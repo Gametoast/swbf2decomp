@@ -1,9 +1,10 @@
 #include "EntitySoundStatic.h"
 #include "SoundFL/source/sndvoicevirtual.h"
 
-// GLOBAL: SWBF2 0x01ebc1a4
 // SYNTHETIC: SWBF2 0x00402e50
 // `dynamic initializer for 'EntitySoundStaticClass::rttiHashEntitySoundStaticClass''
+// GLOBAL: SWBF2 0x01ebc1a4
+// EntitySoundStaticClass::rttiHashEntitySoundStaticClass
 PblHash EntitySoundStaticClass::rttiHashEntitySoundStaticClass("EntitySoundStaticClass");
 char EntitySoundStaticClass::rttiNameEntitySoundStaticClass[] = "EntitySoundStaticClass";
 
@@ -75,9 +76,10 @@ const char* EntitySoundStaticClass::GetDerivedRttiName()
 // `dynamic atexit destructor for 'EntitySoundStatic::sMemoryPool''
 MemoryPool EntitySoundStatic::sMemoryPool("EntitySoundStatic", 0x4c);
 
-// GLOBAL: SWBF2 0x01ebc1f8
 // SYNTHETIC: SWBF2 0x00402e40
 // `dynamic initializer for 'EntitySoundStatic::rttiHashEntitySoundStatic''
+// GLOBAL: SWBF2 0x01ebc1f8
+// EntitySoundStatic::rttiHashEntitySoundStatic
 PblHash EntitySoundStatic::rttiHashEntitySoundStatic("EntitySoundStatic");
 char EntitySoundStatic::rttiNameEntitySoundStatic[] = "EntitySoundStatic";
 

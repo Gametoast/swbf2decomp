@@ -62,15 +62,17 @@ EntityTrapClass::EntityTrapClass(unsigned int uHash)
     mRayTriggerMinSpeed = -1.0f;
 }
 
-// GLOBAL: SWBF2 0x01ebc254
 // SYNTHETIC: SWBF2 0x00402eb0
 // `dynamic initializer for 'EntityTrapClass::rttiHashEntityTrapClass''
+// GLOBAL: SWBF2 0x01ebc254
+// EntityTrapClass::rttiHashEntityTrapClass
 PblHash EntityTrapClass::rttiHashEntityTrapClass("EntityTrapClass");
 char EntityTrapClass::rttiNameEntityTrapClass[] = "EntityTrapClass";
 
-// GLOBAL: SWBF2 0x01ebc258
 // SYNTHETIC: SWBF2 0x00402ea0
 // `dynamic initializer for 'EntityTrap::rttiHashEntityTrap''
+// GLOBAL: SWBF2 0x01ebc258
+// EntityTrap::rttiHashEntityTrap
 PblHash EntityTrap::rttiHashEntityTrap("EntityTrap");
 char EntityTrap::rttiNameEntityTrap[] = "EntityTrap";
 

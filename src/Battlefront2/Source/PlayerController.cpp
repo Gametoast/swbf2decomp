@@ -88,9 +88,10 @@ static float GetInvisibility(const GameObject* pObject)
     return (float)static_cast<const EntitySoldier*>(pObject)->GetInvisibilityAlpha() * (1.0f / 255.0f);
 }
 
-// GLOBAL: SWBF2 0x01ef7f4c
 // SYNTHETIC: SWBF2 0x00405f00
 // `dynamic initializer for 'PlayerController::rttiHashPlayerController''
+// GLOBAL: SWBF2 0x01ef7f4c
+// PlayerController::rttiHashPlayerController
 PblHash PlayerController::rttiHashPlayerController("PlayerController");
 char PlayerController::rttiNamePlayerController[] = "PlayerController";
 

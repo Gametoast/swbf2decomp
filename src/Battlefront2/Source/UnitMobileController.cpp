@@ -1,9 +1,10 @@
 #include "UnitMobileController.h"
 #include "PebbleFL/Common/PblHashTable.h"
 
-// GLOBAL: SWBF2 0x01f99414
 // SYNTHETIC: SWBF2 0x00406d00
 // `dynamic initializer for 'UnitMobileController::rttiHashUnitMobileController''
+// GLOBAL: SWBF2 0x01f99414
+// UnitMobileController::rttiHashUnitMobileController
 PblHash UnitMobileController::rttiHashUnitMobileController("UnitMobileController");
 char UnitMobileController::rttiNameUnitMobileController[] = "UnitMobileController";
 

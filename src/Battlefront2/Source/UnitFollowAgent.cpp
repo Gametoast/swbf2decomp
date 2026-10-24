@@ -101,9 +101,10 @@ namespace
     }
 }
 
-// GLOBAL: SWBF2 0x01f993e8
 // SYNTHETIC: SWBF2 0x00406ce0
 // `dynamic initializer for 'UnitFollowAgent::rttiHashUnitFollowAgent''
+// GLOBAL: SWBF2 0x01f993e8
+// UnitFollowAgent::rttiHashUnitFollowAgent
 PblHash UnitFollowAgent::rttiHashUnitFollowAgent("UnitFollowAgent");
 char UnitFollowAgent::rttiNameUnitFollowAgent[] = "UnitFollowAgent";
 

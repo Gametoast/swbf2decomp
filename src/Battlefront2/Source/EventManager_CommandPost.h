@@ -22,7 +22,7 @@ class PostMatchesName
 {
 public:
 
-    static const char* GetName();
+    static const char* GetName() { return "Name"; }
 
     bool operator()(CommandPost& post, PARAM&) const
     {
@@ -55,7 +55,7 @@ public:
 
     PostMatchesTeam(int iTeam) : mTeam(iTeam) {}
 
-    static const char* GetName();
+    static const char* GetName() { return "Team"; }
 
     bool operator()(CommandPost& post, PARAM&) const
     {

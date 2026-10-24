@@ -63,24 +63,6 @@
 #include "PebbleFL/Common/PblQuaternion.h"
 #include "RedEngineFL/Application/pc/pcFLRender.h"
 
-// FUNCTION: SWBF2 0x0047f9b0
-void EntityWalker::SetVelocity(const PblVector3& vVelocity)
-{
-    mVelocity = vVelocity;
-}
-
-// FUNCTION: SWBF2 0x0047fb30
-Trackable* EntityWalker::GetTrackable()
-{
-    return static_cast<Trackable*>(this);
-}
-
-// FUNCTION: SWBF2 0x0047fc70
-bool EntityWalker::IsForcedThirdPerson() const
-{
-    return true;
-}
-
 // FUNCTION: SWBF2 0x00501a80
 float EntityWalker::GetAimTurnRate() const
 {
@@ -305,15 +287,17 @@ EntityWalkerClass::EntityWalkerClass(unsigned int uHash)
 
 extern "C" PblMatrix* __stdcall D3DXMatrixMultiply(PblMatrix* pOut, const PblMatrix* pM1, const PblMatrix* pM2);
 
-// GLOBAL: SWBF2 0x01ebc25c
 // SYNTHETIC: SWBF2 0x00402ef0
 // `dynamic initializer for 'EntityWalkerClass::rttiHashEntityWalkerClass''
+// GLOBAL: SWBF2 0x01ebc25c
+// EntityWalkerClass::rttiHashEntityWalkerClass
 PblHash EntityWalkerClass::rttiHashEntityWalkerClass("EntityWalkerClass");
 char EntityWalkerClass::rttiNameEntityWalkerClass[] = "EntityWalkerClass";
 
-// GLOBAL: SWBF2 0x01ebc2b0
 // SYNTHETIC: SWBF2 0x00402ee0
 // `dynamic initializer for 'EntityWalker::rttiHashEntityWalker''
+// GLOBAL: SWBF2 0x01ebc2b0
+// EntityWalker::rttiHashEntityWalker
 PblHash EntityWalker::rttiHashEntityWalker("EntityWalker");
 char EntityWalker::rttiNameEntityWalker[] = "EntityWalker";
 
@@ -323,12 +307,6 @@ char EntityWalker::rttiNameEntityWalker[] = "EntityWalker";
 // SYNTHETIC: SWBF2 0x00767010
 // `dynamic atexit destructor for 'EntityWalker::sMemoryPool''
 MemoryPool EntityWalker::sMemoryPool("EntityWalker", 0x2100);
-
-// FUNCTION: SWBF2 0x0047fb20
-float EntityWalker::GetMaxStrafe() const
-{
-    return 0.0f;
-}
 
 // FUNCTION: SWBF2 0x0047fb50
 const Controllable* EntityWalker::GetControllable() const
@@ -342,88 +320,10 @@ Controllable* EntityWalker::GetControllable()
     return this;
 }
 
-// FUNCTION: SWBF2 0x0047fbd0
-GameObjectType EntityWalker::GetGameObjectType()
-{
-    return (GameObjectType)(GO_VEHICLE | GO_WALKER);
-}
-
-// FUNCTION: SWBF2 0x0047fbe0
-void EntityWalker::ReserveForPlayer(float fTime)
-{
-    mReserveForPlayer = GameLoop::GetMissionTime() + fTime;
-}
-
-// FUNCTION: SWBF2 0x0047fc00
-bool EntityWalker::IsReservedForPlayer() const
-{
-    return mReserveForPlayer > GameLoop::GetMissionTime();
-}
-
-// FUNCTION: SWBF2 0x0047fc20
-void EntityWalker::SetEjectTimer(float fTime)
-{
-    mEjectTimer = fTime;
-}
-
-// FUNCTION: SWBF2 0x0047fc40
-float EntityWalker::GetEjectTimer() const
-{
-    return mEjectTimer;
-}
-
-// FUNCTION: SWBF2 0x0047fc50
-void EntityWalker::ResetTimeSinceLastHack()
-{
-    mTimeSinceLastHack = 0.0f;
-}
-
 // FUNCTION: SWBF2 0x0047fc80
 bool EntityWalkerClass::IsRtti(unsigned int uRtti)
 {
     return uRtti == rttiHashEntityWalkerClass || GameObjectClass::IsRtti(uRtti);
-}
-
-// FUNCTION: SWBF2 0x0047fcc0
-int EntityWalkerClass::GetVehicleType()
-{
-    return mVehicleType;
-}
-
-// FUNCTION: SWBF2 0x0047fcd0
-int EntityWalkerClass::GetWeaponCount()
-{
-    return mWeaponCount;
-}
-
-// FUNCTION: SWBF2 0x0047fce0
-const WeaponClass* EntityWalkerClass::GetWeaponClass(int iIndex)
-{
-    return mWeaponClass[iIndex];
-}
-
-// FUNCTION: SWBF2 0x0047fd00
-float EntityWalkerClass::GetCollisionInflict()
-{
-    return mCollisionInflict;
-}
-
-// FUNCTION: SWBF2 0x0047fd10
-float EntityWalkerClass::GetTimeRequiredToEject()
-{
-    return mTimeRequiredToEject;
-}
-
-// FUNCTION: SWBF2 0x0047fd20
-float EntityWalkerClass::GetReboardTime()
-{
-    return mTimeTilReboard;
-}
-
-// FUNCTION: SWBF2 0x0047fd30
-const void* EntityWalkerClass::GetControllableClass()
-{
-    return static_cast<const ControllableClass*>(this);
 }
 
 // FUNCTION: SWBF2 0x004ff4e0
@@ -1608,12 +1508,6 @@ bool EntityWalker::IsRtti(unsigned int uRtti) const
     return uRtti == rttiHashEntityWalker || GameObject::IsRtti(uRtti);
 }
 
-// FUNCTION: SWBF2 0x0047f940
-const RedPose* EntityWalker::GetPose() const
-{
-    return &mPose;
-}
-
 // FUNCTION: SWBF2 0x0047f950
 GameObject* EntityWalker::GetGameObject()
 {
@@ -1636,18 +1530,6 @@ Entity* EntityWalker::GetEntity()
 const Entity* EntityWalker::GetEntity() const
 {
     return this;
-}
-
-// FUNCTION: SWBF2 0x0047f990
-const PblMatrix& EntityWalker::GetMatrix() const
-{
-    return mMatrix;
-}
-
-// FUNCTION: SWBF2 0x0047f9a0
-const PblVector3& EntityWalker::GetVelocity() const
-{
-    return mVelocity;
 }
 
 // FUNCTION: SWBF2 0x0047f9d0
@@ -1781,30 +1663,6 @@ bool EntityWalker::Jump()
     m_bIsJumping = true;
     m_fGroundedTimer = 0.0f;
     return true;
-}
-
-// FUNCTION: SWBF2 0x0047fb70
-int EntityWalker::GetWeaponIndex(int iChannel) const
-{
-    return mWeaponIndex[iChannel];
-}
-
-// FUNCTION: SWBF2 0x0047fb90
-Weapon* EntityWalker::GetWeaponPtr(int iIndex) const
-{
-    return mWeapon[iIndex];
-}
-
-// FUNCTION: SWBF2 0x0047fbb0
-const Aimer* EntityWalker::GetAimer(int iIndex) const
-{
-    return mAimer[iIndex];
-}
-
-// FUNCTION: SWBF2 0x0047fc60
-EnergyBar* EntityWalker::GetEnergyBar()
-{
-    return (EnergyBar*)mEnergyBar;
 }
 
 // SYNTHETIC: SWBF2 0x004803a5

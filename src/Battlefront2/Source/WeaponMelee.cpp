@@ -2598,15 +2598,17 @@ DefaultCombo::DeflectAnimation aDeflectAnimation[DefaultCombo::NUM_DEFLECT_ANIMA
     { "stand_block_rear2", 32 },
 };
 
-// GLOBAL: SWBF2 0x01f9a8ec
 // SYNTHETIC: SWBF2 0x00407200
 // `dynamic initializer for 'WeaponMelee::rttiHashWeaponMelee''
+// GLOBAL: SWBF2 0x01f9a8ec
+// WeaponMelee::rttiHashWeaponMelee
 PblHash WeaponMelee::rttiHashWeaponMelee("WeaponMelee");
 char WeaponMelee::rttiNameWeaponMelee[] = "WeaponMelee";
 
-// GLOBAL: SWBF2 0x01f9a8f4
 // SYNTHETIC: SWBF2 0x00407210
 // `dynamic initializer for 'WeaponMeleeClass::rttiHashWeaponMeleeClass''
+// GLOBAL: SWBF2 0x01f9a8f4
+// WeaponMeleeClass::rttiHashWeaponMeleeClass
 PblHash WeaponMeleeClass::rttiHashWeaponMeleeClass("WeaponMeleeClass");
 char WeaponMeleeClass::rttiNameWeaponMeleeClass[] = "WeaponMeleeClass";
 

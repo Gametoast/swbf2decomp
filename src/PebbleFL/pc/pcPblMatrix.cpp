@@ -4,12 +4,6 @@
 #include "PebbleFL/Common/PblMatrix.h"
 #include "PebbleFL/Common/PblVector.h"
 
-// FUNCTION: SWBF2 0x0040cb30
-PblMatrix::PblMatrix(const PblMatrix& other)
-{
-    memcpy(m, other.m, sizeof(m));
-}
-
 // FUNCTION: SWBF2 0x0043a8c0
 PblMatrix::PblMatrix(const PblQuaternion& rotation, const PblVector3& translation)
 {

@@ -36,9 +36,10 @@ unsigned int sSoftCollisionMask;
 // GLOBAL: SWBF2 0x01e2fdd8
 unsigned int sOrdnanceCollisionMask;
 
-// GLOBAL: SWBF2 0x01eb024c
 // SYNTHETIC: SWBF2 0x004022d0
 // `dynamic initializer for 'AsteroidClass::rttiHashAsteroidClass''
+// GLOBAL: SWBF2 0x01eb024c
+// AsteroidClass::rttiHashAsteroidClass
 PblHash AsteroidClass::rttiHashAsteroidClass("AsteroidClass");
 char AsteroidClass::rttiNameAsteroidClass[] = "AsteroidClass";
 
@@ -298,9 +299,10 @@ EntityClass* AsteroidClass::Derive(unsigned int uHash)
 // `dynamic atexit destructor for 'Asteroid::sMemoryPool''
 MemoryPool Asteroid::sMemoryPool("Asteroid", 0x280);
 
-// GLOBAL: SWBF2 0x01eb0248
 // SYNTHETIC: SWBF2 0x004022c0
 // `dynamic initializer for 'Asteroid::rttiHashAsteroid''
+// GLOBAL: SWBF2 0x01eb0248
+// Asteroid::rttiHashAsteroid
 PblHash Asteroid::rttiHashAsteroid("Asteroid");
 char Asteroid::rttiNameAsteroid[] = "Asteroid";
 

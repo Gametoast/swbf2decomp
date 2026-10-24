@@ -64,9 +64,10 @@ namespace
 // `dynamic atexit destructor for 'Navigator::sMemoryPool''
 MemoryPool Navigator::sMemoryPool("Navigator", sizeof(Navigator));
 
-// GLOBAL: SWBF2 0x01ecb1f8
 // SYNTHETIC: SWBF2 0x00404390
 // `dynamic initializer for 'Navigator::rttiHashNavigator''
+// GLOBAL: SWBF2 0x01ecb1f8
+// Navigator::rttiHashNavigator
 PblHash Navigator::rttiHashNavigator("Navigator");
 char Navigator::rttiNameNavigator[] = "Navigator";
 

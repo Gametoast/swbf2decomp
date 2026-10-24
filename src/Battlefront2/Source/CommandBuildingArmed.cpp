@@ -2,9 +2,10 @@
 #include "GameModel.h"
 #include "NetGame.h"
 
-// GLOBAL: SWBF2 0x01eb928c
 // SYNTHETIC: SWBF2 0x00402660
 // `dynamic initializer for 'CommandBuildingArmed::rttiHashCommandBuildingArmed''
+// GLOBAL: SWBF2 0x01eb928c
+// CommandBuildingArmed::rttiHashCommandBuildingArmed
 PblHash CommandBuildingArmed::rttiHashCommandBuildingArmed("CommandBuildingArmed");
 char CommandBuildingArmed::rttiNameCommandBuildingArmed[] = "CommandBuildingArmed";
 
@@ -125,9 +126,10 @@ CommandBuildingArmedClass::~CommandBuildingArmedClass()
 // SYNTHETIC: SWBF2 0x0047749e
 // [thunk]:CommandBuildingArmedClass::`scalar deleting destructor' adjustor{1656}
 
-// GLOBAL: SWBF2 0x01eb9554
 // SYNTHETIC: SWBF2 0x00402670
 // `dynamic initializer for 'CommandBuildingArmedClass::rttiHashCommandBuildingArmedClass''
+// GLOBAL: SWBF2 0x01eb9554
+// CommandBuildingArmedClass::rttiHashCommandBuildingArmedClass
 PblHash CommandBuildingArmedClass::rttiHashCommandBuildingArmedClass("CommandBuildingArmedClass");
 char CommandBuildingArmedClass::rttiNameCommandBuildingArmedClass[] = "CommandBuildingArmedClass";
 

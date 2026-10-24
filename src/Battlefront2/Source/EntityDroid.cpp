@@ -445,12 +445,6 @@ const GameObject* Controllable::GetGameObject() const
     return 0;
 }
 
-// FUNCTION: SWBF2 0x004833a0
-Trackable* Controllable::GetTrackable()
-{
-    return 0;
-}
-
 // FUNCTION: SWBF2 0x00483360
 Entity* Controllable::GetEntity()
 {
@@ -475,25 +469,6 @@ ControllableClass* Controllable::GetControllableClass()
     return 0;
 }
 
-// FUNCTION: SWBF2 0x00483440
-void Controllable::SetupController()
-{
-}
-
-// FUNCTION: SWBF2 0x00483460
-bool Controllable::AIThread::Update(float fDeltaTime)
-{
-    mOwner->UpdateIndirect(fDeltaTime);
-    return true;
-}
-
-// FUNCTION: SWBF2 0x00483480
-void Controllable::AIThread::DeactivateThread()
-{
-    mOwner->DeactivateIndirect();
-    Thread::DeactivateThread();
-}
-
 // SYNTHETIC: SWBF2 0x004834a0
 // Controllable::`scalar deleting destructor'
 
@@ -503,9 +478,10 @@ void Controllable::AIThread::DeactivateThread()
 // SYNTHETIC: SWBF2 0x004834e0
 // Controllable::AIThread::`scalar deleting destructor'
 
-// GLOBAL: SWBF2 0x01ebbbb4
 // SYNTHETIC: SWBF2 0x00402a40
 // `dynamic initializer for 'EntityDroid::rttiHashEntityDroid''
+// GLOBAL: SWBF2 0x01ebbbb4
+// EntityDroid::rttiHashEntityDroid
 PblHash EntityDroid::rttiHashEntityDroid("EntityDroid");
 char EntityDroid::rttiNameEntityDroid[] = "EntityDroid";
 
@@ -649,9 +625,10 @@ bool EntityDroid::PostCollision::Update(float fDeltaTime)
 // SYNTHETIC: SWBF2 0x00499550
 // EntityDroid::PostCollision::~PostCollision
 
-// GLOBAL: SWBF2 0x01ebbaa4
 // SYNTHETIC: SWBF2 0x00402a50
 // `dynamic initializer for 'EntityDroidClass::rttiHashEntityDroidClass''
+// GLOBAL: SWBF2 0x01ebbaa4
+// EntityDroidClass::rttiHashEntityDroidClass
 PblHash EntityDroidClass::rttiHashEntityDroidClass("EntityDroidClass");
 char EntityDroidClass::rttiNameEntityDroidClass[] = "EntityDroidClass";
 

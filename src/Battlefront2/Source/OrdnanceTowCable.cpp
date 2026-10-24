@@ -27,15 +27,17 @@ void sRenderHermiteSegment(PblHermiteVector3& segment, unsigned char ucViewport,
 
 extern PblVector3 gVectorZero;
 
-// GLOBAL: SWBF2 0x01ef26c0
 // SYNTHETIC: SWBF2 0x00405bc0
 // `dynamic initializer for 'OrdnanceTowCable::rttiHashOrdnanceTowCable''
+// GLOBAL: SWBF2 0x01ef26c0
+// OrdnanceTowCable::rttiHashOrdnanceTowCable
 PblHash OrdnanceTowCable::rttiHashOrdnanceTowCable("OrdnanceTowCable");
 char OrdnanceTowCable::rttiNameOrdnanceTowCable[] = "OrdnanceTowCable";
 
-// GLOBAL: SWBF2 0x01ef26c4
 // SYNTHETIC: SWBF2 0x00405bd0
 // `dynamic initializer for 'OrdnanceTowCableClass::rttiHashOrdnanceTowCableClass''
+// GLOBAL: SWBF2 0x01ef26c4
+// OrdnanceTowCableClass::rttiHashOrdnanceTowCableClass
 PblHash OrdnanceTowCableClass::rttiHashOrdnanceTowCableClass("OrdnanceTowCableClass");
 char OrdnanceTowCableClass::rttiNameOrdnanceTowCableClass[] = "OrdnanceTowCableClass";
 

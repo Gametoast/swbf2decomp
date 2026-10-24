@@ -51,15 +51,17 @@ static PblMatrix _IdentityMatrix(
     PblVector4{ 0.0f, 0.0f, 1.0f, 0.0f },
     PblVector4{ 0.0f, 0.0f, 0.0f, 1.0f });
 
-// GLOBAL: SWBF2 0x01ebb87c
 // SYNTHETIC: SWBF2 0x004028b0
 // `dynamic initializer for 'EntityBuildingAnimatedClass::rttiHashEntityBuildingAnimatedClass''
+// GLOBAL: SWBF2 0x01ebb87c
+// EntityBuildingAnimatedClass::rttiHashEntityBuildingAnimatedClass
 PblHash EntityBuildingAnimatedClass::rttiHashEntityBuildingAnimatedClass("EntityBuildingAnimatedClass");
 char EntityBuildingAnimatedClass::rttiNameEntityBuildingAnimatedClass[] = "EntityBuildingAnimatedClass";
 
-// GLOBAL: SWBF2 0x01ebb878
 // SYNTHETIC: SWBF2 0x004028a0
 // `dynamic initializer for 'EntityBuildingAnimated::rttiHashEntityBuildingAnimated''
+// GLOBAL: SWBF2 0x01ebb878
+// EntityBuildingAnimated::rttiHashEntityBuildingAnimated
 PblHash EntityBuildingAnimated::rttiHashEntityBuildingAnimated("EntityBuildingAnimated");
 char EntityBuildingAnimated::rttiNameEntityBuildingAnimated[] = "EntityBuildingAnimated";
 

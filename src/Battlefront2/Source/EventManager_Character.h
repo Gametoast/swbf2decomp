@@ -3,6 +3,9 @@
 #include "EventManager_LuaUser.h"
 #include "EventInfo.h"
 #include "Damageable.h"
+#include "Character.h"
+#include "Controllable.h"
+#include "Entity.h"
 
 class Character;
 class GameObject;
@@ -31,9 +34,22 @@ public:
 
     CharacterMatchesName(const char* pcName);
 
-    static const char* GetName();
+    static const char* GetName() { return "Name"; }
 
-    bool operator()(const Character& character, const PARAM& param);
+    bool operator()(const Character& character, const PARAM&)
+    {
+        const Controllable* pControllable = character.GetControllable();
+        if (!pControllable)
+        {
+            return false;
+        }
+        const EntityEx* pEntity = (const EntityEx*)pControllable->GetEntity();
+        if (!pEntity)
+        {
+            return false;
+        }
+        return pEntity->mId == mId;
+    }
 
     bool operator==(const CharacterMatchesName& other) const
     {
@@ -50,9 +66,12 @@ public:
 
     CharacterMatchesTeam(int iTeam) : mTeam(iTeam) {}
 
-    static const char* GetName();
+    static const char* GetName() { return "Team"; }
 
-    bool operator()(const Character& character, const PARAM& param) const;
+    bool operator()(const Character& character, const PARAM&) const
+    {
+        return character.mTeamNumber == mTeam;
+    }
 
     bool operator==(const CharacterMatchesTeam& other) const
     {
@@ -69,9 +88,22 @@ public:
 
     CharacterMatchesClass(const char* pcName);
 
-    static const char* GetName();
+    static const char* GetName() { return "Class"; }
 
-    bool operator()(const Character& character, const PARAM& param);
+    bool operator()(const Character& character, const PARAM&)
+    {
+        const Controllable* pControllable = character.GetControllable();
+        if (!pControllable)
+        {
+            return false;
+        }
+        const Entity* pEntity = pControllable->GetEntity();
+        if (!pEntity)
+        {
+            return false;
+        }
+        return pEntity->GetEntityClass() == mClass;
+    }
 
     bool operator==(const CharacterMatchesClass& other) const
     {

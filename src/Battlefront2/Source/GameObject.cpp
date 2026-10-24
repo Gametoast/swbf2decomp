@@ -81,9 +81,10 @@ GameObjectClass::~GameObjectClass()
 // SYNTHETIC: SWBF2 0x00536270
 // GameObjectClass::`scalar deleting destructor'
 
-// GLOBAL: SWBF2 0x01ec3234
 // SYNTHETIC: SWBF2 0x00403dd0
 // `dynamic initializer for 'GameObjectClass::rttiHashGameObjectClass''
+// GLOBAL: SWBF2 0x01ec3234
+// GameObjectClass::rttiHashGameObjectClass
 PblHash GameObjectClass::rttiHashGameObjectClass("GameObjectClass");
 char GameObjectClass::rttiNameGameObjectClass[] = "GameObjectClass";
 
@@ -105,9 +106,10 @@ const char* GameObjectClass::GetDerivedRttiName()
     return rttiNameGameObjectClass;
 }
 
-// GLOBAL: SWBF2 0x01ec0c7c
 // SYNTHETIC: SWBF2 0x00403dc0
 // `dynamic initializer for 'GameObject::rttiHashGameObject''
+// GLOBAL: SWBF2 0x01ec0c7c
+// GameObject::rttiHashGameObject
 PblHash GameObject::rttiHashGameObject("GameObject");
 char GameObject::rttiNameGameObject[] = "GameObject";
 

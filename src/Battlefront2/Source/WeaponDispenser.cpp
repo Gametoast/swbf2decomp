@@ -22,7 +22,10 @@
 #include "UnitStationaryController.h"
 #include "CollisionManager.h"
 
-namespace gf { bool isInitialized(); bool checkError(); }
+namespace gf
+{
+bool isInitialized(); bool checkError();
+}
 void ProcessGalaxyData();
 
 extern "C" PblVector3* __stdcall D3DXVec3TransformNormal(PblVector3* pOut, const PblVector3* pV,
@@ -41,11 +44,15 @@ public:
 extern "C" PblVector3* __stdcall D3DXVec3TransformCoord(PblVector3* pOut, const PblVector3* pV,
                                                         const PblMatrix* pM);
 
-namespace GameLoop { extern float sClientDeltaTime; }
+namespace GameLoop
+{
+extern float sClientDeltaTime;
+}
 
-// GLOBAL: SWBF2 0x01f9a8c0
 // SYNTHETIC: SWBF2 0x00407150
 // `dynamic initializer for 'WeaponDispenserClass::rttiHashWeaponDispenserClass''
+// GLOBAL: SWBF2 0x01f9a8c0
+// WeaponDispenserClass::rttiHashWeaponDispenserClass
 PblHash WeaponDispenserClass::rttiHashWeaponDispenserClass("WeaponDispenserClass");
 char WeaponDispenserClass::rttiNameWeaponDispenserClass[] = "WeaponDispenserClass";
 
@@ -260,9 +267,10 @@ WeaponDispenserClass::WeaponDispenserClass(unsigned int uHash)
     }
 }
 
-// GLOBAL: SWBF2 0x01f9a8bc
 // SYNTHETIC: SWBF2 0x00407140
 // `dynamic initializer for 'WeaponDispenser::rttiHashWeaponDispenser''
+// GLOBAL: SWBF2 0x01f9a8bc
+// WeaponDispenser::rttiHashWeaponDispenser
 PblHash WeaponDispenser::rttiHashWeaponDispenser("WeaponDispenser");
 char WeaponDispenser::rttiNameWeaponDispenser[] = "WeaponDispenser";
 

@@ -75,9 +75,10 @@ namespace
     }
 }
 
-// GLOBAL: SWBF2 0x01ebbdd0
 // SYNTHETIC: SWBF2 0x00402ba0
 // `dynamic initializer for 'EntityHover::rttiHashEntityHover''
+// GLOBAL: SWBF2 0x01ebbdd0
+// EntityHover::rttiHashEntityHover
 PblHash EntityHover::rttiHashEntityHover("EntityHover");
 char EntityHover::rttiNameEntityHover[] = "EntityHover";
 
@@ -88,9 +89,10 @@ char EntityHover::rttiNameEntityHover[] = "EntityHover";
 // `dynamic atexit destructor for 'EntityHover::sMemoryPool''
 MemoryPool EntityHover::sMemoryPool("EntityHover", 0x1d10);
 
-// GLOBAL: SWBF2 0x01ebbdd4
 // SYNTHETIC: SWBF2 0x00402bb0
 // `dynamic initializer for 'EntityHoverClass::rttiHashEntityHoverClass''
+// GLOBAL: SWBF2 0x01ebbdd4
+// EntityHoverClass::rttiHashEntityHoverClass
 PblHash EntityHoverClass::rttiHashEntityHoverClass("EntityHoverClass");
 char EntityHoverClass::rttiNameEntityHoverClass[] = "EntityHoverClass";
 
@@ -124,24 +126,6 @@ const Entity* EntityHover::GetEntity() const
     return this;
 }
 
-// FUNCTION: SWBF2 0x00478ad0
-const PblMatrix& EntityHover::GetMatrix() const
-{
-    return mMatrix;
-}
-
-// FUNCTION: SWBF2 0x00478ae0
-const PblVector3& EntityHover::GetVelocity() const
-{
-    return mVelocity;
-}
-
-// FUNCTION: SWBF2 0x00478af0
-void EntityHover::SetVelocity(const PblVector3& vVelocity)
-{
-    mVelocity = vVelocity;
-}
-
 // FUNCTION: SWBF2 0x00478b10
 void EntityHover::SetPosition(const PblVector3& vPosition)
 {
@@ -159,12 +143,6 @@ void EntityHover::SetMatrix(const PblMatrix& matrix)
     UpdateCollisionSphere(this);
 }
 
-// FUNCTION: SWBF2 0x00478c60
-Trackable* EntityHover::GetTrackable()
-{
-    return this;
-}
-
 // FUNCTION: SWBF2 0x00478c80
 const Controllable* EntityHover::GetControllable() const
 {
@@ -177,118 +155,10 @@ Controllable* EntityHover::GetControllable()
     return this;
 }
 
-// FUNCTION: SWBF2 0x00478ca0
-int EntityHover::GetWeaponIndex(int iChannel) const
-{
-    return mWeaponIndex[iChannel];
-}
-
-// FUNCTION: SWBF2 0x00478cc0
-Weapon* EntityHover::GetWeaponPtr(int iIndex) const
-{
-    return mWeapon[iIndex];
-}
-
-// FUNCTION: SWBF2 0x00478ce0
-const Aimer* EntityHover::GetAimer(int iIndex) const
-{
-    return mAimer[iIndex];
-}
-
-// FUNCTION: SWBF2 0x00478d00
-GameObjectType EntityHover::GetGameObjectType()
-{
-    return (GameObjectType)(GO_VEHICLE | GO_HOVER);
-}
-
-// FUNCTION: SWBF2 0x00478d10
-const RedPose* EntityHover::GetPose() const
-{
-    return &mPose;
-}
-
-// FUNCTION: SWBF2 0x00478d20
-void EntityHover::ReserveForPlayer(float fSeconds)
-{
-    mReserveForPlayer = GameLoop::GetMissionTime() + fSeconds;
-}
-
-// FUNCTION: SWBF2 0x00478d40
-bool EntityHover::IsReservedForPlayer() const
-{
-    return mReserveForPlayer > GameLoop::GetMissionTime();
-}
-
-// FUNCTION: SWBF2 0x00478d60
-EnergyBar* EntityHover::GetEnergyBar()
-{
-    return (EnergyBar*)mEnergyBar;
-}
-
-// FUNCTION: SWBF2 0x00478d70
-void EntityHover::SetEjectTimer(float fSeconds)
-{
-    mEjectTimer = fSeconds;
-}
-
-// FUNCTION: SWBF2 0x00478d90
-float EntityHover::GetEjectTimer() const
-{
-    return mEjectTimer;
-}
-
-// FUNCTION: SWBF2 0x00478da0
-void EntityHover::ResetTimeSinceLastHack()
-{
-    mTimeSinceLastHack = 0.0f;
-}
-
-// FUNCTION: SWBF2 0x00478db0
-bool EntityHover::IsForcedThirdPerson() const
-{
-    return true;
-}
-
 // FUNCTION: SWBF2 0x00478dc0
 bool EntityHoverClass::IsRtti(unsigned int uRtti)
 {
     return uRtti == rttiHashEntityHoverClass || GameObjectClass::IsRtti(uRtti);
-}
-
-// FUNCTION: SWBF2 0x00478e00
-int EntityHoverClass::GetVehicleType()
-{
-    return mVehicleType;
-}
-
-// FUNCTION: SWBF2 0x00478e10
-int EntityHoverClass::GetWeaponCount()
-{
-    return mWeaponCount;
-}
-
-// FUNCTION: SWBF2 0x00478e20
-const WeaponClass* EntityHoverClass::GetWeaponClass(int iIndex)
-{
-    return mWeaponClass[iIndex];
-}
-
-// FUNCTION: SWBF2 0x00478e40
-float EntityHoverClass::GetTimeRequiredToEject()
-{
-    return mTimeRequiredToEject;
-}
-
-// FUNCTION: SWBF2 0x00478e50
-float EntityHoverClass::GetReboardTime()
-{
-    return mTimeTilReboard;
-}
-
-// FUNCTION: SWBF2 0x00478e60
-const void* EntityHoverClass::GetControllableClass()
-{
-    return this ? static_cast<const ControllableClass*>(this) : 0;
 }
 
 // FUNCTION: SWBF2 0x004c0920

@@ -11,9 +11,10 @@ static PblMatrix _IdentityMatrix(
     PblVector4{ 0.0f, 0.0f, 1.0f, 0.0f },
     PblVector4{ 0.0f, 0.0f, 0.0f, 1.0f });
 
-// GLOBAL: SWBF2 0x009c8500
 // SYNTHETIC: SWBF2 0x004092a0
 // `dynamic initializer for 'Red3DModelAnimator::rttiHashRed3DModelAnimator''
+// GLOBAL: SWBF2 0x009c8500
+// Red3DModelAnimator::rttiHashRed3DModelAnimator
 PblHash Red3DModelAnimator::rttiHashRed3DModelAnimator("Red3DModelAnimator");
 char Red3DModelAnimator::rttiNameRed3DModelAnimator[] = "Red3DModelAnimator";
 

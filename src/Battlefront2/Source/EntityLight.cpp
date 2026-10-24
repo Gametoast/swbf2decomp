@@ -25,14 +25,16 @@ extern "C" PblVector3* __stdcall D3DXVec3TransformCoord(PblVector3* pOut, const 
 // GLOBAL: SWBF2 0x01e51de0
 EntityLightFXParser* EntityLightFXParser::s_pInstance;
 
-// GLOBAL: SWBF2 0x01ebbe30
 // SYNTHETIC: SWBF2 0x00402c00
 // `dynamic initializer for 'EntityLight::rttiHashEntityLight''
+// GLOBAL: SWBF2 0x01ebbe30
+// EntityLight::rttiHashEntityLight
 PblHash EntityLight::rttiHashEntityLight("EntityLight");
 char EntityLight::rttiNameEntityLight[] = "EntityLight";
-// GLOBAL: SWBF2 0x01ebbe34
 // SYNTHETIC: SWBF2 0x00402c10
 // `dynamic initializer for 'EntityLightClass::rttiHashEntityLightClass''
+// GLOBAL: SWBF2 0x01ebbe34
+// EntityLightClass::rttiHashEntityLightClass
 PblHash EntityLightClass::rttiHashEntityLightClass("EntityLightClass");
 char EntityLightClass::rttiNameEntityLightClass[] = "EntityLightClass";
 // GLOBAL: SWBF2 0x01ebbe38

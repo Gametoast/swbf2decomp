@@ -52,7 +52,7 @@ public:
 
     LuaObjectMatches(lua_State* L, int iIndex) : mMatch(L, iIndex) {}
 
-    static const char* GetName();
+    static const char* GetName() { return "Match"; }
 
     bool operator()(LuaObject& item, LuaObject&) const
     {

@@ -303,9 +303,10 @@ const void* EntityFlyerClass::GetControllableClass()
     return this ? static_cast<const ControllableClass*>(this) : 0;
 }
 
-// GLOBAL: SWBF2 0x01ebb8ec
 // SYNTHETIC: SWBF2 0x00402960
 // `dynamic initializer for 'EntityCarrier::rttiHashEntityCarrier''
+// GLOBAL: SWBF2 0x01ebb8ec
+// EntityCarrier::rttiHashEntityCarrier
 PblHash EntityCarrier::rttiHashEntityCarrier("EntityCarrier");
 char EntityCarrier::rttiNameEntityCarrier[] = "EntityCarrier";
 
@@ -334,9 +335,10 @@ const char* EntityCarrier::GetDerivedRttiName() const
     return rttiNameEntityCarrier;
 }
 
-// GLOBAL: SWBF2 0x01ebb8e8
 // SYNTHETIC: SWBF2 0x00402970
 // `dynamic initializer for 'EntityCarrierClass::rttiHashEntityCarrierClass''
+// GLOBAL: SWBF2 0x01ebb8e8
+// EntityCarrierClass::rttiHashEntityCarrierClass
 PblHash EntityCarrierClass::rttiHashEntityCarrierClass("EntityCarrierClass");
 char EntityCarrierClass::rttiNameEntityCarrierClass[] = "EntityCarrierClass";
 

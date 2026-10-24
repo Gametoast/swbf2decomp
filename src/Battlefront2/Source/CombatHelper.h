@@ -41,10 +41,22 @@ public:
     void Init(const UnitCombatInfo& info);
     int EventHandler(AI::EventInfo* pInfo);
 
-    UnitController* GetCtrl();
-    Controllable* GetMe();
-    AILowLevel& GetLowLevel();
-    AttackHelper& GetAttackHelper();
+    UnitController* GetCtrl()
+    {
+        return mOwner->mCtrl;
+    }
+    Controllable* GetMe()
+    {
+        return mOwner->mCtrl->mOwner;
+    }
+    AILowLevel& GetLowLevel()
+    {
+        return *reinterpret_cast<AILowLevel*>(mOwner->mCtrl->mLowLevel);
+    }
+    AttackHelper& GetAttackHelper()
+    {
+        return *reinterpret_cast<AttackHelper*>(mOwner->mAttackHelper);
+    }
     float GetUpdateRate() const;
 
 protected:

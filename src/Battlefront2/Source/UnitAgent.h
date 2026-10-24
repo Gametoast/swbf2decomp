@@ -4,6 +4,7 @@
 
 #include "Agent.h"
 #include "Controllable.h"
+#include "UnitController.h"
 #include "RedEngineFL/Memory/RedMemoryPool.h"
 
 class AILowLevel;
@@ -50,9 +51,18 @@ public:
     static PblHash rttiHashUnitAgent;
     static char rttiNameUnitAgent[];
 
-    const Controllable* GetMe() const;
-    Controllable* GetMe();
-    AILowLevel& GetLowLevel();
+    const Controllable* GetMe() const
+    {
+        return mCtrl->mOwner;
+    }
+    Controllable* GetMe()
+    {
+        return mCtrl->mOwner;
+    }
+    AILowLevel& GetLowLevel()
+    {
+        return *reinterpret_cast<AILowLevel*>(mCtrl->mLowLevel);
+    }
 
     bool RunForVehicle(const GameObject* pVehicle) const;
 

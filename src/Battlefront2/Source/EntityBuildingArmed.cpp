@@ -37,15 +37,17 @@ EntityBuildingArmedClass::~EntityBuildingArmedClass()
 {
 }
 
-// GLOBAL: SWBF2 0x01ebb888
 // SYNTHETIC: SWBF2 0x004028e0
 // `dynamic initializer for 'EntityBuildingArmed::rttiHashEntityBuildingArmed''
+// GLOBAL: SWBF2 0x01ebb888
+// EntityBuildingArmed::rttiHashEntityBuildingArmed
 PblHash EntityBuildingArmed::rttiHashEntityBuildingArmed("EntityBuildingArmed");
 char EntityBuildingArmed::rttiNameEntityBuildingArmed[] = "EntityBuildingArmed";
 
-// GLOBAL: SWBF2 0x01ebb88c
 // SYNTHETIC: SWBF2 0x004028f0
 // `dynamic initializer for 'EntityBuildingArmedClass::rttiHashEntityBuildingArmedClass''
+// GLOBAL: SWBF2 0x01ebb88c
+// EntityBuildingArmedClass::rttiHashEntityBuildingArmedClass
 PblHash EntityBuildingArmedClass::rttiHashEntityBuildingArmedClass("EntityBuildingArmedClass");
 char EntityBuildingArmedClass::rttiNameEntityBuildingArmedClass[] = "EntityBuildingArmedClass";
 

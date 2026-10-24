@@ -7974,12 +7974,6 @@ void ReadLockedTargets(NetPktGroup& group, int player)
 // GLOBAL: SWBF2 0x007e8e8c
 int archFilter;
 
-// FUNCTION: SWBF2 0x005d78a0
-void NetMatch::SetRegisterArchFilter()
-{
-    archFilter = 3;
-}
-
 namespace ObjectiveManager { extern PblList<HUD::ObjectiveList>* gObjectiveLists; HUD::ObjectiveList* GetObjectiveList(); }
 
 // FUNCTION: SWBF2 0x005f6a30
@@ -8470,16 +8464,6 @@ extern unsigned int netBroadcastSendSocket;
 extern unsigned int netBroadcastRecvSocket;
 extern "C" int __stdcall closesocket(unsigned int s);
 
-// FUNCTION: SWBF2 0x005d67b0
-void EndRegisterLanGame()
-{
-    NetMatch::SetRegisterArchFilter();
-    closesocket(netBroadcastSendSocket);
-    netBroadcastSendSocket = 0;
-    closesocket(netBroadcastRecvSocket);
-    netBroadcastRecvSocket = 0;
-}
-
 // FUNCTION: SWBF2 0x005c7160
 void AloNextGameInfo::Read(NetPktGroup& group)
 {
@@ -8908,28 +8892,6 @@ SwitchResponse SkipSwitchResponses(NetPktGroup& group)
     return ReadSwitchResponse(group, (unsigned int)-1, (unsigned int)-1);
 }
 
-// FUNCTION: SWBF2 0x005d6690
-void NetMatch::SetGameError(const char* message, int severity)
-{
-    extern const char* gameErrorMsg;
-    extern int gameErrorLvl;
-    gameErrorMsg = message;
-    gameErrorLvl = severity;
-    if (netInShell || severity < 6)
-    {
-        return;
-    }
-    GuiManager* gui = GuiManager::Instance();
-    if (gui->IsErrorOpen())
-    {
-        gui->CloseError(false, true);
-    }
-    NetSetup::RequestQuit(0);
-    ShellLoop::SetNetCableErrorOnEnter(severity, message);
-    gameErrorMsg = 0;
-    gameErrorLvl = 0;
-}
-
 extern unsigned __int64 netCreatedLobbyId;
 extern unsigned __int64 netEnteredLobbyId;
 extern int netLanRegisterState;
@@ -8940,37 +8902,6 @@ namespace gf { bool isInitialized(); namespace utils { const char* ToString(bool
 
 // GLOBAL: SWBF2 0x01e62e88
 int netDirectPort;
-
-// FUNCTION: SWBF2 0x005d5cf0
-void NetMatch::EndRegisterGame()
-{
-    if (NetComm::IsLAN())
-    {
-        EndRegisterLanGame();
-        NetSocket::CloseDirectSocket();
-        netDirectPort = 0;
-        netLanRegisterState = 0;
-        return;
-    }
-    if (!gf::isInitialized())
-    {
-        return;
-    }
-    if (netCreatedLobbyId)
-    {
-        void* matchmaking = GetGalaxyMatchmaking();
-        ((galaxy::api::IMatchmaking*)matchmaking)->SetLobbyData(
-            galaxy::api::GalaxyID(netCreatedLobbyId), "galaxy_lobby_cancelled", gf::utils::ToString(true));
-    }
-    if (netEnteredLobbyId)
-    {
-        void* matchmaking = GetGalaxyMatchmaking();
-        ((galaxy::api::IMatchmaking*)matchmaking)->LeaveLobby(galaxy::api::GalaxyID(netEnteredLobbyId));
-        netLeavingLobby = true;
-    }
-    netEnteredLobbyId = 0;
-    netCreatedLobbyId = 0;
-}
 
 // FUNCTION: SWBF2 0x005d1570
 void DisplayMessage(NG_ChatMsg& opaque)
@@ -11194,12 +11125,6 @@ void DisableFrameLock()
 {
 }
 
-// FUNCTION: SWBF2 0x005daf30
-bool NetQOS::Update(bool)
-{
-    return false;
-}
-
 // FUNCTION: SWBF2 0x005c3790
 int NetGame::FindPlayerByGSID(int low, int high)
 {
@@ -12047,12 +11972,6 @@ void __fastcall SetPacketGroupHeader(void* pPacket, short iIndex, char cFlag1, c
     header.group = iIndex;
     header.idx = cFlag1;
 }
-
-// FUNCTION: SWBF2 0x00530880
-void StatsManager::WriteStatsChallenge(int, NetPktGroup&) {}
-
-// FUNCTION: SWBF2 0x005308a0
-void StatsManager::WriteStatsResponse(int, NetPktGroup&) {}
 
 // FUNCTION: SWBF2 0x005caf90
 void WriteMiniMove(NetPktGroup* pGroup, ProcessedInputs* pInputs)

@@ -38,9 +38,10 @@ namespace
     }
 }
 
-// GLOBAL: SWBF2 0x01f9a248
 // SYNTHETIC: SWBF2 0x00406d10
 // `dynamic initializer for 'UnitRandomAgent::rttiHashUnitRandomAgent''
+// GLOBAL: SWBF2 0x01f9a248
+// UnitRandomAgent::rttiHashUnitRandomAgent
 PblHash UnitRandomAgent::rttiHashUnitRandomAgent("UnitRandomAgent");
 char UnitRandomAgent::rttiNameUnitRandomAgent[] = "UnitRandomAgent";
 

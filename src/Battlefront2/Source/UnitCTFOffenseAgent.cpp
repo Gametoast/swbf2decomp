@@ -40,9 +40,10 @@ float UnitCTFOffenseAgent::GetUpdateRate() const
     }
 }
 
-// GLOBAL: SWBF2 0x01f99388
 // SYNTHETIC: SWBF2 0x00406c80
 // `dynamic initializer for 'UnitCTFOffenseAgent::rttiHashUnitCTFOffenseAgent''
+// GLOBAL: SWBF2 0x01f99388
+// UnitCTFOffenseAgent::rttiHashUnitCTFOffenseAgent
 PblHash UnitCTFOffenseAgent::rttiHashUnitCTFOffenseAgent("UnitCTFOffenseAgent");
 char UnitCTFOffenseAgent::rttiNameUnitCTFOffenseAgent[] = "UnitCTFOffenseAgent";
 

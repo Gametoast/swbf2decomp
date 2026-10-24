@@ -73,9 +73,10 @@ int gUnchangedVehicleSlideCount = 1;
 
 int gClearVehicleSlideCount = 1;
 
-// GLOBAL: SWBF2 0x01ecb258
 // SYNTHETIC: SWBF2 0x004043f0
 // `dynamic initializer for 'NavigatorSlide::rttiHashNavigatorSlide''
+// GLOBAL: SWBF2 0x01ecb258
+// NavigatorSlide::rttiHashNavigatorSlide
 PblHash NavigatorSlide::rttiHashNavigatorSlide("NavigatorSlide");
 char NavigatorSlide::rttiNameNavigatorSlide[] = "NavigatorSlide";
 

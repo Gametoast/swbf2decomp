@@ -39,15 +39,17 @@ EntityRemoteTerminalClass::EntityRemoteTerminalClass(unsigned int uHash)
 // FUNCTION: SWBF2 0x004dd960
 EntityRemoteTerminalClass::~EntityRemoteTerminalClass() {}
 
-// GLOBAL: SWBF2 0x01ebc050
 // SYNTHETIC: SWBF2 0x00402d30
 // `dynamic initializer for 'EntityRemoteTerminalClass::rttiHashEntityRemoteTerminalClass''
+// GLOBAL: SWBF2 0x01ebc050
+// EntityRemoteTerminalClass::rttiHashEntityRemoteTerminalClass
 PblHash EntityRemoteTerminalClass::rttiHashEntityRemoteTerminalClass("EntityRemoteTerminalClass");
 char EntityRemoteTerminalClass::rttiNameEntityRemoteTerminalClass[] = "EntityRemoteTerminalClass";
 
-// GLOBAL: SWBF2 0x01ebc04c
 // SYNTHETIC: SWBF2 0x00402d20
 // `dynamic initializer for 'EntityRemoteTerminal::rttiHashEntityRemoteTerminal''
+// GLOBAL: SWBF2 0x01ebc04c
+// EntityRemoteTerminal::rttiHashEntityRemoteTerminal
 PblHash EntityRemoteTerminal::rttiHashEntityRemoteTerminal("EntityRemoteTerminal");
 char EntityRemoteTerminal::rttiNameEntityRemoteTerminal[] = "EntityRemoteTerminal";
 

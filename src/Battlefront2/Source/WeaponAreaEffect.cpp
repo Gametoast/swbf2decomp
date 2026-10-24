@@ -31,9 +31,10 @@ namespace
     }
 }
 
-// GLOBAL: SWBF2 0x01f9a884
 // SYNTHETIC: SWBF2 0x00407060
 // `dynamic initializer for 'WeaponAreaEffect::rttiHashWeaponAreaEffect''
+// GLOBAL: SWBF2 0x01f9a884
+// WeaponAreaEffect::rttiHashWeaponAreaEffect
 PblHash WeaponAreaEffect::rttiHashWeaponAreaEffect("WeaponAreaEffect");
 
 // FUNCTION: SWBF2 0x0067c170
@@ -767,9 +768,10 @@ void WeaponAreaEffect::Fire()
     }
 }
 
-// GLOBAL: SWBF2 0x01f9a888
 // SYNTHETIC: SWBF2 0x00407070
 // `dynamic initializer for 'WeaponAreaEffectClass::rttiHashWeaponAreaEffectClass''
+// GLOBAL: SWBF2 0x01f9a888
+// WeaponAreaEffectClass::rttiHashWeaponAreaEffectClass
 PblHash WeaponAreaEffectClass::rttiHashWeaponAreaEffectClass("WeaponAreaEffectClass");
 char WeaponAreaEffectClass::rttiNameWeaponAreaEffectClass[] = "WeaponAreaEffectClass";
 

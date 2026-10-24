@@ -56,50 +56,10 @@ bool LuaPushItem<FlagItem>(FlagItem& flag)
     return true;
 }
 
-const char* CharacterMatchesName::GetName()
-{
-    return "Name";
-}
 
-const char* CharacterMatchesTeam::GetName()
-{
-    return "Team";
-}
 
-const char* CharacterMatchesClass::GetName()
-{
-    return "Class";
-}
 
-bool CharacterMatchesName::operator()(const FlagItem&, const Character& character)
-{
-    const Controllable* pControllable = character.GetControllable();
-    if (!pControllable)
-    {
-        return false;
-    }
-    const EntityEx* pEntity = (const EntityEx*)pControllable->GetEntity();
-    if (!pEntity)
-    {
-        return false;
-    }
-    return pEntity->mId == mId;
-}
 
-bool CharacterMatchesClass::operator()(const FlagItem&, const Character& character)
-{
-    const Controllable* pControllable = character.GetControllable();
-    if (!pControllable)
-    {
-        return false;
-    }
-    const Entity* pEntity = pControllable->GetEntity();
-    if (!pEntity)
-    {
-        return false;
-    }
-    return pEntity->GetEntityClass() == mClass;
-}
 
 // FUNCTION: SWBF2 0x005133b0
 template <class ITEM, class PARAM>
@@ -145,20 +105,6 @@ bool LuaCallback<ITEM, PARAM>::operator()(ITEM& item, PARAM& param)
     return true;
 }
 
-template <class ITEM, class PARAM>
-template <class PREDICATE>
-const char* Event<ITEM, PARAM>::Filter<PREDICATE>::GetName()
-{
-    return PREDICATE::GetName();
-}
-
-template <class ITEM, class PARAM>
-template <class PREDICATE>
-bool Event<ITEM, PARAM>::Filter<PREDICATE>::operator()(ITEM& item, PARAM& param)
-{
-    return mPredicate(item, param);
-}
-
 // TEMPLATE: SWBF2 0x00513250
 // EventManager::LuaCallback<FlagItem,Character>::operator()
 
@@ -197,12 +143,6 @@ bool Event<ITEM, PARAM>::Filter<PREDICATE>::operator()(ITEM& item, PARAM& param)
 
 // SYNTHETIC: SWBF2 0x00513620
 // EventManager::Event<FlagItem,Character>::Filter<EventManager::CharacterMatchesClass>::`scalar deleting destructor'
-
-template <class ITEM, class PARAM>
-bool Event<ITEM, PARAM>::Callback::operator()(ITEM&, PARAM&)
-{
-    return true;
-}
 
 // TEMPLATE: SWBF2 0x00512490
 // EventManager::Event<FlagItem,Character>::Callback::operator()
@@ -320,35 +260,6 @@ void Event<ITEM, PARAM>::Unregister(Callback& callback)
     }
 }
 
-template <class ITEM, class PARAM>
-template <class PREDICATE>
-Event<ITEM, PARAM>::Filter<PREDICATE>::Filter(PREDICATE& predicate)
-    : mPredicate(predicate)
-{
-}
-
-template <class ITEM, class PARAM>
-template <class PREDICATE>
-auto Event<ITEM, PARAM>::GetFilter(PREDICATE& predicate, Callback* pParent)
-    -> Filter<PREDICATE>*
-{
-    if (!pParent)
-    {
-        pParent = &mRoot;
-    }
-    for (Node* pNode = pParent->mChild; pNode; pNode = pNode->mSibling)
-    {
-        if (pNode->GetName() == PREDICATE::GetName() &&
-            ((Filter<PREDICATE>*)pNode)->mPredicate == predicate)
-        {
-            pNode->AddRef();
-            return (Filter<PREDICATE>*)pNode;
-        }
-    }
-    Filter<PREDICATE>* pFilter = new Filter<PREDICATE>(predicate);
-    pFilter->AttachToParent(pParent);
-    return pFilter;
-}
 
 template <class ITEM, class PARAM>
 void RegisterUnregisterLuaCallback(Event<ITEM, PARAM>& event, lua_CFunction pfnClient)

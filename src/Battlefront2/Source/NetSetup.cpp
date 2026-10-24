@@ -290,27 +290,6 @@ extern int netCurMaxPlayers;
 void ReadDestMask(NetPktGroup& group, unsigned __int64& mask);
 void ReadString(NetPktGroup& group, char* text, unsigned int capacity);
 
-// FUNCTION: SWBF2 0x005d5b00
-void __fastcall ReadAddr(NetPktGroup* pGroup, NetAddr* pAddr)
-{
-    pGroup->ReadBytes((char*)pAddr, 8);
-    unsigned int uValue;
-    pGroup->ReadBits(uValue, 1);
-    pAddr->hasPriv = uValue != 0;
-    if (pAddr->hasPriv)
-    {
-        pGroup->ReadBits(uValue, 32);
-        pAddr->privAddr = uValue;
-        pGroup->ReadBits(uValue, 16);
-        pAddr->privPort = uValue;
-    }
-}
-
-// FUNCTION: SWBF2 0x005d5e30
-void NetMatch::ChangeRegisterGame()
-{
-}
-
 // FUNCTION: SWBF2 0x005e39b0
 void NetSetup::RemoveGamePlayer(int iPlayer)
 {
@@ -1580,11 +1559,6 @@ void NetSetupP::UpdateScreen()
     }
 }
 
-// FUNCTION: SWBF2 0x005d5e40
-void __fastcall NetMatch::ReceiveRegisterPacket(const char*  , int  , const void*  )
-{
-}
-
 // FUNCTION: SWBF2 0x005e3f70
 void NetSetupP::Recv(NetPacket* pPacket, const void* pSource)
 {
@@ -1626,26 +1600,6 @@ extern unsigned __int64 netCreatedLobbyId;
 bool HasEnteredLobby()
 {
     return netEnteredLobbyId != 0;
-}
-
-// FUNCTION: SWBF2 0x005d7760
-bool NetMatch::UpdateFindAddress()
-{
-    return true;
-}
-
-// FUNCTION: SWBF2 0x005d7820
-int __fastcall NetMatch::SetAddr(unsigned int* pOut, const unsigned int* pIn)
-{
-    pOut[0] = pIn[0];
-    pOut[1] = pIn[1];
-    return pIn[1];
-}
-
-// FUNCTION: SWBF2 0x005daf40
-bool NetQOS::IsDone()
-{
-    return true;
 }
 
 // FUNCTION: SWBF2 0x005e7430
@@ -1740,14 +1694,6 @@ extern int netNoCableCount;
 extern char const* gameErrorMsg;
 extern int gameErrorLvl;
 
-// FUNCTION: SWBF2 0x005d65c0
-void NetMatch::HandleLoginError(bool)
-{
-    netLoginErrorMessage = 0;
-    netLoginErrorLevel = 0;
-    netNoCableCount = 0;
-}
-
 // FUNCTION: SWBF2 0x005d7620
 NetAddr* NetAddr::CopyFieldsFrom(const NetAddr* pOther)
 {
@@ -1780,13 +1726,6 @@ int NetSetup::GetNumPlayers()
         }
     }
     return count;
-}
-
-// FUNCTION: SWBF2 0x005d5ba0
-void __fastcall WriteSessionId(NetPktGroup* pGroup, const unsigned int* pWords)
-{
-    unsigned int words[2] = { pWords[0], pWords[1] };
-    pGroup->WriteBytes((const char*)words, sizeof(words));
 }
 
 // FUNCTION: SWBF2 0x005e6fb0
@@ -1840,12 +1779,6 @@ extern unsigned char sStatsMatchData[0x40];
 
 namespace StatsManager { void BeginMatch(); }
 
-// FUNCTION: SWBF2 0x00530860
-void StatsManager::BeginMatch()
-{
-    strlcpy((char*)sStatsMatchData, GameLoop::mMissionScript, sizeof(sStatsMatchData));
-}
-
 // FUNCTION: SWBF2 0x005e6fd0
 void ReadJoinReject(NetPktGroup& group, JoinRejectReason& eReason)
 {
@@ -1853,19 +1786,6 @@ void ReadJoinReject(NetPktGroup& group, JoinRejectReason& eReason)
     group.ReadBits(reason, 4);
     eReason = (JoinRejectReason)reason;
     JRR_to_Errorbox(eReason);
-}
-
-// FUNCTION: SWBF2 0x005d5aa0
-void __fastcall WriteAddr(NetPktGroup* pGroup, const NetAddr* pAddr)
-{
-    unsigned int publicWords[2] = { (unsigned int)pAddr->pubAddr, (unsigned int)pAddr->pubPort };
-    pGroup->WriteBytes((const char*)publicWords, sizeof(publicWords));
-    pGroup->WriteBits(pAddr->hasPriv ? 1 : 0, 1);
-    if (pAddr->hasPriv)
-    {
-        pGroup->WriteBits((unsigned int)pAddr->privAddr, 32);
-        pGroup->WriteBits((unsigned int)pAddr->privPort, 16);
-    }
 }
 
 // FUNCTION: SWBF2 0x005d4ab0
@@ -2069,18 +1989,6 @@ void __fastcall NetCommP::Connect(int iDest, const void* pAddress)
 }
 
 extern NetPktGroup inQueue;
-
-// FUNCTION: SWBF2 0x005d5f60
-void NetMatch::PauseFindGames() {}
-
-// FUNCTION: SWBF2 0x005d7750
-void NetMatch::EndFindAddress() {}
-
-// FUNCTION: SWBF2 0x005d7810
-void NetMatch::ClientGetAddr() {}
-
-// FUNCTION: SWBF2 0x005daf20
-void NetQOS::CancelGame() {}
 
 // FUNCTION: SWBF2 0x005e54a0
 void SetupSleep() {}
@@ -2692,21 +2600,6 @@ CNetLaunchGame::~CNetLaunchGame() {}
 
 extern int updatePercent;
 
-// FUNCTION: SWBF2 0x005d6730
-NetAddr::NetAddr(int addr, int port, int overridePort)
-{
-    pubAddr = 0;
-    pubPort = 0;
-    if (!IsPrivateIP((unsigned long)addr))
-    {
-        __debugbreak();
-        return;
-    }
-    privAddr = addr;
-    privPort = overridePort ? overridePort : port;
-    hasPriv = true;
-}
-
 // FUNCTION: SWBF2 0x005dd470
 bool CNetHostGame::IsLaunchReady()
 {
@@ -2835,61 +2728,7 @@ int netLanQueryCount;
 // GLOBAL: SWBF2 0x01fa88dc
 unsigned int netLanQuerySequence;
 
-// FUNCTION: SWBF2 0x005d5e70
-char NetMatch::StartFindGames(int, const NetSessionId* id)
-{
-    if (id)
-    {
-        netFindSessionId = id->id;
-    }
-    netMatchOperation = 2;
-    if (NetComm::IsLAN())
-    {
-        if (!netDirectPort)
-        {
-            netDirectPort = NetSocket::OpenDirectSocket(false);
-        }
-        NetSocket::OpenBroadcastSockets();
-        netNextLanQueryTime = 0.0f;
-        netLanQueryCount = 0;
-        netLanQuerySequence = netRandom.GetInt();
-        return (char)netLanQuerySequence;
-    }
-    if (gf::isInitialized())
-    {
-        netLobbyState = 1;
-        void* matchmaking = GetGalaxyMatchmaking();
-        ((galaxy::api::IMatchmaking*)matchmaking)->AddRequestLobbyListStringFilter("galaxy_lobby_cancelled", "1", 1);
-        matchmaking = GetGalaxyMatchmaking();
-        return ((galaxy::api::IMatchmaking*)matchmaking)->RequestLobbyList(false);
-    }
-    return 0;
-}
-
 extern int netConnectState;
-
-// FUNCTION: SWBF2 0x005d7700
-void NetMatch::StartFindAddress()
-{
-    NetAddr* addr = &NetSetupP::GetMyAddr();
-    if (NetComm::IsLAN())
-    {
-        unsigned long ip = GetPrivateIP();
-        addr->privAddr = ip;
-        if (ip)
-        {
-            addr->pubAddr = 0;
-            addr->pubPort = 0;
-            addr->hasPriv = true;
-        }
-    }
-    else
-    {
-        addr->hasPriv = false;
-        addr->privAddr = 0;
-        addr->privPort = 0;
-    }
-}
 
 // FUNCTION: SWBF2 0x005def50
 bool CNetFindGame::IsFinished()
@@ -3682,15 +3521,6 @@ void WriteJoin(NetPktGroup& group, unsigned int guestCount)
 }
 
 bool PumpGalaxyMatchmaking();
-
-// FUNCTION: SWBF2 0x005d6090
-void NetMatch::UpdateJoinGame()
-{
-    if (!NetComm::IsLAN())
-    {
-        PumpGalaxyMatchmaking();
-    }
-}
 
 // FUNCTION: SWBF2 0x005e3720
 void CNetPostLoadJoinGame::Update()

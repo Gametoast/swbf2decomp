@@ -25,9 +25,10 @@ CommandBuildingClass::~CommandBuildingClass()
 // SYNTHETIC: SWBF2 0x004766c3
 // [thunk]:CommandBuildingClass::`scalar deleting destructor' adjustor{1680}
 
-// GLOBAL: SWBF2 0x01eb83c4
 // SYNTHETIC: SWBF2 0x00402630
 // `dynamic initializer for 'CommandBuildingClass::rttiHashCommandBuildingClass''
+// GLOBAL: SWBF2 0x01eb83c4
+// CommandBuildingClass::rttiHashCommandBuildingClass
 PblHash CommandBuildingClass::rttiHashCommandBuildingClass("CommandBuildingClass");
 char CommandBuildingClass::rttiNameCommandBuildingClass[] = "CommandBuildingClass";
 
@@ -49,9 +50,10 @@ const char* CommandBuildingClass::GetDerivedRttiName()
     return rttiNameCommandBuildingClass;
 }
 
-// GLOBAL: SWBF2 0x01eb667c
 // SYNTHETIC: SWBF2 0x00402620
 // `dynamic initializer for 'CommandBuilding::rttiHashCommandBuilding''
+// GLOBAL: SWBF2 0x01eb667c
+// CommandBuilding::rttiHashCommandBuilding
 PblHash CommandBuilding::rttiHashCommandBuilding("CommandBuilding");
 char CommandBuilding::rttiNameCommandBuilding[] = "CommandBuilding";
 

@@ -1,9 +1,10 @@
 #include "EntityBuildingArmedDynamic.h"
 #include "RedEngineFL/Memory/RedMemoryPool.h"
 
-// GLOBAL: SWBF2 0x01ebb894
 // SYNTHETIC: SWBF2 0x00402930
 // `dynamic initializer for 'EntityBuildingArmedDynamicClass::rttiHashEntityBuildingArmedDynamicClass''
+// GLOBAL: SWBF2 0x01ebb894
+// EntityBuildingArmedDynamicClass::rttiHashEntityBuildingArmedDynamicClass
 PblHash EntityBuildingArmedDynamicClass::rttiHashEntityBuildingArmedDynamicClass("EntityBuildingArmedDynamicClass");
 char EntityBuildingArmedDynamicClass::rttiNameEntityBuildingArmedDynamicClass[] = "EntityBuildingArmedDynamicClass";
 
@@ -70,9 +71,10 @@ const char* EntityBuildingArmedDynamicClass::GetDerivedRttiName()
     return rttiNameEntityBuildingArmedDynamicClass;
 }
 
-// GLOBAL: SWBF2 0x01ebb890
 // SYNTHETIC: SWBF2 0x00402920
 // `dynamic initializer for 'EntityBuildingArmedDynamic::rttiHashEntityBuildingArmedDynamic''
+// GLOBAL: SWBF2 0x01ebb890
+// EntityBuildingArmedDynamic::rttiHashEntityBuildingArmedDynamic
 PblHash EntityBuildingArmedDynamic::rttiHashEntityBuildingArmedDynamic("EntityBuildingArmedDynamic");
 char EntityBuildingArmedDynamic::rttiNameEntityBuildingArmedDynamic[] = "EntityBuildingArmedDynamic";
 

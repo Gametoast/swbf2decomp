@@ -8,10 +8,10 @@
 #include "PebbleFL/Common/PblUnicode.h"
 #include "RedEngineFL/Util/RedLocalizeDB.h"
 
-// GLOBAL: SWBF2 0x008eed8c
 // SYNTHETIC: SWBF2 0x00407750
 // `dynamic initializer for 'RedTexture::s_textureHashTable''
 
+// GLOBAL: SWBF2 0x008eed8c
 PblHashTable<RedTexture, 4096> RedTexture::s_textureHashTable;
 
 // GLOBAL: SWBF2 0x008eed88

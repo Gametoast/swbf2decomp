@@ -11,9 +11,10 @@
 // `dynamic atexit destructor for 'CommandFlyer::sMemoryPool''
 MemoryPool CommandFlyer::sMemoryPool("CommandFlyer", 0x1da0);
 
-// GLOBAL: SWBF2 0x01eb9698
 // SYNTHETIC: SWBF2 0x004026a0
 // `dynamic initializer for 'CommandFlyer::rttiHashCommandFlyer''
+// GLOBAL: SWBF2 0x01eb9698
+// CommandFlyer::rttiHashCommandFlyer
 PblHash CommandFlyer::rttiHashCommandFlyer("CommandFlyer");
 char CommandFlyer::rttiNameCommandFlyer[] = "CommandFlyer";
 
@@ -24,9 +25,10 @@ CommandFlyerClass::CommandFlyerClass(unsigned int uHash)
     mIsNeutralWhenEmpty = false;
 }
 
-// GLOBAL: SWBF2 0x01eb969c
 // SYNTHETIC: SWBF2 0x004026b0
 // `dynamic initializer for 'CommandFlyerClass::rttiHashCommandFlyerClass''
+// GLOBAL: SWBF2 0x01eb969c
+// CommandFlyerClass::rttiHashCommandFlyerClass
 PblHash CommandFlyerClass::rttiHashCommandFlyerClass("CommandFlyerClass");
 char CommandFlyerClass::rttiNameCommandFlyerClass[] = "CommandFlyerClass";
 

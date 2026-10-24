@@ -732,65 +732,6 @@ stopped_or_playing:
     }
 }
 
-// FUNCTION: SWBF2 0x006f86f0
-RedCircularBuffer& RedCircularBuffer::operator=(const RedCircularBuffer& other)
-{
-    mBuffer = other.mBuffer;
-    mPos = other.mPos;
-    mUsed = other.mUsed;
-    mSize = other.mSize;
-    return *this;
-}
-
-// FUNCTION: SWBF2 0x006f8740
-unsigned int RedCircularBuffer::GetFree() const
-{
-    return mSize - mUsed;
-}
-
-// FUNCTION: SWBF2 0x006f8750
-unsigned int RedCircularBuffer::GetFreeAligned(unsigned int uiAlign) const
-{
-    unsigned int uiRead = uiAlign * (mPos / uiAlign);
-    unsigned int uiWrite = uiAlign * ((uiAlign + GetWriteOffset() - 1) / uiAlign);
-    unsigned int uiDistance = uiWrite < uiRead ? mSize - uiRead + uiWrite : uiWrite - uiRead;
-    return mSize <= uiDistance ? 0 : mSize - uiDistance;
-}
-
-// FUNCTION: SWBF2 0x006f87a0
-unsigned int RedCircularBuffer::GetFreeBlock() const
-{
-    unsigned int uiWrite = GetWriteOffset();
-    if (!GetFree())
-    {
-        return 0;
-    }
-    return (mPos <= uiWrite ? mSize : mPos) - uiWrite;
-}
-
-// FUNCTION: SWBF2 0x006f87e0
-unsigned int RedCircularBuffer::GetWriteOffset() const
-{
-    unsigned int uiWrite = mPos + mUsed;
-    if (uiWrite >= mSize)
-    {
-        uiWrite -= mSize;
-    }
-    return uiWrite;
-}
-
-// FUNCTION: SWBF2 0x006f87f0
-void* RedCircularBuffer::GetWritePos() const
-{
-    return mBuffer + GetWriteOffset();
-}
-
-// FUNCTION: SWBF2 0x006f8900
-void RedCircularBuffer::UpdateWritePos(unsigned int uiSize)
-{
-    mUsed += uiSize;
-}
-
 // FUNCTION: SWBF2 0x00726c70
 unsigned int RedFileAsync::GetPos() const
 {

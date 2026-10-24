@@ -40,9 +40,10 @@ static PblMatrix _IdentityMatrix(
     PblVector4{ 0.0f, 0.0f, 1.0f, 0.0f },
     PblVector4{ 0.0f, 0.0f, 0.0f, 1.0f });
 
-// GLOBAL: SWBF2 0x01ebbe2c
 // SYNTHETIC: SWBF2 0x00402bd0
 // `dynamic initializer for 'EntityItemClass::rttiHashEntityItemClass''
+// GLOBAL: SWBF2 0x01ebbe2c
+// EntityItemClass::rttiHashEntityItemClass
 PblHash EntityItemClass::rttiHashEntityItemClass("EntityItemClass");
 char EntityItemClass::rttiNameEntityItemClass[] = "EntityItemClass";
 
@@ -219,9 +220,10 @@ EntityClass* EntityItemClass::Derive(unsigned int uHash)
     return new EntityItemClass(this, uHash);
 }
 
-// GLOBAL: SWBF2 0x01ebbe28
 // SYNTHETIC: SWBF2 0x00402bc0
 // `dynamic initializer for 'EntityItem::rttiHashEntityItem''
+// GLOBAL: SWBF2 0x01ebbe28
+// EntityItem::rttiHashEntityItem
 PblHash EntityItem::rttiHashEntityItem("EntityItem");
 char EntityItem::rttiNameEntityItem[] = "EntityItem";
 

@@ -2390,8 +2390,10 @@ void SoldierAnimatorClass::_PostLoad()
         // GLOBAL: SWBF2 0x01fac204
         static const PblVector3 s_vHeadOffset(0.035f, 0.03f, 0.0f);
         // GLOBAL: SWBF2 0x01fac1f8
+        // s_vTorsoOffset
         static const PblVector3 s_vTorsoOffset(-0.12f, 0.12f, 0.0f);
         // GLOBAL: SWBF2 0x01fac228
+        // s_vTorsoOffset_Jump
         static const PblVector3 s_vTorsoOffset_Jump(-0.12f, -0.05f, 0.0f);
         // GLOBAL: SWBF2 0x01fac21c
         static const PblVector3 s_vPivotAxisOffset(0.26f, -0.16f, 0.0f);

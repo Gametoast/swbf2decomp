@@ -4,15 +4,17 @@
 
 #include "RedEngineFL/Application/RedWater.h"
 
-// GLOBAL: SWBF2 0x01ef2660
 // SYNTHETIC: SWBF2 0x00405b60
 // `dynamic initializer for 'OrdnanceShell::rttiHashOrdnanceShell''
+// GLOBAL: SWBF2 0x01ef2660
+// OrdnanceShell::rttiHashOrdnanceShell
 PblHash OrdnanceShell::rttiHashOrdnanceShell("OrdnanceShell");
 char OrdnanceShell::rttiNameOrdnanceShell[] = "OrdnanceShell";
 
-// GLOBAL: SWBF2 0x01ef2664
 // SYNTHETIC: SWBF2 0x00405b70
 // `dynamic initializer for 'OrdnanceShellClass::rttiHashOrdnanceShellClass''
+// GLOBAL: SWBF2 0x01ef2664
+// OrdnanceShellClass::rttiHashOrdnanceShellClass
 PblHash OrdnanceShellClass::rttiHashOrdnanceShellClass("OrdnanceShellClass");
 char OrdnanceShellClass::rttiNameOrdnanceShellClass[] = "OrdnanceShellClass";
 

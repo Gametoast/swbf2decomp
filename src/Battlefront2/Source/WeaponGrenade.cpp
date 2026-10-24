@@ -24,11 +24,15 @@ public:
     void ExpendRounds(float fRounds);
 };
 
-namespace GameLoop { extern float sClientDeltaTime; }
+namespace GameLoop
+{
+extern float sClientDeltaTime;
+}
 
-// GLOBAL: SWBF2 0x01f9a8cc
 // SYNTHETIC: SWBF2 0x00407190
 // `dynamic initializer for 'WeaponGrenadeClass::rttiHashWeaponGrenadeClass''
+// GLOBAL: SWBF2 0x01f9a8cc
+// WeaponGrenadeClass::rttiHashWeaponGrenadeClass
 PblHash WeaponGrenadeClass::rttiHashWeaponGrenadeClass("WeaponGrenadeClass");
 char WeaponGrenadeClass::rttiNameWeaponGrenadeClass[] = "WeaponGrenadeClass";
 
@@ -222,9 +226,10 @@ WeaponGrenade::WeaponGrenade(const WeaponGrenadeClass* pClass, const WeaponDesc&
     m_iFirePos = 0;
 }
 
-// GLOBAL: SWBF2 0x01f9a8d0
 // SYNTHETIC: SWBF2 0x00407180
 // `dynamic initializer for 'WeaponGrenade::rttiHashWeaponGrenade''
+// GLOBAL: SWBF2 0x01f9a8d0
+// WeaponGrenade::rttiHashWeaponGrenade
 PblHash WeaponGrenade::rttiHashWeaponGrenade("WeaponGrenade");
 char WeaponGrenade::rttiNameWeaponGrenade[] = "WeaponGrenade";
 

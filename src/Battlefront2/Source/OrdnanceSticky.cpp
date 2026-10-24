@@ -50,15 +50,17 @@ namespace
     }
 }
 
-// GLOBAL: SWBF2 0x01ef2668
 // SYNTHETIC: SWBF2 0x00405b80
 // `dynamic initializer for 'OrdnanceSticky::rttiHashOrdnanceSticky''
+// GLOBAL: SWBF2 0x01ef2668
+// OrdnanceSticky::rttiHashOrdnanceSticky
 PblHash OrdnanceSticky::rttiHashOrdnanceSticky("OrdnanceSticky");
 char OrdnanceSticky::rttiNameOrdnanceSticky[] = "OrdnanceSticky";
 
-// GLOBAL: SWBF2 0x01ef266c
 // SYNTHETIC: SWBF2 0x00405b90
 // `dynamic initializer for 'OrdnanceStickyClass::rttiHashOrdnanceStickyClass''
+// GLOBAL: SWBF2 0x01ef266c
+// OrdnanceStickyClass::rttiHashOrdnanceStickyClass
 PblHash OrdnanceStickyClass::rttiHashOrdnanceStickyClass("OrdnanceStickyClass");
 char OrdnanceStickyClass::rttiNameOrdnanceStickyClass[] = "OrdnanceStickyClass";
 

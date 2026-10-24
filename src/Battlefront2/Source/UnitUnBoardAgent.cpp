@@ -2,9 +2,10 @@
 #include "AILowLevel.h"
 #include "AttackHelper.h"
 
-// GLOBAL: SWBF2 0x01f9a254
 // SYNTHETIC: SWBF2 0x00406d40
 // `dynamic initializer for 'UnitUnBoardAgent::rttiHashUnitUnBoardAgent''
+// GLOBAL: SWBF2 0x01f9a254
+// UnitUnBoardAgent::rttiHashUnitUnBoardAgent
 PblHash UnitUnBoardAgent::rttiHashUnitUnBoardAgent("UnitUnBoardAgent");
 char UnitUnBoardAgent::rttiNameUnitUnBoardAgent[] = "UnitUnBoardAgent";
 

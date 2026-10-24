@@ -64,9 +64,10 @@ namespace
     }
 }
 
-// GLOBAL: SWBF2 0x01ef2620
 // SYNTHETIC: SWBF2 0x00405a60
 // `dynamic initializer for 'OrdnanceBulletClass::rttiHashOrdnanceBulletClass''
+// GLOBAL: SWBF2 0x01ef2620
+// OrdnanceBulletClass::rttiHashOrdnanceBulletClass
 PblHash OrdnanceBulletClass::rttiHashOrdnanceBulletClass("OrdnanceBulletClass");
 char OrdnanceBulletClass::rttiNameOrdnanceBulletClass[] = "OrdnanceBulletClass";
 
@@ -285,9 +286,10 @@ Ordnance* OrdnanceBulletClass::Build(const OrdnanceDesc& desc)
     return pBullet;
 }
 
-// GLOBAL: SWBF2 0x01ef261c
 // SYNTHETIC: SWBF2 0x00405a50
 // `dynamic initializer for 'OrdnanceBullet::rttiHashOrdnanceBullet''
+// GLOBAL: SWBF2 0x01ef261c
+// OrdnanceBullet::rttiHashOrdnanceBullet
 PblHash OrdnanceBullet::rttiHashOrdnanceBullet("OrdnanceBullet");
 char OrdnanceBullet::rttiNameOrdnanceBullet[] = "OrdnanceBullet";
 

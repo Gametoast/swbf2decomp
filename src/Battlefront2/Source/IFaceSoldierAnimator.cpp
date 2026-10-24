@@ -11,9 +11,10 @@ static PblMatrix _IdentityMatrix(
     PblVector4{ 0.0f, 0.0f, 1.0f, 0.0f },
     PblVector4{ 0.0f, 0.0f, 0.0f, 1.0f });
 
-// GLOBAL: SWBF2 0x01ec601c
 // SYNTHETIC: SWBF2 0x004040d0
 // `dynamic initializer for 'IFaceSoldierAnimator::rttiHashIFaceSoldierAnimator''
+// GLOBAL: SWBF2 0x01ec601c
+// IFaceSoldierAnimator::rttiHashIFaceSoldierAnimator
 PblHash IFaceSoldierAnimator::rttiHashIFaceSoldierAnimator("IFaceSoldierAnimator");
 char IFaceSoldierAnimator::rttiNameIFaceSoldierAnimator[] = "IFaceSoldierAnimator";
 

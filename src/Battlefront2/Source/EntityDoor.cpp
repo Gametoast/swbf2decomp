@@ -127,15 +127,17 @@ int GetUnitsInRange(const PblVector3& vPos, float fRadius, GameObject** const pp
                     int iMax, const Team* pTeam, AI::AIAffil eAffil);
 }
 
-// GLOBAL: SWBF2 0x01ebb998
 // SYNTHETIC: SWBF2 0x004029c0
 // `dynamic initializer for 'EntityDoor::rttiHashEntityDoor''
+// GLOBAL: SWBF2 0x01ebb998
+// EntityDoor::rttiHashEntityDoor
 PblHash EntityDoor::rttiHashEntityDoor("EntityDoor");
 char EntityDoor::rttiNameEntityDoor[] = "EntityDoor";
 
-// GLOBAL: SWBF2 0x01ebb99c
 // SYNTHETIC: SWBF2 0x004029d0
 // `dynamic initializer for 'EntityDoorClass::rttiHashEntityDoorClass''
+// GLOBAL: SWBF2 0x01ebb99c
+// EntityDoorClass::rttiHashEntityDoorClass
 PblHash EntityDoorClass::rttiHashEntityDoorClass("EntityDoorClass");
 char EntityDoorClass::rttiNameEntityDoorClass[] = "EntityDoorClass";
 

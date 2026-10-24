@@ -39,7 +39,8 @@ void ZephyrPoseDyn<N>::Close()
     m_kAnim.SetAnim(NULL, NULL);
 }
 
-// FUNCTION: SWBF2 0x0072d430
+// TEMPLATE: SWBF2 0x0072d430 SYMBOL
+// ?SetAnimation@?$ZephyrPoseDyn@$0CA@@@QAEXPBVZephyrAnim@@M@Z
 template <int N>
 void ZephyrPoseDyn<N>::SetAnimation(const ZephyrAnim* pkAnim, float fSpeed)
 {
@@ -94,7 +95,8 @@ bool ZephyrPoseDyn<N>::SetFrameNumFloat(float fFrameNum)
     return true;
 }
 
-// FUNCTION: SWBF2 0x0072d790
+// TEMPLATE: SWBF2 0x0072d790 SYMBOL
+// ?Update@?$ZephyrPoseDyn@$0CA@@@QAEXM@Z
 template <int N>
 void ZephyrPoseDyn<N>::Update(float fElapsed)
 {

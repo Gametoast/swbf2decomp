@@ -150,8 +150,18 @@ public:
 
         AIThread(Controllable* pOwner) : mOwner(pOwner) {}
 
-        virtual bool Update(float fDeltaTime);
-        virtual void DeactivateThread();
+        // FUNCTION: SWBF2 0x00483460
+        virtual bool Update(float fDeltaTime)
+        {
+            mOwner->UpdateIndirect(fDeltaTime);
+            return true;
+        }
+        // FUNCTION: SWBF2 0x00483480
+        virtual void DeactivateThread()
+        {
+            mOwner->DeactivateIndirect();
+            Thread::DeactivateThread();
+        }
 
         Controllable* mOwner;
     };
@@ -168,10 +178,23 @@ public:
     virtual const GameObject* GetGameObject() const;
     virtual Entity* GetEntity();
     virtual const Entity* GetEntity() const;
-    virtual Trackable* GetTrackable();
-    virtual CollisionModel* GetDefaultPilotCollision();
+    // FUNCTION: SWBF2 0x004833a0
+    virtual Trackable* GetTrackable()
+    {
+        return 0;
+    }
+    // FUNCTION: SWBF2 0x004774d0
+    virtual CollisionModel* GetDefaultPilotCollision()
+    {
+        return 0;
+
+    }
     virtual const PblMatrix& GetMatrix() const = 0;
-    virtual float GetTargetBubbleStanceModifier() const;
+    // FUNCTION: SWBF2 0x004774e0
+    virtual float GetTargetBubbleStanceModifier() const
+    {
+        return 1.0f;
+    }
     virtual float GetSoundRadius() const;
     virtual float GetAimTurnRate() const;
     virtual int GetWeaponCount() const;
@@ -180,15 +203,49 @@ public:
     virtual EnergyBar* GetEnergyBar();
 
     float GetEnergy() const;
-    virtual EnergyMode GetEnergyMode() const;
-    virtual SoldierAnimationBank::BANK GetSoldierAnimationBank() const;
+    // FUNCTION: SWBF2 0x00478a40
+    virtual EnergyMode GetEnergyMode() const
+    {
+        return static_cast<EnergyMode>(0);
+
+    }
+    // FUNCTION: SWBF2 0x004774f0
+    virtual SoldierAnimationBank::BANK GetSoldierAnimationBank() const
+    {
+        return SoldierAnimationBank::INVALID_BANK;
+    }
     virtual void SetWeaponIndex(int iChannel, int iIndex);
     virtual const Aimer* GetAimer(int iIndex) const;
-    virtual bool CanEnterRemote(const GameObject* pObject) const;
-    virtual bool CanEnterVehicle(const GameObject* pObject) const;
-    virtual bool EnterVehicle(GameObject* pObject);
-    virtual bool CyclePosition(bool bForward);
-    virtual bool ExitVehicle(bool bForce, bool bEject);
+    // FUNCTION: SWBF2 0x00477500
+    virtual bool CanEnterRemote(const GameObject* pObject) const
+    {
+        return false;
+
+    }
+    // FUNCTION: SWBF2 0x00477510
+    virtual bool CanEnterVehicle(const GameObject* pObject) const
+    {
+        return false;
+
+    }
+    // FUNCTION: SWBF2 0x00477520
+    virtual bool EnterVehicle(GameObject* pObject)
+    {
+        return false;
+
+    }
+    // FUNCTION: SWBF2 0x00477530
+    virtual bool CyclePosition(bool bForward)
+    {
+        return false;
+
+    }
+    // FUNCTION: SWBF2 0x00477540
+    virtual bool ExitVehicle(bool bForce, bool bEject)
+    {
+        return false;
+
+    }
 
     // FUNCTION: SWBF2 0x00477550
     virtual bool EnterRemote(GameObject* pObject) { return false; }
@@ -196,31 +253,105 @@ public:
     virtual bool ExitRemote() { return false; }
     virtual const ControllableClass* GetControllableClass() const;
     virtual ControllableClass* GetControllableClass();
-    virtual void SetupController();
+    // FUNCTION: SWBF2 0x00483440
+    virtual void SetupController()
+    {
+    }
     virtual void SetPilot(Controllable* pPilot);
+    // FUNCTION: SWBF2 0x00477570
     virtual void SetPilotInfo(const PblMatrix& mMatrix, const PblVector3& vOffset,
                               SoldierAnimationBank::ANIMATION eAnimation, bool bFlag,
-                              float f0, float f1, float f2, float f3);
+                              float f0, float f1, float f2, float f3)
+    {
+    }
     virtual void GetPilotMatrix(const PblMatrix& mIn, PblMatrix& mOut);
-    virtual PilotDeathType GetPilotDeathType();
-    virtual void ApplyWeaponKick(float fPitch, float fYaw);
+    // FUNCTION: SWBF2 0x00477580
+    virtual PilotDeathType GetPilotDeathType()
+    {
+        return PILOTDEATH_FALL;
+
+    }
+    // FUNCTION: SWBF2 0x00477590
+    virtual void ApplyWeaponKick(float fPitch, float fYaw)
+    {
+    }
+    // FUNCTION: SWBF2 0x004775a0
     virtual void GetPitchYawLimits(float& fPitchMin, float& fPitchMax,
-                                   float& fYawMin, float& fYawMax) const;
-    virtual bool Stand();
-    virtual bool Crouch();
-    virtual bool Prone();
-    virtual bool Jump();
-    virtual bool Roll();
-    virtual bool Sprint();
-    virtual bool EndSprint();
-    virtual bool JetJump();
-    virtual bool EndJetJump();
-    virtual float GetOffenseMultiplier() const;
-    virtual int GetActiveWeaponChannel();
+                                   float& fYawMin, float& fYawMax) const
+    {
+
+    }
+    // FUNCTION: SWBF2 0x004775b0
+    virtual bool Stand()
+    {
+        return false;
+
+    }
+    // FUNCTION: SWBF2 0x004775c0
+    virtual bool Crouch()
+    {
+        return false;
+
+    }
+    // FUNCTION: SWBF2 0x004775d0
+    virtual bool Prone()
+    {
+        return false;
+
+    }
+    // FUNCTION: SWBF2 0x004775e0
+    virtual bool Jump()
+    {
+        return false;
+
+    }
+    // FUNCTION: SWBF2 0x004775f0
+    virtual bool Roll()
+    {
+        return false;
+
+    }
+    // FUNCTION: SWBF2 0x00477600
+    virtual bool Sprint()
+    {
+        return false;
+
+    }
+    // FUNCTION: SWBF2 0x00477610
+    virtual bool EndSprint()
+    {
+        return false;
+    }
+    // FUNCTION: SWBF2 0x00477620
+    virtual bool JetJump()
+    {
+        return false;
+
+    }
+    // FUNCTION: SWBF2 0x00477630
+    virtual bool EndJetJump()
+    {
+        return false;
+
+    }
+    // FUNCTION: SWBF2 0x00477640
+    virtual float GetOffenseMultiplier() const
+    {
+        return 1.0f;
+    }
+    // FUNCTION: SWBF2 0x00477650
+    virtual int GetActiveWeaponChannel()
+    {
+        return mWpnChannel;
+
+    }
     virtual bool UpdateIndirect(float fDeltaTime) = 0;
 
 protected:
-    virtual void DeactivateIndirect();
+    // FUNCTION: SWBF2 0x00477660
+    virtual void DeactivateIndirect()
+    {
+    }
 
 public:
     void Initialize();

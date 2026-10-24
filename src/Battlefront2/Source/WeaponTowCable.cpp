@@ -27,15 +27,17 @@ namespace
     }
 }
 
-// GLOBAL: SWBF2 0x01f9a91c
 // SYNTHETIC: SWBF2 0x004072c0
 // `dynamic initializer for 'WeaponTowCable::rttiHashWeaponTowCable''
+// GLOBAL: SWBF2 0x01f9a91c
+// WeaponTowCable::rttiHashWeaponTowCable
 PblHash WeaponTowCable::rttiHashWeaponTowCable("WeaponTowCable");
 char WeaponTowCable::rttiNameWeaponTowCable[] = "WeaponTowCable";
 
-// GLOBAL: SWBF2 0x01f9a920
 // SYNTHETIC: SWBF2 0x004072d0
 // `dynamic initializer for 'WeaponTowCableClass::rttiHashWeaponTowCableClass''
+// GLOBAL: SWBF2 0x01f9a920
+// WeaponTowCableClass::rttiHashWeaponTowCableClass
 PblHash WeaponTowCableClass::rttiHashWeaponTowCableClass("WeaponTowCableClass");
 char WeaponTowCableClass::rttiNameWeaponTowCableClass[] = "WeaponTowCableClass";
 

@@ -22,9 +22,10 @@
 
 #include "UnitThreatManager.h"
 
-// GLOBAL: SWBF2 0x01f993bc
 // SYNTHETIC: SWBF2 0x00406cc0
 // `dynamic initializer for 'UnitFlyAgent::rttiHashUnitFlyAgent''
+// GLOBAL: SWBF2 0x01f993bc
+// UnitFlyAgent::rttiHashUnitFlyAgent
 PblHash UnitFlyAgent::rttiHashUnitFlyAgent("UnitFlyAgent");
 char UnitFlyAgent::rttiNameUnitFlyAgent[] = "UnitFlyAgent";
 

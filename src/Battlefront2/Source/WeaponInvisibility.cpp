@@ -10,9 +10,10 @@
 #include "Trigger.h"
 #include "PebbleFL/Common/PblRandom.h"
 
-// GLOBAL: SWBF2 0x01f9a8d4
 // SYNTHETIC: SWBF2 0x004071a0
 // `dynamic initializer for 'WeaponInvisibility::rttiHashWeaponInvisibility''
+// GLOBAL: SWBF2 0x01f9a8d4
+// WeaponInvisibility::rttiHashWeaponInvisibility
 PblHash WeaponInvisibility::rttiHashWeaponInvisibility("WeaponInvisibility");
 char WeaponInvisibility::rttiNameWeaponInvisibility[] = "WeaponInvisibility";
 
@@ -34,9 +35,10 @@ const char* WeaponInvisibility::GetDerivedRttiName() const
     return rttiNameWeaponInvisibility;
 }
 
-// GLOBAL: SWBF2 0x01f9a8d8
 // SYNTHETIC: SWBF2 0x004071b0
 // `dynamic initializer for 'WeaponInvisibilityClass::rttiHashWeaponInvisibilityClass''
+// GLOBAL: SWBF2 0x01f9a8d8
+// WeaponInvisibilityClass::rttiHashWeaponInvisibilityClass
 PblHash WeaponInvisibilityClass::rttiHashWeaponInvisibilityClass("WeaponInvisibilityClass");
 char WeaponInvisibilityClass::rttiNameWeaponInvisibilityClass[] = "WeaponInvisibilityClass";
 

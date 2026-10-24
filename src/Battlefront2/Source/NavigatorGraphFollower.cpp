@@ -24,9 +24,10 @@ namespace
     }
 }
 
-// GLOBAL: SWBF2 0x01ecb250
 // SYNTHETIC: SWBF2 0x004043d0
 // `dynamic initializer for 'NavigatorGraphFollower::rttiHashNavigatorGraphFollower''
+// GLOBAL: SWBF2 0x01ecb250
+// NavigatorGraphFollower::rttiHashNavigatorGraphFollower
 PblHash NavigatorGraphFollower::rttiHashNavigatorGraphFollower("NavigatorGraphFollower");
 char NavigatorGraphFollower::rttiNameNavigatorGraphFollower[] = "NavigatorGraphFollower";
 

@@ -41,9 +41,10 @@ EntityMineClass::EntityMineClass(unsigned int uHash)
     mTickPitch = 1.0f;
 }
 
-// GLOBAL: SWBF2 0x01ebbf90
 // SYNTHETIC: SWBF2 0x00402c70
 // `dynamic initializer for 'EntityMineClass::rttiHashEntityMineClass''
+// GLOBAL: SWBF2 0x01ebbf90
+// EntityMineClass::rttiHashEntityMineClass
 PblHash EntityMineClass::rttiHashEntityMineClass("EntityMineClass");
 char EntityMineClass::rttiNameEntityMineClass[] = "EntityMineClass";
 
@@ -156,9 +157,10 @@ void EntityMineClass::SetProperty(unsigned int uProperty, const char* pszValue)
     }
 }
 
-// GLOBAL: SWBF2 0x01ebbf8c
 // SYNTHETIC: SWBF2 0x00402c60
 // `dynamic initializer for 'EntityMine::rttiHashEntityMine''
+// GLOBAL: SWBF2 0x01ebbf8c
+// EntityMine::rttiHashEntityMine
 PblHash EntityMine::rttiHashEntityMine("EntityMine");
 char EntityMine::rttiNameEntityMine[] = "EntityMine";
 

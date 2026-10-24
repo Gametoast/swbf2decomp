@@ -90,3 +90,9 @@ bool __fastcall IsSameNet(const unsigned int* pLeft, const unsigned int* pRight)
 
 class NetPktGroup;
 int __fastcall ReadSessionId(NetPktGroup* pGroup, unsigned int* pWords);
+
+void __fastcall WriteAddr(NetPktGroup* pGroup, const NetAddr* pAddr);
+
+void __fastcall ReadAddr(NetPktGroup* pGroup, NetAddr* pAddr);
+
+void __fastcall WriteSessionId(NetPktGroup* pGroup, const unsigned int* pWords);

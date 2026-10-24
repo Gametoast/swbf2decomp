@@ -301,15 +301,17 @@ template void util::HashTable_<ClothBank*, unsigned int, ClothBE::ClothDataT::El
 // TEMPLATE: SWBF2 0x0045c720
 // util::BaseArray<unsigned int,util::TypedArrayAllocator<unsigned int,util::TNewArrayAlloc<ClothBank *> > >::Reserve_
 
-// GLOBAL: SWBF2 0x01eb0fcc
 // SYNTHETIC: SWBF2 0x004023a0
 // `dynamic initializer for 'EntityCloth::rttiHashEntityCloth''
+// GLOBAL: SWBF2 0x01eb0fcc
+// EntityCloth::rttiHashEntityCloth
 PblHash EntityCloth::rttiHashEntityCloth("EntityCloth");
 char EntityCloth::rttiNameEntityCloth[] = "EntityCloth";
 
-// GLOBAL: SWBF2 0x01eb062c
 // SYNTHETIC: SWBF2 0x004023b0
 // `dynamic initializer for 'EntityClothClass::rttiHashEntityClothClass''
+// GLOBAL: SWBF2 0x01eb062c
+// EntityClothClass::rttiHashEntityClothClass
 PblHash EntityClothClass::rttiHashEntityClothClass("EntityClothClass");
 char EntityClothClass::rttiNameEntityClothClass[] = "EntityClothClass";
 

@@ -13,14 +13,16 @@
 // `dynamic atexit destructor for 'CommandWalker::sMemoryPool''
 MemoryPool CommandWalker::sMemoryPool("CommandWalker", 0x2110);
 
-// GLOBAL: SWBF2 0x01eb96f8
 // SYNTHETIC: SWBF2 0x00402720
 // `dynamic initializer for 'CommandWalker::rttiHashCommandWalker''
+// GLOBAL: SWBF2 0x01eb96f8
+// CommandWalker::rttiHashCommandWalker
 PblHash CommandWalker::rttiHashCommandWalker("CommandWalker");
 
-// GLOBAL: SWBF2 0x01eb96fc
 // SYNTHETIC: SWBF2 0x00402730
 // `dynamic initializer for 'CommandWalkerClass::rttiHashCommandWalkerClass''
+// GLOBAL: SWBF2 0x01eb96fc
+// CommandWalkerClass::rttiHashCommandWalkerClass
 PblHash CommandWalkerClass::rttiHashCommandWalkerClass("CommandWalkerClass");
 char CommandWalkerClass::rttiNameCommandWalkerClass[] = "CommandWalkerClass";
 

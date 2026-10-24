@@ -6,9 +6,10 @@
 #include "PathFollower.h"
 #include "UnitController.h"
 
-// GLOBAL: SWBF2 0x01ecb254
 // SYNTHETIC: SWBF2 0x004043e0
 // `dynamic initializer for 'NavigatorPathFollower::rttiHashNavigatorPathFollower''
+// GLOBAL: SWBF2 0x01ecb254
+// NavigatorPathFollower::rttiHashNavigatorPathFollower
 PblHash NavigatorPathFollower::rttiHashNavigatorPathFollower("NavigatorPathFollower");
 char NavigatorPathFollower::rttiNameNavigatorPathFollower[] = "NavigatorPathFollower";
 

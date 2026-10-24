@@ -30,15 +30,17 @@ namespace
     }
 }
 
-// GLOBAL: SWBF2 0x01ef2610
 // SYNTHETIC: SWBF2 0x00405a10
 // `dynamic initializer for 'OrdnanceBeacon::rttiHashOrdnanceBeacon''
+// GLOBAL: SWBF2 0x01ef2610
+// OrdnanceBeacon::rttiHashOrdnanceBeacon
 PblHash OrdnanceBeacon::rttiHashOrdnanceBeacon("OrdnanceBeacon");
 char OrdnanceBeacon::rttiNameOrdnanceBeacon[] = "OrdnanceBeacon";
 
-// GLOBAL: SWBF2 0x01ef257c
 // SYNTHETIC: SWBF2 0x00405a20
 // `dynamic initializer for 'OrdnanceBeaconClass::rttiHashOrdnanceBeaconClass''
+// GLOBAL: SWBF2 0x01ef257c
+// OrdnanceBeaconClass::rttiHashOrdnanceBeaconClass
 PblHash OrdnanceBeaconClass::rttiHashOrdnanceBeaconClass("OrdnanceBeaconClass");
 char OrdnanceBeaconClass::rttiNameOrdnanceBeaconClass[] = "OrdnanceBeaconClass";
 

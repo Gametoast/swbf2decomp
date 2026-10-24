@@ -12,9 +12,15 @@
 #include <new>
 
 extern bool netIsLocalTurn;
-namespace GameLoop { extern float sClientDeltaTime; }
+namespace GameLoop
+{
+extern float sClientDeltaTime;
+}
 
-namespace CombatUtil { void SendDamageEvent(const Controllable* pOwner, const GameObject* pTarget, const Trigger* pTrigger); }
+namespace CombatUtil
+{
+void SendDamageEvent(const Controllable* pOwner, const GameObject* pTarget, const Trigger* pTrigger);
+}
 
 class AmmoCounter
 {
@@ -31,9 +37,10 @@ namespace
     }
 }
 
-// GLOBAL: SWBF2 0x01f9a8e0
 // SYNTHETIC: SWBF2 0x004071c0
 // `dynamic initializer for 'WeaponLaser::rttiHashWeaponLaser''
+// GLOBAL: SWBF2 0x01f9a8e0
+// WeaponLaser::rttiHashWeaponLaser
 PblHash WeaponLaser::rttiHashWeaponLaser("WeaponLaser");
 char WeaponLaser::rttiNameWeaponLaser[] = "WeaponLaser";
 
@@ -222,9 +229,10 @@ void WeaponLaser::EnterEmpty()
     mStateLimit = static_cast<const WeaponLaserClass*>(mClass)->mShotDelay;
 }
 
-// GLOBAL: SWBF2 0x01f9a8dc
 // SYNTHETIC: SWBF2 0x004071d0
 // `dynamic initializer for 'WeaponLaserClass::rttiHashWeaponLaserClass''
+// GLOBAL: SWBF2 0x01f9a8dc
+// WeaponLaserClass::rttiHashWeaponLaserClass
 PblHash WeaponLaserClass::rttiHashWeaponLaserClass("WeaponLaserClass");
 char WeaponLaserClass::rttiNameWeaponLaserClass[] = "WeaponLaserClass";
 

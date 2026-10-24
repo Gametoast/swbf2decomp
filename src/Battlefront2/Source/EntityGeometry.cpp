@@ -29,15 +29,17 @@
 #include "NetGame.h"
 #include "PebbleFL/Common/PblRandom.h"
 
-// GLOBAL: SWBF2 0x01ebbcbc
 // SYNTHETIC: SWBF2 0x00402b30
 // `dynamic initializer for 'EntityGeometryClass::rttiHashEntityGeometryClass''
+// GLOBAL: SWBF2 0x01ebbcbc
+// EntityGeometryClass::rttiHashEntityGeometryClass
 PblHash EntityGeometryClass::rttiHashEntityGeometryClass("EntityGeometryClass");
 char EntityGeometryClass::rttiNameEntityGeometryClass[] = "EntityGeometryClass";
 
-// GLOBAL: SWBF2 0x01ebbcc0
 // SYNTHETIC: SWBF2 0x00402b20
 // `dynamic initializer for 'EntityGeometry::rttiHashEntityGeometry''
+// GLOBAL: SWBF2 0x01ebbcc0
+// EntityGeometry::rttiHashEntityGeometry
 PblHash EntityGeometry::rttiHashEntityGeometry("EntityGeometry");
 char EntityGeometry::rttiNameEntityGeometry[] = "EntityGeometry";
 

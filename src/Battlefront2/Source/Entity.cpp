@@ -16,15 +16,17 @@
 PblHash Entity::rttiHashEntity("Entity");
 char Entity::rttiNameEntity[] = "Entity";
 
-// GLOBAL: SWBF2 0x01eb9868
 // SYNTHETIC: SWBF2 0x00402840
 // `dynamic initializer for 'EntityEx::rttiHashEntityEx''
+// GLOBAL: SWBF2 0x01eb9868
+// EntityEx::rttiHashEntityEx
 PblHash EntityEx::rttiHashEntityEx("EntityEx");
 char EntityEx::rttiNameEntityEx[] = "EntityEx";
 
-// GLOBAL: SWBF2 0x01eb9860
 // SYNTHETIC: SWBF2 0x00402850
 // `dynamic initializer for 'EntityClass::rttiHashEntityClass''
+// GLOBAL: SWBF2 0x01eb9860
+// EntityClass::rttiHashEntityClass
 PblHash EntityClass::rttiHashEntityClass("EntityClass");
 char EntityClass::rttiNameEntityClass[] = "EntityClass";
 

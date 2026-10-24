@@ -40,9 +40,10 @@ namespace
     }
 }
 
-// GLOBAL: SWBF2 0x01f9a89c
 // SYNTHETIC: SWBF2 0x004070c0
 // `dynamic initializer for 'WeaponCatapult::rttiHashWeaponCatapult''
+// GLOBAL: SWBF2 0x01f9a89c
+// WeaponCatapult::rttiHashWeaponCatapult
 PblHash WeaponCatapult::rttiHashWeaponCatapult("WeaponCatapult");
 char WeaponCatapult::rttiNameWeaponCatapult[] = "WeaponCatapult";
 
@@ -326,9 +327,10 @@ void WeaponCatapult::Render(const PblMatrix& matrix, const RedPose* pPose, const
     Weapon::Render(matrix, pPose, color, uFlags, bArg);
 }
 
-// GLOBAL: SWBF2 0x01f9a8a0
 // SYNTHETIC: SWBF2 0x004070d0
 // `dynamic initializer for 'WeaponCatapultClass::rttiHashWeaponCatapultClass''
+// GLOBAL: SWBF2 0x01f9a8a0
+// WeaponCatapultClass::rttiHashWeaponCatapultClass
 PblHash WeaponCatapultClass::rttiHashWeaponCatapultClass("WeaponCatapultClass");
 char WeaponCatapultClass::rttiNameWeaponCatapultClass[] = "WeaponCatapultClass";
 

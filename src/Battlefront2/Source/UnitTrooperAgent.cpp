@@ -93,9 +93,10 @@ namespace
     }
 }
 
-// GLOBAL: SWBF2 0x01f9a250
 // SYNTHETIC: SWBF2 0x00406d30
 // `dynamic initializer for 'UnitTrooperAgent::rttiHashUnitTrooperAgent''
+// GLOBAL: SWBF2 0x01f9a250
+// UnitTrooperAgent::rttiHashUnitTrooperAgent
 PblHash UnitTrooperAgent::rttiHashUnitTrooperAgent("UnitTrooperAgent");
 char UnitTrooperAgent::rttiNameUnitTrooperAgent[] = "UnitTrooperAgent";
 

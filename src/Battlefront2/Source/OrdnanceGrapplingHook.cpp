@@ -13,9 +13,10 @@ extern "C" PblVector3* __stdcall D3DXVec3TransformCoord(PblVector3* pOut, const 
 
 extern PblVector3 gVectorZero;
 
-// GLOBAL: SWBF2 0x01ef2630
 // SYNTHETIC: SWBF2 0x00405aa0
 // `dynamic initializer for 'OrdnanceGrapplingHook::rttiHashOrdnanceGrapplingHook''
+// GLOBAL: SWBF2 0x01ef2630
+// OrdnanceGrapplingHook::rttiHashOrdnanceGrapplingHook
 PblHash OrdnanceGrapplingHook::rttiHashOrdnanceGrapplingHook("OrdnanceGrapplingHook");
 char OrdnanceGrapplingHook::rttiNameOrdnanceGrapplingHook[] = "OrdnanceGrapplingHook";
 
@@ -277,9 +278,10 @@ bool OrdnanceGrapplingHook::Update(float fDeltaTime)
     return true;
 }
 
-// GLOBAL: SWBF2 0x01ef2634
 // SYNTHETIC: SWBF2 0x00405ab0
 // `dynamic initializer for 'OrdnanceGrapplingHookClass::rttiHashOrdnanceGrapplingHookClass''
+// GLOBAL: SWBF2 0x01ef2634
+// OrdnanceGrapplingHookClass::rttiHashOrdnanceGrapplingHookClass
 PblHash OrdnanceGrapplingHookClass::rttiHashOrdnanceGrapplingHookClass("OrdnanceGrapplingHookClass");
 char OrdnanceGrapplingHookClass::rttiNameOrdnanceGrapplingHookClass[] = "OrdnanceGrapplingHookClass";
 

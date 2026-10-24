@@ -119,9 +119,10 @@ static PblMatrix _IdentityMatrix(
     PblVector4{ 0.0f, 0.0f, 1.0f, 0.0f },
     PblVector4{ 0.0f, 0.0f, 0.0f, 1.0f });
 
-// GLOBAL: SWBF2 0x01ebc054
 // SYNTHETIC: SWBF2 0x00402d60
 // `dynamic initializer for 'EntitySoldier::rttiHashEntitySoldier''
+// GLOBAL: SWBF2 0x01ebc054
+// EntitySoldier::rttiHashEntitySoldier
 PblHash EntitySoldier::rttiHashEntitySoldier("EntitySoldier");
 char EntitySoldier::rttiNameEntitySoldier[] = "EntitySoldier";
 
@@ -132,9 +133,10 @@ char EntitySoldier::rttiNameEntitySoldier[] = "EntitySoldier";
 // `dynamic atexit destructor for 'EntitySoldier::sMemoryPool''
 MemoryPool EntitySoldier::sMemoryPool("EntitySoldier", 0xfd0);
 
-// GLOBAL: SWBF2 0x01ebc0f8
 // SYNTHETIC: SWBF2 0x00402d70
 // `dynamic initializer for 'EntitySoldierClass::rttiHashEntitySoldierClass''
+// GLOBAL: SWBF2 0x01ebc0f8
+// EntitySoldierClass::rttiHashEntitySoldierClass
 PblHash EntitySoldierClass::rttiHashEntitySoldierClass("EntitySoldierClass");
 static char rttiNameEntitySoldierClass[] = "EntitySoldierClass";
 

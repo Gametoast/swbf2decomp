@@ -156,26 +156,6 @@ void CombatHelper::Kill()
     Fsm::Kill();
 }
 
-UnitController* CombatHelper::GetCtrl()
-{
-    return mOwner->mCtrl;
-}
-
-Controllable* CombatHelper::GetMe()
-{
-    return mOwner->mCtrl->mOwner;
-}
-
-AILowLevel& CombatHelper::GetLowLevel()
-{
-    return *reinterpret_cast<AILowLevel*>(mOwner->mCtrl->mLowLevel);
-}
-
-AttackHelper& CombatHelper::GetAttackHelper()
-{
-    return *reinterpret_cast<AttackHelper*>(mOwner->mAttackHelper);
-}
-
 // FUNCTION: SWBF2 0x0046c420
 void CombatHelper::Init(const UnitCombatInfo& info)
 {

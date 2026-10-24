@@ -1,9 +1,10 @@
 #include "UnitFlyController.h"
 #include "UnitFlyAgent.h"
 
-// GLOBAL: SWBF2 0x01f993e4
 // SYNTHETIC: SWBF2 0x00406cd0
 // `dynamic initializer for 'UnitFlyController::rttiHashUnitFlyController''
+// GLOBAL: SWBF2 0x01f993e4
+// UnitFlyController::rttiHashUnitFlyController
 PblHash UnitFlyController::rttiHashUnitFlyController("UnitFlyController");
 char UnitFlyController::rttiNameUnitFlyController[] = "UnitFlyController";
 

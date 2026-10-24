@@ -3,9 +3,10 @@
 #include "GameLoop.h"
 #include "GameState.h"
 
-// GLOBAL: SWBF2 0x01ebc1fc
 // SYNTHETIC: SWBF2 0x00402e90
 // `dynamic initializer for 'EntitySoundStreamClass::rttiHashEntitySoundStreamClass''
+// GLOBAL: SWBF2 0x01ebc1fc
+// EntitySoundStreamClass::rttiHashEntitySoundStreamClass
 PblHash EntitySoundStreamClass::rttiHashEntitySoundStreamClass("EntitySoundStreamClass");
 char EntitySoundStreamClass::rttiNameEntitySoundStreamClass[] = "EntitySoundStreamClass";
 
@@ -70,9 +71,10 @@ const char* EntitySoundStreamClass::GetDerivedRttiName()
     return rttiNameEntitySoundStreamClass;
 }
 
-// GLOBAL: SWBF2 0x01ebc250
 // SYNTHETIC: SWBF2 0x00402e80
 // `dynamic initializer for 'EntitySoundStream::rttiHashEntitySoundStream''
+// GLOBAL: SWBF2 0x01ebc250
+// EntitySoundStream::rttiHashEntitySoundStream
 PblHash EntitySoundStream::rttiHashEntitySoundStream("EntitySoundStream");
 char EntitySoundStream::rttiNameEntitySoundStream[] = "EntitySoundStream";
 

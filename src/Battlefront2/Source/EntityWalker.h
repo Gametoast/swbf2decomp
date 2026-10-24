@@ -7,6 +7,7 @@
 #include "Controllable.h"
 #include "EnergyBar.h"
 #include "GameObject.h"
+#include "GameLoop.h"
 #include "GameSound.h"
 #include "Trackable.h"
 #include "VehicleEngine.h"
@@ -124,10 +125,22 @@ public:
     virtual Entity* GetEntity();
     virtual const GameObject* GetGameObject() const;
     virtual GameObject* GetGameObject();
-    virtual const PblVector3& GetVelocity() const;
-    virtual void SetVelocity(const PblVector3& vVelocity);
+    // FUNCTION: SWBF2 0x0047f9a0
+    virtual const PblVector3& GetVelocity() const
+    {
+        return mVelocity;
+    }
+    // FUNCTION: SWBF2 0x0047f9b0
+    virtual void SetVelocity(const PblVector3& vVelocity)
+    {
+        mVelocity = vVelocity;
+    }
     virtual float GetMaxSpeed() const;
-    virtual float GetMaxStrafe() const;
+    // FUNCTION: SWBF2 0x0047fb20
+    virtual float GetMaxStrafe() const
+    {
+        return 0.0f;
+    }
     virtual const Controllable* GetControllable() const;
     virtual Controllable* GetControllable();
     virtual bool ShouldShowReticule() const;
@@ -135,14 +148,38 @@ public:
     virtual const PblVector3& GetAttachOffset() const;
     virtual void ActivatePhysics();
     virtual void DeactivatePhysics();
-    virtual GameObjectType GetGameObjectType();
-    virtual void ReserveForPlayer(float fTime);
-    virtual bool IsReservedForPlayer() const;
+    // FUNCTION: SWBF2 0x0047fbd0
+    virtual GameObjectType GetGameObjectType()
+    {
+        return (GameObjectType)(GO_VEHICLE | GO_WALKER);
+    }
+    // FUNCTION: SWBF2 0x0047fbe0
+    virtual void ReserveForPlayer(float fTime)
+    {
+        mReserveForPlayer = GameLoop::GetMissionTime() + fTime;
+    }
+    // FUNCTION: SWBF2 0x0047fc00
+    virtual bool IsReservedForPlayer() const
+    {
+        return mReserveForPlayer > GameLoop::GetMissionTime();
+    }
     virtual EntityType GetEntityType() const;
     virtual ExplosionClass* GetExplosionClass();
-    virtual float GetEjectTimer() const;
-    virtual void SetEjectTimer(float fTime);
-    virtual void ResetTimeSinceLastHack();
+    // FUNCTION: SWBF2 0x0047fc40
+    virtual float GetEjectTimer() const
+    {
+        return mEjectTimer;
+    }
+    // FUNCTION: SWBF2 0x0047fc20
+    virtual void SetEjectTimer(float fTime)
+    {
+        mEjectTimer = fTime;
+    }
+    // FUNCTION: SWBF2 0x0047fc50
+    virtual void ResetTimeSinceLastHack()
+    {
+        mTimeSinceLastHack = 0.0f;
+    }
     virtual void WriteObject(NetPktGroup& group, NetObjState* pState);
     virtual void ReadObject(NetPktGroup& group, NetObjState* pState);
     virtual void AddSends(void (*pfnSend)(GameObject*, int), int iArg);
@@ -170,8 +207,16 @@ public:
                                    Restrictor* pRestrictor);
     virtual void SetTerrainHeight(int iIndex, float fHeight);
 
-    virtual const PblMatrix& GetMatrix() const;
-    virtual const RedPose* GetPose() const;
+    // FUNCTION: SWBF2 0x0047f990
+    virtual const PblMatrix& GetMatrix() const
+    {
+        return mMatrix;
+    }
+    // FUNCTION: SWBF2 0x0047f940
+    virtual const RedPose* GetPose() const
+    {
+        return &mPose;
+    }
 
     virtual void Render(unsigned char ucViewport, float fDist, unsigned int uiFlags);
 
@@ -181,15 +226,35 @@ public:
                              unsigned int uFlags);
 
     virtual bool Update(float fDeltaTime);
-    virtual Trackable* GetTrackable();
+    // FUNCTION: SWBF2 0x0047fb30
+    virtual Trackable* GetTrackable()
+    {
+        return static_cast<Trackable*>(this);
+    }
     virtual float GetSoundRadius() const;
     virtual float GetAimTurnRate() const;
     virtual int GetWeaponCount() const;
-    virtual int GetWeaponIndex(int iChannel) const;
-    virtual Weapon* GetWeaponPtr(int iIndex) const;
-    virtual EnergyBar* GetEnergyBar();
+    // FUNCTION: SWBF2 0x0047fb70
+    virtual int GetWeaponIndex(int iChannel) const
+    {
+        return mWeaponIndex[iChannel];
+    }
+    // FUNCTION: SWBF2 0x0047fb90
+    virtual Weapon* GetWeaponPtr(int iIndex) const
+    {
+        return mWeapon[iIndex];
+    }
+    // FUNCTION: SWBF2 0x0047fc60
+    virtual EnergyBar* GetEnergyBar()
+    {
+        return (EnergyBar*)mEnergyBar;
+    }
     virtual void SetWeaponIndex(int iChannel, int iIndex);
-    virtual const Aimer* GetAimer(int iIndex) const;
+    // FUNCTION: SWBF2 0x0047fbb0
+    virtual const Aimer* GetAimer(int iIndex) const
+    {
+        return mAimer[iIndex];
+    }
     virtual ControllableClass* GetControllableClass();
     virtual const ControllableClass* GetControllableClass() const;
     virtual void SetupController();
@@ -209,7 +274,11 @@ public:
     virtual bool RenderTrackable(unsigned int uView) const;
 
 protected:
-    virtual bool IsForcedThirdPerson() const;
+    // FUNCTION: SWBF2 0x0047fc70
+    virtual bool IsForcedThirdPerson() const
+    {
+        return true;
+    }
 
 public:
 
@@ -385,13 +454,41 @@ public:
     virtual const char* GetDerivedRttiName();
     virtual void SetProperty(unsigned int uProperty, const char* pszValue);
     virtual void PostReadSetup();
-    virtual int GetVehicleType();
-    virtual const void* GetControllableClass();
-    virtual int GetWeaponCount();
-    virtual const WeaponClass* GetWeaponClass(int iIndex);
-    virtual float GetCollisionInflict();
-    virtual float GetTimeRequiredToEject();
-    virtual float GetReboardTime();
+    // FUNCTION: SWBF2 0x0047fcc0
+    virtual int GetVehicleType()
+    {
+        return mVehicleType;
+    }
+    // FUNCTION: SWBF2 0x0047fd30
+    virtual const void* GetControllableClass()
+    {
+        return static_cast<const ControllableClass*>(this);
+    }
+    // FUNCTION: SWBF2 0x0047fcd0
+    virtual int GetWeaponCount()
+    {
+        return mWeaponCount;
+    }
+    // FUNCTION: SWBF2 0x0047fce0
+    virtual const WeaponClass* GetWeaponClass(int iIndex)
+    {
+        return mWeaponClass[iIndex];
+    }
+    // FUNCTION: SWBF2 0x0047fd00
+    virtual float GetCollisionInflict()
+    {
+        return mCollisionInflict;
+    }
+    // FUNCTION: SWBF2 0x0047fd10
+    virtual float GetTimeRequiredToEject()
+    {
+        return mTimeRequiredToEject;
+    }
+    // FUNCTION: SWBF2 0x0047fd20
+    virtual float GetReboardTime()
+    {
+        return mTimeTilReboard;
+    }
     virtual bool InitAnimations(const char* pszName);
 
     PblBitVector<64> HierarchyJointMask(const ZephyrSkeletonShared* pSkeleton, int iJoint);

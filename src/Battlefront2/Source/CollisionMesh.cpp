@@ -37,6 +37,8 @@
 #include "Zephyr/Source/ZephyrSkeletonShared.h"
 #include "Zephyr/Source/ZephyrSkinReader.h"
 #include "Zephyr/Source/ZephyrSkinShared.h"
+#include "EntitySoldier.h"
+#include "RedEngineFL/Util/RedStack.h"
 
 // GLOBAL: SWBF2 0x01e30374
 char sCurrentCollision[32];
@@ -603,3 +605,160 @@ int CollisionMesh::_HashTableNumEntries;
 // `dynamic initializer for 'CollisionMesh::_HashTable''
 
 PblHashTable<CollisionMesh, 1024> CollisionMesh::_HashTable;
+
+// FUNCTION: SWBF2 0x00461ba0
+void CollisionMesh::__GetTriHits(const PblVector3& vPos, float fRadius2, const PblVector3& vMin, const PblVector3& vMax, CollisionTreeNode* pNode, const CollisionAABB& aabb, PolyListContainer<100>& list, CollisionMeshCache* pCache) const
+{
+    const CollisionMesh* pMesh = (const CollisionMesh*)this;
+    RedStack stack;
+    const float* pPos = &vPos.x;
+    const float* pBoxMin = &aabb.boxmin.x;
+    const float* pBoxMax = &aabb.boxmax.x;
+    int i;
+    if (pCache)
+    {
+        float fDist2 = 0.0f;
+        for (i = 0; i < 3; ++i)
+        {
+            if (pBoxMin[i] > pPos[i])
+            {
+                fDist2 += (pPos[i] - pBoxMin[i]) * (pPos[i] - pBoxMin[i]);
+            }
+            else if (pPos[i] > pBoxMax[i])
+            {
+                fDist2 += (pPos[i] - pBoxMax[i]) * (pPos[i] - pBoxMax[i]);
+            }
+            if (fDist2 > fRadius2)
+            {
+                return;
+            }
+        }
+    }
+    else
+    {
+        for (i = 0; i < 3; ++i)
+        {
+            if ((&vMin.x)[i] > pBoxMax[i])
+            {
+                return;
+            }
+            if (pBoxMin[i] > (&vMax.x)[i])
+            {
+                return;
+            }
+        }
+    }
+
+    if (!pNode->isleaf)
+    {
+
+        CollisionTreeNode* pLChild = pNode + 1;
+        CollisionTreeNode* pGChild = (CollisionTreeNode*)pNode->data;
+        CollisionAABB lAABB(aabb, pLChild->aabb);
+        CollisionAABB gAABB(aabb, pGChild->aabb);
+        ((CollisionMesh*)pMesh)->__GetTriHits(vPos, fRadius2, vMin, vMax, pLChild, lAABB, list, pCache);
+        ((CollisionMesh*)pMesh)->__GetTriHits(vPos, fRadius2, vMin, vMax, pGChild, gAABB, list, pCache);
+        return;
+    }
+
+    CollisionTreeLeaf* pLeaf = (CollisionTreeLeaf*)pNode;
+    PblVector3* pVerts = (PblVector3*)stack.Alloc(100 * sizeof(PblVector3));
+    int iNumVerts = pLeaf->numVerts;
+    if (iNumVerts > 100)
+    {
+        iNumVerts = 100;
+    }
+    const unsigned short* pIndices = pLeaf->GetIndexPointer();
+    for (i = 0; i < iNumVerts; ++i)
+    {
+        pVerts[i] = pMesh->mPoslList[pIndices[i]];
+    }
+    list.AddPolygon((unsigned char)iNumVerts, pVerts);
+    if (pCache && pCache->mNumPolys < 70)
+    {
+        pCache->mPolys[pCache->mNumPolys++] = pLeaf;
+    }
+}
+
+// FUNCTION: SWBF2 0x00461df0
+CollisionMeshCache* CollisionMesh::_GetTriHits(const PblVector3& vPos, float fRadius, const PblVector3& vMin, const PblVector3& vMax, PolyListContainer<100>& list, EntitySoldier* pSoldier) const
+{
+    const CollisionMesh* pMesh = (const CollisionMesh*)this;
+    RedStack stack;
+    CollisionMeshCache* pCache = NULL;
+    bool bSearch = true;
+    list.Clear();
+    if (pSoldier)
+    {
+        PblVector3* pVerts = (PblVector3*)stack.Alloc(100 * sizeof(PblVector3));
+
+        CollisionMeshCache* pCaches = (CollisionMeshCache*)pSoldier->mCollisionMeshCache;
+        for (int i = 0; i < 3; ++i)
+        {
+            CollisionMeshCache& cache = pCaches[i];
+            if (cache.mMesh != pMesh)
+            {
+                continue;
+            }
+            pCache = &cache;
+            float fX = vPos.x - cache.mInitialPos.x;
+            float fY = vPos.y - cache.mInitialPos.y;
+            float fZ = vPos.z - cache.mInitialPos.z;
+            if (fRadius * (0.65f * 0.65f) * fRadius > fX * fX + fY * fY + fZ * fZ && cache.mNumPolys < 70)
+            {
+                for (int k = 0; k < cache.mNumPolys; ++k)
+                {
+                    CollisionTreeLeaf* pLeaf = cache.mPolys[k];
+                    int iNumVerts = pLeaf->numVerts;
+                    if (iNumVerts > 100)
+                    {
+                        iNumVerts = 100;
+                    }
+                    const unsigned short* pIndices = pLeaf->GetIndexPointer();
+                    for (int j = 0; j < iNumVerts; ++j)
+                    {
+                        pVerts[j] = pMesh->mPoslList[pIndices[j]];
+                    }
+                    list.AddPolygon((unsigned char)iNumVerts, pVerts);
+                }
+                bSearch = false;
+                break;
+            }
+        }
+        if (!pCache)
+        {
+            pCache = &pCaches[0];
+            for (int i = 1; i < 3; ++i)
+            {
+                if (pCaches[i].mNumPolys < pCache->mNumPolys)
+                {
+                    pCache = &pCaches[i];
+                }
+            }
+            pCache->lastPos = vPos;
+            pCache->aClosest = fRadius;
+        }
+    }
+    if (bSearch)
+    {
+        if (pCache)
+        {
+            pCache->mInitialPos = vPos;
+            pCache->mMesh = const_cast<CollisionMesh*>(pMesh);
+            pCache->mNumPolys = 0;
+            ((CollisionMesh*)pMesh)->__GetTriHits(vPos, fRadius * (1.65f * 1.65f) * fRadius, vMin, vMax, pMesh->mRoot, pMesh->mAABB, list, pCache);
+        }
+        else
+        {
+            ((CollisionMesh*)pMesh)->__GetTriHits(vPos, fRadius * fRadius, vMin, vMax, pMesh->mRoot, pMesh->mAABB, list, NULL);
+        }
+    }
+    return pCache;
+}
+
+// FUNCTION: SWBF2 0x00462050
+CollisionMeshCache* CollisionMesh::GetTriHits(const PblVector3& vPos, float fRadius, const PblVector3& vMin, const PblVector3& vMax, PolyListContainer<100>& list, EntitySoldier* pSoldier) const
+{
+    const CollisionMesh* pMesh = (const CollisionMesh*)this;
+    return ((CollisionMesh*)pMesh)->_GetTriHits(vPos, fRadius, vMin, vMax, list, pSoldier);
+}

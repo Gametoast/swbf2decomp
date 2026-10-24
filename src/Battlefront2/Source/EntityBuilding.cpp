@@ -75,15 +75,17 @@ const PblBox& EntityBuilding::GetBBox() const
     return GetModel()->_mModel->_TotalBoundingBox;
 }
 
-// GLOBAL: SWBF2 0x01eb986c
 // SYNTHETIC: SWBF2 0x00402890
 // `dynamic initializer for 'EntityBuildingClass::rttiHashEntityBuildingClass''
+// GLOBAL: SWBF2 0x01eb986c
+// EntityBuildingClass::rttiHashEntityBuildingClass
 PblHash EntityBuildingClass::rttiHashEntityBuildingClass("EntityBuildingClass");
 char EntityBuildingClass::rttiNameEntityBuildingClass[] = "EntityBuildingClass";
 
-// GLOBAL: SWBF2 0x01ebb874
 // SYNTHETIC: SWBF2 0x00402880
 // `dynamic initializer for 'EntityBuilding::rttiHashEntityBuilding''
+// GLOBAL: SWBF2 0x01ebb874
+// EntityBuilding::rttiHashEntityBuilding
 PblHash EntityBuilding::rttiHashEntityBuilding("EntityBuilding");
 char EntityBuilding::rttiNameEntityBuilding[] = "EntityBuilding";
 

@@ -233,9 +233,10 @@ namespace
     }
 }
 
-// GLOBAL: SWBF2 0x01f7d0dc
 // SYNTHETIC: SWBF2 0x00406bf0
 // `dynamic initializer for 'UnitAgent::rttiHashUnitAgent''
+// GLOBAL: SWBF2 0x01f7d0dc
+// UnitAgent::rttiHashUnitAgent
 PblHash UnitAgent::rttiHashUnitAgent("UnitAgent");
 char UnitAgent::rttiNameUnitAgent[] = "UnitAgent";
 
@@ -317,21 +318,6 @@ float UnitAgent::GetUpdateRate() const
 void UnitAgent::UpdateState(float dt)
 {
     UpdateStatePostVision(dt);
-}
-
-const Controllable* UnitAgent::GetMe() const
-{
-    return mCtrl->mOwner;
-}
-
-Controllable* UnitAgent::GetMe()
-{
-    return mCtrl->mOwner;
-}
-
-AILowLevel& UnitAgent::GetLowLevel()
-{
-    return *reinterpret_cast<AILowLevel*>(mCtrl->mLowLevel);
 }
 
 // FUNCTION: SWBF2 0x0065de00

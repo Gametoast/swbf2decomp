@@ -355,15 +355,17 @@ FlagItemClass::FlagItemClass(unsigned int uHash)
     mCarriedDroidekaBoneHash = 0x698AED8Au;
 }
 
-// GLOBAL: SWBF2 0x01ebc2b8
 // SYNTHETIC: SWBF2 0x00403850
 // `dynamic initializer for 'FlagItem::rttiHashFlagItem''
+// GLOBAL: SWBF2 0x01ebc2b8
+// FlagItem::rttiHashFlagItem
 PblHash FlagItem::rttiHashFlagItem("FlagItem");
 char FlagItem::rttiNameFlagItem[] = "FlagItem";
 
-// GLOBAL: SWBF2 0x01ebc2b4
 // SYNTHETIC: SWBF2 0x00403860
 // `dynamic initializer for 'FlagItemClass::rttiHashFlagItemClass''
+// GLOBAL: SWBF2 0x01ebc2b4
+// FlagItemClass::rttiHashFlagItemClass
 PblHash FlagItemClass::rttiHashFlagItemClass("FlagItemClass");
 char FlagItemClass::rttiNameFlagItemClass[] = "FlagItemClass";
 

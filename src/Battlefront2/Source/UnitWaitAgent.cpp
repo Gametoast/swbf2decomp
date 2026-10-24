@@ -9,9 +9,10 @@
 #include "PebbleFL/Common/PblMath.h"
 #include "PebbleFL/Common/PblMatrix.h"
 
-// GLOBAL: SWBF2 0x01f9a258
 // SYNTHETIC: SWBF2 0x00406d50
 // `dynamic initializer for 'UnitWaitAgent::rttiHashUnitWaitAgent''
+// GLOBAL: SWBF2 0x01f9a258
+// UnitWaitAgent::rttiHashUnitWaitAgent
 PblHash UnitWaitAgent::rttiHashUnitWaitAgent("UnitWaitAgent");
 char UnitWaitAgent::rttiNameUnitWaitAgent[] = "UnitWaitAgent";
 

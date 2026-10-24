@@ -2,9 +2,10 @@
 #include "PebbleFL/Common/PblChunk.h"
 #include "PebbleFL/Common/PblFile.h"
 
-// GLOBAL: SWBF2 0x01ebd01c
 // SYNTHETIC: SWBF2 0x00403ad0
 // `dynamic initializer for 'FoleyFXImpact::rttiHashFoleyFXImpact''
+// GLOBAL: SWBF2 0x01ebd01c
+// FoleyFXImpact::rttiHashFoleyFXImpact
 PblHash FoleyFXImpact::rttiHashFoleyFXImpact("FoleyFXImpact");
 char FoleyFXImpact::rttiNameFoleyFXImpact[] = "FoleyFXImpact";
 

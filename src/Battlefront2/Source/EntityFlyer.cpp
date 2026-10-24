@@ -400,15 +400,17 @@ EntityFlyerClass::EntityFlyerClass(unsigned int uHash)
     mGuidedMissileBoostExplosionSpeedThreshold = 0.8f;
 }
 
-// GLOBAL: SWBF2 0x01ebbcb8
 // SYNTHETIC: SWBF2 0x00402ae0
 // `dynamic initializer for 'EntityFlyerClass::rttiHashEntityFlyerClass''
+// GLOBAL: SWBF2 0x01ebbcb8
+// EntityFlyerClass::rttiHashEntityFlyerClass
 PblHash EntityFlyerClass::rttiHashEntityFlyerClass("EntityFlyerClass");
 char EntityFlyerClass::rttiNameEntityFlyerClass[] = "EntityFlyerClass";
 
-// GLOBAL: SWBF2 0x01ebbc64
 // SYNTHETIC: SWBF2 0x00402ad0
 // `dynamic initializer for 'EntityFlyer::rttiHashEntityFlyer''
+// GLOBAL: SWBF2 0x01ebbc64
+// EntityFlyer::rttiHashEntityFlyer
 PblHash EntityFlyer::rttiHashEntityFlyer("EntityFlyer");
 
 // FUNCTION: SWBF2 0x004a9cd0

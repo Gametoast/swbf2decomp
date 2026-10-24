@@ -105,15 +105,17 @@ inline RedColorValue ToColorValue(const RedColor& c)
 }
 }
 
-// GLOBAL: SWBF2 0x01ebbcc4
 // SYNTHETIC: SWBF2 0x00402b40
 // `dynamic initializer for 'EntityHologram::rttiHashEntityHologram''
+// GLOBAL: SWBF2 0x01ebbcc4
+// EntityHologram::rttiHashEntityHologram
 PblHash EntityHologram::rttiHashEntityHologram("EntityHologram");
 char EntityHologram::rttiNameEntityHologram[] = "EntityHologram";
 
-// GLOBAL: SWBF2 0x01ebbdcc
 // SYNTHETIC: SWBF2 0x00402b50
 // `dynamic initializer for 'EntityHologramClass::rttiHashEntityHologramClass''
+// GLOBAL: SWBF2 0x01ebbdcc
+// EntityHologramClass::rttiHashEntityHologramClass
 PblHash EntityHologramClass::rttiHashEntityHologramClass("EntityHologramClass");
 char EntityHologramClass::rttiNameEntityHologramClass[] = "EntityHologramClass";
 

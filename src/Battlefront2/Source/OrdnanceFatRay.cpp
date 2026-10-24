@@ -6,9 +6,10 @@
 #include "CollisionManager.h"
 #include "GameObject.h"
 
-// GLOBAL: SWBF2 0x01ef262c
 // SYNTHETIC: SWBF2 0x00405a80
 // `dynamic initializer for 'OrdnanceFatRay::rttiHashOrdnanceFatRay''
+// GLOBAL: SWBF2 0x01ef262c
+// OrdnanceFatRay::rttiHashOrdnanceFatRay
 PblHash OrdnanceFatRay::rttiHashOrdnanceFatRay("OrdnanceFatRay");
 char OrdnanceFatRay::rttiNameOrdnanceFatRay[] = "OrdnanceFatRay";
 
@@ -146,9 +147,10 @@ OrdnanceClass* OrdnanceFatRayClass::Derive(unsigned int uHash)
     return new OrdnanceFatRayClass(this, uHash);
 }
 
-// GLOBAL: SWBF2 0x01ef2628
 // SYNTHETIC: SWBF2 0x00405a90
 // `dynamic initializer for 'OrdnanceFatRayClass::rttiHashOrdnanceFatRayClass''
+// GLOBAL: SWBF2 0x01ef2628
+// OrdnanceFatRayClass::rttiHashOrdnanceFatRayClass
 PblHash OrdnanceFatRayClass::rttiHashOrdnanceFatRayClass("OrdnanceFatRayClass");
 char OrdnanceFatRayClass::rttiNameOrdnanceFatRayClass[] = "OrdnanceFatRayClass";
 

@@ -47,61 +47,11 @@ CharacterMatchesClass<PARAM>::CharacterMatchesClass(const char* pcName)
 {
 }
 
-template <class PARAM>
-const char* CharacterMatchesName<PARAM>::GetName()
-{
-    return "Name";
-}
 
-template <class PARAM>
-const char* CharacterMatchesTeam<PARAM>::GetName()
-{
-    return "Team";
-}
 
-template <class PARAM>
-const char* CharacterMatchesClass<PARAM>::GetName()
-{
-    return "Class";
-}
 
-template <class PARAM>
-bool CharacterMatchesName<PARAM>::operator()(const Character& character, const PARAM&)
-{
-    const Controllable* pControllable = character.GetControllable();
-    if (!pControllable)
-    {
-        return false;
-    }
-    const EntityEx* pEntity = (const EntityEx*)pControllable->GetEntity();
-    if (!pEntity)
-    {
-        return false;
-    }
-    return pEntity->mId == mId;
-}
 
-template <class PARAM>
-bool CharacterMatchesTeam<PARAM>::operator()(const Character& character, const PARAM&) const
-{
-    return character.mTeamNumber == mTeam;
-}
 
-template <class PARAM>
-bool CharacterMatchesClass<PARAM>::operator()(const Character& character, const PARAM&)
-{
-    const Controllable* pControllable = character.GetControllable();
-    if (!pControllable)
-    {
-        return false;
-    }
-    const Entity* pEntity = pControllable->GetEntity();
-    if (!pEntity)
-    {
-        return false;
-    }
-    return pEntity->GetEntityClass() == mClass;
-}
 
 // FUNCTION: SWBF2 0x0050b530
 template <>
@@ -187,12 +137,6 @@ CharacterMatchesClass<AI::EventType> LuaGetItem<CharacterMatchesClass<AI::EventT
     return CharacterMatchesClass<AI::EventType>(luaL_checkstring(LuaHelper::mState, iIndex));
 }
 
-template <class ITEM, class PARAM>
-bool Event<ITEM, PARAM>::Callback::operator()(ITEM&, PARAM&)
-{
-    return true;
-}
-
 // TEMPLATE: SWBF2 0x0050e0c0
 // EventManager::Event<Character,DamageOwner>::Unregister
 
@@ -209,40 +153,9 @@ void Event<ITEM, PARAM>::Unregister(Callback& callback)
     }
 }
 
-template <class ITEM, class PARAM>
-template <class PREDICATE>
-Event<ITEM, PARAM>::Filter<PREDICATE>::Filter(PREDICATE& predicate)
-    : mPredicate(predicate)
-{
-}
 
 // TEMPLATE: SWBF2 0x0050f130
 // EventManager::Event<Character,DamageOwner>::GetFilter<EventManager::CharacterMatchesName<DamageOwner> >
-
-template <class ITEM, class PARAM>
-template <class PREDICATE>
-auto Event<ITEM, PARAM>::GetFilter(PREDICATE& predicate, Callback* pParent)
-    -> Filter<PREDICATE>*
-{
-    if (!pParent)
-    {
-        pParent = &mRoot;
-    }
-
-    for (Node* pNode = pParent->mChild; pNode; pNode = pNode->mSibling)
-    {
-        if (pNode->GetName() == PREDICATE::GetName() &&
-            ((Filter<PREDICATE>*)pNode)->mPredicate == predicate)
-        {
-            pNode->AddRef();
-            return (Filter<PREDICATE>*)pNode;
-        }
-    }
-
-    Filter<PREDICATE>* pFilter = new Filter<PREDICATE>(predicate);
-    pFilter->AttachToParent(pParent);
-    return pFilter;
-}
 
 // TEMPLATE: SWBF2 0x0050e1c0
 // EventManager::LuaCallback<Character,DamageOwner>::LuaCallback<Character,DamageOwner>
@@ -302,22 +215,8 @@ bool LuaCallback<ITEM, PARAM>::operator()(ITEM& item, PARAM& param)
 // TEMPLATE: SWBF2 0x0050e310
 // EventManager::Event<Character,DamageOwner>::Filter<EventManager::CharacterMatchesName<DamageOwner> >::GetName
 
-template <class ITEM, class PARAM>
-template <class PREDICATE>
-const char* Event<ITEM, PARAM>::Filter<PREDICATE>::GetName()
-{
-    return PREDICATE::GetName();
-}
-
 // TEMPLATE: SWBF2 0x0050e2c0
 // EventManager::Event<Character,DamageOwner>::Filter<EventManager::CharacterMatchesName<DamageOwner> >::operator()
-
-template <class ITEM, class PARAM>
-template <class PREDICATE>
-bool Event<ITEM, PARAM>::Filter<PREDICATE>::operator()(ITEM& item, PARAM& param)
-{
-    return mPredicate(item, param);
-}
 
 // TEMPLATE: SWBF2 0x0050cf40
 // EventManager::UnregisterLuaCallback<Character,GameObject>

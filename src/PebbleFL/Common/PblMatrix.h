@@ -1,6 +1,7 @@
 #pragma once
 
 #include <stddef.h>
+#include <string.h>
 
 class PblVector3;
 class PblVector4;
@@ -13,7 +14,11 @@ public:
     // FUNCTION: SWBF2 0x0040fe00
     PblMatrix() {}
 
-    PblMatrix(const PblMatrix& other);
+    // FUNCTION: SWBF2 0x0040cb30
+    PblMatrix(const PblMatrix& other)
+    {
+        memcpy(m, other.m, sizeof(m));
+    }
 
     PblMatrix* CopyFrom(const PblMatrix* pSrc);
 

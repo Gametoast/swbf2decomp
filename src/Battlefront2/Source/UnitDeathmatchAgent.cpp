@@ -20,9 +20,10 @@
 #include <d3dx9math.h>
 #include "PebbleFL/Common/PblHashTable.h"
 
-// GLOBAL: SWBF2 0x01f9938c
 // SYNTHETIC: SWBF2 0x00406c90
 // `dynamic initializer for 'UnitDeathmatchAgent::rttiHashUnitDeathmatchAgent''
+// GLOBAL: SWBF2 0x01f9938c
+// UnitDeathmatchAgent::rttiHashUnitDeathmatchAgent
 PblHash UnitDeathmatchAgent::rttiHashUnitDeathmatchAgent("UnitDeathmatchAgent");
 char UnitDeathmatchAgent::rttiNameUnitDeathmatchAgent[] = "UnitDeathmatchAgent";
 

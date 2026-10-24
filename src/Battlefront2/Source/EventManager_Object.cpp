@@ -171,29 +171,9 @@ bool LuaPushItem<DamageOwner>(DamageOwner& owner)
     return true;
 }
 
-template <class PARAM>
-const char* ObjectMatches<PARAM>::GetName()
-{
-    return "Match";
-}
 
-template <class PARAM>
-const char* ObjectMatchesName<PARAM>::GetName()
-{
-    return "Name";
-}
 
-template <class PARAM>
-const char* ObjectMatchesTeam<PARAM>::GetName()
-{
-    return "Team";
-}
 
-template <class PARAM>
-const char* ObjectMatchesClass<PARAM>::GetName()
-{
-    return "Class";
-}
 
 template <class ITEM, class PARAM>
 LuaCallback<ITEM, PARAM>::LuaCallback(int iRef)
@@ -235,26 +215,6 @@ bool LuaCallback<ITEM, PARAM>::operator()(ITEM& item, PARAM& param)
     }
 
     LuaHelper::CallProc(0);
-    return true;
-}
-
-template <class ITEM, class PARAM>
-template <class PREDICATE>
-const char* Event<ITEM, PARAM>::Filter<PREDICATE>::GetName()
-{
-    return PREDICATE::GetName();
-}
-
-template <class ITEM, class PARAM>
-template <class PREDICATE>
-bool Event<ITEM, PARAM>::Filter<PREDICATE>::operator()(ITEM& item, PARAM& param)
-{
-    return mPredicate(item, param);
-}
-
-template <class ITEM, class PARAM>
-bool Event<ITEM, PARAM>::Callback::operator()(ITEM&, PARAM&)
-{
     return true;
 }
 
@@ -768,35 +728,6 @@ void Event<ITEM, PARAM>::Unregister(Callback& callback)
     }
 }
 
-template <class ITEM, class PARAM>
-template <class PREDICATE>
-Event<ITEM, PARAM>::Filter<PREDICATE>::Filter(PREDICATE& predicate)
-    : mPredicate(predicate)
-{
-}
-
-template <class ITEM, class PARAM>
-template <class PREDICATE>
-auto Event<ITEM, PARAM>::GetFilter(PREDICATE& predicate, Callback* pParent)
-    -> Filter<PREDICATE>*
-{
-    if (!pParent)
-    {
-        pParent = &mRoot;
-    }
-    for (Node* pNode = pParent->mChild; pNode; pNode = pNode->mSibling)
-    {
-        if (pNode->GetName() == PREDICATE::GetName() &&
-            ((Filter<PREDICATE>*)pNode)->mPredicate == predicate)
-        {
-            pNode->AddRef();
-            return (Filter<PREDICATE>*)pNode;
-        }
-    }
-    Filter<PREDICATE>* pFilter = new Filter<PREDICATE>(predicate);
-    pFilter->AttachToParent(pParent);
-    return pFilter;
-}
 
 template <class ITEM, class PARAM>
 void RegisterUnregisterLuaCallback(Event<ITEM, PARAM>& event, lua_CFunction pfnClient)

@@ -46,15 +46,17 @@ static unsigned int sStaticCollisionMask;
 // GLOBAL: SWBF2 0x01faa45c
 static EntityClass* sPendingAttachedOdfClass;
 
-// GLOBAL: SWBF2 0x01ebbfec
 // SYNTHETIC: SWBF2 0x00402cc0
 // `dynamic initializer for 'EntityProp::rttiHashEntityProp''
+// GLOBAL: SWBF2 0x01ebbfec
+// EntityProp::rttiHashEntityProp
 PblHash EntityProp::rttiHashEntityProp("EntityProp");
 char EntityProp::rttiNameEntityProp[] = "EntityProp";
 
-// GLOBAL: SWBF2 0x01ebc040
 // SYNTHETIC: SWBF2 0x00402cd0
 // `dynamic initializer for 'EntityPropClass::rttiHashEntityPropClass''
+// GLOBAL: SWBF2 0x01ebc040
+// EntityPropClass::rttiHashEntityPropClass
 PblHash EntityPropClass::rttiHashEntityPropClass("EntityPropClass");
 char EntityPropClass::rttiNameEntityPropClass[] = "EntityPropClass";
 

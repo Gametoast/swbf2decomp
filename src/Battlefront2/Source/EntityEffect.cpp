@@ -1,9 +1,10 @@
 #include "EntityEffect.h"
 #include "FLEffect.h"
 
-// GLOBAL: SWBF2 0x01ebbc60
 // SYNTHETIC: SWBF2 0x00402aa0
 // `dynamic initializer for 'EntityEffectClass::rttiHashEntityEffectClass''
+// GLOBAL: SWBF2 0x01ebbc60
+// EntityEffectClass::rttiHashEntityEffectClass
 PblHash EntityEffectClass::rttiHashEntityEffectClass("EntityEffectClass");
 char EntityEffectClass::rttiNameEntityEffectClass[] = "EntityEffectClass";
 

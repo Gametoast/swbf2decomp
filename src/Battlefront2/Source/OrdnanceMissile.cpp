@@ -25,9 +25,10 @@ PblMatrix DirectionMatrix(const PblVector3& vDir, const PblVector3& vUp, const P
 
 extern PblVector3 gVectorZero;
 
-// GLOBAL: SWBF2 0x01ef265c
 // SYNTHETIC: SWBF2 0x00405b40
 // `dynamic initializer for 'OrdnanceMissile::rttiHashOrdnanceMissile''
+// GLOBAL: SWBF2 0x01ef265c
+// OrdnanceMissile::rttiHashOrdnanceMissile
 PblHash OrdnanceMissile::rttiHashOrdnanceMissile("OrdnanceMissile");
 char OrdnanceMissile::rttiNameOrdnanceMissile[] = "OrdnanceMissile";
 
@@ -261,9 +262,10 @@ bool OrdnanceMissile::Update(float fDeltaTime)
     return OrdnanceBullet::Update(fDeltaTime);
 }
 
-// GLOBAL: SWBF2 0x01ef2658
 // SYNTHETIC: SWBF2 0x00405b50
 // `dynamic initializer for 'OrdnanceMissileClass::rttiHashOrdnanceMissileClass''
+// GLOBAL: SWBF2 0x01ef2658
+// OrdnanceMissileClass::rttiHashOrdnanceMissileClass
 PblHash OrdnanceMissileClass::rttiHashOrdnanceMissileClass("OrdnanceMissileClass");
 char OrdnanceMissileClass::rttiNameOrdnanceMissileClass[] = "OrdnanceMissileClass";
 

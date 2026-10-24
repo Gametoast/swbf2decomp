@@ -17,7 +17,10 @@
 #include "StatusDisplay.h"
 #include "Trigger.h"
 
-namespace GameLoop { extern float sClientDeltaTime; }
+namespace GameLoop
+{
+extern float sClientDeltaTime;
+}
 
 class AmmoCounter
 {
@@ -38,9 +41,10 @@ extern Event<GameObject, DamageOwner> mHack;
 }
 }
 
-// GLOBAL: SWBF2 0x01f9a90c
 // SYNTHETIC: SWBF2 0x00407290
 // `dynamic initializer for 'WeaponRepairClass::rttiHashWeaponRepairClass''
+// GLOBAL: SWBF2 0x01f9a90c
+// WeaponRepairClass::rttiHashWeaponRepairClass
 PblHash WeaponRepairClass::rttiHashWeaponRepairClass("WeaponRepairClass");
 char WeaponRepairClass::rttiNameWeaponRepairClass[] = "WeaponRepairClass";
 
@@ -218,9 +222,10 @@ WeaponRepair::WeaponRepair(const WeaponRepairClass* pClass, const WeaponDesc& de
 {
 }
 
-// GLOBAL: SWBF2 0x01f9a910
 // SYNTHETIC: SWBF2 0x00407280
 // `dynamic initializer for 'WeaponRepair::rttiHashWeaponRepair''
+// GLOBAL: SWBF2 0x01f9a910
+// WeaponRepair::rttiHashWeaponRepair
 PblHash WeaponRepair::rttiHashWeaponRepair("WeaponRepair");
 char WeaponRepair::rttiNameWeaponRepair[] = "WeaponRepair";
 

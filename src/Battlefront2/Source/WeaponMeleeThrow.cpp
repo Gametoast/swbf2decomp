@@ -25,9 +25,10 @@ namespace
     }
 }
 
-// GLOBAL: SWBF2 0x01f9a8fc
 // SYNTHETIC: SWBF2 0x00407240
 // `dynamic initializer for 'WeaponMeleeThrow::rttiHashWeaponMeleeThrow''
+// GLOBAL: SWBF2 0x01f9a8fc
+// WeaponMeleeThrow::rttiHashWeaponMeleeThrow
 PblHash WeaponMeleeThrow::rttiHashWeaponMeleeThrow("WeaponMeleeThrow");
 char WeaponMeleeThrow::rttiNameWeaponMeleeThrow[] = "WeaponMeleeThrow";
 
@@ -285,9 +286,10 @@ Ordnance* WeaponMeleeThrow::CreateOrdnance(OrdnanceDesc& desc)
     return mClass->mOrdnanceClass->Build(desc);
 }
 
-// GLOBAL: SWBF2 0x01f9a900
 // SYNTHETIC: SWBF2 0x00407250
 // `dynamic initializer for 'WeaponMeleeThrowClass::rttiHashWeaponMeleeThrowClass''
+// GLOBAL: SWBF2 0x01f9a900
+// WeaponMeleeThrowClass::rttiHashWeaponMeleeThrowClass
 PblHash WeaponMeleeThrowClass::rttiHashWeaponMeleeThrowClass("WeaponMeleeThrowClass");
 char WeaponMeleeThrowClass::rttiNameWeaponMeleeThrowClass[] = "WeaponMeleeThrowClass";
 

@@ -12,9 +12,10 @@ namespace
     }
 }
 
-// GLOBAL: SWBF2 0x01f9a24c
 // SYNTHETIC: SWBF2 0x00406d20
 // `dynamic initializer for 'UnitStationaryController::rttiHashUnitStationaryController''
+// GLOBAL: SWBF2 0x01f9a24c
+// UnitStationaryController::rttiHashUnitStationaryController
 PblHash UnitStationaryController::rttiHashUnitStationaryController("UnitStationaryController");
 char UnitStationaryController::rttiNameUnitStationaryController[] = "UnitStationaryController";
 

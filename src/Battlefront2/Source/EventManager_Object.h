@@ -31,7 +31,7 @@ class ObjectMatches
 {
 public:
 
-    static const char* GetName();
+    static const char* GetName() { return "Match"; }
 
     bool operator()(GameObject& object, PARAM&) const
     {
@@ -50,7 +50,7 @@ template <class PARAM>
 class ObjectMatchesName
 {
 public:
-    static const char* GetName();
+    static const char* GetName() { return "Name"; }
 
     bool operator()(GameObject& object, PARAM&) const
     {
@@ -72,7 +72,7 @@ public:
 
     ObjectMatchesTeam(int iTeam) : mTeam(iTeam) {}
 
-    static const char* GetName();
+    static const char* GetName() { return "Team"; }
 
     bool operator()(GameObject& object, PARAM&) const
     {
@@ -91,7 +91,7 @@ template <class PARAM>
 class ObjectMatchesClass
 {
 public:
-    static const char* GetName();
+    static const char* GetName() { return "Class"; }
 
     bool operator()(GameObject& object, PARAM&) const
     {

@@ -60,9 +60,10 @@ PowerupStationClass::PowerupStationClass(unsigned int uHash)
     mActiveSpinHash = 0;
 }
 
-// GLOBAL: SWBF2 0x01efa228
 // SYNTHETIC: SWBF2 0x00405fb0
 // `dynamic initializer for 'PowerupStationClass::rttiHashPowerupStationClass''
+// GLOBAL: SWBF2 0x01efa228
+// PowerupStationClass::rttiHashPowerupStationClass
 PblHash PowerupStationClass::rttiHashPowerupStationClass("PowerupStationClass");
 char PowerupStationClass::rttiNamePowerupStationClass[] = "PowerupStationClass";
 
@@ -293,9 +294,10 @@ Entity* PowerupStationClass::Build(const EntityDesc& desc)
     return (Entity*)pStation;
 }
 
-// GLOBAL: SWBF2 0x01efa22c
 // SYNTHETIC: SWBF2 0x00405fa0
 // `dynamic initializer for 'PowerupStation::rttiHashPowerupStation''
+// GLOBAL: SWBF2 0x01efa22c
+// PowerupStation::rttiHashPowerupStation
 PblHash PowerupStation::rttiHashPowerupStation("PowerupStation");
 char PowerupStation::rttiNamePowerupStation[] = "PowerupStation";
 

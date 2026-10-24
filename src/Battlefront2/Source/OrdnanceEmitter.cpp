@@ -31,9 +31,10 @@ static inline const PblMatrix operator*(const PblMatrix& a, const PblMatrix& b)
     return result;
 }
 
-// GLOBAL: SWBF2 0x01ef2624
 // SYNTHETIC: SWBF2 0x00405a70
 // `dynamic initializer for 'OrdnanceEmitterClass::rttiHashOrdnanceEmitterClass''
+// GLOBAL: SWBF2 0x01ef2624
+// OrdnanceEmitterClass::rttiHashOrdnanceEmitterClass
 PblHash OrdnanceEmitterClass::rttiHashOrdnanceEmitterClass("OrdnanceEmitterClass");
 char OrdnanceEmitterClass::rttiNameOrdnanceEmitterClass[] = "OrdnanceEmitterClass";
 

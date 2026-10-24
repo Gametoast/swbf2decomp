@@ -1,9 +1,10 @@
 #include "UnitCombatAgent.h"
 #include "PebbleFL/Common/PblHashTable.h"
 
-// GLOBAL: SWBF2 0x01f9935c
 // SYNTHETIC: SWBF2 0x00406c40
 // `dynamic initializer for 'UnitCombatAgent::rttiHashUnitCombatAgent''
+// GLOBAL: SWBF2 0x01f9935c
+// UnitCombatAgent::rttiHashUnitCombatAgent
 PblHash UnitCombatAgent::rttiHashUnitCombatAgent("UnitCombatAgent");
 char UnitCombatAgent::rttiNameUnitCombatAgent[] = "UnitCombatAgent";
 

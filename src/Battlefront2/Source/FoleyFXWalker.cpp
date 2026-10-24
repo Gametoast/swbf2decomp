@@ -5,9 +5,10 @@
 #include "PebbleFL/Common/PblChunk.h"
 #include "PebbleFL/Common/PblFile.h"
 
-// GLOBAL: SWBF2 0x01ebdc4c
 // SYNTHETIC: SWBF2 0x00403b40
 // `dynamic initializer for 'FoleyFXWalker::rttiHashFoleyFXWalker''
+// GLOBAL: SWBF2 0x01ebdc4c
+// FoleyFXWalker::rttiHashFoleyFXWalker
 PblHash FoleyFXWalker::rttiHashFoleyFXWalker("FoleyFXWalker");
 char FoleyFXWalker::rttiNameFoleyFXWalker[] = "FoleyFXWalker";
 

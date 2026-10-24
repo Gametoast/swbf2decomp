@@ -28,9 +28,10 @@ PowerupItemClass::PowerupItemClass(unsigned int uHash)
     mDebuffDamageRate = 0.0f;
 }
 
-// GLOBAL: SWBF2 0x01efa1d0
 // SYNTHETIC: SWBF2 0x00405f90
 // `dynamic initializer for 'PowerupItemClass::rttiHashPowerupItemClass''
+// GLOBAL: SWBF2 0x01efa1d0
+// PowerupItemClass::rttiHashPowerupItemClass
 PblHash PowerupItemClass::rttiHashPowerupItemClass("PowerupItemClass");
 char PowerupItemClass::rttiNamePowerupItemClass[] = "PowerupItemClass";
 
@@ -211,9 +212,10 @@ EntityClass* PowerupItemClass::Derive(unsigned int uHash)
 // `dynamic atexit destructor for 'PowerupItem::sMemoryPool''
 MemoryPool PowerupItem::sMemoryPool("PowerupItem", 0x290);
 
-// GLOBAL: SWBF2 0x01efa1d4
 // SYNTHETIC: SWBF2 0x00405f80
 // `dynamic initializer for 'PowerupItem::rttiHashPowerupItem''
+// GLOBAL: SWBF2 0x01efa1d4
+// PowerupItem::rttiHashPowerupItem
 PblHash PowerupItem::rttiHashPowerupItem("PowerupItem");
 char PowerupItem::rttiNamePowerupItem[] = "PowerupItem";
 

@@ -195,15 +195,17 @@ public:
 };
  
 
-// GLOBAL: SWBF2 0x01ecb150
 // SYNTHETIC: SWBF2 0x00404340
 // `dynamic initializer for 'MountedTurret::rttiHashMountedTurret''
+// GLOBAL: SWBF2 0x01ecb150
+// MountedTurret::rttiHashMountedTurret
 PblHash MountedTurret::rttiHashMountedTurret("MountedTurret");
 char MountedTurret::rttiNameMountedTurret[] = "MountedTurret";
 
-// GLOBAL: SWBF2 0x01ecb154
 // SYNTHETIC: SWBF2 0x00404330
 // `dynamic initializer for 'MountedTurretClass::rttiHashMountedTurretClass''
+// GLOBAL: SWBF2 0x01ecb154
+// MountedTurretClass::rttiHashMountedTurretClass
 PblHash MountedTurretClass::rttiHashMountedTurretClass("MountedTurretClass");
 char MountedTurretClass::rttiNameMountedTurretClass[] = "MountedTurretClass";
 

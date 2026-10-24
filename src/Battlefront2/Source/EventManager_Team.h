@@ -21,7 +21,7 @@ public:
 
     TeamMatches(int iTeam) : mTeam(iTeam) {}
 
-    static const char* GetName();
+    static const char* GetName() { return "Team"; }
 
     bool operator()(Team& team, PARAM&) const
     {

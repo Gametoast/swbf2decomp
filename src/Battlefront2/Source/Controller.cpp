@@ -28,9 +28,10 @@ public:
 
 extern "C" PblVector3* __stdcall D3DXVec3Normalize(PblVector3* pOut, const PblVector3* pV);
 
-// GLOBAL: SWBF2 0x01eb97a8
 // SYNTHETIC: SWBF2 0x00402790
 // `dynamic initializer for 'Controller::rttiHashController''
+// GLOBAL: SWBF2 0x01eb97a8
+// Controller::rttiHashController
 PblHash Controller::rttiHashController("Controller");
 char Controller::rttiNameController[] = "Controller";
 

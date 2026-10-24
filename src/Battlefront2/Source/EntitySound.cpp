@@ -24,15 +24,17 @@ public:
 };
  
 
-// GLOBAL: SWBF2 0x01ebc1a0
 // SYNTHETIC: SWBF2 0x00402dd0
 // `dynamic initializer for 'EntitySound::rttiHashEntitySound''
+// GLOBAL: SWBF2 0x01ebc1a0
+// EntitySound::rttiHashEntitySound
 PblHash EntitySound::rttiHashEntitySound("EntitySound");
 char EntitySound::rttiNameEntitySound[] = "EntitySound";
 
-// GLOBAL: SWBF2 0x01ebc0fc
 // SYNTHETIC: SWBF2 0x00402df0
 // `dynamic initializer for 'EntitySoundClass::rttiHashEntitySoundClass''
+// GLOBAL: SWBF2 0x01ebc0fc
+// EntitySoundClass::rttiHashEntitySoundClass
 PblHash EntitySoundClass::rttiHashEntitySoundClass("EntitySoundClass");
 char EntitySoundClass::rttiNameEntitySoundClass[] = "EntitySoundClass";
 

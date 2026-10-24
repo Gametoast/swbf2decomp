@@ -238,31 +238,6 @@ void AttackPatterns::ToggleToReturnState()
     mReturnState = 100;
 }
 
-const Controllable* AttackPatterns::GetMe() const
-{
-    return mOwner->mCtrl->mOwner;
-}
-
-Controllable* AttackPatterns::GetMe()
-{
-    return mOwner->mCtrl->mOwner;
-}
-
-UnitController* AttackPatterns::GetCtrl()
-{
-    return mOwner->mCtrl;
-}
-
-const AttackHelper* AttackPatterns::GetAttackHelper() const
-{
-    return reinterpret_cast<const AttackHelper*>(mOwner->mAttackHelper);
-}
-
-AttackHelper* AttackPatterns::GetAttackHelper()
-{
-    return reinterpret_cast<AttackHelper*>(mOwner->mAttackHelper);
-}
-
 // FUNCTION: SWBF2 0x0065f5b0
 float AttackPatterns::GetNear(const Controllable* pMe)
 {

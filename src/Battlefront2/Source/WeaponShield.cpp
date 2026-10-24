@@ -16,7 +16,10 @@
 #include "Trigger.h"
 #include "SoundFL/source/sndvoicevirtual.h"
 
-namespace GameLoop { extern float sClientDeltaTime; }
+namespace GameLoop
+{
+extern float sClientDeltaTime;
+}
 
 class AmmoCounter
 {
@@ -39,14 +42,16 @@ static PblMatrix _IdentityMatrix(
     PblVector4{ 0.0f, 0.0f, 1.0f, 0.0f },
     PblVector4{ 0.0f, 0.0f, 0.0f, 1.0f });
 
-// GLOBAL: SWBF2 0x01f9a914
 // SYNTHETIC: SWBF2 0x004072a0
 // `dynamic initializer for 'WeaponShield::rttiHashWeaponShield''
+// GLOBAL: SWBF2 0x01f9a914
+// WeaponShield::rttiHashWeaponShield
 PblHash WeaponShield::rttiHashWeaponShield("WeaponShield");
 
-// GLOBAL: SWBF2 0x01f9a918
 // SYNTHETIC: SWBF2 0x004072b0
 // `dynamic initializer for 'WeaponShieldClass::rttiHashWeaponShieldClass''
+// GLOBAL: SWBF2 0x01f9a918
+// WeaponShieldClass::rttiHashWeaponShieldClass
 PblHash WeaponShieldClass::rttiHashWeaponShieldClass("WeaponShieldClass");
 char WeaponShieldClass::rttiNameWeaponShieldClass[] = "WeaponShieldClass";
 

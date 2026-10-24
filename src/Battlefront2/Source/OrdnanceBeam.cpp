@@ -25,9 +25,10 @@ public:
     Aimer* mAimer;
 };
 
-// GLOBAL: SWBF2 0x01ef2614
 // SYNTHETIC: SWBF2 0x00405a30
 // `dynamic initializer for 'OrdnanceBeam::rttiHashOrdnanceBeam''
+// GLOBAL: SWBF2 0x01ef2614
+// OrdnanceBeam::rttiHashOrdnanceBeam
 PblHash OrdnanceBeam::rttiHashOrdnanceBeam("OrdnanceBeam");
 char OrdnanceBeam::rttiNameOrdnanceBeam[] = "OrdnanceBeam";
 
@@ -37,9 +38,10 @@ unsigned int OrdnanceBeamClass::GetDerivedRtti() { return rttiHashOrdnanceBeamCl
 // FUNCTION: SWBF2 0x005f9680
 const char* OrdnanceBeamClass::GetDerivedRttiName() { return rttiNameOrdnanceBeamClass; }
 
-// GLOBAL: SWBF2 0x01ef2618
 // SYNTHETIC: SWBF2 0x00405a40
 // `dynamic initializer for 'OrdnanceBeamClass::rttiHashOrdnanceBeamClass''
+// GLOBAL: SWBF2 0x01ef2618
+// OrdnanceBeamClass::rttiHashOrdnanceBeamClass
 PblHash OrdnanceBeamClass::rttiHashOrdnanceBeamClass("OrdnanceBeamClass");
 char OrdnanceBeamClass::rttiNameOrdnanceBeamClass[] = "OrdnanceBeamClass";
 

@@ -11,9 +11,10 @@
 // `dynamic atexit destructor for 'CommandHover::sMemoryPool''
 MemoryPool CommandHover::sMemoryPool("CommandHover", 0x1d20);
 
-// GLOBAL: SWBF2 0x01eb96a4
 // SYNTHETIC: SWBF2 0x004026e0
 // `dynamic initializer for 'CommandHover::rttiHashCommandHover''
+// GLOBAL: SWBF2 0x01eb96a4
+// CommandHover::rttiHashCommandHover
 PblHash CommandHover::rttiHashCommandHover("CommandHover");
 char CommandHover::rttiNameCommandHover[] = "CommandHover";
 
@@ -109,9 +110,10 @@ CommandHoverClass::CommandHoverClass(unsigned int uHash)
     mIsNeutralWhenEmpty = false;
 }
 
-// GLOBAL: SWBF2 0x01eb96a0
 // SYNTHETIC: SWBF2 0x004026f0
 // `dynamic initializer for 'CommandHoverClass::rttiHashCommandHoverClass''
+// GLOBAL: SWBF2 0x01eb96a0
+// CommandHoverClass::rttiHashCommandHoverClass
 PblHash CommandHoverClass::rttiHashCommandHoverClass("CommandHoverClass");
 char CommandHoverClass::rttiNameCommandHoverClass[] = "CommandHoverClass";
 

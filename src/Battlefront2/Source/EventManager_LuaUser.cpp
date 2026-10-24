@@ -68,17 +68,9 @@ int Create(lua_State*)
 }
 }
 
-const char* LuaObjectMatches::GetName()
-{
-    return "Match";
-}
 
-// FUNCTION: SWBF2 0x00513ca0
-template <class ITEM, class PARAM>
-bool Event<ITEM, PARAM>::Callback::operator()(ITEM&, PARAM&)
-{
-    return true;
-}
+// TEMPLATE: SWBF2 0x00513ca0
+// EventManager::Event<EventManager::LuaObject,EventManager::LuaObject>::Callback::operator()
 
 // SYNTHETIC: SWBF2 0x00513cb0
 // EventManager::Event<EventManager::LuaObject,EventManager::LuaObject>::Callback::`scalar deleting destructor'
@@ -132,38 +124,9 @@ void Event<ITEM, PARAM>::Unregister(Callback& callback)
     }
 }
 
-template <class ITEM, class PARAM>
-template <class PREDICATE>
-Event<ITEM, PARAM>::Filter<PREDICATE>::Filter(PREDICATE& predicate)
-    : mPredicate(predicate)
-{
-}
 
-// FUNCTION: SWBF2 0x005145d0
-template <class ITEM, class PARAM>
-template <class PREDICATE>
-auto Event<ITEM, PARAM>::GetFilter(PREDICATE& predicate, Callback* pParent)
-    -> Filter<PREDICATE>*
-{
-    if (!pParent)
-    {
-        pParent = &mRoot;
-    }
-
-    for (Node* pNode = pParent->mChild; pNode; pNode = pNode->mSibling)
-    {
-        if (pNode->GetName() == PREDICATE::GetName() &&
-            ((Filter<PREDICATE>*)pNode)->mPredicate == predicate)
-        {
-            pNode->AddRef();
-            return (Filter<PREDICATE>*)pNode;
-        }
-    }
-
-    Filter<PREDICATE>* pFilter = new Filter<PREDICATE>(predicate);
-    pFilter->AttachToParent(pParent);
-    return pFilter;
-}
+// TEMPLATE: SWBF2 0x005145d0
+// EventManager::Event<EventManager::LuaObject,EventManager::LuaObject>::GetFilter<EventManager::LuaObjectMatches>
 
 // FUNCTION: SWBF2 0x00514330
 template <class ITEM, class PARAM>
@@ -212,21 +175,11 @@ bool LuaCallback<ITEM, PARAM>::operator()(ITEM& item, PARAM& param)
     return true;
 }
 
-// FUNCTION: SWBF2 0x00514490
-template <class ITEM, class PARAM>
-template <class PREDICATE>
-const char* Event<ITEM, PARAM>::Filter<PREDICATE>::GetName()
-{
-    return PREDICATE::GetName();
-}
+// TEMPLATE: SWBF2 0x00514490
+// EventManager::Event<EventManager::LuaObject,EventManager::LuaObject>::Filter<EventManager::LuaObjectMatches>::GetName
 
-// FUNCTION: SWBF2 0x00514430
-template <class ITEM, class PARAM>
-template <class PREDICATE>
-bool Event<ITEM, PARAM>::Filter<PREDICATE>::operator()(ITEM& item, PARAM& param)
-{
-    return mPredicate(item, param);
-}
+// TEMPLATE: SWBF2 0x00514430
+// EventManager::Event<EventManager::LuaObject,EventManager::LuaObject>::Filter<EventManager::LuaObjectMatches>::operator()
 
 // SYNTHETIC: SWBF2 0x00514540
 // EventManager::Event<EventManager::LuaObject,EventManager::LuaObject>::Filter<EventManager::LuaObjectMatches>::`scalar deleting destructor'

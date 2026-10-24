@@ -11,9 +11,10 @@
 
 extern bool netIsLateTurn;
 
-// GLOBAL: SWBF2 0x01ef2648
 // SYNTHETIC: SWBF2 0x00405b10
 // `dynamic initializer for 'OrdnanceLaserClass::rttiHashOrdnanceLaserClass''
+// GLOBAL: SWBF2 0x01ef2648
+// OrdnanceLaserClass::rttiHashOrdnanceLaserClass
 PblHash OrdnanceLaserClass::rttiHashOrdnanceLaserClass("OrdnanceLaserClass");
 char OrdnanceLaserClass::rttiNameOrdnanceLaserClass[] = "OrdnanceLaserClass";
 
@@ -211,9 +212,10 @@ Ordnance* OrdnanceLaserClass::Build(const OrdnanceDesc& desc)
     return pLaser;
 }
 
-// GLOBAL: SWBF2 0x01ef264c
 // SYNTHETIC: SWBF2 0x00405b00
 // `dynamic initializer for 'OrdnanceLaser::rttiHashOrdnanceLaser''
+// GLOBAL: SWBF2 0x01ef264c
+// OrdnanceLaser::rttiHashOrdnanceLaser
 PblHash OrdnanceLaser::rttiHashOrdnanceLaser("OrdnanceLaser");
 char OrdnanceLaser::rttiNameOrdnanceLaser[] = "OrdnanceLaser";
 

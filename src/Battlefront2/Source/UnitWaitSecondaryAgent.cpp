@@ -25,7 +25,10 @@ namespace ReserveManager
 int GetReservationCountForObject(const GameObject* pObj, int iTeam, ReserveType eType);
 }
 
-namespace AIUtil { GameObject* FindFirstAIInVehicle(GameObject* pVehicle); }
+namespace AIUtil
+{
+GameObject* FindFirstAIInVehicle(GameObject* pVehicle);
+}
 
 namespace AI
 {
@@ -41,9 +44,10 @@ int Play(VOType eType, const GameObject* pSpeaker, const GameObject* pTarget,
 }
 }
 
-// GLOBAL: SWBF2 0x01f9a25c
 // SYNTHETIC: SWBF2 0x00406d60
 // `dynamic initializer for 'UnitWaitSecondaryAgent::rttiHashUnitWaitSecondaryAgent''
+// GLOBAL: SWBF2 0x01f9a25c
+// UnitWaitSecondaryAgent::rttiHashUnitWaitSecondaryAgent
 PblHash UnitWaitSecondaryAgent::rttiHashUnitWaitSecondaryAgent("UnitWaitSecondaryAgent");
 char UnitWaitSecondaryAgent::rttiNameUnitWaitSecondaryAgent[] = "UnitWaitSecondaryAgent";
 

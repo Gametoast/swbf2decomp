@@ -10,9 +10,10 @@ Weapon* WeaponBinocularsClass::Build(const WeaponDesc& desc)
     return pMemory ? reinterpret_cast<Weapon*>(::new (pMemory) WeaponBinoculars(this, desc)) : 0;
 }
 
-// GLOBAL: SWBF2 0x01f9a88c
 // SYNTHETIC: SWBF2 0x00407080
 // `dynamic initializer for 'WeaponBinoculars::rttiHashWeaponBinoculars''
+// GLOBAL: SWBF2 0x01f9a88c
+// WeaponBinoculars::rttiHashWeaponBinoculars
 PblHash WeaponBinoculars::rttiHashWeaponBinoculars("WeaponBinoculars");
 char WeaponBinoculars::rttiNameWeaponBinoculars[] = "WeaponBinoculars";
 
@@ -48,9 +49,10 @@ const char* WeaponBinoculars::GetDerivedRttiName() const
     return rttiNameWeaponBinoculars;
 }
 
-// GLOBAL: SWBF2 0x01f9a890
 // SYNTHETIC: SWBF2 0x00407090
 // `dynamic initializer for 'WeaponBinocularsClass::rttiHashWeaponBinocularsClass''
+// GLOBAL: SWBF2 0x01f9a890
+// WeaponBinocularsClass::rttiHashWeaponBinocularsClass
 PblHash WeaponBinocularsClass::rttiHashWeaponBinocularsClass("WeaponBinocularsClass");
 char WeaponBinocularsClass::rttiNameWeaponBinocularsClass[] = "WeaponBinocularsClass";
 

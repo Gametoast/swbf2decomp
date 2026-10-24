@@ -16,9 +16,10 @@ namespace AIUtil
     float GetRandomFloat(float fMin, float fMax);
 }
 
-// GLOBAL: SWBF2 0x01f9a8e8
 // SYNTHETIC: SWBF2 0x004071f0
 // `dynamic initializer for 'WeaponLauncherClass::rttiHashWeaponLauncherClass''
+// GLOBAL: SWBF2 0x01f9a8e8
+// WeaponLauncherClass::rttiHashWeaponLauncherClass
 PblHash WeaponLauncherClass::rttiHashWeaponLauncherClass("WeaponLauncherClass");
 char WeaponLauncherClass::rttiNameWeaponLauncherClass[] = "WeaponLauncherClass";
 
@@ -107,9 +108,10 @@ WeaponLauncher* WeaponLauncherClass::Build(const WeaponDesc& desc)
     return new WeaponLauncher(this, desc);
 }
 
-// GLOBAL: SWBF2 0x01f9a8e4
 // SYNTHETIC: SWBF2 0x004071e0
 // `dynamic initializer for 'WeaponLauncher::rttiHashWeaponLauncher''
+// GLOBAL: SWBF2 0x01f9a8e4
+// WeaponLauncher::rttiHashWeaponLauncher
 PblHash WeaponLauncher::rttiHashWeaponLauncher("WeaponLauncher");
 char WeaponLauncher::rttiNameWeaponLauncher[] = "WeaponLauncher";
 

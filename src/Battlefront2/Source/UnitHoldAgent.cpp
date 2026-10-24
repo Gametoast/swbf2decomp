@@ -12,9 +12,10 @@
 #include "PebbleFL/Common/PblMatrix.h"
 #include "PebbleFL/Common/PblRandom.h"
 
-// GLOBAL: SWBF2 0x01f993ec
 // SYNTHETIC: SWBF2 0x00406cf0
 // `dynamic initializer for 'UnitHoldAgent::rttiHashUnitHoldAgent''
+// GLOBAL: SWBF2 0x01f993ec
+// UnitHoldAgent::rttiHashUnitHoldAgent
 PblHash UnitHoldAgent::rttiHashUnitHoldAgent("UnitHoldAgent");
 char UnitHoldAgent::rttiNameUnitHoldAgent[] = "UnitHoldAgent";
 

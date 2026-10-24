@@ -146,15 +146,17 @@ WeaponCannonClass::WeaponCannonClass(unsigned int uHash)
     mSecondaryOrdnancePeriod = 0;
 }
 
-// GLOBAL: SWBF2 0x01f9a894
 // SYNTHETIC: SWBF2 0x004070a0
 // `dynamic initializer for 'WeaponCannon::rttiHashWeaponCannon''
+// GLOBAL: SWBF2 0x01f9a894
+// WeaponCannon::rttiHashWeaponCannon
 PblHash WeaponCannon::rttiHashWeaponCannon("WeaponCannon");
 char WeaponCannon::rttiNameWeaponCannon[] = "WeaponCannon";
 
-// GLOBAL: SWBF2 0x01f9a898
 // SYNTHETIC: SWBF2 0x004070b0
 // `dynamic initializer for 'WeaponCannonClass::rttiHashWeaponCannonClass''
+// GLOBAL: SWBF2 0x01f9a898
+// WeaponCannonClass::rttiHashWeaponCannonClass
 PblHash WeaponCannonClass::rttiHashWeaponCannonClass("WeaponCannonClass");
 char WeaponCannonClass::rttiNameWeaponCannonClass[] = "WeaponCannonClass";
 

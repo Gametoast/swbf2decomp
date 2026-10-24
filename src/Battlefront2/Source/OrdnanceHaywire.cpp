@@ -76,15 +76,17 @@ Ordnance* OrdnanceHaywireClass::Build(const OrdnanceDesc& desc)
     return pOrdnance;
 }
 
-// GLOBAL: SWBF2 0x01ef2644
 // SYNTHETIC: SWBF2 0x00405ae0
 // `dynamic initializer for 'OrdnanceHaywire::rttiHashOrdnanceHaywire''
+// GLOBAL: SWBF2 0x01ef2644
+// OrdnanceHaywire::rttiHashOrdnanceHaywire
 PblHash OrdnanceHaywire::rttiHashOrdnanceHaywire("OrdnanceHaywire");
 char OrdnanceHaywire::rttiNameOrdnanceHaywire[] = "OrdnanceHaywire";
 
-// GLOBAL: SWBF2 0x01ef2640
 // SYNTHETIC: SWBF2 0x00405af0
 // `dynamic initializer for 'OrdnanceHaywireClass::rttiHashOrdnanceHaywireClass''
+// GLOBAL: SWBF2 0x01ef2640
+// OrdnanceHaywireClass::rttiHashOrdnanceHaywireClass
 PblHash OrdnanceHaywireClass::rttiHashOrdnanceHaywireClass("OrdnanceHaywireClass");
 char OrdnanceHaywireClass::rttiNameOrdnanceHaywireClass[] = "OrdnanceHaywireClass";
 

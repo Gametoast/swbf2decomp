@@ -5,15 +5,17 @@
 
 #include <stdio.h>
 
-// GLOBAL: SWBF2 0x01ebb990
 // SYNTHETIC: SWBF2 0x004029b0
 // `dynamic initializer for 'EntityDefenseGridTurretClass::rttiHashEntityDefenseGridTurretClass''
+// GLOBAL: SWBF2 0x01ebb990
+// EntityDefenseGridTurretClass::rttiHashEntityDefenseGridTurretClass
 PblHash EntityDefenseGridTurretClass::rttiHashEntityDefenseGridTurretClass("EntityDefenseGridTurretClass");
 char EntityDefenseGridTurretClass::rttiNameEntityDefenseGridTurretClass[] = "EntityDefenseGridTurretClass";
 
-// GLOBAL: SWBF2 0x01ebb994
 // SYNTHETIC: SWBF2 0x004029a0
 // `dynamic initializer for 'EntityDefenseGridTurret::rttiHashEntityDefenseGridTurret''
+// GLOBAL: SWBF2 0x01ebb994
+// EntityDefenseGridTurret::rttiHashEntityDefenseGridTurret
 PblHash EntityDefenseGridTurret::rttiHashEntityDefenseGridTurret("EntityDefenseGridTurret");
 char EntityDefenseGridTurret::rttiNameEntityDefenseGridTurret[] = "EntityDefenseGridTurret";
 

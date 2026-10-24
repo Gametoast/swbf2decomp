@@ -37,12 +37,6 @@ extern Event<Controllable, TargetInfo> mTargetChange;
 namespace EventManager
 {
 
-template <class ITEM, class PARAM>
-bool Event<ITEM, PARAM>::Callback::operator()(ITEM&, PARAM&)
-{
-    return true;
-}
-
 // TEMPLATE: SWBF2 0x005121f0
 // EventManager::Event<Controllable,int>::Callback::operator()
 

@@ -7,15 +7,17 @@
 #include "NetGame.h"
 #include "Trigger.h"
 
-// GLOBAL: SWBF2 0x01f9a904
 // SYNTHETIC: SWBF2 0x00407270
 // `dynamic initializer for 'WeaponRemoteClass::rttiHashWeaponRemoteClass''
+// GLOBAL: SWBF2 0x01f9a904
+// WeaponRemoteClass::rttiHashWeaponRemoteClass
 PblHash WeaponRemoteClass::rttiHashWeaponRemoteClass("WeaponRemoteClass");
 char WeaponRemoteClass::rttiNameWeaponRemoteClass[] = "WeaponRemoteClass";
 
-// GLOBAL: SWBF2 0x01f9a908
 // SYNTHETIC: SWBF2 0x00407260
 // `dynamic initializer for 'WeaponRemote::rttiHashWeaponRemote''
+// GLOBAL: SWBF2 0x01f9a908
+// WeaponRemote::rttiHashWeaponRemote
 PblHash WeaponRemote::rttiHashWeaponRemote("WeaponRemote");
 char WeaponRemote::rttiNameWeaponRemote[] = "WeaponRemote";
 

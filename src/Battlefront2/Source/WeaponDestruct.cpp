@@ -20,9 +20,10 @@ public:
     void ExpendRounds(float fRounds);
 };
 
-// GLOBAL: SWBF2 0x01f9a8a4
 // SYNTHETIC: SWBF2 0x004070e0
 // `dynamic initializer for 'WeaponDestruct::rttiHashWeaponDestruct''
+// GLOBAL: SWBF2 0x01f9a8a4
+// WeaponDestruct::rttiHashWeaponDestruct
 PblHash WeaponDestruct::rttiHashWeaponDestruct("WeaponDestruct");
 char WeaponDestruct::rttiNameWeaponDestruct[] = "WeaponDestruct";
 
@@ -44,9 +45,10 @@ const char* WeaponDestruct::GetDerivedRttiName() const
     return rttiNameWeaponDestruct;
 }
 
-// GLOBAL: SWBF2 0x01f9a8a8
 // SYNTHETIC: SWBF2 0x004070f0
 // `dynamic initializer for 'WeaponDestructClass::rttiHashWeaponDestructClass''
+// GLOBAL: SWBF2 0x01f9a8a8
+// WeaponDestructClass::rttiHashWeaponDestructClass
 PblHash WeaponDestructClass::rttiHashWeaponDestructClass("WeaponDestructClass");
 char WeaponDestructClass::rttiNameWeaponDestructClass[] = "WeaponDestructClass";
 

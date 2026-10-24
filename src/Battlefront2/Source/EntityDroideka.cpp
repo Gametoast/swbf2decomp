@@ -459,9 +459,10 @@ namespace
     }
 }
 
-// GLOBAL: SWBF2 0x01ebbc58
 // SYNTHETIC: SWBF2 0x00402a80
 // `dynamic initializer for 'EntityDroideka::rttiHashEntityDroideka''
+// GLOBAL: SWBF2 0x01ebbc58
+// EntityDroideka::rttiHashEntityDroideka
 PblHash EntityDroideka::rttiHashEntityDroideka("EntityDroideka");
 char EntityDroideka::rttiNameEntityDroideka[] = "EntityDroideka";
 
@@ -754,9 +755,10 @@ EntityDroideka::PostCollision::~PostCollision()
 {
 }
 
-// GLOBAL: SWBF2 0x01ebbc5c
 // SYNTHETIC: SWBF2 0x00402a90
 // `dynamic initializer for 'EntityDroidekaClass::rttiHashEntityDroidekaClass''
+// GLOBAL: SWBF2 0x01ebbc5c
+// EntityDroidekaClass::rttiHashEntityDroidekaClass
 PblHash EntityDroidekaClass::rttiHashEntityDroidekaClass("EntityDroidekaClass");
 char EntityDroidekaClass::rttiNameEntityDroidekaClass[] = "EntityDroidekaClass";
 

@@ -17,7 +17,10 @@ public:
     public:
 
         virtual ~Callback() {}
-        virtual bool operator()(ITEM& item, PARAM& param);
+        virtual bool operator()(ITEM& item, PARAM& param)
+        {
+            return true;
+        }
 
         void Trigger(ITEM& item, PARAM& param);
     };
@@ -27,17 +30,46 @@ public:
     {
     public:
 
-        Filter(PREDICATE& predicate);
+        Filter(PREDICATE& predicate)
+            : mPredicate(predicate)
+        {
+        }
 
-        virtual const char* GetName();
-        virtual bool operator()(ITEM& item, PARAM& param);
+        virtual const char* GetName()
+        {
+            return PREDICATE::GetName();
+        }
+        virtual bool operator()(ITEM& item, PARAM& param)
+        {
+            return mPredicate(item, param);
+        }
 
         PREDICATE mPredicate;
     };
 
     void Unregister(Callback& callback);
     template <class PREDICATE>
-    Filter<PREDICATE>* GetFilter(PREDICATE& predicate, Callback* pParent = 0);
+    Filter<PREDICATE>* GetFilter(PREDICATE& predicate, Callback* pParent = 0)
+    {
+        if (!pParent)
+        {
+            pParent = &mRoot;
+        }
+
+        for (Node* pNode = pParent->mChild; pNode; pNode = pNode->mSibling)
+        {
+            if (pNode->GetName() == PREDICATE::GetName() &&
+                ((Filter<PREDICATE>*)pNode)->mPredicate == predicate)
+            {
+                pNode->AddRef();
+                return (Filter<PREDICATE>*)pNode;
+            }
+        }
+
+        Filter<PREDICATE>* pFilter = new Filter<PREDICATE>(predicate);
+        pFilter->AttachToParent(pParent);
+        return pFilter;
+    }
 
     Event(char* pcName) : mName(pcName) {}
 
@@ -75,7 +107,7 @@ public:
     TimerMatches(const Timer* pTimer) : mTimer(pTimer) {}
     TimerMatches(const char* pcName);
 
-    static const char* GetName();
+    static const char* GetName() { return ""; }
 
     bool operator==(const TimerMatches& other) const
     {

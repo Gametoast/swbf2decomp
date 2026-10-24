@@ -20,7 +20,7 @@ public:
 
     RegionMatches(const char* pcName);
 
-    static const char* GetName();
+    static const char* GetName() { return ""; }
 
     bool operator()(RedRegion& region, Character&) const
     {

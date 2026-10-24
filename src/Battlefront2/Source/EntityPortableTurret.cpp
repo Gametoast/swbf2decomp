@@ -20,15 +20,17 @@ EntityPortableTurretClass::EntityPortableTurretClass(unsigned int uHash)
     mFriction = 0.5f;
 }
 
-// GLOBAL: SWBF2 0x01ebbf94
 // SYNTHETIC: SWBF2 0x00402cb0
 // `dynamic initializer for 'EntityPortableTurretClass::rttiHashEntityPortableTurretClass''
+// GLOBAL: SWBF2 0x01ebbf94
+// EntityPortableTurretClass::rttiHashEntityPortableTurretClass
 PblHash EntityPortableTurretClass::rttiHashEntityPortableTurretClass("EntityPortableTurretClass");
 char EntityPortableTurretClass::rttiNameEntityPortableTurretClass[] = "EntityPortableTurretClass";
 
-// GLOBAL: SWBF2 0x01ebbfe8
 // SYNTHETIC: SWBF2 0x00402ca0
 // `dynamic initializer for 'EntityPortableTurret::rttiHashEntityPortableTurret''
+// GLOBAL: SWBF2 0x01ebbfe8
+// EntityPortableTurret::rttiHashEntityPortableTurret
 PblHash EntityPortableTurret::rttiHashEntityPortableTurret("EntityPortableTurret");
 char EntityPortableTurret::rttiNameEntityPortableTurret[] = "EntityPortableTurret";
 

@@ -10,38 +10,38 @@
 namespace gf
 {
 
-bool initialize();
-void deinitialize();
-bool isInitialized();
-bool checkError();
+__declspec(dllexport) bool initialize();
+__declspec(dllexport) void deinitialize();
+__declspec(dllexport) bool isInitialized();
+__declspec(dllexport) bool checkError();
 
 namespace utils
 {
-const char* ToString(bool bValue);
-const char* ToString(int iValue);
-const char* ToString(unsigned int uValue);
-bool FromString(const char* pcValue, bool bDefault);
-int FromString(const char* pcValue, int iDefault);
-unsigned int FromString(const char* pcValue, unsigned int uDefault);
+__declspec(dllexport) const char* ToString(bool bValue);
+__declspec(dllexport) const char* ToString(int iValue);
+__declspec(dllexport) const char* ToString(unsigned int uValue);
+__declspec(dllexport) bool FromString(const char* pcValue, bool bDefault);
+__declspec(dllexport) int FromString(const char* pcValue, int iDefault);
+__declspec(dllexport) unsigned int FromString(const char* pcValue, unsigned int uDefault);
 }
 
 namespace friends
 {
 
-bool start();
-void stop();
-void reset();
-unsigned int friendCount();
-galaxy::api::GalaxyID friendByIndex(unsigned int uIndex);
-const char* friendNameByIndex(unsigned int uIndex);
-bool getAndResetDirty();
-bool isFriend(const galaxy::api::GalaxyID& id);
-bool isJoinableByIndex(unsigned int index);
-const char* connectionStringByIndex(unsigned int index);
+__declspec(dllexport) bool start();
+__declspec(dllexport) void stop();
+__declspec(dllexport) void reset();
+__declspec(dllexport) unsigned int friendCount();
+__declspec(dllexport) galaxy::api::GalaxyID friendByIndex(unsigned int uIndex);
+__declspec(dllexport) const char* friendNameByIndex(unsigned int uIndex);
+__declspec(dllexport) bool getAndResetDirty();
+__declspec(dllexport) bool isFriend(const galaxy::api::GalaxyID& id);
+__declspec(dllexport) bool isJoinableByIndex(unsigned int index);
+__declspec(dllexport) const char* connectionStringByIndex(unsigned int index);
 }
 
 template <typename T>
-T* Allocate()
+__declspec(dllexport) T* Allocate()
 {
     void* pMem = RedAllocFromHeap(GameMemory::GamespyHeap, sizeof(T), 0);
     if (!pMem)
@@ -52,7 +52,7 @@ T* Allocate()
 }
 
 template <typename T, typename A1>
-T* Allocate(A1&& a1)
+__declspec(dllexport) T* Allocate(A1&& a1)
 {
     void* pMem = RedAllocFromHeap(GameMemory::GamespyHeap, sizeof(T), 0);
     if (!pMem)

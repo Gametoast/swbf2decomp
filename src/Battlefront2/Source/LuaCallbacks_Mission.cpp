@@ -168,16 +168,6 @@ void CollisionManager::SetMaxCollisionDistance(float fDistance)
     }
 }
 
-// FUNCTION: SWBF2 0x00438c50
-void AIDifficulty::SetAILuaModifier(int iPlayer, int iEnemy, int iDifficulty)
-{
-    if ((unsigned int)(iDifficulty - 1) < 3)
-    {
-        AIDifficulty::mScriptPlayerModifier[iDifficulty - 1] = iPlayer;
-        AIDifficulty::mScriptEnemyModifier[iDifficulty - 1] = iEnemy;
-    }
-}
-
 // FUNCTION: SWBF2 0x00657b90
 const char* Timer::GetName()
 {

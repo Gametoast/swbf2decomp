@@ -1267,15 +1267,17 @@ void WeaponClass::RenderFlash(const PblVector3& vPos, const PblVector3& vDir, fl
     mMuzzleFlashModel->Render(&mFlash, 0, color, 0, 0);
 }
 
-// GLOBAL: SWBF2 0x01f9a73c
 // SYNTHETIC: SWBF2 0x00407020
 // `dynamic initializer for 'Weapon::rttiHashWeapon''
+// GLOBAL: SWBF2 0x01f9a73c
+// Weapon::rttiHashWeapon
 PblHash Weapon::rttiHashWeapon("Weapon");
 char Weapon::rttiNameWeapon[] = "Weapon";
 
-// GLOBAL: SWBF2 0x01f9a880
 // SYNTHETIC: SWBF2 0x00407030
 // `dynamic initializer for 'WeaponClass::rttiHashWeaponClass''
+// GLOBAL: SWBF2 0x01f9a880
+// WeaponClass::rttiHashWeaponClass
 PblHash WeaponClass::rttiHashWeaponClass("WeaponClass");
 char WeaponClass::rttiNameWeaponClass[] = "WeaponClass";
 
