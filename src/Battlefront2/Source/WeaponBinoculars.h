@@ -12,7 +12,7 @@ public:
     virtual ~WeaponBinocularsClass();
 
     static PblHash rttiHashWeaponBinocularsClass;
-    static char rttiNameWeaponBinocularsClass[];
+    static const char rttiNameWeaponBinocularsClass[];
 
     virtual WeaponClass* Derive(unsigned int uHash);
     virtual Weapon* Build(const WeaponDesc& desc);
@@ -36,6 +36,6 @@ public:
     virtual const char* GetDerivedRttiName() const;
 
     static PblHash rttiHashWeaponBinoculars;
-    static char rttiNameWeaponBinoculars[];
+    static const char rttiNameWeaponBinoculars[];
 };
   

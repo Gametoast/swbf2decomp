@@ -7,7 +7,7 @@
 // GLOBAL: SWBF2 0x01f9a254
 // UnitUnBoardAgent::rttiHashUnitUnBoardAgent
 PblHash UnitUnBoardAgent::rttiHashUnitUnBoardAgent("UnitUnBoardAgent");
-char UnitUnBoardAgent::rttiNameUnitUnBoardAgent[] = "UnitUnBoardAgent";
+const char UnitUnBoardAgent::rttiNameUnitUnBoardAgent[] = "UnitUnBoardAgent";
 
 // FUNCTION: SWBF2 0x0066b1b0
 bool UnitUnBoardAgent::IsRtti(unsigned int uRtti) const

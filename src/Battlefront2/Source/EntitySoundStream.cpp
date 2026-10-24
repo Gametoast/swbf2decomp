@@ -8,7 +8,7 @@
 // GLOBAL: SWBF2 0x01ebc1fc
 // EntitySoundStreamClass::rttiHashEntitySoundStreamClass
 PblHash EntitySoundStreamClass::rttiHashEntitySoundStreamClass("EntitySoundStreamClass");
-char EntitySoundStreamClass::rttiNameEntitySoundStreamClass[] = "EntitySoundStreamClass";
+const char EntitySoundStreamClass::rttiNameEntitySoundStreamClass[] = "EntitySoundStreamClass";
 
 // FUNCTION: SWBF2 0x004fbc80
 EntitySoundStreamClass::EntitySoundStreamClass(unsigned int uHash)
@@ -76,7 +76,7 @@ const char* EntitySoundStreamClass::GetDerivedRttiName()
 // GLOBAL: SWBF2 0x01ebc250
 // EntitySoundStream::rttiHashEntitySoundStream
 PblHash EntitySoundStream::rttiHashEntitySoundStream("EntitySoundStream");
-char EntitySoundStream::rttiNameEntitySoundStream[] = "EntitySoundStream";
+const char EntitySoundStream::rttiNameEntitySoundStream[] = "EntitySoundStream";
 
 // GLOBAL: SWBF2 0x01ebc200
 // SYNTHETIC: SWBF2 0x00402e60

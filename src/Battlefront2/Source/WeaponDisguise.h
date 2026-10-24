@@ -15,7 +15,7 @@ public:
     virtual ~WeaponDisguiseClass();
 
     static PblHash rttiHashWeaponDisguiseClass;
-    static char rttiNameWeaponDisguiseClass[];
+    static const char rttiNameWeaponDisguiseClass[];
 
     virtual WeaponClass* Derive(unsigned int uHash);
     virtual Weapon* Build(const WeaponDesc& desc);
@@ -80,7 +80,7 @@ public:
     void FinishDroppingDisguise();
 
     static PblHash rttiHashWeaponDisguise;
-    static char rttiNameWeaponDisguise[];
+    static const char rttiNameWeaponDisguise[];
 
     GameModel* mSavedOwnerModel;
     Team* mOtherTeam;

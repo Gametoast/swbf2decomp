@@ -6,7 +6,7 @@
 // GLOBAL: SWBF2 0x01f9935c
 // UnitCombatAgent::rttiHashUnitCombatAgent
 PblHash UnitCombatAgent::rttiHashUnitCombatAgent("UnitCombatAgent");
-char UnitCombatAgent::rttiNameUnitCombatAgent[] = "UnitCombatAgent";
+const char UnitCombatAgent::rttiNameUnitCombatAgent[] = "UnitCombatAgent";
 
 // FUNCTION: SWBF2 0x00662e10
 bool UnitCombatAgent::IsRtti(unsigned int uRtti) const

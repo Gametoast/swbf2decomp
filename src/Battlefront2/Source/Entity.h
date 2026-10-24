@@ -63,7 +63,7 @@ public:
     static PblHash rttiHashEntity;
 
     static unsigned int GetRtti() { return rttiHashEntity; }
-    static char rttiNameEntity[];
+    static const char rttiNameEntity[];
 };
  
 
@@ -92,7 +92,7 @@ public:
     static PblHash rttiHashEntityEx;
 
     static unsigned int GetRtti() { return rttiHashEntityEx; }
-    static char rttiNameEntityEx[];
+    static const char rttiNameEntityEx[];
     static int mIdMapNumEntries;
     static PblHashTable<EntityEx, 1024> mIdMap;
 
@@ -146,7 +146,7 @@ public:
     virtual void PostReadSetup();
 
     static PblHash rttiHashEntityClass;
-    static char rttiNameEntityClass[];
+    static const char rttiNameEntityClass[];
 
     unsigned short* mLabel;
     unsigned int mIconTexture;

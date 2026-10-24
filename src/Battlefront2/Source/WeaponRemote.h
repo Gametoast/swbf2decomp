@@ -16,7 +16,7 @@ public:
     virtual ~WeaponRemoteClass();
 
     static PblHash rttiHashWeaponRemoteClass;
-    static char rttiNameWeaponRemoteClass[];
+    static const char rttiNameWeaponRemoteClass[];
 
     virtual WeaponDispenserClass* Derive(unsigned int uHash);
     virtual WeaponDispenser* Build(const WeaponDesc& desc);
@@ -57,7 +57,7 @@ protected:
 public:
 
     static PblHash rttiHashWeaponRemote;
-    static char rttiNameWeaponRemote[];
+    static const char rttiNameWeaponRemote[];
 
     PblHandle<GameObject> mItem;
 };

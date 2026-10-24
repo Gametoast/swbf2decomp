@@ -1131,3 +1131,4 @@ bool PAManager::Update(float fDeltaTime)
     }
     return true;
 }
+#include <new>

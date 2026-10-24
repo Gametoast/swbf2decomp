@@ -42,7 +42,7 @@ static Trackable* GetTrackable(Controllable* pControllable)
     return static_cast<Trackable*>(pControllable);
 }
 
-static Damageable* GetDamageable(GameObject* pObject)
+static inline Damageable* GetDamageable(GameObject* pObject)
 {
     return static_cast<Damageable*>(pObject);
 }
@@ -62,7 +62,7 @@ static bool IsAlive(const GameObject* pGameObject)
     return pGameObject->Damageable::IsAlive();
 }
 
-static int GetTeam(const GameObject* pGameObject)
+static inline int GetTeam(const GameObject* pGameObject)
 {
     return pGameObject->GetTeam();
 }
@@ -77,7 +77,7 @@ static void SetTeam(GameObject* pGameObject, int iTeam)
     pGameObject->SetTeam(iTeam);
 }
 
-static Entity* AsEntity(EntityDefenseGridTurret* pTurret)
+static inline Entity* AsEntity(EntityDefenseGridTurret* pTurret)
 {
     return reinterpret_cast<Entity*>(pTurret);
 }

@@ -8,7 +8,7 @@
 // GLOBAL: SWBF2 0x01ebd13c
 // FoleyFXSoldier::rttiHashFoleyFXSoldier
 PblHash FoleyFXSoldier::rttiHashFoleyFXSoldier("FoleyFXSoldier");
-char FoleyFXSoldier::rttiNameFoleyFXSoldier[] = "FoleyFXSoldier";
+const char FoleyFXSoldier::rttiNameFoleyFXSoldier[] = "FoleyFXSoldier";
 
 // GLOBAL: SWBF2 0x007ec1a4
 // SYNTHETIC: SWBF2 0x00403af0

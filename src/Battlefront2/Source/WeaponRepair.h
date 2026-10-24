@@ -15,7 +15,7 @@ public:
     virtual ~WeaponRepairClass();
 
     static PblHash rttiHashWeaponRepairClass;
-    static char rttiNameWeaponRepairClass[];
+    static const char rttiNameWeaponRepairClass[];
 
     virtual WeaponClass* Derive(unsigned int uHash);
     virtual Weapon* Build(const WeaponDesc& desc);
@@ -64,7 +64,7 @@ protected:
 public:
 
     static PblHash rttiHashWeaponRepair;
-    static char rttiNameWeaponRepair[];
+    static const char rttiNameWeaponRepair[];
 
     bool mFired;
 

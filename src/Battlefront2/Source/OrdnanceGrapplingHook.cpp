@@ -18,7 +18,7 @@ extern PblVector3 gVectorZero;
 // GLOBAL: SWBF2 0x01ef2630
 // OrdnanceGrapplingHook::rttiHashOrdnanceGrapplingHook
 PblHash OrdnanceGrapplingHook::rttiHashOrdnanceGrapplingHook("OrdnanceGrapplingHook");
-char OrdnanceGrapplingHook::rttiNameOrdnanceGrapplingHook[] = "OrdnanceGrapplingHook";
+const char OrdnanceGrapplingHook::rttiNameOrdnanceGrapplingHook[] = "OrdnanceGrapplingHook";
 
 // FUNCTION: SWBF2 0x005ff090
 bool OrdnanceGrapplingHook::IsRtti(unsigned int uRtti) const
@@ -283,7 +283,7 @@ bool OrdnanceGrapplingHook::Update(float fDeltaTime)
 // GLOBAL: SWBF2 0x01ef2634
 // OrdnanceGrapplingHookClass::rttiHashOrdnanceGrapplingHookClass
 PblHash OrdnanceGrapplingHookClass::rttiHashOrdnanceGrapplingHookClass("OrdnanceGrapplingHookClass");
-char OrdnanceGrapplingHookClass::rttiNameOrdnanceGrapplingHookClass[] = "OrdnanceGrapplingHookClass";
+const char OrdnanceGrapplingHookClass::rttiNameOrdnanceGrapplingHookClass[] = "OrdnanceGrapplingHookClass";
 
 // FUNCTION: SWBF2 0x005ffe30
 OrdnanceGrapplingHookClass::OrdnanceGrapplingHookClass(unsigned int uHash)

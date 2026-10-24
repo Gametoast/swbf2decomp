@@ -24,7 +24,7 @@ extern "C" PblVector3* __stdcall D3DXVec3Normalize(PblVector3* pOut, const PblVe
 
 namespace
 {
-    EntityClass* GetEntityClass(GameObject* pObject)
+    inline EntityClass* GetEntityClass(GameObject* pObject)
     {
         typedef EntityClass* (__thiscall *Fn)(GameObject*);
         return pObject->GetEntityClass();
@@ -773,7 +773,7 @@ void WeaponAreaEffect::Fire()
 // GLOBAL: SWBF2 0x01f9a888
 // WeaponAreaEffectClass::rttiHashWeaponAreaEffectClass
 PblHash WeaponAreaEffectClass::rttiHashWeaponAreaEffectClass("WeaponAreaEffectClass");
-char WeaponAreaEffectClass::rttiNameWeaponAreaEffectClass[] = "WeaponAreaEffectClass";
+const char WeaponAreaEffectClass::rttiNameWeaponAreaEffectClass[] = "WeaponAreaEffectClass";
 
 // FUNCTION: SWBF2 0x0067db70
 WeaponAreaEffectClass::WeaponAreaEffectClass(unsigned int uHash)

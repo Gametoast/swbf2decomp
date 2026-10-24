@@ -131,3 +131,4 @@ void HUD::TransformNumberVector3::EventInput(const HUD::Event& event, void* cons
         break;
     }
 }
+#include <new>

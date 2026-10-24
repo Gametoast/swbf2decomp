@@ -18,14 +18,14 @@ bool IsPilotControlState(const void* pControllable);
 // GLOBAL: SWBF2 0x01f9a8ac
 // WeaponDetonatorClass::rttiHashWeaponDetonatorClass
 PblHash WeaponDetonatorClass::rttiHashWeaponDetonatorClass("WeaponDetonatorClass");
-char WeaponDetonatorClass::rttiNameWeaponDetonatorClass[] = "WeaponDetonatorClass";
+const char WeaponDetonatorClass::rttiNameWeaponDetonatorClass[] = "WeaponDetonatorClass";
 
 // SYNTHETIC: SWBF2 0x00407100
 // `dynamic initializer for 'WeaponDetonator::rttiHashWeaponDetonator''
 // GLOBAL: SWBF2 0x01f9a8b0
 // WeaponDetonator::rttiHashWeaponDetonator
 PblHash WeaponDetonator::rttiHashWeaponDetonator("WeaponDetonator");
-char WeaponDetonator::rttiNameWeaponDetonator[] = "WeaponDetonator";
+const char WeaponDetonator::rttiNameWeaponDetonator[] = "WeaponDetonator";
 
 // FUNCTION: SWBF2 0x00682490
 unsigned int WeaponDetonator::GetDerivedRtti() const

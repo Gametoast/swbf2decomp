@@ -22,7 +22,7 @@ protected:
 
 public:
     static PblHash rttiHashDestroyGoal;
-    static char rttiNameDestroyGoal[];
+    static const char rttiNameDestroyGoal[];
 
     GoalTarget mTarget;
 };

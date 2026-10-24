@@ -116,23 +116,7 @@ void Bus::DestroySubBuses()
     }
 }
 
-// FUNCTION: SWBF2 0x00730c00
-Bus::~Bus()
-{
-    if (mFlags & flags_Solo)
-    {
-        smBusSolo = false;
-    }
-    DestroySubBuses();
-    if (mParentBus)
-    {
-        mNode.Remove();
-    }
-    if (mNode.mNext)
-    {
-        mNode.Remove();
-    }
-}
+
 
 // FUNCTION: SWBF2 0x00730cd0
 Bus* Bus::AddSubBus(unsigned int uiHashID)

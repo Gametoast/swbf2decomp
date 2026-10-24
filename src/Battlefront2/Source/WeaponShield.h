@@ -21,7 +21,7 @@ public:
     virtual ~WeaponShieldClass();
 
     static PblHash rttiHashWeaponShieldClass;
-    static char rttiNameWeaponShieldClass[];
+    static const char rttiNameWeaponShieldClass[];
 
     virtual WeaponClass* Derive(unsigned int uHash);
     virtual Weapon* Build(const WeaponDesc& desc);
@@ -92,7 +92,7 @@ public:
     static PblHash rttiHashWeaponShield;
 
     static unsigned int GetRtti() { return rttiHashWeaponShield; }
-    static char rttiNameWeaponShield[];
+    static const char rttiNameWeaponShield[];
 
     FLEffectObject* mShieldEffect;
 };

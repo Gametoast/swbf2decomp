@@ -55,12 +55,12 @@ namespace
     const PblHash kRttiHashEntityHover("EntityHover");
     const PblHash kRttiHashEntityWalker("EntityWalker");
 
-    bool IsRtti(const GameObject* pObj, unsigned int uRtti)
+    inline bool IsRtti(const GameObject* pObj, unsigned int uRtti)
     {
         return reinterpret_cast<const Entity*>(pObj)->IsRtti(uRtti);
     }
 
-    CollisionObject* GetCollisionObject(GameObject* pObj)
+    inline CollisionObject* GetCollisionObject(GameObject* pObj)
     {
         return pObj->GetCollisionObject();
     }
@@ -72,17 +72,17 @@ namespace
         return vResult;
     }
 
-    const CollisionObject* GetCollisionObject(const GameObject* pObj)
+    inline const CollisionObject* GetCollisionObject(const GameObject* pObj)
     {
         return pObj->GetCollisionObject();
     }
 
-    const CollisionObject* GetGeometryCollision(const GameObject* pObj)
+    inline const CollisionObject* GetGeometryCollision(const GameObject* pObj)
     {
         return static_cast<const CollisionObject*>(pObj);
     }
 
-    float GetMaxSpeed(GameObject* pObj)
+    inline float GetMaxSpeed(GameObject* pObj)
     {
         return pObj->GetMaxSpeed();
     }
@@ -97,7 +97,7 @@ namespace
         return const_cast<PblList<Controllable>&>(pObj->mControllableList);
     }
 
-    const EntitySoldierClass* GetSoldierClass(const Entity* pSoldier)
+    inline const EntitySoldierClass* GetSoldierClass(const Entity* pSoldier)
     {
         return static_cast<const EntitySoldier*>(pSoldier)->mClass;
     }
@@ -107,12 +107,12 @@ namespace
         return static_cast<const EntitySoldier*>(pSoldier)->mAcklayData;
     }
 
-    float GetJetFuel(const Entity* pSoldier)
+    inline float GetJetFuel(const Entity* pSoldier)
     {
         return static_cast<const EntitySoldier*>(pSoldier)->mJetFuel;
     }
 
-    const PblVector3& GetPos(const PblMatrix& m)
+    inline const PblVector3& GetPos(const PblMatrix& m)
     {
         return *(const PblVector3*)&m.m[3][0];
     }

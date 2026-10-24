@@ -16,7 +16,7 @@ MemoryPool CommandFlyer::sMemoryPool("CommandFlyer", 0x1da0);
 // GLOBAL: SWBF2 0x01eb9698
 // CommandFlyer::rttiHashCommandFlyer
 PblHash CommandFlyer::rttiHashCommandFlyer("CommandFlyer");
-char CommandFlyer::rttiNameCommandFlyer[] = "CommandFlyer";
+const char CommandFlyer::rttiNameCommandFlyer[] = "CommandFlyer";
 
 // FUNCTION: SWBF2 0x00478040
 CommandFlyerClass::CommandFlyerClass(unsigned int uHash)
@@ -30,7 +30,7 @@ CommandFlyerClass::CommandFlyerClass(unsigned int uHash)
 // GLOBAL: SWBF2 0x01eb969c
 // CommandFlyerClass::rttiHashCommandFlyerClass
 PblHash CommandFlyerClass::rttiHashCommandFlyerClass("CommandFlyerClass");
-char CommandFlyerClass::rttiNameCommandFlyerClass[] = "CommandFlyerClass";
+const char CommandFlyerClass::rttiNameCommandFlyerClass[] = "CommandFlyerClass";
 
 // FUNCTION: SWBF2 0x00477c30
 bool CommandFlyerClass::IsRtti(unsigned int uRtti)

@@ -98,10 +98,7 @@ void WaterEffect::Update(float fDeltaTime)
     }
 }
 
-// FUNCTION: SWBF2 0x00677080
-WaterEffect::~WaterEffect()
-{
-}
+
 
 // FUNCTION: SWBF2 0x00677070
 void WaterEffect::Render(int)

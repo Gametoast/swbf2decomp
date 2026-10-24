@@ -23,12 +23,12 @@ public:
 namespace
 {
 
-    const PblVector3& GetMatrixPos(const PblMatrix& m)
+    inline const PblVector3& GetMatrixPos(const PblMatrix& m)
     {
         return *(const PblVector3*)&m.m[3][0];
     }
 
-    float DistSq(const PblVector3& a, const PblVector3& b)
+    inline float DistSq(const PblVector3& a, const PblVector3& b)
     {
         float fX = a.x - b.x;
         float fY = a.y - b.y;
@@ -90,20 +90,11 @@ float DefendHelper::GetUpdateRate() const
     return 1.5f;
 }
 
-UnitController* DefendHelper::GetCtrl()
-{
-    return mOwner->mCtrl;
-}
 
-Controllable* DefendHelper::GetMe()
-{
-    return mOwner->mCtrl->mOwner;
-}
 
-AILowLevel& DefendHelper::GetLowLevel()
-{
-    return *reinterpret_cast<AILowLevel*>(GetCtrl()->mLowLevel);
-}
+
+
+
 
 // FUNCTION: SWBF2 0x0048b840
 void DefendHelper::EnterState()

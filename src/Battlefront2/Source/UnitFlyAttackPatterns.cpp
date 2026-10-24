@@ -15,7 +15,7 @@ class GameObject;
 
 namespace
 {
-    const PblVector3& GetPos(const PblMatrix& m)
+    inline const PblVector3& GetPos(const PblMatrix& m)
     {
         return *(const PblVector3*)&m.m[3][0];
     }

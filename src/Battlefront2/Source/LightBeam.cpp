@@ -26,10 +26,7 @@ void LightBeamEffect::Render(int)
 {
 }
 
-// FUNCTION: SWBF2 0x0056faa0
-LightBeamEffect::~LightBeamEffect()
-{
-}
+
 
 // FUNCTION: SWBF2 0x0056fd50
 void LightBeamEffect::Destroy()

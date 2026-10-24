@@ -138,3 +138,12 @@ public:
 };
  
  
+
+
+
+
+
+// FUNCTION: SWBF2 0x004ff690
+inline WalkerAnimationIdle::~WalkerAnimationIdle()
+{
+}

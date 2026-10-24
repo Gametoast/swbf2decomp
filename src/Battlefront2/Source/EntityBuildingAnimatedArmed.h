@@ -24,7 +24,7 @@ public:
     virtual void SetProperty(unsigned int uProperty, const char* pszValue);
 
     static PblHash rttiHashEntityBuildingAnimatedArmedClass;
-    static char rttiNameEntityBuildingAnimatedArmedClass[];
+    static const char rttiNameEntityBuildingAnimatedArmedClass[];
 
     MountedTurretClass* mTurretClass[8];
 };
@@ -62,7 +62,7 @@ public:
     virtual const Controllable* GetTurretPtr(int iIndex) const;
 
     static PblHash rttiHashEntityBuildingAnimatedArmed;
-    static char rttiNameEntityBuildingAnimatedArmed[];
+    static const char rttiNameEntityBuildingAnimatedArmed[];
 
     MountedTurret* mTurret[8];
     int mNumTurrets;

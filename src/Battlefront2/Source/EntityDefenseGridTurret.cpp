@@ -10,14 +10,14 @@
 // GLOBAL: SWBF2 0x01ebb990
 // EntityDefenseGridTurretClass::rttiHashEntityDefenseGridTurretClass
 PblHash EntityDefenseGridTurretClass::rttiHashEntityDefenseGridTurretClass("EntityDefenseGridTurretClass");
-char EntityDefenseGridTurretClass::rttiNameEntityDefenseGridTurretClass[] = "EntityDefenseGridTurretClass";
+const char EntityDefenseGridTurretClass::rttiNameEntityDefenseGridTurretClass[] = "EntityDefenseGridTurretClass";
 
 // SYNTHETIC: SWBF2 0x004029a0
 // `dynamic initializer for 'EntityDefenseGridTurret::rttiHashEntityDefenseGridTurret''
 // GLOBAL: SWBF2 0x01ebb994
 // EntityDefenseGridTurret::rttiHashEntityDefenseGridTurret
 PblHash EntityDefenseGridTurret::rttiHashEntityDefenseGridTurret("EntityDefenseGridTurret");
-char EntityDefenseGridTurret::rttiNameEntityDefenseGridTurret[] = "EntityDefenseGridTurret";
+const char EntityDefenseGridTurret::rttiNameEntityDefenseGridTurret[] = "EntityDefenseGridTurret";
 
 // GLOBAL: SWBF2 0x01ebb940
 // SYNTHETIC: SWBF2 0x00402980
@@ -26,12 +26,12 @@ char EntityDefenseGridTurret::rttiNameEntityDefenseGridTurret[] = "EntityDefense
 // `dynamic atexit destructor for 'EntityDefenseGridTurret::sMemoryPool''
 MemoryPool EntityDefenseGridTurret::sMemoryPool("EntityDefenseGridTurret", 0x6c0);
 
-void* EntityDefenseGridTurret::operator new(unsigned int uSize)
+inline void* EntityDefenseGridTurret::operator new(unsigned int uSize)
 {
     return sMemoryPool.Allocate(uSize);
 }
 
-void EntityDefenseGridTurret::operator delete(void* pBlock)
+inline void EntityDefenseGridTurret::operator delete(void* pBlock)
 {
     sMemoryPool.Free(pBlock);
 }

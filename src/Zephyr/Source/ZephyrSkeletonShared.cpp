@@ -3,7 +3,7 @@
 #include "ZephyrFile.h"
 #include "PebbleFL/Common/PblChunk.h"
 #include <d3dx9math.h>
-
+#include <new>
 // FUNCTION: SWBF2 0x0072ee20
 void ZephyrSkeletonShared::SetJointTransformAnimationFlag(int iJoint, bool bFlag)
 {

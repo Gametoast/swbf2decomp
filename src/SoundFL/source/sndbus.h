@@ -47,7 +47,23 @@ public:
         smFreeList.Free(p);
     }
 
-    ~Bus();
+    // FUNCTION: SWBF2 0x00730c00
+    ~Bus()
+    {
+        if (mFlags & flags_Solo)
+        {
+            smBusSolo = false;
+        }
+        DestroySubBuses();
+        if (mParentBus)
+        {
+            mNode.Remove();
+        }
+        if (mNode.mNext)
+        {
+            mNode.Remove();
+        }
+    }
 
     static Bus smRootBus;
 

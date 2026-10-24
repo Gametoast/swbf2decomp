@@ -31,7 +31,10 @@ struct LuaObject
         luaL_unref(LuaHelper::mState, LUA_REGISTRYINDEX, mRef);
     }
 
-    void Push() const;
+    void Push() const
+    {
+        lua_rawgeti(LuaHelper::mState, LUA_REGISTRYINDEX, mRef);
+    }
 
     int mRef;
 };

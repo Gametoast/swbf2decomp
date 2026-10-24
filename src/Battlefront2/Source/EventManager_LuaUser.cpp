@@ -24,10 +24,7 @@ LuaObjectMatches LuaGetItem<LuaObjectMatches>(int iIndex)
     return LuaObjectMatches(LuaHelper::mState, iIndex);
 }
 
-void LuaObject::Push() const
-{
-    lua_rawgeti(LuaHelper::mState, LUA_REGISTRYINDEX, mRef);
-}
+
 
 namespace LuaUserEvent
 {
@@ -141,14 +138,7 @@ LuaCallback<ITEM, PARAM>::LuaCallback(int iRef)
 
 // SYNTHETIC: SWBF2 0x005144a0
 // EventManager::LuaCallback<EventManager::LuaObject,EventManager::LuaObject>::`scalar deleting destructor'
-template <class ITEM, class PARAM>
-LuaCallback<ITEM, PARAM>::~LuaCallback()
-{
-    if (mFunction != -1)
-    {
-        lua_unref(LuaHelper::mState, mFunction);
-    }
-}
+
 
 // FUNCTION: SWBF2 0x005143c0
 template <class ITEM, class PARAM>

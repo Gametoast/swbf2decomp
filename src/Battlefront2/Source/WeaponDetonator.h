@@ -22,7 +22,7 @@ public:
     unsigned int mPlantedHash;
 
     static PblHash rttiHashWeaponDetonatorClass;
-    static char rttiNameWeaponDetonatorClass[];
+    static const char rttiNameWeaponDetonatorClass[];
 };
   
  
@@ -49,6 +49,6 @@ public:
     virtual bool CheckFire() const;
 
     static PblHash rttiHashWeaponDetonator;
-    static char rttiNameWeaponDetonator[];
+    static const char rttiNameWeaponDetonator[];
 };
  

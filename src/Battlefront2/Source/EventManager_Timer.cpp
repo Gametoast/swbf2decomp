@@ -74,14 +74,7 @@ int RegisterLuaCallback(lua_State*)
 
 // SYNTHETIC: SWBF2 0x0051c780
 // EventManager::LuaCallback<Timer,char>::`scalar deleting destructor'
-template <class ITEM, class PARAM>
-LuaCallback<ITEM, PARAM>::~LuaCallback()
-{
-    if (mFunction != -1)
-    {
-        lua_unref(LuaHelper::mState, mFunction);
-    }
-}
+
 
 // FUNCTION: SWBF2 0x0051c6e0
 template <class ITEM, class PARAM>

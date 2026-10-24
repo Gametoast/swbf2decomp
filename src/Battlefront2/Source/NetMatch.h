@@ -68,7 +68,7 @@ public:
     static void GetGameError(char const*& pcError, int& iSeverity);
 
     static void ChangeRegisterGame();
-    static void __fastcall ReceiveRegisterPacket(const char* pData, int iLen, const void* pSource);
+    static void __cdecl ReceiveRegisterPacket(const char* pData, int iLen, const void* pSource);
     static char StartFindGames(int, const NetSessionId* id);
     static void PauseFindGames();
     static void UpdateJoinGame();

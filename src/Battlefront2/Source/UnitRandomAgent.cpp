@@ -17,12 +17,12 @@
 
 namespace
 {
-    const PblVector3& GetMatrixPos(const PblMatrix& m)
+    inline const PblVector3& GetMatrixPos(const PblMatrix& m)
     {
         return *(const PblVector3*)&m.m[3][0];
     }
 
-    const PblMatrix& GameObjectGetMatrix(const GameObject* pObj)
+    inline const PblMatrix& GameObjectGetMatrix(const GameObject* pObj)
     {
         return static_cast<const CollisionObject*>(pObj)->GetMatrix();
     }
@@ -43,7 +43,7 @@ namespace
 // GLOBAL: SWBF2 0x01f9a248
 // UnitRandomAgent::rttiHashUnitRandomAgent
 PblHash UnitRandomAgent::rttiHashUnitRandomAgent("UnitRandomAgent");
-char UnitRandomAgent::rttiNameUnitRandomAgent[] = "UnitRandomAgent";
+const char UnitRandomAgent::rttiNameUnitRandomAgent[] = "UnitRandomAgent";
 
 // FUNCTION: SWBF2 0x00669320
 bool UnitRandomAgent::IsRtti(unsigned int uRtti) const

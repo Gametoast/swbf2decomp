@@ -65,7 +65,7 @@ extern "C" PblVector3* __stdcall D3DXVec3TransformCoord(PblVector3* pOut, const 
 namespace
 {
 
-    void UpdateCollisionSphere(EntityHover* pHover)
+    inline void UpdateCollisionSphere(EntityHover* pHover)
     {
         PblVector3 center;
         D3DXVec3TransformCoord(&center, &pHover->mModel->_mModel->_BoundingSphere.GetCenter(),
@@ -80,7 +80,7 @@ namespace
 // GLOBAL: SWBF2 0x01ebbdd0
 // EntityHover::rttiHashEntityHover
 PblHash EntityHover::rttiHashEntityHover("EntityHover");
-char EntityHover::rttiNameEntityHover[] = "EntityHover";
+const char EntityHover::rttiNameEntityHover[] = "EntityHover";
 
 // GLOBAL: SWBF2 0x01ebbdd8
 // SYNTHETIC: SWBF2 0x00402b80
@@ -94,7 +94,7 @@ MemoryPool EntityHover::sMemoryPool("EntityHover", 0x1d10);
 // GLOBAL: SWBF2 0x01ebbdd4
 // EntityHoverClass::rttiHashEntityHoverClass
 PblHash EntityHoverClass::rttiHashEntityHoverClass("EntityHoverClass");
-char EntityHoverClass::rttiNameEntityHoverClass[] = "EntityHoverClass";
+const char EntityHoverClass::rttiNameEntityHoverClass[] = "EntityHoverClass";
 
 // FUNCTION: SWBF2 0x00478a50
 bool EntityHover::IsRtti(unsigned int uRtti) const
@@ -380,12 +380,12 @@ static PblMatrix _IdentityMatrix(
     PblVector4{ 0.0f, 0.0f, 1.0f, 0.0f },
     PblVector4{ 0.0f, 0.0f, 0.0f, 1.0f });
 
-void* EntityHover::operator new(unsigned int uSize)
+inline void* EntityHover::operator new(unsigned int uSize)
 {
     return sMemoryPool.Allocate(uSize);
 }
 
-void EntityHover::operator delete(void* pBlock)
+inline void EntityHover::operator delete(void* pBlock)
 {
     sMemoryPool.Free(pBlock);
 }

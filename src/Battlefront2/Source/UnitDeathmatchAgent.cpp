@@ -25,7 +25,7 @@
 // GLOBAL: SWBF2 0x01f9938c
 // UnitDeathmatchAgent::rttiHashUnitDeathmatchAgent
 PblHash UnitDeathmatchAgent::rttiHashUnitDeathmatchAgent("UnitDeathmatchAgent");
-char UnitDeathmatchAgent::rttiNameUnitDeathmatchAgent[] = "UnitDeathmatchAgent";
+const char UnitDeathmatchAgent::rttiNameUnitDeathmatchAgent[] = "UnitDeathmatchAgent";
 
 // FUNCTION: SWBF2 0x006653a0
 bool UnitDeathmatchAgent::IsRtti(unsigned int uRtti) const

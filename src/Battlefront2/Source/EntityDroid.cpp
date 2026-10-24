@@ -483,7 +483,7 @@ ControllableClass* Controllable::GetControllableClass()
 // GLOBAL: SWBF2 0x01ebbbb4
 // EntityDroid::rttiHashEntityDroid
 PblHash EntityDroid::rttiHashEntityDroid("EntityDroid");
-char EntityDroid::rttiNameEntityDroid[] = "EntityDroid";
+const char EntityDroid::rttiNameEntityDroid[] = "EntityDroid";
 
 // FUNCTION: SWBF2 0x00499300
 void GameObject::SetNetUniqueId(int iNetUniqueId)
@@ -630,7 +630,7 @@ bool EntityDroid::PostCollision::Update(float fDeltaTime)
 // GLOBAL: SWBF2 0x01ebbaa4
 // EntityDroidClass::rttiHashEntityDroidClass
 PblHash EntityDroidClass::rttiHashEntityDroidClass("EntityDroidClass");
-char EntityDroidClass::rttiNameEntityDroidClass[] = "EntityDroidClass";
+const char EntityDroidClass::rttiNameEntityDroidClass[] = "EntityDroidClass";
 
 // FUNCTION: SWBF2 0x00499560
 bool EntityDroidClass::IsRtti(unsigned int uRtti)

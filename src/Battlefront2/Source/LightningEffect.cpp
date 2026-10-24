@@ -22,7 +22,7 @@ extern "C" PblVector3* __stdcall D3DXVec3Normalize(PblVector3* pOut, const PblVe
 namespace
 {
 
-const RedColor Interpolate(const RedColor& a, const RedColor& b, float t)
+inline const RedColor Interpolate(const RedColor& a, const RedColor& b, float t)
 {
     RedColor result;
     result.b = (unsigned char)(int)(a.b * (1.0f - t) + b.b * t + 0.5f);

@@ -30,7 +30,7 @@ extern PblVector3 gVectorZero;
 // GLOBAL: SWBF2 0x01ef265c
 // OrdnanceMissile::rttiHashOrdnanceMissile
 PblHash OrdnanceMissile::rttiHashOrdnanceMissile("OrdnanceMissile");
-char OrdnanceMissile::rttiNameOrdnanceMissile[] = "OrdnanceMissile";
+const char OrdnanceMissile::rttiNameOrdnanceMissile[] = "OrdnanceMissile";
 
 // FUNCTION: SWBF2 0x006048d0
 bool OrdnanceMissile::IsRtti(unsigned int uRtti) const
@@ -65,7 +65,7 @@ void Controllable::SetEnemyLockedOnMeState(float fState, OrdnanceMissile* pMissi
     }
 }
 
-static float Distance(const PblVector3& a, const PblVector3& b)
+static inline float Distance(const PblVector3& a, const PblVector3& b)
 {
     const float dx = a.x - b.x;
     const float dy = a.y - b.y;
@@ -267,7 +267,7 @@ bool OrdnanceMissile::Update(float fDeltaTime)
 // GLOBAL: SWBF2 0x01ef2658
 // OrdnanceMissileClass::rttiHashOrdnanceMissileClass
 PblHash OrdnanceMissileClass::rttiHashOrdnanceMissileClass("OrdnanceMissileClass");
-char OrdnanceMissileClass::rttiNameOrdnanceMissileClass[] = "OrdnanceMissileClass";
+const char OrdnanceMissileClass::rttiNameOrdnanceMissileClass[] = "OrdnanceMissileClass";
 
 // FUNCTION: SWBF2 0x00605790
 OrdnanceMissileClass::OrdnanceMissileClass(unsigned int uHash)

@@ -36,7 +36,7 @@ public:
     bool IsDestructableBuilding();
 
     static PblHash rttiHashEntityBuildingClass;
-    static char rttiNameEntityBuildingClass[];
+    static const char rttiNameEntityBuildingClass[];
 
     int mLodType;
     GameModel* mDestroyedModel;
@@ -131,7 +131,7 @@ public:
     void Update(float fDeltaTime);
 
     static PblHash rttiHashEntityBuilding;
-    static char rttiNameEntityBuilding[];
+    static const char rttiNameEntityBuilding[];
 
     EntityBuildingClass* mClass;
     STATE mState;

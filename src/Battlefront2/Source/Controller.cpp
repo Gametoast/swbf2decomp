@@ -33,14 +33,14 @@ extern "C" PblVector3* __stdcall D3DXVec3Normalize(PblVector3* pOut, const PblVe
 // GLOBAL: SWBF2 0x01eb97a8
 // Controller::rttiHashController
 PblHash Controller::rttiHashController("Controller");
-char Controller::rttiNameController[] = "Controller";
+const char Controller::rttiNameController[] = "Controller";
 
 static Trackable* GetTrackable(Controllable* pControllable)
 {
     return pControllable;
 }
 
-static int GetTeam(const GameObject* pObject)
+static inline int GetTeam(const GameObject* pObject)
 {
     return pObject->mTeam;
 }

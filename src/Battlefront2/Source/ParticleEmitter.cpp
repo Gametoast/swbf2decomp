@@ -73,15 +73,6 @@ ParticleEmitter* ParticleEmitter::Create(const ParticleEmitterClass* pClass)
     return new ParticleEmitter(pClass);
 }
 
-// FUNCTION: SWBF2 0x00609c40
-float VarianceValue::GetValue(PblRandom& rand) const
-{
-    if (mVariance == 0.0f)
-    {
-        return mValue;
-    }
-    return rand.GetFloat() * mVariance + mValue;
-}
 
 // FUNCTION: SWBF2 0x0060a130
 void ParticleEmitter::Reset(const ParticleEmitterClass* pClass)

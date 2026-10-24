@@ -19,12 +19,12 @@ class FlagItem;
 
 namespace
 {
-    unsigned int GameObjectHandleId(const GameObject* pObject)
+    inline unsigned int GameObjectHandleId(const GameObject* pObject)
     {
         return pObject->mHandleId;
     }
 
-    GameObject* HandleObject(PblHandle<GameObject>& handle)
+    inline GameObject* HandleObject(PblHandle<GameObject>& handle)
     {
         if (handle.mObject && GameObjectHandleId(handle.mObject) != handle.mSavedHandleId)
         {
@@ -39,7 +39,7 @@ namespace
         return pObject->mControllableList;
     }
 
-    const Controllable* GetControllable(const GameObject* pObject)
+    inline const Controllable* GetControllable(const GameObject* pObject)
     {
         return pObject->GetControllable();
     }
@@ -49,7 +49,7 @@ namespace
         return pCharacter->mCarriedFlagPtr;
     }
 
-    const PblVector3& GameObjectPosition(const GameObject* pObject)
+    inline const PblVector3& GameObjectPosition(const GameObject* pObject)
     {
         return static_cast<const CollisionObject*>(pObject)->GetPosition();
     }

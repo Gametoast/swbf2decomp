@@ -31,7 +31,7 @@ inline float GetMaxShield(const GameObject* p) { return p->mMaxShield; }
 inline bool IsAlive(const GameObject* p) { return p->IsAlive(); }
 inline int GetTeam(const GameObject* p) { return p->GetTeam(); }
 
-const RedColor Interpolate(const RedColor& a, const RedColor& b, float t)
+inline const RedColor Interpolate(const RedColor& a, const RedColor& b, float t)
 {
     RedColor result;
     result.b = (unsigned char)(int)(a.b * (1.0f - t) + b.b * t + 0.5f);

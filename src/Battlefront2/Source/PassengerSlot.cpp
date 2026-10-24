@@ -30,7 +30,7 @@ MemoryPool PassengerSlot::sMemoryPool("PassengerSlot", 0x1f0);
 // GLOBAL: SWBF2 0x01ef7c90
 // PassengerSlot::rttiHashPassengerSlot
 PblHash PassengerSlot::rttiHashPassengerSlot("PassengerSlot");
-char PassengerSlot::rttiNamePassengerSlot[] = "PassengerSlot";
+const char PassengerSlot::rttiNamePassengerSlot[] = "PassengerSlot";
 
 static PblMatrix _IdentityMatrix(
     PblVector4{ 1.0f, 0.0f, 0.0f, 0.0f },

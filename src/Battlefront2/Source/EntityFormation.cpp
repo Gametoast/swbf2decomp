@@ -1,6 +1,6 @@
 #include <string.h>
 #include <d3dx9math.h>
-
+#include <new>
 #include "EntityFormation.h"
 #include "PebbleFL/Common/PblHashTable.h"
 

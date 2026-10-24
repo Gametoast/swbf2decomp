@@ -9,19 +9,19 @@
 namespace
 {
 
-    const PblMatrix& GetCollisionMatrix(GameObject* pObject)
+    inline const PblMatrix& GetCollisionMatrix(GameObject* pObject)
     {
         typedef const PblMatrix& (__thiscall * Fn)(void*);
         return static_cast<CollisionObject*>(pObject)->GetMatrix();
     }
 
-    const PblVector3& GetVelocity(GameObject* pObject)
+    inline const PblVector3& GetVelocity(GameObject* pObject)
     {
         typedef const PblVector3& (__thiscall * Fn)(GameObject*);
         return pObject->GetVelocity();
     }
 
-    const PblVector3& GetTranslation(const PblMatrix& m)
+    inline const PblVector3& GetTranslation(const PblMatrix& m)
     {
         return *reinterpret_cast<const PblVector3*>(m.m[3]);
     }
@@ -32,14 +32,14 @@ namespace
 // GLOBAL: SWBF2 0x01f9a91c
 // WeaponTowCable::rttiHashWeaponTowCable
 PblHash WeaponTowCable::rttiHashWeaponTowCable("WeaponTowCable");
-char WeaponTowCable::rttiNameWeaponTowCable[] = "WeaponTowCable";
+const char WeaponTowCable::rttiNameWeaponTowCable[] = "WeaponTowCable";
 
 // SYNTHETIC: SWBF2 0x004072d0
 // `dynamic initializer for 'WeaponTowCableClass::rttiHashWeaponTowCableClass''
 // GLOBAL: SWBF2 0x01f9a920
 // WeaponTowCableClass::rttiHashWeaponTowCableClass
 PblHash WeaponTowCableClass::rttiHashWeaponTowCableClass("WeaponTowCableClass");
-char WeaponTowCableClass::rttiNameWeaponTowCableClass[] = "WeaponTowCableClass";
+const char WeaponTowCableClass::rttiNameWeaponTowCableClass[] = "WeaponTowCableClass";
 
 // FUNCTION: SWBF2 0x00692a30
 WeaponTowCableClass::WeaponTowCableClass(unsigned int uHash)

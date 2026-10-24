@@ -81,14 +81,14 @@ Ordnance* OrdnanceHaywireClass::Build(const OrdnanceDesc& desc)
 // GLOBAL: SWBF2 0x01ef2644
 // OrdnanceHaywire::rttiHashOrdnanceHaywire
 PblHash OrdnanceHaywire::rttiHashOrdnanceHaywire("OrdnanceHaywire");
-char OrdnanceHaywire::rttiNameOrdnanceHaywire[] = "OrdnanceHaywire";
+const char OrdnanceHaywire::rttiNameOrdnanceHaywire[] = "OrdnanceHaywire";
 
 // SYNTHETIC: SWBF2 0x00405af0
 // `dynamic initializer for 'OrdnanceHaywireClass::rttiHashOrdnanceHaywireClass''
 // GLOBAL: SWBF2 0x01ef2640
 // OrdnanceHaywireClass::rttiHashOrdnanceHaywireClass
 PblHash OrdnanceHaywireClass::rttiHashOrdnanceHaywireClass("OrdnanceHaywireClass");
-char OrdnanceHaywireClass::rttiNameOrdnanceHaywireClass[] = "OrdnanceHaywireClass";
+const char OrdnanceHaywireClass::rttiNameOrdnanceHaywireClass[] = "OrdnanceHaywireClass";
 
 // FUNCTION: SWBF2 0x00600f00
 OrdnanceHaywireClass::OrdnanceHaywireClass(unsigned int uHash)

@@ -11858,7 +11858,7 @@ int* __fastcall InitControllableIterator(int* pThis, void*, const int* pSource)
 bool __fastcall HasMarkerTarget(const int* pThis, void*) { return pThis[54] >= 0; }
 
 // FUNCTION: SWBF2 0x0040f720
-double Clamp(float fValue, float fLow, float fHigh)
+inline double Clamp(float fValue, float fLow, float fHigh)
 {
     if (fLow > fValue)
     {

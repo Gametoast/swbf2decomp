@@ -18,9 +18,10 @@ StreamVAD::StreamVAD()
 }
 
 // FUNCTION: SWBF2 0x00742050
-StreamVAD::~StreamVAD()
+inline StreamVAD::~StreamVAD()
 {
 }
+
 
 // FUNCTION: SWBF2 0x007420b0
 void* __fastcall sub_7420B0(void* pVAD, int, unsigned int uiFlags)

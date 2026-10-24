@@ -1,5 +1,5 @@
 #include "RedTerrain.h"
-
+#include <new>
 #include <math.h>
 #include <string.h>
 

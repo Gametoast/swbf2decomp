@@ -61,7 +61,7 @@ public:
     virtual float GetReboardTime();
 
     static PblHash rttiHashEntityFlyerClass;
-    static char rttiNameEntityFlyerClass[];
+    static const char rttiNameEntityFlyerClass[];
 
     CollisionModel mFlyingCollisionModel;
     bool mFlyingCollisionInited;

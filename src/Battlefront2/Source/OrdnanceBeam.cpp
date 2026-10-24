@@ -30,7 +30,7 @@ public:
 // GLOBAL: SWBF2 0x01ef2614
 // OrdnanceBeam::rttiHashOrdnanceBeam
 PblHash OrdnanceBeam::rttiHashOrdnanceBeam("OrdnanceBeam");
-char OrdnanceBeam::rttiNameOrdnanceBeam[] = "OrdnanceBeam";
+const char OrdnanceBeam::rttiNameOrdnanceBeam[] = "OrdnanceBeam";
 
 // FUNCTION: SWBF2 0x005f9670
 unsigned int OrdnanceBeamClass::GetDerivedRtti() { return rttiHashOrdnanceBeamClass; }
@@ -43,7 +43,7 @@ const char* OrdnanceBeamClass::GetDerivedRttiName() { return rttiNameOrdnanceBea
 // GLOBAL: SWBF2 0x01ef2618
 // OrdnanceBeamClass::rttiHashOrdnanceBeamClass
 PblHash OrdnanceBeamClass::rttiHashOrdnanceBeamClass("OrdnanceBeamClass");
-char OrdnanceBeamClass::rttiNameOrdnanceBeamClass[] = "OrdnanceBeamClass";
+const char OrdnanceBeamClass::rttiNameOrdnanceBeamClass[] = "OrdnanceBeamClass";
 
 // FUNCTION: SWBF2 0x005fa180
 OrdnanceBeamClass::OrdnanceBeamClass(unsigned int uHash)

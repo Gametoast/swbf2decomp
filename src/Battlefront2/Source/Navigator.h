@@ -27,7 +27,7 @@ public:
     static MemoryPool sMemoryPool;
 
     static PblHash rttiHashNavigator;
-    static char rttiNameNavigator[];
+    static const char rttiNameNavigator[];
 
     virtual ~Navigator();
 

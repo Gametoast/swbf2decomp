@@ -27,7 +27,7 @@ public:
     };
 
     static PblHash rttiHashNavigatorSlide;
-    static char rttiNameNavigatorSlide[];
+    static const char rttiNameNavigatorSlide[];
 
     NavigatorSlide(AILowLevel* pOwner, const PblVector3& globalDest,
                    const Obstacle** ppIgnore, int iIgnoreCnt);

@@ -262,7 +262,7 @@ void UpdateAudience(Controller* pController);
 namespace
 {
 
-int GetTeam(const GameObject* pObject)
+inline int GetTeam(const GameObject* pObject)
 {
     return pObject->mTeam;
 }
@@ -272,12 +272,12 @@ int GetPerceivedTeam(const GameObject* pObject)
     return pObject->mPerceivedTeam;
 }
 
-const CollisionObject* GetCollisionObject(const GameObject* pObject)
+inline const CollisionObject* GetCollisionObject(const GameObject* pObject)
 {
     return static_cast<const CollisionObject*>(pObject);
 }
 
-Controllable* GetControllable(GameObject* pObject)
+inline Controllable* GetControllable(GameObject* pObject)
 {
     return pObject->GetControllable();
 }
@@ -287,7 +287,7 @@ PblList<Controllable>& GetControllableList(GameObject* pObject)
     return pObject->mControllableList;
 }
 
-float DistanceSq(const PblVector3& a, const float* b)
+inline float DistanceSq(const PblVector3& a, const float* b)
 {
     float dx = b[0] - a.x;
     float dy = b[1] - a.y;

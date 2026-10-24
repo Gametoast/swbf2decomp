@@ -28,7 +28,7 @@ protected:
 
 public:
     static PblHash rttiHashCTFGoalD;
-    static char rttiNameCTFGoalD[];
+    static const char rttiNameCTFGoalD[];
 
     PblHandle<const GameObject> mFlag;
 };

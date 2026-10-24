@@ -405,7 +405,7 @@ EntityFlyerClass::EntityFlyerClass(unsigned int uHash)
 // GLOBAL: SWBF2 0x01ebbcb8
 // EntityFlyerClass::rttiHashEntityFlyerClass
 PblHash EntityFlyerClass::rttiHashEntityFlyerClass("EntityFlyerClass");
-char EntityFlyerClass::rttiNameEntityFlyerClass[] = "EntityFlyerClass";
+const char EntityFlyerClass::rttiNameEntityFlyerClass[] = "EntityFlyerClass";
 
 // SYNTHETIC: SWBF2 0x00402ad0
 // `dynamic initializer for 'EntityFlyer::rttiHashEntityFlyer''
@@ -1448,12 +1448,12 @@ void Event<Character, GameObject>::Trigger(Character& item, GameObject& param)
 
 extern PblVector3 gVectorZero;
 
-void* EntityFlyer::operator new(unsigned int uSize)
+inline void* EntityFlyer::operator new(unsigned int uSize)
 {
     return sMemoryPool.Allocate(uSize);
 }
 
-void EntityFlyer::operator delete(void* pBlock)
+inline void EntityFlyer::operator delete(void* pBlock)
 {
     sMemoryPool.Free(pBlock);
 }

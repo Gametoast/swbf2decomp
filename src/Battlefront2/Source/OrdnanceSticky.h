@@ -26,7 +26,7 @@ public:
     int mStickTypes;
 
     static PblHash rttiHashOrdnanceStickyClass;
-    static char rttiNameOrdnanceStickyClass[];
+    static const char rttiNameOrdnanceStickyClass[];
 };
   
  
@@ -63,7 +63,7 @@ public:
     float mBeginTime;
 
     static PblHash rttiHashOrdnanceSticky;
-    static char rttiNameOrdnanceSticky[];
+    static const char rttiNameOrdnanceSticky[];
 };
  
  

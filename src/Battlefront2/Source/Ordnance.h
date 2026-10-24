@@ -93,7 +93,7 @@ public:
     GameSound mSoundCollisionShield;
 
     static PblHash rttiHashOrdnanceClass;
-    static char rttiNameOrdnanceClass[];
+    static const char rttiNameOrdnanceClass[];
 };
  
  
@@ -175,7 +175,7 @@ public:
     int mInterpIndex;
 
     static PblHash rttiHashOrdnance;
-    static char rttiNameOrdnance[];
+    static const char rttiNameOrdnance[];
     static MemoryPool sMemoryPool;
 };
  

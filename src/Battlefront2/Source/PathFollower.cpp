@@ -88,12 +88,12 @@ namespace
         static_cast<EntityDroideka*>(p)->mAILastCollisionDirection = cDir;
     }
 
-    bool GameObjectIsRtti(GameObject* pObj, unsigned int uRtti)
+    inline bool GameObjectIsRtti(GameObject* pObj, unsigned int uRtti)
     {
         return pObj->IsRtti(uRtti);
     }
 
-    AILowLevel& LowLevel(UnitController* pCtrl)
+    inline AILowLevel& LowLevel(UnitController* pCtrl)
     {
         return *reinterpret_cast<AILowLevel*>(pCtrl->mLowLevel);
     }

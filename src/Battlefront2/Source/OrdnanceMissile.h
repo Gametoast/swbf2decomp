@@ -21,7 +21,7 @@ public:
     virtual float GetVelocity();
 
     static PblHash rttiHashOrdnanceMissileClass;
-    static char rttiNameOrdnanceMissileClass[];
+    static const char rttiNameOrdnanceMissileClass[];
 
     float mScaleRate;
     float mTurnRate;
@@ -71,7 +71,7 @@ public:
     float mSpeed;
 
     static PblHash rttiHashOrdnanceMissile;
-    static char rttiNameOrdnanceMissile[];
+    static const char rttiNameOrdnanceMissile[];
 };
  
  

@@ -180,7 +180,7 @@ void UpdatePhysics(const Controllable* pMe, float fScale, const ControllableDest
                 float fTurnRate, float fPitchRate, float* pfThrust, float* pfStrafe,
                 float* pfTurn, float* pfPitch);
 }
-namespace AIUtil { bool __fastcall CanPotentiallySee(Controllable* pMe, const GameObject* pObject, float* pOut); }
+namespace AIUtil { bool __cdecl CanPotentiallySee(Controllable* pMe, const GameObject* pObject, float* pOut); }
 namespace AIUtil { void __fastcall AddSpied(Character* pWatcher, Character* pTarget); }
 namespace AIUtil { bool __fastcall IsSpied(const Character* pWatcher, const Character* pTarget); }
 namespace AIUtil { bool __fastcall ShouldStayInVehicle(Controllable* pMe); }

@@ -42,7 +42,7 @@ int Play(VOType eType, const GameObject* pSpeaker, const GameObject* pTarget,
 namespace
 {
 
-    AILowLevel& LowLevel(UnitController* pCtrl)
+    inline AILowLevel& LowLevel(UnitController* pCtrl)
     {
         return *reinterpret_cast<AILowLevel*>(pCtrl->mLowLevel);
     }

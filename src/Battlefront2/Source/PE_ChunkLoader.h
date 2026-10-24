@@ -54,3 +54,8 @@ public:
 };
  
  
+
+// FUNCTION: SWBF2 0x00618620
+inline ParticleEmitterEffect::~ParticleEmitterEffect()
+{
+}

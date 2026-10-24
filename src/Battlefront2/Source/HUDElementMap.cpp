@@ -2086,7 +2086,7 @@ void HUD::ElementMap::EventToggleMapMode(const HUD::Event& event, void* const pD
 }
 
 // FUNCTION: SWBF2 0x00555740
-void __fastcall HUD::ElementMap::WriteBitmapElement(HUD::ElementBitmapBase* pBitmap, HUD::File* pFile,
+void __cdecl HUD::ElementMap::WriteBitmapElement(HUD::ElementBitmapBase* pBitmap, HUD::File* pFile,
                            unsigned int uTabs)
 {
     RedBitmapElement* pElement = (RedBitmapElement*)pBitmap->mElement;

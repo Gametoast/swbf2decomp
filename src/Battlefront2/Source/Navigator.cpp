@@ -36,12 +36,12 @@ namespace PowerupUtility
 
 namespace
 {
-    const PblVector3& GetPos(const PblMatrix& m)
+    inline const PblVector3& GetPos(const PblMatrix& m)
     {
         return *(const PblVector3*)&m.m[3][0];
     }
 
-    Entity* AsEntity(GameObject* pObj)
+    inline Entity* AsEntity(GameObject* pObj)
     {
         return reinterpret_cast<Entity*>(pObj);
     }
@@ -51,7 +51,7 @@ namespace
         return &static_cast<CollisionObject&>(*pObj);
     }
 
-    int GetHealthType(const GameObject* pObj)
+    inline int GetHealthType(const GameObject* pObj)
     {
         return pObj->mHealthType;
     }
@@ -69,7 +69,7 @@ MemoryPool Navigator::sMemoryPool("Navigator", sizeof(Navigator));
 // GLOBAL: SWBF2 0x01ecb1f8
 // Navigator::rttiHashNavigator
 PblHash Navigator::rttiHashNavigator("Navigator");
-char Navigator::rttiNameNavigator[] = "Navigator";
+const char Navigator::rttiNameNavigator[] = "Navigator";
 
 // FUNCTION: SWBF2 0x005ab2d0
 bool Navigator::IsRtti(unsigned int uRtti) const

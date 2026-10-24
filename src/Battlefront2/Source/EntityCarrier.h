@@ -51,7 +51,7 @@ public:
     GameSound mSoundCargoDropoff;
 
     static PblHash rttiHashEntityCarrierClass;
-    static char rttiNameEntityCarrierClass[];
+    static const char rttiNameEntityCarrierClass[];
 };
   
  
@@ -479,7 +479,7 @@ public:
     char _tailPad[0xc];
 
     static PblHash rttiHashEntityCarrier;
-    static char rttiNameEntityCarrier[];
+    static const char rttiNameEntityCarrier[];
 
     static MemoryPool sMemoryPool;
 

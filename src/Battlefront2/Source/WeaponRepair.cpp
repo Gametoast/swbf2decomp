@@ -46,7 +46,7 @@ extern Event<GameObject, DamageOwner> mHack;
 // GLOBAL: SWBF2 0x01f9a90c
 // WeaponRepairClass::rttiHashWeaponRepairClass
 PblHash WeaponRepairClass::rttiHashWeaponRepairClass("WeaponRepairClass");
-char WeaponRepairClass::rttiNameWeaponRepairClass[] = "WeaponRepairClass";
+const char WeaponRepairClass::rttiNameWeaponRepairClass[] = "WeaponRepairClass";
 
 // FUNCTION: SWBF2 0x006910c0
 WeaponRepairClass::WeaponRepairClass(unsigned int uHash)
@@ -227,7 +227,7 @@ WeaponRepair::WeaponRepair(const WeaponRepairClass* pClass, const WeaponDesc& de
 // GLOBAL: SWBF2 0x01f9a910
 // WeaponRepair::rttiHashWeaponRepair
 PblHash WeaponRepair::rttiHashWeaponRepair("WeaponRepair");
-char WeaponRepair::rttiNameWeaponRepair[] = "WeaponRepair";
+const char WeaponRepair::rttiNameWeaponRepair[] = "WeaponRepair";
 
 // FUNCTION: SWBF2 0x006905a0
 bool WeaponRepair::IsRtti(unsigned int uRtti) const

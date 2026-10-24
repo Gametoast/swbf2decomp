@@ -3,6 +3,7 @@
 #include "Battlefront2/Source/EventManager.h"
 #include "PebbleFL/Common/PblHandle.h"
 #include "Timer.h"
+#include "LuaHelper.h"
 
 namespace EventManager
 {
@@ -128,4 +129,16 @@ extern Event<Timer, char> mElapsed;
 void Cleanup();
 }
 
+}
+
+namespace EventManager
+{
+template <class ITEM, class PARAM>
+inline LuaCallback<ITEM, PARAM>::~LuaCallback()
+{
+    if (mFunction != -1)
+    {
+        lua_unref(LuaHelper::mState, mFunction);
+    }
+}
 }

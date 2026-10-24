@@ -33,7 +33,7 @@ public:
     void KillMyCable();
 
     static PblHash rttiHashWeaponTowCable;
-    static char rttiNameWeaponTowCable[];
+    static const char rttiNameWeaponTowCable[];
 
     Ordnance* mMyCable;
     bool mCableOut;
@@ -52,7 +52,7 @@ public:
     virtual ~WeaponTowCableClass();
 
     static PblHash rttiHashWeaponTowCableClass;
-    static char rttiNameWeaponTowCableClass[];
+    static const char rttiNameWeaponTowCableClass[];
 
     // FUNCTION: SWBF2 0x005b4240
     static unsigned int GetRtti() { return rttiHashWeaponTowCableClass; }

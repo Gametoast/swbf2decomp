@@ -30,5 +30,5 @@ public:
 
     static void RecvGalaxySockets();
 
-    static unsigned short __fastcall SetAddr(void* pDest, unsigned int uIP, unsigned short uPort);
+    static unsigned short __cdecl SetAddr(void* pDest, unsigned int uIP, unsigned short uPort);
 };

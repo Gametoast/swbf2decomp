@@ -276,10 +276,7 @@ ListenerBase::~ListenerBase()
     }
 }
 
-// FUNCTION: SWBF2 0x00733e90
-Listener::~Listener()
-{
-}
+
 }
 
 void __cdecl PblTraceP(const char* Format, ...);

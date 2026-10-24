@@ -44,16 +44,16 @@ float GetWeaponMinRange(const Controllable* pMe);
 namespace
 {
 
-    const CollisionObject* GetCollisionObject(const GameObject* pObject)
+    inline const CollisionObject* GetCollisionObject(const GameObject* pObject)
     {
         return static_cast<const CollisionObject*>(pObject);
     }
-    const Damageable* GetDamageable(const GameObject* pObject)
+    inline const Damageable* GetDamageable(const GameObject* pObject)
     {
         return static_cast<const Damageable*>(pObject);
     }
 
-    const GameObject* ResolveHandle(PblHandle<const GameObject>& handle)
+    inline const GameObject* ResolveHandle(PblHandle<const GameObject>& handle)
     {
         const GameObject* pObject = handle.mObject;
         if (pObject)
@@ -69,7 +69,7 @@ namespace
         return 0;
     }
 
-    const WeaponClass* GetWeaponClass(const Weapon* pWeapon)
+    inline const WeaponClass* GetWeaponClass(const Weapon* pWeapon)
     {
         return pWeapon->GetClass();
     }
@@ -78,7 +78,7 @@ namespace
         return pWeapon->IsMelee();
     }
 
-    AI::UnitThreatManager* GetThreatManager(UnitController* pCtrl)
+    inline AI::UnitThreatManager* GetThreatManager(UnitController* pCtrl)
     {
         return reinterpret_cast<AI::UnitThreatManager*>(pCtrl->mThreatManager);
     }
@@ -104,7 +104,7 @@ static float GetOptimalBuildingKillingRange(const Controllable* pMe)
 // GLOBAL: SWBF2 0x01f993b8
 // UnitDestroyAgent::rttiHashUnitDestroyAgent
 PblHash UnitDestroyAgent::rttiHashUnitDestroyAgent("UnitDestroyAgent");
-char UnitDestroyAgent::rttiNameUnitDestroyAgent[] = "UnitDestroyAgent";
+const char UnitDestroyAgent::rttiNameUnitDestroyAgent[] = "UnitDestroyAgent";
 
 // FUNCTION: SWBF2 0x00666000
 bool UnitDestroyAgent::IsRtti(unsigned int uRtti) const

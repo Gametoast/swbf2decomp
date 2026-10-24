@@ -21,10 +21,7 @@ StreamSourceProducer::StreamSourceProducer()
     mProducer[4] = 0;
 }
 
-// FUNCTION: SWBF2 0x0073c790
-StreamNodeSource::~StreamNodeSource()
-{
-}
+
 
 // FUNCTION: SWBF2 0x0073c7a0
 StreamSourceNProducer::~StreamSourceNProducer()

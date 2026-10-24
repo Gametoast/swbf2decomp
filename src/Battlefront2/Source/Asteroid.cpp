@@ -41,7 +41,7 @@ unsigned int sOrdnanceCollisionMask;
 // GLOBAL: SWBF2 0x01eb024c
 // AsteroidClass::rttiHashAsteroidClass
 PblHash AsteroidClass::rttiHashAsteroidClass("AsteroidClass");
-char AsteroidClass::rttiNameAsteroidClass[] = "AsteroidClass";
+const char AsteroidClass::rttiNameAsteroidClass[] = "AsteroidClass";
 
 // FUNCTION: SWBF2 0x004453d0
 AsteroidClass::AsteroidClass(unsigned int uHash)
@@ -304,7 +304,7 @@ MemoryPool Asteroid::sMemoryPool("Asteroid", 0x280);
 // GLOBAL: SWBF2 0x01eb0248
 // Asteroid::rttiHashAsteroid
 PblHash Asteroid::rttiHashAsteroid("Asteroid");
-char Asteroid::rttiNameAsteroid[] = "Asteroid";
+const char Asteroid::rttiNameAsteroid[] = "Asteroid";
 
 class CollisionManager
 {
@@ -342,7 +342,7 @@ void GameObject::ReserveForPlayer(float fTime)
 {
 }
 
-static void AsteroidCollisionFollows(Asteroid* pAsteroid)
+static inline void AsteroidCollisionFollows(Asteroid* pAsteroid)
 {
     PblVector3 vCenter;
     D3DXVec3TransformCoord((D3DXVECTOR3*)&vCenter,

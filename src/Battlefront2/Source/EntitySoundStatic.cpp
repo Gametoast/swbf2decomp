@@ -6,7 +6,7 @@
 // GLOBAL: SWBF2 0x01ebc1a4
 // EntitySoundStaticClass::rttiHashEntitySoundStaticClass
 PblHash EntitySoundStaticClass::rttiHashEntitySoundStaticClass("EntitySoundStaticClass");
-char EntitySoundStaticClass::rttiNameEntitySoundStaticClass[] = "EntitySoundStaticClass";
+const char EntitySoundStaticClass::rttiNameEntitySoundStaticClass[] = "EntitySoundStaticClass";
 
 // FUNCTION: SWBF2 0x004fb6b0
 EntitySoundStaticClass::EntitySoundStaticClass(unsigned int uHash)
@@ -81,7 +81,7 @@ MemoryPool EntitySoundStatic::sMemoryPool("EntitySoundStatic", 0x4c);
 // GLOBAL: SWBF2 0x01ebc1f8
 // EntitySoundStatic::rttiHashEntitySoundStatic
 PblHash EntitySoundStatic::rttiHashEntitySoundStatic("EntitySoundStatic");
-char EntitySoundStatic::rttiNameEntitySoundStatic[] = "EntitySoundStatic";
+const char EntitySoundStatic::rttiNameEntitySoundStatic[] = "EntitySoundStatic";
 
 // FUNCTION: SWBF2 0x004fb420
 bool EntitySoundStatic::IsRtti(unsigned int uRtti) const
@@ -101,7 +101,10 @@ const char* EntitySoundStatic::GetDerivedRttiName() const
     return rttiNameEntitySoundStatic;
 }
 
-void* EntitySoundStatic::operator new(unsigned int uSize)
+
+
+
+inline void* EntitySoundStatic::operator new(unsigned int uSize)
 {
     return sMemoryPool.Allocate(uSize);
 }

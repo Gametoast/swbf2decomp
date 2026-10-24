@@ -23,7 +23,7 @@ public:
     float mGravity;
 
     static PblHash rttiHashOrdnanceShellClass;
-    static char rttiNameOrdnanceShellClass[];
+    static const char rttiNameOrdnanceShellClass[];
 };
   
  
@@ -45,7 +45,7 @@ public:
     float mGravity;
 
     static PblHash rttiHashOrdnanceShell;
-    static char rttiNameOrdnanceShell[];
+    static const char rttiNameOrdnanceShell[];
 };
  
  

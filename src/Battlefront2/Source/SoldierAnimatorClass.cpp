@@ -973,7 +973,7 @@ public:
  
  
 
-void* SoldierAnimation::operator new(unsigned int uiSize)
+inline void* SoldierAnimation::operator new(unsigned int uiSize)
 {
     return sMemoryPool.Allocate(uiSize);
 }

@@ -39,7 +39,7 @@ public:
     GameSound m_OnSound;
 
     static PblHash rttiHashOrdnanceMeleeThrowClass;
-    static char rttiNameOrdnanceMeleeThrowClass[];
+    static const char rttiNameOrdnanceMeleeThrowClass[];
 };
   
  
@@ -93,7 +93,7 @@ public:
     float m_fReturnTime;
 
     static PblHash rttiHashOrdnanceMeleeThrow;
-    static char rttiNameOrdnanceMeleeThrow[];
+    static const char rttiNameOrdnanceMeleeThrow[];
 };
  
  

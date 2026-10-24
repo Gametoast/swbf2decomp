@@ -14,8 +14,9 @@
 // GLOBAL: SWBF2 0x01eb01f4
 // SYNTHETIC: SWBF2 0x004021e0
 // `dynamic initializer for 'AI::AIGoal::rttiHashAIGoal''
+
 PblHash AI::AIGoal::rttiHashAIGoal("AIGoal");
-char AI::AIGoal::rttiNameAIGoal[] = "AIGoal";
+const char AI::AIGoal::rttiNameAIGoal[] = "AIGoal";
 
 // GLOBAL: SWBF2 0x01eb0410
 // SYNTHETIC: SWBF2 0x004021f0

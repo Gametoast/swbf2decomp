@@ -308,14 +308,14 @@ template void util::HashTable_<ClothBank*, unsigned int, ClothBE::ClothDataT::El
 // GLOBAL: SWBF2 0x01eb0fcc
 // EntityCloth::rttiHashEntityCloth
 PblHash EntityCloth::rttiHashEntityCloth("EntityCloth");
-char EntityCloth::rttiNameEntityCloth[] = "EntityCloth";
+const char EntityCloth::rttiNameEntityCloth[] = "EntityCloth";
 
 // SYNTHETIC: SWBF2 0x004023b0
 // `dynamic initializer for 'EntityClothClass::rttiHashEntityClothClass''
 // GLOBAL: SWBF2 0x01eb062c
 // EntityClothClass::rttiHashEntityClothClass
 PblHash EntityClothClass::rttiHashEntityClothClass("EntityClothClass");
-char EntityClothClass::rttiNameEntityClothClass[] = "EntityClothClass";
+const char EntityClothClass::rttiNameEntityClothClass[] = "EntityClothClass";
 
 // FUNCTION: SWBF2 0x00458ae0
 bool EntityCloth::IsRtti(unsigned int uRtti) const

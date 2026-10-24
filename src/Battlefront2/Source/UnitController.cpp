@@ -104,7 +104,7 @@ int GetUnitsInRange(const PblVector3& vPos, float fRadius, GameObject** const pp
 
 namespace AIUtil { bool __fastcall ShouldStayInVehicle(Controllable* pMe); }
 
-namespace AIUtil { bool __fastcall CanPotentiallySee(Controllable* pMe, const GameObject* pObject, float* pOut); }
+namespace AIUtil { bool __cdecl CanPotentiallySee(Controllable* pMe, const GameObject* pObject, float* pOut); }
 
 namespace AIDebug { bool SkipCameraForLODs(); }
 
@@ -128,12 +128,12 @@ static PblMatrix _IdentityMatrix(
 
 namespace
 {
-    const PblVector3& GetTrans(const PblMatrix& m)
+    inline const PblVector3& GetTrans(const PblMatrix& m)
     {
         return *reinterpret_cast<const PblVector3*>(&m.m[3][0]);
     }
 
-    PblHandle<const GameObject> MakeHandle(const GameObject* pObject)
+    inline PblHandle<const GameObject> MakeHandle(const GameObject* pObject)
     {
         PblHandle<const GameObject> h;
         h.mObject = pObject;
@@ -141,7 +141,7 @@ namespace
         return h;
     }
 
-    const PblVector3& GetPosition(const GameObject* pObject)
+    inline const PblVector3& GetPosition(const GameObject* pObject)
     {
     return static_cast<const CollisionObject*>(pObject)->GetPosition();
     }
@@ -161,7 +161,7 @@ namespace
         return 0;
     }
 
-    AttackHelper* GetAttackHelper(UnitAgent* pAgent)
+    inline AttackHelper* GetAttackHelper(UnitAgent* pAgent)
     {
         return reinterpret_cast<AttackHelper*>(pAgent->mAttackHelper);
     }
@@ -172,7 +172,7 @@ namespace
 // GLOBAL: SWBF2 0x01f99384
 // UnitController::rttiHashUnitController
 PblHash UnitController::rttiHashUnitController("UnitController");
-char UnitController::rttiNameUnitController[] = "UnitController";
+const char UnitController::rttiNameUnitController[] = "UnitController";
 
 // GLOBAL: SWBF2 0x01f9a1f8
 // SYNTHETIC: SWBF2 0x00406c60

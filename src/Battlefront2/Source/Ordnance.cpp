@@ -27,12 +27,12 @@ public:
 namespace
 {
 
-    unsigned int GameObjectHandleId(const GameObject* pObject)
+    inline unsigned int GameObjectHandleId(const GameObject* pObject)
     {
         return pObject->mHandleId;
     }
 
-    Controllable* GetControllable(GameObject* pObject)
+    inline Controllable* GetControllable(GameObject* pObject)
     {
         typedef Controllable*(__thiscall * GetControllableFn)(GameObject*);
         return pObject->GetControllable();
@@ -50,14 +50,14 @@ namespace
 // GLOBAL: SWBF2 0x01ef2578
 // Ordnance::rttiHashOrdnance
 PblHash Ordnance::rttiHashOrdnance("Ordnance");
-char Ordnance::rttiNameOrdnance[] = "Ordnance";
+const char Ordnance::rttiNameOrdnance[] = "Ordnance";
 
 // SYNTHETIC: SWBF2 0x00405a00
 // `dynamic initializer for 'OrdnanceClass::rttiHashOrdnanceClass''
 // GLOBAL: SWBF2 0x01ef2574
 // OrdnanceClass::rttiHashOrdnanceClass
 PblHash OrdnanceClass::rttiHashOrdnanceClass("OrdnanceClass");
-char OrdnanceClass::rttiNameOrdnanceClass[] = "OrdnanceClass";
+const char OrdnanceClass::rttiNameOrdnanceClass[] = "OrdnanceClass";
 
 // GLOBAL: SWBF2 0x01ef25c0
 // SYNTHETIC: SWBF2 0x004059d0

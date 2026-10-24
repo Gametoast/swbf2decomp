@@ -89,7 +89,7 @@ template Snd::Queue<NetPacket*, 4>::~Queue();
 namespace GameVoiceChat {
 
 // FUNCTION: SWBF2 0x0053e1f0
-bool __fastcall SendVoice(NetPacket* packet, unsigned char destination, unsigned short sequence)
+bool __cdecl SendVoice(NetPacket* packet, unsigned char destination, unsigned short sequence)
 {
     unsigned int node = destination == 0xff ? 64 : destination;
     if (netInShell ? netEnabled : netEnabledNext)
@@ -137,7 +137,7 @@ bool __fastcall SendVoice(NetPacket* packet, unsigned char destination, unsigned
 }
 
 // FUNCTION: SWBF2 0x0053e2e0
-bool __fastcall VoiceChat::NetPacketAudio::Send(NetPacket** packet, unsigned char destination,
+bool __cdecl VoiceChat::NetPacketAudio::Send(NetPacket** packet, unsigned char destination,
                             unsigned short sequence)
 {
     (*packet)->EndWrite();

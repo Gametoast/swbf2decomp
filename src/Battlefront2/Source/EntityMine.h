@@ -38,7 +38,7 @@ public:
     float mSuppressRadius;
 
     static PblHash rttiHashEntityMineClass;
-    static char rttiNameEntityMineClass[];
+    static const char rttiNameEntityMineClass[];
 };
   
  
@@ -73,7 +73,7 @@ public:
     static void operator delete(void* pBlock) { sMemoryPool.Free(pBlock); }
 
     static PblHash rttiHashEntityMine;
-    static char rttiNameEntityMine[];
+    static const char rttiNameEntityMine[];
     static MemoryPool sMemoryPool;
 
     bool mNetDead;

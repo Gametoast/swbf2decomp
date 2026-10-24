@@ -105,12 +105,12 @@ namespace
         return static_cast<const CollisionObject*>(pObj);
     }
 
-    HealthType GetHealthType(const GameObject* pObj)
+    inline HealthType GetHealthType(const GameObject* pObj)
     {
         return (HealthType)pObj->mHealthType;
     }
 
-    float GetCurHealth(const GameObject* pObj)
+    inline float GetCurHealth(const GameObject* pObj)
     {
         return pObj->mCurHealth;
     }
@@ -120,12 +120,12 @@ namespace
         return pObj->mMaxHealth;
     }
 
-    const CollisionObject* GetCollisionObject(const GameObject* pObj)
+    inline const CollisionObject* GetCollisionObject(const GameObject* pObj)
     {
         return pObj->GetCollisionObject();
     }
 
-    const Controllable* GetControllable(const GameObject* pObj)
+    inline const Controllable* GetControllable(const GameObject* pObj)
     {
         return pObj->GetControllable();
     }
@@ -156,15 +156,9 @@ namespace
     }
 }
 
-Controllable* RepairHelper::GetMe()
-{
-    return mAgent->mCtrl->mOwner;
-}
 
-UnitController* RepairHelper::GetCtrl()
-{
-    return mAgent->mCtrl;
-}
+
+
 
 // FUNCTION: SWBF2 0x0062e2c0
 RepairHelper::RepairHelper(UnitAgent* pAgent)

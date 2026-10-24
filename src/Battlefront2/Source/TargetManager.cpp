@@ -102,7 +102,7 @@ inline void SendRefresh(HUD::EventClass* pClass, unsigned int uIndex)
     event.Send();
 }
 
-const RedColor Interpolate(const RedColor& a, const RedColor& b, float t)
+inline const RedColor Interpolate(const RedColor& a, const RedColor& b, float t)
 {
     RedColor result;
     result.b = (unsigned char)(int)(a.b * (1.0f - t) + b.b * t + 0.5f);

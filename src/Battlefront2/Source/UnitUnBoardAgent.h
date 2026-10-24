@@ -25,6 +25,6 @@ protected:
 
 public:
     static PblHash rttiHashUnitUnBoardAgent;
-    static char rttiNameUnitUnBoardAgent[];
+    static const char rttiNameUnitUnBoardAgent[];
 };
  

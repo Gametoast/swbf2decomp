@@ -88,7 +88,7 @@ public:
     unsigned char GetTeam() { return mTeam; }
 
     static PblHash rttiHashAIGoal;
-    static char rttiNameAIGoal[];
+    static const char rttiNameAIGoal[];
     static MemoryPool sMemoryPool;
 
     PblList<Character> mUnitList;

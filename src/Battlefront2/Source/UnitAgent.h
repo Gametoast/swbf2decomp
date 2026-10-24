@@ -49,7 +49,7 @@ public:
     virtual int EventHandler(AI::EventInfo* pInfo);
 
     static PblHash rttiHashUnitAgent;
-    static char rttiNameUnitAgent[];
+    static const char rttiNameUnitAgent[];
 
     const Controllable* GetMe() const
     {

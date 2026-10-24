@@ -41,7 +41,7 @@ public:
     float mWaitTime;
 
     static PblHash rttiHashUnitFlyAgent;
-    static char rttiNameUnitFlyAgent[];
+    static const char rttiNameUnitFlyAgent[];
 };
  
  

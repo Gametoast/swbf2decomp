@@ -12,7 +12,7 @@
 namespace
 {
 
-    Controllable* GetControllable(GameObject* pObject)
+    inline Controllable* GetControllable(GameObject* pObject)
     {
         return pObject->GetControllable();
     }

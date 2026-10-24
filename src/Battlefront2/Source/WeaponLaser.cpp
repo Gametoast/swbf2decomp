@@ -30,7 +30,7 @@ public:
 
 namespace
 {
-    EntityClass* GetEntityClass(GameObject* pObject)
+    inline EntityClass* GetEntityClass(GameObject* pObject)
     {
         typedef EntityClass* (__thiscall *Fn)(GameObject*);
         return pObject->GetEntityClass();
@@ -42,7 +42,7 @@ namespace
 // GLOBAL: SWBF2 0x01f9a8e0
 // WeaponLaser::rttiHashWeaponLaser
 PblHash WeaponLaser::rttiHashWeaponLaser("WeaponLaser");
-char WeaponLaser::rttiNameWeaponLaser[] = "WeaponLaser";
+const char WeaponLaser::rttiNameWeaponLaser[] = "WeaponLaser";
 
 // FUNCTION: SWBF2 0x00686a10
 bool WeaponLaser::IsRtti(unsigned int uRtti) const
@@ -234,7 +234,7 @@ void WeaponLaser::EnterEmpty()
 // GLOBAL: SWBF2 0x01f9a8dc
 // WeaponLaserClass::rttiHashWeaponLaserClass
 PblHash WeaponLaserClass::rttiHashWeaponLaserClass("WeaponLaserClass");
-char WeaponLaserClass::rttiNameWeaponLaserClass[] = "WeaponLaserClass";
+const char WeaponLaserClass::rttiNameWeaponLaserClass[] = "WeaponLaserClass";
 
 // FUNCTION: SWBF2 0x006870c0
 WeaponLaserClass::WeaponLaserClass(unsigned int uHash)

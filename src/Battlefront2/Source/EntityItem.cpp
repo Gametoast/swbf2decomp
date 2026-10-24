@@ -45,7 +45,7 @@ static PblMatrix _IdentityMatrix(
 // GLOBAL: SWBF2 0x01ebbe2c
 // EntityItemClass::rttiHashEntityItemClass
 PblHash EntityItemClass::rttiHashEntityItemClass("EntityItemClass");
-char EntityItemClass::rttiNameEntityItemClass[] = "EntityItemClass";
+const char EntityItemClass::rttiNameEntityItemClass[] = "EntityItemClass";
 
 // FUNCTION: SWBF2 0x004cabd0
 bool EntityItemClass::IsRtti(unsigned int uRtti)
@@ -225,7 +225,7 @@ EntityClass* EntityItemClass::Derive(unsigned int uHash)
 // GLOBAL: SWBF2 0x01ebbe28
 // EntityItem::rttiHashEntityItem
 PblHash EntityItem::rttiHashEntityItem("EntityItem");
-char EntityItem::rttiNameEntityItem[] = "EntityItem";
+const char EntityItem::rttiNameEntityItem[] = "EntityItem";
 
 class CollisionManager
 {

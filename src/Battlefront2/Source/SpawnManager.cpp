@@ -96,7 +96,7 @@ static bool IsAlive(const GameObject* pObject)
     return pObject->IsAlive();
 }
 
-static int GetTeam(const GameObject* pObject)
+static inline int GetTeam(const GameObject* pObject)
 {
     return pObject->GetTeam();
 }

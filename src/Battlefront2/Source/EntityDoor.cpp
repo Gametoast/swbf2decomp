@@ -132,14 +132,14 @@ int GetUnitsInRange(const PblVector3& vPos, float fRadius, GameObject** const pp
 // GLOBAL: SWBF2 0x01ebb998
 // EntityDoor::rttiHashEntityDoor
 PblHash EntityDoor::rttiHashEntityDoor("EntityDoor");
-char EntityDoor::rttiNameEntityDoor[] = "EntityDoor";
+const char EntityDoor::rttiNameEntityDoor[] = "EntityDoor";
 
 // SYNTHETIC: SWBF2 0x004029d0
 // `dynamic initializer for 'EntityDoorClass::rttiHashEntityDoorClass''
 // GLOBAL: SWBF2 0x01ebb99c
 // EntityDoorClass::rttiHashEntityDoorClass
 PblHash EntityDoorClass::rttiHashEntityDoorClass("EntityDoorClass");
-char EntityDoorClass::rttiNameEntityDoorClass[] = "EntityDoorClass";
+const char EntityDoorClass::rttiNameEntityDoorClass[] = "EntityDoorClass";
 
 int EntityDoor::msHostDoorsNumEntries;
 // GLOBAL: SWBF2 0x01ebb9a4

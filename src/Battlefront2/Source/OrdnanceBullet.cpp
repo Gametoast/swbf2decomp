@@ -43,7 +43,7 @@ PblMatrix DirectionMatrix(const PblVector3& vDir, const PblVector3& vUp, const P
 namespace
 {
 
-    unsigned int GameObjectHandleId(const GameObject* pObject)
+    inline unsigned int GameObjectHandleId(const GameObject* pObject)
     {
         return pObject->mHandleId;
     }
@@ -53,12 +53,12 @@ namespace
         return pObject->GetTeam();
     }
 
-    EntityClass* GetEntityClass(GameObject* pObject)
+    inline EntityClass* GetEntityClass(GameObject* pObject)
     {
         return pObject->GetEntityClass();
     }
 
-    Controllable* GetControllable(GameObject* pObject)
+    inline Controllable* GetControllable(GameObject* pObject)
     {
         return pObject->GetControllable();
     }
@@ -69,7 +69,7 @@ namespace
 // GLOBAL: SWBF2 0x01ef2620
 // OrdnanceBulletClass::rttiHashOrdnanceBulletClass
 PblHash OrdnanceBulletClass::rttiHashOrdnanceBulletClass("OrdnanceBulletClass");
-char OrdnanceBulletClass::rttiNameOrdnanceBulletClass[] = "OrdnanceBulletClass";
+const char OrdnanceBulletClass::rttiNameOrdnanceBulletClass[] = "OrdnanceBulletClass";
 
 static const RedColor kColorZero = { 0, 0, 0, 0 };
 
@@ -291,7 +291,7 @@ Ordnance* OrdnanceBulletClass::Build(const OrdnanceDesc& desc)
 // GLOBAL: SWBF2 0x01ef261c
 // OrdnanceBullet::rttiHashOrdnanceBullet
 PblHash OrdnanceBullet::rttiHashOrdnanceBullet("OrdnanceBullet");
-char OrdnanceBullet::rttiNameOrdnanceBullet[] = "OrdnanceBullet";
+const char OrdnanceBullet::rttiNameOrdnanceBullet[] = "OrdnanceBullet";
 
 // SYNTHETIC: SWBF2 0x005fc2c6
 // [thunk]:OrdnanceBullet::`scalar deleting destructor' adjustor{152}

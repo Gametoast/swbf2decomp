@@ -70,7 +70,7 @@ public:
     ExplosionClass* mExplosion;
 
     static PblHash rttiHashOrdnanceEmitterClass;
-    static char rttiNameOrdnanceEmitterClass[];
+    static const char rttiNameOrdnanceEmitterClass[];
 };
   
  

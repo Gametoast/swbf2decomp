@@ -68,7 +68,7 @@ namespace VehicleManager { int RequestVehiclesInRange(const PblVector3& vPos, Ga
 namespace
 {
 
-    GameObject* ResolveHandle(PblHandle<GameObject>& handle)
+    inline GameObject* ResolveHandle(PblHandle<GameObject>& handle)
     {
         GameObject* pObj = handle.mObject;
         if (pObj)
@@ -83,7 +83,7 @@ namespace
         return 0;
     }
 
-    PblHandle<GameObject> MakeHandle(GameObject* pObj)
+    inline PblHandle<GameObject> MakeHandle(GameObject* pObj)
     {
         PblHandle<GameObject> handle;
         handle.mObject = pObj;
@@ -98,7 +98,7 @@ namespace
 // GLOBAL: SWBF2 0x01f9a250
 // UnitTrooperAgent::rttiHashUnitTrooperAgent
 PblHash UnitTrooperAgent::rttiHashUnitTrooperAgent("UnitTrooperAgent");
-char UnitTrooperAgent::rttiNameUnitTrooperAgent[] = "UnitTrooperAgent";
+const char UnitTrooperAgent::rttiNameUnitTrooperAgent[] = "UnitTrooperAgent";
 
 // FUNCTION: SWBF2 0x0066a3f0
 bool UnitTrooperAgent::IsRtti(unsigned int uRtti) const

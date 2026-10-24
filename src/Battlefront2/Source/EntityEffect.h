@@ -22,7 +22,7 @@ public:
     virtual void SetProperty(unsigned int uProperty, const char* pszValue);
 
     static PblHash rttiHashEntityEffectClass;
-    static char rttiNameEntityEffectClass[];
+    static const char rttiNameEntityEffectClass[];
 
     FLEffectClass* mEffectClass;
 };

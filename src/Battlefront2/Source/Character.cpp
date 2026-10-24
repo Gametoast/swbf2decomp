@@ -287,7 +287,7 @@ GameObject* GetPostObject(CommandPost* pPost)
     return handle.mObject;
 }
 
-Damageable* GetDamageable(GameObject* pObject)
+inline Damageable* GetDamageable(GameObject* pObject)
 {
     return static_cast<Damageable*>(pObject);
 }
@@ -297,12 +297,12 @@ const GameObjectClass* GetGameObjectClass(GameObject* pObject)
     return pObject->GetGameObjectClass();
 }
 
-const PblVector3& GetPosition(GameObject* pObject)
+inline const PblVector3& GetPosition(GameObject* pObject)
 {
     return static_cast<CollisionObject*>(pObject)->GetPosition();
 }
 
-int GetTeam(const GameObject* pObject)
+inline int GetTeam(const GameObject* pObject)
 {
     return pObject->GetTeam();
 }
@@ -322,12 +322,12 @@ const EntityFlyerClass* GetFlyerClass(const EntityFlyer* pFlyer)
     return pFlyer->mClass;
 }
 
-Controllable* GetSoldierControllable(Entity* pSoldier)
+inline Controllable* GetSoldierControllable(Entity* pSoldier)
 {
     return static_cast<Controllable*>(static_cast<EntitySoldier*>(pSoldier));
 }
 
-const GameObjectClass* GetSoldierClass(Entity* pSoldier)
+inline const GameObjectClass* GetSoldierClass(Entity* pSoldier)
 {
     return static_cast<EntitySoldier*>(pSoldier)->mClass;
 }
@@ -342,7 +342,7 @@ bool EnterControllable(Entity* pSoldier, Controllable* pControllable)
     return static_cast<EntitySoldier*>(pSoldier)->EnterControllable(pControllable);
 }
 
-const WeaponClass* GetWeaponClass(Weapon* pWeapon)
+inline const WeaponClass* GetWeaponClass(Weapon* pWeapon)
 {
     return pWeapon->mClass;
 }

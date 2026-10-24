@@ -202,14 +202,7 @@ int RegisterLuaCallback(lua_State*)
 // TEMPLATE: SWBF2 0x00510e00
 // EventManager::RegisterLuaCallback<CommandPost,char>
 
-template <class ITEM, class PARAM>
-LuaCallback<ITEM, PARAM>::~LuaCallback()
-{
-    if (mFunction != -1)
-    {
-        lua_unref(LuaHelper::mState, mFunction);
-    }
-}
+
 
 template <class ITEM, class PARAM>
 bool LuaCallback<ITEM, PARAM>::operator()(ITEM& item, PARAM& param)

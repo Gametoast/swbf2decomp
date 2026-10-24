@@ -47,7 +47,7 @@ public:
     void SetAnimationTime(float fTime) { mAnimationTime = fTime; }
 
     static PblHash rttiHashRed3DModelAnimator;
-    static char rttiNameRed3DModelAnimator[];
+    static const char rttiNameRed3DModelAnimator[];
 
 protected:
     const ZephyrAnim* FindAnimation(unsigned int uAnimHash);

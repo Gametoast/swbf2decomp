@@ -1,6 +1,6 @@
 #include "RedPath.h"
 #include "PebbleFL/Common/PblHashTable.h"
-
+#include <new>
 // GLOBAL: SWBF2 0x007df840
 RedPath::List RedPath::sPathList;
 

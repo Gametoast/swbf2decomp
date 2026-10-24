@@ -44,14 +44,14 @@ EntityRemoteTerminalClass::~EntityRemoteTerminalClass() {}
 // GLOBAL: SWBF2 0x01ebc050
 // EntityRemoteTerminalClass::rttiHashEntityRemoteTerminalClass
 PblHash EntityRemoteTerminalClass::rttiHashEntityRemoteTerminalClass("EntityRemoteTerminalClass");
-char EntityRemoteTerminalClass::rttiNameEntityRemoteTerminalClass[] = "EntityRemoteTerminalClass";
+const char EntityRemoteTerminalClass::rttiNameEntityRemoteTerminalClass[] = "EntityRemoteTerminalClass";
 
 // SYNTHETIC: SWBF2 0x00402d20
 // `dynamic initializer for 'EntityRemoteTerminal::rttiHashEntityRemoteTerminal''
 // GLOBAL: SWBF2 0x01ebc04c
 // EntityRemoteTerminal::rttiHashEntityRemoteTerminal
 PblHash EntityRemoteTerminal::rttiHashEntityRemoteTerminal("EntityRemoteTerminal");
-char EntityRemoteTerminal::rttiNameEntityRemoteTerminal[] = "EntityRemoteTerminal";
+const char EntityRemoteTerminal::rttiNameEntityRemoteTerminal[] = "EntityRemoteTerminal";
 
 // GLOBAL: SWBF2 0x01ebc058
 // SYNTHETIC: SWBF2 0x00402d00

@@ -24,7 +24,7 @@ public:
     virtual const char* GetDerivedRttiName();
 
     static PblHash rttiHashEntityBuildingArmedDynamicClass;
-    static char rttiNameEntityBuildingArmedDynamicClass[];
+    static const char rttiNameEntityBuildingArmedDynamicClass[];
 };
   
  
@@ -49,6 +49,6 @@ public:
 
     static PblHash rttiHashEntityBuildingArmedDynamic;
     static MemoryPool sMemoryPool;
-    static char rttiNameEntityBuildingArmedDynamic[];
+    static const char rttiNameEntityBuildingArmedDynamic[];
 };
  

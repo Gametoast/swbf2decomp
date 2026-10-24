@@ -35,7 +35,7 @@ public:
     float mImpatientSoundTime;
 
     static PblHash rttiHashUnitWaitSecondaryAgent;
-    static char rttiNameUnitWaitSecondaryAgent[];
+    static const char rttiNameUnitWaitSecondaryAgent[];
 };
  
  

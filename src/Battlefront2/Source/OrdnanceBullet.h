@@ -45,7 +45,7 @@ public:
     float m_fRadiusLight;
 
     static PblHash rttiHashOrdnanceBulletClass;
-    static char rttiNameOrdnanceBulletClass[];
+    static const char rttiNameOrdnanceBulletClass[];
 };
   
  
@@ -100,7 +100,7 @@ public:
     float mOffscreenTime;
 
     static PblHash rttiHashOrdnanceBullet;
-    static char rttiNameOrdnanceBullet[];
+    static const char rttiNameOrdnanceBullet[];
 };
  
  

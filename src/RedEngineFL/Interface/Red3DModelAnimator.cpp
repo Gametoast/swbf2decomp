@@ -16,7 +16,7 @@ static PblMatrix _IdentityMatrix(
 // GLOBAL: SWBF2 0x009c8500
 // Red3DModelAnimator::rttiHashRed3DModelAnimator
 PblHash Red3DModelAnimator::rttiHashRed3DModelAnimator("Red3DModelAnimator");
-char Red3DModelAnimator::rttiNameRed3DModelAnimator[] = "Red3DModelAnimator";
+const char Red3DModelAnimator::rttiNameRed3DModelAnimator[] = "Red3DModelAnimator";
 
 // FUNCTION: SWBF2 0x006f8190
 Red3DModelAnimator::Red3DModelAnimator()

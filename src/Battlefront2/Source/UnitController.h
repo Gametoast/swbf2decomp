@@ -85,7 +85,7 @@ public:
 
     static unsigned int GetRtti() { return rttiHashUnitController; }
     static PblHash rttiHashUnitController;
-    static char rttiNameUnitController[];
+    static const char rttiNameUnitController[];
 
     AILowLevel& GetLowLevel() { return *reinterpret_cast<AILowLevel*>(mLowLevel); }
     const AILowLevel& GetLowLevel() const { return *reinterpret_cast<const AILowLevel*>(mLowLevel); }

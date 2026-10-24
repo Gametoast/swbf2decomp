@@ -42,7 +42,7 @@ protected:
 public:
 
     static PblHash rttiHashWeaponLauncher;
-    static char rttiNameWeaponLauncher[];
+    static const char rttiNameWeaponLauncher[];
 
     PblHandle<const GameObject> mCurTarget;
     int mCurTargetBodyID;
@@ -67,7 +67,7 @@ public:
     virtual ~WeaponLauncherClass();
 
     static PblHash rttiHashWeaponLauncherClass;
-    static char rttiNameWeaponLauncherClass[];
+    static const char rttiNameWeaponLauncherClass[];
 
     virtual WeaponClass* Derive(unsigned int uHash);
 

@@ -45,7 +45,7 @@ public:
     virtual const WeaponClass* GetWeaponClass(int iIndex);
 
     static PblHash rttiHashEntityDroidClass;
-    static char rttiNameEntityDroidClass[];
+    static const char rttiNameEntityDroidClass[];
 
     float mSetAltitude;
     float mGravityScale;
@@ -236,7 +236,7 @@ public:
     bool Smooth(float fDeltaTime) const;
     static PblHash rttiHashEntityDroid;
     static MemoryPool sMemoryPool;
-    static char rttiNameEntityDroid[];
+    static const char rttiNameEntityDroid[];
 
     EntityDroidClass* mClass;
     PblVector3 mGroundNormal;

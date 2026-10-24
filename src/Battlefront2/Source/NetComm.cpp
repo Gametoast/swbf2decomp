@@ -448,7 +448,7 @@ unsigned __int64* __fastcall CopyEnteredLobbyId(unsigned __int64* pID)
 }
 
 // FUNCTION: SWBF2 0x00618560
-unsigned short __fastcall NetSocket::SetAddr(void* pDest, unsigned int uIP, unsigned short uPort)
+unsigned short __cdecl NetSocket::SetAddr(void* pDest, unsigned int uIP, unsigned short uPort)
 {
     NetSocketPeerRecord* pPeer = (NetSocketPeerRecord*)pDest;
     sockaddr_in* pAddr = (sockaddr_in*)pPeer->mSocketAddress;

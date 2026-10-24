@@ -51,14 +51,14 @@ static EntityClass* sPendingAttachedOdfClass;
 // GLOBAL: SWBF2 0x01ebbfec
 // EntityProp::rttiHashEntityProp
 PblHash EntityProp::rttiHashEntityProp("EntityProp");
-char EntityProp::rttiNameEntityProp[] = "EntityProp";
+const char EntityProp::rttiNameEntityProp[] = "EntityProp";
 
 // SYNTHETIC: SWBF2 0x00402cd0
 // `dynamic initializer for 'EntityPropClass::rttiHashEntityPropClass''
 // GLOBAL: SWBF2 0x01ebc040
 // EntityPropClass::rttiHashEntityPropClass
 PblHash EntityPropClass::rttiHashEntityPropClass("EntityPropClass");
-char EntityPropClass::rttiNameEntityPropClass[] = "EntityPropClass";
+const char EntityPropClass::rttiNameEntityPropClass[] = "EntityPropClass";
 
 // FUNCTION: SWBF2 0x00497e50
 bool EntityProp::IsRtti(unsigned int uRtti) const

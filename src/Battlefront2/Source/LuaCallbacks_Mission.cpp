@@ -2086,11 +2086,7 @@ void InitMission()
 
 }
 
-// FUNCTION: SWBF2 0x00446e40
-FLEffectClass* FLEffect::Get(unsigned int uHash)
-{
-    return s_EffectClasses.Find(uHash);
-}
+
 
 namespace Lua_Callbacks
 {

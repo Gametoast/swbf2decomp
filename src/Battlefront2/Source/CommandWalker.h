@@ -24,7 +24,7 @@ public:
     virtual void SetProperty(unsigned int uProperty, const char* pszValue);
 
     static PblHash rttiHashCommandWalkerClass;
-    static char rttiNameCommandWalkerClass[];
+    static const char rttiNameCommandWalkerClass[];
 };
 
    

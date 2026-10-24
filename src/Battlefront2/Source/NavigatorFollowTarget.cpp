@@ -24,12 +24,12 @@ namespace ReserveManager
 
 namespace
 {
-    unsigned int GameObjectHandleId(const GameObject* pObject)
+    inline unsigned int GameObjectHandleId(const GameObject* pObject)
     {
         return pObject->mHandleId;
     }
 
-    const GameObject* HandleObject(PblHandle<const GameObject>& handle)
+    inline const GameObject* HandleObject(PblHandle<const GameObject>& handle)
     {
         if (handle.mObject && GameObjectHandleId(handle.mObject) != handle.mSavedHandleId)
         {
@@ -39,7 +39,7 @@ namespace
         return handle.mObject;
     }
 
-    const PblVector3& GameObjectPosition(const GameObject* pObject)
+    inline const PblVector3& GameObjectPosition(const GameObject* pObject)
     {
         return static_cast<const CollisionObject&>(*pObject).GetPosition();
     }
@@ -49,7 +49,7 @@ namespace
         return static_cast<const CollisionObject&>(*pObject).GetMatrix();
     }
 
-    const PblVector3& GetPos(const PblMatrix& m)
+    inline const PblVector3& GetPos(const PblMatrix& m)
     {
         return *(const PblVector3*)&m.m[3][0];
     }
@@ -75,7 +75,7 @@ PblVector3 GetSineRandomOffsetXZ(const GameObject* pObj, const int i)
 // GLOBAL: SWBF2 0x01ecb1fc
 // NavigatorFollowTarget::rttiHashNavigatorFollowTarget
 PblHash NavigatorFollowTarget::rttiHashNavigatorFollowTarget("NavigatorFollowTarget");
-char NavigatorFollowTarget::rttiNameNavigatorFollowTarget[] = "NavigatorFollowTarget";
+const char NavigatorFollowTarget::rttiNameNavigatorFollowTarget[] = "NavigatorFollowTarget";
 
 // FUNCTION: SWBF2 0x005ac510
 bool NavigatorFollowTarget::IsRtti(unsigned int uRtti) const

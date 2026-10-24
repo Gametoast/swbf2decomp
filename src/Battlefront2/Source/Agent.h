@@ -13,5 +13,5 @@ public:
     virtual bool Update(float dt, bool b);
 
     static PblHash rttiHashAgent;
-    static char rttiNameAgent[];
+    static const char rttiNameAgent[];
 };

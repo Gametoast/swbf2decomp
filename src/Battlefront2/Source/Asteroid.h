@@ -26,7 +26,7 @@ public:
                     PblVector3 vMin, PblVector3 vMax);
 
     static PblHash rttiHashAsteroidClass;
-    static char rttiNameAsteroidClass[];
+    static const char rttiNameAsteroidClass[];
 
     struct ChildAsteroidDesc
     {
@@ -118,7 +118,7 @@ public:
 
     static MemoryPool sMemoryPool;
     static PblHash rttiHashAsteroid;
-    static char rttiNameAsteroid[];
+    static const char rttiNameAsteroid[];
 };
  
  

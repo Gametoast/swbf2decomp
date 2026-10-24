@@ -38,12 +38,12 @@ public:
 namespace
 {
 
-    const PblVector3& GetVelocity(GameObject* pObject)
+    inline const PblVector3& GetVelocity(GameObject* pObject)
     {
         return pObject->GetVelocity();
     }
 
-    const PblMatrix& GetCollisionMatrix(const GameObject* pObject)
+    inline const PblMatrix& GetCollisionMatrix(const GameObject* pObject)
     {
         return static_cast<const CollisionObject*>(pObject)->GetMatrix();
     }
@@ -53,22 +53,22 @@ namespace
         return pObject->IsAlive();
     }
 
-    float GetCurHealth(const GameObject* pObject)
+    inline float GetCurHealth(const GameObject* pObject)
     {
         return pObject->mCurHealth;
     }
 
-    const PblVector3& GetTranslation(const PblMatrix& m)
+    inline const PblVector3& GetTranslation(const PblMatrix& m)
     {
         return *reinterpret_cast<const PblVector3*>(m.m[3]);
     }
 
-    int GetTeam(const GameObject* pObject)
+    inline int GetTeam(const GameObject* pObject)
     {
         return pObject->GetTeam();
     }
 
-    EntityClass* GetEntityClass(GameObject* pObject)
+    inline EntityClass* GetEntityClass(GameObject* pObject)
     {
         return pObject->GetEntityClass();
     }
@@ -85,7 +85,7 @@ namespace
         return h.mObject;
     }
 
-    float Clamp(float f, float fMin, float fMax)
+    inline float Clamp(float f, float fMin, float fMax)
     {
         if (fMin > f)
         {
@@ -151,14 +151,14 @@ WeaponCannonClass::WeaponCannonClass(unsigned int uHash)
 // GLOBAL: SWBF2 0x01f9a894
 // WeaponCannon::rttiHashWeaponCannon
 PblHash WeaponCannon::rttiHashWeaponCannon("WeaponCannon");
-char WeaponCannon::rttiNameWeaponCannon[] = "WeaponCannon";
+const char WeaponCannon::rttiNameWeaponCannon[] = "WeaponCannon";
 
 // SYNTHETIC: SWBF2 0x004070b0
 // `dynamic initializer for 'WeaponCannonClass::rttiHashWeaponCannonClass''
 // GLOBAL: SWBF2 0x01f9a898
 // WeaponCannonClass::rttiHashWeaponCannonClass
 PblHash WeaponCannonClass::rttiHashWeaponCannonClass("WeaponCannonClass");
-char WeaponCannonClass::rttiNameWeaponCannonClass[] = "WeaponCannonClass";
+const char WeaponCannonClass::rttiNameWeaponCannonClass[] = "WeaponCannonClass";
 
 // FUNCTION: SWBF2 0x0067e3c0
 bool WeaponCannon::IsRtti(unsigned int uRtti) const

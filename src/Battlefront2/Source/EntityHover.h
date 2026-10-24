@@ -89,7 +89,7 @@ public:
     }
 
     static PblHash rttiHashEntityHoverClass;
-    static char rttiNameEntityHoverClass[];
+    static const char rttiNameEntityHoverClass[];
 
     float mSetAltitude;
     float mGravityScale;
@@ -483,7 +483,7 @@ public:
 
     static PblHash rttiHashEntityHover;
     static MemoryPool sMemoryPool;
-    static char rttiNameEntityHover[];
+    static const char rttiNameEntityHover[];
 
     PblVector3 mVelocity;
     PblVector3 mOmega;

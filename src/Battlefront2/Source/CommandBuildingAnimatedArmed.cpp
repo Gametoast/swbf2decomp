@@ -13,7 +13,7 @@ CommandBuildingAnimatedArmedClass::CommandBuildingAnimatedArmedClass(unsigned in
 // GLOBAL: SWBF2 0x01eb83c8
 // CommandBuildingAnimatedArmed::rttiHashCommandBuildingAnimatedArmed
 PblHash CommandBuildingAnimatedArmed::rttiHashCommandBuildingAnimatedArmed("CommandBuildingAnimatedArmed");
-char CommandBuildingAnimatedArmed::rttiNameCommandBuildingAnimatedArmed[] = "CommandBuildingAnimatedArmed";
+const char CommandBuildingAnimatedArmed::rttiNameCommandBuildingAnimatedArmed[] = "CommandBuildingAnimatedArmed";
 
 // FUNCTION: SWBF2 0x004767d0
 bool CommandBuildingAnimatedArmed::IsRtti(unsigned int uRtti) const
@@ -45,7 +45,7 @@ const char* CommandBuildingAnimatedArmed::GetDerivedRttiName() const
 // GLOBAL: SWBF2 0x01eb83cc
 // CommandBuildingAnimatedArmedClass::rttiHashCommandBuildingAnimatedArmedClass
 PblHash CommandBuildingAnimatedArmedClass::rttiHashCommandBuildingAnimatedArmedClass("CommandBuildingAnimatedArmedClass");
-char CommandBuildingAnimatedArmedClass::rttiNameCommandBuildingAnimatedArmedClass[] = "CommandBuildingAnimatedArmedClass";
+const char CommandBuildingAnimatedArmedClass::rttiNameCommandBuildingAnimatedArmedClass[] = "CommandBuildingAnimatedArmedClass";
 
 // FUNCTION: SWBF2 0x00476890
 bool CommandBuildingAnimatedArmedClass::IsRtti(unsigned int uRtti)

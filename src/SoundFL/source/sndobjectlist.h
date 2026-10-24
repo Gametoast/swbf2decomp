@@ -55,7 +55,32 @@ public:
 
     ObjectList() {}
 
-    ~ObjectList();
+    // FUNCTION: SWBF2 0x0052c6c0
+    ~ObjectList()
+    {
+        for (;;)
+        {
+            Node* const pNode = (Node*)mHead.mNext;
+
+            if (pNode == (Node*)&mHead)
+            {
+                break;
+            }
+
+            if (pNode == 0)
+            {
+                continue;
+            }
+
+            if (pNode->mNode.mNext != 0)
+            {
+                pNode->mNode.Remove();
+            }
+
+            Node::smFreeList.Free(pNode);
+        }
+
+    }
 
     Node* FindByIndex(unsigned int uiIndex) const;
     unsigned int GetCount() const;

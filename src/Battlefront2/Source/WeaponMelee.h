@@ -58,7 +58,7 @@ public:
                 unsigned int uiFlags, bool bArg) const;
 
     static PblHash rttiHashWeaponMeleeClass;
-    static char rttiNameWeaponMeleeClass[];
+    static const char rttiNameWeaponMeleeClass[];
 
     Combo* m_pComboODF;
     Combo* m_pCombo;

@@ -32,7 +32,7 @@ public:
     bool SetupAnimation(ZephyrPoseDyn<32>& kPose, int iAnim, float fTime, bool bLoop);
 
     static PblHash rttiHashEntityBuildingAnimatedClass;
-    static char rttiNameEntityBuildingAnimatedClass[];
+    static const char rttiNameEntityBuildingAnimatedClass[];
 
     ZephyrAnim* mAnimations[2];
     RedAnimation* mAnimObj;
@@ -74,7 +74,7 @@ public:
     void SetAnimation(unsigned int uAnimationId, bool bLoop);
 
     static PblHash rttiHashEntityBuildingAnimated;
-    static char rttiNameEntityBuildingAnimated[];
+    static const char rttiNameEntityBuildingAnimated[];
 
     EntityBuildingAnimatedClass* mAnimatedClass;
     float mAnimationTime;

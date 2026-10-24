@@ -65,7 +65,7 @@ namespace
         return *reinterpret_cast<void* const* const*>(pThis);
     }
 
-    bool GameObject_IsRtti(const GameObject* pObject, unsigned int uRtti)
+    inline bool GameObject_IsRtti(const GameObject* pObject, unsigned int uRtti)
     {
         typedef bool(__thiscall * Fn)(const GameObject*, unsigned int);
         return reinterpret_cast<Fn>(VTable(pObject)[0])(pObject, uRtti);
@@ -83,7 +83,7 @@ namespace
         return reinterpret_cast<Fn>(VTable(pObject)[68])(pObject);
     }
 
-    const PblVector3& Row(const PblMatrix& rMatrix, int iRow)
+    inline const PblVector3& Row(const PblMatrix& rMatrix, int iRow)
     {
         return *reinterpret_cast<const PblVector3*>(rMatrix.m[iRow]);
     }

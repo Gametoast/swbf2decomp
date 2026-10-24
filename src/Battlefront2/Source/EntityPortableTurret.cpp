@@ -25,14 +25,14 @@ EntityPortableTurretClass::EntityPortableTurretClass(unsigned int uHash)
 // GLOBAL: SWBF2 0x01ebbf94
 // EntityPortableTurretClass::rttiHashEntityPortableTurretClass
 PblHash EntityPortableTurretClass::rttiHashEntityPortableTurretClass("EntityPortableTurretClass");
-char EntityPortableTurretClass::rttiNameEntityPortableTurretClass[] = "EntityPortableTurretClass";
+const char EntityPortableTurretClass::rttiNameEntityPortableTurretClass[] = "EntityPortableTurretClass";
 
 // SYNTHETIC: SWBF2 0x00402ca0
 // `dynamic initializer for 'EntityPortableTurret::rttiHashEntityPortableTurret''
 // GLOBAL: SWBF2 0x01ebbfe8
 // EntityPortableTurret::rttiHashEntityPortableTurret
 PblHash EntityPortableTurret::rttiHashEntityPortableTurret("EntityPortableTurret");
-char EntityPortableTurret::rttiNameEntityPortableTurret[] = "EntityPortableTurret";
+const char EntityPortableTurret::rttiNameEntityPortableTurret[] = "EntityPortableTurret";
 
 // GLOBAL: SWBF2 0x01ebbff0
 // SYNTHETIC: SWBF2 0x00402c80

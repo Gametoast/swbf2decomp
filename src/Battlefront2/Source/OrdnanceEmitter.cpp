@@ -36,7 +36,7 @@ static inline const PblMatrix operator*(const PblMatrix& a, const PblMatrix& b)
 // GLOBAL: SWBF2 0x01ef2624
 // OrdnanceEmitterClass::rttiHashOrdnanceEmitterClass
 PblHash OrdnanceEmitterClass::rttiHashOrdnanceEmitterClass("OrdnanceEmitterClass");
-char OrdnanceEmitterClass::rttiNameOrdnanceEmitterClass[] = "OrdnanceEmitterClass";
+const char OrdnanceEmitterClass::rttiNameOrdnanceEmitterClass[] = "OrdnanceEmitterClass";
 
 // FUNCTION: SWBF2 0x005fc410
 OrdnanceEmitterClass::OrdnanceEmitterClass(unsigned int uHash)

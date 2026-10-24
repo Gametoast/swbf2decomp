@@ -137,7 +137,7 @@ public:
     WeaponState GetState() const { return mState; }
 
     static PblHash rttiHashWeapon;
-    static char rttiNameWeapon[];
+    static const char rttiNameWeapon[];
 
     static void operator delete(void* p);
 
@@ -251,7 +251,7 @@ public:
     void UpdateCoolDownSound(float fDeltaTime);
 
     static PblHash rttiHashWeaponCannon;
-    static char rttiNameWeaponCannon[];
+    static const char rttiNameWeaponCannon[];
 
     float mStrength;
     int mSalvoCount;

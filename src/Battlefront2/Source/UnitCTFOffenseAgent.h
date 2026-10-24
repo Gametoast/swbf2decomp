@@ -15,7 +15,7 @@ class UnitCTFOffenseAgent : public UnitAgent
 {
 public:
     static PblHash rttiHashUnitCTFOffenseAgent;
-    static char rttiNameUnitCTFOffenseAgent[];
+    static const char rttiNameUnitCTFOffenseAgent[];
 
     UnitCTFOffenseAgent(UnitController* pCtrl, const FlagItem* pFlag, const PblVector3& vPos);
     virtual ~UnitCTFOffenseAgent();

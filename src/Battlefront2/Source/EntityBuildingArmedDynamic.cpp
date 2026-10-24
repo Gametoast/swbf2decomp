@@ -6,7 +6,7 @@
 // GLOBAL: SWBF2 0x01ebb894
 // EntityBuildingArmedDynamicClass::rttiHashEntityBuildingArmedDynamicClass
 PblHash EntityBuildingArmedDynamicClass::rttiHashEntityBuildingArmedDynamicClass("EntityBuildingArmedDynamicClass");
-char EntityBuildingArmedDynamicClass::rttiNameEntityBuildingArmedDynamicClass[] = "EntityBuildingArmedDynamicClass";
+const char EntityBuildingArmedDynamicClass::rttiNameEntityBuildingArmedDynamicClass[] = "EntityBuildingArmedDynamicClass";
 
 // FUNCTION: SWBF2 0x00496c50
 EntityBuildingArmedDynamicClass::EntityBuildingArmedDynamicClass(unsigned int uHash)
@@ -76,7 +76,7 @@ const char* EntityBuildingArmedDynamicClass::GetDerivedRttiName()
 // GLOBAL: SWBF2 0x01ebb890
 // EntityBuildingArmedDynamic::rttiHashEntityBuildingArmedDynamic
 PblHash EntityBuildingArmedDynamic::rttiHashEntityBuildingArmedDynamic("EntityBuildingArmedDynamic");
-char EntityBuildingArmedDynamic::rttiNameEntityBuildingArmedDynamic[] = "EntityBuildingArmedDynamic";
+const char EntityBuildingArmedDynamic::rttiNameEntityBuildingArmedDynamic[] = "EntityBuildingArmedDynamic";
 
 // GLOBAL: SWBF2 0x01ebb898
 // SYNTHETIC: SWBF2 0x00402900
@@ -129,12 +129,12 @@ EntityBuildingArmedDynamic::EntityBuildingArmedDynamic(EntityBuildingArmedDynami
 // SYNTHETIC: SWBF2 0x00496e03
 // [thunk]:EntityBuildingArmedDynamic::`scalar deleting destructor' adjustor{608}
 
-void* EntityBuildingArmedDynamic::operator new(unsigned int uSize)
+inline void* EntityBuildingArmedDynamic::operator new(unsigned int uSize)
 {
     return sMemoryPool.Allocate(uSize);
 }
 
-void EntityBuildingArmedDynamic::operator delete(void* pBlock)
+inline void EntityBuildingArmedDynamic::operator delete(void* pBlock)
 {
     sMemoryPool.Free(pBlock);
 }

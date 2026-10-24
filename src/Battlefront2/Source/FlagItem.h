@@ -41,7 +41,7 @@ public:
     unsigned int mCarriedDroidekaBoneHash;
 
     static PblHash rttiHashFlagItemClass;
-    static char rttiNameFlagItemClass[];
+    static const char rttiNameFlagItemClass[];
 };
   
  
@@ -162,7 +162,7 @@ public:
     static FlagGameplayType sFlagGameplayType;
     static PblHash rttiHashFlagItem;
     static unsigned int GetRtti();
-    static char rttiNameFlagItem[];
+    static const char rttiNameFlagItem[];
 };
  
  

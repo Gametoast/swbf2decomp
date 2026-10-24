@@ -67,7 +67,7 @@ public:
     virtual void SetProperty(unsigned int uProperty, const char* pcValue);
 
     static PblHash rttiHashEntitySoundClass;
-    static char rttiNameEntitySoundClass[];
+    static const char rttiNameEntitySoundClass[];
 
     static class EntitySound* CreateSoundFromRegion(RedRegionDesc& desc, const char* pcName,
                                                     const char* pcPrefix, EntitySoundClass& soundClass);
@@ -100,7 +100,7 @@ public:
     static void DestroyAll();
 
     static PblHash rttiHashEntitySound;
-    static char rttiNameEntitySound[];
+    static const char rttiNameEntitySound[];
     static PblListSingle sEntitySoundList;
 
     PblVector3 mPosition;

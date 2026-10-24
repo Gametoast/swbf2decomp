@@ -86,7 +86,7 @@ GameObjectClass::~GameObjectClass()
 // GLOBAL: SWBF2 0x01ec3234
 // GameObjectClass::rttiHashGameObjectClass
 PblHash GameObjectClass::rttiHashGameObjectClass("GameObjectClass");
-char GameObjectClass::rttiNameGameObjectClass[] = "GameObjectClass";
+const char GameObjectClass::rttiNameGameObjectClass[] = "GameObjectClass";
 
 // FUNCTION: SWBF2 0x00444400
 bool GameObjectClass::IsRtti(unsigned int uRtti)
@@ -111,7 +111,7 @@ const char* GameObjectClass::GetDerivedRttiName()
 // GLOBAL: SWBF2 0x01ec0c7c
 // GameObject::rttiHashGameObject
 PblHash GameObject::rttiHashGameObject("GameObject");
-char GameObject::rttiNameGameObject[] = "GameObject";
+const char GameObject::rttiNameGameObject[] = "GameObject";
 
 // FUNCTION: SWBF2 0x00535060
 unsigned int GameObject::GetDerivedRtti() const

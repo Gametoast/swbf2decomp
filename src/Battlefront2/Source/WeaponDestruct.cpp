@@ -25,7 +25,7 @@ public:
 // GLOBAL: SWBF2 0x01f9a8a4
 // WeaponDestruct::rttiHashWeaponDestruct
 PblHash WeaponDestruct::rttiHashWeaponDestruct("WeaponDestruct");
-char WeaponDestruct::rttiNameWeaponDestruct[] = "WeaponDestruct";
+const char WeaponDestruct::rttiNameWeaponDestruct[] = "WeaponDestruct";
 
 // FUNCTION: SWBF2 0x00681a10
 bool WeaponDestruct::IsRtti(unsigned int uRtti) const
@@ -50,7 +50,7 @@ const char* WeaponDestruct::GetDerivedRttiName() const
 // GLOBAL: SWBF2 0x01f9a8a8
 // WeaponDestructClass::rttiHashWeaponDestructClass
 PblHash WeaponDestructClass::rttiHashWeaponDestructClass("WeaponDestructClass");
-char WeaponDestructClass::rttiNameWeaponDestructClass[] = "WeaponDestructClass";
+const char WeaponDestructClass::rttiNameWeaponDestructClass[] = "WeaponDestructClass";
 
 // FUNCTION: SWBF2 0x00682190
 WeaponDestructClass::WeaponDestructClass(unsigned int uHash)

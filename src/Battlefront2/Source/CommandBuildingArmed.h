@@ -25,7 +25,7 @@ public:
     virtual void SetProperty(unsigned int uProperty, const char* pszValue);
 
     static PblHash rttiHashCommandBuildingArmedClass;
-    static char rttiNameCommandBuildingArmedClass[];
+    static const char rttiNameCommandBuildingArmedClass[];
 };
 
    
@@ -52,7 +52,7 @@ public:
     virtual GameObject* AddToClient();
 
     static PblHash rttiHashCommandBuildingArmed;
-    static char rttiNameCommandBuildingArmed[];
+    static const char rttiNameCommandBuildingArmed[];
 
     CommandBuildingArmedClass* mClass;
     CommandPost* mPost;

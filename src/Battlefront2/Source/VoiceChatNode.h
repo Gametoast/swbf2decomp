@@ -151,7 +151,7 @@ public:
     const ReceiveStream& GetReceiveStream(unsigned char stream) const;
     unsigned int CalculateNumPackets(const ReceiveStream& stream) const;
 
-    static bool __fastcall ReceiveAudioPacketAllLocalNodes(unsigned char uID, const AudioPacket* pPacket,
+    static bool __cdecl ReceiveAudioPacketAllLocalNodes(unsigned char uID, const AudioPacket* pPacket,
                                                           bool bDiscontinuity, unsigned short uDropped);
     friend class ::SoundDebugDisplay;
 

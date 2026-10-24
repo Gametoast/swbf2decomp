@@ -36,7 +36,7 @@ public:
     bool mMaintainVisualContact;
 
     static PblHash rttiHashUnitDefendAgent;
-    static char rttiNameUnitDefendAgent[];
+    static const char rttiNameUnitDefendAgent[];
 };
 
  

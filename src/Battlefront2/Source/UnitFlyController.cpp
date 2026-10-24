@@ -6,7 +6,7 @@
 // GLOBAL: SWBF2 0x01f993e4
 // UnitFlyController::rttiHashUnitFlyController
 PblHash UnitFlyController::rttiHashUnitFlyController("UnitFlyController");
-char UnitFlyController::rttiNameUnitFlyController[] = "UnitFlyController";
+const char UnitFlyController::rttiNameUnitFlyController[] = "UnitFlyController";
 
 // FUNCTION: SWBF2 0x00667d70
 UnitFlyController::UnitFlyController(Controllable* pOwner)

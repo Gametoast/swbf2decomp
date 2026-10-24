@@ -24,7 +24,7 @@ public:
     virtual const char* GetDerivedRttiName();
 
     static PblHash rttiHashEntitySoundStreamClass;
-    static char rttiNameEntitySoundStreamClass[];
+    static const char rttiNameEntitySoundStreamClass[];
 };
   
 
@@ -45,7 +45,7 @@ public:
 
     static PblHash rttiHashEntitySoundStream;
     static MemoryPool sMemoryPool;
-    static char rttiNameEntitySoundStream[];
+    static const char rttiNameEntitySoundStream[];
 
     Snd::SoundStream mSoundStream;
 };

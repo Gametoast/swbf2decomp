@@ -22,14 +22,15 @@ MemoryPool RedShadingPose::Entry::sMemoryPool("RedShadingPose::Entry", 0xc);
 // `dynamic initializer for 'RedShadingState::sMemoryPool''
 // SYNTHETIC: SWBF2 0x00769af0
 // `dynamic atexit destructor for 'RedShadingState::sMemoryPool''
+
 MemoryPool RedShadingState::sMemoryPool("RedShadingState", 0x20c);
 
-void* RedShadingPose::Entry::operator new(unsigned int uiSize)
+inline void* RedShadingPose::Entry::operator new(unsigned int uiSize)
 {
     return sMemoryPool.Allocate(uiSize);
 }
 
-void RedShadingPose::Entry::operator delete(void* pBlock)
+inline void RedShadingPose::Entry::operator delete(void* pBlock)
 {
     sMemoryPool.Free(pBlock);
 }

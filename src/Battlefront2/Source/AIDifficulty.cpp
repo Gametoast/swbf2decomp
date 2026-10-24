@@ -399,7 +399,7 @@ float SpaceAssault_GetCritSysKillForPlayerTeam()
 namespace
 {
 
-const CollisionObject* GetCollisionObject(const GameObject* pObject)
+inline const CollisionObject* GetCollisionObject(const GameObject* pObject)
 {
     return static_cast<const CollisionObject*>(pObject);
 }

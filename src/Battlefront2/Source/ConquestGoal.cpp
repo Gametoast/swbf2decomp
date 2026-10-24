@@ -21,8 +21,9 @@ inline int GameObjectTeam(const GameObject* pObject)
 // GLOBAL: SWBF2 0x01eb97a0
 // SYNTHETIC: SWBF2 0x00402760
 // `dynamic initializer for 'AI::ConquestGoal::rttiHashConquestGoal''
+
 PblHash AI::ConquestGoal::rttiHashConquestGoal("ConquestGoal");
-char AI::ConquestGoal::rttiNameConquestGoal[] = "ConquestGoal";
+const char AI::ConquestGoal::rttiNameConquestGoal[] = "ConquestGoal";
 
 // FUNCTION: SWBF2 0x004829c0
 bool AI::ConquestGoal::IsRtti(unsigned int uRtti) const

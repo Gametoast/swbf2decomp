@@ -23,7 +23,7 @@ public:
     };
 
     static PblHash rttiHashUnitDeathmatchAgent;
-    static char rttiNameUnitDeathmatchAgent[];
+    static const char rttiNameUnitDeathmatchAgent[];
 
     UnitDeathmatchAgent(UnitController* pCtrl);
 

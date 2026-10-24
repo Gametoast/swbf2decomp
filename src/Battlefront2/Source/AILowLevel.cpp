@@ -37,7 +37,7 @@
 
 namespace
 {
-    unsigned int GameObjectHandleId(const GameObject* pObject)
+    inline unsigned int GameObjectHandleId(const GameObject* pObject)
     {
         return pObject->mHandleId;
     }
@@ -98,28 +98,28 @@ namespace
         pMelee->m_bAI_Deflect = bDeflect;
     }
 
-    int GetTeam(const GameObject* pObject)
+    inline int GetTeam(const GameObject* pObject)
     {
         return pObject->GetTeam();
     }
 
-    unsigned int GetHealthType(const GameObject* pObject)
+    inline unsigned int GetHealthType(const GameObject* pObject)
     {
         return pObject->mHealthType;
     }
 
-    const CollisionObject* GetCollisionObject(const GameObject* pObject)
+    inline const CollisionObject* GetCollisionObject(const GameObject* pObject)
     {
         return pObject->GetCollisionObject();
     }
 }
 
-void* Navigator::operator new(unsigned int uiSize)
+inline void* Navigator::operator new(unsigned int uiSize)
 {
     return sMemoryPool.Allocate(uiSize);
 }
 
-void* AIPath::operator new(unsigned int uiSize)
+inline void* AIPath::operator new(unsigned int uiSize)
 {
     return sMemoryPool.Allocate(uiSize);
 }

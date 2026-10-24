@@ -18,11 +18,6 @@ const char* Node::GetName()
     return 0;
 }
 
-Node::~Node()
-{
-    Clear();
-    DetachFromParent();
-}
 
 // SYNTHETIC: SWBF2 0x0050b4a0
 // EventManager::Node::`scalar deleting destructor'
@@ -173,14 +168,7 @@ LuaCallback<ITEM, PARAM>::LuaCallback(int iRef)
     }
 }
 
-template <class ITEM, class PARAM>
-LuaCallback<ITEM, PARAM>::~LuaCallback()
-{
-    if (mFunction != -1)
-    {
-        lua_unref(LuaHelper::mState, mFunction);
-    }
-}
+
 
 // SYNTHETIC: SWBF2 0x0050e970
 // EventManager::LuaCallback<Character,DamageOwner>::`scalar deleting destructor'

@@ -29,7 +29,7 @@ public:
     float mTargetTimer;
 
     static PblHash rttiHashUnitWaitAgent;
-    static char rttiNameUnitWaitAgent[];
+    static const char rttiNameUnitWaitAgent[];
 };
  
  

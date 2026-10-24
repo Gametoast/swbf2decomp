@@ -32,14 +32,14 @@ extern PblVector3 gVectorZero;
 // GLOBAL: SWBF2 0x01ef26c0
 // OrdnanceTowCable::rttiHashOrdnanceTowCable
 PblHash OrdnanceTowCable::rttiHashOrdnanceTowCable("OrdnanceTowCable");
-char OrdnanceTowCable::rttiNameOrdnanceTowCable[] = "OrdnanceTowCable";
+const char OrdnanceTowCable::rttiNameOrdnanceTowCable[] = "OrdnanceTowCable";
 
 // SYNTHETIC: SWBF2 0x00405bd0
 // `dynamic initializer for 'OrdnanceTowCableClass::rttiHashOrdnanceTowCableClass''
 // GLOBAL: SWBF2 0x01ef26c4
 // OrdnanceTowCableClass::rttiHashOrdnanceTowCableClass
 PblHash OrdnanceTowCableClass::rttiHashOrdnanceTowCableClass("OrdnanceTowCableClass");
-char OrdnanceTowCableClass::rttiNameOrdnanceTowCableClass[] = "OrdnanceTowCableClass";
+const char OrdnanceTowCableClass::rttiNameOrdnanceTowCableClass[] = "OrdnanceTowCableClass";
 
 // GLOBAL: SWBF2 0x01ef2670
 // SYNTHETIC: SWBF2 0x00405ba0

@@ -29,7 +29,7 @@ public:
     float mFadeOutSpeed;
 
     static PblHash rttiHashOrdnanceLaserClass;
-    static char rttiNameOrdnanceLaserClass[];
+    static const char rttiNameOrdnanceLaserClass[];
 };
   
  
@@ -64,7 +64,7 @@ public:
     float mMaxLength;
 
     static PblHash rttiHashOrdnanceLaser;
-    static char rttiNameOrdnanceLaser[];
+    static const char rttiNameOrdnanceLaser[];
 };
  
  

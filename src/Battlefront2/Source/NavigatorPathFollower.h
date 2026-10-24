@@ -17,7 +17,7 @@ public:
     };
 
     static PblHash rttiHashNavigatorPathFollower;
-    static char rttiNameNavigatorPathFollower[];
+    static const char rttiNameNavigatorPathFollower[];
 
     NavigatorPathFollower(AILowLevel* pOwner, bool bDoCallbacksOnPts,
                           const Obstacle** ppIgnore, int iIgnoreCnt,

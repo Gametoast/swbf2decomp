@@ -14,7 +14,7 @@ public:
     virtual ~WeaponLaserClass();
 
     static PblHash rttiHashWeaponLaserClass;
-    static char rttiNameWeaponLaserClass[];
+    static const char rttiNameWeaponLaserClass[];
 
     virtual WeaponClass* Derive(unsigned int uHash);
     virtual Weapon* Build(const WeaponDesc& desc);
@@ -58,7 +58,7 @@ protected:
 
 public:
     static PblHash rttiHashWeaponLaser;
-    static char rttiNameWeaponLaser[];
+    static const char rttiNameWeaponLaser[];
 
     float mSalvoTimer;
 };

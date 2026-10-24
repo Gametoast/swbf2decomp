@@ -32,7 +32,7 @@ public:
     float mStateEnterTime;
 
     static PblHash rttiHashUnitBoardAgent;
-    static char rttiNameUnitBoardAgent[];
+    static const char rttiNameUnitBoardAgent[];
 };
  
  

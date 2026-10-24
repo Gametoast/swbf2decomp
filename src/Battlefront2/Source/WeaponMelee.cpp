@@ -2603,14 +2603,14 @@ DefaultCombo::DeflectAnimation aDeflectAnimation[DefaultCombo::NUM_DEFLECT_ANIMA
 // GLOBAL: SWBF2 0x01f9a8ec
 // WeaponMelee::rttiHashWeaponMelee
 PblHash WeaponMelee::rttiHashWeaponMelee("WeaponMelee");
-char WeaponMelee::rttiNameWeaponMelee[] = "WeaponMelee";
+const char WeaponMelee::rttiNameWeaponMelee[] = "WeaponMelee";
 
 // SYNTHETIC: SWBF2 0x00407210
 // `dynamic initializer for 'WeaponMeleeClass::rttiHashWeaponMeleeClass''
 // GLOBAL: SWBF2 0x01f9a8f4
 // WeaponMeleeClass::rttiHashWeaponMeleeClass
 PblHash WeaponMeleeClass::rttiHashWeaponMeleeClass("WeaponMeleeClass");
-char WeaponMeleeClass::rttiNameWeaponMeleeClass[] = "WeaponMeleeClass";
+const char WeaponMeleeClass::rttiNameWeaponMeleeClass[] = "WeaponMeleeClass";
 
 // GLOBAL: SWBF2 0x01eafd70
 WeaponMelee::TrailData* WeaponMelee::s_aTrailDataPool;

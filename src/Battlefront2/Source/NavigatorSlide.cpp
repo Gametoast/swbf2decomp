@@ -45,12 +45,12 @@ public:
 
 namespace
 {
-    const PblVector3& GetPos(const PblMatrix& m)
+    inline const PblVector3& GetPos(const PblMatrix& m)
     {
         return *(const PblVector3*)&m.m[3][0];
     }
 
-    const PblMatrix& GameObjectGetMatrix(const GameObject* pObj)
+    inline const PblMatrix& GameObjectGetMatrix(const GameObject* pObj)
     {
         return static_cast<const CollisionObject&>(*pObj).GetMatrix();
     }
@@ -78,7 +78,7 @@ int gClearVehicleSlideCount = 1;
 // GLOBAL: SWBF2 0x01ecb258
 // NavigatorSlide::rttiHashNavigatorSlide
 PblHash NavigatorSlide::rttiHashNavigatorSlide("NavigatorSlide");
-char NavigatorSlide::rttiNameNavigatorSlide[] = "NavigatorSlide";
+const char NavigatorSlide::rttiNameNavigatorSlide[] = "NavigatorSlide";
 
 // FUNCTION: SWBF2 0x005addf0
 bool NavigatorSlide::IsRtti(unsigned int uRtti) const

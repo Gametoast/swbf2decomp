@@ -14,7 +14,7 @@ public:
     virtual ~WeaponAreaEffectClass();
 
     static PblHash rttiHashWeaponAreaEffectClass;
-    static char rttiNameWeaponAreaEffectClass[];
+    static const char rttiNameWeaponAreaEffectClass[];
 
     enum FIRE_TYPE
     {

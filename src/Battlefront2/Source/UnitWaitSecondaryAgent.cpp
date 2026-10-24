@@ -49,7 +49,7 @@ int Play(VOType eType, const GameObject* pSpeaker, const GameObject* pTarget,
 // GLOBAL: SWBF2 0x01f9a25c
 // UnitWaitSecondaryAgent::rttiHashUnitWaitSecondaryAgent
 PblHash UnitWaitSecondaryAgent::rttiHashUnitWaitSecondaryAgent("UnitWaitSecondaryAgent");
-char UnitWaitSecondaryAgent::rttiNameUnitWaitSecondaryAgent[] = "UnitWaitSecondaryAgent";
+const char UnitWaitSecondaryAgent::rttiNameUnitWaitSecondaryAgent[] = "UnitWaitSecondaryAgent";
 
 // FUNCTION: SWBF2 0x0066b670
 bool UnitWaitSecondaryAgent::IsRtti(unsigned int uRtti) const

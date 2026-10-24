@@ -78,7 +78,7 @@ extern "C" PblVector3* __stdcall D3DXVec3Normalize(PblVector3* pOut, const PblVe
 extern "C" PblQuaternion* __stdcall D3DXQuaternionNormalize(PblQuaternion* pOut, const PblQuaternion* pQ);
 extern "C" PblMatrix* __stdcall D3DXMatrixRotationQuaternion(PblMatrix* pOut, const PblQuaternion* pQ);
 
-static CollisionObject* GetCollisionObject(GameObject* pObject)
+static inline CollisionObject* GetCollisionObject(GameObject* pObject)
 {
     return static_cast<CollisionObject*>(pObject);
 }

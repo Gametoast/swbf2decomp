@@ -143,7 +143,7 @@ public:
     float mRadiusDamageSizeScale;
 
     static PblHash rttiHashGameObjectClass;
-    static char rttiNameGameObjectClass[];
+    static const char rttiNameGameObjectClass[];
 };
  
  
@@ -420,7 +420,7 @@ public:
     bool mIsTargetable : 1;
 
     static PblHash rttiHashGameObject;
-    static char rttiNameGameObject[];
+    static const char rttiNameGameObject[];
 };
  
 

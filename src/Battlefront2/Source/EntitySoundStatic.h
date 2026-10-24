@@ -23,7 +23,7 @@ public:
     virtual const char* GetDerivedRttiName();
 
     static PblHash rttiHashEntitySoundStaticClass;
-    static char rttiNameEntitySoundStaticClass[];
+    static const char rttiNameEntitySoundStaticClass[];
 };
   
 
@@ -46,7 +46,7 @@ public:
     static void operator delete(void* pBlock) { sMemoryPool.Free(pBlock); }
 
     static PblHash rttiHashEntitySoundStatic;
-    static char rttiNameEntitySoundStatic[];
+    static const char rttiNameEntitySoundStatic[];
     static MemoryPool sMemoryPool;
 
     GameSoundControllable mSound;

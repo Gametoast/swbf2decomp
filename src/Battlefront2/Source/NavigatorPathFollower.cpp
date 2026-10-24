@@ -11,7 +11,7 @@
 // GLOBAL: SWBF2 0x01ecb254
 // NavigatorPathFollower::rttiHashNavigatorPathFollower
 PblHash NavigatorPathFollower::rttiHashNavigatorPathFollower("NavigatorPathFollower");
-char NavigatorPathFollower::rttiNameNavigatorPathFollower[] = "NavigatorPathFollower";
+const char NavigatorPathFollower::rttiNameNavigatorPathFollower[] = "NavigatorPathFollower";
 
 // FUNCTION: SWBF2 0x005adad0
 bool NavigatorPathFollower::IsRtti(unsigned int uRtti) const

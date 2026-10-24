@@ -24,7 +24,7 @@ public:
     float mCableLimit;
 
     static PblHash rttiHashOrdnanceTowCableClass;
-    static char rttiNameOrdnanceTowCableClass[];
+    static const char rttiNameOrdnanceTowCableClass[];
 };
   
  
@@ -116,7 +116,7 @@ public:
     bool mDeleteNextUpdate;
 
     static PblHash rttiHashOrdnanceTowCable;
-    static char rttiNameOrdnanceTowCable[];
+    static const char rttiNameOrdnanceTowCable[];
     static MemoryPool sMemoryPool;
 
     static void PlatformInit();

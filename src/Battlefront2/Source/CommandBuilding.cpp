@@ -30,7 +30,7 @@ CommandBuildingClass::~CommandBuildingClass()
 // GLOBAL: SWBF2 0x01eb83c4
 // CommandBuildingClass::rttiHashCommandBuildingClass
 PblHash CommandBuildingClass::rttiHashCommandBuildingClass("CommandBuildingClass");
-char CommandBuildingClass::rttiNameCommandBuildingClass[] = "CommandBuildingClass";
+const char CommandBuildingClass::rttiNameCommandBuildingClass[] = "CommandBuildingClass";
 
 // FUNCTION: SWBF2 0x004760a0
 bool CommandBuildingClass::IsRtti(unsigned int uRtti)
@@ -55,7 +55,7 @@ const char* CommandBuildingClass::GetDerivedRttiName()
 // GLOBAL: SWBF2 0x01eb667c
 // CommandBuilding::rttiHashCommandBuilding
 PblHash CommandBuilding::rttiHashCommandBuilding("CommandBuilding");
-char CommandBuilding::rttiNameCommandBuilding[] = "CommandBuilding";
+const char CommandBuilding::rttiNameCommandBuilding[] = "CommandBuilding";
 
 // SYNTHETIC: SWBF2 0x00476070
 // CommandBuilding::`scalar deleting destructor'

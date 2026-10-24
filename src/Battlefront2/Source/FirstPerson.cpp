@@ -1235,7 +1235,7 @@ extern "C" PblMatrix* __stdcall D3DXMatrixRotationZ(PblMatrix* pOut, float fAngl
 namespace
 {
 
-PblVector3 HermiteValue(const char* pHermite, float fT)
+inline PblVector3 HermiteValue(const char* pHermite, float fT)
 {
     const float* p = (const float*)pHermite;
     PblVector3 v;

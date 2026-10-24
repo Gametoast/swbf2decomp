@@ -74,3 +74,17 @@ private:
 };
  
  
+
+// FUNCTION: SWBF2 0x00578fa0
+inline PblMemChunk::~PblMemChunk()
+{
+}
+
+inline PblMemChunk::PblMemChunk(const PblMemChunk& other)
+{
+    _iId = other._iId;
+    _iSize = other._iSize;
+    _pNext = other._pNext;
+    _pEnd = other._pEnd;
+    _pData = other._pData;
+}

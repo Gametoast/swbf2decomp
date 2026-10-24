@@ -22,7 +22,7 @@ protected:
 
 public:
     static PblHash rttiHashFollowGoal;
-    static char rttiNameFollowGoal[];
+    static const char rttiNameFollowGoal[];
 
     GoalTarget mTarget;
 };

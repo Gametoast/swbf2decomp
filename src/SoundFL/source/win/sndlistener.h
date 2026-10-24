@@ -10,7 +10,10 @@ class Listener : public ListenerBase
 public:
 
     Listener();
-    ~Listener();
+    // FUNCTION: SWBF2 0x00733e90
+    ~Listener()
+    {
+    }
 
     void Update();
 };

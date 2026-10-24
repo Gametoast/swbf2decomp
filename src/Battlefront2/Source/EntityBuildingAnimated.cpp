@@ -56,14 +56,14 @@ static PblMatrix _IdentityMatrix(
 // GLOBAL: SWBF2 0x01ebb87c
 // EntityBuildingAnimatedClass::rttiHashEntityBuildingAnimatedClass
 PblHash EntityBuildingAnimatedClass::rttiHashEntityBuildingAnimatedClass("EntityBuildingAnimatedClass");
-char EntityBuildingAnimatedClass::rttiNameEntityBuildingAnimatedClass[] = "EntityBuildingAnimatedClass";
+const char EntityBuildingAnimatedClass::rttiNameEntityBuildingAnimatedClass[] = "EntityBuildingAnimatedClass";
 
 // SYNTHETIC: SWBF2 0x004028a0
 // `dynamic initializer for 'EntityBuildingAnimated::rttiHashEntityBuildingAnimated''
 // GLOBAL: SWBF2 0x01ebb878
 // EntityBuildingAnimated::rttiHashEntityBuildingAnimated
 PblHash EntityBuildingAnimated::rttiHashEntityBuildingAnimated("EntityBuildingAnimated");
-char EntityBuildingAnimated::rttiNameEntityBuildingAnimated[] = "EntityBuildingAnimated";
+const char EntityBuildingAnimated::rttiNameEntityBuildingAnimated[] = "EntityBuildingAnimated";
 
 // FUNCTION: SWBF2 0x00475fb0
 bool EntityBuildingAnimatedClass::IsRtti(unsigned int uRtti)

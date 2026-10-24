@@ -7,8 +7,9 @@
 // GLOBAL: SWBF2 0x01eb97b4
 // SYNTHETIC: SWBF2 0x004027c0
 // `dynamic initializer for 'AI::DeathmatchGoal::rttiHashDeathmatchGoal''
+
 PblHash AI::DeathmatchGoal::rttiHashDeathmatchGoal("DeathmatchGoal");
-char AI::DeathmatchGoal::rttiNameDeathmatchGoal[] = "DeathmatchGoal";
+const char AI::DeathmatchGoal::rttiNameDeathmatchGoal[] = "DeathmatchGoal";
 
 // FUNCTION: SWBF2 0x0048a980
 bool AI::DeathmatchGoal::IsRtti(unsigned int uRtti) const

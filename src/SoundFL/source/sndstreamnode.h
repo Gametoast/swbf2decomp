@@ -11,7 +11,10 @@ struct StreamPacket;
 class StreamNodeSource
 {
 public:
-    virtual ~StreamNodeSource();
+    // FUNCTION: SWBF2 0x0073c790
+    virtual ~StreamNodeSource()
+    {
+    }
     virtual StreamPacket* GetPacket(unsigned int uiOutput);
 };
 

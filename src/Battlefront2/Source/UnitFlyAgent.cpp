@@ -27,7 +27,7 @@
 // GLOBAL: SWBF2 0x01f993bc
 // UnitFlyAgent::rttiHashUnitFlyAgent
 PblHash UnitFlyAgent::rttiHashUnitFlyAgent("UnitFlyAgent");
-char UnitFlyAgent::rttiNameUnitFlyAgent[] = "UnitFlyAgent";
+const char UnitFlyAgent::rttiNameUnitFlyAgent[] = "UnitFlyAgent";
 
 namespace VehicleManager { int RequestVehiclesInRange(const PblVector3& vPos, GameObject** ppOut, float fRadius, int iMax); }
 

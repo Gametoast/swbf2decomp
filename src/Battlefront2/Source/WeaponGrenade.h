@@ -33,7 +33,7 @@ public:
     PblVector3 m_avFireOffset[3];
 
     static PblHash rttiHashWeaponGrenadeClass;
-    static char rttiNameWeaponGrenadeClass[];
+    static const char rttiNameWeaponGrenadeClass[];
 };
   
  
@@ -77,7 +77,7 @@ protected:
 public:
 
     static PblHash rttiHashWeaponGrenade;
-    static char rttiNameWeaponGrenade[];
+    static const char rttiNameWeaponGrenade[];
 
     bool mNetFiredFlag;
     bool mFired;

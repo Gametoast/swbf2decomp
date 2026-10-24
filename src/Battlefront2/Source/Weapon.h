@@ -106,7 +106,7 @@ public:
     float GetBarrageDelay() const;
 
     static PblHash rttiHashWeaponClass;
-    static char rttiNameWeaponClass[];
+    static const char rttiNameWeaponClass[];
 
     static GameSound sWeaponChangeUnableSound;
 

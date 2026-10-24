@@ -29,7 +29,7 @@ public:
     void QueueUpperLowerAnimations(unsigned int uUpperAnimHash, unsigned int uLowerAnimHash);
 
     static PblHash rttiHashIFaceSoldierAnimator;
-    static char rttiNameIFaceSoldierAnimator[];
+    static const char rttiNameIFaceSoldierAnimator[];
 
     unsigned int mLowerAnimHash;
     unsigned int mQueuedLowerAnim;

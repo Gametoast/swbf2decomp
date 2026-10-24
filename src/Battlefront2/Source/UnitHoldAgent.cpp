@@ -17,7 +17,7 @@
 // GLOBAL: SWBF2 0x01f993ec
 // UnitHoldAgent::rttiHashUnitHoldAgent
 PblHash UnitHoldAgent::rttiHashUnitHoldAgent("UnitHoldAgent");
-char UnitHoldAgent::rttiNameUnitHoldAgent[] = "UnitHoldAgent";
+const char UnitHoldAgent::rttiNameUnitHoldAgent[] = "UnitHoldAgent";
 
 // FUNCTION: SWBF2 0x00668d50
 bool UnitHoldAgent::IsRtti(unsigned int uRtti) const

@@ -34,7 +34,7 @@ public:
     GameSound mAmbientSound;
 
     static PblHash rttiHashPowerupItemClass;
-    static char rttiNamePowerupItemClass[];
+    static const char rttiNamePowerupItemClass[];
 };
   
  
@@ -88,7 +88,7 @@ public:
 
     static MemoryPool sMemoryPool;
     static PblHash rttiHashPowerupItem;
-    static char rttiNamePowerupItem[];
+    static const char rttiNamePowerupItem[];
 };
  
  

@@ -1,5 +1,5 @@
 #include <string.h>
-
+#include <new>
 #include "HUDTransformNumberColor.h"
 
 HUD::TransformNumberColor::Factory::Factory()

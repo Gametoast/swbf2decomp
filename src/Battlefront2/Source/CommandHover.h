@@ -28,7 +28,7 @@ public:
     virtual void SetProperty(unsigned int uProperty, const char* pszValue);
 
     static PblHash rttiHashCommandHoverClass;
-    static char rttiNameCommandHoverClass[];
+    static const char rttiNameCommandHoverClass[];
 };
 
    
@@ -67,7 +67,7 @@ public:
 
     static MemoryPool sMemoryPool;
     static PblHash rttiHashCommandHover;
-    static char rttiNameCommandHover[];
+    static const char rttiNameCommandHover[];
 };
  
  

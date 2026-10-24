@@ -28,7 +28,7 @@ public:
 
     // FUNCTION: SWBF2 0x0046dbf0
     static unsigned int GetRtti() { return rttiHashWeaponMeleeThrowClass; }
-    static char rttiNameWeaponMeleeThrowClass[];
+    static const char rttiNameWeaponMeleeThrowClass[];
 };
   
  
@@ -80,7 +80,7 @@ public:
     PblMatrix m_mThrow0Local;
 
     static PblHash rttiHashWeaponMeleeThrow;
-    static char rttiNameWeaponMeleeThrow[];
+    static const char rttiNameWeaponMeleeThrow[];
 };
   
  

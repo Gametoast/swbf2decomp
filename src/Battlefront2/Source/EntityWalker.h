@@ -315,7 +315,7 @@ public:
 public:
     static PblHash rttiHashEntityWalker;
     static MemoryPool sMemoryPool;
-    static char rttiNameEntityWalker[];
+    static const char rttiNameEntityWalker[];
     static StateTableEntry sStateTable[];
 
     EntityWalkerClass* mClass;
@@ -504,7 +504,7 @@ protected:
 public:
 
     static PblHash rttiHashEntityWalkerClass;
-    static char rttiNameEntityWalkerClass[];
+    static const char rttiNameEntityWalkerClass[];
 
     RedAnimation* mAnimObj[3];
     int mNumAnimObjs;

@@ -28,7 +28,7 @@ public:
     float mRayRadius;
 
     static PblHash rttiHashOrdnanceFatRayClass;
-    static char rttiNameOrdnanceFatRayClass[];
+    static const char rttiNameOrdnanceFatRayClass[];
 };
   
  
@@ -55,7 +55,7 @@ public:
     float mPush;
 
     static PblHash rttiHashOrdnanceFatRay;
-    static char rttiNameOrdnanceFatRay[];
+    static const char rttiNameOrdnanceFatRay[];
 };
  
  

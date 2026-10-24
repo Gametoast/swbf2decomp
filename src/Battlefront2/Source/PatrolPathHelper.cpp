@@ -16,12 +16,12 @@
 namespace
 {
 
-    AILowLevel& LowLevel(UnitController* pCtrl)
+    inline AILowLevel& LowLevel(UnitController* pCtrl)
     {
         return *reinterpret_cast<AILowLevel*>(pCtrl->mLowLevel);
     }
 
-    const PblVector3& Position(const PblMatrix& mat)
+    inline const PblVector3& Position(const PblMatrix& mat)
     {
         return *reinterpret_cast<const PblVector3*>(mat.m[3]);
     }

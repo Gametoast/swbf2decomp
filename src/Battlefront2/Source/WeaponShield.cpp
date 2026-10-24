@@ -53,7 +53,7 @@ PblHash WeaponShield::rttiHashWeaponShield("WeaponShield");
 // GLOBAL: SWBF2 0x01f9a918
 // WeaponShieldClass::rttiHashWeaponShieldClass
 PblHash WeaponShieldClass::rttiHashWeaponShieldClass("WeaponShieldClass");
-char WeaponShieldClass::rttiNameWeaponShieldClass[] = "WeaponShieldClass";
+const char WeaponShieldClass::rttiNameWeaponShieldClass[] = "WeaponShieldClass";
 
 // GLOBAL: SWBF2 0x009cef54
 PblVector3 gVectorZero;

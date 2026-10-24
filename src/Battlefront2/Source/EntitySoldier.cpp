@@ -124,7 +124,7 @@ static PblMatrix _IdentityMatrix(
 // GLOBAL: SWBF2 0x01ebc054
 // EntitySoldier::rttiHashEntitySoldier
 PblHash EntitySoldier::rttiHashEntitySoldier("EntitySoldier");
-char EntitySoldier::rttiNameEntitySoldier[] = "EntitySoldier";
+const char EntitySoldier::rttiNameEntitySoldier[] = "EntitySoldier";
 
 // GLOBAL: SWBF2 0x01ebc100
 // SYNTHETIC: SWBF2 0x00402d40
@@ -138,7 +138,7 @@ MemoryPool EntitySoldier::sMemoryPool("EntitySoldier", 0xfd0);
 // GLOBAL: SWBF2 0x01ebc0f8
 // EntitySoldierClass::rttiHashEntitySoldierClass
 PblHash EntitySoldierClass::rttiHashEntitySoldierClass("EntitySoldierClass");
-static char rttiNameEntitySoldierClass[] = "EntitySoldierClass";
+const char EntitySoldierClass::rttiNameEntitySoldierClass[] = "EntitySoldierClass";
 
 // GLOBAL: SWBF2 0x01ebc0a8
 // SYNTHETIC: SWBF2 0x00402db0
@@ -3732,7 +3732,7 @@ bool EntitySoldier::CanEnterVehicle(const GameObject* pObject) const
     return CanEnterVehicleInternal(pObject, false);
 }
 
-static int GetFlyerState(const GameObject* pObject)
+static inline int GetFlyerState(const GameObject* pObject)
 {
     return static_cast<const EntityFlyer*>(pObject)->mState;
 }

@@ -34,7 +34,7 @@ extern float sClientDeltaTime;
 // GLOBAL: SWBF2 0x01f9a8cc
 // WeaponGrenadeClass::rttiHashWeaponGrenadeClass
 PblHash WeaponGrenadeClass::rttiHashWeaponGrenadeClass("WeaponGrenadeClass");
-char WeaponGrenadeClass::rttiNameWeaponGrenadeClass[] = "WeaponGrenadeClass";
+const char WeaponGrenadeClass::rttiNameWeaponGrenadeClass[] = "WeaponGrenadeClass";
 
 // FUNCTION: SWBF2 0x00685770
 WeaponGrenadeClass::WeaponGrenadeClass(unsigned int uHash)
@@ -231,7 +231,7 @@ WeaponGrenade::WeaponGrenade(const WeaponGrenadeClass* pClass, const WeaponDesc&
 // GLOBAL: SWBF2 0x01f9a8d0
 // WeaponGrenade::rttiHashWeaponGrenade
 PblHash WeaponGrenade::rttiHashWeaponGrenade("WeaponGrenade");
-char WeaponGrenade::rttiNameWeaponGrenade[] = "WeaponGrenade";
+const char WeaponGrenade::rttiNameWeaponGrenade[] = "WeaponGrenade";
 
 // FUNCTION: SWBF2 0x00684f40
 bool WeaponGrenade::IsRtti(unsigned int uRtti) const

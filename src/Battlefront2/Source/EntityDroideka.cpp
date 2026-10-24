@@ -449,7 +449,7 @@ namespace
         return reinterpret_cast<EnergyBar*>(pDroideka->mEnergyBar);
     }
 
-    void DroidekaUpdateCollisionSphere(EntityDroideka* pDroideka)
+    inline void DroidekaUpdateCollisionSphere(EntityDroideka* pDroideka)
     {
         PblVector3 center;
         D3DXVec3TransformCoord(&center, &pDroideka->mModel->_mModel->_BoundingSphere.GetCenter(),
@@ -464,7 +464,7 @@ namespace
 // GLOBAL: SWBF2 0x01ebbc58
 // EntityDroideka::rttiHashEntityDroideka
 PblHash EntityDroideka::rttiHashEntityDroideka("EntityDroideka");
-char EntityDroideka::rttiNameEntityDroideka[] = "EntityDroideka";
+const char EntityDroideka::rttiNameEntityDroideka[] = "EntityDroideka";
 
 // GLOBAL: SWBF2 0x01ebbc08
 // SYNTHETIC: SWBF2 0x00402a60
@@ -760,7 +760,7 @@ EntityDroideka::PostCollision::~PostCollision()
 // GLOBAL: SWBF2 0x01ebbc5c
 // EntityDroidekaClass::rttiHashEntityDroidekaClass
 PblHash EntityDroidekaClass::rttiHashEntityDroidekaClass("EntityDroidekaClass");
-char EntityDroidekaClass::rttiNameEntityDroidekaClass[] = "EntityDroidekaClass";
+const char EntityDroidekaClass::rttiNameEntityDroidekaClass[] = "EntityDroidekaClass";
 
 // FUNCTION: SWBF2 0x0049ea00
 bool EntityDroidekaClass::IsRtti(unsigned int uRtti)

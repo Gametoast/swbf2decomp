@@ -68,7 +68,7 @@ namespace
     const PblHash kRttiHashWeaponMelee("WeaponMelee");
     const PblHash kRttiHashMountedTurret("MountedTurret");
 
-    const GameObject* HandleObject(PblHandle<const GameObject>& handle)
+    inline const GameObject* HandleObject(PblHandle<const GameObject>& handle)
     {
         if (handle.mObject &&
             handle.mObject->mHandleId != handle.mSavedHandleId)
@@ -85,12 +85,12 @@ namespace
         handle.mSavedHandleId = pObj ? pObj->mHandleId : 0;
     }
 
-    const PblVector3& GetPosition(const GameObject* pObj)
+    inline const PblVector3& GetPosition(const GameObject* pObj)
     {
         return static_cast<const CollisionObject*>(pObj)->GetPosition();
     }
 
-    bool WeaponIsRtti(Weapon* pWpn, unsigned int uRtti)
+    inline bool WeaponIsRtti(Weapon* pWpn, unsigned int uRtti)
     {
         return pWpn->IsRtti(uRtti);
     }
@@ -105,7 +105,7 @@ namespace
     float GetCurShield(const Damageable* pDamageable) { return pDamageable->mCurShield; }
     float GetMaxShield(const Damageable* pDamageable) { return pDamageable->mMaxShield; }
 
-    float DotXZ(const PblVector3& vTarget, const PblVector3& vFacing)
+    inline float DotXZ(const PblVector3& vTarget, const PblVector3& vFacing)
     {
         PblVector3 a, b, vFacingXZ = vFacing, vTargetXZ = vTarget;
         vTargetXZ.y = 0.0f;

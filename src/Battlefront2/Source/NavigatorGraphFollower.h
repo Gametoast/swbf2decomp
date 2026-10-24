@@ -20,7 +20,7 @@ public:
     };
 
     static PblHash rttiHashNavigatorGraphFollower;
-    static char rttiNameNavigatorGraphFollower[];
+    static const char rttiNameNavigatorGraphFollower[];
 
     NavigatorGraphFollower(AILowLevel* pOwner, const PblVector3& globalDest,
                            const Obstacle** ppIgnore, int iIgnoreCnt,

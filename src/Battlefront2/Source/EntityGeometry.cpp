@@ -34,14 +34,14 @@
 // GLOBAL: SWBF2 0x01ebbcbc
 // EntityGeometryClass::rttiHashEntityGeometryClass
 PblHash EntityGeometryClass::rttiHashEntityGeometryClass("EntityGeometryClass");
-char EntityGeometryClass::rttiNameEntityGeometryClass[] = "EntityGeometryClass";
+const char EntityGeometryClass::rttiNameEntityGeometryClass[] = "EntityGeometryClass";
 
 // SYNTHETIC: SWBF2 0x00402b20
 // `dynamic initializer for 'EntityGeometry::rttiHashEntityGeometry''
 // GLOBAL: SWBF2 0x01ebbcc0
 // EntityGeometry::rttiHashEntityGeometry
 PblHash EntityGeometry::rttiHashEntityGeometry("EntityGeometry");
-char EntityGeometry::rttiNameEntityGeometry[] = "EntityGeometry";
+const char EntityGeometry::rttiNameEntityGeometry[] = "EntityGeometry";
 
 // FUNCTION: SWBF2 0x004440d0
 bool EntityGeometry::IsRtti(unsigned int uRtti) const

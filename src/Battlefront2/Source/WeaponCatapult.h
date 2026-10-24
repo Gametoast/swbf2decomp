@@ -16,7 +16,7 @@ public:
     virtual ~WeaponCatapultClass();
 
     static PblHash rttiHashWeaponCatapultClass;
-    static char rttiNameWeaponCatapultClass[];
+    static const char rttiNameWeaponCatapultClass[];
 
     virtual WeaponClass* Derive(unsigned int uHash);
     virtual Weapon* Build(const WeaponDesc& desc);
@@ -68,7 +68,7 @@ protected:
 
 public:
     static PblHash rttiHashWeaponCatapult;
-    static char rttiNameWeaponCatapult[];
+    static const char rttiNameWeaponCatapult[];
 
     PblMatrix mArmPoseMatrix;
     WeaponCatapultClass* mCatapultClass;

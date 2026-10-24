@@ -127,12 +127,12 @@ namespace
         SOLDIER_PILOT = 3
     };
 
-    const PblVector3& GetTrans(const PblMatrix& m)
+    inline const PblVector3& GetTrans(const PblMatrix& m)
     {
         return *reinterpret_cast<const PblVector3*>(&m.m[3][0]);
     }
 
-    int GetTeam(const GameObject* pObj)
+    inline int GetTeam(const GameObject* pObj)
     {
     return pObj->GetTeam();
     }
@@ -142,7 +142,7 @@ namespace
         return pObj->mHandleId;
     }
 
-    GameObject* ResolveHandle(PblHandle<GameObject>& handle)
+    inline GameObject* ResolveHandle(PblHandle<GameObject>& handle)
     {
         GameObject* pObj = handle.mObject;
         if (pObj)
@@ -157,7 +157,7 @@ namespace
         return 0;
     }
 
-    PblHandle<const GameObject> MakeHandle(const GameObject* pObj)
+    inline PblHandle<const GameObject> MakeHandle(const GameObject* pObj)
     {
         PblHandle<const GameObject> handle;
         handle.mObject = pObj;
@@ -165,27 +165,27 @@ namespace
         return handle;
     }
 
-    const Entity* AsEntity(const GameObject* pObj)
+    inline const Entity* AsEntity(const GameObject* pObj)
     {
         return reinterpret_cast<const Entity*>(pObj);
     }
 
-    Entity* AsEntity(GameObject* pObj)
+    inline Entity* AsEntity(GameObject* pObj)
     {
         return reinterpret_cast<Entity*>(pObj);
     }
 
-    const CollisionObject* GetCollisionObject(const GameObject* pObj)
+    inline const CollisionObject* GetCollisionObject(const GameObject* pObj)
     {
         return static_cast<const CollisionObject*>(pObj);
     }
 
-    float GetMaxSpeed(const GameObject* pObj)
+    inline float GetMaxSpeed(const GameObject* pObj)
     {
         return pObj->GetMaxSpeed();
     }
 
-    const Controllable* GetControllable(const GameObject* pObj)
+    inline const Controllable* GetControllable(const GameObject* pObj)
     {
         return pObj->GetControllable();
     }
@@ -227,7 +227,7 @@ namespace
         return static_cast<const EntitySoldier*>(pEntity)->mAcklayData;
     }
 
-    const AttackHelper& GetAttackHelper(const UnitAgent* pAgent)
+    inline const AttackHelper& GetAttackHelper(const UnitAgent* pAgent)
     {
         return *reinterpret_cast<const AttackHelper*>(pAgent->mAttackHelper);
     }
@@ -238,7 +238,7 @@ namespace
 // GLOBAL: SWBF2 0x01f7d0dc
 // UnitAgent::rttiHashUnitAgent
 PblHash UnitAgent::rttiHashUnitAgent("UnitAgent");
-char UnitAgent::rttiNameUnitAgent[] = "UnitAgent";
+const char UnitAgent::rttiNameUnitAgent[] = "UnitAgent";
 
 // GLOBAL: SWBF2 0x01f9a1a8
 // SYNTHETIC: SWBF2 0x00406c00

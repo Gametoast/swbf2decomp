@@ -79,7 +79,7 @@ public:
     float mRenderDt;
 
     static PblHash rttiHashEntityCloth;
-    static char rttiNameEntityCloth[];
+    static const char rttiNameEntityCloth[];
 
     static MemoryPool sMemoryPool;
 
@@ -251,7 +251,7 @@ public:
     unsigned int m_uiTransparent : 1;
 
     static PblHash rttiHashEntityClothClass;
-    static char rttiNameEntityClothClass[];
+    static const char rttiNameEntityClothClass[];
 };
   
  

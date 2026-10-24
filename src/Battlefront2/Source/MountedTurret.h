@@ -72,7 +72,7 @@ public:
     int mFirstPersonModelHandle;
 
     static PblHash rttiHashMountedTurretClass;
-    static char rttiNameMountedTurretClass[];
+    static const char rttiNameMountedTurretClass[];
 };
  
  
@@ -201,7 +201,7 @@ public:
     int mInterpIndex;
 
     static PblHash rttiHashMountedTurret;
-    static char rttiNameMountedTurret[];
+    static const char rttiNameMountedTurret[];
     static MemoryPool sMemoryPool;
 };
  

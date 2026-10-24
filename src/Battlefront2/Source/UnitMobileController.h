@@ -13,7 +13,7 @@ public:
     virtual const char* GetDerivedRttiName() const;
 
     static PblHash rttiHashUnitMobileController;
-    static char rttiNameUnitMobileController[];
+    static const char rttiNameUnitMobileController[];
 
 protected:
 

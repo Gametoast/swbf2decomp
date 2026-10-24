@@ -9,14 +9,14 @@
 // GLOBAL: SWBF2 0x01ef2660
 // OrdnanceShell::rttiHashOrdnanceShell
 PblHash OrdnanceShell::rttiHashOrdnanceShell("OrdnanceShell");
-char OrdnanceShell::rttiNameOrdnanceShell[] = "OrdnanceShell";
+const char OrdnanceShell::rttiNameOrdnanceShell[] = "OrdnanceShell";
 
 // SYNTHETIC: SWBF2 0x00405b70
 // `dynamic initializer for 'OrdnanceShellClass::rttiHashOrdnanceShellClass''
 // GLOBAL: SWBF2 0x01ef2664
 // OrdnanceShellClass::rttiHashOrdnanceShellClass
 PblHash OrdnanceShellClass::rttiHashOrdnanceShellClass("OrdnanceShellClass");
-char OrdnanceShellClass::rttiNameOrdnanceShellClass[] = "OrdnanceShellClass";
+const char OrdnanceShellClass::rttiNameOrdnanceShellClass[] = "OrdnanceShellClass";
 
 // FUNCTION: SWBF2 0x00605d40
 OrdnanceShellClass::OrdnanceShellClass(unsigned int uHash)

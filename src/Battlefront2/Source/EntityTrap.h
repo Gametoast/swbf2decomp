@@ -38,7 +38,7 @@ public:
     bool SetupAnimation(ZephyrPoseDyn<64>& kPose, const ZephyrAnim* pAnim, float fTime);
 
     static PblHash rttiHashEntityTrapClass;
-    static char rttiNameEntityTrapClass[];
+    static const char rttiNameEntityTrapClass[];
 
     ZephyrAnim* mAnimBuildTrap;
     PblMatrix mBuildOffset;
@@ -118,7 +118,7 @@ public:
     virtual GameObject* AddToClient();
 
     static PblHash rttiHashEntityTrap;
-    static char rttiNameEntityTrap[];
+    static const char rttiNameEntityTrap[];
 
     float mAnimationTime;
     EntityTrapClass* mTrapClass;

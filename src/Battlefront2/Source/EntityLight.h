@@ -79,7 +79,7 @@ public:
     EntityLightClass* _lightClass;
 
     static PblHash rttiHashEntityLight;
-    static char rttiNameEntityLight[];
+    static const char rttiNameEntityLight[];
     static MemoryPool sMemoryPool;
 };
  
@@ -149,7 +149,7 @@ public:
 
     static unsigned int GetRtti() { return rttiHashEntityLightClass; }
     static PblHash rttiHashEntityLightClass;
-    static char rttiNameEntityLightClass[];
+    static const char rttiNameEntityLightClass[];
 
     static int sLightClassTableNumEntries;
 

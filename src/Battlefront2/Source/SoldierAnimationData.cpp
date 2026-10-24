@@ -1,6 +1,6 @@
 #include <stdlib.h>
 #include <string.h>
-
+#include <new>
 #include "SoldierAnimationData.h"
 #include "PebbleFL/Common/PblConfig.h"
 #include "PebbleFL/Common/PblUnicode.h"

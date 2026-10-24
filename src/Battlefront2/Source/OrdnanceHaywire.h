@@ -21,7 +21,7 @@ public:
     float mDisableTime;
 
     static PblHash rttiHashOrdnanceHaywireClass;
-    static char rttiNameOrdnanceHaywireClass[];
+    static const char rttiNameOrdnanceHaywireClass[];
 };
   
  
@@ -38,6 +38,6 @@ public:
     virtual const char* GetDerivedRttiName() const;
 
     static PblHash rttiHashOrdnanceHaywire;
-    static char rttiNameOrdnanceHaywire[];
+    static const char rttiNameOrdnanceHaywire[];
 };
  

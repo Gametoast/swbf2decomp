@@ -24,7 +24,7 @@ public:
     GameSound mImpact;
 
     static PblHash rttiHashFoleyFXImpact;
-    static char rttiNameFoleyFXImpact[];
+    static const char rttiNameFoleyFXImpact[];
     static Snd::FreeList smFreeList;
 };
  

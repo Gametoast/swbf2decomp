@@ -32,7 +32,7 @@ public:
     float mRandTime;
 
     static PblHash rttiHashUnitRandomAgent;
-    static char rttiNameUnitRandomAgent[];
+    static const char rttiNameUnitRandomAgent[];
 };
  
  

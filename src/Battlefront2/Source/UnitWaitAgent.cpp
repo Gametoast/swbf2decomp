@@ -14,7 +14,7 @@
 // GLOBAL: SWBF2 0x01f9a258
 // UnitWaitAgent::rttiHashUnitWaitAgent
 PblHash UnitWaitAgent::rttiHashUnitWaitAgent("UnitWaitAgent");
-char UnitWaitAgent::rttiNameUnitWaitAgent[] = "UnitWaitAgent";
+const char UnitWaitAgent::rttiNameUnitWaitAgent[] = "UnitWaitAgent";
 
 // FUNCTION: SWBF2 0x0066b330
 bool UnitWaitAgent::IsRtti(unsigned int uRtti) const

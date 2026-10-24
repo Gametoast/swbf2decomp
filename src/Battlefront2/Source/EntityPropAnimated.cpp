@@ -63,14 +63,14 @@ static PblMatrix _IdentityMatrix(
 // GLOBAL: SWBF2 0x01ebc044
 // EntityPropAnimatedClass::rttiHashEntityPropAnimatedClass
 PblHash EntityPropAnimatedClass::rttiHashEntityPropAnimatedClass("EntityPropAnimatedClass");
-char EntityPropAnimatedClass::rttiNameEntityPropAnimatedClass[] = "EntityPropAnimatedClass";
+const char EntityPropAnimatedClass::rttiNameEntityPropAnimatedClass[] = "EntityPropAnimatedClass";
 
 // SYNTHETIC: SWBF2 0x00402ce0
 // `dynamic initializer for 'EntityPropAnimated::rttiHashEntityPropAnimated''
 // GLOBAL: SWBF2 0x01ebc048
 // EntityPropAnimated::rttiHashEntityPropAnimated
 PblHash EntityPropAnimated::rttiHashEntityPropAnimated("EntityPropAnimated");
-char EntityPropAnimated::rttiNameEntityPropAnimated[] = "EntityPropAnimated";
+const char EntityPropAnimated::rttiNameEntityPropAnimated[] = "EntityPropAnimated";
 
 // FUNCTION: SWBF2 0x004db3c0
 EntityPropAnimated::EntityPropAnimated(EntityPropAnimatedClass* pClass, const EntityDesc& desc)

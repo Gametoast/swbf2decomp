@@ -6,7 +6,7 @@
 // GLOBAL: SWBF2 0x01ebbc60
 // EntityEffectClass::rttiHashEntityEffectClass
 PblHash EntityEffectClass::rttiHashEntityEffectClass("EntityEffectClass");
-char EntityEffectClass::rttiNameEntityEffectClass[] = "EntityEffectClass";
+const char EntityEffectClass::rttiNameEntityEffectClass[] = "EntityEffectClass";
 
 // FUNCTION: SWBF2 0x004a9a00
 EntityEffectClass::EntityEffectClass(unsigned int uHash)

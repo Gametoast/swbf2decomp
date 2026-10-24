@@ -728,7 +728,7 @@ void LoadUtil::ProcessRegion(PblFileChunk& chunk)
 
 bool __cdecl IsCoverHintFilteringEnabled();
 
-void* BaseHint::operator new(unsigned int uSize)
+inline void* BaseHint::operator new(unsigned int uSize)
 {
     return sMemoryPool.Allocate(uSize);
 }

@@ -37,7 +37,7 @@ public:
     PblVector3 mLastSeekPos;
 
     static PblHash rttiHashUnitDestroyAgent;
-    static char rttiNameUnitDestroyAgent[];
+    static const char rttiNameUnitDestroyAgent[];
 };
 
  

@@ -32,7 +32,7 @@ public:
     static MemoryPool sMemoryPool;
 
     static PblHash rttiHashPlayerController;
-    static char rttiNamePlayerController[];
+    static const char rttiNamePlayerController[];
 
 protected:
     void DeployCargo();

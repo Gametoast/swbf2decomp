@@ -39,20 +39,20 @@ public:
     static bool ParseLineLocal(unsigned short* pusLine, bool bConsole);
 };
 
-void __fastcall MD5Transform(unsigned int* pState, const unsigned char* pBlock);
-void __fastcall MD5EncodeWords(void* pDest, const void* pSource, unsigned int uLength);
-void __fastcall MD5DecodeWords(unsigned int* pWords, const unsigned char* pBlock);
-void* __fastcall MD5CopyBytes(void* pDest, const void* pSource, unsigned int uLength);
-void* __fastcall MD5ClearBytes(void* pDest, unsigned int uLength);
-void __fastcall MD5Update(unsigned int* pState, const unsigned char* pData, unsigned int uLength);
-void __fastcall MD5Print(const unsigned char* pDigest, char* pcHex);
+void __cdecl MD5Transform(unsigned int* pState, const unsigned char* pBlock);
+void __cdecl MD5EncodeWords(void* pDest, const void* pSource, unsigned int uLength);
+void __cdecl MD5DecodeWords(unsigned int* pWords, const unsigned char* pBlock);
+void* __cdecl MD5CopyBytes(void* pDest, const void* pSource, unsigned int uLength);
+void* __cdecl MD5ClearBytes(void* pDest, unsigned int uLength);
+void __cdecl MD5Update(unsigned int* pState, const unsigned char* pData, unsigned int uLength);
+void __cdecl MD5Print(const unsigned char* pDigest, char* pcHex);
 extern char adminPlayerIdText[32];
 
 // GLOBAL: SWBF2 0x007e88d0
 unsigned char md5Padding[64] = { 0x80 };
 
 // FUNCTION: SWBF2 0x005a2730
-void __fastcall MD5Init(unsigned int* pState)
+void __cdecl MD5Init(unsigned int* pState)
 {
     pState[4] = pState[5] = 0;
     pState[0] = 0x67452301;
@@ -62,7 +62,7 @@ void __fastcall MD5Init(unsigned int* pState)
 }
 
 // FUNCTION: SWBF2 0x005a2760
-void __fastcall MD5Update(unsigned int* pState, const unsigned char* pData, unsigned int uLength)
+void __cdecl MD5Update(unsigned int* pState, const unsigned char* pData, unsigned int uLength)
 {
     unsigned int uIndex = (pState[4] >> 3) & 63;
     unsigned int uBits = uLength << 3;
@@ -88,7 +88,7 @@ void __fastcall MD5Update(unsigned int* pState, const unsigned char* pData, unsi
 }
 
 // FUNCTION: SWBF2 0x005a2810
-void __fastcall MD5Final(unsigned char* pDigest, unsigned int* pState)
+void __cdecl MD5Final(unsigned char* pDigest, unsigned int* pState)
 {
     unsigned char aucBits[8];
     MD5EncodeWords(aucBits, pState + 4, 8);
@@ -107,7 +107,7 @@ void __fastcall MD5Final(unsigned char* pDigest, unsigned int* pState)
 #define MD5_STEP(f, a, b, c, d, x, s, ac) { (a) += f((b), (c), (d)) + (x) + (unsigned int)(ac); (a) = MD5_ROL((a), (s)); (a) += (b); }
 
 // FUNCTION: SWBF2 0x005a2880
-void __fastcall MD5Transform(unsigned int* pState, const unsigned char* pBlock)
+void __cdecl MD5Transform(unsigned int* pState, const unsigned char* pBlock)
 {
     unsigned int a = pState[0], b = pState[1], c = pState[2], d = pState[3];
     unsigned int x[16];
@@ -156,7 +156,7 @@ void __fastcall MD5Transform(unsigned int* pState, const unsigned char* pBlock)
 }
 
 // FUNCTION: SWBF2 0x005a2f40
-void __fastcall MD5EncodeWords(void* pDest, const void* pSource, unsigned int uLength)
+void __cdecl MD5EncodeWords(void* pDest, const void* pSource, unsigned int uLength)
 {
     unsigned char* pOut = (unsigned char*)pDest;
     const unsigned char* pIn = (const unsigned char*)pSource;
@@ -170,7 +170,7 @@ void __fastcall MD5EncodeWords(void* pDest, const void* pSource, unsigned int uL
 }
 
 // FUNCTION: SWBF2 0x005a2f90
-void __fastcall MD5DecodeWords(unsigned int* pWords, const unsigned char* pBlock)
+void __cdecl MD5DecodeWords(unsigned int* pWords, const unsigned char* pBlock)
 {
     for (int i = 0; i < 16; ++i)
     {
@@ -182,19 +182,19 @@ void __fastcall MD5DecodeWords(unsigned int* pWords, const unsigned char* pBlock
 }
 
 // FUNCTION: SWBF2 0x005a2fd0
-void* __fastcall MD5CopyBytes(void* pDest, const void* pSource, unsigned int uLength)
+void* __cdecl MD5CopyBytes(void* pDest, const void* pSource, unsigned int uLength)
 {
     return memcpy(pDest, pSource, uLength);
 }
 
 // FUNCTION: SWBF2 0x005a2ff0
-void* __fastcall MD5ClearBytes(void* pDest, unsigned int uLength)
+void* __cdecl MD5ClearBytes(void* pDest, unsigned int uLength)
 {
     return memset(pDest, 0, uLength);
 }
 
 // FUNCTION: SWBF2 0x005a3010
-void __fastcall MD5Print(const unsigned char* pDigest, char* pcHex)
+void __cdecl MD5Print(const unsigned char* pDigest, char* pcHex)
 {
     for (int i = 0; i < 16; ++i)
     {
@@ -716,7 +716,7 @@ const char* __fastcall GetMissionModeCode(const char* pcMission)
 extern int netCurMaxPlayers;
 
 // FUNCTION: SWBF2 0x005aef60
-void __fastcall CountConnectedTeams(int* piTeam1, int* piTeam2, int* piWaiting)
+void __cdecl CountConnectedTeams(int* piTeam1, int* piTeam2, int* piWaiting)
 {
     *piWaiting = 0;
     *piTeam2 = 0;

@@ -24,7 +24,7 @@ PblHash CommandWalker::rttiHashCommandWalker("CommandWalker");
 // GLOBAL: SWBF2 0x01eb96fc
 // CommandWalkerClass::rttiHashCommandWalkerClass
 PblHash CommandWalkerClass::rttiHashCommandWalkerClass("CommandWalkerClass");
-char CommandWalkerClass::rttiNameCommandWalkerClass[] = "CommandWalkerClass";
+const char CommandWalkerClass::rttiNameCommandWalkerClass[] = "CommandWalkerClass";
 
 // FUNCTION: SWBF2 0x00480080
 CommandWalkerClass::CommandWalkerClass(unsigned int uHash)

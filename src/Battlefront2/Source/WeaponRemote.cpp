@@ -12,14 +12,14 @@
 // GLOBAL: SWBF2 0x01f9a904
 // WeaponRemoteClass::rttiHashWeaponRemoteClass
 PblHash WeaponRemoteClass::rttiHashWeaponRemoteClass("WeaponRemoteClass");
-char WeaponRemoteClass::rttiNameWeaponRemoteClass[] = "WeaponRemoteClass";
+const char WeaponRemoteClass::rttiNameWeaponRemoteClass[] = "WeaponRemoteClass";
 
 // SYNTHETIC: SWBF2 0x00407260
 // `dynamic initializer for 'WeaponRemote::rttiHashWeaponRemote''
 // GLOBAL: SWBF2 0x01f9a908
 // WeaponRemote::rttiHashWeaponRemote
 PblHash WeaponRemote::rttiHashWeaponRemote("WeaponRemote");
-char WeaponRemote::rttiNameWeaponRemote[] = "WeaponRemote";
+const char WeaponRemote::rttiNameWeaponRemote[] = "WeaponRemote";
 
 // FUNCTION: SWBF2 0x0068ff10
 bool WeaponRemoteClass::IsRtti(unsigned int uRtti)

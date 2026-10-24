@@ -9,7 +9,11 @@ class Node : public PblRef
 {
 public:
 
-    virtual ~Node();
+    virtual ~Node()
+    {
+        Clear();
+        DetachFromParent();
+    }
 
     virtual const char* GetName();
 

@@ -40,8 +40,9 @@ inline bool IsAlive(const GameObject* pObject)
 // GLOBAL: SWBF2 0x01ec0bd8
 // SYNTHETIC: SWBF2 0x00403b50
 // `dynamic initializer for 'AI::FollowGoal::rttiHashFollowGoal''
+
 PblHash AI::FollowGoal::rttiHashFollowGoal("FollowGoal");
-char AI::FollowGoal::rttiNameFollowGoal[] = "FollowGoal";
+const char AI::FollowGoal::rttiNameFollowGoal[] = "FollowGoal";
 
 // FUNCTION: SWBF2 0x0052d1c0
 bool AI::FollowGoal::IsRtti(unsigned int uRtti) const

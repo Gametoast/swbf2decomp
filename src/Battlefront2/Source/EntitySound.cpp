@@ -29,14 +29,14 @@ public:
 // GLOBAL: SWBF2 0x01ebc1a0
 // EntitySound::rttiHashEntitySound
 PblHash EntitySound::rttiHashEntitySound("EntitySound");
-char EntitySound::rttiNameEntitySound[] = "EntitySound";
+const char EntitySound::rttiNameEntitySound[] = "EntitySound";
 
 // SYNTHETIC: SWBF2 0x00402df0
 // `dynamic initializer for 'EntitySoundClass::rttiHashEntitySoundClass''
 // GLOBAL: SWBF2 0x01ebc0fc
 // EntitySoundClass::rttiHashEntitySoundClass
 PblHash EntitySoundClass::rttiHashEntitySoundClass("EntitySoundClass");
-char EntitySoundClass::rttiNameEntitySoundClass[] = "EntitySoundClass";
+const char EntitySoundClass::rttiNameEntitySoundClass[] = "EntitySoundClass";
 
 // GLOBAL: SWBF2 0x01ebc150
 // SYNTHETIC: SWBF2 0x00402e00

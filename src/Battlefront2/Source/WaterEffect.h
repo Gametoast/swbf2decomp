@@ -61,3 +61,8 @@ private:
  
  
  
+
+// FUNCTION: SWBF2 0x00677080
+inline WaterEffect::~WaterEffect()
+{
+}

@@ -24,7 +24,7 @@ public:
     virtual void SetProperty(unsigned int uProperty, const char* pszValue);
 
     static PblHash rttiHashEntityItemClass;
-    static char rttiNameEntityItemClass[];
+    static const char rttiNameEntityItemClass[];
 
     float mLifeSpan;
     bool mNoLifeSpanDisplay : 1;
@@ -108,7 +108,7 @@ public:
     PblHandle<FLEffectObject> mTrailEmitterObj;
 
     static PblHash rttiHashEntityItem;
-    static char rttiNameEntityItem[];
+    static const char rttiNameEntityItem[];
 };
  
  

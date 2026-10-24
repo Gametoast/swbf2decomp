@@ -45,7 +45,7 @@ float UnitCTFOffenseAgent::GetUpdateRate() const
 // GLOBAL: SWBF2 0x01f99388
 // UnitCTFOffenseAgent::rttiHashUnitCTFOffenseAgent
 PblHash UnitCTFOffenseAgent::rttiHashUnitCTFOffenseAgent("UnitCTFOffenseAgent");
-char UnitCTFOffenseAgent::rttiNameUnitCTFOffenseAgent[] = "UnitCTFOffenseAgent";
+const char UnitCTFOffenseAgent::rttiNameUnitCTFOffenseAgent[] = "UnitCTFOffenseAgent";
 
 // FUNCTION: SWBF2 0x00664730
 UnitCTFOffenseAgent::UnitCTFOffenseAgent(UnitController* pCtrl, const FlagItem* pFlag, const PblVector3& vPos)
@@ -146,7 +146,7 @@ namespace
         return 0;
     }
 
-    const CollisionObject* GetCollisionObject(const GameObject* pObject)
+    inline const CollisionObject* GetCollisionObject(const GameObject* pObject)
     {
         return static_cast<const CollisionObject*>(pObject);
     }
@@ -253,7 +253,7 @@ void UnitCTFOffenseAgent::ExitState()
 namespace
 {
 
-    Character* FlagCarrier(const GameObject* pFlag)
+    inline Character* FlagCarrier(const GameObject* pFlag)
     {
         return static_cast<const EntityItem*>(pFlag)->mOwner;
     }

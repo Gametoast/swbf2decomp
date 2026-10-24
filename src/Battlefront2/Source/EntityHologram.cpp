@@ -52,7 +52,7 @@ static PblMatrix _IdentityMatrix(
     PblVector4{ 0.0f, 0.0f, 0.0f, 1.0f });
 
 // FUNCTION: SWBF2 0x004bd820
-const RedColor Interpolate(const RedColor& a, const RedColor& b, float t)
+inline const RedColor Interpolate(const RedColor& a, const RedColor& b, float t)
 {
     RedColor result;
     result.b = (unsigned char)(int)(a.b * (1.0f - t) + b.b * t + 0.5f);
@@ -110,14 +110,14 @@ inline RedColorValue ToColorValue(const RedColor& c)
 // GLOBAL: SWBF2 0x01ebbcc4
 // EntityHologram::rttiHashEntityHologram
 PblHash EntityHologram::rttiHashEntityHologram("EntityHologram");
-char EntityHologram::rttiNameEntityHologram[] = "EntityHologram";
+const char EntityHologram::rttiNameEntityHologram[] = "EntityHologram";
 
 // SYNTHETIC: SWBF2 0x00402b50
 // `dynamic initializer for 'EntityHologramClass::rttiHashEntityHologramClass''
 // GLOBAL: SWBF2 0x01ebbdcc
 // EntityHologramClass::rttiHashEntityHologramClass
 PblHash EntityHologramClass::rttiHashEntityHologramClass("EntityHologramClass");
-char EntityHologramClass::rttiNameEntityHologramClass[] = "EntityHologramClass";
+const char EntityHologramClass::rttiNameEntityHologramClass[] = "EntityHologramClass";
 
 // SYNTHETIC: SWBF2 0x0042cf30
 // PblHandled::`scalar deleting destructor'
@@ -155,22 +155,7 @@ void LightBeam::SetDirection(const PblVector3& vDir)
     _vDirection = vDir;
 }
 
-// FUNCTION: SWBF2 0x004bdec0
-void LightBeam::SetHeadTailPosition(const PblVector3& vHead, const PblVector3& vTail)
-{
-    PblVector3 vDelta(vTail.x - vHead.x, vTail.y - vHead.y, vTail.z - vHead.z);
-    SetHeadPosition(vHead);
-    SetLength(sqrtf(vDelta.x * vDelta.x + vDelta.y * vDelta.y + vDelta.z * vDelta.z));
-    if (_fLength > 0.0f)
-    {
-        float fInv = 1.0f / _fLength;
-        SetDirection(PblVector3(vDelta.x * fInv, vDelta.y * fInv, vDelta.z * fInv));
-    }
-    else
-    {
-        SetDirection(PblVector3(0.0f, 0.0f, 1.0f));
-    }
-}
+
 
 // FUNCTION: SWBF2 0x004bdfc0
 void LightBeam::SetPositionOmni(const PblVector3& vPos)
@@ -245,11 +230,6 @@ void LightBeam::RemoveFromRenderList()
 {
 }
 
-// FUNCTION: SWBF2 0x004bdd90
-LightBeam::~LightBeam()
-{
-    DeactivateEffect();
-}
 
 // SYNTHETIC: SWBF2 0x004c08ea
 // [thunk]:LightBeam::`scalar deleting destructor' adjustor{40}

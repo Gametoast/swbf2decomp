@@ -93,7 +93,7 @@ static float GetInvisibility(const GameObject* pObject)
 // GLOBAL: SWBF2 0x01ef7f4c
 // PlayerController::rttiHashPlayerController
 PblHash PlayerController::rttiHashPlayerController("PlayerController");
-char PlayerController::rttiNamePlayerController[] = "PlayerController";
+const char PlayerController::rttiNamePlayerController[] = "PlayerController";
 
 // GLOBAL: SWBF2 0x01ef7f50
 // SYNTHETIC: SWBF2 0x00405f10

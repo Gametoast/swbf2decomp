@@ -10,7 +10,7 @@
 // GLOBAL: SWBF2 0x01f993b4
 // UnitDefendAgent::rttiHashUnitDefendAgent
 PblHash UnitDefendAgent::rttiHashUnitDefendAgent("UnitDefendAgent");
-char UnitDefendAgent::rttiNameUnitDefendAgent[] = "UnitDefendAgent";
+const char UnitDefendAgent::rttiNameUnitDefendAgent[] = "UnitDefendAgent";
 
 // FUNCTION: SWBF2 0x00665b60
 bool UnitDefendAgent::IsRtti(unsigned int uRtti) const

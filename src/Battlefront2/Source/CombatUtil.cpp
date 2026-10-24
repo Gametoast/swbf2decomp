@@ -88,7 +88,7 @@ namespace
     const PblHash kRttiHashOrdnanceHaywireClass("OrdnanceHaywireClass");
     const PblHash kRttiHashOrdnanceShellClass("OrdnanceShellClass");
 
-    const WeaponClass* WeaponGetClass(const Weapon* pWpn)
+    inline const WeaponClass* WeaponGetClass(const Weapon* pWpn)
     {
         return pWpn->mClass;
     }
@@ -113,7 +113,7 @@ namespace
         return pWpn->mState;
     }
 
-    const GameObject* HandleObject(const PblHandle<GameObject>& handle)
+    inline const GameObject* HandleObject(const PblHandle<GameObject>& handle)
     {
         PblHandle<GameObject>& h = const_cast<PblHandle<GameObject>&>(handle);
         if (h.mObject && h.mObject->mHandleId != h.mSavedHandleId)
@@ -124,42 +124,42 @@ namespace
         return h.mObject;
     }
 
-    const PblVector3& GetPosition(const GameObject* pObj)
+    inline const PblVector3& GetPosition(const GameObject* pObj)
     {
         return static_cast<const CollisionObject*>(pObj)->GetPosition();
     }
 
-    int GetHealthType(const GameObject* pObj)
+    inline int GetHealthType(const GameObject* pObj)
     {
         return pObj->mHealthType;
     }
 
-    int GetTeam(const GameObject* pObj)
+    inline int GetTeam(const GameObject* pObj)
     {
         return pObj->mTeam;
     }
 
-    EntityClass* GetEntityClass(GameObject* pObj)
+    inline EntityClass* GetEntityClass(GameObject* pObj)
     {
         return pObj->GetEntityClass();
     }
 
-    float GetMaxSpeed(const GameObject* pObj)
+    inline float GetMaxSpeed(const GameObject* pObj)
     {
         return pObj->GetMaxSpeed();
     }
 
-    Controllable* GetControllable(GameObject* pObj)
+    inline Controllable* GetControllable(GameObject* pObj)
     {
         return pObj->GetControllable();
     }
 
-    const Controllable* GetControllable(const GameObject* pObj)
+    inline const Controllable* GetControllable(const GameObject* pObj)
     {
         return pObj->GetControllable();
     }
 
-    const PblVector3& GetVelocity(const GameObject* pObj)
+    inline const PblVector3& GetVelocity(const GameObject* pObj)
     {
         return pObj->GetVelocity();
     }
@@ -170,7 +170,7 @@ namespace
         return pObj->GetTargetPoint(vFrom, vDir, iBodyId);
     }
 
-    const Damageable* GetDamageable(const GameObject* pObj)
+    inline const Damageable* GetDamageable(const GameObject* pObj)
     {
         return static_cast<const Damageable*>(pObj);
     }
@@ -180,22 +180,22 @@ namespace
         return pObj->mIsTargetable;
     }
 
-    int GetFlyerState(const GameObject* pObj)
+    inline int GetFlyerState(const GameObject* pObj)
     {
         return static_cast<const EntityFlyer*>(pObj)->mState;
     }
 
-    bool EntityIsRtti(const GameObject* pObj, unsigned int uRtti)
+    inline bool EntityIsRtti(const GameObject* pObj, unsigned int uRtti)
     {
         return pObj->GetEntity()->IsRtti(uRtti);
     }
 
-    float LengthSq(const PblVector3& v)
+    inline float LengthSq(const PblVector3& v)
     {
         return v.x * v.x + v.y * v.y + v.z * v.z;
     }
 
-    float Distance(const PblVector3& v0, const PblVector3& v1)
+    inline float Distance(const PblVector3& v0, const PblVector3& v1)
     {
         float dx = v1.x - v0.x;
         float dy = v1.y - v0.y;

@@ -43,7 +43,7 @@ public:
     bool mTightFollowMode;
 
     static PblHash rttiHashUnitFollowAgent;
-    static char rttiNameUnitFollowAgent[];
+    static const char rttiNameUnitFollowAgent[];
 };
 
  

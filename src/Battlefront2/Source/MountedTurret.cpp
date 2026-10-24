@@ -200,14 +200,14 @@ public:
 // GLOBAL: SWBF2 0x01ecb150
 // MountedTurret::rttiHashMountedTurret
 PblHash MountedTurret::rttiHashMountedTurret("MountedTurret");
-char MountedTurret::rttiNameMountedTurret[] = "MountedTurret";
+const char MountedTurret::rttiNameMountedTurret[] = "MountedTurret";
 
 // SYNTHETIC: SWBF2 0x00404330
 // `dynamic initializer for 'MountedTurretClass::rttiHashMountedTurretClass''
 // GLOBAL: SWBF2 0x01ecb154
 // MountedTurretClass::rttiHashMountedTurretClass
 PblHash MountedTurretClass::rttiHashMountedTurretClass("MountedTurretClass");
-char MountedTurretClass::rttiNameMountedTurretClass[] = "MountedTurretClass";
+const char MountedTurretClass::rttiNameMountedTurretClass[] = "MountedTurretClass";
 
 // GLOBAL: SWBF2 0x01ecb158
 // SYNTHETIC: SWBF2 0x00404310

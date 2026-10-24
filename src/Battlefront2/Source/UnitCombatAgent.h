@@ -12,7 +12,7 @@ class UnitCombatAgent : public UnitAgent
 {
 public:
     static PblHash rttiHashUnitCombatAgent;
-    static char rttiNameUnitCombatAgent[];
+    static const char rttiNameUnitCombatAgent[];
 
     enum
     {

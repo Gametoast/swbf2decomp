@@ -32,7 +32,7 @@ public:
 
     // FUNCTION: SWBF2 0x00476ed0
     static unsigned int GetRtti() { return rttiHashEntityBuildingArmedClass; }
-    static char rttiNameEntityBuildingArmedClass[];
+    static const char rttiNameEntityBuildingArmedClass[];
 
 };
   
@@ -87,7 +87,7 @@ public:
 
     // FUNCTION: SWBF2 0x0043ef20
     static unsigned int GetRtti() { return rttiHashEntityBuildingArmed; }
-    static char rttiNameEntityBuildingArmed[];
+    static const char rttiNameEntityBuildingArmed[];
 };
  
  

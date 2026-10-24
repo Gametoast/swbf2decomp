@@ -147,14 +147,14 @@ namespace
 // GLOBAL: SWBF2 0x01ef2654
 // OrdnanceMeleeThrow::rttiHashOrdnanceMeleeThrow
 PblHash OrdnanceMeleeThrow::rttiHashOrdnanceMeleeThrow("OrdnanceMeleeThrow");
-char OrdnanceMeleeThrow::rttiNameOrdnanceMeleeThrow[] = "OrdnanceMeleeThrow";
+const char OrdnanceMeleeThrow::rttiNameOrdnanceMeleeThrow[] = "OrdnanceMeleeThrow";
 
 // SYNTHETIC: SWBF2 0x00405b30
 // `dynamic initializer for 'OrdnanceMeleeThrowClass::rttiHashOrdnanceMeleeThrowClass''
 // GLOBAL: SWBF2 0x01ef2650
 // OrdnanceMeleeThrowClass::rttiHashOrdnanceMeleeThrowClass
 PblHash OrdnanceMeleeThrowClass::rttiHashOrdnanceMeleeThrowClass("OrdnanceMeleeThrowClass");
-char OrdnanceMeleeThrowClass::rttiNameOrdnanceMeleeThrowClass[] = "OrdnanceMeleeThrowClass";
+const char OrdnanceMeleeThrowClass::rttiNameOrdnanceMeleeThrowClass[] = "OrdnanceMeleeThrowClass";
 
 // FUNCTION: SWBF2 0x00602180
 bool OrdnanceMeleeThrow::IsRtti(unsigned int uRtti) const

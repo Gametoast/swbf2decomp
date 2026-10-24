@@ -175,7 +175,7 @@ public:
     static int _ClearInputQueueToTime(InputQueue* pQueue, float fTime);
     static bool _TestInputQueueForButtonEvent(int iButton, InputQueue* pQueue, float fTime,
                                               int iAction, float fBegin, float fEnd, float* pfMatch);
-    static char rttiNameWeaponMelee[];
+    static const char rttiNameWeaponMelee[];
 
     static TrailData* s_aTrailDataPool;
     static TrailData* s_pTrailDataFreeList;

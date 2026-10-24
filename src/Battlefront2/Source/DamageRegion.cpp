@@ -7,7 +7,7 @@
 #include "GameObject.h"
 #include "TriggerRegionManager.h"
 
-static Damageable* GetDamageable(GameObject* pObject)
+static inline Damageable* GetDamageable(GameObject* pObject)
 {
     return static_cast<Damageable*>(pObject);
 }

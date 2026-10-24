@@ -33,7 +33,7 @@ public:
 
 namespace
 {
-    EntityClass* GetEntityClass(GameObject* pObject)
+    inline EntityClass* GetEntityClass(GameObject* pObject)
     {
         typedef EntityClass* (__thiscall *Fn)(GameObject*);
         return pObject->GetEntityClass();
@@ -45,7 +45,7 @@ namespace
 // GLOBAL: SWBF2 0x01f9a89c
 // WeaponCatapult::rttiHashWeaponCatapult
 PblHash WeaponCatapult::rttiHashWeaponCatapult("WeaponCatapult");
-char WeaponCatapult::rttiNameWeaponCatapult[] = "WeaponCatapult";
+const char WeaponCatapult::rttiNameWeaponCatapult[] = "WeaponCatapult";
 
 // FUNCTION: SWBF2 0x00680be0
 bool WeaponCatapult::IsRtti(unsigned int uRtti) const
@@ -332,7 +332,7 @@ void WeaponCatapult::Render(const PblMatrix& matrix, const RedPose* pPose, const
 // GLOBAL: SWBF2 0x01f9a8a0
 // WeaponCatapultClass::rttiHashWeaponCatapultClass
 PblHash WeaponCatapultClass::rttiHashWeaponCatapultClass("WeaponCatapultClass");
-char WeaponCatapultClass::rttiNameWeaponCatapultClass[] = "WeaponCatapultClass";
+const char WeaponCatapultClass::rttiNameWeaponCatapultClass[] = "WeaponCatapultClass";
 
 // FUNCTION: SWBF2 0x006817d0
 WeaponCatapultClass::WeaponCatapultClass(unsigned int uHash)

@@ -37,7 +37,7 @@ public:
     virtual void SetProperty(unsigned int uProperty, const char* pszValue);
 
     static PblHash rttiHashEntityPropClass;
-    static char rttiNameEntityPropClass[];
+    static const char rttiNameEntityPropClass[];
 
     bool m_bDynamicLighting;
     RedModel* mDestroyedModel;
@@ -101,7 +101,7 @@ public:
 
     // FUNCTION: SWBF2 0x00497e90
     static unsigned int GetRtti() { return rttiHashEntityProp; }
-    static char rttiNameEntityProp[];
+    static const char rttiNameEntityProp[];
 
     EntityCloth* mClothPiece[8];
     PblVector3 mPrevPos;

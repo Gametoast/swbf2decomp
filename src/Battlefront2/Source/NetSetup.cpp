@@ -14,6 +14,7 @@
 #include "PebbleFL/Common/PblFile.h"
 #include "PebbleFL/Common/PblRandom.h"
 #include "PebbleFL/Common/PblTime.h"
+#include "PebbleFL/Common/PblMath.h"
 #include "PebbleFL/Common/PblHashTable.h"
 #include "PebbleFL/Common/PblUnicode.h"
 #include "RedEngineFL/Memory/RedMemory.h"

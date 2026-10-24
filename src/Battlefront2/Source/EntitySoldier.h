@@ -92,6 +92,7 @@ public:
     unsigned int GetSndHeroDefeated() { return mSndHeroDefeated; }
     unsigned int GetSndForHeroKiller() { return mSndForHeroKiller; }
     static PblHash rttiHashEntitySoldierClass;
+    static const char rttiNameEntitySoldierClass[];
 
     // FUNCTION: SWBF2 0x004294a0
     static unsigned int GetRtti() { return rttiHashEntitySoldierClass; }
@@ -659,7 +660,7 @@ public:
 
     float GetJetFuel() const { return mJetFuel; }
     static MemoryPool sMemoryPool;
-    static char rttiNameEntitySoldier[];
+    static const char rttiNameEntitySoldier[];
 
     PblHandle<GameObject> mStandingOnObj;
     int mStandingOnBody;

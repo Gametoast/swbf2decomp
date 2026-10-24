@@ -31,7 +31,7 @@ public:
     PblVector3 mSearchPos;
 
     static PblHash rttiHashUnitHoldAgent;
-    static char rttiNameUnitHoldAgent[];
+    static const char rttiNameUnitHoldAgent[];
 };
  
  

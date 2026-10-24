@@ -16,7 +16,7 @@ public:
     virtual const char* GetDerivedRttiName() const;
 
     static PblHash rttiHashUnitFlyController;
-    static char rttiNameUnitFlyController[];
+    static const char rttiNameUnitFlyController[];
 
 protected:
     virtual void ApplyNextState();

@@ -211,7 +211,7 @@ extern "C" PblVector3* __stdcall D3DXVec3TransformCoord(PblVector3* pOut, const 
 namespace
 {
 
-    void EntityFlyerUpdateCollisionSphere(EntityFlyer* pFlyer)
+    inline void EntityFlyerUpdateCollisionSphere(EntityFlyer* pFlyer)
     {
         const PblMatrix& matrix = pFlyer->mMatrix;
         const GameModel* pModel = pFlyer->mModel;
@@ -308,7 +308,7 @@ const void* EntityFlyerClass::GetControllableClass()
 // GLOBAL: SWBF2 0x01ebb8ec
 // EntityCarrier::rttiHashEntityCarrier
 PblHash EntityCarrier::rttiHashEntityCarrier("EntityCarrier");
-char EntityCarrier::rttiNameEntityCarrier[] = "EntityCarrier";
+const char EntityCarrier::rttiNameEntityCarrier[] = "EntityCarrier";
 
 // GLOBAL: SWBF2 0x01ebb8f0
 // SYNTHETIC: SWBF2 0x00402940
@@ -340,7 +340,7 @@ const char* EntityCarrier::GetDerivedRttiName() const
 // GLOBAL: SWBF2 0x01ebb8e8
 // EntityCarrierClass::rttiHashEntityCarrierClass
 PblHash EntityCarrierClass::rttiHashEntityCarrierClass("EntityCarrierClass");
-char EntityCarrierClass::rttiNameEntityCarrierClass[] = "EntityCarrierClass";
+const char EntityCarrierClass::rttiNameEntityCarrierClass[] = "EntityCarrierClass";
 
 // FUNCTION: SWBF2 0x00496f00
 bool EntityCarrierClass::IsRtti(unsigned int uRtti)
@@ -588,7 +588,7 @@ Entity* EntityCarrierClass::Build(const EntityDesc& desc)
     return (Entity*)pCarrier;
 }
 
-void* EntityCarrier::operator new(unsigned int uSize)
+inline void* EntityCarrier::operator new(unsigned int uSize)
 {
     return sMemoryPool.Allocate(uSize);
 }

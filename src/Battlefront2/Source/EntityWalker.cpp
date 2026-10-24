@@ -292,14 +292,14 @@ extern "C" PblMatrix* __stdcall D3DXMatrixMultiply(PblMatrix* pOut, const PblMat
 // GLOBAL: SWBF2 0x01ebc25c
 // EntityWalkerClass::rttiHashEntityWalkerClass
 PblHash EntityWalkerClass::rttiHashEntityWalkerClass("EntityWalkerClass");
-char EntityWalkerClass::rttiNameEntityWalkerClass[] = "EntityWalkerClass";
+const char EntityWalkerClass::rttiNameEntityWalkerClass[] = "EntityWalkerClass";
 
 // SYNTHETIC: SWBF2 0x00402ee0
 // `dynamic initializer for 'EntityWalker::rttiHashEntityWalker''
 // GLOBAL: SWBF2 0x01ebc2b0
 // EntityWalker::rttiHashEntityWalker
 PblHash EntityWalker::rttiHashEntityWalker("EntityWalker");
-char EntityWalker::rttiNameEntityWalker[] = "EntityWalker";
+const char EntityWalker::rttiNameEntityWalker[] = "EntityWalker";
 
 // GLOBAL: SWBF2 0x01ebc260
 // SYNTHETIC: SWBF2 0x00402ec0
@@ -385,10 +385,9 @@ const char* EntityWalkerClass::GetDerivedRttiName()
     return rttiNameEntityWalkerClass;
 }
 
-// FUNCTION: SWBF2 0x004ff690
-WalkerAnimationIdle::~WalkerAnimationIdle()
-{
-}
+
+
+
 
 // FUNCTION: SWBF2 0x004ff6d0
 WalkerLegPairInfo::WalkerLegPairInfo()
@@ -1461,12 +1460,12 @@ static PblMatrix _IdentityMatrix(
     PblVector4{ 0.0f, 0.0f, 1.0f, 0.0f },
     PblVector4{ 0.0f, 0.0f, 0.0f, 1.0f });
 
-void* WalkerLegPair::operator new(unsigned int uSize)
+inline void* WalkerLegPair::operator new(unsigned int uSize)
 {
     return sMemoryPool.Allocate(uSize);
 }
 
-void WalkerLegPair::operator delete(void* pBlock)
+inline void WalkerLegPair::operator delete(void* pBlock)
 {
     sMemoryPool.Free(pBlock);
 }
@@ -1479,7 +1478,7 @@ void WalkerLegPair::SetInterpolate(bool bInterpolate)
 namespace
 {
 
-void UpdateCollisionSphere(EntityWalker* pWalker)
+inline void UpdateCollisionSphere(EntityWalker* pWalker)
 {
     PblVector3 center;
     D3DXVec3TransformCoord(&center, &pWalker->mModel->_mModel->_BoundingSphere.GetCenter(), &pWalker->mMatrix);

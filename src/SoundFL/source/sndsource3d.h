@@ -15,7 +15,10 @@ struct GainMatrix;
 class Source3D
 {
 public:
-    ~Source3D();
+    // FUNCTION: SWBF2 0x00537ef0
+    ~Source3D()
+    {
+    }
     static float sPitchMultiplier;
     enum Flags
     {

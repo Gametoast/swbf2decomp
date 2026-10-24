@@ -48,32 +48,7 @@ void ObjectList::Remove(void* pObject)
     Node::smFreeList.Free(pNode);
 }
 
-// FUNCTION: SWBF2 0x0052c6c0
-ObjectList::~ObjectList()
-{
-    for (;;)
-    {
-        Node* const pNode = (Node*)mHead.mNext;
 
-        if (pNode == (Node*)&mHead)
-        {
-            break;
-        }
-
-        if (pNode == 0)
-        {
-            continue;
-        }
-
-        if (pNode->mNode.mNext != 0)
-        {
-            pNode->mNode.Remove();
-        }
-
-        Node::smFreeList.Free(pNode);
-    }
-
-}
 
 // FUNCTION: SWBF2 0x007388a0
 ObjectList::Node* ObjectList::FindByObject(void* pObject)

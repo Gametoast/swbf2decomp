@@ -20,7 +20,7 @@ public:
     WeaponDispenserClass(WeaponDispenserClass* pBase, unsigned int uHash);
 
     static PblHash rttiHashWeaponDispenserClass;
-    static char rttiNameWeaponDispenserClass[];
+    static const char rttiNameWeaponDispenserClass[];
 
     virtual WeaponClass* Derive(unsigned int uHash);
     virtual Weapon* Build(const WeaponDesc& desc);
@@ -102,7 +102,7 @@ protected:
 public:
 
     static PblHash rttiHashWeaponDispenser;
-    static char rttiNameWeaponDispenser[];
+    static const char rttiNameWeaponDispenser[];
 
     bool mNetFiredFlag;
     bool mFired;

@@ -16,7 +16,7 @@ static PblMatrix _IdentityMatrix(
 // GLOBAL: SWBF2 0x01ec601c
 // IFaceSoldierAnimator::rttiHashIFaceSoldierAnimator
 PblHash IFaceSoldierAnimator::rttiHashIFaceSoldierAnimator("IFaceSoldierAnimator");
-char IFaceSoldierAnimator::rttiNameIFaceSoldierAnimator[] = "IFaceSoldierAnimator";
+const char IFaceSoldierAnimator::rttiNameIFaceSoldierAnimator[] = "IFaceSoldierAnimator";
 
 // FUNCTION: SWBF2 0x0056a130
 bool IFaceSoldierAnimator::IsRtti(unsigned int uRtti) const

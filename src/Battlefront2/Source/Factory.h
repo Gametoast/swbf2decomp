@@ -78,7 +78,7 @@ Factory<TYPE, CLASS, DESC>::Factory(CLASS* pParent, unsigned int uHash)
 }
 
 template <class TYPE, class CLASS, class DESC>
-CLASS* Factory<TYPE, CLASS, DESC>::Find(unsigned int uHash)
+inline CLASS* Factory<TYPE, CLASS, DESC>::Find(unsigned int uHash)
 {
     for (typename PblList<Factory<TYPE, CLASS, DESC> >::Itor it(sList); it; ++it)
     {

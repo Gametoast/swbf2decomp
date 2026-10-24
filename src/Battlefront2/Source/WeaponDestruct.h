@@ -19,7 +19,7 @@ public:
     virtual ~WeaponDestructClass();
 
     static PblHash rttiHashWeaponDestructClass;
-    static char rttiNameWeaponDestructClass[];
+    static const char rttiNameWeaponDestructClass[];
 
     virtual WeaponClass* Derive(unsigned int uHash);
     virtual Weapon* Build(const WeaponDesc& desc);
@@ -60,7 +60,7 @@ protected:
 
 public:
     static PblHash rttiHashWeaponDestruct;
-    static char rttiNameWeaponDestruct[];
+    static const char rttiNameWeaponDestruct[];
 
     PblHandle<OrbitalStrike> mStrike;
 };

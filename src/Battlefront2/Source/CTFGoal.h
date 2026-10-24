@@ -29,7 +29,7 @@ protected:
 
 public:
     static PblHash rttiHashCTFGoal;
-    static char rttiNameCTFGoal[];
+    static const char rttiNameCTFGoal[];
 
     PblHandle<const GameObject> mFlag;
     PblVector3 mCapturePos;

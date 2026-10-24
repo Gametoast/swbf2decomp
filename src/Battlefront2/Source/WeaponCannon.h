@@ -34,7 +34,7 @@ public:
     virtual int GetBarrageMax();
 
     static PblHash rttiHashWeaponCannonClass;
-    static char rttiNameWeaponCannonClass[];
+    static const char rttiNameWeaponCannonClass[];
 
     float mMaxPressedTime;
     float mShotDelayMin;

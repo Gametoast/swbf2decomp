@@ -21,7 +21,7 @@ namespace AIUtil
 // GLOBAL: SWBF2 0x01f9a8e8
 // WeaponLauncherClass::rttiHashWeaponLauncherClass
 PblHash WeaponLauncherClass::rttiHashWeaponLauncherClass("WeaponLauncherClass");
-char WeaponLauncherClass::rttiNameWeaponLauncherClass[] = "WeaponLauncherClass";
+const char WeaponLauncherClass::rttiNameWeaponLauncherClass[] = "WeaponLauncherClass";
 
 // FUNCTION: SWBF2 0x00687990
 WeaponLauncherClass::WeaponLauncherClass(unsigned int uHash)
@@ -113,7 +113,7 @@ WeaponLauncher* WeaponLauncherClass::Build(const WeaponDesc& desc)
 // GLOBAL: SWBF2 0x01f9a8e4
 // WeaponLauncher::rttiHashWeaponLauncher
 PblHash WeaponLauncher::rttiHashWeaponLauncher("WeaponLauncher");
-char WeaponLauncher::rttiNameWeaponLauncher[] = "WeaponLauncher";
+const char WeaponLauncher::rttiNameWeaponLauncher[] = "WeaponLauncher";
 
 // FUNCTION: SWBF2 0x00687390
 WeaponLauncher::WeaponLauncher(const WeaponLauncherClass* pClass, const WeaponDesc& desc)

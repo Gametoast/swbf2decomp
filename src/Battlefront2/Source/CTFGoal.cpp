@@ -44,8 +44,9 @@ inline void SetHandle(PblHandle<const GameObject>& handle, const GameObject* pOb
 // GLOBAL: SWBF2 0x01eb97ac
 // SYNTHETIC: SWBF2 0x004027a0
 // `dynamic initializer for 'AI::CTFGoal::rttiHashCTFGoal''
+
 PblHash AI::CTFGoal::rttiHashCTFGoal("CTFGoal");
-char AI::CTFGoal::rttiNameCTFGoal[] = "CTFGoal";
+const char AI::CTFGoal::rttiNameCTFGoal[] = "CTFGoal";
 
 // FUNCTION: SWBF2 0x00487c20
 bool AI::CTFGoal::IsRtti(unsigned int uRtti) const

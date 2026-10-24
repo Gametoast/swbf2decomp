@@ -29,7 +29,7 @@ public:
     unsigned int Read(void* pData, unsigned int uiSize);
     static void* Alloc();
 
-    static bool __fastcall Send(NetPacket** ppPacket, unsigned char uDestination, unsigned short uSequence);
+    static bool __cdecl Send(NetPacket** ppPacket, unsigned char uDestination, unsigned short uSequence);
 
     void* mAppPacket;
 };

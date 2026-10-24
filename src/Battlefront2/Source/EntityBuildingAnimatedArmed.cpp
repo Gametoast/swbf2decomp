@@ -79,7 +79,7 @@ Entity* EntityBuildingAnimatedArmedClass::Build(const EntityDesc& desc)
 // GLOBAL: SWBF2 0x01ebb884
 // EntityBuildingAnimatedArmedClass::rttiHashEntityBuildingAnimatedArmedClass
 PblHash EntityBuildingAnimatedArmedClass::rttiHashEntityBuildingAnimatedArmedClass("EntityBuildingAnimatedArmedClass");
-char EntityBuildingAnimatedArmedClass::rttiNameEntityBuildingAnimatedArmedClass[] = "EntityBuildingAnimatedArmedClass";
+const char EntityBuildingAnimatedArmedClass::rttiNameEntityBuildingAnimatedArmedClass[] = "EntityBuildingAnimatedArmedClass";
 
 // FUNCTION: SWBF2 0x00476780
 bool EntityBuildingAnimatedArmedClass::IsRtti(unsigned int uRtti)
@@ -287,15 +287,7 @@ void EntityBuildingAnimatedArmed::Render(unsigned char uFlags, float fDist, unsi
     }
 }
 
-// FUNCTION: SWBF2 0x0043cf70
-Controllable* Controllable::GetPilot()
-{
-    if (mPilotType == PILOT_SELF || (mPilotType == PILOT_VEHICLESELF && mPilot == this))
-    {
-        return 0;
-    }
-    return mPilot;
-}
+
 
 static inline Controllable* TurretControllable(MountedTurret* pTurret)
 {
@@ -307,7 +299,7 @@ static inline Controllable* TurretControllable(MountedTurret* pTurret)
 // GLOBAL: SWBF2 0x01ebb880
 // EntityBuildingAnimatedArmed::rttiHashEntityBuildingAnimatedArmed
 PblHash EntityBuildingAnimatedArmed::rttiHashEntityBuildingAnimatedArmed("EntityBuildingAnimatedArmed");
-char EntityBuildingAnimatedArmed::rttiNameEntityBuildingAnimatedArmed[] = "EntityBuildingAnimatedArmed";
+const char EntityBuildingAnimatedArmed::rttiNameEntityBuildingAnimatedArmed[] = "EntityBuildingAnimatedArmed";
 
 // FUNCTION: SWBF2 0x00494fe0
 unsigned int EntityBuildingAnimatedArmed::GetDerivedRtti() const

@@ -44,7 +44,7 @@ namespace
         return static_cast<Damageable*>(pObject);
     }
 
-    unsigned int GameObjectHandleId(const GameObject* pObject)
+    inline unsigned int GameObjectHandleId(const GameObject* pObject)
     {
         return pObject->mHandleId;
     }
@@ -55,14 +55,14 @@ namespace
 // GLOBAL: SWBF2 0x01ef2668
 // OrdnanceSticky::rttiHashOrdnanceSticky
 PblHash OrdnanceSticky::rttiHashOrdnanceSticky("OrdnanceSticky");
-char OrdnanceSticky::rttiNameOrdnanceSticky[] = "OrdnanceSticky";
+const char OrdnanceSticky::rttiNameOrdnanceSticky[] = "OrdnanceSticky";
 
 // SYNTHETIC: SWBF2 0x00405b90
 // `dynamic initializer for 'OrdnanceStickyClass::rttiHashOrdnanceStickyClass''
 // GLOBAL: SWBF2 0x01ef266c
 // OrdnanceStickyClass::rttiHashOrdnanceStickyClass
 PblHash OrdnanceStickyClass::rttiHashOrdnanceStickyClass("OrdnanceStickyClass");
-char OrdnanceStickyClass::rttiNameOrdnanceStickyClass[] = "OrdnanceStickyClass";
+const char OrdnanceStickyClass::rttiNameOrdnanceStickyClass[] = "OrdnanceStickyClass";
 
 // FUNCTION: SWBF2 0x00606d80
 OrdnanceStickyClass::OrdnanceStickyClass(unsigned int uHash)

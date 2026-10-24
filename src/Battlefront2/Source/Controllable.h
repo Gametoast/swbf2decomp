@@ -492,3 +492,13 @@ public:
  
  
  
+
+// FUNCTION: SWBF2 0x0043cf70
+inline Controllable* Controllable::GetPilot()
+{
+    if (mPilotType == PILOT_SELF || (mPilotType == PILOT_VEHICLESELF && mPilot == this))
+    {
+        return 0;
+    }
+    return mPilot;
+}

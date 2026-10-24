@@ -1,5 +1,5 @@
 #include "PblHeap.h"
-
+#include <new>
 #include <stdlib.h>
 
 // FUNCTION: SWBF2 0x0072b890

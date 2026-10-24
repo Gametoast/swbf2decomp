@@ -576,3 +576,4 @@ void HUD::ElementModel3D::EventMesh(const HUD::Event& event, void* const pData)
         break;
     }
 }
+#include <new>

@@ -88,7 +88,7 @@ public:
     PassengerSlotClass* mClass;
 
     static PblHash rttiHashPassengerSlot;
-    static char rttiNamePassengerSlot[];
+    static const char rttiNamePassengerSlot[];
 };
  
  

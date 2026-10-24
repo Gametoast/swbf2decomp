@@ -34,7 +34,7 @@ public:
     virtual void KillController();
 
     static PblHash rttiHashController;
-    static char rttiNameController[];
+    static const char rttiNameController[];
 
     PblVector3 GetTargetBubbleCircle() const;
     void IncreaseTargetBubbleSize(float fIncrease);

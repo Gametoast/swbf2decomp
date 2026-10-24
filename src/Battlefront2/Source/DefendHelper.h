@@ -1,6 +1,8 @@
 #pragma once
 
 #include <stddef.h>
+#include "UnitAgent.h"
+#include "UnitController.h"
 
 #include "Fsm.h"
 #include "AIGoal.h"
@@ -88,3 +90,18 @@ public:
  
  
  
+
+inline UnitController* DefendHelper::GetCtrl()
+{
+    return mOwner->mCtrl;
+}
+
+inline Controllable* DefendHelper::GetMe()
+{
+    return mOwner->mCtrl->mOwner;
+}
+
+inline AILowLevel& DefendHelper::GetLowLevel()
+{
+    return *reinterpret_cast<AILowLevel*>(GetCtrl()->mLowLevel);
+}

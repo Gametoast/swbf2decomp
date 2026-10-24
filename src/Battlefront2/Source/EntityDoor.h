@@ -36,7 +36,7 @@ public:
     bool InitAnimations(const char* pszName);
 
     static PblHash rttiHashEntityDoorClass;
-    static char rttiNameEntityDoorClass[];
+    static const char rttiNameEntityDoorClass[];
 
     ZephyrAnim* mAnimation;
     RedAnimation* mAnimObj;
@@ -88,7 +88,7 @@ public:
     virtual bool Update(float fDeltaTime);
 
     static PblHash rttiHashEntityDoor;
-    static char rttiNameEntityDoor[];
+    static const char rttiNameEntityDoor[];
 
     static int msHostDoorsNumEntries;
     static PblHashTable<EntityDoor, 32> msHostDoors;

@@ -24,7 +24,7 @@ public:
     virtual void SetProperty(unsigned int uProperty, const char* pszValue);
 
     static PblHash rttiHashPowerupStationClass;
-    static char rttiNamePowerupStationClass[];
+    static const char rttiNamePowerupStationClass[];
 
     float mPowerupDelay;
     float mAddHealth[8];
@@ -108,7 +108,7 @@ public:
     bool IsInsideRegion(RedRegion* pRegion, const GameObject* pObject) const;
 
     static PblHash rttiHashPowerupStation;
-    static char rttiNamePowerupStation[];
+    static const char rttiNamePowerupStation[];
 
     PowerupStationClass* mClass;
     RedRegion* mEffectRegion;

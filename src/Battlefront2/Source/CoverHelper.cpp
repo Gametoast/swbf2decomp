@@ -23,12 +23,12 @@
 
 namespace
 {
-    const PblVector3& GetPos(const PblMatrix& m)
+    inline const PblVector3& GetPos(const PblMatrix& m)
     {
         return *(const PblVector3*)&m.m[3][0];
     }
 
-    AttackHelper* GetAttackHelper(UnitAgent* pOwner)
+    inline AttackHelper* GetAttackHelper(UnitAgent* pOwner)
     {
         return reinterpret_cast<AttackHelper*>(pOwner->mAttackHelper);
     }

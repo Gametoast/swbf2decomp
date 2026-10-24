@@ -3,6 +3,10 @@
 namespace Snd
 {
 
+QueueBase::~QueueBase()
+{
+}
+
 // FUNCTION: SWBF2 0x00738a70
 unsigned short QueueBase::GetNumItems(unsigned short usCapacity) const
 {

@@ -34,7 +34,7 @@ public:
     float mFriction;
 
     static PblHash rttiHashEntityPortableTurretClass;
-    static char rttiNameEntityPortableTurretClass[];
+    static const char rttiNameEntityPortableTurretClass[];
 };
   
  
@@ -68,7 +68,7 @@ public:
     static void operator delete(void* pBlock) { sMemoryPool.Free(pBlock); }
 
     static PblHash rttiHashEntityPortableTurret;
-    static char rttiNameEntityPortableTurret[];
+    static const char rttiNameEntityPortableTurret[];
     static MemoryPool sMemoryPool;
 
     EntityPortableTurretClass* mClass;

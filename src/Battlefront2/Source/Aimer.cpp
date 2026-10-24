@@ -60,12 +60,12 @@ public:
 namespace
 {
 
-    const CollisionObject* GetCollisionObject(const GameObject* pObject)
+    inline const CollisionObject* GetCollisionObject(const GameObject* pObject)
     {
         return &static_cast<const CollisionObject&>(*pObject);
     }
 
-    const Controllable* GetControllable(const GameObject* pObject)
+    inline const Controllable* GetControllable(const GameObject* pObject)
     {
         return pObject->GetControllable();
     }

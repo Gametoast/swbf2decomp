@@ -58,12 +58,12 @@ namespace CombatUtil { bool TestWpnConstraintsPos(Controllable* pMe, const PblVe
 
 namespace
 {
-    unsigned int GameObjectHandleId(const GameObject* pObject)
+    inline unsigned int GameObjectHandleId(const GameObject* pObject)
     {
         return pObject->mHandleId;
     }
 
-    AILowLevel& LowLevelOf(Controller* pCtrl)
+    inline AILowLevel& LowLevelOf(Controller* pCtrl)
     {
         return *reinterpret_cast<AILowLevel*>(UnitControllerPtr(pCtrl)->mLowLevel);
     }

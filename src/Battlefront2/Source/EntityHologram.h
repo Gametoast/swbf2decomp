@@ -37,7 +37,7 @@ public:
     static EntityHologramClass* Find(unsigned int uHash);
 
     static PblHash rttiHashEntityHologramClass;
-    static char rttiNameEntityHologramClass[];
+    static const char rttiNameEntityHologramClass[];
 
     static int sHologramClassTableNumEntries;
     static void Reset();
@@ -151,7 +151,7 @@ public:
     MyThread _Thread;
 
     static PblHash rttiHashEntityHologram;
-    static char rttiNameEntityHologram[];
+    static const char rttiNameEntityHologram[];
 };
  
  

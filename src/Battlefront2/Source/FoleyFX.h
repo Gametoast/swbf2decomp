@@ -32,7 +32,7 @@ public:
     PblListSingle::Node mNode;
 
     static PblHash rttiHashFoleyFX;
-    static char rttiNameFoleyFX[];
+    static const char rttiNameFoleyFX[];
     static PblListSingle smList;
 };
  

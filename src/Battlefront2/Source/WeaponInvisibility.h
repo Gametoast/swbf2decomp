@@ -15,7 +15,7 @@ public:
     virtual ~WeaponInvisibilityClass();
 
     static PblHash rttiHashWeaponInvisibilityClass;
-    static char rttiNameWeaponInvisibilityClass[];
+    static const char rttiNameWeaponInvisibilityClass[];
 
     enum TRIGGER_TYPE
     {
@@ -103,7 +103,7 @@ public:
     void StartFlicker();
 
     static PblHash rttiHashWeaponInvisibility;
-    static char rttiNameWeaponInvisibility[];
+    static const char rttiNameWeaponInvisibility[];
 
     float m_fInvisibilityFactor;
     float m_fInvisibilityPersistTimer;

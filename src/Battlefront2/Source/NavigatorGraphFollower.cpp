@@ -18,7 +18,7 @@ extern "C" PblVector3* __stdcall D3DXVec3Normalize(PblVector3* pOut, const PblVe
 namespace
 {
 
-    const PblVector3& GetPos(const PblMatrix& m)
+    inline const PblVector3& GetPos(const PblMatrix& m)
     {
         return *(const PblVector3*)&m.m[3][0];
     }
@@ -29,7 +29,7 @@ namespace
 // GLOBAL: SWBF2 0x01ecb250
 // NavigatorGraphFollower::rttiHashNavigatorGraphFollower
 PblHash NavigatorGraphFollower::rttiHashNavigatorGraphFollower("NavigatorGraphFollower");
-char NavigatorGraphFollower::rttiNameNavigatorGraphFollower[] = "NavigatorGraphFollower";
+const char NavigatorGraphFollower::rttiNameNavigatorGraphFollower[] = "NavigatorGraphFollower";
 
 // FUNCTION: SWBF2 0x005ac4e0
 bool NavigatorGraphFollower::IsRtti(unsigned int uRtti) const

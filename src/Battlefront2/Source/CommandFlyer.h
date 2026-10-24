@@ -26,7 +26,7 @@ public:
     virtual void SetProperty(unsigned int uProperty, const char* pszValue);
 
     static PblHash rttiHashCommandFlyerClass;
-    static char rttiNameCommandFlyerClass[];
+    static const char rttiNameCommandFlyerClass[];
 };
 
    
@@ -69,7 +69,7 @@ public:
 
     static MemoryPool sMemoryPool;
     static PblHash rttiHashCommandFlyer;
-    static char rttiNameCommandFlyer[];
+    static const char rttiNameCommandFlyer[];
 };
  
  

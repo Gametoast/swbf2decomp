@@ -3,7 +3,7 @@
 #include "RedPose.h"
 #include "PebbleFL/Common/PblChunk.h"
 #include "PebbleFL/Common/PblFile.h"
-
+#include <new>
 extern "C" PblMatrix* __stdcall D3DXMatrixMultiply(PblMatrix* pOut, const PblMatrix* pM1,
                                                    const PblMatrix* pM2);
 

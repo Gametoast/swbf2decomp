@@ -1,6 +1,7 @@
 #pragma once
 
 #include <stddef.h>
+#include <math.h>
 #include "FLEffect.h"
 #include "LensFlare.h"
 #include "RedEngineFL/Util/RedSceneObject.h"
@@ -145,9 +146,135 @@ protected:
     virtual void UpdatedWorldMatrix();
 private:
 
-    void _UpdateBoundingSphere();
+    inline void _UpdateBoundingSphere();
 public:
     unsigned int _uiHideInView;
 };
  
  
+
+// FUNCTION: SWBF2 0x004cc4c0
+inline void ManagedLightBeam::SetHeadTailPosition(const PblVector3& vHead, const PblVector3& vTail)
+{
+    LightBeam::SetHeadTailPosition(vHead, vTail);
+    if (_bActive)
+    {
+        _UpdateBoundingSphere();
+    }
+}
+
+// FUNCTION: SWBF2 0x004bdec0
+inline void LightBeam::SetHeadTailPosition(const PblVector3& vHead, const PblVector3& vTail)
+{
+    PblVector3 vDelta(vTail.x - vHead.x, vTail.y - vHead.y, vTail.z - vHead.z);
+    SetHeadPosition(vHead);
+    SetLength(sqrtf(vDelta.x * vDelta.x + vDelta.y * vDelta.y + vDelta.z * vDelta.z));
+    if (_fLength > 0.0f)
+    {
+        float fInv = 1.0f / _fLength;
+        SetDirection(PblVector3(vDelta.x * fInv, vDelta.y * fInv, vDelta.z * fInv));
+    }
+    else
+    {
+        SetDirection(PblVector3(0.0f, 0.0f, 1.0f));
+    }
+}
+
+// FUNCTION: SWBF2 0x004cc340
+inline void ManagedLightBeam::SetHeadPosition(const PblVector3& vPos)
+{
+    LightBeam::SetHeadPosition(vPos);
+    if (_bActive)
+    {
+        _UpdateBoundingSphere();
+    }
+}
+
+// FUNCTION: SWBF2 0x004cc530
+inline void ManagedLightBeam::SetPositionOmni(const PblVector3& vPos)
+{
+    LightBeam::SetPositionOmni(vPos);
+    if (_bActive)
+    {
+        _UpdateBoundingSphere();
+    }
+}
+
+// FUNCTION: SWBF2 0x004cc940
+inline void ManagedLightBeam::AddToRenderList()
+{
+    if (!_bActive)
+    {
+        _UpdateBoundingSphere();
+        Activate();
+    }
+}
+
+// FUNCTION: SWBF2 0x004cc3d0
+inline void ManagedLightBeam::SetDirection(const PblVector3& vDir)
+{
+    LightBeam::SetDirection(vDir);
+    if (_bActive)
+    {
+        _UpdateBoundingSphere();
+    }
+}
+
+// FUNCTION: SWBF2 0x004cc7e0
+inline void ManagedLightBeam::SetFadeLength(float fLength)
+{
+    LightBeam::SetFadeLength(fLength);
+    if (_bActive)
+    {
+        _UpdateBoundingSphere();
+    }
+}
+
+// FUNCTION: SWBF2 0x004cc8e0
+inline void ManagedLightBeam::UpdatedWorldMatrix()
+{
+    LightBeam::UpdatedWorldMatrix();
+    if (_bActive)
+    {
+        _UpdateBoundingSphere();
+    }
+}
+
+// FUNCTION: SWBF2 0x004cc870
+inline void ManagedLightBeam::HideInView(unsigned int uiView, bool bHide)
+{
+    const unsigned int mask = 1u << uiView;
+    if (bHide)
+    {
+        _uiHideInView |= mask;
+        _Flare._uiHideInView |= mask;
+    }
+    else
+    {
+        _uiHideInView &= ~mask;
+        _Flare._uiHideInView &= ~mask;
+    }
+}
+
+// FUNCTION: SWBF2 0x004cc450
+inline void ManagedLightBeam::SetLength(float fLength)
+{
+    LightBeam::SetLength(fLength);
+    if (_bActive)
+    {
+        _UpdateBoundingSphere();
+    }
+}
+
+// FUNCTION: SWBF2 0x004bdd90
+inline LightBeam::~LightBeam()
+{
+    DeactivateEffect();
+}
+
+
+
+// FUNCTION: SWBF2 0x0056faa0
+inline LightBeamEffect::~LightBeamEffect()
+{
+}

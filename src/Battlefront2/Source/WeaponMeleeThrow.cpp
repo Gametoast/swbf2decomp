@@ -18,7 +18,7 @@ extern bool netIsLocalTurn;
 
 namespace
 {
-    EntityClass* GetEntityClass(GameObject* pObject)
+    inline EntityClass* GetEntityClass(GameObject* pObject)
     {
         typedef EntityClass* (__thiscall *Fn)(GameObject*);
         return pObject->GetEntityClass();
@@ -30,7 +30,7 @@ namespace
 // GLOBAL: SWBF2 0x01f9a8fc
 // WeaponMeleeThrow::rttiHashWeaponMeleeThrow
 PblHash WeaponMeleeThrow::rttiHashWeaponMeleeThrow("WeaponMeleeThrow");
-char WeaponMeleeThrow::rttiNameWeaponMeleeThrow[] = "WeaponMeleeThrow";
+const char WeaponMeleeThrow::rttiNameWeaponMeleeThrow[] = "WeaponMeleeThrow";
 
 // FUNCTION: SWBF2 0x0068f610
 WeaponMeleeThrow::WeaponMeleeThrow(const WeaponMeleeThrowClass* pClass, const WeaponDesc& desc)
@@ -291,7 +291,7 @@ Ordnance* WeaponMeleeThrow::CreateOrdnance(OrdnanceDesc& desc)
 // GLOBAL: SWBF2 0x01f9a900
 // WeaponMeleeThrowClass::rttiHashWeaponMeleeThrowClass
 PblHash WeaponMeleeThrowClass::rttiHashWeaponMeleeThrowClass("WeaponMeleeThrowClass");
-char WeaponMeleeThrowClass::rttiNameWeaponMeleeThrowClass[] = "WeaponMeleeThrowClass";
+const char WeaponMeleeThrowClass::rttiNameWeaponMeleeThrowClass[] = "WeaponMeleeThrowClass";
 
 // FUNCTION: SWBF2 0x0068fcd0
 WeaponMeleeThrowClass::WeaponMeleeThrowClass(unsigned int uHash)

@@ -134,7 +134,7 @@ extern "C" PblVector3* __stdcall D3DXVec3Normalize(PblVector3* pOut, const PblVe
 namespace
 {
 
-    Controllable* GetControllable(GameObject* pObject)
+    inline Controllable* GetControllable(GameObject* pObject)
     {
         typedef Controllable*(__thiscall * GetControllableFn)(GameObject*);
         return pObject->GetControllable();

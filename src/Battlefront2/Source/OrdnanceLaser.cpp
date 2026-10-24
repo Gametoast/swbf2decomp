@@ -16,7 +16,7 @@ extern bool netIsLateTurn;
 // GLOBAL: SWBF2 0x01ef2648
 // OrdnanceLaserClass::rttiHashOrdnanceLaserClass
 PblHash OrdnanceLaserClass::rttiHashOrdnanceLaserClass("OrdnanceLaserClass");
-char OrdnanceLaserClass::rttiNameOrdnanceLaserClass[] = "OrdnanceLaserClass";
+const char OrdnanceLaserClass::rttiNameOrdnanceLaserClass[] = "OrdnanceLaserClass";
 
 // FUNCTION: SWBF2 0x00601b40
 OrdnanceLaserClass::OrdnanceLaserClass(unsigned int uHash)
@@ -217,7 +217,7 @@ Ordnance* OrdnanceLaserClass::Build(const OrdnanceDesc& desc)
 // GLOBAL: SWBF2 0x01ef264c
 // OrdnanceLaser::rttiHashOrdnanceLaser
 PblHash OrdnanceLaser::rttiHashOrdnanceLaser("OrdnanceLaser");
-char OrdnanceLaser::rttiNameOrdnanceLaser[] = "OrdnanceLaser";
+const char OrdnanceLaser::rttiNameOrdnanceLaser[] = "OrdnanceLaser";
 
 static inline float ChargeLerp(float fValue, float fNext, float fRatio)
 {

@@ -6,6 +6,7 @@ namespace Snd
 class QueueBase
 {
 public:
+    ~QueueBase();
 
     void* Get(unsigned int uStride, char* pData, unsigned int uCapacity);
 

@@ -122,7 +122,7 @@ protected:
 public:
 
     static PblHash rttiHashEntityGeometryClass;
-    static char rttiNameEntityGeometryClass[];
+    static const char rttiNameEntityGeometryClass[];
 
     ChunkDescriptor* mChunkDescriptors[10];
     CollisionModel* mFullChunkCollisions[10];
@@ -235,7 +235,7 @@ public:
     AttachedEffects* m_pAttachedEffects;
 
     static PblHash rttiHashEntityGeometry;
-    static char rttiNameEntityGeometry[];
+    static const char rttiNameEntityGeometry[];
 };
  
  

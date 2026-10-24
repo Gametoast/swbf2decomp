@@ -21,7 +21,7 @@ public:
     virtual void SetProperty(unsigned int uProperty, const char* pszValue);
 
     static PblHash rttiHashOrdnanceBeaconClass;
-    static char rttiNameOrdnanceBeaconClass[];
+    static const char rttiNameOrdnanceBeaconClass[];
 
     float mAimAzimuth;
     float mAimElevation;
@@ -55,7 +55,7 @@ public:
     int mSalvoCount;
 
     static PblHash rttiHashOrdnanceBeacon;
-    static char rttiNameOrdnanceBeacon[];
+    static const char rttiNameOrdnanceBeacon[];
 };
  
  

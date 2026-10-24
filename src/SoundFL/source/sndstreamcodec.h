@@ -12,7 +12,11 @@ class StreamCodec : public StreamSourceProducer,
 {
 public:
 
-    virtual ~StreamCodec();
+    // FUNCTION: SWBF2 0x0073d100
+    virtual ~StreamCodec()
+    {
+
+    }
 
     virtual StreamPacket* GetPacket(unsigned int uiOutput);
 

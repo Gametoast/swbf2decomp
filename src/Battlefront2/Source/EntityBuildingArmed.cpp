@@ -42,14 +42,14 @@ EntityBuildingArmedClass::~EntityBuildingArmedClass()
 // GLOBAL: SWBF2 0x01ebb888
 // EntityBuildingArmed::rttiHashEntityBuildingArmed
 PblHash EntityBuildingArmed::rttiHashEntityBuildingArmed("EntityBuildingArmed");
-char EntityBuildingArmed::rttiNameEntityBuildingArmed[] = "EntityBuildingArmed";
+const char EntityBuildingArmed::rttiNameEntityBuildingArmed[] = "EntityBuildingArmed";
 
 // SYNTHETIC: SWBF2 0x004028f0
 // `dynamic initializer for 'EntityBuildingArmedClass::rttiHashEntityBuildingArmedClass''
 // GLOBAL: SWBF2 0x01ebb88c
 // EntityBuildingArmedClass::rttiHashEntityBuildingArmedClass
 PblHash EntityBuildingArmedClass::rttiHashEntityBuildingArmedClass("EntityBuildingArmedClass");
-char EntityBuildingArmedClass::rttiNameEntityBuildingArmedClass[] = "EntityBuildingArmedClass";
+const char EntityBuildingArmedClass::rttiNameEntityBuildingArmedClass[] = "EntityBuildingArmedClass";
 
 // SYNTHETIC: SWBF2 0x00496710
 // EntityBuildingArmedClass::`scalar deleting destructor'

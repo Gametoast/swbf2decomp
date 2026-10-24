@@ -34,7 +34,7 @@ public:
     GameSound mBodyFall;
 
     static PblHash rttiHashFoleyFXSoldier;
-    static char rttiNameFoleyFXSoldier[];
+    static const char rttiNameFoleyFXSoldier[];
     static Snd::FreeList smFreeList;
 };
  

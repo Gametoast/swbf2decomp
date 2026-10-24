@@ -453,7 +453,7 @@ static Damageable* GameObject_GetDamageable(GameObject* pObject)
 {
     return static_cast<Damageable*>(pObject);
 }
-static bool GameObject_IsRtti(GameObject* pObject, unsigned int uRtti)
+static inline bool GameObject_IsRtti(GameObject* pObject, unsigned int uRtti)
 {
     return reinterpret_cast<Entity*>(pObject)->IsRtti(uRtti);
 }

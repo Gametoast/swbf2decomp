@@ -31,7 +31,7 @@ public:
     int mVehicleType;
 
     static PblHash rttiHashEntityRemoteTerminalClass;
-    static char rttiNameEntityRemoteTerminalClass[];
+    static const char rttiNameEntityRemoteTerminalClass[];
 };
   
  
@@ -100,7 +100,7 @@ public:
 
     // FUNCTION: SWBF2 0x0043ef30
     static unsigned int GetRtti() { return rttiHashEntityRemoteTerminal; }
-    static char rttiNameEntityRemoteTerminal[];
+    static const char rttiNameEntityRemoteTerminal[];
     static MemoryPool sMemoryPool;
 
     EntityRemoteTerminalClass* mClass;

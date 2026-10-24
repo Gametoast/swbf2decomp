@@ -360,14 +360,14 @@ FlagItemClass::FlagItemClass(unsigned int uHash)
 // GLOBAL: SWBF2 0x01ebc2b8
 // FlagItem::rttiHashFlagItem
 PblHash FlagItem::rttiHashFlagItem("FlagItem");
-char FlagItem::rttiNameFlagItem[] = "FlagItem";
+const char FlagItem::rttiNameFlagItem[] = "FlagItem";
 
 // SYNTHETIC: SWBF2 0x00403860
 // `dynamic initializer for 'FlagItemClass::rttiHashFlagItemClass''
 // GLOBAL: SWBF2 0x01ebc2b4
 // FlagItemClass::rttiHashFlagItemClass
 PblHash FlagItemClass::rttiHashFlagItemClass("FlagItemClass");
-char FlagItemClass::rttiNameFlagItemClass[] = "FlagItemClass";
+const char FlagItemClass::rttiNameFlagItemClass[] = "FlagItemClass";
 
 // GLOBAL: SWBF2 0x01ebcfa0
 // SYNTHETIC: SWBF2 0x00403830

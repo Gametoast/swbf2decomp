@@ -1296,7 +1296,7 @@ void VoiceChat::Node::Update(float fDeltaTime)
 }
 
 // FUNCTION: SWBF2 0x00673f50
-bool __fastcall VoiceChat::Node::ReceiveAudioPacketAllLocalNodes(unsigned char uID,
+bool __cdecl VoiceChat::Node::ReceiveAudioPacketAllLocalNodes(unsigned char uID,
                            const VoiceChat::AudioPacket* pPacket,
                            bool  , unsigned short uDropped)
 {

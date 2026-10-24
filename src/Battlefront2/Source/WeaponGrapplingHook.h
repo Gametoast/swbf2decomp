@@ -13,7 +13,7 @@ public:
     virtual ~WeaponGrapplingHookClass();
 
     static PblHash rttiHashWeaponGrapplingHookClass;
-    static char rttiNameWeaponGrapplingHookClass[];
+    static const char rttiNameWeaponGrapplingHookClass[];
 
     virtual WeaponClass* Derive(unsigned int uHash);
     virtual Weapon* Build(const WeaponDesc& desc);
@@ -44,7 +44,7 @@ public:
     virtual void SetOrdnance(Ordnance* pOrdnance);
 
     static PblHash rttiHashWeaponGrapplingHook;
-    static char rttiNameWeaponGrapplingHook[];
+    static const char rttiNameWeaponGrapplingHook[];
 
     bool mCableOut;
 };

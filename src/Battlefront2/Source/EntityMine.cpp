@@ -46,7 +46,7 @@ EntityMineClass::EntityMineClass(unsigned int uHash)
 // GLOBAL: SWBF2 0x01ebbf90
 // EntityMineClass::rttiHashEntityMineClass
 PblHash EntityMineClass::rttiHashEntityMineClass("EntityMineClass");
-char EntityMineClass::rttiNameEntityMineClass[] = "EntityMineClass";
+const char EntityMineClass::rttiNameEntityMineClass[] = "EntityMineClass";
 
 // FUNCTION: SWBF2 0x004cf580
 bool EntityMineClass::IsRtti(unsigned int uRtti)
@@ -162,7 +162,7 @@ void EntityMineClass::SetProperty(unsigned int uProperty, const char* pszValue)
 // GLOBAL: SWBF2 0x01ebbf8c
 // EntityMine::rttiHashEntityMine
 PblHash EntityMine::rttiHashEntityMine("EntityMine");
-char EntityMine::rttiNameEntityMine[] = "EntityMine";
+const char EntityMine::rttiNameEntityMine[] = "EntityMine";
 
 // GLOBAL: SWBF2 0x01ebbf98
 // SYNTHETIC: SWBF2 0x00402c40

@@ -22,7 +22,7 @@ public:
     GameSound mFootstep[6];
 
     static PblHash rttiHashFoleyFXWalker;
-    static char rttiNameFoleyFXWalker[];
+    static const char rttiNameFoleyFXWalker[];
     static Snd::FreeList smFreeList;
 };
  

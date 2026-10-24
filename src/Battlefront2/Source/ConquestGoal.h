@@ -29,7 +29,7 @@ protected:
 
 public:
     static PblHash rttiHashConquestGoal;
-    static char rttiNameConquestGoal[];
+    static const char rttiNameConquestGoal[];
 };
 
 }

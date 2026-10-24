@@ -406,3 +406,4 @@ const ZephyrAnim* GetWalkerAnimation(const RedAnimation* const* ppAnims, int iNu
 {
     return GetWalkerAnimation(ppAnims, iNumAnims, PblTEMPHash(pszName));
 }
+#include <new>

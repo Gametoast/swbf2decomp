@@ -30,7 +30,7 @@ extern PblVector3 gVectorZero;
 namespace
 {
 
-    AILowLevel& LowLevel(UnitController* pCtrl)
+    inline AILowLevel& LowLevel(UnitController* pCtrl)
     {
         return *reinterpret_cast<AILowLevel*>(pCtrl->mLowLevel);
     }

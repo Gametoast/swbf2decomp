@@ -80,14 +80,14 @@ const PblBox& EntityBuilding::GetBBox() const
 // GLOBAL: SWBF2 0x01eb986c
 // EntityBuildingClass::rttiHashEntityBuildingClass
 PblHash EntityBuildingClass::rttiHashEntityBuildingClass("EntityBuildingClass");
-char EntityBuildingClass::rttiNameEntityBuildingClass[] = "EntityBuildingClass";
+const char EntityBuildingClass::rttiNameEntityBuildingClass[] = "EntityBuildingClass";
 
 // SYNTHETIC: SWBF2 0x00402880
 // `dynamic initializer for 'EntityBuilding::rttiHashEntityBuilding''
 // GLOBAL: SWBF2 0x01ebb874
 // EntityBuilding::rttiHashEntityBuilding
 PblHash EntityBuilding::rttiHashEntityBuilding("EntityBuilding");
-char EntityBuilding::rttiNameEntityBuilding[] = "EntityBuilding";
+const char EntityBuilding::rttiNameEntityBuilding[] = "EntityBuilding";
 
 // FUNCTION: SWBF2 0x00475ef0
 bool EntityBuildingClass::IsRtti(unsigned int uRtti)

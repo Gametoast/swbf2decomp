@@ -54,7 +54,7 @@ extern float sClientDeltaTime;
 // GLOBAL: SWBF2 0x01f9a8c0
 // WeaponDispenserClass::rttiHashWeaponDispenserClass
 PblHash WeaponDispenserClass::rttiHashWeaponDispenserClass("WeaponDispenserClass");
-char WeaponDispenserClass::rttiNameWeaponDispenserClass[] = "WeaponDispenserClass";
+const char WeaponDispenserClass::rttiNameWeaponDispenserClass[] = "WeaponDispenserClass";
 
 // FUNCTION: SWBF2 0x00682430
 bool WeaponDispenserClass::IsRtti(unsigned int uRtti)
@@ -272,7 +272,7 @@ WeaponDispenserClass::WeaponDispenserClass(unsigned int uHash)
 // GLOBAL: SWBF2 0x01f9a8bc
 // WeaponDispenser::rttiHashWeaponDispenser
 PblHash WeaponDispenser::rttiHashWeaponDispenser("WeaponDispenser");
-char WeaponDispenser::rttiNameWeaponDispenser[] = "WeaponDispenser";
+const char WeaponDispenser::rttiNameWeaponDispenser[] = "WeaponDispenser";
 
 // FUNCTION: SWBF2 0x00682400
 bool WeaponDispenser::IsRtti(unsigned int uRtti) const

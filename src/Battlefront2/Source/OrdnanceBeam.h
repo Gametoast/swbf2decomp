@@ -22,7 +22,7 @@ public:
     virtual bool IsRtti(unsigned int uRtti);
     virtual unsigned int GetDerivedRtti();
     virtual const char* GetDerivedRttiName();
-    static char rttiNameOrdnanceBeamClass[];
+    static const char rttiNameOrdnanceBeamClass[];
     virtual void SetProperty(unsigned int uProperty, const char* pszValue);
     virtual float GetRange();
 
@@ -78,7 +78,7 @@ public:
     bool mDeadFlag;
 
     static PblHash rttiHashOrdnanceBeam;
-    static char rttiNameOrdnanceBeam[];
+    static const char rttiNameOrdnanceBeam[];
 };
  
  

@@ -150,7 +150,7 @@ public:
 protected:
     virtual void PlayerIndexChanged();
 
-    static void __fastcall WriteBitmapElement(HUD::ElementBitmapBase* pBitmap, HUD::File* pFile,
+    static void __cdecl WriteBitmapElement(HUD::ElementBitmapBase* pBitmap, HUD::File* pFile,
                                               unsigned int uTabs);
 
     void EnableModeElements(bool bEnable);

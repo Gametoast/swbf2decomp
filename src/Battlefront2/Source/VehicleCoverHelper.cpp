@@ -32,27 +32,27 @@ namespace
 
     const PblHash kRttiHashEntityHover("EntityHover");
 
-    const PblVector3& GetPos(const PblMatrix& m)
+    inline const PblVector3& GetPos(const PblMatrix& m)
     {
         return *(const PblVector3*)&m.m[3][0];
     }
 
-    AILowLevel& GetLowLevel(UnitController* pCtrl)
+    inline AILowLevel& GetLowLevel(UnitController* pCtrl)
     {
         return *reinterpret_cast<AILowLevel*>(pCtrl->mLowLevel);
     }
 
-    AttackHelper* GetAttackHelper(UnitAgent* pOwner)
+    inline AttackHelper* GetAttackHelper(UnitAgent* pOwner)
     {
         return reinterpret_cast<AttackHelper*>(pOwner->mAttackHelper);
     }
 
-    CollisionObject* GetCollisionObject(GameObject* pObj)
+    inline CollisionObject* GetCollisionObject(GameObject* pObj)
     {
         return pObj->GetCollisionObject();
     }
 
-    const CollisionObject* GetCollisionObject(const GameObject* pObj)
+    inline const CollisionObject* GetCollisionObject(const GameObject* pObj)
     {
         return pObj->GetCollisionObject();
     }

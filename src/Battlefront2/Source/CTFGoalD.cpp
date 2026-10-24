@@ -60,8 +60,9 @@ inline const PblVector3& RegionPosition(const RedRegion* pRegion)
 // GLOBAL: SWBF2 0x01eb97b0
 // SYNTHETIC: SWBF2 0x004027b0
 // `dynamic initializer for 'AI::CTFGoalD::rttiHashCTFGoalD''
+
 PblHash AI::CTFGoalD::rttiHashCTFGoalD("CTFGoalD");
-char AI::CTFGoalD::rttiNameCTFGoalD[] = "CTFGoalD";
+const char AI::CTFGoalD::rttiNameCTFGoalD[] = "CTFGoalD";
 
 // FUNCTION: SWBF2 0x00488040
 bool AI::CTFGoalD::IsRtti(unsigned int uRtti) const

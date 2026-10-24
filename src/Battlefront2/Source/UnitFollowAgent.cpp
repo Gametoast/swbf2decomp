@@ -69,7 +69,7 @@ namespace
     }
 
     template <typename TYPE>
-    TYPE* ResolveHandle(PblHandle<TYPE>& handle)
+    inline TYPE* ResolveHandle(PblHandle<TYPE>& handle)
     {
         return handle.GetValidObject();
     }
@@ -90,12 +90,12 @@ namespace
     const PblHash kRttiHashEntitySoldier("EntitySoldier");
     const PblHash kRttiHashEntityDroideka("EntityDroideka");
 
-    Controllable* SeatOf(const GameObject* pTarget)
+    inline Controllable* SeatOf(const GameObject* pTarget)
     {
         return pTarget->mControllableList.GetFirst()->_pObject;
     }
 
-    const PblVector3* GetTargetPosition(const GameObject* pTarget)
+    inline const PblVector3* GetTargetPosition(const GameObject* pTarget)
     {
         return &static_cast<const CollisionObject*>(pTarget)->GetPosition();
     }
@@ -106,7 +106,7 @@ namespace
 // GLOBAL: SWBF2 0x01f993e8
 // UnitFollowAgent::rttiHashUnitFollowAgent
 PblHash UnitFollowAgent::rttiHashUnitFollowAgent("UnitFollowAgent");
-char UnitFollowAgent::rttiNameUnitFollowAgent[] = "UnitFollowAgent";
+const char UnitFollowAgent::rttiNameUnitFollowAgent[] = "UnitFollowAgent";
 
 // FUNCTION: SWBF2 0x00667f00
 bool UnitFollowAgent::IsRtti(unsigned int uRtti) const

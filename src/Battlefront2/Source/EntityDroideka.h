@@ -38,7 +38,7 @@ class EntityDroidekaClass : public GameObjectClass,
 public:
 
     static PblHash rttiHashEntityDroidekaClass;
-    static char rttiNameEntityDroidekaClass[];
+    static const char rttiNameEntityDroidekaClass[];
 
     // FUNCTION: SWBF2 0x004294b0
     static unsigned int GetRtti() { return rttiHashEntityDroidekaClass; }
@@ -443,7 +443,7 @@ public:
 
     static PblHash rttiHashEntityDroideka;
     static MemoryPool sMemoryPool;
-    static char rttiNameEntityDroideka[];
+    static const char rttiNameEntityDroideka[];
     static StateTableEntry sStateTable[];
 
     bool mCallUpdateWalkingGroundNormal;

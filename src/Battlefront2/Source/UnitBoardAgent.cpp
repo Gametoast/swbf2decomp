@@ -54,7 +54,7 @@ unsigned int GetHandleId(const GameObject* pObj)
     return pObj->mHandleId;
 }
 
-GameObject* ResolveHandle(PblHandle<GameObject>& handle)
+inline GameObject* ResolveHandle(PblHandle<GameObject>& handle)
 {
     GameObject* pObj = handle.mObject;
     if (pObj)
@@ -69,17 +69,17 @@ GameObject* ResolveHandle(PblHandle<GameObject>& handle)
     return 0;
 }
 
-const CollisionObject* GetCollisionObject(const GameObject* pObj)
+inline const CollisionObject* GetCollisionObject(const GameObject* pObj)
 {
     return static_cast<const CollisionObject*>(pObj);
 }
 
-const PblVector3& GetTrans(const PblMatrix& m)
+inline const PblVector3& GetTrans(const PblMatrix& m)
 {
     return *reinterpret_cast<const PblVector3*>(&m.m[3][0]);
 }
 
-float DistSq(const PblVector3& a, const PblVector3& b)
+inline float DistSq(const PblVector3& a, const PblVector3& b)
 {
     float fX = a.x - b.x;
     float fY = a.y - b.y;
@@ -93,7 +93,7 @@ float DistSq(const PblVector3& a, const PblVector3& b)
 // GLOBAL: SWBF2 0x01f99354
 // UnitBoardAgent::rttiHashUnitBoardAgent
 PblHash UnitBoardAgent::rttiHashUnitBoardAgent("UnitBoardAgent");
-char UnitBoardAgent::rttiNameUnitBoardAgent[] = "UnitBoardAgent";
+const char UnitBoardAgent::rttiNameUnitBoardAgent[] = "UnitBoardAgent";
 
 // FUNCTION: SWBF2 0x00661f80
 bool UnitBoardAgent::IsRtti(unsigned int uRtti) const

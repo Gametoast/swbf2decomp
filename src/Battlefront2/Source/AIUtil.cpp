@@ -107,22 +107,22 @@ PblMatrix DirectionMatrix(const PblVector3& vDir, const PblVector3& vUp, const P
 namespace
 {
 
-    const PblVector3& GetVelocity(const GameObject* pObj)
+    inline const PblVector3& GetVelocity(const GameObject* pObj)
     {
         return pObj->GetVelocity();
     }
 
-    bool IsRtti(const GameObject* pObj, unsigned int uRtti)
+    inline bool IsRtti(const GameObject* pObj, unsigned int uRtti)
     {
         return pObj->IsRtti(uRtti);
     }
 
-    float GetMaxSpeed(const GameObject* pObj)
+    inline float GetMaxSpeed(const GameObject* pObj)
     {
         return pObj->GetMaxSpeed();
     }
 
-    const Controllable* GetControllable(const GameObject* pObj)
+    inline const Controllable* GetControllable(const GameObject* pObj)
     {
         return pObj->GetControllable();
     }
@@ -132,7 +132,7 @@ namespace
         return pObj->GetEntityType();
     }
 
-    int GetFlyerState(const GameObject* pObj)
+    inline int GetFlyerState(const GameObject* pObj)
     {
         return static_cast<const EntityFlyer*>(pObj)->GetState();
     }
@@ -837,7 +837,7 @@ namespace
         return static_cast<const EntityFlyer*>(pFlyer)->mObstacle;
     }
 
-    const AILowLevel* GetLowLevel(const UnitController* pUnit)
+    inline const AILowLevel* GetLowLevel(const UnitController* pUnit)
     {
         return reinterpret_cast<const AILowLevel*>(pUnit->mLowLevel);
     }
@@ -1393,7 +1393,7 @@ bool AIUtil::IsNearPost(const Controllable* pMe, const CommandPost* pPost, const
 namespace AIUtil {
 
 // FUNCTION: SWBF2 0x00441860
-bool __fastcall CanPotentiallySee(Controllable* pMe, const GameObject* pObject, float* pOut)
+bool __cdecl CanPotentiallySee(Controllable* pMe, const GameObject* pObject, float* pOut)
 {
     static const float sCosHalfFOV = PblMath::Cos(FOV_ANGLE * 0.5f);
 

@@ -23,7 +23,7 @@ public:
     SoldierAnimationBank::ANIMATION mAttachSoldierAnimation;
 
     static PblHash rttiHashOrdnanceGrapplingHookClass;
-    static char rttiNameOrdnanceGrapplingHookClass[];
+    static const char rttiNameOrdnanceGrapplingHookClass[];
 };
   
  
@@ -75,7 +75,7 @@ public:
     float mDeltaTime;
 
     static PblHash rttiHashOrdnanceGrapplingHook;
-    static char rttiNameOrdnanceGrapplingHook[];
+    static const char rttiNameOrdnanceGrapplingHook[];
 
     static void PlatformInit();
 

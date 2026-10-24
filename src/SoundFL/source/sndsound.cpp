@@ -687,10 +687,6 @@ unsigned int __cdecl Sound::FindParameterIndexByHashID(unsigned int uiHashID)
     return ~0u;
 }
 
-// FUNCTION: SWBF2 0x00537ef0
-Source3D::~Source3D()
-{
-}
 
 }
 

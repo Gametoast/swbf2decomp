@@ -27,7 +27,7 @@ public:
     bool mAlignVertical;
 
     static PblHash rttiHashOrdnanceGrenadeClass;
-    static char rttiNameOrdnanceGrenadeClass[];
+    static const char rttiNameOrdnanceGrenadeClass[];
 };
   
  
@@ -59,7 +59,7 @@ public:
     float mLastEventTime;
 
     static PblHash rttiHashOrdnanceGrenade;
-    static char rttiNameOrdnanceGrenade[];
+    static const char rttiNameOrdnanceGrenade[];
 };
  
  

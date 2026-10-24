@@ -114,12 +114,12 @@ namespace GameLoop { extern bool gUnlimitedAmmo; }
 namespace
 {
 
-    const PblMatrix& GetCollisionMatrix(GameObject* pObject)
+    inline const PblMatrix& GetCollisionMatrix(GameObject* pObject)
     {
         return static_cast<CollisionObject*>(pObject)->GetMatrix();
     }
 
-    const PblVector3& GetVelocity(GameObject* pObject)
+    inline const PblVector3& GetVelocity(GameObject* pObject)
     {
         return pObject->GetVelocity();
     }
@@ -129,17 +129,17 @@ namespace
         return pObject->GetEntityType();
     }
 
-    int GetTeam(GameObject* pObject)
+    inline int GetTeam(GameObject* pObject)
     {
         return pObject->GetTeam();
     }
 
-    const PblVector3& GetTranslation(const PblMatrix& m)
+    inline const PblVector3& GetTranslation(const PblMatrix& m)
     {
         return *reinterpret_cast<const PblVector3*>(m.m[3]);
     }
 
-    const GameObject* GetHandleObject(const PblHandle<const GameObject>& handle)
+    inline const GameObject* GetHandleObject(const PblHandle<const GameObject>& handle)
     {
         PblHandle<const GameObject>& h = const_cast<PblHandle<const GameObject>&>(handle);
         if (h.mObject &&
@@ -151,7 +151,7 @@ namespace
         return h.mObject;
     }
 
-    float Clamp(float f, float fMin, float fMax)
+    inline float Clamp(float f, float fMin, float fMax)
     {
         if (fMin > f)
         {
@@ -164,7 +164,7 @@ namespace
         return f;
     }
 
-    bool ObjectIsRtti(GameObject* pObject, unsigned int uRtti)
+    inline bool ObjectIsRtti(GameObject* pObject, unsigned int uRtti)
     {
         return pObject->IsRtti(uRtti);
     }
@@ -1272,14 +1272,14 @@ void WeaponClass::RenderFlash(const PblVector3& vPos, const PblVector3& vDir, fl
 // GLOBAL: SWBF2 0x01f9a73c
 // Weapon::rttiHashWeapon
 PblHash Weapon::rttiHashWeapon("Weapon");
-char Weapon::rttiNameWeapon[] = "Weapon";
+const char Weapon::rttiNameWeapon[] = "Weapon";
 
 // SYNTHETIC: SWBF2 0x00407030
 // `dynamic initializer for 'WeaponClass::rttiHashWeaponClass''
 // GLOBAL: SWBF2 0x01f9a880
 // WeaponClass::rttiHashWeaponClass
 PblHash WeaponClass::rttiHashWeaponClass("WeaponClass");
-char WeaponClass::rttiNameWeaponClass[] = "WeaponClass";
+const char WeaponClass::rttiNameWeaponClass[] = "WeaponClass";
 
 // GLOBAL: SWBF2 0x01f9a318
 // SYNTHETIC: SWBF2 0x00407040
@@ -1293,14 +1293,15 @@ GameSound WeaponClass::sWeaponChangeUnableSound;
 // `dynamic initializer for 'Weapon::sMemoryPool''
 // SYNTHETIC: SWBF2 0x007697d0
 // `dynamic atexit destructor for 'Weapon::sMemoryPool''
+
 MemoryPool Weapon::sMemoryPool("Weapon", 0x110);
 
-void Weapon::operator delete(void* p)
+inline void Weapon::operator delete(void* p)
 {
     sMemoryPool.Free(p);
 }
 
-void* Weapon::operator new(size_t uSize)
+inline void* Weapon::operator new(size_t uSize)
 {
     return sMemoryPool.Allocate(uSize);
 }

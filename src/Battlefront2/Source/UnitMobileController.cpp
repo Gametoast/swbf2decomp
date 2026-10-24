@@ -6,7 +6,7 @@
 // GLOBAL: SWBF2 0x01f99414
 // UnitMobileController::rttiHashUnitMobileController
 PblHash UnitMobileController::rttiHashUnitMobileController("UnitMobileController");
-char UnitMobileController::rttiNameUnitMobileController[] = "UnitMobileController";
+const char UnitMobileController::rttiNameUnitMobileController[] = "UnitMobileController";
 
 // FUNCTION: SWBF2 0x00669180
 bool UnitMobileController::IsRtti(unsigned int uRtti) const

@@ -854,7 +854,7 @@ void NetMatch::ChangeRegisterGame()
 }
 
 // FUNCTION: SWBF2 0x005d5e40
-void __fastcall NetMatch::ReceiveRegisterPacket(const char*  , int  , const void*  )
+void __cdecl NetMatch::ReceiveRegisterPacket(const char*  , int  , const void*  )
 {
 }
 

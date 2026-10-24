@@ -65,7 +65,7 @@ public:
     PblHandle<GameObject> mConvoyParent;
 
     static PblHash rttiHashUnitTrooperAgent;
-    static char rttiNameUnitTrooperAgent[];
+    static const char rttiNameUnitTrooperAgent[];
 };
 
  

@@ -19,14 +19,15 @@ static const float EPSILON = 0.0001f;
 // `dynamic initializer for 'TreeGridStack::sMemoryPool''
 // SYNTHETIC: SWBF2 0x00769640
 // `dynamic atexit destructor for 'TreeGridStack::sMemoryPool''
+
 MemoryPool TreeGridStack::sMemoryPool("TreeGridStack", sizeof(TreeGridStack));
 
-void* TreeGridStack::operator new(unsigned int uiSize)
+inline void* TreeGridStack::operator new(unsigned int uiSize)
 {
     return sMemoryPool.Allocate(uiSize);
 }
 
-void TreeGridStack::operator delete(void* pBlock)
+inline void TreeGridStack::operator delete(void* pBlock)
 {
     sMemoryPool.Free(pBlock);
 }
@@ -795,3 +796,4 @@ TreeGridStack* TreeGridStack::RemoveObject(TreeGridObject* pObj)
     }
     return this;
 }
+#include <new>

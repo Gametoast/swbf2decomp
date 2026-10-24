@@ -255,3 +255,10 @@ public:
  
  
  
+
+// FUNCTION: SWBF2 0x0043ec10
+inline CollisionObjectType CollisionObject::GetCollisionType() const
+{
+    const CollisionObject* pObject = (const CollisionObject*)this;
+    return (CollisionObjectType)pObject->GetObjectData(0);
+}

@@ -22,7 +22,7 @@ public:
     };
 
     static PblHash rttiHashNavigatorFollowTarget;
-    static char rttiNameNavigatorFollowTarget[];
+    static const char rttiNameNavigatorFollowTarget[];
 
     NavigatorFollowTarget(AILowLevel* pOwner, const GameObject* pTarget,
                           const Obstacle** ppIgnore, int iIgnoreCnt,

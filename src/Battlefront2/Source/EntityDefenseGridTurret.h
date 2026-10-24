@@ -26,7 +26,7 @@ public:
     static PblHash rttiHashEntityDefenseGridTurretClass;
 
     static unsigned int GetRtti() { return rttiHashEntityDefenseGridTurretClass; }
-    static char rttiNameEntityDefenseGridTurretClass[];
+    static const char rttiNameEntityDefenseGridTurretClass[];
 };
   
  
@@ -50,7 +50,7 @@ public:
 
     static MemoryPool sMemoryPool;
     static PblHash rttiHashEntityDefenseGridTurret;
-    static char rttiNameEntityDefenseGridTurret[];
+    static const char rttiNameEntityDefenseGridTurret[];
 
     EntityDefenseGridTurretClass* mClass;
     float mRespawnTimer;

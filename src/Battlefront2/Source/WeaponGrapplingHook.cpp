@@ -5,14 +5,14 @@
 // GLOBAL: SWBF2 0x01f9a8c4
 // WeaponGrapplingHookClass::rttiHashWeaponGrapplingHookClass
 PblHash WeaponGrapplingHookClass::rttiHashWeaponGrapplingHookClass("WeaponGrapplingHookClass");
-char WeaponGrapplingHookClass::rttiNameWeaponGrapplingHookClass[] = "WeaponGrapplingHookClass";
+const char WeaponGrapplingHookClass::rttiNameWeaponGrapplingHookClass[] = "WeaponGrapplingHookClass";
 
 // SYNTHETIC: SWBF2 0x00407160
 // `dynamic initializer for 'WeaponGrapplingHook::rttiHashWeaponGrapplingHook''
 // GLOBAL: SWBF2 0x01f9a8c8
 // WeaponGrapplingHook::rttiHashWeaponGrapplingHook
 PblHash WeaponGrapplingHook::rttiHashWeaponGrapplingHook("WeaponGrapplingHook");
-char WeaponGrapplingHook::rttiNameWeaponGrapplingHook[] = "WeaponGrapplingHook";
+const char WeaponGrapplingHook::rttiNameWeaponGrapplingHook[] = "WeaponGrapplingHook";
 
 // FUNCTION: SWBF2 0x00684de0
 WeaponGrapplingHookClass::WeaponGrapplingHookClass(unsigned int uHash)

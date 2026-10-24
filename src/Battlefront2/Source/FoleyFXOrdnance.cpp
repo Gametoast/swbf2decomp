@@ -7,7 +7,7 @@
 // GLOBAL: SWBF2 0x01ebd01c
 // FoleyFXImpact::rttiHashFoleyFXImpact
 PblHash FoleyFXImpact::rttiHashFoleyFXImpact("FoleyFXImpact");
-char FoleyFXImpact::rttiNameFoleyFXImpact[] = "FoleyFXImpact";
+const char FoleyFXImpact::rttiNameFoleyFXImpact[] = "FoleyFXImpact";
 
 // GLOBAL: SWBF2 0x007ec188
 // SYNTHETIC: SWBF2 0x00403ab0

@@ -6,7 +6,7 @@
 namespace
 {
 
-    Entity* AsEntity(GameObject* pObj)
+    inline Entity* AsEntity(GameObject* pObj)
     {
         return reinterpret_cast<Entity*>(pObj);
     }
@@ -17,7 +17,7 @@ namespace
 // GLOBAL: SWBF2 0x01f9a24c
 // UnitStationaryController::rttiHashUnitStationaryController
 PblHash UnitStationaryController::rttiHashUnitStationaryController("UnitStationaryController");
-char UnitStationaryController::rttiNameUnitStationaryController[] = "UnitStationaryController";
+const char UnitStationaryController::rttiNameUnitStationaryController[] = "UnitStationaryController";
 
 // FUNCTION: SWBF2 0x00669720
 bool UnitStationaryController::IsRtti(unsigned int uRtti) const

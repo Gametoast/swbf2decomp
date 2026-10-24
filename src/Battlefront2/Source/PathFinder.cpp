@@ -1094,3 +1094,4 @@ bool AIDebug::PauseAfterPathFind()
 {
     return false;
 }
+#include <new>

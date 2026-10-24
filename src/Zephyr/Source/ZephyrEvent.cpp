@@ -1,5 +1,5 @@
 #include "ZephyrEvent.h"
-
+#include <new>
 // FUNCTION: SWBF2 0x0072ee90
 void ZephyrEventBank::Init(short iNumLists)
 {

@@ -49,17 +49,17 @@ static const float FOV_ANGLE = 2.70526028f;
 
 namespace
 {
-    const PblVector3& GetMatrixPos(const PblMatrix& m)
+    inline const PblVector3& GetMatrixPos(const PblMatrix& m)
     {
         return *(const PblVector3*)&m.m[3][0];
     }
 
-    const CollisionObject* GetCollisionObject(const GameObject* pObj)
+    inline const CollisionObject* GetCollisionObject(const GameObject* pObj)
     {
         return static_cast<const CollisionObject*>(pObj);
     }
 
-    float DistSq(const PblVector3& a, const PblVector3& b)
+    inline float DistSq(const PblVector3& a, const PblVector3& b)
     {
         float fX = a.x - b.x;
         float fY = a.y - b.y;
@@ -79,25 +79,13 @@ SnipeHelper::SnipeHelper(UnitAgent* pOwner)
 // SYNTHETIC: SWBF2 0x0063b680
 // SnipeHelper::`scalar deleting destructor'
 
-const Controllable* SnipeHelper::GetMe() const
-{
-    return mOwner->GetMe();
-}
 
-Controllable* SnipeHelper::GetMe()
-{
-    return mOwner->GetMe();
-}
 
-UnitController* SnipeHelper::GetCtrl()
-{
-    return mOwner->mCtrl;
-}
 
-const AttackHelper* SnipeHelper::GetAttackHelper() const
-{
-    return reinterpret_cast<const AttackHelper*>(mOwner->mAttackHelper);
-}
+
+
+
+
 
 // FUNCTION: SWBF2 0x0063b6e0
 bool SnipeHelper::LookForSnipeHintAndInit()
