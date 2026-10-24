@@ -766,16 +766,20 @@ void FLInputManager::StopIntermittentRumble(int iPlayer)
     }
 }
 
-// FUNCTION: SWBF2 0x0052b190
+// TEMPLATE: SWBF2 0x0052b190
+// util::Vector<unsigned int,util::BaseArray<unsigned int,util::TypedArrayAllocator<unsigned int,util::NewAllocator> > >::SetSize_
 template bool util::Vector<unsigned int, util::BaseArray<unsigned int,
     util::TypedArrayAllocator<unsigned int, util::NewAllocator> > >::SetSize_(int, bool);
-// FUNCTION: SWBF2 0x0052b250
+// TEMPLATE: SWBF2 0x0052b250
+// util::BaseArray<unsigned short,util::TypedArrayAllocator<unsigned short,util::NewAllocator> >::Reserve_
 template bool util::BaseArray<unsigned short,
     util::TypedArrayAllocator<unsigned short, util::NewAllocator> >::Reserve_(int, bool);
-// FUNCTION: SWBF2 0x0052b320
+// TEMPLATE: SWBF2 0x0052b320
+// util::BaseArray<unsigned int,util::TypedArrayAllocator<unsigned int,util::NewAllocator> >::Reserve_
 template bool util::BaseArray<unsigned int,
     util::TypedArrayAllocator<unsigned int, util::NewAllocator> >::Reserve_(int, bool);
-// FUNCTION: SWBF2 0x0052b440
+// TEMPLATE: SWBF2 0x0052b440
+// util::TypedArrayAllocator<unsigned int,util::NewAllocator>::Allocate_
 template unsigned int* util::TypedArrayAllocator<unsigned int, util::NewAllocator>::Allocate_(int&);
 
 // FUNCTION: SWBF2 0x0052ab40

@@ -52,44 +52,57 @@ void j_nullsub_177()
     sub_725190();
 }
 
-// FUNCTION: SWBF2 0x006aee30
+// TEMPLATE: SWBF2 0x006aee30
+// util::BaseArray<int *,util::TypedArrayAllocator<int *,util::SingletonAllocator<util::DefaultStaticAllocator> > >::Reserve_
 template bool util::BaseArray<int*,
     util::TypedArrayAllocator<int*, util::SingletonAllocator<util::DefaultStaticAllocator> > >::Reserve_(int, bool);
-// FUNCTION: SWBF2 0x006aed30
+// TEMPLATE: SWBF2 0x006aed30
+// util::BaseArray<unsigned int,util::TypedArrayAllocator<unsigned int,util::SingletonAllocator<util::DefaultStaticAllocator> > >::Reserve_
 template bool util::BaseArray<unsigned int,
     util::TypedArrayAllocator<unsigned int, util::SingletonAllocator<util::DefaultStaticAllocator> > >::Reserve_(int, bool);
-// FUNCTION: SWBF2 0x006aef30
+// TEMPLATE: SWBF2 0x006aef30
+// util::BaseArray<char const *,util::TypedArrayAllocator<char const *,util::SingletonAllocator<util::DefaultStaticAllocator> > >::Reserve_
 template bool util::BaseArray<char const*,
     util::TypedArrayAllocator<char const*, util::SingletonAllocator<util::DefaultStaticAllocator> > >::Reserve_(int, bool);
-// FUNCTION: SWBF2 0x006af1e0
+// TEMPLATE: SWBF2 0x006af1e0
+// util::Vector<int *,util::BaseArray<int *,util::TypedArrayAllocator<int *,util::SingletonAllocator<util::DefaultStaticAllocator> > > >::SetSize_
 template bool util::Vector<int*, util::BaseArray<int*,
     util::TypedArrayAllocator<int*, util::SingletonAllocator<util::DefaultStaticAllocator> > > >::SetSize_(int, bool);
-// FUNCTION: SWBF2 0x006af130
+// TEMPLATE: SWBF2 0x006af130
+// util::Vector<unsigned int,util::BaseArray<unsigned int,util::TypedArrayAllocator<unsigned int,util::SingletonAllocator<util::DefaultStaticAllocator> > > >::SetSize_
 template bool util::Vector<unsigned int, util::BaseArray<unsigned int,
     util::TypedArrayAllocator<unsigned int, util::SingletonAllocator<util::DefaultStaticAllocator> > > >::SetSize_(int, bool);
-// FUNCTION: SWBF2 0x006af290
+// TEMPLATE: SWBF2 0x006af290
+// util::Vector<char const *,util::BaseArray<char const *,util::TypedArrayAllocator<char const *,util::SingletonAllocator<util::DefaultStaticAllocator> > > >::SetSize_
 template bool util::Vector<char const*, util::BaseArray<char const*,
     util::TypedArrayAllocator<char const*, util::SingletonAllocator<util::DefaultStaticAllocator> > > >::SetSize_(int, bool);
-// FUNCTION: SWBF2 0x006adb00
+// TEMPLATE: SWBF2 0x006adb00
+// util::HashTable_<int *,char const *,util::Vector<int *,util::BaseArray<int *,util::TypedArrayAllocator<int *,util::SingletonAllocator<util::DefaultStaticAllocator> > > >,util::Vector<char const *,util::BaseArray<char const *,util::TypedArrayAllocator<char const *,util::SingletonAllocator<util::DefaultStaticAllocator> > > >,util::Vector<unsigned int,util::BaseArray<unsigned int,util::TypedArrayAllocator<unsigned int,util::SingletonAllocator<util::DefaultStaticAllocator> > > > >::FindIndex_
 template unsigned int util::HashTable_<int*, char const*, util::HashTable<int*, char const*, util::SingletonAllocator<util::DefaultStaticAllocator> >::ElemVecT, util::HashTable<int*, char const*, util::SingletonAllocator<util::DefaultStaticAllocator> >::KeyVecT, util::HashTable<int*, char const*, util::SingletonAllocator<util::DefaultStaticAllocator> >::HashVecT>::FindIndex_(unsigned int) const;
 
-// FUNCTION: SWBF2 0x006ad580
+// TEMPLATE: SWBF2 0x006ad580
+// util::BaseArray<unsigned int,util::TypedArrayAllocator<unsigned int,util::SingletonAllocator<util::DefaultStaticAllocator> > >::~BaseArray<unsigned int,util::TypedArrayAllocator<unsigned int,util::SingletonAllocator<util::DefaultStaticAllocator> > >
 template util::BaseArray<unsigned int,
     util::TypedArrayAllocator<unsigned int, util::SingletonAllocator<util::DefaultStaticAllocator> > >::~BaseArray();
-// FUNCTION: SWBF2 0x006ad5d0
+// TEMPLATE: SWBF2 0x006ad5d0
+// util::BaseArray<int *,util::TypedArrayAllocator<int *,util::SingletonAllocator<util::DefaultStaticAllocator> > >::~BaseArray<int *,util::TypedArrayAllocator<int *,util::SingletonAllocator<util::DefaultStaticAllocator> > >
 template util::BaseArray<int*,
     util::TypedArrayAllocator<int*, util::SingletonAllocator<util::DefaultStaticAllocator> > >::~BaseArray();
-// FUNCTION: SWBF2 0x006ad620
+// TEMPLATE: SWBF2 0x006ad620
+// util::BaseArray<char const *,util::TypedArrayAllocator<char const *,util::SingletonAllocator<util::DefaultStaticAllocator> > >::~BaseArray<char const *,util::TypedArrayAllocator<char const *,util::SingletonAllocator<util::DefaultStaticAllocator> > >
 template util::BaseArray<char const*,
     util::TypedArrayAllocator<char const*, util::SingletonAllocator<util::DefaultStaticAllocator> > >::~BaseArray();
 
-// FUNCTION: SWBF2 0x006ae950
+// TEMPLATE: SWBF2 0x006ae950
+// util::HashTable_<int *,char const *,util::Vector<int *,util::BaseArray<int *,util::TypedArrayAllocator<int *,util::SingletonAllocator<util::DefaultStaticAllocator> > > >,util::Vector<char const *,util::BaseArray<char const *,util::TypedArrayAllocator<char const *,util::SingletonAllocator<util::DefaultStaticAllocator> > > >,util::Vector<unsigned int,util::BaseArray<unsigned int,util::TypedArrayAllocator<unsigned int,util::SingletonAllocator<util::DefaultStaticAllocator> > > > >::Get
 template int*& util::HashTable_<int*, char const*, util::HashTable<int*, char const*, util::SingletonAllocator<util::DefaultStaticAllocator> >::ElemVecT, util::HashTable<int*, char const*, util::SingletonAllocator<util::DefaultStaticAllocator> >::KeyVecT, util::HashTable<int*, char const*, util::SingletonAllocator<util::DefaultStaticAllocator> >::HashVecT>::Get(char const* const&);
 
-// FUNCTION: SWBF2 0x006ae9d0
+// TEMPLATE: SWBF2 0x006ae9d0
+// util::VariableSet<util::SingletonAllocator<util::DefaultStaticAllocator> >::GetInt
 template int& util::VariableSet<util::SingletonAllocator<util::DefaultStaticAllocator> >::GetInt(char const*);
 
-// FUNCTION: SWBF2 0x006aead0
+// TEMPLATE: SWBF2 0x006aead0
+// util::HashTable<int *,char const *,util::SingletonAllocator<util::DefaultStaticAllocator> >::Reallocate
 template void util::HashTable<int*, char const*, util::SingletonAllocator<util::DefaultStaticAllocator> >::Reallocate(int);
 
 // GLOBAL: SWBF2 0x009a0878
@@ -395,12 +408,15 @@ void RedSceneAABox::Move(RedSceneObject* pObject)
     pBox->Add(pObject);
 }
 
-// FUNCTION: SWBF2 0x006e2a00
+// TEMPLATE: SWBF2 0x006e2a00
+// PblHeap<RedSceneAABox *,float>::Pop
 template void PblHeap<RedSceneAABox*, float>::Pop();
-// FUNCTION: SWBF2 0x006e2a90
+// TEMPLATE: SWBF2 0x006e2a90
+// PblHeap<RedSceneObject *,float>::Pop
 template void PblHeap<RedSceneObject*, float>::Pop();
 
-// FUNCTION: SWBF2 0x006e2b20
+// TEMPLATE: SWBF2 0x006e2b20
+// PblHeap<RedSceneObject *,float>::Push
 template void PblHeap<RedSceneObject*, float>::Push(RedSceneObject*&, float);
 
 // FUNCTION: SWBF2 0x006e2b80

@@ -907,10 +907,12 @@ PblMatrix Aimer::GetFireMatrix() const
     return m;
 }
 
-// FUNCTION: SWBF2 0x005fe640
+// TEMPLATE: SWBF2 0x005fe640
+// PblHeap<GameObject *,float>::Push
 template void PblHeap<GameObject*, float>::Push(GameObject*& obj, float key);
 
-// FUNCTION: SWBF2 0x005fe6a0
+// TEMPLATE: SWBF2 0x005fe6a0
+// PblHeap<GameObject *,float>::Pop
 template void PblHeap<GameObject*, float>::Pop();
 
 // SYNTHETIC: SWBF2 0x005fc5f0

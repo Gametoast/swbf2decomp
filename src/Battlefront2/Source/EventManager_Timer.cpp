@@ -165,7 +165,8 @@ template bool Event<Timer, char>::Callback::operator()(Timer&, char&);
 
 namespace EventManager {
 
-// FUNCTION: SWBF2 0x0051c240
+// TEMPLATE: SWBF2 0x0051c240
+// EventManager::Event<Timer,char>::Callback::~Callback
 template Event<Timer, char>::Callback::~Callback();
 }
 

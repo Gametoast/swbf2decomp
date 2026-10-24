@@ -338,10 +338,12 @@ void UnreserveObject(const GameObject* pObj, ReserveType eType)
  
  
 
-// FUNCTION: SWBF2 0x006300e0
+// TEMPLATE: SWBF2 0x006300e0
+// ListPool<ReserveManager::ReserveStruct,int>::ListPool<ReserveManager::ReserveStruct,int>
 template ListPool<ReserveManager::ReserveStruct, int>::ListPool(int);
 
-// FUNCTION: SWBF2 0x00630190
+// TEMPLATE: SWBF2 0x00630190
+// ListPool<ReserveManager::ReserveStruct,int>::Remove
 template void ListPool<ReserveManager::ReserveStruct, int>::Remove(int);
 
 namespace ReserveManager {

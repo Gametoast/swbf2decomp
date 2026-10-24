@@ -890,7 +890,8 @@ NetPacket* NetComm::Recv(PktType eType, PktType eType2)
     return 0;
 }
 
-// FUNCTION: SWBF2 0x005b3930
+// TEMPLATE: SWBF2 0x005b3930
+// PblJournal::Record<unsigned __int64>
 template void PblJournal::Record<unsigned __int64>(unsigned __int64& value, PblJournalType type);
 
 // FUNCTION: SWBF2 0x005b26d0

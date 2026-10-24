@@ -441,7 +441,8 @@ void RedWater::Cleanup()
     m_CustomPatches.RemoveAll();
 }
 
-// FUNCTION: SWBF2 0x006ce840
+// TEMPLATE: SWBF2 0x006ce840
+// PblList<RedWater::WaterCustomPatch>::RemoveAll
 template void PblList<RedWater::WaterCustomPatch>::RemoveAll();
 
 // FUNCTION: SWBF2 0x006ce880

@@ -427,7 +427,8 @@ bool SnipeHelper::HELPERVehicleNearbyInterrupt(const GameObject* pVehicle) const
     return false;
 }
 
-// FUNCTION: SWBF2 0x0063c200
+// TEMPLATE: SWBF2 0x0063c200
+// PblHeap<BaseHint const *,float>::Pop
 template void PblHeap<const BaseHint*, float>::Pop();
 
 // FUNCTION: SWBF2 0x0063c0a0

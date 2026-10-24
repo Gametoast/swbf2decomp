@@ -521,5 +521,6 @@ void LightningBoltEffectObject::SetStrength(float fStrength)
     mStrength = fStrength;
 }
 
-// FUNCTION: SWBF2 0x005727e0
+// TEMPLATE: SWBF2 0x005727e0
+// PblList<LightningBoltEffectObject>::RemoveAll
 template void PblList<LightningBoltEffectObject>::RemoveAll();

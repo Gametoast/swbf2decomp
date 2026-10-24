@@ -23,7 +23,8 @@ RedPath::~RedPath()
     sPathList.RemoveAll();
 }
 
-// FUNCTION: SWBF2 0x006ddfa0
+// TEMPLATE: SWBF2 0x006ddfa0
+// PblList<RedPath>::RemoveAll
 template void PblList<RedPath>::RemoveAll();
 
 // FUNCTION: SWBF2 0x006dded0

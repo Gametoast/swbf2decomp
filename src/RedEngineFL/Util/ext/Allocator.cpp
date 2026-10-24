@@ -42,14 +42,18 @@ void StackAllocator::Deallocate(Buffer& rBuf)
     rBuf.data_ = 0;
 }
 
-// FUNCTION: SWBF2 0x006e8ff0
+// TEMPLATE: SWBF2 0x006e8ff0
+// util::StaticMemoryBlock<4096>::Allocate
 template void StaticMemoryBlock<4096>::Allocate(Buffer&);
-// FUNCTION: SWBF2 0x006e90e0
+// TEMPLATE: SWBF2 0x006e90e0
+// util::StaticMemoryBlock<4096>::Deallocate
 template void StaticMemoryBlock<4096>::Deallocate(Buffer&);
 
-// FUNCTION: SWBF2 0x006e9010
+// TEMPLATE: SWBF2 0x006e9010
+// util::StaticMemoryBlock<1024>::Allocate
 template void StaticMemoryBlock<1024>::Allocate(Buffer&);
-// FUNCTION: SWBF2 0x006e9100
+// TEMPLATE: SWBF2 0x006e9100
+// util::StaticMemoryBlock<1024>::Deallocate
 template void StaticMemoryBlock<1024>::Deallocate(Buffer&);
 
 // SYNTHETIC: SWBF2 0x006e8fa0

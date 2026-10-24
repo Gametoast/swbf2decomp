@@ -41,7 +41,8 @@ ListAllocatorImpl::~ListAllocatorImpl()
 // SYNTHETIC: SWBF2 0x006e93f0
 // util::ListAllocatorImpl::`scalar deleting destructor'
 
-// FUNCTION: SWBF2 0x006e9420
+// TEMPLATE: SWBF2 0x006e9420
+// util::Vector<util::Buffer,util::BaseArray<util::Buffer,util::TNewArrayAlloc<util::Buffer> > >::Add
 template bool Vector<Buffer>::Add(const Buffer&);
 
 // FUNCTION: SWBF2 0x006e9490
@@ -112,7 +113,8 @@ void ListAllocatorImpl::Allocate(Buffer& rBuf)
     }
 }
 
-// FUNCTION: SWBF2 0x006e95a0
+// TEMPLATE: SWBF2 0x006e95a0
+// util::TypedArrayAllocator<util::Buffer,util::NewAllocator>::Allocate_
 template Buffer* TypedArrayAllocator<Buffer>::Allocate_(int&);
 
 // FUNCTION: SWBF2 0x006e95f0
@@ -264,10 +266,12 @@ bool ListAllocatorImpl::MergeBlocks_(DLNode<Buffer>* pFirst, DLNode<Buffer>* pSe
     return true;
 }
 
-// FUNCTION: SWBF2 0x006e9920
+// TEMPLATE: SWBF2 0x006e9920
+// util::List<util::Buffer,util::DLNode<util::Buffer> >::Remove_
 template bool List<Buffer, DLNode<Buffer> >::Remove_(DLNode<Buffer>*);
 
-// FUNCTION: SWBF2 0x006e9980
+// TEMPLATE: SWBF2 0x006e9980
+// util::BaseArray<util::Buffer,util::TNewArrayAlloc<util::Buffer> >::Reserve_
 template bool BaseArray<Buffer>::Reserve_(int, bool);
 
 // FUNCTION: SWBF2 0x006e9a60

@@ -9,10 +9,12 @@
 #include "StringDB.h"
 #include <new>
 
-// FUNCTION: SWBF2 0x00437f20
+// TEMPLATE: SWBF2 0x00437f20
+// PblBitVector<600>::InvertAll
 template void PblBitVector<600>::InvertAll();
 
-// FUNCTION: SWBF2 0x00437f80
+// TEMPLATE: SWBF2 0x00437f80
+// PblBitVector<600>::And
 template void PblBitVector<600>::And(const PblBitVector<600>&);
 
 namespace EventManager

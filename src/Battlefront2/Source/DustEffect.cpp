@@ -533,10 +533,12 @@ void DustEffectClass::Reset()
     sDustEffects.RemoveAll();
 }
 
-// FUNCTION: SWBF2 0x00490ac0
+// TEMPLATE: SWBF2 0x00490ac0
+// PblList<DustEffectClass>::RemoveAll
 template void PblList<DustEffectClass>::RemoveAll();
 
-// FUNCTION: SWBF2 0x00490a70
+// TEMPLATE: SWBF2 0x00490a70
+// PblList<DustEffect>::RemoveAll
 template void PblList<DustEffect>::RemoveAll();
 
 // FUNCTION: SWBF2 0x00490250

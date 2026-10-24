@@ -98,19 +98,24 @@ void pvs::BaseCamera::GetAABound(geo::Box&) const
 {
 }
 
-// FUNCTION: SWBF2 0x006de6e0
+// TEMPLATE: SWBF2 0x006de6e0
+// util::Max_<unsigned int>
 template const unsigned int& util::Max_<unsigned int>(const unsigned int&, const unsigned int&);
 
-// FUNCTION: SWBF2 0x006de700
+// TEMPLATE: SWBF2 0x006de700
+// geo::Max_<float>
 template const float& geo::Max_<float>(const float&, const float&);
 
-// FUNCTION: SWBF2 0x006de720
+// TEMPLATE: SWBF2 0x006de720
+// geo::Min_<float>
 template const float& geo::Min_<float>(const float&, const float&);
 
-// FUNCTION: SWBF2 0x006de740
+// TEMPLATE: SWBF2 0x006de740
+// util::List<pvs::IDisplayable *,util::SLNode<pvs::IDisplayable *> >::List<pvs::IDisplayable *,util::SLNode<pvs::IDisplayable *> >
 template util::List<pvs::IDisplayable*, util::SLNode<pvs::IDisplayable*> >::List(util::IAllocator*);
 
-// FUNCTION: SWBF2 0x006e02d0
+// TEMPLATE: SWBF2 0x006e02d0
+// util::List<pvs::IDisplayable *,util::SLNode<pvs::IDisplayable *> >::FindRemoveSlow
 template bool util::List<pvs::IDisplayable*, util::SLNode<pvs::IDisplayable*> >::FindRemoveSlow(pvs::IDisplayable* const&);
 
 // FUNCTION: SWBF2 0x006de7b0
@@ -239,15 +244,20 @@ void util::IAllocator::AllocateEx(Buffer& rBuf, int&)
     Allocate(rBuf);
 }
 
-// FUNCTION: SWBF2 0x006df730
+// TEMPLATE: SWBF2 0x006df730
+// util::TypedArrayAllocator<pvs::IDisplayable *,util::NewAllocator>::Allocate_
 template pvs::IDisplayable** util::TypedArrayAllocator<pvs::IDisplayable*>::Allocate_(int&);
-// FUNCTION: SWBF2 0x006df780
+// TEMPLATE: SWBF2 0x006df780
+// util::TypedArrayAllocator<pvs::Portal *,util::NewAllocator>::Allocate_
 template pvs::Portal** util::TypedArrayAllocator<pvs::Portal*>::Allocate_(int&);
-// FUNCTION: SWBF2 0x006df7d0
+// TEMPLATE: SWBF2 0x006df7d0
+// util::TypedArrayAllocator<pvs::Sector *,util::NewAllocator>::Allocate_
 template pvs::Sector** util::TypedArrayAllocator<pvs::Sector*>::Allocate_(int&);
-// FUNCTION: SWBF2 0x006df820
+// TEMPLATE: SWBF2 0x006df820
+// util::TypedArrayAllocator<void *,util::NewAllocator>::Allocate_
 template void** util::TypedArrayAllocator<void*>::Allocate_(int&);
-// FUNCTION: SWBF2 0x006df870
+// TEMPLATE: SWBF2 0x006df870
+// util::TypedArrayAllocator<pvs::SectorCache::Entry,util::NewAllocator>::Allocate_
 template pvs::SectorCache::Entry* util::TypedArrayAllocator<pvs::SectorCache::Entry>::Allocate_(int&);
 
 // FUNCTION: SWBF2 0x006dfa00
@@ -602,10 +612,12 @@ void pvs::Portal::InitBound()
     FindNormal();
 }
 
-// FUNCTION: SWBF2 0x006e0b00
+// TEMPLATE: SWBF2 0x006e0b00
+// util::List<pvs::IDisplayable *,util::SLNode<pvs::IDisplayable *> >::InsertLast
 template bool util::List<pvs::IDisplayable*, util::SLNode<pvs::IDisplayable*> >::InsertLast(pvs::IDisplayable* const&);
 
-// FUNCTION: SWBF2 0x006e0b70
+// TEMPLATE: SWBF2 0x006e0b70
+// util::Vector<void *,util::BaseArray<void *,util::TNewArrayAlloc<void *> > >::Add
 template bool util::Vector<void*>::Add(void* const&);
 
 // FUNCTION: SWBF2 0x006e0bd0
@@ -792,15 +804,20 @@ void pvs::Sector::RegisterStatic(pvs::IDisplayable& rDisp)
     }
 }
 
-// FUNCTION: SWBF2 0x006e1060
+// TEMPLATE: SWBF2 0x006e1060
+// util::BaseArray<pvs::IDisplayable *,util::TNewArrayAlloc<pvs::IDisplayable *> >::Reserve_
 template bool util::BaseArray<pvs::IDisplayable*>::Reserve_(int, bool);
-// FUNCTION: SWBF2 0x006e1130
+// TEMPLATE: SWBF2 0x006e1130
+// util::BaseArray<pvs::Portal *,util::TNewArrayAlloc<pvs::Portal *> >::Reserve_
 template bool util::BaseArray<pvs::Portal*>::Reserve_(int, bool);
-// FUNCTION: SWBF2 0x006e1200
+// TEMPLATE: SWBF2 0x006e1200
+// util::BaseArray<pvs::Sector *,util::TNewArrayAlloc<pvs::Sector *> >::Reserve_
 template bool util::BaseArray<pvs::Sector*>::Reserve_(int, bool);
-// FUNCTION: SWBF2 0x006e12d0
+// TEMPLATE: SWBF2 0x006e12d0
+// util::BaseArray<void *,util::TNewArrayAlloc<void *> >::Reserve_
 template bool util::BaseArray<void*>::Reserve_(int, bool);
-// FUNCTION: SWBF2 0x006e13a0
+// TEMPLATE: SWBF2 0x006e13a0
+// util::BaseArray<pvs::SectorCache::Entry,util::TNewArrayAlloc<pvs::SectorCache::Entry> >::Reserve_
 template bool util::BaseArray<pvs::SectorCache::Entry>::Reserve_(int, bool);
 
 // FUNCTION: SWBF2 0x006e14b0
@@ -860,7 +877,8 @@ void pvs::BaseDisplayable<T>::SetSector(pvs::Sector* pSector)
     sector_ = pSector;
 }
 
-// FUNCTION: SWBF2 0x006e15e0
+// TEMPLATE: SWBF2 0x006e15e0
+// pvs::BaseDisplayable<pvs::IDisplayable>::SetSector
 template void pvs::BaseDisplayable<pvs::IDisplayable>::SetSector(pvs::Sector*);
 
 // FUNCTION: SWBF2 0x006e1620
@@ -873,7 +891,8 @@ void pvs::DynDisplayable::SetSector(pvs::Sector* pSector)
     sector_ = pSector;
 }
 
-// FUNCTION: SWBF2 0x006e1660
+// TEMPLATE: SWBF2 0x006e1660
+// util::Vector<pvs::SectorCache::Entry,util::BaseArray<pvs::SectorCache::Entry,util::TNewArrayAlloc<pvs::SectorCache::Entry> > >::SetSize_
 template bool util::Vector<pvs::SectorCache::Entry>::SetSize_(int, bool);
 
 // FUNCTION: SWBF2 0x006e1710
@@ -1023,7 +1042,8 @@ void pvs::BaseDisplayable<T>::Update(pvs::Manager&)
 {
 }
 
-// FUNCTION: SWBF2 0x006e1bc0
+// TEMPLATE: SWBF2 0x006e1bc0
+// pvs::BaseDisplayable<pvs::IDisplayable>::Update
 template void pvs::BaseDisplayable<pvs::IDisplayable>::Update(pvs::Manager&);
 
 // FUNCTION: SWBF2 0x006e1bd0

@@ -274,7 +274,8 @@ FLRenderer::ReflectionT::ReflectionT()
 {
 }
 
-// FUNCTION: SWBF2 0x006bb280
+// TEMPLATE: SWBF2 0x006bb280
+// PblOrderedList<Renderable,int>::Add
 template void PblOrderedList<Renderable, int>::Add(PblOrderedList<Renderable, int>::Node*, Renderable*, int);
 
 // FUNCTION: SWBF2 0x006bb2e0
@@ -866,7 +867,8 @@ void FLRenderer::CaptureFrame(unsigned int uiView)
     pTarget->Release();
 }
 
-// FUNCTION: SWBF2 0x006bbe40
+// TEMPLATE: SWBF2 0x006bbe40
+// PblList<ReflectionRegion>::RemoveAll
 template void PblList<ReflectionRegion>::RemoveAll();
 
 // FUNCTION: SWBF2 0x006bbe80

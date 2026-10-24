@@ -212,40 +212,52 @@ pvs::Sector* pvs::BaseDisplayable<T>::GetSector()
     return sector_;
 }
 
-// FUNCTION: SWBF2 0x00446c30
+// TEMPLATE: SWBF2 0x00446c30
+// pvs::BaseDisplayable<pvs::IDisplayable>::OnTraverse
 template void pvs::BaseDisplayable<pvs::IDisplayable>::OnTraverse(pvs::ITraverser&);
 
-// FUNCTION: SWBF2 0x00446c40
+// TEMPLATE: SWBF2 0x00446c40
+// pvs::BaseDisplayable<pvs::IDisplayable>::SetActive
 template void pvs::BaseDisplayable<pvs::IDisplayable>::SetActive(int);
 
-// FUNCTION: SWBF2 0x00446c50
+// TEMPLATE: SWBF2 0x00446c50
+// pvs::BaseDisplayable<pvs::IDisplayable>::IsActive
 template bool pvs::BaseDisplayable<pvs::IDisplayable>::IsActive(int) const;
 
-// FUNCTION: SWBF2 0x00446c70
+// TEMPLATE: SWBF2 0x00446c70
+// pvs::BaseDisplayable<pvs::IDisplayable>::SetProcessed
 template void pvs::BaseDisplayable<pvs::IDisplayable>::SetProcessed(int);
 
-// FUNCTION: SWBF2 0x00446c80
+// TEMPLATE: SWBF2 0x00446c80
+// pvs::BaseDisplayable<pvs::IDisplayable>::IsProcessed
 template bool pvs::BaseDisplayable<pvs::IDisplayable>::IsProcessed(int) const;
 
-// FUNCTION: SWBF2 0x00446ca0
+// TEMPLATE: SWBF2 0x00446ca0
+// pvs::BaseDisplayable<pvs::IDisplayable>::PortalActive
 template bool pvs::BaseDisplayable<pvs::IDisplayable>::PortalActive() const;
 
-// FUNCTION: SWBF2 0x00446cb0
+// TEMPLATE: SWBF2 0x00446cb0
+// pvs::BaseDisplayable<pvs::IDisplayable>::SetPortalActive
 template void pvs::BaseDisplayable<pvs::IDisplayable>::SetPortalActive(bool);
 
-// FUNCTION: SWBF2 0x00446cd0
+// TEMPLATE: SWBF2 0x00446cd0
+// pvs::BaseDisplayable<pvs::IDisplayable>::PortalClip
 template bool pvs::BaseDisplayable<pvs::IDisplayable>::PortalClip() const;
 
-// FUNCTION: SWBF2 0x00446ce0
+// TEMPLATE: SWBF2 0x00446ce0
+// pvs::BaseDisplayable<pvs::IDisplayable>::SetPortalClip
 template void pvs::BaseDisplayable<pvs::IDisplayable>::SetPortalClip(bool);
 
-// FUNCTION: SWBF2 0x00446d00
+// TEMPLATE: SWBF2 0x00446d00
+// pvs::BaseDisplayable<pvs::IDisplayable>::Dynamic
 template bool pvs::BaseDisplayable<pvs::IDisplayable>::Dynamic() const;
 
-// FUNCTION: SWBF2 0x00446d10
+// TEMPLATE: SWBF2 0x00446d10
+// pvs::BaseDisplayable<pvs::IDisplayable>::SetDynamic
 template void pvs::BaseDisplayable<pvs::IDisplayable>::SetDynamic(bool);
 
-// FUNCTION: SWBF2 0x00446d30
+// TEMPLATE: SWBF2 0x00446d30
+// pvs::BaseDisplayable<pvs::IDisplayable>::GetSector
 template pvs::Sector* pvs::BaseDisplayable<pvs::IDisplayable>::GetSector();
 
 // GLOBAL: SWBF2 0x01e30314

@@ -121,10 +121,12 @@ static const float MAX_CLUSTER_DISTANCE = 100.0f;
 // `dynamic atexit destructor for 'afScore''
 static util::Vector<float> afScore;
 
-// FUNCTION: SWBF2 0x0062b8e0
+// TEMPLATE: SWBF2 0x0062b8e0
+// util::BaseArray<float,util::TNewArrayAlloc<float> >::Reserve_
 template bool util::BaseArray<float>::Reserve_(int, bool);
 
-// FUNCTION: SWBF2 0x0062ba60
+// TEMPLATE: SWBF2 0x0062ba60
+// util::TypedArrayAllocator<float,util::NewAllocator>::Allocate_
 template float* util::TypedArrayAllocator<float, util::NewAllocator>::Allocate_(int& riCount);
 
 static PblMatrix _IdentityMatrix(
@@ -911,7 +913,8 @@ const RedLodData* PropGenerator::GetLodData(int iIndex)
     return pBest;
 }
 
-// FUNCTION: SWBF2 0x0062b810
+// TEMPLATE: SWBF2 0x0062b810
+// util::Vector<float,util::BaseArray<float,util::TNewArrayAlloc<float> > >::SetSize
 template bool util::Vector<float>::SetSize(int);
 
 namespace PropGenerator {

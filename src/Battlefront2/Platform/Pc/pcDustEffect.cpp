@@ -291,17 +291,23 @@ void DustEffectClass::DestroyRenderData()
     }
 }
 
-// FUNCTION: SWBF2 0x00411860
+// TEMPLATE: SWBF2 0x00411860
+// PblHeap<int,float>::Pop
 template void PblHeap<int, float>::Pop();
 
-// FUNCTION: SWBF2 0x00411760
+// TEMPLATE: SWBF2 0x00411760
+// PblHeap<int,float>::PblHeap<int,float>
 template PblHeap<int, float>::PblHeap(int, float, void*);
-// FUNCTION: SWBF2 0x004117c0
+// TEMPLATE: SWBF2 0x004117c0
+// PblHeap<int,float>::~PblHeap<int,float>
 template PblHeap<int, float>::~PblHeap();
-// FUNCTION: SWBF2 0x00411800
+// TEMPLATE: SWBF2 0x00411800
+// PblHeap<int,float>::Push
 template void PblHeap<int, float>::Push(int&, float);
 
-// FUNCTION: SWBF2 0x004117d0
+// TEMPLATE: SWBF2 0x004117d0
+// PblHeap<int,float>::IsEmpty
 template bool PblHeap<int, float>::IsEmpty();
-// FUNCTION: SWBF2 0x004117e0
+// TEMPLATE: SWBF2 0x004117e0
+// PblHeap<int,float>::Get
 template int PblHeap<int, float>::Get(int);

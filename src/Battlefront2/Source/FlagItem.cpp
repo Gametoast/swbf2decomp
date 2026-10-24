@@ -504,7 +504,8 @@ void FlagItem::Reset()
     sFlagGameplayType = (FlagGameplayType)0;
 }
 
-// FUNCTION: SWBF2 0x00525bf0
+// TEMPLATE: SWBF2 0x00525bf0
+// PblList<FlagItem>::RemoveAll
 template void PblList<FlagItem>::RemoveAll();
 
 // FUNCTION: SWBF2 0x00524460

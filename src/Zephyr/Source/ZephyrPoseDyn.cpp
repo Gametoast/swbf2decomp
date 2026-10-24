@@ -1,6 +1,7 @@
 #include "ZephyrPoseDyn.h"
 
-// FUNCTION: SWBF2 0x0072cc90
+// TEMPLATE: SWBF2 0x0072cc90
+// ZephyrPoseDyn<32>::ZephyrPoseDyn<32>
 template <int N>
 ZephyrPoseDyn<N>::ZephyrPoseDyn()
     : m_pSkel(0),
@@ -16,14 +17,16 @@ ZephyrPoseDyn<N>::ZephyrPoseDyn()
 {
 }
 
-// FUNCTION: SWBF2 0x0072cd70
+// TEMPLATE: SWBF2 0x0072cd70
+// ZephyrPoseDyn<32>::~ZephyrPoseDyn<32>
 template <int N>
 ZephyrPoseDyn<N>::~ZephyrPoseDyn()
 {
     Close();
 }
 
-// FUNCTION: SWBF2 0x0072d3f0
+// TEMPLATE: SWBF2 0x0072d3f0
+// ZephyrPoseDyn<32>::Open
 template <int N>
 void ZephyrPoseDyn<N>::Open(const ZephyrSkeleton<N>& kSkel)
 {
@@ -32,7 +35,8 @@ void ZephyrPoseDyn<N>::Open(const ZephyrSkeleton<N>& kSkel)
     m_pSkel = const_cast<ZephyrSkeleton<N>*>(&kSkel);
 }
 
-// FUNCTION: SWBF2 0x0072cd90
+// TEMPLATE: SWBF2 0x0072cd90
+// ZephyrPoseDyn<32>::Close
 template <int N>
 void ZephyrPoseDyn<N>::Close()
 {
@@ -63,7 +67,8 @@ void ZephyrPoseDyn<N>::SetAnimation(const ZephyrAnim* pkAnim, float fSpeed)
     }
 }
 
-// FUNCTION: SWBF2 0x0072d5b0
+// TEMPLATE: SWBF2 0x0072d5b0
+// ZephyrPoseDyn<32>::SetFrameNum
 template <int N>
 bool ZephyrPoseDyn<N>::SetFrameNum(int iFrameNum)
 {
@@ -79,7 +84,8 @@ bool ZephyrPoseDyn<N>::SetFrameNum(int iFrameNum)
     return true;
 }
 
-// FUNCTION: SWBF2 0x0072d650
+// TEMPLATE: SWBF2 0x0072d650
+// ZephyrPoseDyn<32>::SetFrameNumFloat
 template <int N>
 bool ZephyrPoseDyn<N>::SetFrameNumFloat(float fFrameNum)
 {

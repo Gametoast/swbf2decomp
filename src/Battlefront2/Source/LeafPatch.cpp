@@ -689,7 +689,8 @@ void LeafPatchClass::Reset()
     sObjects.RemoveAll();
 }
 
-// FUNCTION: SWBF2 0x0056f3d0
+// TEMPLATE: SWBF2 0x0056f3d0
+// PblList<LeafPatchClass>::RemoveAll
 template void PblList<LeafPatchClass>::RemoveAll();
 
 // GLOBAL: SWBF2 0x007ebad8

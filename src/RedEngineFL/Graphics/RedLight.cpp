@@ -87,7 +87,8 @@ RedAmbientLight* RedLight::m_sGlobalAmbient;
 // GLOBAL: SWBF2 0x00960f40
 unsigned int RedLight::m_sGlobalEnvMapHash;
 
-// FUNCTION: SWBF2 0x006c6ae0
+// TEMPLATE: SWBF2 0x006c6ae0
+// PblList<RedLight>::RemoveAll
 template void PblList<RedLight>::RemoveAll();
 
 // FUNCTION: SWBF2 0x006c6a60

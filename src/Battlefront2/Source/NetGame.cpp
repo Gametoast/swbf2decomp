@@ -4229,7 +4229,8 @@ void SetTurnHighBits(unsigned int uBits)
     turnHighBits = uBits;
 }
 
-// FUNCTION: SWBF2 0x005b3fd0
+// TEMPLATE: SWBF2 0x005b3fd0
+// PblJournal::Record<int>
 template void PblJournal::Record<int>(int& value, PblJournalType type);
 
 // GLOBAL: SWBF2 0x01e64a2d
@@ -11228,7 +11229,8 @@ bool NetGame::AutoBootLagger()
     return found;
 }
 
-// FUNCTION: SWBF2 0x005d37f0
+// TEMPLATE: SWBF2 0x005d37f0
+// BblList<NetEntity,512>::BblList<NetEntity,512>
 template BblList<NetEntity, 512>::BblList();
 
 // FUNCTION: SWBF2 0x005d3870
@@ -14362,10 +14364,12 @@ struct HandleToIndex
  
  
 
-// FUNCTION: SWBF2 0x005d39f0
+// TEMPLATE: SWBF2 0x005d39f0
+// BblList<HandleToIndex,128>::BblList<HandleToIndex,128>
 template BblList<HandleToIndex, 128>::BblList();
 
-// FUNCTION: SWBF2 0x005d3ae0
+// TEMPLATE: SWBF2 0x005d3ae0
+// PblList<NG_ChatMsg>::Remove
 template void PblList<NG_ChatMsg>::Remove(PblList<NG_ChatMsg>::Node*);
 
 // FUNCTION: SWBF2 0x005c0570

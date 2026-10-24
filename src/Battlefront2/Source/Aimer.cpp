@@ -102,11 +102,14 @@ namespace
     }
 }
 
-// FUNCTION: SWBF2 0x0043eb80
+// TEMPLATE: SWBF2 0x0043eb80
+// PblHashTable<PblMatrix const ,128>::Find
 template const PblMatrix* PblHashTable<const PblMatrix, 128>::Find(unsigned int) const;
-// FUNCTION: SWBF2 0x0043eba0
+// TEMPLATE: SWBF2 0x0043eba0
+// PblHashTable<PblMatrix const ,128>::Store
 template bool PblHashTable<const PblMatrix, 128>::Store(unsigned int, const PblMatrix*);
-// FUNCTION: SWBF2 0x0043ebd0
+// TEMPLATE: SWBF2 0x0043ebd0
+// PblHashTable<PblMatrix const ,128>::Remove
 template bool PblHashTable<const PblMatrix, 128>::Remove(unsigned int);
 
 // GLOBAL: SWBF2 0x01f9af7c

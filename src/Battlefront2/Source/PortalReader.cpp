@@ -391,10 +391,12 @@ void __fastcall DestroyPortalPodArray(void* pArray)
     pThis->_size = 0;
 }
 
-// FUNCTION: SWBF2 0x00622480
+// TEMPLATE: SWBF2 0x00622480
+// PblHashTable<EntityEx,1024>::Begin
 template PblHashTable<EntityEx, 1024>::Itor PblHashTable<EntityEx, 1024>::Begin() const;
 
-// FUNCTION: SWBF2 0x006224c0
+// TEMPLATE: SWBF2 0x006224c0
+// PblHashTable<EntityEx,1024>::Itor::operator++
 template const PblHashTable<EntityEx, 1024>::Itor& PblHashTable<EntityEx, 1024>::Itor::operator++();
 
 // FUNCTION: SWBF2 0x006224b0

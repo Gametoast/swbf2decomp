@@ -43,11 +43,11 @@ void SunFlareEffect::Create()
     }
 }
 
-// GLOBAL: SWBF2 0x01eaffc8
 // SYNTHETIC: SWBF2 0x00402120
 // `dynamic initializer for 's_SunSkyRenderable''
 // SYNTHETIC: SWBF2 0x00766d00
 // `dynamic atexit destructor for 's_SunSkyRenderable''
+// GLOBAL: SWBF2 0x01eaffc8
 SunSkyRenderable s_SunSkyRenderable;
 
 // GLOBAL: SWBF2 0x01e2fd54
@@ -674,7 +674,8 @@ void SunFlare::_Render() const
 
 // TEMPLATE: SWBF2 0x0042e970
 // SunFlare::RenderSunAndHalo<FlareVertex,642>
-// FUNCTION: SWBF2 0x0042ed30
+// TEMPLATE: SWBF2 0x0042ed30
+// SunFlare::RenderSunAndHalo<FlareCompressedVertex,37506>
 template <class VERTEX, int RVF>
 void SunFlare::RenderSunAndHalo(unsigned int uiPass) const
 {
@@ -726,7 +727,8 @@ void SunFlare::RenderSunAndHalo(unsigned int uiPass) const
     pPrimitive->Release();
 }
 
-// FUNCTION: SWBF2 0x0042f0e0
+// TEMPLATE: SWBF2 0x0042f0e0
+// CreateTextures<FlareVertex,642>
 template <class VERTEX, int RVF>
 bool CreateTextures(RedTexture* pTexture, const PblVector3& vPosition, float fSize,
                     SunFlare::Rect& rect, bool bSunAndHalo)
@@ -930,7 +932,8 @@ template bool CreateTextures<FlareVertex, 642>(RedTexture*, const PblVector3&, f
 template bool CreateTextures<FlareCompressedVertex, 37506>(RedTexture*, const PblVector3&,
                                                              float, SunFlare::Rect&, bool);
 
-// FUNCTION: SWBF2 0x0042fb20
+// TEMPLATE: SWBF2 0x0042fb20
+// RenderFlareOuts<FlareVertex,642>
 template <class VERTEX, int RVF>
 void RenderFlareOuts(RedTexture* pTexture, const PblVector3& vPosition, float fSize,
                      const SunFlare::Rect& rect, float fFlareOutSize, int iNumFlareOuts,
@@ -985,7 +988,8 @@ template void RenderFlareOuts<FlareCompressedVertex, 37506>(RedTexture*, const P
                                                              float, const SunFlare::Rect&, float,
                                                              int, unsigned char);
 
-// FUNCTION: SWBF2 0x0042ff10
+// TEMPLATE: SWBF2 0x0042ff10
+// SunFlare::RenderSunRings<FlareVertex,642>
 template <class VERTEX, int RVF>
 void SunFlare::RenderSunRings(const PblVector3& vPosition, float fSize, float fTexU,
                              float fTexV) const
@@ -1027,7 +1031,8 @@ static void SetRingPosition(FlareCompressedVertex& v, const PblVector3& center,
                        center.y + sine * radius, center.z);
 }
 
-// FUNCTION: SWBF2 0x00431330
+// TEMPLATE: SWBF2 0x00431330
+// EmitRing<FlareVertex>
 template <class VERTEX>
 void EmitRing(VERTEX*& pVertices, const PblVector3& vPosition, float fAngle,
               float fInnerRadius, float fMiddleRadius, float fOuterRadius,

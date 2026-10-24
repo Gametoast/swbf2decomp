@@ -174,7 +174,8 @@ LuaCallback<ITEM, PARAM>::LuaCallback(int iRef)
 // TEMPLATE: SWBF2 0x00511410
 // EventManager::LuaCallback<CommandPost,unsigned __int64>::LuaCallback<CommandPost,unsigned __int64>
 
-// FUNCTION: SWBF2 0x005100a0
+// TEMPLATE: SWBF2 0x005100a0
+// EventManager::RegisterLuaCallback<CommandPost,unsigned __int64>
 template <class ITEM, class PARAM>
 int RegisterLuaCallback(lua_State*)
 {
@@ -358,7 +359,8 @@ void CommandPostEvent::Cleanup()
 
 namespace EventManager {
 
-// FUNCTION: SWBF2 0x0050fc90
+// TEMPLATE: SWBF2 0x0050fc90
+// EventManager::Event<CommandPost,unsigned __int64>::Callback::~Callback
 template Event<CommandPost, unsigned __int64>::Callback::~Callback();
 }
 
@@ -370,7 +372,8 @@ template Event<CommandPost, DamageOwner>::Callback::~Callback();
 
 namespace EventManager {
 
-// FUNCTION: SWBF2 0x0050fd70
+// TEMPLATE: SWBF2 0x0050fd70
+// EventManager::Event<CommandPost,char>::Callback::~Callback
 template Event<CommandPost, char>::Callback::~Callback();
 }
 
@@ -472,7 +475,8 @@ int UnregisterLuaCallback(lua_State*)
     return 0;
 }
 
-// FUNCTION: SWBF2 0x00510250
+// TEMPLATE: SWBF2 0x00510250
+// EventManager::RegisterLuaCallback<CommandPost,unsigned __int64,EventManager::PostMatchesName<unsigned __int64> >
 template <class ITEM, class PARAM, class PREDICATE>
 int RegisterLuaCallback(lua_State*)
 {
@@ -497,7 +501,8 @@ int RegisterLuaCallback(lua_State*)
     return 1;
 }
 
-// FUNCTION: SWBF2 0x00511350
+// TEMPLATE: SWBF2 0x00511350
+// EventManager::Event<CommandPost,unsigned __int64>::Unregister
 template <class ITEM, class PARAM>
 void Event<ITEM, PARAM>::Unregister(Callback& callback)
 {

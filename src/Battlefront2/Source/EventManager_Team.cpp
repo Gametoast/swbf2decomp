@@ -148,7 +148,8 @@ bool LuaCallback<ITEM, PARAM>::operator()(ITEM& item, PARAM& param)
 // TEMPLATE: SWBF2 0x0051b0e0
 // EventManager::Event<Team,float>::Callback::operator()
 
-// FUNCTION: SWBF2 0x0051b340
+// TEMPLATE: SWBF2 0x0051b340
+// EventManager::RegisterLuaCallback<Team,int>
 template <class ITEM, class PARAM>
 int RegisterLuaCallback(lua_State*)
 {
@@ -227,13 +228,15 @@ void TeamEvent::Cleanup()
 
 namespace EventManager {
 
-// FUNCTION: SWBF2 0x0051b010
+// TEMPLATE: SWBF2 0x0051b010
+// EventManager::Event<Team,int>::Callback::~Callback
 template Event<Team, int>::Callback::~Callback();
 }
 
 namespace EventManager {
 
-// FUNCTION: SWBF2 0x0051b080
+// TEMPLATE: SWBF2 0x0051b080
+// EventManager::Event<Team,float>::Callback::~Callback
 template Event<Team, float>::Callback::~Callback();
 }
 

@@ -61,7 +61,8 @@ bool LuaPushItem<FlagItem>(FlagItem& flag)
 
 
 
-// FUNCTION: SWBF2 0x005133b0
+// TEMPLATE: SWBF2 0x005133b0
+// EventManager::LuaCallback<FlagItem,char>::LuaCallback<FlagItem,char>
 template <class ITEM, class PARAM>
 LuaCallback<ITEM, PARAM>::LuaCallback(int iRef)
 {
@@ -175,7 +176,8 @@ void FlagEvent::Cleanup()
 
 namespace EventManager {
 
-// FUNCTION: SWBF2 0x005124a0
+// TEMPLATE: SWBF2 0x005124a0
+// EventManager::Event<FlagItem,char>::Callback::~Callback
 template Event<FlagItem, char>::Callback::~Callback();
 }
 
@@ -202,7 +204,8 @@ int UnregisterLuaCallback(lua_State*)
     return 0;
 }
 
-// FUNCTION: SWBF2 0x00513020
+// TEMPLATE: SWBF2 0x00513020
+// EventManager::RegisterLuaCallback<FlagItem,char>
 template <class ITEM, class PARAM>
 int RegisterLuaCallback(lua_State*)
 {

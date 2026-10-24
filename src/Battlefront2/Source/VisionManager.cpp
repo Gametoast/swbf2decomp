@@ -488,16 +488,20 @@ void RemoveRequests(UnitController* pController)
 
 }
 
-// FUNCTION: SWBF2 0x00671280
+// TEMPLATE: SWBF2 0x00671280
+// PblHeap<PblHandle<GameObject>,int>::PblHeap<PblHandle<GameObject>,int>
 template PblHeap<PblHandle<GameObject>, int>::PblHeap(int, int, void*);
 
-// FUNCTION: SWBF2 0x006714e0
+// TEMPLATE: SWBF2 0x006714e0
+// PblHeap<VisionManager::RayRequest *,int>::SortDown
 template void PblHeap<VisionManager::RayRequest*, int>::SortDown(int, VisionManager::RayRequest*&, int);
 
-// FUNCTION: SWBF2 0x00671540
+// TEMPLATE: SWBF2 0x00671540
+// PblHeap<PblHandle<GameObject>,int>::SortDown
 template void PblHeap<PblHandle<GameObject>, int>::SortDown(int, PblHandle<GameObject>&, int);
 
-// FUNCTION: SWBF2 0x006713a0
+// TEMPLATE: SWBF2 0x006713a0
+// PblHeap<PblHandle<GameObject>,int>::Pop
 template void PblHeap<PblHandle<GameObject>, int>::Pop();
 
 // TEMPLATE: SWBF2 0x00671190

@@ -284,13 +284,15 @@ typedef util::HashTable<ClothBank*, unsigned int, util::TNewArrayAlloc<ClothBank
 ClothDataT clothData_;
 }
 
-// FUNCTION: SWBF2 0x00458cb0
+// TEMPLATE: SWBF2 0x00458cb0
+// util::HashTable<ClothBank *,unsigned int,util::TNewArrayAlloc<ClothBank *> >::~HashTable<ClothBank *,unsigned int,util::TNewArrayAlloc<ClothBank *> >
 template ClothBE::ClothDataT::~HashTable();
 
 // SYNTHETIC: SWBF2 0x0045c1f0
 // util::HashTable<ClothBank *,unsigned int,util::TNewArrayAlloc<ClothBank *> >::HashTable<ClothBank *,unsigned int,util::TNewArrayAlloc<ClothBank *> >
 
-// FUNCTION: SWBF2 0x0045c2b0
+// TEMPLATE: SWBF2 0x0045c2b0
+// util::HashTable_<ClothBank *,unsigned int,util::Vector<ClothBank *,util::BaseArray<ClothBank *,util::TypedArrayAllocator<ClothBank *,util::TNewArrayAlloc<ClothBank *> > > >,util::Vector<unsigned int,util::BaseArray<unsigned int,util::TypedArrayAllocator<unsigned int,util::TNewArrayAlloc<ClothBank *> > > >,util::Vector<unsigned int,util::BaseArray<unsigned int,util::TypedArrayAllocator<unsigned int,util::TNewArrayAlloc<ClothBank *> > > > >::Clear
 template void util::HashTable_<ClothBank*, unsigned int, ClothBE::ClothDataT::ElemVecT,
                                ClothBE::ClothDataT::KeyVecT,
                                ClothBE::ClothDataT::HashVecT>::Clear();
@@ -888,44 +890,55 @@ void EntityCloth::ComputeNormals()
     }
 }
 
-// FUNCTION: SWBF2 0x0045c180
+// TEMPLATE: SWBF2 0x0045c180
+// util::HashTable<ClothBank *,unsigned int,util::TNewArrayAlloc<ClothBank *> >::operator[]
 template ClothBank*& util::HashTable<ClothBank*, unsigned int, util::TNewArrayAlloc<ClothBank*> >::operator[](
     const unsigned int& rKey);
 
-// FUNCTION: SWBF2 0x0045c3c0
+// TEMPLATE: SWBF2 0x0045c3c0
+// util::HashTable_<ClothBank *,unsigned int,util::Vector<ClothBank *,util::BaseArray<ClothBank *,util::TypedArrayAllocator<ClothBank *,util::TNewArrayAlloc<ClothBank *> > > >,util::Vector<unsigned int,util::BaseArray<unsigned int,util::TypedArrayAllocator<unsigned int,util::TNewArrayAlloc<ClothBank *> > > >,util::Vector<unsigned int,util::BaseArray<unsigned int,util::TypedArrayAllocator<unsigned int,util::TNewArrayAlloc<ClothBank *> > > > >::Get
 template ClothBank*& util::HashTable_<ClothBank*, unsigned int, ClothBE::ClothDataT::ElemVecT,
                                       ClothBE::ClothDataT::KeyVecT,
                                       ClothBE::ClothDataT::HashVecT>::Get(const unsigned int& rKey);
 
-// FUNCTION: SWBF2 0x0045c420
+// TEMPLATE: SWBF2 0x0045c420
+// util::HashTable<ClothBank *,unsigned int,util::TNewArrayAlloc<ClothBank *> >::Reallocate
 template void util::HashTable<ClothBank*, unsigned int, util::TNewArrayAlloc<ClothBank*> >::Reallocate(int iSize);
 
-// FUNCTION: SWBF2 0x0045c600
+// TEMPLATE: SWBF2 0x0045c600
+// util::HashTable_<ClothBank *,unsigned int,util::Vector<ClothBank *,util::BaseArray<ClothBank *,util::TypedArrayAllocator<ClothBank *,util::TNewArrayAlloc<ClothBank *> > > >,util::Vector<unsigned int,util::BaseArray<unsigned int,util::TypedArrayAllocator<unsigned int,util::TNewArrayAlloc<ClothBank *> > > >,util::Vector<unsigned int,util::BaseArray<unsigned int,util::TypedArrayAllocator<unsigned int,util::TNewArrayAlloc<ClothBank *> > > > >::FindIndex_
 template unsigned int util::HashTable_<ClothBank*, unsigned int, ClothBE::ClothDataT::ElemVecT,
                                        ClothBE::ClothDataT::KeyVecT,
                                        ClothBE::ClothDataT::HashVecT>::FindIndex_(unsigned int uiHash) const;
 
-// FUNCTION: SWBF2 0x0045c7e0
+// TEMPLATE: SWBF2 0x0045c7e0
+// util::BaseArray<EntityCloth *,util::TNewArrayAlloc<EntityCloth *> >::Reserve_
 template bool util::BaseArray<EntityCloth*, util::TNewArrayAlloc<EntityCloth*> >::Reserve_(int iCount, bool bForce);
 
-// FUNCTION: SWBF2 0x0045c8a0
+// TEMPLATE: SWBF2 0x0045c8a0
+// util::Vector<ClothBank *,util::BaseArray<ClothBank *,util::TypedArrayAllocator<ClothBank *,util::TNewArrayAlloc<ClothBank *> > > >::SetSize_
 template bool util::Vector<ClothBank*, util::BaseArray<ClothBank*, util::TypedArrayAllocator<ClothBank*, util::TNewArrayAlloc<ClothBank*> > > >::SetSize_(
     int iSize, bool bForce);
 
-// FUNCTION: SWBF2 0x0045c9a0
+// TEMPLATE: SWBF2 0x0045c9a0
+// util::Vector<unsigned int,util::BaseArray<unsigned int,util::TypedArrayAllocator<unsigned int,util::TNewArrayAlloc<ClothBank *> > > >::SetSize_
 template bool util::Vector<unsigned int, util::BaseArray<unsigned int, util::TypedArrayAllocator<unsigned int, util::TNewArrayAlloc<ClothBank*> > > >::SetSize_(
     int iSize, bool bForce);
 
-// FUNCTION: SWBF2 0x0045c950
+// TEMPLATE: SWBF2 0x0045c950
+// util::TypedArrayAllocator<ClothBank *,util::TNewArrayAlloc<ClothBank *> >::Allocate_
 template ClothBank** util::TypedArrayAllocator<ClothBank*, util::TNewArrayAlloc<ClothBank*> >::Allocate_(int& riCount);
 
-// FUNCTION: SWBF2 0x0045ca50
+// TEMPLATE: SWBF2 0x0045ca50
+// util::TypedArrayAllocator<unsigned int,util::TNewArrayAlloc<ClothBank *> >::Allocate_
 template unsigned int* util::TypedArrayAllocator<unsigned int, util::TNewArrayAlloc<ClothBank*> >::Allocate_(int& riCount);
 
-// FUNCTION: SWBF2 0x0045caa0
+// TEMPLATE: SWBF2 0x0045caa0
+// util::TypedArrayAllocator<EntityCloth *,util::NewAllocator>::Allocate_
 template EntityCloth** util::TypedArrayAllocator<EntityCloth*, util::NewAllocator>::Allocate_(int& riCount);
 
-// FUNCTION: SWBF2 0x0045cb10
+// TEMPLATE: SWBF2 0x0045cb10
+// util::Max_<float>
 template const float& util::Max_<float>(const float&, const float&);
 
 extern "C" PblVector3* __stdcall D3DXVec3TransformNormal(PblVector3* pOut, const PblVector3* pV, const PblMatrix* pM);
@@ -1444,7 +1457,8 @@ void ClothData::PostReadInit()
     m_fBoundingRadius = 2.0f * fRadius;
 }
 
-// FUNCTION: SWBF2 0x0045c310
+// TEMPLATE: SWBF2 0x0045c310
+// util::HashTable_<ClothBank *,unsigned int,util::Vector<ClothBank *,util::BaseArray<ClothBank *,util::TypedArrayAllocator<ClothBank *,util::TNewArrayAlloc<ClothBank *> > > >,util::Vector<unsigned int,util::BaseArray<unsigned int,util::TypedArrayAllocator<unsigned int,util::TNewArrayAlloc<ClothBank *> > > >,util::Vector<unsigned int,util::BaseArray<unsigned int,util::TypedArrayAllocator<unsigned int,util::TNewArrayAlloc<ClothBank *> > > > >::Begin
 template util::HashTable_<ClothBank*, unsigned int, ClothBE::ClothDataT::ElemVecT,
                           ClothBE::ClothDataT::KeyVecT, ClothBE::ClothDataT::HashVecT>::Itor
 util::HashTable_<ClothBank*, unsigned int, ClothBE::ClothDataT::ElemVecT,

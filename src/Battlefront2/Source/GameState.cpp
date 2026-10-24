@@ -1487,7 +1487,8 @@ void GameState::PostStateCleanup(bool bMission)
     MemoryPool::DestroyAll();
 }
 
-// FUNCTION: SWBF2 0x0053c000
+// TEMPLATE: SWBF2 0x0053c000
+// PblJournal::Record<unsigned int>
 template void PblJournal::Record<unsigned int>(unsigned int& value, PblJournalType type);
 
 // FUNCTION: SWBF2 0x0053bff0

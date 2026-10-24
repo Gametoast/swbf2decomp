@@ -41,7 +41,8 @@ void Create()
 
 }
 
-// FUNCTION: SWBF2 0x00458950
+// TEMPLATE: SWBF2 0x00458950
+// PblJournal::Record<char>
 template void PblJournal::Record<char>(char& value, PblJournalType type);
 
 // FUNCTION: SWBF2 0x0052d510
@@ -87,7 +88,8 @@ void FrameUpdate::Update()
     }
 }
 
-// FUNCTION: SWBF2 0x0052d620
+// TEMPLATE: SWBF2 0x0052d620
+// PblJournal::Record<float>
 template void PblJournal::Record<float>(float& value, PblJournalType type);
 
 // GLOBAL: SWBF2 0x01ec0be0

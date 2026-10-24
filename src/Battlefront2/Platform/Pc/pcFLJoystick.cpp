@@ -75,9 +75,9 @@ int mask_chat;
 
 unsigned short __cdecl RawInputToActionKey(unsigned short usRawInput);
 
-// GLOBAL: SWBF2 0x01f9a928
 // SYNTHETIC: SWBF2 0x004014d0
 // `dynamic initializer for 'RawControllerInputs::sDefaultKeyboardBindings''
+// GLOBAL: SWBF2 0x01f9a928
 ActionKey RawControllerInputs::sDefaultKeyboardBindings[5][43] =
 {
 

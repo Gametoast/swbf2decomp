@@ -47,7 +47,8 @@ void GamePathFactory::ClearFactoryList()
     sList.RemoveAll();
 }
 
-// FUNCTION: SWBF2 0x00537ea0
+// TEMPLATE: SWBF2 0x00537ea0
+// PblList<GamePathFactory>::RemoveAll
 template void PblList<GamePathFactory>::RemoveAll();
 
 // FUNCTION: SWBF2 0x00537c60

@@ -492,5 +492,6 @@ void GrassPatchClass::Reset()
     sObjects.RemoveAll();
 }
 
-// FUNCTION: SWBF2 0x00542170
+// TEMPLATE: SWBF2 0x00542170
+// PblList<GrassPatchClass>::RemoveAll
 template void PblList<GrassPatchClass>::RemoveAll();

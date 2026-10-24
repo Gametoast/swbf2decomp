@@ -2612,7 +2612,8 @@ public:
 
 static CannonStrengthConvert cannonStrengthConvert;
 
-// FUNCTION: SWBF2 0x005f6280
+// TEMPLATE: SWBF2 0x005f6280
+// WriteFixed<CannonStrengthConvert>
 template <class CONVERT>
 void WriteFixed(CONVERT& convert, NetPktGroup& group, float fValue)
 {
@@ -2620,7 +2621,8 @@ void WriteFixed(CONVERT& convert, NetPktGroup& group, float fValue)
     group.WriteFixed(fValue, convert.GetMin(), convert.GetMax(), convert.GetBits());
 }
 
-// FUNCTION: SWBF2 0x005f62c0
+// TEMPLATE: SWBF2 0x005f62c0
+// ReadFixed<CannonStrengthConvert>
 template <class CONVERT>
 void ReadFixed(CONVERT& convert, NetPktGroup& group, float& fValue)
 {

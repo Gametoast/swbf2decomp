@@ -209,7 +209,8 @@ void Deliver(NetPacket* pPacket, int iDest)
     pPacket->Free();
 }
 
-// FUNCTION: SWBF2 0x00533b10
+// TEMPLATE: SWBF2 0x00533b10
+// PblJournal::Record<bool>
 template void PblJournal::Record<bool>(bool& value, PblJournalType type);
 
 // GLOBAL: SWBF2 0x01fa3d6c

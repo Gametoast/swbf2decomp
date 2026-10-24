@@ -813,7 +813,8 @@ void RedTerrain::Reset()
     mTerrainBytesUsed = 0;
 }
 
-// FUNCTION: SWBF2 0x006c1650
+// TEMPLATE: SWBF2 0x006c1650
+// PblList<RedTerrain::Hole>::RemoveAll
 template void PblList<RedTerrain::Hole>::RemoveAll();
 
 // FUNCTION: SWBF2 0x004108f0

@@ -5678,7 +5678,8 @@ void EntityFlyer::SetupInterpolatedCameraTrackMatrix(PblMatrix& rMatrix)
 #ifdef GetObject
 #undef GetObject
 #endif
-// FUNCTION: SWBF2 0x00428e40
+// TEMPLATE: SWBF2 0x00428e40
+// PblHandle<ParticleEmitterObject>::GetObject
 template ParticleEmitterObject* PblHandle<ParticleEmitterObject>::GetObject() const;
 
 // SYNTHETIC: SWBF2 0x0047852f

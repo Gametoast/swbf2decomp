@@ -3046,21 +3046,28 @@ D3DCULL RedRenderer::m_backCull;
 // GLOBAL: SWBF2 0x0086ac6c
 RedColor RedRenderer::m_clearColor;
 
-// FUNCTION: SWBF2 0x006ad760
+// TEMPLATE: SWBF2 0x006ad760
+// util::TypedArrayAllocator<dx::NVStateID,util::NewAllocator>::Allocate_
 template dx::NVStateID* util::TypedArrayAllocator<dx::NVStateID>::Allocate_(int&);
-// FUNCTION: SWBF2 0x006af030
+// TEMPLATE: SWBF2 0x006af030
+// util::BaseArray<dx::NVStateID,util::TNewArrayAlloc<dx::NVStateID> >::Reserve_
 template bool util::BaseArray<dx::NVStateID>::Reserve_(int, bool);
-// FUNCTION: SWBF2 0x006b0140
+// TEMPLATE: SWBF2 0x006b0140
+// util::Vector<dx::NVStateID,util::BaseArray<dx::NVStateID,util::TNewArrayAlloc<dx::NVStateID> > >::Add
 template bool util::Vector<dx::NVStateID>::Add(dx::NVStateID const&);
-// FUNCTION: SWBF2 0x006b0340
+// TEMPLATE: SWBF2 0x006b0340
+// util::TypedArrayAllocator<util::TKeyPair_<RenderItem *,unsigned int>,util::NewAllocator>::Allocate_
 template util::TKeyPair_<RenderItem*, unsigned int>* util::TypedArrayAllocator<util::TKeyPair_<RenderItem*, unsigned int> >::Allocate_(int&);
-// FUNCTION: SWBF2 0x006b0390
+// TEMPLATE: SWBF2 0x006b0390
+// util::TypedArrayAllocator<RedRenderer::SortHeap,util::NewAllocator>::Allocate_
 template RedRenderer::SortHeap* util::TypedArrayAllocator<RedRenderer::SortHeap>::Allocate_(int&);
 // FUNCTION: SWBF2 0x006afbe0
 template util::Vector<util::TKeyPair_<RenderItem*, unsigned int> >::Vector(util::Vector<util::TKeyPair_<RenderItem*, unsigned int> > const&);
-// FUNCTION: SWBF2 0x006b2e30
+// TEMPLATE: SWBF2 0x006b2e30
+// util::BaseArray<util::TKeyPair_<RenderItem *,unsigned int>,util::TNewArrayAlloc<util::TKeyPair_<RenderItem *,unsigned int> > >::Reserve_
 template bool util::BaseArray<util::TKeyPair_<RenderItem*, unsigned int> >::Reserve_(int, bool);
-// FUNCTION: SWBF2 0x006b2f20
+// TEMPLATE: SWBF2 0x006b2f20
+// util::BaseArray<RedRenderer::SortHeap,util::TNewArrayAlloc<RedRenderer::SortHeap> >::Reserve_
 template bool util::BaseArray<RedRenderer::SortHeap>::Reserve_(int, bool);
 
 // TEMPLATE: SWBF2 0x006afe10
@@ -4295,7 +4302,8 @@ const PblMatrix& RedLight::GetProjectionMatrix() const
     return gMatrixIdentity;
 }
 
-// FUNCTION: SWBF2 0x006b00d0
+// TEMPLATE: SWBF2 0x006b00d0
+// util::Vector<util::TKeyPair_<RenderItem *,unsigned int>,util::BaseArray<util::TKeyPair_<RenderItem *,unsigned int>,util::TNewArrayAlloc<util::TKeyPair_<RenderItem *,unsigned int> > > >::Add
 template bool util::Vector<util::TKeyPair_<RenderItem*, unsigned int> >::Add(util::TKeyPair_<RenderItem*, unsigned int> const&);
 
 template <class TABLE>
@@ -4318,7 +4326,8 @@ void util::VariableSet<ALLOC>::ResetAll()
     ZeroAllVariables_(boolMap_);
 }
 
-// FUNCTION: SWBF2 0x006b3110
+// TEMPLATE: SWBF2 0x006b3110
+// util::VariableSet<util::SingletonAllocator<util::DefaultStaticAllocator> >::ResetAll
 template void util::VariableSet<util::SingletonAllocator<util::DefaultStaticAllocator> >::ResetAll();
 
 // GLOBAL: SWBF2 0x0086ad10
@@ -4826,7 +4835,8 @@ void TransparentHeap<ITEM, KEY>::Push(ITEM& rItem, KEY idSort)
     }
 }
 
-// FUNCTION: SWBF2 0x006b2820
+// TEMPLATE: SWBF2 0x006b2820
+// TransparentHeap<RenderItem *,unsigned int>::Push
 template void TransparentHeap<RenderItem*, unsigned int>::Push(RenderItem*&, unsigned int);
 
 // FUNCTION: SWBF2 0x006b33c0
@@ -6276,7 +6286,8 @@ void RedRenderer::internalStateStackPop()
     RedRenderer::m_mViewProjection = mViewProj;
 }
 
-// FUNCTION: SWBF2 0x006af340
+// TEMPLATE: SWBF2 0x006af340
+// util::HeapInsert_<util::TKeyPair_<RenderItem *,unsigned int>,util::Vector<util::TKeyPair_<RenderItem *,unsigned int>,util::BaseArray<util::TKeyPair_<RenderItem *,unsigned int>,util::TNewArrayAlloc<util::TKeyPair_<RenderItem *,unsigned int> > > >,util::GreaterEqOp<util::TKeyPair_<RenderItem *,unsigned int> > >
 template void util::HeapInsert_<util::TKeyPair_<RenderItem*, unsigned int>, util::Vector<util::TKeyPair_<RenderItem*, unsigned int> >,
                                 util::GreaterEqOp<util::TKeyPair_<RenderItem*, unsigned int> > >(
     util::Vector<util::TKeyPair_<RenderItem*, unsigned int> >&, int, util::TKeyPair_<RenderItem*, unsigned int> const&);
@@ -6393,10 +6404,12 @@ void RedRenderer::internalRenderFromHeap(HEAP& heap)
     pItem->Free();
 }
 
-// FUNCTION: SWBF2 0x006af430
+// TEMPLATE: SWBF2 0x006af430
+// RedRenderer::internalRenderFromHeap<TransparentHeap<RenderItem *,unsigned int> >
 template void RedRenderer::internalRenderFromHeap<TransparentHeap<RenderItem*, unsigned int> >(
     TransparentHeap<RenderItem*, unsigned int>&);
-// FUNCTION: SWBF2 0x006af820
+// TEMPLATE: SWBF2 0x006af820
+// RedRenderer::internalRenderFromHeap<RedRenderer::SortHeap>
 template void RedRenderer::internalRenderFromHeap<RedRenderer::SortHeap>(RedRenderer::SortHeap&);
 
 // FUNCTION: SWBF2 0x006aff80

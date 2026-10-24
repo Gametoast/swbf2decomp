@@ -655,7 +655,8 @@ void ControllerManager::BroadcastEvent(AI::EventInfo* pInfo, const PblVector3& v
     }
 }
 
-// FUNCTION: SWBF2 0x00486a10
+// TEMPLATE: SWBF2 0x00486a10
+// PblOrderedList<UnitController,float>::Add
 template void PblOrderedList<UnitController, float>::Add(PblOrderedList<UnitController, float>::Node*, UnitController*, float);
 
 namespace ControllerManager
@@ -665,7 +666,8 @@ template <class T> void UpdateControllerAudibles(T* pCtrl)
     AudibleManager::UpdateAudience(pCtrl);
 }
 
-// FUNCTION: SWBF2 0x00486a80
+// TEMPLATE: SWBF2 0x00486a80
+// ControllerManager::UpdateControllerAudibles<PlayerController>
 template void UpdateControllerAudibles<PlayerController>(PlayerController* pCtrl);
 }
 

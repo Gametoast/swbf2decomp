@@ -679,7 +679,8 @@ static float pcRingAlphaScale(float fLifetime, float fAge)
 // TEMPLATE: SWBF2 0x0071ae80
 // RedWater::pcRenderDistortionRing<WaterDistortionRingVertex,738>
 
-// FUNCTION: SWBF2 0x0071a9c0
+// TEMPLATE: SWBF2 0x0071a9c0
+// RedWater::pcRenderDistortionRing<CompressedWaterDistortionRingVertex,53986>
 template <class T, unsigned int FORMAT>
 void RedWater::pcRenderDistortionRing(pcRedShader* pShader, const PblVector3& vWorldMin,
                                       const PblVector3& vWorldMax, const PblVector3& vPos,
@@ -735,7 +736,8 @@ void RedWater::pcRenderDistortionRing(pcRedShader* pShader, const PblVector3& vW
 // TEMPLATE: SWBF2 0x0071bfb0
 // RedWater::pcRenderDistortionWakeRing<WaterDistortionRingVertex,738>
 
-// FUNCTION: SWBF2 0x0071b270
+// TEMPLATE: SWBF2 0x0071b270
+// RedWater::pcRenderDistortionWakeRing<CompressedWaterDistortionRingVertex,53986>
 template <class T, unsigned int FORMAT>
 void RedWater::pcRenderDistortionWakeRing(pcRedShader* pShader, const PblVector3& vWorldMin,
                                           const PblVector3& vWorldMax, const PblVector3& vPos,
@@ -952,7 +954,8 @@ static void pcSetWakeRingVertex(T& vert, const PblVector3& vPos, float fSin, flo
 // TEMPLATE: SWBF2 0x0071e9f0
 // RedWater::pcRenderWakeRing<WaterRingVertex,642>
 
-// FUNCTION: SWBF2 0x0071df70
+// TEMPLATE: SWBF2 0x0071df70
+// RedWater::pcRenderWakeRing<CompressedWaterRingVertex,37506>
 template <class T, unsigned int FORMAT>
 void RedWater::pcRenderWakeRing(pcRedShader* pShader, const PblVector3& vWorldMin,
                                 const PblVector3& vWorldMax, const PblVector3& vPos,

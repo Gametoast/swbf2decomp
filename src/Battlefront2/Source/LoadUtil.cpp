@@ -884,7 +884,8 @@ void LoadUtil::ProcessBarrier(PblFileChunk& chunk)
     }
 }
 
-// FUNCTION: SWBF2 0x00446c00
+// TEMPLATE: SWBF2 0x00446c00
+// Factory<Entity,EntityClass,EntityDesc>::Find
 template EntityClass* Factory<Entity, EntityClass, EntityDesc>::Find(unsigned int);
 
 // TEMPLATE: SWBF2 0x00578f10

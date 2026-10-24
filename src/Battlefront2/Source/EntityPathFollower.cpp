@@ -150,7 +150,8 @@ void EntityPathFollower::ClearList()
     sList.RemoveAll();
 }
 
-// FUNCTION: SWBF2 0x004d7b40
+// TEMPLATE: SWBF2 0x004d7b40
+// PblList<EntityPathFollower>::RemoveAll
 template void PblList<EntityPathFollower>::RemoveAll();
 
 // FUNCTION: SWBF2 0x004d2710

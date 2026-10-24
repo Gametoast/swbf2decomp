@@ -450,13 +450,15 @@ template Event<GameObject, DamageOwner>::Callback::~Callback();
 
 namespace EventManager {
 
-// FUNCTION: SWBF2 0x00515020
+// TEMPLATE: SWBF2 0x00515020
+// EventManager::Event<GameObject,int>::Callback::~Callback
 template Event<GameObject, int>::Callback::~Callback();
 }
 
 namespace EventManager {
 
-// FUNCTION: SWBF2 0x00515090
+// TEMPLATE: SWBF2 0x00515090
+// EventManager::Event<GameObject,float>::Callback::~Callback
 template Event<GameObject, float>::Callback::~Callback();
 }
 

@@ -8,20 +8,23 @@ static const ZephyrTransform& GetBaseTransform(const ZephyrJointShared* pJoint)
     return *(const ZephyrTransform*)pJoint->m_kBaseTransform;
 }
 
-// FUNCTION: SWBF2 0x0072da90
+// TEMPLATE: SWBF2 0x0072da90
+// ZephyrPoseStatic<32>::ZephyrPoseStatic<32>
 template <int N>
 ZephyrPoseStatic<N>::ZephyrPoseStatic() : m_pSkel(0)
 {
 }
 
-// FUNCTION: SWBF2 0x0072db10
+// TEMPLATE: SWBF2 0x0072db10
+// ZephyrPoseStatic<32>::~ZephyrPoseStatic<32>
 template <int N>
 ZephyrPoseStatic<N>::~ZephyrPoseStatic()
 {
     Close();
 }
 
-// FUNCTION: SWBF2 0x0072df20
+// TEMPLATE: SWBF2 0x0072df20
+// ZephyrPoseStatic<32>::Open
 template <int N>
 void ZephyrPoseStatic<N>::Open(const ZephyrSkeleton<N>& kSkel)
 {
@@ -30,7 +33,8 @@ void ZephyrPoseStatic<N>::Open(const ZephyrSkeleton<N>& kSkel)
     m_pSkel = const_cast<ZephyrSkeleton<N>*>(&kSkel);
 }
 
-// FUNCTION: SWBF2 0x0072df10
+// TEMPLATE: SWBF2 0x0072df10
+// ZephyrPoseStatic<32>::Close
 template <int N>
 void ZephyrPoseStatic<N>::Close()
 {
@@ -84,7 +88,8 @@ void ZephyrPoseStatic<N>::Set(const ZephyrPoseDyn<N>& kPose, const PblBitVector<
     }
 }
 
-// FUNCTION: SWBF2 0x0072e170
+// TEMPLATE: SWBF2 0x0072e170
+// ZephyrPoseStatic<32>::SetBasePose
 template <int N>
 void ZephyrPoseStatic<N>::SetBasePose()
 {

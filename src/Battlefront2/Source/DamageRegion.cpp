@@ -82,7 +82,8 @@ void DamageRegion::ClearList()
     sList.RemoveAll();
 }
 
-// FUNCTION: SWBF2 0x0048a260
+// TEMPLATE: SWBF2 0x0048a260
+// PblList<DamageRegion>::RemoveAll
 template void PblList<DamageRegion>::RemoveAll();
 
 // FUNCTION: SWBF2 0x0048a0c0

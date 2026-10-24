@@ -73,7 +73,8 @@ bool ZephyrSkeleton<N>::Open(const ZephyrSkeletonShared& kShared, const ZephyrPo
     return true;
 }
 
-// FUNCTION: SWBF2 0x0072cc20
+// TEMPLATE: SWBF2 0x0072cc20
+// ZephyrSkeleton<32>::Close
 template <int N>
 void ZephyrSkeleton<N>::Close()
 {

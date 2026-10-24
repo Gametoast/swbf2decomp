@@ -22,11 +22,11 @@
 #include "RedEngineFL/Graphics/PC/pcRedRenderer.h"
 #include "pcSunFlare.h"
 
-// GLOBAL: SWBF2 0x01eafd84
 // SYNTHETIC: SWBF2 0x004020e0
 // `dynamic initializer for 's_SkyFogPlane''
 // SYNTHETIC: SWBF2 0x00766cf0
 // `dynamic atexit destructor for 's_SkyFogPlane''
+// GLOBAL: SWBF2 0x01eafd84
 SkyFogRenderable s_SkyFogPlane;
 
 // FUNCTION: SWBF2 0x004285e0
