@@ -42,7 +42,7 @@ public:
         {
             PblListDouble::Node* pPrevious = mNode.mPrev;
             return pPrevious == &pList->mTerminator
-                ? (Node*)pList
+                ? 0
                 : (Node*)((char*)pPrevious - offsetof(Node, mNode));
         }
 
@@ -120,24 +120,27 @@ public:
     {
         if (mFlags & 1)
         {
-            for (PblListDouble::Node* pLink = mTerminator.mNext; pLink != &mTerminator;
-                 pLink = pLink->mNext)
+            Itor itor(this);
+            for (;;)
             {
-                Node* pCur = (Node*)((char*)pLink - offsetof(Node, mNode));
-                if (pCur == GetTerminator())
+                Node* const current = itor.GetNode(this);
+                if (current == GetTerminator())
                 {
                     break;
                 }
-
-                if (pNode->mSortValue > pCur->mSortValue)
+                if (pNode->mSortValue > current->mSortValue)
                 {
-                    AddBefore(pLink, &pNode->mNode);
+                    AddBefore(&current->mNode, &pNode->mNode);
                     return;
                 }
+                ++itor;
             }
+            AddLast(&pNode->mNode);
         }
-
-        AddLast(&pNode->mNode);
+        else
+        {
+            AddLast(&pNode->mNode);
+        }
     }
 
     // FUNCTION: SWBF2 0x005a9420

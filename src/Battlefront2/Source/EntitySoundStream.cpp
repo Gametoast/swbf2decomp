@@ -89,22 +89,6 @@ MemoryPool EntitySoundStream::sMemoryPool("EntitySoundStream", 0x10c);
 
 
 
-// FUNCTION: SWBF2 0x004fb890
-Snd::SoundStream::SoundStream()
-    : VoiceVirtualBus(0, 0, true),
-      mProperties(0),
-      mInfo(0)
-{
-    smList.AddLast(&mNode);
-}
-
-// FUNCTION: SWBF2 0x004fb920
-Snd::SoundStream::~SoundStream()
-{
-    mInfo = 0;
-    mProperties = 0;
-}
-
 // FUNCTION: SWBF2 0x004fba90
 EntitySoundStream::EntitySoundStream(EntitySoundStreamClass* pClass, const EntityDesc& desc)
     : EntitySound(pClass, desc)
@@ -163,7 +147,7 @@ void EntitySoundStream::Play()
 bool EntitySoundStream::Update(float fDeltaTime)
 {
     if (mSoundStream.GetPlayState() == Snd::SourceTransport::playState_stopped &&
-        mSoundStream.mProperties)
+        mSoundStream.GetProperties())
     {
         mSoundStream.Play(true);
     }

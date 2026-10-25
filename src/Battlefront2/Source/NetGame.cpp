@@ -6664,12 +6664,12 @@ void CleanReliableNetEvents(int player)
 }
 
 // GLOBAL: SWBF2 0x007e8e80
-int lastFilledTurn;
+static unsigned int lastFill = 123;
 
 // FUNCTION: SWBF2 0x005c8b00
 void FillTurn(unsigned int value)
 {
-    lastFilledTurn = value;
+    lastFill = value;
 }
 
 // FUNCTION: SWBF2 0x005c8b10
@@ -7474,7 +7474,7 @@ void NetGame::CreateEvent_UpdateDoorState(unsigned int entityID, unsigned __int6
 }
 
 // GLOBAL: SWBF2 0x007e8e78
-unsigned char BOOT_JOYSTICK_BITS;
+static unsigned char BOOT_JOYSTICK_BITS = 2;
 // GLOBAL: SWBF2 0x01fa65a8
 unsigned __int64 hostBootAgreeMask;
 // GLOBAL: SWBF2 0x01fa87c0
@@ -8194,9 +8194,6 @@ void ReadLockedTargets(NetPktGroup& group, int player)
         }
     }
 }
-
-// GLOBAL: SWBF2 0x007e8e8c
-int archFilter;
 
 namespace ObjectiveManager
 {

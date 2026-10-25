@@ -18,9 +18,6 @@ namespace RedMissionLog
     bool Enabled();
 }
 
-// GLOBAL: SWBF2 0x007ec440
-
-int sPreviousHeap;
 // GLOBAL: SWBF2 0x01e2fd3c
 int _fileOpCompleted;
 
@@ -31,6 +28,9 @@ void(__cdecl* PblFile::_blockCallbackFunc)(void) = 0;
 // FUNCTION: SWBF2 0x00425840
 static void PblFile_SetHeap(bool bSet)
 {
+    // GLOBAL: SWBF2 0x007ec440
+    static int heap = -1;
+
     if (bSet)
     {
         int iHeap;
@@ -46,12 +46,12 @@ static void PblFile_SetHeap(bool bSet)
         {
             iHeap = GameMemory::TempLoadHeap;
         }
-        sPreviousHeap = RedSetCurrentHeap(iHeap);
+        heap = RedSetCurrentHeap(iHeap);
     }
-    else if (sPreviousHeap != -1)
+    else if (heap != -1)
     {
-        RedSetCurrentHeap(sPreviousHeap);
-        sPreviousHeap = -1;
+        RedSetCurrentHeap(heap);
+        heap = -1;
     }
 }
 

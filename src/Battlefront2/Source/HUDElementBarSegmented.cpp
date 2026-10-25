@@ -25,7 +25,7 @@ HUD::ElementBarSegmented::Factory::Factory()
 // HUD::ElementBarSegmented::Factory::~Factory
 
 // SYNTHETIC: SWBF2 0x0054b860
-// HUD::ElementGroup::Factory::~Factory -- 5 PDB bytes (pdb_functions.tsv),
+// HUD::ElementGroup::Factory::~Factory
 
 // FUNCTION: SWBF2 0x0054b7b0
 HUD::Item* HUD::ElementGroup::Factory::CreateItem(const char* const pName, ItemCallback pCallback,

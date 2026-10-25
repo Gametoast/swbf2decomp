@@ -56,6 +56,10 @@ HUD::EventHandler::EventHandler()
 // FUNCTION: SWBF2 0x0055db70
 HUD::EventHandler::~EventHandler()
 {
+    if (mNode.IsAttached())
+    {
+        mNode.Remove();
+    }
 }
 
 // FUNCTION: SWBF2 0x0055db50

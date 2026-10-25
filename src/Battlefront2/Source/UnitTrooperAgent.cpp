@@ -125,8 +125,6 @@ UnitTrooperAgent::UnitTrooperAgent(UnitController* pCtrl, const CommandPost* pPo
     , mRepairHelper(this)
     , mMineHelper(this)
 {
-    mConvoyParent.mObject = 0;
-    mConvoyParent.mSavedHandleId = 0;
     mCurState = 1;
     mNextState = 1;
 }

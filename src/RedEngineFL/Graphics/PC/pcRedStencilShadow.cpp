@@ -35,7 +35,8 @@ static const D3DXMATRIXA16 _IdentityMatrix(1.0f, 0.0f, 0.0f, 0.0f,
 
 static const float kInv255 = 1.0f / 255.0f;
 
-bool RedStencilShadow::s_bShadowsEnabled;
+// GLOBAL: SWBF2 0x007dfa84
+bool RedStencilShadow::s_bShadowsEnabled = true;
 
 static const PblMatrix& _GetSkinMatrix(unsigned int uiNumBones, const unsigned char* puiWeights,
                                        const unsigned char* puiIndices, const PblMatrix* pMatrices);

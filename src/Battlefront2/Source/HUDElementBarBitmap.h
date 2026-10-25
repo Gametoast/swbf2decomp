@@ -11,7 +11,7 @@ namespace HUD
 // VTABLE: SWBF2 0x007a08ac RedBitmapElement
 // VTABLE: SWBF2 0x007a0908 HUD::ElementBitmapBase
 // VTABLE: SWBF2 0x007a0944
-class ElementBarBitmap : public HUD::ElementBitmap, public HUD::ElementBar
+class ElementBarBitmap : public HUD::ElementBitmap, protected HUD::ElementBar
 {
 public:
 
@@ -41,7 +41,7 @@ public:
 
     // VTABLE: SWBF2 0x007a0864
 
-    class Factory : public HUD::ElementBitmap::Factory, public HUD::ElementBar::Factory
+    class Factory : public HUD::ElementBitmap::Factory, protected HUD::ElementBar::Factory
     {
     public:
         // FUNCTION: SWBF2 0x0054a800

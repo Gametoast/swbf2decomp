@@ -19,7 +19,12 @@ SoundStream::FireForget::~FireForget()
 {
 }
 
+// GLOBAL: SWBF2 0x01e297a0
+// SoundStream::smCount
 unsigned int SoundStream::smCount[6];
+
+// GLOBAL: SWBF2 0x01e297b8
+// SoundStream::smPlayingProps
 SoundStream::Properties* SoundStream::smPlayingProps[6];
 
 // SYNTHETIC: SWBF2 0x007367f0
@@ -53,17 +58,17 @@ SoundStream::FireForget::FireForget()
 SoundStream::FireForget SoundStream::smFireForget[24];
 
 // SYNTHETIC: SWBF2 0x0040b960
-// `dynamic initializer for 'Snd::SoundStream::smPlayingVel''
-
-// GLOBAL: SWBF2 0x01e297d0
-// SoundStream::smPlayingVel
-PblVector3 SoundStream::smPlayingVel[6];
-// SYNTHETIC: SWBF2 0x0040b980
 // `dynamic initializer for 'Snd::SoundStream::smPlayingPos''
 
-// GLOBAL: SWBF2 0x01e29d40
+// GLOBAL: SWBF2 0x01e297d0
 // SoundStream::smPlayingPos
 PblVector3 SoundStream::smPlayingPos[6];
+// SYNTHETIC: SWBF2 0x0040b980
+// `dynamic initializer for 'Snd::SoundStream::smPlayingVel''
+
+// GLOBAL: SWBF2 0x01e29d40
+// SoundStream::smPlayingVel
+PblVector3 SoundStream::smPlayingVel[6];
 
 // SYNTHETIC: SWBF2 0x0040b900
 // `dynamic initializer for 'Snd::SoundStream::smFree''
@@ -103,27 +108,8 @@ void SoundStream::StopAll()
 {
     for (unsigned int i = 0; i < 6; ++i)
     {
-        for (;;)
+        while (GetFireForget(i))
         {
-            PblListDoubleSorted::Node* pLink = smQueue[i].GetFirst();
-            if (pLink == smQueue[i].GetTerminator())
-            {
-                break;
-            }
-
-            FireForget* pFF = (FireForget*)((char*)pLink
-                                            - (int)offsetof(FireForget, mNode));
-
-            --smCount[i];
-
-            pFF->mNode.mNode.Remove();
-
-            smFree.Add(&pFF->mNode);
-
-            if (!pFF)
-            {
-                break;
-            }
         }
     }
 }
@@ -275,20 +261,26 @@ void SoundStream::Properties::Read(PblFileChunk& chunk)
 
 extern PblRandom sndRandom;
 
-// FUNCTION: SWBF2 0x00736ac0
-SoundStream::FireForget* __cdecl SoundStream::GetFireForget(unsigned int uiIndex)
+void __cdecl SoundStream::FreeFireForget(const unsigned int streamIndex,
+                                          FireForget* const fireForget)
 {
-    PblListDoubleSorted& list = smQueue[uiIndex];
+    --smCount[streamIndex];
+    fireForget->mNode.mNode.Remove();
+    smFree.Add(&fireForget->mNode);
+}
+
+// FUNCTION: SWBF2 0x00736ac0
+SoundStream::FireForget* __cdecl SoundStream::GetFireForget(const unsigned int streamIndex)
+{
+    PblListDoubleSorted& list = smQueue[streamIndex];
     if (list.GetFirst() == list.GetTerminator())
     {
         return 0;
     }
-    FireForget* pFF = (FireForget*)list.GetFirst()->GetObjectA(
-        &list, offsetof(FireForget, mNode));
-    --smCount[uiIndex];
-    pFF->mNode.mNode.Remove();
-    smFree.Add(&pFF->mNode);
-    return pFF;
+    FireForget* const ff = static_cast<FireForget*>(list.GetFirst()->GetObjectA(
+        &list, offsetof(FireForget, mNode)));
+    FreeFireForget(streamIndex, ff);
+    return ff;
 }
 
 // FUNCTION: SWBF2 0x00737560
@@ -354,12 +346,12 @@ void __cdecl SoundStream::UpdateAll()
         }
 
         smPlayingProps[i] = pProps;
-        smPlayingVel[i] = pFF->mPos;
-        smPlayingPos[i] = pFF->mVel;
+        smPlayingPos[i] = pFF->mPos;
+        smPlayingVel[i] = pFF->mVel;
         pStream->SetPitch(pFF->mPitch);
         pStream->SetGain(pFF->mGain);
-        pStream->SetPosition(&smPlayingVel[i]);
-        pStream->SetVelocity(&smPlayingPos[i]);
+        pStream->SetPosition(&smPlayingPos[i]);
+        pStream->SetVelocity(&smPlayingVel[i]);
         pStream->Play(true);
     }
 
@@ -396,73 +388,54 @@ float SoundStream::Properties::CalculatePriority(const PblVector3* const pPos,
 }
 
 // FUNCTION: SWBF2 0x00736800
-SoundStream::FireForget* __cdecl SoundStream::AllocFireForget(unsigned int uiIndex, float fPriority,
-                                                              bool bNoSteal)
+SoundStream::FireForget* __cdecl SoundStream::AllocFireForget(const unsigned int streamIndex,
+                                                              const float priority, const bool is3D)
 {
-    PblListDoubleSorted& rQueue = smQueue[uiIndex];
+    PblListDoubleSorted& list = smQueue[streamIndex];
+    FireForget* ff = static_cast<FireForget*>(smFree.GetFirst()->GetObjectA(
+        &smFree, offsetof(FireForget, mNode)));
 
-    PblListDoubleSorted::Node* pFreeNode = smFree.GetFirst();
-    FireForget* const pFree = (pFreeNode && pFreeNode != smFree.GetTerminator())
-        ? (FireForget*)((char*)pFreeNode - (int)offsetof(FireForget, mNode))
-        : 0;
-
-    for (PblListDouble::Node* pLink = rQueue.mTerminator.mNext; pLink != &rQueue.mTerminator;)
+    PblListDoubleSorted::Itor itor(list);
+    for (;;)
     {
-        PblListDoubleSorted::Node* const pNode =
-            (PblListDoubleSorted::Node*)((char*)pLink - offsetof(PblListDoubleSorted::Node, mNode));
-        if (pNode == rQueue.GetTerminator())
+        PblListDoubleSorted::Node* const node = itor.GetNode(&list);
+        if (node == list.GetTerminator())
         {
             break;
         }
-        FireForget* const pFF = (FireForget*)((char*)pNode - (int)offsetof(FireForget, mNode));
-        pNode->mSortValue = pFF->mProperties->CalculatePriority(&pFF->mPos,
-                                                                &pFF->mVel);
-        pLink = pLink->mNext;
-        if (pNode->mSortValue <= 0.0f)
+        FireForget* const queued = static_cast<FireForget*>(node->GetObjectA(
+            &list, offsetof(FireForget, mNode)));
+        queued->mNode.mSortValue = queued->mProperties->CalculatePriority(&queued->mPos,
+                                                                       &queued->mVel);
+        ++itor;
+        if (queued->mNode.mSortValue <= 0.0f)
         {
-            --smCount[uiIndex];
-            pNode->mNode.Remove();
-            smFree.Add(pNode);
+            FreeFireForget(streamIndex, queued);
         }
     }
 
-    pFree->mNode.mNode.Remove();
-    pFree->mNode.mSortValue = fPriority;
-    rQueue.Add(&pFree->mNode);
-    if (++smCount[uiIndex] <= 4)
+    ff->mNode.mNode.Remove();
+    ff->mNode.mSortValue = priority;
+    list.Add(&ff->mNode);
+    if (++smCount[streamIndex] > 4)
     {
-        return pFree;
-    }
-
-    FireForget* pResult = pFree;
-    PblListDouble::Node* const pLastLink = rQueue.mTerminator.mPrev;
-    const PblListDoubleSorted::Node* pVictim = (pLastLink == &rQueue.mTerminator)
-        ? rQueue.GetTerminator()
-        : (const PblListDoubleSorted::Node*)((char*)pLastLink
-                                             - offsetof(PblListDoubleSorted::Node, mNode));
-    if (pVictim == &pFree->mNode)
-    {
-        if (bNoSteal)
+        PblListDoubleSorted::Node* node = list.GetLast();
+        if (node == &ff->mNode)
         {
-            pResult = 0;
+            if (is3D)
+            {
+                ff = 0;
+            }
+            else
+            {
+                node = node->GetPrevious(&list);
+            }
         }
-        else
-        {
-            PblListDouble::Node* const pPrevLink = pVictim->mNode.mPrev;
-            pVictim = (pPrevLink == &rQueue.mTerminator)
-                ? 0
-                : (const PblListDoubleSorted::Node*)((char*)pPrevLink
-                                                     - offsetof(PblListDoubleSorted::Node, mNode));
-        }
+        FireForget* const drop = static_cast<FireForget*>(node->GetObjectA(
+            &list, offsetof(FireForget, mNode)));
+        FreeFireForget(streamIndex, drop);
     }
-
-    FireForget* const pDrop = (pVictim == rQueue.GetTerminator())
-        ? 0
-        : (FireForget*)((char*)pVictim - (int)offsetof(FireForget, mNode));
-    --smCount[uiIndex];
-    pDrop->mNode.mNode.Remove();
-    smFree.Add(&pDrop->mNode);
-    return pResult;
+    return ff;
 }
 
 // FUNCTION: SWBF2 0x00736ed0
@@ -525,8 +498,8 @@ void __cdecl SoundStream::Play(const Properties* pProps, Source3D* pSource3D, bo
     Stream* const pPlaying = &EngineBase::smStreams[uiIndex];
     if (pPlaying->GetPlayState() != SourceTransport::playState_stopped && smPlayingProps[uiIndex])
     {
-        if (fPriority < smPlayingProps[uiIndex]->CalculatePriority(&smPlayingVel[uiIndex],
-                                                                   &smPlayingPos[uiIndex]))
+        if (fPriority < smPlayingProps[uiIndex]->CalculatePriority(&smPlayingPos[uiIndex],
+                                                                   &smPlayingVel[uiIndex]))
         {
             return;
         }
@@ -538,12 +511,12 @@ void __cdecl SoundStream::Play(const Properties* pProps, Source3D* pSource3D, bo
     }
 
     smPlayingProps[uiIndex] = const_cast<Properties*>(pProps);
-    smPlayingVel[uiIndex] = *source3D.mPos3D;
-    smPlayingPos[uiIndex] = *source3D.mVel3D;
+    smPlayingPos[uiIndex] = *source3D.mPos3D;
+    smPlayingVel[uiIndex] = *source3D.mVel3D;
     pPlaying->SetPitch(pProps->SourceVariation::CalculatePitch(pProps->mPitch));
     pPlaying->SetGain(fGain);
-    pPlaying->SetPosition(&smPlayingVel[uiIndex]);
-    pPlaying->SetVelocity(&smPlayingPos[uiIndex]);
+    pPlaying->SetPosition(&smPlayingPos[uiIndex]);
+    pPlaying->SetVelocity(&smPlayingVel[uiIndex]);
     pPlaying->Play(true);
 }
 

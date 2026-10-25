@@ -42,8 +42,6 @@ CoverHelper::CoverHelper(UnitAgent* pOwner)
     : HelperFsm(STATE_START, STATE_START)
     , mOwner(pOwner)
 {
-    mCoverTarget.mObject = NULL;
-    mCoverTarget.mSavedHandleId = 0;
     mHint = NULL;
 }
 

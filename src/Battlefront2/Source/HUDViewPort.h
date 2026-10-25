@@ -19,7 +19,7 @@ public:
 
     // VTABLE: SWBF2 0x007a38a8
 
-    class Factory : public HUD::Element::Factory
+    class Factory : private HUD::Element::Factory
     {
     public:
         // FUNCTION: SWBF2 0x00568b00
@@ -41,10 +41,10 @@ public:
         Property mViewport3UseSafezone;
     };
 
-    ViewPort(const char* const pName, Factory::ItemCallback pCallback, void* const pUserData);
+    ViewPort(const char* const pName, HUD::Item::Factory::ItemCallback pCallback, void* const pUserData);
     virtual ~ViewPort();
 
-    virtual void Read(PblConfig& config, Factory::ItemCallback pCallback, void* const pUserData);
+    virtual void Read(PblConfig& config, HUD::Item::Factory::ItemCallback pCallback, void* const pUserData);
     virtual bool SetProperty(const unsigned int uHashID, const void* const pValue);
     virtual bool GetProperty(const unsigned int uHashID, void* const pValue);
     virtual const char* PropertyTranslateEnum(const unsigned int uHashID, const unsigned int uValue);

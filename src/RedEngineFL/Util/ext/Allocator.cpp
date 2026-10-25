@@ -2,6 +2,32 @@
 
 namespace util
 {
+namespace
+{
+// SYNTHETIC: SWBF2 0x00408b40
+// util::`anonymous namespace'::`dynamic initializer for 'gStackAllocator_''
+// SYNTHETIC: SWBF2 0x00769a60
+// util::`anonymous namespace'::`dynamic atexit destructor for 'gStackAllocator_''
+// GLOBAL: SWBF2 0x007dfb48
+// `anonymous namespace'::gStackAllocator_
+StackAllocator gStackAllocator_(true, true, 32);
+
+// GLOBAL: SWBF2 0x007dfb88
+// `anonymous namespace'::gStackBlock_
+StaticMemoryBlock<1024> gStackBlock_;
+
+// SYNTHETIC: SWBF2 0x00408b50
+// util::`anonymous namespace'::`dynamic initializer for 'gStaticAllocator_''
+// SYNTHETIC: SWBF2 0x00769aa0
+// util::`anonymous namespace'::`dynamic atexit destructor for 'gStaticAllocator_''
+// GLOBAL: SWBF2 0x007dff90
+// `anonymous namespace'::gStaticAllocator_
+StackAllocator gStaticAllocator_(true, false, 32);
+
+// GLOBAL: SWBF2 0x007dffd0
+// `anonymous namespace'::gStaticBlock_
+StaticMemoryBlock<4096> gStaticBlock_;
+}
 
 // GLOBAL: SWBF2 0x009a1a30
 char* gLastError;
@@ -85,31 +111,32 @@ void HashMultiAllocator::ClearDefault()
     sDefault = 0;
 }
 
+IAllocator& DefaultStackAllocator::GetInstance()
+{
+    static bool first_ = true;
+    if (first_)
+    {
+        Buffer buf(0, 1024);
+        gStackBlock_.Allocate(buf);
+        gStackAllocator_.Set(buf);
+        first_ = false;
+    }
+    return gStackAllocator_;
+}
+
 // FUNCTION: SWBF2 0x006e91b0
 IAllocator& DefaultStaticAllocator::GetInstance()
 {
-    static StackAllocator s_alloc(true, false, 32);
-    static StaticMemoryBlock<4096> s_block;
-    static bool s_bFirst = true;
-
-    if (s_bFirst)
+    static bool first_ = true;
+    if (first_)
     {
         Buffer buf(0, 4096);
-        s_block.Allocate(buf);
-        s_alloc.Set(buf);
-        s_bFirst = false;
+        gStaticBlock_.Allocate(buf);
+        gStaticAllocator_.Set(buf);
+        first_ = false;
     }
-    return s_alloc;
+    return gStaticAllocator_;
 }
-
-// SYNTHETIC: SWBF2 0x00408b50
-// `util::DefaultStaticAllocator::GetInstance'::`2'::`dynamic initializer for 's_alloc''
-// SYNTHETIC: SWBF2 0x00769aa0
-// `util::DefaultStaticAllocator::GetInstance'::`2'::`dynamic atexit destructor for 's_alloc''
-// SYNTHETIC: SWBF2 0x00408b40
-// `util::DefaultStackAllocator::GetInstance'::`2'::`dynamic initializer for 's_alloc''
-// SYNTHETIC: SWBF2 0x00769a60
-// `util::DefaultStackAllocator::GetInstance'::`2'::`dynamic atexit destructor for 's_alloc''
 
 }
 

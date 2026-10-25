@@ -11,13 +11,13 @@ namespace HUD
 // VTABLE: SWBF2 0x007a0a34
 // VTABLE: SWBF2 0x007a0a94 HUD::ElementGroupBase
 // VTABLE: SWBF2 0x007a0ad4 RedGroupElement
-class ElementBarSegmented : public HUD::ElementGroup, public HUD::ElementBar
+class ElementBarSegmented : public HUD::ElementGroup, protected HUD::ElementBar
 {
 public:
 
     // VTABLE: SWBF2 0x007a0b24
 
-    class Factory : public HUD::ElementGroup::Factory, public HUD::ElementBar::Factory
+    class Factory : public HUD::ElementGroup::Factory, protected HUD::ElementBar::Factory
     {
     public:
         // FUNCTION: SWBF2 0x0054baf0

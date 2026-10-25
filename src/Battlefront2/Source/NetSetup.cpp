@@ -2988,7 +2988,6 @@ void CNetHostGame::DropPlayer(int iPlayer)
 // GLOBAL: SWBF2 0x01faa720
 bool netHandlingFindPacket;
 
-extern int archFilter;
 void WriteString(NetPktGroup* pGroup, const char* text, unsigned int capacity);
 
 // FUNCTION: SWBF2 0x005e73b0
@@ -3515,9 +3514,9 @@ bool ReadShellMove(NetPktGroup& group, int player, ShellMove& move, ShellState& 
 }
 
 // GLOBAL: SWBF2 0x007e8e52
-bool netReplicaOk;
+bool netReplicaOk = true;
 // GLOBAL: SWBF2 0x007e8e53
-bool netRelayOk;
+bool netRelayOk = true;
 extern bool g_SpectatorEnabled[1];
 
 // FUNCTION: SWBF2 0x005e54b0

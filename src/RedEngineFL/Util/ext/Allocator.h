@@ -141,6 +141,12 @@ public:
     bool allocated_;
 };
 
+class DefaultStackAllocator
+{
+public:
+    static IAllocator& GetInstance();
+};
+
 class DefaultStaticAllocator
 {
 public:
@@ -182,3 +188,6 @@ private:
 
 // VTABLE: SWBF2 0x00783938
 // class util::StaticMemoryBlock<4096>
+
+// VTABLE: SWBF2 0x00783918
+// class util::StaticMemoryBlock<1024>

@@ -35,9 +35,9 @@
 
 
 // GLOBAL: SWBF2 0x007e6660
-static int sCurrentTrail = 0;
+static int sCurrentTrail = -1;
 // GLOBAL: SWBF2 0x007e665c
-static int sCurrentSmoke = 0;
+static int sCurrentSmoke = -1;
 
 // FUNCTION: SWBF2 0x0051c980
 Ordnance* ExplosionClass::Build(const OrdnanceDesc&)

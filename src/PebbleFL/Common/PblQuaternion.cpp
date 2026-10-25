@@ -1,14 +1,15 @@
 #include "PblQuaternion.h"
 
 #include <math.h>
+#include <d3dx9math.h>
 
 #include "PblMath.h"
 #include "PblMatrix.h"
 #include "PblVector.h"
 
-extern "C" PblQuaternion* __stdcall D3DXQuaternionNormalize(PblQuaternion* pOut, const PblQuaternion* pQ);
-extern "C" PblMatrix* __stdcall D3DXMatrixRotationQuaternion(PblMatrix* pOut, const PblQuaternion* pQ);
-extern "C" PblVector3* __stdcall D3DXVec3TransformNormal(PblVector3* pOut, const PblVector3* pV, const PblMatrix* pM);
+
+
+
 
 enum QUAT_INDEX
 {
@@ -73,7 +74,7 @@ PblQuaternion operator*(const PblQuaternion& q0, const PblQuaternion& q1)
 // FUNCTION: SWBF2 0x0072a380
 PblQuaternion Interpolate(const PblQuaternion& q0, const PblQuaternion& q1, float fT)
 {
-    const float fCos = q0._fX * q1._fX + q1._fS * q0._fS + q1._fY * q0._fY + q1._fZ * q0._fZ;
+    const float fCos = q0.DotProduct(q1);
 
     float fScale0;
     float fScale1;
@@ -86,7 +87,7 @@ PblQuaternion Interpolate(const PblQuaternion& q0, const PblQuaternion& q1, floa
         }
         else
         {
-            const float fAngle = (float)acos((double)fCos);
+            const float fAngle = acosf(fCos);
             const float fInvSin = 1.0f / PblMath::Sin(fAngle);
             fScale0 = PblMath::Sin((1.0f - fT) * fAngle) * fInvSin;
             fScale1 = PblMath::Sin(fAngle * fT) * fInvSin;
@@ -102,29 +103,20 @@ PblQuaternion Interpolate(const PblQuaternion& q0, const PblQuaternion& q1, floa
         }
         else
         {
-            const float fAngle = (float)acos((double)fNegCos);
+            const float fAngle = acosf(fNegCos);
             const float fInvSin = 1.0f / PblMath::Sin(fAngle);
             fScale0 = PblMath::Sin((1.0f - fT) * fAngle) * fInvSin;
             fScale1 = -(PblMath::Sin(fAngle * fT) * fInvSin);
         }
     }
 
-    PblQuaternion q;
-    q._fS = fScale0 * q0._fS + q1._fS * fScale1;
-    q._fY = q0._fY * fScale0 + q1._fY * fScale1;
-    q._fX = q0._fX * fScale0 + q1._fX * fScale1;
-    q._fZ = q0._fZ * fScale0 + q1._fZ * fScale1;
+    PblQuaternion q = q0.Scale(fScale0) + q1.Scale(fScale1);
 
-    const float fLengthSq = q._fX * q._fX + q._fS * q._fS + q._fY * q._fY + q._fZ * q._fZ;
-    if ((float)fabs((double)(fLengthSq - 1.0f)) > 0.0001f)
+    const float fLengthSq = q.GetX() * q.GetX() + q.GetS() * q.GetS()
+                          + q.GetY() * q.GetY() + q.GetZ() * q.GetZ();
+    if (fabsf(fLengthSq - 1.0f) > 0.0001f)
     {
-        const float fInvLength = 1.0f / (float)sqrt((double)fLengthSq);
-        PblQuaternion n;
-        n._fX = fInvLength * q._fX;
-        n._fY = fInvLength * q._fY;
-        n._fZ = fInvLength * q._fZ;
-        n._fS = fInvLength * q._fS;
-        q = n;
+        q = q.Scale(1.0f / PblMath::Sqrt(fLengthSq));
     }
     return q;
 }
@@ -132,14 +124,16 @@ PblQuaternion Interpolate(const PblQuaternion& q0, const PblQuaternion& q1, floa
 // FUNCTION: SWBF2 0x0072a670
 PblVector3 PblQuaternion::RotateVector(const PblVector3& v) const
 {
-    PblQuaternion qUnit;
+    D3DXQUATERNION qUnit;
     PblMatrix mRot;
-    D3DXMatrixRotationQuaternion(&mRot, D3DXQuaternionNormalize(&qUnit, this));
+    D3DXMatrixRotationQuaternion(reinterpret_cast<D3DXMATRIX*>(&mRot),
+        D3DXQuaternionNormalize(&qUnit, reinterpret_cast<const D3DXQUATERNION*>(this)));
     mRot.m[3][0] = 0.0f;
     mRot.m[3][1] = 0.0f;
     mRot.m[3][2] = 0.0f;
     mRot.m[3][3] = 1.0f;
     PblVector3 vOut;
-    D3DXVec3TransformNormal(&vOut, &v, &mRot);
+    D3DXVec3TransformNormal(reinterpret_cast<D3DXVECTOR3*>(&vOut),
+        reinterpret_cast<const D3DXVECTOR3*>(&v), reinterpret_cast<const D3DXMATRIX*>(&mRot));
     return vOut;
 }

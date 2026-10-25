@@ -27,7 +27,7 @@ FilePlatformBase& FilePlatformBase::operator=(FilePlatformBase& rOther)
 {
     memcpy(this, &rOther, sizeof(FilePlatformBase));
     rOther.mBufferAlloc = 0;
-    rOther.mBuffer = Buffer();
+    rOther.mBuffer.Init(0, 0);
     rOther.Close();
     return *this;
 }
@@ -131,10 +131,10 @@ void FilePlatformBase::Close()
     {
         Free(mBufferAlloc);
         mBufferAlloc = 0;
-        mBuffer = Buffer();
+        mBuffer.Init(0, 0);
     }
-    mPos = 0;
     mSectorSize = 0;
+    mPos = 0;
 }
 
 // FUNCTION: SWBF2 0x00730290

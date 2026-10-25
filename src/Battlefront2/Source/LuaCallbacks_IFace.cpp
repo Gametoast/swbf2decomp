@@ -1809,12 +1809,11 @@ int ScriptCB_IFModel_SetRotation(lua_State* L)
         && lua_isnumber(LuaHelper::mState, iArg) && lua_isnumber(LuaHelper::mState, iArg + 1)
         && lua_isnumber(LuaHelper::mState, iArg + 2) && LuaHelper::IsNumber(iArg + 3))
     {
-        PblQuaternion q;
-        q._fS = LuaHelper::GetFloat(iArg);
-        q._fX = LuaHelper::GetFloat(iArg + 1);
-        q._fY = LuaHelper::GetFloat(iArg + 2);
-        q._fZ = LuaHelper::GetFloat(iArg + 3);
-        ((Red3DModelElement*)pElement)->m_rotation = q;
+        const float fS = LuaHelper::GetFloat(iArg);
+        const float fX = LuaHelper::GetFloat(iArg + 1);
+        const float fY = LuaHelper::GetFloat(iArg + 2);
+        const float fZ = LuaHelper::GetFloat(iArg + 3);
+        ((Red3DModelElement*)pElement)->m_rotation = PblQuaternion(fS, fX, fY, fZ);
     }
     return 0;
 }

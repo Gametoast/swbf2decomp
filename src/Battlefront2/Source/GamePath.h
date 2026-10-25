@@ -9,7 +9,7 @@ class PblFileChunk;
 class GamePath;
 
 // VTABLE: SWBF2 0x0079fb1c
-class GamePathFactory : public PblList<GamePathFactory>::Node
+class GamePathFactory : private PblList<GamePathFactory>::Node
 {
 public:
 

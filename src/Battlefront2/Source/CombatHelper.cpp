@@ -128,8 +128,6 @@ CombatHelper::CombatHelper(UnitAgent* pOwner)
     , mOwner(pOwner)
     , mAttackPatternHelper(pOwner)
 {
-    mTargetHandle.mObject = 0;
-    mTargetHandle.mSavedHandleId = 0;
     mTargetPos.x = 0.0f;
     mTargetPos.y = 0.0f;
     mTargetPos.z = 0.0f;

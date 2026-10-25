@@ -46,7 +46,8 @@ extern unsigned int netBroadcastRecvSocket;
 extern bool netLobbyRequestPending;
 extern bool netLeavingLobby;
 extern bool netHandlingFindPacket;
-extern int archFilter;
+// GLOBAL: SWBF2 0x007e8e8c
+static NetArch archFilter = NET_ARCH_ANY;
 extern unsigned __int64 netEnteredLobbyId;
 extern unsigned __int64 netCreatedLobbyId;
 extern unsigned __int64 netFindSessionId;
@@ -397,7 +398,7 @@ void __fastcall HandleFindPacket(NetPacket* packet)
     if (type == 1)
     {
         group.ReadBits(type, 2);
-        accepted = archFilter == 3 || type == (unsigned int)archFilter;
+        accepted = archFilter == NET_ARCH_ANY || type == (unsigned int)archFilter;
     }
     packet->Free();
     if (accepted)
@@ -782,7 +783,7 @@ unsigned __int64 NetMatch::GetLocalGSID()
 // FUNCTION: SWBF2 0x005d78a0
 void NetMatch::SetRegisterArchFilter()
 {
-    archFilter = 3;
+    archFilter = NET_ARCH_ANY;
 }
 
 // FUNCTION: SWBF2 0x005d67b0

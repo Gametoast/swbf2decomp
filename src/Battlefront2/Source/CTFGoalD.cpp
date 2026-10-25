@@ -84,9 +84,8 @@ AI::GoalTarget::GoalTarget(const PblVector3& vPos)
 
 // FUNCTION: SWBF2 0x00487ff0
 AI::GoalTarget::GoalTarget(const GameObject* pObject)
-    : mType(GTT_GAMEOBJECT), mPos(0, 0, 0), mChr(0)
+    : mType(GTT_GAMEOBJECT), mPos(0, 0, 0), mChr(0), mGameObj(pObject)
 {
-    SetHandle(mGameObj, pObject);
 }
 
 // FUNCTION: SWBF2 0x004880c0

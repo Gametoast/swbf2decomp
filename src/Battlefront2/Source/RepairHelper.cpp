@@ -89,14 +89,6 @@ public:
     float mCurClip;
 };
 
-// GLOBAL: SWBF2 0x007ec54c
-
-int gOutOfAmmoWeaponCount;
-
-// GLOBAL: SWBF2 0x007ec550
-
-int gRepairSearchTimeoutCount;
-
 namespace
 {
 
@@ -341,6 +333,9 @@ bool RepairHelper::SetAidWpn(bool* pbChanged)
 // FUNCTION: SWBF2 0x0062e910
 void RepairHelper::CalcMyAidTypes(unsigned int* pHealth, unsigned int* pAmmo)
 {
+    // GLOBAL: SWBF2 0x007ec54c
+    static int iii = 1;
+
     *pAmmo = 0;
     *pHealth = 0;
     for (int i = 0; i < GetMe()->GetWeaponCount(); ++i)
@@ -348,7 +343,7 @@ void RepairHelper::CalcMyAidTypes(unsigned int* pHealth, unsigned int* pAmmo)
         Weapon* pWeapon = GetMe()->GetWeaponPtr(i);
         if (pWeapon->m_pAmmoCounter->GetNumRounds() <= 0)
         {
-            ++gOutOfAmmoWeaponCount;
+            ++iii;
             continue;
         }
 
@@ -479,6 +474,9 @@ bool RepairHelper::FireRepairWeapon(float dt, const GameObject* pTarget)
 // FUNCTION: SWBF2 0x0062f080
 bool RepairHelper::Update(float dt)
 {
+    // GLOBAL: SWBF2 0x007ec550
+    static int iii = 1;
+
     GameObject* pTarget = AIUtil::GetAlivePtr(mAidTarget, true);
     if (!pTarget)
     {
@@ -556,7 +554,7 @@ bool RepairHelper::Update(float dt)
             {
                 return false;
             }
-            ++gRepairSearchTimeoutCount;
+            ++iii;
         }
         AIUtil::Slide(GetMe()->GetGameObject(), pTarget, false, &mPathing, &mPathTime, 8.0f, 1.6f);
         mContactTime = FLT_MAX;

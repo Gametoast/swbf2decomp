@@ -30,6 +30,8 @@ namespace PblMath
         return Length2Est(Length2Est(fX, fY), fZ);
     }
 
+    float Sqrt(float value);
+
     float __cdecl Atan2(float y, float x);
     float __cdecl Sin(float fAngle);
     float __cdecl Cos(float fAngle);
@@ -40,3 +42,5 @@ namespace PblMath
     inline int Floor(float f) { return (int)(f + 4194304.0f) - 4194304; }
     inline int Round(float f) { return Floor(f + 0.5f); }
 }
+
+#include "PebbleFL/pc/pcPblMath.h"

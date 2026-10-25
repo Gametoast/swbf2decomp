@@ -396,12 +396,6 @@ inline PblVector3 CameraManager::GetCameraVelocity(int iCam) const
     return mCurGameCamera[iCam]->GetVelocity();
 }
 
-// FUNCTION: SWBF2 0x00694e20
-void PrecipitationEffect::RainShadowRegion::UpdateVisibility(const RedCamera* pCamera)
-{
-    m_bVisible = RedRegion::IsVisible(pCamera, 0.0f);
-}
-
 // FUNCTION: SWBF2 0x004356b0
 void PrecipitationEffect::Render(int value)
 {

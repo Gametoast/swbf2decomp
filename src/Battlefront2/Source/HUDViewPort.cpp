@@ -61,7 +61,7 @@ HUD::ViewPort::Factory::Factory()
 // HUD::ViewPort::Factory::~Factory
 
 // FUNCTION: SWBF2 0x00568d10
-HUD::ViewPort::ViewPort(const char* const pName, Factory::ItemCallback pCallback,
+HUD::ViewPort::ViewPort(const char* const pName, HUD::Item::Factory::ItemCallback pCallback,
                         void* const pUserData)
     : HUD::Element(*static_cast<RedGroupElement*>(this), pName, pCallback, pUserData)
 {
@@ -176,7 +176,7 @@ bool HUD::ViewPort::GetProperty(const unsigned int uHashID, void* const pValue)
 }
 
 // FUNCTION: SWBF2 0x00569130
-void HUD::ViewPort::Read(PblConfig& config, Factory::ItemCallback pCallback,
+void HUD::ViewPort::Read(PblConfig& config, HUD::Item::Factory::ItemCallback pCallback,
                          void* const pUserData)
 {
     HUD::Item* apItems[512];
@@ -318,7 +318,7 @@ void HUD::ViewPort::WriteData(HUD::File& file, unsigned int uTabs)
     for (unsigned int i = 0; i < mNumItems; ++i)
     {
         unsigned char uViewport = 0;
-        if (mItems[i]->GetType() == Factory::type_Element)
+        if (mItems[i]->GetType() == HUD::Element::Factory::type_Element)
         {
             uViewport = static_cast<HUD::Element*>(mItems[i])->GetViewport();
             static_cast<HUD::Element*>(mItems[i])->SetViewport(0);
@@ -326,7 +326,7 @@ void HUD::ViewPort::WriteData(HUD::File& file, unsigned int uTabs)
         mItems[i]->mWriteEnabled = true;
         mItems[i]->Write(file, uTabs, 0);
         mItems[i]->mWriteEnabled = false;
-        if (mItems[i]->GetType() == Factory::type_Element)
+        if (mItems[i]->GetType() == HUD::Element::Factory::type_Element)
         {
             static_cast<HUD::Element*>(mItems[i])->SetViewport(uViewport);
         }
@@ -336,7 +336,7 @@ void HUD::ViewPort::WriteData(HUD::File& file, unsigned int uTabs)
 // FUNCTION: SWBF2 0x00569900
 void HUD::ViewPort::ItemConstructionCallback(HUD::Item* const pItem, void* const pUserData)
 {
-    if (pItem->GetType() == Factory::type_Element)
+    if (pItem->GetType() == HUD::Element::Factory::type_Element)
     {
         static_cast<HUD::Element*>(pItem)->SetViewport(static_cast<ViewPort*>(pUserData)->mCurViewPort);
     }

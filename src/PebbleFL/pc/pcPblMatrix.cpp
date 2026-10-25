@@ -10,7 +10,9 @@ PblMatrix::PblMatrix(const PblQuaternion& rotation, const PblVector3& translatio
     D3DXQUATERNION normalized;
     D3DXMatrixRotationQuaternion((D3DXMATRIX*)this,
         D3DXQuaternionNormalize(&normalized, (const D3DXQUATERNION*)&rotation));
-    memcpy(&m[3][0], &translation, sizeof(translation));
+    m[3][0] = translation.x;
+    m[3][1] = translation.y;
+    m[3][2] = translation.z;
     m[3][3] = 1.0f;
 }
 
@@ -18,16 +20,28 @@ PblMatrix::PblMatrix(const PblQuaternion& rotation, const PblVector3& translatio
 PblMatrix::PblMatrix(const PblVector4& x, const PblVector4& y,
                      const PblVector4& z, const PblVector4& t)
 {
-    memcpy(m[0], &x, sizeof(x));
-    memcpy(m[1], &y, sizeof(y));
-    memcpy(m[2], &z, sizeof(z));
-    memcpy(m[3], &t, sizeof(t));
+    m[0][0] = x.x;
+    m[0][1] = x.y;
+    m[0][2] = x.z;
+    m[0][3] = x.w;
+    m[1][0] = y.x;
+    m[1][1] = y.y;
+    m[1][2] = y.z;
+    m[1][3] = y.w;
+    m[2][0] = z.x;
+    m[2][1] = z.y;
+    m[2][2] = z.z;
+    m[2][3] = z.w;
+    m[3][0] = t.x;
+    m[3][1] = t.y;
+    m[3][2] = t.z;
+    m[3][3] = t.w;
 }
 
 #pragma warning(disable : 4073)
 #pragma init_seg(lib)
 // SYNTHETIC: SWBF2 0x0040ae50
-// `dynamic initializer for '_IdentityMatrix''
+// `dynamic initializer for 'gMatrixIdentity''
 
 // GLOBAL: SWBF2 0x009caee0
 // gMatrixIdentity
@@ -38,13 +52,21 @@ PblMatrix gMatrixIdentity(PblVector4(1.0f, 0.0f, 0.0f, 0.0f), PblVector4(0.0f, 1
 PblMatrix::PblMatrix(const PblVector3& x, const PblVector3& y,
                      const PblVector3& z, const PblVector3& t)
 {
-    memcpy(m[0], &x, sizeof(x));
+    m[0][0] = x.x;
+    m[0][1] = x.y;
+    m[0][2] = x.z;
     m[0][3] = 0.0f;
-    memcpy(m[1], &y, sizeof(y));
+    m[1][0] = y.x;
+    m[1][1] = y.y;
+    m[1][2] = y.z;
     m[1][3] = 0.0f;
-    memcpy(m[2], &z, sizeof(z));
+    m[2][0] = z.x;
+    m[2][1] = z.y;
+    m[2][2] = z.z;
     m[2][3] = 0.0f;
-    memcpy(m[3], &t, sizeof(t));
+    m[3][0] = t.x;
+    m[3][1] = t.y;
+    m[3][2] = t.z;
     m[3][3] = 1.0f;
 }
 
@@ -82,11 +104,5 @@ const PblMatrix PblMatrix::GetInverseFast() const
 // FUNCTION: SWBF2 0x00458960
 void PblMatrix::Reset()
 {
-    for (int r = 0; r < 4; r++)
-    {
-        for (int c = 0; c < 4; c++)
-        {
-            m[r][c] = (r == c) ? 1.0f : 0.0f;
-        }
-    }
+    D3DXMatrixIdentity(reinterpret_cast<D3DXMATRIX*>(this));
 }

@@ -24,7 +24,6 @@ extern RenderableList _RenderableLists[10];
 namespace FLRenderer
 {
 
-// GLOBAL: SWBF2 0x007dfa84
 
 
 
