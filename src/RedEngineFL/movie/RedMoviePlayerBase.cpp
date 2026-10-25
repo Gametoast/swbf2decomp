@@ -38,7 +38,7 @@ RedMoviePlayerBase::RedMoviePlayerBase(unsigned int uiMediaSectorSize)
     mNumReallocTextures = 0;
     mFlags = 0;
 
-    sMovieList.AddLast(&mNode, this);
+    sMovieList.AddLast(this, this);
 }
 
 // FUNCTION: SWBF2 0x007263f0
@@ -836,7 +836,7 @@ RedMoviePlayerBase::~RedMoviePlayerBase()
     {
         Close();
     }
-    mNode.GetList()->Remove(&mNode);
+    GetList()->Remove(this);
 }
 
 // FUNCTION: SWBF2 0x00725a40

@@ -246,8 +246,8 @@ class Restrictor;
 
 class EntityDroideka : public GameObject,
                        public Controllable,
-                       public PlayableEntitySounds,
-                       public VehicleEngine
+                       public VehicleEngine,
+                       public PlayableEntitySounds
 {
 public:
     enum eState

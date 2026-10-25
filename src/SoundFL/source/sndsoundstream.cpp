@@ -337,8 +337,8 @@ void __cdecl SoundStream::UpdateAll()
         }
 
         smPlayingProps[i] = pProps;
-        smPlayingVel[i] = *(const PblVector3*)pFF->mPos;
-        smPlayingPos[i] = *(const PblVector3*)pFF->mVel;
+        smPlayingVel[i] = pFF->mPos;
+        smPlayingPos[i] = pFF->mVel;
         pStream->SetPitch(pFF->mPitch);
         pStream->SetGain(pFF->mGain);
         pStream->SetPosition(&smPlayingVel[i]);
@@ -398,8 +398,8 @@ SoundStream::FireForget* __cdecl SoundStream::AllocFireForget(unsigned int uiInd
             break;
         }
         FireForget* const pFF = (FireForget*)((char*)pNode - (int)offsetof(FireForget, mNode));
-        pNode->mSortValue = pFF->mProperties->CalculatePriority((const PblVector3*)pFF->mPos,
-                                                                (const PblVector3*)pFF->mVel);
+        pNode->mSortValue = pFF->mProperties->CalculatePriority(&pFF->mPos,
+                                                                &pFF->mVel);
         pLink = pLink->mNext;
         if (pNode->mSortValue <= 0.0f)
         {
@@ -497,8 +497,8 @@ void __cdecl SoundStream::Play(const Properties* pProps, Source3D* pSource3D, bo
             return;
         }
         pFF->mProperties = const_cast<Properties*>(pProps);
-        *(PblVector3*)pFF->mPos = *source3D.mPos3D;
-        *(PblVector3*)pFF->mVel = *source3D.mVel3D;
+        pFF->mPos = *source3D.mPos3D;
+        pFF->mVel = *source3D.mVel3D;
         pFF->mSegmentID = uiSegmentID;
         pFF->mGain = fGain;
         pFF->mPitch = pProps->SourceVariation::CalculatePitch(pProps->mPitch);

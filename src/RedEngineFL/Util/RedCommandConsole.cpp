@@ -263,7 +263,7 @@ void MultiVar::Set(char const* pcValue)
         *m_pVar_FLOAT32 = (float)atof(pcValue);
         break;
     case VAR_TYPE_FLOAT64:
-        *(double*)m_pVar_FLOAT64 = atof(pcValue);
+        *m_pVar_FLOAT64 = atof(pcValue);
         break;
     case VAR_TYPE_STRING:
         strlcpy(m_pVar_STRING, pcValue, m_uiVarLength);
@@ -321,7 +321,7 @@ void MultiVar::Run(RedConsole* pConsole, char const* pcName, unsigned int uiID, 
         pConsole->PrintfMsg("%s = %f\n", pcName, *m_pVar_FLOAT32);
         break;
     case VAR_TYPE_FLOAT64:
-        pConsole->PrintfMsg("%s = %f\n", pcName, *(double*)m_pVar_FLOAT64);
+        pConsole->PrintfMsg("%s = %f\n", pcName, *m_pVar_FLOAT64);
         break;
     case VAR_TYPE_STRING:
         pConsole->PrintfMsg("%s = %s\n", pcName, m_pVar_STRING);

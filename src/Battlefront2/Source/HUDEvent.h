@@ -115,6 +115,7 @@ public:
 
     Event(const EventClass* const pClass, float fValue);
     Event(const EventClass* const pClass, int iValue);
+    Event(const EventClass* const pClass, unsigned int uValue);
     Event(const EventClass* const pClass, const RedColor* const pColor);
 
     Event(const EventClass* const pClass, const PblVector3* const pVector);

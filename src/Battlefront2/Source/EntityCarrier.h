@@ -60,8 +60,8 @@ public:
  
  
 
-class EntityFlyer : public GameObject, public Controllable, public EntityPathFollower,
-                    public VehicleMusic, public VehicleEngine
+class EntityFlyer : public GameObject, public Controllable, public VehicleMusic,
+                    public VehicleEngine, public EntityPathFollower
 {
 public:
     EntityFlyer(EntityFlyerClass* pClass, const EntityDesc& desc);

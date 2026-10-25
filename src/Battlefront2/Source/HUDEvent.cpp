@@ -344,9 +344,8 @@ HUD::Event::Data HUD::Event::GetData() const
 }
 
 // FUNCTION: SWBF2 0x0055e040
-HUD::Event* InitializeEventWithData(HUD::Event* pEvent, HUD::EventClass* pClass, HUD::Event::Data data)
+HUD::Event::Event(const EventClass* const pClass, unsigned int uValue)
 {
-    pEvent->mClass = pClass;
-    pEvent->mData = data;
-    return pEvent;
+    mClass = const_cast<EventClass*>(pClass);
+    mData.uintValue = uValue;
 }

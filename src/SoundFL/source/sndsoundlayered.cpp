@@ -128,7 +128,7 @@ void SoundLayered::FireForgetLayer::Update(float fDeltaTime)
 {
     if (mTimeElapsed >= mTriggerTime)
     {
-        const Sound::Properties* pProps = ((const Properties::Layer*)mLayer)->mSoundProps;
+        const Sound::Properties* pProps = mLayer->mSoundProps;
         Sound::Play(pProps->Get3DMode() ? &mSource3D : 0, pProps, 0, 0, true);
         mNode.Remove();
         smInactiveList.AddLast(&mNode);
@@ -396,25 +396,24 @@ SoundLayered::FireForgetLayer* __cdecl SoundLayered::FireForgetLayer::GetFreeLay
 }
 
 // FUNCTION: SWBF2 0x00739030
-void SoundLayered::FireForgetLayer::Play(Source3D* pSource3D, const void* pLayer, float fPriority)
+void SoundLayered::FireForgetLayer::Play(Source3D* pSource3D, const Properties::Layer* pLayer, float fPriority)
 {
-    const Properties::Layer* pPropsLayer = (const Properties::Layer*)pLayer;
     if (pSource3D)
     {
         mSource3D = *pSource3D;
-        *(::PblVector3*)mPos = *pSource3D->mPos3D;
-        *(::PblVector3*)mVel = *pSource3D->mVel3D;
-        mSource3D.SetPosition((::PblVector3*)mPos);
-        mSource3D.SetVelocity((::PblVector3*)mVel);
+        mPos = *pSource3D->mPos3D;
+        mVel = *pSource3D->mVel3D;
+        mSource3D.SetPosition(&mPos);
+        mSource3D.SetVelocity(&mVel);
     }
-    mLayer = const_cast<Properties::Layer*>(pPropsLayer);
+    mLayer = pLayer;
     mTimeElapsed = 0.0f;
-    mTriggerTime = (sndRandom.GetFloat() - 0.5f) * pPropsLayer->mDelayVar * 2.0f + pPropsLayer->mDelay;
+    mTriggerTime = (sndRandom.GetFloat() - 0.5f) * pLayer->mDelayVar * 2.0f + pLayer->mDelay;
     mNode.Remove();
     smActiveList.AddLast(&mNode);
     if (fPriority == 0.0f)
     {
-        mPriority = CalculatePriority(pSource3D, pPropsLayer->mSoundProps);
+        mPriority = CalculatePriority(pSource3D, pLayer->mSoundProps);
     }
     else
     {

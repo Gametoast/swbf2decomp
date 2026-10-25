@@ -25,7 +25,7 @@ enum HealthType
     NUM_HEALTH_TYPES = 8
 };
 
-class DamageOwner
+struct DamageOwner
 {
 public:
 
@@ -156,3 +156,15 @@ public:
  
  
  
+
+// FUNCTION: SWBF2 0x00488530
+inline DamageOwner& DamageOwner::operator=(const DamageOwner& other)
+{
+    mCharacter = other.mCharacter;
+    mGameObject = other.mGameObject;
+    mTeam = other.mTeam;
+    mClass = other.mClass;
+    mWeapon = other.mWeapon;
+    mDamageMultiplier = other.mDamageMultiplier;
+    return *this;
+}

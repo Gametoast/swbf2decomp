@@ -31,6 +31,8 @@ class EntityHoverClass : public GameObjectClass,
                          public VehicleEngineClass
 {
 public:
+    virtual ~EntityHoverClass();
+
 
     struct ColliderBodyInfo
     {

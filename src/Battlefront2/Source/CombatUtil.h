@@ -3,7 +3,7 @@
 #include "Weapon.h"
 
 class Controllable;
-class DamageOwner;
+struct DamageOwner;
 class ExplosionClass;
 class GameObject;
 class MountedTurretClass;

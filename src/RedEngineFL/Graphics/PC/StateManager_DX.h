@@ -33,7 +33,7 @@ namespace dx {
 class NVStateID
 {
 public:
-    NVStateID() {}
+    NVStateID() : m_Type(0), m_dwValue0(0), m_dwValue1(0) {}
 
     NVStateID(unsigned long type, unsigned long value0, unsigned long value1)
         : m_Type(type), m_dwValue0(value0), m_dwValue1(value1) {}

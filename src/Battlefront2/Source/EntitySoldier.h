@@ -356,8 +356,8 @@ class Weapon;
 
 class EntitySoldier : public GameObject,
                       public Controllable,
-                      public PlayableEntitySounds,
-                      public VehicleEngine
+                      public VehicleEngine,
+                      public PlayableEntitySounds
 {
 public:
 

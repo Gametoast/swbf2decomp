@@ -402,8 +402,10 @@ WalkerLegPairInfo::WalkerLegPairInfo()
     }
 }
 
-// SYNTHETIC: SWBF2 0x005085f0
-// EntityWalkerClass::~EntityWalkerClass
+// FUNCTION: SWBF2 0x005085f0
+EntityWalkerClass::~EntityWalkerClass()
+{
+}
 
 // SYNTHETIC: SWBF2 0x00507d30
 // EntityWalkerClass::`scalar deleting destructor'

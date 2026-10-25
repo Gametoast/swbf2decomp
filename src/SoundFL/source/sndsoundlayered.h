@@ -9,11 +9,12 @@
 #include "sndsourcetransport.h"
 
 #include "PebbleFL/Common/PblListSingle.h"
+#include "PebbleFL/Common/PblVector.h"
 
 #include "PebbleFL/Common/PblListDouble.h"
 
 class PblFileChunk;
-class PblVector3;
+
 
 namespace Snd
 {
@@ -38,65 +39,7 @@ public:
 
     void Play(bool bRestart) { SourceTransport::Play(bRestart); }
 
-    class FireForgetLayer : public Allocator<FireForgetLayer>
-    {
-    public:
-
-        FireForgetLayer()
-            : mTimeElapsed(0.0f),
-              mTriggerTime(0.0f),
-              mSource3D(0),
-              mLayer(0)
-        {
-            smInactiveList.AddLast(&mNode);
-        }
-
-        ~FireForgetLayer()
-        {
-            if (mNode.IsAttached())
-            {
-                mNode.Remove();
-            }
-        }
-
-        void Stop()
-        {
-            mNode.Remove();
-            smInactiveList.AddLast(&mNode);
-        }
-
-        static void StopAll();
-
-        static FireForgetLayer* __cdecl GetFreeLayer();
-
-        void Play(Source3D* pSource3D, const void* pLayer, float fPriority);
-
-        static float __cdecl CalculatePriority(Source3D* pSource3D,
-                                               const Sound::Properties* pProps);
-        static FireForgetLayer* __cdecl StealLayer(float fPriority);
-
-        static void UpdateAll(float fDeltaTime);
-
-    protected:
-
-        void Update(float fDeltaTime);
-
-    public:
-
-        float mTimeElapsed;
-        float mTriggerTime;
-        float mPriority;
-        Source3D mSource3D;
-        void* mLayer;
-        PblListDouble::Node mNode;
-
-        unsigned char mPos[12];
-        unsigned char mVel[12];
-
-        static PblListDouble smInactiveList;
-
-        static PblListDouble smActiveList;
-    };
+    class FireForgetLayer;
 
     static void Open();
 
@@ -243,6 +186,66 @@ public:
     PblListSingle::Node mNode;
 
     static void __cdecl Load(PblFileChunk& chunk, bool bOnce);
+};
+
+class SoundLayered::FireForgetLayer : public Allocator<SoundLayered::FireForgetLayer>
+{
+public:
+
+    FireForgetLayer()
+        : mTimeElapsed(0.0f),
+          mTriggerTime(0.0f),
+          mSource3D(0),
+          mLayer(0)
+    {
+        smInactiveList.AddLast(&mNode);
+    }
+
+    ~FireForgetLayer()
+    {
+        if (mNode.IsAttached())
+        {
+            mNode.Remove();
+        }
+    }
+
+    void Stop()
+    {
+        mNode.Remove();
+        smInactiveList.AddLast(&mNode);
+    }
+
+    static void StopAll();
+
+    static FireForgetLayer* __cdecl GetFreeLayer();
+
+    void Play(Source3D* pSource3D, const Properties::Layer* pLayer, float fPriority);
+
+    static float __cdecl CalculatePriority(Source3D* pSource3D,
+                                           const Sound::Properties* pProps);
+    static FireForgetLayer* __cdecl StealLayer(float fPriority);
+
+    static void UpdateAll(float fDeltaTime);
+
+protected:
+
+    void Update(float fDeltaTime);
+
+public:
+
+    float mTimeElapsed;
+    float mTriggerTime;
+    float mPriority;
+    Source3D mSource3D;
+    const Properties::Layer* mLayer;
+    PblListDouble::Node mNode;
+
+    PblVector3 mPos;
+    PblVector3 mVel;
+
+    static PblListDouble smInactiveList;
+
+    static PblListDouble smActiveList;
 };
 
 inline Sound* SoundLayered::GetLayerByIndex(unsigned int uIndex)

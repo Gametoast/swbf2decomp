@@ -86,6 +86,7 @@ class RumbleEffectClass : public Thread, public EntityClass
 {
 public:
     RumbleEffectClass(unsigned int uHash);
+    virtual ~RumbleEffectClass() {}
 
     virtual bool Update(float fDeltaTime);
     virtual EntityClass* Derive(unsigned int uHash);

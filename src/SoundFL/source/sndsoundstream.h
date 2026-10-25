@@ -3,6 +3,7 @@
 #include <stddef.h>
 
 #include "PebbleFL/Common/PblListDoubleSorted.h"
+#include "PebbleFL/Common/PblVector.h"
 #include "sndobjectweightlist.h"
 #include "sndsoundproperties.h"
 #include "sndsource2d3d.h"
@@ -11,7 +12,6 @@
 #include "sndstreambase.h"
 #include "sndvoicevirtualbus.h"
 
-class PblVector3;
 
 namespace Snd
 {
@@ -43,8 +43,8 @@ public:
 
         Properties* mProperties;
 
-        unsigned char mPos[12];
-        unsigned char mVel[12];
+        PblVector3 mPos;
+        PblVector3 mVel;
 
         float mPitch;
         float mGain;

@@ -8,7 +8,7 @@
 class PblFileChunk;
 class RedTexture;
 
-class RedMoviePlayerBase
+class RedMoviePlayerBase : private PblList<RedMoviePlayerBase>::Node
 {
 public:
 
@@ -237,7 +237,7 @@ public:
 
     static PblList<RedMoviePlayerBase> sMovieList;
 
-    PblList<RedMoviePlayerBase>::Node mNode;
+
     RedTexture** mTextures;
     unsigned int mNumTextures;
     NotifyCallback mNotifyCallback;

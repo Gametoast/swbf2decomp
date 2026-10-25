@@ -661,8 +661,10 @@ void EntityHover::Init()
                                         mClass->mBarrierOX, mClass->mBarrierOZ, 0);
 }
 
-// SYNTHETIC: SWBF2 0x004c8dc0
-// EntityHoverClass::~EntityHoverClass
+// FUNCTION: SWBF2 0x004c8dc0
+EntityHoverClass::~EntityHoverClass()
+{
+}
 
 // SYNTHETIC: SWBF2 0x004c86f0
 // EntityHoverClass::`scalar deleting destructor'

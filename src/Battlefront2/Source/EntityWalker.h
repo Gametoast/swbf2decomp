@@ -431,6 +431,8 @@ class EntityWalkerClass : public GameObjectClass,
                           public VehicleEngineClass
 {
 public:
+    virtual ~EntityWalkerClass();
+
 
     struct WalkerAttackAnim
     {

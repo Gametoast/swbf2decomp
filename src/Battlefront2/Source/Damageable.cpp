@@ -55,17 +55,13 @@ extern bool netTeamDamage;
 // FUNCTION: SWBF2 0x00488570
 DamageOwner::DamageOwner(Character* pCharacter, GameObject* pGameObject, int iTeam,
                          EntityClass* pClass, WeaponClass* pWeapon, float fDamageMultiplier)
+    : mCharacter(pCharacter),
+      mGameObject(pGameObject),
+      mTeam(iTeam),
+      mClass(pClass),
+      mWeapon(pWeapon),
+      mDamageMultiplier(fDamageMultiplier)
 {
-    mCharacter = pCharacter;
-    mGameObject.mObject = pGameObject;
-    mGameObject.mSavedHandleId =
-        pGameObject
-            ? pGameObject->mHandleId
-            : 0;
-    mTeam = iTeam;
-    mClass = pClass;
-    mWeapon = pWeapon;
-    mDamageMultiplier = fDamageMultiplier;
 }
 
 // FUNCTION: SWBF2 0x004885c0
@@ -863,17 +859,7 @@ void Event<GameObject, float>::Callback::Trigger(GameObject& item, float& param)
 }
 }
 
-// FUNCTION: SWBF2 0x00488530
-DamageOwner& DamageOwner::operator=(const DamageOwner& other)
-{
-    mCharacter = other.mCharacter;
-    mGameObject = other.mGameObject;
-    mTeam = other.mTeam;
-    mClass = other.mClass;
-    mWeapon = other.mWeapon;
-    mDamageMultiplier = other.mDamageMultiplier;
-    return *this;
-}
+
 
 // TEMPLATE: SWBF2 0x004479e0
 // PblHandle<FLEffectObject>::operator=

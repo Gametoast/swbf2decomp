@@ -152,7 +152,7 @@ public:
     CollisionTreeNode* mHitLeaf;
     unsigned char mMask;
     CollisionTreeLeaf* mDrawThisLeaf;
-    char mDrawThisAABB[24];
+    CollisionAABB mDrawThisAABB;
 };
  
  

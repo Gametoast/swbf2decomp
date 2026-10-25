@@ -613,7 +613,6 @@ namespace HUD { namespace GameEvents { bool gInputMapLastPressed; } }
 
 extern RedColor gLocalColor;
 
-HUD::Event* InitializeEventWithData(HUD::Event* pEvent, HUD::EventClass* pClass, HUD::Event::Data data);
 
 // FUNCTION: SWBF2 0x00563190
 void HUD::GameEvents::DisableTeamElements(HUD::GameEvents::PlayerEvents& events, HUD::GameEvents::PlayerData& data)
@@ -800,10 +799,7 @@ void HUD::GameEvents::Update(float fDeltaTime)
         }
         if (bFound)
         {
-            HUD::Event event;
-            HUD::Event::Data data;
-            data.uintValue = uHash;
-            InitializeEventWithData(&event, gLevelHintText, data)->Send();
+            HUD::Event(gLevelHintText, uHash).Send();
         }
         HUD::Event(gInitialize, true).Send();
         gInitialized = true;
@@ -1133,10 +1129,7 @@ void HUD::GameEvents::UpdateLockOn(unsigned int uIndex, const GameObject* const 
         if (data.lockedTargetHealth != fShield)
         {
             const float fMaxShield = pTarget->mMaxShield;
-            HUD::Event health;
-            HUD::Event::Data payload;
-            payload.intValue = (int)fShield;
-            InitializeEventWithData(&health, events.lockOnHealth, payload)->Send();
+            HUD::Event(events.lockOnHealth, static_cast<unsigned int>((int)fShield)).Send();
             HUD::Event(events.lockOnHealthFraction, fShield / fMaxShield).Send();
             data.lockedTargetHealth = fShield;
         }
@@ -1155,10 +1148,7 @@ void HUD::GameEvents::UpdateLockOn(unsigned int uIndex, const GameObject* const 
             if (fHealth != data.lockedTargetHealth)
             {
                 const float fMaxHealth = pTarget->mMaxHealth;
-                HUD::Event health;
-                HUD::Event::Data payload;
-                payload.intValue = (int)fHealth;
-                InitializeEventWithData(&health, events.lockOnHealth, payload)->Send();
+                HUD::Event(events.lockOnHealth, static_cast<unsigned int>((int)fHealth)).Send();
                 HUD::Event(events.lockOnHealthFraction, fHealth / fMaxHealth).Send();
                 data.lockedTargetHealth = fHealth;
             }
@@ -1224,10 +1214,7 @@ void HUD::GameEvents::UpdateWeaponEvents(const RedCamera* const pCamera, const C
                          events.vehicleHackingTimeDisable, 0x6d2f8d98, data.vehicleHacking);
         if (pWeapon && !data.scopeActive && !data.unknownBool00D8)
         {
-            HUD::Event change;
-            HUD::Event::Data payload;
-            payload.uintValue = uWeaponHash;
-            InitializeEventWithData(&change, weaponEvents.change, payload)->Send();
+            HUD::Event(weaponEvents.change, uWeaponHash).Send();
 
             unsigned short acFilename[256];
             unsigned short acName[256];
@@ -1305,16 +1292,10 @@ void HUD::GameEvents::UpdateWeaponEvents(const RedCamera* const pCamera, const C
             }
             if (!data.scopeActive && !data.unknownBool00D8)
             {
-                HUD::Event total;
-                HUD::Event::Data payload;
-                payload.intValue = iTotalBullets;
-                InitializeEventWithData(&total, weaponEvents.ammoTotalBullets, payload)->Send();
+                HUD::Event(weaponEvents.ammoTotalBullets, static_cast<unsigned int>(iTotalBullets)).Send();
                 HUD::Event(weaponEvents.ammoTotalFraction, fTotalFraction).Send();
             }
-            HUD::Event clip;
-            HUD::Event::Data payload;
-            payload.intValue = iClipBullets;
-            InitializeEventWithData(&clip, weaponEvents.ammoClipBullets, payload)->Send();
+            HUD::Event(weaponEvents.ammoClipBullets, static_cast<unsigned int>(iClipBullets)).Send();
             HUD::Event(weaponEvents.ammoClipFraction, fClipFraction).Send();
             if (iTotalBullets == -1)
             {
@@ -1517,10 +1498,7 @@ void HUD::GameEvents::UpdateWeaponEvents(const RedCamera* const pCamera, const C
                     if (fShield != weaponData.targetHealth)
                     {
                         const float fMaxShield = pTargetObject->mMaxShield;
-                        HUD::Event health;
-                        HUD::Event::Data payload;
-                        payload.intValue = (int)fShield;
-                        InitializeEventWithData(&health, weaponEvents.targetHealth, payload)->Send();
+                        HUD::Event(weaponEvents.targetHealth, static_cast<unsigned int>((int)fShield)).Send();
                         HUD::Event(weaponEvents.targetHealthFraction, fShield / fMaxShield).Send();
                         weaponData.targetHealth = fShield;
                     }
@@ -1540,10 +1518,7 @@ void HUD::GameEvents::UpdateWeaponEvents(const RedCamera* const pCamera, const C
                         if (fHealth != weaponData.targetHealth)
                         {
                             const float fMaxHealth = pTargetObject->mMaxHealth;
-                            HUD::Event health;
-                            HUD::Event::Data payload;
-                            payload.intValue = (int)fHealth;
-                            InitializeEventWithData(&health, weaponEvents.targetHealth, payload)->Send();
+                            HUD::Event(weaponEvents.targetHealth, static_cast<unsigned int>((int)fHealth)).Send();
                             HUD::Event(weaponEvents.targetHealthFraction, fHealth / fMaxHealth).Send();
 
                             weaponData.targetHealth = fShield;
@@ -1720,10 +1695,7 @@ void HUD::GameEvents::UpdateHealth(const Character* const pCharacter, const Game
             pHealth = events.health;
             pFraction = events.healthFraction;
         }
-        HUD::Event health;
-        HUD::Event::Data payload;
-        payload.intValue = (int)fHealth;
-        InitializeEventWithData(&health, pHealth, payload)->Send();
+        HUD::Event(pHealth, static_cast<unsigned int>((int)fHealth)).Send();
         HUD::Event(pFraction, fFraction).Send();
         HUD::Event(events.bonusHealthFraction, fBonusFraction).Send();
         data.health = fHealth;
@@ -1796,10 +1768,7 @@ void HUD::GameEvents::UpdateVehicleHealth(int iIndex, const Character* const pCh
             {
                 fFraction = fHealth / fMaxHealth;
             }
-            HUD::Event health;
-            HUD::Event::Data payload;
-            payload.intValue = (int)fHealth;
-            InitializeEventWithData(&health, events.vehicleHealth, payload)->Send();
+            HUD::Event(events.vehicleHealth, static_cast<unsigned int>((int)fHealth)).Send();
             HUD::Event(events.vehicleHealthFraction, fFraction).Send();
             data.vehicleHealth = fHealth;
             if (fHealth == 0.0f)
@@ -2288,10 +2257,7 @@ void HUD::GameEvents::UpdateMissleLock(const GameObject* const pObject, const Co
     }
     if (bLocked)
     {
-        HUD::Event distance;
-        HUD::Event::Data payload;
-        payload.intValue = (int)pControllable->mEnemyLockedOnMeDistance;
-        InitializeEventWithData(&distance, events.missileLockDistance, payload)->Send();
+        HUD::Event(events.missileLockDistance, static_cast<unsigned int>((int)pControllable->mEnemyLockedOnMeDistance)).Send();
     }
 }
 

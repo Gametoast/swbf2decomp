@@ -161,8 +161,8 @@ public:
 
     OrdnanceClass* mClass;
     float mRatio;
-    bool mCheckStaticCollision;
-    bool mDecrementLifeTime;
+    unsigned char mCheckStaticCollision;
+    unsigned char mDecrementLifeTime;
     float mLifeTime;
     float mLifeElapsed;
     RedColor mRenderColor;
