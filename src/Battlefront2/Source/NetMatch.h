@@ -24,7 +24,7 @@ public:
     static void StartLogin(int iViewport, bool bArg2, char const* pcArg3, char const* pcArg4,
                            char const* pcArg5, bool bArg6);
 
-    static char __fastcall StartJoinGame(const NetSessionId* pId);
+    static void StartJoinGame(NetAddr& address, NetKey& key);
 
     static char EndJoinGame();
 
@@ -32,13 +32,13 @@ public:
 
     static bool UpdateConnect(const NetAddr* pAddr, const NetKey* pKey, int iDest, int* pReason);
 
-    static void EndConnect();
+    static void EndConnect(NetAddr& address, NetKey& key, int destination);
 
     static bool IsDoneFindGames();
 
     static void UpdateFindGames();
 
-    static bool PingServerByAddress();
+    static bool PingServerByAddress(const NetAddr& address);
 
     static bool GetPlayerDataByAddress();
 

@@ -53,6 +53,11 @@ inline const float Length(const PblVector3& vVector)
     return sqrtf(vVector.x * vVector.x + vVector.y * vVector.y + vVector.z * vVector.z);
 }
 
+inline const float SquaredLength(const PblVector3& vVector)
+{
+    return vVector.x * vVector.x + vVector.y * vVector.y + vVector.z * vVector.z;
+}
+
 inline PblVector3& PblVector3::operator+=(const PblVector3& rhs)
 {
     x += rhs.x;

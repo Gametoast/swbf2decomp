@@ -65,7 +65,10 @@ public:
     int SendEvent(AI::EventInfo* pInfo);
     int SendEvent(AI::EventInfo* pInfo) const;
 
+    float GetUpdateTime() const { return mNextUpdateTime; }
     float GetUpdateRate() const;
+    PblOrderedList<UnitController, float>::Node* GetManagerNode() { return &mManagerNode; }
+    const PblOrderedList<UnitController, float>::Node* GetManagerNode() const { return &mManagerNode; }
     void UpdateHighLevel();
     void UpdateLowLevel(float dt);
 

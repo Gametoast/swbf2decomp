@@ -28,17 +28,35 @@ public:
 
         Itor(const PblList<TYPE>& list) { _pNode = list._head._pNext; }
 
+        // TEMPLATE: SWBF2 0x0049e1c0
+        // PblList<Factory<Weapon,WeaponClass,WeaponDesc> >::Itor::Itor
+        // TEMPLATE: SWBF2 0x005d3b50
+        // PblList<Factory<Ordnance,OrdnanceClass,OrdnanceDesc> >::Itor::Itor
         Itor(Node* pNode) : _pNode(pNode) {}
 
+        // TEMPLATE: SWBF2 0x0049e1f0
+        // PblList<Factory<Weapon,WeaponClass,WeaponDesc> >::Itor::operator Factory<Weapon,WeaponClass,WeaponDesc> *
+        // TEMPLATE: SWBF2 0x005d3bb0
+        // PblList<Factory<Ordnance,OrdnanceClass,OrdnanceDesc> >::Itor::operator Factory<Ordnance,OrdnanceClass,OrdnanceDesc> *
         // TEMPLATE: SWBF2 0x00487f80
         // PblList<FlagItem>::Itor::operator FlagItem *
         operator TYPE*() const { return _pNode->_pObject; }
 
+        // TEMPLATE: SWBF2 0x0049e1e0
+        // PblList<Factory<Weapon,WeaponClass,WeaponDesc> >::Itor::operator*
+        // TEMPLATE: SWBF2 0x005d3b90
+        // PblList<Factory<Ordnance,OrdnanceClass,OrdnanceDesc> >::Itor::operator*
         // TEMPLATE: SWBF2 0x00563920
         // PblList<FlagItem>::Itor::operator*
         TYPE& operator*() const { return *_pNode->_pObject; }
+        // TEMPLATE: SWBF2 0x0049e1d0
+        // PblList<Factory<Weapon,WeaponClass,WeaponDesc> >::Itor::operator->
+        // TEMPLATE: SWBF2 0x005d3b70
+        // PblList<Factory<Ordnance,OrdnanceClass,OrdnanceDesc> >::Itor::operator->
         TYPE* operator->() const { return _pNode->_pObject; }
 
+        // TEMPLATE: SWBF2 0x005d3bd0
+        // PblList<Factory<Ordnance,OrdnanceClass,OrdnanceDesc> >::Itor::operator++
         // TEMPLATE: SWBF2 0x00487f90
         // PblList<FlagItem>::Itor::operator++
         Itor& operator++() { _pNode = _pNode->_pNext; return *this; }
@@ -61,6 +79,8 @@ public:
 
     int GetCount() const { return _iCount; }
 
+    // TEMPLATE: SWBF2 0x0049e1b0
+    // PblList<Factory<Weapon,WeaponClass,WeaponDesc> >::GetFirst
     // TEMPLATE: SWBF2 0x00487fa0
     // PblList<FlagItem>::GetFirst
     Node* GetFirst() const { return _head._pNext; }

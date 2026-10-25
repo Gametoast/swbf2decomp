@@ -9,8 +9,6 @@
 
 extern bool netIsLocalTurn;
 
-typedef PblList<OrdnanceClass>::Itor OrdnanceItor;
-
 // FUNCTION: SWBF2 0x005f6f80
 OrbitalStrikeClass::OrbitalStrikeClass(unsigned int uHash)
 {
@@ -155,33 +153,3 @@ bool OrbitalStrikeClass::SetProperty(unsigned int uProperty, const char* pszValu
     return false;
 }
 
-// FUNCTION: SWBF2 0x005d3b50
-OrdnanceItor* InitOrdnanceItor(OrdnanceItor* pItor, PblList<OrdnanceClass>::Node* pNode)
-{
-    pItor->_pNode = pNode;
-    return pItor;
-}
-
-// FUNCTION: SWBF2 0x005d3b70
-OrdnanceClass* GetOrdnanceItorObjectForCheck(const OrdnanceItor* pItor)
-{
-    return *pItor;
-}
-
-// FUNCTION: SWBF2 0x005d3b90
-OrdnanceClass* GetOrdnanceItorObjectForReturn(const OrdnanceItor* pItor)
-{
-    return *pItor;
-}
-
-// FUNCTION: SWBF2 0x005d3bb0
-OrdnanceClass* GetOrdnanceItorObjectForEndTest(const OrdnanceItor* pItor)
-{
-    return *pItor;
-}
-
-// FUNCTION: SWBF2 0x005d3bd0
-OrdnanceItor* AdvanceOrdnanceItor(OrdnanceItor* pItor)
-{
-    return &++*pItor;
-}

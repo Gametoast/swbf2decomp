@@ -58,11 +58,6 @@ PblList<PlayerController>* sClientPlayerCtrls;
 // GLOBAL: SWBF2 0x01f9c28c
 PblOrderedList<UnitController, float>* sClientAICtrls;
 
-static PblOrderedList<UnitController, float>::Node* GetManagerNode(UnitController* pCtrl)
-{
-    return &pCtrl->mManagerNode;
-}
-
 // FUNCTION: SWBF2 0x00485b30
 void ControllerManager::EnterClient()
 {
@@ -116,12 +111,12 @@ void ControllerManager::AddController(Controller* pCtrl)
     if (pCtrl->IsRtti(PlayerController::rttiHashPlayerController))
     {
         PlayerController* pPlayer = (PlayerController*)pCtrl;
-        sPlayerCtrls->AddLast(&pPlayer->mManagerNode, pPlayer);
+        sPlayerCtrls->AddLast(pPlayer->GetManagerNode(), pPlayer);
     }
     else if (pCtrl->IsRtti(UnitController::rttiHashUnitController))
     {
         UnitController* pUnit = (UnitController*)pCtrl;
-        sAICtrls->Add(GetManagerNode(pUnit), pUnit, 0.0f);
+        sAICtrls->Add(pUnit->GetManagerNode(), pUnit, 0.0f);
     }
 }
 
@@ -131,25 +126,26 @@ void ControllerManager::RemoveController(Controller* pCtrl)
     if (pCtrl->IsRtti(PlayerController::rttiHashPlayerController))
     {
         PlayerController* pPlayer = (PlayerController*)pCtrl;
-        sPlayerCtrls->Remove(&pPlayer->mManagerNode);
+        sPlayerCtrls->Remove(pPlayer->GetManagerNode());
     }
     else if (pCtrl->IsRtti(UnitController::rttiHashUnitController))
     {
-        sAICtrls->Remove(GetManagerNode((UnitController*)pCtrl));
+        sAICtrls->Remove(((UnitController*)pCtrl)->GetManagerNode());
     }
 }
 
 // FUNCTION: SWBF2 0x004862f0
 void ControllerManager::RequestControllerUpdateASAP(UnitController* pCtrl)
 {
+    const float fUpdateTime = pCtrl->GetUpdateTime();
     float fTime = GameLoop::GetMissionTime() + 0.0001f;
-    if (fTime > pCtrl->mNextUpdateTime)
+    if (fTime > fUpdateTime)
     {
-        fTime = pCtrl->mNextUpdateTime;
+        fTime = fUpdateTime;
     }
     pCtrl->mNextUpdateTime = fTime;
 
-    PblOrderedList<UnitController, float>::Node* pNode = GetManagerNode(pCtrl);
+    PblOrderedList<UnitController, float>::Node* pNode = pCtrl->GetManagerNode();
     sAICtrls->Remove(pNode);
     sAICtrls->Add(pNode, pCtrl, pCtrl->mNextUpdateTime);
 }
@@ -162,10 +158,10 @@ void ControllerManager::BroadcastEvent(AI::EventInfo* pInfo, int iMaxCount)
         return;
     }
 
-    PblOrderedList<UnitController, float>::Node* pNode = sAICtrls->_head._pNext;
-    while (UnitController* pCtrl = pNode->_pObject)
+    PblOrderedList<UnitController, float>::Itor it(*sAICtrls);
+    while (UnitController* pCtrl = it)
     {
-        pNode = pNode->_pNext;
+        ++it;
         if (pCtrl->SendEvent(pInfo) == 1 && --iMaxCount <= 0)
         {
             break;
@@ -272,43 +268,6 @@ namespace AudibleManager
 void UpdateAudience(Controller* pController);
 }
 
-namespace
-{
-
-inline int GetTeam(const GameObject* pObject)
-{
-    return pObject->mTeam;
-}
-
-int GetPerceivedTeam(const GameObject* pObject)
-{
-    return pObject->mPerceivedTeam;
-}
-
-inline const CollisionObject* GetCollisionObject(const GameObject* pObject)
-{
-    return static_cast<const CollisionObject*>(pObject);
-}
-
-inline Controllable* GetControllable(GameObject* pObject)
-{
-    return pObject->GetControllable();
-}
-
-PblList<Controllable>& GetControllableList(GameObject* pObject)
-{
-    return pObject->mControllableList;
-}
-
-inline float DistanceSq(const PblVector3& a, const float* b)
-{
-    float dx = b[0] - a.x;
-    float dy = b[1] - a.y;
-    float dz = b[2] - a.z;
-    return dx * dx + dy * dy + dz * dz;
-}
-}
-
 namespace ControllerManager
 {
 // FUNCTION: SWBF2 0x00485e00
@@ -319,10 +278,9 @@ static void sUpdateFriendlyFire()
         return;
     }
 
-    for (PblOrderedList<UnitController, float>::Node* pNode = sAICtrls->_head._pNext;
-         UnitController* pCtrl = pNode->_pObject; pNode = pNode->_pNext)
+    for (PblOrderedList<UnitController, float>::Itor it(*sAICtrls); it; ++it)
     {
-        pCtrl->ResetFriendlyList();
+        it->ResetFriendlyList();
     }
 
     for (PblList<PlayerController>::Itor it(*sPlayerCtrls); (PlayerController*)it; ++it)
@@ -336,18 +294,18 @@ static void sUpdateFriendlyFire()
         GameObject* pPlayer = it->mOwner->GetGameObject();
         GameObject* apObjects[20];
         int iCount = TeamManager::GetObjectsInRange(
-            *reinterpret_cast<const PblVector3*>(GetCollisionObject(pPlayer)->GetMatrix().m[3]),
+            pPlayer->GetMatrix().GetTranslation(),
             50.0f, apObjects, 20, pPlayer, AI::AFFIL_ALLYNEUTRAL);
         for (int i = 0; i < iCount; ++i)
         {
             GameObject* pObject = apObjects[i];
-            if (!GetControllable(pObject) || !GetControllable(pObject)->mCtrl ||
-                !GetControllable(pObject)->mCtrl->IsRtti(UnitController::rttiHashUnitController))
+            if (!pObject->GetControllable() || !pObject->GetControllable()->mCtrl ||
+                !pObject->GetControllable()->mCtrl->IsRtti(UnitController::rttiHashUnitController))
             {
                 continue;
             }
 
-            for (PblList<Controllable>::Itor itC(GetControllableList(pObject)); (Controllable*)itC; ++itC)
+            for (PblList<Controllable>::Itor itC(pObject->GetControllableList()); (Controllable*)itC; ++itC)
             {
                 if (itC->mCtrl && itC->mCtrl->IsRtti(UnitController::rttiHashUnitController))
                 {
@@ -362,27 +320,25 @@ static void sUpdateFriendlyFire()
 // FUNCTION: SWBF2 0x00485f60
 void ControllerManager::UpdatePilotSelf()
 {
-    for (PblOrderedList<UnitController, float>::Node* pNode = sAICtrls->_head._pNext;
-         UnitController* pCtrl = pNode->_pObject; pNode = pNode->_pNext)
+    for (PblOrderedList<UnitController, float>::Itor it(*sAICtrls); it; ++it)
     {
-        Controllable* pOwner = pCtrl->mOwner;
+        Controllable* pOwner = it->mOwner;
         if (!pOwner)
         {
             continue;
         }
-        if (pOwner->mPilotType != PILOT_SELF &&
-            !(pOwner->mPilotType == PILOT_VEHICLESELF && (pOwner->mPilot == pOwner || !pOwner->mPilot)))
+        if (!pOwner->IsSelfPilotable() || pOwner->GetPilot())
         {
             continue;
         }
-        if (pOwner->mCharacter || pCtrl->GetCurCmdType() || pCtrl->IsNewCommand())
+        if (pOwner->mCharacter || it->GetCurCmdType() || it->IsNewCommand())
         {
             continue;
         }
 
         UnitCmdInfo cmd(CMD_DEATHMATCH, PblHandle<GameObject>(), PblVector3(0.0f, 0.0f, 0.0f),
                         PblHandle<GameObject>());
-        pNode->_pObject->QueueCommand(cmd);
+        it->QueueCommand(cmd);
     }
 }
 
@@ -402,22 +358,21 @@ void ControllerManager::UpdateCrowd(Controller* pCtrl)
         return;
     }
 
-    const Team* pTeam = Team::sTeams[GetTeam(pOwner->GetGameObject())];
+    const Team* pTeam = Team::sTeams[pOwner->GetGameObject()->GetTeam()];
     const PblVector3& vPos = pOwner->GetMatrix().GetTranslation();
 
-    for (PblList<PlayerController>::Node* pNode = sPlayerCtrls->_head._pNext; pNode->_pObject;
-         pNode = pNode->_pNext)
+    for (PblList<PlayerController>::Itor it(*sPlayerCtrls); it; ++it)
     {
-        PlayerController* pOther = pNode->_pObject;
+        PlayerController* pOther = it;
         Controllable* pOtherOwner = pOther->mOwner;
         if (pOther == pCtrl || !pOtherOwner || !pOtherOwner->GetGameObject() ||
             !pOtherOwner->GetEntity()->IsRtti(EntitySoldier::rttiHashEntitySoldier))
         {
             continue;
         }
-        if (DistanceSq(vPos, pOtherOwner->GetMatrix().m[3]) < 81.0f)
+        if (SquaredLength(pOtherOwner->GetMatrix().GetTranslation() - vPos) < 81.0f)
         {
-            if (pTeam->GetAffiliation(GetTeam(pOtherOwner->GetGameObject())) < 0)
+            if (pTeam->GetAffiliation(pOtherOwner->GetGameObject()->GetTeam()) < 0)
             {
                 ++pCtrl->mCrowdEnemies;
             }
@@ -428,19 +383,18 @@ void ControllerManager::UpdateCrowd(Controller* pCtrl)
         }
     }
 
-    for (PblOrderedList<UnitController, float>::Node* pNode = sAICtrls->_head._pNext; pNode->_pObject;
-         pNode = pNode->_pNext)
+    for (PblOrderedList<UnitController, float>::Itor it(*sAICtrls); it; ++it)
     {
-        UnitController* pOther = pNode->_pObject;
+        UnitController* pOther = it;
         Controllable* pOtherOwner = pOther->mOwner;
         if (pOther == pCtrl || !pOtherOwner || !pOtherOwner->GetGameObject() ||
             !pOtherOwner->GetEntity()->IsRtti(EntitySoldier::rttiHashEntitySoldier))
         {
             continue;
         }
-        if (DistanceSq(vPos, pOtherOwner->GetMatrix().m[3]) < 81.0f)
+        if (SquaredLength(pOtherOwner->GetMatrix().GetTranslation() - vPos) < 81.0f)
         {
-            if (pTeam->GetAffiliation(GetTeam(pOtherOwner->GetGameObject())) < 0)
+            if (pTeam->GetAffiliation(pOtherOwner->GetGameObject()->GetTeam()) < 0)
             {
                 ++pCtrl->mCrowdEnemies;
             }
@@ -465,13 +419,12 @@ float SpaceAssault_GetCritSysKillForPlayerTeam();
 void ControllerManager::DoPeriodicUpdate(float fDeltaTime)
 {
     UpdatePilotSelf();
-    for (PblList<PlayerController>::Node* pNode = sPlayerCtrls->_head._pNext; pNode->_pObject;
-         pNode = pNode->_pNext)
+    for (PblList<PlayerController>::Itor it(*sPlayerCtrls); it; ++it)
     {
-        UpdateControllerAudibles(pNode->_pObject);
-        pNode->_pObject->UpdateFreeSpace();
-        UpdateCrowd(pNode->_pObject);
-        Controllable* pOwner = pNode->_pObject->mOwner;
+        UpdateControllerAudibles((PlayerController*)it);
+        it->UpdateFreeSpace();
+        UpdateCrowd(it);
+        Controllable* pOwner = it->mOwner;
         pOwner->mCharacter->mAdrenaline.Update(fDeltaTime, pOwner->GetGameObject());
     }
     sUpdateFriendlyFire();
@@ -481,9 +434,9 @@ void ControllerManager::DoPeriodicUpdate(float fDeltaTime)
 // FUNCTION: SWBF2 0x00486370
 void ControllerManager::Update(float fDeltaTime)
 {
-    for (PblList<PlayerController>::Node* pNode = sPlayerCtrls->_head._pNext; PlayerController* pCtrl = pNode->_pObject; )
+    for (PblList<PlayerController>::Itor it(*sPlayerCtrls); PlayerController* pCtrl = it; )
     {
-        pNode = pNode->_pNext;
+        ++it;
         pCtrl->Update(fDeltaTime);
     }
 
@@ -504,21 +457,21 @@ void ControllerManager::Update(float fDeltaTime)
     float fTime = GameLoop::GetMissionTime();
     for (int i = 0; i < iMaxUpdates; ++i)
     {
-        UnitController* pCtrl = sAICtrls->_head._pNext->_pObject;
-        if (!pCtrl || pCtrl->mNextUpdateTime > fTime)
+        UnitController* pCtrl = sAICtrls->Begin();
+        if (!pCtrl || pCtrl->GetUpdateTime() > fTime)
         {
             break;
         }
         pCtrl->UpdateHighLevel();
         UpdateCrowd(pCtrl);
-        PblOrderedList<UnitController, float>::Node* pNode = GetManagerNode(pCtrl);
+        PblOrderedList<UnitController, float>::Node* pNode = pCtrl->GetManagerNode();
         sAICtrls->Remove(pNode);
         sAICtrls->Add(pNode, pCtrl, pCtrl->mNextUpdateTime);
     }
 
-    for (PblOrderedList<UnitController, float>::Node* pNode = sAICtrls->_head._pNext; UnitController* pCtrl = pNode->_pObject; )
+    for (PblOrderedList<UnitController, float>::Itor it(*sAICtrls); UnitController* pCtrl = it; )
     {
-        pNode = pNode->_pNext;
+        ++it;
         pCtrl->UpdateLowLevel(fDeltaTime);
     }
 
@@ -543,7 +496,7 @@ void ControllerManager::LogVODeath(int iVictimTeam, int iKillerTeam, const PblVe
     for (PblList<PlayerController>::Itor it(*sPlayerCtrls); (PlayerController*)it; ++it)
     {
         Controllable* pOwner = it->mOwner;
-        if (pOwner && DistanceSq(vPos, pOwner->GetMatrix().m[3]) < 625.0f)
+        if (pOwner && SquaredLength(pOwner->GetMatrix().GetTranslation() - vPos) < 625.0f)
         {
             it->LogVODeath(iVictimTeam, iKillerTeam);
         }
@@ -573,13 +526,13 @@ int ControllerManager::GetPlayersInRange(const PblVector3& vPos, float fRadius, 
         {
             continue;
         }
-        int iAffil = pTeam ? pTeam->GetAffiliation(GetPerceivedTeam(pObject)) : 0;
+        int iAffil = pTeam ? pTeam->GetAffiliation(pObject->GetPerceivedTeam()) : 0;
         if (!(eAffil & (1 << (iAffil + 1))))
         {
             continue;
         }
-        const PblVector3& vObject = GetCollisionObject(pObject)->GetPosition();
-        if (DistanceSq(vObject, &vPos.x) < fRadiusSq)
+        const PblVector3& vObject = pObject->GetPosition();
+        if (SquaredLength(vPos - vObject) < fRadiusSq)
         {
             ppObjects[iCount++] = pObject;
             if (iCount >= iMax)
@@ -602,10 +555,9 @@ int ControllerManager::GetAIInRange(const PblVector3& vPos, float fRadius, GameO
 
     float fRadiusSq = fRadius * fRadius;
     int iCount = 0;
-    for (PblOrderedList<UnitController, float>::Node* pNode = sAICtrls->_head._pNext;
-         UnitController* pCtrl = pNode->_pObject; pNode = pNode->_pNext)
+    for (PblOrderedList<UnitController, float>::Itor it(*sAICtrls); it; ++it)
     {
-        Controllable* pOwner = pCtrl->mOwner;
+        Controllable* pOwner = it->mOwner;
         if (!pOwner)
         {
             continue;
@@ -615,13 +567,13 @@ int ControllerManager::GetAIInRange(const PblVector3& vPos, float fRadius, GameO
         {
             continue;
         }
-        int iAffil = pTeam ? pTeam->GetAffiliation(GetPerceivedTeam(pObject)) : 0;
+        int iAffil = pTeam ? pTeam->GetAffiliation(pObject->GetPerceivedTeam()) : 0;
         if (!(eAffil & (1 << (iAffil + 1))))
         {
             continue;
         }
-        const PblVector3& vObject = GetCollisionObject(pObject)->GetPosition();
-        if (DistanceSq(vObject, &vPos.x) < fRadiusSq)
+        const PblVector3& vObject = pObject->GetPosition();
+        if (SquaredLength(vPos - vObject) < fRadiusSq)
         {
             ppObjects[iCount++] = pObject;
             if (iCount >= iMax)
@@ -651,15 +603,16 @@ void ControllerManager::BroadcastEvent(AI::EventInfo* pInfo, const PblVector3& v
     }
 
     float fRadiusSq = fRadius * fRadius;
-    PblOrderedList<UnitController, float>::Node* pNode = sAICtrls->_head._pNext;
-    while (UnitController* pCtrl = pNode->_pObject)
+    PblOrderedList<UnitController, float>::Itor it(*sAICtrls);
+    while (UnitController* pCtrl = it)
     {
-        pNode = pNode->_pNext;
+        ++it;
         if (!pCtrl->mOwner || !pCtrl->mOwner->GetGameObject())
         {
             continue;
         }
-        if (pTeam && !(eAffil & (1 << (pTeam->GetAffiliation(GetTeam(pCtrl->mOwner->GetGameObject())) + 1))))
+        GameObject* pObject = pCtrl->mOwner->GetGameObject();
+        if (pTeam && !(eAffil & (1 << (pTeam->GetAffiliation(pObject->GetTeam()) + 1))))
         {
             continue;
         }
@@ -667,7 +620,7 @@ void ControllerManager::BroadcastEvent(AI::EventInfo* pInfo, const PblVector3& v
         {
             continue;
         }
-        if (DistanceSq(vPos, pCtrl->mOwner->GetMatrix().m[3]) < fRadiusSq)
+        if (SquaredLength(pCtrl->mOwner->GetMatrix().GetTranslation() - vPos) < fRadiusSq)
         {
             pCtrl->SendEvent(pInfo);
         }

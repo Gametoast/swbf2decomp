@@ -226,8 +226,7 @@ void gf::GalaxyLobbyListListener::OnLobbyList(unsigned int lobbyCount, bool ioFa
         void* pMatchmaking = GetGalaxyMatchmaking();
         galaxy::api::GalaxyID lobby = ((galaxy::api::IMatchmaking*)pMatchmaking)->GetLobbyByIndex(i);
         NetAddr address;
-        address.pubAddr = (int)lobby.value;
-        address.pubPort = (int)(lobby.value >> 32);
+        address.mGalaxyId = lobby;
         NetSetupP::AddGame(&address);
         pMatchmaking = GetGalaxyMatchmaking();
         ((galaxy::api::IMatchmaking*)pMatchmaking)->RequestLobbyData(lobby);
@@ -248,8 +247,7 @@ void gf::GalaxyLobbyDataListener::OnLobbyDataUpdated(const galaxy::api::GalaxyID
     const unsigned int uCount = ((galaxy::api::IMatchmaking*)pMatchmaking)->GetLobbyDataCount(lobbyID);
 
     NetAddr address;
-    address.pubAddr = (int)lobbyID.value;
-    address.pubPort = (int)(lobbyID.value >> 32);
+    address.mGalaxyId = lobbyID;
     FindGameData data;
     memset(&data, 0, sizeof(data));
     FindGameRules rules;
@@ -261,10 +259,8 @@ void gf::GalaxyLobbyDataListener::OnLobbyDataUpdated(const galaxy::api::GalaxyID
     bool bDrop = false;
     for (unsigned int i = 0; i < uCount; ++i)
     {
-        char acKey[512];
-        char acValue[512];
-        memset(acKey, 0, sizeof(acKey));
-        memset(acValue, 0, sizeof(acValue));
+        char acKey[512] = "";
+        char acValue[512] = "";
         pMatchmaking = GetGalaxyMatchmaking();
         if (!((galaxy::api::IMatchmaking*)pMatchmaking)->GetLobbyDataByIndex(
                 lobbyID, i, acKey, sizeof(acKey), acValue, sizeof(acValue)))

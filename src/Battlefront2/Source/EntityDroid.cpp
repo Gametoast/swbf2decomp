@@ -47,37 +47,6 @@ EntityDroidClass::~EntityDroidClass()
 {
 }
 
-// FUNCTION: SWBF2 0x0049e1b0
-void* __fastcall GetFirstWeaponFactoryNode(const void* pList)
-{
-    return static_cast<const PblList<Factory<Weapon, WeaponClass, WeaponDesc>>*>(pList)->_head._pNext;
-}
-
-// FUNCTION: SWBF2 0x0049e1c0
-void* __fastcall InitializeWeaponFactoryIterator(void* pItor, void*, void* pNode)
-{
-    *reinterpret_cast<void**>(pItor) = pNode;
-    return pItor;
-}
-
-// FUNCTION: SWBF2 0x0049e1d0
-void* __fastcall GetWeaponFactoryIteratorObject(const void* pItor)
-{
-    return *static_cast<const PblList<Factory<Weapon, WeaponClass, WeaponDesc>>::Itor*>(pItor);
-}
-
-// FUNCTION: SWBF2 0x0049e1e0
-void* __fastcall DereferenceWeaponFactoryIterator(const void* pItor)
-{
-    return *static_cast<const PblList<Factory<Weapon, WeaponClass, WeaponDesc>>::Itor*>(pItor);
-}
-
-// FUNCTION: SWBF2 0x0049e1f0
-void* __fastcall ConvertWeaponFactoryIteratorToPointer(const void* pItor)
-{
-    return *static_cast<const PblList<Factory<Weapon, WeaponClass, WeaponDesc>>::Itor*>(pItor);
-}
-
 // TEMPLATE: SWBF2 0x0049e200
 // PblList<Factory<Weapon,WeaponClass,WeaponDesc> >::Itor::operator++
 template PblList<Factory<Weapon, WeaponClass, WeaponDesc> >::Itor&

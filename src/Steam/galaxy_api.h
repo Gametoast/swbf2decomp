@@ -22,8 +22,21 @@ public:
 class GalaxyID
 {
 public:
-    GalaxyID() {}
+    GalaxyID() : value(0) {}
+    // FUNCTION: SWBF2 0x0052e470
     explicit GalaxyID(unsigned __int64 id) : value(id) {}
+
+    // FUNCTION: SWBF2 0x0052e490
+    GalaxyID(const GalaxyID& other) : value(other.value) {}
+
+    GalaxyID& operator=(const GalaxyID& other)
+    {
+        value = other.value;
+        return *this;
+    }
+
+    // FUNCTION: SWBF2 0x0052e4b0
+    bool operator==(const GalaxyID& other) const { return value == other.value; }
 
     unsigned __int64 ToUint64() const { return value; }
     unsigned __int64 value;

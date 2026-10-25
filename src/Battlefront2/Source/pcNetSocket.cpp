@@ -108,7 +108,7 @@ void NetSocket::CloseDirectSocket()
     netDirectSocket = 0;
 }
 
-extern unsigned __int64 netEnteredLobbyId;
+extern unsigned __int64* __fastcall CopyEnteredLobbyId(unsigned __int64* pID);
 namespace gf
 {
 bool isInitialized();
@@ -118,32 +118,36 @@ extern void* GetGalaxyNetworking();
 // FUNCTION: SWBF2 0x00617e50
 int NetSocket::SendSocket(int iDest, char* pData, int iLen)
 {
-    unsigned __int64* pPeer = NetCommP::GetAddr(iDest);
-    if (NetComm::IsLAN())
+    if (!NetComm::IsLAN())
     {
-        int n = iDest == 68
+        const NetSocketPeerRecord* pPeer = (const NetSocketPeerRecord*)NetCommP::GetAddr(iDest);
+        if (!gf::isInitialized())
+        {
+            return 0;
+        }
+        unsigned __int64 lobbyId;
+        if (iDest > 64 || !*CopyEnteredLobbyId(&lobbyId))
+        {
+            return -1;
+        }
+        void* pNetworking = GetGalaxyNetworking();
+        return ((galaxy::api::INetworking*)pNetworking)->SendP2PPacket(
+                   pPeer->mGalaxyId, pData, iLen, 2, 0)
+             ? iLen : -1;
+    }
+    else
+    {
+        const NetSocketPeerRecord* pPeer = (const NetSocketPeerRecord*)NetCommP::GetAddr(iDest);
+        int n = iDest > 64 && iDest == 68
               ? send((SOCKET)netBroadcastSendSocket, pData, iLen, 0)
               : sendto((SOCKET)netDirectSocket, pData, iLen, 0,
-                       (const sockaddr*)(pPeer + 1), sizeof(sockaddr_in));
+                       (const sockaddr*)pPeer->mSocketAddress, sizeof(sockaddr_in));
         if (n == SOCKET_ERROR)
         {
             DecodeError(WSAGetLastError());
         }
         return n;
     }
-    if (!gf::isInitialized())
-    {
-        return 0;
-    }
-    if (iDest > 64 || !*(unsigned __int64*)(&netEnteredLobbyId))
-    {
-        return -1;
-    }
-
-    void* pNetworking = GetGalaxyNetworking();
-    return ((galaxy::api::INetworking*)pNetworking)->SendP2PPacket(
-               galaxy::api::GalaxyID(*pPeer), pData, iLen, 2, 0)
-         ? iLen : -1;
 }
 
 // FUNCTION: SWBF2 0x00617f40
@@ -227,7 +231,7 @@ void NetSocket::RecvSockets()
         }
         ((ReceiveTraceFn)JournalReceiveTraceStub)(netLanReceiveBuffer, received);
         ((ReceiveTraceFn)JournalReceiveTraceStub)(&from, sizeof(from));
-        NetSocketPeerRecord peer = { 0 };
+        NetSocketPeerRecord peer = { galaxy::api::GalaxyID(0) };
         memcpy(peer.mSocketAddress, &from, sizeof(from));
         ProcessReceivedPacket(netLanReceiveBuffer, received, packetPrefix.value, true, peer);
     }
@@ -268,7 +272,7 @@ void NetSocket::RecvSockets()
             }
             ((ReceiveTraceFn)JournalReceiveTraceStub)(netLanReceiveBuffer, received);
             ((ReceiveTraceFn)JournalReceiveTraceStub)(&from, sizeof(from));
-            NetSocketPeerRecord peer = { 0 };
+            NetSocketPeerRecord peer = { galaxy::api::GalaxyID(0) };
             memcpy(peer.mSocketAddress, &from, sizeof(from));
             ProcessReceivedPacket(netLanReceiveBuffer, received, packetPrefix.value, false, peer);
         }
@@ -298,7 +302,7 @@ static bool ReadGalaxy(void* pNetworking, unsigned int capacity,
                        unsigned int& size, NetSocketPeerRecord& peer)
 {
     return ((galaxy::api::INetworking*)pNetworking)->ReadP2PPacket(
-        netGalaxyReceiveBuffer, capacity, &size, *(galaxy::api::GalaxyID*)&peer.mGalaxyId, 0);
+        netGalaxyReceiveBuffer, capacity, &size, peer.mGalaxyId, 0);
 }
 
 static void DiscardGalaxy(void* pNetworking)
@@ -326,7 +330,7 @@ void NetSocket::RecvGalaxySockets()
             DiscardGalaxy(GetGalaxyNetworking());
             continue;
         }
-        NetSocketPeerRecord peer = { 0 };
+        NetSocketPeerRecord peer = { galaxy::api::GalaxyID(0) };
         if (ReadGalaxy(GetGalaxyNetworking(), 2048, size, peer))
         {
             ((ReceiveTraceFn)JournalReceiveTraceStub)(netGalaxyReceiveBuffer, size);
@@ -349,7 +353,7 @@ void NetSocket::RecvGalaxySockets()
                 DiscardGalaxy(GetGalaxyHostNetworking());
                 continue;
             }
-            NetSocketPeerRecord peer = { 0 };
+            NetSocketPeerRecord peer = { galaxy::api::GalaxyID(0) };
             if (ReadGalaxy(GetGalaxyHostNetworking(), 1012 - packetPrefix.value,
                            size, peer))
             {

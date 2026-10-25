@@ -45,6 +45,9 @@ protected:
     void CheckForVisibleCriticalPts();
 
 public:
+    PblList<PlayerController>::Node* GetManagerNode() { return &mManagerNode; }
+    const PblList<PlayerController>::Node* GetManagerNode() const { return &mManagerNode; }
+
     PblList<PlayerController>::Node mManagerNode;
     ProcessedInputs* mJoystick;
     float mMouseTurnBuildup;

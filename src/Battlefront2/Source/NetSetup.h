@@ -1,6 +1,8 @@
 #pragma once
 
 #include <stddef.h>
+#include "Steam/galaxy_api.h"
+#include "pcNetSocket.h"
 
 #include "PebbleFL/Common/PblList.h"
 
@@ -63,6 +65,8 @@ struct NetSessionId
 
     // FUNCTION: SWBF2 0x00591430
     NetSessionId() : id(0) {}
+
+    NetSessionId& operator=(const NetSessionId& other);
 
     unsigned __int64 id;
 
@@ -229,23 +233,30 @@ struct IntraSessionPlayer
     bool isTeam1;
 };
 
+#pragma pack(push, 4)
 struct NetAddr
 {
-    int pubAddr;
-    int pubPort;
+    galaxy::api::GalaxyID mGalaxyId;
     bool hasPriv;
     int privAddr;
     int privPort;
 
     // FUNCTION: SWBF2 0x005d46a0
-    NetAddr() : pubAddr(0), pubPort(0), hasPriv(false), privAddr(0), privPort(0) {}
+    NetAddr() : hasPriv(false), privAddr(0), privPort(0) {}
 
     NetAddr(int addr, int port, int overridePort);
+
+    bool operator==(const NetAddr& other)
+    {
+        return (!hasPriv || (privAddr == other.privAddr && privPort == other.privPort)) &&
+               other.mGalaxyId == mGalaxyId;
+    }
 
     NetAddr* CopyFieldsFrom(const NetAddr* other);
 
     char GetAddr(void* pOut, int pKey) const;
 };
+#pragma pack(pop)
  
  
  
@@ -470,6 +481,7 @@ public:
 
 class NetGameDesc;
 
+#pragma pack(push, 4)
 // VTABLE: SWBF2 0x007ac340
 class CNetFindGame : public NetFindGame
 {
@@ -536,7 +548,10 @@ public:
     bool canceled;
     FindType findType;
 
-    unsigned char mDirectJoinState[0x28];
+    float queryTimer;
+    bool queryDone;
+    NetSocketPeerRecord queryAddr;
+    NetSessionId findSessionId;
 
     bool mWaitingForQueries;
     unsigned char mQueryWaitPadding[3];
@@ -544,6 +559,7 @@ public:
     int mSelectedSession;
     int mPercentDone;
 };
+#pragma pack(pop)
  
  
  

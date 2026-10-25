@@ -1,10 +1,11 @@
 #pragma once
 #include <stddef.h>
+#include "Steam/galaxy_api.h"
 
 struct NetSocketPeerRecord
 {
 
-    unsigned __int64 mGalaxyId;
+    galaxy::api::GalaxyID mGalaxyId;
     unsigned char mSocketAddress[16];
 };
  
