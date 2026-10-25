@@ -565,7 +565,7 @@ bool PblRegion::DoesRayIntersect(const PblVector3& rStart, const PblVector3& rEn
 // FUNCTION: SWBF2 0x007292b0
 PblRegion* PblRegion::Find(unsigned int uId)
 {
-    for (PblListSingle::Itor it(sList); !it.IsDone(); ++it)
+    for (PblListSingle::Itor it(sList); it.GetNode() != sList.GetTerminator(); ++it)
     {
         PblRegion* pRegion = (PblRegion*)((char*)it.GetNode() - offsetof(PblRegion, mNode));
         if (pRegion->mId == uId)

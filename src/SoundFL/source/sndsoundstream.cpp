@@ -640,9 +640,5 @@ namespace Snd
 
 SoundStream::Properties::~Properties()
 {
-    if (mNode.mNext)
-    {
-        mNode.Remove();
-    }
 }
 }

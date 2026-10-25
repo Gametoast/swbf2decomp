@@ -76,10 +76,6 @@ SoundParameterized::Layer::Properties::~Properties()
         delete (Controller::Properties*)((char*)mControllerPropertyList.mHead.mNext
                                          - offsetof(Controller::Properties, mNode));
     }
-    if (mNode.mNext)
-    {
-        mNode.Remove();
-    }
 }
 
 // FUNCTION: SWBF2 0x00735a40

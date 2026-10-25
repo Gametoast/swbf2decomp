@@ -13,6 +13,15 @@ public:
             mPrev = 0;
         }
 
+        // FUNCTION: SWBF2 0x004d0d00
+        ~Node()
+        {
+            if (IsAttached())
+            {
+                Remove();
+            }
+        }
+
         bool IsAttached() const
         {
             return mNext != 0 && mPrev != 0;
@@ -37,6 +46,7 @@ public:
         mTerminator.mPrev = &mTerminator;
     }
 
+    // FUNCTION: SWBF2 0x004d0d50
     ~PblListDouble()
     {
         mTerminator.mNext = 0;

@@ -105,9 +105,5 @@ namespace Snd
 
 I3DL2ReverbPreset::~I3DL2ReverbPreset()
 {
-    if (mNode.mNext)
-    {
-        mNode.Remove();
-    }
 }
 }

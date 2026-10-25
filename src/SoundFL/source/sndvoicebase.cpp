@@ -38,10 +38,6 @@ VoiceBase::~VoiceBase()
 {
     SourceTransport::Stop();
     SetSample(0);
-    if (mNode.mNext != 0)
-    {
-        mNode.Remove();
-    }
 }
 
 // FUNCTION: SWBF2 0x0073c100

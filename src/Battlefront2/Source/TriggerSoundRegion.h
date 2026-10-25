@@ -118,10 +118,6 @@ public:
 
     ~TriggerSoundRegion()
     {
-        if (mNode.mNext != 0)
-        {
-            mNode.Remove();
-        }
     }
 
     static PblListSingle sList;

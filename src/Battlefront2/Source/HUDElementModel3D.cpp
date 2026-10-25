@@ -192,10 +192,6 @@ HUD::ElementModel3D::~ElementModel3D()
         delete[] mMeshInfo;
         mMeshInfo = 0;
     }
-    if (mModelNode.IsAttached())
-    {
-        mModelNode.Remove();
-    }
 }
 
 // FUNCTION: SWBF2 0x005563b0

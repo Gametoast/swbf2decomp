@@ -11,8 +11,6 @@ namespace Snd
 // FUNCTION: SWBF2 0x0073c210
 ThreadUpdate::Object::Object()
 {
-
-    mNode.mNext = 0;
     mUpdate = 0;
     mDestructing = 0;
 }
@@ -25,20 +23,6 @@ ThreadUpdate::Object::~Object()
         mUpdate->RemoveObject(this);
     }
 
-    Node* pNext = mNode.mNext;
-    if (pNext)
-    {
-        Node* pPrev = &mNode;
-        Node* pIt = &mNode;
-        do
-        {
-            pPrev = pIt;
-            pIt = pIt->mNext;
-        } while (pIt != &mNode);
-
-        pPrev->mNext = pNext;
-        mNode.mNext = 0;
-    }
 }
 
 // SYNTHETIC: SWBF2 0x0073c350
@@ -52,11 +36,8 @@ ThreadUpdate* ThreadUpdate::Object::GetThreadUpdate() const
 
 // FUNCTION: SWBF2 0x0073c230
 ThreadUpdate::ThreadUpdate(unsigned int uiPriority, unsigned int uiStackSize)
+    : mThread(UpdateObjects, uiPriority, uiStackSize)
 {
-
-    mThread.Init(UpdateObjects, uiPriority, uiStackSize);
-
-    mUpdateList.mNext = &mUpdateList;
 
     mSleepTime = 10;
     mUpdating = false;
@@ -69,7 +50,6 @@ ThreadUpdate::ThreadUpdate(unsigned int uiPriority, unsigned int uiStackSize)
 // FUNCTION: SWBF2 0x0073c300
 ThreadUpdate::~ThreadUpdate()
 {
-    mUpdateList.mNext = 0;
 }
 
 // FUNCTION: SWBF2 0x0073c3e0
@@ -82,7 +62,7 @@ void ThreadUpdate::AddObject(Object* pObject)
         mStopUpdating = false;
     }
 
-    if (mUpdateList.mNext == &mUpdateList)
+    if (mUpdateList.IsEmpty())
     {
         mUpdating = false;
 
@@ -99,16 +79,7 @@ void ThreadUpdate::AddObject(Object* pObject)
         }
     }
 
-    Node* pTail = &mUpdateList;
-    Node* pIt = &mUpdateList;
-    do
-    {
-        pTail = pIt;
-        pIt = pIt->mNext;
-    } while (pIt != &mUpdateList);
-
-    pObject->mNode.mNext = pTail->mNext;
-    pTail->mNext = &pObject->mNode;
+    mUpdateList.AddLast(&pObject->mNode);
     pObject->mUpdate = this;
 
     if (mAccess.IsValid())
@@ -129,20 +100,10 @@ void ThreadUpdate::RemoveObject(Object* pObject)
         mStopUpdating = false;
     }
 
-    Node* pNode = &pObject->mNode;
-    Node* pPrev = pNode;
-    Node* pIt = pNode;
-    do
-    {
-        pPrev = pIt;
-        pIt = pIt->mNext;
-    } while (pIt != pNode);
-
-    pPrev->mNext = pNode->mNext;
-    pNode->mNext = 0;
+    pObject->mNode.Remove();
     pObject->mUpdate = 0;
 
-    if (mUpdateList.mNext != &mUpdateList)
+    if (!mUpdateList.IsEmpty())
     {
         if (mAccess.IsValid())
         {
@@ -177,12 +138,12 @@ void ThreadUpdate::RemoveObject(Object* pObject)
 // FUNCTION: SWBF2 0x0073c4b0
 void ThreadUpdate::Exit()
 {
-    Node* pNode = mUpdateList.mNext;
-    while (pNode != &mUpdateList)
+    PblListSingle::Node* pNode = mUpdateList.mHead.GetNext();
+    while (pNode != &mUpdateList.mHead)
     {
 
         RemoveObject(reinterpret_cast<Object*>(reinterpret_cast<char*>(pNode) - offsetof(Object, mNode)));
-        pNode = mUpdateList.mNext;
+        pNode = mUpdateList.mHead.GetNext();
     }
 }
 
@@ -250,12 +211,9 @@ void __cdecl ThreadUpdate::UpdateObjects(void* pArg)
             pThis->mAccess.Wait();
 
             iObjects = 0;
-            for (Node* pNode = pThis->mUpdateList.mNext;
-                 pNode != &pThis->mUpdateList;
-                 pNode = pNode->mNext)
+            for (PblListSingle::Itor it(pThis->mUpdateList); it.GetNode() != pThis->mUpdateList.GetTerminator(); ++it)
             {
-
-                Object* pObject = reinterpret_cast<Object*>(reinterpret_cast<char*>(pNode) - offsetof(Object, mNode));
+                Object* pObject = reinterpret_cast<Object*>(reinterpret_cast<char*>(it.GetNode()) - offsetof(Object, mNode));
                 if (!pObject->mDestructing)
                 {
                     pObject->UpdateObject();

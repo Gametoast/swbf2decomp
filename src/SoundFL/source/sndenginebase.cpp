@@ -138,14 +138,8 @@ Stream* EngineBase::GetOpenStream(unsigned int uiHashID)
         {
             continue;
         }
-        for (PblListSingle::Itor it = pStream->GetInfoItor(); !it.IsDone(); ++it)
+        for (StreamBase::InfoItor it = pStream->GetInfoItor(); const StreamBase::Info* pInfo = it.GetInfo(); ++it)
         {
-            const StreamBase::Info* pInfo =
-                (const StreamBase::Info*)((ObjectList::Node*)it.GetNode())->mObject;
-            if (!pInfo)
-            {
-                break;
-            }
             if (pInfo->mHashID == uiHashID)
             {
                 pResult = (Stream*)((unsigned char*)smStreams + uiOffset);

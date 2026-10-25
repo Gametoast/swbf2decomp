@@ -42,10 +42,6 @@ HUD::Transform::Transform(const char* const pName, Factory::ItemCallback pCallba
 // FUNCTION: SWBF2 0x005672a0
 HUD::Transform::~Transform()
 {
-    if (mTransformNode.mNext)
-    {
-        mTransformNode.Remove();
-    }
 }
 
 // FUNCTION: SWBF2 0x005672e0

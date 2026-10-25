@@ -8,6 +8,12 @@
 namespace Snd
 {
 
+// FUNCTION: SWBF2 0x00738370
+SourceBus::~SourceBus()
+{
+}
+
+
 // FUNCTION: SWBF2 0x00738350
 SourceBus::SourceBus()
     : mBus(&Bus::smRootBus),

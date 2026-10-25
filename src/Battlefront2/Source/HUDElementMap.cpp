@@ -189,10 +189,6 @@ HUD::ElementMap::BitmapGroup::~BitmapGroup()
 // FUNCTION: SWBF2 0x005511b0
 HUD::ElementMap::~ElementMap()
 {
-    if (mMapNode.mNext)
-    {
-        mMapNode.Remove();
-    }
 }
 
 // FUNCTION: SWBF2 0x0054f970

@@ -42,7 +42,7 @@ void Stream::Flush(bool bThreadPaused, bool bFlushRenderers)
     const Info* pInfo = 0;
     if (!mInfoList.IsEmpty())
     {
-        pInfo = (const Info*)((ObjectList::Node*)PblListSingle::Itor(mInfoList).GetNode())->mObject;
+        pInfo = GetInfoItor().GetInfo();
     }
 
     for (unsigned int i = 0; i < pInfo->mNumSubstreams; ++i)

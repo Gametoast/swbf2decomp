@@ -28,10 +28,6 @@ public:
             Properties() {}
             ~Properties()
             {
-                if (mNode.mNext)
-                {
-                    mNode.Remove();
-                }
             }
             static void* operator new(unsigned int) { return smFreeList.Alloc(); }
             static void operator delete(void* p) { smFreeList.Free(p); }
@@ -99,10 +95,6 @@ public:
             {
                 delete (Layer::Properties*)((char*)mLayerList.mHead.mNext
                                             - offsetof(Layer::Properties, mNode));
-            }
-            if (mNode.mNext)
-            {
-                mNode.Remove();
             }
         }
         static void* operator new(unsigned int) { return smFreeList.Alloc(); }

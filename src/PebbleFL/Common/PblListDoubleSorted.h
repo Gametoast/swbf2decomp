@@ -19,10 +19,6 @@ public:
         // FUNCTION: SWBF2 0x004d26d0
         ~Node()
         {
-            if (mNode.IsAttached())
-            {
-                mNode.Remove();
-            }
         }
 
         void* GetObjectA(PblListDoubleSorted const* pList, unsigned int uOffset) const;
@@ -61,11 +57,10 @@ public:
     // FUNCTION: SWBF2 0x004fbe10
     Node* GetFirst() const
     {
-        if (mTerminator.mNext == &mTerminator)
-        {
-            return (Node*)GetTerminator();
-        }
-        return (Node*)((char*)mTerminator.mNext - offsetof(Node, mNode));
+        PblListDouble::Node* pNext = mTerminator.mNext;
+        return pNext == &mTerminator
+            ? (Node*)pNext
+            : (Node*)((char*)pNext - offsetof(Node, mNode));
     }
 
     // FUNCTION: SWBF2 0x004d2640

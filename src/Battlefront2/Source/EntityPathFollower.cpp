@@ -221,10 +221,6 @@ EntityPathFollower::~EntityPathFollower()
     {
         GetList()->Remove(this);
     }
-    if (mNode.IsAttached())
-    {
-        mNode.Remove();
-    }
 }
 
 // FUNCTION: SWBF2 0x004d2700

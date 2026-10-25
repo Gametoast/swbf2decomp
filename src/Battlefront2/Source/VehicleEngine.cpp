@@ -94,10 +94,6 @@ VehicleEngine::VehicleEngine(VehicleEngineClass* pClass)
 VehicleEngine::~VehicleEngine()
 {
     DeactivateEngine();
-    if (mNode.mNext)
-    {
-        mNode.Remove();
-    }
 }
 
 // FUNCTION: SWBF2 0x0066ccb0

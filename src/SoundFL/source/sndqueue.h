@@ -6,6 +6,7 @@ namespace Snd
 class QueueBase
 {
 public:
+    QueueBase();
     ~QueueBase();
 
     void* Get(unsigned int uStride, char* pData, unsigned int uCapacity);
@@ -35,20 +36,17 @@ class Queue : public QueueBase
 {
 public:
 
-    // FUNCTION: SWBF2 0x00738930
     Queue()
     {
-        mFull = false;
-        mHead = 0;
-        mTail = 0;
     }
 
-    // FUNCTION: SWBF2 0x0073d940
+    // TEMPLATE: SWBF2 0x0073d940
+    // Snd::Queue<Snd::StreamPacket *,4>::~Queue<Snd::StreamPacket *,4>
     ~Queue()
     {
     }
-
-    // FUNCTION: SWBF2 0x0073da80
+    // TEMPLATE: SWBF2 0x0073da80
+    // Snd::Queue<Snd::StreamPacket *,4>::Add
     bool Add(const T& rElement)
     {
         if (IsFull())

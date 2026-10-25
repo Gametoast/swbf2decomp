@@ -88,10 +88,6 @@ HUD::ElementVehicleSeating::SeatingText::~SeatingText()
 // FUNCTION: SWBF2 0x0055ce20
 HUD::ElementVehicleSeating::~ElementVehicleSeating()
 {
-    if (mNode.mNext)
-    {
-        mNode.Remove();
-    }
 }
 
 // FUNCTION: SWBF2 0x0055c8a0

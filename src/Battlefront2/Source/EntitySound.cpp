@@ -114,10 +114,6 @@ EntitySound::EntitySound(EntitySoundClass* pClass, const EntityDesc& desc)
 // FUNCTION: SWBF2 0x004fadf0
 EntitySound::~EntitySound()
 {
-    if (mNode.mNext)
-    {
-        mNode.Remove();
-    }
 }
 
 // FUNCTION: SWBF2 0x004fae20
@@ -244,7 +240,7 @@ EntitySound* EntitySoundClass::CreateSoundFromRegion(RedRegionDesc& desc, const 
 unsigned int Snd::Space::GetCount()
 {
     unsigned int uCount = 0;
-    for (PblListSingle::Itor it(smSpaceList); !it.IsDone(); ++it)
+    for (PblListSingle::Itor it(smSpaceList); it.GetNode() != smSpaceList.GetTerminator(); ++it)
     {
         ++uCount;
     }
@@ -255,7 +251,7 @@ unsigned int Snd::Space::GetCount()
 unsigned int Snd::Space::GetRegionCount() const
 {
     unsigned int uCount = 0;
-    for (PblListSingle::Itor it(mList); !it.IsDone(); ++it)
+    for (PblListSingle::Itor it(mList); it.GetNode() != mList.GetTerminator(); ++it)
     {
         ++uCount;
     }

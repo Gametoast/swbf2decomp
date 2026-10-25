@@ -47,10 +47,6 @@ FoleyFX::FoleyFX()
 // FUNCTION: SWBF2 0x0052c0f0
 FoleyFX::~FoleyFX()
 {
-    if (mNode.mNext)
-    {
-        mNode.Remove();
-    }
 }
 
 // SYNTHETIC: SWBF2 0x0052c0c0

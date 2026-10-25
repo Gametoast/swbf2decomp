@@ -55,10 +55,6 @@ EntitySquadron::~EntitySquadron()
         RemoveFromSquadron();
     }
 
-    if (mNode.IsAttached())
-    {
-        mNode.Remove();
-    }
 }
 
 // FUNCTION: SWBF2 0x004fbf20

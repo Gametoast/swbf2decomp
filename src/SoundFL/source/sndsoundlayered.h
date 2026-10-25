@@ -89,10 +89,6 @@ public:
 
     ~SoundLayer()
     {
-        if (mLayerNode.mNext)
-        {
-            mLayerNode.Remove();
-        }
     }
 
     static void operator delete(void* p) { smFreeList.Free(p); }
@@ -124,10 +120,6 @@ public:
 
         ~Layer()
         {
-            if (mNode.mNext)
-            {
-                mNode.Remove();
-            }
         }
 
         static void* operator new(unsigned int) { return smFreeList.Alloc(); }
@@ -201,13 +193,6 @@ public:
         smInactiveList.AddLast(&mNode);
     }
 
-    ~FireForgetLayer()
-    {
-        if (mNode.IsAttached())
-        {
-            mNode.Remove();
-        }
-    }
 
     void Stop()
     {

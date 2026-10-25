@@ -117,10 +117,6 @@ Snd::SoundStream::~SoundStream()
 {
     mInfo = 0;
     mProperties = 0;
-    if (mNode.mNext)
-    {
-        mNode.Remove();
-    }
 }
 
 // FUNCTION: SWBF2 0x004fba90

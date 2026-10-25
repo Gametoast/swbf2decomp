@@ -210,10 +210,6 @@ DSBuffer::~DSBuffer()
 {
     Destroy();
 
-    if (mNode.IsAttached())
-    {
-        mNode.Remove();
-    }
 }
 
 // FUNCTION: SWBF2 0x00743d10

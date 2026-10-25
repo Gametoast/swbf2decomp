@@ -297,10 +297,6 @@ Space::~Space()
         mReverbPreset = 0;
     }
 
-    if (mNode.mNext != 0)
-    {
-        mNode.Remove();
-    }
 
 }
 

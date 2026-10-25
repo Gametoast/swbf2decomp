@@ -143,10 +143,6 @@ HUD::Item::Factory::Property::~Property()
     delete mData;
     mData = 0;
 
-    if (mNode.mNext)
-    {
-        mNode.Remove();
-    }
 }
 
 // FUNCTION: SWBF2 0x00563d60
@@ -343,10 +339,6 @@ HUD::Item::Factory::Factory(unsigned int uHashID)
 // FUNCTION: SWBF2 0x005641a0
 HUD::Item::Factory::~Factory()
 {
-    if (mNode.IsAttached())
-    {
-        mNode.Remove();
-    }
 }
 
 // FUNCTION: SWBF2 0x005641e0

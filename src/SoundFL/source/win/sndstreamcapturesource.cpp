@@ -64,11 +64,6 @@ StreamCaptureSource::~StreamCaptureSource()
     }
 
     mDestructing = 1;
-
-    if (mNode.mNext != 0)
-    {
-        mNode.Remove();
-    }
 }
 
 // FUNCTION: SWBF2 0x00741020

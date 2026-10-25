@@ -37,10 +37,6 @@ ParameterGraph::~ParameterGraph()
         delete reinterpret_cast<ControlPoint*>(reinterpret_cast<char*>(mControlPoints.mHead.mNext) -
                                                offsetof(ControlPoint, mNode.mNode));
     }
-    if (mNode.mNext)
-    {
-        mNode.Remove();
-    }
 }
 
 }

@@ -52,8 +52,10 @@ public:
     PblList()
     {
         _head._pList = this;
-        _head._pPrev = &_head;
-        _head._pNext = &_head;
+        Node* pNode = &_head;
+        _head._pPrev = pNode;
+        _head._pNext = pNode;
+        _head._pObject = 0;
         _iCount = 0;
     }
 

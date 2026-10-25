@@ -50,10 +50,6 @@ HUD::Sound::Sound(const char* const, Factory::ItemCallback, void* const)
 HUD::Sound::~Sound()
 {
     HUD::FreeName(&mSoundID);
-    if (mSoundNode.mNext)
-    {
-        mSoundNode.Remove();
-    }
 }
 
 // FUNCTION: SWBF2 0x005670c0

@@ -12,8 +12,7 @@ class SourceBus
 public:
     SourceBus();
 
-    // FUNCTION: SWBF2 0x00738370
-    ~SourceBus() {}
+    ~SourceBus();
 
     void Stop(SourceTransport* pTransport);
 

@@ -8,10 +8,6 @@ namespace Snd
 
 StreamBase::Info::~Info()
 {
-    if (mNode.mNext)
-    {
-        mNode.Remove();
-    }
 }
 
 template <>

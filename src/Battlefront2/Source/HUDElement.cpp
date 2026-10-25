@@ -512,14 +512,6 @@ HUD::Element::~Element()
             }
         }
     }
-    if (mNode.IsAttached())
-    {
-        mNode.Remove();
-    }
-    if (mGroupNode.IsAttached())
-    {
-        mGroupNode.Remove();
-    }
 }
 
 // FUNCTION: SWBF2 0x005481c0

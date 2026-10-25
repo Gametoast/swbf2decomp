@@ -25,10 +25,6 @@ FoleyFXGroup::FoleyFXGroup()
 // FUNCTION: SWBF2 0x0052c7c0
 FoleyFXGroup::~FoleyFXGroup()
 {
-    if (mNode.mNext)
-    {
-        mNode.Remove();
-    }
 }
 
 // FUNCTION: SWBF2 0x0052c800

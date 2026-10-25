@@ -3,6 +3,14 @@
 namespace Snd
 {
 
+// FUNCTION: SWBF2 0x00738930
+QueueBase::QueueBase()
+{
+    mFull = false;
+    mHead = 0;
+    mTail = 0;
+}
+
 QueueBase::~QueueBase()
 {
 }

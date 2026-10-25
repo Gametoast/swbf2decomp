@@ -20,6 +20,25 @@ public:
         void* mObject;
     };
 
+    class Itor : public PblListSingle::Itor
+    {
+    public:
+        Itor() {}
+        Itor(Node* pNode) : PblListSingle::Itor(&pNode->mNode) {}
+        Itor(const ObjectList* pList) : PblListSingle::Itor(pList) {}
+        Itor(const ObjectList& rList) : PblListSingle::Itor(rList) {}
+
+        Node* GetNode()
+        {
+            return reinterpret_cast<Node*>(PblListSingle::Itor::GetNode());
+        }
+        void* GetObjectA(const ObjectList* pList)
+        {
+            return PblListSingle::Itor::GetNode() == pList->GetTerminator()
+                ? 0 : GetNode()->mObject;
+        }
+    };
+
     void Remove(void* pObject);
 
     Node* FindByObject(void* pObject);

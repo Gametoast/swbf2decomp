@@ -59,10 +59,6 @@ public:
         {
             mNode.Remove();
         }
-        if (mNode.mNext)
-        {
-            mNode.Remove();
-        }
     }
 
     static Bus smRootBus;

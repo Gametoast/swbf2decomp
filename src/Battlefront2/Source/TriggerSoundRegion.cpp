@@ -78,10 +78,6 @@ TriggerSoundRegion::Group::Group()
 // FUNCTION: SWBF2 0x0065d460
 TriggerSoundRegion::Group::~Group()
 {
-    if (mNode.mNext != 0)
-    {
-        mNode.Remove();
-    }
 }
 
 // FUNCTION: SWBF2 0x0065d4a0
@@ -160,16 +156,12 @@ TriggerSoundRegion::Properties::Properties()
 // FUNCTION: SWBF2 0x0065d6a0
 TriggerSoundRegion::Properties::~Properties()
 {
-    if (mNode.mNext != 0)
-    {
-        mNode.Remove();
-    }
 }
 
 // FUNCTION: SWBF2 0x0065d6e0
 const GameSound* TriggerSoundRegion::Properties::GetSound(Team::Side eSide, float fRatio) const
 {
-    for (PblListSingle::Itor it(mList); !it.IsDone(); ++it)
+    for (PblListSingle::Itor it(mList); it.GetNode() != mList.GetTerminator(); ++it)
     {
         const Group* pGroup = (const Group*)((Snd::ObjectList::Node*)it.GetNode())->mObject;
         if (fRatio >= pGroup->GetReinforcementCount() && pGroup->IsEnabled())
@@ -197,7 +189,7 @@ void TriggerSoundRegion::Properties::Read(PblFileChunk& chunk)
                 continue;
             }
             PblListSingle::Itor it(mList);
-            for (; !it.IsDone(); ++it)
+            for (; it.GetNode() != mList.GetTerminator(); ++it)
             {
                 const Group* pOther = (const Group*)((Snd::ObjectList::Node*)it.GetNode())->mObject;
                 if (pGroup->GetReinforcementCount() > pOther->GetReinforcementCount())
@@ -205,7 +197,7 @@ void TriggerSoundRegion::Properties::Read(PblFileChunk& chunk)
                     break;
                 }
             }
-            if (it.IsDone())
+            if (it.GetNode() == mList.GetTerminator())
             {
                 mList.Add(pGroup);
             }

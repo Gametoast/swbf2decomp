@@ -171,10 +171,6 @@ HUD::TransformNameMesh::~TransformNameMesh()
     {
         HUD::FreeName(&mInheritNames[i]);
     }
-    if (mTransformNameMeshNode.mNext)
-    {
-        mTransformNameMeshNode.Remove();
-    }
 }
 
 // FUNCTION: SWBF2 0x00567730

@@ -437,7 +437,7 @@ SampleBankBase* __cdecl SampleBankBase::LoadBank(PblFileChunk& chunk, char const
 // FUNCTION: SWBF2 0x00742640
 SampleBankBase* __cdecl SampleBankBase::FindByHashID(unsigned int uiHashID)
 {
-    for (PblListSingle::Itor it(smSampleBankList); !it.IsDone(); ++it)
+    for (PblListSingle::Itor it(smSampleBankList); it.GetNode() != smSampleBankList.GetTerminator(); ++it)
     {
         SampleBankBase* pBank =
             (SampleBankBase*)((char*)it.GetNode() - offsetof(SampleBankBase, mNode));
@@ -462,10 +462,6 @@ SampleBankBase::~SampleBankBase()
         delete &mSamples[i];
     }
 
-    if (mNode.mNext)
-    {
-        mNode.Remove();
-    }
 }
 
 }

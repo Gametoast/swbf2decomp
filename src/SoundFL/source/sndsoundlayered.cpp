@@ -239,10 +239,6 @@ SoundLayered::SoundLayered()
 SoundLayered::~SoundLayered()
 {
     FreeLayers(SoundLayerDestroy);
-    if (mNode.IsAttached())
-    {
-        mNode.Remove();
-    }
 }
 
 // FUNCTION: SWBF2 0x00738e00
@@ -424,7 +420,7 @@ void SoundLayered::FireForgetLayer::Play(Source3D* pSource3D, const Properties::
 // FUNCTION: SWBF2 0x007391d0
 void __cdecl SoundLayered::Play(Source3D* pSource3D, const Properties* pProps)
 {
-    for (PblListSingle::Itor it(pProps->mLayerList); !it.IsDone(); ++it)
+    for (PblListSingle::Itor it(pProps->mLayerList); it.GetNode() != pProps->mLayerList.GetTerminator(); ++it)
     {
         const Properties::Layer* pLayer =
             (const Properties::Layer*)((char*)it.GetNode() - offsetof(Properties::Layer, mNode));
@@ -456,7 +452,7 @@ void __cdecl SoundLayered::Play(Source3D* pSource3D, const Properties* pProps)
 // FUNCTION: SWBF2 0x00739620
 void SoundLayered::SetPosition(const PblVector3* pPos)
 {
-    for (PblListSingle::Itor it(mSoundList); !it.IsDone(); ++it)
+    for (PblListSingle::Itor it(mSoundList); it.GetNode() != mSoundList.GetTerminator(); ++it)
     {
         PblListSingle::Node* pNode = it.GetNode();
         SoundLayer* pSound = pNode == &mSoundList.mHead
@@ -475,7 +471,7 @@ void SoundLayered::SetProperties(const Properties* pProps, SoundLayer* (__cdecl*
     {
         return;
     }
-    for (PblListSingle::Itor it(pProps->mLayerList); !it.IsDone(); ++it)
+    for (PblListSingle::Itor it(pProps->mLayerList); it.GetNode() != pProps->mLayerList.GetTerminator(); ++it)
     {
         const Properties::Layer* pLayer =
             (const Properties::Layer*)((char*)it.GetNode() - offsetof(Properties::Layer, mNode));
@@ -494,7 +490,7 @@ void SoundLayered::SetProperties(const Properties* pProps, SoundLayer* (__cdecl*
 // FUNCTION: SWBF2 0x00739740
 void SoundLayered::SetVelocity(const PblVector3* pVel)
 {
-    for (PblListSingle::Itor it(mSoundList); !it.IsDone(); ++it)
+    for (PblListSingle::Itor it(mSoundList); it.GetNode() != mSoundList.GetTerminator(); ++it)
     {
         PblListSingle::Node* pNode = it.GetNode();
         SoundLayer* pSound = pNode == &mSoundList.mHead
@@ -514,10 +510,6 @@ SoundLayered::Properties::~Properties()
     while (!mLayerList.IsEmpty())
     {
         delete (Layer*)((char*)mLayerList.mHead.mNext - offsetof(Layer, mNode));
-    }
-    if (mNode.mNext)
-    {
-        mNode.Remove();
     }
 }
 }

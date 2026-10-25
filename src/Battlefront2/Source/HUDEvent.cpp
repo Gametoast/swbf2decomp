@@ -54,14 +54,6 @@ HUD::EventHandler::EventHandler()
 // FUNCTION: SWBF2 0x0055db70
 HUD::EventHandler::~EventHandler()
 {
-    if (mNode.IsAttached())
-    {
-        mNode.Remove();
-    }
-    if (mNode.IsAttached())
-    {
-        mNode.Remove();
-    }
 }
 
 // FUNCTION: SWBF2 0x0055db50
@@ -285,10 +277,6 @@ HUD::EventClass::~EventClass()
     }
     mHandlerList.Clear();
 
-    if (mNode.mNext)
-    {
-        mNode.Remove();
-    }
     mHandlerList.mTerminator.mNext = 0;
     mHandlerList.mTerminator.mPrev = 0;
 }

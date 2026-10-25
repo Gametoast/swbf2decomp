@@ -726,9 +726,5 @@ namespace Snd
 
 Sound::Properties::~Properties()
 {
-    if (mNode.mNext)
-    {
-        mNode.Remove();
-    }
 }
 }
