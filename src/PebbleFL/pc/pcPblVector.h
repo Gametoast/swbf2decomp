@@ -35,3 +35,9 @@ inline const PblVector3 operator/(const PblVector3& lhs, float rhs)
 {
     return lhs * (1.0f / rhs);
 }
+
+// FUNCTION: SWBF2 0x00410b60
+inline float DotProduct(const PblVector3& vVector1, const PblVector3& vVector2)
+{
+    return vVector1.y * vVector2.y + vVector1.x * vVector2.x + vVector1.z * vVector2.z;
+}

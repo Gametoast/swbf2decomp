@@ -171,7 +171,6 @@ class PAManagerInterpolator : public Thread
 {
 public:
     PAManagerInterpolator() {}
-    virtual ~PAManagerInterpolator() {}
     virtual bool Update(float fDeltaTime);
 
     void Create();

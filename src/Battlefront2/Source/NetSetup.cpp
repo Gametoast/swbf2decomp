@@ -80,6 +80,8 @@ unsigned int netCrashAddr;
 // GLOBAL: SWBF2 0x01ead480
 // autoNetScript
 char autoNetScript[32];
+// GLOBAL: SWBF2 0x01ead4a0
+// g_fFixedRate
 float g_fFixedRate;
 unsigned int netPasswordHash;
 
@@ -92,6 +94,8 @@ unsigned char netPasswordSha512[64];
 // GLOBAL: SWBF2 0x01ead4f8
 unsigned char netEncodedPassword[512];
 int netDifficulty;
+// GLOBAL: SWBF2 0x01ead4ac
+// g_bNoWait
 bool g_bNoWait;
 bool g_bNoSound;
 

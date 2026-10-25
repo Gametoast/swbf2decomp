@@ -38,36 +38,12 @@ PblListSingle ParameterGraph::smParameterGraphs;
 // FUNCTION: SWBF2 0x00748b30
 ParameterGraph::~ParameterGraph()
 {
-    while (!mControlPoints.IsEmpty())
+    while (mControlPoints.GetFirst() != mControlPoints.GetTerminator())
     {
-        delete reinterpret_cast<ControlPoint*>(reinterpret_cast<char*>(mControlPoints.mHead.mNext) -
-                                               offsetof(ControlPoint, mNode.mNode));
+        delete (ControlPoint*)mControlPoints.GetFirst()->GetObjectA(&mControlPoints, offsetof(ControlPoint, mNode));
     }
 }
 
-}
-
-// FUNCTION: SWBF2 0x00748c00
-void PblListSingleSorted::Add(Node* pNode)
-{
-    if (mFlags & flags_sortOnAdd)
-    {
-        for (PblListSingle::Node* pLink = mHead.mNext; pLink != &mHead; pLink = pLink->mNext)
-        {
-            Node* const pCur = (Node*)((char*)pLink - offsetof(Node, mNode));
-            if (pCur == GetTerminator())
-            {
-                break;
-            }
-            if (pCur->mSortValue > pNode->mSortValue)
-            {
-                pNode->mNode.mNext = pCur->mNode.mNext;
-                pCur->mNode.mNext = &pNode->mNode;
-                return;
-            }
-        }
-    }
-    AddLast(&pNode->mNode);
 }
 
 namespace Snd
@@ -136,16 +112,11 @@ void ParameterGraph::Read(PblFileChunk& chunk)
 float ParameterGraph::CalculateOutputValue(float fInput) const
 {
     const ControlPoint* pPrev = 0;
-    for (const PblListSingle::Node* pLink = mControlPoints.mHead.mNext; pLink != &mControlPoints.mHead;
-         pLink = pLink->mNext)
+    for (PblListSingleSorted::Itor itor(mControlPoints);
+         itor.GetNode(&mControlPoints) != mControlPoints.GetTerminator(); ++itor)
     {
-        const PblListSingleSorted::Node* const pNode =
-            (const PblListSingleSorted::Node*)((const char*)pLink - offsetof(PblListSingleSorted::Node, mNode));
-        if (pNode == mControlPoints.GetTerminator())
-        {
-            break;
-        }
-        const ControlPoint* const pPoint = (const ControlPoint*)pNode;
+        const ControlPoint* const pPoint = (const ControlPoint*)itor.GetNode(&mControlPoints)->GetObjectA(
+            &mControlPoints, offsetof(ControlPoint, mNode));
         if (pPoint->mNode.mSortValue > fInput)
         {
             if (!pPrev)

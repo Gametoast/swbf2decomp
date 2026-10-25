@@ -453,17 +453,7 @@ public:
     static PblHash rttiHashEntityFlyer;
 };
 
-static inline PblQuaternion PblQuaternion_FromAxisAngle(const PblVector3& vAxis, float fAngle)
-{
-    float fSin, fCos;
-    PblMath::SinCos(&fSin, &fCos, fAngle * 0.5f);
-    PblQuaternion q;
-    q._fX = vAxis.x * fSin;
-    q._fY = vAxis.y * fSin;
-    q._fZ = vAxis.z * fSin;
-    q._fS = fCos;
-    return q;
-}
+
 
 // FUNCTION: SWBF2 0x006249a0
 bool PowerupStation::Update(float fDeltaTime)
@@ -606,7 +596,7 @@ bool PowerupStation::Update(float fDeltaTime)
         float fAngle = (float)mRotateDir * mClass->mIdleRotateSpeed * fDeltaTime;
         if (fabs(fAngle) > 0.0001f)
         {
-            q = q * PblQuaternion_FromAxisAngle(gVectorUnitY, fAngle);
+            q = q * PblQuaternion(gVectorUnitY, fAngle);
         }
         mRenderMatrix = PblMatrix_FromQuaternion(q, vPos);
 
@@ -620,7 +610,7 @@ bool PowerupStation::Update(float fDeltaTime)
                 PblQuaternion qWobble = PblQuaternion(*pWobbleMatrix);
                 if (fabs(fWobble) > 0.0001f)
                 {
-                    qWobble = qWobble * PblQuaternion_FromAxisAngle(gVectorUnitZ, fWobble);
+                    qWobble = qWobble * PblQuaternion(gVectorUnitZ, fWobble);
                 }
                 *pWobbleMatrix = PblMatrix_FromQuaternion(qWobble, vWobblePos);
             }
@@ -777,7 +767,7 @@ bool PowerupStation::Update(float fDeltaTime)
             PblQuaternion q = PblQuaternion(*pMatrix);
             if (fabs(fAngle) > 0.0001f)
             {
-                q = q * PblQuaternion_FromAxisAngle(gVectorUnitX, fAngle);
+                q = q * PblQuaternion(gVectorUnitX, fAngle);
             }
             *pMatrix = PblMatrix_FromQuaternion(q, vNodePos);
         }
@@ -817,7 +807,7 @@ bool PowerupStation::Update(float fDeltaTime)
         PblQuaternion q = PblQuaternion(*pMatrix);
         if (fabs(fAngle) > 0.0001f)
         {
-            q = q * PblQuaternion_FromAxisAngle(gVectorUnitZ, fAngle);
+            q = q * PblQuaternion(gVectorUnitZ, fAngle);
         }
         *pMatrix = PblMatrix_FromQuaternion(q, vNodePos);
         return true;

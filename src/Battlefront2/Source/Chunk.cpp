@@ -100,10 +100,8 @@ Chunk::Chunk()
 // SYNTHETIC: SWBF2 0x00455080
 // Chunk::`scalar deleting destructor'
 
-// FUNCTION: SWBF2 0x004550c0
-Chunk::~Chunk()
-{
-}
+// SYNTHETIC: SWBF2 0x004550c0
+// Chunk::~Chunk
 
 // FUNCTION: SWBF2 0x00455150
 void Chunk::ClearAll()
@@ -417,17 +415,7 @@ static inline void SetAxis(PblMatrix& m, int iRow, const PblVector3& v)
     m.m[iRow][3] = 0.0f;
 }
 
-static inline PblQuaternion PblQuaternion_FromAxisAngle(const PblVector3& vAxis, float fAngle)
-{
-    float fSin, fCos;
-    PblMath::SinCos(&fSin, &fCos, fAngle * 0.5f);
-    PblQuaternion q;
-    q._fX = vAxis.x * fSin;
-    q._fY = vAxis.y * fSin;
-    q._fZ = vAxis.z * fSin;
-    q._fS = fCos;
-    return q;
-}
+
 
 static inline PblMatrix MatrixFromQuat(const PblQuaternion& q, const PblVector3& vPos)
 {
@@ -547,7 +535,7 @@ void Chunk::Update(float fDeltaTime)
     if (fAngle > EPSILON)
     {
         float fInv = 1.0f / fAngle;
-        q = q * PblQuaternion_FromAxisAngle(PblVector3(vSpin.x * fInv, vSpin.y * fInv, vSpin.z * fInv), fAngle);
+        q = q * PblQuaternion(PblVector3(vSpin.x * fInv, vSpin.y * fInv, vSpin.z * fInv), fAngle);
     }
 
     mVelocity.x += mOneOverMass * vForce.x * fDeltaTime;
@@ -895,7 +883,7 @@ void Chunk::Render(unsigned char ucAlpha, float fDist, unsigned int uiFlags)
         if (fAngle > EPSILON)
         {
             float fInv = 1.0f / fAngle;
-            q = q * PblQuaternion_FromAxisAngle(PblVector3(vSpin.x * fInv, vSpin.y * fInv, vSpin.z * fInv), fAngle);
+            q = q * PblQuaternion(PblVector3(vSpin.x * fInv, vSpin.y * fInv, vSpin.z * fInv), fAngle);
         }
         vPos.x -= mVelocity.x * fDt;
         vPos.y -= mVelocity.y * fDt;

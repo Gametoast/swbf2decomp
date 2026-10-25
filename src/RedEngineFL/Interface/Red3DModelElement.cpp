@@ -27,14 +27,7 @@ PblQuaternion AxisAngle(const PblVector3& vAxis, float fAngle)
         PblTraceP("axis ( %f, %f, %f ) is not of unit length!\n", vAxis.x, vAxis.y, vAxis.z);
     }
 
-    float fSin, fCos;
-    PblMath::SinCos(&fSin, &fCos, fAngle * 0.5f);
-    PblQuaternion q;
-    q._fX = vAxis.x * fSin;
-    q._fY = vAxis.y * fSin;
-    q._fZ = vAxis.z * fSin;
-    q._fS = fCos;
-    return q;
+    return PblQuaternion(vAxis, fAngle);
 }
 }
 

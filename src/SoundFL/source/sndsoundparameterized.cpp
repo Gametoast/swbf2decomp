@@ -63,12 +63,6 @@ Sound::Sound()
     smSoundList.AddLast(&mNode);
 }
 
-// FUNCTION: SWBF2 0x00735790
-SoundParameterized::Layer::Layer()
-{
-    Reset();
-}
-
 // FUNCTION: SWBF2 0x00735880
 SoundParameterized::SoundParameterized()
 {
@@ -76,6 +70,24 @@ SoundParameterized::SoundParameterized()
     mProperties = 0;
     mNode.Remove();
     smSoundParameterizedList.AddLast(&mNode);
+}
+
+SoundParameterized::Layer::Properties::Properties() : mHashID(0)
+{
+}
+
+SoundParameterized::Properties::Properties() : mHashID(0), mSoundLayeredProps(0)
+{
+    smPropertyList.AddLast(&mNode);
+}
+
+SoundParameterized::Properties::~Properties()
+{
+    while (!mLayerList.IsEmpty())
+    {
+        delete (Layer::Properties*)((char*)mLayerList.mHead.mNext
+                                    - offsetof(Layer::Properties, mNode));
+    }
 }
 
 // FUNCTION: SWBF2 0x007358e0
@@ -94,12 +106,6 @@ SoundParameterized::~SoundParameterized()
     Stop();
     SoundLayered::Update(0.0f);
     SetProperties(0);
-}
-
-// FUNCTION: SWBF2 0x00735ae0
-void __cdecl SoundParameterized::Layer::operator delete(void* p)
-{
-    Snd::SoundParameterized::Layer::smFreeList.Free(p);
 }
 
 // FUNCTION: SWBF2 0x00735b40
@@ -140,23 +146,6 @@ void __cdecl SoundParameterized::Free()
         Snd::SoundParameterized::Layer::smFreeList.mFlags &= ~FreeList::flags_locked;
         Snd::SoundParameterized::Layer::smFreeList.PurgeBlocks();
     }
-}
-
-void* __cdecl SoundParameterized::Layer::operator new(unsigned int)
-{
-    return Snd::SoundParameterized::Layer::smFreeList.Alloc();
-}
-
-// FUNCTION: SWBF2 0x00735c60
-SoundLayered::SoundLayer* __cdecl SoundParameterized::LayerCreate()
-{
-    return new Layer;
-}
-
-// FUNCTION: SWBF2 0x00735cd0
-void __cdecl SoundParameterized::LayerDestroy(SoundLayer* pLayer)
-{
-    delete static_cast<Layer*>(pLayer);
 }
 
 // FUNCTION: SWBF2 0x00735d20

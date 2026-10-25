@@ -49,12 +49,16 @@ char appName[260] = "Star Wars Battlefront II";
 bool gAppActive = true;
 
 void* s_memoryArena;
+// GLOBAL: SWBF2 0x01fa8c54
+// g_hMutex
 void* g_hMutex;
 
 // GLOBAL: SWBF2 0x01eaedd4
 bool gAltMeleeHitEffects;
 
 bool pcForceFixedFunction;
+// GLOBAL: SWBF2 0x01eaedd7
+// pcWindowed
 bool pcWindowed;
 // GLOBAL: SWBF2 0x01eaedd8
 // hGlobalWnd
@@ -64,7 +68,11 @@ bool pcPostInstall;
 // GLOBAL: SWBF2 0x01eaede5
 bool gIsQuitting;
 bool pcEnableLogging;
+// GLOBAL: SWBF2 0x01eaede7
+// gbMutexValid
 bool gbMutexValid;
+// GLOBAL: SWBF2 0x01eaede8
+// hGlobalInstance
 HINSTANCE hGlobalInstance;
 // GLOBAL: SWBF2 0x01eaedec
 // PCDebugHeap
@@ -549,19 +557,4 @@ void InitializeMainCameraState()
 {
 }
 
-// GLOBAL: SWBF2 0x01faa8f8
 
-void* sHeapScratchBuffer;
-
-// GLOBAL: SWBF2 0x01faa8fc
-
-bool sHeapScratchAllocated;
-
-// FUNCTION: SWBF2 0x00766ed0
-void __cdecl ReleaseHeapScratchBuffer()
-{
-    if (sHeapScratchAllocated)
-    {
-        ::operator delete[](sHeapScratchBuffer);
-    }
-}

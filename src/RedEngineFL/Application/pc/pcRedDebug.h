@@ -27,7 +27,6 @@ public:
 
     public:
 
-        virtual ~RedDebugRenderable() {}
 
         // SYNTHETIC: SWBF2 0x006f08f0
         // RedDebug::RedDebugRenderable::`scalar deleting destructor'

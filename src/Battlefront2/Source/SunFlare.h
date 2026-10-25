@@ -76,7 +76,8 @@ public:
     struct Rect;
 
     template <class VERTEX>
-    void EmitSunRings(VERTEX*& pVertices, const PblVector3& vPosition, float fTexU, float fTexV) const;
+    void EmitSunRings(VERTEX*& pVertices, const PblVector3& vPosition, float radius,
+                      float fTexU, float fTexV) const;
 
     SunFlare();
     SunFlare(const SunFlare& that);

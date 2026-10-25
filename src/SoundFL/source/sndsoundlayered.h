@@ -144,17 +144,8 @@ public:
 
     Layer* FindLayerByIndex(unsigned int uIndex) const
     {
-        const PblListSingle::Node* pNode =
-            mLayerList.IsEmpty() ? 0 : mLayerList.mHead.mNext;
-        while (pNode != &mLayerList.mHead)
-        {
-            if (uIndex-- == 0)
-            {
-                return (Layer*)((char*)pNode - offsetof(Layer, mNode));
-            }
-            pNode = pNode->mNext;
-        }
-        return 0;
+        return static_cast<Layer*>(mLayerList.FindByIndex(uIndex)->GetObjectA(
+            &mLayerList, offsetof(Layer, mNode)));
     }
 
     PblListSingle mLayerList;

@@ -196,7 +196,7 @@ void WriteTeam(NetPktGroup& group, Team* pTeam)
 // FUNCTION: SWBF2 0x005f6080
 Team* ReadTeam(NetPktGroup& group)
 {
-    unsigned int index = 0;
+    unsigned int index;
     group.ReadBits(index, 3);
     return index == 7 ? 0 : Team::sTeams[index];
 }
@@ -337,10 +337,10 @@ void NetTrigger::Write(NetPktGroup& group)
 // FUNCTION: SWBF2 0x005f6110
 void NetTrigger::Read(NetPktGroup& group)
 {
-    unsigned int uiCode = 0;
+    unsigned int uiCode;
     group.ReadBits(uiCode, 4);
     m_uiActionState = (unsigned int)DecodeTriggerAction(uiCode);
-    unsigned int uiTimerNet = 0;
+    unsigned int uiTimerNet;
     group.ReadBits(uiTimerNet, 5);
     m_uiTimerNet = uiTimerNet;
     if (m_uiTimerNet)
@@ -2228,10 +2228,15 @@ void WriteQuaternion(NetPktGroup& group, const PblQuaternion& value)
 // FUNCTION: SWBF2 0x005f5b70
 void ReadQuaternion(NetPktGroup& group, PblQuaternion& value)
 {
-    ReadFixed(quatConvert, group, value._fX);
-    ReadFixed(quatConvert, group, value._fY);
-    ReadFixed(quatConvert, group, value._fZ);
-    ReadFixed(quatConvert, group, value._fS);
+    float fX, fY, fZ, fS;
+    ReadFixed(quatConvert, group, fX);
+    ReadFixed(quatConvert, group, fY);
+    ReadFixed(quatConvert, group, fZ);
+    ReadFixed(quatConvert, group, fS);
+    value.SetX(fX);
+    value.SetY(fY);
+    value.SetZ(fZ);
+    value.SetS(fS);
 }
 
 // FUNCTION: SWBF2 0x005f5c90

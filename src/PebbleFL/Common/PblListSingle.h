@@ -69,6 +69,12 @@ public:
         mHead.mNext = &mHead;
     }
 
+    void AddAfter(Node* pAt, Node* pNode)
+    {
+        pNode->mNext = pAt->mNext;
+        pAt->mNext = pNode;
+    }
+
     void AddFirst(Node* pNode)
     {
         pNode->mNext = mHead.mNext;
@@ -79,6 +85,22 @@ public:
         Node* pPrev = mHead.GetPrevious();
         pNode->mNext = pPrev->mNext;
         pPrev->mNext = pNode;
+    }
+
+    Node* GetFirst() const { return mHead.mNext; }
+
+    Node* FindByIndex(unsigned int uiIndex) const
+    {
+        Node* pNode = GetFirst();
+        while (pNode != GetTerminator())
+        {
+            if (uiIndex-- == 0)
+            {
+                return pNode;
+            }
+            pNode = pNode->GetNext();
+        }
+        return 0;
     }
 
     const Node* GetTerminator() const { return &mHead; }

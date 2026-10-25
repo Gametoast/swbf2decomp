@@ -1029,14 +1029,6 @@ void RedMovie::UpdateCurrent()
     }
 }
 
-// FUNCTION: SWBF2 0x006f4f90
-void __fastcall DestroyMovieQueueOnCtorUnwind(void* pThis)
-{
-    ((Snd::Queue<const RedMovie::Properties*, 11>*)pThis)->~Queue();
-}
 
-// FUNCTION: SWBF2 0x006f4fa0
-void __fastcall DestroyMovieQueueOnTeardown(void* pThis)
-{
-    ((Snd::Queue<const RedMovie::SegmentInfo*, 11>*)pThis)->~Queue();
-}
+
+

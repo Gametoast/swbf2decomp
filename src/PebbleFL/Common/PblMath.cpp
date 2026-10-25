@@ -86,24 +86,14 @@ void PblMath::SinCos(float* pSin, float* pCos, float fAngle)
           + _TheSinCosTable._Data[i1].fCos * fFrac;
 }
 
-static PblQuaternion PblQuaternion_FromAxisAngle(const PblVector3& vAxis, float fAngle)
-{
-    float fSin, fCos;
-    PblMath::SinCos(&fSin, &fCos, fAngle * 0.5f);
-    PblQuaternion q;
-    q._fX = vAxis.x * fSin;
-    q._fY = vAxis.y * fSin;
-    q._fZ = vAxis.z * fSin;
-    q._fS = fCos;
-    return q;
-}
+
 
 // SYNTHETIC: SWBF2 0x00403f40
 // `dynamic initializer for 'sNegativeXRotation80''
 
 // GLOBAL: SWBF2 0x01ec60e0
 // sNegativeXRotation80
-PblQuaternion sNegativeXRotation80 = PblQuaternion_FromAxisAngle(PblVector3(-1.0f, 0.0f, 0.0f), 1.3962634f);
+PblQuaternion sNegativeXRotation80 = PblQuaternion(PblVector3(-1.0f, 0.0f, 0.0f), 1.3962634f);
 
 // SYNTHETIC: SWBF2 0x00407300
 // `dynamic initializer for 'PblMath::fOneOverHalfPi''

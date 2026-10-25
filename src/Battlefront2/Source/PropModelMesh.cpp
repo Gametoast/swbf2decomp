@@ -95,10 +95,8 @@ const PblMatrix& PropObjectMesh::GetMatrix()
     return mMatrix;
 }
 
-// FUNCTION: SWBF2 0x0062c1e0
-PropObjectMesh::~PropObjectMesh()
-{
-}
+// SYNTHETIC: SWBF2 0x0062c1e0
+// PropObjectMesh::~PropObjectMesh
 
 // FUNCTION: SWBF2 0x0062c230
 float PropModelMesh::GetDensity()

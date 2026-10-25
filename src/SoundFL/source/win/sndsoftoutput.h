@@ -80,6 +80,8 @@ public:
             mSoftOutput = 0;
         }
 
+        virtual ~PostOutputMixFlusher();
+
         void SetOutput(SoftOutput* const pOutput) { mSoftOutput = pOutput; }
 
         virtual StreamPacket* GetPacket(unsigned int uiOutput);

@@ -22,6 +22,7 @@ public:
     virtual ~StreamVAD();
     virtual StreamPacket* GetPacket(unsigned int uiOutput);
     void Update();
+    void Flush();
 
     Queue<StreamPacket*, 4> mPacketQueue;
     unsigned int mSampleRate;

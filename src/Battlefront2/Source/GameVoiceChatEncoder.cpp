@@ -39,7 +39,6 @@ namespace Snd
 
 }
 
-void __fastcall StreamVAD__Flush(void* pVad);
 
 // FUNCTION: SWBF2 0x0053d4c0
 bool GameVoiceChat::Encoder::Open(unsigned int captureDeviceIndex, float fMaxPacketMs, unsigned int minBuffers)
@@ -170,7 +169,7 @@ void GameVoiceChat::Encoder::Flush()
 
     mSource.Flush(false);
     mAGC.Flush();
-    StreamVAD__Flush(&mVAD);
+    mVAD.Flush();
     mEncoder.Flush();
 }
 

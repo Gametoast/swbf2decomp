@@ -218,7 +218,7 @@ int RayConvexPoly_intersect(const PblVector3& vStart, const PblVector3& vDir, co
     {
         return 0;
     }
-    const PblVector3 p(vStart.x + vDir.x * t, vStart.y + vDir.y * t, vStart.z + vDir.z * t);
+    const PblVector3 p = vStart + vDir * t;
 
     PblVector3 vFrom = v0;
     PblVector3 vTo = vPrev;

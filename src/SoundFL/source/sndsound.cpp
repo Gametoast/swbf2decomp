@@ -595,63 +595,63 @@ void __cdecl Sound::ParamSetGain(Sound* pSound, float fValue)
 // FUNCTION: SWBF2 0x0073a0c0
 void __cdecl Sound::ParamSetMaxDistance(Sound* pSound, float fValue)
 {
-    static_cast<Source3D::Properties*>(static_cast<Source2D3D*>(pSound))->SetMaxDistance(
+    pSound->SetMaxDistance(
         ClampNonnegative(pSound->mProperties->mMaxDistance * fValue));
 }
 
 // FUNCTION: SWBF2 0x0073a0f0
 void __cdecl Sound::ParamSetMinDistance(Sound* pSound, float fValue)
 {
-    static_cast<Source3D::Properties*>(static_cast<Source2D3D*>(pSound))->SetMinDistance(
+    pSound->SetMinDistance(
         ClampNonnegative(pSound->mProperties->mMinDistance * fValue));
 }
 
 // FUNCTION: SWBF2 0x0073a120
 void __cdecl Sound::ParamSetMuteDistance(Sound* pSound, float fValue)
 {
-    static_cast<Source3D::Properties*>(static_cast<Source2D3D*>(pSound))->SetMuteDistance(
+    pSound->SetMuteDistance(
         ClampNonnegative(pSound->mProperties->mMuteDistance * fValue));
 }
 
 // FUNCTION: SWBF2 0x0073a150
 void __cdecl Sound::ParamSetPan(Sound* pSound, float fValue)
 {
-    static_cast<Source2D*>(static_cast<Source2D3D*>(pSound))->SetPan(
+    pSound->SetPan(
         ClampParameter(pSound->mProperties->mPan * fValue, -1.0f, 1.0f));
 }
 
 // FUNCTION: SWBF2 0x0073a190
 void __cdecl Sound::ParamSetPitch(Sound* pSound, float fValue)
 {
-    static_cast<Source*>(static_cast<Source2D3D*>(pSound))->SetPitch(
+    pSound->SetPitch(
         ClampNonnegative(pSound->mProperties->mPitch * fValue));
 }
 
 // FUNCTION: SWBF2 0x0073a1c0
 void __cdecl Sound::ParamSetReverbGain(Sound* pSound, float fValue)
 {
-    static_cast<Source*>(static_cast<Source2D3D*>(pSound))->SetReverbGain(
+    pSound->SetReverbGain(
         ClampParameter(pSound->mProperties->mReverbGain * fValue, 0.0f, 1.0f));
 }
 
 // FUNCTION: SWBF2 0x0073a200
 void __cdecl Sound::ParamSetRollIn(Sound* pSound, float fValue)
 {
-    static_cast<Source3D::Properties*>(static_cast<Source2D3D*>(pSound))->SetRollIn(
+    pSound->SetRollIn(
         ClampNonnegative(pSound->mProperties->mRollInFactor * fValue));
 }
 
 // FUNCTION: SWBF2 0x0073a230
 void __cdecl Sound::ParamSetRollInDistance(Sound* pSound, float fValue)
 {
-    static_cast<Source3D::Properties*>(static_cast<Source2D3D*>(pSound))->SetRollInDistance(
+    pSound->SetRollInDistance(
         ClampNonnegative(pSound->mProperties->mRollInDistance * fValue));
 }
 
 // FUNCTION: SWBF2 0x0073a260
 void __cdecl Sound::ParamSetRollOff(Sound* pSound, float fValue)
 {
-    static_cast<Source3D::Properties*>(static_cast<Source2D3D*>(pSound))->SetRollOff(
+    pSound->SetRollOff(
         ClampNonnegative(pSound->mProperties->mRollOffFactor * fValue));
 }
 

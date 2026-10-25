@@ -35,6 +35,8 @@ int luaO_int2fb (unsigned int x) {
 // LIBRARY: SWBF2 0x006a2620
 // luaO_log2
 int luaO_log2 (unsigned int x) {
+  // GLOBAL: SWBF2 0x00771128
+  // log_8
   static const lu_byte log_8[255] = {
     0,
     1,1,

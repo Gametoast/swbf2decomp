@@ -22,7 +22,6 @@ public:
 
     KeyGrabber() : mInited(false) {}
 
-    virtual ~KeyGrabber() {}
 
     // SYNTHETIC: SWBF2 0x00527ff0
     // KeyGrabber::`scalar deleting destructor'

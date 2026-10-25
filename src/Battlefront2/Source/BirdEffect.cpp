@@ -27,17 +27,7 @@ extern PblMatrix gMatrixIdentity;
 static const float EPSILON = 0.0001f;
 static const float fHalfPi = PblMath::fPi * 0.5f;
 
-static inline PblQuaternion PblQuaternion_FromAxisAngle(const PblVector3& vAxis, float fAngle)
-{
-    float fSin, fCos;
-    PblMath::SinCos(&fSin, &fCos, fAngle * 0.5f);
-    PblQuaternion q;
-    q._fX = vAxis.x * fSin;
-    q._fY = vAxis.y * fSin;
-    q._fZ = vAxis.z * fSin;
-    q._fS = fCos;
-    return q;
-}
+
 
 static inline PblQuaternion RotateByOmega(const PblQuaternion& q, const PblVector3& vOmega)
 {
@@ -45,7 +35,7 @@ static inline PblQuaternion RotateByOmega(const PblQuaternion& q, const PblVecto
     if (fAngle > EPSILON)
     {
         float fInv = 1.0f / fAngle;
-        return q * PblQuaternion_FromAxisAngle(PblVector3(vOmega.x * fInv, vOmega.y * fInv, vOmega.z * fInv), fAngle);
+        return q * PblQuaternion(PblVector3(vOmega.x * fInv, vOmega.y * fInv, vOmega.z * fInv), fAngle);
     }
     return q;
 }
@@ -86,8 +76,8 @@ static inline void PoseWing(PblMatrix& rMatrix, float fRoll)
 {
     rMatrix = gMatrixIdentity;
     PblQuaternion q = PblQuaternion(rMatrix);
-    q = q * PblQuaternion_FromAxisAngle(PblVector3(0.0f, 0.0f, 1.0f), fRoll);
-    q = q * PblQuaternion_FromAxisAngle(PblVector3(0.0f, 1.0f, 0.0f), fHalfPi * 0.5f);
+    q = q * PblQuaternion(PblVector3(0.0f, 0.0f, 1.0f), fRoll);
+    q = q * PblQuaternion(PblVector3(0.0f, 1.0f, 0.0f), fHalfPi * 0.5f);
     SetWingMatrix(rMatrix, q);
 }
 

@@ -118,11 +118,7 @@ bool UnitBoardAgent::ShouldQueueCurCmd(const UnitCmdInfo& cmd) const
 UnitBoardAgent::UnitBoardAgent(UnitController* pCtrl, GameObject* pVehicle, int iVOResponseHandle)
     : UnitAgent(pCtrl)
 {
-    mVehicle.mObject = 0;
-    mVehicle.mSavedHandleId = 0;
-    mVehicle.mObject = pVehicle;
-    mVehicle.mSavedHandleId =
-        pVehicle ? pVehicle->mHandleId : 0;
+    mVehicle = pVehicle;
     mVOResponseHandle = iVOResponseHandle;
     mCurState = 1;
     mNextState = 2;

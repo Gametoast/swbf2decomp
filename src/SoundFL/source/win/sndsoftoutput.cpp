@@ -21,6 +21,11 @@ SoftOutput::SoftOutput()
     mPostOutputMixFlusher.SetOutput(this);
 }
 
+// FUNCTION: SWBF2 0x00746a50
+SoftOutput::PostOutputMixFlusher::~PostOutputMixFlusher()
+{
+}
+
 // FUNCTION: SWBF2 0x00746940
 SoftOutput::BusMixerInfo::~BusMixerInfo()
 {

@@ -29,17 +29,7 @@ public:
                                 int iMaxObjects, const GameObject* pIgnore, int iMask);
 };
 
-static inline PblQuaternion PblQuaternion_FromAxisAngle(const PblVector3& vAxis, float fAngle)
-{
-    float fSin, fCos;
-    PblMath::SinCos(&fSin, &fCos, fAngle * 0.5f);
-    PblQuaternion q;
-    q._fX = vAxis.x * fSin;
-    q._fY = vAxis.y * fSin;
-    q._fZ = vAxis.z * fSin;
-    q._fS = fCos;
-    return q;
-}
+
 
 // FUNCTION: SWBF2 0x0056b370
 FallingLeafParticle::FallingLeafParticle()
@@ -74,7 +64,7 @@ void FallingLeafParticle::RespawnLeaf(const PblVector3& vPos, LeafSpawner* pSpaw
     if (fAngle > EPSILON)
     {
         float fInv = 1.0f / fAngle;
-        q = q * PblQuaternion_FromAxisAngle(PblVector3(vOmega.x * fInv, vOmega.y * fInv, vOmega.z * fInv), fAngle);
+        q = q * PblQuaternion(PblVector3(vOmega.x * fInv, vOmega.y * fInv, vOmega.z * fInv), fAngle);
     }
 
     PblQuaternion qUnit;
@@ -128,11 +118,11 @@ void FallingLeafParticle::DoFlutterUpdate(float fDeltaTime)
     if (fAngle > EPSILON)
     {
         float fInv = 1.0f / fAngle;
-        q = q * PblQuaternion_FromAxisAngle(PblVector3(vOmega.x * fInv, vOmega.y * fInv, vOmega.z * fInv), fAngle);
+        q = q * PblQuaternion(PblVector3(vOmega.x * fInv, vOmega.y * fInv, vOmega.z * fInv), fAngle);
     }
     if (mRandomness < 0.15f)
     {
-        q = q * PblQuaternion_FromAxisAngle(PblVector3(0.0f, 1.0f, 0.0f), (mRandomness - 1.0f) * 10.0f * mFallTime);
+        q = q * PblQuaternion(PblVector3(0.0f, 1.0f, 0.0f), (mRandomness - 1.0f) * 10.0f * mFallTime);
     }
 
     PblQuaternion qUnit;
@@ -166,7 +156,7 @@ void FallingLeafParticle::DoTumbleUpdate(float fDeltaTime)
     if (fAngle > EPSILON)
     {
         float fInv = 1.0f / fAngle;
-        q = q * PblQuaternion_FromAxisAngle(PblVector3(vOmega.x * fInv, vOmega.y * fInv, vOmega.z * fInv), fAngle);
+        q = q * PblQuaternion(PblVector3(vOmega.x * fInv, vOmega.y * fInv, vOmega.z * fInv), fAngle);
     }
 
     PblQuaternion qUnit;
@@ -249,7 +239,7 @@ bool FallingLeafParticle::Update(float fDeltaTime)
         if (fAngle > EPSILON)
         {
             float fInv = 1.0f / fAngle;
-            q = q * PblQuaternion_FromAxisAngle(PblVector3(vOmega.x * fInv, vOmega.y * fInv, vOmega.z * fInv), fAngle);
+            q = q * PblQuaternion(PblVector3(vOmega.x * fInv, vOmega.y * fInv, vOmega.z * fInv), fAngle);
         }
 
         vPos.x += (mConstantWindVelocity.x + mWindVelocity.x) * fDeltaTime;

@@ -600,8 +600,13 @@ Entity* CloudClusterClass::Build(const EntityDesc& desc)
 void CloudClusterClass::RenderDustEffects(const PblVector3& vPos, unsigned int uSeed, unsigned int uiFlags)
 {
     PblMatrix matrix = gMatrixIdentity;
-    static PblHeap<int, float> sHeap(20, 100000.0f, 0);
-    static PblVector3 sPositions[20];
+    // SYNTHETIC: SWBF2 0x00766ed0
+    // `CloudClusterClass::RenderDustEffects'::`2'::`dynamic atexit destructor for 'positionHeap''
+
+    // GLOBAL: SWBF2 0x01faa8f0
+    static PblHeap<int, float> positionHeap(20, 100000.0f, 0);
+    // GLOBAL: SWBF2 0x01faa800
+    static PblVector3 positions[20];
     PblRandom random = { uSeed ^ 0xc71c2830 };
     const PblMatrix& camMatrix = RedRenderer::GetCamera()->GetMatrix();
 
@@ -623,26 +628,26 @@ void CloudClusterClass::RenderDustEffects(const PblVector3& vPos, unsigned int u
                 PblVector3 vOffset((random.GetFloat() - 0.5f) * mHorizontalSpread * 2.0f,
                                    (random.GetFloat() - 0.5f) * mVerticalSpread * 2.0f,
                                    (random.GetFloat() - 0.5f) * mHorizontalSpread * 2.0f);
-                sPositions[j].x = vOffset.x;
-                sPositions[j].y = vOffset.y;
-                sPositions[j].z = vOffset.z;
-                sPositions[j].x += vPos.x;
-                sPositions[j].y += vPos.y;
-                sPositions[j].z += vPos.z;
-                const float fDistance = (camMatrix.m[3][0] - sPositions[j].x) * camMatrix.m[2][0] +
-                                        (camMatrix.m[3][1] - sPositions[j].y) * camMatrix.m[2][1] +
-                                        (camMatrix.m[3][2] - sPositions[j].z) * camMatrix.m[2][2];
+                positions[j].x = vOffset.x;
+                positions[j].y = vOffset.y;
+                positions[j].z = vOffset.z;
+                positions[j].x += vPos.x;
+                positions[j].y += vPos.y;
+                positions[j].z += vPos.z;
+                const float fDistance = (camMatrix.m[3][0] - positions[j].x) * camMatrix.m[2][0] +
+                                        (camMatrix.m[3][1] - positions[j].y) * camMatrix.m[2][1] +
+                                        (camMatrix.m[3][2] - positions[j].z) * camMatrix.m[2][2];
                 if (pEffect->mMaxDistance > fDistance &&
                     (pEffect->mMinDistance <= 0.0f || fDistance > pEffect->mMinDistance))
                 {
-                    sHeap.Push(j, fDistance);
+                    positionHeap.Push(j, fDistance);
                 }
             }
         }
-        while (!sHeap.IsEmpty())
+        while (!positionHeap.IsEmpty())
         {
-            const float fDistance = sHeap.Value(0);
-            const PblVector3& vObject = sPositions[sHeap.Get(0)];
+            const float fDistance = positionHeap.Value(0);
+            const PblVector3& vObject = positions[positionHeap.Get(0)];
             matrix.m[3][0] = vObject.x;
             matrix.m[3][1] = vObject.y;
             matrix.m[3][2] = vObject.z;
@@ -657,7 +662,7 @@ void CloudClusterClass::RenderDustEffects(const PblVector3& vPos, unsigned int u
                 fAlpha = (fDistance - pEffect->mMinDistance) * 0.005f * fAlpha;
             }
             pEffect->Render(matrix, fAlpha * 0.9f, uiFlags);
-            sHeap.Pop();
+            positionHeap.Pop();
         }
     }
 }

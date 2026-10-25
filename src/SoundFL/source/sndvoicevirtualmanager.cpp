@@ -98,8 +98,3 @@ void VoiceVirtualManager::Update(float fDeltaTime)
 
 }
 
-// FUNCTION: SWBF2 0x00748bf0
-extern "C" void __fastcall ClearUnsignedWord(unsigned int* pValue)
-{
-    *pValue = 0;
-}

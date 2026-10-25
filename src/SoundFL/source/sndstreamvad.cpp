@@ -120,19 +120,18 @@ StreamPacket* StreamVAD::GetPacket(unsigned int uiOutput)
 }
 
 // FUNCTION: SWBF2 0x00742120
-void __fastcall StreamVAD__Flush(void* pVad)
+void Snd::StreamVAD::Flush()
 {
-    Snd::StreamVAD* const pThis = (Snd::StreamVAD*)pVad;
 
-    while (!pThis->mPacketQueue.IsEmpty())
+    while (!mPacketQueue.IsEmpty())
     {
         Snd::StreamPacket* pPacket;
-        pThis->mPacketQueue.Get(pPacket);
+        mPacketQueue.Get(pPacket);
         pPacket->Unlock();
     }
 
-    pThis->mActive = false;
-    pThis->mReleaseTimeBytesRemaining = 0;
+    mActive = false;
+    mReleaseTimeBytesRemaining = 0;
 }
 
 // FUNCTION: SWBF2 0x00742350
@@ -140,6 +139,6 @@ void Snd::StreamVAD::Update()
 {
     if (StreamNode::UpdateNode(false))
     {
-        StreamVAD__Flush(this);
+        Flush();
     }
 }

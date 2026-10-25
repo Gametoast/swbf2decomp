@@ -6704,7 +6704,7 @@ unsigned int clientUploadSeqNo;
 // FUNCTION: SWBF2 0x005c5030
 void ReadUploadAck(NetPktGroup& group)
 {
-    bool hasTurn = false;
+    bool hasTurn;
     group.Read(hasTurn);
     if (hasTurn)
     {
@@ -7112,7 +7112,7 @@ void NetGame::CreateEvent_UpdateObjective(HUD::Objective* objective, unsigned __
 // FUNCTION: SWBF2 0x005c24e0
 void ReadEvent_UpdateInvincibility(NetPktGroup& group, ReliableNetEvent& event)
 {
-    unsigned int player = 0;
+    unsigned int player;
     group.ReadBits(player, 7);
     event.u.updateInvincibility.mCharacter = Character::FindPlayer(player);
     group.Read(event.u.updateInvincibility.mIsInvincible);
@@ -7121,13 +7121,13 @@ void ReadEvent_UpdateInvincibility(NetPktGroup& group, ReliableNetEvent& event)
 // FUNCTION: SWBF2 0x005c26c0
 CommandPost* ReadCommandPost(NetPktGroup& group)
 {
-    bool present = false;
+    bool present;
     group.Read(present);
     if (!present)
     {
         return 0;
     }
-    unsigned int index = 0;
+    unsigned int index;
     group.ReadBits(index, 4);
     return CommandPost::FindPostByIndex(index);
 }
@@ -8256,7 +8256,7 @@ void ReadFixed<MouseAxisConvert>(MouseAxisConvert&, NetPktGroup& group, float& v
 // FUNCTION: SWBF2 0x005c25c0
 EntityClass* ReadEntityClass(NetPktGroup& group)
 {
-    unsigned int index = 0;
+    unsigned int index;
     group.ReadBits(index, 8);
     return index < 0xff ? Factory<Entity, EntityClass, EntityDesc>::FindNetIndex(index) : 0;
 }
@@ -8264,7 +8264,7 @@ EntityClass* ReadEntityClass(NetPktGroup& group)
 // FUNCTION: SWBF2 0x005c2640
 WeaponClass* ReadWeaponClass(NetPktGroup& group)
 {
-    unsigned int index = 0;
+    unsigned int index;
     group.ReadBits(index, 8);
     return index < 0xff ? Factory<Weapon, WeaponClass, WeaponDesc>::FindNetIndex(index) : 0;
 }
@@ -8274,7 +8274,7 @@ Character* ReadCharacter(NetPktGroup& group);
 // FUNCTION: SWBF2 0x005c05f0
 void ReadEvent_Message(NetPktGroup& group, ReliableNetEvent& event)
 {
-    unsigned int messageType = 0;
+    unsigned int messageType;
     group.ReadBits(messageType, 4);
     event.u.message.mType = (NetGame::MessageType)messageType;
     event.u.message.mCharacter1 = ReadCharacter(group);
@@ -8329,8 +8329,8 @@ void AtleastOnce::DropAll(int player)
 // FUNCTION: SWBF2 0x005c3370
 void ReadRelaySwitchResponse(NetPktGroup& group, SwitchResponseRelayInfo& relay)
 {
-    bool canSwitch = false;
-    unsigned int turn = 0;
+    bool canSwitch;
+    unsigned int turn;
     group.Read(canSwitch);
     ReadTurnLowBits(group, turn);
     if (canSwitch)
@@ -12056,11 +12056,7 @@ inline double Clamp(float fValue, float fLow, float fHigh)
     return fValue;
 }
 
-// FUNCTION: SWBF2 0x00410b60
-double DotProduct(const float* pA, const float* pB)
-{
-    return pA[1] * pB[1] + pA[0] * pB[0] + pA[2] * pB[2];
-}
+
 
 // FUNCTION: SWBF2 0x004171d0
 double AbsFloat(float fValue) { return fabs(fValue); }
@@ -13518,7 +13514,7 @@ float FrontDist(const float* pPoint, const float* pMatrix)
 {
     const PblMatrix& matrix = *(const PblMatrix*)pMatrix;
     const PblVector3 delta = *(const PblVector3*)pPoint - matrix.GetTranslation();
-    return (float)DotProduct((const float*)&delta, (const float*)&matrix.GetZAxis());
+    return DotProduct(delta, matrix.GetZAxis());
 }
 
 // FUNCTION: SWBF2 0x005d3080
@@ -14013,24 +14009,14 @@ bool FarToNear(GameObject* pFirst, GameObject* pSecond)
 }
 
 // FUNCTION: SWBF2 0x005be760
-PblVector3* GetClosestOrdnancePos(PblVector3* pResult,
-                        const NetEvent::U::OrdnanceEvent* pEvent)
+static PblVector3 GetClosestOrdnancePos(NetEvent::U::OrdnanceEvent& event)
 {
-    const PblVector3 start(pEvent->mPosition.x, pEvent->mPosition.y,
-                           pEvent->mPosition.z);
-    const PblVector3 direction(pEvent->mDirection.x, pEvent->mDirection.y,
-                               pEvent->mDirection.z);
-    const PblVector3 toCenter = sendCenter - start;
-    const float projection = toCenter.x * direction.x +
-                             toCenter.y * direction.y +
-                             toCenter.z * direction.z;
-    OrdnanceClass* pClass = Factory<Ordnance, OrdnanceClass, OrdnanceDesc>::FindNetIndex(pEvent->mOrdClassIndex);
-    const float travel = (float)Clamp(projection, 0.0f,
-                                            pClass->GetRange());
-    pResult->x = start.x + direction.x * travel;
-    pResult->y = start.y + direction.y * travel;
-    pResult->z = start.z + direction.z * travel;
-    return pResult;
+    const PblVector3 start = event.mPosition.Get();
+    const PblVector3 direction = event.mDirection.Get();
+    OrdnanceClass* pClass = Factory<Ordnance, OrdnanceClass, OrdnanceDesc>::FindNetIndex(event.mOrdClassIndex);
+    const float range = pClass->GetRange();
+    const float travel = (float)Clamp(DotProduct(sendCenter - start, direction), 0.0f, range);
+    return start + direction * travel;
 }
 
 // FUNCTION: SWBF2 0x005d3100
@@ -14671,8 +14657,7 @@ float GetNetEventScore(NetEvent& event)
             return -1.0f;
         }
     }
-    PblVector3 projected;
-    GetClosestOrdnancePos(&projected, &ordnance);
+    const PblVector3 projected = GetClosestOrdnancePos(ordnance);
     const PblVector3 difference = sendCenter - projected;
     if (SquaredLength((const float*)&difference) > 22500.0f)
     {
@@ -15423,7 +15408,7 @@ void AddSend(GameObject* pObject)
     if (distance > 1.0f && scale > 0.0f && !deadSystem)
     {
         priority = distance;
-        float facing = (float)DotProduct((const float*)&offset, (const float*)&sendFront);
+        float facing = DotProduct(offset, sendFront);
         if (facing < 0.0f)
         {
             priority *= canTurn ? 3.0f : 1.0f;
@@ -15436,8 +15421,7 @@ void AddSend(GameObject* pObject)
                 offset = offset / distance;
             }
             PblVector3 side(sendFront.GetZ(), 0.0f, -sendFront.GetX());
-            float sideways = (float)AbsFloat((float)DotProduct((const float*)&offset,
-                                                                 (const float*)&side));
+            float sideways = (float)AbsFloat(DotProduct(offset, side));
             static float sSideLimit = sqrtf(0.5f);
             if (sideways / facing > sSideLimit)
             {

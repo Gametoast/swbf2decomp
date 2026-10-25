@@ -57,6 +57,8 @@ const PblVector3 operator-(const PblVector3& lhs, const PblVector3& rhs);
 const PblVector3 operator*(const PblVector3& lhs, float rhs);
 const PblVector3 operator/(const PblVector3& lhs, float rhs);
 
+float DotProduct(const PblVector3& vVector1, const PblVector3& vVector2);
+
 #include "PebbleFL/pc/pcPblVector.h"
 
 inline const PblVector3 Interpolate(const PblVector3& v0, const PblVector3& v1, float fT)

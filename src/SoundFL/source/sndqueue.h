@@ -140,6 +140,10 @@ public:
     }
 };
 
+// TEMPLATE: SWBF2 0x006f4f90
+// Snd::QueueCircular<RedMovie::Properties const *,11>::~QueueCircular<RedMovie::Properties const *,11>
+// TEMPLATE: SWBF2 0x006f4fa0
+// Snd::QueueCircular<RedMovie::SegmentInfo const *,11>::~QueueCircular<RedMovie::SegmentInfo const *,11>
 template <class T, int N>
 class QueueCircular : public Queue<T, N>
 {

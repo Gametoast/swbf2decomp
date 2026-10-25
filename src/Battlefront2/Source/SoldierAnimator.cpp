@@ -59,17 +59,7 @@ inline const EntitySoldierClass* SoldierClass(const EntitySoldier* pSoldier)
 
 const unsigned char NO_MELEE_ANIM = 0xa4;
 
-inline PblQuaternion PblQuaternion_FromAxisAngle(const PblVector3& vAxis, float fAngle)
-{
-    float fSin, fCos;
-    PblMath::SinCos(&fSin, &fCos, fAngle * 0.5f);
-    PblQuaternion q;
-    q._fX = vAxis.x * fSin;
-    q._fY = vAxis.y * fSin;
-    q._fZ = vAxis.z * fSin;
-    q._fS = fCos;
-    return q;
-}
+
 }
 
 // FUNCTION: SWBF2 0x0063e760
@@ -1452,7 +1442,7 @@ bool SoldierAnimator::UpdateActionAnimation(SoldierAnimType::ActionAnimation eAc
         {
             vAxis = PblVector3(1.0f, 0.0f, 0.0f);
         }
-        mZephyrPoseStatic.m_pJoints[uiRoot].kQuat = PblQuaternion_FromAxisAngle(vAxis, mRotAngle);
+        mZephyrPoseStatic.m_pJoints[uiRoot].kQuat = PblQuaternion(vAxis, mRotAngle);
     }
     return bFinished;
 }
@@ -2272,7 +2262,7 @@ float SoldierAnimator::GetLowerBodyBlendFactor()
 void SoldierAnimator::RotateLowerBody(float fAngle)
 {
     static unsigned short uiRoot = (unsigned short)mZephyrSkeleton.m_pShared->GetJointIdxByCrc(0x4446e9b8);
-    mZephyrPoseStatic.m_pJoints[uiRoot].kQuat = PblQuaternion_FromAxisAngle(PblVector3(0.0f, 1.0f, 0.0f), fAngle);
+    mZephyrPoseStatic.m_pJoints[uiRoot].kQuat = PblQuaternion(PblVector3(0.0f, 1.0f, 0.0f), fAngle);
 }
 
 // FUNCTION: SWBF2 0x00643470

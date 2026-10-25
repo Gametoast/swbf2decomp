@@ -29,7 +29,7 @@ public:
     unsigned int mSavedHandleId;
 
     // TEMPLATE: SWBF2 0x00439a80
-    // PblHandle<GameObject>::PblHandle
+    // PblHandle<GameObject>::PblHandle<GameObject>
     PblHandle(TYPE* pObject) : mObject(pObject), mSavedHandleId(pObject ? pObject->mHandleId : 0) {}
     PblHandle() : mObject(0), mSavedHandleId(0) {}
 

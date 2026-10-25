@@ -65,7 +65,6 @@ public:
     {
     public:
         FLEffectThread() {}
-        virtual ~FLEffectThread() {}
 
         virtual bool Update(float fDeltaTime);
     };

@@ -161,10 +161,8 @@ template void PblHeap<PathFinder::PathNode*, float>::Pop();
 // FUNCTION: SWBF2 0x00612710
 PathFollower::PathFollower(UnitController* pCtrl, AIPath* pPath, const Obstacle** ppIgnore,
                            int iIgnoreCnt, bool bDoCallbacksOnPts)
+    : mPath(pPath), mCtrl(pCtrl), mItor(pPath->GetNodeList())
 {
-    mPath = pPath;
-    mCtrl = pCtrl;
-    mItor = PblList<AIPathNode>::Itor(pPath->GetNodeList());
     mDoCallbacksOnPts = bDoCallbacksOnPts;
     mIgnoreCnt = iIgnoreCnt;
     mDone = false;

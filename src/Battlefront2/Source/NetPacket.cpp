@@ -75,7 +75,7 @@ void NetPktGroup::Write(bool bValue)
 // FUNCTION: SWBF2 0x0053e0c0
 void NetPktGroup::Read(bool& bValue)
 {
-    unsigned int uValue = 0;
+    unsigned int uValue;
     ReadBits(uValue, 1);
     bValue = uValue != 0;
 }

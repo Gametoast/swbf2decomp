@@ -601,8 +601,3 @@ void __cdecl Voice::UpdatePitch(Voice* pVoice, float fPitch)
 }
 }
 
-// FUNCTION: SWBF2 0x00746a50
-void __fastcall DestroyStreamNodeSourceAlias(Snd::StreamNodeSource* pSource)
-{
-    pSource->Snd::StreamNodeSource::~StreamNodeSource();
-}

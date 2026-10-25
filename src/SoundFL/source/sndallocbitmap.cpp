@@ -1,5 +1,3 @@
-#include "sndvoicebase.h"
-
 #include <string.h>
 
 #include "sndallocbitmap.h"
@@ -222,21 +220,4 @@ bool MemoryBitmap::Resize(unsigned int uiSize, MemoryHandle& handle)
     return AllocBitmap::Resize((uiSize - 1 + mEntrySize) / mEntrySize, handle);
 }
 
-}
-
-namespace
-{
-struct VoiceBaseDestructorAccess : Snd::VoiceBase
-{
-    static void Destroy(Snd::VoiceBase* pVoice)
-    {
-        ((VoiceBaseDestructorAccess*)pVoice)->Snd::VoiceBase::~VoiceBase();
-    }
-};
-}
-
-// FUNCTION: SWBF2 0x00745a80
-void __fastcall DestroyVoiceBaseAlias(Snd::VoiceBase* pVoice)
-{
-    VoiceBaseDestructorAccess::Destroy(pVoice);
 }

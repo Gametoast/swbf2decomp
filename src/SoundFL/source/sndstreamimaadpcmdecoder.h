@@ -26,7 +26,7 @@ protected:
 
     void DecodeImaAdpcmFrame(unsigned char const* pSrc, short* pDst);
     void DecodeImaAdpcmFrameInterleaved(unsigned char const* pSrc, short* pDst);
-    short DecodeImaAdpcmSample(unsigned char uNibble, short sPredictor, short sStepIndex);
+    short DecodeImaAdpcmSample(unsigned char uNibble, short sPredictor, short sStepSize);
     char GetNextStepIndex(unsigned char uNibble, short sStepIndex);
     static bool ValidateStepIndex(unsigned char uStepIndex);
 

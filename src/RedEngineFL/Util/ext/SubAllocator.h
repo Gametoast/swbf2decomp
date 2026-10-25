@@ -131,7 +131,6 @@ public:
         Create(&valloc_, 0x1000, sizeof(T));
     }
 
-    virtual ~StaticSubAlloc() {}
 
     void Create(IAllocator* pAlloc, int iPageBytes, unsigned int uiElemSize)
     {

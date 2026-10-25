@@ -10,7 +10,6 @@ class RedShadowRegionFactory : public RedRegionFactory
 {
 public:
     RedShadowRegionFactory() : RedRegionFactory("shadow") {}
-    virtual ~RedShadowRegionFactory() {}
 
     virtual void* CreateRegion(RedRegionDesc& desc, const char* pcName) const;
     virtual void ReadParameter(const char* pcRegionName, const char* pcParameter,
