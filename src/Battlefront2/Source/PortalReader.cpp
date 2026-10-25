@@ -410,7 +410,7 @@ void __fastcall DestroyPortalBaseStringArray(void* pArray)
 template bool util::Vector<util::BaseString>::Add(util::BaseString const&);
 
 // TEMPLATE: SWBF2 0x00622eb0
-// util::BaseArray<util::BaseString,util::TNewArrayAlloc<util::BaseString> >::~BaseArray
+// util::BaseArray<util::BaseString,util::TNewArrayAlloc<util::BaseString> >::~BaseArray<util::BaseString,util::TNewArrayAlloc<util::BaseString> >
 template util::BaseArray<util::BaseString>::~BaseArray();
 
 // TEMPLATE: SWBF2 0x00623510

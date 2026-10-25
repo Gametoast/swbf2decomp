@@ -11,6 +11,9 @@
 namespace Snd
 {
 
+// SYNTHETIC: SWBF2 0x00749150
+// Snd::StreamRenderer::`scalar deleting destructor'
+
 // VTABLE: SWBF2 0x00786bf4
 class StreamRenderer : public StreamRendererBase, public StreamNodeSource
 {

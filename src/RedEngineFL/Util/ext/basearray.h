@@ -55,7 +55,8 @@ public:
         rOther._size = iSize;
     }
 
-    // FUNCTION: SWBF2 0x006d8190
+    // TEMPLATE: SWBF2 0x006d8190
+    // util::BaseArray<unsigned short,util::TNewArrayAlloc<unsigned short> >::Reserve_
     bool Reserve_(int iCount, bool bForce)
     {
         if (iCount == _size)

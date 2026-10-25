@@ -55,7 +55,5 @@ public:
 };
 }
 
- 
- 
- 
- 
+// SYNTHETIC: SWBF2 0x0054a990
+// HUD::ElementBar::Factory::~Factory

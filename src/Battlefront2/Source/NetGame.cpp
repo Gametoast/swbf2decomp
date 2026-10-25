@@ -211,6 +211,7 @@ bool netIsSplit;
 // GLOBAL: SWBF2 0x01fa8788
 // netPreGameEnabled
 bool netPreGameEnabled;
+// GLOBAL: SWBF2 0x01fa8784
 float netPreGameStartTime;
 
 // GLOBAL: SWBF2 0x01e62f51
@@ -5219,30 +5220,13 @@ namespace GameLoop
 extern float sDeltaTime;
 }
 
-// FUNCTION: SWBF2 0x0040ca70
-const PblVector3 operator-(const PblVector3& a, const PblVector3& b)
-{
-    return PblVector3(a.x - b.x, a.y - b.y, a.z - b.z);
-}
 
-// FUNCTION: SWBF2 0x0040ca30
-const PblVector3 operator+(const PblVector3& a, const PblVector3& b)
-{
-    return PblVector3(a.x + b.x, a.y + b.y, a.z + b.z);
-}
 
-// FUNCTION: SWBF2 0x0040cab0
-const PblVector3 operator*(const PblVector3& a, float f)
-{
-    return PblVector3(a.x * f, a.y * f, a.z * f);
-}
 
-// FUNCTION: SWBF2 0x0040caf0
-const PblVector3 operator/(const PblVector3& a, float f)
-{
-    const float reciprocal = (float)(1.0 / f);
-    return PblVector3(a.x * reciprocal, a.y * reciprocal, a.z * reciprocal);
-}
+
+
+
+
 
 // GLOBAL: SWBF2 0x01fa876c
 int MAX_PREDICT_STEPS;

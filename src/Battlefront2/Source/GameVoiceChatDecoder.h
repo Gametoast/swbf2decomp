@@ -18,6 +18,9 @@ struct StreamNodeConnection;
 namespace GameVoiceChat
 {
 
+// SYNTHETIC: SWBF2 0x0053c780
+// GameVoiceChat::Decoder::`scalar deleting destructor'
+
 // VTABLE: SWBF2 0x007a0108
 class Decoder : public VoiceChat::Decoder,
                 public Snd::StreamSourceNProducer

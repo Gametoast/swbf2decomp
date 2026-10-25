@@ -65,9 +65,11 @@ char gGamespyAutoEmail[64];
 // gGamespyAutoPPass
 char gGamespyAutoPPass[32];
 unsigned int gGamespyAutoPass;
+// GLOBAL: SWBF2 0x01e30736
 bool gBootLagger;
 bool gShowLoadSpam;
 bool gLogFinalScore;
+// GLOBAL: SWBF2 0x007e6310
 int gBootLaggerPing = 300;
 
 // GLOBAL: SWBF2 0x007e69c9

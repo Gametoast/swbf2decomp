@@ -247,17 +247,13 @@ extern PblRandom sndRandom;
 // FUNCTION: SWBF2 0x00739df0
 VoiceVirtual* __cdecl Sound::GetFreeVoice(VoiceVirtualManager* pManager)
 {
-    for (PblListDouble::Node* pLink = pManager->mInactiveList.mTerminator.mNext;
-         pLink != &pManager->mInactiveList.mTerminator; pLink = pLink->mNext)
+    const PblListDoubleSorted* const pList = &pManager->mInactiveList;
+    for (PblListDoubleSorted::Itor itor(pList);
+         itor.GetNode(pList) != pList->GetTerminator(); ++itor)
     {
-        PblListDoubleSorted::Node* pNode =
-            (PblListDoubleSorted::Node*)((char*)pLink - offsetof(PblListDoubleSorted::Node, mNode));
-        if (pNode == pManager->mInactiveList.GetTerminator())
-        {
-            break;
-        }
-        VoiceVirtual* pVoice = (VoiceVirtual*)((char*)pNode - offsetof(VoiceVirtual, mNode));
-        if (pVoice->mCustomFlags == (unsigned int)smVoiceVirtuals)
+        VoiceVirtual* pVoice = (VoiceVirtual*)itor.GetNode(pList)->GetObjectA(
+            pList, offsetof(VoiceVirtual, mNode));
+        if (pVoice->GetCustomFlags() == (unsigned int)smVoiceVirtuals)
         {
             return pVoice;
         }
@@ -269,20 +265,12 @@ VoiceVirtual* __cdecl Sound::GetFreeVoice(VoiceVirtualManager* pManager)
 VoiceVirtual* __cdecl Sound::StealVoice(VoiceVirtualManager* pManager, float fPriority)
 {
     PblListDoubleSorted& list = pManager->mActiveList;
-    PblListDouble::Node* pTail = list.mTerminator.mPrev;
-    PblListDoubleSorted::Node* pTailNode = pTail == &list.mTerminator
-        ? (PblListDoubleSorted::Node*)list.GetTerminator()
-        : (PblListDoubleSorted::Node*)((char*)pTail - offsetof(PblListDoubleSorted::Node, mNode));
-    for (PblListDouble::Node* pLink = &pTailNode->mNode; pLink != &list.mTerminator; pLink = pLink->mPrev)
+    for (PblListDoubleSorted::Itor itor = list.End();
+         itor.GetNode(&list) != list.GetTerminator(); --itor)
     {
-        PblListDoubleSorted::Node* pNode =
-            (PblListDoubleSorted::Node*)((char*)pLink - offsetof(PblListDoubleSorted::Node, mNode));
-        if (pNode == list.GetTerminator())
-        {
-            break;
-        }
-        VoiceVirtual* pVoice = (VoiceVirtual*)((char*)pNode - offsetof(VoiceVirtual, mNode));
-        if (pVoice->mCustomFlags != (unsigned int)smVoiceVirtuals)
+        VoiceVirtual* pVoice = (VoiceVirtual*)itor.GetNode(&list)->GetObjectA(
+            &list, offsetof(VoiceVirtual, mNode));
+        if (pVoice->GetCustomFlags() != (unsigned int)smVoiceVirtuals)
         {
             continue;
         }
@@ -508,17 +496,13 @@ void __cdecl Sound::UpdateAll(float fDeltaTime)
 // FUNCTION: SWBF2 0x0073aeb0
 void __cdecl Sound::UpdateVoices(VoiceVirtualManager* pManager, float fDeltaTime)
 {
-    for (PblListDouble::Node* pLink = pManager->mActiveList.mTerminator.mNext;
-         pLink != &pManager->mActiveList.mTerminator; pLink = pLink->mNext)
+    PblListDoubleSorted& list = pManager->mActiveList;
+    for (PblListDoubleSorted::Itor itor = list.Begin();
+         itor.GetNode(&list) != list.GetTerminator(); ++itor)
     {
-        PblListDoubleSorted::Node* pNode =
-            (PblListDoubleSorted::Node*)((char*)pLink - offsetof(PblListDoubleSorted::Node, mNode));
-        if (pNode == pManager->mActiveList.GetTerminator())
-        {
-            break;
-        }
-        FireForget* pVoice = (FireForget*)((char*)pNode - offsetof(VoiceVirtual, mNode));
-        if (pVoice->mCustomFlags != (unsigned int)smVoiceVirtuals)
+        FireForget* pVoice = (FireForget*)itor.GetNode(&list)->GetObjectA(
+            &list, offsetof(VoiceVirtual, mNode));
+        if (pVoice->GetCustomFlags() != (unsigned int)smVoiceVirtuals)
         {
             continue;
         }

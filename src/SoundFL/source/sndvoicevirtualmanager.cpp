@@ -54,9 +54,7 @@ void VoiceVirtualManager::Update(float fDeltaTime)
     while (itor.GetNode(&mInactiveList) != mInactiveList.GetTerminator())
     {
         PblListDoubleSorted::Node* pNode = itor.GetNode(&mInactiveList);
-        VoiceVirtual* pVoice = pNode == mInactiveList.GetTerminator()
-            ? 0
-            : (VoiceVirtual*)((char*)pNode - offsetof(VoiceVirtual, mNode));
+        VoiceVirtual* pVoice = (VoiceVirtual*)pNode->GetObjectA(&mInactiveList, offsetof(VoiceVirtual, mNode));
         ++itor;
         pVoice->Update(fDeltaTime);
     }
@@ -64,7 +62,7 @@ void VoiceVirtualManager::Update(float fDeltaTime)
     for (itor = mActiveList.Begin(); itor.GetNode(&mActiveList) != mActiveList.GetTerminator(); ++itor)
     {
         PblListDoubleSorted::Node* pNode = itor.GetNode(&mActiveList);
-        VoiceVirtual* pVoice = (VoiceVirtual*)((char*)pNode - offsetof(VoiceVirtual, mNode));
+        VoiceVirtual* pVoice = (VoiceVirtual*)pNode->GetObjectA(&mActiveList, offsetof(VoiceVirtual, mNode));
         pVoice->DetermineClosestListener();
         pVoice->CalculatePriority(false);
         ++uiNumActive;
@@ -79,9 +77,7 @@ void VoiceVirtualManager::Update(float fDeltaTime)
     {
         --uiNumActive;
         PblListDoubleSorted::Node* pNode = itor.GetNode(&mActiveList);
-        VoiceVirtual* pVoice = pNode == mActiveList.GetTerminator()
-            ? 0
-            : (VoiceVirtual*)((char*)pNode - offsetof(VoiceVirtual, mNode));
+        VoiceVirtual* pVoice = (VoiceVirtual*)pNode->GetObjectA(&mActiveList, offsetof(VoiceVirtual, mNode));
         VoiceBase* pHardwareVoice = pVoice->GetVoice();
         --itor;
         if (uiNumActive < mNumManagedVoices)

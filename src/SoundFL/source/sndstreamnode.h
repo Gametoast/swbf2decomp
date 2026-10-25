@@ -8,6 +8,9 @@ namespace Snd
 
 struct StreamPacket;
 
+// SYNTHETIC: SWBF2 0x0073c810
+// Snd::StreamNodeSource::`scalar deleting destructor'
+
 // VTABLE: SWBF2 0x0078686c
 class StreamNodeSource
 {

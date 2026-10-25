@@ -31,6 +31,7 @@ char* gArenaEnd;
 char* GamespyHeapstart;
 char* GamespyHeapend;
 char* g_Heap3Start;
+// GLOBAL: SWBF2 0x01e56150
 void* gTempHeapBlock;
 namespace GameMemory
 {

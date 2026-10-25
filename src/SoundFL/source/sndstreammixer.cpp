@@ -11,21 +11,21 @@ namespace Snd
 // FUNCTION: SWBF2 0x0073f760
 StreamMixer::StreamMixer()
 {
-    char* const pThis = (char*)this;
+    mGain = 0;
+    mOutputGain = 0x7FFF;
+    mInputPackets = 0;
+    mMixBufferOffsets = 0;
+    mMixBuffer = 0;
+    mMixBufferSize = 0;
+    mMixBufferDataSize = 0;
+    mSynchronizedMixing = 0;
+    mFlags = 0;
+    mInputChannels = 1;
+    mOutputChannels = 1;
+    mInterpolationRate = 10;
 
-
-
-    *(unsigned int*)(pThis + 0x06C) = 0;
-    *(unsigned int*)(pThis + 0x070) = 0x7FFF;
-    *(unsigned int*)(pThis + 0x074) = 0;
-    *(unsigned int*)(pThis + 0x078) = 0;
-    *(unsigned int*)(pThis + 0x07C) = 0;
-    *(unsigned int*)(pThis + 0x080) = 0;
-    *(unsigned int*)(pThis + 0x084) = 0;
-    *(unsigned int*)(pThis + 0x088) = 0x01010000u;
-    pThis[0x08C] = 0x0A;
-
-    memset(pThis + 0x02C, 0, 0x40);
+    memset(mActive, 0, sizeof(mActive));
+    memset(mMixedPacket, 0, sizeof(mMixedPacket));
 }
 
 // FUNCTION: SWBF2 0x0073f830
@@ -37,30 +37,26 @@ StreamMixer::~StreamMixer()
 // FUNCTION: SWBF2 0x0073fb40
 void StreamMixer::SetConstantOutputPacketSize(bool bConstant)
 {
-    char* const pThis = (char*)this;
-
     if (bConstant)
     {
-        pThis[0x89] = (char)(pThis[0x89] | 0x04);
+        mFlags |= flags_CPS;
     }
     else
     {
-        pThis[0x89] = (char)(pThis[0x89] & 0xFB);
+        mFlags &= (unsigned char)~flags_CPS;
     }
 }
 
 // FUNCTION: SWBF2 0x0073fc90
-void StreamMixer::SetLastPacketInfo(unsigned char uc)
+void StreamMixer::SetLastPacketInfo(bool b)
 {
-    char* const pThis = (char*)this;
-
-    if (uc)
+    if (b)
     {
-        pThis[0x89] = (char)(pThis[0x89] | 0x20);
+        mFlags |= flags_LastPck;
     }
     else
     {
-        pThis[0x89] = (char)(pThis[0x89] & 0xDF);
+        mFlags &= (unsigned char)~flags_LastPck;
     }
 }
 
@@ -69,10 +65,9 @@ void StreamMixer::SetMixBuffer(int* const pBuffer)
 {
     const unsigned int uiSize = (GetPacketSize() >> 1) << 2;
 
-    memset(pBuffer, 0, uiSize);
-
     mMixBuffer = pBuffer;
     mMixBufferSize = uiSize;
+    memset(pBuffer, 0, uiSize);
     mMixBufferDataSize = 0;
 }
 
@@ -149,9 +144,9 @@ void StreamMixer::SetGainArray(int* pGains)
 }
 
 // FUNCTION: SWBF2 0x0073fd80
-void StreamMixer::SetStopOnLast(unsigned char uc)
+void StreamMixer::SetStopOnLast(bool b)
 {
-    if (uc)
+    if (b)
     {
         mFlags = (unsigned char)(mFlags | 0x40);
     }
@@ -187,16 +182,8 @@ void StreamMixer::SetSynchronizedDeactivation(bool b)
     }
 }
 
-// FUNCTION: SWBF2 0x0073f8a0
-void* __fastcall sub_73F8A0(void* pMixer, int, unsigned int uiFlags)
-{
-    ((StreamMixer*)pMixer)->StreamMixer::~StreamMixer();
-    if ((uiFlags & 1) != 0)
-    {
-        ::operator delete(pMixer);
-    }
-    return pMixer;
-}
+// SYNTHETIC: SWBF2 0x0073f8a0
+// Snd::StreamMixer::`scalar deleting destructor'
 
 // FUNCTION: SWBF2 0x0073f920
 void StreamMixer::Discontinuity(unsigned int uiInput, bool bFlush)
@@ -762,7 +749,7 @@ void Snd::StreamMixer::SetOutputGain(float fGain)
 }
 
 // FUNCTION: SWBF2 0x0073faf0
-bool Snd::StreamMixer::HasMixedPacket(unsigned int uiInput) const
+bool Snd::StreamMixer::IsMixed(unsigned int uiInput) const
 {
     return (mMixedPacket[uiInput >> 3] & (1u << (uiInput & 7))) != 0;
 }

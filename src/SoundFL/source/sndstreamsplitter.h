@@ -8,6 +8,9 @@
 namespace Snd
 {
 
+// SYNTHETIC: SWBF2 0x0074cf40
+// Snd::StreamSplitter::`scalar deleting destructor'
+
 class StreamSplitter : public StreamNode, public StreamNodeSink, public StreamNodeSource
 {
 public:

@@ -153,7 +153,8 @@ public:
 
     ~HashTable() {}
 
-    // FUNCTION: SWBF2 0x0052ad80
+    // TEMPLATE: SWBF2 0x0052ad80
+    // util::HashTable<unsigned short,unsigned int,util::NewAllocator>::Reallocate
     void Reallocate(int iSize)
     {
         ElemVecT aElements;
@@ -198,7 +199,8 @@ public:
         }
     }
 
-    // FUNCTION: SWBF2 0x0052af70
+    // TEMPLATE: SWBF2 0x0052af70
+    // util::HashTable<unsigned short,unsigned int,util::NewAllocator>::operator[]
     ELEM& operator[](const KEY& rKey)
     {
         CheckSpace_();

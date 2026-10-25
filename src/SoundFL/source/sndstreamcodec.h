@@ -6,6 +6,9 @@
 namespace Snd
 {
 
+// SYNTHETIC: SWBF2 0x0073d110
+// Snd::StreamCodec::`scalar deleting destructor'
+
 // VTABLE: SWBF2 0x0078689c
 class StreamCodec : public StreamNode,
                     public StreamNodeSink,

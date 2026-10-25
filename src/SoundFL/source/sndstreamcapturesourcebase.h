@@ -11,6 +11,9 @@ namespace Snd
 
 class StreamFormat;
 
+// SYNTHETIC: SWBF2 0x0074c030
+// Snd::StreamCaptureSourceBase::`scalar deleting destructor'
+
 // VTABLE: SWBF2 0x00786cd0
 class StreamCaptureSourceBase : public StreamNode,
                                 public StreamNodeSource

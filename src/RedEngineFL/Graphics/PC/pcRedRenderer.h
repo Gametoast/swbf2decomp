@@ -1444,7 +1444,7 @@ public:
     static PblMatrix m_mProjection;
     static PblMatrix m_mProjectionTemp;
     static PblMatrix m_nearSceneFadeTexTransform;
-    static PblVector4 m_userNearClipPlane;
+    static PblPlane m_userNearClipPlane;
     static PblMatrix m_mViewProjection;
     __declspec(align(16)) static PblMatrix m_mView;
 };

@@ -7,6 +7,7 @@ public:
 
     PblHandled();
 
+    // FUNCTION: SWBF2 0x0042cf20
     virtual ~PblHandled() { mHandleId = 0; }
 
     unsigned int GetHandleId() const;
@@ -97,7 +98,7 @@ public:
     }
 
     // TEMPLATE: SWBF2 0x0043ccd0
-    // PblHandle<GameObject const>::operator=
+    // PblHandle<GameObject const >::operator=
 
     // TEMPLATE: SWBF2 0x0042cd30
     // PblHandle<GameObject>::operator=

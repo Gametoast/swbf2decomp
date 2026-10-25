@@ -112,15 +112,7 @@ static const float kInv255 = 1.0f / 255.0f;
 static const PblMatrix& _GetSkinMatrix(unsigned int uiNumBones, const unsigned char* puiWeights,
                                        const unsigned char* puiIndices, const PblMatrix* pMatrices);
 
-inline PblVector3 operator-(const PblVector3& a,
-                                 const PblVector3& b)
-{
-    PblVector3 result;
-    result.x = a.x - b.x;
-    result.y = a.y - b.y;
-    result.z = a.z - b.z;
-    return result;
-}
+
 
 struct CompressedPos
 {

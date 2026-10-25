@@ -1,6 +1,7 @@
 #pragma once
 
 #include <stddef.h>
+#include "PblMath.h"
 
 class PblVector3
 {
@@ -51,6 +52,13 @@ public:
  
  
 
+const PblVector3 operator+(const PblVector3& lhs, const PblVector3& rhs);
+const PblVector3 operator-(const PblVector3& lhs, const PblVector3& rhs);
+const PblVector3 operator*(const PblVector3& lhs, float rhs);
+const PblVector3 operator/(const PblVector3& lhs, float rhs);
+
+#include "PebbleFL/pc/pcPblVector.h"
+
 inline const PblVector3 Interpolate(const PblVector3& v0, const PblVector3& v1, float fT)
 {
     PblVector3 v;
@@ -97,7 +105,17 @@ public:
     void SetRadius(float fRadius) { w = fRadius; }
 };
 
-const PblVector3 __cdecl NormalizeEst(const PblVector3& rv);
+inline const float LengthEst(const PblVector3& rv)
+{
+    return PblMath::Length3Est(rv.x, rv.y, rv.z);
+}
+
+// FUNCTION: SWBF2 0x004a9b50
+inline const PblVector3 NormalizeEst(const PblVector3& rv)
+{
+    const float length = LengthEst(rv);
+    return length != 0.0f ? rv / length : rv;
+}
 
 class PblBox
 {

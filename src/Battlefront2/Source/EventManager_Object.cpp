@@ -463,7 +463,8 @@ void ObjectEvent::Cleanup()
 namespace EventManager
 {
 
-// FUNCTION: SWBF2 0x00514fb0
+// TEMPLATE: SWBF2 0x00514fb0
+// EventManager::Event<GameObject,DamageOwner>::Callback::~Callback
 template Event<GameObject, DamageOwner>::Callback::~Callback();
 }
 

@@ -3190,28 +3190,7 @@ void VehicleCommand(GameObject* pObject, Character* pCharacter);
 
 const PblVector3 __cdecl Normalize(const PblVector3& rv);
 
-namespace PblMath
-{
-    inline float Length2Est(float fA, float fB)
-    {
-        const float fLength2EstAlpha = 0.94805944f;
-        const float fLength2EstBeta = 0.39269909f;
-        fA = (float)fabs((double)fA);
-        fB = (float)fabs((double)fB);
-        return fA > fB ? fA * fLength2EstAlpha + fB * fLength2EstBeta
-                       : fA * fLength2EstBeta + fB * fLength2EstAlpha;
-    }
 
-    inline float Length3Est(float fX, float fY, float fZ)
-    {
-        return Length2Est(Length2Est(fX, fY), fZ);
-    }
-}
-
-inline const float LengthEst(const PblVector3& rv)
-{
-    return PblMath::Length3Est(rv.x, rv.y, rv.z);
-}
 
 // FUNCTION: SWBF2 0x004ac460
 bool EntityFlyer::Update(float fDeltaTime)

@@ -8,6 +8,9 @@
 namespace Snd
 {
 
+// SYNTHETIC: SWBF2 0x0073d140
+// Snd::StreamGSMDecoder::`scalar deleting destructor'
+
 // VTABLE: SWBF2 0x007868a8
 class StreamGSMDecoder : public StreamCodec
 {

@@ -173,7 +173,8 @@ bool LuaPushItem<unsigned __int64>(unsigned __int64& mask)
 
 
 
-// FUNCTION: SWBF2 0x005115c0
+// TEMPLATE: SWBF2 0x005115c0
+// EventManager::LuaCallback<CommandPost,DamageOwner>::LuaCallback<CommandPost,DamageOwner>
 template <class ITEM, class PARAM>
 LuaCallback<ITEM, PARAM>::LuaCallback(int iRef)
 {
@@ -378,7 +379,8 @@ template Event<CommandPost, unsigned __int64>::Callback::~Callback();
 namespace EventManager
 {
 
-// FUNCTION: SWBF2 0x0050fd00
+// TEMPLATE: SWBF2 0x0050fd00
+// EventManager::Event<CommandPost,DamageOwner>::Callback::~Callback
 template Event<CommandPost, DamageOwner>::Callback::~Callback();
 }
 

@@ -4,15 +4,9 @@
 #include "PebbleFL/Common/PblVector.h"
 #include "PebbleFL/Common/PblMatrix.h"
 
-static inline const PblVector3 operator+(const PblVector3& a, const PblVector3& b)
-{
-    return PblVector3(a.x + b.x, a.y + b.y, a.z + b.z);
-}
 
-static inline const PblVector3 operator*(const PblVector3& a, float f)
-{
-    return PblVector3(a.x * f, a.y * f, a.z * f);
-}
+
+
 
 union RenderSortKey
 {

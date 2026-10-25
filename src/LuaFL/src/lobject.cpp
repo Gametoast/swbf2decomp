@@ -18,6 +18,8 @@
 #define lua_str2number(s,p)     strtod((s), (p))
 #endif
 
+// GLOBAL: SWBF2 0x00771120
+// luaO_nilobject
 const TObject luaO_nilobject = {LUA_TNIL, {NULL}};
 
 // FUNCTION: SWBF2 0x006a2600

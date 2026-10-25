@@ -424,6 +424,7 @@ namespace GameLoop
 // GLOBAL: SWBF2 0x01e560e0
 // mMissionScript
 char mMissionScript[64];
+// GLOBAL: SWBF2 0x01e56044
 unsigned int mMissionScriptHash;
 // GLOBAL: SWBF2 0x01e5605e
 // sPauseMode
@@ -439,6 +440,7 @@ char mTerrainFileName[64];
 // GLOBAL: SWBF2 0x01e5600a
 bool sGameOver;
 
+// GLOBAL: SWBF2 0x007e666c
 bool _bFirstPersonEnabled = true;
 
 // GLOBAL: SWBF2 0x007e668c

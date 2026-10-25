@@ -8,6 +8,9 @@
 namespace Snd
 {
 
+// SYNTHETIC: SWBF2 0x0074cbe0
+// Snd::StreamResampler::`scalar deleting destructor'
+
 // VTABLE: SWBF2 0x00786d18
 class StreamResampler : public StreamNode,
                         public StreamNodeSink,

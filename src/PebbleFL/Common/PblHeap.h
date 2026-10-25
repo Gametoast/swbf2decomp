@@ -61,6 +61,8 @@ public:
         mPool[i] = rec;
     }
 
+    // TEMPLATE: SWBF2 0x00671340
+    // PblHeap<PblHandle<GameObject>,int>::~PblHeap<PblHandle<GameObject>,int>
     ~PblHeap()
     {
         if (mAllocated)

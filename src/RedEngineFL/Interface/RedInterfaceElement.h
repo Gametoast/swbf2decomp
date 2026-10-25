@@ -8,11 +8,10 @@
 #include "PebbleFL/Common/PblList.h"
 #include "PebbleFL/Common/PblMatrix.h"
 
-// VTABLE: SWBF2 0x00772970
-
 class RedGroupElement;
 class PblVector3;
 
+// VTABLE: SWBF2 0x00772970
 class RedInterfaceElement
 {
 public:

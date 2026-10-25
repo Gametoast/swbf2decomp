@@ -9,6 +9,9 @@
 namespace Snd
 {
 
+// SYNTHETIC: SWBF2 0x0074c820
+// Snd::StreamSourceMemory::`scalar deleting destructor'
+
 // VTABLE: SWBF2 0x00786d00
 class StreamSourceMemory : public StreamNode, public StreamSourceProducer
 {

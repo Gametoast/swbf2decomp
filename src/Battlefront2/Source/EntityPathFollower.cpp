@@ -1041,15 +1041,6 @@ void EntityPathFollower::RemoveFromSquadron()
     EntitySquadron::RemoveFromSquadron();
 }
 
-// FUNCTION: SWBF2 0x004d2620
-void* PblListDoubleSorted::Node::GetObjectA(PblListDoubleSorted const* pList, unsigned int uOffset) const
-{
-    if ((void const*)this == (void const*)pList)
-    {
-        return 0;
-    }
-    return (char*)this - uOffset;
-}
 
 namespace
 {

@@ -12,6 +12,9 @@ namespace DSP
 class HighLowPassFilter;
 }
 
+// SYNTHETIC: SWBF2 0x007417f0
+// Snd::StreamGSMEncoder::`scalar deleting destructor'
+
 // VTABLE: SWBF2 0x00786a50
 class StreamGSMEncoder : public StreamCodec
 {

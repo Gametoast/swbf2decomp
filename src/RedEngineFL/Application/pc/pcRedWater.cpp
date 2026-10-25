@@ -1439,11 +1439,7 @@ void RedWater::pcRegisterReflection()
         PblMatrix mMesh = gMatrixIdentity;
         mMesh.m[3][1] = m_fWaterHeightOffset;
 
-        PblPlane plane;
-        plane.x = 0.0f;
-        plane.y = 1.0f;
-        plane.z = 0.0f;
-        plane.w = -(m_waterHeight + m_fWaterHeightOffset);
+        PblPlane plane(0.0f, 1.0f, 0.0f, -(m_waterHeight + m_fWaterHeightOffset));
 
         m_reflectionID = FLRenderer::RegisterReflection(
             reinterpret_cast<Renderable*>(&_WaterRenderable), plane,

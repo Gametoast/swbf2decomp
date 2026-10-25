@@ -281,7 +281,8 @@ inline LightBeam::~LightBeam()
 
 
 
-// FUNCTION: SWBF2 0x0056faa0
+// SYNTHETIC: SWBF2 0x0056faa0
+// LightBeamEffect::`scalar deleting destructor'
 inline LightBeamEffect::~LightBeamEffect()
 {
 }

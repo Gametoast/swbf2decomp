@@ -63,16 +63,6 @@ GameVoiceChat::Decoder::~Decoder()
 {
 }
 
-// FUNCTION: SWBF2 0x0053c780
-void* __fastcall sub_53C780(void* pDecoder, void*  , unsigned int flags)
-{
-    ((GameVoiceChat::Decoder*)pDecoder)->GameVoiceChat::Decoder::~Decoder();
-    if (flags & 1)
-    {
-        operator delete(pDecoder);
-    }
-    return pDecoder;
-}
 
 namespace VoiceChat
 {
@@ -89,13 +79,6 @@ unsigned int CalculatePlayCaptureBufferSizeSamples(float fMilliseconds);
 namespace GameVoiceChat
 {
 unsigned int CalculateEncodedPacketSize(unsigned int uiSamples);
-}
-
-namespace Snd
-{
-
-void __fastcall StreamAuxRenderer__Close(void* pAuxRenderer);
-
 }
 
 // FUNCTION: SWBF2 0x0053cc60
@@ -173,7 +156,7 @@ void GameVoiceChat::Decoder::Close()
         Stop();
     }
 
-    Snd::StreamAuxRenderer__Close(&mAuxRenderer);
+    mAuxRenderer.Close();
 
     mMixer.Snd::StreamSourceProducer::SetPackets(0, 0, 0);
     mMixer.SetMixBuffer(0);
@@ -420,7 +403,7 @@ bool Decoder::IsStarving(unsigned int uiInput, bool bForce)
 {
     const Snd::StreamNode& cNode = mAuxRenderer;
     return (bForce || (cNode.GetPlayState() == 1 && cNode.IsStarving())) &&
-           !mMixer.HasMixedPacket(uiInput);
+           !mMixer.IsMixed(uiInput);
 }
 }
 

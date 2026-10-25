@@ -278,12 +278,13 @@ extern PblRandom sndRandom;
 // FUNCTION: SWBF2 0x00736ac0
 SoundStream::FireForget* __cdecl SoundStream::GetFireForget(unsigned int uiIndex)
 {
-    PblListDoubleSorted::Node* pLink = smQueue[uiIndex].GetFirst();
-    if (pLink == smQueue[uiIndex].GetTerminator())
+    PblListDoubleSorted& list = smQueue[uiIndex];
+    if (list.GetFirst() == list.GetTerminator())
     {
         return 0;
     }
-    FireForget* pFF = (FireForget*)((char*)pLink - (int)offsetof(FireForget, mNode));
+    FireForget* pFF = (FireForget*)list.GetFirst()->GetObjectA(
+        &list, offsetof(FireForget, mNode));
     --smCount[uiIndex];
     pFF->mNode.mNode.Remove();
     smFree.Add(&pFF->mNode);

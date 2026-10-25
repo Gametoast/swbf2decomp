@@ -128,6 +128,8 @@ static int setupvalue (lua_State *L) {
   return auxupvalue(L, 0);
 }
 
+// GLOBAL: SWBF2 0x00770328
+// KEY_HOOK
 static const char KEY_HOOK = 'h';
 
 // FUNCTION: SWBF2 0x0069cff0

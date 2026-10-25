@@ -150,7 +150,7 @@ void __cdecl VoiceChat::NetPacketAudio::Send(NetPacketAudio* packet, unsigned ch
 }
 
 // TEMPLATE: SWBF2 0x0053e3f0
-// Snd::Queue<NetPacket*,4>::Add(NetPacket* const&)
+// Snd::Queue<NetPacket *,4>::Add
 template class Snd::Queue<NetPacket*, 4>;
 
 // TEMPLATE: SWBF2 0x0053e3d0

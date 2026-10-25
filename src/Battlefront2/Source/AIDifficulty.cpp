@@ -63,6 +63,7 @@ float mCritSysBias;
 static float GetFloatSkill_RangedLinear(const UnitController* pController, float fMin,
                                         float fMax, bool bClamp);
 
+// FUNCTION: SWBF2 0x004395e0
 static void SpaceAssault_Init()
 {
     mNextFlyerKillTime = SpaceAssault_GetRandomFlyerKillTime();

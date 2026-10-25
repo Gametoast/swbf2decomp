@@ -60,6 +60,7 @@ public:
             }
             Clear();
         }
+        // FUNCTION: SWBF2 0x0057ab40
         ~TargetHistory() { Clear(); }
 
         void Clear()

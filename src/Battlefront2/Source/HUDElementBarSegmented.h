@@ -48,7 +48,7 @@ public:
         Segment();
 
         // SYNTHETIC: SWBF2 0x0054c6e0
-        // HUD::ElementBarSegmented::Segment::`scalar deleting destructor'
+        // HUD::ElementBarSegmented::Segment::`vector deleting destructor'
         virtual ~Segment();
 
         virtual bool SetProperty(const unsigned int uHashID, const void* const pValue);

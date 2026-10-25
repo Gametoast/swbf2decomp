@@ -90,9 +90,6 @@ int bwPercent = 100;
 
 extern int TEMP_bandwith;
 
-// GLOBAL: SWBF2 0x01ecd914
-int gInternetBandwidthScale;
-
 extern int bps[PIPE_MAX];
 extern float sendBits[PIPE_MAX];
 
@@ -920,7 +917,7 @@ void NetComm::SetBandwidthPercent(int percent)
 {
     bwPercent = percent;
     sendBits[PIPE_INTERNET] = 0.0f;
-    bps[PIPE_INTERNET] = percent * gInternetBandwidthScale / 100;
+    bps[PIPE_INTERNET] = percent * netDests[64].upBandwidth / 100;
 }
 
 // FUNCTION: SWBF2 0x005b3700

@@ -55,8 +55,6 @@ public:
     PblList<RedShadowRegion>::Node m_Node;
     PblList<RedShadowRegion>::Node m_VisibleNode;
 };
- 
- 
- 
- 
- 
+
+// SYNTHETIC: SWBF2 0x00719450
+// RedShadowRegion::Info::~Info

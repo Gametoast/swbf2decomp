@@ -108,10 +108,7 @@ RedParticleRenderer::Renderable::~Renderable()
 // SYNTHETIC: SWBF2 0x006d0c30
 // RedParticleRenderer::Renderable::`scalar deleting destructor'
 
-static inline const PblVector3 operator-(const PblVector3& a, const PblVector3& b)
-{
-    return PblVector3(a.x - b.x, a.y - b.y, a.z - b.z);
-}
+
 
 static inline const PblVector3 operator-(const PblVector3& a)
 {

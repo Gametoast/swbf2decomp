@@ -3,39 +3,7 @@
 #include "PblVector.h"
 #include "PblMatrix.h"
 
-// FUNCTION: SWBF2 0x004a9b50
-const PblVector3 __cdecl NormalizeEst(const PblVector3& rv)
-{
 
-    const float fLength2EstAlpha = 0.94805944f;
-    const float fLength2EstBeta = 0.39269909f;
-
-    float fA = (float)fabs(rv.x);
-    float fB = (float)fabs(rv.y);
-    float fEst = fA > fB ? fA * fLength2EstAlpha + fB * fLength2EstBeta
-                         : fA * fLength2EstBeta + fB * fLength2EstAlpha;
-
-    fA = (float)fabs(fEst);
-    fB = (float)fabs(rv.z);
-    fEst = fA > fB ? fA * fLength2EstAlpha + fB * fLength2EstBeta
-                   : fA * fLength2EstBeta + fB * fLength2EstAlpha;
-
-    PblVector3 vResult;
-    if (fEst != 0.0f)
-    {
-        const float fScale = 1.0f / fEst;
-        vResult.x = rv.x * fScale;
-        vResult.y = rv.y * fScale;
-        vResult.z = rv.z * fScale;
-    }
-    else
-    {
-        vResult.x = rv.x;
-        vResult.y = rv.y;
-        vResult.z = rv.z;
-    }
-    return vResult;
-}
 
 // FUNCTION: SWBF2 0x00729f90
 const PblBox PblBox::GetTransformedBox(const PblMatrix& rMatrix) const

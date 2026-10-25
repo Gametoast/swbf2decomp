@@ -85,23 +85,27 @@ RawControllerInputs* FLInputManager::GetPlayerJoystick(int iPlayer)
     return &mJoysticks[iPlayer];
 }
 
+unsigned short __cdecl RawInputToActionKey(unsigned short usRawInput);
+
 struct CustomGlyphData
 {
-    unsigned short unicodeValue;
-    unsigned short mReserved;
+    wchar_t unicodeValue;
     unsigned int textureHash;
 };
 
+// SYNTHETIC: SWBF2 0x004039f0
+// `dynamic initializer for 'gCustomGlyphData''
+
 // GLOBAL: SWBF2 0x007ec140
-static const CustomGlyphData gCustomGlyphData[7] =
+static CustomGlyphData gCustomGlyphData[7] =
 {
-    { 0x7fff, 0, 0x7f0688e4u },
-    { 0x8100, 0, 0x592f1c52u },
-    { 0x8101, 0, 0x7f0688e4u },
-    { 0x8200, 0, 0x00288768u },
-    { 0x8201, 0, 0xee286b12u },
-    { 0x0000, 0, 0x00000000u },
-    { 0x0000, 0, 0x00000000u },
+    { 0x7fff, 0x7f0688e4u },
+    { 0x8100, 0x592f1c52u },
+    { 0x8101, 0x7f0688e4u },
+    { 0x8200, 0x00288768u },
+    { 0x8201, 0xee286b12u },
+    { (wchar_t)(RawInputToActionKey('B') + 0x8000), 0xDD7D0382 },
+    { (wchar_t)(RawInputToActionKey('C') + 0x8000), 0xDD7D0382 },
 };
 
 // FUNCTION: SWBF2 0x00529de0
@@ -910,21 +914,4 @@ bool __fastcall is_rumble_enable(int iPlayer)
     return NetGame::IsHost() && !netIsDedicated && netIsOneWorld;
 }
 
-unsigned short __cdecl RawInputToActionKey(unsigned short usRawInput);
 
-struct AlternateActionKeyEntry
-{
-    unsigned short mKey;
-    unsigned int mValue;
-};
-
-// SYNTHETIC: SWBF2 0x004039f0
-// `dynamic initializer for 'gAlternateActionKeys''
-
-// GLOBAL: SWBF2 0x007ec168
-// gAlternateActionKeys
-AlternateActionKeyEntry gAlternateActionKeys[2] =
-{
-    { (unsigned short)(RawInputToActionKey('B') + 0x8000), 0xDD7D0382 },
-    { (unsigned short)(RawInputToActionKey('C') + 0x8000), 0xDD7D0382 },
-};

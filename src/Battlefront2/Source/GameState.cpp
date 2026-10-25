@@ -414,8 +414,12 @@ GameState::MissionState _MissionState;
 // _ShellState
 GameState::ShellState _ShellState;
 
+// GLOBAL: SWBF2 0x01f9c2c0
+// _pCurrentState
 GameState::State* _pCurrentState;
 
+// GLOBAL: SWBF2 0x01e563a8
+// GameState::MissionState::_pCurrentState
 GameState::MissionState::State* GameState::MissionState::_pCurrentState;
 
 bool gDisableNetworkOnCleanup;
@@ -1214,6 +1218,7 @@ void GameState::MissionState::SetState(unsigned int uiState)
     }
 }
 
+// FUNCTION: SWBF2 0x0053bab0
 void GameState::MissionState::_SetState(State* pState)
 {
     if (pState == _pCurrentState)

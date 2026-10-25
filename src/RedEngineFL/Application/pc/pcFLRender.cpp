@@ -186,10 +186,10 @@ RedTexture* FLRenderer::pcGetReflectionTexture(char)
 // FUNCTION: SWBF2 0x006bf690
 void ReflectionRegion::_UpdateReflectionMatrix()
 {
-    const float x = m_reflectionPlane.x;
-    const float y = m_reflectionPlane.y;
-    const float z = m_reflectionPlane.z;
-    const float w = m_reflectionPlane.w;
+    const float x = m_reflectionPlane.GetA();
+    const float y = m_reflectionPlane.GetB();
+    const float z = m_reflectionPlane.GetC();
+    const float w = m_reflectionPlane.GetD();
     const float xx = x * x, yy = y * y, zz = z * z;
     const float inverse = 1.0f / ((xx + yy) + zz);
     const float twice = -2.0f * inverse;
@@ -751,11 +751,9 @@ ReflectionRegion::ReflectionRegion(RedRegionDesc& desc) : RedRegion(desc)
         const float fX = mMatrix.m[3][0] - mMatrix.m[1][0] * fHalfHeight;
         const float fY = mMatrix.m[3][1] - mMatrix.m[1][1] * fHalfHeight;
         const float fZ = mMatrix.m[3][2] - mMatrix.m[1][2] * fHalfHeight;
-        m_reflectionPlane.x = mMatrix.m[1][0];
-        m_reflectionPlane.y = mMatrix.m[1][1];
-        m_reflectionPlane.z = mMatrix.m[1][2];
-        m_reflectionPlane.w = -(m_reflectionPlane.x * fX + m_reflectionPlane.y * fY +
-                                m_reflectionPlane.z * fZ);
+        m_reflectionPlane = PblPlane(mMatrix.m[1][0], mMatrix.m[1][1], mMatrix.m[1][2],
+                                    -(mMatrix.m[1][0] * fX + mMatrix.m[1][1] * fY +
+                                      mMatrix.m[1][2] * fZ));
         break;
     }
     default:
@@ -1726,26 +1724,26 @@ void FLRenderer::RenderReflections()
         const PblMatrix& mCamera = pCamera->GetMatrix();
         const RedCamera* pSceneCamera = 0;
         bool bClipPlane;
-        if (mCamera.m[3][1] * plane.y + plane.x * mCamera.m[3][0] + mCamera.m[3][2] * plane.z +
-                plane.w > 0.0f)
+        if (mCamera.m[3][1] * plane.GetB() + plane.GetA() * mCamera.m[3][0] + mCamera.m[3][2] * plane.GetC() +
+                plane.GetD() > 0.0f)
         {
             RedRenderer::pcSetFrontFace(PCREDFRONT_CW);
 
             PblMatrix mReflect = gMatrixIdentity;
-            float fInvLenSq = 1.0f / (plane.y * plane.y + plane.x * plane.x + plane.z * plane.z);
+            float fInvLenSq = 1.0f / (plane.GetB() * plane.GetB() + plane.GetA() * plane.GetA() + plane.GetC() * plane.GetC());
             float fScale = fInvLenSq * -2.0f;
-            mReflect.m[0][0] = (plane.y * plane.y - plane.x * plane.x + plane.z * plane.z) * fInvLenSq;
-            mReflect.m[0][1] = fScale * plane.x * plane.y;
-            mReflect.m[0][2] = fScale * plane.x * plane.z;
-            mReflect.m[1][0] = fScale * plane.x * plane.y;
-            mReflect.m[1][1] = (plane.x * plane.x - plane.y * plane.y + plane.z * plane.z) * fInvLenSq;
-            mReflect.m[1][2] = plane.y * fScale * plane.z;
-            mReflect.m[2][0] = plane.x * fScale * plane.z;
-            mReflect.m[2][1] = plane.y * fScale * plane.z;
-            mReflect.m[2][2] = (plane.y * plane.y + plane.x * plane.x - plane.z * plane.z) * fInvLenSq;
-            mReflect.m[3][0] = plane.x * fScale * plane.w;
-            mReflect.m[3][1] = plane.y * fScale * plane.w;
-            mReflect.m[3][2] = plane.z * fScale * plane.w;
+            mReflect.m[0][0] = (plane.GetB() * plane.GetB() - plane.GetA() * plane.GetA() + plane.GetC() * plane.GetC()) * fInvLenSq;
+            mReflect.m[0][1] = fScale * plane.GetA() * plane.GetB();
+            mReflect.m[0][2] = fScale * plane.GetA() * plane.GetC();
+            mReflect.m[1][0] = fScale * plane.GetA() * plane.GetB();
+            mReflect.m[1][1] = (plane.GetA() * plane.GetA() - plane.GetB() * plane.GetB() + plane.GetC() * plane.GetC()) * fInvLenSq;
+            mReflect.m[1][2] = plane.GetB() * fScale * plane.GetC();
+            mReflect.m[2][0] = plane.GetA() * fScale * plane.GetC();
+            mReflect.m[2][1] = plane.GetB() * fScale * plane.GetC();
+            mReflect.m[2][2] = (plane.GetB() * plane.GetB() + plane.GetA() * plane.GetA() - plane.GetC() * plane.GetC()) * fInvLenSq;
+            mReflect.m[3][0] = plane.GetA() * fScale * plane.GetD();
+            mReflect.m[3][1] = plane.GetB() * fScale * plane.GetD();
+            mReflect.m[3][2] = plane.GetC() * fScale * plane.GetD();
             bClipPlane = true;
 
             PblMatrix mReflected;

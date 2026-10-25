@@ -8,6 +8,7 @@
 namespace Snd
 {
 
+// VTABLE: SWBF2 0x007869a0
 class StreamMixer : public StreamNode, public StreamNodeSinkNInput, public StreamSourceProducer
 {
 public:
@@ -34,8 +35,8 @@ public:
     void SetMixBuffer(int* const pBuffer);
     void SetPacketArray(StreamPacketIO* const pIO,
                         unsigned int* const puOffsets);
-    void SetLastPacketInfo(unsigned char uc);
-    void SetStopOnLast(unsigned char uc);
+    void SetLastPacketInfo(bool b);
+    void SetStopOnLast(bool b);
     void SetSynchronizedActivation(bool b);
     void SetSynchronizedDeactivation(bool b);
     void SetSynchronizedMixing(bool b);
@@ -50,7 +51,7 @@ public:
 
     bool IsActive() const;
 
-    bool HasMixedPacket(unsigned int uiInput) const;
+    bool IsMixed(unsigned int uiInput) const;
 private:
 
     StreamPacket* ConnectionGetPacket(unsigned int uiInput);

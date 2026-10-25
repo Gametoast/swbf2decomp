@@ -28,52 +28,26 @@ StreamAuxRenderer::~StreamAuxRenderer()
 
     if (IsOpen())
     {
-        StreamAuxRenderer__Close(this);
+        Close();
     }
 }
 
-// FUNCTION: SWBF2 0x0073f3b0
-void* __fastcall sub_73F3B0(void* pAuxRenderer, unsigned int uiFlags)
-{
-    char* const pThis = (char*)pAuxRenderer;
-
-    ((StreamAuxRenderer*)pThis)->StreamAuxRenderer::~StreamAuxRenderer();
-
-    if ((uiFlags & 1) != 0)
-    {
-        switch (((DSBufferRenderer*)pThis)->GetAllocType())
-        {
-        case Allocator<DSBufferRenderer>::allocType_heap:
-            Free(pThis);
-            break;
-        case Allocator<DSBufferRenderer>::allocType_tempHeap:
-            FreeTemp(pThis);
-            break;
-        default:
-            break;
-        }
-    }
-
-    return pThis;
-}
 
 // FUNCTION: SWBF2 0x0073f440
-void __fastcall StreamAuxRenderer__Close(void* pAuxRenderer)
+void StreamAuxRenderer::Close()
 {
-    StreamAuxRenderer* const pThis = (StreamAuxRenderer*)pAuxRenderer;
-
     Engine::GetThreadUpdate()->Pause(false);
 
-    pThis->SetFormat(SampleInfo::format_Unknown, 0, 0,
+    SetFormat(SampleInfo::format_Unknown, 0, 0,
                      false, 200.0f, false, 0, 0, false);
 
-    IDirectSound* const pDevice = pThis->mDevice;
-    pThis->mIsOpen = false;
+    IDirectSound* const pDevice = mDevice;
+    mIsOpen = false;
 
     if (pDevice != 0)
     {
         pDevice->Release();
-        pThis->mDevice = 0;
+        mDevice = 0;
     }
 
     Engine::GetThreadUpdate()->Resume();

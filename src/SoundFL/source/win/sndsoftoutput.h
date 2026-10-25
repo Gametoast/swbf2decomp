@@ -66,6 +66,9 @@ public:
         unsigned short mRemaining[2];
     };
 
+    // SYNTHETIC: SWBF2 0x00746bb0
+    // Snd::SoftOutput::PostOutputMixFlusher::`scalar deleting destructor'
+
     // VTABLE: SWBF2 0x00786b50
     class PostOutputMixFlusher : public StreamNodeSink, public StreamNodeSource
     {

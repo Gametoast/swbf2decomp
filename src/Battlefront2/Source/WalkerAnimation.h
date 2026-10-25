@@ -147,7 +147,8 @@ public:
 
 
 
-// FUNCTION: SWBF2 0x004ff690
+// SYNTHETIC: SWBF2 0x004ff690
+// WalkerAnimationIdle::`scalar deleting destructor'
 inline WalkerAnimationIdle::~WalkerAnimationIdle()
 {
 }

@@ -107,6 +107,8 @@ public:
     Callback mRoot;
 };
 
+// VTABLE: SWBF2 0x0079e250
+// class LuaCallback<CommandPost, struct DamageOwner>
 template <class ITEM, class PARAM>
 class LuaCallback : public Event<ITEM, PARAM>::Callback
 {

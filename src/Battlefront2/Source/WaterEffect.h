@@ -62,7 +62,8 @@ private:
  
  
 
-// FUNCTION: SWBF2 0x00677080
+// SYNTHETIC: SWBF2 0x00677080
+// WaterEffect::`scalar deleting destructor'
 inline WaterEffect::~WaterEffect()
 {
 }

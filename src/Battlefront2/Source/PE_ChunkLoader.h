@@ -55,7 +55,8 @@ public:
  
  
 
-// FUNCTION: SWBF2 0x00618620
+// SYNTHETIC: SWBF2 0x00618620
+// ParticleEmitterEffect::`scalar deleting destructor'
 inline ParticleEmitterEffect::~ParticleEmitterEffect()
 {
 }

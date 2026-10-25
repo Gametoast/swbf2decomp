@@ -3,6 +3,7 @@
 #include "RedEngineFL/Memory/engineAlloc.h"
 #include "RedEngineFL/Application/pc/pcRenderHelpers.h"
 #include "PebbleFL/Common/PblMatrix.h"
+#include "PebbleFL/Common/PblPlane.h"
 #include <d3dx9math.h>
 #include "pcRedDeviceEnumerator.h"
 #include "pcRedShader.h"
@@ -3857,7 +3858,7 @@ PblMatrix RedRenderer::m_nearSceneFadeTexTransform;
 
 // GLOBAL: SWBF2 0x008eed10
 // RedRenderer::m_userNearClipPlane
-PblVector4 RedRenderer::m_userNearClipPlane;
+PblPlane RedRenderer::m_userNearClipPlane;
 
 // FUNCTION: SWBF2 0x006b81a0
 void RedRenderer::pcFFSetTextureTransform(unsigned int uiStage, const PblMatrix& rMatrix)
@@ -3932,7 +3933,7 @@ void RedRenderer::pcSetTransform(D3DTRANSFORMSTATETYPE eState, const PblMatrix& 
 // FUNCTION: SWBF2 0x006b9db0
 void RedRenderer::pcSetUserNearClipPlane(const PblPlane& plane)
 {
-    RedRenderer::m_userNearClipPlane = *(const PblVector4*)&plane;
+    RedRenderer::m_userNearClipPlane = plane;
     if (RedRenderer::m_userNearClipPlaneEnable)
     {
         internalUpdateSceneConstants();
@@ -4175,7 +4176,10 @@ void RedRenderer::internalUpdateSceneConstants()
         D3DXMatrixInverse((D3DXMATRIX*)&mClip, 0, (const D3DXMATRIX*)&mViewProj);
         mClip.Transpose4x4();
 
-        PblVector4 vPlane = RedRenderer::m_userNearClipPlane;
+        PblVector4 vPlane(RedRenderer::m_userNearClipPlane.GetA(),
+                         RedRenderer::m_userNearClipPlane.GetB(),
+                         RedRenderer::m_userNearClipPlane.GetC(),
+                         RedRenderer::m_userNearClipPlane.GetD());
         D3DXVECTOR4 vIn(vPlane.x, vPlane.y, vPlane.z, vPlane.w);
         D3DXVECTOR4 vClip;
         D3DXVec4Transform(&vClip, &vIn, (const D3DXMATRIX*)&mClip);

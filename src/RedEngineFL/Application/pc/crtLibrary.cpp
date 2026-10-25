@@ -498,3 +498,9 @@
 
 // SYNTHETIC: SWBF2 0x005d49a0
 // std::_System_error_category::`scalar deleting destructor'
+
+// GLOBAL: SWBF2 0x007e3cb8
+// __security_cookie
+
+// GLOBAL: SWBF2 0x007e3cbc
+// __security_cookie_complement

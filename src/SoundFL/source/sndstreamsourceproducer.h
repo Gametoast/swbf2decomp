@@ -7,6 +7,9 @@
 namespace Snd
 {
 
+// SYNTHETIC: SWBF2 0x0073c870
+// Snd::StreamSourceProducer::`scalar deleting destructor'
+
 // VTABLE: SWBF2 0x00786878
 class StreamSourceProducer : public StreamNodeSource
 {
@@ -47,6 +50,9 @@ private:
 
  
  
+
+// SYNTHETIC: SWBF2 0x0073c840
+// Snd::StreamSourceNProducer::`scalar deleting destructor'
 
 // VTABLE: SWBF2 0x00786884
 class StreamSourceNProducer : public StreamNodeSource

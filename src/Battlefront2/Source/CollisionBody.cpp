@@ -18,10 +18,7 @@
 
 
 
-static inline const PblVector3 operator-(const PblVector3& a, const PblVector3& b)
-{
-    return PblVector3(a.x - b.x, a.y - b.y, a.z - b.z);
-}
+
 
 static inline const float Length(const PblVector3& v)
 {

@@ -56,7 +56,7 @@ public:
     virtual ~AIPath();
 
     // SYNTHETIC: SWBF2 0x00613fe0
-    // AIPath::`scalar deleting destructor' -- compiler-generated from the
+    // AIPath::`scalar deleting destructor'
 
     static void operator delete(void* pBlock) { sMemoryPool.Free(pBlock); }
 

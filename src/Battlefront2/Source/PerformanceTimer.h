@@ -11,7 +11,8 @@ class PblPerformanceTimer
 public:
     PblPerformanceTimer() { Reset(); }
 
-    // FUNCTION: SWBF2 0x00530e70
+    // SYNTHETIC: SWBF2 0x00530e70
+    // PblPerformanceTimer::`scalar deleting destructor'
     virtual ~PblPerformanceTimer() {}
 
     static void Init()

@@ -34,11 +34,9 @@ DSBufferRenderer::DSBufferRenderer()
       mFlags(8)
 {
 
-    StreamNodeSink::Connect(0, 0);
-
     mGainTarget[0] = 0x7FFF;
-    mGainTarget[1] = 0x7FFF;
     mGainCurrent[0] = 0x7FFF;
+    mGainTarget[1] = 0x7FFF;
     mGainCurrent[1] = 0x7FFF;
 
     Engine::GetThreadUpdate()->AddObject(this);

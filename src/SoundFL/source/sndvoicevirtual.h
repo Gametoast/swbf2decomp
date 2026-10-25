@@ -28,6 +28,7 @@ public:
     void Stop();
 
     VoiceBase* GetVoice() { return mVoice; }
+    unsigned int GetCustomFlags() const { return mCustomFlags; }
 
     float CalculatePriority(bool bForce);
     void Play(bool bRestart);
