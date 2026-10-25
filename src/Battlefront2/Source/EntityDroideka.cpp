@@ -2595,7 +2595,7 @@ void EntityDroideka::DoFootImpactEffects()
     fHeight[1] = pFoot1 ? pFoot1->m[3][1] : 0.0f;
     fHeight[2] = pFoot2 ? pFoot2->m[3][1] : 0.0f;
 
-    for (int i = 0; i < 3; ++i)
+    for (unsigned int i = 0; i < 3; ++i)
     {
         float fFoot = fHeight[i];
         bool bLanded = fFoot < 0.48f && mLastFootHeight[i] > 0.48f;

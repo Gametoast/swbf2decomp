@@ -6,9 +6,9 @@
 namespace Snd
 {
 
-class StreamCodec : public StreamSourceProducer,
-                    public StreamNode,
-                    public StreamNodeSink
+class StreamCodec : public StreamNode,
+                    public StreamNodeSink,
+                    public StreamSourceProducer
 {
 public:
 

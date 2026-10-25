@@ -1400,7 +1400,7 @@ void HUD::GameEvents::UpdateWeaponEvents(const RedCamera* const pCamera, const C
             EntityClass* pEntityClass = const_cast<EntityClass*>(hTarget->GetEntityClass());
             const bool bBuilding =
                 pEntityClass && pEntityClass->IsRtti(EntityBuildingClass::rttiHashEntityBuildingClass);
-            if ((pClass && pClass->mbHideHealthBar) || (!bBuilding && !hTarget->mIsAlive))
+            if ((pClass && pClass->mbHideHealthBar) || (!bBuilding && !hTarget->IsAlive()))
             {
                 hTarget = 0;
             }

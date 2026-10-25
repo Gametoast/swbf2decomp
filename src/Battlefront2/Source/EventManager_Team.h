@@ -33,6 +33,7 @@ public:
         return mTeam == other.mTeam;
     }
 
+private:
     int mTeam;
 };
  

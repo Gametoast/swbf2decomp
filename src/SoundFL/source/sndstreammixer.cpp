@@ -13,9 +13,7 @@ StreamMixer::StreamMixer()
 {
     char* const pThis = (char*)this;
 
-    *(unsigned int*)(pThis + 0x018) = 0;
-    *(unsigned short*)(pThis + 0x01C) = 0x40;
-    pThis[0x020] = 0;
+
 
     *(unsigned int*)(pThis + 0x06C) = 0;
     *(unsigned int*)(pThis + 0x070) = 0x7FFF;
@@ -83,7 +81,7 @@ void StreamMixer::SetPacketArray(StreamPacketIO* const pIO,
                                  unsigned int* const puOffsets)
 {
 
-    const unsigned int uiNumInputs = mSink.GetNumInputs();
+    const unsigned int uiNumInputs = StreamNodeSinkNInput::GetNumInputs();
 
     mInputPackets = pIO;
     mMixBufferOffsets = puOffsets;
@@ -117,7 +115,7 @@ void StreamMixer::SetChannels(unsigned char ucIn, unsigned char ucOut)
 // FUNCTION: SWBF2 0x0073fbe0
 void StreamMixer::SetGainArray(int* pGains)
 {
-    const unsigned int uiNumInputs = mSink.GetNumInputs();
+    const unsigned int uiNumInputs = StreamNodeSinkNInput::GetNumInputs();
 
     if (uiNumInputs == 0)
     {
@@ -216,7 +214,7 @@ void StreamMixer::Flush()
     memset(mActive, 0, sizeof(mActive));
     memset(mMixedPacket, 0, sizeof(mMixedPacket));
 
-    const unsigned int uiNumInputs = mSink.GetNumInputs();
+    const unsigned int uiNumInputs = StreamNodeSinkNInput::GetNumInputs();
     if (mInputPackets)
     {
         for (unsigned int i = 0; i < uiNumInputs; ++i)
@@ -248,10 +246,10 @@ StreamPacket* StreamMixer::ConnectionGetPacket(unsigned int uiInput)
             }
             pIO->Flush();
         }
-        pIO->SetPacket(mSink.ConnectionGetPacket(uiInput));
+        pIO->SetPacket(StreamNodeSinkNInput::ConnectionGetPacket(uiInput));
         return pIO->GetPacket();
     }
-    return mSink.ConnectionGetPacket(uiInput);
+    return StreamNodeSinkNInput::ConnectionGetPacket(uiInput);
 }
 
 // FUNCTION: SWBF2 0x0073fe00
@@ -289,14 +287,7 @@ StreamPacket* StreamMixer::GetPacket(unsigned int uiOutput)
     return StreamSourceProducer::GetPacket(uiOutput);
 }
 
-namespace
-{
-struct MixerNode : public StreamNode
-{
-    using StreamNode::UpdateNode;
-    using SourceTransport::SetPlayState;
-};
-}
+
 
 // FUNCTION: SWBF2 0x0073fab0
 bool StreamMixer::IsActive() const
@@ -317,13 +308,12 @@ void StreamMixer::Update()
         return;
     }
 
-    MixerNode* const pNode = (MixerNode*)mNode;
-    if (pNode->UpdateNode(true))
+    if (StreamNode::UpdateNode(true))
     {
         Flush();
     }
 
-    switch (pNode->GetCurrentPlayState())
+    switch (StreamNode::GetCurrentPlayState())
     {
     case SourceTransport::playState_playing:
         break;
@@ -332,7 +322,7 @@ void StreamMixer::Update()
         {
             break;
         }
-        pNode->SetPlayState(SourceTransport::playState_paused);
+        StreamNode::SetPlayState(SourceTransport::playState_paused);
         return;
     default:
         return;
@@ -344,7 +334,7 @@ void StreamMixer::Update()
         unsigned int uiNumMixed = 0;
         StreamPacket* const pOutPacket = GetReadPacket();
         unsigned int uiNumActive = 0;
-        const unsigned int uiNumInputs = mSink.GetNumInputs();
+        const unsigned int uiNumInputs = StreamNodeSinkNInput::GetNumInputs();
         if (pOutPacket == 0)
         {
             return;
@@ -663,7 +653,7 @@ void StreamMixer::Update()
         if (mSynchronizedMixing ? (uiNumActive != 0 && uiNumActive == uiNumMixed)
                                 : (uiNumMixed != 0))
         {
-            const unsigned int uiPos = pNode->mPlaybackPosition;
+            const unsigned int uiPos = StreamNode::mPlaybackPosition;
             int* pSum = mMixBuffer;
             short* pOut = (short*)pOutPacket->mBuffer;
             const unsigned int uiSamples = mMixBufferDataSize * mOutputChannels;
@@ -714,7 +704,7 @@ void StreamMixer::Update()
             const bool bInactive = !IsActive();
             PacketComplete(pOutPacket, uiSamples * sizeof(short), mMixBufferDataSize,
                            (mFlags & flags_LastPck) != 0 && bInactive, bInactive, uiPos);
-            pNode->mPlaybackPosition = uiPos + mMixBufferDataSize;
+            StreamNode::mPlaybackPosition = uiPos + mMixBufferDataSize;
             mMixBufferDataSize = 0;
 
             if (bInactive)
@@ -722,7 +712,7 @@ void StreamMixer::Update()
                 mFlags &= (unsigned char)~flags_Discon;
                 if (mFlags & flags_StopOnLast)
                 {
-                    pNode->Stop();
+                    StreamNode::Stop();
                     return;
                 }
             }
@@ -739,7 +729,7 @@ void StreamMixer::SetGain(unsigned int uiInput, unsigned int uiChannel,
                           float fGain, bool bImmediate)
 {
     const unsigned int uiTarget =
-        mSink.GetNumInputs() * mOutputChannels + uiInput * mOutputChannels + uiChannel;
+        StreamNodeSinkNInput::GetNumInputs() * mOutputChannels + uiInput * mOutputChannels + uiChannel;
     int iGain;
     if (fGain > 0.0f)
     {

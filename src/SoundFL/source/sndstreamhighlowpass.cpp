@@ -7,8 +7,7 @@ namespace Snd
 StreamLowHighPass::StreamLowHighPass()
     : mBufferSize(0)
 {
-    mSink.mConnection.mInputNode = 0;
-    mSink.mConnection.mInputNodeOutputIndex = 0;
+
 }
 
 // FUNCTION: SWBF2 0x00747e00
@@ -36,10 +35,10 @@ StreamPacket* StreamLowHighPass::GetPacket(unsigned int uiOutput)
     if (mInputPacket.GetPacket() == 0)
     {
 
-        StreamNodeSource* const pNode = mSink.mConnection.mInputNode;
+        StreamNodeSource* const pNode = StreamNodeSink::mConnection.mInputNode;
         mInputPacket.SetPacket(
             pNode != 0
-                ? pNode->GetPacket(mSink.mConnection.mInputNodeOutputIndex)
+                ? pNode->GetPacket(StreamNodeSink::mConnection.mInputNodeOutputIndex)
                 : 0);
     }
 
@@ -56,7 +55,7 @@ StreamPacket* StreamLowHighPass::GetPacket(unsigned int uiOutput)
         uiSize = mBufferSize;
     }
 
-    mFilter.Process16((const short*)mInputPacket.GetData(), uiSize >> 1, pOut);
+    DSP::HighLowPassFilter::Process16((const short*)mInputPacket.GetData(), uiSize >> 1, pOut);
 
     mOutputPacket.mBufferUsed = uiSize;
     mOutputPacket.mPos = pInput->mPos + (mInputPacket.GetOffset() >> 1);

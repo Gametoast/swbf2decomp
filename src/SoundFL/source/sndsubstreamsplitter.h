@@ -6,8 +6,8 @@
 namespace Snd
 {
 
-class SubstreamSplitter : public StreamNodeSource,
-                          public StreamNode,
+class SubstreamSplitter : public StreamNode,
+                          public StreamNodeSource,
                           public StreamNodeSink
 {
 public:

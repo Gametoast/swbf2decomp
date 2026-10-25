@@ -475,7 +475,7 @@ void SpaceDustEffect::Render(int value)
     texCoords.v0 = 0;
     texCoords.u1 = 0xff;
     texCoords.v1 = 0xff;
-    for (int i = 0; i < 80; i++)
+    for (unsigned int i = 0; i < 80; i++)
     {
         const ParticleData& particle = emitter.mParticle[i];
         if (particle.mLifeLeft < 0.0f)

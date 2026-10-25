@@ -176,7 +176,7 @@ void LockOnManager::CreateAll()
     {
         new LockOnManager(i);
     }
-    for (int i = 0; i < 32; i++)
+    for (unsigned int i = 0; i < 32; i++)
     {
         sTargetCommon[i].obj = 0;
         sTargetCommon[i].teamMask = 0;
@@ -217,7 +217,7 @@ void LockOnManager::Update(float fDeltaTime)
         }
         if (mNewNumAttackerTargets != mNumAttackerTargets || mNewNumNearestTargets != mNumNearestTargets)
         {
-            for (int i = 0; i < 64; i++)
+            for (unsigned int i = 0; i < 64; i++)
             {
                 mTargetPlayer[i].SetObj(0, &mTargetPlayerInfo[i]);
                 mTargetPlayerInfo[i].Clean();
@@ -244,12 +244,12 @@ void LockOnManager::Update(float fDeltaTime)
     unsigned int uChanged = 0;
     if (mTargetVisibilityUpdate && pCtrl)
     {
-        for (int i = 0; i < 64; i++)
+        for (unsigned int i = 0; i < 64; i++)
         {
             UpdateTargetVisibility(pCtrl, pCamera, vEye, mTargetPlayer[i], mTargetPlayerInfo[i], false, uTeamMask,
                                    bOffFrame, uChanged);
         }
-        for (int i = 0; i < 32; i++)
+        for (unsigned int i = 0; i < 32; i++)
         {
             UpdateTargetVisibility(pCtrl, pCamera, vEye, sTargetCommon[i], mTargetCommonInfo[i], true, uTeamMask,
                                    bOffFrame, uChanged);
@@ -506,7 +506,7 @@ void LockOnManager::SetLockedTarget(GameObject* const pObject, TargetInfo* const
     if (pObject)
     {
         sTargetLockSound.Play(0, 0, false, true);
-        for (int i = 0; i < 64; ++i)
+        for (unsigned int i = 0; i < 64; ++i)
         {
             mTargetPlayerInfo[i].mLocked = (pInfo == &mTargetPlayerInfo[i]);
         }

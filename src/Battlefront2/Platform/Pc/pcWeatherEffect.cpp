@@ -172,7 +172,7 @@ void FogCloudEffect::Render(int value)
     box._vMax = box._vMin;
     box.AddPoint(PblVector3(vPos[0] - vAt[0] * DISTANCE_FAR, vPos[1] - vAt[1] * DISTANCE_FAR,
                             vPos[2] - vAt[2] * DISTANCE_FAR));
-    for (int i = 0; i < 4; ++i)
+    for (unsigned int i = 0; i < 4; ++i)
     {
         box.AddPoint(PblVector3(vPos[0] + vCorners[i].x * DISTANCE_NEAR,
                                 vPos[1] + vCorners[i].y * DISTANCE_NEAR,
@@ -323,7 +323,7 @@ void FogCloudEffect::Render(int value)
                 if (RedRenderer::pcGetGeometryMode())
                 {
                     TexturedVertex::VertexC* pVertex = (TexturedVertex::VertexC*)pVertices;
-                    for (int i = 0; i < 4; ++i)
+                    for (unsigned int i = 0; i < 4; ++i)
                     {
                         pVertex[i].SetPos(aCorners[i]);
                         pVertex[i].SetColor(color);
@@ -334,7 +334,7 @@ void FogCloudEffect::Render(int value)
                 else
                 {
                     TexturedVertex::VertexU* pVertex = (TexturedVertex::VertexU*)pVertices;
-                    for (int i = 0; i < 4; ++i)
+                    for (unsigned int i = 0; i < 4; ++i)
                     {
                         pVertex[i].SetPos(aCorners[i]);
                         pVertex[i].SetColor(color);
@@ -596,7 +596,7 @@ void PrecipitationEffect::Render(int value)
             if (RedRenderer::pcGetGeometryMode())
             {
                 TexturedVertex::VertexC* pVertex = (TexturedVertex::VertexC*)pVertices;
-                for (int j = 0; j < 4; ++j)
+                for (unsigned int j = 0; j < 4; ++j)
                 {
                     pVertex[j].SetPos(aCorners[j]);
                     pVertex[j].SetColor(color);
@@ -607,7 +607,7 @@ void PrecipitationEffect::Render(int value)
             else
             {
                 TexturedVertex::VertexU* pVertex = (TexturedVertex::VertexU*)pVertices;
-                for (int j = 0; j < 4; ++j)
+                for (unsigned int j = 0; j < 4; ++j)
                 {
                     pVertex[j].SetPos(aCorners[j]);
                     pVertex[j].SetColor(color);

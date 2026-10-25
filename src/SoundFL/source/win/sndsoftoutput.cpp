@@ -35,7 +35,7 @@ SoftOutput::MainMixerInfo::~MainMixerInfo()
 void SoftOutput::Connect(StreamNodeSource* const pSource, unsigned int uiOutput,
                          unsigned int uiInput)
 {
-    mMixer.mSink.Connect(pSource, uiOutput, uiInput);
+    mMixer.StreamNodeSinkNInput::Connect(pSource, uiOutput, uiInput);
 }
 
 // FUNCTION: SWBF2 0x00746be0
@@ -45,11 +45,11 @@ void SoftOutput::Connect()
 
     if (mEffectsEnabled)
     {
-        mSplitter.mSink.Connect(&mMixer, 0);
-        mMixerOutput.mSink.Connect(&mSplitter, 0, 0);
-        mDMO.mSink.Connect(&mSplitter, 1);
-        mMixerOutput.mSink.Connect(&mDMO, 0, 1);
-        mPostOutputMixFlusher.mSink.Connect(&mMixerOutput, 0);
+        mSplitter.StreamNodeSink::Connect(&mMixer, 0);
+        mMixerOutput.StreamNodeSinkNInput::Connect(&mSplitter, 0, 0);
+        mDMO.StreamNodeSink::Connect(&mSplitter, 1);
+        mMixerOutput.StreamNodeSinkNInput::Connect(&mDMO, 0, 1);
+        mPostOutputMixFlusher.StreamNodeSink::Connect(&mMixerOutput, 0);
         pSource = &mPostOutputMixFlusher;
     }
 
@@ -59,20 +59,20 @@ void SoftOutput::Connect()
 // FUNCTION: SWBF2 0x00746c80
 void SoftOutput::Disconnect()
 {
-    unsigned int uiNumInputs = mMixer.mSink.GetNumInputs();
+    unsigned int uiNumInputs = mMixer.StreamNodeSinkNInput::GetNumInputs();
     for (unsigned int i = 0; i < uiNumInputs; i++)
     {
-        mMixer.mSink.Connect(0, 0, i);
+        mMixer.StreamNodeSinkNInput::Connect(0, 0, i);
     }
 
-    mSplitter.mSink.Connect(0, 0);
-    mDMO.mSink.Connect(0, 0);
+    mSplitter.StreamNodeSink::Connect(0, 0);
+    mDMO.StreamNodeSink::Connect(0, 0);
     mRenderer.StreamNodeSink::Connect(0, 0);
 
-    uiNumInputs = mMixerOutput.mSink.GetNumInputs();
+    uiNumInputs = mMixerOutput.StreamNodeSinkNInput::GetNumInputs();
     for (unsigned int i = 0; i < uiNumInputs; i++)
     {
-        mMixerOutput.mSink.Connect(0, 0, i);
+        mMixerOutput.StreamNodeSinkNInput::Connect(0, 0, i);
     }
 }
 
@@ -86,7 +86,7 @@ void SoftOutput::FreeMixBuffer()
 
     mMixer.SetPackets(0, 0, 0);
     mMixer.SetChannels(1, 1);
-    mMixer.mSink.SetConnectionArray(0, 0);
+    mMixer.StreamNodeSinkNInput::SetConnectionArray(0, 0);
     mMixer.SetGainArray(0);
     mMixer.SetMixBuffer(0);
     mMixer.SetPacketArray(0, 0);
@@ -96,7 +96,7 @@ void SoftOutput::FreeMixBuffer()
 
     mMixerOutput.SetPackets(0, 0, 0);
     mMixerOutput.SetChannels(0, 0);
-    mMixerOutput.mSink.SetConnectionArray(0, 0);
+    mMixerOutput.StreamNodeSinkNInput::SetConnectionArray(0, 0);
     mMixerOutput.SetGainArray(0);
     mMixerOutput.SetMixBuffer(0);
     mMixerOutput.SetPacketArray(0, 0);
@@ -119,7 +119,7 @@ unsigned int SoftOutput::GetUnconnectedInput() const
 {
     for (unsigned int i = 0; i < 32; i++)
     {
-        if (!mMixer.mSink.ConnectionGetNode(i))
+        if (!mMixer.StreamNodeSinkNInput::ConnectionGetNode(i))
         {
             return i;
         }
@@ -206,7 +206,7 @@ bool SoftOutput::SetOutputBufferSize(float fBufferMs, bool bRestart, bool bEffec
 
     mMixer.SetPackets(uiPacketSize, mMixerInfo.mMixersPackets, 2);
     mMixer.SetChannels(1, 2);
-    mMixer.mSink.SetConnectionArray(mMixerInfo.mMixerConns, 32);
+    mMixer.StreamNodeSinkNInput::SetConnectionArray(mMixerInfo.mMixerConns, 32);
     mMixer.SetGainArray(mMixerInfo.mMixerGains);
     mMixer.SetMixBuffer((int*)pNext);
     mMixer.SetPacketArray(mMixerInfo.mPacketIO, mMixerInfo.mOffsets);
@@ -242,7 +242,7 @@ bool SoftOutput::SetOutputBufferSize(float fBufferMs, bool bRestart, bool bEffec
     pSlice += uiPacketSize;
 
     mMixerOutput.SetPackets(uiPacketSize, mMixerOutputInfo.mMixersPackets, 2);
-    mMixerOutput.mSink.SetConnectionArray(mMixerOutputInfo.mMixerConns, 2);
+    mMixerOutput.StreamNodeSinkNInput::SetConnectionArray(mMixerOutputInfo.mMixerConns, 2);
     mMixerOutput.SetMixBuffer((int*)pSlice);
     mMixerOutput.SetPacketArray(mMixerOutputInfo.mPacketIO, mMixerOutputInfo.mOffsets);
     mMixerOutput.SetChannels(2, 2);
@@ -391,18 +391,18 @@ StreamPacket* SoftOutput::PostOutputMixFlusher::GetPacket(unsigned int  )
     typedef StreamPacket* (__thiscall* GetPacketFn)(StreamNodeSource* pThis,
                                                     unsigned int uiOutput);
 
-    StreamNodeSource* const pSource = mSink.mConnection.mInputNode;
+    StreamNodeSource* const pSource = StreamNodeSink::mConnection.mInputNode;
     if (pSource == 0)
     {
         return 0;
     }
 
-    StreamPacket* const pPacket = pSource->GetPacket(mSink.mConnection.mInputNodeOutputIndex);
+    StreamPacket* const pPacket = pSource->GetPacket(StreamNodeSink::mConnection.mInputNodeOutputIndex);
     if (pPacket != 0 && (pPacket->GetDiscontinuity() || pPacket->GetLast()))
     {
-        mSoftOutput->mDMO.mNode.Play(true);
-        ((StreamNode*)mSoftOutput->mSplitter.mNode)->Play(true);
-        ((StreamNode*)mSoftOutput->mMixer.mNode)->Play(true);
+        mSoftOutput->mDMO.StreamNode::Play(true);
+        mSoftOutput->mSplitter.StreamNode::Play(true);
+        mSoftOutput->mMixer.StreamNode::Play(true);
         pPacket->mFlags = (unsigned short)((pPacket->mFlags & ~1u) | 2u);
     }
     return pPacket;
@@ -418,27 +418,27 @@ void SoftOutput::Update()
     {
     case playState_playing:
         SetPlayState(playState_playing);
-        ((StreamNode*)mMixer.mNode)->Play(true);
-        ((StreamNode*)mSplitter.mNode)->Play(true);
-        mDMO.mNode.Play(true);
-        ((StreamNode*)mMixerOutput.mNode)->Play(true);
+        mMixer.StreamNode::Play(true);
+        mSplitter.StreamNode::Play(true);
+        mDMO.StreamNode::Play(true);
+        mMixerOutput.StreamNode::Play(true);
         mRenderer.StreamNode::Play(true);
         break;
 
     case playState_paused:
-        ((StreamNode*)mMixer.mNode)->Pause();
-        ((StreamNode*)mSplitter.mNode)->Pause();
-        mDMO.mNode.Pause();
-        ((StreamNode*)mMixerOutput.mNode)->Pause();
+        mMixer.StreamNode::Pause();
+        mSplitter.StreamNode::Pause();
+        mDMO.StreamNode::Pause();
+        mMixerOutput.StreamNode::Pause();
         mRenderer.StreamNode::Pause();
         SetPlayState(playState_paused);
         break;
 
     case playState_stopped:
-        ((StreamNode*)mMixer.mNode)->Stop();
-        ((StreamNode*)mSplitter.mNode)->Stop();
-        mDMO.mNode.Stop();
-        ((StreamNode*)mMixerOutput.mNode)->Stop();
+        mMixer.StreamNode::Stop();
+        mSplitter.StreamNode::Stop();
+        mDMO.StreamNode::Stop();
+        mMixerOutput.StreamNode::Stop();
         mRenderer.StreamNode::Stop();
         mRenderer.Flush();
         mMixerOutput.Flush();

@@ -455,12 +455,12 @@ void Destroy()
     SoundSpaceRegion::DestroyAll();
     TriggerSoundRegion::DestroyAll();
 
-    for (int i = 0; i < 4; i++)
+    for (unsigned int i = 0; i < 4; i++)
     {
         Snd::EngineBase::smListeners[i].SetSpace(0);
     }
     Snd::Engine::Update(0.1f);
-    for (int i = 0; i < 4; i++)
+    for (unsigned int i = 0; i < 4; i++)
     {
         Snd::EngineBase::smListeners[i].Enable(false);
     }

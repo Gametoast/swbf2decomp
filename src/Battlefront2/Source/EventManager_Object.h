@@ -3,6 +3,7 @@
 #include "EventManager_Timer.h"
 #include "Damageable.h"
 #include "Entity.h"
+#include "GameObject.h"
 
 namespace EventManager
 {
@@ -31,6 +32,10 @@ class ObjectMatches
 {
 public:
 
+    ObjectMatches(GameObject* pObject) : mObject(pObject) {}
+
+    ObjectMatches(const char* pcName) : mObject(EntityEx::mIdMap.Find(PblHash(pcName))) {}
+
     static const char* GetName() { return "Match"; }
 
     bool operator()(GameObject& object, PARAM&) const
@@ -43,6 +48,7 @@ public:
         return mObject == other.mObject;
     }
 
+private:
     EntityEx* mObject;
 };
 
@@ -50,6 +56,8 @@ template <class PARAM>
 class ObjectMatchesName
 {
 public:
+
+    ObjectMatchesName(const char* pcName) : mName(PblHash(pcName)) {}
     static const char* GetName() { return "Name"; }
 
     bool operator()(GameObject& object, PARAM&) const
@@ -62,6 +70,7 @@ public:
         return mName == other.mName;
     }
 
+private:
     unsigned int mName;
 };
 
@@ -84,6 +93,7 @@ public:
         return mTeam == other.mTeam;
     }
 
+private:
     int mTeam;
 };
 
@@ -91,6 +101,8 @@ template <class PARAM>
 class ObjectMatchesClass
 {
 public:
+
+    ObjectMatchesClass(const char* pcName) : mClass(Factory<Entity, EntityClass, EntityDesc>::Find(PblHash(pcName))) {}
     static const char* GetName() { return "Class"; }
 
     bool operator()(GameObject& object, PARAM&) const
@@ -103,6 +115,7 @@ public:
         return mClass == other.mClass;
     }
 
+private:
     EntityClass* mClass;
 };
 

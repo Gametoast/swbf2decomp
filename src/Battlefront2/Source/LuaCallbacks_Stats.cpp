@@ -1280,7 +1280,7 @@ static const CallbackEntryT sStatsCallbacks[18] =
 // FUNCTION: SWBF2 0x005a06f0
 void InitStats()
 {
-    for (int i = 0; i < 18; ++i)
+    for (unsigned int i = 0; i < 18; ++i)
     {
         LuaHelper::Register(sStatsCallbacks[i].pcName, sStatsCallbacks[i].pfnCallback, 0);
     }

@@ -38,14 +38,14 @@ public:
 
     void Pop()
     {
-        mPool[1] = mPool[mCount];
-        --mCount;
-        RECORD rec = mPool[1];
+        mPool[1] = mPool[mCount--];
+        RECORD rec;
+        rec = mPool[1];
         int i = 1;
         while (i <= (mCount >> 1))
         {
             int iChild = i + i;
-            if (iChild < mCount && mPool[iChild + 1].mKey > mPool[iChild].mKey)
+            if (iChild < mCount && mPool[iChild].mKey < mPool[iChild + 1].mKey)
             {
                 ++iChild;
             }
@@ -75,7 +75,8 @@ public:
     int FindLowest()
     {
         int lowest = mCount >> 1;
-        for (int i = lowest + 1; i <= mCount; ++i)
+        int iEnd = mCount + 1;
+        for (int i = lowest + 1; i < iEnd; ++i)
         {
             if (mPool[i].mKey < mPool[lowest].mKey)
             {
@@ -91,7 +92,7 @@ private:
     void SortDown(int i, T& obj, KEY key)
     {
         int iParent = i >> 1;
-        while (key > mPool[iParent].mKey)
+        while (mPool[iParent].mKey < key)
         {
             mPool[i] = mPool[iParent];
             i = iParent;

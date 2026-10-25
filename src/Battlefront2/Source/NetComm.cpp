@@ -152,7 +152,7 @@ void NetComm::Create(bool bMission)
     }
 
     inQueue.Reset();
-    for (int i = 0; i < 64; i++)
+    for (unsigned int i = 0; i < 64; i++)
     {
         inPktGroups[i].Reset();
     }

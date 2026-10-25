@@ -89,24 +89,18 @@ public:
 
     bool Add(TYPE const& rElem)
     {
-        if (this->_numElements >= this->_size)
+        if (this->_numElements >= this->_size && !GrowArray(8))
         {
-            int iGrown = this->_size * 2;
-            int iFloor = 8;
-            if (!this->Reserve_(Max_(iGrown, iFloor), true))
-            {
-                return false;
-            }
+            return false;
         }
 
-        new (this->_elements + this->_numElements) TYPE(rElem);
-        this->_numElements++;
+        (*this)[this->_numElements++] = rElem;
         return true;
     }
 
     bool SetNumElements(int iNum)
     {
-        if (iNum > this->_size && !this->Reserve_(Max_(this->_size * 2, iNum), true))
+        if (iNum > this->_size && !GrowArray(iNum))
         {
             return false;
         }
@@ -165,6 +159,12 @@ public:
 
         this->_numElements = iSize;
         return true;
+    }
+
+private:
+    bool GrowArray(int iSize)
+    {
+        return this->Reserve_(Max_(this->_size * 2, iSize), true);
     }
 
 };

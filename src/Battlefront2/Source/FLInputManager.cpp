@@ -213,7 +213,7 @@ void InitMagicCharMap(void)
     uiKey = 0x1E8375FAu;
     rMap[uiKey] = 0x8101;
 
-    for (int i = 0; i < 0x22; i++)
+    for (unsigned int i = 0; i < 0x22; i++)
     {
         rMap[gProcessedInputMap[i].hashID] = GetRawFromProcessed_(gProcessedInputMap[i].input);
     }

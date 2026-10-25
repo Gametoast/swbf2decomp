@@ -368,7 +368,7 @@ bool HUD::Manager::Write()
         if ((Item*)*ppConfig == pItem)
         {
             char acName[0x400];
-            _snprintf(acName, sizeof(acName) - 1, "data\%s.hud", pItem->GetName());
+            _snprintf(acName, sizeof(acName) - 1, "data\\%s.hud", pItem->GetName());
             acName[sizeof(acName) - 1] = 0;
             if (file.IsOpen())
             {

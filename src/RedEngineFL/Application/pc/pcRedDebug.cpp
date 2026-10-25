@@ -201,7 +201,7 @@ void RedDebug::RedDebugRenderable::Cleanup()
 {
     FLRenderer::RemoveInterfaceElement(&_ScreenGroup);
 
-    for (int i = 0; i < 30; i++)
+    for (unsigned int i = 0; i < 30; i++)
     {
         RedTextElement& line = _aTextLines[i];
         line.SetFont("");
@@ -209,7 +209,7 @@ void RedDebug::RedDebugRenderable::Cleanup()
         _ScreenGroup.RemoveElement(&line);
     }
 
-    for (int i = 0; i < 64; i++)
+    for (unsigned int i = 0; i < 64; i++)
     {
         RedTextElement& text = _aText3D[i].text;
         text.SetFont("");
@@ -391,7 +391,7 @@ void RedDebug::RedDebugRenderable::Init()
     FLRenderer::AddInterfaceElement(&_ScreenGroup, RedInterfaceScreen::LEFT,
                                     RedInterfaceScreen::TOP, false);
 
-    for (int i = 0; i < 30; i++)
+    for (unsigned int i = 0; i < 30; i++)
     {
         RedTextElement& line = _aTextLines[i];
         line.SetFont("systemfont");
@@ -401,7 +401,7 @@ void RedDebug::RedDebugRenderable::Init()
         _ScreenGroup.AddElement(&line);
     }
 
-    for (int i = 0; i < 64; i++)
+    for (unsigned int i = 0; i < 64; i++)
     {
         RedTextElement& text = _aText3D[i].text;
         text.SetFont("systemfont");

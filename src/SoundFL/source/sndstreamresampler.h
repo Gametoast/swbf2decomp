@@ -8,9 +8,9 @@
 namespace Snd
 {
 
-class StreamResampler : public StreamNodeSource,
-                        public StreamNode,
-                        public StreamNodeSink
+class StreamResampler : public StreamNode,
+                        public StreamNodeSink,
+                        public StreamNodeSource
 {
 public:
     StreamResampler();

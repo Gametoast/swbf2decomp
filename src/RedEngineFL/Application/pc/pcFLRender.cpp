@@ -497,7 +497,7 @@ void FLRenderer::Cleanup()
     RedLodManager::Cleanup();
     RedLight::DeinitSys();
 
-    for (int i = 0; i < 10; i++)
+    for (unsigned int i = 0; i < 10; i++)
     {
         _RenderableLists[i].Clear();
     }

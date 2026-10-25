@@ -189,7 +189,7 @@ unsigned short* SquadCommandGroup::sCommands[4][4];
 // FUNCTION: SWBF2 0x00650c20
 void SquadCommandGroup::Create()
 {
-    for (int i = 0; i < 4; ++i)
+    for (unsigned int i = 0; i < 4; ++i)
     {
         for (unsigned int j = 0; j < 4; ++j)
         {
@@ -477,7 +477,7 @@ void VoiceChatGroup::UpdateLines()
     int iLocal = NetGame::GetLocalIndex(mParent->mJoystickIndex);
     Character* pLocal = Character::FindPlayer(iLocal);
 
-    for (int i = 0; i < 4; ++i)
+    for (unsigned int i = 0; i < 4; ++i)
     {
         Line& line = mLines[i];
         if (line.mId < 0)

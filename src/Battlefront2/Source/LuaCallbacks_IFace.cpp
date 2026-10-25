@@ -2721,7 +2721,7 @@ int ScriptCB_RemoveTexture(lua_State* L)
 // FUNCTION: SWBF2 0x00588280
 void InitIFace()
 {
-    for (int i = 0; i < 150; ++i)
+    for (unsigned int i = 0; i < 150; ++i)
     {
         LuaHelper::Register(sIFaceCallbacks[i].pcName, sIFaceCallbacks[i].pfnCallback, 0);
     }

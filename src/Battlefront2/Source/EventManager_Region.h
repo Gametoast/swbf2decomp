@@ -18,7 +18,10 @@ public:
 
     RegionMatches(RedRegion* pRegion) : mRegion(pRegion) {}
 
-    RegionMatches(const char* pcName);
+    RegionMatches(const char* pcName)
+        : mRegion(RedRegion::Find(PblHash(pcName)))
+    {
+    }
 
     static const char* GetName() { return ""; }
 
@@ -32,6 +35,7 @@ public:
         return mRegion == other.mRegion;
     }
 
+private:
     RedRegion* mRegion;
 };
 

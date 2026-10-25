@@ -196,7 +196,7 @@ void* __cdecl MD5ClearBytes(void* pDest, unsigned int uLength)
 // FUNCTION: SWBF2 0x005a3010
 void __cdecl MD5Print(const unsigned char* pDigest, char* pcHex)
 {
-    for (int i = 0; i < 16; ++i)
+    for (unsigned int i = 0; i < 16; ++i)
     {
         sprintf(pcHex, "%02x", pDigest[i]);
         pcHex += 2;

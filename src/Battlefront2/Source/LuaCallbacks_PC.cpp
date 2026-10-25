@@ -909,7 +909,7 @@ int ScriptCB_IsPCVideoFixedFunction(lua_State* L)
 // FUNCTION: SWBF2 0x0059b170
 void InitPC()
 {
-    for (int i = 0; i < 36; ++i)
+    for (unsigned int i = 0; i < 36; ++i)
     {
         LuaHelper::Register(sPCCallbacks[i].pcName, sPCCallbacks[i].pfnCallback, 0);
     }

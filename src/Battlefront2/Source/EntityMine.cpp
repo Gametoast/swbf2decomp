@@ -254,7 +254,7 @@ void EntityMine::ClientKill()
                 false, COLL_UNKNOWN);
         }
     }
-    else if (mIsAlive)
+    else if (IsAlive())
     {
         if (pClass->mExplosionTrigger)
         {

@@ -2922,7 +2922,7 @@ void EntitySoldier::CheckForZoom(float fDeltaTime)
 // FUNCTION: SWBF2 0x004e6f80
 void EntitySoldier::UpdateWeaponAndAimer(float fDeltaTime)
 {
-    if (!mIsAlive)
+    if (!IsAlive())
     {
         return;
     }
@@ -6370,7 +6370,7 @@ bool EntitySoldier::Update(float fDeltaTime)
         }
     }
 
-    if (!mIsAlive)
+    if (!IsAlive())
     {
         int iPlayer = mInitialPlayerId;
         if (iPlayer >= 0 && !Character::GetPtr(iPlayer)->mUnit)
@@ -6398,7 +6398,7 @@ bool EntitySoldier::Update(float fDeltaTime)
             mAmbientSound.Play(&mClass->mAmbientSound, &mMatrix.GetTranslation(), &mVelocity, true);
         }
 
-        if (mIsAlive && mClass->mLowHealthThreshold * mMaxHealth >= mCurHealth)
+        if (IsAlive() && mClass->mLowHealthThreshold * mMaxHealth >= mCurHealth)
         {
             if (!mLowHealthSound.GetPlaying())
             {
@@ -6433,7 +6433,7 @@ bool EntitySoldier::Update(float fDeltaTime)
     if (mState != SoldierState::DEAD && mState != SoldierState::HERO_FLEE && mState != SoldierState::FLY &&
         mState != SoldierState::TUMBLE && mState != SoldierState::BOUNCE)
     {
-        if (!mIsAlive)
+        if (!IsAlive())
         {
 
             EntitySoldierClass* pClass = mClass;
@@ -6701,7 +6701,7 @@ bool EntitySoldier::Update(float fDeltaTime)
             mControlFire[0].Clear();
             mControlFire[1].Clear();
         }
-        if (mIsAlive && fWaterHeight >= mEyePoint.y)
+        if (IsAlive() && fWaterHeight >= mEyePoint.y)
         {
             mDrownTime -= fDeltaTime;
             if (mDrownTime < 0.0f)
@@ -7145,7 +7145,7 @@ bool EntitySoldier::Update(float fDeltaTime)
         }
 
         bool bCanJetJump = false;
-        if (mIsAlive)
+        if (IsAlive())
         {
             int iFactor = mState == SoldierState::FLY ? 7 : 4;
             bCanJetJump = mState != SoldierState::FLY;
@@ -7218,7 +7218,7 @@ bool EntitySoldier::Update(float fDeltaTime)
                 }
             }
         }
-        else if (mIsAlive && mClass->m_bRecoverFromTumble && mStateTimer > 0.5f)
+        else if (IsAlive() && mClass->m_bRecoverFromTumble && mStateTimer > 0.5f)
         {
             SetState(SoldierState::FLY_RECOVER);
         }
@@ -7551,7 +7551,7 @@ bool EntitySoldier::Update(float fDeltaTime)
     }
     }
 
-    if (!mIsAlive && mStateTimer > 4.0f)
+    if (!IsAlive() && mStateTimer > 4.0f)
     {
         Kill();
     }
@@ -7592,7 +7592,7 @@ bool EntitySoldier::Update(float fDeltaTime)
         VehicleEngine::TurnOff(mClass, mMatrix.GetTranslation(), mVelocity);
     }
 
-    if (mIsAlive)
+    if (IsAlive())
     {
 
         for (int iSwitch = 0; iSwitch < 2; ++iSwitch)
@@ -7813,7 +7813,7 @@ bool EntitySoldier::Update(float fDeltaTime)
 
     mFlags &= ~flags_isGrounded;
     mLastRenderedLod = -1;
-    if (mIsAlive)
+    if (IsAlive())
     {
         int iFirstPerson = GetFirstPersonIndex();
         if (iFirstPerson >= 0)
@@ -9634,7 +9634,7 @@ void EntitySoldier::ApplyRadiusDamage(const PblVector3& vPos, float fInnerRadius
     }
 
     GameObject::ApplyRadiusDamage(vPos, fInnerRadius, fOuterRadius, damage);
-    if (!mIsAlive)
+    if (!IsAlive())
     {
         const PblVector3& vPosition = mMatrix.GetTranslation();
         PblVector3 vAway(vPosition.x - vPos.x, vPosition.y - vPos.y, vPosition.z - vPos.z);

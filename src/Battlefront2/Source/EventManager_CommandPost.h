@@ -22,6 +22,15 @@ class PostMatchesName
 {
 public:
 
+    PostMatchesName(const char* pcName) : mIndex(-1)
+    {
+        CommandPost* pPost = CommandPost::FindPostByName(pcName);
+        if (pPost)
+        {
+            mIndex = pPost->GetIndex();
+        }
+    }
+
     static const char* GetName() { return "Name"; }
 
     bool operator()(CommandPost& post, PARAM&) const
@@ -34,6 +43,7 @@ public:
         return mIndex == other.mIndex;
     }
 
+private:
     int mIndex;
 };
 
@@ -71,6 +81,7 @@ public:
         return mTeam == other.mTeam;
     }
 
+private:
     int mTeam;
 };
 

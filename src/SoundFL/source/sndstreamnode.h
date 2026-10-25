@@ -81,11 +81,7 @@ public:
 class StreamNode : public SourceTransport
 {
 public:
-    StreamNode() : mFlags(0)
-    {
-        SourceTransport::mPlaybackPosition = 0;
-        SourceTransport::mFlags = (unsigned short)SourceTransport::flags_stopped;
-    }
+    StreamNode() : mFlags(0) {}
 
     bool IsStarving() const;
 

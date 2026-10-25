@@ -10,8 +10,8 @@ namespace Snd
 {
 
 // VTABLE: SWBF2 0x00786a80
-class StreamVAD : public StreamNodeSource,
-                  public StreamNode,
+class StreamVAD : public StreamNode,
+                  public StreamNodeSource,
                   public StreamNodeSink
 {
 public:

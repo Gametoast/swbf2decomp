@@ -180,7 +180,7 @@ public:
     static bool IsNearLocalPlayer(const PblVector3& vPos);
 
     // FUNCTION: SWBF2 0x004292b0
-    static bool IsClient() { return netEnabledNext ? netClientActive : false; }
+    static bool IsClient() { return netEnabledNext && netClientActive; }
 
     enum MessageType
     {

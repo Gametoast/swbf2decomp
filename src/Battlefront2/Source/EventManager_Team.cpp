@@ -239,29 +239,20 @@ namespace EventManager
 int DummyLuaCallback(lua_State* L);
 namespace TeamEvent { void Init(); }
 
-template <class MATCH>
-static MATCH* ReadNumber(MATCH* pMatch)
-{
-    pMatch->mTeam = (unsigned int)luaL_checknumber(LuaHelper::mState, 2);
-    return pMatch;
-}
+
 
 // FUNCTION: SWBF2 0x0051af60
 template <>
 TeamMatches<int> LuaGetItem<TeamMatches<int> >(int)
 {
-    TeamMatches<int> match(0);
-    ReadNumber(&match);
-    return match;
+    return TeamMatches<int>((int)luaL_checknumber(LuaHelper::mState, 2));
 }
 
 // FUNCTION: SWBF2 0x0051af80
 template <>
 TeamMatches<float> LuaGetItem<TeamMatches<float> >(int)
 {
-    TeamMatches<float> match(0);
-    ReadNumber(&match);
-    return match;
+    return TeamMatches<float>((int)luaL_checknumber(LuaHelper::mState, 2));
 }
 
 template <class ITEM, class PARAM>

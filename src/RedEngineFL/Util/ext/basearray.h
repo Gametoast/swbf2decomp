@@ -82,17 +82,11 @@ public:
         int i = 0;
         for (; i < iKeep; i++)
         {
-            if (pNew)
-            {
-                new (pNew + i) TYPE(_elements[i]);
-            }
+            new (pNew + i) TYPE(_elements[i]);
         }
         for (; i < iCount; i++)
         {
-            if (pNew)
-            {
-                new (pNew + i) TYPE();
-            }
+            new (pNew + i) TYPE();
         }
 
         if (_elements)

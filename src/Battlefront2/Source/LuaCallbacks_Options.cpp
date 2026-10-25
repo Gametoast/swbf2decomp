@@ -1506,7 +1506,7 @@ static const CallbackEntryT sOptionsCallbacks[61] =
 // FUNCTION: SWBF2 0x00599090
 void InitOptions()
 {
-    for (int i = 0; i < 61; ++i)
+    for (unsigned int i = 0; i < 61; ++i)
     {
         LuaHelper::Register(sOptionsCallbacks[i].pcName, sOptionsCallbacks[i].pfnCallback, 0);
     }

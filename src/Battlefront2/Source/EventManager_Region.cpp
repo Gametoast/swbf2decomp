@@ -26,21 +26,12 @@ bool LuaPushItem<Character>(Character& character)
     return true;
 }
 
-RegionMatches::RegionMatches(const char* pcName)
-    : mRegion(RedRegion::Find(PblHash(pcName)))
-{
-}
 
 
-CharacterMatchesName::CharacterMatchesName(const char* pcName)
-    : mId(PblHash(pcName))
-{
-}
 
-CharacterMatchesClass::CharacterMatchesClass(const char* pcName)
-    : mClass(EntityClass::Find(PblHash(pcName)))
-{
-}
+
+
+
 
 
 
@@ -66,7 +57,7 @@ CharacterMatchesName LuaGetItem<CharacterMatchesName>(int iIndex)
 template <>
 CharacterMatchesTeam LuaGetItem<CharacterMatchesTeam>(int iIndex)
 {
-    return CharacterMatchesTeam((unsigned int)luaL_checknumber(LuaHelper::mState, iIndex));
+    return CharacterMatchesTeam((int)luaL_checknumber(LuaHelper::mState, iIndex));
 }
 
 // FUNCTION: SWBF2 0x00519bb0

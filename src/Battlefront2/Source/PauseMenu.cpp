@@ -371,7 +371,7 @@ void PauseMenu::_SetPaused(bool bPaused)
     if (sPauseMenuSoundEnabled)
     {
         EnableDisplays(iViewport, !mVisible);
-        for (int i = 0; i < 5; ++i)
+        for (unsigned int i = 0; i < 5; ++i)
         {
             HUD::gScreenGroup[i].Enable(!mVisible);
             HUD::gScreenGroupEdit[i].Enable(HUD::gScreenGroupEditEnabled && !mVisible);

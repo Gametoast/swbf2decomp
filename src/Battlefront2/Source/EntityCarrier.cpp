@@ -46,7 +46,7 @@ void EntityFlyer::SetupCameraZoomFactor(float& rZoom)
 // FUNCTION: SWBF2 0x004b5c10
 void EntityFlyer::SetupCameraFOV(float& rFOV)
 {
-    if (!mIsAlive)
+    if (!IsAlive())
     {
         rFOV = GetDefaultFOV();
         return;
@@ -241,12 +241,7 @@ void EntityFlyer::SetMatrix(const PblMatrix& mMatrix)
     EntityFlyerUpdateCollisionSphere(this);
 }
 
-// FUNCTION: SWBF2 0x00477870
-bool EntityFlyer::GetFollowingPath() const
-{
-    return mFollowingPath && mState == FLYING && mIsAlive &&
-           mAIEng.ai.mFreeFlyTime <= 0.0f && !mInRoll && !mInFlip;
-}
+
 
 // FUNCTION: SWBF2 0x004778d0
 Trackable* EntityFlyer::GetTrackable()

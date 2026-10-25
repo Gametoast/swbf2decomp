@@ -1370,7 +1370,7 @@ static const CallbackEntryT sNetCallbacks[135] =
 // FUNCTION: SWBF2 0x005969a0
 void InitNet()
 {
-    for (int i = 0; i < 135; ++i)
+    for (unsigned int i = 0; i < 135; ++i)
     {
         LuaHelper::Register(sNetCallbacks[i].pcName, sNetCallbacks[i].pfnCallback, 0);
     }

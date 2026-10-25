@@ -845,7 +845,7 @@ void FlagItem::BroadcastMessage(unsigned int uHash)
 // FUNCTION: SWBF2 0x00524de0
 bool FlagItem::Update(float fDeltaTime)
 {
-    if (!mIsAlive)
+    if (!IsAlive())
     {
         return false;
     }
@@ -862,7 +862,7 @@ bool FlagItem::Update(float fDeltaTime)
             GameObject* pCarrier = static_cast<Trackable*>(pControllable)->GetGameObject();
             if (pCarrier)
             {
-                if (!pCarrier->mIsAlive)
+                if (!pCarrier->IsAlive())
                 {
                     Drop();
                 }
@@ -922,11 +922,11 @@ bool FlagItem::Update(float fDeltaTime)
 bool FlagItem::CollisionCallback(const CollisionResult* pResult, CollisionObject* pOther,
                                  Restrictor* pRestrictor)
 {
-    if (mIsAlive && !mOwner &&
+    if (IsAlive() && !mOwner &&
         (!mStationary || mClass->mLifeSpan - mLifeTimer > 0.5f))
     {
         GameObject* pObject = pOther->GetGameObject();
-        if (pObject && pObject->mIsAlive &&
+        if (pObject && pObject->IsAlive() &&
             (((pObject->mTeam ^ mTeam) & 0xf) || (mAllowTeamPickup && mMoved)) &&
             PickUp(pObject))
         {

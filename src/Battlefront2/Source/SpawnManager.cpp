@@ -109,7 +109,7 @@ static int GetAllyCount(const CommandPost* pPost)
 // FUNCTION: SWBF2 0x0061c490
 int __fastcall PlayerPrefs::FindByPlayerId(int iPlayer)
 {
-    for (int i = 0; i < 1; ++i)
+    for (unsigned int i = 0; i < 1; ++i)
     {
         if ((&PlayerPrefs::mAllUserPrefs[0].mPlayerId)[i * 11] == iPlayer)
         {
@@ -260,7 +260,7 @@ void SpawnManager::InitialUpdate()
     if (NetGame::IsEnabled() && NetGame::IsClient() && !NetGame::IsOneWorld())
     {
         SpawnManager* pHost = sHostInstance;
-        for (int i = 0; i < 8; ++i)
+        for (unsigned int i = 0; i < 8; ++i)
         {
             mMaxUnitCount[i] = pHost->mMaxUnitCount[i];
             mCycleDelay[i] = pHost->mCycleDelay[i];
@@ -270,7 +270,7 @@ void SpawnManager::InitialUpdate()
 
     Character::CreateAll(GetTotalCharacterCount());
 
-    for (int i = 0; i < 8; ++i)
+    for (unsigned int i = 0; i < 8; ++i)
     {
         mCycleTimer[i] = mCycleDelay[i];
         if (gAttractMode || !NetGame::IsEnabled())

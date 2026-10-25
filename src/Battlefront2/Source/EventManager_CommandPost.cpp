@@ -376,81 +376,53 @@ namespace EventManager
 int DummyLuaCallback(lua_State* L);
 namespace CommandPostEvent { void Init(); }
 
-template <class PARAM>
-static PostMatchesName<PARAM>* ReadPostName(PostMatchesName<PARAM>* pMatch)
-{
-    const char* pcName = luaL_checklstring(LuaHelper::mState, 2, 0);
-    pMatch->mIndex = -1;
-    CommandPost* pPost = CommandPost::FindPostByName(pcName);
-    if (pPost)
-    {
-        pMatch->mIndex = pPost->GetIndex();
-    }
-    return pMatch;
-}
 
-template <class MATCH>
-static MATCH* ReadNumber(MATCH* pMatch)
-{
-    pMatch->mTeam = (unsigned int)luaL_checknumber(LuaHelper::mState, 2);
-    return pMatch;
-}
+
+
 
 // FUNCTION: SWBF2 0x0050fa30
 template <>
 PostMatchesName<unsigned __int64> LuaGetItem<PostMatchesName<unsigned __int64> >(int)
 {
-    PostMatchesName<unsigned __int64> match;
-    ReadPostName(&match);
-    return match;
+    return PostMatchesName<unsigned __int64>(luaL_checklstring(LuaHelper::mState, 2, 0));
 }
 
 // FUNCTION: SWBF2 0x0050fa60
 template <>
 PostMatchesName<DamageOwner> LuaGetItem<PostMatchesName<DamageOwner> >(int)
 {
-    PostMatchesName<DamageOwner> match;
-    ReadPostName(&match);
-    return match;
+    return PostMatchesName<DamageOwner>(luaL_checklstring(LuaHelper::mState, 2, 0));
 }
 
 // FUNCTION: SWBF2 0x0050fa90
 template <>
 PostMatchesName<char> LuaGetItem<PostMatchesName<char> >(int)
 {
-    PostMatchesName<char> match;
-    ReadPostName(&match);
-    return match;
+    return PostMatchesName<char>(luaL_checklstring(LuaHelper::mState, 2, 0));
 }
 
 // FUNCTION: SWBF2 0x0050fac0
 template <>
 PostMatchesTeam<unsigned __int64> LuaGetItem<PostMatchesTeam<unsigned __int64> >(int)
 {
-    PostMatchesTeam<unsigned __int64> match(0);
-    ReadNumber(&match);
-    return match;
+    return PostMatchesTeam<unsigned __int64>((int)luaL_checknumber(LuaHelper::mState, 2));
 }
 
 // FUNCTION: SWBF2 0x0050fae0
 template <>
 PostMatchesTeam<DamageOwner> LuaGetItem<PostMatchesTeam<DamageOwner> >(int)
 {
-    PostMatchesTeam<DamageOwner> match(0);
-    ReadNumber(&match);
-    return match;
+    return PostMatchesTeam<DamageOwner>((int)luaL_checknumber(LuaHelper::mState, 2));
 }
 
 // FUNCTION: SWBF2 0x0050fb00
 template <>
 PostMatchesTeam<char> LuaGetItem<PostMatchesTeam<char> >(int)
 {
-    PostMatchesTeam<char> match(0);
-    ReadNumber(&match);
-    return match;
+// FUNCTION: SWBF2 0x0050ff30
+    return PostMatchesTeam<char>((int)luaL_checknumber(LuaHelper::mState, 2));
 }
 
-// FUNCTION: SWBF2 0x0050ff30
 template <class ITEM, class PARAM>
 int UnregisterLuaCallback(lua_State*)
 {

@@ -137,8 +137,8 @@ char* PblMemChunk::ReadString(char* pcBuffer, int iBufSize)
             return 0;
         }
         *pcOut++ = cChar;
-        --iBufSize;
         cChar = Read8();
+        --iBufSize;
     }
     if (iBufSize <= 0)
     {

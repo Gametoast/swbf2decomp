@@ -14,7 +14,7 @@ namespace GameVoiceChat { void* GetNode(); }
 void* VoiceChat::NetPacketAudio::Receive()
 {
     NetPacket* pPacket = 0;
-    for (int i = 0; i < 4; ++i)
+    for (unsigned int i = 0; i < 4; ++i)
     {
         if (!GameVoiceChat::gPacketQueue[i].IsEmpty())
         {

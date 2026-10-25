@@ -12,8 +12,8 @@ namespace Snd
 class StreamFormat;
 
 // VTABLE: SWBF2 0x00786cd0
-class StreamCaptureSourceBase : public StreamNodeSource,
-                                public StreamNode
+class StreamCaptureSourceBase : public StreamNode,
+                                public StreamNodeSource
 {
 public:
     enum Flags

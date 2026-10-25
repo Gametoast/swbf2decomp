@@ -11,7 +11,7 @@
 namespace Snd
 {
 
-class StreamRenderer : public StreamNodeSource, public StreamRendererBase
+class StreamRenderer : public StreamRendererBase, public StreamNodeSource
 {
 public:
     StreamRenderer();

@@ -138,7 +138,7 @@ void GameVoiceChat::Decoder::Stop()
         static_cast<Snd::SourceTransport&>(mDecoders[i]).Stop();
     }
 
-    ((Snd::SourceTransport*)mMixer.mNode)->Stop();
+    static_cast<Snd::SourceTransport&>(mMixer).Stop();
     static_cast<Snd::SourceTransport&>(mAuxRenderer).Stop();
 
     mPlaying = false;
@@ -152,7 +152,7 @@ void GameVoiceChat::Decoder::Close()
     {
         mDecoders[i].mConnection.mInputNode = 0;
         mDecoders[i].mConnection.mInputNodeOutputIndex = 0;
-        mMixer.mSink.Connect(0, 0, i);
+        mMixer.StreamNodeSinkNInput::Connect(0, 0, i);
     }
 
     mAuxRenderer.mConnection.mInputNode = 0;
@@ -167,7 +167,7 @@ void GameVoiceChat::Decoder::Close()
 
     mMixer.Snd::StreamSourceProducer::SetPackets(0, 0, 0);
     mMixer.SetMixBuffer(0);
-    mMixer.mSink.SetConnectionArray(0, 0);
+    mMixer.StreamNodeSinkNInput::SetConnectionArray(0, 0);
     mMixer.SetPacketArray(0, 0);
 
     SetProducers(0, 0);
@@ -270,7 +270,7 @@ bool GameVoiceChat::Decoder::Open(unsigned int playbackDevice, float fPacketMs, 
 
     mMixer.Snd::StreamSourceProducer::SetPackets(uiSamples2, mMixerPackets, 2);
     mMixer.SetMixBuffer(mMixerAccBuffer);
-    mMixer.mSink.SetConnectionArray(mMixerConnections, uiSlots);
+    mMixer.StreamNodeSinkNInput::SetConnectionArray(mMixerConnections, uiSlots);
     mMixer.SetPacketArray(mMixerPacketIO, mMixerBufferOffsets);
     mMixer.SetSynchronizedMixing(true);
     mMixer.SetConstantOutputPacketSize(true);
@@ -288,7 +288,7 @@ bool GameVoiceChat::Decoder::Open(unsigned int playbackDevice, float fPacketMs, 
     {
         mDecoders[i].mConnection.mInputNode = this;
         mDecoders[i].mConnection.mInputNodeOutputIndex = i;
-        mMixer.mSink.Connect(&mDecoders[i], 0, i);
+        mMixer.StreamNodeSinkNInput::Connect(&mDecoders[i], 0, i);
     }
 
     mAuxRenderer.mConnection.mInputNodeOutputIndex = 0;
@@ -314,7 +314,7 @@ void GameVoiceChat::Decoder::Play()
         static_cast<Snd::SourceTransport&>(mDecoders[i]).Play(true);
     }
 
-    ((Snd::SourceTransport*)mMixer.mNode)->Play(true);
+    static_cast<Snd::SourceTransport&>(mMixer).Play(true);
     static_cast<Snd::SourceTransport&>(mAuxRenderer).Play(true);
 
     mPlaying = true;

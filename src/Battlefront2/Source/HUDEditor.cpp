@@ -272,7 +272,7 @@ void HUD::Editor::Update(RawControllerInputs* const pInputs, float fDelta)
     {
         mInfo.SetFont("systemfont");
         mInfo.SetTextScale(0.8f, 0.8f);
-        for (int i = 0; i < 26; i++)
+        for (unsigned int i = 0; i < 26; i++)
         {
             mMenu[i].SetFont("systemfont");
             mMenu[i].SetTextScale(0.8f, 0.8f);
@@ -829,7 +829,7 @@ void HUD::Editor::HighlightElement(bool bHighlight)
 
     EditHeap heap;
     RedTextElement* pMenu = mMenu;
-    for (int i = 0; i < 26; i++)
+    for (unsigned int i = 0; i < 26; i++)
     {
         mMenu[i].SetText("", true);
         mMenu[i].Enable(false);
@@ -1229,7 +1229,7 @@ void HUD::Editor::SetMode(Mode eMode)
         EditHeap heap;
         if (mMode != mode_SelectProperty && mMode != mode_SelectElement)
         {
-            for (int i = 0; i < 26; i++)
+            for (unsigned int i = 0; i < 26; i++)
             {
                 mMenu[i].Enable(false);
                 mMenu[i].SetText("", true);

@@ -65,14 +65,14 @@ void AI::DestroyGoal::Update()
 {
     if (mEnabled)
     {
-        if (mTarget.mType == GTT_GAMEOBJECT && mTarget.mGameObj && !mTarget.mGameObj->mIsAlive)
+        if (mTarget.mType == GTT_GAMEOBJECT && mTarget.mGameObj && !mTarget.mGameObj->IsAlive())
         {
             SetEnabled(false);
             return;
         }
         AIGoal::Update();
     }
-    else if (mTarget.mType == GTT_GAMEOBJECT && mTarget.mGameObj && mTarget.mGameObj->mIsAlive)
+    else if (mTarget.mType == GTT_GAMEOBJECT && mTarget.mGameObj && mTarget.mGameObj->IsAlive())
     {
         SetEnabled(true);
     }

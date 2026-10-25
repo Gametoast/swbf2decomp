@@ -582,7 +582,7 @@ void GameObject::AwardVehicleKillPoints(int iVehicleType, bool bEmpty)
 // FUNCTION: SWBF2 0x00536020
 void GameObject::TriggerDisabledEffect()
 {
-    if (mDisableTime > 0.0f && mIsAlive)
+    if (mDisableTime > 0.0f && IsAlive())
     {
         if (mDisabledEffectHandle)
         {

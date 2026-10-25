@@ -1890,7 +1890,11 @@ const PblMatrix& EntityDroid::GetSmoothedMatrix() const
 // FUNCTION: SWBF2 0x0049ca60
 bool EntityDroid::ShouldShowReticule() const
 {
-    return mState == NORMAL && mIsAlive;
+    if (mState != NORMAL)
+    {
+        return false;
+    }
+    return IsAlive();
 }
 
 // FUNCTION: SWBF2 0x0049ce70

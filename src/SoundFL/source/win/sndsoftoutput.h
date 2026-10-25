@@ -67,13 +67,13 @@ public:
     };
 
     // VTABLE: SWBF2 0x00786b50
-    class PostOutputMixFlusher : public StreamNodeSource
+    class PostOutputMixFlusher : public StreamNodeSink, public StreamNodeSource
     {
     public:
         PostOutputMixFlusher()
         {
 
-            mSink.Connect(0, 0);
+            StreamNodeSink::Connect(0, 0);
             mSoftOutput = 0;
         }
 
@@ -81,7 +81,6 @@ public:
 
         virtual StreamPacket* GetPacket(unsigned int uiOutput);
 
-        StreamNodeSink mSink;
         SoftOutput* mSoftOutput;
     };
 

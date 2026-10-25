@@ -189,7 +189,7 @@ float EntityFlyer::GetMaxStrafe() const
 // FUNCTION: SWBF2 0x004b65d0
 bool EntityFlyer::ShouldShowReticule() const
 {
-    return mIsAlive && !mInFlip && (!mClass->mGuidedMissile || mEnergyBar.m_fEnergy > 0.0f);
+    return IsAlive() && !mInFlip && (!mClass->mGuidedMissile || mEnergyBar.m_fEnergy > 0.0f);
 }
 
 // FUNCTION: SWBF2 0x004b9720
@@ -3415,7 +3415,7 @@ bool EntityFlyer::Update(float fDeltaTime)
         AddSoftToCollisionManager();
     }
 
-    if (mState == TAKEOFF || mState == FLYING || (mState == CRASHING && mIsAlive))
+    if (mState == TAKEOFF || mState == FLYING || (mState == CRASHING && IsAlive()))
     {
         int iPilots = 0;
         int iPlayerPilots = 0;
@@ -3434,7 +3434,7 @@ bool EntityFlyer::Update(float fDeltaTime)
         bool bNeverCrash = mClass && mClass->mNeverCrashWhenUnpiloted;
         if (mState == CRASHING)
         {
-            if (mIsAlive && iPilots)
+            if (IsAlive() && iPilots)
             {
                 mState = TAKEOFF;
             }
@@ -3804,7 +3804,7 @@ bool EntityFlyer::Update(float fDeltaTime)
         }
     }
 
-    if (!mIsAlive)
+    if (!IsAlive())
     {
         if (mState == CRASHED || mState == LANDED)
         {
@@ -3893,7 +3893,7 @@ bool EntityFlyer::Update(float fDeltaTime)
         SquadCommands::VehicleCommand(this, mCharacter);
     }
 
-    if (mIsAlive && mPlayerId >= 0)
+    if (IsAlive() && mPlayerId >= 0)
     {
         if (mState == LANDED)
         {
@@ -4669,7 +4669,7 @@ bool EntityFlyer::Update(float fDeltaTime)
     }
 
     int iFirstPerson = GetFirstPersonIndex();
-    if (mIsAlive && iFirstPerson >= 0)
+    if (IsAlive() && iFirstPerson >= 0)
     {
         FirstPerson::Update(iFirstPerson, TYPE_COCKPIT, mClass->mCockpitModelHandle, this, 0);
     }

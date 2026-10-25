@@ -247,7 +247,12 @@ public:
 
     void SetPosition(const PblVector3& vPos);
     void SetMatrix(const PblMatrix& mMatrix);
-    bool GetFollowingPath() const;
+    // FUNCTION: SWBF2 0x00477870
+    bool GetFollowingPath() const
+    {
+        return mFollowingPath && mState == FLYING && IsAlive() &&
+               mAIEng.ai.mFreeFlyTime <= 0.0f && !mInRoll && !mInFlip;
+    }
     Trackable* GetTrackable();
     unsigned int GetAllegiance();
     bool CanJoinSquadron() const;

@@ -8,7 +8,7 @@
 namespace Snd
 {
 
-class StreamMixer : public StreamSourceProducer
+class StreamMixer : public StreamNode, public StreamNodeSinkNInput, public StreamSourceProducer
 {
 public:
     StreamMixer();
@@ -57,8 +57,6 @@ private:
     void UnlockPacket(unsigned int uiInput, StreamPacket* const pPacket);
 public:
 
-    unsigned int mNode[3];
-    StreamNodeSinkNInput mSink;
 
     unsigned char mActive[32];
     unsigned char mMixedPacket[32];

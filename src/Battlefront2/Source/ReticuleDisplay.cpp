@@ -223,7 +223,7 @@ bool ReticuleDisplay::Update(float fDeltaTime)
     HUD::ElementMap* pMap = HUD::ElementMap::FindByPlayerIndex(mJoystickIndex);
     if ((!pMap || GetMapMode(pMap) != HUD::ElementMap::mode_Large) && !GameLoop::sPauseMode)
     {
-        for (int i = 0; i < 2; ++i)
+        for (unsigned int i = 0; i < 2; ++i)
         {
             vPos.x = 0.5f;
             vPos.y = vPos.y * 0.5f + 0.5f;

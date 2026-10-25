@@ -696,7 +696,7 @@ void InitSound()
     Lua_Callbacks::sGameMusicDelayTime = 0x41700000u;
     Lua_Callbacks::sGameMusicCurDelayTime = 0;
 
-    for (int i = 0; i < 53; ++i)
+    for (unsigned int i = 0; i < 53; ++i)
     {
         LuaHelper::Register(sSoundCallbacks[i].pcName, sSoundCallbacks[i].pfnCallback, 0);
     }
@@ -1181,7 +1181,7 @@ void UpdateShellMusic(float fDeltaTime)
 // FUNCTION: SWBF2 0x0059da20
 void UpdateDelayedSounds(float fDeltaTime)
 {
-    for (int i = 0; i < 2; ++i)
+    for (unsigned int i = 0; i < 2; ++i)
     {
         sDelayedSounds[i].Update(fDeltaTime);
     }
@@ -1284,7 +1284,7 @@ int ScriptCB_SetDopplerFactor(lua_State* L)
 // FUNCTION: SWBF2 0x0059de00
 void InitDelayedSounds()
 {
-    for (int i = 0; i < 2; ++i)
+    for (unsigned int i = 0; i < 2; ++i)
     {
         sDelayedSounds[i].Init(0, 0.0f, -1.0f, true);
     }

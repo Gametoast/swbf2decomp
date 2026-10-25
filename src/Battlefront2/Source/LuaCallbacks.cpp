@@ -455,7 +455,7 @@ int ScriptCB_IsLegalGamespyString(lua_State*)
     apcStrings[1] = luaL_checklstring(LuaHelper::mState, 2, 0);
     apcStrings[2] = luaL_checklstring(LuaHelper::mState, 3, 0);
 
-    for (int i = 0; i < 3; ++i)
+    for (unsigned int i = 0; i < 3; ++i)
     {
         unsigned int uLen = strlen(apcStrings[i]);
         if (uLen < 1 || (i == 0 && uLen < 3))
@@ -515,7 +515,7 @@ int ScriptCB_IsLegalGamespyString(lua_State*)
             goto done;
         }
     }
-    for (int i = 0; i < 3; ++i)
+    for (unsigned int i = 0; i < 3; ++i)
     {
         for (unsigned int c = 0; c < sizeof(sBadFirstChars) - 1; ++c)
         {
@@ -1860,7 +1860,7 @@ namespace Lua_Callbacks
 // FUNCTION: SWBF2 0x00580740
 void Init()
 {
-    for (int i = 0; i < 91; ++i)
+    for (unsigned int i = 0; i < 91; ++i)
     {
         LuaHelper::Register(sCallbacks[i].pcName, sCallbacks[i].pfnCallback, 0);
     }

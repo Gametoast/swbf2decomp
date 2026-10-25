@@ -9,7 +9,7 @@
 namespace Snd
 {
 
-class StreamSourceMemory : public StreamSourceProducer, public StreamNode
+class StreamSourceMemory : public StreamNode, public StreamSourceProducer
 {
 public:
 

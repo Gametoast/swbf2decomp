@@ -216,7 +216,7 @@ const PropObject* PropCluster::FindPropObject(const PblVector3& vPos, bool) cons
     float fBest = FLT_MAX;
     const PropObject* pBest = 0;
 
-    for (int i = 0; i < 4; i++)
+    for (unsigned int i = 0; i < 4; i++)
     {
         for (PblList<PropObject>::Itor it(mLayers[i].mObjects); (PropObject*)it; ++it)
         {

@@ -1498,7 +1498,7 @@ static const CallbackEntryT sLoadSaveCallbacks[64] =
 // FUNCTION: SWBF2 0x0058aa30
 void InitLoadSave()
 {
-    for (int i = 0; i < 64; ++i)
+    for (unsigned int i = 0; i < 64; ++i)
     {
         LuaHelper::Register(sLoadSaveCallbacks[i].pcName, sLoadSaveCallbacks[i].pfnCallback, 0);
     }

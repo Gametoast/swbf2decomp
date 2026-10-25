@@ -13,7 +13,7 @@ namespace Snd
 
 class StreamFormat;
 
-class StreamDSDMO : public StreamSourceProducer
+class StreamDSDMO : public StreamNode, public StreamSourceProducer, public StreamNodeSink
 {
 public:
     StreamDSDMO();
@@ -30,8 +30,6 @@ public:
 
     void Update();
 
-    StreamNode mNode;
-    StreamNodeSink mSink;
     DSDMO mDMO;
 
     StreamPacketIO mInputPacket;

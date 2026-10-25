@@ -296,7 +296,7 @@ void Damageable::UpdateStatus(float fDeltaTime)
 // FUNCTION: SWBF2 0x004889d0
 void Damageable::InstantDeath(const DamageOwner& owner, bool bCheckProtection)
 {
-    if (mIsAlive)
+    if (IsAlive())
     {
         mDamageOwner = owner;
     }
@@ -360,7 +360,7 @@ void Damageable::ApplyNetClientDamage(const DamageDesc& damage, unsigned int uFl
             {
                 FlashLocalPlayers(this, pObject, fHealthLost);
             }
-            if (mIsAlive)
+            if (IsAlive())
             {
                 if (bBigHit && (uFlags & 4))
                 {
@@ -390,7 +390,7 @@ void Damageable::ApplyDamageCommon(const DamageDesc& damage, unsigned int uFlags
         return;
     }
 
-    bool bWasAlive = mIsAlive;
+    bool bWasAlive = IsAlive();
     if (damage.mDamageOwner.mCharacter && mMaxHealth < FLT_MAX)
     {
         Character::GetPlayerStats(damage.mDamageOwner.mCharacter).AddHit();
@@ -491,7 +491,7 @@ void Damageable::ApplyDamageCommon(const DamageDesc& damage, unsigned int uFlags
             {
                 FlashLocalPlayers(this, pObject, fHealthLost);
             }
-            if (mIsAlive)
+            if (IsAlive())
             {
                 if (bBigHit && (uFlags & 4))
                 {

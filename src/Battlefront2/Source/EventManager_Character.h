@@ -32,7 +32,9 @@ class CharacterMatchesName
 {
 public:
 
-    CharacterMatchesName(const char* pcName);
+    CharacterMatchesName(const char* pcName) : mId(PblHash(pcName))
+    {
+    }
 
     static const char* GetName() { return "Name"; }
 
@@ -56,6 +58,7 @@ public:
         return mId == other.mId;
     }
 
+private:
     unsigned int mId;
 };
 
@@ -78,6 +81,7 @@ public:
         return mTeam == other.mTeam;
     }
 
+private:
     int mTeam;
 };
 
@@ -86,7 +90,9 @@ class CharacterMatchesClass
 {
 public:
 
-    CharacterMatchesClass(const char* pcName);
+    CharacterMatchesClass(const char* pcName) : mClass(EntityClass::Find(PblHash(pcName)))
+    {
+    }
 
     static const char* GetName() { return "Class"; }
 
@@ -110,6 +116,7 @@ public:
         return mClass == other.mClass;
     }
 
+private:
     EntityClass* mClass;
 };
 

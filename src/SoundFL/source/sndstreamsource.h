@@ -8,7 +8,7 @@
 namespace Snd
 {
 
-class StreamSource : public StreamNodeSource, public StreamNode
+class StreamSource : public StreamNode, public StreamNodeSource
 {
 public:
 

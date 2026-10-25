@@ -2078,7 +2078,7 @@ int SetAIDamageThreshold(lua_State* L)
 // FUNCTION: SWBF2 0x00591010
 void InitMission()
 {
-    for (int i = 0; i < 220; ++i)
+    for (unsigned int i = 0; i < 220; ++i)
     {
         LuaHelper::Register(sMissionCallbacks[i].pcName, sMissionCallbacks[i].pfnCallback, 0);
     }

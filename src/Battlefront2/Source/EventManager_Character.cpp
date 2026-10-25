@@ -30,17 +30,9 @@ bool LuaPushItem<AI::EventType>(AI::EventType& eType)
     return true;
 }
 
-template <class PARAM>
-CharacterMatchesName<PARAM>::CharacterMatchesName(const char* pcName)
-    : mId(PblHash(pcName))
-{
-}
 
-template <class PARAM>
-CharacterMatchesClass<PARAM>::CharacterMatchesClass(const char* pcName)
-    : mClass(EntityClass::Find(PblHash(pcName)))
-{
-}
+
+
 
 
 
@@ -80,28 +72,28 @@ CharacterMatchesName<AI::EventType> LuaGetItem<CharacterMatchesName<AI::EventTyp
 template <>
 CharacterMatchesTeam<DamageOwner> LuaGetItem<CharacterMatchesTeam<DamageOwner> >(int iIndex)
 {
-    return CharacterMatchesTeam<DamageOwner>((unsigned int)luaL_checknumber(LuaHelper::mState, iIndex));
+    return CharacterMatchesTeam<DamageOwner>((int)luaL_checknumber(LuaHelper::mState, iIndex));
 }
 
 // FUNCTION: SWBF2 0x0050b610
 template <>
 CharacterMatchesTeam<char> LuaGetItem<CharacterMatchesTeam<char> >(int iIndex)
 {
-    return CharacterMatchesTeam<char>((unsigned int)luaL_checknumber(LuaHelper::mState, iIndex));
+    return CharacterMatchesTeam<char>((int)luaL_checknumber(LuaHelper::mState, iIndex));
 }
 
 // FUNCTION: SWBF2 0x0050b630
 template <>
 CharacterMatchesTeam<GameObject> LuaGetItem<CharacterMatchesTeam<GameObject> >(int iIndex)
 {
-    return CharacterMatchesTeam<GameObject>((unsigned int)luaL_checknumber(LuaHelper::mState, iIndex));
+    return CharacterMatchesTeam<GameObject>((int)luaL_checknumber(LuaHelper::mState, iIndex));
 }
 
 // FUNCTION: SWBF2 0x0050b650
 template <>
 CharacterMatchesTeam<AI::EventType> LuaGetItem<CharacterMatchesTeam<AI::EventType> >(int iIndex)
 {
-    return CharacterMatchesTeam<AI::EventType>((unsigned int)luaL_checknumber(LuaHelper::mState, iIndex));
+    return CharacterMatchesTeam<AI::EventType>((int)luaL_checknumber(LuaHelper::mState, iIndex));
 }
 
 // FUNCTION: SWBF2 0x0050b670

@@ -403,7 +403,7 @@ void TTYInit()
     sTTYInvalidIndex = -1;
     sTTYGrid = (char*)RedAllocFromHeap(__RedCurrHeap, 0xC800, 0);
 
-    for (int i = 0; i < 0x50; ++i)
+    for (unsigned int i = 0; i < 0x50; ++i)
     {
         sTTYGrid[i * 0x280] = 0x0A;
     }

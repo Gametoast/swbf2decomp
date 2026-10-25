@@ -487,7 +487,7 @@ void CommandPost::CopyFrom(const CommandPost* pOther)
     mName = pOther->mName;
     mLabel = pOther->mLabel;
     mLocalizeName = pOther->mLocalizeName;
-    for (int i = 0; i < 8; ++i)
+    for (unsigned int i = 0; i < 8; ++i)
     {
         for (int side = 0; side < Team::side_MAX; ++side)
         {

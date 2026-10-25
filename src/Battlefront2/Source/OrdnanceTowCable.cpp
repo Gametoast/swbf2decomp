@@ -384,7 +384,7 @@ bool OrdnanceTowCable::Update(float fDeltaTime)
     RecalculateCenterAndRadius();
     if (mHitWalker)
     {
-        if (!mHitWalker->mIsAlive)
+        if (!mHitWalker->IsAlive())
         {
             CalculateWorldSpacePoints();
         }

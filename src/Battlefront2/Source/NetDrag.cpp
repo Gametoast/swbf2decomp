@@ -96,7 +96,7 @@ void CreateAll()
     bandwidthAvailTime[2] = 0.0f;
     bandwidthAvailTime[0] = bandwidthAvailTime[1] = 0.0f;
 
-    for (int i = 0; i < 3; i++)
+    for (unsigned int i = 0; i < 3; i++)
     {
         bandwidthQueue[i].Reset();
     }
@@ -260,7 +260,7 @@ static void UpdateTime()
 // FUNCTION: SWBF2 0x005b3c90
 static void UpdateBandwidth()
 {
-    for (int i = 0; i < 3; i++)
+    for (unsigned int i = 0; i < 3; i++)
     {
         NetPacket* pPkt;
         while ((pPkt = bandwidthQueue[i].GetFront()) != 0)
@@ -308,7 +308,7 @@ static void UpdateLoss()
 // FUNCTION: SWBF2 0x005b3f10
 static void FreeAllPackets()
 {
-    for (int i = 0; i < 3; i++)
+    for (unsigned int i = 0; i < 3; i++)
     {
         bandwidthQueue[i].Free();
     }

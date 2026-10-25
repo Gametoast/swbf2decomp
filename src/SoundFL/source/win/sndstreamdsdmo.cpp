@@ -55,7 +55,7 @@ bool StreamDSDMO::CreateDMO(const _GUID& rCLSID, const StreamFormat& rIn,
             mInputFrameSize = uiInputFrameSize;
 
             unsigned int uiMinSize = ulSize;
-            for (int i = 0; i < 9; ++i)
+            for (unsigned int i = 0; i < 9; ++i)
             {
                 if (rCLSID.Data1 != kStandardEffects[i]->Data1)
                 {
@@ -103,10 +103,7 @@ unsigned int StreamDSDMO::GetMinInputSize() const
     return mMinSize;
 }
 
-struct StreamNodeUpdateAccess : public StreamNode
-{
-    using StreamNode::UpdateNode;
-};
+
 
  
 
@@ -116,9 +113,8 @@ void StreamDSDMO::Update()
 
     StreamPacketIO* const pInputIO = &mInputPacket;
     StreamPacketIOLite* const pOutputIO = &mOutputPacket;
-    StreamNodeUpdateAccess* const pNode = (StreamNodeUpdateAccess*)&mNode;
 
-    if (pNode->UpdateNode(true))
+    if (StreamNode::UpdateNode(true))
     {
         pInputIO->Flush();
         pOutputIO->Reset();
@@ -127,7 +123,7 @@ void StreamDSDMO::Update()
         mFlags = 0;
     }
 
-    if (pNode->GetCurrentPlayState() == SourceTransport::playState_stopped)
+    if (StreamNode::GetCurrentPlayState() == SourceTransport::playState_stopped)
     {
         return;
     }
@@ -152,12 +148,12 @@ void StreamDSDMO::Update()
         if (pInPacket == 0)
         {
 
-            StreamNodeSource* const pInputNode = mSink.mConnection.mInputNode;
+            StreamNodeSource* const pInputNode = StreamNodeSink::mConnection.mInputNode;
             if (pInputNode != 0)
             {
                 typedef StreamPacket* (__thiscall* GetPacketFn)(
                     StreamNodeSource* pThis, unsigned int uiOutput);
-                pInPacket = pInputNode->GetPacket(mSink.mConnection.mInputNodeOutputIndex);
+                pInPacket = pInputNode->GetPacket(StreamNodeSink::mConnection.mInputNodeOutputIndex);
             }
             else
             {
@@ -312,7 +308,7 @@ void StreamDSDMO::Update()
         if (bProduced)
         {
 
-            const unsigned int uiPos = pNode->mPlaybackPosition;
+            const unsigned int uiPos = StreamNode::mPlaybackPosition;
             const unsigned int uiBytes = pOutputIO->GetOffset();
 
             const unsigned int uiFrames = uiBytes / mAudioFrameSize;
@@ -331,7 +327,7 @@ void StreamDSDMO::Update()
             PacketComplete(pOutPacket, uiBytes, uiFrames, bFlagBit0, bFlagBit1,
                            uiPos);
 
-            pNode->mPlaybackPosition = uiPos + uiFrames;
+            StreamNode::mPlaybackPosition = uiPos + uiFrames;
             pOutputIO->Reset();
         }
 
@@ -382,7 +378,7 @@ StreamPacket* StreamDSDMO::GetPacket(unsigned int uiOutput)
     if ((pPacket->mFlags & 0x01) != 0)
     {
 
-        mNode.Stop();
+        StreamNode::Stop();
     }
 
     return pPacket;
@@ -449,8 +445,7 @@ StreamDSDMO::StreamDSDMO()
       mInputFrameSize(0),
       mFlags(0)
 {
-    mSink.mConnection.mInputNode = 0;
-    mSink.mConnection.mInputNodeOutputIndex = 0;
+
 }
 }
 

@@ -757,11 +757,11 @@ bool Engine::DSClose()
             DSBufferRenderer& rRenderer = smSoftOutput->GetRenderer();
 
             rRenderer.mConnection.mInputNode =
-                pFilter->mSink.mConnection.mInputNode;
+                pFilter->StreamNodeSink::mConnection.mInputNode;
             rRenderer.mConnection.mInputNodeOutputIndex = 0;
 
-            pFilter->mSink.mConnection.mInputNode = 0;
-            pFilter->mSink.mConnection.mInputNodeOutputIndex = 0;
+            pFilter->StreamNodeSink::mConnection.mInputNode = 0;
+            pFilter->StreamNodeSink::mConnection.mInputNodeOutputIndex = 0;
             pFilter->Flush();
         }
 
@@ -1218,21 +1218,21 @@ bool Engine::Open(HWND hwnd, MixConfig eMixConfig, bool bEnable,
 
                     StreamLowHighPass& rFilter = _smHighLowPass;
 
-                    rFilter.mSink.mConnection.mInputNode =
+                    rFilter.StreamNodeSink::mConnection.mInputNode =
                         rRenderer.StreamNodeSink::mConnection.mInputNode;
-                    rFilter.mSink.mConnection.mInputNodeOutputIndex = 0;
+                    rFilter.StreamNodeSink::mConnection.mInputNodeOutputIndex = 0;
                     rRenderer.StreamNodeSink::mConnection.mInputNode =
                         (StreamNodeSource*)&_smHighLowPass;
                     rRenderer.StreamNodeSink::mConnection
                         .mInputNodeOutputIndex = 0;
 
                     rFilter.SetBuffer(_smHighLowPassBuffer, 0x400);
-                    rFilter.mFilter.SetNumChannels(2);
-                    rFilter.mFilter.SetMode(
+                    rFilter.DSP::HighLowPassFilter::SetNumChannels(2);
+                    rFilter.DSP::HighLowPassFilter::SetMode(
                         DSP::HighLowPassFilter::mode_LowPass);
-                    rFilter.mFilter.SetSampleRate(
+                    rFilter.DSP::HighLowPassFilter::SetSampleRate(
                         (float)smSoftOutput->GetOutputFrequency());
-                    rFilter.mFilter.SetCutOffFrequency(60.0f);
+                    rFilter.DSP::HighLowPassFilter::SetCutOffFrequency(60.0f);
                 }
             }
         }

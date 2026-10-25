@@ -96,7 +96,7 @@ StreamPacket* StreamSplitter::GetPacket(unsigned int uiOutput)
     typedef StreamPacket* (__thiscall* GetPacketFn)(StreamNodeSource* pThis,
                                                     unsigned int uiOutput);
 
-    if (((StreamNode*)mNode)->GetPlayState() == SourceTransport::playState_stopped &&
+    if (StreamNode::GetPlayState() == SourceTransport::playState_stopped &&
         !mFlushing)
     {
         return 0;
@@ -105,9 +105,9 @@ StreamPacket* StreamSplitter::GetPacket(unsigned int uiOutput)
     StreamPacket** const ppWrite = &mPackets[mReadPos];
     if (*ppWrite == 0 && !mFlushing)
     {
-        StreamNodeSource* const pInput = mSink.mConnection.mInputNode;
+        StreamNodeSource* const pInput = StreamNodeSink::mConnection.mInputNode;
         *ppWrite = pInput
-            ? pInput->GetPacket(mSink.mConnection.mInputNodeOutputIndex)
+            ? pInput->GetPacket(StreamNodeSink::mConnection.mInputNodeOutputIndex)
             : 0;
         if (*ppWrite)
         {
@@ -165,11 +165,6 @@ StreamSplitter::StreamSplitter()
       mReadPos(0),
       mFlushing(0)
 {
-    mNode[0] = 0;
-    *(unsigned short*)&mNode[1] = (unsigned short)SourceTransport::flags_stopped;
-    *(unsigned char*)&mNode[2] = 0;
-    mSink.mConnection.mInputNode = 0;
-    mSink.mConnection.mInputNodeOutputIndex = 0;
 
 }
 }

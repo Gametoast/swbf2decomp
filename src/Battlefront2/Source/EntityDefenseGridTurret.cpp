@@ -56,7 +56,7 @@ bool EntityDefenseGridTurret::Update(float fDeltaTime)
                          netEnabledNext && netClientActive;
     if (!bClient)
     {
-        if (!mIsAlive)
+        if (!IsAlive())
         {
             mRespawnTimer -= fDeltaTime;
             if (mRespawnTimer < 0.0f)

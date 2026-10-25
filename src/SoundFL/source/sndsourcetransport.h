@@ -30,6 +30,9 @@ public:
         playState_stopped = 4
     };
 
+    SourceTransport() : mPlaybackPosition(0), mFlags(flags_stopped) {}
+    ~SourceTransport() {}
+
     PlayState GetCurrentPlayState() const;
 
     PlayState GetPlayState() const;

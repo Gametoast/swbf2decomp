@@ -158,7 +158,7 @@ void HUD::ElementTarget::Target::Update(float fDeltaTime, HUD::ElementBitmap& bi
         if (pLockOn && bShow && info.mOnScreen)
         {
             bitmap.HUD::Element::Enable(false);
-            for (int i = 0; i < 4; ++i)
+            for (unsigned int i = 0; i < 4; ++i)
             {
                 pLockOn[i] = *this;
                 pLockOn[i].HUD::Element::Enable(true);
@@ -350,7 +350,7 @@ void HUD::ElementTarget::Target::Update(float fDeltaTime, HUD::ElementBitmap& bi
             { fX + fHalfWidth, fY + fHalfHeight },
             { fX - fHalfWidth, fY + fHalfHeight }
         };
-        for (int i = 0; i < 4; ++i)
+        for (unsigned int i = 0; i < 4; ++i)
         {
             pLockOn[i].RedInterfaceElement::SetColor(bitmap.m_color);
             pLockOn[i].SetMatrixPosRotScale(fCorners[i][0], fCorners[i][1],

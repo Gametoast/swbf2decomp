@@ -47,7 +47,7 @@ StreamCaptureSource::StreamCaptureSource()
     if (!mLock.Create(1, 1))
     {
         PrintDebugMessage("Unable to create semaphore : out of system "
-                          "resources!\n");
+                          "resources!");
         exit(0);
     }
 

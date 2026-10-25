@@ -469,184 +469,140 @@ extern Event<GameObject, char> mDelete;
 extern Event<GameObject, int> mTeamChange;
 }
 
-template <class PARAM>
-static ObjectMatches<PARAM>* ReadObject(ObjectMatches<PARAM>* pMatch)
-{
-    if (lua_type(LuaHelper::mState, 2) == LUA_TLIGHTUSERDATA)
-    {
-        pMatch->mObject = (EntityEx*)lua_topointer(LuaHelper::mState, 2);
-    }
-    else
-    {
-        pMatch->mObject = EntityEx::mIdMap.Find(PblHash(luaL_checklstring(LuaHelper::mState, 2, 0)));
-    }
-    return pMatch;
-}
 
-template <class PARAM>
-static ObjectMatchesName<PARAM>* ReadObjectName(ObjectMatchesName<PARAM>* pMatch)
-{
-    pMatch->mName = PblHash(luaL_checklstring(LuaHelper::mState, 2, 0));
-    return pMatch;
-}
 
-template <class PARAM>
-static ObjectMatchesClass<PARAM>* ReadObjectClass(ObjectMatchesClass<PARAM>* pMatch)
-{
-    unsigned int uiHash = PblHash(luaL_checklstring(LuaHelper::mState, 2, 0));
-    pMatch->mClass = Factory<Entity, EntityClass, EntityDesc>::Find(uiHash);
-    return pMatch;
-}
 
-template <class MATCH>
-static MATCH* ReadNumber(MATCH* pMatch)
-{
-    pMatch->mTeam = (unsigned int)luaL_checknumber(LuaHelper::mState, 2);
-    return pMatch;
-}
+
+
+
+
 
 // FUNCTION: SWBF2 0x00514780
 template <>
 ObjectMatches<char> LuaGetItem<ObjectMatches<char> >(int)
 {
-    ObjectMatches<char> match;
-    ReadObject(&match);
-    return match;
+    if (lua_type(LuaHelper::mState, 2) == LUA_TLIGHTUSERDATA)
+    {
+        return ObjectMatches<char>((GameObject*)lua_topointer(LuaHelper::mState, 2));
+    }
+    return ObjectMatches<char>(luaL_checklstring(LuaHelper::mState, 2, 0));
 }
 
 // FUNCTION: SWBF2 0x005147f0
 template <>
 ObjectMatches<DamageOwner> LuaGetItem<ObjectMatches<DamageOwner> >(int)
 {
-    ObjectMatches<DamageOwner> match;
-    ReadObject(&match);
-    return match;
+    if (lua_type(LuaHelper::mState, 2) == LUA_TLIGHTUSERDATA)
+    {
+        return ObjectMatches<DamageOwner>((GameObject*)lua_topointer(LuaHelper::mState, 2));
+    }
+    return ObjectMatches<DamageOwner>(luaL_checklstring(LuaHelper::mState, 2, 0));
 }
 
 // FUNCTION: SWBF2 0x00514860
 template <>
 ObjectMatches<int> LuaGetItem<ObjectMatches<int> >(int)
 {
-    ObjectMatches<int> match;
-    ReadObject(&match);
-    return match;
+    if (lua_type(LuaHelper::mState, 2) == LUA_TLIGHTUSERDATA)
+    {
+        return ObjectMatches<int>((GameObject*)lua_topointer(LuaHelper::mState, 2));
+    }
+    return ObjectMatches<int>(luaL_checklstring(LuaHelper::mState, 2, 0));
 }
 
 // FUNCTION: SWBF2 0x005148d0
 template <>
 ObjectMatches<float> LuaGetItem<ObjectMatches<float> >(int)
 {
-    ObjectMatches<float> match;
-    ReadObject(&match);
-    return match;
+    if (lua_type(LuaHelper::mState, 2) == LUA_TLIGHTUSERDATA)
+    {
+        return ObjectMatches<float>((GameObject*)lua_topointer(LuaHelper::mState, 2));
+    }
+    return ObjectMatches<float>(luaL_checklstring(LuaHelper::mState, 2, 0));
 }
 
 // FUNCTION: SWBF2 0x00514940
 template <>
 ObjectMatchesName<char> LuaGetItem<ObjectMatchesName<char> >(int)
 {
-    ObjectMatchesName<char> match;
-    ReadObjectName(&match);
-    return match;
+    return ObjectMatchesName<char>(luaL_checklstring(LuaHelper::mState, 2, 0));
 }
 
 // FUNCTION: SWBF2 0x00514970
 template <>
 ObjectMatchesName<DamageOwner> LuaGetItem<ObjectMatchesName<DamageOwner> >(int)
 {
-    ObjectMatchesName<DamageOwner> match;
-    ReadObjectName(&match);
-    return match;
+    return ObjectMatchesName<DamageOwner>(luaL_checklstring(LuaHelper::mState, 2, 0));
 }
 
 // FUNCTION: SWBF2 0x005149a0
 template <>
 ObjectMatchesName<int> LuaGetItem<ObjectMatchesName<int> >(int)
 {
-    ObjectMatchesName<int> match;
-    ReadObjectName(&match);
-    return match;
+    return ObjectMatchesName<int>(luaL_checklstring(LuaHelper::mState, 2, 0));
 }
 
 // FUNCTION: SWBF2 0x005149d0
 template <>
 ObjectMatchesName<float> LuaGetItem<ObjectMatchesName<float> >(int)
 {
-    ObjectMatchesName<float> match;
-    ReadObjectName(&match);
-    return match;
+    return ObjectMatchesName<float>(luaL_checklstring(LuaHelper::mState, 2, 0));
 }
 
 // FUNCTION: SWBF2 0x00514a00
 template <>
 ObjectMatchesTeam<char> LuaGetItem<ObjectMatchesTeam<char> >(int)
 {
-    ObjectMatchesTeam<char> match(0);
-    ReadNumber(&match);
-    return match;
+    return ObjectMatchesTeam<char>((int)luaL_checknumber(LuaHelper::mState, 2));
 }
 
 // FUNCTION: SWBF2 0x00514a20
 template <>
 ObjectMatchesTeam<DamageOwner> LuaGetItem<ObjectMatchesTeam<DamageOwner> >(int)
 {
-    ObjectMatchesTeam<DamageOwner> match(0);
-    ReadNumber(&match);
-    return match;
+    return ObjectMatchesTeam<DamageOwner>((int)luaL_checknumber(LuaHelper::mState, 2));
 }
 
 // FUNCTION: SWBF2 0x00514a40
 template <>
 ObjectMatchesTeam<int> LuaGetItem<ObjectMatchesTeam<int> >(int)
 {
-    ObjectMatchesTeam<int> match(0);
-    ReadNumber(&match);
-    return match;
+    return ObjectMatchesTeam<int>((int)luaL_checknumber(LuaHelper::mState, 2));
 }
 
 // FUNCTION: SWBF2 0x00514a60
 template <>
 ObjectMatchesTeam<float> LuaGetItem<ObjectMatchesTeam<float> >(int)
 {
-    ObjectMatchesTeam<float> match(0);
-    ReadNumber(&match);
-    return match;
+    return ObjectMatchesTeam<float>((int)luaL_checknumber(LuaHelper::mState, 2));
 }
 
 // FUNCTION: SWBF2 0x00514a80
 template <>
 ObjectMatchesClass<char> LuaGetItem<ObjectMatchesClass<char> >(int)
 {
-    ObjectMatchesClass<char> match;
-    ReadObjectClass(&match);
-    return match;
+    return ObjectMatchesClass<char>(luaL_checklstring(LuaHelper::mState, 2, 0));
 }
 
 // FUNCTION: SWBF2 0x00514ae0
 template <>
 ObjectMatchesClass<DamageOwner> LuaGetItem<ObjectMatchesClass<DamageOwner> >(int)
 {
-    ObjectMatchesClass<DamageOwner> match;
-    ReadObjectClass(&match);
-    return match;
+    return ObjectMatchesClass<DamageOwner>(luaL_checklstring(LuaHelper::mState, 2, 0));
 }
 
 // FUNCTION: SWBF2 0x00514b40
 template <>
 ObjectMatchesClass<int> LuaGetItem<ObjectMatchesClass<int> >(int)
 {
-    ObjectMatchesClass<int> match;
-    ReadObjectClass(&match);
-    return match;
+    return ObjectMatchesClass<int>(luaL_checklstring(LuaHelper::mState, 2, 0));
 }
 
 // FUNCTION: SWBF2 0x00514ba0
 template <>
 ObjectMatchesClass<float> LuaGetItem<ObjectMatchesClass<float> >(int)
 {
-    ObjectMatchesClass<float> match;
-    ReadObjectClass(&match);
-    return match;
+    return ObjectMatchesClass<float>(luaL_checklstring(LuaHelper::mState, 2, 0));
 }
 
 template <class ITEM, class PARAM>
