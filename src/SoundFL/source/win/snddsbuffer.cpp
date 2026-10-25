@@ -560,14 +560,14 @@ bool DSBuffer::Play(bool bLooping, unsigned int uiPriority, bool bImmediate,
 // FUNCTION: SWBF2 0x007446f0
 void DSBuffer::ResetBuffers()
 {
-    for (PblListDouble::Node* pNode = smList.mTerminator.mNext; pNode != &smList.mTerminator;
-         pNode = pNode->mNext)
+    for (PblListDouble::Itor itor(&smList);
+         itor.GetNode() != smList.GetTerminator(); ++itor)
     {
-        DSBuffer* pBuffer = (DSBuffer*)((char*)pNode - offsetof(DSBuffer, mNode));
+        DSBuffer* pBuffer = (DSBuffer*)((char*)itor.GetNode() - offsetof(DSBuffer, mNode));
         if (pBuffer->mBuffer)
         {
-            pBuffer->ResetFrequencyInterpolation();
             pBuffer->ResetGainInterpolation();
+            pBuffer->ResetFrequencyInterpolation();
         }
     }
 }

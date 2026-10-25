@@ -284,16 +284,6 @@ namespace MuzzleFlash
 {
     bool Init();
 }
-extern int mSkipCount;
-namespace RedLocalizeDB
-{
-
-// FUNCTION: SWBF2 0x006c6010
-void SetSkipCount(int count)
-{
-    mSkipCount = count;
-}
-}
 
 namespace RedMissionLog
 {

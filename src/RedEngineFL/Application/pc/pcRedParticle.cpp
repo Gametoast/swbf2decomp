@@ -101,10 +101,7 @@ RedParticleRenderer::Renderable::~Renderable()
 
 
 
-static inline const PblVector3 operator-(const PblVector3& a)
-{
-    return PblVector3(-a.x, -a.y, -a.z);
-}
+
 
 static inline float Dot(const PblVector3& a, const PblVector3& b)
 {

@@ -1189,25 +1189,17 @@ void LoadDisplay::ProgressIndicator::Init(int iNumLEDs, float fSpacing,
     RedSetCurrentHeap(iHeap);
 }
 
-static void SetLEDColor(LoadDisplay::ProgressIndicator& bar, int i)
-{
-    const float fIntensity = bar.m_pIntensity[i];
-    const RedColor& base = bar.m_pColor[i];
-    RedColor color;
-    color.b = (unsigned char)(int)(base.b * fIntensity);
-    color.g = (unsigned char)(int)(base.g * fIntensity);
-    color.r = (unsigned char)(int)(base.r * fIntensity);
-    color.a = base.a;
-    bar.m_pLED[i].SetColor(color);
-}
-
 // FUNCTION: SWBF2 0x00578c00
 void LoadDisplay::ProgressIndicator::SetAllOn()
 {
     for (int i = 0; i < m_numLEDs; ++i)
     {
         m_pIntensity[i] = 1.0f;
-        SetLEDColor(*this, i);
+        m_pLED[i].SetColor(RedColor(
+            (unsigned char)(m_pColor[i].r * m_pIntensity[i]),
+            (unsigned char)(m_pColor[i].g * m_pIntensity[i]),
+            (unsigned char)(m_pColor[i].b * m_pIntensity[i]),
+            m_pColor[i].a));
     }
 }
 
@@ -1235,7 +1227,11 @@ void LoadDisplay::ProgressIndicator::Update(float fDelta, GameSound* const pSoun
             break;
         case LED_MODE_TIMER:
             m_pIntensity[m_curOnLED] = 1.0f;
-            SetLEDColor(*this, m_curOnLED);
+            m_pLED[m_curOnLED].SetColor(RedColor(
+            (unsigned char)(m_pColor[m_curOnLED].r * m_pIntensity[m_curOnLED]),
+            (unsigned char)(m_pColor[m_curOnLED].g * m_pIntensity[m_curOnLED]),
+            (unsigned char)(m_pColor[m_curOnLED].b * m_pIntensity[m_curOnLED]),
+            m_pColor[m_curOnLED].a));
             ++m_curOnLED;
             iNumLEDs = m_numLEDs;
             if (m_curOnLED >= iNumLEDs)
@@ -1266,7 +1262,11 @@ void LoadDisplay::ProgressIndicator::Update(float fDelta, GameSound* const pSoun
         for (int i = 0; i < m_numLEDs; ++i)
         {
             m_pIntensity[i] = (m_pIntensity[i] - fOff) * 0.95f + fOff;
-            SetLEDColor(*this, i);
+            m_pLED[i].SetColor(RedColor(
+            (unsigned char)(m_pColor[i].r * m_pIntensity[i]),
+            (unsigned char)(m_pColor[i].g * m_pIntensity[i]),
+            (unsigned char)(m_pColor[i].b * m_pIntensity[i]),
+            m_pColor[i].a));
         }
         m_pIntensity[m_curOnLED] = (1.0f - fOff) * m_OnLEDFraction + fOff;
     }
@@ -1278,7 +1278,11 @@ void LoadDisplay::ProgressIndicator::Update(float fDelta, GameSound* const pSoun
         }
         m_pIntensity[m_curOnLED] = (1.0f - LED_OFF_INTENSITY) * m_OnLEDFraction + LED_OFF_INTENSITY;
     }
-    SetLEDColor(*this, m_curOnLED);
+    m_pLED[m_curOnLED].SetColor(RedColor(
+            (unsigned char)(m_pColor[m_curOnLED].r * m_pIntensity[m_curOnLED]),
+            (unsigned char)(m_pColor[m_curOnLED].g * m_pIntensity[m_curOnLED]),
+            (unsigned char)(m_pColor[m_curOnLED].b * m_pIntensity[m_curOnLED]),
+            m_pColor[m_curOnLED].a));
 }
 
 // FUNCTION: SWBF2 0x00578d50

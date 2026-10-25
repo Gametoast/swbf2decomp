@@ -20,10 +20,7 @@
 
 
 
-static inline const float Length(const PblVector3& v)
-{
-    return sqrtf(v.x * v.x + v.y * v.y + v.z * v.z);
-}
+
 
 static inline const PblMatrix operator*(const PblMatrix& a, const PblMatrix& b)
 {

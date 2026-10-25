@@ -40,13 +40,18 @@ PblMatrix::PblMatrix(const PblVector4& x, const PblVector4& y,
 
 #pragma warning(disable : 4073)
 #pragma init_seg(lib)
+static D3DXMATRIXA16 _IdentityMatrix(
+    1.0f, 0.0f, 0.0f, 0.0f,
+    0.0f, 1.0f, 0.0f, 0.0f,
+    0.0f, 0.0f, 1.0f, 0.0f,
+    0.0f, 0.0f, 0.0f, 1.0f);
+
 // SYNTHETIC: SWBF2 0x0040ae50
 // `dynamic initializer for 'gMatrixIdentity''
 
 // GLOBAL: SWBF2 0x009caee0
 // gMatrixIdentity
-PblMatrix gMatrixIdentity(PblVector4(1.0f, 0.0f, 0.0f, 0.0f), PblVector4(0.0f, 1.0f, 0.0f, 0.0f),
-                          PblVector4(0.0f, 0.0f, 1.0f, 0.0f), PblVector4(0.0f, 0.0f, 0.0f, 1.0f));
+PblMatrix gMatrixIdentity(_IdentityMatrix);
 
 // FUNCTION: SWBF2 0x004384f0
 PblMatrix::PblMatrix(const PblVector3& x, const PblVector3& y,
@@ -77,26 +82,14 @@ const PblMatrix PblMatrix::GetInverseFast() const
 
     out = *this;
 
-    float fSwap;
-    fSwap = out.m[0][1];
-    out.m[0][1] = out.m[1][0];
-    out.m[1][0] = fSwap;
-    fSwap = out.m[0][2];
-    out.m[0][2] = out.m[2][0];
-    out.m[2][0] = fSwap;
-    fSwap = out.m[1][2];
-    out.m[1][2] = out.m[2][1];
-    out.m[2][1] = fSwap;
+    out.Transpose3x3();
 
-    D3DXVECTOR3 vRotated;
-    D3DXVec3TransformNormal(&vRotated,
-                            (const D3DXVECTOR3*)out.m[3],
-                            (const D3DXMATRIX*)&out);
+    PblVector3 vRotated;
+    D3DXVec3TransformNormal(reinterpret_cast<D3DXVECTOR3*>(&vRotated),
+                            reinterpret_cast<const D3DXVECTOR3*>(&out.GetTranslation()),
+                            reinterpret_cast<const D3DXMATRIX*>(&out));
 
-    out.m[3][0] = -vRotated.x;
-    out.m[3][1] = -vRotated.y;
-    out.m[3][2] = -vRotated.z;
-    out.m[3][3] = 1.0f;
+    out.SetTranslation(PblVector3(-vRotated.x, -vRotated.y, -vRotated.z));
 
     return out;
 }

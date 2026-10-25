@@ -23,7 +23,8 @@ FLLocalizeEntry* mMasterLocalizeFile;
 bool gbDeterminedLang;
 // GLOBAL: SWBF2 0x00940bf8
 eGAMELANGUAGE gUseLang;
-int mSkipCount;
+// GLOBAL: SWBF2 0x00940bfc
+static int mSkipCount;
 // SYNTHETIC: SWBF2 0x00407d60
 // `dynamic initializer for 'sMasterLocalizeHash''
 
@@ -51,6 +52,12 @@ bool gDemoBuild;
 
 namespace RedLocalizeDB
 {
+
+// FUNCTION: SWBF2 0x006c6010
+void SetSkipCount(int count)
+{
+    mSkipCount = count;
+}
 
 // FUNCTION: SWBF2 0x006c5c30
 void PickLanguage()

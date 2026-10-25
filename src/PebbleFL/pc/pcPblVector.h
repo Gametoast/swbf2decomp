@@ -46,3 +46,30 @@ inline PblVector4::operator const PblVector3&() const
 {
     return *reinterpret_cast<const PblVector3*>(this);
 }
+
+// FUNCTION: SWBF2 0x004213a0
+inline const float Length(const PblVector3& vVector)
+{
+    return sqrtf(vVector.x * vVector.x + vVector.y * vVector.y + vVector.z * vVector.z);
+}
+
+inline PblVector3& PblVector3::operator+=(const PblVector3& rhs)
+{
+    x += rhs.x;
+    y += rhs.y;
+    z += rhs.z;
+    return *this;
+}
+
+inline const PblVector3 PblVector3::operator-() const
+{
+    return PblVector3(-x, -y, -z);
+}
+
+inline PblVector3& PblVector3::operator-=(const PblVector3& rhs)
+{
+    x -= rhs.x;
+    y -= rhs.y;
+    z -= rhs.z;
+    return *this;
+}

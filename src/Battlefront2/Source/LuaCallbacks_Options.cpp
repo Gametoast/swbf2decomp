@@ -1655,14 +1655,6 @@ namespace Lua_Callbacks
 int gHuntShowScoreLimit;
 }
 
-// GLOBAL: SWBF2 0x007e8e7a
-bool netAwardsEnabled = true;
-
-// FUNCTION: SWBF2 0x005d3690
-bool GetNetAwardsEnabled()
-{
-    return netAwardsEnabled;
-}
 
 // GLOBAL: SWBF2 0x00788890
 static const unsigned char kBase64Alphabet[] =

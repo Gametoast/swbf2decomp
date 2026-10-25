@@ -912,18 +912,4 @@ void TowCableRenderObject::Render(GameObject* pObject, unsigned char ucViewport,
     }
 }
 
-// FUNCTION: SWBF2 0x00424b60
-float PblHermiteVector3::GetLengthApproximation(int iSteps) const
-{
-    float fLength = 0.0f;
-    for (int i = 0; i < iSteps; i++)
-    {
-        PblVector3 v0 = getValue((float)i / (float)iSteps);
-        PblVector3 v1 = getValue((float)(i + 1) / (float)iSteps);
-        float dx = v1.x - v0.x;
-        float dy = v1.y - v0.y;
-        float dz = v1.z - v0.z;
-        fLength += sqrtf(dx * dx + dy * dy + dz * dz);
-    }
-    return fLength;
-}
+

@@ -510,7 +510,7 @@ float EntityFlyer::GetMaxSpeed() const
 // FUNCTION: SWBF2 0x004b6310
 int EntityFlyer::GetReservableSlots(ReserveType) const
 {
-    return mControllableList._iCount;
+    return GetControllableList().GetCount();
 }
 
 

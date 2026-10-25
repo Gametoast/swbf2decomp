@@ -7,6 +7,7 @@
 class PblVector3;
 class PblVector4;
 class PblQuaternion;
+struct _D3DXMATRIXA16;
 
 class __declspec(align(16)) PblMatrix
 {
@@ -19,6 +20,11 @@ public:
     PblMatrix(const PblMatrix& other)
     {
         memcpy(m, other.m, sizeof(m));
+    }
+
+    PblMatrix(const _D3DXMATRIXA16& other)
+    {
+        memcpy(m, &other, sizeof(m));
     }
 
     PblMatrix* CopyFrom(const PblMatrix* pSrc);
@@ -34,6 +40,8 @@ public:
     const PblMatrix GetInverseFast() const;
 
     void Reset();
+
+    void Transpose3x3();
 
     void Transpose4x4()
     {

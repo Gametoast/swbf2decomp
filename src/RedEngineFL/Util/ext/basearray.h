@@ -13,8 +13,10 @@ class BaseArray : public ALLOC
 public:
 
     BaseArray()
-        : _elements(0), _numElements(0), _size(0)
     {
+        _elements = 0;
+        _size = 0;
+        _numElements = 0;
     }
 
     ~BaseArray()

@@ -3915,7 +3915,14 @@ void NetGame::SetMaxPreGameTime(int iSeconds)
     netPreGameTimeMax = iSeconds;
 }
 
-extern bool netAwardsEnabled;
+// GLOBAL: SWBF2 0x007e8e7a
+bool netAwardsEnabled = true;
+
+// FUNCTION: SWBF2 0x005d3690
+bool GetNetAwardsEnabled()
+{
+    return netAwardsEnabled;
+}
 
 // FUNCTION: SWBF2 0x005d36a0
 void SetNetAwardsEnabled(int value)
@@ -13292,12 +13299,7 @@ void WriteEvent_ConnectTowCable(NetPktGroup& group, void* pEvent)
     WritePositionVector(group, end);
 }
 
-// FUNCTION: SWBF2 0x004213a0
-float Length(const float* pVector)
-{
-    return sqrtf(pVector[0] * pVector[0] + pVector[1] * pVector[1] +
-                 pVector[2] * pVector[2]);
-}
+
 
 // FUNCTION: SWBF2 0x00411e90
 PblVector3* __fastcall TransformNormalByMatrix(const PblMatrix* pMatrix, void*,
@@ -14660,7 +14662,7 @@ float GetNetEventScore(NetEvent& event)
     {
         return -1.0f;
     }
-    return Length((const float*)&difference);
+    return Length(difference);
 }
 
 void WriteDestMask(NetPktGroup& group, unsigned __int64 mask);
@@ -15291,7 +15293,7 @@ void AddSend(GameObject* pObject)
     const PblVector3& center = pObject->GetCollisionCenter();
     const float radius = pObject->GetCollisionRadius();
     PblVector3 offset = center - sendCenter;
-    float distance = Length((const float*)&offset);
+    float distance = Length(offset);
     if (distance > 0.0f)
     {
         offset = offset / distance;

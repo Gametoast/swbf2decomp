@@ -120,7 +120,8 @@ public:
         }
     }
 
-    // FUNCTION: SWBF2 0x0052b0d0
+    // TEMPLATE: SWBF2 0x0052b0d0
+    // util::Vector<unsigned short,util::BaseArray<unsigned short,util::TypedArrayAllocator<unsigned short,util::NewAllocator> > >::SetSize_
     bool SetSize_(int iSize, bool bForce)
     {
         if (iSize == 0 || this->_size == 0)

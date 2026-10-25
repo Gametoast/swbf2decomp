@@ -38,6 +38,10 @@ public:
         return x != v.x || y != v.y || z != v.z;
     }
 
+    PblVector3& operator+=(const PblVector3& rhs);
+    PblVector3& operator-=(const PblVector3& rhs);
+    const PblVector3 operator-() const;
+
     float GetX() const;
     float GetY() const;
     float GetZ() const;
@@ -58,6 +62,7 @@ const PblVector3 operator*(const PblVector3& lhs, float rhs);
 const PblVector3 operator/(const PblVector3& lhs, float rhs);
 
 float DotProduct(const PblVector3& vVector1, const PblVector3& vVector2);
+const float Length(const PblVector3& vVector);
 
 
 

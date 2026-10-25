@@ -449,9 +449,9 @@ unsigned int DSBufferRenderer::WriteData(void* pData, unsigned int uiSize,
         else
         {
             const unsigned char* const pSrc =
-                (const unsigned char*)pPacket->mBuffer + mPacketRead;
+                (const unsigned char*)pPacket->GetBuffer() + mPacketRead;
 
-            const unsigned int uiUsed = pPacket->mBufferUsed;
+            const unsigned int uiUsed = pPacket->GetUsed();
 
             unsigned int uiChunk = uiUsed - mPacketRead;
             if (uiChunk > uiSize)
@@ -469,57 +469,107 @@ unsigned int DSBufferRenderer::WriteData(void* pData, unsigned int uiSize,
             else
             {
 
-                short* const pOut =
-                    (short*)((unsigned char*)pData + uiWritten);
-                const short* const pIn = (const short*)pSrc;
-                const unsigned int uiSamples = uiChunk >> 1;
+                short* output = (short*)((unsigned char*)pData + uiWritten);
+                const short* input = (const short*)pSrc;
+                unsigned int readSizeSamples = uiChunk >> 1;
 
-                if (mNumChannels == 1)
+                switch (mNumChannels)
                 {
-
+                case 1:
+                {
                     mGainCurrent[0] += (mGainTarget[0] - mGainCurrent[0]) >> 1;
-
-                    for (unsigned int i = 0; i < uiSamples; ++i)
+                    unsigned int remaining = readSizeSamples & 7u;
+                    readSizeSamples &= ~7u;
+                    while (readSizeSamples != 0)
                     {
-                        pOut[i] = (short)ClampSample(
-                            (pIn[i] * (mGainCurrent[0] >> 16)) >> 16);
-                        mGainCurrent[0] +=
-                            (mGainTarget[0] - mGainCurrent[0]) >> 1;
+                        int sample0 = ((mGainCurrent[0] >> 16) * input[0]) >> 16;
+                        mGainCurrent[0] += (mGainTarget[0] - mGainCurrent[0]) >> 1;
+                        output[0] = (short)ClampSample(sample0);
+                        int sample1 = ((mGainCurrent[0] >> 16) * input[1]) >> 16;
+                        mGainCurrent[0] += (mGainTarget[0] - mGainCurrent[0]) >> 1;
+                        output[1] = (short)ClampSample(sample1);
+                        int sample2 = ((mGainCurrent[0] >> 16) * input[2]) >> 16;
+                        mGainCurrent[0] += (mGainTarget[0] - mGainCurrent[0]) >> 1;
+                        output[2] = (short)ClampSample(sample2);
+                        int sample3 = ((mGainCurrent[0] >> 16) * input[3]) >> 16;
+                        mGainCurrent[0] += (mGainTarget[0] - mGainCurrent[0]) >> 1;
+                        output[3] = (short)ClampSample(sample3);
+                        input += 4;
+                        output += 4;
+                        readSizeSamples -= 4;
                     }
+                    while (remaining != 0)
+                    {
+                        int sample = ((mGainCurrent[0] >> 16) * *input++) >> 16;
+                        mGainCurrent[0] += (mGainTarget[0] - mGainCurrent[0]) >> 1;
+                        *output++ = (short)ClampSample(sample);
+                        --remaining;
+                    }
+                    break;
                 }
-                else if (mNumChannels == 2)
+                case 2:
                 {
-
                     mGainCurrent[0] += (mGainTarget[0] - mGainCurrent[0]) >> 1;
                     mGainCurrent[1] += (mGainTarget[1] - mGainCurrent[1]) >> 1;
-
-                    for (unsigned int i = 0; i < uiSamples; i += 2)
+                    unsigned int remaining = readSizeSamples & 15u;
+                    readSizeSamples &= ~15u;
+                    while (readSizeSamples != 0)
                     {
-                        pOut[i] = (short)ClampSample(
-                            (pIn[i] * (mGainCurrent[0] >> 16)) >> 16);
-                        mGainCurrent[0] +=
-                            (mGainTarget[0] - mGainCurrent[0]) >> 1;
-
-                        pOut[i + 1] = (short)ClampSample(
-                            (pIn[i + 1] * (mGainCurrent[1] >> 16)) >> 16);
-                        mGainCurrent[1] +=
-                            (mGainTarget[1] - mGainCurrent[1]) >> 1;
+                        int sample0 = ((mGainCurrent[0] >> 16) * input[0]) >> 16;
+                        mGainCurrent[0] += (mGainTarget[0] - mGainCurrent[0]) >> 1;
+                        output[0] = (short)ClampSample(sample0);
+                        int sample1 = ((mGainCurrent[1] >> 16) * input[1]) >> 16;
+                        mGainCurrent[1] += (mGainTarget[1] - mGainCurrent[1]) >> 1;
+                        output[1] = (short)ClampSample(sample1);
+                        int sample2 = ((mGainCurrent[0] >> 16) * input[2]) >> 16;
+                        mGainCurrent[0] += (mGainTarget[0] - mGainCurrent[0]) >> 1;
+                        output[2] = (short)ClampSample(sample2);
+                        int sample3 = ((mGainCurrent[1] >> 16) * input[3]) >> 16;
+                        mGainCurrent[1] += (mGainTarget[1] - mGainCurrent[1]) >> 1;
+                        output[3] = (short)ClampSample(sample3);
+                        sample0 = ((mGainCurrent[0] >> 16) * input[4]) >> 16;
+                        mGainCurrent[0] += (mGainTarget[0] - mGainCurrent[0]) >> 1;
+                        output[4] = (short)ClampSample(sample0);
+                        sample1 = ((mGainCurrent[1] >> 16) * input[5]) >> 16;
+                        mGainCurrent[1] += (mGainTarget[1] - mGainCurrent[1]) >> 1;
+                        output[5] = (short)ClampSample(sample1);
+                        sample2 = ((mGainCurrent[0] >> 16) * input[6]) >> 16;
+                        mGainCurrent[0] += (mGainTarget[0] - mGainCurrent[0]) >> 1;
+                        output[6] = (short)ClampSample(sample2);
+                        sample3 = ((mGainCurrent[1] >> 16) * input[7]) >> 16;
+                        mGainCurrent[1] += (mGainTarget[1] - mGainCurrent[1]) >> 1;
+                        output[7] = (short)ClampSample(sample3);
+                        input += 8;
+                        output += 8;
+                        readSizeSamples -= 8;
                     }
+                    while (remaining != 0)
+                    {
+                        int sample0 = ((mGainCurrent[0] >> 16) * input[0]) >> 16;
+                        mGainCurrent[0] += (mGainTarget[0] - mGainCurrent[0]) >> 1;
+                        output[0] = (short)ClampSample(sample0);
+                        int sample1 = ((mGainCurrent[1] >> 16) * input[1]) >> 16;
+                        mGainCurrent[1] += (mGainTarget[1] - mGainCurrent[1]) >> 1;
+                        output[1] = (short)ClampSample(sample1);
+                        input += 2;
+                        output += 2;
+                        remaining -= 2;
+                    }
+                    break;
                 }
-                else
+                default:
                 {
-
                     for (unsigned int ch = 0; ch < mNumChannels; ++ch)
                     {
-                        for (unsigned int i = ch; i < uiSamples;
-                             i += mNumChannels)
+                        for (unsigned int i = ch; i < readSizeSamples; i += mNumChannels)
                         {
-                            pOut[i] = (short)ClampSample(
-                                (pIn[i] * (mGainCurrent[ch] >> 16)) >> 16);
-                            mGainCurrent[ch] +=
-                                (mGainTarget[ch] - mGainCurrent[ch]) >> 1;
+                            output[i] = (short)ClampSample(
+                                (input[i] * (mGainCurrent[ch] >> 16)) >> 16);
+                            mGainCurrent[ch] += (mGainTarget[ch] - mGainCurrent[ch]) >> 1;
                         }
                     }
+                    break;
+                }
                 }
             }
 
@@ -532,16 +582,14 @@ unsigned int DSBufferRenderer::WriteData(void* pData, unsigned int uiSize,
             if (mPacketRead == uiUsed)
             {
 
-                const unsigned int uiPacketFlags = pPacket->mFlags;
-                mFlags = (unsigned char)((mFlags & 0xFCu)
-                                         | ((uiPacketFlags & 1u) << 1));
-                mFlags = (unsigned char)(mFlags
-                                         | ((uiPacketFlags >> 1) & 1u));
+                mFlags = (unsigned char)(mFlags & 0xFCu);
+                mFlags = (unsigned char)(mFlags | (pPacket->GetLast() << 1));
+                mFlags = (unsigned char)(mFlags | pPacket->GetDiscontinuity());
 
                 StreamPacket* pDone;
                 mPacketQueue.Get(pDone);
 
-                SourceTransport::mPlaybackPosition = pDone->mPos;
+                SourceTransport::mPlaybackPosition = pDone->GetPosition();
 
                 pDone->Unlock();
                 mPacketRead = 0;
