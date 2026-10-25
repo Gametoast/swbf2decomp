@@ -18,10 +18,6 @@ class EntityHologram;
 class CommandBuilding;
 class CommandWalker;
 class NetObjState;
-class CannonStrengthConvert;
-
-template <class CONVERT> void WriteFixed(CONVERT& convert, NetPktGroup& group, float value);
-template <class CONVERT> void ReadFixed(CONVERT& convert, NetPktGroup& group, float& value);
 class WeaponMelee;
 
 void BeginNetLOD();

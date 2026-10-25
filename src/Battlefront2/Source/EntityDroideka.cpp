@@ -503,23 +503,8 @@ void EntityDroideka::MoveForward(float fDistance)
             fCos = fCos * (f4Cos2 - 3.0f);
         }
 
-        PblMatrix kTurn;
-        kTurn.m[0][0] = fCos;
-        kTurn.m[0][1] = 0.0f;
-        kTurn.m[0][2] = -fSin;
-        kTurn.m[0][3] = 0.0f;
-        kTurn.m[1][0] = 0.0f;
-        kTurn.m[1][1] = 1.0f;
-        kTurn.m[1][2] = 0.0f;
-        kTurn.m[1][3] = 0.0f;
-        kTurn.m[2][0] = fSin;
-        kTurn.m[2][1] = 0.0f;
-        kTurn.m[2][2] = fCos;
-        kTurn.m[2][3] = 0.0f;
-        kTurn.m[3][0] = 0.0f;
-        kTurn.m[3][1] = 0.0f;
-        kTurn.m[3][2] = 0.0f;
-        kTurn.m[3][3] = 1.0f;
+        PblMatrix kTurn(PblVector3(fCos, 0.0f, -fSin), PblVector3(0.0f, 1.0f, 0.0f),
+                        PblVector3(fSin, 0.0f, fCos), PblVector3(0.0f, 0.0f, 0.0f));
         D3DXMatrixMultiply(&kTurn, &kTurn, &mMatrix);
 
         vPos.x += kTurn.m[2][0] * fDistance;

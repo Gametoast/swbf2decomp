@@ -428,11 +428,6 @@ enum SwitchResponse
 
 SwitchResponse ReadSwitchResponse(NetPktGroup& group, unsigned int turn, unsigned int otherTurn);
 
-class StickAxisConvert {};
-class MouseAxisConvert {};
-template <class Convert> void ReadFixed(Convert& convert, NetPktGroup& group, float& value);
-template <> void ReadFixed<StickAxisConvert>(StickAxisConvert& convert, NetPktGroup& group, float& value);
-template <> void ReadFixed<MouseAxisConvert>(MouseAxisConvert& convert, NetPktGroup& group, float& value);
 EntityClass* ReadEntityClass(NetPktGroup& group);
 WeaponClass* ReadWeaponClass(NetPktGroup& group);
 bool AcceptLocalPlayerMessage(const Character* character, int value);

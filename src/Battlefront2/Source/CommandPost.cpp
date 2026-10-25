@@ -76,24 +76,7 @@ PblMatrix NormalMatrix(const PblVector3& vDir, const PblVector3& vNormal, const 
     PblVector3 vFront(vRight.y * vUp.z - vRight.z * vUp.y, vRight.z * vUp.x - vRight.x * vUp.z,
                       vRight.x * vUp.y - vRight.y * vUp.x);
 
-    PblMatrix m;
-    m.m[0][0] = vRight.x;
-    m.m[0][1] = vRight.y;
-    m.m[0][2] = vRight.z;
-    m.m[0][3] = 0.0f;
-    m.m[1][0] = vUp.x;
-    m.m[1][1] = vUp.y;
-    m.m[1][2] = vUp.z;
-    m.m[1][3] = 0.0f;
-    m.m[2][0] = vFront.x;
-    m.m[2][1] = vFront.y;
-    m.m[2][2] = vFront.z;
-    m.m[2][3] = 0.0f;
-    m.m[3][0] = vPos.x;
-    m.m[3][1] = vPos.y;
-    m.m[3][2] = vPos.z;
-    m.m[3][3] = 1.0f;
-    return m;
+    return PblMatrix(vRight, vUp, vFront, vPos);
 }
 
 extern "C" PblQuaternion* __stdcall D3DXQuaternionNormalize(PblQuaternion* pOut, const PblQuaternion* pQ);

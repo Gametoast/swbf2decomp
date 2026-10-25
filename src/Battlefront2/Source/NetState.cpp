@@ -78,14 +78,6 @@ static int NetVectorBits()
     return netLOD == 1 ? 32 : 11;
 }
 
-class ConvertValues
-{
-public:
-
-    // FUNCTION: SWBF2 0x005b4000
-    void TrackValue(float fValue) {}
-};
-
 class QuatConvert : public ConvertValues
 {
 public:
@@ -157,9 +149,6 @@ static SwitchConvert switchConvert;
 static ThrustConvert thrustConvert;
 static AngleConvert angleConvert;
 static JetFuelConvert jetFuelConvert;
-
-template <class CONVERT> void WriteFixed(CONVERT&, NetPktGroup&, float);
-template <class CONVERT> void ReadFixed(CONVERT&, NetPktGroup&, float&);
 
 // GLOBAL: SWBF2 0x01fa8c34
 int lastNetLOD;
@@ -287,9 +276,11 @@ int __fastcall DecodeTriggerAction(unsigned int type)
 }
 
 // FUNCTION: SWBF2 0x005f5850
-void SetNetLOD(bool precision)
+int SetNetLOD(int precision)
 {
+    const int oldPrecision = netLOD;
     netLOD = precision;
+    return oldPrecision;
 }
 
 // FUNCTION: SWBF2 0x005f5880
@@ -316,7 +307,7 @@ void ReadNetLOD(NetPktGroup& group)
         group.ReadBits(precision, 2);
         lastNetLOD = precision;
     }
-    netLOD = lastNetLOD;
+    SetNetLOD(lastNetLOD);
 }
 
 // FUNCTION: SWBF2 0x005f60b0
@@ -1073,7 +1064,7 @@ void EntityWalker::WriteObject(NetPktGroup& group, NetObjState*)
     const PblMatrix& matrix = GetMatrix();
     if (!NetGame::IsFullState())
     {
-        SetNetLOD(ComputeNetLOD((int)&matrix.m[3][0], mPlayerId) != 0);
+        SetNetLOD(ComputeNetLOD((int)&matrix.m[3][0], mPlayerId));
         SetNetPrecision(group);
     }
     WriteMatrix(group, matrix);
@@ -1151,7 +1142,7 @@ void EntityWalker::WriteObject(NetPktGroup& group, NetObjState*)
     {
         mTurret[i]->Write(group);
     }
-    SetNetLOD(false);
+    SetNetLOD(0);
 }
 
 // FUNCTION: SWBF2 0x005ecca0
@@ -1304,7 +1295,7 @@ void EntityWalker::ReadObject(NetPktGroup& group, NetObjState*)
     {
         mTurret[i]->Read(group);
     }
-    SetNetLOD(false);
+    SetNetLOD(0);
 }
 
 // FUNCTION: SWBF2 0x005ee870
@@ -1325,7 +1316,7 @@ void EntityDroid::WriteObject(NetPktGroup& group, NetObjState*)
     const PblMatrix& matrix = GetMatrix();
     if (!NetGame::IsFullState())
     {
-        SetNetLOD(ComputeNetLOD((int)&matrix.m[3][0], mPlayerId) != 0);
+        SetNetLOD(ComputeNetLOD((int)&matrix.m[3][0], mPlayerId));
         SetNetPrecision(group);
     }
     WriteMatrix(group, matrix);
@@ -1369,7 +1360,7 @@ void EntityDroid::WriteObject(NetPktGroup& group, NetObjState*)
     ((EnergyBar*)mEnergyBar)->Write(group);
     group.WriteBits(mState, 2);
     group.WriteFixed(mKillTimer, 0.0f, 5.0f, 8);
-    SetNetLOD(false);
+    SetNetLOD(0);
 }
 
 // FUNCTION: SWBF2 0x005eeaf0
@@ -1439,7 +1430,7 @@ void EntityDroid::ReadObject(NetPktGroup& group, NetObjState*)
     group.ReadBits(value, 2);
     mState = (State)value;
     group.ReadFixed(mKillTimer, 0.0f, 5.0f, 8);
-    SetNetLOD(false);
+    SetNetLOD(0);
 }
 
 // FUNCTION: SWBF2 0x005eeef0
@@ -1460,7 +1451,7 @@ void EntityHover::WriteObject(NetPktGroup& group, NetObjState*)
     const PblMatrix& matrix = GetMatrix();
     if (!NetGame::IsFullState())
     {
-        SetNetLOD(ComputeNetLOD((int)&matrix.m[3][0], mPlayerId) != 0);
+        SetNetLOD(ComputeNetLOD((int)&matrix.m[3][0], mPlayerId));
         SetNetPrecision(group);
     }
     WriteMatrix(group, matrix);
@@ -1527,7 +1518,7 @@ void EntityHover::WriteObject(NetPktGroup& group, NetObjState*)
     {
         mTurret[i]->Write(group);
     }
-    SetNetLOD(false);
+    SetNetLOD(0);
 }
 
 // FUNCTION: SWBF2 0x005ef2f0
@@ -1603,7 +1594,7 @@ void EntityHover::ReadObject(NetPktGroup& group, NetObjState*)
     {
         mTurret[i]->Read(group);
     }
-    SetNetLOD(false);
+    SetNetLOD(0);
 }
 
 // FUNCTION: SWBF2 0x005f51d0
@@ -1798,8 +1789,8 @@ void MountedTurret::WriteLateState(NetPktGroup& group)
 void MountedTurret::Write(NetPktGroup& group)
 {
     const int clientId = NetGame::GetCurDst();
-    const int oldPrecision = netLOD;
-    netLOD = NetGame::IsLocalTo(clientId, mPlayerId) ? 1 : oldPrecision;
+    const int oldPrecision = SetNetLOD(0);
+    SetNetLOD(NetGame::IsLocalTo(clientId, mPlayerId) ? 1 : oldPrecision);
     WriteThrust(group, mControlPitch);
     WriteThrust(group, mControlTurn);
     const PblVector3 aim(mAimMatrix.m[2][0], mAimMatrix.m[2][1],
@@ -1813,7 +1804,7 @@ void MountedTurret::Write(NetPktGroup& group)
                      mClass->mTurnRate, 16);
     if (mPlayerId < 0)
     {
-        netLOD = oldPrecision;
+        SetNetLOD(oldPrecision);
         return;
     }
     WriteThrust(group, mTurnBuildup);
@@ -1850,14 +1841,14 @@ void MountedTurret::Write(NetPktGroup& group)
     {
         WriteObjectPtr(group, mTargetLockedObj);
     }
-    netLOD = oldPrecision;
+    SetNetLOD(oldPrecision);
 }
 
 // FUNCTION: SWBF2 0x005efaf0
 void MountedTurret::Read(NetPktGroup& group)
 {
-    const int oldPrecision = netLOD;
-    netLOD = NetGame::GetJoystickIndex(mPlayerId) >= 0 ? 1 : oldPrecision;
+    const int oldPrecision = SetNetLOD(0);
+    SetNetLOD(NetGame::GetJoystickIndex(mPlayerId) >= 0 ? 1 : oldPrecision);
     ReadThrust(group, mControlPitch);
     ReadThrust(group, mControlTurn);
     PblVector3 direction;
@@ -1927,7 +1918,7 @@ void MountedTurret::Read(NetPktGroup& group)
             }
         }
     }
-    netLOD = oldPrecision;
+    SetNetLOD(oldPrecision);
 }
 
 // FUNCTION: SWBF2 0x005f0d50
@@ -2619,22 +2610,10 @@ static CannonStrengthConvert cannonStrengthConvert;
 
 // TEMPLATE: SWBF2 0x005f6280
 // WriteFixed<CannonStrengthConvert>
-template <class CONVERT>
-void WriteFixed(CONVERT& convert, NetPktGroup& group, float fValue)
-{
-    convert.TrackValue(fValue);
-    group.WriteFixed(fValue, convert.GetMin(), convert.GetMax(), convert.GetBits());
-}
+template void WriteFixed<CannonStrengthConvert>(CannonStrengthConvert&, NetPktGroup&, float);
 
 // TEMPLATE: SWBF2 0x005f62c0
 // ReadFixed<CannonStrengthConvert>
-template <class CONVERT>
-void ReadFixed(CONVERT& convert, NetPktGroup& group, float& fValue)
-{
-    group.ReadFixed(fValue, convert.GetMin(), convert.GetMax(), convert.GetBits());
-}
-
-template void WriteFixed<CannonStrengthConvert>(CannonStrengthConvert&, NetPktGroup&, float);
 template void ReadFixed<CannonStrengthConvert>(CannonStrengthConvert&, NetPktGroup&, float&);
 
 // TEMPLATE: SWBF2 0x005f62e0
@@ -3841,7 +3820,7 @@ void EntityFlyer::WriteObject(NetPktGroup& group, NetObjState* pState)
     const PblMatrix& matrix = GetMatrix();
     if (!NetGame::IsFullState())
     {
-        SetNetLOD(ComputeNetLOD((int)&matrix.m[3][0], mPlayerId) != 0);
+        SetNetLOD(ComputeNetLOD((int)&matrix.m[3][0], mPlayerId));
         SetNetPrecision(group);
     }
     WriteMatrix(group, matrix);
@@ -3949,7 +3928,7 @@ void EntityFlyer::WriteObject(NetPktGroup& group, NetObjState* pState)
             mTurret[i]->Write(group);
         }
     }
-    SetNetLOD(false);
+    SetNetLOD(0);
 }
 
 // FUNCTION: SWBF2 0x005ebfe0
@@ -4074,7 +4053,7 @@ void EntityFlyer::ReadObject(NetPktGroup& group, NetObjState* pState)
             mTurret[i]->Read(group);
         }
     }
-    SetNetLOD(false);
+    SetNetLOD(0);
 }
 
 // FUNCTION: SWBF2 0x005f3500
@@ -4427,7 +4406,7 @@ void EntityDroideka::ReadObject(NetPktGroup& group, NetObjState*)
         }
     }
     PropagateTeam(mCharacter, mTeam);
-    SetNetLOD(false);
+    SetNetLOD(0);
 }
 
 // FUNCTION: SWBF2 0x005f47c0
@@ -4667,7 +4646,7 @@ void EntityDroideka::WriteObject(NetPktGroup& group, NetObjState*)
     const PblMatrix& matrix = static_cast<CollisionObject*>(this)->GetMatrix();
     if (!NetGame::IsFullState())
     {
-        SetNetLOD(ComputeNetLOD((int)&matrix.m[3][0], mPlayerId) != 0);
+        SetNetLOD(ComputeNetLOD((int)&matrix.m[3][0], mPlayerId));
         SetNetPrecision(group);
     }
     group.WriteBits(mCtrl != 0, 1);
@@ -4776,7 +4755,7 @@ void EntityDroideka::WriteObject(NetPktGroup& group, NetObjState*)
             }
         }
     }
-    SetNetLOD(false);
+    SetNetLOD(0);
 }
 
 // FUNCTION: SWBF2 0x005e9660
@@ -4798,7 +4777,7 @@ void EntitySoldier::WriteObject(NetPktGroup& group, NetObjState*)
                 ++gSoldierLodCount;
             }
         }
-        SetNetLOD(precision != 0);
+        SetNetLOD(precision);
         SetNetPrecision(group);
     }
     const bool bHasController = mCtrl != 0;
@@ -4995,7 +4974,7 @@ void EntitySoldier::WriteObject(NetPktGroup& group, NetObjState*)
     {
         group.WriteBits(0, 1);
     }
-    SetNetLOD(false);
+    SetNetLOD(0);
 }
 
 // FUNCTION: SWBF2 0x005f2910
@@ -5565,7 +5544,7 @@ void EntitySoldier::ReadObject(NetPktGroup& group, NetObjState*)
         }
     }
     PropagateTeam(mCharacter, mTeam);
-    SetNetLOD(false);
+    SetNetLOD(0);
 }
 
 // FUNCTION: SWBF2 0x005f2ec0

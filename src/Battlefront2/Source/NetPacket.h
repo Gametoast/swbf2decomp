@@ -139,6 +139,27 @@ public:
     int curBit;
     unsigned int pktBits;
 };
+
+template <class CONVERT>
+void WriteFixed(CONVERT& convert, NetPktGroup& group, float fValue)
+{
+    convert.TrackValue(fValue);
+    group.WriteFixed(fValue, convert.GetMin(), convert.GetMax(), convert.GetBits());
+}
+
+template <class CONVERT>
+void ReadFixed(CONVERT& convert, NetPktGroup& group, float& fValue)
+{
+    group.ReadFixed(fValue, convert.GetMin(), convert.GetMax(), convert.GetBits());
+}
+
+class ConvertValues
+{
+public:
+
+    // FUNCTION: SWBF2 0x005b4000
+    void TrackValue(float fValue) {}
+};
  
 
 void NetPktGroupClampFixed(float& f, float fMin, float fMax, int iBits);

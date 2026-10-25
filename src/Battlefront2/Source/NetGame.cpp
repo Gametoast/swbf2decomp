@@ -3037,7 +3037,7 @@ void NetGame::LeaveClient()
 }
 
 void BeginNetLOD();
-void SetNetLOD(bool bArg);
+int SetNetLOD(int precision);
 namespace GameLoop
 {
 extern float sDeltaTime;
@@ -3111,7 +3111,7 @@ void NetGame::ApplyLateMoves()
     NetPktGroup* pGroup = &lateState[iGroup];
     pGroup->BeginRead();
     BeginNetLOD();
-    SetNetLOD(true);
+    SetNetLOD(1);
     lateObjCount = 0;
     for (i = 0; i < netCurMaxPlayers; i++)
     {
@@ -4665,7 +4665,7 @@ void WriteSwitchResponse(NetPktGroup* pGroup, int iObj, int iTurn);
 void WriteMiniMove(NetPktGroup* pGroup, ProcessedInputs* pInputs);
 void WriteMove(NetPktGroup* pGroup, ProcessedInputs* pPrev, ProcessedInputs* pCur);
 bool IsNetObjectFeatureEnabled();
-void SetNetLOD(bool bArg);
+int SetNetLOD(int precision);
 void WriteSpawnSelect(NetPktGroup* pGroup);
 void WriteLockedTargets(NetPktGroup* pGroup);
 void WriteBootRequest(NetPktGroup* pGroup);
@@ -4773,7 +4773,7 @@ void NetGame::SendClient()
         }
         WriteTurnLowBits(&group, clientHostTurnNumber ? clientHostTurnNumber : -1);
         WriteSwitchResponse(&group, clientSwitchObjects, clientSwitchObjTurn);
-        SetNetLOD(true);
+        SetNetLOD(1);
         WriteSpawnSelect(&group);
         WriteLockedTargets(&group);
         WriteBootRequest(&group);
@@ -6096,7 +6096,7 @@ void NetGame::SaveLateState()
     pGroup->Free();
     pGroup->BeginWrite();
     BeginNetLOD();
-    SetNetLOD(true);
+    SetNetLOD(1);
     for (int i = 0; i < netCurMaxPlayers; ++i)
     {
         if (!NetGame::IsPlaying(i, false))
@@ -6905,6 +6905,22 @@ void BblList<NetEntity, 512>::Itor::Advance()
         ++idx;
     }
 }
+
+class StickAxisConvert : public ConvertValues
+{
+public:
+    float GetMin() const { return -1.0f; }
+    float GetMax() const { return 1.0f; }
+    int GetBits() const { return 7; }
+};
+
+class MouseAxisConvert : public ConvertValues
+{
+public:
+    float GetMin() const { return -16.0f; }
+    float GetMax() const { return 16.0f; }
+    int GetBits() const { return 11; }
+};
 
 // GLOBAL: SWBF2 0x01e64b84
 StickAxisConvert stickAxisConvert;
@@ -8237,19 +8253,13 @@ unsigned int GetUpdateTurn(NetPktGroup* group)
     return turn;
 }
 
-// FUNCTION: SWBF2 0x005d3cc0
-template <>
-void ReadFixed<StickAxisConvert>(StickAxisConvert&, NetPktGroup& group, float& value)
-{
-    group.ReadFixed(value, -1.0f, 1.0f, 7);
-}
+// TEMPLATE: SWBF2 0x005d3cc0
+// ReadFixed<StickAxisConvert>
+template void ReadFixed<StickAxisConvert>(StickAxisConvert&, NetPktGroup&, float&);
 
-// FUNCTION: SWBF2 0x005d3cf0
-template <>
-void ReadFixed<MouseAxisConvert>(MouseAxisConvert&, NetPktGroup& group, float& value)
-{
-    group.ReadFixed(value, -16.0f, 16.0f, 11);
-}
+// TEMPLATE: SWBF2 0x005d3cf0
+// ReadFixed<MouseAxisConvert>
+template void ReadFixed<MouseAxisConvert>(MouseAxisConvert&, NetPktGroup&, float&);
 
 // FUNCTION: SWBF2 0x005c25c0
 EntityClass* ReadEntityClass(NetPktGroup& group)
@@ -10970,7 +10980,7 @@ void ReceivePrimary()
             }
 
             curDst = player;
-            SetNetLOD(true);
+            SetNetLOD(1);
             ReadSpawnSelect(group, player);
             ReadLockedTargets(group, player);
             ReadBootRequest(group, player);
@@ -13744,13 +13754,6 @@ void AloMapDisplayMarkers::Write(NetPktGroup& group)
     group.Write(false);
 }
 
-template <class Convert>
-void WriteFixed(Convert&, NetPktGroup&, float);
-template <>
-void WriteFixed<StickAxisConvert>(StickAxisConvert&, NetPktGroup&, float);
-template <>
-void WriteFixed<MouseAxisConvert>(MouseAxisConvert&, NetPktGroup&, float);
-
 // FUNCTION: SWBF2 0x005cad00
 void WriteMove(NetPktGroup* pGroup, ProcessedInputs* pPrev, ProcessedInputs* pCur)
 {
@@ -14488,24 +14491,13 @@ void WriteObject(NetPktGroup& group, GameObject* pObject)
     }
 }
 
-template <class Convert>
-void WriteFixed(Convert&, NetPktGroup&, float);
+// TEMPLATE: SWBF2 0x005d3c60
+// WriteFixed<StickAxisConvert>
+template void WriteFixed<StickAxisConvert>(StickAxisConvert&, NetPktGroup&, float);
 
-// FUNCTION: SWBF2 0x005d3c60
-template <>
-void WriteFixed<StickAxisConvert>(StickAxisConvert&, NetPktGroup& group,
-                                 float fValue)
-{
-    group.WriteFixed(fValue, -1.0f, 1.0f, 7);
-}
-
-// FUNCTION: SWBF2 0x005d3c90
-template <>
-void WriteFixed<MouseAxisConvert>(MouseAxisConvert&, NetPktGroup& group,
-                                 float fValue)
-{
-    group.WriteFixed(fValue, -16.0f, 16.0f, 11);
-}
+// TEMPLATE: SWBF2 0x005d3c90
+// WriteFixed<MouseAxisConvert>
+template void WriteFixed<MouseAxisConvert>(MouseAxisConvert&, NetPktGroup&, float);
 
  
  

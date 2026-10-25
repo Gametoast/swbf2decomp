@@ -921,24 +921,7 @@ PblMatrix Aimer::GetFireMatrix() const
                    mDirection.z * vRight.x - mDirection.x * vRight.z,
                    mDirection.x * vRight.y - mDirection.y * vRight.x);
 
-    PblMatrix m;
-    m.m[0][0] = vRight.x;
-    m.m[0][1] = vRight.y;
-    m.m[0][2] = vRight.z;
-    m.m[0][3] = 0.0f;
-    m.m[1][0] = vUp.x;
-    m.m[1][1] = vUp.y;
-    m.m[1][2] = vUp.z;
-    m.m[1][3] = 0.0f;
-    m.m[2][0] = mDirection.x;
-    m.m[2][1] = mDirection.y;
-    m.m[2][2] = mDirection.z;
-    m.m[2][3] = 0.0f;
-    m.m[3][0] = mFirePos.x;
-    m.m[3][1] = mFirePos.y;
-    m.m[3][2] = mFirePos.z;
-    m.m[3][3] = 1.0f;
-    return m;
+    return PblMatrix(vRight, vUp, mDirection, mFirePos);
 }
 
 // TEMPLATE: SWBF2 0x005fe640
