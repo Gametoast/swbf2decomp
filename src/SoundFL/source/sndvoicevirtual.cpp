@@ -46,7 +46,7 @@ VoiceVirtual::VoiceVirtual(unsigned int uiCustomFlags,
     if (!mVoiceManager)
     {
         mVoiceManager =
-            EngineBase::GetVoiceVirtualManager((Source2D3D::mFlags & 1) != 0);
+            EngineBase::GetVoiceVirtualManager(Source2D3D::Get3DMode());
     }
 
     mFlags |= (unsigned int)((bRestorePlaybackPos ? flags_restorePlaybackPos : 0)

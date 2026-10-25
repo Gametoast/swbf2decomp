@@ -100,7 +100,6 @@ namespace
         return pCtrl->mLowLevel;
     }
 
-    const PblVector3& Trans(const PblMatrix& m) { return *(const PblVector3*)&m.m[3][0]; }
 }
 
 extern int WORLD_EXTENTS;
@@ -223,7 +222,7 @@ void PathFollower::ConstructorCommon()
     }
     else
     {
-        SetLocalPoints(Trans(mCtrl->mOwner->GetMatrix()), mItor);
+        SetLocalPoints(mCtrl->mOwner->GetMatrix().GetTranslation(), mItor);
     }
 }
 
@@ -286,7 +285,7 @@ bool PathFollower::PrependPath(const AIPath* pPath)
 
     mPath->PrependPath(pPath);
     mItor = PblList<AIPathNode>::Itor(mPath->GetNodeList());
-    SetLocalPoints(Trans(mCtrl->mOwner->GetMatrix()), mItor);
+    SetLocalPoints(mCtrl->mOwner->GetMatrix().GetTranslation(), mItor);
     return true;
 }
 
@@ -303,7 +302,7 @@ void PathFollower::SetLocalPoints(const PblVector3& vPrev, const PblList<AIPathN
     {
         mNextPoint = pNext->mPos;
         const PblMatrix& mMe = mCtrl->mOwner->GetMatrix();
-        if (!(Trans(mMe) != vPrev))
+        if (!(mMe.GetTranslation() != vPrev))
         {
             PblVector3 vDelta(mNextPoint.x - mGotoPoint.x, mNextPoint.y - mGotoPoint.y,
                               mNextPoint.z - mGotoPoint.z);
@@ -470,7 +469,7 @@ bool PathFollower::TestBarriersAhead() const
     PblVector3 vTo(mMe.m[3][0] + vAhead.x, mMe.m[3][1] + vAhead.y, mMe.m[3][2] + vAhead.z);
     float fRadius = AIUtil::GetCollisionRadius(mCtrl->mOwner->GetGameObject());
     int eType = AIUtil::GetAIType(mCtrl->mOwner->GetGameObject());
-    return PathFinder::TestTrivialStraightLineHit(Trans(mMe), vTo, fRadius, eType,
+    return PathFinder::TestTrivialStraightLineHit(mMe.GetTranslation(), vTo, fRadius, eType,
                                                   mIgnore, mIgnoreCnt, true);
 }
 
@@ -659,13 +658,13 @@ void PathFollower::UpdateControllableMoving()
         PblVector3 vDir;
         D3DXVec3Normalize(&vDir, &vForward);
         vForward = vDir;
-        AIUtil::CalculateFlyerSteerPoint(mGotoPoint, mDir, Trans(EntityGetMatrix(pFlyer)), vForward,
+        AIUtil::CalculateFlyerSteerPoint(mGotoPoint, mDir, (EntityGetMatrix(pFlyer)).GetTranslation(), vForward,
                                          fTurn, vSteer, mDestSide);
     }
 
     if (mCtrl->mOwner->GetEntity()->IsRtti(kRttiHashEntityHover))
     {
-        PblVector3 vPos = Trans(mCtrl->mOwner->GetMatrix());
+        PblVector3 vPos = mCtrl->mOwner->GetMatrix().GetTranslation();
         const PblVector3& vVel = EntityGetVelocity(mCtrl->mOwner->GetEntity());
         float fSpeed = sqrtf(vVel.y * vVel.y + vVel.x * vVel.x + vVel.z * vVel.z);
         AIUtil::CalculateSoldierSteerPoint(mPrevPoint, mGotoPoint, vPos, fSpeed, vSteer);
@@ -673,7 +672,7 @@ void PathFollower::UpdateControllableMoving()
 
     if (mCtrl->mOwner->GetEntity()->IsRtti(kRttiHashEntityWalker))
     {
-        PblVector3 vPos = Trans(mCtrl->mOwner->GetMatrix());
+        PblVector3 vPos = mCtrl->mOwner->GetMatrix().GetTranslation();
         AIUtil::CalculateSoldierSteerPoint(mPrevPoint, mGotoPoint, vPos, 20.0f, vSteer);
     }
 
@@ -701,7 +700,7 @@ void PathFollower::UpdateControllableMoving()
             PblVector3 vN;
             D3DXVec3Normalize(&vN, &vNormal);
             PblVector3 vAlong(vN.z, 0.0f, -vN.x);
-            PblVector3 vPos = Trans(mCtrl->mOwner->GetMatrix());
+            PblVector3 vPos = mCtrl->mOwner->GetMatrix().GetTranslation();
 
             if (cDir == 0)
             {
@@ -740,7 +739,7 @@ void PathFollower::UpdateControllableMoving()
                 EntityDroidekaAiSetLastCollisionDirection(mCtrl->mOwner->GetEntity(), 0);
             }
 
-            PblVector3 vPos = Trans(mCtrl->mOwner->GetMatrix());
+            PblVector3 vPos = mCtrl->mOwner->GetMatrix().GetTranslation();
             const PblVector3& vVel = EntityGetVelocity(mCtrl->mOwner->GetEntity());
             float fSpeed = sqrtf(vVel.x * vVel.x + vVel.y * vVel.y + vVel.z * vVel.z);
             AIUtil::CalculateSoldierSteerPoint(mPrevPoint, mGotoPoint, vPos, fSpeed, vSteer);
@@ -776,7 +775,7 @@ void PathFollower::CheckStuck(float dt)
     PathFollower::GetStuckParams(mCtrl, fStuckDist, fStuckTime, fMinDistTime);
     mIsStuck = 0;
 
-    PblVector3 vPos = Trans(mCtrl->mOwner->GetMatrix());
+    PblVector3 vPos = mCtrl->mOwner->GetMatrix().GetTranslation();
     float fGoalDX = vPos.x - mGotoPoint.x;
     float fGoalDZ = vPos.z - mGotoPoint.z;
     if (fGoalDZ * fGoalDZ + fGoalDX * fGoalDX < 0.04f)

@@ -2,6 +2,7 @@
 
 #include <stddef.h>
 #include <string.h>
+#include "PblVector.h"
 
 class PblVector3;
 class PblVector4;
@@ -56,7 +57,11 @@ public:
     // FUNCTION: SWBF2 0x0040cb70
     const PblVector3& GetZAxis() const { return *(const PblVector3*)&m[2][0]; }
 
+    void SetTranslation(const PblVector3& vTranslation);
+
     float m[4][4];
 };
+
+#include "PebbleFL/pc/pcPblMatrix.h"
 
 extern PblMatrix gMatrixIdentity;

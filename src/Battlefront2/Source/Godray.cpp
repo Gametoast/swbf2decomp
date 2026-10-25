@@ -24,7 +24,7 @@ bool GodrayEffectObject::IsEffectActive() const
 // FUNCTION: SWBF2 0x0053e490
 void GodrayEffectObject::UpdatedWorldMatrix()
 {
-    GodrayManager::s_pInstance->UpdateGodrayPosition(m_hGodray, *(const PblVector3*)&m_mWorldMatrix.m[3][0]);
+    GodrayManager::s_pInstance->UpdateGodrayPosition(m_hGodray, m_mWorldMatrix.GetTranslation());
 }
 
 // SYNTHETIC: SWBF2 0x0053e4b0
@@ -853,7 +853,7 @@ FLEffectObject* GodrayClass::BuildEffect()
 // FUNCTION: SWBF2 0x00540550
 Entity* GodrayClass::Build(const EntityDesc& desc)
 {
-    const PblVector3& vPos = *(const PblVector3*)&desc.mMatrix.m[3][0];
+    const PblVector3& vPos = desc.mMatrix.GetTranslation();
     for (int i = 0; i < mNumGodRays; ++i)
     {
         GodrayDesc godrayDesc;

@@ -233,7 +233,7 @@ bool EntityPortableTurret::CollisionCallback(const CollisionResult* pResult, Col
             D3DXVec3Normalize(&vUnit, &vNormal);
             if (vUnit.y > 0.7f)
             {
-                mMatrix = NormalMatrix(*(const PblVector3*)mMatrix.m[2], vNormal, *(const PblVector3*)mMatrix.m[3]);
+                mMatrix = NormalMatrix(mMatrix.GetZAxis(), vNormal, mMatrix.GetTranslation());
                 mVelocity = gVectorZero;
                 mBecomeStationaryNow = true;
             }

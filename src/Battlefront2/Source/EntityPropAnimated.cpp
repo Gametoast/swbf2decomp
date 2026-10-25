@@ -474,7 +474,7 @@ bool EntityPropAnimated::Update(float fDeltaTime)
         PblMatrix mWorld;
         D3DXMatrixMultiply(&mWorld, &mBone, &mMatrix);
         GameObject* pFound;
-        if (CollisionManager::GetObjectsInRange(*(const PblVector3*)mWorld.m[3], trigger.mTriggerRadius,
+        if (CollisionManager::GetObjectsInRange(mWorld.GetTranslation(), trigger.mTriggerRadius,
                                                 &pFound, 1, 0, 2) > 0)
         {
             mAnimationTime = 0.0f;
@@ -502,7 +502,7 @@ bool EntityPropAnimated::Update(float fDeltaTime)
             PblMatrix mWorld;
             D3DXMatrixMultiply(&mWorld, mAttachMatrix, &mMatrix);
             GameObject* pFound;
-            if (CollisionManager::GetObjectsInRange(*(const PblVector3*)mWorld.m[3], attach.mAttachRadius,
+            if (CollisionManager::GetObjectsInRange(mWorld.GetTranslation(), attach.mAttachRadius,
                                                     &pFound, 1, 0, 2) <= 0)
             {
                 continue;

@@ -247,10 +247,7 @@ void EntitySoldier::SetVelocity(const PblVector3& vVelocity)
 // FUNCTION: SWBF2 0x004de130
 void EntitySoldier::SetPosition(const PblVector3& vPosition)
 {
-    mMatrix.m[3][0] = vPosition.x;
-    mMatrix.m[3][1] = vPosition.y;
-    mMatrix.m[3][2] = vPosition.z;
-    mMatrix.m[3][3] = 1.0f;
+    mMatrix.SetTranslation(vPosition);
 
     PblVector3 center;
     D3DXVec3TransformCoord(&center, &mModel->_mModel->_BoundingSphere.GetCenter(), &mMatrix);
@@ -376,10 +373,7 @@ bool EntitySoldier::PostCollision::Update(float fDeltaTime)
 // SYNTHETIC: SWBF2 0x004de3f0
 // EntitySoldier::PostCollision::`scalar deleting destructor'
 
-// FUNCTION: SWBF2 0x004de420
-EntitySoldier::PostCollision::~PostCollision()
-{
-}
+
 
 
 
@@ -430,8 +424,8 @@ void SoldierAnimator::ModifyLegMatrixByVehicle(const PblMatrix& lastVehicleMatri
     PblMatrix mab;
     D3DXMatrixMultiply(&ma, &mLegMatrix, &lastVehicleMatrix);
     D3DXMatrixMultiply(&mab, &ma, &vehicleMatrix);
-    mLegMatrix = NormalMatrix(*(const PblVector3*)mab.m[2], *(const PblVector3*)mLegMatrix.m[1],
-                            *(const PblVector3*)mab.m[3]);
+    mLegMatrix = NormalMatrix(mab.GetZAxis(), mLegMatrix.GetYAxis(),
+                            mab.GetTranslation());
 }
 
 // FUNCTION: SWBF2 0x004de5f0
@@ -2188,7 +2182,7 @@ void EntitySoldier::Render(unsigned char ucLod, float fFade, unsigned int uiFlag
             if (mState == SoldierState::FLY || mState == SoldierState::TUMBLE)
             {
                 mRoot = mTemp;
-                mWorld = NormalMatrix(mRoot.GetZAxis(), *(const PblVector3*)&mRoot.m[1][0], mRoot.GetTranslation());
+                mWorld = NormalMatrix(mRoot.GetZAxis(), mRoot.GetYAxis(), mRoot.GetTranslation());
             }
             else
             {
@@ -8875,10 +8869,7 @@ void EntitySoldier::UpdateOrdnanceCollision(float fDeltaTime)
             mPitch.m[2][1] = fSin;
             mPitch.m[2][2] = fCos;
             mPitch.m[2][3] = 0.0f;
-            mPitch.m[3][0] = gVectorZero.x;
-            mPitch.m[3][1] = gVectorZero.y;
-            mPitch.m[3][2] = gVectorZero.z;
-            mPitch.m[3][3] = 1.0f;
+            mPitch.SetTranslation(gVectorZero);
             PblVector3 vPivot((table.avPitchAxis[i].x + vTorsoOffset.x) * fScale,
                               (table.avPitchAxis[i].y + vTorsoOffset.y) * fScale,
                               (table.avPitchAxis[i].z + vTorsoOffset.z) * fScale);
@@ -8894,19 +8885,13 @@ void EntitySoldier::UpdateOrdnanceCollision(float fDeltaTime)
                              (vHeadOffset.z + table.avHeadPos[i].z) * fScale);
             PblVector3 vOut;
             D3DXVec3TransformCoord(&vOut, &vBody, &mPitch);
-            mBody.m[3][0] = vOut.x;
-            mBody.m[3][1] = vOut.y;
-            mBody.m[3][2] = vOut.z;
-            mBody.m[3][3] = 1.0f;
+            mBody.SetTranslation(vOut);
             mCollisionBodyHead.SetMatrix(mBody);
             vBody = PblVector3((vTorsoOffset.x + table.avTorsoPos[i].x) * fScale,
                                (vTorsoOffset.y + table.avTorsoPos[i].y) * fScale,
                                (vTorsoOffset.z + table.avTorsoPos[i].z) * fScale);
             D3DXVec3TransformCoord(&vOut, &vBody, &mPitch);
-            mBody.m[3][0] = vOut.x;
-            mBody.m[3][1] = vOut.y;
-            mBody.m[3][2] = vOut.z;
-            mBody.m[3][3] = 1.0f;
+            mBody.SetTranslation(vOut);
             mCollisionBodyTorso.SetMatrix(mBody);
         }
         else if (mLegAngle != 0.0f)
@@ -8940,29 +8925,20 @@ void EntitySoldier::UpdateOrdnanceCollision(float fDeltaTime)
             mYaw.m[2][1] = 0.0f;
             mYaw.m[2][2] = fCos;
             mYaw.m[2][3] = 0.0f;
-            mYaw.m[3][0] = gVectorZero.x;
-            mYaw.m[3][1] = gVectorZero.y;
-            mYaw.m[3][2] = gVectorZero.z;
-            mYaw.m[3][3] = 1.0f;
+            mYaw.SetTranslation(gVectorZero);
 
             PblVector3 vBody((table.avHeadPos[i].x + vHeadOffset.x) * fScale,
                              (table.avHeadPos[i].y + vHeadOffset.y) * fScale,
                              (table.avHeadPos[i].z + vHeadOffset.z) * fScale);
             PblVector3 vOut;
             D3DXVec3TransformNormal(&vOut, &vBody, &mYaw);
-            mBody.m[3][0] = vOut.x;
-            mBody.m[3][1] = vOut.y;
-            mBody.m[3][2] = vOut.z;
-            mBody.m[3][3] = 1.0f;
+            mBody.SetTranslation(vOut);
             mCollisionBodyHead.SetMatrix(mBody);
             vBody = PblVector3((vTorsoOffset.x + table.avTorsoPos[i].x) * fScale,
                                (vTorsoOffset.y + table.avTorsoPos[i].y) * fScale,
                                (vTorsoOffset.z + table.avTorsoPos[i].z) * fScale);
             D3DXVec3TransformNormal(&vOut, &vBody, &mYaw);
-            mBody.m[3][0] = vOut.x;
-            mBody.m[3][1] = vOut.y;
-            mBody.m[3][2] = vOut.z;
-            mBody.m[3][3] = 1.0f;
+            mBody.SetTranslation(vOut);
             mCollisionBodyTorso.SetMatrix(mBody);
         }
         else

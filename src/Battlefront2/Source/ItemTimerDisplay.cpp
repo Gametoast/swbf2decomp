@@ -221,7 +221,7 @@ bool ItemTimerDisplay::DisplayThread::Update(float fDeltaTime)
         }
 
         const PblMatrix& mCamera = pCamera->GetMatrix();
-        PblVector3 vCamPos = *(const PblVector3*)&mCamera.m[3][0];
+        PblVector3 vCamPos = mCamera.GetTranslation();
         PblVector3 vDelta(vPos.x - vCamPos.x, vPos.y - vCamPos.y, vPos.z - vCamPos.z);
         PblVector3 vDir;
         D3DXVec3Normalize(&vDir, &vDelta);

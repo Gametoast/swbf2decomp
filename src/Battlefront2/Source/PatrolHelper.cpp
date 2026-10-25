@@ -79,7 +79,7 @@ void PatrolHelper::EnterState()
             {
                 const PblMatrix& mVehicle = pVehicle->GetMatrix();
                 if (AIUtil::AreEnemiesInRange(pVehicle->GetGameObject()->GetTeam(),
-                                              *(const PblVector3*)&mVehicle.m[3][0], 20.0f) == true)
+                                              mVehicle.GetTranslation(), 20.0f) == true)
                 {
                     AI::GoalTarget target(AIUtil::GetCommandPostPos(pPost));
                     UnitGoalAgentInfo cmd(CMD_DEFEND, &target);

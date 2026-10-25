@@ -605,10 +605,7 @@ bool EntityTrap::Update(float fDeltaTime)
             GetModel()->GetRedModel(0)->GetBoneMatrix(mTrapClass->mTriggerNode, mNode);
         }
         PblMatrix mOffset = _IdentityMatrix;
-        mOffset.m[3][0] = mTrapClass->mTriggerOffset.x;
-        mOffset.m[3][1] = mTrapClass->mTriggerOffset.y;
-        mOffset.m[3][2] = mTrapClass->mTriggerOffset.z;
-        mOffset.m[3][3] = 1.0f;
+        mOffset.SetTranslation(mTrapClass->mTriggerOffset);
         PblMatrix mLocal;
         D3DXMatrixMultiply(&mLocal, &mOffset, &mNode);
         PblMatrix mWorld;
@@ -720,10 +717,7 @@ bool EntityTrap::Update(float fDeltaTime)
             GetModel()->GetRedModel(0)->GetBoneMatrix(mTrapClass->mTriggerNode, mNode);
         }
         PblMatrix mOffset(_IdentityMatrix);
-        mOffset.m[3][0] = mTrapClass->mTriggerOffset.x;
-        mOffset.m[3][1] = mTrapClass->mTriggerOffset.y;
-        mOffset.m[3][2] = mTrapClass->mTriggerOffset.z;
-        mOffset.m[3][3] = 1.0f;
+        mOffset.SetTranslation(mTrapClass->mTriggerOffset);
         PblMatrix mLocal;
         D3DXMatrixMultiply(&mLocal, &mOffset, &mNode);
         PblMatrix mWorld;
@@ -752,10 +746,7 @@ bool EntityTrap::Update(float fDeltaTime)
             if (pEffectClass)
             {
                 PblMatrix mEffect = _IdentityMatrix;
-                mEffect.m[3][0] = mTrapClass->mDeathEffectOffset.x;
-                mEffect.m[3][1] = mTrapClass->mDeathEffectOffset.y;
-                mEffect.m[3][2] = mTrapClass->mDeathEffectOffset.z;
-                mEffect.m[3][3] = 1.0f;
+                mEffect.SetTranslation(mTrapClass->mDeathEffectOffset);
                 FLEffectObject* pEffect = pEffectClass->BuildEffect();
                 if (pEffect)
                 {
@@ -813,10 +804,7 @@ Entity* EntityTrapClass::Build(const EntityDesc& desc)
         {
             vPos.y = RedTerrain::GetInterpolatedHeight(vPos.x, vPos.z);
         }
-        kBoxDesc.mMatrix.m[3][0] = vPos.x;
-        kBoxDesc.mMatrix.m[3][1] = vPos.y;
-        kBoxDesc.mMatrix.m[3][2] = vPos.z;
-        kBoxDesc.mMatrix.m[3][3] = 1.0f;
+        kBoxDesc.mMatrix.SetTranslation(vPos);
         pTrap->mBuildBox = mBuildBoxOdf->Build(kBoxDesc);
 
         if (pTrap->m_pHologram)

@@ -671,7 +671,7 @@ bool ConnectivityGraph::CanGetThereFromHere_QuickButNotSoPerfectlyAccurateTest(
     {
         return true;
     }
-    const PblVector3& vFrom = *(const PblVector3*)&pCtrl->mOwner->GetMatrix().m[3][0];
+    const PblVector3& vFrom = pCtrl->mOwner->GetMatrix().GetTranslation();
 
     float fFromDist = FLT_MAX;
     float fToDist = FLT_MAX;
@@ -729,7 +729,7 @@ bool ConnectivityGraph::CanGetThereFromHere(UnitController* pCtrl, const PblVect
         return true;
     }
     ConnectivityGraphFollower follower(pCtrl);
-    if (!follower.SetDestination(this, *(const PblVector3*)&pCtrl->mOwner->GetMatrix().m[3][0],
+    if (!follower.SetDestination(this, pCtrl->mOwner->GetMatrix().GetTranslation(),
                                  vDest, eType))
     {
         return false;
@@ -760,7 +760,7 @@ const ConnectivityNode* ConnectivityGraph::GetRandomAccessibleNode(const UnitCon
     }
     float fBest = FLT_MAX;
     const ConnectivityNode* pNearest = 0;
-    const PblVector3& vPos = *(const PblVector3*)&pCtrl->mOwner->GetMatrix().m[3][0];
+    const PblVector3& vPos = pCtrl->mOwner->GetMatrix().GetTranslation();
     for (int i = 0; i < mMaxNodes; ++i)
     {
         const ConnectivityNode* pNode = &mNodes[i];

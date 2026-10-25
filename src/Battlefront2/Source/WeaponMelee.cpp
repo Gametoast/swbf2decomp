@@ -582,7 +582,7 @@ void LightsaberTrailEffect::RenderLightsaberTrail(const LightsaberTrail* pTrail,
     if (bCompressed)
     {
         pPrim = pcRedPrimitive::Create(D3DPT_TRIANGLESTRIP, 0x1082, sizeof(VertexC), uiNumVertices, 0, false);
-        CompressedPos::SetBoundingBox(&bbox);
+        CompressedPos::SetBoundingBox(bbox);
     }
     else
     {

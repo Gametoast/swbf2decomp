@@ -97,7 +97,7 @@ EntitySound::EntitySound(EntitySoundClass* pClass, const EntityDesc& desc)
     {
         SetMaxDistance(pClass->mMaxDistance);
     }
-    mPosition = *(const PblVector3*)desc.mMatrix.m[3];
+    mPosition = desc.mMatrix.GetTranslation();
     sEntitySoundList.AddLast(&mNode);
 }
 

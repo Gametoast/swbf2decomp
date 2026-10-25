@@ -38,10 +38,7 @@ ReticuleDisplay* ReticuleDisplay::sInstance[1];
 // reticuleInterpolator
 ReticuleInterpolator reticuleInterpolator[1];
 
-// FUNCTION: SWBF2 0x00630490
-ReticuleInterpolator::~ReticuleInterpolator()
-{
-}
+
 
 // SYNTHETIC: SWBF2 0x006304a0
 // ReticuleInterpolator::`scalar deleting destructor'

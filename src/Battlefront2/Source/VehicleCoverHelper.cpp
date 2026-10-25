@@ -32,10 +32,6 @@ namespace
 
     const PblHash kRttiHashEntityHover("EntityHover");
 
-    inline const PblVector3& GetPos(const PblMatrix& m)
-    {
-        return *(const PblVector3*)&m.m[3][0];
-    }
 
     inline AILowLevel& GetLowLevel(UnitController* pCtrl)
     {
@@ -101,7 +97,7 @@ void VehicleCoverHelper::EnterState()
     {
 
         mHint->Reserve(GetMe()->GetGameObject());
-        PblVector3 vMe = GetPos(GetMe()->GetMatrix());
+        PblVector3 vMe = GetMe()->GetMatrix().GetTranslation();
         const PblVector3& vHint = mHint->GetCollisionCenter();
         PblVector3 vDir(vHint.x - vMe.x, vHint.y - vMe.y, vHint.z - vMe.z);
         float fDist = sqrtf(vDir.x * vDir.x + vDir.y * vDir.y + vDir.z * vDir.z);
@@ -286,7 +282,7 @@ void VehicleCoverHelper::UpdateState(float dt)
             Controllable* pMe = GetMe();
             const PblVector3& vZ = mHint->GetZAxis();
             PblVector3 vAhead(vZ.x * 30.0f, vZ.y * 30.0f, vZ.z * 30.0f);
-            const PblVector3& vPos = GetPos(pMe->GetMatrix());
+            const PblVector3& vPos = pMe->GetMatrix().GetTranslation();
             PblVector3 vLook(vAhead.x + vPos.x, vPos.y + vAhead.y, vPos.z + vAhead.z);
             mOwner->GetLowLevel().SetHeading(vLook, 0.0f);
         }
@@ -311,7 +307,7 @@ bool VehicleCoverHelper::HELPERFaceTarget() const
         return true;
     }
 
-    PblVector3 vMe = GetPos(GetMe()->GetMatrix());
+    PblVector3 vMe = GetMe()->GetMatrix().GetTranslation();
     PblVector3 vHint = mHint->GetCollisionCenter();
     float fRadius = GetCollisionObject(GetMe()->GetGameObject())->GetCollisionRadius() + 1.0f;
     float dx = vHint.x - vMe.x;
@@ -359,7 +355,7 @@ const VehicleCoverHint* VehicleCoverHelper::FindHint() const
 {
     float fMaxDist = GetMaxHintDist();
     const BaseHint* pHints[30];
-    int iCount = HintManager::RequestVehicleCoverHints(GetCtrl(), GetPos(GetMe()->GetMatrix()),
+    int iCount = HintManager::RequestVehicleCoverHints(GetCtrl(), GetMe()->GetMatrix().GetTranslation(),
                                                        (int)fMaxDist, 30, pHints);
     return SelectHint(iCount, pHints);
 }
@@ -392,7 +388,7 @@ const VehicleCoverHint* VehicleCoverHelper::SelectHint(int iCount, const BaseHin
 // FUNCTION: SWBF2 0x0066c8e0
 float VehicleCoverHelper::IsHintSuitable_Combat(const VehicleCoverHint* pHint) const
 {
-    PblVector3 vMe = GetPos(GetMe()->GetMatrix());
+    PblVector3 vMe = GetMe()->GetMatrix().GetTranslation();
     PblVector3 vTarget = GetAttackHelper(mOwner)->GetLastSeenTargetPos();
     PblVector3 vMeToTarget(vTarget.x - vMe.x, 0.0f, vTarget.z - vMe.z);
     PblVector3 vHint = pHint->GetCollisionCenter();

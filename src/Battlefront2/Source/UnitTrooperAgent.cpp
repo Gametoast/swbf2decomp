@@ -182,7 +182,7 @@ void UnitTrooperAgent::EnterState()
             break;
         }
         mSnipeHelper.ResetHintCheckTime();
-        mSrcPos = *(const PblVector3*)&mCtrl->mOwner->GetMatrix().m[3][0];
+        mSrcPos = mCtrl->mOwner->GetMatrix().GetTranslation();
         mCPPos = AIUtil::GetCommandPostPos(mPost);
         mCPOffset = AIUtil::GetCommandPostOffset(mPost);
         mCPTime = GameLoop::GetMissionTime();
@@ -233,7 +233,7 @@ bool UnitTrooperAgent::CheckForVehicleConvoy()
         return false;
     }
 
-    const PblVector3& myPos = *(const PblVector3*)&mCtrl->mOwner->GetMatrix().m[3][0];
+    const PblVector3& myPos = mCtrl->mOwner->GetMatrix().GetTranslation();
     PblVector3 myDest = GetLowLevel().GetGlobalDest();
     float dx = myPos.x - myDest.x;
     float dy = myPos.y - myDest.y;
@@ -348,7 +348,7 @@ void UnitTrooperAgent::UpdateStatePostVision(float dt)
 
         if (AIUtil::IsVehicle(static_cast<Trackable*>(mCtrl->mOwner)->GetGameObject()))
         {
-            const PblVector3& pos = *(const PblVector3*)&mCtrl->mOwner->GetMatrix().m[3][0];
+            const PblVector3& pos = mCtrl->mOwner->GetMatrix().GetTranslation();
             PblVector3 vDest = GetLowLevel().GetGlobalDest();
             float dx = pos.x - vDest.x;
             float dy = pos.y - vDest.y;
@@ -358,7 +358,7 @@ void UnitTrooperAgent::UpdateStatePostVision(float dt)
                 float fRange = CombatUtil::GetWeaponOptimalRange(mCtrl->mOwner);
                 if (fRange * fRange > dx * dx + dy * dy + dz * dz)
                 {
-                    const PblVector3& from = *(const PblVector3*)&mCtrl->mOwner->GetMatrix().m[3][0];
+                    const PblVector3& from = mCtrl->mOwner->GetMatrix().GetTranslation();
                     if (!PathFinder::TestTrivialStraightLineHit(
                             from, GetLowLevel().GetGlobalDest(),
                             static_cast<Trackable*>(mCtrl->mOwner)->GetGameObject()))

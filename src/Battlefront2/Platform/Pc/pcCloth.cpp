@@ -14,16 +14,7 @@ extern "C" PblMatrix* __stdcall D3DXMatrixMultiply(PblMatrix* pOut, const PblMat
 namespace
 {
 
-struct PosXYZ
-{
-    void SetPos(float fX, float fY, float fZ)
-    {
-        x = fX;
-        y = fY;
-        z = fZ;
-    }
-    float x, y, z;
-};
+
 
 struct NormalXYZ
 {
@@ -36,10 +27,7 @@ struct NormalXYZ
     float x, y, z;
 };
 
-struct TexCoord
-{
-    float u, v;
-};
+
 
 struct ClothVertex
 {

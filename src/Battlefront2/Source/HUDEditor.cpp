@@ -1077,7 +1077,7 @@ PblVector3 HUD::Editor::GetScreenElementPosition()
         fOffsetY = (float)RedInterfaceScreen::GetScreenHeight() * fOffsetY;
         PblMatrix mScreen = mElement->CalculateScreenMatrix();
         mInfo.SetMatrix(mScreen);
-        vPos = *(const PblVector3*)mScreen.m[3];
+        vPos = mScreen.GetTranslation();
         vPos.x -= fOffsetX;
         vPos.y -= fOffsetY;
     }

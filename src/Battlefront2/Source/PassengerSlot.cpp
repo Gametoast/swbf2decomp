@@ -146,7 +146,7 @@ CameraTrackSetting* PassengerSlot::GetCameraTrackSettings()
 void PassengerSlot::SetupCameraTrackMatrix(PblMatrix& rMatrix, float fDeltaTime)
 {
     PblVector3 vDir(-mEyeDir.x, -mEyeDir.y, -mEyeDir.z);
-    rMatrix = DirectionMatrix(vDir, *(const PblVector3*)mAimMatrix.m[1], mEyePoint);
+    rMatrix = DirectionMatrix(vDir, mAimMatrix.GetYAxis(), mEyePoint);
 }
 
 // FUNCTION: SWBF2 0x0060fcd0

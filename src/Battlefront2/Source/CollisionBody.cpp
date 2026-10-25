@@ -123,10 +123,7 @@ CollisionBodyPrimitive::CollisionBodyPrimitive()
 // SYNTHETIC: SWBF2 0x0045d0d0
 // CollisionBodyPrimitive::`scalar deleting destructor'
 
-// FUNCTION: SWBF2 0x004550b0
-CollisionBodyPrimitive::~CollisionBodyPrimitive()
-{
-}
+
 
 // FUNCTION: SWBF2 0x0045d100
 CollisionBodyPrimitive::CollisionBodyPrimitive(CollisionPrimitive primitive, const char* pcName,

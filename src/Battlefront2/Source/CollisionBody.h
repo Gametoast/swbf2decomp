@@ -84,7 +84,8 @@ public:
     CollisionBodyPrimitive();
     CollisionBodyPrimitive(CollisionPrimitive primitive, const char* pcName, const PblMatrix& matrix,
                            unsigned int uiParentHashName);
-    virtual ~CollisionBodyPrimitive();
+    // SYNTHETIC: SWBF2 0x004550b0
+    // CollisionBodyPrimitive::~CollisionBodyPrimitive
 
     void Init(CollisionPrimitive primitive, const char* pcName, const PblMatrix& matrix,
               unsigned int uiParentHashName);

@@ -379,7 +379,8 @@ public:
     public:
 
         PostCollision(EntitySoldier* pOwner) : mOwner(pOwner) {}
-        virtual ~PostCollision();
+        // SYNTHETIC: SWBF2 0x004de420
+        // EntitySoldier::PostCollision::~PostCollision
         virtual bool Update(float fDeltaTime);
 
         EntitySoldier* mOwner;

@@ -291,7 +291,7 @@ void Controller::UpdateFreeSpace()
         const Obstacle* pIgnore = AIUtil::GetGameObjectBarrier(mOwner->GetGameObject());
         const PblMatrix& mMatrix = mOwner->GetMatrix();
         GameObject* pObject = mOwner->GetGameObject();
-        if (PathFinder::IsPointValid(*(const PblVector3*)&mMatrix.m[3][0],
+        if (PathFinder::IsPointValid(mMatrix.GetTranslation(),
                                      fRadius + AIUtil::GetCollisionRadius(pObject),
                                      AIUtil::GetAIType(pObject), 0, &pIgnore, 1))
         {

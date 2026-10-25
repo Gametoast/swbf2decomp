@@ -342,10 +342,7 @@ void ChaseCamera::SetupCamera(RedCamera* pCamera, float fDeltaTime)
             PblQuaternion qUnit;
             PblMatrix mNew;
             D3DXMatrixRotationQuaternion(&mNew, D3DXQuaternionNormalize(&qUnit, &qRot));
-            mNew.m[3][0] = vPos.x;
-            mNew.m[3][1] = vPos.y;
-            mNew.m[3][2] = vPos.z;
-            mNew.m[3][3] = 1.0f;
+            mNew.SetTranslation(vPos);
             mMatrix = mNew;
 
             vPos.x = (vOldPos.x + vPos.x) * 0.5f;
@@ -354,10 +351,7 @@ void ChaseCamera::SetupCamera(RedCamera* pCamera, float fDeltaTime)
             PblQuaternion qMid = Interpolate(qOld, qNew, 0.5f);
             PblMatrix mMid;
             D3DXMatrixRotationQuaternion(&mMid, D3DXQuaternionNormalize(&qUnit, &qMid));
-            mMid.m[3][0] = vPos.x;
-            mMid.m[3][1] = vPos.y;
-            mMid.m[3][2] = vPos.z;
-            mMid.m[3][3] = 1.0f;
+            mMid.SetTranslation(vPos);
 
             float fSwing = sqrtf(vDelta.x * vDelta.x + vDelta.y * vDelta.y + vDelta.z * vDelta.z) * 0.5f
                            * (1.0f - fBlend);

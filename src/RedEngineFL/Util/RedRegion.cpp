@@ -111,7 +111,7 @@ const RedRegionFactory* RedRegionFactory::Find(const char* pcName)
 float RedRegion::GetIntersectionFactor(const PblVector3& vCenter, float fRadius) const
 {
     const PblVector3& vSize = *(const PblVector3*)&mSize;
-    const PblVector3& vPos = *(const PblVector3*)&mMatrix.m[3][0];
+    const PblVector3& vPos = mMatrix.GetTranslation();
     PblVector3 vLocal;
 
     switch (mType)
@@ -212,7 +212,7 @@ const char* RedRegionFactory::GetPrefix() const
 // FUNCTION: SWBF2 0x006dce20
 bool RedRegion::IsVisible(const RedCamera* pCamera, float fExtra) const
 {
-    const PblVector3& vPos = *(const PblVector3*)&mMatrix.m[3][0];
+    const PblVector3& vPos = mMatrix.GetTranslation();
 
     switch (mType)
     {
@@ -225,7 +225,7 @@ bool RedRegion::IsVisible(const RedCamera* pCamera, float fExtra) const
         return pCamera->ClassifyBox(mMatrix, PblVector3(mSize.x + fExtra, mSize.y + fExtra,
                                                         mSize.z + fExtra)) != RedCamera::VISIBILITY_NONE;
     case type_plane:
-        return pCamera->ClassifyPlane(*(const PblVector3*)&mMatrix.m[2][0],
+        return pCamera->ClassifyPlane(mMatrix.GetZAxis(),
                                       fExtra + mSize.w) != RedCamera::VISIBILITY_NONE;
     case type_box_aligned:
         return pCamera->ClassifyAABox(vPos, PblVector3(fExtra + mSize.x, mSize.y + fExtra,

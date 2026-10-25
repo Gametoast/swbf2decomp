@@ -132,10 +132,7 @@ PblMatrix BaseHint::BuildMatrix() const
 {
     PblMatrix mat;
     const PblVector3& vPos = GetCollisionCenter();
-    mat.m[3][0] = vPos.x;
-    mat.m[3][1] = vPos.y;
-    mat.m[3][2] = vPos.z;
-    mat.m[3][3] = 1.0f;
+    mat.SetTranslation(vPos);
     mat.m[2][0] = mForward.x;
     mat.m[2][1] = mForward.y;
     mat.m[2][2] = mForward.z;

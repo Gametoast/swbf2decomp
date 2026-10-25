@@ -13,10 +13,6 @@
 #include "PebbleFL/Common/PblMatrix.h"
 #include "RedEngineFL/Application/RedTerrain.h"
 
-static inline const PblVector3& GetTranslation(const PblMatrix& m)
-{
-    return *(const PblVector3*)&m.m[3][0];
-}
 
 static inline PblVector3 ApplyRotation(const PblMatrix& m, const PblVector3& v)
 {
@@ -115,7 +111,7 @@ PblBox CollisionPrimitive::GetWorldspaceAABB(const PblMatrix& matrix) const
     PblVector3 corners[8];
     for (int i = 0; i < 8; ++i)
     {
-        corners[i] = GetTranslation(matrix);
+        corners[i] = matrix.GetTranslation();
     }
 
     switch (mType)
@@ -189,13 +185,13 @@ bool CollisionPrimitive::CheckForCollision(const PblMatrix& mMatrix, const PblVe
     switch (mType)
     {
     case SPHERE:
-        return other.CollideSphere(otherVelocity, vVelocity, otherMatrix, GetTranslation(mMatrix),
+        return other.CollideSphere(otherVelocity, vVelocity, otherMatrix, mMatrix.GetTranslation(),
                                    mRadius, vNormal, fDepth);
     case BOX:
         return other.CollideBox(otherVelocity, vVelocity, otherMatrix, mMatrix,
                                 mWidth, mHeight, mDepth, vNormal, fDepth);
     case AXIS_ALIGNED_CYLINDER:
-        return other.CollideAACylinder(otherVelocity, vVelocity, otherMatrix, GetTranslation(mMatrix),
+        return other.CollideAACylinder(otherVelocity, vVelocity, otherMatrix, mMatrix.GetTranslation(),
                                        mRadius, mHeight, vNormal, fDepth);
     case CYLINDER:
         return other.CollideCylinder(otherVelocity, vVelocity, otherMatrix, mMatrix,
@@ -215,7 +211,7 @@ float CollisionPrimitive::RayHit(const PblMatrix& matrix, const PblVector3& vSta
         switch (mType)
         {
         case SPHERE:
-            return CollisionUtil::RayHitSphere(vS, vDir, fLength, GetTranslation(matrix), mRadius + fRadius,
+            return CollisionUtil::RayHitSphere(vS, vDir, fLength, matrix.GetTranslation(), mRadius + fRadius,
                                                pNormal);
         case BUBBLE:
         {
@@ -226,7 +222,7 @@ float CollisionPrimitive::RayHit(const PblMatrix& matrix, const PblVector3& vSta
             return CollisionUtil::RayHitBox(vS, vDir, fLength, matrix, mWidth + fRadius, mDepth + fRadius, mHeight + fRadius,
                               pNormal);
         case AXIS_ALIGNED_CYLINDER:
-            return CollisionUtil::RayHitAxisAlignedCylinder(vS, vDir, fLength, GetTranslation(matrix), mRadius + fRadius,
+            return CollisionUtil::RayHitAxisAlignedCylinder(vS, vDir, fLength, matrix.GetTranslation(), mRadius + fRadius,
                               mHeight * 0.5f + fRadius, pNormal);
         case CYLINDER:
             return CollisionUtil::RayHitCylinder(vS, vDir, fLength, matrix, mRadius + fRadius, mHeight * 0.5f + fRadius, pNormal);
@@ -238,7 +234,7 @@ float CollisionPrimitive::RayHit(const PblMatrix& matrix, const PblVector3& vSta
     switch (mType)
     {
     case SPHERE:
-        return CollisionUtil::RayHitSphere(vStart, vDir, fLength, GetTranslation(matrix), mRadius, pNormal);
+        return CollisionUtil::RayHitSphere(vStart, vDir, fLength, matrix.GetTranslation(), mRadius, pNormal);
     case BUBBLE:
     {
         PblVector3 vSize(mWidth, mHeight, mDepth);
@@ -247,7 +243,7 @@ float CollisionPrimitive::RayHit(const PblMatrix& matrix, const PblVector3& vSta
     case BOX:
         return CollisionUtil::RayHitBox(vStart, vDir, fLength, matrix, mWidth, mDepth, mHeight, pNormal);
     case AXIS_ALIGNED_CYLINDER:
-        return CollisionUtil::RayHitAxisAlignedCylinder(vStart, vDir, fLength, GetTranslation(matrix), mRadius, mHeight * 0.5f, pNormal);
+        return CollisionUtil::RayHitAxisAlignedCylinder(vStart, vDir, fLength, matrix.GetTranslation(), mRadius, mHeight * 0.5f, pNormal);
     case CYLINDER:
         return CollisionUtil::RayHitCylinder(vStart, vDir, fLength, matrix, mRadius, mHeight * 0.5f, pNormal);
     default:
@@ -321,7 +317,7 @@ bool CollisionPrimitive::RayTest(const PblMatrix& matrix, const PblVector3& vSta
     switch (mType)
     {
     case SPHERE:
-        fHit = CollisionUtil::RayHitSphere(vStart, vDir, fLength, GetTranslation(matrix), mRadius, 0);
+        fHit = CollisionUtil::RayHitSphere(vStart, vDir, fLength, matrix.GetTranslation(), mRadius, 0);
         break;
     case BUBBLE:
     {
@@ -333,7 +329,7 @@ bool CollisionPrimitive::RayTest(const PblMatrix& matrix, const PblVector3& vSta
         fHit = CollisionUtil::RayHitBox(vStart, vDir, fLength, matrix, mWidth, mDepth, mHeight, 0);
         break;
     case AXIS_ALIGNED_CYLINDER:
-        fHit = CollisionUtil::RayHitAxisAlignedCylinder(vStart, vDir, fLength, GetTranslation(matrix), mRadius, mHeight * 0.5f, 0);
+        fHit = CollisionUtil::RayHitAxisAlignedCylinder(vStart, vDir, fLength, matrix.GetTranslation(), mRadius, mHeight * 0.5f, 0);
         break;
     case CYLINDER:
         fHit = CollisionUtil::RayHitCylinder(vStart, vDir, fLength, matrix, mRadius, mHeight * 0.5f, 0);
@@ -357,7 +353,7 @@ bool CollisionPrimitive::CollideSphere(const PblVector3&, const PblVector3&, con
     switch (mType)
     {
     case SPHERE:
-        return CollisionUtil::CollideSpheres(GetTranslation(matrix), mRadius, vCenter, fRadius, vNormal, fDepth);
+        return CollisionUtil::CollideSpheres(matrix.GetTranslation(), mRadius, vCenter, fRadius, vNormal, fDepth);
     case BOX:
         return CollisionUtil::CollideBoxSphere(matrix, mWidth, mDepth, mHeight, vCenter, fRadius, vNormal, fDepth);
     case AXIS_ALIGNED_CYLINDER:
@@ -384,7 +380,7 @@ bool CollisionPrimitive::CollideCylinder(const PblVector3& vVelocity, const PblV
     switch (mType)
     {
     case SPHERE:
-        return CollisionUtil::CollideSphereCylinder(GetTranslation(matrix), mRadius, cylinderMatrix, fRadius,
+        return CollisionUtil::CollideSphereCylinder(matrix.GetTranslation(), mRadius, cylinderMatrix, fRadius,
                                                     fHeight, vNormal, fDepth);
     case BOX:
         return CollisionUtil::CollideBoxCylinder(vVelocity, matrix, mWidth, mDepth, mHeight, otherVelocity,
@@ -417,20 +413,14 @@ bool CollisionPrimitive::CollideAACylinder(const PblVector3& vVelocity, const Pb
     case SPHERE:
     {
         PblMatrix aligned = gMatrixIdentity;
-        aligned.m[3][0] = vCenter.x;
-        aligned.m[3][1] = vCenter.y;
-        aligned.m[3][2] = vCenter.z;
-        aligned.m[3][3] = 1.0f;
-        return CollisionUtil::CollideSphereCylinder(GetTranslation(matrix), mRadius, aligned, fRadius, fHeight,
+        aligned.SetTranslation(vCenter);
+        return CollisionUtil::CollideSphereCylinder(matrix.GetTranslation(), mRadius, aligned, fRadius, fHeight,
                                                     vNormal, fDepth);
     }
     case BOX:
     {
         PblMatrix aligned = gMatrixIdentity;
-        aligned.m[3][0] = vCenter.x;
-        aligned.m[3][1] = vCenter.y;
-        aligned.m[3][2] = vCenter.z;
-        aligned.m[3][3] = 1.0f;
+        aligned.SetTranslation(vCenter);
         return CollisionUtil::CollideBoxCylinder(vVelocity, matrix, mWidth, mDepth, mHeight, otherVelocity, aligned,
                                                  fRadius, fHeight * 0.5f, vNormal, fDepth);
     }
@@ -440,10 +430,7 @@ bool CollisionPrimitive::CollideAACylinder(const PblVector3& vVelocity, const Pb
     case CYLINDER:
     {
         PblMatrix aligned = gMatrixIdentity;
-        aligned.m[3][0] = vCenter.x;
-        aligned.m[3][1] = vCenter.y;
-        aligned.m[3][2] = vCenter.z;
-        aligned.m[3][3] = 1.0f;
+        aligned.SetTranslation(vCenter);
         return CollisionUtil::CollideCylinders(matrix, mRadius, mHeight * 0.5f, aligned, fRadius, fHeight * 0.5f, vNormal, fDepth);
     }
     default:
@@ -459,7 +446,7 @@ bool CollisionPrimitive::CollideBox(const PblVector3& vVelocity, const PblVector
     switch (mType)
     {
     case SPHERE:
-        return CollisionUtil::CollideSphereBox(GetTranslation(matrix), mRadius, boxMatrix, fWidth, fDepth, fHeight, vNormal,
+        return CollisionUtil::CollideSphereBox(matrix.GetTranslation(), mRadius, boxMatrix, fWidth, fDepth, fHeight, vNormal,
                           fPenetration);
     case BOX:
         return CollisionUtil::CollideBoxes(vVelocity, matrix, mWidth, mHeight, mDepth, otherVelocity, boxMatrix,
@@ -498,7 +485,7 @@ bool CollisionPrimitive::InitMeshCollision(const PblMatrix& matrix, const Collis
 
     sRadius = mMeshCollisionRadius;
     sWorld2Collision = meshMatrix.GetInverseFast();
-    D3DXVec3TransformCoord((D3DXVECTOR3*)&sLocalPos, (const D3DXVECTOR3*)&GetTranslation(matrix),
+    D3DXVec3TransformCoord((D3DXVECTOR3*)&sLocalPos, (const D3DXVECTOR3*)&matrix.GetTranslation(),
                            (const D3DXMATRIX*)&sWorld2Collision);
     for (int iRow = 0; iRow < 3; ++iRow)
     {
@@ -506,10 +493,7 @@ bool CollisionPrimitive::InitMeshCollision(const PblMatrix& matrix, const Collis
                                 (const D3DXVECTOR3*)&matrix.m[iRow][0], (const D3DXMATRIX*)&sWorld2Collision);
         sPrimitiveInCollision.m[iRow][3] = 0.0f;
     }
-    sPrimitiveInCollision.m[3][0] = sLocalPos.x;
-    sPrimitiveInCollision.m[3][1] = sLocalPos.y;
-    sPrimitiveInCollision.m[3][2] = sLocalPos.z;
-    sPrimitiveInCollision.m[3][3] = 1.0f;
+    sPrimitiveInCollision.SetTranslation(sLocalPos);
 
     if (!CollisionObject::sCollidingWithMesh)
     {
@@ -955,7 +939,7 @@ static inline float TerrainDepth(const PblVector3& vPos, float fY, float fOffset
 bool CollisionPrimitive::CollideTerrain(const PblMatrix& matrix, PblVector3& vNormal, float& fDepth,
                                         PblVector3& vPos) const
 {
-    const PblVector3& vTrans = GetTranslation(matrix);
+    const PblVector3& vTrans = matrix.GetTranslation();
     float fOffset = mHeight * 0.5f;
     PblVector3 vSide(0.0f, 0.0f, 0.0f);
     vPos = PblVector3(vTrans.x - 0.0f, vTrans.y - fOffset, vTrans.z - 0.0f);

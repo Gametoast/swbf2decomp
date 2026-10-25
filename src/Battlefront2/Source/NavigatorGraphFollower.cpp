@@ -18,10 +18,6 @@ extern "C" PblVector3* __stdcall D3DXVec3Normalize(PblVector3* pOut, const PblVe
 namespace
 {
 
-    inline const PblVector3& GetPos(const PblMatrix& m)
-    {
-        return *(const PblVector3*)&m.m[3][0];
-    }
 }
 
 // SYNTHETIC: SWBF2 0x004043d0
@@ -111,7 +107,7 @@ void NavigatorGraphFollower::EnterState()
     }
 
     Controllable* pMe = mOwner->mOwner->mOwner;
-    PblVector3 vFrom = GetPos(pMe->GetMatrix());
+    PblVector3 vFrom = pMe->GetMatrix().GetTranslation();
     PblVector3 vTo = mGlobalDest;
     const GameObject* pObj = pMe->GetGameObject();
 

@@ -114,22 +114,6 @@ static const PblMatrix& _GetSkinMatrix(unsigned int uiNumBones, const unsigned c
 
 
 
-struct CompressedPos
-{
-    short x;
-    short y;
-    short z;
-    short w;
-
-    static PblVector3 s_vMin;
-    static PblVector3 s_vScale;
-    static PblVector3 s_vScaleInv;
-};
-
-
-
-
-
 // GLOBAL: SWBF2 0x007f5870
 
 PblVector3 CompressedPos::s_vMin;

@@ -15,12 +15,7 @@
 
 extern "C" PblVector3* __stdcall D3DXVec3Normalize(PblVector3* pOut, const PblVector3* pV);
 
-struct PosXYZ
-{
-    float x;
-    float y;
-    float z;
-};
+
 
 struct NormalXYZ
 {
@@ -29,11 +24,7 @@ struct NormalXYZ
     float z;
 };
 
-struct TexCoord
-{
-    float u;
-    float v;
-};
+
 
 struct BlurParticleVertexT
 {

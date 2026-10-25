@@ -50,10 +50,7 @@ void ZephyrSkeletonShared::CalcBasePoseInverses(char iJointIdx)
     PblMatrix mLocal;
     D3DXMatrixRotationQuaternion((D3DXMATRIX*)&mLocal,
                                  D3DXQuaternionNormalize(&qUnit, (const D3DXQUATERNION*)&kBase.kQuat));
-    mLocal.m[3][0] = kBase.kTrans.x;
-    mLocal.m[3][1] = kBase.kTrans.y;
-    mLocal.m[3][2] = kBase.kTrans.z;
-    mLocal.m[3][3] = 1.0f;
+    mLocal.SetTranslation(kBase.kTrans);
     mInverse = mLocal;
 
     if (kJoint.m_iParent >= 0)

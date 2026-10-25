@@ -5,25 +5,6 @@
 namespace Snd
 {
 
-// FUNCTION: SWBF2 0x0059b300
-void Source2D3D::Set3DMode(bool b3DMode)
-{
-    const unsigned char f = (unsigned char)(mFlags & (unsigned char)~2u);
-
-    mFlags = (unsigned char)(f | (unsigned char)((f & 1) << 1));
-
-    if (b3DMode)
-    {
-        mFlags |= 1;
-    }
-    else
-    {
-        mFlags &= (unsigned char)~1u;
-    }
-
-    mFlags |= 4;
-}
-
 // FUNCTION: SWBF2 0x0074b2a0
 float Source2D3D::CalculatePitch(const Source3D* pSource3D) const
 {

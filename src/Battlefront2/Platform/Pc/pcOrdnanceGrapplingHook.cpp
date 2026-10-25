@@ -23,10 +23,7 @@ extern "C" PblVector3* __stdcall D3DXVec3TransformCoord(PblVector3* pOut, const 
 // GLOBAL: SWBF2 0x007eb740
 static RedColor kCableColor = { 0xcc, 0xcc, 0xcc, 0xff };
 
-struct TexCoord
-{
-    float u, v;
-};
+
 
 namespace
 {

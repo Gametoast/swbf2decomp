@@ -267,9 +267,9 @@ void AILowLevel::SetDest(const PblVector3& pos, const PblVector3& originalPos,
 // FUNCTION: SWBF2 0x0043ae90
 void AILowLevel::SetDestCurrent()
 {
-    SetDest(*(const PblVector3*)&GetMatrix().m[3][0],
-            *(const PblVector3*)&GetMatrix().m[3][0],
-            *(const PblVector3*)&GetMatrix().m[2][0],
+    SetDest(GetMatrix().GetTranslation(),
+            GetMatrix().GetTranslation(),
+            GetMatrix().GetZAxis(),
             SH_FULL, -1.0f, 1.0f);
     mAllowHoverStrafe = true;
 }
@@ -753,7 +753,7 @@ bool AILowLevel::IsSafeToRoll(const PblVector3& dir)
     }
 
     PblVector3 dirXZ = AIUtil::GetSafeNormalXZ(dir);
-    const PblVector3& pos = *(const PblVector3*)&GetMatrix().m[3][0];
+    const PblVector3& pos = GetMatrix().GetTranslation();
     PblVector3 dest(pos.x + dirXZ.x * 4.0f,
                     pos.y + dirXZ.y * 4.0f,
                     pos.z + dirXZ.z * 4.0f);
@@ -905,7 +905,7 @@ void AILowLevel::SetNavigator_GotoDirect(const PblVector3& dest,
     AIPath* pPath = new AIPath();
     if (pPath)
     {
-        pPath->Append(*(const PblVector3*)&GetMatrix().m[3][0], 0);
+        pPath->Append(GetMatrix().GetTranslation(), 0);
         pPath->Append(dest, 0);
         SetNavigator_FollowPath(pPath, false, bFlyerIgnoreBarriers, false);
         pPath->Release();
@@ -918,7 +918,7 @@ void AILowLevel::SetNavigator_Goto(const PblVector3& dest, const Obstacle* pIgno
 {
     DeleteNavigator();
     const GameObject* pObj = mOwner->mOwner->GetGameObject();
-    const PblVector3& pos = *(const PblVector3*)&GetMatrix().m[3][0];
+    const PblVector3& pos = GetMatrix().GetTranslation();
     PblVector3 vDest = dest;
 
     const Obstacle* ignore[2];
@@ -1060,7 +1060,7 @@ PblVector3 AILowLevel::GetLocalDest()
     {
         return mDest.mPos;
     }
-    return *(const PblVector3*)&GetMatrix().m[3][0];
+    return GetMatrix().GetTranslation();
 }
 
 // FUNCTION: SWBF2 0x0043c550

@@ -82,7 +82,7 @@ DustEffect::DustEffect(DustEffectClass* pClass, const PblMatrix& matrix)
     mMatrix.m[3][2] = matrix.m[3][2];
     mMatrix.m[3][3] = 1.0f;
 
-    SetRenderPos(*(const PblVector3*)mMatrix.m[3]);
+    SetRenderPos(mMatrix.GetTranslation());
     SetRenderRadius(mClass->mBoundingRadius);
     Activate();
 
@@ -115,7 +115,7 @@ void DustEffect::Render(unsigned char ucViewport, float fDist, unsigned int uiFl
         mMatrix.m[3][0] = camMatrix.m[3][0];
         mMatrix.m[3][2] = camMatrix.m[3][2];
         mMatrix.m[3][3] = 1.0f;
-        SetRenderPos(*(const PblVector3*)mMatrix.m[3]);
+        SetRenderPos(mMatrix.GetTranslation());
     }
 
     float fDistance = camMatrix.m[2][1] * (camMatrix.m[3][1] - mMatrix.m[3][1]) +
@@ -274,7 +274,7 @@ bool DustEffectClass::Update(float fDeltaTime)
         {
             vWind = PblVector3(0.0f, 0.0f, 0.0f);
         }
-        mOldCamPos = *(const PblVector3*)camMatrix.m[3];
+        mOldCamPos = camMatrix.GetTranslation();
     }
 
     mTimer += fDeltaTime;
@@ -593,7 +593,7 @@ EntityClass* CloudClusterClass::Derive(unsigned int uHash)
 // FUNCTION: SWBF2 0x00490400
 Entity* CloudClusterClass::Build(const EntityDesc& desc)
 {
-    return new CloudClusterObject(this, *(const PblVector3*)desc.mMatrix.m[3]);
+    return new CloudClusterObject(this, desc.mMatrix.GetTranslation());
 }
 
 // FUNCTION: SWBF2 0x00490470
@@ -648,10 +648,7 @@ void CloudClusterClass::RenderDustEffects(const PblVector3& vPos, unsigned int u
         {
             const float fDistance = positionHeap.Value(0);
             const PblVector3& vObject = positions[positionHeap.Get(0)];
-            matrix.m[3][0] = vObject.x;
-            matrix.m[3][1] = vObject.y;
-            matrix.m[3][2] = vObject.z;
-            matrix.m[3][3] = 1.0f;
+            matrix.SetTranslation(vObject);
             float fAlpha = (pEffect->mMaxDistance - fDistance) * 0.002f;
             if (!(1.0f > fAlpha))
             {

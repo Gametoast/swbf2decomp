@@ -304,7 +304,8 @@ public:
     public:
 
         PostCollision(EntityHover* pOwner) : mOwner(pOwner) {}
-        virtual ~PostCollision();
+        // SYNTHETIC: SWBF2 0x004c09b0
+        // EntityHover::PostCollision::~PostCollision
         virtual bool Update(float fDeltaTime);
 
         EntityHover* mOwner;

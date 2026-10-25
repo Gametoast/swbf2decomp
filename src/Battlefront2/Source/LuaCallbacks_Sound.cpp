@@ -476,8 +476,7 @@ int ScriptCB_PlayAudioStream(lua_State*)
     pStream->SetGain(fGain);
     pStream->Source2D::mFlags |= 1;
     pStream->Source2D::mPan = 0.0f;
-    unsigned char& uMode = pStream->Source2D3D::mFlags;
-    uMode = (unsigned char)((uMode & 0xFC) | ((uMode & 1) << 1) | 4);
+    pStream->Set3DMode(false);
     pStream->Source::mFlags |= 0x12;
     pStream->SetBus(Snd::Bus::FindByHashID(PblHash(pcBus)));
     pStream->SeekSegment(pStream->FindSegment(PblHash(pcSegment)));
@@ -745,9 +744,9 @@ namespace Lua_Callbacks
 float sShellMusicInterval = 3.0f;
 
 // SYNTHETIC: SWBF2 0x00404230
-// `dynamic initializer for 'Lua_Callbacks::sDelayedSounds''
+// Lua_Callbacks::`dynamic initializer for 'sDelayedSounds''
 // SYNTHETIC: SWBF2 0x00768cd0
-// `dynamic atexit destructor for 'Lua_Callbacks::sDelayedSounds''
+// Lua_Callbacks::`dynamic atexit destructor for 'sDelayedSounds''
 
 // GLOBAL: SWBF2 0x01ec91d0
 // sDelayedSounds

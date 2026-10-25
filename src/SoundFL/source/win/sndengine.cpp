@@ -137,9 +137,9 @@ bool Engine::smErrorsEnabled = true;
 float Engine::smMinStreamBufferSize = 100.0f;
 
 // SYNTHETIC: SWBF2 0x0040b560
-// `dynamic initializer for 'Snd::sndEngineThreadUpdate''
+// Snd::`dynamic initializer for 'sndEngineThreadUpdate''
 // SYNTHETIC: SWBF2 0x0076a1a0
-// `dynamic atexit destructor for 'Snd::sndEngineThreadUpdate''
+// Snd::`dynamic atexit destructor for 'sndEngineThreadUpdate''
 
 // GLOBAL: SWBF2 0x009d7eac
 // sndEngineThreadUpdate
@@ -459,7 +459,7 @@ void Engine::SetBassManagement(bool bEnable)
 
             DSBufferRenderer& rRenderer = smSoftOutput->GetRenderer();
 
-            const bool b3D = (rRenderer.Source2D3D::mFlags & 1) != 0;
+            const bool b3D = rRenderer.Get3DMode();
 
             rRenderer.SetFormat(rRenderer.mFormat, rRenderer.mNumChannels,
                                 rRenderer.mFrequency, b3D,

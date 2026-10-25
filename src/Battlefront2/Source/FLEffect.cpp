@@ -651,14 +651,14 @@ void FLEffectObject::AttachEffectToVector(const PblVector3* pVector, const PblVe
         m_uiAttachFlags |= ATTACHED_DYNAMIC;
     }
 
-    m_mWorldMatrix = DirectionMatrix(vDir, gVectorUnitY, *(const PblVector3*)m_mWorldMatrix.m[3]);
+    m_mWorldMatrix = DirectionMatrix(vDir, gVectorUnitY, m_mWorldMatrix.GetTranslation());
     _Attach(_IdentityMatrix);
 }
 
 // FUNCTION: SWBF2 0x00527860
 void FLEffectObject::SetOrientation(const PblVector3& vDir)
 {
-    m_mWorldMatrix = DirectionMatrix(vDir, gVectorUnitY, *(const PblVector3*)m_mWorldMatrix.m[3]);
+    m_mWorldMatrix = DirectionMatrix(vDir, gVectorUnitY, m_mWorldMatrix.GetTranslation());
     UpdatedWorldMatrix();
 }
 

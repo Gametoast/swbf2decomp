@@ -961,7 +961,7 @@ void PlayerController::CheckForVisibleCriticalPts()
         return;
     }
     PblMatrix mFire = pOwner->GetAimer(0)->GetFireMatrix();
-    const PblVector3& vForward = *(const PblVector3*)mFire.m[2];
+    const PblVector3& vForward = mFire.GetZAxis();
     const PblVector3& vFirePos = pOwner->GetAimer(0)->mFirePos;
     CollisionModel* pModel = pTarget->mCollisionModel;
     if (!pModel)

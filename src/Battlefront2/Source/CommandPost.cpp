@@ -350,7 +350,7 @@ void CommandPostClass::SetProperty(unsigned int uProperty, const char* pszValue,
             if (pModel->GetHierarchicalBoneMatrix(PblTEMPHash(acName), mBone))
             {
                 mSpawnRotation[mSpawnCount] = PblQuaternion(mBone);
-                mSpawnPosition[mSpawnCount] = *(const PblVector3*)mBone.m[3];
+                mSpawnPosition[mSpawnCount] = mBone.GetTranslation();
                 mSpawnCount++;
             }
         }
@@ -725,7 +725,7 @@ CommandPost* CommandPost::BuildPost(GameObject* pObject, CommandPostClass* pClas
 void CommandPost::Attach(GameObject* pObject)
 {
     mObject = pObject;
-    mPosition = *(const PblVector3*)pObject->GetMatrix().m[3];
+    mPosition = pObject->GetMatrix().GetTranslation();
     if (!mName)
     {
         mName = const_cast<char*>(StringDB::Find(pObject->mId));
@@ -1219,10 +1219,7 @@ PblMatrix CommandPost::GetMatrixOnSpawnPath(bool bAlly) const
         const PblVector3& vPosition = pPath->GetPointPosition(uPoint);
         PblQuaternion qUnit;
         D3DXMatrixRotationQuaternion(&mMatrix, D3DXQuaternionNormalize(&qUnit, &qRotation));
-        mMatrix.m[3][0] = vPosition.x;
-        mMatrix.m[3][1] = vPosition.y;
-        mMatrix.m[3][2] = vPosition.z;
-        mMatrix.m[3][3] = 1.0f;
+        mMatrix.SetTranslation(vPosition);
         mMatrix.m[0][0] = -mMatrix.m[0][0];
         mMatrix.m[0][1] = -mMatrix.m[0][1];
         mMatrix.m[0][2] = -mMatrix.m[0][2];
@@ -1235,10 +1232,7 @@ PblMatrix CommandPost::GetMatrixOnSpawnPath(bool bAlly) const
         if (AIUtil::IsUberMode() && mSpawnRegion)
         {
             const PblVector3 vPoint = AIUtil::GetRandomPtInRegion(mSpawnRegion);
-            mMatrix.m[3][0] = vPoint.x;
-            mMatrix.m[3][1] = vPoint.y;
-            mMatrix.m[3][2] = vPoint.z;
-            mMatrix.m[3][3] = 1.0f;
+            mMatrix.SetTranslation(vPoint);
         }
 
         PblVector3 vStart(mMatrix.m[3][0], mMatrix.m[3][1], mMatrix.m[3][2]);
@@ -1264,10 +1258,7 @@ PblMatrix CommandPost::GetMatrixOnSpawnPath(bool bAlly) const
         PblQuaternion qUnit;
         PblMatrix mSpawn;
         D3DXMatrixRotationQuaternion(&mSpawn, D3DXQuaternionNormalize(&qUnit, &mClass->mSpawnRotation[uPoint]));
-        mSpawn.m[3][0] = vPosition.x;
-        mSpawn.m[3][1] = vPosition.y;
-        mSpawn.m[3][2] = vPosition.z;
-        mSpawn.m[3][3] = 1.0f;
+        mSpawn.SetTranslation(vPosition);
         PblMatrix mWorld;
         D3DXMatrixMultiply(&mWorld, &mSpawn, &mMatrix);
         mMatrix = mWorld;
@@ -1289,7 +1280,7 @@ PblMatrix CommandPost::GetMatrixOnSpawnPath(bool bAlly) const
             }
         }
     }
-    return NormalMatrix(*(const PblVector3*)mMatrix.m[2], gVectorUnitY, *(const PblVector3*)mMatrix.m[3]);
+    return NormalMatrix(mMatrix.GetZAxis(), gVectorUnitY, mMatrix.GetTranslation());
 }
 
 // FUNCTION: SWBF2 0x0047ccd0
@@ -1354,7 +1345,7 @@ bool CommandPost::Update(float fDeltaTime)
     float fLongestHoldTime = 0.0f;
     GameObject* apObjects[64];
     int iCount = 0;
-    if (!NetGame::IsEnabled() || !NetGame::IsClient() || NetGame::IsNearLocalPlayer(*(const PblVector3*)GetMatrix().m[3]))
+    if (!NetGame::IsEnabled() || !NetGame::IsClient() || NetGame::IsNearLocalPlayer(GetMatrix().GetTranslation()))
     {
         iCount = GetObjectsInCaptureRegion(apObjects, 64);
         for (int i = 0; i < iCount; ++i)

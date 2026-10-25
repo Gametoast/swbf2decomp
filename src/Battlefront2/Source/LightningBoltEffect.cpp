@@ -321,7 +321,7 @@ bool LightningBoltEffectObject::UpdateBolt(float fDeltaTime)
 
     if (!_bActive)
     {
-        const PblVector3& vStart = *(const PblVector3*)&m_mWorldMatrix.m[3][0];
+        const PblVector3& vStart = m_mWorldMatrix.GetTranslation();
         PblVector3 vDelta(vStart.x - mTargetPos.x, vStart.y - mTargetPos.y, vStart.z - mTargetPos.z);
         PblVector3 vCenter(mTargetPos.x + vDelta.x * 0.5f, mTargetPos.y + vDelta.y * 0.5f,
                            mTargetPos.z + vDelta.z * 0.5f);
@@ -349,7 +349,7 @@ bool LightningBoltEffectObject::SetOrdnanceOwner(GameObject* pObject)
 // FUNCTION: SWBF2 0x00571c60
 void LightningBoltEffectObject::Render(unsigned char, float, unsigned int)
 {
-    PblVector3 vStart = *(const PblVector3*)&m_mWorldMatrix.m[3][0];
+    PblVector3 vStart = m_mWorldMatrix.GetTranslation();
     PblVector3 vMin((mTargetPos.x > vStart.x ? vStart.x : mTargetPos.x) - 128.0f,
                     (mTargetPos.y > vStart.y ? vStart.y : mTargetPos.y) - 128.0f,
                     (mTargetPos.z > vStart.z ? vStart.z : mTargetPos.z) - 128.0f);

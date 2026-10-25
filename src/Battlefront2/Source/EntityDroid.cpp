@@ -400,10 +400,7 @@ void EntityDroidClass::SetProperty(unsigned int uProperty, const char* pszValue)
             CollisionPrimitive primitive;
             primitive.SetSphere(sphere.GetRadius());
             PblMatrix matrix = gMatrixIdentity;
-            matrix.m[3][0] = sphere.x;
-            matrix.m[3][1] = sphere.y;
-            matrix.m[3][2] = sphere.z;
-            matrix.m[3][3] = 1.0f;
+            matrix.SetTranslation(sphere);
             mCollisionModel.AddBody(new CollisionBodyPrimitive(primitive, "main_body", matrix, 0));
         }
         break;

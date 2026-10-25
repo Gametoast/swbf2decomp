@@ -55,22 +55,6 @@ static const float kfFadeDrawDistance = 0.9f;
 static const float kfFadeDrawDistanceSquared = kfFadeDrawDistance * kfFadeDrawDistance;
 static const float kfFadeDrawDistanceFactor = 1.0f / (1.0f - kfFadeDrawDistanceSquared);
 
-struct CompressedPos
-{
-    short x;
-    short y;
-    short z;
-    short w;
-
-    static PblVector3 s_vMin;
-    static PblVector3 s_vScale;
-    static PblVector3 s_vScaleInv;
-};
-struct CompressedTexCoord
-{
-    short u;
-    short v;
-};
 struct FlareCompressedVertex
 {
     CompressedPos pos;
@@ -79,18 +63,9 @@ struct FlareCompressedVertex
 };
  
 
-struct PosXYZ
-{
-    float x;
-    float y;
-    float z;
-};
 
-struct TexCoord
-{
-    float u;
-    float v;
-};
+
+
 
 struct FlareVertex
 {
@@ -100,56 +75,63 @@ struct FlareVertex
 };
  
 
-// FUNCTION: SWBF2 0x0041f1d0
-template <>
-void LensFlare::EmitRing<FlareVertex>(FlareVertex*& pVertices, const PblVector3& pos, float angle,
-                float innerRadius, float middleRadius, float outerRadius,
-                const RedColor& innerColor, const RedColor& middleColor,
-                const RedColor& outerColor, int, float fU, float fV)
+template <class VERTEX>
+void LensFlare::EmitRing(VERTEX*& pVertices, const PblVector3& vPosition, float fAngle,
+              float fInnerRadius, float fMiddleRadius, float fOuterRadius,
+              const RedColor& innerColor, const RedColor& middleColor,
+              const RedColor& outerColor, int iSegments, float fU, float fV)
 {
-    FlareVertex* const first = pVertices;
-    float s, c;
-    PblMath::SinCos(&s, &c, angle);
-    first[0].pos.x = pos.x + c * innerRadius;
-    first[0].pos.y = pos.y + s * innerRadius;
-    first[0].pos.z = pos.z;
-
-    for (int i = 0; i <= 12; ++i)
+    float fSin, fCos;
+    PblMath::SinCos(&fSin, &fCos, fAngle);
+    PblVector3 tempPos = vPosition + PblVector3(fCos * fInnerRadius, fSin * fInnerRadius, 0.0f);
+    pVertices->pos.SetPos(tempPos);
+    ++pVertices;
+    for (int i = 0; i <= iSegments; ++i)
     {
-        PblMath::SinCos(&s, &c, ((float)i * 6.2831855f) / 12.0f + angle);
-        FlareVertex* p = first + 1 + 2 * i;
-        p[0].pos.x = pos.x + c * innerRadius;
-        p[0].pos.y = pos.y + s * innerRadius;
-        p[0].pos.z = pos.z;
-        p[0].color = innerColor;
-        p[0].uv.u = fU;
-        p[0].uv.v = fV;
-
-        p[1].pos.x = pos.x + c * middleRadius;
-        p[1].pos.y = pos.y + s * middleRadius;
-        p[1].pos.z = pos.z;
-        p[1].color = middleColor;
-        p[1].uv.u = fU;
-        p[1].uv.v = fV;
+        PblMath::SinCos(&fSin, &fCos, (float)i * 6.2831855f / (float)iSegments + fAngle);
+        PblVector3 vSegPos[3] = {
+            vPosition + PblVector3(fCos * fInnerRadius, fSin * fInnerRadius, 0.0f),
+            vPosition + PblVector3(fCos * fMiddleRadius, fSin * fMiddleRadius, 0.0f),
+            vPosition + PblVector3(fCos * fOuterRadius, fSin * fOuterRadius, 0.0f)
+        };
+        pVertices[0].pos.SetPos(vSegPos[0]);
+        pVertices[0].color = innerColor;
+        pVertices[0].uv.SetUV(fU, fV);
+        pVertices[1].pos.SetPos(vSegPos[1]);
+        pVertices[1].color = middleColor;
+        pVertices[1].uv.SetUV(fU, fV);
         if (i == 0)
         {
-            p[26] = p[1];
+            pVertices[2 * iSegments + 2].pos.SetPos(vSegPos[1]);
+            pVertices[2 * iSegments + 2].color = middleColor;
+            pVertices[2 * iSegments + 2].uv.SetUV(fU, fV);
         }
-        p[27] = p[1];
-
-        p[28].pos.x = pos.x + c * outerRadius;
-        p[28].pos.y = pos.y + s * outerRadius;
-        p[28].pos.z = pos.z;
-        p[28].color = outerColor;
-        p[28].uv.u = fU;
-        p[28].uv.v = fV;
+        pVertices[2 * iSegments + 3].pos.SetPos(vSegPos[1]);
+        pVertices[2 * iSegments + 3].color = middleColor;
+        pVertices[2 * iSegments + 3].uv.SetUV(fU, fV);
+        pVertices[2 * iSegments + 4].pos.SetPos(vSegPos[2]);
+        pVertices[2 * iSegments + 4].color = outerColor;
+        pVertices[2 * iSegments + 4].uv.SetUV(fU, fV);
+        pVertices += 2;
     }
-    PblMath::SinCos(&s, &c, angle);
-    first[54].pos.x = pos.x + c * outerRadius;
-    first[54].pos.y = pos.y + s * outerRadius;
-    first[54].pos.z = pos.z;
-    pVertices = first + 55;
+    pVertices += 2 * iSegments + 3;
+    PblMath::SinCos(&fSin, &fCos, fAngle);
+    tempPos = vPosition + PblVector3(fCos * fOuterRadius, fSin * fOuterRadius, 0.0f);
+    pVertices->pos.SetPos(tempPos);
+    ++pVertices;
 }
+
+// TEMPLATE: SWBF2 0x0041f1d0
+// LensFlare::EmitRing<FlareVertex>
+template void LensFlare::EmitRing<FlareVertex>(FlareVertex*&, const PblVector3&, float,
+                        float, float, float, const RedColor&, const RedColor&,
+                        const RedColor&, int, float, float);
+
+// TEMPLATE: SWBF2 0x0041f480
+// LensFlare::EmitRing<FlareCompressedVertex>
+template void LensFlare::EmitRing<FlareCompressedVertex>(FlareCompressedVertex*&, const PblVector3&, float,
+                        float, float, float, const RedColor&, const RedColor&,
+                        const RedColor&, int, float, float);
 
 static void CompressedPos_SetBoundingBox(const PblBox& box)
 {
@@ -394,46 +376,6 @@ static void SetFlareVertex(FlareCompressedVertex& vertex, float x, float y, floa
     vertex.color = color;
     vertex.uv.u = u;
     vertex.uv.v = v;
-}
-
-// FUNCTION: SWBF2 0x0041f480
-template <>
-void LensFlare::EmitRing<FlareCompressedVertex>(
-    FlareCompressedVertex*& pVertices, const PblVector3& pos, float angle,
-    float innerRadius, float middleRadius, float outerRadius,
-    const RedColor& innerColor, const RedColor& middleColor,
-    const RedColor& outerColor, int, float fU, float fV)
-{
-    const short u = (short)(int)(fU * 2048.0f);
-    const short v = (short)(int)(fV * 2048.0f);
-    FlareCompressedVertex* const first = pVertices;
-    float s, c;
-    PblMath::SinCos(&s, &c, angle);
-    CompressedPos_SetPos(first[0].pos, pos.x + c * innerRadius,
-                         pos.y + s * innerRadius, pos.z);
-
-    for (int i = 0; i <= 12; ++i)
-    {
-        PblMath::SinCos(&s, &c, ((float)i * 6.2831855f) / 12.0f + angle);
-        FlareCompressedVertex* p = first + 1 + 2 * i;
-        SetFlareVertex(p[0], pos.x + c * innerRadius, pos.y + s * innerRadius,
-                       pos.z, innerColor, u, v);
-        SetFlareVertex(p[1], pos.x + c * middleRadius, pos.y + s * middleRadius,
-                       pos.z, middleColor, u, v);
-        if (i == 0)
-        {
-            SetFlareVertex(p[26], pos.x + c * middleRadius, pos.y + s * middleRadius,
-                           pos.z, middleColor, u, v);
-        }
-        SetFlareVertex(p[27], pos.x + c * middleRadius, pos.y + s * middleRadius,
-                       pos.z, middleColor, u, v);
-        SetFlareVertex(p[28], pos.x + c * outerRadius, pos.y + s * outerRadius,
-                       pos.z, outerColor, u, v);
-    }
-    PblMath::SinCos(&s, &c, angle);
-    CompressedPos_SetPos(first[54].pos, pos.x + c * outerRadius,
-                         pos.y + s * outerRadius, pos.z);
-    pVertices = first + 55;
 }
 
 // FUNCTION: SWBF2 0x0041e980

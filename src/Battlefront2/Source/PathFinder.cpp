@@ -116,7 +116,7 @@ void Obstacle::UpdatePosition(const PblMatrix& rMatrix, float fOffsetX, float fO
     if (rVelocity.x * rVelocity.x + rVelocity.y * rVelocity.y + rVelocity.z * rVelocity.z < 36.0f)
     {
         SetEnabled(true);
-        PblVector3 forward = AIUtil::GetSafeNormalXZ(*(const PblVector3*)rMatrix.m[2]);
+        PblVector3 forward = AIUtil::GetSafeNormalXZ(rMatrix.GetZAxis());
         float fPosX = rMatrix.m[3][0] + forward.x * fOffsetZ + -forward.z * fOffsetX;
         float fPosZ = rMatrix.m[3][2] + forward.z * fOffsetZ + forward.x * fOffsetX;
         float fDX = fPosX - mPosX;
@@ -424,7 +424,7 @@ void PathFinder::AddObstacle(const PblMatrix& rMatrix, const PblVector4& rSize, 
                              unsigned int uName)
 {
     Obstacle* pObstacle = new Obstacle(rMatrix, rSize, eProhibit, uName);
-    const PblVector3& rPos = *(const PblVector3*)rMatrix.m[3];
+    const PblVector3& rPos = rMatrix.GetTranslation();
     pObstacle->SetCollisionCenter(rPos);
     pObstacle->SetCollisionRadius(rSize.w);
     sObstacles->Add(pObstacle, rPos, rSize.w * 2.0f);
@@ -466,8 +466,8 @@ void PathFinder::CreateGameObjectBarrier(Obstacle*& rpObstacle, GameObject* pObj
     size.z = fSizeZ;
     size.w = 0.0f;
     PblMatrix mat = pCollision->GetMatrix();
-    PblVector3 xAxis = AIUtil::GetSafeNormalXZ(*(const PblVector3*)mat.m[0]);
-    PblVector3 zAxis = AIUtil::GetSafeNormalXZ(*(const PblVector3*)mat.m[2]);
+    PblVector3 xAxis = AIUtil::GetSafeNormalXZ(mat.GetXAxis());
+    PblVector3 zAxis = AIUtil::GetSafeNormalXZ(mat.GetZAxis());
     mat.m[3][0] += zAxis.x * fOffsetZ + xAxis.x * fOffsetX;
     mat.m[3][1] += zAxis.y * fOffsetZ + xAxis.y * fOffsetX;
     mat.m[3][2] += zAxis.z * fOffsetZ + xAxis.z * fOffsetX;

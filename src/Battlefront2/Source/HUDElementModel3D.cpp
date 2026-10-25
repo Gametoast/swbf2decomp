@@ -176,10 +176,7 @@ HUD::ElementModel3D::ElementModel3D(const char* const pName, Factory::ItemCallba
 
 // SYNTHETIC: SWBF2 0x006d6cb0
 // Red3DModelElementLite::`scalar deleting destructor'
-// FUNCTION: SWBF2 0x00556290
-Red3DModelElementLite::~Red3DModelElementLite()
-{
-}
+
 
 // SYNTHETIC: SWBF2 0x00557103
 // [thunk]:HUD::ElementModel3D::`scalar deleting destructor' adjustor{256}

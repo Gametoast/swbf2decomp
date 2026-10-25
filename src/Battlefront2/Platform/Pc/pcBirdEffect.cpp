@@ -66,17 +66,9 @@ const RedColor kBirdColor = { 0xcc, 0xcc, 0xcc, 0xff };
 namespace
 {
 
-struct TexCoord
-{
-    float u, v;
-    void SetUV(float fU, float fV) { u = fU; v = fV; }
-};
 
-struct CompressedTexCoord
-{
-    short u, v;
-    void SetUV(float fU, float fV) { u = (short)(fU * 2048.0f); v = (short)(fV * 2048.0f); }
-};
+
+
 
 struct BirdVertex
 {
@@ -161,7 +153,7 @@ pcRedPrimitive* BirdParticle::CreateCompressedGeometry()
     box._vMin = PblVector3(-fExtent, -fExtent, -fExtent);
     box._vMax = PblVector3(fExtent, fExtent, fExtent);
     pPrimitive->m_bbox = box;
-    CompressedPos::SetBoundingBox(&box);
+    CompressedPos::SetBoundingBox(box);
 
     BirdCompressedVertex* pVerts = (BirdCompressedVertex*)pPrimitive->BeginVertexData();
     if (pVerts)

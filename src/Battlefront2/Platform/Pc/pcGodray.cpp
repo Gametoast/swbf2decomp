@@ -48,10 +48,7 @@ static const unsigned short sRayStripIndices[20] =
 namespace
 {
 
-struct CompressedTexCoord
-{
-    short u, v;
-};
+
 
 struct GodrayVertex
 {
@@ -154,7 +151,7 @@ void GodrayManager::PlatformRender(unsigned int uiFlags) const
     {
         pPrimitive = pcRedPrimitive::Create(D3DPT_TRIANGLESTRIP, 0x9282, sizeof(GodrayVertex::VertexC),
                                             uiNumVertices, uiNumIndices, false);
-        CompressedPos::SetBoundingBox(&box);
+        CompressedPos::SetBoundingBox(box);
     }
     else
     {

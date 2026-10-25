@@ -817,10 +817,7 @@ bool RedSceneAABox::SetupBox()
             local._vMin = PblVector3(-vHalf.x, -vHalf.y, -vHalf.z);
             local._vMax = vHalf;
             PblMatrix m = pObject->GetBBoxMatrix();
-            m.m[3][0] = vPos.x;
-            m.m[3][1] = vPos.y;
-            m.m[3][2] = vPos.z;
-            m.m[3][3] = 1.0f;
+            m.SetTranslation(vPos);
             box = local.GetTransformedBox(m);
         }
         else

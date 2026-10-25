@@ -722,72 +722,72 @@ namespace CommandPostEvent
 {
 
 // SYNTHETIC: SWBF2 0x00403140
-// `dynamic initializer for 'EventManager::CommandPostEvent::mBeginNeutralize''
+// EventManager::CommandPostEvent::`dynamic initializer for 'mBeginNeutralize''
 // SYNTHETIC: SWBF2 0x007675a0
-// `dynamic atexit destructor for 'EventManager::CommandPostEvent::mBeginNeutralize''
+// EventManager::CommandPostEvent::`dynamic atexit destructor for 'mBeginNeutralize''
 
 // GLOBAL: SWBF2 0x007ebb90
 // mBeginNeutralize
 Event<CommandPost, unsigned __int64> mBeginNeutralize("BeginNeutralize");
 
 // SYNTHETIC: SWBF2 0x00403170
-// `dynamic initializer for 'EventManager::CommandPostEvent::mAbortNeutralize''
+// EventManager::CommandPostEvent::`dynamic initializer for 'mAbortNeutralize''
 // SYNTHETIC: SWBF2 0x00767620
-// `dynamic atexit destructor for 'EventManager::CommandPostEvent::mAbortNeutralize''
+// EventManager::CommandPostEvent::`dynamic atexit destructor for 'mAbortNeutralize''
 
 // GLOBAL: SWBF2 0x007eba60
 // mAbortNeutralize
 Event<CommandPost, unsigned __int64> mAbortNeutralize("AbortNeutralize");
 
 // SYNTHETIC: SWBF2 0x004031a0
-// `dynamic initializer for 'EventManager::CommandPostEvent::mFinishNeutralize''
+// EventManager::CommandPostEvent::`dynamic initializer for 'mFinishNeutralize''
 // SYNTHETIC: SWBF2 0x007676a0
-// `dynamic atexit destructor for 'EventManager::CommandPostEvent::mFinishNeutralize''
+// EventManager::CommandPostEvent::`dynamic atexit destructor for 'mFinishNeutralize''
 
 // GLOBAL: SWBF2 0x007ebb50
 // mFinishNeutralize
 Event<CommandPost, unsigned __int64> mFinishNeutralize("FinishNeutralize");
 
 // SYNTHETIC: SWBF2 0x004031d0
-// `dynamic initializer for 'EventManager::CommandPostEvent::mBeginCapture''
+// EventManager::CommandPostEvent::`dynamic initializer for 'mBeginCapture''
 // SYNTHETIC: SWBF2 0x00767720
-// `dynamic atexit destructor for 'EventManager::CommandPostEvent::mBeginCapture''
+// EventManager::CommandPostEvent::`dynamic atexit destructor for 'mBeginCapture''
 
 // GLOBAL: SWBF2 0x007ebb20
 // mBeginCapture
 Event<CommandPost, unsigned __int64> mBeginCapture("BeginCapture");
 
 // SYNTHETIC: SWBF2 0x00403200
-// `dynamic initializer for 'EventManager::CommandPostEvent::mAbortCapture''
+// EventManager::CommandPostEvent::`dynamic initializer for 'mAbortCapture''
 // SYNTHETIC: SWBF2 0x007677a0
-// `dynamic atexit destructor for 'EventManager::CommandPostEvent::mAbortCapture''
+// EventManager::CommandPostEvent::`dynamic atexit destructor for 'mAbortCapture''
 
 // GLOBAL: SWBF2 0x007ebaa0
 // mAbortCapture
 Event<CommandPost, unsigned __int64> mAbortCapture("AbortCapture");
 
 // SYNTHETIC: SWBF2 0x00403230
-// `dynamic initializer for 'EventManager::CommandPostEvent::mFinishCapture''
+// EventManager::CommandPostEvent::`dynamic initializer for 'mFinishCapture''
 // SYNTHETIC: SWBF2 0x00767820
-// `dynamic atexit destructor for 'EventManager::CommandPostEvent::mFinishCapture''
+// EventManager::CommandPostEvent::`dynamic atexit destructor for 'mFinishCapture''
 
 // GLOBAL: SWBF2 0x007ebac0
 // mFinishCapture
 Event<CommandPost, unsigned __int64> mFinishCapture("FinishCapture");
 
 // SYNTHETIC: SWBF2 0x00403260
-// `dynamic initializer for 'EventManager::CommandPostEvent::mKill''
+// EventManager::CommandPostEvent::`dynamic initializer for 'mKill''
 // SYNTHETIC: SWBF2 0x007678a0
-// `dynamic atexit destructor for 'EventManager::CommandPostEvent::mKill''
+// EventManager::CommandPostEvent::`dynamic atexit destructor for 'mKill''
 
 // GLOBAL: SWBF2 0x007eba80
 // mKill
 Event<CommandPost, DamageOwner> mKill("CommandPostKill");
 
 // SYNTHETIC: SWBF2 0x00403290
-// `dynamic initializer for 'EventManager::CommandPostEvent::mRespawn''
+// EventManager::CommandPostEvent::`dynamic initializer for 'mRespawn''
 // SYNTHETIC: SWBF2 0x00767920
-// `dynamic atexit destructor for 'EventManager::CommandPostEvent::mRespawn''
+// EventManager::CommandPostEvent::`dynamic atexit destructor for 'mRespawn''
 
 // GLOBAL: SWBF2 0x007ebb00
 // mRespawn

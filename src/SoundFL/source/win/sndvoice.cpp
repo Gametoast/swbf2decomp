@@ -130,7 +130,7 @@ void Voice::Update3DMode()
     {
         const bool b3D = Get3DMode();
         if (mRenderer.mFormat != SampleInfo::format_Unknown
-            && ((mRenderer.Source2D3D::mFlags & 1) != 0) != b3D
+            && (mRenderer.Get3DMode()) != b3D
             && mRenderer.mNumChannels == 1)
         {
             mRenderer.SetFormat(mRenderer.mFormat, 1, mRenderer.mFrequency, b3D,

@@ -174,10 +174,7 @@ void RedSceneObject::UpdateOcclusionQuery(unsigned int uiViewport)
     }
     _iFrameNum[FLRenderer::GetCurrentViewport()] = RedRenderer::GetFrameNumber();
     PblMatrix mWorld = gMatrixIdentity;
-    mWorld.m[3][0] = vCenter.x;
-    mWorld.m[3][1] = vCenter.y;
-    mWorld.m[3][2] = vCenter.z;
-    mWorld.m[3][3] = 1.0f;
+    mWorld.SetTranslation(vCenter);
     _uiOcclusionIndex[FLRenderer::GetCurrentViewport()] =
         RedRenderer::SubmitOcclusionQuery(mWorld, OCCLUSION_QUERY_BOX, vExtents, false);
 }

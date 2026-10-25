@@ -44,10 +44,7 @@ static inline const PblVector3 TransformCoord(const PblVector3& v, const PblMatr
 // FUNCTION: SWBF2 0x00454e30
 void Chunk::SetPosition(const PblVector3& vPos)
 {
-    mMatrix.m[3][0] = vPos.x;
-    mMatrix.m[3][1] = vPos.y;
-    mMatrix.m[3][2] = vPos.z;
-    mMatrix.m[3][3] = 1.0f;
+    mMatrix.SetTranslation(vPos);
     mCollisionMatrix = mPrimitiveMatrix.GetInverseFast() * mMatrix;
     SetCollisionCenter(mCollisionMatrix.GetTranslation());
 }

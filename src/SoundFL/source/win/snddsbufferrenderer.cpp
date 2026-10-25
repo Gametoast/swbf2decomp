@@ -85,7 +85,7 @@ void DSBufferRenderer::UpdateBufferParameters(IDirectSoundBuffer* const pBuffer,
     DSBuffer::SetFrequency(
         (int)((float)(unsigned int)mFrequency * Source::mPitch));
 
-    if ((Source2D3D::mFlags & 1) == 0)
+    if (!Source2D3D::Get3DMode())
     {
         UpdateGain(false, 1.0f);
         return;
@@ -233,7 +233,7 @@ void DSBufferRenderer::UpdateGain(bool bEnable, float fGain)
     if ((mFlags & 0x10) != 0)
     {
 
-        if ((Source2D3D::mFlags & 1) != 0)
+        if (Source2D3D::Get3DMode())
         {
             DSBuffer::SetGain(fSourceGain * fGain);
             return;
@@ -244,7 +244,7 @@ void DSBufferRenderer::UpdateGain(bool bEnable, float fGain)
         return;
     }
 
-    if ((Source2D3D::mFlags & 1) != 0)
+    if (Source2D3D::Get3DMode())
     {
 
         const int iGain =
@@ -619,7 +619,7 @@ void DSBufferRenderer::UpdateObject()
 
             const bool bWasStopped = !DSBuffer::IsPlaying();
 
-            if ((Source2D3D::mFlags & 1) != 0)
+            if (Source2D3D::Get3DMode())
             {
 
                 SourceI3DL2::mFlags =

@@ -297,7 +297,8 @@ public:
     public:
 
         PostCollision(EntityDroideka* pOwner) : mOwner(pOwner) {}
-        virtual ~PostCollision();
+        // SYNTHETIC: SWBF2 0x0049e9f0
+        // EntityDroideka::PostCollision::~PostCollision
         virtual bool Update(float fDeltaTime);
 
         EntityDroideka* mOwner;

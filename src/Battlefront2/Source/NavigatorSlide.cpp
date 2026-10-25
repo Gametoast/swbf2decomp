@@ -45,10 +45,7 @@ public:
 
 namespace
 {
-    inline const PblVector3& GetPos(const PblMatrix& m)
-    {
-        return *(const PblVector3*)&m.m[3][0];
-    }
+
 
     inline const PblMatrix& GameObjectGetMatrix(const GameObject* pObj)
     {
@@ -278,7 +275,7 @@ PblVector3 NavigatorSlide::GetBouncePosition() const
 // FUNCTION: SWBF2 0x005ae430
 void NavigatorSlide::NextInfantrySlidePos(const PblVector3& dest)
 {
-    PblVector3 pos = GetPos(GetMatrix());
+    PblVector3 pos = GetMatrix().GetTranslation();
     PblVector3 slideDest = dest;
 
     const GameObject* pObj = mOwner->mOwner->mOwner->GetGameObject();
@@ -331,7 +328,7 @@ void NavigatorSlide::UpdateInfantrySlideObject()
         return;
     }
 
-    PblVector3 pos = GetPos(GetMatrix());
+    PblVector3 pos = GetMatrix().GetTranslation();
     float dx = slidePos.x - mGlobalDest.x;
     float dz = slidePos.z - mGlobalDest.z;
     if (dz * dz + dx * dx > 1.0f)
@@ -380,8 +377,8 @@ bool NavigatorSlide::GetObjectSlideToPosition(PblVector3* pPos) const
         return true;
     }
 
-    *pPos = GetPos(GameObjectGetMatrix(pObj));
-    const PblVector3& myPos = GetPos(GetMatrix());
+    *pPos = (GameObjectGetMatrix(pObj)).GetTranslation();
+    const PblVector3& myPos = GetMatrix().GetTranslation();
     PblVector3 dir(myPos.x - pPos->x, myPos.y - pPos->y, myPos.z - pPos->z);
     PblVector3 normal = AIUtil::GetSafeNormalXZ(dir);
     pPos->x += normal.x * mOffset;
@@ -393,7 +390,7 @@ bool NavigatorSlide::GetObjectSlideToPosition(PblVector3* pPos) const
 // FUNCTION: SWBF2 0x005ae900
 void NavigatorSlide::NextVehicleSlidePos()
 {
-    PblVector3 pos = GetPos(GetMatrix());
+    PblVector3 pos = GetMatrix().GetTranslation();
     const float fRadius = GetMyRadius() * 2.0f;
     const int eProhibit = GetMyProhibit();
     PathFinder::GetClosestValidPoint(pos, pos, fRadius, eProhibit, (const Obstacle**)mIgnore, mIgnoreCnt);

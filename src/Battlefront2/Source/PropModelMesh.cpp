@@ -86,7 +86,7 @@ PropObjectMesh sObjectCache[2000];
 // FUNCTION: SWBF2 0x0062c1b0
 PblVector3 PropObjectMesh::GetPos()
 {
-    return *(const PblVector3*)&mMatrix.m[3][0];
+    return mMatrix.GetTranslation();
 }
 
 // FUNCTION: SWBF2 0x0062c1d0
@@ -159,7 +159,7 @@ void PropCollisionObject::RecalculateAABB(PblMatrix& matrix, const PblBox& box)
 // FUNCTION: SWBF2 0x0062c3b0
 const PblVector3& PropCollisionObject::GetPosition() const
 {
-    return *(const PblVector3*)&mMatrix.m[3][0];
+    return mMatrix.GetTranslation();
 }
 
 // FUNCTION: SWBF2 0x0062c3c0

@@ -124,14 +124,14 @@ ClassMarker _gClassMarker[MAX_CLASS_MARKERS];
 Marker* _gMarkers;
 
 // SYNTHETIC: SWBF2 0x00406600
-// `dynamic initializer for 'TargetManager::gMarkers''
+// TargetManager::`dynamic initializer for 'gMarkers''
 
 // GLOBAL: SWBF2 0x01f6de9c
 // gMarkers
 Marker* gMarkers = _gMarkers;
 
 // SYNTHETIC: SWBF2 0x00406520
-// `dynamic initializer for 'TargetManager::_gPost''
+// TargetManager::`dynamic initializer for '_gPost''
 
 // GLOBAL: SWBF2 0x01f76410
 // _gPost
@@ -143,9 +143,9 @@ Post _gPost[MAX_POSTS];
 // TargetManager::Target::~Target
 
 // SYNTHETIC: SWBF2 0x004064f0
-// `dynamic initializer for 'TargetManager::_gTarget''
+// TargetManager::`dynamic initializer for '_gTarget''
 // SYNTHETIC: SWBF2 0x00769500
-// `dynamic atexit destructor for 'TargetManager::_gTarget''
+// TargetManager::`dynamic atexit destructor for '_gTarget''
 
 // GLOBAL: SWBF2 0x01f76710
 // _gTarget
@@ -648,18 +648,18 @@ namespace TargetManager
 {
 
 // SYNTHETIC: SWBF2 0x004065a0
-// `dynamic initializer for 'TargetManager::_gHostMarkers''
+// TargetManager::`dynamic initializer for '_gHostMarkers''
 // SYNTHETIC: SWBF2 0x00769520
-// `dynamic atexit destructor for 'TargetManager::_gHostMarkers''
+// TargetManager::`dynamic atexit destructor for '_gHostMarkers''
 
 // GLOBAL: SWBF2 0x01f75f10
 // _gHostMarkers
 Marker _gHostMarkers[MAX_MARKERS];
 
 // SYNTHETIC: SWBF2 0x004065d0
-// `dynamic initializer for 'TargetManager::_gClientMarkers''
+// TargetManager::`dynamic initializer for '_gClientMarkers''
 // SYNTHETIC: SWBF2 0x00769540
-// `dynamic atexit destructor for 'TargetManager::_gClientMarkers''
+// TargetManager::`dynamic atexit destructor for '_gClientMarkers''
 
 // GLOBAL: SWBF2 0x01f7c980
 // _gClientMarkers

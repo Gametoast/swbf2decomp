@@ -1197,7 +1197,7 @@ void EntityWalkerClass::SetProperty(unsigned int uProperty, const char* pszValue
                     if (pSkeleton->GetBoneNameHash(i) == mAttachHash)
                     {
                         const PblMatrix& mBone = pSkeleton->GetDefaultPoseMatrix(i);
-                        mAttachOffset = *(const PblVector3*)&mBone.m[3][0];
+                        mAttachOffset = mBone.GetTranslation();
                         break;
                     }
                 }
@@ -1518,10 +1518,7 @@ const Entity* EntityWalker::GetEntity() const
 // FUNCTION: SWBF2 0x0047f9d0
 void EntityWalker::SetPosition(const PblVector3& vPosition)
 {
-    mMatrix.m[3][0] = vPosition.x;
-    mMatrix.m[3][1] = vPosition.y;
-    mMatrix.m[3][2] = vPosition.z;
-    mMatrix.m[3][3] = 1.0f;
+    mMatrix.SetTranslation(vPosition);
     UpdateCollisionSphere(this);
 }
 
@@ -1684,10 +1681,7 @@ bool EntityWalker::PostCollision::Update(float fDeltaTime)
 // SYNTHETIC: SWBF2 0x004ff620
 // EntityWalker::PostCollision::`scalar deleting destructor'
 
-// FUNCTION: SWBF2 0x004ff650
-EntityWalker::PostCollision::~PostCollision()
-{
-}
+
 
 // SYNTHETIC: SWBF2 0x004ff720
 // EntityWalker::`scalar deleting destructor'
@@ -2096,10 +2090,7 @@ void EntityWalker::DoFootImpactEffects()
         {
 
             GetControllableList();
-            mFoot.m[3][0] = vSplash.x;
-            mFoot.m[3][1] = vSplash.y;
-            mFoot.m[3][2] = vSplash.z;
-            mFoot.m[3][3] = 1.0f;
+            mFoot.SetTranslation(vSplash);
             float fSplashWater;
             if (RedWater::GetWaterHeight(vSplash, fSplashWater) && fSplashWater >= vSplash.y)
             {
@@ -2421,10 +2412,7 @@ void EntityWalker::Render(unsigned char ucViewport, float fDist, unsigned int ui
                 if (pEffect)
                 {
                     PblMatrix mDust = gMatrixIdentity;
-                    mDust.m[3][0] = mClass->mDeathDustOffset.x;
-                    mDust.m[3][1] = mClass->mDeathDustOffset.y;
-                    mDust.m[3][2] = mClass->mDeathDustOffset.z;
-                    mDust.m[3][3] = 1.0f;
+                    mDust.SetTranslation(mClass->mDeathDustOffset);
                     PblMatrix mTemp;
                     D3DXMatrixMultiply(&mTemp, &mDust, &mWorld);
                     mDust = mTemp;

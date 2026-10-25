@@ -145,10 +145,7 @@ void DroidekaElement::RenderUsingContext(const PblMatrix& mContext, const RedCol
     D3DXMatrixRotationQuaternion((D3DXMATRIX*)&mWorld,
                                  D3DXQuaternionNormalize((D3DXQUATERNION*)&qUnit,
                                                          (const D3DXQUATERNION*)&mRotation));
-    mWorld.m[3][0] = mTranslation.x;
-    mWorld.m[3][1] = mTranslation.y;
-    mWorld.m[3][2] = mTranslation.z;
-    mWorld.m[3][3] = 1.0f;
+    mWorld.SetTranslation(mTranslation);
 
     PblMatrix mScaling;
     D3DXMatrixMultiply((D3DXMATRIX*)&mWorld, (const D3DXMATRIX*)&mWorld,

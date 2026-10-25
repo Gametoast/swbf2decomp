@@ -395,16 +395,10 @@ void CameraTrackSetting::SetupCameraTrackMatrixHUDTargeting(PblMatrix& rMatrix, 
     PblQuaternion qUnit;
     PblMatrix mCamera;
     D3DXMatrixRotationQuaternion(&mCamera, D3DXQuaternionNormalize(&qUnit, &q));
-    mCamera.m[3][0] = gVectorZero.x;
-    mCamera.m[3][1] = gVectorZero.y;
-    mCamera.m[3][2] = gVectorZero.z;
-    mCamera.m[3][3] = 1.0f;
+    mCamera.SetTranslation(gVectorZero);
 
     PblVector3 vPoint = CalcCameraPoint(rTarget, mCamera);
-    mCamera.m[3][0] = vPoint.x;
-    mCamera.m[3][1] = vPoint.y;
-    mCamera.m[3][2] = vPoint.z;
-    mCamera.m[3][3] = 1.0f;
+    mCamera.SetTranslation(vPoint);
     rMatrix = mCamera;
 }
 
@@ -439,10 +433,7 @@ void CameraTrackSetting::SetupCameraTrackMatrixHUDTargeting(const CameraTrackSet
     PblQuaternion qUnit;
     PblMatrix mCamera;
     D3DXMatrixRotationQuaternion(&mCamera, D3DXQuaternionNormalize(&qUnit, &q));
-    mCamera.m[3][0] = gVectorZero.x;
-    mCamera.m[3][1] = gVectorZero.y;
-    mCamera.m[3][2] = gVectorZero.z;
-    mCamera.m[3][3] = 1.0f;
+    mCamera.SetTranslation(gVectorZero);
 
     PblVector3 vOffset;
     D3DXVec3TransformNormal(&vOffset, &vTrackOffset, &mCamera);
@@ -493,10 +484,7 @@ void CameraTrackSetting::SetupCameraTrackMatrix(Trackable* pTrackable, PblMatrix
     PblQuaternion qUnit;
     PblMatrix mCamera;
     D3DXMatrixRotationQuaternion(&mCamera, D3DXQuaternionNormalize(&qUnit, &q));
-    mCamera.m[3][0] = gVectorZero.x;
-    mCamera.m[3][1] = gVectorZero.y;
-    mCamera.m[3][2] = gVectorZero.z;
-    mCamera.m[3][3] = 1.0f;
+    mCamera.SetTranslation(gVectorZero);
 
     PblVector3 vCamera = CalcCameraPoint(rTarget, mCamera);
     PblVector3 vSafe = CalcCameraSafePoint(rTarget);
@@ -590,10 +578,7 @@ void CameraTrackSetting::SetupCameraTrackMatrix(Trackable* pTrackable, PblMatrix
         vCamera.z = vWorld.z + vCurrent.z;
     }
 
-    mCamera.m[3][0] = vCamera.x;
-    mCamera.m[3][1] = vCamera.y;
-    mCamera.m[3][2] = vCamera.z;
-    mCamera.m[3][3] = 1.0f;
+    mCamera.SetTranslation(vCamera);
     rMatrix = mCamera;
 }
 
@@ -646,10 +631,7 @@ void CameraTrackSetting::SetupCameraTrackMatrix(Trackable* pTrackable, const Cam
     PblQuaternion qUnit;
     PblMatrix mCamera;
     D3DXMatrixRotationQuaternion(&mCamera, D3DXQuaternionNormalize(&qUnit, &q));
-    mCamera.m[3][0] = gVectorZero.x;
-    mCamera.m[3][1] = gVectorZero.y;
-    mCamera.m[3][2] = gVectorZero.z;
-    mCamera.m[3][3] = 1.0f;
+    mCamera.SetTranslation(gVectorZero);
 
     PblVector3 vOffset;
     D3DXVec3TransformNormal(&vOffset, &vTrackOffset, &mCamera);
@@ -730,10 +712,7 @@ void CameraTrackSetting::SetupCameraTrackMatrix(Trackable* pTrackable, const Cam
         vCamera.z = vWorld.z + vCurrent.z;
     }
 
-    mCamera.m[3][0] = vCamera.x;
-    mCamera.m[3][1] = vCamera.y;
-    mCamera.m[3][2] = vCamera.z;
-    mCamera.m[3][3] = 1.0f;
+    mCamera.SetTranslation(vCamera);
     rMatrix = mCamera;
 }
 

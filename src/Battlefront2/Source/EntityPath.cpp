@@ -75,7 +75,7 @@ void* EntityPath::BranchRegionFactory::CreateRegion(RedRegionDesc& desc, const c
     {
         return 0;
     }
-    return new BranchRegion(*(const PblVector3*)&desc.mMatrix.m[3][0], desc.mSize.w, PblHash(pcID));
+    return new BranchRegion(desc.mMatrix.GetTranslation(), desc.mSize.w, PblHash(pcID));
 }
 
 // FUNCTION: SWBF2 0x004d0fb0
@@ -126,15 +126,15 @@ void EntityPath::NodeProperties::CalculateNodePosition(const PblVector3* const p
         PblVector3 vDirection = *pDirection;
         PblMatrix matrix;
         EntityPath::BuildMatrix(vDirection, matrix, 0);
-        PblVector3 vOffset = RandomVector(*(const PblVector3*)matrix.m[0], mVariance.x, mVariance.x, mVariance.x);
+        PblVector3 vOffset = RandomVector(matrix.GetXAxis(), mVariance.x, mVariance.x, mVariance.x);
         vPosition.x += vOffset.x;
         vPosition.y += vOffset.y;
         vPosition.z += vOffset.z;
-        vOffset = RandomVector(*(const PblVector3*)matrix.m[1], mVariance.y, mVariance.y, mVariance.y);
+        vOffset = RandomVector(matrix.GetYAxis(), mVariance.y, mVariance.y, mVariance.y);
         vPosition.x += vOffset.x;
         vPosition.y += vOffset.y;
         vPosition.z += vOffset.z;
-        vOffset = RandomVector(*(const PblVector3*)matrix.m[2], mVariance.z, mVariance.z, mVariance.z);
+        vOffset = RandomVector(matrix.GetZAxis(), mVariance.z, mVariance.z, mVariance.z);
         vPosition.x += vOffset.x;
         vPosition.y += vOffset.y;
         vPosition.z += vOffset.z;

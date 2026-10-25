@@ -55,7 +55,7 @@ bool IsTurretCameraTargeting(const MountedTurret& turret)
 PblMatrix TurretDirectionMatrix(const MountedTurret& turret)
 {
     PblVector3 vDirection(-turret.mEyeDir.x, -turret.mEyeDir.y, -turret.mEyeDir.z);
-    const PblVector3& vUp = *(const PblVector3*)&turret.mAimMatrix.m[1][0];
+    const PblVector3& vUp = turret.mAimMatrix.GetYAxis();
     return DirectionMatrix(vDirection, vUp, turret.mEyePoint);
 }
 }
@@ -75,7 +75,7 @@ void MountedTurret::SetupCameraTrackMatrixHUDTargeting(PblMatrix& rMatrix)
         return;
     }
     const PblMatrix& rTarget = mClass->mTrackUseRoot ? mParent->GetMatrix() : mAimMatrix;
-    const PblVector3& vAimDir = *(const PblVector3*)&mAimMatrix.m[2][0];
+    const PblVector3& vAimDir = mAimMatrix.GetZAxis();
     mClass->mCameraSettings.SetupCameraTrackMatrixHUDTargeting(rMatrix, rTarget, vAimDir);
 }
 
@@ -93,7 +93,7 @@ void MountedTurret::SetupCameraTrackMatrix(PblMatrix& rMatrix, float fDeltaTime)
         return;
     }
     const PblMatrix& rTarget = mClass->mTrackUseRoot ? mParent->GetMatrix() : mAimMatrix;
-    const PblVector3& vAimDir = *(const PblVector3*)&mAimMatrix.m[2][0];
+    const PblVector3& vAimDir = mAimMatrix.GetZAxis();
     mClass->mCameraSettings.SetupCameraTrackMatrix(this, rMatrix, fDeltaTime, rTarget,
                                                      vAimDir, 1.0f, 1.0f, mParent);
 }
@@ -1660,8 +1660,8 @@ bool MountedTurretClass::SetProperty(unsigned int uHash, const char* pcValue, co
             mParentHash = pModel->GetParentBoneAndOffsetMatrix(mMountHash, mat);
             if (mParentHash)
             {
-                mMountPos = *(const PblVector3*)&mat.m[3][0];
-                mMountUp = *(const PblVector3*)&mat.m[1][0];
+                mMountPos = mat.GetTranslation();
+                mMountUp = mat.GetYAxis();
             }
             for (unsigned int uBone = mMountHash; uBone; uBone = pModel->GetParentBone(uBone))
             {

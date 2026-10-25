@@ -83,20 +83,18 @@ SoundParameterized::Properties::Properties() : mHashID(0), mSoundLayeredProps(0)
 
 SoundParameterized::Properties::~Properties()
 {
-    while (!mLayerList.IsEmpty())
+    while (mLayerList.GetFirst() != mLayerList.GetTerminator())
     {
-        delete (Layer::Properties*)((char*)mLayerList.mHead.mNext
-                                    - offsetof(Layer::Properties, mNode));
+        delete (Layer::Properties*)mLayerList.GetFirst()->GetObjectA(&mLayerList, offsetof(Layer::Properties, mNode));
     }
 }
 
 // FUNCTION: SWBF2 0x007358e0
 SoundParameterized::Layer::Properties::~Properties()
 {
-    while (!mControllerPropertyList.IsEmpty())
+    while (mControllerPropertyList.GetFirst() != mControllerPropertyList.GetTerminator())
     {
-        delete (Controller::Properties*)((char*)mControllerPropertyList.mHead.mNext
-                                         - offsetof(Controller::Properties, mNode));
+        delete (Controller::Properties*)mControllerPropertyList.GetFirst()->GetObjectA(&mControllerPropertyList, offsetof(Controller::Properties, mNode));
     }
 }
 
@@ -111,9 +109,9 @@ SoundParameterized::~SoundParameterized()
 // FUNCTION: SWBF2 0x00735b40
 void __cdecl SoundParameterized::Properties::DestroyAll()
 {
-    while (!smPropertyList.IsEmpty())
+    while (smPropertyList.GetFirst() != smPropertyList.GetTerminator())
     {
-        delete (Properties*)((char*)smPropertyList.mHead.mNext - offsetof(Properties, mNode));
+        delete (Properties*)smPropertyList.GetFirst()->GetObjectA(&smPropertyList, offsetof(Properties, mNode));
     }
 }
 

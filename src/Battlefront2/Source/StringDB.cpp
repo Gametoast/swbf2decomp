@@ -5,7 +5,7 @@
 namespace StringDB
 {
 // SYNTHETIC: SWBF2 0x004064d0
-// `dynamic initializer for 'StringDB::mMap''
+// StringDB::`dynamic initializer for 'mMap''
 
 // GLOBAL: SWBF2 0x01f6df08
 PblHashTable<char, 4096> mMap;

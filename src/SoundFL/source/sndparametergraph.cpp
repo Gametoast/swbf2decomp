@@ -95,15 +95,18 @@ void ParameterGraph::Read(PblFileChunk& chunk)
         PblFileChunk child = chunk.ReadNextChild();
         const unsigned int uiID = child._pFile->Read32();
         child._pFile->Read8();
-        if (uiID == 0x415B9110u)
+        switch (uiID)
+        {
+        case 0x415B9110u:
         {
             const float fInput = child._pFile->ReadFloat();
             const float fOutput = child._pFile->ReadFloat();
             new ControlPoint(fInput, fOutput, mControlPoints);
+            break;
         }
-        else if (uiID == 0x8D39BDE6u)
-        {
+        case 0x8D39BDE6u:
             mHashID = child._pFile->Read32();
+            break;
         }
     }
 }

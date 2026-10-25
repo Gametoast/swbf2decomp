@@ -35,9 +35,9 @@ bool mInitFlag;
 bool mLoaded;
 
 // SYNTHETIC: SWBF2 0x00406060
-// `dynamic initializer for 'PropGenerator::mPropLayers''
+// PropGenerator::`dynamic initializer for 'mPropLayers''
 // SYNTHETIC: SWBF2 0x00769360
-// `dynamic atexit destructor for 'PropGenerator::mPropLayers''
+// PropGenerator::`dynamic atexit destructor for 'mPropLayers''
 
 // GLOBAL: SWBF2 0x01f03000
 // mPropLayers
@@ -51,9 +51,9 @@ PropLayer mPropLayers[4];
 PblMatrix m_amCamera[1];
 
 // SYNTHETIC: SWBF2 0x004060a0
-// `dynamic initializer for 'PropGenerator::mThread''
+// PropGenerator::`dynamic initializer for 'mThread''
 // SYNTHETIC: SWBF2 0x00769380
-// `dynamic atexit destructor for 'PropGenerator::mThread''
+// PropGenerator::`dynamic atexit destructor for 'mThread''
 
 // GLOBAL: SWBF2 0x01efd044
 // mThread

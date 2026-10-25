@@ -311,7 +311,7 @@ bool EntityMine::Update(float fDeltaTime)
                 mVelocity.x = (mMatrix.m[3][0] - mOldPosition.x) * fInv;
                 mVelocity.y = (mMatrix.m[3][1] - mOldPosition.y) * fInv;
                 mVelocity.z = (mMatrix.m[3][2] - mOldPosition.z) * fInv;
-                mOldPosition = *(const PblVector3*)mMatrix.m[3];
+                mOldPosition = mMatrix.GetTranslation();
             }
             mStationary = true;
         }
@@ -368,7 +368,7 @@ bool EntityMine::Update(float fDeltaTime)
 
     if (mStationary && pClass->mExplosionTrigger && pClass->mTriggerRadius > 0.0f)
     {
-        PblVector3 vPos = *(const PblVector3*)mMatrix.m[3];
+        PblVector3 vPos = mMatrix.GetTranslation();
         const float fRange =
             pClass->mTriggerRadius > pClass->mSuppressRadius ? pClass->mTriggerRadius : pClass->mSuppressRadius;
         GameObject* apObjects[64];
@@ -514,8 +514,8 @@ bool EntityMine::CollisionCallback(const CollisionResult* pResult, CollisionObje
         PblVector3 vStart(mMatrix.m[3][0] + vNormal.x * 0.5f, mMatrix.m[3][1] + vNormal.y * 0.5f,
                           mMatrix.m[3][2] + vNormal.z * 0.5f);
         pOther->RayHit(vStart, vDown, 1.0f, &vNormal, 0, true, 0.0f);
-        PblMatrix mStick = NormalMatrix(*(const PblVector3*)mMatrix.m[2], vNormal,
-                                      *(const PblVector3*)mMatrix.m[3]);
+        PblMatrix mStick = NormalMatrix(mMatrix.GetZAxis(), vNormal,
+                                      mMatrix.GetTranslation());
 
         mStickInfo = new StickInfo;
         mStickInfo->mCollHandle = pOther->GetGameObject();
@@ -536,7 +536,7 @@ bool EntityMine::CollisionCallback(const CollisionResult* pResult, CollisionObje
 
         mParent = pOther;
         mVelocity = gVectorZero;
-        mOldPosition = *(const PblVector3*)mMatrix.m[3];
+        mOldPosition = mMatrix.GetTranslation();
         if (!mHitSurface)
         {
             mHitSurface = 1;

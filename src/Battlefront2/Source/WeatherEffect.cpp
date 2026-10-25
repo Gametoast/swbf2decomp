@@ -596,8 +596,8 @@ void PrecipitationEffect::Update(float fDeltaTime)
         const float fReach = mGroundEffectSpread + 3.0f;
         const PblMatrix& mCamera = CameraManager::sInstance->GetCamera(uCam)->GetMatrix();
         PblBox& box = aBoxes[uCam];
-        box._vMin = *(const PblVector3*)mCamera.m[3];
-        box._vMax = *(const PblVector3*)mCamera.m[3];
+        box._vMin = mCamera.GetTranslation();
+        box._vMax = mCamera.GetTranslation();
 
         const PblVector3 vCentre(mCamera.m[3][0] - fReach * mCamera.m[2][0],
                                  mCamera.m[3][1] - mCamera.m[2][1] * fReach,

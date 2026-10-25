@@ -24,7 +24,8 @@ public:
     {
     public:
         OrdnanceUpdate(CollisionManager* pOwner);
-        virtual ~OrdnanceUpdate();
+        // SYNTHETIC: SWBF2 0x0045e740
+        // CollisionManager::OrdnanceUpdate::~OrdnanceUpdate
         virtual bool Update(float fDeltaTime);
 
         CollisionManager* mOwner;

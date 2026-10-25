@@ -23,9 +23,9 @@ namespace util
 {
 
 // SYNTHETIC: SWBF2 0x0040a8e0
-// `dynamic initializer for 'util::globals''
+// util::`dynamic initializer for 'globals''
 // SYNTHETIC: SWBF2 0x0076a080
-// `dynamic atexit destructor for 'util::globals''
+// util::`dynamic atexit destructor for 'globals''
 
 // GLOBAL: SWBF2 0x009caacc
 // globals

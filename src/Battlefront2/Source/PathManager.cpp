@@ -61,9 +61,9 @@ int sPathManagerUnknown0;
 int sPathManagerUnknown1;
 
 // SYNTHETIC: SWBF2 0x00405e90
-// `dynamic initializer for 'PathManager::mTimer''
+// PathManager::`dynamic initializer for 'mTimer''
 // SYNTHETIC: SWBF2 0x00769300
-// `dynamic atexit destructor for 'PathManager::mTimer''
+// PathManager::`dynamic atexit destructor for 'mTimer''
 
 // GLOBAL: SWBF2 0x007ebc38
 // mTimer

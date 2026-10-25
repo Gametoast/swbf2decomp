@@ -49,10 +49,6 @@ namespace
         return static_cast<const CollisionObject&>(*pObject).GetMatrix();
     }
 
-    inline const PblVector3& GetPos(const PblMatrix& m)
-    {
-        return *(const PblVector3*)&m.m[3][0];
-    }
 }
 
 // FUNCTION: SWBF2 0x005ac930
@@ -283,7 +279,7 @@ void NavigatorFollowTarget::UpdateTarget()
 bool NavigatorFollowTarget::LookForCrumbs()
 {
     bool bCheckLOS = false;
-    const PblVector3& vMyPos = GetPos(GetMatrix());
+    const PblVector3& vMyPos = GetMatrix().GetTranslation();
     const float fTime = GameLoop::GetMissionTime();
     if (fTime > mLastShortcutCheck + 2.0f)
     {
@@ -332,7 +328,7 @@ void NavigatorFollowTarget::UpdateFollowCrumbs()
 {
     LookForCrumbs();
 
-    const PblVector3& vMyPos = GetPos(GetMatrix());
+    const PblVector3& vMyPos = GetMatrix().GetTranslation();
     const PblVector3& vHead = mCrumbBuffer[mCrumbHead];
     const float dx = vHead.x - vMyPos.x;
     const float dz = vHead.z - vMyPos.z;
@@ -384,7 +380,7 @@ void NavigatorFollowTarget::UpdateFollowCrumbs()
 
     delete mPathFollower;
     mPathFollower = 0;
-    mPathFollower = new PathFollower(mOwner->mOwner, GetPos(GetMatrix()), vCrumb,
+    mPathFollower = new PathFollower(mOwner->mOwner, GetMatrix().GetTranslation(), vCrumb,
                                      (const Obstacle**)mIgnore, mIgnoreCnt, false);
 }
 

@@ -10,9 +10,9 @@ namespace HUD
 // HUD::DelayedEvent::~DelayedEvent
 
 // SYNTHETIC: SWBF2 0x00404000
-// `dynamic initializer for 'HUD::gEventList''
+// HUD::`dynamic initializer for 'gEventList''
 // SYNTHETIC: SWBF2 0x00768b90
-// `dynamic atexit destructor for 'HUD::gEventList''
+// HUD::`dynamic atexit destructor for 'gEventList''
 
 // GLOBAL: SWBF2 0x01ec6110
 // gEventList

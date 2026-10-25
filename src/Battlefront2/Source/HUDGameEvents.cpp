@@ -156,9 +156,9 @@ namespace HUD
 // HUD::GameEvents::WeaponData::WeaponData
 
 // SYNTHETIC: SWBF2 0x00404050
-// `dynamic initializer for 'HUD::GameEvents::gPlayerData''
+// HUD::GameEvents::`dynamic initializer for 'gPlayerData''
 // SYNTHETIC: SWBF2 0x00768bc0
-// `dynamic atexit destructor for 'HUD::GameEvents::gPlayerData''
+// HUD::GameEvents::`dynamic atexit destructor for 'gPlayerData''
 
 // GLOBAL: SWBF2 0x01ec6290
 // HUD::GameEvents::gPlayerData

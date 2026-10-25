@@ -140,10 +140,7 @@ void SkyDome::Render(int value)
                 float fHeight = rDome.mOffset + mDomeHeight;
                 pos.y = fHeight - (fHeight - pos.y) * rDome.mMovementScale;
             }
-            mat.m[3][0] = pos.x;
-            mat.m[3][1] = pos.y;
-            mat.m[3][2] = pos.z;
-            mat.m[3][3] = 1.0f;
+            mat.SetTranslation(pos);
 
             for (int j = 0; j < rDome.mNumEffectData; ++j)
             {

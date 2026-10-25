@@ -465,65 +465,65 @@ bool mShowTeamPoints[2];
 bool mbMetagameRules;
 
 // SYNTHETIC: SWBF2 0x00403c70
-// `dynamic initializer for 'GameLoop::mAttractGroup''
+// GameLoop::`dynamic initializer for 'mAttractGroup''
 // SYNTHETIC: SWBF2 0x007689f0
-// `dynamic atexit destructor for 'GameLoop::mAttractGroup''
+// GameLoop::`dynamic atexit destructor for 'mAttractGroup''
 
 // GLOBAL: SWBF2 0x01ec0ea0
 // mAttractGroup
 RedScreenGroupElement mAttractGroup;
 // SYNTHETIC: SWBF2 0x00403c90
-// `dynamic initializer for 'GameLoop::mAttractInfoText''
+// GameLoop::`dynamic initializer for 'mAttractInfoText''
 // SYNTHETIC: SWBF2 0x00768a00
-// `dynamic atexit destructor for 'GameLoop::mAttractInfoText''
+// GameLoop::`dynamic atexit destructor for 'mAttractInfoText''
 
 // GLOBAL: SWBF2 0x01ec10b0
 // mAttractInfoText
 RedTextElement mAttractInfoText;
 // SYNTHETIC: SWBF2 0x00403cb0
-// `dynamic initializer for 'GameLoop::mDedicatedGroup''
+// GameLoop::`dynamic initializer for 'mDedicatedGroup''
 // SYNTHETIC: SWBF2 0x00768a10
-// `dynamic atexit destructor for 'GameLoop::mDedicatedGroup''
+// GameLoop::`dynamic atexit destructor for 'mDedicatedGroup''
 
 // GLOBAL: SWBF2 0x01ec0d40
 // mDedicatedGroup
 RedScreenGroupElement mDedicatedGroup;
 // SYNTHETIC: SWBF2 0x00403cd0
-// `dynamic initializer for 'GameLoop::mDedicatedTitleText''
+// GameLoop::`dynamic initializer for 'mDedicatedTitleText''
 // SYNTHETIC: SWBF2 0x00768a20
-// `dynamic atexit destructor for 'GameLoop::mDedicatedTitleText''
+// GameLoop::`dynamic atexit destructor for 'mDedicatedTitleText''
 
 // GLOBAL: SWBF2 0x01ec0de0
 // mDedicatedTitleText
 RedTextElement mDedicatedTitleText;
 // SYNTHETIC: SWBF2 0x00403cf0
-// `dynamic initializer for 'GameLoop::mDedicatedTeam1Text''
+// GameLoop::`dynamic initializer for 'mDedicatedTeam1Text''
 // SYNTHETIC: SWBF2 0x00768a30
-// `dynamic atexit destructor for 'GameLoop::mDedicatedTeam1Text''
+// GameLoop::`dynamic atexit destructor for 'mDedicatedTeam1Text''
 
 // GLOBAL: SWBF2 0x01ec0c80
 // mDedicatedTeam1Text
 RedTextElement mDedicatedTeam1Text;
 // SYNTHETIC: SWBF2 0x00403d10
-// `dynamic initializer for 'GameLoop::mDedicatedTeam2Text''
+// GameLoop::`dynamic initializer for 'mDedicatedTeam2Text''
 // SYNTHETIC: SWBF2 0x00768a40
-// `dynamic atexit destructor for 'GameLoop::mDedicatedTeam2Text''
+// GameLoop::`dynamic atexit destructor for 'mDedicatedTeam2Text''
 
 // GLOBAL: SWBF2 0x01ec0f40
 // mDedicatedTeam2Text
 RedTextElement mDedicatedTeam2Text;
 // SYNTHETIC: SWBF2 0x00403d30
-// `dynamic initializer for 'GameLoop::mWaitMessageGroup''
+// GameLoop::`dynamic initializer for 'mWaitMessageGroup''
 // SYNTHETIC: SWBF2 0x00768a50
-// `dynamic atexit destructor for 'GameLoop::mWaitMessageGroup''
+// GameLoop::`dynamic atexit destructor for 'mWaitMessageGroup''
 
 // GLOBAL: SWBF2 0x01ec1010
 // mWaitMessageGroup
 RedScreenGroupElement mWaitMessageGroup;
 // SYNTHETIC: SWBF2 0x00403d50
-// `dynamic initializer for 'GameLoop::mWaitTextElement''
+// GameLoop::`dynamic initializer for 'mWaitTextElement''
 // SYNTHETIC: SWBF2 0x00768a60
-// `dynamic atexit destructor for 'GameLoop::mWaitTextElement''
+// GameLoop::`dynamic atexit destructor for 'mWaitTextElement''
 
 // GLOBAL: SWBF2 0x01ec1170
 // mWaitTextElement

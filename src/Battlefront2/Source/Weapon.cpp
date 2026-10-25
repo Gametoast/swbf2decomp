@@ -1263,10 +1263,7 @@ void WeaponClass::RenderFlash(const PblVector3& vPos, const PblVector3& vDir, fl
     mFlash.m[2][1] = vDir.y * r;
     mFlash.m[2][2] = vDir.z * r;
     mFlash.m[2][3] = 0.0f;
-    mFlash.m[3][0] = vPos.x;
-    mFlash.m[3][1] = vPos.y;
-    mFlash.m[3][2] = vPos.z;
-    mFlash.m[3][3] = 1.0f;
+    mFlash.SetTranslation(vPos);
     mMuzzleFlashModel->Render(&mFlash, 0, color, 0, 0);
 }
 

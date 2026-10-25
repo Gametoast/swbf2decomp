@@ -669,9 +669,9 @@ namespace VOHelper
 // AI::VOHelper::QueuedSound::QueuedSound
 
 // SYNTHETIC: SWBF2 0x00406f50
-// `dynamic initializer for 'AI::VOHelper::mSndQueue''
+// AI::VOHelper::`dynamic initializer for 'mSndQueue''
 // SYNTHETIC: SWBF2 0x00769780
-// `dynamic atexit destructor for 'AI::VOHelper::mSndQueue''
+// AI::VOHelper::`dynamic atexit destructor for 'mSndQueue''
 
 // GLOBAL: SWBF2 0x01f9a320
 // mSndQueue

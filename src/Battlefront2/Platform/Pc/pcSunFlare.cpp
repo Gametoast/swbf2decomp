@@ -77,18 +77,9 @@ extern "C" PblVector3* __stdcall D3DXVec3TransformCoord(PblVector3* pOut, const 
 // s_boundingBox
 static PblBox s_boundingBox(-3000.0f, -3000.0f, -3000.0f, 3000.0f, 3000.0f, 3000.0f);
 
-struct PosXYZ
-{
-    float x;
-    float y;
-    float z;
-};
 
-struct TexCoord
-{
-    float u;
-    float v;
-};
+
+
 
 struct FlareVertex
 {
@@ -98,11 +89,7 @@ struct FlareVertex
 };
  
 
-struct CompressedTexCoord
-{
-    short u;
-    short v;
-};
+
 struct FlareCompressedVertex
 {
     CompressedPos pos;
@@ -135,28 +122,12 @@ static void CompressedPos_SetBoundingBox(const PblBox& box)
     CompressedPos::s_vScaleInv.z = 1.0f / CompressedPos::s_vScale.z;
 }
 
-static short CompressedPos_Encode(float f, float fMin, float fScaleInv)
-{
-    return (short)((f - fMin) * fScaleInv - 32767.5f);
-}
-
-// FUNCTION: SWBF2 0x0040cc80
-void CompressedPos::SetPos(float fX, float fY, float fZ)
-{
-    x = CompressedPos_Encode(fX, CompressedPos::s_vMin.x,
-                            CompressedPos::s_vScaleInv.x);
-    y = CompressedPos_Encode(fY, CompressedPos::s_vMin.y,
-                            CompressedPos::s_vScaleInv.y);
-    z = CompressedPos_Encode(fZ, CompressedPos::s_vMin.z,
-                            CompressedPos::s_vScaleInv.z);
-}
-
 static void SetSunFlareVertex(FlareVertex& v, float x, float y, float z,
                               const RedColor& color, float u, float texV)
 {
-    v.pos.x = x; v.pos.y = y; v.pos.z = z;
+    v.pos.SetPos(x, y, z);
     v.color = color;
-    v.uv.u = u; v.uv.v = texV;
+    v.uv.SetUV(u, texV);
 }
 
 static void SetSunFlareVertex(FlareCompressedVertex& v, float x, float y, float z,
@@ -164,13 +135,12 @@ static void SetSunFlareVertex(FlareCompressedVertex& v, float x, float y, float 
 {
     v.pos.SetPos(x, y, z);
     v.color = color;
-    v.uv.u = (short)(u * 2048.0f);
-    v.uv.v = (short)(texV * 2048.0f);
+    v.uv.SetUV(u, texV);
 }
 
 static void SetSunFlareDiscVertex(FlareVertex& v, float x, float y, float z)
 {
-    v.pos.x = x; v.pos.y = y; v.pos.z = z;
+    v.pos.SetPos(x, y, z);
     v.color = RedColor::WHITE;
 }
 
@@ -229,7 +199,7 @@ void SunFlareEffect::Init()
         const PblBox box(0.0f, 0.0f, 0.0f, 15.0f, 15.0f, 0.0f);
         s_samplePoints->m_bbox = box;
         CompressedPos_SetBoundingBox(box);
-        short* v = (short*)s_samplePoints->BeginVertexData();
+        CompressedPos* v = (CompressedPos*)s_samplePoints->BeginVertexData();
         if (!v)
         {
             return;
@@ -238,13 +208,8 @@ void SunFlareEffect::Init()
         {
             for (int j = 0; j < 16; j++)
             {
-                v[0] = CompressedPos_Encode((float)i, CompressedPos::s_vMin.x,
-                                            CompressedPos::s_vScaleInv.x);
-                v[1] = CompressedPos_Encode((float)j, CompressedPos::s_vMin.y,
-                                            CompressedPos::s_vScaleInv.y);
-                v[2] = CompressedPos_Encode(0.0f, CompressedPos::s_vMin.z,
-                                            CompressedPos::s_vScaleInv.z);
-                v += 4;
+                v->SetPos((float)i, (float)j, 0.0f);
+                ++v;
             }
         }
         s_samplePoints->EndVertexData();
@@ -1002,23 +967,6 @@ void SunFlare::RenderSunRings(const PblVector3& vPosition, float fSize, float fT
 template void SunFlare::RenderSunRings<FlareVertex, 642>(const PblVector3&, float, float, float) const;
 template void SunFlare::RenderSunRings<FlareCompressedVertex, 37506>(const PblVector3&, float, float, float) const;
 
-static void SetRingPosition(FlareVertex& v, const PblVector3& center, float cosine,
-                            float sine, float radius)
-{
-    v.pos.x = center.x + cosine * radius;
-    v.pos.y = center.y + sine * radius;
-    v.pos.z = center.z;
-}
-
-static void SetRingPosition(FlareCompressedVertex& v, const PblVector3& center,
-                            float cosine, float sine, float radius)
-{
-    v.pos.SetPos(center.x + cosine * radius,
-                       center.y + sine * radius, center.z);
-}
-
-// TEMPLATE: SWBF2 0x00431330
-// EmitRing<FlareVertex>
 template <class VERTEX>
 void EmitRing(VERTEX*& pVertices, const PblVector3& vPosition, float fAngle,
               float fInnerRadius, float fMiddleRadius, float fOuterRadius,
@@ -1027,41 +975,55 @@ void EmitRing(VERTEX*& pVertices, const PblVector3& vPosition, float fAngle,
 {
     float fSin, fCos;
     PblMath::SinCos(&fSin, &fCos, fAngle);
-    SetRingPosition(*pVertices++, vPosition, fCos, fSin, fInnerRadius);
+    PblVector3 tempPos = vPosition + PblVector3(fCos * fInnerRadius, fSin * fInnerRadius, 0.0f);
+    pVertices->pos.SetPos(tempPos);
+    ++pVertices;
     for (int i = 0; i <= iSegments; ++i)
     {
         PblMath::SinCos(&fSin, &fCos, (float)i * 6.2831855f / (float)iSegments + fAngle);
-        VERTEX* pPair = pVertices;
-        SetSunFlareVertex(pPair[0], vPosition.x + fCos * fInnerRadius,
-                          vPosition.y + fSin * fInnerRadius, vPosition.z,
-                          innerColor, fU, fV);
-        SetSunFlareVertex(pPair[1], vPosition.x + fCos * fMiddleRadius,
-                          vPosition.y + fSin * fMiddleRadius, vPosition.z,
-                          middleColor, fU, fV);
+        PblVector3 vSegPos[3] = {
+            vPosition + PblVector3(fCos * fInnerRadius, fSin * fInnerRadius, 0.0f),
+            vPosition + PblVector3(fCos * fMiddleRadius, fSin * fMiddleRadius, 0.0f),
+            vPosition + PblVector3(fCos * fOuterRadius, fSin * fOuterRadius, 0.0f)
+        };
+        pVertices[0].pos.SetPos(vSegPos[0]);
+        pVertices[0].color = innerColor;
+        pVertices[0].uv.SetUV(fU, fV);
+        pVertices[1].pos.SetPos(vSegPos[1]);
+        pVertices[1].color = middleColor;
+        pVertices[1].uv.SetUV(fU, fV);
         if (i == 0)
         {
-            pPair[2 * iSegments + 2] = pPair[1];
+            pVertices[2 * iSegments + 2].pos.SetPos(vSegPos[1]);
+            pVertices[2 * iSegments + 2].color = middleColor;
+            pVertices[2 * iSegments + 2].uv.SetUV(fU, fV);
         }
-        pPair[2 * iSegments + 3] = pPair[1];
-        SetSunFlareVertex(pPair[2 * iSegments + 4],
-                          vPosition.x + fCos * fOuterRadius,
-                          vPosition.y + fSin * fOuterRadius, vPosition.z,
-                          outerColor, fU, fV);
+        pVertices[2 * iSegments + 3].pos.SetPos(vSegPos[1]);
+        pVertices[2 * iSegments + 3].color = middleColor;
+        pVertices[2 * iSegments + 3].uv.SetUV(fU, fV);
+        pVertices[2 * iSegments + 4].pos.SetPos(vSegPos[2]);
+        pVertices[2 * iSegments + 4].color = outerColor;
+        pVertices[2 * iSegments + 4].uv.SetUV(fU, fV);
         pVertices += 2;
     }
     pVertices += 2 * iSegments + 3;
     PblMath::SinCos(&fSin, &fCos, fAngle);
-    SetRingPosition(*pVertices++, vPosition, fCos, fSin, fOuterRadius);
+    tempPos = vPosition + PblVector3(fCos * fOuterRadius, fSin * fOuterRadius, 0.0f);
+    pVertices->pos.SetPos(tempPos);
+    ++pVertices;
 }
+
+// TEMPLATE: SWBF2 0x00431330
+// EmitRing<FlareVertex>
+template void EmitRing<FlareVertex>(FlareVertex*&, const PblVector3&, float,
+                        float, float, float, const RedColor&, const RedColor&,
+                        const RedColor&, int, float, float);
 
 // TEMPLATE: SWBF2 0x004315f0
 // EmitRing<FlareCompressedVertex>
-template void EmitRing<FlareVertex>(FlareVertex*&, const PblVector3&, float, float, float,
-                                    float, const RedColor&, const RedColor&, const RedColor&,
-                                    int, float, float);
-template void EmitRing<FlareCompressedVertex>(FlareCompressedVertex*&, const PblVector3&,
-                                              float, float, float, float, const RedColor&,
-                                              const RedColor&, const RedColor&, int, float, float);
+template void EmitRing<FlareCompressedVertex>(FlareCompressedVertex*&, const PblVector3&, float,
+                        float, float, float, const RedColor&, const RedColor&,
+                        const RedColor&, int, float, float);
 
 static RedColor SunRingColor(unsigned int rgb, unsigned char alpha)
 {

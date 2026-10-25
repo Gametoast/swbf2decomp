@@ -545,7 +545,7 @@ void PrecipitationEffect::Render(int value)
         {
             pPrimitive = pcRedPrimitive::Create(D3DPT_TRIANGLESTRIP, 0x9282, sizeof(TexturedVertex::VertexC),
                                                 usNumVertices, usNumIndices, false);
-            CompressedPos::SetBoundingBox(&box);
+            CompressedPos::SetBoundingBox(box);
         }
         else
         {
@@ -707,7 +707,7 @@ void PrecipitationEffect::Render(int value)
     iEndZ += iStepZ;
 
     PblMatrix mWorld = gMatrixIdentity;
-    const PblVector3& vCellCenter = *(const PblVector3*)mWorld.m[3];
+    const PblVector3& vCellCenter = mWorld.GetTranslation();
     float fHalfBox = BOX_SIZE * 0.5f;
     PblVector3 vExtents(fHalfBox, fHalfBox, fHalfBox);
 

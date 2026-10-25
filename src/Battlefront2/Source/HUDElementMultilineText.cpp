@@ -76,10 +76,7 @@ HUD::ElementMultilineText::Line::Line()
 {
 }
 
-// FUNCTION: SWBF2 0x00557210
-HUD::ElementMultilineText::Line::~Line()
-{
-}
+
 
 // FUNCTION: SWBF2 0x00557150
 bool HUD::ElementMultilineText::Line::SetProperty(const unsigned int uHashID,

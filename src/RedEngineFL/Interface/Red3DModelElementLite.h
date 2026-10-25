@@ -14,7 +14,8 @@ public:
 
     Red3DModelElementLite(const char* const pcName);
 
-    virtual ~Red3DModelElementLite();
+    // SYNTHETIC: SWBF2 0x00556290
+    // Red3DModelElementLite::~Red3DModelElementLite
 
     void SetModel(unsigned int uiModelHash);
     void SetModel(const char* const pcModelName);

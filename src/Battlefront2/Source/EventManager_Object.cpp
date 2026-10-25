@@ -1147,108 +1147,108 @@ namespace ObjectEvent
 {
 
 // SYNTHETIC: SWBF2 0x00403470
-// `dynamic initializer for 'EventManager::ObjectEvent::mCreate''
+// EventManager::ObjectEvent::`dynamic initializer for 'mCreate''
 // SYNTHETIC: SWBF2 0x00767e20
-// `dynamic atexit destructor for 'EventManager::ObjectEvent::mCreate''
+// EventManager::ObjectEvent::`dynamic atexit destructor for 'mCreate''
 
 // GLOBAL: SWBF2 0x007ebfa0
 // mCreate
 Event<GameObject, char> mCreate("ObjectCreate");
 
 // SYNTHETIC: SWBF2 0x004034a0
-// `dynamic initializer for 'EventManager::ObjectEvent::mInit''
+// EventManager::ObjectEvent::`dynamic initializer for 'mInit''
 // SYNTHETIC: SWBF2 0x00767ea0
-// `dynamic atexit destructor for 'EventManager::ObjectEvent::mInit''
+// EventManager::ObjectEvent::`dynamic atexit destructor for 'mInit''
 
 // GLOBAL: SWBF2 0x007ebf00
 // mInit
 Event<GameObject, char> mInit("ObjectInit");
 
 // SYNTHETIC: SWBF2 0x004034d0
-// `dynamic initializer for 'EventManager::ObjectEvent::mDamage''
+// EventManager::ObjectEvent::`dynamic initializer for 'mDamage''
 // SYNTHETIC: SWBF2 0x00767f20
-// `dynamic atexit destructor for 'EventManager::ObjectEvent::mDamage''
+// EventManager::ObjectEvent::`dynamic atexit destructor for 'mDamage''
 
 // GLOBAL: SWBF2 0x007ec060
 // mDamage
 Event<GameObject, DamageOwner> mDamage("ObjectDamage");
 
 // SYNTHETIC: SWBF2 0x00403500
-// `dynamic initializer for 'EventManager::ObjectEvent::mRepair''
+// EventManager::ObjectEvent::`dynamic initializer for 'mRepair''
 // SYNTHETIC: SWBF2 0x00767fa0
-// `dynamic atexit destructor for 'EventManager::ObjectEvent::mRepair''
+// EventManager::ObjectEvent::`dynamic atexit destructor for 'mRepair''
 
 // GLOBAL: SWBF2 0x007ebf60
 // mRepair
 Event<GameObject, DamageOwner> mRepair("ObjectRepair");
 
 // SYNTHETIC: SWBF2 0x00403530
-// `dynamic initializer for 'EventManager::ObjectEvent::mHack''
+// EventManager::ObjectEvent::`dynamic initializer for 'mHack''
 // SYNTHETIC: SWBF2 0x00768020
-// `dynamic atexit destructor for 'EventManager::ObjectEvent::mHack''
+// EventManager::ObjectEvent::`dynamic atexit destructor for 'mHack''
 
 // GLOBAL: SWBF2 0x007ebfe0
 // mHack
 Event<GameObject, DamageOwner> mHack("ObjectHack");
 
 // SYNTHETIC: SWBF2 0x00403560
-// `dynamic initializer for 'EventManager::ObjectEvent::mKill''
+// EventManager::ObjectEvent::`dynamic initializer for 'mKill''
 // SYNTHETIC: SWBF2 0x007680a0
-// `dynamic atexit destructor for 'EventManager::ObjectEvent::mKill''
+// EventManager::ObjectEvent::`dynamic atexit destructor for 'mKill''
 
 // GLOBAL: SWBF2 0x007ebf80
 // mKill
 Event<GameObject, DamageOwner> mKill("ObjectKill");
 
 // SYNTHETIC: SWBF2 0x00403590
-// `dynamic initializer for 'EventManager::ObjectEvent::mHeadshot''
+// EventManager::ObjectEvent::`dynamic initializer for 'mHeadshot''
 // SYNTHETIC: SWBF2 0x00768120
-// `dynamic atexit destructor for 'EventManager::ObjectEvent::mHeadshot''
+// EventManager::ObjectEvent::`dynamic atexit destructor for 'mHeadshot''
 
 // GLOBAL: SWBF2 0x007ec000
 // mHeadshot
 Event<GameObject, DamageOwner> mHeadshot("ObjectHeadshot");
 
 // SYNTHETIC: SWBF2 0x004035c0
-// `dynamic initializer for 'EventManager::ObjectEvent::mRespawn''
+// EventManager::ObjectEvent::`dynamic initializer for 'mRespawn''
 // SYNTHETIC: SWBF2 0x007681a0
-// `dynamic atexit destructor for 'EventManager::ObjectEvent::mRespawn''
+// EventManager::ObjectEvent::`dynamic atexit destructor for 'mRespawn''
 
 // GLOBAL: SWBF2 0x007ebf20
 // mRespawn
 Event<GameObject, char> mRespawn("ObjectRespawn");
 
 // SYNTHETIC: SWBF2 0x004035f0
-// `dynamic initializer for 'EventManager::ObjectEvent::mDelete''
+// EventManager::ObjectEvent::`dynamic initializer for 'mDelete''
 // SYNTHETIC: SWBF2 0x00768220
-// `dynamic atexit destructor for 'EventManager::ObjectEvent::mDelete''
+// EventManager::ObjectEvent::`dynamic atexit destructor for 'mDelete''
 
 // GLOBAL: SWBF2 0x007ebfc0
 // mDelete
 Event<GameObject, char> mDelete("ObjectDelete");
 
 // SYNTHETIC: SWBF2 0x00403620
-// `dynamic initializer for 'EventManager::ObjectEvent::mTeamChange''
+// EventManager::ObjectEvent::`dynamic initializer for 'mTeamChange''
 // SYNTHETIC: SWBF2 0x007682a0
-// `dynamic atexit destructor for 'EventManager::ObjectEvent::mTeamChange''
+// EventManager::ObjectEvent::`dynamic atexit destructor for 'mTeamChange''
 
 // GLOBAL: SWBF2 0x007ebf40
 // mTeamChange
 Event<GameObject, int> mTeamChange("TeamChange");
 
 // SYNTHETIC: SWBF2 0x00403650
-// `dynamic initializer for 'EventManager::ObjectEvent::mHealthChange''
+// EventManager::ObjectEvent::`dynamic initializer for 'mHealthChange''
 // SYNTHETIC: SWBF2 0x00768320
-// `dynamic atexit destructor for 'EventManager::ObjectEvent::mHealthChange''
+// EventManager::ObjectEvent::`dynamic atexit destructor for 'mHealthChange''
 
 // GLOBAL: SWBF2 0x007ec020
 // mHealthChange
 Event<GameObject, float> mHealthChange("HealthChange");
 
 // SYNTHETIC: SWBF2 0x00403680
-// `dynamic initializer for 'EventManager::ObjectEvent::mShieldChange''
+// EventManager::ObjectEvent::`dynamic initializer for 'mShieldChange''
 // SYNTHETIC: SWBF2 0x007683a0
-// `dynamic atexit destructor for 'EventManager::ObjectEvent::mShieldChange''
+// EventManager::ObjectEvent::`dynamic atexit destructor for 'mShieldChange''
 
 // GLOBAL: SWBF2 0x007ec040
 // mShieldChange

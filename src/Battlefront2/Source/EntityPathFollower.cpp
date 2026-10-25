@@ -636,10 +636,7 @@ unsigned int EntityPathFollower::CreateSquadronForFlyby(BranchParams& params)
         PblVector3 vPos(vStart.x + fSlotOffset * vEntry.x, vEntry.y * fSlotOffset + vStart.y,
                         vEntry.z * fSlotOffset + vStart.z);
         PblMatrix& matrix = params.mMatrix;
-        matrix.m[3][0] = vPos.x;
-        matrix.m[3][1] = vPos.y;
-        matrix.m[3][2] = vPos.z;
-        matrix.m[3][3] = 1.0f;
+        matrix.SetTranslation(vPos);
         static_cast<CollisionObject*>(params.mGameObject)->mLastPosition = vPos;
         if (params.mGameObject->IsRtti(EntityFlyer::rttiHashEntityFlyer))
         {
@@ -1078,10 +1075,7 @@ bool EntityPathFollower::Update(BranchParams& params, float fElapsed, PblVector3
         PblVector3 vPos(lead.m[3][0] + lead.m[0][0] * fSlot * 15.0f, lead.m[3][1] + lead.m[0][1] * fSlot * 15.0f,
                         lead.m[3][2] + lead.m[0][2] * fSlot * 15.0f);
         PblMatrix& matrix = params.mMatrix;
-        matrix.m[3][0] = vPos.x;
-        matrix.m[3][1] = vPos.y;
-        matrix.m[3][2] = vPos.z;
-        matrix.m[3][3] = 1.0f;
+        matrix.SetTranslation(vPos);
         static_cast<CollisionObject*>(params.mGameObject)->mLastPosition = vPos;
         matrix.m[2][0] = lead.m[2][0];
         matrix.m[2][1] = lead.m[2][1];
@@ -1225,10 +1219,7 @@ bool EntityPathFollower::Update(BranchParams& params, float fElapsed, PblVector3
                           (vTarget.y - vOldPosition.y) * fScale + vOldPosition.y,
                           (vTarget.z - vOldPosition.z) * fScale + vOldPosition.z);
     }
-    matrix.m[3][0] = vNew.x;
-    matrix.m[3][1] = vNew.y;
-    matrix.m[3][2] = vNew.z;
-    matrix.m[3][3] = 1.0f;
+    matrix.SetTranslation(vNew);
     if (pMatrix)
     {
         pMatrix->m[3][0] = vNew.x;

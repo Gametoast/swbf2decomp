@@ -864,10 +864,7 @@ void HUD::ElementMap::Update(const float fElapsed)
 
             PblMatrix rotation;
             D3DXMatrixRotationZ((D3DXMATRIX*)&rotation, fRotation);
-            rotation.m[3][0] = gVectorZero.x;
-            rotation.m[3][1] = gVectorZero.y;
-            rotation.m[3][2] = gVectorZero.z;
-            rotation.m[3][3] = 1.0f;
+            rotation.SetTranslation(gVectorZero);
             PblMatrix matrix;
             D3DXMatrixMultiply((D3DXMATRIX*)&matrix, (const D3DXMATRIX*)&rotation,
                                (const D3DXMATRIX*)&mGroupMatrix);
@@ -1682,10 +1679,7 @@ void HUD::ElementMap::SetMode(Mode eMode)
     {
         PblMatrix rotation;
         D3DXMatrixRotationZ((D3DXMATRIX*)&rotation, 0.0f);
-        rotation.m[3][0] = gVectorZero.x;
-        rotation.m[3][1] = gVectorZero.y;
-        rotation.m[3][2] = gVectorZero.z;
-        rotation.m[3][3] = 1.0f;
+        rotation.SetTranslation(gVectorZero);
         PblMatrix matrix;
         D3DXMatrixMultiply((D3DXMATRIX*)&matrix, (const D3DXMATRIX*)&rotation,
                            (const D3DXMATRIX*)&mGroupMatrix);

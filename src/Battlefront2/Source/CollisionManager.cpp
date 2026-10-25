@@ -630,10 +630,7 @@ CollisionManager::CollisionManager(const PblVector3& vMin, const PblVector3& vMa
 // SYNTHETIC: SWBF2 0x0045e710
 // CollisionManager::`scalar deleting destructor'
 
-// FUNCTION: SWBF2 0x0045e740
-CollisionManager::OrdnanceUpdate::~OrdnanceUpdate()
-{
-}
+
 
 // TEMPLATE: SWBF2 0x00460960
 // PblList<CollisionObject>::RemoveAll
@@ -945,7 +942,7 @@ int CollisionManager::I_GetObjectsInRegion(const RedRegion& rRegion, GameObject*
     data.mRegion = (RedRegion*)&rRegion;
     data.mMe = (GameObject*)pIgnore;
 
-    const PblVector3& vPos = *(const PblVector3*)rRegion.mMatrix.m[3];
+    const PblVector3& vPos = rRegion.mMatrix.GetTranslation();
     float fRadius = rRegion.mSize.w;
     PblVector3 vMin(vPos.x - fRadius, vPos.y - fRadius, vPos.z - fRadius);
     PblVector3 vMax(vPos.x + fRadius, vPos.y + fRadius, vPos.z + fRadius);

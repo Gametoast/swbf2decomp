@@ -41,3 +41,8 @@ inline float DotProduct(const PblVector3& vVector1, const PblVector3& vVector2)
 {
     return vVector1.y * vVector2.y + vVector1.x * vVector2.x + vVector1.z * vVector2.z;
 }
+
+inline PblVector4::operator const PblVector3&() const
+{
+    return *reinterpret_cast<const PblVector3*>(this);
+}

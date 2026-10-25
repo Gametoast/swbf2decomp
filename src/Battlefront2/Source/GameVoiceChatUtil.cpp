@@ -154,7 +154,7 @@ void __cdecl VoiceChat::NetPacketAudio::Send(NetPacketAudio* packet, unsigned ch
 template class Snd::Queue<NetPacket*, 4>;
 
 // TEMPLATE: SWBF2 0x0053e3d0
-// Snd::Queue<NetPacket *,4>::Queue
+// Snd::Queue<NetPacket *,4>::Queue<NetPacket *,4>
 
 class NetPacket;
 
@@ -162,9 +162,9 @@ namespace GameVoiceChat
 {
 
 // SYNTHETIC: SWBF2 0x00403ef0
-// `dynamic initializer for 'GameVoiceChat::gPacketQueue''
+// GameVoiceChat::`dynamic initializer for 'gPacketQueue''
 // SYNTHETIC: SWBF2 0x00768af0
-// `dynamic atexit destructor for 'GameVoiceChat::gPacketQueue''
+// GameVoiceChat::`dynamic atexit destructor for 'gPacketQueue''
 
 // GLOBAL: SWBF2 0x01ec6020
 // gPacketQueue

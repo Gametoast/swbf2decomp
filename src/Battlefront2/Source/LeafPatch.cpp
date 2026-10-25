@@ -514,7 +514,7 @@ LeafPatch::LeafPatch(LeafPatchClass* pClass, const PblMatrix& matrix)
     mMatrix.m[3][2] = matrix.m[3][2];
     mMatrix.m[3][3] = 1.0f;
 
-    SetCollisionCenter(*(const PblVector3*)mMatrix.m[3]);
+    SetCollisionCenter(mMatrix.GetTranslation());
     SetCollisionRadius(mClass->mRadius);
 
     PblVector3 vCenter;
@@ -562,7 +562,7 @@ void LeafPatch::DeactivateLeaf()
 // FUNCTION: SWBF2 0x0056cf00
 const PblVector3& LeafPatch::GetPosition() const
 {
-    return *(const PblVector3*)mMatrix.m[3];
+    return mMatrix.GetTranslation();
 }
 
 // FUNCTION: SWBF2 0x0056cf10
@@ -664,7 +664,7 @@ void LeafPatch::Render(unsigned char ucViewport, float fDist, unsigned int uiFla
         {
             continue;
         }
-        PblVector3 vPos = *(const PblVector3*)mMatrix.m[3];
+        PblVector3 vPos = mMatrix.GetTranslation();
         const float fX = (PblRandom::GetGlobalFloat() * 2.0f - 1.0f) * mClass->mRadius;
         const float fY = (PblRandom::GetGlobalFloat() * 2.0f - 1.0f) * mClass->mHeight * mClass->mHeightScale;
         const float fZ = (PblRandom::GetGlobalFloat() * 2.0f - 1.0f) * mClass->mRadius;

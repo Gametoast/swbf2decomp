@@ -17,10 +17,7 @@
 
 namespace
 {
-    inline const PblVector3& GetMatrixPos(const PblMatrix& m)
-    {
-        return *(const PblVector3*)&m.m[3][0];
-    }
+
 
     inline const PblMatrix& GameObjectGetMatrix(const GameObject* pObj)
     {
@@ -68,7 +65,7 @@ bool UnitRandomAgent::ShouldQueueCurCmd(const UnitCmdInfo& cmd) const
 UnitRandomAgent::UnitRandomAgent(UnitController* pCtrl)
     : UnitAgent(pCtrl)
 {
-    mStartPos = GetMatrixPos(GetMe()->GetMatrix());
+    mStartPos = GetMe()->GetMatrix().GetTranslation();
     mCurState = 1;
     mNextState = 2;
 }
@@ -77,14 +74,14 @@ UnitRandomAgent::UnitRandomAgent(UnitController* pCtrl)
 bool UnitRandomAgent::IsPointValid(const PblVector3& vPoint)
 {
     const GameObject* pObj = GetMe()->GetGameObject();
-    PblVector3 vPos = GetMatrixPos(GameObjectGetMatrix(pObj));
+    PblVector3 vPos = (GameObjectGetMatrix(pObj)).GetTranslation();
     return PathFinder::IsPointValid(vPos, AIUtil::GetCollisionRadius(pObj), AIUtil::GetAIType(pObj), 0, 0, 0);
 }
 
 // FUNCTION: SWBF2 0x00669480
 void UnitRandomAgent::PickRandomDest()
 {
-    PblVector3 vPos = GetMatrixPos(GetMe()->GetMatrix());
+    PblVector3 vPos = GetMe()->GetMatrix().GetTranslation();
     PblVector3 vRand = PblRandom::GetGlobalVector3();
     PblVector3 vDest(vPos.x + vRand.x * 10.0f, vPos.y + vRand.y * 10.0f, vPos.z + vRand.z * 10.0f);
     GetLowLevel().SetNavigator_GotoDirect(vDest, true, false);
@@ -119,7 +116,7 @@ void UnitRandomAgent::UpdateStatePostVision(float dt)
             fRange = 2.0f;
         }
 
-        PblVector3 vPos = GetMatrixPos(GameObjectGetMatrix(GetMe()->GetGameObject()));
+        PblVector3 vPos = (GameObjectGetMatrix(GetMe()->GetGameObject())).GetTranslation();
         float fX = vPos.x - mStartPos.x;
         float fY = vPos.y - mStartPos.y;
         float fZ = vPos.z - mStartPos.z;

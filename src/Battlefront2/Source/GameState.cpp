@@ -434,19 +434,19 @@ bool sbDidOneTimeInit;
 namespace GameState
 {
 // SYNTHETIC: SWBF2 0x00403e20
-// `dynamic initializer for 'GameState::_TimeBase''
+// GameState::`dynamic initializer for '_TimeBase''
 
 // GLOBAL: SWBF2 0x01ec5f40
 // _TimeBase
 PblTimeBase _TimeBase;
 // SYNTHETIC: SWBF2 0x00403e40
-// `dynamic initializer for 'GameState::_TotalTimeBase''
+// GameState::`dynamic initializer for '_TotalTimeBase''
 
 // GLOBAL: SWBF2 0x01ec5f58
 // _TotalTimeBase
 PblTimeBase _TotalTimeBase;
 // SYNTHETIC: SWBF2 0x00403e30
-// `dynamic initializer for 'GameState::_SystemTimeBase''
+// GameState::`dynamic initializer for '_SystemTimeBase''
 
 // GLOBAL: SWBF2 0x01ec5f90
 // _SystemTimeBase

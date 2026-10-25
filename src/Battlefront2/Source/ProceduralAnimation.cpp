@@ -637,10 +637,7 @@ void PAAnimation::CalculateNextMatrix(float fDeltaTime, float& fTime, const PblM
             PblVector3 vPos = result.GetTranslation();
             D3DXMatrixMultiply(&temp, &rot, &start);
             result = temp;
-            result.m[3][0] = vPos.x;
-            result.m[3][1] = vPos.y;
-            result.m[3][2] = vPos.z;
-            result.m[3][3] = 1.0f;
+            result.SetTranslation(vPos);
         }
 
         PblVector3 vDelta = gVectorZero;

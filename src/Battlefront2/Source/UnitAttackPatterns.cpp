@@ -112,10 +112,6 @@ namespace
         return static_cast<const EntitySoldier*>(pSoldier)->mJetFuel;
     }
 
-    inline const PblVector3& GetPos(const PblMatrix& m)
-    {
-        return *(const PblVector3*)&m.m[3][0];
-    }
 }
 
 // SYNTHETIC: SWBF2 0x0065f1c0
@@ -323,7 +319,7 @@ bool AttackPatterns::IsInEnemySights(float fAngle, const Controllable** ppEnemy)
 // FUNCTION: SWBF2 0x0065f880
 bool AttackPatterns::GetInRange()
 {
-    PblVector3 vPos = GetPos(GetMe()->GetMatrix());
+    PblVector3 vPos = GetMe()->GetMatrix().GetTranslation();
     PblVector3 vTarget = GetAttackHelper()->GetLastSeenTargetPos();
 
     PblVector3 vDiff;
@@ -475,7 +471,7 @@ void AttackPatterns::DoStationary()
         GetMaxStrafe(GetMe()->GetGameObject()) > 0.0001f &&
         AIUtil::GetRandomIntPerSecond(1, 13) == 1)
     {
-        PblVector3 vDest = GetPos(GetMe()->GetMatrix());
+        PblVector3 vDest = GetMe()->GetMatrix().GetTranslation();
         const PblMatrix& m = GetMe()->GetMatrix();
         float fSide = (float)(AIUtil::GetRandomInt(0, 1) * 2 - 1);
         PblVector3 vSide(m.m[0][0] * fSide, m.m[0][1] * fSide, m.m[0][2] * fSide);
@@ -551,7 +547,7 @@ void AttackPatterns::DoSimple()
 // FUNCTION: SWBF2 0x00660240
 void AttackPatterns::CycleSerpDir()
 {
-    PblVector3 vPos = GetPos(GetMe()->GetMatrix());
+    PblVector3 vPos = GetMe()->GetMatrix().GetTranslation();
     const PblVector3& vTarget = GetAttackHelper()->GetLastSeenTargetPos();
     PblVector3 vAhead = AIUtil::GetSafeNormalXZ(PblVector3(vTarget.x - vPos.x, vTarget.y - vPos.y, vTarget.z - vPos.z));
 
@@ -594,7 +590,7 @@ void AttackPatterns::DoSerpentine()
 
         const Controllable* pMe = GetMe();
         const PblVector3& vTarget = GetAttackHelper()->GetLastSeenTargetPos();
-        const PblVector3& vPos = GetPos(pMe->GetMatrix());
+        const PblVector3& vPos = pMe->GetMatrix().GetTranslation();
         float fDistSq = (vPos.x - vTarget.x) * (vPos.x - vTarget.x) + (vPos.z - vTarget.z) * (vPos.z - vTarget.z);
 
         bool bChangeAhead = false;
@@ -654,7 +650,7 @@ void AttackPatterns::DoFlank()
         return;
     }
 
-    PblVector3 vPos = GetPos(GetMe()->GetMatrix());
+    PblVector3 vPos = GetMe()->GetMatrix().GetTranslation();
     PblVector3 vTarget = GetAttackHelper()->GetLastSeenTargetPos();
     PblVector3 vDiff(vPos.x - vTarget.x, 0.0f, vPos.z - vTarget.z);
 
@@ -767,7 +763,7 @@ void AttackPatterns::DoMelee()
     }
     else if (GameLoop::GetMissionTime() > mJumpTimer)
     {
-        const PblVector3& vPos = GetPos(GetMe()->GetMatrix());
+        const PblVector3& vPos = GetMe()->GetMatrix().GetTranslation();
         const PblVector3& vTarget = GetAttackHelper()->GetLastSeenTargetPos();
         float dx = vTarget.x - vPos.x;
         float dz = vTarget.z - vPos.z;
@@ -808,7 +804,7 @@ void AttackPatterns::DoMelee()
         vLand.x *= 25.0f;
         vLand.y *= 25.0f;
         vLand.z *= 25.0f;
-        const PblVector3& vMe = GetPos(GetMe()->GetMatrix());
+        const PblVector3& vMe = GetMe()->GetMatrix().GetTranslation();
         PblVector3 vDest(vLand.x + vMe.x, vMe.y + vLand.y, vMe.z + vLand.z);
 
         if (AIUtil::DirectLineToTarget(GetMe()->GetGameObject(), vDest))
@@ -836,7 +832,7 @@ void AttackPatterns::DoMelee()
 void AttackPatterns::SetGlanceDest()
 {
     const GameObject* pTarget = GetAttackHelper()->GetTarget();
-    PblVector3 vPos = GetPos(GetMe()->GetMatrix());
+    PblVector3 vPos = GetMe()->GetMatrix().GetTranslation();
     const PblMatrix& m = GetMe()->GetMatrix();
     PblVector3 vFwd(m.m[2][0], m.m[2][1], m.m[2][2]);
     float fSpeed = GetMaxSpeed(GetMe()->GetGameObject());
@@ -870,7 +866,7 @@ void AttackPatterns::SetGlanceDest()
 
     mOwner->GetLowLevel().SetNavigator_Slide(mGlancePos, NULL);
 
-    const PblVector3& vMe = GetPos(GetMe()->GetMatrix());
+    const PblVector3& vMe = GetMe()->GetMatrix().GetTranslation();
     float dz = mGlancePos.z - vMe.z;
     float dx = mGlancePos.x - vMe.x;
     mClosestXZSq = dz * dz + dx * dx;
@@ -881,7 +877,7 @@ void AttackPatterns::SetGlanceDest()
 // FUNCTION: SWBF2 0x00661260
 bool AttackPatterns::IsGlanceMakingProgress()
 {
-    const PblVector3& vPos = GetPos(GetMe()->GetMatrix());
+    const PblVector3& vPos = GetMe()->GetMatrix().GetTranslation();
     float dx = mGlancePos.x - vPos.x;
     float dz = mGlancePos.z - vPos.z;
     float fXZSq = dx * dx + dz * dz;
@@ -898,7 +894,7 @@ bool AttackPatterns::IsGlanceMakingProgress()
 bool AttackPatterns::GonePastGlancePos() const
 {
     PblVector3 vLeg(mGlancePos.x - mGlanceSrc.x, mGlancePos.y - mGlanceSrc.y, mGlancePos.z - mGlanceSrc.z);
-    const PblVector3& vPos = GetPos(GetMe()->GetMatrix());
+    const PblVector3& vPos = GetMe()->GetMatrix().GetTranslation();
     return (vPos.x - mGlancePos.x) * vLeg.x + (vPos.y - mGlancePos.y) * vLeg.y +
            (vPos.z - mGlancePos.z) * vLeg.z > 0.0f;
 }
@@ -924,7 +920,7 @@ void AttackPatterns::DoGlance()
 // FUNCTION: SWBF2 0x006614a0
 void AttackPatterns::PickRetreatSpot()
 {
-    PblVector3 vPos = GetPos(GetMe()->GetMatrix());
+    PblVector3 vPos = GetMe()->GetMatrix().GetTranslation();
     PblVector3 vTarget = GetAttackHelper()->GetLastSeenTargetPos();
     PblVector3 vAway = AIUtil::GetSafeNormalXZ(PblVector3(vPos.x - vTarget.x, vPos.y - vTarget.y, vPos.z - vTarget.z));
 
@@ -987,7 +983,7 @@ void AttackPatterns::InitCriticalHit()
 void AttackPatterns::InitGlance()
 {
     mOnApproach = true;
-    mGlanceSrc = GetPos(GetMe()->GetMatrix());
+    mGlanceSrc = GetMe()->GetMatrix().GetTranslation();
     SetGlanceDest();
     GetAttackHelper()->SetWaitDelay(12.0f);
 }
@@ -1202,7 +1198,7 @@ void AttackPatterns::InitJetJumpCharge()
 
     const PblMatrix& mMe = GetMe()->GetMatrix();
     const PblVector3& vTarget = GetGeometryCollision(pTarget)->GetPosition();
-    const PblVector3& vMe = GetPos(mMe);
+    const PblVector3& vMe = mMe.GetTranslation();
     PblVector3 vDiff(vTarget.x - vMe.x, vTarget.y - vMe.y, vTarget.z - vMe.z);
     PblVector3 vDir;
     D3DXVec3Normalize(&vDir, &vDiff);
@@ -1220,7 +1216,7 @@ void AttackPatterns::DoJetJumpCharge(float dt)
     {
         const PblMatrix& mMe = GetMe()->GetMatrix();
         const PblVector3& vTarget = GetGeometryCollision(pTarget)->GetPosition();
-        const PblVector3& vMe = GetPos(mMe);
+        const PblVector3& vMe = mMe.GetTranslation();
         float fX = vMe.x - vTarget.x;
         float fZ = vMe.z - vTarget.z;
         float fDistSq = fX * fX + fZ * fZ;

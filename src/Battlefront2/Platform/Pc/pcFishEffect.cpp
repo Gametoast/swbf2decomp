@@ -118,10 +118,7 @@ const RedColor kFishColor = { 0xcc, 0xcc, 0xcc, 0xff };
 namespace
 {
 
-struct CompressedTexCoord
-{
-    short u, v;
-};
+
 
 struct FishVertex
 {
@@ -213,7 +210,7 @@ pcRedPrimitive* FishParticle::CreateCompressedGeometry(PblVector3* pVertices, Te
     box._vMin = PblVector3(-fExtent, -fExtent, -fExtent);
     box._vMax = PblVector3(fExtent, fExtent, fExtent);
     pPrimitive->m_bbox = box;
-    CompressedPos::SetBoundingBox(&box);
+    CompressedPos::SetBoundingBox(box);
 
     FishCompressedVertex* pVerts = (FishCompressedVertex*)pPrimitive->BeginVertexData();
     if (pVerts)

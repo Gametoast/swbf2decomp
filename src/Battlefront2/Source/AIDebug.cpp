@@ -162,16 +162,16 @@ namespace TestSpawn
 {
 
 // SYNTHETIC: SWBF2 0x004021a0
-// `dynamic initializer for 'AIDebug::TestSpawn::mCamera''
+// AIDebug::TestSpawn::`dynamic initializer for 'mCamera''
 // SYNTHETIC: SWBF2 0x00766d30
-// `dynamic atexit destructor for 'AIDebug::TestSpawn::mCamera''
+// AIDebug::TestSpawn::`dynamic atexit destructor for 'mCamera''
 
 // GLOBAL: SWBF2 0x01eb0250
 // mCamera
 RedCamera mCamera;
 
 // SYNTHETIC: SWBF2 0x004021c0
-// `dynamic initializer for 'AIDebug::TestSpawn::camDir''
+// AIDebug::TestSpawn::`dynamic initializer for 'camDir''
 
 // GLOBAL: SWBF2 0x01eaffe4
 // camDir

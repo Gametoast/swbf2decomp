@@ -326,7 +326,7 @@ EntityItem::EntityItem(EntityItemClass* pClass, const EntityDesc& desc)
         if (mTrailEmitterObj)
         {
             mTrailEmitterObj->AttachEffectToVector((const PblVector3*)mMatrix.m[3], true);
-            mTrailEmitterObj->SetOrientation(*(const PblVector3*)mMatrix.m[2]);
+            mTrailEmitterObj->SetOrientation(mMatrix.GetZAxis());
         }
     }
     else
@@ -496,8 +496,8 @@ bool EntityItem::CollisionCallback(const CollisionResult* pResult, CollisionObje
                 .Play((const PblVector3*)mMatrix.m[3], 0, false, true);
             if (fDot > -1.0f)
             {
-                mMatrix = NormalMatrix(*(const PblVector3*)mMatrix.m[2], vNormal,
-                                     *(const PblVector3*)mMatrix.m[3]);
+                mMatrix = NormalMatrix(mMatrix.GetZAxis(), vNormal,
+                                     mMatrix.GetTranslation());
                 mVelocity = gVectorZero;
                 mStationary = true;
                 CollisionManager::DeactivateItem(EntityGeometry::GetCollisionObject());

@@ -436,18 +436,6 @@ void RedDebug::RedDebugRenderable::Init()
                                         RedColor::WHITE, RedColor::BLACK, 32.0f);
 }
 
-struct CompressedPos
-{
-    short x;
-    short y;
-    short z;
-    short w;
-
-    static PblVector3 s_vMin;
-    static PblVector3 s_vScale;
-    static PblVector3 s_vScaleInv;
-};
-
 struct DebugVertex
 {
     CompressedPos position;

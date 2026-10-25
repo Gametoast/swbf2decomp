@@ -130,11 +130,11 @@ void GameVoiceChat::Decoder::Stop()
 
     for (unsigned int i = 0; i < mNumInputStreams; ++i)
     {
-        static_cast<Snd::SourceTransport&>(mDecoders[i]).Stop();
+        mDecoders[i].Stop();
     }
 
-    static_cast<Snd::SourceTransport&>(mMixer).Stop();
-    static_cast<Snd::SourceTransport&>(mAuxRenderer).Stop();
+    mMixer.Stop();
+    mAuxRenderer.Snd::SourceTransport::Stop();
 
     mPlaying = false;
 }
@@ -302,11 +302,11 @@ void GameVoiceChat::Decoder::Play()
 {
     for (unsigned int i = 0; i < mNumInputStreams; ++i)
     {
-        static_cast<Snd::SourceTransport&>(mDecoders[i]).Play(true);
+        mDecoders[i].Play(true);
     }
 
-    static_cast<Snd::SourceTransport&>(mMixer).Play(true);
-    static_cast<Snd::SourceTransport&>(mAuxRenderer).Play(true);
+    mMixer.Play(true);
+    mAuxRenderer.Play(true);
 
     mPlaying = true;
 }
@@ -320,7 +320,7 @@ bool GameVoiceChat::Decoder::IsEnabled()
 // FUNCTION: SWBF2 0x0053cfd0
 bool GameVoiceChat::Decoder::IsEnabled(unsigned int  )
 {
-    return static_cast<const Snd::SourceTransport&>(mAuxRenderer).GetPlayState()
+    return mAuxRenderer.GetPlayState()
         != Snd::SourceTransport::playState_stopped;
 }
 

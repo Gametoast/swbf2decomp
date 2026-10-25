@@ -432,45 +432,45 @@ namespace FlagEvent
 {
 
 // SYNTHETIC: SWBF2 0x00403380
-// `dynamic initializer for 'EventManager::FlagEvent::mPickUp''
+// EventManager::FlagEvent::`dynamic initializer for 'mPickUp''
 // SYNTHETIC: SWBF2 0x00767ba0
-// `dynamic atexit destructor for 'EventManager::FlagEvent::mPickUp''
+// EventManager::FlagEvent::`dynamic atexit destructor for 'mPickUp''
 
 // GLOBAL: SWBF2 0x007ebed0
 // mPickUp
 Event<FlagItem, Character> mPickUp("FlagPickUp");
 
 // SYNTHETIC: SWBF2 0x004033b0
-// `dynamic initializer for 'EventManager::FlagEvent::mDrop''
+// EventManager::FlagEvent::`dynamic initializer for 'mDrop''
 // SYNTHETIC: SWBF2 0x00767c20
-// `dynamic atexit destructor for 'EventManager::FlagEvent::mDrop''
+// EventManager::FlagEvent::`dynamic atexit destructor for 'mDrop''
 
 // GLOBAL: SWBF2 0x007ebcb0
 // mDrop
 Event<FlagItem, Character> mDrop("FlagDrop");
 
 // SYNTHETIC: SWBF2 0x004033e0
-// `dynamic initializer for 'EventManager::FlagEvent::mReturn''
+// EventManager::FlagEvent::`dynamic initializer for 'mReturn''
 // SYNTHETIC: SWBF2 0x00767ca0
-// `dynamic atexit destructor for 'EventManager::FlagEvent::mReturn''
+// EventManager::FlagEvent::`dynamic atexit destructor for 'mReturn''
 
 // GLOBAL: SWBF2 0x007ebea0
 // mReturn
 Event<FlagItem, Character> mReturn("FlagReturn");
 
 // SYNTHETIC: SWBF2 0x00403410
-// `dynamic initializer for 'EventManager::FlagEvent::mCapture''
+// EventManager::FlagEvent::`dynamic initializer for 'mCapture''
 // SYNTHETIC: SWBF2 0x00767d20
-// `dynamic atexit destructor for 'EventManager::FlagEvent::mCapture''
+// EventManager::FlagEvent::`dynamic atexit destructor for 'mCapture''
 
 // GLOBAL: SWBF2 0x007ebe60
 // mCapture
 Event<FlagItem, Character> mCapture("FlagCapture");
 
 // SYNTHETIC: SWBF2 0x00403440
-// `dynamic initializer for 'EventManager::FlagEvent::mReset''
+// EventManager::FlagEvent::`dynamic initializer for 'mReset''
 // SYNTHETIC: SWBF2 0x00767da0
-// `dynamic atexit destructor for 'EventManager::FlagEvent::mReset''
+// EventManager::FlagEvent::`dynamic atexit destructor for 'mReset''
 
 // GLOBAL: SWBF2 0x007ebe80
 // mReset

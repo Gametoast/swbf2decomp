@@ -274,7 +274,7 @@ void VehicleManager::Update()
         if (!pObject->GetEntity()->IsRtti(EntityBuilding::rttiHashEntityBuilding))
         {
             const Obstacle* pBarrier = AIUtil::GetGameObjectBarrier(pObject);
-            if (!PathFinder::IsPointValid(*(const PblVector3*)&pObject->GetMatrix().m[3][0], 2.0f, 1, 0,
+            if (!PathFinder::IsPointValid(pObject->GetMatrix().GetTranslation(), 2.0f, 1, 0,
                                           &pBarrier, 1))
             {
                 continue;
@@ -284,7 +284,7 @@ void VehicleManager::Update()
         {
             const Obstacle* pBarrier = AIUtil::GetGameObjectBarrier(pObject);
             int eProhibit = pObject->GetGameObjectClass()->mAIType;
-            if (!PathFinder::IsPointValid(*(const PblVector3*)&pObject->GetMatrix().m[3][0],
+            if (!PathFinder::IsPointValid(pObject->GetMatrix().GetTranslation(),
                                           AIUtil::GetCollisionRadius(pObject), eProhibit, 0, &pBarrier, 1))
             {
                 continue;
@@ -292,13 +292,13 @@ void VehicleManager::Update()
         }
 
         GameObject* apObjects[30];
-        int iCount = TeamManager::GetObjectsInRange(*(const PblVector3*)&pObject->GetMatrix().m[3][0],
+        int iCount = TeamManager::GetObjectsInRange(pObject->GetMatrix().GetTranslation(),
                                                     sNotifyRadius, apObjects, 30, pObject,
                                                     AI::AFFIL_ALLYNEUTRAL);
         if (iCount > 1)
         {
             sGameObjSortFlagPriority = pObject->IsRtti(EntityFlyer::rttiHashEntityFlyer);
-            sGameObjSortFrom = *(const PblVector3*)&pObject->GetMatrix().m[3][0];
+            sGameObjSortFrom = pObject->GetMatrix().GetTranslation();
             qsort(apObjects, iCount, sizeof(GameObject*), sGameObjSortByDistance);
         }
 

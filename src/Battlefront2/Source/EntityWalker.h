@@ -107,7 +107,8 @@ public:
     public:
 
         PostCollision(EntityWalker* pOwner) : mOwner(pOwner) {}
-        virtual ~PostCollision();
+        // SYNTHETIC: SWBF2 0x004ff650
+        // EntityWalker::PostCollision::~PostCollision
         virtual bool Update(float fDeltaTime);
 
         EntityWalker* mOwner;

@@ -349,10 +349,7 @@ void OrdnanceSticky::Render(unsigned char ucViewport, float fDist, unsigned int 
                 mat.m[i][j] = mRot.m[i][j];
             }
         }
-        mat.m[3][0] = mStickInfo->mLocalPosition.x;
-        mat.m[3][1] = mStickInfo->mLocalPosition.y;
-        mat.m[3][2] = mStickInfo->mLocalPosition.z;
-        mat.m[3][3] = 1.0f;
+        mat.SetTranslation(mStickInfo->mLocalPosition);
 
         CollisionObject* pObject = mStickInfo->mCollObject;
         if (pObject->mCollisionModel)
@@ -377,10 +374,7 @@ void OrdnanceSticky::Render(unsigned char ucViewport, float fDist, unsigned int 
                 mat.m[i][j] = i == j ? 1.0f : 0.0f;
             }
         }
-        mat.m[3][0] = vPos.x;
-        mat.m[3][1] = vPos.y;
-        mat.m[3][2] = vPos.z;
-        mat.m[3][3] = 1.0f;
+        mat.SetTranslation(vPos);
     }
     else
     {

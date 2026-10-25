@@ -135,10 +135,7 @@ const Entity* EntityHover::GetEntity() const
 // FUNCTION: SWBF2 0x00478b10
 void EntityHover::SetPosition(const PblVector3& vPosition)
 {
-    mMatrix.m[3][0] = vPosition.x;
-    mMatrix.m[3][1] = vPosition.y;
-    mMatrix.m[3][2] = vPosition.z;
-    mMatrix.m[3][3] = 1.0f;
+    mMatrix.SetTranslation(vPosition);
     UpdateCollisionSphere(this);
 }
 
@@ -179,10 +176,7 @@ bool EntityHover::PostCollision::Update(float fDeltaTime)
     return mOwner->PostCollisionUpdate(fDeltaTime);
 }
 
-// FUNCTION: SWBF2 0x004c09b0
-EntityHover::PostCollision::~PostCollision()
-{
-}
+
 
 // SYNTHETIC: SWBF2 0x004c09c0
 // EntityHover::PostCollision::`scalar deleting destructor'
@@ -2627,10 +2621,7 @@ void EntityHover::Render(unsigned char ucViewport, float fDist, unsigned int uiF
             }
             PblVector3 vPos = mClass->mBaseSuspensionPos;
             vPos.y += mCurrSuspensionOffset;
-            mCenter.m[3][0] = vPos.x;
-            mCenter.m[3][1] = vPos.y;
-            mCenter.m[3][2] = vPos.z;
-            mCenter.m[3][3] = 1.0f;
+            mCenter.SetTranslation(vPos);
         }
 
         const PblMatrix* pLeft = mClass->mSuspensionLeftArmHash ? mPose.Find(mClass->mSuspensionLeftArmHash) : 0;
@@ -2658,10 +2649,7 @@ void EntityHover::Render(unsigned char ucViewport, float fDist, unsigned int uiF
             mLeft.m[2][1] = mArm.m[0][1];
             mLeft.m[2][2] = mArm.m[0][2];
             mLeft.m[2][3] = 0.0f;
-            mLeft.m[3][0] = mClass->mLeftSuspensionPos.x;
-            mLeft.m[3][1] = mClass->mLeftSuspensionPos.y;
-            mLeft.m[3][2] = mClass->mLeftSuspensionPos.z;
-            mLeft.m[3][3] = 1.0f;
+            mLeft.SetTranslation(mClass->mLeftSuspensionPos);
         }
 
         const PblMatrix* pRight = mClass->mSuspensionRightArmHash ? mPose.Find(mClass->mSuspensionRightArmHash) : 0;
@@ -2689,10 +2677,7 @@ void EntityHover::Render(unsigned char ucViewport, float fDist, unsigned int uiF
             mRight.m[2][1] = -mArm.m[0][1];
             mRight.m[2][2] = -mArm.m[0][2];
             mRight.m[2][3] = 0.0f;
-            mRight.m[3][0] = mClass->mRightSuspensionPos.x;
-            mRight.m[3][1] = mClass->mRightSuspensionPos.y;
-            mRight.m[3][2] = mClass->mRightSuspensionPos.z;
-            mRight.m[3][3] = 1.0f;
+            mRight.SetTranslation(mClass->mRightSuspensionPos);
         }
     }
 
@@ -2852,10 +2837,7 @@ bool EntityHover::PostCollisionUpdate(float fDeltaTime)
             PblQuaternion qUnit;
             PblMatrix mCamera;
             D3DXMatrixRotationQuaternion(&mCamera, D3DXQuaternionNormalize(&qUnit, &qCamera));
-            mCamera.m[3][0] = gVectorZero.x;
-            mCamera.m[3][1] = gVectorZero.y;
-            mCamera.m[3][2] = gVectorZero.z;
-            mCamera.m[3][3] = 1.0f;
+            mCamera.SetTranslation(gVectorZero);
 
             mTargetInfo.mAimStart = mClass->mCameraSettings.CalcCameraPoint(mMatrix, mCamera);
             float fAlong = mEyeDir.y * (mEyePoint.y - mTargetInfo.mAimStart.y) +

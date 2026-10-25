@@ -59,17 +59,25 @@ public:
     {
         if (mFlags & flags_sortOnAdd)
         {
-            for (Itor itor(this); itor.GetNode(this) != GetTerminator(); ++itor)
+            for (Itor itor(this); ; ++itor)
             {
                 Node* const pCur = itor.GetNode(this);
+                if (pCur == GetTerminator())
+                {
+                    break;
+                }
                 if (pCur->mSortValue > pNode->mSortValue)
                 {
                     PblListSingle::AddAfter(&pCur->mNode, &pNode->mNode);
                     return;
                 }
             }
+            PblListSingle::AddLast(&pNode->mNode);
         }
-        PblListSingle::AddLast(&pNode->mNode);
+        else
+        {
+            PblListSingle::AddLast(&pNode->mNode);
+        }
     }
 
 private:

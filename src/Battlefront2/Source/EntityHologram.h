@@ -94,7 +94,8 @@ public:
     class MyThread : public Thread
     {
     public:
-        virtual ~MyThread();
+        // SYNTHETIC: SWBF2 0x004be2a0
+        // EntityHologram::MyThread::~MyThread
         virtual bool Update(float fDeltaTime);
 
         void SetOwner(EntityHologram* pOwner) { _pOwner = pOwner; }

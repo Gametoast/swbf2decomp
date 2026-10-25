@@ -195,10 +195,7 @@ bool EntityCarrier::Update(float fDeltaTime)
         PblMatrix matrix = mMatrix;
         PblVector3 position;
         D3DXVec3TransformCoord(&position, &mCargoArray[i].mOffset, &matrix);
-        matrix.m[3][0] = position.x;
-        matrix.m[3][1] = position.y;
-        matrix.m[3][2] = position.z;
-        matrix.m[3][3] = 1.0f;
+        matrix.SetTranslation(position);
         pObject->SetMatrix(matrix);
         pObject->SetVelocity(mVelocity);
     }
@@ -227,10 +224,7 @@ namespace
 void EntityFlyer::SetPosition(const PblVector3& vPos)
 {
     PblMatrix& matrix = mMatrix;
-    matrix.m[3][0] = vPos.x;
-    matrix.m[3][1] = vPos.y;
-    matrix.m[3][2] = vPos.z;
-    matrix.m[3][3] = 1.0f;
+    matrix.SetTranslation(vPos);
     EntityFlyerUpdateCollisionSphere(this);
 }
 
@@ -524,7 +518,7 @@ void EntityCarrierClass::SetProperty(unsigned int uProperty, const char* pszValu
                     {
 
                         const PblMatrix& mBone = pSkeleton->GetDefaultPoseMatrix(i);
-                        mCargoInfo[mCargoCount].mOffset = *(const PblVector3*)&mBone.m[3][0];
+                        mCargoInfo[mCargoCount].mOffset = mBone.GetTranslation();
                         ++mCargoCount;
                         break;
                     }

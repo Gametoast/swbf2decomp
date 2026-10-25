@@ -15,14 +15,11 @@ class GameObject;
 
 namespace
 {
-    inline const PblVector3& GetPos(const PblMatrix& m)
-    {
-        return *(const PblVector3*)&m.m[3][0];
-    }
+
 
     const PblVector3& GetFront(const PblMatrix& m)
     {
-        return *(const PblVector3*)&m.m[2][0];
+        return m.GetZAxis();
     }
 
     const PblVector3& GetTargetVelocity(const GameObject* pTarget)
@@ -40,7 +37,7 @@ void AttackPatterns::DoFlyDirect()
     const EntityFlyerClass* pClass =
         static_cast<const EntityFlyerClass*>(GetMe()->GetEntity()->GetEntityClass());
 
-    PblVector3 vPos = GetPos(GetMe()->GetMatrix());
+    PblVector3 vPos = GetMe()->GetMatrix().GetTranslation();
     PblVector3 vTarget = GetAttackHelper()->GetLastSeenTargetPos();
     PblVector3 vToTarget;
     vToTarget.x = vTarget.x - vPos.x;
@@ -108,7 +105,7 @@ void AttackPatterns::DoFlyDirect()
 // FUNCTION: SWBF2 0x00667550
 void AttackPatterns::GeneratePath()
 {
-    PblVector3 vPos = GetPos(GetMe()->GetMatrix());
+    PblVector3 vPos = GetMe()->GetMatrix().GetTranslation();
     PblVector3 vTarget = GetAttackHelper()->GetLastSeenTargetPos();
     PblVector3 vToTarget;
     vToTarget.x = vTarget.x - vPos.x;
@@ -163,8 +160,8 @@ void AttackPatterns::GeneratePath()
 void AttackPatterns::DoFlyStrafe()
 {
     const GameObject* pTarget = GetAttackHelper()->GetTarget();
-    PblVector3 vPos = GetPos(GetMe()->GetMatrix());
-    PblVector3 vTarget = GetPos(static_cast<const CollisionObject*>(pTarget)->GetMatrix());
+    PblVector3 vPos = GetMe()->GetMatrix().GetTranslation();
+    PblVector3 vTarget = (static_cast<const CollisionObject*>(pTarget)->GetMatrix()).GetTranslation();
     PblVector3 vToTarget;
     vToTarget.x = vTarget.x - vPos.x;
     vToTarget.y = vTarget.y - vPos.y;

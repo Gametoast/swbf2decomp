@@ -246,9 +246,9 @@ namespace TimerEvent
 {
 
 // SYNTHETIC: SWBF2 0x004037a0
-// `dynamic initializer for 'EventManager::TimerEvent::mElapsed''
+// EventManager::TimerEvent::`dynamic initializer for 'mElapsed''
 // SYNTHETIC: SWBF2 0x007686a0
-// `dynamic atexit destructor for 'EventManager::TimerEvent::mElapsed''
+// EventManager::TimerEvent::`dynamic atexit destructor for 'mElapsed''
 
 // GLOBAL: SWBF2 0x007ec120
 // mElapsed

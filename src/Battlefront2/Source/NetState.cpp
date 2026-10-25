@@ -4786,7 +4786,7 @@ void EntitySoldier::WriteObject(NetPktGroup& group, NetObjState*)
     const PblMatrix& matrix = static_cast<CollisionObject*>(this)->GetMatrix();
     if (!NetGame::IsFullState())
     {
-        const PblVector3& position = *(const PblVector3*)&matrix.m[3][0];
+        const PblVector3& position = matrix.GetTranslation();
         int precision = ComputeNetLOD((int)&position, mPlayerId);
         if (!precision && gSoldierLodCount < 3)
         {
@@ -4822,7 +4822,7 @@ void EntitySoldier::WriteObject(NetPktGroup& group, NetObjState*)
         {
             WriteFixed(quatConvert, group, q._fY);
             WriteFixed(quatConvert, group, q._fS);
-            WritePositionVector(group, *(const PblVector3*)&matrix.m[3][0]);
+            WritePositionVector(group, matrix.GetTranslation());
         }
         WriteVelocity(group, mVelocity,
                    mClass->mJumpVerticalSpeed * 2.0f + mClass->mMaxSpeed + mClass->mJetJump, -1);
@@ -5023,7 +5023,7 @@ void EntitySoldier::WriteLateState(NetPktGroup& group)
         {
             WriteFixed(quatConvert, group, q._fY);
             WriteFixed(quatConvert, group, q._fS);
-            WritePositionVector(group, *(const PblVector3*)&matrix.m[3][0]);
+            WritePositionVector(group, matrix.GetTranslation());
         }
         WriteVelocity(group, mVelocity,
                    mClass->mJumpVerticalSpeed * 2.0f + mClass->mMaxSpeed + mClass->mJetJump, -1);

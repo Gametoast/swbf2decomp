@@ -142,7 +142,7 @@ CamPaths::CamPaths()
 }
 
 // SYNTHETIC: SWBF2 0x00403820
-// `dynamic initializer for 'FirstPerson::mCameraPaths''
+// FirstPerson::`dynamic initializer for 'mCameraPaths''
 
 // GLOBAL: SWBF2 0x01ebc300
 // mCameraPaths
@@ -152,7 +152,7 @@ CamPaths mCameraPaths;
 // PblHermiteVector3::PblHermiteVector3
 
 // SYNTHETIC: SWBF2 0x004037d0
-// `dynamic initializer for 'FirstPerson::mFPCamera''
+// FirstPerson::`dynamic initializer for 'mFPCamera''
 
 // GLOBAL: SWBF2 0x01ebcce0
 // mFPCamera
@@ -431,10 +431,7 @@ void FirstPersonRenderable::UpdateCockpitAimer(const PblMatrix& mMatrix)
     }
 
     PblMatrix mOffset = gMatrixIdentity;
-    mOffset.m[3][0] = vOffset.x;
-    mOffset.m[3][1] = vOffset.y;
-    mOffset.m[3][2] = vOffset.z;
-    mOffset.m[3][3] = 1.0f;
+    mOffset.SetTranslation(vOffset);
 
     if (mOwner->GetControllableClass()->mCockpitTension > 0.0f)
     {
@@ -467,10 +464,7 @@ void FirstPersonRenderable::UpdateCockpitAimer(const PblMatrix& mMatrix)
     PblQuaternion qRotation;
     PblMatrix mRotation;
     D3DXMatrixRotationQuaternion(&mRotation, D3DXQuaternionNormalize(&qRotation, &mCockpitRotation));
-    mRotation.m[3][0] = vPos.x;
-    mRotation.m[3][1] = vPos.y;
-    mRotation.m[3][2] = vPos.z;
-    mRotation.m[3][3] = 1.0f;
+    mRotation.SetTranslation(vPos);
     D3DXMatrixMultiply(&mModelMatrix, &mOffset, &mRotation);
 }
 
@@ -1291,7 +1285,7 @@ void FirstPersonCameraManager::Update(PblMatrix& rMatrix)
             rMatrix.m[3][2] += vOffset.z;
             rMatrix.m[3][3] = 1.0f;
             mCurRotVec = mHermRot[mCurrCamPt].getValue(fT);
-            mCameraPos = *(const PblVector3*)rMatrix.m[3];
+            mCameraPos = rMatrix.GetTranslation();
 
             PblMatrix mRotation = gMatrixIdentity;
             PblMatrix mTemp;
@@ -1316,7 +1310,7 @@ void FirstPersonCameraManager::Update(PblMatrix& rMatrix)
             }
         }
     }
-    mCameraPos = *(const PblVector3*)rMatrix.m[3];
+    mCameraPos = rMatrix.GetTranslation();
 }
 
 // FUNCTION: SWBF2 0x00521450

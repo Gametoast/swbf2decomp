@@ -263,7 +263,7 @@ bool FlagItem::IsInLandingZone() const
     {
         TriggerRegionManager::TriggerRegionData* pData = pManager->GetTriggerRegionData(i);
         if (pData && pData->mType == TriggerRegionManager::TRIGGER_LANDING &&
-            pData->mRegion->IsPointInside(*(const PblVector3*)pCollision->GetMatrix().m[3]))
+            pData->mRegion->IsPointInside(pCollision->GetMatrix().GetTranslation()))
         {
             return true;
         }

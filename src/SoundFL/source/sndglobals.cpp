@@ -17,7 +17,7 @@ static void __cdecl PrintDebugMessageDefault(char const*)
 }
 
 // SYNTHETIC: SWBF2 0x0040b600
-// `dynamic initializer for 'Snd::sndRandom''
+// Snd::`dynamic initializer for 'sndRandom''
 
 // GLOBAL: SWBF2 0x009d83b0
 // sndRandom

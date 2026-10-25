@@ -178,10 +178,10 @@ void GameVoiceChat::Encoder::Stop()
 {
     Flush();
 
-    static_cast<Snd::SourceTransport&>(mSource).Stop();
-    static_cast<Snd::SourceTransport&>(mAGC).Stop();
-    static_cast<Snd::SourceTransport&>(mVAD).Stop();
-    static_cast<Snd::SourceTransport&>(mEncoder).Stop();
+    mSource.Stop();
+    mAGC.Stop();
+    mVAD.Stop();
+    mEncoder.Stop();
 
     mPlaying = false;
 }
@@ -286,7 +286,7 @@ bool IsBanned();
 unsigned char GameVoiceChat::Encoder::IsEnabled()
 {
     return mPlaying
-        && static_cast<const Snd::SourceTransport&>(mSource).GetPlayState()
+        && mSource.GetPlayState()
                != Snd::SourceTransport::playState_stopped;
 }
 
@@ -359,10 +359,10 @@ VoiceChat::AudioPacket* GameVoiceChat::Encoder::GetData()
 // FUNCTION: SWBF2 0x0053d8e0
 void GameVoiceChat::Encoder::Play()
 {
-    static_cast<Snd::SourceTransport&>(mSource).Play(true);
-    static_cast<Snd::SourceTransport&>(mAGC).Play(true);
-    static_cast<Snd::SourceTransport&>(mVAD).Play(true);
-    static_cast<Snd::SourceTransport&>(mEncoder).Play(true);
+    mSource.Play(true);
+    mAGC.Play(true);
+    mVAD.Play(true);
+    mEncoder.Play(true);
 
     mPlaying = true;
 }

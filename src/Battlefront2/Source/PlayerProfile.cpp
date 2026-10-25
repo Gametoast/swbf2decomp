@@ -135,7 +135,7 @@ namespace PlayerPrefs
 {
 
 // SYNTHETIC: SWBF2 0x00405f30
-// `dynamic initializer for 'PlayerPrefs::mAllUserPrefs''
+// PlayerPrefs::`dynamic initializer for 'mAllUserPrefs''
 
 // GLOBAL: SWBF2 0x01ef7fa0
 // mAllUserPrefs

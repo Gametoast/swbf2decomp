@@ -245,7 +245,7 @@ RedCamera::VisibilityT RedCamera::ClassifyBox(const PblMatrix& rMatrix, const Pb
 {
     PblMatrix m;
     D3DXMatrixMultiply((D3DXMATRIX*)&m, (const D3DXMATRIX*)&rMatrix, (const D3DXMATRIX*)&_MatrixInverse);
-    return ClassifyBoxInternal(m, *(const PblVector3*)&m.m[3][0], vExtents);
+    return ClassifyBoxInternal(m, m.GetTranslation(), vExtents);
 }
 
 // FUNCTION: SWBF2 0x00433eb0

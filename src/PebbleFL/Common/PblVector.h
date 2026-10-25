@@ -59,7 +59,7 @@ const PblVector3 operator/(const PblVector3& lhs, float rhs);
 
 float DotProduct(const PblVector3& vVector1, const PblVector3& vVector2);
 
-#include "PebbleFL/pc/pcPblVector.h"
+
 
 inline const PblVector3 Interpolate(const PblVector3& v0, const PblVector3& v1, float fT)
 {
@@ -82,6 +82,8 @@ public:
     PblVector4() {}
     PblVector4(float fX, float fY, float fZ, float fW) : x(fX), y(fY), z(fZ), w(fW) {}
 
+    operator const PblVector3&() const;
+
     void Set(float fX, float fY, float fZ, float fW)
     {
         x = fX;
@@ -95,6 +97,8 @@ public:
     float z;
     float w;
 };
+
+#include "PebbleFL/pc/pcPblVector.h"
 
 class PblSphere : public PblVector4
 {

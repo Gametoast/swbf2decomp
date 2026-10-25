@@ -55,7 +55,7 @@ bool AI::GoalTarget::GetLocation(PblVector3& vPos)
         {
             return false;
         }
-        vPos = *(const PblVector3*)&pCtrl->GetMatrix().m[3][0];
+        vPos = pCtrl->GetMatrix().GetTranslation();
         return true;
     }
     case GTT_POS:

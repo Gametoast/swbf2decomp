@@ -241,17 +241,6 @@ unsigned int kuiWaterSplashTextureHash = PblHash("fx_splash");
 
 static const float kInv255 = 1.0f / 255.0f;
 
-struct CompressedPos
-{
-    short x;
-    short y;
-    short z;
-    short w;
-
-    static PblVector3 s_vMin;
-    static PblVector3 s_vScale;
-    static PblVector3 s_vScaleInv;
-};
 struct CompressedNormal
 {
     unsigned char z;
@@ -259,11 +248,7 @@ struct CompressedNormal
     unsigned char x;
     unsigned char w;
 };
-struct CompressedTexCoord
-{
-    short u;
-    short v;
-};
+
 struct CompressedOceanVertex
 {
     CompressedPos pos;
@@ -583,11 +568,7 @@ pcRedPrimitive* RedWater::pcCreateStaticPatchPrimitive<WaterVertex, 546>(
     return pPrim;
 }
 
-struct TexCoord
-{
-    float u;
-    float v;
-};
+
 struct CompressedWaterDistortionRingVertex
 {
     CompressedPos pos;
@@ -1468,10 +1449,7 @@ void RedWater::pcRegisterReflection()
             }
             else
             {
-                mPatch.m[3][0] = rPatch.bbox._vMin.x;
-                mPatch.m[3][1] = rPatch.bbox._vMin.y;
-                mPatch.m[3][2] = rPatch.bbox._vMin.z;
-                mPatch.m[3][3] = 1.0f;
+                mPatch.SetTranslation(rPatch.bbox._vMin);
                 RedRenderer::pcRenderPrimitive(m_pLowResPrim,
                                                s_pPreReflectionShader,
                                                mPatch,
@@ -2169,10 +2147,7 @@ void RedWater::pcAccumulateNormalMap()
         }
         else
         {
-            mPatch.m[3][0] = patch.bbox._vMin.x;
-            mPatch.m[3][1] = patch.bbox._vMin.y;
-            mPatch.m[3][2] = patch.bbox._vMin.z;
-            mPatch.m[3][3] = 1.0f;
+            mPatch.SetTranslation(patch.bbox._vMin);
             RedRenderer::pcRenderPrimitive(m_pLowResPrim, s_pNormalMapAdderShader, mPatch,
                                            RedColor::WHITE, 0x200, 0, 0, 0);
         }
@@ -2552,10 +2527,7 @@ void RedWater::pcRenderWaterPatches()
         else
         {
             PblMatrix mPatch = mWorld;
-            mPatch.m[3][0] = patch.bbox._vMin.x;
-            mPatch.m[3][1] = patch.bbox._vMin.y;
-            mPatch.m[3][2] = patch.bbox._vMin.z;
-            mPatch.m[3][3] = 1.0f;
+            mPatch.SetTranslation(patch.bbox._vMin);
             RedRenderer::pcRenderPrimitive(m_pHighResPrim,
                                            s_pNormalWaterShader,
                                            mPatch,
@@ -2855,10 +2827,7 @@ void RedWater::pcRenderFarWaterPatches()
             }
             else
             {
-                mPatch.m[3][0] = patch.bbox._vMin.x;
-                mPatch.m[3][1] = patch.bbox._vMin.y;
-                mPatch.m[3][2] = patch.bbox._vMin.z;
-                mPatch.m[3][3] = 1.0f;
+                mPatch.SetTranslation(patch.bbox._vMin);
                 RedRenderer::pcRenderPrimitive(m_pLowResPrim,
                                                s_pNormalWaterShader,
                                                mPatch,

@@ -263,10 +263,7 @@ bool EntityHologram::MyThread::Update(float fDeltaTime)
 // SYNTHETIC: SWBF2 0x004be270
 // EntityHologram::`scalar deleting destructor'
 
-// FUNCTION: SWBF2 0x004be2a0
-EntityHologram::MyThread::~MyThread()
-{
-}
+
 
 // SYNTHETIC: SWBF2 0x004be2b0
 // EntityHologram::MyThread::`scalar deleting destructor'

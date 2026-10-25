@@ -36,10 +36,7 @@ namespace PowerupUtility
 
 namespace
 {
-    inline const PblVector3& GetPos(const PblMatrix& m)
-    {
-        return *(const PblVector3*)&m.m[3][0];
-    }
+
 
     inline Entity* AsEntity(GameObject* pObj)
     {
@@ -250,7 +247,7 @@ const PblVector3& Navigator::GetGlobalDest() const
     {
         return mPathFollower->mFinalPoint;
     }
-    return GetPos(GetMatrix());
+    return GetMatrix().GetTranslation();
 }
 
 // FUNCTION: SWBF2 0x005ab710
@@ -260,7 +257,7 @@ const PblVector3& Navigator::GetLocalDest() const
     {
         return mPathFollower->mGotoPoint;
     }
-    return GetPos(GetMatrix());
+    return GetMatrix().GetTranslation();
 }
 
 // FUNCTION: SWBF2 0x005ab730
@@ -276,7 +273,7 @@ bool Navigator::AttemptWallFollow(float fStep, bool bRight)
         return false;
     }
 
-    PblVector3 vStart = GetPos(GetMatrix());
+    PblVector3 vStart = GetMatrix().GetTranslation();
     PblVector3 vPos = vStart;
     float fRadius = GetMyRadius();
     int eProhibit = GetMyProhibit();
@@ -399,7 +396,7 @@ bool Navigator::LookForPowerUps(float fRadius)
     }
 
     GameObject* objects[6];
-    int iCount = CollisionManager::GetObjectsInRange(GetPos(GetMatrix()), fRadius, objects, 6, 0, 1);
+    int iCount = CollisionManager::GetObjectsInRange(GetMatrix().GetTranslation(), fRadius, objects, 6, 0, 1);
     while (iCount--)
     {
         GameObject* pObj = objects[iCount];
@@ -418,14 +415,14 @@ bool Navigator::LookForPowerUps(float fRadius)
         }
 
         const Obstacle* pBarrier = GetMyBarrier();
-        if (PathFinder::TestTrivialStraightLineHit(GetPos(GetMatrix()), GetPos(AsCollisionObject(pObj)->GetMatrix()),
+        if (PathFinder::TestTrivialStraightLineHit(GetMatrix().GetTranslation(), (AsCollisionObject(pObj)->GetMatrix()).GetTranslation(),
                                                    GetMyRadius(), GetMyProhibit(), &pBarrier, 1, false))
         {
             continue;
         }
 
-        PblVector3 vStart = GetPos(GetMatrix());
-        PblVector3 vItem = GetPos(AsCollisionObject(pObj)->GetMatrix());
+        PblVector3 vStart = GetMatrix().GetTranslation();
+        PblVector3 vItem = (AsCollisionObject(pObj)->GetMatrix()).GetTranslation();
         PblVector3 vDelta(vItem.x - vStart.x, vItem.y - vStart.y, vItem.z - vStart.z);
         PblVector3 vNormal;
         D3DXVec3Normalize((D3DXVECTOR3*)&vNormal, (const D3DXVECTOR3*)&vDelta);
@@ -462,7 +459,7 @@ bool Navigator::LookForCoverNodes()
         return false;
     }
 
-    const PblVector3& vMyPos = GetPos(GetMatrix());
+    const PblVector3& vMyPos = GetMatrix().GetTranslation();
     const PblVector3& vGoto = mPathFollower->mGotoPoint;
     PblVector3 vToGoto(vGoto.x - vMyPos.x, vGoto.y - vMyPos.y, vGoto.z - vMyPos.z);
     PblVector3 vDir = AIUtil::GetSafeNormalXZ(vToGoto);
@@ -515,7 +512,7 @@ bool Navigator::LookForCoverNodes()
     }
 
     pBest->Reserve(pObj);
-    PblVector3 vStart = GetPos(GetMatrix());
+    PblVector3 vStart = GetMatrix().GetTranslation();
     PblVector3 vHint = pBest->GetCollisionCenter();
     float fAlong = (vHint.x - vMyPos.x) * vDir.x + (vHint.y - vMyPos.y) * vDir.y + (vHint.z - vMyPos.z) * vDir.z;
     PblVector3 vFoot(vMyPos.x + vDir.x * fAlong, vMyPos.y + vDir.y * fAlong, vMyPos.z + vDir.z * fAlong);

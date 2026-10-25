@@ -923,10 +923,6 @@ float RayHitBubble(const PblVector3& vStart, const PblVector3& vDir, float fLeng
 }
 }
 
-static inline const PblVector3& GetTranslation(const PblMatrix& m)
-{
-    return *(const PblVector3*)&m.m[3][0];
-}
 
 static inline PblVector3 InverseRotate(const PblMatrix& m, float x, float y, float z)
 {
@@ -942,7 +938,7 @@ namespace CollisionUtil
 float RayHitBox(const PblVector3& vStart, const PblVector3& vDir, float fLength, const PblMatrix& matrix,
                  float fWidth, float fDepth, float fHeight, PblVector3* pNormal)
 {
-    const PblVector3& vPos = GetTranslation(matrix);
+    const PblVector3& vPos = matrix.GetTranslation();
     PblVector3 vLocalStart = InverseRotate(matrix, vStart.x - vPos.x, vStart.y - vPos.y, vStart.z - vPos.z);
     PblVector3 vLocalDir = InverseRotate(matrix, vDir.x, vDir.y, vDir.z);
 
@@ -1122,7 +1118,7 @@ namespace CollisionUtil
 float RayHitCylinder(const PblVector3& vStart, const PblVector3& vDir, float fLength, const PblMatrix& matrix,
                  float fRadius, float fHalfHeight, PblVector3* pNormal)
 {
-    const PblVector3& vPos = GetTranslation(matrix);
+    const PblVector3& vPos = matrix.GetTranslation();
     PblVector3 vLocalStart = InverseRotate(matrix, vStart.x - vPos.x, vStart.y - vPos.y, vStart.z - vPos.z);
     PblVector3 vLocalDir = InverseRotate(matrix, vDir.x, vDir.y, vDir.z);
     PblVector3 vCenter(0.0f, 0.0f, 0.0f);

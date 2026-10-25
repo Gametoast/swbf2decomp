@@ -183,7 +183,7 @@ void IdleHelper::StartStationaryIdle(UnitController* pCtrl, float& fIdleTime, fl
     {
         Controllable* pMe = pCtrl->mOwner;
         float fBestDistSq = FLT_MAX;
-        PblVector3 vMyPos = *(const PblVector3*)&pMe->GetMatrix().m[3][0];
+        PblVector3 vMyPos = pMe->GetMatrix().GetTranslation();
         const Character* pBest = NULL;
         for (int i = 0; i < Character::sCharacterLimit; ++i)
         {

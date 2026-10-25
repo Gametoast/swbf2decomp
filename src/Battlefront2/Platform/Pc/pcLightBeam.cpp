@@ -137,19 +137,6 @@ void LightBeamEffect::_PlatformInit()
         0, 0, 0x10040, RedColor::WHITE, RedColor::BLACK, 32.0f);
 }
 
-// FUNCTION: SWBF2 0x0040cbe0
-void __cdecl CompressedPos::SetBoundingBox(const PblBox* pBox)
-{
-    PblVector3 vMin = { pBox->_vMin.x, pBox->_vMin.y, pBox->_vMin.z };
-    PblVector3 vExtent = { pBox->_vMax.x - pBox->_vMin.x, pBox->_vMax.y - pBox->_vMin.y,
-                                pBox->_vMax.z - pBox->_vMin.z };
-    CompressedPos::s_vMin = vMin;
-    CompressedPos::s_vScale = vExtent * (1.0f / 65535.0f);
-    CompressedPos::s_vScaleInv.x = 1.0f / CompressedPos::s_vScale.x;
-    CompressedPos::s_vScaleInv.y = 1.0f / CompressedPos::s_vScale.y;
-    CompressedPos::s_vScaleInv.z = 1.0f / CompressedPos::s_vScale.z;
-}
-
 // FUNCTION: SWBF2 0x00410ba0
 void VertexC::SetPos(const PblVector3& v)
 {
@@ -292,10 +279,7 @@ void LightBeamEffect::RenderLightBeam(const LightBeam* pBeam, unsigned int uiFla
         mBeam.m[2][1] = pFront->y;
         mBeam.m[2][2] = pFront->z;
         mBeam.m[2][3] = 0.0f;
-        mBeam.m[3][0] = vHead.x;
-        mBeam.m[3][1] = vHead.y;
-        mBeam.m[3][2] = vHead.z;
-        mBeam.m[3][3] = 1.0f;
+        mBeam.SetTranslation(vHead);
 
         float fHeadSize = pBeam->_fHeadSizeX;
         float fTailSize = pBeam->_fTailSizeX;
@@ -409,7 +393,7 @@ void LightBeamEffect::RenderLightBeam(const LightBeam* pBeam, unsigned int uiFla
         if (RedRenderer::pcGetGeometryMode() == GEOMETRYMODE_COMPRESSED)
         {
             pPrimitive = pcRedPrimitive::Create(D3DPT_TRIANGLESTRIP, 0x1082, sizeof(VertexC), 22, 38, false);
-            CompressedPos::SetBoundingBox(&box);
+            CompressedPos::SetBoundingBox(box);
         }
         else
         {
@@ -534,7 +518,7 @@ void LightBeamEffect::RenderLightBeam(const LightBeam* pBeam, unsigned int uiFla
         if (RedRenderer::pcGetGeometryMode() == GEOMETRYMODE_COMPRESSED)
         {
             pPrimitive = pcRedPrimitive::Create(D3DPT_TRIANGLESTRIP, 0x1082, sizeof(VertexC), 33, 66, false);
-            CompressedPos::SetBoundingBox(&box);
+            CompressedPos::SetBoundingBox(box);
         }
         else
         {
@@ -599,10 +583,7 @@ void LightBeamEffect::RenderLightBeam(const LightBeam* pBeam, unsigned int uiFla
         pPrimitive->EndVertexData();
 
         __declspec(align(16)) PblMatrix mHalo = mCamera;
-        mHalo.m[3][0] = vHead.x;
-        mHalo.m[3][1] = vHead.y;
-        mHalo.m[3][2] = vHead.z;
-        mHalo.m[3][3] = 1.0f;
+        mHalo.SetTranslation(vHead);
         RedRenderer::pcRenderPrimitive(pPrimitive, m_pShader,
                                        mHalo, RedColor::WHITE,
                                        uiFlags, 0, 0, 0);

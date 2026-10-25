@@ -44,9 +44,9 @@ namespace SaveGameManager
 {
 
 // SYNTHETIC: SWBF2 0x00406350
-// `dynamic initializer for 'SaveGameManager::mSaveFsm''
+// SaveGameManager::`dynamic initializer for 'mSaveFsm''
 // SYNTHETIC: SWBF2 0x00769490
-// `dynamic atexit destructor for 'SaveGameManager::mSaveFsm''
+// SaveGameManager::`dynamic atexit destructor for 'mSaveFsm''
 
 // GLOBAL: SWBF2 0x01f3a1b0
 // mSaveFsm

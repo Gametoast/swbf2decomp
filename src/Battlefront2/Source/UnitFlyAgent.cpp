@@ -440,7 +440,7 @@ bool UnitFlyAgent::IsNearATAT()
 // FUNCTION: SWBF2 0x006673b0
 bool UnitFlyAgent::IsRoofOverhead() const
 {
-    const PblVector3 vStart = *(const PblVector3*)&mCtrl->mOwner->GetMatrix().m[3][0];
+    const PblVector3 vStart = mCtrl->mOwner->GetMatrix().GetTranslation();
     const PblVector3 vEnd(vStart.x + 0.0f, vStart.y + 100.0f, vStart.z + 0.0f);
     const GameObject* pIgnore = static_cast<const Trackable*>(mCtrl->mOwner)->GetGameObject();
     return CollisionManager::RayTest(vStart, vEnd, &pIgnore, 1, 0x9a);

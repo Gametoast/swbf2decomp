@@ -2248,10 +2248,7 @@ void EntityFlyer::Render(unsigned char renderMode, float lod, unsigned int flags
         const FlagItemClass* pFlagClass = static_cast<const FlagItemClass*>(pFlag->mClass);
         PblVector3 vPos;
         D3DXVec3TransformCoord(&vPos, &pFlagClass->mCarriedOffset, &mWorld);
-        mWorld.m[3][0] = vPos.x;
-        mWorld.m[3][1] = vPos.y;
-        mWorld.m[3][2] = vPos.z;
-        mWorld.m[3][3] = 1.0f;
+        mWorld.SetTranslation(vPos);
         reinterpret_cast<GameObject*>(pFlag)->SetMatrix(mWorld);
         reinterpret_cast<GameObject*>(pFlag)->SetVelocity(GetVelocity());
         pFlag->RenderHelper(renderMode, lod, flags);
@@ -4588,10 +4585,7 @@ bool EntityFlyer::Update(float fDeltaTime)
         PblQuaternion qUnit;
         PblMatrix mFrame;
         D3DXMatrixRotationQuaternion(&mFrame, D3DXQuaternionNormalize(&qUnit, &qBody));
-        mFrame.m[3][0] = vPos.x;
-        mFrame.m[3][1] = vPos.y;
-        mFrame.m[3][2] = vPos.z;
-        mFrame.m[3][3] = 1.0f;
+        mFrame.SetTranslation(vPos);
         matrix = mFrame;
         PblMatrix mBank;
         PblMatrix mBankRoll;

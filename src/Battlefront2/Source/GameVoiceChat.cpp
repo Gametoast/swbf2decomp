@@ -154,9 +154,9 @@ bool GameVoiceChat::IsSuspended()
 }
 
 // SYNTHETIC: SWBF2 0x00403ea0
-// `dynamic initializer for 'GameVoiceChat::gTransport''
+// GameVoiceChat::`dynamic initializer for 'gTransport''
 // SYNTHETIC: SWBF2 0x00768ae0
-// `dynamic atexit destructor for 'GameVoiceChat::gTransport''
+// GameVoiceChat::`dynamic atexit destructor for 'gTransport''
 
 // GLOBAL: SWBF2 0x01ec5fc0
 // GameVoiceChat::gTransport

@@ -275,9 +275,9 @@ _D3DFORMAT FLRenderer::m_formatReflectionTarget_Medium;
 // GLOBAL: SWBF2 0x008f6edc
 _D3DFORMAT FLRenderer::m_formatReflectionDepth_Medium;
 // SYNTHETIC: SWBF2 0x00407930
-// `dynamic initializer for 'FLRenderer::mCursorImage''
+// FLRenderer::`dynamic initializer for 'mCursorImage''
 // SYNTHETIC: SWBF2 0x00769880
-// `dynamic atexit destructor for 'FLRenderer::mCursorImage''
+// FLRenderer::`dynamic atexit destructor for 'mCursorImage''
 
 // GLOBAL: SWBF2 0x008f6ef0
 // FLRenderer::mCursorImage
@@ -291,15 +291,15 @@ namespace FLRenderer
 RedColor m_colorReflectionFog;
 }
 // SYNTHETIC: SWBF2 0x00407910
-// `dynamic initializer for 'FLRenderer::mCursorGroup''
+// FLRenderer::`dynamic initializer for 'mCursorGroup''
 // SYNTHETIC: SWBF2 0x00769870
-// `dynamic atexit destructor for 'FLRenderer::mCursorGroup''
+// FLRenderer::`dynamic atexit destructor for 'mCursorGroup''
 
 // GLOBAL: SWBF2 0x008f7000
 // FLRenderer::mCursorGroup
 RedScreenGroupElement FLRenderer::mCursorGroup;
 // SYNTHETIC: SWBF2 0x00407950
-// `dynamic initializer for 'FLRenderer::m_curFrameReflections''
+// FLRenderer::`dynamic initializer for 'm_curFrameReflections''
 
 // GLOBAL: SWBF2 0x008f70a0
 // FLRenderer::m_curFrameReflections
@@ -686,7 +686,7 @@ bool ReflectionRegion::_IsVisible(const RedCamera* pCamera) const
     switch (mType)
     {
     case type_sphere:
-        return pCamera->ClassifySphere(*(const PblVector3*)&mMatrix.m[3][0],
+        return pCamera->ClassifySphere(mMatrix.GetTranslation(),
                                        mSize.w + fMargin, -1.0f) != RedCamera::VISIBILITY_NONE;
     case type_box:
     case type_cylinder:
@@ -694,22 +694,22 @@ bool ReflectionRegion::_IsVisible(const RedCamera* pCamera) const
                      PblVector3(mSize.x + fMargin, mSize.y + fMargin, mSize.z + fMargin))
                != RedCamera::VISIBILITY_NONE;
     case type_plane:
-        return pCamera->ClassifyPlane(*(const PblVector3*)&mMatrix.m[2][0], mSize.w + fMargin)
+        return pCamera->ClassifyPlane(mMatrix.GetZAxis(), mSize.w + fMargin)
                != RedCamera::VISIBILITY_NONE;
     case type_box_aligned:
-        return pCamera->ClassifyAABox(*(const PblVector3*)&mMatrix.m[3][0],
+        return pCamera->ClassifyAABox(mMatrix.GetTranslation(),
                      PblVector3(mSize.x + fMargin, mSize.y + fMargin, mSize.z + fMargin))
                != RedCamera::VISIBILITY_NONE;
     case type_cylinder_xaligned:
-        return pCamera->ClassifyAABox(*(const PblVector3*)&mMatrix.m[3][0],
+        return pCamera->ClassifyAABox(mMatrix.GetTranslation(),
                      PblVector3(mSize.y + fMargin, mSize.x + fMargin, mSize.x + fMargin))
                != RedCamera::VISIBILITY_NONE;
     case type_cylinder_yaligned:
-        return pCamera->ClassifyAABox(*(const PblVector3*)&mMatrix.m[3][0],
+        return pCamera->ClassifyAABox(mMatrix.GetTranslation(),
                      PblVector3(mSize.x + fMargin, mSize.y + fMargin, mSize.z + fMargin))
                != RedCamera::VISIBILITY_NONE;
     case type_cylinder_zaligned:
-        return pCamera->ClassifyAABox(*(const PblVector3*)&mMatrix.m[3][0],
+        return pCamera->ClassifyAABox(mMatrix.GetTranslation(),
                      PblVector3(mSize.x + fMargin, mSize.x + fMargin, mSize.y + fMargin))
                != RedCamera::VISIBILITY_NONE;
     default:

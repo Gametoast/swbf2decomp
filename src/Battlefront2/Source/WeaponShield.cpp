@@ -169,10 +169,7 @@ void WeaponShieldClass::PostReadInit()
     CollisionPrimitive primitive;
     primitive.SetBubble(m_vShieldSize);
     PblMatrix matrix = gMatrixIdentity;
-    matrix.m[3][0] = m_vShieldOffset.x;
-    matrix.m[3][1] = m_vShieldOffset.y;
-    matrix.m[3][2] = m_vShieldOffset.z;
-    matrix.m[3][3] = 1.0f;
+    matrix.SetTranslation(m_vShieldOffset);
     mCollisionBody = new CollisionBodyPrimitive(primitive, "shield", matrix, 0);
     mCollisionModel.AddBody(mCollisionBody);
 }

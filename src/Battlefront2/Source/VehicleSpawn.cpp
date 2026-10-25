@@ -372,10 +372,7 @@ void VehicleSpawn::UpdateSpawn(float fDeltaTime)
     mSpawnRegion.mMatrix = mMatrix;
     PblVector3 vPos;
     D3DXVec3TransformCoord(&vPos, &vCenter, &mMatrix);
-    mSpawnRegion.mMatrix.m[3][0] = vPos.x;
-    mSpawnRegion.mMatrix.m[3][1] = vPos.y;
-    mSpawnRegion.mMatrix.m[3][2] = vPos.z;
-    mSpawnRegion.mMatrix.m[3][3] = 1.0f;
+    mSpawnRegion.mMatrix.SetTranslation(vPos);
 
     mSpawnRegion.mSize.x = vExtents.x;
     mSpawnRegion.mSize.y = vExtents.y;

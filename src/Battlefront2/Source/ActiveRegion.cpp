@@ -185,7 +185,7 @@ int IsInside(lua_State*)
     return 1;
 }
 // SYNTHETIC: SWBF2 0x00402150
-// `dynamic initializer for 'ActiveRegions::sMap''
+// ActiveRegions::`dynamic initializer for 'sMap''
 
 // GLOBAL: SWBF2 0x01eafff0
 PblHashTable<ActiveRegion, 64> sMap;

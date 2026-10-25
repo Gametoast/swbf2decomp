@@ -138,25 +138,25 @@ bool isReadingJournal;
 IDirectInput8A* m_pDI;
 unsigned int m_numJoysticks;
 // SYNTHETIC: SWBF2 0x004085d0
-// `dynamic initializer for 'RedInputManager::m_keyboards''
+// RedInputManager::`dynamic initializer for 'm_keyboards''
 // SYNTHETIC: SWBF2 0x007699d0
-// `dynamic atexit destructor for 'RedInputManager::m_keyboards''
+// RedInputManager::`dynamic atexit destructor for 'm_keyboards''
 
 // GLOBAL: SWBF2 0x0099cd18
 // m_keyboards
 RedKeyboard m_keyboards[1];
 // SYNTHETIC: SWBF2 0x00408630
-// `dynamic initializer for 'RedInputManager::m_mouses''
+// RedInputManager::`dynamic initializer for 'm_mouses''
 // SYNTHETIC: SWBF2 0x00769a10
-// `dynamic atexit destructor for 'RedInputManager::m_mouses''
+// RedInputManager::`dynamic atexit destructor for 'm_mouses''
 
 // GLOBAL: SWBF2 0x0099d138
 // m_mouses
 RedMouse m_mouses[1];
 // SYNTHETIC: SWBF2 0x004085a0
-// `dynamic initializer for 'RedInputManager::m_joysticks''
+// RedInputManager::`dynamic initializer for 'm_joysticks''
 // SYNTHETIC: SWBF2 0x007699b0
-// `dynamic atexit destructor for 'RedInputManager::m_joysticks''
+// RedInputManager::`dynamic atexit destructor for 'm_joysticks''
 
 // GLOBAL: SWBF2 0x0099d188
 // m_joysticks

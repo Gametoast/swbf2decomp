@@ -176,15 +176,15 @@ void Stream::Update(float fDeltaTime)
     for (unsigned int i = 0; i < uiNumSubstreams; ++i)
     {
         StreamRenderer& rRenderer = mRenderer[i];
-        const bool b3D = (Source2D3D::mFlags & 1) != 0;
+        const bool b3D = Source2D3D::Get3DMode();
         if (rRenderer.mFormat != SampleInfo::format_Unknown
-            && ((rRenderer.Source2D3D::mFlags & 1) != 0) != b3D
+            && (rRenderer.Get3DMode()) != b3D
             && rRenderer.mNumChannels == 1)
         {
             rRenderer.SetFormat(rRenderer.mFormat, rRenderer.mNumChannels,
                                 rRenderer.mFrequency, b3D, rRenderer.mChannelMask, 200.0f);
         }
-        if (Source2D3D::mFlags & 1)
+        if (Source2D3D::Get3DMode())
         {
             rRenderer.Source3D::CopyParameters(*this);
             rRenderer.Set3DMode(Get3DMode());
@@ -387,7 +387,7 @@ void Stream::Open(File& rFile)
     for (unsigned int i = 0; i < uiNumSubstreams; ++i)
     {
         mADPCMDecoder[i].SetPackets(0x1B000, mADPCMPackets[i], 8, uiNumChannels);
-        const bool b3D = (Source2D3D::mFlags & 1) != 0;
+        const bool b3D = Source2D3D::Get3DMode();
         if (uiNumChannels == 1 || uiNumSubstreams == 1)
         {
             aulChannelMask[i] = 0;

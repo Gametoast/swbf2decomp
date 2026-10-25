@@ -466,27 +466,27 @@ namespace TeamEvent
 {
 
 // SYNTHETIC: SWBF2 0x00403710
-// `dynamic initializer for 'EventManager::TeamEvent::mTicketCountChange''
+// EventManager::TeamEvent::`dynamic initializer for 'mTicketCountChange''
 // SYNTHETIC: SWBF2 0x00768520
-// `dynamic atexit destructor for 'EventManager::TeamEvent::mTicketCountChange''
+// EventManager::TeamEvent::`dynamic atexit destructor for 'mTicketCountChange''
 
 // GLOBAL: SWBF2 0x007ec0c0
 // mTicketCountChange
 Event<Team, int> mTicketCountChange("TicketCountChange");
 
 // SYNTHETIC: SWBF2 0x00403740
-// `dynamic initializer for 'EventManager::TeamEvent::mTicketBleedChange''
+// EventManager::TeamEvent::`dynamic initializer for 'mTicketBleedChange''
 // SYNTHETIC: SWBF2 0x007685a0
-// `dynamic atexit destructor for 'EventManager::TeamEvent::mTicketBleedChange''
+// EventManager::TeamEvent::`dynamic atexit destructor for 'mTicketBleedChange''
 
 // GLOBAL: SWBF2 0x007ec0e0
 // mTicketBleedChange
 Event<Team, float> mTicketBleedChange("TicketBleedChange");
 
 // SYNTHETIC: SWBF2 0x00403770
-// `dynamic initializer for 'EventManager::TeamEvent::mPointsChange''
+// EventManager::TeamEvent::`dynamic initializer for 'mPointsChange''
 // SYNTHETIC: SWBF2 0x00768620
-// `dynamic atexit destructor for 'EventManager::TeamEvent::mPointsChange''
+// EventManager::TeamEvent::`dynamic atexit destructor for 'mPointsChange''
 
 // GLOBAL: SWBF2 0x007ec100
 // mPointsChange

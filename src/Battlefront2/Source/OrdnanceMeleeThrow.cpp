@@ -328,10 +328,7 @@ OrdnanceMeleeThrow::OrdnanceMeleeThrow(OrdnanceMeleeThrowClass* pClass, const Or
                 m_pLight->SetColor(pClass->m_colorLight);
             }
             PblMatrix matrix = gMatrixIdentity;
-            matrix.m[3][0] = mPosition.x;
-            matrix.m[3][1] = mPosition.y;
-            matrix.m[3][2] = mPosition.z;
-            matrix.m[3][3] = 1.0f;
+            matrix.SetTranslation(mPosition);
             if (m_pLight->_fBeamLength > 0.0f)
             {
                 *(PblVector3*)matrix.m[1] = vDir;
@@ -367,10 +364,7 @@ OrdnanceMeleeThrow::OrdnanceMeleeThrow(OrdnanceMeleeThrowClass* pClass, const Or
             m_pLight->SetHaloRadius(0.0f);
             m_pLight->SetFlareIntensity(0.0f);
             PblMatrix matrix = gMatrixIdentity;
-            matrix.m[3][0] = mPosition.x;
-            matrix.m[3][1] = mPosition.y;
-            matrix.m[3][2] = mPosition.z;
-            matrix.m[3][3] = 1.0f;
+            matrix.SetTranslation(mPosition);
             m_pLight->SetMatrix(matrix);
             m_pLight->TurnOn();
         }
@@ -431,10 +425,7 @@ bool OrdnanceMeleeThrow::Update(float fDeltaTime)
         PblMatrix mRotate = gMatrixIdentity;
         D3DXMatrixRotationAxis((D3DXMATRIX*)&mRotate, (const D3DXVECTOR3*)&m_vRotationAxis, pClass->m_fOmega * fStep);
         D3DXMatrixMultiply((D3DXMATRIX*)&m_mMatrix, (const D3DXMATRIX*)&m_mMatrix, (const D3DXMATRIX*)&mRotate);
-        m_mMatrix.m[3][0] = mPosition.x;
-        m_mMatrix.m[3][1] = mPosition.y;
-        m_mMatrix.m[3][2] = mPosition.z;
-        m_mMatrix.m[3][3] = 1.0f;
+        m_mMatrix.SetTranslation(mPosition);
 
         if (!Ordnance::Update(fStep) && mLifeTime > 0.0f)
         {
@@ -480,10 +471,7 @@ bool OrdnanceMeleeThrow::Update(float fDeltaTime)
     D3DXMatrixRotationAxis((D3DXMATRIX*)&mRotate, (const D3DXVECTOR3*)&m_vRotationAxis,
                            pClass->m_fOmega * fDeltaTime * 0.5f);
     D3DXMatrixMultiply((D3DXMATRIX*)&m_mMatrix, (const D3DXMATRIX*)&m_mMatrix, (const D3DXMATRIX*)&mRotate);
-    m_mMatrix.m[3][0] = mPosition.x;
-    m_mMatrix.m[3][1] = mPosition.y;
-    m_mMatrix.m[3][2] = mPosition.z;
-    m_mMatrix.m[3][3] = 1.0f;
+    m_mMatrix.SetTranslation(mPosition);
     m_pWeapon->m_pPrimaryWeapon->UpdateEffects(fDeltaTime, mPosition, mVelocity, 0);
     SetRenderPos(mPosition);
     ApplyDamage(fDeltaTime);

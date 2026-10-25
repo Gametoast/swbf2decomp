@@ -38,11 +38,7 @@ StreamBase::StreamBase()
       mUpdateI3DL2Source(1)
 {
 
-    const unsigned char f = Source2D3D::mFlags;
-    Source2D3D::mFlags =
-        (unsigned char)((f & (unsigned char)~3u)
-                        | (unsigned char)((f & 1) << 1)
-                        | 4u);
+    Source2D3D::Set3DMode(false);
 }
 
 // SYNTHETIC: SWBF2 0x0040c0b0

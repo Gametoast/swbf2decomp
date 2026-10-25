@@ -277,9 +277,9 @@ bool enabled_ = true;
 typedef util::HashTable<ClothBank*, unsigned int, util::TNewArrayAlloc<ClothBank*> > ClothDataT;
 
 // SYNTHETIC: SWBF2 0x00402420
-// `dynamic initializer for 'ClothBE::clothData_''
+// ClothBE::`dynamic initializer for 'clothData_''
 // SYNTHETIC: SWBF2 0x00766e00
-// `dynamic atexit destructor for 'ClothBE::clothData_''
+// ClothBE::`dynamic atexit destructor for 'clothData_''
 
 // GLOBAL: SWBF2 0x01eb1330
 // clothData_

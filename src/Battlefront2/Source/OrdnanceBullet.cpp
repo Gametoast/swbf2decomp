@@ -402,10 +402,7 @@ OrdnanceBullet::OrdnanceBullet(OrdnanceBulletClass* pClass, const OrdnanceDesc& 
                 m_pLight->SetColor(pClass->m_colorLight);
             }
             PblMatrix matrix = gMatrixIdentity;
-            matrix.m[3][0] = mPosition.x;
-            matrix.m[3][1] = mPosition.y;
-            matrix.m[3][2] = mPosition.z;
-            matrix.m[3][3] = 1.0f;
+            matrix.SetTranslation(mPosition);
             if (m_pLight->_fBeamLength > 0.0f)
             {
                 const PblVector3& vDir = desc.mDirection;
@@ -442,10 +439,7 @@ OrdnanceBullet::OrdnanceBullet(OrdnanceBulletClass* pClass, const OrdnanceDesc& 
             m_pLight->SetHaloRadius(0.0f);
             m_pLight->SetFlareIntensity(0.0f);
             PblMatrix matrix = gMatrixIdentity;
-            matrix.m[3][0] = mPosition.x;
-            matrix.m[3][1] = mPosition.y;
-            matrix.m[3][2] = mPosition.z;
-            matrix.m[3][3] = 1.0f;
+            matrix.SetTranslation(mPosition);
             m_pLight->SetMatrix(matrix);
             m_pLight->TurnOn();
         }

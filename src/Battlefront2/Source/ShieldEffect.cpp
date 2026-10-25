@@ -249,7 +249,7 @@ void ShieldEffect::ActivateEffect()
 {
     if (!_bActive)
     {
-        SetRenderPos(*(const PblVector3*)&m_mWorldMatrix.m[3][0]);
+        SetRenderPos(m_mWorldMatrix.GetTranslation());
         SetRenderRadius(m_pClass->m_fRadius);
         Activate();
         FLEffectObject::ActivateEffect();
@@ -364,5 +364,5 @@ bool ShieldEffect::Update(float fDeltaTime)
 // FUNCTION: SWBF2 0x00637170
 void ShieldEffect::UpdatedWorldMatrix()
 {
-    SetRenderPos(*(const PblVector3*)&m_mWorldMatrix.m[3][0]);
+    SetRenderPos(m_mWorldMatrix.GetTranslation());
 }

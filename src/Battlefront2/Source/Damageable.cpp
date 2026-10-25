@@ -738,10 +738,7 @@ void Damageable::HealthChangeCallback(bool, float)
                 pEmitter->SetInheritVelocity(pStage->mInheritVelocity);
             }
             PblMatrix mOffset = gMatrixIdentity;
-            mOffset.m[3][0] = pStage->mAttachOffset.x;
-            mOffset.m[3][1] = pStage->mAttachOffset.y;
-            mOffset.m[3][2] = pStage->mAttachOffset.z;
-            mOffset.m[3][3] = 1.0f;
+            mOffset.SetTranslation(pStage->mAttachOffset);
             const EntityGeometry* pGeometry =
                 reinterpret_cast<const EntityGeometry*>(GetGameObject()->GetEntity());
             if (pStage->mHardPoint == 0)

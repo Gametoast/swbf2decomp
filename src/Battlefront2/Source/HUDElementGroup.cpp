@@ -523,9 +523,6 @@ void HUD::ElementGroupBase::EventRotation(const HUD::Event& event, void* const p
                                          sqrtf(vY.x * vY.x + vY.y * vY.y + vY.z * vY.z),
                                          sqrtf(vZ.x * vZ.x + vZ.y * vZ.y + vZ.z * vZ.z)));
 
-    mResult.m[3][0] = vPosition.x;
-    mResult.m[3][1] = vPosition.y;
-    mResult.m[3][2] = vPosition.z;
-    mResult.m[3][3] = 1.0f;
+    mResult.SetTranslation(vPosition);
     pGroup->mElement->SetMatrix(mResult);
 }

@@ -38,9 +38,9 @@ namespace pvs
 {
 
 // SYNTHETIC: SWBF2 0x00408870
-// `dynamic initializer for 'pvs::displayableSuballoc_''
+// pvs::`dynamic initializer for 'displayableSuballoc_''
 // SYNTHETIC: SWBF2 0x00769a50
-// `dynamic atexit destructor for 'pvs::displayableSuballoc_''
+// pvs::`dynamic atexit destructor for 'displayableSuballoc_''
 
 // GLOBAL: SWBF2 0x007df8c0
 // displayableSuballoc_

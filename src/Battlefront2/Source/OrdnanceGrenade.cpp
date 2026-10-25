@@ -219,10 +219,7 @@ void OrdnanceGrenade::Render(unsigned char ucViewport, float fDist, unsigned int
     }
 
     PblMatrix mat = _IdentityMatrix;
-    mat.m[3][0] = vPos.x;
-    mat.m[3][1] = vPos.y;
-    mat.m[3][2] = vPos.z;
-    mat.m[3][3] = 1.0f;
+    mat.SetTranslation(vPos);
     ((OrdnanceGrenadeClass*)mClass)->mModel->Render(&mat, 0, RedColor::WHITE, uiFlags, 0);
 }
 

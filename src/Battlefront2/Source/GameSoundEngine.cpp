@@ -107,7 +107,7 @@ namespace GameSoundEngine
 {
 
 // SYNTHETIC: SWBF2 0x00403df0
-// `dynamic initializer for 'GameSoundEngine::gSoundHeap''
+// GameSoundEngine::`dynamic initializer for 'gSoundHeap''
 
 // GLOBAL: SWBF2 0x01ec3238
 // gSoundHeap

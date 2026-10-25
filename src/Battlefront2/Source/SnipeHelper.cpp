@@ -49,10 +49,7 @@ static const float FOV_ANGLE = 2.70526028f;
 
 namespace
 {
-    inline const PblVector3& GetMatrixPos(const PblMatrix& m)
-    {
-        return *(const PblVector3*)&m.m[3][0];
-    }
+
 
     inline const CollisionObject* GetCollisionObject(const GameObject* pObj)
     {
@@ -156,7 +153,7 @@ void SnipeHelper::UpdateState(float dt)
         {
             break;
         }
-        if (DistSq(GetMatrixPos(GetMe()->GetMatrix()), mHint->GetCollisionCenter()) < 4.0f)
+        if (DistSq(GetMe()->GetMatrix().GetTranslation(), mHint->GetCollisionCenter()) < 4.0f)
         {
             SetNextState(STATE_SNIPE);
         }
@@ -195,7 +192,7 @@ void SnipeHelper::UpdateState(float dt)
 
         mHint->Reserve(GetMe()->GetGameObject());
         PblVector3 vZ = AIUtil::GetSafeNormal(mHint->GetZAxis());
-        PblVector3 vMyPos = GetMatrixPos(GetMe()->GetMatrix());
+        PblVector3 vMyPos = GetMe()->GetMatrix().GetTranslation();
 
         PblVector3 vFace(vZ.x * 10.0f + vMyPos.x, vZ.y * 10.0f + vMyPos.y, vZ.z * 10.0f + vMyPos.z);
 
@@ -203,7 +200,7 @@ void SnipeHelper::UpdateState(float dt)
         const AttackHelper* pAttack = GetAttackHelper();
         if (pAttack->GetVisibleTarget())
         {
-            vTarget = GetMatrixPos(GetCollisionObject(pAttack->GetVisibleTarget())->GetMatrix());
+            vTarget = (GetCollisionObject(pAttack->GetVisibleTarget())->GetMatrix()).GetTranslation();
         }
         else if (pAttack->HasTarget())
         {
@@ -249,7 +246,7 @@ void SnipeHelper::UpdateState(float dt)
 bool SnipeHelper::IsWithinSnipeFOV(const PblVector3& vPos) const
 {
     PblVector3 vZ = AIUtil::GetSafeNormal(mHint->GetZAxis());
-    PblVector3 vMyPos = GetMatrixPos(GetMe()->GetMatrix());
+    PblVector3 vMyPos = GetMe()->GetMatrix().GetTranslation();
     PblVector3 vDir = AIUtil::GetSafeNormal(PblVector3(vPos.x - vMyPos.x, vPos.y - vMyPos.y, vPos.z - vMyPos.z));
     return vZ.x * vDir.x + vZ.y * vDir.y + vZ.z * vDir.z > PblMath::Cos(FOV_ANGLE * 0.5f);
 }
@@ -285,7 +282,7 @@ bool SnipeHelper::IsHintSuitable(const SnipeHint* pHint, const Team* pTeam) cons
 const SnipeHint* SnipeHelper::FindSnipeHint() const
 {
     const GameObject* pMe = GetMe()->GetGameObject();
-    PblVector3 vMyPos = GetMatrixPos(GetMe()->GetMatrix());
+    PblVector3 vMyPos = GetMe()->GetMatrix().GetTranslation();
 
     PblHeap<const BaseHint*, float>::RECORD aPool[21];
     PblHeap<const BaseHint*, float> heap(20, 0.0f, aPool);
@@ -392,11 +389,11 @@ bool SnipeHelper::HELPERSeeEnemyInterrupt(const GameObject* pEnemy) const
         return true;
     }
     const PblMatrix& rEnemy = GetCollisionObject(pEnemy)->GetMatrix();
-    if (IsWithinSnipeFOV(GetMatrixPos(rEnemy)))
+    if (IsWithinSnipeFOV(rEnemy.GetTranslation()))
     {
         return false;
     }
-    return DistSq(GetMatrixPos(GetCollisionObject(pEnemy)->GetMatrix()), GetMatrixPos(GetMe()->GetMatrix())) < 1600.0f;
+    return DistSq((GetCollisionObject(pEnemy)->GetMatrix()).GetTranslation(), GetMe()->GetMatrix().GetTranslation()) < 1600.0f;
 }
 
 // FUNCTION: SWBF2 0x0063c1a0
@@ -404,7 +401,7 @@ bool SnipeHelper::HELPERHearEnemyInterrupt(const GameObject* pEnemy) const
 {
     if (mCurState == STATE_SNIPE)
     {
-        return !IsWithinSnipeFOV(GetMatrixPos(GetCollisionObject(pEnemy)->GetMatrix()));
+        return !IsWithinSnipeFOV((GetCollisionObject(pEnemy)->GetMatrix()).GetTranslation());
     }
     return true;
 }

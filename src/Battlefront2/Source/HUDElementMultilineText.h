@@ -33,8 +33,8 @@ public:
         // SYNTHETIC: SWBF2 0x00558010
         // HUD::ElementMultilineText::Line::`vector deleting destructor'
 
-        // FUNCTION: SWBF2 0x00557210
-        virtual ~Line();
+        // SYNTHETIC: SWBF2 0x00557210
+        // HUD::ElementMultilineText::Line::~Line
 
         void SetGroup(HUD::ElementMultilineText* const pGroup) { mGroup = pGroup; }
 
