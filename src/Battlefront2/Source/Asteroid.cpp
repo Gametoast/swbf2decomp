@@ -403,7 +403,7 @@ const PblVector3& Asteroid::GetVelocity() const
 // FUNCTION: SWBF2 0x00444560
 void Asteroid::SetPosition(const PblVector3& vPos)
 {
-    *(PblVector3*)&mMatrix.m[3][0] = vPos;
+    mMatrix[3] = vPos;
     mMatrix.m[3][3] = 1.0f;
     AsteroidCollisionFollows(this);
 }
@@ -571,8 +571,7 @@ bool Asteroid::Update(float fDeltaTime)
         const float fInv = 1.0f / fOmega;
         float fSin, fCos;
         PblMath::SinCos(&fSin, &fCos, fOmega * fDeltaTime * 0.5f);
-        const PblQuaternion qStep(mOmega.x * fInv * fSin, mOmega.y * fInv * fSin,
-                                  mOmega.z * fInv * fSin, fCos);
+        const PblQuaternion qStep(fCos, mOmega.x * fInv * fSin, mOmega.y * fInv * fSin, mOmega.z * fInv * fSin);
         qRotation = qRotation * qStep;
     }
     vPos.x += mVelocity.x * fDeltaTime;
@@ -583,7 +582,7 @@ bool Asteroid::Update(float fDeltaTime)
     D3DXQuaternionNormalize(&qNormalized, (const D3DXQUATERNION*)&qRotation);
     PblMatrix mNew;
     D3DXMatrixRotationQuaternion((D3DXMATRIX*)&mNew, &qNormalized);
-    *(PblVector3*)&mNew.m[3][0] = vPos;
+    mNew[3] = vPos;
     mNew.m[3][3] = 1.0f;
     mMatrix = mNew;
     SetRenderPos(vPos);

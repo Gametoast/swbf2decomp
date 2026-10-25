@@ -179,3 +179,6 @@ private:
 };
 
 }
+
+// VTABLE: SWBF2 0x00783938
+// class util::StaticMemoryBlock<4096>

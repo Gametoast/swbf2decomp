@@ -496,7 +496,7 @@ bool RepairHelper::Update(float dt)
     Controllable* pMe = GetMe();
     UnitControllerPtr(pMe->mCtrl)->GetLowLevel().SetTarget(pTarget);
     const PblVector3 vHisPos = *reinterpret_cast<const PblVector3*>(&AsCollisionObject(pTarget)->GetMatrix().m[3][0]);
-    const PblVector3 vMyPos = *reinterpret_cast<const PblVector3*>(&pMe->GetMatrix().m[3][0]);
+    const PblVector3 vMyPos = pMe->GetMatrix().GetTranslation();
     const float fRange = CombatUtil::GetWeaponMaxRange(pMe);
     const float fDistSq = (vMyPos.x - vHisPos.x) * (vMyPos.x - vHisPos.x) + (vMyPos.z - vHisPos.z) * (vMyPos.z - vHisPos.z);
     const bool bTouching = pMe->GetCurrentCollision() == pTarget;

@@ -120,10 +120,7 @@ void UnitController::ResetFriendlyList()
 
 namespace
 {
-    inline const PblVector3& GetTrans(const PblMatrix& m)
-    {
-        return *reinterpret_cast<const PblVector3*>(&m.m[3][0]);
-    }
+
 
     inline PblHandle<const GameObject> MakeHandle(const GameObject* pObject)
     {
@@ -255,7 +252,7 @@ UnitController::UnitController(Controllable* pOwner)
     mLookAheadOnly = false;
     SetRandomSeed(AIUtil::GetRandomInt(0, 100));
     const PblMatrix& rOwnerMatrix = mOwner->GetMatrix();
-    mOriginalAheadDir = *reinterpret_cast<const PblVector3*>(&rOwnerMatrix.m[2][0]);
+    mOriginalAheadDir = rOwnerMatrix.GetZAxis();
     mSkip = false;
     mFriendlyCount = 0;
     mUpdateRate = 0.5f;
@@ -571,7 +568,7 @@ const PblVector3& UnitController::GetAttackHelperTargetLastSeenPosition() const
     {
         return GetAttackHelper(mAgent)->GetLastSeenTargetPos();
     }
-    return GetTrans(gMatrixIdentity);
+    return gMatrixIdentity.GetTranslation();
 }
 
 // FUNCTION: SWBF2 0x00663ce0
@@ -593,7 +590,7 @@ void UnitController::UpdateLodState()
     mLodStateUpdateTime = GameLoop::GetMissionTime();
 
     int iLod = 0;
-    const PblVector3& vMyPos = GetTrans(mOwner->GetMatrix());
+    const PblVector3& vMyPos = mOwner->GetMatrix().GetTranslation();
     float fClosestDistSq = FLT_MAX;
     mLodHumanPlayer = 0;
 
@@ -606,7 +603,7 @@ void UnitController::UpdateLodState()
         }
 
         int iCharLod = 3;
-        const PblVector3& vPos = GetTrans(pCharacter->GetControllable()->GetMatrix());
+        const PblVector3& vPos = pCharacter->GetControllable()->GetMatrix().GetTranslation();
         float dx = vPos.x - vMyPos.x;
         float dy = vPos.y - vMyPos.y;
         float dz = vPos.z - vMyPos.z;
@@ -724,7 +721,7 @@ int UnitController::SendEvent(AI::EventInfo* pInfo) const
 void UnitController::SetLastShotDist(float fDistSq)
 {
     mLastShotDistSq = fDistSq;
-    mLastShotDistPos = mOwner ? GetTrans(mOwner->GetMatrix()) : GetTrans(gMatrixIdentity);
+    mLastShotDistPos = mOwner ? mOwner->GetMatrix().GetTranslation() : gMatrixIdentity.GetTranslation();
     mLastShotDistTime = GameLoop::GetMissionTime();
 }
 
@@ -742,7 +739,7 @@ bool UnitController::IsTargetLOSPossiblyBlocked()
         return false;
     }
 
-    const PblVector3& vMyPos = GetTrans(mOwner->GetMatrix());
+    const PblVector3& vMyPos = mOwner->GetMatrix().GetTranslation();
     float dx = vMyPos.x - mLastShotDistPos.x;
     float dy = vMyPos.y - mLastShotDistPos.y;
     float dz = vMyPos.z - mLastShotDistPos.z;
@@ -812,7 +809,7 @@ void UnitController::UseBuffs()
         {
             GameObject* apUnits[3];
             const Team* pTeam = Team::GetPtr(static_cast<Trackable*>(mOwner)->GetGameObject()->GetTeam());
-            if (ControllerManager::GetUnitsInRange(GetTrans(mOwner->GetMatrix()), pClass->mMaxRange, apUnits, 3,
+            if (ControllerManager::GetUnitsInRange(mOwner->GetMatrix().GetTranslation(), pClass->mMaxRange, apUnits, 3,
                                                    pTeam, AI::AFFIL_ALLYNEUTRAL) < 3)
             {
                 return;

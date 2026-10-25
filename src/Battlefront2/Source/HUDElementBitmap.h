@@ -94,7 +94,8 @@ public:
 
     ElementBitmap(const char* const pName = 0, Factory::ItemCallback pCallback = 0,
                   void* const pUserData = 0);
-    virtual ~ElementBitmap();
+    // SYNTHETIC: SWBF2 0x0054a730
+    // HUD::ElementBitmap::~ElementBitmap
     virtual void* GetParent();
 
     void SetTexture(const char* pName);

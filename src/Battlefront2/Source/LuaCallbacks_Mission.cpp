@@ -3478,7 +3478,7 @@ int Print3D(lua_State* L)
 {
     const PblMatrix* pMatrix = (const PblMatrix*)lua_touserdata(L, 1);
     const char* pcText = luaL_checklstring(L, 2, 0);
-    const PblVector3& vPosition = *(const PblVector3*)&pMatrix->m[3][0];
+    const PblVector3& vPosition = (*pMatrix)[3];
     RedDebug::Printf3D(vPosition, "%s", pcText);
     return 0;
 }

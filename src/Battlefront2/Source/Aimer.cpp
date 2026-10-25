@@ -72,8 +72,8 @@ namespace
         return pObject->GetControllable();
     }
 
-    PblVector3& Row(PblMatrix& m, int i) { return *reinterpret_cast<PblVector3*>(m.m[i]); }
-    const PblVector3& Row(const PblMatrix& m, int i) { return *reinterpret_cast<const PblVector3*>(m.m[i]); }
+
+
 
     PblMatrix MakeMatrix(const PblQuaternion& q, const PblVector3& v)
     {
@@ -254,7 +254,7 @@ bool AimerClass::SetProperty(unsigned int uProperty, const char* pszValue, const
             pClass->mParentHash = pModel->GetParentBoneAndOffsetMatrix(pClass->mMountHash, mOffset);
             if (pClass->mParentHash)
             {
-                pClass->mOffsetPos = Row(mOffset, 3);
+                pClass->mOffsetPos = mOffset[3];
                 pClass->mOffsetRot = PblQuaternion(mOffset);
             }
             for (unsigned int uBone = pClass->mMountHash; uBone; uBone = pModel->GetParentBone(uBone))
@@ -335,7 +335,7 @@ Aimer::Aimer(AimerClass* pClass, const Controllable* pOwner, const PblMatrix* pP
     mMountRot = mClass->mOffsetRot;
     D3DXVec3TransformCoord(&v, &mMountPos, mParentMatrix);
     mRootPos = v;
-    mFirePos = Row(*mParentMatrix, 3);
+    mFirePos = (*mParentMatrix)[3];
     mOldRootPos.x = 0.0f;
     mOldRootPos.y = 0.0f;
     mOldRootPos.z = 0.0f;
@@ -372,7 +372,7 @@ const PblMatrix Aimer::GetMatrix() const
     PblMatrix mRot = MakeMatrix(mMountRot, mMountPos);
     PblMatrix mMount;
     D3DXMatrixMultiply(&mMount, &mRot, mParentMatrix);
-    return DirectionMatrix(mDirection, Row(mMount, 1), Row(mMount, 3));
+    return DirectionMatrix(mDirection, mMount[1], mMount[3]);
 }
 
 // FUNCTION: SWBF2 0x0043d280
@@ -412,7 +412,7 @@ void Aimer::SetupPose(const PblMatrix& mParent, RedPose& pose, bool bRecurse) co
             D3DXMatrixMultiply(&mMount, &mOffset, pParentBone);
             PblVector3 vDir;
             D3DXVec3TransformNormal(&vDir, &mDirection, &mParent);
-            mMountPoseMatrix = DirectionMatrix(vDir, Row(mMount, 1), Row(mMount, 3));
+            mMountPoseMatrix = DirectionMatrix(vDir, mMount[1], mMount[3]);
 
             const PblMatrix* pOld = pose.Find(mClass->mMountHash);
             if (pOld != &mMountPoseMatrix)
@@ -625,7 +625,7 @@ bool Aimer::Update(float fDeltaTime)
             PblMatrix mOffset = MakeMatrix(mClass->mOffsetRot, mOffsetPos);
             PblMatrix mMount;
             D3DXMatrixMultiply(&mMount, &mOffset, pParentBone);
-            mMountPos = Row(mMount, 3);
+            mMountPos = mMount[3];
             mMountRot = PblQuaternion(mMount);
         }
     }
@@ -633,7 +633,7 @@ bool Aimer::Update(float fDeltaTime)
     PblMatrix mRot = MakeMatrix(mMountRot, mMountPos);
     PblMatrix mMount;
     D3DXMatrixMultiply(&mMount, &mRot, mParentMatrix);
-    mRootPos = Row(mMount, 3);
+    mRootPos = mMount[3];
 
     if (mWeapon)
     {
@@ -716,7 +716,7 @@ bool Aimer::Update(float fDeltaTime)
             mRecoil[i] -= fDeltaTime * 4.0f;
         }
 
-        const PblMatrix mAim = DirectionMatrix(mDirection, Row(mMount, 1), mRootPos);
+        const PblMatrix mAim = DirectionMatrix(mDirection, mMount[1], mRootPos);
         const AimerClass::BarrelInfo& barrel = mClass->mBarrelInfo[mCurrentBarrel];
         const PblVector3 vOffset(barrel.mOffset.x + barrel.mFireOffset.x,
                                  barrel.mOffset.y + barrel.mFireOffset.y,

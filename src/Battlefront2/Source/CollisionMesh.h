@@ -96,11 +96,11 @@ public:
  
  
 
-// VTABLE: SWBF2 0x00797448
 template <int N> class PolyListContainer;
 class CollisionMeshCache;
 class EntitySoldier;
 
+// VTABLE: SWBF2 0x00797448
 class CollisionMesh
 {
 public:

@@ -406,7 +406,7 @@ OrdnanceBullet::OrdnanceBullet(OrdnanceBulletClass* pClass, const OrdnanceDesc& 
             if (m_pLight->_fBeamLength > 0.0f)
             {
                 const PblVector3& vDir = desc.mDirection;
-                *(PblVector3*)matrix.m[1] = vDir;
+                matrix[1] = vDir;
                 matrix.m[1][3] = 0.0f;
                 PblVector3 vFront(vDir.x * vDir.y - gVectorUnitY.x, vDir.y * vDir.y - gVectorUnitY.y,
                                   vDir.z * vDir.y - gVectorUnitY.z);
@@ -425,7 +425,7 @@ OrdnanceBullet::OrdnanceBullet(OrdnanceBulletClass* pClass, const OrdnanceDesc& 
                 matrix.m[0][1] = vDir.z * vFront.x - vDir.x * vFront.z;
                 matrix.m[0][2] = vDir.x * vFront.y - vDir.y * vFront.x;
                 matrix.m[0][3] = 0.0f;
-                *(PblVector3*)matrix.m[2] = vFront;
+                matrix[2] = vFront;
                 matrix.m[2][3] = 0.0f;
             }
             m_pLight->SetMatrix(matrix);
@@ -684,7 +684,7 @@ bool OrdnanceBullet::Collide(CollisionObject* pObject, const PblVector3& vPos, c
                     }
                     else
                     {
-                        *(PblVector3*)mWorld.m[3] = vPos;
+                        mWorld[3] = vPos;
                         mWorld.m[3][3] = 1.0f;
                     }
                     const PblMatrix mInverse = pVictim->GetMatrix().GetInverseFast();

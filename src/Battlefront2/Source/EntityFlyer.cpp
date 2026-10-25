@@ -4566,7 +4566,7 @@ bool EntityFlyer::Update(float fDeltaTime)
             float fSin;
             float fCos;
             PblMath::SinCos(&fSin, &fCos, fSpin * fDeltaTime * 0.5f);
-            qBody = qBody * PblQuaternion(fAxisX * fSin, fAxisY * fSin, fAxisZ * fSin, fCos);
+            qBody = qBody * PblQuaternion(fCos, fAxisX * fSin, fAxisY * fSin, fAxisZ * fSin);
         }
         vPos.x += mVelocity.x * fDeltaTime;
         vPos.y += mVelocity.y * fDeltaTime;

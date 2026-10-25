@@ -247,8 +247,8 @@ void TentacleSimulator::DoTentacles(RedPose* pPose, const PblMatrix& mParent,
             for (int b = 0; b < mBonesPerTentacle; b++)
             {
                 const PblMatrix* pBone = apBones[t][b];
-                oldPos[t][b] = *(const PblVector3*)pBone->m[3];
-                tPos[t][b] = *(const PblVector3*)pBone->m[3];
+                oldPos[t][b] = (*pBone)[3];
+                tPos[t][b] = (*pBone)[3];
             }
         }
         mFirstUpdate = false;

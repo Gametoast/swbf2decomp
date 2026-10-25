@@ -3227,7 +3227,7 @@ void EntityWalker::CorrectJoints()
     }
 
     ZephyrTransform* pJoints = mZephyrPoseStatic.m_pJoints;
-    pJoints[0].kQuat = pJoints[0].kQuat * PblQuaternion(0.0f, mTurnOffset.mSin, 0.0f, mTurnOffset.mCos);
+    pJoints[0].kQuat = pJoints[0].kQuat * PblQuaternion(mTurnOffset.mCos, 0.0f, mTurnOffset.mSin, 0.0f);
 
     unsigned short uiRoot = (unsigned short)mZephyrSkeleton.m_pShared->GetJointIdxByCrc(0x16e27226);
     ZephyrTransform* pRoot = &pJoints[uiRoot];
@@ -3237,11 +3237,11 @@ void EntityWalker::CorrectJoints()
     }
     if (mBodyPitch != 0.0f && pRoot)
     {
-        pRoot->kQuat = pRoot->kQuat * PblQuaternion(mPitchOffset.mSin, 0.0f, 0.0f, mPitchOffset.mCos);
+        pRoot->kQuat = pRoot->kQuat * PblQuaternion(mPitchOffset.mCos, mPitchOffset.mSin, 0.0f, 0.0f);
     }
     if (mRollOffset.mCos < 1.0f && pRoot)
     {
-        pRoot->kQuat = pRoot->kQuat * PblQuaternion(0.0f, 0.0f, mRollOffset.mSin, mRollOffset.mCos);
+        pRoot->kQuat = pRoot->kQuat * PblQuaternion(mRollOffset.mCos, 0.0f, 0.0f, mRollOffset.mSin);
     }
 }
 
@@ -3257,14 +3257,14 @@ void EntityWalker::RestoreJoints()
     }
     if (mRollOffset.mCos < 1.0f && pRoot)
     {
-        pRoot->kQuat = pRoot->kQuat * PblQuaternion(0.0f, 0.0f, -mRollOffset.mSin, mRollOffset.mCos);
+        pRoot->kQuat = pRoot->kQuat * PblQuaternion(mRollOffset.mCos, 0.0f, 0.0f, -mRollOffset.mSin);
     }
     if (mBodyPitch != 0.0f && pRoot)
     {
-        pRoot->kQuat = pRoot->kQuat * PblQuaternion(-mPitchOffset.mSin, 0.0f, 0.0f, mPitchOffset.mCos);
+        pRoot->kQuat = pRoot->kQuat * PblQuaternion(mPitchOffset.mCos, -mPitchOffset.mSin, 0.0f, 0.0f);
     }
     pJoints[0].kQuat =
-        pJoints[0].kQuat * PblQuaternion(0.0f, mTurnOffset.mSin, 0.0f, mTurnOffset.mCos).Inverse();
+        pJoints[0].kQuat * PblQuaternion(mTurnOffset.mCos, 0.0f, mTurnOffset.mSin, 0.0f).Inverse();
 
     if (mBodyPitch != 0.0f)
     {

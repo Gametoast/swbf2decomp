@@ -83,10 +83,7 @@ namespace
         return reinterpret_cast<Fn>(VTable(pObject)[68])(pObject);
     }
 
-    inline const PblVector3& Row(const PblMatrix& rMatrix, int iRow)
-    {
-        return *reinterpret_cast<const PblVector3*>(rMatrix.m[iRow]);
-    }
+
 }
 
 static const float Sign(float f)
@@ -160,7 +157,7 @@ void Trackable::SetupCameraTrackMatrixHUDTargeting(PblMatrix& rMatrix)
     {
         PblMatrix mObject = GameObject_GetSmoothedMatrix(GameObject_GetGameObject(pObject));
         PblVector3 vDir(-pControllable->mEyeDir.x, -pControllable->mEyeDir.y, -pControllable->mEyeDir.z);
-        rMatrix = DirectionMatrix(vDir, Row(mObject, 1), pControllable->mEyePoint);
+        rMatrix = DirectionMatrix(vDir, mObject[1], pControllable->mEyePoint);
     }
 }
 
@@ -381,7 +378,7 @@ void CameraTrackSetting::SetupCameraTrackMatrixHUDTargeting(PblMatrix& rMatrix, 
                                                             const PblVector3& vAimDir)
 {
     PblVector3 vDir(-vAimDir.x, -vAimDir.y, -vAimDir.z);
-    PblQuaternion qLook = PblQuaternion(DirectionMatrix(vDir, Row(rTarget, 1), gVectorZero));
+    PblQuaternion qLook = PblQuaternion(DirectionMatrix(vDir, rTarget[1], gVectorZero));
 
     float fSin, fCos;
     PblMath::SinCos(&fSin, &fCos, -GetCameraTiltValue() * 0.5f);
@@ -419,7 +416,7 @@ void CameraTrackSetting::SetupCameraTrackMatrixHUDTargeting(const CameraTrackSet
     D3DXVec3TransformCoord(&vCenter, &vTrackCenter, &rTarget);
 
     PblVector3 vDir(-vAimDir.x, -vAimDir.y, -vAimDir.z);
-    PblQuaternion qLook = PblQuaternion(DirectionMatrix(vDir, Row(rTarget, 1), gVectorZero));
+    PblQuaternion qLook = PblQuaternion(DirectionMatrix(vDir, rTarget[1], gVectorZero));
 
     float fSin, fCos;
     PblMath::SinCos(&fSin, &fCos, fTilt * -0.5f);
@@ -453,14 +450,14 @@ void CameraTrackSetting::SetupCameraTrackMatrix(Trackable* pTrackable, PblMatrix
                                                 const GameObject* pIgnore)
 {
     PblQuaternion qCurrent = PblQuaternion(rMatrix);
-    PblVector3 vCurrent = Row(rMatrix, 3);
+    PblVector3 vCurrent = rMatrix[3];
 
     PblVector3 vCenter = CalcCenterPoint(rTarget);
     PblVector3 vToCenter(vCenter.x - vCurrent.x, vCenter.y - vCurrent.y, vCenter.z - vCurrent.z);
     bool bSnap = vToCenter.x * vToCenter.x + vToCenter.y * vToCenter.y + vToCenter.z * vToCenter.z > 62500.0f;
 
     PblVector3 vDir(-vAimDir.x, -vAimDir.y, -vAimDir.z);
-    PblQuaternion qTarget = PblQuaternion(DirectionMatrix(vDir, Row(rTarget, 1), gVectorZero));
+    PblQuaternion qTarget = PblQuaternion(DirectionMatrix(vDir, rTarget[1], gVectorZero));
 
     float fSin, fCos;
     PblMath::SinCos(&fSin, &fCos, -GetCameraTiltValue() * 0.5f);
@@ -504,8 +501,8 @@ void CameraTrackSetting::SetupCameraTrackMatrix(Trackable* pTrackable, PblMatrix
         PblVector3 vNear(vCamera.x - vRay.x * fNear, vCamera.y - vRay.y * fNear, vCamera.z - vRay.z * fNear);
         const GameObject* apIgnore[1] = { pIgnore };
 
-        const PblVector3& vRight = Row(mCamera, 0);
-        const PblVector3& vUp = Row(mCamera, 1);
+        const PblVector3& vRight = mCamera[0];
+        const PblVector3& vUp = mCamera[1];
         PblVector3 vCorner;
         switch (pTrackable->whichCornerToCastForCamera)
         {
@@ -590,7 +587,7 @@ void CameraTrackSetting::SetupCameraTrackMatrix(Trackable* pTrackable, const Cam
                                                 const GameObject* pIgnore)
 {
     PblQuaternion qCurrent = PblQuaternion(rMatrix);
-    PblVector3 vCurrent = Row(rMatrix, 3);
+    PblVector3 vCurrent = rMatrix[3];
 
     PblVector3 vTrackCenter = Interpolate(rOther.mCameraTrackCenter, mCameraTrackCenter, fBlend);
     PblVector3 vTrackOffset = Interpolate(rOther.mCameraTrackOffset, mCameraTrackOffset, fBlend);
@@ -607,7 +604,7 @@ void CameraTrackSetting::SetupCameraTrackMatrix(Trackable* pTrackable, const Cam
     bool bSnap = vToCenter.y * vToCenter.y + vToCenter.x * vToCenter.x + vToCenter.z * vToCenter.z > 22500.0f;
 
     PblVector3 vDir(-vAimDir.x, -vAimDir.y, -vAimDir.z);
-    PblQuaternion qTarget = PblQuaternion(DirectionMatrix(vDir, Row(rTarget, 1), gVectorZero));
+    PblQuaternion qTarget = PblQuaternion(DirectionMatrix(vDir, rTarget[1], gVectorZero));
 
     float fSin, fCos;
     PblMath::SinCos(&fSin, &fCos, fTilt * -0.5f);
@@ -661,8 +658,8 @@ void CameraTrackSetting::SetupCameraTrackMatrix(Trackable* pTrackable, const Cam
 
         float fDistance = CollisionManager::RayHit(vSafe, vNear, pHitObject, 0, apIgnore, bIgnore, 0x90, true);
 
-        const PblVector3& vRight = Row(mCamera, 0);
-        const PblVector3& vUp = Row(mCamera, 1);
+        const PblVector3& vRight = mCamera[0];
+        const PblVector3& vUp = mCamera[1];
         PblVector3 avCorner[4] = {
             PblVector3(vUp.x * 0.4f + vRight.x * 0.4f, vUp.y * 0.4f + vRight.y * 0.4f,
                        vUp.z * 0.4f + vRight.z * 0.4f),

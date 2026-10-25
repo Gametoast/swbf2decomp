@@ -59,6 +59,9 @@ public:
 
     void SetTranslation(const PblVector3& vTranslation);
 
+    PblVector3& operator[](int iRow);
+    const PblVector3& operator[](int iRow) const;
+
     float m[4][4];
 };
 

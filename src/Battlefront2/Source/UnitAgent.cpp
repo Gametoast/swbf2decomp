@@ -130,10 +130,6 @@ namespace
         SOLDIER_PILOT = 3
     };
 
-    inline const PblVector3& GetTrans(const PblMatrix& m)
-    {
-        return *reinterpret_cast<const PblVector3*>(&m.m[3][0]);
-    }
 
     inline int GetTeam(const GameObject* pObj)
     {
@@ -356,10 +352,10 @@ void UnitAgent::FaceTarget(ControllableHeight eHeight, const PblVector3& vTarget
 // FUNCTION: SWBF2 0x0065df60
 bool UnitAgent::RunForVehicle(const GameObject* pVehicle) const
 {
-    PblVector3 vVehiclePos = GetTrans(GetCollisionObject(pVehicle)->GetMatrix());
+    PblVector3 vVehiclePos = (GetCollisionObject(pVehicle)->GetMatrix()).GetTranslation();
     const GameObject* pMe = GetMe()->GetGameObject();
     GameObject* pObjects[30];
-    int iCount = TeamManager::GetApproxObjectsAlongLine(GetTrans(GetMe()->GetMatrix()), vVehiclePos, 8.0f,
+    int iCount = TeamManager::GetApproxObjectsAlongLine(GetMe()->GetMatrix().GetTranslation(), vVehiclePos, 8.0f,
                                                         pObjects, 30, pMe, AI::AFFIL_ENEMY);
     for (int i = 0; i < iCount; ++i)
     {
@@ -383,7 +379,7 @@ bool UnitAgent::AreNearbyUnitsInCombat()
         if (AsEntity(pMe)->GetEntity()->IsRtti(EntitySoldier::rttiHashEntitySoldier))
         {
             GameObject* pObjects[30];
-            int iCount = TeamManager::GetObjectsInRange(GetTrans(GetMe()->GetMatrix()), 7.0f, pObjects, 30,
+            int iCount = TeamManager::GetObjectsInRange(GetMe()->GetMatrix().GetTranslation(), 7.0f, pObjects, 30,
                                                         pMe, AI::AFFIL_ALLY);
             int iInCombat = 0;
             for (int i = 0; i < iCount && iInCombat < 3; ++i)
@@ -477,8 +473,8 @@ int UnitAgent::DamagedEventPlayerCentricness(AI::EventInfo* pEvent)
 
     if (!pInfo->mIsPropagated && pInfo->mDamageOwner && pInfo->mDamageOwner->GetControllable())
     {
-        const PblVector3& vAttacker = GetTrans(pInfo->mDamageOwner->GetControllable()->GetMatrix());
-        const PblVector3& vMe = GetTrans(GetMe()->GetMatrix());
+        const PblVector3& vAttacker = pInfo->mDamageOwner->GetControllable()->GetMatrix().GetTranslation();
+        const PblVector3& vMe = GetMe()->GetMatrix().GetTranslation();
         float fDX = vAttacker.x - vMe.x;
         float fDY = vAttacker.y - vMe.y;
         float fDZ = vAttacker.z - vMe.z;
@@ -536,7 +532,7 @@ int UnitAgent::HandleDamagedEvent(AI::EventInfo* pEvent)
 
     if (GetMe()->GetEntity()->IsRtti(EntityFlyer::rttiHashEntityFlyer))
     {
-        PblVector3 vPos = GetTrans(GetMe()->GetMatrix());
+        PblVector3 vPos = GetMe()->GetMatrix().GetTranslation();
         float fRadius = AIUtil::GetCollisionRadius(GetMe()->GetGameObject());
         if (FlyRegionManager::IsInside(vPos, 15.0f > fRadius ? 15.0f : fRadius))
         {
@@ -550,8 +546,8 @@ int UnitAgent::HandleDamagedEvent(AI::EventInfo* pEvent)
     }
 
     const GameObject* pAttacker = pOwner->GetControllable()->GetGameObject();
-    PblVector3 vMyPos = GetTrans(GetMe()->GetMatrix());
-    PblVector3 vAttackerPos = GetTrans(pOwner->GetControllable()->GetMatrix());
+    PblVector3 vMyPos = GetMe()->GetMatrix().GetTranslation();
+    PblVector3 vAttackerPos = pOwner->GetControllable()->GetMatrix().GetTranslation();
     float fRange = VisionManager::MaxVisibleDist(pAttacker, pMe);
     float fDX = vAttackerPos.x - vMyPos.x;
     float fDY = vAttackerPos.y - vMyPos.y;
@@ -645,8 +641,8 @@ int UnitAgent::Handle_Vision_CanSeeEnemy(AI::EventInfo* pInfo)
 
     if (AIUtil::GetEntityType(GetMe()->GetEntity()) == AIUtil::ENTITY_DROIDEKA)
     {
-        const PblVector3& vMe = GetTrans(GetMe()->GetMatrix());
-        const PblVector3& vEnemy = GetTrans(GetCollisionObject(pEnemy)->GetMatrix());
+        const PblVector3& vMe = GetMe()->GetMatrix().GetTranslation();
+        const PblVector3& vEnemy = (GetCollisionObject(pEnemy)->GetMatrix()).GetTranslation();
         float fDX = vEnemy.x - vMe.x;
         float fDY = vEnemy.y - vMe.y;
         float fDZ = vEnemy.z - vMe.z;
@@ -681,7 +677,7 @@ int UnitAgent::Handle_Audible_CanHearEnemy(AI::EventInfo* pInfo)
 
     if (GetMe()->GetEntity()->IsRtti(EntityFlyer::rttiHashEntityFlyer))
     {
-        PblVector3 vPos = GetTrans(GetMe()->GetMatrix());
+        PblVector3 vPos = GetMe()->GetMatrix().GetTranslation();
         float fRadius = AIUtil::GetCollisionRadius(GetMe()->GetGameObject());
         if (FlyRegionManager::IsInside(vPos, 15.0f > fRadius ? 15.0f : fRadius))
         {
@@ -701,8 +697,8 @@ int UnitAgent::Handle_Audible_CanHearEnemy(AI::EventInfo* pInfo)
         return 1;
     }
 
-    PblVector3 vMyPos = GetTrans(GetMe()->GetMatrix());
-    PblVector3 vEnemyPos = GetTrans(GetCollisionObject(ResolveHandle(pInfo->mGameObject))->GetMatrix());
+    PblVector3 vMyPos = GetMe()->GetMatrix().GetTranslation();
+    PblVector3 vEnemyPos = (GetCollisionObject(ResolveHandle(pInfo->mGameObject))->GetMatrix()).GetTranslation();
     PblVector3 vDiff(vEnemyPos.x - vMyPos.x, vEnemyPos.y - vMyPos.y, vEnemyPos.z - vMyPos.z);
     float fRange = CombatUtil::GetCombatRange(GetMe());
     if (AIUtil::GetEntityType(GetMe()->GetEntity()) == AIUtil::ENTITY_DROIDEKA)

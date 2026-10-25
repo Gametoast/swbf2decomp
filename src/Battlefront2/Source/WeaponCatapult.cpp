@@ -132,7 +132,7 @@ void WeaponCatapult::SetArmAngle(float fAngle)
         const float fInv = 1.0f / fLength;
         float fSin, fCos;
         PblMath::SinCos(&fSin, &fCos, fLength * 0.5f);
-        qArm = qArm * PblQuaternion(vOmega.x * fInv * fSin, vOmega.y * fInv * fSin, vOmega.z * fInv * fSin, fCos);
+        qArm = qArm * PblQuaternion(fCos, vOmega.x * fInv * fSin, vOmega.y * fInv * fSin, vOmega.z * fInv * fSin);
     }
 
     PblQuaternion qUnit;

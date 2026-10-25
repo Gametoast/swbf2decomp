@@ -12,7 +12,13 @@ public:
 
     // FUNCTION: SWBF2 0x0043ce60
     PblQuaternion() : _fX(0.0f), _fY(0.0f), _fZ(0.0f), _fS(1.0f) {}
-    PblQuaternion(float fX, float fY, float fZ, float fS) : _fX(fX), _fY(fY), _fZ(fZ), _fS(fS) {}
+    PblQuaternion(float fS, float fX, float fY, float fZ)
+    {
+        _fS = fS;
+        _fX = fX;
+        _fY = fY;
+        _fZ = fZ;
+    }
     PblQuaternion(const PblVector3& vAxis, float fAngle)
     {
         float fSin, fCos;

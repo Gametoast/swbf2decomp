@@ -78,7 +78,7 @@ WalkerLegPair::WalkerLegPair(EntityWalker* pParent, const WalkerLegPairInfo& inf
     mLegJoints[Left] = info.mLegJoints[Left];
     mLegJoints[Right] = info.mLegJoints[Right];
 
-    PblQuaternion identity(0.0f, 0.0f, 0.0f, 1.0f);
+    PblQuaternion identity(1.0f, 0.0f, 0.0f, 0.0f);
     mLegAdjustments[Left] = identity;
     mLegAdjustments[Right] = identity;
     mBlendFactor = 0.0f;
@@ -240,7 +240,7 @@ void WalkerLegPair::ApplyBlend()
 // FUNCTION: SWBF2 0x006767d0
 void WalkerLegPair::CorrectJoints()
 {
-    PblQuaternion kAdjust(-mParent->mPitchOffset.mSin, 0.0f, 0.0f, mParent->mPitchOffset.mCos);
+    PblQuaternion kAdjust(mParent->mPitchOffset.mCos, -mParent->mPitchOffset.mSin, 0.0f, 0.0f);
     AdjustLeg(Left, kAdjust);
     AdjustLeg(Right, kAdjust);
 }

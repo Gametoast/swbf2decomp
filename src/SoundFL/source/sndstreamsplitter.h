@@ -11,6 +11,7 @@ namespace Snd
 // SYNTHETIC: SWBF2 0x0074cf40
 // Snd::StreamSplitter::`scalar deleting destructor'
 
+// VTABLE: SWBF2 0x00786d24
 class StreamSplitter : public StreamNode, public StreamNodeSink, public StreamNodeSource
 {
 public:

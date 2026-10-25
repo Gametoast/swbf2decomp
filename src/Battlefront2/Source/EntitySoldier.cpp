@@ -1810,8 +1810,8 @@ void EntitySoldier::Render(unsigned char ucLod, float fFade, unsigned int uiFlag
                                 vLocal = PblVector3(vUp.x * 0.4f + vSide.x * fSin, vUp.y * 0.4f + vSide.y * fSin,
                                                     vUp.z * 0.4f + vSide.z * fSin);
                             }
-                            PblMatrix mDir = DirectionMatrix(vLocal, *(const PblVector3*)&pHead->m[0][0],
-                                                             *(const PblVector3*)&pHead->m[3][0]);
+                            PblMatrix mDir = DirectionMatrix(vLocal, (*pHead)[0],
+                                                             (*pHead)[3]);
                             mHeadLook.m[0][0] = mDir.m[1][0];
                             mHeadLook.m[0][1] = mDir.m[1][1];
                             mHeadLook.m[0][2] = mDir.m[1][2];

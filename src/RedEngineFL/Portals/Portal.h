@@ -400,8 +400,6 @@ public:
     virtual void GetSphereBound(geo::Sphere &) const;
 };
 }
- 
- 
- 
- 
- 
+
+// VTABLE: SWBF2 0x00783574
+// class pvs::BaseDisplayable<pvs::IDisplayable>

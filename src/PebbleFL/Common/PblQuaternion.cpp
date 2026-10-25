@@ -63,12 +63,11 @@ PblQuaternion::PblQuaternion(const PblMatrix& rMatrix)
 // FUNCTION: SWBF2 0x0072a2a0
 PblQuaternion operator*(const PblQuaternion& q0, const PblQuaternion& q1)
 {
-    PblQuaternion q;
-    q._fS = q1._fS * q0._fS - q1._fX * q0._fX - q1._fY * q0._fY - q1._fZ * q0._fZ;
-    q._fX = q0._fX * q1._fS + q1._fX * q0._fS - q0._fZ * q1._fY + q1._fZ * q0._fY;
-    q._fY = q0._fZ * q1._fX + q0._fY * q1._fS + q1._fY * q0._fS - q1._fZ * q0._fX;
-    q._fZ = q0._fZ * q1._fS - q0._fY * q1._fX + q1._fY * q0._fX + q1._fZ * q0._fS;
-    return q;
+    return PblQuaternion(
+        q1.GetS() * q0.GetS() - q1.GetX() * q0.GetX() - q1.GetY() * q0.GetY() - q1.GetZ() * q0.GetZ(),
+        q0.GetX() * q1.GetS() + q1.GetX() * q0.GetS() - q0.GetZ() * q1.GetY() + q1.GetZ() * q0.GetY(),
+        q0.GetZ() * q1.GetX() + q0.GetY() * q1.GetS() + q1.GetY() * q0.GetS() - q1.GetZ() * q0.GetX(),
+        q0.GetZ() * q1.GetS() - q0.GetY() * q1.GetX() + q1.GetY() * q0.GetX() + q1.GetZ() * q0.GetS());
 }
 
 // FUNCTION: SWBF2 0x0072a380

@@ -137,10 +137,6 @@ namespace
         return pObject->GetTeam();
     }
 
-    inline const PblVector3& GetTranslation(const PblMatrix& m)
-    {
-        return *reinterpret_cast<const PblVector3*>(m.m[3]);
-    }
 
     inline const GameObject* GetHandleObject(const PblHandle<const GameObject>& handle)
     {
@@ -1200,7 +1196,7 @@ void WeaponClass::CreateMuzzleFlash(const PblMatrix& mFire) const
     {
         return;
     }
-    if (!CameraManager::sInstance->IsInsideAnyCamera(*reinterpret_cast<const PblVector3*>(mFire.m[3]), 30.0f, 70.0f))
+    if (!CameraManager::sInstance->IsInsideAnyCamera(mFire.GetTranslation(), 30.0f, 70.0f))
     {
         return;
     }
@@ -1739,7 +1735,7 @@ void Weapon::Select(unsigned int, bool bOffhand)
     mMuzzleFlashStartTime = GameLoop::GetMissionTime() - 1.0f;
     if (!bOffhand)
     {
-        mClass->mWeaponChangeSound.Play(&GetTranslation(GetCollisionMatrix(pObject)),
+        mClass->mWeaponChangeSound.Play(&(GetCollisionMatrix(pObject)).GetTranslation(),
                                         &GetVelocity(pObject), false, true);
     }
 }
@@ -1798,7 +1794,7 @@ bool Weapon::Update(float fDeltaTime)
     }
 
     GameObject* pObject = mOwner->GetGameObject();
-    const PblVector3& vPos = GetTranslation(GetCollisionMatrix(pObject));
+    const PblVector3& vPos = (GetCollisionMatrix(pObject)).GetTranslation();
     const PblVector3& vVel = GetVelocity(pObject);
     if (mSoundControl.mFlags & GameSoundControllable::flags_playing)
     {
@@ -1883,7 +1879,7 @@ bool Weapon::Update(float fDeltaTime)
                     mTrigger->IsPressed())
                 {
                     mSoundPropsFire = mClass->mFireEmptySound;
-                    mSoundControlFire.Play(&mSoundPropsFire, &GetTranslation(GetCollisionMatrix(pObject)),
+                    mSoundControlFire.Play(&mSoundPropsFire, &(GetCollisionMatrix(pObject)).GetTranslation(),
                                            &GetVelocity(pObject), true);
                 }
                 return true;
@@ -1928,7 +1924,7 @@ bool Weapon::Update(float fDeltaTime)
                 if (mOwner && mOwner->mPlayerId >= 0 && mSelectedFlag && mTrigger->IsPressed())
                 {
                     mSoundPropsFire = mClass->mFireEmptySound;
-                    mSoundControlFire.Play(&mSoundPropsFire, &GetTranslation(GetCollisionMatrix(pObject)),
+                    mSoundControlFire.Play(&mSoundPropsFire, &(GetCollisionMatrix(pObject)).GetTranslation(),
                                            &GetVelocity(pObject), true);
                 }
                 return true;
@@ -1945,7 +1941,7 @@ bool Weapon::Update(float fDeltaTime)
                 if (mSelectedFlag && mTrigger->IsPressed() && mOwner && mOwner->mPlayerId >= 0)
                 {
                     mSoundPropsFire = mClass->mFireEmptySound;
-                    mSoundControlFire.Play(&mSoundPropsFire, &GetTranslation(GetCollisionMatrix(pObject)),
+                    mSoundControlFire.Play(&mSoundPropsFire, &(GetCollisionMatrix(pObject)).GetTranslation(),
                                            &GetVelocity(pObject), true);
                 }
                 return true;
@@ -1964,7 +1960,7 @@ bool Weapon::Update(float fDeltaTime)
                 if (mOwner && mOwner->mPlayerId >= 0 && mSelectedFlag && mTrigger->IsPressed())
                 {
                     mSoundPropsFire = mClass->mFireEmptySound;
-                    mSoundControlFire.Play(&mSoundPropsFire, &GetTranslation(GetCollisionMatrix(pObject)),
+                    mSoundControlFire.Play(&mSoundPropsFire, &(GetCollisionMatrix(pObject)).GetTranslation(),
                                            &GetVelocity(pObject), true);
                 }
                 return true;
@@ -2039,7 +2035,7 @@ void Weapon::EnterIdle()
     {
         mSoundProps = mClass->mOverheatSound;
         GameObject* pObject = mOwner->GetGameObject();
-        mSoundControl.Play(&mSoundProps, &GetTranslation(GetCollisionMatrix(mOwner->GetGameObject())),
+        mSoundControl.Play(&mSoundProps, &(GetCollisionMatrix(mOwner->GetGameObject())).GetTranslation(),
                            &GetVelocity(pObject), true);
         if (Snd::VoiceVirtual* pVoice = mSoundControl.GetVoiceVirtual())
         {
@@ -2088,7 +2084,7 @@ void Weapon::ExitIdle()
 void Weapon::PlayFireSound(bool bNoLoop)
 {
     GameObject* pObject = mOwner->GetGameObject();
-    const PblVector3* pPos = mAimer ? &mAimer->mFirePos : &GetTranslation(GetCollisionMatrix(pObject));
+    const PblVector3* pPos = mAimer ? &mAimer->mFirePos : &(GetCollisionMatrix(pObject)).GetTranslation();
     const PblVector3& vVel = GetVelocity(pObject);
     if (mClass->mFireSoundStop && (mSoundControlFire.mFlags & GameSoundControllable::flags_playing))
     {
@@ -2135,7 +2131,7 @@ void Weapon::PlayFoleyFX(unsigned int uIndex)
     {
         GameObject* pObject = mOwner->GetGameObject();
         mFoleyFXProps = mClass->mFoleyFX[uIndex];
-        mFoleyFXControl.Play(&mFoleyFXProps, &GetTranslation(mOwner->GetMatrix()),
+        mFoleyFXControl.Play(&mFoleyFXProps, &mOwner->GetMatrix().GetTranslation(),
                              pObject ? &GetVelocity(pObject) : 0, true);
     }
 }
@@ -2177,7 +2173,7 @@ void Weapon::EnterCharge()
     if (!IsRtti(0xe33ded9d) || NetGame::GetJoystickIndex(mOwner->mPlayerId) >= 0)
     {
         mSoundProps = mClass->mChargeSound;
-        const PblVector3* pPos = mAimer ? &mAimer->mFirePos : &GetTranslation(GetCollisionMatrix(pObject));
+        const PblVector3* pPos = mAimer ? &mAimer->mFirePos : &(GetCollisionMatrix(pObject)).GetTranslation();
         mSoundControl.Play(&mSoundProps, pPos, &GetVelocity(pObject), true);
     }
     if (Snd::VoiceVirtual* pVoice = mSoundControl.GetVoiceVirtual())
@@ -2259,7 +2255,7 @@ bool Weapon::UpdateCharge(float fDeltaTime)
     if (mStateTimer > mStateLimit && !mCharged)
     {
         GameObject* pObject = mOwner->GetGameObject();
-        const PblVector3* pPos = mAimer ? &mAimer->mFirePos : &GetTranslation(GetCollisionMatrix(pObject));
+        const PblVector3* pPos = mAimer ? &mAimer->mFirePos : &(GetCollisionMatrix(pObject)).GetTranslation();
         mClass->mChargedSound.Play(pPos, &GetVelocity(pObject), false, true);
         mCharged = true;
         if (mClass->mStopChargeSound)
@@ -2286,7 +2282,7 @@ void Weapon::EnterReload()
     mStateTimer = 0.0f;
     mStateLimit = mClass->mReloadTime;
     mSoundProps = mClass->mReloadSound;
-    const PblVector3* pPos = mAimer ? &mAimer->mFirePos : &GetTranslation(GetCollisionMatrix(pObject));
+    const PblVector3* pPos = mAimer ? &mAimer->mFirePos : &(GetCollisionMatrix(pObject)).GetTranslation();
     mSoundControl.Play(&mSoundProps, pPos, &GetVelocity(pObject), true);
     if (mOwner->mPlayerId >= 0 && GameLoop::gUnlimitedAmmo && !NetGame::IsEnabled())
     {
@@ -2429,13 +2425,13 @@ void Weapon::Render(const PblMatrix& mat, const RedPose* pPose, const RedColor& 
     pThis->mFirePointMatrix = *pMatrix;
     PblVector3 vFirePos;
     D3DXVec3TransformCoord(&vFirePos, &mRenderClass->mFirePointOffset, pMatrix);
-    *reinterpret_cast<PblVector3*>(pThis->mFirePointMatrix.m[3]) = vFirePos;
+    pThis->mFirePointMatrix[3] = vFirePos;
     pThis->mFirePointMatrix.m[3][3] = 1.0f;
 
     float fFlash = mMuzzleFlashStartTime - GameLoop::GetMissionTime();
     if (fFlash > 0.0f)
     {
-        mRenderClass->RenderFlash(GetTranslation(mFirePointMatrix), mAimer->mDirection,
+        mRenderClass->RenderFlash(mFirePointMatrix.GetTranslation(), mAimer->mDirection,
                                   (1.0f / mClass->mFlashLength) * fFlash);
     }
 

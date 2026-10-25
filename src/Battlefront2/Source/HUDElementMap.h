@@ -67,7 +67,8 @@ public:
             : HUD::ElementBitmap(pName), mMap(0), mMapMode(0), mBitmaps(0), mNumBitmaps(0)
         {
         }
-        virtual ~BitmapGroup();
+        // SYNTHETIC: SWBF2 0x0054fa60
+        // HUD::ElementMap::BitmapGroup::~BitmapGroup
 
         void Init(HUD::ElementMap* pMap, unsigned int uMapMode, RedBitmapElement* pBitmaps,
                   unsigned int uNumBitmaps)

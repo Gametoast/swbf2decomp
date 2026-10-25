@@ -73,10 +73,7 @@ void* HUD::ElementBitmap::GetParent()
 // SYNTHETIC: SWBF2 0x0054b78d
 // [thunk]:HUD::ElementBitmap::`scalar deleting destructor' adjustor{288}
 
-// FUNCTION: SWBF2 0x0054a730
-HUD::ElementBitmap::~ElementBitmap()
-{
-}
+
 
 // SYNTHETIC: SWBF2 0x0054abe0
 // HUD::ElementBarBitmap::`scalar deleting destructor'

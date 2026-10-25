@@ -16,6 +16,7 @@ struct KeyStroke
     unsigned short flags;
 };
 
+// VTABLE: SWBF2 0x0079f164
 class KeyGrabber : public RedInputEventHandler
 {
 public:

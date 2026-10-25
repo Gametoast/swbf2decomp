@@ -11,9 +11,8 @@ public:
     {
     public:
 
-        Node(float fSortValue = 0.0f)
+        Node(float fSortValue = 0.0f) : mSortValue(fSortValue)
         {
-            mSortValue = fSortValue;
         }
 
         // FUNCTION: SWBF2 0x004d26d0

@@ -269,7 +269,7 @@ void __fastcall Filter(SmoothInfo* pInfo)
             (&pInfo->mPosErr.x)[i] = mResult.m[3][i] - pInfo->lastPredictMat[0].m[3][i];
             (&pInfo->mFrontErr.x)[i] = mResult.m[2][i] - pInfo->lastPredictMat[0].m[2][i];
         }
-        pInfo->mRotErr = PblQuaternion(0.0f, 0.0f, 0.0f, 1.0f);
+        pInfo->mRotErr = PblQuaternion(1.0f, 0.0f, 0.0f, 0.0f);
     }
     ((SmoothInfo&)(*pInfo)).SetRenderMatrix(mResult);
 }
@@ -325,7 +325,7 @@ void __fastcall SmoothLocal(SmoothInfo* pInfo)
     {
         (&pInfo->mPosErr.x)[i] = (0.0f - (&pInfo->mPosErr.x)[i]) * fRatio + (&pInfo->mPosErr.x)[i];
     }
-    PblQuaternion qIdentity(0.0f, 0.0f, 0.0f, 1.0f);
+    PblQuaternion qIdentity(1.0f, 0.0f, 0.0f, 0.0f);
     pInfo->mRotErr = Interpolate(pInfo->mRotErr, qIdentity, fRatio);
     PblQuaternion qNormal;
     D3DXQuaternionNormalize(&qNormal, &pInfo->mRotErr);

@@ -926,13 +926,13 @@ bool SoldierAnimatorLowRes::GetRootMatrixAnimation(const EntitySoldier& soldier,
         PblVector3 vRight(vFront.z, 0.0f, -vFront.x);
 
         PblMatrix kRoot;
-        *(PblVector3*)&kRoot.m[0][0] = vRight;
+        kRoot[0] = vRight;
         kRoot.m[0][3] = 0.0f;
-        *(PblVector3*)&kRoot.m[1][0] = gVectorUnitY;
+        kRoot[1] = gVectorUnitY;
         kRoot.m[1][3] = 0.0f;
-        *(PblVector3*)&kRoot.m[2][0] = vFront;
+        kRoot[2] = vFront;
         kRoot.m[2][3] = 0.0f;
-        *(PblVector3*)&kRoot.m[3][0] = gVectorZero;
+        kRoot[3] = gVectorZero;
         kRoot.m[3][3] = 1.0f;
         kMatrix = kRoot;
         return true;
@@ -1118,13 +1118,13 @@ bool SoldierAnimatorLowRes_Pool::GetRootMatrixAnimation(const EntitySoldier& sol
     PblVector3 vRight(fCos, 0.0f, -fSin);
 
     PblMatrix kRoot;
-    *(PblVector3*)&kRoot.m[0][0] = vRight;
+    kRoot[0] = vRight;
     kRoot.m[0][3] = 0.0f;
-    *(PblVector3*)&kRoot.m[1][0] = gVectorUnitY;
+    kRoot[1] = gVectorUnitY;
     kRoot.m[1][3] = 0.0f;
-    *(PblVector3*)&kRoot.m[2][0] = vFront;
+    kRoot[2] = vFront;
     kRoot.m[2][3] = 0.0f;
-    *(PblVector3*)&kRoot.m[3][0] = gVectorZero;
+    kRoot[3] = gVectorZero;
     kRoot.m[3][3] = 1.0f;
     kMatrix = kRoot;
     return true;

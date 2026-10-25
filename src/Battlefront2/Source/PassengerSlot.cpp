@@ -168,7 +168,7 @@ PassengerSlot::PassengerSlot(GameObject* pParent, PassengerSlotClass* pClass, Re
 {
     D3DXMatrixMultiply(&mAimMatrix, &mClass->mMountMatrix, &mParent->GetMatrix());
     mEyePoint = mClass->mCameraSettings.CalcEyePoint(mAimMatrix);
-    mEyeDir = *reinterpret_cast<const PblVector3*>(mAimMatrix.m[2]);
+    mEyeDir = mAimMatrix.GetZAxis();
 }
 
 // SYNTHETIC: SWBF2 0x0060f530
@@ -297,7 +297,7 @@ bool PassengerSlot::Update(float fDeltaTime)
 
     D3DXMatrixMultiply(&mAimMatrix, &mClass->mMountMatrix, &mParent->GetMatrix());
     mEyePoint = mClass->mCameraSettings.CalcEyePoint(mAimMatrix);
-    mEyeDir = *reinterpret_cast<const PblVector3*>(mAimMatrix.m[2]);
+    mEyeDir = mAimMatrix.GetZAxis();
     mPowerupTimer += fDeltaTime;
     if (mPowerupTimer >= mClass->mPowerupDelay)
     {

@@ -1125,7 +1125,7 @@ bool EntityGeometryClass::AddTargetableCollision(const char* pszValue)
 // FUNCTION: SWBF2 0x004920e0
 void EntityGeometry::SetPosition(const PblVector3& vPos)
 {
-    *(PblVector3*)&mMatrix.m[3][0] = vPos;
+    mMatrix[3] = vPos;
     mMatrix.m[3][3] = 1.0f;
 
     PblVector3 vCenter;

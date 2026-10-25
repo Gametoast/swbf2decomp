@@ -505,7 +505,7 @@ void HUD::ElementBitmap::CopyToBitmaps(RedBitmapElement* const pBitmaps, unsigne
         bitmap.SetBlendMode(GetBlendMode());
 
         PblMatrix matrix = m_mLocal;
-        *(PblVector3*)matrix.m[3] = bitmap.GetPosition();
+        matrix[3] = bitmap.GetPosition();
         matrix.m[3][3] = 1.0f;
         bitmap.SetMatrix(matrix);
 

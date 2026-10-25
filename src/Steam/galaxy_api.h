@@ -308,3 +308,33 @@ private:
 }
 
 #endif
+
+// VTABLE: SWBF2 0x0079f684
+// class galaxy::api::SelfRegisteringListener<galaxy::api::IFriendListListener>
+
+// VTABLE: SWBF2 0x0079f6c0
+// class galaxy::api::SelfRegisteringListener<galaxy::api::IGameJoinRequestedListener>
+
+// VTABLE: SWBF2 0x007ab964
+// class galaxy::api::SelfRegisteringListener<galaxy::api::ILobbyListListener>
+
+// VTABLE: SWBF2 0x007ab97c
+// class galaxy::api::SelfRegisteringListener<galaxy::api::ILobbyEnteredListener>
+
+// VTABLE: SWBF2 0x007ab9ac
+// class galaxy::api::SelfRegisteringListener<galaxy::api::ILobbyCreatedListener>
+
+// VTABLE: SWBF2 0x007aba14
+// class galaxy::api::SelfRegisteringListener<galaxy::api::ILobbyDataListener>
+
+// VTABLE: SWBF2 0x007aba3c
+// class galaxy::api::SelfRegisteringListener<galaxy::api::ILobbyMemberStateListener>
+
+// VTABLE: SWBF2 0x007aba54
+// class galaxy::api::SelfRegisteringListener<galaxy::api::IAuthListener>
+
+// VTABLE: SWBF2 0x007aba74
+// class galaxy::api::SelfRegisteringListener<galaxy::api::ILobbyOwnerChangeListener>
+
+// VTABLE: SWBF2 0x007aba80
+// class galaxy::api::SelfRegisteringListener<galaxy::api::ILobbyLeftListener>

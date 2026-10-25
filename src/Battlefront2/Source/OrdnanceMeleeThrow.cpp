@@ -331,7 +331,7 @@ OrdnanceMeleeThrow::OrdnanceMeleeThrow(OrdnanceMeleeThrowClass* pClass, const Or
             matrix.SetTranslation(mPosition);
             if (m_pLight->_fBeamLength > 0.0f)
             {
-                *(PblVector3*)matrix.m[1] = vDir;
+                matrix[1] = vDir;
                 matrix.m[1][3] = 0.0f;
                 PblVector3 vFront(vDir.x * vDir.y - gVectorUnitY.x, vDir.y * vDir.y - gVectorUnitY.y,
                                   vDir.z * vDir.y - gVectorUnitY.z);
@@ -350,7 +350,7 @@ OrdnanceMeleeThrow::OrdnanceMeleeThrow(OrdnanceMeleeThrowClass* pClass, const Or
                 matrix.m[0][1] = vDir.z * vFront.x - vDir.x * vFront.z;
                 matrix.m[0][2] = vDir.x * vFront.y - vDir.y * vFront.x;
                 matrix.m[0][3] = 0.0f;
-                *(PblVector3*)matrix.m[2] = vFront;
+                matrix[2] = vFront;
                 matrix.m[2][3] = 0.0f;
             }
             m_pLight->SetMatrix(matrix);

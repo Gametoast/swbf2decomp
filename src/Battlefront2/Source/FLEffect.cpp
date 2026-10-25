@@ -629,11 +629,11 @@ void FLEffectObject::AttachEffectToVector(const PblVector3* pVector, bool b)
         m_uiAttachFlags |= ATTACHED_DYNAMIC;
     }
 
-    *(PblVector3*)m_mWorldMatrix.m[0] = gVectorUnitX;
+    m_mWorldMatrix[0] = gVectorUnitX;
     m_mWorldMatrix.m[0][3] = 0.0f;
-    *(PblVector3*)m_mWorldMatrix.m[1] = gVectorUnitY;
+    m_mWorldMatrix[1] = gVectorUnitY;
     m_mWorldMatrix.m[1][3] = 0.0f;
-    *(PblVector3*)m_mWorldMatrix.m[2] = gVectorUnitZ;
+    m_mWorldMatrix[2] = gVectorUnitZ;
     m_mWorldMatrix.m[2][3] = 0.0f;
     _Attach(_IdentityMatrix);
 }
@@ -672,7 +672,7 @@ void FLEffectObject::SetMatrix(const PblMatrix& mMatrix)
 // FUNCTION: SWBF2 0x00527900
 void FLEffectObject::SetPosition(const PblVector3& vPos)
 {
-    *(PblVector3*)m_mWorldMatrix.m[3] = vPos;
+    m_mWorldMatrix[3] = vPos;
     m_mWorldMatrix.m[3][3] = 1.0f;
     UpdatedWorldMatrix();
 }
@@ -798,7 +798,7 @@ void FLEffectObject::_UpdateWorldMatrix()
             }
             else
             {
-                *(PblVector3*)m_mWorldMatrix.m[3] = *m_pvAttachedToVector;
+                m_mWorldMatrix[3] = *m_pvAttachedToVector;
             }
             m_mWorldMatrix.m[3][3] = 1.0f;
             UpdatedWorldMatrix();

@@ -42,6 +42,11 @@ public:
 
 protected:
 
+    void CopyParameters(const Source2D3D& rOther)
+    {
+        Set3DMode(rOther.Get3DMode());
+    }
+
     bool Read(PblFileChunk& chunk, unsigned int uiPropertyID);
 
     bool Get3DModeChanged()

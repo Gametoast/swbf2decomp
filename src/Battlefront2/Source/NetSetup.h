@@ -125,6 +125,7 @@ public:
     virtual void ForceWriteShellMove() = 0;
 };
 
+// VTABLE: SWBF2 0x007ac210
 class NetFindGame
 {
 public:
@@ -166,6 +167,7 @@ public:
     virtual int GetPercentDone() = 0;
 };
 
+// VTABLE: SWBF2 0x007ac3c8
 class NetLoadGame
 {
 public:

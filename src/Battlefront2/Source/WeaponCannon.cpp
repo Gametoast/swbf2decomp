@@ -64,10 +64,6 @@ namespace
         return pObject->mCurHealth;
     }
 
-    inline const PblVector3& GetTranslation(const PblMatrix& m)
-    {
-        return *reinterpret_cast<const PblVector3*>(m.m[3]);
-    }
 
     inline int GetTeam(const GameObject* pObject)
     {
@@ -239,7 +235,7 @@ bool WeaponCannon::Update(float fDeltaTime)
     }
     else
     {
-        pPos = &GetTranslation(GetCollisionMatrix(pObject));
+        pPos = &(GetCollisionMatrix(pObject)).GetTranslation();
     }
     const PblVector3* pVel = &GetVelocity(pObject);
 
@@ -839,7 +835,7 @@ void WeaponCannon::PlayWarmUpSound()
     const PblMatrix& mMatrix = GetCollisionMatrix(pObject);
     const PblVector3& vVel = GetVelocity(pObject);
     mSoundPropsWarmUp = pClass->mWarmUpSound;
-    mSoundControlWarmUp.Play(&mSoundPropsWarmUp, &GetTranslation(mMatrix), &vVel, true);
+    mSoundControlWarmUp.Play(&mSoundPropsWarmUp, &mMatrix.GetTranslation(), &vVel, true);
     if (Snd::VoiceVirtual* pVoice = mSoundControlWarmUp.GetVoiceVirtual())
     {
         static_cast<Snd::VoiceVirtualBus*>(pVoice)->SetGain(0.0f);
@@ -943,7 +939,7 @@ void WeaponCannon::PlayBarrelSound()
     const PblMatrix& mMatrix = GetCollisionMatrix(pObject);
     const PblVector3& vVel = GetVelocity(pObject);
     mSoundPropsBarrel = pClass->mBarrelSound;
-    mSoundControlBarrel.Play(&mSoundPropsBarrel, &GetTranslation(mMatrix), &vVel, true);
+    mSoundControlBarrel.Play(&mSoundPropsBarrel, &mMatrix.GetTranslation(), &vVel, true);
     if (Snd::VoiceVirtual* pVoice = mSoundControlBarrel.GetVoiceVirtual())
     {
         static_cast<Snd::VoiceVirtualBus*>(pVoice)->SetGain(0.0f);
@@ -1017,7 +1013,7 @@ void WeaponCannon::PlayCoolDownSound()
     const PblMatrix& mMatrix = GetCollisionMatrix(pObject);
     const PblVector3& vVel = GetVelocity(pObject);
     mSoundPropsCoolDown = pClass->mCoolDownSound;
-    mSoundControlCoolDown.Play(&mSoundPropsCoolDown, &GetTranslation(mMatrix), &vVel, true);
+    mSoundControlCoolDown.Play(&mSoundPropsCoolDown, &mMatrix.GetTranslation(), &vVel, true);
     if (Snd::VoiceVirtual* pVoice = mSoundControlCoolDown.GetVoiceVirtual())
     {
         static_cast<Snd::VoiceVirtualBus*>(pVoice)->SetGain(0.0f);

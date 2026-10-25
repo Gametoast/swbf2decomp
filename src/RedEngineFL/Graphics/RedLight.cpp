@@ -1179,7 +1179,7 @@ void RedLight::Read(PblFileChunk& chunk)
 // FUNCTION: SWBF2 0x006c9030
 void RedLight::ReadLight(PblConfig& config, unsigned int uiName)
 {
-    PblQuaternion qRotation(0.0f, 0.0f, 0.0f, 1.0f);
+    PblQuaternion qRotation(1.0f, 0.0f, 0.0f, 0.0f);
     PblVector3 vPosition;
     RedColorValue color;
     color.r = RedColor::BLACK.r * kf1by255;

@@ -74,10 +74,6 @@ inline const CollisionObject* GetCollisionObject(const GameObject* pObj)
     return static_cast<const CollisionObject*>(pObj);
 }
 
-inline const PblVector3& GetTrans(const PblMatrix& m)
-{
-    return *reinterpret_cast<const PblVector3*>(&m.m[3][0]);
-}
 
 inline float DistSq(const PblVector3& a, const PblVector3& b)
 {
@@ -140,8 +136,8 @@ int UnitBoardAgent::EventHandler(AI::EventInfo* pInfo)
         {
             return 0;
         }
-        if (DistSq(GetCollisionObject(ResolveHandle(mVehicle))->GetPosition(), GetTrans(GetMe()->GetMatrix())) <=
-            DistSq(GetCollisionObject(ResolveHandle(pInfo->mGameObject))->GetPosition(), GetTrans(GetMe()->GetMatrix())))
+        if (DistSq(GetCollisionObject(ResolveHandle(mVehicle))->GetPosition(), GetMe()->GetMatrix().GetTranslation()) <=
+            DistSq(GetCollisionObject(ResolveHandle(pInfo->mGameObject))->GetPosition(), GetMe()->GetMatrix().GetTranslation()))
         {
             return 0;
         }

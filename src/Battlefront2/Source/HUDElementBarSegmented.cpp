@@ -60,10 +60,7 @@ HUD::ElementBarSegmented::Segment::Segment()
 
 // SYNTHETIC: SWBF2 0x0054cae2
 // [thunk]:HUD::ElementBarSegmented::Segment::`scalar deleting destructor' adjustor{288}
-// FUNCTION: SWBF2 0x0054baa0
-HUD::ElementBarSegmented::Segment::~Segment()
-{
-}
+
 
 // FUNCTION: SWBF2 0x0054b990
 bool HUD::ElementBarSegmented::Segment::SetProperty(const unsigned int uHashID, const void* const pValue)

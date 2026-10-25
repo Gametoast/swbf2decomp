@@ -16,6 +16,7 @@ class StreamFormat;
 // SYNTHETIC: SWBF2 0x0074d820
 // Snd::StreamDSDMO::`scalar deleting destructor'
 
+// VTABLE: SWBF2 0x00786d60
 class StreamDSDMO : public StreamNode, public StreamSourceProducer, public StreamNodeSink
 {
 public:

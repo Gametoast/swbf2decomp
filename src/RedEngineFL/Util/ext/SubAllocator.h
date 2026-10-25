@@ -142,3 +142,6 @@ public:
 };
 
 }
+
+// VTABLE: SWBF2 0x007836e4
+// class util::StaticSubAlloc<util::SLNode<pvs::IDisplayable *>>

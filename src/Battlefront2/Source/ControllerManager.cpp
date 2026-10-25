@@ -403,7 +403,7 @@ void ControllerManager::UpdateCrowd(Controller* pCtrl)
     }
 
     const Team* pTeam = Team::sTeams[GetTeam(pOwner->GetGameObject())];
-    const PblVector3& vPos = *reinterpret_cast<const PblVector3*>(pOwner->GetMatrix().m[3]);
+    const PblVector3& vPos = pOwner->GetMatrix().GetTranslation();
 
     for (PblList<PlayerController>::Node* pNode = sPlayerCtrls->_head._pNext; pNode->_pObject;
          pNode = pNode->_pNext)

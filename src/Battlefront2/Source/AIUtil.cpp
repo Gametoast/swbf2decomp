@@ -1836,13 +1836,13 @@ PblVector3 AIUtil::DumbDown(const GameObject* pObject, float fDeltaTime, Aimer* 
         const PblVector3 vRight(vDir.y * vUp.z - vDir.z * vUp.y, vDir.z * vUp.x - vDir.x * vUp.z,
                                 vDir.x * vUp.y - vDir.y * vUp.x);
         PblMatrix mAim;
-        *(PblVector3*)&mAim.m[0][0] = vRight;
+        mAim[0] = vRight;
         mAim.m[0][3] = 0.0f;
-        *(PblVector3*)&mAim.m[1][0] = vUp;
+        mAim[1] = vUp;
         mAim.m[1][3] = 0.0f;
-        *(PblVector3*)&mAim.m[2][0] = vDir;
+        mAim[2] = vDir;
         mAim.m[2][3] = 0.0f;
-        *(PblVector3*)&mAim.m[3][0] = gVectorZero;
+        mAim[3] = gVectorZero;
         mAim.m[3][3] = 1.0f;
         PblMatrix mRotate;
         D3DXMatrixMultiply(&mAim, &mAim, D3DXMatrixRotationY(&mRotate, vUp.y > 0.0f ? 0.523598790f

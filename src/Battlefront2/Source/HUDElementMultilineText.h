@@ -22,7 +22,9 @@ public:
         state_EnablingLine = 4
     };
 
+    // VTABLE: SWBF2 0x007a1470 RedTextElement
     // VTABLE: SWBF2 0x007a14b8 HUD::Element
+    // class Line
 
     class __declspec(align(16)) Line : public HUD::ElementText
     {

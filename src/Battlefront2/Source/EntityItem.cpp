@@ -290,13 +290,13 @@ EntityItem::EntityItem(EntityItemClass* pClass, const EntityDesc& desc)
             matrix.m[3][3] = 1.0f;
             if (m_pLight->_fBeamLength > 0.0f)
             {
-                *(PblVector3*)matrix.m[0] = gVectorUnitX;
+                matrix[0] = gVectorUnitX;
                 matrix.m[0][3] = 0.0f;
                 matrix.m[1][0] = -gVectorUnitZ.x;
                 matrix.m[1][1] = -gVectorUnitZ.y;
                 matrix.m[1][2] = -gVectorUnitZ.z;
                 matrix.m[1][3] = 0.0f;
-                *(PblVector3*)matrix.m[2] = gVectorUnitY;
+                matrix[2] = gVectorUnitY;
                 matrix.m[2][3] = 0.0f;
             }
             m_pLight->SetMatrix(matrix);

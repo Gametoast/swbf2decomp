@@ -21,10 +21,6 @@ namespace
         return pObject->GetVelocity();
     }
 
-    inline const PblVector3& GetTranslation(const PblMatrix& m)
-    {
-        return *reinterpret_cast<const PblVector3*>(m.m[3]);
-    }
 }
 
 // SYNTHETIC: SWBF2 0x004072c0
@@ -151,7 +147,7 @@ void WeaponTowCable::SetOrdnance(Ordnance* pOrdnance)
     const WeaponTowCableClass* pClass = static_cast<const WeaponTowCableClass*>(mClass);
     mSoundControl.Stop(true);
     mSoundProps = mCableOut ? pClass->mDetatch : pClass->mWhir;
-    mSoundControl.Play(&mSoundProps, &GetTranslation(GetCollisionMatrix(pObject)), &GetVelocity(pObject), true);
+    mSoundControl.Play(&mSoundProps, &(GetCollisionMatrix(pObject)).GetTranslation(), &GetVelocity(pObject), true);
     mMyCable = pOrdnance;
     mCableOut = pOrdnance != 0;
 }

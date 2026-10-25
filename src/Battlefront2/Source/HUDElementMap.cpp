@@ -153,10 +153,7 @@ bool HUD::ElementMap::BitmapGroup::SetProperty(const unsigned int uHashID, const
 
 // SYNTHETIC: SWBF2 0x00555c35
 // [thunk]:HUD::ElementMap::BitmapGroup::`scalar deleting destructor' adjustor{288}
-// FUNCTION: SWBF2 0x0054fa60
-HUD::ElementMap::BitmapGroup::~BitmapGroup()
-{
-}
+
 
 // SYNTHETIC: SWBF2 0x0054fe40
 // HUD::ElementMap::Factory::~Factory

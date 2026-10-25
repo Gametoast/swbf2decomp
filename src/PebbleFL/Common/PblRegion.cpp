@@ -639,11 +639,11 @@ void PblRegion::Initialize(const Description& desc)
                     mSize.z = afLen[j] * (&desc.mSize.x)[j];
                 }
             }
-            *(PblVector3*)mMatrix.m[0] = gVectorUnitX;
+            mMatrix[0] = gVectorUnitX;
             mMatrix.m[0][3] = 0.0f;
-            *(PblVector3*)mMatrix.m[1] = gVectorUnitY;
+            mMatrix[1] = gVectorUnitY;
             mMatrix.m[1][3] = 0.0f;
-            *(PblVector3*)mMatrix.m[2] = gVectorUnitZ;
+            mMatrix[2] = gVectorUnitZ;
             mMatrix.m[2][3] = 0.0f;
         }
         else
@@ -707,31 +707,31 @@ void PblRegion::Initialize(const Description& desc)
         else if (uMask == 1)
         {
             mType = type_cylinder_xaligned;
-            *(PblVector3*)mMatrix.m[0] = gVectorUnitY;
+            mMatrix[0] = gVectorUnitY;
             mMatrix.m[0][3] = 0.0f;
-            *(PblVector3*)mMatrix.m[1] = gVectorUnitZ;
+            mMatrix[1] = gVectorUnitZ;
             mMatrix.m[1][3] = 0.0f;
-            *(PblVector3*)mMatrix.m[2] = gVectorUnitX;
+            mMatrix[2] = gVectorUnitX;
             mMatrix.m[2][3] = 0.0f;
         }
         else if (uMask == 4)
         {
             mType = type_cylinder_zaligned;
-            *(PblVector3*)mMatrix.m[0] = gVectorUnitZ;
+            mMatrix[0] = gVectorUnitZ;
             mMatrix.m[0][3] = 0.0f;
-            *(PblVector3*)mMatrix.m[1] = gVectorUnitX;
+            mMatrix[1] = gVectorUnitX;
             mMatrix.m[1][3] = 0.0f;
-            *(PblVector3*)mMatrix.m[2] = gVectorUnitY;
+            mMatrix[2] = gVectorUnitY;
             mMatrix.m[2][3] = 0.0f;
         }
         else
         {
             mType = type_cylinder_yaligned;
-            *(PblVector3*)mMatrix.m[0] = gVectorUnitX;
+            mMatrix[0] = gVectorUnitX;
             mMatrix.m[0][3] = 0.0f;
-            *(PblVector3*)mMatrix.m[1] = gVectorUnitY;
+            mMatrix[1] = gVectorUnitY;
             mMatrix.m[1][3] = 0.0f;
-            *(PblVector3*)mMatrix.m[2] = gVectorUnitZ;
+            mMatrix[2] = gVectorUnitZ;
             mMatrix.m[2][3] = 0.0f;
         }
         break;
@@ -739,7 +739,7 @@ void PblRegion::Initialize(const Description& desc)
 
     case type_plane:
     {
-        PblVector3& vNormal = *(PblVector3*)mMatrix.m[2];
+        PblVector3& vNormal = mMatrix[2];
         PblVector3 v;
         D3DXVec3Normalize(&v, &vNormal);
         vNormal = v;

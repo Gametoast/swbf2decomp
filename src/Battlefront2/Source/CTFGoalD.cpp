@@ -53,7 +53,7 @@ inline const RedRegion* FlagHomeRegion(const GameObject* pFlag)
 
 inline const PblVector3& RegionPosition(const RedRegion* pRegion)
 {
-    return *reinterpret_cast<const PblVector3*>(&pRegion->mMatrix.m[3][0]);
+    return pRegion->mMatrix.GetTranslation();
 }
 }
 

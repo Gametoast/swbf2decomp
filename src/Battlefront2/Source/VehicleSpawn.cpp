@@ -425,7 +425,7 @@ void VehicleSpawn::UpdateSpawn(float fDeltaTime)
         StringDB::Store(desc.mNameId, acName);
     }
 
-    PblVector3& vTranslation = *(PblVector3*)&desc.mMatrix.m[3][0];
+    PblVector3& vTranslation = desc.mMatrix[3];
     const PblVector3 vStart(vTranslation.x + gVectorUnitY.x, vTranslation.y + gVectorUnitY.y,
                             vTranslation.z + gVectorUnitY.z);
     const PblVector3 vDir(-gVectorUnitY.x, -gVectorUnitY.y, -gVectorUnitY.z);

@@ -74,9 +74,9 @@ EntityPortableTurret::EntityPortableTurret(EntityPortableTurretClass* pClass, co
     mStationary = false;
     mBecomeStationaryNow = false;
 
-    PblVector3& vRight = *(PblVector3*)mMatrix.m[0];
-    PblVector3& vUp = *(PblVector3*)mMatrix.m[1];
-    PblVector3& vFront = *(PblVector3*)mMatrix.m[2];
+    PblVector3& vRight = mMatrix[0];
+    PblVector3& vUp = mMatrix[1];
+    PblVector3& vFront = mMatrix[2];
     vUp = gVectorUnitY;
     mMatrix.m[1][3] = 0.0f;
     PblVector3 vCross(vUp.y * vFront.z - vUp.z * vFront.y, vUp.z * vFront.x - vUp.x * vFront.z,

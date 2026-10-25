@@ -421,7 +421,7 @@ void UnitCTFOffenseAgent::EnterState()
     case 7:
     {
         const RedRegion* pHome = reinterpret_cast<const FlagItem*>(pFlag)->GetHomeRegion();
-        PblVector3 vPos = pHome ? *reinterpret_cast<const PblVector3*>(&pHome->mMatrix.m[3][0])
+        PblVector3 vPos = pHome ? pHome->mMatrix.GetTranslation()
                                 : GetCollisionObject(pFlag)->GetPosition();
         mDefendHelper.Init(AI::GoalTarget(vPos));
         break;

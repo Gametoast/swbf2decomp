@@ -119,10 +119,10 @@ static const PblMatrix& _GetSkinMatrix(unsigned int uiNumBones, const unsigned c
 PblVector3 CompressedPos::s_vMin;
 // GLOBAL: SWBF2 0x007de270
 // CompressedPos::s_vScale
-PblVector3 CompressedPos::s_vScale;
+PblVector3 CompressedPos::s_vScale(1.0f / 65535.0f, 1.0f / 65535.0f, 1.0f / 65535.0f);
 // GLOBAL: SWBF2 0x007de27c
 // CompressedPos::s_vScaleInv
-PblVector3 CompressedPos::s_vScaleInv;
+PblVector3 CompressedPos::s_vScaleInv(65535.0f, 65535.0f, 65535.0f);
 
 // FUNCTION: SWBF2 0x00717980
 pcSoftwareSkinnedShaderSegment::pcSoftwareSkinnedShaderSegment()
