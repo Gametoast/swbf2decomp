@@ -271,7 +271,7 @@ bool UnitTrooperAgent::CheckForVehicleConvoy()
             continue;
         }
 
-        PblVector3 vDest = reinterpret_cast<AILowLevel*>(pCtrl->mLowLevel)->GetGlobalDest();
+        PblVector3 vDest = pCtrl->mLowLevel.GetGlobalDest();
         float ex = vDest.x - myDest.x;
         float ey = vDest.y - myDest.y;
         float ez = vDest.z - myDest.z;
@@ -301,7 +301,7 @@ void UnitTrooperAgent::UpdateStatePostVision(float dt)
         return;
     }
 
-    AttackHelper& attack = *reinterpret_cast<AttackHelper*>(mAttackHelper);
+    AttackHelper& attack = mAttackHelper;
     switch (mCurState)
     {
     case STATE_START:

@@ -114,7 +114,6 @@ void Chunk::ClearAll()
     mNumTerrainCollisions = 0;
     mMatrix = gMatrixIdentity;
     SetCollisionRadius(1.0f);
-    Set2DCollisionRadius(1.0f);
     mModel = NULL;
     RemoveFromCollisionManager();
     mSimpleCollisionModel.ClearAll(false);
@@ -195,7 +194,6 @@ void Chunk::SetData(ChunkDescriptor& desc)
 
     float fRadius = desc.mPrimitive->GetRadius();
     SetCollisionRadius(fRadius);
-    Set2DCollisionRadius(fRadius);
 
     mModel = desc.mModel;
     mModel->GetRedModel(0)->SetupPose(pose);

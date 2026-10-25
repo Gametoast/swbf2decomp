@@ -16,18 +16,6 @@
 #include "WeaponCannonInstance.h"
 #include "PebbleFL/Common/PblRandom.h"
 
-namespace AI
-{
-
-class UnitThreatManager
-{
-public:
-    const GameObject* GetVisibleObject() const;
-    void LockThreat(GameObject* pObj);
-
-    void AddThreat(GameObject* pObj);
-};
-}
 
 namespace AIUtil
 {
@@ -80,7 +68,7 @@ namespace
 
     inline AI::UnitThreatManager* GetThreatManager(UnitController* pCtrl)
     {
-        return reinterpret_cast<AI::UnitThreatManager*>(pCtrl->mThreatManager);
+        return &pCtrl->mThreatManager;
     }
 }
 
@@ -197,7 +185,7 @@ void UnitDestroyAgent::CheckTargetPosition(const PblVector3& vPos)
 // FUNCTION: SWBF2 0x00666370
 void UnitDestroyAgent::UpdateStatePostVision(float dt)
 {
-    reinterpret_cast<AttackHelper*>(mAttackHelper)->Update();
+    mAttackHelper.Update();
 
     if (mCurState == STATE_Goto)
     {
@@ -245,7 +233,7 @@ void UnitDestroyAgent::UpdateStatePostVision(float dt)
                     {
                         GetLowLevel().SetNavigator_Stationary();
                         mCtrl->ForceSetAttackHelperTarget(mTarget.GetGameObject());
-                        reinterpret_cast<AI::UnitThreatManager*>(mCtrl->mThreatManager)->AddThreat(
+                        mCtrl->mThreatManager.AddThreat(
                                    const_cast<GameObject*>(mTarget.GetGameObject()));
                         bAttacking = true;
                     }

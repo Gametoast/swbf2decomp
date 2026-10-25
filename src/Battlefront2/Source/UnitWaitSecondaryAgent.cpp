@@ -86,7 +86,7 @@ void UnitWaitSecondaryAgent::EnterState()
 {
     if (mCurState == 2)
     {
-        ((AILowLevel*)mCtrl->mLowLevel)->SetNavigator_Stationary();
+        mCtrl->mLowLevel.SetNavigator_Stationary();
     }
 }
 
@@ -192,7 +192,7 @@ const char* UnitWaitSecondaryAgent::NFINAL_GetStateString(int iState) const
 // FUNCTION: SWBF2 0x0066b960
 void UnitWaitSecondaryAgent::UpdateStatePostVision(float dt)
 {
-    reinterpret_cast<AttackHelper*>(mAttackHelper)->Update();
+    mAttackHelper.Update();
     if (mCurState != 2)
     {
         return;

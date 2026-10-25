@@ -229,7 +229,7 @@ void UnitDeathmatchAgent::UpdateStatePostVision(float dt)
 {
     if (mCurState != STATE_Combat)
     {
-        reinterpret_cast<AttackHelper*>(mAttackHelper)->Update();
+        mAttackHelper.Update();
     }
 
     switch (mCurState)

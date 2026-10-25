@@ -103,19 +103,19 @@ char PblMemChunk::Read8()
 // FUNCTION: SWBF2 0x0072a990
 short PblMemChunk::Read16()
 {
-    int iValue = (unsigned char)Read8();
-    iValue |= Read8() << 8;
-    return (short)iValue;
+    unsigned short iLow = (unsigned char)*_pData++;
+    unsigned short iHigh = (unsigned short)(*_pData++ << 8);
+    return iLow | iHigh;
 }
 
 // FUNCTION: SWBF2 0x0072a9c0
 int PblMemChunk::Read32()
 {
-    int iValue = (unsigned char)Read8();
-    iValue |= (unsigned char)Read8() << 8;
-    iValue |= (unsigned char)Read8() << 16;
-    iValue |= Read8() << 24;
-    return iValue;
+    int iByte0 = (unsigned char)*_pData++;
+    int iByte1 = (unsigned char)*_pData++ << 8;
+    int iByte2 = (unsigned char)*_pData++ << 16;
+    int iByte3 = *_pData++ << 24;
+    return iByte0 | iByte1 | iByte2 | iByte3;
 }
 
 // FUNCTION: SWBF2 0x0072aa10

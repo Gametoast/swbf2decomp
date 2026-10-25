@@ -230,7 +230,6 @@ void FlagItem::SetupCollisionGeometry()
 
     CollisionObject* pCollision = FlagCollision(this);
     pCollision->SetCollisionRadius(fRadius);
-    pCollision->Set2DCollisionRadius(fRadius);
     const PblVector3& vPos = mMatrix.GetTranslation();
     pCollision->SetCollisionCenter(vPos);
     pCollision->SetCollisionModel(pModel);

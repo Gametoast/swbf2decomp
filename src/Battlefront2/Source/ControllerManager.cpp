@@ -60,7 +60,7 @@ PblOrderedList<UnitController, float>* sClientAICtrls;
 
 static PblOrderedList<UnitController, float>::Node* GetManagerNode(UnitController* pCtrl)
 {
-    return (PblOrderedList<UnitController, float>::Node*)pCtrl->mManagerNode;
+    return &pCtrl->mManagerNode;
 }
 
 // FUNCTION: SWBF2 0x00485b30

@@ -59,7 +59,6 @@ void HintManager::AddHint(BaseHint* pHint)
 
     pHint->SetCollisionCenter(pHint->GetCollisionCenter());
     pHint->SetCollisionRadius(1.0f);
-    pHint->Set2DCollisionRadius(1.0f);
     sHints->Add(pHint, pHint->GetCollisionCenter(), pHint->GetCollisionRadius());
 }
 

@@ -5353,7 +5353,7 @@ void EntityFlyer::TargetReact(Controllable* pAttacker)
             mAttacker = pAttacker->mCharacter;
             if (UnitControllerPtr(mCtrl))
             {
-                reinterpret_cast<AI::UnitThreatManager*>(UnitControllerPtr(mCtrl)->mThreatManager)->AddThreat(
+                UnitControllerPtr(mCtrl)->mThreatManager.AddThreat(
                            static_cast<Trackable*>(pAttacker)->GetGameObject());
             }
             return;

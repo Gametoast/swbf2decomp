@@ -93,5 +93,5 @@ inline UnitController* SnipeHelper::GetCtrl()
 
 inline const AttackHelper* SnipeHelper::GetAttackHelper() const
 {
-    return reinterpret_cast<const AttackHelper*>(mOwner->mAttackHelper);
+    return &mOwner->mAttackHelper;
 }

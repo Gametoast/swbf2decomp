@@ -323,10 +323,10 @@ float WeaponCannon::GetYawSpread() const
     float fYaw = pClass->mYawSpread;
     if (fYaw == 0.0f && mOwner->mPlayerId < 0 && pClass->mTriggerSingle && pClass->mZoomMax >= 6.0f &&
         UnitControllerPtr(mOwner->mCtrl) &&
-        reinterpret_cast<AILowLevel*>(UnitControllerPtr(mOwner->mCtrl)->mLowLevel)->GetTarget())
+        UnitControllerPtr(mOwner->mCtrl)->mLowLevel.GetTarget())
     {
         const GameObject* pTarget =
-            reinterpret_cast<AILowLevel*>(UnitControllerPtr(mOwner->mCtrl)->mLowLevel)->GetTarget();
+            UnitControllerPtr(mOwner->mCtrl)->mLowLevel.GetTarget();
         const PblMatrix& mOwnerMatrix = mOwner->GetMatrix();
         const PblMatrix& mTargetMatrix = GetCollisionMatrix(pTarget);
         float fX = mTargetMatrix.m[3][0] - mOwnerMatrix.m[3][0];

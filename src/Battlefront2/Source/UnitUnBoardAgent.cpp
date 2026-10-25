@@ -52,7 +52,7 @@ void UnitUnBoardAgent::UpdateStatePostVision(float dt)
 {
     if (mCurState != 100)
     {
-        reinterpret_cast<AttackHelper*>(mAttackHelper)->Update();
+        mAttackHelper.Update();
     }
 }
 

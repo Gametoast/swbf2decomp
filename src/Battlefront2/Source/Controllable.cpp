@@ -202,7 +202,7 @@ void Controllable::ClearControllable()
 
     if (UnitControllerPtr(mCtrl))
     {
-        reinterpret_cast<AILowLevel*>(UnitControllerPtr(mCtrl)->mLowLevel)->ClearControllable();
+        UnitControllerPtr(mCtrl)->mLowLevel.ClearControllable();
     }
 }
 
@@ -249,7 +249,7 @@ void Controllable::ResetControls()
     mWpnDistFactor = 1.0f;
     if (UnitControllerPtr(mCtrl))
     {
-        reinterpret_cast<AILowLevel*>(UnitControllerPtr(mCtrl)->mLowLevel)->ResetControls();
+        UnitControllerPtr(mCtrl)->mLowLevel.ResetControls();
     }
 }
 
@@ -258,7 +258,7 @@ void Controllable::Initialize()
 {
     if (UnitControllerPtr(mCtrl))
     {
-        reinterpret_cast<AILowLevel*>(UnitControllerPtr(mCtrl)->mLowLevel)->Initialize();
+        UnitControllerPtr(mCtrl)->mLowLevel.Initialize();
     }
     mPlayAnim = false;
 }
@@ -337,7 +337,7 @@ void Controllable::SetExitVehicle(const CommandPost* pPost)
     }
     if (UnitControllerPtr(mCtrl))
     {
-        reinterpret_cast<AILowLevel*>(UnitControllerPtr(mCtrl)->mLowLevel)->SetExitVehicle(pPost);
+        UnitControllerPtr(mCtrl)->mLowLevel.SetExitVehicle(pPost);
     }
 }
 

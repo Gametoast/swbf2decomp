@@ -7,6 +7,10 @@
 #include "Controller.h"
 #include "CommandFsm.h"
 #include "UnitCmdInfo.h"
+#include "AILowLevel.h"
+#include "UnitThreatManager.h"
+#include "SquadCommands.h"
+#include "Thread.h"
 #include "PebbleFL/Common/PblHandle.h"
 #include "PebbleFL/Common/PblVector.h"
 #include "RedEngineFL/Memory/RedMemoryPool.h"
@@ -100,8 +104,8 @@ public:
     static PblHash rttiHashUnitController;
     static const char rttiNameUnitController[];
 
-    AILowLevel& GetLowLevel() { return *reinterpret_cast<AILowLevel*>(mLowLevel); }
-    const AILowLevel& GetLowLevel() const { return *reinterpret_cast<const AILowLevel*>(mLowLevel); }
+    AILowLevel& GetLowLevel() { return mLowLevel; }
+    const AILowLevel& GetLowLevel() const { return mLowLevel; }
 
 protected:
     UnitController();
@@ -121,26 +125,26 @@ protected:
     void UseAutoTurrets();
 
 public:
-    unsigned char mManagerNode[20];
+    PblOrderedList<UnitController, float>::Node mManagerNode;
     float mNextUpdateTime;
     float mLastUpdateTime;
     float mUpdateRate;
     char mLowLevelUpdateSkips;
     float mLowLevelUpdateSkipDt;
-    unsigned char mThreatManager[204];
+    AI::UnitThreatManager mThreatManager;
     UnitAgent* mAgent;
-    unsigned char mLowLevel[232];
+    AILowLevel mLowLevel;
     int mLodState;
     Character* mLodHumanPlayer;
     float mLodStateUpdateTime;
-    unsigned char mLastSquadCommand[20];
+    SquadCommands::SquadCommandOrder mLastSquadCommand;
     bool mJustEnteredVehicleGoToPickupAgent;
     bool mLookAheadOnly;
     PblVector3 mOriginalAheadDir;
     int mSeed;
     float mCrowdCheckTime;
     int mFriendlyCount;
-    unsigned char mFriendly[64];
+    PblHandle<const GameObject> mFriendly[8];
     bool mSkip;
     int mVisionSkip;
     float mLastShotDistSq;

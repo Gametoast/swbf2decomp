@@ -339,7 +339,7 @@ float GetLatency(int iDest)
 }
 
 // FUNCTION: SWBF2 0x005b3a30
-float GetJitter()
+static float GetJitter(int iDest)
 {
     const float fWidth = (float)dragJitter * (float)dragLatency / 100.0f;
     return ((PblRandom::_Global.GetFloat() * fWidth * 2.0f) - fWidth) * 0.001f;
@@ -356,7 +356,7 @@ void AddToLatency(NetPacket* pPacket, float fElapsed)
 {
     const int iDest = (signed char)NetComm::Header(pPacket).idx;
     const float fLatency = GetLatency(iDest);
-    const float fJitter = GetJitter();
+    const float fJitter = GetJitter(iDest);
     *(float*)pPacket->mData = ((thisDrag - fElapsed) + fLatency) + fJitter;
     if (++gLatencyDebugPacketCount == gLatencyDebugPacketLimit)
     {

@@ -1,4 +1,5 @@
 #pragma once
+#include "PebbleFL/Common/PblHermite.h"
 
 #include <stddef.h>
 
@@ -78,8 +79,8 @@ public:
                         PblVector3* pRotSlope, float* pTime, unsigned int uPoints);
     void SetBobbing(bool bBobbing) { mIsBobbing = bBobbing; }
 
-    char mHermPos[6 * 52];
-    char mHermRot[6 * 52];
+    PblHermiteVector3 mHermPos[6];
+    PblHermiteVector3 mHermRot[6];
     float mCamTime[6];
     float mCurrCamTime;
     int mCurrCamPt;

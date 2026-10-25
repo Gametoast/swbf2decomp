@@ -740,7 +740,7 @@ int CombatHelper::EventHandler(AI::EventInfo* pInfo)
         {
             return AI::EVT_Ignored;
         }
-        reinterpret_cast<AI::UnitThreatManager*>(GetCtrl()->mThreatManager)->AddThreat(pInfo->mGameObject);
+        GetCtrl()->mThreatManager.AddThreat(pInfo->mGameObject);
         mTargetHandle = pInfo->mGameObject;
         mTargetPos = GetPosition(pInfo->mGameObject);
         SetNextState(STATE_Investigate);

@@ -45,7 +45,6 @@ CollisionObject::CollisionObject(CollisionObjectType eType, const CollisionModel
       FoleyFXCollider(pColliderClass),
       FoleyFXCollidee(pCollideeClass)
 {
-    new (mCollisionObjectNode) PblList<CollisionObject>::Node;
     mProcedurallyAnimated = false;
     mCollisionModel = const_cast<CollisionModel*>(pModel);
     mParent = 0;
@@ -305,7 +304,7 @@ void CollisionObject::RemoveFromCollisionManager()
 // FUNCTION: SWBF2 0x00464460
 bool CollisionObject::IsInCollisionList()
 {
-    return *(void**)mCollisionObjectNode != 0;
+    return mCollisionObjectNode.IsInList();
 }
 
 // FUNCTION: SWBF2 0x00464470

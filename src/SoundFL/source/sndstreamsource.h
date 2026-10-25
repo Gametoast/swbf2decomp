@@ -69,8 +69,8 @@ public:
     SegmentProperties mNextSegment;
     File mFile;
     Semaphore mLock;
-    unsigned char mFlags;
-    unsigned char mPacketReadPos;
+    volatile unsigned char mFlags;
+    volatile unsigned char mPacketReadPos;
     unsigned char mPacketLockPos;
     unsigned char mNumPackets;
     unsigned int mPacketSize;

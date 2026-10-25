@@ -49,8 +49,8 @@ public:
     Semaphore mAccess;
     unsigned int mSleepTime;
     bool mUpdating;
-    bool mStopUpdating;
-    bool mPausing;
+    volatile bool mStopUpdating;
+    volatile bool mPausing;
     void(__cdecl* mCompleteCallback)(ThreadUpdate*, void*);
     void* mCompleteCallbackData;
 };

@@ -73,7 +73,7 @@ void UnitWaitAgent::SetNewSearchHeading()
 // FUNCTION: SWBF2 0x0066b500
 void UnitWaitAgent::UpdateStatePostVision(float dt)
 {
-    AttackHelper& attack = *reinterpret_cast<AttackHelper*>(mAttackHelper);
+    AttackHelper& attack = mAttackHelper;
     attack.Update();
     if (mCurState != 2)
     {

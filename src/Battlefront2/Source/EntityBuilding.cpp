@@ -329,7 +329,6 @@ EntityBuilding::EntityBuilding(EntityBuildingClass* pClass, const EntityDesc& de
             fRadius = mClass->mPotentialCollisionRadius;
         }
         SetCollisionRadius(fRadius);
-        Set2DCollisionRadius(fRadius);
         RecalculateAABB();
         SetRenderPos(GetCollisionCenter());
         SetRenderRadius(GetCollisionRadius());
@@ -596,7 +595,6 @@ void EntityBuilding::Kill()
             fRadius = mClass->mPotentialCollisionRadius;
         }
         SetCollisionRadius(fRadius);
-        Set2DCollisionRadius(fRadius);
         RecalculateAABB();
         SetRenderPos(GetCollisionCenter());
         SetRenderRadius(GetCollisionRadius());
@@ -701,7 +699,6 @@ void EntityBuilding::Respawn()
             fRadius = mClass->mPotentialCollisionRadius;
         }
         SetCollisionRadius(fRadius);
-        Set2DCollisionRadius(fRadius);
         RecalculateAABB();
         SetRenderPos(GetCollisionCenter());
         SetRenderRadius(GetCollisionRadius());

@@ -277,7 +277,7 @@ void WeaponMeleeClass::Render(float fTurnOn, const PblMatrix& matrix, const RedP
 }
 
 // FUNCTION: SWBF2 0x00574bb0
-int LightsaberTrail::GetTotalNumSteps(float fMaxTimeStep, float fMaxDistanceStep,
+unsigned int LightsaberTrail::GetTotalNumSteps(float fMaxTimeStep, float fMaxDistanceStep,
                                       unsigned char* pSteps, float* pTotalDistance) const
 {
     const unsigned int uiCount = m_uiNumSamples;
@@ -377,7 +377,7 @@ unsigned char LightsaberTrail::s_uiSamplePrev = 0;
 float LightsaberTrail::s_fDeltaTimeInv = 0.0f;
 
 // FUNCTION: SWBF2 0x00575140
-int LightsaberTrail::_SetSample(float fTime) const
+void LightsaberTrail::_SetSample(float fTime) const
 {
     unsigned char uiEnd = LightsaberTrail::s_uiSample;
     if (LightsaberTrail::s_uiSample == LightsaberTrail::s_uiSamplePrev || m_afTime[LightsaberTrail::s_uiSamplePrev] > fTime)
@@ -387,13 +387,11 @@ int LightsaberTrail::_SetSample(float fTime) const
         LightsaberTrail::s_uiSample = uiEnd;
         LightsaberTrail::s_fDeltaTimeInv = 1.0f / (m_afTime[uiEnd] - m_afTime[LightsaberTrail::s_uiSamplePrev]);
     }
-    int iResult = uiEnd;
     if (fTime > m_afTime[uiEnd])
     {
         do
         {
             const unsigned char uiNext = (uiEnd + 1) & 7;
-            iResult = uiNext;
             if (uiNext == m_uiSampleNext)
             {
                 break;
@@ -403,7 +401,6 @@ int LightsaberTrail::_SetSample(float fTime) const
             LightsaberTrail::s_uiSamplePrev = uiPrevious;
             LightsaberTrail::s_uiSample = uiEnd;
             const float fNextTime = m_afTime[uiEnd];
-            iResult = uiPrevious;
             LightsaberTrail::s_fDeltaTimeInv = 1.0f / (fNextTime - m_afTime[uiPrevious]);
             if (fTime <= fNextTime)
             {
@@ -412,45 +409,60 @@ int LightsaberTrail::_SetSample(float fTime) const
         }
         while (true);
     }
-    return iResult;
-}
-
-static PblVector3* InterpolateTrailVector(const LightsaberTrail* pTrail, float fTime,
-                                         PblVector3* pResult, const PblVector3* pSamples,
-                                         const PblVector3* pVelocities)
-{
-    pTrail->_SetSample(fTime);
-    const unsigned int uiBegin = LightsaberTrail::s_uiSamplePrev;
-    const unsigned int uiEnd = LightsaberTrail::s_uiSample;
-    const float fElapsed = fTime - pTrail->m_afTime[uiBegin];
-    const float fFraction = LightsaberTrail::s_fDeltaTimeInv * fElapsed;
-    const float fRemaining = 1.0f - fFraction;
-    const float fBeginVelocityWeight = fRemaining * fRemaining * fElapsed;
-    const float fEndVelocityWeight = fRemaining * fElapsed * fFraction;
-    const float fEndWeight = (3.0f - 2.0f * fFraction) * fFraction * fFraction;
-    const float fBeginWeight = 1.0f - fEndWeight;
-    pResult->x = (pSamples[uiBegin].x * fBeginWeight + pSamples[uiEnd].x * fEndWeight)
-               + pVelocities[uiBegin].x * fBeginVelocityWeight
-               - pVelocities[uiEnd].x * fEndVelocityWeight;
-    pResult->y = (pSamples[uiBegin].y * fBeginWeight + pSamples[uiEnd].y * fEndWeight)
-               + pVelocities[uiBegin].y * fBeginVelocityWeight
-               - pVelocities[uiEnd].y * fEndVelocityWeight;
-    pResult->z = (pSamples[uiBegin].z * fBeginWeight + pSamples[uiEnd].z * fEndWeight)
-               + pVelocities[uiBegin].z * fBeginVelocityWeight
-               - pVelocities[uiEnd].z * fEndVelocityWeight;
-    return pResult;
 }
 
 // FUNCTION: SWBF2 0x00575230
-PblVector3* LightsaberTrail::GetInterpolatedPos(float fTime, PblVector3* pResult) const
+PblVector3 LightsaberTrail::GetInterpolatedPos(float fTime) const
 {
-    return InterpolateTrailVector(this, fTime, pResult, m_avPos, m_avVel);
+    PblVector3 result;
+    _SetSample(fTime);
+    const unsigned int uiBegin = LightsaberTrail::s_uiSamplePrev;
+    const unsigned int uiEnd = LightsaberTrail::s_uiSample;
+    const float fElapsed = fTime - m_afTime[uiBegin];
+    const float fFraction = LightsaberTrail::s_fDeltaTimeInv * fElapsed;
+    const float fRemaining = 1.0f - fFraction;
+    const float fWeightedElapsed = fRemaining * fElapsed;
+    const float fEndVelocityWeight = fWeightedElapsed * fFraction;
+    const float fBeginVelocityWeight = fRemaining * fWeightedElapsed;
+    const float fEndWeight = (3.0f - 2.0f * fFraction) * fFraction * fFraction;
+    const float fBeginWeight = 1.0f - fEndWeight;
+    result.x = (m_avPos[uiBegin].x * fBeginWeight + m_avPos[uiEnd].x * fEndWeight)
+               + m_avVel[uiBegin].x * fBeginVelocityWeight
+               - m_avVel[uiEnd].x * fEndVelocityWeight;
+    result.y = (m_avPos[uiBegin].y * fBeginWeight + m_avPos[uiEnd].y * fEndWeight)
+               + m_avVel[uiBegin].y * fBeginVelocityWeight
+               - m_avVel[uiEnd].y * fEndVelocityWeight;
+    result.z = (m_avPos[uiBegin].z * fBeginWeight + m_avPos[uiEnd].z * fEndWeight)
+               + m_avVel[uiBegin].z * fBeginVelocityWeight
+               - m_avVel[uiEnd].z * fEndVelocityWeight;
+    return result;
 }
 
 // FUNCTION: SWBF2 0x005753b0
-PblVector3* LightsaberTrail::GetInterpolatedDir(float fTime, PblVector3* pResult) const
+PblVector3 LightsaberTrail::GetInterpolatedDir(float fTime) const
 {
-    return InterpolateTrailVector(this, fTime, pResult, m_avDir, m_avOmg);
+    PblVector3 result;
+    _SetSample(fTime);
+    const unsigned int uiBegin = LightsaberTrail::s_uiSamplePrev;
+    const unsigned int uiEnd = LightsaberTrail::s_uiSample;
+    const float fElapsed = fTime - m_afTime[uiBegin];
+    const float fFraction = LightsaberTrail::s_fDeltaTimeInv * fElapsed;
+    const float fRemaining = 1.0f - fFraction;
+    const float fWeightedElapsed = fRemaining * fElapsed;
+    const float fEndVelocityWeight = fWeightedElapsed * fFraction;
+    const float fBeginVelocityWeight = fRemaining * fWeightedElapsed;
+    const float fEndWeight = (3.0f - 2.0f * fFraction) * fFraction * fFraction;
+    const float fBeginWeight = 1.0f - fEndWeight;
+    result.x = (m_avDir[uiBegin].x * fBeginWeight + m_avDir[uiEnd].x * fEndWeight)
+               + m_avOmg[uiBegin].x * fBeginVelocityWeight
+               - m_avOmg[uiEnd].x * fEndVelocityWeight;
+    result.y = (m_avDir[uiBegin].y * fBeginWeight + m_avDir[uiEnd].y * fEndWeight)
+               + m_avOmg[uiBegin].y * fBeginVelocityWeight
+               - m_avOmg[uiEnd].y * fEndVelocityWeight;
+    result.z = (m_avDir[uiBegin].z * fBeginWeight + m_avDir[uiEnd].z * fEndWeight)
+               + m_avOmg[uiBegin].z * fBeginVelocityWeight
+               - m_avOmg[uiEnd].z * fEndVelocityWeight;
+    return result;
 }
 
  
@@ -653,7 +665,7 @@ void LightsaberTrailEffect::RenderLightsaberTrail(const LightsaberTrail* pTrail,
                 fDist += fDistStep;
                 RedColor color = colorTrail;
                 const float fAge = pTrail->m_fTimer - fTime;
-                pTrail->GetInterpolatedDir(fTime, &vDir);
+                vDir = pTrail->GetInterpolatedDir(fTime);
                 fDot = vDir.x * vCamZ.x + vDir.y * vCamZ.y + vDir.z * vCamZ.z;
                 vCap = PblVector3(vDir.x - fDot * vCamZ.x, vDir.y - fDot * vCamZ.y, vDir.z - fDot * vCamZ.z);
                 if (vCap.x * vCap.x + vCap.y * vCap.y + vCap.z * vCap.z <= 0.01f)
@@ -672,16 +684,14 @@ void LightsaberTrailEffect::RenderLightsaberTrail(const LightsaberTrail* pTrail,
                 if (bCoreDone || m_fLIGHTSABER_TRAIL_CORE_MAX_TIME < fAge ||
                     fDist <= fTotalDist - m_fLIGHTSABER_TRAIL_CORE_MAX_DISTANCE)
                 {
-                    PblVector3 vResult;
-                    vPos = *pTrail->GetInterpolatedPos(fTime, &vResult);
+                    vPos = pTrail->GetInterpolatedPos(fTime);
                     vPosNext = PblVector3(vPos.x + vDir.x * fLength, vPos.y + vDir.y * fLength,
                                           vPos.z + vDir.z * fLength);
                 }
                 else
                 {
 
-                    PblVector3 vPosNew;
-                    pTrail->GetInterpolatedPos(fTime, &vPosNew);
+                    PblVector3 vPosNew = pTrail->GetInterpolatedPos(fTime);
                     const PblVector3 vPosNextNew(vPos.x + vDir.x * fLength, vPos.y + vDir.y * fLength,
                                                  vPos.z + vDir.z * fLength);
                     const float fPosMove = sqrtf((vPosNew.x - vPos.x) * (vPosNew.x - vPos.x) +
@@ -901,7 +911,7 @@ void LightsaberTrailEffect::RenderLightsaberTrail(const LightsaberTrail* pTrail,
                 fDist += fDistStep;
                 RedColor color = colorTrail;
                 const float fAge = pTrail->m_fTimer - fTime;
-                pTrail->GetInterpolatedDir(fTime, &vDir);
+                vDir = pTrail->GetInterpolatedDir(fTime);
                 fDot = vDir.x * vCamZ.x + vDir.y * vCamZ.y + vDir.z * vCamZ.z;
                 vCap = PblVector3(vDir.x - fDot * vCamZ.x, vDir.y - fDot * vCamZ.y, vDir.z - fDot * vCamZ.z);
                 if (vCap.x * vCap.x + vCap.y * vCap.y + vCap.z * vCap.z <= 0.01f)
@@ -920,16 +930,14 @@ void LightsaberTrailEffect::RenderLightsaberTrail(const LightsaberTrail* pTrail,
                 if (bCoreDone || m_fLIGHTSABER_TRAIL_CORE_MAX_TIME < fAge ||
                     fDist <= fTotalDist - m_fLIGHTSABER_TRAIL_CORE_MAX_DISTANCE)
                 {
-                    PblVector3 vResult;
-                    vPos = *pTrail->GetInterpolatedPos(fTime, &vResult);
+                    vPos = pTrail->GetInterpolatedPos(fTime);
                     vPosNext = PblVector3(vPos.x + vDir.x * fLength, vPos.y + vDir.y * fLength,
                                           vPos.z + vDir.z * fLength);
                 }
                 else
                 {
 
-                    PblVector3 vPosNew;
-                    pTrail->GetInterpolatedPos(fTime, &vPosNew);
+                    PblVector3 vPosNew = pTrail->GetInterpolatedPos(fTime);
                     const PblVector3 vPosNextNew(vPos.x + vDir.x * fLength, vPos.y + vDir.y * fLength,
                                                  vPos.z + vDir.z * fLength);
                     const float fPosMove = sqrtf((vPosNew.x - vPos.x) * (vPosNew.x - vPos.x) +
@@ -1506,43 +1514,34 @@ bool WeaponMelee::Deflect(const Ordnance* pOrdnance, const PblVector3& pos, cons
 }
 
 // FUNCTION: SWBF2 0x0068b850
-int WeaponMelee::_ClearInputQueueToTime(WeaponMelee::InputQueue* pQueue, float fTime)
+int WeaponMelee::_ClearInputQueueToTime(WeaponMelee::InputQueue& queue, float fTime)
 {
-    if (!pQueue->m_uiCount || pQueue->m_aEventQueue[pQueue->m_uiStart & 7].fTime > fTime)
+    if (!queue.GetCount() || queue.GetEvent(0).fTime > fTime)
     {
         return 0;
     }
     int iConsumed = 1;
-    while (iConsumed < pQueue->m_uiCount &&
-           pQueue->m_aEventQueue[(pQueue->m_uiStart + iConsumed) & 7].fTime <= fTime)
+    while (iConsumed < queue.GetCount() &&
+           queue.GetEvent(iConsumed).fTime <= fTime)
     {
         ++iConsumed;
     }
-    if (iConsumed == pQueue->m_uiCount)
-    {
-        pQueue->m_uiCount = 0;
-        pQueue->m_uiStart = 0;
-    }
-    else
-    {
-        pQueue->m_uiCount -= iConsumed;
-        pQueue->m_uiStart = (pQueue->m_uiStart + iConsumed) & 7;
-    }
+    queue.Pop(iConsumed);
     return iConsumed;
 }
 
 // FUNCTION: SWBF2 0x0068b8d0
-bool WeaponMelee::TestInputQueueForButtons(int iPressedMask, int iReleasedMask) const
+bool WeaponMelee::TestInputQueueForButtons(unsigned int iPressedMask, unsigned int iReleasedMask) const
 {
     if (!iPressedMask && !iReleasedMask)
     {
         return true;
     }
     const WeaponMelee::InputQueue& queue = m_InputQueue;
-    for (unsigned int i = 0; i < queue.m_uiCount; ++i)
+    for (unsigned int i = 0; i < queue.GetCount(); ++i)
     {
         const WeaponMelee::InputQueue::Event& event =
-            queue.m_aEventQueue[(queue.m_uiStart + i) & 7];
+            queue.GetEvent(i);
         int iButton = 1 << event.uiButton;
         if ((iButton & iPressedMask) && !(event.uiButtonAction & 3))
         {
@@ -1557,7 +1556,7 @@ bool WeaponMelee::TestInputQueueForButtons(int iPressedMask, int iReleasedMask) 
 }
 
 // FUNCTION: SWBF2 0x0068b400
-void WeaponMelee::InputQueue::Update(float fTime, unsigned char uiButtons)
+void WeaponMelee::InputQueue::Update(unsigned char uiButtons, float fTime)
 {
     for (unsigned char uiButton = 1; uiButton < 8; ++uiButton)
     {
@@ -1626,35 +1625,23 @@ void WeaponMelee::InputQueue::Update(float fTime, unsigned char uiButtons)
         }
         if (iAction >= 0)
         {
-            unsigned int uiIndex = (m_uiStart + m_uiCount) & 7;
-            WeaponMelee::InputQueue::Event& event = m_aEventQueue[uiIndex];
-            event.fTime = fTime;
-            event.uiButton = uiButton;
-            event.uiButtonAction = static_cast<unsigned char>(iAction);
-            if (m_uiCount >= 8)
-            {
-                ++m_uiStart;
-            }
-            else
-            {
-                ++m_uiCount;
-            }
+            Push(fTime, uiButton, static_cast<unsigned char>(iAction));
         }
     }
 }
 
 // FUNCTION: SWBF2 0x0068b5f0
-bool WeaponMelee::_TestInputQueueForButtonEvent(int iButton, WeaponMelee::InputQueue* pQueue, float fTime,
-                int iAction, float fBegin, float fEnd, float* pfMatch)
+bool WeaponMelee::_TestInputQueueForButtonEvent(const WeaponMelee::InputQueue& queue, float fTime,
+                unsigned int iButton, unsigned int iAction, float fBegin, float fEnd, float& fMatch)
 {
     if (iAction == 10 || iAction == 8)
     {
         int iLastRelease = -1;
         bool bOpen = false;
-        for (unsigned int i = 0; i < pQueue->m_uiCount; ++i)
+        for (unsigned int i = 0; i < queue.GetCount(); ++i)
         {
             const WeaponMelee::InputQueue::Event& event =
-                pQueue->m_aEventQueue[(pQueue->m_uiStart + i) & 7];
+                queue.GetEvent(i);
             if (event.uiButton != iButton)
             {
                 continue;
@@ -1677,7 +1664,7 @@ bool WeaponMelee::_TestInputQueueForButtonEvent(int iButton, WeaponMelee::InputQ
             }
             if (((event.uiButtonAction & 1) != 0) == (iAction == 8))
             {
-                *pfMatch = event.fTime;
+                fMatch = event.fTime;
                 return true;
             }
             if (iAction == 10 || !(event.uiButtonAction & 2))
@@ -1688,13 +1675,13 @@ bool WeaponMelee::_TestInputQueueForButtonEvent(int iButton, WeaponMelee::InputQ
         }
         if (iLastRelease >= 0 || bOpen)
         {
-            *pfMatch = fBegin;
+            fMatch = fBegin;
             return true;
         }
-        const bool bDown = ((1u << iButton) & pQueue->m_uiButtonDown) != 0;
+        const bool bDown = queue.IsButtonDown(static_cast<unsigned char>(iButton));
         if (fTime >= fBegin && fTime <= fEnd && bDown == (iAction == 10))
         {
-            *pfMatch = fBegin;
+            fMatch = fBegin;
             return true;
         }
         return false;
@@ -1711,10 +1698,10 @@ bool WeaponMelee::_TestInputQueueForButtonEvent(int iButton, WeaponMelee::InputQ
         uiRequired = iAction & 7;
         uiMask = 2 | (iAction & 5);
     }
-    for (unsigned int i = 0; i < pQueue->m_uiCount; ++i)
+    for (unsigned int i = 0; i < queue.GetCount(); ++i)
     {
         const WeaponMelee::InputQueue::Event& event =
-            pQueue->m_aEventQueue[(pQueue->m_uiStart + i) & 7];
+            queue.GetEvent(i);
         if (event.uiButton == iButton && (event.uiButtonAction & uiMask) == uiRequired)
         {
             if (event.fTime > fEnd)
@@ -1723,7 +1710,7 @@ bool WeaponMelee::_TestInputQueueForButtonEvent(int iButton, WeaponMelee::InputQ
             }
             if (fBegin <= event.fTime)
             {
-                *pfMatch = event.fTime;
+                fMatch = event.fTime;
                 return true;
             }
         }
@@ -1806,9 +1793,9 @@ bool WeaponMelee::TestCondition(float fPreviousTime, float fCurrentTime,
             fEnd += fPreviousTime;
         }
         const float fOffset = m_fInputTimer - fCurrentTime;
-        if (!WeaponMelee::_TestInputQueueForButtonEvent(pCondition->m_uiButton, &m_InputQueue,
-                         m_fInputTimer, pCondition->m_uiButtonAction,
-                         fStart + fOffset, fEnd + fOffset, pfMatchTime))
+        if (!WeaponMelee::_TestInputQueueForButtonEvent(m_InputQueue, m_fInputTimer,
+                         pCondition->m_uiButton, pCondition->m_uiButtonAction,
+                         fStart + fOffset, fEnd + fOffset, *pfMatchTime))
         {
             return false;
         }
@@ -1899,9 +1886,7 @@ void WeaponMelee::ClearInput()
     m_fInputThrustZ = 0.0f;
     m_fInputTimer = 0.0f;
     m_uiButtonDown = 0;
-    m_InputQueue.m_uiCount = 0;
-    m_InputQueue.m_uiStart = 0;
-    m_InputQueue.m_uiButtonDown = 0;
+    m_InputQueue.ClearAll();
 }
 
 // FUNCTION: SWBF2 0x0068b370
@@ -1986,8 +1971,7 @@ void WeaponMelee::EnterState(ComboState eState)
 
     if (eState == COMBO_IDLE)
     {
-        m_InputQueue.m_uiCount = 0;
-        m_InputQueue.m_uiStart = 0;
+        m_InputQueue.Clear();
         mState = (WeaponState)MELEE_IDLE;
         EnterIdle();
     }
@@ -3568,12 +3552,11 @@ bool WeaponMelee::Update(float fDeltaTime)
     if (m_bSoldierInputLock)
     {
         m_uiButtonDown = 0;
-        m_InputQueue.m_uiCount = 0;
-        m_InputQueue.m_uiStart = 0;
+        m_InputQueue.Clear();
     }
     else
     {
-        m_InputQueue.Update(m_fInputTimer, m_uiButtonDown);
+        m_InputQueue.Update(m_uiButtonDown, m_fInputTimer);
     }
 
     const Combo::State* pState = &m_pCombo->m_aState[m_eComboState];
@@ -3758,7 +3741,7 @@ bool WeaponMelee::Update(float fDeltaTime)
                 m_fComboStateDurationPrev = 0.0f;
                 pStatePrev = 0;
             }
-            WeaponMelee::_ClearInputQueueToTime(&m_InputQueue, m_fInputTimer + fMatchTime - fTimer);
+            WeaponMelee::_ClearInputQueueToTime(m_InputQueue, m_fInputTimer + fMatchTime - fTimer);
             ExitState();
             EnterState(eNextState);
             m_fComboStateTimer += fDt;

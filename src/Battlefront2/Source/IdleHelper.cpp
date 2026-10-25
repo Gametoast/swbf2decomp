@@ -44,7 +44,7 @@ namespace
 
     inline AILowLevel& LowLevel(UnitController* pCtrl)
     {
-        return *reinterpret_cast<AILowLevel*>(pCtrl->mLowLevel);
+        return pCtrl->mLowLevel;
     }
 }
 

@@ -427,7 +427,6 @@ void PathFinder::AddObstacle(const PblMatrix& rMatrix, const PblVector4& rSize, 
     const PblVector3& rPos = *(const PblVector3*)rMatrix.m[3];
     pObstacle->SetCollisionCenter(rPos);
     pObstacle->SetCollisionRadius(rSize.w);
-    pObstacle->Set2DCollisionRadius(rSize.w);
     sObstacles->Add(pObstacle, rPos, rSize.w * 2.0f);
 }
 

@@ -240,7 +240,7 @@ void UpdatePotentiallyVisible(UnitController* pController)
         }
     }
 
-    AI::UnitThreatManager& threats = *reinterpret_cast<AI::UnitThreatManager*>(pController->mThreatManager);
+    AI::UnitThreatManager& threats = pController->mThreatManager;
     for (int i = 0; i < AI::UnitThreatManager::MAX_THREATS; ++i)
     {
         const AI::Threat& threat = threats.GetThreat(i);
@@ -369,7 +369,7 @@ int GetVisualPriority(const Controllable* pMe, const GameObject* pObj)
     for (int i = 0; i < pMe->GetWeaponCount(); ++i)
     {
         if (pMe->GetWeaponPtr(i) &&
-            pMe->GetWeaponPtr(i)->mClass->IsRtti(WeaponTowCableClass::rttiHashWeaponTowCableClass))
+            pMe->GetWeaponPtr(i)->mClass->IsRtti(WeaponTowCableClass::GetRtti()))
         {
             if (!pObj->GetControllable() || !AIUtil::IsATAT(pObj->GetControllable()))
             {
@@ -421,7 +421,7 @@ bool VisionTest(UnitController* pController, GameObject* pTarget)
         AI::EventInfo info(AI::EVT_Vision_CanSeeEnemy, pTarget, vSeenPos);
         pController->SendEvent(&info);
     }
-    reinterpret_cast<AI::UnitThreatManager*>(pController->mThreatManager)->RayhitResult(pTarget, bCanSee);
+    pController->mThreatManager.RayhitResult(pTarget, bCanSee);
 
     UnitController* pHim = UnitControllerPtr(pTarget->mControllableList.GetFirst()->_pObject);
     if (pHim && bCanSee)
@@ -429,8 +429,8 @@ bool VisionTest(UnitController* pController, GameObject* pTarget)
         AI::EventInfo info(AI::EVT_Vision_CanSeeEnemy, pController->mOwner->GetGameObject());
         if (!pHim->IsNewCommand() && pHim->SendEvent(&info) == AI::EVT_Handled)
         {
-            reinterpret_cast<AI::UnitThreatManager*>(pHim->mThreatManager)
-                ->ForceThreat(pController->mOwner->GetGameObject());
+            pHim->mThreatManager
+                .ForceThreat(pController->mOwner->GetGameObject());
         }
     }
     return true;
@@ -524,7 +524,7 @@ void __fastcall VisionManager::AddFakeRayhitResult(UnitController* pUnit, const 
     }
 
     GameObject* pHim = const_cast<GameObject*>(pObject);
-    reinterpret_cast<AI::UnitThreatManager*>(pUnit->mThreatManager)->ForceThreat(pHim);
+    pUnit->mThreatManager.ForceThreat(pHim);
     AI::EventInfo info(AI::EVT_Vision_CanSeeEnemy, pHim);
     pUnit->SendEvent(&info);
 }

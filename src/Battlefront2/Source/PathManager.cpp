@@ -376,7 +376,7 @@ void LowerRequestPriority(UnitController* pCtrl)
         {
             if (pReq->mPriority)
             {
-                pReq->mPriority = reinterpret_cast<AILowLevel*>(pCtrl->mLowLevel)->GetPathQueueDepth();
+                pReq->mPriority = pCtrl->mLowLevel.GetPathQueueDepth();
             }
             return;
         }
@@ -388,7 +388,7 @@ bool RequestPath(UnitController* pUnit, const PblVector3& vStart, const PblVecto
                  float fRadius, int eProhibit, unsigned char uPriority,
                  const ConnectivityArc* pArc, const Obstacle** ppIgnore, int iIgnoreCount)
 {
-    AILowLevel* pLow = reinterpret_cast<AILowLevel*>(pUnit->mLowLevel);
+    AILowLevel* pLow = &pUnit->mLowLevel;
     unsigned char uPriorityPlusDepth = (unsigned char)(pLow->GetPathQueueDepth() + uPriority);
     RemovePathRequest(pUnit);
 

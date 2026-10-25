@@ -59,19 +59,6 @@ public:
 };
  
 
-namespace AI
-{
-
-class UnitThreatManager
-{
-public:
-
-    UnitThreatManager();
-    const GameObject* GetVisibleObject() const;
-
-    void Update(float dt, UnitController* pCtrl);
-};
-}
 
 namespace AudibleManager
 {
@@ -168,7 +155,7 @@ namespace
 
     inline AttackHelper* GetAttackHelper(UnitAgent* pAgent)
     {
-        return reinterpret_cast<AttackHelper*>(pAgent->mAttackHelper);
+        return &pAgent->mAttackHelper;
     }
 }
 
@@ -254,17 +241,8 @@ const UnitController* UnitControllerPtr(const Controllable* pControllable)
 
 // FUNCTION: SWBF2 0x00663180
 UnitController::UnitController(Controllable* pOwner)
-    : Controller(pOwner)
+    : Controller(pOwner), mLowLevel(this)
 {
-    new (mManagerNode) PblOrderedList<UnitController, float>::Node();
-    new (mThreatManager) AI::UnitThreatManager();
-    new (mLowLevel) AILowLevel(this);
-    new (mLastSquadCommand) SquadCommands::SquadCommandOrder();
-
-    for (int i = 0; i < 8; i++)
-    {
-        new (mFriendly + i * sizeof(PblHandle<const GameObject>)) PblHandle<const GameObject>();
-    }
 
     mOwner = pOwner;
     mAgent = 0;
@@ -293,12 +271,6 @@ UnitController::UnitController(Controllable* pOwner)
 UnitController::~UnitController()
 {
     DeleteAgent();
-    for (int i = 7; i >= 0; --i)
-    {
-        reinterpret_cast<PblHandle<const GameObject>*>(mFriendly)[i].~PblHandle();
-    }
-    GetLowLevel().~AILowLevel();
-    reinterpret_cast<AI::UnitThreatManager*>(mThreatManager)->~UnitThreatManager();
 }
 
 // SYNTHETIC: SWBF2 0x006633a0
@@ -487,7 +459,7 @@ void UnitController::UpdateHighLevel()
         pCharacter->mAdrenaline.Update(dt, static_cast<Trackable*>(mOwner)->GetGameObject());
     }
 
-    reinterpret_cast<AI::UnitThreatManager*>(mThreatManager)->Update(dt, this);
+    mThreatManager.Update(dt, this);
     CommandFsm::FSMUpdate(dt, false);
     UpdateInvisibility();
     UseBuffs();
@@ -497,7 +469,7 @@ void UnitController::UpdateHighLevel()
     if (static_cast<Trackable*>(mOwner)->GetGameObject() && AIUtil::IsEndGame(0) &&
         !AIUtil::ShouldStayInVehicle(mOwner))
     {
-        reinterpret_cast<AILowLevel*>(mLowLevel)->SetExitVehicle(0);
+        mLowLevel.SetExitVehicle(0);
     }
 
     VisionManager::RemoveRequests(this);
@@ -508,7 +480,7 @@ void UnitController::UpdateHighLevel()
 // FUNCTION: SWBF2 0x00663af0
 void UnitController::UpdateLowLevel(float dt)
 {
-    AILowLevel* pLowLevel = reinterpret_cast<AILowLevel*>(mLowLevel);
+    AILowLevel* pLowLevel = &mLowLevel;
     mLowLevelUpdateSkipDt += dt;
     if (--mLowLevelUpdateSkips >= 0)
     {
@@ -569,7 +541,7 @@ const UnitCmdInfo* UnitController::GetCurCmd() const
 // FUNCTION: SWBF2 0x00663c10
 const SquadCommands::SquadCommandOrder& UnitController::GetLastSquadCommand()
 {
-    return *reinterpret_cast<const SquadCommands::SquadCommandOrder*>(mLastSquadCommand);
+    return mLastSquadCommand;
 }
 
 // FUNCTION: SWBF2 0x00663c20
@@ -798,12 +770,12 @@ void UnitController::UpdateInvisibility()
     {
         return;
     }
-    if (reinterpret_cast<AI::UnitThreatManager*>(mThreatManager)->GetVisibleObject())
+    if (mThreatManager.GetVisibleObject())
     {
         return;
     }
 
-    AILowLevel* pLowLevel = reinterpret_cast<AILowLevel*>(mLowLevel);
+    AILowLevel* pLowLevel = &mLowLevel;
     for (int i = 0; i < mOwner->GetWeaponCount(); ++i)
     {
         if (mOwner->GetWeaponPtr(i)->IsRtti(WeaponInvisibility::rttiHashWeaponInvisibility))
@@ -821,7 +793,7 @@ void UnitController::UseBuffs()
     {
         return;
     }
-    if (!reinterpret_cast<AI::UnitThreatManager*>(mThreatManager)->GetVisibleObject())
+    if (!mThreatManager.GetVisibleObject())
     {
         return;
     }
@@ -845,7 +817,7 @@ void UnitController::UseBuffs()
             {
                 return;
             }
-            AILowLevel* pLowLevel = reinterpret_cast<AILowLevel*>(mLowLevel);
+            AILowLevel* pLowLevel = &mLowLevel;
             pLowLevel->SetNextWeapon(i);
             pLowLevel->SetFireRequest(true, false);
         }
@@ -860,7 +832,7 @@ void UnitController::UseAutoTurrets()
         return;
     }
 
-    const GameObject* pTarget = reinterpret_cast<AI::UnitThreatManager*>(mThreatManager)->GetVisibleObject();
+    const GameObject* pTarget = mThreatManager.GetVisibleObject();
     const Controllable* pTargetCtl = pTarget ? pTarget->GetControllable() : 0;
     Controller* pTargetCtrl = pTargetCtl ? pTargetCtl->mCtrl : 0;
     if (!pTargetCtrl || !pTargetCtrl->IsInCrowd())
@@ -892,7 +864,7 @@ void UnitController::UseAutoTurrets()
             if (pDispense && pDispense->IsRtti(EntityBuildingArmedClass::rttiHashEntityBuildingArmedClass) &&
                 (pClass->mAITargetTypes & 1))
             {
-                AILowLevel* pLowLevel = reinterpret_cast<AILowLevel*>(mLowLevel);
+                AILowLevel* pLowLevel = &mLowLevel;
                 pLowLevel->SetNextWeapon(i);
                 pLowLevel->SetFireRequest(true, false);
             }
@@ -911,7 +883,7 @@ void UnitController::AddFriendlyFire(const GameObject* pObject)
 {
     if (mFriendlyCount < 8)
     {
-        ((PblHandle<const GameObject>*)mFriendly)[mFriendlyCount++] = pObject;
+        mFriendly[mFriendlyCount++] = pObject;
     }
 }
 
@@ -922,7 +894,7 @@ const GameObject* UnitController::GetFriendlyFire(int iIndex)
     {
         return 0;
     }
-    return ((PblHandle<const GameObject>*)mFriendly)[iIndex];
+    return mFriendly[iIndex];
 }
 
 // FUNCTION: SWBF2 0x00664090

@@ -38,7 +38,8 @@ public:
     int GetCurCmdType() { return mCurCmd.mWhat; }
 
 protected:
-    virtual ~CommandFsm();
+    // FUNCTION: SWBF2 0x00478630
+    virtual ~CommandFsm() {}
 
     virtual void ApplyNextCommand();
     virtual void ApplyNextState() = 0;

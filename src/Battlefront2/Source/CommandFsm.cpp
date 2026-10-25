@@ -148,7 +148,3 @@ void CommandFsm::PrependQueueCommands(const CmdInfo& cmdA, const CmdInfo& cmdB)
     mForceCommand = true;
 }
 
-// FUNCTION: SWBF2 0x00478630
-CommandFsm::~CommandFsm()
-{
-}

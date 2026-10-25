@@ -45,7 +45,7 @@ public:
     static void Destroy();
     static void Init();
 
-    static void __fastcall EnableViewport(int iViewport);
+    static void EnableViewport(int iViewport, bool bEnable);
 
     static SpawnDisplay* Instance(int iIndex);
 

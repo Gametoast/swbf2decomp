@@ -402,8 +402,8 @@ ControllableClass* EntityRemoteTerminal::GetControllableClass()
 // FUNCTION: SWBF2 0x004dcf90
 bool EntityRemoteTerminal::UpdateIndirect(float fDeltaTime)
 {
-    reinterpret_cast<AILowLevel*>(UnitControllerPtr(AsControllable(this)->mCtrl)->mLowLevel)
-        ->UpdateIndirect(fDeltaTime);
+    UnitControllerPtr(AsControllable(this)->mCtrl)->mLowLevel
+        .UpdateIndirect(fDeltaTime);
     return true;
 }
 

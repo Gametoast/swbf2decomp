@@ -101,9 +101,9 @@ void UnitDefendAgent::UpdateStatePostVision(float dt)
 {
     if (mCurState != 3)
     {
-        reinterpret_cast<AttackHelper*>(mAttackHelper)->Update();
+        mAttackHelper.Update();
     }
-    reinterpret_cast<AILowLevel*>(mCtrl->mLowLevel)->SetHeight(HEIGHT_STAND);
+    mCtrl->mLowLevel.SetHeight(HEIGHT_STAND);
 
     switch (mCurState)
     {

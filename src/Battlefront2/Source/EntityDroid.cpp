@@ -1674,7 +1674,6 @@ void EntityDroid::Move(float fDeltaTime, float fMove, float fStrafe, float fTurn
 void EntityDroid::RecalculateAABB()
 {
     SetCollisionRadius(1.5f);
-    Set2DCollisionRadius(1.5f);
     const PblVector3& vCenter = GetCollisionCenter();
     mAABB = PblBox(vCenter.x - 2.5f, vCenter.y - 2.5f, vCenter.z - 2.5f, vCenter.x + 2.5f, vCenter.y + 2.5f,
                    vCenter.z + 2.5f);

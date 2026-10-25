@@ -521,7 +521,7 @@ bool PauseMenu::Update(float fDeltaTime)
 
     if (GameLoop::IsGameOver())
     {
-        SpawnDisplay::EnableViewport(iViewport);
+        SpawnDisplay::EnableViewport(iViewport, false);
         EnableDisplays(iViewport, false);
         EnableScreenGroups(false);
     }

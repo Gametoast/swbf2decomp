@@ -112,7 +112,7 @@ void PassengerSlot::DeactivatePhysics()
 // FUNCTION: SWBF2 0x0060fad0
 bool PassengerSlot::UpdateIndirect(float fDeltaTime)
 {
-    reinterpret_cast<AILowLevel*>(UnitControllerPtr(mCtrl)->mLowLevel)->UpdateIndirect(fDeltaTime);
+    UnitControllerPtr(mCtrl)->mLowLevel.UpdateIndirect(fDeltaTime);
     return true;
 }
 

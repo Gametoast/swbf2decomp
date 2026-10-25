@@ -232,7 +232,7 @@ namespace
 
     inline const AttackHelper& GetAttackHelper(const UnitAgent* pAgent)
     {
-        return *reinterpret_cast<const AttackHelper*>(pAgent->mAttackHelper);
+        return pAgent->mAttackHelper;
     }
 }
 
@@ -279,10 +279,9 @@ bool UnitAgent::ShouldQueueCurCmd(const UnitCmdInfo& cmd) const
 
 // FUNCTION: SWBF2 0x0065dd80
 UnitAgent::UnitAgent(UnitController* pCtrl)
-    : mCtrl(pCtrl),
+    : mCtrl(pCtrl), mAttackHelper(this),
       mCheckNearbyUnitsTime(-1.0f)
 {
-    new (mAttackHelper) AttackHelper(this);
 }
 
 // FUNCTION: SWBF2 0x0065ddb0
@@ -507,7 +506,7 @@ int UnitAgent::DamagedEventPlayerCentricness(AI::EventInfo* pEvent)
     }
 
     GameObject* pAttacker = pInfo->mDamageOwner->GetControllable()->GetGameObject();
-    reinterpret_cast<AI::UnitThreatManager*>(mCtrl->mThreatManager)->AddThreat(pAttacker);
+    mCtrl->mThreatManager.AddThreat(pAttacker);
     mCtrl->ForceSetAttackHelperTarget(pAttacker);
     return 1;
 }
@@ -570,7 +569,7 @@ int UnitAgent::HandleDamagedEvent(AI::EventInfo* pEvent)
                                               PblHandle<GameObject>());
             }
         }
-        reinterpret_cast<AI::UnitThreatManager*>(mCtrl->mThreatManager)->AddThreat(pInfo->mDamageOwner->GetControllable()->GetGameObject());
+        mCtrl->mThreatManager.AddThreat(pInfo->mDamageOwner->GetControllable()->GetGameObject());
         return 1;
     }
 

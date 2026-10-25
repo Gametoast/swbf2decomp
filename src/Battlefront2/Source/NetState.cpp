@@ -3652,7 +3652,7 @@ bool CollisionManager::I_DeactivateItem(CollisionObject* pObject)
 {
     CollisionManager* pManager = this;
     PerformSafeRemove(pObject);
-    PblList<CollisionObject>::Node* pNode = (PblList<CollisionObject>::Node*)pObject->mCollisionObjectNode;
+    PblList<CollisionObject>::Node* pNode = &pObject->mCollisionObjectNode;
     if (!pNode->IsInList())
     {
         return false;
@@ -4248,7 +4248,7 @@ void EntityDroideka::ReadObject(NetPktGroup& group, NetObjState*)
     group.ReadBits(value, 2);
     if (UnitControllerPtr(mCtrl))
     {
-        ((AILowLevel*)UnitControllerPtr(mCtrl)->mLowLevel)->mFoldStatus = (FoldStatus)value;
+        UnitControllerPtr(mCtrl)->mLowLevel.mFoldStatus = (FoldStatus)value;
     }
     group.ReadBits(value, 4);
     if ((int)value == mState)
@@ -4435,7 +4435,7 @@ void EntityDroideka::WriteLateState(NetPktGroup& group)
     group.WriteBits(mDirection, 2);
     if (UnitControllerPtr(mCtrl))
     {
-        group.WriteBits(((AILowLevel*)UnitControllerPtr(mCtrl)->mLowLevel)->mFoldStatus, 2);
+        group.WriteBits(UnitControllerPtr(mCtrl)->mLowLevel.mFoldStatus, 2);
     }
     else
     {
@@ -4510,7 +4510,7 @@ void EntityDroideka::ReadLateState(NetPktGroup& group)
     group.ReadBits(value, 2);
     if (UnitControllerPtr(mCtrl))
     {
-        ((AILowLevel*)UnitControllerPtr(mCtrl)->mLowLevel)->mFoldStatus = (FoldStatus)value;
+        UnitControllerPtr(mCtrl)->mLowLevel.mFoldStatus = (FoldStatus)value;
     }
     group.ReadBits(value, 4);
     if ((int)value == mState)
@@ -4672,7 +4672,7 @@ void EntityDroideka::WriteObject(NetPktGroup& group, NetObjState*)
     group.WriteBits(mDirection, 2);
     if (UnitControllerPtr(mCtrl))
     {
-        group.WriteBits(((AILowLevel*)UnitControllerPtr(mCtrl)->mLowLevel)->mFoldStatus, 2);
+        group.WriteBits(UnitControllerPtr(mCtrl)->mLowLevel.mFoldStatus, 2);
     }
     else
     {

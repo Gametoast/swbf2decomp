@@ -26,9 +26,9 @@ SinCosTable::SinCosTable()
     int i;
     for (i = 0; i < TABLE_SIZE; ++i)
     {
-        const float fAngle = (float)i * (3.141592654f * 2.0f / (float)TABLE_SIZE);
-        _Data[i].fSin = ::sinf(fAngle);
-        _Data[i].fCos = ::cosf(fAngle);
+        const double fAngle = (float)i * (3.141592654f * 2.0f / (float)TABLE_SIZE);
+        _Data[i].fSin = ::sin(fAngle);
+        _Data[i].fCos = ::cos(fAngle);
     }
 }
 

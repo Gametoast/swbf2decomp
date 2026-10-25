@@ -148,7 +148,6 @@ PropCollisionObject::PropCollisionObject(PblMatrix& matrix, PropModelMesh* pMode
 
     const float fRadius = pModel->mRenderObj.mGeometry->_BoundingSphere.GetRadius();
     SetCollisionRadius(fRadius);
-    Set2DCollisionRadius(fRadius);
 
     RecalculateAABB(mMatrix, pModel->mRenderObj.mGeometry->_TotalBoundingBox);
     AddStaticToCollisionManager();

@@ -58,9 +58,46 @@ public:
 
         InputQueue() : m_uiCount(0), m_uiStart(0), m_uiButtonDown(0) {}
 
-        void Update(float fTime, unsigned char uiButtons);
+        int GetCount() const { return m_uiCount; }
+        bool IsButtonDown(unsigned char uiButton) const { return (m_uiButtonDown & (1 << uiButton)) != 0; }
+        const Event& GetEvent(int iEvent) const { return m_aEventQueue[(m_uiStart + iEvent) & INPUT_QUEUE_MASK]; }
+        const Event& operator[](int iEvent) const { return GetEvent(iEvent); }
+        void Update(unsigned char uiButtons, float fTime);
+        void Clear() { m_uiCount = 0; m_uiStart = 0; }
+        void ClearAll() { Clear(); m_uiButtonDown = 0; }
+        void Push(float fTime, unsigned char uiButton, unsigned char uiAction)
+        {
+            Event& event = m_aEventQueue[(m_uiStart + m_uiCount) & INPUT_QUEUE_MASK];
+            event.fTime = fTime;
+            event.uiButton = uiButton;
+            event.uiButtonAction = uiAction;
+            if (m_uiCount >= INPUT_QUEUE_LENGTH)
+            {
+                ++m_uiStart;
+            }
+            else
+            {
+                ++m_uiCount;
+            }
+        }
+        void Pop(int iCount)
+        {
+            if (iCount == m_uiCount)
+            {
+                Clear();
+            }
+            else
+            {
+                m_uiCount -= iCount;
+                m_uiStart = (m_uiStart + iCount) & INPUT_QUEUE_MASK;
+            }
+        }
 
-        Event m_aEventQueue[8];
+    private:
+        static const int INPUT_QUEUE_LENGTH_LOG2 = 3;
+        static const int INPUT_QUEUE_LENGTH = 1 << INPUT_QUEUE_LENGTH_LOG2;
+        static const unsigned char INPUT_QUEUE_MASK = INPUT_QUEUE_LENGTH - 1;
+        Event m_aEventQueue[INPUT_QUEUE_LENGTH];
         unsigned char m_uiCount;
         unsigned char m_uiStart;
         unsigned char m_uiButtonDown;
@@ -144,7 +181,7 @@ public:
     float GetLightSaberLengthFactor(unsigned int uiBlade) const;
     void RenderLightsaberTrail(unsigned int uiEdge, const PblMatrix* pMatrix, bool bTrailOn,
                                unsigned int uiFlags);
-    bool TestInputQueueForButtons(int iPressedMask, int iReleasedMask) const;
+    bool TestInputQueueForButtons(unsigned int iPressedMask, unsigned int iReleasedMask) const;
     bool TestConditionExceptInputQueue(float fPreviousTime, float fCurrentTime,
                                        const Combo::Condition* pCondition);
     bool TestCondition(float fPreviousTime, float fCurrentTime, const Combo::Condition* pCondition,
@@ -174,9 +211,9 @@ protected:
 public:
     static PblHash rttiHashWeaponMelee;
 
-    static int _ClearInputQueueToTime(InputQueue* pQueue, float fTime);
-    static bool _TestInputQueueForButtonEvent(int iButton, InputQueue* pQueue, float fTime,
-                                              int iAction, float fBegin, float fEnd, float* pfMatch);
+    static int _ClearInputQueueToTime(InputQueue& queue, float fTime);
+    static bool _TestInputQueueForButtonEvent(const InputQueue& queue, float fTime,
+                unsigned int iButton, unsigned int iAction, float fBegin, float fEnd, float& fMatch);
     static const char rttiNameWeaponMelee[];
 
     static TrailData* s_aTrailDataPool;

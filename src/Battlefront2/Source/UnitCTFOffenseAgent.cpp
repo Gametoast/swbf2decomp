@@ -306,7 +306,7 @@ void UnitCTFOffenseAgent::FaceTargetIfClose(ControllableHeight eHeight)
     AILowLevel& lowLevel = mCtrl->GetLowLevel();
     lowLevel.SetHeight(eHeight);
     const PblMatrix& myMat = mCtrl->mOwner->GetMatrix();
-    AttackHelper* pAttack = reinterpret_cast<AttackHelper*>(mAttackHelper);
+    AttackHelper* pAttack = &mAttackHelper;
     const GameObject* pTarget = pAttack->GetVisibleTarget();
     PblVector3 vLastSeen = pAttack->HasTarget() ? pAttack->GetLastSeenTargetPos() : PblVector3(0, 0, 0);
 
@@ -452,7 +452,7 @@ void UnitCTFOffenseAgent::UpdateStatePostVision(float dt)
 
     if (mCurState != 8)
     {
-        reinterpret_cast<AttackHelper*>(mAttackHelper)->Update();
+        mAttackHelper.Update();
     }
 
     switch (mCurState)

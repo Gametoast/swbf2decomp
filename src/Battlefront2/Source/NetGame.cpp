@@ -25,6 +25,7 @@
 #include "CommandLine.h"
 #include "ControllerManager.h"
 #include "EntityDoor.h"
+#include "EntityDroideka.h"
 #include "Steam/galaxy_api.h"
 #include "FLJoystick.h"
 #include "NetComm.h"
@@ -1471,9 +1472,6 @@ void EnterClient(); void LeaveClient();
 }
 
 class EntityDroid { public: static MemoryPool sMemoryPool; };
-class EntityDroideka { public: static MemoryPool sMemoryPool; };
-class EntityDroidekaClass { public: static PblHash rttiHashEntityDroidekaClass;
-    static unsigned int GetRtti() { return rttiHashEntityDroidekaClass; } };
 class MountedTurret { public: static MemoryPool sMemoryPool; };
 class PowerupItem { public: static MemoryPool sMemoryPool; };
 class EntityBuildingArmedDynamic { public: static MemoryPool sMemoryPool; };
@@ -1654,7 +1652,6 @@ void NetCollisionObject::RecalculateAABB()
     SetCollisionCenter(mHostObject->GetCollisionCenter());
     float fRadius = mHostObject->GetCollisionRadius();
     SetCollisionRadius(fRadius);
-    Set2DCollisionRadius(fRadius);
     mAABB = mHostObject->mAABB;
 }
 
@@ -6281,7 +6278,7 @@ extern int gHuntShowScoreLimit;
 // FUNCTION: SWBF2 0x005d3160
 void NetGame::GetScore(int* count1, int* count2, int* limit1, int* limit2, bool* limits, bool* points)
 {
-    if (SpaceAssault::mInstance && SpaceAssault::mInstance->mbEnabled)
+    if (SpaceAssault::mInstance && SpaceAssault::mInstance->IsEnabled())
     {
         *limits = true;
         *points = true;
@@ -6290,7 +6287,7 @@ void NetGame::GetScore(int* count1, int* count2, int* limit1, int* limit2, bool*
         *limit1 = Lua_Callbacks::gSpaceAssaultScoreLimit[Lua_Callbacks::gCurRules];
         *limit2 = Lua_Callbacks::gSpaceAssaultScoreLimit[Lua_Callbacks::gCurRules];
     }
-    else if ((int)FlagItem::sFlagGameplayType == 2 || (int)FlagItem::sFlagGameplayType == 3 ||
+    else if ((int)FlagItem::GetGameplayType() == 2 || (int)FlagItem::GetGameplayType() == 3 ||
              Lua_Callbacks::gHuntShowScoreLimit == 1 || AIUtil::sUberMode)
     {
         *limits = false;
@@ -9065,7 +9062,7 @@ void ReadNetEvent(NetPktGroup& group)
 
         if (weaponClass &&
             (weaponClass->IsRtti((unsigned int)WeaponTowCableClass::rttiHashWeaponTowCableClass) ||
-             weaponClass->IsRtti(WeaponMeleeThrowClass::rttiHashWeaponMeleeThrowClass)))
+             weaponClass->IsRtti(WeaponMeleeThrowClass::GetRtti())))
         {
             if (!desc.mFireWeapon)
             {
@@ -11162,26 +11159,6 @@ unsigned int __fastcall SetDamageableVanishFlags(unsigned int* pThis)
     return pThis[47];
 }
 
-// FUNCTION: SWBF2 0x00454da0
-void __fastcall SetHoleRecordRadius(int* pThis, void*, int value)
-{
-    if (pThis[0])
-    {
-        *(int*)(pThis[0] + 16 * pThis[1] + 76) = value;
-    }
-    pThis[5] = value;
-    pThis[6] = value;
-}
-
-// FUNCTION: SWBF2 0x0045dad0
-void __fastcall SetHoleRecordValue(int* pThis, void*, int index, int value)
-{
-    if (pThis[0])
-    {
-        *(int*)(pThis[0] + 4 * (pThis[1] + 15 * index) + 4) = value;
-    }
-    pThis[index + 7] = value;
-}
 
 
 // FUNCTION: SWBF2 0x005b7370
@@ -11201,14 +11178,14 @@ unsigned int clientRandom;
 // FUNCTION: SWBF2 0x005b7550
 void EnterClient()
 {
-    hostRandom = PblRandom::GetSim()._uiSeed;
+    hostRandom = PblRandom::GetSim().GetSeed();
     PblRandom::GetSim().SetSeed(clientRandom);
 }
 
 // FUNCTION: SWBF2 0x005b7580
 void LeaveClient()
 {
-    clientRandom = PblRandom::GetSim()._uiSeed;
+    clientRandom = PblRandom::GetSim().GetSeed();
     PblRandom::GetSim().SetSeed(clientRandom);
 }
 }
@@ -11626,30 +11603,16 @@ void EnableFrameLock()
 }
 
 // FUNCTION: SWBF2 0x005b4300
-RedTerrain::Hole::Hole(RedTerrain::Hole* pSource)
+RedTerrain::Hole::Hole(RedTerrain::Hole* pSource) : TreeGridObject(-1)
 {
-    int* pThis = (int*)this;
-    const int* source = (const int*)pSource;
-    new (pThis) TreeGridObject(-1);
-    pThis[11] = pThis[12] = pThis[13] = pThis[14] = 0;
-    SetHoleRecordValue(pThis, 0, 0, 0x4000);
-    ((TreeGridObject*)pThis)->SetCollisionCenter(((const TreeGridObject*)source)->GetCollisionCenter());
-    float radius = ((const TreeGridObject*)source)->GetCollisionRadius();
-    int radiusBits;
-    memcpy(&radiusBits, &radius, sizeof(radiusBits));
-    SetHoleRecordRadius(pThis, 0, radiusBits);
-    const unsigned int count = source[9];
-    pThis[9] = count;
-    struct Record
+    SetObjectData(0, COLL_HOLE);
+    SetCollisionCenter(pSource->GetCollisionCenter());
+    SetCollisionRadius(pSource->GetCollisionRadius());
+    iNumPlanes = pSource->iNumPlanes;
+    aPlanes = new PblVector4[iNumPlanes];
+    for (int i = 0; i < iNumPlanes; ++i)
     {
-        int words[4];
-        Record() {}
-    };
-    Record* records = new Record[count];
-    pThis[10] = (int)records;
-    for (unsigned int i = 0; i < count; ++i)
-    {
-        memcpy(&records[i], (const char*)source[10] + 16 * i, sizeof(Record));
+        aPlanes[i] = pSource->aPlanes[i];
     }
 }
 
@@ -14038,7 +14001,7 @@ bool IsUnmanned(const GameObject* pObject)
         }
         if ((pControllable->mPilotType == PILOT_VEHICLE ||
              pControllable->mPilotType == PILOT_VEHICLESELF ||
-             pControllable->mPilotType == PILOT_REMOTE) && pControllable->GetPilot())
+             pControllable->IsRemoteVehicle()) && pControllable->GetPilot())
         {
             return false;
         }
@@ -14285,7 +14248,7 @@ void WriteCaptureDisplay(NetPktGroup& group, int player)
         {
             CommandPost* pPost = *it;
             const unsigned __int64 playerBit = 1ULL << pCharacter->mPlayerId;
-            if (!(pPost->mHoldPlayerMask & playerBit) &&
+            if (!(pPost->GetHoldPlayerMask() & playerBit) &&
                 !(pPost->mSkippedPlayerMask & playerBit))
             {
                 continue;
@@ -14309,13 +14272,13 @@ void WriteCaptureDisplay(NetPktGroup& group, int player)
             {
                 event = skipped ? 3 : 1;
                 group.WriteBits(event, 3);
-                const int biasTeam = pPost->mBiasTeam;
+                const int biasTeam = pPost->GetBiasTeam();
                 group.WriteBits(biasTeam, 3);
                 int otherTeam = 0;
-                if (pPost->mHoldTeam < 0)
+                if (pPost->GetHoldTeam() < 0)
                 {
                     for (otherTeam = 1; otherTeam < 8 &&
-                         (otherTeam == biasTeam || pPost->mHoldCount[otherTeam] <= 0);
+                         (otherTeam == biasTeam || pPost->GetHoldCount(otherTeam) <= 0);
                          ++otherTeam)
                         ;
                 }
@@ -15280,7 +15243,7 @@ void WriteNetEvent(NetEvent& event, NetPktGroup& group)
         unsigned int ownerId = GetUniqObjectId(owner);
         WeaponClass* weaponClass = data.mWpnClassIndex < 0xff ? Factory<Weapon, WeaponClass, WeaponDesc>::FindNetIndex(data.mWpnClassIndex) : 0;
         if (ownerId == 63 && weaponClass &&
-            weaponClass->IsRtti(WeaponMeleeThrowClass::rttiHashWeaponMeleeThrowClass))
+            weaponClass->IsRtti(WeaponMeleeThrowClass::GetRtti()))
         {
             break;
         }

@@ -77,7 +77,7 @@ public:
 // FUNCTION: SWBF2 0x006927b0
 inline bool WeaponTowCableClass::IsRtti(unsigned int uRtti) const
 {
-    if (rttiHashWeaponTowCableClass == uRtti)
+    if (GetRtti() == uRtti)
     {
         return true;
     }

@@ -568,7 +568,7 @@ static void sCalculateTurnControls(const Controllable* pMe, float fScale, const 
 
         const UnitController* pUnit = UnitControllerPtr(static_cast<const Controller*>(pMe->mCtrl));
         const float fMax =
-            reinterpret_cast<const AILowLevel*>(pUnit->mLowLevel)->UseFastTurn() ? 2.0f : 1.0f;
+            pUnit->mLowLevel.UseFastTurn() ? 2.0f : 1.0f;
         if (-fMax > *pfTurn)
         {
             *pfTurn = -fMax;
@@ -875,7 +875,7 @@ namespace
 
     inline const AILowLevel* GetLowLevel(const UnitController* pUnit)
     {
-        return reinterpret_cast<const AILowLevel*>(pUnit->mLowLevel);
+        return &pUnit->mLowLevel;
     }
 }
 

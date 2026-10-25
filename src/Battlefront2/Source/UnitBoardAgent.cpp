@@ -249,7 +249,7 @@ void UnitBoardAgent::UpdateStatePostVision(float dt)
         return;
     }
 
-    reinterpret_cast<AttackHelper*>(mAttackHelper)->Update();
+    mAttackHelper.Update();
     GameObject* pVehicle = AIUtil::GetAlivePtr(mVehicle, false);
     if (pVehicle &&
         (!pVehicle->IsRtti(EntityFlyer::rttiHashEntityFlyer) ||

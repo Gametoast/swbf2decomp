@@ -86,7 +86,7 @@ void UnitHoldAgent::UpdateStatePostVision(float dt)
         return;
     }
 
-    reinterpret_cast<AttackHelper*>(mAttackHelper)->Update();
+    mAttackHelper.Update();
 
     const Character* pLeader = mCtrl->GetLastSquadCommand().mWhoGaveIt;
     if (!pLeader || !pLeader->GetControllable())

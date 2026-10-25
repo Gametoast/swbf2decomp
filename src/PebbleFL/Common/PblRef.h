@@ -21,14 +21,14 @@ public:
         mAliveFlag = 0;
     }
 
-    unsigned short AddRef()
+    unsigned short AddRef() const
     {
         ++mRefCount;
         return mRefCount;
     }
 
     // FUNCTION: SWBF2 0x0040cbb0
-    unsigned short Release()
+    unsigned short Release() const
     {
         --mRefCount;
         unsigned short count = (unsigned short)mRefCount;
@@ -46,7 +46,7 @@ public:
 
     unsigned short mValidFlag : 1;
     unsigned short mAliveFlag : 1;
-    unsigned short mRefCount : 14;
+    mutable unsigned short mRefCount : 14;
 };
  
 

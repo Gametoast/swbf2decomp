@@ -95,9 +95,10 @@ void SpawnDisplay::UpdateSpectate(Character* pCharacter)
 }
 
 // FUNCTION: SWBF2 0x0042b620
-void __fastcall SpawnDisplay::EnableViewport(int iViewport)
+void SpawnDisplay::EnableViewport(int iViewport, bool bEnable)
 {
-    HUD::Event event(HUD::GameEvents::gPlayerEvents[iViewport].spawnDisplayDisable, true);
+    HUD::Event event(bEnable ? HUD::GameEvents::gPlayerEvents[iViewport].spawnDisplayEnable
+                            : HUD::GameEvents::gPlayerEvents[iViewport].spawnDisplayDisable, true);
     event.Send();
 }
 

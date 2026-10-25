@@ -213,7 +213,7 @@ void UnitFollowAgent::EnterState()
 
         if (PathFinder::IsPointValid(vDest, 0, mCtrl->mOwner->GetGameObject()) && uTry < 20)
         {
-            reinterpret_cast<AILowLevel*>(mCtrl->mLowLevel)->SetNavigator_Goto(vDest, 0, false, false);
+            mCtrl->mLowLevel.SetNavigator_Goto(vDest, 0, false, false);
             return;
         }
     }
@@ -259,7 +259,7 @@ void UnitFollowAgent::UpdateStatePostVision(float dt)
         return;
     }
 
-    reinterpret_cast<AttackHelper*>(mAttackHelper)->Update();
+    mAttackHelper.Update();
 
     const GameObject* pTarget = ResolveHandle(mTarget);
     if (!pTarget)
@@ -340,9 +340,9 @@ void UnitFollowAgent::UpdateStatePostVision(float dt)
             vOffset.y *= fScale;
             vOffset.z *= fScale;
             pTargetNow = ResolveHandle(mTarget);
-            reinterpret_cast<AILowLevel*>(mCtrl->mLowLevel)->SetNavigator_FollowTarget(pTargetNow, vOffset);
+            mCtrl->mLowLevel.SetNavigator_FollowTarget(pTargetNow, vOffset);
 
-            if (!reinterpret_cast<AttackHelper*>(mAttackHelper)->HasTarget())
+            if (!mAttackHelper.HasTarget())
             {
 
                 if (SeatOf(ResolveHandle(mTarget)))
@@ -359,7 +359,7 @@ void UnitFollowAgent::UpdateStatePostVision(float dt)
                             GameObject* pOccupant2 =
                                 const_cast<GameObject*>(ResolveHandle(const_cast<PblHandle<const GameObject>&>(
                                     ResolveHandle(mTarget)->GetControllable()->mReticuleTarget[0])));
-                            reinterpret_cast<AI::UnitThreatManager*>(mCtrl->mThreatManager)->AddThreat(pOccupant2);
+                            mCtrl->mThreatManager.AddThreat(pOccupant2);
                         }
                     }
                 }
@@ -386,7 +386,7 @@ void UnitFollowAgent::UpdateStatePostVision(float dt)
         }
         else
         {
-            reinterpret_cast<AILowLevel*>(mCtrl->mLowLevel)->SetNavigator_Stationary();
+            mCtrl->mLowLevel.SetNavigator_Stationary();
         }
         break;
     case 4:
@@ -400,7 +400,7 @@ void UnitFollowAgent::UpdateStatePostVision(float dt)
         }
         break;
     case 5:
-        if (reinterpret_cast<AILowLevel*>(mCtrl->mLowLevel)->IsNavigatorInProgress())
+        if (mCtrl->mLowLevel.IsNavigatorInProgress())
         {
             if (CheckForForwardHintNodes())
             {

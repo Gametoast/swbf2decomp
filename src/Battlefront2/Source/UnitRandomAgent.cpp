@@ -103,13 +103,13 @@ void UnitRandomAgent::EnterState()
 // FUNCTION: SWBF2 0x00669540
 void UnitRandomAgent::ExitState()
 {
-    reinterpret_cast<AILowLevel*>(mCtrl->mLowLevel)->mFoldStatus = FOLD_FOLD;
+    mCtrl->mLowLevel.mFoldStatus = FOLD_FOLD;
 }
 
 // FUNCTION: SWBF2 0x00669550
 void UnitRandomAgent::UpdateStatePostVision(float dt)
 {
-    reinterpret_cast<AttackHelper*>(mAttackHelper)->Update();
+    mAttackHelper.Update();
     if (mCurState == 2)
     {
         float fRange = 6.0f;

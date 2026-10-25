@@ -30,7 +30,7 @@ namespace
 
     inline AttackHelper* GetAttackHelper(UnitAgent* pOwner)
     {
-        return reinterpret_cast<AttackHelper*>(pOwner->mAttackHelper);
+        return &pOwner->mAttackHelper;
     }
 }
 
@@ -62,7 +62,7 @@ void CoverHelper::HELPERClean()
 // FUNCTION: SWBF2 0x00486fb0
 void CoverHelper::ExitState()
 {
-    AttackHelper* pAttack = reinterpret_cast<AttackHelper*>(mOwner->mAttackHelper);
+    AttackHelper* pAttack = &mOwner->mAttackHelper;
     mStance = HEIGHT_STAND;
     switch (mCurState)
     {
@@ -423,7 +423,7 @@ const CoverHint* CoverHelper::SelectHint(int iCount, const BaseHint** ppHints) c
 float CoverHelper::IsHintSuitable_Combat(const BaseHint* pHint) const
 {
     PblVector3 vMe = GetPos(GetMe()->GetMatrix());
-    PblVector3 vTarget = reinterpret_cast<const AttackHelper*>(mOwner->mAttackHelper)->GetLastSeenTargetPos();
+    PblVector3 vTarget = mOwner->mAttackHelper.GetLastSeenTargetPos();
     PblVector3 vMeToTarget(vTarget.x - vMe.x, 0.0f, vTarget.z - vMe.z);
     PblVector3 vHint = pHint->GetCollisionCenter();
     float fCosMax = PblMath::Cos(1.0471976f);

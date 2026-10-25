@@ -12,7 +12,6 @@ EntityWater::EntityWater()
     totalTime = 0.0f;
     SetCollisionCenter(gVectorZero);
     SetCollisionRadius(10000.0f);
-    Set2DCollisionRadius(10000.0f);
     CollisionManager::SetWater(this);
     ActivateThread(10000, PER_LOCAL_TURN);
 }

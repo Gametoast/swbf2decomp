@@ -104,5 +104,5 @@ inline Controllable* DefendHelper::GetMe()
 
 inline AILowLevel& DefendHelper::GetLowLevel()
 {
-    return *reinterpret_cast<AILowLevel*>(GetCtrl()->mLowLevel);
+    return GetCtrl()->mLowLevel;
 }

@@ -291,7 +291,7 @@ bool RepairHelper::CheckForRecipientAndInit()
     mSearchTime = GameLoop::GetMissionTime();
     mPathing = false;
     mPathTime = -100.0f;
-    reinterpret_cast<AILowLevel*>(GetCtrl()->mLowLevel)->SetNavigator_Stationary();
+    GetCtrl()->mLowLevel.SetNavigator_Stationary();
     AI::VOHelper::Play(AI::VOT_RepairStart, GetMe()->GetGameObject(), 0, pBest, 0.0f);
     return true;
 }
@@ -327,7 +327,7 @@ bool RepairHelper::SetAidWpn(bool* pbChanged)
         {
             if (GetMe()->GetWeaponIndex(GetMe()->GetWpnChannel()) != i)
             {
-                reinterpret_cast<AILowLevel*>(UnitControllerPtr(GetMe()->mCtrl)->mLowLevel)->SetNextWeapon(i);
+                UnitControllerPtr(GetMe()->mCtrl)->mLowLevel.SetNextWeapon(i);
                 *pbChanged = true;
                 return true;
             }

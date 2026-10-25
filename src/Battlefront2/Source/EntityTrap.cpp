@@ -204,7 +204,6 @@ void EntityTrap::HealthChangeCallback(bool bArg, float fDelta)
             pCollision->SetCollisionModel(&mTrapClass->mTrapCollisionModel);
             pCollision->SetCollisionCenter(mTrapCollisionSphere.GetCenter());
             pCollision->SetCollisionRadius(mTrapCollisionSphere.GetRadius());
-            pCollision->Set2DCollisionRadius(mTrapCollisionSphere.GetRadius());
             pCollision->RecalculateAABB();
             if (pCollision->IsInCollisionList())
             {
@@ -537,7 +536,6 @@ bool EntityTrap::Update(float fDeltaTime)
                 SetCollisionModel(&mTrapClass->mBuildBoxCollisionModel);
                 SetCollisionCenter(mBuildBoxCollisionSphere.GetCenter());
                 SetCollisionRadius(mBuildBoxCollisionSphere.GetRadius());
-                Set2DCollisionRadius(mBuildBoxCollisionSphere.GetRadius());
                 RecalculateAABB();
                 if (IsInCollisionList())
                 {
@@ -880,7 +878,6 @@ Entity* EntityTrapClass::Build(const EntityDesc& desc)
                                                              kBoxDesc.mMatrix.m[3][2] + vOffset.z));
         pTrap->SetCollisionCenter(pTrap->mBuildBoxCollisionSphere.GetCenter());
         pTrap->SetCollisionRadius(pTrap->mBuildBoxCollisionSphere.GetRadius());
-        pTrap->Set2DCollisionRadius(pTrap->mBuildBoxCollisionSphere.GetRadius());
         pTrap->RecalculateAABB();
     }
 

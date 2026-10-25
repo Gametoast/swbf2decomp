@@ -105,7 +105,6 @@ EntityGeometry::EntityGeometry(EntityGeometryClass* pClass, const EntityDesc& de
         fRadius = pClass->mPotentialCollisionRadius;
     }
     SetCollisionRadius(fRadius);
-    Set2DCollisionRadius(fRadius);
     RecalculateAABB();
 
     const PblBox& box = mModel->_mModel->_TotalBoundingBox;
@@ -151,7 +150,6 @@ void EntityGeometry::SetProperty(unsigned int uProperty, const char* pszValue)
                 fRadius = pClass->mPotentialCollisionRadius;
             }
             SetCollisionRadius(fRadius);
-            Set2DCollisionRadius(fRadius);
             RecalculateAABB();
             SetRenderPos(GetCollisionCenter());
             SetRenderRadius(GetCollisionRadius());

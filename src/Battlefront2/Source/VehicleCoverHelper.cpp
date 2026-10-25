@@ -39,12 +39,12 @@ namespace
 
     inline AILowLevel& GetLowLevel(UnitController* pCtrl)
     {
-        return *reinterpret_cast<AILowLevel*>(pCtrl->mLowLevel);
+        return pCtrl->mLowLevel;
     }
 
     inline AttackHelper* GetAttackHelper(UnitAgent* pOwner)
     {
-        return reinterpret_cast<AttackHelper*>(pOwner->mAttackHelper);
+        return &pOwner->mAttackHelper;
     }
 
     inline CollisionObject* GetCollisionObject(GameObject* pObj)
@@ -163,7 +163,7 @@ void VehicleCoverHelper::EnterState()
 // FUNCTION: SWBF2 0x0066c260
 void VehicleCoverHelper::ExitState()
 {
-    AttackHelper* pAttack = reinterpret_cast<AttackHelper*>(mOwner->mAttackHelper);
+    AttackHelper* pAttack = &mOwner->mAttackHelper;
     switch (mCurState)
     {
     case STATE_GOTO:

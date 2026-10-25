@@ -80,11 +80,11 @@ protected:
     }
     const AttackHelper* GetAttackHelper() const
     {
-        return reinterpret_cast<const AttackHelper*>(mOwner->mAttackHelper);
+        return &mOwner->mAttackHelper;
     }
     AttackHelper* GetAttackHelper()
     {
-        return reinterpret_cast<AttackHelper*>(mOwner->mAttackHelper);
+        return &mOwner->mAttackHelper;
     }
 
     friend class CoverHelper;

@@ -1137,7 +1137,6 @@ void EntitySoldier::RecalculateAABB()
     {
         SetCollisionCenter(mMatrix.GetTranslation());
         SetCollisionRadius(3.0f);
-        Set2DCollisionRadius(3.0f);
         float fRadius = GetCollisionRadius();
         const PblVector3& vCenter = GetCollisionCenter();
         mAABB = PblBox(vCenter.x - fRadius, vCenter.y - fRadius, vCenter.z - fRadius,
@@ -1155,7 +1154,6 @@ void EntitySoldier::RecalculateAABB()
     {
         SetCollisionCenter(mMatrix.GetTranslation());
         SetCollisionRadius(sCollisionRadius2[2]);
-        Set2DCollisionRadius(sCollisionRadius2[2]);
         float fRadius = GetCollisionRadius();
         const PblVector3& vCenter = GetCollisionCenter();
         mAABB = PblBox(vCenter.x - fRadius, vCenter.y - fRadius, vCenter.z - fRadius,
@@ -1167,7 +1165,6 @@ void EntitySoldier::RecalculateAABB()
         const PblVector3& vUp = mMatrix.GetYAxis();
         SetCollisionCenter(PblVector3(vPos.x + vUp.x, vPos.y + vUp.y, vPos.z + vUp.z));
         SetCollisionRadius(sCollisionRadius2[0]);
-        Set2DCollisionRadius(sCollisionRadius2[0]);
     }
     else
     {
@@ -1177,7 +1174,6 @@ void EntitySoldier::RecalculateAABB()
         SetCollisionCenter(PblVector3(fOffset * vUp.x + vPos.x, vPos.y + vUp.y * fOffset,
                                       vPos.z + vUp.z * fOffset));
         SetCollisionRadius(sCollisionRadius2[mStanceIndex]);
-        Set2DCollisionRadius(sCollisionRadius2[mStanceIndex]);
         float fRadius = sCollisionRadius[mStanceIndex];
         float fHalfHeight = sCollisionHeight[mStanceIndex] * 0.5f + 0.1f;
         const PblVector3& vCenter = GetCollisionCenter();

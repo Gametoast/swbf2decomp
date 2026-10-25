@@ -97,7 +97,7 @@ namespace
 
     inline AILowLevel& LowLevel(UnitController* pCtrl)
     {
-        return *reinterpret_cast<AILowLevel*>(pCtrl->mLowLevel);
+        return pCtrl->mLowLevel;
     }
 
     const PblVector3& Trans(const PblMatrix& m) { return *(const PblVector3*)&m.m[3][0]; }

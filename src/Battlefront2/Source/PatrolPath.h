@@ -1,4 +1,5 @@
 #pragma once
+#include "PebbleFL/Common/PblHandle.h"
 
 #include <stddef.h>
 #include "GamePath.h"
@@ -58,7 +59,7 @@ public:
     static void DestroyAll();
 
     NodeProperties* mNodeProps;
-    char mReservingObject[8];
+    PblHandle<const GameObject> mReservingObject;
     float mReservingTime;
 };
 }

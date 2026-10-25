@@ -203,7 +203,7 @@ static CollisionObject** sSafetyColliderPointer;
 static inline PblList<CollisionObject>::Node* CollisionNode(CollisionObject* pObject)
 {
 
-    return (PblList<CollisionObject>::Node*)pObject->mCollisionObjectNode;
+    return &pObject->mCollisionObjectNode;
 }
 
 // FUNCTION: SWBF2 0x0045db30

@@ -12,7 +12,6 @@ EntityTerrain::EntityTerrain()
 {
     SetCollisionCenter(gVectorZero);
     SetCollisionRadius(10000.0f);
-    Set2DCollisionRadius(10000.0f);
     CollisionManager::SetTerrain(this);
 }
 

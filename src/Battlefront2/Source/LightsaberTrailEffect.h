@@ -93,12 +93,12 @@ public:
 
     float GetLastTime() const;
 
-    int GetTotalNumSteps(float fMaxTimeStep, float fMaxDistanceStep, unsigned char* pSteps,
+    unsigned int GetTotalNumSteps(float fMaxTimeStep, float fMaxDistanceStep, unsigned char* pSteps,
                          float* pTotalDistance) const;
     PblBox GetBoundingBox(float fLength) const;
-    int _SetSample(float fTime) const;
-    PblVector3* GetInterpolatedPos(float fTime, PblVector3* pResult) const;
-    PblVector3* GetInterpolatedDir(float fTime, PblVector3* pResult) const;
+    void _SetSample(float fTime) const;
+    PblVector3 GetInterpolatedPos(float fTime) const;
+    PblVector3 GetInterpolatedDir(float fTime) const;
 
 protected:
 

@@ -516,7 +516,6 @@ LeafPatch::LeafPatch(LeafPatchClass* pClass, const PblMatrix& matrix)
 
     SetCollisionCenter(*(const PblVector3*)mMatrix.m[3]);
     SetCollisionRadius(mClass->mRadius);
-    Set2DCollisionRadius(mClass->mRadius);
 
     PblVector3 vCenter;
     D3DXVec3TransformCoord(&vCenter, &mClass->mBoundingOffset, &mMatrix);

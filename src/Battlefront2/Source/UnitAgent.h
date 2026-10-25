@@ -5,6 +5,7 @@
 #include <stddef.h>
 
 #include "Agent.h"
+#include "AttackHelper.h"
 #include "Controllable.h"
 #include "UnitController.h"
 #include "RedEngineFL/Memory/RedMemoryPool.h"
@@ -68,7 +69,7 @@ public:
     }
     AILowLevel& GetLowLevel()
     {
-        return *reinterpret_cast<AILowLevel*>(mCtrl->mLowLevel);
+        return mCtrl->mLowLevel;
     }
 
     bool RunForVehicle(const GameObject* pVehicle) const;
@@ -89,7 +90,7 @@ private:
 public:
 
     UnitController* mCtrl;
-    unsigned char mAttackHelper[52];
+    AttackHelper mAttackHelper;
     float mCheckNearbyUnitsTime;
     bool mNearbyUnitsInCombat;
 };

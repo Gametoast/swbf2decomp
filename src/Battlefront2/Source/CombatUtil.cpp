@@ -893,7 +893,7 @@ bool CombatUtil::sSelectBestWeaponType(Controllable* pMe, const GameObject* pTar
     *pLabel = GetWeaponLabel(pMe->GetWeaponPtr(iBest));
     if ((!pMe->GetCurWpn() || pMe->GetWeaponIndex(pMe->GetWpnChannel()) != iBest) && bFire)
     {
-        reinterpret_cast<AILowLevel*>(UnitControllerPtr(pMe->mCtrl)->mLowLevel)->SetNextWeapon(iBest);
+        UnitControllerPtr(pMe->mCtrl)->mLowLevel.SetNextWeapon(iBest);
     }
     return true;
 }

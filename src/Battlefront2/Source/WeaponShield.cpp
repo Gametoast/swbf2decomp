@@ -205,7 +205,6 @@ WeaponShield::WeaponShield(const WeaponShieldClass* pClass, const WeaponDesc& de
             fRadius = pClass->m_vShieldSize.z;
         }
         SetCollisionRadius(fRadius);
-        Set2DCollisionRadius(fRadius);
     }
 
     mParent = mOwner->GetGameObject()->GetCollisionObject();

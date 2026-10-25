@@ -1248,19 +1248,6 @@ extern "C" PblMatrix* __stdcall D3DXMatrixRotationX(PblMatrix* pOut, float fAngl
 extern "C" PblMatrix* __stdcall D3DXMatrixRotationY(PblMatrix* pOut, float fAngle);
 extern "C" PblMatrix* __stdcall D3DXMatrixRotationZ(PblMatrix* pOut, float fAngle);
 
-namespace
-{
-
-inline PblVector3 HermiteValue(const char* pHermite, float fT)
-{
-    const float* p = (const float*)pHermite;
-    PblVector3 v;
-    v.x = ((p[0] * fT + p[3]) * fT + p[6]) * fT + p[9];
-    v.y = ((p[1] * fT + p[4]) * fT + p[7]) * fT + p[10];
-    v.z = ((p[2] * fT + p[5]) * fT + p[8]) * fT + p[11];
-    return v;
-}
-}
 
 namespace FirstPerson
 {
@@ -1296,14 +1283,14 @@ void FirstPersonCameraManager::Update(PblMatrix& rMatrix)
         }
         else
         {
-            PblVector3 vPos = HermiteValue(mHermPos + mCurrCamPt * 52, fT);
+            PblVector3 vPos = mHermPos[mCurrCamPt].getValue(fT);
             PblVector3 vOffset;
             D3DXVec3TransformNormal(&vOffset, &vPos, &rMatrix);
             rMatrix.m[3][0] += vOffset.x;
             rMatrix.m[3][1] += vOffset.y;
             rMatrix.m[3][2] += vOffset.z;
             rMatrix.m[3][3] = 1.0f;
-            mCurRotVec = HermiteValue(mHermRot + mCurrCamPt * 52, fT);
+            mCurRotVec = mHermRot[mCurrCamPt].getValue(fT);
             mCameraPos = *(const PblVector3*)rMatrix.m[3];
 
             PblMatrix mRotation = gMatrixIdentity;
@@ -1591,8 +1578,8 @@ float FirstPersonCameraManager::SetCameraPath(PblVector3* pPos, PblVector3* pPos
 {
     FirstPerson::IsActive(0);
     mNumPoints = uPoints;
-    PblHermiteVector3* pPosHermite = (PblHermiteVector3*)mHermPos;
-    PblHermiteVector3* pRotHermite = (PblHermiteVector3*)mHermRot;
+    PblHermiteVector3* pPosHermite = mHermPos;
+    PblHermiteVector3* pRotHermite = mHermRot;
     float fTotalTime = 0.0f;
     for (unsigned int i = 0; i < uPoints; ++i)
     {
@@ -1698,7 +1685,7 @@ void FirstPersonCameraManager::ReturnToCenter()
     }
 
     const float fT = 1.0f - mCurrCamTime / mCamTime[mCurrCamPt];
-    mLinVec = HermiteValue(mHermPos + mCurrCamPt * sizeof(PblHermiteVector3), fT);
+    mLinVec = mHermPos[mCurrCamPt].getValue(fT);
     mCurrCamTime = 0.0f;
     mCurrCamPt = 0;
     mCamTime[0] = 0.3f;

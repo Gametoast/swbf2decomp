@@ -283,7 +283,7 @@ void UnitFlyAgent::UpdateStatePostVision(float dt)
             ->InstantDeath(DamageOwner(0, 0, 0, 0, 0, 1.0f), true);
     }
 
-    reinterpret_cast<AttackHelper*>(mAttackHelper)->Update();
+    mAttackHelper.Update();
 
     switch (mCurState)
     {
@@ -421,7 +421,7 @@ bool UnitFlyAgent::IsNearATAT()
                     UnitController* pGunner = UnitControllerPtr(it->mCtrl);
                     if (pGunner)
                     {
-                        reinterpret_cast<AI::UnitThreatManager*>(pGunner->mThreatManager)->AddThreat(static_cast<Trackable*>(pATAT)->GetGameObject());
+                        pGunner->mThreatManager.AddThreat(static_cast<Trackable*>(pATAT)->GetGameObject());
                         pGunner->ForceSetAttackHelperTarget(static_cast<Trackable*>(pATAT)->GetGameObject());
                     }
                 }

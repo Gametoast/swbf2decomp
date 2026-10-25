@@ -704,7 +704,6 @@ void RedTerrain::Read(PblFileChunk& chunk)
                             vCenter.z = pPartFile->ReadFloat();
                             pHole->SetCollisionCenter(vCenter);
                             pHole->SetCollisionRadius(fRadius);
-                            pHole->Set2DCollisionRadius(fRadius);
 
                             iOldHeap = RedSetCurrentHeap(iHeap);
                             pHole->aPlanes = new PblVector4[pHole->iNumPlanes];

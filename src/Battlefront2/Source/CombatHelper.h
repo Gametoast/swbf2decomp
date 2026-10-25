@@ -54,11 +54,11 @@ public:
     }
     AILowLevel& GetLowLevel()
     {
-        return *reinterpret_cast<AILowLevel*>(mOwner->mCtrl->mLowLevel);
+        return mOwner->mCtrl->mLowLevel;
     }
     AttackHelper& GetAttackHelper()
     {
-        return *reinterpret_cast<AttackHelper*>(mOwner->mAttackHelper);
+        return mOwner->mAttackHelper;
     }
     float GetUpdateRate() const;
 

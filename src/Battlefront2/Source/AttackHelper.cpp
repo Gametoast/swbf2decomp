@@ -68,7 +68,7 @@ namespace
 
     inline AILowLevel& LowLevelOf(Controller* pCtrl)
     {
-        return *reinterpret_cast<AILowLevel*>(UnitControllerPtr(pCtrl)->mLowLevel);
+        return UnitControllerPtr(pCtrl)->mLowLevel;
     }
 }
 
@@ -118,7 +118,7 @@ void AttackHelper::SetTargetInfo(GameObject const* pTarget, PblVector3 const& vP
 bool AttackHelper::UpdateTarget()
 {
     const AI::UnitThreatManager& threats =
-        *reinterpret_cast<const AI::UnitThreatManager*>(mAgent->mCtrl->mThreatManager);
+        mAgent->mCtrl->mThreatManager;
     const GameObject* pVisible = threats.GetVisibleObject();
     const GameObject* pOldTarget = GetTarget();
     const GameObject* pTarget = pOldTarget;

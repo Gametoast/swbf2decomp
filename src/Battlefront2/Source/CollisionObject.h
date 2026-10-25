@@ -4,6 +4,7 @@
 
 #include "PebbleFL/Common/PblVector.h"
 
+#include "PebbleFL/Common/PblList.h"
 class CollisionModel;
 class CollisionObject;
 class CollisionOptimizationInfo;
@@ -86,7 +87,7 @@ public:
     static void SetupMemoryPool(unsigned int uCount, unsigned int uSize, unsigned int uGrow);
 
     int mStackSize;
-    int mData[15][1];
+    int mData[1][15];
     PblSphere mSphere[15];
     TreeGridObject* mObject[15];
     TreeGridStack* mNext;
@@ -120,14 +121,15 @@ public:
     }
     int GetObjectData(int iIndex) const
     {
-        return mStackPtr ? mStackPtr->mData[mStackIdx][iIndex] : mData[iIndex];
+        return mStackPtr ? mStackPtr->mData[iIndex][mStackIdx] : mData[iIndex];
     }
 
+    // FUNCTION: SWBF2 0x0045dad0
     void SetObjectData(int iIndex, int iData)
     {
         if (mStackPtr)
         {
-            mStackPtr->mData[mStackIdx][iIndex] = iData;
+            mStackPtr->mData[iIndex][mStackIdx] = iData;
         }
         mData[iIndex] = iData;
     }
@@ -152,6 +154,7 @@ public:
         mCollisionSphere.y = rCenter.y;
         mCollisionSphere.z = rCenter.z;
     }
+    // FUNCTION: SWBF2 0x00454da0
     void SetCollisionRadius(float fRadius)
     {
         if (mStackPtr)
@@ -159,6 +162,7 @@ public:
             mStackPtr->mSphere[mStackIdx].w = fRadius;
         }
         mCollisionSphere.w = fRadius;
+        m2dRadius = fRadius;
     }
     void Set2DCollisionRadius(float fRadius) { m2dRadius = fRadius; }
 
@@ -230,7 +234,7 @@ public:
     {
         if (mStackPtr)
         {
-            mStackPtr->mData[mStackIdx][0] = eType;
+            mStackPtr->mData[0][mStackIdx] = eType;
         }
         mData[0] = eType;
     }
@@ -239,7 +243,7 @@ public:
     // FUNCTION: SWBF2 0x0045db10
     const CollisionModel* GetCollisionModel() const { return mCollisionModel; }
 
-    char mCollisionObjectNode[16];
+    PblList<CollisionObject>::Node mCollisionObjectNode;
     CollisionModel* mCollisionModel;
     CollisionObject* mParent;
     float mMass;
