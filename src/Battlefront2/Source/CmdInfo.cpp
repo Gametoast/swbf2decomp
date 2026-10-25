@@ -2,30 +2,9 @@
 #include "CommandPost.h"
 #include "GameObject.h"
 
-void CommandPostHandle::operator=(CommandPost* pPost)
-{
-    mPost = pPost;
-}
 
-// FUNCTION: SWBF2 0x00450410
-ConstCommandPostHandle::operator const CommandPost*() const
-{
-    if (mPost)
-    {
-        PblHandle<GameObject>& object = mPost->mObject;
-        if (object.mObject &&
-            object.mObject->mHandleId != object.mSavedHandleId)
-        {
-            object.mObject = 0;
-            object.mSavedHandleId = 0;
-        }
-        if (!object.mObject)
-        {
-            return 0;
-        }
-    }
-    return mPost;
-}
+
+
 
 // FUNCTION: SWBF2 0x0045cb40
 CmdInfo::CmdInfo()

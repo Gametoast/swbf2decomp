@@ -3108,7 +3108,7 @@ CNetJoinGame::CNetJoinGame(NetFindGame* find)
     connecting = true;
     hostPlayer = -1;
     NetMatch::StartJoinGame((const NetSessionId*)&hostAddr);
-    connected = NetMatch::StartConnect();
+    connected = NetMatch::StartConnect(hostAddr, hostKey, 64);
     strlcpy(gameName, find->GetName(), sizeof(gameName));
     NetSetup::SetGameName(gameName);
     GameLoop::SetMetagameRulesOn(((CNetFindGame*)find)->IsMetaGame());
@@ -5444,7 +5444,7 @@ bool CNetFindGame::Update()
                 {
                     data.mConnecting = true;
                     data.mConnectTimeout = now + connectTime;
-                    if (NetMatch::StartConnect())
+                    if (NetMatch::StartConnect(game->mAddr, game->mKey, 64))
                     {
                         data.mConnected = true;
                         data.mConnecting = false;
@@ -6562,3 +6562,9 @@ NetSessionId NetSetup::mSpecialJoinAddress;
 
 // GLOBAL: SWBF2 0x01e6505b
 bool NetSetup::mPrivateGame = false;
+
+// FUNCTION: SWBF2 0x005e7180
+char* NetSetup::GetHostName()
+{
+    return netGameName;
+}

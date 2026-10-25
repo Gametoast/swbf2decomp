@@ -1212,7 +1212,7 @@ bool NetAdmin::ParseLineRemote(int iPlayer, unsigned short* pusLine, bool bConso
                     int iDeaths;
                     if (pCharacter)
                     {
-                        PlayerStats& stats = pCharacter->GetPlayerStats();
+                        PlayerStats& stats = Character::GetPlayerStats(pCharacter);
                         iPoints = stats.GetPoints();
                         iKills = stats.GetKills(-1, -1);
                         iDeaths = stats.GetDeaths(-1, -1);

@@ -338,7 +338,7 @@ bool EntityDoor::Update(float fDeltaTime)
             if (NetGame::IsEnabled() && netEnabledNext && netClientActive)
             {
                 iCount = NetGame::GetObjectsInRange(mWorld.GetTranslation(), rTrigger.mTriggerRadius, apUnits, 20, 0,
-                                    AI::AFFIL_NEUTRAL);
+                                    COLL_SOFT);
             }
             else
             {

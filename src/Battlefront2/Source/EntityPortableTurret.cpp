@@ -156,7 +156,7 @@ bool EntityPortableTurret::Update(float fDeltaTime)
         mStationary = true;
         mBecomeStationaryNow = false;
         CollisionManager::RemoveBody(this);
-        CollisionManager::AddRigidBody(this);
+        this->AddRigidToCollisionManager();
     }
 
     if (!mStationary)
@@ -352,7 +352,7 @@ Entity* EntityPortableTurretClass::Build(const EntityDesc& desc)
     EntityPortableTurret* pTurret = new EntityPortableTurret(this, desc);
     if (pTurret)
     {
-        CollisionManager::AddSoftBody(pTurret);
+        pTurret->AddSoftToCollisionManager();
         pTurret->ActivatePhysics();
     }
     return pTurret;

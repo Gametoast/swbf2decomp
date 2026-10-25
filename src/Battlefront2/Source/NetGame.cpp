@@ -121,6 +121,41 @@
 #include "EntityPropAnimated.h"
 #include "EntityWater.h"
 
+inline void NetEventVector::Set(const PblVector3& value)
+{
+    x = value.GetX();
+    y = value.GetY();
+    z = value.GetZ();
+}
+
+inline PblVector3 NetEventVector::Get()
+{
+    return PblVector3(x, y, z);
+}
+
+inline void NetGameObjectHandle::Set(const GameObject* object)
+{
+    ptr = object;
+    if (object)
+    {
+        id = object->GetHandleId();
+    }
+    else
+    {
+        id = 0;
+    }
+}
+
+inline void NetGameObjectHandle::Get(const GameObject*& object)
+{
+    if (ptr && ptr->GetHandleId() != id)
+    {
+        ptr = 0;
+        id = 0;
+    }
+    object = ptr;
+}
+
 namespace gf { bool isInitialized(); bool checkError(); }
 namespace { struct NetVectorRecord { char unknown[8]; PblVector3 vector; }; }
  
@@ -686,7 +721,7 @@ class NetNdObjMap
 public:
     NetNdObjMap();
     void Clear();
-    void Add(int* object, unsigned int hash);
+    void Add(NetNdObj* object, unsigned int hash);
 
     int objMapNumEntries;
     PblHashTable<NetNdObj, 256> objMap;
@@ -1860,7 +1895,7 @@ void NetGame::Create(bool bMission)
         void* pVoice = GameVoiceChat::GetTransport();
         VoiceChat::Transport::Method cMethod((VoiceChat::Transport::Method::Type)netVoiceMode,
             ((VoiceChat::Transport*)pVoice)->GetMethod().GetNumRelayNodes());
-        ((VoiceChat::Transport*)pVoice)->SetMethod(&cMethod, 1);
+        ((VoiceChat::Transport*)pVoice)->SetMethod(cMethod, true);
     }
 
     if (netEnabledNext && bMission)
@@ -3006,12 +3041,12 @@ void NetGame::CreateEvent_CreateOrdnance(const OrdnanceClass* pClass,
     NetEvent& record = sServerNetEvents[netEventHead];
     record.mType = 0;
     NetEvent::U::OrdnanceEvent& data = record.u.ordnance;
-    data.mPosition.x = desc.mPosition.x;
-    data.mPosition.y = desc.mPosition.y;
-    data.mPosition.z = desc.mPosition.z;
-    data.mDirection.x = desc.mDirection.x;
-    data.mDirection.y = desc.mDirection.y;
-    data.mDirection.z = desc.mDirection.z;
+    data.mPosition.x = desc.mPosition.GetX();
+    data.mPosition.y = desc.mPosition.GetY();
+    data.mPosition.z = desc.mPosition.GetZ();
+    data.mDirection.x = desc.mDirection.GetX();
+    data.mDirection.y = desc.mDirection.GetY();
+    data.mDirection.z = desc.mDirection.GetZ();
     data.mOwner.ptr = desc.mOwner;
     data.mOwner.id = desc.mOwner ? desc.mOwner->GetHandleId() : 0;
     data.mStrength = desc.mStrength;
@@ -3020,9 +3055,9 @@ void NetGame::CreateEvent_CreateOrdnance(const OrdnanceClass* pClass,
     data.mGameObject = damageObject;
     data.mGameObjectId = damageObject ? damageObject->GetHandleId() : 0;
     data.mDamageMultiplier = desc.mDamageOwner.mDamageMultiplier;
-    data.mOrdClassIndex = pClass->mNetIndex;
-    data.mWpnClassIndex = desc.mDamageOwner.mWeapon ? desc.mDamageOwner.mWeapon->mNetIndex : -1;
-    data.mEntClassIndex = desc.mDamageOwner.mClass ? desc.mDamageOwner.mClass->mNetIndex : -1;
+    data.mOrdClassIndex = pClass->GetNetIndex();
+    data.mWpnClassIndex = desc.mDamageOwner.mWeapon ? desc.mDamageOwner.mWeapon->GetNetIndex() : -1;
+    data.mEntClassIndex = desc.mDamageOwner.mClass ? desc.mDamageOwner.mClass->GetNetIndex() : -1;
     data.mTarget = desc.mTarget;
     data.mTargetId = desc.mTarget ? desc.mTarget->GetHandleId() : 0;
     data.mFireWeapon = desc.mFireWeapon;
@@ -3210,18 +3245,16 @@ struct ReliableNetEvent
 
         struct ConnectTowCableEvent
         {
-            float mDirection[3];
-            GameObject* mOwnerObject;
-            unsigned int mOwnerHandleId;
+            NetEventVector mDirection;
+            NetGameObjectHandle mOwnerObject;
             Weapon* mFireWeapon;
             GameObject* mCollideWalker;
-            float mCollidePosition[3];
+            NetEventVector mCollidePosition;
             int mCollideBodyID;
         } connectTowCable;
         struct DestroyTowCableEvent
         {
-            GameObject* mOwnerObject;
-            unsigned int mOwnerHandleId;
+            NetGameObjectHandle mOwnerObject;
             Weapon* mFireWeapon;
         } destroyTowCable;
         struct GameOverEvent
@@ -3369,17 +3402,12 @@ void NetGame::CreateEvent_ConnectTowCable(GameObject* pOwner, Weapon* pWeapon, c
 {
     ReliableNetEvent& event = GetNextReliableEvent();
     event.mEvType = REL_CONNECT_TOWCABLE;
-    event.u.connectTowCable.mDirection[0] = vDir.x;
-    event.u.connectTowCable.mDirection[1] = vDir.y;
-    event.u.connectTowCable.mDirection[2] = vDir.z;
-    event.u.connectTowCable.mOwnerObject = pOwner;
-    event.u.connectTowCable.mOwnerHandleId = pOwner ? pOwner->mHandleId : 0;
+    event.u.connectTowCable.mDirection.Set(vDir);
+    event.u.connectTowCable.mOwnerObject.Set(pOwner);
     event.u.connectTowCable.mFireWeapon = pWeapon;
     event.u.connectTowCable.mCollideWalker = pWalker;
     event.u.connectTowCable.mCollideBodyID = iBodyId;
-    event.u.connectTowCable.mCollidePosition[0] = vPos.x;
-    event.u.connectTowCable.mCollidePosition[1] = vPos.y;
-    event.u.connectTowCable.mCollidePosition[2] = vPos.z;
+    event.u.connectTowCable.mCollidePosition.Set(vPos);
 }
 
 // FUNCTION: SWBF2 0x005c1bc0
@@ -3387,8 +3415,7 @@ void NetGame::CreateEvent_DestroyTowCable(GameObject* pOwner, Weapon* pWeapon, u
 {
     ReliableNetEvent& event = GetNextReliableEvent();
     event.mEvType = REL_DESTROY_TOWCABLE;
-    event.u.destroyTowCable.mOwnerObject = pOwner;
-    event.u.destroyTowCable.mOwnerHandleId = pOwner ? pOwner->mHandleId : 0;
+    event.u.destroyTowCable.mOwnerObject.Set(pOwner);
     event.u.destroyTowCable.mFireWeapon = pWeapon;
 }
 
@@ -3881,22 +3908,22 @@ void NetGame::HeroRulesUpdate(int iTeam)
                         switch (netHeroRulePlayer)
                         {
                         case 1:
-                            iScore = pCharacter->GetPlayerStats().GetPoints(true);
+                            iScore = Character::GetPlayerStats(pCharacter).GetPoints(true);
                             break;
                         case 2:
-                            iScore = pCharacter->GetPlayerStats().GetKills(-1, 0);
+                            iScore = Character::GetPlayerStats(pCharacter).GetKills(-1, 0);
                             break;
                         case 3:
-                            iScore = pCharacter->GetPlayerStats().GetDeaths(-1, 0);
+                            iScore = Character::GetPlayerStats(pCharacter).GetDeaths(-1, 0);
                             break;
                         case 4:
-                            iScore = -pCharacter->GetPlayerStats().GetPoints(true);
+                            iScore = -Character::GetPlayerStats(pCharacter).GetPoints(true);
                             break;
                         case 5:
-                            iScore = -pCharacter->GetPlayerStats().GetKills(-1, 0);
+                            iScore = -Character::GetPlayerStats(pCharacter).GetKills(-1, 0);
                             break;
                         case 6:
-                            iScore = -pCharacter->GetPlayerStats().GetDeaths(-1, 0);
+                            iScore = -Character::GetPlayerStats(pCharacter).GetDeaths(-1, 0);
                             break;
                         default:
                             iScore = 0;
@@ -4008,11 +4035,11 @@ void NetGame::HeroRulesUpdate(int iTeam)
                         int iScore;
                         if (netHeroRuleUnlock == 3)
                         {
-                            iScore = pCharacter->GetPlayerStats().GetPoints(true);
+                            iScore = Character::GetPlayerStats(pCharacter).GetPoints(true);
                         }
                         else
                         {
-                            iScore = pCharacter->GetPlayerStats().GetKills(-1, 0);
+                            iScore = Character::GetPlayerStats(pCharacter).GetKills(-1, 0);
                         }
                         iTotal = Max(iTotal, iScore);
                         iCount++;
@@ -4031,11 +4058,11 @@ void NetGame::HeroRulesUpdate(int iTeam)
                         int iScore;
                         if (netHeroRuleUnlock == 3)
                         {
-                            iScore = pCharacter->GetPlayerStats().GetPoints(true);
+                            iScore = Character::GetPlayerStats(pCharacter).GetPoints(true);
                         }
                         else
                         {
-                            iScore = pCharacter->GetPlayerStats().GetKills(-1, 0);
+                            iScore = Character::GetPlayerStats(pCharacter).GetKills(-1, 0);
                         }
                         iTotal += iScore;
                     }
@@ -4711,11 +4738,10 @@ bool NetGame::IsLocalTo(int iPlayer, int iOther)
     return false;
 }
 
-void WriteEntityClass(NetPktGroup& group, const void* pValue);
-void WriteWeaponClass(NetPktGroup& group, const void* pValue);
+void WriteEntityClass(NetPktGroup& group, const EntityClass* pClass);
+void WriteWeaponClass(NetPktGroup& group, const WeaponClass* pClass);
 EntityClass* ReadEntityClass(NetPktGroup& group);
 WeaponClass* ReadWeaponClass(NetPktGroup& group);
-GameObject* ResolveGameObjectHandle(PblHandle<GameObject>& handle);
 void WriteObjectPtr(NetPktGroup& group, const GameObject* pObject);
 GameObject* ReadObjectPtr(NetPktGroup& group);
 
@@ -4723,10 +4749,10 @@ GameObject* ReadObjectPtr(NetPktGroup& group);
 void WriteDamageOwner(NetPktGroup& group, const DamageOwner& owner)
 {
     WriteCharacter(group, owner.mCharacter);
-    if (ResolveGameObjectHandle(const_cast<PblHandle<GameObject>&>(owner.mGameObject)))
+    if (static_cast<GameObject*>(owner.mGameObject))
     {
         group.Write(true);
-        WriteObjectPtr(group, ResolveGameObjectHandle(const_cast<PblHandle<GameObject>&>(owner.mGameObject)));
+        WriteObjectPtr(group, static_cast<GameObject*>(owner.mGameObject));
     }
     else
     {
@@ -4757,7 +4783,7 @@ void ReadDamageOwner(NetPktGroup& group, DamageOwner& owner)
     {
         owner.mTeam = owner.mCharacter->GetTeamNumber();
     }
-    else if (ResolveGameObjectHandle(owner.mGameObject))
+    else if (static_cast<GameObject*>(owner.mGameObject))
     {
         owner.mTeam = ((GameObject*)owner.mGameObject)->GetTeam();
     }
@@ -5327,7 +5353,7 @@ void SpawnDisplay::AcceptSideSelect()
     case 2:
         if (NetGame::IsEnabled())
         {
-            NetGame::AutoAssignSpawn(mJoystickIndex, 0);
+            NetGame::AutoAssignSpawn(mJoystickIndex, false);
             NetGame::SpectateSpawn(mJoystickIndex, false);
         }
         SpawnDisplay::Instance(mJoystickIndex)->SelectTeam(iSelection);
@@ -5335,7 +5361,7 @@ void SpawnDisplay::AcceptSideSelect()
     case 3:
         if (NetGame::IsEnabled())
         {
-            NetGame::AutoAssignSpawn(mJoystickIndex, 1);
+            NetGame::AutoAssignSpawn(mJoystickIndex, true);
         }
         if (GameLoop::AreMetagameRulesOn())
         {
@@ -5364,7 +5390,7 @@ void SpawnDisplay::AcceptSideSelect()
     {
         if (NetGame::IsEnabled())
         {
-            NetGame::AutoAssignSpawn(mJoystickIndex, 0);
+            NetGame::AutoAssignSpawn(mJoystickIndex, false);
             NetGame::SpectateSpawn(mJoystickIndex, true);
         }
         mSpectateMode = true;
@@ -6718,12 +6744,9 @@ void Dump()
 void HandleEvent_ConnectTowCable(ReliableNetEvent& event)
 {
     ReliableNetEvent::U::ConnectTowCableEvent& data = event.u.connectTowCable;
-    if (data.mOwnerObject && data.mOwnerObject->GetHandleId() != data.mOwnerHandleId)
-    {
-        data.mOwnerObject = 0;
-        data.mOwnerHandleId = 0;
-    }
-    GameObject* owner = data.mOwnerObject;
+    const GameObject* recordedOwner;
+    data.mOwnerObject.Get(recordedOwner);
+    GameObject* owner = const_cast<GameObject*>(recordedOwner);
     if (!data.mCollideWalker || !data.mFireWeapon || !owner)
     {
         return;
@@ -6739,9 +6762,8 @@ void HandleEvent_ConnectTowCable(ReliableNetEvent& event)
     const int team = character ? character->GetTeamNumber() : 0;
     desc.mStrength = weapon->mStrength;
     desc.mDamageOwner.mTeam = team;
-    desc.mPosition = PblVector3(data.mCollidePosition[0], data.mCollidePosition[1],
-                                data.mCollidePosition[2]);
-    desc.mDirection = PblVector3(data.mDirection[0], data.mDirection[1], data.mDirection[2]);
+    desc.mPosition = data.mCollidePosition.Get();
+    desc.mDirection = data.mDirection.Get();
     desc.mFireWeapon = weapon;
     desc.mOwner = owner;
     desc.mDamageOwner.mCharacter = character;
@@ -6751,8 +6773,7 @@ void HandleEvent_ConnectTowCable(ReliableNetEvent& event)
     Ordnance* ordnance = ordnanceClass->Build(desc);
     weapon->SetOrdnance(ordnance);
     ordnance->Collide(data.mCollideWalker->GetCollisionObject(),
-                      PblVector3(data.mCollidePosition[0], data.mCollidePosition[1],
-                                 data.mCollidePosition[2]),
+                      data.mCollidePosition.Get(),
                       gVectorUnitY, data.mCollideBodyID);
 }
 
@@ -6874,7 +6895,7 @@ void HandleEvent_UpdateObjective(const ReliableNetEvent& event)
 }
 
 // FUNCTION: SWBF2 0x005c2360
-void NetGame::CreateEvent_UpdateObjective(HUD::Objective* objective, int maskLow, int maskHigh)
+void NetGame::CreateEvent_UpdateObjective(HUD::Objective* objective, unsigned __int64 sendMask)
 {
     if (!objective)
     {
@@ -6882,8 +6903,8 @@ void NetGame::CreateEvent_UpdateObjective(HUD::Objective* objective, int maskLow
     }
     ReliableNetEvent& event = GetNextReliableEvent();
     event.mEvType = REL_UPDATEOBJECTIVE;
-    event.mSendMask &= (unsigned int)maskLow | ((unsigned __int64)(unsigned int)maskHigh << 32);
-    event.u.updateObjective.mHashID = objective->_textHashID;
+    event.mSendMask &= sendMask;
+    event.u.updateObjective.mHashID = objective->GetTextHashID();
     event.u.updateObjective.state = objective->GetState();
 }
 
@@ -7001,15 +7022,11 @@ template <class TYPE, class CLASS, class DESC>
 CLASS* Factory<TYPE, CLASS, DESC>::FindNetIndex(int index)
 {
     typedef Factory<TYPE, CLASS, DESC> FactoryType;
-    PblList<FactoryType>& list = FactoryType::sList;
-    typedef PblList<FactoryType>::Node Node;
-    Node* head = &list._head;
-    for (Node* node = head->_pNext; node != head; node = node->_pNext)
+    for (typename PblList<FactoryType>::Itor it(sList.GetFirst()); it; ++it)
     {
-        FactoryType* candidate = node->_pObject;
-        if (candidate->mNetIndex == index)
+        if (it->mNetIndex == index)
         {
-            return static_cast<CLASS*>(candidate);
+            return static_cast<CLASS*>(&*it);
         }
     }
     return 0;
@@ -7052,17 +7069,16 @@ void NetGame::SpectateSpawn(int player, bool spectate)
 }
 
 // FUNCTION: SWBF2 0x005cfd00
-void NetGame::AutoAssignSpawn(int player, int autoassign)
+void NetGame::AutoAssignSpawn(int player, bool autoassign)
 {
-    SpawnInfo& info = spawnInfo[player];
     if (autoassign)
     {
-        ++info.changeCount;
-        info.changedTurn = clientTurnNumber;
-        info.cancel = false;
-        info.spectate = false;
+        ++spawnInfo[player].changeCount;
+        spawnInfo[player].changedTurn = clientTurnNumber;
+        spawnInfo[player].cancel = false;
+        spawnInfo[player].spectate = false;
     }
-    info.autoassign = autoassign != 0;
+    spawnInfo[player].autoassign = autoassign;
 }
 
 // FUNCTION: SWBF2 0x005c0850
@@ -7555,7 +7571,7 @@ void AloMiniStats::Read(NetPktGroup& group)
     Character* character = Character::FindPlayer(NetComm::GetLocalIndex(0));
     if (character && !NetGame::IsHost())
     {
-        PlayerStats& stats = character->GetPlayerStats();
+        PlayerStats& stats = Character::GetPlayerStats(character);
         stats.SetClientMiniStats(kills, teamKills, deaths, commandPostPoints);
         stats.SetPoints((short)points);
     }
@@ -8627,16 +8643,14 @@ void ReadSpawnDisplay(NetPktGroup& group)
 void ReadEvent_DestroyTowCable(NetPktGroup& group, ReliableNetEvent& event)
 {
     ReliableNetEvent::U::DestroyTowCableEvent& data = event.u.destroyTowCable;
-    data.mOwnerObject = 0;
-    data.mOwnerHandleId = 0;
+    data.mOwnerObject.Set(0);
     unsigned int objectIndex = 0;
     group.ReadBits(objectIndex, GetUniqObjectBits());
     GameObject* object = 0;
     if (objectIndex != 63 && clientObjMap[objectIndex])
     {
         object = *(GameObject**)clientObjMap[objectIndex];
-        data.mOwnerObject = object;
-        data.mOwnerHandleId = object ? object->mHandleId : 0;
+        data.mOwnerObject.Set(object);
     }
 
     data.mFireWeapon = 0;
@@ -8671,22 +8685,18 @@ void ReadUnitVector(NetPktGroup& group, PblVector3& value);
 void ReadEvent_ConnectTowCable(NetPktGroup& group, ReliableNetEvent& event)
 {
     ReliableNetEvent::U::ConnectTowCableEvent& data = event.u.connectTowCable;
-    data.mOwnerObject = 0;
-    data.mOwnerHandleId = 0;
+    data.mOwnerObject.Set(0);
     data.mCollideWalker = 0;
     PblVector3 direction;
     ReadUnitVector(group, direction);
-    data.mDirection[0] = direction.x;
-    data.mDirection[1] = direction.y;
-    data.mDirection[2] = direction.z;
+    data.mDirection.Set(direction);
 
     unsigned int ownerIndex = 0, collideIndex = 0;
     group.ReadBits(ownerIndex, GetUniqObjectBits());
     if (ownerIndex != 63 && clientObjMap[ownerIndex])
     {
         GameObject* owner = *(GameObject**)clientObjMap[ownerIndex];
-        data.mOwnerObject = owner;
-        data.mOwnerHandleId = owner ? owner->mHandleId : 0;
+        data.mOwnerObject.Set(owner);
     }
     group.ReadBits(collideIndex, GetUniqObjectBits());
     if (collideIndex != 63 && clientObjMap[collideIndex])
@@ -8694,13 +8704,8 @@ void ReadEvent_ConnectTowCable(NetPktGroup& group, ReliableNetEvent& event)
         data.mCollideWalker = *(GameObject**)clientObjMap[collideIndex];
     }
 
-    GameObject* owner = data.mOwnerObject;
-    if (owner && owner->mHandleId != data.mOwnerHandleId)
-    {
-        data.mOwnerObject = 0;
-        data.mOwnerHandleId = 0;
-        owner = 0;
-    }
+    const GameObject* owner;
+    data.mOwnerObject.Get(owner);
     data.mFireWeapon = 0;
     bool hasWeapon = false;
     group.Read(hasWeapon);
@@ -8729,9 +8734,7 @@ void ReadEvent_ConnectTowCable(NetPktGroup& group, ReliableNetEvent& event)
     data.mCollideBodyID = bodyId;
     PblVector3 position;
     ReadPositionVector(group, position);
-    data.mCollidePosition[0] = position.x;
-    data.mCollidePosition[1] = position.y;
-    data.mCollidePosition[2] = position.z;
+    data.mCollidePosition.Set(position);
 }
 
 void ReadUpdate(NetPktGroup& group);
@@ -9082,7 +9085,7 @@ void NetGame::AddPlayer(int iPlayer)
              objective = objectives->GetCurrentIter())
         {
             const unsigned __int64 mask = 1ui64 << iPlayer;
-            NetGame::CreateEvent_UpdateObjective(objective, (int)mask, (int)(mask >> 32));
+            NetGame::CreateEvent_UpdateObjective(objective, mask);
             objectives->IncrementIter();
         }
     }
@@ -9971,7 +9974,7 @@ GameObject* CreateObject(unsigned int uniqId, EntityClass* entityClass, int init
     {
         NetObjState* state = new NetObjState;
         state->handle = object;
-        state->classIdx = (unsigned char)entityClass->mNetIndex;
+        state->classIdx = (unsigned char)entityClass->GetNetIndex();
         state->playerId = playerId < 0 ? 0xff : (unsigned char)playerId;
         state->initialPlayerId = initialPlayerId < 0 ? 0xff : (unsigned char)initialPlayerId;
         state->character = character ? (unsigned char)(character - Character::GetPtr(0)) : 0xff;
@@ -10140,7 +10143,7 @@ bool ReadObject(NetPktGroup& group)
                 }
                 state = new NetObjState;
                 state->handle = object;
-                state->classIdx = (unsigned char)object->GetEntityClass()->mNetIndex;
+                state->classIdx = (unsigned char)object->GetEntityClass()->GetNetIndex();
                 state->playerId = playerId < 0 ? 0xff : (unsigned char)playerId;
                 state->initialPlayerId = initialPlayerId < 0 ? 0xff : (unsigned char)initialPlayerId;
                 state->character = character ? (unsigned char)(character - Character::GetPtr(0)) : 0xff;
@@ -10895,11 +10898,6 @@ void ReceivePrimary()
     }
 }
 
-// FUNCTION: SWBF2 0x0040fdf0
-void* __fastcall GetRangeRecordPointer(void* pThis)
-{
-    return pThis;
-}
 
 // FUNCTION: SWBF2 0x0041bba0
 float SquaredLength(const float* value)
@@ -10941,11 +10939,6 @@ void __fastcall SetHoleRecordValue(int* pThis, void*, int index, int value)
     pThis[index + 7] = value;
 }
 
-// FUNCTION: SWBF2 0x00497e10
-void* __fastcall GetRangeRecordPosition(int* pThis)
-{
-    return pThis[0] ? (void*)(pThis[0] + 16 * (pThis[1] + 4)) : (void*)(pThis + 2);
-}
 
 // FUNCTION: SWBF2 0x005b7370
 bool NetGame::CanExitVehicle(unsigned int player)
@@ -11417,17 +11410,17 @@ RedTerrain::Hole::Hole(RedTerrain::Hole* pSource)
 }
 
 // FUNCTION: SWBF2 0x005b45f0
-void NetNdObjMap::Add(int* object, unsigned int hash)
+void NetNdObjMap::Add(NetNdObj* object, unsigned int hash)
 {
     NetNdObjMap* pThis = this;
-    object[2] = hash;
-    object[3] = pThis->count;
-    if (pThis->objMap.Store(hash, (NetNdObj*)object))
+    object->uniqId = hash;
+    object->index = pThis->count;
+    if (pThis->objMap.Store(hash, object))
     {
         ++pThis->objMapNumEntries;
     }
-    pThis->array[pThis->count++] = (NetNdObj*)object;
-    ((GameObject*)object[0])->SetNetUniqueId(object[3] + 0x40);
+    pThis->array[pThis->count++] = object;
+    object->obj->SetNetUniqueId(object->index + 0x40);
 }
 
 // GLOBAL: SWBF2 0x01e64ddc
@@ -11523,25 +11516,25 @@ namespace AI { enum AIAffil { AFFIL_ENEMY = 1, AFFIL_NEUTRAL = 2,
 
 // FUNCTION: SWBF2 0x005cf820
 int NetGame::GetObjectsInRange(const PblVector3& position, float radius, GameObject** const found,
-               int capacity, const Team* excluded, int team)
+               int capacity, GameObject* excluded, CollisionObjectType type)
 {
     int count = 0;
     const float radiusSquared = radius * radius;
     for (int i = 0; i < 64; ++i)
     {
         NetObj* entry = i == 63 ? 0 : (NetObj*)clientObjMap[i];
-        if (!entry || !entry->obj || entry->obj == (const void*)excluded)
+        if (!entry || !entry->obj || entry->obj == excluded)
         {
             continue;
         }
 
         CollisionObject* info = entry->obj->GetCollisionObject();
-        if (!info || info->GetCollisionType() != team)
+        if (!info || info->GetCollisionType() != type)
         {
             continue;
         }
-        const float* targetPosition = (const float*)GetRangeRecordPointer(GetRangeRecordPosition((int*)info + 1));
-        const PblVector3 difference = position - *(const PblVector3*)targetPosition;
+        const PblVector3& targetPosition = info->GetCollisionSphere().GetCenter();
+        const PblVector3 difference = position - targetPosition;
         if (radiusSquared > SquaredLength((const float*)&difference))
         {
             found[count++] = entry->obj;
@@ -11759,7 +11752,7 @@ void CreateClientCollision(bool bNetCollision)
                         NetNdObj* pNdObj = new NetNdObj;
                         pNdObj->obj = pObject->AddToClient();
                         pNdObj->orig = pObject;
-                        clientNdObjMap.Add((int*)pNdObj, (int)((PblHandled*)pObject)->GetHandleId());
+                        clientNdObjMap.Add(pNdObj, ((PblHandled*)pObject)->GetHandleId());
                     }
                     ++iCount;
                     break;
@@ -11834,8 +11827,8 @@ bool NetGame::IsNearLocalPlayer(const PblVector3& vPos)
 {
     for (int i = 0; i < 2; ++i)
     {
-        const float dx = vPos.x - netLocalPos[i].x;
-        const float dz = vPos.z - netLocalPos[i].z;
+        const float dx = vPos.GetX() - netLocalPos[i].GetX();
+        const float dz = vPos.GetZ() - netLocalPos[i].GetZ();
         if (dx * dx < 10000.0f && dz * dz < 10000.0f)
         {
             return true;
@@ -12611,7 +12604,7 @@ void ResetSend(GameObject** ppObjects, const PblVector3& center,
     sendObjCount = 0;
     sendObjList = ppObjects;
     sendCenter = center;
-    sendFront = Normalize(PblVector3(front.x, 0.0f, front.z));
+    sendFront = Normalize(PblVector3(front.GetX(), 0.0f, front.GetZ()));
     sendScoreList = pPriorities;
     sendLateObj = 0;
 }
@@ -12878,7 +12871,7 @@ void WriteEvent_CreateChunkCluster(NetPktGroup& group, const void* pEvent)
 
     const unsigned int* pClass = (const unsigned int*)fields.mEntClass;
     group.WriteBits(fields.mChunkClusterIndex, 4);
-    WriteEntityClass(group, pClass);
+    WriteEntityClass(group, static_cast<const EntityClass*>(fields.mEntClass));
     if (pClass[7] >= 0xff)
     {
         return;
@@ -13022,13 +13015,8 @@ void WriteEvent_DestroyTowCable(NetPktGroup& group, void* pEvent)
 {
     ReliableNetEvent& event = *static_cast<ReliableNetEvent*>(pEvent);
     ReliableNetEvent::U::DestroyTowCableEvent& fields = event.u.destroyTowCable;
-    if (fields.mOwnerObject &&
-        fields.mOwnerObject->GetHandleId() != fields.mOwnerHandleId)
-    {
-        fields.mOwnerObject = 0;
-        fields.mOwnerHandleId = 0;
-    }
-    GameObject* pObject = fields.mOwnerObject;
+    const GameObject* pObject;
+    fields.mOwnerObject.Get(pObject);
     group.WriteBits(GetUniqObjectId(pObject), GetUniqObjectBits());
     if (!fields.mFireWeapon || !pObject)
     {
@@ -13072,17 +13060,11 @@ void WriteEvent_ConnectTowCable(NetPktGroup& group, void* pEvent)
 {
     ReliableNetEvent& event = *static_cast<ReliableNetEvent*>(pEvent);
     ReliableNetEvent::U::ConnectTowCableEvent& fields = event.u.connectTowCable;
-    PblVector3 start(fields.mDirection[0], fields.mDirection[1],
-                     fields.mDirection[2]);
+    PblVector3 start = fields.mDirection.Get();
     WriteUnitVector(group, start);
 
-    if (fields.mOwnerObject &&
-        fields.mOwnerObject->GetHandleId() != fields.mOwnerHandleId)
-    {
-        fields.mOwnerObject = 0;
-        fields.mOwnerHandleId = 0;
-    }
-    GameObject* pObject = fields.mOwnerObject;
+    const GameObject* pObject;
+    fields.mOwnerObject.Get(pObject);
     group.WriteBits(GetUniqObjectId(pObject), GetUniqObjectBits());
     group.WriteBits(GetUniqObjectId(fields.mCollideWalker), GetUniqObjectBits());
     if (fields.mFireWeapon && pObject)
@@ -13122,8 +13104,7 @@ void WriteEvent_ConnectTowCable(NetPktGroup& group, void* pEvent)
     }
 
     group.WriteBits(fields.mCollideBodyID, 7);
-    PblVector3 end(fields.mCollidePosition[0], fields.mCollidePosition[1],
-                   fields.mCollidePosition[2]);
+    PblVector3 end = fields.mCollidePosition.Get();
     WritePositionVector(group, end);
 }
 
@@ -13457,7 +13438,7 @@ void AloMiniStats::Update(NetPktGroup& group)
         Character* pPlayer = Character::FindPlayer(curDst);
         if (pPlayer)
         {
-            PlayerStats& stats = pPlayer->GetPlayerStats();
+            PlayerStats& stats = Character::GetPlayerStats(pPlayer);
             uEnemyKills = stats.GetEnemyKills(-1, -1);
             uTeamKills = stats.GetTeamKills(-1, -1);
             uDeaths = stats.GetDeaths(-1, -1);
@@ -13496,7 +13477,7 @@ void AloMissionTimer::Update(NetPktGroup& group)
             {
                 iShow = 0;
             }
-            Set(true, pTimer->GetTime(), pTimer->mRate,
+            Set(true, pTimer->GetTime(), pTimer->GetRate(),
                         pTimer->IsRunning(), iShow, MissionTimer::GetTeam());
         }
         else
@@ -13814,7 +13795,7 @@ bool IsUnmanned(const GameObject* pObject)
             return false;
         }
     }
-    return GameLoop::GetMissionTime() - pObject->mCreatedTime >= 1.0f;
+    return GameLoop::GetMissionTime() - pObject->GetCreatedTime() >= 1.0f;
 }
 
 // FUNCTION: SWBF2 0x005c2dd0
@@ -13824,7 +13805,7 @@ float FrontAngle(const PblVector3& point, const PblMatrix& matrix)
     const PblMatrix inverse = matrix.GetInverseFast();
     PblVector3 local;
     TransformNormalByMatrix(&inverse, 0, &local, &offset);
-    return PblMath::Atan2(local.x, local.z) * (180.0f / 3.1415927f);
+    return PblMath::Atan2(local.GetX(), local.GetZ()) * (180.0f / 3.1415927f);
 }
 
 // FUNCTION: SWBF2 0x005c2d30
@@ -14821,12 +14802,12 @@ void ListNearObjects()
         _snprintf(text, sizeof(text),
                   "%d: handleId(%d) type(%s) playerId(%d) pos(%.2f,%.2f,%.2f) frontCount(%d) frontAngle(%.2f) frontDist(%.2f)\n",
                   i, pObject->GetHandleId(), pObject->GetDerivedRttiName(),
-                  iPlayer, position.x, position.y, position.z,
+                  iPlayer, position.GetX(), position.GetY(), position.GetZ(),
                   frontCount, frontAngle, frontDist);
         RedConsole::Instance()->PrintMsg(text);
     }
     _snprintf(text, sizeof(text), "center(%.2f,%.2f,%.2f)\n",
-              center.x, center.y, center.z);
+              center.GetX(), center.GetY(), center.GetZ());
     RedConsole::Instance()->PrintMsg(text);
     _snprintf(text, sizeof(text), "front(%.2f,%.2f,%.2f)\n",
               camera.m[2][0], camera.m[2][1], camera.m[2][2]);
@@ -15047,7 +15028,7 @@ void WriteNetEvent(NetEvent& event, NetPktGroup& group)
             ownerHandle.ptr = 0;
             ownerHandle.id = 0;
         }
-        GameObject* owner = ownerHandle.ptr;
+        const GameObject* owner = ownerHandle.ptr;
         unsigned int ownerId = GetUniqObjectId(owner);
         WeaponClass* weaponClass = data.mWpnClassIndex < 0xff ? Factory<Weapon, WeaponClass, WeaponDesc>::FindNetIndex(data.mWpnClassIndex) : 0;
         if (ownerId == 63 && weaponClass &&
@@ -15393,7 +15374,7 @@ void FinishSend(GameObject** ppSends, GameObject* (*ppScopes)[64], int*)
     }
     for (i = 0; i < 32; ++i)
     {
-        GameObject* pActor = ResolveGameObjectHandle(TargetManager::gMarkers[i].actor);
+        GameObject* pActor = static_cast<GameObject*>(TargetManager::gMarkers[i].actor);
         if (pActor)
         {
             AddSendBefore(pActor, sendObjCount);
@@ -15577,7 +15558,7 @@ void WriteObjects(NetPktGroup& group)
                 HandleToIndex* entry = node;
                 entry->index = i;
                 entry->isNew = false;
-                GameObject* pObject = ResolveGameObjectHandle(state->handle);
+                GameObject* pObject = static_cast<GameObject*>(state->handle);
                 if (pObject)
                 {
                     if (handleMap->Store(pObject->GetHandleId(), entry))
@@ -15634,7 +15615,7 @@ void WriteObjects(NetPktGroup& group)
                 {
                     PblValues::Record(index, PVT_FULL);
                     group.WriteBits(index, 6);
-                    bool deleted = ResolveGameObjectHandle(state->handle) == 0;
+                    bool deleted = static_cast<GameObject*>(state->handle) == 0;
                     group.Write(deleted);
                     ++written;
                 }
@@ -15647,7 +15628,7 @@ void WriteObjects(NetPktGroup& group)
                 {
                     PblValues::Record(index, PVT_FULL);
                     group.WriteBits(index, 6);
-                    bool deleted = ResolveGameObjectHandle(state->handle) == 0;
+                    bool deleted = static_cast<GameObject*>(state->handle) == 0;
                     group.Write(deleted);
                     ++written;
                 }
@@ -15726,7 +15707,7 @@ void WriteObjects(NetPktGroup& group)
                 {
                     state->position = pObject->GetMatrix().GetTranslation();
                     state->team = (unsigned char)pObject->GetTeam();
-                    state->classIdx = (unsigned char)pObject->GetEntityClass()->mNetIndex;
+                    state->classIdx = (unsigned char)pObject->GetEntityClass()->GetNetIndex();
                     SetHostWorldIndex(entry->index, pObject);
                 }
                 else
@@ -15735,7 +15716,7 @@ void WriteObjects(NetPktGroup& group)
                         ? 0 : netPlayers[curDst].lastObjState->stateMap[entry->index];
                     state->position = pObject->GetMatrix().GetTranslation();
                     state->team = lastState->team;
-                    state->classIdx = (unsigned char)pObject->GetEntityClass()->mNetIndex;
+                    state->classIdx = (unsigned char)pObject->GetEntityClass()->GetNetIndex();
                 }
                 PblValues::Record(entry->index, PVT_FULL);
                 netPlayers[curDst].nextObjState->stateMap[entry->index] = state;
@@ -16429,18 +16410,16 @@ void NetGame::Reboot()
 }
 
 // FUNCTION: SWBF2 0x005c2580
-void WriteEntityClass(NetPktGroup& group, const void* pValue)
+void WriteEntityClass(NetPktGroup& group, const EntityClass* pClass)
 {
-    const EntityClass* pClass = static_cast<const EntityClass*>(pValue);
-    const int value = pClass ? pClass->mNetIndex : -1;
+    const unsigned int value = pClass ? pClass->GetNetIndex() : -1;
     group.WriteBits(value, 8);
 }
 
 // FUNCTION: SWBF2 0x005c2600
-void WriteWeaponClass(NetPktGroup& group, const void* pValue)
+void WriteWeaponClass(NetPktGroup& group, const WeaponClass* pClass)
 {
-    const WeaponClass* pClass = static_cast<const WeaponClass*>(pValue);
-    const int value = pClass ? pClass->mNetIndex : -1;
+    const unsigned int value = pClass ? pClass->GetNetIndex() : -1;
     group.WriteBits(value, 8);
 }
 

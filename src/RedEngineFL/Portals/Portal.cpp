@@ -9,18 +9,6 @@
 #include <math.h>
 #include <stdlib.h>
 
-// GLOBAL: SWBF2 0x009a1a30
-namespace util { int gLastError; }
-
-namespace util {
-
-// FUNCTION: SWBF2 0x006e9200
-int __cdecl SetLastError(int value)
-{
-    util::gLastError = value;
-    return value;
-}
-}
 
 // FUNCTION: SWBF2 0x006df220
 geo::ExtrudedPoly3D& geo::ExtrudedPoly3D::operator=(const geo::ExtrudedPoly3D& rOther)

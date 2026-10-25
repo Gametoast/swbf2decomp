@@ -329,7 +329,7 @@ Entity* AsteroidClass::Build(const EntityDesc& desc)
     {
         if (mCollidable)
         {
-            CollisionManager::AddAsteroidBody(pAsteroid);
+            pAsteroid->AddAsteroidToCollisionManager();
         }
 
         pAsteroid->ActivatePhysics();

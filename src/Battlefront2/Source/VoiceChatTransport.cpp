@@ -5,32 +5,12 @@
 
 #include "VoiceChatUtil.h"
 
-struct VoiceChatTransportFields
-{
 
-    void*          mLocalBitmapPointers[4];
-    void*          mIncomingBitmapPointers[4];
-    void*          mChangeTrackingPointers[4];
-    void*          mHostUpdated;
-    unsigned int   mClientChangedPckID;
-    unsigned int   mSize;
-
-    unsigned short mBitmapDimensions;
-    unsigned char  mNumNodes;
-    unsigned char  mNumNodesLog2;
-    unsigned short mLocalNodeLimits;
-    unsigned short mReservedNodeLimitBytes;
-    unsigned char  mMethodOutgoing[8];
-    unsigned char  mMethodIncoming[8];
-
-    unsigned char  mClientUpdatedFlags;
-};
 
 namespace VoiceChat { void* Alloc(unsigned int uiSize); }
 
 namespace VoiceChat { void Free(void* pBlock); }
 
-namespace VoiceChat { int GetMSBIndex(); }
 
 // FUNCTION: SWBF2 0x006745c0
 VoiceChat::Transport::Method::Method(Type type, unsigned char numRelayNodes)
@@ -40,7 +20,7 @@ VoiceChat::Transport::Method::Method(Type type, unsigned char numRelayNodes)
 }
 
 // FUNCTION: SWBF2 0x00674620
-unsigned char VoiceChat::Transport::Method::CalculateOptimalRelayNodes(int iNumNodes) const
+unsigned char VoiceChat::Transport::Method::CalculateOptimalRelayNodes(unsigned char iNumNodes) const
 {
     const unsigned char ucNodes = (unsigned char)iNumNodes;
     const unsigned char ucSelf = mNumRelayNodes;
@@ -68,9 +48,8 @@ unsigned char VoiceChat::Transport::GetNumNodesLog2() const
 }
 
 // FUNCTION: SWBF2 0x00674f10
-void VoiceChat::Transport::SetMethod(void* pSrc, int bBoth)
+void VoiceChat::Transport::SetMethod(const Method& method, bool bBoth)
 {
-    const Method& method = *(const Method*)pSrc;
     mMethodOutgoing = method;
 
     if (bBoth)
@@ -80,124 +59,113 @@ void VoiceChat::Transport::SetMethod(void* pSrc, int bBoth)
 }
 
 // FUNCTION: SWBF2 0x00674700
-bool VoiceChat::Transport::Open()
+bool VoiceChat::Transport::Open(unsigned char numNodes, unsigned char numLocalNodes)
 {
-    VoiceChatTransportFields* t = (VoiceChatTransportFields*)this;
-
-    char* p = (char*)VoiceChat::Alloc(0x8BC);
-    t->mLocalBitmapPointers[0] = p;
+    const unsigned char roundedNodes = numNodes + 7;
+    const unsigned char widthHeight = roundedNodes & ~7;
+    const unsigned int widthBytes = roundedNodes >> 3;
+    const unsigned int paddedWidth = (widthBytes + 3) & ~3;
+    const unsigned int paddedLocalNodes = (numLocalNodes + 3) & ~3;
+    const unsigned int bitmapSize = (widthHeight * widthHeight) >> 3;
+    unsigned char* p = (unsigned char*)VoiceChat::Alloc(
+        bitmapSize * 5 + paddedWidth * 9 + numNodes * 4 + paddedLocalNodes);
+    mLocal.mSend = p;
     if (!p)
     {
         return false;
     }
 
-    p += 0x188; t->mClientChangedPckID = 0;      t->mLocalBitmapPointers[1] = p;
-    p += 0x188;                            t->mLocalBitmapPointers[2] = p;
-    p += 0x10;                             t->mLocalBitmapPointers[3] = p;
-    p += 0x08;                             t->mIncomingBitmapPointers[0] = p;
-    p += 0x188;                            t->mIncomingBitmapPointers[1] = p;
-    p += 0x188;                            t->mIncomingBitmapPointers[2] = p;
-    p += 0x10;                             t->mIncomingBitmapPointers[3] = p;
-    p += 0x08;                             t->mChangeTrackingPointers[0] = p;
-    p += 0x08;                             t->mChangeTrackingPointers[1] = p;
-    p += 0x188;                            t->mChangeTrackingPointers[2] = p;
-    p += 0xC8;                             t->mChangeTrackingPointers[3] = p;
-    p += 0x04;                             t->mHostUpdated = p;
+    p += bitmapSize;
+    mLocal.mReceive = p;
+    p += bitmapSize;
+    mLocal.mConnected = p;
+    p += paddedWidth * 2;
+    mLocal.mSending = p;
+    p += paddedWidth;
+    mIncoming.mSend = p;
+    p += bitmapSize;
+    mIncoming.mReceive = p;
+    p += bitmapSize;
+    mIncoming.mConnected = p;
+    p += paddedWidth * 2;
+    mIncoming.mSending = p;
+    p += paddedWidth;
+    mClientChangedNodes = p;
+    p += paddedWidth;
+    mHostChangedNodes = p;
+    p += bitmapSize;
+    mHostChangedPckID = (unsigned int*)p;
+    p += numNodes * 4;
+    mLocalNodes = p;
+    p += paddedLocalNodes;
+    mHostUpdated = p;
 
-    t->mSize = 0x188;
-    t->mBitmapDimensions = 0x738;
-    t->mNumNodes = 0x32;
-    t->mNumNodesLog2 = (unsigned char)(VoiceChat::GetMSBIndex() + 1);
-    t->mClientUpdatedFlags &= 0xFE;
-    t->mLocalNodeLimits = 0x100;
+    mClientChangedPckID = 0;
+    mSize = bitmapSize;
+    mWidthHeight = widthHeight;
+    mWidthBytes = (unsigned char)widthBytes;
+    mNumNodes = numNodes;
+    mNumNodesLog2 = (unsigned char)(VoiceChat::GetMSBIndex(numNodes) + 1);
+    mClientUpdated = false;
+    mNumLocalNodes = 0;
+    mMaxLocalNodes = numLocalNodes;
+    mMethodOutgoing.SetType(Method::type_none);
+    mMethodOutgoing.SetNumRelayNodes(0);
+    mMethodIncoming = mMethodOutgoing;
 
-    ((VoiceChat::Transport::Method*)t->mMethodOutgoing)->SetType((VoiceChat::Transport::Method::Type)1);
-    ((VoiceChat::Transport::Method*)t->mMethodOutgoing)->SetNumRelayNodes(0);
-    *(unsigned int*)&t->mMethodIncoming[0] = *(unsigned int*)&t->mMethodOutgoing[0];
-    *(unsigned int*)&t->mMethodIncoming[4] = *(unsigned int*)&t->mMethodOutgoing[4];
-
-    memset(t->mLocalBitmapPointers[0], 0, t->mSize);
-    memset(t->mLocalBitmapPointers[1], 0, t->mSize);
-
-    unsigned char* q = (unsigned char*)t->mLocalBitmapPointers[2];
-    *(unsigned int*)(q + 0) = 0;
-    *(unsigned int*)(q + 4) = 0;
-    *(unsigned int*)(q + 8) = 0;
-    *(unsigned short*)(q + 0xC) = 0;
-
-    q = (unsigned char*)t->mLocalBitmapPointers[3];
-    *(unsigned int*)(q + 0) = 0;
-    *(unsigned short*)(q + 4) = 0;
-    *(unsigned char*)(q + 6) = 0;
-
-    memset(t->mIncomingBitmapPointers[0], 0, t->mSize);
-    memset(t->mIncomingBitmapPointers[1], 0, t->mSize);
-
-    q = (unsigned char*)t->mIncomingBitmapPointers[2];
-    *(unsigned int*)(q + 0) = 0;
-    *(unsigned int*)(q + 4) = 0;
-    *(unsigned int*)(q + 8) = 0;
-    *(unsigned short*)(q + 0xC) = 0;
-
-    q = (unsigned char*)t->mIncomingBitmapPointers[3];
-    *(unsigned int*)(q + 0) = 0;
-    *(unsigned short*)(q + 4) = 0;
-    *(unsigned char*)(q + 6) = 0;
-
-    q = (unsigned char*)t->mChangeTrackingPointers[0];
-    *(unsigned int*)(q + 0) = 0;
-    *(unsigned short*)(q + 4) = 0;
-    *(unsigned char*)(q + 6) = 0;
-
-    memset(t->mChangeTrackingPointers[1], 0, t->mSize);
-
-    memset(t->mChangeTrackingPointers[2], 0, (unsigned int)t->mNumNodes * 4);
-
-    *(unsigned char*)t->mChangeTrackingPointers[3] = 0;
-
-    q = (unsigned char*)t->mHostUpdated;
-    *(unsigned int*)(q + 0) = 0;
-    *(unsigned short*)(q + 4) = 0;
-    *(unsigned char*)(q + 6) = 0;
-
+    memset(mLocal.mSend, 0, mSize);
+    memset(mLocal.mReceive, 0, mSize);
+    memset(mLocal.mConnected, 0, widthBytes * 2);
+    memset(mLocal.mSending, 0, widthBytes);
+    memset(mIncoming.mSend, 0, mSize);
+    memset(mIncoming.mReceive, 0, mSize);
+    memset(mIncoming.mConnected, 0, widthBytes * 2);
+    memset(mIncoming.mSending, 0, widthBytes);
+    memset(mClientChangedNodes, 0, widthBytes);
+    memset(mHostChangedNodes, 0, mSize);
+    memset(mHostChangedPckID, 0, mNumNodes * sizeof(unsigned int));
+    memset(mLocalNodes, 0, numLocalNodes);
+    memset(mHostUpdated, 0, widthBytes);
     return true;
 }
 
 // FUNCTION: SWBF2 0x00674920
 void VoiceChat::Transport::Close()
 {
-    VoiceChatTransportFields* t = (VoiceChatTransportFields*)this;
 
-    VoiceChat::Free(t->mLocalBitmapPointers[0]);
+    VoiceChat::Free(mLocal.mSend);
 
-    t->mClientUpdatedFlags = (unsigned char)(t->mClientUpdatedFlags & 0xFE);
+    mClientUpdated = false;
 
-    t->mLocalBitmapPointers[0] = 0;
-    t->mLocalBitmapPointers[1] = 0;
-    t->mLocalBitmapPointers[2] = 0;
-    t->mLocalBitmapPointers[3] = 0;
-    t->mIncomingBitmapPointers[0] = 0;
-    t->mIncomingBitmapPointers[1] = 0;
-    t->mIncomingBitmapPointers[2] = 0;
-    t->mIncomingBitmapPointers[3] = 0;
-    t->mChangeTrackingPointers[0] = 0;
-    t->mChangeTrackingPointers[1] = 0;
-    t->mChangeTrackingPointers[2] = 0;
-    t->mChangeTrackingPointers[3] = 0;
+    mLocal.mSend = 0;
+    mLocal.mReceive = 0;
+    mLocal.mConnected = 0;
+    mLocal.mSending = 0;
+    mIncoming.mSend = 0;
+    mIncoming.mReceive = 0;
+    mIncoming.mConnected = 0;
+    mIncoming.mSending = 0;
+    mClientChangedNodes = 0;
+    mHostChangedNodes = 0;
+    mHostChangedPckID = 0;
+    mLocalNodes = 0;
 
-    t->mHostUpdated = 0;
-    t->mClientChangedPckID = 0;
-    t->mSize = 0;
+    mHostUpdated = 0;
+    mClientChangedPckID = 0;
+    mSize = 0;
 
-    *(unsigned int*)&t->mBitmapDimensions = 0;
+    mWidthHeight = 0;
+    mWidthBytes = 0;
+    mNumNodes = 0;
+    mNumNodesLog2 = 0;
 
-    t->mLocalNodeLimits = 0;
+    mNumLocalNodes = 0;
+    mMaxLocalNodes = 0;
 
-    ((VoiceChat::Transport::Method*)t->mMethodOutgoing)->SetType((VoiceChat::Transport::Method::Type)0);
-    ((VoiceChat::Transport::Method*)t->mMethodOutgoing)->SetNumRelayNodes(0);
+    mMethodOutgoing.SetType((VoiceChat::Transport::Method::Type)0);
+    mMethodOutgoing.SetNumRelayNodes(0);
 
-    *(unsigned int*)&t->mMethodIncoming[0] = *(unsigned int*)&t->mMethodOutgoing[0];
-    *(unsigned int*)&t->mMethodIncoming[4] = *(unsigned int*)&t->mMethodOutgoing[4];
+    mMethodIncoming = mMethodOutgoing;
 }
 
 // FUNCTION: SWBF2 0x00674670
@@ -453,3 +421,15 @@ bool VoiceChat::Transport::GetReceivePossible(unsigned char node, unsigned char 
     return GetReceiveEnable(node, stream) && GetSendEnable(stream, node) &&
            IsConnectedReceive(node) && IsConnectedSend(stream);
 }
+
+// FUNCTION: SWBF2 0x006745e0
+void VoiceChat::Transport::Method::SetType(Type type) { mType = type; }
+
+// FUNCTION: SWBF2 0x00674600
+void VoiceChat::Transport::Method::SetNumRelayNodes(unsigned char numRelayNodes) { mNumRelayNodes = numRelayNodes; }
+
+// FUNCTION: SWBF2 0x006745f0
+VoiceChat::Transport::Method::Type VoiceChat::Transport::Method::GetType() const { return mType; }
+
+// FUNCTION: SWBF2 0x00674f40
+const VoiceChat::Transport::Method& VoiceChat::Transport::GetMethod() const { return mMethodIncoming; }

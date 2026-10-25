@@ -687,7 +687,7 @@ public:
 
     static char* GetGameVersion();
 
-    static const char* GetHostName();
+    static char* GetHostName();
 
     static NetLaunchGame* LaunchGame(bool bHost);
 

@@ -194,7 +194,7 @@ bool WeaponLaser::Fire(float fTime)
     desc.mOwner = pOwnerObject;
     desc.mDamageOwner = DamageOwner(mOwner->mCharacter, mOwner->GetGameObject(), mOwner->GetGameObject()->GetTeam(),
                                     GetEntityClass(mOwner->GetGameObject()), mClass, mOwner->GetOffenseMultiplier());
-    desc.mTarget = const_cast<GameObject*>(mTarget.GetValidObject());
+    desc.mTarget = const_cast<GameObject*>(static_cast<const GameObject*>(mTarget));
     desc.mBodyID = mTargetBodyID;
 
     bool bFlash = true;
@@ -218,7 +218,7 @@ bool WeaponLaser::Fire(float fTime)
         mClass->CreateMuzzleFlash(mFirePointMatrix);
     }
     mClass->mOrdnanceClass->Build(desc);
-    CombatUtil::SendDamageEvent(mOwner, mTarget.GetValidObject(), mTrigger);
+    CombatUtil::SendDamageEvent(mOwner, static_cast<const GameObject*>(mTarget), mTrigger);
     return true;
 }
 

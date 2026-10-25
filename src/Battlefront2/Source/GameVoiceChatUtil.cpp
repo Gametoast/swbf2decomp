@@ -89,14 +89,14 @@ template Snd::Queue<NetPacket*, 4>::~Queue();
 namespace GameVoiceChat {
 
 // FUNCTION: SWBF2 0x0053e1f0
-bool __cdecl SendVoice(NetPacket* packet, unsigned char destination, unsigned short sequence)
+bool __cdecl SendVoice(NetPacket* packet, unsigned char destination, unsigned int voiceDataOffset)
 {
     unsigned int node = destination == 0xff ? 64 : destination;
     if (netInShell ? netEnabled : netEnabledNext)
     {
         if (NetComm::IsConnected(node))
         {
-            NetComm::SendVoice(node, packet, sequence);
+            NetComm::SendVoice(node, PKT_VOICE, packet, voiceDataOffset);
             return true;
         }
     }
@@ -137,11 +137,12 @@ bool __cdecl SendVoice(NetPacket* packet, unsigned char destination, unsigned sh
 }
 
 // FUNCTION: SWBF2 0x0053e2e0
-bool __cdecl VoiceChat::NetPacketAudio::Send(NetPacket** packet, unsigned char destination,
-                            unsigned short sequence)
+void __cdecl VoiceChat::NetPacketAudio::Send(NetPacketAudio* packet, unsigned char destination,
+                            unsigned int voiceDataOffset)
 {
-    (*packet)->EndWrite();
-    return GameVoiceChat::SendVoice(*packet, destination, sequence);
+    NetPacket* appPacket = static_cast<NetPacket*>(packet->mAppPacket);
+    appPacket->EndWrite();
+    GameVoiceChat::SendVoice(appPacket, destination, voiceDataOffset);
 }
 
 // TEMPLATE: SWBF2 0x0053e3f0

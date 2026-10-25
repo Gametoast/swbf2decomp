@@ -764,7 +764,7 @@ bool FlagItem::PickUp(GameObject* pObject)
     mOwner = pCharacter;
     mStationary = true;
     pCharacter->mCarriedFlagPtr = this;
-    mOwner->GetPlayerStats().PointsProcess(0x1a, 0);
+    Character::GetPlayerStats(mOwner).PointsProcess(0x1a, 0);
     if (mCarriedModel)
     {
         SetModel(mCarriedModel);

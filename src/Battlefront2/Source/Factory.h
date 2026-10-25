@@ -36,11 +36,15 @@ public:
 
     static CLASS* FindNetIndex(int iNetIndex);
     unsigned int GetId() const;
+    unsigned int GetNetIndex() const { return mNetIndex; }
 
     typename PblList<Factory<TYPE, CLASS, DESC> >::Node mNode;
     CLASS* mParent;
     unsigned int mId;
-    int mNetIndex;
+protected:
+    unsigned int mNetIndex;
+
+public:
 
     static PblList<Factory<TYPE, CLASS, DESC> > sList;
     static unsigned int sCounter;
@@ -62,7 +66,7 @@ template <class TYPE, class CLASS, class DESC>
 unsigned int Factory<TYPE, CLASS, DESC>::sCounter;
 
 template <class TYPE, class CLASS, class DESC>
-void Factory<TYPE, CLASS, DESC>::Reset()
+inline void Factory<TYPE, CLASS, DESC>::Reset()
 {
     sCounter = 0;
     sList.RemoveAll();
@@ -80,11 +84,11 @@ Factory<TYPE, CLASS, DESC>::Factory(CLASS* pParent, unsigned int uHash)
 template <class TYPE, class CLASS, class DESC>
 inline CLASS* Factory<TYPE, CLASS, DESC>::Find(unsigned int uHash)
 {
-    for (typename PblList<Factory<TYPE, CLASS, DESC> >::Itor it(sList); it; ++it)
+    for (typename PblList<Factory<TYPE, CLASS, DESC> >::Itor it(sList.GetFirst()); it; ++it)
     {
         if (it->mId == uHash)
         {
-            return static_cast<CLASS*>((Factory<TYPE, CLASS, DESC>*)it);
+            return static_cast<CLASS*>(&*it);
         }
     }
     return 0;

@@ -614,7 +614,7 @@ Entity* EntityWalkerClass::Build(const EntityDesc& desc)
     if (pWalker)
     {
         NetGame::Created(pWalker);
-        CollisionManager::AddRigidBody(pWalker);
+        pWalker->AddRigidToCollisionManager();
         pWalker->ActivatePhysics();
         pWalker->BuildEffects();
     }

@@ -559,7 +559,7 @@ void PlayerStats::AddKill(Character* pVictim, GameObject* pObject)
     }
 
     mKills[iTeam][iHero].Inc(1);
-    mKillsByPlayer[iTeam][iHero][pVictim->GetPlayerStats().mStatId].Inc(1);
+    mKillsByPlayer[iTeam][iHero][Character::GetPlayerStats(pVictim).mStatId].Inc(1);
     if (mLastHealth < 64)
     {
         mKillsUnder25Health[iTeam][iHero].Inc(1);
@@ -630,7 +630,7 @@ void PlayerStats::AddAllyKill(Character* pVictim, GameObject*)
     int iHero = Character::GetPtr(mStatId)->IsHero();
     mKills[iTeam][iHero].Inc(1);
     mSameTeamKills[iTeam][iHero].Inc(1);
-    mKillsByPlayer[iTeam][iHero][pVictim->GetPlayerStats().mStatId].Inc(1);
+    mKillsByPlayer[iTeam][iHero][Character::GetPlayerStats(pVictim).mStatId].Inc(1);
 
     if (Character::GetPtr(mStatId) == pVictim)
     {
@@ -1125,7 +1125,7 @@ void PlayerStats::_GetPlayerAwardMax(AwardStatT eAward, int& iValue,
         for (int character = 0; character < Character::sCharacterLimit; ++character)
         {
             Character* pCharacter = Character::GetPtr(character);
-            PlayerStats& stats = pCharacter->GetPlayerStats();
+            PlayerStats& stats = Character::GetPlayerStats(pCharacter);
             int value = stats._GetPlayerAwardVal(eAward, team, character);
             if (value > iValue)
             {
@@ -1248,7 +1248,7 @@ void PlayerStats::AddGameStatsToProfile()
             {
                 continue;
             }
-            PlayerStats& stats = character->GetPlayerStats();
+            PlayerStats& stats = Character::GetPlayerStats(character);
             PlayerProfile::tProfile* profile = character->GetProfile();
             profile->mAccumPoints.mTotalDeaths += stats.GetDeaths(side, 1) + stats.GetDeaths(side, 0);
             profile->mAccumPoints.mTotalKills += stats.GetKills(side, 1) + stats.GetKills(side, 0);

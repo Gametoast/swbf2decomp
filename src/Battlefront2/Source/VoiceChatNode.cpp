@@ -61,11 +61,11 @@ void* VoiceChat::Node::sList[4] = { VoiceChat::Node::sList, VoiceChat::Node::sLi
 int sRegisteredNodeCount;
 
 // FUNCTION: SWBF2 0x00674580
-void VoiceChat::Node::SetSkipOutOfSequence(float fRate)
+void VoiceChat::Node::SetSkipOutOfSequence(bool skip, float fRate)
 {
     const float fPeriod = VoiceChat::Node::sBufferSizeMs / 1000.0f;
 
-    VoiceChat::Node::sSkipDropped = 0;
+    VoiceChat::Node::sSkipDropped = skip;
 
     const int iCount = (int)(fRate / fPeriod);
     VoiceChat::Node::sRepeatMax = (iCount > 0xFFFF) ? (unsigned short)0xFFFF
@@ -73,13 +73,13 @@ void VoiceChat::Node::SetSkipOutOfSequence(float fRate)
 }
 
 // FUNCTION: SWBF2 0x00673d40
-bool VoiceChat::Node::OpenStatic(float fSeconds, float fA, float fB)
+bool VoiceChat::Node::OpenStatic(Transport* transport, float fSeconds, float fA, float fB)
 {
 
-    VoiceChat::Node::sTransport = &GameVoiceChat::gTransport;
+    VoiceChat::Node::sTransport = transport;
 
-    const unsigned int uiNodes = ((const VoiceChat::Transport*)(&GameVoiceChat::gTransport))->GetNumNodes();
-    const unsigned int uiNodesLog2 = ((const VoiceChat::Transport*)(&GameVoiceChat::gTransport))->GetNumNodesLog2();
+    const unsigned int uiNodes = transport->GetNumNodes();
+    const unsigned int uiNodesLog2 = transport->GetNumNodesLog2();
 
     const unsigned int uiBitmapBytes = ((uiNodesLog2 + 8 + uiNodes) & ~7u) >> 3;
     VoiceChat::Node::sReadHeader.mSize = uiBitmapBytes;
@@ -128,7 +128,7 @@ bool VoiceChat::Node::OpenStatic(float fSeconds, float fA, float fB)
         VoiceChat::Node::sSeqNumVariance = 0x3FF;
     }
 
-    VoiceChat::Node::SetSkipOutOfSequence(0.2f);
+    VoiceChat::Node::SetSkipOutOfSequence(false, 0.2f);
     return true;
 }
 
@@ -186,15 +186,15 @@ unsigned int VoiceChat::Node::UpdateReceiveStreamLatency(unsigned char ucIndex)
 }
 
 // FUNCTION: SWBF2 0x00672b70
-bool VoiceChat::Node::Open()
+bool VoiceChat::Node::Open(unsigned int captureDeviceIndex, unsigned int renderDeviceIndex, unsigned char numDecoderInputs)
 {
 
-    if (!mEncoder->Open())
+    if (!mEncoder->Open(captureDeviceIndex, sBufferSizeMs, 2))
     {
         return false;
     }
 
-    if (!mDecoder->Open(mEncoder->GetMaxOutputPacketSizeMs(), 0x0C))
+    if (!mDecoder->Open(renderDeviceIndex, mEncoder->GetMaxOutputPacketSizeMs(), 2, numDecoderInputs))
     {
         mEncoder->Close();
         return false;
@@ -228,7 +228,7 @@ bool VoiceChat::Node::Open()
     mLastReceiveTime = 0;
     mBufferUpdateTime = 0;
     mSendSeq = 0;
-    mNumDecoderInputs = 0x0C;
+    mNumDecoderInputs = numDecoderInputs;
 
     char* pEntryBuf = pBlock + uiNodes * 0x18;
     char* pData = (char*)((((unsigned long)(pEntryBuf) +
@@ -907,9 +907,9 @@ bool VoiceChat::Node::SendAudioPacket(const AudioPacket* const audio, const Head
         }
         return false;
     }
-    NetPacket* wrapper = packet;
-    const unsigned short headerBytes = (unsigned short)VoiceChat::Node::sWriteHeader.Write((VoiceChat::NetPacketAudio*)&wrapper);
-    const unsigned int bytes = audio->mSize ? ((VoiceChat::NetPacketAudio*)&wrapper)->Write(
+    VoiceChat::NetPacketAudio wrapper(packet);
+    const unsigned int headerBytes = VoiceChat::Node::sWriteHeader.Write(&wrapper);
+    const unsigned int bytes = audio->mSize ? wrapper.Write(
         audio->mData, audio->mSize) : 0;
     VoiceChat::NetPacketAudio::Send(&wrapper, destination, headerBytes);
     if (sendTime)
@@ -1296,7 +1296,7 @@ void VoiceChat::Node::Update(float fDeltaTime)
 }
 
 // FUNCTION: SWBF2 0x00673f50
-bool __cdecl VoiceChat::Node::ReceiveAudioPacketAllLocalNodes(unsigned char uID,
+unsigned char __cdecl VoiceChat::Node::ReceiveAudioPacketAllLocalNodes(unsigned char uID,
                            const VoiceChat::AudioPacket* pPacket,
                            bool  , unsigned short uDropped)
 {
@@ -1306,7 +1306,7 @@ bool __cdecl VoiceChat::Node::ReceiveAudioPacketAllLocalNodes(unsigned char uID,
          pLink->_pObject; pLink = pLink->_pNext)
     {
         VoiceChat::Node* pNode = pLink->_pObject;
-        unsigned char uNodeID = pNode->mNodeID;
+        unsigned char uNodeID = pNode->GetID();
         if (!VoiceChat::Node::sReadHeader.GetReceiveNode((*(const VoiceChat::Transport*)VoiceChat::Node::sTransport), uNodeID))
         {
             continue;
@@ -1329,7 +1329,7 @@ bool __cdecl VoiceChat::Node::ReceiveAudioPacketAllLocalNodes(unsigned char uID,
         }
         --uRemaining;
     }
-    return uRemaining != 0;
+    return uRemaining;
 }
 
 // LIBRARY: SWBF2 0x0075490e

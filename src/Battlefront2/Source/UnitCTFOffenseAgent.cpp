@@ -410,7 +410,7 @@ void UnitCTFOffenseAgent::EnterState()
 
     case 2:
         mCtrl->GetLowLevel().SetNavigator_Goto(
-            *reinterpret_cast<const PblVector3*>(&GetCollisionObject(mFlag.GetValidObject())->GetMatrix().m[3][0]),
+            *reinterpret_cast<const PblVector3*>(&GetCollisionObject(static_cast<const GameObject*>(mFlag))->GetMatrix().m[3][0]),
             0, false, false);
         break;
 

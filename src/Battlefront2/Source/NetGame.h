@@ -19,6 +19,7 @@ class EntityGeometryClass;
 class CommandPost;
 class EntityClass;
 class Team;
+enum CollisionObjectType;
 class WeaponClass;
 class GameObject;
 class NetPktGroup;
@@ -32,12 +33,18 @@ namespace HUD { class Objective; }
 
 struct NetEventVector
 {
+    void Set(const PblVector3& value);
+    PblVector3 Get();
+
     float x, y, z;
 };
 struct NetGameObjectHandle
 {
-    GameObject* ptr;
+    const GameObject* ptr;
     unsigned int id;
+
+    void Set(const GameObject* object);
+    void Get(const GameObject*& object);
 };
 struct NetEvent
 {
@@ -170,9 +177,9 @@ public:
     // FUNCTION: SWBF2 0x004292d0
     static bool IsOneWorld() { return netIsOneWorld; }
 
-    // FUNCTION: SWBF2 0x004292b0
-
     static bool IsNearLocalPlayer(const PblVector3& vPos);
+
+    // FUNCTION: SWBF2 0x004292b0
     static bool IsClient() { return netEnabledNext ? netClientActive : false; }
 
     enum MessageType
@@ -285,7 +292,7 @@ public:
     static bool Predict();
     static CommandPost* ConvertCP(CommandPost* pPost);
     static void CreateEvent_ChangeCommandPostTeams(unsigned __int64 sendMask);
-    static void CreateEvent_UpdateObjective(HUD::Objective* objective, int maskLow, int maskHigh);
+    static void CreateEvent_UpdateObjective(HUD::Objective* objective, unsigned __int64 sendMask);
 
     static void CreateEvent_AddObjective(HUD::Objective* objective);
     static void EnableJournal();
@@ -319,11 +326,11 @@ public:
     static void HeroSpawned(int team);
     static void HeroKilled(int iTeam);
     static void ClearLastHero(int team);
-    static int GetObjectsInRange(const PblVector3& position, float radius, GameObject** const found, int capacity, const Team* excluded, int team);
+    static int GetObjectsInRange(const PblVector3& position, float radius, GameObject** const found, int capacity, GameObject* excluded, CollisionObjectType type);
     static void SelectSpawn(int player, int team, int classIndex, CommandPost* post);
     static void CancelSpawn(int player);
     static void SpectateSpawn(int player, bool spectate);
-    static void AutoAssignSpawn(int player, int autoassign);
+    static void AutoAssignSpawn(int player, bool autoassign);
     static void RequestSuicide(int index);
     static void ForceBootPlayer(int player);
     static void AddChatMessageToQue(bool local, int player, unsigned __int64 mask, int code, const unsigned short* text, int flag);

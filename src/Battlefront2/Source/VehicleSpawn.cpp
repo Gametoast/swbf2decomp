@@ -610,14 +610,11 @@ void VehicleSpawn::Reset()
     sVehicleSpawnList.RemoveAll();
 }
 
-// FUNCTION: SWBF2 0x00670110
+// TEMPLATE: SWBF2 0x00670110
+// PblList<VehicleSpawn>::RemoveAll
 template void PblList<VehicleSpawn>::RemoveAll();
 
-// FUNCTION: SWBF2 0x0066e7e0
-const CommandPost* ConstCommandPostHandle::operator->() const
-{
-    return *this;
-}
+
 
 // GLOBAL: SWBF2 0x007ebebc
 PblList<VehicleSpawn> VehicleSpawn::sVehicleSpawnList;

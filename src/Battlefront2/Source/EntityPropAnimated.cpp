@@ -459,7 +459,7 @@ bool EntityPropAnimated::Update(float fDeltaTime)
             mBlendFactor = 0.0f;
             if (mAttachedSoldier)
             {
-                GameObject* pSoldier = mAttachedSoldier();
+                GameObject* pSoldier = &mAttachedSoldier();
                 pSoldier->InstantDeath(DamageOwner(0, 0, 0, 0, 0, 1.0f), true);
                 mAnimatedClass->mKillSoldierSound.Play((const PblVector3*)GetMatrix().m[3], 0, false, true);
             }

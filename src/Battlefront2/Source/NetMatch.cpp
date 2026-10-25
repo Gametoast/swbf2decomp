@@ -291,7 +291,7 @@ char NetMatch::EndJoinGame()
 }
 
 // FUNCTION: SWBF2 0x005d60a0
-bool NetMatch::StartConnect()
+bool NetMatch::StartConnect(NetAddr& address, NetKey& key, int destination)
 {
     return NetComm::IsLAN();
 }

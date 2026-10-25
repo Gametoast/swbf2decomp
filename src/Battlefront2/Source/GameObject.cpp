@@ -538,11 +538,11 @@ void GameObject::AwardVehicleKillPoints(int iVehicleType, bool bEmpty)
         }
         if (bEmpty)
         {
-            pCharacter->GetPlayerStats().PointsProcess(13, 0);
+            Character::GetPlayerStats(pCharacter).PointsProcess(13, 0);
         }
         else
         {
-            pCharacter->GetPlayerStats().AddVehicleKill(iVehicleType);
+            Character::GetPlayerStats(pCharacter).AddVehicleKill(iVehicleType);
         }
         return;
     }

@@ -14,9 +14,9 @@
 #include "SoundFL/source/sndstreammixer.h"
 
 // FUNCTION: SWBF2 0x0053d1d0
-bool VoiceChat::Decoder::Open(float fPacketMs, int iSlots)
+bool VoiceChat::Decoder::Open(unsigned int playbackDevice, float fPacketMs, unsigned int minBuffers, unsigned int iSlots)
 {
-    return static_cast<GameVoiceChat::Decoder*>(this)->Open(fPacketMs, iSlots);
+    return static_cast<GameVoiceChat::Decoder*>(this)->Open(playbackDevice, fPacketMs, minBuffers, iSlots);
 }
 
 // FUNCTION: SWBF2 0x0053d200
@@ -188,7 +188,7 @@ void GameVoiceChat::Decoder::Close()
 }
 
 // FUNCTION: SWBF2 0x0053c810
-bool GameVoiceChat::Decoder::Open(float fPacketMs, int iSlots)
+bool GameVoiceChat::Decoder::Open(unsigned int playbackDevice, float fPacketMs, unsigned int minBuffers, unsigned int iSlots)
 {
     const unsigned int uiSlots = (unsigned int)iSlots;
 

@@ -145,17 +145,7 @@ void Ordnance::CreateRicochet(const PblVector3& vPos, const PblVector3& vNormal,
 {
 }
 
-// FUNCTION: SWBF2 0x005f7240
-GameObject* Ordnance::GetOwner() const
-{
-    PblHandle<GameObject>& owner = const_cast<PblHandle<GameObject>&>(mOwner);
-    if (owner.mObject && GameObjectHandleId(owner.mObject) != owner.mSavedHandleId)
-    {
-        owner.mObject = 0;
-        owner.mSavedHandleId = 0;
-    }
-    return owner.mObject;
-}
+
 
 // SYNTHETIC: SWBF2 0x005f7270
 // Ordnance::`scalar deleting destructor'
@@ -260,7 +250,7 @@ Ordnance::Ordnance(OrdnanceClass* pClass, const OrdnanceDesc& desc)
     {
         if (desc.mDamageOwner.mCharacter)
         {
-            desc.mDamageOwner.mCharacter->GetPlayerStats().AddShot();
+            Character::GetPlayerStats(desc.mDamageOwner.mCharacter).AddShot();
         }
     }
 
@@ -732,5 +722,3 @@ template Factory<Ordnance, OrdnanceClass, OrdnanceDesc>::Factory(OrdnanceClass*,
 
 // SYNTHETIC: SWBF2 0x005fa200
 // OrdnanceBeamClass::`scalar deleting destructor'
-
-

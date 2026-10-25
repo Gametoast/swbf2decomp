@@ -68,23 +68,19 @@ unsigned int __fastcall HashGalaxyID(const unsigned char* pID)
 }
 
 // FUNCTION: SWBF2 0x0053dc00
-unsigned char* GameVoiceChat::Node::GetSendMask(unsigned int* pWord, unsigned char* pFirst,
-                                               unsigned char* pSecond) const
+void GameVoiceChat::Node::GetSendMask(Transport::Mask& mask, bool& enable, bool& maskExisting) const
 {
-    *pWord = (unsigned int)mSendMask.mMask;
-    *pFirst = mSendMask.mEnable;
-    *pSecond = mSendMask.mMaskExisting;
-    return pSecond;
+    mask = mSendMask.mMask;
+    enable = mSendMask.mEnable;
+    maskExisting = mSendMask.mMaskExisting;
 }
 
 // FUNCTION: SWBF2 0x0053dc40
-unsigned char* GameVoiceChat::Node::GetReceiveMask(unsigned int* pWord, unsigned char* pFirst,
-                                                  unsigned char* pSecond) const
+void GameVoiceChat::Node::GetReceiveMask(Transport::Mask& mask, bool& enable, bool& maskExisting) const
 {
-    *pWord = (unsigned int)mReceiveMask.mMask;
-    *pFirst = mReceiveMask.mEnable;
-    *pSecond = mReceiveMask.mMaskExisting;
-    return pSecond;
+    mask = mReceiveMask.mMask;
+    enable = mReceiveMask.mEnable;
+    maskExisting = mReceiveMask.mMaskExisting;
 }
 
 extern int hostPlayer;
@@ -3186,11 +3182,11 @@ int ScriptCB_SetVoiceSendPreset(lua_State*)
 {
     if (GameVoiceChat::IsOpen())
     {
-        const int preset = (int)(float)luaL_checknumber(LuaHelper::mState, 1);
+        const GameVoiceChat::Transport::Mask preset = static_cast<GameVoiceChat::Transport::Mask>((int)(float)luaL_checknumber(LuaHelper::mState, 1));
         void* node = GameVoiceChat::FindNodeByDeviceID();
         if (node)
         {
-            ((GameVoiceChat::Node*)node)->SetSendMask(preset);
+            ((GameVoiceChat::Node*)node)->SetSendMask(preset, true, false);
             static_cast<GameVoiceChat::Node*>(node)->Update();
         }
     }
@@ -3200,14 +3196,14 @@ int ScriptCB_SetVoiceSendPreset(lua_State*)
 // FUNCTION: SWBF2 0x00596390
 int ScriptCB_GetVoiceSendPreset(lua_State*)
 {
-    unsigned int preset = 5;
+    GameVoiceChat::Transport::Mask preset = GameVoiceChat::Transport::mask_Noone;
     if (GameVoiceChat::IsOpen())
     {
         void* node = GameVoiceChat::FindNodeByDeviceID();
         if (node)
         {
-            unsigned char enabled, keepCurrent;
-            ((GameVoiceChat::Node*)node)->GetSendMask(&preset, &enabled, &keepCurrent);
+            bool enabled, keepCurrent;
+            ((GameVoiceChat::Node*)node)->GetSendMask(preset, enabled, keepCurrent);
         }
     }
     lua_pushnumber(LuaHelper::mState, (float)(int)preset);
@@ -3219,11 +3215,11 @@ int ScriptCB_SetVoiceReceivePreset(lua_State*)
 {
     if (GameVoiceChat::IsOpen())
     {
-        const int preset = (int)(float)luaL_checknumber(LuaHelper::mState, 1);
+        const GameVoiceChat::Transport::Mask preset = static_cast<GameVoiceChat::Transport::Mask>((int)(float)luaL_checknumber(LuaHelper::mState, 1));
         void* node = GameVoiceChat::FindNodeByDeviceID();
         if (node)
         {
-            ((GameVoiceChat::Node*)node)->SetReceiveMask(preset);
+            ((GameVoiceChat::Node*)node)->SetReceiveMask(preset, true, false);
             static_cast<GameVoiceChat::Node*>(node)->Update();
         }
     }
@@ -3233,14 +3229,14 @@ int ScriptCB_SetVoiceReceivePreset(lua_State*)
 // FUNCTION: SWBF2 0x00596440
 int ScriptCB_GetVoiceReceivePreset(lua_State*)
 {
-    unsigned int preset = 5;
+    GameVoiceChat::Transport::Mask preset = GameVoiceChat::Transport::mask_Noone;
     if (GameVoiceChat::IsOpen())
     {
         void* node = GameVoiceChat::FindNodeByDeviceID();
         if (node)
         {
-            unsigned char enabled, keepCurrent;
-            ((GameVoiceChat::Node*)node)->GetReceiveMask(&preset, &enabled, &keepCurrent);
+            bool enabled, keepCurrent;
+            ((GameVoiceChat::Node*)node)->GetReceiveMask(preset, enabled, keepCurrent);
         }
     }
     lua_pushnumber(LuaHelper::mState, (float)(int)preset);
@@ -3252,7 +3248,7 @@ int ScriptCB_SetVoiceSendEnable(lua_State*)
 {
     if (GameVoiceChat::IsOpen())
     {
-        const unsigned int selected = (unsigned int)luaL_checknumber(LuaHelper::mState, 1);
+        const unsigned int selected = LuaHelper::GetInt(1);
         const unsigned char player = (unsigned char)GetLobbyPlayerIndex(selected);
         VoiceChat::Node* node = (VoiceChat::Node*)GameVoiceChat::FindNodeByDeviceID();
         if (node)
@@ -3269,7 +3265,7 @@ int ScriptCB_SetVoiceReceiveEnable(lua_State*)
 {
     if (GameVoiceChat::IsOpen())
     {
-        const unsigned int selected = (unsigned int)luaL_checknumber(LuaHelper::mState, 1);
+        const unsigned int selected = LuaHelper::GetInt(1);
         const unsigned char player = (unsigned char)GetLobbyPlayerIndex(selected);
         VoiceChat::Node* node = (VoiceChat::Node*)GameVoiceChat::FindNodeByDeviceID();
         if (node)
@@ -3288,7 +3284,7 @@ int ScriptCB_GetVoiceSendStatus(lua_State*)
     if (GameVoiceChat::IsOpen())
     {
         const int player = lua_gettop(LuaHelper::mState) >= 1
-            ? GetLobbyPlayerIndex((unsigned int)luaL_checknumber(LuaHelper::mState, 1))
+            ? GetLobbyPlayerIndex(LuaHelper::GetInt(1))
             : PauseMenu::GetPausingJoystick();
         const unsigned char selected = (unsigned char)player;
         VoiceChat::Node* node = (VoiceChat::Node*)GameVoiceChat::FindNodeByDeviceID();
@@ -3335,7 +3331,7 @@ int ScriptCB_GetVoiceReceiveStatus(lua_State*)
     if (GameVoiceChat::IsOpen())
     {
         const int player = lua_gettop(LuaHelper::mState) >= 1
-            ? GetLobbyPlayerIndex((unsigned int)luaL_checknumber(LuaHelper::mState, 1))
+            ? GetLobbyPlayerIndex(LuaHelper::GetInt(1))
             : PauseMenu::GetPausingJoystick();
         const unsigned char selected = (unsigned char)player;
         VoiceChat::Node* node = (VoiceChat::Node*)GameVoiceChat::FindNodeByDeviceID();
@@ -3596,7 +3592,7 @@ int ScriptCB_SetBandwidth(lua_State*)
     {
         float bandwidth = (float)luaL_checknumber(LuaHelper::mState, 1);
         TEMP_bandwith = (int)bandwidth;
-        NetComm::SetBandwidthPercent();
+        NetComm::SetBandwidthPercent(TEMP_bandwith);
     }
     return 0;
 }

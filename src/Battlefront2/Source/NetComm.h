@@ -143,8 +143,8 @@ public:
     static NetArch GetMyArch();
 
     static bool IsLAN();
-    static int SetBandwidthPercent();
-    static void SendVoice(int iDest, NetPacket* pPacket, unsigned short uSequence);
+    static void SetBandwidthPercent(int percent);
+    static void SendVoice(int iDest, PktType type, NetPacket* pPacket, int voiceDataOffset);
 
     static NetArch GetArch(int iDest);
 

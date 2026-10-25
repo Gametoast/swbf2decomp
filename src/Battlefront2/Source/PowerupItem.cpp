@@ -240,7 +240,7 @@ Entity* PowerupItemClass::Build(const EntityDesc& desc)
     PowerupItem* pItem = new PowerupItem(this, desc);
     if (pItem)
     {
-        CollisionManager::AddItemBody(pItem);
+        pItem->AddItemToCollisionManager();
         pItem->ActivatePhysics();
         pItem->BuildEffects();
     }

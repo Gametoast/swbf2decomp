@@ -637,7 +637,7 @@ Entity* WeaponDispenser::Fire()
                 pItem = *pHandle;
                 if (pItem->GetAffiliationToMe(pMe) >= 0)
                 {
-                    if (!pOldest || pOldest->mCreatedTime > ((GameObject*)*pHandle)->mCreatedTime)
+                    if (!pOldest || pOldest->GetCreatedTime() > ((GameObject*)*pHandle)->GetCreatedTime())
                     {
                         pOldest = *pHandle;
                     }

@@ -240,7 +240,7 @@ Entity* EntityItemClass::Build(const EntityDesc& desc)
     EntityItem* pItem = new EntityItem(this, desc);
     if (pItem)
     {
-        CollisionManager::AddItemBody(pItem);
+        pItem->AddItemToCollisionManager();
         pItem->ActivatePhysics();
         pItem->BuildEffects();
     }

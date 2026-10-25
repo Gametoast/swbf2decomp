@@ -32,7 +32,7 @@ public:
     bool ReceivePacket(unsigned int uiInput, const VoiceChat::AudioPacket* pPacket);
     bool IsStarving(unsigned int uiInput, bool bForce);
 
-    bool Open(float fPacketMs, int iSlots);
+    bool Open(unsigned int playbackDevice, float fPacketMs, unsigned int minBuffers, unsigned int iSlots);
     void FreeBuffers();
     void Close();
     void Flush();

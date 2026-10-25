@@ -78,8 +78,8 @@ void GameVoiceChat::Reset()
         {
             continue;
         }
-        ((GameVoiceChat::Node*)pNode)->SetSendMask(1);
-        ((GameVoiceChat::Node*)pNode)->SetReceiveMask(4);
+        ((GameVoiceChat::Node*)pNode)->SetSendMask(GameVoiceChat::Transport::mask_TeamFriend, true, false);
+        ((GameVoiceChat::Node*)pNode)->SetReceiveMask(GameVoiceChat::Transport::mask_Everyone, true, false);
         ((GameVoiceChat::Node*)pNode)->SetID(0xFF);
     }
 }

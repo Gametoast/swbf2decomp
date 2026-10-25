@@ -3,6 +3,15 @@
 namespace util
 {
 
+// GLOBAL: SWBF2 0x009a1a30
+char* gLastError;
+
+// FUNCTION: SWBF2 0x006e9200
+void SetLastError(char* pError)
+{
+    gLastError = pError;
+}
+
 // FUNCTION: SWBF2 0x006e9030
 void StackAllocator::Allocate(Buffer& rBuf)
 {

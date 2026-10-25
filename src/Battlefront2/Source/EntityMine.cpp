@@ -77,7 +77,7 @@ Entity* EntityMineClass::Build(const EntityDesc& desc)
     EntityMine* pMine = new EntityMine(this, desc);
     if (pMine)
     {
-        CollisionManager::AddItemBody(static_cast<CollisionObject*>(pMine));
+        (static_cast<CollisionObject*>(pMine))->AddItemToCollisionManager();
 
         pMine->ActivatePhysics();
 

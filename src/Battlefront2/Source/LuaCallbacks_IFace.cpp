@@ -170,11 +170,6 @@ void __fastcall TableReadDirection(int iUnused, float* pfDirection)
 
 extern char netGameName[64];
 
-// FUNCTION: SWBF2 0x005e7180
-const char* NetSetup::GetHostName()
-{
-    return netGameName;
-}
 
 // GLOBAL: SWBF2 0x01fa88e0
 unsigned __int64 netLocalGSID;
@@ -1887,7 +1882,7 @@ int ScriptCB_SetIFScreenViewport(lua_State* L)
         IFScreen* pScreen = IFScreen::GetCurScreen(GuiManager::mCurViewport);
         unsigned int uiName = pcName ? (unsigned int)PblHash(pcName) : 0;
         (void)uiName;
-        pScreen->SetViewport((unsigned int)luaL_checknumber(LuaHelper::mState, 2));
+        pScreen->SetViewport(LuaHelper::GetInt(2));
     }
     return 0;
 }
@@ -2131,10 +2126,10 @@ int ScriptCB_PlayMovie(lua_State* L)
                               ? luaL_checklstring(LuaHelper::mState, 3, 0)
                               : 0;
     GameMovie::Play(luaL_checklstring(LuaHelper::mState, 1, 0), pcAtEnd,
-                    (unsigned int)luaL_checknumber(LuaHelper::mState, 4),
-                    (unsigned int)luaL_checknumber(LuaHelper::mState, 5),
-                    (unsigned int)luaL_checknumber(LuaHelper::mState, 6),
-                    (unsigned int)luaL_checknumber(LuaHelper::mState, 7),
+                    LuaHelper::GetInt(4),
+                    LuaHelper::GetInt(5),
+                    LuaHelper::GetInt(6),
+                    LuaHelper::GetInt(7),
                     (int)(float)luaL_checknumber(LuaHelper::mState, 2) > 0);
     return 0;
 }
@@ -2812,7 +2807,7 @@ int ScriptCB_IFText_SetLeading(lua_State* L)
         && lua_isnumber(LuaHelper::mState, iArg))
     {
         static_cast<RedTextElement*>(pElement)->m_leading =
-            (short)(unsigned int)luaL_checknumber(LuaHelper::mState, iArg);
+            (short)LuaHelper::GetInt(iArg);
     }
     return 0;
 }

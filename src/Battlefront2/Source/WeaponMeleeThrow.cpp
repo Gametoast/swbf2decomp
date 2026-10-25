@@ -248,7 +248,7 @@ void WeaponMeleeThrow::Fire()
     desc.mDamageOwner = DamageOwner(mOwner->mCharacter, pOwnerObject,
         pOwnerObject ? pOwnerObject->GetTeam() : 0,
         GetEntityClass(pOwnerObject), mClass, mOwner->GetOffenseMultiplier());
-    desc.mTarget = IsLocked() ? const_cast<GameObject*>(mTarget.GetValidObject()) : 0;
+    desc.mTarget = IsLocked() ? const_cast<GameObject*>(static_cast<const GameObject*>(mTarget)) : 0;
     desc.mBodyID = IsLocked() ? mTargetBodyID : -1;
     desc.mFireWeapon = this;
 

@@ -412,7 +412,9 @@ public:
     void* mPrevFoliageObj;
     GameSoundControllable mGameObjectAttachedSound;
     PblHandle<FLEffectObject> mDisabledEffectHandle;
+protected:
     float mCreatedTime;
+public:
     int mTeam : 4;
     int mPerceivedTeam : 4;
     int mOwningTeam : 4;

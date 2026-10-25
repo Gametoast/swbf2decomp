@@ -132,6 +132,7 @@ public:
         mData[iIndex] = iData;
     }
 
+    // FUNCTION: SWBF2 0x00497e10
     const PblSphere& GetCollisionSphere() const
     {
         return mStackPtr ? mStackPtr->mSphere[mStackIdx] : mCollisionSphere;

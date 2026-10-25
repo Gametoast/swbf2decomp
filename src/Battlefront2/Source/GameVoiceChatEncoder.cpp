@@ -30,7 +30,7 @@ namespace Snd
 void __fastcall StreamVAD__Flush(void* pVad);
 
 // FUNCTION: SWBF2 0x0053d4c0
-bool GameVoiceChat::Encoder::Open(float fMaxPacketMs)
+bool GameVoiceChat::Encoder::Open(unsigned int captureDeviceIndex, float fMaxPacketMs, unsigned int minBuffers)
 {
 
     float fMs = fMaxPacketMs;
@@ -206,9 +206,9 @@ float GameVoiceChat::Encoder::GetMaxOutputPacketSizeMs() const
 }
 
 // FUNCTION: SWBF2 0x0053da70
-bool VoiceChat::Encoder::Open()
+bool VoiceChat::Encoder::Open(unsigned int captureDeviceIndex, float minBufferSizeMs, unsigned int minBuffers)
 {
-    return static_cast<GameVoiceChat::Encoder*>(this)->Open(VoiceChat::Node::sBufferSizeMs);
+    return static_cast<GameVoiceChat::Encoder*>(this)->Open(captureDeviceIndex, minBufferSizeMs, minBuffers);
 }
 
 // FUNCTION: SWBF2 0x0053daa0

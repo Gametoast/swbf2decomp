@@ -26,7 +26,7 @@ StreamAuxRenderer::StreamAuxRenderer()
 StreamAuxRenderer::~StreamAuxRenderer()
 {
 
-    if (mIsOpen)
+    if (IsOpen())
     {
         StreamAuxRenderer__Close(this);
     }

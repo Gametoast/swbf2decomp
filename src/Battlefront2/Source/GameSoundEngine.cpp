@@ -286,13 +286,13 @@ bool Open(float fSeconds, bool bSoundWorking)
     sVoiceChatHeap = GameMemory::ApplicationHeap;
     int iOldHeap = RedSetCurrentHeap(GameMemory::ApplicationHeap);
 
-    if (!GameVoiceChat::gTransport.Open())
+    if (!GameVoiceChat::gTransport.Open(0x32, 1))
     {
         RedSetCurrentHeap(iOldHeap);
         return false;
     }
 
-    if (!VoiceChat::Node::OpenStatic(fSeconds, 1000.0f, 1000.0f))
+    if (!VoiceChat::Node::OpenStatic(&GameVoiceChat::gTransport, fSeconds, 1000.0f, 1000.0f))
     {
         GameVoiceChat::gTransport.Close();
         RedSetCurrentHeap(iOldHeap);
@@ -316,7 +316,7 @@ bool Open(float fSeconds, bool bSoundWorking)
     VoiceChat::Transport::Method cMethod(
         (VoiceChat::Transport::Method::Type)(netVoiceMode ? netVoiceMode : 2), 0x32);
     cMethod.SetNumRelayNodes(cMethod.CalculateOptimalRelayNodes(0x32));
-    GameVoiceChat::gTransport.SetMethod(&cMethod, 1);
+    GameVoiceChat::gTransport.SetMethod(cMethod, true);
 
     if (bSoundWorking)
     {
@@ -324,7 +324,7 @@ bool Open(float fSeconds, bool bSoundWorking)
 
         for (i = 0; i < uiNodes && bAllOpen; ++i)
         {
-            bAllOpen = (bAllOpen && ((VoiceChat::Node*)GameVoiceChat::gNodes[i])->Open());
+            bAllOpen = (bAllOpen && ((VoiceChat::Node*)GameVoiceChat::gNodes[i])->Open(0xFF, 0xFF, 0x0C));
         }
 
         if (!bAllOpen)
@@ -357,8 +357,8 @@ bool Open(float fSeconds, bool bSoundWorking)
 
         for (i = 0; i < uiNodes; ++i)
         {
-            ((GameVoiceChat::Node*)GameVoiceChat::gNodes[i])->SetSendMask(1);
-            ((GameVoiceChat::Node*)GameVoiceChat::gNodes[i])->SetReceiveMask(4);
+            ((GameVoiceChat::Node*)GameVoiceChat::gNodes[i])->SetSendMask(GameVoiceChat::Transport::mask_TeamFriend, true, false);
+            ((GameVoiceChat::Node*)GameVoiceChat::gNodes[i])->SetReceiveMask(GameVoiceChat::Transport::mask_Everyone, true, false);
         }
     }
 

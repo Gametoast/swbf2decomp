@@ -43,7 +43,9 @@ public:
 
     unsigned int mId;
     float mTime;
+protected:
     float mRate;
+public:
 
     static int sMapNumEntries;
     static PblHashTable<Timer, 64> sMap;

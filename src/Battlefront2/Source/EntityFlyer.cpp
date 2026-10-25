@@ -1905,7 +1905,7 @@ Entity* EntityFlyerClass::Build(const EntityDesc& desc)
     EntityFlyer* pFlyer = new EntityFlyer(this, desc);
     if (pFlyer)
     {
-        CollisionManager::AddSoftBody(pFlyer);
+        pFlyer->AddSoftToCollisionManager();
         pFlyer->ActivatePhysics();
         pFlyer->BuildEffects();
     }
@@ -3163,7 +3163,7 @@ void EntityFlyer::TakeOff()
             mAIEng.ai.mTrickTime = 0.0f;
         }
         CollisionManager::RemoveBody(this);
-        CollisionManager::AddSoftBody(this);
+        this->AddSoftToCollisionManager();
     }
     const PblVector3& vPosition = GetPosition();
     if (!IsWindingUp() || IsWindingDown())
@@ -5678,9 +5678,7 @@ void EntityFlyer::SetupInterpolatedCameraTrackMatrix(PblMatrix& rMatrix)
 #ifdef GetObject
 #undef GetObject
 #endif
-// TEMPLATE: SWBF2 0x00428e40
-// PblHandle<ParticleEmitterObject>::GetObject
-template ParticleEmitterObject* PblHandle<ParticleEmitterObject>::GetObject() const;
+template ParticleEmitterObject* PblHandle<ParticleEmitterObject>::GetObjectA() const;
 
 // SYNTHETIC: SWBF2 0x0047852f
 // [thunk]:CommandFlyer::`scalar deleting destructor'`adjustor{320}'

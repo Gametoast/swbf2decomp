@@ -97,9 +97,7 @@ void SpawnDisplay::UpdateSpectate(Character* pCharacter)
 // FUNCTION: SWBF2 0x0042b620
 void __fastcall SpawnDisplay::EnableViewport(int iViewport)
 {
-    HUD::Event event;
-    event.mClass = HUD::GameEvents::gPlayerEvents[iViewport].spawnDisplayDisable;
-    event.mData.boolValue = true;
+    HUD::Event event(HUD::GameEvents::gPlayerEvents[iViewport].spawnDisplayDisable, true);
     event.Send();
 }
 
@@ -364,7 +362,7 @@ void SpawnDisplay::UpdateUnitCountText()
     }
 
     PlayerStats::UnselectableReason eReason;
-    if (!mOwner->GetPlayerStats().IsClassSelectable(pTeam->GetClassIndex(pClass), &eReason))
+    if (!Character::GetPlayerStats(mOwner).IsClassSelectable(pTeam->GetClassIndex(pClass), &eReason))
     {
         switch (eReason)
         {
@@ -373,7 +371,7 @@ void SpawnDisplay::UpdateUnitCountText()
             break;
         case PlayerStats::NOT_ENOUGH_POINTS:
             PblUnicode::usnprintf(text, 255, RedLocalizeDB::Find(0x155AB074, false),
-                                  pClass->mPointsToUnlock - mOwner->GetPlayerStats().GetPoints(true));
+                                  pClass->mPointsToUnlock - Character::GetPlayerStats(mOwner).GetPoints(true));
             break;
         }
     }
@@ -501,7 +499,7 @@ void SpawnDisplay::Show(Character* pCharacter)
     mDPadPressed = false;
     if (pCharacter && !(NetGame::IsEnabled() && NetGame::IsClient()))
     {
-        pCharacter->GetPlayerStats().TimingPause();
+        Character::GetPlayerStats(pCharacter).TimingPause();
     }
 
     if (!IsLocal(mPlayerIdx))
@@ -629,7 +627,7 @@ void SpawnDisplay::Hide(Character* pCharacter)
 
     if (mOwner && !(NetGame::IsEnabled() && NetGame::IsClient()))
     {
-        mOwner->GetPlayerStats().TimingUnpause();
+        Character::GetPlayerStats(mOwner).TimingUnpause();
     }
 
     mMode = eSPAWNDISPLAY;
@@ -816,7 +814,7 @@ bool SpawnDisplay::Update(float fDeltaTime)
         }
         UpdateInput();
         m_pEntityElement->SetColor(
-            mOwner->GetPlayerStats().IsClassSelectable(mOwner->mClassIndex, 0) ? RedColor::WHITE
+            Character::GetPlayerStats(mOwner).IsClassSelectable(mOwner->mClassIndex, 0) ? RedColor::WHITE
                                                                                : RedColor::BLACK);
         UpdateUnitCountText();
         m_pEntityElement->Update(fDeltaTime);

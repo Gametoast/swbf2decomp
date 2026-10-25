@@ -1665,7 +1665,7 @@ int ScriptCB_MetagameSetBonus(lua_State*)
 int ScriptCB_MetagameSetSide(lua_State*)
 {
     const char* pcSide = LuaHelper::GetString(2);
-    unsigned int uiIndex = (unsigned int)luaL_checknumber(LuaHelper::mState, 1);
+    unsigned int uiIndex = LuaHelper::GetInt(1);
     GameLoop::SetMetagameSide(uiIndex, Team::TranslateTeamName(pcSide));
     return 0;
 }

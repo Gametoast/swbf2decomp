@@ -23,7 +23,7 @@ void HUD::ObjectiveList::SetState(unsigned int uiTextHashID, Objective::Objectiv
     SetupText();
     if (NetGame::IsEnabled() && !NetGame::IsClient())
     {
-        NetGame::CreateEvent_UpdateObjective(pObjective, -1, -1);
+        NetGame::CreateEvent_UpdateObjective(pObjective, ~0ui64);
     }
 }
 

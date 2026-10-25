@@ -200,9 +200,9 @@ void EntityGeometry::SetProperty(unsigned int uProperty, const char* pszValue)
                 switch (GetCollisionType())
                 {
                 case COLL_ITEM:     AddItemToCollisionManager(); break;
-                case COLL_SOFT:     CollisionManager::AddSoftBody(this); break;
+                case COLL_SOFT:     this->AddSoftToCollisionManager(); break;
                 case COLL_ASTEROID: AddAsteroidToCollisionManager(); break;
-                case COLL_RIGID:    CollisionManager::AddRigidBody(this); break;
+                case COLL_RIGID:    this->AddRigidToCollisionManager(); break;
                 case COLL_STATIC:   AddStaticToCollisionManager(); break;
                 case COLL_ATTACHED: AddAttachedToCollisionManager(); break;
                 case COLL_SHIELD:   AddShieldToCollisionManager(); break;

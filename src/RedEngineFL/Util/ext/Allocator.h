@@ -9,6 +9,8 @@
 namespace util
 {
 
+void SetLastError(char* pError);
+
 class NewAllocator
 {
 public:
@@ -18,7 +20,7 @@ public:
         rBuf.data_ = RedAllocFromHeap(__RedCurrHeap, rBuf.size_, 0);
         if (!rBuf.data_)
         {
-            printf("util::NewAllocator::Allocate failed - new[] failed - out of memory!");
+            SetLastError("util::NewAllocator::Allocate failed - new[] failed - out of memory!");
         }
     }
 

@@ -901,12 +901,11 @@ bool NetComm::IsLAN()
 }
 
 // FUNCTION: SWBF2 0x005b36b0
-int NetComm::SetBandwidthPercent()
+void NetComm::SetBandwidthPercent(int percent)
 {
-    bwPercent = TEMP_bandwith;
+    bwPercent = percent;
     sendBits[PIPE_INTERNET] = 0.0f;
-    bps[PIPE_INTERNET] = TEMP_bandwith * gInternetBandwidthScale / 100;
-    return bps[PIPE_INTERNET];
+    bps[PIPE_INTERNET] = percent * gInternetBandwidthScale / 100;
 }
 
 // FUNCTION: SWBF2 0x005b3700
@@ -957,11 +956,11 @@ int __fastcall FindSource(const void* pSource, unsigned int uType)
 }
 
 // FUNCTION: SWBF2 0x005b2970
-void NetComm::SendVoice(int iDest, NetPacket* pPacket, unsigned short uSequence)
+void NetComm::SendVoice(int iDest, PktType type, NetPacket* pPacket, int voiceDataOffset)
 {
     Header(pPacket).src = (unsigned char)iDest;
-    Header(pPacket).type = PKT_VOICE;
-    Header(pPacket).group = uSequence;
+    Header(pPacket).type = static_cast<unsigned char>(type);
+    Header(pPacket).group = static_cast<unsigned short>(voiceDataOffset);
     Header(pPacket).idx = 0;
     Header(pPacket).count = 1;
     if ((unsigned int)iDest < MAX_DESTS)

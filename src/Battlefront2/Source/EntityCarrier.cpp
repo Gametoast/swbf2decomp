@@ -581,7 +581,7 @@ Entity* EntityCarrierClass::Build(const EntityDesc& desc)
     EntityCarrier* pCarrier = new EntityCarrier(this, desc);
     if (pCarrier)
     {
-        CollisionManager::AddRigidBody(static_cast<CollisionObject*>(pCarrier));
+        (static_cast<CollisionObject*>(pCarrier))->AddRigidToCollisionManager();
         pCarrier->ActivatePhysics();
         static_cast<EntityGeometry*>(pCarrier)->BuildEffects();
     }

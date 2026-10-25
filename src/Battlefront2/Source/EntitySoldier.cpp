@@ -795,21 +795,7 @@ void EntitySoldier::UpdateFoleyFX(const RedPose& pose, const PblMatrix& mWorld)
     mRightFootElevation = fRightFoot;
 }
 
-// FUNCTION: SWBF2 0x00424b30
-GameObject* ResolveGameObjectHandle(PblHandle<GameObject>& handle)
-{
-    GameObject* pObject = handle.mObject;
-    if (pObject)
-    {
-        if (pObject->mHandleId == handle.mSavedHandleId)
-        {
-            return pObject;
-        }
-        handle.mObject = 0;
-        handle.mSavedHandleId = 0;
-    }
-    return 0;
-}
+
 
 extern PblVector3 gVectorZero;
 
@@ -2523,7 +2509,7 @@ bool EntitySoldier::CollisionCallback(const CollisionResult* pResult, CollisionO
             float fOverlap = pResult->mOverlap;
             if (pOther->GetGameObject())
             {
-                float fAge = GameLoop::GetMissionTime() - pOther->GetGameObject()->mCreatedTime;
+                float fAge = GameLoop::GetMissionTime() - pOther->GetGameObject()->GetCreatedTime();
                 if (fAge > 0.0f && fAge < 1.0f)
                 {
                     fOverlap = fAge * fOverlap;
@@ -10012,9 +9998,9 @@ bool EntitySoldier::ApplyDamage(const DamageDesc& damage, const PblVector3& vDir
     }
 
     if (iBodyPart == 0 && mDamageOwner.mCharacter && mDamageOwner.mCharacter->IsPlayer() &&
-        ResolveGameObjectHandle(mDamageOwner.mGameObject))
+        static_cast<GameObject*>(mDamageOwner.mGameObject))
     {
-        if (GetAffiliationToMe(ResolveGameObjectHandle(mDamageOwner.mGameObject)) < 0)
+        if (GetAffiliationToMe(static_cast<GameObject*>(mDamageOwner.mGameObject)) < 0)
         {
             AI::VOHelper::Play(AI::VOT_HeadshotKill, 0, 0, this, 0.0f);
         }
@@ -10605,7 +10591,7 @@ void EntitySoldier::SetPilotInfo(const PblMatrix& mMatrixIn, const PblVector3& v
         }
         if (!IsInCollisionList())
         {
-            CollisionManager::AddAttachedBody(this);
+            this->AddAttachedToCollisionManager();
         }
         mForceFrameNum1 = fFrame1;
         mForceFrameNum2 = fFrame2;

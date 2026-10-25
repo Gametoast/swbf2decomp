@@ -28,7 +28,7 @@ public:
 
     static char EndJoinGame();
 
-    static bool StartConnect();
+    static bool StartConnect(NetAddr& address, NetKey& key, int destination);
 
     static bool UpdateConnect(const NetAddr* pAddr, const NetKey* pKey, int iDest, int* pReason);
 

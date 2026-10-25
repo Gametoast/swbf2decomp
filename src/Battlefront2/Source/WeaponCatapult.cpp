@@ -280,7 +280,7 @@ bool WeaponCatapult::Fire()
     desc.mOwner = mOwner->GetGameObject();
     desc.mDamageOwner = DamageOwner(mOwner->mCharacter, mOwner->GetGameObject(), mOwner->GetGameObject()->GetTeam(),
                                     GetEntityClass(mOwner->GetGameObject()), mClass, mOwner->GetOffenseMultiplier());
-    desc.mTarget = const_cast<GameObject*>(mTarget.GetValidObject());
+    desc.mTarget = const_cast<GameObject*>(static_cast<const GameObject*>(mTarget));
     desc.mBodyID = mTargetBodyID;
 
     if (NetGame::IsEnabled())

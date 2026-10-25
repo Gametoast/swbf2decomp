@@ -263,7 +263,7 @@ void TableReadVal(char const* pcKey, int& iVal, bool bRequired)
     lua_rawget(mState, -2);
     if (lua_isnumber(mState, -1))
     {
-        iVal = (unsigned int)luaL_checknumber(mState, -1);
+        iVal = LuaHelper::GetInt(-1);
         lua_settop(mState, -2);
     }
     else

@@ -1048,7 +1048,7 @@ int ScriptCB_SetNetGameDefaults(lua_State* L)
         void* pTransport = GameVoiceChat::GetTransport();
         VoiceChat::Transport::Method cMethod((VoiceChat::Transport::Method::Type)iValue,
             ((VoiceChat::Transport*)pTransport)->GetMethod().GetNumRelayNodes());
-        ((VoiceChat::Transport*)pTransport)->SetMethod(&cMethod, 1);
+        ((VoiceChat::Transport*)pTransport)->SetMethod(cMethod, true);
 
         NetGame::SetMaxPreGameTime(iWarmUp);
         hostVoteThreshold = iVote;

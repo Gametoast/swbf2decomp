@@ -30,7 +30,6 @@ extern "C" PblMatrix* __stdcall D3DXMatrixMultiply(PblMatrix* pOut, const PblMat
 
 const RedColor Interpolate(const RedColor& a, const RedColor& b, float t);
 
-GameObject* ResolveGameObjectHandle(PblHandle<GameObject>& handle);
 
 static PblMatrix _IdentityMatrix(
     PblVector4{ 1.0f, 0.0f, 0.0f, 0.0f },
@@ -505,7 +504,7 @@ bool OrdnanceBullet::Update(float fDeltaTime)
                                    mVelocity.z * mVelocity.z);
         const float fInv = 1.0f / fSpeed;
         const PblVector3 vDir(mVelocity.x * fInv, mVelocity.y * fInv, mVelocity.z * fInv);
-        const GameObject* pOwner = ResolveGameObjectHandle(mOwner);
+        const GameObject* pOwner = static_cast<GameObject*>(mOwner);
         CollisionObject* pHitObject;
         const float fHit = CollisionManager::RayHit(mPosition, vDir, mLifeTime * fSpeed, pHitObject,
                                                     &mFinalCollisionNormal, pOwner ? &pOwner : 0,

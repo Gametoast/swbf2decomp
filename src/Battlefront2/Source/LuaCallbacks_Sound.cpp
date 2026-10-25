@@ -1470,8 +1470,8 @@ int ScriptCB_SetAmbientMusic(lua_State*)
         iCount = (int)luaL_checknumber(LuaHelper::mState, 2);
     }
     VoiceOverManager::sInstance->SetAmbientMusic(
-        iTeam - 1, iCount, luaL_checkstring(LuaHelper::mState, 3),
-        (VoiceOverManager::GameStage)(unsigned int)luaL_checknumber(LuaHelper::mState, 4));
+        iTeam - 1, iCount, LuaHelper::GetString(3),
+        (VoiceOverManager::GameStage)LuaHelper::GetInt(4));
     return 0;
 }
 }
@@ -1514,7 +1514,7 @@ namespace Lua_Callbacks {
 int ScriptCB_SetOutOfBoundsVoiceOver(lua_State*)
 {
     BoundaryManager::sInstance->SetOutOfBoundsVoiceOverID(
-        (unsigned int)luaL_checknumber(LuaHelper::mState, 1), luaL_checkstring(LuaHelper::mState, 2));
+        LuaHelper::GetInt(1), LuaHelper::GetString(2));
     return 0;
 }
 }

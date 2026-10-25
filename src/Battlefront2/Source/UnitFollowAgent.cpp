@@ -71,7 +71,7 @@ namespace
     template <typename TYPE>
     inline TYPE* ResolveHandle(PblHandle<TYPE>& handle)
     {
-        return handle.GetValidObject();
+        return static_cast<TYPE*>(handle);
     }
 
     GameObject* ResolveHandleAt(void* pHandleAddr)

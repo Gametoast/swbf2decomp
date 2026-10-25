@@ -838,7 +838,7 @@ Entity* EntityHoverClass::Build(const EntityDesc& desc)
     if (pHover)
     {
         NetGame::Created(pHover);
-        CollisionManager::AddRigidBody(static_cast<CollisionObject*>(pHover));
+        (static_cast<CollisionObject*>(pHover))->AddRigidToCollisionManager();
         pHover->ActivatePhysics();
         pHover->BuildEffects();
     }

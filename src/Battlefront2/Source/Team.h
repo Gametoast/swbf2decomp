@@ -202,6 +202,7 @@ public:
     void SetConquestIcon(unsigned int uIcon) { mConquestIcon = uIcon; }
     void SetCTFIcon(unsigned int uIcon) { mCTFIcon = uIcon; }
     void SetAffiliation(int iTeam, int iAffiliation) { mAffiliation[iTeam] = (char)iAffiliation; }
+    // FUNCTION: SWBF2 0x00429350
     int GetCurReinforcements() const { return mCurReinforcements; }
 
     // FUNCTION: SWBF2 0x00438ae0

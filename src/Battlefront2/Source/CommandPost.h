@@ -179,7 +179,6 @@ public:
     // FUNCTION: SWBF2 0x0044f940
     int GetBiasTeam() const { return mBiasTeam; }
 
-    // FUNCTION: SWBF2 0x00429350
     const unsigned short* GetLocalizeName() const { return mLocalizeName; }
 
     void Kill();
@@ -334,3 +333,34 @@ inline CommandPost* CommandPostHandle::operator->() const
  
 
 unsigned int __fastcall GetDoorEntityId(const unsigned int* pRecord);
+
+inline void CommandPostHandle::operator=(CommandPost* pPost)
+{
+    mPost = pPost;
+}
+
+// FUNCTION: SWBF2 0x00450410
+inline ConstCommandPostHandle::operator const CommandPost*() const
+{
+    if (mPost)
+    {
+        PblHandle<GameObject>& object = mPost->mObject;
+        if (object.mObject &&
+            object.mObject->mHandleId != object.mSavedHandleId)
+        {
+            object.mObject = 0;
+            object.mSavedHandleId = 0;
+        }
+        if (!object.mObject)
+        {
+            return 0;
+        }
+    }
+    return mPost;
+}
+
+// FUNCTION: SWBF2 0x0066e7e0
+inline const CommandPost* ConstCommandPostHandle::operator->() const
+{
+    return *this;
+}

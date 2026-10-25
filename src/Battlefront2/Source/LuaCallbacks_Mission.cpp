@@ -750,7 +750,7 @@ int SetMapCameraOffset(lua_State* L)
 int SetMapCameraPitch(lua_State* L)
 {
     float fPitch = LuaHelper::GetFloat(2);
-    MapCamera::SetPitch((MapCamera::ZoomLevel)(unsigned int)luaL_checknumber(LuaHelper::mState, 1), fPitch);
+    MapCamera::SetPitch((MapCamera::ZoomLevel)LuaHelper::GetInt(1), fPitch);
     return 0;
 }
 
@@ -758,7 +758,7 @@ int SetMapCameraPitch(lua_State* L)
 int SetMapCameraZoom(lua_State* L)
 {
     CameraManager::Instance()->GetMapCamera(0)->SetZoomLevel(
-        (MapCamera::ZoomLevel)(unsigned int)luaL_checknumber(LuaHelper::mState, 1));
+        (MapCamera::ZoomLevel)LuaHelper::GetInt(1));
     return 0;
 }
 
@@ -1762,7 +1762,7 @@ int SetObjectTeam(lua_State* L)
     GameObject* pObject = _GetEntity<GameObject>(L, 1);
     if (pObject)
     {
-        pObject->SetTeam((unsigned int)luaL_checknumber(LuaHelper::mState, 2));
+        pObject->SetTeam(LuaHelper::GetInt(2));
     }
     return 0;
 }
@@ -2263,7 +2263,7 @@ int SetAIDifficulty(lua_State* L)
 // FUNCTION: SWBF2 0x0058c9d0
 int SetNumFishTypes(lua_State* L)
 {
-    FishParticleManager::SetNumFishTypes((unsigned int)(float)luaL_checknumber(L, 1));
+    FishParticleManager::SetNumFishTypes(LuaHelper::GetInt(1));
     return 0;
 }
 
@@ -2422,7 +2422,7 @@ int GetTimerRate(lua_State* L)
     Timer* pTimer = GetTimer(L, 1);
     if (pTimer)
     {
-        lua_pushnumber(L, pTimer->mRate);
+        lua_pushnumber(L, pTimer->GetRate());
     }
     else
     {
@@ -2622,7 +2622,7 @@ int SetCarrierClass(lua_State* L)
 // FUNCTION: SWBF2 0x0058c8c0
 int SetNumBirdTypes(lua_State* L)
 {
-    BirdParticleManager::SetNumBirdTypes((unsigned int)(float)luaL_checknumber(L, 1));
+    BirdParticleManager::SetNumBirdTypes(LuaHelper::GetInt(1));
     return 0;
 }
 
@@ -2746,7 +2746,7 @@ int SelectCharacterTeam(lua_State* L)
     Character* pCharacter = Character::GetPtr((int)(float)luaL_checknumber(L, 1));
     if (pCharacter)
     {
-        pCharacter->SelectTeam((unsigned int)(float)luaL_checknumber(L, 2));
+        pCharacter->SelectTeam(LuaHelper::GetInt(2));
     }
     return 0;
 }

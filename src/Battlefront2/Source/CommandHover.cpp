@@ -182,7 +182,7 @@ Entity* CommandHoverClass::Build(const EntityDesc& desc)
     if (pHover)
     {
         NetGame::Created(pHover);
-        CollisionManager::AddRigidBody(pHover);
+        pHover->AddRigidToCollisionManager();
         pHover->ActivatePhysics();
         if (!NetGame::IsEnabled() || !NetGame::IsClient())
         {

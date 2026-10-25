@@ -30,8 +30,8 @@ void WriteString(NetPktGroup* group, const char* text, unsigned int capacity);
 void ReadString(NetPktGroup& group, char* text, unsigned int capacity);
 
 void __fastcall PropagateTeam(Character* pCharacter, int iTeam);
-void WriteEntityClass(NetPktGroup& group, const void* pValue);
-void WriteWeaponClass(NetPktGroup& group, const void* pValue);
+void WriteEntityClass(NetPktGroup& group, const EntityClass* pClass);
+void WriteWeaponClass(NetPktGroup& group, const WeaponClass* pClass);
 
 class NetTrigger : public Trigger
 {

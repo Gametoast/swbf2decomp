@@ -63,22 +63,14 @@ CollisionModel::CollisionModel()
 {
     mNumBodies = 0;
 
-    mSoftMask.mMask[0] = 0;
-    mSoftMask.mMask[1] = 0;
-    mRigidMask.mMask[0] = 0;
-    mRigidMask.mMask[1] = 0;
-    mStaticMask.mMask[0] = 0;
-    mStaticMask.mMask[1] = 0;
-    mTerrainMask.mMask[0] = 0;
-    mTerrainMask.mMask[1] = 0;
-    mOrdnanceMask.mMask[0] = 0;
-    mOrdnanceMask.mMask[1] = 0;
-    mTowCableMask.mMask[0] = 0;
-    mTowCableMask.mMask[1] = 0;
-    mTargetableMask.mMask[0] = 0;
-    mTargetableMask.mMask[1] = 0;
-    mFlyingOrdnanceMask.mMask[0] = 0;
-    mFlyingOrdnanceMask.mMask[1] = 0;
+    mTerrainMask.ClearAll();
+    mStaticMask.ClearAll();
+    mRigidMask.ClearAll();
+    mSoftMask.ClearAll();
+    mOrdnanceMask.ClearAll();
+    mTowCableMask.ClearAll();
+    mTargetableMask.ClearAll();
+    mFlyingOrdnanceMask.ClearAll();
 
     mDenyFlyerLand = false;
     mDeathOnFlyerLand = false;
@@ -123,22 +115,14 @@ void CollisionModel::ClearAll(bool bDeleteBodies)
         mNumBodies = 0;
     }
 
-    mSoftMask.mMask[0] = 0;
-    mSoftMask.mMask[1] = 0;
-    mRigidMask.mMask[0] = 0;
-    mRigidMask.mMask[1] = 0;
-    mStaticMask.mMask[0] = 0;
-    mStaticMask.mMask[1] = 0;
-    mTerrainMask.mMask[0] = 0;
-    mTerrainMask.mMask[1] = 0;
-    mOrdnanceMask.mMask[0] = 0;
-    mOrdnanceMask.mMask[1] = 0;
-    mTowCableMask.mMask[0] = 0;
-    mTowCableMask.mMask[1] = 0;
-    mTargetableMask.mMask[0] = 0;
-    mTargetableMask.mMask[1] = 0;
-    mFlyingOrdnanceMask.mMask[0] = 0;
-    mFlyingOrdnanceMask.mMask[1] = 0;
+    mTerrainMask.ClearAll();
+    mStaticMask.ClearAll();
+    mRigidMask.ClearAll();
+    mSoftMask.ClearAll();
+    mOrdnanceMask.ClearAll();
+    mTowCableMask.ClearAll();
+    mTargetableMask.ClearAll();
+    mFlyingOrdnanceMask.ClearAll();
 }
 
 // FUNCTION: SWBF2 0x00462520
@@ -639,11 +623,11 @@ const CollisionMask& CollisionModel::GetCollisionMask(const CollisionObjectType&
 {
     switch (eType)
     {
+    case COLL_STATIC:
+        return mStaticMask;
     case COLL_ASTEROID:
     case COLL_RIGID:
         return mRigidMask;
-    case COLL_STATIC:
-        return mStaticMask;
     case COLL_SPECIAL:
         return mFlyingOrdnanceMask;
     case COLL_TERRAIN:

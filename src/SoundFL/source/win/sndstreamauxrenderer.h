@@ -14,6 +14,7 @@ class StreamAuxRenderer : public DSBufferRenderer
 public:
     StreamAuxRenderer();
     virtual ~StreamAuxRenderer();
+    bool IsOpen() const { return mIsOpen; }
     bool Open(unsigned char ucDeviceIndex, StreamFormat const& cFormat,
               float fBufferMs);
 

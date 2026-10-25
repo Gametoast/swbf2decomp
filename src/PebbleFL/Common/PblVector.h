@@ -89,6 +89,7 @@ public:
 class PblSphere : public PblVector4
 {
 public:
+    // FUNCTION: SWBF2 0x0040fdf0
     const PblVector3& GetCenter() const { return *(const PblVector3*)this; }
     float GetRadius() const { return w; }
 

@@ -1256,7 +1256,7 @@ void EntityWalker::ReadObject(NetPktGroup& group, NetObjState*)
         if (mIsDead)
         {
             CollisionManager::RemoveBody(this);
-            CollisionManager::AddRigidBody(this);
+            this->AddRigidToCollisionManager();
             for (int i = 0; i < mClass->mWeaponCount; ++i)
             {
                 if (mWeapon[i])

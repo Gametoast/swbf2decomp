@@ -7,6 +7,7 @@
 #include "Factory.h"
 #include "FoleyFX.h"
 #include "GameSound.h"
+#include "GameObject.h"
 #include "Thread.h"
 #include "RedEngineFL/Graphics/RedColor.h"
 #include "RedEngineFL/Memory/RedMemoryPool.h"
@@ -190,3 +191,9 @@ public:
  
  
  
+
+// FUNCTION: SWBF2 0x005f7240
+inline GameObject* Ordnance::GetOwner() const
+{
+    return static_cast<GameObject*>(mOwner);
+}

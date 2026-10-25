@@ -22,7 +22,7 @@ public:
     VoiceChat::AudioPacket* GetData();
     void Play();
 
-    bool Open(float fMaxPacketMs);
+    bool Open(unsigned int captureDeviceIndex, float fMaxPacketMs, unsigned int minBuffers);
     void FreeBuffers();
     void Close();
     void FreeAudioPacket(VoiceChat::AudioPacket* packet);
