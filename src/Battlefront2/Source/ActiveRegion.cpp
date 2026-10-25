@@ -72,10 +72,7 @@ namespace ActiveRegions
 ActiveRegion::ActiveRegion(RedRegion& region) : mRegion(region)
 {
     mPlayers = GetPlayersInRegion();
-    if (sMap.Store(region.mId, this))
-    {
-        ++sMapNumEntries;
-    }
+    sMap.Store(region.mId, this);
     ActivateThread(-100, PER_FRAME);
 }
 
@@ -187,14 +184,10 @@ int IsInside(lua_State*)
     }
     return 1;
 }
-
-// GLOBAL: SWBF2 0x01eafff0
-int sMapNumEntries;
 // SYNTHETIC: SWBF2 0x00402150
 // `dynamic initializer for 'ActiveRegions::sMap''
 
-// GLOBAL: SWBF2 0x01eafff4
-// sMap
+// GLOBAL: SWBF2 0x01eafff0
 PblHashTable<ActiveRegion, 64> sMap;
 
 // SYNTHETIC: SWBF2 0x00402170
@@ -210,10 +203,7 @@ MemoryPool ActiveRegion::sMemoryPool("ActiveRegion", 0x68);
 ActiveRegion::~ActiveRegion()
 {
     DeactivateThread();
-    if (sMap.Remove(mRegion.mId))
-    {
-        --sMapNumEntries;
-    }
+    sMap.Remove(mRegion.mId);
 }
 
 // FUNCTION: SWBF2 0x00437660
@@ -282,7 +272,6 @@ PblBitVector<600> ActiveRegion::GetPlayersInRegion()
 void Cleanup()
 {
     sMap.Clear();
-    sMapNumEntries = 0;
 }
 
 // FUNCTION: SWBF2 0x00437ab0

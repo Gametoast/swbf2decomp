@@ -158,8 +158,6 @@ public:
     static PblHash rttiHashEntityLightClass;
     static const char rttiNameEntityLightClass[];
 
-    static int sLightClassTableNumEntries;
-
     static void Reset();
     static PblHashTable<EntityLightClass, 32> sLightClassTable;
 

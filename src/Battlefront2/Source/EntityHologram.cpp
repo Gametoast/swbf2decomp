@@ -936,10 +936,7 @@ EntityHologramClass::EntityHologramClass(EntityHologramClass* pParent, unsigned 
     m_fTurnOnDistance = pParent->m_fTurnOnDistance;
     m_eType = pParent->m_eType;
 
-    if (sHologramClassTable.Store(uHash, this))
-    {
-        ++sHologramClassTableNumEntries;
-    }
+    sHologramClassTable.Store(uHash, this);
 }
 
 // FUNCTION: SWBF2 0x004c0500
@@ -1056,15 +1053,10 @@ EntityClass* EntityHologramClass::Derive(unsigned int uHash)
 void EntityHologramClass::Reset()
 {
     sHologramClassTable.Clear();
-    sHologramClassTableNumEntries = 0;
 }
-
-// GLOBAL: SWBF2 0x01ebbcc8
-int EntityHologramClass::sHologramClassTableNumEntries;
 
 // SYNTHETIC: SWBF2 0x00402b60
 // `dynamic initializer for 'EntityHologramClass::sHologramClassTable''
 
-// GLOBAL: SWBF2 0x01ebbccc
-// EntityHologramClass::sHologramClassTable
+// GLOBAL: SWBF2 0x01ebbcc8
 PblHashTable<EntityHologramClass, 32> EntityHologramClass::sHologramClassTable;

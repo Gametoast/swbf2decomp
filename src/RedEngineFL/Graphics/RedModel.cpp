@@ -27,8 +27,7 @@ extern bool sLoadNestedLevels;
 // SYNTHETIC: SWBF2 0x00407cc0
 // `dynamic initializer for 'RedModel::_HashTable''
 
-// GLOBAL: SWBF2 0x0093ebdc
-// RedModel::_HashTable
+// GLOBAL: SWBF2 0x0093ebd8
 PblHashTable<RedModel, 1024> RedModel::_HashTable;
 
 // GLOBAL: SWBF2 0x007deee0
@@ -37,17 +36,10 @@ bool RedModel::pc_shareBuffers = true;
 // GLOBAL: SWBF2 0x007deee8
 static float sfShadowDistance = 30.0f;
 
-// GLOBAL: SWBF2 0x0093ebd8
-int RedModel_HashTableNumEntries;
-
 void RedModel::ClearAll()
 {
     _HashTable.Clear();
-    RedModel_HashTableNumEntries = 0;
 }
-
-// GLOBAL: SWBF2 0x009a0a28
-int RedSkeleton_HashTableNumEntries;
 
 // FUNCTION: SWBF2 0x006c3d60
 RedModel::RedModel()
@@ -95,9 +87,9 @@ RedModel::~RedModel()
 // FUNCTION: SWBF2 0x006c3e40
 RedSkeleton::~RedSkeleton()
 {
-    if (m_uiNameHash && _HashTable.Remove(m_uiNameHash))
+    if (m_uiNameHash)
     {
-        --RedSkeleton_HashTableNumEntries;
+        _HashTable.Remove(m_uiNameHash);
     }
     if (m_amDefaultPose)
     {
@@ -520,10 +512,7 @@ RedModel* RedModel::Read(PblFileChunk& chunk)
         }
         return _HashTable.Find(pModel->_uiNameHash);
     }
-    if (_HashTable.Store(pModel->_uiNameHash, pModel))
-    {
-        ++RedModel_HashTableNumEntries;
-    }
+    _HashTable.Store(pModel->_uiNameHash, pModel);
     return pModel;
 }
 

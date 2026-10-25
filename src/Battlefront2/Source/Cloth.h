@@ -175,8 +175,6 @@ public:
     static void Cleanup();
 
     static MemoryPool sMemoryPool;
-
-    static int s_clothDataHashTableNumEntries;
     static PblHashTable<ClothData, 64> s_clothDataHashTable;
 
     void _Read(PblFileChunk& chunk);

@@ -23,6 +23,8 @@ public:
 
         bool IsAttached() const { return mNext != 0; }
 
+        void* GetObjectA(const PblListSingle* pList, unsigned int uiOffset) const;
+
         Node* GetNext() const { return mNext; }
 
         Node* GetPrevious() const
@@ -110,4 +112,8 @@ public:
 
     Node mHead;
 };
- 
+
+inline void* PblListSingle::Node::GetObjectA(const PblListSingle* pList, unsigned int uiOffset) const
+{
+    return this == pList->GetTerminator() ? 0 : (char*)this - uiOffset;
+}

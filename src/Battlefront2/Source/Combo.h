@@ -589,8 +589,6 @@ public:
     const State* GetState(unsigned int i) const { return &m_aState[i]; }
 
     static MemoryPool sMemoryPool;
-
-    static int s_ComboTableNumEntries;
     static PblHashTable<const Combo, 32> s_ComboTable;
 
     void InitDefault(unsigned int uiNameHash);

@@ -71,8 +71,7 @@ void Red3DModelElementLite::RenderUsingContext(const PblMatrix& mContext,
     unsigned int uiFlags = GetRenderFlags();
 
     RedPose pose;
-    pose._Table.Clear();
-    pose._iNumEntries = 0;
+    pose.Clear();
     pose.BindToSkeleton(0);
 
     PblMatrix mWorld = mContext;

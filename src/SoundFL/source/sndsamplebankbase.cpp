@@ -442,8 +442,8 @@ SampleBankBase* __cdecl SampleBankBase::FindByHashID(unsigned int uiHashID)
     for (PblListSingle::Itor it(smSampleBankList); it.GetNode() != smSampleBankList.GetTerminator(); ++it)
     {
         SampleBankBase* pBank =
-            (SampleBankBase*)((char*)it.GetNode() - offsetof(SampleBankBase, mNode));
-        if (pBank->mHashID == uiHashID)
+            (SampleBankBase*)it.GetNode()->GetObjectA(&smSampleBankList, offsetof(SampleBankBase, mNode));
+        if (uiHashID == pBank->mHashID)
         {
             return pBank;
         }

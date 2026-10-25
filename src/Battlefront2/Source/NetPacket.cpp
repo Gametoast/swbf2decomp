@@ -832,17 +832,17 @@ bool NetPacket::Read(unsigned short& value)
 }
 
 // FUNCTION: SWBF2 0x005d9570
-void __stdcall InsertLatencyPacketBefore(NetPacket* pBefore, NetPacket* pNew)
+void NetPktGroup::InsertBefore(NetPacket* pBefore, NetPacket* pNew)
 {
     pNew->mPrevPkt = pBefore->mPrevPkt;
     int iBefore = pBefore->GetNum();
     pNew->mNextPkt = (short)iBefore;
     int iNew = pNew->GetNum();
     pBefore->mPrevPkt = (short)iNew;
-    ++latencyQueue.pktCount;
-    if (latencyQueue.firstPkt == iBefore)
+    ++pktCount;
+    if (firstPkt == iBefore)
     {
-        latencyQueue.firstPkt = iNew;
+        firstPkt = iNew;
     }
     else
     {

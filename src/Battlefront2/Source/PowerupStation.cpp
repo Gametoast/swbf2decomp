@@ -220,7 +220,7 @@ void PowerupStationClass::SetProperty(unsigned int uProperty, const char* pszVal
         mIdleWobbleHash = PblTEMPHash(pszValue);
         RedPose pose;
         mModel->GetRedModel(0)->SetupPose(pose);
-        const PblMatrix* pMatrix = pose._Table.Find(mIdleWobbleHash);
+        const PblMatrix* pMatrix = pose.Find(mIdleWobbleHash);
         if (pMatrix)
         {
             mBaseWobbleMatrix = *pMatrix;
@@ -575,7 +575,7 @@ bool PowerupStation::Update(float fDeltaTime)
     PblMatrix* pWobbleMatrix = 0;
     if (mClass->mIdleWobbleHash)
     {
-        const PblMatrix* pMatrix = mPose._Table.Find(mClass->mIdleWobbleHash);
+        const PblMatrix* pMatrix = mPose.Find(mClass->mIdleWobbleHash);
         if (pMatrix)
         {
             pWobbleMatrix = &mProceduralMatrix[0];
@@ -746,7 +746,7 @@ bool PowerupStation::Update(float fDeltaTime)
             {
                 continue;
             }
-            const PblMatrix* pNode = mPose._Table.Find(uHash);
+            const PblMatrix* pNode = mPose.Find(uHash);
             if (!pNode || iNumProcedural >= 5)
             {
                 continue;
@@ -787,7 +787,7 @@ bool PowerupStation::Update(float fDeltaTime)
         {
             return true;
         }
-        const PblMatrix* pNode = mPose._Table.Find(uSpinHash);
+        const PblMatrix* pNode = mPose.Find(uSpinHash);
         if (!pNode || iNumProcedural >= 5)
         {
             return true;

@@ -37,12 +37,6 @@ public:
 
     static MemoryPool sMemoryPool;
 };
-
- 
- 
- 
-
-extern int sMapNumEntries;
 extern PblHashTable<ActiveRegion, 64> sMap;
 
 void Cleanup();

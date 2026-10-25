@@ -113,7 +113,6 @@ bool ZephyrSkeletonShared::Open(PblMemChunk& kChunk, int iNumJoints, const DataO
     m_uNumJoints = (unsigned int)iNumJoints;
 
     m_kHashCRC2Joint.Clear();
-    m_kHashCRC2JointNumEntries = 0;
 
     JointRelatives* pRel = new JointRelatives[iNumJoints];
 
@@ -171,10 +170,7 @@ bool ZephyrSkeletonShared::Open(PblMemChunk& kChunk, int iNumJoints, const DataO
 
     for (i = 0; i < iNumJoints; i++)
     {
-        if (m_kHashCRC2Joint.Store(m_pJoints[i].m_kCrc, (unsigned int*)(i + 1)))
-        {
-            ++m_kHashCRC2JointNumEntries;
-        }
+        m_kHashCRC2Joint.Store(m_pJoints[i].m_kCrc, (unsigned int*)(i + 1));
     }
 
     if (uNumRoots != 1)

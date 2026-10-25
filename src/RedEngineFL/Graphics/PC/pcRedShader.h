@@ -244,11 +244,8 @@ FACTORY_SLOTS = 256
 }
 ;
 
-    // GLOBAL: SWBF2 0x007f5054
     static PblHashTable<const pcRedShader, FACTORY_SLOTS> s_ShaderFactoryByRenderType;
 
-    // GLOBAL: SWBF2 0x007f5050
-    static int s_ShaderFactoryByRenderTypeNumEntries;
 
 protected:
 

@@ -253,22 +253,15 @@ PABaseKey sPAKeys[255];
 // GLOBAL: SWBF2 0x01efd060
 // sPAAnims
 PAAnimationData sPAAnims[255];
-
-// GLOBAL: SWBF2 0x01efce10
-int PAAnimation::_HashTableNumEntries;
 // SYNTHETIC: SWBF2 0x00405fe0
 // `dynamic initializer for 'PAAnimation::_HashTable''
 
-// GLOBAL: SWBF2 0x01efce14
-// PAAnimation::_HashTable
+// GLOBAL: SWBF2 0x01efce10
 PblHashTable<PAAnimation, 32> PAAnimation::_HashTable;
-// GLOBAL: SWBF2 0x01efcf40
-int PAAnimationGroup::_HashTableNumEntries;
 // SYNTHETIC: SWBF2 0x00406020
 // `dynamic initializer for 'PAAnimationGroup::_HashTable''
 
-// GLOBAL: SWBF2 0x01efcf44
-// PAAnimationGroup::_HashTable
+// GLOBAL: SWBF2 0x01efcf40
 PblHashTable<PAAnimationGroup, 32> PAAnimationGroup::_HashTable;
 
 // GLOBAL: SWBF2 0x01eaef3c
@@ -370,9 +363,9 @@ void PAAnimation::Read(PblFileChunk& chunk)
             }
             pAnim->SetAnimationInfo(bLoop, bLocalTranslation, fTotalTime);
             unsigned int uiHash = PblHash(pcName);
-            if (!_HashTable.Find(uiHash) && _HashTable.Store(uiHash, pAnim))
+            if (!_HashTable.Find(uiHash))
             {
-                ++_HashTableNumEntries;
+                _HashTable.Store(uiHash, pAnim);
             }
         }
     }
@@ -795,9 +788,9 @@ void PAAnimationGroup::Read(PblFileChunk& chunk)
             {
                 return;
             }
-            if (!_HashTable.Find(PblHash(pcName)) && _HashTable.Store(PblHash(pcName), pGroup))
+            if (!_HashTable.Find(PblHash(pcName)))
             {
-                ++_HashTableNumEntries;
+                _HashTable.Store(PblHash(pcName), pGroup);
             }
             *pGroup->mActive = child._pFile->Read8() != 0;
             pGroup->mStopWhenControlled = child._pFile->Read8() != 0;
@@ -1112,10 +1105,8 @@ void PAManager::Destroy()
     sHostInstance = NULL;
     sNextAvailableKey = 0;
     PAAnimation::_HashTable.Clear();
-    PAAnimation::_HashTableNumEntries = 0;
     sNextAvailableAnim = 0;
     PAAnimationGroup::_HashTable.Clear();
-    PAAnimationGroup::_HashTableNumEntries = 0;
     PAAnimationGroup::mNumHierarchies = 0;
 }
 

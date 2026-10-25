@@ -59,25 +59,16 @@ pcRedVertexBuffer::~pcRedVertexBuffer()
 // GLOBAL: SWBF2 0x007df16c
 PblList<pcRedVertexBuffer> s_nonSharedVertexBufferList;
 
-// GLOBAL: SWBF2 0x00960f58
-
-int sStaticVertexBufferCount;
-
 // SYNTHETIC: SWBF2 0x00407e60
 // `dynamic initializer for 'sStaticVertexBufferHashTable''
 
-// GLOBAL: SWBF2 0x00960f5c
-// sStaticVertexBufferHashTable
+// GLOBAL: SWBF2 0x00960f58
 PblHashTable<PblList<pcRedVertexBuffer>, 1024> sStaticVertexBufferHashTable;
-// GLOBAL: SWBF2 0x00962f68
-
-int sDynamicVertexBufferCount;
 
 // SYNTHETIC: SWBF2 0x00407e40
 // `dynamic initializer for 'sDynamicVertexBufferHashTable''
 
-// GLOBAL: SWBF2 0x00962f6c
-// sDynamicVertexBufferHashTable
+// GLOBAL: SWBF2 0x00962f68
 PblHashTable<PblList<pcRedVertexBuffer>, 1024> sDynamicVertexBufferHashTable;
 
 // FUNCTION: SWBF2 0x006ca790
@@ -139,10 +130,8 @@ void pcRedVertexBuffer::Cleanup()
     }
 
     sDynamicVertexBufferHashTable.Clear();
-    sDynamicVertexBufferCount = 0;
 
     sStaticVertexBufferHashTable.Clear();
-    sStaticVertexBufferCount = 0;
 }
 
 // FUNCTION: SWBF2 0x006ca7d0
@@ -212,17 +201,11 @@ pcRedVertexBuffer* pcRedVertexBuffer::Create(unsigned int uiNumVertices,
 
     if (bStatic)
     {
-        if (sStaticVertexBufferHashTable.Store(uiVertexSize, pNewList))
-        {
-            sStaticVertexBufferCount++;
-        }
+        sStaticVertexBufferHashTable.Store(uiVertexSize, pNewList);
     }
     else
     {
-        if (sDynamicVertexBufferHashTable.Store(uiVertexSize, pNewList))
-        {
-            sDynamicVertexBufferCount++;
-        }
+        sDynamicVertexBufferHashTable.Store(uiVertexSize, pNewList);
     }
 
     pBuffer->AddRef();
@@ -233,10 +216,8 @@ pcRedVertexBuffer* pcRedVertexBuffer::Create(unsigned int uiNumVertices,
 void pcRedVertexBuffer::Init()
 {
     sDynamicVertexBufferHashTable.Clear();
-    sDynamicVertexBufferCount = 0;
 
     sStaticVertexBufferHashTable.Clear();
-    sStaticVertexBufferCount = 0;
 
     s_nonSharedVertexBufferList.Clear();
 

@@ -54,14 +54,10 @@ extern PblMatrix gMatrixIdentity;
 // GLOBAL: SWBF2 0x01e51e26
 bool FLEffect::s_bInitRender;
 
-// GLOBAL: SWBF2 0x01ebd020
-int FLEffect::s_EffectFactoriesNumEntries;
-
 // SYNTHETIC: SWBF2 0x004038f0
 // `dynamic initializer for 'FLEffect::s_EffectFactories''
 
-// GLOBAL: SWBF2 0x01ebd024
-// FLEffect::s_EffectFactories
+// GLOBAL: SWBF2 0x01ebd020
 PblHashTable<FLEffect, 32> FLEffect::s_EffectFactories;
 
 // SYNTHETIC: SWBF2 0x004038d0
@@ -73,14 +69,10 @@ PblHashTable<FLEffect, 32> FLEffect::s_EffectFactories;
 // FLEffect::_Thread
 FLEffect::FLEffectThread FLEffect::_Thread;
 
-// GLOBAL: SWBF2 0x01ebd140
-int FLEffect::s_EffectClassesNumEntries;
-
 // SYNTHETIC: SWBF2 0x00403910
 // `dynamic initializer for 'FLEffect::s_EffectClasses''
 
-// GLOBAL: SWBF2 0x01ebd144
-// FLEffect::s_EffectClasses
+// GLOBAL: SWBF2 0x01ebd140
 PblHashTable<FLEffectClass, 256> FLEffect::s_EffectClasses;
 
 // SYNTHETIC: SWBF2 0x00403930
@@ -154,7 +146,7 @@ void FLEffect::CleanupAll()
         (*i).Cleanup();
     }
 
-    while (s_EffectClassesNumEntries)
+    while (s_EffectClasses.GetNumEntries())
     {
         FLEffectClass* pClass = s_EffectClasses.Begin();
         if (pClass)
@@ -163,7 +155,6 @@ void FLEffect::CleanupAll()
         }
     }
     s_EffectClasses.Clear();
-    s_EffectClassesNumEntries = 0;
 
     ParticleEmitterEffect::Destroy();
     LightBeamEffect::Destroy();
@@ -192,7 +183,6 @@ void FLEffect::CleanupAll()
     EntityLightFXParser::Destroy();
 
     s_EffectFactories.Clear();
-    s_EffectFactoriesNumEntries = 0;
 }
 
 // FUNCTION: SWBF2 0x00526db0
@@ -233,10 +223,7 @@ void FLEffect::Read(PblFileChunk& chunk)
                     if (!s_EffectClasses.Find(uiName))
                     {
                         pClass->SetClassName(uiName);
-                        if (s_EffectClasses.Store(uiName, pClass))
-                        {
-                            ++s_EffectClassesNumEntries;
-                        }
+                        s_EffectClasses.Store(uiName, pClass);
                     }
                 }
             }
@@ -247,10 +234,7 @@ void FLEffect::Read(PblFileChunk& chunk)
 // FUNCTION: SWBF2 0x00526f50
 void FLEffect::RegisterManager(FLEffect* pEffect, unsigned int uiName)
 {
-    if (s_EffectFactories.Store(uiName, pEffect))
-    {
-        ++s_EffectFactoriesNumEntries;
-    }
+    s_EffectFactories.Store(uiName, pEffect);
 }
 
 // FUNCTION: SWBF2 0x00526f70
@@ -261,10 +245,7 @@ void FLEffect::UnregisterManager(FLEffect* pEffect)
     {
         if (i == pEffect)
         {
-            if (s_EffectFactories.Remove(i.GetKey()))
-            {
-                --s_EffectFactoriesNumEntries;
-            }
+            s_EffectFactories.Remove(i.GetKey());
             return;
         }
     }
@@ -317,9 +298,9 @@ bool FLEffect::FLEffectThread::Update(float fDeltaTime)
 // FUNCTION: SWBF2 0x005270d0
 void FLEffect::Unregister(unsigned int uiClassName)
 {
-    if (s_EffectClasses.Find(uiClassName) && s_EffectClasses.Remove(uiClassName))
+    if (s_EffectClasses.Find(uiClassName))
     {
-        --s_EffectClassesNumEntries;
+        s_EffectClasses.Remove(uiClassName);
     }
 }
 
@@ -475,7 +456,7 @@ void FLEffectObject::AttachEffectToObject(const EntityGeometry* pObject, unsigne
     {
         if (pObject->GetPose())
         {
-            m_pmAttachedToMatrix = const_cast<PblMatrix*>(pObject->GetPose()->_Table.Find(uiBone));
+            m_pmAttachedToMatrix = const_cast<PblMatrix*>(pObject->GetPose()->Find(uiBone));
         }
 
         if (!m_pmAttachedToMatrix && pObject->GetModel() && pObject->GetModel()->GetRedModel(0))

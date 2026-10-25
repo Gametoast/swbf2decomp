@@ -84,7 +84,7 @@ void Sound::Close()
 
 // GLOBAL: SWBF2 0x007e36dc
 // Sound::Properties::smFreeList
-FreeList Sound::Properties::smFreeList(sizeof(Sound::Properties), 1, 8, 1);
+FreeList Sound::Properties::smFreeList(sizeof(Sound::Properties), 1, true, 8);
 
 // SYNTHETIC: SWBF2 0x0040bc40
 // `dynamic initializer for 'Snd::Sound::Properties::smPropertyList''
@@ -725,7 +725,7 @@ const Sound::Properties* __cdecl Sound::Properties::FindByHashID(unsigned int ui
          pNode != &smPropertyList.mHead; pNode = pNode->mNext)
     {
         const Properties* const pProps =
-            (const Properties*)((char*)pNode - offsetof(Properties, mNode));
+            (const Properties*)pNode->GetObjectA(&smPropertyList, offsetof(Properties, mNode));
         if (pProps->mHashID == uiHashID)
         {
             return pProps;

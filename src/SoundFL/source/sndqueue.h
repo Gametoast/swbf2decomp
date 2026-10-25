@@ -9,7 +9,7 @@ public:
     QueueBase();
     ~QueueBase();
 
-    void* Get(unsigned int uStride, char* pData, unsigned int uCapacity);
+    void* Get(unsigned int uiElementSize, void* const pElements, unsigned int uiCapacity);
 
     bool IsFull() const;
 

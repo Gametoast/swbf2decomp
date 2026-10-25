@@ -21,7 +21,7 @@ const char FoleyFXSoldier::rttiNameFoleyFXSoldier[] = "FoleyFXSoldier";
 
 // GLOBAL: SWBF2 0x007ec1a4
 // FoleyFXSoldier::smFreeList
-Snd::FreeList FoleyFXSoldier::smFreeList(sizeof(FoleyFXSoldier), 4, 8, 1);
+Snd::FreeList FoleyFXSoldier::smFreeList(sizeof(FoleyFXSoldier), 4, true, 8);
 
 
 

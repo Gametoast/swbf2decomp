@@ -50,8 +50,6 @@ public:
 protected:
     float mRate;
 public:
-
-    static int sMapNumEntries;
     static PblHashTable<Timer, 64> sMap;
     static MemoryPool sMemoryPool;
 };

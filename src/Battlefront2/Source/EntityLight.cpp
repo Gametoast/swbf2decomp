@@ -53,13 +53,10 @@ const char EntityLightClass::rttiNameEntityLightClass[] = "EntityLightClass";
 // GLOBAL: SWBF2 0x01ebbe38
 // EntityLight::sMemoryPool
 MemoryPool EntityLight::sMemoryPool("EntityLight", 0x2e0);
-// GLOBAL: SWBF2 0x01ebbe88
-int EntityLightClass::sLightClassTableNumEntries;
 // SYNTHETIC: SWBF2 0x00402c20
 // `dynamic initializer for 'EntityLightClass::sLightClassTable''
 
-// GLOBAL: SWBF2 0x01ebbe8c
-// EntityLightClass::sLightClassTable
+// GLOBAL: SWBF2 0x01ebbe88
 PblHashTable<EntityLightClass, 32> EntityLightClass::sLightClassTable;
 
 // FUNCTION: SWBF2 0x004ce920
@@ -1108,10 +1105,7 @@ EntityLightClass::EntityLightClass(EntityLightClass* pParent, unsigned int uHash
         _puiProjectedTextures = 0;
     }
 
-    if (sLightClassTable.Store(uHash, this))
-    {
-        ++sLightClassTableNumEntries;
-    }
+    sLightClassTable.Store(uHash, this);
 }
 
 // FUNCTION: SWBF2 0x004ce010
@@ -1481,7 +1475,6 @@ EntityClass* EntityLightClass::Derive(unsigned int uHash)
 void EntityLightClass::Reset()
 {
     sLightClassTable.Clear();
-    sLightClassTableNumEntries = 0;
 }
 
 // FUNCTION: SWBF2 0x004ceb20

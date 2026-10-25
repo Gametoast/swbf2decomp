@@ -23,14 +23,10 @@ RedTexture* s_systemFontTexture;
 // GLOBAL: SWBF2 0x0099843c
 CustomFontData* s_cfdata;
 
-// GLOBAL: SWBF2 0x00998450
-int RedFont::s_fontHashTableNumEntries;
-
 // SYNTHETIC: SWBF2 0x00408440
 // `dynamic initializer for 'RedFont::s_fontHashTable''
 
-// GLOBAL: SWBF2 0x00998454
-// RedFont::s_fontHashTable
+// GLOBAL: SWBF2 0x00998450
 PblHashTable<RedFont, 16> RedFont::s_fontHashTable;
 
 // GLOBAL: SWBF2 0x00998440
@@ -2265,10 +2261,7 @@ RedFixedWidthFont::RedFixedWidthFont(const char* pcName, const RedTexture* pText
 
     if (!s_fontHashTable.Find(m_crcName))
     {
-        if (s_fontHashTable.Store(m_crcName, this))
-        {
-            s_fontHashTableNumEntries++;
-        }
+        s_fontHashTable.Store(m_crcName, this);
     }
 }
 
@@ -2367,10 +2360,7 @@ void RedFont::Read(PblFileChunk& chunk)
         return;
     }
 
-    if (s_fontHashTable.Store(pFont->m_crcName, pFont))
-    {
-        s_fontHashTableNumEntries++;
-    }
+    s_fontHashTable.Store(pFont->m_crcName, pFont);
 }
 
 // FUNCTION: SWBF2 0x006d9e30
@@ -2630,7 +2620,6 @@ void RedFont::Cleanup()
         delete (RedFont*)i;
     }
     s_fontHashTable.Clear();
-    s_fontHashTableNumEntries = 0;
 
     delete s_systemFontTexture;
 

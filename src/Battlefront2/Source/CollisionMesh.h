@@ -125,8 +125,6 @@ public:
     // CollisionMesh::`scalar deleting destructor'
 
     static PblHashTable<CollisionMesh, 1024> _HashTable;
-
-    static int _HashTableNumEntries;
     static void ClearAll();
 
     static const CollisionMesh* Find(unsigned int uHash);

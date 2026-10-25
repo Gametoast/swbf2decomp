@@ -15,7 +15,7 @@ namespace Snd
 
 // GLOBAL: SWBF2 0x007e39b8
 // ParameterGraph::ControlPoint::smFreeList
-FreeList ParameterGraph::ControlPoint::smFreeList(12, 1, 16, 1);
+FreeList ParameterGraph::ControlPoint::smFreeList(12, 1, true, 16);
 
 // SYNTHETIC: SWBF2 0x0040c3e0
 // `dynamic initializer for 'Snd::ParameterGraph::smFreeList''
@@ -24,7 +24,7 @@ FreeList ParameterGraph::ControlPoint::smFreeList(12, 1, 16, 1);
 
 // GLOBAL: SWBF2 0x007e39d4
 // ParameterGraph::smFreeList
-FreeList ParameterGraph::smFreeList(16, 1, 8, 1);
+FreeList ParameterGraph::smFreeList(16, 1, true, 8);
 
 // SYNTHETIC: SWBF2 0x0040c400
 // `dynamic initializer for 'Snd::ParameterGraph::smParameterGraphs''
@@ -79,7 +79,7 @@ const ParameterGraph* __cdecl ParameterGraph::FindByHashID(unsigned int uiHashID
     for (PblListSingle::Node* pLink = smParameterGraphs.mHead.mNext; pLink != &smParameterGraphs.mHead;
          pLink = pLink->mNext)
     {
-        const ParameterGraph* const pGraph = (const ParameterGraph*)((char*)pLink - offsetof(ParameterGraph, mNode));
+        const ParameterGraph* const pGraph = (const ParameterGraph*)pLink->GetObjectA(&smParameterGraphs, offsetof(ParameterGraph, mNode));
         if (pGraph->mHashID == uiHashID)
         {
             return pGraph;

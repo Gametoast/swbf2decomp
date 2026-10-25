@@ -30,7 +30,7 @@ static inline Bus* BusFromNode(PblListSingle::Node* pNode)
 
 // GLOBAL: SWBF2 0x007e325c
 // Bus::smFreeList
-FreeList Bus::smFreeList(sizeof(Bus), 1, 8, 1);
+FreeList Bus::smFreeList(sizeof(Bus), 1, true, 8);
 
 // SYNTHETIC: SWBF2 0x0040b470
 // `dynamic initializer for 'Snd::Bus::smRootBus''

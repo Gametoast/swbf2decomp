@@ -135,7 +135,7 @@ void SoundStream::StopAll()
 
 // GLOBAL: SWBF2 0x007e3568
 // SoundStream::Properties::smFreeList
-FreeList SoundStream::Properties::smFreeList(sizeof(SoundStream::Properties), 1, 8, 1);
+FreeList SoundStream::Properties::smFreeList(sizeof(SoundStream::Properties), 1, true, 8);
 
 // SYNTHETIC: SWBF2 0x0040b9a0
 // `dynamic initializer for 'Snd::SoundStream::Properties::smPropertyList''
@@ -153,7 +153,7 @@ PblListSingle SoundStream::Properties::smPropertyList;
 
 // GLOBAL: SWBF2 0x007e3588
 // SoundStream::smFreeList
-FreeList SoundStream::smFreeList(0xcc, 1, 4, 1);
+FreeList SoundStream::smFreeList(0xcc, 1, true, 4);
 
 // SYNTHETIC: SWBF2 0x0040b950
 // `dynamic initializer for 'Snd::SoundStream::smList''
@@ -640,7 +640,7 @@ const SoundStream::Properties* __cdecl SoundStream::Properties::FindByHashID(uns
          pNode != &smPropertyList.mHead; pNode = pNode->mNext)
     {
         const Properties* const pProps =
-            (const Properties*)((char*)pNode - offsetof(Properties, mNode));
+            (const Properties*)pNode->GetObjectA(&smPropertyList, offsetof(Properties, mNode));
         if (pProps->mHashID == uiHashID)
         {
             return pProps;

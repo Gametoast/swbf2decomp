@@ -9,7 +9,6 @@
 extern int dragLatency;
 extern int dragJitter;
 extern int gDebugCount;
-void __stdcall InsertLatencyPacketBefore(NetPacket* pBefore, NetPacket* pNew);
 NetPacket* PopLocal();
 void __fastcall QueueLossPacket(NetPacket* pPacket);
 
@@ -317,15 +316,23 @@ static void FreeAllPackets()
     localQueue.Free();
 }
 
+// FUNCTION: SWBF2 0x005b3f50
+static void ResetTime()
+{
+    thisDrag = 0.0f;
+    lastDrag = 0.0f;
+    dragDt = 0.0f;
+    for (unsigned int i = 0; i < 3; ++i)
+    {
+        bandwidthAvailTime[i] = 0.0f;
+    }
+}
+
 // FUNCTION: SWBF2 0x005b3ad0
 void NetDrag::Reset()
 {
     FreeAllPackets();
-    thisDrag = 0.0f;
-    lastDrag = 0.0f;
-    dragDt = 0.0f;
-    bandwidthAvailTime[0] = bandwidthAvailTime[1] = 0.0f;
-    bandwidthAvailTime[2] = 0.0f;
+    ResetTime();
 }
 
 // FUNCTION: SWBF2 0x005b39f0
@@ -351,6 +358,22 @@ NetPacket* NetDrag::ReceiveLocal()
     return PopLocal();
 }
 
+// FUNCTION: SWBF2 0x005b3f90
+static void AddWithPriority(NetPktGroup& queue, NetPacket* pPacket)
+{
+    const float fTime = *(float*)pPacket->mData;
+    for (NetPacket* pCurrent = queue.GetFront(); pCurrent;
+         pCurrent = NetPacket::Get(pCurrent->mNextPkt))
+    {
+        if (*(float*)pCurrent->mData > fTime)
+        {
+            queue.InsertBefore(pCurrent, pPacket);
+            return;
+        }
+    }
+    queue.PushBack(pPacket);
+}
+
 // FUNCTION: SWBF2 0x005b3cf0
 void AddToLatency(NetPacket* pPacket, float fElapsed)
 {
@@ -363,19 +386,7 @@ void AddToLatency(NetPacket* pPacket, float fElapsed)
         ++gDebugCount;
     }
 
-    NetPacket* pBefore = latencyQueue.GetFront();
-    while (pBefore && *(float*)pBefore->mData <= *(float*)pPacket->mData)
-    {
-        pBefore = NetPacket::Get(pBefore->mNextPkt);
-    }
-    if (pBefore)
-    {
-        InsertLatencyPacketBefore(pBefore, pPacket);
-    }
-    else
-    {
-        latencyQueue.PushBack(pPacket);
-    }
+    AddWithPriority(latencyQueue, pPacket);
 }
 
 // FUNCTION: SWBF2 0x005b3d90

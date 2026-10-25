@@ -178,7 +178,6 @@ public:
     PblMatrix m_mLocal;
 
     static PblHashTable<RedInterfaceElement, 32768> sAllObjectsList;
-    static int sAllObjectsListNumEntries;
     static void Reset();
 
     static unsigned int s_uiUnnamedCRC;

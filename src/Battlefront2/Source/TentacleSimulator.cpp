@@ -226,7 +226,7 @@ void TentacleSimulator::DoTentacles(RedPose* pPose, const PblMatrix& mParent,
         mInternalTimer = 0.0f;
     }
 
-    if (!pPose->_Table.Find(TENTACLE_NAMES[0]))
+    if (!pPose->Find(TENTACLE_NAMES[0]))
     {
         return;
     }
@@ -236,7 +236,7 @@ void TentacleSimulator::DoTentacles(RedPose* pPose, const PblMatrix& mParent,
     {
         for (int b = 0; b < mBonesPerTentacle; b++)
         {
-            apBones[t][b] = pPose->_Table.Find(TENTACLE_NAMES[t * mBonesPerTentacle + b]);
+            apBones[t][b] = pPose->Find(TENTACLE_NAMES[t * mBonesPerTentacle + b]);
         }
     }
 
@@ -353,14 +353,8 @@ void TentacleSimulator::UpdatePose(RedPose* pPose, const PblMatrix& mParent,
             m.m[1][3] = 0.0f;
 
             unsigned int uiName = TENTACLE_NAMES[mBonesPerTentacle * t + b];
-            if (pPose->_Table.Remove(uiName))
-            {
-                pPose->_iNumEntries--;
-            }
-            if (pPose->_Table.Store(uiName, &m))
-            {
-                pPose->_iNumEntries++;
-            }
+            pPose->Remove(uiName);
+            pPose->Store(uiName, &m);
         }
     }
 }
@@ -475,7 +469,7 @@ void TentacleSimulator::UpdatePositions(float fDeltaTime, const PblVector3& vVel
 // FUNCTION: SWBF2 0x006569c0
 void TentacleSimulator::EnforceCollisions(const RedPose* pPose, const PblMatrix& mParent)
 {
-    const PblMatrix* pBone = pPose->_Table.Find(0xe5b51072);
+    const PblMatrix* pBone = pPose->Find(0xe5b51072);
     if (!pBone)
     {
         return;

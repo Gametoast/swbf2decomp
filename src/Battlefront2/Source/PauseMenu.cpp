@@ -578,7 +578,7 @@ bool IsEnabled();
 
 namespace ObjectiveManager
 {
-int GetCurrentPopupText();
+unsigned int GetCurrentPopupText();
 }
 
 // FUNCTION: SWBF2 0x00620d20

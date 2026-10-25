@@ -267,7 +267,7 @@ bool Init(unsigned int uiFlags, bool bEnable)
 
 // GLOBAL: SWBF2 0x007e3504
 // Snd::SoundParameterized::Layer::smFreeList
-Snd::FreeList Snd::SoundParameterized::Layer::smFreeList(0x100, 1, 0xa0, 1);
+Snd::FreeList Snd::SoundParameterized::Layer::smFreeList(0x100, 1, true, 0xa0);
 
 namespace GameSoundEngine
 {

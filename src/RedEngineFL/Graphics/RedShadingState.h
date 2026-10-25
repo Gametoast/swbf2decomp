@@ -52,8 +52,6 @@ public:
     unsigned int m_uiRenderTypeHash;
     unsigned int m_uiNumValues;
     Value m_aValues[31];
-
-    int m_ParamHashNumEntries;
     PblHashTable<Value, 32> m_ParamHash;
 };
  

@@ -23,7 +23,7 @@ const char FoleyFXWalker::rttiNameFoleyFXWalker[] = "FoleyFXWalker";
 
 // GLOBAL: SWBF2 0x007ec1c0
 // FoleyFXWalker::smFreeList
-Snd::FreeList FoleyFXWalker::smFreeList(sizeof(FoleyFXWalker), 4, 8, 1);
+Snd::FreeList FoleyFXWalker::smFreeList(sizeof(FoleyFXWalker), 4, true, 8);
 
 
 

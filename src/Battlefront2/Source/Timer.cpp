@@ -9,14 +9,10 @@ namespace EventManager
 template <>
 void Event<Timer, char>::Callback::Trigger(Timer& item, char& param);
 }
-
-// GLOBAL: SWBF2 0x01f7ced8
-int Timer::sMapNumEntries;
 // SYNTHETIC: SWBF2 0x00406aa0
 // `dynamic initializer for 'Timer::sMap''
 
-// GLOBAL: SWBF2 0x01f7cedc
-// Timer::sMap
+// GLOBAL: SWBF2 0x01f7ced8
 PblHashTable<Timer, 64> Timer::sMap;
 // SYNTHETIC: SWBF2 0x00406ac0
 // `dynamic initializer for 'Timer::sMemoryPool''
@@ -88,10 +84,7 @@ Timer::~Timer()
     {
         HUD::GameEvents::SetObjectiveTimer(0);
     }
-    if (sMap.Remove(mId))
-    {
-        --sMapNumEntries;
-    }
+    sMap.Remove(mId);
     StringDB::Remove(mId);
 }
 
@@ -102,10 +95,7 @@ Timer::Timer(const char* pcName)
     mTime = 0.0f;
     mRate = 1.0f;
     StringDB::Store(mId, pcName);
-    if (sMap.Store(mId, this))
-    {
-        ++sMapNumEntries;
-    }
+    sMap.Store(mId, this);
 }
 
 // SYNTHETIC: SWBF2 0x006579b0
@@ -156,5 +146,4 @@ void Event<Timer, char>::Callback::Trigger(Timer& item, char& param)
 void Timer::Clear()
 {
     sMap.Clear();
-    sMapNumEntries = 0;
 }

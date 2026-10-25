@@ -13,6 +13,16 @@ PblList<HUD::ObjectiveList> gClientObjectiveLists;
 // GLOBAL: SWBF2 0x01eaed58
 PblList<HUD::ObjectiveList>* gObjectiveLists;
 
+// FUNCTION: SWBF2 0x005f6920
+unsigned int GetCurrentPopupText()
+{
+    if (gObjectiveLists && gObjectiveLists->GetCount() > 0)
+    {
+        return gObjectiveLists->GetFirst()->_pObject->GetCurrentPopupText();
+    }
+    return 0;
+}
+
 // FUNCTION: SWBF2 0x005f6940
 void CleanList(PblList<HUD::ObjectiveList>& list)
 {

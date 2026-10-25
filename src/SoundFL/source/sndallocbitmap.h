@@ -11,7 +11,16 @@ public:
     {
     public:
 
-        Handle() : mStartEntry(0), mNumEntries(0) {}
+        Handle() { Reset(); }
+
+        unsigned int GetAllocatedEntryIndex() const { return mStartEntry; }
+        unsigned int GetNumAllocatedEntries() const { return mNumEntries; }
+
+        void Reset()
+        {
+            mStartEntry = 0;
+            mNumEntries = 0;
+        }
 
         unsigned int mStartEntry;
         unsigned int mNumEntries;

@@ -548,13 +548,13 @@ EntityClass* EntityCarrierClass::Derive(unsigned int uHash)
     return (EntityClass*)new EntityCarrierClass(this, uHash);
 }
 
-extern unsigned int gCarrierBuildLimit;
-extern unsigned int gCarrierBuildCount;
+
+
 
 // FUNCTION: SWBF2 0x004978a0
 Entity* EntityCarrierClass::Build(const EntityDesc& desc)
 {
-    if (gCarrierBuildCount >= gCarrierBuildLimit)
+    if (EntityCarrier::sMemoryPool.IsFull())
     {
         return 0;
     }
@@ -806,8 +806,6 @@ void EntityFlyer::SetupCameraTrackMatrix(PblMatrix& rMatrix, float fDeltaTime)
     }
 }
 
-// GLOBAL: SWBF2 0x01ebb924
-unsigned int gCarrierBuildLimit = 0u;
 
-// GLOBAL: SWBF2 0x01ebb92c
-unsigned int gCarrierBuildCount = 0u;
+
+

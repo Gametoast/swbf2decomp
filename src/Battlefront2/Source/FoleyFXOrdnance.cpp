@@ -20,7 +20,7 @@ const char FoleyFXImpact::rttiNameFoleyFXImpact[] = "FoleyFXImpact";
 
 // GLOBAL: SWBF2 0x007ec188
 // FoleyFXImpact::smFreeList
-Snd::FreeList FoleyFXImpact::smFreeList(sizeof(FoleyFXImpact), 4, 8, 1);
+Snd::FreeList FoleyFXImpact::smFreeList(sizeof(FoleyFXImpact), 4, true, 8);
 
 
 

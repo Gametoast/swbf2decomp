@@ -774,32 +774,7 @@ void GameObjectGetNames(PblHandle<GameObject const>& hObject, const unsigned sho
 }
 namespace ObjectiveManager
 {
-    extern PblList<HUD::ObjectiveList>* gObjectiveLists;
-}
-
-namespace ObjectiveManager
-{
-
-// FUNCTION: SWBF2 0x005f6920
-int GetCurrentPopupText()
-{
-    PblList<HUD::ObjectiveList>* lists = ObjectiveManager::gObjectiveLists;
-    if (!lists || lists->_iCount <= 0)
-    {
-        return 0;
-    }
-    HUD::ObjectiveList* list = lists->_head._pNext->_pObject;
-    PblList<HUD::Objective>::Node* node = list->_objectives._head._pNext;
-    while (HUD::Objective* objective = node->_pObject)
-    {
-        if (objective->_state == HUD::Objective::ACTIVE && objective->_popupTextID)
-        {
-            return objective->_popupTextID;
-        }
-        node = node->_pNext;
-    }
-    return 0;
-}
+    unsigned int GetCurrentPopupText();
 }
 namespace PopupText
 {

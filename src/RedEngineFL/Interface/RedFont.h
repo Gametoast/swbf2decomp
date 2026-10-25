@@ -56,8 +56,6 @@ public:
 
     static void PostCommonInit();
     static void Cleanup();
-
-    static int s_fontHashTableNumEntries;
     static PblHashTable<RedFont, 16> s_fontHashTable;
 
     static bool sJapaneseOnly;

@@ -2674,10 +2674,7 @@ void Combo::InitDefault(unsigned int uiNameHash)
         return;
     }
 
-    if (s_ComboTable.Store(uiNameHash, this))
-    {
-        ++s_ComboTableNumEntries;
-    }
+    s_ComboTable.Store(uiNameHash, this);
 
     m_aState = 0;
     m_uiNumStates = 0;

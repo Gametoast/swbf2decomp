@@ -95,10 +95,7 @@ public:
 
     static PblHash rttiHashEntityDoor;
     static const char rttiNameEntityDoor[];
-
-    static int msHostDoorsNumEntries;
     static PblHashTable<EntityDoor, 32> msHostDoors;
-    static int msClientDoorsNumEntries;
     static PblHashTable<EntityDoor, 32> msClientDoors;
     static PblHashTable<EntityDoor, 32>* mspDoors;
     static PblHashTable<EntityDoor, 32>::Itor msDoorIter;

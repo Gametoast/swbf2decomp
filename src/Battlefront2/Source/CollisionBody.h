@@ -105,8 +105,6 @@ public:
     static CollisionBodyPrimitive* Find(unsigned int uHash);
 
     CollisionPrimitive mPrimitive;
-
-    static int _HashTableNumEntries;
     static PblHashTable<CollisionBodyPrimitive, 1024> _HashTable;
 };
  

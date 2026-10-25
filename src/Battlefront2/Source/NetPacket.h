@@ -91,6 +91,7 @@ public:
     int GetBytes();
 
     void PushBack(NetPacket* pPkt);
+    void InsertBefore(NetPacket* pBefore, NetPacket* pNew);
 
     NetPacket* PopFront();
 

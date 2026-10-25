@@ -2414,7 +2414,7 @@ void Weapon::Render(const PblMatrix& mat, const RedPose* pPose, const RedColor& 
     PblMatrix mBoneMatrix;
     if (pPose)
     {
-        const PblMatrix* pBone = pPose->_Table.Find(mRenderClass->mIsOffhand ? 0xB7EC1D31 : 0x2B960099);
+        const PblMatrix* pBone = pPose->Find(mRenderClass->mIsOffhand ? 0xB7EC1D31 : 0x2B960099);
         if (!pBone)
         {
             return;
@@ -2513,7 +2513,7 @@ void WeaponClass::Render(const PblMatrix& mMatrix, const RedPose* pPose, const R
     PblMatrix mBoneMatrix;
     if (pPose)
     {
-        const PblMatrix* pBone = pPose->_Table.Find(mIsOffhand ? 0xB7EC1D31 : 0x2B960099);
+        const PblMatrix* pBone = pPose->Find(mIsOffhand ? 0xB7EC1D31 : 0x2B960099);
         if (!pBone)
         {
             return;

@@ -20,7 +20,7 @@ namespace Snd
 
 // GLOBAL: SWBF2 0x007e3b5c
 // ObjectWeight::smFreeList
-FreeList ObjectWeight::smFreeList(sizeof(ObjectWeight), 1, 32, 1);
+FreeList ObjectWeight::smFreeList(sizeof(ObjectWeight), 1, true, 32);
 
 // FUNCTION: SWBF2 0x0074b880
 void __cdecl ObjectWeight::operator delete(void* p)

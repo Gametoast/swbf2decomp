@@ -23,20 +23,16 @@ bool AllocBitmap::Alloc(unsigned int uiNumEntries, Handle& handle)
             uiByte = 0;
         }
 
-        const unsigned char ucByte = mBitmap[uiByte];
-        if (ucByte == 0)
+        if (mBitmap[uiByte] == 0)
         {
             if (uiRun == 0)
             {
                 uiRunStart = uiByte * 8;
             }
             uiRun += 8;
-            if (uiRun > uiLargestRun)
-            {
-                uiLargestRun = uiRun;
-            }
+            uiLargestRun = uiRun > uiLargestRun ? uiRun : uiLargestRun;
         }
-        else if (ucByte == 0xFF)
+        else if (mBitmap[uiByte] == 0xFF)
         {
             uiRunStart = uiByte * 8;
             uiRun = 0;
@@ -45,12 +41,7 @@ bool AllocBitmap::Alloc(unsigned int uiNumEntries, Handle& handle)
         {
             for (unsigned int b = 0; b < 8; b++)
             {
-                if (ucByte & (1 << b))
-                {
-                    uiRunStart = b + uiByte * 8;
-                    uiRun = 0;
-                }
-                else
+                if (!(mBitmap[uiByte] & (1 << b)))
                 {
                     if (uiRun == 0)
                     {
@@ -58,15 +49,17 @@ bool AllocBitmap::Alloc(unsigned int uiNumEntries, Handle& handle)
                     }
                     uiRun++;
                 }
+                else
+                {
+                    uiRunStart = b + uiByte * 8;
+                    uiRun = 0;
+                }
                 if (uiRun == uiNumEntries)
                 {
                     break;
                 }
             }
-            if (uiRun > uiLargestRun)
-            {
-                uiLargestRun = uiRun;
-            }
+            uiLargestRun = uiRun > uiLargestRun ? uiRun : uiLargestRun;
         }
 
         if (uiRun >= uiNumEntries)
@@ -125,16 +118,15 @@ unsigned int AllocBitmap::GetFreeEntries() const
 
     for (unsigned int i = 0; i < mBitmapSize; i++)
     {
-        const unsigned char ucByte = mBitmap[i];
-        if (ucByte == 0)
+        if (mBitmap[i] == 0)
         {
             uiFree += 8;
         }
-        else if (ucByte != 0xFF)
+        else if (mBitmap[i] != 0xFF)
         {
-            for (unsigned int b = 0; b < 8; b++)
+            for (unsigned char b = 0; b < 8; b++)
             {
-                if (!(ucByte & (1 << b)))
+                if (!(mBitmap[i] & (1 << b)))
                 {
                     uiFree++;
                 }
@@ -183,6 +175,7 @@ void MemoryBitmap::Initialize(unsigned int uiStartAddress, unsigned int uiMemory
 // FUNCTION: SWBF2 0x00745600
 void AllocBitmap::Reserve(unsigned int uiStartEntry, unsigned int uiNumEntries, bool bReserve)
 {
+    const unsigned char ucMask = bReserve ? 1 : 0;
     const unsigned int uiFirstByte = uiStartEntry >> 3;
     const unsigned int uiLastByte = (uiStartEntry + uiNumEntries) >> 3;
     const unsigned char ucFirstBit = (unsigned char)(uiStartEntry & 7);
@@ -195,14 +188,14 @@ void AllocBitmap::Reserve(unsigned int uiStartEntry, unsigned int uiNumEntries, 
 
         if (ucFrom == 0 && ucTo == 8)
         {
-            mBitmap[i] = bReserve ? (unsigned char)0xFF : (unsigned char)0x00;
+            mBitmap[i] = (unsigned char)-ucMask;
             continue;
         }
 
-        for (unsigned char b = ucFrom; b < ucTo; b++)
+        for (unsigned int b = ucFrom; b < ucTo; b++)
         {
             mBitmap[i] &= (unsigned char)~(1 << b);
-            mBitmap[i] |= (unsigned char)(bReserve << b);
+            mBitmap[i] |= (unsigned char)(ucMask << b);
         }
     }
 }

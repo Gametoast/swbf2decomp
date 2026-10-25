@@ -343,7 +343,7 @@ void Chunk::CreateTrailEmitters()
         {
             RedPose pose;
             mModel->GetRedModel(0)->SetupPose(pose);
-            pAttach = pose._Table.Find(mTrailAttachPoints[i]);
+            pAttach = pose.Find(mTrailAttachPoints[i]);
             if (pAttach)
             {
                 pEffect->AttachEffectToMatrix(&mMatrix, *pAttach, true);
@@ -383,7 +383,7 @@ void Chunk::CreateSmokeEmitters()
         {
             RedPose pose;
             mModel->GetRedModel(0)->SetupPose(pose);
-            pAttach = pose._Table.Find(mSmokeAttachPoints[i]);
+            pAttach = pose.Find(mSmokeAttachPoints[i]);
             if (pAttach)
             {
                 pEffect->AttachEffectToMatrix(&mMatrix, *pAttach, true);

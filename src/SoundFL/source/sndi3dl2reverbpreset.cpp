@@ -13,7 +13,7 @@ namespace Snd
 
 // GLOBAL: SWBF2 0x007e3890
 // I3DL2ReverbPreset::smFreeList
-FreeList I3DL2ReverbPreset::smFreeList(sizeof(I3DL2ReverbPreset), 1, 4, 1);
+FreeList I3DL2ReverbPreset::smFreeList(sizeof(I3DL2ReverbPreset), 1, true, 4);
 
 // SYNTHETIC: SWBF2 0x0040c1b0
 // `dynamic initializer for 'Snd::I3DL2ReverbPreset::smList''
@@ -36,8 +36,8 @@ I3DL2ReverbPreset* __cdecl I3DL2ReverbPreset::Find(unsigned int uiHashID)
     for (PblListSingle::Node* pNode = smList.mHead.mNext; pNode != &smList.mHead;
          pNode = pNode->mNext)
     {
-        I3DL2ReverbPreset* const pPreset = reinterpret_cast<I3DL2ReverbPreset*>(reinterpret_cast<char*>(pNode) - offsetof(I3DL2ReverbPreset, mNode));
-        if (pPreset->mHashID == uiHashID)
+        I3DL2ReverbPreset* const pPreset = static_cast<I3DL2ReverbPreset*>(pNode->GetObjectA(&smList, offsetof(I3DL2ReverbPreset, mNode)));
+        if (uiHashID == pPreset->mHashID)
         {
             return pPreset;
         }

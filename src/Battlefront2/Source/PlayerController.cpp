@@ -64,7 +64,7 @@ void ClearFireTriggerBlock();
 bool IsFireTriggerBlocked();
 namespace ObjectiveManager
 {
-int GetCurrentPopupText();
+unsigned int GetCurrentPopupText();
 }
 void RecordRecentPlayerObject(int iPlayer, const GameObject* pObject);
 

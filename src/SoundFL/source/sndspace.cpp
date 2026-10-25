@@ -34,7 +34,7 @@ PblListSingle Space::smSpaceList;
 
 // GLOBAL: SWBF2 0x007e341c
 // Space::Connected::smFreeList
-FreeList Space::Connected::smFreeList(8, 1, 8, 1);
+FreeList Space::Connected::smFreeList(8, 1, true, 8);
 
 // SYNTHETIC: SWBF2 0x0040b6b0
 // `dynamic initializer for 'Snd::Space::smFreeList''
@@ -43,7 +43,7 @@ FreeList Space::Connected::smFreeList(8, 1, 8, 1);
 
 // GLOBAL: SWBF2 0x007e3400
 // Space::smFreeList
-FreeList Space::smFreeList(sizeof(Space), 1, 8, 1);
+FreeList Space::smFreeList(sizeof(Space), 1, true, 8);
 
 // FUNCTION: SWBF2 0x00733a70
 bool Space::Open()
@@ -320,7 +320,7 @@ Space* __cdecl Space::Find(unsigned int uiHashID)
     for (PblListSingle::Node* pNode = smSpaceList.mHead.mNext;
          pNode != &smSpaceList.mHead; pNode = pNode->mNext)
     {
-        Space* const pSpace = reinterpret_cast<Space*>(reinterpret_cast<char*>(pNode) - offsetof(Space, mNode));
+        Space* const pSpace = static_cast<Space*>(pNode->GetObjectA(&smSpaceList, offsetof(Space, mNode)));
         if (pSpace->mHashID == uiHashID)
         {
             return pSpace;

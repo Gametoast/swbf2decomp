@@ -42,10 +42,7 @@ inline void RedShadingPose::Entry::operator delete(void* pBlock)
 RedColor& RedShadingState::AddColorParam(unsigned int uiHash)
 {
     m_aValues[m_uiNumValues].type = TYPE_COLOR;
-    if (m_ParamHash.Store(uiHash, &m_aValues[m_uiNumValues]))
-    {
-        ++m_ParamHashNumEntries;
-    }
+    m_ParamHash.Store(uiHash, &m_aValues[m_uiNumValues]);
     return *(RedColor*)&m_aValues[m_uiNumValues++].value;
 }
 
@@ -53,10 +50,7 @@ RedColor& RedShadingState::AddColorParam(unsigned int uiHash)
 int& RedShadingState::AddIntParam(unsigned int uiHash)
 {
     m_aValues[m_uiNumValues].type = TYPE_INT;
-    if (m_ParamHash.Store(uiHash, &m_aValues[m_uiNumValues]))
-    {
-        ++m_ParamHashNumEntries;
-    }
+    m_ParamHash.Store(uiHash, &m_aValues[m_uiNumValues]);
     return *(int*)&m_aValues[m_uiNumValues++].value;
 }
 
@@ -64,10 +58,7 @@ int& RedShadingState::AddIntParam(unsigned int uiHash)
 RedTextureTransform& RedShadingState::AddTextureTransformParam(unsigned int uiHash)
 {
     m_aValues[m_uiNumValues].type = TYPE_TEXTURETRANSFORM;
-    if (m_ParamHash.Store(uiHash, &m_aValues[m_uiNumValues]))
-    {
-        ++m_ParamHashNumEntries;
-    }
+    m_ParamHash.Store(uiHash, &m_aValues[m_uiNumValues]);
     m_uiNumValues += 4;
     return *(RedTextureTransform*)&m_aValues[m_uiNumValues - 4].value;
 }

@@ -66,8 +66,6 @@ private:
 public:
     ZephyrJointShared* m_pJoints;
     unsigned int m_uNumJoints;
-
-    int m_kHashCRC2JointNumEntries;
     PblHashTable<unsigned int, 64> m_kHashCRC2Joint;
 };
  

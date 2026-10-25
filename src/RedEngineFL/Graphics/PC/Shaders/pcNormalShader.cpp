@@ -343,8 +343,6 @@ RedShadingState::RedShadingState(unsigned int uiRenderTypeHash)
 {
     m_uiRenderTypeHash = uiRenderTypeHash;
     m_uiNumValues = 0;
-    m_ParamHash.Clear();
-    m_ParamHashNumEntries = 0;
 }
 
 // SYNTHETIC: SWBF2 0x006fe9b0

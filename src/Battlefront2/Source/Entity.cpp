@@ -41,18 +41,10 @@ PblHash EntityClass::rttiHashEntityClass("EntityClass");
 // GLOBAL: SWBF2 0x00788f34
 // EntityClass::rttiNameEntityClass
 const char EntityClass::rttiNameEntityClass[] = "EntityClass";
-
-
-
-
-
-// GLOBAL: SWBF2 0x01eb9870
-int EntityEx::mIdMapNumEntries;
 // SYNTHETIC: SWBF2 0x00402860
 // `dynamic initializer for 'EntityEx::mIdMap''
 
-// GLOBAL: SWBF2 0x01eb9874
-// EntityEx::mIdMap
+// GLOBAL: SWBF2 0x01eb9870
 PblHashTable<EntityEx, 1024> EntityEx::mIdMap;
 
 EntityClass::MapParams::MapParams()
@@ -226,10 +218,7 @@ void EntityEx::Store(unsigned int uId, EntityEx* pEntity)
 {
     if (!(NetGame::IsEnabled() && NetGame::IsClient()))
     {
-        if (mIdMap.Store(uId, pEntity))
-        {
-            ++mIdMapNumEntries;
-        }
+        mIdMap.Store(uId, pEntity);
     }
 }
 
@@ -237,10 +226,7 @@ void EntityEx::Remove(unsigned int uId)
 {
     if (!(NetGame::IsEnabled() && NetGame::IsClient()))
     {
-        if (mIdMap.Remove(uId))
-        {
-            --mIdMapNumEntries;
-        }
+        mIdMap.Remove(uId);
     }
 }
 

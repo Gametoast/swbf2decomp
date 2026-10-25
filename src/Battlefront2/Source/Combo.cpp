@@ -112,10 +112,7 @@ resolve_damage:
             }
         }
     }
-    if (s_ComboTable.Store(uiNameHash, pResolved))
-    {
-        ++s_ComboTableNumEntries;
-    }
+    s_ComboTable.Store(uiNameHash, pResolved);
     return pResolved;
 }
 
@@ -598,15 +595,10 @@ MemoryPool Combo::Transition::sMemoryPool("Combo::Transition", 0x0c);
 // GLOBAL: SWBF2 0x01eb9400
 // Combo::Condition::sMemoryPool
 MemoryPool Combo::Condition::sMemoryPool("Combo::Condition", 0x14);
-
-int Combo::s_ComboTableNumEntries;
 // SYNTHETIC: SWBF2 0x00402520
 // `dynamic initializer for 'Combo::s_ComboTable''
 
-// GLOBAL: SWBF2 0x01eb9454
-// Combo::s_ComboTable
 // GLOBAL: SWBF2 0x01eb9450
-// Combo::s_ComboTable
 PblHashTable<const Combo, 32> Combo::s_ComboTable;
 
 // SYNTHETIC: SWBF2 0x004025e0
@@ -2780,10 +2772,7 @@ void Combo::ReadConfig(PblConfig& config)
         }
     }
 
-    if (s_ComboTable.Store(m_uiNameHash, this))
-    {
-        ++s_ComboTableNumEntries;
-    }
+    s_ComboTable.Store(m_uiNameHash, this);
 }
 
 // FUNCTION: SWBF2 0x00475980
@@ -2885,7 +2874,6 @@ Combo::State* Combo::AddState(unsigned int uiNameHash)
 void Combo::Init()
 {
     s_ComboTable.Clear();
-    s_ComboTableNumEntries = 0;
 
     sMemoryPool.Setup(0x20, sMemoryPool.mSize, sMemoryPool.mGrow);
     State::sMemoryPool.Setup(0x64, State::sMemoryPool.mSize, State::sMemoryPool.mGrow);

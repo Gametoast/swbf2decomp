@@ -39,14 +39,10 @@ static inline const PblVector3& LastPosition(const CollisionObject* pObject)
 {
     return pObject->mLastPosition;
 }
-
-// GLOBAL: SWBF2 0x01eb1368
-int CollisionBodyPrimitive::_HashTableNumEntries;
 // SYNTHETIC: SWBF2 0x00402440
 // `dynamic initializer for 'CollisionBodyPrimitive::_HashTable''
 
-// GLOBAL: SWBF2 0x01eb136c
-// CollisionBodyPrimitive::_HashTable
+// GLOBAL: SWBF2 0x01eb1368
 PblHashTable<CollisionBodyPrimitive, 1024> CollisionBodyPrimitive::_HashTable;
 
 // FUNCTION: SWBF2 0x0045ce40
@@ -98,7 +94,7 @@ PblMatrix CollisionBody::GetLocalMatrix(const RedPose* pPose) const
 {
     if (pPose && mParentHashName)
     {
-        const PblMatrix* pParent = pPose->_Table.Find(mParentHashName);
+        const PblMatrix* pParent = pPose->Find(mParentHashName);
         if (pParent)
         {
             return mMatrix * *pParent;
@@ -267,10 +263,7 @@ void CollisionBodyPrimitive::Read(PblFileChunk& chunk)
                     {
                         pBody->SetMask(ucMask);
                     }
-                    if (_HashTable.Store(uiHash, pBody))
-                    {
-                        ++_HashTableNumEntries;
-                    }
+                    _HashTable.Store(uiHash, pBody);
                 }
             }
             ++iPrim;
@@ -349,7 +342,6 @@ float CollisionBodyPrimitive::GetHeight() const
 void CollisionBodyPrimitive::ClearAll()
 {
     _HashTable.Clear();
-    _HashTableNumEntries = 0;
 }
 
 // FUNCTION: SWBF2 0x0045d830

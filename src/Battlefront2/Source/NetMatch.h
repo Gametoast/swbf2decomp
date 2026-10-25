@@ -69,7 +69,7 @@ public:
 
     static void ChangeRegisterGame();
     static void __cdecl ReceiveRegisterPacket(const char* pData, int iLen, const void* pSource);
-    static char StartFindGames(int, const NetSessionId* id);
+    static void StartFindGames(int, const NetSessionId* id);
     static void PauseFindGames();
     static void UpdateJoinGame();
     static void HandleLoginError(bool);

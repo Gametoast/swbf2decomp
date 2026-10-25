@@ -60,7 +60,7 @@ PblListDouble SoundLayered::FireForgetLayer::smActiveList;
 
 // GLOBAL: SWBF2 0x007e3678
 // SoundLayered::Properties::Layer::smFreeList
-FreeList SoundLayered::Properties::Layer::smFreeList(sizeof(SoundLayered::Properties::Layer), 1, 8, 1);
+FreeList SoundLayered::Properties::Layer::smFreeList(sizeof(SoundLayered::Properties::Layer), 1, true, 8);
 
 // SYNTHETIC: SWBF2 0x0040bb70
 // `dynamic initializer for 'Snd::SoundLayered::Properties::smFreeList''
@@ -69,7 +69,7 @@ FreeList SoundLayered::Properties::Layer::smFreeList(sizeof(SoundLayered::Proper
 
 // GLOBAL: SWBF2 0x007e3694
 // SoundLayered::Properties::smFreeList
-FreeList SoundLayered::Properties::smFreeList(0x0c, 1, 8, 1);
+FreeList SoundLayered::Properties::smFreeList(0x0c, 1, true, 8);
 
 // SYNTHETIC: SWBF2 0x0040bb90
 // `dynamic initializer for 'Snd::SoundLayered::SoundLayer::smFreeList''
@@ -78,7 +78,7 @@ FreeList SoundLayered::Properties::smFreeList(0x0c, 1, 8, 1);
 
 // GLOBAL: SWBF2 0x007e365c
 // SoundLayered::SoundLayer::smFreeList
-FreeList SoundLayered::SoundLayer::smFreeList(sizeof(SoundLayered::SoundLayer), 1, 0x40, 0);
+FreeList SoundLayered::SoundLayer::smFreeList(sizeof(SoundLayered::SoundLayer), 1, false, 0x40);
 
 // SYNTHETIC: SWBF2 0x0040bbc0
 // `dynamic initializer for 'Snd::SoundLayered::Properties::smPropertyList''
@@ -228,7 +228,7 @@ SoundLayered::Properties* __cdecl SoundLayered::Properties::FindByHashID(unsigne
     for (PblListSingle::Node* pNode = smPropertyList.mHead.mNext; pNode != &smPropertyList.mHead;
          pNode = pNode->mNext)
     {
-        Properties* pProps = (Properties*)((char*)pNode - offsetof(Properties, mNode));
+        Properties* pProps = (Properties*)pNode->GetObjectA(&smPropertyList, offsetof(Properties, mNode));
         if (pProps->mHashID == uiHashID)
         {
             return pProps;

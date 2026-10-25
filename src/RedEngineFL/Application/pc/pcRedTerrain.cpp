@@ -130,8 +130,14 @@ void RedTerrain::Activate()
 {
     if (RedTerrain::_bEnable)
     {
-        _TerrainRenderable._SetQuality();
+        _TerrainRenderable.Activate();
     }
+}
+
+// FUNCTION: SWBF2 0x006d35c0
+void TerrainRenderable::Activate()
+{
+    _SetQuality();
 }
 
 // FUNCTION: SWBF2 0x006d6480

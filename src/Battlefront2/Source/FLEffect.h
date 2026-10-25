@@ -55,11 +55,7 @@ public:
     static void Unregister(unsigned int uiClassName);
 
     static FLEffectClass* Get(unsigned int uHash);
-
-    static int s_EffectClassesNumEntries;
     static PblHashTable<FLEffectClass, 256> s_EffectClasses;
-
-    static int s_EffectFactoriesNumEntries;
     static PblHashTable<FLEffect, 32> s_EffectFactories;
 
     static bool s_bInitRender;

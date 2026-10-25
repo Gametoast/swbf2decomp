@@ -242,6 +242,19 @@ void HUD::ObjectiveList::SetupText()
     }
 }
 
+// FUNCTION: SWBF2 0x005663f0
+unsigned int HUD::ObjectiveList::GetCurrentPopupText()
+{
+    for (PblList<Objective>::Itor it(_objectives); it != _objectives.End(); ++it)
+    {
+        if (it->_state == Objective::ACTIVE && it->_popupTextID)
+        {
+            return it->_popupTextID;
+        }
+    }
+    return 0;
+}
+
 // FUNCTION: SWBF2 0x005666e0
 Character* HUD::ObjectiveList::GetOwner()
 {

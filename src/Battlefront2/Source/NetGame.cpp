@@ -864,8 +864,6 @@ public:
     NetNdObjMap();
     void Clear();
     void Add(NetNdObj* object, unsigned int hash);
-
-    int objMapNumEntries;
     PblHashTable<NetNdObj, 256> objMap;
     unsigned int count;
     NetNdObj* array[256];
@@ -876,8 +874,6 @@ public:
 // FUNCTION: SWBF2 0x005b4520
 NetNdObjMap::NetNdObjMap()
 {
-    objMap.Clear();
-    objMapNumEntries = 0;
     count = 0;
 }
 
@@ -889,7 +885,6 @@ void NetNdObjMap::Clear()
         delete array[--count];
     }
     objMap.Clear();
-    objMapNumEntries = 0;
 }
 
 // SYNTHETIC: SWBF2 0x00404820
@@ -4895,8 +4890,14 @@ void NetGame::SendHost()
 
 unsigned int GetUniqObjectId(const GameObject* pObject);
 GameObject* FindClientObject(unsigned int uId);
+struct HandleToIndex
+{
+    int index;
+    bool isNew;
+};
+
 // GLOBAL: SWBF2 0x01e64ef4
-unsigned int* handleToIndexMapPtr;
+PblHashTable<HandleToIndex, 128>* handleToIndexMapPtr;
 // GLOBAL: SWBF2 0x01fa2513
 bool isFullState;
 // GLOBAL: SWBF2 0x01fa88c8
@@ -5097,10 +5098,9 @@ unsigned int GetUniqObjectId(const GameObject* pObject)
     {
         return 63;
     }
-    PblHashTable<unsigned int, 128>* pTable =
-        (PblHashTable<unsigned int, 128>*)(handleToIndexMapPtr + 1);
-    unsigned int* pId = pTable->Find(pObject->GetHandleId());
-    return pId ? *pId : 63;
+    PblHashTable<HandleToIndex, 128>* pTable = handleToIndexMapPtr;
+    HandleToIndex* pId = pTable->Find(pObject->GetHandleId());
+    return pId ? pId->index : 63;
 }
 
 // FUNCTION: SWBF2 0x005ce480
@@ -11622,10 +11622,7 @@ void NetNdObjMap::Add(NetNdObj* object, unsigned int hash)
     NetNdObjMap* pThis = this;
     object->uniqId = hash;
     object->index = pThis->count;
-    if (pThis->objMap.Store(hash, object))
-    {
-        ++pThis->objMapNumEntries;
-    }
+    pThis->objMap.Store(hash, object);
     pThis->array[pThis->count++] = object;
     object->obj->SetNetUniqueId(object->index + 0x40);
 }
@@ -13011,11 +13008,10 @@ void AdjustClock()
 // FUNCTION: SWBF2 0x005cc600
 void GetLastObjState(GameObject* pObject, NetObjState*& pState, unsigned int& uId)
 {
-    PblHashTable<unsigned int, 128>* pTable =
-        (PblHashTable<unsigned int, 128>*)(handleToIndexMapPtr + 1);
-    unsigned int* pEntry = pTable->Find(pObject->GetHandleId());
-    uId = *pEntry;
-    if (!*((unsigned char*)pEntry + 4))
+    PblHashTable<HandleToIndex, 128>* pTable = handleToIndexMapPtr;
+    HandleToIndex* pEntry = pTable->Find(pObject->GetHandleId());
+    uId = pEntry->index;
+    if (!pEntry->isNew)
     {
         pState = uId == 63 ? 0 :
             netPlayers[curDst].lastObjState->stateMap[uId];
@@ -14548,11 +14544,6 @@ void WriteFixed<MouseAxisConvert>(MouseAxisConvert&, NetPktGroup& group,
     group.WriteFixed(fValue, -16.0f, 16.0f, 11);
 }
 
-struct HandleToIndex
-{
-    int index;
-    bool isNew;
-};
  
  
 
@@ -15501,8 +15492,6 @@ void FinishSend(GameObject** ppSends, GameObject* (*ppScopes)[64], int*)
 {
     int i, j;
     PblHashTable<GameObject, 512> added;
-    added.Clear();
-    int addedCount = 0;
     bool hasGuest = NetGame::GetMyGuest(curDst, 0) != -1;
     int count = 0;
     if (hasGuest)
@@ -15515,10 +15504,7 @@ void FinishSend(GameObject** ppSends, GameObject* (*ppScopes)[64], int*)
                 if (pObject && count < 64 && !added.Find((unsigned int)pObject))
                 {
                     ppSends[count++] = pObject;
-                    if (added.Store((unsigned int)pObject, pObject))
-                    {
-                        ++addedCount;
-                    }
+                    added.Store((unsigned int)pObject, pObject);
                 }
             }
         }
@@ -15752,7 +15738,7 @@ void WriteObjects(NetPktGroup& group)
 
         NetObjStateMap* lastMap = netPlayers[curDst].lastObjState;
         PblHashTable<HandleToIndex, 128>* handleMap =
-            (PblHashTable<HandleToIndex, 128>*)(handleToIndexMapPtr + 1);
+            handleToIndexMapPtr;
         for (i = 0; i < 64; ++i)
         {
             NetObjState* state = lastMap->stateMap[i];
@@ -15772,10 +15758,7 @@ void WriteObjects(NetPktGroup& group)
                 GameObject* pObject = static_cast<GameObject*>(state->handle);
                 if (pObject)
                 {
-                    if (handleMap->Store(pObject->GetHandleId(), entry))
-                    {
-                        ++*handleToIndexMapPtr;
-                    }
+                    handleMap->Store(pObject->GetHandleId(), entry);
                 }
                 else
                 {
@@ -15899,10 +15882,7 @@ void WriteObjects(NetPktGroup& group)
                 entry = node;
                 entry->index = freeIndex++;
                 entry->isNew = true;
-                if (handleMap->Store(pObject->GetHandleId(), entry))
-                {
-                    ++*handleToIndexMapPtr;
-                }
+                handleMap->Store(pObject->GetHandleId(), entry);
                 if (pObject->GetHandleId() == netHostTraceHandleId)
                 {
                     netTraceIndex = entry->index;
@@ -16120,11 +16100,9 @@ void WriteUpdate(NetPktGroup& group)
     }
 
     BblList<HandleToIndex, 128> handlePool;
-    unsigned int handleToIndexMap[1 + 2 * 128];
-    ((PblHashTable<HandleToIndex, 128>*)&handleToIndexMap[1])->Clear();
-    handleToIndexMap[0] = 0;
+    PblHashTable<HandleToIndex, 128> handleToIndexMap;
     handlePoolPtr = &handlePool;
-    handleToIndexMapPtr = handleToIndexMap;
+    handleToIndexMapPtr = &handleToIndexMap;
     if (!isFullState || curDst == -1)
     {
         WriteObjects(group);

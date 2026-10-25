@@ -115,7 +115,7 @@ Entity* EntityDefenseGridTurretClass::Build(const EntityDesc& desc)
     EntityDefenseGridTurret* pTurret = new EntityDefenseGridTurret(this, desc);
     if (pTurret)
     {
-        CollisionManager::AddItemBody(static_cast<CollisionObject*>(pTurret));
+        pTurret->AddStaticToCollisionManager();
         pTurret->ActivatePhysics();
     }
     return pTurret;

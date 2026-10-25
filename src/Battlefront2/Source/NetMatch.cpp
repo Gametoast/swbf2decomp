@@ -869,8 +869,17 @@ void NetMatch::HandleLoginError(bool)
 // FUNCTION: SWBF2 0x005d5f60
 void NetMatch::PauseFindGames() {}
 
+// FUNCTION: SWBF2 0x005d6810
+static void StartFindLanGames()
+{
+    NetSocket::OpenBroadcastSockets();
+    netNextLanQueryTime = 0.0f;
+    netLanQueryCount = 0;
+    netLanQuerySequence = netRandom.GetInt();
+}
+
 // FUNCTION: SWBF2 0x005d5e70
-char NetMatch::StartFindGames(int, const NetSessionId* id)
+void NetMatch::StartFindGames(int, const NetSessionId* id)
 {
     if (id)
     {
@@ -883,11 +892,8 @@ char NetMatch::StartFindGames(int, const NetSessionId* id)
         {
             netDirectPort = NetSocket::OpenDirectSocket(false);
         }
-        NetSocket::OpenBroadcastSockets();
-        netNextLanQueryTime = 0.0f;
-        netLanQueryCount = 0;
-        netLanQuerySequence = netRandom.GetInt();
-        return (char)netLanQuerySequence;
+        StartFindLanGames();
+        return;
     }
     if (gf::isInitialized())
     {
@@ -895,9 +901,8 @@ char NetMatch::StartFindGames(int, const NetSessionId* id)
         void* matchmaking = GetGalaxyMatchmaking();
         ((galaxy::api::IMatchmaking*)matchmaking)->AddRequestLobbyListStringFilter("galaxy_lobby_cancelled", "1", 1);
         matchmaking = GetGalaxyMatchmaking();
-        return ((galaxy::api::IMatchmaking*)matchmaking)->RequestLobbyList(false);
+        ((galaxy::api::IMatchmaking*)matchmaking)->RequestLobbyList(false);
     }
-    return 0;
 }
 
 // FUNCTION: SWBF2 0x005d6090

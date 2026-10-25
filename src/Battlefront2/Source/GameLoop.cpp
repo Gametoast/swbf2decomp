@@ -628,7 +628,6 @@ namespace GameLoop
 void EntityEx::InitFind()
 {
     mIdMap.Clear();
-    mIdMapNumEntries = 0;
 }
 
 void TreeGridStack::SetupMemoryPool(unsigned int uCount, unsigned int uSize, unsigned int uGrow)

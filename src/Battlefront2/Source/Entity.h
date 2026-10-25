@@ -97,7 +97,6 @@ public:
 
     static unsigned int GetRtti() { return rttiHashEntityEx; }
     static const char rttiNameEntityEx[];
-    static int mIdMapNumEntries;
     static PblHashTable<EntityEx, 1024> mIdMap;
 
     static PblHashTable<EntityEx, 1024>& GetEntityMap() { return mIdMap; }

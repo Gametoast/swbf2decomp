@@ -40,8 +40,6 @@ public:
 
     static PblHash rttiHashEntityHologramClass;
     static const char rttiNameEntityHologramClass[];
-
-    static int sHologramClassTableNumEntries;
     static void Reset();
     static PblHashTable<EntityHologramClass, 32> sHologramClassTable;
 

@@ -48,14 +48,10 @@ void RedInterfaceElement::Rotate(float fX, float fY, float fAngle)
 // GLOBAL: SWBF2 0x008fe488
 unsigned int RedInterfaceElement::s_uiUnnamedCRC;
 
-// GLOBAL: SWBF2 0x008fe498
-int RedInterfaceElement::sAllObjectsListNumEntries;
-
 // SYNTHETIC: SWBF2 0x00407a10
 // `dynamic initializer for 'RedInterfaceElement::sAllObjectsList''
 
-// GLOBAL: SWBF2 0x008fe49c
-// RedInterfaceElement::sAllObjectsList
+// GLOBAL: SWBF2 0x008fe498
 PblHashTable<RedInterfaceElement, 32768> RedInterfaceElement::sAllObjectsList;
 
 // FUNCTION: SWBF2 0x006bfeb0
@@ -128,10 +124,7 @@ RedInterfaceElement::~RedInterfaceElement()
     if (m_bInAllObjectList)
     {
         m_bInAllObjectList = false;
-        if (sAllObjectsList.Remove(m_crcName))
-        {
-            --sAllObjectsListNumEntries;
-        }
+        sAllObjectsList.Remove(m_crcName);
     }
 
     if (m_groupNode._pList)
@@ -274,10 +267,7 @@ RedGroupElement* RedInterfaceElement::GetGroup() const
 void RedInterfaceElement::AddToSearchList(const char* pcName)
 {
     SetName(pcName);
-    if (sAllObjectsList.Store(m_crcName, this))
-    {
-        ++sAllObjectsListNumEntries;
-    }
+    sAllObjectsList.Store(m_crcName, this);
     m_bInAllObjectList = true;
 }
 
@@ -297,7 +287,6 @@ RedInterfaceElement* RedInterfaceElement::Find(const char* pcName)
 void RedInterfaceElement::Reset()
 {
     sAllObjectsList.Clear();
-    sAllObjectsListNumEntries = 0;
     s_uiUnnamedCRC = 0;
 }
 

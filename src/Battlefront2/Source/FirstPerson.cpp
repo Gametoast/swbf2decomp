@@ -273,7 +273,7 @@ void FirstPersonRenderable::UpdateSoldierAimer(const PblMatrix& mMatrix)
     mZephyrSkeleton.BuildWorldMatrices(gMatrixIdentity);
     RedPose kPose;
     kPose.ConvertFromZephyrPose(mZephyrPoseStatic);
-    const PblMatrix* pBone = kPose._Table.Find(0x8629b159);
+    const PblMatrix* pBone = kPose.Find(0x8629b159);
 
     PblMatrix mOffset = gMatrixIdentity;
     PblMatrix mTemp;
@@ -341,7 +341,7 @@ void FirstPersonRenderable::UpdateDroidekaAimer(const PblMatrix& mMatrix)
     mZephyrSkeleton.BuildWorldMatrices(gMatrixIdentity);
     RedPose kPose;
     kPose.ConvertFromZephyrPose(mZephyrPoseStatic);
-    const PblMatrix* pBone = kPose._Table.Find(0x8629b159);
+    const PblMatrix* pBone = kPose.Find(0x8629b159);
 
     PblMatrix mOffset = gMatrixIdentity;
     PblMatrix mTemp;
@@ -373,7 +373,7 @@ void FirstPersonRenderable::UpdateDroidekaAimer(const PblMatrix& mMatrix)
     D3DXMatrixMultiply(&mTemp, &mOffset, &mBone);
     D3DXMatrixMultiply(&mModelMatrix, &mTemp, &mRotation);
 
-    const PblMatrix* pWeaponBone = kPose._Table.Find(0x2b960099);
+    const PblMatrix* pWeaponBone = kPose.Find(0x2b960099);
     Weapon* pWeapon = mOwner->GetWeaponPtr(mOwner->GetActiveWeaponChannel());
     if (pWeaponBone && pWeapon)
     {

@@ -33,8 +33,7 @@ RedSkeleton* RedSkeleton::s_pCurrentSkeleton;
 // SYNTHETIC: SWBF2 0x00408ae0
 // `dynamic initializer for 'RedSkeleton::_HashTable''
 
-// GLOBAL: SWBF2 0x009a0a2c
-// RedSkeleton::_HashTable
+// GLOBAL: SWBF2 0x009a0a28
 PblHashTable<RedSkeleton, 512> RedSkeleton::_HashTable;
 
 // FUNCTION: SWBF2 0x006e87e0
@@ -88,12 +87,9 @@ void RedSkeleton::SetupPose(RedPose& pose) const
 {
     for (unsigned int i = 0; i < m_uiNumBones; ++i)
     {
-        if (m_auiNameHash[i] && !pose._Table.Find(m_auiNameHash[i]))
+        if (m_auiNameHash[i] && !pose.Find(m_auiNameHash[i]))
         {
-            if (pose._Table.Store(m_auiNameHash[i], &m_amDefaultPose[i]))
-            {
-                ++pose._iNumEntries;
-            }
+            pose.Store(m_auiNameHash[i], &m_amDefaultPose[i]);
         }
     }
 }

@@ -597,7 +597,7 @@ const PblMatrix* SoldierAnimatorClass::_GetBoneMatrix(unsigned int uiJointCrc, c
     poseStatic.Set(poseDyn, true);
     skeleton.BuildWorldMatrices(gMatrixIdentity);
     pPose->ConvertFromZephyrPose(poseStatic);
-    return pPose->_Table.Find(uiJointCrc);
+    return pPose->Find(uiJointCrc);
 }
 
 // FUNCTION: SWBF2 0x006446c0

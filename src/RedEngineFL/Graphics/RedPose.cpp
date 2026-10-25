@@ -12,7 +12,7 @@ extern PblMatrix gMatrixIdentity;
 // FUNCTION: SWBF2 0x006ddc70
 void RedPose::BindToSkeleton(RedSkeleton const* pSkeleton) const
 {
-    m_pSkeleton = (RedSkeleton*)pSkeleton;
+    m_pSkeleton = pSkeleton;
 }
 
 // FUNCTION: SWBF2 0x006ddc80
@@ -51,7 +51,7 @@ void RedPose::GetSkinMatrices(PblMatrix* pMatrices, unsigned char const* pIndice
 // FUNCTION: SWBF2 0x006ddde0
 PblMatrix const& RedPose::_GetBoneMatrix(int iBone) const
 {
-    PblMatrix const* pMatrix = _Table.Find(m_pSkeleton->m_auiNameHash[iBone]);
+    PblMatrix const* pMatrix = Find(m_pSkeleton->m_auiNameHash[iBone]);
     return pMatrix ? *pMatrix : _IdentityMatrix;
 }
 
@@ -63,14 +63,11 @@ unsigned int RedPose::ConvertFromZephyrPose(const ZephyrSkeleton<N>& kSkel)
     for (unsigned int i = 0; i < uiNumJoints; ++i)
     {
         unsigned int uiCrc = kSkel.m_pShared->m_pJoints[i].m_kCrc;
-        if (_Table.Find(uiCrc) && _Table.Remove(uiCrc))
+        if (Find(uiCrc))
         {
-            --_iNumEntries;
+            Remove(uiCrc);
         }
-        if (_Table.Store(uiCrc, &kSkel.m_pWorldMatrices[i]))
-        {
-            ++_iNumEntries;
-        }
+        Store(uiCrc, &kSkel.m_pWorldMatrices[i]);
     }
     return uiNumJoints;
 }

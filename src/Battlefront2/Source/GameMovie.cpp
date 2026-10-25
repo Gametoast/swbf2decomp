@@ -343,24 +343,6 @@ void UpdatInGameMovie()
     }
 }
 
-// FUNCTION: SWBF2 0x00738a20
-void* Snd::QueueBase::Get(unsigned int uStride, char* pData, unsigned int uCapacity)
-{
-    unsigned short* pQueue = (unsigned short*)this;
-    if (pQueue[0] == pQueue[1] && !(pQueue[2] & 1))
-    {
-        return 0;
-    }
-    const unsigned int uIndex = pQueue[1];
-    pQueue[1] = (unsigned short)(uIndex + 1);
-    if (pQueue[1] == uCapacity)
-    {
-        pQueue[1] = 0;
-    }
-    pQueue[2] &= ~1u;
-    return pData + uStride * uIndex;
-}
-
 // FUNCTION: SWBF2 0x005347a0
 void GameMovie::Play(const char* const pcProperties, const char* const pcPropertiesAtEnd,
                      unsigned int uiY, unsigned int uiX, unsigned int uiWidth,

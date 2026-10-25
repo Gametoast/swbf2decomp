@@ -89,18 +89,12 @@ namespace
 
     void PoseRemove(RedPose& pose, unsigned int uHash)
     {
-        if (pose._Table.Remove(uHash))
-        {
-            --pose._iNumEntries;
-        }
+        pose.Remove(uHash);
     }
 
     void PoseStore(RedPose& pose, unsigned int uHash, const PblMatrix* pMatrix)
     {
-        if (pose._Table.Store(uHash, pMatrix))
-        {
-            ++pose._iNumEntries;
-        }
+        pose.Store(uHash, pMatrix);
     }
 }
 
@@ -109,10 +103,10 @@ namespace
 template const PblMatrix* PblHashTable<const PblMatrix, 128>::Find(unsigned int) const;
 // TEMPLATE: SWBF2 0x0043eba0
 // PblHashTable<PblMatrix const ,128>::Store
-template bool PblHashTable<const PblMatrix, 128>::Store(unsigned int, const PblMatrix*);
+template void PblHashTable<const PblMatrix, 128>::Store(unsigned int, const PblMatrix*);
 // TEMPLATE: SWBF2 0x0043ebd0
 // PblHashTable<PblMatrix const ,128>::Remove
-template bool PblHashTable<const PblMatrix, 128>::Remove(unsigned int);
+template void PblHashTable<const PblMatrix, 128>::Remove(unsigned int);
 
 // GLOBAL: SWBF2 0x01f9af7c
 int sCurBarrel;
@@ -410,7 +404,7 @@ void Aimer::SetupPose(const PblMatrix& mParent, RedPose& pose, bool bRecurse) co
 {
     if (mClass->mMountHash && mClass->mParentHash)
     {
-        const PblMatrix* pParentBone = pose._Table.Find(mClass->mParentHash);
+        const PblMatrix* pParentBone = pose.Find(mClass->mParentHash);
         if (pParentBone)
         {
             PblMatrix mOffset = MakeMatrix(mClass->mOffsetRot, mOffsetPos);
@@ -420,7 +414,7 @@ void Aimer::SetupPose(const PblMatrix& mParent, RedPose& pose, bool bRecurse) co
             D3DXVec3TransformNormal(&vDir, &mDirection, &mParent);
             mMountPoseMatrix = DirectionMatrix(vDir, Row(mMount, 1), Row(mMount, 3));
 
-            const PblMatrix* pOld = pose._Table.Find(mClass->mMountHash);
+            const PblMatrix* pOld = pose.Find(mClass->mMountHash);
             if (pOld != &mMountPoseMatrix)
             {
                 if (pOld)
@@ -437,7 +431,7 @@ void Aimer::SetupPose(const PblMatrix& mParent, RedPose& pose, bool bRecurse) co
         const AimerClass::BarrelInfo& barrel = mClass->mBarrelInfo[i];
         if (barrel.mHash && barrel.mParentHash)
         {
-            const PblMatrix* pParentBone = pose._Table.Find(barrel.mParentHash);
+            const PblMatrix* pParentBone = pose.Find(barrel.mParentHash);
             if (pParentBone)
             {
                 mBarrelPoseMatrix[i] = *pParentBone;
@@ -453,7 +447,7 @@ void Aimer::SetupPose(const PblMatrix& mParent, RedPose& pose, bool bRecurse) co
                 mBarrelPoseMatrix[i].m[3][2] = vPos.z;
                 mBarrelPoseMatrix[i].m[3][3] = 1.0f;
 
-                const PblMatrix* pOld = pose._Table.Find(barrel.mHash);
+                const PblMatrix* pOld = pose.Find(barrel.mHash);
                 if (pOld != &mBarrelPoseMatrix[i])
                 {
                     if (pOld)
@@ -625,7 +619,7 @@ bool Aimer::Update(float fDeltaTime)
     if (mPose && mParentMatrix == &GetCollisionObject(mOwner->GetGameObject())->GetMatrix()
         && mClass->mParentHash)
     {
-        const PblMatrix* pParentBone = mPose->_Table.Find(mClass->mParentHash);
+        const PblMatrix* pParentBone = mPose->Find(mClass->mParentHash);
         if (pParentBone)
         {
             PblMatrix mOffset = MakeMatrix(mClass->mOffsetRot, mOffsetPos);

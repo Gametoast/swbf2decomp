@@ -144,24 +144,15 @@ PblHash EntityDoorClass::rttiHashEntityDoorClass("EntityDoorClass");
 // GLOBAL: SWBF2 0x00789118
 // EntityDoorClass::rttiNameEntityDoorClass
 const char EntityDoorClass::rttiNameEntityDoorClass[] = "EntityDoorClass";
-
-int EntityDoor::msHostDoorsNumEntries;
 // SYNTHETIC: SWBF2 0x004029e0
 // `dynamic initializer for 'EntityDoor::msHostDoors''
 
-// GLOBAL: SWBF2 0x01ebb9a4
-// EntityDoor::msHostDoors
 // GLOBAL: SWBF2 0x01ebb9a0
-// EntityDoor::msHostDoors
 PblHashTable<EntityDoor, 32> EntityDoor::msHostDoors;
-int EntityDoor::msClientDoorsNumEntries;
 // SYNTHETIC: SWBF2 0x00402a00
 // `dynamic initializer for 'EntityDoor::msClientDoors''
 
-// GLOBAL: SWBF2 0x01ebbaac
-// EntityDoor::msClientDoors
 // GLOBAL: SWBF2 0x01ebbaa8
-// EntityDoor::msClientDoors
 PblHashTable<EntityDoor, 32> EntityDoor::msClientDoors;
 
 // GLOBAL: SWBF2 0x007e6338
@@ -175,9 +166,7 @@ void EntityDoor::ResetDoorList()
 {
     mspDoors = &msHostDoors;
     msHostDoors.Clear();
-    msHostDoorsNumEntries = 0;
     msClientDoors.Clear();
-    msClientDoorsNumEntries = 0;
 }
 
 // FUNCTION: SWBF2 0x00498f00
@@ -255,9 +244,9 @@ EntityDoor::EntityDoor(EntityDoorClass* pClass, const EntityDesc& desc)
     mZephyrSkeleton.BuildWorldMatrices(gMatrixIdentity);
     mPose.ConvertFromZephyrPose(mZephyrSkeleton);
 
-    if (mId && !mspDoors->Find(mId) && mspDoors->Store(mId, this))
+    if (mId && !mspDoors->Find(mId))
     {
-        ++(mspDoors == &msClientDoors ? msClientDoorsNumEntries : msHostDoorsNumEntries);
+        mspDoors->Store(mId, this);
     }
 }
 

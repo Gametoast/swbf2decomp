@@ -89,14 +89,10 @@ MemoryPool EntityCloth::sMemoryPool("EntityCloth", 0x120);
 // GLOBAL: SWBF2 0x01eb10d0
 // ClothData::sMemoryPool
 MemoryPool ClothData::sMemoryPool("ClothData", 0xa0);
-
-// GLOBAL: SWBF2 0x01eb1120
-int ClothData::s_clothDataHashTableNumEntries;
 // SYNTHETIC: SWBF2 0x00402400
 // `dynamic initializer for 'ClothData::s_clothDataHashTable''
 
-// GLOBAL: SWBF2 0x01eb1124
-// ClothData::s_clothDataHashTable
+// GLOBAL: SWBF2 0x01eb1120
 PblHashTable<ClothData, 64> ClothData::s_clothDataHashTable;
 
 // FUNCTION: SWBF2 0x00459010
@@ -108,7 +104,6 @@ void ClothData::Init()
                                  ClothData::sMemoryPool.mGrow);
 
     s_clothDataHashTable.Clear();
-    s_clothDataHashTableNumEntries = 0;
 }
 
 // FUNCTION: SWBF2 0x00459370
@@ -1409,7 +1404,6 @@ ClothData::~ClothData()
 void ClothData::Cleanup()
 {
     s_clothDataHashTable.Clear();
-    s_clothDataHashTableNumEntries = 0;
 }
 
 // FUNCTION: SWBF2 0x00459080
@@ -1464,10 +1458,7 @@ void ClothData::Read(PblFileChunk& chunk)
         delete pData;
         return;
     }
-    if (ClothData::s_clothDataHashTable.Store(pData->m_uiNameHash, pData))
-    {
-        ++ClothData::s_clothDataHashTableNumEntries;
-    }
+    ClothData::s_clothDataHashTable.Store(pData->m_uiNameHash, pData);
     pData->PostReadInit();
 }
 

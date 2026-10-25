@@ -469,7 +469,6 @@ CollisionTreeNode* ReadTree(PblFileChunk& chunk)
 void CollisionMesh::ClearAll()
 {
     _HashTable.Clear();
-    _HashTableNumEntries = 0;
     memset(mTopCollision, 0, sizeof(mTopCollision));
 }
 
@@ -556,10 +555,7 @@ void CollisionMesh::Read(PblFileChunk& chunk)
     pMesh->_Read(chunk);
     if (!CollisionMesh::_HashTable.Find(pMesh->GetName()))
     {
-        if (CollisionMesh::_HashTable.Store(pMesh->GetName(), pMesh))
-        {
-            ++CollisionMesh::_HashTableNumEntries;
-        }
+        CollisionMesh::_HashTable.Store(pMesh->GetName(), pMesh);
     }
     else
     {
@@ -597,14 +593,10 @@ int CollisionTreeNode::nodes;
 // GLOBAL: SWBF2 0x01e30370
 int CollisionTreeNode::leafs;
 
-// GLOBAL: SWBF2 0x01eb3390
-int CollisionMesh::_HashTableNumEntries;
-
 // SYNTHETIC: SWBF2 0x00402460
 // `dynamic initializer for 'CollisionMesh::_HashTable''
 
-// GLOBAL: SWBF2 0x01eb3394
-// CollisionMesh::_HashTable
+// GLOBAL: SWBF2 0x01eb3390
 PblHashTable<CollisionMesh, 1024> CollisionMesh::_HashTable;
 
 // FUNCTION: SWBF2 0x00461ba0

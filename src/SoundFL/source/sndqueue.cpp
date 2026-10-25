@@ -15,6 +15,24 @@ QueueBase::~QueueBase()
 {
 }
 
+// FUNCTION: SWBF2 0x00738a20
+void* QueueBase::Get(unsigned int uiElementSize, void* const pElements,
+                      unsigned int uiCapacity)
+{
+    if (IsEmpty())
+    {
+        return 0;
+    }
+
+    void* const pEntry = (unsigned char*)pElements + mTail * uiElementSize;
+    if (++mTail == uiCapacity)
+    {
+        mTail = 0;
+    }
+    mFull = false;
+    return pEntry;
+}
+
 // FUNCTION: SWBF2 0x00738a70
 unsigned short QueueBase::GetNumItems(unsigned short usCapacity) const
 {
@@ -22,11 +40,11 @@ unsigned short QueueBase::GetNumItems(unsigned short usCapacity) const
     {
         return usCapacity;
     }
-    if (mHead < mTail)
+    if (mHead >= mTail)
     {
-        return usCapacity + mHead - mTail;
+        return mHead - mTail;
     }
-    return mHead - mTail;
+    return usCapacity + mHead - mTail;
 }
 
 // FUNCTION: SWBF2 0x007389a0
@@ -34,29 +52,27 @@ void QueueBase::Empty(unsigned int uiElementSize, void* const pElements,
                       unsigned short usCapacity,
                       bool(__cdecl* const pfnCallback)(void*, void*), void* const pData)
 {
-    if (IsEmpty())
+    if (!IsEmpty())
     {
-        return;
-    }
-
-    if (pfnCallback)
-    {
-        bool bContinue = true;
-        while (!IsEmpty() && bContinue)
+        if (pfnCallback)
         {
-            bContinue = pfnCallback((unsigned char*)pElements + mTail * uiElementSize, pData);
-            if (++mTail == usCapacity)
+            bool bContinue = true;
+            while ((mFull || mTail != mHead) && bContinue)
             {
-                mTail = 0;
+                bContinue = pfnCallback((unsigned char*)pElements + mTail * uiElementSize, pData);
+                if (++mTail == usCapacity)
+                {
+                    mTail = 0;
+                }
+                mFull = false;
             }
-            mFull = false;
         }
-    }
-    else
-    {
-        mFull = false;
-        mHead = 0;
-        mTail = 0;
+        else
+        {
+            mFull = false;
+            mHead = 0;
+            mTail = 0;
+        }
     }
 }
 

@@ -17,9 +17,9 @@ void __cdecl PblTraceP(const char* Format, ...);
 // SYNTHETIC: SWBF2 0x004072e0
 // `dynamic initializer for 'pcRedShader::s_ShaderFactoryByRenderType''
 
+// GLOBAL: SWBF2 0x007f5050
 PblHashTable<const pcRedShader, pcRedShader::FACTORY_SLOTS>
     pcRedShader::s_ShaderFactoryByRenderType;
-int pcRedShader::s_ShaderFactoryByRenderTypeNumEntries;
 
 // GLOBAL: SWBF2 0x007f4fe8
 // pcRedShaderDef::s_IDCount
@@ -85,17 +85,11 @@ void pcRedShaderDef::BindOnRead(pcRedShader* pShader)
 // FUNCTION: SWBF2 0x006ac740
 void __cdecl pcRedShader::Cleanup()
 {
-    const unsigned int* const puiKeys = s_ShaderFactoryByRenderType._table;
-    const pcRedShader* const* const ppValues =
-        (const pcRedShader* const*)(puiKeys + FACTORY_SLOTS);
-
-    for (unsigned int i = 0; i < FACTORY_SLOTS; ++i)
+    for (PblHashTable<const pcRedShader, FACTORY_SLOTS>::Itor it = s_ShaderFactoryByRenderType.Begin();
+         it != s_ShaderFactoryByRenderType.End(); ++it)
     {
-        if (puiKeys[i] == 0)
-        {
-            continue;
-        }
-        ppValues[i]->GetShaderDef()->Reset();
+        const pcRedShader* pShader = it;
+        pShader->GetShaderDef()->Reset();
     }
 
     pcRedShaderDef::Cleanup();
@@ -160,18 +154,10 @@ void __cdecl pcRedShader::Init()
 
     pcRedShaderDef::Init();
 
-    const unsigned int* const puiKeys = s_ShaderFactoryByRenderType._table;
-    const pcRedShader* const* const ppValues =
-        (const pcRedShader* const*)(puiKeys + FACTORY_SLOTS);
-
-    for (unsigned int i = 0; i < FACTORY_SLOTS; ++i)
+    for (PblHashTable<const pcRedShader, FACTORY_SLOTS>::Itor it = s_ShaderFactoryByRenderType.Begin();
+         it != s_ShaderFactoryByRenderType.End(); ++it)
     {
-        if (puiKeys[i] == 0)
-        {
-            continue;
-        }
-
-        const pcRedShader* pFactory = ppValues[i];
+        const pcRedShader* pFactory = it;
 
         pFactory->_StaticInit();
         if (uiPipeline == 0 || pFactory->GetShaderDef()->m_uiNameHash == 0)
@@ -496,12 +482,9 @@ void pcRedShader::_BindPipeline(const GetStateFuncT* pGetState,
 // FUNCTION: SWBF2 0x006ad200
 unsigned int __cdecl pcRedShader::_Register(unsigned int uiHash, const pcRedShader* pFactory)
 {
-    if (s_ShaderFactoryByRenderType.Store(uiHash, pFactory))
-    {
-        ++s_ShaderFactoryByRenderTypeNumEntries;
-    }
+    s_ShaderFactoryByRenderType.Store(uiHash, pFactory);
 
-    return (unsigned int)s_ShaderFactoryByRenderTypeNumEntries;
+    return (unsigned int)s_ShaderFactoryByRenderType.GetNumEntries();
 }
 
 // FUNCTION: SWBF2 0x006ad230

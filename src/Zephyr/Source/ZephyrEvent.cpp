@@ -17,9 +17,6 @@ ZephyrEventList* ZephyrEventBank::New(unsigned int uiHash)
     }
 
     short i = _iNumLists++;
-    if (_HashTable.Store(uiHash, &_Lists[i]))
-    {
-        ++_HashTableNumEntries;
-    }
+    _HashTable.Store(uiHash, &_Lists[i]);
     return &_Lists[i];
 }

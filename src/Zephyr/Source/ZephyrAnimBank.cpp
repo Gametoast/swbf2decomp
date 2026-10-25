@@ -31,7 +31,6 @@ bool ZephyrAnimBank::Open(char* pcMem, unsigned int uiMemSize, const char* pcDat
     char* pcJointData = pcJoints + 56 * pkHeader->u32NumTotalJoints;
 
     m_kHashCRC2Anim.Clear();
-    m_kHashCRC2AnimNumEntries = 0;
 
     ZephyrAnim* pkAnim = m_pkAnims;
     for (int i = 0; i < m_u16NumAnims; ++i)
@@ -40,10 +39,7 @@ bool ZephyrAnimBank::Open(char* pcMem, unsigned int uiMemSize, const char* pcDat
         {
             return false;
         }
-        if (m_kHashCRC2Anim.Store(pkAnim->GetNameCRC(), pkAnim))
-        {
-            ++m_kHashCRC2AnimNumEntries;
-        }
+        m_kHashCRC2Anim.Store(pkAnim->GetNameCRC(), pkAnim);
 
         unsigned short u16NumJoints = pkAnimD->u16NumJoints;
         ++pkAnim;

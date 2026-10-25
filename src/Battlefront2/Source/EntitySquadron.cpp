@@ -234,6 +234,7 @@ bool EntitySquadron::AddToSquadron(EntitySquadron* const pMember, int iSlot)
 }
 
 // FUNCTION: SWBF2 0x004fc3a0
+// EntitySquadron::RemoveFromSquadron
 void EntitySquadron::RemoveFromSquadron()
 {
     if (IsSquadronLeader())

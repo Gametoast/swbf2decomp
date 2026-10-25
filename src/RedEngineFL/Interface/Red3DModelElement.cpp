@@ -131,8 +131,7 @@ void Red3DModelElement::RenderUsingContext(const PblMatrix& mContext,
     if (!pPose)
     {
         pPose = &pose;
-        pose._Table.Clear();
-        pose._iNumEntries = 0;
+        pose.Clear();
         pose.BindToSkeleton(0);
     }
 

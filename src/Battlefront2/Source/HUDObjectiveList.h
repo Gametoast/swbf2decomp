@@ -77,6 +77,7 @@ public:
     void AddObjective(unsigned int uiTextHashID, unsigned int uiPopupTextID, int iTeam);
     void SetState(unsigned int uiTextHashID, Objective::ObjectiveState state);
     Objective::ObjectiveState GetState(unsigned int uiTextHashID);
+    unsigned int GetCurrentPopupText();
     Objective* FindObjective(unsigned int uiTextHashID);
 
 protected:
