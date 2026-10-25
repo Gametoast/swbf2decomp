@@ -700,7 +700,8 @@ void OrdnanceClass::SetProperty(unsigned int uProperty, const char* pszValue)
     }
 }
 
-// FUNCTION: SWBF2 0x005f89c0
+// TEMPLATE: SWBF2 0x005f89c0
+// Factory<Ordnance,OrdnanceClass,OrdnanceDesc>::Factory<Ordnance,OrdnanceClass,OrdnanceDesc>
 template Factory<Ordnance, OrdnanceClass, OrdnanceDesc>::Factory(OrdnanceClass*, unsigned int);
 
 // SYNTHETIC: SWBF2 0x005f8a80

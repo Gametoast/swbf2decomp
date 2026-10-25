@@ -3461,7 +3461,7 @@ bool EntityDroideka::PostCollisionUpdate(float fDeltaTime)
                 mWakeEmitter = pWake->BuildEffect();
                 if (mWakeEmitter)
                 {
-                    mWakeEmitter->AttachEffectToObject(this, mOffset, false);
+                    mWakeEmitter->AttachEffectToObject(this, mOffset, true);
                 }
             }
         }
@@ -4402,7 +4402,7 @@ void EntityDroideka::Render(unsigned char aLod, float aFadeVal, unsigned int uiR
 
                     if (spine)
                     {
-                        particleObj->AttachEffectToObject(this, spine, false);
+                        particleObj->AttachEffectToObject(this, spine, true);
                     }
                     else
                     {

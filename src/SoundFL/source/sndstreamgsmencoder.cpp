@@ -40,7 +40,7 @@ void Snd::StreamGSMEncoder::SetPackets(unsigned int uiPacketSize, StreamPacket* 
 // FUNCTION: SWBF2 0x00741780
 StreamGSMEncoder::~StreamGSMEncoder()
 {
-    if (mProducer[2] != 0)
+    if (GetPacketSize() != 0)
     {
         Flush();
     }
@@ -219,7 +219,7 @@ void StreamGSMEncoder::Update()
                 bFlag1 = (uiFlags & 2) != 0;
                 bLast = bFlag0 || bFlag1;
 
-                if (bLast && mInputFrameOffset != 0 && mOutputPacketOffset < mProducer[2])
+                if (bLast && mInputFrameOffset != 0 && mOutputPacketOffset < GetPacketSize())
                 {
                     memset(&mInputFrame[mInputFrameOffset], 0,
                            (160 - mInputFrameOffset) * 2);
@@ -239,7 +239,7 @@ void StreamGSMEncoder::Update()
                 mInputPacketSize = 0;
             }
 
-            if (mOutputPacketOffset == mProducer[2] || bLast)
+            if (mOutputPacketOffset == GetPacketSize() || bLast)
             {
                 const unsigned int uiPos = mPlaybackPosition;
                 const unsigned int uiDecoded = (mOutputPacketOffset / 33) * 160;

@@ -32,7 +32,24 @@ public:
 
     int& GetInt(const char* pcName);
 
-    void ResetAll();
+    void ResetAll()
+    {
+        for (typename HashTable<int*, const char*, ALLOC>::Itor i = int32Map_.Begin();
+             i != int32Map_.End(); ++i)
+        {
+            **i = 0;
+        }
+        for (typename HashTable<float*, const char*, ALLOC>::Itor i = floatMap_.Begin();
+             i != floatMap_.End(); ++i)
+        {
+            **i = 0.0f;
+        }
+        for (typename HashTable<bool*, const char*, ALLOC>::Itor i = boolMap_.Begin();
+             i != boolMap_.End(); ++i)
+        {
+            **i = false;
+        }
+    }
 
     HashTable<int*, const char*, ALLOC>   int32Map_;
     HashTable<float*, const char*, ALLOC> floatMap_;

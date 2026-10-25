@@ -96,12 +96,9 @@ bool GameVoiceChat::Encoder::Open(unsigned int captureDeviceIndex, float fMaxPac
 
     mEncoder.SetPackets(uiEncodedBytes, mEncoderPackets, 1);
 
-    mEncoder.mConnection.mInputNode = &mVAD;
-    mEncoder.mConnection.mInputNodeOutputIndex = 0;
-    mVAD.mConnection.mInputNode = &mAGC;
-    mVAD.mConnection.mInputNodeOutputIndex = 0;
-    mAGC.mConnection.mInputNode = &mSource;
-    mAGC.mConnection.mInputNodeOutputIndex = 0;
+    mEncoder.Connect(&mVAD, 0);
+    mVAD.Connect(&mAGC, 0);
+    mAGC.Connect(&mSource, 0);
     mAudioPacketIndex = 0;
     mSourceDeviceIndex = 0xFF;
     mPacketSizeMs = fMs;
@@ -128,12 +125,9 @@ void GameVoiceChat::Encoder::FreeBuffers()
 // FUNCTION: SWBF2 0x0053d710
 void GameVoiceChat::Encoder::Close()
 {
-    mEncoder.mConnection.mInputNode = 0;
-    mEncoder.mConnection.mInputNodeOutputIndex = 0;
-    mVAD.mConnection.mInputNode = 0;
-    mVAD.mConnection.mInputNodeOutputIndex = 0;
-    mAGC.mConnection.mInputNode = 0;
-    mAGC.mConnection.mInputNodeOutputIndex = 0;
+    mEncoder.Connect(0, 0);
+    mVAD.Connect(0, 0);
+    mAGC.Connect(0, 0);
 
     if (IsPlaying())
     {

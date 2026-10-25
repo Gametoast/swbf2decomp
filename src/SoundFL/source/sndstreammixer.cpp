@@ -67,7 +67,7 @@ void StreamMixer::SetLastPacketInfo(unsigned char uc)
 // FUNCTION: SWBF2 0x0073fcb0
 void StreamMixer::SetMixBuffer(int* const pBuffer)
 {
-    const unsigned int uiSize = (mProducer[2] >> 1) << 2;
+    const unsigned int uiSize = (GetPacketSize() >> 1) << 2;
 
     memset(pBuffer, 0, uiSize);
 

@@ -651,16 +651,16 @@ Event<CommandPost, char>::GetFilter(PostMatchesTeam<char>&, Callback*);
 // EventManager::RegisterRegisterLuaCallback<CommandPost,char,EventManager::PostMatchesTeam<char> >
 
 // TEMPLATE: SWBF2 0x00510460
-// EventManager::RegisterLuaCallback<classCommandPost,unsigned__int64,classEventManager::PostMatchesTeam<unsigned__int64>>
+// EventManager::RegisterLuaCallback<CommandPost,unsigned __int64,EventManager::PostMatchesTeam<unsigned __int64> >
 
 // TEMPLATE: SWBF2 0x00510c90
-// EventManager::UnregisterLuaCallback<classCommandPost,char>
+// EventManager::UnregisterLuaCallback<CommandPost,char>
 
 // TEMPLATE: SWBF2 0x00510fc0
-// EventManager::RegisterLuaCallback<classCommandPost,char,classEventManager::PostMatchesName<char>>
+// EventManager::RegisterLuaCallback<CommandPost,char,EventManager::PostMatchesName<char> >
 
 // TEMPLATE: SWBF2 0x005111d0
-// EventManager::RegisterLuaCallback<classCommandPost,char,classEventManager::PostMatchesTeam<char>>
+// EventManager::RegisterLuaCallback<CommandPost,char,EventManager::PostMatchesTeam<char> >
 
 // TEMPLATE: SWBF2 0x005113d0
 // EventManager::Event<CommandPost,char>::Unregister

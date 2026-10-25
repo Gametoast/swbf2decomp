@@ -22,6 +22,14 @@ struct StreamPacket
     ~StreamPacket() {}
 
     void Lock() { ++mRefCount; }
+    bool IsLocked() const { return mRefCount > 0; }
+
+    void SetUsed(unsigned int uiUsed) { mBufferUsed = uiUsed; }
+    unsigned int GetUsed() const { return mBufferUsed; }
+    void SetPosition(unsigned int uiPosition) { mPos = uiPosition; }
+    unsigned int GetPosition() const { return mPos; }
+    void SetBuffer(void* pBuffer) { mBuffer = pBuffer; }
+    void* GetBuffer() const { return mBuffer; }
 
     // FUNCTION: SWBF2 0x0053d330
     void Unlock()

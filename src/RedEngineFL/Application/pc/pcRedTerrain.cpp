@@ -137,7 +137,16 @@ void RedTerrain::Activate()
 // FUNCTION: SWBF2 0x006d35c0
 void TerrainRenderable::Activate()
 {
-    _SetQuality();
+    QualityT eQuality = RedRenderer::pcGetRenderOptions().terrainQuality;
+    bool bBumpMapping = RedRenderer::pcGetRenderOptions().bumpMapping;
+    if (m_eQuality != eQuality || m_bEnableBumpMapping != bBumpMapping)
+    {
+        m_eQuality = eQuality;
+        m_bEnableBumpMapping = bBumpMapping;
+        RedTerrain::RenderDetail = eQuality > QUALITY_LOW;
+        _InitPixelLighting(RedRenderer::pcGetRenderCaps().pipeline != PIPELINE_FIXED &&
+                           m_eQuality == QUALITY_HIGH);
+    }
 }
 
 // FUNCTION: SWBF2 0x006d6480
@@ -150,14 +159,8 @@ void TerrainRenderable::_SetQuality()
         m_eQuality = eQuality;
         m_bEnableBumpMapping = bBumpMapping;
         RedTerrain::RenderDetail = eQuality > QUALITY_LOW;
-        if (RedRenderer::pcGetRenderCaps().pipeline != PIPELINE_FIXED && m_eQuality == QUALITY_HIGH)
-        {
-            _InitPixelLighting(true);
-        }
-        else
-        {
-            _InitPixelLighting(false);
-        }
+        _InitPixelLighting(RedRenderer::pcGetRenderCaps().pipeline != PIPELINE_FIXED &&
+                           m_eQuality == QUALITY_HIGH);
     }
 }
 

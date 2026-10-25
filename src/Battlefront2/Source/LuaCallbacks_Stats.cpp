@@ -1,4 +1,5 @@
 #include "LuaCallbacks_Stats.h"
+#include "FLInputManager.h"
 #include "LuaHelper.h"
 #include "PlayerProfile.h"
 #include "PlayerStats.h"
@@ -23,7 +24,6 @@
 
 using namespace PblUnicode;
 
-extern int gActiveViewport;
 
 // GLOBAL: SWBF2 0x01e57990
 int gTeamStatsSortMode;
@@ -737,7 +737,7 @@ static void CareerMedals_AddItem(const unsigned short* pusLabel, int iVal1, int 
 // FUNCTION: SWBF2 0x0059e500
 int GetStatsPageJoystick()
 {
-    return gActiveViewport;
+    return FLInputManager::Instance()->GetPrimaryPort();
 }
 
 // FUNCTION: SWBF2 0x0059e570

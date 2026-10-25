@@ -11,6 +11,7 @@ QueueBase::QueueBase()
     mTail = 0;
 }
 
+// FUNCTION: SWBF2 0x00738940
 QueueBase::~QueueBase()
 {
 }
@@ -107,7 +108,3 @@ const void* QueueBase::Peek(unsigned int uiElementSize,
 
 }
 
-// FUNCTION: SWBF2 0x00738940
-void DestroyFoldedQueue()
-{
-}

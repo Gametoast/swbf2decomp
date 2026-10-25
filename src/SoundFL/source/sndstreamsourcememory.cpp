@@ -69,7 +69,7 @@ void StreamSourceMemory::Update()
         return;
     }
 
-    const unsigned int uiPacketSize = mProducer[2];
+    const unsigned int uiPacketSize = GetPacketSize();
     if (mDataSize == 0 || uiPacketSize == 0)
     {
         Stop();

@@ -40,7 +40,8 @@ void ZephyrPoseStatic<N>::Close()
 {
 }
 
-// FUNCTION: SWBF2 0x0072dfd0
+// TEMPLATE: SWBF2 0x0072dfd0
+// ZephyrPoseStatic<32>::Set
 template <int N>
 void ZephyrPoseStatic<N>::Set(const ZephyrPoseDyn<N>& kPose, bool bUseDefault)
 {
@@ -62,7 +63,8 @@ void ZephyrPoseStatic<N>::Set(const ZephyrPoseDyn<N>& kPose, bool bUseDefault)
     }
 }
 
-// FUNCTION: SWBF2 0x0072df40
+// TEMPLATE: SWBF2 0x0072df40
+// ZephyrPoseStatic<32>::Set
 template <int N>
 void ZephyrPoseStatic<N>::Set(const ZephyrPoseDyn<N>& kPose, const PblBitVector<N>& kMask, bool bUseDefault)
 {
@@ -99,7 +101,8 @@ void ZephyrPoseStatic<N>::SetBasePose()
     }
 }
 
-// FUNCTION: SWBF2 0x0072dc80
+// TEMPLATE: SWBF2 0x0072dc80
+// ZephyrPoseStatic<32>::Blend
 template <int N>
 void ZephyrPoseStatic<N>::Blend(const ZephyrPoseDyn<N>& kPose, float fWeight)
 {
@@ -127,7 +130,8 @@ void ZephyrPoseStatic<N>::Blend(const ZephyrPoseDyn<N>& kPose, float fWeight)
     }
 }
 
-// FUNCTION: SWBF2 0x0072db30
+// TEMPLATE: SWBF2 0x0072db30
+// ZephyrPoseStatic<32>::Blend
 template <int N>
 void ZephyrPoseStatic<N>::Blend(const ZephyrPoseDyn<N>& kPose, const PblBitVector<N>& kMask, float fWeight)
 {

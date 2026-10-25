@@ -3995,14 +3995,8 @@ int AttachEffectToObject(lua_State* L)
         EntityGeometry* pEntity = _GetEntity<EntityGeometry>(LuaHelper::mState, 2);
         const char* pcBone = luaL_optlstring(LuaHelper::mState, 3, 0, 0);
         const PblMatrix* pOffset = lua_type(LuaHelper::mState, 4) > LUA_TNIL ?
-            (const PblMatrix*)lua_touserdata(LuaHelper::mState, 4) : 0;
-        PblMatrix identity;
-        if (!pOffset)
-        {
-            identity.Reset();
-            pOffset = &identity;
-        }
-        pEffect->AttachEffectToObject(pEntity, PblHash(pcBone), *pOffset, false);
+            (const PblMatrix*)lua_touserdata(LuaHelper::mState, 4) : &gMatrixIdentity;
+        pEffect->AttachEffectToObject(pEntity, PblHash(pcBone), *pOffset, true);
     }
     return 0;
 }

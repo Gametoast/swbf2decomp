@@ -6,6 +6,7 @@
 #include "GameMovie.h"
 
 #include "CommandLine.h"
+#include "FLInputManager.h"
 #include "GameLoop.h"
 #include "GameSoundEngine.h"
 #include "GameState.h"
@@ -75,9 +76,7 @@ bool sLoadNestedLevels = true;
 
 // GLOBAL: SWBF2 0x007e666d
 bool GameMovie::sUseMovies = true;
-// GLOBAL: SWBF2 0x01ec0ace
 
-bool gMissionSpecified;
 char Destination[16];
 
 namespace PlayerPrefs
@@ -301,7 +300,7 @@ void ParseCommandLine(int iArgc, char** const apcArgv)
             else
             {
                 GameLoop::SetNextMission(pcArg);
-                gMissionSpecified = true;
+                FLInputManager::Instance()->SetAutoAcquire(true);
             }
             continue;
         }

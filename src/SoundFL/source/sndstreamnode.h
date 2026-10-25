@@ -30,6 +30,23 @@ struct StreamNodeConnection
     // FUNCTION: SWBF2 0x0053c650
     ~StreamNodeConnection() {}
 
+    void Initialize(StreamNodeSource* const pNode, unsigned int uiOutput)
+    {
+        mInputNode = pNode;
+        mInputNodeOutputIndex = uiOutput;
+    }
+
+    StreamNodeSource* GetInputNode() const { return mInputNode; }
+
+    StreamPacket* GetPacket() const
+    {
+        if (mInputNode)
+        {
+            return mInputNode->GetPacket(mInputNodeOutputIndex);
+        }
+        return 0;
+    }
+
     StreamNodeSource* mInputNode;
     unsigned int mInputNodeOutputIndex;
 };
@@ -41,6 +58,11 @@ public:
     {
         mConnection.mInputNode = pSource;
         mConnection.mInputNodeOutputIndex = uiOutput;
+    }
+
+    StreamNodeSource* ConnectionGetNode() const
+    {
+        return mConnection.GetInputNode();
     }
 
     StreamPacket* ConnectionGetPacket() const

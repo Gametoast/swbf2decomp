@@ -412,13 +412,13 @@ Event<Team, float>::GetFilter(TeamMatches<float>&, Callback*);
 // EventManager::RegisterRegisterLuaCallback<Team,float,EventManager::TeamMatches<float> >
 
 // TEMPLATE: SWBF2 0x0051b1d0
-// EventManager::UnregisterLuaCallback<classTeam,int>
+// EventManager::UnregisterLuaCallback<Team,int>
 
 // TEMPLATE: SWBF2 0x0051b4f0
-// EventManager::RegisterLuaCallback<classTeam,int,classEventManager::TeamMatches<int>>
+// EventManager::RegisterLuaCallback<Team,int,EventManager::TeamMatches<int> >
 
 // TEMPLATE: SWBF2 0x0051b7e0
-// EventManager::RegisterLuaCallback<classTeam,float>
+// EventManager::RegisterLuaCallback<Team,float>
 
 // TEMPLATE: SWBF2 0x0051bb10
 // EventManager::Event<Team,int>::Unregister
@@ -436,7 +436,7 @@ Event<Team, float>::GetFilter(TeamMatches<float>&, Callback*);
 // EventManager::UnregisterLuaCallback<Team,float>
 
 // TEMPLATE: SWBF2 0x0051b990
-// EventManager::RegisterLuaCallback<Team,float,TeamMatches<float> >
+// EventManager::RegisterLuaCallback<Team,float,EventManager::TeamMatches<float> >
 
 }
 

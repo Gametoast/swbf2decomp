@@ -1,4 +1,5 @@
 #include "LuaCallbacks_LoadSave.h"
+#include "FLInputManager.h"
 #include "LuaHelper.h"
 #include "NetSetup.h"
 
@@ -69,7 +70,6 @@ namespace PblBuildType
 {
 extern unsigned char gCreateMemoryProfile;
 }
-extern int gActiveViewport;
 extern bool gInTrainingMission;
 
 namespace RedLocalizeDB
@@ -183,7 +183,7 @@ int ScriptCB_GetLoginList(lua_State* L)
             iCount = 1;
         }
 
-        if (iInList + iNumFiles < 1 && gActiveViewport)
+        if (iInList + iNumFiles < 1 && FLInputManager::Instance()->GetPrimaryPort())
         {
             if (pCur)
             {
@@ -461,7 +461,7 @@ int ScriptCB_AddProfile(lua_State* L)
         PlayerProfile::SetNumMemoryProfiles(iNum + 1);
     }
 
-    int iViewport = gActiveViewport;
+    int iViewport = FLInputManager::Instance()->GetPrimaryPort();
     PlayerProfile::SetCurProfile(iViewport);
     PlayerProfile::tProfile* pProfile = PlayerProfile::GetCurProfile();
     pProfile->ResetProfile();
@@ -511,14 +511,14 @@ static void LoadProfileDoneCallback()
     else
     {
         unsigned int uiCur = PlayerProfile::GetCurProfileIndex();
-        int iViewport = gActiveViewport;
+        int iViewport = FLInputManager::Instance()->GetPrimaryPort();
         PlayerProfile::ResetAllProfiles();
         PlayerProfile::DuplicateDefaultProfile(iViewport, PlayerProfile::GetDefaultProfileName());
         PlayerProfile::SetCurProfile(uiCur);
         gProfilesLoaded = 0;
     }
 
-    int iViewport = gActiveViewport;
+    int iViewport = FLInputManager::Instance()->GetPrimaryPort();
     if (gProfilesLoaded & 1)
     {
         PlayerProfile::SetCurProfile(0);
@@ -589,7 +589,7 @@ int ScriptCB_StartLoadProfile(lua_State* L)
     {
         char acName[130];
         PblUnicode::ustrncnv(acName, (unsigned short const*)pcName, sizeof(acName));
-        NetSetup::SetLoginName(gActiveViewport, acName);
+        NetSetup::SetLoginName(FLInputManager::Instance()->GetPrimaryPort(), acName);
     }
     return 0;
 }
@@ -611,7 +611,7 @@ static void Make1FakeProfile(int iIndex, unsigned short const* pusName)
     PlayerPrefs::mAllUserPrefs[iIndex].pProfile = PlayerProfile::GetCurProfile();
     PlayerProfile::SetCurProfile(iIndex);
 
-    if (iIndex != gActiveViewport)
+    if (iIndex != FLInputManager::Instance()->GetPrimaryPort())
     {
         PlayerProfile::tProfile* pProfile = PlayerProfile::GetProfile(iIndex);
         pProfile->mAccumPoints.ResetToDefault();
@@ -633,7 +633,7 @@ namespace Lua_Callbacks
 // FUNCTION: SWBF2 0x00588fd0
 int ScriptCB_MakeFakeProfiles(lua_State* L)
 {
-    int iViewport = gActiveViewport;
+    int iViewport = FLInputManager::Instance()->GetPrimaryPort();
     if (lua_isstring(LuaHelper::mState, 1))
     {
         Make1FakeProfile(0, (unsigned short const*)luaL_checklstring(LuaHelper::mState, 1, 0));
@@ -656,7 +656,7 @@ int ScriptCB_SetProfileAsDefault(lua_State* L)
 // FUNCTION: SWBF2 0x00589050
 int ScriptCB_RestoreDefaultProfile(lua_State* L)
 {
-    int iViewport = gActiveViewport;
+    int iViewport = FLInputManager::Instance()->GetPrimaryPort();
     PlayerProfile::DuplicateDefaultProfile(iViewport, 0);
     PlayerProfile::SetCurProfile(iViewport);
     PlayerPrefs::mAllUserPrefs[0].pProfile = PlayerProfile::GetCurProfile();
@@ -674,7 +674,7 @@ int ScriptCB_MarkCurrentProfile(lua_State* L)
 // FUNCTION: SWBF2 0x005890a0
 int ScriptCB_ReloadMarkedProfile(lua_State* L)
 {
-    int iViewport = gActiveViewport;
+    int iViewport = FLInputManager::Instance()->GetPrimaryPort();
     memcpy(PlayerProfile::GetProfile(iViewport), &sSavedPlayerOne, sizeof(PlayerProfile::tProfile));
     PlayerProfile::SetCurProfile(iViewport);
     PlayerPrefs::mAllUserPrefs[0].pProfile = PlayerProfile::GetCurProfile();
@@ -810,7 +810,7 @@ int ScriptCB_StartSaveMetagame(lua_State* L)
     const unsigned short* pusOld = (unsigned short const*)luaL_optlstring(LuaHelper::mState, 1, 0, 0);
     const unsigned short* pusName = (unsigned short const*)luaL_optlstring(LuaHelper::mState, 2, 0, 0);
     unsigned short ausFilename[128];
-    PblUnicode::ustrlcpy(ausFilename, pusName ? pusName : PlayerProfile::GetProfile(gActiveViewport)->mName, 128);
+    PblUnicode::ustrlcpy(ausFilename, pusName ? pusName : PlayerProfile::GetProfile(FLInputManager::Instance()->GetPrimaryPort())->mName, 128);
     SaveFile::MakeMetagameFilename(ausFilename, ausFilename);
     SaveGameManager::StartQueue();
     SaveGameManager::QueueSave(ausFilename, 2, sMetagameBuffer, sizeof(sMetagameBuffer));
@@ -886,7 +886,7 @@ int ScriptCB_StartSaveCampaign(lua_State* L)
     const unsigned short* pusOld = (unsigned short const*)luaL_optlstring(LuaHelper::mState, 1, 0, 0);
     const unsigned short* pusName = (unsigned short const*)luaL_optlstring(LuaHelper::mState, 2, 0, 0);
     unsigned short ausFilename[128];
-    PblUnicode::ustrlcpy(ausFilename, pusName ? pusName : PlayerProfile::GetProfile(gActiveViewport)->mName, 128);
+    PblUnicode::ustrlcpy(ausFilename, pusName ? pusName : PlayerProfile::GetProfile(FLInputManager::Instance()->GetPrimaryPort())->mName, 128);
     SaveFile::MakeMetagameFilename(ausFilename, ausFilename);
     SaveGameManager::StartQueue();
     SaveGameManager::QueueSave(ausFilename, 3, sCampaignBuffer, sizeof(sCampaignBuffer));

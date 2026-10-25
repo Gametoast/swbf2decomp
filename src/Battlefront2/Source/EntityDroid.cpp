@@ -761,7 +761,7 @@ void EntityDroid::FreezeMovement()
 }
 
 // TEMPLATE: SWBF2 0x0049e180
-// Factory<Weapon, WeaponClass, WeaponDesc>::Find
+// Factory<Weapon,WeaponClass,WeaponDesc>::Find
 template WeaponClass* Factory<Weapon, WeaponClass, WeaponDesc>::Find(unsigned int);
 
 

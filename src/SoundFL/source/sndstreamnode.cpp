@@ -7,14 +7,13 @@ namespace Snd
 void StreamNodeSinkNInput::Connect(StreamNodeSource* const pSource,
                                    unsigned int uiOutput, unsigned int uiInput)
 {
-    mConnections[uiInput].mInputNode = pSource;
-    mConnections[uiInput].mInputNodeOutputIndex = uiOutput;
+    mConnections[uiInput].Initialize(pSource, uiOutput);
 }
 
 // FUNCTION: SWBF2 0x0073d600
 StreamNodeSource* StreamNodeSinkNInput::ConnectionGetNode(unsigned int uiInput) const
 {
-    return mConnections[uiInput].mInputNode;
+    return mConnections[uiInput].GetInputNode();
 }
 
 // FUNCTION: SWBF2 0x0073d5c0
@@ -116,12 +115,7 @@ namespace Snd
 // FUNCTION: SWBF2 0x0073d610
 StreamPacket* StreamNodeSinkNInput::ConnectionGetPacket(unsigned int uiInput) const
 {
-    const StreamNodeConnection& connection = mConnections[uiInput];
-    if (connection.mInputNode == 0)
-    {
-        return 0;
-    }
-    return connection.mInputNode->GetPacket(connection.mInputNodeOutputIndex);
+    return mConnections[uiInput].GetPacket();
 }
 }
 

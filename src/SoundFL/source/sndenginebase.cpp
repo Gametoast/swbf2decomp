@@ -55,26 +55,7 @@ VoiceVirtualManager EngineBase::smVoiceVirtualManager;
 // EngineBase::smSoundRAMAllocator
 MemoryBitmap EngineBase::smSoundRAMAllocator;
 
-// FUNCTION: SWBF2 0x00731440
-ListenerBase::ListenerBase()
-{
-    mFlags = flags_reverbUpdate;
-    mPos = &Globals::smNullVector;
-    mSpacePos = &Globals::smNullVector;
-    mFront = &Globals::smFrontVector;
-    mUp = &Globals::smUpVector;
-    mVel = &Globals::smNullVector;
-    mDopplerFactor = 1.0f;
-    mRollOffFactor = 10.0f;
-    mDistanceFactor = 1.0f;
-    mSpace = &Space::smDefaultSpace;
-    mReverb = 0;
-}
 
-// FUNCTION: SWBF2 0x00733e80
-Listener::Listener()
-{
-}
 
 // SYNTHETIC: SWBF2 0x0040b720
 // `dynamic initializer for 'Snd::EngineBase::smListeners''
@@ -262,27 +243,6 @@ void EngineBase::Update(float fDeltaTime, bool b)
 namespace Snd
 {
 
-// FUNCTION: SWBF2 0x00731490
-ListenerBase::~ListenerBase()
-{
-    if (mSpace)
-    {
-        mSpace = &Space::smDefaultSpace;
-        I3DL2ReverbPreset* pReverb = (I3DL2ReverbPreset*)Space::smDefaultSpace.mReverbPreset;
-        if (pReverb != mReverb)
-        {
-            if (pReverb)
-            {
-                mFlags |= flags_reverbChanged;
-            }
-            mReverb = pReverb;
-        }
-    }
-    if (mReverb)
-    {
-        mReverb = 0;
-    }
-}
 
 
 }

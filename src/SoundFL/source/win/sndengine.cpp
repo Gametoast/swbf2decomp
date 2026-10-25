@@ -765,12 +765,9 @@ bool Engine::DSClose()
             StreamLowHighPass* const pFilter = &_smHighLowPass;
             DSBufferRenderer& rRenderer = smSoftOutput->GetRenderer();
 
-            rRenderer.mConnection.mInputNode =
-                pFilter->StreamNodeSink::mConnection.mInputNode;
-            rRenderer.mConnection.mInputNodeOutputIndex = 0;
+            rRenderer.Connect(pFilter->StreamNodeSink::ConnectionGetNode(), 0);
 
-            pFilter->StreamNodeSink::mConnection.mInputNode = 0;
-            pFilter->StreamNodeSink::mConnection.mInputNodeOutputIndex = 0;
+            pFilter->StreamNodeSink::Connect(0, 0);
             pFilter->Flush();
         }
 
@@ -1227,13 +1224,10 @@ bool Engine::Open(HWND hwnd, MixConfig eMixConfig, bool bEnable,
 
                     StreamLowHighPass& rFilter = _smHighLowPass;
 
-                    rFilter.StreamNodeSink::mConnection.mInputNode =
-                        rRenderer.StreamNodeSink::mConnection.mInputNode;
-                    rFilter.StreamNodeSink::mConnection.mInputNodeOutputIndex = 0;
-                    rRenderer.StreamNodeSink::mConnection.mInputNode =
-                        (StreamNodeSource*)&_smHighLowPass;
-                    rRenderer.StreamNodeSink::mConnection
-                        .mInputNodeOutputIndex = 0;
+                    rFilter.StreamNodeSink::Connect(
+                        rRenderer.StreamNodeSink::ConnectionGetNode(), 0);
+                    rRenderer.StreamNodeSink::Connect(
+                        (StreamNodeSource*)&_smHighLowPass, 0);
 
                     rFilter.SetBuffer(_smHighLowPassBuffer, 0x400);
                     rFilter.DSP::HighLowPassFilter::SetNumChannels(2);

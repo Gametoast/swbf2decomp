@@ -58,7 +58,8 @@ static inline void BuildJointWorldMatrix(ZephyrSkeleton<N>& kSkel, char iJoint, 
     kSkel.m_pWorldMatrices[iJoint] = kWorld;
 }
 
-// FUNCTION: SWBF2 0x0072cc30
+// TEMPLATE: SWBF2 0x0072cc30
+// ZephyrSkeleton<32>::Open
 template <int N>
 bool ZephyrSkeleton<N>::Open(const ZephyrSkeletonShared& kShared)
 {
@@ -66,7 +67,8 @@ bool ZephyrSkeleton<N>::Open(const ZephyrSkeletonShared& kShared)
     return true;
 }
 
-// FUNCTION: SWBF2 0x0072cc40
+// TEMPLATE: SWBF2 0x0072cc40
+// ZephyrSkeleton<32>::Open
 template <int N>
 bool ZephyrSkeleton<N>::Open(const ZephyrSkeletonShared& kShared, const ZephyrPoseStatic<N>& kPoseFinal)
 {
@@ -83,7 +85,8 @@ void ZephyrSkeleton<N>::Close()
     m_pShared = 0;
 }
 
-// FUNCTION: SWBF2 0x0072bc30
+// TEMPLATE: SWBF2 0x0072bc30
+// ZephyrSkeleton<32>::BuildWorldMatrices
 template <int N>
 void ZephyrSkeleton<N>::BuildWorldMatrices(const PblMatrix& kRootMatrix)
 {
@@ -96,7 +99,8 @@ void ZephyrSkeleton<N>::BuildWorldMatrices(const PblMatrix& kRootMatrix)
     }
 }
 
-// FUNCTION: SWBF2 0x0072bd00
+// TEMPLATE: SWBF2 0x0072bd00
+// ZephyrSkeleton<32>::BuildWorldMatrices
 template <int N>
 void ZephyrSkeleton<N>::BuildWorldMatrices(const PblMatrix& kRootMatrix, PblBitVector<N>& kDirty)
 {
@@ -113,7 +117,8 @@ void ZephyrSkeleton<N>::BuildWorldMatrices(const PblMatrix& kRootMatrix, PblBitV
     }
 }
 
-// FUNCTION: SWBF2 0x0072bde0
+// TEMPLATE: SWBF2 0x0072bde0
+// ZephyrSkeleton<32>::BuildWorldMatrices
 template <int N>
 void ZephyrSkeleton<N>::BuildWorldMatrices(const PblMatrix& kRootMatrix, const PblBitVector<N>& kMask)
 {
@@ -133,7 +138,8 @@ void ZephyrSkeleton<N>::BuildWorldMatrices(const PblMatrix& kRootMatrix, const P
     }
 }
 
-// FUNCTION: SWBF2 0x0072bef0
+// TEMPLATE: SWBF2 0x0072bef0
+// ZephyrSkeleton<32>::BuildWorldMatrices
 template <int N>
 void ZephyrSkeleton<N>::BuildWorldMatrices(const PblMatrix& kRootMatrix, int iJoint)
 {
@@ -145,7 +151,8 @@ void ZephyrSkeleton<N>::BuildWorldMatrices(const PblMatrix& kRootMatrix, int iJo
     }
 }
 
-// FUNCTION: SWBF2 0x0072bfb0
+// TEMPLATE: SWBF2 0x0072bfb0
+// ZephyrSkeleton<32>::BuildWorldMatrices
 template <int N>
 void ZephyrSkeleton<N>::BuildWorldMatrices(const PblMatrix& kRootMatrix, int iJoint, PblBitVector<N>& kDirty)
 {
@@ -161,7 +168,8 @@ void ZephyrSkeleton<N>::BuildWorldMatrices(const PblMatrix& kRootMatrix, int iJo
     }
 }
 
-// FUNCTION: SWBF2 0x0072c150
+// TEMPLATE: SWBF2 0x0072c150
+// ZephyrSkeleton<32>::BuildWorldMatricesRecurseDown
 template <int N>
 void ZephyrSkeleton<N>::BuildWorldMatricesRecurseDown(char iJoint)
 {
@@ -180,7 +188,8 @@ void ZephyrSkeleton<N>::BuildWorldMatricesRecurseDown(char iJoint)
     } while (iJoint >= 0);
 }
 
-// FUNCTION: SWBF2 0x0072c360
+// TEMPLATE: SWBF2 0x0072c360
+// ZephyrSkeleton<32>::BuildWorldMatricesRecurseDown
 template <int N>
 void ZephyrSkeleton<N>::BuildWorldMatricesRecurseDown(char iJoint, PblBitVector<N>& kDirty)
 {
@@ -202,7 +211,8 @@ void ZephyrSkeleton<N>::BuildWorldMatricesRecurseDown(char iJoint, PblBitVector<
     } while (iJoint >= 0);
 }
 
-// FUNCTION: SWBF2 0x0072c7d0
+// TEMPLATE: SWBF2 0x0072c7d0
+// ZephyrSkeleton<32>::BuildWorldMatricesRecurseUp
 template <int N>
 void ZephyrSkeleton<N>::BuildWorldMatricesRecurseUp(char iJoint)
 {
@@ -215,7 +225,8 @@ void ZephyrSkeleton<N>::BuildWorldMatricesRecurseUp(char iJoint)
     BuildJointWorldMatrix(*this, iJoint, pJoint);
 }
 
-// FUNCTION: SWBF2 0x0072c9e0
+// TEMPLATE: SWBF2 0x0072c9e0
+// ZephyrSkeleton<32>::BuildWorldMatricesRecurseUp
 template <int N>
 void ZephyrSkeleton<N>::BuildWorldMatricesRecurseUp(char iJoint, PblBitVector<N>& kDirty)
 {

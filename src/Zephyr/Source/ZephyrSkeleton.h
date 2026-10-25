@@ -12,9 +12,11 @@ class ZephyrSkeleton
 {
 public:
 
-    // FUNCTION: SWBF2 0x0072bbf0
+    // TEMPLATE: SWBF2 0x0072bbf0
+    // ZephyrSkeleton<32>::ZephyrSkeleton<32>
     ZephyrSkeleton() { m_pShared = 0; }
-    // FUNCTION: SWBF2 0x0072bc10
+    // TEMPLATE: SWBF2 0x0072bc10
+    // ZephyrSkeleton<32>::~ZephyrSkeleton<32>
     ~ZephyrSkeleton() { m_pShared = 0; }
 
     bool Open(const ZephyrSkeletonShared& kShared, const ZephyrPoseStatic<N>& kPoseFinal);

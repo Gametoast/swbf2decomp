@@ -174,7 +174,8 @@ void ZephyrPoseDyn<N>::Update(float fElapsed)
     }
 }
 
-// FUNCTION: SWBF2 0x0072cdc0
+// TEMPLATE: SWBF2 0x0072cdc0
+// ZephyrPoseDyn<32>::GetJointTransform
 template <int N>
 void ZephyrPoseDyn<N>::GetJointTransform(ZephyrTransform& kTransform, unsigned short u16JointNum, float fT) const
 {
@@ -218,7 +219,8 @@ void ZephyrPoseDyn<N>::GetJointTransform(ZephyrTransform& kTransform, unsigned s
     }
 }
 
-// FUNCTION: SWBF2 0x0072cda0
+// TEMPLATE: SWBF2 0x0072cda0
+// ZephyrPoseDyn<32>::GetJointTransform
 template <int N>
 void ZephyrPoseDyn<N>::GetJointTransform(ZephyrTransform& kTransform, unsigned short u16JointNum) const
 {

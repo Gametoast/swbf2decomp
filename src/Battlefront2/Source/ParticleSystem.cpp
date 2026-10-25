@@ -1,4 +1,5 @@
 #include "ParticleSystem.h"
+#include "Battlefront2Lod.h"
 
 #include <float.h>
 
@@ -38,24 +39,18 @@ static bool sLodFadeMask[4][4] = {
 namespace ParticleSystem
 {
 
-// GLOBAL: SWBF2 0x01eb05ac
 
-float sSmallEffectMaxDist;
-// GLOBAL: SWBF2 0x01eb05cc
 
-float sLargeEffectMaxDist;
-// GLOBAL: SWBF2 0x01eb05ec
 
-float sMediumEffectMaxDist;
 // GLOBAL: SWBF2 0x01eaed90
 float mFadeBias;
 
 // FUNCTION: SWBF2 0x0060e3a0
 void SetMaxDistanceBias(float fBias)
 {
-    sSmallEffectMaxDist = fBias + 50.0f;
-    sMediumEffectMaxDist = fBias + 150.0f;
-    sLargeEffectMaxDist = fBias + 500.0f;
+    smallEffectLodData.SetMaxDist(fBias + 50.0f);
+    mediumEffectLodData.SetMaxDist(fBias + 150.0f);
+    largeEffectLodData.SetMaxDist(fBias + 500.0f);
 }
 
 // FUNCTION: SWBF2 0x0060e3e0

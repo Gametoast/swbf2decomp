@@ -55,7 +55,8 @@ PblMatrix const& RedPose::_GetBoneMatrix(int iBone) const
     return pMatrix ? *pMatrix : _IdentityMatrix;
 }
 
-// FUNCTION: SWBF2 0x006ddb30
+// TEMPLATE: SWBF2 0x006ddb30
+// RedPose::ConvertFromZephyrPose<32>
 template <int N>
 unsigned int RedPose::ConvertFromZephyrPose(const ZephyrSkeleton<N>& kSkel)
 {

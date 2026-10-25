@@ -23,9 +23,46 @@ public:
 
         void* GetObjectA(PblListDoubleSorted const* pList, unsigned int uOffset) const;
 
+        Node* GetNext(PblListDoubleSorted* const pList) const
+        {
+            PblListDouble::Node* pNext = mNode.mNext;
+            return pNext == &pList->mTerminator
+                ? (Node*)pList
+                : (Node*)((char*)pNext - offsetof(Node, mNode));
+        }
+
+        Node* GetPrevious(PblListDoubleSorted* const pList) const
+        {
+            PblListDouble::Node* pPrevious = mNode.mPrev;
+            return pPrevious == &pList->mTerminator
+                ? (Node*)pList
+                : (Node*)((char*)pPrevious - offsetof(Node, mNode));
+        }
+
         float mSortValue;
         PblListDouble::Node mNode;
     };
+
+    class Itor : public PblListDouble::Itor
+    {
+    public:
+        Itor(Node* pNode) : PblListDouble::Itor(&pNode->mNode) {}
+        Itor(const Itor& itor) : PblListDouble::Itor(itor) {}
+        Itor(const PblListDoubleSorted* pList) : PblListDouble::Itor(pList) {}
+        Itor(const PblListDoubleSorted& list) : PblListDouble::Itor(list) {}
+        Itor() {}
+
+        Node* GetNode(const PblListDoubleSorted* pList)
+        {
+            PblListDouble::Node* pNode = PblListDouble::Itor::GetNode();
+            return pNode == &pList->mTerminator
+                ? (Node*)pList
+                : (Node*)((char*)pNode - offsetof(Node, mNode));
+        }
+    };
+
+    Itor Begin() const { return Itor(this); }
+    Itor End() { return Itor(GetLast()); }
 
     PblListDoubleSorted(bool bSortOnAdd = false)
     {
@@ -61,6 +98,14 @@ public:
         return pNext == &mTerminator
             ? (Node*)pNext
             : (Node*)((char*)pNext - offsetof(Node, mNode));
+    }
+
+    Node* GetLast() const
+    {
+        PblListDouble::Node* pPrevious = mTerminator.mPrev;
+        return pPrevious == &mTerminator
+            ? (Node*)pPrevious
+            : (Node*)((char*)pPrevious - offsetof(Node, mNode));
     }
 
     // FUNCTION: SWBF2 0x004d2640

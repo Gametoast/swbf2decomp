@@ -408,7 +408,7 @@ void FLEffectObject::AttachEffectToObject(const EntityGeometry* pObject, const P
     m_uiAttachFlags &= ~(ATTACHED_DYNAMIC | ATTACHED_TO_GAMEOBJECT | ATTACHED_TO_VECTOR);
     if (pObject->GetGameObject() && pObject->GetGameObject()->mHandleId)
     {
-        m_hobjAttachedToObject = pObject->GetGameObject();
+        m_hobjAttachedToObject = PblHandle<GameObject const>(pObject->GetGameObject());
         m_uiAttachFlags |= ATTACHED_TO_GAMEOBJECT;
     }
     else
@@ -428,7 +428,28 @@ void FLEffectObject::AttachEffectToObject(const EntityGeometry* pObject, const P
 void FLEffectObject::AttachEffectToObject(const EntityGeometry* pObject, const PblMatrix* pMatrix,
                                           bool bDynamic)
 {
-    AttachEffectToObject(pObject, pMatrix, _IdentityMatrix, bDynamic);
+    if (!pObject)
+    {
+        return;
+    }
+
+    m_uiAttachFlags &= ~(ATTACHED_DYNAMIC | ATTACHED_TO_GAMEOBJECT | ATTACHED_TO_VECTOR);
+    if (pObject->GetGameObject() && pObject->GetGameObject()->mHandleId)
+    {
+        m_hobjAttachedToObject = PblHandle<GameObject const>(pObject->GetGameObject());
+        m_uiAttachFlags |= ATTACHED_TO_GAMEOBJECT;
+    }
+    else
+    {
+        _SetObject(pObject);
+    }
+
+    m_pmAttachedToMatrix = const_cast<PblMatrix*>(pMatrix);
+    if (bDynamic)
+    {
+        m_uiAttachFlags |= ATTACHED_DYNAMIC;
+    }
+    _Attach(_IdentityMatrix);
 }
 
 // FUNCTION: SWBF2 0x005273a0
@@ -443,7 +464,7 @@ void FLEffectObject::AttachEffectToObject(const EntityGeometry* pObject, unsigne
     m_uiAttachFlags &= ~(ATTACHED_DYNAMIC | ATTACHED_TO_GAMEOBJECT | ATTACHED_TO_VECTOR);
     if (pObject->GetGameObject() && pObject->GetGameObject()->mHandleId)
     {
-        m_hobjAttachedToObject = pObject->GetGameObject();
+        m_hobjAttachedToObject = PblHandle<GameObject const>(pObject->GetGameObject());
         m_uiAttachFlags |= ATTACHED_TO_GAMEOBJECT;
     }
     else
@@ -480,20 +501,100 @@ void FLEffectObject::AttachEffectToObject(const EntityGeometry* pObject, unsigne
 void FLEffectObject::AttachEffectToObject(const EntityGeometry* pObject, unsigned int uiBone,
                                           bool bDynamic)
 {
-    AttachEffectToObject(pObject, uiBone, _IdentityMatrix, bDynamic);
+    if (!pObject)
+    {
+        return;
+    }
+
+    m_uiAttachFlags &= ~(ATTACHED_DYNAMIC | ATTACHED_TO_GAMEOBJECT | ATTACHED_TO_VECTOR);
+    if (pObject->GetGameObject() && pObject->GetGameObject()->mHandleId)
+    {
+        m_hobjAttachedToObject = PblHandle<GameObject const>(pObject->GetGameObject());
+        m_uiAttachFlags |= ATTACHED_TO_GAMEOBJECT;
+    }
+    else
+    {
+        _SetObject(pObject);
+    }
+
+    m_pmAttachedToMatrix = 0;
+    if (uiBone)
+    {
+        if (pObject->GetPose())
+        {
+            m_pmAttachedToMatrix = const_cast<PblMatrix*>(pObject->GetPose()->Find(uiBone));
+        }
+
+        if (!m_pmAttachedToMatrix && pObject->GetModel() && pObject->GetModel()->GetRedModel(0))
+        {
+            const RedSkeleton* pSkeleton = pObject->GetModel()->GetRedModel(0)->GetSkeleton();
+            if (pSkeleton)
+            {
+                m_pmAttachedToMatrix = pSkeleton->GetBoneMatrixByName(uiBone);
+            }
+        }
+    }
+
+    if (bDynamic)
+    {
+        m_uiAttachFlags |= ATTACHED_DYNAMIC;
+    }
+    _Attach(_IdentityMatrix);
 }
 
 // FUNCTION: SWBF2 0x00527590
 void FLEffectObject::AttachEffectToObject(const EntityGeometry* pObject, const PblMatrix& mOffset,
                                           bool bDynamic)
 {
-    AttachEffectToObject(pObject, (const PblMatrix*)0, mOffset, bDynamic);
+    if (!pObject)
+    {
+        return;
+    }
+
+    m_uiAttachFlags &= ~(ATTACHED_DYNAMIC | ATTACHED_TO_GAMEOBJECT | ATTACHED_TO_VECTOR);
+    if (pObject->GetGameObject() && pObject->GetGameObject()->mHandleId)
+    {
+        m_hobjAttachedToObject = PblHandle<GameObject const>(pObject->GetGameObject());
+        m_uiAttachFlags |= ATTACHED_TO_GAMEOBJECT;
+    }
+    else
+    {
+        _SetObject(pObject);
+    }
+
+    m_pmAttachedToMatrix = 0;
+    if (bDynamic)
+    {
+        m_uiAttachFlags |= ATTACHED_DYNAMIC;
+    }
+    _Attach(mOffset);
 }
 
 // FUNCTION: SWBF2 0x00527610
 void FLEffectObject::AttachEffectToObject(const EntityGeometry* pObject, bool bDynamic)
 {
-    AttachEffectToObject(pObject, (const PblMatrix*)0, _IdentityMatrix, bDynamic);
+    if (!pObject)
+    {
+        return;
+    }
+
+    m_uiAttachFlags &= ~(ATTACHED_DYNAMIC | ATTACHED_TO_GAMEOBJECT | ATTACHED_TO_VECTOR);
+    if (pObject->GetGameObject() && pObject->GetGameObject()->mHandleId)
+    {
+        m_hobjAttachedToObject = PblHandle<GameObject const>(pObject->GetGameObject());
+        m_uiAttachFlags |= ATTACHED_TO_GAMEOBJECT;
+    }
+    else
+    {
+        _SetObject(pObject);
+    }
+
+    m_pmAttachedToMatrix = 0;
+    if (bDynamic)
+    {
+        m_uiAttachFlags |= ATTACHED_DYNAMIC;
+    }
+    _Attach(_IdentityMatrix);
 }
 
 // FUNCTION: SWBF2 0x005276a0

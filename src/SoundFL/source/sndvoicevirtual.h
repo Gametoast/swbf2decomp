@@ -27,6 +27,8 @@ public:
 
     void Stop();
 
+    VoiceBase* GetVoice() { return mVoice; }
+
     float CalculatePriority(bool bForce);
     void Play(bool bRestart);
 

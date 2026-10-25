@@ -21,7 +21,7 @@ public:
                     unsigned int uiNumPackets);
 
     void SetPackets(unsigned int uiPacketSize, StreamPacket* pPackets, unsigned int uiNumPackets,
-                    int iUnread);
+                    const bool bCheckPacketBuffers);
 
     void Flush();
 
@@ -30,9 +30,19 @@ public:
                         unsigned int uiUnused, bool bFlagBit0, bool bFlagBit1,
                         unsigned int uiPos);
 
-    unsigned int mProducer[5];
-
     unsigned int GetNumQueuedPackets() const;
+
+protected:
+    unsigned int GetPacketSize() const { return mPacketSize; }
+
+private:
+    friend class StreamSourceNProducer;
+
+    StreamPacket* mPackets;
+    unsigned int mNumPackets;
+    unsigned int mPacketSize;
+    unsigned int mReadPacketIndex;
+    unsigned int mLockPacketIndex;
 };
 
  
@@ -48,9 +58,13 @@ public:
     void SetProducers(StreamSourceProducer* pProducers,
                       unsigned int uiNumProducers);
 
-    StreamPacket* GetWritablePacket(unsigned int uiOutput);
+    StreamPacket* GetReadPacket(const unsigned int uiOutput) const;
+    StreamSourceProducer* GetProducer(const unsigned int uiOutput) const
+    {
+        return mProducers + uiOutput;
+    }
 
-    unsigned int CompleteWrittenPacket(StreamPacket* pPacket, unsigned int uiBufferUsed,
+    void PacketComplete(StreamPacket* const pPacket, unsigned int uiBufferUsed,
                                        unsigned int uiUnused, bool bFlagBit0, bool bFlagBit1,
                                        unsigned int uiPos, unsigned int uiOutput);
 

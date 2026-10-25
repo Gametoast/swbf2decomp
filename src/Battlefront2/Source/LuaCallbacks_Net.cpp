@@ -1,4 +1,5 @@
 #include "LuaCallbacks_Net.h"
+#include "FLInputManager.h"
 #include "LuaHelper.h"
 #include "LuaCallbacks_IFace.h"
 
@@ -201,7 +202,6 @@ static void VoiceLocalEchoEnable(const bool bEnable)
 
 extern char gLoginName[];
 
-extern int gActiveViewport;
 extern int netNumBots;
 extern int netRequestedCameraCount;
 
@@ -338,7 +338,7 @@ int ScriptCB_GetLoginName(lua_State* L)
 // FUNCTION: SWBF2 0x00591e30
 int ScriptCB_StartLoginDedicatedServer(lua_State* L)
 {
-    const int iViewport = gActiveViewport;
+    const int iViewport = FLInputManager::Instance()->GetPrimaryPort();
     NetSetup::StartLogin(iViewport, false, 0, 0, 0, false);
     PlayerProfile::ResetAllProfiles();
 
@@ -1105,7 +1105,7 @@ int ScriptCB_GetConnectType(lua_State* L)
 int ScriptCB_StartLogin(lua_State* L)
 {
     lua_gettop(LuaHelper::mState);
-    NetSetup::StartLogin(gActiveViewport, false, 0, 0, 0, false);
+    NetSetup::StartLogin(FLInputManager::Instance()->GetPrimaryPort(), false, 0, 0, 0, false);
     return 0;
 }
 
@@ -2160,7 +2160,7 @@ int ScriptCB_SetNetLoginName(lua_State*)
         unsigned short name[34];
         const char* pcName = luaL_checklstring(LuaHelper::mState, 1, 0);
         PblUnicode::ustrncnv((char*)name, (const unsigned short*)pcName, 66);
-        NetSetup::SetLoginName(gActiveViewport, (const char*)name);
+        NetSetup::SetLoginName(FLInputManager::Instance()->GetPrimaryPort(), (const char*)name);
     }
     return 0;
 }

@@ -3,6 +3,7 @@
 #define _CRT_SECURE_NO_WARNINGS
 
 #include <windows.h>
+#include "PerformanceTimer.h"
 #include "CommandPost.h"
 
 #include <process.h>
@@ -425,8 +426,6 @@ bool sKioskMode;
 
 bool sbDidOneTimeInit;
 
-// GLOBAL: SWBF2 0x009cef88
-double secondsPerPerformanceTick;
 
 namespace GameState
 {
@@ -515,9 +514,7 @@ void GameState::OneTimeInit()
     RedInputManager::Init();
     RedRenderer::InitStatic();
 
-    LARGE_INTEGER counterFrequency;
-    QueryPerformanceFrequency(&counterFrequency);
-    secondsPerPerformanceTick = 1.0 / (double)counterFrequency.QuadPart;
+    PblPerformanceTimer::Init();
 
     RedRenderer::OpenDynamic();
     RedRenderer::SetTimeBase(&_TimeBase);

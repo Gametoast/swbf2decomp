@@ -16,6 +16,15 @@ public:
 
         static FreeList smFreeList;
 
+        static FreeList& GetFreeList() { return smFreeList; }
+
+        static void operator delete(void* p)
+        {
+            GetFreeList().Free(p);
+        }
+
+        void* GetObjectA() const { return mObject; }
+
         PblListSingle::Node mNode;
         void* mObject;
     };
@@ -34,8 +43,11 @@ public:
         }
         void* GetObjectA(const ObjectList* pList)
         {
-            return PblListSingle::Itor::GetNode() == pList->GetTerminator()
-                ? 0 : GetNode()->mObject;
+            if (PblListSingle::Itor::GetNode() != pList->GetTerminator())
+            {
+                return GetNode()->GetObjectA();
+            }
+            return 0;
         }
     };
 

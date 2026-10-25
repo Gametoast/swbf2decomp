@@ -33,38 +33,6 @@ union RenderSortKey
     } translucent;
 };
 
-// GLOBAL: SWBF2 0x007f58e8
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// GLOBAL: SWBF2 0x007fbeac
-
-// GLOBAL: SWBF2 0x007fbeb0
-
-// GLOBAL: SWBF2 0x007fbeb4
-
-// GLOBAL: SWBF2 0x007fbeb8
-
-// GLOBAL: SWBF2 0x008eecd0
-
-// GLOBAL: SWBF2 0x009caee0
-
 extern PblMatrix gMatrixIdentity;
 
 #endif

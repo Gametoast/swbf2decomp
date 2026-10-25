@@ -361,7 +361,7 @@ void __cdecl SoundParameterized::UpdateAll(float fDeltaTime)
     for (PblListDouble::Node* pNode = smSoundParameterizedList.mTerminator.mNext;
          pNode != &smSoundParameterizedList.mTerminator; pNode = pNode->mNext)
     {
-        ((SoundParameterized*)((char*)pNode - offsetof(SoundParameterized, mNode)))
+        ((SoundParameterized*)pNode->GetObjectA(&smSoundParameterizedList, offsetof(SoundParameterized, mNode)))
             ->Update(fDeltaTime);
     }
 }

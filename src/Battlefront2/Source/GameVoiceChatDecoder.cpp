@@ -162,13 +162,11 @@ void GameVoiceChat::Decoder::Close()
 
     for (unsigned int i = 0; i < mNumInputStreams; ++i)
     {
-        mDecoders[i].mConnection.mInputNode = 0;
-        mDecoders[i].mConnection.mInputNodeOutputIndex = 0;
+        mDecoders[i].Connect(0, 0);
         mMixer.StreamNodeSinkNInput::Connect(0, 0, i);
     }
 
-    mAuxRenderer.mConnection.mInputNode = 0;
-    mAuxRenderer.mConnection.mInputNodeOutputIndex = 0;
+    mAuxRenderer.Connect(0, 0);
 
     if (IsPlaying())
     {
@@ -298,13 +296,11 @@ bool GameVoiceChat::Decoder::Open(unsigned int playbackDevice, float fPacketMs, 
 
     for (unsigned int i = 0; i < uiSlots; ++i)
     {
-        mDecoders[i].mConnection.mInputNode = this;
-        mDecoders[i].mConnection.mInputNodeOutputIndex = i;
+        mDecoders[i].Connect(this, i);
         mMixer.StreamNodeSinkNInput::Connect(&mDecoders[i], 0, i);
     }
 
-    mAuxRenderer.mConnection.mInputNodeOutputIndex = 0;
-    mAuxRenderer.mConnection.mInputNode = &mMixer;
+    mAuxRenderer.Connect(&mMixer, 0);
 
     mAuxRenderer.SetLowTideMark(1.0f);
 
@@ -392,13 +388,13 @@ bool Decoder::ReceivePacket(unsigned int uiInput, const VoiceChat::AudioPacket* 
         {
             return false;
         }
-        Snd::StreamPacket* pOutput = static_cast<Snd::StreamSourceNProducer*>(this)->GetWritablePacket(uiInput);
+        Snd::StreamPacket* pOutput = static_cast<Snd::StreamSourceNProducer*>(this)->GetReadPacket(uiInput);
         if (!pOutput)
         {
             return false;
         }
         pOutput->mBuffer = pPacket->mData;
-        static_cast<Snd::StreamSourceNProducer*>(this)->CompleteWrittenPacket(pOutput, pPacket->mSize,
+        static_cast<Snd::StreamSourceNProducer*>(this)->PacketComplete(pOutput, pPacket->mSize,
                         160 * (pPacket->mSize / 33u), false,
                         pPacket->mDiscontinuity, 0, uiInput);
         pDecoder->Update();

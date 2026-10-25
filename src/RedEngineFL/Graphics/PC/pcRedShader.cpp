@@ -18,6 +18,7 @@ void __cdecl PblTraceP(const char* Format, ...);
 // `dynamic initializer for 'pcRedShader::s_ShaderFactoryByRenderType''
 
 // GLOBAL: SWBF2 0x007f5050
+// pcRedShader::s_ShaderFactoryByRenderType
 PblHashTable<const pcRedShader, pcRedShader::FACTORY_SLOTS>
     pcRedShader::s_ShaderFactoryByRenderType;
 

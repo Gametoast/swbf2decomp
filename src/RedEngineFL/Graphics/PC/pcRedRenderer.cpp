@@ -1979,6 +1979,8 @@ PblMatrix RedRenderer::m_amMatrixPool[3062];
 // SYNTHETIC: SWBF2 0x00407610
 // `dynamic initializer for 'RedRenderer::m_mView''
 
+// GLOBAL: SWBF2 0x008eecd0
+// RedRenderer::m_mView
 __declspec(align(16)) PblMatrix RedRenderer::m_mView;
 
 // SYNTHETIC: SWBF2 0x004076e0
@@ -4341,26 +4343,6 @@ const PblMatrix& RedLight::GetProjectionMatrix() const
 // TEMPLATE: SWBF2 0x006b00d0
 // util::Vector<util::TKeyPair_<RenderItem *,unsigned int>,util::BaseArray<util::TKeyPair_<RenderItem *,unsigned int>,util::TNewArrayAlloc<util::TKeyPair_<RenderItem *,unsigned int> > > >::Add
 template bool util::Vector<util::TKeyPair_<RenderItem*, unsigned int> >::Add(util::TKeyPair_<RenderItem*, unsigned int> const&);
-
-template <class TABLE>
-static void ZeroAllVariables_(TABLE& rTable)
-{
-    for (int i = 0; i < rTable.hashes_.GetSize(); ++i)
-    {
-        if (rTable.hashes_[i] != 0)
-        {
-            *rTable.elements_[i] = 0;
-        }
-    }
-}
-
-template <class ALLOC>
-void util::VariableSet<ALLOC>::ResetAll()
-{
-    ZeroAllVariables_(int32Map_);
-    ZeroAllVariables_(floatMap_);
-    ZeroAllVariables_(boolMap_);
-}
 
 // TEMPLATE: SWBF2 0x006b3110
 // util::VariableSet<util::SingletonAllocator<util::DefaultStaticAllocator> >::ResetAll

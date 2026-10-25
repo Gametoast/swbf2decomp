@@ -158,7 +158,7 @@ void SoundLayered::FireForgetLayer::UpdateAll(float fDeltaTime)
     PblListDouble::Node* pLink = smActiveList.mTerminator.mNext;
     while (pLink != &smActiveList.mTerminator)
     {
-        FireForgetLayer* pLayer = (FireForgetLayer*)((char*)pLink - offsetof(FireForgetLayer, mNode));
+        FireForgetLayer* pLayer = (FireForgetLayer*)pLink->GetObjectA(&smActiveList, offsetof(FireForgetLayer, mNode));
         pLink = pLink->mNext;
         pLayer->Update(fDeltaTime);
     }
@@ -170,7 +170,7 @@ void SoundLayered::UpdateAll(float fDeltaTime)
     PblListDouble::Node* pLink = smSoundLayeredList.mTerminator.mNext;
     while (pLink != &smSoundLayeredList.mTerminator)
     {
-        ((SoundLayered*)((char*)pLink - offsetof(SoundLayered, mNode)))->Update(fDeltaTime);
+        ((SoundLayered*)pLink->GetObjectA(&smSoundLayeredList, offsetof(SoundLayered, mNode)))->Update(fDeltaTime);
         pLink = pLink->mNext;
     }
     FireForgetLayer::UpdateAll(fDeltaTime);
@@ -202,7 +202,7 @@ void SoundLayered::RemoveAll()
     PblListDouble::Node* pLink = smSoundLayeredList.mTerminator.mNext;
     while (pLink != &smSoundLayeredList.mTerminator)
     {
-        SoundLayered* pSound = (SoundLayered*)((char*)pLink - offsetof(SoundLayered, mNode));
+        SoundLayered* pSound = (SoundLayered*)pLink->GetObjectA(&smSoundLayeredList, offsetof(SoundLayered, mNode));
         pLink = pLink->mNext;
         pSound->Stop();
         pSound->mNode.Remove();
@@ -216,7 +216,7 @@ void SoundLayered::FireForgetLayer::StopAll()
     PblListDouble::Node* pLink = smActiveList.mTerminator.mNext;
     while (pLink != &smActiveList.mTerminator)
     {
-        FireForgetLayer* pLayer = (FireForgetLayer*)((char*)pLink - offsetof(FireForgetLayer, mNode));
+        FireForgetLayer* pLayer = (FireForgetLayer*)pLink->GetObjectA(&smActiveList, offsetof(FireForgetLayer, mNode));
         pLink = pLink->mNext;
         pLayer->Stop();
     }
@@ -266,14 +266,10 @@ Sound* SoundLayered::FindLayerByHashID(unsigned int uiHashID)
          pNode = pNode->mNext, pSoundNode = pSoundNode->mNext)
     {
         const Properties::Layer* pLayer =
-            (const Properties::Layer*)((const char*)pNode - offsetof(Properties::Layer, mNode));
+            (const Properties::Layer*)pNode->GetObjectA(&mProperties->mLayerList, offsetof(Properties::Layer, mNode));
         if (pLayer->mHashID == uiHashID)
-        {
-            if (pSoundNode == &mSoundList.mHead)
-            {
-                return 0;
-            }
-            return (SoundLayer*)((char*)pSoundNode - offsetof(SoundLayer, mLayerNode));
+        {            return (SoundLayer*)pSoundNode->GetObjectA(
+                &mSoundList, offsetof(SoundLayer, mLayerNode));
         }
     }
     return 0;
@@ -555,7 +551,7 @@ SoundLayered::Properties::Layer* SoundLayered::Properties::FindLayerByHashID(uns
     for (PblListSingle::Node* pNode = mLayerList.mHead.mNext; pNode != &mLayerList.mHead;
          pNode = pNode->mNext)
     {
-        Layer* const pLayer = (Layer*)((char*)pNode - offsetof(Layer, mNode));
+        Layer* const pLayer = (Layer*)pNode->GetObjectA(&mLayerList, offsetof(Layer, mNode));
         if (pLayer->mHashID == uiHashID)
         {
             return pLayer;

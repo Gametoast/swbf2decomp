@@ -22,7 +22,7 @@ HUD::ElementBarSegmented::Factory::Factory()
 }
 
 // SYNTHETIC: SWBF2 0x0054bc90
-// HUD::ElementBarSegmented::Factory::~Factory -- see the header: eight
+// HUD::ElementBarSegmented::Factory::~Factory
 
 // SYNTHETIC: SWBF2 0x0054b860
 // HUD::ElementGroup::Factory::~Factory -- 5 PDB bytes (pdb_functions.tsv),

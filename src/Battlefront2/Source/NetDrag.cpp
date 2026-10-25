@@ -361,15 +361,19 @@ NetPacket* NetDrag::ReceiveLocal()
 // FUNCTION: SWBF2 0x005b3f90
 static void AddWithPriority(NetPktGroup& queue, NetPacket* pPacket)
 {
-    const float fTime = *(float*)pPacket->mData;
-    for (NetPacket* pCurrent = queue.GetFront(); pCurrent;
-         pCurrent = NetPacket::Get(pCurrent->mNextPkt))
+    NetPacket* pCurrent = queue.GetFront();
+    if (pCurrent)
     {
-        if (*(float*)pCurrent->mData > fTime)
+        const float fTime = *(float*)pPacket->mData;
+        do
         {
-            queue.InsertBefore(pCurrent, pPacket);
-            return;
-        }
+            if (*(float*)pCurrent->mData > fTime)
+            {
+                queue.InsertBefore(pCurrent, pPacket);
+                return;
+            }
+            pCurrent = NetPacket::Get(pCurrent->mNextPkt);
+        } while (pCurrent);
     }
     queue.PushBack(pPacket);
 }

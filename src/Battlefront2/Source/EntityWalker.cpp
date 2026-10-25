@@ -2395,7 +2395,7 @@ void EntityWalker::Render(unsigned char ucViewport, float fDist, unsigned int ui
 
                         if (pBone)
                         {
-                            pEffect->AttachEffectToObject(this, pBone, false);
+                            pEffect->AttachEffectToObject(this, pBone, true);
                         }
                         else
                         {

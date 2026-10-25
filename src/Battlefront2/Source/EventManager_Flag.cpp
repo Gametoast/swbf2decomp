@@ -389,10 +389,10 @@ Event<FlagItem, Character>::GetFilter(CharacterMatchesClass&, Callback*);
 // EventManager::RegisterRegisterLuaCallback<FlagItem,char>
 
 // TEMPLATE: SWBF2 0x005125f0
-// EventManager::UnregisterLuaCallback<classFlagItem,classCharacter>
+// EventManager::UnregisterLuaCallback<FlagItem,Character>
 
 // TEMPLATE: SWBF2 0x00512eb0
-// EventManager::UnregisterLuaCallback<classFlagItem,char>
+// EventManager::UnregisterLuaCallback<FlagItem,char>
 
 // TEMPLATE: SWBF2 0x00513140
 // EventManager::Event<FlagItem,Character>::Unregister
@@ -416,13 +416,13 @@ Event<FlagItem, Character>::GetFilter(CharacterMatchesClass&, Callback*);
 // EventManager::RegisterLuaCallback<FlagItem,Character>
 
 // TEMPLATE: SWBF2 0x00512910
-// EventManager::RegisterLuaCallback<FlagItem,Character,CharacterMatchesName>
+// EventManager::RegisterLuaCallback<FlagItem,Character,EventManager::CharacterMatchesName>
 
 // TEMPLATE: SWBF2 0x00512b20
-// EventManager::RegisterLuaCallback<FlagItem,Character,CharacterMatchesTeam>
+// EventManager::RegisterLuaCallback<FlagItem,Character,EventManager::CharacterMatchesTeam>
 
 // TEMPLATE: SWBF2 0x00512d30
-// EventManager::RegisterLuaCallback<FlagItem,Character,CharacterMatchesClass>
+// EventManager::RegisterLuaCallback<FlagItem,Character,EventManager::CharacterMatchesClass>
 
 }
 

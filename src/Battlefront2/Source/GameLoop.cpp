@@ -749,9 +749,7 @@ namespace GameLoop
 }
 
 extern int g_InGameMoviePlayerState;
-extern __int64 sLastPerformanceCount;
-extern __int64 sPerformanceCountOffset;
-extern double secondsPerPerformanceTick;
+extern PblPerformanceTimer frameTimer;
 extern FlashyTextManager sFlashyTextManagerInstance;
 
 extern float netSecondsPerTurn;
@@ -1292,9 +1290,7 @@ void Update(float fDeltaTime, float fSystemDeltaTime)
         UpdateDedicatedMsg(fSystemDeltaTime);
     }
 
-    LARGE_INTEGER liCount;
-    QueryPerformanceCounter(&liCount);
-    sLastPerformanceCount = liCount.QuadPart;
+    frameTimer.Start();
 
     MotionBlurEffect::Stop(0, 0);
     GameLoop::sDeltaTime = fDeltaTime;
@@ -1499,9 +1495,8 @@ void Update(float fDeltaTime, float fSystemDeltaTime)
     NetGame::LeaveClient();
     SaveGameManager::Update(GameLoop::sDeltaTime);
 
-    QueryPerformanceCounter(&liCount);
-    gPrevFrameTime = (float)((double)(unsigned __int64)(liCount.QuadPart - sLastPerformanceCount + sPerformanceCountOffset) * secondsPerPerformanceTick);
-    sPerformanceCountOffset = 0;
+    gPrevFrameTime = frameTimer.GetTime();
+    frameTimer.Reset();
 
     if (NetGame::DetectError() && NetGame::ErrorDismissed())
     {

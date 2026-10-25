@@ -56,7 +56,7 @@ public:
     unsigned int GetHandleId() const { return mSavedHandleId; }
 
     // TEMPLATE: SWBF2 0x0043cd00
-    // PblHandle<GameObject const>::operator==
+    // PblHandle<GameObject const >::operator==
 
     // TEMPLATE: SWBF2 0x00470880
     // PblHandle<GameObject>::operator==
@@ -75,7 +75,7 @@ public:
     TYPE* operator->() const { return GetObjectA(); }
 
     // TEMPLATE: SWBF2 0x0043a150
-    // PblHandle<GameObject const>::operator GameObject const *
+    // PblHandle<GameObject const >::operator GameObject const *
 
     // TEMPLATE: SWBF2 0x00428e60
     // PblHandle<ParticleEmitterObject>::operator ParticleEmitterObject *

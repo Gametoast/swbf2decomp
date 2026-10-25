@@ -10,6 +10,7 @@
 #include "PauseMenu.h"
 
 #include "EntitySoldier.h"
+#include "SoundFL/source/sndbus.h"
 #include "EnergyBar.h"
 #include "RedEngineFL/Memory/RedMemoryPool.h"
 #include "CollisionObject.h"
@@ -561,8 +562,7 @@ void EntitySoldier::PlayFootstep(float fSpeed, bool bRightFoot, const PblVector3
     }
 }
 
-// GLOBAL: SWBF2 0x007e329c
-float gShockFoleyEnabled = 1.0f;
+
 
 extern bool netIsLocalTurn;
 
@@ -583,7 +583,7 @@ void EntitySoldier::UpdateFoleyFX(float fDeltaTime)
 
     if (mSoundState & 0x10)
     {
-        if (gShockFoleyEnabled == 0.0f)
+        if (Snd::Bus::GetRootBus().GetFinalGain() == 0.0f)
         {
             mSoundState &= ~0x10;
         }

@@ -63,7 +63,7 @@ Space* __cdecl Space::GetSpace(const ::PblVector3& rPos)
          pNode = pNode->mNext)
     {
 
-        Space* const pSpace = reinterpret_cast<Space*>(reinterpret_cast<char*>(pNode) - offsetof(Space, mNode));
+        Space* const pSpace = static_cast<Space*>(pNode->GetObjectA(&smSpaceList, offsetof(Space, mNode)));
 
         if (pSpace->mPriority > pBest->mPriority)
         {

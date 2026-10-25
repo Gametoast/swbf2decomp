@@ -35,7 +35,8 @@ class TypedArrayAllocator : public ALLOC
 {
 public:
 
-    // FUNCTION: SWBF2 0x0052b3f0
+    // TEMPLATE: SWBF2 0x0052b3f0
+    // util::TypedArrayAllocator<unsigned short,util::NewAllocator>::Allocate_
 
     static TYPE* Allocate_(int& riCount)
     {

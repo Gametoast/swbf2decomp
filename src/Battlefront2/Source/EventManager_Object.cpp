@@ -973,43 +973,43 @@ Event<GameObject, float>::GetFilter(ObjectMatchesClass<float>&, Callback*);
 // EventManager::RegisterRegisterLuaCallback<GameObject,float,EventManager::ObjectMatchesClass<float> >
 
 // TEMPLATE: SWBF2 0x005152c0
-// EventManager::UnregisterLuaCallback<classGameObject,char>
+// EventManager::UnregisterLuaCallback<GameObject,char>
 
 // TEMPLATE: SWBF2 0x00516860
-// EventManager::UnregisterLuaCallback<classGameObject,int>
+// EventManager::UnregisterLuaCallback<GameObject,int>
 
 // TEMPLATE: SWBF2 0x005169d0
-// EventManager::RegisterLuaCallback<classGameObject,int>
+// EventManager::RegisterLuaCallback<GameObject,int>
 
 // TEMPLATE: SWBF2 0x00516b80
-// EventManager::RegisterLuaCallback<classGameObject,int,classEventManager::ObjectMatches<int>>
+// EventManager::RegisterLuaCallback<GameObject,int,EventManager::ObjectMatches<int> >
 
 // TEMPLATE: SWBF2 0x00516d90
-// EventManager::RegisterLuaCallback<classGameObject,int,classEventManager::ObjectMatchesName<int>>
+// EventManager::RegisterLuaCallback<GameObject,int,EventManager::ObjectMatchesName<int> >
 
 // TEMPLATE: SWBF2 0x00516fc0
-// EventManager::RegisterLuaCallback<classGameObject,int,classEventManager::ObjectMatchesTeam<int>>
+// EventManager::RegisterLuaCallback<GameObject,int,EventManager::ObjectMatchesTeam<int> >
 
 // TEMPLATE: SWBF2 0x005171d0
-// EventManager::RegisterLuaCallback<classGameObject,int,classEventManager::ObjectMatchesClass<int>>
+// EventManager::RegisterLuaCallback<GameObject,int,EventManager::ObjectMatchesClass<int> >
 
 // TEMPLATE: SWBF2 0x00517350
-// EventManager::UnregisterLuaCallback<classGameObject,float>
+// EventManager::UnregisterLuaCallback<GameObject,float>
 
 // TEMPLATE: SWBF2 0x005174c0
-// EventManager::RegisterLuaCallback<classGameObject,float>
+// EventManager::RegisterLuaCallback<GameObject,float>
 
 // TEMPLATE: SWBF2 0x00517670
-// EventManager::RegisterLuaCallback<classGameObject,float,classEventManager::ObjectMatches<float>>
+// EventManager::RegisterLuaCallback<GameObject,float,EventManager::ObjectMatches<float> >
 
 // TEMPLATE: SWBF2 0x00517880
-// EventManager::RegisterLuaCallback<classGameObject,float,classEventManager::ObjectMatchesName<float>>
+// EventManager::RegisterLuaCallback<GameObject,float,EventManager::ObjectMatchesName<float> >
 
 // TEMPLATE: SWBF2 0x00517a90
-// EventManager::RegisterLuaCallback<classGameObject,float,classEventManager::ObjectMatchesTeam<float>>
+// EventManager::RegisterLuaCallback<GameObject,float,EventManager::ObjectMatchesTeam<float> >
 
 // TEMPLATE: SWBF2 0x00517ca0
-// EventManager::RegisterLuaCallback<classGameObject,float,classEventManager::ObjectMatchesClass<float>>
+// EventManager::RegisterLuaCallback<GameObject,float,EventManager::ObjectMatchesClass<float> >
 
 // TEMPLATE: SWBF2 0x00517e20
 // EventManager::Event<GameObject,char>::Unregister
@@ -1063,16 +1063,16 @@ Event<GameObject, float>::GetFilter(ObjectMatchesClass<float>&, Callback*);
 // EventManager::RegisterLuaCallback<GameObject,char>
 
 // TEMPLATE: SWBF2 0x005155e0
-// EventManager::RegisterLuaCallback<GameObject,char,ObjectMatches<char> >
+// EventManager::RegisterLuaCallback<GameObject,char,EventManager::ObjectMatches<char> >
 
 // TEMPLATE: SWBF2 0x005157f0
-// EventManager::RegisterLuaCallback<GameObject,char,ObjectMatchesName<char> >
+// EventManager::RegisterLuaCallback<GameObject,char,EventManager::ObjectMatchesName<char> >
 
 // TEMPLATE: SWBF2 0x00515a00
-// EventManager::RegisterLuaCallback<GameObject,char,ObjectMatchesTeam<char> >
+// EventManager::RegisterLuaCallback<GameObject,char,EventManager::ObjectMatchesTeam<char> >
 
 // TEMPLATE: SWBF2 0x00515c10
-// EventManager::RegisterLuaCallback<GameObject,char,ObjectMatchesClass<char> >
+// EventManager::RegisterLuaCallback<GameObject,char,EventManager::ObjectMatchesClass<char> >
 
 }
 

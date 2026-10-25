@@ -79,16 +79,13 @@ void DisablePopup();
 
 extern bool gAttractMode;
 extern bool sPauseMenuSoundEnabled;
-extern int gActiveViewport;
 extern bool gPauseReverbEnabled;
 extern int gSkipToPlayerListState;
 extern float gSkipToPlayerListTime;
 
 // GLOBAL: SWBF2 0x007e8ef0
 int PauseMenu::sPausingViewport = -1;
-// GLOBAL: SWBF2 0x01ec0aac
 
-int gActiveViewport;
 
 // GLOBAL: SWBF2 0x01eaedbd
 bool PauseMenu::sSkipToPlayerList;
@@ -182,7 +179,7 @@ int PauseMenu::GetPausingViewport()
         return PauseMenu::sPausingViewport;
     }
 
-    return (gActiveViewport >= 0) ? gActiveViewport : 0;
+    return (FLInputManager::Instance()->GetPrimaryPort() >= 0) ? FLInputManager::Instance()->GetPrimaryPort() : 0;
 }
 
 // FUNCTION: SWBF2 0x00616450
@@ -194,7 +191,7 @@ int PauseMenu::GetPausingJoystick()
         int iJoystick = FLInputManager::s_instance.GetHWPort(iViewport);
         return (iJoystick >= 0) ? iJoystick : iViewport;
     }
-    return (gActiveViewport >= 0) ? gActiveViewport : 0;
+    return (FLInputManager::Instance()->GetPrimaryPort() >= 0) ? FLInputManager::Instance()->GetPrimaryPort() : 0;
 }
 
 // FUNCTION: SWBF2 0x00616480
@@ -447,7 +444,7 @@ void PauseMenu::_SetStatsVisible()
     {
         pGui->PushScreen("ifs_teamstats", GetPausingJoystick(), 0);
     }
-    FLInputManager::s_instance.SetHotController(gActiveViewport);
+    FLInputManager::s_instance.SetHotController(FLInputManager::Instance()->GetPrimaryPort());
 }
 
 // FUNCTION: SWBF2 0x00616ae0
@@ -482,7 +479,7 @@ bool PauseMenu::Update(float fDeltaTime)
     }
 
     bool bGameOver = GameLoop::IsGameOver();
-    if (bStart && bGameOver && playerJoystickNumbers[11 * iViewport] != gActiveViewport)
+    if (bStart && bGameOver && playerJoystickNumbers[11 * iViewport] != FLInputManager::Instance()->GetPrimaryPort())
     {
         bStart = false;
         bPlayerList = false;

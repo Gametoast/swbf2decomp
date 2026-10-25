@@ -757,7 +757,8 @@ void ExplosionClass::CreateExplosion(const PblVector3& aPos, const DamageOwner& 
     }
 }
 
-// FUNCTION: SWBF2 0x0051eba0
+// TEMPLATE: SWBF2 0x0051eba0
+// Factory<Ordnance,ExplosionClass,OrdnanceDesc>::Factory<Ordnance,ExplosionClass,OrdnanceDesc>
 template Factory<Ordnance, ExplosionClass, OrdnanceDesc>::Factory(ExplosionClass*, unsigned int);
 
 // SYNTHETIC: SWBF2 0x0051ec60

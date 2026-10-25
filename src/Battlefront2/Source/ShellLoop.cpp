@@ -1,4 +1,5 @@
 #include "ShellLoop.h"
+#include "PerformanceTimer.h"
 #include "CameraManager.h"
 #include "DownloadableContent.h"
 #include "Entity.h"
@@ -250,12 +251,7 @@ int ShellLoop::PostLoad()
     return 0;
 }
 
-// GLOBAL: SWBF2 0x007eb950
-
-__int64 sLastPerformanceCount;
-// GLOBAL: SWBF2 0x007eb958
-
-__int64 sPerformanceCountOffset;
+extern PblPerformanceTimer frameTimer;
 
 namespace SaveGameManager
 {
@@ -275,9 +271,7 @@ static void fnErrorBoxOk(bool)
 // FUNCTION: SWBF2 0x00636280
 int ShellLoop::Update(float fDeltaTime)
 {
-    LARGE_INTEGER liCount;
-    QueryPerformanceCounter(&liCount);
-    sLastPerformanceCount = liCount.QuadPart;
+    frameTimer.Start();
 
     Lua_Callbacks::UpdateShellMusic(fDeltaTime);
     GameSoundEngine::Update(fDeltaTime);
@@ -301,8 +295,7 @@ int ShellLoop::Update(float fDeltaTime)
     }
     FLRenderer::Render();
 
-    QueryPerformanceCounter(&liCount);
-    sPerformanceCountOffset += liCount.QuadPart - sLastPerformanceCount;
+    frameTimer.Stop();
 
     if (mbNetCableErrorOnEnter)
     {

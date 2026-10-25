@@ -113,7 +113,6 @@ namespace GameLoop
 {
     extern bool sShowStats;
 }
-extern int gActiveViewport;
 extern bool gDrawFlyerShadows;
 extern HWND hGlobalWnd;
 
@@ -1448,7 +1447,7 @@ int ScriptCB_Unpause(lua_State*)
         return 0;
     }
     if (uiState == MISSION_STATE && GameLoop::sShowStats && GameLoop::mNumCameras > 1 &&
-        playerJoystickNumbers[0] == gActiveViewport)
+        playerJoystickNumbers[0] == FLInputManager::Instance()->GetPrimaryPort())
     {
         iViewport = 0;
     }

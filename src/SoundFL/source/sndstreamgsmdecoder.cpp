@@ -184,7 +184,7 @@ void StreamGSMDecoder::Update()
             }
 
             const unsigned int uiSamples = mOutputPacketOffset;
-            if (uiSamples == mProducer[2] >> 1 || bEnd)
+            if (uiSamples == GetPacketSize() >> 1 || bEnd)
             {
                 const unsigned int uiPos = mPlaybackPosition;
                 PacketComplete(pOutput, uiSamples * 2, uiSamples, bLast,

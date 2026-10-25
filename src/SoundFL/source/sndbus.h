@@ -75,6 +75,9 @@ public:
 
     void SetGain(float fGain, bool bStopFade);
 
+    float GetFinalGain() const { return mFinalGain; }
+    static Bus& GetRootBus() { return smRootBus; }
+
     static Bus* FindByHashID(unsigned int uiHashID);
 
     void DestroySubBuses();

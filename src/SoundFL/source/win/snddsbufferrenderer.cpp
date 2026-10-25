@@ -291,7 +291,7 @@ void DSBufferRenderer::UpdateParameters()
          pNode = pNode->mNext)
     {
 
-        DSBufferRenderer* const pRenderer = reinterpret_cast<DSBufferRenderer*>(reinterpret_cast<char*>(pNode) - offsetof(DSBufferRenderer, mNode));
+        DSBufferRenderer* const pRenderer = static_cast<DSBufferRenderer*>(pNode->GetObjectA(&smRendererList, offsetof(DSBufferRenderer, mNode)));
 
         IDirectSoundBuffer* const pBuffer =
             pRenderer->DSBuffer::GetBuffer();

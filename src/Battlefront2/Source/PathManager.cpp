@@ -468,8 +468,8 @@ void Update(float fDeltaTime)
     mCostConstraint = (int)(fDeltaTime * 10.0f * 5.0f / 5.0f);
     PathFinder::ResetCost();
 
-    mTimer._iAccum = 0;
-    QueryPerformanceCounter((LARGE_INTEGER*)&mTimer._iValue);
+    mTimer.Reset();
+    mTimer.Start();
 
     if (IsWithinTimeConstraint())
     {
@@ -525,9 +525,7 @@ void Update(float fDeltaTime)
         }
     }
 
-    LARGE_INTEGER qEnd;
-    QueryPerformanceCounter(&qEnd);
-    mTimer._iAccum += qEnd.QuadPart - mTimer._iValue;
+    mTimer.Stop();
 }
 
 // FUNCTION: SWBF2 0x00614e00

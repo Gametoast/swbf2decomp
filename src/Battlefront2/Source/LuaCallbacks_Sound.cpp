@@ -54,7 +54,7 @@ namespace Lua_Callbacks
 namespace Lua_Callbacks
 {
     // GLOBAL: SWBF2 0x01e57968
-    unsigned int sShellMusicStoppedTime;
+    float sShellMusicStoppedTime;
 }
 namespace Lua_Callbacks
 {
@@ -1198,11 +1198,10 @@ void UpdateShellMusic(float fDeltaTime)
         return;
     }
 
-    float& fStoppedTime = *(float*)&Lua_Callbacks::sShellMusicStoppedTime;
-    fStoppedTime += fDeltaTime;
-    if (fStoppedTime > sShellMusicInterval)
+    Lua_Callbacks::sShellMusicStoppedTime += fDeltaTime;
+    if (Lua_Callbacks::sShellMusicStoppedTime > sShellMusicInterval)
     {
-        fStoppedTime = 0.0f;
+        Lua_Callbacks::sShellMusicStoppedTime = 0.0f;
         Snd::SoundStream::Play(pProps, true);
     }
 }
@@ -1243,7 +1242,7 @@ int ScriptCB_SetShellMusicInterval(lua_State* L)
         sShellMusicInterval = 10.0f;
     }
 
-    *(float*)&Lua_Callbacks::sShellMusicStoppedTime = sShellMusicInterval;
+    Lua_Callbacks::sShellMusicStoppedTime = sShellMusicInterval;
     Music::IgnoreInactiveTime(sShellMusicInterval == 0.0f);
     return 0;
 }

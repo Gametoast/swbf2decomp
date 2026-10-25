@@ -111,6 +111,7 @@ inline CLASS* Factory<TYPE, CLASS, DESC>::Find(unsigned int uHash)
 }
 
 // VTABLE: SWBF2 0x00799318
+// class Factory<Entity, class EntityClass, struct EntityDesc>
 
 
 
@@ -121,13 +122,16 @@ template Factory<Entity, EntityClass, EntityDesc>::Factory(unsigned int);
 template Factory<Entity, EntityClass, EntityDesc>::Factory(EntityClass*, unsigned int);
 
 // VTABLE: SWBF2 0x007ac47c
+// class Factory<Ordnance, class OrdnanceClass, struct OrdnanceDesc>
 
 
 
-// FUNCTION: SWBF2 0x005f8940
+// TEMPLATE: SWBF2 0x005f8940
+// Factory<Ordnance,OrdnanceClass,OrdnanceDesc>::Factory<Ordnance,OrdnanceClass,OrdnanceDesc>
 template Factory<Ordnance, OrdnanceClass, OrdnanceDesc>::Factory(unsigned int);
 
 // VTABLE: SWBF2 0x007b0298
+// class Factory<Weapon, class WeaponClass, struct WeaponDesc>
 
 
 
@@ -138,8 +142,22 @@ template Factory<Weapon, WeaponClass, WeaponDesc>::Factory(unsigned int);
 template Factory<Weapon, WeaponClass, WeaponDesc>::Factory(WeaponClass*, unsigned int);
 
 // VTABLE: SWBF2 0x0079e8ac
+// class Factory<Ordnance, class ExplosionClass, struct OrdnanceDesc>
 
 
 
-// FUNCTION: SWBF2 0x0051eb20
+// TEMPLATE: SWBF2 0x0051eb20
+// Factory<Ordnance,ExplosionClass,OrdnanceDesc>::Factory<Ordnance,ExplosionClass,OrdnanceDesc>
 template Factory<Ordnance, ExplosionClass, OrdnanceDesc>::Factory(unsigned int);
+
+// TEMPLATE: SWBF2 0x00491f70
+// Factory<Entity,EntityClass,EntityDesc>::~Factory<Entity,EntityClass,EntityDesc>
+
+// TEMPLATE: SWBF2 0x0051ec20
+// Factory<Ordnance,ExplosionClass,OrdnanceDesc>::~Factory<Ordnance,ExplosionClass,OrdnanceDesc>
+
+// TEMPLATE: SWBF2 0x005f8a40
+// Factory<Ordnance,OrdnanceClass,OrdnanceDesc>::~Factory<Ordnance,OrdnanceClass,OrdnanceDesc>
+
+// TEMPLATE: SWBF2 0x0067c0e0
+// Factory<Weapon,WeaponClass,WeaponDesc>::~Factory<Weapon,WeaponClass,WeaponDesc>
