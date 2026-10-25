@@ -50,23 +50,11 @@ OrdnanceLaserClass::OrdnanceLaserClass(OrdnanceLaserClass* pBase, unsigned int u
     mFadeOutSpeed = pBase->mFadeOutSpeed;
 }
 
-// FUNCTION: SWBF2 0x00601180
-bool OrdnanceLaserClass::IsRtti(unsigned int uRtti)
-{
-    return uRtti == rttiHashOrdnanceLaserClass || OrdnanceBulletClass::IsRtti(uRtti);
-}
 
-// FUNCTION: SWBF2 0x006011b0
-unsigned int OrdnanceLaserClass::GetDerivedRtti()
-{
-    return rttiHashOrdnanceLaserClass;
-}
 
-// FUNCTION: SWBF2 0x006011c0
-const char* OrdnanceLaserClass::GetDerivedRttiName()
-{
-    return rttiNameOrdnanceLaserClass;
-}
+
+
+
 
 static const RedColor kRedBoltColor   = { 0xff, 0x0a, 0x0a, 0x64 };
 static const RedColor kGreenBoltColor = { 0x64, 0xff, 0x64, 0x50 };
@@ -262,23 +250,11 @@ OrdnanceLaser::~OrdnanceLaser()
 {
 }
 
-// FUNCTION: SWBF2 0x00601100
-bool OrdnanceLaser::IsRtti(unsigned int uRtti) const
-{
-    return uRtti == rttiHashOrdnanceLaser || OrdnanceBullet::IsRtti(uRtti);
-}
 
-// FUNCTION: SWBF2 0x00601130
-unsigned int OrdnanceLaser::GetDerivedRtti() const
-{
-    return rttiHashOrdnanceLaser;
-}
 
-// FUNCTION: SWBF2 0x00601140
-const char* OrdnanceLaser::GetDerivedRttiName() const
-{
-    return rttiNameOrdnanceLaser;
-}
+
+
+
 
 // FUNCTION: SWBF2 0x00601310
 void OrdnanceLaser::KillOrdnance()

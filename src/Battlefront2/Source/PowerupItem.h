@@ -1,5 +1,7 @@
 #pragma once
 
+#include "PebbleFL/Common/PblHashTable.h"
+
 #include <stddef.h>
 
 #include "EntityItem.h"
@@ -14,9 +16,9 @@ public:
 
     virtual EntityClass* Derive(unsigned int uHash);
     virtual Entity* Build(const EntityDesc& desc);
-    virtual bool IsRtti(unsigned int uRtti);
-    virtual unsigned int GetDerivedRtti();
-    virtual const char* GetDerivedRttiName();
+    virtual bool IsRtti(unsigned int uRtti) const;
+    virtual unsigned int GetDerivedRtti() const;
+    virtual const char* GetDerivedRttiName() const;
     virtual void SetProperty(unsigned int uProperty, const char* pszValue);
 
     float mAddHealth[8];
@@ -92,3 +94,49 @@ public:
 };
  
  
+
+// FUNCTION: SWBF2 0x00623890
+inline bool PowerupItemClass::IsRtti(unsigned int uRtti) const
+{
+    if (rttiHashPowerupItemClass == uRtti)
+    {
+        return true;
+    }
+    return EntityItemClass::IsRtti(uRtti);
+}
+
+// FUNCTION: SWBF2 0x006238d0
+inline unsigned int PowerupItemClass::GetDerivedRtti() const
+{
+    return rttiHashPowerupItemClass;
+}
+
+// FUNCTION: SWBF2 0x006238e0
+inline const char* PowerupItemClass::GetDerivedRttiName() const
+{
+    return rttiNamePowerupItemClass;
+}
+
+// FUNCTION: SWBF2 0x006237f0
+inline bool PowerupItem::IsRtti(unsigned int uRtti) const
+{
+    if (rttiHashPowerupItem == uRtti)
+    {
+        return true;
+    }
+    return EntityItem::rttiHashEntityItem == uRtti || GameObject::IsRtti(uRtti);
+}
+
+// FUNCTION: SWBF2 0x00623840
+inline unsigned int PowerupItem::GetDerivedRtti() const
+{
+    return rttiHashPowerupItem;
+}
+
+// FUNCTION: SWBF2 0x00623850
+inline const char* PowerupItem::GetDerivedRttiName() const
+{
+    return rttiNamePowerupItem;
+}
+
+

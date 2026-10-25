@@ -1306,23 +1306,11 @@ inline void* Weapon::operator new(size_t uSize)
     return sMemoryPool.Allocate(uSize);
 }
 
-// FUNCTION: SWBF2 0x00677610
-bool Weapon::IsRtti(unsigned int uRtti) const
-{
-    return uRtti == rttiHashWeapon;
-}
 
-// FUNCTION: SWBF2 0x00677630
-unsigned int Weapon::GetDerivedRtti() const
-{
-    return rttiHashWeapon;
-}
 
-// FUNCTION: SWBF2 0x00677640
-const char* Weapon::GetDerivedRttiName() const
-{
-    return rttiNameWeapon;
-}
+
+
+
 
 // FUNCTION: SWBF2 0x00677660
 bool Weapon::IsLocked() const
@@ -1415,23 +1403,11 @@ bool Weapon::IsBusy() const
 // SYNTHETIC: SWBF2 0x006777a0
 // Weapon::`scalar deleting destructor'
 
-// FUNCTION: SWBF2 0x006777d0
-bool WeaponClass::IsRtti(unsigned int uRtti)
-{
-    return uRtti == rttiHashWeaponClass;
-}
 
-// FUNCTION: SWBF2 0x006777f0
-unsigned int WeaponClass::GetDerivedRtti()
-{
-    return rttiHashWeaponClass;
-}
 
-// FUNCTION: SWBF2 0x00677800
-const char* WeaponClass::GetDerivedRttiName()
-{
-    return rttiNameWeaponClass;
-}
+
+
+
 
 // FUNCTION: SWBF2 0x00677810
 bool WeaponClass::PostLoadInit()

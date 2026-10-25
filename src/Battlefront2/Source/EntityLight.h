@@ -1,5 +1,7 @@
 #pragma once
 
+#include "PebbleFL/Common/PblHashTable.h"
+
 #include <stddef.h>
 #include "Entity.h"
 #include "FLEffect.h"
@@ -141,9 +143,9 @@ public:
 
     virtual EntityClass* Derive(unsigned int uHash);
     virtual Entity* Build(const EntityDesc& desc);
-    virtual bool IsRtti(unsigned int uRtti);
-    virtual unsigned int GetDerivedRtti();
-    virtual const char* GetDerivedRttiName();
+    virtual bool IsRtti(unsigned int uRtti) const;
+    virtual unsigned int GetDerivedRtti() const;
+    virtual const char* GetDerivedRttiName() const;
     virtual void SetProperty(unsigned int uProperty, const char* pszValue);
     virtual FLEffectObject* BuildEffect();
 
@@ -206,3 +208,49 @@ public:
  
  
  
+
+// FUNCTION: SWBF2 0x004cca60
+inline bool EntityLight::IsRtti(unsigned int uRtti) const
+{
+    if (rttiHashEntityLight == uRtti)
+    {
+        return true;
+    }
+    return Entity::IsRtti(uRtti);
+}
+
+// FUNCTION: SWBF2 0x004cca90
+inline unsigned int EntityLight::GetDerivedRtti() const
+{
+    return rttiHashEntityLight;
+}
+
+// FUNCTION: SWBF2 0x004ccaa0
+inline const char* EntityLight::GetDerivedRttiName() const
+{
+    return rttiNameEntityLight;
+}
+
+// FUNCTION: SWBF2 0x004ccab0
+inline bool EntityLightClass::IsRtti(unsigned int uRtti) const
+{
+    if (rttiHashEntityLightClass == uRtti)
+    {
+        return true;
+    }
+    return EntityClass::IsRtti(uRtti);
+}
+
+// FUNCTION: SWBF2 0x004ccae0
+inline unsigned int EntityLightClass::GetDerivedRtti() const
+{
+    return rttiHashEntityLightClass;
+}
+
+// FUNCTION: SWBF2 0x004ccaf0
+inline const char* EntityLightClass::GetDerivedRttiName() const
+{
+    return rttiNameEntityLightClass;
+}
+
+

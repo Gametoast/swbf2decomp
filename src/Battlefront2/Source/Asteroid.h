@@ -1,5 +1,7 @@
 #pragma once
 
+#include "PebbleFL/Common/PblHashTable.h"
+
 #include <stddef.h>
 
 #include "GameObject.h"
@@ -17,9 +19,9 @@ public:
 
     virtual EntityClass* Derive(unsigned int uHash);
     virtual Entity* Build(const EntityDesc& desc);
-    virtual bool IsRtti(unsigned int uRtti);
-    virtual unsigned int GetDerivedRtti();
-    virtual const char* GetDerivedRttiName();
+    virtual bool IsRtti(unsigned int uRtti) const;
+    virtual unsigned int GetDerivedRtti() const;
+    virtual const char* GetDerivedRttiName() const;
     virtual void SetProperty(unsigned int uProperty, const char* pszValue);
     void FillRegion(const char* pcRegion, int iCount, PblVector3 vMin, PblVector3 vMax);
     void FillPath(const char* pcPath, float fDensity, int iCount,
@@ -124,3 +126,49 @@ public:
  
  
  
+
+// FUNCTION: SWBF2 0x00444790
+inline bool AsteroidClass::IsRtti(unsigned int uRtti) const
+{
+    if (rttiHashAsteroidClass == uRtti)
+    {
+        return true;
+    }
+    return GameObjectClass::IsRtti(uRtti);
+}
+
+// FUNCTION: SWBF2 0x004447d0
+inline unsigned int AsteroidClass::GetDerivedRtti() const
+{
+    return rttiHashAsteroidClass;
+}
+
+// FUNCTION: SWBF2 0x004447e0
+inline const char* AsteroidClass::GetDerivedRttiName() const
+{
+    return rttiNameAsteroidClass;
+}
+
+// FUNCTION: SWBF2 0x004444d0
+inline bool Asteroid::IsRtti(unsigned int uRtti) const
+{
+    if (rttiHashAsteroid == uRtti)
+    {
+        return true;
+    }
+    return GameObject::IsRtti(uRtti);
+}
+
+// FUNCTION: SWBF2 0x00444510
+inline unsigned int Asteroid::GetDerivedRtti() const
+{
+    return rttiHashAsteroid;
+}
+
+// FUNCTION: SWBF2 0x00444520
+inline const char* Asteroid::GetDerivedRttiName() const
+{
+    return "Asteroid";
+}
+
+

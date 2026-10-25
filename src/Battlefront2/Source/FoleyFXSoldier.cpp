@@ -15,25 +15,14 @@ const char FoleyFXSoldier::rttiNameFoleyFXSoldier[] = "FoleyFXSoldier";
 // `dynamic initializer for 'FoleyFXSoldier::smFreeList''
 // SYNTHETIC: SWBF2 0x00768800
 // `dynamic atexit destructor for 'FoleyFXSoldier::smFreeList''
+
 Snd::FreeList FoleyFXSoldier::smFreeList(sizeof(FoleyFXSoldier), 4, 8, 1);
 
-// FUNCTION: SWBF2 0x0052cc40
-bool FoleyFXSoldier::IsRtti(unsigned int uRtti) const
-{
-    return uRtti == rttiHashFoleyFXSoldier || FoleyFX::IsRtti(uRtti);
-}
 
-// FUNCTION: SWBF2 0x0052cc70
-unsigned int FoleyFXSoldier::GetDerivedRtti() const
-{
-    return rttiHashFoleyFXSoldier;
-}
 
-// FUNCTION: SWBF2 0x0052cc80
-const char* FoleyFXSoldier::GetDerivedRttiName() const
-{
-    return rttiNameFoleyFXSoldier;
-}
+
+
+
 
 // FUNCTION: SWBF2 0x0052cc90
 FoleyFXSoldier::FoleyFXSoldier()

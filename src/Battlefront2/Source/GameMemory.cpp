@@ -5,14 +5,18 @@
 
 namespace GameMemory
 {
+// GLOBAL: SWBF2 0x01e5614c
 int ApplicationHeap;
 int GamespyHeap;
 int RunTimeHeap;
 int TempLoadHeap;
 
+// GLOBAL: SWBF2 0x01e56144
 int LuaHeap;
+// GLOBAL: SWBF2 0x01e5613c
 int ArtistHeap;
 
+// GLOBAL: SWBF2 0x01e56138
 int TEMP_GamespyHeap;
 }
 

@@ -13,24 +13,39 @@
 
 int sVoiceChatHeap;
 
-// GLOBAL: SWBF2 0x007e68f2
-namespace GameVoiceChat { bool gPlayerChange = true; }
+namespace GameVoiceChat
+{
+    // GLOBAL: SWBF2 0x007e68f2
+    bool gPlayerChange = true;
+}
 
 // GLOBAL: SWBF2 0x01e563cc
 
 void* sVoiceChatEncoders[1];
-// GLOBAL: SWBF2 0x01e5665c
-namespace GameVoiceChat { void* gNodes[1]; }
+namespace GameVoiceChat
+{
+    // GLOBAL: SWBF2 0x01e5665c
+    void* gNodes[1];
+}
 // GLOBAL: SWBF2 0x01e566b4
 
 void* sVoiceChatDecoders[1];
 
-// GLOBAL: SWBF2 0x01e563d0
-namespace GameVoiceChat { char _gDecoderStorage[0x288 + 3]; }
-// GLOBAL: SWBF2 0x01e56660
-namespace GameVoiceChat { char _gNodeStorage[0x50 + 3]; }
-// GLOBAL: SWBF2 0x01e566b8
-namespace GameVoiceChat { char _gEncoderStorage[0x50C + 3]; }
+namespace GameVoiceChat
+{
+    // GLOBAL: SWBF2 0x01e563d0
+    char _gDecoderStorage[0x288 + 3];
+}
+namespace GameVoiceChat
+{
+    // GLOBAL: SWBF2 0x01e56660
+    char _gNodeStorage[0x50 + 3];
+}
+namespace GameVoiceChat
+{
+    // GLOBAL: SWBF2 0x01e566b8
+    char _gEncoderStorage[0x50C + 3];
+}
 
 // GLOBAL: SWBF2 0x01ec5fb8
 
@@ -54,7 +69,10 @@ unsigned int GameVoiceChat::GetNumNodes()
     return 1;
 }
 
-namespace VoiceChat { void* Alloc(unsigned int uiSize); void Free(void* pBlock); }
+namespace VoiceChat
+{
+    void* Alloc(unsigned int uiSize); void Free(void* pBlock);
+}
 
 // FUNCTION: SWBF2 0x0053e390
 void* VoiceChat::Alloc(unsigned int uiSize)
@@ -154,8 +172,14 @@ void GameVoiceChat::PlayerChange()
     GameVoiceChat::gPlayerChange = true;
 }
 
-namespace GameVoiceChat { extern void* gNodes[1]; }
-namespace GameVoiceChat { unsigned int GetNumNodes(); }
+namespace GameVoiceChat
+{
+    extern void* gNodes[1];
+}
+namespace GameVoiceChat
+{
+    unsigned int GetNumNodes();
+}
 
 // FUNCTION: SWBF2 0x0053c510
 GameVoiceChat::Node* GameVoiceChat::GetEnabledNode(unsigned int uiEnabledIndex, unsigned int& uiIndex)

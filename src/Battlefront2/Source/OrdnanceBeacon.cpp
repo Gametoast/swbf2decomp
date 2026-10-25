@@ -74,23 +74,8 @@ float OrdnanceShellClass::GetGravity()
     return mGravity;
 }
 
-// FUNCTION: SWBF2 0x005f8c70
-bool OrdnanceBeacon::IsRtti(unsigned int uRtti) const
-{
-    return uRtti == rttiHashOrdnanceBeacon || OrdnanceSticky::IsRtti(uRtti);
-}
 
-// FUNCTION: SWBF2 0x005f8cb0
-unsigned int OrdnanceBeacon::GetDerivedRtti() const
-{
-    return rttiHashOrdnanceBeacon;
-}
 
-// FUNCTION: SWBF2 0x005f8cc0
-const char* OrdnanceBeacon::GetDerivedRttiName() const
-{
-    return rttiNameOrdnanceBeacon;
-}
 
 // SYNTHETIC: SWBF2 0x005f95d6
 // [thunk]:OrdnanceBeacon::`scalar deleting destructor' adjustor{152}
@@ -162,23 +147,11 @@ bool OrdnanceBeacon::Update(float fDeltaTime)
     return OrdnanceSticky::Update(fDeltaTime);
 }
 
-// FUNCTION: SWBF2 0x005f8d00
-bool OrdnanceBeaconClass::IsRtti(unsigned int uRtti)
-{
-    return uRtti == rttiHashOrdnanceBeaconClass || OrdnanceStickyClass::IsRtti(uRtti);
-}
 
-// FUNCTION: SWBF2 0x005f8d40
-unsigned int OrdnanceBeaconClass::GetDerivedRtti()
-{
-    return rttiHashOrdnanceBeaconClass;
-}
 
-// FUNCTION: SWBF2 0x005f8d50
-const char* OrdnanceBeaconClass::GetDerivedRttiName()
-{
-    return rttiNameOrdnanceBeaconClass;
-}
+
+
+
 
 // FUNCTION: SWBF2 0x005f9270
 OrdnanceBeaconClass::OrdnanceBeaconClass(unsigned int uHash)

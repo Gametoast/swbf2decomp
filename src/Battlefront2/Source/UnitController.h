@@ -1,5 +1,7 @@
 #pragma once
 
+#include "PebbleFL/Common/PblHashTable.h"
+
 #include <stddef.h>
 
 #include "Controller.h"
@@ -148,3 +150,27 @@ const UnitController* UnitControllerPtr(const Controllable* pControllable);
  
  
  
+
+// FUNCTION: SWBF2 0x00663050
+inline bool UnitController::IsRtti(unsigned int uRtti) const
+{
+    if (rttiHashUnitController == uRtti)
+    {
+        return true;
+    }
+    return Controller::IsRtti(uRtti);
+}
+
+// FUNCTION: SWBF2 0x00663080
+inline unsigned int UnitController::GetDerivedRtti() const
+{
+    return rttiHashUnitController;
+}
+
+// FUNCTION: SWBF2 0x00663090
+inline const char* UnitController::GetDerivedRttiName() const
+{
+    return rttiNameUnitController;
+}
+
+

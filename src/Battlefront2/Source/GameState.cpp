@@ -238,19 +238,40 @@ void InitMission();
 }
 
 class PauseMenu { public: static void Init(); static void Reset(); };
-namespace PropGenerator { void Init(); }
+namespace PropGenerator
+{
+    void Init();
+}
 
-namespace SkyManager { void Init(); }
+namespace SkyManager
+{
+    void Init();
+}
 
-namespace FLRenderer { void Init(bool bUberMode); }
+namespace FLRenderer
+{
+    void Init(bool bUberMode);
+}
 
-namespace RedInputManager { void Init(); }
+namespace RedInputManager
+{
+    void Init();
+}
 
-namespace RedInputManager { void Cleanup(); }
+namespace RedInputManager
+{
+    void Cleanup();
+}
 
-namespace SaveGameManager { void Init(); }
+namespace SaveGameManager
+{
+    void Init();
+}
 
-namespace StatsManager { void Init(); }
+namespace StatsManager
+{
+    void Init();
+}
 
 class CustomContent
 {
@@ -258,7 +279,10 @@ public:
     static void Create(bool bMission);
 };
 
-namespace MuzzleFlash { bool Init(); }
+namespace MuzzleFlash
+{
+    bool Init();
+}
 extern int mSkipCount;
 namespace RedLocalizeDB {
 
@@ -269,8 +293,14 @@ void SetSkipCount(int count)
 }
 }
 
-namespace RedMissionLog { void Init(); }
-namespace RedProfile { void Init(); }
+namespace RedMissionLog
+{
+    void Init();
+}
+namespace RedProfile
+{
+    void Init();
+}
 
 class RedVertexCache
 {
@@ -298,24 +328,64 @@ bool EntitySoldier::sEnableAnnouncementVO = true;
 // GLOBAL: SWBF2 0x007e651d
 bool EntitySoldier::sEnableMusic = true;
 
-namespace FrameUpdate { void Update(); }
+namespace FrameUpdate
+{
+    void Update();
+}
 
-namespace PblProfile { void EndFrame(); }
-namespace PblProfile { void StartFrame(); }
-namespace RedProfile { void DisplayCountersByGroup(); }
+namespace PblProfile
+{
+    void EndFrame();
+}
+namespace PblProfile
+{
+    void StartFrame();
+}
+namespace RedProfile
+{
+    void DisplayCountersByGroup();
+}
 
-namespace QOSDisplay { void Reset(); }
+namespace QOSDisplay
+{
+    void Reset();
+}
 
 class SoldierAnimatorClass { public: static void Destroy(); };
 
-namespace RedMissionLog { void Reset(); } namespace RedProfile { void Cleanup(); }
-namespace StatsManager { void Cleanup(); }
-namespace ReserveManager { void Reset(); }
-namespace SkyManager { void Reset(); }
+namespace RedMissionLog
+{
+    void Reset();
+}
+namespace RedProfile
+{
+    void Cleanup();
+}
+namespace StatsManager
+{
+    void Cleanup();
+}
+namespace ReserveManager
+{
+    void Reset();
+}
+namespace SkyManager
+{
+    void Reset();
+}
 
-namespace SaveGameManager { void Cleanup(); }
-namespace GameVoiceChat { unsigned int GetNumNodes(); }
-namespace GameVoiceChat { void* GetNode(); }
+namespace SaveGameManager
+{
+    void Cleanup();
+}
+namespace GameVoiceChat
+{
+    unsigned int GetNumNodes();
+}
+namespace GameVoiceChat
+{
+    void* GetNode();
+}
 
 extern int gNetSetup_errState;
 
@@ -378,8 +448,11 @@ float g_fFrameRateScale;
 bool sIgnoreNextTime;
 bool gMemoryPoolErrors;
 
-// GLOBAL: SWBF2 0x01f9c2c4
-namespace GameState { int sNumFontsLoaded; }
+namespace GameState
+{
+    // GLOBAL: SWBF2 0x01f9c2c4
+    int sNumFontsLoaded;
+}
 
 LARGE_INTEGER Frequency;
 
@@ -663,20 +736,41 @@ void RedFootprintManager::Init()
 {
 }
 
-// GLOBAL: SWBF2 0x01eaf000
-namespace SaveGameManager { unsigned int mReqSaveFile2Data; }
+namespace SaveGameManager
+{
+    // GLOBAL: SWBF2 0x01eaf000
+    unsigned int mReqSaveFile2Data;
+}
 
-namespace SaveGameManager { extern void (*mOnDone)(); }
-// GLOBAL: SWBF2 0x01eaf008
-namespace SaveGameManager { unsigned int mReqSaveFile2Size; }
-// GLOBAL: SWBF2 0x01eaf010
-namespace SaveGameManager { unsigned int mReqSaveFile1Data; }
-// GLOBAL: SWBF2 0x01eaf014
-namespace SaveGameManager { unsigned int mReqSaveFile1Size; }
-// GLOBAL: SWBF2 0x01eaeff7
-namespace SaveGameManager { unsigned char mForceNoSaveDevice; }
-// GLOBAL: SWBF2 0x009cef72
-namespace PblBuildType { unsigned char gCreateMemoryProfile; }
+namespace SaveGameManager
+{
+    extern void (*mOnDone)();
+}
+namespace SaveGameManager
+{
+    // GLOBAL: SWBF2 0x01eaf008
+    unsigned int mReqSaveFile2Size;
+}
+namespace SaveGameManager
+{
+    // GLOBAL: SWBF2 0x01eaf010
+    unsigned int mReqSaveFile1Data;
+}
+namespace SaveGameManager
+{
+    // GLOBAL: SWBF2 0x01eaf014
+    unsigned int mReqSaveFile1Size;
+}
+namespace SaveGameManager
+{
+    // GLOBAL: SWBF2 0x01eaeff7
+    unsigned char mForceNoSaveDevice;
+}
+namespace PblBuildType
+{
+    // GLOBAL: SWBF2 0x009cef72
+    unsigned char gCreateMemoryProfile;
+}
 
 namespace SaveGameManager {
 

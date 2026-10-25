@@ -221,11 +221,7 @@ static unsigned int sSoftCollisionMask;
 // GLOBAL: SWBF2 0x01e51da4
 static unsigned int sOrdnanceCollisionMask;
 
-static PblMatrix _IdentityMatrix(
-    PblVector4{ 1.0f, 0.0f, 0.0f, 0.0f },
-    PblVector4{ 0.0f, 1.0f, 0.0f, 0.0f },
-    PblVector4{ 0.0f, 0.0f, 1.0f, 0.0f },
-    PblVector4{ 0.0f, 0.0f, 0.0f, 1.0f });
+
 
 // FUNCTION: SWBF2 0x004b6670
 EntityFlyerClass::EntityFlyerClass(unsigned int uHash)
@@ -413,31 +409,17 @@ const char EntityFlyerClass::rttiNameEntityFlyerClass[] = "EntityFlyerClass";
 // EntityFlyer::rttiHashEntityFlyer
 PblHash EntityFlyer::rttiHashEntityFlyer("EntityFlyer");
 
-// FUNCTION: SWBF2 0x004a9cd0
-unsigned int EntityFlyer::GetDerivedRtti() const
-{
-    return rttiHashEntityFlyer;
-}
 
-// FUNCTION: SWBF2 0x004a9ce0
-const char* EntityFlyer::GetDerivedRttiName() const
-{
-    return "EntityFlyer";
-}
 
 // GLOBAL: SWBF2 0x01ebbc68
 // SYNTHETIC: SWBF2 0x00402ab0
 // `dynamic initializer for 'EntityFlyer::sMemoryPool''
 // SYNTHETIC: SWBF2 0x00766f50
 // `dynamic atexit destructor for 'EntityFlyer::sMemoryPool''
+
 MemoryPool EntityFlyer::sMemoryPool("EntityFlyer", 0x1d90);
 
-// FUNCTION: SWBF2 0x00477680
-bool EntityFlyer::IsRtti(unsigned int uRtti) const
-{
-    return uRtti == rttiHashEntityFlyer ||
-           GameObject::IsRtti(uRtti);
-}
+
 
 // FUNCTION: SWBF2 0x004ab7c0
 const ControllableClass* EntityFlyer::GetControllableClass() const
@@ -524,11 +506,7 @@ int EntityFlyer::GetReservableSlots(ReserveType) const
     return mControllableList._iCount;
 }
 
-// FUNCTION: SWBF2 0x00477ac0
-bool EntityFlyerClass::IsRtti(unsigned int uRtti)
-{
-    return uRtti == rttiHashEntityFlyerClass || GameObjectClass::IsRtti(uRtti);
-}
+
 
 // FUNCTION: SWBF2 0x004a9d00
 bool EntityFlyer::PostCollision::Update(float fDeltaTime)
@@ -542,17 +520,9 @@ bool EntityFlyer::PostCollision::Update(float fDeltaTime)
 // SYNTHETIC: SWBF2 0x004a9d60
 // EntityFlyer::PostCollision::`scalar deleting destructor'
 
-// FUNCTION: SWBF2 0x004a9d90
-unsigned int EntityFlyerClass::GetDerivedRtti()
-{
-    return rttiHashEntityFlyerClass;
-}
 
-// FUNCTION: SWBF2 0x004a9da0
-const char* EntityFlyerClass::GetDerivedRttiName()
-{
-    return rttiNameEntityFlyerClass;
-}
+
+
 
 // FUNCTION: SWBF2 0x004a9db0
 Trackable* CameraManager::GetChaseCameraTarget(int iCam)
@@ -1280,14 +1250,14 @@ void EntityFlyerClass::SetProperty(unsigned int uProperty, const char* pszValue)
         const CollisionMesh* pMesh = CollisionMesh::Find(PblHash(pszValue));
         if (pMesh)
         {
-            mCollisionModel.AddBody(new CollisionBodyMesh(pMesh, "CollisionMesh", _IdentityMatrix, 0));
+            mCollisionModel.AddBody(new CollisionBodyMesh(pMesh, "CollisionMesh", gMatrixIdentity, 0));
             int iMaskId = mCollisionModel.GetMaskId(0x29173102);
             if (iMaskId >= 0)
             {
                 sSoftCollisionMask |= 1 << iMaskId;
                 sOrdnanceCollisionMask |= 1 << iMaskId;
             }
-            PblBox box = pMesh->GetWorldspaceAABB(_IdentityMatrix);
+            PblBox box = pMesh->GetWorldspaceAABB(gMatrixIdentity);
             mBarrierX = box._vMax.x - box._vMin.x;
             mBarrierZ = box._vMax.z - box._vMin.z;
             mBarrierOX = (box._vMin.x + box._vMax.x) * 0.5f;
@@ -1309,7 +1279,7 @@ void EntityFlyerClass::SetProperty(unsigned int uProperty, const char* pszValue)
             float fHalfY = (box._vMax.y - box._vMin.y) * 0.5f;
             float fHalfZ = (box._vMax.z - box._vMin.z) * 0.5f;
             CollisionPrimitive primitive;
-            PblMatrix matrix = _IdentityMatrix;
+            PblMatrix matrix = gMatrixIdentity;
             primitive.SetAACylinder((fHalfZ + fHalfX) * 0.5f, fHalfY * 2.0f);
             matrix.m[3][0] = fCenterX;
             matrix.m[3][1] = fCenterY;
@@ -1735,7 +1705,7 @@ EntityFlyer::EntityFlyer(EntityFlyerClass* pClass, const EntityDesc& desc)
             mZephyrPoseDyn.SetLoop(false);
             mZephyrPoseDyn.SetFrameNum(0);
             kPoseFinal.Set(mZephyrPoseDyn, true);
-            mZephyrSkeleton.BuildWorldMatrices(_IdentityMatrix);
+            mZephyrSkeleton.BuildWorldMatrices(gMatrixIdentity);
             mPose.ConvertFromZephyrPose(mZephyrSkeleton);
         }
     }
@@ -2187,7 +2157,7 @@ void EntityFlyer::Render(unsigned char renderMode, float lod, unsigned int flags
             mZephyrSkeleton.Open(*mZephyrSkeleton.m_pShared, kPose);
             kPose.Open(mZephyrSkeleton);
             kPose.Set(mZephyrPoseDyn, true);
-            mZephyrSkeleton.BuildWorldMatrices(_IdentityMatrix);
+            mZephyrSkeleton.BuildWorldMatrices(gMatrixIdentity);
             mPose.ConvertFromZephyrPose(mZephyrSkeleton);
         }
         else if (mClass->mAnimFins)
@@ -2220,7 +2190,7 @@ void EntityFlyer::Render(unsigned char renderMode, float lod, unsigned int flags
             kPose.Set(mZephyrPoseDyn, true);
             mZephyrPoseDyn.SetFrameNumFloat(fBlend > 0.0f ? fTurn + 1.0f : fTurn + 7.0f);
             kPose.Blend(mZephyrPoseDyn, (float)fabs((double)fBlend));
-            mZephyrSkeleton.BuildWorldMatrices(_IdentityMatrix);
+            mZephyrSkeleton.BuildWorldMatrices(gMatrixIdentity);
             mPose.ConvertFromZephyrPose(mZephyrSkeleton);
         }
     }
@@ -2334,7 +2304,7 @@ void EntityFlyer::TurnOnThrustEffects()
             continue;
         }
         mThrustEffect[i]->ScaleSet(mClass->mThrustEffectMinScale[i]);
-        PblMatrix mOffset = _IdentityMatrix;
+        PblMatrix mOffset = gMatrixIdentity;
         mOffset.m[3][0] = mClass->mThrustEffectAttachOffset[i].x;
         mOffset.m[3][1] = mClass->mThrustEffectAttachOffset[i].y;
         mOffset.m[3][2] = mClass->mThrustEffectAttachOffset[i].z;
@@ -2423,7 +2393,7 @@ bool EntityFlyer::TurnOnContrailEffect(int iIndex)
     }
 
     mContrailEffect[iIndex]->ScaleSet(mClass->mContrailEffectMinScale[iIndex]);
-    PblMatrix mOffset = _IdentityMatrix;
+    PblMatrix mOffset = gMatrixIdentity;
     mOffset.m[3][0] = mClass->mContrailEffectAttachOffset[iIndex].x;
     mOffset.m[3][1] = mClass->mContrailEffectAttachOffset[iIndex].y;
     mOffset.m[3][2] = mClass->mContrailEffectAttachOffset[iIndex].z;

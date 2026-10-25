@@ -56,23 +56,11 @@ extern float sClientDeltaTime;
 PblHash WeaponDispenserClass::rttiHashWeaponDispenserClass("WeaponDispenserClass");
 const char WeaponDispenserClass::rttiNameWeaponDispenserClass[] = "WeaponDispenserClass";
 
-// FUNCTION: SWBF2 0x00682430
-bool WeaponDispenserClass::IsRtti(unsigned int uRtti)
-{
-    return uRtti == rttiHashWeaponDispenserClass || WeaponClass::IsRtti(uRtti);
-}
 
-// FUNCTION: SWBF2 0x006836d0
-unsigned int WeaponDispenserClass::GetDerivedRtti()
-{
-    return rttiHashWeaponDispenserClass;
-}
 
-// FUNCTION: SWBF2 0x006836e0
-const char* WeaponDispenserClass::GetDerivedRttiName()
-{
-    return rttiNameWeaponDispenserClass;
-}
+
+
+
 
 // FUNCTION: SWBF2 0x00684670
 WeaponDispenserClass::WeaponDispenserClass(WeaponDispenserClass* pBase, unsigned int uHash)
@@ -276,23 +264,11 @@ WeaponDispenserClass::WeaponDispenserClass(unsigned int uHash)
 PblHash WeaponDispenser::rttiHashWeaponDispenser("WeaponDispenser");
 const char WeaponDispenser::rttiNameWeaponDispenser[] = "WeaponDispenser";
 
-// FUNCTION: SWBF2 0x00682400
-bool WeaponDispenser::IsRtti(unsigned int uRtti) const
-{
-    return uRtti == rttiHashWeaponDispenser || reinterpret_cast<const Weapon*>(this)->Weapon::IsRtti(uRtti);
-}
 
-// FUNCTION: SWBF2 0x006836b0
-unsigned int WeaponDispenser::GetDerivedRtti() const
-{
-    return rttiHashWeaponDispenser;
-}
 
-// FUNCTION: SWBF2 0x006836c0
-const char* WeaponDispenser::GetDerivedRttiName() const
-{
-    return rttiNameWeaponDispenser;
-}
+
+
+
 
 // FUNCTION: SWBF2 0x006836f0
 WeaponDispenser::WeaponDispenser(const WeaponDispenserClass* pClass, const WeaponDesc& desc)

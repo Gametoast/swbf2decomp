@@ -100,23 +100,11 @@ namespace
 PblHash UnitTrooperAgent::rttiHashUnitTrooperAgent("UnitTrooperAgent");
 const char UnitTrooperAgent::rttiNameUnitTrooperAgent[] = "UnitTrooperAgent";
 
-// FUNCTION: SWBF2 0x0066a3f0
-bool UnitTrooperAgent::IsRtti(unsigned int uRtti) const
-{
-    return uRtti == rttiHashUnitTrooperAgent || UnitAgent::IsRtti(uRtti);
-}
 
-// FUNCTION: SWBF2 0x0066a420
-unsigned int UnitTrooperAgent::GetDerivedRtti() const
-{
-    return rttiHashUnitTrooperAgent;
-}
 
-// FUNCTION: SWBF2 0x0066a430
-const char* UnitTrooperAgent::GetDerivedRttiName() const
-{
-    return rttiNameUnitTrooperAgent;
-}
+
+
+
 
 // SYNTHETIC: SWBF2 0x0066a440
 // UnitTrooperAgent::`scalar deleting destructor'

@@ -85,23 +85,11 @@ WeaponRepairClass::~WeaponRepairClass()
 // SYNTHETIC: SWBF2 0x00691130
 // WeaponRepairClass::`scalar deleting destructor'
 
-// FUNCTION: SWBF2 0x006905f0
-bool WeaponRepairClass::IsRtti(unsigned int uRtti)
-{
-    return uRtti == rttiHashWeaponRepairClass || WeaponClass::IsRtti(uRtti);
-}
 
-// FUNCTION: SWBF2 0x00690620
-unsigned int WeaponRepairClass::GetDerivedRtti()
-{
-    return rttiHashWeaponRepairClass;
-}
 
-// FUNCTION: SWBF2 0x00690630
-const char* WeaponRepairClass::GetDerivedRttiName()
-{
-    return rttiNameWeaponRepairClass;
-}
+
+
+
 
 // FUNCTION: SWBF2 0x006911e0
 void WeaponRepairClass::SetProperty(unsigned int uProperty, const char* pszValue)
@@ -229,23 +217,11 @@ WeaponRepair::WeaponRepair(const WeaponRepairClass* pClass, const WeaponDesc& de
 PblHash WeaponRepair::rttiHashWeaponRepair("WeaponRepair");
 const char WeaponRepair::rttiNameWeaponRepair[] = "WeaponRepair";
 
-// FUNCTION: SWBF2 0x006905a0
-bool WeaponRepair::IsRtti(unsigned int uRtti) const
-{
-    return uRtti == rttiHashWeaponRepair || reinterpret_cast<const Weapon*>(this)->Weapon::IsRtti(uRtti);
-}
 
-// FUNCTION: SWBF2 0x006905d0
-unsigned int WeaponRepair::GetDerivedRtti() const
-{
-    return rttiHashWeaponRepair;
-}
 
-// FUNCTION: SWBF2 0x006905e0
-const char* WeaponRepair::GetDerivedRttiName() const
-{
-    return rttiNameWeaponRepair;
-}
+
+
+
 
 // FUNCTION: SWBF2 0x00690830
 bool WeaponRepair::IsBusy() const

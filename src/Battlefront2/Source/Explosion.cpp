@@ -32,11 +32,7 @@
 #include "PebbleFL/Common/PblFile.h"
 #include "RedEngineFL/Graphics/RedModel.h"
 
-static PblMatrix _IdentityMatrix(
-    PblVector4{ 1.0f, 0.0f, 0.0f, 0.0f },
-    PblVector4{ 0.0f, 1.0f, 0.0f, 0.0f },
-    PblVector4{ 0.0f, 0.0f, 1.0f, 0.0f },
-    PblVector4{ 0.0f, 0.0f, 0.0f, 1.0f });
+
 
 // GLOBAL: SWBF2 0x007e6660
 static int sCurrentTrail = 0;
@@ -318,7 +314,7 @@ void ExplosionClass::SetProperty(unsigned int uProperty, const char* pszValue)
             float fCenterY = (box._vMin.y + box._vMax.y) * 0.5f;
             float fCenterZ = (box._vMin.z + box._vMax.z) * 0.5f;
             CollisionPrimitive primitive;
-            PblMatrix matrix = _IdentityMatrix;
+            PblMatrix matrix = gMatrixIdentity;
             float fHalfX = (float)fabs(box._vMax.x - box._vMin.x) * 0.5f;
             float fHalfY = (float)fabs(box._vMax.y - box._vMin.y) * 0.5f;
             float fHalfZ = (float)fabs(box._vMax.z - box._vMin.z) * 0.5f;

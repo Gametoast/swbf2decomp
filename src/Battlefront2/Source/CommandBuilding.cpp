@@ -32,23 +32,11 @@ CommandBuildingClass::~CommandBuildingClass()
 PblHash CommandBuildingClass::rttiHashCommandBuildingClass("CommandBuildingClass");
 const char CommandBuildingClass::rttiNameCommandBuildingClass[] = "CommandBuildingClass";
 
-// FUNCTION: SWBF2 0x004760a0
-bool CommandBuildingClass::IsRtti(unsigned int uRtti)
-{
-    return uRtti == rttiHashCommandBuildingClass || EntityBuildingAnimatedClass::IsRtti(uRtti);
-}
 
-// FUNCTION: SWBF2 0x004760f0
-unsigned int CommandBuildingClass::GetDerivedRtti()
-{
-    return rttiHashCommandBuildingClass;
-}
 
-// FUNCTION: SWBF2 0x00476100
-const char* CommandBuildingClass::GetDerivedRttiName()
-{
-    return rttiNameCommandBuildingClass;
-}
+
+
+
 
 // SYNTHETIC: SWBF2 0x00402620
 // `dynamic initializer for 'CommandBuilding::rttiHashCommandBuilding''
@@ -90,23 +78,11 @@ void CommandBuilding::Respawn()
     }
 }
 
-// FUNCTION: SWBF2 0x00476040
-unsigned int CommandBuilding::GetDerivedRtti() const
-{
-    return rttiHashCommandBuilding;
-}
 
-// FUNCTION: SWBF2 0x00476050
-const char* CommandBuilding::GetDerivedRttiName() const
-{
-    return rttiNameCommandBuilding;
-}
 
-// FUNCTION: SWBF2 0x00475ff0
-bool CommandBuilding::IsRtti(unsigned int uRtti) const
-{
-    return uRtti == rttiHashCommandBuilding || EntityBuildingAnimated::IsRtti(uRtti);
-}
+
+
+
 
 // FUNCTION: SWBF2 0x00476110
 CommandBuilding::CommandBuilding(CommandBuildingClass* pClass, const EntityDesc& desc)

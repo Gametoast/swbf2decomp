@@ -120,11 +120,7 @@ void UnitController::ResetFriendlyList()
     mFriendlyCount = 0;
 }
 
-static PblMatrix _IdentityMatrix(
-    PblVector4{ 1.0f, 0.0f, 0.0f, 0.0f },
-    PblVector4{ 0.0f, 1.0f, 0.0f, 0.0f },
-    PblVector4{ 0.0f, 0.0f, 1.0f, 0.0f },
-    PblVector4{ 0.0f, 0.0f, 0.0f, 1.0f });
+
 
 namespace
 {
@@ -179,25 +175,14 @@ const char UnitController::rttiNameUnitController[] = "UnitController";
 // `dynamic initializer for 'UnitController::sMemoryPool''
 // SYNTHETIC: SWBF2 0x007696c0
 // `dynamic atexit destructor for 'UnitController::sMemoryPool''
+
 MemoryPool UnitController::sMemoryPool("UnitController", sizeof(UnitController));
 
-// FUNCTION: SWBF2 0x00663050
-bool UnitController::IsRtti(unsigned int uRtti) const
-{
-    return uRtti == rttiHashUnitController || Controller::IsRtti(uRtti);
-}
 
-// FUNCTION: SWBF2 0x00663080
-unsigned int UnitController::GetDerivedRtti() const
-{
-    return rttiHashUnitController;
-}
 
-// FUNCTION: SWBF2 0x00663090
-const char* UnitController::GetDerivedRttiName() const
-{
-    return rttiNameUnitController;
-}
+
+
+
 
 // FUNCTION: SWBF2 0x006630a0
 static int GetLODDistHigh()
@@ -600,7 +585,7 @@ const PblVector3& UnitController::GetAttackHelperTargetLastSeenPosition() const
     {
         return GetAttackHelper(mAgent)->GetLastSeenTargetPos();
     }
-    return GetTrans(_IdentityMatrix);
+    return GetTrans(gMatrixIdentity);
 }
 
 // FUNCTION: SWBF2 0x00663ce0
@@ -753,7 +738,7 @@ int UnitController::SendEvent(AI::EventInfo* pInfo) const
 void UnitController::SetLastShotDist(float fDistSq)
 {
     mLastShotDistSq = fDistSq;
-    mLastShotDistPos = mOwner ? GetTrans(mOwner->GetMatrix()) : GetTrans(_IdentityMatrix);
+    mLastShotDistPos = mOwner ? GetTrans(mOwner->GetMatrix()) : GetTrans(gMatrixIdentity);
     mLastShotDistTime = GameLoop::GetMissionTime();
 }
 

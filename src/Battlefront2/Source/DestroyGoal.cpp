@@ -13,23 +13,11 @@
 PblHash AI::DestroyGoal::rttiHashDestroyGoal("DestroyGoal");
 const char AI::DestroyGoal::rttiNameDestroyGoal[] = "DestroyGoal";
 
-// FUNCTION: SWBF2 0x0048c6b0
-bool AI::DestroyGoal::IsRtti(unsigned int uRtti) const
-{
-    return uRtti == rttiHashDestroyGoal || AIGoal::IsRtti(uRtti);
-}
 
-// FUNCTION: SWBF2 0x0048c6e0
-unsigned int AI::DestroyGoal::GetDerivedRtti() const
-{
-    return rttiHashDestroyGoal;
-}
 
-// FUNCTION: SWBF2 0x0048c6f0
-const char* AI::DestroyGoal::GetDerivedRttiName() const
-{
-    return rttiNameDestroyGoal;
-}
+
+
+
 
 // SYNTHETIC: SWBF2 0x0048c700
 // AI::DestroyGoal::`scalar deleting destructor'

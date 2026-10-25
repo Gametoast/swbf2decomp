@@ -14,8 +14,14 @@
 #include "PebbleFL/Common/PblUnicode.h"
 #include "SoundFL/source/sndbus.h"
 
-namespace PopupText { extern void DisablePopup(); }
-namespace PopupText { void __fastcall ShowPopup(int iType, unsigned int uTextId); }
+namespace PopupText
+{
+    extern void DisablePopup();
+}
+namespace PopupText
+{
+    void __fastcall ShowPopup(int iType, unsigned int uTextId);
+}
 namespace HUD { namespace GameEvents { extern void DisableAllForObjectiveDisplay(int iViewport, bool bInit); } }
 
 // FUNCTION: SWBF2 0x00527ea0
@@ -257,7 +263,10 @@ bool PopupText::GetPreventJump()
     return gPreventJump;
 }
 
-namespace PopupText { int GetNumHints(); }
+namespace PopupText
+{
+    int GetNumHints();
+}
 
 // FUNCTION: SWBF2 0x00620ee0
 int PopupText::GetNumHints()

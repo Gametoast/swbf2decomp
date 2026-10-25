@@ -1,5 +1,7 @@
 #pragma once
 
+#include "PebbleFL/Common/PblHashTable.h"
+
 #include <stddef.h>
 
 #include "EntityFlyer.h"
@@ -40,9 +42,9 @@ public:
 
     virtual EntityClass* Derive(unsigned int uHash);
     virtual Entity* Build(const EntityDesc& desc);
-    virtual bool IsRtti(unsigned int uRtti);
-    virtual unsigned int GetDerivedRtti();
-    virtual const char* GetDerivedRttiName();
+    virtual bool IsRtti(unsigned int uRtti) const;
+    virtual unsigned int GetDerivedRtti() const;
+    virtual const char* GetDerivedRttiName() const;
     virtual void SetProperty(unsigned int uProperty, const char* pszValue);
 
     CargoInfo mCargoInfo[4];
@@ -531,3 +533,69 @@ struct EntityCarrierRuntimeLayout
  
  
  
+
+// FUNCTION: SWBF2 0x00496e20
+inline bool EntityCarrier::IsRtti(unsigned int uRtti) const
+{
+    if (rttiHashEntityCarrier == uRtti)
+    {
+        return true;
+    }
+    return EntityFlyer::IsRtti(uRtti);
+}
+
+// FUNCTION: SWBF2 0x00496e70
+inline unsigned int EntityCarrier::GetDerivedRtti() const
+{
+    return rttiHashEntityCarrier;
+}
+
+// FUNCTION: SWBF2 0x00496e80
+inline const char* EntityCarrier::GetDerivedRttiName() const
+{
+    return rttiNameEntityCarrier;
+}
+
+// FUNCTION: SWBF2 0x00496f00
+inline bool EntityCarrierClass::IsRtti(unsigned int uRtti) const
+{
+    if (rttiHashEntityCarrierClass == uRtti)
+    {
+        return true;
+    }
+    return EntityFlyerClass::IsRtti(uRtti);
+}
+
+// FUNCTION: SWBF2 0x00496f40
+inline unsigned int EntityCarrierClass::GetDerivedRtti() const
+{
+    return rttiHashEntityCarrierClass;
+}
+
+// FUNCTION: SWBF2 0x00496f50
+inline const char* EntityCarrierClass::GetDerivedRttiName() const
+{
+    return rttiNameEntityCarrierClass;
+}
+
+// FUNCTION: SWBF2 0x004a9cd0
+inline unsigned int EntityFlyer::GetDerivedRtti() const
+{
+    return rttiHashEntityFlyer;
+}
+
+// FUNCTION: SWBF2 0x004a9ce0
+inline const char* EntityFlyer::GetDerivedRttiName() const
+{
+    return "EntityFlyer";
+}
+
+// FUNCTION: SWBF2 0x00477680
+inline bool EntityFlyer::IsRtti(unsigned int uRtti) const
+{
+    if (rttiHashEntityFlyer == uRtti)
+    {
+        return true;
+    }
+    return GameObject::IsRtti(uRtti);
+}

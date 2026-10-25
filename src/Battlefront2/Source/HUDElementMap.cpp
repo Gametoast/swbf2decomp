@@ -81,11 +81,7 @@ static BackdropDefaults gBackdropDefaults[3] =
     { 0.6f, 0.5f, 0.65f }
 };
 
-static const PblMatrix _IdentityMatrix(
-    PblVector4{ 1.0f, 0.0f, 0.0f, 0.0f },
-    PblVector4{ 0.0f, 1.0f, 0.0f, 0.0f },
-    PblVector4{ 0.0f, 0.0f, 1.0f, 0.0f },
-    PblVector4{ 0.0f, 0.0f, 0.0f, 1.0f });
+
 
 // GLOBAL: SWBF2 0x00789ad4
 char* HUD::ElementMap::sModeStrings[3] = { "Small", "Large", "Spawn" };
@@ -581,7 +577,7 @@ void HUD::ElementMap::PostReadSetup()
 
     for (unsigned int i = 0; i < mode_MAX; ++i)
     {
-        PblMatrix matrix = _IdentityMatrix;
+        PblMatrix matrix = gMatrixIdentity;
         matrix.m[3][0] = mPosition[i].x;
         matrix.m[3][1] = mPosition[i].y;
         matrix.m[3][2] = mPosition[i].z;
@@ -1815,7 +1811,7 @@ bool HUD::ElementMap::GetProperty(const unsigned int uHashID, void* pValue)
 // FUNCTION: SWBF2 0x005522a0
 bool HUD::ElementMap::SetProperty(const unsigned int uHashID, const void* pValue)
 {
-    PblMatrix matrix = _IdentityMatrix;
+    PblMatrix matrix = gMatrixIdentity;
     matrix.m[3][0] = mPosition[mMode].x;
     matrix.m[3][1] = mPosition[mMode].y;
     matrix.m[3][2] = mPosition[mMode].z;

@@ -317,23 +317,11 @@ const char EntityCloth::rttiNameEntityCloth[] = "EntityCloth";
 PblHash EntityClothClass::rttiHashEntityClothClass("EntityClothClass");
 const char EntityClothClass::rttiNameEntityClothClass[] = "EntityClothClass";
 
-// FUNCTION: SWBF2 0x00458ae0
-bool EntityCloth::IsRtti(unsigned int uRtti) const
-{
-    return uRtti == rttiHashEntityCloth || Entity::IsRtti(uRtti);
-}
 
-// FUNCTION: SWBF2 0x00458b10
-unsigned int EntityCloth::GetDerivedRtti() const
-{
-    return rttiHashEntityCloth;
-}
 
-// FUNCTION: SWBF2 0x00458b20
-const char* EntityCloth::GetDerivedRttiName() const
-{
-    return rttiNameEntityCloth;
-}
+
+
+
 
 // FUNCTION: SWBF2 0x00458b40
 EntityClass* EntityCloth::GetEntityClass()
@@ -347,23 +335,11 @@ const EntityClass* EntityCloth::GetEntityClass() const
     return mClass;
 }
 
-// FUNCTION: SWBF2 0x00458b60
-bool EntityClothClass::IsRtti(unsigned int uRtti)
-{
-    return uRtti == rttiHashEntityClothClass || EntityClass::IsRtti(uRtti);
-}
 
-// FUNCTION: SWBF2 0x00458b90
-unsigned int EntityClothClass::GetDerivedRtti()
-{
-    return rttiHashEntityClothClass;
-}
 
-// FUNCTION: SWBF2 0x00458ba0
-const char* EntityClothClass::GetDerivedRttiName()
-{
-    return rttiNameEntityClothClass;
-}
+
+
+
 
 // FUNCTION: SWBF2 0x00458bb0
 void ClothBank::Push(EntityCloth* pCloth, float fPriority)
@@ -946,11 +922,7 @@ extern "C" PblVector3* __stdcall D3DXVec3TransformNormal(PblVector3* pOut, const
 // GLOBAL: SWBF2 0x007eb77c
 static PblVector3 sGravity(0.0f, -9.8f, 0.0f);
 
-static PblMatrix _IdentityMatrix(
-    PblVector4{ 1.0f, 0.0f, 0.0f, 0.0f },
-    PblVector4{ 0.0f, 1.0f, 0.0f, 0.0f },
-    PblVector4{ 0.0f, 0.0f, 1.0f, 0.0f },
-    PblVector4{ 0.0f, 0.0f, 0.0f, 1.0f });
+
 
 // FUNCTION: SWBF2 0x0045b3b0
 void EntityCloth::EnforceSphereCollision(const PblMatrix& mMatrix, float fRadius)
@@ -1300,7 +1272,7 @@ void EntityCloth::EnforceCollisions(const PblMatrix& mMatrix, const RedPose* pPo
         }
         else
         {
-            PblMatrix mBone = _IdentityMatrix;
+            PblMatrix mBone = gMatrixIdentity;
             RedModel::_HashTable.Find(mData->m_uiModelHash)->GetBoneMatrix(collision.parent, mBone);
             PblMatrix mTemp;
             D3DXMatrixMultiply(&mTemp, &collision.localMat, &mBone);

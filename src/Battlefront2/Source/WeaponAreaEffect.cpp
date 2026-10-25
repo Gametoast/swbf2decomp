@@ -37,23 +37,11 @@ namespace
 // WeaponAreaEffect::rttiHashWeaponAreaEffect
 PblHash WeaponAreaEffect::rttiHashWeaponAreaEffect("WeaponAreaEffect");
 
-// FUNCTION: SWBF2 0x0067c170
-bool WeaponAreaEffect::IsRtti(unsigned int uRtti) const
-{
-    return uRtti == rttiHashWeaponAreaEffect || Weapon::IsRtti(uRtti);
-}
 
-// FUNCTION: SWBF2 0x0067c1a0
-unsigned int WeaponAreaEffect::GetDerivedRtti() const
-{
-    return rttiHashWeaponAreaEffect;
-}
 
-// FUNCTION: SWBF2 0x0067c1b0
-const char* WeaponAreaEffect::GetDerivedRttiName() const
-{
-    return "WeaponAreaEffect";
-}
+
+
+
 
 // FUNCTION: SWBF2 0x0067c1c0
 void WeaponAreaEffect::SetOrdnance(Ordnance*)
@@ -829,23 +817,11 @@ WeaponAreaEffectClass::~WeaponAreaEffectClass()
 // SYNTHETIC: SWBF2 0x0067dc40
 // WeaponAreaEffectClass::`scalar deleting destructor'
 
-// FUNCTION: SWBF2 0x0067c210
-bool WeaponAreaEffectClass::IsRtti(unsigned int uRtti)
-{
-    return uRtti == rttiHashWeaponAreaEffectClass || WeaponClass::IsRtti(uRtti);
-}
 
-// FUNCTION: SWBF2 0x0067c240
-unsigned int WeaponAreaEffectClass::GetDerivedRtti()
-{
-    return rttiHashWeaponAreaEffectClass;
-}
 
-// FUNCTION: SWBF2 0x0067c250
-const char* WeaponAreaEffectClass::GetDerivedRttiName()
-{
-    return rttiNameWeaponAreaEffectClass;
-}
+
+
+
 
 // FUNCTION: SWBF2 0x0067dd70
 void WeaponAreaEffectClass::SetProperty(unsigned int uProperty, const char* pszValue)

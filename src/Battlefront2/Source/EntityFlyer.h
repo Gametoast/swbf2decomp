@@ -1,5 +1,7 @@
 #pragma once
 
+#include "PebbleFL/Common/PblHashTable.h"
+
 #include <stddef.h>
 
 #include "Aimer.h"
@@ -49,9 +51,9 @@ public:
 
     virtual EntityClass* Derive(unsigned int uHash);
     virtual Entity* Build(const EntityDesc& desc);
-    virtual bool IsRtti(unsigned int uRtti);
-    virtual unsigned int GetDerivedRtti();
-    virtual const char* GetDerivedRttiName();
+    virtual bool IsRtti(unsigned int uRtti) const;
+    virtual unsigned int GetDerivedRtti() const;
+    virtual const char* GetDerivedRttiName() const;
     virtual void SetProperty(unsigned int uProperty, const char* pszValue);
     virtual int GetVehicleType();
     virtual const void* GetControllableClass();
@@ -256,3 +258,25 @@ public:
  
  
  
+
+// FUNCTION: SWBF2 0x00477ac0
+inline bool EntityFlyerClass::IsRtti(unsigned int uRtti) const
+{
+    if (rttiHashEntityFlyerClass == uRtti)
+    {
+        return true;
+    }
+    return GameObjectClass::IsRtti(uRtti);
+}
+
+// FUNCTION: SWBF2 0x004a9d90
+inline unsigned int EntityFlyerClass::GetDerivedRtti() const
+{
+    return rttiHashEntityFlyerClass;
+}
+
+// FUNCTION: SWBF2 0x004a9da0
+inline const char* EntityFlyerClass::GetDerivedRttiName() const
+{
+    return rttiNameEntityFlyerClass;
+}

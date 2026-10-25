@@ -96,11 +96,7 @@ MemoryPool EntityHover::sMemoryPool("EntityHover", 0x1d10);
 PblHash EntityHoverClass::rttiHashEntityHoverClass("EntityHoverClass");
 const char EntityHoverClass::rttiNameEntityHoverClass[] = "EntityHoverClass";
 
-// FUNCTION: SWBF2 0x00478a50
-bool EntityHover::IsRtti(unsigned int uRtti) const
-{
-    return uRtti == rttiHashEntityHover || GameObject::IsRtti(uRtti);
-}
+
 
 // FUNCTION: SWBF2 0x00478a90
 GameObject* EntityHover::GetGameObject()
@@ -155,23 +151,11 @@ Controllable* EntityHover::GetControllable()
     return this;
 }
 
-// FUNCTION: SWBF2 0x00478dc0
-bool EntityHoverClass::IsRtti(unsigned int uRtti)
-{
-    return uRtti == rttiHashEntityHoverClass || GameObjectClass::IsRtti(uRtti);
-}
 
-// FUNCTION: SWBF2 0x004c0920
-unsigned int EntityHover::GetDerivedRtti() const
-{
-    return rttiHashEntityHover;
-}
 
-// FUNCTION: SWBF2 0x004c0930
-const char* EntityHover::GetDerivedRttiName() const
-{
-    return rttiNameEntityHover;
-}
+
+
+
 
 // FUNCTION: SWBF2 0x004c0950
 EntityType EntityHover::GetEntityType() const
@@ -193,17 +177,9 @@ EntityHover::PostCollision::~PostCollision()
 // SYNTHETIC: SWBF2 0x004c09c0
 // EntityHover::PostCollision::`scalar deleting destructor'
 
-// FUNCTION: SWBF2 0x004c09f0
-unsigned int EntityHoverClass::GetDerivedRtti()
-{
-    return rttiHashEntityHoverClass;
-}
 
-// FUNCTION: SWBF2 0x004c0a00
-const char* EntityHoverClass::GetDerivedRttiName()
-{
-    return rttiNameEntityHoverClass;
-}
+
+
 
 // GLOBAL: SWBF2 0x007e6514
 static int sCurrentSection = -1;
@@ -374,11 +350,7 @@ EntityClass* EntityHoverClass::Derive(unsigned int uHash)
     return new EntityHoverClass(this, uHash);
 }
 
-static PblMatrix _IdentityMatrix(
-    PblVector4{ 1.0f, 0.0f, 0.0f, 0.0f },
-    PblVector4{ 0.0f, 1.0f, 0.0f, 0.0f },
-    PblVector4{ 0.0f, 0.0f, 1.0f, 0.0f },
-    PblVector4{ 0.0f, 0.0f, 0.0f, 1.0f });
+
 
 inline void* EntityHover::operator new(unsigned int uSize)
 {
@@ -541,7 +513,7 @@ EntityHover::EntityHover(EntityHoverClass* pClass, const EntityDesc& desc)
             mZephyrPoseDyn.SetFrameNum(4);
             mZephyrPoseDyn.Update(0.0f);
             kPoseFinal.Set(mZephyrPoseDyn, false);
-            mZephyrSkeleton.BuildWorldMatrices(_IdentityMatrix);
+            mZephyrSkeleton.BuildWorldMatrices(gMatrixIdentity);
             mPose.ConvertFromZephyrPose(mZephyrSkeleton);
         }
     }
@@ -1246,7 +1218,7 @@ void EntityHoverClass::SetProperty(unsigned int uProperty, const char* pszValue)
         {
             CollisionPrimitive primitive;
             primitive.SetSphere(fRadius);
-            PblMatrix matrix = _IdentityMatrix;
+            PblMatrix matrix = gMatrixIdentity;
             matrix.m[3][0] = x;
             matrix.m[3][1] = y;
             matrix.m[3][2] = z;
@@ -1391,14 +1363,14 @@ void EntityHoverClass::SetProperty(unsigned int uProperty, const char* pszValue)
         const CollisionMesh* pMesh = CollisionMesh::Find(PblHash(pszValue));
         if (pMesh)
         {
-            mCollisionModel.AddBody(new CollisionBodyMesh(pMesh, "CollisionMesh", _IdentityMatrix, 0));
+            mCollisionModel.AddBody(new CollisionBodyMesh(pMesh, "CollisionMesh", gMatrixIdentity, 0));
             int iMaskId = mCollisionModel.GetMaskId(0x29173102);
             if (iMaskId >= 0)
             {
                 sSoftCollisionMask |= 1 << iMaskId;
                 sOrdnanceCollisionMask |= 1 << iMaskId;
             }
-            PblBox box = pMesh->GetWorldspaceAABB(_IdentityMatrix);
+            PblBox box = pMesh->GetWorldspaceAABB(gMatrixIdentity);
             mBarrierX = box._vMax.x - box._vMin.x;
             mBarrierZ = box._vMax.z - box._vMin.z;
             mBarrierOX = (box._vMin.x + box._vMax.x) * 0.5f;
@@ -1419,7 +1391,7 @@ void EntityHoverClass::SetProperty(unsigned int uProperty, const char* pszValue)
                 float fHalfY = (box._vMax.y - box._vMin.y) * 0.5f;
                 float fHalfZ = (box._vMax.z - box._vMin.z) * 0.5f;
                 CollisionPrimitive primitive;
-                PblMatrix matrix = _IdentityMatrix;
+                PblMatrix matrix = gMatrixIdentity;
                 primitive.SetAACylinder((fHalfX + fHalfZ) * 0.5f, fHalfY * 2.0f);
                 matrix.m[3][0] = fCenterX;
                 matrix.m[3][1] = fCenterY;
@@ -2534,7 +2506,7 @@ void EntityHover::Move(float fDeltaTime, float fThrust, float fStrafe, float fTu
         mZephyrPoseDyn.SetFrameNumFloat(mForceFrameNum2);
         mZephyrPoseDyn.Update(0.0f);
         kPose.Blend(mZephyrPoseDyn, mForceFrameBlend);
-        mZephyrSkeleton.BuildWorldMatrices(_IdentityMatrix);
+        mZephyrSkeleton.BuildWorldMatrices(gMatrixIdentity);
         mPose.ConvertFromZephyrPose(mZephyrSkeleton);
     }
 
@@ -2752,7 +2724,7 @@ void EntityHover::Render(unsigned char ucViewport, float fDist, unsigned int uiF
         mZephyrPoseDyn.SetFrameNumFloat(fFrame2);
         mZephyrPoseDyn.Update(0.0f);
         kPose.Blend(mZephyrPoseDyn, fBlend);
-        mZephyrSkeleton.BuildWorldMatrices(_IdentityMatrix);
+        mZephyrSkeleton.BuildWorldMatrices(gMatrixIdentity);
         mPose.ConvertFromZephyrPose(kPose);
     }
 

@@ -28,8 +28,11 @@
 class PblMatrix;
 extern PblMatrix gMatrixIdentity;
 
-// GLOBAL: SWBF2 0x01e56054
-namespace GameLoop { extern float sDeltaTime; }
+namespace GameLoop
+{
+    // GLOBAL: SWBF2 0x01e56054
+    extern float sDeltaTime;
+}
 
 namespace FLRenderer
 {
@@ -38,7 +41,10 @@ float GetNearSceneFadeEnd();
 
 extern bool flushClusterObjs_;
 
-namespace PropGenerator { void FlushClusterObjects(); }
+namespace PropGenerator
+{
+    void FlushClusterObjects();
+}
 
 // FUNCTION: SWBF2 0x0062b100
 void PropGenerator::FlushClusterObjects()
@@ -46,7 +52,10 @@ void PropGenerator::FlushClusterObjects()
     flushClusterObjs_ = true;
 }
 
-namespace PropGenerator { void GetTerrainYAndNormal(float x, float z, float& y, PblVector3& vNormal); }
+namespace PropGenerator
+{
+    void GetTerrainYAndNormal(float x, float z, float& y, PblVector3& vNormal);
+}
 
 PblMatrix NormalMatrix(const PblVector3& vDir, const PblVector3& vNormal, const PblVector3& vPos);
 

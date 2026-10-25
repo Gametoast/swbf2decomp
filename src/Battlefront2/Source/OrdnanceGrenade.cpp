@@ -79,58 +79,57 @@ OrdnanceGrenadeClass::OrdnanceGrenadeClass(OrdnanceGrenadeClass* pBase, unsigned
     mImpactEffectWater = pBase->mImpactEffectWater;
 }
 
-// FUNCTION: SWBF2 0x006000c0
-bool OrdnanceGrenadeClass::IsRtti(unsigned int uRtti)
-{
-    return uRtti == rttiHashOrdnanceGrenadeClass || OrdnanceShellClass::IsRtti(uRtti);
-}
 
-// FUNCTION: SWBF2 0x00600100
-unsigned int OrdnanceGrenadeClass::GetDerivedRtti()
-{
-    return rttiHashOrdnanceGrenadeClass;
-}
 
-// FUNCTION: SWBF2 0x00600110
-const char* OrdnanceGrenadeClass::GetDerivedRttiName()
-{
-    return rttiNameOrdnanceGrenadeClass;
-}
+
+
+
 
 // FUNCTION: SWBF2 0x00600b40
 void OrdnanceGrenadeClass::SetProperty(unsigned int uProperty, const char* pszValue)
 {
-    if (uProperty == 0x678DE338)
+    switch (uProperty)
+    {
+    case 0x678DE338:
     {
         sscanf(pszValue, "%f", &mRebound);
+            break;
     }
-    else if (uProperty == 0xA51BE2BB)
+    case 0xA51BE2BB:
     {
         sscanf(pszValue, "%f", &mFriction);
+            break;
     }
-    else if (uProperty == 0xB8C524F1)
+    case 0xB8C524F1:
     {
         mSoundCollisionLeaf.SetID(pszValue, false, false);
+            break;
     }
-    else if (uProperty == 0xEDC6251A)
+    case 0xEDC6251A:
     {
         mSoundCollisionOther.SetID(pszValue, false, false);
+            break;
     }
-    else if (uProperty == 0xECAAA59D)
+    case 0xECAAA59D:
     {
         mImpactEffectWater = PblHash(pszValue);
+            break;
     }
-    else if (uProperty == 0x0D0CDE2B)
+    case 0x0D0CDE2B:
     {
         mStartTimerOnContact = atoi(pszValue) != 0;
+            break;
     }
-    else if (uProperty == 0xDB873344)
+    case 0xDB873344:
     {
         mAlignVertical = atoi(pszValue) != 0;
+            break;
     }
-    else
+    default:
     {
         OrdnanceShellClass::SetProperty(uProperty, pszValue);
+            break;
+    }
     }
 }
 
@@ -184,23 +183,11 @@ OrdnanceGrenade::~OrdnanceGrenade()
 // SYNTHETIC: SWBF2 0x00600090
 // OrdnanceGrenade::`scalar deleting destructor'
 
-// FUNCTION: SWBF2 0x00600030
-bool OrdnanceGrenade::IsRtti(unsigned int uRtti) const
-{
-    return uRtti == rttiHashOrdnanceGrenade || OrdnanceShell::IsRtti(uRtti);
-}
 
-// FUNCTION: SWBF2 0x00600070
-unsigned int OrdnanceGrenade::GetDerivedRtti() const
-{
-    return rttiHashOrdnanceGrenade;
-}
 
-// FUNCTION: SWBF2 0x00600080
-const char* OrdnanceGrenade::GetDerivedRttiName() const
-{
-    return rttiNameOrdnanceGrenade;
-}
+
+
+
 
 // FUNCTION: SWBF2 0x006001a0
 void OrdnanceGrenade::Render(unsigned char ucViewport, float fDist, unsigned int uiFlags)

@@ -45,23 +45,11 @@ static inline int GetTeam(const GameObject* pObject)
     return pObject->mTeam;
 }
 
-// FUNCTION: SWBF2 0x00485100
-bool Controller::IsRtti(unsigned int uRtti) const
-{
-    return uRtti == rttiHashController;
-}
 
-// FUNCTION: SWBF2 0x00485120
-unsigned int Controller::GetDerivedRtti() const
-{
-    return rttiHashController;
-}
 
-// FUNCTION: SWBF2 0x00485130
-const char* Controller::GetDerivedRttiName() const
-{
-    return rttiNameController;
-}
+
+
+
 
 // FUNCTION: SWBF2 0x00485150
 void Controller::KillController()

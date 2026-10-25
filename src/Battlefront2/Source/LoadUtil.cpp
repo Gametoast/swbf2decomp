@@ -90,9 +90,21 @@ int sUnknownChunkSeen;
 class PblMatrix;
 extern PblMatrix gMatrixIdentity;
 
-namespace HUD { namespace Manager { void Load(PblFileChunk& chunk); } }
-namespace PropGenerator { void Read(PblFileChunk& chunk); }
-namespace SkyManager { void Read(PblFileChunk& chunk); }
+namespace HUD
+{
+    namespace Manager
+    {
+        void Load(PblFileChunk& chunk);
+    }
+}
+namespace PropGenerator
+{
+    void Read(PblFileChunk& chunk);
+}
+namespace SkyManager
+{
+    void Read(PblFileChunk& chunk);
+}
 
 extern bool sLoadNestedLevels;
 

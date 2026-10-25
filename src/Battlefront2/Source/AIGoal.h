@@ -1,5 +1,7 @@
 #pragma once
 
+#include "PebbleFL/Common/PblHashTable.h"
+
 #include <stddef.h>
 
 #include "PebbleFL/Common/PblHashTable.h"
@@ -104,3 +106,21 @@ public:
  
  
  
+
+// FUNCTION: SWBF2 0x00439ab0
+inline bool AI::AIGoal::IsRtti(unsigned int uRtti) const
+{
+    return rttiHashAIGoal == uRtti;
+}
+
+// FUNCTION: SWBF2 0x00439ad0
+inline unsigned int AI::AIGoal::GetDerivedRtti() const
+{
+    return rttiHashAIGoal;
+}
+
+// FUNCTION: SWBF2 0x00439ae0
+inline const char* AI::AIGoal::GetDerivedRttiName() const
+{
+    return rttiNameAIGoal;
+}

@@ -35,11 +35,7 @@ void CollisionModel::LeaveClient()
     sCollisionResult = sHostCollisionResult;
 }
 
-static PblMatrix _IdentityMatrix(
-    PblVector4{ 1.0f, 0.0f, 0.0f, 0.0f },
-    PblVector4{ 0.0f, 1.0f, 0.0f, 0.0f },
-    PblVector4{ 0.0f, 0.0f, 1.0f, 0.0f },
-    PblVector4{ 0.0f, 0.0f, 0.0f, 1.0f });
+
 
 static inline const PblMatrix operator*(const PblMatrix& a, const PblMatrix& b)
 {
@@ -595,7 +591,7 @@ const PblMatrix& CollisionModel::GetBodyMatrix(int id) const
     {
         return mBody[id]->mMatrix;
     }
-    return _IdentityMatrix;
+    return gMatrixIdentity;
 }
 
 // FUNCTION: SWBF2 0x00463750
@@ -615,7 +611,7 @@ PblMatrix CollisionModel::GetLocalMatrix(int id, const RedPose* pPose) const
     {
         return mBody[id]->GetLocalMatrix(pPose);
     }
-    return _IdentityMatrix;
+    return gMatrixIdentity;
 }
 
 // FUNCTION: SWBF2 0x00463820

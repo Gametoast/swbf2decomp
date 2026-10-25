@@ -1,5 +1,7 @@
 #pragma once
 
+#include "PebbleFL/Common/PblHashTable.h"
+
 class PblFileChunk;
 
 #include <stddef.h>
@@ -36,7 +38,7 @@ public:
     Entity() {}
 
     // FUNCTION: SWBF2 0x00443ea0
-    virtual bool IsRtti(unsigned int uRtti) const { return uRtti == rttiHashEntity; }
+    virtual bool IsRtti(unsigned int uRtti) const { return rttiHashEntity == uRtti; }
     // FUNCTION: SWBF2 0x00458a00
     virtual unsigned int GetDerivedRtti() const { return rttiHashEntity; }
     // FUNCTION: SWBF2 0x00458a10
@@ -139,9 +141,9 @@ public:
     EntityClass(EntityClass* pParent, unsigned int uHash);
 
     virtual ~EntityClass();
-    virtual bool IsRtti(unsigned int uRtti);
-    virtual unsigned int GetDerivedRtti();
-    virtual const char* GetDerivedRttiName();
+    virtual bool IsRtti(unsigned int uRtti) const;
+    virtual unsigned int GetDerivedRtti() const;
+    virtual const char* GetDerivedRttiName() const;
     virtual void SetProperty(unsigned int uProperty, const char* pszValue);
     virtual void PostReadSetup();
 
@@ -174,3 +176,43 @@ public:
  
  
  
+
+// FUNCTION: SWBF2 0x00443f60
+inline bool EntityClass::IsRtti(unsigned int uRtti) const
+{
+    return rttiHashEntityClass == uRtti;
+}
+
+// FUNCTION: SWBF2 0x0048ec00
+inline unsigned int EntityClass::GetDerivedRtti() const
+{
+    return rttiHashEntityClass;
+}
+
+// FUNCTION: SWBF2 0x0048ec10
+inline const char* EntityClass::GetDerivedRttiName() const
+{
+    return rttiNameEntityClass;
+}
+
+// FUNCTION: SWBF2 0x00443ec0
+inline bool EntityEx::IsRtti(unsigned int uRtti) const
+{
+    if (rttiHashEntityEx == uRtti)
+    {
+        return true;
+    }
+    return Entity::IsRtti(uRtti);
+}
+
+// FUNCTION: SWBF2 0x00491700
+inline unsigned int EntityEx::GetDerivedRtti() const
+{
+    return rttiHashEntityEx;
+}
+
+// FUNCTION: SWBF2 0x00491710
+inline const char* EntityEx::GetDerivedRttiName() const
+{
+    return rttiNameEntityEx;
+}

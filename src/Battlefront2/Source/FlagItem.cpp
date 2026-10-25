@@ -448,41 +448,17 @@ void FlagItem::RenderHelper(unsigned char ucLod, float fAlpha, unsigned int uiFl
     }
 }
 
-// FUNCTION: SWBF2 0x00524010
-bool FlagItemClass::IsRtti(unsigned int uRtti)
-{
-    return uRtti == rttiHashFlagItemClass || EntityItemClass::IsRtti(uRtti);
-}
 
-// FUNCTION: SWBF2 0x00524050
-unsigned int FlagItemClass::GetDerivedRtti()
-{
-    return rttiHashFlagItemClass;
-}
 
-// FUNCTION: SWBF2 0x00524060
-const char* FlagItemClass::GetDerivedRttiName()
-{
-    return rttiNameFlagItemClass;
-}
 
-// FUNCTION: SWBF2 0x00523f30
-bool FlagItem::IsRtti(unsigned int uRtti) const
-{
-    return uRtti == rttiHashFlagItem || EntityItem::IsRtti(uRtti);
-}
 
-// FUNCTION: SWBF2 0x00523f80
-unsigned int FlagItem::GetDerivedRtti() const
-{
-    return rttiHashFlagItem;
-}
 
-// FUNCTION: SWBF2 0x00523f90
-const char* FlagItem::GetDerivedRttiName() const
-{
-    return rttiNameFlagItem;
-}
+
+
+
+
+
+
 
 // FUNCTION: SWBF2 0x00523fb0
 EntityType FlagItem::GetEntityType() const
@@ -574,51 +550,65 @@ FlagItemClass::~FlagItemClass()
 // FUNCTION: SWBF2 0x00525910
 void FlagItemClass::SetProperty(unsigned int uProperty, const char* pszValue)
 {
-    if (uProperty == 0x05CEA8DE)
+    switch (uProperty)
+    {
+    case 0x05CEA8DE:
     {
         mCarriedModel = const_cast<GameModel*>(GameModel::Find(PblHash(pszValue)));
+            break;
     }
-    else if (uProperty == 0x0E0C4B60)
+    case 0x0E0C4B60:
     {
         mDroppedInLandingZoneModel = const_cast<GameModel*>(GameModel::Find(PblHash(pszValue)));
+            break;
     }
-    else if (uProperty == 0x58A48A9E)
+    case 0x58A48A9E:
     {
         float x, y, z;
         sscanf(pszValue, "%f %f %f", &x, &y, &z);
         mCarriedOffset = PblVector3(x, y, z);
+            break;
     }
-    else if (uProperty == 0xDA070BBA)
+    case 0xDA070BBA:
     {
         mTeamColorize[0] = atoi(pszValue) != 0;
+            break;
     }
-    else if (uProperty == 0xCC229F56)
+    case 0xCC229F56:
     {
         mTeamColorize[1] = atoi(pszValue) != 0;
+            break;
     }
-    else if (uProperty == 0x759C8F54)
+    case 0x759C8F54:
     {
         mPickupSound.SetID(pszValue, false, false);
+            break;
     }
-    else if (uProperty == 0x5B2F29F3)
+    case 0x5B2F29F3:
     {
         mDropSound.SetID(pszValue, false, false);
+            break;
     }
-    else if (uProperty == 0x65A920BA)
+    case 0x65A920BA:
     {
         mAmbientSound.SetID(pszValue, false, false);
+            break;
     }
-    else if (uProperty == 0x826BFFDA)
+    case 0x826BFFDA:
     {
         mCarriedSoldierBoneHash = PblTEMPHash(pszValue);
+            break;
     }
-    else if (uProperty == 0x4B80027B)
+    case 0x4B80027B:
     {
         mCarriedDroidekaBoneHash = PblTEMPHash(pszValue);
+            break;
     }
-    else
+    default:
     {
         EntityItemClass::SetProperty(uProperty, pszValue);
+            break;
+    }
     }
 }
 

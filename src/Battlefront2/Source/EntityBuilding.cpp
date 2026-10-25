@@ -63,11 +63,7 @@ EntityBuildingClass::EntityBuildingClass(unsigned int uHash)
     mIsDestructable = (uHash == PblHash("destructablebuilding"));
 }
 
-static PblMatrix _IdentityMatrix(
-    PblVector4{ 1.0f, 0.0f, 0.0f, 0.0f },
-    PblVector4{ 0.0f, 1.0f, 0.0f, 0.0f },
-    PblVector4{ 0.0f, 0.0f, 1.0f, 0.0f },
-    PblVector4{ 0.0f, 0.0f, 0.0f, 1.0f });
+
 
 // FUNCTION: SWBF2 0x00475ed0
 const PblBox& EntityBuilding::GetBBox() const
@@ -89,23 +85,11 @@ const char EntityBuildingClass::rttiNameEntityBuildingClass[] = "EntityBuildingC
 PblHash EntityBuilding::rttiHashEntityBuilding("EntityBuilding");
 const char EntityBuilding::rttiNameEntityBuilding[] = "EntityBuilding";
 
-// FUNCTION: SWBF2 0x00475ef0
-bool EntityBuildingClass::IsRtti(unsigned int uRtti)
-{
-    return uRtti == rttiHashEntityBuildingClass || GameObjectClass::IsRtti(uRtti);
-}
 
-// FUNCTION: SWBF2 0x00492390
-unsigned int EntityBuildingClass::GetDerivedRtti()
-{
-    return rttiHashEntityBuildingClass;
-}
 
-// FUNCTION: SWBF2 0x004923a0
-const char* EntityBuildingClass::GetDerivedRttiName()
-{
-    return rttiNameEntityBuildingClass;
-}
+
+
+
 
 // FUNCTION: SWBF2 0x004923b0
 bool EntityBuildingClass::IsDestructableBuilding()
@@ -180,8 +164,8 @@ void EntityBuildingClass::SetProperty(unsigned int uProperty, const char* pszVal
         const CollisionMesh* pMesh = CollisionMesh::_HashTable.Find(PblHash(pszValue));
         if (pMesh)
         {
-            mCollisionModel.AddBody(new CollisionBodyMesh(pMesh, "CollisionMesh", _IdentityMatrix, 0));
-            PblBox box = pMesh->GetWorldspaceAABB(_IdentityMatrix);
+            mCollisionModel.AddBody(new CollisionBodyMesh(pMesh, "CollisionMesh", gMatrixIdentity, 0));
+            PblBox box = pMesh->GetWorldspaceAABB(gMatrixIdentity);
             if (mBarrierX <= 0.0f)
             {
                 mBarrierX = box._vMax.x - box._vMin.x;
@@ -202,7 +186,7 @@ void EntityBuildingClass::SetProperty(unsigned int uProperty, const char* pszVal
         const CollisionMesh* pMesh = CollisionMesh::_HashTable.Find(PblHash(pszValue));
         if (pMesh)
         {
-            mDestroyedCollisionModel.AddBody(new CollisionBodyMesh(pMesh, "DestroyedCollisionMesh", _IdentityMatrix, 0));
+            mDestroyedCollisionModel.AddBody(new CollisionBodyMesh(pMesh, "DestroyedCollisionMesh", gMatrixIdentity, 0));
         }
 
         CollisionBodyPrimitive* pPrimitive;
@@ -227,7 +211,7 @@ void EntityBuildingClass::SetProperty(unsigned int uProperty, const char* pszVal
         const CollisionMesh* pMesh = CollisionMesh::_HashTable.Find(PblHash(pszValue));
         if (pMesh)
         {
-            mUnbuiltCollisionModel.AddBody(new CollisionBodyMesh(pMesh, "UnbuiltCollisionMesh", _IdentityMatrix, 0));
+            mUnbuiltCollisionModel.AddBody(new CollisionBodyMesh(pMesh, "UnbuiltCollisionMesh", gMatrixIdentity, 0));
         }
         break;
     }
@@ -314,11 +298,7 @@ bool GameObject::AddToTeamManager() const
     return true;
 }
 
-// FUNCTION: SWBF2 0x00475de0
-bool EntityBuilding::IsRtti(unsigned int uRtti) const
-{
-    return uRtti == rttiHashEntityBuilding || GameObject::IsRtti(uRtti);
-}
+
 
 // FUNCTION: SWBF2 0x004923e0
 EntityBuilding::EntityBuilding(EntityBuildingClass* pClass, const EntityDesc& desc)
@@ -430,17 +410,9 @@ EntityBuilding::~EntityBuilding()
 // SYNTHETIC: SWBF2 0x004940d3
 // [thunk]:EntityBuilding::`scalar deleting destructor' adjustor{148}
 
-// FUNCTION: SWBF2 0x00492330
-unsigned int EntityBuilding::GetDerivedRtti() const
-{
-    return rttiHashEntityBuilding;
-}
 
-// FUNCTION: SWBF2 0x00492340
-const char* EntityBuilding::GetDerivedRttiName() const
-{
-    return rttiNameEntityBuilding;
-}
+
+
 
 // FUNCTION: SWBF2 0x00475e90
 bool EntityBuilding::IsUnbuilt() const

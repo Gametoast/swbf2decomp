@@ -32,8 +32,14 @@ extern bool netShowNames;
 extern bool netFrameLock;
 extern int netCurMaxPlayers;
 extern RedColor gHudHighlightColor;
-namespace FriendBuddyList { bool __fastcall IsFriendBuddy(int iLocalIndex, int iPlayerId); }
-namespace AIDebug { bool GetTestSpawnMode(); }
+namespace FriendBuddyList
+{
+    bool __fastcall IsFriendBuddy(int iLocalIndex, int iPlayerId);
+}
+namespace AIDebug
+{
+    bool GetTestSpawnMode();
+}
 Controllable* GetControllablePilot(Controllable* pControllable);
 
 // GLOBAL: SWBF2 0x01faa69c

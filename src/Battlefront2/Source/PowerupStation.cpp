@@ -21,11 +21,7 @@
 #include "RedEngineFL/Graphics/RedSkeleton.h"
 #include "RedEngineFL/Util/RedRegion.h"
 
-static PblMatrix _IdentityMatrix(
-    PblVector4{ 1.0f, 0.0f, 0.0f, 0.0f },
-    PblVector4{ 0.0f, 1.0f, 0.0f, 0.0f },
-    PblVector4{ 0.0f, 0.0f, 1.0f, 0.0f },
-    PblVector4{ 0.0f, 0.0f, 0.0f, 1.0f });
+
 
 // FUNCTION: SWBF2 0x00625cf0
 PowerupStationClass::PowerupStationClass(unsigned int uHash)
@@ -49,7 +45,7 @@ PowerupStationClass::PowerupStationClass(unsigned int uHash)
     mIdleRotateSpeed = 0.0f;
     mIdleWaitTime = 0.0f;
     mIdleWobbleHash = 0;
-    mBaseWobbleMatrix = _IdentityMatrix;
+    mBaseWobbleMatrix = gMatrixIdentity;
     mIdleWobbleFactor = 0.0f;
     mIdleWobbleLeftFootHash = 0;
     mIdleWobbleRightFootHash = 0;
@@ -110,23 +106,11 @@ PowerupStationClass::~PowerupStationClass()
 // SYNTHETIC: SWBF2 0x00625e50
 // PowerupStationClass::`scalar deleting destructor'
 
-// FUNCTION: SWBF2 0x006245a0
-bool PowerupStationClass::IsRtti(unsigned int uRtti)
-{
-    return uRtti == rttiHashPowerupStationClass || EntityBuildingClass::IsRtti(uRtti);
-}
 
-// FUNCTION: SWBF2 0x006245e0
-unsigned int PowerupStationClass::GetDerivedRtti()
-{
-    return rttiHashPowerupStationClass;
-}
 
-// FUNCTION: SWBF2 0x006245f0
-const char* PowerupStationClass::GetDerivedRttiName()
-{
-    return rttiNamePowerupStationClass;
-}
+
+
+
 
 // FUNCTION: SWBF2 0x00626090
 void PowerupStationClass::SetProperty(unsigned int uProperty, const char* pszValue)
@@ -301,23 +285,11 @@ Entity* PowerupStationClass::Build(const EntityDesc& desc)
 PblHash PowerupStation::rttiHashPowerupStation("PowerupStation");
 const char PowerupStation::rttiNamePowerupStation[] = "PowerupStation";
 
-// FUNCTION: SWBF2 0x006244f0
-bool PowerupStation::IsRtti(unsigned int uRtti) const
-{
-    return uRtti == rttiHashPowerupStation || EntityBuilding::IsRtti(uRtti);
-}
 
-// FUNCTION: SWBF2 0x00624540
-unsigned int PowerupStation::GetDerivedRtti() const
-{
-    return rttiHashPowerupStation;
-}
 
-// FUNCTION: SWBF2 0x00624550
-const char* PowerupStation::GetDerivedRttiName() const
-{
-    return rttiNamePowerupStation;
-}
+
+
+
 
 // FUNCTION: SWBF2 0x00624560
 EntityType PowerupStation::GetEntityType() const
@@ -636,7 +608,7 @@ bool PowerupStation::Update(float fDeltaTime)
             if (pWobbleMatrix)
             {
                 PblVector3 vWobblePos = pWobbleMatrix->GetTranslation();
-                *pWobbleMatrix = _IdentityMatrix;
+                *pWobbleMatrix = gMatrixIdentity;
                 PblQuaternion qWobble = PblQuaternion(*pWobbleMatrix);
                 if (fabs(fWobble) > 0.0001f)
                 {
@@ -714,7 +686,7 @@ bool PowerupStation::Update(float fDeltaTime)
             if (pWobbleMatrix)
             {
                 PblVector3 vWobblePos = pWobbleMatrix->GetTranslation();
-                *pWobbleMatrix = _IdentityMatrix;
+                *pWobbleMatrix = gMatrixIdentity;
                 float fCos = PblMath::Cos(mRotateWaitTime * PblMath::fTwoPi);
                 vWobblePos.y += (fCos - 1.0f) * (mClass->mIdleWobbleFactor * 0.5f);
                 pWobbleMatrix->m[3][0] = vWobblePos.x;
@@ -780,7 +752,7 @@ bool PowerupStation::Update(float fDeltaTime)
                 *pMatrix = *pNode;
             }
 
-            PblMatrix mDefault(_IdentityMatrix);
+            PblMatrix mDefault(gMatrixIdentity);
             pSkeleton = mModel->GetRedModel(0)->GetSkeleton();
             for (unsigned int uBone = 0; uBone < 128; uBone++)
             {
@@ -820,7 +792,7 @@ bool PowerupStation::Update(float fDeltaTime)
             *pMatrix = *pNode;
         }
 
-        PblMatrix mDefault(_IdentityMatrix);
+        PblMatrix mDefault(gMatrixIdentity);
         pSkeleton = mModel->GetRedModel(0)->GetSkeleton();
         for (unsigned int uBone = 0; uBone < 128; uBone++)
         {

@@ -63,23 +63,11 @@ WeaponTowCableClass::~WeaponTowCableClass()
 // SYNTHETIC: SWBF2 0x00692a70
 // WeaponTowCableClass::`scalar deleting destructor'
 
-// FUNCTION: SWBF2 0x006927b0
-bool WeaponTowCableClass::IsRtti(unsigned int uRtti)
-{
-    return uRtti == rttiHashWeaponTowCableClass || WeaponCannonClass::IsRtti(uRtti);
-}
 
-// FUNCTION: SWBF2 0x006927e0
-unsigned int WeaponTowCableClass::GetDerivedRtti()
-{
-    return rttiHashWeaponTowCableClass;
-}
 
-// FUNCTION: SWBF2 0x006927f0
-const char* WeaponTowCableClass::GetDerivedRttiName()
-{
-    return rttiNameWeaponTowCableClass;
-}
+
+
+
 
 // FUNCTION: SWBF2 0x00692b40
 void WeaponTowCableClass::SetProperty(unsigned int uProperty, const char* pszValue)
@@ -127,11 +115,7 @@ WeaponTowCable::~WeaponTowCable()
 {
 }
 
-// FUNCTION: SWBF2 0x00692730
-bool WeaponTowCable::IsRtti(unsigned int uRtti) const
-{
-    return uRtti == rttiHashWeaponTowCable || WeaponCannon::IsRtti(uRtti);
-}
+
 
 // FUNCTION: SWBF2 0x006929b0
 bool WeaponTowCable::CheckFire() const
@@ -143,17 +127,9 @@ bool WeaponTowCable::CheckFire() const
     return WeaponCannon::CheckFire();
 }
 
-// FUNCTION: SWBF2 0x00692760
-unsigned int WeaponTowCable::GetDerivedRtti() const
-{
-    return rttiHashWeaponTowCable;
-}
 
-// FUNCTION: SWBF2 0x00692770
-const char* WeaponTowCable::GetDerivedRttiName() const
-{
-    return rttiNameWeaponTowCable;
-}
+
+
 
 // FUNCTION: SWBF2 0x00692840
 void WeaponTowCable::SetOrdnance(Ordnance* pOrdnance)

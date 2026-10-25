@@ -183,11 +183,7 @@ struct PAGameObjectTeam
     int mTeam : 4;
 };
 
-static const PblMatrix _IdentityMatrix(
-    PblVector4{ 1.0f, 0.0f, 0.0f, 0.0f },
-    PblVector4{ 0.0f, 1.0f, 0.0f, 0.0f },
-    PblVector4{ 0.0f, 0.0f, 1.0f, 0.0f },
-    PblVector4{ 0.0f, 0.0f, 0.0f, 1.0f });
+
 
 // FUNCTION: SWBF2 0x006284e0
 PAHierarchy::PAHierarchy()
@@ -196,7 +192,7 @@ PAHierarchy::PAHierarchy()
     mRoot.mHostGeometry = 0;
     mRoot.mGeometry = &mRoot.mHostGeometry;
     mRoot.mClientGeometry = 0;
-    memcpy(&mRoot.mLocalMatrix, &_IdentityMatrix, sizeof(mRoot.mLocalMatrix));
+    memcpy(&mRoot.mLocalMatrix, &gMatrixIdentity, sizeof(mRoot.mLocalMatrix));
 }
 
 // FUNCTION: SWBF2 0x00628340
@@ -226,7 +222,7 @@ void __cdecl PAAnimationGroup::ReadHierarchy(PblFileChunk& chunk)
             node.mHostGeometry = 0;
             node.mGeometry = &node.mHostGeometry;
             node.mClientGeometry = 0;
-            memcpy(&node.mLocalMatrix, &_IdentityMatrix, sizeof(node.mLocalMatrix));
+            memcpy(&node.mLocalMatrix, &gMatrixIdentity, sizeof(node.mLocalMatrix));
         }
         char acName[128];
         pHierarchy->mRoot.mObjHash = PblHash(child.ReadString(acName, sizeof(acName)));
@@ -558,7 +554,7 @@ void PAAnimation::CalculateNextMatrix(float fDeltaTime, float& fTime, const PblM
         if (GetKeys(fTime, key0, key1, true, 0, NULL))
         {
             InterpolateKeys(key0, key1, fTime, key);
-            PblMatrix rot = _IdentityMatrix;
+            PblMatrix rot = gMatrixIdentity;
             PblMatrix temp;
             D3DXMatrixMultiply(&rot, &rot, D3DXMatrixRotationX(&temp, key.mVal.x));
             D3DXMatrixMultiply(&rot, &rot, D3DXMatrixRotationY(&temp, key.mVal.y));
@@ -632,7 +628,7 @@ void PAAnimation::CalculateNextMatrix(float fDeltaTime, float& fTime, const PblM
 
         if (GetKeys(fKeyTime, key0, key1, true, 0, &ucKey))
         {
-            PblMatrix rot = _IdentityMatrix;
+            PblMatrix rot = gMatrixIdentity;
             InterpolateKeys(key0, key1, fKeyTime, key);
             PblMatrix temp;
             D3DXMatrixMultiply(&rot, &rot, D3DXMatrixRotationX(&temp, key.mVal.x));
@@ -714,7 +710,7 @@ bool PAAnimationGroup::AddAnimation(unsigned int uiAnimHash, unsigned int uiObjH
     data.mHostTimer = 0.0f;
     data.mClientTimer = 0.0f;
     data.mTimer = &data.mHostTimer;
-    data.mInitialMatrix = _IdentityMatrix;
+    data.mInitialMatrix = gMatrixIdentity;
     data.mGeometry = &data.mHostGeometry;
     data.mHostGeometry = NULL;
     data.mClientGeometry = NULL;

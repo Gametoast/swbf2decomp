@@ -20,11 +20,7 @@ public:
     unsigned int mHandleId;
 };
 
-static PblMatrix _IdentityMatrix(
-    PblVector4{ 1.0f, 0.0f, 0.0f, 0.0f },
-    PblVector4{ 0.0f, 1.0f, 0.0f, 0.0f },
-    PblVector4{ 0.0f, 0.0f, 1.0f, 0.0f },
-    PblVector4{ 0.0f, 0.0f, 0.0f, 1.0f });
+
 
 AttachedEffectsClass::AttachClassData AttachedEffectsClass::s_aAttachClassData[MAX_ATTACHED];
 unsigned int AttachedEffectsClass::s_uiNumAttached;
@@ -108,7 +104,7 @@ AttachedEffects* AttachedEffectsClass::BuildEffects(const EntityGeometry* pGeome
         if (classData.bIsOdf)
         {
             EntityDesc desc;
-            desc.mMatrix = _IdentityMatrix;
+            desc.mMatrix = gMatrixIdentity;
             desc.mMatrix = pGeometry->GetMatrix();
             Entity* pEntity = classData.pOdfClass->Build(desc);
             if (pEntity->IsRtti(EntityLight::GetRtti()))

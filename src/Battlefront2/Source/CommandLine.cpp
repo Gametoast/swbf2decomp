@@ -72,10 +72,16 @@ bool GameMovie::sUseMovies = true;
 bool gMissionSpecified;
 char Destination[16];
 
-// GLOBAL: SWBF2 0x007e9030
-namespace PlayerPrefs { int gDefaultDifficulty = 2; }
-// GLOBAL: SWBF2 0x007e9034
-namespace PlayerPrefs { int gDefaultTeamNum = 1; }
+namespace PlayerPrefs
+{
+    // GLOBAL: SWBF2 0x007e9030
+    int gDefaultDifficulty = 2;
+}
+namespace PlayerPrefs
+{
+    // GLOBAL: SWBF2 0x007e9034
+    int gDefaultTeamNum = 1;
+}
 
 extern bool pcWindowed;
 extern bool pcPostInstall;
@@ -98,7 +104,10 @@ extern bool gNoAIRespawn;
 extern bool gSoundWarningEnabled;
 extern bool gProfileOptionEnabled;
 extern bool netAutoAssignTeamsOriginalSetting;
-namespace AIDifficulty { extern bool gAutoBalanceEnabled; }
+namespace AIDifficulty
+{
+    extern bool gAutoBalanceEnabled;
+}
 extern bool gCentreSpeakerEnhancement;
 
 extern bool netIsOneWorld;
@@ -116,9 +125,18 @@ extern int netVoiceMode;
 extern int netThrottle;
 extern int gAutoNetPlayers;
 extern int gSpawnInvicibility;
-namespace GameSoundEngine { extern int gSamplerate; }
-namespace GameSoundEngine { extern int gMaxVoices; }
-namespace GameSoundEngine { extern float gSoftMixerBufferSizeMs; }
+namespace GameSoundEngine
+{
+    extern int gSamplerate;
+}
+namespace GameSoundEngine
+{
+    extern int gMaxVoices;
+}
+namespace GameSoundEngine
+{
+    extern float gSoftMixerBufferSizeMs;
+}
 
 extern int dragBandwidth;
 extern int netHeroRuleTeam;
@@ -136,9 +154,15 @@ extern int netFPS;
 extern float gGameSlice;
 
 void AddAutoNetMission(char const* pcArg, int iA, int iB);
-namespace PlayerProfile { void SetSafeMode(); }
+namespace PlayerProfile
+{
+    void SetSafeMode();
+}
 void SetNetAwardsEnabled(int);
-namespace RedLocalizeDB { void ForceLanguageID(int iLanguage); }
+namespace RedLocalizeDB
+{
+    void ForceLanguageID(int iLanguage);
+}
 
 // FUNCTION: SWBF2 0x00414900
 int const Clamp(int iValue, int iMin, int iMax)

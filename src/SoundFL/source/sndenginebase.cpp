@@ -20,7 +20,9 @@ namespace Snd
 {
 
 Stream* EngineBase::smStreams;
+// GLOBAL: SWBF2 0x009d8414
 Voice* EngineBase::smVoices;
+// GLOBAL: SWBF2 0x009d8418
 bool EngineBase::smOpened;
 
 unsigned char EngineBase::smVoiceStorage[0xA800];

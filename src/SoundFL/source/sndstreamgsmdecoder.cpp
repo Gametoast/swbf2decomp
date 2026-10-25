@@ -209,17 +209,17 @@ void Snd::StreamGSMDecoder::SetPackets(unsigned int uiPacketSize, StreamPacket* 
 
 }
 
-extern unsigned short* __cdecl APCM_quantization_xmaxc_to_exp_mant(short value, short* exponent,
+extern "C" unsigned short* __cdecl APCM_quantization_xmaxc_to_exp_mant(short value, short* exponent,
                                            unsigned short* mantissa);
-extern int __cdecl APCM_inverse_quantization(const short* coded, unsigned short mantissa,
+extern "C" int __cdecl APCM_inverse_quantization(const short* coded, unsigned short mantissa,
                                short exponent, short* output);
-extern void __cdecl RPE_grid_positioning(unsigned short grid, const short* input,
+extern "C" void __cdecl RPE_grid_positioning(unsigned short grid, const short* input,
                                 short* output);
-extern void __cdecl Decoding_of_the_coded_Log_Area_Ratios(const short* coded, short* decoded);
-extern int __cdecl Coefficients_0_12(const short* previous, const short* current, short* output);
-extern int __cdecl Coefficients_13_26(const short* previous, const short* current, short* output);
-extern int __cdecl Coefficients_27_39(const short* previous, const short* current, short* output);
-extern int __cdecl LARp_to_rp(short* ratios);
+extern "C" void __cdecl Decoding_of_the_coded_Log_Area_Ratios(const short* coded, short* decoded);
+extern "C" int __cdecl Coefficients_0_12(const short* previous, const short* current, short* output);
+extern "C" int __cdecl Coefficients_13_26(const short* previous, const short* current, short* output);
+extern "C" int __cdecl Coefficients_27_39(const short* previous, const short* current, short* output);
+extern "C" int __cdecl LARp_to_rp(short* ratios);
 
 static short gsmDecoderSaturate(int value)
 {

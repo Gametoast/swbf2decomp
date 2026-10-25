@@ -1,5 +1,7 @@
 #pragma once
 
+#include "PebbleFL/Common/PblHashTable.h"
+
 #include <stddef.h>
 
 #include "FoleyFXOrdnance.h"
@@ -40,3 +42,25 @@ public:
  
  
  
+
+// FUNCTION: SWBF2 0x0052cc40
+inline bool FoleyFXSoldier::IsRtti(unsigned int uRtti) const
+{
+    if (rttiHashFoleyFXSoldier == uRtti)
+    {
+        return true;
+    }
+    return FoleyFX::IsRtti(uRtti);
+}
+
+// FUNCTION: SWBF2 0x0052cc70
+inline unsigned int FoleyFXSoldier::GetDerivedRtti() const
+{
+    return rttiHashFoleyFXSoldier;
+}
+
+// FUNCTION: SWBF2 0x0052cc80
+inline const char* FoleyFXSoldier::GetDerivedRttiName() const
+{
+    return rttiNameFoleyFXSoldier;
+}

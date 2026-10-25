@@ -1,5 +1,7 @@
 #pragma once
 
+#include "PebbleFL/Common/PblHashTable.h"
+
 #include "Fsm.h"
 
 class PblHash;
@@ -15,3 +17,18 @@ public:
     static PblHash rttiHashAgent;
     static const char rttiNameAgent[];
 };
+
+inline bool Agent::IsRtti(unsigned int hash) const
+{
+    return rttiHashAgent == hash;
+}
+
+inline unsigned int Agent::GetDerivedRtti() const
+{
+    return rttiHashAgent;
+}
+
+inline const char* Agent::GetDerivedRttiName() const
+{
+    return rttiNameAgent;
+}

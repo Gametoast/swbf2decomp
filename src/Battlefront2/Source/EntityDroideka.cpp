@@ -471,25 +471,14 @@ const char EntityDroideka::rttiNameEntityDroideka[] = "EntityDroideka";
 // `dynamic initializer for 'EntityDroideka::sMemoryPool''
 // SYNTHETIC: SWBF2 0x00766f40
 // `dynamic atexit destructor for 'EntityDroideka::sMemoryPool''
+
 MemoryPool EntityDroideka::sMemoryPool("EntityDroideka", 0x1b70);
 
-// FUNCTION: SWBF2 0x0049e370
-bool EntityDroideka::IsRtti(unsigned int uRtti) const
-{
-    return uRtti == rttiHashEntityDroideka || GameObject::IsRtti(uRtti);
-}
 
-// FUNCTION: SWBF2 0x0049e3b0
-unsigned int EntityDroideka::GetDerivedRtti() const
-{
-    return rttiHashEntityDroideka;
-}
 
-// FUNCTION: SWBF2 0x0049e3c0
-const char* EntityDroideka::GetDerivedRttiName() const
-{
-    return rttiNameEntityDroideka;
-}
+
+
+
 
 // FUNCTION: SWBF2 0x0049e3e0
 void EntityDroideka::MoveForward(float fDistance)
@@ -762,23 +751,11 @@ EntityDroideka::PostCollision::~PostCollision()
 PblHash EntityDroidekaClass::rttiHashEntityDroidekaClass("EntityDroidekaClass");
 const char EntityDroidekaClass::rttiNameEntityDroidekaClass[] = "EntityDroidekaClass";
 
-// FUNCTION: SWBF2 0x0049ea00
-bool EntityDroidekaClass::IsRtti(unsigned int uRtti)
-{
-    return uRtti == rttiHashEntityDroidekaClass || GameObjectClass::IsRtti(uRtti);
-}
 
-// FUNCTION: SWBF2 0x0049ea40
-unsigned int EntityDroidekaClass::GetDerivedRtti()
-{
-    return rttiHashEntityDroidekaClass;
-}
 
-// FUNCTION: SWBF2 0x0049ea50
-const char* EntityDroidekaClass::GetDerivedRttiName()
-{
-    return rttiNameEntityDroidekaClass;
-}
+
+
+
 
 // FUNCTION: SWBF2 0x0049ea60
 int EntityDroidekaClass::GetVehicleType()
@@ -999,11 +976,7 @@ int EntityDroideka::GetFirstPersonIndex()
     return -1;
 }
 
-static PblMatrix _IdentityMatrix(
-    PblVector4{ 1.0f, 0.0f, 0.0f, 0.0f },
-    PblVector4{ 0.0f, 1.0f, 0.0f, 0.0f },
-    PblVector4{ 0.0f, 0.0f, 1.0f, 0.0f },
-    PblVector4{ 0.0f, 0.0f, 0.0f, 1.0f });
+
 
 // FUNCTION: SWBF2 0x004a7940
 EntityDroidekaClass::EntityDroidekaClass(EntityDroidekaClass* pSrc, unsigned int uHash)
@@ -1592,7 +1565,7 @@ void EntityDroidekaClass::PostReadSetup()
 {
     CollisionPrimitive primitive;
     primitive.SetSphere(mBallRadius);
-    PblMatrix matrix = _IdentityMatrix;
+    PblMatrix matrix = gMatrixIdentity;
     matrix.m[3][0] = 0.0f;
     matrix.m[3][1] = mBallRadius + 0.1f;
     matrix.m[3][2] = 0.2f;
@@ -3113,7 +3086,7 @@ void EntityDroideka::BuildWorldMatrices()
         kSpin.m[3][2] = gVectorZero.z;
         kSpin.m[3][3] = 1.0f;
 
-        mZephyrSkeleton.BuildWorldMatrices(_IdentityMatrix, mClass->mSpineIdx, kDirty);
+        mZephyrSkeleton.BuildWorldMatrices(gMatrixIdentity, mClass->mSpineIdx, kDirty);
         PblMatrix& rSpine = mZephyrSkeleton.m_pWorldMatrices[mClass->mSpineIdx];
         PblMatrix kSpine;
         D3DXMatrixMultiply(&kSpine, &kSpin, &rSpine);
@@ -3168,7 +3141,7 @@ void EntityDroideka::BuildWorldMatrices()
         kTilt.m[3][2] = gVectorZero.z;
         kTilt.m[3][3] = 1.0f;
 
-        mZephyrSkeleton.BuildWorldMatrices(_IdentityMatrix, mClass->mSpineIdx, kDirty);
+        mZephyrSkeleton.BuildWorldMatrices(gMatrixIdentity, mClass->mSpineIdx, kDirty);
         PblMatrix& rSpine = mZephyrSkeleton.m_pWorldMatrices[mClass->mSpineIdx];
         PblMatrix kSpine;
         D3DXMatrixMultiply(&kSpine, &kTilt, &rSpine);
@@ -3191,7 +3164,7 @@ void EntityDroideka::BuildWorldMatrices()
         }
         else
         {
-            kLegs = _IdentityMatrix;
+            kLegs = gMatrixIdentity;
         }
         PblMatrix kRot;
         if (fabs(fPitch) > 0.04f)
@@ -3211,7 +3184,7 @@ void EntityDroideka::BuildWorldMatrices()
 
         for (int i = 0; i < 3; ++i)
         {
-            mZephyrSkeleton.BuildWorldMatrices(_IdentityMatrix, mClass->mJointIdx[i], kDirty);
+            mZephyrSkeleton.BuildWorldMatrices(gMatrixIdentity, mClass->mJointIdx[i], kDirty);
             PblMatrix& rJoint = mZephyrSkeleton.m_pWorldMatrices[mClass->mJointIdx[i]];
             PblVector3 vZ;
             PblVector3 vY;
@@ -3247,7 +3220,7 @@ void EntityDroideka::BuildWorldMatrices()
         D3DXMatrixRotationY(&kArms, -fHalfYaw);
         for (int i = 0; i < 2; ++i)
         {
-            mZephyrSkeleton.BuildWorldMatrices(_IdentityMatrix, mClass->mArmJointIdx[i], kDirty);
+            mZephyrSkeleton.BuildWorldMatrices(gMatrixIdentity, mClass->mArmJointIdx[i], kDirty);
             PblMatrix& rJoint = mZephyrSkeleton.m_pWorldMatrices[mClass->mArmJointIdx[i]];
             PblVector3 vZ;
             PblVector3 vY;
@@ -3276,7 +3249,7 @@ void EntityDroideka::BuildWorldMatrices()
         }
     }
 
-    mZephyrSkeleton.BuildWorldMatrices(_IdentityMatrix, kDirty);
+    mZephyrSkeleton.BuildWorldMatrices(gMatrixIdentity, kDirty);
 }
 
 // FUNCTION: SWBF2 0x004a65f0
@@ -4441,7 +4414,7 @@ void EntityDroideka::Render(unsigned char aLod, float aFadeVal, unsigned int uiR
             FLEffectObject* particleObj = mClass->mDeathDustEffect->BuildEffect();
             if (particleObj)
             {
-                PblMatrix mat2 = _IdentityMatrix;
+                PblMatrix mat2 = gMatrixIdentity;
                 mat2.m[3][0] = mClass->mDeathDustOffset.x;
                 mat2.m[3][1] = mClass->mDeathDustOffset.y;
                 mat2.m[3][2] = mClass->mDeathDustOffset.z;

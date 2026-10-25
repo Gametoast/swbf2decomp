@@ -35,23 +35,11 @@ PowerupItemClass::PowerupItemClass(unsigned int uHash)
 PblHash PowerupItemClass::rttiHashPowerupItemClass("PowerupItemClass");
 const char PowerupItemClass::rttiNamePowerupItemClass[] = "PowerupItemClass";
 
-// FUNCTION: SWBF2 0x00623890
-bool PowerupItemClass::IsRtti(unsigned int uRtti)
-{
-    return uRtti == rttiHashPowerupItemClass || EntityItemClass::IsRtti(uRtti);
-}
 
-// FUNCTION: SWBF2 0x006238d0
-unsigned int PowerupItemClass::GetDerivedRtti()
-{
-    return rttiHashPowerupItemClass;
-}
 
-// FUNCTION: SWBF2 0x006238e0
-const char* PowerupItemClass::GetDerivedRttiName()
-{
-    return rttiNamePowerupItemClass;
-}
+
+
+
 
 // SYNTHETIC: SWBF2 0x00623d80
 // PowerupItemClass::`scalar deleting destructor'
@@ -260,23 +248,11 @@ EntityType PowerupItem::GetEntityType() const
     return ENT_POWERUP;
 }
 
-// FUNCTION: SWBF2 0x006237f0
-bool PowerupItem::IsRtti(unsigned int uRtti) const
-{
-    return uRtti == rttiHashPowerupItem || uRtti == EntityItem::rttiHashEntityItem || GameObject::IsRtti(uRtti);
-}
 
-// FUNCTION: SWBF2 0x00623840
-unsigned int PowerupItem::GetDerivedRtti() const
-{
-    return rttiHashPowerupItem;
-}
 
-// FUNCTION: SWBF2 0x00623850
-const char* PowerupItem::GetDerivedRttiName() const
-{
-    return rttiNamePowerupItem;
-}
+
+
+
 
 // FUNCTION: SWBF2 0x00623880
 bool PowerupItem::AddToTeamManager() const

@@ -44,23 +44,11 @@ UnitFlyAgent::UnitFlyAgent(UnitController* pCtrl)
 // SYNTHETIC: SWBF2 0x00666740
 // UnitFlyAgent::`scalar deleting destructor'
 
-// FUNCTION: SWBF2 0x006666f0
-bool UnitFlyAgent::IsRtti(unsigned int uRtti) const
-{
-    return uRtti == rttiHashUnitFlyAgent || UnitAgent::IsRtti(uRtti);
-}
 
-// FUNCTION: SWBF2 0x00666720
-unsigned int UnitFlyAgent::GetDerivedRtti() const
-{
-    return rttiHashUnitFlyAgent;
-}
 
-// FUNCTION: SWBF2 0x00666730
-const char* UnitFlyAgent::GetDerivedRttiName() const
-{
-    return rttiNameUnitFlyAgent;
-}
+
+
+
 
 // FUNCTION: SWBF2 0x006667d0
 void UnitFlyAgent::EnterState()

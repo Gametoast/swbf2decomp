@@ -56,23 +56,11 @@ Ordnance* OrdnanceShellClass::Build(const OrdnanceDesc& desc)
     return pShell;
 }
 
-// FUNCTION: SWBF2 0x005f8bb0
-bool OrdnanceShellClass::IsRtti(unsigned int uRtti)
-{
-    return uRtti == rttiHashOrdnanceShellClass || OrdnanceBulletClass::IsRtti(uRtti);
-}
 
-// FUNCTION: SWBF2 0x00605b90
-unsigned int OrdnanceShellClass::GetDerivedRtti()
-{
-    return rttiHashOrdnanceShellClass;
-}
 
-// FUNCTION: SWBF2 0x00605ba0
-const char* OrdnanceShellClass::GetDerivedRttiName()
-{
-    return rttiNameOrdnanceShellClass;
-}
+
+
+
 
 // FUNCTION: SWBF2 0x00605df0
 void OrdnanceShellClass::SetProperty(unsigned int uProperty, const char* pszValue)
@@ -136,23 +124,11 @@ bool OrdnanceShell::Update(float fDeltaTime)
     return true;
 }
 
-// FUNCTION: SWBF2 0x005f8b80
-bool OrdnanceShell::IsRtti(unsigned int uRtti) const
-{
-    return uRtti == rttiHashOrdnanceShell || OrdnanceBullet::IsRtti(uRtti);
-}
 
-// FUNCTION: SWBF2 0x00605b40
-unsigned int OrdnanceShell::GetDerivedRtti() const
-{
-    return rttiHashOrdnanceShell;
-}
 
-// FUNCTION: SWBF2 0x00605b50
-const char* OrdnanceShell::GetDerivedRttiName() const
-{
-    return rttiNameOrdnanceShell;
-}
+
+
+
 
 // FUNCTION: SWBF2 0x00605de0
 OrdnanceShellClass::~OrdnanceShellClass()

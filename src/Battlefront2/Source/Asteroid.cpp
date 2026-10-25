@@ -25,11 +25,7 @@
 class PblMatrix;
 extern PblMatrix gMatrixIdentity;
 
-static PblMatrix _IdentityMatrix(
-    PblVector4{ 1.0f, 0.0f, 0.0f, 0.0f },
-    PblVector4{ 0.0f, 1.0f, 0.0f, 0.0f },
-    PblVector4{ 0.0f, 0.0f, 1.0f, 0.0f },
-    PblVector4{ 0.0f, 0.0f, 0.0f, 1.0f });
+
 
 // GLOBAL: SWBF2 0x01e2fddc
 unsigned int sSoftCollisionMask;
@@ -86,23 +82,11 @@ AsteroidClass::AsteroidClass(AsteroidClass* pBase, unsigned int uHash)
     mLODClass = 1;
 }
 
-// FUNCTION: SWBF2 0x00444790
-bool AsteroidClass::IsRtti(unsigned int uRtti)
-{
-    return uRtti == rttiHashAsteroidClass || GameObjectClass::IsRtti(uRtti);
-}
 
-// FUNCTION: SWBF2 0x004447d0
-unsigned int AsteroidClass::GetDerivedRtti()
-{
-    return rttiHashAsteroidClass;
-}
 
-// FUNCTION: SWBF2 0x004447e0
-const char* AsteroidClass::GetDerivedRttiName()
-{
-    return rttiNameAsteroidClass;
-}
+
+
+
 
 // FUNCTION: SWBF2 0x004441e0
 const GameModel* EntityGeometryClass::GetModel()
@@ -184,7 +168,7 @@ void AsteroidClass::SetProperty(unsigned int uProperty, const char* pszValue)
         const CollisionMesh* pMesh = CollisionMesh::Find(PblHash(pszValue));
         if (pMesh)
         {
-            mCollisionModel.AddBody(new CollisionBodyMesh(pMesh, "CollisionMesh", _IdentityMatrix, 0));
+            mCollisionModel.AddBody(new CollisionBodyMesh(pMesh, "CollisionMesh", gMatrixIdentity, 0));
             int iMaskId = mCollisionModel.GetMaskId(0x29173102);
             if (iMaskId >= 0)
             {
@@ -202,7 +186,7 @@ void AsteroidClass::SetProperty(unsigned int uProperty, const char* pszValue)
             float fHalfY = (box._vMax.y - box._vMin.y) * 0.5f;
             float fHalfZ = (box._vMax.z - box._vMin.z) * 0.5f;
             CollisionPrimitive primitive;
-            PblMatrix matrix = _IdentityMatrix;
+            PblMatrix matrix = gMatrixIdentity;
             primitive.SetAACylinder((fHalfZ + fHalfX) * 0.5f, fHalfY * 2.0f);
             matrix.m[3][0] = fCenterX;
             matrix.m[3][1] = fCenterY;
@@ -390,23 +374,11 @@ Asteroid::~Asteroid()
 // SYNTHETIC: SWBF2 0x00446df3
 // [thunk]:Asteroid::`scalar deleting destructor' adjustor{148}
 
-// FUNCTION: SWBF2 0x004444d0
-bool Asteroid::IsRtti(unsigned int uRtti) const
-{
-    return uRtti == rttiHashAsteroid || GameObject::IsRtti(uRtti);
-}
 
-// FUNCTION: SWBF2 0x00444510
-unsigned int Asteroid::GetDerivedRtti() const
-{
-    return rttiHashAsteroid;
-}
 
-// FUNCTION: SWBF2 0x00444520
-const char* Asteroid::GetDerivedRttiName() const
-{
-    return "Asteroid";
-}
+
+
+
 
 // FUNCTION: SWBF2 0x00444540
 const PblMatrix& Asteroid::GetMatrix() const

@@ -1,5 +1,7 @@
 #pragma once
 
+#include "PebbleFL/Common/PblHashTable.h"
+
 #include <stddef.h>
 
 #include "Navigator.h"
@@ -50,3 +52,25 @@ public:
  
  
  
+
+// FUNCTION: SWBF2 0x005ac4e0
+inline bool NavigatorGraphFollower::IsRtti(unsigned int uRtti) const
+{
+    if (rttiHashNavigatorGraphFollower == uRtti)
+    {
+        return true;
+    }
+    return Navigator::IsRtti(uRtti);
+}
+
+// FUNCTION: SWBF2 0x005ad230
+inline unsigned int NavigatorGraphFollower::GetDerivedRtti() const
+{
+    return rttiHashNavigatorGraphFollower;
+}
+
+// FUNCTION: SWBF2 0x005ad240
+inline const char* NavigatorGraphFollower::GetDerivedRttiName() const
+{
+    return rttiNameNavigatorGraphFollower;
+}

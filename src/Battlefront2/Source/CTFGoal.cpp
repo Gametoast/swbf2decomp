@@ -48,23 +48,11 @@ inline void SetHandle(PblHandle<const GameObject>& handle, const GameObject* pOb
 PblHash AI::CTFGoal::rttiHashCTFGoal("CTFGoal");
 const char AI::CTFGoal::rttiNameCTFGoal[] = "CTFGoal";
 
-// FUNCTION: SWBF2 0x00487c20
-bool AI::CTFGoal::IsRtti(unsigned int uRtti) const
-{
-    return uRtti == rttiHashCTFGoal || AIGoal::IsRtti(uRtti);
-}
 
-// FUNCTION: SWBF2 0x00487c50
-unsigned int AI::CTFGoal::GetDerivedRtti() const
-{
-    return rttiHashCTFGoal;
-}
 
-// FUNCTION: SWBF2 0x00487c60
-const char* AI::CTFGoal::GetDerivedRttiName() const
-{
-    return rttiNameCTFGoal;
-}
+
+
+
 
 // SYNTHETIC: SWBF2 0x00487c70
 // AI::CTFGoal::`scalar deleting destructor'

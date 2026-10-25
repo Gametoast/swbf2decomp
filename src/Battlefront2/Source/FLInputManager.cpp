@@ -247,10 +247,10 @@ void FLInputManager::Init(void)
     RedLogitechLCD* pPanel = RedInputManager::GetLCDPanel(0);
     if (pPanel && pPanel->mOpened)
     {
-        ClearLCD(pPanel);
-        DrawLCDText(pPanel, "Star Wars", 0x37, 4);
-        DrawLCDText(pPanel, "Battlefront II", 0x32, 0x14);
-        PresentLCD(pPanel);
+        pPanel->ClearLCD();
+        pPanel->DrawLCDText("Star Wars", 0x37, 4);
+        pPanel->DrawLCDText("Battlefront II", 0x32, 0x14);
+        pPanel->PresentLCD();
     }
 }
 
@@ -350,9 +350,6 @@ namespace ObjectiveManager
 HUD::ObjectiveList* GetObjectiveList();
 }
 
-void DrawLCDLine(RedLogitechLCD* pThis, int x0, int y0, int x1, int y1);
-void DrawLCDWideText(RedLogitechLCD* pThis, const unsigned short* pwString, int x, int y);
-void DrawLCDWrappedText(RedLogitechLCD* pThis, const unsigned short* pwString);
 
 // FUNCTION: SWBF2 0x0052a280
 bool FLInputManager::Update(float fDeltaTime)
@@ -478,7 +475,7 @@ bool FLInputManager::Update(float fDeltaTime)
 
                         if (pObjective)
                         {
-                            DrawLCDWrappedText(pLcd, pObjective->_textElement.m_text.GetData());
+                            pLcd->DrawLCDWrappedText(pObjective->_textElement.m_text.GetData());
                         }
                         else
                         {
@@ -548,7 +545,7 @@ bool FLInputManager::Update(float fDeltaTime)
                     unsigned short awLine[256];
                     PblUnicode::ustrncnv(awLine, acBuffer, 256);
                     PblUnicode::ustrlcat(awLine, pClass->mLabel, 256);
-                    DrawLCDWideText(pLcd, awLine, 5, y);
+                    pLcd->DrawLCDWideText(awLine, 5, y);
                 }
 
                 GameObject* pObject = pControllable->GetGameObject();
@@ -563,7 +560,7 @@ bool FLInputManager::Update(float fDeltaTime)
                                                pDamageable->mMaxShield);
                         if (iLen > 0)
                         {
-                            DrawLCDLine(pLcd, 0, 32, iLen - 1, 32);
+                            pLcd->DrawLCDLine(0, 32, iLen - 1, 32);
                         }
                     }
 
@@ -573,9 +570,9 @@ bool FLInputManager::Update(float fDeltaTime)
                                                pDamageable->mMaxHealth);
                         if (iLen > 0)
                         {
-                            DrawLCDLine(pLcd, 0, 35, iLen - 1, 35);
-                            DrawLCDLine(pLcd, 0, 36, iLen - 1, 36);
-                            DrawLCDLine(pLcd, 0, 37, iLen - 1, 37);
+                            pLcd->DrawLCDLine(0, 35, iLen - 1, 35);
+                            pLcd->DrawLCDLine(0, 36, iLen - 1, 36);
+                            pLcd->DrawLCDLine(0, 37, iLen - 1, 37);
                         }
                     }
 
@@ -589,8 +586,8 @@ bool FLInputManager::Update(float fDeltaTime)
                                 (int)((float)iWidth * pBar->m_fEnergy / fMax);
                             if (iLen > 0)
                             {
-                                DrawLCDLine(pLcd, 0, 40, iLen - 1, 40);
-                                DrawLCDLine(pLcd, 0, 41, iLen - 1, 41);
+                                pLcd->DrawLCDLine(0, 40, iLen - 1, 40);
+                                pLcd->DrawLCDLine(0, 41, iLen - 1, 41);
                             }
                         }
                     }
@@ -600,13 +597,13 @@ bool FLInputManager::Update(float fDeltaTime)
 
             if (fTextTimer > 0.0f)
             {
-                DrawLCDWrappedText(pLcd, mChatText);
+                pLcd->DrawLCDWrappedText(mChatText);
                 continue;
             }
         }
 
-        DrawLCDText(pLcd, "Star Wars", 55, 4);
-        DrawLCDText(pLcd, "Battlefront II", 50, 20);
+        pLcd->DrawLCDText("Star Wars", 55, 4);
+        pLcd->DrawLCDText("Battlefront II", 50, 20);
     }
 
     m_rumble[0].Update(fDeltaTime);
@@ -799,64 +796,11 @@ void FLInputManager::SwapPrimarySecondary()
     mSecondaryPort = iPrimary;
 }
 
-// FUNCTION: SWBF2 0x006f0120
-void DrawLCDLine(RedLogitechLCD* pThis, int x0, int y0, int x1, int y1)
-{
-    if (!pThis->mOpened || !pThis->mConnected)
-    {
-        return;
-    }
-    PrepareLCDDrawing(pThis);
-    HGDIOBJ hOldPen = SelectObject(pThis->mhDC, GetStockObject(WHITE_PEN));
-    MoveToEx(pThis->mhDC, x0, y0, 0);
-    LineTo(pThis->mhDC, x1, y1);
-    SelectObject(pThis->mhDC, hOldPen);
-}
 
-// FUNCTION: SWBF2 0x006f0230
-void DrawLCDWideText(RedLogitechLCD* pThis, const unsigned short* pwString, int x, int y)
-{
-    if (!pThis->mOpened || !pThis->mConnected)
-    {
-        return;
-    }
-    PrepareLCDDrawing(pThis);
-    if (!pThis->mhFont)
-    {
-        return;
-    }
-    int iMapMode = SetMapMode(pThis->mhDC, MM_TEXT);
-    int iBkMode = SetBkMode(pThis->mhDC, TRANSPARENT);
-    HGDIOBJ hOldFont = SelectObject(pThis->mhDC, pThis->mhFont);
-    const WCHAR* psz = (const WCHAR*)pwString;
-    TextOutW(pThis->mhDC, x, y, psz, lstrlenW(psz));
-    SetMapMode(pThis->mhDC, iMapMode);
-    SetBkMode(pThis->mhDC, iBkMode);
-    SelectObject(pThis->mhDC, hOldFont);
-}
 
-// FUNCTION: SWBF2 0x006f02d0
-void DrawLCDWrappedText(RedLogitechLCD* pThis, const unsigned short* pwString)
-{
-    if (!pThis->mOpened || !pThis->mConnected)
-    {
-        return;
-    }
-    PrepareLCDDrawing(pThis);
-    if (!pThis->mhFont)
-    {
-        return;
-    }
-    int iMapMode = SetMapMode(pThis->mhDC, MM_TEXT);
-    int iBkMode = SetBkMode(pThis->mhDC, TRANSPARENT);
-    HGDIOBJ hOldFont = SelectObject(pThis->mhDC, pThis->mhFont);
-    RECT rc = { 0, 0, pThis->mWidth - 1, pThis->mHeight - 1 };
-    const WCHAR* psz = (const WCHAR*)pwString;
-    DrawTextW(pThis->mhDC, psz, lstrlenW(psz), &rc, DT_WORDBREAK);
-    SetMapMode(pThis->mhDC, iMapMode);
-    SetBkMode(pThis->mhDC, iBkMode);
-    SelectObject(pThis->mhDC, hOldFont);
-}
+
+
+
 
 // FUNCTION: SWBF2 0x0052aae0
 void FLInputManager::SetReadAll(bool bReadAll)

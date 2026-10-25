@@ -93,11 +93,7 @@ static const unsigned int kAngleEnd = 0x7197bcbd;
 static const unsigned int kNumSegments = 0x40fbdebd;
 static const unsigned int kCircular = 0x026723e0;
 
-static PblMatrix _IdentityMatrix(
-    PblVector4{ 1.0f, 0.0f, 0.0f, 0.0f },
-    PblVector4{ 0.0f, 1.0f, 0.0f, 0.0f },
-    PblVector4{ 0.0f, 0.0f, 1.0f, 0.0f },
-    PblVector4{ 0.0f, 0.0f, 0.0f, 1.0f });
+
 
 // FUNCTION: SWBF2 0x0054bd00
 HUD::ElementBarSegmented::ElementBarSegmented(const char* const pName, Factory::ItemCallback pCallback,
@@ -227,7 +223,7 @@ float HUD::ElementBarSegmented::SetValue(const float fValue)
         float fPos = 0.0f;
         const float fStep = (float)(int)fWidth / (float)(int)mNumSegments;
         const float fLit = fWidth * fValueApplied + fPos;
-        matrix = _IdentityMatrix;
+        matrix = gMatrixIdentity;
 
         for (; fPos < fLit && i < mNumSegments; fPos += fStep, ++i)
         {

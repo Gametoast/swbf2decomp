@@ -85,23 +85,11 @@ OrdnanceStickyClass::OrdnanceStickyClass(OrdnanceStickyClass* pBase, unsigned in
     mStickTypes = pBase->mStickTypes;
 }
 
-// FUNCTION: SWBF2 0x005f8c30
-bool OrdnanceStickyClass::IsRtti(unsigned int uRtti)
-{
-    return uRtti == rttiHashOrdnanceStickyClass || OrdnanceShellClass::IsRtti(uRtti);
-}
 
-// FUNCTION: SWBF2 0x00605fb0
-unsigned int OrdnanceStickyClass::GetDerivedRtti()
-{
-    return rttiHashOrdnanceStickyClass;
-}
 
-// FUNCTION: SWBF2 0x00605fc0
-const char* OrdnanceStickyClass::GetDerivedRttiName()
-{
-    return rttiNameOrdnanceStickyClass;
-}
+
+
+
 
 // FUNCTION: SWBF2 0x00606f00
 void OrdnanceStickyClass::SetProperty(unsigned int uProperty, const char* pszValue)
@@ -262,23 +250,11 @@ OrdnanceSticky::~OrdnanceSticky()
 // SYNTHETIC: SWBF2 0x00605f80
 // OrdnanceSticky::`scalar deleting destructor'
 
-// FUNCTION: SWBF2 0x005f8bf0
-bool OrdnanceSticky::IsRtti(unsigned int uRtti) const
-{
-    return uRtti == rttiHashOrdnanceSticky || OrdnanceShell::IsRtti(uRtti);
-}
 
-// FUNCTION: SWBF2 0x00605f60
-unsigned int OrdnanceSticky::GetDerivedRtti() const
-{
-    return rttiHashOrdnanceSticky;
-}
 
-// FUNCTION: SWBF2 0x00605f70
-const char* OrdnanceSticky::GetDerivedRttiName() const
-{
-    return rttiNameOrdnanceSticky;
-}
+
+
+
 
 // FUNCTION: SWBF2 0x006060b0
 bool OrdnanceSticky::Update(float fDeltaTime)

@@ -20,7 +20,10 @@ namespace FLRenderer
 void EnableCursor(bool bEnable);
 }
 
-namespace GameLoop { extern bool sShowStats; }
+namespace GameLoop
+{
+    extern bool sShowStats;
+}
 
 static const float kINITIAL_REPEAT_DELAY = 0.65f;
 static const float kEXTRA_REPEAT_DELAY = 0.15f;

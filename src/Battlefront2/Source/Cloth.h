@@ -1,5 +1,7 @@
 #pragma once
 
+#include "PebbleFL/Common/PblHashTable.h"
+
 #include <stddef.h>
 
 #include "Entity.h"
@@ -230,9 +232,9 @@ public:
 
     virtual EntityClass* Derive(unsigned int uHash);
     virtual Entity* Build(const EntityDesc& desc);
-    virtual bool IsRtti(unsigned int uRtti);
-    virtual unsigned int GetDerivedRtti();
-    virtual const char* GetDerivedRttiName();
+    virtual bool IsRtti(unsigned int uRtti) const;
+    virtual unsigned int GetDerivedRtti() const;
+    virtual const char* GetDerivedRttiName() const;
     virtual void SetProperty(unsigned int uProperty, const char* pszValue);
 
     unsigned int mModelHash;
@@ -263,3 +265,49 @@ public:
  
  
  
+
+// FUNCTION: SWBF2 0x00458ae0
+inline bool EntityCloth::IsRtti(unsigned int uRtti) const
+{
+    if (rttiHashEntityCloth == uRtti)
+    {
+        return true;
+    }
+    return Entity::IsRtti(uRtti);
+}
+
+// FUNCTION: SWBF2 0x00458b10
+inline unsigned int EntityCloth::GetDerivedRtti() const
+{
+    return rttiHashEntityCloth;
+}
+
+// FUNCTION: SWBF2 0x00458b20
+inline const char* EntityCloth::GetDerivedRttiName() const
+{
+    return rttiNameEntityCloth;
+}
+
+// FUNCTION: SWBF2 0x00458b60
+inline bool EntityClothClass::IsRtti(unsigned int uRtti) const
+{
+    if (rttiHashEntityClothClass == uRtti)
+    {
+        return true;
+    }
+    return EntityClass::IsRtti(uRtti);
+}
+
+// FUNCTION: SWBF2 0x00458b90
+inline unsigned int EntityClothClass::GetDerivedRtti() const
+{
+    return rttiHashEntityClothClass;
+}
+
+// FUNCTION: SWBF2 0x00458ba0
+inline const char* EntityClothClass::GetDerivedRttiName() const
+{
+    return rttiNameEntityClothClass;
+}
+
+

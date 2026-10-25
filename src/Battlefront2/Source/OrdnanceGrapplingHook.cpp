@@ -20,23 +20,11 @@ extern PblVector3 gVectorZero;
 PblHash OrdnanceGrapplingHook::rttiHashOrdnanceGrapplingHook("OrdnanceGrapplingHook");
 const char OrdnanceGrapplingHook::rttiNameOrdnanceGrapplingHook[] = "OrdnanceGrapplingHook";
 
-// FUNCTION: SWBF2 0x005ff090
-bool OrdnanceGrapplingHook::IsRtti(unsigned int uRtti) const
-{
-    return uRtti == rttiHashOrdnanceGrapplingHook || OrdnanceBullet::IsRtti(uRtti);
-}
 
-// FUNCTION: SWBF2 0x005ff0c0
-unsigned int OrdnanceGrapplingHook::GetDerivedRtti() const
-{
-    return rttiHashOrdnanceGrapplingHook;
-}
 
-// FUNCTION: SWBF2 0x005ff0d0
-const char* OrdnanceGrapplingHook::GetDerivedRttiName() const
-{
-    return rttiNameOrdnanceGrapplingHook;
-}
+
+
+
 
 // FUNCTION: SWBF2 0x005ff160
 OrdnanceGrapplingHook::OrdnanceGrapplingHook(OrdnanceGrapplingHookClass* pClass, const OrdnanceDesc& desc)
@@ -299,23 +287,11 @@ OrdnanceGrapplingHookClass::OrdnanceGrapplingHookClass(OrdnanceGrapplingHookClas
     mAttachSoldierAnimation = pBase->mAttachSoldierAnimation;
 }
 
-// FUNCTION: SWBF2 0x005ff110
-bool OrdnanceGrapplingHookClass::IsRtti(unsigned int uRtti)
-{
-    return uRtti == rttiHashOrdnanceGrapplingHookClass || OrdnanceBulletClass::IsRtti(uRtti);
-}
 
-// FUNCTION: SWBF2 0x005ff140
-unsigned int OrdnanceGrapplingHookClass::GetDerivedRtti()
-{
-    return rttiHashOrdnanceGrapplingHookClass;
-}
 
-// FUNCTION: SWBF2 0x005ff150
-const char* OrdnanceGrapplingHookClass::GetDerivedRttiName()
-{
-    return rttiNameOrdnanceGrapplingHookClass;
-}
+
+
+
 
 // FUNCTION: SWBF2 0x005fffe0
 void OrdnanceGrapplingHookClass::SetProperty(unsigned int uProperty, const char* pszValue)

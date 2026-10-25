@@ -14,23 +14,11 @@ UnitFlyController::UnitFlyController(Controllable* pOwner)
 {
 }
 
-// FUNCTION: SWBF2 0x00667cf0
-bool UnitFlyController::IsRtti(unsigned int uRtti) const
-{
-    return uRtti == rttiHashUnitFlyController || UnitController::IsRtti(uRtti);
-}
 
-// FUNCTION: SWBF2 0x00667d20
-unsigned int UnitFlyController::GetDerivedRtti() const
-{
-    return rttiHashUnitFlyController;
-}
 
-// FUNCTION: SWBF2 0x00667d30
-const char* UnitFlyController::GetDerivedRttiName() const
-{
-    return rttiNameUnitFlyController;
-}
+
+
+
 
 // FUNCTION: SWBF2 0x00667da0
 void UnitFlyController::ApplyNextState()

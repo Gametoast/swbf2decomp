@@ -1,5 +1,7 @@
 #pragma once
 
+#include "PebbleFL/Common/PblHashTable.h"
+
 #include "UnitController.h"
 
 class UnitMobileController : public UnitController
@@ -19,3 +21,25 @@ protected:
 
     virtual void ApplyNextState();
 };
+
+// FUNCTION: SWBF2 0x006691b0
+inline unsigned int UnitMobileController::GetDerivedRtti() const
+{
+    return rttiHashUnitMobileController;
+}
+
+// FUNCTION: SWBF2 0x006691c0
+inline const char* UnitMobileController::GetDerivedRttiName() const
+{
+    return rttiNameUnitMobileController;
+}
+
+// FUNCTION: SWBF2 0x00669180
+inline bool UnitMobileController::IsRtti(unsigned int uRtti) const
+{
+    if (rttiHashUnitMobileController == uRtti)
+    {
+        return true;
+    }
+    return UnitController::IsRtti(uRtti);
+}

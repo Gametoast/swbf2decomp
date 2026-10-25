@@ -15,30 +15,11 @@ CommandBuildingAnimatedArmedClass::CommandBuildingAnimatedArmedClass(unsigned in
 PblHash CommandBuildingAnimatedArmed::rttiHashCommandBuildingAnimatedArmed("CommandBuildingAnimatedArmed");
 const char CommandBuildingAnimatedArmed::rttiNameCommandBuildingAnimatedArmed[] = "CommandBuildingAnimatedArmed";
 
-// FUNCTION: SWBF2 0x004767d0
-bool CommandBuildingAnimatedArmed::IsRtti(unsigned int uRtti) const
-{
-    return uRtti == rttiHashCommandBuildingAnimatedArmed ||
-           uRtti == EntityBuildingAnimatedArmed::rttiHashEntityBuildingAnimatedArmed ||
-           uRtti == EntityBuildingAnimated::rttiHashEntityBuildingAnimated ||
-           uRtti == EntityBuilding::rttiHashEntityBuilding ||
-           uRtti == GameObject::rttiHashGameObject ||
-           uRtti == EntityGeometry::rttiHashEntityGeometry ||
-           uRtti == EntityEx::rttiHashEntityEx ||
-           uRtti == Entity::rttiHashEntity;
-}
 
-// FUNCTION: SWBF2 0x00476830
-unsigned int CommandBuildingAnimatedArmed::GetDerivedRtti() const
-{
-    return rttiHashCommandBuildingAnimatedArmed;
-}
 
-// FUNCTION: SWBF2 0x00476840
-const char* CommandBuildingAnimatedArmed::GetDerivedRttiName() const
-{
-    return rttiNameCommandBuildingAnimatedArmed;
-}
+
+
+
 
 // SYNTHETIC: SWBF2 0x00402650
 // `dynamic initializer for 'CommandBuildingAnimatedArmedClass::rttiHashCommandBuildingAnimatedArmedClass''
@@ -47,24 +28,11 @@ const char* CommandBuildingAnimatedArmed::GetDerivedRttiName() const
 PblHash CommandBuildingAnimatedArmedClass::rttiHashCommandBuildingAnimatedArmedClass("CommandBuildingAnimatedArmedClass");
 const char CommandBuildingAnimatedArmedClass::rttiNameCommandBuildingAnimatedArmedClass[] = "CommandBuildingAnimatedArmedClass";
 
-// FUNCTION: SWBF2 0x00476890
-bool CommandBuildingAnimatedArmedClass::IsRtti(unsigned int uRtti)
-{
-    return uRtti == rttiHashCommandBuildingAnimatedArmedClass ||
-           EntityBuildingAnimatedArmedClass::IsRtti(uRtti);
-}
 
-// FUNCTION: SWBF2 0x004768e0
-unsigned int CommandBuildingAnimatedArmedClass::GetDerivedRtti()
-{
-    return rttiHashCommandBuildingAnimatedArmedClass;
-}
 
-// FUNCTION: SWBF2 0x004768f0
-const char* CommandBuildingAnimatedArmedClass::GetDerivedRttiName()
-{
-    return rttiNameCommandBuildingAnimatedArmedClass;
-}
+
+
+
 
 // SYNTHETIC: SWBF2 0x00476b00
 // CommandBuildingAnimatedArmedClass::`scalar deleting destructor'

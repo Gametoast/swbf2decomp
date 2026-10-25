@@ -23,25 +23,14 @@ const char AI::AIGoal::rttiNameAIGoal[] = "AIGoal";
 // `dynamic initializer for 'AI::AIGoal::sMemoryPool''
 // SYNTHETIC: SWBF2 0x00766d40
 // `dynamic atexit destructor for 'AI::AIGoal::sMemoryPool''
+
 MemoryPool AI::AIGoal::sMemoryPool("AIGoal", 0x20);
 
-// FUNCTION: SWBF2 0x00439ab0
-bool AI::AIGoal::IsRtti(unsigned int uRtti) const
-{
-    return uRtti == rttiHashAIGoal;
-}
 
-// FUNCTION: SWBF2 0x00439ad0
-unsigned int AI::AIGoal::GetDerivedRtti() const
-{
-    return rttiHashAIGoal;
-}
 
-// FUNCTION: SWBF2 0x00439ae0
-const char* AI::AIGoal::GetDerivedRttiName() const
-{
-    return rttiNameAIGoal;
-}
+
+
+
 
 // FUNCTION: SWBF2 0x00439b50
 bool AI::GoalTarget::GetLocation(PblVector3& vPos)

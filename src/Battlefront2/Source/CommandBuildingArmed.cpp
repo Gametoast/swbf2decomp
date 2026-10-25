@@ -9,29 +9,11 @@
 PblHash CommandBuildingArmed::rttiHashCommandBuildingArmed("CommandBuildingArmed");
 const char CommandBuildingArmed::rttiNameCommandBuildingArmed[] = "CommandBuildingArmed";
 
-// FUNCTION: SWBF2 0x00476ee0
-bool CommandBuildingArmed::IsRtti(unsigned int uRtti) const
-{
-    return uRtti == rttiHashCommandBuildingArmed ||
-           uRtti == EntityBuildingArmed::rttiHashEntityBuildingArmed ||
-           uRtti == EntityBuilding::rttiHashEntityBuilding ||
-           uRtti == GameObject::rttiHashGameObject ||
-           uRtti == EntityGeometry::rttiHashEntityGeometry ||
-           uRtti == EntityEx::rttiHashEntityEx ||
-           uRtti == Entity::rttiHashEntity;
-}
 
-// FUNCTION: SWBF2 0x00476f30
-unsigned int CommandBuildingArmed::GetDerivedRtti() const
-{
-    return rttiHashCommandBuildingArmed;
-}
 
-// FUNCTION: SWBF2 0x00476f40
-const char* CommandBuildingArmed::GetDerivedRttiName() const
-{
-    return rttiNameCommandBuildingArmed;
-}
+
+
+
 
 // FUNCTION: SWBF2 0x00476f50
 EntityType CommandBuildingArmed::GetEntityType() const
@@ -133,23 +115,11 @@ CommandBuildingArmedClass::~CommandBuildingArmedClass()
 PblHash CommandBuildingArmedClass::rttiHashCommandBuildingArmedClass("CommandBuildingArmedClass");
 const char CommandBuildingArmedClass::rttiNameCommandBuildingArmedClass[] = "CommandBuildingArmedClass";
 
-// FUNCTION: SWBF2 0x00476f90
-bool CommandBuildingArmedClass::IsRtti(unsigned int uRtti)
-{
-    return uRtti == rttiHashCommandBuildingArmedClass || EntityBuildingArmedClass::IsRtti(uRtti);
-}
 
-// FUNCTION: SWBF2 0x00476fe0
-unsigned int CommandBuildingArmedClass::GetDerivedRtti()
-{
-    return rttiHashCommandBuildingArmedClass;
-}
 
-// FUNCTION: SWBF2 0x00476ff0
-const char* CommandBuildingArmedClass::GetDerivedRttiName()
-{
-    return rttiNameCommandBuildingArmedClass;
-}
+
+
+
 
 // FUNCTION: SWBF2 0x00477310
 void CommandBuildingArmedClass::SetProperty(unsigned int uProperty, const char* pszValue)

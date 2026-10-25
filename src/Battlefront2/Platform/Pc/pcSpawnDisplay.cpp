@@ -103,7 +103,13 @@ void __fastcall SpawnDisplay::EnableViewport(int iViewport)
 
 extern int g_InGameMoviePlayerState;
 
-namespace HUD { namespace GameEvents { void DisableAllForObjectiveDisplay(int iPlayer, bool bFlag); } }
+namespace HUD
+{
+    namespace GameEvents
+    {
+        void DisableAllForObjectiveDisplay(int iPlayer, bool bFlag);
+    }
+}
 
 // FUNCTION: SWBF2 0x005636b0
 void HUD::GameEvents::DisableAllForObjectiveDisplay(int iPlayer, bool bFlag)
@@ -126,7 +132,10 @@ void HUD::GameEvents::DisableAllForObjectiveDisplay(int iPlayer, bool bFlag)
     HUD::Event(HUD::GameEvents::gObjectiveEvents.timerDisable, true).Send();
 }
 
-namespace GameLoop { bool GetCanSwitchSides(); }
+namespace GameLoop
+{
+    bool GetCanSwitchSides();
+}
 
 extern bool gAttractMode;
 

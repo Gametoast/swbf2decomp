@@ -1,5 +1,7 @@
 #pragma once
 
+#include "PebbleFL/Common/PblHashTable.h"
+
 #include "AIGoal.h"
 
 namespace AI {
@@ -31,3 +33,25 @@ public:
 
  
  
+
+// FUNCTION: SWBF2 0x0048c6b0
+inline bool AI::DestroyGoal::IsRtti(unsigned int uRtti) const
+{
+    if (rttiHashDestroyGoal == uRtti)
+    {
+        return true;
+    }
+    return AIGoal::IsRtti(uRtti);
+}
+
+// FUNCTION: SWBF2 0x0048c6e0
+inline unsigned int AI::DestroyGoal::GetDerivedRtti() const
+{
+    return rttiHashDestroyGoal;
+}
+
+// FUNCTION: SWBF2 0x0048c6f0
+inline const char* AI::DestroyGoal::GetDerivedRttiName() const
+{
+    return rttiNameDestroyGoal;
+}

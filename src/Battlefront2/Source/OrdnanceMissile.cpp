@@ -32,23 +32,11 @@ extern PblVector3 gVectorZero;
 PblHash OrdnanceMissile::rttiHashOrdnanceMissile("OrdnanceMissile");
 const char OrdnanceMissile::rttiNameOrdnanceMissile[] = "OrdnanceMissile";
 
-// FUNCTION: SWBF2 0x006048d0
-bool OrdnanceMissile::IsRtti(unsigned int uRtti) const
-{
-    return uRtti == rttiHashOrdnanceMissile || OrdnanceBullet::IsRtti(uRtti);
-}
 
-// FUNCTION: SWBF2 0x00604900
-unsigned int OrdnanceMissile::GetDerivedRtti() const
-{
-    return rttiHashOrdnanceMissile;
-}
 
-// FUNCTION: SWBF2 0x00604910
-const char* OrdnanceMissile::GetDerivedRttiName() const
-{
-    return rttiNameOrdnanceMissile;
-}
+
+
+
 
 void Controllable::SetEnemyLockedOnMeState(float fState, OrdnanceMissile* pMissile, float fDistance)
 {
@@ -299,23 +287,11 @@ OrdnanceMissileClass::OrdnanceMissileClass(OrdnanceMissileClass* pBase, unsigned
     mAcceleration = pBase->mAcceleration;
 }
 
-// FUNCTION: SWBF2 0x00604950
-bool OrdnanceMissileClass::IsRtti(unsigned int uRtti)
-{
-    return uRtti == rttiHashOrdnanceMissileClass || OrdnanceBulletClass::IsRtti(uRtti);
-}
 
-// FUNCTION: SWBF2 0x00604980
-unsigned int OrdnanceMissileClass::GetDerivedRtti()
-{
-    return rttiHashOrdnanceMissileClass;
-}
 
-// FUNCTION: SWBF2 0x00604990
-const char* OrdnanceMissileClass::GetDerivedRttiName()
-{
-    return rttiNameOrdnanceMissileClass;
-}
+
+
+
 
 // FUNCTION: SWBF2 0x006049a0
 float OrdnanceMissileClass::GetVelocity()

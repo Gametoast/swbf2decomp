@@ -81,24 +81,11 @@ Entity* EntityBuildingAnimatedArmedClass::Build(const EntityDesc& desc)
 PblHash EntityBuildingAnimatedArmedClass::rttiHashEntityBuildingAnimatedArmedClass("EntityBuildingAnimatedArmedClass");
 const char EntityBuildingAnimatedArmedClass::rttiNameEntityBuildingAnimatedArmedClass[] = "EntityBuildingAnimatedArmedClass";
 
-// FUNCTION: SWBF2 0x00476780
-bool EntityBuildingAnimatedArmedClass::IsRtti(unsigned int uRtti)
-{
-    return uRtti == rttiHashEntityBuildingAnimatedArmedClass ||
-           EntityBuildingAnimatedClass::IsRtti(uRtti);
-}
 
-// FUNCTION: SWBF2 0x00495040
-unsigned int EntityBuildingAnimatedArmedClass::GetDerivedRtti()
-{
-    return rttiHashEntityBuildingAnimatedArmedClass;
-}
 
-// FUNCTION: SWBF2 0x00495050
-const char* EntityBuildingAnimatedArmedClass::GetDerivedRttiName()
-{
-    return rttiNameEntityBuildingAnimatedArmedClass;
-}
+
+
+
 
 // SYNTHETIC: SWBF2 0x00495630
 // EntityBuildingAnimatedArmedClass::`scalar deleting destructor'
@@ -164,12 +151,7 @@ EntityBuildingAnimatedArmed::~EntityBuildingAnimatedArmed()
     }
 }
 
-// FUNCTION: SWBF2 0x004766e0
-bool EntityBuildingAnimatedArmed::IsRtti(unsigned int uRtti) const
-{
-    return uRtti == rttiHashEntityBuildingAnimatedArmed ||
-           EntityBuildingAnimated::IsRtti(uRtti);
-}
+
 
 // FUNCTION: SWBF2 0x00495290
 void EntityBuildingAnimatedArmed::Init()
@@ -301,17 +283,9 @@ static inline Controllable* TurretControllable(MountedTurret* pTurret)
 PblHash EntityBuildingAnimatedArmed::rttiHashEntityBuildingAnimatedArmed("EntityBuildingAnimatedArmed");
 const char EntityBuildingAnimatedArmed::rttiNameEntityBuildingAnimatedArmed[] = "EntityBuildingAnimatedArmed";
 
-// FUNCTION: SWBF2 0x00494fe0
-unsigned int EntityBuildingAnimatedArmed::GetDerivedRtti() const
-{
-    return rttiHashEntityBuildingAnimatedArmed;
-}
 
-// FUNCTION: SWBF2 0x00494ff0
-const char* EntityBuildingAnimatedArmed::GetDerivedRttiName() const
-{
-    return rttiNameEntityBuildingAnimatedArmed;
-}
+
+
 
 // FUNCTION: SWBF2 0x00476770
 GameObjectType EntityBuildingAnimatedArmed::GetGameObjectType()

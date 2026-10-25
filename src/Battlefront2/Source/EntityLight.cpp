@@ -228,41 +228,17 @@ ManagedLightBeam::ManagedLightBeam()
 {
 }
 
-// FUNCTION: SWBF2 0x004cca60
-bool EntityLight::IsRtti(unsigned int uRtti) const
-{
-    return uRtti == rttiHashEntityLight || Entity::IsRtti(uRtti);
-}
 
-// FUNCTION: SWBF2 0x004cca90
-unsigned int EntityLight::GetDerivedRtti() const
-{
-    return rttiHashEntityLight;
-}
 
-// FUNCTION: SWBF2 0x004ccaa0
-const char* EntityLight::GetDerivedRttiName() const
-{
-    return rttiNameEntityLight;
-}
 
-// FUNCTION: SWBF2 0x004ccab0
-bool EntityLightClass::IsRtti(unsigned int uRtti)
-{
-    return uRtti == rttiHashEntityLightClass || EntityClass::IsRtti(uRtti);
-}
 
-// FUNCTION: SWBF2 0x004ccae0
-unsigned int EntityLightClass::GetDerivedRtti()
-{
-    return rttiHashEntityLightClass;
-}
 
-// FUNCTION: SWBF2 0x004ccaf0
-const char* EntityLightClass::GetDerivedRttiName()
-{
-    return rttiNameEntityLightClass;
-}
+
+
+
+
+
+
 
 // FUNCTION: SWBF2 0x004ccb00
 void EntityLightFXParser::Init()

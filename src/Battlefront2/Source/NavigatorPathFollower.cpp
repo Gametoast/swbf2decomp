@@ -13,23 +13,11 @@
 PblHash NavigatorPathFollower::rttiHashNavigatorPathFollower("NavigatorPathFollower");
 const char NavigatorPathFollower::rttiNameNavigatorPathFollower[] = "NavigatorPathFollower";
 
-// FUNCTION: SWBF2 0x005adad0
-bool NavigatorPathFollower::IsRtti(unsigned int uRtti) const
-{
-    return uRtti == rttiHashNavigatorPathFollower || Navigator::IsRtti(uRtti);
-}
 
-// FUNCTION: SWBF2 0x005adb00
-unsigned int NavigatorPathFollower::GetDerivedRtti() const
-{
-    return rttiHashNavigatorPathFollower;
-}
 
-// FUNCTION: SWBF2 0x005adb10
-const char* NavigatorPathFollower::GetDerivedRttiName() const
-{
-    return rttiNameNavigatorPathFollower;
-}
+
+
+
 
 // SYNTHETIC: SWBF2 0x005adb20
 // NavigatorPathFollower::`scalar deleting destructor'

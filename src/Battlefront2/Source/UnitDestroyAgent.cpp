@@ -106,23 +106,11 @@ static float GetOptimalBuildingKillingRange(const Controllable* pMe)
 PblHash UnitDestroyAgent::rttiHashUnitDestroyAgent("UnitDestroyAgent");
 const char UnitDestroyAgent::rttiNameUnitDestroyAgent[] = "UnitDestroyAgent";
 
-// FUNCTION: SWBF2 0x00666000
-bool UnitDestroyAgent::IsRtti(unsigned int uRtti) const
-{
-    return uRtti == rttiHashUnitDestroyAgent || UnitAgent::IsRtti(uRtti);
-}
 
-// FUNCTION: SWBF2 0x00666030
-unsigned int UnitDestroyAgent::GetDerivedRtti() const
-{
-    return rttiHashUnitDestroyAgent;
-}
 
-// FUNCTION: SWBF2 0x00666040
-const char* UnitDestroyAgent::GetDerivedRttiName() const
-{
-    return rttiNameUnitDestroyAgent;
-}
+
+
+
 
 // SYNTHETIC: SWBF2 0x00666050
 // UnitDestroyAgent::`scalar deleting destructor'

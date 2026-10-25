@@ -21,11 +21,7 @@
 #include "RedEngineFL/Graphics/RedDirectionalLight.h"
 #include "RedEngineFL/Graphics/RedLight.h"
 
-static PblMatrix _IdentityMatrix(
-    PblVector4{ 1.0f, 0.0f, 0.0f, 0.0f },
-    PblVector4{ 0.0f, 1.0f, 0.0f, 0.0f },
-    PblVector4{ 0.0f, 0.0f, 1.0f, 0.0f },
-    PblVector4{ 0.0f, 0.0f, 0.0f, 1.0f });
+
 
 static const float DYNAMIC_LIFETIME = 8.0f;
 static const float STATIC_LIFETIME = 53.0f;
@@ -91,7 +87,7 @@ Chunk::Chunk()
     : CollisionObject(COLL_UNKNOWN, NULL, NULL, NULL),
       mIsValid(false),
       mIsMoving(false),
-      mMatrix(_IdentityMatrix),
+      mMatrix(gMatrixIdentity),
       mModel(NULL),
       mMaxTerrainCollisions(0),
       mNumTerrainCollisions(0)
@@ -116,7 +112,7 @@ void Chunk::ClearAll()
     mIsMoving = false;
     mMaxTerrainCollisions = 0;
     mNumTerrainCollisions = 0;
-    mMatrix = _IdentityMatrix;
+    mMatrix = gMatrixIdentity;
     SetCollisionRadius(1.0f);
     Set2DCollisionRadius(1.0f);
     mModel = NULL;
@@ -243,7 +239,7 @@ void Chunk::SetData(ChunkDescriptor& desc)
     mMass = 40.0f;
     mOneOverMass = 1.0f / 40.0f;
     PblMatrix bodyInertia = desc.mPrimitive->GetMomentOfInertia();
-    mInverseBodyInertiaTensor = _IdentityMatrix;
+    mInverseBodyInertiaTensor = gMatrixIdentity;
     bodyInertia.m[0][0] *= 40.0f;
     bodyInertia.m[1][1] *= 40.0f;
     bodyInertia.m[2][2] *= 40.0f;

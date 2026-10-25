@@ -50,9 +50,15 @@ VoiceChat::Node::Header VoiceChat::Node::sReadHeader;
 // `dynamic initializer for 'VoiceChat::Node::sWriteHeader''
 VoiceChat::Node::Header VoiceChat::Node::sWriteHeader;
 
-namespace VoiceChat { void* Alloc(unsigned int uiSize); }
+namespace VoiceChat
+{
+    void* Alloc(unsigned int uiSize);
+}
 
-namespace VoiceChat { void Free(void* pBlock); }
+namespace VoiceChat
+{
+    void Free(void* pBlock);
+}
 
 // GLOBAL: SWBF2 0x007ebee8
 void* VoiceChat::Node::sList[4] = { VoiceChat::Node::sList, VoiceChat::Node::sList, VoiceChat::Node::sList, 0 };

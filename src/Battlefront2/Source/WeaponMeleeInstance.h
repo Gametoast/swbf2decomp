@@ -1,5 +1,7 @@
 #pragma once
 
+#include "PebbleFL/Common/PblHashTable.h"
+
 #include <stddef.h>
 
 #include "Combo.h"
@@ -244,3 +246,25 @@ public:
  
  
  
+
+// FUNCTION: SWBF2 0x00687bf0
+inline bool WeaponMelee::IsRtti(unsigned int uRtti) const
+{
+    if (rttiHashWeaponMelee == uRtti)
+    {
+        return true;
+    }
+    return Weapon::IsRtti(uRtti);
+}
+
+// FUNCTION: SWBF2 0x00687c20
+inline unsigned int WeaponMelee::GetDerivedRtti() const
+{
+    return rttiHashWeaponMelee;
+}
+
+// FUNCTION: SWBF2 0x00687c30
+inline const char* WeaponMelee::GetDerivedRttiName() const
+{
+    return rttiNameWeaponMelee;
+}

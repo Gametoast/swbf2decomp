@@ -95,11 +95,7 @@ void SkyFogRenderable::Render(int)
                                    RedColor::WHITE, 0x200, 0, 0, 0);
 }
 
-static PblMatrix _IdentityMatrix(
-    PblVector4{ 1.0f, 0.0f, 0.0f, 0.0f },
-    PblVector4{ 0.0f, 1.0f, 0.0f, 0.0f },
-    PblVector4{ 0.0f, 0.0f, 1.0f, 0.0f },
-    PblVector4{ 0.0f, 0.0f, 0.0f, 1.0f });
+
 
 extern "C" PblMatrix* __stdcall D3DXMatrixRotationAxis(PblMatrix* pOut, const PblVector3* pV, float fAngle);
 extern "C" PblMatrix* __stdcall D3DXMatrixMultiply(PblMatrix* pOut, const PblMatrix* pM1, const PblMatrix* pM2);
@@ -118,7 +114,7 @@ void SkyDome::Render(int value)
 
     if (mNumDomeModels > 0)
     {
-        PblMatrix mat = _IdentityMatrix;
+        PblMatrix mat = gMatrixIdentity;
         bool bNearClip = RedRenderer::pcGetUserNearClipPlaneEnable();
         RedRenderer::pcSetUserNearClipPlaneEnable(false);
 
@@ -130,7 +126,7 @@ void SkyDome::Render(int value)
                 continue;
             }
 
-            mat = _IdentityMatrix;
+            mat = gMatrixIdentity;
             D3DXMatrixRotationAxis(&mat, &rDome.mRotationAxis,
                                    RedRenderer::GetTimeBase()->GetTime() * rDome.mRotationSpeed *
                                        PblMath::fTwoPi);

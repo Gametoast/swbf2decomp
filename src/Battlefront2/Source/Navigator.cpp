@@ -71,23 +71,11 @@ MemoryPool Navigator::sMemoryPool("Navigator", sizeof(Navigator));
 PblHash Navigator::rttiHashNavigator("Navigator");
 const char Navigator::rttiNameNavigator[] = "Navigator";
 
-// FUNCTION: SWBF2 0x005ab2d0
-bool Navigator::IsRtti(unsigned int uRtti) const
-{
-    return uRtti == rttiHashNavigator;
-}
 
-// FUNCTION: SWBF2 0x005ab2f0
-unsigned int Navigator::GetDerivedRtti() const
-{
-    return rttiHashNavigator;
-}
 
-// FUNCTION: SWBF2 0x005ab300
-const char* Navigator::GetDerivedRttiName() const
-{
-    return rttiNameNavigator;
-}
+
+
+
 
 // SYNTHETIC: SWBF2 0x005ab310
 // Navigator::`scalar deleting destructor'

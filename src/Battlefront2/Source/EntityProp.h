@@ -1,5 +1,7 @@
 #pragma once
 
+#include "PebbleFL/Common/PblHashTable.h"
+
 #include <stddef.h>
 
 #include "EntityGeometry.h"
@@ -31,9 +33,9 @@ public:
     virtual ~EntityPropClass();
     virtual EntityClass* Derive(unsigned int uHash);
     virtual Entity* Build(const EntityDesc& desc);
-    virtual bool IsRtti(unsigned int uRtti);
-    virtual unsigned int GetDerivedRtti();
-    virtual const char* GetDerivedRttiName();
+    virtual bool IsRtti(unsigned int uRtti) const;
+    virtual unsigned int GetDerivedRtti() const;
+    virtual const char* GetDerivedRttiName() const;
     virtual void SetProperty(unsigned int uProperty, const char* pszValue);
 
     static PblHash rttiHashEntityPropClass;
@@ -121,3 +123,47 @@ public:
  
  
  
+
+// FUNCTION: SWBF2 0x00497e50
+inline bool EntityProp::IsRtti(unsigned int uRtti) const
+{
+    if (rttiHashEntityProp == uRtti)
+    {
+        return true;
+    }
+    return reinterpret_cast<const EntityGeometry*>(this)->EntityGeometry::IsRtti(uRtti);
+}
+
+// FUNCTION: SWBF2 0x00497ef0
+inline bool EntityPropClass::IsRtti(unsigned int uRtti) const
+{
+    if (rttiHashEntityPropClass == uRtti)
+    {
+        return true;
+    }
+    return EntityClass::IsRtti(uRtti);
+}
+
+// FUNCTION: SWBF2 0x004d8d50
+inline unsigned int EntityProp::GetDerivedRtti() const
+{
+    return rttiHashEntityProp;
+}
+
+// FUNCTION: SWBF2 0x004d8d60
+inline const char* EntityProp::GetDerivedRttiName() const
+{
+    return rttiNameEntityProp;
+}
+
+// FUNCTION: SWBF2 0x004d8da0
+inline unsigned int EntityPropClass::GetDerivedRtti() const
+{
+    return rttiHashEntityPropClass;
+}
+
+// FUNCTION: SWBF2 0x004d8db0
+inline const char* EntityPropClass::GetDerivedRttiName() const
+{
+    return rttiNameEntityPropClass;
+}

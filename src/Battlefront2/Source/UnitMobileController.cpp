@@ -8,11 +8,7 @@
 PblHash UnitMobileController::rttiHashUnitMobileController("UnitMobileController");
 const char UnitMobileController::rttiNameUnitMobileController[] = "UnitMobileController";
 
-// FUNCTION: SWBF2 0x00669180
-bool UnitMobileController::IsRtti(unsigned int uRtti) const
-{
-    return uRtti == rttiHashUnitMobileController || UnitController::IsRtti(uRtti);
-}
+
 
 // FUNCTION: SWBF2 0x00669200
 UnitMobileController::UnitMobileController(Controllable* pOwner)

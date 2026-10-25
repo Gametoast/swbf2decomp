@@ -16,11 +16,7 @@
 // LIBRARY: SWBF2 0x0041fa10
 // sqrtf
 
-static PblMatrix _IdentityMatrix(
-    PblVector4{ 1.0f, 0.0f, 0.0f, 0.0f },
-    PblVector4{ 0.0f, 1.0f, 0.0f, 0.0f },
-    PblVector4{ 0.0f, 0.0f, 1.0f, 0.0f },
-    PblVector4{ 0.0f, 0.0f, 0.0f, 1.0f });
+
 
 static inline const PblVector3 operator-(const PblVector3& a, const PblVector3& b)
 {
@@ -124,7 +120,7 @@ float CollisionBody::GetHeight() const
 
 // FUNCTION: SWBF2 0x0045d0a0
 CollisionBodyPrimitive::CollisionBodyPrimitive()
-    : CollisionBody(NULL, _IdentityMatrix, 0)
+    : CollisionBody(NULL, gMatrixIdentity, 0)
 {
     mMask = 0;
     bIsMesh = false;
@@ -303,7 +299,7 @@ float CollisionBodyPrimitive::GetRadius() const
 // FUNCTION: SWBF2 0x0045d6e0
 PblMatrix CollisionBodyPrimitive::GetMomentOfInertia() const
 {
-    PblMatrix inertia = _IdentityMatrix;
+    PblMatrix inertia = gMatrixIdentity;
     float fXX, fYY, fZZ;
     if (mPrimitive.mType == CollisionPrimitive::BOX)
     {

@@ -181,11 +181,7 @@ EntityDroidClass::EntityDroidClass(unsigned int uHash)
     mDestructChargeEffect = 0x23081C56u;
 }
 
-static PblMatrix _IdentityMatrix(
-    PblVector4{ 1.0f, 0.0f, 0.0f, 0.0f },
-    PblVector4{ 0.0f, 1.0f, 0.0f, 0.0f },
-    PblVector4{ 0.0f, 0.0f, 1.0f, 0.0f },
-    PblVector4{ 0.0f, 0.0f, 0.0f, 1.0f });
+
 
 // FUNCTION: SWBF2 0x0049d370
 EntityDroidClass::EntityDroidClass(EntityDroidClass* pBase, unsigned int uHash)
@@ -403,7 +399,7 @@ void EntityDroidClass::SetProperty(unsigned int uProperty, const char* pszValue)
             const PblSphere& sphere = mModel->_mModel->_BoundingSphere;
             CollisionPrimitive primitive;
             primitive.SetSphere(sphere.GetRadius());
-            PblMatrix matrix = _IdentityMatrix;
+            PblMatrix matrix = gMatrixIdentity;
             matrix.m[3][0] = sphere.x;
             matrix.m[3][1] = sphere.y;
             matrix.m[3][2] = sphere.z;
@@ -497,19 +493,12 @@ void GameObject::SetNetUniqueId(int iNetUniqueId)
 // `dynamic initializer for 'EntityDroid::sMemoryPool''
 // SYNTHETIC: SWBF2 0x00766f30
 // `dynamic atexit destructor for 'EntityDroid::sMemoryPool''
+
 MemoryPool EntityDroid::sMemoryPool("EntityDroid", 0x460);
 
-// FUNCTION: SWBF2 0x00499370
-unsigned int EntityDroid::GetDerivedRtti() const
-{
-    return rttiHashEntityDroid;
-}
 
-// FUNCTION: SWBF2 0x00499380
-const char* EntityDroid::GetDerivedRttiName() const
-{
-    return rttiNameEntityDroid;
-}
+
+
 
 // FUNCTION: SWBF2 0x004993a0
 GameObject* EntityDroid::GetGameObject()
@@ -632,23 +621,11 @@ bool EntityDroid::PostCollision::Update(float fDeltaTime)
 PblHash EntityDroidClass::rttiHashEntityDroidClass("EntityDroidClass");
 const char EntityDroidClass::rttiNameEntityDroidClass[] = "EntityDroidClass";
 
-// FUNCTION: SWBF2 0x00499560
-bool EntityDroidClass::IsRtti(unsigned int uRtti)
-{
-    return uRtti == rttiHashEntityDroidClass || GameObjectClass::IsRtti(uRtti);
-}
 
-// FUNCTION: SWBF2 0x004995a0
-unsigned int EntityDroidClass::GetDerivedRtti()
-{
-    return rttiHashEntityDroidClass;
-}
 
-// FUNCTION: SWBF2 0x004995b0
-const char* EntityDroidClass::GetDerivedRttiName()
-{
-    return rttiNameEntityDroidClass;
-}
+
+
+
 
 // FUNCTION: SWBF2 0x004995c0
 int EntityDroidClass::GetWeaponCount()
@@ -774,14 +751,11 @@ void EntityDroid::FreezeMovement()
     }
 }
 
-// FUNCTION: SWBF2 0x0049e180
+// TEMPLATE: SWBF2 0x0049e180
+// Factory<Weapon, WeaponClass, WeaponDesc>::Find
 template WeaponClass* Factory<Weapon, WeaponClass, WeaponDesc>::Find(unsigned int);
 
-// FUNCTION: SWBF2 0x00499330
-bool EntityDroid::IsRtti(unsigned int uRtti) const
-{
-    return uRtti == rttiHashEntityDroid || GameObject::IsRtti(uRtti);
-}
+
 
 // FUNCTION: SWBF2 0x00499640
 EntityDroid::EntityDroid(EntityDroidClass* pClass, const EntityDesc& desc)

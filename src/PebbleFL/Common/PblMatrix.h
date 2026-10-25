@@ -59,5 +59,4 @@ public:
     float m[4][4];
 };
 
- 
- 
+extern PblMatrix gMatrixIdentity;

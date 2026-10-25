@@ -1,5 +1,7 @@
 #pragma once
 
+#include "PebbleFL/Common/PblHashTable.h"
+
 #include <stddef.h>
 
 #include "Damageable.h"
@@ -55,11 +57,11 @@ public:
 
     GameObjectClass(GameObjectClass* pBase, unsigned int uHash);
 
-    virtual bool IsRtti(unsigned int uRtti);
+    virtual bool IsRtti(unsigned int uRtti) const;
     virtual void SetProperty(unsigned int uProperty, const char* pszValue);
 
-    virtual unsigned int GetDerivedRtti();
-    virtual const char* GetDerivedRttiName();
+    virtual unsigned int GetDerivedRtti() const;
+    virtual const char* GetDerivedRttiName() const;
 
     virtual ~GameObjectClass();
 
@@ -434,3 +436,47 @@ public:
  
  
  
+
+// FUNCTION: SWBF2 0x00444400
+inline bool GameObjectClass::IsRtti(unsigned int uRtti) const
+{
+    if (rttiHashGameObjectClass == uRtti)
+    {
+        return true;
+    }
+    return EntityGeometryClass::IsRtti(uRtti);
+}
+
+// FUNCTION: SWBF2 0x00535080
+inline unsigned int GameObjectClass::GetDerivedRtti() const
+{
+    return rttiHashGameObjectClass;
+}
+
+// FUNCTION: SWBF2 0x00535090
+inline const char* GameObjectClass::GetDerivedRttiName() const
+{
+    return rttiNameGameObjectClass;
+}
+
+// FUNCTION: SWBF2 0x00535060
+inline unsigned int GameObject::GetDerivedRtti() const
+{
+    return rttiHashGameObject;
+}
+
+// FUNCTION: SWBF2 0x00535070
+inline const char* GameObject::GetDerivedRttiName() const
+{
+    return rttiNameGameObject;
+}
+
+// FUNCTION: SWBF2 0x004441f0
+inline bool GameObject::IsRtti(unsigned int uRtti) const
+{
+    if (rttiHashGameObject == uRtti)
+    {
+        return true;
+    }
+    return EntityGeometry::IsRtti(uRtti);
+}

@@ -88,23 +88,11 @@ GameObjectClass::~GameObjectClass()
 PblHash GameObjectClass::rttiHashGameObjectClass("GameObjectClass");
 const char GameObjectClass::rttiNameGameObjectClass[] = "GameObjectClass";
 
-// FUNCTION: SWBF2 0x00444400
-bool GameObjectClass::IsRtti(unsigned int uRtti)
-{
-    return uRtti == rttiHashGameObjectClass || EntityGeometryClass::IsRtti(uRtti);
-}
 
-// FUNCTION: SWBF2 0x00535080
-unsigned int GameObjectClass::GetDerivedRtti()
-{
-    return rttiHashGameObjectClass;
-}
 
-// FUNCTION: SWBF2 0x00535090
-const char* GameObjectClass::GetDerivedRttiName()
-{
-    return rttiNameGameObjectClass;
-}
+
+
+
 
 // SYNTHETIC: SWBF2 0x00403dc0
 // `dynamic initializer for 'GameObject::rttiHashGameObject''
@@ -113,23 +101,11 @@ const char* GameObjectClass::GetDerivedRttiName()
 PblHash GameObject::rttiHashGameObject("GameObject");
 const char GameObject::rttiNameGameObject[] = "GameObject";
 
-// FUNCTION: SWBF2 0x00535060
-unsigned int GameObject::GetDerivedRtti() const
-{
-    return rttiHashGameObject;
-}
 
-// FUNCTION: SWBF2 0x00535070
-const char* GameObject::GetDerivedRttiName() const
-{
-    return rttiNameGameObject;
-}
 
-// FUNCTION: SWBF2 0x004441f0
-bool GameObject::IsRtti(unsigned int uRtti) const
-{
-    return uRtti == rttiHashGameObject || EntityGeometry::IsRtti(uRtti);
-}
+
+
+
 
 // FUNCTION: SWBF2 0x00444250
 const Controllable* GameObject::GetControllable() const

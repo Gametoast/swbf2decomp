@@ -45,11 +45,7 @@ EntityBuildingAnimatedClass::~EntityBuildingAnimatedClass()
 {
 }
 
-static PblMatrix _IdentityMatrix(
-    PblVector4{ 1.0f, 0.0f, 0.0f, 0.0f },
-    PblVector4{ 0.0f, 1.0f, 0.0f, 0.0f },
-    PblVector4{ 0.0f, 0.0f, 1.0f, 0.0f },
-    PblVector4{ 0.0f, 0.0f, 0.0f, 1.0f });
+
 
 // SYNTHETIC: SWBF2 0x004028b0
 // `dynamic initializer for 'EntityBuildingAnimatedClass::rttiHashEntityBuildingAnimatedClass''
@@ -65,23 +61,11 @@ const char EntityBuildingAnimatedClass::rttiNameEntityBuildingAnimatedClass[] = 
 PblHash EntityBuildingAnimated::rttiHashEntityBuildingAnimated("EntityBuildingAnimated");
 const char EntityBuildingAnimated::rttiNameEntityBuildingAnimated[] = "EntityBuildingAnimated";
 
-// FUNCTION: SWBF2 0x00475fb0
-bool EntityBuildingAnimatedClass::IsRtti(unsigned int uRtti)
-{
-    return uRtti == rttiHashEntityBuildingAnimatedClass || EntityBuildingClass::IsRtti(uRtti);
-}
 
-// FUNCTION: SWBF2 0x00494140
-unsigned int EntityBuildingAnimatedClass::GetDerivedRtti()
-{
-    return rttiHashEntityBuildingAnimatedClass;
-}
 
-// FUNCTION: SWBF2 0x00494150
-const char* EntityBuildingAnimatedClass::GetDerivedRttiName()
-{
-    return rttiNameEntityBuildingAnimatedClass;
-}
+
+
+
 
 // SYNTHETIC: SWBF2 0x00494b90
 // EntityBuildingAnimatedClass::`scalar deleting destructor'
@@ -211,11 +195,7 @@ Entity* EntityBuildingAnimatedClass::Build(const EntityDesc& desc)
     return (Entity*)pBuilding;
 }
 
-// FUNCTION: SWBF2 0x00475f30
-bool EntityBuildingAnimated::IsRtti(unsigned int uRtti) const
-{
-    return uRtti == rttiHashEntityBuildingAnimated || EntityBuilding::IsRtti(uRtti);
-}
+
 
 // FUNCTION: SWBF2 0x00475fa0
 const RedPose* EntityBuildingAnimated::GetPose() const
@@ -223,17 +203,9 @@ const RedPose* EntityBuildingAnimated::GetPose() const
     return &mPose;
 }
 
-// FUNCTION: SWBF2 0x004940f0
-unsigned int EntityBuildingAnimated::GetDerivedRtti() const
-{
-    return rttiHashEntityBuildingAnimated;
-}
 
-// FUNCTION: SWBF2 0x00494100
-const char* EntityBuildingAnimated::GetDerivedRttiName() const
-{
-    return rttiNameEntityBuildingAnimated;
-}
+
+
 
 // FUNCTION: SWBF2 0x00475f80
 EntityClass* EntityBuildingAnimated::GetEntityClass()
@@ -348,7 +320,7 @@ void EntityBuildingAnimated::SetAnimation(unsigned int uAnimationId, bool bLoop)
     mZephyrSkeleton.Open(*mZephyrSkeleton.m_pShared, kPose);
     kPose.Open(mZephyrSkeleton);
     kPose.Set(mZephyrPoseDyn, true);
-    mZephyrSkeleton.BuildWorldMatrices(_IdentityMatrix);
+    mZephyrSkeleton.BuildWorldMatrices(gMatrixIdentity);
     mPose.ConvertFromZephyrPose(mZephyrSkeleton);
     mAnimationId = uAnimationId;
 }
@@ -422,7 +394,7 @@ bool EntityBuildingAnimated::Update(float fDeltaTime)
             mZephyrPoseDyn.Update(fDeltaTime);
             kPose.Set(mZephyrPoseDyn, true);
         }
-        mZephyrSkeleton.BuildWorldMatrices(_IdentityMatrix);
+        mZephyrSkeleton.BuildWorldMatrices(gMatrixIdentity);
         mPose.ConvertFromZephyrPose(mZephyrSkeleton);
     }
 

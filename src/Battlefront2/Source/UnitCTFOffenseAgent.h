@@ -1,5 +1,7 @@
 #pragma once
 
+#include "PebbleFL/Common/PblHashTable.h"
+
 #include <stddef.h>
 
 #include "UnitAgent.h"
@@ -54,3 +56,26 @@ public:
  
  
  
+
+// FUNCTION: SWBF2 0x006645e0
+inline bool UnitCTFOffenseAgent::IsRtti(unsigned int uRtti) const
+{
+    if (rttiHashUnitCTFOffenseAgent == uRtti)
+    {
+        return true;
+    }
+    return UnitAgent::rttiHashUnitAgent == uRtti ||
+           Agent::rttiHashAgent == uRtti;
+}
+
+// FUNCTION: SWBF2 0x00664610
+inline unsigned int UnitCTFOffenseAgent::GetDerivedRtti() const
+{
+    return rttiHashUnitCTFOffenseAgent;
+}
+
+// FUNCTION: SWBF2 0x00664620
+inline const char* UnitCTFOffenseAgent::GetDerivedRttiName() const
+{
+    return rttiNameUnitCTFOffenseAgent;
+}

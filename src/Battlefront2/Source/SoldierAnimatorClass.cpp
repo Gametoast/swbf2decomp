@@ -24,11 +24,7 @@
 #include "Zephyr/Source/ZephyrSkeleton.h"
 #include "Zephyr/Source/ZephyrSkeletonShared.h"
 
-static PblMatrix _IdentityMatrix(
-    PblVector4{ 1.0f, 0.0f, 0.0f, 0.0f },
-    PblVector4{ 0.0f, 1.0f, 0.0f, 0.0f },
-    PblVector4{ 0.0f, 0.0f, 1.0f, 0.0f },
-    PblVector4{ 0.0f, 0.0f, 0.0f, 1.0f });
+
 
 static const float ANIM_FRAME_SPEED = 1.0f / 30.0f;
 
@@ -406,7 +402,7 @@ bool SoldierAnimatorClass::_GetAnimationBoneMatrix(const ZephyrSkeletonShared* p
 
     kPoseStatic.Set(kPoseUpper, upperBodyMask, true);
     kPoseStatic.Set(kPoseLower, lowerBodyMask, true);
-    kSkeleton.BuildWorldMatrices(_IdentityMatrix, iJoint);
+    kSkeleton.BuildWorldMatrices(gMatrixIdentity, iJoint);
     matrix = kSkeleton.m_pWorldMatrices[iJoint];
     return true;
 }
@@ -599,7 +595,7 @@ const PblMatrix* SoldierAnimatorClass::_GetBoneMatrix(unsigned int uiJointCrc, c
     pPose->BindToSkeleton(NULL);
     pAnim->SetupDynamicPose(poseDyn, (pAnim->GetAnimationNumFrames() - 1) * ANIM_FRAME_SPEED * 0.5f);
     poseStatic.Set(poseDyn, true);
-    skeleton.BuildWorldMatrices(_IdentityMatrix);
+    skeleton.BuildWorldMatrices(gMatrixIdentity);
     pPose->ConvertFromZephyrPose(poseStatic);
     return pPose->_Table.Find(uiJointCrc);
 }

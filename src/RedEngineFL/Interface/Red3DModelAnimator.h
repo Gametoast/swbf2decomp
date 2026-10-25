@@ -1,5 +1,7 @@
 #pragma once
 
+#include "PebbleFL/Common/PblHashTable.h"
+
 #include <stddef.h>
 
 #include "PebbleFL/Common/PblHashTable.h"
@@ -82,3 +84,21 @@ public:
  
  
  
+
+// FUNCTION: SWBF2 0x0056a110
+inline bool Red3DModelAnimator::IsRtti(unsigned int uRtti) const
+{
+    return rttiHashRed3DModelAnimator == uRtti;
+}
+
+// FUNCTION: SWBF2 0x006f83a0
+inline unsigned int Red3DModelAnimator::GetDerivedRtti() const
+{
+    return rttiHashRed3DModelAnimator;
+}
+
+// FUNCTION: SWBF2 0x006f83b0
+inline const char* Red3DModelAnimator::GetDerivedRttiName() const
+{
+    return rttiNameRed3DModelAnimator;
+}

@@ -1,5 +1,7 @@
 #pragma once
 
+#include "PebbleFL/Common/PblHashTable.h"
+
 #include <stddef.h>
 
 #include "EntityProp.h"
@@ -42,9 +44,9 @@ public:
     virtual ~EntityPropAnimatedClass();
     virtual EntityClass* Derive(unsigned int uHash);
     virtual Entity* Build(const EntityDesc& desc);
-    virtual bool IsRtti(unsigned int uRtti);
-    virtual unsigned int GetDerivedRtti();
-    virtual const char* GetDerivedRttiName();
+    virtual bool IsRtti(unsigned int uRtti) const;
+    virtual unsigned int GetDerivedRtti() const;
+    virtual const char* GetDerivedRttiName() const;
     virtual void SetProperty(unsigned int uProperty, const char* pszValue);
 
     bool InitAnimations(const char* pszName);
@@ -129,3 +131,47 @@ public:
  
  
  
+
+// FUNCTION: SWBF2 0x004db370
+inline bool EntityPropAnimatedClass::IsRtti(unsigned int uRtti) const
+{
+    if (rttiHashEntityPropAnimatedClass == uRtti)
+    {
+        return true;
+    }
+    return EntityPropClass::IsRtti(uRtti);
+}
+
+// FUNCTION: SWBF2 0x004db2a0
+inline bool EntityPropAnimated::IsRtti(unsigned int uRtti) const
+{
+    if (rttiHashEntityPropAnimated == uRtti)
+    {
+        return true;
+    }
+    return EntityProp::IsRtti(uRtti);
+}
+
+// FUNCTION: SWBF2 0x004db3a0
+inline unsigned int EntityPropAnimatedClass::GetDerivedRtti() const
+{
+    return rttiHashEntityPropAnimatedClass;
+}
+
+// FUNCTION: SWBF2 0x004db3b0
+inline const char* EntityPropAnimatedClass::GetDerivedRttiName() const
+{
+    return rttiNameEntityPropAnimatedClass;
+}
+
+// FUNCTION: SWBF2 0x004db2f0
+inline unsigned int EntityPropAnimated::GetDerivedRtti() const
+{
+    return rttiHashEntityPropAnimated;
+}
+
+// FUNCTION: SWBF2 0x004db300
+inline const char* EntityPropAnimated::GetDerivedRttiName() const
+{
+    return rttiNameEntityPropAnimated;
+}

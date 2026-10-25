@@ -194,24 +194,8 @@ void EntityRemoteTerminal::Render(unsigned char ucViewport, float fDist, unsigne
                    (uiFlags & ~0x10000) | 0x10000100, 0);
 }
 
-// FUNCTION: SWBF2 0x004dc920
-bool EntityRemoteTerminal::IsRtti(unsigned int uRtti) const
-{
-    return uRtti == rttiHashEntityRemoteTerminal ||
-           reinterpret_cast<const GameObject*>(this)->GameObject::IsRtti(uRtti);
-}
 
-// FUNCTION: SWBF2 0x004dc960
-unsigned int EntityRemoteTerminal::GetDerivedRtti() const
-{
-    return rttiHashEntityRemoteTerminal;
-}
 
-// FUNCTION: SWBF2 0x004dc970
-const char* EntityRemoteTerminal::GetDerivedRttiName() const
-{
-    return rttiNameEntityRemoteTerminal;
-}
 
 // SYNTHETIC: SWBF2 0x004dde83
 // [thunk]:EntityRemoteTerminal::GetEntity const adjustor{576}
@@ -724,23 +708,11 @@ void EntityRemoteTerminalClass::SetProperty(unsigned int uProperty, const char* 
     }
 }
 
-// FUNCTION: SWBF2 0x004dcc20
-bool EntityRemoteTerminalClass::IsRtti(unsigned int uRtti)
-{
-    return uRtti == rttiHashEntityRemoteTerminalClass || GameObjectClass::IsRtti(uRtti);
-}
 
-// FUNCTION: SWBF2 0x004dcc60
-unsigned int EntityRemoteTerminalClass::GetDerivedRtti()
-{
-    return rttiHashEntityRemoteTerminalClass;
-}
 
-// FUNCTION: SWBF2 0x004dcc70
-const char* EntityRemoteTerminalClass::GetDerivedRttiName()
-{
-    return rttiNameEntityRemoteTerminalClass;
-}
+
+
+
 
 // FUNCTION: SWBF2 0x004dcc80
 int EntityRemoteTerminalClass::GetVehicleType()

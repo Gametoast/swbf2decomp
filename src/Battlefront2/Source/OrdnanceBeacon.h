@@ -1,5 +1,7 @@
 #pragma once
 
+#include "PebbleFL/Common/PblHashTable.h"
+
 #include <stddef.h>
 
 #include "OrdnanceSticky.h"
@@ -16,9 +18,9 @@ public:
 
     virtual OrdnanceClass* Derive(unsigned int uHash);
     virtual Ordnance* Build(const OrdnanceDesc& desc);
-    virtual bool IsRtti(unsigned int uRtti);
-    virtual unsigned int GetDerivedRtti();
-    virtual const char* GetDerivedRttiName();
+    virtual bool IsRtti(unsigned int uRtti) const;
+    virtual unsigned int GetDerivedRtti() const;
+    virtual const char* GetDerivedRttiName() const;
     virtual void SetProperty(unsigned int uProperty, const char* pszValue);
 
     static PblHash rttiHashOrdnanceBeaconClass;
@@ -60,3 +62,47 @@ public:
 };
  
  
+
+// FUNCTION: SWBF2 0x005f8c70
+inline bool OrdnanceBeacon::IsRtti(unsigned int uRtti) const
+{
+    if (rttiHashOrdnanceBeacon == uRtti)
+    {
+        return true;
+    }
+    return OrdnanceSticky::IsRtti(uRtti);
+}
+
+// FUNCTION: SWBF2 0x005f8cb0
+inline unsigned int OrdnanceBeacon::GetDerivedRtti() const
+{
+    return rttiHashOrdnanceBeacon;
+}
+
+// FUNCTION: SWBF2 0x005f8cc0
+inline const char* OrdnanceBeacon::GetDerivedRttiName() const
+{
+    return rttiNameOrdnanceBeacon;
+}
+
+// FUNCTION: SWBF2 0x005f8d00
+inline bool OrdnanceBeaconClass::IsRtti(unsigned int uRtti) const
+{
+    if (rttiHashOrdnanceBeaconClass == uRtti)
+    {
+        return true;
+    }
+    return OrdnanceStickyClass::IsRtti(uRtti);
+}
+
+// FUNCTION: SWBF2 0x005f8d40
+inline unsigned int OrdnanceBeaconClass::GetDerivedRtti() const
+{
+    return rttiHashOrdnanceBeaconClass;
+}
+
+// FUNCTION: SWBF2 0x005f8d50
+inline const char* OrdnanceBeaconClass::GetDerivedRttiName() const
+{
+    return rttiNameOrdnanceBeaconClass;
+}

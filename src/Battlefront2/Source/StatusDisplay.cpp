@@ -36,7 +36,10 @@ namespace GameVoiceChat
 class Transport;
 Transport* GetTransport();
 }
-namespace FriendBuddyList { bool __fastcall IsFriendBuddy(int ignored, int iPlayer); }
+namespace FriendBuddyList
+{
+    bool __fastcall IsFriendBuddy(int ignored, int iPlayer);
+}
 
 extern int gDebugCount;
 

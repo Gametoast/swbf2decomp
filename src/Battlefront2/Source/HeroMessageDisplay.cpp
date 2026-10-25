@@ -31,7 +31,10 @@ extern bool netHeroesEnabled;
 extern unsigned int netHeroSelectedTurn[3];
 extern float spHeroSelectedTime[3];
 
-namespace PblUnicode { unsigned int ustrncnv(unsigned short* pDest, const unsigned char* pSrc, unsigned int uiCount); }
+namespace PblUnicode
+{
+    unsigned int ustrncnv(unsigned short* pDest, const unsigned char* pSrc, unsigned int uiCount);
+}
 
 // GLOBAL: SWBF2 0x01e56c28
 HeroMessageDisplay* HeroMessageDisplay::sInstance[1];

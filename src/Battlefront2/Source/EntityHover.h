@@ -1,5 +1,7 @@
 #pragma once
 
+#include "PebbleFL/Common/PblHashTable.h"
+
 #include <stddef.h>
 
 #include "Aimer.h"
@@ -55,9 +57,9 @@ public:
 
     virtual EntityClass* Derive(unsigned int uHash);
     virtual Entity* Build(const EntityDesc& desc);
-    virtual bool IsRtti(unsigned int uRtti);
-    virtual unsigned int GetDerivedRtti();
-    virtual const char* GetDerivedRttiName();
+    virtual bool IsRtti(unsigned int uRtti) const;
+    virtual unsigned int GetDerivedRtti() const;
+    virtual const char* GetDerivedRttiName() const;
     virtual void SetProperty(unsigned int uProperty, const char* pszValue);
     // FUNCTION: SWBF2 0x00478e00
     virtual int GetVehicleType()
@@ -591,3 +593,47 @@ public:
  
  
  
+
+// FUNCTION: SWBF2 0x00478a50
+inline bool EntityHover::IsRtti(unsigned int uRtti) const
+{
+    if (rttiHashEntityHover == uRtti)
+    {
+        return true;
+    }
+    return GameObject::IsRtti(uRtti);
+}
+
+// FUNCTION: SWBF2 0x00478dc0
+inline bool EntityHoverClass::IsRtti(unsigned int uRtti) const
+{
+    if (rttiHashEntityHoverClass == uRtti)
+    {
+        return true;
+    }
+    return GameObjectClass::IsRtti(uRtti);
+}
+
+// FUNCTION: SWBF2 0x004c0920
+inline unsigned int EntityHover::GetDerivedRtti() const
+{
+    return rttiHashEntityHover;
+}
+
+// FUNCTION: SWBF2 0x004c0930
+inline const char* EntityHover::GetDerivedRttiName() const
+{
+    return rttiNameEntityHover;
+}
+
+// FUNCTION: SWBF2 0x004c09f0
+inline unsigned int EntityHoverClass::GetDerivedRtti() const
+{
+    return rttiHashEntityHoverClass;
+}
+
+// FUNCTION: SWBF2 0x004c0a00
+inline const char* EntityHoverClass::GetDerivedRttiName() const
+{
+    return rttiNameEntityHoverClass;
+}

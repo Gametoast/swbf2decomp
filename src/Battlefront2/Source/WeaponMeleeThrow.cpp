@@ -65,23 +65,11 @@ WeaponMeleeThrow::WeaponMeleeThrow(const WeaponMeleeThrowClass* pClass, const We
         uiThrowAnim, 0x2B960099, pClass->m_fInitialSalvoDelay, m_mThrow0Local);
 }
 
-// FUNCTION: SWBF2 0x0068f520
-bool WeaponMeleeThrow::IsRtti(unsigned int uRtti) const
-{
-    return uRtti == rttiHashWeaponMeleeThrow || Weapon::IsRtti(uRtti);
-}
 
-// FUNCTION: SWBF2 0x0068f550
-unsigned int WeaponMeleeThrow::GetDerivedRtti() const
-{
-    return rttiHashWeaponMeleeThrow;
-}
 
-// FUNCTION: SWBF2 0x0068f560
-const char* WeaponMeleeThrow::GetDerivedRttiName() const
-{
-    return rttiNameWeaponMeleeThrow;
-}
+
+
+
 
 // FUNCTION: SWBF2 0x0068f570
 bool WeaponMeleeThrow::IsMeleeThrow() const
@@ -301,23 +289,11 @@ WeaponMeleeThrowClass::WeaponMeleeThrowClass(unsigned int uHash)
     m_fInitialSalvoDelay = 0.0f;
 }
 
-// FUNCTION: SWBF2 0x0068f5c0
-bool WeaponMeleeThrowClass::IsRtti(unsigned int uRtti)
-{
-    return uRtti == rttiHashWeaponMeleeThrowClass || WeaponClass::IsRtti(uRtti);
-}
 
-// FUNCTION: SWBF2 0x0068f5f0
-unsigned int WeaponMeleeThrowClass::GetDerivedRtti()
-{
-    return rttiHashWeaponMeleeThrowClass;
-}
 
-// FUNCTION: SWBF2 0x0068f600
-const char* WeaponMeleeThrowClass::GetDerivedRttiName()
-{
-    return rttiNameWeaponMeleeThrowClass;
-}
+
+
+
 
 // SYNTHETIC: SWBF2 0x0068fd00
 // WeaponMeleeThrowClass::`scalar deleting destructor'

@@ -12,23 +12,11 @@
 PblHash UnitDefendAgent::rttiHashUnitDefendAgent("UnitDefendAgent");
 const char UnitDefendAgent::rttiNameUnitDefendAgent[] = "UnitDefendAgent";
 
-// FUNCTION: SWBF2 0x00665b60
-bool UnitDefendAgent::IsRtti(unsigned int uRtti) const
-{
-    return uRtti == rttiHashUnitDefendAgent || UnitAgent::IsRtti(uRtti);
-}
 
-// FUNCTION: SWBF2 0x00665b90
-unsigned int UnitDefendAgent::GetDerivedRtti() const
-{
-    return rttiHashUnitDefendAgent;
-}
 
-// FUNCTION: SWBF2 0x00665ba0
-const char* UnitDefendAgent::GetDerivedRttiName() const
-{
-    return rttiNameUnitDefendAgent;
-}
+
+
+
 
 // SYNTHETIC: SWBF2 0x00665bb0
 // UnitDefendAgent::`scalar deleting destructor'

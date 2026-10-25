@@ -128,6 +128,7 @@ int LoadDisplay::m_ShowCount;
 // GLOBAL: SWBF2 0x01faaa70
 static unsigned __int64 load_update_qpc_stamp;
 
+// GLOBAL: SWBF2 0x01e573f4
 LoadDisplay* LoadDisplay::sInstance;
 
 // GLOBAL: SWBF2 0x01ec6410

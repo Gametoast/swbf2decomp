@@ -30,11 +30,7 @@ public:
 extern "C" PblMatrix* __stdcall D3DXMatrixMultiply(PblMatrix* pOut, const PblMatrix* pM1,
                                                    const PblMatrix* pM2);
 
-static PblMatrix _IdentityMatrix(
-    PblVector4{ 1.0f, 0.0f, 0.0f, 0.0f },
-    PblVector4{ 0.0f, 1.0f, 0.0f, 0.0f },
-    PblVector4{ 0.0f, 0.0f, 1.0f, 0.0f },
-    PblVector4{ 0.0f, 0.0f, 0.0f, 1.0f });
+
 
 // FUNCTION: SWBF2 0x00484730
 ControllableClass::ControllableClass()
@@ -48,7 +44,7 @@ ControllableClass::ControllableClass()
     mForceMode = 0;
     mThirdPersonFOV = mFirstPersonFOV = GetDefaultFOV();
     mPilotParentNodeHash = 0;
-    mPilotOffsetMatrix = _IdentityMatrix;
+    mPilotOffsetMatrix = gMatrixIdentity;
     mPilotAnimation = SoldierAnimationBank::INVALID_ANIMATION;
     mAnimatedPilotNodeFlag = false;
     mPilotDeathType = PILOTDEATH_FALL;

@@ -1,5 +1,7 @@
 #pragma once
 
+#include "PebbleFL/Common/PblHashTable.h"
+
 #include <stddef.h>
 
 #include "OrdnanceBullet.h"
@@ -16,9 +18,9 @@ public:
 
     virtual OrdnanceClass* Derive(unsigned int uHash);
     virtual Ordnance* Build(const OrdnanceDesc& desc);
-    virtual bool IsRtti(unsigned int uRtti);
-    virtual unsigned int GetDerivedRtti();
-    virtual const char* GetDerivedRttiName();
+    virtual bool IsRtti(unsigned int uRtti) const;
+    virtual unsigned int GetDerivedRtti() const;
+    virtual const char* GetDerivedRttiName() const;
     virtual void SetProperty(unsigned int uProperty, const char* pszValue);
 
     float mInitialCableLimit;
@@ -134,3 +136,49 @@ public:
  
  
  
+
+// FUNCTION: SWBF2 0x006072a0
+inline bool OrdnanceTowCable::IsRtti(unsigned int uRtti) const
+{
+    if (rttiHashOrdnanceTowCable == uRtti)
+    {
+        return true;
+    }
+    return OrdnanceBullet::IsRtti(uRtti);
+}
+
+// FUNCTION: SWBF2 0x006072d0
+inline unsigned int OrdnanceTowCable::GetDerivedRtti() const
+{
+    return rttiHashOrdnanceTowCable;
+}
+
+// FUNCTION: SWBF2 0x006072e0
+inline const char* OrdnanceTowCable::GetDerivedRttiName() const
+{
+    return rttiNameOrdnanceTowCable;
+}
+
+// FUNCTION: SWBF2 0x00607330
+inline bool OrdnanceTowCableClass::IsRtti(unsigned int uRtti) const
+{
+    if (rttiHashOrdnanceTowCableClass == uRtti)
+    {
+        return true;
+    }
+    return OrdnanceBulletClass::IsRtti(uRtti);
+}
+
+// FUNCTION: SWBF2 0x00607360
+inline unsigned int OrdnanceTowCableClass::GetDerivedRtti() const
+{
+    return rttiHashOrdnanceTowCableClass;
+}
+
+// FUNCTION: SWBF2 0x00607370
+inline const char* OrdnanceTowCableClass::GetDerivedRttiName() const
+{
+    return rttiNameOrdnanceTowCableClass;
+}
+
+

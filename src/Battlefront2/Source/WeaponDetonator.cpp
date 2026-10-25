@@ -27,17 +27,9 @@ const char WeaponDetonatorClass::rttiNameWeaponDetonatorClass[] = "WeaponDetonat
 PblHash WeaponDetonator::rttiHashWeaponDetonator("WeaponDetonator");
 const char WeaponDetonator::rttiNameWeaponDetonator[] = "WeaponDetonator";
 
-// FUNCTION: SWBF2 0x00682490
-unsigned int WeaponDetonator::GetDerivedRtti() const
-{
-    return rttiHashWeaponDetonator;
-}
 
-// FUNCTION: SWBF2 0x006824a0
-const char* WeaponDetonator::GetDerivedRttiName() const
-{
-    return rttiNameWeaponDetonator;
-}
+
+
 
 // FUNCTION: SWBF2 0x00682600
 unsigned int WeaponDetonator::GetNameHash() const
@@ -74,23 +66,11 @@ WeaponDetonatorClass::WeaponDetonatorClass(WeaponDetonatorClass* pBase, unsigned
     mPlantedHash = pBase->mPlantedHash;
 }
 
-// FUNCTION: SWBF2 0x006824b0
-bool WeaponDetonatorClass::IsRtti(unsigned int uRtti)
-{
-    return uRtti == rttiHashWeaponDetonatorClass || WeaponDispenserClass::IsRtti(uRtti);
-}
 
-// FUNCTION: SWBF2 0x006824e0
-unsigned int WeaponDetonatorClass::GetDerivedRtti()
-{
-    return rttiHashWeaponDetonatorClass;
-}
 
-// FUNCTION: SWBF2 0x006824f0
-const char* WeaponDetonatorClass::GetDerivedRttiName()
-{
-    return rttiNameWeaponDetonatorClass;
-}
+
+
+
 
 // FUNCTION: SWBF2 0x00682b40
 void WeaponDetonatorClass::SetProperty(unsigned int uProperty, const char* pszValue)
@@ -123,11 +103,7 @@ WeaponDetonatorClass::~WeaponDetonatorClass()
 {
 }
 
-// FUNCTION: SWBF2 0x00682460
-bool WeaponDetonator::IsRtti(unsigned int uRtti) const
-{
-    return uRtti == GetWeaponDetonatorRttiHash() || WeaponDispenser::IsRtti(uRtti);
-}
+
 
 // FUNCTION: SWBF2 0x00682500
 WeaponDetonator::WeaponDetonator(const WeaponDetonatorClass* pClass, const WeaponDesc& desc)

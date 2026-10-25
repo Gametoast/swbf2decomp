@@ -16,23 +16,11 @@
 PblHash UnitWaitAgent::rttiHashUnitWaitAgent("UnitWaitAgent");
 const char UnitWaitAgent::rttiNameUnitWaitAgent[] = "UnitWaitAgent";
 
-// FUNCTION: SWBF2 0x0066b330
-bool UnitWaitAgent::IsRtti(unsigned int uRtti) const
-{
-    return uRtti == rttiHashUnitWaitAgent || UnitAgent::IsRtti(uRtti);
-}
 
-// FUNCTION: SWBF2 0x0066b360
-unsigned int UnitWaitAgent::GetDerivedRtti() const
-{
-    return rttiHashUnitWaitAgent;
-}
 
-// FUNCTION: SWBF2 0x0066b370
-const char* UnitWaitAgent::GetDerivedRttiName() const
-{
-    return rttiNameUnitWaitAgent;
-}
+
+
+
 
 // FUNCTION: SWBF2 0x0066b3b0
 UnitWaitAgent::UnitWaitAgent(UnitController* pCtrl)

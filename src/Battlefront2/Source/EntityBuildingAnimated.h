@@ -1,5 +1,7 @@
 #pragma once
 
+#include "PebbleFL/Common/PblHashTable.h"
+
 #include <stddef.h>
 
 #include "EntityBuilding.h"
@@ -23,9 +25,9 @@ public:
 
     virtual EntityClass* Derive(unsigned int uHash);
     virtual Entity* Build(const EntityDesc& desc);
-    virtual bool IsRtti(unsigned int uRtti);
-    virtual unsigned int GetDerivedRtti();
-    virtual const char* GetDerivedRttiName();
+    virtual bool IsRtti(unsigned int uRtti) const;
+    virtual unsigned int GetDerivedRtti() const;
+    virtual const char* GetDerivedRttiName() const;
     virtual void SetProperty(unsigned int uProperty, const char* pszValue);
 
     bool InitAnimations(const char* pszName);
@@ -93,3 +95,47 @@ public:
  
  
  
+
+// FUNCTION: SWBF2 0x00475fb0
+inline bool EntityBuildingAnimatedClass::IsRtti(unsigned int uRtti) const
+{
+    if (rttiHashEntityBuildingAnimatedClass == uRtti)
+    {
+        return true;
+    }
+    return EntityBuildingClass::IsRtti(uRtti);
+}
+
+// FUNCTION: SWBF2 0x00494140
+inline unsigned int EntityBuildingAnimatedClass::GetDerivedRtti() const
+{
+    return rttiHashEntityBuildingAnimatedClass;
+}
+
+// FUNCTION: SWBF2 0x00494150
+inline const char* EntityBuildingAnimatedClass::GetDerivedRttiName() const
+{
+    return rttiNameEntityBuildingAnimatedClass;
+}
+
+// FUNCTION: SWBF2 0x00475f30
+inline bool EntityBuildingAnimated::IsRtti(unsigned int uRtti) const
+{
+    if (rttiHashEntityBuildingAnimated == uRtti)
+    {
+        return true;
+    }
+    return EntityBuilding::IsRtti(uRtti);
+}
+
+// FUNCTION: SWBF2 0x004940f0
+inline unsigned int EntityBuildingAnimated::GetDerivedRtti() const
+{
+    return rttiHashEntityBuildingAnimated;
+}
+
+// FUNCTION: SWBF2 0x00494100
+inline const char* EntityBuildingAnimated::GetDerivedRttiName() const
+{
+    return rttiNameEntityBuildingAnimated;
+}

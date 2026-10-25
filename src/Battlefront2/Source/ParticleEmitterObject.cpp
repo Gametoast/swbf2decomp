@@ -19,11 +19,7 @@ PblVector3 Max(const PblVector3& a, const PblVector3& b);
 // GLOBAL: SWBF2 0x01eaed56
 bool ParticleEmitterObject::sForceRegisterStep;
 
-static PblMatrix _IdentityMatrix(
-    PblVector4{ 1.0f, 0.0f, 0.0f, 0.0f },
-    PblVector4{ 0.0f, 1.0f, 0.0f, 0.0f },
-    PblVector4{ 0.0f, 0.0f, 1.0f, 0.0f },
-    PblVector4{ 0.0f, 0.0f, 0.0f, 1.0f });
+
 
 extern Particle sParticleCache[128];
 extern ParticleEmitterObject sPEO;
@@ -565,9 +561,9 @@ void ParticleEmitter::Render(float fTime)
             {
                 for (int r = 0; r < 3; ++r)
                 {
-                    mat.m[r][0] = _IdentityMatrix.m[r][0];
-                    mat.m[r][1] = _IdentityMatrix.m[r][1];
-                    mat.m[r][2] = _IdentityMatrix.m[r][2];
+                    mat.m[r][0] = gMatrixIdentity.m[r][0];
+                    mat.m[r][1] = gMatrixIdentity.m[r][1];
+                    mat.m[r][2] = gMatrixIdentity.m[r][2];
                     mat.m[r][3] = 0.0f;
                 }
             }
@@ -754,9 +750,9 @@ void ParticleEmitter::RenderAsEmitter(float fTime)
             {
                 for (int r = 0; r < 3; ++r)
                 {
-                    mat.m[r][0] = _IdentityMatrix.m[r][0];
-                    mat.m[r][1] = _IdentityMatrix.m[r][1];
-                    mat.m[r][2] = _IdentityMatrix.m[r][2];
+                    mat.m[r][0] = gMatrixIdentity.m[r][0];
+                    mat.m[r][1] = gMatrixIdentity.m[r][1];
+                    mat.m[r][2] = gMatrixIdentity.m[r][2];
                     mat.m[r][3] = 0.0f;
                 }
             }

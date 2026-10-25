@@ -41,23 +41,50 @@
 #include "EndDisplay.h"
 #include "PebbleFL/Common/PblUnicode.h"
 
-// GLOBAL: SWBF2 0x007e69cb
-namespace Lua_Callbacks { bool sSoundEnabled = true; }
-// GLOBAL: SWBF2 0x01e57949
-namespace Lua_Callbacks { bool sGameMusicRetrigger; }
-// GLOBAL: SWBF2 0x01e57968
-namespace Lua_Callbacks { unsigned int sShellMusicStoppedTime; }
-// GLOBAL: SWBF2 0x01e5796c
-namespace Lua_Callbacks { unsigned int sShellMusicID; }
-// GLOBAL: SWBF2 0x01e57984
-namespace Lua_Callbacks { unsigned int sGameMusicCurDelayTime; }
-// GLOBAL: SWBF2 0x01e57988
-namespace Lua_Callbacks { void* sGameMusic; }
-// GLOBAL: SWBF2 0x01e5798c
-namespace Lua_Callbacks { unsigned int sGameMusicDelayTime; }
+namespace Lua_Callbacks
+{
+    // GLOBAL: SWBF2 0x007e69cb
+    bool sSoundEnabled = true;
+}
+namespace Lua_Callbacks
+{
+    // GLOBAL: SWBF2 0x01e57949
+    bool sGameMusicRetrigger;
+}
+namespace Lua_Callbacks
+{
+    // GLOBAL: SWBF2 0x01e57968
+    unsigned int sShellMusicStoppedTime;
+}
+namespace Lua_Callbacks
+{
+    // GLOBAL: SWBF2 0x01e5796c
+    unsigned int sShellMusicID;
+}
+namespace Lua_Callbacks
+{
+    // GLOBAL: SWBF2 0x01e57984
+    unsigned int sGameMusicCurDelayTime;
+}
+namespace Lua_Callbacks
+{
+    // GLOBAL: SWBF2 0x01e57988
+    void* sGameMusic;
+}
+namespace Lua_Callbacks
+{
+    // GLOBAL: SWBF2 0x01e5798c
+    unsigned int sGameMusicDelayTime;
+}
 
-namespace GameSoundEngine { extern bool sHwMixingSupported; }
-namespace GameSoundEngine { extern bool sHwEffectsSupported; }
+namespace GameSoundEngine
+{
+    extern bool sHwMixingSupported;
+}
+namespace GameSoundEngine
+{
+    extern bool sHwEffectsSupported;
+}
 
 // FUNCTION: SWBF2 0x0059b470
 void Snd::StreamBase::Play(bool bRestart)

@@ -36,11 +36,7 @@ void GodrayManager::PlatformCleanup()
     }
 }
 
-static const PblMatrix _IdentityMatrix(
-    PblVector4{ 1.0f, 0.0f, 0.0f, 0.0f },
-    PblVector4{ 0.0f, 1.0f, 0.0f, 0.0f },
-    PblVector4{ 0.0f, 0.0f, 1.0f, 0.0f },
-    PblVector4{ 0.0f, 0.0f, 0.0f, 1.0f });
+
 
 // GLOBAL: SWBF2 0x00796510
 
@@ -279,7 +275,7 @@ void GodrayManager::PlatformRender(unsigned int uiFlags) const
     pPrimitive->EndIndexData();
     pPrimitive->EndVertexData();
     RedRenderer::pcRenderPrimitive(pPrimitive, m_pShader,
-                                   _IdentityMatrix,
+                                   gMatrixIdentity,
                                    m_color, 0x1000010, 0, 0, 0);
     pPrimitive->Release();
 }

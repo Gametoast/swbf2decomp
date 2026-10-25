@@ -87,23 +87,11 @@ Entity* EntityBuildingArmedClass::Build(const EntityDesc& desc)
     return pBuilding;
 }
 
-// FUNCTION: SWBF2 0x00476e90
-bool EntityBuildingArmedClass::IsRtti(unsigned int uRtti)
-{
-    return uRtti == rttiHashEntityBuildingArmedClass || EntityBuildingClass::IsRtti(uRtti);
-}
 
-// FUNCTION: SWBF2 0x00495a20
-unsigned int EntityBuildingArmedClass::GetDerivedRtti()
-{
-    return rttiHashEntityBuildingArmedClass;
-}
 
-// FUNCTION: SWBF2 0x00495a30
-const char* EntityBuildingArmedClass::GetDerivedRttiName()
-{
-    return rttiNameEntityBuildingArmedClass;
-}
+
+
+
 
 // FUNCTION: SWBF2 0x004959e0
 EntityType EntityBuildingArmed::GetEntityType() const
@@ -416,23 +404,11 @@ Trackable* EntityBuildingArmed::GetTrackable()
     return 0;
 }
 
-// FUNCTION: SWBF2 0x00476db0
-bool EntityBuildingArmed::IsRtti(unsigned int uRtti) const
-{
-    return uRtti == rttiHashEntityBuildingArmed || EntityBuilding::IsRtti(uRtti);
-}
 
-// FUNCTION: SWBF2 0x004959c0
-unsigned int EntityBuildingArmed::GetDerivedRtti() const
-{
-    return rttiHashEntityBuildingArmed;
-}
 
-// FUNCTION: SWBF2 0x004959d0
-const char* EntityBuildingArmed::GetDerivedRttiName() const
-{
-    return rttiNameEntityBuildingArmed;
-}
+
+
+
 
 // FUNCTION: SWBF2 0x00476e00
 int EntityBuildingArmed::GetTurretCount() const

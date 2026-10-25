@@ -43,17 +43,9 @@ const char EntityGeometryClass::rttiNameEntityGeometryClass[] = "EntityGeometryC
 PblHash EntityGeometry::rttiHashEntityGeometry("EntityGeometry");
 const char EntityGeometry::rttiNameEntityGeometry[] = "EntityGeometry";
 
-// FUNCTION: SWBF2 0x004440d0
-bool EntityGeometry::IsRtti(unsigned int uRtti) const
-{
-    return uRtti == rttiHashEntityGeometry || EntityEx::IsRtti(uRtti);
-}
 
-// FUNCTION: SWBF2 0x004441b0
-bool EntityGeometryClass::IsRtti(unsigned int uRtti)
-{
-    return uRtti == rttiHashEntityGeometryClass || EntityClass::IsRtti(uRtti);
-}
+
+
 
 // FUNCTION: SWBF2 0x00444190
 void EntityGeometry::SetupPose(RedPose& pose) const
@@ -61,17 +53,7 @@ void EntityGeometry::SetupPose(RedPose& pose) const
     mModel->GetRedModel(0)->SetupPose(pose);
 }
 
-// FUNCTION: SWBF2 0x004ba080
-unsigned int EntityGeometry::GetDerivedRtti() const
-{
-    return rttiHashEntityGeometry;
-}
 
-// FUNCTION: SWBF2 0x004ba090
-const char* EntityGeometry::GetDerivedRttiName() const
-{
-    return rttiNameEntityGeometry;
-}
 
 // SYNTHETIC: SWBF2 0x004bd7fe
 // [thunk]:EntityGeometry::`scalar deleting destructor' adjustor{12}
@@ -80,17 +62,9 @@ const char* EntityGeometry::GetDerivedRttiName() const
 // SYNTHETIC: SWBF2 0x004ba0a0
 // EntityGeometry::`scalar deleting destructor'
 
-// FUNCTION: SWBF2 0x004ba0d0
-unsigned int EntityGeometryClass::GetDerivedRtti()
-{
-    return rttiHashEntityGeometryClass;
-}
 
-// FUNCTION: SWBF2 0x004ba0e0
-const char* EntityGeometryClass::GetDerivedRttiName()
-{
-    return rttiNameEntityGeometryClass;
-}
+
+
 
 // FUNCTION: SWBF2 0x004ba0f0
 EntityGeometry::EntityGeometry(EntityGeometryClass* pClass, const EntityDesc& desc,
@@ -476,11 +450,7 @@ static unsigned int sSoftCollisionMask;
 // GLOBAL: SWBF2 0x01e51dc4
 static unsigned int sRigidCollisionMask;
 
-static PblMatrix _IdentityMatrix(
-    PblVector4{ 1.0f, 0.0f, 0.0f, 0.0f },
-    PblVector4{ 0.0f, 1.0f, 0.0f, 0.0f },
-    PblVector4{ 0.0f, 0.0f, 1.0f, 0.0f },
-    PblVector4{ 0.0f, 0.0f, 0.0f, 1.0f });
+
 
 // FUNCTION: SWBF2 0x004bb9e0
 EntityGeometryClass::EntityGeometryClass(EntityGeometryClass* pBase, unsigned int uHash)
@@ -706,7 +676,7 @@ void EntityGeometryClass::SetProperty(unsigned int uProperty, const char* pszVal
         float x, y, z, a, b, c;
         sscanf(pszValue, "%s %s %s %f %f %f %f %f %f", acName, acType, acParent, &x, &y, &z, &a, &b, &c);
 
-        PblMatrix matrix = _IdentityMatrix;
+        PblMatrix matrix = gMatrixIdentity;
         matrix.m[3][0] = x;
         matrix.m[3][1] = y;
         matrix.m[3][2] = z;
@@ -810,7 +780,7 @@ void EntityGeometryClass::SetProperty(unsigned int uProperty, const char* pszVal
         {
             const CollisionMesh* pMesh = CollisionMesh::Find(PblHash(pszValue));
             mFullChunkCollisions[sCurrentChunk]->AddBody(
-                new CollisionBodyMesh(pMesh, pszValue, _IdentityMatrix, 0));
+                new CollisionBodyMesh(pMesh, pszValue, gMatrixIdentity, 0));
         }
 
         _snprintf(acName, 127, "%s0", pszValue);
@@ -826,7 +796,7 @@ void EntityGeometryClass::SetProperty(unsigned int uProperty, const char* pszVal
             float fCenterZ = (box._vMin.z + box._vMax.z) * 0.5f;
 
             CollisionPrimitive primitive;
-            PblMatrix matrix = _IdentityMatrix;
+            PblMatrix matrix = gMatrixIdentity;
             float fHalfX = (float)fabs(box._vMax.x - box._vMin.x) * 0.5f;
             float fHalfY = (float)fabs(box._vMax.y - box._vMin.y) * 0.5f;
             float fHalfZ = (float)fabs(box._vMax.z - box._vMin.z) * 0.5f;

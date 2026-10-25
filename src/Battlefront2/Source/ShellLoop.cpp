@@ -52,28 +52,61 @@ unsigned int ShellLoop::sSystemDeltaTime;
 // GLOBAL: SWBF2 0x01eaf058
 unsigned int ShellLoop::clientTimePrev;
 
-namespace PblBuildType { extern bool gDemoBuild; }
-namespace PblBuildType { extern unsigned char gCreateMemoryProfile; }
-// GLOBAL: SWBF2 0x009cef73
-namespace PblBuildType { bool gDemoHasSplitscreen; }
-// GLOBAL: SWBF2 0x009cef74
-namespace PblBuildType { bool gDemoHost; }
-// GLOBAL: SWBF2 0x009cef77
-namespace PblBuildType { bool gDemoNoInputRebind; }
-// GLOBAL: SWBF2 0x007e2e0c
-namespace PblBuildType { bool gFinalBuild = true; }
-// GLOBAL: SWBF2 0x007e2e0d
-namespace PblBuildType { bool gXBox_DVDDemo = true; }
-// GLOBAL: SWBF2 0x007e2e0e
-namespace PblBuildType { bool gE3Demo = true; }
-// GLOBAL: SWBF2 0x007e2e0f
-namespace PblBuildType { bool gDemoAutoAssign = true; }
+namespace PblBuildType
+{
+    extern bool gDemoBuild;
+}
+namespace PblBuildType
+{
+    extern unsigned char gCreateMemoryProfile;
+}
+namespace PblBuildType
+{
+    // GLOBAL: SWBF2 0x009cef73
+    bool gDemoHasSplitscreen;
+}
+namespace PblBuildType
+{
+    // GLOBAL: SWBF2 0x009cef74
+    bool gDemoHost;
+}
+namespace PblBuildType
+{
+    // GLOBAL: SWBF2 0x009cef77
+    bool gDemoNoInputRebind;
+}
+namespace PblBuildType
+{
+    // GLOBAL: SWBF2 0x007e2e0c
+    bool gFinalBuild = true;
+}
+namespace PblBuildType
+{
+    // GLOBAL: SWBF2 0x007e2e0d
+    bool gXBox_DVDDemo = true;
+}
+namespace PblBuildType
+{
+    // GLOBAL: SWBF2 0x007e2e0e
+    bool gE3Demo = true;
+}
+namespace PblBuildType
+{
+    // GLOBAL: SWBF2 0x007e2e0f
+    bool gDemoAutoAssign = true;
+}
 
-namespace GameLoop { extern bool mbHistoricalRules; }
+namespace GameLoop
+{
+    extern bool mbHistoricalRules;
+}
 extern bool gAttractMode;
 extern bool gDemoMode;
 
-namespace ObjectiveManager { void Init(); void DestroyAll(); }
+namespace ObjectiveManager
+{
+    void Init(); void DestroyAll();
+}
 
 // FUNCTION: SWBF2 0x00635d50
 float ShellLoop::GetMissionTime()
@@ -224,9 +257,15 @@ __int64 sLastPerformanceCount;
 
 __int64 sPerformanceCountOffset;
 
-namespace SaveGameManager { void Update(float fDeltaTime); }
+namespace SaveGameManager
+{
+    void Update(float fDeltaTime);
+}
 
-namespace FLRenderer { void Render(); }
+namespace FLRenderer
+{
+    void Render();
+}
 
 // FUNCTION: SWBF2 0x00636270
 static void fnErrorBoxOk(bool)

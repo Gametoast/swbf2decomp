@@ -17,7 +17,9 @@ void __cdecl PblTraceP(const char* Format, ...);
 
 FLLocalizeEntry* mMasterLocalizeFile;
 
+// GLOBAL: SWBF2 0x00940bf4
 bool gbDeterminedLang;
+// GLOBAL: SWBF2 0x00940bf8
 eGAMELANGUAGE gUseLang;
 int mSkipCount;
 
@@ -28,6 +30,7 @@ int sMasterLocalizeHashNumEntries;
 
 PblHashTable<FLLocalizeEntry, 16384> sMasterLocalizeHash;
 
+// GLOBAL: SWBF2 0x00960c04
 char const* gLanguageStr;
 
 eGAMELANGUAGE gForceLang = eLANG_AUTODETERMINE;

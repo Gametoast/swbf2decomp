@@ -1,5 +1,7 @@
 #pragma once
 
+#include "PebbleFL/Common/PblHashTable.h"
+
 #include "Fsm.h"
 #include "PebbleFL/Common/PblHashTable.h"
 #include "RedEngineFL/Memory/RedMemoryPool.h"
@@ -69,3 +71,23 @@ protected:
 };
 
  
+
+// FUNCTION: SWBF2 0x005ab2d0
+inline bool Navigator::IsRtti(unsigned int uRtti) const
+{
+    return rttiHashNavigator == uRtti;
+}
+
+// FUNCTION: SWBF2 0x005ab2f0
+inline unsigned int Navigator::GetDerivedRtti() const
+{
+    return rttiHashNavigator;
+}
+
+// FUNCTION: SWBF2 0x005ab300
+inline const char* Navigator::GetDerivedRttiName() const
+{
+    return rttiNameNavigator;
+}
+
+

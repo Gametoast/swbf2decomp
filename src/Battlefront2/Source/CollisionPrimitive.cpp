@@ -255,11 +255,7 @@ float CollisionPrimitive::RayHit(const PblMatrix& matrix, const PblVector3& vSta
     }
 }
 
-static PblMatrix _IdentityMatrix(
-    PblVector4{ 1.0f, 0.0f, 0.0f, 0.0f },
-    PblVector4{ 0.0f, 1.0f, 0.0f, 0.0f },
-    PblVector4{ 0.0f, 0.0f, 1.0f, 0.0f },
-    PblVector4{ 0.0f, 0.0f, 0.0f, 1.0f });
+
 
 // GLOBAL: SWBF2 0x01eb9290
 static PblMatrix sWorld2Collision;
@@ -366,7 +362,7 @@ bool CollisionPrimitive::CollideSphere(const PblVector3&, const PblVector3&, con
         return CollisionUtil::CollideBoxSphere(matrix, mWidth, mDepth, mHeight, vCenter, fRadius, vNormal, fDepth);
     case AXIS_ALIGNED_CYLINDER:
     {
-        PblMatrix aligned = _IdentityMatrix;
+        PblMatrix aligned = gMatrixIdentity;
         aligned.m[3][0] = matrix.m[3][0];
         aligned.m[3][1] = matrix.m[3][1];
         aligned.m[3][2] = matrix.m[3][2];
@@ -395,7 +391,7 @@ bool CollisionPrimitive::CollideCylinder(const PblVector3& vVelocity, const PblV
                                                  cylinderMatrix, fRadius, fHeight * 0.5f, vNormal, fDepth);
     case AXIS_ALIGNED_CYLINDER:
     {
-        PblMatrix aligned = _IdentityMatrix;
+        PblMatrix aligned = gMatrixIdentity;
         aligned.m[3][0] = matrix.m[3][0];
         aligned.m[3][1] = matrix.m[3][1];
         aligned.m[3][2] = matrix.m[3][2];
@@ -420,7 +416,7 @@ bool CollisionPrimitive::CollideAACylinder(const PblVector3& vVelocity, const Pb
     {
     case SPHERE:
     {
-        PblMatrix aligned = _IdentityMatrix;
+        PblMatrix aligned = gMatrixIdentity;
         aligned.m[3][0] = vCenter.x;
         aligned.m[3][1] = vCenter.y;
         aligned.m[3][2] = vCenter.z;
@@ -430,7 +426,7 @@ bool CollisionPrimitive::CollideAACylinder(const PblVector3& vVelocity, const Pb
     }
     case BOX:
     {
-        PblMatrix aligned = _IdentityMatrix;
+        PblMatrix aligned = gMatrixIdentity;
         aligned.m[3][0] = vCenter.x;
         aligned.m[3][1] = vCenter.y;
         aligned.m[3][2] = vCenter.z;
@@ -443,7 +439,7 @@ bool CollisionPrimitive::CollideAACylinder(const PblVector3& vVelocity, const Pb
         return CollisionUtil::CollideAxisAlignedCylinders(vNormal, mRadius, fRadius, mHeight, fHeight, fDepth);
     case CYLINDER:
     {
-        PblMatrix aligned = _IdentityMatrix;
+        PblMatrix aligned = gMatrixIdentity;
         aligned.m[3][0] = vCenter.x;
         aligned.m[3][1] = vCenter.y;
         aligned.m[3][2] = vCenter.z;
@@ -470,7 +466,7 @@ bool CollisionPrimitive::CollideBox(const PblVector3& vVelocity, const PblVector
                                            fWidth, fHeight, fDepth, vNormal, fPenetration);
     case AXIS_ALIGNED_CYLINDER:
     {
-        PblMatrix aligned = _IdentityMatrix;
+        PblMatrix aligned = gMatrixIdentity;
         aligned.m[3][0] = matrix.m[3][0];
         aligned.m[3][1] = matrix.m[3][1];
         aligned.m[3][2] = matrix.m[3][2];

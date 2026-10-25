@@ -1,5 +1,7 @@
 #pragma once
 
+#include "PebbleFL/Common/PblHashTable.h"
+
 #include <stddef.h>
 
 #include "Ordnance.h"
@@ -19,9 +21,9 @@ public:
 
     virtual OrdnanceClass* Derive(unsigned int uHash);
     virtual Ordnance* Build(const OrdnanceDesc& desc);
-    virtual bool IsRtti(unsigned int uRtti);
-    virtual unsigned int GetDerivedRtti();
-    virtual const char* GetDerivedRttiName();
+    virtual bool IsRtti(unsigned int uRtti) const;
+    virtual unsigned int GetDerivedRtti() const;
+    virtual const char* GetDerivedRttiName() const;
     virtual void SetProperty(unsigned int uProperty, const char* pszValue);
     virtual float GetVelocity();
     virtual float GetRange();
@@ -106,3 +108,47 @@ public:
  
  
  
+
+// FUNCTION: SWBF2 0x005f8b30
+inline bool OrdnanceBulletClass::IsRtti(unsigned int uRtti) const
+{
+    if (rttiHashOrdnanceBulletClass == uRtti)
+    {
+        return true;
+    }
+    return OrdnanceClass::IsRtti(uRtti);
+}
+
+// FUNCTION: SWBF2 0x005fa870
+inline unsigned int OrdnanceBulletClass::GetDerivedRtti() const
+{
+    return rttiHashOrdnanceBulletClass;
+}
+
+// FUNCTION: SWBF2 0x005fa880
+inline const char* OrdnanceBulletClass::GetDerivedRttiName() const
+{
+    return rttiNameOrdnanceBulletClass;
+}
+
+// FUNCTION: SWBF2 0x005f8ae0
+inline bool OrdnanceBullet::IsRtti(unsigned int uRtti) const
+{
+    if (rttiHashOrdnanceBullet == uRtti)
+    {
+        return true;
+    }
+    return Ordnance::IsRtti(uRtti);
+}
+
+// FUNCTION: SWBF2 0x005fa820
+inline unsigned int OrdnanceBullet::GetDerivedRtti() const
+{
+    return rttiHashOrdnanceBullet;
+}
+
+// FUNCTION: SWBF2 0x005fa830
+inline const char* OrdnanceBullet::GetDerivedRttiName() const
+{
+    return rttiNameOrdnanceBullet;
+}

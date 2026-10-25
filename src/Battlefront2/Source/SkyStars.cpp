@@ -18,11 +18,7 @@ namespace FLRenderer
 unsigned int GetCurrentViewport();
 }
 
-static const PblMatrix _IdentityMatrix(
-    PblVector4{ 1.0f, 0.0f, 0.0f, 0.0f },
-    PblVector4{ 0.0f, 1.0f, 0.0f, 0.0f },
-    PblVector4{ 0.0f, 0.0f, 1.0f, 0.0f },
-    PblVector4{ 0.0f, 0.0f, 0.0f, 1.0f });
+
 
 // FUNCTION: SWBF2 0x00639960
 SkyStars::SkyStars()
@@ -348,7 +344,7 @@ void SkyStars::Render(unsigned int uiFlags) const
     const float fScale = fNear * 2.0f;
     PblMatrix mScale;
 
-    PblMatrix mTop = _IdentityMatrix;
+    PblMatrix mTop = gMatrixIdentity;
     D3DXMatrixScaling((D3DXMATRIX*)&mScale, fScale, fScale, fScale);
     D3DXMatrixMultiply((D3DXMATRIX*)&mTop, (D3DXMATRIX*)&mTop, (D3DXMATRIX*)&mScale);
     mTop.m[3][0] = mCamera.m[3][0];

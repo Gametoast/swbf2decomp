@@ -19,23 +19,11 @@ namespace
 PblHash UnitStationaryController::rttiHashUnitStationaryController("UnitStationaryController");
 const char UnitStationaryController::rttiNameUnitStationaryController[] = "UnitStationaryController";
 
-// FUNCTION: SWBF2 0x00669720
-bool UnitStationaryController::IsRtti(unsigned int uRtti) const
-{
-    return uRtti == rttiHashUnitStationaryController || UnitController::IsRtti(uRtti);
-}
 
-// FUNCTION: SWBF2 0x00669750
-unsigned int UnitStationaryController::GetDerivedRtti() const
-{
-    return rttiHashUnitStationaryController;
-}
 
-// FUNCTION: SWBF2 0x00669760
-const char* UnitStationaryController::GetDerivedRttiName() const
-{
-    return rttiNameUnitStationaryController;
-}
+
+
+
 
 // FUNCTION: SWBF2 0x006697a0
 UnitStationaryController::UnitStationaryController(Controllable* pOwner)

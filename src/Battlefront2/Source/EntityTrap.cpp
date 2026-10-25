@@ -122,23 +122,11 @@ EntityTrap::~EntityTrap()
 // SYNTHETIC: SWBF2 0x004ff4d4
 // [thunk]:EntityTrap::`scalar deleting destructor' adjustor{148}
 
-// FUNCTION: SWBF2 0x004fcc70
-bool EntityTrap::IsRtti(unsigned int uRtti) const
-{
-    return uRtti == rttiHashEntityTrap || EntityBuilding::IsRtti(uRtti);
-}
 
-// FUNCTION: SWBF2 0x004fccc0
-unsigned int EntityTrap::GetDerivedRtti() const
-{
-    return rttiHashEntityTrap;
-}
 
-// FUNCTION: SWBF2 0x004fccd0
-const char* EntityTrap::GetDerivedRttiName() const
-{
-    return rttiNameEntityTrap;
-}
+
+
+
 
 // FUNCTION: SWBF2 0x004fcce0
 const RedPose* EntityTrap::GetPose() const
@@ -502,23 +490,11 @@ EntityClass* EntityTrapClass::Derive(unsigned int uHash)
     return new EntityTrapClass(this, uHash);
 }
 
-// FUNCTION: SWBF2 0x004fcd30
-bool EntityTrapClass::IsRtti(unsigned int uRtti)
-{
-    return uRtti == rttiHashEntityTrapClass || EntityBuildingClass::IsRtti(uRtti);
-}
 
-// FUNCTION: SWBF2 0x004fcd70
-unsigned int EntityTrapClass::GetDerivedRtti()
-{
-    return rttiHashEntityTrapClass;
-}
 
-// FUNCTION: SWBF2 0x004fcd80
-const char* EntityTrapClass::GetDerivedRttiName()
-{
-    return rttiNameEntityTrapClass;
-}
+
+
+
 
 // FUNCTION: SWBF2 0x004fd0b0
 bool EntityTrap::Update(float fDeltaTime)

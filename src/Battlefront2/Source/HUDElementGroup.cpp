@@ -450,11 +450,7 @@ void HUD::ElementGroupBase::EventPosition(const HUD::Event& event, void* const p
     pGroup->SetAlignment((HAlign)pGroup->mHAlign, (VAlign)pGroup->mVAlign, false, false, true);
 }
 
-static PblMatrix _IdentityMatrix(
-    PblVector4{ 1.0f, 0.0f, 0.0f, 0.0f },
-    PblVector4{ 0.0f, 1.0f, 0.0f, 0.0f },
-    PblVector4{ 0.0f, 0.0f, 1.0f, 0.0f },
-    PblVector4{ 0.0f, 0.0f, 0.0f, 1.0f });
+
 
 // FUNCTION: SWBF2 0x0054f240
 void HUD::ElementGroupBase::EventScale(const HUD::Event& event, void* const pData)
@@ -510,7 +506,7 @@ void HUD::ElementGroupBase::EventRotation(const HUD::Event& event, void* const p
     const PblVector3 vPosition = mCurrent.GetTranslation();
 
     const float fDegToRad = 0.017453292f;
-    PblMatrix mResult = _IdentityMatrix;
+    PblMatrix mResult = gMatrixIdentity;
     D3DXMATRIX mTemp;
     D3DXMatrixRotationX((D3DXMATRIX*)&mResult, pRotation->x * fDegToRad);
     D3DXMatrixMultiply((D3DXMATRIX*)&mResult, (D3DXMATRIX*)&mResult,

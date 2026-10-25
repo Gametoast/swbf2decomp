@@ -31,11 +31,7 @@ extern "C" PblMatrix* __stdcall D3DXMatrixMultiply(PblMatrix* pOut, const PblMat
 const RedColor Interpolate(const RedColor& a, const RedColor& b, float t);
 
 
-static PblMatrix _IdentityMatrix(
-    PblVector4{ 1.0f, 0.0f, 0.0f, 0.0f },
-    PblVector4{ 0.0f, 1.0f, 0.0f, 0.0f },
-    PblVector4{ 0.0f, 0.0f, 1.0f, 0.0f },
-    PblVector4{ 0.0f, 0.0f, 0.0f, 1.0f });
+
 
 PblMatrix DirectionMatrix(const PblVector3& vDir, const PblVector3& vUp, const PblVector3& vPos);
 
@@ -122,23 +118,11 @@ OrdnanceBulletClass::OrdnanceBulletClass(OrdnanceBulletClass* pBase, unsigned in
     m_fRadiusLight = pBase->m_fRadiusLight;
 }
 
-// FUNCTION: SWBF2 0x005f8b30
-bool OrdnanceBulletClass::IsRtti(unsigned int uRtti)
-{
-    return uRtti == rttiHashOrdnanceBulletClass || OrdnanceClass::IsRtti(uRtti);
-}
 
-// FUNCTION: SWBF2 0x005fa870
-unsigned int OrdnanceBulletClass::GetDerivedRtti()
-{
-    return rttiHashOrdnanceBulletClass;
-}
 
-// FUNCTION: SWBF2 0x005fa880
-const char* OrdnanceBulletClass::GetDerivedRttiName()
-{
-    return rttiNameOrdnanceBulletClass;
-}
+
+
+
 
 // FUNCTION: SWBF2 0x005fbde0
 void OrdnanceBulletClass::SetProperty(unsigned int uProperty, const char* pszValue)
@@ -299,23 +283,11 @@ const char OrdnanceBullet::rttiNameOrdnanceBullet[] = "OrdnanceBullet";
 // SYNTHETIC: SWBF2 0x005fa840
 // OrdnanceBullet::`scalar deleting destructor'
 
-// FUNCTION: SWBF2 0x005f8ae0
-bool OrdnanceBullet::IsRtti(unsigned int uRtti) const
-{
-    return uRtti == rttiHashOrdnanceBullet || Ordnance::IsRtti(uRtti);
-}
 
-// FUNCTION: SWBF2 0x005fa820
-unsigned int OrdnanceBullet::GetDerivedRtti() const
-{
-    return rttiHashOrdnanceBullet;
-}
 
-// FUNCTION: SWBF2 0x005fa830
-const char* OrdnanceBullet::GetDerivedRttiName() const
-{
-    return rttiNameOrdnanceBullet;
-}
+
+
+
 
 // FUNCTION: SWBF2 0x005fb900
 void OrdnanceBullet::CreateRicochet(const PblVector3& vPos, const PblVector3& vNormal,
@@ -421,7 +393,7 @@ OrdnanceBullet::OrdnanceBullet(OrdnanceBulletClass* pClass, const OrdnanceDesc& 
             {
                 m_pLight->SetColor(pClass->m_colorLight);
             }
-            PblMatrix matrix = _IdentityMatrix;
+            PblMatrix matrix = gMatrixIdentity;
             matrix.m[3][0] = mPosition.x;
             matrix.m[3][1] = mPosition.y;
             matrix.m[3][2] = mPosition.z;
@@ -461,7 +433,7 @@ OrdnanceBullet::OrdnanceBullet(OrdnanceBulletClass* pClass, const OrdnanceDesc& 
             m_pLight->SetOmniLightRadius(pClass->m_fRadiusLight);
             m_pLight->SetHaloRadius(0.0f);
             m_pLight->SetFlareIntensity(0.0f);
-            PblMatrix matrix = _IdentityMatrix;
+            PblMatrix matrix = gMatrixIdentity;
             matrix.m[3][0] = mPosition.x;
             matrix.m[3][1] = mPosition.y;
             matrix.m[3][2] = mPosition.z;
@@ -703,7 +675,7 @@ bool OrdnanceBullet::Collide(CollisionObject* pObject, const PblVector3& vPos, c
             {
                 if (pVictim)
                 {
-                    PblMatrix mWorld = _IdentityMatrix;
+                    PblMatrix mWorld = gMatrixIdentity;
                     if (bShield)
                     {
                         mWorld = DirectionMatrix(vNormal, gVectorUnitY, vPos);

@@ -144,8 +144,11 @@ namespace
     }
 }
 
-// GLOBAL: SWBF2 0x0078e770
-namespace ControllerManager { extern const int UPDATES_PER_SECOND = 2; }
+namespace ControllerManager
+{
+    // GLOBAL: SWBF2 0x0078e770
+    extern const int UPDATES_PER_SECOND = 2;
+}
 
 // GLOBAL: SWBF2 0x01e2fdb2
 bool AIUtil::sUberMode;
@@ -185,10 +188,22 @@ namespace VisionManager
     };
 }
 
-namespace VisionManager { void Reset(); }
-namespace AudibleManager { void Reset(); }
-namespace HintManager { void Reset(); }
-namespace ReserveManager { void Reset(); }
+namespace VisionManager
+{
+    void Reset();
+}
+namespace AudibleManager
+{
+    void Reset();
+}
+namespace HintManager
+{
+    void Reset();
+}
+namespace ReserveManager
+{
+    void Reset();
+}
 
 // FUNCTION: SWBF2 0x0043f280
 void AIUtil::Reset()
@@ -315,12 +330,33 @@ bool AIUtil::IsNearNonAllyCommandPost(const GameObject* pObject, const CommandPo
     return *ppPost != 0;
 }
 
-namespace AIDifficulty { void Init(); }
-namespace VisionManager { void Initialize(); }
-namespace AudibleManager { void Initialize(); }
-namespace HintManager { void Initialize(); }
-namespace ReserveManager { void Init(); }
-namespace AI { namespace VOHelper { void Reset(); } }
+namespace AIDifficulty
+{
+    void Init();
+}
+namespace VisionManager
+{
+    void Initialize();
+}
+namespace AudibleManager
+{
+    void Initialize();
+}
+namespace HintManager
+{
+    void Initialize();
+}
+namespace ReserveManager
+{
+    void Init();
+}
+namespace AI
+{
+    namespace VOHelper
+    {
+        void Reset();
+    }
+}
 
 // FUNCTION: SWBF2 0x0043f060
 void AIUtil::Init()
@@ -819,11 +855,7 @@ static const float FOV_ANGLE = 2.70526028f;
 // GLOBAL: SWBF2 0x01e2fdb0
 bool gAllSoldiers;
 
-static PblMatrix _IdentityMatrix(
-    PblVector4{ 1.0f, 0.0f, 0.0f, 0.0f },
-    PblVector4{ 0.0f, 1.0f, 0.0f, 0.0f },
-    PblVector4{ 0.0f, 0.0f, 1.0f, 0.0f },
-    PblVector4{ 0.0f, 0.0f, 0.0f, 1.0f });
+
 
 namespace
 {
@@ -1291,7 +1323,7 @@ PblVector3 AIUtil::GetRandomPtInRegion(const RedRegion* pRegion)
 {
     if (!pRegion)
     {
-        return _IdentityMatrix.GetTranslation();
+        return gMatrixIdentity.GetTranslation();
     }
 
     switch (pRegion->mType)

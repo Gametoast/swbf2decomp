@@ -1,5 +1,7 @@
 #pragma once
 
+#include "PebbleFL/Common/PblHashTable.h"
+
 #include <stddef.h>
 
 #include "Controllable.h"
@@ -94,3 +96,16 @@ public:
  
  
  
+
+// FUNCTION: SWBF2 0x0060f460
+inline bool PassengerSlot::IsRtti(unsigned int uRtti) const
+{
+    if (rttiHashPassengerSlot == uRtti)
+    {
+        return true;
+    }
+    return EntityEx::rttiHashEntityEx == uRtti ||
+           Entity::rttiHashEntity == uRtti;
+}
+
+

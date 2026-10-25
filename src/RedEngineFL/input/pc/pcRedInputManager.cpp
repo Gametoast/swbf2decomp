@@ -192,8 +192,8 @@ void Init()
 
     if (!gDisableLCD)
     {
-        ConnectLCDPanel(&gLCDPanels[0], 0);
-        OpenLCDPanel(&gLCDPanels[0]);
+        gLCDPanels[0].ConnectLCDPanel(0);
+        gLCDPanels[0].OpenLCDPanel();
     }
 
     RedKeyboard::StaticInit();
@@ -286,8 +286,8 @@ void Cleanup()
 
     if (!gDisableLCD)
     {
-        CloseLCDPanel(&gLCDPanels[0]);
-        DisconnectLCDPanel(&gLCDPanels[0]);
+        gLCDPanels[0].CloseLCDPanel();
+        gLCDPanels[0].DisconnectLCDPanel();
     }
 
     m_numJoysticks = 0;
@@ -336,57 +336,20 @@ void RedInputManager::Update(float fDeltaTime)
     m_mouses[0].Update(fDeltaTime);
     if (!gDisableLCD)
     {
-        UpdateLCDPanel(&gLCDPanels[0], fDeltaTime);
+        gLCDPanels[0].UpdateLCDPanel(fDeltaTime);
     }
 }
 
 // LIBRARY: SWBF2 0x00754920
 // DirectInput8Create
 
-// FUNCTION: SWBF2 0x006f00d0
-void DisconnectLCDPanel(RedLogitechLCD* pThis)
-{
-    if (pThis->mConnected)
-    {
-        lgLcdDisconnect(pThis->mConnectCtx.connection);
-    }
-    lgLcdDeInit();
-    pThis->mConnected = false;
-}
 
-// FUNCTION: SWBF2 0x006f0620
-void CloseLCDPanel(RedLogitechLCD* pThis)
-{
-    if (pThis->mpBitmap)
-    {
-        delete pThis->mpBitmap;
-        pThis->mpBitmap = 0;
-    }
-    if (pThis->mhBitmap)
-    {
-        DeleteObject(pThis->mhBitmap);
-        pThis->mhBitmap = 0;
-        pThis->mpBits = 0;
-    }
-    if (pThis->mpBitmapInfo)
-    {
-        delete[] (BYTE*)pThis->mpBitmapInfo;
-        pThis->mpBitmapInfo = 0;
-    }
-    if (pThis->mhDC)
-    {
-        DeleteDC(pThis->mhDC);
-        pThis->mhDC = 0;
-    }
-    if (pThis->mhFont)
-    {
-        DeleteObject(pThis->mhFont);
-        pThis->mhFont = 0;
-    }
-    pThis->mhOldBitmap = 0;
-    if (pThis->mOpened && pThis->mConnected)
-    {
-        lgLcdClose(pThis->mOpenCtx.device);
-        pThis->mOpened = false;
-    }
-}
+
+
+
+// GLOBAL: SWBF2 0x99cd08
+// RedInputManager::m_numJoysticks
+
+// GLOBAL: SWBF2 0x99cd04
+// RedInputManager::m_pDI
+

@@ -245,40 +245,20 @@ const char UnitAgent::rttiNameUnitAgent[] = "UnitAgent";
 // `dynamic initializer for 'UnitAgent::sMemoryPool''
 // SYNTHETIC: SWBF2 0x007696b0
 // `dynamic atexit destructor for 'UnitAgent::sMemoryPool''
+
 MemoryPool UnitAgent::sMemoryPool("UnitAgent", sizeof(UnitAgent));
 
-bool Agent::IsRtti(unsigned int hash) const
-{
-    return hash == rttiHashAgent;
-}
 
-unsigned int Agent::GetDerivedRtti() const
-{
-    return rttiHashAgent;
-}
 
-const char* Agent::GetDerivedRttiName() const
-{
-    return rttiNameAgent;
-}
 
-// FUNCTION: SWBF2 0x0065dce0
-bool UnitAgent::IsRtti(unsigned int uRtti) const
-{
-    return uRtti == rttiHashUnitAgent || Agent::IsRtti(uRtti);
-}
 
-// FUNCTION: SWBF2 0x0065dd10
-unsigned int UnitAgent::GetDerivedRtti() const
-{
-    return rttiHashUnitAgent;
-}
 
-// FUNCTION: SWBF2 0x0065dd20
-const char* UnitAgent::GetDerivedRttiName() const
-{
-    return rttiNameUnitAgent;
-}
+
+
+
+
+
+
 
 // FUNCTION: SWBF2 0x0065dd40
 bool UnitAgent::ShouldQueueCurCmd(const UnitCmdInfo& cmd) const

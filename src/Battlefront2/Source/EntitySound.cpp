@@ -50,43 +50,20 @@ MemoryPool SoundSpaceRegion::sMemoryPool("SoundSpaceRegion", 0x70);
 // `dynamic initializer for 'EntitySound::sEntitySoundList''
 // SYNTHETIC: SWBF2 0x00766fd0
 // `dynamic atexit destructor for 'EntitySound::sEntitySoundList''
+
 PblListSingle EntitySound::sEntitySoundList;
 
-// FUNCTION: SWBF2 0x004fac70
-bool EntitySound::IsRtti(unsigned int uRtti) const
-{
-    return uRtti == rttiHashEntitySound || Entity::IsRtti(uRtti);
-}
 
-// FUNCTION: SWBF2 0x004faca0
-unsigned int EntitySound::GetDerivedRtti() const
-{
-    return rttiHashEntitySound;
-}
 
-// FUNCTION: SWBF2 0x004facb0
-const char* EntitySound::GetDerivedRttiName() const
-{
-    return rttiNameEntitySound;
-}
 
-// FUNCTION: SWBF2 0x004facc0
-bool EntitySoundClass::IsRtti(unsigned int uRtti)
-{
-    return uRtti == rttiHashEntitySoundClass || EntityClass::IsRtti(uRtti);
-}
 
-// FUNCTION: SWBF2 0x004facf0
-unsigned int EntitySoundClass::GetDerivedRtti()
-{
-    return rttiHashEntitySoundClass;
-}
 
-// FUNCTION: SWBF2 0x004fad00
-const char* EntitySoundClass::GetDerivedRttiName()
-{
-    return rttiNameEntitySoundClass;
-}
+
+
+
+
+
+
 
 // SYNTHETIC: SWBF2 0x004fad20
 // EntitySound::`scalar deleting destructor'

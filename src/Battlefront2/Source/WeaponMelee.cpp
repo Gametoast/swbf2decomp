@@ -458,7 +458,10 @@ PblVector3* LightsaberTrail::GetInterpolatedDir(float fTime, PblVector3* pResult
  
  
 
-namespace GameLoop { extern float sClientDeltaTime; }
+namespace GameLoop
+{
+    extern float sClientDeltaTime;
+}
 
 // GLOBAL: SWBF2 0x01fac398
 static unsigned int s_uiODFComboId;
@@ -2621,23 +2624,11 @@ WeaponMelee::DamageData* WeaponMelee::s_aDamageDataPool;
 // GLOBAL: SWBF2 0x01eafd64
 WeaponMelee::DamageData* WeaponMelee::s_pDamageDataFreeList;
 
-// FUNCTION: SWBF2 0x00687bf0
-bool WeaponMelee::IsRtti(unsigned int uRtti) const
-{
-    return uRtti == rttiHashWeaponMelee || Weapon::IsRtti(uRtti);
-}
 
-// FUNCTION: SWBF2 0x00687c20
-unsigned int WeaponMelee::GetDerivedRtti() const
-{
-    return rttiHashWeaponMelee;
-}
 
-// FUNCTION: SWBF2 0x00687c30
-const char* WeaponMelee::GetDerivedRttiName() const
-{
-    return rttiNameWeaponMelee;
-}
+
+
+
 
 // FUNCTION: SWBF2 0x00687c40
 bool WeaponMelee::IsMelee() const
@@ -2654,23 +2645,11 @@ bool WeaponMelee::SoldierCanOperate() const
 // SYNTHETIC: SWBF2 0x00687c60
 // WeaponMelee::`scalar deleting destructor'
 
-// FUNCTION: SWBF2 0x00687c90
-bool WeaponMeleeClass::IsRtti(unsigned int uRtti)
-{
-    return uRtti == rttiHashWeaponMeleeClass || WeaponClass::IsRtti(uRtti);
-}
 
-// FUNCTION: SWBF2 0x00687cc0
-unsigned int WeaponMeleeClass::GetDerivedRtti()
-{
-    return rttiHashWeaponMeleeClass;
-}
 
-// FUNCTION: SWBF2 0x00687cd0
-const char* WeaponMeleeClass::GetDerivedRttiName()
-{
-    return rttiNameWeaponMeleeClass;
-}
+
+
+
 
 LightsaberTrailClass::LightsaberTrailClass()
 {

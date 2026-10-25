@@ -93,23 +93,11 @@ OrdnanceClass::OrdnanceClass(unsigned int uHash)
     mImpactExplosionEffect = 0;
 }
 
-// FUNCTION: SWBF2 0x005f71a0
-bool Ordnance::IsRtti(unsigned int uRtti) const
-{
-    return uRtti == rttiHashOrdnance;
-}
 
-// FUNCTION: SWBF2 0x005f71c0
-unsigned int Ordnance::GetDerivedRtti() const
-{
-    return rttiHashOrdnance;
-}
 
-// FUNCTION: SWBF2 0x005f71d0
-const char* Ordnance::GetDerivedRttiName() const
-{
-    return rttiNameOrdnance;
-}
+
+
+
 
 // FUNCTION: SWBF2 0x005f71f0
 const PblVector3& Ordnance::GetPosition() const
@@ -150,23 +138,11 @@ void Ordnance::CreateRicochet(const PblVector3& vPos, const PblVector3& vNormal,
 // SYNTHETIC: SWBF2 0x005f7270
 // Ordnance::`scalar deleting destructor'
 
-// FUNCTION: SWBF2 0x005f72a0
-bool OrdnanceClass::IsRtti(unsigned int uRtti)
-{
-    return uRtti == rttiHashOrdnanceClass;
-}
 
-// FUNCTION: SWBF2 0x005f72c0
-unsigned int OrdnanceClass::GetDerivedRtti()
-{
-    return rttiHashOrdnanceClass;
-}
 
-// FUNCTION: SWBF2 0x005f72d0
-const char* OrdnanceClass::GetDerivedRttiName()
-{
-    return rttiNameOrdnanceClass;
-}
+
+
+
 
 // FUNCTION: SWBF2 0x005f72e0
 float OrdnanceClass::GetVelocity()

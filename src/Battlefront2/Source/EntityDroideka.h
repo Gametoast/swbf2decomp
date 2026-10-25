@@ -1,5 +1,7 @@
 #pragma once
 
+#include "PebbleFL/Common/PblHashTable.h"
+
 #include <stddef.h>
 
 #include "Aimer.h"
@@ -50,9 +52,9 @@ public:
 
     virtual EntityClass* Derive(unsigned int uHash);
     virtual Entity* Build(const EntityDesc& desc);
-    virtual bool IsRtti(unsigned int uRtti);
-    virtual unsigned int GetDerivedRtti();
-    virtual const char* GetDerivedRttiName();
+    virtual bool IsRtti(unsigned int uRtti) const;
+    virtual unsigned int GetDerivedRtti() const;
+    virtual const char* GetDerivedRttiName() const;
     virtual void SetProperty(unsigned int uProperty, const char* pszValue);
     virtual void PostReadSetup();
     virtual int GetVehicleType();
@@ -561,3 +563,49 @@ public:
  
  
  
+
+// FUNCTION: SWBF2 0x0049e370
+inline bool EntityDroideka::IsRtti(unsigned int uRtti) const
+{
+    if (rttiHashEntityDroideka == uRtti)
+    {
+        return true;
+    }
+    return GameObject::IsRtti(uRtti);
+}
+
+// FUNCTION: SWBF2 0x0049e3b0
+inline unsigned int EntityDroideka::GetDerivedRtti() const
+{
+    return rttiHashEntityDroideka;
+}
+
+// FUNCTION: SWBF2 0x0049e3c0
+inline const char* EntityDroideka::GetDerivedRttiName() const
+{
+    return rttiNameEntityDroideka;
+}
+
+// FUNCTION: SWBF2 0x0049ea00
+inline bool EntityDroidekaClass::IsRtti(unsigned int uRtti) const
+{
+    if (rttiHashEntityDroidekaClass == uRtti)
+    {
+        return true;
+    }
+    return GameObjectClass::IsRtti(uRtti);
+}
+
+// FUNCTION: SWBF2 0x0049ea40
+inline unsigned int EntityDroidekaClass::GetDerivedRtti() const
+{
+    return rttiHashEntityDroidekaClass;
+}
+
+// FUNCTION: SWBF2 0x0049ea50
+inline const char* EntityDroidekaClass::GetDerivedRttiName() const
+{
+    return rttiNameEntityDroidekaClass;
+}
+
+

@@ -84,20 +84,28 @@
 #include <math.h>
 extern "C" void* __stdcall D3DXMatrixMultiply(void*, const void*, const void*);
 extern "C" PblMatrix* __stdcall D3DXMatrixRotationAxis(PblMatrix*, const PblVector3*, float);
-namespace PopupText { void __fastcall ShowPopup(int iType, unsigned int uTextId); }
+namespace PopupText
+{
+    void __fastcall ShowPopup(int iType, unsigned int uTextId);
+}
 
-namespace GameLoop { extern bool mbHistoricalRules; }
+namespace GameLoop
+{
+    extern bool mbHistoricalRules;
+}
 extern float sNotifyRadius;
 extern int WORLD_EXTENTS;
-namespace ParticleSystem { void SetMaxDistanceBias(float fBias); }
+namespace ParticleSystem
+{
+    void SetMaxDistanceBias(float fBias);
+}
 
-namespace PopupText { extern int gNumHints; extern unsigned int gHints[64]; }
+namespace PopupText
+{
+    extern int gNumHints; extern unsigned int gHints[64];
+}
 
-static PblMatrix _IdentityMatrix(
-    PblVector4{ 1.0f, 0.0f, 0.0f, 0.0f },
-    PblVector4{ 0.0f, 1.0f, 0.0f, 0.0f },
-    PblVector4{ 0.0f, 0.0f, 1.0f, 0.0f },
-    PblVector4{ 0.0f, 0.0f, 0.0f, 1.0f });
+
 
 namespace PopupText {
 
@@ -187,30 +195,51 @@ extern int netHeroRuleRespawn;
 extern int netHeroRuleRespawnVal;
 extern bool netHeroUnlocked[3];
 extern bool netHeroFirstUnlocked[3];
-namespace PblBuildType { extern bool gDemoBuild; }
+namespace PblBuildType
+{
+    extern bool gDemoBuild;
+}
 extern int netHeroRuleTeam;
 extern int netHeroRuleUnlock;
 extern int netHeroRulePlayer;
-namespace PblBuildType { extern bool gDemoHost; }
-namespace PblBuildType { extern bool gDemoNoInputRebind; }
-namespace PblBuildType { extern bool gFinalBuild; }
+namespace PblBuildType
+{
+    extern bool gDemoHost;
+}
+namespace PblBuildType
+{
+    extern bool gDemoNoInputRebind;
+}
+namespace PblBuildType
+{
+    extern bool gFinalBuild;
+}
 extern bool gMapDisplayAll;
 extern bool sMissionActive;
 
-namespace AIDebug { bool OnlyOneAI(); }
+namespace AIDebug
+{
+    bool OnlyOneAI();
+}
 
 inline void CameraManager::SetChaseCameraPosition(const PblVector3& vPos, int iCam)
 {
     mChaseCamera[iCam]->SetPosition(vPos);
 }
 
-namespace PathFinder { Obstacle* FindBarrierByName(unsigned int uName); }
+namespace PathFinder
+{
+    Obstacle* FindBarrierByName(unsigned int uName);
+}
 
 // GLOBAL: SWBF2 0x01e57724
 static void* sTempHeapBlock;
 
-// GLOBAL: SWBF2 0x01e57940
-namespace Lua_Callbacks { int gTeamSetReinforcementMult; }
+namespace Lua_Callbacks
+{
+    // GLOBAL: SWBF2 0x01e57940
+    int gTeamSetReinforcementMult;
+}
 
 namespace Lua_Callbacks
 {
@@ -461,8 +490,14 @@ bool RedFreeToHeapInternal(int heap, void* block, unsigned int flags);
 void TagRemoveList(TagList* pList, Tag* pTag);
 void TagAddList(TagList* pList, Tag* pTag);
 
-namespace ObjectiveManager { void AddObjective(unsigned int uName, unsigned int uText, int iTeam); }
-namespace ObjectiveManager { void SetObjectiveState(unsigned int uName, int iState); }
+namespace ObjectiveManager
+{
+    void AddObjective(unsigned int uName, unsigned int uText, int iTeam);
+}
+namespace ObjectiveManager
+{
+    void SetObjectiveState(unsigned int uName, int iState);
+}
 
 // FUNCTION: SWBF2 0x0058dfe0
 static Timer* GetTimer(lua_State* L, int iIndex)
@@ -3192,7 +3227,7 @@ int AttachEffectToMatrix(lua_State* L)
     PblMatrix matrix;
     memcpy(&matrix, lua_touserdata(L, 2), sizeof(matrix));
     const PblMatrix* pOffset = lua_type(L, 3) > LUA_TNIL ?
-        (const PblMatrix*)lua_touserdata(L, 3) : &_IdentityMatrix;
+        (const PblMatrix*)lua_touserdata(L, 3) : &gMatrixIdentity;
     pEffect->AttachEffectToMatrix(&matrix, *pOffset, false);
     return 0;
 }
@@ -3620,7 +3655,7 @@ void AsteroidClass::FillRegion(const char* pcRegion, int iCount, PblVector3 vMin
                 ? gVectorUnitY
                 : gVectorUnitZ;
         EntityDesc desc;
-        desc.mMatrix = _IdentityMatrix;
+        desc.mMatrix = gMatrixIdentity;
         desc.mPlayerId = 0;
         desc.mMatrix = DirectionMatrix(vDir, vUp, vPosition);
         Build(desc);
@@ -3699,7 +3734,7 @@ void AsteroidClass::FillPath(const char* pcPath, float fDensity, int iCount,
                 ? gVectorUnitY
                 : gVectorUnitZ;
         EntityDesc desc;
-        desc.mMatrix = _IdentityMatrix;
+        desc.mMatrix = gMatrixIdentity;
         desc.mPlayerId = 0;
         desc.mMatrix = DirectionMatrix(vDir, vUp, vPosition);
         Build(desc);

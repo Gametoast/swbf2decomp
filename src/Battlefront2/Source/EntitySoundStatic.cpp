@@ -45,11 +45,7 @@ EntityClass* EntitySoundStaticClass::Derive(unsigned int uHash)
     return new EntitySoundStaticClass(this, uHash);
 }
 
-// FUNCTION: SWBF2 0x004fb480
-bool EntitySoundStaticClass::IsRtti(unsigned int uRtti)
-{
-    return uRtti == rttiHashEntitySoundStaticClass || EntitySoundClass::IsRtti(uRtti);
-}
+
 
 // FUNCTION: SWBF2 0x004fb7d0
 Entity* EntitySoundStaticClass::Build(const EntityDesc& desc)
@@ -57,17 +53,7 @@ Entity* EntitySoundStaticClass::Build(const EntityDesc& desc)
     return new EntitySoundStatic(this, desc);
 }
 
-// FUNCTION: SWBF2 0x004fb4b0
-unsigned int EntitySoundStaticClass::GetDerivedRtti()
-{
-    return rttiHashEntitySoundStaticClass;
-}
 
-// FUNCTION: SWBF2 0x004fb4c0
-const char* EntitySoundStaticClass::GetDerivedRttiName()
-{
-    return rttiNameEntitySoundStaticClass;
-}
 
 // GLOBAL: SWBF2 0x01ebc1a8
 // SYNTHETIC: SWBF2 0x00402e20
@@ -83,23 +69,8 @@ MemoryPool EntitySoundStatic::sMemoryPool("EntitySoundStatic", 0x4c);
 PblHash EntitySoundStatic::rttiHashEntitySoundStatic("EntitySoundStatic");
 const char EntitySoundStatic::rttiNameEntitySoundStatic[] = "EntitySoundStatic";
 
-// FUNCTION: SWBF2 0x004fb420
-bool EntitySoundStatic::IsRtti(unsigned int uRtti) const
-{
-    return uRtti == rttiHashEntitySoundStatic || Entity::IsRtti(uRtti);
-}
 
-// FUNCTION: SWBF2 0x004fb450
-unsigned int EntitySoundStatic::GetDerivedRtti() const
-{
-    return rttiHashEntitySoundStatic;
-}
 
-// FUNCTION: SWBF2 0x004fb460
-const char* EntitySoundStatic::GetDerivedRttiName() const
-{
-    return rttiNameEntitySoundStatic;
-}
 
 
 

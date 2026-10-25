@@ -53,23 +53,11 @@ Entity* EntityBuildingArmedDynamicClass::Build(const EntityDesc& desc)
     return pBuilding;
 }
 
-// FUNCTION: SWBF2 0x00496b90
-bool EntityBuildingArmedDynamicClass::IsRtti(unsigned int uRtti)
-{
-    return uRtti == rttiHashEntityBuildingArmedDynamicClass || EntityBuildingArmedClass::IsRtti(uRtti);
-}
 
-// FUNCTION: SWBF2 0x00496be0
-unsigned int EntityBuildingArmedDynamicClass::GetDerivedRtti()
-{
-    return rttiHashEntityBuildingArmedDynamicClass;
-}
 
-// FUNCTION: SWBF2 0x00496bf0
-const char* EntityBuildingArmedDynamicClass::GetDerivedRttiName()
-{
-    return rttiNameEntityBuildingArmedDynamicClass;
-}
+
+
+
 
 // SYNTHETIC: SWBF2 0x00402920
 // `dynamic initializer for 'EntityBuildingArmedDynamic::rttiHashEntityBuildingArmedDynamic''
@@ -83,19 +71,12 @@ const char EntityBuildingArmedDynamic::rttiNameEntityBuildingArmedDynamic[] = "E
 // `dynamic initializer for 'EntityBuildingArmedDynamic::sMemoryPool''
 // SYNTHETIC: SWBF2 0x00766f00
 // `dynamic atexit destructor for 'EntityBuildingArmedDynamic::sMemoryPool''
+
 MemoryPool EntityBuildingArmedDynamic::sMemoryPool("EntityBuildingArmedDynamic", 0x6b0);
 
-// FUNCTION: SWBF2 0x00496b10
-unsigned int EntityBuildingArmedDynamic::GetDerivedRtti() const
-{
-    return rttiHashEntityBuildingArmedDynamic;
-}
 
-// FUNCTION: SWBF2 0x00496b20
-const char* EntityBuildingArmedDynamic::GetDerivedRttiName() const
-{
-    return rttiNameEntityBuildingArmedDynamic;
-}
+
+
 
 // FUNCTION: SWBF2 0x00496b40
 EntityType EntityBuildingArmedDynamic::GetEntityType() const
@@ -103,11 +84,7 @@ EntityType EntityBuildingArmedDynamic::GetEntityType() const
     return ENT_ARMED_DYNAMIC;
 }
 
-// FUNCTION: SWBF2 0x00496ac0
-bool EntityBuildingArmedDynamic::IsRtti(unsigned int uRtti) const
-{
-    return uRtti == rttiHashEntityBuildingArmedDynamic || EntityBuildingArmed::IsRtti(uRtti);
-}
+
 
 // FUNCTION: SWBF2 0x00496c00
 EntityBuildingArmedDynamic::EntityBuildingArmedDynamic(EntityBuildingArmedDynamicClass* pClass,

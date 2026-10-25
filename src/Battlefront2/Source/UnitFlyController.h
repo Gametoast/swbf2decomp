@@ -1,5 +1,7 @@
 #pragma once
 
+#include "PebbleFL/Common/PblHashTable.h"
+
 #include "UnitController.h"
 
 // VTABLE: SWBF2 0x007afae0
@@ -26,3 +28,25 @@ protected:
 };
 
  
+
+// FUNCTION: SWBF2 0x00667cf0
+inline bool UnitFlyController::IsRtti(unsigned int uRtti) const
+{
+    if (rttiHashUnitFlyController == uRtti)
+    {
+        return true;
+    }
+    return UnitController::IsRtti(uRtti);
+}
+
+// FUNCTION: SWBF2 0x00667d20
+inline unsigned int UnitFlyController::GetDerivedRtti() const
+{
+    return rttiHashUnitFlyController;
+}
+
+// FUNCTION: SWBF2 0x00667d30
+inline const char* UnitFlyController::GetDerivedRttiName() const
+{
+    return rttiNameUnitFlyController;
+}

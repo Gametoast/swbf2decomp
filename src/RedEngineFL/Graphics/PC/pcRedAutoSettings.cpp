@@ -746,8 +746,10 @@ void VidConfig::SaveConfigFile()
 namespace RedVideoConfig
 {
 
+// GLOBAL: SWBF2 0x009aba44
 IDirect3D9* m_pD3D;
 bool m_MultiSampleDriverControlled;
+// GLOBAL: SWBF2 0x009aba4c
 unsigned int m_MemoryHint;
 
 // FUNCTION: SWBF2 0x006ea7f0

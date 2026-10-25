@@ -123,23 +123,11 @@ bool OrdnanceFatRay::CheckCollision()
     return true;
 }
 
-// FUNCTION: SWBF2 0x005fe730
-bool OrdnanceFatRay::IsRtti(unsigned int uRtti) const
-{
-    return uRtti == rttiHashOrdnanceFatRay || OrdnanceBullet::IsRtti(uRtti);
-}
 
-// FUNCTION: SWBF2 0x005fe760
-unsigned int OrdnanceFatRay::GetDerivedRtti() const
-{
-    return rttiHashOrdnanceFatRay;
-}
 
-// FUNCTION: SWBF2 0x005fe770
-const char* OrdnanceFatRay::GetDerivedRttiName() const
-{
-    return rttiNameOrdnanceFatRay;
-}
+
+
+
 
 // FUNCTION: SWBF2 0x005fef70
 OrdnanceClass* OrdnanceFatRayClass::Derive(unsigned int uHash)
@@ -184,58 +172,57 @@ OrdnanceFatRayClass::OrdnanceFatRayClass(OrdnanceFatRayClass* pBase, unsigned in
     mRayRadius = pBase->mRayRadius;
 }
 
-// FUNCTION: SWBF2 0x005fe7b0
-bool OrdnanceFatRayClass::IsRtti(unsigned int uRtti)
-{
-    return uRtti == rttiHashOrdnanceFatRayClass || OrdnanceBulletClass::IsRtti(uRtti);
-}
 
-// FUNCTION: SWBF2 0x005fe7e0
-unsigned int OrdnanceFatRayClass::GetDerivedRtti()
-{
-    return rttiHashOrdnanceFatRayClass;
-}
 
-// FUNCTION: SWBF2 0x005fe7f0
-const char* OrdnanceFatRayClass::GetDerivedRttiName()
-{
-    return rttiNameOrdnanceFatRayClass;
-}
+
+
+
 
 // FUNCTION: SWBF2 0x005feee0
 void OrdnanceFatRayClass::SetProperty(unsigned int uProperty, const char* pszValue)
 {
-    if (uProperty == 0x47D0E794)
+    switch (uProperty)
+    {
+    case 0x47D0E794:
     {
         sscanf(pszValue, "%f", &mMaxDamage);
+            break;
     }
-    else if (uProperty == 0xFE544F96)
+    case 0xFE544F96:
     {
         sscanf(pszValue, "%f", &mMinDamage);
+            break;
     }
-    else if (uProperty == 0xAF922A6B)
+    case 0xAF922A6B:
     {
         sscanf(pszValue, "%f", &mDamageDeduction);
+            break;
     }
-    else if (uProperty == 0xAEE05D99)
+    case 0xAEE05D99:
     {
         sscanf(pszValue, "%f", &mMaxPush);
+            break;
     }
-    else if (uProperty == 0x3ED11AC3)
+    case 0x3ED11AC3:
     {
         sscanf(pszValue, "%f", &mMinPush);
+            break;
     }
-    else if (uProperty == 0x58A7DA24)
+    case 0x58A7DA24:
     {
         sscanf(pszValue, "%f", &mPushDeduction);
+            break;
     }
-    else if (uProperty == 0xA4C53EFD)
+    case 0xA4C53EFD:
     {
         sscanf(pszValue, "%f", &mRayRadius);
+            break;
     }
-    else
+    default:
     {
         OrdnanceBulletClass::SetProperty(uProperty, pszValue);
+            break;
+    }
     }
 }
 

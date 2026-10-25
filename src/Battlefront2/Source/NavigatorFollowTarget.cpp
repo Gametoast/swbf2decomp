@@ -77,23 +77,11 @@ PblVector3 GetSineRandomOffsetXZ(const GameObject* pObj, const int i)
 PblHash NavigatorFollowTarget::rttiHashNavigatorFollowTarget("NavigatorFollowTarget");
 const char NavigatorFollowTarget::rttiNameNavigatorFollowTarget[] = "NavigatorFollowTarget";
 
-// FUNCTION: SWBF2 0x005ac510
-bool NavigatorFollowTarget::IsRtti(unsigned int uRtti) const
-{
-    return uRtti == rttiHashNavigatorFollowTarget || NavigatorGraphFollower::IsRtti(uRtti);
-}
 
-// FUNCTION: SWBF2 0x005ac540
-unsigned int NavigatorFollowTarget::GetDerivedRtti() const
-{
-    return rttiHashNavigatorFollowTarget;
-}
 
-// FUNCTION: SWBF2 0x005ac550
-const char* NavigatorFollowTarget::GetDerivedRttiName() const
-{
-    return rttiNameNavigatorFollowTarget;
-}
+
+
+
 
 // SYNTHETIC: SWBF2 0x005ac560
 // NavigatorFollowTarget::`scalar deleting destructor'

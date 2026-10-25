@@ -112,12 +112,27 @@ class WeaponMeleeClass { public: static void PostLoad(); };
 class WeaponMelee { public: static void PostLoad() { WeaponMeleeClass::PostLoad(); } };
 
 class TeamAssistManager { public: static void Create(); static void Destroy(); };
-namespace MissionTimer { void Init(); }
-namespace ObjectiveManager { void Init(); void DestroyAll(); }
-namespace EventManager { void Init(); void Cleanup(); }
+namespace MissionTimer
+{
+    void Init();
+}
+namespace ObjectiveManager
+{
+    void Init(); void DestroyAll();
+}
+namespace EventManager
+{
+    void Init(); void Cleanup();
+}
 
-namespace Lua_Callbacks { void Cleanup(); }
-namespace RedMissionLog { bool Enabled(); }
+namespace Lua_Callbacks
+{
+    void Cleanup();
+}
+namespace RedMissionLog
+{
+    bool Enabled();
+}
 
 class EntityWater
 {
@@ -291,12 +306,24 @@ public:
     static MemoryPool sMemoryPool;
 };
 
-namespace AIDebug { void Create(); }
-namespace TeamManager { void Init(); }
-namespace SkyManager { void Activate(); }
+namespace AIDebug
+{
+    void Create();
+}
+namespace TeamManager
+{
+    void Init();
+}
+namespace SkyManager
+{
+    void Activate();
+}
 
 void InitMouseCursor();
-namespace PopupText { void Init(); }
+namespace PopupText
+{
+    void Init();
+}
 extern float netSecondsPerTurn;
 extern int netCurMaxPlayers;
 extern HWND hGlobalWnd;
@@ -500,25 +527,43 @@ bool sInitCompleteFlag;
 
 bool sLoadLowDetailModels;
 
-// GLOBAL: SWBF2 0x01e56133
-namespace GameLoop { bool gUnlimitedAmmo; }
+namespace GameLoop
+{
+    // GLOBAL: SWBF2 0x01e56133
+    bool gUnlimitedAmmo;
+}
 // GLOBAL: SWBF2 0x01e57722
 
 bool sMissionActive;
-// GLOBAL: SWBF2 0x01e5605c
-namespace GameLoop { bool sShowStats; }
+namespace GameLoop
+{
+    // GLOBAL: SWBF2 0x01e5605c
+    bool sShowStats;
+}
 
-// GLOBAL: SWBF2 0x01e5605d
-namespace GameLoop { bool mbHistoricalRules; }
-// GLOBAL: SWBF2 0x01e56009
-namespace GameLoop { bool sQuitRequested; }
-// GLOBAL: SWBF2 0x01e56124
-namespace GameLoop { unsigned int sQuitTurn; }
+namespace GameLoop
+{
+    // GLOBAL: SWBF2 0x01e5605d
+    bool mbHistoricalRules;
+}
+namespace GameLoop
+{
+    // GLOBAL: SWBF2 0x01e56009
+    bool sQuitRequested;
+}
+namespace GameLoop
+{
+    // GLOBAL: SWBF2 0x01e56124
+    unsigned int sQuitTurn;
+}
 // GLOBAL: SWBF2 0x01e56128
 
 unsigned int sMissionTurnCounter;
-// GLOBAL: SWBF2 0x01e56024
-namespace GameLoop { float sGameOverDelayTimer; }
+namespace GameLoop
+{
+    // GLOBAL: SWBF2 0x01e56024
+    float sGameOverDelayTimer;
+}
 // GLOBAL: SWBF2 0x01e56028
 
 unsigned int sPendingClientTurns;
@@ -526,8 +571,11 @@ unsigned int sPendingClientTurns;
 
 unsigned int sPendingHostTurns;
 
-// GLOBAL: SWBF2 0x01e56120
-namespace GameLoop { float mAttractModeTime; }
+namespace GameLoop
+{
+    // GLOBAL: SWBF2 0x01e56120
+    float mAttractModeTime;
+}
 
 class EndTimer
 {
@@ -546,8 +594,14 @@ EndTimer endTimer;
 // GLOBAL: SWBF2 0x01e5612c
 float gPrevFrameTime;
 
-namespace GameLoop { float sDeltaTime; }
-namespace GameLoop { extern float sClientDeltaTime; }
+namespace GameLoop
+{
+    float sDeltaTime;
+}
+namespace GameLoop
+{
+    extern float sClientDeltaTime;
+}
 
 void EntityEx::InitFind()
 {
@@ -630,15 +684,36 @@ void StatusDisplay::InitAll()
     }
 }
 
-namespace GameLoop { void CheckScreenShots(); }
-namespace GameLoop { bool CheckToggleDisplay(); }
-namespace TeamManager { void UpdatePositions(); }
+namespace GameLoop
+{
+    void CheckScreenShots();
+}
+namespace GameLoop
+{
+    bool CheckToggleDisplay();
+}
+namespace TeamManager
+{
+    void UpdatePositions();
+}
 namespace HUD { namespace Manager { void Update(float fDeltaTime); } }
-namespace PlayerPrefs { int __fastcall FindByViewport(int iValue); }
-namespace PopupText { bool IsEnabled(); void Update(float fDeltaTime); }
+namespace PlayerPrefs
+{
+    int __fastcall FindByViewport(int iValue);
+}
+namespace PopupText
+{
+    bool IsEnabled(); void Update(float fDeltaTime);
+}
 namespace HUD { namespace GameEvents { void Update(float fDeltaTime); } }
-namespace SaveGameManager { void Update(float fDeltaTime); }
-namespace GameLoop { void UpdateStats(float fDeltaTime, float fSystemDeltaTime); }
+namespace SaveGameManager
+{
+    void Update(float fDeltaTime);
+}
+namespace GameLoop
+{
+    void UpdateStats(float fDeltaTime, float fSystemDeltaTime);
+}
 
 extern int g_InGameMoviePlayerState;
 extern __int64 sLastPerformanceCount;
@@ -1670,8 +1745,11 @@ void SetNextMission(char const* pcName)
 
 }
 
-// GLOBAL: SWBF2 0x007e651f
-namespace GameLoop { bool mbCanSwitchSides = true; }
+namespace GameLoop
+{
+    // GLOBAL: SWBF2 0x007e651f
+    bool mbCanSwitchSides = true;
+}
 
 extern bool netAutoAssignTeams;
 
@@ -1697,7 +1775,10 @@ void SetCanSwitchSides(bool bFlag)
 }
 }
 
-namespace RedScreenShot { void TakeScreenShot(); }
+namespace RedScreenShot
+{
+    void TakeScreenShot();
+}
 
 namespace GameLoop {
 

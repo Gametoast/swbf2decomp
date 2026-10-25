@@ -65,7 +65,10 @@ void __cdecl printf_wrapper(const char*, ...)
 {
 }
 
-namespace PblUnicode { unsigned int ustrncnv(unsigned short* pDest, const unsigned char* pSrc, unsigned int uiCount); }
+namespace PblUnicode
+{
+    unsigned int ustrncnv(unsigned short* pDest, const unsigned char* pSrc, unsigned int uiCount);
+}
 unsigned int __cdecl ConvertUnicodeSkippingWide(char* pDest, const unsigned short* pSrc, unsigned int uiCount);
 
 // FUNCTION: SWBF2 0x0052a9b0
@@ -104,7 +107,10 @@ int __fastcall GetScreenTransitionType(const char* pcName, void*)
 extern bool gDemoMode;
 extern bool gAttractMode;
 
-namespace GameLoop { extern bool sShowStats; }
+namespace GameLoop
+{
+    extern bool sShowStats;
+}
 extern int gActiveViewport;
 extern bool gDrawFlyerShadows;
 extern HWND hGlobalWnd;

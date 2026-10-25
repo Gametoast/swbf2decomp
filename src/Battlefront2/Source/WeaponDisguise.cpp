@@ -59,23 +59,11 @@ WeaponDisguiseClass::~WeaponDisguiseClass()
 // SYNTHETIC: SWBF2 0x006833d0
 // WeaponDisguiseClass::`scalar deleting destructor'
 
-// FUNCTION: SWBF2 0x00682cb0
-bool WeaponDisguiseClass::IsRtti(unsigned int uRtti)
-{
-    return uRtti == rttiHashWeaponDisguiseClass || WeaponClass::IsRtti(uRtti);
-}
 
-// FUNCTION: SWBF2 0x00682ce0
-unsigned int WeaponDisguiseClass::GetDerivedRtti()
-{
-    return rttiHashWeaponDisguiseClass;
-}
 
-// FUNCTION: SWBF2 0x00682cf0
-const char* WeaponDisguiseClass::GetDerivedRttiName()
-{
-    return rttiNameWeaponDisguiseClass;
-}
+
+
+
 
 // FUNCTION: SWBF2 0x00683430
 void WeaponDisguiseClass::SetProperty(unsigned int uProperty, const char* pszValue)
@@ -100,23 +88,11 @@ WeaponClass* WeaponDisguiseClass::Derive(unsigned int uHash)
 PblHash WeaponDisguise::rttiHashWeaponDisguise("WeaponDisguise");
 const char WeaponDisguise::rttiNameWeaponDisguise[] = "WeaponDisguise";
 
-// FUNCTION: SWBF2 0x00682c60
-bool WeaponDisguise::IsRtti(unsigned int uRtti) const
-{
-    return uRtti == rttiHashWeaponDisguise || Weapon::IsRtti(uRtti);
-}
 
-// FUNCTION: SWBF2 0x00682c90
-unsigned int WeaponDisguise::GetDerivedRtti() const
-{
-    return rttiHashWeaponDisguise;
-}
 
-// FUNCTION: SWBF2 0x00682ca0
-const char* WeaponDisguise::GetDerivedRttiName() const
-{
-    return rttiNameWeaponDisguise;
-}
+
+
+
 
 // FUNCTION: SWBF2 0x00682d00
 WeaponDisguise::WeaponDisguise(const WeaponDisguiseClass* pClass, const WeaponDesc& desc)

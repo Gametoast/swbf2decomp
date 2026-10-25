@@ -182,7 +182,9 @@ bool netEnabledNext;
 // GLOBAL: SWBF2 0x007e802f
 bool netTeamDamage = true;
 
+// GLOBAL: SWBF2 0x01e62f58
 int netCurMaxPlayers;
+// GLOBAL: SWBF2 0x01e62f54
 int netCurMaxHosts;
 int netHostIndex;
 int journalMode;

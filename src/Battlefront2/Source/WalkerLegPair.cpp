@@ -18,11 +18,7 @@
 // `dynamic atexit destructor for 'WalkerLegPair::sMemoryPool''
 MemoryPool WalkerLegPair::sMemoryPool("WalkerLegPair", 0x130);
 
-static PblMatrix _IdentityMatrix(
-    PblVector4{ 1.0f, 0.0f, 0.0f, 0.0f },
-    PblVector4{ 0.0f, 1.0f, 0.0f, 0.0f },
-    PblVector4{ 0.0f, 0.0f, 1.0f, 0.0f },
-    PblVector4{ 0.0f, 0.0f, 0.0f, 1.0f });
+
 
 // FUNCTION: SWBF2 0x00676770
 float WalkerLegPair::GetTurnState()
@@ -102,8 +98,8 @@ void WalkerLegPair::BuildBlendLookupTable()
     {
         mBlend->mUnits[1]->mWeight = fBlend;
         mBlend->Blend(mParent->mZephyrPoseStatic);
-        mParent->mZephyrSkeleton.BuildWorldMatrices(_IdentityMatrix);
-        *pEntry++ = pModel->GetWorldMatrix(mFootCollisionBody[Left], _IdentityMatrix,
+        mParent->mZephyrSkeleton.BuildWorldMatrices(gMatrixIdentity);
+        *pEntry++ = pModel->GetWorldMatrix(mFootCollisionBody[Left], gMatrixIdentity,
                                            mParent->GetPose()).m[3][1];
         fBlend += 0.125f;
     } while (fBlend <= 1.0f);
@@ -116,7 +112,7 @@ void WalkerLegPair::BuildBlendLookupTable()
 
     mBlend->mUnits[1]->mWeight = 0.0f;
     mBlend->Blend(mParent->mZephyrPoseStatic);
-    mParent->mZephyrSkeleton.BuildWorldMatrices(_IdentityMatrix);
+    mParent->mZephyrSkeleton.BuildWorldMatrices(gMatrixIdentity);
     mBlend->mUnits[0]->mMask.SetAll();
     mBlend->mUnits[1]->mMask.SetAll();
     mBlend->mUnits[2]->mMask.SetAll();

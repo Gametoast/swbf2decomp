@@ -31,17 +31,9 @@ const char EntityEx::rttiNameEntityEx[] = "EntityEx";
 PblHash EntityClass::rttiHashEntityClass("EntityClass");
 const char EntityClass::rttiNameEntityClass[] = "EntityClass";
 
-// FUNCTION: SWBF2 0x0048ec00
-unsigned int EntityClass::GetDerivedRtti()
-{
-    return rttiHashEntityClass;
-}
 
-// FUNCTION: SWBF2 0x0048ec10
-const char* EntityClass::GetDerivedRttiName()
-{
-    return rttiNameEntityClass;
-}
+
+
 
 // GLOBAL: SWBF2 0x01eb9870
 int EntityEx::mIdMapNumEntries;
@@ -263,23 +255,8 @@ EntityEx::~EntityEx()
 // SYNTHETIC: SWBF2 0x004917f0
 // EntityEx::`scalar deleting destructor'
 
-// FUNCTION: SWBF2 0x00443ec0
-bool EntityEx::IsRtti(unsigned int uRtti) const
-{
-    return rttiHashEntityEx == uRtti || Entity::IsRtti(uRtti);
-}
 
-// FUNCTION: SWBF2 0x00491700
-unsigned int EntityEx::GetDerivedRtti() const
-{
-    return rttiHashEntityEx;
-}
 
-// FUNCTION: SWBF2 0x00491710
-const char* EntityEx::GetDerivedRttiName() const
-{
-    return rttiNameEntityEx;
-}
 
 // SYNTHETIC: SWBF2 0x005a93fc
 // [thunk]:Entity::GetGameObject`adjustor{12}'

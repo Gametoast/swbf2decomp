@@ -25,23 +25,11 @@ inline int GameObjectTeam(const GameObject* pObject)
 PblHash AI::ConquestGoal::rttiHashConquestGoal("ConquestGoal");
 const char AI::ConquestGoal::rttiNameConquestGoal[] = "ConquestGoal";
 
-// FUNCTION: SWBF2 0x004829c0
-bool AI::ConquestGoal::IsRtti(unsigned int uRtti) const
-{
-    return uRtti == rttiHashConquestGoal || AIGoal::IsRtti(uRtti);
-}
 
-// FUNCTION: SWBF2 0x004829f0
-unsigned int AI::ConquestGoal::GetDerivedRtti() const
-{
-    return rttiHashConquestGoal;
-}
 
-// FUNCTION: SWBF2 0x00482a00
-const char* AI::ConquestGoal::GetDerivedRttiName() const
-{
-    return rttiNameConquestGoal;
-}
+
+
+
 
 // SYNTHETIC: SWBF2 0x00482a10
 // AI::ConquestGoal::`scalar deleting destructor'

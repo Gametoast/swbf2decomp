@@ -1,5 +1,7 @@
 #pragma once
 
+#include "PebbleFL/Common/PblHashTable.h"
+
 #include <stddef.h>
 
 #include "GameSound.h"
@@ -25,9 +27,9 @@ public:
 
     virtual WeaponClass* Derive(unsigned int uHash);
     virtual Weapon* Build(const WeaponDesc& desc);
-    virtual bool IsRtti(unsigned int uRtti);
-    virtual unsigned int GetDerivedRtti();
-    virtual const char* GetDerivedRttiName();
+    virtual bool IsRtti(unsigned int uRtti) const;
+    virtual unsigned int GetDerivedRtti() const;
+    virtual const char* GetDerivedRttiName() const;
     virtual void SetProperty(unsigned int uProperty, const char* pszValue);
     virtual float GetHeatPerSalvo();
     virtual float GetShotsPerSalvo();
@@ -107,3 +109,25 @@ public:
  
  
  
+
+// FUNCTION: SWBF2 0x0067e440
+inline bool WeaponCannonClass::IsRtti(unsigned int uRtti) const
+{
+    if (rttiHashWeaponCannonClass == uRtti)
+    {
+        return true;
+    }
+    return WeaponClass::IsRtti(uRtti);
+}
+
+// FUNCTION: SWBF2 0x0067e470
+inline unsigned int WeaponCannonClass::GetDerivedRtti() const
+{
+    return rttiHashWeaponCannonClass;
+}
+
+// FUNCTION: SWBF2 0x0067e480
+inline const char* WeaponCannonClass::GetDerivedRttiName() const
+{
+    return rttiNameWeaponCannonClass;
+}

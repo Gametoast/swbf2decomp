@@ -7,11 +7,7 @@
 extern "C" PblMatrix* __stdcall D3DXMatrixMultiply(PblMatrix* pOut, const PblMatrix* pM1,
                                                    const PblMatrix* pM2);
 
-static const PblMatrix _IdentityMatrix(
-    PblVector4{ 1.0f, 0.0f, 0.0f, 0.0f },
-    PblVector4{ 0.0f, 1.0f, 0.0f, 0.0f },
-    PblVector4{ 0.0f, 0.0f, 1.0f, 0.0f },
-    PblVector4{ 0.0f, 0.0f, 0.0f, 1.0f });
+
 
 static PblMatrix* _NewAlignedMatrices(unsigned int uiCount)
 {
@@ -196,5 +192,5 @@ void RedSkeleton::_Read(PblFileChunk& chunk)
             break;
         }
     }
-    _PostProcess(_IdentityMatrix, 0);
+    _PostProcess(gMatrixIdentity, 0);
 }

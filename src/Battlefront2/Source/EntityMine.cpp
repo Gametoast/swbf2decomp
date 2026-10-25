@@ -48,23 +48,11 @@ EntityMineClass::EntityMineClass(unsigned int uHash)
 PblHash EntityMineClass::rttiHashEntityMineClass("EntityMineClass");
 const char EntityMineClass::rttiNameEntityMineClass[] = "EntityMineClass";
 
-// FUNCTION: SWBF2 0x004cf580
-bool EntityMineClass::IsRtti(unsigned int uRtti)
-{
-    return uRtti == rttiHashEntityMineClass || EntityItemClass::IsRtti(uRtti);
-}
 
-// FUNCTION: SWBF2 0x004cf5c0
-unsigned int EntityMineClass::GetDerivedRtti()
-{
-    return rttiHashEntityMineClass;
-}
 
-// FUNCTION: SWBF2 0x004cf5d0
-const char* EntityMineClass::GetDerivedRttiName()
-{
-    return rttiNameEntityMineClass;
-}
+
+
+
 
 // FUNCTION: SWBF2 0x004d0aa0
 Entity* EntityMineClass::Build(const EntityDesc& desc)
@@ -117,43 +105,55 @@ EntityClass* EntityMineClass::Derive(unsigned int uHash)
 // FUNCTION: SWBF2 0x004d0b50
 void EntityMineClass::SetProperty(unsigned int uProperty, const char* pszValue)
 {
-    if (uProperty == 0x02BB1FE0 ||
-        uProperty == 0x6A5E371C ||
-        uProperty == 0x9B30E763)
+    switch (uProperty)
+    {
+    case 0x02BB1FE0:
+    case 0x6A5E371C:
+    case 0x9B30E763:
     {
         mExplosionTrigger = ExplosionClass::Find(PblHash(pszValue));
+            break;
     }
-    else if (uProperty == 0x2E51081F)
+    case 0x2E51081F:
     {
         mExplosionExpire = ExplosionClass::Find(PblHash(pszValue));
+            break;
     }
-    else if (uProperty == 0xA2723442)
+    case 0xA2723442:
     {
         mExplosionDeath = ExplosionClass::Find(PblHash(pszValue));
+            break;
     }
-    else if (uProperty == 0xACFE0D9B)
+    case 0xACFE0D9B:
     {
         mTick.SetID(pszValue, false, false);
+            break;
     }
-    else if (uProperty == 0x18953967)
+    case 0x18953967:
     {
         sscanf("%f", pszValue, &mTickPitch);
+            break;
     }
-    else if (uProperty == 0xBFB22E35)
+    case 0xBFB22E35:
     {
         mTriggerContact = atoi(pszValue) != 0;
+            break;
     }
-    else if (uProperty == 0xC461D811)
+    case 0xC461D811:
     {
         sscanf(pszValue, "%f", &mTriggerRadius);
+            break;
     }
-    else if (uProperty == 0xCE754894)
+    case 0xCE754894:
     {
         sscanf(pszValue, "%f", &mSuppressRadius);
+            break;
     }
-    else
+    default:
     {
         EntityItemClass::SetProperty(uProperty, pszValue);
+            break;
+    }
     }
 }
 
@@ -207,24 +207,11 @@ EntityMine::~EntityMine()
 // SYNTHETIC: SWBF2 0x004d0cf2
 // [thunk]:EntityMine::`vector deleting destructor'`adjustor{576}'
 
-// FUNCTION: SWBF2 0x004cf4c0
-bool EntityMine::IsRtti(unsigned int uRtti) const
-{
-    return uRtti == rttiHashEntityMine ||
-           EntityItem::IsRtti(uRtti);
-}
 
-// FUNCTION: SWBF2 0x004cf510
-unsigned int EntityMine::GetDerivedRtti() const
-{
-    return rttiHashEntityMine;
-}
 
-// FUNCTION: SWBF2 0x004cf520
-const char* EntityMine::GetDerivedRttiName() const
-{
-    return rttiNameEntityMine;
-}
+
+
+
 
 // FUNCTION: SWBF2 0x004cf540
 EntityType EntityMine::GetEntityType() const

@@ -1,5 +1,7 @@
 #pragma once
 
+#include "PebbleFL/Common/PblHashTable.h"
+
 #include <stddef.h>
 
 #include "PebbleFL/Common/PblHashTable.h"
@@ -89,3 +91,21 @@ public:
  
  
  
+
+// FUNCTION: SWBF2 0x00485100
+inline bool Controller::IsRtti(unsigned int uRtti) const
+{
+    return rttiHashController == uRtti;
+}
+
+// FUNCTION: SWBF2 0x00485120
+inline unsigned int Controller::GetDerivedRtti() const
+{
+    return rttiHashController;
+}
+
+// FUNCTION: SWBF2 0x00485130
+inline const char* Controller::GetDerivedRttiName() const
+{
+    return rttiNameController;
+}

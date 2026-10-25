@@ -1,5 +1,7 @@
 #pragma once
 
+#include "PebbleFL/Common/PblHashTable.h"
+
 #include <stddef.h>
 
 #include "GameSound.h"
@@ -77,9 +79,9 @@ public:
 
     virtual EntityClass* Derive(unsigned int uHash);
     virtual Entity* Build(const EntityDesc& desc);
-    virtual bool IsRtti(unsigned int uRtti);
-    virtual unsigned int GetDerivedRtti();
-    virtual const char* GetDerivedRttiName();
+    virtual bool IsRtti(unsigned int uRtti) const;
+    virtual unsigned int GetDerivedRtti() const;
+    virtual const char* GetDerivedRttiName() const;
     virtual void SetProperty(unsigned int uProperty, const char* pszValue);
     virtual void PostReadSetup();
     virtual int GetSoldierType();
@@ -848,3 +850,50 @@ public:
  
 
 #include "SoldierAnimator.h"
+
+// FUNCTION: SWBF2 0x004de010
+inline bool EntitySoldier::IsRtti(unsigned int uRtti) const
+{
+    if (rttiHashEntitySoldier == uRtti)
+    {
+        return true;
+    }
+    return GameObject::IsRtti(uRtti);
+}
+
+// FUNCTION: SWBF2 0x004de050
+inline unsigned int EntitySoldier::GetDerivedRtti() const
+{
+    return rttiHashEntitySoldier;
+}
+
+// FUNCTION: SWBF2 0x004de060
+inline const char* EntitySoldier::GetDerivedRttiName() const
+{
+    return rttiNameEntitySoldier;
+}
+
+// FUNCTION: SWBF2 0x004de430
+inline bool EntitySoldierClass::IsRtti(unsigned int uRtti) const
+{
+    if (rttiHashEntitySoldierClass == uRtti)
+    {
+        return true;
+    }
+    return GameObjectClass::IsRtti(uRtti);
+}
+
+// FUNCTION: SWBF2 0x004de470
+inline unsigned int EntitySoldierClass::GetDerivedRtti() const
+{
+    return rttiHashEntitySoldierClass;
+}
+
+// FUNCTION: SWBF2 0x004de480
+inline const char* EntitySoldierClass::GetDerivedRttiName() const
+{
+    return rttiNameEntitySoldierClass;
+}
+
+
+

@@ -17,25 +17,14 @@ const char FoleyFXWalker::rttiNameFoleyFXWalker[] = "FoleyFXWalker";
 // `dynamic initializer for 'FoleyFXWalker::smFreeList''
 // SYNTHETIC: SWBF2 0x00768810
 // `dynamic atexit destructor for 'FoleyFXWalker::smFreeList''
+
 Snd::FreeList FoleyFXWalker::smFreeList(sizeof(FoleyFXWalker), 4, 8, 1);
 
-// FUNCTION: SWBF2 0x0052d000
-bool FoleyFXWalker::IsRtti(unsigned int uRtti) const
-{
-    return uRtti == rttiHashFoleyFXWalker || FoleyFX::IsRtti(uRtti);
-}
 
-// FUNCTION: SWBF2 0x0052d030
-unsigned int FoleyFXWalker::GetDerivedRtti() const
-{
-    return rttiHashFoleyFXWalker;
-}
 
-// FUNCTION: SWBF2 0x0052d040
-const char* FoleyFXWalker::GetDerivedRttiName() const
-{
-    return rttiNameFoleyFXWalker;
-}
+
+
+
 
 // FUNCTION: SWBF2 0x0052d050
 FoleyFXWalker::FoleyFXWalker()

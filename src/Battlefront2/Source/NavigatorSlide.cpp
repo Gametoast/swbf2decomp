@@ -80,23 +80,11 @@ int gClearVehicleSlideCount = 1;
 PblHash NavigatorSlide::rttiHashNavigatorSlide("NavigatorSlide");
 const char NavigatorSlide::rttiNameNavigatorSlide[] = "NavigatorSlide";
 
-// FUNCTION: SWBF2 0x005addf0
-bool NavigatorSlide::IsRtti(unsigned int uRtti) const
-{
-    return uRtti == rttiHashNavigatorSlide || Navigator::IsRtti(uRtti);
-}
 
-// FUNCTION: SWBF2 0x005ade20
-unsigned int NavigatorSlide::GetDerivedRtti() const
-{
-    return rttiHashNavigatorSlide;
-}
 
-// FUNCTION: SWBF2 0x005ade30
-const char* NavigatorSlide::GetDerivedRttiName() const
-{
-    return rttiNameNavigatorSlide;
-}
+
+
+
 
 // SYNTHETIC: SWBF2 0x005ade40
 // NavigatorSlide::`scalar deleting destructor'

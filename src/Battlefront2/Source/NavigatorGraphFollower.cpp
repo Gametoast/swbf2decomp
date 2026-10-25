@@ -31,23 +31,11 @@ namespace
 PblHash NavigatorGraphFollower::rttiHashNavigatorGraphFollower("NavigatorGraphFollower");
 const char NavigatorGraphFollower::rttiNameNavigatorGraphFollower[] = "NavigatorGraphFollower";
 
-// FUNCTION: SWBF2 0x005ac4e0
-bool NavigatorGraphFollower::IsRtti(unsigned int uRtti) const
-{
-    return uRtti == rttiHashNavigatorGraphFollower || Navigator::IsRtti(uRtti);
-}
 
-// FUNCTION: SWBF2 0x005ad230
-unsigned int NavigatorGraphFollower::GetDerivedRtti() const
-{
-    return rttiHashNavigatorGraphFollower;
-}
 
-// FUNCTION: SWBF2 0x005ad240
-const char* NavigatorGraphFollower::GetDerivedRttiName() const
-{
-    return rttiNameNavigatorGraphFollower;
-}
+
+
+
 
 // SYNTHETIC: SWBF2 0x005ad250
 // NavigatorGraphFollower::`scalar deleting destructor'

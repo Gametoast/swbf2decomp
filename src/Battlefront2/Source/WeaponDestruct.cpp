@@ -27,23 +27,11 @@ public:
 PblHash WeaponDestruct::rttiHashWeaponDestruct("WeaponDestruct");
 const char WeaponDestruct::rttiNameWeaponDestruct[] = "WeaponDestruct";
 
-// FUNCTION: SWBF2 0x00681a10
-bool WeaponDestruct::IsRtti(unsigned int uRtti) const
-{
-    return uRtti == rttiHashWeaponDestruct || Weapon::IsRtti(uRtti);
-}
 
-// FUNCTION: SWBF2 0x00681a40
-unsigned int WeaponDestruct::GetDerivedRtti() const
-{
-    return rttiHashWeaponDestruct;
-}
 
-// FUNCTION: SWBF2 0x00681a50
-const char* WeaponDestruct::GetDerivedRttiName() const
-{
-    return rttiNameWeaponDestruct;
-}
+
+
+
 
 // SYNTHETIC: SWBF2 0x004070f0
 // `dynamic initializer for 'WeaponDestructClass::rttiHashWeaponDestructClass''
@@ -80,23 +68,11 @@ WeaponDestructClass::~WeaponDestructClass()
 // SYNTHETIC: SWBF2 0x006821f0
 // WeaponDestructClass::`scalar deleting destructor'
 
-// FUNCTION: SWBF2 0x00681a60
-bool WeaponDestructClass::IsRtti(unsigned int uRtti)
-{
-    return uRtti == rttiHashWeaponDestructClass || WeaponClass::IsRtti(uRtti);
-}
 
-// FUNCTION: SWBF2 0x00681a90
-unsigned int WeaponDestructClass::GetDerivedRtti()
-{
-    return rttiHashWeaponDestructClass;
-}
 
-// FUNCTION: SWBF2 0x00681aa0
-const char* WeaponDestructClass::GetDerivedRttiName()
-{
-    return rttiNameWeaponDestructClass;
-}
+
+
+
 
 // FUNCTION: SWBF2 0x00682290
 void WeaponDestructClass::SetProperty(unsigned int uProperty, const char* pszValue)

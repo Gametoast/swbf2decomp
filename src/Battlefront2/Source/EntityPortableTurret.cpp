@@ -51,11 +51,7 @@ extern bool netIsLateTurn;
 
 PblMatrix NormalMatrix(const PblVector3& vDir, const PblVector3& vNormal, const PblVector3& vPos);
 
-// FUNCTION: SWBF2 0x004d7b90
-bool EntityPortableTurret::IsRtti(unsigned int uRtti) const
-{
-    return uRtti == rttiHashEntityPortableTurret || EntityBuildingArmedDynamic::IsRtti(uRtti);
-}
+
 
 // FUNCTION: SWBF2 0x004d7cf0
 EntityPortableTurret::EntityPortableTurret(EntityPortableTurretClass* pClass, const EntityDesc& desc)
@@ -267,17 +263,9 @@ bool EntityPortableTurret::CollisionCallback(const CollisionResult* pResult, Col
     return bResult;
 }
 
-// FUNCTION: SWBF2 0x004d7bf0
-unsigned int EntityPortableTurret::GetDerivedRtti() const
-{
-    return rttiHashEntityPortableTurret;
-}
 
-// FUNCTION: SWBF2 0x004d7c00
-const char* EntityPortableTurret::GetDerivedRttiName() const
-{
-    return rttiNameEntityPortableTurret;
-}
+
+
 
 // FUNCTION: SWBF2 0x004d7c20
 const PblVector3& EntityPortableTurret::GetVelocity() const
@@ -296,23 +284,11 @@ void EntityPortableTurret::RecalculateAABB()
 {
 }
 
-// FUNCTION: SWBF2 0x004d7c80
-bool EntityPortableTurretClass::IsRtti(unsigned int uRtti)
-{
-    return uRtti == rttiHashEntityPortableTurretClass || EntityBuildingArmedDynamicClass::IsRtti(uRtti);
-}
 
-// FUNCTION: SWBF2 0x004d7cd0
-unsigned int EntityPortableTurretClass::GetDerivedRtti()
-{
-    return rttiHashEntityPortableTurretClass;
-}
 
-// FUNCTION: SWBF2 0x004d7ce0
-const char* EntityPortableTurretClass::GetDerivedRttiName()
-{
-    return rttiNameEntityPortableTurretClass;
-}
+
+
+
 
 // FUNCTION: SWBF2 0x004d8a70
 EntityPortableTurretClass::EntityPortableTurretClass(EntityPortableTurretClass* pBase, unsigned int uHash)

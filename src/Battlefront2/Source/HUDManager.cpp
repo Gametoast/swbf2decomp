@@ -234,9 +234,13 @@ void HUD::Manager::ConfigFile::WriteData(HUD::File& file, unsigned int uTabs)
 namespace HUD {
 // GLOBAL: SWBF2 0x007e69c8
 bool gScreenGroupEditEnabled = true;
+// GLOBAL: SWBF2 0x007e69cc
 int gEditHeap = -1;
+// GLOBAL: SWBF2 0x01e56fbc
 void* gEditHeapMem;
+// GLOBAL: SWBF2 0x01e573c8
 RedScreenGroupElement* gScreenGroup;
+// GLOBAL: SWBF2 0x01e573cc
 RedScreenGroupElement* gScreenGroupEdit;
 }
 

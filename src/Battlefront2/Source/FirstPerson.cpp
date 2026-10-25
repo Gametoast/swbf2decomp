@@ -48,12 +48,21 @@ RedAnimation* s_apAnimBank[4];
 char sModelName[64][256];
 }
 
-// GLOBAL: SWBF2 0x01e51e28
-namespace FirstPerson { int sModelCount; }
-// GLOBAL: SWBF2 0x01e55f04
-namespace FirstPerson { int sModel; }
-// GLOBAL: SWBF2 0x01e55f08
-namespace FirstPerson { int sModelId; }
+namespace FirstPerson
+{
+    // GLOBAL: SWBF2 0x01e51e28
+    int sModelCount;
+}
+namespace FirstPerson
+{
+    // GLOBAL: SWBF2 0x01e55f04
+    int sModel;
+}
+namespace FirstPerson
+{
+    // GLOBAL: SWBF2 0x01e55f08
+    int sModelId;
+}
 
 PblQuaternion Interpolate(const PblQuaternion& q0, const PblQuaternion& q1, float fT);
 
@@ -69,14 +78,16 @@ unsigned int GetViewportCount();
 unsigned int GetCurrentViewport();
 }
 
-namespace GameLoop { extern float sDeltaTime; }
-namespace GameLoop { extern float sClientDeltaTime; }
+namespace GameLoop
+{
+    extern float sDeltaTime;
+}
+namespace GameLoop
+{
+    extern float sClientDeltaTime;
+}
 
-static PblMatrix _IdentityMatrix(
-    PblVector4{ 1.0f, 0.0f, 0.0f, 0.0f },
-    PblVector4{ 0.0f, 1.0f, 0.0f, 0.0f },
-    PblVector4{ 0.0f, 0.0f, 1.0f, 0.0f },
-    PblVector4{ 0.0f, 0.0f, 0.0f, 1.0f });
+
 
 static const float ANIM_FRAME_SPEED = 30.0f;
 static const float FIRST_PERSON_BLEND_SPEED = 3.0f;
@@ -254,12 +265,12 @@ void FirstPersonRenderable::UpdateSoldierAimer(const PblMatrix& mMatrix)
         mZephyrPoseStatic.Set(mZephyrPoseDynamic, true);
     }
 
-    mZephyrSkeleton.BuildWorldMatrices(_IdentityMatrix);
+    mZephyrSkeleton.BuildWorldMatrices(gMatrixIdentity);
     RedPose kPose;
     kPose.ConvertFromZephyrPose(mZephyrPoseStatic);
     const PblMatrix* pBone = kPose._Table.Find(0x8629b159);
 
-    PblMatrix mOffset = _IdentityMatrix;
+    PblMatrix mOffset = gMatrixIdentity;
     PblMatrix mTemp;
     D3DXMatrixMultiply(&mOffset, &mOffset, D3DXMatrixRotationY(&mTemp, 3.0f));
     D3DXMatrixMultiply(&mOffset, &mOffset, D3DXMatrixRotationZ(&mTemp, 0.05f));
@@ -322,12 +333,12 @@ void FirstPersonRenderable::UpdateDroidekaAimer(const PblMatrix& mMatrix)
         mZephyrPoseStatic.Set(mZephyrPoseDynamic, true);
     }
 
-    mZephyrSkeleton.BuildWorldMatrices(_IdentityMatrix);
+    mZephyrSkeleton.BuildWorldMatrices(gMatrixIdentity);
     RedPose kPose;
     kPose.ConvertFromZephyrPose(mZephyrPoseStatic);
     const PblMatrix* pBone = kPose._Table.Find(0x8629b159);
 
-    PblMatrix mOffset = _IdentityMatrix;
+    PblMatrix mOffset = gMatrixIdentity;
     PblMatrix mTemp;
     D3DXMatrixMultiply(&mOffset, &mOffset, D3DXMatrixRotationY(&mTemp, 3.2f));
     mOffset.m[3][0] = 0.01f;
@@ -414,7 +425,7 @@ void FirstPersonRenderable::UpdateCockpitAimer(const PblMatrix& mMatrix)
         vOffset.z = -1.5f;
     }
 
-    PblMatrix mOffset = _IdentityMatrix;
+    PblMatrix mOffset = gMatrixIdentity;
     mOffset.m[3][0] = vOffset.x;
     mOffset.m[3][1] = vOffset.y;
     mOffset.m[3][2] = vOffset.z;
@@ -1290,7 +1301,7 @@ void FirstPersonCameraManager::Update(PblMatrix& rMatrix)
             mCurRotVec = HermiteValue(mHermRot + mCurrCamPt * 52, fT);
             mCameraPos = *(const PblVector3*)rMatrix.m[3];
 
-            PblMatrix mRotation = _IdentityMatrix;
+            PblMatrix mRotation = gMatrixIdentity;
             PblMatrix mTemp;
             D3DXMatrixMultiply(&mRotation, &mRotation, D3DXMatrixRotationX(&mTemp, mCurRotVec.x));
             D3DXMatrixMultiply(&mRotation, &mRotation, D3DXMatrixRotationY(&mTemp, mCurRotVec.y));

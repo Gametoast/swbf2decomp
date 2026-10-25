@@ -9,6 +9,7 @@
 namespace Snd
 {
 
+// GLOBAL: SWBF2 0x009cf4a0
 unsigned int ListenerBase::smActiveListeners;
 
 // FUNCTION: SWBF2 0x007314c0

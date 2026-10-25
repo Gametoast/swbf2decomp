@@ -51,23 +51,11 @@ int Play(VOType eType, const GameObject* pSpeaker, const GameObject* pTarget,
 PblHash UnitWaitSecondaryAgent::rttiHashUnitWaitSecondaryAgent("UnitWaitSecondaryAgent");
 const char UnitWaitSecondaryAgent::rttiNameUnitWaitSecondaryAgent[] = "UnitWaitSecondaryAgent";
 
-// FUNCTION: SWBF2 0x0066b670
-bool UnitWaitSecondaryAgent::IsRtti(unsigned int uRtti) const
-{
-    return uRtti == rttiHashUnitWaitSecondaryAgent || UnitAgent::IsRtti(uRtti);
-}
 
-// FUNCTION: SWBF2 0x0066b6a0
-unsigned int UnitWaitSecondaryAgent::GetDerivedRtti() const
-{
-    return rttiHashUnitWaitSecondaryAgent;
-}
 
-// FUNCTION: SWBF2 0x0066b6b0
-const char* UnitWaitSecondaryAgent::GetDerivedRttiName() const
-{
-    return rttiNameUnitWaitSecondaryAgent;
-}
+
+
+
 
 // FUNCTION: SWBF2 0x0066b6c0
 bool UnitWaitSecondaryAgent::ShouldQueueCurCmd(const UnitCmdInfo& cmd) const

@@ -15,11 +15,7 @@
 
 extern "C" PblVector3* __stdcall D3DXVec3Normalize(PblVector3* pOut, const PblVector3* pV);
 
-static PblMatrix _IdentityMatrix(
-    PblVector4{ 1.0f, 0.0f, 0.0f, 0.0f },
-    PblVector4{ 0.0f, 1.0f, 0.0f, 0.0f },
-    PblVector4{ 0.0f, 0.0f, 1.0f, 0.0f },
-    PblVector4{ 0.0f, 0.0f, 0.0f, 1.0f });
+
 
 extern PblVector3 gVectorZero;
 
@@ -315,7 +311,7 @@ void SkyDome::Read(PblConfig& config)
             for (int j = 0; j < 8; ++j)
             {
                 EntityDesc desc;
-                desc.mMatrix = _IdentityMatrix;
+                desc.mMatrix = gMatrixIdentity;
 
                 const float z = ((float)j + PblRandom::_Global.GetFloat() * 0.8f - 4.0f) * 250.0f;
                 const float y = PblRandom::_Global.GetFloat() * 35.0f + fCloudHeight;

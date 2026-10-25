@@ -19,23 +19,11 @@
 PblHash UnitHoldAgent::rttiHashUnitHoldAgent("UnitHoldAgent");
 const char UnitHoldAgent::rttiNameUnitHoldAgent[] = "UnitHoldAgent";
 
-// FUNCTION: SWBF2 0x00668d50
-bool UnitHoldAgent::IsRtti(unsigned int uRtti) const
-{
-    return uRtti == rttiHashUnitHoldAgent || UnitAgent::IsRtti(uRtti);
-}
 
-// FUNCTION: SWBF2 0x00668d80
-unsigned int UnitHoldAgent::GetDerivedRtti() const
-{
-    return rttiHashUnitHoldAgent;
-}
 
-// FUNCTION: SWBF2 0x00668d90
-const char* UnitHoldAgent::GetDerivedRttiName() const
-{
-    return rttiNameUnitHoldAgent;
-}
+
+
+
 
 // FUNCTION: SWBF2 0x00668dd0
 UnitHoldAgent::UnitHoldAgent(UnitController* pCtrl)

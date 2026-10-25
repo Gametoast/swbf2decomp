@@ -13,6 +13,7 @@ namespace LuaHelper
 
 lua_State* mState;
 
+// GLOBAL: SWBF2 0x01e5794b
 bool mbInitialized;
 
 // FUNCTION: SWBF2 0x005a0ce0

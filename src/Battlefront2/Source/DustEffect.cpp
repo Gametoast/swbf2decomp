@@ -43,11 +43,7 @@ PblList<DustEffectClass> DustEffectClass::sDustEffectClasses;
 // GLOBAL: SWBF2 0x007eb7bc
 PblList<DustEffect> DustEffectClass::sDustEffects;
 
-// FUNCTION: SWBF2 0x00443f60
-bool EntityClass::IsRtti(unsigned int uRtti)
-{
-    return rttiHashEntityClass == uRtti;
-}
+
 
 // FUNCTION: SWBF2 0x0048ec20
 DustEffect::DustEffect(DustEffectClass* pClass, const PblMatrix& matrix)

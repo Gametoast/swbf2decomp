@@ -1,5 +1,7 @@
 #pragma once
 
+#include "PebbleFL/Common/PblHashTable.h"
+
 #include "WeaponCannon.h"
 #include "WeaponCannonInstance.h"
 #include "PebbleFL/Common/PblHashTable.h"
@@ -17,9 +19,9 @@ public:
 
     virtual WeaponClass* Derive(unsigned int uHash);
     virtual Weapon* Build(const WeaponDesc& desc);
-    virtual bool IsRtti(unsigned int uRtti);
-    virtual unsigned int GetDerivedRtti();
-    virtual const char* GetDerivedRttiName();
+    virtual bool IsRtti(unsigned int uRtti) const;
+    virtual unsigned int GetDerivedRtti() const;
+    virtual const char* GetDerivedRttiName() const;
 };
  class Ordnance;
 class NetPktGroup;
@@ -51,3 +53,47 @@ public:
   
 
  
+
+// FUNCTION: SWBF2 0x00684d10
+inline bool WeaponGrapplingHookClass::IsRtti(unsigned int uRtti) const
+{
+    if (rttiHashWeaponGrapplingHookClass == uRtti)
+    {
+        return true;
+    }
+    return WeaponCannonClass::IsRtti(uRtti);
+}
+
+// FUNCTION: SWBF2 0x00684d40
+inline unsigned int WeaponGrapplingHookClass::GetDerivedRtti() const
+{
+    return rttiHashWeaponGrapplingHookClass;
+}
+
+// FUNCTION: SWBF2 0x00684d50
+inline const char* WeaponGrapplingHookClass::GetDerivedRttiName() const
+{
+    return rttiNameWeaponGrapplingHookClass;
+}
+
+// FUNCTION: SWBF2 0x00684c90
+inline bool WeaponGrapplingHook::IsRtti(unsigned int uRtti) const
+{
+    if (rttiHashWeaponGrapplingHook == uRtti)
+    {
+        return true;
+    }
+    return WeaponCannon::IsRtti(uRtti);
+}
+
+// FUNCTION: SWBF2 0x00684cc0
+inline unsigned int WeaponGrapplingHook::GetDerivedRtti() const
+{
+    return rttiHashWeaponGrapplingHook;
+}
+
+// FUNCTION: SWBF2 0x00684cd0
+inline const char* WeaponGrapplingHook::GetDerivedRttiName() const
+{
+    return rttiNameWeaponGrapplingHook;
+}

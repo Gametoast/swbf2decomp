@@ -45,11 +45,7 @@ static const float kfFadeDrawDistance = 0.9f;
 static const float kfFadeDrawDistanceSquared = kfFadeDrawDistance * kfFadeDrawDistance;
 static const float kfFadeDrawDistanceFactor = 1.0f / (1.0f - kfFadeDrawDistanceSquared);
 
-static PblMatrix _IdentityMatrix(
-    PblVector4{ 1.0f, 0.0f, 0.0f, 0.0f },
-    PblVector4{ 0.0f, 1.0f, 0.0f, 0.0f },
-    PblVector4{ 0.0f, 0.0f, 1.0f, 0.0f },
-    PblVector4{ 0.0f, 0.0f, 0.0f, 1.0f });
+
 
 // FUNCTION: SWBF2 0x004bd820
 inline const RedColor Interpolate(const RedColor& a, const RedColor& b, float t)
@@ -238,23 +234,11 @@ void LightBeam::RemoveFromRenderList()
 // SYNTHETIC: SWBF2 0x004be180
 // LightBeam::`scalar deleting destructor'
 
-// FUNCTION: SWBF2 0x004be1b0
-bool EntityHologram::IsRtti(unsigned int uRtti) const
-{
-    return uRtti == rttiHashEntityHologram || EntityEx::IsRtti(uRtti);
-}
 
-// FUNCTION: SWBF2 0x004be1e0
-unsigned int EntityHologram::GetDerivedRtti() const
-{
-    return rttiHashEntityHologram;
-}
 
-// FUNCTION: SWBF2 0x004be1f0
-const char* EntityHologram::GetDerivedRttiName() const
-{
-    return rttiNameEntityHologram;
-}
+
+
+
 
 // FUNCTION: SWBF2 0x004be200
 bool EntityHologram::MyThread::Update(float fDeltaTime)
@@ -263,23 +247,8 @@ bool EntityHologram::MyThread::Update(float fDeltaTime)
     return true;
 }
 
-// FUNCTION: SWBF2 0x004be220
-bool EntityHologramClass::IsRtti(unsigned int uRtti)
-{
-    return uRtti == rttiHashEntityHologramClass || EntityClass::IsRtti(uRtti);
-}
 
-// FUNCTION: SWBF2 0x004be250
-unsigned int EntityHologramClass::GetDerivedRtti()
-{
-    return rttiHashEntityHologramClass;
-}
 
-// FUNCTION: SWBF2 0x004be260
-const char* EntityHologramClass::GetDerivedRttiName()
-{
-    return rttiNameEntityHologramClass;
-}
 
 // SYNTHETIC: SWBF2 0x004c08f2
 // [thunk]:EntityHologram::`scalar deleting destructor' adjustor{12}
@@ -772,7 +741,7 @@ void EntityHologram::Render(unsigned char ucViewport, float fDist, unsigned int 
     float fInvAspect = 1.0f / m_fAspect;
     float fSize = m_fCurrentFadeInFactor * pClass->m_fSize;
 
-    PblMatrix mModel(_IdentityMatrix);
+    PblMatrix mModel(gMatrixIdentity);
     PblMatrix mTemp;
     D3DXMatrixMultiply(&mModel, &mModel, D3DXMatrixRotationX(&mTemp, m_fTilt));
     D3DXMatrixMultiply(&mModel, &mModel, D3DXMatrixRotationY(&mTemp, pClass->m_fRotateRate * m_fRotateTimer));

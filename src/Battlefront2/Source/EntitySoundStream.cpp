@@ -47,11 +47,7 @@ EntityClass* EntitySoundStreamClass::Derive(unsigned int uHash)
     return new EntitySoundStreamClass(this, uHash);
 }
 
-// FUNCTION: SWBF2 0x004fba10
-bool EntitySoundStreamClass::IsRtti(unsigned int uRtti)
-{
-    return uRtti == rttiHashEntitySoundStreamClass || EntitySoundClass::IsRtti(uRtti);
-}
+
 
 // FUNCTION: SWBF2 0x004fbda0
 Entity* EntitySoundStreamClass::Build(const EntityDesc& desc)
@@ -59,17 +55,9 @@ Entity* EntitySoundStreamClass::Build(const EntityDesc& desc)
     return new EntitySoundStream(this, desc);
 }
 
-// FUNCTION: SWBF2 0x004fba40
-unsigned int EntitySoundStreamClass::GetDerivedRtti()
-{
-    return rttiHashEntitySoundStreamClass;
-}
 
-// FUNCTION: SWBF2 0x004fba50
-const char* EntitySoundStreamClass::GetDerivedRttiName()
-{
-    return rttiNameEntitySoundStreamClass;
-}
+
+
 
 // SYNTHETIC: SWBF2 0x00402e80
 // `dynamic initializer for 'EntitySoundStream::rttiHashEntitySoundStream''
@@ -83,25 +71,14 @@ const char EntitySoundStream::rttiNameEntitySoundStream[] = "EntitySoundStream";
 // `dynamic initializer for 'EntitySoundStream::sMemoryPool''
 // SYNTHETIC: SWBF2 0x00767000
 // `dynamic atexit destructor for 'EntitySoundStream::sMemoryPool''
+
 MemoryPool EntitySoundStream::sMemoryPool("EntitySoundStream", 0x10c);
 
-// FUNCTION: SWBF2 0x004fb9b0
-bool EntitySoundStream::IsRtti(unsigned int uRtti) const
-{
-    return uRtti == rttiHashEntitySoundStream || Entity::IsRtti(uRtti);
-}
 
-// FUNCTION: SWBF2 0x004fb9e0
-unsigned int EntitySoundStream::GetDerivedRtti() const
-{
-    return rttiHashEntitySoundStream;
-}
 
-// FUNCTION: SWBF2 0x004fb9f0
-const char* EntitySoundStream::GetDerivedRttiName() const
-{
-    return rttiNameEntitySoundStream;
-}
+
+
+
 
 // FUNCTION: SWBF2 0x004fb890
 Snd::SoundStream::SoundStream()

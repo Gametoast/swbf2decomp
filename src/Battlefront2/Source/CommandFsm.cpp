@@ -19,17 +19,9 @@
 // SYNTHETIC: SWBF2 0x0066989b
 // [thunk]:UnitStationaryController::`scalar deleting destructor' adjustor{120}
 
-// FUNCTION: SWBF2 0x006691b0
-unsigned int UnitMobileController::GetDerivedRtti() const
-{
-    return rttiHashUnitMobileController;
-}
 
-// FUNCTION: SWBF2 0x006691c0
-const char* UnitMobileController::GetDerivedRttiName() const
-{
-    return rttiNameUnitMobileController;
-}
+
+
 
 // FUNCTION: SWBF2 0x00478780
 CommandFsm::CommandFsm()

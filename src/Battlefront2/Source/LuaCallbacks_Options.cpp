@@ -31,7 +31,10 @@ int gNumBots[4] = { -1, -1, 16, 16 };
 
 }
 
-namespace GameLoop { extern bool mbHistoricalRules; }
+namespace GameLoop
+{
+    extern bool mbHistoricalRules;
+}
 
 extern bool netTeamDamage;
 extern bool netAutoAssignTeams;
@@ -40,7 +43,10 @@ extern bool netHeroesEnabled;
 extern int netHeroRuleUnlockVal;
 extern int netHeroRuleRespawn;
 extern int netHeroRuleRespawnVal;
-namespace PblBuildType { extern bool gDemoBuild; }
+namespace PblBuildType
+{
+    extern bool gDemoBuild;
+}
 extern int hostVoteThreshold;
 extern int netHostedPlayerLimit;
 extern int netDedicatedPlayerLimit;
@@ -48,14 +54,20 @@ extern int netPlayerLimit;
 extern int gGlobalNumBots;
 extern bool netAutoAim;
 extern bool netShowNames;
-namespace PblBuildType { extern bool gDemoAutoAssign; }
+namespace PblBuildType
+{
+    extern bool gDemoAutoAssign;
+}
 extern bool netAutoAssignTeamsOriginalSetting;
 extern int netMinPlayersToAutoLaunchDedicated;
 extern int netThrottle;
 extern int netHeroRuleUnlock;
 extern int netHeroRulePlayer;
 extern int netHeroRuleTeam;
-namespace Lua_Callbacks { extern int gTeamSetReinforcementMult; }
+namespace Lua_Callbacks
+{
+    extern int gTeamSetReinforcementMult;
+}
 extern int netRequestedCameraCount;
 extern bool g_SpectatorEnabled[1];
 

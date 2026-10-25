@@ -1,5 +1,7 @@
 #pragma once
 
+#include "PebbleFL/Common/PblHashTable.h"
+
 #include <stddef.h>
 
 #include "Entity.h"
@@ -29,9 +31,9 @@ public:
 
     virtual EntityClass* Derive(unsigned int uHash);
     virtual Entity* Build(const EntityDesc& desc);
-    virtual bool IsRtti(unsigned int uRtti);
-    virtual unsigned int GetDerivedRtti();
-    virtual const char* GetDerivedRttiName();
+    virtual bool IsRtti(unsigned int uRtti) const;
+    virtual unsigned int GetDerivedRtti() const;
+    virtual const char* GetDerivedRttiName() const;
     virtual void SetProperty(unsigned int uProperty, const char* pszValue);
 
     static EntityHologramClass* Find(unsigned int uHash);
@@ -167,3 +169,47 @@ public:
  
  
  
+
+// FUNCTION: SWBF2 0x004be1b0
+inline bool EntityHologram::IsRtti(unsigned int uRtti) const
+{
+    if (rttiHashEntityHologram == uRtti)
+    {
+        return true;
+    }
+    return EntityEx::IsRtti(uRtti);
+}
+
+// FUNCTION: SWBF2 0x004be1e0
+inline unsigned int EntityHologram::GetDerivedRtti() const
+{
+    return rttiHashEntityHologram;
+}
+
+// FUNCTION: SWBF2 0x004be1f0
+inline const char* EntityHologram::GetDerivedRttiName() const
+{
+    return rttiNameEntityHologram;
+}
+
+// FUNCTION: SWBF2 0x004be220
+inline bool EntityHologramClass::IsRtti(unsigned int uRtti) const
+{
+    if (rttiHashEntityHologramClass == uRtti)
+    {
+        return true;
+    }
+    return EntityClass::IsRtti(uRtti);
+}
+
+// FUNCTION: SWBF2 0x004be250
+inline unsigned int EntityHologramClass::GetDerivedRtti() const
+{
+    return rttiHashEntityHologramClass;
+}
+
+// FUNCTION: SWBF2 0x004be260
+inline const char* EntityHologramClass::GetDerivedRttiName() const
+{
+    return rttiNameEntityHologramClass;
+}

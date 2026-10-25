@@ -1,5 +1,7 @@
 #pragma once
 
+#include "PebbleFL/Common/PblHashTable.h"
+
 #include <stddef.h>
 
 #include "WeaponDispenser.h"
@@ -20,9 +22,9 @@ public:
 
     virtual WeaponDispenserClass* Derive(unsigned int uHash);
     virtual WeaponDispenser* Build(const WeaponDesc& desc);
-    virtual bool IsRtti(unsigned int uRtti);
-    virtual unsigned int GetDerivedRtti();
-    virtual const char* GetDerivedRttiName();
+    virtual bool IsRtti(unsigned int uRtti) const;
+    virtual unsigned int GetDerivedRtti() const;
+    virtual const char* GetDerivedRttiName() const;
     virtual void SetProperty(unsigned int uProperty, const char* pszValue);
 
     bool mSwitchImmediately;
@@ -63,3 +65,47 @@ public:
 };
  
  
+
+// FUNCTION: SWBF2 0x0068ff10
+inline bool WeaponRemoteClass::IsRtti(unsigned int uRtti) const
+{
+    if (rttiHashWeaponRemoteClass == uRtti)
+    {
+        return true;
+    }
+    return WeaponDispenserClass::IsRtti(uRtti);
+}
+
+// FUNCTION: SWBF2 0x0068ff40
+inline unsigned int WeaponRemoteClass::GetDerivedRtti() const
+{
+    return rttiHashWeaponRemoteClass;
+}
+
+// FUNCTION: SWBF2 0x0068ff50
+inline const char* WeaponRemoteClass::GetDerivedRttiName() const
+{
+    return rttiNameWeaponRemoteClass;
+}
+
+// FUNCTION: SWBF2 0x0068fec0
+inline bool WeaponRemote::IsRtti(unsigned int uRtti) const
+{
+    if (rttiHashWeaponRemote == uRtti)
+    {
+        return true;
+    }
+    return WeaponDispenser::IsRtti(uRtti);
+}
+
+// FUNCTION: SWBF2 0x0068fef0
+inline unsigned int WeaponRemote::GetDerivedRtti() const
+{
+    return rttiHashWeaponRemote;
+}
+
+// FUNCTION: SWBF2 0x0068ff00
+inline const char* WeaponRemote::GetDerivedRttiName() const
+{
+    return "WeaponRemote";
+}

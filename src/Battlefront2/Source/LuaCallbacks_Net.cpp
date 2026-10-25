@@ -34,7 +34,10 @@
 
 void JRR_to_Errorbox(JoinRejectReason eReason);
 extern int hostVoteThreshold;
-namespace FriendBuddyList { bool __fastcall IsFriendBuddy(int ignored, int iPlayer); }
+namespace FriendBuddyList
+{
+    bool __fastcall IsFriendBuddy(int ignored, int iPlayer);
+}
 
 // FUNCTION: SWBF2 0x00429300
 RedColor Team::GetColor(int iTeam) const
@@ -42,8 +45,11 @@ RedColor Team::GetColor(int iTeam) const
     return mColor[iTeam];
 }
 
-// GLOBAL: SWBF2 0x01e57728
-namespace Lua_Callbacks { unsigned int HighestError; }
+namespace Lua_Callbacks
+{
+    // GLOBAL: SWBF2 0x01e57728
+    unsigned int HighestError;
+}
 
 namespace Lua_Callbacks
 {
@@ -132,9 +138,18 @@ bool gVoiceLocalEchoEnabled;
 
 int gFriendListIcon;
 
-namespace GameVoiceChat { void* GetNode(); }
-namespace GameVoiceChat { void* FindNodeByDeviceID(); }
-namespace GameVoiceChat { unsigned int GetNumNodes(); }
+namespace GameVoiceChat
+{
+    void* GetNode();
+}
+namespace GameVoiceChat
+{
+    void* FindNodeByDeviceID();
+}
+namespace GameVoiceChat
+{
+    unsigned int GetNumNodes();
+}
 
 // FUNCTION: SWBF2 0x00596020
 static void VoiceLocalEchoEnable(const bool bEnable)

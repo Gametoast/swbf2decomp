@@ -2994,6 +2994,14 @@
     <ClCompile Include="src\SoundFL\source\sndstreamformat.cpp" />
     <ClCompile Include="src\SoundFL\source\sndstreamgsmdecoder.cpp" />
     <ClCompile Include="src\SoundFL\source\sndstreamgsmencoder.cpp" />
+    <ClCompile Include="src\SoundFL\source\gsm_encode.c">
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <OmitDefaultLibName>true</OmitDefaultLibName>
+    </ClCompile>
+    <ClCompile Include="src\SoundFL\source\gsm_option.c">
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <OmitDefaultLibName>true</OmitDefaultLibName>
+    </ClCompile>
     <ClCompile Include="src\SoundFL\source\sndstreamhighlowpass.cpp" />
     <ClCompile Include="src\SoundFL\source\sndstreamimaadpcmdecoder.cpp" />
     <ClCompile Include="src\SoundFL\source\sndstreammixer.cpp" />
@@ -3056,6 +3064,9 @@
     <ClCompile Include="src\ZlibFL\inftrees.c" />
     <ClCompile Include="src\ZlibFL\trees.c" />
     <ClCompile Include="src\ZlibFL\zutil.c" />
+    <ClCompile Include="src\RedEngineFL\input\pc\pcRedLogitechLCD.cpp">
+      <InlineFunctionExpansion Condition="'$(Configuration)'=='Release'">OnlyExplicitInline</InlineFunctionExpansion>
+    </ClCompile>
     <ClCompile Include="src\lglcd\lgLcd.cpp">
       <BufferSecurityCheck>false</BufferSecurityCheck>
     </ClCompile>

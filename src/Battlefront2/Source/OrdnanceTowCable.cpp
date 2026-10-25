@@ -51,23 +51,8 @@ MemoryPool OrdnanceTowCable::sMemoryPool("OrdnanceTowCable", 0x670);
 // GLOBAL: SWBF2 0x01eaed60
 unsigned int OrdnanceTowCable::sTextureHash;
 
-// FUNCTION: SWBF2 0x006072a0
-bool OrdnanceTowCable::IsRtti(unsigned int uRtti) const
-{
-    return uRtti == rttiHashOrdnanceTowCable || OrdnanceBullet::IsRtti(uRtti);
-}
 
-// FUNCTION: SWBF2 0x006072d0
-unsigned int OrdnanceTowCable::GetDerivedRtti() const
-{
-    return rttiHashOrdnanceTowCable;
-}
 
-// FUNCTION: SWBF2 0x006072e0
-const char* OrdnanceTowCable::GetDerivedRttiName() const
-{
-    return rttiNameOrdnanceTowCable;
-}
 
 // SYNTHETIC: SWBF2 0x00609c29
 // [thunk]:OrdnanceTowCable::`scalar deleting destructor' adjustor{24}
@@ -76,23 +61,11 @@ const char* OrdnanceTowCable::GetDerivedRttiName() const
 // SYNTHETIC: SWBF2 0x00607300
 // OrdnanceTowCable::`scalar deleting destructor'
 
-// FUNCTION: SWBF2 0x00607330
-bool OrdnanceTowCableClass::IsRtti(unsigned int uRtti)
-{
-    return uRtti == rttiHashOrdnanceTowCableClass || OrdnanceBulletClass::IsRtti(uRtti);
-}
 
-// FUNCTION: SWBF2 0x00607360
-unsigned int OrdnanceTowCableClass::GetDerivedRtti()
-{
-    return rttiHashOrdnanceTowCableClass;
-}
 
-// FUNCTION: SWBF2 0x00607370
-const char* OrdnanceTowCableClass::GetDerivedRttiName()
-{
-    return rttiNameOrdnanceTowCableClass;
-}
+
+
+
 
 // FUNCTION: SWBF2 0x00607380
 OrdnanceTowCable::OrdnanceTowCable(OrdnanceTowCableClass* pClass, const OrdnanceDesc& desc)

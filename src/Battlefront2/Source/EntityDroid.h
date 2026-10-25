@@ -1,5 +1,7 @@
 #pragma once
 
+#include "PebbleFL/Common/PblHashTable.h"
+
 #include <stddef.h>
 
 #include "Aimer.h"
@@ -36,9 +38,9 @@ public:
 
     virtual EntityClass* Derive(unsigned int uHash);
     virtual Entity* Build(const EntityDesc& desc);
-    virtual bool IsRtti(unsigned int uRtti);
-    virtual unsigned int GetDerivedRtti();
-    virtual const char* GetDerivedRttiName();
+    virtual bool IsRtti(unsigned int uRtti) const;
+    virtual unsigned int GetDerivedRtti() const;
+    virtual const char* GetDerivedRttiName() const;
     virtual void SetProperty(unsigned int uProperty, const char* pszValue);
     virtual const void* GetControllableClass();
     virtual int GetWeaponCount();
@@ -270,3 +272,49 @@ public:
  
  
  
+
+// FUNCTION: SWBF2 0x00499370
+inline unsigned int EntityDroid::GetDerivedRtti() const
+{
+    return rttiHashEntityDroid;
+}
+
+// FUNCTION: SWBF2 0x00499380
+inline const char* EntityDroid::GetDerivedRttiName() const
+{
+    return rttiNameEntityDroid;
+}
+
+// FUNCTION: SWBF2 0x00499560
+inline bool EntityDroidClass::IsRtti(unsigned int uRtti) const
+{
+    if (rttiHashEntityDroidClass == uRtti)
+    {
+        return true;
+    }
+    return GameObjectClass::IsRtti(uRtti);
+}
+
+// FUNCTION: SWBF2 0x004995a0
+inline unsigned int EntityDroidClass::GetDerivedRtti() const
+{
+    return rttiHashEntityDroidClass;
+}
+
+// FUNCTION: SWBF2 0x004995b0
+inline const char* EntityDroidClass::GetDerivedRttiName() const
+{
+    return rttiNameEntityDroidClass;
+}
+
+// FUNCTION: SWBF2 0x00499330
+inline bool EntityDroid::IsRtti(unsigned int uRtti) const
+{
+    if (rttiHashEntityDroid == uRtti)
+    {
+        return true;
+    }
+    return GameObject::IsRtti(uRtti);
+}
+
+

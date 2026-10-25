@@ -45,23 +45,11 @@ namespace
 PblHash UnitRandomAgent::rttiHashUnitRandomAgent("UnitRandomAgent");
 const char UnitRandomAgent::rttiNameUnitRandomAgent[] = "UnitRandomAgent";
 
-// FUNCTION: SWBF2 0x00669320
-bool UnitRandomAgent::IsRtti(unsigned int uRtti) const
-{
-    return uRtti == rttiHashUnitRandomAgent || UnitAgent::IsRtti(uRtti);
-}
 
-// FUNCTION: SWBF2 0x00669350
-unsigned int UnitRandomAgent::GetDerivedRtti() const
-{
-    return rttiHashUnitRandomAgent;
-}
 
-// FUNCTION: SWBF2 0x00669360
-const char* UnitRandomAgent::GetDerivedRttiName() const
-{
-    return rttiNameUnitRandomAgent;
-}
+
+
+
 
 // FUNCTION: SWBF2 0x00669370
 bool UnitRandomAgent::ShouldQueueCurCmd(const UnitCmdInfo& cmd) const

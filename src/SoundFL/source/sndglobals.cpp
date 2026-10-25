@@ -24,12 +24,18 @@ PblRandom sndRandom;
 namespace Globals
 {
 
+// GLOBAL: SWBF2 0x009d8390
 void* (__cdecl* smAlloc)(size_t) = 0;
+// GLOBAL: SWBF2 0x009d8394
 void (__cdecl* smFree)(void*) = 0;
+// GLOBAL: SWBF2 0x009d8398
 void* (__cdecl* smTempAlloc)(size_t) = 0;
+// GLOBAL: SWBF2 0x009d839c
 void (__cdecl* smTempFree)(void*) = 0;
 
+// GLOBAL: SWBF2 0x009d83a0
 void* (__cdecl* smAllocPerm)(size_t) = 0;
+// GLOBAL: SWBF2 0x009d83a4
 void (__cdecl* smFreePerm)(void*) = 0;
 
 void (__cdecl* smWarningFunction)(char const*) = PrintDebugMessageDefault;

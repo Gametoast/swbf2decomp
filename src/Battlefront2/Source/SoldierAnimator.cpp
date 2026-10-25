@@ -33,11 +33,7 @@ static const float FIRST_PERSON_ANIMATION_SCALE = 0.45f;
 static const float MOVEANGLE_BLEND_RATE = 7.5f;
 static const float OVERLAY_FADEOUT_RATE = 8.0f;
 
-static PblMatrix _IdentityMatrix(
-    PblVector4{ 1.0f, 0.0f, 0.0f, 0.0f },
-    PblVector4{ 0.0f, 1.0f, 0.0f, 0.0f },
-    PblVector4{ 0.0f, 0.0f, 1.0f, 0.0f },
-    PblVector4{ 0.0f, 0.0f, 0.0f, 1.0f });
+
 
 extern "C" PblVector3* __stdcall D3DXVec3Normalize(PblVector3* pOut, const PblVector3* pV);
 
@@ -837,7 +833,7 @@ void SoldierAnimator::SetupPose(RedPose& pose)
                 overlayPose.SetAnimation(pOverlayAnim, 30.0f);
                 mZephyrPoseStatic.Blend(overlayPose, mUpperBodyAnimMask, fOverlayBlend);
             }
-            mZephyrSkeleton.BuildWorldMatrices(_IdentityMatrix);
+            mZephyrSkeleton.BuildWorldMatrices(gMatrixIdentity);
         }
         pose.ConvertFromZephyrPose(mZephyrSkeleton);
         return;
@@ -1131,7 +1127,7 @@ inline PblMatrix& RotateJointWorldMatrix(ZephyrSkeleton<32>& kSkel, int iJoint, 
     PblMatrix mTemp;
     D3DXMatrixRotationY(&mRotate, fYaw);
     D3DXMatrixMultiply(&mRotate, &mRotate, D3DXMatrixRotationX(&mTemp, fPitch));
-    kSkel.BuildWorldMatrices(_IdentityMatrix, iJoint, kDirty);
+    kSkel.BuildWorldMatrices(gMatrixIdentity, iJoint, kDirty);
 
     PblMatrix& mWorld = kSkel.m_pWorldMatrices[iJoint];
     PblVector3 vOrigin;
@@ -1159,7 +1155,7 @@ void SoldierAnimator::ApplyProceduralAnimationAndBuildWorldMatrices(float fDelta
 {
     if (!(m_uiAimState & 0x33))
     {
-        mZephyrSkeleton.BuildWorldMatrices(_IdentityMatrix);
+        mZephyrSkeleton.BuildWorldMatrices(gMatrixIdentity);
         return;
     }
 
@@ -1173,7 +1169,7 @@ void SoldierAnimator::ApplyProceduralAnimationAndBuildWorldMatrices(float fDelta
         m_uiAimState &= ~0x30;
         if (!(m_uiAimState & 0x33))
         {
-            mZephyrSkeleton.BuildWorldMatrices(_IdentityMatrix);
+            mZephyrSkeleton.BuildWorldMatrices(gMatrixIdentity);
             return;
         }
         fBlend = 1.0f;
@@ -1306,7 +1302,7 @@ void SoldierAnimator::ApplyProceduralAnimationAndBuildWorldMatrices(float fDelta
         }
     }
 
-    mZephyrSkeleton.BuildWorldMatrices(_IdentityMatrix, kDirty);
+    mZephyrSkeleton.BuildWorldMatrices(gMatrixIdentity, kDirty);
 }
 
 // FUNCTION: SWBF2 0x00640860

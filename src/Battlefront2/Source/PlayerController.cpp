@@ -100,25 +100,14 @@ const char PlayerController::rttiNamePlayerController[] = "PlayerController";
 // `dynamic initializer for 'PlayerController::sMemoryPool''
 // SYNTHETIC: SWBF2 0x00769330
 // `dynamic atexit destructor for 'PlayerController::sMemoryPool''
+
 MemoryPool PlayerController::sMemoryPool("PlayerController", sizeof(PlayerController));
 
-// FUNCTION: SWBF2 0x0061a060
-bool PlayerController::IsRtti(unsigned int uRtti) const
-{
-    return uRtti == rttiHashPlayerController || Controller::IsRtti(uRtti);
-}
 
-// FUNCTION: SWBF2 0x0061a090
-unsigned int PlayerController::GetDerivedRtti() const
-{
-    return rttiHashPlayerController;
-}
 
-// FUNCTION: SWBF2 0x0061a0a0
-const char* PlayerController::GetDerivedRttiName() const
-{
-    return rttiNamePlayerController;
-}
+
+
+
 
 // FUNCTION: SWBF2 0x0061a0b0
 PlayerController* PlayerControllerPtr(Controller* pCtrl)

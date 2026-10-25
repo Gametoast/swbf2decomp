@@ -47,18 +47,14 @@ const RedModel* RedModel::Find(unsigned int uiName)
     return _HashTable.Find(uiName);
 }
 
-static PblMatrix _IdentityMatrix(
-    PblVector4{ 1.0f, 0.0f, 0.0f, 0.0f },
-    PblVector4{ 0.0f, 1.0f, 0.0f, 0.0f },
-    PblVector4{ 0.0f, 0.0f, 1.0f, 0.0f },
-    PblVector4{ 0.0f, 0.0f, 0.0f, 1.0f });
+
 
 // FUNCTION: SWBF2 0x0043ed70
 const PblMatrix& CommandPost::GetMatrix() const
 {
     if (!(GameObject*)mObject)
     {
-        return _IdentityMatrix;
+        return gMatrixIdentity;
     }
     return ((GameObject*)mObject)->GetMatrix();
 }

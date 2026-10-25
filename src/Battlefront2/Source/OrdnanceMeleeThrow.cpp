@@ -156,23 +156,11 @@ const char OrdnanceMeleeThrow::rttiNameOrdnanceMeleeThrow[] = "OrdnanceMeleeThro
 PblHash OrdnanceMeleeThrowClass::rttiHashOrdnanceMeleeThrowClass("OrdnanceMeleeThrowClass");
 const char OrdnanceMeleeThrowClass::rttiNameOrdnanceMeleeThrowClass[] = "OrdnanceMeleeThrowClass";
 
-// FUNCTION: SWBF2 0x00602180
-bool OrdnanceMeleeThrow::IsRtti(unsigned int uRtti) const
-{
-    return uRtti == rttiHashOrdnanceMeleeThrow || Ordnance::IsRtti(uRtti);
-}
 
-// FUNCTION: SWBF2 0x006021b0
-unsigned int OrdnanceMeleeThrow::GetDerivedRtti() const
-{
-    return rttiHashOrdnanceMeleeThrow;
-}
 
-// FUNCTION: SWBF2 0x006021c0
-const char* OrdnanceMeleeThrow::GetDerivedRttiName() const
-{
-    return rttiNameOrdnanceMeleeThrow;
-}
+
+
+
 
 // FUNCTION: SWBF2 0x006021d0
 const PblVector3& OrdnanceMeleeThrow::GetOldPosition() const
@@ -186,23 +174,11 @@ const PblVector3& OrdnanceMeleeThrow::GetVelocity() const
     return mVelocity;
 }
 
-// FUNCTION: SWBF2 0x00602220
-bool OrdnanceMeleeThrowClass::IsRtti(unsigned int uRtti)
-{
-    return uRtti == rttiHashOrdnanceMeleeThrowClass || OrdnanceClass::IsRtti(uRtti);
-}
 
-// FUNCTION: SWBF2 0x00602250
-unsigned int OrdnanceMeleeThrowClass::GetDerivedRtti()
-{
-    return rttiHashOrdnanceMeleeThrowClass;
-}
 
-// FUNCTION: SWBF2 0x00602260
-const char* OrdnanceMeleeThrowClass::GetDerivedRttiName()
-{
-    return rttiNameOrdnanceMeleeThrowClass;
-}
+
+
+
 
 // FUNCTION: SWBF2 0x00602270
 float OrdnanceMeleeThrowClass::GetVelocity()
@@ -245,11 +221,7 @@ void OrdnanceMeleeThrow::Return()
 
 extern bool netIsLateTurn;
 
-static PblMatrix _IdentityMatrix(
-    PblVector4{ 1.0f, 0.0f, 0.0f, 0.0f },
-    PblVector4{ 0.0f, 1.0f, 0.0f, 0.0f },
-    PblVector4{ 0.0f, 0.0f, 1.0f, 0.0f },
-    PblVector4{ 0.0f, 0.0f, 0.0f, 1.0f });
+
 
 // FUNCTION: SWBF2 0x00602290
 OrdnanceMeleeThrow::OrdnanceMeleeThrow(OrdnanceMeleeThrowClass* pClass, const OrdnanceDesc& desc)
@@ -347,7 +319,7 @@ OrdnanceMeleeThrow::OrdnanceMeleeThrow(OrdnanceMeleeThrowClass* pClass, const Or
             {
                 m_pLight->SetColor(pClass->m_colorLight);
             }
-            PblMatrix matrix = _IdentityMatrix;
+            PblMatrix matrix = gMatrixIdentity;
             matrix.m[3][0] = mPosition.x;
             matrix.m[3][1] = mPosition.y;
             matrix.m[3][2] = mPosition.z;
@@ -386,7 +358,7 @@ OrdnanceMeleeThrow::OrdnanceMeleeThrow(OrdnanceMeleeThrowClass* pClass, const Or
             m_pLight->SetOmniLightRadius(pClass->m_fRadiusLight);
             m_pLight->SetHaloRadius(0.0f);
             m_pLight->SetFlareIntensity(0.0f);
-            PblMatrix matrix = _IdentityMatrix;
+            PblMatrix matrix = gMatrixIdentity;
             matrix.m[3][0] = mPosition.x;
             matrix.m[3][1] = mPosition.y;
             matrix.m[3][2] = mPosition.z;
@@ -448,7 +420,7 @@ bool OrdnanceMeleeThrow::Update(float fDeltaTime)
         mPosition.x += mVelocity.x * fStep;
         mPosition.y += mVelocity.y * fStep;
         mPosition.z += mVelocity.z * fStep;
-        PblMatrix mRotate = _IdentityMatrix;
+        PblMatrix mRotate = gMatrixIdentity;
         D3DXMatrixRotationAxis((D3DXMATRIX*)&mRotate, (const D3DXVECTOR3*)&m_vRotationAxis, pClass->m_fOmega * fStep);
         D3DXMatrixMultiply((D3DXMATRIX*)&m_mMatrix, (const D3DXMATRIX*)&m_mMatrix, (const D3DXMATRIX*)&mRotate);
         m_mMatrix.m[3][0] = mPosition.x;
@@ -496,7 +468,7 @@ bool OrdnanceMeleeThrow::Update(float fDeltaTime)
     mPosition.x = (vTarget.x - mOldPosition.x) * fT + mOldPosition.x;
     mPosition.y = (vTarget.y - mOldPosition.y) * fT + mOldPosition.y;
     mPosition.z = (vTarget.z - mOldPosition.z) * fT + mOldPosition.z;
-    PblMatrix mRotate(_IdentityMatrix);
+    PblMatrix mRotate(gMatrixIdentity);
     D3DXMatrixRotationAxis((D3DXMATRIX*)&mRotate, (const D3DXVECTOR3*)&m_vRotationAxis,
                            pClass->m_fOmega * fDeltaTime * 0.5f);
     D3DXMatrixMultiply((D3DXMATRIX*)&m_mMatrix, (const D3DXMATRIX*)&m_mMatrix, (const D3DXMATRIX*)&mRotate);
@@ -543,7 +515,7 @@ void OrdnanceMeleeThrow::ApplyDamage(float fDeltaTime)
     const int iNumSteps = (int)(fDeltaTime / fStepTime) + 1;
     const float fStep = fDeltaTime / (float)iNumSteps;
 
-    PblMatrix mRotate = _IdentityMatrix;
+    PblMatrix mRotate = gMatrixIdentity;
     D3DXMatrixRotationAxis((D3DXMATRIX*)&mRotate, (const D3DXVECTOR3*)&m_vRotationAxis, fStep * pClass->m_fOmega);
     PblMatrix mFirst;
     D3DXMatrixMultiply((D3DXMATRIX*)&mFirst, (const D3DXMATRIX*)&m_mMatrix, (const D3DXMATRIX*)&mRotate);
@@ -773,19 +745,24 @@ OrdnanceMeleeThrowClass::OrdnanceMeleeThrowClass(OrdnanceMeleeThrowClass* pBase,
 // FUNCTION: SWBF2 0x00604530
 void OrdnanceMeleeThrowClass::SetProperty(unsigned int uProperty, const char* pszValue)
 {
-    if (uProperty == 0x32741C32)
+    switch (uProperty)
+    {
+    case 0x32741C32:
     {
         sscanf(pszValue, "%f", &mVelocity);
+            break;
     }
-    else if (uProperty == 0x2776564D)
+    case 0x2776564D:
     {
         sscanf(pszValue, "%f", &m_fRadiusLight);
+            break;
     }
-    else if (uProperty == 0x0DDA9B5B)
+    case 0x0DDA9B5B:
     {
         sscanf(pszValue, "%f", &m_fReturnDuration);
+            break;
     }
-    else if (uProperty == 0x746CE73E)
+    case 0x746CE73E:
     {
         int r, g, b, a;
         int iCount = sscanf(pszValue, "%d %d %d %d", &r, &g, &b, &a);
@@ -808,12 +785,14 @@ void OrdnanceMeleeThrowClass::SetProperty(unsigned int uProperty, const char* ps
         }
         color.a = 255;
         m_colorLight = color;
+            break;
     }
-    else if (uProperty == 0xDE71B19F)
+    case 0xDE71B19F:
     {
         m_OnSound.SetID(pszValue, false, false);
+            break;
     }
-    else if (uProperty == 0xC3B311DC)
+    case 0xC3B311DC:
     {
         char acEdge[256];
         m_bDamageLengthFromEdge = 0;
@@ -821,18 +800,21 @@ void OrdnanceMeleeThrowClass::SetProperty(unsigned int uProperty, const char* ps
         {
             m_bDamageLengthFromEdge = 1;
         }
+            break;
     }
-    else if (uProperty == 0xE369687E)
+    case 0xE369687E:
     {
         m_uiLightOdfNameHash = PblHash(pszValue);
+            break;
     }
-    else if (uProperty == 0xE6989765)
+    case 0xE6989765:
     {
         float fRate;
         sscanf(pszValue, "%f", &fRate);
         m_fOmega = 6.2831855f * fRate;
+            break;
     }
-    else if (uProperty == 0xE4B667AC)
+    case 0xE4B667AC:
     {
         char acEdge[256];
         m_bDamageWidthFromEdge = 0;
@@ -840,10 +822,13 @@ void OrdnanceMeleeThrowClass::SetProperty(unsigned int uProperty, const char* ps
         {
             m_bDamageWidthFromEdge = 1;
         }
+            break;
     }
-    else
+    default:
     {
         OrdnanceClass::SetProperty(uProperty, pszValue);
+            break;
+    }
     }
 }
 

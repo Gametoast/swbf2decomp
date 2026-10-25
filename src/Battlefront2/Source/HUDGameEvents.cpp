@@ -48,8 +48,14 @@ char* HUD::GameEvents::gStatisticStrings[5] =
     "points", "kills", "deaths", "heropoints", "captures"
 };
 
-// GLOBAL: SWBF2 0x01e56c3b
-namespace HUD { namespace GameEvents { bool gInitialized; } }
+namespace HUD
+{
+    // GLOBAL: SWBF2 0x01e56c3b
+    namespace GameEvents
+    {
+        bool gInitialized;
+    }
+}
 
 // GLOBAL: SWBF2 0x01e56c40
 HUD::GameEvents::PlayerEvents HUD::GameEvents::gPlayerEvents[1];
@@ -108,8 +114,14 @@ void HUD::GameEvents::ShowTeamPoints(int iTeam, bool bShow)
     }
 }
 
-// GLOBAL: SWBF2 0x01e56f68
-namespace HUD { namespace GameEvents { HUD::EventClass* gInitialize; } }
+namespace HUD
+{
+    // GLOBAL: SWBF2 0x01e56f68
+    namespace GameEvents
+    {
+        HUD::EventClass* gInitialize;
+    }
+}
 
 // GLOBAL: SWBF2 0x01e56f6c
 HUD::GameEvents::ObjectiveEvents HUD::GameEvents::gObjectiveEvents;
@@ -120,11 +132,23 @@ HUD::EventClass* HUD::GameEvents::gTargetResetCommon;
 // GLOBAL: SWBF2 0x01e56fa8
 Timer* HUD::GameEvents::gObjectiveTimer;
 
-// GLOBAL: SWBF2 0x01e56fac
-namespace HUD { namespace GameEvents { HUD::EventClass* gLevelHintText; } }
+namespace HUD
+{
+    // GLOBAL: SWBF2 0x01e56fac
+    namespace GameEvents
+    {
+        HUD::EventClass* gLevelHintText;
+    }
+}
 
-// GLOBAL: SWBF2 0x01e56fb0
-namespace HUD { namespace GameEvents { HUD::EventClass* gTime; } }
+namespace HUD
+{
+    // GLOBAL: SWBF2 0x01e56fb0
+    namespace GameEvents
+    {
+        HUD::EventClass* gTime;
+    }
+}
 
 // SYNTHETIC: SWBF2 0x0055e340
 // HUD::GameEvents::PlayerData::PlayerData
@@ -608,8 +632,14 @@ void HUD::GameEvents::Close()
     gObjectiveTimer = 0;
 }
 
-// GLOBAL: SWBF2 0x01e56fa0
-namespace HUD { namespace GameEvents { bool gInputMapLastPressed; } }
+namespace HUD
+{
+    // GLOBAL: SWBF2 0x01e56fa0
+    namespace GameEvents
+    {
+        bool gInputMapLastPressed;
+    }
+}
 
 extern RedColor gLocalColor;
 
@@ -736,7 +766,10 @@ void UpdateHackWeapon(const GameObject* const pObject, EventClass* const pTimeEv
 void GameObjectGetNames(PblHandle<GameObject const>& hObject, const unsigned short** const ppName,
                         const unsigned short** const ppClassName);
 } }
-namespace ObjectiveManager { extern PblList<HUD::ObjectiveList>* gObjectiveLists; }
+namespace ObjectiveManager
+{
+    extern PblList<HUD::ObjectiveList>* gObjectiveLists;
+}
 
 namespace ObjectiveManager {
 
@@ -761,7 +794,10 @@ int GetCurrentPopupText()
     return 0;
 }
 }
-namespace PopupText { int GetNumHints(); }
+namespace PopupText
+{
+    int GetNumHints();
+}
 
 // FUNCTION: SWBF2 0x00562b90
 void HUD::GameEvents::SetObjectiveTimer(const Timer* const pTimer)
@@ -995,11 +1031,17 @@ class EntityBuildingArmed { public: static PblHash rttiHashEntityBuildingArmed; 
 class EntityBuildingClass { public: static PblHash rttiHashEntityBuildingClass; };
 class WeaponRepair { public: static PblHash rttiHashWeaponRepair; };
 
-namespace Lua_Callbacks { extern int gUberScoreLimit; }
+namespace Lua_Callbacks
+{
+    extern int gUberScoreLimit;
+}
 
 extern bool netFrameLock;
 
-namespace Lua_Callbacks { extern int gHuntShowScoreLimit; }
+namespace Lua_Callbacks
+{
+    extern int gHuntShowScoreLimit;
+}
 
 // FUNCTION: SWBF2 0x00561c70
 void HUD::GameEvents::UpdateHackWeapon(const GameObject* const pObject, EventClass* const pTimeEvent,

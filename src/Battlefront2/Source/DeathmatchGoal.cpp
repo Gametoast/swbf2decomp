@@ -11,23 +11,11 @@
 PblHash AI::DeathmatchGoal::rttiHashDeathmatchGoal("DeathmatchGoal");
 const char AI::DeathmatchGoal::rttiNameDeathmatchGoal[] = "DeathmatchGoal";
 
-// FUNCTION: SWBF2 0x0048a980
-bool AI::DeathmatchGoal::IsRtti(unsigned int uRtti) const
-{
-    return uRtti == rttiHashDeathmatchGoal || AIGoal::IsRtti(uRtti);
-}
 
-// FUNCTION: SWBF2 0x0048a9b0
-unsigned int AI::DeathmatchGoal::GetDerivedRtti() const
-{
-    return rttiHashDeathmatchGoal;
-}
 
-// FUNCTION: SWBF2 0x0048a9c0
-const char* AI::DeathmatchGoal::GetDerivedRttiName() const
-{
-    return rttiNameDeathmatchGoal;
-}
+
+
+
 
 // SYNTHETIC: SWBF2 0x0048a9d0
 // AI::DeathmatchGoal::`scalar deleting destructor'

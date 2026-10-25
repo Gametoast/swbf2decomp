@@ -44,23 +44,11 @@ namespace
 PblHash WeaponLaser::rttiHashWeaponLaser("WeaponLaser");
 const char WeaponLaser::rttiNameWeaponLaser[] = "WeaponLaser";
 
-// FUNCTION: SWBF2 0x00686a10
-bool WeaponLaser::IsRtti(unsigned int uRtti) const
-{
-    return uRtti == rttiHashWeaponLaser || Weapon::IsRtti(uRtti);
-}
 
-// FUNCTION: SWBF2 0x00686a40
-unsigned int WeaponLaser::GetDerivedRtti() const
-{
-    return rttiHashWeaponLaser;
-}
 
-// FUNCTION: SWBF2 0x00686a50
-const char* WeaponLaser::GetDerivedRttiName() const
-{
-    return rttiNameWeaponLaser;
-}
+
+
+
 
 // FUNCTION: SWBF2 0x00686ae0
 WeaponLaser::WeaponLaser(const WeaponLaserClass* pClass, const WeaponDesc& desc)
@@ -244,23 +232,11 @@ WeaponLaserClass::WeaponLaserClass(unsigned int uHash)
     mSalvoTime = 0.5f;
 }
 
-// FUNCTION: SWBF2 0x00686a90
-bool WeaponLaserClass::IsRtti(unsigned int uRtti)
-{
-    return uRtti == rttiHashWeaponLaserClass || WeaponClass::IsRtti(uRtti);
-}
 
-// FUNCTION: SWBF2 0x00686ac0
-unsigned int WeaponLaserClass::GetDerivedRtti()
-{
-    return rttiHashWeaponLaserClass;
-}
 
-// FUNCTION: SWBF2 0x00686ad0
-const char* WeaponLaserClass::GetDerivedRttiName()
-{
-    return rttiNameWeaponLaserClass;
-}
+
+
+
 
 // SYNTHETIC: SWBF2 0x006870f0
 // WeaponLaserClass::`scalar deleting destructor'

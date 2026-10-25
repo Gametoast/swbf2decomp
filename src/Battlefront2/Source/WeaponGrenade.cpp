@@ -61,23 +61,11 @@ WeaponGrenadeClass::WeaponGrenadeClass(unsigned int uHash)
     }
 }
 
-// FUNCTION: SWBF2 0x00684f90
-bool WeaponGrenadeClass::IsRtti(unsigned int uRtti)
-{
-    return uRtti == rttiHashWeaponGrenadeClass || WeaponClass::IsRtti(uRtti);
-}
 
-// FUNCTION: SWBF2 0x00684fc0
-unsigned int WeaponGrenadeClass::GetDerivedRtti()
-{
-    return rttiHashWeaponGrenadeClass;
-}
 
-// FUNCTION: SWBF2 0x00684fd0
-const char* WeaponGrenadeClass::GetDerivedRttiName()
-{
-    return rttiNameWeaponGrenadeClass;
-}
+
+
+
 
 // FUNCTION: SWBF2 0x00685840
 WeaponGrenadeClass::WeaponGrenadeClass(WeaponGrenadeClass* pBase, unsigned int uHash)
@@ -108,51 +96,63 @@ WeaponGrenadeClass::~WeaponGrenadeClass()
 // FUNCTION: SWBF2 0x00685900
 void WeaponGrenadeClass::SetProperty(unsigned int uProperty, const char* pszValue)
 {
-    if (uProperty == 0xD9356908)
+    switch (uProperty)
+    {
+    case 0xD9356908:
     {
         sscanf(pszValue, "%f", &mShotDelay);
         if (mShotDelay < 0.01f)
         {
             mShotDelay = 0.01f;
         }
+            break;
     }
-    else if (uProperty == 0xC8388D9D)
+    case 0xC8388D9D:
     {
         sscanf(pszValue, "%f", &mInitialSalvoDelay[1]);
         mInitialSalvoDelay[0] = mInitialSalvoDelay[1];
         mInitialSalvoDelay[2] = mInitialSalvoDelay[1];
+            break;
     }
-    else if (uProperty == 0x2A708F20)
+    case 0x2A708F20:
     {
         sscanf(pszValue, "%f", &mInitialSalvoDelay[0]);
+            break;
     }
-    else if (uProperty == 0x36F0BFCD)
+    case 0x36F0BFCD:
     {
         sscanf(pszValue, "%f", &mInitialSalvoDelay[2]);
+            break;
     }
-    else if (uProperty == 0xAE3DB60D)
+    case 0xAE3DB60D:
     {
         sscanf(pszValue, "%f", &mShotElevate);
+            break;
     }
-    else if (uProperty == 0x2819FFA0)
+    case 0x2819FFA0:
     {
         sscanf(pszValue, "%f", &mMaxPressedTime);
+            break;
     }
-    else if (uProperty == 0x5578D44C)
+    case 0x5578D44C:
     {
         mHideOnFire = atoi(pszValue) != 0;
+            break;
     }
-    else if (uProperty == 0x079C1D86)
+    case 0x079C1D86:
     {
         mForcedFireAnim = (char)atoi(pszValue);
         if (mForcedFireAnim < 0 || mForcedFireAnim > 1)
         {
             mForcedFireAnim = -1;
         }
+            break;
     }
-    else
+    default:
     {
         WeaponClass::SetProperty(uProperty, pszValue);
+            break;
+    }
     }
 }
 
@@ -233,23 +233,11 @@ WeaponGrenade::WeaponGrenade(const WeaponGrenadeClass* pClass, const WeaponDesc&
 PblHash WeaponGrenade::rttiHashWeaponGrenade("WeaponGrenade");
 const char WeaponGrenade::rttiNameWeaponGrenade[] = "WeaponGrenade";
 
-// FUNCTION: SWBF2 0x00684f40
-bool WeaponGrenade::IsRtti(unsigned int uRtti) const
-{
-    return uRtti == rttiHashWeaponGrenade || reinterpret_cast<const Weapon*>(this)->Weapon::IsRtti(uRtti);
-}
 
-// FUNCTION: SWBF2 0x00684f70
-unsigned int WeaponGrenade::GetDerivedRtti() const
-{
-    return rttiHashWeaponGrenade;
-}
 
-// FUNCTION: SWBF2 0x00684f80
-const char* WeaponGrenade::GetDerivedRttiName() const
-{
-    return rttiNameWeaponGrenade;
-}
+
+
+
 
 // FUNCTION: SWBF2 0x00685060
 bool WeaponGrenade::IsBusy() const

@@ -36,11 +36,7 @@ public:
     unsigned int m_uiRefCount;
 };
 
-static PblMatrix _IdentityMatrix(
-    PblVector4{ 1.0f, 0.0f, 0.0f, 0.0f },
-    PblVector4{ 0.0f, 1.0f, 0.0f, 0.0f },
-    PblVector4{ 0.0f, 0.0f, 1.0f, 0.0f },
-    PblVector4{ 0.0f, 0.0f, 0.0f, 1.0f });
+
 
 // SYNTHETIC: SWBF2 0x004072a0
 // `dynamic initializer for 'WeaponShield::rttiHashWeaponShield''
@@ -100,23 +96,11 @@ WeaponShieldClass::~WeaponShieldClass()
 // SYNTHETIC: SWBF2 0x00692190
 // WeaponShieldClass::`scalar deleting destructor'
 
-// FUNCTION: SWBF2 0x00691770
-bool WeaponShieldClass::IsRtti(unsigned int uRtti)
-{
-    return uRtti == rttiHashWeaponShieldClass || WeaponClass::IsRtti(uRtti);
-}
 
-// FUNCTION: SWBF2 0x006917a0
-unsigned int WeaponShieldClass::GetDerivedRtti()
-{
-    return rttiHashWeaponShieldClass;
-}
 
-// FUNCTION: SWBF2 0x006917b0
-const char* WeaponShieldClass::GetDerivedRttiName()
-{
-    return rttiNameWeaponShieldClass;
-}
+
+
+
 
 // FUNCTION: SWBF2 0x00692350
 void WeaponShieldClass::SetProperty(unsigned int uProperty, const char* pszValue)
@@ -178,7 +162,7 @@ void WeaponShieldClass::PostReadInit()
 {
     CollisionPrimitive primitive;
     primitive.SetBubble(m_vShieldSize);
-    PblMatrix matrix = _IdentityMatrix;
+    PblMatrix matrix = gMatrixIdentity;
     matrix.m[3][0] = m_vShieldOffset.x;
     matrix.m[3][1] = m_vShieldOffset.y;
     matrix.m[3][2] = m_vShieldOffset.z;
@@ -245,23 +229,11 @@ WeaponShield::~WeaponShield()
     }
 }
 
-// FUNCTION: SWBF2 0x00691700
-bool WeaponShield::IsRtti(unsigned int uRtti) const
-{
-    return uRtti == rttiHashWeaponShield || Weapon::IsRtti(uRtti);
-}
 
-// FUNCTION: SWBF2 0x00691730
-unsigned int WeaponShield::GetDerivedRtti() const
-{
-    return rttiHashWeaponShield;
-}
 
-// FUNCTION: SWBF2 0x00691740
-const char* WeaponShield::GetDerivedRttiName() const
-{
-    return "WeaponShield";
-}
+
+
+
 
 // FUNCTION: SWBF2 0x00691750
 const CollisionObject* WeaponShield::GetCollisionObject() const

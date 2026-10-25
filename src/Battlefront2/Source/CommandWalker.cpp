@@ -35,23 +35,11 @@ CommandWalkerClass::CommandWalkerClass(unsigned int uHash)
     mEjectResist = 10.0f;
 }
 
-// FUNCTION: SWBF2 0x0047fe00
-bool CommandWalkerClass::IsRtti(unsigned int uRtti)
-{
-    return uRtti == rttiHashCommandWalkerClass || EntityWalkerClass::IsRtti(uRtti);
-}
 
-// FUNCTION: SWBF2 0x0047fe50
-unsigned int CommandWalkerClass::GetDerivedRtti()
-{
-    return rttiHashCommandWalkerClass;
-}
 
-// FUNCTION: SWBF2 0x0047fe60
-const char* CommandWalkerClass::GetDerivedRttiName()
-{
-    return rttiNameCommandWalkerClass;
-}
+
+
+
 
 // SYNTHETIC: SWBF2 0x00480100
 // CommandWalkerClass::`scalar deleting destructor'
@@ -102,17 +90,9 @@ Entity* CommandWalkerClass::Build(const EntityDesc& desc)
     return pWalker;
 }
 
-// FUNCTION: SWBF2 0x0047fd40
-bool CommandWalker::IsRtti(unsigned int uRtti) const
-{
-    return uRtti == rttiHashCommandWalker || EntityWalker::IsRtti(uRtti);
-}
 
-// FUNCTION: SWBF2 0x0047fd90
-unsigned int CommandWalker::GetDerivedRtti() const
-{
-    return rttiHashCommandWalker;
-}
+
+
 
 // FUNCTION: SWBF2 0x0047fdc0
 EntityType CommandWalker::GetEntityType() const
@@ -165,11 +145,7 @@ void CommandWalker::SetTeam(int iTeam)
     mPost->SetTeam(iOldTeam, iTeam);
 }
 
-// FUNCTION: SWBF2 0x0047fda0
-const char* CommandWalker::GetDerivedRttiName() const
-{
-    return "CommandWalker";
-}
+
 
 // FUNCTION: SWBF2 0x00480000
 void CommandWalker::Respawn()

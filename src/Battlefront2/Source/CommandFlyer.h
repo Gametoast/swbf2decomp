@@ -1,5 +1,7 @@
 #pragma once
 
+#include "PebbleFL/Common/PblHashTable.h"
+
 #include <stddef.h>
 
 #include "CommandPost.h"
@@ -20,9 +22,9 @@ public:
 
     virtual EntityClass* Derive(unsigned int uHash);
     virtual Entity* Build(const EntityDesc& desc);
-    virtual bool IsRtti(unsigned int uRtti);
-    virtual unsigned int GetDerivedRtti();
-    virtual const char* GetDerivedRttiName();
+    virtual bool IsRtti(unsigned int uRtti) const;
+    virtual unsigned int GetDerivedRtti() const;
+    virtual const char* GetDerivedRttiName() const;
     virtual void SetProperty(unsigned int uProperty, const char* pszValue);
 
     static PblHash rttiHashCommandFlyerClass;
@@ -75,3 +77,49 @@ public:
  
  
  
+
+// FUNCTION: SWBF2 0x00477c30
+inline bool CommandFlyerClass::IsRtti(unsigned int uRtti) const
+{
+    if (rttiHashCommandFlyerClass == uRtti)
+    {
+        return true;
+    }
+    return EntityFlyerClass::IsRtti(uRtti);
+}
+
+// FUNCTION: SWBF2 0x00477c80
+inline unsigned int CommandFlyerClass::GetDerivedRtti() const
+{
+    return rttiHashCommandFlyerClass;
+}
+
+// FUNCTION: SWBF2 0x00477c90
+inline const char* CommandFlyerClass::GetDerivedRttiName() const
+{
+    return rttiNameCommandFlyerClass;
+}
+
+// FUNCTION: SWBF2 0x00477b70
+inline bool CommandFlyer::IsRtti(unsigned int uRtti) const
+{
+    if (rttiHashCommandFlyer == uRtti)
+    {
+        return true;
+    }
+    return EntityFlyer::IsRtti(uRtti);
+}
+
+// FUNCTION: SWBF2 0x00477bc0
+inline unsigned int CommandFlyer::GetDerivedRtti() const
+{
+    return rttiHashCommandFlyer;
+}
+
+// FUNCTION: SWBF2 0x00477bd0
+inline const char* CommandFlyer::GetDerivedRttiName() const
+{
+    return "CommandFlyer";
+}
+
+

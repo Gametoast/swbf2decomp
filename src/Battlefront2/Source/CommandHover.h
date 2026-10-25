@@ -1,5 +1,7 @@
 #pragma once
 
+#include "PebbleFL/Common/PblHashTable.h"
+
 #include <stddef.h>
 
 #include "CommandPost.h"
@@ -22,9 +24,9 @@ public:
 
     virtual EntityClass* Derive(unsigned int uHash);
     virtual Entity* Build(const EntityDesc& desc);
-    virtual bool IsRtti(unsigned int uRtti);
-    virtual unsigned int GetDerivedRtti();
-    virtual const char* GetDerivedRttiName();
+    virtual bool IsRtti(unsigned int uRtti) const;
+    virtual unsigned int GetDerivedRtti() const;
+    virtual const char* GetDerivedRttiName() const;
     virtual void SetProperty(unsigned int uProperty, const char* pszValue);
 
     static PblHash rttiHashCommandHoverClass;
@@ -72,3 +74,53 @@ public:
  
  
  
+
+// FUNCTION: SWBF2 0x00478e70
+inline bool CommandHover::IsRtti(unsigned int uRtti) const
+{
+    if (rttiHashCommandHover == uRtti)
+    {
+        return true;
+    }
+    return EntityHover::rttiHashEntityHover == uRtti ||
+           GameObject::rttiHashGameObject == uRtti ||
+           EntityGeometry::rttiHashEntityGeometry == uRtti ||
+           EntityEx::rttiHashEntityEx == uRtti ||
+           Entity::rttiHashEntity == uRtti;
+}
+
+// FUNCTION: SWBF2 0x00478ec0
+inline unsigned int CommandHover::GetDerivedRtti() const
+{
+    return rttiHashCommandHover;
+}
+
+// FUNCTION: SWBF2 0x00478ed0
+inline const char* CommandHover::GetDerivedRttiName() const
+{
+    return rttiNameCommandHover;
+}
+
+// FUNCTION: SWBF2 0x00478f30
+inline bool CommandHoverClass::IsRtti(unsigned int uRtti) const
+{
+    if (rttiHashCommandHoverClass == uRtti)
+    {
+        return true;
+    }
+    return EntityHoverClass::IsRtti(uRtti);
+}
+
+// FUNCTION: SWBF2 0x00478f80
+inline unsigned int CommandHoverClass::GetDerivedRtti() const
+{
+    return rttiHashCommandHoverClass;
+}
+
+// FUNCTION: SWBF2 0x00478f90
+inline const char* CommandHoverClass::GetDerivedRttiName() const
+{
+    return rttiNameCommandHoverClass;
+}
+
+

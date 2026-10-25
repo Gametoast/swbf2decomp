@@ -4,12 +4,12 @@
 #include "sndgsm.h"
 
 extern int __cdecl gsm_decode(const __m128i* state, unsigned char* frame, short* samples);
-extern void __cdecl gsm_encode(char* pGsm, short* pFrame, unsigned char* pOut);
+extern "C" void __cdecl gsm_encode(char* pGsm, short* pFrame, unsigned char* pOut);
 
 namespace Snd
 {
 
-void __cdecl gsm_option(void* pGsm, int iOption, unsigned char* pValue);
+extern "C" void __cdecl gsm_option(void* pGsm, int iOption, unsigned char* pValue);
 
 // FUNCTION: SWBF2 0x0074bca0
 void GSM::Decode(unsigned char (*pFrame)[33], short (*pSamples)[160])

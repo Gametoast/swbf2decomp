@@ -1,5 +1,7 @@
 #pragma once
 
+#include "PebbleFL/Common/PblHashTable.h"
+
 class PblFileChunk;
 
 #include <stddef.h>
@@ -84,10 +86,10 @@ public:
     virtual ~WeaponClass();
     virtual WeaponClass* Derive(unsigned int uHash);
 
-    virtual bool IsRtti(unsigned int uRtti);
+    virtual bool IsRtti(unsigned int uRtti) const;
     virtual Weapon* Build(const WeaponDesc& desc);
-    virtual unsigned int GetDerivedRtti();
-    virtual const char* GetDerivedRttiName();
+    virtual unsigned int GetDerivedRtti() const;
+    virtual const char* GetDerivedRttiName() const;
     virtual void SetProperty(unsigned int uProperty, const char* pszValue);
     virtual void PostReadInit();
     virtual bool PostLoadInit();
@@ -284,3 +286,21 @@ public:
  
  
  
+
+// FUNCTION: SWBF2 0x006777d0
+inline bool WeaponClass::IsRtti(unsigned int uRtti) const
+{
+    return rttiHashWeaponClass == uRtti;
+}
+
+// FUNCTION: SWBF2 0x006777f0
+inline unsigned int WeaponClass::GetDerivedRtti() const
+{
+    return rttiHashWeaponClass;
+}
+
+// FUNCTION: SWBF2 0x00677800
+inline const char* WeaponClass::GetDerivedRttiName() const
+{
+    return rttiNameWeaponClass;
+}

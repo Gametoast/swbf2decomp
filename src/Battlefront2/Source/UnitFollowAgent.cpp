@@ -108,23 +108,11 @@ namespace
 PblHash UnitFollowAgent::rttiHashUnitFollowAgent("UnitFollowAgent");
 const char UnitFollowAgent::rttiNameUnitFollowAgent[] = "UnitFollowAgent";
 
-// FUNCTION: SWBF2 0x00667f00
-bool UnitFollowAgent::IsRtti(unsigned int uRtti) const
-{
-    return uRtti == rttiHashUnitFollowAgent || UnitAgent::IsRtti(uRtti);
-}
 
-// FUNCTION: SWBF2 0x00667f30
-unsigned int UnitFollowAgent::GetDerivedRtti() const
-{
-    return rttiHashUnitFollowAgent;
-}
 
-// FUNCTION: SWBF2 0x00667f40
-const char* UnitFollowAgent::GetDerivedRttiName() const
-{
-    return rttiNameUnitFollowAgent;
-}
+
+
+
 
 // SYNTHETIC: SWBF2 0x00667f50
 // UnitFollowAgent::`scalar deleting destructor'

@@ -80,9 +80,12 @@ namespace GameSoundEngine
 // `dynamic initializer for 'GameSoundEngine::gSoundHeap''
 int gSoundHeap = GameMemory::RunTimeHeap;
 
+// GLOBAL: SWBF2 0x01e56283
 bool gSoundIsOpen;
+// GLOBAL: SWBF2 0x01e56398
 unsigned long gWindowsSpeakerConfig;
 
+// GLOBAL: SWBF2 0x01e56394
 Snd::EngineBase::SpeakerConfig gDefaultSpeakerConfig;
 
 // FUNCTION: SWBF2 0x005390e0

@@ -87,24 +87,11 @@ bool EntityDefenseGridTurret::Update(float fDeltaTime)
 // SYNTHETIC: SWBF2 0x00497dfb
 // [thunk]:EntityDefenseGridTurret::`vector deleting destructor'`adjustor{608}'
 
-// FUNCTION: SWBF2 0x004979a0
-bool EntityDefenseGridTurret::IsRtti(unsigned int uRtti) const
-{
-    return uRtti == rttiHashEntityDefenseGridTurret ||
-           EntityBuildingArmedDynamic::IsRtti(uRtti);
-}
 
-// FUNCTION: SWBF2 0x00497a00
-unsigned int EntityDefenseGridTurret::GetDerivedRtti() const
-{
-    return rttiHashEntityDefenseGridTurret;
-}
 
-// FUNCTION: SWBF2 0x00497a10
-const char* EntityDefenseGridTurret::GetDerivedRttiName() const
-{
-    return rttiNameEntityDefenseGridTurret;
-}
+
+
+
 
 // FUNCTION: SWBF2 0x00497d00
 Entity* EntityDefenseGridTurretClass::Build(const EntityDesc& desc)
@@ -151,23 +138,11 @@ EntityClass* EntityDefenseGridTurretClass::Derive(unsigned int uHash)
     return new EntityDefenseGridTurretClass(this, uHash);
 }
 
-// FUNCTION: SWBF2 0x00497a60
-bool EntityDefenseGridTurretClass::IsRtti(unsigned int uRtti)
-{
-    return uRtti == rttiHashEntityDefenseGridTurretClass || EntityBuildingArmedDynamicClass::IsRtti(uRtti);
-}
 
-// FUNCTION: SWBF2 0x00497ab0
-unsigned int EntityDefenseGridTurretClass::GetDerivedRtti()
-{
-    return rttiHashEntityDefenseGridTurretClass;
-}
 
-// FUNCTION: SWBF2 0x00497ac0
-const char* EntityDefenseGridTurretClass::GetDerivedRttiName()
-{
-    return rttiNameEntityDefenseGridTurretClass;
-}
+
+
+
 
 // FUNCTION: SWBF2 0x00497da0
 void EntityDefenseGridTurretClass::SetProperty(unsigned int uProperty, const char* pszValue)

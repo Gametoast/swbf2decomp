@@ -27,24 +27,11 @@
 PblHash UnitDeathmatchAgent::rttiHashUnitDeathmatchAgent("UnitDeathmatchAgent");
 const char UnitDeathmatchAgent::rttiNameUnitDeathmatchAgent[] = "UnitDeathmatchAgent";
 
-// FUNCTION: SWBF2 0x006653a0
-bool UnitDeathmatchAgent::IsRtti(unsigned int uRtti) const
-{
-    return uRtti == rttiHashUnitDeathmatchAgent || uRtti == UnitAgent::rttiHashUnitAgent ||
-           uRtti == Agent::rttiHashAgent;
-}
 
-// FUNCTION: SWBF2 0x006653d0
-unsigned int UnitDeathmatchAgent::GetDerivedRtti() const
-{
-    return rttiHashUnitDeathmatchAgent;
-}
 
-// FUNCTION: SWBF2 0x006653e0
-const char* UnitDeathmatchAgent::GetDerivedRttiName() const
-{
-    return rttiNameUnitDeathmatchAgent;
-}
+
+
+
 
 // FUNCTION: SWBF2 0x00665b50
 const char* UnitDeathmatchAgent::NFINAL_GetStateString(int) const

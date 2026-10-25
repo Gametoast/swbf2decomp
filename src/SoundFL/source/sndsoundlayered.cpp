@@ -30,7 +30,9 @@ void Allocator<SoundLayered::FireForgetLayer>::operator delete(void* p, unsigned
 namespace Snd
 {
 
+// GLOBAL: SWBF2 0x01e29db0
 SoundLayered::FireForgetLayer* SoundLayered::smFireForgetLayers;
+// GLOBAL: SWBF2 0x01e29db4
 bool SoundLayered::smIsOpen;
 unsigned char SoundLayered::smFireForgetLayerStorage[5888];
 // GLOBAL: SWBF2 0x007e36bc

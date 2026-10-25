@@ -16,11 +16,7 @@
 
 extern bool netFrameLock;
 extern "C" PblMatrix* __stdcall D3DXMatrixMultiply(PblMatrix* pOut, const PblMatrix* pM1, const PblMatrix* pM2);
-static PblMatrix _IdentityMatrix(
-    PblVector4{ 1.0f, 0.0f, 0.0f, 0.0f },
-    PblVector4{ 0.0f, 1.0f, 0.0f, 0.0f },
-    PblVector4{ 0.0f, 0.0f, 1.0f, 0.0f },
-    PblVector4{ 0.0f, 0.0f, 0.0f, 1.0f });
+
 
 // FUNCTION: SWBF2 0x00498460
 void EntityDoor::Render(unsigned char ucViewport, float fDist, unsigned int uiFlags)
@@ -56,7 +52,7 @@ void EntityDoor::Render(unsigned char ucViewport, float fDist, unsigned int uiFl
         mZephyrSkeleton.Open(*mZephyrSkeleton.m_pShared, kPose);
         kPose.Open(mZephyrSkeleton);
         kPose.Set(mZephyrPoseDyn, true);
-        mZephyrSkeleton.BuildWorldMatrices(_IdentityMatrix);
+        mZephyrSkeleton.BuildWorldMatrices(gMatrixIdentity);
         mPose.ConvertFromZephyrPose(mZephyrSkeleton);
     }
 
@@ -83,7 +79,7 @@ void EntityDoor::Render(unsigned char ucViewport, float fDist, unsigned int uiFl
         mZephyrSkeleton.Open(*mZephyrSkeleton.m_pShared, kPose);
         kPose.Open(mZephyrSkeleton);
         kPose.Set(mZephyrPoseDyn, true);
-        mZephyrSkeleton.BuildWorldMatrices(_IdentityMatrix);
+        mZephyrSkeleton.BuildWorldMatrices(gMatrixIdentity);
         mPose.ConvertFromZephyrPose(mZephyrSkeleton);
     }
     mJustRendered = true;
@@ -189,17 +185,9 @@ unsigned int EntityDoor::GetRtti()
     return rttiHashEntityDoor;
 }
 
-// FUNCTION: SWBF2 0x00497f70
-unsigned int EntityDoor::GetDerivedRtti() const
-{
-    return rttiHashEntityDoor;
-}
 
-// FUNCTION: SWBF2 0x00497f80
-const char* EntityDoor::GetDerivedRttiName() const
-{
-    return rttiNameEntityDoor;
-}
+
+
 
 // FUNCTION: SWBF2 0x00497f90
 EntityClass* EntityDoor::GetEntityClass()
@@ -219,12 +207,7 @@ const RedPose* EntityDoor::GetPose() const
     return &mPose;
 }
 
-// FUNCTION: SWBF2 0x00497f20
-bool EntityDoor::IsRtti(unsigned int uRtti) const
-{
-    return uRtti == rttiHashEntityDoor ||
-           reinterpret_cast<const EntityProp*>(this)->EntityProp::IsRtti(uRtti);
-}
+
 
 // FUNCTION: SWBF2 0x00498040
 EntityDoor::EntityDoor(EntityDoorClass* pClass, const EntityDesc& desc)
@@ -255,7 +238,7 @@ EntityDoor::EntityDoor(EntityDoorClass* pClass, const EntityDesc& desc)
     mZephyrPoseDyn.SetCurTime(0.0f);
     mZephyrPoseDyn.Update(0.0f);
     kPose.Set(mZephyrPoseDyn, true);
-    mZephyrSkeleton.BuildWorldMatrices(_IdentityMatrix);
+    mZephyrSkeleton.BuildWorldMatrices(gMatrixIdentity);
     mPose.ConvertFromZephyrPose(mZephyrSkeleton);
 
     if (mId && !mspDoors->Find(mId) && mspDoors->Store(mId, this))
@@ -422,7 +405,7 @@ bool EntityDoor::Update(float fDeltaTime)
         mZephyrSkeleton.Open(*mZephyrSkeleton.m_pShared, kPose);
         kPose.Open(mZephyrSkeleton);
         kPose.Set(mZephyrPoseDyn, true);
-        mZephyrSkeleton.BuildWorldMatrices(_IdentityMatrix);
+        mZephyrSkeleton.BuildWorldMatrices(gMatrixIdentity);
         mPose.ConvertFromZephyrPose(mZephyrSkeleton);
     }
 
@@ -433,23 +416,11 @@ bool EntityDoor::Update(float fDeltaTime)
     return true;
 }
 
-// FUNCTION: SWBF2 0x00497ff0
-bool EntityDoorClass::IsRtti(unsigned int uRtti)
-{
-    return uRtti == rttiHashEntityDoorClass || EntityPropClass::IsRtti(uRtti);
-}
 
-// FUNCTION: SWBF2 0x00498020
-unsigned int EntityDoorClass::GetDerivedRtti()
-{
-    return rttiHashEntityDoorClass;
-}
 
-// FUNCTION: SWBF2 0x00498030
-const char* EntityDoorClass::GetDerivedRttiName()
-{
-    return rttiNameEntityDoorClass;
-}
+
+
+
 
 // FUNCTION: SWBF2 0x00498e10
 void EntityDoor::EnterClient()

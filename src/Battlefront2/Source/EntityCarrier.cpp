@@ -310,25 +310,14 @@ const char EntityCarrier::rttiNameEntityCarrier[] = "EntityCarrier";
 // `dynamic initializer for 'EntityCarrier::sMemoryPool''
 // SYNTHETIC: SWBF2 0x00766f10
 // `dynamic atexit destructor for 'EntityCarrier::sMemoryPool''
+
 MemoryPool EntityCarrier::sMemoryPool("EntityCarrier", 0x1df0);
 
-// FUNCTION: SWBF2 0x00496e20
-bool EntityCarrier::IsRtti(unsigned int uRtti) const
-{
-    return uRtti == rttiHashEntityCarrier || EntityFlyer::IsRtti(uRtti);
-}
 
-// FUNCTION: SWBF2 0x00496e70
-unsigned int EntityCarrier::GetDerivedRtti() const
-{
-    return rttiHashEntityCarrier;
-}
 
-// FUNCTION: SWBF2 0x00496e80
-const char* EntityCarrier::GetDerivedRttiName() const
-{
-    return rttiNameEntityCarrier;
-}
+
+
+
 
 // SYNTHETIC: SWBF2 0x00402970
 // `dynamic initializer for 'EntityCarrierClass::rttiHashEntityCarrierClass''
@@ -337,23 +326,11 @@ const char* EntityCarrier::GetDerivedRttiName() const
 PblHash EntityCarrierClass::rttiHashEntityCarrierClass("EntityCarrierClass");
 const char EntityCarrierClass::rttiNameEntityCarrierClass[] = "EntityCarrierClass";
 
-// FUNCTION: SWBF2 0x00496f00
-bool EntityCarrierClass::IsRtti(unsigned int uRtti)
-{
-    return uRtti == rttiHashEntityCarrierClass || EntityFlyerClass::IsRtti(uRtti);
-}
 
-// FUNCTION: SWBF2 0x00496f40
-unsigned int EntityCarrierClass::GetDerivedRtti()
-{
-    return rttiHashEntityCarrierClass;
-}
 
-// FUNCTION: SWBF2 0x00496f50
-const char* EntityCarrierClass::GetDerivedRttiName()
-{
-    return rttiNameEntityCarrierClass;
-}
+
+
+
 
 // FUNCTION: SWBF2 0x00497300
 bool EntityCarrier::AttachCargo(int, GameObject* pGameObject)

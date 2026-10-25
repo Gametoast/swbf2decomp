@@ -1,5 +1,7 @@
 #pragma once
 
+#include "PebbleFL/Common/PblHashTable.h"
+
 #include <stddef.h>
 
 #include "CollisionObject.h"
@@ -63,9 +65,9 @@ public:
 
     static void Read(PblFileChunk& chunk);
 
-    virtual bool IsRtti(unsigned int uRtti);
-    virtual unsigned int GetDerivedRtti();
-    virtual const char* GetDerivedRttiName();
+    virtual bool IsRtti(unsigned int uRtti) const;
+    virtual unsigned int GetDerivedRtti() const;
+    virtual const char* GetDerivedRttiName() const;
     virtual void SetProperty(unsigned int uProperty, const char* pszValue);
     virtual float GetVelocity();
     virtual float GetGravity();
@@ -197,3 +199,42 @@ inline GameObject* Ordnance::GetOwner() const
 {
     return static_cast<GameObject*>(mOwner);
 }
+
+// FUNCTION: SWBF2 0x005f71a0
+inline bool Ordnance::IsRtti(unsigned int uRtti) const
+{
+    return rttiHashOrdnance == uRtti;
+}
+
+// FUNCTION: SWBF2 0x005f71c0
+inline unsigned int Ordnance::GetDerivedRtti() const
+{
+    return rttiHashOrdnance;
+}
+
+// FUNCTION: SWBF2 0x005f71d0
+inline const char* Ordnance::GetDerivedRttiName() const
+{
+    return rttiNameOrdnance;
+}
+
+// FUNCTION: SWBF2 0x005f72a0
+inline bool OrdnanceClass::IsRtti(unsigned int uRtti) const
+{
+    return rttiHashOrdnanceClass == uRtti;
+}
+
+// FUNCTION: SWBF2 0x005f72c0
+inline unsigned int OrdnanceClass::GetDerivedRtti() const
+{
+    return rttiHashOrdnanceClass;
+}
+
+// FUNCTION: SWBF2 0x005f72d0
+inline const char* OrdnanceClass::GetDerivedRttiName() const
+{
+    return rttiNameOrdnanceClass;
+}
+
+
+

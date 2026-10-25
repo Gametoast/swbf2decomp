@@ -1,5 +1,7 @@
 #pragma once
 
+#include "PebbleFL/Common/PblHashTable.h"
+
 #include <stddef.h>
 
 #include "OrdnanceShell.h"
@@ -14,9 +16,9 @@ public:
 
     virtual OrdnanceClass* Derive(unsigned int uHash);
     virtual Ordnance* Build(const OrdnanceDesc& desc);
-    virtual bool IsRtti(unsigned int uRtti);
-    virtual unsigned int GetDerivedRtti();
-    virtual const char* GetDerivedRttiName();
+    virtual bool IsRtti(unsigned int uRtti) const;
+    virtual unsigned int GetDerivedRtti() const;
+    virtual const char* GetDerivedRttiName() const;
     virtual void SetProperty(unsigned int uProperty, const char* pszValue);
 
     GameSound mSoundCollisionWater;
@@ -71,3 +73,47 @@ public:
  
  
  
+
+// FUNCTION: SWBF2 0x005f8c30
+inline bool OrdnanceStickyClass::IsRtti(unsigned int uRtti) const
+{
+    if (rttiHashOrdnanceStickyClass == uRtti)
+    {
+        return true;
+    }
+    return OrdnanceShellClass::IsRtti(uRtti);
+}
+
+// FUNCTION: SWBF2 0x00605fb0
+inline unsigned int OrdnanceStickyClass::GetDerivedRtti() const
+{
+    return rttiHashOrdnanceStickyClass;
+}
+
+// FUNCTION: SWBF2 0x00605fc0
+inline const char* OrdnanceStickyClass::GetDerivedRttiName() const
+{
+    return rttiNameOrdnanceStickyClass;
+}
+
+// FUNCTION: SWBF2 0x005f8bf0
+inline bool OrdnanceSticky::IsRtti(unsigned int uRtti) const
+{
+    if (rttiHashOrdnanceSticky == uRtti)
+    {
+        return true;
+    }
+    return OrdnanceShell::IsRtti(uRtti);
+}
+
+// FUNCTION: SWBF2 0x00605f60
+inline unsigned int OrdnanceSticky::GetDerivedRtti() const
+{
+    return rttiHashOrdnanceSticky;
+}
+
+// FUNCTION: SWBF2 0x00605f70
+inline const char* OrdnanceSticky::GetDerivedRttiName() const
+{
+    return rttiNameOrdnanceSticky;
+}

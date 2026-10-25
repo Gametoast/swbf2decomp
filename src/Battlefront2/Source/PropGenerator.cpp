@@ -129,16 +129,12 @@ template bool util::BaseArray<float>::Reserve_(int, bool);
 // util::TypedArrayAllocator<float,util::NewAllocator>::Allocate_
 template float* util::TypedArrayAllocator<float, util::NewAllocator>::Allocate_(int& riCount);
 
-static PblMatrix _IdentityMatrix(
-    PblVector4{ 1.0f, 0.0f, 0.0f, 0.0f },
-    PblVector4{ 0.0f, 1.0f, 0.0f, 0.0f },
-    PblVector4{ 0.0f, 0.0f, 1.0f, 0.0f },
-    PblVector4{ 0.0f, 0.0f, 0.0f, 1.0f });
+
 
 // FUNCTION: SWBF2 0x0062a010
 void PropGenerator::Init()
 {
-    m_amCamera[0] = _IdentityMatrix;
+    m_amCamera[0] = gMatrixIdentity;
     mLayerCellWidth = 16.0f;
     mLayerCellWidthAspect = 1.0f / 16.0f;
     mLayerMapWidth = 512;

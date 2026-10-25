@@ -47,23 +47,11 @@ namespace
 PblHash WeaponCatapult::rttiHashWeaponCatapult("WeaponCatapult");
 const char WeaponCatapult::rttiNameWeaponCatapult[] = "WeaponCatapult";
 
-// FUNCTION: SWBF2 0x00680be0
-bool WeaponCatapult::IsRtti(unsigned int uRtti) const
-{
-    return uRtti == rttiHashWeaponCatapult || Weapon::IsRtti(uRtti);
-}
 
-// FUNCTION: SWBF2 0x00680c10
-unsigned int WeaponCatapult::GetDerivedRtti() const
-{
-    return rttiHashWeaponCatapult;
-}
 
-// FUNCTION: SWBF2 0x00680c20
-const char* WeaponCatapult::GetDerivedRttiName() const
-{
-    return rttiNameWeaponCatapult;
-}
+
+
+
 
 // FUNCTION: SWBF2 0x00681450
 bool WeaponCatapult::CheckReload() const
@@ -360,23 +348,11 @@ WeaponCatapultClass::~WeaponCatapultClass()
 // SYNTHETIC: SWBF2 0x00681810
 // WeaponCatapultClass::`scalar deleting destructor'
 
-// FUNCTION: SWBF2 0x00680c30
-bool WeaponCatapultClass::IsRtti(unsigned int uRtti)
-{
-    return uRtti == rttiHashWeaponCatapultClass || WeaponClass::IsRtti(uRtti);
-}
 
-// FUNCTION: SWBF2 0x00680c60
-unsigned int WeaponCatapultClass::GetDerivedRtti()
-{
-    return rttiHashWeaponCatapultClass;
-}
 
-// FUNCTION: SWBF2 0x00680c70
-const char* WeaponCatapultClass::GetDerivedRttiName()
-{
-    return rttiNameWeaponCatapultClass;
-}
+
+
+
 
 // FUNCTION: SWBF2 0x006818a0
 void WeaponCatapultClass::SetProperty(unsigned int uProperty, const char* pszValue)

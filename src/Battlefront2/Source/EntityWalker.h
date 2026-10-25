@@ -1,5 +1,7 @@
 #pragma once
 
+#include "PebbleFL/Common/PblHashTable.h"
+
 #include <stddef.h>
 #include "WalkerAnimation.h"
 
@@ -451,9 +453,9 @@ public:
 
     virtual EntityClass* Derive(unsigned int uHash);
     virtual Entity* Build(const EntityDesc& desc);
-    virtual bool IsRtti(unsigned int uRtti);
-    virtual unsigned int GetDerivedRtti();
-    virtual const char* GetDerivedRttiName();
+    virtual bool IsRtti(unsigned int uRtti) const;
+    virtual unsigned int GetDerivedRtti() const;
+    virtual const char* GetDerivedRttiName() const;
     virtual void SetProperty(unsigned int uProperty, const char* pszValue);
     virtual void PostReadSetup();
     // FUNCTION: SWBF2 0x0047fcc0
@@ -697,3 +699,49 @@ public:
  
  
  
+
+// FUNCTION: SWBF2 0x0047fc80
+inline bool EntityWalkerClass::IsRtti(unsigned int uRtti) const
+{
+    if (rttiHashEntityWalkerClass == uRtti)
+    {
+        return true;
+    }
+    return GameObjectClass::IsRtti(uRtti);
+}
+
+// FUNCTION: SWBF2 0x004ff4e0
+inline unsigned int EntityWalker::GetDerivedRtti() const
+{
+    return rttiHashEntityWalker;
+}
+
+// FUNCTION: SWBF2 0x004ff4f0
+inline const char* EntityWalker::GetDerivedRttiName() const
+{
+    return rttiNameEntityWalker;
+}
+
+// FUNCTION: SWBF2 0x004ff660
+inline unsigned int EntityWalkerClass::GetDerivedRtti() const
+{
+    return rttiHashEntityWalkerClass;
+}
+
+// FUNCTION: SWBF2 0x004ff670
+inline const char* EntityWalkerClass::GetDerivedRttiName() const
+{
+    return rttiNameEntityWalkerClass;
+}
+
+// FUNCTION: SWBF2 0x0047f900
+inline bool EntityWalker::IsRtti(unsigned int uRtti) const
+{
+    if (rttiHashEntityWalker == uRtti)
+    {
+        return true;
+    }
+    return GameObject::IsRtti(uRtti);
+}
+
+

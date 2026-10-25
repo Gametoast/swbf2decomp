@@ -1,5 +1,7 @@
 #pragma once
 
+#include "PebbleFL/Common/PblHashTable.h"
+
 #include <stddef.h>
 
 #include "CollisionModel.h"
@@ -29,9 +31,9 @@ public:
 
     virtual EntityClass* Derive(unsigned int uHash);
     virtual Entity* Build(const EntityDesc& desc);
-    virtual bool IsRtti(unsigned int uRtti);
-    virtual unsigned int GetDerivedRtti();
-    virtual const char* GetDerivedRttiName();
+    virtual bool IsRtti(unsigned int uRtti) const;
+    virtual unsigned int GetDerivedRtti() const;
+    virtual const char* GetDerivedRttiName() const;
     virtual void SetProperty(unsigned int uProperty, const char* pszValue);
 
     bool IsDestructableBuilding();
@@ -152,3 +154,47 @@ public:
  
  
  
+
+// FUNCTION: SWBF2 0x00475ef0
+inline bool EntityBuildingClass::IsRtti(unsigned int uRtti) const
+{
+    if (rttiHashEntityBuildingClass == uRtti)
+    {
+        return true;
+    }
+    return GameObjectClass::IsRtti(uRtti);
+}
+
+// FUNCTION: SWBF2 0x00492390
+inline unsigned int EntityBuildingClass::GetDerivedRtti() const
+{
+    return rttiHashEntityBuildingClass;
+}
+
+// FUNCTION: SWBF2 0x004923a0
+inline const char* EntityBuildingClass::GetDerivedRttiName() const
+{
+    return rttiNameEntityBuildingClass;
+}
+
+// FUNCTION: SWBF2 0x00475de0
+inline bool EntityBuilding::IsRtti(unsigned int uRtti) const
+{
+    if (rttiHashEntityBuilding == uRtti)
+    {
+        return true;
+    }
+    return GameObject::IsRtti(uRtti);
+}
+
+// FUNCTION: SWBF2 0x00492330
+inline unsigned int EntityBuilding::GetDerivedRtti() const
+{
+    return rttiHashEntityBuilding;
+}
+
+// FUNCTION: SWBF2 0x00492340
+inline const char* EntityBuilding::GetDerivedRttiName() const
+{
+    return rttiNameEntityBuilding;
+}

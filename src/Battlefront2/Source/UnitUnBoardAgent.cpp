@@ -9,23 +9,11 @@
 PblHash UnitUnBoardAgent::rttiHashUnitUnBoardAgent("UnitUnBoardAgent");
 const char UnitUnBoardAgent::rttiNameUnitUnBoardAgent[] = "UnitUnBoardAgent";
 
-// FUNCTION: SWBF2 0x0066b1b0
-bool UnitUnBoardAgent::IsRtti(unsigned int uRtti) const
-{
-    return uRtti == rttiHashUnitUnBoardAgent || UnitAgent::IsRtti(uRtti);
-}
 
-// FUNCTION: SWBF2 0x0066b1e0
-unsigned int UnitUnBoardAgent::GetDerivedRtti() const
-{
-    return rttiHashUnitUnBoardAgent;
-}
 
-// FUNCTION: SWBF2 0x0066b1f0
-const char* UnitUnBoardAgent::GetDerivedRttiName() const
-{
-    return rttiNameUnitUnBoardAgent;
-}
+
+
+
 
 // FUNCTION: SWBF2 0x0066b200
 bool UnitUnBoardAgent::ShouldQueueCurCmd(const UnitCmdInfo& cmd) const

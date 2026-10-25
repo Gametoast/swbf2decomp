@@ -66,6 +66,7 @@ static void SetLobbyData(const char* pKey, const char* pValue)
 bool autoNetEnabled;
 bool autoNetLan;
 bool autoNetRandomize;
+// GLOBAL: SWBF2 0x01ead47b
 bool g_bNoRender;
 unsigned int netCrashAddr;
 char autoNetScript[32];

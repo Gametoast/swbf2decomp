@@ -52,11 +52,7 @@ EntityPropAnimatedClass::EntityPropAnimatedClass(unsigned int uHash)
     mIdleDelay = 0.0f;
 }
 
-static PblMatrix _IdentityMatrix(
-    PblVector4{ 1.0f, 0.0f, 0.0f, 0.0f },
-    PblVector4{ 0.0f, 1.0f, 0.0f, 0.0f },
-    PblVector4{ 0.0f, 0.0f, 1.0f, 0.0f },
-    PblVector4{ 0.0f, 0.0f, 0.0f, 1.0f });
+
 
 // SYNTHETIC: SWBF2 0x00402cf0
 // `dynamic initializer for 'EntityPropAnimatedClass::rttiHashEntityPropAnimatedClass''
@@ -139,30 +135,13 @@ void EntityPropAnimated::Render(unsigned char ucLod, float fAlpha, unsigned int 
 // SYNTHETIC: SWBF2 0x004dc914
 // [thunk]:EntityPropAnimated::`vector deleting destructor'`adjustor{148}'
 
-// FUNCTION: SWBF2 0x004db370
-bool EntityPropAnimatedClass::IsRtti(unsigned int uRtti)
-{
-    return uRtti == rttiHashEntityPropAnimatedClass || EntityPropClass::IsRtti(uRtti);
-}
 
-// FUNCTION: SWBF2 0x004db2a0
-bool EntityPropAnimated::IsRtti(unsigned int uRtti) const
-{
-    return uRtti == rttiHashEntityPropAnimated ||
-           EntityProp::IsRtti(uRtti);
-}
 
-// FUNCTION: SWBF2 0x004db3a0
-unsigned int EntityPropAnimatedClass::GetDerivedRtti()
-{
-    return rttiHashEntityPropAnimatedClass;
-}
 
-// FUNCTION: SWBF2 0x004db3b0
-const char* EntityPropAnimatedClass::GetDerivedRttiName()
-{
-    return rttiNameEntityPropAnimatedClass;
-}
+
+
+
+
 
 // SYNTHETIC: SWBF2 0x004dc150
 // EntityPropAnimatedClass::`scalar deleting destructor'
@@ -376,17 +355,9 @@ unsigned int EntityPropAnimated::GetRtti()
     return rttiHashEntityPropAnimated;
 }
 
-// FUNCTION: SWBF2 0x004db2f0
-unsigned int EntityPropAnimated::GetDerivedRtti() const
-{
-    return rttiHashEntityPropAnimated;
-}
 
-// FUNCTION: SWBF2 0x004db300
-const char* EntityPropAnimated::GetDerivedRttiName() const
-{
-    return rttiNameEntityPropAnimated;
-}
+
+
 
 // FUNCTION: SWBF2 0x004db310
 EntityClass* EntityPropAnimated::GetEntityClass()
@@ -424,7 +395,7 @@ void EntityPropAnimated::SetAnimation(unsigned int uAnimationId, bool bLoop)
     {
         mZephyrPoseStatic.Blend(mZephyrPoseDyn, mBlendFactor);
     }
-    mZephyrSkeleton.BuildWorldMatrices(_IdentityMatrix);
+    mZephyrSkeleton.BuildWorldMatrices(gMatrixIdentity);
     mPose.ConvertFromZephyrPose(mZephyrPoseStatic);
     mAnimationId = uAnimationId;
 }
@@ -437,7 +408,7 @@ bool EntityPropAnimated::Update(float fDeltaTime)
         SetAnimation(0, true);
         mZephyrPoseDyn.Update(0.0f);
         mZephyrPoseStatic.Set(mZephyrPoseDyn, true);
-        mZephyrSkeleton.BuildWorldMatrices(_IdentityMatrix);
+        mZephyrSkeleton.BuildWorldMatrices(gMatrixIdentity);
         mPose.ConvertFromZephyrPose(mZephyrPoseStatic);
     }
 
@@ -590,7 +561,7 @@ bool EntityPropAnimated::Update(float fDeltaTime)
         mZephyrPoseStatic.Blend(mZephyrPoseDyn, mBlendFactor);
     }
     mBlendFactor += mAnimationId == 0 ? fStep * 0.2f : fStep;
-    mZephyrSkeleton.BuildWorldMatrices(_IdentityMatrix);
+    mZephyrSkeleton.BuildWorldMatrices(gMatrixIdentity);
     mPose.ConvertFromZephyrPose(mZephyrPoseStatic);
 
     if (mAttachedSoldier && mAttachMatrix)

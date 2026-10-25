@@ -1,5 +1,7 @@
 #pragma once
 
+#include "PebbleFL/Common/PblHashTable.h"
+
 #include <stddef.h>
 
 #include "Aimer.h"
@@ -29,9 +31,9 @@ public:
     virtual ~MountedTurretClass();
     virtual EntityClass* Derive(unsigned int uHash);
     virtual Entity* Build(const EntityDesc& desc);
-    virtual bool IsRtti(unsigned int uRtti);
-    virtual unsigned int GetDerivedRtti();
-    virtual const char* GetDerivedRttiName();
+    virtual bool IsRtti(unsigned int uRtti) const;
+    virtual unsigned int GetDerivedRtti() const;
+    virtual const char* GetDerivedRttiName() const;
 
     AimerClass mAimerClass[4];
     WeaponClass* mWeaponClass[4];
@@ -218,3 +220,49 @@ public:
  
  
  
+
+// FUNCTION: SWBF2 0x005a5160
+inline bool MountedTurret::IsRtti(unsigned int uRtti) const
+{
+    if (rttiHashMountedTurret == uRtti)
+    {
+        return true;
+    }
+    return EntityEx::IsRtti(uRtti);
+}
+
+// FUNCTION: SWBF2 0x005a5190
+inline unsigned int MountedTurret::GetDerivedRtti() const
+{
+    return rttiHashMountedTurret;
+}
+
+// FUNCTION: SWBF2 0x005a51a0
+inline const char* MountedTurret::GetDerivedRttiName() const
+{
+    return rttiNameMountedTurret;
+}
+
+// FUNCTION: SWBF2 0x005a52f0
+inline bool MountedTurretClass::IsRtti(unsigned int uRtti) const
+{
+    if (rttiHashMountedTurretClass == uRtti)
+    {
+        return true;
+    }
+    return EntityClass::IsRtti(uRtti);
+}
+
+// FUNCTION: SWBF2 0x005a5320
+inline unsigned int MountedTurretClass::GetDerivedRtti() const
+{
+    return rttiHashMountedTurretClass;
+}
+
+// FUNCTION: SWBF2 0x005a5330
+inline const char* MountedTurretClass::GetDerivedRttiName() const
+{
+    return rttiNameMountedTurretClass;
+}
+
+

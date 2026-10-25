@@ -12,7 +12,9 @@
 #include "RedEngineFL/Memory/RedMemory.h"
 #include "RedEngineFL/Application/pc/pcRenderHelpers.h"
 
+// GLOBAL: SWBF2 0x0099ccf0
 unsigned int RedGlyphCacheElement::s_uiNumQuads;
+// GLOBAL: SWBF2 0x0099ccf4
 bool RedGlyphCacheElement::s_bQuadsInUse;
 RedGlyphMemoryManager* RedGlyphCacheElement::s_pMemoryManager;
 

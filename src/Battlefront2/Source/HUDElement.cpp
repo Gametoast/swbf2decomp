@@ -95,11 +95,7 @@ static const unsigned int kAnimEnable = 0xbdbfd84f;
 static const unsigned int kAnimDisable = 0x6242102c;
 static const unsigned int kAnimChange = 0x3455b0a8;
 
-static const PblMatrix _IdentityMatrix(
-    PblVector4{ 1.0f, 0.0f, 0.0f, 0.0f },
-    PblVector4{ 0.0f, 1.0f, 0.0f, 0.0f },
-    PblVector4{ 0.0f, 0.0f, 1.0f, 0.0f },
-    PblVector4{ 0.0f, 0.0f, 0.0f, 1.0f });
+
 
 // FUNCTION: SWBF2 0x00547010
 float HUD::ConvertRelativeToPixels(RelativeMode eMode, float fValue, float fFrameSize,
@@ -322,7 +318,7 @@ void HUD::Matrix::SetRotation(float fX, float fY, float fZ)
         fZ += 360.0f;
     }
 
-    PblMatrix matrix = _IdentityMatrix;
+    PblMatrix matrix = gMatrixIdentity;
     PblMatrix rotation;
     D3DXMatrixMultiply((D3DXMATRIX*)&matrix, (D3DXMATRIX*)&matrix,
                        D3DXMatrixRotationX((D3DXMATRIX*)&rotation, fX * 0.017453292f));

@@ -32,23 +32,11 @@ CommandFlyerClass::CommandFlyerClass(unsigned int uHash)
 PblHash CommandFlyerClass::rttiHashCommandFlyerClass("CommandFlyerClass");
 const char CommandFlyerClass::rttiNameCommandFlyerClass[] = "CommandFlyerClass";
 
-// FUNCTION: SWBF2 0x00477c30
-bool CommandFlyerClass::IsRtti(unsigned int uRtti)
-{
-    return uRtti == rttiHashCommandFlyerClass || EntityFlyerClass::IsRtti(uRtti);
-}
 
-// FUNCTION: SWBF2 0x00477c80
-unsigned int CommandFlyerClass::GetDerivedRtti()
-{
-    return rttiHashCommandFlyerClass;
-}
 
-// FUNCTION: SWBF2 0x00477c90
-const char* CommandFlyerClass::GetDerivedRttiName()
-{
-    return rttiNameCommandFlyerClass;
-}
+
+
+
 
 // FUNCTION: SWBF2 0x00477c70
 unsigned int GetFlyerClassRtti()
@@ -109,23 +97,11 @@ Entity* CommandFlyerClass::Build(const EntityDesc& desc)
     return pFlyer;
 }
 
-// FUNCTION: SWBF2 0x00477b70
-bool CommandFlyer::IsRtti(unsigned int uRtti) const
-{
-    return uRtti == rttiHashCommandFlyer || EntityFlyer::IsRtti(uRtti);
-}
 
-// FUNCTION: SWBF2 0x00477bc0
-unsigned int CommandFlyer::GetDerivedRtti() const
-{
-    return rttiHashCommandFlyer;
-}
 
-// FUNCTION: SWBF2 0x00477bd0
-const char* CommandFlyer::GetDerivedRttiName() const
-{
-    return "CommandFlyer";
-}
+
+
+
 
 // FUNCTION: SWBF2 0x00477bf0
 EntityType CommandFlyer::GetEntityType() const

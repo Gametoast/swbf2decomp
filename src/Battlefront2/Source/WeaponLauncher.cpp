@@ -35,23 +35,11 @@ WeaponLauncherClass::WeaponLauncherClass(unsigned int uHash)
     mHasTrackingAmmo = false;
 }
 
-// FUNCTION: SWBF2 0x00687340
-bool WeaponLauncherClass::IsRtti(unsigned int uRtti)
-{
-    return uRtti == rttiHashWeaponLauncherClass || WeaponCannonClass::IsRtti(uRtti);
-}
 
-// FUNCTION: SWBF2 0x00687370
-unsigned int WeaponLauncherClass::GetDerivedRtti()
-{
-    return rttiHashWeaponLauncherClass;
-}
 
-// FUNCTION: SWBF2 0x00687380
-const char* WeaponLauncherClass::GetDerivedRttiName()
-{
-    return rttiNameWeaponLauncherClass;
-}
+
+
+
 
 // SYNTHETIC: SWBF2 0x006879d0
 // WeaponLauncherClass::`scalar deleting destructor'
@@ -124,23 +112,11 @@ WeaponLauncher::WeaponLauncher(const WeaponLauncherClass* pClass, const WeaponDe
     mLocked = !static_cast<const WeaponLauncherClass*>(mClass)->mHasTrackingAmmo;
 }
 
-// FUNCTION: SWBF2 0x006872a0
-bool WeaponLauncher::IsRtti(unsigned int uRtti) const
-{
-    return uRtti == rttiHashWeaponLauncher || reinterpret_cast<const Weapon*>(this)->Weapon::IsRtti(uRtti);
-}
 
-// FUNCTION: SWBF2 0x006872d0
-unsigned int WeaponLauncher::GetDerivedRtti() const
-{
-    return rttiHashWeaponLauncher;
-}
 
-// FUNCTION: SWBF2 0x006872e0
-const char* WeaponLauncher::GetDerivedRttiName() const
-{
-    return rttiNameWeaponLauncher;
-}
+
+
+
 
 // FUNCTION: SWBF2 0x006872f0
 bool WeaponLauncher::IsLocked() const

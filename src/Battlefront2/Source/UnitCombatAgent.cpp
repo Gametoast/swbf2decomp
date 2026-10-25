@@ -8,24 +8,11 @@
 PblHash UnitCombatAgent::rttiHashUnitCombatAgent("UnitCombatAgent");
 const char UnitCombatAgent::rttiNameUnitCombatAgent[] = "UnitCombatAgent";
 
-// FUNCTION: SWBF2 0x00662e10
-bool UnitCombatAgent::IsRtti(unsigned int uRtti) const
-{
-    return uRtti == rttiHashUnitCombatAgent || uRtti == UnitAgent::rttiHashUnitAgent ||
-           uRtti == Agent::rttiHashAgent;
-}
 
-// FUNCTION: SWBF2 0x00662e40
-unsigned int UnitCombatAgent::GetDerivedRtti() const
-{
-    return rttiHashUnitCombatAgent;
-}
 
-// FUNCTION: SWBF2 0x00662e50
-const char* UnitCombatAgent::GetDerivedRttiName() const
-{
-    return rttiNameUnitCombatAgent;
-}
+
+
+
 
 // FUNCTION: SWBF2 0x00663020
 const char* UnitCombatAgent::NFINAL_GetStateString(int) const

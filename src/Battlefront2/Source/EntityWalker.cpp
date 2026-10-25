@@ -320,23 +320,11 @@ Controllable* EntityWalker::GetControllable()
     return this;
 }
 
-// FUNCTION: SWBF2 0x0047fc80
-bool EntityWalkerClass::IsRtti(unsigned int uRtti)
-{
-    return uRtti == rttiHashEntityWalkerClass || GameObjectClass::IsRtti(uRtti);
-}
 
-// FUNCTION: SWBF2 0x004ff4e0
-unsigned int EntityWalker::GetDerivedRtti() const
-{
-    return rttiHashEntityWalker;
-}
 
-// FUNCTION: SWBF2 0x004ff4f0
-const char* EntityWalker::GetDerivedRttiName() const
-{
-    return rttiNameEntityWalker;
-}
+
+
+
 
 // FUNCTION: SWBF2 0x004ff510
 void EntityWalker::RotateY(const PblAngle& rAngle)
@@ -373,17 +361,7 @@ EntityType EntityWalker::GetEntityType() const
     return ENT_WALKER;
 }
 
-// FUNCTION: SWBF2 0x004ff660
-unsigned int EntityWalkerClass::GetDerivedRtti()
-{
-    return rttiHashEntityWalkerClass;
-}
 
-// FUNCTION: SWBF2 0x004ff670
-const char* EntityWalkerClass::GetDerivedRttiName()
-{
-    return rttiNameEntityWalkerClass;
-}
 
 
 
@@ -1456,11 +1434,7 @@ extern bool netIsLocalTurn;
 // GLOBAL: SWBF2 0x01e51e24
 static bool sBipedHack;
 
-static PblMatrix _IdentityMatrix(
-    PblVector4{ 1.0f, 0.0f, 0.0f, 0.0f },
-    PblVector4{ 0.0f, 1.0f, 0.0f, 0.0f },
-    PblVector4{ 0.0f, 0.0f, 1.0f, 0.0f },
-    PblVector4{ 0.0f, 0.0f, 0.0f, 1.0f });
+
 
 inline void* WalkerLegPair::operator new(unsigned int uSize)
 {
@@ -1503,11 +1477,7 @@ void SmashParkedFlyer(EntityWalker* pWalker, CollisionObject* pOther, Entity* pE
 }
 }
 
-// FUNCTION: SWBF2 0x0047f900
-bool EntityWalker::IsRtti(unsigned int uRtti) const
-{
-    return uRtti == rttiHashEntityWalker || GameObject::IsRtti(uRtti);
-}
+
 
 // FUNCTION: SWBF2 0x0047f950
 GameObject* EntityWalker::GetGameObject()
@@ -1854,7 +1824,7 @@ EntityWalker::EntityWalker(EntityWalkerClass* pClass, const EntityDesc& desc)
     }
 
     mZephyrPoseStatic.SetBasePose();
-    mZephyrSkeleton.BuildWorldMatrices(_IdentityMatrix);
+    mZephyrSkeleton.BuildWorldMatrices(gMatrixIdentity);
     mPose.ConvertFromZephyrPose(mZephyrSkeleton);
     mModel->GetRedModel(0)->SetupPose(mPose);
 
@@ -2438,7 +2408,7 @@ void EntityWalker::Render(unsigned char ucViewport, float fDist, unsigned int ui
                 FLEffectObject* pEffect = mClass->mDeathDustEffect->BuildEffect();
                 if (pEffect)
                 {
-                    PblMatrix mDust = _IdentityMatrix;
+                    PblMatrix mDust = gMatrixIdentity;
                     mDust.m[3][0] = mClass->mDeathDustOffset.x;
                     mDust.m[3][1] = mClass->mDeathDustOffset.y;
                     mDust.m[3][2] = mClass->mDeathDustOffset.z;
@@ -3316,7 +3286,7 @@ void EntityWalker::BuildWorldMatrices()
 {
     ApplyBlend();
     CorrectJoints();
-    mZephyrSkeleton.BuildWorldMatrices(_IdentityMatrix);
+    mZephyrSkeleton.BuildWorldMatrices(gMatrixIdentity);
     RestoreJoints();
 }
 
@@ -4196,7 +4166,7 @@ bool EntityWalker::PostCollisionUpdate(float fDeltaTime)
     }
     UpdateDone();
     CorrectJoints();
-    mZephyrSkeleton.BuildWorldMatrices(_IdentityMatrix);
+    mZephyrSkeleton.BuildWorldMatrices(gMatrixIdentity);
     RestoreJoints();
 
     float fSinPitch;

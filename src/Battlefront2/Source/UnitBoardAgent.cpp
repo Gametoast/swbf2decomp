@@ -95,23 +95,11 @@ inline float DistSq(const PblVector3& a, const PblVector3& b)
 PblHash UnitBoardAgent::rttiHashUnitBoardAgent("UnitBoardAgent");
 const char UnitBoardAgent::rttiNameUnitBoardAgent[] = "UnitBoardAgent";
 
-// FUNCTION: SWBF2 0x00661f80
-bool UnitBoardAgent::IsRtti(unsigned int uRtti) const
-{
-    return uRtti == rttiHashUnitBoardAgent || UnitAgent::IsRtti(uRtti);
-}
 
-// FUNCTION: SWBF2 0x00661fb0
-unsigned int UnitBoardAgent::GetDerivedRtti() const
-{
-    return rttiHashUnitBoardAgent;
-}
 
-// FUNCTION: SWBF2 0x00661fc0
-const char* UnitBoardAgent::GetDerivedRttiName() const
-{
-    return rttiNameUnitBoardAgent;
-}
+
+
+
 
 // FUNCTION: SWBF2 0x00661fd0
 bool UnitBoardAgent::ShouldQueueCurCmd(const UnitCmdInfo& cmd) const

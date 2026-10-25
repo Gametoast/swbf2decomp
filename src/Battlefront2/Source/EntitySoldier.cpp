@@ -113,11 +113,7 @@ extern "C" PblVector3* __stdcall D3DXVec3Normalize(PblVector3* pOut, const PblVe
 
 PblMatrix NormalMatrix(const PblVector3& vDir, const PblVector3& vNormal, const PblVector3& vPos);
 
-static PblMatrix _IdentityMatrix(
-    PblVector4{ 1.0f, 0.0f, 0.0f, 0.0f },
-    PblVector4{ 0.0f, 1.0f, 0.0f, 0.0f },
-    PblVector4{ 0.0f, 0.0f, 1.0f, 0.0f },
-    PblVector4{ 0.0f, 0.0f, 0.0f, 1.0f });
+
 
 // SYNTHETIC: SWBF2 0x00402d60
 // `dynamic initializer for 'EntitySoldier::rttiHashEntitySoldier''
@@ -169,23 +165,11 @@ ZephyrSkeletonShared* SoldierAnimatorLowResClass::GetDefaultSkeleton()
 // SYNTHETIC: SWBF2 0x0043cf20
 // Aimer::`scalar deleting destructor'
 
-// FUNCTION: SWBF2 0x004de010
-bool EntitySoldier::IsRtti(unsigned int uRtti) const
-{
-    return uRtti == rttiHashEntitySoldier || GameObject::IsRtti(uRtti);
-}
 
-// FUNCTION: SWBF2 0x004de050
-unsigned int EntitySoldier::GetDerivedRtti() const
-{
-    return rttiHashEntitySoldier;
-}
 
-// FUNCTION: SWBF2 0x004de060
-const char* EntitySoldier::GetDerivedRttiName() const
-{
-    return rttiNameEntitySoldier;
-}
+
+
+
 
 // FUNCTION: SWBF2 0x004de080
 const RedPose* EntitySoldier::GetPose() const
@@ -384,23 +368,11 @@ EntitySoldier::PostCollision::~PostCollision()
 {
 }
 
-// FUNCTION: SWBF2 0x004de430
-bool EntitySoldierClass::IsRtti(unsigned int uRtti)
-{
-    return uRtti == rttiHashEntitySoldierClass || GameObjectClass::IsRtti(uRtti);
-}
 
-// FUNCTION: SWBF2 0x004de470
-unsigned int EntitySoldierClass::GetDerivedRtti()
-{
-    return rttiHashEntitySoldierClass;
-}
 
-// FUNCTION: SWBF2 0x004de480
-const char* EntitySoldierClass::GetDerivedRttiName()
-{
-    return rttiNameEntitySoldierClass;
-}
+
+
+
 
 // FUNCTION: SWBF2 0x004de490
 int EntitySoldierClass::GetWeaponCount()
@@ -491,7 +463,7 @@ void AcklayData::SetupBasePose(const ZephyrSkeletonShared* pSkeleton)
     mZSkeleton.Open(*pSkeleton, mZPoseStatic);
     mZPoseStatic.Open(mZSkeleton);
     mZPoseStatic.SetBasePose();
-    mZSkeleton.BuildWorldMatrices(_IdentityMatrix);
+    mZSkeleton.BuildWorldMatrices(gMatrixIdentity);
     mPose.ConvertFromZephyrPose(mZSkeleton);
 }
 
@@ -944,7 +916,7 @@ EntitySoldier::EntitySoldier(EntitySoldierClass* pClass, const EntityDesc& desc)
     CollisionModel& rModel = mClass->mCollisionModels[0];
     float fScale = mClass->mCollisionRootScale;
     CollisionPrimitive primitive;
-    PblMatrix matrix = _IdentityMatrix;
+    PblMatrix matrix = gMatrixIdentity;
     primitive.SetSphere((fScale > 1.0f ? fScale : 1.0f) * 0.17f);
     matrix.m[3][0] = 0.0f;
     matrix.m[3][1] = fScale * 1.65f;
@@ -1012,7 +984,7 @@ EntitySoldier::EntitySoldier(EntitySoldierClass* pClass, const EntityDesc& desc)
     mHook = 0;
     mSkipTime = 0.0f;
     mSkipIndirectTime = 0.0f;
-    mLastVehicleMatrix = _IdentityMatrix;
+    mLastVehicleMatrix = gMatrixIdentity;
     mLastPilotInfoFrame = 99999999;
     mJetFuel = (mClass->mJetFuelRechargeRate > 0.0f) ? 0.5f : 0.0f;
 
@@ -1902,7 +1874,7 @@ void EntitySoldier::Render(unsigned char ucLod, float fFade, unsigned int uiFlag
                     const PblMatrix* pLeftFoot = pose.Find(0x1af77461);
                     if (!pLeftFoot)
                     {
-                        pLeftFoot = &_IdentityMatrix;
+                        pLeftFoot = &gMatrixIdentity;
                     }
                     D3DXMatrixMultiply(&mFoot, pLeftFoot, &mWorld);
                     PblVector3 vLeftFoot = mFoot.GetTranslation();
@@ -1973,7 +1945,7 @@ void EntitySoldier::Render(unsigned char ucLod, float fFade, unsigned int uiFlag
                     }
                     if (mFootSlideEffectRightHandle != 0)
                     {
-                        mFootSlideEffectRightHandle->AttachEffectToMatrix(&_IdentityMatrix, mRightFoot, false);
+                        mFootSlideEffectRightHandle->AttachEffectToMatrix(&gMatrixIdentity, mRightFoot, false);
                         if (!bSlide)
                         {
                             mFootSlideEffectRightHandle->StopAndFinish();
@@ -2007,7 +1979,7 @@ void EntitySoldier::Render(unsigned char ucLod, float fFade, unsigned int uiFlag
                     }
                     if (mFootSlideEffectLeftHandle != 0)
                     {
-                        mFootSlideEffectLeftHandle->AttachEffectToMatrix(&_IdentityMatrix, mLeftFoot, false);
+                        mFootSlideEffectLeftHandle->AttachEffectToMatrix(&gMatrixIdentity, mLeftFoot, false);
                         if (!bSlide)
                         {
                             mFootSlideEffectLeftHandle->StopAndFinish();
@@ -2074,7 +2046,7 @@ void EntitySoldier::Render(unsigned char ucLod, float fFade, unsigned int uiFlag
                 {
                     mChoke = mWorld;
                 }
-                mChokeEffectHandle->AttachEffectToMatrix(&_IdentityMatrix, mChoke, false);
+                mChokeEffectHandle->AttachEffectToMatrix(&gMatrixIdentity, mChoke, false);
                 if (mState != SoldierState::CHOKE)
                 {
                     mChokeEffectHandle->StopAndFinish();
@@ -4715,7 +4687,7 @@ void EntitySoldierClass::PostReadSetup()
     const float fScale = mCollisionRootScale;
     const float fLowerRadius = 0.57000005f;
     CollisionPrimitive primitive;
-    PblMatrix matrix = _IdentityMatrix;
+    PblMatrix matrix = gMatrixIdentity;
     float fHeight = fScale * 0.8f - 0.1925f;
 
     if (!m_bIsAcklay)
@@ -8612,8 +8584,8 @@ void EntitySoldier::SetCollisionStance(int iStance)
     }
 
     float fScale = mClass->mCollisionRootScale;
-    PblMatrix mHead = _IdentityMatrix;
-    PblMatrix mTorso = _IdentityMatrix;
+    PblMatrix mHead = gMatrixIdentity;
+    PblMatrix mTorso = gMatrixIdentity;
     CollisionModel* pModel;
     switch (iStance)
     {
@@ -8856,7 +8828,7 @@ void EntitySoldier::UpdateOrdnanceCollision(float fDeltaTime)
     const PblVector3& vHeadOffset = mClass->m_vCollisionHeadOffset;
     const PblVector3& vTorsoOffset = mClass->m_vCollisionTorsoOffset;
     float fScale = mClass->mCollisionRootScale;
-    PblMatrix mBody = _IdentityMatrix;
+    PblMatrix mBody = gMatrixIdentity;
     int iCrouch = 0;
     switch (mState)
     {

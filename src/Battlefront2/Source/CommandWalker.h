@@ -1,5 +1,7 @@
 #pragma once
 
+#include "PebbleFL/Common/PblHashTable.h"
+
 #include <stddef.h>
 
 #include "CommandPost.h"
@@ -18,9 +20,9 @@ public:
 
     virtual EntityClass* Derive(unsigned int uHash);
     virtual Entity* Build(const EntityDesc& desc);
-    virtual bool IsRtti(unsigned int uRtti);
-    virtual unsigned int GetDerivedRtti();
-    virtual const char* GetDerivedRttiName();
+    virtual bool IsRtti(unsigned int uRtti) const;
+    virtual unsigned int GetDerivedRtti() const;
+    virtual const char* GetDerivedRttiName() const;
     virtual void SetProperty(unsigned int uProperty, const char* pszValue);
 
     static PblHash rttiHashCommandWalkerClass;
@@ -72,3 +74,49 @@ public:
 };
  
  
+
+// FUNCTION: SWBF2 0x0047fe00
+inline bool CommandWalkerClass::IsRtti(unsigned int uRtti) const
+{
+    if (rttiHashCommandWalkerClass == uRtti)
+    {
+        return true;
+    }
+    return EntityWalkerClass::IsRtti(uRtti);
+}
+
+// FUNCTION: SWBF2 0x0047fe50
+inline unsigned int CommandWalkerClass::GetDerivedRtti() const
+{
+    return rttiHashCommandWalkerClass;
+}
+
+// FUNCTION: SWBF2 0x0047fe60
+inline const char* CommandWalkerClass::GetDerivedRttiName() const
+{
+    return rttiNameCommandWalkerClass;
+}
+
+// FUNCTION: SWBF2 0x0047fd40
+inline bool CommandWalker::IsRtti(unsigned int uRtti) const
+{
+    if (rttiHashCommandWalker == uRtti)
+    {
+        return true;
+    }
+    return EntityWalker::IsRtti(uRtti);
+}
+
+// FUNCTION: SWBF2 0x0047fd90
+inline unsigned int CommandWalker::GetDerivedRtti() const
+{
+    return rttiHashCommandWalker;
+}
+
+// FUNCTION: SWBF2 0x0047fda0
+inline const char* CommandWalker::GetDerivedRttiName() const
+{
+    return "CommandWalker";
+}
+
+

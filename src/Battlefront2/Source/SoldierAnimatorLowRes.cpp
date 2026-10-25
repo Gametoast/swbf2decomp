@@ -24,11 +24,7 @@
 
 static const char* const HUMAN_LOWRES_BANK = "humanlz";
 
-static PblMatrix _IdentityMatrix(
-    PblVector4{ 1.0f, 0.0f, 0.0f, 0.0f },
-    PblVector4{ 0.0f, 1.0f, 0.0f, 0.0f },
-    PblVector4{ 0.0f, 0.0f, 1.0f, 0.0f },
-    PblVector4{ 0.0f, 0.0f, 0.0f, 1.0f });
+
 
 namespace GameLoop { extern float sClientDeltaTime; }
 
@@ -894,7 +890,7 @@ void SoldierAnimatorLowRes::Initialize(const ZephyrSkeletonShared* pSkeleton, co
         kPoseStatic.Set(kPoseDyn, true);
     }
 
-    mZephyrSkeleton.BuildWorldMatrices(_IdentityMatrix, kMask);
+    mZephyrSkeleton.BuildWorldMatrices(gMatrixIdentity, kMask);
     mPose.ConvertFromZephyrPose(kPoseStatic);
     mZephyrSkeleton.Close();
 }
@@ -1068,7 +1064,7 @@ void SoldierAnimatorLowRes_Pool::Initialize(const ZephyrSkeletonShared* pSkeleto
         mZephyrPoseStatic.Set(mZephyrPoseDyn, true);
     }
 
-    mZephyrSkeleton.BuildWorldMatrices(_IdentityMatrix, kMask);
+    mZephyrSkeleton.BuildWorldMatrices(gMatrixIdentity, kMask);
 }
 
 // FUNCTION: SWBF2 0x00649e20
@@ -1081,7 +1077,7 @@ const RedPose* SoldierAnimatorLowRes_Pool::GetPose()
     {
         mZephyrPoseDyn.Update(fElapsed);
         mZephyrPoseStatic.Set(mZephyrPoseDyn, true);
-        mZephyrSkeleton.BuildWorldMatrices(_IdentityMatrix, mZephyrJointMask);
+        mZephyrSkeleton.BuildWorldMatrices(gMatrixIdentity, mZephyrJointMask);
         m_iLastFrame = iFrame;
     }
 

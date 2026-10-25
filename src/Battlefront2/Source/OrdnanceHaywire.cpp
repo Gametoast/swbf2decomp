@@ -4,23 +4,11 @@
 
 #include <stdio.h>
 
-// FUNCTION: SWBF2 0x00600d50
-bool OrdnanceHaywire::IsRtti(unsigned int uRtti) const
-{
-    return uRtti == rttiHashOrdnanceHaywire || OrdnanceSticky::IsRtti(uRtti);
-}
 
-// FUNCTION: SWBF2 0x00600d90
-unsigned int OrdnanceHaywire::GetDerivedRtti() const
-{
-    return rttiHashOrdnanceHaywire;
-}
 
-// FUNCTION: SWBF2 0x00600da0
-const char* OrdnanceHaywire::GetDerivedRttiName() const
-{
-    return rttiNameOrdnanceHaywire;
-}
+
+
+
 
 // FUNCTION: SWBF2 0x00600e40
 OrdnanceHaywire::OrdnanceHaywire(OrdnanceHaywireClass* pClass, const OrdnanceDesc& desc)
@@ -104,23 +92,11 @@ OrdnanceHaywireClass::OrdnanceHaywireClass(OrdnanceHaywireClass* pBase, unsigned
     mDisableTime = pBase->mDisableTime;
 }
 
-// FUNCTION: SWBF2 0x00600de0
-bool OrdnanceHaywireClass::IsRtti(unsigned int uRtti)
-{
-    return uRtti == rttiHashOrdnanceHaywireClass || OrdnanceStickyClass::IsRtti(uRtti);
-}
 
-// FUNCTION: SWBF2 0x00600e20
-unsigned int OrdnanceHaywireClass::GetDerivedRtti()
-{
-    return rttiHashOrdnanceHaywireClass;
-}
 
-// FUNCTION: SWBF2 0x00600e30
-const char* OrdnanceHaywireClass::GetDerivedRttiName()
-{
-    return rttiNameOrdnanceHaywireClass;
-}
+
+
+
 
 // FUNCTION: SWBF2 0x00600fa0
 void OrdnanceHaywireClass::SetProperty(unsigned int uProperty, const char* pszValue)

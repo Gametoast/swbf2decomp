@@ -1,5 +1,7 @@
 #pragma once
 
+#include "PebbleFL/Common/PblHashTable.h"
+
 #include <stddef.h>
 
 #include "AIGoal.h"
@@ -37,3 +39,25 @@ public:
 
  
  
+
+// FUNCTION: SWBF2 0x00488040
+inline bool AI::CTFGoalD::IsRtti(unsigned int uRtti) const
+{
+    if (rttiHashCTFGoalD == uRtti)
+    {
+        return true;
+    }
+    return AIGoal::IsRtti(uRtti);
+}
+
+// FUNCTION: SWBF2 0x00488070
+inline unsigned int AI::CTFGoalD::GetDerivedRtti() const
+{
+    return rttiHashCTFGoalD;
+}
+
+// FUNCTION: SWBF2 0x00488080
+inline const char* AI::CTFGoalD::GetDerivedRttiName() const
+{
+    return rttiNameCTFGoalD;
+}

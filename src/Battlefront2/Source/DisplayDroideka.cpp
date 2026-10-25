@@ -13,11 +13,7 @@
 
 #include "RedEngineFL/Graphics/RedShadingState.h"
 
-static PblMatrix _IdentityMatrix(
-    PblVector4{ 1.0f, 0.0f, 0.0f, 0.0f },
-    PblVector4{ 0.0f, 1.0f, 0.0f, 0.0f },
-    PblVector4{ 0.0f, 0.0f, 1.0f, 0.0f },
-    PblVector4{ 0.0f, 0.0f, 0.0f, 1.0f });
+
 
 // FUNCTION: SWBF2 0x0048cb30
 void DroidekaElement::SetScale(float fScale)
@@ -85,7 +81,7 @@ void DroidekaElement::BuildWorldMatrices()
         kRoot.kTrans.z = mTranslationOffset.z + kRoot.kTrans.z;
     }
 
-    mZephyrSkeleton.BuildWorldMatrices(_IdentityMatrix);
+    mZephyrSkeleton.BuildWorldMatrices(gMatrixIdentity);
 
     if (mState == EntityDroideka::Rolling)
     {

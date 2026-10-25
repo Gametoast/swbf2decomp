@@ -3,10 +3,22 @@
 
 #include "FLInputManager.h"
 
-namespace SaveGameManager { extern unsigned int mReqSaveFile2Data; }
-namespace SaveGameManager { extern unsigned int mReqSaveFile2Size; }
-namespace SaveGameManager { extern unsigned int mReqSaveFile1Data; }
-namespace SaveGameManager { extern unsigned int mReqSaveFile1Size; }
+namespace SaveGameManager
+{
+    extern unsigned int mReqSaveFile2Data;
+}
+namespace SaveGameManager
+{
+    extern unsigned int mReqSaveFile2Size;
+}
+namespace SaveGameManager
+{
+    extern unsigned int mReqSaveFile1Data;
+}
+namespace SaveGameManager
+{
+    extern unsigned int mReqSaveFile1Size;
+}
 
 namespace SaveGameManager
 {
@@ -22,7 +34,10 @@ namespace SaveGameManager {
 void ResetFileList();
 }
 
-namespace SaveGameManager { extern unsigned char mForceNoSaveDevice; }
+namespace SaveGameManager
+{
+    extern unsigned char mForceNoSaveDevice;
+}
 
 namespace SaveGameManager
 {

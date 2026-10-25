@@ -214,25 +214,14 @@ const char MountedTurretClass::rttiNameMountedTurretClass[] = "MountedTurretClas
 // `dynamic initializer for 'MountedTurret::sMemoryPool''
 // SYNTHETIC: SWBF2 0x00768d20
 // `dynamic atexit destructor for 'MountedTurret::sMemoryPool''
+
 MemoryPool MountedTurret::sMemoryPool("MountedTurret", 0x2c0);
 
-// FUNCTION: SWBF2 0x005a5160
-bool MountedTurret::IsRtti(unsigned int uRtti) const
-{
-    return uRtti == rttiHashMountedTurret || EntityEx::IsRtti(uRtti);
-}
 
-// FUNCTION: SWBF2 0x005a5190
-unsigned int MountedTurret::GetDerivedRtti() const
-{
-    return rttiHashMountedTurret;
-}
 
-// FUNCTION: SWBF2 0x005a51a0
-const char* MountedTurret::GetDerivedRttiName() const
-{
-    return rttiNameMountedTurret;
-}
+
+
+
 
 // FUNCTION: SWBF2 0x005a51b0
 const PblMatrix& MountedTurret::GetMatrix() const
@@ -312,23 +301,11 @@ bool MountedTurret::PostCollision::Update(float fDeltaTime)
 // SYNTHETIC: SWBF2 0x005a52e0
 // MountedTurret::PostCollision::~PostCollision
 
-// FUNCTION: SWBF2 0x005a52f0
-bool MountedTurretClass::IsRtti(unsigned int uRtti)
-{
-    return uRtti == rttiHashMountedTurretClass || EntityClass::IsRtti(uRtti);
-}
 
-// FUNCTION: SWBF2 0x005a5320
-unsigned int MountedTurretClass::GetDerivedRtti()
-{
-    return rttiHashMountedTurretClass;
-}
 
-// FUNCTION: SWBF2 0x005a5330
-const char* MountedTurretClass::GetDerivedRttiName()
-{
-    return rttiNameMountedTurretClass;
-}
+
+
+
 
 // SYNTHETIC: SWBF2 0x005a5340
 // MountedTurret::`scalar deleting destructor'

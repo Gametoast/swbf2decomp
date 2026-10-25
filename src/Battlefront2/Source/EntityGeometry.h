@@ -1,5 +1,7 @@
 #pragma once
 
+#include "PebbleFL/Common/PblHashTable.h"
+
 #include <stddef.h>
 
 #include "CollisionModel.h"
@@ -100,10 +102,10 @@ public:
 
     int GetNumChunks();
 
-    virtual bool IsRtti(unsigned int uRtti);
+    virtual bool IsRtti(unsigned int uRtti) const;
 
-    virtual unsigned int GetDerivedRtti();
-    virtual const char* GetDerivedRttiName();
+    virtual unsigned int GetDerivedRtti() const;
+    virtual const char* GetDerivedRttiName() const;
 
     virtual void PostReadSetup();
 
@@ -242,3 +244,47 @@ public:
  
  
  
+
+// FUNCTION: SWBF2 0x004440d0
+inline bool EntityGeometry::IsRtti(unsigned int uRtti) const
+{
+    if (rttiHashEntityGeometry == uRtti)
+    {
+        return true;
+    }
+    return EntityEx::IsRtti(uRtti);
+}
+
+// FUNCTION: SWBF2 0x004441b0
+inline bool EntityGeometryClass::IsRtti(unsigned int uRtti) const
+{
+    if (rttiHashEntityGeometryClass == uRtti)
+    {
+        return true;
+    }
+    return EntityClass::IsRtti(uRtti);
+}
+
+// FUNCTION: SWBF2 0x004ba080
+inline unsigned int EntityGeometry::GetDerivedRtti() const
+{
+    return rttiHashEntityGeometry;
+}
+
+// FUNCTION: SWBF2 0x004ba090
+inline const char* EntityGeometry::GetDerivedRttiName() const
+{
+    return rttiNameEntityGeometry;
+}
+
+// FUNCTION: SWBF2 0x004ba0d0
+inline unsigned int EntityGeometryClass::GetDerivedRtti() const
+{
+    return rttiHashEntityGeometryClass;
+}
+
+// FUNCTION: SWBF2 0x004ba0e0
+inline const char* EntityGeometryClass::GetDerivedRttiName() const
+{
+    return rttiNameEntityGeometryClass;
+}

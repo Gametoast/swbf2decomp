@@ -101,25 +101,11 @@ int GetFormationType(const UnitController* pCtrl)
     return (static_cast<unsigned int>(value - 2) > 1) + 2;
 }
 
-// FUNCTION: SWBF2 0x006645e0
-bool UnitCTFOffenseAgent::IsRtti(unsigned int uRtti) const
-{
-    return uRtti == rttiHashUnitCTFOffenseAgent ||
-           uRtti == UnitAgent::rttiHashUnitAgent ||
-           uRtti == Agent::rttiHashAgent;
-}
 
-// FUNCTION: SWBF2 0x00664610
-unsigned int UnitCTFOffenseAgent::GetDerivedRtti() const
-{
-    return rttiHashUnitCTFOffenseAgent;
-}
 
-// FUNCTION: SWBF2 0x00664620
-const char* UnitCTFOffenseAgent::GetDerivedRttiName() const
-{
-    return rttiNameUnitCTFOffenseAgent;
-}
+
+
+
 
 // FUNCTION: SWBF2 0x00665390
 const char* UnitCTFOffenseAgent::NFINAL_GetStateString(int) const

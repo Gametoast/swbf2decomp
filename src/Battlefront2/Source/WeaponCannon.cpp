@@ -160,41 +160,17 @@ const char WeaponCannon::rttiNameWeaponCannon[] = "WeaponCannon";
 PblHash WeaponCannonClass::rttiHashWeaponCannonClass("WeaponCannonClass");
 const char WeaponCannonClass::rttiNameWeaponCannonClass[] = "WeaponCannonClass";
 
-// FUNCTION: SWBF2 0x0067e3c0
-bool WeaponCannon::IsRtti(unsigned int uRtti) const
-{
-    return uRtti == rttiHashWeaponCannon || Weapon::IsRtti(uRtti);
-}
 
-// FUNCTION: SWBF2 0x0067e3f0
-unsigned int WeaponCannon::GetDerivedRtti() const
-{
-    return rttiHashWeaponCannon;
-}
 
-// FUNCTION: SWBF2 0x0067e400
-const char* WeaponCannon::GetDerivedRttiName() const
-{
-    return rttiNameWeaponCannon;
-}
 
-// FUNCTION: SWBF2 0x0067e440
-bool WeaponCannonClass::IsRtti(unsigned int uRtti)
-{
-    return uRtti == rttiHashWeaponCannonClass || WeaponClass::IsRtti(uRtti);
-}
 
-// FUNCTION: SWBF2 0x0067e470
-unsigned int WeaponCannonClass::GetDerivedRtti()
-{
-    return rttiHashWeaponCannonClass;
-}
 
-// FUNCTION: SWBF2 0x0067e480
-const char* WeaponCannonClass::GetDerivedRttiName()
-{
-    return rttiNameWeaponCannonClass;
-}
+
+
+
+
+
+
 
 // FUNCTION: SWBF2 0x0067e490
 WeaponCannon::WeaponCannon(const WeaponCannonClass* pClass, const WeaponDesc& desc)

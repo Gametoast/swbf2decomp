@@ -64,23 +64,11 @@ inline const PblVector3& RegionPosition(const RedRegion* pRegion)
 PblHash AI::CTFGoalD::rttiHashCTFGoalD("CTFGoalD");
 const char AI::CTFGoalD::rttiNameCTFGoalD[] = "CTFGoalD";
 
-// FUNCTION: SWBF2 0x00488040
-bool AI::CTFGoalD::IsRtti(unsigned int uRtti) const
-{
-    return uRtti == rttiHashCTFGoalD || AIGoal::IsRtti(uRtti);
-}
 
-// FUNCTION: SWBF2 0x00488070
-unsigned int AI::CTFGoalD::GetDerivedRtti() const
-{
-    return rttiHashCTFGoalD;
-}
 
-// FUNCTION: SWBF2 0x00488080
-const char* AI::CTFGoalD::GetDerivedRttiName() const
-{
-    return rttiNameCTFGoalD;
-}
+
+
+
 
 // SYNTHETIC: SWBF2 0x00488090
 // AI::CTFGoalD::`scalar deleting destructor'

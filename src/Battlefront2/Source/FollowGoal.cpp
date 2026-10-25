@@ -44,23 +44,11 @@ inline bool IsAlive(const GameObject* pObject)
 PblHash AI::FollowGoal::rttiHashFollowGoal("FollowGoal");
 const char AI::FollowGoal::rttiNameFollowGoal[] = "FollowGoal";
 
-// FUNCTION: SWBF2 0x0052d1c0
-bool AI::FollowGoal::IsRtti(unsigned int uRtti) const
-{
-    return uRtti == rttiHashFollowGoal || AIGoal::IsRtti(uRtti);
-}
 
-// FUNCTION: SWBF2 0x0052d1f0
-unsigned int AI::FollowGoal::GetDerivedRtti() const
-{
-    return rttiHashFollowGoal;
-}
 
-// FUNCTION: SWBF2 0x0052d200
-const char* AI::FollowGoal::GetDerivedRttiName() const
-{
-    return rttiNameFollowGoal;
-}
+
+
+
 
 // SYNTHETIC: SWBF2 0x0052d210
 // AI::FollowGoal::`scalar deleting destructor'

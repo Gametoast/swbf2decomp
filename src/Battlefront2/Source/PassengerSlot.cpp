@@ -32,11 +32,7 @@ MemoryPool PassengerSlot::sMemoryPool("PassengerSlot", 0x1f0);
 PblHash PassengerSlot::rttiHashPassengerSlot("PassengerSlot");
 const char PassengerSlot::rttiNamePassengerSlot[] = "PassengerSlot";
 
-static PblMatrix _IdentityMatrix(
-    PblVector4{ 1.0f, 0.0f, 0.0f, 0.0f },
-    PblVector4{ 0.0f, 1.0f, 0.0f, 0.0f },
-    PblVector4{ 0.0f, 0.0f, 1.0f, 0.0f },
-    PblVector4{ 0.0f, 0.0f, 0.0f, 1.0f });
+
 
 // FUNCTION: SWBF2 0x0060fd00
 PassengerSlotClass::PassengerSlotClass(unsigned int uHash)
@@ -52,7 +48,7 @@ PassengerSlotClass::PassengerSlotClass(unsigned int uHash)
     mAddHealth = 15.0f;
     mAddAmmo = 1.0f;
     mPowerupDelay = 1.0f;
-    mMountMatrix = _IdentityMatrix;
+    mMountMatrix = gMatrixIdentity;
 }
 
 // SYNTHETIC: SWBF2 0x0060fde0
@@ -180,12 +176,7 @@ PassengerSlot::~PassengerSlot()
 {
 }
 
-// FUNCTION: SWBF2 0x0060f460
-bool PassengerSlot::IsRtti(unsigned int uRtti) const
-{
-    return uRtti == rttiHashPassengerSlot || uRtti == EntityEx::rttiHashEntityEx ||
-           uRtti == Entity::rttiHashEntity;
-}
+
 
 // FUNCTION: SWBF2 0x0060f490
 unsigned int PassengerSlot::GetDerivedRtti() const { return rttiHashPassengerSlot; }

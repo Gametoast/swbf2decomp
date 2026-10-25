@@ -1,5 +1,7 @@
 #pragma once
 
+#include "PebbleFL/Common/PblHashTable.h"
+
 #include <stddef.h>
 
 #include "GameSound.h"
@@ -280,3 +282,43 @@ public:
  
  
  
+
+// FUNCTION: SWBF2 0x00677610
+inline bool Weapon::IsRtti(unsigned int uRtti) const
+{
+    return rttiHashWeapon == uRtti;
+}
+
+// FUNCTION: SWBF2 0x00677630
+inline unsigned int Weapon::GetDerivedRtti() const
+{
+    return rttiHashWeapon;
+}
+
+// FUNCTION: SWBF2 0x00677640
+inline const char* Weapon::GetDerivedRttiName() const
+{
+    return rttiNameWeapon;
+}
+
+// FUNCTION: SWBF2 0x0067e3c0
+inline bool WeaponCannon::IsRtti(unsigned int uRtti) const
+{
+    if (rttiHashWeaponCannon == uRtti)
+    {
+        return true;
+    }
+    return Weapon::IsRtti(uRtti);
+}
+
+// FUNCTION: SWBF2 0x0067e3f0
+inline unsigned int WeaponCannon::GetDerivedRtti() const
+{
+    return rttiHashWeaponCannon;
+}
+
+// FUNCTION: SWBF2 0x0067e400
+inline const char* WeaponCannon::GetDerivedRttiName() const
+{
+    return rttiNameWeaponCannon;
+}

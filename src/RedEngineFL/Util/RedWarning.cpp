@@ -33,19 +33,28 @@ static char kpcNullTime[7] = "[NULL]";
 namespace RedWarning
 {
 
+// GLOBAL: SWBF2 0x009c8448
 RED_ERROR_SEVERITY g_eSeverityMin;
 RED_ERROR_SEVERITY g_aeSeverityToDestination[6];
+// GLOBAL: SWBF2 0x009c8464
 unsigned int g_auiFormatToDestination[5];
+// GLOBAL: SWBF2 0x009c8478
 void(__cdecl* g_fnLogCallback)(char const*, ...);
 RED_ERROR_SEVERITY g_eSeverity;
+// GLOBAL: SWBF2 0x009c8480
 char* g_pcFileName;
+// GLOBAL: SWBF2 0x009c8484
 char* g_pcCompileDate;
+// GLOBAL: SWBF2 0x009c8488
 char* g_pcCompileTime;
+// GLOBAL: SWBF2 0x009c848c
 int g_iLineNumber;
 bool g_bFormatted;
+// GLOBAL: SWBF2 0x009c8491
 bool g_bValidLogFile;
 bool g_bInitialized;
 
+// GLOBAL: SWBF2 0x009c8498
 char g_pcLogFileName[64];
 
 }

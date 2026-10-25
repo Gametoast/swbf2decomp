@@ -13,6 +13,7 @@ extern "C" ::PblVector3* __stdcall D3DXVec3Normalize(::PblVector3* pOut,
 namespace Snd
 {
 
+// GLOBAL: SWBF2 0x007e37a0
 float Source3D::sPitchMultiplier = 1.0f;
 
 static const float fLength2EstAlpha = 0.94805944f;

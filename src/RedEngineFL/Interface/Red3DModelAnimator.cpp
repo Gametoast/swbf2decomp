@@ -5,11 +5,7 @@
 #include "RedEngineFL/Util/RedAnimation.h"
 #include "Zephyr/Source/ZephyrAnimBank.h"
 
-static PblMatrix _IdentityMatrix(
-    PblVector4{ 1.0f, 0.0f, 0.0f, 0.0f },
-    PblVector4{ 0.0f, 1.0f, 0.0f, 0.0f },
-    PblVector4{ 0.0f, 0.0f, 1.0f, 0.0f },
-    PblVector4{ 0.0f, 0.0f, 0.0f, 1.0f });
+
 
 // SYNTHETIC: SWBF2 0x004092a0
 // `dynamic initializer for 'Red3DModelAnimator::rttiHashRed3DModelAnimator''
@@ -35,11 +31,7 @@ Red3DModelAnimator::Red3DModelAnimator()
     Open();
 }
 
-// FUNCTION: SWBF2 0x0056a110
-bool Red3DModelAnimator::IsRtti(unsigned int uRtti) const
-{
-    return uRtti == rttiHashRed3DModelAnimator;
-}
+
 
 // FUNCTION: SWBF2 0x006f8270
 Red3DModelAnimator::~Red3DModelAnimator()
@@ -77,17 +69,9 @@ const ZephyrAnim* Red3DModelAnimator::FindAnimation(unsigned int uAnimHash)
     return 0;
 }
 
-// FUNCTION: SWBF2 0x006f83a0
-unsigned int Red3DModelAnimator::GetDerivedRtti() const
-{
-    return rttiHashRed3DModelAnimator;
-}
 
-// FUNCTION: SWBF2 0x006f83b0
-const char* Red3DModelAnimator::GetDerivedRttiName() const
-{
-    return rttiNameRed3DModelAnimator;
-}
+
+
 
 // FUNCTION: SWBF2 0x006f83c0
 void Red3DModelAnimator::Open()
@@ -163,6 +147,6 @@ RedPose* Red3DModelAnimator::UpdatePose()
         }
         mZephyrPoseStatic.Set(mZephyrPoseDyn, true);
     }
-    mZephyrSkeleton.BuildWorldMatrices(_IdentityMatrix);
+    mZephyrSkeleton.BuildWorldMatrices(gMatrixIdentity);
     return &mPose;
 }

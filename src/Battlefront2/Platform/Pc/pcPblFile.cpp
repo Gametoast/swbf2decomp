@@ -13,7 +13,10 @@
 #include "Battlefront2/Source/GameMemory.h"
 #include "Battlefront2/Source/NetGame.h"
 
-namespace RedMissionLog { bool Enabled(); }
+namespace RedMissionLog
+{
+    bool Enabled();
+}
 
 // GLOBAL: SWBF2 0x007ec440
 
@@ -427,8 +430,11 @@ void PblFile::MemSeek(int iOffset, SeekType eFrom)
     }
 }
 
-// GLOBAL: SWBF2 0x00964f78
-namespace RedMissionLog { bool mEnabled; }
+namespace RedMissionLog
+{
+    // GLOBAL: SWBF2 0x00964f78
+    bool mEnabled;
+}
 
 // FUNCTION: SWBF2 0x006ccca0
 bool RedMissionLog::Enabled()

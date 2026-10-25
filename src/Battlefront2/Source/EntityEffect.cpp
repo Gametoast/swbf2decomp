@@ -15,23 +15,11 @@ EntityEffectClass::EntityEffectClass(unsigned int uHash)
     mEffectClass = 0;
 }
 
-// FUNCTION: SWBF2 0x004a99b0
-bool EntityEffectClass::IsRtti(unsigned int uRtti)
-{
-    return uRtti == rttiHashEntityEffectClass || EntityClass::IsRtti(uRtti);
-}
 
-// FUNCTION: SWBF2 0x004a99e0
-unsigned int EntityEffectClass::GetDerivedRtti()
-{
-    return rttiHashEntityEffectClass;
-}
 
-// FUNCTION: SWBF2 0x004a99f0
-const char* EntityEffectClass::GetDerivedRttiName()
-{
-    return rttiNameEntityEffectClass;
-}
+
+
+
 
 // SYNTHETIC: SWBF2 0x004a9a30
 // EntityEffectClass::`scalar deleting destructor'

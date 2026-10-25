@@ -278,11 +278,7 @@ void Combo::Attack::AddDamageSample(float fTime, const PblVector3& vBegin, const
     }
 }
 
-static PblMatrix _IdentityMatrix(
-    PblVector4{ 1.0f, 0.0f, 0.0f, 0.0f },
-    PblVector4{ 0.0f, 1.0f, 0.0f, 0.0f },
-    PblVector4{ 0.0f, 0.0f, 1.0f, 0.0f },
-    PblVector4{ 0.0f, 0.0f, 0.0f, 1.0f });
+
 
 // FUNCTION: SWBF2 0x004727a0
 bool Combo::Attack::_ResolveDamageData(const Combo* pCombo, const State* pState,
@@ -408,7 +404,7 @@ bool Combo::Attack::_ResolveDamageData(const Combo* pCombo, const State* pState,
 
     kPose.Set(kUpperPose, kUpperMask, true);
     kPose.Set(kLowerPose, kLowerMask, true);
-    kSkel.BuildWorldMatrices(_IdentityMatrix, iJoint);
+    kSkel.BuildWorldMatrices(gMatrixIdentity, iJoint);
     const PblMatrix& mJoint = kSkel.m_pWorldMatrices[iJoint];
     PblVector3 vPos, vDir;
     D3DXVec3TransformCoord((D3DXVECTOR3*)&vPos, (const D3DXVECTOR3*)&vBegin, (const D3DXMATRIX*)&mJoint);
@@ -429,7 +425,7 @@ bool Combo::Attack::_ResolveDamageData(const Combo* pCombo, const State* pState,
         }
         kPose.Set(kUpperPose, kUpperMask, true);
         kPose.Set(kLowerPose, kLowerMask, true);
-        kSkel.BuildWorldMatrices(_IdentityMatrix, iJoint);
+        kSkel.BuildWorldMatrices(gMatrixIdentity, iJoint);
         PblVector3 vNewPos, vNewDir;
         D3DXVec3TransformCoord((D3DXVECTOR3*)&vNewPos, (const D3DXVECTOR3*)&vBegin, (const D3DXMATRIX*)&mJoint);
         D3DXVec3TransformNormal((D3DXVECTOR3*)&vNewDir, (const D3DXVECTOR3*)&vEnd, (const D3DXMATRIX*)&mJoint);
@@ -464,7 +460,7 @@ bool Combo::Attack::_ResolveDamageData(const Combo* pCombo, const State* pState,
             }
             kPose.Set(kUpperPose, kUpperMask, true);
             kPose.Set(kLowerPose, kLowerMask, true);
-            kSkel.BuildWorldMatrices(_IdentityMatrix, iJoint);
+            kSkel.BuildWorldMatrices(gMatrixIdentity, iJoint);
             D3DXVec3TransformCoord((D3DXVECTOR3*)&vNewPos, (const D3DXVECTOR3*)&vBegin, (const D3DXMATRIX*)&mJoint);
             D3DXVec3TransformNormal((D3DXVECTOR3*)&vNewDir, (const D3DXVECTOR3*)&vEnd, (const D3DXMATRIX*)&mJoint);
         }
