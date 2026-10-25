@@ -1,4 +1,7 @@
 #include "HUDObjectiveList.h"
+#include "HUDElementMap.h"
+#include "HUDEvent.h"
+#include "HUDGameEvents.h"
 #include "PebbleFL/Common/PblList.h"
 
 extern bool netIsOneWorld;
@@ -106,6 +109,59 @@ void AddObjectiveList(HUD::ObjectiveList* pList)
     }
 
     pLists->Add(new PblList<HUD::ObjectiveList>::Node, pList);
+}
+
+}
+
+namespace ObjectiveManager
+{
+
+// FUNCTION: SWBF2 0x005f67f0
+void AddObjective(unsigned int uiTextHashID, unsigned int uiPopupTextID, int iTeam)
+{
+    if (!ObjectiveManager::gObjectiveLists)
+    {
+        return;
+    }
+    for (PblList<HUD::ObjectiveList>::Itor it = ObjectiveManager::gObjectiveLists->Begin();
+         it != ObjectiveManager::gObjectiveLists->End(); ++it)
+    {
+        it->AddObjective(uiTextHashID, uiPopupTextID, iTeam);
+    }
+}
+
+// FUNCTION: SWBF2 0x005f6840
+void SetObjectiveState(unsigned int uiTextHashID, int iState)
+{
+    HUD::Objective::ObjectiveState state = (HUD::Objective::ObjectiveState)iState;
+    for (PblList<HUD::ObjectiveList>::Itor it = ObjectiveManager::gObjectiveLists->Begin();
+         it != ObjectiveManager::gObjectiveLists->End(); ++it)
+    {
+        HUD::ObjectiveList* pList = it;
+        if (state == HUD::Objective::ACTIVE && pList->GetState(uiTextHashID) != state)
+        {
+            HUD::ElementMap* pMap = HUD::ElementMap::FindByPlayerIndex(pList->GetViewport());
+            if (pMap && pMap->GetMode() == HUD::ElementMap::mode_Small)
+            {
+                HUD::Event event;
+                event.mClass = HUD::GameEvents::gPlayerEvents[pList->GetViewport()].objectivesUpdated;
+                event.mData.boolValue = true;
+                event.SendDelayed(0.25f);
+                HUD::Event eventOff;
+                eventOff.mClass = HUD::GameEvents::gPlayerEvents[it->GetViewport()].objectivesUpdatedDisable;
+                eventOff.mData.boolValue = true;
+                eventOff.SendDelayed(6.0f);
+            }
+        }
+        it->SetState(uiTextHashID, state);
+    }
+}
+
+// FUNCTION: SWBF2 0x005f6a30
+HUD::ObjectiveList* GetObjectiveList()
+{
+    PblList<HUD::ObjectiveList>* list = ObjectiveManager::gObjectiveLists;
+    return list && list->GetCount() > 0 ? list->GetFirst()->_pObject : 0;
 }
 
 }

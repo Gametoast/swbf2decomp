@@ -316,6 +316,12 @@ static void FreeAllPackets()
     localQueue.Free();
 }
 
+// FUNCTION: SWBF2 0x005b3b60
+void NetDrag::FreePackets()
+{
+    FreeAllPackets();
+}
+
 // FUNCTION: SWBF2 0x005b3f50
 static void ResetTime()
 {

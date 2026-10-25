@@ -73,3 +73,13 @@ inline PblVector3& PblVector3::operator-=(const PblVector3& rhs)
     z -= rhs.z;
     return *this;
 }
+
+// FUNCTION: SWBF2 0x004171f0
+inline const PblVector3 CrossProduct(const PblVector3& lhs, const PblVector3& rhs)
+{
+    PblVector3 Temp;
+    Temp.x = lhs.y * rhs.z - lhs.z * rhs.y;
+    Temp.y = lhs.z * rhs.x - lhs.x * rhs.z;
+    Temp.z = lhs.x * rhs.y - lhs.y * rhs.x;
+    return Temp;
+}

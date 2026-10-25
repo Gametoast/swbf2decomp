@@ -235,15 +235,15 @@ int PblFile::GetSize()
     {
         return MemGetSize();
     }
-    if (_Buffer == 0)
+    if (_Buffer)
     {
-        return 0;
+        if (_bAsynchronous)
+        {
+            return ((Snd::File*)_Buffer)->GetSize();
+        }
+        return ((Snd::FilePlatform*)_Buffer)->GetSize();
     }
-    if (_bAsynchronous)
-    {
-        return ((Snd::File*)_Buffer)->GetSize();
-    }
-    return ((Snd::FilePlatform*)_Buffer)->GetSize();
+    return 0;
 }
 
 // FUNCTION: SWBF2 0x00425d00
@@ -377,58 +377,6 @@ void PblFile::SeekAlign(int iAlign)
     if (iPad)
     {
         Seek(iPad, SeekFromHere);
-    }
-}
-
-unsigned int PblFile::MemGetSize() const
-{
-    return _iBufferSize;
-}
-
-void PblFile::MemRead(void* pBuffer, int iNumBytes)
-{
-    if (_iPos + iNumBytes > _iBufferSize)
-    {
-        iNumBytes = _iBufferSize - _iPos;
-    }
-    if (iNumBytes != 0)
-    {
-        memcpy(pBuffer, _Buffer + _iPos, iNumBytes);
-        _iPos += iNumBytes;
-    }
-}
-
-void PblFile::MemWrite(void* pBuffer, int iNumBytes)
-{
-    if (_iPos + iNumBytes > _iBufferSize)
-    {
-        iNumBytes = _iBufferSize - _iPos;
-    }
-    if (iNumBytes != 0)
-    {
-        memcpy(_Buffer + _iPos, pBuffer, iNumBytes);
-        _iPos += iNumBytes;
-    }
-}
-
-unsigned int PblFile::MemTell() const
-{
-    return _iPos;
-}
-
-void PblFile::MemSeek(int iOffset, SeekType eFrom)
-{
-    switch (eFrom)
-    {
-    case SeekFromHere:
-        _iPos += iOffset;
-        break;
-    case SeekFromStart:
-        _iPos = iOffset;
-        break;
-    case SeekFromEnd:
-        _iPos = _iBufferSize - iOffset;
-        break;
     }
 }
 

@@ -8207,12 +8207,6 @@ namespace ObjectiveManager
 extern PblList<HUD::ObjectiveList>* gObjectiveLists; HUD::ObjectiveList* GetObjectiveList();
 }
 
-// FUNCTION: SWBF2 0x005f6a30
-HUD::ObjectiveList* ObjectiveManager::GetObjectiveList()
-{
-    PblList<HUD::ObjectiveList>* list = ObjectiveManager::gObjectiveLists;
-    return list && list->GetCount() > 0 ? list->GetFirst()->_pObject : 0;
-}
 
 // FUNCTION: SWBF2 0x005c33e0
 SwitchResponse ReadSwitchResponse(NetPktGroup& group, unsigned int turn, unsigned int)

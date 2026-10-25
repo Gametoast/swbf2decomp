@@ -1184,3 +1184,53 @@ float sendBits[2];
 
 // GLOBAL: SWBF2 0x007e8e10
 char netGameName[64] = "SWBF2";
+
+// FUNCTION: SWBF2 0x005b2ca0
+void __fastcall NetCommP::Connect(int iDest, const void* pAddress)
+{
+    NetDest& dest = netDests[iDest];
+    memcpy(dest.mAddressStorage, pAddress, sizeof(dest.mAddressStorage));
+    dest.connected = true;
+    dest.lastRecv = NetComm::GetTime();
+}
+
+// FUNCTION: SWBF2 0x005b3800
+int __fastcall NetCommP::FindJoinSource(const int* pAddress)
+{
+    const float fNow = NetComm::GetTime();
+    for (int i = 0; i < 64; ++i)
+    {
+        int* pEntry = joinSlots + i * 7;
+        bool bSame;
+        if (isLAN)
+        {
+            int ip1, port1, ip2, port2;
+            NetSocket::GetAddr(pAddress, ip1, port1);
+            NetSocket::GetAddr(pEntry + 1, ip2, port2);
+            bSame = ip1 == ip2 && port1 == port2;
+        }
+        else
+        {
+            bSame = pAddress[0] == pEntry[1] && pAddress[1] == pEntry[2];
+        }
+        if (bSame)
+        {
+            *(float*)pEntry = fNow;
+            return i + 69;
+        }
+    }
+    for (int i = 0; i < 64; ++i)
+    {
+        int* pEntry = joinSlots + i * 7;
+        const float fLast = *(float*)pEntry;
+        if (fNow - fLast > 1.0f || fLast == 0.0f)
+        {
+            pEntry[1] = pAddress[0];
+            pEntry[2] = pAddress[1];
+            memcpy(pEntry + 3, pAddress + 2, 16);
+            *(float*)pEntry = fNow;
+            return i + 69;
+        }
+    }
+    return -1;
+}

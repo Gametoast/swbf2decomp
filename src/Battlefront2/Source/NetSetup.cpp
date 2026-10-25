@@ -2025,14 +2025,6 @@ void ReadLoad(NetPktGroup& group, bool& bReady)
     }
 }
 
-// FUNCTION: SWBF2 0x005b2ca0
-void __fastcall NetCommP::Connect(int iDest, const void* pAddress)
-{
-    NetDest& dest = netDests[iDest];
-    memcpy(dest.mAddressStorage, pAddress, sizeof(dest.mAddressStorage));
-    dest.connected = true;
-    dest.lastRecv = NetComm::GetTime();
-}
 
 extern NetPktGroup inQueue;
 

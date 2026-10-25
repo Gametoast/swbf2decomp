@@ -145,17 +145,7 @@ void VertexC::SetPos(const PblVector3& v)
     pos.z = (short)((v.z - CompressedPos::s_vMin.z) * CompressedPos::s_vScaleInv.z - 32767.5f);
 }
 
-// FUNCTION: SWBF2 0x004171f0
-PblVector3* __cdecl CrossProduct(PblVector3* pResult, const PblVector3* pA, const PblVector3* pB)
-{
-    float x = pA->y * pB->z - pA->z * pB->y;
-    float y = pA->z * pB->x - pA->x * pB->z;
-    float z = pA->x * pB->y - pA->y * pB->x;
-    pResult->x = x;
-    pResult->y = y;
-    pResult->z = z;
-    return pResult;
-}
+
 
 namespace
 {
@@ -265,19 +255,17 @@ void LightBeamEffect::RenderLightBeam(const LightBeam* pBeam, unsigned int uiFla
 
         const PblVector3& vCamPos = mCamera.GetTranslation();
         PblVector3 vSide(vHead.x - vCamPos.x, vHead.y - vCamPos.y, vHead.z - vCamPos.z);
-        PblVector3 vCross;
-        D3DXVec3Normalize((D3DXVECTOR3*)&vSide,
-                          (const D3DXVECTOR3*)CrossProduct(&vCross, &vSide, &vDir));
+        PblVector3 vCross = CrossProduct(vSide, vDir);
+        D3DXVec3Normalize((D3DXVECTOR3*)&vSide, (const D3DXVECTOR3*)&vCross);
         mBeam.m[0][0] = vSide.x;
         mBeam.m[0][1] = vSide.y;
         mBeam.m[0][2] = vSide.z;
         mBeam.m[0][3] = 0.0f;
 
-        const PblVector3* pFront = CrossProduct(&vCross, (const PblVector3*)mBeam.m[1],
-                                              (const PblVector3*)mBeam.m[0]);
-        mBeam.m[2][0] = pFront->x;
-        mBeam.m[2][1] = pFront->y;
-        mBeam.m[2][2] = pFront->z;
+        vCross = CrossProduct(mBeam.GetYAxis(), mBeam.GetXAxis());
+        mBeam.m[2][0] = vCross.x;
+        mBeam.m[2][1] = vCross.y;
+        mBeam.m[2][2] = vCross.z;
         mBeam.m[2][3] = 0.0f;
         mBeam.SetTranslation(vHead);
 

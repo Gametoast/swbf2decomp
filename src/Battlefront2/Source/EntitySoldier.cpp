@@ -1242,7 +1242,7 @@ extern bool netIsLateTurn;
 extern int netCurMaxPlayers;
 extern bool gThreadIsEven;
 
-PblVector3* __cdecl CrossProduct(PblVector3* pResult, const PblVector3* pA, const PblVector3* pB);
+
 namespace VisionManager
 {
 void __fastcall AddFakeRayhitResult(UnitController* pUnit, const GameObject* pObject);
@@ -2805,9 +2805,8 @@ bool EntitySoldier::PostCollisionUpdate(float fDeltaTime)
                     D3DXVec3Normalize(&vNewFront, &vBlend);
                     vFront = vNewFront;
 
-                    PblVector3 vSide;
-                    const PblVector3* pSide = CrossProduct(&vSide, &vFront, &mGroundNormal);
-                    vBlend = Interpolate(vRight, PblVector3(-pSide->x, -pSide->y, -pSide->z), 0.1f);
+                    PblVector3 vSide = CrossProduct(vFront, mGroundNormal);
+                    vBlend = Interpolate(vRight, PblVector3(-vSide.x, -vSide.y, -vSide.z), 0.1f);
                     PblVector3 vNewRight;
                     D3DXVec3Normalize(&vNewRight, &vBlend);
                     vRight = vNewRight;

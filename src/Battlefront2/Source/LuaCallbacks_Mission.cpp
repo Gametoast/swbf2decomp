@@ -3543,46 +3543,48 @@ bool RedMoveHeapEnd(int iHeap, int iDelta)
     return RedFreeToHeapInternal(iSource, pBlock, 0);
 }
 
-// FUNCTION: SWBF2 0x00446250
-void GetPoint(const float* pKeys, int iNumKeys, float fTime,
-                           const float* pCoefficients, float* pPosition, float* pVelocity)
+struct LengthEntryT
 {
-    int iLow = 0;
-    int iHigh = iNumKeys - 2;
-    int iKey;
-    float fStart, fEnd;
+    float length;
+    int segmentIndex;
+};
+
+// FUNCTION: SWBF2 0x00446250
+void GetPoint(float s, LengthEntryT* parameterizedArcLength, int numEntries,
+              PblHermiteVector3* hermiteSegment, PblVector3& pos, PblVector3& direction)
+{
+    int low = 0;
+    int high = numEntries - 2;
+    int index;
+    float start, end;
     for (;;)
     {
-        iKey = (iHigh + iLow) / 2;
-        fStart = pKeys[iKey * 2];
-        if (fTime >= fStart)
+        index = (high + low) / 2;
+        start = parameterizedArcLength[index].length;
+        if (s >= start)
         {
-            fEnd = pKeys[iKey * 2 + 2];
-            if (fTime <= fEnd)
+            end = parameterizedArcLength[index + 1].length;
+            if (s <= end)
             {
                 break;
             }
         }
-        if (fStart <= fTime)
+        if (start <= s)
         {
-            if (fTime > fStart)
+            if (s > start)
             {
-                iLow = iKey + 1;
+                low = index + 1;
             }
         }
         else
         {
-            iHigh = iKey - 1;
+            high = index - 1;
         }
     }
-    const unsigned int iCoefficient = *(const unsigned int*)&pKeys[iKey * 2 + 1];
-    const float* pC = pCoefficients + 13 * iCoefficient;
-    const float u = (fTime - fStart) / (fEnd - fStart);
-    for (int i = 0; i < 3; ++i)
-    {
-        pPosition[i] = pC[9 + i] + ((pC[3 + i] + pC[i] * u) * u + pC[6 + i]) * u;
-        pVelocity[i] = pC[6 + i] + ((pC[i] * u * 3.0f + pC[3 + i] * 2.0f) * u);
-    }
+    const float t = (s - start) / (end - start);
+    const int segmentIndex = parameterizedArcLength[index].segmentIndex;
+    pos = hermiteSegment[segmentIndex].getValue(t);
+    direction = hermiteSegment[segmentIndex].getSlope(t);
 }
 
 extern "C" PblVector3* __stdcall D3DXVec3Normalize(PblVector3* pOut, const PblVector3* pV);
@@ -3680,12 +3682,12 @@ void AsteroidClass::FillPath(const char* pcPath, float fDensity, int iCount,
 
     int iNumPoints = pPath->GetNumPoints();
     int iNumKeys = 10 * iNumPoints - 9;
-    float (*pKeys)[2] = new float[iNumKeys][2];
+    LengthEntryT* pKeys = new LengthEntryT[iNumKeys];
     PblHermiteVector3* pSegments = new PblHermiteVector3[iNumPoints - 1];
     float fLength = 0.0f;
-    pKeys[0][0] = 0.0f;
-    *(int*)&pKeys[0][1] = 0;
-    float (*pKey)[2] = pKeys + 1;
+    pKeys[0].length = 0.0f;
+    pKeys[0].segmentIndex = 0;
+    LengthEntryT* pKey = pKeys + 1;
     for (int i = 1; i < iNumPoints; ++i)
     {
         PblMatrix mStart(pPath->GetPointRotation(i - 1), pPath->GetPointPosition(i - 1));
@@ -3700,8 +3702,8 @@ void AsteroidClass::FillPath(const char* pcPath, float fDensity, int iCount,
             float fDY = vTo.y - vFrom.y;
             float fDZ = vTo.z - vFrom.z;
             fLength += sqrtf(fDX * fDX + fDY * fDY + fDZ * fDZ);
-            (*pKey)[0] = fLength;
-            *(int*)&(*pKey)[1] = i - 1;
+            pKey->length = fLength;
+            pKey->segmentIndex = i - 1;
             ++pKey;
         }
     }
@@ -3709,8 +3711,8 @@ void AsteroidClass::FillPath(const char* pcPath, float fDensity, int iCount,
     for (int i = 0; i < iCount; ++i)
     {
         PblVector3 vPosition, vDir;
-        GetPoint(&pKeys[0][0], iNumKeys, PblRandom::GetSim().GetFloat() * fLength,
-                   &pSegments[0]._a.x, &vPosition.x, &vDir.x);
+        GetPoint(PblRandom::GetSim().GetFloat() * fLength, pKeys, iNumKeys,
+                 pSegments, vPosition, vDir);
         const PblVector3& vPathUp =
             fabs(vDir.x * gVectorUnitY.x + vDir.y * gVectorUnitY.y + vDir.z * gVectorUnitY.z) >= 0.99f
                 ? gVectorUnitY

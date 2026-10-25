@@ -400,7 +400,7 @@ float CollisionMesh::RayHit(const PblVector3& vStart, const PblVector3& vDir, fl
         const PblVector3& v2 = mPoslList[pIndices[2]];
         const PblVector3 e1(v1.x - v0.x, v1.y - v0.y, v1.z - v0.z);
         const PblVector3 e2(v2.x - v0.x, v2.y - v0.y, v2.z - v0.z);
-        PblVector3 vCross(e1.y * e2.z - e1.z * e2.y, e1.z * e2.x - e1.x * e2.z, e1.x * e2.y - e1.y * e2.x);
+        PblVector3 vCross = CrossProduct(e1, e2);
         PblVector3 vNormal;
         D3DXVec3Normalize(&vNormal, &vCross);
         *pNormal = vNormal;

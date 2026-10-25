@@ -54,17 +54,6 @@ void NetCommP::FreePackets()
     }
 }
 
-// FUNCTION: SWBF2 0x005b3b60
-void NetDrag::FreePackets()
-{
-    for (int i = 0; i < 3; ++i)
-    {
-        bandwidthQueue[i].Free();
-    }
-    latencyQueue.Free();
-    lossQueue.Free();
-    localQueue.Free();
-}
 
 // FUNCTION: SWBF2 0x0053e0a0
 void NetPktGroup::Write(bool bValue)

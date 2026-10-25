@@ -70,6 +70,7 @@ public:
         }
 
         bool GetDopplerMode() const { return (mFlags & flags_dopplerMode) != 0; }
+        bool GetCentrePeakMode() const { return (mFlags & flags_centrePeakMode) != 0; }
 
     protected:
 
