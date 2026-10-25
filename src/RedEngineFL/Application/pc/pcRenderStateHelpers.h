@@ -21,15 +21,15 @@ extern RenderableList _RenderableLists[10];
  
 
 #include "RedEngineFL/Application/pc/pcRedDropShadow.h"
+namespace FLRenderer
+{
 
 // GLOBAL: SWBF2 0x007dfa84
 
-// GLOBAL: SWBF2 0x008f6e04
 
-// GLOBAL: SWBF2 0x008f6e08
 
-namespace FLRenderer
-{
+
+
 extern unsigned int m_numPotentialReflections;
 extern Renderable* m_potentialReflections[50];
 

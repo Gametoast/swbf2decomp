@@ -63,19 +63,21 @@ PblList<pcRedVertexBuffer> s_nonSharedVertexBufferList;
 
 int sStaticVertexBufferCount;
 
-// GLOBAL: SWBF2 0x00960f5c
 // SYNTHETIC: SWBF2 0x00407e60
 // `dynamic initializer for 'sStaticVertexBufferHashTable''
 
+// GLOBAL: SWBF2 0x00960f5c
+// sStaticVertexBufferHashTable
 PblHashTable<PblList<pcRedVertexBuffer>, 1024> sStaticVertexBufferHashTable;
 // GLOBAL: SWBF2 0x00962f68
 
 int sDynamicVertexBufferCount;
 
-// GLOBAL: SWBF2 0x00962f6c
 // SYNTHETIC: SWBF2 0x00407e40
 // `dynamic initializer for 'sDynamicVertexBufferHashTable''
 
+// GLOBAL: SWBF2 0x00962f6c
+// sDynamicVertexBufferHashTable
 PblHashTable<PblList<pcRedVertexBuffer>, 1024> sDynamicVertexBufferHashTable;
 
 // FUNCTION: SWBF2 0x006ca790

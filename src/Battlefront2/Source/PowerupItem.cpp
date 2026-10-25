@@ -30,9 +30,13 @@ PowerupItemClass::PowerupItemClass(unsigned int uHash)
 
 // SYNTHETIC: SWBF2 0x00405f90
 // `dynamic initializer for 'PowerupItemClass::rttiHashPowerupItemClass''
+// PowerupItemClass::rttiHashPowerupItemClass
+
 // GLOBAL: SWBF2 0x01efa1d0
 // PowerupItemClass::rttiHashPowerupItemClass
 PblHash PowerupItemClass::rttiHashPowerupItemClass("PowerupItemClass");
+// GLOBAL: SWBF2 0x0078abe0
+// PowerupItemClass::rttiNamePowerupItemClass
 const char PowerupItemClass::rttiNamePowerupItemClass[] = "PowerupItemClass";
 
 
@@ -193,18 +197,24 @@ EntityClass* PowerupItemClass::Derive(unsigned int uHash)
 // SYNTHETIC: SWBF2 0x006244d8
 // [thunk]:PowerupItem::`scalar deleting destructor'`adjustor{576}'
 
-// GLOBAL: SWBF2 0x01efa1d8
 // SYNTHETIC: SWBF2 0x00405f60
 // `dynamic initializer for 'PowerupItem::sMemoryPool''
 // SYNTHETIC: SWBF2 0x00769340
 // `dynamic atexit destructor for 'PowerupItem::sMemoryPool''
+
+// GLOBAL: SWBF2 0x01efa1d8
+// PowerupItem::sMemoryPool
 MemoryPool PowerupItem::sMemoryPool("PowerupItem", 0x290);
 
 // SYNTHETIC: SWBF2 0x00405f80
 // `dynamic initializer for 'PowerupItem::rttiHashPowerupItem''
+// PowerupItem::rttiHashPowerupItem
+
 // GLOBAL: SWBF2 0x01efa1d4
 // PowerupItem::rttiHashPowerupItem
 PblHash PowerupItem::rttiHashPowerupItem("PowerupItem");
+// GLOBAL: SWBF2 0x0078ac00
+// PowerupItem::rttiNamePowerupItem
 const char PowerupItem::rttiNamePowerupItem[] = "PowerupItem";
 
 class CollisionManager

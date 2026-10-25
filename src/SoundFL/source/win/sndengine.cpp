@@ -122,11 +122,13 @@ SoftOutput* Engine::smSoftOutput;
 // GLOBAL: SWBF2 0x009d7e50
 HWND Engine::smApplicationWindow;
 
-// GLOBAL: SWBF2 0x009d7e68
 // SYNTHETIC: SWBF2 0x0040b500
 // `dynamic initializer for 'Snd::Engine::smDummySecBuffer''
 // SYNTHETIC: SWBF2 0x0076a160
 // `dynamic atexit destructor for 'Snd::Engine::smDummySecBuffer''
+
+// GLOBAL: SWBF2 0x009d7e68
+// Engine::smDummySecBuffer
 DSBuffer Engine::smDummySecBuffer;
 
 // GLOBAL: SWBF2 0x007e3310
@@ -134,11 +136,13 @@ bool Engine::smErrorsEnabled = true;
 // GLOBAL: SWBF2 0x007e3314
 float Engine::smMinStreamBufferSize = 100.0f;
 
-// GLOBAL: SWBF2 0x009d7eac
 // SYNTHETIC: SWBF2 0x0040b560
 // `dynamic initializer for 'Snd::sndEngineThreadUpdate''
 // SYNTHETIC: SWBF2 0x0076a1a0
 // `dynamic atexit destructor for 'Snd::sndEngineThreadUpdate''
+
+// GLOBAL: SWBF2 0x009d7eac
+// sndEngineThreadUpdate
 ThreadUpdate sndEngineThreadUpdate(0, 0x2000);
 
 // GLOBAL: SWBF2 0x009cf4b0
@@ -691,6 +695,7 @@ void Engine::SetSpeakerConfig(EngineBase::SpeakerConfig eConfig)
 
 }
 
+// VTABLE: SWBF2 0x00785d14
 class EngineUpdate : public Snd::ThreadUpdate::Object
 {
 public:
@@ -713,11 +718,13 @@ void EngineUpdate::UpdateObject()
     }
 }
 
-// GLOBAL: SWBF2 0x009d7e54
 // SYNTHETIC: SWBF2 0x0040b520
 // `dynamic initializer for 'smEngineUpdater''
 // SYNTHETIC: SWBF2 0x0076a170
 // `dynamic atexit destructor for 'smEngineUpdater''
+
+// GLOBAL: SWBF2 0x009d7e54
+// smEngineUpdater
 static EngineUpdate smEngineUpdater;
 
 namespace Snd
@@ -725,11 +732,13 @@ namespace Snd
 
 }
 
-// GLOBAL: SWBF2 0x009d7ed8
 // SYNTHETIC: SWBF2 0x0040b540
 // `dynamic initializer for '_smHighLowPass''
 // SYNTHETIC: SWBF2 0x0076a190
 // `dynamic atexit destructor for '_smHighLowPass''
+
+// GLOBAL: SWBF2 0x009d7ed8
+// _smHighLowPass
 Snd::StreamLowHighPass _smHighLowPass;
 
 // GLOBAL: SWBF2 0x009d7f90

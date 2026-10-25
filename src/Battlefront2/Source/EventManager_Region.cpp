@@ -374,18 +374,22 @@ namespace EventManager
 namespace RegionEvent
 {
 
-// GLOBAL: SWBF2 0x007ec080
 // SYNTHETIC: SWBF2 0x004036b0
 // `dynamic initializer for 'EventManager::RegionEvent::mEnterRegion''
 // SYNTHETIC: SWBF2 0x00768420
 // `dynamic atexit destructor for 'EventManager::RegionEvent::mEnterRegion''
+
+// GLOBAL: SWBF2 0x007ec080
+// mEnterRegion
 Event<RedRegion, Character> mEnterRegion("EnterRegion");
 
-// GLOBAL: SWBF2 0x007ec0a0
 // SYNTHETIC: SWBF2 0x004036e0
 // `dynamic initializer for 'EventManager::RegionEvent::mLeaveRegion''
 // SYNTHETIC: SWBF2 0x007684a0
 // `dynamic atexit destructor for 'EventManager::RegionEvent::mLeaveRegion''
+
+// GLOBAL: SWBF2 0x007ec0a0
+// mLeaveRegion
 Event<RedRegion, Character> mLeaveRegion("LeaveRegion");
 
 }

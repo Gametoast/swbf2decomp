@@ -80,8 +80,8 @@ public:
  
  
 
-// VTABLE: SWBF2 0x007ae068
-// VTABLE: SWBF2 0x007ae044
+// VTABLE: SWBF2 0x007ae068 Thread
+// VTABLE: SWBF2 0x007ae044 EntityClass
 class RumbleEffectClass : public Thread, public EntityClass
 {
 public:

@@ -22,9 +22,11 @@ RedNoLodData::RedNoLodData()
     _LodClass = -1;
 }
 
-// GLOBAL: SWBF2 0x009a0854
 // SYNTHETIC: SWBF2 0x00408980
 // `dynamic initializer for 'rednoloddata''
+
+// GLOBAL: SWBF2 0x009a0854
+// rednoloddata
 RedNoLodData rednoloddata;
 
 namespace FLRenderer

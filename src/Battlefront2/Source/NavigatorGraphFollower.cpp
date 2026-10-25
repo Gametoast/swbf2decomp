@@ -26,9 +26,13 @@ namespace
 
 // SYNTHETIC: SWBF2 0x004043d0
 // `dynamic initializer for 'NavigatorGraphFollower::rttiHashNavigatorGraphFollower''
+// NavigatorGraphFollower::rttiHashNavigatorGraphFollower
+
 // GLOBAL: SWBF2 0x01ecb250
 // NavigatorGraphFollower::rttiHashNavigatorGraphFollower
 PblHash NavigatorGraphFollower::rttiHashNavigatorGraphFollower("NavigatorGraphFollower");
+// GLOBAL: SWBF2 0x0078a620
+// NavigatorGraphFollower::rttiNameNavigatorGraphFollower
 const char NavigatorGraphFollower::rttiNameNavigatorGraphFollower[] = "NavigatorGraphFollower";
 
 

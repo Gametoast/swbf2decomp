@@ -54,7 +54,10 @@ namespace VisionManager
     int GetVisualPriority(const Controllable* pMe, const GameObject* pObj);
 }
 
-namespace CombatUtil { bool TestWpnConstraintsPos(Controllable* pMe, const PblVector3& vAim, const PblVector3& vPos); }
+namespace CombatUtil
+{
+bool TestWpnConstraintsPos(Controllable* pMe, const PblVector3& vAim, const PblVector3& vPos);
+}
 
 namespace
 {

@@ -7,6 +7,7 @@
 #include "RedEngineFL/Interface/RedBitmapElement.h"
 #include "RedEngineFL/Interface/RedInterfaceScreen.h"
 
+// VTABLE: SWBF2 0x007992c8
 class EndDisplay : public Thread
 {
 public:

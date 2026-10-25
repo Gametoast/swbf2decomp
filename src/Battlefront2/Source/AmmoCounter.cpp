@@ -34,11 +34,13 @@ public:
 };
  
 
-// GLOBAL: SWBF2 0x01eb04b0
 // SYNTHETIC: SWBF2 0x00402280
 // `dynamic initializer for 'AmmoCounter::sMemoryPool''
 // SYNTHETIC: SWBF2 0x00766d70
 // `dynamic atexit destructor for 'AmmoCounter::sMemoryPool''
+
+// GLOBAL: SWBF2 0x01eb04b0
+// AmmoCounter::sMemoryPool
 MemoryPool AmmoCounter::sMemoryPool("AmmoCounter", 0x18);
 
 // FUNCTION: SWBF2 0x00443680

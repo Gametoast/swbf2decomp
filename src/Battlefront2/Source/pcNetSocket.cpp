@@ -109,7 +109,10 @@ void NetSocket::CloseDirectSocket()
 }
 
 extern unsigned __int64 netEnteredLobbyId;
-namespace gf { bool isInitialized(); }
+namespace gf
+{
+bool isInitialized();
+}
 extern void* GetGalaxyNetworking();
 
 // FUNCTION: SWBF2 0x00617e50

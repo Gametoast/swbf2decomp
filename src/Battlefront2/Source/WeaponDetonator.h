@@ -32,6 +32,7 @@ public:
   
  
 
+// VTABLE: SWBF2 0x007b096c
 class WeaponDetonator : public WeaponDispenser
 {
 public:

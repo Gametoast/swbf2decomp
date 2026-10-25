@@ -56,6 +56,8 @@ bool gAltMeleeHitEffects;
 
 bool pcForceFixedFunction;
 bool pcWindowed;
+// GLOBAL: SWBF2 0x01eaedd8
+// hGlobalWnd
 HWND hGlobalWnd;
 bool pcPostInstall;
 
@@ -64,6 +66,8 @@ bool gIsQuitting;
 bool pcEnableLogging;
 bool gbMutexValid;
 HINSTANCE hGlobalInstance;
+// GLOBAL: SWBF2 0x01eaedec
+// PCDebugHeap
 int PCDebugHeap;
 
 int pcHeight;

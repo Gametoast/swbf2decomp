@@ -8,7 +8,10 @@
 #include "NetPacket.h"
 #include "SoundFL/source/sndqueue.h"
 
-namespace GameVoiceChat { void* GetNode(); }
+namespace GameVoiceChat
+{
+void* GetNode();
+}
 
 // FUNCTION: SWBF2 0x0053e300
 void* VoiceChat::NetPacketAudio::Receive()
@@ -86,7 +89,8 @@ void VoiceChat::NetPacketAudio::Free(void* pPacket)
 // Snd::Queue<NetPacket *,4>::~Queue<NetPacket *,4>
 template Snd::Queue<NetPacket*, 4>::~Queue();
 
-namespace GameVoiceChat {
+namespace GameVoiceChat
+{
 
 // FUNCTION: SWBF2 0x0053e1f0
 bool __cdecl SendVoice(NetPacket* packet, unsigned char destination, unsigned int voiceDataOffset)
@@ -157,10 +161,12 @@ class NetPacket;
 namespace GameVoiceChat
 {
 
-// GLOBAL: SWBF2 0x01ec6020
 // SYNTHETIC: SWBF2 0x00403ef0
 // `dynamic initializer for 'GameVoiceChat::gPacketQueue''
 // SYNTHETIC: SWBF2 0x00768af0
 // `dynamic atexit destructor for 'GameVoiceChat::gPacketQueue''
+
+// GLOBAL: SWBF2 0x01ec6020
+// gPacketQueue
 Snd::Queue<NetPacket*, 4> gPacketQueue[4];
 }

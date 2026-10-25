@@ -16,6 +16,8 @@ public:
 
     ~SoundSpaceRegion() {}
 
+    // SYNTHETIC: SWBF2 0x004fad10
+    // SoundSpaceRegion::operator delete
     static void operator delete(void* p) { sMemoryPool.Free(p); }
 
     static void DestroyAll();
@@ -26,31 +28,42 @@ public:
 
 // SYNTHETIC: SWBF2 0x00402dd0
 // `dynamic initializer for 'EntitySound::rttiHashEntitySound''
+// EntitySound::rttiHashEntitySound
+
 // GLOBAL: SWBF2 0x01ebc1a0
 // EntitySound::rttiHashEntitySound
 PblHash EntitySound::rttiHashEntitySound("EntitySound");
+// GLOBAL: SWBF2 0x007895e4
+// EntitySound::rttiNameEntitySound
 const char EntitySound::rttiNameEntitySound[] = "EntitySound";
 
 // SYNTHETIC: SWBF2 0x00402df0
 // `dynamic initializer for 'EntitySoundClass::rttiHashEntitySoundClass''
+// EntitySoundClass::rttiHashEntitySoundClass
+
 // GLOBAL: SWBF2 0x01ebc0fc
 // EntitySoundClass::rttiHashEntitySoundClass
 PblHash EntitySoundClass::rttiHashEntitySoundClass("EntitySoundClass");
+// GLOBAL: SWBF2 0x007895f0
+// EntitySoundClass::rttiNameEntitySoundClass
 const char EntitySoundClass::rttiNameEntitySoundClass[] = "EntitySoundClass";
 
-// GLOBAL: SWBF2 0x01ebc150
 // SYNTHETIC: SWBF2 0x00402e00
 // `dynamic initializer for 'SoundSpaceRegion::sMemoryPool''
 // SYNTHETIC: SWBF2 0x00766fe0
 // `dynamic atexit destructor for 'SoundSpaceRegion::sMemoryPool''
+
+// GLOBAL: SWBF2 0x01ebc150
+// SoundSpaceRegion::sMemoryPool
 MemoryPool SoundSpaceRegion::sMemoryPool("SoundSpaceRegion", 0x70);
 
-// GLOBAL: SWBF2 0x007eb884
 // SYNTHETIC: SWBF2 0x00402de0
 // `dynamic initializer for 'EntitySound::sEntitySoundList''
 // SYNTHETIC: SWBF2 0x00766fd0
 // `dynamic atexit destructor for 'EntitySound::sEntitySoundList''
 
+// GLOBAL: SWBF2 0x007eb884
+// EntitySound::sEntitySoundList
 PblListSingle EntitySound::sEntitySoundList;
 
 

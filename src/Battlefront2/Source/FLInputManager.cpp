@@ -28,13 +28,18 @@
 #include "EnergyBar.h"
 #include "PebbleFL/Common/PblUnicode.h"
 
-namespace PblBuildType { extern bool gDemoBuild; }
+namespace PblBuildType
+{
+extern bool gDemoBuild;
+}
 
-// GLOBAL: SWBF2 0x01ebdc50
 // SYNTHETIC: SWBF2 0x004039d0
 // `dynamic initializer for 'FLInputManager::s_instance''
 // SYNTHETIC: SWBF2 0x007687a0
 // `dynamic atexit destructor for 'FLInputManager::s_instance''
+
+// GLOBAL: SWBF2 0x01ebdc50
+// FLInputManager::s_instance
 FLInputManager FLInputManager::s_instance;
 
 // FUNCTION: SWBF2 0x00529ef0
@@ -913,9 +918,11 @@ struct AlternateActionKeyEntry
     unsigned int mValue;
 };
 
-// GLOBAL: SWBF2 0x007ec168
 // SYNTHETIC: SWBF2 0x004039f0
 // `dynamic initializer for 'gAlternateActionKeys''
+
+// GLOBAL: SWBF2 0x007ec168
+// gAlternateActionKeys
 AlternateActionKeyEntry gAlternateActionKeys[2] =
 {
     { (unsigned short)(RawInputToActionKey('B') + 0x8000), 0xDD7D0382 },

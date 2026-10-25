@@ -47,20 +47,26 @@ namespace GameVoiceChat
     char _gEncoderStorage[0x50C + 3];
 }
 
-// GLOBAL: SWBF2 0x01ec5fb8
 
 // SYNTHETIC: SWBF2 0x00403ec0
 // `dynamic initializer for 'sEncoderStorage''
+
+// GLOBAL: SWBF2 0x01ec5fb8
+// sEncoderStorage
 void* sEncoderStorage = (void*)(((unsigned int)GameVoiceChat::_gEncoderStorage + 3) & ~3u);
-// GLOBAL: SWBF2 0x01ec5fbc
 
 // SYNTHETIC: SWBF2 0x00403ed0
 // `dynamic initializer for 'sDecoderStorage''
+
+// GLOBAL: SWBF2 0x01ec5fbc
+// sDecoderStorage
 void* sDecoderStorage = (void*)(((unsigned int)GameVoiceChat::_gDecoderStorage + 3) & ~3u);
-// GLOBAL: SWBF2 0x01ec6018
 
 // SYNTHETIC: SWBF2 0x00403ee0
 // `dynamic initializer for 'sNodeStorage''
+
+// GLOBAL: SWBF2 0x01ec6018
+// sNodeStorage
 void* sNodeStorage = (void*)(((unsigned int)GameVoiceChat::_gNodeStorage + 3) & ~3u);
 
 // FUNCTION: SWBF2 0x0053c500
@@ -147,11 +153,13 @@ bool GameVoiceChat::IsSuspended()
     return false;
 }
 
-// GLOBAL: SWBF2 0x01ec5fc0
 // SYNTHETIC: SWBF2 0x00403ea0
 // `dynamic initializer for 'GameVoiceChat::gTransport''
 // SYNTHETIC: SWBF2 0x00768ae0
 // `dynamic atexit destructor for 'GameVoiceChat::gTransport''
+
+// GLOBAL: SWBF2 0x01ec5fc0
+// GameVoiceChat::gTransport
 GameVoiceChat::Transport GameVoiceChat::gTransport;
 
 // FUNCTION: SWBF2 0x0053c590
@@ -292,7 +300,8 @@ void GameVoiceChat::Update(float fDeltaTime)
     Snd::Engine::GetThreadUpdate()->Resume();
 }
 
-namespace GameVoiceChat {
+namespace GameVoiceChat
+{
 
 // FUNCTION: SWBF2 0x0053c4e0
 void* GetNode()
@@ -302,7 +311,8 @@ void* GetNode()
 
 }
 
-namespace GameVoiceChat {
+namespace GameVoiceChat
+{
 
 // FUNCTION: SWBF2 0x0053c4f0
 void* FindNodeByDeviceID()

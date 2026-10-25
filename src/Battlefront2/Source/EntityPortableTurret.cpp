@@ -22,23 +22,33 @@ EntityPortableTurretClass::EntityPortableTurretClass(unsigned int uHash)
 
 // SYNTHETIC: SWBF2 0x00402cb0
 // `dynamic initializer for 'EntityPortableTurretClass::rttiHashEntityPortableTurretClass''
+// EntityPortableTurretClass::rttiHashEntityPortableTurretClass
+
 // GLOBAL: SWBF2 0x01ebbf94
 // EntityPortableTurretClass::rttiHashEntityPortableTurretClass
 PblHash EntityPortableTurretClass::rttiHashEntityPortableTurretClass("EntityPortableTurretClass");
+// GLOBAL: SWBF2 0x00789464
+// EntityPortableTurretClass::rttiNameEntityPortableTurretClass
 const char EntityPortableTurretClass::rttiNameEntityPortableTurretClass[] = "EntityPortableTurretClass";
 
 // SYNTHETIC: SWBF2 0x00402ca0
 // `dynamic initializer for 'EntityPortableTurret::rttiHashEntityPortableTurret''
+// EntityPortableTurret::rttiHashEntityPortableTurret
+
 // GLOBAL: SWBF2 0x01ebbfe8
 // EntityPortableTurret::rttiHashEntityPortableTurret
 PblHash EntityPortableTurret::rttiHashEntityPortableTurret("EntityPortableTurret");
+// GLOBAL: SWBF2 0x00789448
+// EntityPortableTurret::rttiNameEntityPortableTurret
 const char EntityPortableTurret::rttiNameEntityPortableTurret[] = "EntityPortableTurret";
 
-// GLOBAL: SWBF2 0x01ebbff0
 // SYNTHETIC: SWBF2 0x00402c80
 // `dynamic initializer for 'EntityPortableTurret::sMemoryPool''
 // SYNTHETIC: SWBF2 0x00766f90
 // `dynamic atexit destructor for 'EntityPortableTurret::sMemoryPool''
+
+// GLOBAL: SWBF2 0x01ebbff0
+// EntityPortableTurret::sMemoryPool
 MemoryPool EntityPortableTurret::sMemoryPool("EntityPortableTurret", 0x6d0);
 
 extern "C" PblVector3* __stdcall D3DXVec3Normalize(PblVector3* pOut, const PblVector3* pV);

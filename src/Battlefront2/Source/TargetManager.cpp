@@ -123,14 +123,18 @@ ClassMarker _gClassMarker[MAX_CLASS_MARKERS];
 // GLOBAL: SWBF2 0x01eafb9c
 Marker* _gMarkers;
 
-// GLOBAL: SWBF2 0x01f6de9c
 // SYNTHETIC: SWBF2 0x00406600
 // `dynamic initializer for 'TargetManager::gMarkers''
+
+// GLOBAL: SWBF2 0x01f6de9c
+// gMarkers
 Marker* gMarkers = _gMarkers;
 
-// GLOBAL: SWBF2 0x01f76410
 // SYNTHETIC: SWBF2 0x00406520
 // `dynamic initializer for 'TargetManager::_gPost''
+
+// GLOBAL: SWBF2 0x01f76410
+// _gPost
 Post _gPost[MAX_POSTS];
 
 // SYNTHETIC: SWBF2 0x00652170
@@ -138,16 +142,20 @@ Post _gPost[MAX_POSTS];
 // SYNTHETIC: SWBF2 0x006521e0
 // TargetManager::Target::~Target
 
-// GLOBAL: SWBF2 0x01f76710
 // SYNTHETIC: SWBF2 0x004064f0
 // `dynamic initializer for 'TargetManager::_gTarget''
 // SYNTHETIC: SWBF2 0x00769500
 // `dynamic atexit destructor for 'TargetManager::_gTarget''
+
+// GLOBAL: SWBF2 0x01f76710
+// _gTarget
 Target _gTarget[MAX_TARGETS];
 
-// GLOBAL: SWBF2 0x007ec320
 // SYNTHETIC: SWBF2 0x00406610
 // `dynamic initializer for 'gColorTable''
+
+// GLOBAL: SWBF2 0x007ec320
+// gColorTable
 Color gColorTable[MAX_COLORS] =
 {
     { 0x00000000, { 0, 0, 0, 0 } },
@@ -639,18 +647,22 @@ void CheckObjectClassMarker(GameObject* const actor)
 namespace TargetManager
 {
 
-// GLOBAL: SWBF2 0x01f75f10
 // SYNTHETIC: SWBF2 0x004065a0
 // `dynamic initializer for 'TargetManager::_gHostMarkers''
 // SYNTHETIC: SWBF2 0x00769520
 // `dynamic atexit destructor for 'TargetManager::_gHostMarkers''
+
+// GLOBAL: SWBF2 0x01f75f10
+// _gHostMarkers
 Marker _gHostMarkers[MAX_MARKERS];
 
-// GLOBAL: SWBF2 0x01f7c980
 // SYNTHETIC: SWBF2 0x004065d0
 // `dynamic initializer for 'TargetManager::_gClientMarkers''
 // SYNTHETIC: SWBF2 0x00769540
 // `dynamic atexit destructor for 'TargetManager::_gClientMarkers''
+
+// GLOBAL: SWBF2 0x01f7c980
+// _gClientMarkers
 Marker _gClientMarkers[MAX_MARKERS];
 
 }

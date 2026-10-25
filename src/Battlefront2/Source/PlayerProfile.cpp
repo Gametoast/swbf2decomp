@@ -34,25 +34,38 @@ BOOL CALLBACK EnumObjectsCallback(DIDEVICEOBJECTINSTANCEA const* pObject, void* 
 // GLOBAL: SWBF2 0x01fa9264
 unsigned int mLastDirtyCRC[1];
 
-namespace PblBuildType { extern unsigned char gCreateMemoryProfile; }
+namespace PblBuildType
+{
+extern unsigned char gCreateMemoryProfile;
+}
 
 extern bool pcWindowed;
 extern int pcWidth;
 extern int pcHeight;
 
-namespace ParticleSystem { void SetFadeBias(float fBias); }
+namespace ParticleSystem
+{
+void SetFadeBias(float fBias);
+}
 using ParticleSystem::SetFadeBias;
 
-namespace GameVoiceChat { void* FindNodeByDeviceID(); }
+namespace GameVoiceChat
+{
+void* FindNodeByDeviceID();
+}
 
-// GLOBAL: SWBF2 0x01ef90d0
 // SYNTHETIC: SWBF2 0x00405f40
 // `dynamic initializer for 'mProfiles''
+
+// GLOBAL: SWBF2 0x01ef90d0
+// mProfiles
 PlayerProfile::tProfile mProfiles[1];
 
-// GLOBAL: SWBF2 0x01ef7fd0
 // SYNTHETIC: SWBF2 0x00405f50
 // `dynamic initializer for 'mDefaultProfile''
+
+// GLOBAL: SWBF2 0x01ef7fd0
+// mDefaultProfile
 PlayerProfile::tProfile mDefaultProfile;
 
 // FUNCTION: SWBF2 0x0061c870
@@ -118,14 +131,22 @@ const unsigned short* PlayerProfile::GetDefaultProfileName()
 {
     return mDefaultProfile.mName;
 }
+namespace PlayerPrefs
+{
 
-// GLOBAL: SWBF2 0x01ef7fa0
 // SYNTHETIC: SWBF2 0x00405f30
 // `dynamic initializer for 'PlayerPrefs::mAllUserPrefs''
-namespace PlayerPrefs { OnePrefs mAllUserPrefs[1]; }
+
+// GLOBAL: SWBF2 0x01ef7fa0
+// mAllUserPrefs
+OnePrefs mAllUserPrefs[1];
+}
+namespace PlayerProfile
+{
 
 // GLOBAL: SWBF2 0x01eaedf4
-namespace PlayerProfile { int mCurProfile; }
+int mCurProfile;
+}
 
 // GLOBAL: SWBF2 0x01eaedf8
 bool mSafeMode;
@@ -1073,7 +1094,8 @@ void PlayerProfile::tProfile::InitProfile(unsigned short const* pusName)
     mIsDirty = mName[0] != 0;
 }
 
-namespace PlayerProfile {
+namespace PlayerProfile
+{
 
 // FUNCTION: SWBF2 0x0061d850
 int GetDefaultProfileIdx()
@@ -1093,7 +1115,8 @@ int GetDefaultProfileIdx()
 }
 }
 
-namespace PlayerProfile {
+namespace PlayerProfile
+{
 
 // FUNCTION: SWBF2 0x0061d8a0
 bool tProfile::IsDirty(bool bArg)

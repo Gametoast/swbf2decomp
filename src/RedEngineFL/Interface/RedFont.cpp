@@ -26,10 +26,11 @@ CustomFontData* s_cfdata;
 // GLOBAL: SWBF2 0x00998450
 int RedFont::s_fontHashTableNumEntries;
 
-// GLOBAL: SWBF2 0x00998454
 // SYNTHETIC: SWBF2 0x00408440
 // `dynamic initializer for 'RedFont::s_fontHashTable''
 
+// GLOBAL: SWBF2 0x00998454
+// RedFont::s_fontHashTable
 PblHashTable<RedFont, 16> RedFont::s_fontHashTable;
 
 // GLOBAL: SWBF2 0x00998440

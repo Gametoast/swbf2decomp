@@ -23,9 +23,11 @@ pcRedShader::BeginFuncT pcTerrainShader2::BeginFuncArray[MAX_PIPELINES];
 pcRedShader::EndFuncT pcTerrainShader2::EndFuncArray[MAX_PIPELINES];
 pcRedShader::RenderFuncT pcTerrainShader2::RenderFuncArray[MAX_PIPELINES];
 
-// GLOBAL: SWBF2 0x009c8a8c
 // SYNTHETIC: SWBF2 0x004095a0
 // `dynamic initializer for 'pcTerrainShader2::s_uiRenderTypeHash''
+
+// GLOBAL: SWBF2 0x009c8a8c
+// pcTerrainShader2::s_uiRenderTypeHash
 unsigned int pcTerrainShader2::s_uiRenderTypeHash = PblHash("Terrain2");
 
 // SYNTHETIC: SWBF2 0x004095c0
@@ -34,11 +36,13 @@ unsigned int pcTerrainShader2::s_uiRenderTypeHash = PblHash("Terrain2");
 // SYNTHETIC: SWBF2 0x004095e0
 // `dynamic initializer for 'PblMath::fOneOverTwoPi''
 
-// GLOBAL: SWBF2 0x009c8f80
 // SYNTHETIC: SWBF2 0x00409580
 // `dynamic initializer for 'pcTerrainShader2::s_shaderDef''
 // SYNTHETIC: SWBF2 0x00769c20
 // `dynamic atexit destructor for 'pcTerrainShader2::s_shaderDef''
+
+// GLOBAL: SWBF2 0x009c8f80
+// pcTerrainShader2::s_shaderDef
 pcRedShaderDef pcTerrainShader2::s_shaderDef("normal_terrain_shader.xml");
 
 // GLOBAL: SWBF2 0x007e1950
@@ -81,58 +85,68 @@ static bool sForceSimpleLighting;
 // GLOBAL: SWBF2 0x009c8a8a
 static bool sDrawNormals;
 
-// GLOBAL: SWBF2 0x009c8a90
 // SYNTHETIC: SWBF2 0x004096e0
 // `dynamic initializer for 's_ShadowMapTextureTransform''
 
+// GLOBAL: SWBF2 0x009c8a90
+// s_ShadowMapTextureTransform
 static PblVector4 s_ShadowMapTextureTransform[3];
-// GLOBAL: SWBF2 0x009c8ac0
 // SYNTHETIC: SWBF2 0x00409680
 // `dynamic initializer for 's_DiffuseTexTransform''
 
+// GLOBAL: SWBF2 0x009c8ac0
+// s_DiffuseTexTransform
 static PblVector4 s_DiffuseTexTransform[16];
-// GLOBAL: SWBF2 0x009c8bc0
 // SYNTHETIC: SWBF2 0x00409640
 // `dynamic initializer for 's_BumpTexTransform''
 
+// GLOBAL: SWBF2 0x009c8bc0
+// s_BumpTexTransform
 static PblVector4 s_BumpTexTransform[16];
-// GLOBAL: SWBF2 0x009c8cd0
 // SYNTHETIC: SWBF2 0x00409600
 // `dynamic initializer for 's_BumpLuminosityTextureTransform''
 
+// GLOBAL: SWBF2 0x009c8cd0
+// s_BumpLuminosityTextureTransform
 static PblVector4 s_BumpLuminosityTextureTransform[2];
 
-// GLOBAL: SWBF2 0x009c8fac
 // SYNTHETIC: SWBF2 0x00409620
 // `dynamic initializer for 's_BumpSpecularTextureTransform''
 
+// GLOBAL: SWBF2 0x009c8fac
+// s_BumpSpecularTextureTransform
 PblVector4 s_BumpSpecularTextureTransform[2];
 
-// GLOBAL: SWBF2 0x009c8cf0
 // SYNTHETIC: SWBF2 0x004096b0
 // `dynamic initializer for 's_UnreferencedTextureTransformA''
 
+// GLOBAL: SWBF2 0x009c8cf0
+// s_UnreferencedTextureTransformA
 PblVector4 s_UnreferencedTextureTransformA;
-// GLOBAL: SWBF2 0x009c8cc0
 // SYNTHETIC: SWBF2 0x004096a0
 // `dynamic initializer for 's_UnreferencedTextureTransformB''
 
+// GLOBAL: SWBF2 0x009c8cc0
+// s_UnreferencedTextureTransformB
 PblVector4 s_UnreferencedTextureTransformB;
 
-// GLOBAL: SWBF2 0x009c8d00
 // SYNTHETIC: SWBF2 0x00409660
 // `dynamic initializer for 's_DetailTextureTransform''
 
+// GLOBAL: SWBF2 0x009c8d00
+// s_DetailTextureTransform
 static PblVector4 s_DetailTextureTransform[4][2];
-// GLOBAL: SWBF2 0x009c8d80
 // SYNTHETIC: SWBF2 0x00409700
 // `dynamic initializer for 's_TextureTransform''
 
+// GLOBAL: SWBF2 0x009c8d80
+// s_TextureTransform
 static PblVector4 s_TextureTransform[16][2];
-// GLOBAL: SWBF2 0x009c8ff0
 // SYNTHETIC: SWBF2 0x004096c0
 // `dynamic initializer for 's_NoiseTexTransform''
 
+// GLOBAL: SWBF2 0x009c8ff0
+// s_NoiseTexTransform
 static PblVector4 s_NoiseTexTransform[16];
 // GLOBAL: SWBF2 0x009c90f8
 static RedMaterial s_material;
@@ -873,18 +887,21 @@ void pcTerrainShader2::_StaticInit() const
     s_material.animationData = 0;
 }
 
-// GLOBAL: SWBF2 0x009c8fcc
 // SYNTHETIC: SWBF2 0x00409560
 // `dynamic initializer for 'pcTerrainShader2::s_Factory''
 // SYNTHETIC: SWBF2 0x00769c00
 // `dynamic atexit destructor for 'pcTerrainShader2::s_Factory''
+
+// GLOBAL: SWBF2 0x009c8fcc
+// pcTerrainShader2::s_Factory
 pcTerrainShader2 pcTerrainShader2::s_Factory;
 
 // GLOBAL: SWBF2 0x009c89a8
 unsigned int g_pcTerrainShader2;
 
-// GLOBAL: SWBF2 0x009c9170
 // SYNTHETIC: SWBF2 0x00409720
 // `dynamic initializer for 's_mProjectionRestore''
 
+// GLOBAL: SWBF2 0x009c9170
+// s_mProjectionRestore
 static PblMatrix s_mProjectionRestore;

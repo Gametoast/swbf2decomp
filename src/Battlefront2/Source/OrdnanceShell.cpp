@@ -6,16 +6,24 @@
 
 // SYNTHETIC: SWBF2 0x00405b60
 // `dynamic initializer for 'OrdnanceShell::rttiHashOrdnanceShell''
+// OrdnanceShell::rttiHashOrdnanceShell
+
 // GLOBAL: SWBF2 0x01ef2660
 // OrdnanceShell::rttiHashOrdnanceShell
 PblHash OrdnanceShell::rttiHashOrdnanceShell("OrdnanceShell");
+// GLOBAL: SWBF2 0x0078a9c4
+// OrdnanceShell::rttiNameOrdnanceShell
 const char OrdnanceShell::rttiNameOrdnanceShell[] = "OrdnanceShell";
 
 // SYNTHETIC: SWBF2 0x00405b70
 // `dynamic initializer for 'OrdnanceShellClass::rttiHashOrdnanceShellClass''
+// OrdnanceShellClass::rttiHashOrdnanceShellClass
+
 // GLOBAL: SWBF2 0x01ef2664
 // OrdnanceShellClass::rttiHashOrdnanceShellClass
 PblHash OrdnanceShellClass::rttiHashOrdnanceShellClass("OrdnanceShellClass");
+// GLOBAL: SWBF2 0x0078a9e8
+// OrdnanceShellClass::rttiNameOrdnanceShellClass
 const char OrdnanceShellClass::rttiNameOrdnanceShellClass[] = "OrdnanceShellClass";
 
 // FUNCTION: SWBF2 0x00605d40

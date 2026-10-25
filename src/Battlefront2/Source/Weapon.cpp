@@ -109,7 +109,10 @@ public:
     unsigned int m_uiRefCount;
 };
 
-namespace GameLoop { extern bool gUnlimitedAmmo; }
+namespace GameLoop
+{
+extern bool gUnlimitedAmmo;
+}
 
 namespace
 {
@@ -1269,33 +1272,46 @@ void WeaponClass::RenderFlash(const PblVector3& vPos, const PblVector3& vDir, fl
 
 // SYNTHETIC: SWBF2 0x00407020
 // `dynamic initializer for 'Weapon::rttiHashWeapon''
+// Weapon::rttiHashWeapon
+
 // GLOBAL: SWBF2 0x01f9a73c
 // Weapon::rttiHashWeapon
 PblHash Weapon::rttiHashWeapon("Weapon");
+// GLOBAL: SWBF2 0x0078bdec
+// Weapon::rttiNameWeapon
 const char Weapon::rttiNameWeapon[] = "Weapon";
 
 // SYNTHETIC: SWBF2 0x00407030
 // `dynamic initializer for 'WeaponClass::rttiHashWeaponClass''
+// WeaponClass::rttiHashWeaponClass
+
 // GLOBAL: SWBF2 0x01f9a880
 // WeaponClass::rttiHashWeaponClass
 PblHash WeaponClass::rttiHashWeaponClass("WeaponClass");
+// GLOBAL: SWBF2 0x0078bdd0
+// WeaponClass::rttiNameWeaponClass
 const char WeaponClass::rttiNameWeaponClass[] = "WeaponClass";
 
-// GLOBAL: SWBF2 0x01f9a318
 // SYNTHETIC: SWBF2 0x00407040
 // `dynamic initializer for 'WeaponClass::sWeaponChangeUnableSound''
 // SYNTHETIC: SWBF2 0x007697e0
 // `dynamic atexit destructor for 'WeaponClass::sWeaponChangeUnableSound''
+
+// GLOBAL: SWBF2 0x01f9a318
+// WeaponClass::sWeaponChangeUnableSound
 GameSound WeaponClass::sWeaponChangeUnableSound;
 
-// GLOBAL: SWBF2 0x01f9a830
 // SYNTHETIC: SWBF2 0x00407000
 // `dynamic initializer for 'Weapon::sMemoryPool''
 // SYNTHETIC: SWBF2 0x007697d0
 // `dynamic atexit destructor for 'Weapon::sMemoryPool''
 
+// GLOBAL: SWBF2 0x01f9a830
+// Weapon::sMemoryPool
 MemoryPool Weapon::sMemoryPool("Weapon", 0x110);
 
+// SYNTHETIC: SWBF2 0x00677650
+// Weapon::operator delete
 inline void Weapon::operator delete(void* p)
 {
     sMemoryPool.Free(p);

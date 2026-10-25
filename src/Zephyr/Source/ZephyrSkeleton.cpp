@@ -7,9 +7,11 @@ extern "C" PblQuaternion* __stdcall D3DXQuaternionNormalize(PblQuaternion* pOut,
 extern "C" PblMatrix* __stdcall D3DXMatrixRotationQuaternion(PblMatrix* pOut, const PblQuaternion* pQ);
 extern "C" PblMatrix* __stdcall D3DXMatrixMultiply(PblMatrix* pOut, const PblMatrix* pM1, const PblMatrix* pM2);
 
-// GLOBAL: SWBF2 0x009cf404
 // SYNTHETIC: SWBF2 0x0040b0f0
 // `dynamic initializer for 'kuiDummyRootHash''
+
+// GLOBAL: SWBF2 0x009cf404
+// kuiDummyRootHash
 static const unsigned int kuiDummyRootHash = PblTEMPHash("DummyRoot");
 
 static inline void SetLocal(PblMatrix& kLocal, const PblQuaternion& kQuat, const PblVector3& kTrans)

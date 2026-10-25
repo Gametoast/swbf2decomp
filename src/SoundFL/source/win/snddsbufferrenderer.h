@@ -16,6 +16,7 @@
 namespace Snd
 {
 
+// VTABLE: SWBF2 0x007868c0
 class DSBufferRenderer : public ThreadUpdate::Object,
                          public Allocator<DSBufferRenderer>,
                          public StreamNode,

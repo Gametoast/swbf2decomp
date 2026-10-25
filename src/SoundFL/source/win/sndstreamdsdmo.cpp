@@ -9,7 +9,8 @@
 #include "sndengine.h"
 #include "sndsoftoutput.h"
 
-namespace Snd {
+namespace Snd
+{
 }
 
 namespace Snd
@@ -435,7 +436,8 @@ void StreamDSDMO::SetInputBuffer(void* pBuffer, unsigned int uiSize)
 
 }
 
-namespace Snd {
+namespace Snd
+{
 
 // FUNCTION: SWBF2 0x0074d6e0
 StreamDSDMO::StreamDSDMO()
@@ -449,7 +451,8 @@ StreamDSDMO::StreamDSDMO()
 }
 }
 
-namespace Snd {
+namespace Snd
+{
 
 // FUNCTION: SWBF2 0x0074d7a0
 StreamDSDMO::~StreamDSDMO()

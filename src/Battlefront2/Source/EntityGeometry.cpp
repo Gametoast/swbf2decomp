@@ -31,16 +31,24 @@
 
 // SYNTHETIC: SWBF2 0x00402b30
 // `dynamic initializer for 'EntityGeometryClass::rttiHashEntityGeometryClass''
+// EntityGeometryClass::rttiHashEntityGeometryClass
+
 // GLOBAL: SWBF2 0x01ebbcbc
 // EntityGeometryClass::rttiHashEntityGeometryClass
 PblHash EntityGeometryClass::rttiHashEntityGeometryClass("EntityGeometryClass");
+// GLOBAL: SWBF2 0x0078924c
+// EntityGeometryClass::rttiNameEntityGeometryClass
 const char EntityGeometryClass::rttiNameEntityGeometryClass[] = "EntityGeometryClass";
 
 // SYNTHETIC: SWBF2 0x00402b20
 // `dynamic initializer for 'EntityGeometry::rttiHashEntityGeometry''
+// EntityGeometry::rttiHashEntityGeometry
+
 // GLOBAL: SWBF2 0x01ebbcc0
 // EntityGeometry::rttiHashEntityGeometry
 PblHash EntityGeometry::rttiHashEntityGeometry("EntityGeometry");
+// GLOBAL: SWBF2 0x0078923c
+// EntityGeometry::rttiNameEntityGeometry
 const char EntityGeometry::rttiNameEntityGeometry[] = "EntityGeometry";
 
 
@@ -431,6 +439,7 @@ void ChunkDescriptor::Init()
 // ChunkDescriptor::ChunkDescriptor
 
 // GLOBAL: SWBF2 0x007e650c
+// sCurrentChunk
 static int sCurrentChunk = -1;
 // GLOBAL: SWBF2 0x007e6510
 static int sCurrentTrail = -1;

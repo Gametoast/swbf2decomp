@@ -566,4 +566,5 @@ pcRedShaderDef pcStencilShadowShader::s_shaderDef("stencilshadow_shader.xml");
 // `dynamic initializer for 'PblMath::fOneOverHalfPi''
 
 // GLOBAL: SWBF2 0x009c9cd4
+// g_pcStencilShadowShader
 unsigned int g_pcStencilShadowShader;

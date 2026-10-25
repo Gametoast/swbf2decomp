@@ -117,30 +117,42 @@ PblMatrix NormalMatrix(const PblVector3& vDir, const PblVector3& vNormal, const 
 
 // SYNTHETIC: SWBF2 0x00402d60
 // `dynamic initializer for 'EntitySoldier::rttiHashEntitySoldier''
+// EntitySoldier::rttiHashEntitySoldier
+
 // GLOBAL: SWBF2 0x01ebc054
 // EntitySoldier::rttiHashEntitySoldier
 PblHash EntitySoldier::rttiHashEntitySoldier("EntitySoldier");
+// GLOBAL: SWBF2 0x00789540
+// EntitySoldier::rttiNameEntitySoldier
 const char EntitySoldier::rttiNameEntitySoldier[] = "EntitySoldier";
 
-// GLOBAL: SWBF2 0x01ebc100
 // SYNTHETIC: SWBF2 0x00402d40
 // `dynamic initializer for 'EntitySoldier::sMemoryPool''
 // SYNTHETIC: SWBF2 0x00766fb0
 // `dynamic atexit destructor for 'EntitySoldier::sMemoryPool''
+
+// GLOBAL: SWBF2 0x01ebc100
+// EntitySoldier::sMemoryPool
 MemoryPool EntitySoldier::sMemoryPool("EntitySoldier", 0xfd0);
 
 // SYNTHETIC: SWBF2 0x00402d70
 // `dynamic initializer for 'EntitySoldierClass::rttiHashEntitySoldierClass''
+// EntitySoldierClass::rttiHashEntitySoldierClass
+
 // GLOBAL: SWBF2 0x01ebc0f8
 // EntitySoldierClass::rttiHashEntitySoldierClass
 PblHash EntitySoldierClass::rttiHashEntitySoldierClass("EntitySoldierClass");
+// GLOBAL: SWBF2 0x007895c8
+// EntitySoldierClass::rttiNameEntitySoldierClass
 const char EntitySoldierClass::rttiNameEntitySoldierClass[] = "EntitySoldierClass";
 
-// GLOBAL: SWBF2 0x01ebc0a8
 // SYNTHETIC: SWBF2 0x00402db0
 // `dynamic initializer for 'AcklayData::sMemoryPool''
 // SYNTHETIC: SWBF2 0x00766fc0
 // `dynamic atexit destructor for 'AcklayData::sMemoryPool''
+
+// GLOBAL: SWBF2 0x01ebc0a8
+// AcklayData::sMemoryPool
 MemoryPool AcklayData::sMemoryPool("AcklayData", 0x13d0);
 
 // GLOBAL: SWBF2 0x01e51e04
@@ -1241,7 +1253,10 @@ extern int netCurMaxPlayers;
 extern bool gThreadIsEven;
 
 PblVector3* __cdecl CrossProduct(PblVector3* pResult, const PblVector3* pA, const PblVector3* pB);
-namespace VisionManager { void __fastcall AddFakeRayhitResult(UnitController* pUnit, const GameObject* pObject); }
+namespace VisionManager
+{
+void __fastcall AddFakeRayhitResult(UnitController* pUnit, const GameObject* pObject);
+}
 
 PblMatrix DirectionMatrix(const PblVector3& vDir, const PblVector3& vUp, const PblVector3& vPos);
 
@@ -1258,7 +1273,10 @@ static PblVector3 sEyePointRelativeWeaponOffset[3] = {
 bool gPlayerSoldierCollisionOccurred;
 
 extern bool gShowSoldierPolyCount;
-namespace GameLoop { extern float sClientDeltaTime; }
+namespace GameLoop
+{
+extern float sClientDeltaTime;
+}
 
 bool IsNeverDies(EntityType eType);
 
@@ -9069,7 +9087,10 @@ public:
     static MemoryPool sMemoryPool;
 };
 
-namespace AIDebug { void StartBulletTime(float f0, float f1, float f2); }
+namespace AIDebug
+{
+void StartBulletTime(float f0, float f1, float f2);
+}
 
 // SYNTHETIC: SWBF2 0x004de820
 // EntitySoldier::`scalar deleting destructor'

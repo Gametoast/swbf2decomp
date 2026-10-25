@@ -15,11 +15,13 @@ pcRedShader::BeginFuncT pcRainShader::BeginFuncArray[MAX_PIPELINES];
 pcRedShader::EndFuncT pcRainShader::EndFuncArray[MAX_PIPELINES];
 pcRedShader::RenderFuncT pcRainShader::RenderFuncArray[MAX_PIPELINES];
 
-// GLOBAL: SWBF2 0x009c9a68
 // SYNTHETIC: SWBF2 0x00409c00
 // `dynamic initializer for 'pcRainShader::s_shaderDef''
 // SYNTHETIC: SWBF2 0x00769d70
 // `dynamic atexit destructor for 'pcRainShader::s_shaderDef''
+
+// GLOBAL: SWBF2 0x009c9a68
+// pcRainShader::s_shaderDef
 pcRedShaderDef pcRainShader::s_shaderDef("rain_shader.xml");
 
 // FUNCTION: SWBF2 0x00704c60
@@ -328,9 +330,11 @@ void pcRainShader::_StaticInit() const
 {
 }
 
-// GLOBAL: SWBF2 0x009c9a64
 // SYNTHETIC: SWBF2 0x00409c20
 // `dynamic initializer for 'pcRainShader::s_uiRenderTypeHash''
+
+// GLOBAL: SWBF2 0x009c9a64
+// pcRainShader::s_uiRenderTypeHash
 unsigned int pcRainShader::s_uiRenderTypeHash = PblHash("Rain");
 
 // SYNTHETIC: SWBF2 0x00409c40
@@ -339,11 +343,13 @@ unsigned int pcRainShader::s_uiRenderTypeHash = PblHash("Rain");
 // SYNTHETIC: SWBF2 0x00409c60
 // `dynamic initializer for 'PblMath::fOneOverTwoPi''
 
-// GLOBAL: SWBF2 0x009c9a30
 // SYNTHETIC: SWBF2 0x00409be0
 // `dynamic initializer for 'pcRainShader::s_Factory''
 // SYNTHETIC: SWBF2 0x00769d50
 // `dynamic atexit destructor for 'pcRainShader::s_Factory''
+
+// GLOBAL: SWBF2 0x009c9a30
+// pcRainShader::s_Factory
 pcRainShader pcRainShader::s_Factory;
 
 // GLOBAL: SWBF2 0x009c9a2c

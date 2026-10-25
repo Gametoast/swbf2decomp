@@ -48,11 +48,15 @@ const char* GetNextMissionForLobby();
 const char* GetEncodedLobbyPassword();
 void* GetGalaxyMatchmaking();
 
-namespace gf { namespace utils {
+namespace gf
+{
+namespace utils
+{
 const char* ToString(bool b);
 const char* ToString(int i);
 const char* ToString(unsigned int u);
-} }
+}
+}
 
 static void SetLobbyData(const char* pKey, const char* pValue)
 {
@@ -63,12 +67,18 @@ static void SetLobbyData(const char* pKey, const char* pValue)
 // LIBRARY: SWBF2 0x00411c30
 // strchr
 
+// GLOBAL: SWBF2 0x01ead478
+// autoNetEnabled
 bool autoNetEnabled;
+// GLOBAL: SWBF2 0x01ead479
+// autoNetLan
 bool autoNetLan;
 bool autoNetRandomize;
 // GLOBAL: SWBF2 0x01ead47b
 bool g_bNoRender;
 unsigned int netCrashAddr;
+// GLOBAL: SWBF2 0x01ead480
+// autoNetScript
 char autoNetScript[32];
 float g_fFixedRate;
 unsigned int netPasswordHash;
@@ -106,9 +116,11 @@ unsigned int autoNetMissionCount;
 // GLOBAL: SWBF2 0x01ead930
 stAutoNetMission autoNetMissions[256];
 
-// GLOBAL: SWBF2 0x01ef24b0
 // SYNTHETIC: SWBF2 0x004059a0
 // `dynamic initializer for 'netRandom''
+
+// GLOBAL: SWBF2 0x01ef24b0
+// netRandom
 PblRandom netRandom;
 
 extern float gGameSlice;
@@ -253,27 +265,37 @@ NetPostLoadJoinGame* postLoadJoinGame;
 // GLOBAL: SWBF2 0x01ead6f8
 IntraSessionPlayer intraSessionPlayers[64];
 
-// GLOBAL: SWBF2 0x01ef1fa0
 // SYNTHETIC: SWBF2 0x00405990
 // `dynamic initializer for 'netPrevSessionId''
+
+// GLOBAL: SWBF2 0x01ef1fa0
+// netPrevSessionId
 NetSessionId netPrevSessionId;
-// GLOBAL: SWBF2 0x01ef1fa8
 // SYNTHETIC: SWBF2 0x00405940
 // `dynamic initializer for 'clientAddrs''
+
+// GLOBAL: SWBF2 0x01ef1fa8
+// clientAddrs
 NetAddr clientAddrs[64];
 
-// GLOBAL: SWBF2 0x01ef24a8
 // SYNTHETIC: SWBF2 0x00405980
 // `dynamic initializer for 'netSessionId''
+
+// GLOBAL: SWBF2 0x01ef24a8
+// netSessionId
 NetSessionId netSessionId;
 
-// GLOBAL: SWBF2 0x01ef2510
 // SYNTHETIC: SWBF2 0x00405960
 // `dynamic initializer for 'hostAddrs''
+
+// GLOBAL: SWBF2 0x01ef2510
+// hostAddrs
 NetAddr hostAddrs[3];
-// GLOBAL: SWBF2 0x01ef2558
 // SYNTHETIC: SWBF2 0x00405930
 // `dynamic initializer for 'myAddr''
+
+// GLOBAL: SWBF2 0x01ef2558
+// myAddr
 NetAddr myAddr;
 
 // GLOBAL: SWBF2 0x01fa88f0
@@ -439,8 +461,14 @@ char netGameType[32];
 
 extern char netGameName[64];
 
-namespace GameLoop { extern bool sQuitRequested; }
-namespace GameLoop { extern unsigned int sQuitTurn; }
+namespace GameLoop
+{
+extern bool sQuitRequested;
+}
+namespace GameLoop
+{
+extern unsigned int sQuitTurn;
+}
 extern int netCurMaxPlayers;
 
 // FUNCTION: SWBF2 0x005db330
@@ -1178,7 +1206,10 @@ extern PblTimeBase::Stamp autoNetTimeStamp;
 extern int netMinPlayersToAutoLaunchDedicated;
 extern int netNumBots;
 
-namespace StatsManager { void Update(); }
+namespace StatsManager
+{
+void Update();
+}
 
 void AddAutoNetMission(char const* pcArg, int iA, int iB);
 
@@ -1779,7 +1810,10 @@ int NetGetHostPlayer()
 
 extern unsigned char sStatsMatchData[0x40];
 
-namespace StatsManager { void BeginMatch(); }
+namespace StatsManager
+{
+void BeginMatch();
+}
 
 // FUNCTION: SWBF2 0x005e6fd0
 void ReadJoinReject(NetPktGroup& group, JoinRejectReason& eReason)
@@ -1847,7 +1881,10 @@ char SaveSessionRuleDefaults()
 
 extern unsigned __int64 netLocalGSID;
 
-namespace gf { bool isInitialized(); }
+namespace gf
+{
+bool isInitialized();
+}
 
 // FUNCTION: SWBF2 0x00437590
 void LuaHelper::PushString(const char* pString)
@@ -1942,7 +1979,10 @@ void ReadFilesAck(NetPktGroup& group, SendStateSrc& state)
 }
 
 void WriteDestMask(NetPktGroup& group, unsigned __int64 mask);
-namespace Lua_Callbacks { extern int gHuntShowScoreLimit; }
+namespace Lua_Callbacks
+{
+extern int gHuntShowScoreLimit;
+}
 
 // FUNCTION: SWBF2 0x005e7000
 void WriteLoad(NetPktGroup& group, int, unsigned __int64 firstMask,
@@ -2646,7 +2686,10 @@ extern unsigned __int64 netCreatedLobbyId;
 extern bool gGalaxyInitialized;
 void* GetGalaxyMatchmaking();
 void ResetLanRegistration();
-namespace gf { bool checkError(); }
+namespace gf
+{
+bool checkError();
+}
 
 // FUNCTION: SWBF2 0x005d6770
 void ResetLanRegistration()
@@ -3665,7 +3708,10 @@ bool netJoinUpdatePending;
 void WriteDestMask(NetPktGroup& group, unsigned __int64 mask);
 void UpdateCurMaxHosts(unsigned int uMask, bool bIncludeCurrent);
 int GetPacketSourceHost(NetPacket* packet);
-namespace GameVoiceChat { void* GetNode(); }
+namespace GameVoiceChat
+{
+void* GetNode();
+}
 void WriteFiles(NetPktGroup& group, SendStateSrc& state);
 void ReadFiles(NetPktGroup& group, SendStateDst& state);
 
@@ -6504,16 +6550,16 @@ void RemoveFoundGameByAddress(const NetAddr* address)
     ((CNetFindGame*)findGame)->RemoveGameByAddress(address);
 }
 
-// SYNTHETIC: SWBF2 0x005d49e0
+
 utf8::invalid_code_point::~invalid_code_point() {}
 
-// SYNTHETIC: SWBF2 0x005d4a20
+
 utf8::exception::~exception() {}
 
-// SYNTHETIC: SWBF2 0x005d4a60
+
 utf8::invalid_utf8::~invalid_utf8() {}
 
-// SYNTHETIC: SWBF2 0x005d8a10
+
 utf8::not_enough_room::~not_enough_room() {}
 
 // SYNTHETIC: SWBF2 0x004056c0
@@ -6534,16 +6580,18 @@ utf8::not_enough_room::~not_enough_room() {}
 // SYNTHETIC: SWBF2 0x00405760
 // `dynamic initializer for '_IdentityMatrix''
 
-// GLOBAL: SWBF2 0x01ef1f90
 // SYNTHETIC: SWBF2 0x004059b0
 // `dynamic initializer for 'autoNetTimeStamp''
 
+// GLOBAL: SWBF2 0x01ef1f90
+// autoNetTimeStamp
 PblTimeBase::Stamp autoNetTimeStamp;
 
-// GLOBAL: SWBF2 0x01ef254c
 // SYNTHETIC: SWBF2 0x004059c0
 // `dynamic initializer for 'NetSetup::mSpecialJoinAddress''
 
+// GLOBAL: SWBF2 0x01ef254c
+// NetSetup::mSpecialJoinAddress
 NetSessionId NetSetup::mSpecialJoinAddress;
 
 // SYNTHETIC: SWBF2 0x00405870
@@ -6562,6 +6610,7 @@ NetSessionId NetSetup::mSpecialJoinAddress;
 // `dynamic initializer for 'MAX_DOUBLETAP_INTERVAL_TICKS''
 
 // GLOBAL: SWBF2 0x01e6505b
+// NetSetup::mPrivateGame
 bool NetSetup::mPrivateGame = false;
 
 // FUNCTION: SWBF2 0x005e7180

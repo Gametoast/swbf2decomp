@@ -12,6 +12,9 @@
 class RedLight;
 class EntityLightClass;
 
+// VTABLE: SWBF2 0x0079bfe0 Thread
+// VTABLE: SWBF2 0x0079c154 PblHandled
+// VTABLE: SWBF2 0x0079c164
 class EntityLight : public Entity, public FLEffectObject
 {
 public:
@@ -28,6 +31,8 @@ public:
     };
 
     static void* operator new(unsigned int uiSize) { return sMemoryPool.Allocate(uiSize); }
+    // SYNTHETIC: SWBF2 0x004cac30
+    // EntityLight::operator delete
     static void operator delete(void* pBlock) { sMemoryPool.Free(pBlock); }
 
     EntityLight();
@@ -117,8 +122,8 @@ public:
     static EntityLightFXParser* s_pInstance;
 };
  
- // VTABLE: SWBF2 0x0079c088
-// VTABLE: SWBF2 0x0079c0ac
+ // VTABLE: SWBF2 0x0079c088 EntityClass
+// VTABLE: SWBF2 0x0079c0ac FLEffectClass
 class EntityLightClass : public EntityClass, public FLEffectClass
 {
 public:

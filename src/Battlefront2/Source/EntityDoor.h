@@ -59,6 +59,10 @@ public:
 class EntityDoorClass;
 class EntityClass;
 
+// VTABLE: SWBF2 0x0079a810
+// VTABLE: SWBF2 0x0079a828 RedSceneObject
+// VTABLE: SWBF2 0x0079a890 CollisionObject
+// VTABLE: SWBF2 0x0079a8e4 EntityEx
 class EntityDoor : public EntityProp, public Thread
 {
 public:

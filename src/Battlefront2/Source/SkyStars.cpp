@@ -46,7 +46,8 @@ SkyStars::~SkyStars()
     memset(m_aStarFields, 0, sizeof(m_aStarFields));
 }
 
-namespace {
+namespace
+{
 
 inline unsigned char ClampColorComponent(float f)
 {

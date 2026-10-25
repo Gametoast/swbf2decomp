@@ -50,7 +50,8 @@ static inline float const Clamp(float fValue, float fMin, float fMax)
     return fValue;
 }
 
-namespace HUD {
+namespace HUD
+{
 
 class EditHeap
 {

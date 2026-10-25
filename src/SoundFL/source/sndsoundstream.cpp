@@ -25,11 +25,13 @@ SoundStream::Properties* SoundStream::smPlayingProps[6];
 // SYNTHETIC: SWBF2 0x007367f0
 // PblListDoubleSorted::`default constructor closure'
 
-// GLOBAL: SWBF2 0x01e29818
 // SYNTHETIC: SWBF2 0x0040b9b0
 // `dynamic initializer for 'Snd::SoundStream::smQueue''
 // SYNTHETIC: SWBF2 0x0076a340
 // `dynamic atexit destructor for 'Snd::SoundStream::smQueue''
+
+// GLOBAL: SWBF2 0x01e29818
+// SoundStream::smQueue
 PblListDoubleSorted SoundStream::smQueue[6];
 
 // FUNCTION: SWBF2 0x007366b0
@@ -41,29 +43,35 @@ SoundStream::FireForget::FireForget()
 {
 }
 
-// GLOBAL: SWBF2 0x01e29860
 // SYNTHETIC: SWBF2 0x0040b8d0
 // `dynamic initializer for 'Snd::SoundStream::smFireForget''
 // SYNTHETIC: SWBF2 0x0076a2c0
 // `dynamic atexit destructor for 'Snd::SoundStream::smFireForget''
+
+// GLOBAL: SWBF2 0x01e29860
+// SoundStream::smFireForget
 SoundStream::FireForget SoundStream::smFireForget[24];
 
-// GLOBAL: SWBF2 0x01e297d0
 // SYNTHETIC: SWBF2 0x0040b960
 // `dynamic initializer for 'Snd::SoundStream::smPlayingVel''
 
+// GLOBAL: SWBF2 0x01e297d0
+// SoundStream::smPlayingVel
 PblVector3 SoundStream::smPlayingVel[6];
-// GLOBAL: SWBF2 0x01e29d40
 // SYNTHETIC: SWBF2 0x0040b980
 // `dynamic initializer for 'Snd::SoundStream::smPlayingPos''
 
+// GLOBAL: SWBF2 0x01e29d40
+// SoundStream::smPlayingPos
 PblVector3 SoundStream::smPlayingPos[6];
 
-// GLOBAL: SWBF2 0x007e35a8
 // SYNTHETIC: SWBF2 0x0040b900
 // `dynamic initializer for 'Snd::SoundStream::smFree''
 // SYNTHETIC: SWBF2 0x0076a2e0
 // `dynamic atexit destructor for 'Snd::SoundStream::smFree''
+
+// GLOBAL: SWBF2 0x007e35a8
+// SoundStream::smFree
 PblListDoubleSorted SoundStream::smFree;
 
 // FUNCTION: SWBF2 0x00736b40
@@ -120,32 +128,40 @@ void SoundStream::StopAll()
     }
 }
 
-// GLOBAL: SWBF2 0x007e3568
 // SYNTHETIC: SWBF2 0x0040b910
 // `dynamic initializer for 'Snd::SoundStream::Properties::smFreeList''
 // SYNTHETIC: SWBF2 0x0076a300
 // `dynamic atexit destructor for 'Snd::SoundStream::Properties::smFreeList''
+
+// GLOBAL: SWBF2 0x007e3568
+// SoundStream::Properties::smFreeList
 FreeList SoundStream::Properties::smFreeList(sizeof(SoundStream::Properties), 1, 8, 1);
 
-// GLOBAL: SWBF2 0x007e3584
 // SYNTHETIC: SWBF2 0x0040b9a0
 // `dynamic initializer for 'Snd::SoundStream::Properties::smPropertyList''
 // SYNTHETIC: SWBF2 0x0076a330
 // `dynamic atexit destructor for 'Snd::SoundStream::Properties::smPropertyList''
+
+// GLOBAL: SWBF2 0x007e3584
+// SoundStream::Properties::smPropertyList
 PblListSingle SoundStream::Properties::smPropertyList;
 
-// GLOBAL: SWBF2 0x007e3588
 // SYNTHETIC: SWBF2 0x0040b930
 // `dynamic initializer for 'Snd::SoundStream::smFreeList''
 // SYNTHETIC: SWBF2 0x0076a310
 // `dynamic atexit destructor for 'Snd::SoundStream::smFreeList''
+
+// GLOBAL: SWBF2 0x007e3588
+// SoundStream::smFreeList
 FreeList SoundStream::smFreeList(0xcc, 1, 4, 1);
 
-// GLOBAL: SWBF2 0x007e35a4
 // SYNTHETIC: SWBF2 0x0040b950
 // `dynamic initializer for 'Snd::SoundStream::smList''
 // SYNTHETIC: SWBF2 0x0076a320
 // `dynamic atexit destructor for 'Snd::SoundStream::smList''
+
+// GLOBAL: SWBF2 0x007e35a4
+// SoundStream::smList
 PblListSingle SoundStream::smList;
 
 // FUNCTION: SWBF2 0x007366f0
@@ -600,7 +616,8 @@ void SoundStream::Play(bool bRestart)
 
 }
 
-namespace Snd {
+namespace Snd
+{
 
 // FUNCTION: SWBF2 0x00736a20
 void __cdecl SoundStream::Properties::DestroyAll()
@@ -613,7 +630,8 @@ void __cdecl SoundStream::Properties::DestroyAll()
 }
 }
 
-namespace Snd {
+namespace Snd
+{
 
 // FUNCTION: SWBF2 0x00736a90
 const SoundStream::Properties* __cdecl SoundStream::Properties::FindByHashID(unsigned int uiHashID)

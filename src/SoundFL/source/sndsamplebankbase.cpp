@@ -12,11 +12,13 @@
 namespace Snd
 {
 
-// GLOBAL: SWBF2 0x007e3850
 // SYNTHETIC: SWBF2 0x0040c060
 // `dynamic initializer for 'Snd::SampleBankBase::smSampleBankList''
 // SYNTHETIC: SWBF2 0x0076a470
 // `dynamic atexit destructor for 'Snd::SampleBankBase::smSampleBankList''
+
+// GLOBAL: SWBF2 0x007e3850
+// SampleBankBase::smSampleBankList
 PblListSingle SampleBankBase::smSampleBankList;
 
 // FUNCTION: SWBF2 0x00742510
@@ -466,7 +468,8 @@ SampleBankBase::~SampleBankBase()
 
 }
 
-namespace Snd {
+namespace Snd
+{
 
 // FUNCTION: SWBF2 0x007425e0
 void __cdecl SampleBankBase::DestroyAllBanks()

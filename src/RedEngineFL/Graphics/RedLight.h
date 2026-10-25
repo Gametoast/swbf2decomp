@@ -19,6 +19,7 @@ class RedTexture;
 class PblSphere;
 struct RedLightingState;
 
+// VTABLE: SWBF2 0x0077214c
 class RedLight
 {
 public:

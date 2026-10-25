@@ -13,10 +13,11 @@
 
 extern bool sLoadLowDetailModels;
 
-// GLOBAL: SWBF2 0x01ec1234
 // SYNTHETIC: SWBF2 0x00403d80
 // `dynamic initializer for 'GameModel::_HashTable''
 
+// GLOBAL: SWBF2 0x01ec1234
+// GameModel::_HashTable
 PblHashTable<GameModel, 1024> GameModel::_HashTable;
 
 // GLOBAL: SWBF2 0x01ec1230

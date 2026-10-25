@@ -448,9 +448,11 @@ void HUD::ElementVehicleSeating::WriteData(HUD::File& file, unsigned int uTabs)
     }
 }
 
-// GLOBAL: SWBF2 0x007eba58
 // SYNTHETIC: SWBF2 0x00403fe0
 // `dynamic initializer for 'HUD::ElementVehicleSeating::sSeatingDisplays''
 // SYNTHETIC: SWBF2 0x00768b70
 // `dynamic atexit destructor for 'HUD::ElementVehicleSeating::sSeatingDisplays''
+
+// GLOBAL: SWBF2 0x007eba58
+// HUD::ElementVehicleSeating::sSeatingDisplays
 PblListSingle HUD::ElementVehicleSeating::sSeatingDisplays;

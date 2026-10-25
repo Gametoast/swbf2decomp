@@ -4,11 +4,14 @@
 #include "UnitCmdInfo.h"
 #include "UnitController.h"
 
-// GLOBAL: SWBF2 0x01eb97b4
 // SYNTHETIC: SWBF2 0x004027c0
 // `dynamic initializer for 'AI::DeathmatchGoal::rttiHashDeathmatchGoal''
 
+// GLOBAL: SWBF2 0x01eb97b4
+// AI::DeathmatchGoal::rttiHashDeathmatchGoal
 PblHash AI::DeathmatchGoal::rttiHashDeathmatchGoal("DeathmatchGoal");
+// GLOBAL: SWBF2 0x00788e54
+// AI::DeathmatchGoal::rttiNameDeathmatchGoal
 const char AI::DeathmatchGoal::rttiNameDeathmatchGoal[] = "DeathmatchGoal";
 
 

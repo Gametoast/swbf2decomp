@@ -722,7 +722,8 @@ void StreamMixer::Update()
 
 }
 
-namespace Snd {
+namespace Snd
+{
 
 // FUNCTION: SWBF2 0x0073fb60
 void StreamMixer::SetGain(unsigned int uiInput, unsigned int uiChannel,

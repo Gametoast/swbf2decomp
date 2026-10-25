@@ -60,9 +60,25 @@ Factory<TYPE, CLASS, DESC>::Factory(unsigned int uHash)
 }
 
 template <class TYPE, class CLASS, class DESC>
+// GLOBAL: SWBF2 0x007ec55c
+// Factory<Entity,EntityClass,EntityDesc>::sList
+// GLOBAL: SWBF2 0x007ec570
+// Factory<Ordnance,ExplosionClass,OrdnanceDesc>::sList
+// GLOBAL: SWBF2 0x007ec590
+// Factory<Ordnance,OrdnanceClass,OrdnanceDesc>::sList
+// GLOBAL: SWBF2 0x007ec5a4
+// Factory<Weapon,WeaponClass,WeaponDesc>::sList
 PblList<Factory<TYPE, CLASS, DESC> > Factory<TYPE, CLASS, DESC>::sList;
 
 template <class TYPE, class CLASS, class DESC>
+// GLOBAL: SWBF2 0x01faa458
+// Factory<Entity,EntityClass,EntityDesc>::sCounter
+// GLOBAL: SWBF2 0x01faa470
+// Factory<Ordnance,ExplosionClass,OrdnanceDesc>::sCounter
+// GLOBAL: SWBF2 0x01faa728
+// Factory<Ordnance,OrdnanceClass,OrdnanceDesc>::sCounter
+// GLOBAL: SWBF2 0x01faa758
+// Factory<Weapon,WeaponClass,WeaponDesc>::sCounter
 unsigned int Factory<TYPE, CLASS, DESC>::sCounter;
 
 template <class TYPE, class CLASS, class DESC>
@@ -96,8 +112,8 @@ inline CLASS* Factory<TYPE, CLASS, DESC>::Find(unsigned int uHash)
 
 // VTABLE: SWBF2 0x00799318
 
-// GLOBAL: SWBF2 0x007ec55c
-// GLOBAL: SWBF2 0x01faa458
+
+
 // FUNCTION: SWBF2 0x00491e70
 template Factory<Entity, EntityClass, EntityDesc>::Factory(unsigned int);
 
@@ -106,15 +122,15 @@ template Factory<Entity, EntityClass, EntityDesc>::Factory(EntityClass*, unsigne
 
 // VTABLE: SWBF2 0x007ac47c
 
-// GLOBAL: SWBF2 0x007ec590
-// GLOBAL: SWBF2 0x01faa728
+
+
 // FUNCTION: SWBF2 0x005f8940
 template Factory<Ordnance, OrdnanceClass, OrdnanceDesc>::Factory(unsigned int);
 
 // VTABLE: SWBF2 0x007b0298
 
-// GLOBAL: SWBF2 0x007ec5a4
-// GLOBAL: SWBF2 0x01faa758
+
+
 // FUNCTION: SWBF2 0x0067bfe0
 template Factory<Weapon, WeaponClass, WeaponDesc>::Factory(unsigned int);
 
@@ -123,7 +139,7 @@ template Factory<Weapon, WeaponClass, WeaponDesc>::Factory(WeaponClass*, unsigne
 
 // VTABLE: SWBF2 0x0079e8ac
 
-// GLOBAL: SWBF2 0x007ec570
-// GLOBAL: SWBF2 0x01faa470
+
+
 // FUNCTION: SWBF2 0x0051eb20
 template Factory<Ordnance, ExplosionClass, OrdnanceDesc>::Factory(unsigned int);

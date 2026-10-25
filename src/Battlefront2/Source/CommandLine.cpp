@@ -24,7 +24,8 @@
 extern bool mSafeMode;
 extern eGAMELANGUAGE gForceLang;
 
-namespace PlayerProfile {
+namespace PlayerProfile
+{
 
 // FUNCTION: SWBF2 0x0061d8f0
 void SetSafeMode()
@@ -33,7 +34,8 @@ void SetSafeMode()
 }
 }
 
-namespace RedLocalizeDB {
+namespace RedLocalizeDB
+{
 
 // FUNCTION: SWBF2 0x006c5b80
 void ForceLanguageID(int iLanguage)
@@ -50,10 +52,16 @@ void ForceLanguageID(int iLanguage)
 }
 }
 
+// GLOBAL: SWBF2 0x01e3073c
+// gGamespyAutoName
 char gGamespyAutoName[32];
 char gGamespyAutoConnectAddr[64];
 char gGamespyAutoPassStr[128];
+// GLOBAL: SWBF2 0x01e30820
+// gGamespyAutoEmail
 char gGamespyAutoEmail[64];
+// GLOBAL: SWBF2 0x01e30860
+// gGamespyAutoPPass
 char gGamespyAutoPPass[32];
 unsigned int gGamespyAutoPass;
 bool gBootLagger;

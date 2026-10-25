@@ -4641,7 +4641,10 @@ void EntityDroideka::ReadLateState(NetPktGroup& group)
 
 extern PblVector3 gCameraFrontPos;
 
-namespace GameVoiceChat { void PlayerChange(); }
+namespace GameVoiceChat
+{
+void PlayerChange();
+}
 
 void WriteDamageOwner(NetPktGroup& group, const DamageOwner& owner);
 

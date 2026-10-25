@@ -4,9 +4,11 @@
 // GLOBAL: SWBF2 0x009c8954
 RedShadowBlob* RedShadowBlob::sInstance;
 
-// GLOBAL: SWBF2 0x009c8958
 // SYNTHETIC: SWBF2 0x00409520
 // `dynamic initializer for 'shadowBlobRandom''
+
+// GLOBAL: SWBF2 0x009c8958
+// shadowBlobRandom
 PblRandom shadowBlobRandom;
 
 // FUNCTION: SWBF2 0x006fc810

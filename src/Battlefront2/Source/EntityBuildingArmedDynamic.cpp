@@ -3,9 +3,13 @@
 
 // SYNTHETIC: SWBF2 0x00402930
 // `dynamic initializer for 'EntityBuildingArmedDynamicClass::rttiHashEntityBuildingArmedDynamicClass''
+// EntityBuildingArmedDynamicClass::rttiHashEntityBuildingArmedDynamicClass
+
 // GLOBAL: SWBF2 0x01ebb894
 // EntityBuildingArmedDynamicClass::rttiHashEntityBuildingArmedDynamicClass
 PblHash EntityBuildingArmedDynamicClass::rttiHashEntityBuildingArmedDynamicClass("EntityBuildingArmedDynamicClass");
+// GLOBAL: SWBF2 0x00789070
+// EntityBuildingArmedDynamicClass::rttiNameEntityBuildingArmedDynamicClass
 const char EntityBuildingArmedDynamicClass::rttiNameEntityBuildingArmedDynamicClass[] = "EntityBuildingArmedDynamicClass";
 
 // FUNCTION: SWBF2 0x00496c50
@@ -61,17 +65,22 @@ Entity* EntityBuildingArmedDynamicClass::Build(const EntityDesc& desc)
 
 // SYNTHETIC: SWBF2 0x00402920
 // `dynamic initializer for 'EntityBuildingArmedDynamic::rttiHashEntityBuildingArmedDynamic''
+// EntityBuildingArmedDynamic::rttiHashEntityBuildingArmedDynamic
+
 // GLOBAL: SWBF2 0x01ebb890
 // EntityBuildingArmedDynamic::rttiHashEntityBuildingArmedDynamic
 PblHash EntityBuildingArmedDynamic::rttiHashEntityBuildingArmedDynamic("EntityBuildingArmedDynamic");
+// GLOBAL: SWBF2 0x00789050
+// EntityBuildingArmedDynamic::rttiNameEntityBuildingArmedDynamic
 const char EntityBuildingArmedDynamic::rttiNameEntityBuildingArmedDynamic[] = "EntityBuildingArmedDynamic";
 
-// GLOBAL: SWBF2 0x01ebb898
 // SYNTHETIC: SWBF2 0x00402900
 // `dynamic initializer for 'EntityBuildingArmedDynamic::sMemoryPool''
 // SYNTHETIC: SWBF2 0x00766f00
 // `dynamic atexit destructor for 'EntityBuildingArmedDynamic::sMemoryPool''
 
+// GLOBAL: SWBF2 0x01ebb898
+// EntityBuildingArmedDynamic::sMemoryPool
 MemoryPool EntityBuildingArmedDynamic::sMemoryPool("EntityBuildingArmedDynamic", 0x6b0);
 
 
@@ -111,6 +120,8 @@ inline void* EntityBuildingArmedDynamic::operator new(unsigned int uSize)
     return sMemoryPool.Allocate(uSize);
 }
 
+// SYNTHETIC: SWBF2 0x00496b30
+// EntityBuildingArmedDynamic::operator delete
 inline void EntityBuildingArmedDynamic::operator delete(void* pBlock)
 {
     sMemoryPool.Free(pBlock);

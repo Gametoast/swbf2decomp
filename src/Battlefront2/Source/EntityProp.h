@@ -76,6 +76,9 @@ public:
 
 void ConvertHSVtoRGB(float* pR, float* pG, float* pB, float fH, float fS, float fV);
 
+// VTABLE: SWBF2 0x0079c740 EntityEx
+// VTABLE: SWBF2 0x0079c7a0 CollisionObject
+// VTABLE: SWBF2 0x0079c844 RedSceneObject
 class EntityProp : public EntityGeometry
 {
 public:

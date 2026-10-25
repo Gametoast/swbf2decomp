@@ -8,6 +8,7 @@
 namespace Snd
 {
 
+// VTABLE: SWBF2 0x00786c0c
 class StreamSource : public StreamNode, public StreamNodeSource
 {
 public:

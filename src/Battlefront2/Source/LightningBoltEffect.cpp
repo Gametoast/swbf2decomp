@@ -25,11 +25,13 @@ void LightningBoltEffect::Create()
     }
 }
 
-// GLOBAL: SWBF2 0x01ec63c0
 // SYNTHETIC: SWBF2 0x00404100
 // `dynamic initializer for 'LightningBoltEffectObject::sMemoryPool''
 // SYNTHETIC: SWBF2 0x00768c50
 // `dynamic atexit destructor for 'LightningBoltEffectObject::sMemoryPool''
+
+// GLOBAL: SWBF2 0x01ec63c0
+// LightningBoltEffectObject::sMemoryPool
 MemoryPool LightningBoltEffectObject::sMemoryPool("LightningBoltEffectObject", 0x120);
 
 namespace

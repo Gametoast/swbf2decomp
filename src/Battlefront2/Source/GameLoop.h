@@ -82,7 +82,10 @@ inline void SetShowTeamPoints(int iTeam, bool bShow) { mShowTeamPoints[iTeam - 1
 
 }
 
-namespace GameLoop { extern float sDeltaTime; }
+namespace GameLoop
+{
+extern float sDeltaTime;
+}
 
 namespace GameLoop
 {
@@ -91,4 +94,7 @@ namespace GameLoop
 inline float GetDeltaTime() { return GameLoop::sDeltaTime; }
 }
 
-namespace GameLoop { void SetCanSwitchSides(bool bFlag); }
+namespace GameLoop
+{
+void SetCanSwitchSides(bool bFlag);
+}

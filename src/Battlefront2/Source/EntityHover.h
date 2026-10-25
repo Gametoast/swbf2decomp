@@ -284,12 +284,12 @@ class RedPose;
 class Restrictor;
 class Weapon;
 
-// VTABLE: SWBF2 0x0079b960
+// VTABLE: SWBF2 0x0079b960 EntityEx
 // VTABLE: SWBF2 0x0079bc98 CollisionObject
 // VTABLE: SWBF2 0x0079bbec RedSceneObject
 // VTABLE: SWBF2 0x0079bc54 Damageable
 // VTABLE: SWBF2 0x0079bacc PblHandled
-// VTABLE: SWBF2 0x0079bad4 Controllable
+// VTABLE: SWBF2 0x0079bad4 Thread
 // VTABLE: SWBF2 0x0079bba4 Trackable
 class EntityHover : public GameObject,
                     public Controllable,

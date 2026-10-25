@@ -22,7 +22,9 @@ struct EntityDesc
     // FUNCTION: SWBF2 0x00443f10
     EntityDesc()
         : mMatrix(*reinterpret_cast<const PblMatrix*>(&gMatrixIdentity)),
-          mNameId(0), mPlayerId(-1), mPriority(0.001f) {}
+mNameId(0), mPlayerId(-1), mPriority(0.001f)
+{
+}
 
     PblMatrix mMatrix;
     unsigned int mNameId;
@@ -113,6 +115,7 @@ private:
  
  
 
+// VTABLE: SWBF2 0x00799328
 class EntityClass : public Factory<Entity, EntityClass, EntityDesc>
 {
 public:

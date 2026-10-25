@@ -171,6 +171,7 @@ public:
 };
  
 
+// VTABLE: SWBF2 0x00797460
 class CollisionObject : public TreeGridObject, public FoleyFXCollider, public FoleyFXCollidee
 {
 public:

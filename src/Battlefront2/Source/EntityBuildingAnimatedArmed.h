@@ -37,6 +37,12 @@ class Controllable;
 class MountedTurret;
 class Trackable;
 
+// VTABLE: SWBF2 0x00799900 RedSceneObject
+// VTABLE: SWBF2 0x00799968 Damageable
+// VTABLE: SWBF2 0x00799994 PblHandled
+// VTABLE: SWBF2 0x0079999c EntityEx
+// VTABLE: SWBF2 0x00799ad0 CollisionObject
+// VTABLE: SWBF2 0x00799b24
 class EntityBuildingAnimatedArmed : public EntityBuildingAnimated
 {
 public:

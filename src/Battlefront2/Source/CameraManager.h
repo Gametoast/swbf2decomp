@@ -15,7 +15,10 @@ class GameCamera;
 class MapCamera;
 class RedCamera;
 class Trackable;
-namespace Snd { class Listener; }
+namespace Snd
+{
+class Listener;
+}
 
 // VTABLE: SWBF2 0x007970c8
 class CameraManager : public Thread

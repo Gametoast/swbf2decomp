@@ -28,6 +28,8 @@ public:
 
     void SetMouseBuildup(float fBuildup) { mMouseTurnBuildup = fBuildup; }
 
+    // SYNTHETIC: SWBF2 0x00499320
+    // PlayerController::operator delete
     static void operator delete(void* pBlock) { sMemoryPool.Free(pBlock); }
 
     static void* operator new(unsigned int uSize) { return sMemoryPool.Allocate(uSize); }

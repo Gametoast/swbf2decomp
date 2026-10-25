@@ -611,9 +611,11 @@ void pcNormalShader::RenderZPrepass(const RenderItem* pItem) const
     pItem->pPrim->Draw();
 }
 
-// GLOBAL: SWBF2 0x009c92a4
 // SYNTHETIC: SWBF2 0x00409850
 // `dynamic initializer for 'kuiLinearRamp''
+
+// GLOBAL: SWBF2 0x009c92a4
+// kuiLinearRamp
 static unsigned int kuiLinearRamp = PblHash("linear_ramp");
 
 // FUNCTION: SWBF2 0x006fea10
@@ -1392,23 +1394,29 @@ void pcNormalShader::UpdateAnimation()
     transform.m_Transform[2][1] = fScrollV;
 }
 
-// GLOBAL: SWBF2 0x009c938c
 // SYNTHETIC: SWBF2 0x004097f0
 // `dynamic initializer for 'pcNormalShader::s_uiRenderTypeHash''
+
+// GLOBAL: SWBF2 0x009c938c
+// pcNormalShader::s_uiRenderTypeHash
 unsigned int pcNormalShader::s_uiRenderTypeHash = PblHash("Normal");
 
-// GLOBAL: SWBF2 0x009c92a8
 // SYNTHETIC: SWBF2 0x004097b0
 // `dynamic initializer for 'pcNormalShader::s_Factory''
 // SYNTHETIC: SWBF2 0x00769c30
 // `dynamic atexit destructor for 'pcNormalShader::s_Factory''
+
+// GLOBAL: SWBF2 0x009c92a8
+// pcNormalShader::s_Factory
 pcNormalShader pcNormalShader::s_Factory;
 
-// GLOBAL: SWBF2 0x009c934c
 // SYNTHETIC: SWBF2 0x004097d0
 // `dynamic initializer for 'pcNormalShader::s_shaderDef''
 // SYNTHETIC: SWBF2 0x00769c50
 // `dynamic atexit destructor for 'pcNormalShader::s_shaderDef''
+
+// GLOBAL: SWBF2 0x009c934c
+// pcNormalShader::s_shaderDef
 pcRedShaderDef pcNormalShader::s_shaderDef("normal_shader.xml");
 
 // SYNTHETIC: SWBF2 0x00409810
@@ -1418,4 +1426,5 @@ pcRedShaderDef pcNormalShader::s_shaderDef("normal_shader.xml");
 // `dynamic initializer for 'PblMath::fOneOverTwoPi''
 
 // GLOBAL: SWBF2 0x009c9268
+// g_pcNormalShader
 unsigned int g_pcNormalShader;

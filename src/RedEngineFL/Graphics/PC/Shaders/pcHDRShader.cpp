@@ -322,11 +322,13 @@ void pcHDRShader::_StaticInit() const
 // `dynamic initializer for 'pcHDRShader::s_uiRenderTypeHash''
 unsigned int pcHDRShader::s_uiRenderTypeHash = PblHash("hdr");
 
-// GLOBAL: SWBF2 0x009caa80
 // SYNTHETIC: SWBF2 0x0040a800
 // `dynamic initializer for 'pcHDRShader::s_Factory''
 // SYNTHETIC: SWBF2 0x0076a050
 // `dynamic atexit destructor for 'pcHDRShader::s_Factory''
+
+// GLOBAL: SWBF2 0x009caa80
+// pcHDRShader::s_Factory
 pcHDRShader pcHDRShader::s_Factory;
 
 // GLOBAL: SWBF2 0x009caa44

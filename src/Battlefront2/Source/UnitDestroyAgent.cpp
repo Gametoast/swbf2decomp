@@ -101,9 +101,13 @@ static float GetOptimalBuildingKillingRange(const Controllable* pMe)
 
 // SYNTHETIC: SWBF2 0x00406cb0
 // `dynamic initializer for 'UnitDestroyAgent::rttiHashUnitDestroyAgent''
+// UnitDestroyAgent::rttiHashUnitDestroyAgent
+
 // GLOBAL: SWBF2 0x01f993b8
 // UnitDestroyAgent::rttiHashUnitDestroyAgent
 PblHash UnitDestroyAgent::rttiHashUnitDestroyAgent("UnitDestroyAgent");
+// GLOBAL: SWBF2 0x0078b82c
+// UnitDestroyAgent::rttiNameUnitDestroyAgent
 const char UnitDestroyAgent::rttiNameUnitDestroyAgent[] = "UnitDestroyAgent";
 
 

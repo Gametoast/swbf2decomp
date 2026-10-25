@@ -1220,7 +1220,10 @@ bool PlayerStats::IsClassSelectable(int iClassIndex, UnselectableReason* pReason
     return false;
 }
 
-namespace PopupText { extern bool gPopupShownLatch; }
+namespace PopupText
+{
+extern bool gPopupShownLatch;
+}
 
 // FUNCTION: SWBF2 0x006210f0
 void ClearFireTriggerBlock()

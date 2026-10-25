@@ -378,7 +378,8 @@ void AIDifficulty::GetFlyerSpeedRange(const UnitController* pController, float f
     rHigh = (rLow > fHigh) ? rLow : fHigh;
 }
 
-namespace AIDifficulty {
+namespace AIDifficulty
+{
 
 // FUNCTION: SWBF2 0x004392e0
 float SpaceAssault_GetFlyerKillForPlayerTeam()
@@ -387,7 +388,8 @@ float SpaceAssault_GetFlyerKillForPlayerTeam()
 }
 }
 
-namespace AIDifficulty {
+namespace AIDifficulty
+{
 
 // FUNCTION: SWBF2 0x004392f0
 float SpaceAssault_GetCritSysKillForPlayerTeam()
@@ -425,7 +427,8 @@ int GetAIInRange(const PblVector3& vPos, float fRadius, GameObject** const ppObj
                  int iMax, const Team* pTeam, AI::AIAffil eAffil);
 }
 
-namespace AIDifficulty {
+namespace AIDifficulty
+{
 
 // FUNCTION: SWBF2 0x00439620
 static GameObject* GetRandomFlyer(const Team* pTeam, AI::AIAffil eAffil)
@@ -453,7 +456,8 @@ static GameObject* GetRandomFlyer(const Team* pTeam, AI::AIAffil eAffil)
 }
 }
 
-namespace AIDifficulty {
+namespace AIDifficulty
+{
 
 // FUNCTION: SWBF2 0x004396e0
 static void SpaceAssault_RandomFlyerKill(const Team* pTeam)
@@ -475,7 +479,8 @@ static void SpaceAssault_RandomFlyerKill(const Team* pTeam)
 }
 }
 
-namespace AIDifficulty {
+namespace AIDifficulty
+{
 
 // FUNCTION: SWBF2 0x00439770
 static void SpaceAssault_RandomCritSysDamage(const Team* pTeam)
@@ -541,7 +546,8 @@ static void SpaceAssault_RandomCritSysDamage(const Team* pTeam)
 }
 }
 
-namespace AIDifficulty {
+namespace AIDifficulty
+{
 
 // FUNCTION: SWBF2 0x00439930
 void SpaceAssault_CheatLikeABastard()
@@ -576,7 +582,8 @@ void SpaceAssault_CheatLikeABastard()
 }
 }
 
-namespace AIDifficulty {
+namespace AIDifficulty
+{
 
 // FUNCTION: SWBF2 0x00439320
 int GetAutoBalanceMode()
@@ -602,7 +609,8 @@ int GetAutoBalanceMode()
 }
 }
 
-namespace AIDifficulty {
+namespace AIDifficulty
+{
 
 // FUNCTION: SWBF2 0x00439380
 bool AutoBalanceActive()
@@ -611,7 +619,8 @@ bool AutoBalanceActive()
 }
 }
 
-namespace AIDifficulty {
+namespace AIDifficulty
+{
 
 // FUNCTION: SWBF2 0x004393b0
 void GetAutoBalanceScores(int& iPlayerScore, int& iEnemyScore, int& iThreshold, int& iDivisor)
@@ -643,7 +652,8 @@ void GetAutoBalanceScores(int& iPlayerScore, int& iEnemyScore, int& iThreshold, 
 }
 }
 
-namespace AIDifficulty {
+namespace AIDifficulty
+{
 
 // FUNCTION: SWBF2 0x00439470
 void UpdateAutoBalance()

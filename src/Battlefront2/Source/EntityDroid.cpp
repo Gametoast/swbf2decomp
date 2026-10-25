@@ -476,9 +476,13 @@ ControllableClass* Controllable::GetControllableClass()
 
 // SYNTHETIC: SWBF2 0x00402a40
 // `dynamic initializer for 'EntityDroid::rttiHashEntityDroid''
+// EntityDroid::rttiHashEntityDroid
+
 // GLOBAL: SWBF2 0x01ebbbb4
 // EntityDroid::rttiHashEntityDroid
 PblHash EntityDroid::rttiHashEntityDroid("EntityDroid");
+// GLOBAL: SWBF2 0x00789144
+// EntityDroid::rttiNameEntityDroid
 const char EntityDroid::rttiNameEntityDroid[] = "EntityDroid";
 
 // FUNCTION: SWBF2 0x00499300
@@ -488,12 +492,13 @@ void GameObject::SetNetUniqueId(int iNetUniqueId)
     mNetUniqueId = iNetUniqueId;
 }
 
-// GLOBAL: SWBF2 0x01ebbbb8
 // SYNTHETIC: SWBF2 0x00402a20
 // `dynamic initializer for 'EntityDroid::sMemoryPool''
 // SYNTHETIC: SWBF2 0x00766f30
 // `dynamic atexit destructor for 'EntityDroid::sMemoryPool''
 
+// GLOBAL: SWBF2 0x01ebbbb8
+// EntityDroid::sMemoryPool
 MemoryPool EntityDroid::sMemoryPool("EntityDroid", 0x460);
 
 
@@ -616,9 +621,13 @@ bool EntityDroid::PostCollision::Update(float fDeltaTime)
 
 // SYNTHETIC: SWBF2 0x00402a50
 // `dynamic initializer for 'EntityDroidClass::rttiHashEntityDroidClass''
+// EntityDroidClass::rttiHashEntityDroidClass
+
 // GLOBAL: SWBF2 0x01ebbaa4
 // EntityDroidClass::rttiHashEntityDroidClass
 PblHash EntityDroidClass::rttiHashEntityDroidClass("EntityDroidClass");
+// GLOBAL: SWBF2 0x00789164
+// EntityDroidClass::rttiNameEntityDroidClass
 const char EntityDroidClass::rttiNameEntityDroidClass[] = "EntityDroidClass";
 
 

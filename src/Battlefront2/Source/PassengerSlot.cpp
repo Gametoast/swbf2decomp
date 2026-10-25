@@ -18,18 +18,24 @@
 extern "C" PblMatrix* __stdcall D3DXMatrixMultiply(PblMatrix* pOut, const PblMatrix* pM1,
                                                    const PblMatrix* pM2);
 
-// GLOBAL: SWBF2 0x01ef7ca0
 // SYNTHETIC: SWBF2 0x00405da0
 // `dynamic initializer for 'PassengerSlot::sMemoryPool''
 // SYNTHETIC: SWBF2 0x00769290
 // `dynamic atexit destructor for 'PassengerSlot::sMemoryPool''
+
+// GLOBAL: SWBF2 0x01ef7ca0
+// PassengerSlot::sMemoryPool
 MemoryPool PassengerSlot::sMemoryPool("PassengerSlot", 0x1f0);
 
 // SYNTHETIC: SWBF2 0x00405dc0
 // `dynamic initializer for 'PassengerSlot::rttiHashPassengerSlot''
+// PassengerSlot::rttiHashPassengerSlot
+
 // GLOBAL: SWBF2 0x01ef7c90
 // PassengerSlot::rttiHashPassengerSlot
 PblHash PassengerSlot::rttiHashPassengerSlot("PassengerSlot");
+// GLOBAL: SWBF2 0x0078aabc
+// PassengerSlot::rttiNamePassengerSlot
 const char PassengerSlot::rttiNamePassengerSlot[] = "PassengerSlot";
 
 

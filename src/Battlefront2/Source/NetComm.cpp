@@ -27,41 +27,53 @@ public:
     static NetPacket* ReceiveLocal();
 };
 
+// GLOBAL: SWBF2 0x01fa3d58
+// netLocalIndex
 int netLocalIndex[2];
 
-// GLOBAL: SWBF2 0x01ecc0c0
 // SYNTHETIC: SWBF2 0x00404400
 // `dynamic initializer for 'netDests''
 
+// GLOBAL: SWBF2 0x01ecc0c0
+// netDests
 NetDest netDests[MAX_DESTS];
 
+// GLOBAL: SWBF2 0x01fa3d60
+// netTime
 float netTime;
 
 // GLOBAL: SWBF2 0x01e57a0d
 bool netIsHost;
 
-// GLOBAL: SWBF2 0x01ecd9e0
 // SYNTHETIC: SWBF2 0x00404460
 // `dynamic initializer for 'netTimeBase''
+
+// GLOBAL: SWBF2 0x01ecd9e0
+// netTimeBase
 PblTimeBase netTimeBase;
 
-// GLOBAL: SWBF2 0x007ec248
 // SYNTHETIC: SWBF2 0x00404470
 // `dynamic initializer for 'netTimeStamp''
+
+// GLOBAL: SWBF2 0x007ec248
+// netTimeStamp
 PblTimeBase::Stamp netTimeStamp(&netTimeBase);
 
-// GLOBAL: SWBF2 0x01ecb2a0
 // SYNTHETIC: SWBF2 0x00404490
 // `dynamic initializer for 'inPktGroups''
+
+// GLOBAL: SWBF2 0x01ecb2a0
+// inPktGroups
 NetPktGroup inPktGroups[64];
 
 // GLOBAL: SWBF2 0x01ecb9a0
 NetPktGroup inQueue;
 
-// GLOBAL: SWBF2 0x01ecb9c0
 // SYNTHETIC: SWBF2 0x00404430
 // `dynamic initializer for 'joinSlots''
 
+// GLOBAL: SWBF2 0x01ecb9c0
+// joinSlots
 int joinSlots[0x1C0];
 
 // GLOBAL: SWBF2 0x01fa3d48
@@ -510,7 +522,10 @@ void DoRecvs();
 void __fastcall SendLow(NetPacket* pPacket);
 bool __fastcall RecvGroup(NetPktGroup* pGroup, NetPacket* pPacket);
 void __fastcall HandleCommPacketOut(NetPacket* pPacket);
-namespace gf { bool checkError(); }
+namespace gf
+{
+bool checkError();
+}
 
 // FUNCTION: SWBF2 0x005b2740
 void NetComm::Update()

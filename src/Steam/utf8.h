@@ -8,7 +8,10 @@ namespace utf8
 {
 typedef unsigned char uint8_t;
 typedef unsigned int uint32_t;
+// SYNTHETIC: SWBF2 0x005d4a20
+// utf8::exception::`scalar deleting destructor'
 
+// VTABLE: SWBF2 0x007aba68
 class exception : public std::exception
 {
 public:
@@ -16,7 +19,10 @@ public:
     exception(const exception& rhs);
     virtual ~exception();
 };
+// SYNTHETIC: SWBF2 0x005d8a10
+// utf8::not_enough_room::`scalar deleting destructor'
 
+// VTABLE: SWBF2 0x007ab9a0
 class not_enough_room : public exception
 {
 public:
@@ -25,7 +31,10 @@ public:
     virtual ~not_enough_room();
     virtual const char* what() const throw();
 };
+// SYNTHETIC: SWBF2 0x005d4a60
+// utf8::invalid_utf8::`scalar deleting destructor'
 
+// VTABLE: SWBF2 0x007ab994
 class invalid_utf8 : public exception
 {
 public:
@@ -35,7 +44,10 @@ public:
     virtual ~invalid_utf8();
     virtual const char* what() const throw();
 };
+// SYNTHETIC: SWBF2 0x005d49e0
+// utf8::invalid_code_point::`scalar deleting destructor'
 
+// VTABLE: SWBF2 0x007ab970
 class invalid_code_point : public exception
 {
 public:

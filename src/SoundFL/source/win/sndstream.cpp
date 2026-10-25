@@ -270,7 +270,8 @@ void Stream::Update(float fDeltaTime)
 
 }
 
-namespace Snd {
+namespace Snd
+{
 
 // FUNCTION: SWBF2 0x00734920
 bool Stream::AppendSegments(PblFileChunk& chunk, unsigned int uiHashID, const char* pcFileName,
@@ -302,7 +303,8 @@ bool Stream::AppendSegments(PblFileChunk& chunk, unsigned int uiHashID, const ch
 }
 }
 
-namespace Snd {
+namespace Snd
+{
 
 // FUNCTION: SWBF2 0x00734a90
 void Stream::Connect(StreamNodeSink** ppSinks)
@@ -325,7 +327,8 @@ void Stream::Connect(StreamNodeSink** ppSinks)
 }
 }
 
-namespace Snd {
+namespace Snd
+{
 
 // FUNCTION: SWBF2 0x00734c80
 void Stream::Open(File& rFile)
@@ -395,7 +398,8 @@ void Stream::Open(File& rFile)
 }
 }
 
-namespace Snd {
+namespace Snd
+{
 
 // FUNCTION: SWBF2 0x00734f40
 bool Stream::Open(PblFileChunk& chunk, unsigned int uiSegment, char const* pcFileName,

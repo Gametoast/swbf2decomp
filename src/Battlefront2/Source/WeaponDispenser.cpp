@@ -51,9 +51,13 @@ extern float sClientDeltaTime;
 
 // SYNTHETIC: SWBF2 0x00407150
 // `dynamic initializer for 'WeaponDispenserClass::rttiHashWeaponDispenserClass''
+// WeaponDispenserClass::rttiHashWeaponDispenserClass
+
 // GLOBAL: SWBF2 0x01f9a8c0
 // WeaponDispenserClass::rttiHashWeaponDispenserClass
 PblHash WeaponDispenserClass::rttiHashWeaponDispenserClass("WeaponDispenserClass");
+// GLOBAL: SWBF2 0x0078bf94
+// WeaponDispenserClass::rttiNameWeaponDispenserClass
 const char WeaponDispenserClass::rttiNameWeaponDispenserClass[] = "WeaponDispenserClass";
 
 
@@ -259,9 +263,13 @@ WeaponDispenserClass::WeaponDispenserClass(unsigned int uHash)
 
 // SYNTHETIC: SWBF2 0x00407140
 // `dynamic initializer for 'WeaponDispenser::rttiHashWeaponDispenser''
+// WeaponDispenser::rttiHashWeaponDispenser
+
 // GLOBAL: SWBF2 0x01f9a8bc
 // WeaponDispenser::rttiHashWeaponDispenser
 PblHash WeaponDispenser::rttiHashWeaponDispenser("WeaponDispenser");
+// GLOBAL: SWBF2 0x0078bf80
+// WeaponDispenser::rttiNameWeaponDispenser
 const char WeaponDispenser::rttiNameWeaponDispenser[] = "WeaponDispenser";
 
 

@@ -9,12 +9,30 @@
 
 extern "C" PblVector3* __stdcall D3DXVec3TransformNormal(PblVector3* pOut, const PblVector3* pV, const PblMatrix* pM);
 extern "C" PblMatrix* __stdcall D3DXMatrixMultiply(PblMatrix* pOut, const PblMatrix* pM1, const PblMatrix* pM2);
-namespace ParticleSystem { PblBox& GetBoundingBox(); }
-namespace ParticleSystem { float GetSizeMultiplier(); }
-namespace ParticleSystem { float GetMinParticleSize(); }
-namespace ParticleSystem { float GetLodAlpha(int iLod); }
-namespace ParticleSystem { void SetupParticleCache(unsigned int uTexture, RedBlendMode eBlend, float fBlurValue, int iBlurParam); }
-namespace ParticleSystem { void CacheParticle(const PblVector3& vPos, const RedColorValue& color, float fSize, float fRotation); }
+namespace ParticleSystem
+{
+PblBox& GetBoundingBox();
+}
+namespace ParticleSystem
+{
+float GetSizeMultiplier();
+}
+namespace ParticleSystem
+{
+float GetMinParticleSize();
+}
+namespace ParticleSystem
+{
+float GetLodAlpha(int iLod);
+}
+namespace ParticleSystem
+{
+void SetupParticleCache(unsigned int uTexture, RedBlendMode eBlend, float fBlurValue, int iBlurParam);
+}
+namespace ParticleSystem
+{
+void CacheParticle(const PblVector3& vPos, const RedColorValue& color, float fSize, float fRotation);
+}
 
 // GLOBAL: SWBF2 0x01eaed64
 int ParticleGeometry::mParticleCount;

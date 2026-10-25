@@ -11,19 +11,23 @@
 #include "UnitCmdInfo.h"
 #include "UnitController.h"
 
-// GLOBAL: SWBF2 0x01eb01f4
 // SYNTHETIC: SWBF2 0x004021e0
 // `dynamic initializer for 'AI::AIGoal::rttiHashAIGoal''
 
+// GLOBAL: SWBF2 0x01eb01f4
+// AI::AIGoal::rttiHashAIGoal
 PblHash AI::AIGoal::rttiHashAIGoal("AIGoal");
+// GLOBAL: SWBF2 0x007887b8
+// AI::AIGoal::rttiNameAIGoal
 const char AI::AIGoal::rttiNameAIGoal[] = "AIGoal";
 
-// GLOBAL: SWBF2 0x01eb0410
 // SYNTHETIC: SWBF2 0x004021f0
 // `dynamic initializer for 'AI::AIGoal::sMemoryPool''
 // SYNTHETIC: SWBF2 0x00766d40
 // `dynamic atexit destructor for 'AI::AIGoal::sMemoryPool''
 
+// GLOBAL: SWBF2 0x01eb0410
+// AI::AIGoal::sMemoryPool
 MemoryPool AI::AIGoal::sMemoryPool("AIGoal", 0x20);
 
 

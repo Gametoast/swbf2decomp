@@ -40,15 +40,21 @@ public:
 
 // SYNTHETIC: SWBF2 0x004072a0
 // `dynamic initializer for 'WeaponShield::rttiHashWeaponShield''
+// WeaponShield::rttiHashWeaponShield
+
 // GLOBAL: SWBF2 0x01f9a914
 // WeaponShield::rttiHashWeaponShield
 PblHash WeaponShield::rttiHashWeaponShield("WeaponShield");
 
 // SYNTHETIC: SWBF2 0x004072b0
 // `dynamic initializer for 'WeaponShieldClass::rttiHashWeaponShieldClass''
+// WeaponShieldClass::rttiHashWeaponShieldClass
+
 // GLOBAL: SWBF2 0x01f9a918
 // WeaponShieldClass::rttiHashWeaponShieldClass
 PblHash WeaponShieldClass::rttiHashWeaponShieldClass("WeaponShieldClass");
+// GLOBAL: SWBF2 0x0078c280
+// WeaponShieldClass::rttiNameWeaponShieldClass
 const char WeaponShieldClass::rttiNameWeaponShieldClass[] = "WeaponShieldClass";
 
 // GLOBAL: SWBF2 0x009cef54

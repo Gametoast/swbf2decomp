@@ -8,6 +8,7 @@
 #include "EventInfo.h"
 #include "PebbleFL/Common/PblHashTable.h"
 
+// VTABLE: SWBF2 0x007afd98
 class UnitUnBoardAgent : public UnitAgent
 {
 public:

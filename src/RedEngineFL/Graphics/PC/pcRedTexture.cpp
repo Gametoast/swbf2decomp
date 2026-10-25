@@ -12,6 +12,7 @@
 // `dynamic initializer for 'RedTexture::s_textureHashTable''
 
 // GLOBAL: SWBF2 0x008eed8c
+// RedTexture::s_textureHashTable
 PblHashTable<RedTexture, 4096> RedTexture::s_textureHashTable;
 
 // GLOBAL: SWBF2 0x008eed88

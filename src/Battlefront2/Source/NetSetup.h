@@ -36,6 +36,7 @@ extern char autoNetSession[64];
 extern stAutoNetMission autoNetMissions[256];
 extern PblRandom netRandom;
 
+// VTABLE: SWBF2 0x007ac330
 class NetLaunchGame
 {
 public:
@@ -75,6 +76,7 @@ struct FindGameData;
 struct NetKey;
 class NetPacket;
 
+// VTABLE: SWBF2 0x007ac190
 class NetHostGame
 {
 public:
@@ -97,6 +99,7 @@ public:
     virtual void ForceWriteShellUpdate() = 0;
 };
 
+// VTABLE: SWBF2 0x007ac1cc
 class NetJoinGame
 {
 public:
@@ -176,6 +179,7 @@ public:
     virtual bool HostKnowsILoaded() = 0;
 };
 
+// VTABLE: SWBF2 0x007ac290
 class NetPostLoadHostGame
 {
 public:
@@ -189,6 +193,7 @@ public:
     virtual void BootPlayer(int iPlayer) = 0;
 };
 
+// VTABLE: SWBF2 0x007ac2a4
 class NetPostLoadJoinGame
 {
 public:

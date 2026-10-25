@@ -22,9 +22,13 @@
 
 // SYNTHETIC: SWBF2 0x00406c90
 // `dynamic initializer for 'UnitDeathmatchAgent::rttiHashUnitDeathmatchAgent''
+// UnitDeathmatchAgent::rttiHashUnitDeathmatchAgent
+
 // GLOBAL: SWBF2 0x01f9938c
 // UnitDeathmatchAgent::rttiHashUnitDeathmatchAgent
 PblHash UnitDeathmatchAgent::rttiHashUnitDeathmatchAgent("UnitDeathmatchAgent");
+// GLOBAL: SWBF2 0x0078b7ec
+// UnitDeathmatchAgent::rttiNameUnitDeathmatchAgent
 const char UnitDeathmatchAgent::rttiNameUnitDeathmatchAgent[] = "UnitDeathmatchAgent";
 
 

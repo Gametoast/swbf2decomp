@@ -31,6 +31,12 @@ public:
   
  
 
+// VTABLE: SWBF2 0x00799ebc
+// VTABLE: SWBF2 0x00799ed4 EntityEx
+// VTABLE: SWBF2 0x0079a008 PblHandled
+// VTABLE: SWBF2 0x0079a010 Damageable
+// VTABLE: SWBF2 0x0079a088 RedSceneObject
+// VTABLE: SWBF2 0x0079a0f0 CollisionObject
 class EntityBuildingArmedDynamic : public EntityBuildingArmed
 {
 public:

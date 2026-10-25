@@ -441,4 +441,5 @@ pcRedShaderDef pcInterfaceShader::s_shaderDef("interface_shader.xml");
 // `dynamic initializer for 'PblMath::fOneOverHalfPi''
 
 // GLOBAL: SWBF2 0x009c9538
+// g_pcInterfaceShader
 unsigned int g_pcInterfaceShader;

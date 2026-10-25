@@ -26,7 +26,9 @@
 // `dynamic initializer for 's_SkyFogPlane''
 // SYNTHETIC: SWBF2 0x00766cf0
 // `dynamic atexit destructor for 's_SkyFogPlane''
+
 // GLOBAL: SWBF2 0x01eafd84
+// s_SkyFogPlane
 SkyFogRenderable s_SkyFogPlane;
 
 // FUNCTION: SWBF2 0x004285e0

@@ -134,14 +134,18 @@ struct CompressedPos
     static PblVector3 s_vScaleInv;
 };
 
-// GLOBAL: SWBF2 0x007de270
 
-// GLOBAL: SWBF2 0x007de27c
+
+
 
 // GLOBAL: SWBF2 0x007f5870
 
 PblVector3 CompressedPos::s_vMin;
+// GLOBAL: SWBF2 0x007de270
+// CompressedPos::s_vScale
 PblVector3 CompressedPos::s_vScale;
+// GLOBAL: SWBF2 0x007de27c
+// CompressedPos::s_vScaleInv
 PblVector3 CompressedPos::s_vScaleInv;
 
 // FUNCTION: SWBF2 0x00717980

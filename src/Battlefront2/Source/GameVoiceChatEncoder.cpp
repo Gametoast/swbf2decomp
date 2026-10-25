@@ -16,11 +16,23 @@
 
 #include "SoundFL/source/sndstreamcodec.h"
 
-namespace GameVoiceChat { unsigned int CalculatePlayCaptureBufferSizeSamples(float fMilliseconds); }
-namespace GameVoiceChat { unsigned int CalculateEncodedPacketSize(unsigned int uiSamples); }
+namespace GameVoiceChat
+{
+unsigned int CalculatePlayCaptureBufferSizeSamples(float fMilliseconds);
+}
+namespace GameVoiceChat
+{
+unsigned int CalculateEncodedPacketSize(unsigned int uiSamples);
+}
 
-namespace VoiceChat { void* Alloc(unsigned int uiSize); }
-namespace VoiceChat { void Free(void* pBlock); }
+namespace VoiceChat
+{
+void* Alloc(unsigned int uiSize);
+}
+namespace VoiceChat
+{
+void Free(void* pBlock);
+}
 
 namespace Snd
 {
@@ -268,8 +280,14 @@ GameVoiceChat::Encoder::~Encoder()
 {
 }
 
-namespace GameVoiceChat { bool IsSuspended(); }
-namespace GameVoiceChat { bool IsBanned(); }
+namespace GameVoiceChat
+{
+bool IsSuspended();
+}
+namespace GameVoiceChat
+{
+bool IsBanned();
+}
 
 // FUNCTION: SWBF2 0x0053da10
 unsigned char GameVoiceChat::Encoder::IsEnabled()

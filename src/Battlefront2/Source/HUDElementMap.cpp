@@ -729,12 +729,18 @@ HUD::ElementMap* HUD::ElementMap::FindByPlayerIndex(int iPlayerIndex)
 // GLOBAL: SWBF2 0x01e56c38
 static bool updating;
 
-namespace FriendBuddyList { bool __fastcall IsFriendBuddy(int iLocalIndex, int iPlayerId); }
+namespace FriendBuddyList
+{
+bool __fastcall IsFriendBuddy(int iLocalIndex, int iPlayerId);
+}
 
 const RedColor Interpolate(const RedColor& a, const RedColor& b, float t);
 
 extern RedColor gHudHighlightColor;
-namespace GameLoop { extern bool mbHistoricalRules; }
+namespace GameLoop
+{
+extern bool mbHistoricalRules;
+}
 extern bool netFrameLock;
 extern PblVector3 gVectorZero;
 
@@ -1988,7 +1994,8 @@ const char* HUD::ElementMap::PropertyTranslateEnum(const unsigned int uHashID,
     }
 }
 
-namespace FriendBuddyList {
+namespace FriendBuddyList
+{
 
 // FUNCTION: SWBF2 0x0052e140
 unsigned int GetFriendBuddyCount()
@@ -1997,7 +2004,8 @@ unsigned int GetFriendBuddyCount()
 }
 }
 
-namespace FriendBuddyList {
+namespace FriendBuddyList
+{
 
 // FUNCTION: SWBF2 0x0052e150
 int __fastcall GetFriendBuddy(int, unsigned int index)
@@ -2011,7 +2019,8 @@ int __fastcall GetFriendBuddy(int, unsigned int index)
 }
 }
 
-namespace FriendBuddyList {
+namespace FriendBuddyList
+{
 
 // FUNCTION: SWBF2 0x0052e190
 bool __fastcall IsFriendBuddy(int, int playerId)
@@ -2168,11 +2177,13 @@ void HUD::ElementMap::EventRefreshPost(const HUD::Event& event, void* const pDat
     pMap->mPostText[uIndex].Enable(false);
 }
 
-// GLOBAL: SWBF2 0x007eb9fc
 // SYNTHETIC: SWBF2 0x00403fc0
 // `dynamic initializer for 'HUD::ElementMap::sMapList''
 // SYNTHETIC: SWBF2 0x00768b40
 // `dynamic atexit destructor for 'HUD::ElementMap::sMapList''
+
+// GLOBAL: SWBF2 0x007eb9fc
+// HUD::ElementMap::sMapList
 PblListSingle HUD::ElementMap::sMapList;
 
 // GLOBAL: SWBF2 0x01e56c39

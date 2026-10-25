@@ -5,7 +5,10 @@
 #include "HUDElementGroup.h"
 #include "HUDElementText.h"
 
-namespace HUD {
+namespace HUD
+{
+// VTABLE: SWBF2 0x007a14f4 HUD::ElementGroupBase
+// VTABLE: SWBF2 0x007a1534 RedGroupElement
 class ElementMultilineText : public HUD::ElementGroup
 {
 public:
@@ -19,7 +22,7 @@ public:
         state_EnablingLine = 4
     };
 
-    // VTABLE: SWBF2 0x007a14b8
+    // VTABLE: SWBF2 0x007a14b8 HUD::Element
 
     class __declspec(align(16)) Line : public HUD::ElementText
     {

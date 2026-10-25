@@ -47,7 +47,9 @@ void SunFlareEffect::Create()
 // `dynamic initializer for 's_SunSkyRenderable''
 // SYNTHETIC: SWBF2 0x00766d00
 // `dynamic atexit destructor for 's_SunSkyRenderable''
+
 // GLOBAL: SWBF2 0x01eaffc8
+// s_SunSkyRenderable
 SunSkyRenderable s_SunSkyRenderable;
 
 // GLOBAL: SWBF2 0x01e2fd54
@@ -72,6 +74,7 @@ extern "C" PblVector3* __stdcall D3DXVec3TransformCoord(PblVector3* pOut, const 
                                                          const PblMatrix* pM);
 
 // GLOBAL: SWBF2 0x007eb748
+// s_boundingBox
 static PblBox s_boundingBox(-3000.0f, -3000.0f, -3000.0f, 3000.0f, 3000.0f, 3000.0f);
 
 struct PosXYZ

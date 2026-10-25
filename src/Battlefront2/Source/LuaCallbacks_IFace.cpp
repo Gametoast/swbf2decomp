@@ -116,16 +116,26 @@ extern "C" PblMatrix* __stdcall D3DXMatrixRotationX(PblMatrix* pOut, float fAngl
 extern "C" PblMatrix* __stdcall D3DXMatrixRotationY(PblMatrix* pOut, float fAngle);
 extern "C" PblMatrix* __stdcall D3DXMatrixRotationZ(PblMatrix* pOut, float fAngle);
 
-namespace PblUnicode { unsigned int ustrncnv(unsigned short* pDest, const unsigned char* pSrc, unsigned int uiCount); }
-namespace StatsManager { void Stop(); }
+namespace PblUnicode
+{
+unsigned int ustrncnv(unsigned short* pDest, const unsigned char* pSrc, unsigned int uiCount);
+}
+namespace StatsManager
+{
+void Stop();
+}
 extern int netCurMaxPlayers;
 extern bool netIsDedicated;
 
 static const float DEG_TO_RAD = 0.017453292f;
 
-namespace StatsManager { extern int m_state; }
+namespace StatsManager
+{
+extern int m_state;
+}
 
-namespace Lua_Callbacks {
+namespace Lua_Callbacks
+{
 
 // FUNCTION: SWBF2 0x00587ea0
 void __fastcall TableReadValWithDefault(const char* pcKey, float* pfValue)
@@ -140,7 +150,8 @@ void __fastcall TableReadValWithDefault(const char* pcKey, float* pfValue)
 }
 }
 
-namespace Lua_Callbacks {
+namespace Lua_Callbacks
+{
 
 // FUNCTION: SWBF2 0x00587f00
 void __fastcall TableReadColor(const char* pcKey, float* pfColor)
@@ -154,7 +165,8 @@ void __fastcall TableReadColor(const char* pcKey, float* pfColor)
 }
 }
 
-namespace Lua_Callbacks {
+namespace Lua_Callbacks
+{
 
 // FUNCTION: SWBF2 0x00587f60
 void __fastcall TableReadDirection(int iUnused, float* pfDirection)
@@ -197,7 +209,8 @@ bool ToggleInvincibilityCheat()
     return GameLoop::gInvincible;
 }
 
-namespace Lua_Callbacks {
+namespace Lua_Callbacks
+{
 
 // FUNCTION: SWBF2 0x00586a00
 bool GetServicePlayerID(const char* pcName, unsigned __int64* puId)
@@ -231,7 +244,10 @@ bool GetServicePlayerID(const char* pcName, unsigned __int64* puId)
 }
 }
 
-namespace GameLoop { extern bool gUnlimitedAmmo; }
+namespace GameLoop
+{
+extern bool gUnlimitedAmmo;
+}
 extern bool gLowResModelsEnabled;
 
 // FUNCTION: SWBF2 0x00617070
@@ -4101,7 +4117,9 @@ int ScriptCB_SetIFaceLighting(lua_State* L)
 
 }
 
-// GLOBAL: SWBF2 0x01ec610c
 // SYNTHETIC: SWBF2 0x004041d0
 // `dynamic initializer for 'sDefaultFont''
+
+// GLOBAL: SWBF2 0x01ec610c
+// sDefaultFont
 unsigned int sDefaultFont = RedFont::GAMEFONT_SMALL;

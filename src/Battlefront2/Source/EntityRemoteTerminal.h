@@ -39,7 +39,13 @@ public:
  
  
 
-// VTABLE: SWBF2 0x0079ca9c
+// VTABLE: SWBF2 0x0079ca9c EntityEx
+// VTABLE: SWBF2 0x0079cbc4 Trackable
+// VTABLE: SWBF2 0x0079cc0c Damageable
+// VTABLE: SWBF2 0x0079cc38 RedSceneObject
+// VTABLE: SWBF2 0x0079cca0 PblHandled
+// VTABLE: SWBF2 0x0079ccf4 Thread
+// VTABLE: SWBF2 0x0079cdc4 CollisionObject
 class EntityRemoteTerminal : public GameObject, public Controllable
 {
 public:
@@ -96,6 +102,8 @@ public:
     void UpdateHealthRemote(float fAddHealth);
 
     static void* operator new(unsigned int uSize) { return sMemoryPool.Allocate(uSize); }
+    // SYNTHETIC: SWBF2 0x004dc980
+    // EntityRemoteTerminal::operator delete
     static void operator delete(void* pBlock) { sMemoryPool.Free(pBlock); }
 
     static PblHash rttiHashEntityRemoteTerminal;

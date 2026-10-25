@@ -7,27 +7,75 @@
 
 namespace EventManager
 {
-namespace CommandPostEvent { void Cleanup(); }
-namespace ControllableEvent { void Cleanup(); }
-namespace FlagEvent { void Cleanup(); }
-namespace ObjectEvent { void Cleanup(); }
-namespace CharacterEvent { void Cleanup(); }
-namespace RegionEvent { void Cleanup(); }
-namespace TeamEvent { void Cleanup(); }
-namespace TimerEvent { void Cleanup(); }
+namespace CommandPostEvent
+{
+void Cleanup();
+}
+namespace ControllableEvent
+{
+void Cleanup();
+}
+namespace FlagEvent
+{
+void Cleanup();
+}
+namespace ObjectEvent
+{
+void Cleanup();
+}
+namespace CharacterEvent
+{
+void Cleanup();
+}
+namespace RegionEvent
+{
+void Cleanup();
+}
+namespace TeamEvent
+{
+void Cleanup();
+}
+namespace TimerEvent
+{
+void Cleanup();
+}
 }
 
 namespace EventManager
 {
-namespace CommandPostEvent { void Init(); }
-namespace FlagEvent { void Init(); }
-namespace CharacterEvent { void Init(); }
-namespace RegionEvent { void Init(); }
-namespace LuaUserEvent { void Init(); }
-namespace ObjectEvent { void Init(); }
-namespace TeamEvent { void Init(); }
+namespace CommandPostEvent
+{
+void Init();
+}
+namespace FlagEvent
+{
+void Init();
+}
+namespace CharacterEvent
+{
+void Init();
+}
+namespace RegionEvent
+{
+void Init();
+}
+namespace LuaUserEvent
+{
+void Init();
+}
+namespace ObjectEvent
+{
+void Init();
+}
+namespace TeamEvent
+{
+void Init();
+}
 
-namespace TimerEvent { void Init(); }
+namespace TimerEvent
+{
+void Init();
+}
 }
 
 namespace EventManager
@@ -85,7 +133,8 @@ void Node::DetachFromParent()
 
 }
 
-namespace EventManager {
+namespace EventManager
+{
 
 // FUNCTION: SWBF2 0x0050b3d0
 void Cleanup()

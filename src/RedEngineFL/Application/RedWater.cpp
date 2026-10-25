@@ -161,43 +161,52 @@ bool RedWater::m_bSetSpecularDirection;
 // GLOBAL: SWBF2 0x00966178
 unsigned int s_numReads;
 
-// GLOBAL: SWBF2 0x00965160
 // SYNTHETIC: SWBF2 0x00408080
 // `dynamic initializer for 'RedWater::m_worldMin''
 
+// GLOBAL: SWBF2 0x00965160
+// RedWater::m_worldMin
 PblVector3 RedWater::m_worldMin;
-// GLOBAL: SWBF2 0x00966150
 // SYNTHETIC: SWBF2 0x00408070
 // `dynamic initializer for 'RedWater::m_worldMax''
 
+// GLOBAL: SWBF2 0x00966150
+// RedWater::m_worldMax
 PblVector3 RedWater::m_worldMax;
 
-// GLOBAL: SWBF2 0x0096516c
 // SYNTHETIC: SWBF2 0x00407fe0
 // `dynamic initializer for 'RedWater::_UnderWaterRenderable''
 // SYNTHETIC: SWBF2 0x00769920
 // `dynamic atexit destructor for 'RedWater::_UnderWaterRenderable''
+
+// GLOBAL: SWBF2 0x0096516c
+// RedWater::_UnderWaterRenderable
 UnderWaterRenderable RedWater::_UnderWaterRenderable;
 
-// GLOBAL: SWBF2 0x00965188
 // SYNTHETIC: SWBF2 0x00408060
 // `dynamic initializer for 'RedWater::m_vSpecularDirection''
 
+// GLOBAL: SWBF2 0x00965188
+// RedWater::m_vSpecularDirection
 PblVector3 RedWater::m_vSpecularDirection;
 
 // GLOBAL: SWBF2 0x00965198
 PblTimeBase::Stamp RedWater::m_waterTimeStamp;
 
-// GLOBAL: SWBF2 0x009651b0
 // SYNTHETIC: SWBF2 0x00408040
 // `dynamic initializer for 'RedWater::m_eventCache''
+
+// GLOBAL: SWBF2 0x009651b0
+// RedWater::m_eventCache
 RedWater::WaterEvent RedWater::m_eventCache[100];
 
-// GLOBAL: SWBF2 0x0096615c
 // SYNTHETIC: SWBF2 0x00408010
 // `dynamic initializer for 'RedWater::_WaterRenderable''
 // SYNTHETIC: SWBF2 0x00769940
 // `dynamic atexit destructor for 'RedWater::_WaterRenderable''
+
+// GLOBAL: SWBF2 0x0096615c
+// RedWater::_WaterRenderable
 WaterRenderable RedWater::_WaterRenderable;
 
 // FUNCTION: SWBF2 0x006ce0a0

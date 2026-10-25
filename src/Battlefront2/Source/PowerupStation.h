@@ -79,6 +79,12 @@ public:
 
 class RedRegion;
 
+// VTABLE: SWBF2 0x007adbb8 CollisionObject
+// VTABLE: SWBF2 0x007adc0c EntityEx
+// VTABLE: SWBF2 0x007add34 RedSceneObject
+// VTABLE: SWBF2 0x007add9c
+// VTABLE: SWBF2 0x007addb4 PblHandled
+// VTABLE: SWBF2 0x007addbc Damageable
 class PowerupStation : public EntityBuilding, public Thread
 {
 public:

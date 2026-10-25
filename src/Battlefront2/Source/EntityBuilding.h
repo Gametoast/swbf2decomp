@@ -82,6 +82,11 @@ public:
  
  
 
+// VTABLE: SWBF2 0x007993ec Damageable
+// VTABLE: SWBF2 0x00799418 EntityEx
+// VTABLE: SWBF2 0x0079958c RedSceneObject
+// VTABLE: SWBF2 0x007995f4 PblHandled
+// VTABLE: SWBF2 0x007995fc CollisionObject
 class EntityBuilding : public GameObject
 {
 public:

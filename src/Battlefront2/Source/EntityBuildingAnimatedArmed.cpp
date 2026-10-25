@@ -76,9 +76,13 @@ Entity* EntityBuildingAnimatedArmedClass::Build(const EntityDesc& desc)
 
 // SYNTHETIC: SWBF2 0x004028d0
 // `dynamic initializer for 'EntityBuildingAnimatedArmedClass::rttiHashEntityBuildingAnimatedArmedClass''
+// EntityBuildingAnimatedArmedClass::rttiHashEntityBuildingAnimatedArmedClass
+
 // GLOBAL: SWBF2 0x01ebb884
 // EntityBuildingAnimatedArmedClass::rttiHashEntityBuildingAnimatedArmedClass
 PblHash EntityBuildingAnimatedArmedClass::rttiHashEntityBuildingAnimatedArmedClass("EntityBuildingAnimatedArmedClass");
+// GLOBAL: SWBF2 0x00788fe4
+// EntityBuildingAnimatedArmedClass::rttiNameEntityBuildingAnimatedArmedClass
 const char EntityBuildingAnimatedArmedClass::rttiNameEntityBuildingAnimatedArmedClass[] = "EntityBuildingAnimatedArmedClass";
 
 
@@ -278,9 +282,13 @@ static inline Controllable* TurretControllable(MountedTurret* pTurret)
 
 // SYNTHETIC: SWBF2 0x004028c0
 // `dynamic initializer for 'EntityBuildingAnimatedArmed::rttiHashEntityBuildingAnimatedArmed''
+// EntityBuildingAnimatedArmed::rttiHashEntityBuildingAnimatedArmed
+
 // GLOBAL: SWBF2 0x01ebb880
 // EntityBuildingAnimatedArmed::rttiHashEntityBuildingAnimatedArmed
 PblHash EntityBuildingAnimatedArmed::rttiHashEntityBuildingAnimatedArmed("EntityBuildingAnimatedArmed");
+// GLOBAL: SWBF2 0x00788fb8
+// EntityBuildingAnimatedArmed::rttiNameEntityBuildingAnimatedArmed
 const char EntityBuildingAnimatedArmed::rttiNameEntityBuildingAnimatedArmed[] = "EntityBuildingAnimatedArmed";
 
 

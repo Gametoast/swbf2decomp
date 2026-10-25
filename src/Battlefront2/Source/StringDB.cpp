@@ -6,13 +6,20 @@ namespace StringDB
 {
 
 int mMapNumEntries;
-// GLOBAL: SWBF2 0x01f6df0c
 // SYNTHETIC: SWBF2 0x004064d0
 // `dynamic initializer for 'StringDB::mMap''
 
+// GLOBAL: SWBF2 0x01f6df0c
+// mMap
+// GLOBAL: SWBF2 0x01f6df08
+// mMap
 PblHashTable<char, 4096> mMap;
 
+// GLOBAL: SWBF2 0x01eafb90
+// mPool
 char* mPool;
+// GLOBAL: SWBF2 0x01eafb94
+// mNext
 char* mNext;
 int mPoolSize;
 

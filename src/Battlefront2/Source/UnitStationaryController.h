@@ -4,7 +4,9 @@
 
 #include "UnitController.h"
 
-// VTABLE: SWBF2 0x007afccc
+// VTABLE: SWBF2 0x007afccc Controller
+// VTABLE: SWBF2 0x007afce4 PblHandled
+// VTABLE: SWBF2 0x007afcec CommandFsm
 class UnitStationaryController : public UnitController
 {
 public:

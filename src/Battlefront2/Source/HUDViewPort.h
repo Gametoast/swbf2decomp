@@ -4,10 +4,15 @@
 #include "HUDElement.h"
 #include "RedEngineFL/Interface/RedGroupElement.h"
 
-namespace HUD { class Item; }
+namespace HUD
+{
+class Item;
+}
 
-namespace HUD {
-// VTABLE: SWBF2 0x007a381c
+namespace HUD
+{
+// VTABLE: SWBF2 0x007a381c HUD::Element
+// VTABLE: SWBF2 0x007a3858 RedGroupElement
 class ViewPort : public HUD::Element, public RedGroupElement
 {
 public:

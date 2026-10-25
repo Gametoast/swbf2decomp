@@ -144,7 +144,8 @@ template bool Event<Timer, char>::Callback::operator()(Timer&, char&);
 
 }
 
-namespace EventManager {
+namespace EventManager
+{
 
 // TEMPLATE: SWBF2 0x0051c240
 // EventManager::Event<Timer,char>::Callback::~Callback
@@ -155,7 +156,10 @@ namespace EventManager
 {
 
 int DummyLuaCallback(lua_State* L);
-namespace TimerEvent { void Init(); }
+namespace TimerEvent
+{
+void Init();
+}
 
 template <class ITEM, class PARAM>
 void RegisterUnregisterLuaCallback(Event<ITEM, PARAM>& event, lua_CFunction pfnClient)
@@ -208,6 +212,7 @@ void RegisterRegisterLuaCallback(Event<ITEM, PARAM>& event, lua_CFunction pfnCli
     }
 }
 
+// FUNCTION: SWBF2 0x0051c200
 void TimerEvent::Init()
 {
     mElapsed.Init();
@@ -227,6 +232,7 @@ void TimerEvent::Init()
 namespace EventManager
 {
 
+// FUNCTION: SWBF2 0x0051c230
 void TimerEvent::Cleanup()
 {
     mElapsed.Cleanup();
@@ -239,11 +245,13 @@ namespace EventManager
 namespace TimerEvent
 {
 
-// GLOBAL: SWBF2 0x007ec120
 // SYNTHETIC: SWBF2 0x004037a0
 // `dynamic initializer for 'EventManager::TimerEvent::mElapsed''
 // SYNTHETIC: SWBF2 0x007686a0
 // `dynamic atexit destructor for 'EventManager::TimerEvent::mElapsed''
+
+// GLOBAL: SWBF2 0x007ec120
+// mElapsed
 Event<Timer, char> mElapsed("TimerElapse");
 
 }

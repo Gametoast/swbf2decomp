@@ -38,11 +38,13 @@ int Play(VOType eType, const GameObject* pSpeaker, const GameObject* pTarget,
 }
 }
 
-// GLOBAL: SWBF2 0x01ef7da8
 // SYNTHETIC: SWBF2 0x00405e10
 // `dynamic initializer for 'PathFollower::sMemoryPool''
 // SYNTHETIC: SWBF2 0x007692c0
 // `dynamic atexit destructor for 'PathFollower::sMemoryPool''
+
+// GLOBAL: SWBF2 0x01ef7da8
+// PathFollower::sMemoryPool
 MemoryPool PathFollower::sMemoryPool("PathFollower", sizeof(PathFollower));
 
 namespace
@@ -112,7 +114,10 @@ unsigned int _FindBarrierNameHash;
 Obstacle* _FindBarrierRet;
 }
 
-namespace PathFinder { bool FindBarrierCallback(const TreeGridObject* pObject, TreeGridCallbackData*, float&); }
+namespace PathFinder
+{
+bool FindBarrierCallback(const TreeGridObject* pObject, TreeGridCallbackData*, float&);
+}
 
 // FUNCTION: SWBF2 0x00612510
 bool PathFinder::FindBarrierCallback(const TreeGridObject* pObject, TreeGridCallbackData*, float&)
@@ -126,7 +131,10 @@ bool PathFinder::FindBarrierCallback(const TreeGridObject* pObject, TreeGridCall
     return true;
 }
 
-namespace PathFinder { Obstacle* FindBarrierByName(unsigned int uName); }
+namespace PathFinder
+{
+Obstacle* FindBarrierByName(unsigned int uName);
+}
 
 // FUNCTION: SWBF2 0x00612530
 Obstacle* PathFinder::FindBarrierByName(unsigned int uName)

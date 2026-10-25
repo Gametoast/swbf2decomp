@@ -53,7 +53,8 @@ namespace AIDebug
     }
 }
 
-namespace AIDebug {
+namespace AIDebug
+{
 
 // FUNCTION: SWBF2 0x00438a00
 bool GetTestSpawnMode()
@@ -63,7 +64,8 @@ bool GetTestSpawnMode()
 
 }
 
-namespace AIDebugR {
+namespace AIDebugR
+{
 
 // FUNCTION: SWBF2 0x004385d0
 void Create()
@@ -88,7 +90,8 @@ void StartBulletTime(float fFirst, float fSecond, float fThird)
 
 }
 
-namespace AIDebug {
+namespace AIDebug
+{
 
 // FUNCTION: SWBF2 0x00438660
 void Create()
@@ -140,7 +143,8 @@ bool __cdecl IsCoverHintFilteringEnabled()
     return false;
 }
 
-namespace AIDebug {
+namespace AIDebug
+{
 
 // FUNCTION: SWBF2 0x00438680
 bool OnlyOneAI()
@@ -157,16 +161,20 @@ namespace AIDebug
 namespace TestSpawn
 {
 
-// GLOBAL: SWBF2 0x01eb0250
 // SYNTHETIC: SWBF2 0x004021a0
 // `dynamic initializer for 'AIDebug::TestSpawn::mCamera''
 // SYNTHETIC: SWBF2 0x00766d30
 // `dynamic atexit destructor for 'AIDebug::TestSpawn::mCamera''
+
+// GLOBAL: SWBF2 0x01eb0250
+// mCamera
 RedCamera mCamera;
 
-// GLOBAL: SWBF2 0x01eaffe4
 // SYNTHETIC: SWBF2 0x004021c0
 // `dynamic initializer for 'AIDebug::TestSpawn::camDir''
+
+// GLOBAL: SWBF2 0x01eaffe4
+// camDir
 PblVector3 camDir = CYL_CENTER;
 
 }

@@ -118,8 +118,8 @@ public:
  
  
 
-// VTABLE: SWBF2 0x007ac40c
-// VTABLE: SWBF2 0x007ac48c
+// VTABLE: SWBF2 0x007ac40c Thread
+// VTABLE: SWBF2 0x007ac48c PblHandled
 class Ordnance : public Thread, public PblHandled, public FoleyFXCollider, public FoleyFXCollidee
 {
 protected:
@@ -147,6 +147,8 @@ public:
     DamageDesc GetDamage();
     void AddOrdnanceToCollisionManager();
 
+    // SYNTHETIC: SWBF2 0x005f71e0
+    // Ordnance::operator delete
     static void operator delete(void* pBlock) { sMemoryPool.Free(pBlock); }
 
     static void* operator new(unsigned int uSize) { return sMemoryPool.Allocate(uSize); }

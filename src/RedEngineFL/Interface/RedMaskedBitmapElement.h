@@ -5,6 +5,7 @@
 
 class pcInterfaceShader;
 
+// VTABLE: SWBF2 0x00784200
 class RedMaskedBitmapElement : public RedBitmapElement
 {
 public:

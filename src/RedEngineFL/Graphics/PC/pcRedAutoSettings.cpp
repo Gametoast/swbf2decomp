@@ -21,6 +21,8 @@ extern HWND hGlobalWnd;
 namespace RedAutoSettings
 {
 
+// GLOBAL: SWBF2 0x007e1050
+// _RenderSettings
 RenderOptionsT _RenderSettings;
 
 // GLOBAL: SWBF2 0x007e1098
@@ -748,6 +750,8 @@ namespace RedVideoConfig
 
 // GLOBAL: SWBF2 0x009aba44
 IDirect3D9* m_pD3D;
+// GLOBAL: SWBF2 0x009aba48
+// m_MultiSampleDriverControlled
 bool m_MultiSampleDriverControlled;
 // GLOBAL: SWBF2 0x009aba4c
 unsigned int m_MemoryHint;

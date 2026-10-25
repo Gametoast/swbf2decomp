@@ -4,18 +4,24 @@
 #include "RedEngineFL/Memory/RedMemoryPool.h"
 #include "GameModel.h"
 
-// GLOBAL: SWBF2 0x01eb96a8
 // SYNTHETIC: SWBF2 0x004026c0
 // `dynamic initializer for 'CommandHover::sMemoryPool''
 // SYNTHETIC: SWBF2 0x00766e90
 // `dynamic atexit destructor for 'CommandHover::sMemoryPool''
+
+// GLOBAL: SWBF2 0x01eb96a8
+// CommandHover::sMemoryPool
 MemoryPool CommandHover::sMemoryPool("CommandHover", 0x1d20);
 
 // SYNTHETIC: SWBF2 0x004026e0
 // `dynamic initializer for 'CommandHover::rttiHashCommandHover''
+// CommandHover::rttiHashCommandHover
+
 // GLOBAL: SWBF2 0x01eb96a4
 // CommandHover::rttiHashCommandHover
 PblHash CommandHover::rttiHashCommandHover("CommandHover");
+// GLOBAL: SWBF2 0x00788ca4
+// CommandHover::rttiNameCommandHover
 const char CommandHover::rttiNameCommandHover[] = "CommandHover";
 
 
@@ -95,9 +101,13 @@ CommandHoverClass::CommandHoverClass(unsigned int uHash)
 
 // SYNTHETIC: SWBF2 0x004026f0
 // `dynamic initializer for 'CommandHoverClass::rttiHashCommandHoverClass''
+// CommandHoverClass::rttiHashCommandHoverClass
+
 // GLOBAL: SWBF2 0x01eb96a0
 // CommandHoverClass::rttiHashCommandHoverClass
 PblHash CommandHoverClass::rttiHashCommandHoverClass("CommandHoverClass");
+// GLOBAL: SWBF2 0x00788cb8
+// CommandHoverClass::rttiNameCommandHoverClass
 const char CommandHoverClass::rttiNameCommandHoverClass[] = "CommandHoverClass";
 
 

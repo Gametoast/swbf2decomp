@@ -6,11 +6,13 @@ HUD::Sound::Factory::Factory()
     mName = "Sound";
 }
 
-// GLOBAL: SWBF2 0x007eba9c
 // SYNTHETIC: SWBF2 0x004040a0
 // `dynamic initializer for 'HUD::Sound::sList''
 // SYNTHETIC: SWBF2 0x00768c10
 // `dynamic atexit destructor for 'HUD::Sound::sList''
+
+// GLOBAL: SWBF2 0x007eba9c
+// HUD::Sound::sList
 PblListSingle HUD::Sound::sList;
 
 static const unsigned int kSoundHash = 0x0e0d9594;

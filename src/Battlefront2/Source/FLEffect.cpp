@@ -57,33 +57,39 @@ bool FLEffect::s_bInitRender;
 // GLOBAL: SWBF2 0x01ebd020
 int FLEffect::s_EffectFactoriesNumEntries;
 
-// GLOBAL: SWBF2 0x01ebd024
 // SYNTHETIC: SWBF2 0x004038f0
 // `dynamic initializer for 'FLEffect::s_EffectFactories''
 
+// GLOBAL: SWBF2 0x01ebd024
+// FLEffect::s_EffectFactories
 PblHashTable<FLEffect, 32> FLEffect::s_EffectFactories;
 
-// GLOBAL: SWBF2 0x01ebd124
 // SYNTHETIC: SWBF2 0x004038d0
 // `dynamic initializer for 'FLEffect::_Thread''
 // SYNTHETIC: SWBF2 0x00768740
 // `dynamic atexit destructor for 'FLEffect::_Thread''
+
+// GLOBAL: SWBF2 0x01ebd124
+// FLEffect::_Thread
 FLEffect::FLEffectThread FLEffect::_Thread;
 
 // GLOBAL: SWBF2 0x01ebd140
 int FLEffect::s_EffectClassesNumEntries;
 
-// GLOBAL: SWBF2 0x01ebd144
 // SYNTHETIC: SWBF2 0x00403910
 // `dynamic initializer for 'FLEffect::s_EffectClasses''
 
+// GLOBAL: SWBF2 0x01ebd144
+// FLEffect::s_EffectClasses
 PblHashTable<FLEffectClass, 256> FLEffect::s_EffectClasses;
 
-// GLOBAL: SWBF2 0x01ebd960
 // SYNTHETIC: SWBF2 0x00403930
 // `dynamic initializer for 'FLEffectObject::s_OffsetMatrixPool''
 // SYNTHETIC: SWBF2 0x00768750
 // `dynamic atexit destructor for 'FLEffectObject::s_OffsetMatrixPool''
+
+// GLOBAL: SWBF2 0x01ebd960
+// FLEffectObject::s_OffsetMatrixPool
 MemoryPool FLEffectObject::s_OffsetMatrixPool("FLEffectObject::OffsetMatrix", 0x40);
 
 // FUNCTION: SWBF2 0x00526b20

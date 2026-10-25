@@ -76,9 +76,11 @@ PblVector4 pcTerrainShader::s_FarDetailTextureTransform;
 
 PblMatrix pcTerrainShader::s_mProjectionRestore;
 
-// GLOBAL: SWBF2 0x009c88d0
 // SYNTHETIC: SWBF2 0x004093e0
 // `dynamic initializer for 'pcTerrainShader::s_uiRenderTypeHash''
+
+// GLOBAL: SWBF2 0x009c88d0
+// pcTerrainShader::s_uiRenderTypeHash
 unsigned int pcTerrainShader::s_uiRenderTypeHash = PblHash("Terrain");
 
 // SYNTHETIC: SWBF2 0x00409330
@@ -201,9 +203,11 @@ pcTerrainShader::pcTerrainShader(unsigned int uiFlags,
     _Init(uiFlags, pParams, uiNumParams, uiMaterialFlags, color0, color1, fSpecularPower);
 }
 
-// GLOBAL: SWBF2 0x009c8674
 // SYNTHETIC: SWBF2 0x00409440
 // `dynamic initializer for 'kuiLinearRamp''
+
+// GLOBAL: SWBF2 0x009c8674
+// kuiLinearRamp
 static unsigned int kuiLinearRamp = PblHash("linear_ramp");
 
 static PblMatrix AxesMatrix(float rx, float ry, float rz, float ux, float uy, float uz,
@@ -1244,11 +1248,13 @@ void pcTerrainShader::_StaticInit() const
     memset(&s_d3dMat, 0, sizeof(s_d3dMat));
 }
 
-// GLOBAL: SWBF2 0x009c8620
 // SYNTHETIC: SWBF2 0x00409350
 // `dynamic initializer for 'pcTerrainShader::s_Factory''
 // SYNTHETIC: SWBF2 0x00769bd0
 // `dynamic atexit destructor for 'pcTerrainShader::s_Factory''
+
+// GLOBAL: SWBF2 0x009c8620
+// pcTerrainShader::s_Factory
 pcTerrainShader pcTerrainShader::s_Factory;
 
 // SYNTHETIC: SWBF2 0x004093c0
@@ -1264,4 +1270,5 @@ pcRedShaderDef pcTerrainShader::s_shaderDef("terrain_shader.xml");
 // `dynamic initializer for 'PblMath::fOneOverHalfPi''
 
 // GLOBAL: SWBF2 0x009c8510
+// g_pcTerrainShader
 unsigned int g_pcTerrainShader;

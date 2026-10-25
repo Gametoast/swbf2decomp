@@ -22,7 +22,13 @@ namespace PopupText
 {
     void __fastcall ShowPopup(int iType, unsigned int uTextId);
 }
-namespace HUD { namespace GameEvents { extern void DisableAllForObjectiveDisplay(int iViewport, bool bInit); } }
+namespace HUD
+{
+namespace GameEvents
+{
+extern void DisableAllForObjectiveDisplay(int iViewport, bool bInit);
+}
+}
 
 // FUNCTION: SWBF2 0x00527ea0
 bool GUIInputs::IsLeftPressed() const

@@ -19,18 +19,22 @@ static const float EPSILON = 0.0001f;
 static const float HEAP_MAX_VALUE = 100000.0f;
 static const float EXTRA_OBSTACLE_PUSHOUT_OFFSET = 0.5f;
 
-// GLOBAL: SWBF2 0x01ef7cf0
 // SYNTHETIC: SWBF2 0x00405dd0
 // `dynamic initializer for 'Obstacle::sMemoryPool''
 // SYNTHETIC: SWBF2 0x007692a0
 // `dynamic atexit destructor for 'Obstacle::sMemoryPool''
+
+// GLOBAL: SWBF2 0x01ef7cf0
+// Obstacle::sMemoryPool
 MemoryPool Obstacle::sMemoryPool("Obstacle", sizeof(Obstacle));
 
-// GLOBAL: SWBF2 0x01ef7d40
 // SYNTHETIC: SWBF2 0x00405df0
 // `dynamic initializer for 'PathFinder::PathNode::sMemoryPool''
 // SYNTHETIC: SWBF2 0x007692b0
 // `dynamic atexit destructor for 'PathFinder::PathNode::sMemoryPool''
+
+// GLOBAL: SWBF2 0x01ef7d40
+// PathFinder::PathNode::sMemoryPool
 MemoryPool PathFinder::PathNode::sMemoryPool("PathNode", sizeof(PathFinder::PathNode));
 
 // GLOBAL: SWBF2 0x007e8ee8

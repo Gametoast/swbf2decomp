@@ -7,6 +7,7 @@
 namespace Snd
 {
 
+// VTABLE: SWBF2 0x00786b94
 class StreamLowHighPass : public StreamNode, public StreamNodeSink, public StreamSourceProducer, public DSP::HighLowPassFilter
 {
 public:

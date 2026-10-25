@@ -5,9 +5,11 @@
 // GLOBAL: SWBF2 0x007e2cf4
 PblRandom PblRandom::_Global(0x94153A94u);
 
-// GLOBAL: SWBF2 0x009cef48
 // SYNTHETIC: SWBF2 0x0040af40
 // `dynamic initializer for 'PblRandom::_Sim''
+
+// GLOBAL: SWBF2 0x009cef48
+// PblRandom::_Sim
 PblRandom PblRandom::_Sim;
 
 // FUNCTION: SWBF2 0x00438570

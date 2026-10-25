@@ -1,10 +1,12 @@
 #include "HUDTransform.h"
 
-// GLOBAL: SWBF2 0x007ebab8
 // SYNTHETIC: SWBF2 0x004040b0
 // `dynamic initializer for 'HUD::Transform::sList''
 // SYNTHETIC: SWBF2 0x00768c20
 // `dynamic atexit destructor for 'HUD::Transform::sList''
+
+// GLOBAL: SWBF2 0x007ebab8
+// HUD::Transform::sList
 PblListSingle HUD::Transform::sList;
 
 static const unsigned int kEventInputHash = 0xcce718ed;

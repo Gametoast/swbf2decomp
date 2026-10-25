@@ -246,6 +246,14 @@ class NetObjState;
 class NetPktGroup;
 class Restrictor;
 
+// VTABLE: SWBF2 0x0079add4 CollisionObject
+// VTABLE: SWBF2 0x0079ae40 Damageable
+// VTABLE: SWBF2 0x0079ae6c Trackable
+// VTABLE: SWBF2 0x0079af04 PblHandled
+// VTABLE: SWBF2 0x0079af0c EntityEx
+// VTABLE: SWBF2 0x0079b044 RedSceneObject
+// VTABLE: SWBF2 0x0079b0ac Thread
+// VTABLE: SWBF2 0x0079b17c
 class EntityDroideka : public GameObject,
                        public Controllable,
                        public VehicleEngine,
@@ -300,6 +308,8 @@ public:
     virtual ~EntityDroideka();
 
     static void* operator new(size_t uSize) { return sMemoryPool.Allocate(uSize); }
+    // SYNTHETIC: SWBF2 0x0049e3d0
+    // EntityDroideka::operator delete
     static void operator delete(void* pBlock) { sMemoryPool.Free(pBlock); }
 
     virtual bool IsRtti(unsigned int uRtti) const;

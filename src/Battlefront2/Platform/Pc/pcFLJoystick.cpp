@@ -77,7 +77,9 @@ unsigned short __cdecl RawInputToActionKey(unsigned short usRawInput);
 
 // SYNTHETIC: SWBF2 0x004014d0
 // `dynamic initializer for 'RawControllerInputs::sDefaultKeyboardBindings''
+
 // GLOBAL: SWBF2 0x01f9a928
+// RawControllerInputs::sDefaultKeyboardBindings
 ActionKey RawControllerInputs::sDefaultKeyboardBindings[5][43] =
 {
 

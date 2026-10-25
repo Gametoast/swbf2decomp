@@ -78,7 +78,8 @@ void SourceBus::Update(Source* pSource, SourceTransport* pTransport)
 
 }
 
-namespace Snd {
+namespace Snd
+{
 
 // FUNCTION: SWBF2 0x007383a0
 void SourceBus::Play(SourceTransport* pTransport)
@@ -97,7 +98,8 @@ void SourceBus::Play(SourceTransport* pTransport)
 }
 }
 
-namespace Snd {
+namespace Snd
+{
 
 // FUNCTION: SWBF2 0x00738430
 void SourceBus::SetGain(Source* pSource, float fGain)

@@ -1,7 +1,10 @@
 #ifndef GF_GALAXY_API_H
 #define GF_GALAXY_API_H
 
-namespace galaxy { namespace api {
+namespace galaxy
+{
+namespace api
+{
 
 class IGalaxy;
 class IErrorManager;
@@ -182,6 +185,7 @@ enum ListenerType
     FRIEND_LIST_RETRIEVE = 23
 };
 
+// VTABLE: SWBF2 0x0079f6cc
 class IGalaxyListener
 {
 public:
@@ -300,6 +304,7 @@ private:
     IListenerRegistrar* registrar;
 };
 
-} }
+}
+}
 
 #endif

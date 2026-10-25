@@ -145,7 +145,7 @@ public:
     unsigned int m_uiNumShadersToBind;
     pcRedShader** m_apShadersToBind;
 
-    // GLOBAL: SWBF2 0x007f4fe8
+
     static unsigned int s_IDCount;
 
     // FUNCTION: SWBF2 0x006ac920
@@ -238,7 +238,11 @@ public:
                                        const RedColor& color1,
                                        float fArg7);
 
-    enum { FACTORY_SLOTS = 256 };
+enum
+{
+FACTORY_SLOTS = 256
+}
+;
 
     // GLOBAL: SWBF2 0x007f5054
     static PblHashTable<const pcRedShader, FACTORY_SLOTS> s_ShaderFactoryByRenderType;

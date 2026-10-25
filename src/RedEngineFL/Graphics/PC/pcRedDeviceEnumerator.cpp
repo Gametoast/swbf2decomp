@@ -29,6 +29,7 @@ bool AppRequiresWindowed = false;
 // GLOBAL: SWBF2 0x009cab02
 bool AppRequiresFullscreen = false;
 // GLOBAL: SWBF2 0x009cab04
+// ConfirmDeviceCallback
 bool (*ConfirmDeviceCallback)(D3DCAPS9* pCaps, VertexProcessingType vpType,
                               D3DFORMAT backBufferFormat) = 0;
 

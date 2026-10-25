@@ -14,11 +14,13 @@ pcRedShader::GetStateFuncT pcClearShader::GetStateFuncArray[MAX_PIPELINES];
 pcRedShader::BeginFuncT pcClearShader::BeginFuncArray[MAX_PIPELINES];
 pcRedShader::EndFuncT pcClearShader::EndFuncArray[MAX_PIPELINES];
 pcRedShader::RenderFuncT pcClearShader::RenderFuncArray[MAX_PIPELINES];
-// GLOBAL: SWBF2 0x009c9c5c
 // SYNTHETIC: SWBF2 0x00409de0
 // `dynamic initializer for 'pcClearShader::s_shaderDef''
 // SYNTHETIC: SWBF2 0x00769e00
 // `dynamic atexit destructor for 'pcClearShader::s_shaderDef''
+
+// GLOBAL: SWBF2 0x009c9c5c
+// pcClearShader::s_shaderDef
 pcRedShaderDef pcClearShader::s_shaderDef;
 
 // FUNCTION: SWBF2 0x00706840
@@ -297,16 +299,20 @@ void pcClearShader::_StaticInit() const
 {
 }
 
-// GLOBAL: SWBF2 0x009c9c88
 // SYNTHETIC: SWBF2 0x00409e00
 // `dynamic initializer for 'pcClearShader::s_uiRenderTypeHash''
+
+// GLOBAL: SWBF2 0x009c9c88
+// pcClearShader::s_uiRenderTypeHash
 unsigned int pcClearShader::s_uiRenderTypeHash = PblHash("clear");
 
-// GLOBAL: SWBF2 0x009c9c24
 // SYNTHETIC: SWBF2 0x00409dc0
 // `dynamic initializer for 'pcClearShader::s_Factory''
 // SYNTHETIC: SWBF2 0x00769de0
 // `dynamic atexit destructor for 'pcClearShader::s_Factory''
+
+// GLOBAL: SWBF2 0x009c9c24
+// pcClearShader::s_Factory
 pcClearShader pcClearShader::s_Factory;
 
 // SYNTHETIC: SWBF2 0x00409e20
@@ -316,4 +322,5 @@ pcClearShader pcClearShader::s_Factory;
 // `dynamic initializer for 'PblMath::fOneOverTwoPi''
 
 // GLOBAL: SWBF2 0x009c9c20
+// g_pcClearShader
 unsigned int g_pcClearShader;

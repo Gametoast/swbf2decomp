@@ -16,17 +16,23 @@
 
 void __cdecl PblTraceP(const char* Format, ...);
 
-// GLOBAL: SWBF2 0x009ca964
 // SYNTHETIC: SWBF2 0x0040a650
 // `dynamic initializer for 's_uiDefaultSpotLightMapHash''
+
+// GLOBAL: SWBF2 0x009ca964
+// s_uiDefaultSpotLightMapHash
 static unsigned int s_uiDefaultSpotLightMapHash = PblHash("default_spotlight");
-// GLOBAL: SWBF2 0x009ca968
 // SYNTHETIC: SWBF2 0x0040a670
 // `dynamic initializer for 's_uiLightVolumeMapHash''
+
+// GLOBAL: SWBF2 0x009ca968
+// s_uiLightVolumeMapHash
 static unsigned int s_uiLightVolumeMapHash = PblHash("attenuation_volume");
-// GLOBAL: SWBF2 0x009ca93c
 // SYNTHETIC: SWBF2 0x0040a690
 // `dynamic initializer for 's_uiNormalizationCubeMapHash''
+
+// GLOBAL: SWBF2 0x009ca93c
+// s_uiNormalizationCubeMapHash
 static unsigned int s_uiNormalizationCubeMapHash = PblHash("cube_normalizationmap");
 
 // GLOBAL: SWBF2 0x007854d8
@@ -589,4 +595,5 @@ pcRedShaderDef pcPerPixelDiffuseLightingShader::s_shaderDef("perpixeldiffuseligh
 // `dynamic initializer for 'PblMath::fOneOverHalfPi''
 
 // GLOBAL: SWBF2 0x009ca908
+// g_pcPerPixelDiffuseLightingShader
 unsigned int g_pcPerPixelDiffuseLightingShader;

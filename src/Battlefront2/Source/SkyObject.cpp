@@ -19,7 +19,10 @@ int SkyObjectManager::mNumObjectClasses;
 // GLOBAL: SWBF2 0x01eaf06c
 SkyObjectManager::SkyObjectClass* SkyObjectManager::mObjectClasses[10];
 
-namespace SkyManager { void Activate(); }
+namespace SkyManager
+{
+void Activate();
+}
 
 // FUNCTION: SWBF2 0x00638d30
 void SkyManager::Activate()

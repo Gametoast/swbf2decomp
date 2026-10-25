@@ -27,9 +27,13 @@ public:
 
 // SYNTHETIC: SWBF2 0x00405a30
 // `dynamic initializer for 'OrdnanceBeam::rttiHashOrdnanceBeam''
+// OrdnanceBeam::rttiHashOrdnanceBeam
+
 // GLOBAL: SWBF2 0x01ef2614
 // OrdnanceBeam::rttiHashOrdnanceBeam
 PblHash OrdnanceBeam::rttiHashOrdnanceBeam("OrdnanceBeam");
+// GLOBAL: SWBF2 0x0078a7b8
+// OrdnanceBeam::rttiNameOrdnanceBeam
 const char OrdnanceBeam::rttiNameOrdnanceBeam[] = "OrdnanceBeam";
 
 // FUNCTION: SWBF2 0x005f9670
@@ -40,9 +44,13 @@ const char* OrdnanceBeamClass::GetDerivedRttiName() const { return rttiNameOrdna
 
 // SYNTHETIC: SWBF2 0x00405a40
 // `dynamic initializer for 'OrdnanceBeamClass::rttiHashOrdnanceBeamClass''
+// OrdnanceBeamClass::rttiHashOrdnanceBeamClass
+
 // GLOBAL: SWBF2 0x01ef2618
 // OrdnanceBeamClass::rttiHashOrdnanceBeamClass
 PblHash OrdnanceBeamClass::rttiHashOrdnanceBeamClass("OrdnanceBeamClass");
+// GLOBAL: SWBF2 0x0078a79c
+// OrdnanceBeamClass::rttiNameOrdnanceBeamClass
 const char OrdnanceBeamClass::rttiNameOrdnanceBeamClass[] = "OrdnanceBeamClass";
 
 // FUNCTION: SWBF2 0x005fa180

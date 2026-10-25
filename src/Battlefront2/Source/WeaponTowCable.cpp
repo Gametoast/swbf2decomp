@@ -29,16 +29,24 @@ namespace
 
 // SYNTHETIC: SWBF2 0x004072c0
 // `dynamic initializer for 'WeaponTowCable::rttiHashWeaponTowCable''
+// WeaponTowCable::rttiHashWeaponTowCable
+
 // GLOBAL: SWBF2 0x01f9a91c
 // WeaponTowCable::rttiHashWeaponTowCable
 PblHash WeaponTowCable::rttiHashWeaponTowCable("WeaponTowCable");
+// GLOBAL: SWBF2 0x0078c2b0
+// WeaponTowCable::rttiNameWeaponTowCable
 const char WeaponTowCable::rttiNameWeaponTowCable[] = "WeaponTowCable";
 
 // SYNTHETIC: SWBF2 0x004072d0
 // `dynamic initializer for 'WeaponTowCableClass::rttiHashWeaponTowCableClass''
+// WeaponTowCableClass::rttiHashWeaponTowCableClass
+
 // GLOBAL: SWBF2 0x01f9a920
 // WeaponTowCableClass::rttiHashWeaponTowCableClass
 PblHash WeaponTowCableClass::rttiHashWeaponTowCableClass("WeaponTowCableClass");
+// GLOBAL: SWBF2 0x0078c2c4
+// WeaponTowCableClass::rttiNameWeaponTowCableClass
 const char WeaponTowCableClass::rttiNameWeaponTowCableClass[] = "WeaponTowCableClass";
 
 // FUNCTION: SWBF2 0x00692a30

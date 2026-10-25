@@ -127,7 +127,8 @@ void AudibleManager::UpdateAudience(Controller* pController)
     }
 }
 
-namespace AudibleManager {
+namespace AudibleManager
+{
 
 // FUNCTION: SWBF2 0x00447fe0
 void Reset()

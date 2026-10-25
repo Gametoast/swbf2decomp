@@ -466,4 +466,5 @@ pcRedShaderDef pcPerVertexDiffuseLightingShader::s_shaderDef("pervertexdiffuseli
 // `dynamic initializer for 'PblMath::fOneOverHalfPi''
 
 // GLOBAL: SWBF2 0x009ca874
+// g_pcPerVertexDiffuseLightingShader
 unsigned int g_pcPerVertexDiffuseLightingShader;

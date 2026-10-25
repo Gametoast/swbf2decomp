@@ -8,6 +8,7 @@
 namespace Snd
 {
 
+// VTABLE: SWBF2 0x007868a8
 class StreamGSMDecoder : public StreamCodec
 {
 public:

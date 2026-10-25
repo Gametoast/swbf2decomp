@@ -42,10 +42,11 @@ static inline const PblVector3& LastPosition(const CollisionObject* pObject)
 
 // GLOBAL: SWBF2 0x01eb1368
 int CollisionBodyPrimitive::_HashTableNumEntries;
-// GLOBAL: SWBF2 0x01eb136c
 // SYNTHETIC: SWBF2 0x00402440
 // `dynamic initializer for 'CollisionBodyPrimitive::_HashTable''
 
+// GLOBAL: SWBF2 0x01eb136c
+// CollisionBodyPrimitive::_HashTable
 PblHashTable<CollisionBodyPrimitive, 1024> CollisionBodyPrimitive::_HashTable;
 
 // FUNCTION: SWBF2 0x0045ce40

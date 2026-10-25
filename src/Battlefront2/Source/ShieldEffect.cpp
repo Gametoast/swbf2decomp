@@ -3,11 +3,13 @@
 #include "PebbleFL/Common/PblHashTable.h"
 #include "Battlefront2Lod.h"
 
-// GLOBAL: SWBF2 0x01f6dda8
 // SYNTHETIC: SWBF2 0x00406370
 // `dynamic initializer for 'ShieldEffect::sMemoryPool''
 // SYNTHETIC: SWBF2 0x007694a0
 // `dynamic atexit destructor for 'ShieldEffect::sMemoryPool''
+
+// GLOBAL: SWBF2 0x01f6dda8
+// ShieldEffect::sMemoryPool
 MemoryPool ShieldEffect::sMemoryPool("ShieldEffect", 0xF0);
 
 // GLOBAL: SWBF2 0x01eaf060
@@ -77,7 +79,8 @@ FLEffectClass* ShieldEffectManager::BuildClass(PblConfig& config) const
     return pClass;
 }
 
-namespace {
+namespace
+{
 
 inline unsigned char ClampColorComponent(float f)
 {

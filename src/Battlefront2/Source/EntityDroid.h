@@ -119,12 +119,12 @@ public:
 class CollisionResult;
 class Restrictor;
 
-// VTABLE: SWBF2 0x0079ab0c
+// VTABLE: SWBF2 0x0079ab0c EntityEx
 // VTABLE: SWBF2 0x0079ac7c CollisionObject
 // VTABLE: SWBF2 0x0079aa14 RedSceneObject
 // VTABLE: SWBF2 0x0079aa94 Damageable
 // VTABLE: SWBF2 0x0079acd0 PblHandled
-// VTABLE: SWBF2 0x0079a944 Controllable
+// VTABLE: SWBF2 0x0079a944 Thread
 // VTABLE: SWBF2 0x0079ac34 Trackable
 class EntityDroid : public GameObject, public Controllable
 {
@@ -153,6 +153,8 @@ public:
     virtual ~EntityDroid();
 
     static void* operator new(size_t uSize) { return sMemoryPool.Allocate(uSize); }
+    // SYNTHETIC: SWBF2 0x00499390
+    // EntityDroid::operator delete
     static void operator delete(void* pBlock) { sMemoryPool.Free(pBlock); }
 
     virtual bool IsRtti(unsigned int uRtti) const;

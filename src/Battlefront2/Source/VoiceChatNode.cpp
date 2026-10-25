@@ -40,14 +40,18 @@ VoiceChat::Node::Header::Header()
     mBits = 0;
 }
 
-// GLOBAL: SWBF2 0x01f9a26c
 // SYNTHETIC: SWBF2 0x00406f80
 // `dynamic initializer for 'VoiceChat::Node::sReadHeader''
+
+// GLOBAL: SWBF2 0x01f9a26c
+// VoiceChat::Node::sReadHeader
 VoiceChat::Node::Header VoiceChat::Node::sReadHeader;
 
-// GLOBAL: SWBF2 0x01f9a730
 // SYNTHETIC: SWBF2 0x00406f90
 // `dynamic initializer for 'VoiceChat::Node::sWriteHeader''
+
+// GLOBAL: SWBF2 0x01f9a730
+// VoiceChat::Node::sWriteHeader
 VoiceChat::Node::Header VoiceChat::Node::sWriteHeader;
 
 namespace VoiceChat

@@ -10,6 +10,7 @@
 class RedModel;
 class MemoryPool;
 
+// VTABLE: SWBF2 0x00784648
 class RedShadingState : public PblRef
 {
 public:

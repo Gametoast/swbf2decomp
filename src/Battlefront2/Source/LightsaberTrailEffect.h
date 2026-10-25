@@ -72,8 +72,8 @@ public:
  
  
 
-// VTABLE: SWBF2 0x007a3d20
-// VTABLE: SWBF2 0x007a3d18
+// VTABLE: SWBF2 0x007a3d20 Thread
+// VTABLE: SWBF2 0x007a3d18 PblHandled
 class LightsaberTrail : public FLEffectObject
 {
 public:

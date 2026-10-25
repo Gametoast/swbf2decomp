@@ -5,17 +5,22 @@
 
 // SYNTHETIC: SWBF2 0x00403b10
 // `dynamic initializer for 'FoleyFXSoldier::rttiHashFoleyFXSoldier''
+// FoleyFXSoldier::rttiHashFoleyFXSoldier
+
 // GLOBAL: SWBF2 0x01ebd13c
 // FoleyFXSoldier::rttiHashFoleyFXSoldier
 PblHash FoleyFXSoldier::rttiHashFoleyFXSoldier("FoleyFXSoldier");
+// GLOBAL: SWBF2 0x007898d4
+// FoleyFXSoldier::rttiNameFoleyFXSoldier
 const char FoleyFXSoldier::rttiNameFoleyFXSoldier[] = "FoleyFXSoldier";
 
-// GLOBAL: SWBF2 0x007ec1a4
 // SYNTHETIC: SWBF2 0x00403af0
 // `dynamic initializer for 'FoleyFXSoldier::smFreeList''
 // SYNTHETIC: SWBF2 0x00768800
 // `dynamic atexit destructor for 'FoleyFXSoldier::smFreeList''
 
+// GLOBAL: SWBF2 0x007ec1a4
+// FoleyFXSoldier::smFreeList
 Snd::FreeList FoleyFXSoldier::smFreeList(sizeof(FoleyFXSoldier), 4, 8, 1);
 
 

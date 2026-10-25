@@ -5,6 +5,7 @@
 
 class RedModel;
 
+// VTABLE: SWBF2 0x00773148
 class Red3DModelElementLite : public RedInterfaceElement
 {
 public:

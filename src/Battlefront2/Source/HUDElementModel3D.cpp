@@ -14,11 +14,13 @@ static const unsigned int kHardpointHash        = 0x4e2c2692;
 static const unsigned int kInheritMeshInfoHash  = 0x36ea8575;
 static const unsigned int kMeshInfoHash         = 0x4b426ca0;
 
-// GLOBAL: SWBF2 0x007eba38
 // SYNTHETIC: SWBF2 0x00403fd0
 // `dynamic initializer for 'HUD::ElementModel3D::sModelList''
 // SYNTHETIC: SWBF2 0x00768b50
 // `dynamic atexit destructor for 'HUD::ElementModel3D::sModelList''
+
+// GLOBAL: SWBF2 0x007eba38
+// HUD::ElementModel3D::sModelList
 PblListDouble HUD::ElementModel3D::sModelList;
 
 // FUNCTION: SWBF2 0x00555c50

@@ -14,10 +14,12 @@ class GameObject;
 class Ordnance;
 class RedRegion;
 
+// VTABLE: SWBF2 0x00797418
 class CollisionManager : public Thread
 {
 public:
 
+    // VTABLE: SWBF2 0x00797430
     class OrdnanceUpdate : public Thread
     {
     public:

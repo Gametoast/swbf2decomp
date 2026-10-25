@@ -36,14 +36,32 @@
 #include "RedEngineFL/Util/RedLocalizeDB.h"
 #include "RedEngineFL/Application/pc/pcRenderHelpers.h"
 
-namespace Lua_Callbacks { bool IsTrainingMission(); }
-namespace Lua_Callbacks { bool IsMetaGameStateSaved(); }
-namespace Lua_Callbacks { void __fastcall GetMissionWorld(char* pcWorld, int); }
+namespace Lua_Callbacks
+{
+bool IsTrainingMission();
+}
+namespace Lua_Callbacks
+{
+bool IsMetaGameStateSaved();
+}
+namespace Lua_Callbacks
+{
+void __fastcall GetMissionWorld(char* pcWorld, int);
+}
 
-namespace PblProfile { bool IsPaused(); }
-namespace PblProfile { void SetPaused(bool bValue); }
+namespace PblProfile
+{
+bool IsPaused();
+}
+namespace PblProfile
+{
+void SetPaused(bool bValue);
+}
 
-namespace GameLoop { extern bool mbHistoricalRules; }
+namespace GameLoop
+{
+extern bool mbHistoricalRules;
+}
 
 extern "C" PblVector3* __stdcall D3DXVec3Normalize(PblVector3* pOut, const PblVector3* pV);
 
@@ -108,9 +126,11 @@ static RedColor MODE_NAME_COLOR = { 0xc8, 0xc8, 0xc8, 0xff };
 // GLOBAL: SWBF2 0x007ebb18
 static RedColor DEFAULT_LEVELTIPS_TEXT_COLOR = { 0xc8, 0xc8, 0xff, 0xff };
 
-// GLOBAL: SWBF2 0x01ec6108
 // SYNTHETIC: SWBF2 0x00404120
 // `dynamic initializer for 'DEFAULT_LED_TEXTURE_HASH''
+
+// GLOBAL: SWBF2 0x01ec6108
+// DEFAULT_LED_TEXTURE_HASH
 static unsigned int DEFAULT_LED_TEXTURE_HASH = PblHash("white");
 
 // GLOBAL: SWBF2 0x007e69d8
@@ -131,17 +151,21 @@ static unsigned __int64 load_update_qpc_stamp;
 // GLOBAL: SWBF2 0x01e573f4
 LoadDisplay* LoadDisplay::sInstance;
 
-// GLOBAL: SWBF2 0x01ec6410
 // SYNTHETIC: SWBF2 0x00404140
 // `dynamic initializer for 'LoadDisplay::sTipsDatabase''
 // SYNTHETIC: SWBF2 0x00768c60
 // `dynamic atexit destructor for 'LoadDisplay::sTipsDatabase''
+
+// GLOBAL: SWBF2 0x01ec6410
+// LoadDisplay::sTipsDatabase
 LoadDisplay::IDDatabase LoadDisplay::sTipsDatabase;
-// GLOBAL: SWBF2 0x01ec70a0
 // SYNTHETIC: SWBF2 0x00404160
 // `dynamic initializer for 'LoadDisplay::sLVLDatabase''
 // SYNTHETIC: SWBF2 0x00768c70
 // `dynamic atexit destructor for 'LoadDisplay::sLVLDatabase''
+
+// GLOBAL: SWBF2 0x01ec70a0
+// LoadDisplay::sLVLDatabase
 LoadDisplay::IDDatabase LoadDisplay::sLVLDatabase;
 
 bool IsJournaling()

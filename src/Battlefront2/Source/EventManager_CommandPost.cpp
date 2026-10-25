@@ -81,43 +81,59 @@ void Cleanup();
 }
 }
 
-namespace EventManager {
-namespace CommandPostEvent {
+namespace EventManager
+{
+namespace CommandPostEvent
+{
 extern Event<CommandPost, unsigned __int64> mBeginNeutralize;
 }
 }
-namespace EventManager {
-namespace CommandPostEvent {
+namespace EventManager
+{
+namespace CommandPostEvent
+{
 extern Event<CommandPost, unsigned __int64> mAbortNeutralize;
 }
 }
-namespace EventManager {
-namespace CommandPostEvent {
+namespace EventManager
+{
+namespace CommandPostEvent
+{
 extern Event<CommandPost, unsigned __int64> mFinishNeutralize;
 }
 }
-namespace EventManager {
-namespace CommandPostEvent {
+namespace EventManager
+{
+namespace CommandPostEvent
+{
 extern Event<CommandPost, unsigned __int64> mBeginCapture;
 }
 }
-namespace EventManager {
-namespace CommandPostEvent {
+namespace EventManager
+{
+namespace CommandPostEvent
+{
 extern Event<CommandPost, unsigned __int64> mAbortCapture;
 }
 }
-namespace EventManager {
-namespace CommandPostEvent {
+namespace EventManager
+{
+namespace CommandPostEvent
+{
 extern Event<CommandPost, unsigned __int64> mFinishCapture;
 }
 }
-namespace EventManager {
-namespace CommandPostEvent {
+namespace EventManager
+{
+namespace CommandPostEvent
+{
 extern Event<CommandPost, DamageOwner> mKill;
 }
 }
-namespace EventManager {
-namespace CommandPostEvent {
+namespace EventManager
+{
+namespace CommandPostEvent
+{
 extern Event<CommandPost, char> mRespawn;
 }
 }
@@ -334,7 +350,8 @@ bool LuaPushItem<char>(char&)
 }
 }
 
-namespace EventManager {
+namespace EventManager
+{
 
 // FUNCTION: SWBF2 0x0050fc40
 void CommandPostEvent::Cleanup()
@@ -350,20 +367,23 @@ void CommandPostEvent::Cleanup()
 }
 }
 
-namespace EventManager {
+namespace EventManager
+{
 
 // TEMPLATE: SWBF2 0x0050fc90
 // EventManager::Event<CommandPost,unsigned __int64>::Callback::~Callback
 template Event<CommandPost, unsigned __int64>::Callback::~Callback();
 }
 
-namespace EventManager {
+namespace EventManager
+{
 
 // FUNCTION: SWBF2 0x0050fd00
 template Event<CommandPost, DamageOwner>::Callback::~Callback();
 }
 
-namespace EventManager {
+namespace EventManager
+{
 
 // TEMPLATE: SWBF2 0x0050fd70
 // EventManager::Event<CommandPost,char>::Callback::~Callback
@@ -374,7 +394,10 @@ namespace EventManager
 {
 
 int DummyLuaCallback(lua_State* L);
-namespace CommandPostEvent { void Init(); }
+namespace CommandPostEvent
+{
+void Init();
+}
 
 
 
@@ -696,60 +719,76 @@ namespace EventManager
 namespace CommandPostEvent
 {
 
-// GLOBAL: SWBF2 0x007ebb90
 // SYNTHETIC: SWBF2 0x00403140
 // `dynamic initializer for 'EventManager::CommandPostEvent::mBeginNeutralize''
 // SYNTHETIC: SWBF2 0x007675a0
 // `dynamic atexit destructor for 'EventManager::CommandPostEvent::mBeginNeutralize''
+
+// GLOBAL: SWBF2 0x007ebb90
+// mBeginNeutralize
 Event<CommandPost, unsigned __int64> mBeginNeutralize("BeginNeutralize");
 
-// GLOBAL: SWBF2 0x007eba60
 // SYNTHETIC: SWBF2 0x00403170
 // `dynamic initializer for 'EventManager::CommandPostEvent::mAbortNeutralize''
 // SYNTHETIC: SWBF2 0x00767620
 // `dynamic atexit destructor for 'EventManager::CommandPostEvent::mAbortNeutralize''
+
+// GLOBAL: SWBF2 0x007eba60
+// mAbortNeutralize
 Event<CommandPost, unsigned __int64> mAbortNeutralize("AbortNeutralize");
 
-// GLOBAL: SWBF2 0x007ebb50
 // SYNTHETIC: SWBF2 0x004031a0
 // `dynamic initializer for 'EventManager::CommandPostEvent::mFinishNeutralize''
 // SYNTHETIC: SWBF2 0x007676a0
 // `dynamic atexit destructor for 'EventManager::CommandPostEvent::mFinishNeutralize''
+
+// GLOBAL: SWBF2 0x007ebb50
+// mFinishNeutralize
 Event<CommandPost, unsigned __int64> mFinishNeutralize("FinishNeutralize");
 
-// GLOBAL: SWBF2 0x007ebb20
 // SYNTHETIC: SWBF2 0x004031d0
 // `dynamic initializer for 'EventManager::CommandPostEvent::mBeginCapture''
 // SYNTHETIC: SWBF2 0x00767720
 // `dynamic atexit destructor for 'EventManager::CommandPostEvent::mBeginCapture''
+
+// GLOBAL: SWBF2 0x007ebb20
+// mBeginCapture
 Event<CommandPost, unsigned __int64> mBeginCapture("BeginCapture");
 
-// GLOBAL: SWBF2 0x007ebaa0
 // SYNTHETIC: SWBF2 0x00403200
 // `dynamic initializer for 'EventManager::CommandPostEvent::mAbortCapture''
 // SYNTHETIC: SWBF2 0x007677a0
 // `dynamic atexit destructor for 'EventManager::CommandPostEvent::mAbortCapture''
+
+// GLOBAL: SWBF2 0x007ebaa0
+// mAbortCapture
 Event<CommandPost, unsigned __int64> mAbortCapture("AbortCapture");
 
-// GLOBAL: SWBF2 0x007ebac0
 // SYNTHETIC: SWBF2 0x00403230
 // `dynamic initializer for 'EventManager::CommandPostEvent::mFinishCapture''
 // SYNTHETIC: SWBF2 0x00767820
 // `dynamic atexit destructor for 'EventManager::CommandPostEvent::mFinishCapture''
+
+// GLOBAL: SWBF2 0x007ebac0
+// mFinishCapture
 Event<CommandPost, unsigned __int64> mFinishCapture("FinishCapture");
 
-// GLOBAL: SWBF2 0x007eba80
 // SYNTHETIC: SWBF2 0x00403260
 // `dynamic initializer for 'EventManager::CommandPostEvent::mKill''
 // SYNTHETIC: SWBF2 0x007678a0
 // `dynamic atexit destructor for 'EventManager::CommandPostEvent::mKill''
+
+// GLOBAL: SWBF2 0x007eba80
+// mKill
 Event<CommandPost, DamageOwner> mKill("CommandPostKill");
 
-// GLOBAL: SWBF2 0x007ebb00
 // SYNTHETIC: SWBF2 0x00403290
 // `dynamic initializer for 'EventManager::CommandPostEvent::mRespawn''
 // SYNTHETIC: SWBF2 0x00767920
 // `dynamic atexit destructor for 'EventManager::CommandPostEvent::mRespawn''
+
+// GLOBAL: SWBF2 0x007ebb00
+// mRespawn
 Event<CommandPost, char> mRespawn("CommandPostRespawn");
 
 }

@@ -18,9 +18,13 @@ namespace AIUtil
 
 // SYNTHETIC: SWBF2 0x004071f0
 // `dynamic initializer for 'WeaponLauncherClass::rttiHashWeaponLauncherClass''
+// WeaponLauncherClass::rttiHashWeaponLauncherClass
+
 // GLOBAL: SWBF2 0x01f9a8e8
 // WeaponLauncherClass::rttiHashWeaponLauncherClass
 PblHash WeaponLauncherClass::rttiHashWeaponLauncherClass("WeaponLauncherClass");
+// GLOBAL: SWBF2 0x0078c0a4
+// WeaponLauncherClass::rttiNameWeaponLauncherClass
 const char WeaponLauncherClass::rttiNameWeaponLauncherClass[] = "WeaponLauncherClass";
 
 // FUNCTION: SWBF2 0x00687990
@@ -98,9 +102,13 @@ WeaponLauncher* WeaponLauncherClass::Build(const WeaponDesc& desc)
 
 // SYNTHETIC: SWBF2 0x004071e0
 // `dynamic initializer for 'WeaponLauncher::rttiHashWeaponLauncher''
+// WeaponLauncher::rttiHashWeaponLauncher
+
 // GLOBAL: SWBF2 0x01f9a8e4
 // WeaponLauncher::rttiHashWeaponLauncher
 PblHash WeaponLauncher::rttiHashWeaponLauncher("WeaponLauncher");
+// GLOBAL: SWBF2 0x0078c094
+// WeaponLauncher::rttiNameWeaponLauncher
 const char WeaponLauncher::rttiNameWeaponLauncher[] = "WeaponLauncher";
 
 // FUNCTION: SWBF2 0x00687390

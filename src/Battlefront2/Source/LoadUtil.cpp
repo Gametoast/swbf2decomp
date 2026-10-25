@@ -117,6 +117,8 @@ char RedStack::sMem[40960];
 // GLOBAL: SWBF2 0x009aba40
 int RedStack::sMemIdx;
 
+// SYNTHETIC: SWBF2 0x00579920
+// pvs::PortalReader::~PortalReader
 pvs::PortalReader::~PortalReader()
 {
 }
@@ -745,7 +747,8 @@ inline void* BaseHint::operator new(unsigned int uSize)
     return sMemoryPool.Allocate(uSize);
 }
 
-namespace LoadUtil {
+namespace LoadUtil
+{
 
 // FUNCTION: SWBF2 0x0057a3e0
 BaseHint* ProcessHintInfo(PblFileChunk& chunk)
@@ -830,7 +833,8 @@ void LoadUtil::ProcessHint(PblFileChunk& chunk)
     }
 }
 
-namespace LoadUtil {
+namespace LoadUtil
+{
 
 // FUNCTION: SWBF2 0x0057a790
 void ProcessBarrierInfo(PblFileChunk& chunk)

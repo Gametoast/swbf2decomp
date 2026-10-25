@@ -7,8 +7,8 @@
 #include "CommandPost.h"
 #include "EntityWalker.h"
 
-// VTABLE: SWBF2 0x00798854
-// VTABLE: SWBF2 0x007987d4
+// VTABLE: SWBF2 0x00798854 EntityWalkerClass
+// VTABLE: SWBF2 0x007987d4 CommandPostClass
 class CommandWalkerClass : public EntityWalkerClass, public CommandPostClass
 {
 public:
@@ -34,12 +34,12 @@ public:
 
 #include "RedEngineFL/Memory/RedMemoryPool.h"
 
-// VTABLE: SWBF2 0x00798690
+// VTABLE: SWBF2 0x00798690 EntityEx
 // VTABLE: SWBF2 0x007989a0 CollisionObject
 // VTABLE: SWBF2 0x00798628 RedSceneObject
 // VTABLE: SWBF2 0x00798974 Damageable
 // VTABLE: SWBF2 0x0079884c PblHandled
-// VTABLE: SWBF2 0x007988a4 Controllable
+// VTABLE: SWBF2 0x007988a4 Thread
 // VTABLE: SWBF2 0x007987e0 Trackable
 class CommandWalker : public EntityWalker
 {
@@ -48,6 +48,8 @@ public:
     virtual ~CommandWalker();
 
     static void* operator new(unsigned int uSize) { return sMemoryPool.Allocate(uSize); }
+    // SYNTHETIC: SWBF2 0x0047fdb0
+    // CommandWalker::operator delete
     static void operator delete(void* pBlock) { sMemoryPool.Free(pBlock); }
 
     virtual bool IsRtti(unsigned int uRtti) const;

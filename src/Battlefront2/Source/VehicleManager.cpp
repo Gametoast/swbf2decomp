@@ -55,18 +55,22 @@ namespace
     }
 }
 
-// GLOBAL: SWBF2 0x007ec3cc
 // SYNTHETIC: SWBF2 0x00406db0
 // `dynamic initializer for 'sHostVehicles''
 // SYNTHETIC: SWBF2 0x00769700
 // `dynamic atexit destructor for 'sHostVehicles''
+
+// GLOBAL: SWBF2 0x007ec3cc
+// sHostVehicles
 ListPool<PblHandle<GameObject>, int> sHostVehicles(1200);
 
-// GLOBAL: SWBF2 0x007ec3dc
 // SYNTHETIC: SWBF2 0x00406e60
 // `dynamic initializer for 'sClientVehicles''
 // SYNTHETIC: SWBF2 0x00769730
 // `dynamic atexit destructor for 'sClientVehicles''
+
+// GLOBAL: SWBF2 0x007ec3dc
+// sClientVehicles
 ListPool<PblHandle<GameObject>, int> sClientVehicles(1200);
 
 // GLOBAL: SWBF2 0x01eafcf4

@@ -10,7 +10,10 @@ class Character;
 class GameObject;
 class RedColor;
 class Team;
-namespace HUD { class ElementGroup; }
+namespace HUD
+{
+class ElementGroup;
+}
 
 // VTABLE: SWBF2 0x007af260
 class SpaceAssault : public Thread

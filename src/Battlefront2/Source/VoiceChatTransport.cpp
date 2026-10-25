@@ -7,9 +7,15 @@
 
 
 
-namespace VoiceChat { void* Alloc(unsigned int uiSize); }
+namespace VoiceChat
+{
+void* Alloc(unsigned int uiSize);
+}
 
-namespace VoiceChat { void Free(void* pBlock); }
+namespace VoiceChat
+{
+void Free(void* pBlock);
+}
 
 
 // FUNCTION: SWBF2 0x006745c0

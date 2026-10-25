@@ -34,24 +34,29 @@ bool mInitFlag;
 // GLOBAL: SWBF2 0x01eaeff4
 bool mLoaded;
 
-// GLOBAL: SWBF2 0x01f03000
 // SYNTHETIC: SWBF2 0x00406060
 // `dynamic initializer for 'PropGenerator::mPropLayers''
 // SYNTHETIC: SWBF2 0x00769360
 // `dynamic atexit destructor for 'PropGenerator::mPropLayers''
+
+// GLOBAL: SWBF2 0x01f03000
+// mPropLayers
 PropLayer mPropLayers[4];
 
-// GLOBAL: SWBF2 0x01f03250
 // SYNTHETIC: SWBF2 0x00406090
 // `dynamic initializer for 'PropGenerator::m_amCamera''
 
+// GLOBAL: SWBF2 0x01f03250
+// m_amCamera
 PblMatrix m_amCamera[1];
 
-// GLOBAL: SWBF2 0x01efd044
 // SYNTHETIC: SWBF2 0x004060a0
 // `dynamic initializer for 'PropGenerator::mThread''
 // SYNTHETIC: SWBF2 0x00769380
 // `dynamic atexit destructor for 'PropGenerator::mThread''
+
+// GLOBAL: SWBF2 0x01efd044
+// mThread
 PropGeneratorThread mThread;
 
 // GLOBAL: SWBF2 0x01eaefcc
@@ -114,11 +119,13 @@ static const float mRandValues[256] = {
 
 static const float MAX_CLUSTER_DISTANCE = 100.0f;
 
-// GLOBAL: SWBF2 0x01efce04
 // SYNTHETIC: SWBF2 0x004060c0
 // `dynamic initializer for 'afScore''
 // SYNTHETIC: SWBF2 0x00769390
 // `dynamic atexit destructor for 'afScore''
+
+// GLOBAL: SWBF2 0x01efce04
+// afScore
 static util::Vector<float> afScore;
 
 // TEMPLATE: SWBF2 0x0062b8e0
@@ -190,6 +197,7 @@ bool PropGenerator::PropGeneratorThread::Update(float fDeltaTime)
 // PropGenerator::PropGeneratorThread::`scalar deleting destructor'
 
 // GLOBAL: SWBF2 0x007e9039
+// flushClusterObjs_
 bool flushClusterObjs_ = true;
 
 // FUNCTION: SWBF2 0x0062a180
@@ -511,7 +519,10 @@ void PropGenerator::Update()
     ResetClusterRenderedFlags();
 }
 
-namespace TreeLine { void CreateTreeLine(PblFileChunk& chunk); }
+namespace TreeLine
+{
+void CreateTreeLine(PblFileChunk& chunk);
+}
 void CreateTreeLineOnPath(unsigned int uPathName, PblFileChunk& chunk);
 
 // FUNCTION: SWBF2 0x0065c890
@@ -913,7 +924,8 @@ const RedLodData* PropGenerator::GetLodData(int iIndex)
 // util::Vector<float,util::BaseArray<float,util::TNewArrayAlloc<float> > >::SetSize
 template bool util::Vector<float>::SetSize(int);
 
-namespace PropGenerator {
+namespace PropGenerator
+{
 
 // FUNCTION: SWBF2 0x0062b660
 void GetTerrainYAndNormal(float x, float z, float& y, PblVector3& vNormal)

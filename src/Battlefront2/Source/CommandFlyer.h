@@ -10,8 +10,8 @@
 #include "PebbleFL/Common/PblHashTable.h"
 #include "RedEngineFL/Memory/RedMemoryPool.h"
 
-// VTABLE: SWBF2 0x00797ff8
-// VTABLE: SWBF2 0x00797fc8
+// VTABLE: SWBF2 0x00797ff8 EntityFlyerClass
+// VTABLE: SWBF2 0x00797fc8 CommandPostClass
 class CommandFlyerClass : public EntityFlyerClass, public CommandPostClass
 {
 public:
@@ -34,6 +34,14 @@ public:
    
  
 
+// VTABLE: SWBF2 0x00797e08 Trackable
+// VTABLE: SWBF2 0x00797e50 CollisionObject
+// VTABLE: SWBF2 0x00797ea4 EntityEx
+// VTABLE: SWBF2 0x00797fd4
+// VTABLE: SWBF2 0x00798044 PblHandled
+// VTABLE: SWBF2 0x0079804c Thread
+// VTABLE: SWBF2 0x0079811c Damageable
+// VTABLE: SWBF2 0x00798148 RedSceneObject
 class CommandFlyer : public EntityFlyer
 {
 public:
@@ -43,6 +51,8 @@ public:
     virtual ~CommandFlyer();
 
     static void* operator new(unsigned int uSize) { return sMemoryPool.Allocate(uSize); }
+    // SYNTHETIC: SWBF2 0x00477be0
+    // CommandFlyer::operator delete
     static void operator delete(void* pBlock) { sMemoryPool.Free(pBlock); }
 
     static void SetupMemoryPool(unsigned int uCount, unsigned int uSize, unsigned int uGrow) { sMemoryPool.Setup(uCount, uSize, uGrow); }

@@ -44,16 +44,24 @@ static EntityClass* sPendingAttachedOdfClass;
 
 // SYNTHETIC: SWBF2 0x00402cc0
 // `dynamic initializer for 'EntityProp::rttiHashEntityProp''
+// EntityProp::rttiHashEntityProp
+
 // GLOBAL: SWBF2 0x01ebbfec
 // EntityProp::rttiHashEntityProp
 PblHash EntityProp::rttiHashEntityProp("EntityProp");
+// GLOBAL: SWBF2 0x00789484
+// EntityProp::rttiNameEntityProp
 const char EntityProp::rttiNameEntityProp[] = "EntityProp";
 
 // SYNTHETIC: SWBF2 0x00402cd0
 // `dynamic initializer for 'EntityPropClass::rttiHashEntityPropClass''
+// EntityPropClass::rttiHashEntityPropClass
+
 // GLOBAL: SWBF2 0x01ebc040
 // EntityPropClass::rttiHashEntityPropClass
 PblHash EntityPropClass::rttiHashEntityPropClass("EntityPropClass");
+// GLOBAL: SWBF2 0x00789490
+// EntityPropClass::rttiNameEntityPropClass
 const char EntityPropClass::rttiNameEntityPropClass[] = "EntityPropClass";
 
 

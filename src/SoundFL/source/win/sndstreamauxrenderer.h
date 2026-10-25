@@ -9,6 +9,7 @@ namespace Snd
 
 class StreamFormat;
 
+// VTABLE: SWBF2 0x00786964
 class StreamAuxRenderer : public DSBufferRenderer
 {
 public:

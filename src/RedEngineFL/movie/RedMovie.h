@@ -11,8 +11,12 @@
 class PblFileChunk;
 class RedTexture;
 
-namespace Snd { class Bus; }
+namespace Snd
+{
+class Bus;
+}
 
+// VTABLE: SWBF2 0x00784024
 class RedMovie : public RedMoviePlayer
 {
 public:

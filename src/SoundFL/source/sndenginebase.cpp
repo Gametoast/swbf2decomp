@@ -19,6 +19,8 @@
 namespace Snd
 {
 
+// GLOBAL: SWBF2 0x009d8410
+// EngineBase::smStreams
 Stream* EngineBase::smStreams;
 // GLOBAL: SWBF2 0x009d8414
 Voice* EngineBase::smVoices;
@@ -29,20 +31,28 @@ unsigned char EngineBase::smVoiceStorage[0xA800];
 
 unsigned char EngineBase::smStreamStorage[0x1446A68];
 
+// GLOBAL: SWBF2 0x01e29688
+// EngineBase::smTimeElapsed
 float EngineBase::smTimeElapsed;
 
+// GLOBAL: SWBF2 0x007e3440
+// EngineBase::smSpeakerConfig
 EngineBase::SpeakerConfig EngineBase::smSpeakerConfig = speakerConfig_Stereo;
 
-// GLOBAL: SWBF2 0x007e3450
 // SYNTHETIC: SWBF2 0x0040b760
 // `dynamic initializer for 'Snd::EngineBase::smVoiceVirtualManager''
 // SYNTHETIC: SWBF2 0x0076a210
 // `dynamic atexit destructor for 'Snd::EngineBase::smVoiceVirtualManager''
+
+// GLOBAL: SWBF2 0x007e3450
+// EngineBase::smVoiceVirtualManager
 VoiceVirtualManager EngineBase::smVoiceVirtualManager;
 
-// GLOBAL: SWBF2 0x01e2968c
 // SYNTHETIC: SWBF2 0x0040b750
 // `dynamic initializer for 'Snd::EngineBase::smSoundRAMAllocator''
+
+// GLOBAL: SWBF2 0x01e2968c
+// EngineBase::smSoundRAMAllocator
 MemoryBitmap EngineBase::smSoundRAMAllocator;
 
 // FUNCTION: SWBF2 0x00731440
@@ -66,11 +76,13 @@ Listener::Listener()
 {
 }
 
-// GLOBAL: SWBF2 0x01e296a8
 // SYNTHETIC: SWBF2 0x0040b720
 // `dynamic initializer for 'Snd::EngineBase::smListeners''
 // SYNTHETIC: SWBF2 0x0076a1f0
 // `dynamic atexit destructor for 'Snd::EngineBase::smListeners''
+
+// GLOBAL: SWBF2 0x01e296a8
+// EngineBase::smListeners
 Listener EngineBase::smListeners[4];
 
 // FUNCTION: SWBF2 0x00733ea0
@@ -466,7 +478,8 @@ Stream::~Stream()
 
 }
 
-namespace Snd {
+namespace Snd
+{
 
 // FUNCTION: SWBF2 0x00734080
 Stream* EngineBase::GetFreeStream()
@@ -482,7 +495,8 @@ Stream* EngineBase::GetFreeStream()
 }
 }
 
-namespace Snd {
+namespace Snd
+{
 
 // FUNCTION: SWBF2 0x00734150
 float EngineBase::GetTimeElapsed()

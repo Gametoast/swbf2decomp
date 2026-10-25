@@ -77,23 +77,33 @@ namespace
 
 // SYNTHETIC: SWBF2 0x00402ba0
 // `dynamic initializer for 'EntityHover::rttiHashEntityHover''
+// EntityHover::rttiHashEntityHover
+
 // GLOBAL: SWBF2 0x01ebbdd0
 // EntityHover::rttiHashEntityHover
 PblHash EntityHover::rttiHashEntityHover("EntityHover");
+// GLOBAL: SWBF2 0x007892dc
+// EntityHover::rttiNameEntityHover
 const char EntityHover::rttiNameEntityHover[] = "EntityHover";
 
-// GLOBAL: SWBF2 0x01ebbdd8
 // SYNTHETIC: SWBF2 0x00402b80
 // `dynamic initializer for 'EntityHover::sMemoryPool''
 // SYNTHETIC: SWBF2 0x00766f60
 // `dynamic atexit destructor for 'EntityHover::sMemoryPool''
+
+// GLOBAL: SWBF2 0x01ebbdd8
+// EntityHover::sMemoryPool
 MemoryPool EntityHover::sMemoryPool("EntityHover", 0x1d10);
 
 // SYNTHETIC: SWBF2 0x00402bb0
 // `dynamic initializer for 'EntityHoverClass::rttiHashEntityHoverClass''
+// EntityHoverClass::rttiHashEntityHoverClass
+
 // GLOBAL: SWBF2 0x01ebbdd4
 // EntityHoverClass::rttiHashEntityHoverClass
 PblHash EntityHoverClass::rttiHashEntityHoverClass("EntityHoverClass");
+// GLOBAL: SWBF2 0x007892b4
+// EntityHoverClass::rttiNameEntityHoverClass
 const char EntityHoverClass::rttiNameEntityHoverClass[] = "EntityHoverClass";
 
 
@@ -177,11 +187,8 @@ EntityHover::PostCollision::~PostCollision()
 // SYNTHETIC: SWBF2 0x004c09c0
 // EntityHover::PostCollision::`scalar deleting destructor'
 
-
-
-
-
 // GLOBAL: SWBF2 0x007e6514
+// sCurrentSection
 static int sCurrentSection = -1;
 // GLOBAL: SWBF2 0x007e6518
 static float sBodySpringLengthRadiusMultiplier = 0.5f;
@@ -357,6 +364,8 @@ inline void* EntityHover::operator new(unsigned int uSize)
     return sMemoryPool.Allocate(uSize);
 }
 
+// SYNTHETIC: SWBF2 0x004c0940
+// EntityHover::operator delete
 inline void EntityHover::operator delete(void* pBlock)
 {
     sMemoryPool.Free(pBlock);
@@ -1593,7 +1602,10 @@ Controllable* GetControllablePilot(Controllable* pControllable);
 
 PblMatrix NormalMatrix(const PblVector3& vDir, const PblVector3& vNormal, const PblVector3& vPos);
 
-namespace SquadCommands { void VehicleCommand(GameObject* pObject, Character* pCharacter); }
+namespace SquadCommands
+{
+void VehicleCommand(GameObject* pObject, Character* pCharacter);
+}
 
 // FUNCTION: SWBF2 0x004c2230
 bool EntityHover::Update(float fDeltaTime)

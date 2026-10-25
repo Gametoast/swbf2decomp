@@ -56,16 +56,24 @@ EntityPropAnimatedClass::EntityPropAnimatedClass(unsigned int uHash)
 
 // SYNTHETIC: SWBF2 0x00402cf0
 // `dynamic initializer for 'EntityPropAnimatedClass::rttiHashEntityPropAnimatedClass''
+// EntityPropAnimatedClass::rttiHashEntityPropAnimatedClass
+
 // GLOBAL: SWBF2 0x01ebc044
 // EntityPropAnimatedClass::rttiHashEntityPropAnimatedClass
 PblHash EntityPropAnimatedClass::rttiHashEntityPropAnimatedClass("EntityPropAnimatedClass");
+// GLOBAL: SWBF2 0x007894b0
+// EntityPropAnimatedClass::rttiNameEntityPropAnimatedClass
 const char EntityPropAnimatedClass::rttiNameEntityPropAnimatedClass[] = "EntityPropAnimatedClass";
 
 // SYNTHETIC: SWBF2 0x00402ce0
 // `dynamic initializer for 'EntityPropAnimated::rttiHashEntityPropAnimated''
+// EntityPropAnimated::rttiHashEntityPropAnimated
+
 // GLOBAL: SWBF2 0x01ebc048
 // EntityPropAnimated::rttiHashEntityPropAnimated
 PblHash EntityPropAnimated::rttiHashEntityPropAnimated("EntityPropAnimated");
+// GLOBAL: SWBF2 0x007894c8
+// EntityPropAnimated::rttiNameEntityPropAnimated
 const char EntityPropAnimated::rttiNameEntityPropAnimated[] = "EntityPropAnimated";
 
 // FUNCTION: SWBF2 0x004db3c0

@@ -317,9 +317,11 @@ void RedSpotLight::_RecalculateProjectionMatrix() const
     m_bProjectionDirty = false;
 }
 
-// GLOBAL: SWBF2 0x009acd30
 // SYNTHETIC: SWBF2 0x00408e50
 // `dynamic initializer for 'RedSpotLight::BLACK''
 // SYNTHETIC: SWBF2 0x00769b20
 // `dynamic atexit destructor for 'RedSpotLight::BLACK''
+
+// GLOBAL: SWBF2 0x009acd30
+// RedSpotLight::BLACK
 RedSpotLight RedSpotLight::BLACK(RedColorValue::BLACK, gVectorUnitZ, gVectorZero, 1.0f, 1.0f);

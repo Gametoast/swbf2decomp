@@ -122,4 +122,7 @@ bool IsWithinTimeConstraint();
 
 }
 
-namespace PathManager { bool GetPathPriority(const PblVector3* a, const PblVector3* b); }
+namespace PathManager
+{
+bool GetPathPriority(const PblVector3* a, const PblVector3* b);
+}

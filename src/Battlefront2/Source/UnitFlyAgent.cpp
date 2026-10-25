@@ -24,12 +24,19 @@
 
 // SYNTHETIC: SWBF2 0x00406cc0
 // `dynamic initializer for 'UnitFlyAgent::rttiHashUnitFlyAgent''
+// UnitFlyAgent::rttiHashUnitFlyAgent
+
 // GLOBAL: SWBF2 0x01f993bc
 // UnitFlyAgent::rttiHashUnitFlyAgent
 PblHash UnitFlyAgent::rttiHashUnitFlyAgent("UnitFlyAgent");
+// GLOBAL: SWBF2 0x0078b844
+// UnitFlyAgent::rttiNameUnitFlyAgent
 const char UnitFlyAgent::rttiNameUnitFlyAgent[] = "UnitFlyAgent";
 
-namespace VehicleManager { int RequestVehiclesInRange(const PblVector3& vPos, GameObject** ppOut, float fRadius, int iMax); }
+namespace VehicleManager
+{
+int RequestVehiclesInRange(const PblVector3& vPos, GameObject** ppOut, float fRadius, int iMax);
+}
 
 // FUNCTION: SWBF2 0x00666790
 UnitFlyAgent::UnitFlyAgent(UnitController* pCtrl)

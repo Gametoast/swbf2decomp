@@ -16,7 +16,10 @@
 class CommandPost;
 class GameObject;
 class UnitController;
-namespace AI { class EventInfo; }
+namespace AI
+{
+class EventInfo;
+}
 
 // VTABLE: SWBF2 0x007afd40
 class UnitTrooperAgent : public UnitAgent

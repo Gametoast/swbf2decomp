@@ -22,9 +22,13 @@ public:
 
 // SYNTHETIC: SWBF2 0x004070e0
 // `dynamic initializer for 'WeaponDestruct::rttiHashWeaponDestruct''
+// WeaponDestruct::rttiHashWeaponDestruct
+
 // GLOBAL: SWBF2 0x01f9a8a4
 // WeaponDestruct::rttiHashWeaponDestruct
 PblHash WeaponDestruct::rttiHashWeaponDestruct("WeaponDestruct");
+// GLOBAL: SWBF2 0x0078bee4
+// WeaponDestruct::rttiNameWeaponDestruct
 const char WeaponDestruct::rttiNameWeaponDestruct[] = "WeaponDestruct";
 
 
@@ -35,9 +39,13 @@ const char WeaponDestruct::rttiNameWeaponDestruct[] = "WeaponDestruct";
 
 // SYNTHETIC: SWBF2 0x004070f0
 // `dynamic initializer for 'WeaponDestructClass::rttiHashWeaponDestructClass''
+// WeaponDestructClass::rttiHashWeaponDestructClass
+
 // GLOBAL: SWBF2 0x01f9a8a8
 // WeaponDestructClass::rttiHashWeaponDestructClass
 PblHash WeaponDestructClass::rttiHashWeaponDestructClass("WeaponDestructClass");
+// GLOBAL: SWBF2 0x0078befc
+// WeaponDestructClass::rttiNameWeaponDestructClass
 const char WeaponDestructClass::rttiNameWeaponDestructClass[] = "WeaponDestructClass";
 
 // FUNCTION: SWBF2 0x00682190

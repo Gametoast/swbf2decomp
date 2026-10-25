@@ -52,6 +52,12 @@ public:
 class EntityBuildingAnimatedClass;
 struct EntityDesc;
 
+// VTABLE: SWBF2 0x00799684 Damageable
+// VTABLE: SWBF2 0x007996b0
+// VTABLE: SWBF2 0x007996c8 PblHandled
+// VTABLE: SWBF2 0x0079971c CollisionObject
+// VTABLE: SWBF2 0x00799770 EntityEx
+// VTABLE: SWBF2 0x00799898 RedSceneObject
 class EntityBuildingAnimated : public EntityBuilding, public Thread
 {
 public:

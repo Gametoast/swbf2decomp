@@ -153,7 +153,8 @@ StreamPacket* StreamSplitter::GetPacket(unsigned int uiOutput)
 
 }
 
-namespace Snd {
+namespace Snd
+{
 
 // FUNCTION: SWBF2 0x0074cee0
 StreamSplitter::StreamSplitter()
@@ -169,7 +170,8 @@ StreamSplitter::StreamSplitter()
 }
 }
 
-namespace Snd {
+namespace Snd
+{
 
 // FUNCTION: SWBF2 0x0074cf30
 StreamSplitter::~StreamSplitter()

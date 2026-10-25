@@ -91,6 +91,12 @@ public:
  
  
 
+// VTABLE: SWBF2 0x0079d5a8 PblHandled
+// VTABLE: SWBF2 0x0079d5b0 EntityEx
+// VTABLE: SWBF2 0x0079d6d8
+// VTABLE: SWBF2 0x0079d6f0 CollisionObject
+// VTABLE: SWBF2 0x0079d744 Damageable
+// VTABLE: SWBF2 0x0079d770 RedSceneObject
 class EntityTrap : public EntityBuilding, public Thread
 {
 public:

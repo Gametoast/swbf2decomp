@@ -480,7 +480,8 @@ void Voice::SourceResampler::Stop()
 }
 }
 
-namespace Snd {
+namespace Snd
+{
 
 // FUNCTION: SWBF2 0x007458f0
 Voice::SourceResampler::~SourceResampler()
@@ -496,7 +497,8 @@ Voice::SourceResampler::~SourceResampler()
 }
 }
 
-namespace Snd {
+namespace Snd
+{
 
 // FUNCTION: SWBF2 0x007459a0
 Voice::~Voice()
@@ -518,7 +520,8 @@ Voice::~Voice()
 }
 }
 
-namespace Snd {
+namespace Snd
+{
 
 // FUNCTION: SWBF2 0x00746120
 void __cdecl Voice::UpdateGain(Voice* pVoice, GainMatrix& rMatrix, bool bPanChanged)
@@ -557,7 +560,8 @@ void __cdecl Voice::UpdateGain(Voice* pVoice, GainMatrix& rMatrix, bool bPanChan
 }
 }
 
-namespace Snd {
+namespace Snd
+{
 
 // FUNCTION: SWBF2 0x00746250
 void __cdecl Voice::UpdatePitch(Voice* pVoice, float fPitch)

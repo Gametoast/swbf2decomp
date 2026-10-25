@@ -41,6 +41,9 @@ public:
  
  
 
+// VTABLE: SWBF2 0x007aca78 PblHandled
+// VTABLE: SWBF2 0x007aca80
+// VTABLE: SWBF2 0x007acae8 Thread
 class OrdnanceGrenade : public OrdnanceShell
 {
 public:

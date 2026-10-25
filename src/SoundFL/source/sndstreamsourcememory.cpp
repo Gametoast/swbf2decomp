@@ -154,7 +154,8 @@ void StreamSourceMemory::Update()
 
 }
 
-namespace Snd {
+namespace Snd
+{
 
 // FUNCTION: SWBF2 0x0074c910
 void StreamSourceMemory::SetLooping(bool bLooping)
@@ -163,7 +164,8 @@ void StreamSourceMemory::SetLooping(bool bLooping)
 }
 }
 
-namespace Snd {
+namespace Snd
+{
 
 // FUNCTION: SWBF2 0x0074c930
 void StreamSourceMemory::Setup(const StreamFormat& rFormat, void* const pData,
@@ -195,7 +197,8 @@ void StreamSourceMemory::Setup(const StreamFormat& rFormat, void* const pData,
 }
 }
 
-namespace Snd {
+namespace Snd
+{
 
 // FUNCTION: SWBF2 0x0074c810
 StreamSourceMemory::~StreamSourceMemory()

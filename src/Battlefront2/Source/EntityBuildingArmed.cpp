@@ -39,16 +39,24 @@ EntityBuildingArmedClass::~EntityBuildingArmedClass()
 
 // SYNTHETIC: SWBF2 0x004028e0
 // `dynamic initializer for 'EntityBuildingArmed::rttiHashEntityBuildingArmed''
+// EntityBuildingArmed::rttiHashEntityBuildingArmed
+
 // GLOBAL: SWBF2 0x01ebb888
 // EntityBuildingArmed::rttiHashEntityBuildingArmed
 PblHash EntityBuildingArmed::rttiHashEntityBuildingArmed("EntityBuildingArmed");
+// GLOBAL: SWBF2 0x0078902c
+// EntityBuildingArmed::rttiNameEntityBuildingArmed
 const char EntityBuildingArmed::rttiNameEntityBuildingArmed[] = "EntityBuildingArmed";
 
 // SYNTHETIC: SWBF2 0x004028f0
 // `dynamic initializer for 'EntityBuildingArmedClass::rttiHashEntityBuildingArmedClass''
+// EntityBuildingArmedClass::rttiHashEntityBuildingArmedClass
+
 // GLOBAL: SWBF2 0x01ebb88c
 // EntityBuildingArmedClass::rttiHashEntityBuildingArmedClass
 PblHash EntityBuildingArmedClass::rttiHashEntityBuildingArmedClass("EntityBuildingArmedClass");
+// GLOBAL: SWBF2 0x00789008
+// EntityBuildingArmedClass::rttiNameEntityBuildingArmedClass
 const char EntityBuildingArmedClass::rttiNameEntityBuildingArmedClass[] = "EntityBuildingArmedClass";
 
 // SYNTHETIC: SWBF2 0x00496710

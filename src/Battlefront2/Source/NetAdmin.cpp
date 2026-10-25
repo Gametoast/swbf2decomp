@@ -661,8 +661,14 @@ bool GetCommand(char* pcToken, AdminCommand& cmd, bool& bNo)
 }
 
 void __fastcall SendAdminMessage(char* pcMessage);
-namespace GameLoop { extern bool sQuitRequested; }
-namespace GameLoop { extern unsigned int sQuitTurn; }
+namespace GameLoop
+{
+extern bool sQuitRequested;
+}
+namespace GameLoop
+{
+extern unsigned int sQuitTurn;
+}
 
 // FUNCTION: SWBF2 0x005aedb0
 void NetAdmin::RemovePlayer(int iPlayer)
@@ -894,6 +900,7 @@ public:
     int GetDeaths(int iTeam, int iStat) const;
 };
 
+// FUNCTION: SWBF2 0x005b12a0
 static bool IsMatch(char* pcMatch, unsigned short* pusLine)
 {
     while (*pusLine == ' ')

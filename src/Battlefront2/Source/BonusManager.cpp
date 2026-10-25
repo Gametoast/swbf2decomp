@@ -104,11 +104,13 @@ const float BonusManager::sTeamBonusLeaderUnlockTime = 120.0f;
 const float BonusManager::sTeamBonusGarrisonThreshold = 0.2f;
 const float BonusManager::sTeamBonusGarrisonExtraReinforcements = 0.2f;
 
-// GLOBAL: SWBF2 0x01eb0630
 // SYNTHETIC: SWBF2 0x00402350
 // `dynamic initializer for 'BonusManager::sInstance''
 // SYNTHETIC: SWBF2 0x00766db0
 // `dynamic atexit destructor for 'BonusManager::sInstance''
+
+// GLOBAL: SWBF2 0x01eb0630
+// BonusManager::sInstance
 BonusManager BonusManager::sInstance;
 
 // FUNCTION: SWBF2 0x0044c5b0

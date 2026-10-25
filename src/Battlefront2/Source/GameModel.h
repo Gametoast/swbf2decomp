@@ -14,6 +14,7 @@ class RedPose;
 class RedShadingPose;
 class RedSkeleton;
 
+// VTABLE: SWBF2 0x0079f874
 class GameModel
 {
 public:

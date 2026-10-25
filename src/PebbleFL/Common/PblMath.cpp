@@ -32,9 +32,11 @@ SinCosTable::SinCosTable()
     }
 }
 
-// GLOBAL: SWBF2 0x009caf38
 // SYNTHETIC: SWBF2 0x0040aea0
 // `dynamic initializer for '_TheSinCosTable''
+
+// GLOBAL: SWBF2 0x009caf38
+// _TheSinCosTable
 SinCosTable _TheSinCosTable;
 
 // FUNCTION: SWBF2 0x00727b70
@@ -96,9 +98,11 @@ static PblQuaternion PblQuaternion_FromAxisAngle(const PblVector3& vAxis, float 
     return q;
 }
 
-// GLOBAL: SWBF2 0x01ec60e0
 // SYNTHETIC: SWBF2 0x00403f40
 // `dynamic initializer for 'sNegativeXRotation80''
+
+// GLOBAL: SWBF2 0x01ec60e0
+// sNegativeXRotation80
 PblQuaternion sNegativeXRotation80 = PblQuaternion_FromAxisAngle(PblVector3(-1.0f, 0.0f, 0.0f), 1.3962634f);
 
 // SYNTHETIC: SWBF2 0x00407300

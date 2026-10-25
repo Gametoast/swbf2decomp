@@ -64,27 +64,35 @@ int RedParticleRenderer::s_cacheIndex;
 // SYNTHETIC: SWBF2 0x006d0bf0
 // RedParticleRenderer::RedParticleRenderer
 
-// GLOBAL: SWBF2 0x009661e0
 // SYNTHETIC: SWBF2 0x00408110
 // `dynamic initializer for 'RedParticleRenderer::s_caches''
+
+// GLOBAL: SWBF2 0x009661e0
+// RedParticleRenderer::s_caches
 RedParticleRenderer RedParticleRenderer::s_caches[15];
 
-// GLOBAL: SWBF2 0x009661dc
 // SYNTHETIC: SWBF2 0x00408180
 // `dynamic initializer for 'kuiParticleShader''
+
+// GLOBAL: SWBF2 0x009661dc
+// kuiParticleShader
 unsigned int kuiParticleShader = PblHash("particle");
 
-// GLOBAL: SWBF2 0x00998210
 // SYNTHETIC: SWBF2 0x004080f0
 // `dynamic initializer for 'RedParticleRenderer::_Instance''
 // SYNTHETIC: SWBF2 0x00769970
 // `dynamic atexit destructor for 'RedParticleRenderer::_Instance''
+
+// GLOBAL: SWBF2 0x00998210
+// RedParticleRenderer::_Instance
 RedParticleRenderer::Renderable RedParticleRenderer::_Instance;
-// GLOBAL: SWBF2 0x009661c0
 // SYNTHETIC: SWBF2 0x004080d0
 // `dynamic initializer for 'RedParticleRenderer::_FarInstance''
 // SYNTHETIC: SWBF2 0x00769960
 // `dynamic atexit destructor for 'RedParticleRenderer::_FarInstance''
+
+// GLOBAL: SWBF2 0x009661c0
+// RedParticleRenderer::_FarInstance
 RedParticleRenderer::Renderable RedParticleRenderer::_FarInstance;
 
 // FUNCTION: SWBF2 0x006d0c00

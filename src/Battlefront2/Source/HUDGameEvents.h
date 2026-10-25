@@ -12,8 +12,10 @@ class WeaponClass;
 class Timer;
 class Controllable;
 
-namespace HUD {
-namespace GameEvents {
+namespace HUD
+{
+namespace GameEvents
+{
 
 struct WeaponEvents
 {

@@ -101,11 +101,13 @@ bool bForceFullDetail = true;
 // `dynamic initializer for 'cvForceFullDetail''
 static RedCommandConsole cvForceFullDetail("terrain.ForceFullDetail", MultiVar(&bForceFullDetail));
 
-// GLOBAL: SWBF2 0x00998240
 // SYNTHETIC: SWBF2 0x004081a0
 // `dynamic initializer for '_TerrainRenderable''
 // SYNTHETIC: SWBF2 0x00769980
 // `dynamic atexit destructor for '_TerrainRenderable''
+
+// GLOBAL: SWBF2 0x00998240
+// _TerrainRenderable
 TerrainRenderable _TerrainRenderable;
 
 // FUNCTION: SWBF2 0x006d34f0

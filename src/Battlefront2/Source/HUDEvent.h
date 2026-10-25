@@ -10,7 +10,8 @@ class RedColor;
 class RedModel;
 class RedTexture;
 
-namespace HUD {
+namespace HUD
+{
 
 class EventHandler;
 class Event;

@@ -35,53 +35,67 @@ SoundLayered::FireForgetLayer* SoundLayered::smFireForgetLayers;
 // GLOBAL: SWBF2 0x01e29db4
 bool SoundLayered::smIsOpen;
 unsigned char SoundLayered::smFireForgetLayerStorage[5888];
-// GLOBAL: SWBF2 0x007e36bc
 // SYNTHETIC: SWBF2 0x0040bbb0
 // `dynamic initializer for 'Snd::SoundLayered::FireForgetLayer::smInactiveList''
 // SYNTHETIC: SWBF2 0x0076a3c0
 // `dynamic atexit destructor for 'Snd::SoundLayered::FireForgetLayer::smInactiveList''
+
+// GLOBAL: SWBF2 0x007e36bc
+// SoundLayered::FireForgetLayer::smInactiveList
 PblListDouble SoundLayered::FireForgetLayer::smInactiveList;
 
-// GLOBAL: SWBF2 0x007e36b4
 // SYNTHETIC: SWBF2 0x0040bb40
 // `dynamic initializer for 'Snd::SoundLayered::FireForgetLayer::smActiveList''
 // SYNTHETIC: SWBF2 0x0076a370
 // `dynamic atexit destructor for 'Snd::SoundLayered::FireForgetLayer::smActiveList''
+
+// GLOBAL: SWBF2 0x007e36b4
+// SoundLayered::FireForgetLayer::smActiveList
 PblListDouble SoundLayered::FireForgetLayer::smActiveList;
 
-// GLOBAL: SWBF2 0x007e3678
 // SYNTHETIC: SWBF2 0x0040bb50
 // `dynamic initializer for 'Snd::SoundLayered::Properties::Layer::smFreeList''
 // SYNTHETIC: SWBF2 0x0076a390
 // `dynamic atexit destructor for 'Snd::SoundLayered::Properties::Layer::smFreeList''
+
+// GLOBAL: SWBF2 0x007e3678
+// SoundLayered::Properties::Layer::smFreeList
 FreeList SoundLayered::Properties::Layer::smFreeList(sizeof(SoundLayered::Properties::Layer), 1, 8, 1);
 
-// GLOBAL: SWBF2 0x007e3694
 // SYNTHETIC: SWBF2 0x0040bb70
 // `dynamic initializer for 'Snd::SoundLayered::Properties::smFreeList''
 // SYNTHETIC: SWBF2 0x0076a3a0
 // `dynamic atexit destructor for 'Snd::SoundLayered::Properties::smFreeList''
+
+// GLOBAL: SWBF2 0x007e3694
+// SoundLayered::Properties::smFreeList
 FreeList SoundLayered::Properties::smFreeList(0x0c, 1, 8, 1);
 
-// GLOBAL: SWBF2 0x007e365c
 // SYNTHETIC: SWBF2 0x0040bb90
 // `dynamic initializer for 'Snd::SoundLayered::SoundLayer::smFreeList''
 // SYNTHETIC: SWBF2 0x0076a3b0
 // `dynamic atexit destructor for 'Snd::SoundLayered::SoundLayer::smFreeList''
+
+// GLOBAL: SWBF2 0x007e365c
+// SoundLayered::SoundLayer::smFreeList
 FreeList SoundLayered::SoundLayer::smFreeList(sizeof(SoundLayered::SoundLayer), 1, 0x40, 0);
 
-// GLOBAL: SWBF2 0x007e36b0
 // SYNTHETIC: SWBF2 0x0040bbc0
 // `dynamic initializer for 'Snd::SoundLayered::Properties::smPropertyList''
 // SYNTHETIC: SWBF2 0x0076a3e0
 // `dynamic atexit destructor for 'Snd::SoundLayered::Properties::smPropertyList''
+
+// GLOBAL: SWBF2 0x007e36b0
+// SoundLayered::Properties::smPropertyList
 PblListSingle SoundLayered::Properties::smPropertyList;
 
-// GLOBAL: SWBF2 0x007e36c4
 // SYNTHETIC: SWBF2 0x0040bbd0
 // `dynamic initializer for 'Snd::SoundLayered::smSoundLayeredList''
 // SYNTHETIC: SWBF2 0x0076a3f0
 // `dynamic atexit destructor for 'Snd::SoundLayered::smSoundLayeredList''
+
+// GLOBAL: SWBF2 0x007e36c4
+// SoundLayered::smSoundLayeredList
 PblListDouble SoundLayered::smSoundLayeredList;
 
 // FUNCTION: SWBF2 0x00738cf0
@@ -504,7 +518,8 @@ void SoundLayered::SetVelocity(const PblVector3* pVel)
 
 }
 
-namespace Snd {
+namespace Snd
+{
 
 // FUNCTION: SWBF2 0x00738b70
 SoundLayered::Properties::~Properties()
@@ -516,7 +531,8 @@ SoundLayered::Properties::~Properties()
 }
 }
 
-namespace Snd {
+namespace Snd
+{
 
 // FUNCTION: SWBF2 0x00738d20
 void SoundLayered::Close()
@@ -530,7 +546,8 @@ void SoundLayered::Close()
 }
 }
 
-namespace Snd {
+namespace Snd
+{
 
 // FUNCTION: SWBF2 0x00738dd0
 SoundLayered::Properties::Layer* SoundLayered::Properties::FindLayerByHashID(unsigned int uiHashID)
@@ -548,7 +565,8 @@ SoundLayered::Properties::Layer* SoundLayered::Properties::FindLayerByHashID(uns
 }
 }
 
-namespace Snd {
+namespace Snd
+{
 
 // FUNCTION: SWBF2 0x00738e70
 void __cdecl SoundLayered::Properties::Load(PblFileChunk& chunk, bool bOnce)
@@ -574,7 +592,8 @@ void __cdecl SoundLayered::Properties::Load(PblFileChunk& chunk, bool bOnce)
 }
 }
 
-namespace Snd {
+namespace Snd
+{
 
 // FUNCTION: SWBF2 0x00739330
 void SoundLayered::Properties::Read(PblFileChunk& chunk)

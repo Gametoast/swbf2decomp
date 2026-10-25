@@ -6,6 +6,7 @@
 namespace Snd
 {
 
+// VTABLE: SWBF2 0x007871f8
 class DSMediaBuffer : public IMediaBuffer
 {
 public:

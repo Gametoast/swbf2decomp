@@ -231,7 +231,8 @@ void HUD::Manager::ConfigFile::WriteData(HUD::File& file, unsigned int uTabs)
     }
 }
 
-namespace HUD {
+namespace HUD
+{
 // GLOBAL: SWBF2 0x007e69c8
 bool gScreenGroupEditEnabled = true;
 // GLOBAL: SWBF2 0x007e69cc
@@ -246,8 +247,11 @@ RedScreenGroupElement* gScreenGroupEdit;
 
 // GLOBAL: SWBF2 0x01e573c0
 HUD::Editor* gEditor;
+namespace HUD
+{
 // GLOBAL: SWBF2 0x01e573c4
-namespace HUD { int gNumConfigFiles; }
+int gNumConfigFiles;
+}
 
 // FUNCTION: SWBF2 0x00565140
 void HUD::Manager::Open()

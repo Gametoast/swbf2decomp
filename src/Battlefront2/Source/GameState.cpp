@@ -284,7 +284,8 @@ namespace MuzzleFlash
     bool Init();
 }
 extern int mSkipCount;
-namespace RedLocalizeDB {
+namespace RedLocalizeDB
+{
 
 // FUNCTION: SWBF2 0x006c6010
 void SetSkipCount(int count)
@@ -392,18 +393,24 @@ extern int gNetSetup_errState;
 GameState::State* _pNextState;
 bool _bDoChangeState;
 unsigned int mNextStateHash;
+// GLOBAL: SWBF2 0x01e563b8
+// mCurrentStateHash
 unsigned int mCurrentStateHash;
-// GLOBAL: SWBF2 0x007eb97c
 // SYNTHETIC: SWBF2 0x00403e60
 // `dynamic initializer for '_MissionState''
 // SYNTHETIC: SWBF2 0x00768aa0
 // `dynamic atexit destructor for '_MissionState''
+
+// GLOBAL: SWBF2 0x007eb97c
+// _MissionState
 GameState::MissionState _MissionState;
-// GLOBAL: SWBF2 0x007eb998
 // SYNTHETIC: SWBF2 0x00403e50
 // `dynamic initializer for '_ShellState''
 // SYNTHETIC: SWBF2 0x00768a90
 // `dynamic atexit destructor for '_ShellState''
+
+// GLOBAL: SWBF2 0x007eb998
+// _ShellState
 GameState::ShellState _ShellState;
 
 GameState::State* _pCurrentState;
@@ -412,6 +419,8 @@ GameState::MissionState::State* GameState::MissionState::_pCurrentState;
 
 bool gDisableNetworkOnCleanup;
 
+// GLOBAL: SWBF2 0x01e563b1
+// sKioskMode
 bool sKioskMode;
 
 bool sbDidOneTimeInit;
@@ -421,17 +430,23 @@ double secondsPerPerformanceTick;
 
 namespace GameState
 {
-// GLOBAL: SWBF2 0x01ec5f40
 // SYNTHETIC: SWBF2 0x00403e20
 // `dynamic initializer for 'GameState::_TimeBase''
+
+// GLOBAL: SWBF2 0x01ec5f40
+// _TimeBase
 PblTimeBase _TimeBase;
-// GLOBAL: SWBF2 0x01ec5f58
 // SYNTHETIC: SWBF2 0x00403e40
 // `dynamic initializer for 'GameState::_TotalTimeBase''
+
+// GLOBAL: SWBF2 0x01ec5f58
+// _TotalTimeBase
 PblTimeBase _TotalTimeBase;
-// GLOBAL: SWBF2 0x01ec5f90
 // SYNTHETIC: SWBF2 0x00403e30
 // `dynamic initializer for 'GameState::_SystemTimeBase''
+
+// GLOBAL: SWBF2 0x01ec5f90
+// _SystemTimeBase
 PblTimeBase _SystemTimeBase;
 }
 
@@ -445,6 +460,8 @@ LARGE_INTEGER oldPerfCount;
 __int64 maxAdvanceTicks;
 __int64 normalAdvanceTicks;
 float g_fFrameRateScale;
+// GLOBAL: SWBF2 0x01e5639f
+// sIgnoreNextTime
 bool sIgnoreNextTime;
 bool gMemoryPoolErrors;
 
@@ -705,7 +722,8 @@ void GameState::_SetState(State* pState)
     }
 }
 
-namespace RedMissionLog {
+namespace RedMissionLog
+{
 
 // FUNCTION: SWBF2 0x006cccc0
 void Init()
@@ -713,7 +731,8 @@ void Init()
 }
 }
 
-namespace RedProfile {
+namespace RedProfile
+{
 
 // FUNCTION: SWBF2 0x006f7450
 void Init()
@@ -772,7 +791,8 @@ namespace PblBuildType
     unsigned char gCreateMemoryProfile;
 }
 
-namespace SaveGameManager {
+namespace SaveGameManager
+{
 
 // FUNCTION: SWBF2 0x00632ee0
 void Init()
@@ -1591,24 +1611,30 @@ unsigned int __fastcall GetFactorySecondWord(const unsigned int* pThis)
     return pThis[1];
 }
 
-// GLOBAL: SWBF2 0x007eb99c
 // SYNTHETIC: SWBF2 0x00403e70
 // `dynamic initializer for 'GameState::MissionState::_PlayState''
 // SYNTHETIC: SWBF2 0x00768ab0
 // `dynamic atexit destructor for 'GameState::MissionState::_PlayState''
+
+// GLOBAL: SWBF2 0x007eb99c
+// GameState::MissionState::_PlayState
 GameState::MissionState::PlayState GameState::MissionState::_PlayState;
 
-// GLOBAL: SWBF2 0x007eb9b8
 // SYNTHETIC: SWBF2 0x00403e80
 // `dynamic initializer for 'GameState::MissionState::PlayState::_NormalState''
 // SYNTHETIC: SWBF2 0x00768ac0
 // `dynamic atexit destructor for 'GameState::MissionState::PlayState::_NormalState''
+
+// GLOBAL: SWBF2 0x007eb9b8
+// GameState::MissionState::PlayState::_NormalState
 GameState::MissionState::PlayState::NormalState GameState::MissionState::PlayState::_NormalState;
 
-// GLOBAL: SWBF2 0x007eb978
 // SYNTHETIC: SWBF2 0x00403e90
 // `dynamic initializer for 'GameState::MissionState::PlayState::_PausedState''
 // SYNTHETIC: SWBF2 0x00768ad0
 // `dynamic atexit destructor for 'GameState::MissionState::PlayState::_PausedState''
+
+// GLOBAL: SWBF2 0x007eb978
+// GameState::MissionState::PlayState::_PausedState
 GameState::MissionState::PlayState::PausedState GameState::MissionState::PlayState::_PausedState;
 

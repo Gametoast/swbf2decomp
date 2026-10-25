@@ -57,11 +57,14 @@ inline const PblVector3& RegionPosition(const RedRegion* pRegion)
 }
 }
 
-// GLOBAL: SWBF2 0x01eb97b0
 // SYNTHETIC: SWBF2 0x004027b0
 // `dynamic initializer for 'AI::CTFGoalD::rttiHashCTFGoalD''
 
+// GLOBAL: SWBF2 0x01eb97b0
+// AI::CTFGoalD::rttiHashCTFGoalD
 PblHash AI::CTFGoalD::rttiHashCTFGoalD("CTFGoalD");
+// GLOBAL: SWBF2 0x00788dfc
+// AI::CTFGoalD::rttiNameCTFGoalD
 const char AI::CTFGoalD::rttiNameCTFGoalD[] = "CTFGoalD";
 
 

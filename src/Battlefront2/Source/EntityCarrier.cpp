@@ -300,17 +300,22 @@ const void* EntityFlyerClass::GetControllableClass()
 
 // SYNTHETIC: SWBF2 0x00402960
 // `dynamic initializer for 'EntityCarrier::rttiHashEntityCarrier''
+// EntityCarrier::rttiHashEntityCarrier
+
 // GLOBAL: SWBF2 0x01ebb8ec
 // EntityCarrier::rttiHashEntityCarrier
 PblHash EntityCarrier::rttiHashEntityCarrier("EntityCarrier");
+// GLOBAL: SWBF2 0x007890b4
+// EntityCarrier::rttiNameEntityCarrier
 const char EntityCarrier::rttiNameEntityCarrier[] = "EntityCarrier";
 
-// GLOBAL: SWBF2 0x01ebb8f0
 // SYNTHETIC: SWBF2 0x00402940
 // `dynamic initializer for 'EntityCarrier::sMemoryPool''
 // SYNTHETIC: SWBF2 0x00766f10
 // `dynamic atexit destructor for 'EntityCarrier::sMemoryPool''
 
+// GLOBAL: SWBF2 0x01ebb8f0
+// EntityCarrier::sMemoryPool
 MemoryPool EntityCarrier::sMemoryPool("EntityCarrier", 0x1df0);
 
 
@@ -321,9 +326,13 @@ MemoryPool EntityCarrier::sMemoryPool("EntityCarrier", 0x1df0);
 
 // SYNTHETIC: SWBF2 0x00402970
 // `dynamic initializer for 'EntityCarrierClass::rttiHashEntityCarrierClass''
+// EntityCarrierClass::rttiHashEntityCarrierClass
+
 // GLOBAL: SWBF2 0x01ebb8e8
 // EntityCarrierClass::rttiHashEntityCarrierClass
 PblHash EntityCarrierClass::rttiHashEntityCarrierClass("EntityCarrierClass");
+// GLOBAL: SWBF2 0x007890a0
+// EntityCarrierClass::rttiNameEntityCarrierClass
 const char EntityCarrierClass::rttiNameEntityCarrierClass[] = "EntityCarrierClass";
 
 

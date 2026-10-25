@@ -40,9 +40,11 @@ PblVector3 pcShieldShader::s_vLightY;
 
 static D3DMATERIAL9 s_d3dMat;
 
-// GLOBAL: SWBF2 0x00965048
 // SYNTHETIC: SWBF2 0x00407fc0
 // `dynamic initializer for 'kuiSpecularSpotMap''
+
+// GLOBAL: SWBF2 0x00965048
+// kuiSpecularSpotMap
 static unsigned int kuiSpecularSpotMap = PblHash("specularspot");
 
 // FUNCTION: SWBF2 0x006ccce0
@@ -551,18 +553,21 @@ void pcShieldShader::_Read(PblFileChunk& chunk) const
 // `dynamic initializer for 'pcShieldShader::s_uiRenderTypeHash''
 unsigned int pcShieldShader::s_uiRenderTypeHash = PblHash("Shield");
 
-// GLOBAL: SWBF2 0x00964fc8
 // SYNTHETIC: SWBF2 0x00407f00
 // `dynamic initializer for 'pcShieldShader::s_Factory''
 // SYNTHETIC: SWBF2 0x007698f0
 // `dynamic atexit destructor for 'pcShieldShader::s_Factory''
+
+// GLOBAL: SWBF2 0x00964fc8
+// pcShieldShader::s_Factory
 pcShieldShader pcShieldShader::s_Factory;
 
 // GLOBAL: SWBF2 0x00964fc0
 unsigned int g_pcShieldShader;
 
-// GLOBAL: SWBF2 0x00964fc4
 // SYNTHETIC: SWBF2 0x00407fa0
 // `dynamic initializer for 'kuiLinearRamp''
 
+// GLOBAL: SWBF2 0x00964fc4
+// kuiLinearRamp
 unsigned int kuiLinearRamp = PblHash("linear_ramp");

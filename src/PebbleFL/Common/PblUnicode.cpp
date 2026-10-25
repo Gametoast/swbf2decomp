@@ -455,7 +455,8 @@ unsigned int __cdecl ConvertUnicodeSkippingWide(char* pDest, const unsigned shor
     return (unsigned int)(p - pDest);
 }
 
-namespace PblUnicode {
+namespace PblUnicode
+{
 
 // FUNCTION: SWBF2 0x00727420
 unsigned int __cdecl ustrncnv(unsigned short* pDest, const unsigned char* pSrc, unsigned int uiCount)

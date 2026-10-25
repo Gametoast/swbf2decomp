@@ -7,11 +7,13 @@ void __cdecl PblTraceP(const char* Format, ...);
 namespace Snd
 {
 
-// GLOBAL: SWBF2 0x007e37f8
 // SYNTHETIC: SWBF2 0x0040be90
 // `dynamic initializer for 'Snd::DSBufferRenderer::smRendererList''
 // SYNTHETIC: SWBF2 0x0076a460
 // `dynamic atexit destructor for 'Snd::DSBufferRenderer::smRendererList''
+
+// GLOBAL: SWBF2 0x007e37f8
+// DSBufferRenderer::smRendererList
 PblListSingle DSBufferRenderer::smRendererList;
 
 // FUNCTION: SWBF2 0x0073d740

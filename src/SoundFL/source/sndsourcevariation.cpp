@@ -41,7 +41,8 @@ bool SourceVariation::Read(PblFileChunk& chunk, unsigned int uiPropertyID)
 
 }
 
-namespace Snd {
+namespace Snd
+{
 
 // FUNCTION: SWBF2 0x00743990
 float SourceVariation::CalculateGain(float fGain) const
@@ -50,7 +51,8 @@ float SourceVariation::CalculateGain(float fGain) const
 }
 }
 
-namespace Snd {
+namespace Snd
+{
 
 // FUNCTION: SWBF2 0x00743a30
 float SourceVariation::CalculatePitch(float fPitch) const

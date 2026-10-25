@@ -5,7 +5,9 @@
 #include "HUDElementGroup.h"
 #include "HUDEvent.h"
 
-namespace HUD {
+namespace HUD
+{
+// VTABLE: SWBF2 0x007a117c
 class ElementGroupPlayer : public HUD::ElementGroupBase
 {
 public:

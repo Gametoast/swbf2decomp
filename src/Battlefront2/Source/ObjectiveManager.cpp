@@ -64,7 +64,8 @@ void LeaveClient()
 
 }
 
-namespace ObjectiveManager {
+namespace ObjectiveManager
+{
 
 // FUNCTION: SWBF2 0x005f69b0
 void DestroyAll()
@@ -74,7 +75,8 @@ void DestroyAll()
 }
 }
 
-namespace ObjectiveManager {
+namespace ObjectiveManager
+{
 
 // FUNCTION: SWBF2 0x005f6760
 void AddObjectiveList(HUD::ObjectiveList* pList)

@@ -600,10 +600,11 @@ int CollisionTreeNode::leafs;
 // GLOBAL: SWBF2 0x01eb3390
 int CollisionMesh::_HashTableNumEntries;
 
-// GLOBAL: SWBF2 0x01eb3394
 // SYNTHETIC: SWBF2 0x00402460
 // `dynamic initializer for 'CollisionMesh::_HashTable''
 
+// GLOBAL: SWBF2 0x01eb3394
+// CollisionMesh::_HashTable
 PblHashTable<CollisionMesh, 1024> CollisionMesh::_HashTable;
 
 // FUNCTION: SWBF2 0x00461ba0

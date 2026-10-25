@@ -48,6 +48,12 @@ class MountedTurret;
 class Trackable;
 class FLEffectObject;
 
+// VTABLE: SWBF2 0x00799bf8 Damageable
+// VTABLE: SWBF2 0x00799c24 RedSceneObject
+// VTABLE: SWBF2 0x00799cd8
+// VTABLE: SWBF2 0x00799cf0 CollisionObject
+// VTABLE: SWBF2 0x00799d44 EntityEx
+// VTABLE: SWBF2 0x00799e78 PblHandled
 class EntityBuildingArmed : public EntityBuilding, public Thread
 {
 public:

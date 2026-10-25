@@ -120,12 +120,24 @@ FLRenderer::TransitionT sViewTransitions[2] = {
 bool FLRenderer::m_bEnableFadeAdjustWithZoom;
 // GLOBAL: SWBF2 0x008f6d9a
 bool FLRenderer::m_bSceneEnable[1];
+namespace FLRenderer
+{
 
 // GLOBAL: SWBF2 0x008f6d9b
-namespace FLRenderer { bool m_bInterfaceEnable[1]; }
-namespace FLRenderer { extern float m_fWorldFogStart; }
-namespace FLRenderer { extern float m_fWorldFogEnd; }
-namespace FLRenderer { extern RedColor m_colorReflectionFog; }
+bool m_bInterfaceEnable[1];
+}
+namespace FLRenderer
+{
+extern float m_fWorldFogStart;
+}
+namespace FLRenderer
+{
+extern float m_fWorldFogEnd;
+}
+namespace FLRenderer
+{
+extern RedColor m_colorReflectionFog;
+}
 
 // FUNCTION: SWBF2 0x006beac0
 void FLRenderer::RenderableList::RenderReflections(unsigned int uiFlags) const
@@ -212,10 +224,16 @@ unsigned int FLRenderer::mViewCount;
 float fl_fog_start;
 // GLOBAL: SWBF2 0x008f6dc0
 float fl_fog_end;
+namespace FLRenderer
+{
 // GLOBAL: SWBF2 0x008f6dc4
-namespace FLRenderer { float m_fWorldFogStart; }
+float m_fWorldFogStart;
+}
+namespace FLRenderer
+{
 // GLOBAL: SWBF2 0x008f6dc8
-namespace FLRenderer { float m_fWorldFogEnd; }
+float m_fWorldFogEnd;
+}
 // GLOBAL: SWBF2 0x008f6dcc
 float FLRenderer::m_fViewNearPlane;
 // GLOBAL: SWBF2 0x008f6dd0
@@ -224,8 +242,11 @@ float FLRenderer::m_fViewNearSceneFadeStart[2];
 float FLRenderer::m_fViewNearSceneFadeEnd[2];
 // GLOBAL: SWBF2 0x008f6de0
 float FLRenderer::m_fViewFarPlane[2];
+namespace FLRenderer
+{
 // GLOBAL: SWBF2 0x008f6de8
-namespace FLRenderer { float m_fNearSceneRangeFactor; }
+float m_fNearSceneRangeFactor;
+}
 // GLOBAL: SWBF2 0x008f6dec
 
 bool sFarSceneRangeEnabled[1];
@@ -235,10 +256,16 @@ RedInterfaceScreen* FLRenderer::m_pViewInterfaceScreen[1];
 ReflectionRegionFactory* FLRenderer::m_pReflectionRegionFactory;
 // GLOBAL: SWBF2 0x008f6df8
 RedTexture* FLRenderer::m_reflectionRenderTarget;
+namespace FLRenderer
+{
 // GLOBAL: SWBF2 0x008f6dfc
-namespace FLRenderer { IDirect3DSurface9* m_reflectionDepthBuffer; }
+IDirect3DSurface9* m_reflectionDepthBuffer;
+}
+namespace FLRenderer
+{
 // GLOBAL: SWBF2 0x008f6e00
-namespace FLRenderer { IDirect3DSurface9* m_FarSceneDepthBuffer; }
+IDirect3DSurface9* m_FarSceneDepthBuffer;
+}
 // GLOBAL: SWBF2 0x008f6ed0
 unsigned int FLRenderer::m_numCurFrameReflections;
 // GLOBAL: SWBF2 0x008f6ed4
@@ -247,26 +274,35 @@ RedTexture* FLRenderer::m_previousFrameTex;
 _D3DFORMAT FLRenderer::m_formatReflectionTarget_Medium;
 // GLOBAL: SWBF2 0x008f6edc
 _D3DFORMAT FLRenderer::m_formatReflectionDepth_Medium;
-// GLOBAL: SWBF2 0x008f6ef0
 // SYNTHETIC: SWBF2 0x00407930
 // `dynamic initializer for 'FLRenderer::mCursorImage''
 // SYNTHETIC: SWBF2 0x00769880
 // `dynamic atexit destructor for 'FLRenderer::mCursorImage''
+
+// GLOBAL: SWBF2 0x008f6ef0
+// FLRenderer::mCursorImage
 RedBitmapElement FLRenderer::mCursorImage;
 
 // GLOBAL: SWBF2 0x008f6ff0
 RedColor FLRenderer::m_colorFog;
+namespace FLRenderer
+{
 // GLOBAL: SWBF2 0x008f6ff4
-namespace FLRenderer { RedColor m_colorReflectionFog; }
-// GLOBAL: SWBF2 0x008f7000
+RedColor m_colorReflectionFog;
+}
 // SYNTHETIC: SWBF2 0x00407910
 // `dynamic initializer for 'FLRenderer::mCursorGroup''
 // SYNTHETIC: SWBF2 0x00769870
 // `dynamic atexit destructor for 'FLRenderer::mCursorGroup''
+
+// GLOBAL: SWBF2 0x008f7000
+// FLRenderer::mCursorGroup
 RedScreenGroupElement FLRenderer::mCursorGroup;
-// GLOBAL: SWBF2 0x008f70a0
 // SYNTHETIC: SWBF2 0x00407950
 // `dynamic initializer for 'FLRenderer::m_curFrameReflections''
+
+// GLOBAL: SWBF2 0x008f70a0
+// FLRenderer::m_curFrameReflections
 FLRenderer::ReflectionT FLRenderer::m_curFrameReflections[255];
 
 // FUNCTION: SWBF2 0x006bb240
@@ -2036,7 +2072,11 @@ void FLRenderer::pcUpdateRefractionBuffer()
 
 namespace FLRenderer
 {
+// GLOBAL: SWBF2 0x008f6e04
+// m_numPotentialReflections
 unsigned int m_numPotentialReflections;
+// GLOBAL: SWBF2 0x008f6e08
+// m_potentialReflections
 Renderable* m_potentialReflections[50];
 }
 

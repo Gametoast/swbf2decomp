@@ -30,11 +30,13 @@ pcRedShader::BeginFuncT pcWaterShader::BeginFuncArray[MAX_PIPELINES];
 pcRedShader::EndFuncT pcWaterShader::EndFuncArray[MAX_PIPELINES];
 pcRedShader::RenderFuncT pcWaterShader::RenderFuncArray[MAX_PIPELINES];
 
-// GLOBAL: SWBF2 0x009c9e60
 // SYNTHETIC: SWBF2 0x00409fc0
 // `dynamic initializer for 'pcWaterShader::s_shaderDef''
 // SYNTHETIC: SWBF2 0x00769e90
 // `dynamic atexit destructor for 'pcWaterShader::s_shaderDef''
+
+// GLOBAL: SWBF2 0x009c9e60
+// pcWaterShader::s_shaderDef
 pcRedShaderDef pcWaterShader::s_shaderDef("water_shader.xml");
 
 bool pcWaterShader::s_specularEnable = true;
@@ -43,20 +45,25 @@ RedColorValue pcWaterShader::s_refractionColor(1.0f, 1.0f, 1.0f, 1.0f);
 RedColorValue pcWaterShader::s_reflectionColor(1.0f, 1.0f, 1.0f, 1.0f);
 RedColorValue pcWaterShader::s_fresnelMinMax(0.0f, 0.0f, 0.0f, 1.0f);
 
-// GLOBAL: SWBF2 0x009ca094
 // SYNTHETIC: SWBF2 0x0040a040
 // `dynamic initializer for 'kuiCubeNormalizationMap''
+
+// GLOBAL: SWBF2 0x009ca094
+// kuiCubeNormalizationMap
 static unsigned int kuiCubeNormalizationMap = PblHash("cube_normalizationmap");
 
-// GLOBAL: SWBF2 0x009c9e8c
 // SYNTHETIC: SWBF2 0x0040a060
 // `dynamic initializer for 'kuiLinearRamp''
+
+// GLOBAL: SWBF2 0x009c9e8c
+// kuiLinearRamp
 static unsigned int kuiLinearRamp = PblHash("linear_ramp");
 
-// GLOBAL: SWBF2 0x009ca050
 // SYNTHETIC: SWBF2 0x0040a080
 // `dynamic initializer for '_IdentityMatrix''
 
+// GLOBAL: SWBF2 0x009ca050
+// _IdentityMatrix
 static D3DXMATRIXA16 _IdentityMatrix;
 
 // GLOBAL: SWBF2 0x009ca098
@@ -821,9 +828,11 @@ void pcWaterShader::_StaticInit() const
         !(RedRenderer::pcGetDeviceCaps().TextureCaps & D3DPTEXTURECAPS_NOPROJECTEDBUMPENV);
 }
 
-// GLOBAL: SWBF2 0x009ca090
 // SYNTHETIC: SWBF2 0x00409fe0
 // `dynamic initializer for 'pcWaterShader::s_uiRenderTypeHash''
+
+// GLOBAL: SWBF2 0x009ca090
+// pcWaterShader::s_uiRenderTypeHash
 unsigned int pcWaterShader::s_uiRenderTypeHash = PblHash("Water");
 
 // SYNTHETIC: SWBF2 0x0040a000
@@ -832,11 +841,13 @@ unsigned int pcWaterShader::s_uiRenderTypeHash = PblHash("Water");
 // SYNTHETIC: SWBF2 0x0040a020
 // `dynamic initializer for 'PblMath::fOneOverTwoPi''
 
-// GLOBAL: SWBF2 0x009c9f10
 // SYNTHETIC: SWBF2 0x00409fa0
 // `dynamic initializer for 'pcWaterShader::s_Factory''
 // SYNTHETIC: SWBF2 0x00769e70
 // `dynamic atexit destructor for 'pcWaterShader::s_Factory''
+
+// GLOBAL: SWBF2 0x009c9f10
+// pcWaterShader::s_Factory
 pcWaterShader pcWaterShader::s_Factory;
 
 // FUNCTION: SWBF2 0x007092a0

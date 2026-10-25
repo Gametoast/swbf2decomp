@@ -14,7 +14,10 @@ class GameObject;
 class UnitAgent;
 class UnitCombatInfo;
 class UnitController;
-namespace AI { class EventInfo; }
+namespace AI
+{
+class EventInfo;
+}
 
 // VTABLE: SWBF2 0x007974e8
 class CombatHelper : public HelperFsm

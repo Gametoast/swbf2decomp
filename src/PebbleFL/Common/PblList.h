@@ -118,6 +118,16 @@ public:
         }
     }
 
+    // TEMPLATE: SWBF2 0x0043a180
+    // PblList<Character>::RemoveAll
+    // TEMPLATE: SWBF2 0x0056f8c0
+    // PblList<LensFlare>::RemoveAll
+    // TEMPLATE: SWBF2 0x00695020
+    // PblList<PrecipitationEffect::RainShadowRegion>::RemoveAll
+    // TEMPLATE: SWBF2 0x006edbe0
+    // PblList<RedShadowProxy>::RemoveAll
+    // TEMPLATE: SWBF2 0x00526ab0
+    // PblList<FlashyTextElement>::RemoveAll
     void RemoveAll()
     {
         while (_iCount > 0)

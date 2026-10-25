@@ -10,20 +10,49 @@
 #include "RedEngineFL/geometry/polygons.h"
 #include "RedEngineFL/geometry/Primitives.h"
 
-namespace pvs { class ICamera; }
-namespace pvs { class IDisplayable; }
-namespace pvs { class IPortal; }
-namespace pvs { class ISector; }
-namespace pvs { class ITraverser; }
-namespace pvs { class Sector; }
-namespace pvs { class Portal; }
-namespace pvs { class BaseCamera; }
-namespace geo { struct Box; }
+namespace pvs
+{
+class ICamera;
+}
+namespace pvs
+{
+class IDisplayable;
+}
+namespace pvs
+{
+class IPortal;
+}
+namespace pvs
+{
+class ISector;
+}
+namespace pvs
+{
+class ITraverser;
+}
+namespace pvs
+{
+class Sector;
+}
+namespace pvs
+{
+class Portal;
+}
+namespace pvs
+{
+class BaseCamera;
+}
+namespace geo
+{
+struct Box;
+}
 
-namespace pvs {
+namespace pvs
+{
 
 int GetCurrentFrame_();
 
+// VTABLE: SWBF2 0x00783534
 class IManager
 {
 public:
@@ -50,7 +79,8 @@ public:
 };
 }
 
-namespace pvs {
+namespace pvs
+{
 
 class IPortal
 {
@@ -68,7 +98,8 @@ public:
 };
 }
 
-namespace pvs {
+namespace pvs
+{
 
 class ISector
 {
@@ -84,7 +115,8 @@ public:
 };
 }
 
-namespace pvs {
+namespace pvs
+{
 
 // VTABLE: SWBF2 0x00783604
 class Sector : public pvs::ISector
@@ -142,7 +174,8 @@ public:
  
  
 
-namespace pvs {
+namespace pvs
+{
 
 class SectorCache
 {
@@ -161,7 +194,8 @@ public:
 }
  
 
-namespace pvs {
+namespace pvs
+{
 
 // VTABLE: SWBF2 0x0078365c
 class Manager : public pvs::IManager
@@ -226,7 +260,8 @@ public:
  
  
 
-namespace pvs {
+namespace pvs
+{
 
 // VTABLE: SWBF2 0x0078362c
 class Portal : public pvs::IPortal
@@ -269,10 +304,17 @@ public:
  
  
 
-namespace pvs { class Manager; }
-namespace geo { struct Box; }
+namespace pvs
+{
+class Manager;
+}
+namespace geo
+{
+struct Box;
+}
 
-namespace pvs {
+namespace pvs
+{
 
 class IDisplayable
 {

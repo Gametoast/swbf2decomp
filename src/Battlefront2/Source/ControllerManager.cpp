@@ -29,7 +29,8 @@
 #include "Ordnance.h"
 #include "CombatUtil.h"
 
-namespace ControllerManager {
+namespace ControllerManager
+{
 // GLOBAL: SWBF2 0x01e30930
 PblList<PlayerController>* sPlayerCtrls;
 // GLOBAL: SWBF2 0x01e30934
@@ -204,9 +205,21 @@ int GetObjectsInRange(const PblVector3& vPos, float fRadius, GameObject** const 
                       int iMax, const GameObject* pIgnore, AI::AIAffil eAffil);
 }
 
-namespace AI { namespace VOHelper { void Update(); } }
-namespace AIDifficulty { void UpdateAutoBalance(); }
-namespace VisionManager { bool RayTests(int i); }
+namespace AI
+{
+namespace VOHelper
+{
+void Update();
+}
+}
+namespace AIDifficulty
+{
+void UpdateAutoBalance();
+}
+namespace VisionManager
+{
+bool RayTests(int i);
+}
 
 namespace AI
 {
@@ -439,8 +452,14 @@ void ControllerManager::UpdateCrowd(Controller* pCtrl)
     }
 }
 
-namespace AIDifficulty { float SpaceAssault_GetFlyerKillForPlayerTeam(); }
-namespace AIDifficulty { float SpaceAssault_GetCritSysKillForPlayerTeam(); }
+namespace AIDifficulty
+{
+float SpaceAssault_GetFlyerKillForPlayerTeam();
+}
+namespace AIDifficulty
+{
+float SpaceAssault_GetCritSysKillForPlayerTeam();
+}
 
 // FUNCTION: SWBF2 0x00486270
 void ControllerManager::DoPeriodicUpdate(float fDeltaTime)
@@ -671,7 +690,10 @@ template <class T> void UpdateControllerAudibles(T* pCtrl)
 template void UpdateControllerAudibles<PlayerController>(PlayerController* pCtrl);
 }
 
-namespace AI { namespace VOHelper {
+namespace AI
+{
+namespace VOHelper
+{
 
 // FUNCTION: SWBF2 0x00672640
 void Update()
@@ -697,4 +719,5 @@ void Update()
         rSound.mType = AI::VOT_NONE;
     }
 }
-} }
+}
+}

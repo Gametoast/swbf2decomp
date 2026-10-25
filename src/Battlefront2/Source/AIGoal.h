@@ -14,7 +14,8 @@ class Character;
 class CommandPost;
 class GameObject;
 
-namespace AI {
+namespace AI
+{
 
 enum AIGoalType
 {

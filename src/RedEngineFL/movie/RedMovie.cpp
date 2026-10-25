@@ -90,9 +90,11 @@ PblList<RedMovie::SegmentSubtitles> RedMovie::SegmentSubtitles::sList;
 // GLOBAL: SWBF2 0x007e15a4
 PblList<RedMovie::Properties> RedMovie::Properties::sPropertyList;
 
-// GLOBAL: SWBF2 0x009c8444
 // SYNTHETIC: SWBF2 0x00409160
 // `dynamic initializer for 'RedMovie::Properties::sRandom''
+
+// GLOBAL: SWBF2 0x009c8444
+// RedMovie::Properties::sRandom
 PblRandom RedMovie::Properties::sRandom;
 
 // SYNTHETIC: SWBF2 0x004091a0
@@ -102,6 +104,7 @@ PblRandom RedMovie::Properties::sRandom;
 // `dynamic initializer for 'PblMath::fOneOverTwoPi''
 
 // GLOBAL: SWBF2 0x009c8434
+// RedMovie::sSubtitlesEnabled
 bool RedMovie::sSubtitlesEnabled;
 
 // SYNTHETIC: SWBF2 0x006f5110

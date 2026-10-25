@@ -348,9 +348,11 @@ void __fastcall SmoothLocal(SmoothInfo* pInfo)
     }
 }
 
-// GLOBAL: SWBF2 0x01ee8390
 // SYNTHETIC: SWBF2 0x004055f0
 // `dynamic initializer for 'smoothInfo''
+
+// GLOBAL: SWBF2 0x01ee8390
+// smoothInfo
 SmoothInfo smoothInfo[64];
 
 // FUNCTION: SWBF2 0x005d9c00
@@ -460,14 +462,16 @@ void SmoothInfo::ResetMat(const PblMatrix& mat)
     mRotErr._fS = 1.0f;
 }
 
-// GLOBAL: SWBF2 0x01ee7d90
 // SYNTHETIC: SWBF2 0x00405680
 // `dynamic initializer for 'interpPos''
 
+// GLOBAL: SWBF2 0x01ee7d90
+// interpPos
 PblVector3 interpPos[2][64];
 
-// GLOBAL: SWBF2 0x01eeff90
 // SYNTHETIC: SWBF2 0x004056a0
 // `dynamic initializer for 'interpMat''
 
+// GLOBAL: SWBF2 0x01eeff90
+// interpMat
 PblMatrix interpMat[2][64];

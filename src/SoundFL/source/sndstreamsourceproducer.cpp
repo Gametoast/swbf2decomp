@@ -276,7 +276,8 @@ void StreamPacket::SetDiscontinuity(bool bDiscontinuity)
 
 }
 
-namespace Snd {
+namespace Snd
+{
 
 // FUNCTION: SWBF2 0x0073c9e0
 StreamPacket* StreamSourceNProducer::GetWritablePacket(unsigned int uiOutput)
@@ -287,7 +288,8 @@ StreamPacket* StreamSourceNProducer::GetWritablePacket(unsigned int uiOutput)
 }
 }
 
-namespace Snd {
+namespace Snd
+{
 
 // FUNCTION: SWBF2 0x0073ca30
 unsigned int StreamSourceNProducer::CompleteWrittenPacket(StreamPacket* pPacket,

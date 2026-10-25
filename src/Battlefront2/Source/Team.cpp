@@ -49,17 +49,23 @@ unsigned int Team::sWinningTeams;
 
 // GLOBAL: SWBF2 0x007ebc98
 RedColor gFriendColor = { 0x01, 0x56, 0xd5, 0xff };
-// GLOBAL: SWBF2 0x01f7ce80
 // SYNTHETIC: SWBF2 0x00406890
 // `dynamic initializer for 'gEnemyColor''
+
+// GLOBAL: SWBF2 0x01f7ce80
+// gEnemyColor
 RedColor gEnemyColor = RedColor::RED;
-// GLOBAL: SWBF2 0x01f6deb4
 // SYNTHETIC: SWBF2 0x004068c0
 // `dynamic initializer for 'gLocalColor''
+
+// GLOBAL: SWBF2 0x01f6deb4
+// gLocalColor
 RedColor gLocalColor = RedColor::WHITE;
-// GLOBAL: SWBF2 0x01f75f0c
 // SYNTHETIC: SWBF2 0x004068f0
 // `dynamic initializer for 'gNeutralColor''
+
+// GLOBAL: SWBF2 0x01f75f0c
+// gNeutralColor
 RedColor gNeutralColor = RedColor::YELLOW;
 
 // FUNCTION: SWBF2 0x00652dd0

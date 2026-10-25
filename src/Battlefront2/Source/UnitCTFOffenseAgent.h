@@ -13,6 +13,7 @@
 class FlagItem;
 int GetFormationType(const UnitController* pCtrl);
 
+// VTABLE: SWBF2 0x007af88c
 class UnitCTFOffenseAgent : public UnitAgent
 {
 public:

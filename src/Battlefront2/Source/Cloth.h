@@ -18,9 +18,13 @@ class RedColor;
 class RedPose;
 struct ClothConstraint;
 struct RedLightingState;
-namespace util { class IAllocator; }
+namespace util
+{
+class IAllocator;
+}
 
-// VTABLE: SWBF2 0x007972b4
+// VTABLE: SWBF2 0x007972b4 Entity
+// VTABLE: SWBF2 0x007972e8 Thread
 class EntityCloth : public Entity, public Thread
 {
 public:
@@ -41,6 +45,8 @@ public:
     EntityCloth(EntityClothClass* pClass, const EntityDesc& desc);
 
     static void* operator new(unsigned int uSize) { return sMemoryPool.Allocate(uSize); }
+    // SYNTHETIC: SWBF2 0x00458b30
+    // EntityCloth::operator delete
     static void operator delete(void* p) { sMemoryPool.Free(p); }
 
     static bool IsEnabled();

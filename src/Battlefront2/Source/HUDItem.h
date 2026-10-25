@@ -5,13 +5,20 @@
 #include "PebbleFL/Common/PblListDouble.h"
 #include "PebbleFL/Common/PblListSingle.h"
 
-namespace HUD { class File; }
-namespace HUD { class EventHandler; }
+namespace HUD
+{
+class File;
+}
+namespace HUD
+{
+class EventHandler;
+}
 #include "PebbleFL/Common/PblConfig.h"
 #include "HUDEvent.h"
 #include "PebbleFL/Common/PblFile.h"
 
-namespace HUD {
+namespace HUD
+{
 
 class File : public PblFile
 {
@@ -43,7 +50,8 @@ public:
 };
 }
 
-namespace HUD {
+namespace HUD
+{
 // VTABLE: SWBF2 0x007a31c4
 class Item
 {

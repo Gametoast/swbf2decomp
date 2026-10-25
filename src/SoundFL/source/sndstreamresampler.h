@@ -8,6 +8,7 @@
 namespace Snd
 {
 
+// VTABLE: SWBF2 0x00786d18
 class StreamResampler : public StreamNode,
                         public StreamNodeSink,
                         public StreamNodeSource

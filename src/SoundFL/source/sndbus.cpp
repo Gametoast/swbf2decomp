@@ -23,18 +23,22 @@ static inline Bus* BusFromNode(PblListSingle::Node* pNode)
     return reinterpret_cast<Bus*>(reinterpret_cast<char*>(pNode) - offsetof(Bus, mNode));
 }
 
-// GLOBAL: SWBF2 0x007e325c
 // SYNTHETIC: SWBF2 0x0040b450
 // `dynamic initializer for 'Snd::Bus::smFreeList''
 // SYNTHETIC: SWBF2 0x0076a140
 // `dynamic atexit destructor for 'Snd::Bus::smFreeList''
+
+// GLOBAL: SWBF2 0x007e325c
+// Bus::smFreeList
 FreeList Bus::smFreeList(sizeof(Bus), 1, 8, 1);
 
-// GLOBAL: SWBF2 0x007e3278
 // SYNTHETIC: SWBF2 0x0040b470
 // `dynamic initializer for 'Snd::Bus::smRootBus''
 // SYNTHETIC: SWBF2 0x0076a150
 // `dynamic atexit destructor for 'Snd::Bus::smRootBus''
+
+// GLOBAL: SWBF2 0x007e3278
+// Bus::smRootBus
 Bus Bus::smRootBus(0, 0x20FD0E45u);
 
 // GLOBAL: SWBF2 0x009cf494

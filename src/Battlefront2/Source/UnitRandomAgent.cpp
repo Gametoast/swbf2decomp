@@ -40,9 +40,13 @@ namespace
 
 // SYNTHETIC: SWBF2 0x00406d10
 // `dynamic initializer for 'UnitRandomAgent::rttiHashUnitRandomAgent''
+// UnitRandomAgent::rttiHashUnitRandomAgent
+
 // GLOBAL: SWBF2 0x01f9a248
 // UnitRandomAgent::rttiHashUnitRandomAgent
 PblHash UnitRandomAgent::rttiHashUnitRandomAgent("UnitRandomAgent");
+// GLOBAL: SWBF2 0x0078b914
+// UnitRandomAgent::rttiNameUnitRandomAgent
 const char UnitRandomAgent::rttiNameUnitRandomAgent[] = "UnitRandomAgent";
 
 

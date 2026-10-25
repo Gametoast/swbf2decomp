@@ -11,8 +11,8 @@
 
 class MemoryPool;
 
-// VTABLE: SWBF2 0x007983a0
-// VTABLE: SWBF2 0x00798580
+// VTABLE: SWBF2 0x007983a0 EntityHoverClass
+// VTABLE: SWBF2 0x00798580 CommandPostClass
 class CommandHoverClass : public EntityHoverClass, public CommandPostClass
 {
 public:
@@ -36,6 +36,13 @@ public:
    
  
 
+// VTABLE: SWBF2 0x00798214 Thread
+// VTABLE: SWBF2 0x007982e4 RedSceneObject
+// VTABLE: SWBF2 0x0079834c CollisionObject
+// VTABLE: SWBF2 0x007983ec Damageable
+// VTABLE: SWBF2 0x00798418 Trackable
+// VTABLE: SWBF2 0x00798460 EntityEx
+// VTABLE: SWBF2 0x0079858c PblHandled
 class CommandHover : public EntityHover
 {
 public:
@@ -45,6 +52,8 @@ public:
     virtual ~CommandHover();
 
     static void* operator new(unsigned int uSize) { return sMemoryPool.Allocate(uSize); }
+    // SYNTHETIC: SWBF2 0x00478ee0
+    // CommandHover::operator delete
     static void operator delete(void* pBlock) { sMemoryPool.Free(pBlock); }
 
     virtual bool IsRtti(unsigned int uRtti) const;

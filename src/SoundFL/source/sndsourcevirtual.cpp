@@ -30,7 +30,8 @@ bool SourceVirtual::Read(PblFileChunk& chunk, unsigned int uiPropertyID)
 
 }
 
-namespace Snd {
+namespace Snd
+{
 
 // FUNCTION: SWBF2 0x0074b380
 float SourceVirtual::CalculatePriority(unsigned char ePlayState, float fArg, bool bLooping,
@@ -49,7 +50,8 @@ float SourceVirtual::CalculatePriority(unsigned char ePlayState, float fArg, boo
 }
 }
 
-namespace Snd {
+namespace Snd
+{
 
 // FUNCTION: SWBF2 0x0074b3e0
 float SourceVirtual::CalculatePriority(const SourceTransport* pTransport,

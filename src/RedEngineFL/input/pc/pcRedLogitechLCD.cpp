@@ -5,12 +5,13 @@
 
 
 
-// GLOBAL: SWBF2 0x0099e768
 // SYNTHETIC: SWBF2 0x00408600
 // `dynamic initializer for 'gLCDPanels''
 // SYNTHETIC: SWBF2 0x007699f0
 // `dynamic atexit destructor for 'gLCDPanels''
 
+// GLOBAL: SWBF2 0x0099e768
+// gLCDPanels
 RedLogitechLCD gLCDPanels[1];
 
 char* lpString2 = "Arial";

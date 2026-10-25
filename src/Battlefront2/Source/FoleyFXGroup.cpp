@@ -2,11 +2,13 @@
 #include "PebbleFL/Common/PblChunk.h"
 #include "PebbleFL/Common/PblFile.h"
 
-// GLOBAL: SWBF2 0x007eb8cc
 // SYNTHETIC: SWBF2 0x00403aa0
 // `dynamic initializer for 'FoleyFXGroup::smList''
 // SYNTHETIC: SWBF2 0x007687d0
 // `dynamic atexit destructor for 'FoleyFXGroup::smList''
+
+// GLOBAL: SWBF2 0x007eb8cc
+// FoleyFXGroup::smList
 PblListSingle FoleyFXGroup::smList;
 
 // GLOBAL: SWBF2 0x01e55f74

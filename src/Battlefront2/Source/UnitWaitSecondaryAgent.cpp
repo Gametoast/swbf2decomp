@@ -46,9 +46,13 @@ int Play(VOType eType, const GameObject* pSpeaker, const GameObject* pTarget,
 
 // SYNTHETIC: SWBF2 0x00406d60
 // `dynamic initializer for 'UnitWaitSecondaryAgent::rttiHashUnitWaitSecondaryAgent''
+// UnitWaitSecondaryAgent::rttiHashUnitWaitSecondaryAgent
+
 // GLOBAL: SWBF2 0x01f9a25c
 // UnitWaitSecondaryAgent::rttiHashUnitWaitSecondaryAgent
 PblHash UnitWaitSecondaryAgent::rttiHashUnitWaitSecondaryAgent("UnitWaitSecondaryAgent");
+// GLOBAL: SWBF2 0x0078b9e0
+// UnitWaitSecondaryAgent::rttiNameUnitWaitSecondaryAgent
 const char UnitWaitSecondaryAgent::rttiNameUnitWaitSecondaryAgent[] = "UnitWaitSecondaryAgent";
 
 

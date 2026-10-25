@@ -16,28 +16,34 @@
 namespace Snd
 {
 
+// GLOBAL: SWBF2 0x01e2b4c0
+// Sound::smVoiceVirtuals
 Sound::FireForget* Sound::smVoiceVirtuals;
 unsigned char Sound::smVoiceVirtualStorage[12800];
 
 // SYNTHETIC: SWBF2 0x00739c30
 // Snd::Source3D::`default constructor closure'
 
-// GLOBAL: SWBF2 0x01e2e9d0
 // SYNTHETIC: SWBF2 0x0040bca0
 // `dynamic initializer for 'Snd::Sound::smSource3Ds''
 // SYNTHETIC: SWBF2 0x0076a440
 // `dynamic atexit destructor for 'Snd::Sound::smSource3Ds''
+
+// GLOBAL: SWBF2 0x01e2e9d0
+// Sound::smSource3Ds
 Source3D Sound::smSource3Ds[64];
 
-// GLOBAL: SWBF2 0x01e2e6c8
 // SYNTHETIC: SWBF2 0x0040bc60
 // `dynamic initializer for 'Snd::Sound::smSource3DPositions''
 
+// GLOBAL: SWBF2 0x01e2e6c8
+// Sound::smSource3DPositions
 ::PblVector3 Sound::smSource3DPositions[64];
-// GLOBAL: SWBF2 0x01e2f3d0
 // SYNTHETIC: SWBF2 0x0040bc80
 // `dynamic initializer for 'Snd::Sound::smSource3DVelocities''
 
+// GLOBAL: SWBF2 0x01e2f3d0
+// Sound::smSource3DVelocities
 ::PblVector3 Sound::smSource3DVelocities[64];
 
 // FUNCTION: SWBF2 0x00739f50
@@ -71,25 +77,31 @@ void Sound::Close()
     smVoiceVirtuals = 0;
 }
 
-// GLOBAL: SWBF2 0x007e36dc
 // SYNTHETIC: SWBF2 0x0040bc20
 // `dynamic initializer for 'Snd::Sound::Properties::smFreeList''
 // SYNTHETIC: SWBF2 0x0076a410
 // `dynamic atexit destructor for 'Snd::Sound::Properties::smFreeList''
+
+// GLOBAL: SWBF2 0x007e36dc
+// Sound::Properties::smFreeList
 FreeList Sound::Properties::smFreeList(sizeof(Sound::Properties), 1, 8, 1);
 
-// GLOBAL: SWBF2 0x007e36f8
 // SYNTHETIC: SWBF2 0x0040bc40
 // `dynamic initializer for 'Snd::Sound::Properties::smPropertyList''
 // SYNTHETIC: SWBF2 0x0076a420
 // `dynamic atexit destructor for 'Snd::Sound::Properties::smPropertyList''
+
+// GLOBAL: SWBF2 0x007e36f8
+// Sound::Properties::smPropertyList
 PblListSingle Sound::Properties::smPropertyList;
 
-// GLOBAL: SWBF2 0x007e36fc
 // SYNTHETIC: SWBF2 0x0040bc50
 // `dynamic initializer for 'Snd::Sound::smSoundList''
 // SYNTHETIC: SWBF2 0x0076a430
 // `dynamic atexit destructor for 'Snd::Sound::smSoundList''
+
+// GLOBAL: SWBF2 0x007e36fc
+// Sound::smSoundList
 PblListSingle Sound::smSoundList;
 
 // FUNCTION: SWBF2 0x00739b70
@@ -690,7 +702,8 @@ unsigned int __cdecl Sound::FindParameterIndexByHashID(unsigned int uiHashID)
 
 }
 
-namespace Snd {
+namespace Snd
+{
 
 // FUNCTION: SWBF2 0x00739d20
 void __cdecl Sound::Properties::DestroyAll()
@@ -702,7 +715,8 @@ void __cdecl Sound::Properties::DestroyAll()
 }
 }
 
-namespace Snd {
+namespace Snd
+{
 
 // FUNCTION: SWBF2 0x00739d90
 const Sound::Properties* __cdecl Sound::Properties::FindByHashID(unsigned int uiHashID)

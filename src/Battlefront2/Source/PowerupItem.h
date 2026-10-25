@@ -56,12 +56,12 @@ public:
 #include "GameSound.h"
 #include "RedEngineFL/Memory/RedMemoryPool.h"
 
-// VTABLE: SWBF2 0x007ad9bc
+// VTABLE: SWBF2 0x007ad9bc EntityEx
 // VTABLE: SWBF2 0x007ad8d4 CollisionObject
 // VTABLE: SWBF2 0x007ad928 RedSceneObject
 // VTABLE: SWBF2 0x007ad990 Damageable
 // VTABLE: SWBF2 0x007adadc PblHandled
-// VTABLE: SWBF2 0x007adb30 Thread
+// VTABLE: SWBF2 0x007adb30
 class PowerupItem : public EntityItem
 {
 public:
@@ -69,6 +69,8 @@ public:
     virtual ~PowerupItem();
 
     static void* operator new(unsigned int uSize) { return sMemoryPool.Allocate(uSize); }
+    // SYNTHETIC: SWBF2 0x00623860
+    // PowerupItem::operator delete
     static void operator delete(void* pBlock) { sMemoryPool.Free(pBlock); }
 
     virtual bool IsRtti(unsigned int uRtti) const;

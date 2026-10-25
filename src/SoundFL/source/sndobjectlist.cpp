@@ -3,11 +3,13 @@
 namespace Snd
 {
 
-// GLOBAL: SWBF2 0x007e3634
 // SYNTHETIC: SWBF2 0x0040bae0
 // `dynamic initializer for 'Snd::ObjectList::Node::smFreeList''
 // SYNTHETIC: SWBF2 0x0076a360
 // `dynamic atexit destructor for 'Snd::ObjectList::Node::smFreeList''
+
+// GLOBAL: SWBF2 0x007e3634
+// ObjectList::Node::smFreeList
 FreeList ObjectList::Node::smFreeList(8, 1, 16, 1);
 
 // FUNCTION: SWBF2 0x007388d0

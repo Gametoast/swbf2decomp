@@ -136,7 +136,8 @@ static const int sLuaFunctionToEnum[5][21] = {
 // FUNCTION: SWBF2 0x0052b500
 int RawControllerInputs::GetFunctionForAnalog(int, int) { return 0; }
 
-namespace GameLoop {
+namespace GameLoop
+{
 
 // FUNCTION: SWBF2 0x00533630
 void SetFunctionIdForButtonId(int iButton, int iFunction)
@@ -149,7 +150,8 @@ void SetFunctionIdForButtonId(int iButton, int iFunction)
 }
 }
 
-namespace GameLoop {
+namespace GameLoop
+{
 
 // FUNCTION: SWBF2 0x00533660
 int GetFunctionIdForButtonId(int iButton)
@@ -163,7 +165,8 @@ int GetFunctionIdForButtonId(int iButton)
 }
 }
 
-namespace GameLoop {
+namespace GameLoop
+{
 
 // FUNCTION: SWBF2 0x00533690
 int GetFunctionIdForAnalog()
@@ -1526,7 +1529,8 @@ void InitOptions()
 
 }
 
-namespace Lua_Callbacks {
+namespace Lua_Callbacks
+{
 
 // FUNCTION: SWBF2 0x00597540
 void _SetGameRules(eGAME_RULES eRules)
@@ -1602,42 +1606,50 @@ void _SetGameRules(eGAME_RULES eRules)
 }
 }
 
-namespace Lua_Callbacks {
+namespace Lua_Callbacks
+{
 // GLOBAL: SWBF2 0x007e737c
 bool gHeroesEnabled[4] = { true, true, true, false };
 }
 
-namespace Lua_Callbacks {
+namespace Lua_Callbacks
+{
 // GLOBAL: SWBF2 0x007e7fc0
 int gHeroRuleUnlock[4] = { 3, 3, 7, 1 };
 }
 
-namespace Lua_Callbacks {
+namespace Lua_Callbacks
+{
 // GLOBAL: SWBF2 0x007e7f60
 int gHeroRuleUnlockVal[4] = { 10, 10, 1, 1 };
 }
 
-namespace Lua_Callbacks {
+namespace Lua_Callbacks
+{
 // GLOBAL: SWBF2 0x007e7f70
 int gHeroRuleTeam[4] = { 3, 3, 3, 3 };
 }
 
-namespace Lua_Callbacks {
+namespace Lua_Callbacks
+{
 // GLOBAL: SWBF2 0x007e7fa0
 int gHeroRulePlayer[4] = { 1, 1, 1, 1 };
 }
 
-namespace Lua_Callbacks {
+namespace Lua_Callbacks
+{
 // GLOBAL: SWBF2 0x007e7f10
 int gHeroRuleRespawn[4] = { 2, 2, 1, 1 };
 }
 
-namespace Lua_Callbacks {
+namespace Lua_Callbacks
+{
 // GLOBAL: SWBF2 0x007e7f30
 int gHeroRuleRespawnVal[4] = { 90, 90, -1, -1 };
 }
 
-namespace Lua_Callbacks {
+namespace Lua_Callbacks
+{
 
 // GLOBAL: SWBF2 0x01e57944
 int gHuntShowScoreLimit;
@@ -1883,6 +1895,7 @@ void Sha512Hash(const unsigned char* input, unsigned int size, unsigned char* ou
 namespace Lua_Callbacks
 {
 
+// FUNCTION: SWBF2 0x005990d0
 void CleanupOptions()
 {
     _SetGameRules(gCurRules);
@@ -1891,7 +1904,9 @@ void CleanupOptions()
 }
 }
 
-// GLOBAL: SWBF2 0x01ec636c
 // SYNTHETIC: SWBF2 0x004041f0
 // `dynamic initializer for 'gGlobalNumBots''
+
+// GLOBAL: SWBF2 0x01ec636c
+// gGlobalNumBots
 int gGlobalNumBots = netNumBots;

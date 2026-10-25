@@ -566,55 +566,72 @@ unsigned char Combo::GetOffhandAnimIndex(int eState) const
     return (unsigned char)-1;
 }
 
-// GLOBAL: SWBF2 0x01eb9310
 // SYNTHETIC: SWBF2 0x00402540
 // `dynamic initializer for 'Combo::sMemoryPool''
 // SYNTHETIC: SWBF2 0x00766e10
 // `dynamic atexit destructor for 'Combo::sMemoryPool''
+
+// GLOBAL: SWBF2 0x01eb9310
+// Combo::sMemoryPool
 MemoryPool Combo::sMemoryPool("Combo", 0x24);
-// GLOBAL: SWBF2 0x01eb9360
 // SYNTHETIC: SWBF2 0x00402600
 // `dynamic initializer for 'Combo::Deflect::sMemoryPool''
 // SYNTHETIC: SWBF2 0x00766e70
 // `dynamic atexit destructor for 'Combo::Deflect::sMemoryPool''
+
+// GLOBAL: SWBF2 0x01eb9360
+// Combo::Deflect::sMemoryPool
 MemoryPool Combo::Deflect::sMemoryPool("Combo::Deflect", 0x24);
-// GLOBAL: SWBF2 0x01eb93b0
 // SYNTHETIC: SWBF2 0x00402580
 // `dynamic initializer for 'Combo::Transition::sMemoryPool''
 // SYNTHETIC: SWBF2 0x00766e30
 // `dynamic atexit destructor for 'Combo::Transition::sMemoryPool''
+
+// GLOBAL: SWBF2 0x01eb93b0
+// Combo::Transition::sMemoryPool
 MemoryPool Combo::Transition::sMemoryPool("Combo::Transition", 0x0c);
-// GLOBAL: SWBF2 0x01eb9400
 // SYNTHETIC: SWBF2 0x004025a0
 // `dynamic initializer for 'Combo::Condition::sMemoryPool''
 // SYNTHETIC: SWBF2 0x00766e40
 // `dynamic atexit destructor for 'Combo::Condition::sMemoryPool''
+
+// GLOBAL: SWBF2 0x01eb9400
+// Combo::Condition::sMemoryPool
 MemoryPool Combo::Condition::sMemoryPool("Combo::Condition", 0x14);
 
 int Combo::s_ComboTableNumEntries;
-// GLOBAL: SWBF2 0x01eb9454
 // SYNTHETIC: SWBF2 0x00402520
 // `dynamic initializer for 'Combo::s_ComboTable''
 
+// GLOBAL: SWBF2 0x01eb9454
+// Combo::s_ComboTable
+// GLOBAL: SWBF2 0x01eb9450
+// Combo::s_ComboTable
 PblHashTable<const Combo, 32> Combo::s_ComboTable;
 
-// GLOBAL: SWBF2 0x01eb9558
 // SYNTHETIC: SWBF2 0x004025e0
 // `dynamic initializer for 'Combo::DamageSample::sMemoryPool''
 // SYNTHETIC: SWBF2 0x00766e60
 // `dynamic atexit destructor for 'Combo::DamageSample::sMemoryPool''
+
+// GLOBAL: SWBF2 0x01eb9558
+// Combo::DamageSample::sMemoryPool
 MemoryPool Combo::DamageSample::sMemoryPool("Combo::DamageSample", 0x1c);
-// GLOBAL: SWBF2 0x01eb95a8
 // SYNTHETIC: SWBF2 0x004025c0
 // `dynamic initializer for 'Combo::Attack::sMemoryPool''
 // SYNTHETIC: SWBF2 0x00766e50
 // `dynamic atexit destructor for 'Combo::Attack::sMemoryPool''
+
+// GLOBAL: SWBF2 0x01eb95a8
+// Combo::Attack::sMemoryPool
 MemoryPool Combo::Attack::sMemoryPool("Combo::Attack", 0x10);
-// GLOBAL: SWBF2 0x01eb95f8
 // SYNTHETIC: SWBF2 0x00402560
 // `dynamic initializer for 'Combo::State::sMemoryPool''
 // SYNTHETIC: SWBF2 0x00766e20
 // `dynamic atexit destructor for 'Combo::State::sMemoryPool''
+
+// GLOBAL: SWBF2 0x01eb95f8
+// Combo::State::sMemoryPool
 MemoryPool Combo::State::sMemoryPool("Combo::State", 0x34);
 
 const float Combo::Condition::TIME_SCALE_INV = 100.0f;

@@ -4,7 +4,9 @@
 
 #include "UnitController.h"
 
-// VTABLE: SWBF2 0x007afae0
+// VTABLE: SWBF2 0x007afae0 Controller
+// VTABLE: SWBF2 0x007afaa0 CommandFsm
+// VTABLE: SWBF2 0x007afaf8 PblHandled
 class UnitFlyController : public UnitController
 {
 public:

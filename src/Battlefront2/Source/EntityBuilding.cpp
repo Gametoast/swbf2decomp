@@ -73,16 +73,24 @@ const PblBox& EntityBuilding::GetBBox() const
 
 // SYNTHETIC: SWBF2 0x00402890
 // `dynamic initializer for 'EntityBuildingClass::rttiHashEntityBuildingClass''
+// EntityBuildingClass::rttiHashEntityBuildingClass
+
 // GLOBAL: SWBF2 0x01eb986c
 // EntityBuildingClass::rttiHashEntityBuildingClass
 PblHash EntityBuildingClass::rttiHashEntityBuildingClass("EntityBuildingClass");
+// GLOBAL: SWBF2 0x00788f50
+// EntityBuildingClass::rttiNameEntityBuildingClass
 const char EntityBuildingClass::rttiNameEntityBuildingClass[] = "EntityBuildingClass";
 
 // SYNTHETIC: SWBF2 0x00402880
 // `dynamic initializer for 'EntityBuilding::rttiHashEntityBuilding''
+// EntityBuilding::rttiHashEntityBuilding
+
 // GLOBAL: SWBF2 0x01ebb874
 // EntityBuilding::rttiHashEntityBuilding
 PblHash EntityBuilding::rttiHashEntityBuilding("EntityBuilding");
+// GLOBAL: SWBF2 0x00788f70
+// EntityBuilding::rttiNameEntityBuilding
 const char EntityBuilding::rttiNameEntityBuilding[] = "EntityBuilding";
 
 

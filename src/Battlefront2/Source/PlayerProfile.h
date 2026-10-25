@@ -283,11 +283,17 @@ int GetDefaultProfileIdx();
 
 }
 
-namespace PlayerPrefs { void InitAll(); }
+namespace PlayerPrefs
+{
+void InitAll();
+}
 
 double ConvertMouseScaleToRawScale(float fScale, int iMode);
 
-namespace PlayerProfile { void ResetAllProfiles(); }
+namespace PlayerProfile
+{
+void ResetAllProfiles();
+}
 
 namespace PlayerPrefs
 {
@@ -321,5 +327,8 @@ static int* const playerJoystickNumbers = &PlayerPrefs::mAllUserPrefs[0].mJoysti
 
 static int* const playerTeamNumbers = &PlayerPrefs::mAllUserPrefs[0].mTeamNum;
 
-namespace PlayerProfile { extern int mCurProfile; }
+namespace PlayerProfile
+{
+extern int mCurProfile;
+}
 extern int mNumMemoryProfiles;

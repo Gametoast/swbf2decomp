@@ -29,7 +29,9 @@ public:
   
  
 
-// VTABLE: SWBF2 0x007acb5c
+// VTABLE: SWBF2 0x007acb5c Thread
+// VTABLE: SWBF2 0x007acb54 PblHandled
+// VTABLE: SWBF2 0x007acbd0
 class OrdnanceHaywire : public OrdnanceSticky
 {
 public:

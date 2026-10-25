@@ -12,7 +12,8 @@ StreamConsumer::StreamConsumer()
 
 }
 
-namespace Snd {
+namespace Snd
+{
 
 // FUNCTION: SWBF2 0x0074ded0
 StreamConsumer::~StreamConsumer()

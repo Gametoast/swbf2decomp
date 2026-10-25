@@ -7,8 +7,14 @@ namespace GameMemory
 {
 // GLOBAL: SWBF2 0x01e5614c
 int ApplicationHeap;
+// GLOBAL: SWBF2 0x01e56168
+// GamespyHeap
 int GamespyHeap;
+// GLOBAL: SWBF2 0x01e56160
+// RunTimeHeap
 int RunTimeHeap;
+// GLOBAL: SWBF2 0x01e56164
+// TempLoadHeap
 int TempLoadHeap;
 
 // GLOBAL: SWBF2 0x01e56144
@@ -26,9 +32,12 @@ char* GamespyHeapstart;
 char* GamespyHeapend;
 char* g_Heap3Start;
 void* gTempHeapBlock;
+namespace GameMemory
+{
 
 // GLOBAL: SWBF2 0x01e56158
-namespace GameMemory { int gTempGamespyBlock; }
+int gTempGamespyBlock;
+}
 // GLOBAL: SWBF2 0x01e5615c
 
 char* gArtistHeapStart;

@@ -102,6 +102,7 @@ Damageable::~Damageable()
 // Damageable::`scalar deleting destructor'
 
 // GLOBAL: SWBF2 0x007e6328
+// Damageable::sSameTeamDamageScale
 float Damageable::sSameTeamDamageScale = 1.0f;
 
 // FUNCTION: SWBF2 0x004887b0

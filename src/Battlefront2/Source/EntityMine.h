@@ -52,7 +52,12 @@ public:
  
  
 
-// VTABLE: SWBF2 0x0079c274
+// VTABLE: SWBF2 0x0079c274 EntityEx
+// VTABLE: SWBF2 0x0079c1b8 CollisionObject
+// VTABLE: SWBF2 0x0079c20c RedSceneObject
+// VTABLE: SWBF2 0x0079c3e0 Damageable
+// VTABLE: SWBF2 0x0079c40c PblHandled
+// VTABLE: SWBF2 0x0079c414
 class EntityMine : public EntityItem
 {
 public:
@@ -72,6 +77,8 @@ public:
     virtual void ReadObject(NetPktGroup& group, NetObjState* pState);
 
     static void* operator new(unsigned int uSize) { return sMemoryPool.Allocate(uSize); }
+    // SYNTHETIC: SWBF2 0x004cf530
+    // EntityMine::operator delete
     static void operator delete(void* pBlock) { sMemoryPool.Free(pBlock); }
 
     static PblHash rttiHashEntityMine;

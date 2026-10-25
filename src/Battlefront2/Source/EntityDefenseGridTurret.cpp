@@ -7,23 +7,33 @@
 
 // SYNTHETIC: SWBF2 0x004029b0
 // `dynamic initializer for 'EntityDefenseGridTurretClass::rttiHashEntityDefenseGridTurretClass''
+// EntityDefenseGridTurretClass::rttiHashEntityDefenseGridTurretClass
+
 // GLOBAL: SWBF2 0x01ebb990
 // EntityDefenseGridTurretClass::rttiHashEntityDefenseGridTurretClass
 PblHash EntityDefenseGridTurretClass::rttiHashEntityDefenseGridTurretClass("EntityDefenseGridTurretClass");
+// GLOBAL: SWBF2 0x007890cc
+// EntityDefenseGridTurretClass::rttiNameEntityDefenseGridTurretClass
 const char EntityDefenseGridTurretClass::rttiNameEntityDefenseGridTurretClass[] = "EntityDefenseGridTurretClass";
 
 // SYNTHETIC: SWBF2 0x004029a0
 // `dynamic initializer for 'EntityDefenseGridTurret::rttiHashEntityDefenseGridTurret''
+// EntityDefenseGridTurret::rttiHashEntityDefenseGridTurret
+
 // GLOBAL: SWBF2 0x01ebb994
 // EntityDefenseGridTurret::rttiHashEntityDefenseGridTurret
 PblHash EntityDefenseGridTurret::rttiHashEntityDefenseGridTurret("EntityDefenseGridTurret");
+// GLOBAL: SWBF2 0x007890f8
+// EntityDefenseGridTurret::rttiNameEntityDefenseGridTurret
 const char EntityDefenseGridTurret::rttiNameEntityDefenseGridTurret[] = "EntityDefenseGridTurret";
 
-// GLOBAL: SWBF2 0x01ebb940
 // SYNTHETIC: SWBF2 0x00402980
 // `dynamic initializer for 'EntityDefenseGridTurret::sMemoryPool''
 // SYNTHETIC: SWBF2 0x00766f20
 // `dynamic atexit destructor for 'EntityDefenseGridTurret::sMemoryPool''
+
+// GLOBAL: SWBF2 0x01ebb940
+// EntityDefenseGridTurret::sMemoryPool
 MemoryPool EntityDefenseGridTurret::sMemoryPool("EntityDefenseGridTurret", 0x6c0);
 
 inline void* EntityDefenseGridTurret::operator new(unsigned int uSize)
@@ -31,6 +41,8 @@ inline void* EntityDefenseGridTurret::operator new(unsigned int uSize)
     return sMemoryPool.Allocate(uSize);
 }
 
+// SYNTHETIC: SWBF2 0x00497a20
+// EntityDefenseGridTurret::operator delete
 inline void EntityDefenseGridTurret::operator delete(void* pBlock)
 {
     sMemoryPool.Free(pBlock);

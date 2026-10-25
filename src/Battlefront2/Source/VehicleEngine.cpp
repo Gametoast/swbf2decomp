@@ -16,25 +16,31 @@ const unsigned int VehicleEngine::sParamIDs[12] = {
     0x08aab3aa, 0xc8a9e3c6, 0xc7ab9270, 0x43f6a333, 0xeecf1cca, 0xbb0169a2,
 };
 
-// GLOBAL: SWBF2 0x007ebe9c
 // SYNTHETIC: SWBF2 0x00406d70
 // `dynamic initializer for 'VehicleEngine::sEngineList''
 // SYNTHETIC: SWBF2 0x007696d0
 // `dynamic atexit destructor for 'VehicleEngine::sEngineList''
+
+// GLOBAL: SWBF2 0x007ebe9c
+// VehicleEngine::sEngineList
 PblListSingle VehicleEngine::sEngineList;
 
-// GLOBAL: SWBF2 0x007ebeb8
 // SYNTHETIC: SWBF2 0x00406da0
 // `dynamic initializer for 'VehicleEngineClass::Boost::sGlobalList''
 // SYNTHETIC: SWBF2 0x007696f0
 // `dynamic atexit destructor for 'VehicleEngineClass::Boost::sGlobalList''
+
+// GLOBAL: SWBF2 0x007ebeb8
+// VehicleEngineClass::Boost::sGlobalList
 PblListSingle VehicleEngineClass::Boost::sGlobalList;
 
-// GLOBAL: SWBF2 0x007ec3b0
 // SYNTHETIC: SWBF2 0x00406d80
 // `dynamic initializer for 'VehicleEngineClass::Boost::smFreeList''
 // SYNTHETIC: SWBF2 0x007696e0
 // `dynamic atexit destructor for 'VehicleEngineClass::Boost::smFreeList''
+
+// GLOBAL: SWBF2 0x007ec3b0
+// VehicleEngineClass::Boost::smFreeList
 Snd::FreeList VehicleEngineClass::Boost::smFreeList((sizeof(Boost) + 15) & ~15u, 16, 8, 1);
 
 // FUNCTION: SWBF2 0x0066cac0

@@ -10,25 +10,36 @@
 #include "PebbleFL/Common/PblMath.h"
 #include "RedEngineFL/Util/RedLocalizeDB.h"
 
-// GLOBAL: SWBF2 0x01eb9864
 // SYNTHETIC: SWBF2 0x00402830
 // `dynamic initializer for 'Entity::rttiHashEntity''
 
+// GLOBAL: SWBF2 0x01eb9864
+// Entity::rttiHashEntity
 PblHash Entity::rttiHashEntity("Entity");
+// GLOBAL: SWBF2 0x00788f2c
+// Entity::rttiNameEntity
 const char Entity::rttiNameEntity[] = "Entity";
 
 // SYNTHETIC: SWBF2 0x00402840
 // `dynamic initializer for 'EntityEx::rttiHashEntityEx''
+// EntityEx::rttiHashEntityEx
+
 // GLOBAL: SWBF2 0x01eb9868
 // EntityEx::rttiHashEntityEx
 PblHash EntityEx::rttiHashEntityEx("EntityEx");
+// GLOBAL: SWBF2 0x00788f44
+// EntityEx::rttiNameEntityEx
 const char EntityEx::rttiNameEntityEx[] = "EntityEx";
 
 // SYNTHETIC: SWBF2 0x00402850
 // `dynamic initializer for 'EntityClass::rttiHashEntityClass''
+// EntityClass::rttiHashEntityClass
+
 // GLOBAL: SWBF2 0x01eb9860
 // EntityClass::rttiHashEntityClass
 PblHash EntityClass::rttiHashEntityClass("EntityClass");
+// GLOBAL: SWBF2 0x00788f34
+// EntityClass::rttiNameEntityClass
 const char EntityClass::rttiNameEntityClass[] = "EntityClass";
 
 
@@ -37,10 +48,11 @@ const char EntityClass::rttiNameEntityClass[] = "EntityClass";
 
 // GLOBAL: SWBF2 0x01eb9870
 int EntityEx::mIdMapNumEntries;
-// GLOBAL: SWBF2 0x01eb9874
 // SYNTHETIC: SWBF2 0x00402860
 // `dynamic initializer for 'EntityEx::mIdMap''
 
+// GLOBAL: SWBF2 0x01eb9874
+// EntityEx::mIdMap
 PblHashTable<EntityEx, 1024> EntityEx::mIdMap;
 
 EntityClass::MapParams::MapParams()

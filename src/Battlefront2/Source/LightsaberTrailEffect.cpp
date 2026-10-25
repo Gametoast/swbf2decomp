@@ -65,9 +65,12 @@ extern "C" PblVector3* __stdcall D3DXVec3TransformCoord(PblVector3* pOut, const 
                                                         const PblMatrix* pM);
 extern "C" PblVector3* __stdcall D3DXVec3TransformNormal(PblVector3* pOut, const PblVector3* pV,
                                                          const PblMatrix* pM);
+namespace GameLoop
+{
 
 // GLOBAL: SWBF2 0x01e56058
-namespace GameLoop { float sClientDeltaTime; }
+float sClientDeltaTime;
+}
 
 // FUNCTION: SWBF2 0x00573f60
 LightsaberTrail::LightsaberTrail(const LightsaberTrailClass* pClass)

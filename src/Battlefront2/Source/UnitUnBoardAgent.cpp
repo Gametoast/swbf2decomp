@@ -4,9 +4,13 @@
 
 // SYNTHETIC: SWBF2 0x00406d40
 // `dynamic initializer for 'UnitUnBoardAgent::rttiHashUnitUnBoardAgent''
+// UnitUnBoardAgent::rttiHashUnitUnBoardAgent
+
 // GLOBAL: SWBF2 0x01f9a254
 // UnitUnBoardAgent::rttiHashUnitUnBoardAgent
 PblHash UnitUnBoardAgent::rttiHashUnitUnBoardAgent("UnitUnBoardAgent");
+// GLOBAL: SWBF2 0x0078b998
+// UnitUnBoardAgent::rttiNameUnitUnBoardAgent
 const char UnitUnBoardAgent::rttiNameUnitUnBoardAgent[] = "UnitUnBoardAgent";
 
 

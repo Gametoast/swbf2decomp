@@ -35,13 +35,17 @@ static const unsigned int VOTypeNames[48] =
     0x1d2f03ea, 0x03a34694, 0x7208dd19, 0x335a8bad,
 };
 
-namespace AI {
-namespace VOHelper {
+namespace AI
+{
+namespace VOHelper
+{
 extern VOSound* sLoadingBatch;
 }
 }
-namespace AI {
-namespace VOHelper {
+namespace AI
+{
+namespace VOHelper
+{
 extern int sLoadingBatchIndex;
 }
 }
@@ -664,11 +668,13 @@ namespace VOHelper
 // SYNTHETIC: SWBF2 0x006715c0
 // AI::VOHelper::QueuedSound::QueuedSound
 
-// GLOBAL: SWBF2 0x01f9a320
 // SYNTHETIC: SWBF2 0x00406f50
 // `dynamic initializer for 'AI::VOHelper::mSndQueue''
 // SYNTHETIC: SWBF2 0x00769780
 // `dynamic atexit destructor for 'AI::VOHelper::mSndQueue''
+
+// GLOBAL: SWBF2 0x01f9a320
+// mSndQueue
 QueuedSound mSndQueue[20];
 
 // GLOBAL: SWBF2 0x01eafd30

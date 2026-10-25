@@ -21,11 +21,13 @@
 #include "NetGame.h"
 #include "TeamManager.h"
 
-// GLOBAL: SWBF2 0x01ec6090
 // SYNTHETIC: SWBF2 0x00403f20
 // `dynamic initializer for 'BaseHint::sMemoryPool''
 // SYNTHETIC: SWBF2 0x00768b10
 // `dynamic atexit destructor for 'BaseHint::sMemoryPool''
+
+// GLOBAL: SWBF2 0x01ec6090
+// BaseHint::sMemoryPool
 MemoryPool BaseHint::sMemoryPool("BaseHint", 0x40);
 
 extern int WORLD_EXTENTS;
@@ -524,7 +526,8 @@ int RequestLandHints(const UnitController* pController, const PblVector3& vPos,
 
 }
 
-namespace HintManager {
+namespace HintManager
+{
 
 // FUNCTION: SWBF2 0x005438e0
 void Reset()

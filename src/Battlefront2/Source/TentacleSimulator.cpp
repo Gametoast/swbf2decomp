@@ -25,11 +25,13 @@ static const unsigned int TENTACLE_NAMES[20] =
 
 static const float gTentacleAngle = 0.52359879f;
 
-// GLOBAL: SWBF2 0x01f992e0
 // SYNTHETIC: SWBF2 0x004069d0
 // `dynamic initializer for 'TentacleSimulator::sMemoryPool''
 // SYNTHETIC: SWBF2 0x00769590
 // `dynamic atexit destructor for 'TentacleSimulator::sMemoryPool''
+
+// GLOBAL: SWBF2 0x01f992e0
+// TentacleSimulator::sMemoryPool
 MemoryPool TentacleSimulator::sMemoryPool("TentacleSimulator", 0x268);
 
 // FUNCTION: SWBF2 0x00656e70

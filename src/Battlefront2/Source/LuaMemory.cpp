@@ -43,7 +43,10 @@ MemPoolInfo gPoolInfo[48];
 MemoryPool* gPools[48];
 
 unsigned int gLuaUsedMemory;
-namespace LuaMemory { unsigned int gLuaNumBlocks; }
+namespace LuaMemory
+{
+unsigned int gLuaNumBlocks;
+}
 
 // FUNCTION: SWBF2 0x005a15d0
 void LuaMemory::CreatePools(bool bMission)

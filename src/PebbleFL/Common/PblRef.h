@@ -13,6 +13,8 @@ public:
 
     virtual void Kill();
 
+    // SYNTHETIC: SWBF2 0x0050b410
+    // PblRef::~PblRef
     virtual ~PblRef()
     {
         mValidFlag = 0;

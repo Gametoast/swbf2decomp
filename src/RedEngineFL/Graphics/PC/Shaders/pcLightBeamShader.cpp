@@ -250,28 +250,36 @@ void pcLightBeamShader::_StaticInit() const
 {
 }
 
-// GLOBAL: SWBF2 0x009c9994
 // SYNTHETIC: SWBF2 0x00409b60
 // `dynamic initializer for 'pcLightBeamShader::s_uiRenderTypeHash''
+
+// GLOBAL: SWBF2 0x009c9994
+// pcLightBeamShader::s_uiRenderTypeHash
 unsigned int pcLightBeamShader::s_uiRenderTypeHash = PblHash("LightBeam");
 
-// GLOBAL: SWBF2 0x009c99d0
 // SYNTHETIC: SWBF2 0x00409b20
 // `dynamic initializer for 'pcLightBeamShader::s_Factory''
 // SYNTHETIC: SWBF2 0x00769d20
 // `dynamic atexit destructor for 'pcLightBeamShader::s_Factory''
+
+// GLOBAL: SWBF2 0x009c99d0
+// pcLightBeamShader::s_Factory
 pcLightBeamShader pcLightBeamShader::s_Factory;
 
-// GLOBAL: SWBF2 0x009c999c
 // SYNTHETIC: SWBF2 0x00409b40
 // `dynamic initializer for 'pcLightBeamShader::s_shaderDef''
 // SYNTHETIC: SWBF2 0x00769d40
 // `dynamic atexit destructor for 'pcLightBeamShader::s_shaderDef''
+
+// GLOBAL: SWBF2 0x009c999c
+// pcLightBeamShader::s_shaderDef
 pcRedShaderDef pcLightBeamShader::s_shaderDef("lightbeam_shader.xml");
 
-// GLOBAL: SWBF2 0x009c9998
 // SYNTHETIC: SWBF2 0x00409bc0
 // `dynamic initializer for 'kuiLinearRamp''
+
+// GLOBAL: SWBF2 0x009c9998
+// kuiLinearRamp
 static unsigned int kuiLinearRamp = PblHash("linear_ramp");
 
 // FUNCTION: SWBF2 0x00704600
@@ -329,4 +337,5 @@ void pcLightBeamShader::Begin_Fixed(unsigned int, unsigned int) const
 // `dynamic initializer for 'PblMath::fOneOverTwoPi''
 
 // GLOBAL: SWBF2 0x009c9990
+// g_pcLightBeamShader
 unsigned int g_pcLightBeamShader;

@@ -1555,7 +1555,14 @@ extern void SetNetAwardsEnabled(int);
 
 extern bool netAutoAssignTeams;
 
-namespace Lua_Callbacks { static const unsigned int netPlayersSupported[9] = {3, 6, 9, 12, 19, 25, 38, 76, 153}; }
+namespace Lua_Callbacks
+{
+static const unsigned int netPlayersSupported[9] =
+{
+3, 6, 9, 12, 19, 25, 38, 76, 153
+}
+;
+}
 
 // GLOBAL: SWBF2 0x007e8edb
 bool NetSetup::mLoginErrorsAreFatal = true;
@@ -3449,67 +3456,78 @@ int ScriptCB_VoiceEnable(lua_State*)
 
 }
 
-namespace Lua_Callbacks {
+namespace Lua_Callbacks
+{
 
 // FUNCTION: SWBF2 0x005916b0
 int ScriptCB_InNetSession(lua_State*) { lua_pushboolean(LuaHelper::mState, NetSetup::IsInSession()); return 1; }
 }
 
-namespace Lua_Callbacks {
+namespace Lua_Callbacks
+{
 
 // FUNCTION: SWBF2 0x005916d0
 int ScriptCB_NetWasHost(lua_State*) { lua_pushboolean(LuaHelper::mState, NetSetup::WasHost()); return 1; }
 }
 
-namespace Lua_Callbacks {
+namespace Lua_Callbacks
+{
 
 // FUNCTION: SWBF2 0x005916f0
 int ScriptCB_NetWasDedicated(lua_State*) { lua_pushboolean(LuaHelper::mState, NetSetup::WasDedicated()); return 1; }
 }
 
-namespace Lua_Callbacks {
+namespace Lua_Callbacks
+{
 
 // FUNCTION: SWBF2 0x00591710
 int ScriptCB_NetWasDedicatedQuit(lua_State*) { lua_pushnumber(LuaHelper::mState, (float)(unsigned char)PauseMenu::sPauseDedicated); return 1; }
 }
 
-namespace Lua_Callbacks {
+namespace Lua_Callbacks
+{
 
 // FUNCTION: SWBF2 0x00591740
 int ScriptCB_NetWasClient(lua_State*) { lua_pushboolean(LuaHelper::mState, NetSetup::WasClient()); return 1; }
 }
 
-namespace Lua_Callbacks {
+namespace Lua_Callbacks
+{
 
 // FUNCTION: SWBF2 0x005917f0
 int ScriptCB_EndAutoNet(lua_State*) { autoNetEnabled = false; return 0; }
 }
 
-namespace Lua_Callbacks {
+namespace Lua_Callbacks
+{
 
 // FUNCTION: SWBF2 0x00591800
 int ScriptCB_GetAutoNetMode(lua_State*) { lua_pushstring(LuaHelper::mState, autoNetScript); return 1; }
 }
 
-namespace Lua_Callbacks {
+namespace Lua_Callbacks
+{
 
 // FUNCTION: SWBF2 0x00591910
 int ScriptCB_IsBootInvitePending(lua_State*) { lua_pushboolean(LuaHelper::mState, 0); return 1; }
 }
 
-namespace Lua_Callbacks {
+namespace Lua_Callbacks
+{
 
 // FUNCTION: SWBF2 0x00591930
 int ScriptCB_GetAutoAssignTeams(lua_State*) { lua_pushboolean(LuaHelper::mState, netAutoAssignTeams); return 1; }
 }
 
-namespace Lua_Callbacks {
+namespace Lua_Callbacks
+{
 
 // FUNCTION: SWBF2 0x005919a0
 int ScriptCB_GetGameName(lua_State*) { lua_pushstring(LuaHelper::mState, NetSetup::GetHostName()); return 1; }
 }
 
-namespace Lua_Callbacks {
+namespace Lua_Callbacks
+{
 
 // FUNCTION: SWBF2 0x005919c0
 int ScriptCB_SetGameName(lua_State*)
@@ -3522,25 +3540,29 @@ int ScriptCB_SetGameName(lua_State*)
 }
 }
 
-namespace Lua_Callbacks {
+namespace Lua_Callbacks
+{
 
 // FUNCTION: SWBF2 0x00591b50
 int ScriptCB_EnableJournal(lua_State*) { NetGame::EnableJournal(); return 0; }
 }
 
-namespace Lua_Callbacks {
+namespace Lua_Callbacks
+{
 
 // FUNCTION: SWBF2 0x00591b60
 int ScriptCB_EnablePlayback(lua_State*) { NetGame::EnablePlayback(); return 0; }
 }
 
-namespace Lua_Callbacks {
+namespace Lua_Callbacks
+{
 
 // FUNCTION: SWBF2 0x00591ef0
 int ScriptCB_TrackLoginErrors(lua_State*) { NetSetup::mLoginErrorsAreFatal = lua_toboolean(LuaHelper::mState, 1) != 0; return 0; }
 }
 
-namespace Lua_Callbacks {
+namespace Lua_Callbacks
+{
 
 // FUNCTION: SWBF2 0x00591f30
 int ScriptCB_BeginLobby(lua_State*)
@@ -3586,19 +3608,22 @@ int ScriptCB_BeginLobby(lua_State*)
 }
 }
 
-namespace Lua_Callbacks {
+namespace Lua_Callbacks
+{
 
 // FUNCTION: SWBF2 0x005969e0
 int ScriptCB_SearchStatsRank(lua_State*) { return 1; }
 }
 
-namespace Lua_Callbacks {
+namespace Lua_Callbacks
+{
 
 // FUNCTION: SWBF2 0x005969f0
 int ScriptCB_GetBandwidth(lua_State*) { lua_pushnumber(LuaHelper::mState, (float)TEMP_bandwith); return 1; }
 }
 
-namespace Lua_Callbacks {
+namespace Lua_Callbacks
+{
 
 // FUNCTION: SWBF2 0x00596a20
 int ScriptCB_SetBandwidth(lua_State*)

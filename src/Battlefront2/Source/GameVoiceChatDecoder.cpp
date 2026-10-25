@@ -74,10 +74,22 @@ void* __fastcall sub_53C780(void* pDecoder, void*  , unsigned int flags)
     return pDecoder;
 }
 
-namespace VoiceChat { void* Alloc(unsigned int uiSize); }
-namespace VoiceChat { void Free(void* pBlock); }
-namespace GameVoiceChat { unsigned int CalculatePlayCaptureBufferSizeSamples(float fMilliseconds); }
-namespace GameVoiceChat { unsigned int CalculateEncodedPacketSize(unsigned int uiSamples); }
+namespace VoiceChat
+{
+void* Alloc(unsigned int uiSize);
+}
+namespace VoiceChat
+{
+void Free(void* pBlock);
+}
+namespace GameVoiceChat
+{
+unsigned int CalculatePlayCaptureBufferSizeSamples(float fMilliseconds);
+}
+namespace GameVoiceChat
+{
+unsigned int CalculateEncodedPacketSize(unsigned int uiSamples);
+}
 
 namespace Snd
 {
@@ -365,7 +377,8 @@ bool VoiceChat::Decoder::Update()
     return static_cast<GameVoiceChat::Decoder*>(this)->Update();
 }
 
-namespace GameVoiceChat {
+namespace GameVoiceChat
+{
 
 // FUNCTION: SWBF2 0x0053cff0
 bool Decoder::ReceivePacket(unsigned int uiInput, const VoiceChat::AudioPacket* pPacket)
@@ -403,7 +416,8 @@ bool Decoder::ReceivePacket(unsigned int uiInput, const VoiceChat::AudioPacket* 
 }
 }
 
-namespace GameVoiceChat {
+namespace GameVoiceChat
+{
 
 // FUNCTION: SWBF2 0x0053d110
 bool Decoder::IsStarving(unsigned int uiInput, bool bForce)

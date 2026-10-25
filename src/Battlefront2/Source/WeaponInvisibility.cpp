@@ -12,9 +12,13 @@
 
 // SYNTHETIC: SWBF2 0x004071a0
 // `dynamic initializer for 'WeaponInvisibility::rttiHashWeaponInvisibility''
+// WeaponInvisibility::rttiHashWeaponInvisibility
+
 // GLOBAL: SWBF2 0x01f9a8d4
 // WeaponInvisibility::rttiHashWeaponInvisibility
 PblHash WeaponInvisibility::rttiHashWeaponInvisibility("WeaponInvisibility");
+// GLOBAL: SWBF2 0x0078c04c
+// WeaponInvisibility::rttiNameWeaponInvisibility
 const char WeaponInvisibility::rttiNameWeaponInvisibility[] = "WeaponInvisibility";
 
 
@@ -25,9 +29,13 @@ const char WeaponInvisibility::rttiNameWeaponInvisibility[] = "WeaponInvisibilit
 
 // SYNTHETIC: SWBF2 0x004071b0
 // `dynamic initializer for 'WeaponInvisibilityClass::rttiHashWeaponInvisibilityClass''
+// WeaponInvisibilityClass::rttiHashWeaponInvisibilityClass
+
 // GLOBAL: SWBF2 0x01f9a8d8
 // WeaponInvisibilityClass::rttiHashWeaponInvisibilityClass
 PblHash WeaponInvisibilityClass::rttiHashWeaponInvisibilityClass("WeaponInvisibilityClass");
+// GLOBAL: SWBF2 0x0078c028
+// WeaponInvisibilityClass::rttiNameWeaponInvisibilityClass
 const char WeaponInvisibilityClass::rttiNameWeaponInvisibilityClass[] = "WeaponInvisibilityClass";
 
 // FUNCTION: SWBF2 0x006865f0

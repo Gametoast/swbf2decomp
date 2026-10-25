@@ -15,10 +15,11 @@ void __cdecl PblTraceP(const char* Format, ...);
 extern "C" PblMatrix* __stdcall D3DXMatrixMultiply(PblMatrix* pOut, const PblMatrix* pM1,
                                                    const PblMatrix* pM2);
 
-// GLOBAL: SWBF2 0x009c9740
 // SYNTHETIC: SWBF2 0x00409a70
 // `dynamic initializer for 's_blurTexMatrix''
 
+// GLOBAL: SWBF2 0x009c9740
+// s_blurTexMatrix
 static PblMatrix s_blurTexMatrix;
 
 // GLOBAL: SWBF2 0x007e1b90
@@ -84,6 +85,7 @@ void pcParticleShader::Begin_Prog1(unsigned int, unsigned int) const
     if (m_blurEnable)
     {
         // GLOBAL: SWBF2 0x009c9880
+        // s_BiasToTextureMatrix
 
         static const PblMatrix s_BiasToTextureMatrix(
             PblVector4{ 0.5f, 0.0f, 0.0f, 0.0f },
@@ -473,28 +475,36 @@ void pcParticleShader::_StaticInit() const
 {
 }
 
-// GLOBAL: SWBF2 0x009c96ec
 // SYNTHETIC: SWBF2 0x004099f0
 // `dynamic initializer for 'pcParticleShader::s_uiRenderTypeHash''
+
+// GLOBAL: SWBF2 0x009c96ec
+// pcParticleShader::s_uiRenderTypeHash
 unsigned int pcParticleShader::s_uiRenderTypeHash = PblHash("Particle");
 
-// GLOBAL: SWBF2 0x009c96f0
 // SYNTHETIC: SWBF2 0x004099b0
 // `dynamic initializer for 'pcParticleShader::s_Factory''
 // SYNTHETIC: SWBF2 0x00769cc0
 // `dynamic atexit destructor for 'pcParticleShader::s_Factory''
+
+// GLOBAL: SWBF2 0x009c96f0
+// pcParticleShader::s_Factory
 pcParticleShader pcParticleShader::s_Factory;
 
-// GLOBAL: SWBF2 0x009c9780
 // SYNTHETIC: SWBF2 0x004099d0
 // `dynamic initializer for 'pcParticleShader::s_shaderDef''
 // SYNTHETIC: SWBF2 0x00769ce0
 // `dynamic atexit destructor for 'pcParticleShader::s_shaderDef''
+
+// GLOBAL: SWBF2 0x009c9780
+// pcParticleShader::s_shaderDef
 pcRedShaderDef pcParticleShader::s_shaderDef("particle_shader.xml");
 
-// GLOBAL: SWBF2 0x009c9734
 // SYNTHETIC: SWBF2 0x00409a50
 // `dynamic initializer for 'kuiLinearRamp''
+
+// GLOBAL: SWBF2 0x009c9734
+// kuiLinearRamp
 static unsigned int kuiLinearRamp = PblHash("linear_ramp");
 
 // SYNTHETIC: SWBF2 0x00409a10
@@ -504,4 +514,5 @@ static unsigned int kuiLinearRamp = PblHash("linear_ramp");
 // `dynamic initializer for 'PblMath::fOneOverTwoPi''
 
 // GLOBAL: SWBF2 0x009c96e8
+// g_pcParticleShader
 unsigned int g_pcParticleShader;

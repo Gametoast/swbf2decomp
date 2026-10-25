@@ -9,7 +9,10 @@
 extern void* GetNextSaveFile(void* pDevice);
 extern void sub_631640();
 extern unsigned int CalcCRC(void const* pData, unsigned int uiSize, unsigned int uiSeed);
-namespace RedLocalizeDB { const unsigned short* Find(unsigned int uiHash, bool bNullIfMissing); }
+namespace RedLocalizeDB
+{
+const unsigned short* Find(unsigned int uiHash, bool bNullIfMissing);
+}
 
 extern int SafeLocalizeSPrintf(void* pDest, unsigned int uiSize, char const* pcFormat, int iArg);
 
@@ -43,7 +46,10 @@ int SafeLocalizeSPrintf(void* pDest, unsigned int uiSize, char const* pcFormat,
 }
 unsigned short* SafeLocalizeStrcpy(unsigned short* pusDest, char const* pcSrc, unsigned int uiSize);
 
-namespace RedLocalizeDB { const unsigned short* Find(unsigned int uiHash, bool bNullIfMissing); }
+namespace RedLocalizeDB
+{
+const unsigned short* Find(unsigned int uiHash, bool bNullIfMissing);
+}
 
 // FUNCTION: SWBF2 0x00631600
 unsigned int Hash16(unsigned short const* pusString)

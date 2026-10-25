@@ -36,6 +36,8 @@ public:
 
     T Get(int i) { return mPool[i + 1].mObj; }
 
+    // TEMPLATE: SWBF2 0x0072b890
+    // PblHeap<int,int>::Pop
     void Pop()
     {
         mPool[1] = mPool[mCount--];

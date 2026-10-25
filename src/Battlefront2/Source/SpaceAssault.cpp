@@ -51,11 +51,13 @@ inline int GetMapMode(const HUD::ElementMap* pMap)
 // GLOBAL: SWBF2 0x01eafb2c
 SpaceAssault* SpaceAssault::mInstance;
 
-// GLOBAL: SWBF2 0x01f6de48
 // SYNTHETIC: SWBF2 0x004063b0
 // `dynamic initializer for 'SpaceAssault::ViewportData::sMemoryPool''
 // SYNTHETIC: SWBF2 0x007694c0
 // `dynamic atexit destructor for 'SpaceAssault::ViewportData::sMemoryPool''
+
+// GLOBAL: SWBF2 0x01f6de48
+// SpaceAssault::ViewportData::sMemoryPool
 MemoryPool SpaceAssault::ViewportData::sMemoryPool("SpaceAssault::ViewportData", 0x2410);
 
 // FUNCTION: SWBF2 0x0064b7c0

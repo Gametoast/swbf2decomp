@@ -7,17 +7,23 @@
 #include "RedEngineFL/Graphics/PC/pcRedRenderer.h"
 #include "RedInterfaceScreen.h"
 
-// GLOBAL: SWBF2 0x009982b0
 // SYNTHETIC: SWBF2 0x00408270
 // `dynamic initializer for 'SQRT3''
+
+// GLOBAL: SWBF2 0x009982b0
+// SQRT3
 float SQRT3 = (float)sqrt(3.0);
-// GLOBAL: SWBF2 0x009982b4
 // SYNTHETIC: SWBF2 0x00408230
 // `dynamic initializer for 'RedHotSpot::s_fCotHalfFOVx''
+
+// GLOBAL: SWBF2 0x009982b4
+// RedHotSpot::s_fCotHalfFOVx
 float RedHotSpot::s_fCotHalfFOVx = SQRT3;
-// GLOBAL: SWBF2 0x009982c0
 // SYNTHETIC: SWBF2 0x00408250
 // `dynamic initializer for 'RedHotSpot::s_fCotHalfFOVy''
+
+// GLOBAL: SWBF2 0x009982c0
+// RedHotSpot::s_fCotHalfFOVy
 float RedHotSpot::s_fCotHalfFOVy = SQRT3 * 1.3333333f;
 
 // FUNCTION: SWBF2 0x006d64e0

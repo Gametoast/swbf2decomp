@@ -30,9 +30,13 @@ extern "C" PblVector3* __stdcall D3DXVec3Normalize(PblVector3* pOut, const PblVe
 
 // SYNTHETIC: SWBF2 0x00402790
 // `dynamic initializer for 'Controller::rttiHashController''
+// Controller::rttiHashController
+
 // GLOBAL: SWBF2 0x01eb97a8
 // Controller::rttiHashController
 PblHash Controller::rttiHashController("Controller");
+// GLOBAL: SWBF2 0x00788d90
+// Controller::rttiNameController
 const char Controller::rttiNameController[] = "Controller";
 
 static Trackable* GetTrackable(Controllable* pControllable)
@@ -56,6 +60,8 @@ void Controller::KillController()
 {
 }
 
+// SYNTHETIC: SWBF2 0x00485140
+// Controller::~Controller
 Controller::~Controller()
 {
 }

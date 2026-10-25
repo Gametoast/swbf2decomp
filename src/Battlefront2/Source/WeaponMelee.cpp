@@ -2603,16 +2603,24 @@ DefaultCombo::DeflectAnimation aDeflectAnimation[DefaultCombo::NUM_DEFLECT_ANIMA
 
 // SYNTHETIC: SWBF2 0x00407200
 // `dynamic initializer for 'WeaponMelee::rttiHashWeaponMelee''
+// WeaponMelee::rttiHashWeaponMelee
+
 // GLOBAL: SWBF2 0x01f9a8ec
 // WeaponMelee::rttiHashWeaponMelee
 PblHash WeaponMelee::rttiHashWeaponMelee("WeaponMelee");
+// GLOBAL: SWBF2 0x0078c198
+// WeaponMelee::rttiNameWeaponMelee
 const char WeaponMelee::rttiNameWeaponMelee[] = "WeaponMelee";
 
 // SYNTHETIC: SWBF2 0x00407210
 // `dynamic initializer for 'WeaponMeleeClass::rttiHashWeaponMeleeClass''
+// WeaponMeleeClass::rttiHashWeaponMeleeClass
+
 // GLOBAL: SWBF2 0x01f9a8f4
 // WeaponMeleeClass::rttiHashWeaponMeleeClass
 PblHash WeaponMeleeClass::rttiHashWeaponMeleeClass("WeaponMeleeClass");
+// GLOBAL: SWBF2 0x0078c0e0
+// WeaponMeleeClass::rttiNameWeaponMeleeClass
 const char WeaponMeleeClass::rttiNameWeaponMeleeClass[] = "WeaponMeleeClass";
 
 // GLOBAL: SWBF2 0x01eafd70
@@ -2655,6 +2663,8 @@ LightsaberTrailClass::LightsaberTrailClass()
 {
 }
 
+// SYNTHETIC: SWBF2 0x00687ce0
+// LightsaberTrailClass::~LightsaberTrailClass
 LightsaberTrailClass::~LightsaberTrailClass()
 {
 }
@@ -4629,7 +4639,9 @@ void WeaponMeleeClass::PlayTurnOffSound() const
     m_TurnOffSound.Play(0, 0, true, true);
 }
 
-// GLOBAL: SWBF2 0x01f9a8f0
 // SYNTHETIC: SWBF2 0x00407220
 // `dynamic initializer for 'gDefaultHash''
+
+// GLOBAL: SWBF2 0x01f9a8f0
+// gDefaultHash
 unsigned int gDefaultHash = PblHash("default");

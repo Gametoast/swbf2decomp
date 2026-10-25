@@ -2,7 +2,8 @@
 
 #include <stddef.h>
 
-namespace HUD {
+namespace HUD
+{
 class Envelope
 {
 public:

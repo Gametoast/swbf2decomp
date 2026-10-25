@@ -24,10 +24,11 @@ float GetFarSceneRange();
 void __cdecl PblTraceP(const char* Format, ...);
 extern bool sLoadNestedLevels;
 
-// GLOBAL: SWBF2 0x0093ebdc
 // SYNTHETIC: SWBF2 0x00407cc0
 // `dynamic initializer for 'RedModel::_HashTable''
 
+// GLOBAL: SWBF2 0x0093ebdc
+// RedModel::_HashTable
 PblHashTable<RedModel, 1024> RedModel::_HashTable;
 
 // GLOBAL: SWBF2 0x007deee0

@@ -174,8 +174,8 @@ private:
  
  
  
- // VTABLE: SWBF2 0x007a015c
-// VTABLE: SWBF2 0x007a0150
+ // VTABLE: SWBF2 0x007a015c EntityClass
+// VTABLE: SWBF2 0x007a0150 FLEffectClass
 class GodrayClass : public EntityClass, public FLEffectClass
 {
 public:
@@ -209,6 +209,8 @@ public:
  
  
 
+// VTABLE: SWBF2 0x007a0114 PblHandled
+// VTABLE: SWBF2 0x007a0180 Thread
 class GodrayEffectObject : public FLEffectObject
 {
     friend class GodrayClass;

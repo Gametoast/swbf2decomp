@@ -25,8 +25,14 @@ extern bool netIsLocalTurn;
 extern "C" PblVector3* __stdcall D3DXVec3TransformNormal(PblVector3* pOut, const PblVector3* pV,
                                                          const PblMatrix* pM);
 
-namespace CombatUtil { void SendDamageEvent(const Controllable* pOwner, const GameObject* pTarget, const Trigger* pTrigger); }
-namespace GameLoop { extern float sClientDeltaTime; }
+namespace CombatUtil
+{
+void SendDamageEvent(const Controllable* pOwner, const GameObject* pTarget, const Trigger* pTrigger);
+}
+namespace GameLoop
+{
+extern float sClientDeltaTime;
+}
 
 class AmmoCounter
 {
@@ -148,16 +154,24 @@ WeaponCannonClass::WeaponCannonClass(unsigned int uHash)
 
 // SYNTHETIC: SWBF2 0x004070a0
 // `dynamic initializer for 'WeaponCannon::rttiHashWeaponCannon''
+// WeaponCannon::rttiHashWeaponCannon
+
 // GLOBAL: SWBF2 0x01f9a894
 // WeaponCannon::rttiHashWeaponCannon
 PblHash WeaponCannon::rttiHashWeaponCannon("WeaponCannon");
+// GLOBAL: SWBF2 0x0078be8c
+// WeaponCannon::rttiNameWeaponCannon
 const char WeaponCannon::rttiNameWeaponCannon[] = "WeaponCannon";
 
 // SYNTHETIC: SWBF2 0x004070b0
 // `dynamic initializer for 'WeaponCannonClass::rttiHashWeaponCannonClass''
+// WeaponCannonClass::rttiHashWeaponCannonClass
+
 // GLOBAL: SWBF2 0x01f9a898
 // WeaponCannonClass::rttiHashWeaponCannonClass
 PblHash WeaponCannonClass::rttiHashWeaponCannonClass("WeaponCannonClass");
+// GLOBAL: SWBF2 0x0078be70
+// WeaponCannonClass::rttiNameWeaponCannonClass
 const char WeaponCannonClass::rttiNameWeaponCannonClass[] = "WeaponCannonClass";
 
 

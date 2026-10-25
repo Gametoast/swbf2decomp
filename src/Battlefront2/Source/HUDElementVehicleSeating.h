@@ -10,7 +10,10 @@
 class Character;
 class GameObject;
 
-namespace HUD {
+namespace HUD
+{
+// VTABLE: SWBF2 0x007a1ba0 RedGroupElement
+// VTABLE: SWBF2 0x007a1bf0 HUD::ElementGroupPlayer
 class ElementVehicleSeating : public HUD::ElementGroupPlayer, public RedGroupElement
 {
 public:
@@ -35,7 +38,8 @@ public:
                                       void* const pUserData);
     };
 
-    // VTABLE: SWBF2 0x007a1c40
+    // VTABLE: SWBF2 0x007a1c40 HUD::Element
+    // VTABLE: SWBF2 0x007a1cc4 Red3DModelElementLite
     class SeatingMarker : public HUD::ElementModel3D
     {
     public:
@@ -57,7 +61,8 @@ public:
         ElementVehicleSeating* mSeatingDisplay;
     };
 
-    // VTABLE: SWBF2 0x007a1d0c
+    // VTABLE: SWBF2 0x007a1d0c HUD::Element
+    // VTABLE: SWBF2 0x007a1c7c RedTextElement
     class SeatingText : public HUD::ElementText
     {
     public:

@@ -12,7 +12,8 @@
 #include "RedEngineFL/Util/ext/basevector.h"
 #include "RedEngineFL/Util/ext/types.h"
 
-namespace util {
+namespace util
+{
 
 template <class ELEM, class KEY>
 struct TKeyPair_
@@ -28,7 +29,8 @@ struct TKeyPair_
 
 }
 
-namespace dx {
+namespace dx
+{
 
 class NVStateID
 {
@@ -104,6 +106,7 @@ public:
     NVIndexData m_IndexData;
 };
 
+// VTABLE: SWBF2 0x007857d0
 class StateManager_DX
 {
 public:

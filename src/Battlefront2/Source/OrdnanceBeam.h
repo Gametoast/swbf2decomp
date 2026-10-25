@@ -58,6 +58,9 @@ public:
 };
  
 
+// VTABLE: SWBF2 0x007ac5dc
+// VTABLE: SWBF2 0x007ac644 Thread
+// VTABLE: SWBF2 0x007ac6b4 PblHandled
 class OrdnanceBeam : public Ordnance, public RedSceneObject
 {
 public:

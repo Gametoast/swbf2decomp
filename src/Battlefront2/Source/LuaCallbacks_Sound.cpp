@@ -744,11 +744,13 @@ namespace Lua_Callbacks
 // GLOBAL: SWBF2 0x007e7f94
 float sShellMusicInterval = 3.0f;
 
-// GLOBAL: SWBF2 0x01ec91d0
 // SYNTHETIC: SWBF2 0x00404230
 // `dynamic initializer for 'Lua_Callbacks::sDelayedSounds''
 // SYNTHETIC: SWBF2 0x00768cd0
 // `dynamic atexit destructor for 'Lua_Callbacks::sDelayedSounds''
+
+// GLOBAL: SWBF2 0x01ec91d0
+// sDelayedSounds
 DelayedSound sDelayedSounds[2];
 
 // FUNCTION: SWBF2 0x0059b570
@@ -1319,7 +1321,8 @@ void InitDelayedSounds()
 
 }
 
-namespace Snd {
+namespace Snd
+{
 
 // FUNCTION: SWBF2 0x0059b370
 StreamBase::Info* StreamBase::Info::Find(unsigned int uiHashID, StreamBase* pStream, bool bAddRef)
@@ -1351,7 +1354,8 @@ StreamBase::Info* StreamBase::Info::Find(unsigned int uiHashID, StreamBase* pStr
 }
 }
 
-namespace Snd {
+namespace Snd
+{
 
 // FUNCTION: SWBF2 0x0059b3e0
 void StreamBase::SeekSegment(const Segment* pSegment)
@@ -1364,7 +1368,8 @@ void StreamBase::SeekSegment(const Segment* pSegment)
 }
 }
 
-namespace Snd {
+namespace Snd
+{
 
 // FUNCTION: SWBF2 0x0059b4e0
 StreamBase::Segment* StreamBase::FindSegment(unsigned int uiSegmentID) const
@@ -1388,7 +1393,8 @@ StreamBase::Segment* StreamBase::FindSegment(unsigned int uiSegmentID) const
 }
 }
 
-namespace Lua_Callbacks {
+namespace Lua_Callbacks
+{
 
 // FUNCTION: SWBF2 0x0059ded0
 void CleanupSound()
@@ -1401,7 +1407,8 @@ void CleanupSound()
 }
 }
 
-namespace Lua_Callbacks {
+namespace Lua_Callbacks
+{
 
 // FUNCTION: SWBF2 0x0059bde0
 int ScriptCB_AudioStreamAppendSegments(lua_State*)
@@ -1441,7 +1448,8 @@ int ScriptCB_AudioStreamAppendSegments(lua_State*)
 }
 }
 
-namespace Lua_Callbacks {
+namespace Lua_Callbacks
+{
 
 // FUNCTION: SWBF2 0x0059c110
 int ScriptCB_SetBleedingVoiceOver(lua_State*)
@@ -1455,7 +1463,8 @@ int ScriptCB_SetBleedingVoiceOver(lua_State*)
 }
 }
 
-namespace Lua_Callbacks {
+namespace Lua_Callbacks
+{
 
 // FUNCTION: SWBF2 0x0059c1c0
 int ScriptCB_SetLowReinforcementsVoiceOver(lua_State*)
@@ -1479,7 +1488,8 @@ int ScriptCB_SetLowReinforcementsVoiceOver(lua_State*)
 }
 }
 
-namespace Lua_Callbacks {
+namespace Lua_Callbacks
+{
 
 // FUNCTION: SWBF2 0x0059c5e0
 int ScriptCB_SetAmbientMusic(lua_State*)
@@ -1503,7 +1513,8 @@ int ScriptCB_SetAmbientMusic(lua_State*)
 }
 }
 
-namespace Lua_Callbacks {
+namespace Lua_Callbacks
+{
 
 // FUNCTION: SWBF2 0x0059c6b0
 int ScriptCB_SetAttackingTeam(lua_State*)
@@ -1513,7 +1524,8 @@ int ScriptCB_SetAttackingTeam(lua_State*)
 }
 }
 
-namespace Lua_Callbacks {
+namespace Lua_Callbacks
+{
 
 // FUNCTION: SWBF2 0x0059c6e0
 int ScriptCB_SetVictoryMusic(lua_State*)
@@ -1524,7 +1536,8 @@ int ScriptCB_SetVictoryMusic(lua_State*)
 }
 }
 
-namespace Lua_Callbacks {
+namespace Lua_Callbacks
+{
 
 // FUNCTION: SWBF2 0x0059c730
 int ScriptCB_SetDefeatMusic(lua_State*)
@@ -1535,7 +1548,8 @@ int ScriptCB_SetDefeatMusic(lua_State*)
 }
 }
 
-namespace Lua_Callbacks {
+namespace Lua_Callbacks
+{
 
 // FUNCTION: SWBF2 0x0059ce00
 int ScriptCB_SetOutOfBoundsVoiceOver(lua_State*)
@@ -1549,9 +1563,11 @@ int ScriptCB_SetOutOfBoundsVoiceOver(lua_State*)
 // LIBRARY: SWBF2 0x00752ace
 // qsort
 
-// GLOBAL: SWBF2 0x01ec7d38
 // SYNTHETIC: SWBF2 0x00404200
 // `dynamic initializer for 'sAuditionEffects''
 // SYNTHETIC: SWBF2 0x00768cb0
 // `dynamic atexit destructor for 'sAuditionEffects''
+
+// GLOBAL: SWBF2 0x01ec7d38
+// sAuditionEffects
 GameSound sAuditionEffects[3];

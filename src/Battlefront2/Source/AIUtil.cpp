@@ -251,12 +251,14 @@ float AIUtil::gSnipeSuitabilityDist = 70.0f;
 // GLOBAL: SWBF2 0x01f9af80
 static unsigned __int64 sSpied[600];
 
+// FUNCTION: SWBF2 0x004417d0
 void AIUtil::ResetSpied(Character* pWatcher)
 {
     sSpied[pWatcher - Character::sCharacters] = 0;
 }
 
-namespace AIUtil {
+namespace AIUtil
+{
 
 // FUNCTION: SWBF2 0x00441780
 void __fastcall AddSpied(Character* pWatcher, Character* pTarget)
@@ -268,7 +270,8 @@ void __fastcall AddSpied(Character* pWatcher, Character* pTarget)
 }
 }
 
-namespace AIUtil {
+namespace AIUtil
+{
 
 // FUNCTION: SWBF2 0x00441800
 bool __fastcall IsSpied(const Character* pWatcher, const Character* pTarget)
@@ -282,7 +285,8 @@ bool __fastcall IsSpied(const Character* pWatcher, const Character* pTarget)
 }
 }
 
-namespace AIUtil {
+namespace AIUtil
+{
 
 // FUNCTION: SWBF2 0x00442b30
 bool __fastcall ShouldStayInVehicle(Controllable* pMe)
@@ -875,7 +879,8 @@ namespace
     }
 }
 
-namespace AIUtil {
+namespace AIUtil
+{
 
 // FUNCTION: SWBF2 0x00440380
 void UpdatePhysics(const Controllable* pMe, float fScale, const ControllableDestination& rDest,
@@ -1422,7 +1427,8 @@ bool AIUtil::IsNearPost(const Controllable* pMe, const CommandPost* pPost, const
     return fRadius * fRadius > fDistSq;
 }
 
-namespace AIUtil {
+namespace AIUtil
+{
 
 // FUNCTION: SWBF2 0x00441860
 bool __cdecl CanPotentiallySee(Controllable* pMe, const GameObject* pObject, float* pOut)
@@ -1551,7 +1557,8 @@ bool AIUtil::AvoidBarriers(EntityFlyer* pFlyer, const PblVector3&  , PblVector3*
     return true;
 }
 
-namespace AIUtil {
+namespace AIUtil
+{
 
 // FUNCTION: SWBF2 0x00441f60
 float GetTargetSpeedForRealSpeed(float fNum, float fDenom)
@@ -1569,7 +1576,8 @@ float GetTargetSpeedForRealSpeed(float fNum, float fDenom)
 }
 }
 
-namespace AIUtil {
+namespace AIUtil
+{
 
 // FUNCTION: SWBF2 0x00441f80
 float GetThrustForTargetSpeed(float fT, float fA, float fB, float fC)
@@ -1599,7 +1607,8 @@ float GetThrustForTargetSpeed(float fT, float fA, float fB, float fC)
 }
 }
 
-namespace AIUtil {
+namespace AIUtil
+{
 
 // FUNCTION: SWBF2 0x00442000
 bool ShouldSoldierDodgeThisType(int eType)
@@ -1741,7 +1750,8 @@ bool AIUtil::HasCPMoved(const CommandPost* pPost, Controllable* pMe, const PblVe
     return false;
 }
 
-namespace AIUtil {
+namespace AIUtil
+{
 
 // FUNCTION: SWBF2 0x00442430
 bool IsImportant(const GameObject* pObj)
@@ -2123,7 +2133,9 @@ PblVector3 AIUtil::GetRandomAccessiblePoint(const UnitController* pCtrl)
     return vDest;
 }
 
-namespace TeamManager { int GetObjectsInRange(const PblVector3& vPos, float fRange, GameObject** const ppObjects, int iMax,
+namespace TeamManager
+{
+int GetObjectsInRange(const PblVector3& vPos, float fRange, GameObject** const ppObjects, int iMax,
                const Team* pTeam, int iAffilMask); }
 
 // FUNCTION: SWBF2 0x00443220
@@ -2142,7 +2154,8 @@ bool AIUtil::AreEnemiesInRange(int iTeam, const PblVector3& vPos, float fRange)
     return false;
 }
 
-namespace AIUtil {
+namespace AIUtil
+{
 
 // FUNCTION: SWBF2 0x00443290
 float GetThreatSwitchTime(const UnitController* pCtrl)
@@ -2184,6 +2197,7 @@ void AIUtil::TellAIToExit(GameObject* pObject)
 
 namespace
 {
+    // FUNCTION: SWBF2 0x00443020
     GameObject* FindFirstInVehicle(GameObject* pVehicle, bool bPlayer)
     {
         const PblList<Controllable>& list = pVehicle->GetControllableList();

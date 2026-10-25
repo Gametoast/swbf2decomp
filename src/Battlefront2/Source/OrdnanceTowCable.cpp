@@ -29,23 +29,33 @@ extern PblVector3 gVectorZero;
 
 // SYNTHETIC: SWBF2 0x00405bc0
 // `dynamic initializer for 'OrdnanceTowCable::rttiHashOrdnanceTowCable''
+// OrdnanceTowCable::rttiHashOrdnanceTowCable
+
 // GLOBAL: SWBF2 0x01ef26c0
 // OrdnanceTowCable::rttiHashOrdnanceTowCable
 PblHash OrdnanceTowCable::rttiHashOrdnanceTowCable("OrdnanceTowCable");
+// GLOBAL: SWBF2 0x0078aa68
+// OrdnanceTowCable::rttiNameOrdnanceTowCable
 const char OrdnanceTowCable::rttiNameOrdnanceTowCable[] = "OrdnanceTowCable";
 
 // SYNTHETIC: SWBF2 0x00405bd0
 // `dynamic initializer for 'OrdnanceTowCableClass::rttiHashOrdnanceTowCableClass''
+// OrdnanceTowCableClass::rttiHashOrdnanceTowCableClass
+
 // GLOBAL: SWBF2 0x01ef26c4
 // OrdnanceTowCableClass::rttiHashOrdnanceTowCableClass
 PblHash OrdnanceTowCableClass::rttiHashOrdnanceTowCableClass("OrdnanceTowCableClass");
+// GLOBAL: SWBF2 0x0078aa3c
+// OrdnanceTowCableClass::rttiNameOrdnanceTowCableClass
 const char OrdnanceTowCableClass::rttiNameOrdnanceTowCableClass[] = "OrdnanceTowCableClass";
 
-// GLOBAL: SWBF2 0x01ef2670
 // SYNTHETIC: SWBF2 0x00405ba0
 // `dynamic initializer for 'OrdnanceTowCable::sMemoryPool''
 // SYNTHETIC: SWBF2 0x00769200
 // `dynamic atexit destructor for 'OrdnanceTowCable::sMemoryPool''
+
+// GLOBAL: SWBF2 0x01ef2670
+// OrdnanceTowCable::sMemoryPool
 MemoryPool OrdnanceTowCable::sMemoryPool("OrdnanceTowCable", 0x670);
 
 // GLOBAL: SWBF2 0x01eaed60

@@ -219,4 +219,7 @@ namespace FirstPerson
     const RedModel* LoadDynamicModel(const char* pszName, bool bArg);
 }
 
-namespace FirstPerson { extern int sModelCount; }
+namespace FirstPerson
+{
+extern int sModelCount;
+}

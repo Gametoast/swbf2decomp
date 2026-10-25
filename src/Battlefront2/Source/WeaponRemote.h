@@ -34,6 +34,7 @@ public:
  
  
 
+// VTABLE: SWBF2 0x007b1838
 class WeaponRemote : public WeaponDispenser
 {
 public:

@@ -22,11 +22,13 @@ extern const GUID kEAX40ContextPropertySet;
 extern const GUID kEAX40FXSlot0PropertySet;
 extern const GUID kEAX30BufferPropertySet;
 
-// GLOBAL: SWBF2 0x007e3870
 // SYNTHETIC: SWBF2 0x0040c140
 // `dynamic initializer for 'Snd::DSBuffer::smList''
 // SYNTHETIC: SWBF2 0x0076a490
 // `dynamic atexit destructor for 'Snd::DSBuffer::smList''
+
+// GLOBAL: SWBF2 0x007e3870
+// DSBuffer::smList
 PblListDouble DSBuffer::smList;
 
 // FUNCTION: SWBF2 0x00744020

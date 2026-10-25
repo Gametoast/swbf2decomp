@@ -30,10 +30,11 @@ static PblMatrix* _NewAlignedMatrices(unsigned int uiCount)
 // GLOBAL: SWBF2 0x009a0a18
 RedSkeleton* RedSkeleton::s_pCurrentSkeleton;
 
-// GLOBAL: SWBF2 0x009a0a2c
 // SYNTHETIC: SWBF2 0x00408ae0
 // `dynamic initializer for 'RedSkeleton::_HashTable''
 
+// GLOBAL: SWBF2 0x009a0a2c
+// RedSkeleton::_HashTable
 PblHashTable<RedSkeleton, 512> RedSkeleton::_HashTable;
 
 // FUNCTION: SWBF2 0x006e87e0

@@ -20,7 +20,10 @@
 #include "RedEngineFL/Graphics/RedShadingState.h"
 #include "RedEngineFL/Graphics/PC/pcRedRenderer.h"
 
-namespace GameLoop { extern float sDeltaTime; }
+namespace GameLoop
+{
+extern float sDeltaTime;
+}
 
 extern PblVector3 gVectorZero;
 

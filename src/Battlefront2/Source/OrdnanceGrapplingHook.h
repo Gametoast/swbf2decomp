@@ -42,9 +42,9 @@ enum GrapplingHookState
     HOOK_ABORTING = 4
 };
 
-// VTABLE: SWBF2 0x007ac9d8
+// VTABLE: SWBF2 0x007ac9d8 Thread
 // VTABLE: SWBF2 0x007ac970
-// VTABLE: SWBF2 0x007aca18
+// VTABLE: SWBF2 0x007aca18 PblHandled
 class OrdnanceGrapplingHook : public OrdnanceBullet
 {
 public:

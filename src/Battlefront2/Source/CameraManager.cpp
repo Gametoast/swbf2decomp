@@ -55,11 +55,13 @@ static CollisionObject* GetObjectCollision(GameObject* pObject)
     return static_cast<CollisionObject*>(pObject);
 }
 
-// GLOBAL: SWBF2 0x01eb0fd0
 // SYNTHETIC: SWBF2 0x00402370
 // `dynamic initializer for 'cameraInterpolator''
 // SYNTHETIC: SWBF2 0x00766dc0
 // `dynamic atexit destructor for 'cameraInterpolator''
+
+// GLOBAL: SWBF2 0x01eb0fd0
+// cameraInterpolator
 CameraInterpolator cameraInterpolator[1];
 
 // GLOBAL: SWBF2 0x01e30324

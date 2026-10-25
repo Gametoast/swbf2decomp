@@ -49,14 +49,18 @@ extern const PointCondition sMedalPoints_condition[MedalsMgr::MEDAL_TYPES_COUNT]
     { 36, false, false, 0xff, false, true,  "warhero" },
 };
 
-// GLOBAL: SWBF2 0x01ecb14c
 // SYNTHETIC: SWBF2 0x004042b0
 // `dynamic initializer for 'sMedalHudColor''
+
+// GLOBAL: SWBF2 0x01ecb14c
+// sMedalHudColor
 RedColor sMedalHudColor = RedColor::CYAN;
 
-// GLOBAL: SWBF2 0x01ecb148
 // SYNTHETIC: SWBF2 0x004042e0
 // `dynamic initializer for 'sAwardHudColor''
+
+// GLOBAL: SWBF2 0x01ecb148
+// sAwardHudColor
 RedColor sAwardHudColor = RedColor::YELLOW;
 
 // FUNCTION: SWBF2 0x005a35c0

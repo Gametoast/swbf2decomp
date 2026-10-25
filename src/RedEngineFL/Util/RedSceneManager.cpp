@@ -139,9 +139,11 @@ float g_fCameraCosHalfFOVX;
 // GLOBAL: SWBF2 0x009a08a0
 float g_fCameraCosHalfFOVY;
 
-// GLOBAL: SWBF2 0x009a08b0
 // SYNTHETIC: SWBF2 0x004089d0
 // `dynamic initializer for 'sRedSceneCamera''
+
+// GLOBAL: SWBF2 0x009a08b0
+// sRedSceneCamera
 static RedSceneCamera sRedSceneCamera;
 // GLOBAL: SWBF2 0x007df954
 static int sMaxNumFarObjects = 256;

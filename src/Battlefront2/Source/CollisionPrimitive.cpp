@@ -1068,26 +1068,30 @@ bool CollisionPrimitive::CollideTerrain(const PblMatrix& matrix, PblVector3& vNo
 }
 #pragma fenv_access(off)
 
-// GLOBAL: SWBF2 0x01eb7548
 // SYNTHETIC: SWBF2 0x004024e0
 // `dynamic initializer for 'sHostTriList''
 
+// GLOBAL: SWBF2 0x01eb7548
+// sHostTriList
 PolyListContainer<100> sHostTriList;
 
-// GLOBAL: SWBF2 0x01eb5800
 // SYNTHETIC: SWBF2 0x004024f0
 // `dynamic initializer for 'sHostCollTriList''
 
+// GLOBAL: SWBF2 0x01eb5800
+// sHostCollTriList
 PolyListContainer<100> sHostCollTriList;
 
-// GLOBAL: SWBF2 0x01eb66c0
 // SYNTHETIC: SWBF2 0x00402500
 // `dynamic initializer for 'sClientTriList''
 
+// GLOBAL: SWBF2 0x01eb66c0
+// sClientTriList
 PolyListContainer<100> sClientTriList;
 
-// GLOBAL: SWBF2 0x01eb8410
 // SYNTHETIC: SWBF2 0x00402510
 // `dynamic initializer for 'sClientCollTriList''
 
+// GLOBAL: SWBF2 0x01eb8410
+// sClientCollTriList
 PolyListContainer<100> sClientCollTriList;

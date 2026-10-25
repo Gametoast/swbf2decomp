@@ -33,6 +33,8 @@ namespace
 
 // SYNTHETIC: SWBF2 0x00407060
 // `dynamic initializer for 'WeaponAreaEffect::rttiHashWeaponAreaEffect''
+// WeaponAreaEffect::rttiHashWeaponAreaEffect
+
 // GLOBAL: SWBF2 0x01f9a884
 // WeaponAreaEffect::rttiHashWeaponAreaEffect
 PblHash WeaponAreaEffect::rttiHashWeaponAreaEffect("WeaponAreaEffect");
@@ -758,9 +760,13 @@ void WeaponAreaEffect::Fire()
 
 // SYNTHETIC: SWBF2 0x00407070
 // `dynamic initializer for 'WeaponAreaEffectClass::rttiHashWeaponAreaEffectClass''
+// WeaponAreaEffectClass::rttiHashWeaponAreaEffectClass
+
 // GLOBAL: SWBF2 0x01f9a888
 // WeaponAreaEffectClass::rttiHashWeaponAreaEffectClass
 PblHash WeaponAreaEffectClass::rttiHashWeaponAreaEffectClass("WeaponAreaEffectClass");
+// GLOBAL: SWBF2 0x0078be18
+// WeaponAreaEffectClass::rttiNameWeaponAreaEffectClass
 const char WeaponAreaEffectClass::rttiNameWeaponAreaEffectClass[] = "WeaponAreaEffectClass";
 
 // FUNCTION: SWBF2 0x0067db70

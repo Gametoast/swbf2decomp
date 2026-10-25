@@ -15,6 +15,8 @@ FLLocalizeEntry* mPatchLocalizeFile;
 
 void __cdecl PblTraceP(const char* Format, ...);
 
+// GLOBAL: SWBF2 0x00940bec
+// mMasterLocalizeFile
 FLLocalizeEntry* mMasterLocalizeFile;
 
 // GLOBAL: SWBF2 0x00940bf4
@@ -24,10 +26,13 @@ eGAMELANGUAGE gUseLang;
 int mSkipCount;
 
 int sMasterLocalizeHashNumEntries;
-// GLOBAL: SWBF2 0x00940c04
 // SYNTHETIC: SWBF2 0x00407d60
 // `dynamic initializer for 'sMasterLocalizeHash''
 
+// GLOBAL: SWBF2 0x00940c04
+// sMasterLocalizeHash
+// GLOBAL: SWBF2 0x00940c00
+// sMasterLocalizeHash
 PblHashTable<FLLocalizeEntry, 16384> sMasterLocalizeHash;
 
 // GLOBAL: SWBF2 0x00960c04
@@ -35,7 +40,8 @@ char const* gLanguageStr;
 
 eGAMELANGUAGE gForceLang = eLANG_AUTODETERMINE;
 
-namespace PblBuildType {
+namespace PblBuildType
+{
 // GLOBAL: SWBF2 0x007e2e00
 eGAMELANGUAGE gForceLang1 = eLANG_UNRESTRICTED;
 // GLOBAL: SWBF2 0x007e2e04

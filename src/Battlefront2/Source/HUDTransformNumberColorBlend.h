@@ -3,7 +3,8 @@
 #include <stddef.h>
 #include "HUDTransformNumberColor.h"
 
-namespace HUD {
+namespace HUD
+{
 // VTABLE: SWBF2 0x007a3668
 class TransformNumberColorBlend : public HUD::TransformNumberColor
 {

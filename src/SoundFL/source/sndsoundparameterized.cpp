@@ -10,39 +10,49 @@
 namespace Snd
 {
 
-// GLOBAL: SWBF2 0x007e34cc
 // SYNTHETIC: SWBF2 0x0040b810
 // `dynamic initializer for 'Snd::SoundParameterized::Controller::Properties::smFreeList''
 // SYNTHETIC: SWBF2 0x0076a260
 // `dynamic atexit destructor for 'Snd::SoundParameterized::Controller::Properties::smFreeList''
+
+// GLOBAL: SWBF2 0x007e34cc
+// SoundParameterized::Controller::Properties::smFreeList
 FreeList SoundParameterized::Controller::Properties::smFreeList(0x10, 1, 0x10, 1);
 
-// GLOBAL: SWBF2 0x007e34e8
 // SYNTHETIC: SWBF2 0x0040b830
 // `dynamic initializer for 'Snd::SoundParameterized::Layer::Properties::smFreeList''
 // SYNTHETIC: SWBF2 0x0076a270
 // `dynamic atexit destructor for 'Snd::SoundParameterized::Layer::Properties::smFreeList''
+
+// GLOBAL: SWBF2 0x007e34e8
+// SoundParameterized::Layer::Properties::smFreeList
 FreeList SoundParameterized::Layer::Properties::smFreeList(0x0c, 1, 0x10, 1);
 
-// GLOBAL: SWBF2 0x007e3520
 // SYNTHETIC: SWBF2 0x0040b850
 // `dynamic initializer for 'Snd::SoundParameterized::Properties::smFreeList''
 // SYNTHETIC: SWBF2 0x0076a280
 // `dynamic atexit destructor for 'Snd::SoundParameterized::Properties::smFreeList''
+
+// GLOBAL: SWBF2 0x007e3520
+// SoundParameterized::Properties::smFreeList
 FreeList SoundParameterized::Properties::smFreeList(0x10, 1, 0x10, 1);
 
-// GLOBAL: SWBF2 0x007e353c
 // SYNTHETIC: SWBF2 0x0040b870
 // `dynamic initializer for 'Snd::SoundParameterized::Properties::smPropertyList''
 // SYNTHETIC: SWBF2 0x0076a290
 // `dynamic atexit destructor for 'Snd::SoundParameterized::Properties::smPropertyList''
+
+// GLOBAL: SWBF2 0x007e353c
+// SoundParameterized::Properties::smPropertyList
 PblListSingle SoundParameterized::Properties::smPropertyList;
 
-// GLOBAL: SWBF2 0x007e3540
 // SYNTHETIC: SWBF2 0x0040b880
 // `dynamic initializer for 'Snd::SoundParameterized::smSoundParameterizedList''
 // SYNTHETIC: SWBF2 0x0076a2a0
 // `dynamic atexit destructor for 'Snd::SoundParameterized::smSoundParameterizedList''
+
+// GLOBAL: SWBF2 0x007e3540
+// SoundParameterized::smSoundParameterizedList
 PblListDouble SoundParameterized::smSoundParameterizedList;
 
 // FUNCTION: SWBF2 0x007357f0

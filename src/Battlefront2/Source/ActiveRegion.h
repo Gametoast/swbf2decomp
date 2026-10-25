@@ -28,6 +28,8 @@ public:
 
     static void* operator new(unsigned int uSize);
 
+    // SYNTHETIC: SWBF2 0x004375c0
+    // ActiveRegions::ActiveRegion::operator delete
     static void operator delete(void* pBlock) { sMemoryPool.Free(pBlock); }
 
     RedRegion& mRegion;

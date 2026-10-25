@@ -36,16 +36,18 @@ static unsigned int PIPELINE1_STATE_MAP[16];
 // GLOBAL: SWBF2 0x009ca5b0
 static unsigned int PIPELINE1_INV_STATE_MAP[16];
 
-// GLOBAL: SWBF2 0x009ca4f0
 // SYNTHETIC: SWBF2 0x0040a390
 // `dynamic initializer for 's_bumpMat''
 
+// GLOBAL: SWBF2 0x009ca4f0
+// s_bumpMat
 PblMatrix s_bumpMat;
 
-// GLOBAL: SWBF2 0x009ca530
 // SYNTHETIC: SWBF2 0x0040a3a0
 // `dynamic initializer for 's_refractionTexMat''
 
+// GLOBAL: SWBF2 0x009ca530
+// s_refractionTexMat
 PblMatrix s_refractionTexMat;
 
 static PblMatrix _IdentityMatrix(
@@ -300,6 +302,7 @@ void pcRefractionShader::Begin_Prog1(unsigned int uiState, unsigned int) const
     if (uiFlags & 2)
     {
         // GLOBAL: SWBF2 0x009ca5f0
+        // kClipToTextureMatrix
 
         static const PblMatrix kClipToTextureMatrix(
             PblVector4{ 0.5f, 0.0f, 0.0f, 0.0f },
@@ -998,28 +1001,36 @@ void pcRefractionShader::_StaticInit() const
          s_projectedBump);
 }
 
-// GLOBAL: SWBF2 0x009ca3ac
 // SYNTHETIC: SWBF2 0x0040a310
 // `dynamic initializer for 'pcRefractionShader::s_uiRenderTypeHash''
+
+// GLOBAL: SWBF2 0x009ca3ac
+// pcRefractionShader::s_uiRenderTypeHash
 unsigned int pcRefractionShader::s_uiRenderTypeHash = PblHash("Refraction");
 
-// GLOBAL: SWBF2 0x009ca3e0
 // SYNTHETIC: SWBF2 0x0040a2d0
 // `dynamic initializer for 'pcRefractionShader::s_Factory''
 // SYNTHETIC: SWBF2 0x00769f30
 // `dynamic atexit destructor for 'pcRefractionShader::s_Factory''
+
+// GLOBAL: SWBF2 0x009ca3e0
+// pcRefractionShader::s_Factory
 pcRefractionShader pcRefractionShader::s_Factory;
 
-// GLOBAL: SWBF2 0x009ca3b0
 // SYNTHETIC: SWBF2 0x0040a2f0
 // `dynamic initializer for 'pcRefractionShader::s_shaderDef''
 // SYNTHETIC: SWBF2 0x00769f50
 // `dynamic atexit destructor for 'pcRefractionShader::s_shaderDef''
+
+// GLOBAL: SWBF2 0x009ca3b0
+// pcRefractionShader::s_shaderDef
 pcRedShaderDef pcRefractionShader::s_shaderDef("refration_shader.xml");
 
-// GLOBAL: SWBF2 0x009ca3dc
 // SYNTHETIC: SWBF2 0x0040a370
 // `dynamic initializer for 'kuiLinearRamp''
+
+// GLOBAL: SWBF2 0x009ca3dc
+// kuiLinearRamp
 static unsigned int kuiLinearRamp = PblHash("linear_ramp");
 
 // SYNTHETIC: SWBF2 0x0040a330
@@ -1029,4 +1040,5 @@ static unsigned int kuiLinearRamp = PblHash("linear_ramp");
 // `dynamic initializer for 'PblMath::fOneOverTwoPi''
 
 // GLOBAL: SWBF2 0x009ca370
+// g_pcRefractionShader
 unsigned int g_pcRefractionShader;

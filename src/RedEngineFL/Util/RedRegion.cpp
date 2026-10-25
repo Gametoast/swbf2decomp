@@ -7,18 +7,22 @@
 
 #include "RedEngineFL/Graphics/RedCamera.h"
 
-// GLOBAL: SWBF2 0x007df740
 // SYNTHETIC: SWBF2 0x00408660
 // `dynamic initializer for 'RedRegionFactory::sList''
 // SYNTHETIC: SWBF2 0x00769a30
 // `dynamic atexit destructor for 'RedRegionFactory::sList''
+
+// GLOBAL: SWBF2 0x007df740
+// RedRegionFactory::sList
 PblListSingle RedRegionFactory::sList;
 
-// GLOBAL: SWBF2 0x0099e7ec
 // SYNTHETIC: SWBF2 0x00408670
 // `dynamic initializer for 'RedRegionFactory::sRegionFactory''
 // SYNTHETIC: SWBF2 0x00769a40
 // `dynamic atexit destructor for 'RedRegionFactory::sRegionFactory''
+
+// GLOBAL: SWBF2 0x0099e7ec
+// RedRegionFactory::sRegionFactory
 RedRegionFactory RedRegionFactory::sRegionFactory;
 
 // FUNCTION: SWBF2 0x006dc840

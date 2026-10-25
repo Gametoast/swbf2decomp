@@ -41,23 +41,33 @@ EntityRemoteTerminalClass::~EntityRemoteTerminalClass() {}
 
 // SYNTHETIC: SWBF2 0x00402d30
 // `dynamic initializer for 'EntityRemoteTerminalClass::rttiHashEntityRemoteTerminalClass''
+// EntityRemoteTerminalClass::rttiHashEntityRemoteTerminalClass
+
 // GLOBAL: SWBF2 0x01ebc050
 // EntityRemoteTerminalClass::rttiHashEntityRemoteTerminalClass
 PblHash EntityRemoteTerminalClass::rttiHashEntityRemoteTerminalClass("EntityRemoteTerminalClass");
+// GLOBAL: SWBF2 0x00789510
+// EntityRemoteTerminalClass::rttiNameEntityRemoteTerminalClass
 const char EntityRemoteTerminalClass::rttiNameEntityRemoteTerminalClass[] = "EntityRemoteTerminalClass";
 
 // SYNTHETIC: SWBF2 0x00402d20
 // `dynamic initializer for 'EntityRemoteTerminal::rttiHashEntityRemoteTerminal''
+// EntityRemoteTerminal::rttiHashEntityRemoteTerminal
+
 // GLOBAL: SWBF2 0x01ebc04c
 // EntityRemoteTerminal::rttiHashEntityRemoteTerminal
 PblHash EntityRemoteTerminal::rttiHashEntityRemoteTerminal("EntityRemoteTerminal");
+// GLOBAL: SWBF2 0x007894ec
+// EntityRemoteTerminal::rttiNameEntityRemoteTerminal
 const char EntityRemoteTerminal::rttiNameEntityRemoteTerminal[] = "EntityRemoteTerminal";
 
-// GLOBAL: SWBF2 0x01ebc058
 // SYNTHETIC: SWBF2 0x00402d00
 // `dynamic initializer for 'EntityRemoteTerminal::sMemoryPool''
 // SYNTHETIC: SWBF2 0x00766fa0
 // `dynamic atexit destructor for 'EntityRemoteTerminal::sMemoryPool''
+
+// GLOBAL: SWBF2 0x01ebc058
+// EntityRemoteTerminal::sMemoryPool
 MemoryPool EntityRemoteTerminal::sMemoryPool("EntityRemoteTerminal", 0x3f0);
 
 namespace

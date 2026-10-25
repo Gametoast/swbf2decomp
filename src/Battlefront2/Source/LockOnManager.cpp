@@ -40,11 +40,13 @@ unsigned int LockOnManager::sNumLockOnManagers;
 // GLOBAL: SWBF2 0x01e57400
 LockOnManager* LockOnManager::sLockOnManagers[4];
 
-// GLOBAL: SWBF2 0x01ec7d30
 // SYNTHETIC: SWBF2 0x00404180
 // `dynamic initializer for 'LockOnManager::sTargetLockSound''
 // SYNTHETIC: SWBF2 0x00768c80
 // `dynamic atexit destructor for 'LockOnManager::sTargetLockSound''
+
+// GLOBAL: SWBF2 0x01ec7d30
+// LockOnManager::sTargetLockSound
 GameSound LockOnManager::sTargetLockSound;
 
 static inline void ClearHandle(PblHandle<GameObject>& handle)
@@ -284,7 +286,10 @@ void LockOnManager::UpdateAll(float fDeltaTime)
 }
 
 extern bool netFrameLock;
-namespace GameLoop { extern bool mbHistoricalRules; }
+namespace GameLoop
+{
+extern bool mbHistoricalRules;
+}
 
 // FUNCTION: SWBF2 0x0057b430
 void LockOnManager::CalculateScreenCoordinates(Controllable* const pCtrl, RedCamera* const pCamera, const PblVector3* pPos, float* pScreenX, float* pScreenY, bool* pOffScreen, bool bAimRay)
@@ -1279,9 +1284,11 @@ void LockOnManager::RemoveTargetCommon(GameObject* pActor, unsigned int uTeamMas
     }
 }
 
-// GLOBAL: SWBF2 0x01ec7d50
 // SYNTHETIC: SWBF2 0x004041a0
 // `dynamic initializer for 'LockOnManager::sTargetCommon''
 // SYNTHETIC: SWBF2 0x00768c90
 // `dynamic atexit destructor for 'LockOnManager::sTargetCommon''
+
+// GLOBAL: SWBF2 0x01ec7d50
+// LockOnManager::sTargetCommon
 LockOnManager::Target LockOnManager::sTargetCommon[32];

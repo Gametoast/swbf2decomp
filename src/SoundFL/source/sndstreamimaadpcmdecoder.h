@@ -6,6 +6,7 @@
 namespace Snd
 {
 
+// VTABLE: SWBF2 0x00786c24
 class StreamIMAADPCMDecoder : public StreamCodec
 {
 public:

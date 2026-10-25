@@ -9,6 +9,7 @@
 #include "pcSunFlare.h"
 
 // GLOBAL: SWBF2 0x007eafe8
+// sBox
 static PblBox sBox(-400.0f, -400.0f, -400.0f, 400.0f, 400.0f, 400.0f);
 
 static void CompressedPosXY_SetBoundingBox(const PblBox& box)

@@ -8,25 +8,31 @@
 namespace Snd
 {
 
-// GLOBAL: SWBF2 0x007e39b8
 // SYNTHETIC: SWBF2 0x0040c3c0
 // `dynamic initializer for 'Snd::ParameterGraph::ControlPoint::smFreeList''
 // SYNTHETIC: SWBF2 0x0076a4d0
 // `dynamic atexit destructor for 'Snd::ParameterGraph::ControlPoint::smFreeList''
+
+// GLOBAL: SWBF2 0x007e39b8
+// ParameterGraph::ControlPoint::smFreeList
 FreeList ParameterGraph::ControlPoint::smFreeList(12, 1, 16, 1);
 
-// GLOBAL: SWBF2 0x007e39d4
 // SYNTHETIC: SWBF2 0x0040c3e0
 // `dynamic initializer for 'Snd::ParameterGraph::smFreeList''
 // SYNTHETIC: SWBF2 0x0076a4e0
 // `dynamic atexit destructor for 'Snd::ParameterGraph::smFreeList''
+
+// GLOBAL: SWBF2 0x007e39d4
+// ParameterGraph::smFreeList
 FreeList ParameterGraph::smFreeList(16, 1, 8, 1);
 
-// GLOBAL: SWBF2 0x007e39f0
 // SYNTHETIC: SWBF2 0x0040c400
 // `dynamic initializer for 'Snd::ParameterGraph::smParameterGraphs''
 // SYNTHETIC: SWBF2 0x0076a4f0
 // `dynamic atexit destructor for 'Snd::ParameterGraph::smParameterGraphs''
+
+// GLOBAL: SWBF2 0x007e39f0
+// ParameterGraph::smParameterGraphs
 PblListSingle ParameterGraph::smParameterGraphs;
 
 // FUNCTION: SWBF2 0x00748b30
@@ -157,7 +163,8 @@ float ParameterGraph::CalculateOutputValue(float fInput) const
 
 }
 
-namespace Snd {
+namespace Snd
+{
 
 // FUNCTION: SWBF2 0x00748d00
 void __cdecl ParameterGraph::DestroyAll()

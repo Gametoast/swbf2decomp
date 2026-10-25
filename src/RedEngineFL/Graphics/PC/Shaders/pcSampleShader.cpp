@@ -22,11 +22,13 @@ pcRedShader::BeginFuncT pcSampleShader::BeginFuncArray[MAX_PIPELINES];
 pcRedShader::EndFuncT pcSampleShader::EndFuncArray[MAX_PIPELINES];
 pcRedShader::RenderFuncT pcSampleShader::RenderFuncArray[MAX_PIPELINES];
 
-// GLOBAL: SWBF2 0x009c9b24
 // SYNTHETIC: SWBF2 0x00409ca0
 // `dynamic initializer for 'pcSampleShader::s_shaderDef''
 // SYNTHETIC: SWBF2 0x00769da0
 // `dynamic atexit destructor for 'pcSampleShader::s_shaderDef''
+
+// GLOBAL: SWBF2 0x009c9b24
+// pcSampleShader::s_shaderDef
 pcRedShaderDef pcSampleShader::s_shaderDef("sample_shader.xml");
 
 // FUNCTION: SWBF2 0x00705510
@@ -325,9 +327,11 @@ void pcSampleShader::_StaticInit() const
 {
 }
 
-// GLOBAL: SWBF2 0x009c9b20
 // SYNTHETIC: SWBF2 0x00409cc0
 // `dynamic initializer for 'pcSampleShader::s_uiRenderTypeHash''
+
+// GLOBAL: SWBF2 0x009c9b20
+// pcSampleShader::s_uiRenderTypeHash
 unsigned int pcSampleShader::s_uiRenderTypeHash = PblHash("sample");
 
 // SYNTHETIC: SWBF2 0x00409ce0
@@ -336,11 +340,13 @@ unsigned int pcSampleShader::s_uiRenderTypeHash = PblHash("sample");
 // SYNTHETIC: SWBF2 0x00409d00
 // `dynamic initializer for 'PblMath::fOneOverTwoPi''
 
-// GLOBAL: SWBF2 0x009c9ad0
 // SYNTHETIC: SWBF2 0x00409c80
 // `dynamic initializer for 'pcSampleShader::s_Factory''
 // SYNTHETIC: SWBF2 0x00769d80
 // `dynamic atexit destructor for 'pcSampleShader::s_Factory''
+
+// GLOBAL: SWBF2 0x009c9ad0
+// pcSampleShader::s_Factory
 pcSampleShader pcSampleShader::s_Factory;
 
 // GLOBAL: SWBF2 0x009c9acc

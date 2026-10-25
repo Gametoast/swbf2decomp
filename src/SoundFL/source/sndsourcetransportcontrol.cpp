@@ -52,7 +52,8 @@ bool SourceTransportControl::Read(PblFileChunk& chunk, unsigned int uiPropertyID
 
 }
 
-namespace Snd {
+namespace Snd
+{
 
 // FUNCTION: SWBF2 0x0074b540
 bool SourceTransportControl::DeterminePlaySource(bool bArg) const

@@ -11,18 +11,22 @@ extern PblMatrix gMatrixIdentity;
 
 static const float POINT_LIGHT_VISIBILITY_RADIUS_FUDGE = 10.0f;
 
-// GLOBAL: SWBF2 0x009acbb0
 // SYNTHETIC: SWBF2 0x00408df0
 // `dynamic initializer for 'RedOmniLight::sMemoryPool''
 // SYNTHETIC: SWBF2 0x00769b10
 // `dynamic atexit destructor for 'RedOmniLight::sMemoryPool''
+
+// GLOBAL: SWBF2 0x009acbb0
+// RedOmniLight::sMemoryPool
 MemoryPool RedOmniLight::sMemoryPool("RedOmniLight", 0x120);
 
-// GLOBAL: SWBF2 0x009acc00
 // SYNTHETIC: SWBF2 0x00408d40
 // `dynamic initializer for 'RedOmniLight::BLACK''
 // SYNTHETIC: SWBF2 0x00769b00
 // `dynamic atexit destructor for 'RedOmniLight::BLACK''
+
+// GLOBAL: SWBF2 0x009acc00
+// RedOmniLight::BLACK
 RedOmniLight RedOmniLight::BLACK(PblVector3(0.0f, 0.0f, 0.0f), 0.0f,
                                  RedColorValue(RedColor::BLACK));
 

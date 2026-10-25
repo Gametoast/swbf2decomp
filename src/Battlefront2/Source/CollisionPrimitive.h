@@ -74,15 +74,18 @@ public:
     static CollisionMeshMask* sCurrentCollisionMeshMask;
 };
 
-namespace CollisionUtil {
+namespace CollisionUtil
+{
 float RayHitBox(const PblVector3& vStart, const PblVector3& vDir, float fLength, const PblMatrix& matrix,
                  float fWidth, float fDepth, float fHeight, PblVector3* pNormal);
 }
-namespace CollisionUtil {
+namespace CollisionUtil
+{
 float RayHitAxisAlignedCylinder(const PblVector3& vStart, const PblVector3& vDir, float fLength, const PblVector3& vCenter,
                  float fRadius, float fHalfHeight, PblVector3* pNormal);
 }
-namespace CollisionUtil {
+namespace CollisionUtil
+{
 float RayHitCylinder(const PblVector3& vStart, const PblVector3& vDir, float fLength, const PblMatrix& matrix,
                  float fRadius, float fHalfHeight, PblVector3* pNormal);
 }

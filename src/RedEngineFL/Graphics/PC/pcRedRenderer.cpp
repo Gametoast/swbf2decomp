@@ -1937,24 +1937,43 @@ void RedRenderer::pcUnregisterResetFunction(void(__cdecl* pFunction)(ResetFlagsT
     }
 }
 
+// GLOBAL: SWBF2 0x007de2a0
+// RedRenderer::sLightingEnable
 bool RedRenderer::sLightingEnable = true;
+// GLOBAL: SWBF2 0x007fa025
+// RedRenderer::m_bStencilShadowZFail
 bool RedRenderer::m_bStencilShadowZFail;
+// GLOBAL: SWBF2 0x007fa026
+// RedRenderer::m_bScreenSpaceShadows
 bool RedRenderer::m_bScreenSpaceShadows;
+// GLOBAL: SWBF2 0x007fa028
+// RedRenderer::m_fStencilShadowLength
 float RedRenderer::m_fStencilShadowLength;
+// GLOBAL: SWBF2 0x007fa048
+// RedRenderer::m_iImmediateMode
 int RedRenderer::m_iImmediateMode;
+// GLOBAL: SWBF2 0x007fa04c
+// RedRenderer::m_uiCurMatrixPoolOffset
 int RedRenderer::m_uiCurMatrixPoolOffset;
+// GLOBAL: SWBF2 0x007fa050
+// RedRenderer::m_curRenderItemOffset
 unsigned int RedRenderer::m_curRenderItemOffset;
+// GLOBAL: SWBF2 0x007f58e0
+// RedRenderer::m_camera
 RedCamera* RedRenderer::m_camera;
+// GLOBAL: SWBF2 0x007fbe74
+// RedRenderer::m_pLightingState
 RedLightingState* RedRenderer::m_pLightingState;
 int RedRenderer::m_pmObjWorldPrev;
 int RedRenderer::m_pmBoneMatricesPrev;
 int RedRenderer::m_pPrimPrev;
 int RedRenderer::m_pLightingStatePrev;
 
-// GLOBAL: SWBF2 0x008bef50
 // SYNTHETIC: SWBF2 0x00407590
 // `dynamic initializer for 'RedRenderer::m_amMatrixPool''
 
+// GLOBAL: SWBF2 0x008bef50
+// RedRenderer::m_amMatrixPool
 PblMatrix RedRenderer::m_amMatrixPool[3062];
 
 // SYNTHETIC: SWBF2 0x00407610
@@ -1962,11 +1981,13 @@ PblMatrix RedRenderer::m_amMatrixPool[3062];
 
 __declspec(align(16)) PblMatrix RedRenderer::m_mView;
 
-// GLOBAL: SWBF2 0x008174f0
 // SYNTHETIC: SWBF2 0x004076e0
 // `dynamic initializer for 'RedRenderer::m_renderItemPool''
 // SYNTHETIC: SWBF2 0x00769840
 // `dynamic atexit destructor for 'RedRenderer::m_renderItemPool''
+
+// GLOBAL: SWBF2 0x008174f0
+// RedRenderer::m_renderItemPool
 RenderItem RedRenderer::m_renderItemPool[4748];
 
 int GetPhasePass_(RenderPhaseT ePhase);
@@ -2385,23 +2406,29 @@ void TransparentHeap<ITEM, KEY>::InitNodePool(unsigned int uiMaxSize)
     m_aNodePool[m_iMaxSize - 1].pNext = 0;
 }
 
-// GLOBAL: SWBF2 0x007fbec8
 // SYNTHETIC: SWBF2 0x004076b0
 // `dynamic initializer for 'RedRenderer::m_preShadowTransparentItems''
 // SYNTHETIC: SWBF2 0x00769830
 // `dynamic atexit destructor for 'RedRenderer::m_preShadowTransparentItems''
+
+// GLOBAL: SWBF2 0x007fbec8
+// RedRenderer::m_preShadowTransparentItems
 TransparentHeap<RenderItem*, unsigned int> RedRenderer::m_preShadowTransparentItems(100);
-// GLOBAL: SWBF2 0x0086ac50
 // SYNTHETIC: SWBF2 0x00407710
 // `dynamic initializer for 'RedRenderer::m_transparentItems''
 // SYNTHETIC: SWBF2 0x00769860
 // `dynamic atexit destructor for 'RedRenderer::m_transparentItems''
+
+// GLOBAL: SWBF2 0x0086ac50
+// RedRenderer::m_transparentItems
 TransparentHeap<RenderItem*, unsigned int> RedRenderer::m_transparentItems(800);
-// GLOBAL: SWBF2 0x0086ac74
 // SYNTHETIC: SWBF2 0x00407680
 // `dynamic initializer for 'RedRenderer::m_posttransparentItems''
 // SYNTHETIC: SWBF2 0x00769820
 // `dynamic atexit destructor for 'RedRenderer::m_posttransparentItems''
+
+// GLOBAL: SWBF2 0x0086ac74
+// RedRenderer::m_posttransparentItems
 TransparentHeap<RenderItem*, unsigned int> RedRenderer::m_posttransparentItems(512);
 
 extern HWND hGlobalWnd;
@@ -2450,9 +2477,11 @@ bool RedRenderer::m_bFogEnable;
 // GLOBAL: SWBF2 0x007fa054
 int RedRenderer::m_uiCurLightingStatePoolOffset;
 
-// GLOBAL: SWBF2 0x007fbec4
 // SYNTHETIC: SWBF2 0x004075b0
 // `dynamic initializer for 'RedRenderer::m_colorFog''
+
+// GLOBAL: SWBF2 0x007fbec4
+// RedRenderer::m_colorFog
 RedColor RedRenderer::m_colorFog = RedColor::BLACK;
 // GLOBAL: SWBF2 0x0086ac70
 RedColor RedRenderer::m_lightingScaleColor;
@@ -2816,6 +2845,7 @@ void RedRenderer::SetCursorImage(RedTexture const* pTexture, unsigned int uiX,
 extern bool pcForceFixedFunction;
 
 // GLOBAL: SWBF2 0x007fbea8
+// RedRenderer::internalRenderFunc
 void(__cdecl* RedRenderer::internalRenderFunc)(RenderItem*, unsigned int, unsigned int);
 
 // FUNCTION: SWBF2 0x006b6f70
@@ -2984,11 +3014,13 @@ const pcRedPixelShader* RedRenderer::m_curPixelShader;
 // GLOBAL: SWBF2 0x007fbe98
 const pcRedVertexFormat* RedRenderer::m_curFormat;
 
-// GLOBAL: SWBF2 0x008174e0
 // SYNTHETIC: SWBF2 0x00407670
 // `dynamic initializer for 'RedRenderer::m_opaqueQueues''
 // SYNTHETIC: SWBF2 0x00769810
 // `dynamic atexit destructor for 'RedRenderer::m_opaqueQueues''
+
+// GLOBAL: SWBF2 0x008174e0
+// RedRenderer::m_opaqueQueues
 util::Vector<RedRenderer::SortHeap> RedRenderer::m_opaqueQueues;
 // GLOBAL: SWBF2 0x007de348 -- .data, and the image's 1,544 bytes there are zero
 
@@ -3799,26 +3831,30 @@ RedLight::RedLight(TypeT eType)
     m_uiProjTexBlendMode = 0;
 }
 
-// GLOBAL: SWBF2 0x0086ac90
 // SYNTHETIC: SWBF2 0x004075e0
 // `dynamic initializer for 'RedRenderer::m_mProjection''
 
+// GLOBAL: SWBF2 0x0086ac90
+// RedRenderer::m_mProjection
 PblMatrix RedRenderer::m_mProjection;
-// GLOBAL: SWBF2 0x008eed20
 // SYNTHETIC: SWBF2 0x00407620
 // `dynamic initializer for 'RedRenderer::m_mViewProjection''
 
+// GLOBAL: SWBF2 0x008eed20
+// RedRenderer::m_mViewProjection
 PblMatrix RedRenderer::m_mViewProjection;
-// GLOBAL: SWBF2 0x008bef10
 // SYNTHETIC: SWBF2 0x00407640
 // `dynamic initializer for 'RedRenderer::m_nearSceneFadeTexTransform''
 
+// GLOBAL: SWBF2 0x008bef10
+// RedRenderer::m_nearSceneFadeTexTransform
 PblMatrix RedRenderer::m_nearSceneFadeTexTransform;
 
-// GLOBAL: SWBF2 0x008eed10
 // SYNTHETIC: SWBF2 0x00407740
 // `dynamic initializer for 'RedRenderer::m_userNearClipPlane''
 
+// GLOBAL: SWBF2 0x008eed10
+// RedRenderer::m_userNearClipPlane
 PblVector4 RedRenderer::m_userNearClipPlane;
 
 // FUNCTION: SWBF2 0x006b81a0
@@ -4330,13 +4366,15 @@ void util::VariableSet<ALLOC>::ResetAll()
 // util::VariableSet<util::SingletonAllocator<util::DefaultStaticAllocator> >::ResetAll
 template void util::VariableSet<util::SingletonAllocator<util::DefaultStaticAllocator> >::ResetAll();
 
-// GLOBAL: SWBF2 0x0086ad10
 // SYNTHETIC: SWBF2 0x00407560
 // `dynamic initializer for 'RedRenderer::m_aLightingStatePool''
 // SYNTHETIC: SWBF2 0x007697f0
 // `dynamic atexit destructor for 'RedRenderer::m_aLightingStatePool''
 // SYNTHETIC: SWBF2 0x006afd70
 // RedLightingState::RedLightingState
+
+// GLOBAL: SWBF2 0x0086ad10
+// RedRenderer::m_aLightingStatePool
 RedLightingState RedRenderer::m_aLightingStatePool[2051];
 
 // FUNCTION: SWBF2 0x006b0270
@@ -4588,10 +4626,11 @@ struct OcclusionQueryT
 
 // SYNTHETIC: SWBF2 0x006afc80
 // OcclusionQueryT::OcclusionQueryT
-// GLOBAL: SWBF2 0x007fbf60
 // SYNTHETIC: SWBF2 0x00407650
 // `dynamic initializer for 'RedRenderer::m_occlusionQueries''
 
+// GLOBAL: SWBF2 0x007fbf60
+// RedRenderer::m_occlusionQueries
 OcclusionQueryT RedRenderer::m_occlusionQueries[1400];
 
 // FUNCTION: SWBF2 0x006b0d70
@@ -4749,10 +4788,11 @@ int GetPhasePass_(RenderPhaseT ePhase)
     return ePhase == RENDERPHASE_TRANSPARENT ? 20 : 0;
 }
 
-// GLOBAL: SWBF2 0x0086acd0
 // SYNTHETIC: SWBF2 0x004075f0
 // `dynamic initializer for 'RedRenderer::m_mProjectionTemp''
 
+// GLOBAL: SWBF2 0x0086acd0
+// RedRenderer::m_mProjectionTemp
 PblMatrix RedRenderer::m_mProjectionTemp;
 
 // FUNCTION: SWBF2 0x006b16f0
@@ -6195,15 +6235,17 @@ void dx::StateManager_DX::FlushStateEx_()
     }
 }
 
-// GLOBAL: SWBF2 0x007fbee0
 // SYNTHETIC: SWBF2 0x00407630
 // `dynamic initializer for 'RedRenderer::m_mViewUndo''
 
+// GLOBAL: SWBF2 0x007fbee0
+// RedRenderer::m_mViewUndo
 PblMatrix RedRenderer::m_mViewUndo;
-// GLOBAL: SWBF2 0x007fbf20
 // SYNTHETIC: SWBF2 0x00407600
 // `dynamic initializer for 'RedRenderer::m_mProjectionUndo''
 
+// GLOBAL: SWBF2 0x007fbf20
+// RedRenderer::m_mProjectionUndo
 PblMatrix RedRenderer::m_mProjectionUndo;
 // GLOBAL: SWBF2 0x007fb07b
 bool bSetNullTexture;

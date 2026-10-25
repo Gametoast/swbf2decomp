@@ -12,20 +12,26 @@ void Event<Timer, char>::Callback::Trigger(Timer& item, char& param);
 
 // GLOBAL: SWBF2 0x01f7ced8
 int Timer::sMapNumEntries;
-// GLOBAL: SWBF2 0x01f7cedc
 // SYNTHETIC: SWBF2 0x00406aa0
 // `dynamic initializer for 'Timer::sMap''
 
+// GLOBAL: SWBF2 0x01f7cedc
+// Timer::sMap
 PblHashTable<Timer, 64> Timer::sMap;
-// GLOBAL: SWBF2 0x01f99418
 // SYNTHETIC: SWBF2 0x00406ac0
 // `dynamic initializer for 'Timer::sMemoryPool''
 // SYNTHETIC: SWBF2 0x007695f0
 // `dynamic atexit destructor for 'Timer::sMemoryPool''
+
+// GLOBAL: SWBF2 0x01f99418
+// Timer::sMemoryPool
 MemoryPool Timer::sMemoryPool("Timer", 0x2c);
+namespace EventManager
+{
 
 // GLOBAL: SWBF2 0x01e51e25
-namespace EventManager { static char noContext; }
+static char noContext;
+}
 
 // FUNCTION: SWBF2 0x00657a80
 bool Timer::Update(float fDeltaTime)

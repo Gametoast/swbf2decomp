@@ -69,4 +69,7 @@ public:
  
  
 
-namespace util { extern util::Globals globals; }
+namespace util
+{
+extern util::Globals globals;
+}

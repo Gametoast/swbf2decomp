@@ -22,11 +22,13 @@ pcRedShader::BeginFuncT pcSkyFogShader::BeginFuncArray[MAX_PIPELINES];
 pcRedShader::EndFuncT pcSkyFogShader::EndFuncArray[MAX_PIPELINES];
 pcRedShader::RenderFuncT pcSkyFogShader::RenderFuncArray[MAX_PIPELINES];
 
-// GLOBAL: SWBF2 0x009c9904
 // SYNTHETIC: SWBF2 0x00409aa0
 // `dynamic initializer for 'pcSkyFogShader::s_shaderDef''
 // SYNTHETIC: SWBF2 0x00769d10
 // `dynamic atexit destructor for 'pcSkyFogShader::s_shaderDef''
+
+// GLOBAL: SWBF2 0x009c9904
+// pcSkyFogShader::s_shaderDef
 pcRedShaderDef pcSkyFogShader::s_shaderDef("skyfog_shader.xml");
 
 // FUNCTION: SWBF2 0x00703cb0
@@ -304,9 +306,11 @@ void pcSkyFogShader::_StaticInit() const
 {
 }
 
-// GLOBAL: SWBF2 0x009c9900
 // SYNTHETIC: SWBF2 0x00409ac0
 // `dynamic initializer for 'pcSkyFogShader::s_uiRenderTypeHash''
+
+// GLOBAL: SWBF2 0x009c9900
+// pcSkyFogShader::s_uiRenderTypeHash
 unsigned int pcSkyFogShader::s_uiRenderTypeHash = PblHash("SkyFog");
 
 // SYNTHETIC: SWBF2 0x00409ae0
@@ -315,11 +319,13 @@ unsigned int pcSkyFogShader::s_uiRenderTypeHash = PblHash("SkyFog");
 // SYNTHETIC: SWBF2 0x00409b00
 // `dynamic initializer for 'PblMath::fOneOverTwoPi''
 
-// GLOBAL: SWBF2 0x009c9938
 // SYNTHETIC: SWBF2 0x00409a80
 // `dynamic initializer for 'pcSkyFogShader::s_Factory''
 // SYNTHETIC: SWBF2 0x00769cf0
 // `dynamic atexit destructor for 'pcSkyFogShader::s_Factory''
+
+// GLOBAL: SWBF2 0x009c9938
+// pcSkyFogShader::s_Factory
 pcSkyFogShader pcSkyFogShader::s_Factory;
 
 // GLOBAL: SWBF2 0x009c98fc

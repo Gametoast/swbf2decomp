@@ -261,7 +261,8 @@ void StreamRenderer::Update()
 
 }
 
-namespace Snd {
+namespace Snd
+{
 
 // FUNCTION: SWBF2 0x007490a0
 StreamRenderer::~StreamRenderer()

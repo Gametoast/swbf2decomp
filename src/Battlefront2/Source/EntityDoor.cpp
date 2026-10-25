@@ -125,29 +125,43 @@ int GetUnitsInRange(const PblVector3& vPos, float fRadius, GameObject** const pp
 
 // SYNTHETIC: SWBF2 0x004029c0
 // `dynamic initializer for 'EntityDoor::rttiHashEntityDoor''
+// EntityDoor::rttiHashEntityDoor
+
 // GLOBAL: SWBF2 0x01ebb998
 // EntityDoor::rttiHashEntityDoor
 PblHash EntityDoor::rttiHashEntityDoor("EntityDoor");
+// GLOBAL: SWBF2 0x00789130
+// EntityDoor::rttiNameEntityDoor
 const char EntityDoor::rttiNameEntityDoor[] = "EntityDoor";
 
 // SYNTHETIC: SWBF2 0x004029d0
 // `dynamic initializer for 'EntityDoorClass::rttiHashEntityDoorClass''
+// EntityDoorClass::rttiHashEntityDoorClass
+
 // GLOBAL: SWBF2 0x01ebb99c
 // EntityDoorClass::rttiHashEntityDoorClass
 PblHash EntityDoorClass::rttiHashEntityDoorClass("EntityDoorClass");
+// GLOBAL: SWBF2 0x00789118
+// EntityDoorClass::rttiNameEntityDoorClass
 const char EntityDoorClass::rttiNameEntityDoorClass[] = "EntityDoorClass";
 
 int EntityDoor::msHostDoorsNumEntries;
-// GLOBAL: SWBF2 0x01ebb9a4
 // SYNTHETIC: SWBF2 0x004029e0
 // `dynamic initializer for 'EntityDoor::msHostDoors''
 
+// GLOBAL: SWBF2 0x01ebb9a4
+// EntityDoor::msHostDoors
+// GLOBAL: SWBF2 0x01ebb9a0
+// EntityDoor::msHostDoors
 PblHashTable<EntityDoor, 32> EntityDoor::msHostDoors;
 int EntityDoor::msClientDoorsNumEntries;
-// GLOBAL: SWBF2 0x01ebbaac
 // SYNTHETIC: SWBF2 0x00402a00
 // `dynamic initializer for 'EntityDoor::msClientDoors''
 
+// GLOBAL: SWBF2 0x01ebbaac
+// EntityDoor::msClientDoors
+// GLOBAL: SWBF2 0x01ebbaa8
+// EntityDoor::msClientDoors
 PblHashTable<EntityDoor, 32> EntityDoor::msClientDoors;
 
 // GLOBAL: SWBF2 0x007e6338

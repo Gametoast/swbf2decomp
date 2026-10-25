@@ -15,11 +15,13 @@
 #include "RedEngineFL/Graphics/RedModel.h"
 #include "RedEngineFL/Graphics/RedPose.h"
 
-// GLOBAL: SWBF2 0x01eb0460
 // SYNTHETIC: SWBF2 0x00402210
 // `dynamic initializer for 'Aimer::sMemoryPool''
 // SYNTHETIC: SWBF2 0x00766d50
 // `dynamic atexit destructor for 'Aimer::sMemoryPool''
+
+// GLOBAL: SWBF2 0x01eb0460
+// Aimer::sMemoryPool
 MemoryPool Aimer::sMemoryPool("Aimer", 0x220);
 
 extern PblVector3 gVectorZero;

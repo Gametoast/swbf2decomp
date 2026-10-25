@@ -8,7 +8,8 @@
 #include "GameLoop.h"
 #include "PebbleFL/Common/PblUnicode.h"
 
-namespace StatsManager {
+namespace StatsManager
+{
 
 // FUNCTION: SWBF2 0x005307a0
 void Update()
@@ -17,7 +18,10 @@ void Update()
 
 }
 
-namespace StatsManager { extern int m_state; }
+namespace StatsManager
+{
+extern int m_state;
+}
 extern unsigned char sStatsMatchData[0x40];
 class NetPktGroup;
 
@@ -28,7 +32,8 @@ void WriteStatsResponse(int iLocal, NetPktGroup& group);
 void BeginMatch();
 }
 
-namespace StatsManager {
+namespace StatsManager
+{
 
 // FUNCTION: SWBF2 0x00530890
 void ReadStatsChallenge()
@@ -36,7 +41,8 @@ void ReadStatsChallenge()
 }
 }
 
-namespace StatsManager {
+namespace StatsManager
+{
 
 // FUNCTION: SWBF2 0x005308b0
 void ReadStatsResponse()
@@ -44,7 +50,8 @@ void ReadStatsResponse()
 }
 }
 
-namespace StatsManager {
+namespace StatsManager
+{
 
 // FUNCTION: SWBF2 0x005307b0
 int GetState()
@@ -59,7 +66,8 @@ void StatsManagerSetStoppedState()
     StatsManager::m_state = 2;
 }
 
-namespace StatsManager {
+namespace StatsManager
+{
 
 // FUNCTION: SWBF2 0x005308c0
 bool __fastcall ReadStatsGetResults(int iUnused, void* pData)
@@ -72,7 +80,8 @@ bool __fastcall ReadStatsGetResults(int iUnused, void* pData)
 }
 }
 
-namespace StatsManager {
+namespace StatsManager
+{
 
 // FUNCTION: SWBF2 0x005308f0
 bool FindServicePlayerID()
@@ -81,7 +90,8 @@ bool FindServicePlayerID()
 }
 }
 
-namespace StatsManager {
+namespace StatsManager
+{
 
 // FUNCTION: SWBF2 0x00530900
 int GetLeaderBoardId()
@@ -90,7 +100,8 @@ int GetLeaderBoardId()
 }
 }
 
-namespace StatsManager {
+namespace StatsManager
+{
 
 // FUNCTION: SWBF2 0x00530910
 bool ResetPlayer()
@@ -147,11 +158,13 @@ struct StatsLeaderboardContainer
 };
  
 
-// GLOBAL: SWBF2 0x01ec0c20
 // SYNTHETIC: SWBF2 0x00403c20
 // `dynamic initializer for 'sStatsLeaderboard''
 // SYNTHETIC: SWBF2 0x00768910
 // `dynamic atexit destructor for 'sStatsLeaderboard''
+
+// GLOBAL: SWBF2 0x01ec0c20
+// sStatsLeaderboard
 StatsLeaderboardContainer sStatsLeaderboard;
 
 void ClearStatsLeaderboardList();
@@ -167,9 +180,12 @@ StatsLeaderboardContainer::~StatsLeaderboardContainer()
     ClearStatsLeaderboardList();
     ::operator delete(mListHead);
 }
+namespace StatsManager
+{
 
 // GLOBAL: SWBF2 0x007e6668
-namespace StatsManager { int m_state = 1; }
+int m_state = 1;
+}
 
 // GLOBAL: SWBF2 0x01e56008
 bool sStatsRequestBusy;
@@ -387,7 +403,8 @@ StatsLeaderboardContainer::StatsLeaderboardContainer()
     mBucketCount = 8;
 }
 
-namespace StatsManager {
+namespace StatsManager
+{
 
 // FUNCTION: SWBF2 0x00530640
 void Init()
@@ -412,7 +429,8 @@ void Init()
 
 void StatsManagerSetStoppedState();
 
-namespace StatsManager {
+namespace StatsManager
+{
 
 // FUNCTION: SWBF2 0x005307d0
 void Stop()
@@ -469,7 +487,8 @@ void __fastcall FreeGamespyBlock(void* pBlock)
     RedFreeToHeap(GameMemory::GamespyHeap, pBlock, 0);
 }
 
-namespace StatsManager {
+namespace StatsManager
+{
 
 // FUNCTION: SWBF2 0x005306b0
 void Cleanup()
@@ -543,9 +562,11 @@ void* __fastcall ReturnStatsListPointer(void* pThis)
     return pThis;
 }
 
-// GLOBAL: SWBF2 0x01ec0c14
 // SYNTHETIC: SWBF2 0x00403c50
 // `dynamic initializer for 'sStatsScratchBytes''
 // SYNTHETIC: SWBF2 0x007689a0
 // `dynamic atexit destructor for 'sStatsScratchBytes''
+
+// GLOBAL: SWBF2 0x01ec0c14
+// sStatsScratchBytes
 std::vector<unsigned char> sStatsScratchBytes;

@@ -29,7 +29,7 @@ public:
 };
   
 
-// VTABLE: SWBF2 0x0079d3d0
+// VTABLE: SWBF2 0x0079d3d0 EntitySound
 // VTABLE: SWBF2 0x0079d3b8 Thread
 class EntitySoundStatic : public EntitySound, public Thread
 {
@@ -45,6 +45,8 @@ public:
 
     static void* operator new(unsigned int uSize);
 
+    // SYNTHETIC: SWBF2 0x004fb470
+    // EntitySoundStatic::operator delete
     static void operator delete(void* pBlock) { sMemoryPool.Free(pBlock); }
 
     static PblHash rttiHashEntitySoundStatic;

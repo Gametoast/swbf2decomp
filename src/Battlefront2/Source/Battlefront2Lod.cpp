@@ -46,14 +46,18 @@ SoldierLodData::SoldierLodData(const RedModel* pModel, const RedModel* pLowResMo
     }
 }
 
-// GLOBAL: SWBF2 0x01eb0570
 // SYNTHETIC: SWBF2 0x00402310
 // `dynamic initializer for 'ordnanceloddata''
+
+// GLOBAL: SWBF2 0x01eb0570
+// ordnanceloddata
 OrdnanceLodData ordnanceloddata;
 
-// GLOBAL: SWBF2 0x01eb0550
 // SYNTHETIC: SWBF2 0x00402320
 // `dynamic initializer for 'noloddata''
+
+// GLOBAL: SWBF2 0x01eb0550
+// noloddata
 NoLodData noloddata;
 
 // FUNCTION: SWBF2 0x00448760
@@ -141,17 +145,23 @@ LargeEffectLodData::LargeEffectLodData()
     mMaxDist = 500.0f;
 }
 
-// GLOBAL: SWBF2 0x01eb0590
 // SYNTHETIC: SWBF2 0x004022e0
 // `dynamic initializer for 'smallEffectLodData''
+
+// GLOBAL: SWBF2 0x01eb0590
+// smallEffectLodData
 SmallEffectLodData smallEffectLodData;
 
-// GLOBAL: SWBF2 0x01eb05d0
 // SYNTHETIC: SWBF2 0x004022f0
 // `dynamic initializer for 'mediumEffectLodData''
+
+// GLOBAL: SWBF2 0x01eb05d0
+// mediumEffectLodData
 MediumEffectLodData mediumEffectLodData;
 
-// GLOBAL: SWBF2 0x01eb05b0
 // SYNTHETIC: SWBF2 0x00402300
 // `dynamic initializer for 'largeEffectLodData''
+
+// GLOBAL: SWBF2 0x01eb05b0
+// largeEffectLodData
 LargeEffectLodData largeEffectLodData;

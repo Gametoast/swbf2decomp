@@ -6,18 +6,22 @@
 namespace Snd
 {
 
-// GLOBAL: SWBF2 0x007e3890
 // SYNTHETIC: SWBF2 0x0040c190
 // `dynamic initializer for 'Snd::I3DL2ReverbPreset::smFreeList''
 // SYNTHETIC: SWBF2 0x0076a4b0
 // `dynamic atexit destructor for 'Snd::I3DL2ReverbPreset::smFreeList''
+
+// GLOBAL: SWBF2 0x007e3890
+// I3DL2ReverbPreset::smFreeList
 FreeList I3DL2ReverbPreset::smFreeList(sizeof(I3DL2ReverbPreset), 1, 4, 1);
 
-// GLOBAL: SWBF2 0x007e38ac
 // SYNTHETIC: SWBF2 0x0040c1b0
 // `dynamic initializer for 'Snd::I3DL2ReverbPreset::smList''
 // SYNTHETIC: SWBF2 0x0076a4c0
 // `dynamic atexit destructor for 'Snd::I3DL2ReverbPreset::smList''
+
+// GLOBAL: SWBF2 0x007e38ac
+// I3DL2ReverbPreset::smList
 PblListSingle I3DL2ReverbPreset::smList;
 
 // FUNCTION: SWBF2 0x00744e10
@@ -85,7 +89,8 @@ void __cdecl I3DL2ReverbPreset::Load(PblFileChunk& chunk, bool bOnce)
 
 }
 
-namespace Snd {
+namespace Snd
+{
 
 // FUNCTION: SWBF2 0x00744e30
 void __cdecl I3DL2ReverbPreset::DestroyAll()

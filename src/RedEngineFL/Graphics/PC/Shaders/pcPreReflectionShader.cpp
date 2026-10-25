@@ -14,11 +14,13 @@ pcRedShader::BeginFuncT pcPreReflectionShader::BeginFuncArray[MAX_PIPELINES];
 pcRedShader::EndFuncT pcPreReflectionShader::EndFuncArray[MAX_PIPELINES];
 pcRedShader::RenderFuncT pcPreReflectionShader::RenderFuncArray[MAX_PIPELINES];
 
-// GLOBAL: SWBF2 0x009ca11c
 // SYNTHETIC: SWBF2 0x0040a0b0
 // `dynamic initializer for 'pcPreReflectionShader::s_shaderDef''
 // SYNTHETIC: SWBF2 0x00769ec0
 // `dynamic atexit destructor for 'pcPreReflectionShader::s_shaderDef''
+
+// GLOBAL: SWBF2 0x009ca11c
+// pcPreReflectionShader::s_shaderDef
 pcRedShaderDef pcPreReflectionShader::s_shaderDef("prereflection_shader.xml");
 
 // FUNCTION: SWBF2 0x0070afc0
@@ -234,9 +236,11 @@ void pcPreReflectionShader::_StaticInit() const
 {
 }
 
-// GLOBAL: SWBF2 0x009ca170
 // SYNTHETIC: SWBF2 0x0040a0d0
 // `dynamic initializer for 'pcPreReflectionShader::s_uiRenderTypeHash''
+
+// GLOBAL: SWBF2 0x009ca170
+// pcPreReflectionShader::s_uiRenderTypeHash
 unsigned int pcPreReflectionShader::s_uiRenderTypeHash = PblHash("PreReflection");
 
 // SYNTHETIC: SWBF2 0x0040a0f0
@@ -245,11 +249,13 @@ unsigned int pcPreReflectionShader::s_uiRenderTypeHash = PblHash("PreReflection"
 // SYNTHETIC: SWBF2 0x0040a110
 // `dynamic initializer for 'PblMath::fOneOverTwoPi''
 
-// GLOBAL: SWBF2 0x009ca148
 // SYNTHETIC: SWBF2 0x0040a090
 // `dynamic initializer for 'pcPreReflectionShader::s_Factory''
 // SYNTHETIC: SWBF2 0x00769ea0
 // `dynamic atexit destructor for 'pcPreReflectionShader::s_Factory''
+
+// GLOBAL: SWBF2 0x009ca148
+// pcPreReflectionShader::s_Factory
 pcPreReflectionShader pcPreReflectionShader::s_Factory;
 
 // GLOBAL: SWBF2 0x009ca110

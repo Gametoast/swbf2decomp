@@ -9,9 +9,13 @@
 
 // SYNTHETIC: SWBF2 0x004092a0
 // `dynamic initializer for 'Red3DModelAnimator::rttiHashRed3DModelAnimator''
+// Red3DModelAnimator::rttiHashRed3DModelAnimator
+
 // GLOBAL: SWBF2 0x009c8500
 // Red3DModelAnimator::rttiHashRed3DModelAnimator
 PblHash Red3DModelAnimator::rttiHashRed3DModelAnimator("Red3DModelAnimator");
+// GLOBAL: SWBF2 0x00784258
+// Red3DModelAnimator::rttiNameRed3DModelAnimator
 const char Red3DModelAnimator::rttiNameRed3DModelAnimator[] = "Red3DModelAnimator";
 
 // FUNCTION: SWBF2 0x006f8190

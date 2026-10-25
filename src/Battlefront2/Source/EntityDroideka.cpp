@@ -440,7 +440,10 @@ extern "C" PblVector3* __stdcall D3DXVec3TransformCoord(PblVector3* pOut, const 
                                                         const PblMatrix* pM);
 extern "C" PblVector3* __stdcall D3DXVec3Normalize(PblVector3* pOut, const PblVector3* pV);
 
-namespace GameLoop { extern float sClientDeltaTime; }
+namespace GameLoop
+{
+extern float sClientDeltaTime;
+}
 
 namespace
 {
@@ -461,17 +464,22 @@ namespace
 
 // SYNTHETIC: SWBF2 0x00402a80
 // `dynamic initializer for 'EntityDroideka::rttiHashEntityDroideka''
+// EntityDroideka::rttiHashEntityDroideka
+
 // GLOBAL: SWBF2 0x01ebbc58
 // EntityDroideka::rttiHashEntityDroideka
 PblHash EntityDroideka::rttiHashEntityDroideka("EntityDroideka");
+// GLOBAL: SWBF2 0x0078917c
+// EntityDroideka::rttiNameEntityDroideka
 const char EntityDroideka::rttiNameEntityDroideka[] = "EntityDroideka";
 
-// GLOBAL: SWBF2 0x01ebbc08
 // SYNTHETIC: SWBF2 0x00402a60
 // `dynamic initializer for 'EntityDroideka::sMemoryPool''
 // SYNTHETIC: SWBF2 0x00766f40
 // `dynamic atexit destructor for 'EntityDroideka::sMemoryPool''
 
+// GLOBAL: SWBF2 0x01ebbc08
+// EntityDroideka::sMemoryPool
 MemoryPool EntityDroideka::sMemoryPool("EntityDroideka", 0x1b70);
 
 
@@ -746,9 +754,13 @@ EntityDroideka::PostCollision::~PostCollision()
 
 // SYNTHETIC: SWBF2 0x00402a90
 // `dynamic initializer for 'EntityDroidekaClass::rttiHashEntityDroidekaClass''
+// EntityDroidekaClass::rttiHashEntityDroidekaClass
+
 // GLOBAL: SWBF2 0x01ebbc5c
 // EntityDroidekaClass::rttiHashEntityDroidekaClass
 PblHash EntityDroidekaClass::rttiHashEntityDroidekaClass("EntityDroidekaClass");
+// GLOBAL: SWBF2 0x007891a8
+// EntityDroidekaClass::rttiNameEntityDroidekaClass
 const char EntityDroidekaClass::rttiNameEntityDroidekaClass[] = "EntityDroidekaClass";
 
 

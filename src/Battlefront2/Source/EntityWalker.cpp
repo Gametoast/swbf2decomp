@@ -289,23 +289,33 @@ extern "C" PblMatrix* __stdcall D3DXMatrixMultiply(PblMatrix* pOut, const PblMat
 
 // SYNTHETIC: SWBF2 0x00402ef0
 // `dynamic initializer for 'EntityWalkerClass::rttiHashEntityWalkerClass''
+// EntityWalkerClass::rttiHashEntityWalkerClass
+
 // GLOBAL: SWBF2 0x01ebc25c
 // EntityWalkerClass::rttiHashEntityWalkerClass
 PblHash EntityWalkerClass::rttiHashEntityWalkerClass("EntityWalkerClass");
+// GLOBAL: SWBF2 0x007896cc
+// EntityWalkerClass::rttiNameEntityWalkerClass
 const char EntityWalkerClass::rttiNameEntityWalkerClass[] = "EntityWalkerClass";
 
 // SYNTHETIC: SWBF2 0x00402ee0
 // `dynamic initializer for 'EntityWalker::rttiHashEntityWalker''
+// EntityWalker::rttiHashEntityWalker
+
 // GLOBAL: SWBF2 0x01ebc2b0
 // EntityWalker::rttiHashEntityWalker
 PblHash EntityWalker::rttiHashEntityWalker("EntityWalker");
+// GLOBAL: SWBF2 0x007896ac
+// EntityWalker::rttiNameEntityWalker
 const char EntityWalker::rttiNameEntityWalker[] = "EntityWalker";
 
-// GLOBAL: SWBF2 0x01ebc260
 // SYNTHETIC: SWBF2 0x00402ec0
 // `dynamic initializer for 'EntityWalker::sMemoryPool''
 // SYNTHETIC: SWBF2 0x00767010
 // `dynamic atexit destructor for 'EntityWalker::sMemoryPool''
+
+// GLOBAL: SWBF2 0x01ebc260
+// EntityWalker::sMemoryPool
 MemoryPool EntityWalker::sMemoryPool("EntityWalker", 0x2100);
 
 // FUNCTION: SWBF2 0x0047fb50
@@ -1441,6 +1451,8 @@ inline void* WalkerLegPair::operator new(unsigned int uSize)
     return sMemoryPool.Allocate(uSize);
 }
 
+// SYNTHETIC: SWBF2 0x004ff6c0
+// WalkerLegPair::operator delete
 inline void WalkerLegPair::operator delete(void* pBlock)
 {
     sMemoryPool.Free(pBlock);
@@ -3040,7 +3052,10 @@ PblMatrix DirectionMatrix(const PblVector3& vDir, const PblVector3& vUp, const P
 
 Controllable* GetControllablePilot(Controllable* pControllable);
 
-namespace SquadCommands { void VehicleCommand(GameObject* pObject, Character* pCharacter); }
+namespace SquadCommands
+{
+void VehicleCommand(GameObject* pObject, Character* pCharacter);
+}
 
 static const float ATTACK_CONTROL_DELAY = 0.1f;
 static const float ATTACK_REPEAT_DELAY = 0.3f;
@@ -4646,6 +4661,7 @@ void EntityWalker::SetupCameraTrackMatrix(PblMatrix& rMatrix, float fDeltaTime)
 // [thunk]:EntityWalker::`scalar deleting destructor'`adjustor{148}'
 
 // GLOBAL: SWBF2 0x01e51e13
+// g_bWalkerShowDamage
 bool g_bWalkerShowDamage;
 
 // SYNTHETIC: SWBF2 0x00402f00

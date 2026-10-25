@@ -6,8 +6,10 @@
 #include "HUDEvent.h"
 #include "RedEngineFL/Interface/RedGroupElement.h"
 
-namespace HUD {
+namespace HUD
+{
 
+// VTABLE: SWBF2 0x007a0dfc
 class ElementGroupBase : public HUD::Element
 {
 public:
@@ -105,6 +107,8 @@ public:
     bool mShowChildren : 1;
 };
 
+// VTABLE: SWBF2 0x007a0394 RedGroupElement
+// VTABLE: SWBF2 0x007a0474 HUD::ElementGroupBase
 class ElementGroup : public HUD::ElementGroupBase, public RedGroupElement
 {
 public:

@@ -42,16 +42,24 @@ namespace
 
 // SYNTHETIC: SWBF2 0x00405ac0
 // `dynamic initializer for 'OrdnanceGrenade::rttiHashOrdnanceGrenade''
+// OrdnanceGrenade::rttiHashOrdnanceGrenade
+
 // GLOBAL: SWBF2 0x01ef263c
 // OrdnanceGrenade::rttiHashOrdnanceGrenade
 PblHash OrdnanceGrenade::rttiHashOrdnanceGrenade("OrdnanceGrenade");
+// GLOBAL: SWBF2 0x0078a8d4
+// OrdnanceGrenade::rttiNameOrdnanceGrenade
 const char OrdnanceGrenade::rttiNameOrdnanceGrenade[] = "OrdnanceGrenade";
 
 // SYNTHETIC: SWBF2 0x00405ad0
 // `dynamic initializer for 'OrdnanceGrenadeClass::rttiHashOrdnanceGrenadeClass''
+// OrdnanceGrenadeClass::rttiHashOrdnanceGrenadeClass
+
 // GLOBAL: SWBF2 0x01ef2638
 // OrdnanceGrenadeClass::rttiHashOrdnanceGrenadeClass
 PblHash OrdnanceGrenadeClass::rttiHashOrdnanceGrenadeClass("OrdnanceGrenadeClass");
+// GLOBAL: SWBF2 0x0078a8b0
+// OrdnanceGrenadeClass::rttiNameOrdnanceGrenadeClass
 const char OrdnanceGrenadeClass::rttiNameOrdnanceGrenadeClass[] = "OrdnanceGrenadeClass";
 
 // FUNCTION: SWBF2 0x006009c0

@@ -4,9 +4,13 @@
 
 // SYNTHETIC: SWBF2 0x00402660
 // `dynamic initializer for 'CommandBuildingArmed::rttiHashCommandBuildingArmed''
+// CommandBuildingArmed::rttiHashCommandBuildingArmed
+
 // GLOBAL: SWBF2 0x01eb928c
 // CommandBuildingArmed::rttiHashCommandBuildingArmed
 PblHash CommandBuildingArmed::rttiHashCommandBuildingArmed("CommandBuildingArmed");
+// GLOBAL: SWBF2 0x00788c44
+// CommandBuildingArmed::rttiNameCommandBuildingArmed
 const char CommandBuildingArmed::rttiNameCommandBuildingArmed[] = "CommandBuildingArmed";
 
 
@@ -110,9 +114,13 @@ CommandBuildingArmedClass::~CommandBuildingArmedClass()
 
 // SYNTHETIC: SWBF2 0x00402670
 // `dynamic initializer for 'CommandBuildingArmedClass::rttiHashCommandBuildingArmedClass''
+// CommandBuildingArmedClass::rttiHashCommandBuildingArmedClass
+
 // GLOBAL: SWBF2 0x01eb9554
 // CommandBuildingArmedClass::rttiHashCommandBuildingArmedClass
 PblHash CommandBuildingArmedClass::rttiHashCommandBuildingArmedClass("CommandBuildingArmedClass");
+// GLOBAL: SWBF2 0x00788c20
+// CommandBuildingArmedClass::rttiNameCommandBuildingArmedClass
 const char CommandBuildingArmedClass::rttiNameCommandBuildingArmedClass[] = "CommandBuildingArmedClass";
 
 

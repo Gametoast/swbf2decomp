@@ -61,12 +61,12 @@ public:
 #include "Thread.h"
 #include "RedEngineFL/Memory/RedMemoryPool.h"
 
-// VTABLE: SWBF2 0x00796d00
+// VTABLE: SWBF2 0x00796d00 EntityEx
 // VTABLE: SWBF2 0x00796cac CollisionObject
 // VTABLE: SWBF2 0x00796e20 RedSceneObject
 // VTABLE: SWBF2 0x00796c80 Damageable
 // VTABLE: SWBF2 0x00796e88 PblHandled
-// VTABLE: SWBF2 0x00796c68 Thread
+// VTABLE: SWBF2 0x00796c68
 class Asteroid : public GameObject, public Thread
 {
 public:
@@ -76,6 +76,8 @@ public:
     virtual ~Asteroid();
 
     static void* operator new(unsigned int uSize) { return sMemoryPool.Allocate(uSize); }
+    // SYNTHETIC: SWBF2 0x00444530
+    // Asteroid::operator delete
     static void operator delete(void* pBlock) { sMemoryPool.Free(pBlock); }
 
     virtual bool IsRtti(unsigned int uRtti) const;

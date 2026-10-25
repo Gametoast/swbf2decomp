@@ -8,9 +8,13 @@
 
 // SYNTHETIC: SWBF2 0x00405a80
 // `dynamic initializer for 'OrdnanceFatRay::rttiHashOrdnanceFatRay''
+// OrdnanceFatRay::rttiHashOrdnanceFatRay
+
 // GLOBAL: SWBF2 0x01ef262c
 // OrdnanceFatRay::rttiHashOrdnanceFatRay
 PblHash OrdnanceFatRay::rttiHashOrdnanceFatRay("OrdnanceFatRay");
+// GLOBAL: SWBF2 0x0078a850
+// OrdnanceFatRay::rttiNameOrdnanceFatRay
 const char OrdnanceFatRay::rttiNameOrdnanceFatRay[] = "OrdnanceFatRay";
 
 // FUNCTION: SWBF2 0x005fe800
@@ -137,9 +141,13 @@ OrdnanceClass* OrdnanceFatRayClass::Derive(unsigned int uHash)
 
 // SYNTHETIC: SWBF2 0x00405a90
 // `dynamic initializer for 'OrdnanceFatRayClass::rttiHashOrdnanceFatRayClass''
+// OrdnanceFatRayClass::rttiHashOrdnanceFatRayClass
+
 // GLOBAL: SWBF2 0x01ef2628
 // OrdnanceFatRayClass::rttiHashOrdnanceFatRayClass
 PblHash OrdnanceFatRayClass::rttiHashOrdnanceFatRayClass("OrdnanceFatRayClass");
+// GLOBAL: SWBF2 0x0078a830
+// OrdnanceFatRayClass::rttiNameOrdnanceFatRayClass
 const char OrdnanceFatRayClass::rttiNameOrdnanceFatRayClass[] = "OrdnanceFatRayClass";
 
 // FUNCTION: SWBF2 0x005feda0

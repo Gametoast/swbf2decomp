@@ -421,8 +421,12 @@ int PlayerController::sEnabled = -1;
 namespace GameLoop
 {
 
+// GLOBAL: SWBF2 0x01e560e0
+// mMissionScript
 char mMissionScript[64];
 unsigned int mMissionScriptHash;
+// GLOBAL: SWBF2 0x01e5605e
+// sPauseMode
 bool sPauseMode;
 
 // GLOBAL: SWBF2 0x01e56132
@@ -437,6 +441,8 @@ bool sGameOver;
 
 bool _bFirstPersonEnabled = true;
 
+// GLOBAL: SWBF2 0x007e668c
+// mNumCameras
 unsigned int mNumCameras = 1;
 
 // GLOBAL: SWBF2 0x01ec1000
@@ -456,53 +462,69 @@ bool mShowTeamPoints[2];
 // GLOBAL: SWBF2 0x01e56033
 bool mbMetagameRules;
 
-// GLOBAL: SWBF2 0x01ec0ea0
 // SYNTHETIC: SWBF2 0x00403c70
 // `dynamic initializer for 'GameLoop::mAttractGroup''
 // SYNTHETIC: SWBF2 0x007689f0
 // `dynamic atexit destructor for 'GameLoop::mAttractGroup''
+
+// GLOBAL: SWBF2 0x01ec0ea0
+// mAttractGroup
 RedScreenGroupElement mAttractGroup;
-// GLOBAL: SWBF2 0x01ec10b0
 // SYNTHETIC: SWBF2 0x00403c90
 // `dynamic initializer for 'GameLoop::mAttractInfoText''
 // SYNTHETIC: SWBF2 0x00768a00
 // `dynamic atexit destructor for 'GameLoop::mAttractInfoText''
+
+// GLOBAL: SWBF2 0x01ec10b0
+// mAttractInfoText
 RedTextElement mAttractInfoText;
-// GLOBAL: SWBF2 0x01ec0d40
 // SYNTHETIC: SWBF2 0x00403cb0
 // `dynamic initializer for 'GameLoop::mDedicatedGroup''
 // SYNTHETIC: SWBF2 0x00768a10
 // `dynamic atexit destructor for 'GameLoop::mDedicatedGroup''
+
+// GLOBAL: SWBF2 0x01ec0d40
+// mDedicatedGroup
 RedScreenGroupElement mDedicatedGroup;
-// GLOBAL: SWBF2 0x01ec0de0
 // SYNTHETIC: SWBF2 0x00403cd0
 // `dynamic initializer for 'GameLoop::mDedicatedTitleText''
 // SYNTHETIC: SWBF2 0x00768a20
 // `dynamic atexit destructor for 'GameLoop::mDedicatedTitleText''
+
+// GLOBAL: SWBF2 0x01ec0de0
+// mDedicatedTitleText
 RedTextElement mDedicatedTitleText;
-// GLOBAL: SWBF2 0x01ec0c80
 // SYNTHETIC: SWBF2 0x00403cf0
 // `dynamic initializer for 'GameLoop::mDedicatedTeam1Text''
 // SYNTHETIC: SWBF2 0x00768a30
 // `dynamic atexit destructor for 'GameLoop::mDedicatedTeam1Text''
+
+// GLOBAL: SWBF2 0x01ec0c80
+// mDedicatedTeam1Text
 RedTextElement mDedicatedTeam1Text;
-// GLOBAL: SWBF2 0x01ec0f40
 // SYNTHETIC: SWBF2 0x00403d10
 // `dynamic initializer for 'GameLoop::mDedicatedTeam2Text''
 // SYNTHETIC: SWBF2 0x00768a40
 // `dynamic atexit destructor for 'GameLoop::mDedicatedTeam2Text''
+
+// GLOBAL: SWBF2 0x01ec0f40
+// mDedicatedTeam2Text
 RedTextElement mDedicatedTeam2Text;
-// GLOBAL: SWBF2 0x01ec1010
 // SYNTHETIC: SWBF2 0x00403d30
 // `dynamic initializer for 'GameLoop::mWaitMessageGroup''
 // SYNTHETIC: SWBF2 0x00768a50
 // `dynamic atexit destructor for 'GameLoop::mWaitMessageGroup''
+
+// GLOBAL: SWBF2 0x01ec1010
+// mWaitMessageGroup
 RedScreenGroupElement mWaitMessageGroup;
-// GLOBAL: SWBF2 0x01ec1170
 // SYNTHETIC: SWBF2 0x00403d50
 // `dynamic initializer for 'GameLoop::mWaitTextElement''
 // SYNTHETIC: SWBF2 0x00768a60
 // `dynamic atexit destructor for 'GameLoop::mWaitTextElement''
+
+// GLOBAL: SWBF2 0x01ec1170
+// mWaitTextElement
 RedTextElement mWaitTextElement;
 
 // GLOBAL: SWBF2 0x01e56050
@@ -696,7 +718,13 @@ namespace TeamManager
 {
     void UpdatePositions();
 }
-namespace HUD { namespace Manager { void Update(float fDeltaTime); } }
+namespace HUD
+{
+namespace Manager
+{
+void Update(float fDeltaTime);
+}
+}
 namespace PlayerPrefs
 {
     int __fastcall FindByViewport(int iValue);
@@ -705,7 +733,13 @@ namespace PopupText
 {
     bool IsEnabled(); void Update(float fDeltaTime);
 }
-namespace HUD { namespace GameEvents { void Update(float fDeltaTime); } }
+namespace HUD
+{
+namespace GameEvents
+{
+void Update(float fDeltaTime);
+}
+}
 namespace SaveGameManager
 {
     void Update(float fDeltaTime);
@@ -1753,12 +1787,15 @@ namespace GameLoop
 
 extern bool netAutoAssignTeams;
 
-// GLOBAL: SWBF2 0x01ed86a7
 // SYNTHETIC: SWBF2 0x00404740
 // `dynamic initializer for 'netAutoAssignTeamsOriginalSetting''
+
+// GLOBAL: SWBF2 0x01ed86a7
+// netAutoAssignTeamsOriginalSetting
 bool netAutoAssignTeamsOriginalSetting = netAutoAssignTeams;
 
-namespace GameLoop {
+namespace GameLoop
+{
 
 // FUNCTION: SWBF2 0x005335b0
 void SetCanSwitchSides(bool bFlag)
@@ -1780,7 +1817,8 @@ namespace RedScreenShot
     void TakeScreenShot();
 }
 
-namespace GameLoop {
+namespace GameLoop
+{
 
 // FUNCTION: SWBF2 0x005334f0
 void CheckScreenShots()
@@ -1796,7 +1834,8 @@ void CheckScreenShots()
 }
 }
 
-namespace GameLoop {
+namespace GameLoop
+{
 
 // FUNCTION: SWBF2 0x00533540
 bool CheckToggleDisplay()
@@ -1805,7 +1844,8 @@ bool CheckToggleDisplay()
 }
 }
 
-namespace GameLoop {
+namespace GameLoop
+{
 
 // FUNCTION: SWBF2 0x00533560
 bool GetCanSwitchSides()
@@ -1829,7 +1869,10 @@ void HUD::Element::UpdateAll(float fDeltaTime)
     }
 }
 
-namespace HUD { namespace Manager {
+namespace HUD
+{
+namespace Manager
+{
 
 // FUNCTION: SWBF2 0x005658e0
 void Update(float fDeltaTime)
@@ -1845,7 +1888,8 @@ void Update(float fDeltaTime)
     }
     HUD::Element::UpdateAll(fScale * fDeltaTime);
 }
-} }
+}
+}
 
 extern bool netIsDedicated;
 
@@ -1929,9 +1973,11 @@ void GameLoop::UpdateStats(float fDeltaTime, float fSystemDeltaTime)
 // GLOBAL: SWBF2 0x01e2fde5
 bool gNoAIRespawn;
 
-// GLOBAL: SWBF2 0x007eb948
 // SYNTHETIC: SWBF2 0x00403d70
 // `dynamic initializer for 'frameTimer''
 // SYNTHETIC: SWBF2 0x00768a70
 // `dynamic atexit destructor for 'frameTimer''
+
+// GLOBAL: SWBF2 0x007eb948
+// frameTimer
 PblPerformanceTimer frameTimer;

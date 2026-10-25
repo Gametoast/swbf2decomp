@@ -24,6 +24,8 @@ int sPreviousHeap;
 // GLOBAL: SWBF2 0x01e2fd3c
 int _fileOpCompleted;
 
+// GLOBAL: SWBF2 0x01e2fd38
+// PblFile::_blockCallbackFunc
 void(__cdecl* PblFile::_blockCallbackFunc)(void) = 0;
 
 // FUNCTION: SWBF2 0x00425840

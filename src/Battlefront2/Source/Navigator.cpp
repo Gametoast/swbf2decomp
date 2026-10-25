@@ -57,18 +57,24 @@ namespace
     }
 }
 
-// GLOBAL: SWBF2 0x01ecb200
 // SYNTHETIC: SWBF2 0x004043a0
 // `dynamic initializer for 'Navigator::sMemoryPool''
 // SYNTHETIC: SWBF2 0x00768d80
 // `dynamic atexit destructor for 'Navigator::sMemoryPool''
+
+// GLOBAL: SWBF2 0x01ecb200
+// Navigator::sMemoryPool
 MemoryPool Navigator::sMemoryPool("Navigator", sizeof(Navigator));
 
 // SYNTHETIC: SWBF2 0x00404390
 // `dynamic initializer for 'Navigator::rttiHashNavigator''
+// Navigator::rttiHashNavigator
+
 // GLOBAL: SWBF2 0x01ecb1f8
 // Navigator::rttiHashNavigator
 PblHash Navigator::rttiHashNavigator("Navigator");
+// GLOBAL: SWBF2 0x0078a5dc
+// Navigator::rttiNameNavigator
 const char Navigator::rttiNameNavigator[] = "Navigator";
 
 

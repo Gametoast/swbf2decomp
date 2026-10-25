@@ -18,6 +18,7 @@ struct StreamNodeConnection;
 namespace GameVoiceChat
 {
 
+// VTABLE: SWBF2 0x007a0108
 class Decoder : public VoiceChat::Decoder,
                 public Snd::StreamSourceNProducer
 {

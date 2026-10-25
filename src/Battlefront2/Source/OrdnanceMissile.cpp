@@ -27,9 +27,13 @@ extern PblVector3 gVectorZero;
 
 // SYNTHETIC: SWBF2 0x00405b40
 // `dynamic initializer for 'OrdnanceMissile::rttiHashOrdnanceMissile''
+// OrdnanceMissile::rttiHashOrdnanceMissile
+
 // GLOBAL: SWBF2 0x01ef265c
 // OrdnanceMissile::rttiHashOrdnanceMissile
 PblHash OrdnanceMissile::rttiHashOrdnanceMissile("OrdnanceMissile");
+// GLOBAL: SWBF2 0x0078a9ac
+// OrdnanceMissile::rttiNameOrdnanceMissile
 const char OrdnanceMissile::rttiNameOrdnanceMissile[] = "OrdnanceMissile";
 
 
@@ -252,9 +256,13 @@ bool OrdnanceMissile::Update(float fDeltaTime)
 
 // SYNTHETIC: SWBF2 0x00405b50
 // `dynamic initializer for 'OrdnanceMissileClass::rttiHashOrdnanceMissileClass''
+// OrdnanceMissileClass::rttiHashOrdnanceMissileClass
+
 // GLOBAL: SWBF2 0x01ef2658
 // OrdnanceMissileClass::rttiHashOrdnanceMissileClass
 PblHash OrdnanceMissileClass::rttiHashOrdnanceMissileClass("OrdnanceMissileClass");
+// GLOBAL: SWBF2 0x0078a990
+// OrdnanceMissileClass::rttiNameOrdnanceMissileClass
 const char OrdnanceMissileClass::rttiNameOrdnanceMissileClass[] = "OrdnanceMissileClass";
 
 // FUNCTION: SWBF2 0x00605790

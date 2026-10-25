@@ -90,9 +90,13 @@ inline float DistSq(const PblVector3& a, const PblVector3& b)
 
 // SYNTHETIC: SWBF2 0x00406c20
 // `dynamic initializer for 'UnitBoardAgent::rttiHashUnitBoardAgent''
+// UnitBoardAgent::rttiHashUnitBoardAgent
+
 // GLOBAL: SWBF2 0x01f99354
 // UnitBoardAgent::rttiHashUnitBoardAgent
 PblHash UnitBoardAgent::rttiHashUnitBoardAgent("UnitBoardAgent");
+// GLOBAL: SWBF2 0x0078b728
+// UnitBoardAgent::rttiNameUnitBoardAgent
 const char UnitBoardAgent::rttiNameUnitBoardAgent[] = "UnitBoardAgent";
 
 

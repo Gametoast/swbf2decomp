@@ -2,7 +2,10 @@
 #include "NetGame.h"
 
 extern int netCurMaxPlayers;
-namespace FriendBuddyList { bool __fastcall IsFriendBuddy(int ignored, int iPlayer); }
+namespace FriendBuddyList
+{
+bool __fastcall IsFriendBuddy(int ignored, int iPlayer);
+}
 
 namespace GameVoiceChat
 {

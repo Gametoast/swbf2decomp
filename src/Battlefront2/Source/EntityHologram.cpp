@@ -103,16 +103,24 @@ inline RedColorValue ToColorValue(const RedColor& c)
 
 // SYNTHETIC: SWBF2 0x00402b40
 // `dynamic initializer for 'EntityHologram::rttiHashEntityHologram''
+// EntityHologram::rttiHashEntityHologram
+
 // GLOBAL: SWBF2 0x01ebbcc4
 // EntityHologram::rttiHashEntityHologram
 PblHash EntityHologram::rttiHashEntityHologram("EntityHologram");
+// GLOBAL: SWBF2 0x00789280
+// EntityHologram::rttiNameEntityHologram
 const char EntityHologram::rttiNameEntityHologram[] = "EntityHologram";
 
 // SYNTHETIC: SWBF2 0x00402b50
 // `dynamic initializer for 'EntityHologramClass::rttiHashEntityHologramClass''
+// EntityHologramClass::rttiHashEntityHologramClass
+
 // GLOBAL: SWBF2 0x01ebbdcc
 // EntityHologramClass::rttiHashEntityHologramClass
 PblHash EntityHologramClass::rttiHashEntityHologramClass("EntityHologramClass");
+// GLOBAL: SWBF2 0x00789264
+// EntityHologramClass::rttiNameEntityHologramClass
 const char EntityHologramClass::rttiNameEntityHologramClass[] = "EntityHologramClass";
 
 // SYNTHETIC: SWBF2 0x0042cf30
@@ -1054,8 +1062,9 @@ void EntityHologramClass::Reset()
 // GLOBAL: SWBF2 0x01ebbcc8
 int EntityHologramClass::sHologramClassTableNumEntries;
 
-// GLOBAL: SWBF2 0x01ebbccc
 // SYNTHETIC: SWBF2 0x00402b60
 // `dynamic initializer for 'EntityHologramClass::sHologramClassTable''
 
+// GLOBAL: SWBF2 0x01ebbccc
+// EntityHologramClass::sHologramClassTable
 PblHashTable<EntityHologramClass, 32> EntityHologramClass::sHologramClassTable;

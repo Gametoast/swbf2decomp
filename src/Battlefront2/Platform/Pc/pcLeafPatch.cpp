@@ -141,6 +141,7 @@ bool LeafPatchClass::RenderMaxDist(const PblMatrix& matrix, float& fDist,
 extern "C" PblVector3* __stdcall D3DXVec3Normalize(PblVector3* pOut, const PblVector3* pV);
 
 // GLOBAL: SWBF2 0x007eb710
+// sBox
 static PblBox sBox(-50.0f, -50.0f, -50.0f, 50.0f, 50.0f, 50.0f);
 
 namespace

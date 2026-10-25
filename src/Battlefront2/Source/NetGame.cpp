@@ -156,8 +156,18 @@ inline void NetGameObjectHandle::Get(const GameObject*& object)
     object = ptr;
 }
 
-namespace gf { bool isInitialized(); bool checkError(); }
-namespace { struct NetVectorRecord { char unknown[8]; PblVector3 vector; }; }
+namespace gf
+{
+bool isInitialized(); bool checkError();
+}
+namespace
+{
+struct NetVectorRecord
+{
+char unknown[8]; PblVector3 vector;
+}
+;
+}
  
 
 class NetPktGroup;
@@ -175,8 +185,14 @@ namespace StatsManager
 // GLOBAL: SWBF2 0x01fa3d88
 NetEvent sServerNetEvents[128];
 
+// GLOBAL: SWBF2 0x007e8007
+// netInShell
 bool netInShell = true;
+// GLOBAL: SWBF2 0x01e62ea8
+// netEnabled
 bool netEnabled;
+// GLOBAL: SWBF2 0x01e62ea9
+// netEnabledNext
 bool netEnabledNext;
 
 // GLOBAL: SWBF2 0x007e802f
@@ -186,9 +202,13 @@ bool netTeamDamage = true;
 int netCurMaxPlayers;
 // GLOBAL: SWBF2 0x01e62f54
 int netCurMaxHosts;
+// GLOBAL: SWBF2 0x01e62f0c
+// netHostIndex
 int netHostIndex;
 int journalMode;
 bool netIsSplit;
+// GLOBAL: SWBF2 0x01fa8788
+// netPreGameEnabled
 bool netPreGameEnabled;
 float netPreGameStartTime;
 
@@ -218,9 +238,11 @@ float netSecondsPerTurn;
 // GLOBAL: SWBF2 0x01e62f44
 int netGameCount;
 
-// GLOBAL: SWBF2 0x01ecdaa0
 // SYNTHETIC: SWBF2 0x00404830
 // `dynamic initializer for 'netPlayers''
+
+// GLOBAL: SWBF2 0x01ecdaa0
+// netPlayers
 NetPlayer netPlayers[64];
 // GLOBAL: SWBF2 0x01fa8858
 NetHost netHosts[3];
@@ -253,6 +275,8 @@ unsigned int turnHighBits;
 unsigned __int64 hostPlayingMask;
 // GLOBAL: SWBF2 0x01fa87a8
 unsigned __int64 clientPlayingMask;
+// GLOBAL: SWBF2 0x01e62eab
+// netClientActive
 bool netClientActive;
 
 // GLOBAL: SWBF2 0x007e802c
@@ -260,15 +284,17 @@ bool netIsOneWorld = true;
 // GLOBAL: SWBF2 0x01e62eaa
 bool netIsDedicated;
 
-// GLOBAL: SWBF2 0x01ee7614
 // SYNTHETIC: SWBF2 0x00405550
 // `dynamic initializer for 'netGameChatMsgClient''
 
+// GLOBAL: SWBF2 0x01ee7614
+// netGameChatMsgClient
 PblList<NG_ChatMsg> netGameChatMsgClient;
-// GLOBAL: SWBF2 0x01ecb25c
 // SYNTHETIC: SWBF2 0x00405560
 // `dynamic initializer for 'netGameChatMsgServer''
 
+// GLOBAL: SWBF2 0x01ecb25c
+// netGameChatMsgServer
 PblList<NG_ChatMsg> netGameChatMsgServer;
 
 // TEMPLATE: SWBF2 0x005d3a60
@@ -277,370 +303,473 @@ PblList<NG_ChatMsg> netGameChatMsgServer;
 // GLOBAL: SWBF2 0x01e64efd
 bool isJournalOpened;
 
-// GLOBAL: SWBF2 0x01ee7490
 // SYNTHETIC: SWBF2 0x00404880
 // `dynamic initializer for 'NetObj::sMemoryPool''
 // SYNTHETIC: SWBF2 0x00768e10
 // `dynamic atexit destructor for 'NetObj::sMemoryPool''
+
+// GLOBAL: SWBF2 0x01ee7490
+// NetObj::sMemoryPool
 MemoryPool NetObj::sMemoryPool("NetObj", 0xC);
 
-// GLOBAL: SWBF2 0x01ee74e0
 // SYNTHETIC: SWBF2 0x004048e0
 // `dynamic initializer for 'clientSoldierPool''
 // SYNTHETIC: SWBF2 0x00768e30
 // `dynamic atexit destructor for 'clientSoldierPool''
+
+// GLOBAL: SWBF2 0x01ee74e0
+// clientSoldierPool
 MemoryPool clientSoldierPool("ClientSoldier", 0);
 
-// GLOBAL: SWBF2 0x01ed77c8
 // SYNTHETIC: SWBF2 0x00404910
 // `dynamic initializer for 'clientDroidPool''
 // SYNTHETIC: SWBF2 0x00768e40
 // `dynamic atexit destructor for 'clientDroidPool''
+
+// GLOBAL: SWBF2 0x01ed77c8
+// clientDroidPool
 MemoryPool clientDroidPool("ClientDroid", 0);
 
-// GLOBAL: SWBF2 0x01ee5360
 // SYNTHETIC: SWBF2 0x00404940
 // `dynamic initializer for 'clientWalkerPool''
 // SYNTHETIC: SWBF2 0x00768e50
 // `dynamic atexit destructor for 'clientWalkerPool''
+
+// GLOBAL: SWBF2 0x01ee5360
+// clientWalkerPool
 MemoryPool clientWalkerPool("ClientWalker", 0);
 
-// GLOBAL: SWBF2 0x01ed70a0
 // SYNTHETIC: SWBF2 0x00404970
 // `dynamic initializer for 'clientCommandWalkerPool''
 // SYNTHETIC: SWBF2 0x00768e60
 // `dynamic atexit destructor for 'clientCommandWalkerPool''
+
+// GLOBAL: SWBF2 0x01ed70a0
+// clientCommandWalkerPool
 MemoryPool clientCommandWalkerPool("ClientCommandWalker", 0);
 
-// GLOBAL: SWBF2 0x01ed8890
 // SYNTHETIC: SWBF2 0x004049a0
 // `dynamic initializer for 'clientCommandFlyerPool''
 // SYNTHETIC: SWBF2 0x00768e70
 // `dynamic atexit destructor for 'clientCommandFlyerPool''
+
+// GLOBAL: SWBF2 0x01ed8890
+// clientCommandFlyerPool
 MemoryPool clientCommandFlyerPool("ClientCommandFlyer", 0);
 
-// GLOBAL: SWBF2 0x01ed86f8
 // SYNTHETIC: SWBF2 0x004049d0
 // `dynamic initializer for 'clientDroidekaPool''
 // SYNTHETIC: SWBF2 0x00768e80
 // `dynamic atexit destructor for 'clientDroidekaPool''
+
+// GLOBAL: SWBF2 0x01ed86f8
+// clientDroidekaPool
 MemoryPool clientDroidekaPool("ClientDroideka", 0);
 
-// GLOBAL: SWBF2 0x01ee5480
 // SYNTHETIC: SWBF2 0x00404a00
 // `dynamic initializer for 'clientFlyerPool''
 // SYNTHETIC: SWBF2 0x00768e90
 // `dynamic atexit destructor for 'clientFlyerPool''
+
+// GLOBAL: SWBF2 0x01ee5480
+// clientFlyerPool
 MemoryPool clientFlyerPool("ClientFlyer", 0);
 
-// GLOBAL: SWBF2 0x01ed5ca0
 // SYNTHETIC: SWBF2 0x00404a30
 // `dynamic initializer for 'clientCarrierPool''
 // SYNTHETIC: SWBF2 0x00768ea0
 // `dynamic atexit destructor for 'clientCarrierPool''
+
+// GLOBAL: SWBF2 0x01ed5ca0
+// clientCarrierPool
 MemoryPool clientCarrierPool("ClientCarrier", 0);
 
-// GLOBAL: SWBF2 0x01ee7730
 // SYNTHETIC: SWBF2 0x00404a60
 // `dynamic initializer for 'clientHoverPool''
 // SYNTHETIC: SWBF2 0x00768eb0
 // `dynamic atexit destructor for 'clientHoverPool''
+
+// GLOBAL: SWBF2 0x01ee7730
+// clientHoverPool
 MemoryPool clientHoverPool("ClientHover", 0);
 
-// GLOBAL: SWBF2 0x01ed7848
 // SYNTHETIC: SWBF2 0x00404a90
 // `dynamic initializer for 'clientCommandHoverPool''
 // SYNTHETIC: SWBF2 0x00768ec0
 // `dynamic atexit destructor for 'clientCommandHoverPool''
+
+// GLOBAL: SWBF2 0x01ed7848
+// clientCommandHoverPool
 MemoryPool clientCommandHoverPool("ClientCommandHover", 0);
 
-// GLOBAL: SWBF2 0x01ed7778
 // SYNTHETIC: SWBF2 0x00404ac0
 // `dynamic initializer for 'clientMountedTurretPool''
 // SYNTHETIC: SWBF2 0x00768ed0
 // `dynamic atexit destructor for 'clientMountedTurretPool''
+
+// GLOBAL: SWBF2 0x01ed7778
+// clientMountedTurretPool
 MemoryPool clientMountedTurretPool("ClientMountedTurret", 0);
 
-// GLOBAL: SWBF2 0x01ee73a0
 // SYNTHETIC: SWBF2 0x00404af0
 // `dynamic initializer for 'clientPowerupPool''
 // SYNTHETIC: SWBF2 0x00768ee0
 // `dynamic atexit destructor for 'clientPowerupPool''
+
+// GLOBAL: SWBF2 0x01ee73a0
+// clientPowerupPool
 MemoryPool clientPowerupPool("ClientPowerup", 0);
 
-// GLOBAL: SWBF2 0x01ed86a8
 // SYNTHETIC: SWBF2 0x00404b20
 // `dynamic initializer for 'clientArmedDynamicPool''
 // SYNTHETIC: SWBF2 0x00768ef0
 // `dynamic atexit destructor for 'clientArmedDynamicPool''
+
+// GLOBAL: SWBF2 0x01ed86a8
+// clientArmedDynamicPool
 MemoryPool clientArmedDynamicPool("ClientArmedDynamic", 0);
 
-// GLOBAL: SWBF2 0x01ee4aa0
 // SYNTHETIC: SWBF2 0x00404b50
 // `dynamic initializer for 'clientWalkerLegPairPool''
 // SYNTHETIC: SWBF2 0x00768f00
 // `dynamic atexit destructor for 'clientWalkerLegPairPool''
+
+// GLOBAL: SWBF2 0x01ee4aa0
+// clientWalkerLegPairPool
 MemoryPool clientWalkerLegPairPool("ClientWalkerLegPair", 0);
 
-// GLOBAL: SWBF2 0x01ee53b0
 // SYNTHETIC: SWBF2 0x00404b80
 // `dynamic initializer for 'clientWalkerBlendPool''
 // SYNTHETIC: SWBF2 0x00768f10
 // `dynamic atexit destructor for 'clientWalkerBlendPool''
+
+// GLOBAL: SWBF2 0x01ee53b0
+// clientWalkerBlendPool
 MemoryPool clientWalkerBlendPool("ClientWalkerBlend", 0);
 
-// GLOBAL: SWBF2 0x01ed7000
 // SYNTHETIC: SWBF2 0x00404bb0
 // `dynamic initializer for 'clientWalkerBlendUnitPool''
 // SYNTHETIC: SWBF2 0x00768f20
 // `dynamic atexit destructor for 'clientWalkerBlendUnitPool''
+
+// GLOBAL: SWBF2 0x01ed7000
+// clientWalkerBlendUnitPool
 MemoryPool clientWalkerBlendUnitPool("ClientWalkerBlendUnit", 0);
 
-// GLOBAL: SWBF2 0x01ee5140
 // SYNTHETIC: SWBF2 0x00404be0
 // `dynamic initializer for 'clientAimerPool''
 // SYNTHETIC: SWBF2 0x00768f30
 // `dynamic atexit destructor for 'clientAimerPool''
+
+// GLOBAL: SWBF2 0x01ee5140
+// clientAimerPool
 MemoryPool clientAimerPool("ClientAimer", 0);
 
-// GLOBAL: SWBF2 0x01ed8840
 // SYNTHETIC: SWBF2 0x00404c10
 // `dynamic initializer for 'clientWeaponPool''
 // SYNTHETIC: SWBF2 0x00768f40
 // `dynamic atexit destructor for 'clientWeaponPool''
+
+// GLOBAL: SWBF2 0x01ed8840
+// clientWeaponPool
 MemoryPool clientWeaponPool("ClientWeapon", 0);
 
-// GLOBAL: SWBF2 0x01ed6f60
 // SYNTHETIC: SWBF2 0x00404c40
 // `dynamic initializer for 'clientAmmoCounterPool''
 // SYNTHETIC: SWBF2 0x00768f50
 // `dynamic atexit destructor for 'clientAmmoCounterPool''
+
+// GLOBAL: SWBF2 0x01ed6f60
+// clientAmmoCounterPool
 MemoryPool clientAmmoCounterPool("ClientAmmoCounter", 0);
 
-// GLOBAL: SWBF2 0x01ee7560
 // SYNTHETIC: SWBF2 0x00404c70
 // `dynamic initializer for 'clientEnergyBarPool''
 // SYNTHETIC: SWBF2 0x00768f60
 // `dynamic atexit destructor for 'clientEnergyBarPool''
+
+// GLOBAL: SWBF2 0x01ee7560
+// clientEnergyBarPool
 MemoryPool clientEnergyBarPool("ClientEnergyBar", 0);
 
-// GLOBAL: SWBF2 0x01ee7678
 // SYNTHETIC: SWBF2 0x00404ca0
 // `dynamic initializer for 'clientTreeGridPool''
 // SYNTHETIC: SWBF2 0x00768f70
 // `dynamic atexit destructor for 'clientTreeGridPool''
+
+// GLOBAL: SWBF2 0x01ee7678
+// clientTreeGridPool
 MemoryPool clientTreeGridPool("ClientTreeGrid", 0);
 
-// GLOBAL: SWBF2 0x01ee7628
 // SYNTHETIC: SWBF2 0x00404cd0
 // `dynamic initializer for 'clientOrdnanceTowCablePool''
 // SYNTHETIC: SWBF2 0x00768f80
 // `dynamic atexit destructor for 'clientOrdnanceTowCablePool''
+
+// GLOBAL: SWBF2 0x01ee7628
+// clientOrdnanceTowCablePool
 MemoryPool clientOrdnanceTowCablePool("ClientOrdnanceTowCable", 0);
 
-// GLOBAL: SWBF2 0x01ee7ba8
 // SYNTHETIC: SWBF2 0x00404d00
 // `dynamic initializer for 'clientAsteroidPool''
 // SYNTHETIC: SWBF2 0x00768f90
 // `dynamic atexit destructor for 'clientAsteroidPool''
+
+// GLOBAL: SWBF2 0x01ee7ba8
+// clientAsteroidPool
 MemoryPool clientAsteroidPool("ClientAsteroid", 0);
 
-// GLOBAL: SWBF2 0x01ee4a50
 // SYNTHETIC: SWBF2 0x00404d30
 // `dynamic initializer for 'clientFlagPool''
 // SYNTHETIC: SWBF2 0x00768fa0
 // `dynamic atexit destructor for 'clientFlagPool''
+
+// GLOBAL: SWBF2 0x01ee4a50
+// clientFlagPool
 MemoryPool clientFlagPool("ClientFlag", 0);
 
-// GLOBAL: SWBF2 0x01ee73f0
 // SYNTHETIC: SWBF2 0x00404d60
 // `dynamic initializer for 'clientRemoteTerminalPool''
 // SYNTHETIC: SWBF2 0x00768fb0
 // `dynamic atexit destructor for 'clientRemoteTerminalPool''
+
+// GLOBAL: SWBF2 0x01ee73f0
+// clientRemoteTerminalPool
 MemoryPool clientRemoteTerminalPool("ClientRemoteTerminal", 0);
 
-// GLOBAL: SWBF2 0x01ee7aa0
 // SYNTHETIC: SWBF2 0x00404d90
 // `dynamic initializer for 'hostSoldierPool''
 // SYNTHETIC: SWBF2 0x00768fc0
 // `dynamic atexit destructor for 'hostSoldierPool''
+
+// GLOBAL: SWBF2 0x01ee7aa0
+// hostSoldierPool
 MemoryPool hostSoldierPool("HostSoldier", 0);
 
-// GLOBAL: SWBF2 0x01ee7c48
 // SYNTHETIC: SWBF2 0x00404dc0
 // `dynamic initializer for 'hostDroidPool''
 // SYNTHETIC: SWBF2 0x00768fd0
 // `dynamic atexit destructor for 'hostDroidPool''
+
+// GLOBAL: SWBF2 0x01ee7c48
+// hostDroidPool
 MemoryPool hostDroidPool("HostDroid", 0);
 
-// GLOBAL: SWBF2 0x01ed87f0
 // SYNTHETIC: SWBF2 0x00404df0
 // `dynamic initializer for 'hostWalkerPool''
 // SYNTHETIC: SWBF2 0x00768fe0
 // `dynamic atexit destructor for 'hostWalkerPool''
+
+// GLOBAL: SWBF2 0x01ed87f0
+// hostWalkerPool
 MemoryPool hostWalkerPool("HostWalker", 0);
 
-// GLOBAL: SWBF2 0x01ed7100
 // SYNTHETIC: SWBF2 0x00404e20
 // `dynamic initializer for 'hostCommandWalkerPool''
 // SYNTHETIC: SWBF2 0x00768ff0
 // `dynamic atexit destructor for 'hostCommandWalkerPool''
+
+// GLOBAL: SWBF2 0x01ed7100
+// hostCommandWalkerPool
 MemoryPool hostCommandWalkerPool("HostCommandWalker", 0);
 
-// GLOBAL: SWBF2 0x01ed8940
 // SYNTHETIC: SWBF2 0x00404e50
 // `dynamic initializer for 'hostCommandFlyerPool''
 // SYNTHETIC: SWBF2 0x00769000
 // `dynamic atexit destructor for 'hostCommandFlyerPool''
+
+// GLOBAL: SWBF2 0x01ed8940
+// hostCommandFlyerPool
 MemoryPool hostCommandFlyerPool("HostCommandFlyer", 0);
 
-// GLOBAL: SWBF2 0x01ee7320
 // SYNTHETIC: SWBF2 0x00404e80
 // `dynamic initializer for 'hostDroidekaPool''
 // SYNTHETIC: SWBF2 0x00769010
 // `dynamic atexit destructor for 'hostDroidekaPool''
+
+// GLOBAL: SWBF2 0x01ee7320
+// hostDroidekaPool
 MemoryPool hostDroidekaPool("HostDroideka", 0);
 
-// GLOBAL: SWBF2 0x01ee7b40
 // SYNTHETIC: SWBF2 0x00404eb0
 // `dynamic initializer for 'hostFlyerPool''
 // SYNTHETIC: SWBF2 0x00769020
 // `dynamic atexit destructor for 'hostFlyerPool''
+
+// GLOBAL: SWBF2 0x01ee7b40
+// hostFlyerPool
 MemoryPool hostFlyerPool("HostFlyer", 0);
 
-// GLOBAL: SWBF2 0x01ee7cf0
 // SYNTHETIC: SWBF2 0x00404ee0
 // `dynamic initializer for 'hostCarrierPool''
 // SYNTHETIC: SWBF2 0x00769030
 // `dynamic atexit destructor for 'hostCarrierPool''
+
+// GLOBAL: SWBF2 0x01ee7cf0
+// hostCarrierPool
 MemoryPool hostCarrierPool("HostCarrier", 0);
 
-// GLOBAL: SWBF2 0x01ee51e0
 // SYNTHETIC: SWBF2 0x00404f10
 // `dynamic initializer for 'hostHoverPool''
 // SYNTHETIC: SWBF2 0x00769040
 // `dynamic atexit destructor for 'hostHoverPool''
+
+// GLOBAL: SWBF2 0x01ee51e0
+// hostHoverPool
 MemoryPool hostHoverPool("HostHover", 0);
 
-// GLOBAL: SWBF2 0x01ed7150
 // SYNTHETIC: SWBF2 0x00404f40
 // `dynamic initializer for 'hostCommandHoverPool''
 // SYNTHETIC: SWBF2 0x00769050
 // `dynamic atexit destructor for 'hostCommandHoverPool''
+
+// GLOBAL: SWBF2 0x01ed7150
+// hostCommandHoverPool
 MemoryPool hostCommandHoverPool("HostCommandHover", 0);
 
-// GLOBAL: SWBF2 0x01ed8748
 // SYNTHETIC: SWBF2 0x00404f70
 // `dynamic initializer for 'hostMountedTurretPool''
 // SYNTHETIC: SWBF2 0x00769060
 // `dynamic atexit destructor for 'hostMountedTurretPool''
+
+// GLOBAL: SWBF2 0x01ed8748
+// hostMountedTurretPool
 MemoryPool hostMountedTurretPool("HostMountedTurret", 0);
 
-// GLOBAL: SWBF2 0x01ee7af0
 // SYNTHETIC: SWBF2 0x00404fa0
 // `dynamic initializer for 'hostPowerupPool''
 // SYNTHETIC: SWBF2 0x00769070
 // `dynamic atexit destructor for 'hostPowerupPool''
+
+// GLOBAL: SWBF2 0x01ee7af0
+// hostPowerupPool
 MemoryPool hostPowerupPool("HostPowerup", 0);
 
-// GLOBAL: SWBF2 0x01ee75c0
 // SYNTHETIC: SWBF2 0x00404fd0
 // `dynamic initializer for 'hostArmedDynamicPool''
 // SYNTHETIC: SWBF2 0x00769080
 // `dynamic atexit destructor for 'hostArmedDynamicPool''
+
+// GLOBAL: SWBF2 0x01ee75c0
+// hostArmedDynamicPool
 MemoryPool hostArmedDynamicPool("HostArmedDynamic", 0);
 
-// GLOBAL: SWBF2 0x01ee7bf8
 // SYNTHETIC: SWBF2 0x00405000
 // `dynamic initializer for 'hostWalkerLegPairPool''
 // SYNTHETIC: SWBF2 0x00769090
 // `dynamic atexit destructor for 'hostWalkerLegPairPool''
+
+// GLOBAL: SWBF2 0x01ee7bf8
+// hostWalkerLegPairPool
 MemoryPool hostWalkerLegPairPool("HostWalkerLegPair", 0);
 
-// GLOBAL: SWBF2 0x01ee5430
 // SYNTHETIC: SWBF2 0x00405030
 // `dynamic initializer for 'hostWalkerBlendPool''
 // SYNTHETIC: SWBF2 0x007690a0
 // `dynamic atexit destructor for 'hostWalkerBlendPool''
+
+// GLOBAL: SWBF2 0x01ee5430
+// hostWalkerBlendPool
 MemoryPool hostWalkerBlendPool("HostWalkerBlend", 0);
 
-// GLOBAL: SWBF2 0x01ed5cf0
 // SYNTHETIC: SWBF2 0x00405060
 // `dynamic initializer for 'hostWalkerBlendUnitPool''
 // SYNTHETIC: SWBF2 0x007690b0
 // `dynamic atexit destructor for 'hostWalkerBlendUnitPool''
+
+// GLOBAL: SWBF2 0x01ed5cf0
+// hostWalkerBlendUnitPool
 MemoryPool hostWalkerBlendUnitPool("HostWalkerBlendUnit", 0);
 
-// GLOBAL: SWBF2 0x01ee5230
 // SYNTHETIC: SWBF2 0x00405090
 // `dynamic initializer for 'hostAimerPool''
 // SYNTHETIC: SWBF2 0x007690c0
 // `dynamic atexit destructor for 'hostAimerPool''
+
+// GLOBAL: SWBF2 0x01ee5230
+// hostAimerPool
 MemoryPool hostAimerPool("HostAimer", 0);
 
-// GLOBAL: SWBF2 0x01ed6fb0
 // SYNTHETIC: SWBF2 0x004050c0
 // `dynamic initializer for 'hostWeaponPool''
 // SYNTHETIC: SWBF2 0x007690d0
 // `dynamic atexit destructor for 'hostWeaponPool''
+
+// GLOBAL: SWBF2 0x01ed6fb0
+// hostWeaponPool
 MemoryPool hostWeaponPool("HostWeapon", 0);
 
-// GLOBAL: SWBF2 0x01ee54d0
 // SYNTHETIC: SWBF2 0x004050f0
 // `dynamic initializer for 'hostAmmoCounterPool''
 // SYNTHETIC: SWBF2 0x007690e0
 // `dynamic atexit destructor for 'hostAmmoCounterPool''
+
+// GLOBAL: SWBF2 0x01ee54d0
+// hostAmmoCounterPool
 MemoryPool hostAmmoCounterPool("HostAmmoCounter", 0);
 
-// GLOBAL: SWBF2 0x01ee49d0
 // SYNTHETIC: SWBF2 0x00405120
 // `dynamic initializer for 'hostEnergyBarPool''
 // SYNTHETIC: SWBF2 0x007690f0
 // `dynamic atexit destructor for 'hostEnergyBarPool''
+
+// GLOBAL: SWBF2 0x01ee49d0
+// hostEnergyBarPool
 MemoryPool hostEnergyBarPool("HostEnergyBar", 0);
 
-// GLOBAL: SWBF2 0x01ee7ca0
 // SYNTHETIC: SWBF2 0x00405150
 // `dynamic initializer for 'hostTreeGridPool''
 // SYNTHETIC: SWBF2 0x00769100
 // `dynamic atexit destructor for 'hostTreeGridPool''
+
+// GLOBAL: SWBF2 0x01ee7ca0
+// hostTreeGridPool
 MemoryPool hostTreeGridPool("HostTreeGrid", 0);
 
-// GLOBAL: SWBF2 0x01ee76e0
 // SYNTHETIC: SWBF2 0x00405180
 // `dynamic initializer for 'hostOrdnanceTowCablePool''
 // SYNTHETIC: SWBF2 0x00769110
 // `dynamic atexit destructor for 'hostOrdnanceTowCablePool''
+
+// GLOBAL: SWBF2 0x01ee76e0
+// hostOrdnanceTowCablePool
 MemoryPool hostOrdnanceTowCablePool("HostOrdnanceTowCable", 0);
 
-// GLOBAL: SWBF2 0x01ed7050
 // SYNTHETIC: SWBF2 0x004051b0
 // `dynamic initializer for 'hostAsteroidPool''
 // SYNTHETIC: SWBF2 0x00769120
 // `dynamic atexit destructor for 'hostAsteroidPool''
+
+// GLOBAL: SWBF2 0x01ed7050
+// hostAsteroidPool
 MemoryPool hostAsteroidPool("HostAsteroid", 0);
 
-// GLOBAL: SWBF2 0x01ed71a0
 // SYNTHETIC: SWBF2 0x004051e0
 // `dynamic initializer for 'hostFlagPool''
 // SYNTHETIC: SWBF2 0x00769130
 // `dynamic atexit destructor for 'hostFlagPool''
+
+// GLOBAL: SWBF2 0x01ed71a0
+// hostFlagPool
 MemoryPool hostFlagPool("HostFlag", 0);
 
-// GLOBAL: SWBF2 0x01ed87a0
 // SYNTHETIC: SWBF2 0x00405210
 // `dynamic initializer for 'hostRemoteTerminalPool''
 // SYNTHETIC: SWBF2 0x00769140
 // `dynamic atexit destructor for 'hostRemoteTerminalPool''
+
+// GLOBAL: SWBF2 0x01ed87a0
+// hostRemoteTerminalPool
 MemoryPool hostRemoteTerminalPool("HostRemoteTerminal", 0);
 
 // GLOBAL: SWBF2 0x01e64a30
 ProcessedInputs* hostJoysticks[64];
 
-// GLOBAL: SWBF2 0x01ee7b90
 // SYNTHETIC: SWBF2 0x00404860
 // `dynamic initializer for 'netLocalPos''
 
+// GLOBAL: SWBF2 0x01ee7b90
+// netLocalPos
 PblVector3 netLocalPos[2];
 
 class NetTurn
@@ -687,34 +816,44 @@ struct RelChunkClusterData
 // SYNTHETIC: SWBF2 0x005c0b60
 // RelChunkClusterData::RelChunkClusterData
 
-// GLOBAL: SWBF2 0x01ed6960
 // SYNTHETIC: SWBF2 0x00404750
 // `dynamic initializer for 'remoteClientTurns''
 // SYNTHETIC: SWBF2 0x00768d90
 // `dynamic atexit destructor for 'remoteClientTurns''
+
+// GLOBAL: SWBF2 0x01ed6960
+// remoteClientTurns
 NetTurn remoteClientTurns;
-// GLOBAL: SWBF2 0x01ee4b40
 // SYNTHETIC: SWBF2 0x00404780
 // `dynamic initializer for 'localClientTurns''
 // SYNTHETIC: SWBF2 0x00768db0
 // `dynamic atexit destructor for 'localClientTurns''
+
+// GLOBAL: SWBF2 0x01ee4b40
+// localClientTurns
 ProcessedInputs localClientTurns[32][2];
-// GLOBAL: SWBF2 0x01ed89d0
 // SYNTHETIC: SWBF2 0x004047b0
 // `dynamic initializer for 'hostTurns''
 // SYNTHETIC: SWBF2 0x00768de0
 // `dynamic atexit destructor for 'hostTurns''
+
+// GLOBAL: SWBF2 0x01ed89d0
+// hostTurns
 NetTurn hostTurns[32];
-// GLOBAL: SWBF2 0x01ee7a88
 // SYNTHETIC: SWBF2 0x00404800
 // `dynamic initializer for 'noInputs''
 // SYNTHETIC: SWBF2 0x00768e00
 // `dynamic atexit destructor for 'noInputs''
+
+// GLOBAL: SWBF2 0x01ee7a88
+// noInputs
 ProcessedInputs noInputs;
 
-// GLOBAL: SWBF2 0x01ee5280
 // SYNTHETIC: SWBF2 0x004047e0
 // `dynamic initializer for 'lateState''
+
+// GLOBAL: SWBF2 0x01ee5280
+// lateState
 NetPktGroup lateState[8];
 
 class NetNdObj;
@@ -752,9 +891,11 @@ void NetNdObjMap::Clear()
     objMapNumEntries = 0;
 }
 
-// GLOBAL: SWBF2 0x01ed5d58
 // SYNTHETIC: SWBF2 0x00404820
 // `dynamic initializer for 'clientNdObjMap''
+
+// GLOBAL: SWBF2 0x01ed5d58
+// clientNdObjMap
 NetNdObjMap clientNdObjMap;
 
 // GLOBAL: SWBF2 0x01e62f52
@@ -767,89 +908,119 @@ static int RequestNearObjects(RedConsole*, unsigned int, char const*)
     return 0;
 }
 
-// GLOBAL: SWBF2 0x01ed86a6
 // SYNTHETIC: SWBF2 0x00405240
 // `dynamic initializer for 'nearObjects''
+
+// GLOBAL: SWBF2 0x01ed86a6
+// nearObjects
 RedCommandConsole nearObjects("net.nearobjects", RequestNearObjects);
 
-// GLOBAL: SWBF2 0x01ee7450
 // SYNTHETIC: SWBF2 0x00404850
 // `dynamic initializer for 'netCenter''
 
+// GLOBAL: SWBF2 0x01ee7450
+// netCenter
 PblMatrix netCenter;
-// GLOBAL: SWBF2 0x01ed8990
 // SYNTHETIC: SWBF2 0x00405260
 // `dynamic initializer for 'spawnInfo''
 // SYNTHETIC: SWBF2 0x00769150
 // `dynamic atexit destructor for 'spawnInfo''
+
+// GLOBAL: SWBF2 0x01ed8990
+// spawnInfo
 SpawnInfo spawnInfo[2];
 
-// GLOBAL: SWBF2 0x01ed5d4c
 // SYNTHETIC: SWBF2 0x00405290
 // `dynamic initializer for 'sendCenter''
 
+// GLOBAL: SWBF2 0x01ed5d4c
+// sendCenter
 PblVector3 sendCenter;
-// GLOBAL: SWBF2 0x01ee5424
 // SYNTHETIC: SWBF2 0x004052a0
 // `dynamic initializer for 'sendFront''
 
+// GLOBAL: SWBF2 0x01ee5424
+// sendFront
 PblVector3 sendFront;
-// GLOBAL: SWBF2 0x01ee5520
 // SYNTHETIC: SWBF2 0x004052b0
 // `dynamic initializer for 'relChunkClusterData''
 
+// GLOBAL: SWBF2 0x01ee5520
+// relChunkClusterData
 RelChunkClusterData relChunkClusterData[8][10];
-// GLOBAL: SWBF2 0x01ed8934
 // SYNTHETIC: SWBF2 0x004052d0
 // `dynamic initializer for 'farToNearCenter''
 
+// GLOBAL: SWBF2 0x01ed8934
+// farToNearCenter
 PblVector3 farToNearCenter;
-// GLOBAL: SWBF2 0x01ed5d40
 // SYNTHETIC: SWBF2 0x00405500
 // `dynamic initializer for 'gCameraFrontPos''
 
+// GLOBAL: SWBF2 0x01ed5d40
+// gCameraFrontPos
 PblVector3 gCameraFrontPos(0.0f, 0.0f, 0.0f);
 
-// GLOBAL: SWBF2 0x01ee5190
 // SYNTHETIC: SWBF2 0x00405540
 // `dynamic initializer for 'trackDesc''
+
+// GLOBAL: SWBF2 0x01ee5190
+// trackDesc
 EntityDesc trackDesc;
 
-// GLOBAL: SWBF2 0x01ee4a20
 // SYNTHETIC: SWBF2 0x004052e0
 // `dynamic initializer for 'aloReinforcements''
+
+// GLOBAL: SWBF2 0x01ee4a20
+// aloReinforcements
 AloReinforcements aloReinforcements;
-// GLOBAL: SWBF2 0x01ee7530
 // SYNTHETIC: SWBF2 0x00405320
 // `dynamic initializer for 'aloHeroData0''
+
+// GLOBAL: SWBF2 0x01ee7530
+// aloHeroData0
 AloHeroData aloHeroData0(0);
-// GLOBAL: SWBF2 0x01ed7818
 // SYNTHETIC: SWBF2 0x00405360
 // `dynamic initializer for 'aloHeroData1''
+
+// GLOBAL: SWBF2 0x01ed7818
+// aloHeroData1
 AloHeroData aloHeroData1(1);
-// GLOBAL: SWBF2 0x01ee7370
 // SYNTHETIC: SWBF2 0x004053a0
 // `dynamic initializer for 'aloHeroData2''
+
+// GLOBAL: SWBF2 0x01ee7370
+// aloHeroData2
 AloHeroData aloHeroData2(2);
-// GLOBAL: SWBF2 0x01ed71f0
 // SYNTHETIC: SWBF2 0x00405400
 // `dynamic initializer for 'aloMiniStats''
+
+// GLOBAL: SWBF2 0x01ed71f0
+// aloMiniStats
 AloMiniStats aloMiniStats;
-// GLOBAL: SWBF2 0x01ee7780
 // SYNTHETIC: SWBF2 0x00405410
 // `dynamic initializer for 'aloTrackable''
+
+// GLOBAL: SWBF2 0x01ee7780
+// aloTrackable
 AloTrackable aloTrackable;
-// GLOBAL: SWBF2 0x01ed70f0
 // SYNTHETIC: SWBF2 0x00405420
 // `dynamic initializer for 'aloStats''
+
+// GLOBAL: SWBF2 0x01ed70f0
+// aloStats
 AloStats aloStats;
-// GLOBAL: SWBF2 0x01ee75b0
 // SYNTHETIC: SWBF2 0x00405460
 // `dynamic initializer for 'aloNextGameInfo''
+
+// GLOBAL: SWBF2 0x01ee75b0
+// aloNextGameInfo
 AloNextGameInfo aloNextGameInfo;
-// GLOBAL: SWBF2 0x01ee5400
 // SYNTHETIC: SWBF2 0x004054a0
 // `dynamic initializer for 'aloMissionTimer''
+
+// GLOBAL: SWBF2 0x01ee5400
+// aloMissionTimer
 AloMissionTimer aloMissionTimer;
 
 // FUNCTION: SWBF2 0x005c52f0
@@ -985,6 +1156,8 @@ int netHeroRuleRespawn = 1;
 int netUpdateSize = 1024;
 // GLOBAL: SWBF2 0x007e853c
 int netNumBots = 16;
+// GLOBAL: SWBF2 0x007e8e60
+// netPreGameTimeMax
 int netPreGameTimeMax = 45;
 // GLOBAL: SWBF2 0x01e62ee3
 bool netHeroesEnabled;
@@ -1272,12 +1445,30 @@ class PAManager { public: static void EnterClient(); static void LeaveClient();
 class SpawnManager { public: static SpawnManager* sInstance; static SpawnManager* Instance() { return sInstance; }   static void EnterClient(); static void LeaveClient();
     static void CreateClient(); static void DestroyClient();
     CommandPost* GetRandomSpawnPoint(int iTeam); };
-namespace MissionTimer { void EnterClient(); void LeaveClient(); }
-namespace NetRandom { void EnterClient(); void LeaveClient(); }
-namespace ObjectiveManager { void EnterClient(); void LeaveClient(); void CreateClient(); }
-namespace TargetManager { void EnterClient(); void LeaveClient(); void CreateClient(); void DestroyClient(); }
-namespace TeamManager { void EnterClient(); void LeaveClient(); }
-namespace VehicleManager { void EnterClient(); void LeaveClient(); }
+namespace MissionTimer
+{
+void EnterClient(); void LeaveClient();
+}
+namespace NetRandom
+{
+void EnterClient(); void LeaveClient();
+}
+namespace ObjectiveManager
+{
+void EnterClient(); void LeaveClient(); void CreateClient();
+}
+namespace TargetManager
+{
+void EnterClient(); void LeaveClient(); void CreateClient(); void DestroyClient();
+}
+namespace TeamManager
+{
+void EnterClient(); void LeaveClient();
+}
+namespace VehicleManager
+{
+void EnterClient(); void LeaveClient();
+}
 
 class EntityDroid { public: static MemoryPool sMemoryPool; };
 class EntityDroideka { public: static MemoryPool sMemoryPool; };
@@ -1341,13 +1532,16 @@ public:
 };
  
 
-// GLOBAL: SWBF2 0x01ee4af0
 // SYNTHETIC: SWBF2 0x004048b0
 // `dynamic initializer for 'NetObjState::sMemoryPool''
 // SYNTHETIC: SWBF2 0x00768e20
 // `dynamic atexit destructor for 'NetObjState::sMemoryPool''
+
+// GLOBAL: SWBF2 0x01ee4af0
+// NetObjState::sMemoryPool
 MemoryPool NetObjState::sMemoryPool("NetObjState", 0x30);
 
+// VTABLE: SWBF2 0x007ab8c0
 class NetCollisionObject : public CollisionObject
 {
 public:
@@ -2480,7 +2674,10 @@ float netMaxWorldXZ;
 float netMaxWorldY;
 
 float Max(float fA, float fB);
-namespace AIUtil { extern float gMaxFlyHeight; }
+namespace AIUtil
+{
+extern float gMaxFlyHeight;
+}
 
 // GLOBAL: SWBF2 0x007e8e74
 int clientUploadState = 100;
@@ -2848,7 +3045,10 @@ void NetGame::LeaveClient()
 
 void BeginNetLOD();
 void SetNetLOD(bool bArg);
-namespace GameLoop { extern float sDeltaTime; }
+namespace GameLoop
+{
+extern float sDeltaTime;
+}
 
 // GLOBAL: SWBF2 0x01e63220
 NetPktGroupOffset lateStateOffset[8][64];
@@ -3421,9 +3621,15 @@ void NetGame::CreateEvent_DestroyTowCable(GameObject* pOwner, Weapon* pWeapon, u
     event.u.destroyTowCable.mFireWeapon = pWeapon;
 }
 
-namespace PblUnicode { unsigned int ustrncnv(unsigned short* pDest, const unsigned char* pSrc, unsigned int uiCount); }
+namespace PblUnicode
+{
+unsigned int ustrncnv(unsigned short* pDest, const unsigned char* pSrc, unsigned int uiCount);
+}
 
-namespace GameVoiceChat { void PlayerChange(); }
+namespace GameVoiceChat
+{
+void PlayerChange();
+}
 
 // FUNCTION: SWBF2 0x005bfdf0
 void HandleEvent_Message(ReliableNetEvent& event)
@@ -5011,7 +5217,10 @@ void PredictTurn();
 extern bool journalNeedsClose;
 extern int debugPredictClientTurn;
 extern int debugPredictStepCount;
-namespace GameLoop { extern float sDeltaTime; }
+namespace GameLoop
+{
+extern float sDeltaTime;
+}
 
 // FUNCTION: SWBF2 0x0040ca70
 const PblVector3 operator-(const PblVector3& a, const PblVector3& b)
@@ -6064,7 +6273,10 @@ float GetTimeSinceHeroDied(int iTeam)
     return NetGame::GetLocalTime() - spHeroDiedTime[iTeam];
 }
 
-namespace Lua_Callbacks { extern int gHuntShowScoreLimit; }
+namespace Lua_Callbacks
+{
+extern int gHuntShowScoreLimit;
+}
 
 // FUNCTION: SWBF2 0x005d3160
 void NetGame::GetScore(int* count1, int* count2, int* limit1, int* limit2, bool* limits, bool* points)
@@ -6876,8 +7088,14 @@ void ReadEvent_AddObjective(NetPktGroup& group, ReliableNetEvent& event)
     group.ReadBits(event.u.addObjective.state, 8);
 }
 
-namespace ObjectiveManager { void AddObjective(unsigned int nameHash, unsigned int popupHash, int team); }
-namespace ObjectiveManager { void SetObjectiveState(unsigned int nameHash, int state); }
+namespace ObjectiveManager
+{
+void AddObjective(unsigned int nameHash, unsigned int popupHash, int team);
+}
+namespace ObjectiveManager
+{
+void SetObjectiveState(unsigned int nameHash, int state);
+}
 
 // FUNCTION: SWBF2 0x005c2320
 void HandleEvent_AddObjective(const ReliableNetEvent& event)
@@ -7104,8 +7322,14 @@ void NetGame::CreateEvent_ChangeCommandPostTeams(unsigned __int64 sendMask)
     }
 }
 
-namespace GameLoop { extern bool sQuitRequested; }
-namespace GameLoop { extern unsigned int sQuitTurn; }
+namespace GameLoop
+{
+extern bool sQuitRequested;
+}
+namespace GameLoop
+{
+extern unsigned int sQuitTurn;
+}
 
 // FUNCTION: SWBF2 0x005aecc0
 bool GameLoop::IsQuitRequested()
@@ -7993,7 +8217,10 @@ void ReadLockedTargets(NetPktGroup& group, int player)
 // GLOBAL: SWBF2 0x007e8e8c
 int archFilter;
 
-namespace ObjectiveManager { extern PblList<HUD::ObjectiveList>* gObjectiveLists; HUD::ObjectiveList* GetObjectiveList(); }
+namespace ObjectiveManager
+{
+extern PblList<HUD::ObjectiveList>* gObjectiveLists; HUD::ObjectiveList* GetObjectiveList();
+}
 
 // FUNCTION: SWBF2 0x005f6a30
 HUD::ObjectiveList* ObjectiveManager::GetObjectiveList()
@@ -8904,7 +9131,13 @@ extern int netLanRegisterState;
 extern bool netLeavingLobby;
 void EndRegisterLanGame();
 void* GetGalaxyMatchmaking();
-namespace gf { bool isInitialized(); namespace utils { const char* ToString(bool); } }
+namespace gf
+{
+bool isInitialized(); namespace utils
+{
+const char* ToString(bool);
+}
+}
 
 // GLOBAL: SWBF2 0x01e62e88
 int netDirectPort;
@@ -8999,7 +9232,10 @@ void NetGame::ReadChatMessageFromServer(NetPktGroup* group)
     DisplayMessage(*(NG_ChatMsg*)message);
 }
 
-namespace GameVoiceChat { void* FindNodeByDeviceID(); }
+namespace GameVoiceChat
+{
+void* FindNodeByDeviceID();
+}
 
 // FUNCTION: SWBF2 0x005b7ee0
 void NetGame::AddPlayer(int iPlayer)
@@ -9820,8 +10056,14 @@ unsigned int GetHoverClassRtti();
 unsigned int GetFlyerClassRtti();
 void ReadQuaternion(NetPktGroup& group, PblQuaternion& value);
 
-namespace StatsManager { void ReadStatsChallenge(); }
-namespace StatsManager { void ReadStatsResponse(); }
+namespace StatsManager
+{
+void ReadStatsChallenge();
+}
+namespace StatsManager
+{
+void ReadStatsResponse();
+}
 
 // FUNCTION: SWBF2 0x005bc740
 GameObject* CreateObject(unsigned int uniqId, EntityClass* entityClass, int initialPlayerId, int playerId,
@@ -11513,7 +11755,11 @@ void RedTerrain::ProcessHoles(void (__cdecl *callback)(void*))
     }
 }
 
-namespace AI { enum AIAffil { AFFIL_ENEMY = 1, AFFIL_NEUTRAL = 2,
+namespace AI
+{
+enum AIAffil
+{
+AFFIL_ENEMY = 1, AFFIL_NEUTRAL = 2,
                              AFFIL_ALLY = 4, AFFIL_ALLYNEUTRAL = 6, AFFIL_ALL = 7 }; }
 
 // FUNCTION: SWBF2 0x005cf820
@@ -16291,9 +16537,11 @@ void* __fastcall ConstructNetVectorRecord(void* self) { return new (self) NetVec
 // FUNCTION: SWBF2 0x005d3bf0
 void sub_5D3BF0(void*, int) {}
 
-// GLOBAL: SWBF2 0x01ee76c8
 // SYNTHETIC: SWBF2 0x00405570
 // `dynamic initializer for 'frameLockTimeBase''
+
+// GLOBAL: SWBF2 0x01ee76c8
+// frameLockTimeBase
 PblTimeBase frameLockTimeBase;
 
 // SYNTHETIC: SWBF2 0x004044d0
@@ -16329,10 +16577,11 @@ PblTimeBase frameLockTimeBase;
 // SYNTHETIC: SWBF2 0x00404710
 // `dynamic initializer for 'MAX_DOUBLETAP_INTERVAL_TICKS''
 
-// GLOBAL: SWBF2 0x01ecb9bc
 // SYNTHETIC: SWBF2 0x004054e0
 // `dynamic initializer for 'CAPTURE_RATIO_SCALE''
 
+// GLOBAL: SWBF2 0x01ecb9bc
+// CAPTURE_RATIO_SCALE
 float CAPTURE_RATIO_SCALE = 1.0f / 63.0f;
 
 // FUNCTION: SWBF2 0x005c5cc0
@@ -16344,27 +16593,32 @@ AloMapDisplayMarkers::AloMapDisplayMarkers()
     changeTurn = (unsigned int)-1;
 }
 
-// GLOBAL: SWBF2 0x01ed8198
 // SYNTHETIC: SWBF2 0x004053e0
 // `dynamic initializer for 'aloMapDisplayMarkers''
 // SYNTHETIC: SWBF2 0x00769170
 // `dynamic atexit destructor for 'aloMapDisplayMarkers''
+
+// GLOBAL: SWBF2 0x01ed8198
+// aloMapDisplayMarkers
 AloMapDisplayMarkers aloMapDisplayMarkers;
 
-// GLOBAL: SWBF2 0x01ee7440
 // SYNTHETIC: SWBF2 0x00405580
 // `dynamic initializer for 'frameLockStamp''
 
+// GLOBAL: SWBF2 0x01ee7440
+// frameLockStamp
 PblTimeBase::Stamp frameLockStamp;
 
 // SYNTHETIC: SWBF2 0x005d3440
 // RecentGuestObjectRecord::RecentGuestObjectRecord
 
-// GLOBAL: SWBF2 0x01ed7898
 // SYNTHETIC: SWBF2 0x00405590
 // `dynamic initializer for 'recentGuestObjects''
 // SYNTHETIC: SWBF2 0x00769190
 // `dynamic atexit destructor for 'recentGuestObjects''
+
+// GLOBAL: SWBF2 0x01ed7898
+// recentGuestObjects
 RecentGuestObjectRecord recentGuestObjects[64][3];
 
 // GLOBAL: SWBF2 0x01e62f12

@@ -41,6 +41,9 @@ public:
 
 class StickInfo;
 
+// VTABLE: SWBF2 0x007ad08c
+// VTABLE: SWBF2 0x007ad0f4 Thread
+// VTABLE: SWBF2 0x007ad168 PblHandled
 class OrdnanceSticky : public OrdnanceShell
 {
 public:

@@ -11,6 +11,8 @@
 namespace LuaHelper
 {
 
+// GLOBAL: SWBF2 0x01e579a0
+// mState
 lua_State* mState;
 
 // GLOBAL: SWBF2 0x01e5794b
@@ -356,7 +358,8 @@ void LuaHelper::PushString(unsigned short const* pusString)
     lua_pushlstring(mState, (const char*)pusString, PblUnicode::ustrlen(pusString) * 2 + 2);
 }
 
-namespace LuaHelper {
+namespace LuaHelper
+{
 
 // FUNCTION: SWBF2 0x005a1110
 bool CallGlobalProc(char const* pcFunc, bool bArg)
@@ -371,7 +374,8 @@ bool CallGlobalProc(char const* pcFunc, bool bArg)
 }
 }
 
-namespace LuaHelper {
+namespace LuaHelper
+{
 
 // FUNCTION: SWBF2 0x005a1180
 bool CallGlobalProc(char const* pcFunc, unsigned short const* pusArg)
@@ -411,7 +415,8 @@ bool LuaHelper::CallTableProcWThis(char const* pcTable, char const* pcFunc, floa
     return true;
 }
 
-namespace LuaHelper {
+namespace LuaHelper
+{
 
 // FUNCTION: SWBF2 0x005a1510
 void TableWriteVal(char const* pcKey, bool bVal)

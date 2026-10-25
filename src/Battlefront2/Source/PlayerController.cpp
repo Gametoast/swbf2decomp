@@ -62,7 +62,10 @@ namespace PopupText
 
 void ClearFireTriggerBlock();
 bool IsFireTriggerBlocked();
-namespace ObjectiveManager { int GetCurrentPopupText(); }
+namespace ObjectiveManager
+{
+int GetCurrentPopupText();
+}
 void RecordRecentPlayerObject(int iPlayer, const GameObject* pObject);
 
 extern int gSpawnInvicibility;
@@ -90,17 +93,22 @@ static float GetInvisibility(const GameObject* pObject)
 
 // SYNTHETIC: SWBF2 0x00405f00
 // `dynamic initializer for 'PlayerController::rttiHashPlayerController''
+// PlayerController::rttiHashPlayerController
+
 // GLOBAL: SWBF2 0x01ef7f4c
 // PlayerController::rttiHashPlayerController
 PblHash PlayerController::rttiHashPlayerController("PlayerController");
+// GLOBAL: SWBF2 0x0078ab84
+// PlayerController::rttiNamePlayerController
 const char PlayerController::rttiNamePlayerController[] = "PlayerController";
 
-// GLOBAL: SWBF2 0x01ef7f50
 // SYNTHETIC: SWBF2 0x00405f10
 // `dynamic initializer for 'PlayerController::sMemoryPool''
 // SYNTHETIC: SWBF2 0x00769330
 // `dynamic atexit destructor for 'PlayerController::sMemoryPool''
 
+// GLOBAL: SWBF2 0x01ef7f50
+// PlayerController::sMemoryPool
 MemoryPool PlayerController::sMemoryPool("PlayerController", sizeof(PlayerController));
 
 
@@ -833,7 +841,9 @@ namespace ReserveManager
 int GetReservationCountForObject(const GameObject* pObj, int iTeam, ReserveType eType);
 }
 
-namespace TeamManager { int GetObjectsInRange(const PblVector3& vPos, float fRange, GameObject** const ppObjects, int iMax,
+namespace TeamManager
+{
+int GetObjectsInRange(const PblVector3& vPos, float fRange, GameObject** const ppObjects, int iMax,
                const Team* pTeam, int iAffilMask); }
 
 namespace AI

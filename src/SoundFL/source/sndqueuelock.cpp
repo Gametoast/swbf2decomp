@@ -14,7 +14,8 @@ void QueueLockBase::Empty(QueueBase* const pQueue, unsigned int uiElementSize,
 
 }
 
-namespace Snd {
+namespace Snd
+{
 
 // FUNCTION: SWBF2 0x00745040
 QueueLockBase::~QueueLockBase()

@@ -37,11 +37,14 @@ inline bool IsAlive(const GameObject* pObject)
 }
 }
 
-// GLOBAL: SWBF2 0x01ec0bd8
 // SYNTHETIC: SWBF2 0x00403b50
 // `dynamic initializer for 'AI::FollowGoal::rttiHashFollowGoal''
 
+// GLOBAL: SWBF2 0x01ec0bd8
+// AI::FollowGoal::rttiHashFollowGoal
 PblHash AI::FollowGoal::rttiHashFollowGoal("FollowGoal");
+// GLOBAL: SWBF2 0x007898f8
+// AI::FollowGoal::rttiNameFollowGoal
 const char AI::FollowGoal::rttiNameFollowGoal[] = "FollowGoal";
 
 

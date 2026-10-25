@@ -12,11 +12,14 @@ CollisionResult CollisionModel::sCollisionResult;
 CollisionResult CollisionModel::sHostCollisionResult;
 // GLOBAL: SWBF2 0x01eb57e0
 CollisionResult CollisionModel::sClientCollisionResult;
-// GLOBAL: SWBF2 0x01eb53a0
 // SYNTHETIC: SWBF2 0x00402480
 // `dynamic initializer for 'CollisionModel::sHostCollisionMask''
+
+// GLOBAL: SWBF2 0x01eb53a0
+// CollisionModel::sHostCollisionMask
 CollisionMask CollisionModel::sHostCollisionMask[64];
 // GLOBAL: SWBF2 0x007e5f04
+// CollisionModel::sCollisionMask
 CollisionMask (*CollisionModel::sCollisionMask)[64] = &CollisionModel::sHostCollisionMask;
 
 // FUNCTION: SWBF2 0x004621a0
@@ -691,9 +694,11 @@ CollisionBody* CollisionModel::GetBody(int id)
     return mBody[id];
 }
 
-// GLOBAL: SWBF2 0x01eb55e0
 // SYNTHETIC: SWBF2 0x004024b0
 // `dynamic initializer for 'CollisionModel::sClientCollisionMask''
+
+// GLOBAL: SWBF2 0x01eb55e0
+// CollisionModel::sClientCollisionMask
 CollisionMask CollisionModel::sClientCollisionMask[64];
 
 // SYNTHETIC: SWBF2 0x00478410

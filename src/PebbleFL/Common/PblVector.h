@@ -144,7 +144,9 @@ public:
     explicit PblBox(const PblVector3& rv) : _vMin(rv), _vMax(rv) {}
     // FUNCTION: SWBF2 0x0040c930
     PblBox(float fMinX, float fMinY, float fMinZ, float fMaxX, float fMaxY, float fMaxZ)
-        : _vMin(fMinX, fMinY, fMinZ), _vMax(fMaxX, fMaxY, fMaxZ) {}
+: _vMin(fMinX, fMinY, fMinZ), _vMax(fMaxX, fMaxY, fMaxZ)
+{
+}
 
     // FUNCTION: SWBF2 0x0040c980
     const PblVector3& GetMin() const { return _vMin; }

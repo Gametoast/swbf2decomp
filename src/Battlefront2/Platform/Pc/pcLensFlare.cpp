@@ -48,6 +48,7 @@ PblVector3 CompressedPosXY::s_vScale = { 1.0f / 65535.0f, 1.0f / 65535.0f, 1.0f 
 PblVector3 CompressedPosXY::s_vScaleInv = { 65535.0f, 65535.0f, 65535.0f };
 
 // GLOBAL: SWBF2 0x007eb728
+// s_boundingBox
 static PblBox s_boundingBox(-2200.0f, -2200.0f, -2200.0f, 2200.0f, 2200.0f, 2200.0f);
 
 static const float kfFadeDrawDistance = 0.9f;

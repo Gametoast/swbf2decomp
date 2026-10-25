@@ -17,27 +17,33 @@ void PblRef::Kill()
 
 extern "C" PblVector3* __stdcall D3DXVec3Normalize(PblVector3* pOut, const PblVector3* pV);
 
-// GLOBAL: SWBF2 0x01ef7df8
 // SYNTHETIC: SWBF2 0x00405e30
 // `dynamic initializer for 'AIPathNode::sMemoryPool''
 // SYNTHETIC: SWBF2 0x007692d0
 // `dynamic atexit destructor for 'AIPathNode::sMemoryPool''
+
+// GLOBAL: SWBF2 0x01ef7df8
+// AIPathNode::sMemoryPool
 MemoryPool AIPathNode::sMemoryPool("AIPathNode", sizeof(AIPathNode));
-// GLOBAL: SWBF2 0x01ef7e98
 // SYNTHETIC: SWBF2 0x00405e50
 // `dynamic initializer for 'AIPath::sMemoryPool''
 // SYNTHETIC: SWBF2 0x007692e0
 // `dynamic atexit destructor for 'AIPath::sMemoryPool''
+
+// GLOBAL: SWBF2 0x01ef7e98
+// AIPath::sMemoryPool
 MemoryPool AIPath::sMemoryPool("AIPath", sizeof(AIPath));
 
 namespace PathManager
 {
 
-// GLOBAL: SWBF2 0x01ef7e48
 // SYNTHETIC: SWBF2 0x00405e70
 // `dynamic initializer for 'PathManager::PathRequest::sMemoryPool''
 // SYNTHETIC: SWBF2 0x007692f0
 // `dynamic atexit destructor for 'PathManager::PathRequest::sMemoryPool''
+
+// GLOBAL: SWBF2 0x01ef7e48
+// PathRequest::sMemoryPool
 MemoryPool PathRequest::sMemoryPool("PathRequest", sizeof(PathRequest));
 
 // GLOBAL: SWBF2 0x01eaedc8
@@ -54,11 +60,13 @@ int sPathManagerUnknown0;
 // GLOBAL: SWBF2 0x01eaedd0
 int sPathManagerUnknown1;
 
-// GLOBAL: SWBF2 0x007ebc38
 // SYNTHETIC: SWBF2 0x00405e90
 // `dynamic initializer for 'PathManager::mTimer''
 // SYNTHETIC: SWBF2 0x00769300
 // `dynamic atexit destructor for 'PathManager::mTimer''
+
+// GLOBAL: SWBF2 0x007ebc38
+// mTimer
 PblPerformanceTimer mTimer;
 
 }

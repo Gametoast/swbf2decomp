@@ -28,7 +28,9 @@ PblMatrix::PblMatrix(const PblVector4& x, const PblVector4& y,
 #pragma init_seg(lib)
 // SYNTHETIC: SWBF2 0x0040ae50
 // `dynamic initializer for '_IdentityMatrix''
+
 // GLOBAL: SWBF2 0x009caee0
+// gMatrixIdentity
 PblMatrix gMatrixIdentity(PblVector4(1.0f, 0.0f, 0.0f, 0.0f), PblVector4(0.0f, 1.0f, 0.0f, 0.0f),
                           PblVector4(0.0f, 0.0f, 1.0f, 0.0f), PblVector4(0.0f, 0.0f, 0.0f, 1.0f));
 

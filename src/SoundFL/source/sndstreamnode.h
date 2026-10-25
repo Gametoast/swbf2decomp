@@ -8,6 +8,7 @@ namespace Snd
 
 struct StreamPacket;
 
+// VTABLE: SWBF2 0x0078686c
 class StreamNodeSource
 {
 public:

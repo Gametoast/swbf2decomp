@@ -47,23 +47,33 @@ namespace
 
 // SYNTHETIC: SWBF2 0x004059f0
 // `dynamic initializer for 'Ordnance::rttiHashOrdnance''
+// Ordnance::rttiHashOrdnance
+
 // GLOBAL: SWBF2 0x01ef2578
 // Ordnance::rttiHashOrdnance
 PblHash Ordnance::rttiHashOrdnance("Ordnance");
+// GLOBAL: SWBF2 0x0078a750
+// Ordnance::rttiNameOrdnance
 const char Ordnance::rttiNameOrdnance[] = "Ordnance";
 
 // SYNTHETIC: SWBF2 0x00405a00
 // `dynamic initializer for 'OrdnanceClass::rttiHashOrdnanceClass''
+// OrdnanceClass::rttiHashOrdnanceClass
+
 // GLOBAL: SWBF2 0x01ef2574
 // OrdnanceClass::rttiHashOrdnanceClass
 PblHash OrdnanceClass::rttiHashOrdnanceClass("OrdnanceClass");
+// GLOBAL: SWBF2 0x0078a740
+// OrdnanceClass::rttiNameOrdnanceClass
 const char OrdnanceClass::rttiNameOrdnanceClass[] = "OrdnanceClass";
 
-// GLOBAL: SWBF2 0x01ef25c0
 // SYNTHETIC: SWBF2 0x004059d0
 // `dynamic initializer for 'Ordnance::sMemoryPool''
 // SYNTHETIC: SWBF2 0x007691f0
 // `dynamic atexit destructor for 'Ordnance::sMemoryPool''
+
+// GLOBAL: SWBF2 0x01ef25c0
+// Ordnance::sMemoryPool
 MemoryPool Ordnance::sMemoryPool("Ordnance", 0x98);
 
 // FUNCTION: SWBF2 0x005f7e70

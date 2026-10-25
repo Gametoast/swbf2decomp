@@ -1,6 +1,7 @@
 #include "PlayerProfile.h"
 
-namespace PlayerPrefs {
+namespace PlayerPrefs
+{
 
 // FUNCTION: SWBF2 0x0061c4b0
 int __fastcall FindByViewport(int iValue)

@@ -29,7 +29,10 @@ class PblMatrix;
 class ProcessedInputs;
 struct OrdnanceDesc;
 class Weapon;
-namespace HUD { class Objective; }
+namespace HUD
+{
+class Objective;
+}
 
 struct NetEventVector
 {

@@ -5,32 +5,44 @@
 namespace Snd
 {
 
+// GLOBAL: SWBF2 0x009cf468
+// File::smExitFileThread
 bool File::smExitFileThread;
+// GLOBAL: SWBF2 0x009cf469
+// File::smFileSystemOpen
 bool File::smFileSystemOpen;
-// GLOBAL: SWBF2 0x009cf46c
 // SYNTHETIC: SWBF2 0x0040b400
 // `dynamic initializer for 'Snd::File::smQueuedFileOpListLock''
 // SYNTHETIC: SWBF2 0x0076a130
 // `dynamic atexit destructor for 'Snd::File::smQueuedFileOpListLock''
+
+// GLOBAL: SWBF2 0x009cf46c
+// File::smQueuedFileOpListLock
 Semaphore File::smQueuedFileOpListLock;
 Thread File::smFileThread;
-// GLOBAL: SWBF2 0x009cf48c
 // SYNTHETIC: SWBF2 0x0040b3e0
 // `dynamic initializer for 'Snd::File::smQueuedCommands''
 // SYNTHETIC: SWBF2 0x0076a100
 // `dynamic atexit destructor for 'Snd::File::smQueuedCommands''
+
+// GLOBAL: SWBF2 0x009cf48c
+// File::smQueuedCommands
 Semaphore File::smQueuedCommands;
-// GLOBAL: SWBF2 0x007e3228
 // SYNTHETIC: SWBF2 0x0040b3f0
 // `dynamic initializer for 'Snd::File::smQueuedFileOpList''
 // SYNTHETIC: SWBF2 0x0076a110
 // `dynamic atexit destructor for 'Snd::File::smQueuedFileOpList''
+
+// GLOBAL: SWBF2 0x007e3228
+// File::smQueuedFileOpList
 PblListDoubleSorted File::smQueuedFileOpList(true);
-// GLOBAL: SWBF2 0x007e3234
 // SYNTHETIC: SWBF2 0x0040b3d0
 // `dynamic initializer for 'Snd::File::smFileList''
 // SYNTHETIC: SWBF2 0x0076a0e0
 // `dynamic atexit destructor for 'Snd::File::smFileList''
+
+// GLOBAL: SWBF2 0x007e3234
+// File::smFileList
 PblListDoubleSorted File::smFileList(false);
 
 // FUNCTION: SWBF2 0x00730ae0

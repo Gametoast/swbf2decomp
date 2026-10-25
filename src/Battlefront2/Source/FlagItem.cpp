@@ -34,7 +34,10 @@
 
 extern PblVector3 gVectorZero;
 
-namespace EventManager { namespace FlagEvent {
+namespace EventManager
+{
+namespace FlagEvent
+{
 extern Event<FlagItem, Character> mPickUp;
 extern Event<FlagItem, Character> mDrop;
 extern Event<FlagItem, char> mReset;
@@ -49,7 +52,10 @@ void Event<FlagItem, char>::Callback::Trigger(FlagItem& item, char& param);
 }
 
 extern int gSpawnInvicibility;
-namespace GameLoop { extern bool mbHistoricalRules; }
+namespace GameLoop
+{
+extern bool mbHistoricalRules;
+}
 
 namespace
 {
@@ -357,23 +363,33 @@ FlagItemClass::FlagItemClass(unsigned int uHash)
 
 // SYNTHETIC: SWBF2 0x00403850
 // `dynamic initializer for 'FlagItem::rttiHashFlagItem''
+// FlagItem::rttiHashFlagItem
+
 // GLOBAL: SWBF2 0x01ebc2b8
 // FlagItem::rttiHashFlagItem
 PblHash FlagItem::rttiHashFlagItem("FlagItem");
+// GLOBAL: SWBF2 0x00789858
+// FlagItem::rttiNameFlagItem
 const char FlagItem::rttiNameFlagItem[] = "FlagItem";
 
 // SYNTHETIC: SWBF2 0x00403860
 // `dynamic initializer for 'FlagItemClass::rttiHashFlagItemClass''
+// FlagItemClass::rttiHashFlagItemClass
+
 // GLOBAL: SWBF2 0x01ebc2b4
 // FlagItemClass::rttiHashFlagItemClass
 PblHash FlagItemClass::rttiHashFlagItemClass("FlagItemClass");
+// GLOBAL: SWBF2 0x00789848
+// FlagItemClass::rttiNameFlagItemClass
 const char FlagItemClass::rttiNameFlagItemClass[] = "FlagItemClass";
 
-// GLOBAL: SWBF2 0x01ebcfa0
 // SYNTHETIC: SWBF2 0x00403830
 // `dynamic initializer for 'FlagItem::sMemoryPool''
 // SYNTHETIC: SWBF2 0x00768720
 // `dynamic atexit destructor for 'FlagItem::sMemoryPool''
+
+// GLOBAL: SWBF2 0x01ebcfa0
+// FlagItem::sMemoryPool
 MemoryPool FlagItem::sMemoryPool("FlagItem", 0x450);
 
 // GLOBAL: SWBF2 0x007eb888

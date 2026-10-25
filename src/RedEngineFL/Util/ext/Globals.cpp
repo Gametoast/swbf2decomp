@@ -19,13 +19,18 @@ template bool util::Vector<util::VariableSet<util::SingletonAllocator<util::Defa
 // TEMPLATE: SWBF2 0x00715280
 // util::HashTable_<util::VariableSet<util::SingletonAllocator<util::DefaultStaticAllocator> > *,char const *,util::Vector<util::VariableSet<util::SingletonAllocator<util::DefaultStaticAllocator> > *,util::BaseArray<util::VariableSet<util::SingletonAllocator<util::DefaultStaticAllocator> > *,util::TypedArrayAllocator<util::VariableSet<util::SingletonAllocator<util::DefaultStaticAllocator> > *,util::SingletonAllocator<util::DefaultStaticAllocator> > > >,util::Vector<char const *,util::BaseArray<char const *,util::TypedArrayAllocator<char const *,util::SingletonAllocator<util::DefaultStaticAllocator> > > >,util::Vector<unsigned int,util::BaseArray<unsigned int,util::TypedArrayAllocator<unsigned int,util::SingletonAllocator<util::DefaultStaticAllocator> > > > >::FindIndex_
 template unsigned int util::HashTable_<util::VariableSet<util::SingletonAllocator<util::DefaultStaticAllocator> >*, char const*, util::HashTable<util::VariableSet<util::SingletonAllocator<util::DefaultStaticAllocator> >*, char const*, util::SingletonAllocator<util::DefaultStaticAllocator> >::ElemVecT, util::HashTable<util::VariableSet<util::SingletonAllocator<util::DefaultStaticAllocator> >*, char const*, util::SingletonAllocator<util::DefaultStaticAllocator> >::KeyVecT, util::HashTable<util::VariableSet<util::SingletonAllocator<util::DefaultStaticAllocator> >*, char const*, util::SingletonAllocator<util::DefaultStaticAllocator> >::HashVecT>::FindIndex_(unsigned int) const;
+namespace util
+{
 
-// GLOBAL: SWBF2 0x009caacc
 // SYNTHETIC: SWBF2 0x0040a8e0
 // `dynamic initializer for 'util::globals''
 // SYNTHETIC: SWBF2 0x0076a080
 // `dynamic atexit destructor for 'util::globals''
-namespace util { util::Globals globals; }
+
+// GLOBAL: SWBF2 0x009caacc
+// globals
+util::Globals globals;
+}
 
 // TEMPLATE: SWBF2 0x00714b90
 // util::HashTable_<util::VariableSet<util::SingletonAllocator<util::DefaultStaticAllocator> > *,char const *,util::Vector<util::VariableSet<util::SingletonAllocator<util::DefaultStaticAllocator> > *,util::BaseArray<util::VariableSet<util::SingletonAllocator<util::DefaultStaticAllocator> > *,util::TypedArrayAllocator<util::VariableSet<util::SingletonAllocator<util::DefaultStaticAllocator> > *,util::SingletonAllocator<util::DefaultStaticAllocator> > > >,util::Vector<char const *,util::BaseArray<char const *,util::TypedArrayAllocator<char const *,util::SingletonAllocator<util::DefaultStaticAllocator> > > >,util::Vector<unsigned int,util::BaseArray<unsigned int,util::TypedArrayAllocator<unsigned int,util::SingletonAllocator<util::DefaultStaticAllocator> > > > >::HashTable_<util::VariableSet<util::SingletonAllocator<util::DefaultStaticAllocator> > *,char const *,util::Vector<util::VariableSet<util::SingletonAllocator<util::DefaultStaticAllocator> > *,util::BaseArray<util::VariableSet<util::SingletonAllocator<util::DefaultStaticAllocator> > *,util::TypedArrayAllocator<util::VariableSet<util::SingletonAllocator<util::DefaultStaticAllocator> > *,util::SingletonAllocator<util::DefaultStaticAllocator> > > >,util::Vector<char const *,util::BaseArray<char const *,util::TypedArrayAllocator<char const *,util::SingletonAllocator<util::DefaultStaticAllocator> > > >,util::Vector<unsigned int,util::BaseArray<unsigned int,util::TypedArrayAllocator<unsigned int,util::SingletonAllocator<util::DefaultStaticAllocator> > > > >

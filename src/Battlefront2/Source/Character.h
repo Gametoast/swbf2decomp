@@ -16,7 +16,10 @@ class Team;
 class PlayerStats;
 class NetPktGroup;
 class PblMatrix;
-namespace PlayerProfile { struct tProfile; }
+namespace PlayerProfile
+{
+struct tProfile;
+}
 
 // VTABLE: SWBF2 0x00797134
 class Character : public Thread

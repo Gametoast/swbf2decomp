@@ -298,7 +298,8 @@ void StreamIMAADPCMDecoder::Update()
 
 }
 
-namespace Snd {
+namespace Snd
+{
 
 // FUNCTION: SWBF2 0x0074a460
 StreamIMAADPCMDecoder::~StreamIMAADPCMDecoder()
@@ -306,7 +307,8 @@ StreamIMAADPCMDecoder::~StreamIMAADPCMDecoder()
 }
 }
 
-namespace Snd {
+namespace Snd
+{
 
 // FUNCTION: SWBF2 0x0074ab40
 void StreamIMAADPCMDecoder::SetPackets(unsigned int uiPacketSize, StreamPacket* pPackets,

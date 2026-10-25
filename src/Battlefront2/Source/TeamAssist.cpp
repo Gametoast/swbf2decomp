@@ -37,11 +37,13 @@ TeamAssistManager* TeamAssistManager::sInstance;
 
 float TeamAssistManager::sDuration = 5.0f;
 
-// GLOBAL: SWBF2 0x01f7ce88
 // SYNTHETIC: SWBF2 0x00406920
 // `dynamic initializer for 'TeamAssist::sMemoryPool''
 // SYNTHETIC: SWBF2 0x00769560
 // `dynamic atexit destructor for 'TeamAssist::sMemoryPool''
+
+// GLOBAL: SWBF2 0x01f7ce88
+// TeamAssist::sMemoryPool
 MemoryPool TeamAssist::sMemoryPool("TeamAssist", sizeof(TeamAssist));
 
 // FUNCTION: SWBF2 0x00654bd0

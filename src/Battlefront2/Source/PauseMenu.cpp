@@ -32,11 +32,17 @@
 #include "SoundFL/source/win/sndengine.h"
 #include "Trigger.h"
 #include "PlayerController.h"
+namespace GameLoop
+{
 
 // GLOBAL: SWBF2 0x01e5600b
-namespace GameLoop { bool sFreeMode; }
+bool sFreeMode;
+}
 
-namespace GameLoop { void SetFreeMode(bool bFreeCamera); }
+namespace GameLoop
+{
+void SetFreeMode(bool bFreeCamera);
+}
 
 // FUNCTION: SWBF2 0x00533600
 void GameLoop::SetFreeMode(bool bFreeCamera)
@@ -62,8 +68,14 @@ public:
     static void EnableViewport(unsigned int uiViewport, bool bEnable);
 };
 
-namespace GameLoop { void SetFreeMode(bool bFreeCamera); }
-namespace PopupText { void DisablePopup(); }
+namespace GameLoop
+{
+void SetFreeMode(bool bFreeCamera);
+}
+namespace PopupText
+{
+void DisablePopup();
+}
 
 extern bool gAttractMode;
 extern bool sPauseMenuSoundEnabled;
@@ -83,11 +95,13 @@ bool PauseMenu::sSkipToPlayerList;
 // GLOBAL: SWBF2 0x01eaedd5
 bool PauseMenu::sPauseDedicated;
 
-// GLOBAL: SWBF2 0x01ef7ee8
 // SYNTHETIC: SWBF2 0x00405ed0
 // `dynamic initializer for '_sPauseMenuInstance''
 // SYNTHETIC: SWBF2 0x00769310
 // `dynamic atexit destructor for '_sPauseMenuInstance''
+
+// GLOBAL: SWBF2 0x01ef7ee8
+// _sPauseMenuInstance
 PauseMenu _sPauseMenuInstance[1];
 
 // GLOBAL: SWBF2 0x007e8eec
@@ -551,7 +565,8 @@ bool PauseMenu::AllStatsDone()
     return true;
 }
 
-namespace PopupText {
+namespace PopupText
+{
 enum PopupType { DISABLED = 0, HINT = 1, OBJECTIVE = 2, SELECTION = 3, MAX_POPUP_TYPES = 4 };
 extern PopupType gType;
 extern bool gMapEnabled[1];
@@ -561,7 +576,10 @@ extern Trigger gButtonTrigger;
 bool IsEnabled();
 }
 
-namespace ObjectiveManager { int GetCurrentPopupText(); }
+namespace ObjectiveManager
+{
+int GetCurrentPopupText();
+}
 
 // FUNCTION: SWBF2 0x00620d20
 void PopupText::DisablePopup()

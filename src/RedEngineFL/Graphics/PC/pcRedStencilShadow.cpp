@@ -46,22 +46,25 @@ unsigned int ShadowData::_iShadowMem;
 // GLOBAL: SWBF2 0x009a0948
 unsigned int ShadowData::_iShadowSilhouetteVertexCount;
 
-// GLOBAL: SWBF2 0x009a0958
 // SYNTHETIC: SWBF2 0x00408a60
 // `dynamic initializer for 'RedStencilShadow::s_aTestPlane''
 
+// GLOBAL: SWBF2 0x009a0958
+// RedStencilShadow::s_aTestPlane
 PblVector4 RedStencilShadow::s_aTestPlane[5];
 
-// GLOBAL: SWBF2 0x009a09ac
 // SYNTHETIC: SWBF2 0x00408a80
 // `dynamic initializer for 'RedStencilShadow::s_vNearPlaneCenter''
 
+// GLOBAL: SWBF2 0x009a09ac
+// RedStencilShadow::s_vNearPlaneCenter
 PblVector3 RedStencilShadow::s_vNearPlaneCenter;
 
-// GLOBAL: SWBF2 0x009a09b8
 // SYNTHETIC: SWBF2 0x00408a90
 // `dynamic initializer for 'RedStencilShadow::s_vProjection''
 
+// GLOBAL: SWBF2 0x009a09b8
+// RedStencilShadow::s_vProjection
 PblVector3 RedStencilShadow::s_vProjection;
 
 // GLOBAL: SWBF2 0x009a094c

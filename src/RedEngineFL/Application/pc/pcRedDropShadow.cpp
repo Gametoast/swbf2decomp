@@ -27,9 +27,11 @@ static float MIN_COS_VIEW_ANGLE = 0.05f;
 // GLOBAL: SWBF2 0x007e12c4
 static float FADE_COS_VIEW_ANGLE = 0.15f;
 
-// GLOBAL: SWBF2 0x009acb94
 // SYNTHETIC: SWBF2 0x00408d20
 // `dynamic initializer for 'kuiShader''
+
+// GLOBAL: SWBF2 0x009acb94
+// kuiShader
 static const unsigned int kuiShader = PblHash("Particle");
 
 struct CompressedTexCoord

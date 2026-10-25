@@ -14,7 +14,10 @@ class GameObject;
 class PblHash;
 class UnitController;
 class UnitCmdInfo;
-namespace AI { class EventInfo; }
+namespace AI
+{
+class EventInfo;
+}
 
 // VTABLE: SWBF2 0x007af6a4
 class UnitAgent : public Agent
@@ -25,6 +28,8 @@ class UnitAgent : public Agent
 public:
 
     static void* operator new(unsigned int uiSize) { return sMemoryPool.Allocate(uiSize); }
+    // SYNTHETIC: SWBF2 0x0065dd30
+    // UnitAgent::operator delete
     static void operator delete(void* pBlock) { sMemoryPool.Free(pBlock); }
     static MemoryPool sMemoryPool;
 

@@ -8,8 +8,12 @@
 #include "UnitCmdInfo.h"
 #include "CombatHelper.h"
 
-namespace AI { class EventInfo; }
+namespace AI
+{
+class EventInfo;
+}
 
+// VTABLE: SWBF2 0x007af7b0
 class UnitCombatAgent : public UnitAgent
 {
 public:

@@ -113,7 +113,8 @@ IAllocator& DefaultStaticAllocator::GetInstance()
 
 }
 
-namespace util {
+namespace util
+{
 
 // FUNCTION: SWBF2 0x006e9180
 void Deallocate_(void* p, unsigned int uiSize, util::IAllocator& rAlloc)

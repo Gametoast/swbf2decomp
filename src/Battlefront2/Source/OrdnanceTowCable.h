@@ -78,9 +78,9 @@ public:
 };
  
 
-// VTABLE: SWBF2 0x007ad1cc
+// VTABLE: SWBF2 0x007ad1cc Thread
 // VTABLE: SWBF2 0x007ad20c
-// VTABLE: SWBF2 0x007ad274
+// VTABLE: SWBF2 0x007ad274 PblHandled
 class OrdnanceTowCable : public OrdnanceBullet
 {
 public:
@@ -96,6 +96,8 @@ public:
 
     void SetFakeCable(bool bFake) { mFakeCable = bFake; }
 
+    // SYNTHETIC: SWBF2 0x006072f0
+    // OrdnanceTowCable::operator delete
     static void operator delete(void* pBlock) { sMemoryPool.Free(pBlock); }
 
     static void* operator new(unsigned int uSize) { return sMemoryPool.Allocate(uSize); }

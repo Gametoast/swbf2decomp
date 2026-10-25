@@ -4,7 +4,10 @@
 #include "basics.h"
 #include "polygons.h"
 
-namespace geo { bool __cdecl Overlap_(const geo::Frustum& rFrustum, const geo::Ray<geo::Vector3<float> >* pEdges, int iNumEdges); }
+namespace geo
+{
+bool __cdecl Overlap_(const geo::Frustum& rFrustum, const geo::Ray<geo::Vector3<float> >* pEdges, int iNumEdges);
+}
 
 // FUNCTION: SWBF2 0x00724c60
 bool geo::Overlap3D::Op(const geo::Frustum& rFrustum, const geo::Sphere& rSphere)
@@ -24,7 +27,8 @@ bool geo::Overlap3D::Op(const geo::Frustum& rFrustum, const geo::Sphere& rSphere
     return true;
 }
 
-namespace geo {
+namespace geo
+{
 
 // FUNCTION: SWBF2 0x00724db0
 bool __cdecl Overlap_(const geo::Frustum& rFrustum, const geo::Ray<geo::Vector3<float> >* pEdges, int iNumEdges)
@@ -337,7 +341,8 @@ unsigned int geo::Classify3D::Op(const geo::Frustum& rFrustum, const geo::Sphere
     return uResult;
 }
 
-namespace geo {
+namespace geo
+{
 
 // FUNCTION: SWBF2 0x00724e80
 bool __cdecl Overlap_(const geo::Plane* pPlanes, const geo::Vector3<float>& rPoint)

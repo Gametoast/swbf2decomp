@@ -863,7 +863,8 @@ LUA_API int lua_pushupvalues (lua_State *L) {
 
 // FUNCTION: SWBF2 0x0069b780
 static const char *aux_upvalue (lua_State *L, int funcindex, int n,
-                                TObject **val) {
+TObject **val)
+{
   Closure *f;
   StkId fi = luaA_index(L, funcindex);
   if (!ttisfunction(fi)) return NULL;

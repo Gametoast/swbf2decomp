@@ -7,6 +7,7 @@
 namespace Snd
 {
 
+// VTABLE: SWBF2 0x00786878
 class StreamSourceProducer : public StreamNodeSource
 {
 public:
@@ -37,6 +38,7 @@ public:
  
  
 
+// VTABLE: SWBF2 0x00786884
 class StreamSourceNProducer : public StreamNodeSource
 {
 public:

@@ -64,16 +64,24 @@ EntityTrapClass::EntityTrapClass(unsigned int uHash)
 
 // SYNTHETIC: SWBF2 0x00402eb0
 // `dynamic initializer for 'EntityTrapClass::rttiHashEntityTrapClass''
+// EntityTrapClass::rttiHashEntityTrapClass
+
 // GLOBAL: SWBF2 0x01ebc254
 // EntityTrapClass::rttiHashEntityTrapClass
 PblHash EntityTrapClass::rttiHashEntityTrapClass("EntityTrapClass");
+// GLOBAL: SWBF2 0x00789684
+// EntityTrapClass::rttiNameEntityTrapClass
 const char EntityTrapClass::rttiNameEntityTrapClass[] = "EntityTrapClass";
 
 // SYNTHETIC: SWBF2 0x00402ea0
 // `dynamic initializer for 'EntityTrap::rttiHashEntityTrap''
+// EntityTrap::rttiHashEntityTrap
+
 // GLOBAL: SWBF2 0x01ebc258
 // EntityTrap::rttiHashEntityTrap
 PblHash EntityTrap::rttiHashEntityTrap("EntityTrap");
+// GLOBAL: SWBF2 0x00789678
+// EntityTrap::rttiNameEntityTrap
 const char EntityTrap::rttiNameEntityTrap[] = "EntityTrap";
 
 static inline CollisionObject* AsCollisionObject(EntityTrap* pTrap)

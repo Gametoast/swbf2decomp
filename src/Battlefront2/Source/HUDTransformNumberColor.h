@@ -6,7 +6,9 @@
 
 class PblConfig;
 
-namespace HUD {
+namespace HUD
+{
+// VTABLE: SWBF2 0x007a36c8
 class TransformNumberType : public HUD::Transform
 {
 public:
@@ -30,7 +32,8 @@ public:
 };
 }
 
-namespace HUD {
+namespace HUD
+{
 // VTABLE: SWBF2 0x007a3628
 class TransformNumberColor : public HUD::TransformNumberType
 {

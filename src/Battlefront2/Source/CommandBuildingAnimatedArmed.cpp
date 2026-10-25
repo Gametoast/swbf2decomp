@@ -10,9 +10,13 @@ CommandBuildingAnimatedArmedClass::CommandBuildingAnimatedArmedClass(unsigned in
 
 // SYNTHETIC: SWBF2 0x00402640
 // `dynamic initializer for 'CommandBuildingAnimatedArmed::rttiHashCommandBuildingAnimatedArmed''
+// CommandBuildingAnimatedArmed::rttiHashCommandBuildingAnimatedArmed
+
 // GLOBAL: SWBF2 0x01eb83c8
 // CommandBuildingAnimatedArmed::rttiHashCommandBuildingAnimatedArmed
 PblHash CommandBuildingAnimatedArmed::rttiHashCommandBuildingAnimatedArmed("CommandBuildingAnimatedArmed");
+// GLOBAL: SWBF2 0x00788bcc
+// CommandBuildingAnimatedArmed::rttiNameCommandBuildingAnimatedArmed
 const char CommandBuildingAnimatedArmed::rttiNameCommandBuildingAnimatedArmed[] = "CommandBuildingAnimatedArmed";
 
 
@@ -23,9 +27,13 @@ const char CommandBuildingAnimatedArmed::rttiNameCommandBuildingAnimatedArmed[] 
 
 // SYNTHETIC: SWBF2 0x00402650
 // `dynamic initializer for 'CommandBuildingAnimatedArmedClass::rttiHashCommandBuildingAnimatedArmedClass''
+// CommandBuildingAnimatedArmedClass::rttiHashCommandBuildingAnimatedArmedClass
+
 // GLOBAL: SWBF2 0x01eb83cc
 // CommandBuildingAnimatedArmedClass::rttiHashCommandBuildingAnimatedArmedClass
 PblHash CommandBuildingAnimatedArmedClass::rttiHashCommandBuildingAnimatedArmedClass("CommandBuildingAnimatedArmedClass");
+// GLOBAL: SWBF2 0x00788bf4
+// CommandBuildingAnimatedArmedClass::rttiNameCommandBuildingAnimatedArmedClass
 const char CommandBuildingAnimatedArmedClass::rttiNameCommandBuildingAnimatedArmedClass[] = "CommandBuildingAnimatedArmedClass";
 
 

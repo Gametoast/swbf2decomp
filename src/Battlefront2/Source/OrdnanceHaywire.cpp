@@ -66,16 +66,24 @@ Ordnance* OrdnanceHaywireClass::Build(const OrdnanceDesc& desc)
 
 // SYNTHETIC: SWBF2 0x00405ae0
 // `dynamic initializer for 'OrdnanceHaywire::rttiHashOrdnanceHaywire''
+// OrdnanceHaywire::rttiHashOrdnanceHaywire
+
 // GLOBAL: SWBF2 0x01ef2644
 // OrdnanceHaywire::rttiHashOrdnanceHaywire
 PblHash OrdnanceHaywire::rttiHashOrdnanceHaywire("OrdnanceHaywire");
+// GLOBAL: SWBF2 0x0078a8fc
+// OrdnanceHaywire::rttiNameOrdnanceHaywire
 const char OrdnanceHaywire::rttiNameOrdnanceHaywire[] = "OrdnanceHaywire";
 
 // SYNTHETIC: SWBF2 0x00405af0
 // `dynamic initializer for 'OrdnanceHaywireClass::rttiHashOrdnanceHaywireClass''
+// OrdnanceHaywireClass::rttiHashOrdnanceHaywireClass
+
 // GLOBAL: SWBF2 0x01ef2640
 // OrdnanceHaywireClass::rttiHashOrdnanceHaywireClass
 PblHash OrdnanceHaywireClass::rttiHashOrdnanceHaywireClass("OrdnanceHaywireClass");
+// GLOBAL: SWBF2 0x0078a8e4
+// OrdnanceHaywireClass::rttiNameOrdnanceHaywireClass
 const char OrdnanceHaywireClass::rttiNameOrdnanceHaywireClass[] = "OrdnanceHaywireClass";
 
 // FUNCTION: SWBF2 0x00600f00

@@ -56,12 +56,12 @@ public:
  
  
 
-// VTABLE: SWBF2 0x0079ecd8
+// VTABLE: SWBF2 0x0079ecd8 EntityEx
 // VTABLE: SWBF2 0x0079ec38 CollisionObject
 // VTABLE: SWBF2 0x0079ee2c RedSceneObject
 // VTABLE: SWBF2 0x0079ee00 Damageable
 // VTABLE: SWBF2 0x0079edf8 PblHandled
-// VTABLE: SWBF2 0x0079ec20 Thread
+// VTABLE: SWBF2 0x0079ec20
 class FlagItem : public EntityItem
 {
 public:
@@ -71,6 +71,8 @@ public:
     virtual ~FlagItem();
 
     static void* operator new(unsigned int uSize) { return sMemoryPool.Allocate(uSize); }
+    // SYNTHETIC: SWBF2 0x00523fa0
+    // FlagItem::operator delete
     static void operator delete(void* pBlock) { sMemoryPool.Free(pBlock); }
 
     virtual bool IsRtti(unsigned int uRtti) const;

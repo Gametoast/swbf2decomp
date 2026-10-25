@@ -67,6 +67,7 @@ public:
  
  
 
+// VTABLE: SWBF2 0x007b0c1c
 class WeaponDispenser : public Weapon
 {
 public:

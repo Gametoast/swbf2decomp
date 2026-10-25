@@ -15,9 +15,18 @@ class UnitAgent;
 class AILowLevel;
 class Character;
 class GameObject;
-namespace AI { class EventInfo; }
-namespace SquadCommands { class SquadCommandOrder; }
+namespace AI
+{
+class EventInfo;
+}
+namespace SquadCommands
+{
+class SquadCommandOrder;
+}
 
+// VTABLE: SWBF2 0x007af818 CommandFsm
+// VTABLE: SWBF2 0x007af858 Controller
+// VTABLE: SWBF2 0x007af870 PblHandled
 class UnitController : public Controller, public CommandFsm, public PblHandled
 {
 public:
@@ -80,6 +89,8 @@ public:
     bool IsLookAheadOnly() const;
     const PblVector3& GetOriginalAheadDir() const;
 
+    // SYNTHETIC: SWBF2 0x00499600
+    // UnitController::operator delete
     static void operator delete(void* pBlock) { sMemoryPool.Free(pBlock); }
 
     static void* operator new(unsigned int uSize) { return sMemoryPool.Allocate(uSize); }

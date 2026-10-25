@@ -102,11 +102,20 @@ int GetUnitsInRange(const PblVector3& vPos, float fRadius, GameObject** const pp
                     int iMax, const Team* pTeam, AI::AIAffil eAffil);
 }
 
-namespace AIUtil { bool __fastcall ShouldStayInVehicle(Controllable* pMe); }
+namespace AIUtil
+{
+bool __fastcall ShouldStayInVehicle(Controllable* pMe);
+}
 
-namespace AIUtil { bool __cdecl CanPotentiallySee(Controllable* pMe, const GameObject* pObject, float* pOut); }
+namespace AIUtil
+{
+bool __cdecl CanPotentiallySee(Controllable* pMe, const GameObject* pObject, float* pOut);
+}
 
-namespace AIDebug { bool SkipCameraForLODs(); }
+namespace AIDebug
+{
+bool SkipCameraForLODs();
+}
 
 // FUNCTION: SWBF2 0x004386a0
 bool AIDebug::SkipCameraForLODs()
@@ -165,17 +174,22 @@ namespace
 
 // SYNTHETIC: SWBF2 0x00406c50
 // `dynamic initializer for 'UnitController::rttiHashUnitController''
+// UnitController::rttiHashUnitController
+
 // GLOBAL: SWBF2 0x01f99384
 // UnitController::rttiHashUnitController
 PblHash UnitController::rttiHashUnitController("UnitController");
+// GLOBAL: SWBF2 0x0078b7a8
+// UnitController::rttiNameUnitController
 const char UnitController::rttiNameUnitController[] = "UnitController";
 
-// GLOBAL: SWBF2 0x01f9a1f8
 // SYNTHETIC: SWBF2 0x00406c60
 // `dynamic initializer for 'UnitController::sMemoryPool''
 // SYNTHETIC: SWBF2 0x007696c0
 // `dynamic atexit destructor for 'UnitController::sMemoryPool''
 
+// GLOBAL: SWBF2 0x01f9a1f8
+// UnitController::sMemoryPool
 MemoryPool UnitController::sMemoryPool("UnitController", sizeof(UnitController));
 
 

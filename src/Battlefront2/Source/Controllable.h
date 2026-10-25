@@ -140,10 +140,13 @@ public:
 };
  
 
+// VTABLE: SWBF2 0x00798b80 Thread
+// VTABLE: SWBF2 0x00798cb0 Trackable
 class Controllable : public Thread, public Trackable
 {
 public:
 
+    // VTABLE: SWBF2 0x00798c98
     class AIThread : public Thread
     {
     public:

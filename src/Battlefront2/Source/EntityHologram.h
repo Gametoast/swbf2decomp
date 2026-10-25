@@ -86,7 +86,8 @@ public:
  
  
 
-// VTABLE: SWBF2 0x0079b820
+// VTABLE: SWBF2 0x0079b820 EntityEx
+// VTABLE: SWBF2 0x0079b878 RedSceneObject
 class EntityHologram : public EntityEx, public RedSceneObject
 {
 public:

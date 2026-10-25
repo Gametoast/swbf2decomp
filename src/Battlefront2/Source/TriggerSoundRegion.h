@@ -109,6 +109,8 @@ public:
 
         ~Group();
 
+        // SYNTHETIC: SWBF2 0x0065d3f0
+        // TriggerSoundRegion::Group::operator delete
         static void operator delete(void* pBlock) { sMemoryPool.Free(pBlock); }
     };
 
@@ -133,6 +135,8 @@ public:
         return sMemoryPool.Allocate(sizeof(TriggerSoundRegion));
     }
 
+    // SYNTHETIC: SWBF2 0x0065d3e0
+    // TriggerSoundRegion::operator delete
     static void operator delete(void* pBlock) { sMemoryPool.Free(pBlock); }
 
     static MemoryPool sMemoryPool;

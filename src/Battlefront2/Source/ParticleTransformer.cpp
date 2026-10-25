@@ -1,32 +1,40 @@
 #include "ParticleTransformer.h"
 #include "Particle.h"
 
-// GLOBAL: SWBF2 0x01ef7b50
 // SYNTHETIC: SWBF2 0x00405d20
 // `dynamic initializer for 'ParticleTransformer::PositionTransformer::sMemoryPool''
 // SYNTHETIC: SWBF2 0x00769250
 // `dynamic atexit destructor for 'ParticleTransformer::PositionTransformer::sMemoryPool''
+
+// GLOBAL: SWBF2 0x01ef7b50
+// ParticleTransformer::PositionTransformer::sMemoryPool
 MemoryPool ParticleTransformer::PositionTransformer::sMemoryPool("ParticleTransformer::PositionTransformer",
                                                                  sizeof(ParticleTransformer::PositionTransformer));
-// GLOBAL: SWBF2 0x01ef7bf0
 // SYNTHETIC: SWBF2 0x00405d40
 // `dynamic initializer for 'ParticleTransformer::SizeTransformer::sMemoryPool''
 // SYNTHETIC: SWBF2 0x00769260
 // `dynamic atexit destructor for 'ParticleTransformer::SizeTransformer::sMemoryPool''
+
+// GLOBAL: SWBF2 0x01ef7bf0
+// ParticleTransformer::SizeTransformer::sMemoryPool
 MemoryPool ParticleTransformer::SizeTransformer::sMemoryPool("ParticleTransformer::SizeTransformer",
                                                              sizeof(ParticleTransformer::SizeTransformer));
-// GLOBAL: SWBF2 0x01ef7c40
 // SYNTHETIC: SWBF2 0x00405d60
 // `dynamic initializer for 'ParticleTransformer::RotationTransformer::sMemoryPool''
 // SYNTHETIC: SWBF2 0x00769270
 // `dynamic atexit destructor for 'ParticleTransformer::RotationTransformer::sMemoryPool''
+
+// GLOBAL: SWBF2 0x01ef7c40
+// ParticleTransformer::RotationTransformer::sMemoryPool
 MemoryPool ParticleTransformer::RotationTransformer::sMemoryPool("ParticleTransformer::RotationTransformer",
                                                                  sizeof(ParticleTransformer::RotationTransformer));
-// GLOBAL: SWBF2 0x01ef7ba0
 // SYNTHETIC: SWBF2 0x00405d80
 // `dynamic initializer for 'ParticleTransformer::ColorTransformer::sMemoryPool''
 // SYNTHETIC: SWBF2 0x00769280
 // `dynamic atexit destructor for 'ParticleTransformer::ColorTransformer::sMemoryPool''
+
+// GLOBAL: SWBF2 0x01ef7ba0
+// ParticleTransformer::ColorTransformer::sMemoryPool
 MemoryPool ParticleTransformer::ColorTransformer::sMemoryPool("ParticleTransformer::ColorTransformer",
                                                               sizeof(ParticleTransformer::ColorTransformer));
 

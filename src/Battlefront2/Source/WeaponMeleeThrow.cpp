@@ -27,9 +27,13 @@ namespace
 
 // SYNTHETIC: SWBF2 0x00407240
 // `dynamic initializer for 'WeaponMeleeThrow::rttiHashWeaponMeleeThrow''
+// WeaponMeleeThrow::rttiHashWeaponMeleeThrow
+
 // GLOBAL: SWBF2 0x01f9a8fc
 // WeaponMeleeThrow::rttiHashWeaponMeleeThrow
 PblHash WeaponMeleeThrow::rttiHashWeaponMeleeThrow("WeaponMeleeThrow");
+// GLOBAL: SWBF2 0x0078c1cc
+// WeaponMeleeThrow::rttiNameWeaponMeleeThrow
 const char WeaponMeleeThrow::rttiNameWeaponMeleeThrow[] = "WeaponMeleeThrow";
 
 // FUNCTION: SWBF2 0x0068f610
@@ -276,9 +280,13 @@ Ordnance* WeaponMeleeThrow::CreateOrdnance(OrdnanceDesc& desc)
 
 // SYNTHETIC: SWBF2 0x00407250
 // `dynamic initializer for 'WeaponMeleeThrowClass::rttiHashWeaponMeleeThrowClass''
+// WeaponMeleeThrowClass::rttiHashWeaponMeleeThrowClass
+
 // GLOBAL: SWBF2 0x01f9a900
 // WeaponMeleeThrowClass::rttiHashWeaponMeleeThrowClass
 PblHash WeaponMeleeThrowClass::rttiHashWeaponMeleeThrowClass("WeaponMeleeThrowClass");
+// GLOBAL: SWBF2 0x0078c1e4
+// WeaponMeleeThrowClass::rttiNameWeaponMeleeThrowClass
 const char WeaponMeleeThrowClass::rttiNameWeaponMeleeThrowClass[] = "WeaponMeleeThrowClass";
 
 // FUNCTION: SWBF2 0x0068fcd0

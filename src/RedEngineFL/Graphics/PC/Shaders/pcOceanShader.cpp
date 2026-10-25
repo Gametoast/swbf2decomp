@@ -22,21 +22,27 @@ pcRedShader::BeginFuncT pcOceanShader::BeginFuncArray[MAX_PIPELINES];
 pcRedShader::EndFuncT pcOceanShader::EndFuncArray[MAX_PIPELINES];
 pcRedShader::RenderFuncT pcOceanShader::RenderFuncArray[MAX_PIPELINES];
 
-// GLOBAL: SWBF2 0x009ca330
 // SYNTHETIC: SWBF2 0x0040a210
 // `dynamic initializer for 'pcOceanShader::s_shaderDef''
 // SYNTHETIC: SWBF2 0x00769f20
 // `dynamic atexit destructor for 'pcOceanShader::s_shaderDef''
+
+// GLOBAL: SWBF2 0x009ca330
+// pcOceanShader::s_shaderDef
 pcRedShaderDef pcOceanShader::s_shaderDef("ocean_shader.xml");
 
-// GLOBAL: SWBF2 0x009ca32c
 // SYNTHETIC: SWBF2 0x0040a290
 // `dynamic initializer for 'kuiCubeNormalizationMap''
+
+// GLOBAL: SWBF2 0x009ca32c
+// kuiCubeNormalizationMap
 static unsigned int kuiCubeNormalizationMap = PblHash("cube_normalizationmap");
 
-// GLOBAL: SWBF2 0x009ca294
 // SYNTHETIC: SWBF2 0x0040a2b0
 // `dynamic initializer for 'kuiLinearRamp''
+
+// GLOBAL: SWBF2 0x009ca294
+// kuiLinearRamp
 static unsigned int kuiLinearRamp = PblHash("linear_ramp");
 
 // FUNCTION: SWBF2 0x0070bd00
@@ -391,9 +397,11 @@ void pcOceanShader::_StaticInit() const
 {
 }
 
-// GLOBAL: SWBF2 0x009ca328
 // SYNTHETIC: SWBF2 0x0040a230
 // `dynamic initializer for 'pcOceanShader::s_uiRenderTypeHash''
+
+// GLOBAL: SWBF2 0x009ca328
+// pcOceanShader::s_uiRenderTypeHash
 unsigned int pcOceanShader::s_uiRenderTypeHash = PblHash("Ocean");
 
 // SYNTHETIC: SWBF2 0x0040a250
@@ -402,11 +410,13 @@ unsigned int pcOceanShader::s_uiRenderTypeHash = PblHash("Ocean");
 // SYNTHETIC: SWBF2 0x0040a270
 // `dynamic initializer for 'PblMath::fOneOverTwoPi''
 
-// GLOBAL: SWBF2 0x009ca298
 // SYNTHETIC: SWBF2 0x0040a1f0
 // `dynamic initializer for 'pcOceanShader::s_Factory''
 // SYNTHETIC: SWBF2 0x00769f00
 // `dynamic atexit destructor for 'pcOceanShader::s_Factory''
+
+// GLOBAL: SWBF2 0x009ca298
+// pcOceanShader::s_Factory
 pcOceanShader pcOceanShader::s_Factory;
 
 static PblMatrix OceanTextureMatrix(const RedTextureTransform& t)

@@ -9,11 +9,13 @@ HUD::TransformNameMesh::Factory::Factory()
     mName = "TransformNameMesh";
 }
 
-// GLOBAL: SWBF2 0x007ebabc
 // SYNTHETIC: SWBF2 0x004040c0
 // `dynamic initializer for 'HUD::TransformNameMesh::sTransformNameMeshList''
 // SYNTHETIC: SWBF2 0x00768c30
 // `dynamic atexit destructor for 'HUD::TransformNameMesh::sTransformNameMeshList''
+
+// GLOBAL: SWBF2 0x007ebabc
+// HUD::TransformNameMesh::sTransformNameMeshList
 PblListSingle HUD::TransformNameMesh::sTransformNameMeshList;
 
 static const unsigned int kNameMeshHash = 0x63cc538f;

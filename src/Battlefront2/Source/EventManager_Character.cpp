@@ -790,81 +790,103 @@ namespace EventManager
 namespace CharacterEvent
 {
 
-// GLOBAL: SWBF2 0x007eba20
 // SYNTHETIC: SWBF2 0x00402f30
 // `dynamic initializer for 'EventManager::CharacterEvent::mDeath''
 // SYNTHETIC: SWBF2 0x00767020
 // `dynamic atexit destructor for 'EventManager::CharacterEvent::mDeath''
+
+// GLOBAL: SWBF2 0x007eba20
+// mDeath
 Event<Character, DamageOwner> mDeath("CharacterDeath");
 
-// GLOBAL: SWBF2 0x007eba00
 // SYNTHETIC: SWBF2 0x00402f60
 // `dynamic initializer for 'EventManager::CharacterEvent::mSpawn''
 // SYNTHETIC: SWBF2 0x007670a0
 // `dynamic atexit destructor for 'EventManager::CharacterEvent::mSpawn''
+
+// GLOBAL: SWBF2 0x007eba00
+// mSpawn
 Event<Character, char> mSpawn("CharacterSpawn");
 
-// GLOBAL: SWBF2 0x007eba40
 // SYNTHETIC: SWBF2 0x00402f90
 // `dynamic initializer for 'EventManager::CharacterEvent::mChangeClass''
 // SYNTHETIC: SWBF2 0x00767120
 // `dynamic atexit destructor for 'EventManager::CharacterEvent::mChangeClass''
+
+// GLOBAL: SWBF2 0x007eba40
+// mChangeClass
 Event<Character, char> mChangeClass("CharacterChangeClass");
 
-// GLOBAL: SWBF2 0x007eb900
 // SYNTHETIC: SWBF2 0x00402fc0
 // `dynamic initializer for 'EventManager::CharacterEvent::mDispensePowerup''
 // SYNTHETIC: SWBF2 0x007671a0
 // `dynamic atexit destructor for 'EventManager::CharacterEvent::mDispensePowerup''
+
+// GLOBAL: SWBF2 0x007eb900
+// mDispensePowerup
 Event<Character, GameObject> mDispensePowerup("CharacterDispensePowerup");
 
-// GLOBAL: SWBF2 0x007eb8d0
 // SYNTHETIC: SWBF2 0x00402ff0
 // `dynamic initializer for 'EventManager::CharacterEvent::mDispenseControllable''
 // SYNTHETIC: SWBF2 0x00767220
 // `dynamic atexit destructor for 'EventManager::CharacterEvent::mDispenseControllable''
+
+// GLOBAL: SWBF2 0x007eb8d0
+// mDispenseControllable
 Event<Character, GameObject> mDispenseControllable("CharacterDispenseControllable");
 
-// GLOBAL: SWBF2 0x007eb9d0
 // SYNTHETIC: SWBF2 0x00403020
 // `dynamic initializer for 'EventManager::CharacterEvent::mLandedFlyer''
 // SYNTHETIC: SWBF2 0x007672a0
 // `dynamic atexit destructor for 'EventManager::CharacterEvent::mLandedFlyer''
+
+// GLOBAL: SWBF2 0x007eb9d0
+// mLandedFlyer
 Event<Character, GameObject> mLandedFlyer("CharacterLandedFlyer");
 
-// GLOBAL: SWBF2 0x007eb980
 // SYNTHETIC: SWBF2 0x00403050
 // `dynamic initializer for 'EventManager::CharacterEvent::mEnterVehicle''
 // SYNTHETIC: SWBF2 0x00767320
 // `dynamic atexit destructor for 'EventManager::CharacterEvent::mEnterVehicle''
+
+// GLOBAL: SWBF2 0x007eb980
+// mEnterVehicle
 Event<Character, GameObject> mEnterVehicle("CharacterEnterVehicle");
 
-// GLOBAL: SWBF2 0x007eb9a0
 // SYNTHETIC: SWBF2 0x00403080
 // `dynamic initializer for 'EventManager::CharacterEvent::mIssueAICommand''
 // SYNTHETIC: SWBF2 0x007673a0
 // `dynamic atexit destructor for 'EventManager::CharacterEvent::mIssueAICommand''
+
+// GLOBAL: SWBF2 0x007eb9a0
+// mIssueAICommand
 Event<Character, AI::EventType> mIssueAICommand("CharacterIssueAICommand");
 
-// GLOBAL: SWBF2 0x007eb930
 // SYNTHETIC: SWBF2 0x004030b0
 // `dynamic initializer for 'EventManager::CharacterEvent::mKillsChange''
 // SYNTHETIC: SWBF2 0x00767420
 // `dynamic atexit destructor for 'EventManager::CharacterEvent::mKillsChange''
+
+// GLOBAL: SWBF2 0x007eb930
+// mKillsChange
 Event<Character, int> mKillsChange("KillsChange");
 
-// GLOBAL: SWBF2 0x007eb960
 // SYNTHETIC: SWBF2 0x004030e0
 // `dynamic initializer for 'EventManager::CharacterEvent::mDeathsChange''
 // SYNTHETIC: SWBF2 0x007674a0
 // `dynamic atexit destructor for 'EventManager::CharacterEvent::mDeathsChange''
+
+// GLOBAL: SWBF2 0x007eb960
+// mDeathsChange
 Event<Character, int> mDeathsChange("DeathsChange");
 
-// GLOBAL: SWBF2 0x007eb8b0
 // SYNTHETIC: SWBF2 0x00403110
 // `dynamic initializer for 'EventManager::CharacterEvent::mScoreChange''
 // SYNTHETIC: SWBF2 0x00767520
 // `dynamic atexit destructor for 'EventManager::CharacterEvent::mScoreChange''
+
+// GLOBAL: SWBF2 0x007eb8b0
+// mScoreChange
 Event<Character, int> mScoreChange("ScoreChange");
 
 }

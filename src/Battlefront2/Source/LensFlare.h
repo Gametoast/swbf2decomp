@@ -50,6 +50,9 @@ public:
 };
  
  
+ // VTABLE: SWBF2 0x0079b860 PblHandled
+ // VTABLE: SWBF2 0x0079b868
+ // VTABLE: SWBF2 0x0079b8e0 Thread
  class LensFlare : public FLEffectClass, public FLEffectObject
 {
 public:

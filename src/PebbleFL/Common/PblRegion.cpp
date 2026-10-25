@@ -138,11 +138,13 @@ bool PblRegion::IsPointInside(const PblVector3& rPoint) const
     }
 }
 
-// GLOBAL: SWBF2 0x007e2c9c
 // SYNTHETIC: SWBF2 0x0040aef0
 // `dynamic initializer for 'PblRegion::sList''
 // SYNTHETIC: SWBF2 0x0076a0d0
 // `dynamic atexit destructor for 'PblRegion::sList''
+
+// GLOBAL: SWBF2 0x007e2c9c
+// PblRegion::sList
 PblListSingle PblRegion::sList;
 
 // FUNCTION: SWBF2 0x00727f00

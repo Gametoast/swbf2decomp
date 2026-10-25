@@ -43,6 +43,9 @@ public:
  
  
 
+// VTABLE: SWBF2 0x007acc38 PblHandled
+// VTABLE: SWBF2 0x007acc40
+// VTABLE: SWBF2 0x007acccc Thread
 class OrdnanceLaser : public OrdnanceBullet
 {
 public:

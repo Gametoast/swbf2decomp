@@ -26,6 +26,8 @@ public:
     static MemoryPool sMemoryPool;
 
     static void* operator new(size_t uSize) { return sMemoryPool.Allocate(uSize); }
+    // SYNTHETIC: SWBF2 0x004de000
+    // AcklayData::operator delete
     static void operator delete(void* pBlock) { sMemoryPool.Free(pBlock); }
 
     GameSound mFootSound[2];
@@ -356,6 +358,14 @@ class TargetInfo;
 class TentacleSimulator;
 class Weapon;
 
+// VTABLE: SWBF2 0x0079cf2c Thread
+// VTABLE: SWBF2 0x0079cffc Damageable
+// VTABLE: SWBF2 0x0079d028 Trackable
+// VTABLE: SWBF2 0x0079d08c PblHandled
+// VTABLE: SWBF2 0x0079d0ac RedSceneObject
+// VTABLE: SWBF2 0x0079d114 EntityEx
+// VTABLE: SWBF2 0x0079d240
+// VTABLE: SWBF2 0x0079d250 CollisionObject
 class EntitySoldier : public GameObject,
                       public Controllable,
                       public VehicleEngine,
@@ -418,6 +428,8 @@ public:
     virtual ~EntitySoldier();
 
     static void* operator new(size_t uSize) { return sMemoryPool.Allocate(uSize); }
+    // SYNTHETIC: SWBF2 0x004de070
+    // EntitySoldier::operator delete
     static void operator delete(void* pBlock) { sMemoryPool.Free(pBlock); }
 
     virtual bool IsRtti(unsigned int uRtti) const;

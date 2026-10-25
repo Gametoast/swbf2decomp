@@ -4,7 +4,9 @@
 #include "HUDTransformNumberColor.h"
 #include "PebbleFL/Common/PblVector.h"
 
-namespace HUD {
+namespace HUD
+{
+// VTABLE: SWBF2 0x007a371c
 class TransformNumberVector3 : public HUD::TransformNumberType
 {
 public:

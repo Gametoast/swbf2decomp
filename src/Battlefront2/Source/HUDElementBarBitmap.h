@@ -5,8 +5,12 @@
 #include "HUDElementBar.h"
 #include "HUDElementBitmap.h"
 
-namespace HUD {
+namespace HUD
+{
 
+// VTABLE: SWBF2 0x007a08ac RedBitmapElement
+// VTABLE: SWBF2 0x007a0908 HUD::ElementBitmapBase
+// VTABLE: SWBF2 0x007a0944
 class ElementBarBitmap : public HUD::ElementBitmap, public HUD::ElementBar
 {
 public:

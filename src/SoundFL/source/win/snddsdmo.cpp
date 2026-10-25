@@ -163,7 +163,8 @@ bool DSDMO::IsInputDataComplete()
 
 }
 
-namespace Snd {
+namespace Snd
+{
 
 // FUNCTION: SWBF2 0x0074d1b0
 DSDMO::DSDMO()
@@ -175,7 +176,8 @@ DSDMO::DSDMO()
 }
 }
 
-namespace Snd {
+namespace Snd
+{
 
 // FUNCTION: SWBF2 0x0074d2d0
 DSDMO::~DSDMO()

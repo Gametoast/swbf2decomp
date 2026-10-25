@@ -52,16 +52,24 @@ namespace
 
 // SYNTHETIC: SWBF2 0x00405b80
 // `dynamic initializer for 'OrdnanceSticky::rttiHashOrdnanceSticky''
+// OrdnanceSticky::rttiHashOrdnanceSticky
+
 // GLOBAL: SWBF2 0x01ef2668
 // OrdnanceSticky::rttiHashOrdnanceSticky
 PblHash OrdnanceSticky::rttiHashOrdnanceSticky("OrdnanceSticky");
+// GLOBAL: SWBF2 0x0078aa00
+// OrdnanceSticky::rttiNameOrdnanceSticky
 const char OrdnanceSticky::rttiNameOrdnanceSticky[] = "OrdnanceSticky";
 
 // SYNTHETIC: SWBF2 0x00405b90
 // `dynamic initializer for 'OrdnanceStickyClass::rttiHashOrdnanceStickyClass''
+// OrdnanceStickyClass::rttiHashOrdnanceStickyClass
+
 // GLOBAL: SWBF2 0x01ef266c
 // OrdnanceStickyClass::rttiHashOrdnanceStickyClass
 PblHash OrdnanceStickyClass::rttiHashOrdnanceStickyClass("OrdnanceStickyClass");
+// GLOBAL: SWBF2 0x0078aa20
+// OrdnanceStickyClass::rttiNameOrdnanceStickyClass
 const char OrdnanceStickyClass::rttiNameOrdnanceStickyClass[] = "OrdnanceStickyClass";
 
 // FUNCTION: SWBF2 0x00606d80

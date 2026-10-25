@@ -17,7 +17,10 @@ extern unsigned __int64 netEnteredLobbyId;
 extern unsigned __int64 netCreatedLobbyId;
 extern char gLoginName[256];
 
-namespace StatsManager { void Init(); }
+namespace StatsManager
+{
+void Init();
+}
 void RemoveFoundGameByAddress(const NetAddr* address);
 int __cdecl DecodeBase64(unsigned char* pOutput, unsigned int uiOutputCapacity, unsigned int* pOutputSize,
                        const unsigned char* pSource, unsigned int uiSourceSize);

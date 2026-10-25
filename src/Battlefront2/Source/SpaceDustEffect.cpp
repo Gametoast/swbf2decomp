@@ -36,11 +36,13 @@ SpaceDustEffect::DustEmitterData::~DustEmitterData()
     }
 }
 
-// GLOBAL: SWBF2 0x01f6dea0
 // SYNTHETIC: SWBF2 0x004063d0
 // `dynamic initializer for 'SpaceDustEffect::m_emitter''
 // SYNTHETIC: SWBF2 0x007694d0
 // `dynamic atexit destructor for 'SpaceDustEffect::m_emitter''
+
+// GLOBAL: SWBF2 0x01f6dea0
+// SpaceDustEffect::m_emitter
 SpaceDustEffect::DustEmitterData SpaceDustEffect::m_emitter[1];
 
 // GLOBAL: SWBF2 0x01eafb30

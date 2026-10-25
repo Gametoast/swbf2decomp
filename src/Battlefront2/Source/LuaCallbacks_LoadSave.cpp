@@ -65,21 +65,32 @@ namespace LuaHelper
 bool CallGlobalProc(char const* pcFunc, bool bArg);
 }
 
-namespace PblBuildType { extern unsigned char gCreateMemoryProfile; }
+namespace PblBuildType
+{
+extern unsigned char gCreateMemoryProfile;
+}
 extern int gActiveViewport;
 extern bool gInTrainingMission;
 
-namespace RedLocalizeDB { const unsigned short* Find(unsigned int uiHash, bool bNullIfMissing); }
+namespace RedLocalizeDB
+{
+const unsigned short* Find(unsigned int uiHash, bool bNullIfMissing);
+}
 
-namespace Lua_Callbacks { extern unsigned short sTempReturnString16[256]; }
+namespace Lua_Callbacks
+{
+extern unsigned short sTempReturnString16[256];
+}
 
 // GLOBAL: SWBF2 0x007e7370
 int s_doInitialMemcardCheck = 1;
 // GLOBAL: SWBF2 0x01e57721
 unsigned char gProfilesLoaded;
-// GLOBAL: SWBF2 0x01ec80d0
 // SYNTHETIC: SWBF2 0x004041e0
 // `dynamic initializer for 'sSavedPlayerOne''
+
+// GLOBAL: SWBF2 0x01ec80d0
+// sSavedPlayerOne
 PlayerProfile::tProfile sSavedPlayerOne;
 // GLOBAL: SWBF2 0x01f9c7c0
 int savedWhich;
@@ -102,8 +113,14 @@ unsigned char sCampaignBuffer[256];
 // GLOBAL: SWBF2 0x01f9ccd0
 unsigned char sMissionBuffer[256];
 
-namespace Lua_Callbacks { static unsigned int SaveLuaItems(lua_State* L, unsigned char* pBuffer, unsigned int iCapacity); }
-namespace Lua_Callbacks { static int LoadLuaItems(lua_State* L, unsigned char* pBuffer, unsigned int iSize); }
+namespace Lua_Callbacks
+{
+static unsigned int SaveLuaItems(lua_State* L, unsigned char* pBuffer, unsigned int iCapacity);
+}
+namespace Lua_Callbacks
+{
+static int LoadLuaItems(lua_State* L, unsigned char* pBuffer, unsigned int iSize);
+}
 
 struct OneSavegame
 {
@@ -1531,7 +1548,8 @@ void SaveFile::MakeMetagameFilename(unsigned short* pusDest, unsigned short cons
     PblUnicode::ustrlcat(pusDest, ausStamp, 128);
 }
 
-namespace Lua_Callbacks {
+namespace Lua_Callbacks
+{
 
 // FUNCTION: SWBF2 0x0058a410
 static int WriteLuaItem(unsigned char* pOut, int iIndex, int iDepth, bool bArg)
@@ -1604,7 +1622,8 @@ static int WriteLuaItem(unsigned char* pOut, int iIndex, int iDepth, bool bArg)
 }
 }
 
-namespace Lua_Callbacks {
+namespace Lua_Callbacks
+{
 
 // FUNCTION: SWBF2 0x0058a5c0
 static int ReadLuaItem(unsigned char* pData, int iDepth, bool bArg)
@@ -1722,7 +1741,8 @@ static unsigned int _zlibuncompress(unsigned char* pDest, int iCapacity, unsigne
     return stream.total_out;
 }
 
-namespace Lua_Callbacks {
+namespace Lua_Callbacks
+{
 
 // FUNCTION: SWBF2 0x0058a8e0
 static unsigned int SaveLuaItems(lua_State* L, unsigned char* pBuffer, unsigned int iCapacity)
@@ -1744,7 +1764,8 @@ static unsigned int SaveLuaItems(lua_State* L, unsigned char* pBuffer, unsigned 
 }
 }
 
-namespace Lua_Callbacks {
+namespace Lua_Callbacks
+{
 
 // FUNCTION: SWBF2 0x0058a960
 static int LoadLuaItems(lua_State* L, unsigned char* pBuffer, unsigned int iSize)
@@ -1766,7 +1787,8 @@ static int LoadLuaItems(lua_State* L, unsigned char* pBuffer, unsigned int iSize
 }
 }
 
-namespace Lua_Callbacks {
+namespace Lua_Callbacks
+{
 
 // FUNCTION: SWBF2 0x0058a9d0
 void __fastcall GetMissionWorld(char* pcWorld, int)
@@ -1778,7 +1800,8 @@ void __fastcall GetMissionWorld(char* pcWorld, int)
 }
 }
 
-namespace Lua_Callbacks {
+namespace Lua_Callbacks
+{
 
 // FUNCTION: SWBF2 0x0058aa10
 bool IsMetaGameStateSaved()
@@ -1790,7 +1813,8 @@ bool IsMetaGameStateSaved()
 // GLOBAL: SWBF2 0x01e57720
 bool gInTrainingMission;
 
-namespace Lua_Callbacks {
+namespace Lua_Callbacks
+{
 
 // FUNCTION: SWBF2 0x0058aa20
 bool IsTrainingMission()

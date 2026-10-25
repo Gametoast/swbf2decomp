@@ -43,9 +43,13 @@ extern Event<GameObject, DamageOwner> mHack;
 
 // SYNTHETIC: SWBF2 0x00407290
 // `dynamic initializer for 'WeaponRepairClass::rttiHashWeaponRepairClass''
+// WeaponRepairClass::rttiHashWeaponRepairClass
+
 // GLOBAL: SWBF2 0x01f9a90c
 // WeaponRepairClass::rttiHashWeaponRepairClass
 PblHash WeaponRepairClass::rttiHashWeaponRepairClass("WeaponRepairClass");
+// GLOBAL: SWBF2 0x0078c254
+// WeaponRepairClass::rttiNameWeaponRepairClass
 const char WeaponRepairClass::rttiNameWeaponRepairClass[] = "WeaponRepairClass";
 
 // FUNCTION: SWBF2 0x006910c0
@@ -212,9 +216,13 @@ WeaponRepair::WeaponRepair(const WeaponRepairClass* pClass, const WeaponDesc& de
 
 // SYNTHETIC: SWBF2 0x00407280
 // `dynamic initializer for 'WeaponRepair::rttiHashWeaponRepair''
+// WeaponRepair::rttiHashWeaponRepair
+
 // GLOBAL: SWBF2 0x01f9a910
 // WeaponRepair::rttiHashWeaponRepair
 PblHash WeaponRepair::rttiHashWeaponRepair("WeaponRepair");
+// GLOBAL: SWBF2 0x0078c23c
+// WeaponRepair::rttiNameWeaponRepair
 const char WeaponRepair::rttiNameWeaponRepair[] = "WeaponRepair";
 
 

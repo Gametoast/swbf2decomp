@@ -8,8 +8,10 @@
 
 class RedGroupElement;
 
-namespace HUD {
+namespace HUD
+{
 
+// VTABLE: SWBF2 0x007a0c84
 class ElementBitmapBase : public HUD::Element
 {
 public:
@@ -70,6 +72,8 @@ public:
     unsigned char mVAlign;
 };
 
+// VTABLE: SWBF2 0x007a0870 HUD::ElementBitmapBase
+// VTABLE: SWBF2 0x007a0974 RedBitmapElement
 class ElementBitmap : public HUD::ElementBitmapBase, public RedBitmapElement
 {
 public:
@@ -105,6 +109,8 @@ public:
     }
 };
 
+// VTABLE: SWBF2 0x007a0cc0 HUD::ElementBitmapBase
+// VTABLE: SWBF2 0x007a0cfc RedMaskedBitmapElement
 class ElementBitmapMasked : public HUD::ElementBitmapBase, public RedMaskedBitmapElement
 {
 public:

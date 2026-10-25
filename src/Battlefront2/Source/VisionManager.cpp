@@ -65,11 +65,13 @@ namespace CombatUtil
                                   const GameObject* pObj, const PblVector3& vPos);
 }
 
-// GLOBAL: SWBF2 0x01f9a2c8
 // SYNTHETIC: SWBF2 0x00406f30
 // `dynamic initializer for 'VisionManager::RayRequest::sMemoryPool''
 // SYNTHETIC: SWBF2 0x00769770
 // `dynamic atexit destructor for 'VisionManager::RayRequest::sMemoryPool''
+
+// GLOBAL: SWBF2 0x01f9a2c8
+// VisionManager::RayRequest::sMemoryPool
 MemoryPool VisionManager::RayRequest::sMemoryPool("RayRequest", 0x14);
 
 namespace VisionManager
@@ -527,7 +529,10 @@ void __fastcall VisionManager::AddFakeRayhitResult(UnitController* pUnit, const 
     pUnit->SendEvent(&info);
 }
 
-namespace VisionManager { bool RayTests(int iMaxHits); }
+namespace VisionManager
+{
+bool RayTests(int iMaxHits);
+}
 
 // FUNCTION: SWBF2 0x00670b40
 bool VisionManager::RayTests(int iMaxHits)
@@ -574,7 +579,8 @@ bool VisionManager::RayTests(int iMaxHits)
 // PblHeap<PblHandle<GameObject>,int>::Get
 template PblHandle<GameObject> PblHeap<PblHandle<GameObject>, int>::Get(int);
 
-namespace VisionManager {
+namespace VisionManager
+{
 
 // FUNCTION: SWBF2 0x006703c0
 void Reset()
@@ -593,28 +599,33 @@ void Reset()
 // PblHeap<PblHandle<GameObject>,int>::RECORD::~RECORD
  
 
-namespace VisionManager {
+namespace VisionManager
+{
 
 // GLOBAL: SWBF2 0x01eafd24
 GameObject** sPVRect;
 }
 
-namespace VisionManager {
+namespace VisionManager
+{
 // GLOBAL: SWBF2 0x01eafd20
 PblHeap<RayRequest*, int>* sHeap1;
 }
 
-namespace VisionManager {
+namespace VisionManager
+{
 // GLOBAL: SWBF2 0x01eafd2c
 PblHeap<RayRequest*, int>* sHeap2;
 }
 
-namespace VisionManager {
+namespace VisionManager
+{
 // GLOBAL: SWBF2 0x01eafcfc
 PblHeap<RayRequest*, int>* sHeap;
 }
 
-namespace VisionManager {
+namespace VisionManager
+{
 // GLOBAL: SWBF2 0x01eafcf8
 PblHeap<RayRequest*, int>* sTmpHeap;
 }

@@ -16,26 +16,34 @@ static void __cdecl PrintDebugMessageDefault(char const*)
 {
 }
 
-// GLOBAL: SWBF2 0x009d83b0
 // SYNTHETIC: SWBF2 0x0040b600
 // `dynamic initializer for 'Snd::sndRandom''
+
+// GLOBAL: SWBF2 0x009d83b0
+// sndRandom
 PblRandom sndRandom;
 
 namespace Globals
 {
 
 // GLOBAL: SWBF2 0x009d8390
+// smAlloc
 void* (__cdecl* smAlloc)(size_t) = 0;
 // GLOBAL: SWBF2 0x009d8394
+// smFree
 void (__cdecl* smFree)(void*) = 0;
 // GLOBAL: SWBF2 0x009d8398
+// smTempAlloc
 void* (__cdecl* smTempAlloc)(size_t) = 0;
 // GLOBAL: SWBF2 0x009d839c
+// smTempFree
 void (__cdecl* smTempFree)(void*) = 0;
 
 // GLOBAL: SWBF2 0x009d83a0
+// smAllocPerm
 void* (__cdecl* smAllocPerm)(size_t) = 0;
 // GLOBAL: SWBF2 0x009d83a4
+// smFreePerm
 void (__cdecl* smFreePerm)(void*) = 0;
 
 void (__cdecl* smWarningFunction)(char const*) = PrintDebugMessageDefault;

@@ -6,7 +6,11 @@
 #include "HUDElementBitmap.h"
 #include "HUDElementGroup.h"
 
-namespace HUD {
+namespace HUD
+{
+// VTABLE: SWBF2 0x007a0a34
+// VTABLE: SWBF2 0x007a0a94 HUD::ElementGroupBase
+// VTABLE: SWBF2 0x007a0ad4 RedGroupElement
 class ElementBarSegmented : public HUD::ElementGroup, public HUD::ElementBar
 {
 public:
@@ -34,8 +38,9 @@ public:
         Property mCircular;
     };
 
-    // VTABLE: SWBF2 0x007a0a58 (`vftable'), 0x007a0b30 (`vftable'_0, the
+    // VTABLE: SWBF2 0x007a0a58 HUD::ElementBitmapBase
 
+    // VTABLE: SWBF2 0x007a0b30 RedBitmapElement
     class Segment : public HUD::ElementBitmap
     {
     public:

@@ -42,7 +42,8 @@ extern "C" PblMatrix* __stdcall D3DXMatrixRotationX(PblMatrix* pOut, float fAngl
 extern "C" PblMatrix* __stdcall D3DXMatrixRotationY(PblMatrix* pOut, float fAngle);
 extern "C" PblMatrix* __stdcall D3DXMatrixRotationZ(PblMatrix* pOut, float fAngle);
 
-namespace AIUtil {
+namespace AIUtil
+{
 
 // FUNCTION: SWBF2 0x0043ef40
 bool IsDebugOutputVisible()

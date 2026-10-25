@@ -41,6 +41,9 @@ public:
  
  
 
+// VTABLE: SWBF2 0x007ac82c
+// VTABLE: SWBF2 0x007ac894 Thread
+// VTABLE: SWBF2 0x007ac904 PblHandled
 class OrdnanceFatRay : public OrdnanceBullet
 {
 public:

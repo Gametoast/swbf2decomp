@@ -25,6 +25,7 @@ float s_afBeamAlpha[13];
 // `dynamic initializer for 's_avBeamRadius''
 
 // GLOBAL: SWBF2 0x01eaff80
+// s_avBeamRadius
 PblVector3 s_avBeamRadius[6];
 // GLOBAL: SWBF2 0x01f9aeb0
 unsigned short s_auiHaloIndices[66];
@@ -32,6 +33,7 @@ unsigned short s_auiHaloIndices[66];
 // `dynamic initializer for 's_avHaloRadius''
 
 // GLOBAL: SWBF2 0x01eafe00
+// s_avHaloRadius
 PblVector3 s_avHaloRadius[32];
 
 // FUNCTION: SWBF2 0x0041fa70

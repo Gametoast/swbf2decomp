@@ -21,7 +21,10 @@ void ToolTipsDisplay::SetAlwaysOff()
 // GLOBAL: SWBF2 0x01e56032
 bool gAttractMode;
 
-namespace PlayerPrefs { int __fastcall FindByViewport(int iCamera); }
+namespace PlayerPrefs
+{
+int __fastcall FindByViewport(int iCamera);
+}
 
 // GLOBAL: SWBF2 0x007e9ac0
 TipClass sTipData[TTT_COUNT + 1] =

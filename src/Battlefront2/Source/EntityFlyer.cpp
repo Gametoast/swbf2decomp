@@ -398,25 +398,32 @@ EntityFlyerClass::EntityFlyerClass(unsigned int uHash)
 
 // SYNTHETIC: SWBF2 0x00402ae0
 // `dynamic initializer for 'EntityFlyerClass::rttiHashEntityFlyerClass''
+// EntityFlyerClass::rttiHashEntityFlyerClass
+
 // GLOBAL: SWBF2 0x01ebbcb8
 // EntityFlyerClass::rttiHashEntityFlyerClass
 PblHash EntityFlyerClass::rttiHashEntityFlyerClass("EntityFlyerClass");
+// GLOBAL: SWBF2 0x007891ec
+// EntityFlyerClass::rttiNameEntityFlyerClass
 const char EntityFlyerClass::rttiNameEntityFlyerClass[] = "EntityFlyerClass";
 
 // SYNTHETIC: SWBF2 0x00402ad0
 // `dynamic initializer for 'EntityFlyer::rttiHashEntityFlyer''
+// EntityFlyer::rttiHashEntityFlyer
+
 // GLOBAL: SWBF2 0x01ebbc64
 // EntityFlyer::rttiHashEntityFlyer
 PblHash EntityFlyer::rttiHashEntityFlyer("EntityFlyer");
 
 
 
-// GLOBAL: SWBF2 0x01ebbc68
 // SYNTHETIC: SWBF2 0x00402ab0
 // `dynamic initializer for 'EntityFlyer::sMemoryPool''
 // SYNTHETIC: SWBF2 0x00766f50
 // `dynamic atexit destructor for 'EntityFlyer::sMemoryPool''
 
+// GLOBAL: SWBF2 0x01ebbc68
+// EntityFlyer::sMemoryPool
 MemoryPool EntityFlyer::sMemoryPool("EntityFlyer", 0x1d90);
 
 
@@ -1423,6 +1430,8 @@ inline void* EntityFlyer::operator new(unsigned int uSize)
     return sMemoryPool.Allocate(uSize);
 }
 
+// SYNTHETIC: SWBF2 0x004a9cf0
+// EntityFlyer::operator delete
 inline void EntityFlyer::operator delete(void* pBlock)
 {
     sMemoryPool.Free(pBlock);
@@ -3174,7 +3183,10 @@ EntityPathFollower::BranchParams EntityFlyer::GetBranchParams()
 
 extern "C" PblVector3* __stdcall D3DXVec3TransformNormal(PblVector3* pOut, const PblVector3* pV, const PblMatrix* pM);
 
-namespace SquadCommands { void VehicleCommand(GameObject* pObject, Character* pCharacter); }
+namespace SquadCommands
+{
+void VehicleCommand(GameObject* pObject, Character* pCharacter);
+}
 
 const PblVector3 __cdecl Normalize(const PblVector3& rv);
 
@@ -5682,6 +5694,7 @@ template ParticleEmitterObject* PblHandle<ParticleEmitterObject>::GetObjectA() c
 // [thunk]:EntityFlyer::`scalar deleting destructor'`adjustor{12}'
 
 // GLOBAL: SWBF2 0x007e6323
+// bRenderContrails
 bool bRenderContrails = true;
 
 // SYNTHETIC: SWBF2 0x00402af0

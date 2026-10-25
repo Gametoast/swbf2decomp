@@ -74,11 +74,13 @@ static short sNumFreeObjects = -1;
 // GLOBAL: SWBF2 0x01fa9270
 static short sFreeObjectList[2000];
 
-// GLOBAL: SWBF2 0x01f03290
 // SYNTHETIC: SWBF2 0x004060d0
 // `dynamic initializer for 'sObjectCache''
 // SYNTHETIC: SWBF2 0x007693d0
 // `dynamic atexit destructor for 'sObjectCache''
+
+// GLOBAL: SWBF2 0x01f03290
+// sObjectCache
 PropObjectMesh sObjectCache[2000];
 
 // FUNCTION: SWBF2 0x0062c1b0

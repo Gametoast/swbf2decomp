@@ -78,7 +78,10 @@ public:
  
  
 
-// VTABLE: SWBF2 0x0079c9e0
+// VTABLE: SWBF2 0x0079c9e0 EntityEx
+// VTABLE: SWBF2 0x0079c90c RedSceneObject
+// VTABLE: SWBF2 0x0079c974 CollisionObject
+// VTABLE: SWBF2 0x0079c9c8
 class EntityPropAnimated : public EntityProp, public Thread
 {
 public:

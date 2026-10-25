@@ -43,9 +43,13 @@ EntityMineClass::EntityMineClass(unsigned int uHash)
 
 // SYNTHETIC: SWBF2 0x00402c70
 // `dynamic initializer for 'EntityMineClass::rttiHashEntityMineClass''
+// EntityMineClass::rttiHashEntityMineClass
+
 // GLOBAL: SWBF2 0x01ebbf90
 // EntityMineClass::rttiHashEntityMineClass
 PblHash EntityMineClass::rttiHashEntityMineClass("EntityMineClass");
+// GLOBAL: SWBF2 0x0078935c
+// EntityMineClass::rttiNameEntityMineClass
 const char EntityMineClass::rttiNameEntityMineClass[] = "EntityMineClass";
 
 
@@ -159,16 +163,22 @@ void EntityMineClass::SetProperty(unsigned int uProperty, const char* pszValue)
 
 // SYNTHETIC: SWBF2 0x00402c60
 // `dynamic initializer for 'EntityMine::rttiHashEntityMine''
+// EntityMine::rttiHashEntityMine
+
 // GLOBAL: SWBF2 0x01ebbf8c
 // EntityMine::rttiHashEntityMine
 PblHash EntityMine::rttiHashEntityMine("EntityMine");
+// GLOBAL: SWBF2 0x00789340
+// EntityMine::rttiNameEntityMine
 const char EntityMine::rttiNameEntityMine[] = "EntityMine";
 
-// GLOBAL: SWBF2 0x01ebbf98
 // SYNTHETIC: SWBF2 0x00402c40
 // `dynamic initializer for 'EntityMine::sMemoryPool''
 // SYNTHETIC: SWBF2 0x00766f80
 // `dynamic atexit destructor for 'EntityMine::sMemoryPool''
+
+// GLOBAL: SWBF2 0x01ebbf98
+// EntityMine::sMemoryPool
 MemoryPool EntityMine::sMemoryPool("EntityMine", 0x2a0);
 
 // FUNCTION: SWBF2 0x004cf5e0

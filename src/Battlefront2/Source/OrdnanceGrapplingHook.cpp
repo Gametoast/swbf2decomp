@@ -15,9 +15,13 @@ extern PblVector3 gVectorZero;
 
 // SYNTHETIC: SWBF2 0x00405aa0
 // `dynamic initializer for 'OrdnanceGrapplingHook::rttiHashOrdnanceGrapplingHook''
+// OrdnanceGrapplingHook::rttiHashOrdnanceGrapplingHook
+
 // GLOBAL: SWBF2 0x01ef2630
 // OrdnanceGrapplingHook::rttiHashOrdnanceGrapplingHook
 PblHash OrdnanceGrapplingHook::rttiHashOrdnanceGrapplingHook("OrdnanceGrapplingHook");
+// GLOBAL: SWBF2 0x0078a88c
+// OrdnanceGrapplingHook::rttiNameOrdnanceGrapplingHook
 const char OrdnanceGrapplingHook::rttiNameOrdnanceGrapplingHook[] = "OrdnanceGrapplingHook";
 
 
@@ -268,9 +272,13 @@ bool OrdnanceGrapplingHook::Update(float fDeltaTime)
 
 // SYNTHETIC: SWBF2 0x00405ab0
 // `dynamic initializer for 'OrdnanceGrapplingHookClass::rttiHashOrdnanceGrapplingHookClass''
+// OrdnanceGrapplingHookClass::rttiHashOrdnanceGrapplingHookClass
+
 // GLOBAL: SWBF2 0x01ef2634
 // OrdnanceGrapplingHookClass::rttiHashOrdnanceGrapplingHookClass
 PblHash OrdnanceGrapplingHookClass::rttiHashOrdnanceGrapplingHookClass("OrdnanceGrapplingHookClass");
+// GLOBAL: SWBF2 0x0078a870
+// OrdnanceGrapplingHookClass::rttiNameOrdnanceGrapplingHookClass
 const char OrdnanceGrapplingHookClass::rttiNameOrdnanceGrapplingHookClass[] = "OrdnanceGrapplingHookClass";
 
 // FUNCTION: SWBF2 0x005ffe30

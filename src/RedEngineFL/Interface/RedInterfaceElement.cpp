@@ -51,10 +51,11 @@ unsigned int RedInterfaceElement::s_uiUnnamedCRC;
 // GLOBAL: SWBF2 0x008fe498
 int RedInterfaceElement::sAllObjectsListNumEntries;
 
-// GLOBAL: SWBF2 0x008fe49c
 // SYNTHETIC: SWBF2 0x00407a10
 // `dynamic initializer for 'RedInterfaceElement::sAllObjectsList''
 
+// GLOBAL: SWBF2 0x008fe49c
+// RedInterfaceElement::sAllObjectsList
 PblHashTable<RedInterfaceElement, 32768> RedInterfaceElement::sAllObjectsList;
 
 // FUNCTION: SWBF2 0x006bfeb0

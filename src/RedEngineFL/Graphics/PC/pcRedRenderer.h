@@ -1162,6 +1162,7 @@ public:
                                             unsigned int uiPass);
 
     // GLOBAL: SWBF2 0x007fbea8
+    // internalRenderFunc
     static void(__cdecl* internalRenderFunc)(RenderItem*, unsigned int, unsigned int);
 
     static TransparentHeap<RenderItem*, unsigned int> m_preShadowTransparentItems;

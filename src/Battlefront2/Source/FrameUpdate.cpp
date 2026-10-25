@@ -8,9 +8,11 @@
 #include "FLInputManager.h"
 #include "RedEngineFL/input/RedKeyboard.h"
 
-// GLOBAL: SWBF2 0x01ec0bdc
 // SYNTHETIC: SWBF2 0x00403b60
 // `dynamic initializer for '_frameUpdateTimer''
+
+// GLOBAL: SWBF2 0x01ec0bdc
+// _frameUpdateTimer
 PblTime _frameUpdateTimer;
 
 // GLOBAL: SWBF2 0x01e55f90
@@ -92,9 +94,11 @@ void FrameUpdate::Update()
 // PblJournal::Record<float>
 template void PblJournal::Record<float>(float& value, PblJournalType type);
 
-// GLOBAL: SWBF2 0x01ec0be0
 // SYNTHETIC: SWBF2 0x00403b70
 // `dynamic initializer for 'gNormalizedMagentaColor''
+
+// GLOBAL: SWBF2 0x01ec0be0
+// gNormalizedMagentaColor
 RedColorValue gNormalizedMagentaColor(
     RedColor::MAGENTA.r * (1.0f / 255.0f),
     RedColor::MAGENTA.g * (1.0f / 255.0f),

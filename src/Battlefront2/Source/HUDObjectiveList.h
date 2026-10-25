@@ -9,7 +9,8 @@
 class Character;
 class FLInputManager;
 
-namespace HUD {
+namespace HUD
+{
 
 class Objective
 {
@@ -40,6 +41,8 @@ public:
     unsigned int _popupTextID;
 };
 
+// VTABLE: SWBF2 0x007a3368 RedGroupElement
+// VTABLE: SWBF2 0x007a33c4 HUD::ElementGroupBase
 class ObjectiveList : public HUD::ElementGroup
 {
 public:

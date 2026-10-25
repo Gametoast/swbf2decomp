@@ -43,7 +43,7 @@ class RedPose;
 
 // VTABLE: SWBF2 0x007ad448
 // VTABLE: SWBF2 0x007ad47c Trackable
-// VTABLE: SWBF2 0x007ad4c4 Controllable
+// VTABLE: SWBF2 0x007ad4c4 Thread
 class PassengerSlot : public EntityEx, public Controllable
 {
 public:
@@ -69,6 +69,8 @@ public:
     virtual const ControllableClass* GetControllableClass() const;
 
     static void* operator new(size_t uSize) { return sMemoryPool.Allocate(uSize); }
+    // SYNTHETIC: SWBF2 0x004a9cc0
+    // PassengerSlot::operator delete
     static void operator delete(void* pBlock) { sMemoryPool.Free(pBlock); }
 
     void ActivatePhysics();

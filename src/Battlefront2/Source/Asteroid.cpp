@@ -34,9 +34,13 @@ unsigned int sOrdnanceCollisionMask;
 
 // SYNTHETIC: SWBF2 0x004022d0
 // `dynamic initializer for 'AsteroidClass::rttiHashAsteroidClass''
+// AsteroidClass::rttiHashAsteroidClass
+
 // GLOBAL: SWBF2 0x01eb024c
 // AsteroidClass::rttiHashAsteroidClass
 PblHash AsteroidClass::rttiHashAsteroidClass("AsteroidClass");
+// GLOBAL: SWBF2 0x00788840
+// AsteroidClass::rttiNameAsteroidClass
 const char AsteroidClass::rttiNameAsteroidClass[] = "AsteroidClass";
 
 // FUNCTION: SWBF2 0x004453d0
@@ -276,15 +280,19 @@ EntityClass* AsteroidClass::Derive(unsigned int uHash)
     return new AsteroidClass(this, uHash);
 }
 
-// GLOBAL: SWBF2 0x01eb0500
 // SYNTHETIC: SWBF2 0x004022a0
 // `dynamic initializer for 'Asteroid::sMemoryPool''
 // SYNTHETIC: SWBF2 0x00766d80
 // `dynamic atexit destructor for 'Asteroid::sMemoryPool''
+
+// GLOBAL: SWBF2 0x01eb0500
+// Asteroid::sMemoryPool
 MemoryPool Asteroid::sMemoryPool("Asteroid", 0x280);
 
 // SYNTHETIC: SWBF2 0x004022c0
 // `dynamic initializer for 'Asteroid::rttiHashAsteroid''
+// Asteroid::rttiHashAsteroid
+
 // GLOBAL: SWBF2 0x01eb0248
 // Asteroid::rttiHashAsteroid
 PblHash Asteroid::rttiHashAsteroid("Asteroid");

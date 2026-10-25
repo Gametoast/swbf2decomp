@@ -9,15 +9,39 @@ class RedScreenGroupElement;
 class RedColorValue;
 class PblVector3;
 
-namespace StatsManager { int GetState(); }
+namespace StatsManager
+{
+int GetState();
+}
 void StatsManagerSetStoppedState();
-namespace StatsManager { bool __fastcall ReadStatsGetResults(int iUnused, void* pData); }
-namespace StatsManager { bool FindServicePlayerID(); }
-namespace StatsManager { int GetLeaderBoardId(); }
-namespace StatsManager { bool ResetPlayer(); }
-namespace Lua_Callbacks { void __fastcall TableReadValWithDefault(const char* pcKey, float* pfValue); }
-namespace Lua_Callbacks { void __fastcall TableReadColor(const char* pcKey, float* pfColor); }
-namespace Lua_Callbacks { void __fastcall TableReadDirection(int iUnused, float* pfDirection); }
+namespace StatsManager
+{
+bool __fastcall ReadStatsGetResults(int iUnused, void* pData);
+}
+namespace StatsManager
+{
+bool FindServicePlayerID();
+}
+namespace StatsManager
+{
+int GetLeaderBoardId();
+}
+namespace StatsManager
+{
+bool ResetPlayer();
+}
+namespace Lua_Callbacks
+{
+void __fastcall TableReadValWithDefault(const char* pcKey, float* pfValue);
+}
+namespace Lua_Callbacks
+{
+void __fastcall TableReadColor(const char* pcKey, float* pfColor);
+}
+namespace Lua_Callbacks
+{
+void __fastcall TableReadDirection(int iUnused, float* pfDirection);
+}
 bool ToggleInvincibilityCheat();
 
 namespace Lua_Callbacks
@@ -83,7 +107,10 @@ struct LeaderBoardPlayerStatsT
  
  
 
-namespace Lua_Callbacks { bool GetServicePlayerID(const char* pcName, unsigned __int64* puId); }
+namespace Lua_Callbacks
+{
+bool GetServicePlayerID(const char* pcName, unsigned __int64* puId);
+}
 
 struct CheatToggleT
 {

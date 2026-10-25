@@ -10,24 +10,30 @@
 #include "SoundFL/source/sndenginebase.h"
 #include "RedEngineFL/Memory/RedMemoryPool.h"
 
-// GLOBAL: SWBF2 0x01ecb1a8
 // SYNTHETIC: SWBF2 0x00404350
 // `dynamic initializer for 'Music::sMemoryPool''
 // SYNTHETIC: SWBF2 0x00768d30
 // `dynamic atexit destructor for 'Music::sMemoryPool''
+
+// GLOBAL: SWBF2 0x01ecb1a8
+// Music::sMemoryPool
 MemoryPool Music::sMemoryPool("Music", 0x48);
 
-// GLOBAL: SWBF2 0x007ec23c
 // SYNTHETIC: SWBF2 0x00404370
 // `dynamic initializer for 'Music::sMusicInactive''
 // SYNTHETIC: SWBF2 0x00768d40
 // `dynamic atexit destructor for 'Music::sMusicInactive''
+
+// GLOBAL: SWBF2 0x007ec23c
+// Music::sMusicInactive
 PblListDoubleSorted Music::sMusicInactive(true);
-// GLOBAL: SWBF2 0x007ec230
 // SYNTHETIC: SWBF2 0x00404380
 // `dynamic initializer for 'Music::sMusicActive''
 // SYNTHETIC: SWBF2 0x00768d60
 // `dynamic atexit destructor for 'Music::sMusicActive''
+
+// GLOBAL: SWBF2 0x007ec230
+// Music::sMusicActive
 PblListDoubleSorted Music::sMusicActive(true);
 // GLOBAL: SWBF2 0x01e579ec
 unsigned int Music::sMusicPlaying;

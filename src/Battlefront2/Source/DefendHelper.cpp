@@ -67,6 +67,7 @@ void DefendHelper::Kill()
     Fsm::Kill();
 }
 
+// FUNCTION: SWBF2 0x0048b800
 void DefendHelper::Clean()
 {
     ExitState();

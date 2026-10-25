@@ -17,6 +17,8 @@ bool GamePath::Read(PblConfig& config)
 // GamePath::`scalar deleting destructor'
 
 
+// GLOBAL: SWBF2 0x007eb8ec
+// GamePathFactory::sList
 PblList<GamePathFactory> GamePathFactory::sList;
 
 // FUNCTION: SWBF2 0x00537b10

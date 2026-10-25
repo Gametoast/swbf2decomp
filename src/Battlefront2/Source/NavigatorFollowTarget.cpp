@@ -72,9 +72,13 @@ PblVector3 GetSineRandomOffsetXZ(const GameObject* pObj, const int i)
 
 // SYNTHETIC: SWBF2 0x004043c0
 // `dynamic initializer for 'NavigatorFollowTarget::rttiHashNavigatorFollowTarget''
+// NavigatorFollowTarget::rttiHashNavigatorFollowTarget
+
 // GLOBAL: SWBF2 0x01ecb1fc
 // NavigatorFollowTarget::rttiHashNavigatorFollowTarget
 PblHash NavigatorFollowTarget::rttiHashNavigatorFollowTarget("NavigatorFollowTarget");
+// GLOBAL: SWBF2 0x0078a608
+// NavigatorFollowTarget::rttiNameNavigatorFollowTarget
 const char NavigatorFollowTarget::rttiNameNavigatorFollowTarget[] = "NavigatorFollowTarget";
 
 

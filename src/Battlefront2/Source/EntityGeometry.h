@@ -163,6 +163,9 @@ public:
  
  
 
+// VTABLE: SWBF2 0x0079b65c EntityEx
+// VTABLE: SWBF2 0x0079b6b8 CollisionObject
+// VTABLE: SWBF2 0x0079b70c RedSceneObject
 class EntityGeometry : public EntityEx, public CollisionObject, public RedSceneObject
 {
 public:

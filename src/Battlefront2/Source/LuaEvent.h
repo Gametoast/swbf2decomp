@@ -6,6 +6,7 @@
 
 struct lua_State;
 
+// VTABLE: SWBF2 0x007aa3d4
 class LuaEvent : public Thread
 {
 public:

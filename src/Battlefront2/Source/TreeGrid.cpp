@@ -14,12 +14,13 @@ const int MAX_TREEGRID_STACKS = 15;
 
 static const float EPSILON = 0.0001f;
 
-// GLOBAL: SWBF2 0x01f9a068
 // SYNTHETIC: SWBF2 0x00406b40
 // `dynamic initializer for 'TreeGridStack::sMemoryPool''
 // SYNTHETIC: SWBF2 0x00769640
 // `dynamic atexit destructor for 'TreeGridStack::sMemoryPool''
 
+// GLOBAL: SWBF2 0x01f9a068
+// TreeGridStack::sMemoryPool
 MemoryPool TreeGridStack::sMemoryPool("TreeGridStack", sizeof(TreeGridStack));
 
 inline void* TreeGridStack::operator new(unsigned int uiSize)

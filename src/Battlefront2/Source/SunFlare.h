@@ -64,6 +64,9 @@ public:
  
 
  
+ // VTABLE: SWBF2 0x00796a70 Thread
+ // VTABLE: SWBF2 0x00796aa0
+ // VTABLE: SWBF2 0x00796ab8 PblHandled
  class SunFlare : public FLEffectClass, public FLEffectObject
 {
     friend class SunFlareEffect;

@@ -234,8 +234,14 @@ extern int sProhibit;
 extern int sIgnoreCnt;
 extern float sRadiusVehicle;
 
-namespace PathFinder { void sExpandNode(PathFinder::PathNode* pParent, const PblVector3& rPos, int iDepth); }
-namespace AIDebug { bool PauseAfterPathFind(); }
+namespace PathFinder
+{
+void sExpandNode(PathFinder::PathNode* pParent, const PblVector3& rPos, int iDepth);
+}
+namespace AIDebug
+{
+bool PauseAfterPathFind();
+}
 
 float GetDistanceSquaredFromLineSegment(const PblVector3& rEnd, const PblVector3& rStart,
                                         const PblVector3& rPos, PblVector3& rClosest);

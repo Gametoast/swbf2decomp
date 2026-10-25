@@ -3,9 +3,13 @@
 
 // SYNTHETIC: SWBF2 0x00406d00
 // `dynamic initializer for 'UnitMobileController::rttiHashUnitMobileController''
+// UnitMobileController::rttiHashUnitMobileController
+
 // GLOBAL: SWBF2 0x01f99414
 // UnitMobileController::rttiHashUnitMobileController
 PblHash UnitMobileController::rttiHashUnitMobileController("UnitMobileController");
+// GLOBAL: SWBF2 0x0078b8ec
+// UnitMobileController::rttiNameUnitMobileController
 const char UnitMobileController::rttiNameUnitMobileController[] = "UnitMobileController";
 
 

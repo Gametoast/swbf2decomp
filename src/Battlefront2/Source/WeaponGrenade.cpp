@@ -31,9 +31,13 @@ extern float sClientDeltaTime;
 
 // SYNTHETIC: SWBF2 0x00407190
 // `dynamic initializer for 'WeaponGrenadeClass::rttiHashWeaponGrenadeClass''
+// WeaponGrenadeClass::rttiHashWeaponGrenadeClass
+
 // GLOBAL: SWBF2 0x01f9a8cc
 // WeaponGrenadeClass::rttiHashWeaponGrenadeClass
 PblHash WeaponGrenadeClass::rttiHashWeaponGrenadeClass("WeaponGrenadeClass");
+// GLOBAL: SWBF2 0x0078bff4
+// WeaponGrenadeClass::rttiNameWeaponGrenadeClass
 const char WeaponGrenadeClass::rttiNameWeaponGrenadeClass[] = "WeaponGrenadeClass";
 
 // FUNCTION: SWBF2 0x00685770
@@ -228,9 +232,13 @@ WeaponGrenade::WeaponGrenade(const WeaponGrenadeClass* pClass, const WeaponDesc&
 
 // SYNTHETIC: SWBF2 0x00407180
 // `dynamic initializer for 'WeaponGrenade::rttiHashWeaponGrenade''
+// WeaponGrenade::rttiHashWeaponGrenade
+
 // GLOBAL: SWBF2 0x01f9a8d0
 // WeaponGrenade::rttiHashWeaponGrenade
 PblHash WeaponGrenade::rttiHashWeaponGrenade("WeaponGrenade");
+// GLOBAL: SWBF2 0x0078c018
+// WeaponGrenade::rttiNameWeaponGrenade
 const char WeaponGrenade::rttiNameWeaponGrenade[] = "WeaponGrenade";
 
 

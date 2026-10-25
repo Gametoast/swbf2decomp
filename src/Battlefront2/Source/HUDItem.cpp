@@ -320,11 +320,13 @@ float HUD::Item::Factory::Property::GetStepVectorValue(Axis eAxis) const
     return mData ? mData->mInfo.vectorRange.range[eAxis - 1].stepValue : 0.0f;
 }
 
-// GLOBAL: SWBF2 0x007eba78
 // SYNTHETIC: SWBF2 0x00404080
 // `dynamic initializer for 'HUD::Item::Factory::sList''
 // SYNTHETIC: SWBF2 0x00768be0
 // `dynamic atexit destructor for 'HUD::Item::Factory::sList''
+
+// GLOBAL: SWBF2 0x007eba78
+// HUD::Item::Factory::sList
 PblListDouble HUD::Item::Factory::sList;
 
 // FUNCTION: SWBF2 0x00564110
@@ -430,11 +432,13 @@ void HUD::Item::Factory::DestroyAll()
     sList.Clear();
 }
 
-// GLOBAL: SWBF2 0x007eba98
 // SYNTHETIC: SWBF2 0x00404090
 // `dynamic initializer for 'HUD::Item::sList''
 // SYNTHETIC: SWBF2 0x00768c00
 // `dynamic atexit destructor for 'HUD::Item::sList''
+
+// GLOBAL: SWBF2 0x007eba98
+// HUD::Item::sList
 PblListSingle HUD::Item::sList;
 
 // FUNCTION: SWBF2 0x00564310

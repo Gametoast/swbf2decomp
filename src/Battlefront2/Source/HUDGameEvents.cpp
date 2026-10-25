@@ -50,9 +50,9 @@ char* HUD::GameEvents::gStatisticStrings[5] =
 
 namespace HUD
 {
-    // GLOBAL: SWBF2 0x01e56c3b
     namespace GameEvents
     {
+    // GLOBAL: SWBF2 0x01e56c3b
         bool gInitialized;
     }
 }
@@ -116,9 +116,9 @@ void HUD::GameEvents::ShowTeamPoints(int iTeam, bool bShow)
 
 namespace HUD
 {
-    // GLOBAL: SWBF2 0x01e56f68
     namespace GameEvents
     {
+    // GLOBAL: SWBF2 0x01e56f68
         HUD::EventClass* gInitialize;
     }
 }
@@ -134,18 +134,18 @@ Timer* HUD::GameEvents::gObjectiveTimer;
 
 namespace HUD
 {
-    // GLOBAL: SWBF2 0x01e56fac
     namespace GameEvents
     {
+    // GLOBAL: SWBF2 0x01e56fac
         HUD::EventClass* gLevelHintText;
     }
 }
 
 namespace HUD
 {
-    // GLOBAL: SWBF2 0x01e56fb0
     namespace GameEvents
     {
+    // GLOBAL: SWBF2 0x01e56fb0
         HUD::EventClass* gTime;
     }
 }
@@ -155,11 +155,13 @@ namespace HUD
 // SYNTHETIC: SWBF2 0x0055e370
 // HUD::GameEvents::WeaponData::WeaponData
 
-// GLOBAL: SWBF2 0x01ec6290
 // SYNTHETIC: SWBF2 0x00404050
 // `dynamic initializer for 'HUD::GameEvents::gPlayerData''
 // SYNTHETIC: SWBF2 0x00768bc0
 // `dynamic atexit destructor for 'HUD::GameEvents::gPlayerData''
+
+// GLOBAL: SWBF2 0x01ec6290
+// HUD::GameEvents::gPlayerData
 HUD::GameEvents::PlayerData HUD::GameEvents::gPlayerData[1];
 
 // FUNCTION: SWBF2 0x0055e3a0
@@ -634,9 +636,9 @@ void HUD::GameEvents::Close()
 
 namespace HUD
 {
-    // GLOBAL: SWBF2 0x01e56fa0
     namespace GameEvents
     {
+    // GLOBAL: SWBF2 0x01e56fa0
         bool gInputMapLastPressed;
     }
 }
@@ -740,7 +742,10 @@ void HUD::GameEvents::Die(HUD::GameEvents::PlayerEvents& events, HUD::GameEvents
 }
 
 class EntitySoldierClass;
-namespace HUD { namespace GameEvents {
+namespace HUD
+{
+namespace GameEvents
+{
 void UpdateLockOn(unsigned int uIndex, const GameObject* const pObject, PlayerEvents& events, PlayerData& data);
 void UpdateWeaponEvents(const RedCamera* const pCamera, const Character* const pCharacter,
                         const GameObject* const pObject, const Controllable* const pControllable,
@@ -765,13 +770,15 @@ void UpdateHackWeapon(const GameObject* const pObject, EventClass* const pTimeEv
                       unsigned int uFormatID, bool& bActive);
 void GameObjectGetNames(PblHandle<GameObject const>& hObject, const unsigned short** const ppName,
                         const unsigned short** const ppClassName);
-} }
+}
+}
 namespace ObjectiveManager
 {
     extern PblList<HUD::ObjectiveList>* gObjectiveLists;
 }
 
-namespace ObjectiveManager {
+namespace ObjectiveManager
+{
 
 // FUNCTION: SWBF2 0x005f6920
 int GetCurrentPopupText()

@@ -107,7 +107,8 @@ namespace PopupText
 
 
 
-namespace PopupText {
+namespace PopupText
+{
 
 // FUNCTION: SWBF2 0x00620ec0
 static void AddHint(unsigned int uHint)
@@ -119,7 +120,8 @@ static void AddHint(unsigned int uHint)
 }
 }
 
-namespace VehicleManager {
+namespace VehicleManager
+{
 
 // FUNCTION: SWBF2 0x0066e380
 static void SetNotifyRadius(float fRadius)

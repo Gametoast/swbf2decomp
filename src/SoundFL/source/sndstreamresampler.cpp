@@ -177,7 +177,8 @@ StreamPacket* StreamResampler::GetPacket(unsigned int)
 
 }
 
-namespace Snd {
+namespace Snd
+{
 
 // FUNCTION: SWBF2 0x0074ced0
 void StreamResampler::Update()
@@ -186,7 +187,8 @@ void StreamResampler::Update()
 }
 }
 
-namespace Snd {
+namespace Snd
+{
 
 // FUNCTION: SWBF2 0x0074cbd0
 StreamResampler::~StreamResampler()

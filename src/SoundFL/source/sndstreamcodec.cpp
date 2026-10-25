@@ -25,7 +25,8 @@ bool StreamCodec::BufferPackets()
 }
 }
 
-namespace Snd {
+namespace Snd
+{
 
 // FUNCTION: SWBF2 0x0074bc90
 bool StreamCodec::Update()

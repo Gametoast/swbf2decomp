@@ -62,6 +62,7 @@ __declspec(dllexport) T* Allocate(A1&& a1)
     return new (pMem) T(a1);
 }
 
+// VTABLE: SWBF2 0x007ab928
 class GalaxyAuthListener
     : public galaxy::api::SelfRegisteringListener<galaxy::api::IAuthListener>
 {
@@ -76,6 +77,7 @@ private:
     int m_iViewport;
 };
 
+// VTABLE: SWBF2 0x007ab988
 class GalaxyLobbyCreatedListener
     : public galaxy::api::SelfRegisteringListener<galaxy::api::ILobbyCreatedListener>
 {
@@ -83,6 +85,7 @@ public:
     virtual void OnLobbyCreated(const galaxy::api::GalaxyID& lobbyID, int result);
 };
 
+// VTABLE: SWBF2 0x007ab91c
 class GalaxyLobbyLeftListener
     : public galaxy::api::SelfRegisteringListener<galaxy::api::ILobbyLeftListener>
 {
@@ -90,6 +93,7 @@ public:
     virtual void OnLobbyLeft(const galaxy::api::GalaxyID& lobbyID, bool ioFailure);
 };
 
+// VTABLE: SWBF2 0x007aba48
 class GalaxyLobbyMemberStateListener
     : public galaxy::api::SelfRegisteringListener<galaxy::api::ILobbyMemberStateListener>
 {
@@ -99,6 +103,7 @@ public:
                                            int memberStateChange);
 };
 
+// VTABLE: SWBF2 0x007ab9c4
 class GalaxyLobbyEnteredListener
     : public galaxy::api::SelfRegisteringListener<galaxy::api::ILobbyEnteredListener>
 {
@@ -106,6 +111,7 @@ public:
     virtual void OnLobbyEntered(const galaxy::api::GalaxyID& lobbyID, int result);
 };
 
+// VTABLE: SWBF2 0x007ab9d0
 class GalaxyLobbyListListener
     : public galaxy::api::SelfRegisteringListener<galaxy::api::ILobbyListListener>
 {
@@ -113,6 +119,7 @@ public:
     virtual void OnLobbyList(unsigned int lobbyCount, bool ioFailure);
 };
 
+// VTABLE: SWBF2 0x007ab93c
 class GalaxyLobbyDataListener
     : public galaxy::api::SelfRegisteringListener<galaxy::api::ILobbyDataListener>
 {
@@ -121,6 +128,7 @@ public:
                                     const galaxy::api::GalaxyID& memberID);
 };
 
+// VTABLE: SWBF2 0x007ab9b8
 class GalaxyLobbyOwnerChangeListener
     : public galaxy::api::SelfRegisteringListener<galaxy::api::ILobbyOwnerChangeListener>
 {

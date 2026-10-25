@@ -4,6 +4,9 @@
 
 #include "UnitController.h"
 
+// VTABLE: SWBF2 0x007afbe8 CommandFsm
+// VTABLE: SWBF2 0x007afc28 PblHandled
+// VTABLE: SWBF2 0x007afc30 Controller
 class UnitMobileController : public UnitController
 {
 public:

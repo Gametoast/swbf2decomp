@@ -44,8 +44,8 @@ public:
 
 class GameObject;
 
-// VTABLE: SWBF2 0x007ace84
-// VTABLE: SWBF2 0x007acec4
+// VTABLE: SWBF2 0x007ace84 Thread
+// VTABLE: SWBF2 0x007acec4 PblHandled
 // VTABLE: SWBF2 0x007acefc
 class OrdnanceMissile : public OrdnanceBullet
 {

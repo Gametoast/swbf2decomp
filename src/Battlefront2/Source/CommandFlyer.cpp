@@ -4,15 +4,19 @@
 #include "NetGame.h"
 #include "RedEngineFL/Memory/RedMemoryPool.h"
 
-// GLOBAL: SWBF2 0x01eb9648
 // SYNTHETIC: SWBF2 0x00402680
 // `dynamic initializer for 'CommandFlyer::sMemoryPool''
 // SYNTHETIC: SWBF2 0x00766e80
 // `dynamic atexit destructor for 'CommandFlyer::sMemoryPool''
+
+// GLOBAL: SWBF2 0x01eb9648
+// CommandFlyer::sMemoryPool
 MemoryPool CommandFlyer::sMemoryPool("CommandFlyer", 0x1da0);
 
 // SYNTHETIC: SWBF2 0x004026a0
 // `dynamic initializer for 'CommandFlyer::rttiHashCommandFlyer''
+// CommandFlyer::rttiHashCommandFlyer
+
 // GLOBAL: SWBF2 0x01eb9698
 // CommandFlyer::rttiHashCommandFlyer
 PblHash CommandFlyer::rttiHashCommandFlyer("CommandFlyer");
@@ -27,9 +31,13 @@ CommandFlyerClass::CommandFlyerClass(unsigned int uHash)
 
 // SYNTHETIC: SWBF2 0x004026b0
 // `dynamic initializer for 'CommandFlyerClass::rttiHashCommandFlyerClass''
+// CommandFlyerClass::rttiHashCommandFlyerClass
+
 // GLOBAL: SWBF2 0x01eb969c
 // CommandFlyerClass::rttiHashCommandFlyerClass
 PblHash CommandFlyerClass::rttiHashCommandFlyerClass("CommandFlyerClass");
+// GLOBAL: SWBF2 0x00788c78
+// CommandFlyerClass::rttiNameCommandFlyerClass
 const char CommandFlyerClass::rttiNameCommandFlyerClass[] = "CommandFlyerClass";
 
 

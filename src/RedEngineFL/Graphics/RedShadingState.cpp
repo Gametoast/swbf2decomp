@@ -10,19 +10,22 @@ public:
     RedShadingState* CreateDefaultShadingState(unsigned int uiRenderTypeHash) const;
 };
 
-// GLOBAL: SWBF2 0x009acad8
 // SYNTHETIC: SWBF2 0x00408c20
 // `dynamic initializer for 'RedShadingPose::Entry::sMemoryPool''
 // SYNTHETIC: SWBF2 0x00769ae0
 // `dynamic atexit destructor for 'RedShadingPose::Entry::sMemoryPool''
+
+// GLOBAL: SWBF2 0x009acad8
+// RedShadingPose::Entry::sMemoryPool
 MemoryPool RedShadingPose::Entry::sMemoryPool("RedShadingPose::Entry", 0xc);
 
-// GLOBAL: SWBF2 0x009acb30
 // SYNTHETIC: SWBF2 0x00408c40
 // `dynamic initializer for 'RedShadingState::sMemoryPool''
 // SYNTHETIC: SWBF2 0x00769af0
 // `dynamic atexit destructor for 'RedShadingState::sMemoryPool''
 
+// GLOBAL: SWBF2 0x009acb30
+// RedShadingState::sMemoryPool
 MemoryPool RedShadingState::sMemoryPool("RedShadingState", 0x20c);
 
 inline void* RedShadingPose::Entry::operator new(unsigned int uiSize)

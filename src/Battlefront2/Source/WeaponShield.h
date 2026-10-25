@@ -60,7 +60,7 @@ class FLEffectObject;
 class CollisionResult;
 class Restrictor;
 
-// VTABLE: SWBF2 0x007b1a9c
+// VTABLE: SWBF2 0x007b1a9c Weapon
 // VTABLE: SWBF2 0x007b1b94 CollisionObject
 class WeaponShield : public Weapon, public CollisionObject
 {

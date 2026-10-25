@@ -9,7 +9,8 @@
 
 class GameObject;
 
-namespace AI {
+namespace AI
+{
 
 struct GoalTarget;
 

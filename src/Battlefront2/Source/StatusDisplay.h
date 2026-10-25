@@ -50,6 +50,7 @@ public:
     Arrow mArrows[4];
 };
 
+// VTABLE: SWBF2 0x007af394
 class OutOfBoundsGroup : public RedScreenGroupElement
 {
 public:
@@ -75,6 +76,7 @@ public:
     static const float sOmegaSquared;
 };
 
+// VTABLE: SWBF2 0x007af44c
 class SquadCommandGroup : public RedScreenGroupElement
 {
 public:
@@ -121,6 +123,7 @@ public:
     static unsigned short* sCommands[4][4];
 };
 
+// VTABLE: SWBF2 0x007af3fc
 class VoiceChatGroup : public RedScreenGroupElement
 {
 public:
@@ -158,6 +161,7 @@ public:
     Line mLines[4];
 };
 
+// VTABLE: SWBF2 0x007af3e4
 class StatusDisplay : public Thread
 {
 public:

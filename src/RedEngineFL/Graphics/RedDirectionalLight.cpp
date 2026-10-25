@@ -32,11 +32,13 @@ RedDirectionalLight::RedDirectionalLight(const PblVector3& vDirection,
     _RecalculateProjectionMatrix();
 }
 
-// GLOBAL: SWBF2 0x00998300
 // SYNTHETIC: SWBF2 0x004083a0
 // `dynamic initializer for 'RedDirectionalLight::BLACK''
 // SYNTHETIC: SWBF2 0x00769990
 // `dynamic atexit destructor for 'RedDirectionalLight::BLACK''
+
+// GLOBAL: SWBF2 0x00998300
+// RedDirectionalLight::BLACK
 RedDirectionalLight RedDirectionalLight::BLACK(PblVector3(0.0f, 0.0f, 0.0f), RedColorValue::BLACK);
 
 // FUNCTION: SWBF2 0x006d8cd0

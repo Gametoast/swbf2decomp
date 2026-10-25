@@ -72,6 +72,7 @@ public:
  
  
 
+// VTABLE: SWBF2 0x00798dcc
 class Damageable
 {
 public:

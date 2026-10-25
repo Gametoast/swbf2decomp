@@ -1,5 +1,6 @@
 #pragma once
 
+// VTABLE: SWBF2 0x00785b04
 class PblHandled
 {
 public:

@@ -47,12 +47,12 @@ class DamageDesc;
 class EntityWalkerClass;
 class PblAngle;
 
-// VTABLE: SWBF2 0x0079db50
+// VTABLE: SWBF2 0x0079db50 EntityEx
 // VTABLE: SWBF2 0x0079ddf4 CollisionObject
 // VTABLE: SWBF2 0x0079dae8 RedSceneObject
 // VTABLE: SWBF2 0x0079dce4 Damageable
 // VTABLE: SWBF2 0x0079dd1c PblHandled
-// VTABLE: SWBF2 0x0079dd24 Controllable
+// VTABLE: SWBF2 0x0079dd24 Thread
 // VTABLE: SWBF2 0x0079daa0 Trackable
 class EntityWalker : public GameObject,
                      public Controllable,
@@ -117,6 +117,8 @@ public:
     virtual ~EntityWalker();
 
     static void* operator new(unsigned int uSize) { return sMemoryPool.Allocate(uSize); }
+    // SYNTHETIC: SWBF2 0x004ff500
+    // EntityWalker::operator delete
     static void operator delete(void* pBlock) { sMemoryPool.Free(pBlock); }
 
     virtual bool IsRtti(unsigned int uRtti) const;

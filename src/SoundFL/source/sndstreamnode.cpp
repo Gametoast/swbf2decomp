@@ -110,7 +110,8 @@ bool StreamNode::UpdateNode(bool bAllowPausing)
 
 }
 
-namespace Snd {
+namespace Snd
+{
 
 // FUNCTION: SWBF2 0x0073d610
 StreamPacket* StreamNodeSinkNInput::ConnectionGetPacket(unsigned int uiInput) const
@@ -124,7 +125,8 @@ StreamPacket* StreamNodeSinkNInput::ConnectionGetPacket(unsigned int uiInput) co
 }
 }
 
-namespace Snd {
+namespace Snd
+{
 
 // FUNCTION: SWBF2 0x0073d650
 unsigned int StreamNodeSinkNInput::GetNumInputs() const

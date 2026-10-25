@@ -78,5 +78,11 @@ namespace CombatUtil
     bool CanFaceDisturbance(const GameObject* pObj, const PblVector3& vPos);
 }
 
-namespace CombatUtil { float GetCombatRange(const Controllable* pMe); }
-namespace CombatUtil { bool TestWpnConstraintsPos(Controllable* pMe, const PblVector3& vAim, const PblVector3& vPos); }
+namespace CombatUtil
+{
+float GetCombatRange(const Controllable* pMe);
+}
+namespace CombatUtil
+{
+bool TestWpnConstraintsPos(Controllable* pMe, const PblVector3& vAim, const PblVector3& vPos);
+}

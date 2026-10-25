@@ -41,6 +41,8 @@ public:
     };
 
     static void* operator new(unsigned int uiSize) { return sMemoryPool.Allocate(uiSize); }
+    // SYNTHETIC: SWBF2 0x005ab400
+    // PathFollower::operator delete
     static void operator delete(void* pBlock) { sMemoryPool.Free(pBlock); }
     static MemoryPool sMemoryPool;
 

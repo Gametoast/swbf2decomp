@@ -4,7 +4,8 @@
 
 #include "AIGoal.h"
 
-namespace AI {
+namespace AI
+{
 
 // VTABLE: SWBF2 0x00798ebc
 class DeathmatchGoal : public AIGoal

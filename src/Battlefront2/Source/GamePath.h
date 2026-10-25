@@ -8,6 +8,7 @@ class PblFileChunk;
 
 class GamePath;
 
+// VTABLE: SWBF2 0x0079fb1c
 class GamePathFactory : public PblList<GamePathFactory>::Node
 {
 public:
@@ -41,6 +42,8 @@ public:
 class GamePath : public RedPath
 {
 public:
+    // SYNTHETIC: SWBF2 0x004b9990
+    // GamePath::~GamePath
     virtual ~GamePath() {}
     virtual bool Read(PblConfig& config);
 };

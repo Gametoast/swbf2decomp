@@ -78,12 +78,19 @@ int sHostCharacterCount;
 extern int netCurMaxPlayers;
 extern NetPlayer netPlayers[64];
 
-namespace AIDebug { namespace TestSpawn {
+namespace AIDebug
+{
+namespace TestSpawn
+{
 // GLOBAL: SWBF2 0x01e2fd6c
 Character* aic[4];
-} }
+}
+}
 
-namespace AIDebug { namespace TestSpawn {
+namespace AIDebug
+{
+namespace TestSpawn
+{
 
 // FUNCTION: SWBF2 0x00438750
 PblMatrix* __fastcall GetTestSpawnMatrix(PblMatrix* pResult, Character* pCharacter)
@@ -117,9 +124,11 @@ PblMatrix* __fastcall GetTestSpawnMatrix(PblMatrix* pResult, Character* pCharact
     p[14] = vStart.z; p[15] = 1.0f;
     return pResult;
 }
-} }
+}
+}
 
-namespace AIDebug {
+namespace AIDebug
+{
 
 // FUNCTION: SWBF2 0x00438a10
 PblMatrix GetTestSpawnMatrix(Character* pCharacter)
@@ -238,7 +247,10 @@ extern bool netHeroesEnabled;
 extern int netHeroLastPlayerID[3];
 extern bool gDoTakeoverSpawns;
 extern bool gNoAIRespawn;
-namespace GameLoop { extern bool mbHistoricalRules; }
+namespace GameLoop
+{
+extern bool mbHistoricalRules;
+}
 extern int netNumBots;
 
 // GLOBAL: SWBF2 0x01e2fde6
@@ -247,8 +259,14 @@ extern int netHeroPlayerID[3];
 extern int netHeroAIID[3];
 extern int gDebugCount;
 
-namespace AIDebug { bool GetTestSpawnMode(); }
-namespace AIDebug { PblMatrix GetTestSpawnMatrix(Character* pCharacter); }
+namespace AIDebug
+{
+bool GetTestSpawnMode();
+}
+namespace AIDebug
+{
+PblMatrix GetTestSpawnMatrix(Character* pCharacter);
+}
 
 class AmmoCounter
 {
@@ -1764,6 +1782,7 @@ void Character::RegisterHit(int iTeam, float fMultiplier)
 // GLOBAL: SWBF2 0x01e3033c
 int Character::sCharacterCount;
 
+// FUNCTION: SWBF2 0x00450630
 void Character::DestroyAll()
 {
     sCharacterCount = 0;

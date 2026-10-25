@@ -6,24 +6,32 @@
 #include "NetGame.h"
 #include "RedEngineFL/Memory/RedMemoryPool.h"
 
-// GLOBAL: SWBF2 0x01eb9700
 // SYNTHETIC: SWBF2 0x00402700
 // `dynamic initializer for 'CommandWalker::sMemoryPool''
 // SYNTHETIC: SWBF2 0x00766ea0
 // `dynamic atexit destructor for 'CommandWalker::sMemoryPool''
+
+// GLOBAL: SWBF2 0x01eb9700
+// CommandWalker::sMemoryPool
 MemoryPool CommandWalker::sMemoryPool("CommandWalker", 0x2110);
 
 // SYNTHETIC: SWBF2 0x00402720
 // `dynamic initializer for 'CommandWalker::rttiHashCommandWalker''
+// CommandWalker::rttiHashCommandWalker
+
 // GLOBAL: SWBF2 0x01eb96f8
 // CommandWalker::rttiHashCommandWalker
 PblHash CommandWalker::rttiHashCommandWalker("CommandWalker");
 
 // SYNTHETIC: SWBF2 0x00402730
 // `dynamic initializer for 'CommandWalkerClass::rttiHashCommandWalkerClass''
+// CommandWalkerClass::rttiHashCommandWalkerClass
+
 // GLOBAL: SWBF2 0x01eb96fc
 // CommandWalkerClass::rttiHashCommandWalkerClass
 PblHash CommandWalkerClass::rttiHashCommandWalkerClass("CommandWalkerClass");
+// GLOBAL: SWBF2 0x00788cfc
+// CommandWalkerClass::rttiNameCommandWalkerClass
 const char CommandWalkerClass::rttiNameCommandWalkerClass[] = "CommandWalkerClass";
 
 // FUNCTION: SWBF2 0x00480080

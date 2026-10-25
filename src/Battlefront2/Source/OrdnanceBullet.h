@@ -72,6 +72,9 @@ public:
 
 class EntityLight;
 
+// VTABLE: SWBF2 0x007ac710 Thread
+// VTABLE: SWBF2 0x007ac750 PblHandled
+// VTABLE: SWBF2 0x007ac758
 class OrdnanceBullet : public Ordnance, public RedSceneObject
 {
 public:

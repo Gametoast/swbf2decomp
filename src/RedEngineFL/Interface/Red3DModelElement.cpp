@@ -199,4 +199,4 @@ Red3DModelElement::~Red3DModelElement()
     delete mAnimator;
 }
 
-// SYNTHETIC: SWBF2 0x006dab40
+

@@ -38,9 +38,13 @@ PblMatrix NormalMatrix(const PblVector3& vDir, const PblVector3& vNormal, const 
 
 // SYNTHETIC: SWBF2 0x00402bd0
 // `dynamic initializer for 'EntityItemClass::rttiHashEntityItemClass''
+// EntityItemClass::rttiHashEntityItemClass
+
 // GLOBAL: SWBF2 0x01ebbe2c
 // EntityItemClass::rttiHashEntityItemClass
 PblHash EntityItemClass::rttiHashEntityItemClass("EntityItemClass");
+// GLOBAL: SWBF2 0x007892fc
+// EntityItemClass::rttiNameEntityItemClass
 const char EntityItemClass::rttiNameEntityItemClass[] = "EntityItemClass";
 
 
@@ -222,9 +226,13 @@ EntityClass* EntityItemClass::Derive(unsigned int uHash)
 
 // SYNTHETIC: SWBF2 0x00402bc0
 // `dynamic initializer for 'EntityItem::rttiHashEntityItem''
+// EntityItem::rttiHashEntityItem
+
 // GLOBAL: SWBF2 0x01ebbe28
 // EntityItem::rttiHashEntityItem
 PblHash EntityItem::rttiHashEntityItem("EntityItem");
+// GLOBAL: SWBF2 0x007892f0
+// EntityItem::rttiNameEntityItem
 const char EntityItem::rttiNameEntityItem[] = "EntityItem";
 
 class CollisionManager

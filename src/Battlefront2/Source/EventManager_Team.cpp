@@ -74,18 +74,24 @@ void Cleanup();
 }
 }
 
-namespace EventManager {
-namespace TeamEvent {
+namespace EventManager
+{
+namespace TeamEvent
+{
 extern Event<Team, int> mTicketCountChange;
 }
 }
-namespace EventManager {
-namespace TeamEvent {
+namespace EventManager
+{
+namespace TeamEvent
+{
 extern Event<Team, float> mTicketBleedChange;
 }
 }
-namespace EventManager {
-namespace TeamEvent {
+namespace EventManager
+{
+namespace TeamEvent
+{
 extern Event<Team, int> mPointsChange;
 }
 }
@@ -208,7 +214,8 @@ template int RegisterLuaCallback<Team, int>(lua_State*);
 
 }
 
-namespace EventManager {
+namespace EventManager
+{
 
 // FUNCTION: SWBF2 0x0051aff0
 void TeamEvent::Cleanup()
@@ -219,14 +226,16 @@ void TeamEvent::Cleanup()
 }
 }
 
-namespace EventManager {
+namespace EventManager
+{
 
 // TEMPLATE: SWBF2 0x0051b010
 // EventManager::Event<Team,int>::Callback::~Callback
 template Event<Team, int>::Callback::~Callback();
 }
 
-namespace EventManager {
+namespace EventManager
+{
 
 // TEMPLATE: SWBF2 0x0051b080
 // EventManager::Event<Team,float>::Callback::~Callback
@@ -237,7 +246,10 @@ namespace EventManager
 {
 
 int DummyLuaCallback(lua_State* L);
-namespace TeamEvent { void Init(); }
+namespace TeamEvent
+{
+void Init();
+}
 
 
 
@@ -453,25 +465,31 @@ namespace EventManager
 namespace TeamEvent
 {
 
-// GLOBAL: SWBF2 0x007ec0c0
 // SYNTHETIC: SWBF2 0x00403710
 // `dynamic initializer for 'EventManager::TeamEvent::mTicketCountChange''
 // SYNTHETIC: SWBF2 0x00768520
 // `dynamic atexit destructor for 'EventManager::TeamEvent::mTicketCountChange''
+
+// GLOBAL: SWBF2 0x007ec0c0
+// mTicketCountChange
 Event<Team, int> mTicketCountChange("TicketCountChange");
 
-// GLOBAL: SWBF2 0x007ec0e0
 // SYNTHETIC: SWBF2 0x00403740
 // `dynamic initializer for 'EventManager::TeamEvent::mTicketBleedChange''
 // SYNTHETIC: SWBF2 0x007685a0
 // `dynamic atexit destructor for 'EventManager::TeamEvent::mTicketBleedChange''
+
+// GLOBAL: SWBF2 0x007ec0e0
+// mTicketBleedChange
 Event<Team, float> mTicketBleedChange("TicketBleedChange");
 
-// GLOBAL: SWBF2 0x007ec100
 // SYNTHETIC: SWBF2 0x00403770
 // `dynamic initializer for 'EventManager::TeamEvent::mPointsChange''
 // SYNTHETIC: SWBF2 0x00768620
 // `dynamic atexit destructor for 'EventManager::TeamEvent::mPointsChange''
+
+// GLOBAL: SWBF2 0x007ec100
+// mPointsChange
 Event<Team, int> mPointsChange("TeamPointsChange");
 
 }

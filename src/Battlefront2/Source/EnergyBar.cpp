@@ -2,11 +2,13 @@
 
 #include <stdio.h>
 
-// GLOBAL: SWBF2 0x01eb9810
 // SYNTHETIC: SWBF2 0x00402810
 // `dynamic initializer for 'EnergyBar::sMemoryPool''
 // SYNTHETIC: SWBF2 0x00766ef0
 // `dynamic atexit destructor for 'EnergyBar::sMemoryPool''
+
+// GLOBAL: SWBF2 0x01eb9810
+// EnergyBar::sMemoryPool
 MemoryPool EnergyBar::sMemoryPool("EnergyBar", 0xc);
 
 // FUNCTION: SWBF2 0x00491470

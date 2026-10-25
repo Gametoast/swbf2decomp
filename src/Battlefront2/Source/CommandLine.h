@@ -24,5 +24,11 @@ extern bool gShowLoadSpam;
 extern bool gLogFinalScore;
 extern int gBootLaggerPing;
 
-namespace PlayerPrefs { extern int gDefaultDifficulty; }
-namespace PlayerPrefs { extern int gDefaultTeamNum; }
+namespace PlayerPrefs
+{
+extern int gDefaultDifficulty;
+}
+namespace PlayerPrefs
+{
+extern int gDefaultTeamNum;
+}

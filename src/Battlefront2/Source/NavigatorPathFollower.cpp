@@ -8,9 +8,13 @@
 
 // SYNTHETIC: SWBF2 0x004043e0
 // `dynamic initializer for 'NavigatorPathFollower::rttiHashNavigatorPathFollower''
+// NavigatorPathFollower::rttiHashNavigatorPathFollower
+
 // GLOBAL: SWBF2 0x01ecb254
 // NavigatorPathFollower::rttiHashNavigatorPathFollower
 PblHash NavigatorPathFollower::rttiHashNavigatorPathFollower("NavigatorPathFollower");
+// GLOBAL: SWBF2 0x0078a650
+// NavigatorPathFollower::rttiNameNavigatorPathFollower
 const char NavigatorPathFollower::rttiNameNavigatorPathFollower[] = "NavigatorPathFollower";
 
 

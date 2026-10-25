@@ -10,7 +10,8 @@
 
 class GameObject;
 
-namespace AI {
+namespace AI
+{
 
 // VTABLE: SWBF2 0x00798d48
 class CTFGoal : public AIGoal

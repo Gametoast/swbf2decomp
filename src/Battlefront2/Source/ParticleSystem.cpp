@@ -225,7 +225,8 @@ void FlushParticleCache()
 
 }
 
-namespace ParticleSystem {
+namespace ParticleSystem
+{
 
 // FUNCTION: SWBF2 0x0060e380
 PblBox& GetBoundingBox()
@@ -235,7 +236,8 @@ PblBox& GetBoundingBox()
 
 }
 
-namespace ParticleSystem {
+namespace ParticleSystem
+{
 
 // FUNCTION: SWBF2 0x0060e660
 float GetSizeMultiplier()
@@ -245,7 +247,8 @@ float GetSizeMultiplier()
 
 }
 
-namespace ParticleSystem {
+namespace ParticleSystem
+{
 
 // FUNCTION: SWBF2 0x0060e670
 float GetMinParticleSize()
@@ -255,7 +258,8 @@ float GetMinParticleSize()
 
 }
 
-namespace ParticleSystem {
+namespace ParticleSystem
+{
 
 // FUNCTION: SWBF2 0x0060e680
 bool IsLodActive(int iLod)
@@ -265,7 +269,8 @@ bool IsLodActive(int iLod)
 
 }
 
-namespace ParticleSystem {
+namespace ParticleSystem
+{
 
 // FUNCTION: SWBF2 0x0060e690
 float GetLodAlpha(int iLod)
@@ -280,7 +285,8 @@ float GetLodAlpha(int iLod)
 
 }
 
-namespace ParticleSystem {
+namespace ParticleSystem
+{
 
 // FUNCTION: SWBF2 0x0060e6b0
 void SetupParticleCache(unsigned int uTexture, RedBlendMode eBlend, float fBlurValue, int iBlurParam)
@@ -297,7 +303,8 @@ void SetupParticleCache(unsigned int uTexture, RedBlendMode eBlend, float fBlurV
 
 }
 
-namespace ParticleSystem {
+namespace ParticleSystem
+{
 
 // FUNCTION: SWBF2 0x0060e700
 void CacheParticle(const PblVector3& vPos, const RedColorValue& color, float fSize, float fRotation)
@@ -321,7 +328,9 @@ template void PblHeap<unsigned int, float>::Pop();
 // SYNTHETIC: SWBF2 0x0060e370
 // CacheParticle::CacheParticle
 
-// GLOBAL: SWBF2 0x01ef5120
 // SYNTHETIC: SWBF2 0x00405d00
 // `dynamic initializer for 'sCachedParticles''
+
+// GLOBAL: SWBF2 0x01ef5120
+// sCachedParticles
 CacheParticle sCachedParticles[300];

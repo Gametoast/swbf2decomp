@@ -6,7 +6,10 @@
 #include "Character.h"
 #include "NetGame.h"
 
-namespace ObjectiveManager { void AddObjectiveList(HUD::ObjectiveList* pList); }
+namespace ObjectiveManager
+{
+void AddObjectiveList(HUD::ObjectiveList* pList);
+}
 
 // FUNCTION: SWBF2 0x00565e90
 HUD::ObjectiveList::Factory::Factory()

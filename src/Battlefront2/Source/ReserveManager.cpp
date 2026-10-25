@@ -346,7 +346,8 @@ template ListPool<ReserveManager::ReserveStruct, int>::ListPool(int);
 // ListPool<ReserveManager::ReserveStruct,int>::Remove
 template void ListPool<ReserveManager::ReserveStruct, int>::Remove(int);
 
-namespace ReserveManager {
+namespace ReserveManager
+{
 
 // FUNCTION: SWBF2 0x0062f5c0
 void Reset()

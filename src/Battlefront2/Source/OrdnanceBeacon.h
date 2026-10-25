@@ -43,7 +43,9 @@ public:
  
  
 
-// VTABLE: SWBF2 0x007ac53c
+// VTABLE: SWBF2 0x007ac53c Thread
+// VTABLE: SWBF2 0x007ac4d4
+// VTABLE: SWBF2 0x007ac580 PblHandled
 class OrdnanceBeacon : public OrdnanceSticky
 {
 public:

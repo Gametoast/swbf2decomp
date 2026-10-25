@@ -8,6 +8,7 @@
 class PblFileChunk;
 class RedTexture;
 
+// VTABLE: SWBF2 0x00785a84
 class RedMoviePlayerBase : private PblList<RedMoviePlayerBase>::Node
 {
 public:

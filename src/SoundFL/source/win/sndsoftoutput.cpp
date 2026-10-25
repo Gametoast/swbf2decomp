@@ -452,7 +452,8 @@ void SoftOutput::Update()
 
 }
 
-namespace Snd {
+namespace Snd
+{
 
 // FUNCTION: SWBF2 0x00746720
 SoftOutput::BusMixerInfo::BusMixerInfo()
@@ -465,7 +466,8 @@ SoftOutput::BusMixerInfo::BusMixerInfo()
 }
 }
 
-namespace Snd {
+namespace Snd
+{
 
 // FUNCTION: SWBF2 0x00746fb0
 void SoftOutput::SetGain(unsigned int uiInput, float fLeftGain, float fRightGain,
@@ -477,7 +479,8 @@ void SoftOutput::SetGain(unsigned int uiInput, float fLeftGain, float fRightGain
 }
 }
 
-namespace Snd {
+namespace Snd
+{
 
 // FUNCTION: SWBF2 0x00746a60
 SoftOutput::~SoftOutput()

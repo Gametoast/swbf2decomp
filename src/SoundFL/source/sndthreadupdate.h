@@ -11,6 +11,7 @@ class ThreadUpdate
 {
 public:
 
+    // VTABLE: SWBF2 0x007867b4
     class Object
     {
     public:

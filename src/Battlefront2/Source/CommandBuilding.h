@@ -8,8 +8,8 @@
 #include "EntityBuildingAnimated.h"
 #include "PebbleFL/Common/PblHashTable.h"
 
-// VTABLE: SWBF2 0x007977f8
-// VTABLE: SWBF2 0x007977e4
+// VTABLE: SWBF2 0x007977f8 EntityBuildingAnimatedClass
+// VTABLE: SWBF2 0x007977e4 CommandPostClass
 class CommandBuildingClass : public EntityBuildingAnimatedClass, public CommandPostClass
 {
 public:
@@ -32,6 +32,12 @@ public:
    
  
 
+// VTABLE: SWBF2 0x007975bc RedSceneObject
+// VTABLE: SWBF2 0x00797624 CollisionObject
+// VTABLE: SWBF2 0x00797678 EntityEx
+// VTABLE: SWBF2 0x007977a0 Damageable
+// VTABLE: SWBF2 0x007977cc
+// VTABLE: SWBF2 0x007977f0 PblHandled
 class CommandBuilding : public EntityBuildingAnimated
 {
 public:

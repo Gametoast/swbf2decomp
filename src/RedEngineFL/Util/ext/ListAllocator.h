@@ -7,6 +7,7 @@
 namespace util
 {
 
+// VTABLE: SWBF2 0x00783958
 class DummyNonAllocator : public IAllocator
 {
 public:
@@ -14,6 +15,7 @@ public:
     virtual void Deallocate(Buffer& rBuf);
 };
 
+// VTABLE: SWBF2 0x00783978
 class ListAllocator : public IAllocator
 {
 public:
@@ -29,6 +31,7 @@ protected:
     ListAllocator() {}
 };
 
+// VTABLE: SWBF2 0x007839a0
 class ListAllocatorImpl : public ListAllocator
 {
 public:

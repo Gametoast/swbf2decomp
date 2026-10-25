@@ -63,7 +63,10 @@ public:
     static PblHash rttiHashEntityWalker;
 };
 
-namespace VehicleManager { int RequestVehiclesInRange(const PblVector3& vPos, GameObject** ppOut, float fRadius, int iMax); }
+namespace VehicleManager
+{
+int RequestVehiclesInRange(const PblVector3& vPos, GameObject** ppOut, float fRadius, int iMax);
+}
 
 namespace
 {
@@ -95,9 +98,13 @@ namespace
 
 // SYNTHETIC: SWBF2 0x00406d30
 // `dynamic initializer for 'UnitTrooperAgent::rttiHashUnitTrooperAgent''
+// UnitTrooperAgent::rttiHashUnitTrooperAgent
+
 // GLOBAL: SWBF2 0x01f9a250
 // UnitTrooperAgent::rttiHashUnitTrooperAgent
 PblHash UnitTrooperAgent::rttiHashUnitTrooperAgent("UnitTrooperAgent");
+// GLOBAL: SWBF2 0x0078b968
+// UnitTrooperAgent::rttiNameUnitTrooperAgent
 const char UnitTrooperAgent::rttiNameUnitTrooperAgent[] = "UnitTrooperAgent";
 
 

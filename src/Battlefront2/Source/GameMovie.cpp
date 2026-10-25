@@ -478,9 +478,11 @@ int g_InGameMoviePlayerState;
 // GLOBAL: SWBF2 0x01e56270
 int g_InGameMoviePlayerFrame;
 
-// GLOBAL: SWBF2 0x01ec0c44
 // SYNTHETIC: SWBF2 0x00403da0
 // `dynamic initializer for 'g_InGameMovieQueue''
 // SYNTHETIC: SWBF2 0x00768a80
 // `dynamic atexit destructor for 'g_InGameMovieQueue''
+
+// GLOBAL: SWBF2 0x01ec0c44
+// g_InGameMovieQueue
 Snd::Queue<unsigned int, 12> g_InGameMovieQueue;

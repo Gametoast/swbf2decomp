@@ -75,9 +75,13 @@ int gClearVehicleSlideCount = 1;
 
 // SYNTHETIC: SWBF2 0x004043f0
 // `dynamic initializer for 'NavigatorSlide::rttiHashNavigatorSlide''
+// NavigatorSlide::rttiHashNavigatorSlide
+
 // GLOBAL: SWBF2 0x01ecb258
 // NavigatorSlide::rttiHashNavigatorSlide
 PblHash NavigatorSlide::rttiHashNavigatorSlide("NavigatorSlide");
+// GLOBAL: SWBF2 0x0078a678
+// NavigatorSlide::rttiNameNavigatorSlide
 const char NavigatorSlide::rttiNameNavigatorSlide[] = "NavigatorSlide";
 
 

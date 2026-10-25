@@ -14,11 +14,13 @@ pcRedShader::BeginFuncT pcFlareShader::BeginFuncArray[MAX_PIPELINES];
 pcRedShader::EndFuncT pcFlareShader::EndFuncArray[MAX_PIPELINES];
 pcRedShader::RenderFuncT pcFlareShader::RenderFuncArray[MAX_PIPELINES];
 
-// GLOBAL: SWBF2 0x009c9bc0
 // SYNTHETIC: SWBF2 0x00409d40
 // `dynamic initializer for 'pcFlareShader::s_shaderDef''
 // SYNTHETIC: SWBF2 0x00769dd0
 // `dynamic atexit destructor for 'pcFlareShader::s_shaderDef''
+
+// GLOBAL: SWBF2 0x009c9bc0
+// pcFlareShader::s_shaderDef
 pcRedShaderDef pcFlareShader::s_shaderDef("flare_shader.xml");
 
 // FUNCTION: SWBF2 0x00705ec0
@@ -344,9 +346,11 @@ void pcFlareShader::_StaticInit() const
 {
 }
 
-// GLOBAL: SWBF2 0x009c9bbc
 // SYNTHETIC: SWBF2 0x00409d60
 // `dynamic initializer for 'pcFlareShader::s_uiRenderTypeHash''
+
+// GLOBAL: SWBF2 0x009c9bbc
+// pcFlareShader::s_uiRenderTypeHash
 unsigned int pcFlareShader::s_uiRenderTypeHash = PblHash("flare");
 
 // SYNTHETIC: SWBF2 0x00409d80
@@ -355,11 +359,13 @@ unsigned int pcFlareShader::s_uiRenderTypeHash = PblHash("flare");
 // SYNTHETIC: SWBF2 0x00409da0
 // `dynamic initializer for 'PblMath::fOneOverTwoPi''
 
-// GLOBAL: SWBF2 0x009c9b90
 // SYNTHETIC: SWBF2 0x00409d20
 // `dynamic initializer for 'pcFlareShader::s_Factory''
 // SYNTHETIC: SWBF2 0x00769db0
 // `dynamic atexit destructor for 'pcFlareShader::s_Factory''
+
+// GLOBAL: SWBF2 0x009c9b90
+// pcFlareShader::s_Factory
 pcFlareShader pcFlareShader::s_Factory;
 
 // GLOBAL: SWBF2 0x009c9b84

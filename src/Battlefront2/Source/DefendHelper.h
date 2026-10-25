@@ -20,6 +20,7 @@ class UnitAgent;
 class UnitController;
 #include "EventInfo.h"
 
+// VTABLE: SWBF2 0x00798f58
 class DefendHelper : public HelperFsm
 {
 public:

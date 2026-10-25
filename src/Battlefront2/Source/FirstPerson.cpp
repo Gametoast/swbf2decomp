@@ -30,7 +30,8 @@
 
 extern bool netFrameLock;
 
-namespace FirstPerson {
+namespace FirstPerson
+{
 
 // GLOBAL: SWBF2 0x01e55f00
 FirstPersonRenderable* s_pRenderable[1];
@@ -140,17 +141,21 @@ CamPaths::CamPaths()
 {
 }
 
-// GLOBAL: SWBF2 0x01ebc300
 // SYNTHETIC: SWBF2 0x00403820
 // `dynamic initializer for 'FirstPerson::mCameraPaths''
+
+// GLOBAL: SWBF2 0x01ebc300
+// mCameraPaths
 CamPaths mCameraPaths;
 
 // SYNTHETIC: SWBF2 0x00444810
 // PblHermiteVector3::PblHermiteVector3
 
-// GLOBAL: SWBF2 0x01ebcce0
 // SYNTHETIC: SWBF2 0x004037d0
 // `dynamic initializer for 'FirstPerson::mFPCamera''
+
+// GLOBAL: SWBF2 0x01ebcce0
+// mFPCamera
 FirstPersonCameraManager mFPCamera[1];
 
 // FUNCTION: SWBF2 0x0051ed00

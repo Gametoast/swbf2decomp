@@ -6,6 +6,7 @@
 namespace Snd
 {
 
+// VTABLE: SWBF2 0x0078689c
 class StreamCodec : public StreamNode,
                     public StreamNodeSink,
                     public StreamSourceProducer

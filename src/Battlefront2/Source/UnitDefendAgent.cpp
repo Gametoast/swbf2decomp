@@ -7,9 +7,13 @@
 
 // SYNTHETIC: SWBF2 0x00406ca0
 // `dynamic initializer for 'UnitDefendAgent::rttiHashUnitDefendAgent''
+// UnitDefendAgent::rttiHashUnitDefendAgent
+
 // GLOBAL: SWBF2 0x01f993b4
 // UnitDefendAgent::rttiHashUnitDefendAgent
 PblHash UnitDefendAgent::rttiHashUnitDefendAgent("UnitDefendAgent");
+// GLOBAL: SWBF2 0x0078b800
+// UnitDefendAgent::rttiNameUnitDefendAgent
 const char UnitDefendAgent::rttiNameUnitDefendAgent[] = "UnitDefendAgent";
 
 

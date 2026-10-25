@@ -257,7 +257,8 @@ void VoiceVirtual::Update(float fDeltaTime)
 
 }
 
-namespace Snd {
+namespace Snd
+{
 
 // FUNCTION: SWBF2 0x00737a90
 VoiceVirtual::~VoiceVirtual()
@@ -266,7 +267,8 @@ VoiceVirtual::~VoiceVirtual()
 }
 }
 
-namespace Snd {
+namespace Snd
+{
 
 // FUNCTION: SWBF2 0x00737c80
 void VoiceVirtual::Play(bool bRestart)
@@ -285,7 +287,8 @@ void VoiceVirtual::Play(bool bRestart)
 }
 }
 
-namespace Snd {
+namespace Snd
+{
 
 // FUNCTION: SWBF2 0x00737dd0
 void VoiceVirtual::Set3DMode(bool b3DMode)
@@ -295,7 +298,8 @@ void VoiceVirtual::Set3DMode(bool b3DMode)
 }
 }
 
-namespace Snd {
+namespace Snd
+{
 
 // FUNCTION: SWBF2 0x00737e10
 void VoiceVirtual::SetInactiveCallback(void (__cdecl* pfnCallback)(const VoiceVirtual* const, void* const),
@@ -306,7 +310,8 @@ void VoiceVirtual::SetInactiveCallback(void (__cdecl* pfnCallback)(const VoiceVi
 }
 }
 
-namespace Snd {
+namespace Snd
+{
 
 // FUNCTION: SWBF2 0x00737e90
 void VoiceVirtual::SetVoiceVirtualManager(VoiceVirtualManager* pManager)

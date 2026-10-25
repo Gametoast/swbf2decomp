@@ -9,9 +9,13 @@
 
 // SYNTHETIC: SWBF2 0x004040d0
 // `dynamic initializer for 'IFaceSoldierAnimator::rttiHashIFaceSoldierAnimator''
+// IFaceSoldierAnimator::rttiHashIFaceSoldierAnimator
+
 // GLOBAL: SWBF2 0x01ec601c
 // IFaceSoldierAnimator::rttiHashIFaceSoldierAnimator
 PblHash IFaceSoldierAnimator::rttiHashIFaceSoldierAnimator("IFaceSoldierAnimator");
+// GLOBAL: SWBF2 0x00789c74
+// IFaceSoldierAnimator::rttiNameIFaceSoldierAnimator
 const char IFaceSoldierAnimator::rttiNameIFaceSoldierAnimator[] = "IFaceSoldierAnimator";
 
 

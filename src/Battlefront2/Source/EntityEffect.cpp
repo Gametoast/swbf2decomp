@@ -3,9 +3,13 @@
 
 // SYNTHETIC: SWBF2 0x00402aa0
 // `dynamic initializer for 'EntityEffectClass::rttiHashEntityEffectClass''
+// EntityEffectClass::rttiHashEntityEffectClass
+
 // GLOBAL: SWBF2 0x01ebbc60
 // EntityEffectClass::rttiHashEntityEffectClass
 PblHash EntityEffectClass::rttiHashEntityEffectClass("EntityEffectClass");
+// GLOBAL: SWBF2 0x007891c4
+// EntityEffectClass::rttiNameEntityEffectClass
 const char EntityEffectClass::rttiNameEntityEffectClass[] = "EntityEffectClass";
 
 // FUNCTION: SWBF2 0x004a9a00

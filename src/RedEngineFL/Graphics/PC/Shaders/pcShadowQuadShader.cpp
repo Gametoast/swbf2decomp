@@ -20,11 +20,13 @@ pcRedShader::BeginFuncT pcShadowQuadShader::BeginFuncArray[MAX_PIPELINES];
 pcRedShader::EndFuncT pcShadowQuadShader::EndFuncArray[MAX_PIPELINES];
 pcRedShader::RenderFuncT pcShadowQuadShader::RenderFuncArray[MAX_PIPELINES];
 
-// GLOBAL: SWBF2 0x009c9de8
 // SYNTHETIC: SWBF2 0x00409f20
 // `dynamic initializer for 'pcShadowQuadShader::s_shaderDef''
 // SYNTHETIC: SWBF2 0x00769e60
 // `dynamic atexit destructor for 'pcShadowQuadShader::s_shaderDef''
+
+// GLOBAL: SWBF2 0x009c9de8
+// pcShadowQuadShader::s_shaderDef
 pcRedShaderDef pcShadowQuadShader::s_shaderDef("shadowquad_shader.xml");
 
 // FUNCTION: SWBF2 0x00707f20
@@ -280,9 +282,11 @@ void pcShadowQuadShader::_StaticInit() const
 {
 }
 
-// GLOBAL: SWBF2 0x009c9ddc
 // SYNTHETIC: SWBF2 0x00409f40
 // `dynamic initializer for 'pcShadowQuadShader::s_uiRenderTypeHash''
+
+// GLOBAL: SWBF2 0x009c9ddc
+// pcShadowQuadShader::s_uiRenderTypeHash
 unsigned int pcShadowQuadShader::s_uiRenderTypeHash = PblHash("ShadowQuad");
 
 // SYNTHETIC: SWBF2 0x00409f60
@@ -291,11 +295,13 @@ unsigned int pcShadowQuadShader::s_uiRenderTypeHash = PblHash("ShadowQuad");
 // SYNTHETIC: SWBF2 0x00409f80
 // `dynamic initializer for 'PblMath::fOneOverTwoPi''
 
-// GLOBAL: SWBF2 0x009c9dbc
 // SYNTHETIC: SWBF2 0x00409f00
 // `dynamic initializer for 'pcShadowQuadShader::s_Factory''
 // SYNTHETIC: SWBF2 0x00769e40
 // `dynamic atexit destructor for 'pcShadowQuadShader::s_Factory''
+
+// GLOBAL: SWBF2 0x009c9dbc
+// pcShadowQuadShader::s_Factory
 pcShadowQuadShader pcShadowQuadShader::s_Factory;
 
 // GLOBAL: SWBF2 0x009c9db8

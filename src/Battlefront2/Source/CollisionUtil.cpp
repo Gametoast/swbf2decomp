@@ -165,7 +165,8 @@ int FindAACenteredBoxRayIntersection(const PblVector3& vStart, const PblVector3&
     return aSide[nPlane] * (nPlane + 1);
 }
 
-namespace CollisionUtil {
+namespace CollisionUtil
+{
 
 // FUNCTION: SWBF2 0x00469670
 bool IsPointInsideAxisAlignedCylinder(const PblVector3& vOffset, float fRadius, float fHalfHeight)
@@ -192,7 +193,8 @@ static inline PblVector3 ToWorld(const PblMatrix& m, float x, float y, float z)
                       m.m[0][2] * x + m.m[1][2] * y + m.m[2][2] * z);
 }
 
-namespace CollisionUtil {
+namespace CollisionUtil
+{
 
 // FUNCTION: SWBF2 0x0046a700
 bool CollideSpheres(const PblVector3& vCenter, float fRadius, const PblVector3& vSphereCenter, float fSphereRadius,
@@ -225,7 +227,8 @@ bool CollideSpheres(const PblVector3& vCenter, float fRadius, const PblVector3& 
 }
 }
 
-namespace CollisionUtil {
+namespace CollisionUtil
+{
 
 // FUNCTION: SWBF2 0x00469e90
 bool CollideBoxSphere(const PblMatrix& matrix, float fWidth, float fDepth, float fHeight, const PblVector3& vSphereCenter,
@@ -312,7 +315,8 @@ bool CollideBoxSphere(const PblMatrix& matrix, float fWidth, float fDepth, float
 }
 }
 
-namespace CollisionUtil {
+namespace CollisionUtil
+{
 
 // FUNCTION: SWBF2 0x00469e20
 bool CollideSphereBox(const PblVector3& vCenter, float fRadius, const PblMatrix& matrix, float fWidth, float fDepth,
@@ -326,7 +330,8 @@ bool CollideSphereBox(const PblVector3& vCenter, float fRadius, const PblMatrix&
 }
 }
 
-namespace CollisionUtil {
+namespace CollisionUtil
+{
 
 // FUNCTION: SWBF2 0x0046a280
 bool CollideCylinderSphere(const PblMatrix& matrix, float fRadius, float fHalfHeight, const PblVector3& vSphereCenter,
@@ -397,7 +402,8 @@ bool CollideCylinderSphere(const PblMatrix& matrix, float fRadius, float fHalfHe
 }
 }
 
-namespace CollisionUtil {
+namespace CollisionUtil
+{
 
 // FUNCTION: SWBF2 0x004696b0
 bool GetClosestPointInPolygon(const PblVector3& vPos, int iNumCorners, const PblVector3* pCorners, PblVector3& vOutPos,
@@ -668,7 +674,8 @@ bool CollisionUtil::CollideBoxCylinder(const PblVector3& vVelocityA, const PblMa
                         fDepth);
 }
 
-namespace CollisionUtil {
+namespace CollisionUtil
+{
 
 // FUNCTION: SWBF2 0x004687e0
 bool CollideCylinders(const PblMatrix& m1, float fRadius1, float fHalfHeight1, const PblMatrix& m2, float fRadius2,
@@ -678,7 +685,8 @@ bool CollideCylinders(const PblMatrix& m1, float fRadius1, float fHalfHeight1, c
 }
 }
 
-namespace CollisionUtil {
+namespace CollisionUtil
+{
 
 // FUNCTION: SWBF2 0x00469200
 bool CollideCapsules(const PblMatrix& m1, float fRadius1, float fHalfHeight1, const PblMatrix& m2, float fRadius2,
@@ -858,7 +866,8 @@ float CollisionUtil::RayHitSphere(const PblVector3& vStart, const PblVector3& vD
     return fHit / fLength;
 }
 
-namespace CollisionUtil {
+namespace CollisionUtil
+{
 
 // FUNCTION: SWBF2 0x0046ab20
 float RayHitBubble(const PblVector3& vStart, const PblVector3& vDir, float fLength, const PblMatrix& matrix,
@@ -926,7 +935,8 @@ static inline PblVector3 InverseRotate(const PblMatrix& m, float x, float y, flo
                       m.m[2][0] * x + m.m[2][1] * y + m.m[2][2] * z);
 }
 
-namespace CollisionUtil {
+namespace CollisionUtil
+{
 
 // FUNCTION: SWBF2 0x0046b130
 float RayHitBox(const PblVector3& vStart, const PblVector3& vDir, float fLength, const PblMatrix& matrix,
@@ -1044,7 +1054,8 @@ float RayHitAACylinder(const PblVector3& vStart, const PblVector3& vDir, float f
     return fHit / fLength;
 }
 
-namespace CollisionUtil {
+namespace CollisionUtil
+{
 
 // FUNCTION: SWBF2 0x0046b710
 float RayHitAxisAlignedCylinder(const PblVector3& vStart, const PblVector3& vDir, float fLength, const PblVector3& vCenter,
@@ -1104,7 +1115,8 @@ float RayHitAxisAlignedCylinder(const PblVector3& vStart, const PblVector3& vDir
 }
 }
 
-namespace CollisionUtil {
+namespace CollisionUtil
+{
 
 // FUNCTION: SWBF2 0x0046b9c0
 float RayHitCylinder(const PblVector3& vStart, const PblVector3& vDir, float fLength, const PblMatrix& matrix,
@@ -1128,7 +1140,8 @@ float RayHitCylinder(const PblVector3& vStart, const PblVector3& vDir, float fLe
 }
 }
 
-namespace CollisionUtil {
+namespace CollisionUtil
+{
 
 // FUNCTION: SWBF2 0x0046bf30
 void GetClosestPoint_SegmentPoint(const PblVector3& vSegStart, const PblVector3& vSegEnd, const PblVector3& vPoint,
@@ -1154,7 +1167,8 @@ void GetClosestPoint_SegmentPoint(const PblVector3& vSegStart, const PblVector3&
 }
 }
 
-namespace CollisionUtil {
+namespace CollisionUtil
+{
 
 // FUNCTION: SWBF2 0x0046bc00
 void GetClosestPoints_SegmentSegment(const PblVector3& vSStart, const PblVector3& vSEnd, const PblVector3& vTStart,

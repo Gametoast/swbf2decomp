@@ -45,16 +45,19 @@ StreamBase::StreamBase()
                         | 4u);
 }
 
-// GLOBAL: SWBF2 0x007e3860
 // SYNTHETIC: SWBF2 0x0040c0b0
 // `dynamic initializer for 'Snd::StreamBase::Info::smInfoList''
 // SYNTHETIC: SWBF2 0x0076a480
 // `dynamic atexit destructor for 'Snd::StreamBase::Info::smInfoList''
+
+// GLOBAL: SWBF2 0x007e3860
+// StreamBase::Info::smInfoList
 PblListSingle StreamBase::Info::smInfoList;
 
 }
 
-namespace Snd {
+namespace Snd
+{
 
 // FUNCTION: SWBF2 0x00742e90
 StreamBase::Info::Info(unsigned int uiHashID, Segment* pSegments, unsigned int uiNumSegments,
@@ -77,7 +80,8 @@ StreamBase::Info::Info(unsigned int uiHashID, Segment* pSegments, unsigned int u
 }
 }
 
-namespace Snd {
+namespace Snd
+{
 
 // FUNCTION: SWBF2 0x00742fd0
 StreamBase::~StreamBase()
@@ -85,7 +89,8 @@ StreamBase::~StreamBase()
 }
 }
 
-namespace Snd {
+namespace Snd
+{
 
 // FUNCTION: SWBF2 0x007430c0
 bool StreamBase::AppendSegments(PblFileChunk& chunk, unsigned int uiHashID, const char* pcFileName,
@@ -105,7 +110,8 @@ bool StreamBase::AppendSegments(PblFileChunk& chunk, unsigned int uiHashID, cons
 }
 }
 
-namespace Snd {
+namespace Snd
+{
 
 // FUNCTION: SWBF2 0x007431f0
 void StreamBase::Close()
@@ -131,7 +137,8 @@ void StreamBase::Close()
 }
 }
 
-namespace Snd {
+namespace Snd
+{
 
 // FUNCTION: SWBF2 0x007432d0
 int __cdecl StreamBase::Segment::CompareSearch(void const* pKey, void const* pElement)
@@ -146,7 +153,8 @@ int __cdecl StreamBase::Segment::CompareSearch(void const* pKey, void const* pEl
 }
 }
 
-namespace Snd {
+namespace Snd
+{
 
 // FUNCTION: SWBF2 0x007432f0
 int __cdecl StreamBase::Segment::CompareSort(void const* pA, void const* pB)
@@ -161,7 +169,8 @@ int __cdecl StreamBase::Segment::CompareSort(void const* pA, void const* pB)
 }
 }
 
-namespace Snd {
+namespace Snd
+{
 
 // FUNCTION: SWBF2 0x00743310
 bool StreamBase::LoadSegments(PblFileChunk& chunk, Segment* pSegments,
@@ -249,7 +258,8 @@ bool StreamBase::LoadSegments(PblFileChunk& chunk, Segment* pSegments,
 }
 }
 
-namespace Snd {
+namespace Snd
+{
 
 // FUNCTION: SWBF2 0x00743580
 bool StreamBase::Open(PblFileChunk& chunk, unsigned int uiHashID, const char* pcFileName,
@@ -382,7 +392,8 @@ bool StreamBase::Open(PblFileChunk& chunk, unsigned int uiHashID, const char* pc
 }
 }
 
-namespace Snd {
+namespace Snd
+{
 
 // FUNCTION: SWBF2 0x00743900
 void StreamBase::Update(float fDeltaTime)

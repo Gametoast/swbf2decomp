@@ -38,9 +38,11 @@ void FrontlineSceneManager::EndSceneRender()
 {
 }
 
-// GLOBAL: SWBF2 0x01eb05f0
 // SYNTHETIC: SWBF2 0x00402330
 // `dynamic initializer for '_FrontlineSceneManager''
 // SYNTHETIC: SWBF2 0x00766d90
 // `dynamic atexit destructor for '_FrontlineSceneManager''
+
+// GLOBAL: SWBF2 0x01eb05f0
+// _FrontlineSceneManager
 FrontlineSceneManager _FrontlineSceneManager;

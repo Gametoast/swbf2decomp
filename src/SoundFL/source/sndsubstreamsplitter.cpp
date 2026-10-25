@@ -180,7 +180,8 @@ fill:
 
 }
 
-namespace Snd {
+namespace Snd
+{
 
 // FUNCTION: SWBF2 0x0074b070
 void SubstreamSplitter::Setup(unsigned int uiNumSubstreams, unsigned int uiSubstreamInterleave,

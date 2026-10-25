@@ -5,18 +5,21 @@
 #include "PebbleFL/Common/PblFile.h"
 #include "PebbleFL/Common/PblRandom.h"
 
-namespace Snd {
+namespace Snd
+{
 extern PblRandom sndRandom;
 }
 
 namespace Snd
 {
 
-// GLOBAL: SWBF2 0x007e3b5c
 // SYNTHETIC: SWBF2 0x0040c610
 // `dynamic initializer for 'Snd::ObjectWeight::smFreeList''
 // SYNTHETIC: SWBF2 0x0076a500
 // `dynamic atexit destructor for 'Snd::ObjectWeight::smFreeList''
+
+// GLOBAL: SWBF2 0x007e3b5c
+// ObjectWeight::smFreeList
 FreeList ObjectWeight::smFreeList(sizeof(ObjectWeight), 1, 32, 1);
 
 // FUNCTION: SWBF2 0x0074b880
@@ -107,7 +110,8 @@ bool ObjectWeightList::ReadObjectWeights(PblFileChunk& chunk, unsigned int uiObj
 
 }
 
-namespace Snd {
+namespace Snd
+{
 
 // FUNCTION: SWBF2 0x0074b7f0
 ObjectWeightList::~ObjectWeightList()
@@ -121,7 +125,8 @@ ObjectWeightList::~ObjectWeightList()
 }
 }
 
-namespace Snd {
+namespace Snd
+{
 
 // FUNCTION: SWBF2 0x0074b8a0
 void const* ObjectWeightList::GetObjectA() const
@@ -167,7 +172,8 @@ void const* ObjectWeightList::GetObjectA() const
 }
 }
 
-namespace Snd {
+namespace Snd
+{
 
 // FUNCTION: SWBF2 0x0074b990
 const ObjectWeight* ObjectWeightList::GetObjectNode(const ObjectWeight* const pExclude) const

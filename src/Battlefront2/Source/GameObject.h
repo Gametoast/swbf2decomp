@@ -36,7 +36,10 @@ struct DamageEffectClass
  
  
 
-namespace AI { class VOSound; }
+namespace AI
+{
+class VOSound;
+}
 
 // VTABLE: SWBF2 0x0079fac8
 class GameObjectClass : public EntityGeometryClass
@@ -246,6 +249,11 @@ class PlayableEntitySounds;
 class TargetInfo;
 extern PblVector3 gVectorZero;
 
+// VTABLE: SWBF2 0x0079f8b8 CollisionObject
+// VTABLE: SWBF2 0x0079f90c EntityEx
+// VTABLE: SWBF2 0x0079fa2c Damageable
+// VTABLE: SWBF2 0x0079fa58 PblHandled
+// VTABLE: SWBF2 0x0079fa60 RedSceneObject
 class GameObject : public EntityGeometry, public Damageable, public PblHandled
 {
 public:

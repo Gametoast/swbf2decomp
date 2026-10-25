@@ -195,7 +195,9 @@ public:
     static ParticleSpawnCache mCaches[1];
 };
 
-// GLOBAL: SWBF2 0x01ef50e0
 // SYNTHETIC: SWBF2 0x00405ce0
 // `dynamic initializer for 'ParticleSpawnCache::mCaches''
+
+// GLOBAL: SWBF2 0x01ef50e0
+// ParticleSpawnCache::mCaches
 ParticleSpawnCache ParticleSpawnCache::mCaches[1];

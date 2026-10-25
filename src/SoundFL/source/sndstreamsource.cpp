@@ -401,7 +401,8 @@ void StreamSource::Update()
 
 }
 
-namespace Snd {
+namespace Snd
+{
 
 // FUNCTION: SWBF2 0x00749950
 StreamSource::~StreamSource()
@@ -415,7 +416,8 @@ StreamSource::~StreamSource()
 }
 }
 
-namespace Snd {
+namespace Snd
+{
 
 // FUNCTION: SWBF2 0x00749e20
 bool StreamSource::Open(File& rFile, unsigned int uiPacketSize, unsigned char uiNumPackets,
@@ -453,7 +455,8 @@ bool StreamSource::Open(File& rFile, unsigned int uiPacketSize, unsigned char ui
 }
 }
 
-namespace Snd {
+namespace Snd
+{
 
 // FUNCTION: SWBF2 0x00749fb0
 void StreamSource::SetLooping(bool bLooping)

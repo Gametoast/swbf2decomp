@@ -150,9 +150,11 @@ static float WATERRING_MAX_ALPHASCALE_AFTER_TIME = 1.0f / (1.0f - WATERRING_MAX_
 // GLOBAL: SWBF2 0x007e2620
 static float WATERSPLASH_MAX_SEGMENTS_RADIUSINV = 1.0f / WATERSPLASH_MAX_SEGMENTS_RADIUS;
 
-// GLOBAL: SWBF2 0x009cae8c
 // SYNTHETIC: SWBF2 0x0040ab20
 // `dynamic initializer for 'WATERSPLASH_COLOR''
+
+// GLOBAL: SWBF2 0x009cae8c
+// WATERSPLASH_COLOR
 static RedColor WATERSPLASH_COLOR = RedColor::LTGREY;
 
 // GLOBAL: SWBF2 0x007e262c
@@ -176,45 +178,65 @@ static pcNormalMapAdderShader* s_pWaterDistortionRingShader;
 // GLOBAL: SWBF2 0x009cae54
 static pcClearShader* s_pUnderWaterShader;
 
-// GLOBAL: SWBF2 0x009cae74
 // SYNTHETIC: SWBF2 0x0040ab90
 // `dynamic initializer for 'kuiNormalMapAdderShader''
+
+// GLOBAL: SWBF2 0x009cae74
+// kuiNormalMapAdderShader
 unsigned int kuiNormalMapAdderShader = PblHash("NormalMapAdder");
-// GLOBAL: SWBF2 0x009cae80
 // SYNTHETIC: SWBF2 0x0040abb0
 // `dynamic initializer for 'kuiOceanShader''
+
+// GLOBAL: SWBF2 0x009cae80
+// kuiOceanShader
 unsigned int kuiOceanShader = PblHash("Ocean");
-// GLOBAL: SWBF2 0x009cae88
 // SYNTHETIC: SWBF2 0x0040abd0
 // `dynamic initializer for 'kuiPreReflectionShader''
+
+// GLOBAL: SWBF2 0x009cae88
+// kuiPreReflectionShader
 unsigned int kuiPreReflectionShader = PblHash("PreReflection");
-// GLOBAL: SWBF2 0x009cae78
 // SYNTHETIC: SWBF2 0x0040abf0
 // `dynamic initializer for 'kuiUnderWaterShader''
+
+// GLOBAL: SWBF2 0x009cae78
+// kuiUnderWaterShader
 unsigned int kuiUnderWaterShader = PblHash("Clear");
-// GLOBAL: SWBF2 0x009cae58
 // SYNTHETIC: SWBF2 0x0040ac10
 // `dynamic initializer for 'kuiWaterDistortionRingTextureHash''
+
+// GLOBAL: SWBF2 0x009cae58
+// kuiWaterDistortionRingTextureHash
 unsigned int kuiWaterDistortionRingTextureHash = PblHash("fx_ringbump");
-// GLOBAL: SWBF2 0x009cae5c
 // SYNTHETIC: SWBF2 0x0040ac30
 // `dynamic initializer for 'kuiWaterRingShader''
+
+// GLOBAL: SWBF2 0x009cae5c
+// kuiWaterRingShader
 unsigned int kuiWaterRingShader = PblHash("Particle");
-// GLOBAL: SWBF2 0x009cae64
 // SYNTHETIC: SWBF2 0x0040ac50
 // `dynamic initializer for 'kuiWaterRingTextureHash''
+
+// GLOBAL: SWBF2 0x009cae64
+// kuiWaterRingTextureHash
 unsigned int kuiWaterRingTextureHash = PblHash("FXrippl1");
-// GLOBAL: SWBF2 0x009cae90
 // SYNTHETIC: SWBF2 0x0040ac70
 // `dynamic initializer for 'kuiWaterShader''
+
+// GLOBAL: SWBF2 0x009cae90
+// kuiWaterShader
 unsigned int kuiWaterShader = PblHash("Water");
-// GLOBAL: SWBF2 0x009cae68
 // SYNTHETIC: SWBF2 0x0040ac90
 // `dynamic initializer for 'kuiWaterSplashShader''
+
+// GLOBAL: SWBF2 0x009cae68
+// kuiWaterSplashShader
 unsigned int kuiWaterSplashShader = PblHash("Particle");
-// GLOBAL: SWBF2 0x009cae60
 // SYNTHETIC: SWBF2 0x0040acb0
 // `dynamic initializer for 'kuiWaterSplashTextureHash''
+
+// GLOBAL: SWBF2 0x009cae60
+// kuiWaterSplashTextureHash
 unsigned int kuiWaterSplashTextureHash = PblHash("fx_splash");
 
 static const float kInv255 = 1.0f / 255.0f;

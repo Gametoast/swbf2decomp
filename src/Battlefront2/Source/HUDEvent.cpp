@@ -7,11 +7,13 @@
 #include "HUDItem.h"
 #include "PebbleFL/Common/PblHashTable.h"
 
-// GLOBAL: SWBF2 0x007eba5c
 // SYNTHETIC: SWBF2 0x00403ff0
 // `dynamic initializer for 'HUD::EventClass::sList''
 // SYNTHETIC: SWBF2 0x00768b80
 // `dynamic atexit destructor for 'HUD::EventClass::sList''
+
+// GLOBAL: SWBF2 0x007eba5c
+// HUD::EventClass::sList
 PblListSingle HUD::EventClass::sList;
 
 // FUNCTION: SWBF2 0x0055dc30

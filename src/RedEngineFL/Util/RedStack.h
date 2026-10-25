@@ -4,6 +4,8 @@ class RedStack
 {
 public:
     RedStack() : mMemIdx(sMemIdx) {}
+    // SYNTHETIC: SWBF2 0x0045db20
+    // RedStack::~RedStack
     ~RedStack() { sMemIdx = mMemIdx; }
 
     void* Alloc(int iSize)

@@ -44,6 +44,7 @@ public:
  
  
 
+// VTABLE: SWBF2 0x007ad7e4
 class PlayableEntitySounds
 {
 public:

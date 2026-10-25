@@ -62,6 +62,14 @@ public:
  
  
 
+// VTABLE: SWBF2 0x0079b20c CollisionObject
+// VTABLE: SWBF2 0x0079b2c4 PblHandled
+// VTABLE: SWBF2 0x0079b2cc
+// VTABLE: SWBF2 0x0079b2f0 Damageable
+// VTABLE: SWBF2 0x0079b31c Trackable
+// VTABLE: SWBF2 0x0079b364 RedSceneObject
+// VTABLE: SWBF2 0x0079b3cc Thread
+// VTABLE: SWBF2 0x0079b49c EntityEx
 class EntityFlyer : public GameObject, public Controllable, public VehicleMusic,
                     public VehicleEngine, public EntityPathFollower
 {
@@ -465,6 +473,14 @@ struct EntityFlyerRuntimeLayout
  
  
 
+// VTABLE: SWBF2 0x0079a168 CollisionObject
+// VTABLE: SWBF2 0x0079a1bc Thread
+// VTABLE: SWBF2 0x0079a28c PblHandled
+// VTABLE: SWBF2 0x0079a294
+// VTABLE: SWBF2 0x0079a304 Trackable
+// VTABLE: SWBF2 0x0079a34c EntityEx
+// VTABLE: SWBF2 0x0079a470 Damageable
+// VTABLE: SWBF2 0x0079a49c RedSceneObject
 class EntityCarrier : public EntityFlyer
 {
 public:

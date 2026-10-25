@@ -41,11 +41,14 @@ inline void SetHandle(PblHandle<const GameObject>& handle, const GameObject* pOb
 }
 }
 
-// GLOBAL: SWBF2 0x01eb97ac
 // SYNTHETIC: SWBF2 0x004027a0
 // `dynamic initializer for 'AI::CTFGoal::rttiHashCTFGoal''
 
+// GLOBAL: SWBF2 0x01eb97ac
+// AI::CTFGoal::rttiHashCTFGoal
 PblHash AI::CTFGoal::rttiHashCTFGoal("CTFGoal");
+// GLOBAL: SWBF2 0x00788de4
+// AI::CTFGoal::rttiNameCTFGoal
 const char AI::CTFGoal::rttiNameCTFGoal[] = "CTFGoal";
 
 

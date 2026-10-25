@@ -190,17 +190,21 @@ int IsInside(lua_State*)
 
 // GLOBAL: SWBF2 0x01eafff0
 int sMapNumEntries;
-// GLOBAL: SWBF2 0x01eafff4
 // SYNTHETIC: SWBF2 0x00402150
 // `dynamic initializer for 'ActiveRegions::sMap''
 
+// GLOBAL: SWBF2 0x01eafff4
+// sMap
 PblHashTable<ActiveRegion, 64> sMap;
 
-// GLOBAL: SWBF2 0x01eb01f8
 // SYNTHETIC: SWBF2 0x00402170
 // `dynamic initializer for 'ActiveRegions::ActiveRegion::sMemoryPool''
 // SYNTHETIC: SWBF2 0x00766d20
 // `dynamic atexit destructor for 'ActiveRegions::ActiveRegion::sMemoryPool''
+
+// GLOBAL: SWBF2 0x01eb01f8
+// ActiveRegion::sMemoryPool
+// STRING: SWBF2 0x00796adc
 MemoryPool ActiveRegion::sMemoryPool("ActiveRegion", 0x68);
 
 ActiveRegion::~ActiveRegion()

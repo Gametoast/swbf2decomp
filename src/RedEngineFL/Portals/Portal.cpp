@@ -34,13 +34,18 @@ int _cframe;
 
 // GLOBAL: SWBF2 0x009a0830
 pvs::IManager* _man;
+namespace pvs
+{
 
-// GLOBAL: SWBF2 0x007df8c0
 // SYNTHETIC: SWBF2 0x00408870
 // `dynamic initializer for 'pvs::displayableSuballoc_''
 // SYNTHETIC: SWBF2 0x00769a50
 // `dynamic atexit destructor for 'pvs::displayableSuballoc_''
-namespace pvs { util::StaticSubAlloc<util::SLNode<pvs::IDisplayable*> > displayableSuballoc_; }
+
+// GLOBAL: SWBF2 0x007df8c0
+// displayableSuballoc_
+util::StaticSubAlloc<util::SLNode<pvs::IDisplayable*> > displayableSuballoc_;
+}
 
 // GLOBAL: SWBF2 0x007df864
 static bool gEnable = true;
@@ -69,7 +74,8 @@ geo::Frustum::Frustum()
 {
 }
 
-namespace pvs {
+namespace pvs
+{
 
 // FUNCTION: SWBF2 0x006e0900
 int GetCurrentFrame_()

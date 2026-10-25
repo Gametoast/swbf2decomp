@@ -12,6 +12,7 @@ namespace DSP
 class HighLowPassFilter;
 }
 
+// VTABLE: SWBF2 0x00786a50
 class StreamGSMEncoder : public StreamCodec
 {
 public:

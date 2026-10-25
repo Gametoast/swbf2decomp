@@ -5,7 +5,9 @@
 
 class RedModel;
 
-namespace HUD {
+namespace HUD
+{
+// VTABLE: SWBF2 0x007a35d8
 class TransformNameMesh : public HUD::Transform
 {
 public:

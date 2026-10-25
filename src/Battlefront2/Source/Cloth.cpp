@@ -73,25 +73,30 @@
 #include "ShellLoop.h"
 #include "RedEngineFL/Interface/RedShadowBlob.h"
 
-// GLOBAL: SWBF2 0x01eb1080
 // SYNTHETIC: SWBF2 0x004023e0
 // `dynamic initializer for 'EntityCloth::sMemoryPool''
 // SYNTHETIC: SWBF2 0x00766df0
 // `dynamic atexit destructor for 'EntityCloth::sMemoryPool''
+
+// GLOBAL: SWBF2 0x01eb1080
+// EntityCloth::sMemoryPool
 MemoryPool EntityCloth::sMemoryPool("EntityCloth", 0x120);
-// GLOBAL: SWBF2 0x01eb10d0
 // SYNTHETIC: SWBF2 0x004023c0
 // `dynamic initializer for 'ClothData::sMemoryPool''
 // SYNTHETIC: SWBF2 0x00766de0
 // `dynamic atexit destructor for 'ClothData::sMemoryPool''
+
+// GLOBAL: SWBF2 0x01eb10d0
+// ClothData::sMemoryPool
 MemoryPool ClothData::sMemoryPool("ClothData", 0xa0);
 
 // GLOBAL: SWBF2 0x01eb1120
 int ClothData::s_clothDataHashTableNumEntries;
-// GLOBAL: SWBF2 0x01eb1124
 // SYNTHETIC: SWBF2 0x00402400
 // `dynamic initializer for 'ClothData::s_clothDataHashTable''
 
+// GLOBAL: SWBF2 0x01eb1124
+// ClothData::s_clothDataHashTable
 PblHashTable<ClothData, 64> ClothData::s_clothDataHashTable;
 
 // FUNCTION: SWBF2 0x00459010
@@ -276,11 +281,13 @@ bool enabled_ = true;
 
 typedef util::HashTable<ClothBank*, unsigned int, util::TNewArrayAlloc<ClothBank*> > ClothDataT;
 
-// GLOBAL: SWBF2 0x01eb1330
 // SYNTHETIC: SWBF2 0x00402420
 // `dynamic initializer for 'ClothBE::clothData_''
 // SYNTHETIC: SWBF2 0x00766e00
 // `dynamic atexit destructor for 'ClothBE::clothData_''
+
+// GLOBAL: SWBF2 0x01eb1330
+// clothData_
 ClothDataT clothData_;
 }
 
@@ -305,16 +312,24 @@ template void util::HashTable_<ClothBank*, unsigned int, ClothBE::ClothDataT::El
 
 // SYNTHETIC: SWBF2 0x004023a0
 // `dynamic initializer for 'EntityCloth::rttiHashEntityCloth''
+// EntityCloth::rttiHashEntityCloth
+
 // GLOBAL: SWBF2 0x01eb0fcc
 // EntityCloth::rttiHashEntityCloth
 PblHash EntityCloth::rttiHashEntityCloth("EntityCloth");
+// GLOBAL: SWBF2 0x00788a70
+// EntityCloth::rttiNameEntityCloth
 const char EntityCloth::rttiNameEntityCloth[] = "EntityCloth";
 
 // SYNTHETIC: SWBF2 0x004023b0
 // `dynamic initializer for 'EntityClothClass::rttiHashEntityClothClass''
+// EntityClothClass::rttiHashEntityClothClass
+
 // GLOBAL: SWBF2 0x01eb062c
 // EntityClothClass::rttiHashEntityClothClass
 PblHash EntityClothClass::rttiHashEntityClothClass("EntityClothClass");
+// GLOBAL: SWBF2 0x00788a48
+// EntityClothClass::rttiNameEntityClothClass
 const char EntityClothClass::rttiNameEntityClothClass[] = "EntityClothClass";
 
 
@@ -605,7 +620,10 @@ float EntityCloth::GetPriority()
 // SYNTHETIC: SWBF2 0x0045a230
 // EntityCloth::`scalar deleting destructor'
 
-namespace util { void Deallocate_(void* p, unsigned int uiSize, util::IAllocator& rAlloc); }
+namespace util
+{
+void Deallocate_(void* p, unsigned int uiSize, util::IAllocator& rAlloc);
+}
 
 // FUNCTION: SWBF2 0x0045a610
 EntityCloth::~EntityCloth()

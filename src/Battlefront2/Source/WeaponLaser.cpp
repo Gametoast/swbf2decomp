@@ -39,9 +39,13 @@ namespace
 
 // SYNTHETIC: SWBF2 0x004071c0
 // `dynamic initializer for 'WeaponLaser::rttiHashWeaponLaser''
+// WeaponLaser::rttiHashWeaponLaser
+
 // GLOBAL: SWBF2 0x01f9a8e0
 // WeaponLaser::rttiHashWeaponLaser
 PblHash WeaponLaser::rttiHashWeaponLaser("WeaponLaser");
+// GLOBAL: SWBF2 0x0078c06c
+// WeaponLaser::rttiNameWeaponLaser
 const char WeaponLaser::rttiNameWeaponLaser[] = "WeaponLaser";
 
 
@@ -219,9 +223,13 @@ void WeaponLaser::EnterEmpty()
 
 // SYNTHETIC: SWBF2 0x004071d0
 // `dynamic initializer for 'WeaponLaserClass::rttiHashWeaponLaserClass''
+// WeaponLaserClass::rttiHashWeaponLaserClass
+
 // GLOBAL: SWBF2 0x01f9a8dc
 // WeaponLaserClass::rttiHashWeaponLaserClass
 PblHash WeaponLaserClass::rttiHashWeaponLaserClass("WeaponLaserClass");
+// GLOBAL: SWBF2 0x0078c07c
+// WeaponLaserClass::rttiNameWeaponLaserClass
 const char WeaponLaserClass::rttiNameWeaponLaserClass[] = "WeaponLaserClass";
 
 // FUNCTION: SWBF2 0x006870c0

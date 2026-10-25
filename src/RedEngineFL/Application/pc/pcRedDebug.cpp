@@ -32,16 +32,20 @@ static const PblMatrix _IdentityMatrix(
     PblVector4{ 0.0f, 0.0f, 1.0f, 0.0f },
     PblVector4{ 0.0f, 0.0f, 0.0f, 1.0f });
 
-// GLOBAL: SWBF2 0x009ae64c
 // SYNTHETIC: SWBF2 0x00408f10
 // `dynamic initializer for 'RedDebug::_PrintfColor''
+
+// GLOBAL: SWBF2 0x009ae64c
+// RedDebug::_PrintfColor
 RedColor RedDebug::_PrintfColor = RedColor::WHITE;
 
-// GLOBAL: SWBF2 0x009af450
 // SYNTHETIC: SWBF2 0x00408f40
 // `dynamic initializer for 'RedDebug::_ScreenGroup''
 // SYNTHETIC: SWBF2 0x00769b30
 // `dynamic atexit destructor for 'RedDebug::_ScreenGroup''
+
+// GLOBAL: SWBF2 0x009af450
+// RedDebug::_ScreenGroup
 RedScreenGroupElement RedDebug::_ScreenGroup("_DebugGroup");
 
 struct RedDebug::Radius
@@ -76,49 +80,63 @@ RedDebug::SolidOBB::SolidOBB()
 {
 }
 
-// GLOBAL: SWBF2 0x009c7c10
 // SYNTHETIC: SWBF2 0x00408f80
 // `dynamic initializer for 'RedDebug::_aMarkers3D''
 // SYNTHETIC: SWBF2 0x00769b40
 // `dynamic atexit destructor for 'RedDebug::_aMarkers3D''
+
+// GLOBAL: SWBF2 0x009c7c10
+// RedDebug::_aMarkers3D
 RedTetrahedronShape RedDebug::_aMarkers3D[16];
 
-// GLOBAL: SWBF2 0x009ae650
 // SYNTHETIC: SWBF2 0x00408fb0
 // `dynamic initializer for 'RedDebug::_aOBB''
+
+// GLOBAL: SWBF2 0x009ae650
+// RedDebug::_aOBB
 RedDebug::SolidOBB RedDebug::_aOBB[32];
 
-// GLOBAL: SWBF2 0x009b57d0
 // SYNTHETIC: SWBF2 0x00408fd0
 // `dynamic initializer for 'RedDebug::_aRadii''
+
+// GLOBAL: SWBF2 0x009b57d0
+// RedDebug::_aRadii
 RedDebug::Radius RedDebug::_aRadii[32];
 
-// GLOBAL: SWBF2 0x009c7410
 // SYNTHETIC: SWBF2 0x00408ff0
 // `dynamic initializer for 'RedDebug::_aSpheres''
 // SYNTHETIC: SWBF2 0x00769b60
 // `dynamic atexit destructor for 'RedDebug::_aSpheres''
+
+// GLOBAL: SWBF2 0x009c7410
+// RedDebug::_aSpheres
 RedSphereShape RedDebug::_aSpheres[16];
 
-// GLOBAL: SWBF2 0x009b23d0
 // SYNTHETIC: SWBF2 0x00409020
 // `dynamic initializer for 'RedDebug::_aText3D''
 // SYNTHETIC: SWBF2 0x00769b80
 // `dynamic atexit destructor for 'RedDebug::_aText3D''
+
+// GLOBAL: SWBF2 0x009b23d0
+// RedDebug::_aText3D
 RedDebug::Text3D RedDebug::_aText3D[64];
 
-// GLOBAL: SWBF2 0x009acfb0
 // SYNTHETIC: SWBF2 0x00409050
 // `dynamic initializer for 'RedDebug::_aTextLines''
 // SYNTHETIC: SWBF2 0x00769ba0
 // `dynamic atexit destructor for 'RedDebug::_aTextLines''
+
+// GLOBAL: SWBF2 0x009acfb0
+// RedDebug::_aTextLines
 RedTextElement RedDebug::_aTextLines[30];
 
-// GLOBAL: SWBF2 0x009ae630
 // SYNTHETIC: SWBF2 0x00409080
 // `dynamic initializer for 'RedDebug::_kStaticRenderable''
 // SYNTHETIC: SWBF2 0x00769bc0
 // `dynamic atexit destructor for 'RedDebug::_kStaticRenderable''
+
+// GLOBAL: SWBF2 0x009ae630
+// RedDebug::_kStaticRenderable
 RedDebug::RedDebugRenderable RedDebug::_kStaticRenderable;
 
 // GLOBAL: SWBF2 0x009ace98
@@ -153,10 +171,11 @@ unsigned int RedDebug::_nOBB;
 // GLOBAL: SWBF2 0x009af4f0
 RedColor RedDebug::_aColor[3000];
 
-// GLOBAL: SWBF2 0x009b5ad0
 // SYNTHETIC: SWBF2 0x00408f60
 // `dynamic initializer for 'RedDebug::_a3DLineVectors''
 
+// GLOBAL: SWBF2 0x009b5ad0
+// RedDebug::_a3DLineVectors
 PblVector3 RedDebug::_a3DLineVectors[6000];
 
 // FUNCTION: SWBF2 0x006f0790

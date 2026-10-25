@@ -237,33 +237,38 @@ void __cdecl PAAnimationGroup::ReadHierarchy(PblFileChunk& chunk)
 unsigned char sNextAvailableKey;
 // GLOBAL: SWBF2 0x01eaefc4
 unsigned char sNextAvailableAnim;
-// GLOBAL: SWBF2 0x01efa230
 // SYNTHETIC: SWBF2 0x00405fc0
 // `dynamic initializer for 'sPAKeys''
+
+// GLOBAL: SWBF2 0x01efa230
+// sPAKeys
 PABaseKey sPAKeys[255];
 
 // SYNTHETIC: SWBF2 0x00626be0
 // PABaseKey::PABaseKey
 
-// GLOBAL: SWBF2 0x01efd060
 // SYNTHETIC: SWBF2 0x00406000
 // `dynamic initializer for 'sPAAnims''
 
+// GLOBAL: SWBF2 0x01efd060
+// sPAAnims
 PAAnimationData sPAAnims[255];
 
 // GLOBAL: SWBF2 0x01efce10
 int PAAnimation::_HashTableNumEntries;
-// GLOBAL: SWBF2 0x01efce14
 // SYNTHETIC: SWBF2 0x00405fe0
 // `dynamic initializer for 'PAAnimation::_HashTable''
 
+// GLOBAL: SWBF2 0x01efce14
+// PAAnimation::_HashTable
 PblHashTable<PAAnimation, 32> PAAnimation::_HashTable;
 // GLOBAL: SWBF2 0x01efcf40
 int PAAnimationGroup::_HashTableNumEntries;
-// GLOBAL: SWBF2 0x01efcf44
 // SYNTHETIC: SWBF2 0x00406020
 // `dynamic initializer for 'PAAnimationGroup::_HashTable''
 
+// GLOBAL: SWBF2 0x01efcf44
+// PAAnimationGroup::_HashTable
 PblHashTable<PAAnimationGroup, 32> PAAnimationGroup::_HashTable;
 
 // GLOBAL: SWBF2 0x01eaef3c
@@ -278,11 +283,13 @@ PAManager* PAManager::sClientInstance;
 // GLOBAL: SWBF2 0x01eaef38
 PAManager* PAManager::sInstance;
 
-// GLOBAL: SWBF2 0x01efcf14
 // SYNTHETIC: SWBF2 0x00406040
 // `dynamic initializer for 'pamanagerInterpolator''
 // SYNTHETIC: SWBF2 0x00769350
 // `dynamic atexit destructor for 'pamanagerInterpolator''
+
+// GLOBAL: SWBF2 0x01efcf14
+// pamanagerInterpolator
 PAManagerInterpolator pamanagerInterpolator;
 
 // SYNTHETIC: SWBF2 0x00626c00

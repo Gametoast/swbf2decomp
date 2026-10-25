@@ -8,7 +8,10 @@
 #include "SoundFL/source/sndstreamvad.h"
 #include "SoundFL/source/win/sndstreamcapturesource.h"
 
-namespace Snd { struct StreamPacket; }
+namespace Snd
+{
+struct StreamPacket;
+}
 
 namespace GameVoiceChat
 {

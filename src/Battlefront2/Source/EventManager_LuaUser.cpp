@@ -292,7 +292,8 @@ template void RegisterRegisterLuaCallback<LuaObject, LuaObject, LuaObjectMatches
 
 }
 
-namespace EventManager {
+namespace EventManager
+{
 
 // TEMPLATE: SWBF2 0x00513c40
 // EventManager::Event<EventManager::LuaObject,EventManager::LuaObject>::Callback::~Callback
@@ -303,7 +304,10 @@ namespace EventManager
 {
 
 int DummyLuaCallback(lua_State* L);
-namespace LuaUserEvent { int Create(lua_State* L); void Init(); }
+namespace LuaUserEvent
+{
+int Create(lua_State* L); void Init();
+}
 
 // FUNCTION: SWBF2 0x00513c20
 void LuaUserEvent::Init()

@@ -6,10 +6,11 @@
 #include <string.h>
 #include "Zephyr/Source/ZephyrSkinShared.h"
 
-// GLOBAL: SWBF2 0x0099e80c
 // SYNTHETIC: SWBF2 0x004086d0
 // `dynamic initializer for 'RedAnimation::_HashTable''
 
+// GLOBAL: SWBF2 0x0099e80c
+// RedAnimation::_HashTable
 PblHashTable<RedAnimation, 1024> RedAnimation::_HashTable;
 
 // GLOBAL: SWBF2 0x0099e808

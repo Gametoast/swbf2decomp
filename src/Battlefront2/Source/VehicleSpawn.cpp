@@ -27,11 +27,13 @@
 
 extern "C" PblVector3* __stdcall D3DXVec3TransformCoord(PblVector3* pOut, const PblVector3* pV, const PblMatrix* pM);
 
-// GLOBAL: SWBF2 0x01f9a278
 // SYNTHETIC: SWBF2 0x00406f10
 // `dynamic initializer for 'VehicleSpawn::VehicleTracker::sMemoryPool''
 // SYNTHETIC: SWBF2 0x00769760
 // `dynamic atexit destructor for 'VehicleSpawn::VehicleTracker::sMemoryPool''
+
+// GLOBAL: SWBF2 0x01f9a278
+// VehicleSpawn::VehicleTracker::sMemoryPool
 MemoryPool VehicleSpawn::VehicleTracker::sMemoryPool("VehicleSpawn::VehicleTracker", 0x1c);
 
 static unsigned int HandleId(const GameObject* pObject)

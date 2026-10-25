@@ -15,7 +15,10 @@ class CommandPost;
 class Controllable;
 class Team;
 
-namespace HUD {
+namespace HUD
+{
+// VTABLE: SWBF2 0x007a1258 HUD::ElementGroupPlayer
+// VTABLE: SWBF2 0x007a129c RedGroupElement
 class ElementMap : public HUD::ElementGroupPlayer, public RedGroupElement
 {
 public:
@@ -54,7 +57,8 @@ public:
 
     Mode GetMode() const { return mMode; }
 
-    // VTABLE: SWBF2 0x007a121c
+    // VTABLE: SWBF2 0x007a121c HUD::ElementBitmapBase
+    // VTABLE: SWBF2 0x007a11c0 RedBitmapElement
     class BitmapGroup : public HUD::ElementBitmap
     {
     public:

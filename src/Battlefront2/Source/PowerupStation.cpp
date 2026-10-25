@@ -58,9 +58,13 @@ PowerupStationClass::PowerupStationClass(unsigned int uHash)
 
 // SYNTHETIC: SWBF2 0x00405fb0
 // `dynamic initializer for 'PowerupStationClass::rttiHashPowerupStationClass''
+// PowerupStationClass::rttiHashPowerupStationClass
+
 // GLOBAL: SWBF2 0x01efa228
 // PowerupStationClass::rttiHashPowerupStationClass
 PblHash PowerupStationClass::rttiHashPowerupStationClass("PowerupStationClass");
+// GLOBAL: SWBF2 0x0078ac30
+// PowerupStationClass::rttiNamePowerupStationClass
 const char PowerupStationClass::rttiNamePowerupStationClass[] = "PowerupStationClass";
 
 // FUNCTION: SWBF2 0x00625e80
@@ -280,9 +284,13 @@ Entity* PowerupStationClass::Build(const EntityDesc& desc)
 
 // SYNTHETIC: SWBF2 0x00405fa0
 // `dynamic initializer for 'PowerupStation::rttiHashPowerupStation''
+// PowerupStation::rttiHashPowerupStation
+
 // GLOBAL: SWBF2 0x01efa22c
 // PowerupStation::rttiHashPowerupStation
 PblHash PowerupStation::rttiHashPowerupStation("PowerupStation");
+// GLOBAL: SWBF2 0x0078ac1c
+// PowerupStation::rttiNamePowerupStation
 const char PowerupStation::rttiNamePowerupStation[] = "PowerupStation";
 
 

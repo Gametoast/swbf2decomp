@@ -9,6 +9,7 @@
 #include "PebbleFL/Common/PblHashTable.h"
 #include "SoundFL/source/sndfreelist.h"
 
+// VTABLE: SWBF2 0x0079f240
 class FoleyFXImpact : public FoleyFX
 {
 public:

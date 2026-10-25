@@ -7,18 +7,22 @@
 #include "Zephyr/Source/ZephyrAnimJoint.h"
 #include "Zephyr/Source/ZephyrPoseStatic.h"
 
-// GLOBAL: SWBF2 0x01f9a790
 // SYNTHETIC: SWBF2 0x00406fa0
 // `dynamic initializer for 'WalkerBlend::sMemoryPool''
 // SYNTHETIC: SWBF2 0x007697a0
 // `dynamic atexit destructor for 'WalkerBlend::sMemoryPool''
+
+// GLOBAL: SWBF2 0x01f9a790
+// WalkerBlend::sMemoryPool
 MemoryPool WalkerBlend::sMemoryPool("WalkerBlend", 76);
 
-// GLOBAL: SWBF2 0x01f9a740
 // SYNTHETIC: SWBF2 0x00406fc0
 // `dynamic initializer for 'WalkerBlendUnit::sMemoryPool''
 // SYNTHETIC: SWBF2 0x007697b0
 // `dynamic atexit destructor for 'WalkerBlendUnit::sMemoryPool''
+
+// GLOBAL: SWBF2 0x01f9a740
+// WalkerBlendUnit::sMemoryPool
 MemoryPool WalkerBlendUnit::sMemoryPool("WalkerBlendUnit", 4924);
 
 // FUNCTION: SWBF2 0x00675990

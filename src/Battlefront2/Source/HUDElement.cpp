@@ -53,11 +53,13 @@ float HUD::Element::sViewportWidth;
 
 float HUD::Element::sViewportHeight;
 
-// GLOBAL: SWBF2 0x007eba18
 // SYNTHETIC: SWBF2 0x00403fb0
 // `dynamic initializer for 'HUD::Element::sList''
 // SYNTHETIC: SWBF2 0x00768b20
 // `dynamic atexit destructor for 'HUD::Element::sList''
+
+// GLOBAL: SWBF2 0x007eba18
+// HUD::Element::sList
 PblListDouble HUD::Element::sList;
 
 // GLOBAL: SWBF2 0x007e6904

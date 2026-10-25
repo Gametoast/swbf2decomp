@@ -7,7 +7,8 @@ class AIPath;
 class GameObject;
 class PblVector3;
 
-namespace AI {
+namespace AI
+{
 // VTABLE: SWBF2 0x007ad640
 class PatrolPath : public GamePath
 {
@@ -68,7 +69,8 @@ public:
  
  
 
-namespace AI {
+namespace AI
+{
 // VTABLE: SWBF2 0x0079fbd0
 class PatrolPathFactory : public GamePathFactory
 {

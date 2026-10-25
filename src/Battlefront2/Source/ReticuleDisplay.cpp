@@ -29,11 +29,13 @@ extern bool netIsLocalTurn;
 // GLOBAL: SWBF2 0x01eaeffc
 ReticuleDisplay* ReticuleDisplay::sInstance[1];
 
-// GLOBAL: SWBF2 0x01f3a170
 // SYNTHETIC: SWBF2 0x004061e0
 // `dynamic initializer for 'reticuleInterpolator''
 // SYNTHETIC: SWBF2 0x00769440
 // `dynamic atexit destructor for 'reticuleInterpolator''
+
+// GLOBAL: SWBF2 0x01f3a170
+// reticuleInterpolator
 ReticuleInterpolator reticuleInterpolator[1];
 
 // FUNCTION: SWBF2 0x00630490

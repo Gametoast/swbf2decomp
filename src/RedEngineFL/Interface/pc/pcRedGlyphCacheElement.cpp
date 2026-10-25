@@ -16,6 +16,8 @@
 unsigned int RedGlyphCacheElement::s_uiNumQuads;
 // GLOBAL: SWBF2 0x0099ccf4
 bool RedGlyphCacheElement::s_bQuadsInUse;
+// GLOBAL: SWBF2 0x009984ec
+// RedGlyphCacheElement::s_pMemoryManager
 RedGlyphMemoryManager* RedGlyphCacheElement::s_pMemoryManager;
 
 RedGlyphCacheElement::Quad RedGlyphCacheElement::s_aQuads[512];

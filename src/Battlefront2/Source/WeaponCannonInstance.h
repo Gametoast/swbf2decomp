@@ -26,6 +26,7 @@ class Trigger;
 struct OrdnanceDesc;
 struct WeaponDesc;
 
+// VTABLE: SWBF2 0x007b01a8
 class Weapon : public Thread
 {
 public:

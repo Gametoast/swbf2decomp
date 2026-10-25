@@ -9,13 +9,19 @@
 
 // SYNTHETIC: SWBF2 0x00407270
 // `dynamic initializer for 'WeaponRemoteClass::rttiHashWeaponRemoteClass''
+// WeaponRemoteClass::rttiHashWeaponRemoteClass
+
 // GLOBAL: SWBF2 0x01f9a904
 // WeaponRemoteClass::rttiHashWeaponRemoteClass
 PblHash WeaponRemoteClass::rttiHashWeaponRemoteClass("WeaponRemoteClass");
+// GLOBAL: SWBF2 0x0078c208
+// WeaponRemoteClass::rttiNameWeaponRemoteClass
 const char WeaponRemoteClass::rttiNameWeaponRemoteClass[] = "WeaponRemoteClass";
 
 // SYNTHETIC: SWBF2 0x00407260
 // `dynamic initializer for 'WeaponRemote::rttiHashWeaponRemote''
+// WeaponRemote::rttiHashWeaponRemote
+
 // GLOBAL: SWBF2 0x01f9a908
 // WeaponRemote::rttiHashWeaponRemote
 PblHash WeaponRemote::rttiHashWeaponRemote("WeaponRemote");

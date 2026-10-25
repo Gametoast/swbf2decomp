@@ -27,21 +27,31 @@ EntityLightFXParser* EntityLightFXParser::s_pInstance;
 
 // SYNTHETIC: SWBF2 0x00402c00
 // `dynamic initializer for 'EntityLight::rttiHashEntityLight''
+// EntityLight::rttiHashEntityLight
+
 // GLOBAL: SWBF2 0x01ebbe30
 // EntityLight::rttiHashEntityLight
 PblHash EntityLight::rttiHashEntityLight("EntityLight");
+// GLOBAL: SWBF2 0x00789334
+// EntityLight::rttiNameEntityLight
 const char EntityLight::rttiNameEntityLight[] = "EntityLight";
 // SYNTHETIC: SWBF2 0x00402c10
 // `dynamic initializer for 'EntityLightClass::rttiHashEntityLightClass''
+// EntityLightClass::rttiHashEntityLightClass
+
 // GLOBAL: SWBF2 0x01ebbe34
 // EntityLightClass::rttiHashEntityLightClass
 PblHash EntityLightClass::rttiHashEntityLightClass("EntityLightClass");
+// GLOBAL: SWBF2 0x0078930c
+// EntityLightClass::rttiNameEntityLightClass
 const char EntityLightClass::rttiNameEntityLightClass[] = "EntityLightClass";
 // SYNTHETIC: SWBF2 0x00402be0
 // `dynamic initializer for 'EntityLight::sMemoryPool''
 // SYNTHETIC: SWBF2 0x00766f70
 // `dynamic atexit destructor for 'EntityLight::sMemoryPool''
+
 // GLOBAL: SWBF2 0x01ebbe38
+// EntityLight::sMemoryPool
 MemoryPool EntityLight::sMemoryPool("EntityLight", 0x2e0);
 // GLOBAL: SWBF2 0x01ebbe88
 int EntityLightClass::sLightClassTableNumEntries;
@@ -49,6 +59,7 @@ int EntityLightClass::sLightClassTableNumEntries;
 // `dynamic initializer for 'EntityLightClass::sLightClassTable''
 
 // GLOBAL: SWBF2 0x01ebbe8c
+// EntityLightClass::sLightClassTable
 PblHashTable<EntityLightClass, 32> EntityLightClass::sLightClassTable;
 
 // FUNCTION: SWBF2 0x004ce920

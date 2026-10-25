@@ -11,11 +11,13 @@
 #include "Zephyr/Source/ZephyrPoseStatic.h"
 #include "RedEngineFL/Memory/RedMemoryPool.h"
 
-// GLOBAL: SWBF2 0x01f9a7e0
 // SYNTHETIC: SWBF2 0x00406fe0
 // `dynamic initializer for 'WalkerLegPair::sMemoryPool''
 // SYNTHETIC: SWBF2 0x007697c0
 // `dynamic atexit destructor for 'WalkerLegPair::sMemoryPool''
+
+// GLOBAL: SWBF2 0x01f9a7e0
+// WalkerLegPair::sMemoryPool
 MemoryPool WalkerLegPair::sMemoryPool("WalkerLegPair", 0x130);
 
 

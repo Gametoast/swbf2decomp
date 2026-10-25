@@ -72,11 +72,20 @@ extern int netPlayerLimit;
 extern int netNumBots;
 extern bool gAttractMode;
 
-namespace PlayerPrefs { int __fastcall FindByPlayerId(int iPlayer); }
+namespace PlayerPrefs
+{
+int __fastcall FindByPlayerId(int iPlayer);
+}
 
-namespace FriendBuddyList { bool __fastcall IsFriendBuddy(int iLocalIndex, int iPlayerId); }
+namespace FriendBuddyList
+{
+bool __fastcall IsFriendBuddy(int iLocalIndex, int iPlayerId);
+}
 
-namespace PblUnicode { unsigned int ustrncnv(unsigned short* pDest, const unsigned char* pSrc, unsigned int uiCount); }
+namespace PblUnicode
+{
+unsigned int ustrncnv(unsigned short* pDest, const unsigned char* pSrc, unsigned int uiCount);
+}
 
 static GameObject* GetGameObject(CommandPost* pPost)
 {

@@ -55,7 +55,10 @@ int Play(VOType eType, const GameObject* pSpeaker, const GameObject* pTarget, co
 }
 }
 
-namespace CombatUtil { float GetCombatRange(const Controllable* pMe); }
+namespace CombatUtil
+{
+float GetCombatRange(const Controllable* pMe);
+}
 
 namespace
 {

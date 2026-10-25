@@ -7,8 +7,8 @@
 #include "CommandPost.h"
 #include "EntityBuildingAnimatedArmed.h"
 
-// VTABLE: SWBF2 0x00797888
-// VTABLE: SWBF2 0x00797b08
+// VTABLE: SWBF2 0x00797888 EntityBuildingAnimatedArmedClass
+// VTABLE: SWBF2 0x00797b08 CommandPostClass
 class CommandBuildingAnimatedArmedClass : public EntityBuildingAnimatedArmedClass,
                                           public CommandPostClass
 {
@@ -33,6 +33,12 @@ public:
    
  
 
+// VTABLE: SWBF2 0x007978d4 Damageable
+// VTABLE: SWBF2 0x00797900 CollisionObject
+// VTABLE: SWBF2 0x00797954 EntityEx
+// VTABLE: SWBF2 0x00797a88
+// VTABLE: SWBF2 0x00797aa0 RedSceneObject
+// VTABLE: SWBF2 0x00797b14 PblHandled
 class CommandBuildingAnimatedArmed : public EntityBuildingAnimatedArmed
 {
 public:

@@ -35,7 +35,12 @@ public:
 
 class MemoryPool;
 
-// VTABLE: SWBF2 0x0079a544
+// VTABLE: SWBF2 0x0079a544 EntityEx
+// VTABLE: SWBF2 0x0079a53c PblHandled
+// VTABLE: SWBF2 0x0079a678 Damageable
+// VTABLE: SWBF2 0x0079a6a4
+// VTABLE: SWBF2 0x0079a6bc RedSceneObject
+// VTABLE: SWBF2 0x0079a724 CollisionObject
 class EntityDefenseGridTurret : public EntityBuildingArmedDynamic
 {
 public:

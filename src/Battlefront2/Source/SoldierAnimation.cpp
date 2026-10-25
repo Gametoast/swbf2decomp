@@ -4,11 +4,13 @@
 #include "Zephyr/Source/ZephyrPoseDyn.h"
 #include "SoldierAnimationData.h"
 
-// GLOBAL: SWBF2 0x01f6ddf8
 // SYNTHETIC: SWBF2 0x00406390
 // `dynamic initializer for 'SoldierAnimation::sMemoryPool''
 // SYNTHETIC: SWBF2 0x007694b0
 // `dynamic atexit destructor for 'SoldierAnimation::sMemoryPool''
+
+// GLOBAL: SWBF2 0x01f6ddf8
+// SoldierAnimation::sMemoryPool
 MemoryPool SoldierAnimation::sMemoryPool("SoldierAnimation", 0xc);
 
 // FUNCTION: SWBF2 0x0063c2d0

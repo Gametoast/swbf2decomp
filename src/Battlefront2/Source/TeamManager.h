@@ -16,7 +16,10 @@ void RemoveObject(GameObject* pObject);
 int sGetObjectsInRange(const PblVector3& vPos, float fRange, GameObject** const ppObjects, int iMax,
                        const Team* pTeam, int iAffilMask, const GameObject* pIgnore);
 }
-namespace TeamManager { void UpdatePositions(); }
+namespace TeamManager
+{
+void UpdatePositions();
+}
 
 class GameObject;
 

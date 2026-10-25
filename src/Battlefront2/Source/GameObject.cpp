@@ -83,9 +83,13 @@ GameObjectClass::~GameObjectClass()
 
 // SYNTHETIC: SWBF2 0x00403dd0
 // `dynamic initializer for 'GameObjectClass::rttiHashGameObjectClass''
+// GameObjectClass::rttiHashGameObjectClass
+
 // GLOBAL: SWBF2 0x01ec3234
 // GameObjectClass::rttiHashGameObjectClass
 PblHash GameObjectClass::rttiHashGameObjectClass("GameObjectClass");
+// GLOBAL: SWBF2 0x00789998
+// GameObjectClass::rttiNameGameObjectClass
 const char GameObjectClass::rttiNameGameObjectClass[] = "GameObjectClass";
 
 
@@ -96,9 +100,13 @@ const char GameObjectClass::rttiNameGameObjectClass[] = "GameObjectClass";
 
 // SYNTHETIC: SWBF2 0x00403dc0
 // `dynamic initializer for 'GameObject::rttiHashGameObject''
+// GameObject::rttiHashGameObject
+
 // GLOBAL: SWBF2 0x01ec0c7c
 // GameObject::rttiHashGameObject
 PblHash GameObject::rttiHashGameObject("GameObject");
+// GLOBAL: SWBF2 0x007899ac
+// GameObject::rttiNameGameObject
 const char GameObject::rttiNameGameObject[] = "GameObject";
 
 
@@ -136,7 +144,10 @@ bool GameObject::Deflect(const Ordnance* pOrdnance, const PblVector3& vPos, cons
     return false;
 }
 
-namespace AIUtil { bool __fastcall IsSpied(const Character* pCharacter, const Character* pOther); }
+namespace AIUtil
+{
+bool __fastcall IsSpied(const Character* pCharacter, const Character* pOther);
+}
 
 static char sEventParam;
 
@@ -594,9 +605,11 @@ GameObjectInterpolator::GameObjectInterpolator()
 {
 }
 
-// GLOBAL: SWBF2 0x01ec3240
 // SYNTHETIC: SWBF2 0x00403de0
 // `dynamic initializer for 'gameObjectInterpolator''
+
+// GLOBAL: SWBF2 0x01ec3240
+// gameObjectInterpolator
 GameObjectInterpolator gameObjectInterpolator;
 
 // FUNCTION: SWBF2 0x00537460

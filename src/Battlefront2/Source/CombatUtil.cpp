@@ -1593,7 +1593,8 @@ float CombatUtil::GetWeaponMinRange(const Controllable* pMe)
     return WeaponGetClass(pWpn)->mMinRange;
 }
 
-namespace CombatUtil {
+namespace CombatUtil
+{
 
 // FUNCTION: SWBF2 0x004700b0
 float GetCombatRange(const Controllable* pMe)
@@ -1696,7 +1697,8 @@ bool CombatUtil::IsTargetLinedUpObj(const Controllable* pMe, const GameObject* p
     return sIsTargetLinedUpPos(pMe, vLead);
 }
 
-namespace CombatUtil {
+namespace CombatUtil
+{
 
 // FUNCTION: SWBF2 0x00470460
 bool TestWpnConstraintsPos(Controllable* pMe, const PblVector3& vAim, const PblVector3& vPos)
@@ -1785,7 +1787,8 @@ bool CombatUtil::CanFaceDisturbance(const GameObject* pObj, const PblVector3& vP
     return false;
 }
 
-namespace CombatUtil {
+namespace CombatUtil
+{
 
 // FUNCTION: SWBF2 0x00470720
 void SendDamageEvent(const Controllable* pOwner, const GameObject* pTarget, const Trigger* pTrigger)

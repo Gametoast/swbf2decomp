@@ -79,7 +79,10 @@ namespace CombatUtil
     bool CanFaceDisturbance(const GameObject* pObj, const PblVector3& vPos);
 }
 
-namespace CombatUtil { float GetCombatRange(const Controllable* pMe); }
+namespace CombatUtil
+{
+float GetCombatRange(const Controllable* pMe);
+}
 
 namespace TeamManager
 {
@@ -235,17 +238,22 @@ namespace
 
 // SYNTHETIC: SWBF2 0x00406bf0
 // `dynamic initializer for 'UnitAgent::rttiHashUnitAgent''
+// UnitAgent::rttiHashUnitAgent
+
 // GLOBAL: SWBF2 0x01f7d0dc
 // UnitAgent::rttiHashUnitAgent
 PblHash UnitAgent::rttiHashUnitAgent("UnitAgent");
+// GLOBAL: SWBF2 0x0078b6e8
+// UnitAgent::rttiNameUnitAgent
 const char UnitAgent::rttiNameUnitAgent[] = "UnitAgent";
 
-// GLOBAL: SWBF2 0x01f9a1a8
 // SYNTHETIC: SWBF2 0x00406c00
 // `dynamic initializer for 'UnitAgent::sMemoryPool''
 // SYNTHETIC: SWBF2 0x007696b0
 // `dynamic atexit destructor for 'UnitAgent::sMemoryPool''
 
+// GLOBAL: SWBF2 0x01f9a1a8
+// UnitAgent::sMemoryPool
 MemoryPool UnitAgent::sMemoryPool("UnitAgent", sizeof(UnitAgent));
 
 

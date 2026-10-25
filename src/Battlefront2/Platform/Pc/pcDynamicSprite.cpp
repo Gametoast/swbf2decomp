@@ -78,7 +78,9 @@ void pcDynamicSprite::ClearViewports()
 // `dynamic initializer for 'pcDynamicSprite::s_Instance''
 // SYNTHETIC: SWBF2 0x00766ce0
 // `dynamic atexit destructor for 'pcDynamicSprite::s_Instance''
+
 // GLOBAL: SWBF2 0x01eafda8
+// pcDynamicSprite::s_Instance
 pcDynamicSprite pcDynamicSprite::s_Instance;
 
 

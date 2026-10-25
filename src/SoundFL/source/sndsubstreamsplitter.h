@@ -6,6 +6,7 @@
 namespace Snd
 {
 
+// VTABLE: SWBF2 0x00786c30
 class SubstreamSplitter : public StreamNode,
                           public StreamNodeSource,
                           public StreamNodeSink

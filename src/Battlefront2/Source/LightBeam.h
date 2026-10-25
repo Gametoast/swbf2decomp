@@ -47,6 +47,9 @@ private:
 };
  
  
+ // VTABLE: SWBF2 0x0079b7f0 Thread
+ // VTABLE: SWBF2 0x0079b910 PblHandled
+ // VTABLE: SWBF2 0x0079b918
  class LightBeam : public FLEffectClass, public FLEffectObject
 {
 public:
@@ -118,6 +121,10 @@ public:
  
  
  
+ // VTABLE: SWBF2 0x0079c010 Thread
+ // VTABLE: SWBF2 0x0079c040 LightBeam
+ // VTABLE: SWBF2 0x0079c0b8 RedSceneObject
+ // VTABLE: SWBF2 0x0079c15c PblHandled
  class ManagedLightBeam : public RedSceneObject, public LightBeam
 {
 public:

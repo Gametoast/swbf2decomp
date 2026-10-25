@@ -58,6 +58,9 @@ public:
 class EntityLight;
 class WeaponMeleeThrow;
 
+// VTABLE: SWBF2 0x007acd7c PblHandled
+// VTABLE: SWBF2 0x007acd84 Thread
+// VTABLE: SWBF2 0x007acdc4
 class OrdnanceMeleeThrow : public Ordnance, public RedSceneObject
 {
 public:

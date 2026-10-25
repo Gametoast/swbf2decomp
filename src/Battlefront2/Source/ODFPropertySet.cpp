@@ -12,7 +12,10 @@ namespace ObjectiveManager
 extern PblList<HUD::ObjectiveList>* gObjectiveLists;
 }
 
-namespace ObjectiveManager { void AddObjective(unsigned int uiTextHashID, unsigned int uiPopupTextID, int iTeam); }
+namespace ObjectiveManager
+{
+void AddObjective(unsigned int uiTextHashID, unsigned int uiPopupTextID, int iTeam);
+}
 
 // FUNCTION: SWBF2 0x005f67f0
 void ObjectiveManager::AddObjective(unsigned int uiTextHashID, unsigned int uiPopupTextID, int iTeam)
@@ -28,7 +31,10 @@ void ObjectiveManager::AddObjective(unsigned int uiTextHashID, unsigned int uiPo
     }
 }
 
-namespace ObjectiveManager { void SetObjectiveState(unsigned int uiTextHashID, int iState); }
+namespace ObjectiveManager
+{
+void SetObjectiveState(unsigned int uiTextHashID, int iState);
+}
 
 // FUNCTION: SWBF2 0x005f6840
 void ObjectiveManager::SetObjectiveState(unsigned int uiTextHashID, int iState)

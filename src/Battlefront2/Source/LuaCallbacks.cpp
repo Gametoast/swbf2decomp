@@ -53,10 +53,12 @@ const int Max(int iA, int iB)
     return iA > iB ? iA : iB;
 }
 
-namespace Lua_Callbacks {
+namespace Lua_Callbacks
+{
 void CleanupOptions();
 }
-namespace Lua_Callbacks {
+namespace Lua_Callbacks
+{
 void CleanupSound();
 }
 
@@ -1883,7 +1885,8 @@ void Init()
 
 }
 
-namespace Lua_Callbacks {
+namespace Lua_Callbacks
+{
 
 // FUNCTION: SWBF2 0x005807a0
 void Cleanup()

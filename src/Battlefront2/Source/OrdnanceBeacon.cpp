@@ -32,16 +32,24 @@ namespace
 
 // SYNTHETIC: SWBF2 0x00405a10
 // `dynamic initializer for 'OrdnanceBeacon::rttiHashOrdnanceBeacon''
+// OrdnanceBeacon::rttiHashOrdnanceBeacon
+
 // GLOBAL: SWBF2 0x01ef2610
 // OrdnanceBeacon::rttiHashOrdnanceBeacon
 PblHash OrdnanceBeacon::rttiHashOrdnanceBeacon("OrdnanceBeacon");
+// GLOBAL: SWBF2 0x0078a78c
+// OrdnanceBeacon::rttiNameOrdnanceBeacon
 const char OrdnanceBeacon::rttiNameOrdnanceBeacon[] = "OrdnanceBeacon";
 
 // SYNTHETIC: SWBF2 0x00405a20
 // `dynamic initializer for 'OrdnanceBeaconClass::rttiHashOrdnanceBeaconClass''
+// OrdnanceBeaconClass::rttiHashOrdnanceBeaconClass
+
 // GLOBAL: SWBF2 0x01ef257c
 // OrdnanceBeaconClass::rttiHashOrdnanceBeaconClass
 PblHash OrdnanceBeaconClass::rttiHashOrdnanceBeaconClass("OrdnanceBeaconClass");
+// GLOBAL: SWBF2 0x0078a768
+// OrdnanceBeaconClass::rttiNameOrdnanceBeaconClass
 const char OrdnanceBeaconClass::rttiNameOrdnanceBeaconClass[] = "OrdnanceBeaconClass";
 
 // FUNCTION: SWBF2 0x005f8b10

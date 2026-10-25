@@ -42,9 +42,13 @@ namespace
 
 // SYNTHETIC: SWBF2 0x004070c0
 // `dynamic initializer for 'WeaponCatapult::rttiHashWeaponCatapult''
+// WeaponCatapult::rttiHashWeaponCatapult
+
 // GLOBAL: SWBF2 0x01f9a89c
 // WeaponCatapult::rttiHashWeaponCatapult
 PblHash WeaponCatapult::rttiHashWeaponCatapult("WeaponCatapult");
+// GLOBAL: SWBF2 0x0078beb0
+// WeaponCatapult::rttiNameWeaponCatapult
 const char WeaponCatapult::rttiNameWeaponCatapult[] = "WeaponCatapult";
 
 
@@ -317,9 +321,13 @@ void WeaponCatapult::Render(const PblMatrix& matrix, const RedPose* pPose, const
 
 // SYNTHETIC: SWBF2 0x004070d0
 // `dynamic initializer for 'WeaponCatapultClass::rttiHashWeaponCatapultClass''
+// WeaponCatapultClass::rttiHashWeaponCatapultClass
+
 // GLOBAL: SWBF2 0x01f9a8a0
 // WeaponCatapultClass::rttiHashWeaponCatapultClass
 PblHash WeaponCatapultClass::rttiHashWeaponCatapultClass("WeaponCatapultClass");
+// GLOBAL: SWBF2 0x0078bec0
+// WeaponCatapultClass::rttiNameWeaponCatapultClass
 const char WeaponCatapultClass::rttiNameWeaponCatapultClass[] = "WeaponCatapultClass";
 
 // FUNCTION: SWBF2 0x006817d0

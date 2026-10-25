@@ -24,13 +24,18 @@ bool ParticleEmitterObject::sForceRegisterStep;
 extern Particle sParticleCache[128];
 extern ParticleEmitterObject sPEO;
 
-namespace ParticleSystem { bool IsLodActive(int iLod); }
+namespace ParticleSystem
+{
+bool IsLodActive(int iLod);
+}
 
-// GLOBAL: SWBF2 0x01ef5090
 // SYNTHETIC: SWBF2 0x00405cc0
 // `dynamic initializer for 'ParticleEmitterObject::sMemoryPool''
 // SYNTHETIC: SWBF2 0x00769240
 // `dynamic atexit destructor for 'ParticleEmitterObject::sMemoryPool''
+
+// GLOBAL: SWBF2 0x01ef5090
+// ParticleEmitterObject::sMemoryPool
 MemoryPool ParticleEmitterObject::sMemoryPool("ParticleEmitterObject", 0x110);
 
 // FUNCTION: SWBF2 0x0060b910

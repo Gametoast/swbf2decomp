@@ -39,6 +39,7 @@ private:
  
  
 
+// VTABLE: SWBF2 0x00772ba4
 class PblMemChunk
 {
 public:

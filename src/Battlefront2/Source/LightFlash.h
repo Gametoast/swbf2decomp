@@ -15,6 +15,8 @@ class LightFlash : public Thread, public RedOmniLight
 {
 public:
     static void* operator new(unsigned int uiSize) { return sMemoryPool.Allocate(uiSize); }
+    // SYNTHETIC: SWBF2 0x0051c990
+    // LightFlash::operator delete
     static void operator delete(void* pBlock) { sMemoryPool.Free(pBlock); }
 
     LightFlash(const PblSphere& sphere, const RedColor& color, float fLifeTime);

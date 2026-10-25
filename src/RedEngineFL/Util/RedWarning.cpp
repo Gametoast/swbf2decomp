@@ -24,7 +24,12 @@ bool GetBreakOnWarning()
 static char* kapcSEVERITYSHORT[6] = { "*", "?", "#", "$", "%", "!" };
 static char* kapcSEVERITYLONG[6] = { "VERBOSE", "INFORM", "WARNING", "ERROR", "BUG", "FATAL" };
 
-namespace RedWarning { bool g_bOverwriteLogFile = true; }
+namespace RedWarning
+{
+// GLOBAL: SWBF2 0x007e15fc
+// g_bOverwriteLogFile
+bool g_bOverwriteLogFile = true;
+}
 
 static char kpcNullFileName[7] = "[NULL]";
 static char kpcNullDate[7] = "[NULL]";
@@ -35,11 +40,16 @@ namespace RedWarning
 
 // GLOBAL: SWBF2 0x009c8448
 RED_ERROR_SEVERITY g_eSeverityMin;
+// GLOBAL: SWBF2 0x009c844c
+// g_aeSeverityToDestination
 RED_ERROR_SEVERITY g_aeSeverityToDestination[6];
 // GLOBAL: SWBF2 0x009c8464
 unsigned int g_auiFormatToDestination[5];
 // GLOBAL: SWBF2 0x009c8478
+// g_fnLogCallback
 void(__cdecl* g_fnLogCallback)(char const*, ...);
+// GLOBAL: SWBF2 0x009c847c
+// g_eSeverity
 RED_ERROR_SEVERITY g_eSeverity;
 // GLOBAL: SWBF2 0x009c8480
 char* g_pcFileName;
@@ -49,6 +59,8 @@ char* g_pcCompileDate;
 char* g_pcCompileTime;
 // GLOBAL: SWBF2 0x009c848c
 int g_iLineNumber;
+// GLOBAL: SWBF2 0x009c8490
+// g_bFormatted
 bool g_bFormatted;
 // GLOBAL: SWBF2 0x009c8491
 bool g_bValidLogFile;

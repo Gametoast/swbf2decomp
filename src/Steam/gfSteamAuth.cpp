@@ -19,18 +19,22 @@ extern bool gFriendListDirty;
 extern bool gGalaxyInitialized;
 extern bool gFriendsStarted;
 
-// GLOBAL: SWBF2 0x007eb918
 // SYNTHETIC: SWBF2 0x00403be0
 // `dynamic initializer for 'gEncryptedAppTicket''
 // SYNTHETIC: SWBF2 0x00768820
 // `dynamic atexit destructor for 'gEncryptedAppTicket''
+
+// GLOBAL: SWBF2 0x007eb918
+// gEncryptedAppTicket
 std::string gEncryptedAppTicket;
 
-// GLOBAL: SWBF2 0x01ec0bf0
 // SYNTHETIC: SWBF2 0x00403bf0
 // `dynamic initializer for 'gFriendConnectionStrings''
 // SYNTHETIC: SWBF2 0x00768880
 // `dynamic atexit destructor for 'gFriendConnectionStrings''
+
+// GLOBAL: SWBF2 0x01ec0bf0
+// gFriendConnectionStrings
 std::unordered_map<unsigned __int64, std::string> gFriendConnectionStrings;
 
 // TEMPLATE: SWBF2 0x0052fbb0

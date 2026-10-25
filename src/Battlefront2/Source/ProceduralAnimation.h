@@ -32,6 +32,7 @@ public:
  
  
 
+// VTABLE: SWBF2 0x007ade20
 class PAAnimation
 {
 public:
@@ -112,6 +113,7 @@ public:
  
  
 
+// VTABLE: SWBF2 0x007ade00
 class PAAnimationGroup
 {
 public:
@@ -168,6 +170,7 @@ public:
  
  
 
+// VTABLE: SWBF2 0x007adde8
 class PAManagerInterpolator : public Thread
 {
 public:

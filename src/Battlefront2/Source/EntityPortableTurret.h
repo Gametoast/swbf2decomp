@@ -50,6 +50,12 @@ public:
 class CollisionResult;
 class Restrictor;
 
+// VTABLE: SWBF2 0x0079c4b8
+// VTABLE: SWBF2 0x0079c4d0 RedSceneObject
+// VTABLE: SWBF2 0x0079c538 EntityEx
+// VTABLE: SWBF2 0x0079c6b8 PblHandled
+// VTABLE: SWBF2 0x0079c6c0 Damageable
+// VTABLE: SWBF2 0x0079c6ec CollisionObject
 class EntityPortableTurret : public EntityBuildingArmedDynamic
 {
 public:
@@ -67,6 +73,8 @@ public:
     virtual bool Update(float fDeltaTime);
 
     static void* operator new(unsigned int uSize) { return sMemoryPool.Allocate(uSize); }
+    // SYNTHETIC: SWBF2 0x004d7c10
+    // EntityPortableTurret::operator delete
     static void operator delete(void* pBlock) { sMemoryPool.Free(pBlock); }
 
     static PblHash rttiHashEntityPortableTurret;

@@ -7,10 +7,18 @@
 extern "C"
 {
     bool isHeapObjInitialized;
+    // GLOBAL: SWBF2 0x0093eba4
+    // heapobj
     HeapObj* heapobj;
     int maxheaps;
+    // GLOBAL: SWBF2 0x0093ebac
+    // __RedCurrHeap
     int __RedCurrHeap;
+    // GLOBAL: SWBF2 0x007dee30
+    // __RedDebugHeap
     int __RedDebugHeap = -1;
+    // GLOBAL: SWBF2 0x007dee34
+    // __RedTempHeap
     int __RedTempHeap = -1;
     void (*OnFailure)();
     int sRecursionDepth;

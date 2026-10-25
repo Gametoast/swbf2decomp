@@ -370,4 +370,5 @@ pcRedShaderDef pcZPrepassShader::s_shaderDef("zprepass_shader.xml");
 // `dynamic initializer for 'PblMath::fOneOverHalfPi''
 
 // GLOBAL: SWBF2 0x009c95dc
+// g_pcZPrepassShader
 unsigned int g_pcZPrepassShader;

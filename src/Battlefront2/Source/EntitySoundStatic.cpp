@@ -3,9 +3,13 @@
 
 // SYNTHETIC: SWBF2 0x00402e50
 // `dynamic initializer for 'EntitySoundStaticClass::rttiHashEntitySoundStaticClass''
+// EntitySoundStaticClass::rttiHashEntitySoundStaticClass
+
 // GLOBAL: SWBF2 0x01ebc1a4
 // EntitySoundStaticClass::rttiHashEntitySoundStaticClass
 PblHash EntitySoundStaticClass::rttiHashEntitySoundStaticClass("EntitySoundStaticClass");
+// GLOBAL: SWBF2 0x00789604
+// EntitySoundStaticClass::rttiNameEntitySoundStaticClass
 const char EntitySoundStaticClass::rttiNameEntitySoundStaticClass[] = "EntitySoundStaticClass";
 
 // FUNCTION: SWBF2 0x004fb6b0
@@ -55,18 +59,24 @@ Entity* EntitySoundStaticClass::Build(const EntityDesc& desc)
 
 
 
-// GLOBAL: SWBF2 0x01ebc1a8
 // SYNTHETIC: SWBF2 0x00402e20
 // `dynamic initializer for 'EntitySoundStatic::sMemoryPool''
 // SYNTHETIC: SWBF2 0x00766ff0
 // `dynamic atexit destructor for 'EntitySoundStatic::sMemoryPool''
+
+// GLOBAL: SWBF2 0x01ebc1a8
+// EntitySoundStatic::sMemoryPool
 MemoryPool EntitySoundStatic::sMemoryPool("EntitySoundStatic", 0x4c);
 
 // SYNTHETIC: SWBF2 0x00402e40
 // `dynamic initializer for 'EntitySoundStatic::rttiHashEntitySoundStatic''
+// EntitySoundStatic::rttiHashEntitySoundStatic
+
 // GLOBAL: SWBF2 0x01ebc1f8
 // EntitySoundStatic::rttiHashEntitySoundStatic
 PblHash EntitySoundStatic::rttiHashEntitySoundStatic("EntitySoundStatic");
+// GLOBAL: SWBF2 0x00789620
+// EntitySoundStatic::rttiNameEntitySoundStatic
 const char EntitySoundStatic::rttiNameEntitySoundStatic[] = "EntitySoundStatic";
 
 

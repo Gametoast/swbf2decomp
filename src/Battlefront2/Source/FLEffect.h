@@ -99,6 +99,8 @@ protected:
  
  
  
+  // VTABLE: SWBF2 0x00796a04 Thread
+  // VTABLE: SWBF2 0x00796a68 PblHandled
   class FLEffectObject : public Thread, public PblHandled
 {
 public:

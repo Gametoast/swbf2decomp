@@ -15,44 +15,56 @@
 class PblMatrix;
 extern PblMatrix gMatrixIdentity;
 
-// GLOBAL: SWBF2 0x0093e4d4
 // SYNTHETIC: SWBF2 0x00407a70
 // `dynamic initializer for 'RedInterfaceScreen::sSQRT3''
+
+// GLOBAL: SWBF2 0x0093e4d4
+// RedInterfaceScreen::sSQRT3
 float RedInterfaceScreen::sSQRT3 = (float)sqrt(3.0);
 
-// GLOBAL: SWBF2 0x0093e4f0
 // SYNTHETIC: SWBF2 0x00407aa0
 // `dynamic initializer for 'RedInterfaceScreen::s_directionalLight''
 // SYNTHETIC: SWBF2 0x00769890
 // `dynamic atexit destructor for 'RedInterfaceScreen::s_directionalLight''
+
+// GLOBAL: SWBF2 0x0093e4f0
+// RedInterfaceScreen::s_directionalLight
 RedDirectionalLight RedInterfaceScreen::s_directionalLight[2];
 
 // SYNTHETIC: SWBF2 0x006c0a90
 // RedDirectionalLight::`default constructor closure'
 
-// GLOBAL: SWBF2 0x007decb8
 // SYNTHETIC: SWBF2 0x00407ad0
 // `dynamic initializer for 'RedInterfaceScreen::s_lightingState''
 // SYNTHETIC: SWBF2 0x007698b0
 // `dynamic atexit destructor for 'RedInterfaceScreen::s_lightingState''
+
+// GLOBAL: SWBF2 0x007decb8
+// RedInterfaceScreen::s_lightingState
 RedLightingState RedInterfaceScreen::s_lightingState;
 
-// GLOBAL: SWBF2 0x0093e4a4
 // SYNTHETIC: SWBF2 0x00407b60
 // `dynamic initializer for 'RedInterfaceScreen::s_screenFull''
 // SYNTHETIC: SWBF2 0x007698d0
 // `dynamic atexit destructor for 'RedInterfaceScreen::s_screenFull''
+
+// GLOBAL: SWBF2 0x0093e4a4
+// RedInterfaceScreen::s_screenFull
 RedInterfaceScreen RedInterfaceScreen::s_screenFull;
 
 const float RedInterfaceScreen::sfNear = 1.0f;
 const float RedInterfaceScreen::sfFar = 10000.0f;
-// GLOBAL: SWBF2 0x0093e4d0
 // SYNTHETIC: SWBF2 0x00407b80
 // `dynamic initializer for 'RedInterfaceScreen::sfHeight''
+
+// GLOBAL: SWBF2 0x0093e4d0
+// RedInterfaceScreen::sfHeight
 float RedInterfaceScreen::sfHeight = RedInterfaceScreen::sSQRT3 * 0.5f;
-// GLOBAL: SWBF2 0x0093e4e0
 // SYNTHETIC: SWBF2 0x00407ba0
 // `dynamic initializer for 'RedInterfaceScreen::sfWidth''
+
+// GLOBAL: SWBF2 0x0093e4e0
+// RedInterfaceScreen::sfWidth
 float RedInterfaceScreen::sfWidth = RedInterfaceScreen::sSQRT3 * (2.0f / 3.0f);
 
 // GLOBAL: SWBF2 0x007dec90

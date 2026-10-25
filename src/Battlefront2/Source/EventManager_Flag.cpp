@@ -19,28 +19,38 @@ void Cleanup();
 }
 }
 
-namespace EventManager {
-namespace FlagEvent {
+namespace EventManager
+{
+namespace FlagEvent
+{
 extern Event<FlagItem, Character> mPickUp;
 }
 }
-namespace EventManager {
-namespace FlagEvent {
+namespace EventManager
+{
+namespace FlagEvent
+{
 extern Event<FlagItem, Character> mDrop;
 }
 }
-namespace EventManager {
-namespace FlagEvent {
+namespace EventManager
+{
+namespace FlagEvent
+{
 extern Event<FlagItem, Character> mReturn;
 }
 }
-namespace EventManager {
-namespace FlagEvent {
+namespace EventManager
+{
+namespace FlagEvent
+{
 extern Event<FlagItem, Character> mCapture;
 }
 }
-namespace EventManager {
-namespace FlagEvent {
+namespace EventManager
+{
+namespace FlagEvent
+{
 extern Event<FlagItem, char> mReset;
 }
 }
@@ -154,7 +164,8 @@ template class Event<FlagItem, Character>::Filter<CharacterMatchesClass>;
 
 }
 
-namespace EventManager {
+namespace EventManager
+{
 
 // FUNCTION: SWBF2 0x005123f0
 void FlagEvent::Cleanup()
@@ -167,7 +178,8 @@ void FlagEvent::Cleanup()
 }
 }
 
-namespace EventManager {
+namespace EventManager
+{
 
 // TEMPLATE: SWBF2 0x005124a0
 // EventManager::Event<FlagItem,char>::Callback::~Callback
@@ -178,7 +190,10 @@ namespace EventManager
 {
 
 int DummyLuaCallback(lua_State* L);
-namespace FlagEvent { void Init(); }
+namespace FlagEvent
+{
+void Init();
+}
 
 template <class ITEM, class PARAM>
 int UnregisterLuaCallback(lua_State*)
@@ -416,39 +431,49 @@ namespace EventManager
 namespace FlagEvent
 {
 
-// GLOBAL: SWBF2 0x007ebed0
 // SYNTHETIC: SWBF2 0x00403380
 // `dynamic initializer for 'EventManager::FlagEvent::mPickUp''
 // SYNTHETIC: SWBF2 0x00767ba0
 // `dynamic atexit destructor for 'EventManager::FlagEvent::mPickUp''
+
+// GLOBAL: SWBF2 0x007ebed0
+// mPickUp
 Event<FlagItem, Character> mPickUp("FlagPickUp");
 
-// GLOBAL: SWBF2 0x007ebcb0
 // SYNTHETIC: SWBF2 0x004033b0
 // `dynamic initializer for 'EventManager::FlagEvent::mDrop''
 // SYNTHETIC: SWBF2 0x00767c20
 // `dynamic atexit destructor for 'EventManager::FlagEvent::mDrop''
+
+// GLOBAL: SWBF2 0x007ebcb0
+// mDrop
 Event<FlagItem, Character> mDrop("FlagDrop");
 
-// GLOBAL: SWBF2 0x007ebea0
 // SYNTHETIC: SWBF2 0x004033e0
 // `dynamic initializer for 'EventManager::FlagEvent::mReturn''
 // SYNTHETIC: SWBF2 0x00767ca0
 // `dynamic atexit destructor for 'EventManager::FlagEvent::mReturn''
+
+// GLOBAL: SWBF2 0x007ebea0
+// mReturn
 Event<FlagItem, Character> mReturn("FlagReturn");
 
-// GLOBAL: SWBF2 0x007ebe60
 // SYNTHETIC: SWBF2 0x00403410
 // `dynamic initializer for 'EventManager::FlagEvent::mCapture''
 // SYNTHETIC: SWBF2 0x00767d20
 // `dynamic atexit destructor for 'EventManager::FlagEvent::mCapture''
+
+// GLOBAL: SWBF2 0x007ebe60
+// mCapture
 Event<FlagItem, Character> mCapture("FlagCapture");
 
-// GLOBAL: SWBF2 0x007ebe80
 // SYNTHETIC: SWBF2 0x00403440
 // `dynamic initializer for 'EventManager::FlagEvent::mReset''
 // SYNTHETIC: SWBF2 0x00767da0
 // `dynamic atexit destructor for 'EventManager::FlagEvent::mReset''
+
+// GLOBAL: SWBF2 0x007ebe80
+// mReset
 Event<FlagItem, char> mReset("FlagReset");
 
 }

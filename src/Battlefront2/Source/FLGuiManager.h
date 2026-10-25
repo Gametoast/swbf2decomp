@@ -171,6 +171,8 @@ public:
         ~Event() {}
 
         static void* operator new(unsigned int uiSize) { return sMemoryPool.Allocate(uiSize); }
+        // SYNTHETIC: SWBF2 0x00527f40
+        // GuiManager::Event::operator delete
         static void operator delete(void* pBlock) { sMemoryPool.Free(pBlock); }
 
         eEventType type;
