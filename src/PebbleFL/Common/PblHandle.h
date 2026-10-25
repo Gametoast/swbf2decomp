@@ -8,8 +8,7 @@ public:
 
     virtual ~PblHandled() { mHandleId = 0; }
 
-    // FUNCTION: SWBF2 0x00423e90
-    unsigned int GetHandleId() const { return mHandleId; }
+    unsigned int GetHandleId() const;
 
     static unsigned int SetNextHandleId(unsigned int uId);
 

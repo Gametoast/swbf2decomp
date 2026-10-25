@@ -8,6 +8,14 @@
 namespace Snd
 {
 
+// FUNCTION: SWBF2 0x00737dc0
+void VoiceVirtual::ResetPriority()
+{
+    mFlags |= flags_updatePriority;
+    Source3D::mFlags |= Source3D::flags_updateListener;
+}
+
+
 // FUNCTION: SWBF2 0x00737be0
 void VoiceVirtual::Pause()
 {

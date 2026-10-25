@@ -12,6 +12,7 @@ class OrdnanceClass;
 class WeaponCannonClass : public WeaponClass
 {
 public:
+    virtual ~WeaponCannonClass();
     WeaponCannonClass(unsigned int uHash);
 
     WeaponCannonClass(WeaponCannonClass* pBase, unsigned int uHash);

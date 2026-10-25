@@ -110,3 +110,12 @@ HUD::Envelope& HUD::Envelope::operator=(const Envelope& other)
     }
     return *this;
 }
+
+// FUNCTION: SWBF2 0x0055da60
+HUD::Envelope::Phase HUD::Envelope::GetPhase() const { return mPhase; }
+
+// FUNCTION: SWBF2 0x0055daf0
+float HUD::Envelope::GetPhaseTime(Phase ePhase) const { return mPhaseTime[ePhase]; }
+
+// FUNCTION: SWBF2 0x0055dae0
+void HUD::Envelope::SetPhaseTime(Phase ePhase, float fTime) { mPhaseTime[ePhase] = fTime; }

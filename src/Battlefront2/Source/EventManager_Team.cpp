@@ -305,18 +305,7 @@ int RegisterLuaCallback(lua_State*)
     return 1;
 }
 
-template <class ITEM, class PARAM>
-void Event<ITEM, PARAM>::Unregister(Callback& callback)
-{
-    Node* pParent = callback.mParent;
-    callback.DetachFromParent();
-    while (pParent && pParent->mParent && !pParent->mChild)
-    {
-        Node* pNext = pParent->mParent;
-        pParent->DetachFromParent();
-        pParent = pNext;
-    }
-}
+
 
 
 template <class ITEM, class PARAM>

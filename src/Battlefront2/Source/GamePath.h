@@ -41,7 +41,7 @@ public:
 class GamePath : public RedPath
 {
 public:
-    virtual ~GamePath();
+    virtual ~GamePath() {}
     virtual bool Read(PblConfig& config);
 };
  

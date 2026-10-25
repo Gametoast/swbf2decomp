@@ -690,11 +690,6 @@ void Resume()
 
 }
 
-// FUNCTION: SWBF2 0x005c4600
-bool NetGame::ErrorDismissed()
-{
-    return NetSetup::IsErrorDismissed();
-}
 
 namespace GameLoop
 {

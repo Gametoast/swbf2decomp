@@ -33,11 +33,6 @@ HUD::ElementGroup::ElementGroup(const char* const pName, Factory::ItemCallback p
 
 // SYNTHETIC: SWBF2 0x00544937
 // [thunk]:HUD::ElementGroup::`scalar deleting destructor' adjustor{368}
-// FUNCTION: SWBF2 0x00543fd0
-HUD::ElementGroup::~ElementGroup()
-{
-    ElementGroupBase::RemoveAllElements();
-}
 
 // FUNCTION: SWBF2 0x00544040
 void* HUD::ElementGroup::GetParent()

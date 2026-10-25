@@ -3729,21 +3729,7 @@ void __fastcall PropagateTeam(Character* pCharacter, int iTeam)
     }
 }
 
-// FUNCTION: SWBF2 0x005c2580
-void WriteEntityClass(NetPktGroup& group, const void* pValue)
-{
-    const EntityClass* pClass = static_cast<const EntityClass*>(pValue);
-    const int value = pClass ? pClass->mNetIndex : -1;
-    group.WriteBits(value, 8);
-}
 
-// FUNCTION: SWBF2 0x005c2600
-void WriteWeaponClass(NetPktGroup& group, const void* pValue)
-{
-    const WeaponClass* pClass = static_cast<const WeaponClass*>(pValue);
-    const int value = pClass ? pClass->mNetIndex : -1;
-    group.WriteBits(value, 8);
-}
 
 void AddNetCollision(CollisionObject* pObject);
 

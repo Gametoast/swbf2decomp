@@ -8,6 +8,7 @@
 class OrdnanceHaywireClass : public OrdnanceStickyClass
 {
 public:
+    virtual ~OrdnanceHaywireClass();
     OrdnanceHaywireClass(unsigned int uHash);
     OrdnanceHaywireClass(OrdnanceHaywireClass* pBase, unsigned int uHash);
 

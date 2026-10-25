@@ -24,8 +24,7 @@ public:
 
     void Play(SourceTransport* pTransport);
 
-    // FUNCTION: SWBF2 0x00738380
-    Bus* GetBus() const { return mBus; }
+    Bus* GetBus() const;
 
 protected:
 

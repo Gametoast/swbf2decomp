@@ -32,8 +32,7 @@ public:
     // FUNCTION: SWBF2 0x0058aaa0
     float GetRate() const { return mRate; }
 
-    // FUNCTION: SWBF2 0x00657b60
-    bool IsRunning() const { return const_cast<Timer*>(this)->IsThreadActive(); }
+    bool IsRunning() const;
 
     void Start();
     void Stop();

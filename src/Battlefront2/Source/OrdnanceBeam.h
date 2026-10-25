@@ -13,6 +13,7 @@ class FLEffectClass;
 class OrdnanceBeamClass : public OrdnanceClass
 {
 public:
+    virtual ~OrdnanceBeamClass();
     OrdnanceBeamClass(unsigned int uHash);
 
     OrdnanceBeamClass(OrdnanceBeamClass* pBase, unsigned int uHash);

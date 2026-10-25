@@ -55,6 +55,7 @@ class OrdnanceClass : public Factory<Ordnance, OrdnanceClass, OrdnanceDesc>,
                       public FoleyFXCollideeClass
 {
 public:
+    virtual ~OrdnanceClass();
     OrdnanceClass(unsigned int uHash);
 
     OrdnanceClass(OrdnanceClass* pBase, unsigned int uHash);

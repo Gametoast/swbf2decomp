@@ -483,8 +483,10 @@ OrdnanceClass::OrdnanceClass(OrdnanceClass* pBase, unsigned int uHash)
     mSoundCollision = pBase->mSoundCollision;
 }
 
-// SYNTHETIC: SWBF2 0x005f8180
-// OrdnanceClass::~OrdnanceClass
+// FUNCTION: SWBF2 0x005f8180
+OrdnanceClass::~OrdnanceClass()
+{
+}
 
 // FUNCTION: SWBF2 0x005f81c0
 DamageDesc OrdnanceClass::GetDamage(const DamageOwner& owner, float fUnused, float fRatio,
@@ -731,5 +733,4 @@ template Factory<Ordnance, OrdnanceClass, OrdnanceDesc>::Factory(OrdnanceClass*,
 // SYNTHETIC: SWBF2 0x005fa200
 // OrdnanceBeamClass::`scalar deleting destructor'
 
-// SYNTHETIC: SWBF2 0x005fa2d0
-// OrdnanceBeamClass::~OrdnanceBeamClass
+

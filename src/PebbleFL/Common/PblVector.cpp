@@ -75,3 +75,21 @@ PblVector3 gVectorUnitY(0.0f, 1.0f, 0.0f);
 
 // GLOBAL: SWBF2 0x007e2d2c
 PblVector3 gVectorUnitZ(0.0f, 0.0f, 1.0f);
+
+// FUNCTION: SWBF2 0x0040ca00
+float PblVector3::GetX() const
+{
+    return x;
+}
+
+// FUNCTION: SWBF2 0x0040ca10
+float PblVector3::GetY() const
+{
+    return y;
+}
+
+// FUNCTION: SWBF2 0x0040ca20
+float PblVector3::GetZ() const
+{
+    return z;
+}

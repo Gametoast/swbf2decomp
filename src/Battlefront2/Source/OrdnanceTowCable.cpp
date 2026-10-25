@@ -635,8 +635,10 @@ OrdnanceTowCableClass::OrdnanceTowCableClass(unsigned int uHash)
     mCableLimit = 45.0f;
 }
 
-// SYNTHETIC: SWBF2 0x006091b0
-// OrdnanceTowCableClass::~OrdnanceTowCableClass
+// FUNCTION: SWBF2 0x006091b0
+OrdnanceTowCableClass::~OrdnanceTowCableClass()
+{
+}
 
 // SYNTHETIC: SWBF2 0x00609140
 // OrdnanceTowCableClass::`scalar deleting destructor'

@@ -25,6 +25,7 @@ public:
     EntityBuildingClass(unsigned int uHash);
 
     EntityBuildingClass(EntityBuildingClass* pBase, unsigned int uHash);
+    virtual ~EntityBuildingClass();
 
     virtual EntityClass* Derive(unsigned int uHash);
     virtual Entity* Build(const EntityDesc& desc);

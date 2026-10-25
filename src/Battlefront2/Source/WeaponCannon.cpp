@@ -1407,5 +1407,7 @@ int WeaponCannonClass::GetBarrageMax()
 // SYNTHETIC: SWBF2 0x006801e0
 // WeaponCannonClass::`scalar deleting destructor'
 
-// SYNTHETIC: SWBF2 0x00680450
-// WeaponCannonClass::~WeaponCannonClass
+// FUNCTION: SWBF2 0x00680450
+WeaponCannonClass::~WeaponCannonClass()
+{
+}

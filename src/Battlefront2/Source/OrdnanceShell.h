@@ -9,6 +9,7 @@
 class OrdnanceShellClass : public OrdnanceBulletClass
 {
 public:
+    virtual ~OrdnanceShellClass();
     OrdnanceShellClass(unsigned int uHash);
     OrdnanceShellClass(OrdnanceShellClass* pBase, unsigned int uHash);
 

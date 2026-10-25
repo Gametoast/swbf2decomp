@@ -18,6 +18,8 @@ public:
     public:
 
         virtual ~Callback() {}
+        // TEMPLATE: SWBF2 0x00519d00
+        // EventManager::Event<RedRegion,Character>::Callback::operator()
         virtual bool operator()(ITEM& item, PARAM& param)
         {
             return true;
@@ -48,7 +50,29 @@ public:
         PREDICATE mPredicate;
     };
 
-    void Unregister(Callback& callback);
+    // TEMPLATE: SWBF2 0x0050e0c0
+    // EventManager::Event<Character,DamageOwner>::Unregister
+
+    // TEMPLATE: SWBF2 0x00511350
+    // EventManager::Event<CommandPost,unsigned __int64>::Unregister
+
+    // TEMPLATE: SWBF2 0x005142f0
+    // EventManager::Event<EventManager::LuaObject,EventManager::LuaObject>::Unregister
+
+    // TEMPLATE: SWBF2 0x0051c610
+    // EventManager::Event<Timer,char>::Unregister
+
+    void Unregister(Callback& callback)
+    {
+        Node* pParent = callback.mParent;
+        callback.DetachFromParent();
+        while (pParent && pParent->mParent && !pParent->mChild)
+        {
+            Node* pNext = pParent->mParent;
+            pParent->DetachFromParent();
+            pParent = pNext;
+        }
+    }
     template <class PREDICATE>
     Filter<PREDICATE>* GetFilter(PREDICATE& predicate, Callback* pParent = 0)
     {

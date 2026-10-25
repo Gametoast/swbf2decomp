@@ -10,6 +10,7 @@ class pcRedShader;
 class OrdnanceTowCableClass : public OrdnanceBulletClass
 {
 public:
+    virtual ~OrdnanceTowCableClass();
     OrdnanceTowCableClass(unsigned int uHash);
     OrdnanceTowCableClass(OrdnanceTowCableClass* pBase, unsigned int uHash);
 

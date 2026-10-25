@@ -53,6 +53,14 @@ public:
         mTerminator.mPrev = 0;
     }
 
+    void AddBefore(Node* pAt, Node* pNode)
+    {
+        pNode->mNext = pAt;
+        pNode->mPrev = pAt->mPrev;
+        pAt->mPrev->mNext = pNode;
+        pAt->mPrev = pNode;
+    }
+
     void AddFirst(Node* pNode)
     {
         Node* pAt = mTerminator.mNext;

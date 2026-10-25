@@ -16416,3 +16416,40 @@ int debugPredictClientTurn = 1181;
 int debugPredictStepCount = 4;
 // GLOBAL: SWBF2 0x01e62ed4
 float spHeroSelectedTime[3] = { 0.0f, 0.0f, 0.0f };
+
+// FUNCTION: SWBF2 0x005c4600
+bool NetGame::ErrorDismissed()
+{
+    return NetSetup::IsErrorDismissed();
+}
+
+// FUNCTION: SWBF2 0x005c5080
+void NetGame::Reboot()
+{
+}
+
+// FUNCTION: SWBF2 0x005c2580
+void WriteEntityClass(NetPktGroup& group, const void* pValue)
+{
+    const EntityClass* pClass = static_cast<const EntityClass*>(pValue);
+    const int value = pClass ? pClass->mNetIndex : -1;
+    group.WriteBits(value, 8);
+}
+
+// FUNCTION: SWBF2 0x005c2600
+void WriteWeaponClass(NetPktGroup& group, const void* pValue)
+{
+    const WeaponClass* pClass = static_cast<const WeaponClass*>(pValue);
+    const int value = pClass ? pClass->mNetIndex : -1;
+    group.WriteBits(value, 8);
+}
+
+// FUNCTION: SWBF2 0x005c4440
+int NetGame::GetSpawnOrder(int iPlayer)
+{
+    if (iPlayer >= 0 && iPlayer < netCurMaxPlayers && NetGame::IsPlaying(iPlayer, false))
+    {
+        return netPlayers[iPlayer].mSpawnOrder;
+    }
+    return -1;
+}

@@ -9,6 +9,7 @@
 class WeaponDetonatorClass : public WeaponDispenserClass
 {
 public:
+    virtual ~WeaponDetonatorClass();
     WeaponDetonatorClass(unsigned int uHash);
     WeaponDetonatorClass(WeaponDetonatorClass* pBase, unsigned int uHash);
 
@@ -30,6 +31,7 @@ public:
 class WeaponDetonator : public WeaponDispenser
 {
 public:
+    virtual ~WeaponDetonator();
     WeaponDetonator(const WeaponDetonatorClass* pClass, const WeaponDesc& desc);
 
     virtual bool Update(float fDeltaTime);

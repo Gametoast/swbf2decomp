@@ -12,6 +12,7 @@ class OrdnanceBeaconClass : public OrdnanceStickyClass
 public:
     OrdnanceBeaconClass(unsigned int uHash);
     OrdnanceBeaconClass(OrdnanceBeaconClass* pBase, unsigned int uHash);
+    virtual ~OrdnanceBeaconClass();
 
     virtual OrdnanceClass* Derive(unsigned int uHash);
     virtual Ordnance* Build(const OrdnanceDesc& desc);

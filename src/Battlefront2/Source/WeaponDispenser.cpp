@@ -98,8 +98,10 @@ WeaponDispenserClass::WeaponDispenserClass(WeaponDispenserClass* pBase, unsigned
 // SYNTHETIC: SWBF2 0x00684640
 // WeaponDispenserClass::`scalar deleting destructor'
 
-// SYNTHETIC: SWBF2 0x00684760
-// WeaponDispenserClass::~WeaponDispenserClass
+// FUNCTION: SWBF2 0x00684760
+WeaponDispenserClass::~WeaponDispenserClass()
+{
+}
 
 // FUNCTION: SWBF2 0x00684770
 void WeaponDispenserClass::SetProperty(unsigned int uProperty, const char* pszValue)

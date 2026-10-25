@@ -125,7 +125,11 @@ public:
 
     ElementGroup(const char* const pName, Factory::ItemCallback pCallback,
                  void* const pUserData);
-    virtual ~ElementGroup();
+    // FUNCTION: SWBF2 0x00543fd0
+    virtual ~ElementGroup()
+    {
+        ElementGroupBase::RemoveAllElements();
+    }
     virtual void* GetParent();
 };
 }

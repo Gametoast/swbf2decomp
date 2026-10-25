@@ -20,3 +20,9 @@ unsigned int PblHandled::SetNextHandleId(unsigned int uId)
     sNextHandleId = uId;
     return uOld;
 }
+
+// FUNCTION: SWBF2 0x00423e90
+unsigned int PblHandled::GetHandleId() const
+{
+    return mHandleId;
+}

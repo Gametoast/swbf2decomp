@@ -32,12 +32,7 @@ public:
 
     void Pause();
 
-    // FUNCTION: SWBF2 0x00737dc0
-    void ResetPriority()
-    {
-        mFlags |= flags_updatePriority;
-        Source3D::mFlags |= Source3D::flags_updateListener;
-    }
+    void ResetPriority();
     void Set3DMode(bool b3DMode);
     void SetInactiveCallback(void (__cdecl* pfnCallback)(const VoiceVirtual* const, void* const),
                              void* const pData);

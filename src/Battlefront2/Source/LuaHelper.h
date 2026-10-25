@@ -93,7 +93,11 @@ void TableWriteVal(char const* pcKey, float fVal);
 void TableWriteVal(char const* pcKey, bool bVal);
 
 void TableWriteVal(char const* pcKey, char const* pcVal);
-void SetGlobal(char const* pcName);
+// FUNCTION: SWBF2 0x00527fa0
+inline void SetGlobal(char const* pcName)
+{
+    lua_setglobal(mState, pcName);
+}
 void TableReadVal(char const* pcKey, float& fVal, bool bRequired);
 void TableReadVal(char const* pcKey, int& iVal, bool bRequired);
 void TableReadVal(char const* pcKey, bool& bVal);

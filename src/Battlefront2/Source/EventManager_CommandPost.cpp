@@ -494,20 +494,6 @@ int RegisterLuaCallback(lua_State*)
     return 1;
 }
 
-// TEMPLATE: SWBF2 0x00511350
-// EventManager::Event<CommandPost,unsigned __int64>::Unregister
-template <class ITEM, class PARAM>
-void Event<ITEM, PARAM>::Unregister(Callback& callback)
-{
-    Node* pParent = callback.mParent;
-    callback.DetachFromParent();
-    while (pParent && pParent->mParent && !pParent->mChild)
-    {
-        Node* pNext = pParent->mParent;
-        pParent->DetachFromParent();
-        pParent = pNext;
-    }
-}
 
 
 // TEMPLATE: SWBF2 0x00511d90

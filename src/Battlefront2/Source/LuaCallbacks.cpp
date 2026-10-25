@@ -82,10 +82,6 @@ int FLInputManager::CountControllers() const
     return iConnected ? iConnected : 1;
 }
 
-// FUNCTION: SWBF2 0x005c5080
-void NetGame::Reboot()
-{
-}
 
 // FUNCTION: SWBF2 0x005805e0
 int __fastcall GetScreenTransitionType(const char* pcName, void*)

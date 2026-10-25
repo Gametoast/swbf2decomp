@@ -736,5 +736,7 @@ bool OrdnanceBullet::Collide(CollisionObject* pObject, const PblVector3& vPos, c
 // SYNTHETIC: SWBF2 0x005fbc70
 // OrdnanceBulletClass::`scalar deleting destructor'
 
-// SYNTHETIC: SWBF2 0x005fbdd0
-// OrdnanceBulletClass::~OrdnanceBulletClass
+// FUNCTION: SWBF2 0x005fbdd0
+OrdnanceBulletClass::~OrdnanceBulletClass()
+{
+}

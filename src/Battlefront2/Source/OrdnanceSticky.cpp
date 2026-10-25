@@ -574,5 +574,7 @@ void OrdnanceSticky::SoundEvent()
     AIUtil::GrenadeAlert(mPosition, GetOwner(), &mBeginTime, &mLastEventTime);
 }
 
-// SYNTHETIC: SWBF2 0x00606ef0
-// OrdnanceStickyClass::~OrdnanceStickyClass
+// FUNCTION: SWBF2 0x00606ef0
+OrdnanceStickyClass::~OrdnanceStickyClass()
+{
+}

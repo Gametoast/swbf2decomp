@@ -90,7 +90,6 @@ template util::BaseArray<util::VariableSet<util::SingletonAllocator<util::Defaul
 template util::BaseArray<bool*,
     util::TypedArrayAllocator<bool*, util::SingletonAllocator<util::DefaultStaticAllocator> > >::~BaseArray();
 
-// FUNCTION: SWBF2 0x00715250
 template void util::VariableSet<util::SingletonAllocator<util::DefaultStaticAllocator> >::operator delete(void*, util::IAllocator&);
 
 // TEMPLATE: SWBF2 0x007152d0

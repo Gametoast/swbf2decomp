@@ -387,11 +387,7 @@ static IFaceSoldierAnimator* GetIFaceSoldierAnimator(Red3DModelElement* pModel)
 
 static unsigned int sAnimationBankHashes[5];
 
-// FUNCTION: SWBF2 0x00527fa0
-void LuaHelper::SetGlobal(char const* pcName)
-{
-    lua_setglobal(mState, pcName);
-}
+
 
 // FUNCTION: SWBF2 0x0048c9e0
 void RedInterfaceElement::CreateHotSpot(float fLeft, float fTop, float fRight, float fBottom)

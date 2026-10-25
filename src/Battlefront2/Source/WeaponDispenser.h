@@ -16,6 +16,7 @@ class NetPktGroup;
 class WeaponDispenserClass : public WeaponClass
 {
 public:
+    virtual ~WeaponDispenserClass();
     WeaponDispenserClass(unsigned int uHash);
     WeaponDispenserClass(WeaponDispenserClass* pBase, unsigned int uHash);
 

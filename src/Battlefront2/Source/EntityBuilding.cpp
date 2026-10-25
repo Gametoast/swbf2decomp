@@ -135,8 +135,10 @@ EntityBuildingClass::EntityBuildingClass(EntityBuildingClass* pBase, unsigned in
     mIsDestructable = pBase->mIsDestructable;
 }
 
-// SYNTHETIC: SWBF2 0x00493920
-// EntityBuildingClass::~EntityBuildingClass
+// FUNCTION: SWBF2 0x00493920
+EntityBuildingClass::~EntityBuildingClass()
+{
+}
 
 // SYNTHETIC: SWBF2 0x004937d0
 // EntityBuildingClass::`scalar deleting destructor'

@@ -530,3 +530,8 @@ void OrdnanceBeamClass::SetProperty(unsigned int uProperty, const char* pszValue
         break;
     }
 }
+
+// FUNCTION: SWBF2 0x005fa2d0
+OrdnanceBeamClass::~OrdnanceBeamClass()
+{
+}

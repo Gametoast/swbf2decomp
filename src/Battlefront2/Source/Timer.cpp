@@ -63,6 +63,12 @@ void Timer::Stop()
     }
 }
 
+// FUNCTION: SWBF2 0x00657b60
+bool Timer::IsRunning() const
+{
+    return const_cast<Timer*>(this)->IsThreadActive();
+}
+
 // FUNCTION: SWBF2 0x00657ba0
 Timer* Timer::Find(const char* pcName)
 {

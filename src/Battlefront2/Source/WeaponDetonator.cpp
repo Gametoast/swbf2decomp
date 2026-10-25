@@ -118,8 +118,10 @@ WeaponDispenser* WeaponDetonatorClass::Build(const WeaponDesc& desc)
     return new WeaponDetonator(this, desc);
 }
 
-// SYNTHETIC: SWBF2 0x00682b30
-// WeaponDetonatorClass::~WeaponDetonatorClass
+// FUNCTION: SWBF2 0x00682b30
+WeaponDetonatorClass::~WeaponDetonatorClass()
+{
+}
 
 // FUNCTION: SWBF2 0x00682460
 bool WeaponDetonator::IsRtti(unsigned int uRtti) const
@@ -207,8 +209,10 @@ void WeaponDetonator::NetAttachItem(Entity* pAttach)
     }
 }
 
-// SYNTHETIC: SWBF2 0x00682550
-// WeaponDetonator::~WeaponDetonator
+// FUNCTION: SWBF2 0x00682550
+WeaponDetonator::~WeaponDetonator()
+{
+}
 
 // SYNTHETIC: SWBF2 0x00682520
 // WeaponDetonator::`scalar deleting destructor'

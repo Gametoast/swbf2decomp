@@ -10,6 +10,7 @@ class OrdnanceStickyClass : public OrdnanceShellClass
 public:
     OrdnanceStickyClass(unsigned int uHash);
     OrdnanceStickyClass(OrdnanceStickyClass* pBase, unsigned int uHash);
+    virtual ~OrdnanceStickyClass();
 
     virtual OrdnanceClass* Derive(unsigned int uHash);
     virtual Ordnance* Build(const OrdnanceDesc& desc);

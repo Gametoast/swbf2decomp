@@ -37,12 +37,9 @@ public:
         return x != v.x || y != v.y || z != v.z;
     }
 
-    // FUNCTION: SWBF2 0x0040ca00
-    float GetX() const { return x; }
-    // FUNCTION: SWBF2 0x0040ca10
-    float GetY() const { return y; }
-    // FUNCTION: SWBF2 0x0040ca20
-    float GetZ() const { return z; }
+    float GetX() const;
+    float GetY() const;
+    float GetZ() const;
 
     float x;
     float y;

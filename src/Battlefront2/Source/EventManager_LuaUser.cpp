@@ -107,19 +107,7 @@ void Event<ITEM, PARAM>::Callback::Trigger(ITEM& item, PARAM& param)
     Release();
 }
 
-// FUNCTION: SWBF2 0x005142f0
-template <class ITEM, class PARAM>
-void Event<ITEM, PARAM>::Unregister(Callback& callback)
-{
-    Node* pParent = callback.mParent;
-    callback.DetachFromParent();
-    while (pParent && pParent->mParent && !pParent->mChild)
-    {
-        Node* pNext = pParent->mParent;
-        pParent->DetachFromParent();
-        pParent = pNext;
-    }
-}
+
 
 
 // TEMPLATE: SWBF2 0x005145d0

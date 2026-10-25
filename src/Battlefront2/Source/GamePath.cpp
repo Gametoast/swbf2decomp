@@ -16,9 +16,6 @@ bool GamePath::Read(PblConfig& config)
 // SYNTHETIC: SWBF2 0x004b99b0
 // GamePath::`scalar deleting destructor'
 
-GamePath::~GamePath()
-{
-}
 
 PblList<GamePathFactory> GamePathFactory::sList;
 

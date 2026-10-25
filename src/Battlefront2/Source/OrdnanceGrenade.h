@@ -8,6 +8,7 @@
 class OrdnanceGrenadeClass : public OrdnanceShellClass
 {
 public:
+    virtual ~OrdnanceGrenadeClass();
     OrdnanceGrenadeClass(unsigned int uHash);
     OrdnanceGrenadeClass(OrdnanceGrenadeClass* pBase, unsigned int uHash);
 

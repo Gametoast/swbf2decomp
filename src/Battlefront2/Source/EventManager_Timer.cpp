@@ -113,19 +113,7 @@ bool LuaCallback<ITEM, PARAM>::operator()(ITEM& item, PARAM& param)
 // TEMPLATE: SWBF2 0x0051c740
 // EventManager::Event<Timer,char>::Filter<EventManager::TimerMatches>::operator()
 
-// FUNCTION: SWBF2 0x0051c610
-template <class ITEM, class PARAM>
-void Event<ITEM, PARAM>::Unregister(Callback& callback)
-{
-    Node* pParent = callback.mParent;
-    callback.DetachFromParent();
-    while (pParent && pParent->mParent && !pParent->mChild)
-    {
-        Node* pNext = pParent->mParent;
-        pParent->DetachFromParent();
-        pParent = pNext;
-    }
-}
+
 
 // FUNCTION: SWBF2 0x0051c320
 template <class ITEM, class PARAM>

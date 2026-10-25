@@ -22,6 +22,8 @@ public:
         return buf.data_;
     }
 
+    // TEMPLATE: SWBF2 0x00715250
+    // util::VariableSet<util::SingletonAllocator<util::DefaultStaticAllocator> >::operator delete
     static void operator delete(void*, IAllocator& rAlloc)
     {
         Buffer buf(0, sizeof(VariableSet));

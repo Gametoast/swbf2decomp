@@ -76,19 +76,7 @@ CharacterMatchesClass LuaGetItem<CharacterMatchesClass>(int iIndex)
     return CharacterMatchesClass(luaL_checkstring(LuaHelper::mState, iIndex));
 }
 
-// TEMPLATE: SWBF2 0x00519d00
-template <class ITEM, class PARAM>
-void Event<ITEM, PARAM>::Unregister(Callback& callback)
-{
-    Node* pParent = callback.mParent;
-    callback.DetachFromParent();
-    while (pParent && pParent->mParent && !pParent->mChild)
-    {
-        Node* pNext = pParent->mParent;
-        pParent->DetachFromParent();
-        pParent = pNext;
-    }
-}
+
 
 
 // TEMPLATE: SWBF2 0x0051ac50

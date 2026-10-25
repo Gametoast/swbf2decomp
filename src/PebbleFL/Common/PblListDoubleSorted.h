@@ -79,10 +79,7 @@ public:
 
                 if (pNode->mSortValue > pCur->mSortValue)
                 {
-                    pNode->mNode.mNext = pLink;
-                    pNode->mNode.mPrev = pLink->mPrev;
-                    pLink->mPrev->mNext = &pNode->mNode;
-                    pLink->mPrev = &pNode->mNode;
+                    AddBefore(pLink, &pNode->mNode);
                     return;
                 }
             }
@@ -91,7 +88,49 @@ public:
         AddLast(&pNode->mNode);
     }
 
-    void Sort();
+    // FUNCTION: SWBF2 0x005a9420
+    void Sort()
+    {
+        PblListDouble::Node* pLink = mTerminator.mNext;
+        Node* pPrev = (pLink == &mTerminator) ? 0 : (Node*)((char*)pLink - offsetof(Node, mNode));
+
+        for (pLink = pLink->mNext; pLink != &mTerminator; pLink = pLink->mNext)
+        {
+            Node* pNode = (Node*)((char*)pLink - offsetof(Node, mNode));
+            if (pNode == 0)
+            {
+                break;
+            }
+
+            if (pNode->mSortValue > pPrev->mSortValue)
+            {
+                Node* pAfter;
+                PblListDouble::Node* pScan = &pNode->mNode;
+                for (;;)
+                {
+                    pScan = pScan->mPrev;
+                    if (pScan == &mTerminator)
+                    {
+                        pAfter = 0;
+                        break;
+                    }
+                    pAfter = (Node*)((char*)pScan - offsetof(Node, mNode));
+                    if (pAfter == 0 || !(pNode->mSortValue > pAfter->mSortValue))
+                    {
+                        break;
+                    }
+                }
+
+                pNode->mNode.Remove();
+
+                PblListDouble::Node* pAt = pAfter ? pAfter->mNode.mNext : mTerminator.mNext;
+                AddBefore(pAt, &pNode->mNode);
+            }
+
+            pPrev = pNode;
+            pLink = &pNode->mNode;
+        }
+    }
 
     unsigned char mFlags;
 };

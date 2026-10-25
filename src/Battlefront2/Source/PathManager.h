@@ -29,13 +29,11 @@ public:
         AIPN_ROLLIN = 256
     };
 
-    // FUNCTION: SWBF2 0x00613f60
-    AIPathNode(const PblVector3& pos, unsigned short flags) : mPos(pos), mFlags(flags) {}
+    AIPathNode(const PblVector3& pos, unsigned short flags);
 
     AIPathNode() : mFlags(0) {}
 
-    // FUNCTION: SWBF2 0x00613fa0
-    PblList<AIPathNode>::Node* GetListNode() { return &mNode; }
+    PblList<AIPathNode>::Node* GetListNode();
 
     PblList<AIPathNode>::Node mNode;
     PblVector3 mPos;
@@ -49,8 +47,7 @@ class AIPath : public PblRef
 {
 public:
 
-    // FUNCTION: SWBF2 0x00614310
-    const PblList<AIPathNode>& GetNodeList() const { return mNodes; }
+    const PblList<AIPathNode>& GetNodeList() const;
 
     static void* operator new(unsigned int uiSize);
 

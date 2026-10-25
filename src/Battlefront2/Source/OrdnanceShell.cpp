@@ -154,5 +154,7 @@ const char* OrdnanceShell::GetDerivedRttiName() const
     return rttiNameOrdnanceShell;
 }
 
-// SYNTHETIC: SWBF2 0x00605de0
-// OrdnanceShellClass::~OrdnanceShellClass
+// FUNCTION: SWBF2 0x00605de0
+OrdnanceShellClass::~OrdnanceShellClass()
+{
+}

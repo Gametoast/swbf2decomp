@@ -157,8 +157,10 @@ Ordnance* OrdnanceGrenadeClass::Build(const OrdnanceDesc& desc)
 // SYNTHETIC: SWBF2 0x00600a20
 // OrdnanceGrenadeClass::`scalar deleting destructor'
 
-// SYNTHETIC: SWBF2 0x00600b30
-// OrdnanceGrenadeClass::~OrdnanceGrenadeClass
+// FUNCTION: SWBF2 0x00600b30
+OrdnanceGrenadeClass::~OrdnanceGrenadeClass()
+{
+}
 
 // FUNCTION: SWBF2 0x00600120
 OrdnanceGrenade::OrdnanceGrenade(OrdnanceGrenadeClass* pClass, const OrdnanceDesc& desc)

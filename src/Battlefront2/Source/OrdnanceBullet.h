@@ -13,6 +13,7 @@ class RedModel;
 class OrdnanceBulletClass : public OrdnanceClass
 {
 public:
+    virtual ~OrdnanceBulletClass();
     OrdnanceBulletClass(unsigned int uHash);
     OrdnanceBulletClass(OrdnanceBulletClass* pBase, unsigned int uHash);
 

@@ -38,52 +38,7 @@ float Music::sInactiveTime;
 // GLOBAL: SWBF2 0x01e579c6
 bool Music::sIgnoreInactiveTime;
 
-// FUNCTION: SWBF2 0x005a9420
-void PblListDoubleSorted::Sort()
-{
-    PblListDouble::Node* pLink = mTerminator.mNext;
-    Node* pPrev = (pLink == &mTerminator) ? 0 : (Node*)((char*)pLink - offsetof(Node, mNode));
 
-    for (pLink = pLink->mNext; pLink != &mTerminator; pLink = pLink->mNext)
-    {
-        Node* pNode = (Node*)((char*)pLink - offsetof(Node, mNode));
-        if (pNode == 0)
-        {
-            break;
-        }
-
-        if (pNode->mSortValue > pPrev->mSortValue)
-        {
-            Node* pAfter;
-            PblListDouble::Node* pScan = &pNode->mNode;
-            for (;;)
-            {
-                pScan = pScan->mPrev;
-                if (pScan == &mTerminator)
-                {
-                    pAfter = 0;
-                    break;
-                }
-                pAfter = (Node*)((char*)pScan - offsetof(Node, mNode));
-                if (pAfter == 0 || !(pNode->mSortValue > pAfter->mSortValue))
-                {
-                    break;
-                }
-            }
-
-            pNode->mNode.Remove();
-
-            PblListDouble::Node* pAt = pAfter ? pAfter->mNode.mNext : mTerminator.mNext;
-            pNode->mNode.mNext = pAt;
-            pNode->mNode.mPrev = pAt->mPrev;
-            pAt->mPrev->mNext = &pNode->mNode;
-            pAt->mPrev = &pNode->mNode;
-        }
-
-        pPrev = pNode;
-        pLink = &pNode->mNode;
-    }
-}
 
 // FUNCTION: SWBF2 0x005a94b0
 Music::Music()

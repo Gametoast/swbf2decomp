@@ -1937,17 +1937,7 @@ float EntityDroideka::GetSmallestCollisionDim() const
     return mClass->mBallRadius;
 }
 
-// FUNCTION: SWBF2 0x00463a80
-bool Restrictor::AddRestriction(const PblVector3& vRestriction)
-{
 
-    if (mNumRestrictions < mMaxRestrictions)
-    {
-        mRestrictions[mNumRestrictions++] = vRestriction;
-        return true;
-    }
-    return false;
-}
 
 // FUNCTION: SWBF2 0x004a0e00
 bool EntityDroideka::CollisionCallback(const CollisionResult* pResult, CollisionObject* pOther,

@@ -490,3 +490,6 @@ void SpawnManager::Destroy()
     }
     Character::DestroyAll();
 }
+
+// FUNCTION: SWBF2 0x0064ee40
+int SpawnManager::GetUnitCount(int iTeam) const { return mMaxUnitCount[iTeam]; }

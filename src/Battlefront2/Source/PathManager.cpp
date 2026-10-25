@@ -529,3 +529,12 @@ bool IsWithinTimeConstraint()
 }
 
 }
+
+// FUNCTION: SWBF2 0x00613f60
+AIPathNode::AIPathNode(const PblVector3& pos, unsigned short flags) : mPos(pos), mFlags(flags) {}
+
+// FUNCTION: SWBF2 0x00613fa0
+PblList<AIPathNode>::Node* AIPathNode::GetListNode() { return &mNode; }
+
+// FUNCTION: SWBF2 0x00614310
+const PblList<AIPathNode>& AIPath::GetNodeList() const { return mNodes; }

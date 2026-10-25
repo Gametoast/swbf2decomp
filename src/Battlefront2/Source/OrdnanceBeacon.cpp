@@ -209,8 +209,10 @@ OrdnanceBeaconClass::OrdnanceBeaconClass(OrdnanceBeaconClass* pBase, unsigned in
     mOrdnanceClass = pBase->mOrdnanceClass;
 }
 
-// SYNTHETIC: SWBF2 0x005f9390
-// OrdnanceBeaconClass::~OrdnanceBeaconClass
+// FUNCTION: SWBF2 0x005f9390
+OrdnanceBeaconClass::~OrdnanceBeaconClass()
+{
+}
 
 // FUNCTION: SWBF2 0x005f93a0
 void OrdnanceBeaconClass::SetProperty(unsigned int uProperty, const char* pszValue)

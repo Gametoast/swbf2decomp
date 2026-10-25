@@ -206,15 +206,6 @@ Controllable* CommandFlyer::GetPassengerSlot(int)
     return pLast;
 }
 
-// FUNCTION: SWBF2 0x005c4440
-int NetGame::GetSpawnOrder(int iPlayer)
-{
-    if (iPlayer >= 0 && iPlayer < netCurMaxPlayers && NetGame::IsPlaying(iPlayer, false))
-    {
-        return netPlayers[iPlayer].mSpawnOrder;
-    }
-    return -1;
-}
 
 namespace EventManager
 {

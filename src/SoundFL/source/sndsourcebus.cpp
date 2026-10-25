@@ -8,6 +8,10 @@
 namespace Snd
 {
 
+// FUNCTION: SWBF2 0x00738380
+Bus* SourceBus::GetBus() const { return mBus; }
+
+
 // FUNCTION: SWBF2 0x00738370
 SourceBus::~SourceBus()
 {

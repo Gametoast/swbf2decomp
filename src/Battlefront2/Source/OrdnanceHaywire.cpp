@@ -141,8 +141,10 @@ OrdnanceClass* OrdnanceHaywireClass::Derive(unsigned int uHash)
     return new OrdnanceHaywireClass(this, uHash);
 }
 
-// SYNTHETIC: SWBF2 0x00600f90
-// OrdnanceHaywireClass::~OrdnanceHaywireClass
+// FUNCTION: SWBF2 0x00600f90
+OrdnanceHaywireClass::~OrdnanceHaywireClass()
+{
+}
 
 // SYNTHETIC: SWBF2 0x00600f30
 // OrdnanceHaywireClass::`scalar deleting destructor'
