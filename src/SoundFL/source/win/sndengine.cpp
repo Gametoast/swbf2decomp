@@ -1504,7 +1504,7 @@ void Engine::SetupEAXSource(void* const pA, void* const pB,
 // malloc
 
 // LIBRARY: SWBF2 0x007535e0
-// _alloca_probe
+// _chkstk
 
 // LIBRARY: SWBF2 0x007548fc
 // DirectSoundCreate8

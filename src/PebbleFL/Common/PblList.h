@@ -48,6 +48,8 @@ public:
         // PblList<Factory<Ordnance,OrdnanceClass,OrdnanceDesc> >::Itor::operator*
         // TEMPLATE: SWBF2 0x00563920
         // PblList<FlagItem>::Itor::operator*
+        // TEMPLATE: SWBF2 0x005d3720
+        // PblList<Controllable>::Itor::operator*
         TYPE& operator*() const { return *_pNode->_pObject; }
         // TEMPLATE: SWBF2 0x0049e1d0
         // PblList<Factory<Weapon,WeaponClass,WeaponDesc> >::Itor::operator->

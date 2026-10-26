@@ -87,6 +87,9 @@ public:
     // TEMPLATE: SWBF2 0x00447a10
     // PblHandle<FLEffectObject>::operator!=
 
+    // TEMPLATE: SWBF2 0x004850c0
+    // PblHandle<GameObject>::operator!=
+
     // TEMPLATE: SWBF2 0x0043a0f0
     // PblHandle<GameObject const >::operator!=
     bool operator!=(TYPE* pObject) const { return pObject != GetObjectA(); }

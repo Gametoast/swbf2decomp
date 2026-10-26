@@ -29,6 +29,7 @@ unsigned short CURSOR_CHAR = 124;
 float CURSOR_X = -0.5f;
 float CURSOR_Y;
 
+// GLOBAL: SWBF2 0x9982dc
 util::HashTable<unsigned short, unsigned int, util::NewAllocator>* mMagicCharMap_;
 bool sFindReplaceError;
 

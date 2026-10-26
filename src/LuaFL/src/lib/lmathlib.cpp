@@ -227,6 +227,7 @@ static int math_randomseed (lua_State *L) {
   return 0;
 }
 
+// GLOBAL: SWBF2 0x770550
 static const luaL_reg mathlib[] = {
   {"abs",   math_abs},
   {"sin",   math_sin},

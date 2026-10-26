@@ -1541,6 +1541,7 @@
     </ClCompile>
     <ClCompile Include="src\Battlefront2\Source\NetGame.cpp">
       <Optimization>Disabled</Optimization>
+      <StringPooling Condition="'$(Configuration)'=='Release'">true</StringPooling>
       <BufferSecurityCheck>false</BufferSecurityCheck>
       <WholeProgramOptimization Condition="'$(Configuration)'=='Release'">true</WholeProgramOptimization>
       <InlineFunctionExpansion Condition="'$(Configuration)'=='Release'">OnlyExplicitInline</InlineFunctionExpansion>
@@ -1567,6 +1568,7 @@
     </ClCompile>
     <ClCompile Include="src\Battlefront2\Source\NetSetup.cpp">
       <Optimization>Disabled</Optimization>
+      <StringPooling Condition="'$(Configuration)'=='Release'">true</StringPooling>
       <BufferSecurityCheck>false</BufferSecurityCheck>
       <WholeProgramOptimization Condition="'$(Configuration)'=='Release'">true</WholeProgramOptimization>
       <InlineFunctionExpansion Condition="'$(Configuration)'=='Release'">OnlyExplicitInline</InlineFunctionExpansion>

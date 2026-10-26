@@ -10,6 +10,9 @@ public:
 
     int GetNum() const;
 
+    // FUNCTION: SWBF2 0x005b2340
+    NetPacket* GetNext() { return Get(mNextPkt); }
+
     static void SetHiRes(bool bHiRes);
 
     static void Reset();

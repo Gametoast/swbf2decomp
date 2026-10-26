@@ -106,6 +106,21 @@ NetPktGroup freeSmallPackets;
 // GLOBAL: SWBF2 0x01e65054
 unsigned int NetPacket::sNextSeqNo;
 
+inline void SetCompressed(NetPacket* packet, bool compressed)
+{
+    NetComm::Header(packet).compressed = compressed;
+}
+
+inline int GetNumSmall(const NetPacket* packet)
+{
+    int index = (int)(static_cast<const NetSmallPacket*>(packet) - netSmallPackets);
+    if (index >= 0 && index < MAX_SMALL_PACKETS)
+    {
+        return index;
+    }
+    return -1;
+}
+
 // FUNCTION: SWBF2 0x005d8df0
 NetPacket* NetPacket::Alloc(bool bSmall)
 {
@@ -138,12 +153,12 @@ NetPacket* NetPacket::Alloc(bool bSmall)
 // FUNCTION: SWBF2 0x005d8f60
 void NetPacket::BeginWrite()
 {
-    mData[0] = mData[1] = mData[2] = mData[3] = 0;
-    *(int*)((char*)this + 16) = 0;
-    mData[0] = mData[1] = (char)0xff;
+    memset(mData, 0, sizeof(NetComm::PktHeader));
+    SetCompressed(this, false);
+    NetComm::Header(this).group = 0xffff;
     mDataIndex = 14;
-    mMaxIndex = (short)(GetNum() >= MAX_BIG_PACKETS ? 116 : 1012);
-    mCurIndex = 14;
+    mMaxIndex = mDataIndex + (GetNumSmall(this) >= 0 ? 102 : 998);
+    mCurIndex = mDataIndex;
 }
 
 // FUNCTION: SWBF2 0x005d8d80
@@ -546,14 +561,8 @@ void NetPktGroup::ReadBytes(char* pData, int iLen)
 void NetPacket::Free()
 {
     mCurIndex = 0;
-    if (GetNum() >= MAX_BIG_PACKETS)
-    {
-        freeSmallPackets.PushFront(this);
-    }
-    else
-    {
-        freeBigPackets.PushFront(this);
-    }
+    NetPktGroup& freePackets = GetNumSmall(this) >= 0 ? freeSmallPackets : freeBigPackets;
+    freePackets.PushFront(this);
 }
 
 // FUNCTION: SWBF2 0x005d8f40
@@ -599,13 +608,14 @@ void NetPktGroup::Set(NetPacket* pPkt)
 {
     firstPkt = pPkt->GetNum();
     pktCount = 1;
-    lastPkt = firstPkt;
+    int last = firstPkt;
     while (pPkt->mNextPkt != -1)
     {
-        lastPkt = pPkt->mNextPkt;
-        pPkt = NetPacket::Get(lastPkt);
         ++pktCount;
+        last = pPkt->mNextPkt;
+        pPkt = NetPacket::Get(last);
     }
+    lastPkt = last;
 }
 
 // FUNCTION: SWBF2 0x005d92a0
@@ -656,13 +666,13 @@ void NetPktGroup::PushFront(NetPacket* pPkt)
 {
     int num = pPkt->GetNum();
     pPkt->mNextPkt = (short)firstPkt;
-    if (pktCount)
+    if (pktCount == 0)
     {
-        NetPacket::Get(firstPkt)->mPrevPkt = (short)num;
+        lastPkt = num;
     }
     else
     {
-        lastPkt = num;
+        NetPacket::Get(firstPkt)->mPrevPkt = (short)num;
     }
     firstPkt = num;
     pPkt->mPrevPkt = -1;
@@ -705,11 +715,12 @@ void NetPktGroup::Remove(NetPacket* pPkt)
         PopBack();
         return;
     }
-    NetPacket::Get(pPkt->mNextPkt)->mPrevPkt = pPkt->mPrevPkt;
-    NetPacket::Get(pPkt->mPrevPkt)->mNextPkt = pPkt->mNextPkt;
+    NetPacket* next = NetPacket::Get(pPkt->mNextPkt);
+    NetPacket* prev = NetPacket::Get(pPkt->mPrevPkt);
+    prev->mNextPkt = pPkt->mNextPkt;
+    next->mPrevPkt = pPkt->mPrevPkt;
     --pktCount;
-    pPkt->mNextPkt = -1;
-    pPkt->mPrevPkt = -1;
+    pPkt->mNextPkt = pPkt->mPrevPkt = -1;
 }
 
 // FUNCTION: SWBF2 0x005d9b40
@@ -733,7 +744,11 @@ void NetPktGroup::Tell(NetPktGroupOffset& offset)
 // FUNCTION: SWBF2 0x005d9280
 int NetPktGroup::GetBytes()
 {
-    return pktPtr ? pktPtr->mCurIndex + 998 * pktCount - 1012 : 0;
+    if (!pktPtr)
+    {
+        return 0;
+    }
+    return 998 * pktCount - 1012 + pktPtr->mCurIndex;
 }
 
 // FUNCTION: SWBF2 0x005d8de0

@@ -74,6 +74,8 @@ public:
     static void EnterClient();
     static void LeaveClient();
 
+    void SetIsLocked(bool locked) { mIsLocked = locked; }
+
     static EntityDoor* Find(unsigned int uHash);
     static void BeginIter();
     static EntityDoor* GetCurrentIter();

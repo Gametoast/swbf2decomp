@@ -157,6 +157,7 @@ PblHash::PblHash(unsigned int uiSeed, const char* pcText)
     _uiValue = _MakeHash(pcText, uiSeed);
 }
 
+// GLOBAL: SWBF2 0x7e2860
 static const unsigned int _auiCRCTable[256] =
 {
     0x00000000, 0x04c11db7, 0x09823b6e, 0x0d4326d9, 0x130476dc, 0x17c56b6b, 0x1a864db2, 0x1e475005,

@@ -529,6 +529,7 @@ static int luaB__ALERT (lua_State *L) {
   return 0;
 }
 
+// GLOBAL: SWBF2 0x770998
 static const luaL_reg base_funcs[] = {
   {"_ALERT", luaB__ALERT},
   {"error", luaB_error},
@@ -655,6 +656,7 @@ static int luaB_costatus (lua_State *L) {
   return 1;
 }
 
+// GLOBAL: SWBF2 0x770a70
 static const luaL_reg co_funcs[] = {
   {"create", luaB_cocreate},
   {"wrap", luaB_cowrap},

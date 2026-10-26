@@ -381,8 +381,10 @@ namespace GameVoiceChat
 
 extern int gNetSetup_errState;
 
+// GLOBAL: SWBF2 0x1e563ac
 GameState::State* _pNextState;
 bool _bDoChangeState;
+// GLOBAL: SWBF2 0x1e563b4
 unsigned int mNextStateHash;
 // GLOBAL: SWBF2 0x01e563b8
 // mCurrentStateHash
@@ -412,12 +414,14 @@ GameState::State* _pCurrentState;
 // GameState::MissionState::_pCurrentState
 GameState::MissionState::State* GameState::MissionState::_pCurrentState;
 
+// GLOBAL: SWBF2 0x1e563b2
 bool gDisableNetworkOnCleanup;
 
 // GLOBAL: SWBF2 0x01e563b1
 // sKioskMode
 bool sKioskMode;
 
+// GLOBAL: SWBF2 0x1e5639e
 bool sbDidOneTimeInit;
 
 
@@ -443,14 +447,19 @@ PblTimeBase _TotalTimeBase;
 PblTimeBase _SystemTimeBase;
 }
 
+// GLOBAL: SWBF2 0x1ec5f70
 PblTimeBase::Stamp SystemTimeStamp;
+// GLOBAL: SWBF2 0x1ec5f80
 PblTimeBase::Stamp AppTimeStamp;
+// GLOBAL: SWBF2 0x1ec5fa8
 PblTimeBase::Stamp TotalTimeStamp;
 float sDeltaTime;
 float sSystemDeltaTime;
 LARGE_INTEGER perfCount;
 LARGE_INTEGER oldPerfCount;
+// GLOBAL: SWBF2 0x1e563a0
 __int64 maxAdvanceTicks;
+// GLOBAL: SWBF2 0x1e563c0
 __int64 normalAdvanceTicks;
 float g_fFrameRateScale;
 // GLOBAL: SWBF2 0x01e5639f
@@ -464,6 +473,7 @@ namespace GameState
     int sNumFontsLoaded;
 }
 
+// GLOBAL: SWBF2 0x1f9c2d8
 LARGE_INTEGER Frequency;
 
 // GLOBAL: SWBF2 0x01f9c2a0

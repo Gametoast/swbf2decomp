@@ -642,6 +642,9 @@ class AtleastOnceSame : public AtleastOnce
 public:
     AtleastOnceSame() : deltaSends(true), changeTurn((unsigned int)-1) {}
     bool IsConfirmed();
+    bool IsConfirmed(int player);
+    bool CanChange();
+    void Change();
     bool Send(NetPktGroup& group);
 
     bool deltaSends;
@@ -662,7 +665,9 @@ public:
     }
 
     bool Send(NetPktGroup& group);
+    bool IsConfirmed();
     bool CanChange();
+    void Change();
 
     bool deltaSends;
     unsigned int changeTurn[64];
@@ -823,8 +828,8 @@ GameObject* ReadObjectPtr(NetPktGroup& group);
 void MarkWriteAlign(NetPktGroup& group);
 void CheckReadAlign(NetPktGroup& group);
 struct ReliableNetEvent;
-void WriteEvent_Message(NetPktGroup& group, const ReliableNetEvent& event);
-void WriteEvent_ChangeTeam(NetPktGroup& group, const ReliableNetEvent& event);
+void WriteEvent_Message(NetPktGroup& group, ReliableNetEvent& event);
+void WriteEvent_ChangeTeam(NetPktGroup& group, ReliableNetEvent& event);
 void WriteMoves(NetPktGroup& group, int iPlayer, unsigned int uTurn);
 int FrontCount(GameObject* const* ppObjects, int iCount,
                int iCurrent, const PblMatrix& camera);
@@ -834,9 +839,8 @@ void WriteObject(NetPktGroup& group, GameObject* pObject);
 void WriteSpawnDisplay(NetPktGroup& group);
 void WritePlayerMoves(NetPktGroup& group);
 void WriteSpawnCamera(NetPktGroup& group);
-void AddSendLate();
+void AddSendLate(GameObject* object, GameObject* owner);
 int ComputeNetLOD(int iUnused, int iPlayer);
-unsigned int __fastcall sub_5D3720(const void* pThis);
 
 class AloBootVote
 {
@@ -850,9 +854,14 @@ class AloMapDisplayMarkers : public AtleastOnceSame
 {
 public:
     AloMapDisplayMarkers();
+    void Reset()
+    {
+        memset(markers, 0, sizeof(markers));
+        changeTurn = (unsigned int)-1;
+    }
     void Update(NetPktGroup& group);
     void Read(NetPktGroup& group);
-    void Set(int iMarker, const TargetManager::Marker* pMarker);
+    void Set(int i, const TargetManager::Marker* aMarker);
     void Write(NetPktGroup& group);
 
     TargetManager::Marker markers[32];

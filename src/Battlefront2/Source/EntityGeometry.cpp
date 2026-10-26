@@ -434,7 +434,8 @@ void ChunkDescriptor::Init()
 }
 
 // SYNTHETIC: SWBF2 0x004bb0b0
-// ChunkDescriptor::ChunkDescriptor
+// ChunkDescriptor::ChunkDescriptor(class ChunkDescriptor const &)
+
 
 // GLOBAL: SWBF2 0x007e650c
 // sCurrentChunk
@@ -1313,11 +1314,9 @@ void EntityGeometry::CreateChunkCluster(float fScale)
 // SYNTHETIC: SWBF2 0x00446e24
 // [thunk]:EntityGeometry::GetEntity`adjustor{12}'
 
-// FUNCTION: SWBF2 0x004bd360
-void* __fastcall ReturnObjectPointer(void* pObject)
-{
-    return pObject;
-}
+// SYNTHETIC: SWBF2 0x004bd360
+// ChunkDescriptor::ChunkDescriptor(void)
+
 
 // SYNTHETIC: SWBF2 0x004992d2
 // [thunk]:EntityGeometry::GetGameObject`adjustor{12}'

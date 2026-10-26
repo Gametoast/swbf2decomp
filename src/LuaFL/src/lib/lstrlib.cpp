@@ -744,6 +744,7 @@ static int str_format (lua_State *L) {
   return 1;
 }
 
+// GLOBAL: SWBF2 0x7706f0
 static const luaL_reg strlib[] = {
   {"len", str_len},
   {"sub", str_sub},
