@@ -169,3 +169,14 @@ inline DamageOwner& DamageOwner::operator=(const DamageOwner& other)
     mDamageMultiplier = other.mDamageMultiplier;
     return *this;
 }
+
+// FUNCTION: SWBF2 0x00438a40
+inline DamageDesc::DamageDesc(DamageOwner owner, float fBaseValue)
+    : mDamageOwner(owner), mBaseValue(fBaseValue)
+{
+    for (int i = 0; i < 8; ++i)
+    {
+        mHealthScale[i] = 1.0f;
+    }
+    mShieldScale = 1.0f;
+}

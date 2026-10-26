@@ -66,10 +66,6 @@ SpaceAssault::ViewportData::ViewportData()
 {
 }
 
-// FUNCTION: SWBF2 0x0064ba80
-SpaceAssault::ViewportData::~ViewportData()
-{
-}
 
 // FUNCTION: SWBF2 0x0064b860
 void SpaceAssault::Create()

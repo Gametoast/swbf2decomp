@@ -82,7 +82,9 @@ class RedSceneManager
 {
 public:
     RedSceneManager();
-    virtual ~RedSceneManager();
+    // SYNTHETIC: SWBF2 0x004488d0
+    // RedSceneManager::`scalar deleting destructor'
+    virtual ~RedSceneManager() {}
 
     static RedSceneManager& GetInstance() { return *sInstance; }
     static void Init() { GetInstance()._Init(); }

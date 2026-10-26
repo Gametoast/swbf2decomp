@@ -61,11 +61,7 @@ HUD::ElementBitmapBase::Factory::Factory(unsigned int uHashID)
     mEventBitmap.Init("EventBitmap", mProperties, Property::type_Event);
 }
 
-HUD::ElementBitmap::Factory::Factory()
-    : HUD::ElementBitmapBase::Factory(0x46544626u)
-{
-    mName = "Bitmap";
-}
+
 
 // FUNCTION: SWBF2 0x0054deb0
 HUD::ElementBitmapMasked::Factory::Factory()
@@ -74,15 +70,7 @@ HUD::ElementBitmapMasked::Factory::Factory()
     mBitmapMask.Init("Mask", mProperties, Property::type_Texture);
 }
 
-HUD::ElementBitmapMasked::ElementBitmapMasked(const char* const pName,
-                                              Factory::ItemCallback pCallback,
-                                              void* const pUserData)
-    : HUD::ElementBitmapBase(*static_cast<RedMaskedBitmapElement*>(this), pName, pCallback,
-                             pUserData),
-      mMaskTextureName(0)
-{
-    RedMaskedBitmapElement::Enable(false);
-}
+
 
 // FUNCTION: SWBF2 0x0054cb10
 HUD::Item* HUD::ElementBitmapMasked::Factory::CreateItem(const char* const pName,
@@ -97,14 +85,7 @@ HUD::Item* HUD::ElementBitmapMasked::Factory::CreateItem(const char* const pName
     return 0;
 }
 
-// SYNTHETIC: SWBF2 0x0054e1a9
-// [thunk]:HUD::ElementBitmapMasked::`scalar deleting destructor' adjustor{288}
 
-// FUNCTION: SWBF2 0x0054cbc0
-HUD::ElementBitmapMasked::~ElementBitmapMasked()
-{
-    FreeName(&mMaskTextureName);
-}
 
 // FUNCTION: SWBF2 0x0054cc30
 void* HUD::ElementBitmapMasked::GetParent()
@@ -112,8 +93,6 @@ void* HUD::ElementBitmapMasked::GetParent()
     return this;
 }
 
-// SYNTHETIC: SWBF2 0x0054cc40
-// HUD::ElementBitmapMasked::`scalar deleting destructor'
 
 // FUNCTION: SWBF2 0x0054cf20
 HUD::ElementBitmapBase::ElementBitmapBase(RedBitmapElement& element, const char* const pName,

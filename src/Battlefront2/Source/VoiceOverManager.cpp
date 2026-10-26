@@ -36,10 +36,6 @@ VoiceOverManager::VoiceOverManager()
     mAttackingTeam = 0;
 }
 
-// FUNCTION: SWBF2 0x00675400
-VoiceOverManager::AmbientMusic::~AmbientMusic()
-{
-}
 
 // FUNCTION: SWBF2 0x00675410
 VoiceOverManager::~VoiceOverManager()

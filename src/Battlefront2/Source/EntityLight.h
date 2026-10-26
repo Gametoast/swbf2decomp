@@ -108,7 +108,8 @@ public:
     {
     }
 
-    virtual ~EntityLightFXParser();
+    // SYNTHETIC: SWBF2 0x004ccb30
+    // EntityLightFXParser::`scalar deleting destructor'
     virtual void Render(int value);
     virtual void Init();
     virtual void Cleanup();

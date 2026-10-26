@@ -57,9 +57,6 @@ const PblVector3 RedCamera::TransformWorldPointToProjectionSpace(const PblVector
     return TransformCameraPointToProjectionSpace(vCameraPoint);
 }
 
-ItemTimerDisplay::DisplayThread::~DisplayThread()
-{
-}
 
 // FUNCTION: SWBF2 0x0056a6f0
 void ItemTimerDisplay::Create()

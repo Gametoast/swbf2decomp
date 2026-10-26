@@ -3,11 +3,7 @@
 
 #include "HUDTransformNumberVector3.h"
 
-HUD::TransformNumberVector3::Factory::Factory()
-    : HUD::Item::Factory(0x2ef8f006u)
-{
-    mName = "TransformNumberVector3";
-}
+
 
 static const unsigned int kNumberVector3Hash = 0x37737dd4;
 

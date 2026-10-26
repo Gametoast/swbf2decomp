@@ -26,12 +26,7 @@ void LightsaberTrailEffect::Init()
     _PlatformInit();
 }
 
-LightsaberTrailEffect::~LightsaberTrailEffect()
-{
-}
 
-// SYNTHETIC: SWBF2 0x00573d30
-// LightsaberTrailEffect::`scalar deleting destructor'
 
 // FUNCTION: SWBF2 0x00573d20
 void LightsaberTrailEffect::Render(int)
@@ -84,16 +79,8 @@ LightsaberTrail::LightsaberTrail(const LightsaberTrailClass* pClass)
     m_uiNumSamples = 0;
 }
 
-LightsaberTrail::~LightsaberTrail()
-{
-    m_bEffectActive = false;
-}
 
-// SYNTHETIC: SWBF2 0x00573df0
-// LightsaberTrail::`scalar deleting destructor'
 
-// SYNTHETIC: SWBF2 0x0057552c
-// [thunk]:LightsaberTrail::`scalar deleting destructor' adjustor{24}
 
 // FUNCTION: SWBF2 0x00573da0
 bool LightsaberTrail::IsEffectActive() const

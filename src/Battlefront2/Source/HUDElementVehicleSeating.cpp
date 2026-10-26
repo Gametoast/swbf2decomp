@@ -32,12 +32,6 @@ HUD::ElementVehicleSeating::Factory::Factory()
     mName = "VehicleSeating";
 }
 
-// SYNTHETIC: SWBF2 0x0055d8e6
-// [thunk]:HUD::ElementVehicleSeating::SeatingMarker::`scalar deleting destructor' adjustor{256}
-// FUNCTION: SWBF2 0x0055c920
-HUD::ElementVehicleSeating::SeatingMarker::~SeatingMarker()
-{
-}
 
 // FUNCTION: SWBF2 0x0055c940
 bool HUD::ElementVehicleSeating::SeatingMarker::SetProperty(const unsigned int uHashID, const void* pValue)
@@ -67,18 +61,8 @@ void* HUD::ElementVehicleSeating::GetParent()
     return this;
 }
 
-// SYNTHETIC: SWBF2 0x0055c9b0
-// HUD::ElementVehicleSeating::SeatingMarker::`scalar deleting destructor'
 
-// SYNTHETIC: SWBF2 0x0055c9f0
-// HUD::ElementVehicleSeating::SeatingText::`scalar deleting destructor'
 
-// SYNTHETIC: SWBF2 0x0055d8f1
-// [thunk]:HUD::ElementVehicleSeating::SeatingText::`scalar deleting destructor' adjustor{256}
-// FUNCTION: SWBF2 0x0055ca20
-HUD::ElementVehicleSeating::SeatingText::~SeatingText()
-{
-}
 
 // SYNTHETIC: SWBF2 0x0055cdb0
 // HUD::ElementVehicleSeating::`scalar deleting destructor'

@@ -28,7 +28,8 @@ public:
     };
 
     Transport() {}
-    ~Transport();
+    // SYNTHETIC: SWBF2 0x0053c030
+    // GameVoiceChat::Transport::~Transport
 
     void SetSendEnableUsingMask(unsigned char node, Mask mask, bool bEnable, bool bKeepCurrent);
     void SetReceiveEnableUsingMask(unsigned char node, Mask mask, bool bEnable, bool bKeepCurrent);

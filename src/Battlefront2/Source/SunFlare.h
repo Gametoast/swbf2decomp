@@ -30,7 +30,8 @@ public:
     {
     }
 
-    virtual ~SunFlareEffect();
+    // SYNTHETIC: SWBF2 0x0042d0d0
+    // SunFlareEffect::`scalar deleting destructor'
     virtual void Render(int value);
     virtual void Init();
     virtual void Cleanup();

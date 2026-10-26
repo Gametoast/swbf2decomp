@@ -338,12 +338,7 @@ CollisionBodyMesh::CollisionBodyMesh(const CollisionMesh* pMesh, const char* pcN
     bIsMesh = true;
 }
 
-// SYNTHETIC: SWBF2 0x0045d870
-// CollisionBodyMesh::`scalar deleting destructor'
 
-CollisionBodyMesh::~CollisionBodyMesh()
-{
-}
 
 // FUNCTION: SWBF2 0x0045d8a0
 bool CollisionBodyMesh::RayTest(const RedPose*, const PblVector3& vStart, const PblVector3& vEnd, float fLength)

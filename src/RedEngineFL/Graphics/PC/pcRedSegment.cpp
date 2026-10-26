@@ -19,10 +19,6 @@
 #include "PebbleFL/Common/PblHashTable.h"
 #include "pcRedIndexBuffer.h"
 
-pcShaderSegment::~pcShaderSegment()
-{
-    Free();
-}
 
 // FUNCTION: SWBF2 0x00717b50
 RedShadingState* pcShaderSegment::CreateShadingState() const
@@ -124,19 +120,8 @@ PblVector3 CompressedPos::s_vScale(1.0f / 65535.0f, 1.0f / 65535.0f, 1.0f / 6553
 // CompressedPos::s_vScaleInv
 PblVector3 CompressedPos::s_vScaleInv(65535.0f, 65535.0f, 65535.0f);
 
-// FUNCTION: SWBF2 0x00717980
-pcSoftwareSkinnedShaderSegment::pcSoftwareSkinnedShaderSegment()
-    : m_pVertexData(0), m_puiSkinData(0), m_uiSkinNumBones(0),
-      m_pIndexBuffer(0), m_PrimType(5), m_uiStartIndex(0),
-      m_uiPrimCount(0), m_uiNumVertices(0), m_uiNumIndices(0),
-      m_pShader(0), m_uiSegmentRenderFlags(0)
-{
-}
 
-pcSoftwareSkinnedShaderSegment::~pcSoftwareSkinnedShaderSegment()
-{
-    Free();
-}
+
 
 // FUNCTION: SWBF2 0x00717b60
 RedShadingState* pcSoftwareSkinnedShaderSegment::CreateShadingState() const

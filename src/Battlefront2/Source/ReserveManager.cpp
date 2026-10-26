@@ -24,7 +24,8 @@ namespace ReserveManager
 
 struct ReserveStruct
 {
-    ~ReserveStruct();
+    // SYNTHETIC: SWBF2 0x0062f9b0
+    // ReserveManager::ReserveStruct::~ReserveStruct
 
     PblHandle<const GameObject> mObj;
     float mReserveTime;
@@ -356,7 +357,3 @@ void Reset()
 }
 }
 
-// FUNCTION: SWBF2 0x0062f9b0
-ReserveManager::ReserveStruct::~ReserveStruct()
-{
-}

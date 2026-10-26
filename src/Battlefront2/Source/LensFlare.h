@@ -32,7 +32,8 @@ public:
     {
     }
 
-    virtual ~LensFlareEffect();
+    // SYNTHETIC: SWBF2 0x0056f430
+    // LensFlareEffect::`scalar deleting destructor'
     virtual void Render(int value);
     virtual void Init();
     virtual void Cleanup();

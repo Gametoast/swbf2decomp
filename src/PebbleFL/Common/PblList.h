@@ -98,11 +98,11 @@ public:
     void AddBefore(Node* pAt, Node* pNode, TYPE* pObject)
     {
         ++_iCount;
+        pNode->_pObject = pObject;
         pNode->_pList = this;
         pNode->_pNext = pAt;
-        pNode->_pObject = pObject;
         pNode->_pPrev = pAt->_pPrev;
-        pAt->_pPrev = pNode;
+        pNode->_pNext->_pPrev = pNode;
         pNode->_pPrev->_pNext = pNode;
     }
 

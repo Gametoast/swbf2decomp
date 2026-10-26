@@ -91,3 +91,9 @@ public:
 };
  
  
+
+inline RedShadingState::RedShadingState(unsigned int uiRenderTypeHash)
+{
+    m_uiRenderTypeHash = uiRenderTypeHash;
+    m_uiNumValues = 0;
+}

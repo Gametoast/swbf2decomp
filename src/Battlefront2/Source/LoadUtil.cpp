@@ -117,11 +117,6 @@ char RedStack::sMem[40960];
 // GLOBAL: SWBF2 0x009aba40
 int RedStack::sMemIdx;
 
-// SYNTHETIC: SWBF2 0x00579920
-// pvs::PortalReader::~PortalReader
-pvs::PortalReader::~PortalReader()
-{
-}
 
 // FUNCTION: SWBF2 0x00578ff0
 void FileBlockCallback()

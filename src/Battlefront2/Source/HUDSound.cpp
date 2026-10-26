@@ -1,10 +1,6 @@
 #include "HUDSound.h"
 
-HUD::Sound::Factory::Factory()
-    : HUD::Item::Factory(0x0E0D9594u)
-{
-    mName = "Sound";
-}
+
 
 // SYNTHETIC: SWBF2 0x004040a0
 // `dynamic initializer for 'HUD::Sound::sList''

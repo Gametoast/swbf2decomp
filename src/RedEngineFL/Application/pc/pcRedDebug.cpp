@@ -188,10 +188,6 @@ RedDebug::Text3D::Text3D()
 {
 }
 
-// FUNCTION: SWBF2 0x006f08e0
-RedDebug::Text3D::~Text3D()
-{
-}
 
 // FUNCTION: SWBF2 0x006f07b0
 RedShape::RedShape()

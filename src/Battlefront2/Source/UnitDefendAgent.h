@@ -16,7 +16,10 @@ class UnitDefendAgent : public UnitAgent
 public:
 
     UnitDefendAgent(UnitController* pCtrl, const AI::GoalTarget& target);
-    virtual ~UnitDefendAgent();
+    // SYNTHETIC: SWBF2 0x00665bb0
+    // UnitDefendAgent::`scalar deleting destructor'
+    // SYNTHETIC: SWBF2 0x00665be0
+    // UnitDefendAgent::~UnitDefendAgent
     virtual void Kill();
     virtual bool IsRtti(unsigned int uRtti) const;
     virtual unsigned int GetDerivedRtti() const;

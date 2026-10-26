@@ -20,7 +20,8 @@ public:
 
     void RenderLightsaberTrail(const class LightsaberTrail* pTrail, unsigned int uiFlags) const;
 
-    virtual ~LightsaberTrailEffect();
+    // SYNTHETIC: SWBF2 0x00573d30
+    // LightsaberTrailEffect::`scalar deleting destructor'
     virtual void Render(int value);
     virtual void Init();
     virtual void Cleanup();
@@ -59,7 +60,11 @@ class LightsaberTrailClass : public FLEffectClass
 public:
 
     LightsaberTrailClass();
-    virtual ~LightsaberTrailClass();
+    // SYNTHETIC: SWBF2 0x00687ce0
+    // LightsaberTrailClass::~LightsaberTrailClass
+    // SYNTHETIC: SWBF2 0x00687d50
+    // LightsaberTrailClass::`scalar deleting destructor'
+    virtual ~LightsaberTrailClass() {}
     virtual FLEffectObject* BuildEffect();
 
     PblVector3 m_vOffsetPos;
@@ -80,7 +85,14 @@ public:
     enum { MAX_SAMPLES_PER_TRAIL = 8 };
 
     LightsaberTrail(const LightsaberTrailClass* pClass);
-    virtual ~LightsaberTrail();
+    // SYNTHETIC: SWBF2 0x00573df0
+    // LightsaberTrail::`scalar deleting destructor'
+    // SYNTHETIC: SWBF2 0x0057552c
+    // [thunk]:LightsaberTrail::`scalar deleting destructor' adjustor{24}
+    virtual ~LightsaberTrail()
+    {
+        m_bEffectActive = false;
+    }
     virtual bool IsEffectActive() const;
     virtual void ActivateEffect();
     virtual void DeactivateEffect();
@@ -135,3 +147,6 @@ public:
  
  
  
+inline LightsaberTrailClass::LightsaberTrailClass()
+{
+}

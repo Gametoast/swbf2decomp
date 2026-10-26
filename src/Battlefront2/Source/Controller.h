@@ -32,7 +32,11 @@ public:
     virtual bool IsRtti(unsigned int uRtti) const;
     virtual unsigned int GetDerivedRtti() const;
     virtual const char* GetDerivedRttiName() const;
-    virtual ~Controller();
+    // SYNTHETIC: SWBF2 0x00485140
+    // Controller::~Controller
+    // SYNTHETIC: SWBF2 0x00485160
+    // Controller::`scalar deleting destructor'
+    virtual ~Controller() {}
     virtual void KillController();
 
     static PblHash rttiHashController;

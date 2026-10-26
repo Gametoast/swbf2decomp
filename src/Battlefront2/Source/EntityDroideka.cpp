@@ -60,10 +60,6 @@
 #include "PebbleFL/Common/PblHandle.h"
 #include "PebbleFL/Common/PblMatrix.h"
 
-// FUNCTION: SWBF2 0x004a78e0
-PlayableEntitySoundsClass::~PlayableEntitySoundsClass()
-{
-}
 PblMatrix DirectionMatrix(const PblVector3& vDir, const PblVector3& vUp,
                           const PblVector3& vPos);
 
@@ -398,9 +394,6 @@ EntityDroidekaClass::EntityDroidekaClass(unsigned int uHash)
     mBallJumpVerticalSpeed = 5.0f;
     mBallJumpForwardSpeedFactor = 1.25f;
 
-    mEnergyBarClass.m_fEnergyMax = 0.0f;
-    mEnergyBarClass.m_fEnergyMin = 0.0f;
-    mEnergyBarClass.m_fEnergyOverheat = 0.0f;
     mEnergyBarClass.Init(100.0f, 20.0f);
 
     mEnergyRestore = 10.0f;
@@ -968,9 +961,6 @@ EntityDroidekaClass::EntityDroidekaClass(EntityDroidekaClass* pSrc, unsigned int
       ControllableClass(pSrc),
       VehicleEngineClass(pSrc)
 {
-    mEnergyBarClass.m_fEnergyMax = 0.0f;
-    mEnergyBarClass.m_fEnergyMin = 0.0f;
-    mEnergyBarClass.m_fEnergyOverheat = 0.0f;
 
     sWeaponSection = 0;
     mLODClass = pSrc->mLODClass;

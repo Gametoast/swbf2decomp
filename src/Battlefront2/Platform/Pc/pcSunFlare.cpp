@@ -29,11 +29,6 @@ RedColor ReadColor(const PblConfig::Data& data);
 // GLOBAL: SWBF2 0x01e2fd4c
 SunFlareEffect* SunFlareEffect::s_pInstance;
 
-// SYNTHETIC: SWBF2 0x0042d0d0
-// SunFlareEffect::`scalar deleting destructor'
-SunFlareEffect::~SunFlareEffect()
-{
-}
 
 // FUNCTION: SWBF2 0x0042d140
 void SunFlareEffect::Create()

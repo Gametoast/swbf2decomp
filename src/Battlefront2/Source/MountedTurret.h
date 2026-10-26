@@ -28,7 +28,8 @@ public:
 
     bool SetProperty(unsigned int uHash, const char* pcValue, const RedModel* pModel);
 
-    virtual ~MountedTurretClass();
+    // SYNTHETIC: SWBF2 0x005a8b40
+    // MountedTurretClass::`scalar deleting destructor'
     virtual EntityClass* Derive(unsigned int uHash);
     virtual Entity* Build(const EntityDesc& desc);
     virtual bool IsRtti(unsigned int uRtti) const;

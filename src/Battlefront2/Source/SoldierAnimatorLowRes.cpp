@@ -76,10 +76,6 @@ int SoldierAnimatorLowRes::GetFramesSinceUsed() const
     return 0;
 }
 
-// FUNCTION: SWBF2 0x00647cb0
-SoldierAnimatorLowRes_UnsharedPool::~SoldierAnimatorLowRes_UnsharedPool()
-{
-}
 
 // FUNCTION: SWBF2 0x00647cc0
 bool SoldierAnimatorLowRes_UnsharedPool::GetRootMatrixAnimation(const EntitySoldier& soldier,
@@ -88,10 +84,6 @@ bool SoldierAnimatorLowRes_UnsharedPool::GetRootMatrixAnimation(const EntitySold
     return false;
 }
 
-// FUNCTION: SWBF2 0x00647cd0
-SoldierAnimatorLowRes_HighResPool::~SoldierAnimatorLowRes_HighResPool()
-{
-}
 
 // FUNCTION: SWBF2 0x00647ce0
 void SoldierAnimatorLowResClass::Create()

@@ -2,6 +2,8 @@
 
 #include <stddef.h>
 
+#include "PebbleFL/Common/PblUnicode.h"
+
 #include "RedEngineFL/Memory/RedMemoryPool.h"
 #include "RedEngineFL/input/RedInputEventHandler.h"
 #include "FLList.h"
@@ -287,3 +289,18 @@ public:
  
  
  
+
+inline GuiManager::Event::Event(eEventType eType, unsigned int uiVal, const char* pcName, int iController)
+{
+    type = eType;
+    val.i32 = uiVal;
+    if (pcName)
+    {
+        strlcpy(pName, pcName, sizeof(pName));
+    }
+    else
+    {
+        pName[0] = 0;
+    }
+    mController = iController;
+}

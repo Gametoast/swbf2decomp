@@ -563,10 +563,6 @@ CommandPost::VoiceOver::VoiceOver()
 {
 }
 
-// FUNCTION: SWBF2 0x0047a6e0
-CommandPost::VoiceOver::~VoiceOver()
-{
-}
 
 // FUNCTION: SWBF2 0x0047a710
 CommandPost::CommandPost(CommandPostClass* pClass, int iIndex)

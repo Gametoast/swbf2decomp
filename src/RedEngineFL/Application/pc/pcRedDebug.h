@@ -44,8 +44,8 @@ public:
     {
         // FUNCTION: SWBF2 0x006f08b0
         Text3D();
-        // FUNCTION: SWBF2 0x006f08e0
-        ~Text3D();
+        // SYNTHETIC: SWBF2 0x006f08e0
+        // RedDebug::Text3D::~Text3D
 
         RedTextElement text;
         PblVector3 pos;

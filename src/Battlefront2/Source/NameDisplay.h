@@ -13,7 +13,8 @@ class NameDisplayThread : public Thread
 {
 public:
     NameDisplayThread();
-    virtual ~NameDisplayThread();
+    // SYNTHETIC: SWBF2 0x005aa830
+    // NameDisplayThread::`scalar deleting destructor'
     virtual bool Update(float fDeltaTime);
 
     int mJoystickIndex;

@@ -44,13 +44,7 @@ LuaEvent::LuaEvent()
     Reset();
 }
 
-// FUNCTION: SWBF2 0x005a0aa0
-LuaEvent::~LuaEvent()
-{
-}
 
-// SYNTHETIC: SWBF2 0x005a0ab0
-// LuaEvent::`scalar deleting destructor'
 
 // FUNCTION: SWBF2 0x005a0b20
 void LuaEvent::Reset()

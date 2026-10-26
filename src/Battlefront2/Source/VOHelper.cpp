@@ -368,7 +368,8 @@ struct QueuedSound
     float mTime;
     int mHandle;
 
-    ~QueuedSound();
+    // SYNTHETIC: SWBF2 0x006715f0
+    // AI::VOHelper::QueuedSound::~QueuedSound
 };
 extern QueuedSound mSndQueue[20];
 extern int mNextQueueHandle;
@@ -654,10 +655,6 @@ AI::VOSound::VOSound()
 {
 }
 
-// FUNCTION: SWBF2 0x006715f0
-AI::VOHelper::QueuedSound::~QueuedSound()
-{
-}
 
 namespace AI
 {

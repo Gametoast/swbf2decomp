@@ -56,3 +56,9 @@ public:
  
  
  
+
+inline HUD::TransformNumberColorBlend::Factory::Factory()
+    : HUD::Item::Factory(0xf3c47270u)
+{
+    mName = "TransformNumberColorBlend";
+}

@@ -220,16 +220,7 @@ static inline void FlashLocalPlayers(Damageable* pThis, GameObject* pObject, flo
     }
 }
 
-// FUNCTION: SWBF2 0x00438a40
-DamageDesc::DamageDesc(DamageOwner owner, float fBaseValue)
-    : mDamageOwner(owner), mBaseValue(fBaseValue)
-{
-    for (int i = 0; i < 8; ++i)
-    {
-        mHealthScale[i] = 1.0f;
-    }
-    mShieldScale = 1.0f;
-}
+
 
 // FUNCTION: SWBF2 0x00488820
 void Damageable::SetCurHealth(float fHealth, bool bNotify, DamageOwner* pOwner)

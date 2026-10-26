@@ -117,8 +117,6 @@ namespace
     }
 }
 
-// SYNTHETIC: SWBF2 0x0046c2e0
-// CombatHelper::`scalar deleting destructor'
 
 // FUNCTION: SWBF2 0x0046c330
 CombatHelper::CombatHelper(UnitAgent* pOwner)
@@ -144,9 +142,6 @@ CombatHelper::CombatHelper(UnitAgent* pOwner)
     mDeflectTimer = 0.0f;
 }
 
-CombatHelper::~CombatHelper()
-{
-}
 
 // FUNCTION: SWBF2 0x0046c400
 void CombatHelper::Kill()

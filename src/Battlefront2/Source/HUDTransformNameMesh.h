@@ -96,3 +96,9 @@ public:
  
  
  
+
+inline HUD::TransformNameMesh::Factory::Factory()
+    : HUD::Item::Factory(0x67c3c715u)
+{
+    mName = "TransformNameMesh";
+}

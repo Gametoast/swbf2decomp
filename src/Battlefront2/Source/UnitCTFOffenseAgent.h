@@ -21,7 +21,10 @@ public:
     static const char rttiNameUnitCTFOffenseAgent[];
 
     UnitCTFOffenseAgent(UnitController* pCtrl, const FlagItem* pFlag, const PblVector3& vPos);
-    virtual ~UnitCTFOffenseAgent();
+    // SYNTHETIC: SWBF2 0x00664630
+    // UnitCTFOffenseAgent::`scalar deleting destructor'
+    // SYNTHETIC: SWBF2 0x00664660
+    // UnitCTFOffenseAgent::~UnitCTFOffenseAgent
     virtual void Kill();
 
     virtual bool IsRtti(unsigned int uRtti) const;

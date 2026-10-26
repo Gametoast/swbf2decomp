@@ -47,20 +47,7 @@ const char EntityClass::rttiNameEntityClass[] = "EntityClass";
 // GLOBAL: SWBF2 0x01eb9870
 PblHashTable<EntityEx, 1024> EntityEx::mIdMap;
 
-EntityClass::MapParams::MapParams()
-{
-    mScale = 1.0f;
-    mSpeedMin = 10.0f;
-    mSpeedMax = 100.0f;
-    mViewRangeMin = 125.0f;
-    mViewRangeMax = 250.0f;
-    mTexture = 0;
-    mTargetFadeTime = 32.0f;
-    mRangeOverall = 15.0f;
-    mRangeShooting = 1000.0f;
-    mRangeViewCone = 60.0f;
-    mViewConeCosine = PblMath::Cos(0.41887903f);
-}
+
 
 // FUNCTION: SWBF2 0x004918d0
 EntityClass::EntityClass(unsigned int uHash)

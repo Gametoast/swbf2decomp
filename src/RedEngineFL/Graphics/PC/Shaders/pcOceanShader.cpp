@@ -1,3 +1,4 @@
+#include <string.h>
 #include "pcOceanShader.h"
 
 #include "PebbleFL/Common/PblChunk.h"
@@ -48,21 +49,11 @@ static unsigned int kuiLinearRamp = PblHash("linear_ramp");
 // FUNCTION: SWBF2 0x0070bd00
 pcOceanShader::pcOceanShader()
 {
-    m_textureTransform.m_bTransform = 0;
-    m_foamMapTransform.m_bTransform = 0;
 
-    GetStateFuncArray[PIPELINE_FIXED] = 0;
-    GetStateFuncArray[PIPELINE_PROG1] = 0;
-    GetStateFuncArray[PIPELINE_PROG2] = 0;
-    BeginFuncArray[PIPELINE_FIXED] = 0;
-    BeginFuncArray[PIPELINE_PROG1] = 0;
-    BeginFuncArray[PIPELINE_PROG2] = 0;
-    EndFuncArray[PIPELINE_FIXED] = 0;
-    EndFuncArray[PIPELINE_PROG1] = 0;
-    EndFuncArray[PIPELINE_PROG2] = 0;
-    RenderFuncArray[PIPELINE_FIXED] = 0;
-    RenderFuncArray[PIPELINE_PROG1] = 0;
-    RenderFuncArray[PIPELINE_PROG2] = 0;
+    memset(GetStateFuncArray, 0, sizeof(GetStateFuncArray));
+    memset(BeginFuncArray, 0, sizeof(BeginFuncArray));
+    memset(EndFuncArray, 0, sizeof(EndFuncArray));
+    memset(RenderFuncArray, 0, sizeof(RenderFuncArray));
 
     s_uiID = _Register(s_uiRenderTypeHash, this);
 

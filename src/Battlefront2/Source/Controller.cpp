@@ -60,14 +60,7 @@ void Controller::KillController()
 {
 }
 
-// SYNTHETIC: SWBF2 0x00485140
-// Controller::~Controller
-Controller::~Controller()
-{
-}
 
-// SYNTHETIC: SWBF2 0x00485160
-// Controller::`scalar deleting destructor'
 
 // FUNCTION: SWBF2 0x00485190
 Controller::Controller(Controllable* pOwner)

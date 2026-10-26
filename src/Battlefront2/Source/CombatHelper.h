@@ -37,7 +37,8 @@ public:
     };
 
     CombatHelper(UnitAgent* pOwner);
-    virtual ~CombatHelper();
+    // SYNTHETIC: SWBF2 0x0046c2e0
+    // CombatHelper::`scalar deleting destructor'
     virtual void Kill();
 
     void Clean();

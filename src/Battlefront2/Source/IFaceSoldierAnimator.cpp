@@ -38,9 +38,6 @@ void IFaceSoldierAnimator::SetUpperLowerAnimations(unsigned int uUpperAnimHash, 
     Open();
 }
 
-IFaceSoldierAnimator::~IFaceSoldierAnimator()
-{
-}
 
 // FUNCTION: SWBF2 0x0056a240
 IFaceSoldierAnimator::IFaceSoldierAnimator(const Red3DModelAnimator* pAnimator)

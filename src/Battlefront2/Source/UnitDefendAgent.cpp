@@ -22,13 +22,7 @@ const char UnitDefendAgent::rttiNameUnitDefendAgent[] = "UnitDefendAgent";
 
 
 
-// SYNTHETIC: SWBF2 0x00665bb0
-// UnitDefendAgent::`scalar deleting destructor'
 
-// FUNCTION: SWBF2 0x00665be0
-UnitDefendAgent::~UnitDefendAgent()
-{
-}
 
 // FUNCTION: SWBF2 0x00665c70
 UnitDefendAgent::UnitDefendAgent(UnitController* pCtrl, const AI::GoalTarget& target)

@@ -59,3 +59,9 @@ public:
  
  
  
+
+inline HUD::Sound::Factory::Factory()
+    : HUD::Item::Factory(0x0E0D9594u)
+{
+    mName = "Sound";
+}

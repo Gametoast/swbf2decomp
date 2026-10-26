@@ -1,3 +1,4 @@
+#include <string.h>
 #include "pcNormalMapAdderShader.h"
 
 #include "PebbleFL/Common/PblChunk.h"
@@ -34,21 +35,11 @@ static unsigned int kuiHemisphereNormalizationMap = PblHash("hemisphere_normaliz
 // FUNCTION: SWBF2 0x0070b4e0
 pcNormalMapAdderShader::pcNormalMapAdderShader()
 {
-    m_textureTransform1.m_bTransform = 0;
-    m_textureTransform2.m_bTransform = 0;
 
-    GetStateFuncArray[PIPELINE_FIXED] = 0;
-    GetStateFuncArray[PIPELINE_PROG1] = 0;
-    GetStateFuncArray[PIPELINE_PROG2] = 0;
-    BeginFuncArray[PIPELINE_FIXED] = 0;
-    BeginFuncArray[PIPELINE_PROG1] = 0;
-    BeginFuncArray[PIPELINE_PROG2] = 0;
-    EndFuncArray[PIPELINE_FIXED] = 0;
-    EndFuncArray[PIPELINE_PROG1] = 0;
-    EndFuncArray[PIPELINE_PROG2] = 0;
-    RenderFuncArray[PIPELINE_FIXED] = 0;
-    RenderFuncArray[PIPELINE_PROG1] = 0;
-    RenderFuncArray[PIPELINE_PROG2] = 0;
+    memset(GetStateFuncArray, 0, sizeof(GetStateFuncArray));
+    memset(BeginFuncArray, 0, sizeof(BeginFuncArray));
+    memset(EndFuncArray, 0, sizeof(EndFuncArray));
+    memset(RenderFuncArray, 0, sizeof(RenderFuncArray));
 
     s_uiID = _Register(s_uiRenderTypeHash, this);
 

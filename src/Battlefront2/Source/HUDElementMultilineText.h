@@ -29,7 +29,6 @@ public:
     class __declspec(align(16)) Line : public HUD::ElementText
     {
     public:
-        // FUNCTION: SWBF2 0x00557120
         Line();
 
         // SYNTHETIC: SWBF2 0x00558010
@@ -174,3 +173,10 @@ public:
  
  
  
+
+// FUNCTION: SWBF2 0x00557120
+inline HUD::ElementMultilineText::Line::Line()
+    : HUD::ElementText(0, 0, 0),
+      mGroup(0)
+{
+}

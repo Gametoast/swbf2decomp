@@ -153,20 +153,16 @@ public:
                 return false;
             }
         }
-        else if (bForce && this->_size / 2 - 1 > iSize)
+        else if (bForce && iSize < this->_size / 2 - 1)
         {
             if (!this->Reserve_(1 << Int_::ilog(iSize), bForce))
             {
                 return false;
             }
         }
-        else if (this->_size < iSize)
+        else if (iSize > this->_size)
         {
-            int iMinGranule = 4;
-
-            const int iLog = Int_::ilog(iSize);
-            int iGrowthGranule = iLog >= 2 ? 1 << (iLog - 2) : 0;
-            const int iGranule = Max_(iGrowthGranule, iMinGranule);
+            int iGranule = Max_(1 << (Int_::ilog(iSize) - 2), 4);
 
             int iRounded = iSize;
             if (iSize % iGranule != 0)

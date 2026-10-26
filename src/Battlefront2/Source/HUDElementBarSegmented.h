@@ -44,7 +44,6 @@ public:
     class Segment : public HUD::ElementBitmap
     {
     public:
-        // FUNCTION: SWBF2 0x0054b8f0
         Segment();
 
         // SYNTHETIC: SWBF2 0x0054c6e0
@@ -124,3 +123,10 @@ public:
  
  
  
+
+// FUNCTION: SWBF2 0x0054b8f0
+inline HUD::ElementBarSegmented::Segment::Segment()
+    : HUD::ElementBitmap(0, 0, 0)
+{
+    mGroup = 0;
+}

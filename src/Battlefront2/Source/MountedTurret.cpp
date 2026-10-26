@@ -1582,12 +1582,7 @@ MountedTurretClass::MountedTurretClass(unsigned int uHash)
     mFirstPersonModelHandle = -1;
 }
 
-MountedTurretClass::~MountedTurretClass()
-{
-}
 
-// SYNTHETIC: SWBF2 0x005a8b40
-// MountedTurretClass::`scalar deleting destructor'
 
 // FUNCTION: SWBF2 0x005a8bb0
 EntityClass* MountedTurretClass::Derive(unsigned int)

@@ -208,7 +208,8 @@ struct PlayerEvents
 
 struct WeaponData
 {
-    ~WeaponData();
+    // SYNTHETIC: SWBF2 0x0055e390
+    // HUD::GameEvents::WeaponData::~WeaponData
     Weapon* weapon;
     const WeaponClass* weaponClass;
     unsigned int weaponHash;
@@ -231,7 +232,8 @@ struct TeamData
 
 struct PlayerData
 {
-    ~PlayerData();
+    // SYNTHETIC: SWBF2 0x0055e360
+    // HUD::GameEvents::PlayerData::~PlayerData
     WeaponData weaponData[2];
     TeamData teamData[2];
     HUD::ElementMap::Mode mapMode;

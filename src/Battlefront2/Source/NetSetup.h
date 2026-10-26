@@ -442,7 +442,8 @@ class CNetLaunchGame : public NetLaunchGame
 {
 public:
     CNetLaunchGame(bool host);
-    virtual ~CNetLaunchGame();
+    // SYNTHETIC: SWBF2 0x005e0dc0
+    // CNetLaunchGame::`scalar deleting destructor'
     virtual void Update();
     virtual bool IsDone();
 

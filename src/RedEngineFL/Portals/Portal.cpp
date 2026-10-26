@@ -196,12 +196,7 @@ pvs::Sector::~Sector()
 // SYNTHETIC: SWBF2 0x006df370
 // pvs::Manager::`scalar deleting destructor'
 
-pvs::Portal::~Portal()
-{
-}
 
-// SYNTHETIC: SWBF2 0x006df3a0
-// pvs::Portal::`scalar deleting destructor'
 
 // SYNTHETIC: SWBF2 0x006df3f0
 // pvs::Sector::`scalar deleting destructor'

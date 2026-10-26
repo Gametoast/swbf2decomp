@@ -46,7 +46,8 @@ class EntityDefenseGridTurret : public EntityBuildingArmedDynamic
 public:
 
     EntityDefenseGridTurret(EntityDefenseGridTurretClass* pClass, const EntityDesc& desc);
-    virtual ~EntityDefenseGridTurret();
+    // SYNTHETIC: SWBF2 0x00497a30
+    // EntityDefenseGridTurret::`scalar deleting destructor'
     virtual bool IsRtti(unsigned int uRtti) const;
     virtual unsigned int GetDerivedRtti() const;
     virtual const char* GetDerivedRttiName() const;

@@ -41,7 +41,8 @@ public:
     {
     public:
         ViewportData();
-        ~ViewportData();
+        // SYNTHETIC: SWBF2 0x0064ba80
+        // SpaceAssault::ViewportData::~ViewportData
 
         static void SetupMemoryPool(unsigned int uCount, unsigned int uSize, unsigned int uGrow)
         {

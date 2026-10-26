@@ -4211,9 +4211,6 @@ EntitySoldierClass::EntitySoldierClass(unsigned int uHash)
     mOverrideTextureHash = 0;
     mOverrideTextureHash2 = 0;
 
-    mEnergyBarClass.m_fEnergyMax = 0.0f;
-    mEnergyBarClass.m_fEnergyMin = 0.0f;
-    mEnergyBarClass.m_fEnergyOverheat = 0.0f;
     mEnergyBarClass.Init(100.0f, 20.0f);
 
     mEnergyRestore = 10.0f;
@@ -4439,9 +4436,6 @@ EntitySoldierClass::EntitySoldierClass(EntitySoldierClass* pBase, unsigned int u
       VehicleEngineClass(pBase),
       PlayableEntitySoundsClass(pBase)
 {
-    mEnergyBarClass.m_fEnergyMax = 0.0f;
-    mEnergyBarClass.m_fEnergyMin = 0.0f;
-    mEnergyBarClass.m_fEnergyOverheat = 0.0f;
 
     mLODClass = 2;
     sCurrentCameraStance = 0;

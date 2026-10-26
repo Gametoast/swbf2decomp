@@ -75,12 +75,7 @@ NameDisplayThread::NameDisplayThread()
 {
 }
 
-NameDisplayThread::~NameDisplayThread()
-{
-}
 
-// SYNTHETIC: SWBF2 0x005aa830
-// NameDisplayThread::`scalar deleting destructor'
 
 // FUNCTION: SWBF2 0x005aa770
 void NameDisplay::Create()

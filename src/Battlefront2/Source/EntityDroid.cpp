@@ -133,9 +133,6 @@ EntityDroidClass::EntityDroidClass(unsigned int uHash)
 
     mExplosion = 0;
 
-    mEnergyBarClass.m_fEnergyMax = 0.0f;
-    mEnergyBarClass.m_fEnergyMin = 0.0f;
-    mEnergyBarClass.m_fEnergyOverheat = 0.0f;
     mEnergyBarClass.Init(100.0f, 20.0f);
 
     mEnergyAutoRestore = 0.0f;
@@ -153,9 +150,6 @@ EntityDroidClass::EntityDroidClass(EntityDroidClass* pBase, unsigned int uHash)
     : GameObjectClass(pBase, uHash),
       ControllableClass(pBase)
 {
-    mEnergyBarClass.m_fEnergyMax = 0.0f;
-    mEnergyBarClass.m_fEnergyMin = 0.0f;
-    mEnergyBarClass.m_fEnergyOverheat = 0.0f;
 
     sWeaponSection = 0;
 

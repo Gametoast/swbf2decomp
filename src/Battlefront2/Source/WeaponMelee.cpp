@@ -2637,15 +2637,8 @@ bool WeaponMelee::SoldierCanOperate() const
 
 
 
-LightsaberTrailClass::LightsaberTrailClass()
-{
-}
 
-// SYNTHETIC: SWBF2 0x00687ce0
-// LightsaberTrailClass::~LightsaberTrailClass
-LightsaberTrailClass::~LightsaberTrailClass()
-{
-}
+
 
 // FUNCTION: SWBF2 0x00687cf0
 FLEffectObject* LightsaberTrailClass::BuildEffect()
@@ -2653,8 +2646,6 @@ FLEffectObject* LightsaberTrailClass::BuildEffect()
     return new LightsaberTrail(this);
 }
 
-// SYNTHETIC: SWBF2 0x00687d50
-// LightsaberTrailClass::`scalar deleting destructor'
 
 // FUNCTION: SWBF2 0x00687d80
 void Combo::InitDefault(unsigned int uiNameHash)

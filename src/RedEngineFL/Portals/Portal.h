@@ -271,7 +271,9 @@ class Portal : public pvs::IPortal
 {
 public:
     Portal() : active_(true), clipMark_(false) {}
-    virtual ~Portal();
+    // SYNTHETIC: SWBF2 0x006df3a0
+    // pvs::Portal::`scalar deleting destructor'
+    virtual ~Portal() {}
 
     virtual void SetActive(bool);
     virtual bool IsActive();

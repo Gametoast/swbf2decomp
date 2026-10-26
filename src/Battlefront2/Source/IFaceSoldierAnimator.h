@@ -18,7 +18,7 @@ public:
     virtual bool IsRtti(unsigned int uRtti) const;
     virtual unsigned int GetDerivedRtti() const;
     virtual const char* GetDerivedRttiName() const;
-    virtual ~IFaceSoldierAnimator();
+    virtual ~IFaceSoldierAnimator() {}
     // SYNTHETIC: SWBF2 0x0056a1d0
     // IFaceSoldierAnimator::`scalar deleting destructor'
     virtual void Open();

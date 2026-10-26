@@ -54,18 +54,10 @@ D3DMATERIAL9 s_d3dMat;
 // FUNCTION: SWBF2 0x006fe7e0
 pcNormalShader::pcNormalShader()
 {
-    GetStateFuncArray[PIPELINE_FIXED] = 0;
-    GetStateFuncArray[PIPELINE_PROG1] = 0;
-    GetStateFuncArray[PIPELINE_PROG2] = 0;
-    BeginFuncArray[PIPELINE_FIXED] = 0;
-    BeginFuncArray[PIPELINE_PROG1] = 0;
-    BeginFuncArray[PIPELINE_PROG2] = 0;
-    EndFuncArray[PIPELINE_FIXED] = 0;
-    EndFuncArray[PIPELINE_PROG1] = 0;
-    EndFuncArray[PIPELINE_PROG2] = 0;
-    RenderFuncArray[PIPELINE_FIXED] = 0;
-    RenderFuncArray[PIPELINE_PROG1] = 0;
-    RenderFuncArray[PIPELINE_PROG2] = 0;
+    memset(GetStateFuncArray, 0, sizeof(GetStateFuncArray));
+    memset(BeginFuncArray, 0, sizeof(BeginFuncArray));
+    memset(EndFuncArray, 0, sizeof(EndFuncArray));
+    memset(RenderFuncArray, 0, sizeof(RenderFuncArray));
 
     s_uiID = _Register(s_uiRenderTypeHash, this);
 
@@ -338,11 +330,7 @@ void RedShadingState::operator delete(void* pBlock)
     sMemoryPool.Free(pBlock);
 }
 
-RedShadingState::RedShadingState(unsigned int uiRenderTypeHash)
-{
-    m_uiRenderTypeHash = uiRenderTypeHash;
-    m_uiNumValues = 0;
-}
+
 
 // SYNTHETIC: SWBF2 0x006fe9b0
 // RedShadingState::`scalar deleting destructor'

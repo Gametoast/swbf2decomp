@@ -130,20 +130,7 @@ void KeyGrabber::KeyboardEvent(RedInputEventType, RedKeyboard*, unsigned char uc
     mStroke.flags = usFlags;
 }
 
-GuiManager::Event::Event(eEventType eType, unsigned int uiVal, const char* pcName, int iController)
-{
-    type = eType;
-    val.i32 = uiVal;
-    if (pcName)
-    {
-        strlcpy(pName, pcName, sizeof(pName));
-    }
-    else
-    {
-        pName[0] = 0;
-    }
-    mController = iController;
-}
+
 
 // FUNCTION: SWBF2 0x00528020
 GuiManager::GuiManager() : mEventQueue(64)

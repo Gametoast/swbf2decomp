@@ -9,6 +9,7 @@ class PblFileChunk;
 #include "Factory.h"
 #include "PebbleFL/Common/PblHashTable.h"
 #include "PebbleFL/Common/PblMatrix.h"
+#include "PebbleFL/Common/PblMath.h"
 
 class Entity;
 class EntityClass;
@@ -124,7 +125,8 @@ public:
     class MapParams
     {
     public:
-        MapParams();
+        MapParams(float scale = 1.0f, float speedMin = 10.0f, float speedMax = 100.0f,
+                  float viewRangeMin = 125.0f, float viewRangeMax = 250.0f);
 
         float mScale;
         float mSpeedMin;
@@ -217,4 +219,20 @@ inline unsigned int EntityEx::GetDerivedRtti() const
 inline const char* EntityEx::GetDerivedRttiName() const
 {
     return rttiNameEntityEx;
+}
+
+inline EntityClass::MapParams::MapParams(float scale, float speedMin, float speedMax,
+                                         float viewRangeMin, float viewRangeMax)
+{
+    mScale = scale;
+    mSpeedMin = speedMin;
+    mSpeedMax = speedMax;
+    mViewRangeMin = viewRangeMin;
+    mViewRangeMax = viewRangeMax;
+    mTexture = 0;
+    mTargetFadeTime = 32.0f;
+    mRangeOverall = 15.0f;
+    mRangeShooting = 1000.0f;
+    mRangeViewCone = 60.0f;
+    mViewConeCosine = PblMath::Cos(0.41887903f);
 }

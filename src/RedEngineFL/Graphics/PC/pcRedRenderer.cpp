@@ -3823,16 +3823,7 @@ RedColor RedRenderer::pcGetClearColor()
     return m_clearColor;
 }
 
-// FUNCTION: SWBF2 0x006afd00
-RedLight::RedLight(TypeT eType)
-{
-    m_uiHideInView = 0;
-    m_uiFlags = 0;
-    m_eType = eType;
-    m_uiProjTexHash = 0;
-    m_uiProjTexWrapMode = 3;
-    m_uiProjTexBlendMode = 0;
-}
+
 
 // SYNTHETIC: SWBF2 0x004075e0
 // `dynamic initializer for 'RedRenderer::m_mProjection''

@@ -3,6 +3,7 @@
 #include <stddef.h>
 #include <math.h>
 #include "FLEffect.h"
+#include "Battlefront2Lod.h"
 #include "LensFlare.h"
 #include "RedEngineFL/Util/RedSceneObject.h"
 
@@ -132,7 +133,16 @@ public:
     ManagedLightBeam();
 
     ManagedLightBeam(const LightBeam& beam);
-    virtual ~ManagedLightBeam();
+    // SYNTHETIC: SWBF2 0x004cf48c
+    // [thunk]:ManagedLightBeam::`scalar deleting destructor' adjustor{96}
+    // SYNTHETIC: SWBF2 0x004cf494
+    // [thunk]:ManagedLightBeam::`scalar deleting destructor' adjustor{136}
+    // SYNTHETIC: SWBF2 0x004cf4a7
+    // [thunk]:ManagedLightBeam::`scalar deleting destructor' adjustor{112}
+    // SYNTHETIC: SWBF2 0x004cc9b0
+    // ManagedLightBeam::`scalar deleting destructor'
+    // SYNTHETIC: SWBF2 0x004cca10
+    // ManagedLightBeam::~ManagedLightBeam
     virtual void Render(unsigned char ucViewport, float fDist, unsigned int uiFlags);
     virtual void SetHeadPosition(const PblVector3& vPos);
     virtual void SetDirection(const PblVector3& vDir);
@@ -284,5 +294,12 @@ inline LightBeam::~LightBeam()
 // SYNTHETIC: SWBF2 0x0056faa0
 // LightBeamEffect::`scalar deleting destructor'
 inline LightBeamEffect::~LightBeamEffect()
+{
+}
+
+inline ManagedLightBeam::ManagedLightBeam()
+    : RedSceneObject(&largeEffectLodData)
+    , LightBeam()
+    , _uiHideInView(0)
 {
 }

@@ -1,3 +1,4 @@
+#include <string.h>
 #include "pcShadowQuadShader.h"
 
 #include "PebbleFL/Common/PblChunk.h"
@@ -32,18 +33,10 @@ pcRedShaderDef pcShadowQuadShader::s_shaderDef("shadowquad_shader.xml");
 // FUNCTION: SWBF2 0x00707f20
 pcShadowQuadShader::pcShadowQuadShader()
 {
-    GetStateFuncArray[PIPELINE_FIXED] = 0;
-    GetStateFuncArray[PIPELINE_PROG1] = 0;
-    GetStateFuncArray[PIPELINE_PROG2] = 0;
-    BeginFuncArray[PIPELINE_FIXED] = 0;
-    BeginFuncArray[PIPELINE_PROG1] = 0;
-    BeginFuncArray[PIPELINE_PROG2] = 0;
-    EndFuncArray[PIPELINE_FIXED] = 0;
-    EndFuncArray[PIPELINE_PROG1] = 0;
-    EndFuncArray[PIPELINE_PROG2] = 0;
-    RenderFuncArray[PIPELINE_FIXED] = 0;
-    RenderFuncArray[PIPELINE_PROG1] = 0;
-    RenderFuncArray[PIPELINE_PROG2] = 0;
+    memset(GetStateFuncArray, 0, sizeof(GetStateFuncArray));
+    memset(BeginFuncArray, 0, sizeof(BeginFuncArray));
+    memset(EndFuncArray, 0, sizeof(EndFuncArray));
+    memset(RenderFuncArray, 0, sizeof(RenderFuncArray));
 
     s_uiID = _Register(s_uiRenderTypeHash, this);
 

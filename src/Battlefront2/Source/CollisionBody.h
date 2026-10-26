@@ -61,7 +61,8 @@ class CollisionBodyMesh : public CollisionBody
 public:
     CollisionBodyMesh(const CollisionMesh* pMesh, const char* pcName, const PblMatrix& matrix,
                       unsigned int uiParentHashName);
-    virtual ~CollisionBodyMesh();
+    // SYNTHETIC: SWBF2 0x0045d870
+    // CollisionBodyMesh::`scalar deleting destructor'
 
     virtual bool ReceiveCollision(const PblMatrix &, const CollisionPrimitive &, CollisionObject *, const PblMatrix &, CollisionObject *, Restrictor *) const;
     virtual bool RayTest(const RedPose *, const PblVector3 &, const PblVector3 &, float);

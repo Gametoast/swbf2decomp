@@ -2479,22 +2479,12 @@ void RedVariableWidthFont::Read(PblFileChunk& chunk)
     m_aRanges[iRange].last = uiPrev;
 }
 
-RedFixedWidthFont::~RedFixedWidthFont()
-{
-}
 
-RedVariableWidthFont::~RedVariableWidthFont()
-{
-}
 
-// SYNTHETIC: SWBF2 0x006d9520
-// RedFixedWidthFont::`scalar deleting destructor'
 
 // SYNTHETIC: SWBF2 0x006d9550
 // RedFont::`scalar deleting destructor'
 
-// SYNTHETIC: SWBF2 0x006d9580
-// RedVariableWidthFont::`scalar deleting destructor'
 
 // FUNCTION: SWBF2 0x006d99a0
 unsigned char RedFixedWidthFont::GetBaseNumTextures() const

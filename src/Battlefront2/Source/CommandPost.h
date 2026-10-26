@@ -134,7 +134,8 @@ public:
         };
 
         VoiceOver();
-        ~VoiceOver();
+        // SYNTHETIC: SWBF2 0x0047a6e0
+        // CommandPost::VoiceOver::~VoiceOver
 
         GameSoundStream mStream[Team::side_MAX][stream_MAX];
     };

@@ -38,10 +38,6 @@ MemoryPool ParticleTransformer::RotationTransformer::sMemoryPool("ParticleTransf
 MemoryPool ParticleTransformer::ColorTransformer::sMemoryPool("ParticleTransformer::ColorTransformer",
                                                               sizeof(ParticleTransformer::ColorTransformer));
 
-ParticleTransformer::TransformState::~TransformState()
-{
-    delete mNextState;
-}
 
 // FUNCTION: SWBF2 0x0060ebc0
 ParticleTransformer::ParticleTransformer()

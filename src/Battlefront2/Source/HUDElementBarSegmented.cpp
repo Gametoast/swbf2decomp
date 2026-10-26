@@ -51,12 +51,7 @@ HUD::Item* HUD::ElementBarSegmented::Factory::CreateItem(const char* const pName
     return 0;
 }
 
-// FUNCTION: SWBF2 0x0054b8f0
-HUD::ElementBarSegmented::Segment::Segment()
-    : HUD::ElementBitmap(0, 0, 0)
-{
-    mGroup = 0;
-}
+
 
 // SYNTHETIC: SWBF2 0x0054cae2
 // [thunk]:HUD::ElementBarSegmented::Segment::`scalar deleting destructor' adjustor{288}

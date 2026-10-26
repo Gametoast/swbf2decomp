@@ -36,12 +36,7 @@ HUD::Item* HUD::ElementBarBitmap::Factory::CreateItem(const char* const pName, I
     return 0;
 }
 
-HUD::ElementBitmap::ElementBitmap(const char* const pName, Factory::ItemCallback pCallback,
-                                  void* const pUserData)
-    : HUD::ElementBitmapBase(*static_cast<RedBitmapElement*>(this), pName, pCallback, pUserData)
-{
-    RedBitmapElement::Enable(false);
-}
+
 
 // FUNCTION: SWBF2 0x0054a560
 HUD::Item* HUD::ElementBitmap::Factory::CreateItem(const char* const pName, ItemCallback pCallback,
@@ -75,17 +70,7 @@ void* HUD::ElementBitmap::GetParent()
 
 
 
-// SYNTHETIC: SWBF2 0x0054abe0
-// HUD::ElementBarBitmap::`scalar deleting destructor'
 
-// SYNTHETIC: SWBF2 0x0054b761
-// [thunk]:HUD::ElementBarBitmap::`scalar deleting destructor' adjustor{288}
-// SYNTHETIC: SWBF2 0x0054b777
-// [thunk]:HUD::ElementBarBitmap::`scalar deleting destructor' adjustor{544}
-// FUNCTION: SWBF2 0x0054ac10
-HUD::ElementBarBitmap::~ElementBarBitmap()
-{
-}
 
 // SYNTHETIC: SWBF2 0x0054a9c0
 // HUD::ElementBarBitmap::Factory::~Factory

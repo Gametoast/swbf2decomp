@@ -67,18 +67,10 @@ pcRedShader::RenderFuncT pcRefractionShader::RenderFuncArray[MAX_PIPELINES];
 // FUNCTION: SWBF2 0x0070cae0
 pcRefractionShader::pcRefractionShader()
 {
-    GetStateFuncArray[PIPELINE_FIXED] = 0;
-    GetStateFuncArray[PIPELINE_PROG1] = 0;
-    GetStateFuncArray[PIPELINE_PROG2] = 0;
-    BeginFuncArray[PIPELINE_FIXED] = 0;
-    BeginFuncArray[PIPELINE_PROG1] = 0;
-    BeginFuncArray[PIPELINE_PROG2] = 0;
-    EndFuncArray[PIPELINE_FIXED] = 0;
-    EndFuncArray[PIPELINE_PROG1] = 0;
-    EndFuncArray[PIPELINE_PROG2] = 0;
-    RenderFuncArray[PIPELINE_FIXED] = 0;
-    RenderFuncArray[PIPELINE_PROG1] = 0;
-    RenderFuncArray[PIPELINE_PROG2] = 0;
+    memset(GetStateFuncArray, 0, sizeof(GetStateFuncArray));
+    memset(BeginFuncArray, 0, sizeof(BeginFuncArray));
+    memset(EndFuncArray, 0, sizeof(EndFuncArray));
+    memset(RenderFuncArray, 0, sizeof(RenderFuncArray));
 
     s_uiID = _Register(s_uiRenderTypeHash, this);
 

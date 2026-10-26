@@ -83,3 +83,9 @@ public:
  
  
  
+
+inline HUD::TransformNumberColor::Factory::Factory()
+    : HUD::Item::Factory(0x0d34920du)
+{
+    mName = "TransformNumberColor";
+}

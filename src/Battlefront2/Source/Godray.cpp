@@ -27,15 +27,7 @@ void GodrayEffectObject::UpdatedWorldMatrix()
     GodrayManager::s_pInstance->UpdateGodrayPosition(m_hGodray, m_mWorldMatrix.GetTranslation());
 }
 
-// SYNTHETIC: SWBF2 0x0053e4b0
-// GodrayEffectObject::`scalar deleting destructor'
-// SYNTHETIC: SWBF2 0x005409d7
-// [thunk]:GodrayEffectObject::`scalar deleting destructor' adjustor{24}
 
-GodrayEffectObject::~GodrayEffectObject()
-{
-    GodrayManager::s_pInstance->RemoveGodray(m_hGodray);
-}
 
 // FUNCTION: SWBF2 0x0053e500
 void GodrayManager::Create()

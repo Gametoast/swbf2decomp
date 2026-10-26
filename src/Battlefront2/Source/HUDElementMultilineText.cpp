@@ -69,12 +69,7 @@ float HUD::Element::GetFadeHoldElapsed() const
 
 // SYNTHETIC: SWBF2 0x00558b63
 // [thunk]:HUD::ElementMultilineText::Line::`scalar deleting destructor' adjustor{256}
-// FUNCTION: SWBF2 0x00557120
-HUD::ElementMultilineText::Line::Line()
-    : HUD::ElementText(0, 0, 0),
-      mGroup(0)
-{
-}
+
 
 
 

@@ -63,13 +63,7 @@ UnitCTFOffenseAgent::UnitCTFOffenseAgent(UnitController* pCtrl, const FlagItem* 
     mDefendCarrierOffset = AIUtil::GetRandomFloat(1.0f, 6.0f);
 }
 
-// SYNTHETIC: SWBF2 0x00664630
-// UnitCTFOffenseAgent::`scalar deleting destructor'
 
-// FUNCTION: SWBF2 0x00664660
-UnitCTFOffenseAgent::~UnitCTFOffenseAgent()
-{
-}
 
 // FUNCTION: SWBF2 0x006647e0
 void UnitCTFOffenseAgent::Kill()

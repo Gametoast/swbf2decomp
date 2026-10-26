@@ -214,26 +214,9 @@ void ManagedLightBeam::RemoveFromRenderList()
     Deactivate();
 }
 
-// SYNTHETIC: SWBF2 0x004cf48c
-// [thunk]:ManagedLightBeam::`scalar deleting destructor' adjustor{96}
-// SYNTHETIC: SWBF2 0x004cf494
-// [thunk]:ManagedLightBeam::`scalar deleting destructor' adjustor{136}
-// SYNTHETIC: SWBF2 0x004cf4a7
-// [thunk]:ManagedLightBeam::`scalar deleting destructor' adjustor{112}
-// SYNTHETIC: SWBF2 0x004cc9b0
-// ManagedLightBeam::`scalar deleting destructor'
 
-// FUNCTION: SWBF2 0x004cca10
-ManagedLightBeam::~ManagedLightBeam()
-{
-}
 
-ManagedLightBeam::ManagedLightBeam()
-    : RedSceneObject(&largeEffectLodData)
-    , LightBeam()
-    , _uiHideInView(0)
-{
-}
+
 
 
 
@@ -576,12 +559,7 @@ void EntityLightFXParser::Render(int)
 {
 }
 
-// SYNTHETIC: SWBF2 0x004ccb30
-// EntityLightFXParser::`scalar deleting destructor'
 
-EntityLightFXParser::~EntityLightFXParser()
-{
-}
 
 // FUNCTION: SWBF2 0x004ccba0
 EntityLight::EntityLight()

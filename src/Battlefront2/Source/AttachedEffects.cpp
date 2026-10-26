@@ -26,11 +26,7 @@ AttachedEffectsClass::AttachClassData AttachedEffectsClass::s_aAttachClassData[M
 unsigned int AttachedEffectsClass::s_uiNumAttached;
 bool AttachedEffectsClass::s_bDynamic;
 
-AttachedEffectsClass::AttachedEffectsClass()
-{
-    m_uiNumAttached = 0;
-    m_bDynamic = 0;
-}
+
 
 // FUNCTION: SWBF2 0x00447910
 AttachedEffectsClass* AttachedEffectsClass::BuildAttachedEffectsClass()
@@ -155,10 +151,6 @@ AttachedEffects::AttachData::AttachData()
     pEffect.mSavedHandleId = 0;
 }
 
-// FUNCTION: SWBF2 0x00447660
-AttachedEffects::AttachData::~AttachData()
-{
-}
 
 // FUNCTION: SWBF2 0x00447670
 bool AttachedEffectsClass::SetProperty(unsigned int uiProperty, const char* pszValue)

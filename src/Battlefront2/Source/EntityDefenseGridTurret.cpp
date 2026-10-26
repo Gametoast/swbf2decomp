@@ -57,9 +57,6 @@ EntityDefenseGridTurret::EntityDefenseGridTurret(EntityDefenseGridTurretClass* p
     mRespawnTimer = pClass->mRespawnTime;
 }
 
-EntityDefenseGridTurret::~EntityDefenseGridTurret()
-{
-}
 
 // FUNCTION: SWBF2 0x00497b40
 bool EntityDefenseGridTurret::Update(float fDeltaTime)
@@ -86,8 +83,6 @@ bool EntityDefenseGridTurret::Update(float fDeltaTime)
     return true;
 }
 
-// SYNTHETIC: SWBF2 0x00497a30
-// EntityDefenseGridTurret::`scalar deleting destructor'
 // SYNTHETIC: SWBF2 0x00497dd2
 // [thunk]:EntityDefenseGridTurret::`vector deleting destructor'`adjustor{148}'
 // SYNTHETIC: SWBF2 0x00497ddd

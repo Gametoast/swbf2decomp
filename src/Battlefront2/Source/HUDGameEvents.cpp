@@ -2316,12 +2316,4 @@ void HUD::GameEvents::DisplayCenterMessage(unsigned int uTextHash, unsigned int 
     }
 }
 
-// FUNCTION: SWBF2 0x0055e360
-HUD::GameEvents::PlayerData::~PlayerData()
-{
-}
 
-// FUNCTION: SWBF2 0x0055e390
-HUD::GameEvents::WeaponData::~WeaponData()
-{
-}

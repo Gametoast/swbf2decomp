@@ -35,11 +35,7 @@ HUD::ElementGroupBase::Factory::Factory(unsigned int uHashID)
     mEventRotation.Init("EventRotation", mProperties, Property::type_Event);
 }
 
-HUD::ElementGroup::Factory::Factory()
-    : HUD::ElementGroupBase::Factory(0x5FB91E8Cu)
-{
-    mName = "Group";
-}
+
 
 static const unsigned int kRect = 0xeae44d07;
 static const unsigned int kRelativeSize = 0x07c10754;

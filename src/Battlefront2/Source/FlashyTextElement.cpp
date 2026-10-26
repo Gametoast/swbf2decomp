@@ -12,9 +12,6 @@ FlashyTextManager::FlashyTextManager()
 {
 }
 
-FlashyTextManager::~FlashyTextManager()
-{
-}
 
 // SYNTHETIC: SWBF2 0x00403870
 // `dynamic initializer for 'sFlashyTextManagerInstance''

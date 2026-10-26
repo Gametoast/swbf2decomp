@@ -308,9 +308,6 @@ EntityFlyerClass::EntityFlyerClass(unsigned int uHash)
     mFOVEFFectMaxCamOffset3rd.z = 0.0f;
     mFOVEffect1st = 0.0f;
 
-    mEnergyBarClass.m_fEnergyMax = 0.0f;
-    mEnergyBarClass.m_fEnergyMin = 0.0f;
-    mEnergyBarClass.m_fEnergyOverheat = 0.0f;
     mEnergyBarClass.Init(100.0f, 20.0f);
 
     mEnergyAutoRestore = 0.0f;
@@ -545,9 +542,6 @@ EntityFlyerClass::EntityFlyerClass(EntityFlyerClass* pSrc, unsigned int uHash)
       VehicleMusicClass(pSrc),
       VehicleEngineClass(pSrc)
 {
-    mEnergyBarClass.m_fEnergyMax = 0.0f;
-    mEnergyBarClass.m_fEnergyMin = 0.0f;
-    mEnergyBarClass.m_fEnergyOverheat = 0.0f;
 
     mFlyingCollisionInited = false;
     sCurrentSection = -1;

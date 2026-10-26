@@ -178,9 +178,6 @@ public:
 WeaponClass::WeaponClass(unsigned int uHash)
     : Factory<Weapon, WeaponClass, WeaponDesc>(uHash)
 {
-    mEnergyBarClass.m_fEnergyMax = 0.0f;
-    mEnergyBarClass.m_fEnergyMin = 0.0f;
-    mEnergyBarClass.m_fEnergyOverheat = 0.0f;
 
     mPostLoadInit = false;
 
@@ -303,9 +300,6 @@ WeaponClass::WeaponClass(WeaponClass* pBase, unsigned int uHash)
     : Factory<Weapon, WeaponClass, WeaponDesc>(pBase, uHash)
 {
 
-    mEnergyBarClass.m_fEnergyMax = 0.0f;
-    mEnergyBarClass.m_fEnergyMin = 0.0f;
-    mEnergyBarClass.m_fEnergyOverheat = 0.0f;
 
     mPostLoadInit = false;
     mStrengthLimit = pBase->mStrengthLimit;

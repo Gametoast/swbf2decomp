@@ -216,7 +216,14 @@ class GodrayEffectObject : public FLEffectObject
     friend class GodrayClass;
      
 public:
-    virtual ~GodrayEffectObject();
+    // SYNTHETIC: SWBF2 0x0053e4b0
+    // GodrayEffectObject::`scalar deleting destructor'
+    // SYNTHETIC: SWBF2 0x005409d7
+    // [thunk]:GodrayEffectObject::`scalar deleting destructor' adjustor{24}
+    virtual ~GodrayEffectObject()
+    {
+        GodrayManager::s_pInstance->RemoveGodray(m_hGodray);
+    }
     virtual bool IsEffectActive() const;
 private:
     GodrayEffectObject(unsigned int hGodray) : m_hGodray(hGodray) {}

@@ -322,7 +322,3 @@ void* FindNodeByDeviceID()
 
 }
 
-// FUNCTION: SWBF2 0x0053c030
-GameVoiceChat::Transport::~Transport()
-{
-}

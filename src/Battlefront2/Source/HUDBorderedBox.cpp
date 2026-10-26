@@ -20,13 +20,7 @@ void HUD::ElementGroupBase::GetSize(float& fWidth, float& fHeight)
     fHeight = GetHeightPixelsFloat();
 }
 
-// FUNCTION: SWBF2 0x00543f40
-HUD::ElementGroup::ElementGroup(const char* const pName, Factory::ItemCallback pCallback,
-                                void* const pUserData)
-    : HUD::ElementGroupBase(*static_cast<RedGroupElement*>(this), pName, pCallback, pUserData)
-{
-    RedGroupElement::Enable(false);
-}
+
 
 // SYNTHETIC: SWBF2 0x005440c0
 // HUD::ElementGroup::`scalar deleting destructor'

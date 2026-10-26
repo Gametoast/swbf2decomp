@@ -42,7 +42,6 @@ public:
 
     DefendHelper(UnitAgent* pOwner);
 
-    virtual ~DefendHelper();
 
     // SYNTHETIC: SWBF2 0x0048b650
     // DefendHelper::`scalar deleting destructor'

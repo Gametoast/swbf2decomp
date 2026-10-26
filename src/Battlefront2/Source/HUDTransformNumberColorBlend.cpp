@@ -1,10 +1,6 @@
 #include "HUDTransformNumberColorBlend.h"
 
-HUD::TransformNumberColorBlend::Factory::Factory()
-    : HUD::Item::Factory(0xf3c47270u)
-{
-    mName = "TransformNumberColorBlend";
-}
+
 
 // FUNCTION: SWBF2 0x00568020
 HUD::TransformNumberColorBlend::TransformNumberColorBlend(const char* const pName,

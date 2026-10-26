@@ -49,9 +49,6 @@ DefendHelper::DefendHelper(UnitAgent* pOwner)
     mTarget.mType = AI::GTT_NONE;
 }
 
-DefendHelper::~DefendHelper()
-{
-}
 
 // FUNCTION: SWBF2 0x0048b760
 void DefendHelper::Kill()

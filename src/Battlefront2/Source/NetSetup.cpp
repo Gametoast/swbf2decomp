@@ -2633,9 +2633,6 @@ bool CNetFindGame::IsReady()
 // FUNCTION: SWBF2 0x005e1d10
 CNetLoadGame::~CNetLoadGame() {}
 
-// SYNTHETIC: SWBF2 0x005e0dc0
-// CNetLaunchGame::`scalar deleting destructor'
-CNetLaunchGame::~CNetLaunchGame() {}
 
 extern int updatePercent;
 

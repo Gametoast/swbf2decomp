@@ -6,6 +6,8 @@
 class EnergyBarClass
 {
 public:
+    EnergyBarClass() : m_fEnergyMax(0.0f), m_fEnergyMin(0.0f), m_fEnergyOverheat(0.0f) {}
+
     void Init(float fEnergyMax, float fEnergyOverheat);
     bool SetProperty(unsigned int uProperty, const char* pszValue);
 

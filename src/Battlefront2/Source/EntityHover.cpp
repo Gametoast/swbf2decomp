@@ -313,9 +313,6 @@ EntityHoverClass::EntityHoverClass(unsigned int uHash)
     mRandomSpring = true;
     mNumColliderBodies = 0;
 
-    mEnergyBarClass.m_fEnergyMax = 0.0f;
-    mEnergyBarClass.m_fEnergyMin = 0.0f;
-    mEnergyBarClass.m_fEnergyOverheat = 0.0f;
     mEnergyBarClass.Init(100.0f, 20.0f);
 
     mEnergyAutoRestore = 0.0f;
@@ -650,9 +647,6 @@ EntityHoverClass::EntityHoverClass(EntityHoverClass* pBase, unsigned int uHash)
       VehicleMusicClass(pBase),
       VehicleEngineClass(pBase)
 {
-    mEnergyBarClass.m_fEnergyMax = 0.0f;
-    mEnergyBarClass.m_fEnergyMin = 0.0f;
-    mEnergyBarClass.m_fEnergyOverheat = 0.0f;
 
     mSetAltitude = pBase->mSetAltitude;
     mGravityScale = pBase->mGravityScale;

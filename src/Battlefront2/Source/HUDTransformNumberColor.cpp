@@ -2,11 +2,7 @@
 #include <new>
 #include "HUDTransformNumberColor.h"
 
-HUD::TransformNumberColor::Factory::Factory()
-    : HUD::Item::Factory(0x0d34920du)
-{
-    mName = "TransformNumberColor";
-}
+
 
 static const unsigned int kNumberColorHash = 0xed01cbb7;
 

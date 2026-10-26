@@ -4,11 +4,7 @@
 #include "HUDTransformNameMesh.h"
 #include "RedEngineFL/Graphics/RedModel.h"
 
-HUD::TransformNameMesh::Factory::Factory()
-    : HUD::Item::Factory(0x67c3c715u)
-{
-    mName = "TransformNameMesh";
-}
+
 
 // SYNTHETIC: SWBF2 0x004040c0
 // `dynamic initializer for 'HUD::TransformNameMesh::sTransformNameMeshList''

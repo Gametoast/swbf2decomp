@@ -162,9 +162,6 @@ EntityWalkerClass::EntityWalkerClass(unsigned int uHash)
     mOrientRoll = false;
     mWidth = 1.0f;
 
-    mEnergyBarClass.m_fEnergyMax = 0.0f;
-    mEnergyBarClass.m_fEnergyMin = 0.0f;
-    mEnergyBarClass.m_fEnergyOverheat = 0.0f;
     mEnergyBarClass.Init(100.0f, 20.0f);
 
     mEnergyAutoRestore = 0.0f;
@@ -406,9 +403,6 @@ EntityWalkerClass::EntityWalkerClass(EntityWalkerClass* pBase, unsigned int uHas
       VehicleMusicClass(pBase),
       VehicleEngineClass(pBase)
 {
-    mEnergyBarClass.m_fEnergyMax = 0.0f;
-    mEnergyBarClass.m_fEnergyMin = 0.0f;
-    mEnergyBarClass.m_fEnergyOverheat = 0.0f;
 
     m_bDynamicLighting = true;
     mHealthType = HEALTH_TYPE_VEHICLE;
