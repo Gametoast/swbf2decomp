@@ -56,10 +56,7 @@ static float& MaxHealth(Damageable* pDamageable)
     return pDamageable->mMaxHealth;
 }
 
-static bool IsAlive(const GameObject* pGameObject)
-{
-    return pGameObject->Damageable::IsAlive();
-}
+
 
 static inline int GetTeam(const GameObject* pGameObject)
 {
@@ -81,18 +78,7 @@ static inline Entity* AsEntity(EntityDefenseGridTurret* pTurret)
     return reinterpret_cast<Entity*>(pTurret);
 }
 
-static GameObject* GetGameObject(CommandPost* pPost)
-{
-    PblHandle<GameObject>& handle = pPost->mObject;
-    if (handle.mObject &&
-        handle.mObject->mHandleId !=
-            handle.mSavedHandleId)
-    {
-        handle.mObject = 0;
-        handle.mSavedHandleId = 0;
-    }
-    return handle.mObject;
-}
+
 
 static int GetSide(const Team* pTeam)
 {
@@ -411,14 +397,14 @@ void BonusManager::UpdateTeamBonusAutoturrets(int iTeam, float fDeltaTime)
         CommandPost* pPost = data.pCommandPost;
         if (bActive)
         {
-            if (IsAlive(GetGameObject(pPost)) && GetTeam(GetGameObject(pPost)) == iTeam)
+            if (pPost->GetGameObject()->IsAlive() && GetTeam(pPost->GetGameObject()) == iTeam)
             {
                 AddTurretsToCP(data, iTeam);
             }
         }
         else
         {
-            if (GetGameObject(pPost) && GetTeam(GetGameObject(pPost)) == iTeam)
+            if (pPost->GetGameObject() && GetTeam(pPost->GetGameObject()) == iTeam)
             {
                 RemoveTurretsFromCP(data);
             }

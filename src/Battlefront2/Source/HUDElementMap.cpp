@@ -2101,7 +2101,7 @@ void HUD::ElementMap::EventRefreshMarker(const HUD::Event& event, void* const pD
     {
         return;
     }
-    const unsigned int index = event.mData.uintValue;
+    const unsigned int index = event.GetData().uintValue;
     if (index >= TargetManager::MAX_MARKERS)
     {
         return;

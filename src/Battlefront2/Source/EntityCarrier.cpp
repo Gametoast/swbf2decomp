@@ -131,7 +131,7 @@ EntityCarrier::~EntityCarrier()
 // SYNTHETIC: SWBF2 0x004785e6
 // [thunk]:EntityFlyer::GetControllable`adjustor{600}'
 // SYNTHETIC: SWBF2 0x004785fc
-// [thunk]:EntityFlyer::`scalar deleting destructor'`adjustor{960}'
+// [thunk]:EntityFlyer::GetMatrix`adjustor{960}'
 
 // FUNCTION: SWBF2 0x00496f60
 EntityCarrier::EntityCarrier(EntityCarrierClass* pClass, const EntityDesc& desc)

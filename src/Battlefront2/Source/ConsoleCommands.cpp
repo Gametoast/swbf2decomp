@@ -49,12 +49,4 @@ const RedModel* RedModel::Find(unsigned int uiName)
 
 
 
-// FUNCTION: SWBF2 0x0043ed70
-const PblMatrix& CommandPost::GetMatrix() const
-{
-    if (!(GameObject*)mObject)
-    {
-        return gMatrixIdentity;
-    }
-    return ((GameObject*)mObject)->GetMatrix();
-}
+

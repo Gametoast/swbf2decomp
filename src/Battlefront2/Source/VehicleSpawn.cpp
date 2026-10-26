@@ -41,10 +41,7 @@ static unsigned int HandleId(const GameObject* pObject)
     return pObject->mHandleId;
 }
 
-static bool IsAlive(const GameObject* pObject)
-{
-    return pObject->mIsAlive;
-}
+
 
 static inline int GetTeam(const GameObject* pObject)
 {
@@ -294,7 +291,7 @@ void VehicleSpawn::UpdateLive(float fDeltaTime, VehicleTracker& tracker)
 
     float fExpireTime = mExpireTimeField;
     const CommandPost* pPost = mCommandPost.mPost;
-    if (pPost && GetObject(pPost->mObject) && IsAlive(GetObject(pPost->mObject)) &&
+    if (pPost && GetObject(pPost->mObject) && GetObject(pPost->mObject)->IsAlive() &&
         pPost->IsInsideControlRegion(GetObject(tracker.mVehicle)))
     {
         if (mSpawnClass[mVehicleTeam] != mSpawnClass[mSpawnTeam])
@@ -572,7 +569,7 @@ bool VehicleSpawn::Update(float fDeltaTime)
 
     if (mCommandPost)
     {
-        int iTeam = IsAlive(GetPostObject(mCommandPost)) ? GetTeam(GetPostObject(mCommandPost)) : 0;
+        int iTeam = GetPostObject(mCommandPost)->IsAlive() ? GetTeam(GetPostObject(mCommandPost)) : 0;
         if (mSpawnTeam != iTeam)
         {
             mSpawnTeam = GetTeam(GetPostObject(mCommandPost));
@@ -583,7 +580,7 @@ bool VehicleSpawn::Update(float fDeltaTime)
     for (PblList<VehicleTracker>::Itor it(mTrackerList); it; ++it)
     {
         VehicleTracker* pTracker = it;
-        if (GetObject(pTracker->mVehicle) && IsAlive(GetObject(pTracker->mVehicle)))
+        if (GetObject(pTracker->mVehicle) && GetObject(pTracker->mVehicle)->IsAlive())
         {
             UpdateLive(fDeltaTime, *pTracker);
         }

@@ -401,9 +401,9 @@ const ControllableClass* EntitySoldierClass::GetControllableClass() const
 
 // FUNCTION: SWBF2 0x004de4e0
 AI::EventInfo::EventInfo(EventType eType, float fFloat, int iInt)
-    : mNextCmd(CMD_NONE, PblHandle<GameObject>(), PblVector3(0, 0, 0), PblHandle<GameObject>()),
+    : mNextCmd(CMD_NONE, 0, PblVector3(0, 0, 0), 0),
       mType(eType),
-      mGameObject(),
+      mGameObject(0),
       mPos(0, 0, 0),
       mFloat(fFloat),
       mInt(iInt),

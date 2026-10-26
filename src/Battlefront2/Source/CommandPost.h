@@ -365,3 +365,13 @@ inline const CommandPost* ConstCommandPostHandle::operator->() const
 {
     return *this;
 }
+
+// FUNCTION: SWBF2 0x0043ed70
+inline const PblMatrix& CommandPost::GetMatrix() const
+{
+    if (!(GameObject*)mObject)
+    {
+        return gMatrixIdentity;
+    }
+    return ((GameObject*)mObject)->GetMatrix();
+}

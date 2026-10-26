@@ -662,10 +662,10 @@ void HUD::ElementMultilineText::EventText(const HUD::Event& event, void* const p
     switch (event.GetClass()->GetType())
     {
     case EventClass::type_Uint:
-        pText = RedLocalizeDB::Find(event.mData.uintValue, false);
+        pText = RedLocalizeDB::Find(event.GetData().uintValue, false);
         break;
     case EventClass::type_String:
-        pText = event.mData.string;
+        pText = event.GetData().string;
         if (!pText)
         {
             static const unsigned short acNewline[] = { '\n', 0 };
@@ -685,10 +685,9 @@ void HUD::ElementMultilineText::EventColor(const HUD::Event& event, void* const 
     if (event.GetClass()->GetType() == EventClass::type_Color)
     {
         ElementMultilineText* pDisplay = (ElementMultilineText*)pData;
-        const RedColor& color = *event.mData.color;
-        GetText(pDisplay->mFormat).m_color = color;
-        pDisplay->mFormat.mColorDefault = color;
-        pDisplay->mFormat.mAlpha = (float)color.a / 255.0f;
+        pDisplay->mFormat.RedInterfaceElement::SetColor(*event.GetData().color);
+        pDisplay->mFormat.mColorDefault = *event.GetData().color;
+        pDisplay->mFormat.mAlpha = (float)event.GetData().color->a / 255.0f;
     }
 }
 

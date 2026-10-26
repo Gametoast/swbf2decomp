@@ -73,10 +73,7 @@ static inline CollisionObject* GetCollisionObject(GameObject* pObject)
     return static_cast<CollisionObject*>(pObject);
 }
 
-static bool IsAlive(GameObject* pObject)
-{
-    return pObject->mIsAlive;
-}
+
 
 typedef const PblVector3& (__fastcall *GetVelocityFn)(GameObject* pThis, void*);
 
@@ -250,7 +247,7 @@ void ChaseCamera::Update(float fDeltaTime)
         }
     }
 
-    if (pTrackable && pTrackable->GetGameObject() && IsAlive(pTrackable->GetGameObject()))
+    if (pTrackable && pTrackable->GetGameObject() && pTrackable->GetGameObject()->IsAlive())
     {
         SetOwner(pTrackable);
     }

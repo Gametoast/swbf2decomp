@@ -45,8 +45,7 @@ static void SetObject(PblHandle<const GameObject>& handle, const GameObject* pOb
 // FUNCTION: SWBF2 0x00662a70
 DroidRepairInfo::DroidRepairInfo(PblHandle<const GameObject> who,
                                  PblHandle<const GameObject> owner)
-    : UnitCmdInfo(CMD_REPAIR, PblHandle<GameObject>(), PblVector3(0, 0, 0),
-                  PblHandle<GameObject>())
+    : UnitCmdInfo(CMD_REPAIR, 0, PblVector3(0, 0, 0), 0)
 {
     SetObject(mWho, GetObject(who));
     SetObject(mOwner, GetObject(owner));
@@ -80,7 +79,7 @@ UnitFollowInfo::UnitFollowInfo(PblHandle<GameObject> who, PblHandle<GameObject> 
 
 // FUNCTION: SWBF2 0x00662750
 UnitCombatInfo::UnitCombatInfo(State eState, PblHandle<const GameObject> who)
-    : UnitCmdInfo(CMD_COMBAT, PblHandle<GameObject>(), PblVector3(0, 0, 0), PblHandle<GameObject>())
+    : UnitCmdInfo(CMD_COMBAT, 0, PblVector3(0, 0, 0), 0)
 {
     SetState(eState);
     SetObject(mWho, GetObject(who));
@@ -88,7 +87,7 @@ UnitCombatInfo::UnitCombatInfo(State eState, PblHandle<const GameObject> who)
 
 // FUNCTION: SWBF2 0x006627d0
 UnitCombatInfo::UnitCombatInfo(State eState, const PblVector3& targetPos, bool bAllowRoll)
-    : UnitCmdInfo(CMD_COMBAT, PblHandle<GameObject>(), PblVector3(0, 0, 0), PblHandle<GameObject>())
+    : UnitCmdInfo(CMD_COMBAT, 0, PblVector3(0, 0, 0), 0)
 {
     SetState(eState);
     mPos = targetPos;
@@ -97,14 +96,14 @@ UnitCombatInfo::UnitCombatInfo(State eState, const PblVector3& targetPos, bool b
 
 // FUNCTION: SWBF2 0x00662850
 UnitCombatInfo::UnitCombatInfo(State eState)
-    : UnitCmdInfo(CMD_COMBAT, PblHandle<GameObject>(), PblVector3(0, 0, 0), PblHandle<GameObject>())
+    : UnitCmdInfo(CMD_COMBAT, 0, PblVector3(0, 0, 0), 0)
 {
     SetState(eState);
 }
 
 // FUNCTION: SWBF2 0x00662a20
 UnitRandomInfo::UnitRandomInfo()
-    : UnitCmdInfo(CMD_RANDOM, PblHandle<GameObject>(), PblVector3(0, 0, 0), PblHandle<GameObject>())
+    : UnitCmdInfo(CMD_RANDOM, 0, PblVector3(0, 0, 0), 0)
 {
 }
 
@@ -140,7 +139,7 @@ bool UnitCombatInfo::GetAllowRoll() const
 
 // FUNCTION: SWBF2 0x00662960
 UnitBoardInfo::UnitBoardInfo(PblHandle<GameObject> who, int iParam)
-    : UnitCmdInfo(CMD_BOARD, who, PblVector3(0, 0, 0), PblHandle<GameObject>())
+    : UnitCmdInfo(CMD_BOARD, who, PblVector3(0, 0, 0), 0)
 {
     mParam = iParam;
 }
@@ -159,13 +158,13 @@ int UnitBoardInfo::GetVOResponseHandle() const
 
 // FUNCTION: SWBF2 0x006629d0
 UnitUnBoardInfo::UnitUnBoardInfo()
-    : UnitCmdInfo(CMD_UNBOARD, PblHandle<GameObject>(), PblVector3(0, 0, 0), PblHandle<GameObject>())
+    : UnitCmdInfo(CMD_UNBOARD, 0, PblVector3(0, 0, 0), 0)
 {
 }
 
 // FUNCTION: SWBF2 0x00662b40
 UnitWaitSecondaryInfo::UnitWaitSecondaryInfo(float fTime, bool bParam)
-    : UnitCmdInfo(CMD_WAIT_SECONDARY, PblHandle<GameObject>(), PblVector3(0, 0, 0), PblHandle<GameObject>())
+    : UnitCmdInfo(CMD_WAIT_SECONDARY, 0, PblVector3(0, 0, 0), 0)
 {
     mParam = (int)(fTime * 1000.0f) | 1;
 }
@@ -184,7 +183,7 @@ ConstCommandPostHandle UnitCaptureCPInfo::GetCommandPost() const
 
 // FUNCTION: SWBF2 0x00662bb0
 UnitGoalAgentInfo::UnitGoalAgentInfo(UnitControllerCommand eCmd, const AI::GoalTarget* pTarget)
-    : UnitCmdInfo(eCmd, PblHandle<GameObject>(), PblVector3(0, 0, 0), PblHandle<GameObject>())
+    : UnitCmdInfo(eCmd, 0, PblVector3(0, 0, 0), 0)
 {
     mPos = pTarget->mPos;
     mParam = pTarget->mType;
@@ -194,7 +193,7 @@ UnitGoalAgentInfo::UnitGoalAgentInfo(UnitControllerCommand eCmd, const AI::GoalT
 
 // FUNCTION: SWBF2 0x00662c70
 UnitGoalAgentInfo::UnitGoalAgentInfo(UnitControllerCommand eCmd, const FlagItem* pFlag, const PblVector3& vPos)
-    : UnitCmdInfo(eCmd, PblHandle<GameObject>(), PblVector3(0, 0, 0), PblHandle<GameObject>())
+    : UnitCmdInfo(eCmd, 0, PblVector3(0, 0, 0), 0)
 {
     mPos = vPos;
     SetObject(mFlag, reinterpret_cast<const GameObject*>(pFlag));

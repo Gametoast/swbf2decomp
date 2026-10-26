@@ -297,6 +297,69 @@ inline LightBeamEffect::~LightBeamEffect()
 {
 }
 
+// FUNCTION: SWBF2 0x004be010
+inline void LightBeam::SetColor(const RedColor& color)
+{
+    _color = color;
+    RedColor flareColor = _color;
+    flareColor.a = (unsigned char)(int)(_color.a * _fFlareIntensity);
+    _Flare.SetColor(flareColor);
+}
+
+// FUNCTION: SWBF2 0x004bde50
+inline void LightBeam::SetHeadPosition(const PblVector3& vPos)
+{
+    _vHeadPosition = vPos;
+    PblVector3 vWorld;
+    D3DXVec3TransformCoord(reinterpret_cast<D3DXVECTOR3*>(&vWorld), reinterpret_cast<const D3DXVECTOR3*>(&_vHeadPosition), reinterpret_cast<const D3DXMATRIX*>(&m_mWorldMatrix));
+    _Flare.SetPosition(vWorld);
+}
+
+// FUNCTION: SWBF2 0x004bdea0
+inline void LightBeam::SetDirection(const PblVector3& vDir)
+{
+    _vDirection = vDir;
+}
+
+// FUNCTION: SWBF2 0x004bdfc0
+inline void LightBeam::SetPositionOmni(const PblVector3& vPos)
+{
+    SetPosition(vPos);
+    SetLength(0.0f);
+    SetDirection(PblVector3(0.0f, 1.0f, 0.0f));
+}
+
+// FUNCTION: SWBF2 0x004be0e0
+inline void LightBeam::SetFadeLength(float fLength)
+{
+    _fFadeLength = fLength;
+}
+
+// FUNCTION: SWBF2 0x004be100
+inline void LightBeam::Unhide()
+{
+    _Flare._uiHideInView = 0;
+}
+
+// FUNCTION: SWBF2 0x004be110
+inline void LightBeam::HideInView(unsigned int uiView, bool bHide)
+{
+    if (bHide)
+    {
+        _Flare._uiHideInView |= 1 << uiView;
+    }
+    else
+    {
+        _Flare._uiHideInView &= ~(1 << uiView);
+    }
+}
+
+// FUNCTION: SWBF2 0x004be140
+inline bool LightBeam::IsHiddenInView(unsigned int uiView)
+{
+    return (_Flare._uiHideInView & (1 << uiView)) != 0;
+}
+
 inline ManagedLightBeam::ManagedLightBeam()
     : RedSceneObject(&largeEffectLodData)
     , LightBeam()

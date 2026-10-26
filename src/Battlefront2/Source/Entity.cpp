@@ -244,4 +244,4 @@ EntityEx::~EntityEx()
 
 
 // SYNTHETIC: SWBF2 0x005a93fc
-// [thunk]:Entity::GetGameObject`adjustor{12}'
+// [thunk]:MountedTurret::GetEntity`adjustor{12}'

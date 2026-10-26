@@ -737,11 +737,7 @@ bool EntityBuilding::ApplyDamage(const DamageDesc& damage, const PblVector3& vDi
     return true;
 }
 
-// FUNCTION: SWBF2 0x004923c0
-TreeGrid* CollisionManager::GetTreeGrid()
-{
-    return sInstance ? sInstance->mTreeGrid : 0;
-}
+
 
 // FUNCTION: SWBF2 0x004439c0
 const GameModel* GameModel::Find(unsigned int uHash)

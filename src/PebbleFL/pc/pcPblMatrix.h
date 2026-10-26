@@ -49,3 +49,28 @@ inline const PblMatrix operator*(const PblMatrix& a, const PblMatrix& b)
     D3DXMatrixMultiply((D3DXMATRIX*)&result, (const D3DXMATRIX*)&a, (const D3DXMATRIX*)&b);
     return result;
 }
+
+// FUNCTION: SWBF2 0x00411dd0
+inline const PblMatrix PblMatrix::GetInverseFast() const
+{
+    PblMatrix out;
+
+    out = *this;
+
+    out.Transpose3x3();
+
+    PblVector3 vRotated;
+    D3DXVec3TransformNormal(reinterpret_cast<D3DXVECTOR3*>(&vRotated),
+                            reinterpret_cast<const D3DXVECTOR3*>(&out.GetTranslation()),
+                            reinterpret_cast<const D3DXMATRIX*>(&out));
+
+    out.SetTranslation(PblVector3(-vRotated.x, -vRotated.y, -vRotated.z));
+
+    return out;
+}
+
+// FUNCTION: SWBF2 0x00458960
+inline void PblMatrix::Reset()
+{
+    D3DXMatrixIdentity(reinterpret_cast<D3DXMATRIX*>(this));
+}

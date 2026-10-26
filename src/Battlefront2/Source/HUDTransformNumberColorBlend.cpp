@@ -53,7 +53,7 @@ void HUD::TransformNumberColorBlend::EventBlend(const Event& event, void* const 
 {
     if (event.GetClass()->GetType() == EventClass::type_Color)
     {
-        *(RedColor*)((TransformNumberColorBlend*)pData)->mBlendColor = *event.mData.color;
+        *(RedColor*)((TransformNumberColorBlend*)pData)->mBlendColor = *event.GetData().color;
     }
 }
 
@@ -65,10 +65,10 @@ void HUD::TransformNumberColorBlend::EventAlpha(const Event& event, void* const 
     {
     case EventClass::type_Int:
     case EventClass::type_Uint:
-        pTransform->mAlpha = (unsigned char)event.mData.uintValue;
+        pTransform->mAlpha = (unsigned char)event.GetData().uintValue;
         break;
     case EventClass::type_Float:
-        pTransform->mAlpha = (unsigned char)(int)(event.mData.floatValue * 255.0f);
+        pTransform->mAlpha = (unsigned char)(int)(event.GetData().floatValue * 255.0f);
         break;
     }
 }

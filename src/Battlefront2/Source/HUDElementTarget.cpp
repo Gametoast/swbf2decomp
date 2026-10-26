@@ -770,13 +770,13 @@ void HUD::ElementTarget::WriteData(HUD::File& file, unsigned int uTabs)
 // FUNCTION: SWBF2 0x0055ab30
 void HUD::ElementTarget::EventRefreshTargetCommon(const HUD::Event& event, void* const pData)
 {
-    if (event.mClass->mType != HUD::EventClass::type_Uint)
+    if (event.GetClass()->GetType() != HUD::EventClass::type_Uint)
     {
         return;
     }
 
     ElementTarget* pTarget = static_cast<ElementTarget*>(pData);
-    const unsigned int slot = event.mData.uintValue;
+    const unsigned int slot = event.GetData().uintValue;
     pTarget->mTargetCommonState[slot] = targetCommonState_MAX;
     pTarget->mTargetCommon[slot].RedInterfaceElement::SetColor(TargetManager::gMarkers[slot].color);
 }

@@ -248,13 +248,7 @@ RedCamera::VisibilityT RedCamera::ClassifyBox(const PblMatrix& rMatrix, const Pb
     return ClassifyBoxInternal(m, m.GetTranslation(), vExtents);
 }
 
-// FUNCTION: SWBF2 0x00433eb0
-RedCamera::VisibilityT RedCamera::ClassifyAABox(const PblVector3& vCenter, const PblVector3& vExtents) const
-{
-    PblVector3 v;
-    D3DXVec3TransformCoord((D3DXVECTOR3*)&v, (const D3DXVECTOR3*)&vCenter, (const D3DXMATRIX*)&_MatrixInverse);
-    return ClassifyBoxInternal(_MatrixInverse, v, vExtents);
-}
+
 
 // FUNCTION: SWBF2 0x006cb980
 RedCamera::VisibilityT RedCamera::ClassifySphere(const PblVector3& vCenter, float fRadius, float fFar) const

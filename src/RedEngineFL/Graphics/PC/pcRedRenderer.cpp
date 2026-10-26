@@ -3971,15 +3971,7 @@ void pcRedVertexShaderConstantRegister::SetMatrix4x4(const PblMatrix& rMatrix)
     }
 }
 
-// FUNCTION: SWBF2 0x006b3ec0
-void dx::StateManager_DX::SetTransform(D3DTRANSFORMSTATETYPE State, const D3DMATRIX* pMatrix)
-{
-    if (pMatrix)
-    {
-        m_DirtyStates.Add(NVStateID(9, State, 0));
-        memcpy(m_CurrentState.m_Matrices[State], pMatrix, sizeof(D3DMATRIX));
-    }
-}
+
 
 // FUNCTION: SWBF2 0x006b4430
 void RedRenderer::internalBeginConstants()

@@ -140,39 +140,15 @@ void FLEffectObject::UpdatedWorldMatrix()
 // SYNTHETIC: SWBF2 0x0042cf90
 // FLEffectObject::`scalar deleting destructor'
 
-// FUNCTION: SWBF2 0x004bde50
-void LightBeam::SetHeadPosition(const PblVector3& vPos)
-{
-    _vHeadPosition = vPos;
-    PblVector3 vWorld;
-    D3DXVec3TransformCoord(reinterpret_cast<D3DXVECTOR3*>(&vWorld), reinterpret_cast<const D3DXVECTOR3*>(&_vHeadPosition), reinterpret_cast<const D3DXMATRIX*>(&m_mWorldMatrix));
-    _Flare.SetPosition(vWorld);
-}
-
-// FUNCTION: SWBF2 0x004bdea0
-void LightBeam::SetDirection(const PblVector3& vDir)
-{
-    _vDirection = vDir;
-}
 
 
 
-// FUNCTION: SWBF2 0x004bdfc0
-void LightBeam::SetPositionOmni(const PblVector3& vPos)
-{
-    SetPosition(vPos);
-    SetLength(0.0f);
-    SetDirection(PblVector3(0.0f, 1.0f, 0.0f));
-}
 
-// FUNCTION: SWBF2 0x004be010
-void LightBeam::SetColor(const RedColor& color)
-{
-    _color = color;
-    RedColor flareColor = _color;
-    flareColor.a = (unsigned char)(int)(_color.a * _fFlareIntensity);
-    _Flare.SetColor(flareColor);
-}
+
+
+
+
+
 
 // FUNCTION: SWBF2 0x004be070
 void LightBeam::SetInitialWidth(float fWidth)
@@ -189,36 +165,13 @@ void LightBeam::SetInitialWidth(float fWidthX, float fWidthZ)
     _Flare._fSize = _fHeadSizeX + _fHeadSizeZ;
 }
 
-// FUNCTION: SWBF2 0x004be0e0
-void LightBeam::SetFadeLength(float fLength)
-{
-    _fFadeLength = fLength;
-}
 
-// FUNCTION: SWBF2 0x004be100
-void LightBeam::Unhide()
-{
-    _Flare._uiHideInView = 0;
-}
 
-// FUNCTION: SWBF2 0x004be110
-void LightBeam::HideInView(unsigned int uiView, bool bHide)
-{
-    if (bHide)
-    {
-        _Flare._uiHideInView |= 1 << uiView;
-    }
-    else
-    {
-        _Flare._uiHideInView &= ~(1 << uiView);
-    }
-}
 
-// FUNCTION: SWBF2 0x004be140
-bool LightBeam::IsHiddenInView(unsigned int uiView)
-{
-    return (_Flare._uiHideInView & (1 << uiView)) != 0;
-}
+
+
+
+
 
 // FUNCTION: SWBF2 0x004be160
 void LightBeam::AddToRenderList()

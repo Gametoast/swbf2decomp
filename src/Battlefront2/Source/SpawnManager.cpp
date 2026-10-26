@@ -87,23 +87,9 @@ namespace PblUnicode
 unsigned int ustrncnv(unsigned short* pDest, const unsigned char* pSrc, unsigned int uiCount);
 }
 
-static GameObject* GetGameObject(CommandPost* pPost)
-{
-    PblHandle<GameObject>& handle = pPost->mObject;
-    if (handle.mObject &&
-        handle.mObject->mHandleId !=
-            handle.mSavedHandleId)
-    {
-        handle.mObject = 0;
-        handle.mSavedHandleId = 0;
-    }
-    return handle.mObject;
-}
 
-static bool IsAlive(const GameObject* pObject)
-{
-    return pObject->IsAlive();
-}
+
+
 
 static inline int GetTeam(const GameObject* pObject)
 {
@@ -370,7 +356,7 @@ bool SpawnManager::Update(float fDeltaTime)
     for (CommandPostItor itor = CommandPostManager::Instance()->GetItor(); itor; ++itor)
     {
         CommandPost* pPost = NetGame::ConvertCP(*itor);
-        if (pPost && Team::sTeams[GetTeam(GetGameObject(pPost))]->mAffiliation[3] > 0)
+        if (pPost && Team::sTeams[GetTeam(pPost->GetGameObject())]->mAffiliation[3] > 0)
         {
             mAllyUnitCount += GetAllyCount(pPost);
         }
@@ -418,7 +404,7 @@ CommandPost* SpawnManager::RequestSpawnPoint(CommandPost* pPost, Character* pChr
     {
         return Request(pPost, pChr->mTeamNumber);
     }
-    if (pPost && IsAlive(GetGameObject(pPost)) && pPost->CanTeamSpawnHere(pChr->mTeamNumber))
+    if (pPost && pPost->GetGameObject()->IsAlive() && pPost->CanTeamSpawnHere(pChr->mTeamNumber))
     {
         return pPost;
     }
@@ -428,12 +414,12 @@ CommandPost* SpawnManager::RequestSpawnPoint(CommandPost* pPost, Character* pChr
 // FUNCTION: SWBF2 0x0064ec30
 CommandPost* SpawnManager::Request(CommandPost* pPost, int iTeam)
 {
-    if (!pPost || !GetGameObject(pPost))
+    if (!pPost || !pPost->GetGameObject())
     {
         return NetGame::ConvertCP(CommandPostManager::Instance()->FindPostClosestToEnemy(iTeam));
     }
 
-    if (IsAlive(GetGameObject(pPost)) && pPost->CanTeamSpawnHere(iTeam))
+    if (pPost->GetGameObject()->IsAlive() && pPost->CanTeamSpawnHere(iTeam))
     {
         return pPost;
     }

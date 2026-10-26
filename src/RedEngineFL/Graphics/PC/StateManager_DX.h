@@ -7,6 +7,7 @@
 #include <new>
 #include <stddef.h>
 #include <stdio.h>
+#include <string.h>
 
 #include "RedEngineFL/Memory/RedMemory.h"
 #include "RedEngineFL/Util/ext/basevector.h"
@@ -176,36 +177,14 @@ extern StateManager_DX* localInstance_;
 
 }
 
- 
- 
- 
-
- 
- 
- 
- 
- 
- 
- 
- 
- 
-
- 
- 
- 
- 
- 
-
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
+// FUNCTION: SWBF2 0x006b3ec0
+inline void dx::StateManager_DX::SetTransform(D3DTRANSFORMSTATETYPE State, const D3DMATRIX* pMatrix)
+{
+    if (pMatrix)
+    {
+        m_DirtyStates.Add(NVStateID(9, State, 0));
+        memcpy(m_CurrentState.m_Matrices[State], pMatrix, sizeof(D3DMATRIX));
+    }
+}
 
 #endif
