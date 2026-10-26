@@ -263,8 +263,3 @@ void DroidekaElement::SetSelected(bool bSelected)
     UpdateState(!bSelected);
 }
 
-// FUNCTION: SWBF2 0x0048d770
-void __fastcall ResetShadingPose(RedShadingPose* pThis)
-{
-    pThis->Reset();
-}

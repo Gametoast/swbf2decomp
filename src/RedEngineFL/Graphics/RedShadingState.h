@@ -61,6 +61,12 @@ public:
 class RedShadingPose
 {
 public:
+
+    RedShadingPose() : m_pFirstEntry(0), m_pModel(0) {}
+
+    // FUNCTION: SWBF2 0x0048d770
+    ~RedShadingPose() { Reset(); }
+
     struct Entry
     {
         static void* operator new(unsigned int uiSize);

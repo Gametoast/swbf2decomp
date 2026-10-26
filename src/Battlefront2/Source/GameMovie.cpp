@@ -237,10 +237,9 @@ extern int g_InGameMoviePlayerState;
 // FUNCTION: SWBF2 0x00534ab0
 void EnableSceneAndInterface(bool bEnable)
 {
-    CameraManager* pCameras = CameraManager::sInstance;
-    for (unsigned int i = 0; i < pCameras->m_iNumCam; ++i)
+    for (unsigned int i = 0; i < CameraManager::sInstance->m_iNumCam; ++i)
     {
-        unsigned int iView = pCameras->m_hView[i];
+        unsigned int iView = CameraManager::sInstance->m_hView[i];
         FLRenderer::SetSceneEnable(iView, bEnable);
         FLRenderer::SetInterfaceEnable(iView, bEnable);
     }
@@ -254,20 +253,11 @@ void EnableSceneAndInterface(bool bEnable)
     const unsigned int numCameras = CameraManager::sInstance->m_iNumCam;
     for (unsigned int i = 0; i < numCameras; ++i)
     {
-        Character* pCharacter = 0;
-        if (Character::sCharacters && (int)i < Character::sCharacterLimit)
-        {
-            Character* pCandidate = &Character::sCharacters[i];
-            if (pCandidate->mPlayerId == (int)i)
-            {
-                pCharacter = pCandidate;
-            }
-        }
-
         if (bEnable)
         {
             if (g_InGameMovieSpawnDisplayActive[i])
             {
+                Character* pCharacter = Character::GetPtr(i);
                 SpawnDisplay::Instance(0)->Show(pCharacter);
                 g_InGameMovieSpawnDisplayActive[i] = false;
             }
@@ -276,7 +266,7 @@ void EnableSceneAndInterface(bool bEnable)
         {
             pSpawnDisplay = SpawnDisplay::Instance(0);
             g_InGameMovieSpawnDisplayActive[i] = pSpawnDisplay->mMode == SpawnDisplay::eCHANGECLASS;
-            pSpawnDisplay->Hide(pCharacter);
+            pSpawnDisplay->Hide(Character::GetPtr(i));
         }
     }
 }

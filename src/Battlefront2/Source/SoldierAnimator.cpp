@@ -2229,11 +2229,11 @@ float SoldierAnimator::CalculateBlendFactorDelta(float fPrevFactor, float fFacto
     {
         return 0.0f;
     }
-    if (fPrevFactor > 0.0f)
+    if (fPrevFactor <= 0.0f)
     {
-        return (fFactor - fPrevFactor) / (1.0f - fPrevFactor);
+        return fFactor;
     }
-    return fFactor;
+    return (fFactor - fPrevFactor) / (1.0f - fPrevFactor);
 }
 
 // FUNCTION: SWBF2 0x006426e0

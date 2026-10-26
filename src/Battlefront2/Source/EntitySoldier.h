@@ -86,10 +86,10 @@ public:
     virtual const char* GetDerivedRttiName() const;
     virtual void SetProperty(unsigned int uProperty, const char* pszValue);
     virtual void PostReadSetup();
-    virtual int GetSoldierType();
-    virtual const void* GetControllableClass();
-    virtual int GetWeaponCount();
-    virtual const WeaponClass* GetWeaponClass(int iIndex);
+    virtual int GetSoldierType() const;
+    virtual const ControllableClass* GetControllableClass() const;
+    virtual int GetWeaponCount() const;
+    virtual const WeaponClass* GetWeaponClass(int iIndex) const;
 
     unsigned int GetSndHeroSelectable() { return mSndHeroSelectable; }
     unsigned int GetSndHeroSpawned() { return mSndHeroSpawned; }

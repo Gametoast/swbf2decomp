@@ -549,7 +549,7 @@ void PlayerController::Update(float dt)
                 continue;
             }
 
-            WeaponClass* pClass = pWeapon->mClass;
+            const WeaponClass* pClass = pWeapon->mClass;
             const GameObject* pTarget = pWeapon->mTarget;
             const GameObject* pAITarget = pWeapon->mTarget;
             int iBodyID = pWeapon->mTargetBodyID;

@@ -32,7 +32,7 @@ public:
     DamageOwner() {}
 
     DamageOwner(Character* pCharacter, GameObject* pGameObject, int iTeam,
-                EntityClass* pClass, WeaponClass* pWeapon, float fDamageMultiplier);
+                const EntityClass* pClass, const WeaponClass* pWeapon, float fDamageMultiplier);
 
     DamageOwner& operator=(const DamageOwner& other);
 
@@ -42,8 +42,8 @@ public:
     Character* mCharacter;
     PblHandle<GameObject> mGameObject;
     int mTeam;
-    EntityClass* mClass;
-    WeaponClass* mWeapon;
+    const EntityClass* mClass;
+    const WeaponClass* mWeapon;
     float mDamageMultiplier;
 };
  

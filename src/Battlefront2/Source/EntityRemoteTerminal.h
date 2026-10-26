@@ -28,7 +28,7 @@ public:
     virtual unsigned int GetDerivedRtti() const;
     virtual const char* GetDerivedRttiName() const;
     virtual void SetProperty(unsigned int uProperty, const char* pszValue);
-    virtual int GetVehicleType();
+    virtual int GetVehicleType() const;
 
     int mVehicleType;
 

@@ -1,3 +1,4 @@
+#include <new>
 #include "WalkerAnimation.h"
 
 #include "PebbleFL/Common/PblVector.h"
@@ -410,4 +411,3 @@ const ZephyrAnim* GetWalkerAnimation(const RedAnimation* const* ppAnims, int iNu
 {
     return GetWalkerAnimation(ppAnims, iNumAnims, PblTEMPHash(pszName));
 }
-#include <new>

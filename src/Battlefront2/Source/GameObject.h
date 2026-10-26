@@ -68,15 +68,15 @@ public:
 
     virtual ~GameObjectClass();
 
-    virtual int GetSoldierType();
-    virtual int GetVehicleType();
-    virtual const void* GetControllableClass();
-    virtual int GetWeaponCount();
-    virtual const class WeaponClass* GetWeaponClass(int iIndex);
-    virtual float GetCollisionInflict();
-    virtual const DamageEffectClass* GetDamageEffectClass(int iIndex);
-    virtual float GetTimeRequiredToEject();
-    virtual float GetReboardTime();
+    virtual int GetSoldierType() const;
+    virtual int GetVehicleType() const;
+    virtual const class ControllableClass* GetControllableClass() const;
+    virtual int GetWeaponCount() const;
+    virtual const class WeaponClass* GetWeaponClass(int iIndex) const;
+    virtual float GetCollisionInflict() const;
+    virtual const DamageEffectClass* GetDamageEffectClass(int iIndex) const;
+    virtual float GetTimeRequiredToEject() const;
+    virtual float GetReboardTime() const;
 
     enum VehicleType
     {
@@ -142,7 +142,7 @@ public:
     AI::VOSound* mVOSoundList;
     int mVOUnitType;
     float mVORadius;
-    float mAICollisionRadius;
+    mutable float mAICollisionRadius;
     int mPointsToUnlock;
     unsigned int mDisabledEffect;
     float mRadiusDamageSizeScale;
@@ -380,7 +380,9 @@ public:
     virtual void Respawn();
     virtual float GetDamageMultiplier(int iBodyId) const;
 
-    GameObjectClass* GetGameObjectClass() const { return (GameObjectClass*)mEntityClass; }
+    // FUNCTION: SWBF2 0x00438ac0
+    GameObjectClass* GetGameObjectClass() { return (GameObjectClass*)mEntityClass; }
+    const GameObjectClass* GetGameObjectClass() const { return (const GameObjectClass*)mEntityClass; }
     const PblList<Controllable>& GetControllableList() const;
 
     // FUNCTION: SWBF2 0x00499310

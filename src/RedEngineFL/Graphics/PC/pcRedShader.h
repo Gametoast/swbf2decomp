@@ -174,6 +174,8 @@ public:
     // FUNCTION: SWBF2 0x006ac5c0
     pcRedShader();
 
+    // FUNCTION: SWBF2 0x006ac690
+    // pcRedShader::~pcRedShader
     virtual ~pcRedShader()
     {
     }

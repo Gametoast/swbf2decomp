@@ -1,3 +1,4 @@
+#include <new>
 #include <string.h>
 
 #include "HUDViewPort.h"
@@ -341,4 +342,3 @@ void HUD::ViewPort::ItemConstructionCallback(HUD::Item* const pItem, void* const
         static_cast<HUD::Element*>(pItem)->SetViewport(static_cast<ViewPort*>(pUserData)->mCurViewPort);
     }
 }
-#include <new>

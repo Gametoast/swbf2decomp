@@ -1471,7 +1471,7 @@ void AIUtil::DeployCargo(GameObject* pObject, const CommandPost*  )
 // FUNCTION: SWBF2 0x00441c10
 float AIUtil::GetCollisionRadius(const GameObject* pObj)
 {
-    GameObjectClass* pClass = pObj->GetGameObjectClass();
+    const GameObjectClass* pClass = pObj->GetGameObjectClass();
     const float fCached = pClass->mAICollisionRadius;
     if (fCached > 0.0f)
     {

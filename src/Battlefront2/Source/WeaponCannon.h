@@ -31,10 +31,10 @@ public:
     virtual unsigned int GetDerivedRtti() const;
     virtual const char* GetDerivedRttiName() const;
     virtual void SetProperty(unsigned int uProperty, const char* pszValue);
-    virtual float GetHeatPerSalvo();
-    virtual float GetShotsPerSalvo();
-    virtual int GetBarrageMin();
-    virtual int GetBarrageMax();
+    virtual float GetHeatPerSalvo() const;
+    virtual float GetShotsPerSalvo() const;
+    virtual int GetBarrageMin() const;
+    virtual int GetBarrageMax() const;
 
     static PblHash rttiHashWeaponCannonClass;
     static const char rttiNameWeaponCannonClass[];

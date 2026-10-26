@@ -485,7 +485,7 @@ bool WeaponCannon::UpdateFire(float fDeltaTime)
 
         if (mSalvoCount > 0)
         {
-            while (!(mSalvoDelay > 0.0f))
+            while (mSalvoDelay <= 0.0f)
             {
                 pClass = static_cast<const WeaponCannonClass*>(mClass);
                 bool bFirstShot = mSalvoCount == pClass->mSalvoCount;
@@ -493,7 +493,7 @@ bool WeaponCannon::UpdateFire(float fDeltaTime)
                 {
                     const WeaponCannonClass* pShotClass = static_cast<const WeaponCannonClass*>(mClass);
                     if (!m_pAmmoCounter->CanExpendRounds(pShotClass->mRoundsPerShot) ||
-                        (m_pEnergyBar->IsOverheating() && pShotClass->mHeatPerShot > 0.0f))
+                        (m_pEnergyBar->IsOverheating() && !(pShotClass->mHeatPerShot <= 0.0f)))
                     {
                         mSalvoCount = 0;
                         break;
@@ -545,7 +545,7 @@ bool WeaponCannon::UpdateFire(float fDeltaTime)
             }
             fRemaining -= fStep;
             mStateTimer += fStep;
-            if (mStateTimer < mStateLimit || static_cast<const WeaponCannonClass*>(mClass)->mTriggerSingle ||
+            if (!(mStateTimer >= mStateLimit) || static_cast<const WeaponCannonClass*>(mClass)->mTriggerSingle ||
                 !CheckFire() || CheckReload() || CheckEmpty())
             {
                 break;
@@ -664,7 +664,7 @@ bool WeaponCannon::FireDone() const
     {
         return true;
     }
-    if (mSalvoCount > 0 || mStateTimer < mStateLimit)
+    if (mSalvoCount > 0 || !(mStateTimer >= mStateLimit))
     {
         return false;
     }
@@ -1358,19 +1358,19 @@ Weapon* WeaponCannonClass::Build(const WeaponDesc& desc)
 }
 
 // FUNCTION: SWBF2 0x00680b50
-float WeaponCannonClass::GetHeatPerSalvo()
+float WeaponCannonClass::GetHeatPerSalvo() const
 {
     return (float)mShotsPerSalvo * mHeatPerShot;
 }
 
 // FUNCTION: SWBF2 0x00680b80
-float WeaponCannonClass::GetShotsPerSalvo()
+float WeaponCannonClass::GetShotsPerSalvo() const
 {
     return (float)mShotsPerSalvo;
 }
 
 // FUNCTION: SWBF2 0x00680ba0
-int WeaponCannonClass::GetBarrageMin()
+int WeaponCannonClass::GetBarrageMin() const
 {
     if (mTriggerSingle)
     {
@@ -1380,7 +1380,7 @@ int WeaponCannonClass::GetBarrageMin()
 }
 
 // FUNCTION: SWBF2 0x00680bc0
-int WeaponCannonClass::GetBarrageMax()
+int WeaponCannonClass::GetBarrageMax() const
 {
     if (mTriggerSingle)
     {

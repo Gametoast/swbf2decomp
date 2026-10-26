@@ -1,3 +1,4 @@
+#include <new>
 #include <stdlib.h>
 
 #include "HUDTransformNameMesh.h"
@@ -327,4 +328,3 @@ void HUD::TransformNameMesh::EventInput(const HUD::Event& event, void* const pDa
         HUD::Event(pTransform->mEventClassOutput, pMesh).Send();
     }
 }
-#include <new>

@@ -246,7 +246,11 @@ bool PathManager::GetPathPriority(const PblVector3* a, const PblVector3* b)
 {
     float dx = a->x - b->x;
     float dz = a->z - b->z;
-    return dx * dx + dz * dz >= 2500.0f;
+    if (dx * dx + dz * dz < 2500.0f)
+    {
+        return false;
+    }
+    return true;
 }
 
 namespace PathManager

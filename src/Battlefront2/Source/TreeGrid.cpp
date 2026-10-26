@@ -1,3 +1,4 @@
+#include <new>
 #include <d3dx9math.h>
 #include <math.h>
 #include <string.h>
@@ -797,4 +798,3 @@ TreeGridStack* TreeGridStack::RemoveObject(TreeGridObject* pObj)
     }
     return this;
 }
-#include <new>

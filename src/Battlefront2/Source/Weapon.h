@@ -98,10 +98,10 @@ public:
                 unsigned int uiFlags, bool bArg) const;
 
     void RenderFlash(const PblVector3& vPos, const PblVector3& vDir, float fScale) const;
-    virtual float GetHeatPerSalvo();
-    virtual float GetShotsPerSalvo();
-    virtual int GetBarrageMin();
-    virtual int GetBarrageMax();
+    virtual float GetHeatPerSalvo() const;
+    virtual float GetShotsPerSalvo() const;
+    virtual int GetBarrageMin() const;
+    virtual int GetBarrageMax() const;
 
     void CreateMuzzleFlash(const PblMatrix& mFire) const;
 

@@ -6165,11 +6165,8 @@ bool NetGame::DetectError()
     return false;
 }
 
-// FUNCTION: SWBF2 0x005bf360
-void __fastcall DestroyEmbeddedDamageOwner(void* pThis)
-{
-    ((DamageOwner*)((char*)pThis + 0x20))->~DamageOwner();
-}
+// SYNTHETIC: SWBF2 0x005bf360
+// OrdnanceDesc::~OrdnanceDesc
 
 extern RecentGuestObjectRecord recentGuestObjects[64][3];
 
@@ -7235,10 +7232,10 @@ void NetGameP::SetNotPlaying(int player)
 void ReadMiniMove(NetPktGroup& group, ProcessedInputs& inputs)
 {
     inputs = noInputs;
-    for (int axis = 0; axis < 4; ++axis)
-    {
-        group.ReadFixed(inputs.mFloatInputs[axis], -1.0f, 1.0f, 3);
-    }
+    group.ReadFixed(inputs.mFloatInputs[0], -1.0f, 1.0f, 3);
+    group.ReadFixed(inputs.mFloatInputs[1], -1.0f, 1.0f, 3);
+    group.ReadFixed(inputs.mFloatInputs[2], -1.0f, 1.0f, 3);
+    group.ReadFixed(inputs.mFloatInputs[3], -1.0f, 1.0f, 3);
 }
 
 // TEMPLATE: SWBF2 0x005d36b0
@@ -8041,18 +8038,18 @@ void Unlink(GameObject* object)
     for (PblList<Controllable>::Itor it(list); it; ++it)
     {
         Controllable* controllable = it;
-        if (controllable && controllable->GetPlayerId() >= 0)
+        if (controllable && controllable->WasPlayer())
         {
             bool affectsPlayer = true;
-            Character* player = Character::FindPlayer(controllable->GetPlayerId());
+            Character* player = Character::FindPlayer(controllable->GetInitialPlayerId());
             if (player && player->GetControllable() != controllable)
             {
                 affectsPlayer = false;
             }
-            const int joystick = NetGame::GetJoystickIndex(controllable->GetPlayerId());
+            const int joystick = NetGame::GetJoystickIndex(controllable->GetInitialPlayerId());
             if (joystick >= 0 && affectsPlayer)
             {
-                Tracker* tracker = Tracker::GetTracker(controllable->GetPlayerId());
+                Tracker* tracker = Tracker::GetTracker(controllable->GetInitialPlayerId());
                 if (tracker->IsFirstPersonView())
                 {
                     FirstPerson::Activate(joystick, false);
@@ -10384,7 +10381,7 @@ bool ReadObject(NetPktGroup& group)
                 if (controllable)
                 {
                     playerId = controllable->GetPlayerId();
-                    initialPlayerId = controllable->mInitialPlayerId;
+                    initialPlayerId = controllable->GetInitialPlayerId();
                     character = controllable->GetCharacter();
                 }
                 state = new NetObjState;
@@ -12091,8 +12088,6 @@ bool NetGame::IsNearLocalPlayer(const PblVector3& vPos)
     return false;
 }
 
-// FUNCTION: SWBF2 0x00438ac0
-int __fastcall GetOpaqueObjectWord(const int* pThis, void*) { return pThis[2]; }
 
 // FUNCTION: SWBF2 0x004433d0
 int* __fastcall InitControllableIterator(int* pThis, void*, const int* pSource)
@@ -12101,8 +12096,6 @@ int* __fastcall InitControllableIterator(int* pThis, void*, const int* pSource)
     return pThis;
 }
 
-// FUNCTION: SWBF2 0x0049e350
-bool __fastcall HasMarkerTarget(const int* pThis, void*) { return pThis[54] >= 0; }
 
 // FUNCTION: SWBF2 0x0040f720
 inline double Clamp(float fValue, float fLow, float fHigh)
@@ -12208,10 +12201,10 @@ void __fastcall SetPacketGroupHeader(void* pPacket, short iIndex, char cFlag1, c
 // FUNCTION: SWBF2 0x005caf90
 void WriteMiniMove(NetPktGroup* pGroup, ProcessedInputs* pInputs)
 {
-    for (int i = 0; i < 4; ++i)
-    {
-        pGroup->WriteFixed(pInputs->mFloatInputs[i], -1.0f, 1.0f, 3);
-    }
+    pGroup->WriteFixed(pInputs->mFloatInputs[0], -1.0f, 1.0f, 3);
+    pGroup->WriteFixed(pInputs->mFloatInputs[1], -1.0f, 1.0f, 3);
+    pGroup->WriteFixed(pInputs->mFloatInputs[2], -1.0f, 1.0f, 3);
+    pGroup->WriteFixed(pInputs->mFloatInputs[3], -1.0f, 1.0f, 3);
 }
 
 // FUNCTION: SWBF2 0x005c1ff0
@@ -12399,8 +12392,6 @@ void AloHeroData::Set()
     }
 }
 
-// FUNCTION: SWBF2 0x0049e360
-void* __fastcall GetMarkerTargetPointer(const int* pThis, void*) { return (void*)pThis[54]; }
 
 // FUNCTION: SWBF2 0x0048c8e0
 float* __fastcall SetFloatPair(float* pResult, void*, float fFirst, float fSecond)
@@ -14023,8 +14014,7 @@ bool FarToNear(GameObject* pFirst, GameObject* pSecond)
         static_cast<const CollisionObject*>(pSecond)->GetMatrix().GetTranslation();
     const PblVector3 first = firstPos - farToNearCenter;
     const PblVector3 second = secondPos - farToNearCenter;
-    return first.x * first.x + first.y * first.y + first.z * first.z >
-           second.x * second.x + second.y * second.y + second.z * second.z;
+    return DotProduct(first, first) > DotProduct(second, second);
 }
 
 // FUNCTION: SWBF2 0x005be760
@@ -14197,8 +14187,7 @@ int GetObjectsInScope(const PblVector3& center, GameObject** ppObjects, int maxC
                 if (scopeInfo[i].objRadius > radius)
                 {
                     const PblVector3 delta = center - pEntity->pos;
-                    float distSq = delta.x * delta.x + delta.y * delta.y +
-                                   delta.z * delta.z;
+                    float distSq = DotProduct(delta, delta);
                     const float range = scopeInfo[i].maxDist;
                     if (distSq > range * range && distSq > radius * radius)
                     {
@@ -14444,7 +14433,7 @@ void WriteCreate(NetPktGroup& group, GameObject* pObject)
     EntityClass* pClass = pObject->GetEntityClass();
     WriteEntityClass(group, pClass);
     Controllable* pControllable = pObject->GetControllable();
-    const int player = pControllable ? pControllable->mInitialPlayerId : -1;
+    const int player = pControllable ? pControllable->GetInitialPlayerId() : -1;
     if (player >= 0)
     {
         if (player == debugWriteInitialPlayer)
@@ -14899,9 +14888,7 @@ void WritePlayerMoves(NetPktGroup& group)
         }
         const PblVector3 difference =
             pTrackable->GetGameObject()->GetMatrix().GetTranslation() - center;
-        const float distance = sqrtf(difference.x * difference.x +
-                                     difference.y * difference.y +
-                                     difference.z * difference.z);
+        const float distance = Length(difference);
         nearest.Push(iPlayer, -distance);
     }
 

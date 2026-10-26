@@ -108,7 +108,7 @@ void AddObjectiveList(HUD::ObjectiveList* pList)
         }
     }
 
-    pLists->Add(new PblList<HUD::ObjectiveList>::Node, pList);
+    ObjectiveManager::gObjectiveLists->Add(new PblList<HUD::ObjectiveList>::Node, pList);
 }
 
 }

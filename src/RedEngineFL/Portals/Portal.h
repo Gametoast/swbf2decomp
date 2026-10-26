@@ -189,6 +189,9 @@ public:
         geo::Vector3<float> lastCheckPos_;
     };
 
+    // SYNTHETIC: SWBF2 0x006df140
+    // pvs::SectorCache::~SectorCache
+
     util::Vector<Entry> entries_;
 };
 }

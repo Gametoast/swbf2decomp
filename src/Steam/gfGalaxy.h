@@ -43,23 +43,13 @@ __declspec(dllexport) const char* connectionStringByIndex(unsigned int index);
 template <typename T>
 __declspec(dllexport) T* Allocate()
 {
-    void* pMem = RedAllocFromHeap(GameMemory::GamespyHeap, sizeof(T), 0);
-    if (!pMem)
-    {
-        return 0;
-    }
-    return new (pMem) T();
+    return new (RedAllocFromHeap(GameMemory::GamespyHeap, sizeof(T), 0)) T();
 }
 
 template <typename T, typename A1>
 __declspec(dllexport) T* Allocate(A1&& a1)
 {
-    void* pMem = RedAllocFromHeap(GameMemory::GamespyHeap, sizeof(T), 0);
-    if (!pMem)
-    {
-        return 0;
-    }
-    return new (pMem) T(a1);
+    return new (RedAllocFromHeap(GameMemory::GamespyHeap, sizeof(T), 0)) T(a1);
 }
 
 // VTABLE: SWBF2 0x007ab928

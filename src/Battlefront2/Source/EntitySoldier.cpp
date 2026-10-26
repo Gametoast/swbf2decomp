@@ -376,25 +376,25 @@ bool EntitySoldier::PostCollision::Update(float fDeltaTime)
 
 
 // FUNCTION: SWBF2 0x004de490
-int EntitySoldierClass::GetWeaponCount()
+int EntitySoldierClass::GetWeaponCount() const
 {
     return mWeaponCount;
 }
 
 // FUNCTION: SWBF2 0x004de4a0
-const WeaponClass* EntitySoldierClass::GetWeaponClass(int iIndex)
+const WeaponClass* EntitySoldierClass::GetWeaponClass(int iIndex) const
 {
     return mWeaponClass[iIndex];
 }
 
 // FUNCTION: SWBF2 0x004de4c0
-int EntitySoldierClass::GetSoldierType()
+int EntitySoldierClass::GetSoldierType() const
 {
     return mSoldierType;
 }
 
 // FUNCTION: SWBF2 0x004de4d0
-const void* EntitySoldierClass::GetControllableClass()
+const ControllableClass* EntitySoldierClass::GetControllableClass() const
 {
     return static_cast<const ControllableClass*>(this);
 }
@@ -1519,8 +1519,6 @@ void EntitySoldier::Render(unsigned char ucLod, float fFade, unsigned int uiFlag
     float fAttachAlpha = 1.0f;
     RedShadingPose* pShadingPose = NULL;
     RedShadingPose shadingPose;
-    shadingPose.m_pFirstEntry = 0;
-    shadingPose.m_pModel = 0;
 
     if (m_uiInvisibilityAlpha)
     {
@@ -2101,7 +2099,6 @@ void EntitySoldier::Render(unsigned char ucLod, float fFade, unsigned int uiFlag
     {
         if (pModel != mModelLowRes)
         {
-            shadingPose.Reset();
             return;
         }
 
@@ -2154,7 +2151,6 @@ void EntitySoldier::Render(unsigned char ucLod, float fFade, unsigned int uiFlag
         mSoldierAnimatorLowRes = SoldierAnimatorLowResClass::GetAnimator(*this);
         if (!mSoldierAnimatorLowRes)
         {
-            shadingPose.Reset();
             return;
         }
         pPose = mSoldierAnimatorLowRes->GetPose();
@@ -2364,7 +2360,6 @@ void EntitySoldier::Render(unsigned char ucLod, float fFade, unsigned int uiFlag
         }
     }
 
-    shadingPose.Reset();
 }
 
 // FUNCTION: SWBF2 0x004e5380
@@ -2871,7 +2866,7 @@ void EntitySoldier::CheckForZoom(float fDeltaTime)
     }
 
     if ((mActiveIndex >= 0 && mWeapon[mActiveIndex] && mWeapon[mActiveIndex]->IsMelee()) || mActiveIndex < 0 ||
-        !mWeapon[mActiveIndex] || mWeapon[mActiveIndex]->mClass->mZoomMax <= 1.0f ||
+        !mWeapon[mActiveIndex] || !(mWeapon[mActiveIndex]->mClass->mZoomMax > 1.0f) ||
         (mActiveChannel == 0 && mWeapon[mActiveIndex]->mState == Weapon::RELOAD))
     {
         mTargetInfo.mIsAiming = false;
@@ -10887,14 +10882,13 @@ void EntitySoldier::SetGrapplingHook(OrdnanceGrapplingHook* pHook)
         return;
     }
 
-    CameraManager* pManager = CameraManager::sInstance;
-    for (unsigned int i = 0; i < pManager->m_iNumCam; ++i)
+    for (unsigned int i = 0; i < CameraManager::sInstance->m_iNumCam; ++i)
     {
-        Trackable* pTrackable = pManager->mCurGameCamera[i] == pManager->mDeathCamera[i]
-            ? pManager->mDeathCamera[i]->mOwner : pManager->mChaseCamera[i]->mOwner;
+        Trackable* pTrackable = CameraManager::sInstance->mCurGameCamera[i] == CameraManager::sInstance->mDeathCamera[i]
+            ? CameraManager::sInstance->mDeathCamera[i]->mOwner : CameraManager::sInstance->mChaseCamera[i]->mOwner;
         if (pTrackable && pTrackable->GetGameObject() == this)
         {
-            pManager->mChaseCamera[i]->mTimer = 0.0f;
+            CameraManager::sInstance->mChaseCamera[i]->mTimer = 0.0f;
             break;
         }
     }

@@ -9,6 +9,8 @@ template <class T>
 class Vector2
 {
 public:
+    Vector2() : x(0), y(0) {}
+
     T x;
     T y;
 };

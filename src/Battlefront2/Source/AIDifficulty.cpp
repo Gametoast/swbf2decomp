@@ -501,7 +501,7 @@ static void SpaceAssault_RandomCritSysDamage(const Team* pTeam)
     Controllable* pCtrl = pFlyer->GetControllable();
     DamageOwner owner(pCtrl->mCharacter, pFlyer, pFlyer->GetTeam(),
                       pFlyer->mEntityClass, 0, 1.0f);
-    WeaponClass* pBestWeapon = 0;
+    const WeaponClass* pBestWeapon = 0;
     float fBestDamage = 0.0f;
     for (int i = 0; i < pCtrl->GetWeaponCount(); ++i)
     {

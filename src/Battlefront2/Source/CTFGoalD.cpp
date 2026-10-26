@@ -7,15 +7,7 @@
 #include "UnitController.h"
 #include "RedEngineFL/Util/RedRegion.h"
 
-// FUNCTION: SWBF2 0x00488290
-AI::GoalTarget& AI::GoalTarget::operator=(const GoalTarget& other)
-{
-    mType = other.mType;
-    mPos = other.mPos;
-    mChr = other.mChr;
-    mGameObj = other.mGameObj;
-    return *this;
-}
+
 
 namespace
 {

@@ -462,37 +462,37 @@ public:
     virtual void SetProperty(unsigned int uProperty, const char* pszValue);
     virtual void PostReadSetup();
     // FUNCTION: SWBF2 0x0047fcc0
-    virtual int GetVehicleType()
+    virtual int GetVehicleType() const
     {
         return mVehicleType;
     }
     // FUNCTION: SWBF2 0x0047fd30
-    virtual const void* GetControllableClass()
+    virtual const ControllableClass* GetControllableClass() const
     {
         return static_cast<const ControllableClass*>(this);
     }
     // FUNCTION: SWBF2 0x0047fcd0
-    virtual int GetWeaponCount()
+    virtual int GetWeaponCount() const
     {
         return mWeaponCount;
     }
     // FUNCTION: SWBF2 0x0047fce0
-    virtual const WeaponClass* GetWeaponClass(int iIndex)
+    virtual const WeaponClass* GetWeaponClass(int iIndex) const
     {
         return mWeaponClass[iIndex];
     }
     // FUNCTION: SWBF2 0x0047fd00
-    virtual float GetCollisionInflict()
+    virtual float GetCollisionInflict() const
     {
         return mCollisionInflict;
     }
     // FUNCTION: SWBF2 0x0047fd10
-    virtual float GetTimeRequiredToEject()
+    virtual float GetTimeRequiredToEject() const
     {
         return mTimeRequiredToEject;
     }
     // FUNCTION: SWBF2 0x0047fd20
-    virtual float GetReboardTime()
+    virtual float GetReboardTime() const
     {
         return mTimeTilReboard;
     }

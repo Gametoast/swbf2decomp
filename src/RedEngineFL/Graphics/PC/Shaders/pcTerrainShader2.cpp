@@ -361,24 +361,25 @@ unsigned short pcTerrainShader2::GetShaderChain(pcRedShader** const ppOut,
                                                 unsigned short,
                                                 const RenderItem* pItem)
 {
-    if (bLightingEnable && s_PipelineVersion < 2.0f)
+    if (!bLightingEnable || s_PipelineVersion >= 2.0f)
     {
-        m_lightingInSeparatePass = false;
-        const bool bSpecial = (pItem->flags & 0x10220010) != 0;
-        sForceSimpleLighting = RedRenderer::pcGetRenderOptions().mGraphicsTier < 1;
-        sUseHighTierLighting = RedRenderer::pcGetRenderOptions().mGraphicsTier > 1;
-        if (sUseHighTierLighting && !sForceSimpleLighting && !bSpecial)
-        {
-            ppOut[0] = RedRenderer::pcGetSystemShader(SYSTEM_SHADER_PERPIXELDIFFUSELIGHTING);
-            ppOut[1] = this;
-            m_lightingInSeparatePass = true;
-            return 2;
-        }
         ppOut[0] = this;
+        m_lightingInSeparatePass = false;
         return 1;
     }
-    ppOut[0] = this;
+
     m_lightingInSeparatePass = false;
+    const bool bSpecial = (pItem->flags & 0x10220010) != 0;
+    sForceSimpleLighting = RedRenderer::pcGetRenderOptions().mGraphicsTier < 1;
+    sUseHighTierLighting = RedRenderer::pcGetRenderOptions().mGraphicsTier > 1;
+    if (sUseHighTierLighting && !sForceSimpleLighting && !bSpecial)
+    {
+        ppOut[0] = RedRenderer::pcGetSystemShader(SYSTEM_SHADER_PERPIXELDIFFUSELIGHTING);
+        ppOut[1] = this;
+        m_lightingInSeparatePass = true;
+        return 2;
+    }
+    ppOut[0] = this;
     return 1;
 }
 

@@ -45,13 +45,13 @@ bool Weapon::FireDone() const
 }
 
 // FUNCTION: SWBF2 0x0067bce0
-float WeaponClass::GetHeatPerSalvo()
+float WeaponClass::GetHeatPerSalvo() const
 {
     return mHeatPerShot;
 }
 
 // FUNCTION: SWBF2 0x0067bcf0
-float WeaponClass::GetShotsPerSalvo()
+float WeaponClass::GetShotsPerSalvo() const
 {
     return 1.0f;
 }
@@ -1206,13 +1206,13 @@ void WeaponClass::CreateMuzzleFlash(const PblMatrix& mFire) const
 }
 
 // FUNCTION: SWBF2 0x0067bd00
-int WeaponClass::GetBarrageMin()
+int WeaponClass::GetBarrageMin() const
 {
     return mBarrageMin;
 }
 
 // FUNCTION: SWBF2 0x0067bd10
-int WeaponClass::GetBarrageMax()
+int WeaponClass::GetBarrageMax() const
 {
     return mBarrageMax;
 }
@@ -1435,9 +1435,9 @@ bool WeaponClass::PostLoadInit()
 // FUNCTION: SWBF2 0x00677840
 Weapon::Weapon(const WeaponClass* pClass, const WeaponDesc& desc)
 {
-    mStart = const_cast<WeaponClass*>(pClass);
-    mClass = const_cast<WeaponClass*>(pClass);
-    mRenderClass = const_cast<WeaponClass*>(pClass);
+    mStart = pClass;
+    mClass = pClass;
+    mRenderClass = pClass;
     mOwner = desc.mOwner;
     mAimer = desc.mAimer;
     mTrigger = desc.mTrigger;
@@ -1678,15 +1678,16 @@ float Weapon::GetOrdnanceVelocity() const
         {
             pOrdnance = pOrdnance->mNextCharge;
         }
-        if (pOrdnance->mStrengthLimit <= fCharge &&
-            pOrdnance->mStrengthLimit < pOrdnance->mNextCharge->mStrengthLimit)
+        if (pOrdnance->mStrengthLimit > fCharge ||
+            pOrdnance->mStrengthLimit >= pOrdnance->mNextCharge->mStrengthLimit)
         {
-            float t = (fCharge - pOrdnance->mStrengthLimit) /
-                      (pOrdnance->mNextCharge->mStrengthLimit - pOrdnance->mStrengthLimit);
-            float fLow = pOrdnance->GetVelocity();
-            float fHigh = pOrdnance->mNextCharge->GetVelocity();
-            return (fHigh - fLow) * t + fLow;
+            return pOrdnance->GetVelocity();
         }
+        float t = (fCharge - pOrdnance->mStrengthLimit) /
+                  (pOrdnance->mNextCharge->mStrengthLimit - pOrdnance->mStrengthLimit);
+        float fLow = pOrdnance->GetVelocity();
+        float fHigh = pOrdnance->mNextCharge->GetVelocity();
+        return (fHigh - fLow) * t + fLow;
     }
     return pOrdnance->GetVelocity();
 }
@@ -1706,15 +1707,16 @@ float Weapon::GetOrdnanceGravity() const
         {
             pOrdnance = pOrdnance->mNextCharge;
         }
-        if (pOrdnance->mStrengthLimit <= fCharge &&
-            pOrdnance->mStrengthLimit < pOrdnance->mNextCharge->mStrengthLimit)
+        if (pOrdnance->mStrengthLimit > fCharge ||
+            pOrdnance->mStrengthLimit >= pOrdnance->mNextCharge->mStrengthLimit)
         {
-            float t = (fCharge - pOrdnance->mStrengthLimit) /
-                      (pOrdnance->mNextCharge->mStrengthLimit - pOrdnance->mStrengthLimit);
-            float fLow = pOrdnance->GetGravity();
-            float fHigh = pOrdnance->mNextCharge->GetGravity();
-            return (fHigh - fLow) * t + fLow;
+            return pOrdnance->GetGravity();
         }
+        float t = (fCharge - pOrdnance->mStrengthLimit) /
+                  (pOrdnance->mNextCharge->mStrengthLimit - pOrdnance->mStrengthLimit);
+        float fLow = pOrdnance->GetGravity();
+        float fHigh = pOrdnance->mNextCharge->GetGravity();
+        return (fHigh - fLow) * t + fLow;
     }
     return pOrdnance->GetGravity();
 }
@@ -2356,7 +2358,7 @@ bool Weapon::CheckEmpty() const
 // FUNCTION: SWBF2 0x00679290
 bool Weapon::ForceReload() const
 {
-    return mReload && mReload->IsPressed() && m_pAmmoCounter->mCurClip < 1.0f;
+    return mReload && mReload->IsPressed() && !(m_pAmmoCounter->mCurClip >= 1.0f);
 }
 
 // FUNCTION: SWBF2 0x006792c0

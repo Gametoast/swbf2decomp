@@ -965,8 +965,6 @@ void FirstPersonRenderable::RenderSoldier(unsigned int uFlags) const
     {
 
         RedShadingPose shadingPose;
-        shadingPose.m_pFirstEntry = 0;
-        shadingPose.m_pModel = 0;
         RedShadingPose* pShadingPose = 0;
         if (mOwner)
         {
@@ -998,7 +996,6 @@ void FirstPersonRenderable::RenderSoldier(unsigned int uFlags) const
             }
         }
         mObjectModel->Render(&mModelMatrix, &pose, RedColor::WHITE, uFlags, pShadingPose);
-        shadingPose.Reset();
     }
 
     if (mCurrentWeapon)

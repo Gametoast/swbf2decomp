@@ -55,12 +55,12 @@ public:
     virtual unsigned int GetDerivedRtti() const;
     virtual const char* GetDerivedRttiName() const;
     virtual void SetProperty(unsigned int uProperty, const char* pszValue);
-    virtual int GetVehicleType();
-    virtual const void* GetControllableClass();
-    virtual int GetWeaponCount();
-    virtual const WeaponClass* GetWeaponClass(int iIndex);
-    virtual float GetTimeRequiredToEject();
-    virtual float GetReboardTime();
+    virtual int GetVehicleType() const;
+    virtual const ControllableClass* GetControllableClass() const;
+    virtual int GetWeaponCount() const;
+    virtual const WeaponClass* GetWeaponClass(int iIndex) const;
+    virtual float GetTimeRequiredToEject() const;
+    virtual float GetReboardTime() const;
 
     static PblHash rttiHashEntityFlyerClass;
     static const char rttiNameEntityFlyerClass[];

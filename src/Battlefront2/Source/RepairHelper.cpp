@@ -293,16 +293,16 @@ bool RepairHelper::SetAidWpn(bool* pbChanged)
 {
     for (int i = 0; i < GetMe()->GetWeaponCount(); ++i)
     {
-        WeaponClass* pClass = GetMe()->GetWeaponPtr(i)->mClass;
+        const WeaponClass* pClass = GetMe()->GetWeaponPtr(i)->mClass;
         float fAdd;
         if (pClass->IsRtti(WeaponRepairClass::rttiHashWeaponRepairClass))
         {
-            WeaponRepairClass* pRepair = static_cast<WeaponRepairClass*>(pClass);
+            const WeaponRepairClass* pRepair = static_cast<const WeaponRepairClass*>(pClass);
             fAdd = mAidType.ammo ? pRepair->mAddAmmo[mAidType.type] : pRepair->mAddHealth[mAidType.type];
         }
         else if (pClass->IsRtti(WeaponDispenserClass::rttiHashWeaponDispenserClass))
         {
-            EntityClass* pDispense = static_cast<WeaponDispenserClass*>(pClass)->mDispenseClass;
+            EntityClass* pDispense = static_cast<const WeaponDispenserClass*>(pClass)->mDispenseClass;
             if (!pDispense || !pDispense->IsRtti(PowerupItemClass::rttiHashPowerupItemClass))
             {
                 continue;
@@ -349,12 +349,12 @@ void RepairHelper::CalcMyAidTypes(unsigned int* pHealth, unsigned int* pAmmo)
 
         if (pWeapon->IsRtti(WeaponRepair::rttiHashWeaponRepair))
         {
-            WeaponRepairClass* pClass = static_cast<WeaponRepairClass*>(pWeapon->mClass);
+            const WeaponRepairClass* pClass = static_cast<const WeaponRepairClass*>(pWeapon->mClass);
             AddAidTypes(pClass->mAddHealth, pClass->mAddAmmo, pHealth, pAmmo);
         }
         else if (pWeapon->IsRtti(WeaponDispenser::rttiHashWeaponDispenser))
         {
-            EntityClass* pDispense = static_cast<WeaponDispenserClass*>(pWeapon->mClass)->mDispenseClass;
+            EntityClass* pDispense = static_cast<const WeaponDispenserClass*>(pWeapon->mClass)->mDispenseClass;
             if (pDispense && pDispense->IsRtti(PowerupItemClass::rttiHashPowerupItemClass))
             {
                 PowerupItemClass* pPowerup = static_cast<PowerupItemClass*>(pDispense);

@@ -241,17 +241,15 @@ void ParticleTransformer::SizeTransformer::Update(float& fSize, float fTime) con
 void ParticleTransformer::RotationTransformer::Update(float& fRotation, float& fRotVelocity, float fTime) const
 {
     const RotationTransformer* pState = this;
-    for (;;)
+    float fScale = pState->GetScale(fTime);
+    pState->mData.Update(fRotVelocity, fScale);
+    while (fScale > 1.0f && pState->mNextState)
     {
-        float fScale = pState->GetScale(fTime);
-        pState->mData.Update(fRotVelocity, fScale);
-        if (fScale <= 1.0f || !pState->mNextState)
-        {
-            break;
-        }
         fRotation += pState->mLifeTime * fRotVelocity;
         fTime -= pState->mLifeTime;
         pState = (const RotationTransformer*)pState->mNextState;
+        fScale = pState->GetScale(fTime);
+        pState->mData.Update(fRotVelocity, fScale);
     }
     fRotation += fRotVelocity * fTime;
 }

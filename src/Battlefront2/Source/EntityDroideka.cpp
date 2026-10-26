@@ -742,13 +742,13 @@ const char EntityDroidekaClass::rttiNameEntityDroidekaClass[] = "EntityDroidekaC
 
 
 // FUNCTION: SWBF2 0x0049ea60
-int EntityDroidekaClass::GetVehicleType()
+int EntityDroidekaClass::GetVehicleType() const
 {
     return mVehicleType;
 }
 
 // FUNCTION: SWBF2 0x0049ea70
-int EntityDroidekaClass::GetWeaponCount()
+int EntityDroidekaClass::GetWeaponCount() const
 {
     if (!mWeaponClass[0])
     {
@@ -758,13 +758,13 @@ int EntityDroidekaClass::GetWeaponCount()
 }
 
 // FUNCTION: SWBF2 0x0049ea90
-const WeaponClass* EntityDroidekaClass::GetWeaponClass(int iIndex)
+const WeaponClass* EntityDroidekaClass::GetWeaponClass(int iIndex) const
 {
     return mWeaponClass[iIndex];
 }
 
 // FUNCTION: SWBF2 0x0049eab0
-const void* EntityDroidekaClass::GetControllableClass()
+const ControllableClass* EntityDroidekaClass::GetControllableClass() const
 {
     return static_cast<const ControllableClass*>(this);
 }

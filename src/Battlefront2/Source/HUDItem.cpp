@@ -1,3 +1,4 @@
+#include <new>
 #include <float.h>
 #include <stdarg.h>
 #include <stdio.h>
@@ -730,4 +731,3 @@ void HUD::FreeName(char** ppName)
         *ppName = 0;
     }
 }
-#include <new>

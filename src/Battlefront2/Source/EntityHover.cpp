@@ -2720,8 +2720,6 @@ void EntityHover::Render(unsigned char ucViewport, float fDist, unsigned int uiF
     {
 
         RedShadingPose shadingPose;
-        shadingPose.m_pFirstEntry = 0;
-        shadingPose.m_pModel = 0;
         shadingPose.BindToModel(mModel->GetRedModel(0));
         for (int i = 0; i < mClass->mWheelCount; ++i)
         {
@@ -2745,7 +2743,6 @@ void EntityHover::Render(unsigned char ucViewport, float fDist, unsigned int uiF
             }
         }
         mModel->Render(0, fDist, &mWorld, &mPose, RedColor::WHITE, uiFlags, &shadingPose);
-        shadingPose.Reset();
     }
     else
     {

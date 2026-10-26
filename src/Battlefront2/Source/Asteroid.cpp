@@ -99,55 +99,55 @@ const GameModel* EntityGeometryClass::GetModel()
 }
 
 // FUNCTION: SWBF2 0x00444430
-int GameObjectClass::GetSoldierType()
+int GameObjectClass::GetSoldierType() const
 {
     return 5;
 }
 
 // FUNCTION: SWBF2 0x00444440
-int GameObjectClass::GetVehicleType()
+int GameObjectClass::GetVehicleType() const
 {
     return 9;
 }
 
 // FUNCTION: SWBF2 0x00444450
-const void* GameObjectClass::GetControllableClass()
+const ControllableClass* GameObjectClass::GetControllableClass() const
 {
     return 0;
 }
 
 // FUNCTION: SWBF2 0x00444460
-int GameObjectClass::GetWeaponCount()
+int GameObjectClass::GetWeaponCount() const
 {
     return 0;
 }
 
 // FUNCTION: SWBF2 0x00444470
-const WeaponClass* GameObjectClass::GetWeaponClass(int iIndex)
+const WeaponClass* GameObjectClass::GetWeaponClass(int iIndex) const
 {
     return 0;
 }
 
 // FUNCTION: SWBF2 0x00444480
-float GameObjectClass::GetCollisionInflict()
+float GameObjectClass::GetCollisionInflict() const
 {
     return 1.0f;
 }
 
 // FUNCTION: SWBF2 0x00444490
-const DamageEffectClass* GameObjectClass::GetDamageEffectClass(int iIndex)
+const DamageEffectClass* GameObjectClass::GetDamageEffectClass(int iIndex) const
 {
     return mDamageEffectClass[iIndex];
 }
 
 // FUNCTION: SWBF2 0x004444b0
-float GameObjectClass::GetTimeRequiredToEject()
+float GameObjectClass::GetTimeRequiredToEject() const
 {
     return 0.0f;
 }
 
 // FUNCTION: SWBF2 0x004444c0
-float GameObjectClass::GetReboardTime()
+float GameObjectClass::GetReboardTime() const
 {
     return 0.0f;
 }

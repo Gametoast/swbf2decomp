@@ -55,7 +55,7 @@ extern bool netTeamDamage;
 
 // FUNCTION: SWBF2 0x00488570
 DamageOwner::DamageOwner(Character* pCharacter, GameObject* pGameObject, int iTeam,
-                         EntityClass* pClass, WeaponClass* pWeapon, float fDamageMultiplier)
+                         const EntityClass* pClass, const WeaponClass* pWeapon, float fDamageMultiplier)
     : mCharacter(pCharacter),
       mGameObject(pGameObject),
       mTeam(iTeam),

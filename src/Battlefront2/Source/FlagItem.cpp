@@ -406,12 +406,7 @@ void FlagItem::RenderHelper(unsigned char ucLod, float fAlpha, unsigned int uiFl
 {
     const FlagItemClass* pClass = static_cast<const FlagItemClass*>(mEntityClass);
     const bool bCarried = mOwner != 0;
-    const GameModel* pModel = mModel;
-    const unsigned int nCloth = pModel->mClothCount;
     EntityCloth* const* pCloth = mClothPiece;
-    const PblMatrix& mWorld = mMatrix;
-    const float fLife = mLifeTimer;
-    const float fFade = fLife + 1.0f < 1.0f ? fLife + 1.0f : 1.0f;
 
     if (pClass->mTeamColorize[bCarried ? 1 : 0])
     {
@@ -426,13 +421,16 @@ void FlagItem::RenderHelper(unsigned char ucLod, float fAlpha, unsigned int uiFl
                     ? pCharacter->mTeamPtr : Team::sTeams[1];
         const int iFlagTeam = mTeam;
         RedColor color = pTeam->mColor[iFlagTeam];
+        const float fLife = mLifeTimer;
+        const float fFade = fLife + 1.0f > 1.0f ? 1.0f : fLife + 1.0f;
         color.a = static_cast<unsigned char>(static_cast<int>(color.a * fAlpha * fFade));
-        if (nCloth)
+        const PblMatrix mWorld = mMatrix;
+        if (mModel->mClothCount)
         {
             RedColor modelColor = RedColor::WHITE;
             modelColor.a = color.a;
-            pModel->Render(ucLod, fAlpha, &mWorld, 0, modelColor, uiFlags, 0);
-            for (unsigned int i = 0; i < nCloth; ++i)
+            mModel->Render(ucLod, fAlpha, &mWorld, 0, modelColor, uiFlags, 0);
+            for (unsigned int i = 0; i < mModel->mClothCount; ++i)
             {
                 if (pCloth[i])
                 {
@@ -442,20 +440,23 @@ void FlagItem::RenderHelper(unsigned char ucLod, float fAlpha, unsigned int uiFl
         }
         else
         {
-            pModel->Render(ucLod, fAlpha, &mWorld, 0, color, uiFlags, 0);
+            mModel->Render(ucLod, fAlpha, &mWorld, 0, color, uiFlags, 0);
         }
     }
     else
     {
         reinterpret_cast<EntityItem*>(this)->EntityItem::Render(ucLod, fAlpha, uiFlags);
-        if (nCloth)
+        if (mModel->mClothCount)
         {
-            RedColor color = RedColor::WHITE;
-            color.a = static_cast<unsigned char>(static_cast<int>(fAlpha * fFade * 255.0f));
-            for (unsigned int i = 0; i < nCloth; ++i)
+            const PblMatrix mWorld = mMatrix;
+            const float fLife = mLifeTimer;
+            const float fFade = fLife + 1.0f > 1.0f ? 1.0f : fLife + 1.0f;
+            for (unsigned int i = 0; i < mModel->mClothCount; ++i)
             {
                 if (pCloth[i])
                 {
+                    RedColor color = RedColor::WHITE;
+                    color.a = static_cast<unsigned char>(static_cast<int>(fAlpha * fFade * 255.0f));
                     pCloth[i]->Render(mWorld, 0, ucLod, color, uiFlags, 1);
                 }
             }

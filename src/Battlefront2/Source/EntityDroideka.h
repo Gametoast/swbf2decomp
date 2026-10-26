@@ -57,10 +57,10 @@ public:
     virtual const char* GetDerivedRttiName() const;
     virtual void SetProperty(unsigned int uProperty, const char* pszValue);
     virtual void PostReadSetup();
-    virtual int GetVehicleType();
-    virtual const void* GetControllableClass();
-    virtual int GetWeaponCount();
-    virtual const WeaponClass* GetWeaponClass(int iIndex);
+    virtual int GetVehicleType() const;
+    virtual const ControllableClass* GetControllableClass() const;
+    virtual int GetWeaponCount() const;
+    virtual const WeaponClass* GetWeaponClass(int iIndex) const;
     virtual bool InitAnimations(const char* pszBank);
 
 protected:

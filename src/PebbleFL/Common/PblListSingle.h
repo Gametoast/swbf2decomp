@@ -109,6 +109,7 @@ public:
     {
     public:
         Itor() : mNode(0) {}
+        Itor(const Itor& itor) : mNode(itor.mNode) {}
         Itor(Node* pNode) : mNode(pNode) {}
         Itor(const PblListSingle* pList) : mNode(pList->mHead.mNext) {}
         Itor(const PblListSingle& rList) : mNode(rList.mHead.mNext) {}

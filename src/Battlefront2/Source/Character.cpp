@@ -93,10 +93,11 @@ namespace TestSpawn
 {
 
 // FUNCTION: SWBF2 0x00438750
-PblMatrix* __fastcall GetTestSpawnMatrix(PblMatrix* pResult, Character* pCharacter)
+PblMatrix GetTestSpawnMatrix(Character* pCharacter)
 {
-    pResult->Reset();
-    float* p = reinterpret_cast<float*>(pResult);
+    PblMatrix result;
+    result.Reset();
+    float* p = reinterpret_cast<float*>(&result);
     if (pCharacter->mPlayerId < 0 &&
         pCharacter != AIDebug::TestSpawn::aic[0] &&
         pCharacter != AIDebug::TestSpawn::aic[1] &&
@@ -105,7 +106,7 @@ PblMatrix* __fastcall GetTestSpawnMatrix(PblMatrix* pResult, Character* pCharact
     {
         p[12] = (float)(pCharacter - Character::sCharacters) * 3.0f;
         p[13] = 100.0f;
-        return pResult;
+        return result;
     }
 
     const float fAngle = PblRandom::_Global.GetFloat() * 6.2831855f;
@@ -122,7 +123,7 @@ PblMatrix* __fastcall GetTestSpawnMatrix(PblMatrix* pResult, Character* pCharact
     p[8] = -fSin; p[9] = 0.0f; p[10] = -fCos; p[11] = 0.0f;
     p[12] = vStart.x; p[13] = vStart.y - fHit * 50.0f;
     p[14] = vStart.z; p[15] = 1.0f;
-    return pResult;
+    return result;
 }
 }
 }
@@ -133,9 +134,7 @@ namespace AIDebug
 // FUNCTION: SWBF2 0x00438a10
 PblMatrix GetTestSpawnMatrix(Character* pCharacter)
 {
-    PblMatrix result;
-    AIDebug::TestSpawn::GetTestSpawnMatrix(&result, pCharacter);
-    return result;
+    return AIDebug::TestSpawn::GetTestSpawnMatrix(pCharacter);
 }
 }
 
@@ -1382,7 +1381,7 @@ void Character::Died()
         }
         if (bMessage)
         {
-            NetGame::CreateEvent_Message(eType, this, pKiller, rOwner.mClass, rOwner.mWeapon, pEnemyTeam, 0);
+            NetGame::CreateEvent_Message(eType, this, pKiller, const_cast<EntityClass*>(rOwner.mClass), const_cast<WeaponClass*>(rOwner.mWeapon), pEnemyTeam, 0);
         }
         return;
     }
@@ -1410,7 +1409,7 @@ void Character::Died()
     }
     if (bPlayer)
     {
-        NetGame::CreateEvent_Message(NetGame::MSG_DIED, this, 0, rOwner.mClass, rOwner.mWeapon, pEnemyTeam, 0);
+        NetGame::CreateEvent_Message(NetGame::MSG_DIED, this, 0, const_cast<EntityClass*>(rOwner.mClass), const_cast<WeaponClass*>(rOwner.mWeapon), pEnemyTeam, 0);
     }
 }
 

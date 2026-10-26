@@ -1,9 +1,10 @@
 #pragma once
 
 #include <stddef.h>
+#include <d3dx9math.h>
 #include "PblMath.h"
 
-class PblVector3
+class PblVector3 : public D3DXVECTOR3
 {
 public:
 
@@ -49,9 +50,6 @@ public:
     float GetY() const;
     float GetZ() const;
 
-    float x;
-    float y;
-    float z;
 };
 
  
@@ -84,13 +82,13 @@ extern PblVector3 gVectorUnitX;
 extern PblVector3 gVectorUnitY;
 extern PblVector3 gVectorUnitZ;
 
-class PblVector4
+class PblVector4 : public D3DXVECTOR4
 {
 public:
 
     // FUNCTION: SWBF2 0x00463a30
     PblVector4() {}
-    PblVector4(float fX, float fY, float fZ, float fW) : x(fX), y(fY), z(fZ), w(fW) {}
+    PblVector4(float fX, float fY, float fZ, float fW) : D3DXVECTOR4(fX, fY, fZ, fW) {}
 
     operator const PblVector3&() const;
 
@@ -102,10 +100,6 @@ public:
         w = fW;
     }
 
-    float x;
-    float y;
-    float z;
-    float w;
 };
 
 #include "PebbleFL/pc/pcPblVector.h"

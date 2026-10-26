@@ -329,7 +329,7 @@ bool WeaponRepair::UpdateFire(float fDeltaTime)
                 }
                 fTimeLeft -= fStep;
                 mStateTimer += fStep;
-                if (mStateTimer < mStateLimit || mClass->mTriggerSingle || !CheckFire() ||
+                if (!(mStateTimer >= mStateLimit) || mClass->mTriggerSingle || !CheckFire() ||
                     CheckReload() || CheckEmpty())
                 {
                     break;

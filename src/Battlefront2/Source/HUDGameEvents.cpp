@@ -982,7 +982,7 @@ void HUD::GameEvents::Update(float fDeltaTime)
         if (!bScope)
         {
             UpdateHealth(pCharacter, pUnitObject, events, data);
-            GameObjectClass* pClass = pUnitObject->GetGameObjectClass();
+            const GameObjectClass* pClass = pUnitObject->GetGameObjectClass();
             UpdateJetpack(pUnitObject,
                           pClass->IsRtti(EntitySoldierClass::rttiHashEntitySoldierClass)
                               ? (const EntitySoldierClass*)pClass
@@ -1224,7 +1224,7 @@ void HUD::GameEvents::UpdateWeaponEvents(const RedCamera* const pCamera, const C
     (void)pUnit;
     const int iWeaponIndex = pControllable->GetWeaponIndex(uWeapon);
     Weapon* pWeapon = iWeaponIndex >= 0 ? pControllable->GetWeaponPtr(iWeaponIndex) : 0;
-    WeaponClass* pWeaponClass = pWeapon ? pWeapon->mClass : 0;
+    const WeaponClass* pWeaponClass = pWeapon ? pWeapon->mClass : 0;
     const unsigned int uWeaponHash = pWeapon ? pWeapon->GetNameHash() : 0;
 
     if (pWeapon != weaponData.weapon || pWeaponClass != weaponData.weaponClass ||

@@ -149,20 +149,21 @@ EnergyBar::~EnergyBar()
 // FUNCTION: SWBF2 0x004916c0
 bool EnergyBar::SpendEnergy(float fEnergy)
 {
-    if (fEnergy > 0.0f)
+    if (fEnergy <= 0.0f)
     {
-        if (m_bOverheat)
+        return true;
+    }
+    if (m_bOverheat)
+    {
+        return false;
+    }
+    m_fEnergy -= fEnergy;
+    if (0.0f > m_fEnergy)
+    {
+        m_bOverheat = 1;
+        if (m_pClass->m_fEnergyMin > m_fEnergy)
         {
-            return false;
-        }
-        m_fEnergy -= fEnergy;
-        if (0.0f > m_fEnergy)
-        {
-            m_bOverheat = 1;
-            if (m_pClass->m_fEnergyMin > m_fEnergy)
-            {
-                m_fEnergy = m_pClass->m_fEnergyMin;
-            }
+            m_fEnergy = m_pClass->m_fEnergyMin;
         }
     }
     return true;

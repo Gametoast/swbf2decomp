@@ -41,11 +41,11 @@ enum GoalTargetType
 
 struct GoalTarget
 {
-    GoalTarget& operator=(const GoalTarget& other);
+    // SYNTHETIC: SWBF2 0x00488290
+    // AI::GoalTarget::operator=
+    GoalTarget& operator=(const GoalTarget& other) = default;
     GoalTarget()
     {
-        mGameObj.mObject = 0;
-        mGameObj.mSavedHandleId = 0;
     }
 
     GoalTarget(const PblVector3& vPos);

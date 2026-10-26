@@ -844,7 +844,7 @@ void UnitController::UseAutoTurrets()
     for (int i = 0; i < mOwner->GetWeaponCount(); ++i)
     {
         Weapon* pWeapon = mOwner->GetWeaponPtr(i);
-        WeaponClass* pClass = pWeapon->mClass;
+        const WeaponClass* pClass = pWeapon->mClass;
         if (!pClass || pWeapon->CheckOverheat())
         {
             continue;
@@ -857,7 +857,7 @@ void UnitController::UseAutoTurrets()
         }
         if (pClass->IsRtti(WeaponDispenserClass::rttiHashWeaponDispenserClass))
         {
-            EntityClass* pDispense = static_cast<WeaponDispenserClass*>(pClass)->mDispenseClass;
+            EntityClass* pDispense = static_cast<const WeaponDispenserClass*>(pClass)->mDispenseClass;
             if (pDispense && pDispense->IsRtti(EntityBuildingArmedClass::rttiHashEntityBuildingArmedClass) &&
                 (pClass->mAITargetTypes & 1))
             {

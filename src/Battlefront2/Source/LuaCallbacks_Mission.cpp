@@ -2517,7 +2517,7 @@ int GetObjectLastHitWeaponClass(lua_State* L)
     if (pObject)
     {
         Damageable* pDamage = pObject;
-        WeaponClass* pWeapon = pDamage->mDamageOwner.mWeapon;
+        const WeaponClass* pWeapon = pDamage->mDamageOwner.mWeapon;
         if (pWeapon)
         {
             lua_pushstring(LuaHelper::mState, StringDB::Find(pWeapon->mId));
@@ -3510,15 +3510,15 @@ int BatchChangeTeams(lua_State* L)
     {
         int iMoved = iRequested < iAvailable ? iRequested : iAvailable;
         pSpawns->mMaxUnitCount[iTo] = pSpawns->GetUnitCount(iTo) + iMoved;
-        Team* pTeam = Team::GetPtr(iFrom);
         for (int i = iMoved - 1; i >= 0; --i)
         {
+            Team* pTeam = Team::GetPtr(iFrom);
             if (i < pTeam->mMemberCount && pTeam->mMemberArray[i])
             {
                 pTeam->mMemberArray[i]->SelectTeam(iTo);
             }
         }
-        pSpawns->mMaxUnitCount[iFrom] = iAvailable - iMoved;
+        SpawnManager::sInstance->mMaxUnitCount[iFrom] = iAvailable - iMoved;
     }
     return 0;
 }

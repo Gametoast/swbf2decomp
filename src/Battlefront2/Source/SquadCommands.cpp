@@ -65,7 +65,11 @@ int SquadCommands::VehicleDistCallback(const void* pA, const void* pB)
     {
         return 1;
     }
-    return (b <= a) - 1;
+    if (a < b)
+    {
+        return -1;
+    }
+    return 0;
 }
 
 // FUNCTION: SWBF2 0x00650720

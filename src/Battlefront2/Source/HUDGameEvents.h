@@ -210,7 +210,7 @@ struct WeaponData
 {
     ~WeaponData();
     Weapon* weapon;
-    WeaponClass* weaponClass;
+    const WeaponClass* weaponClass;
     unsigned int weaponHash;
     float ammoTotalFraction;
     float clipTotalFraction;

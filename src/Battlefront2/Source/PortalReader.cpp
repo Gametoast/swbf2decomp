@@ -11,17 +11,6 @@
 #include <math.h>
 
 
-namespace
-{
-
-struct RawArray
-{
-    void* _elements;
-    int _numElements;
-    int _size;
-};
-}
-
 namespace pvs
 {
 
@@ -118,18 +107,8 @@ void PortalReader::Read(ISector& sector, PblConfig& config, const char* pcName)
 
 }
 
-// FUNCTION: SWBF2 0x006215c0
-void __fastcall DestroyPortalScratchArray(void* pArray)
-{
-    RawArray* pThis = (RawArray*)pArray;
-    if (pThis->_elements)
-    {
-        RedFreeToHeap(__RedCurrHeap, pThis->_elements, 0);
-        pThis->_elements = 0;
-    }
-    pThis->_numElements = 0;
-    pThis->_size = 0;
-}
+// SYNTHETIC: SWBF2 0x006215c0
+// util::BaseString::~BaseString
 
 namespace pvs
 {
@@ -376,18 +355,8 @@ template bool util::Vector<unsigned int, util::BaseArray<unsigned int, util::Typ
 // util::BaseArray<unsigned int,util::TypedArrayAllocator<unsigned int,util::TNewArrayAlloc<pvs::ISector *> > >::Reserve_
 template bool util::BaseArray<unsigned int, util::TypedArrayAllocator<unsigned int, util::TNewArrayAlloc<pvs::ISector*> > >::Reserve_(int, bool);
 
-// FUNCTION: SWBF2 0x00622380
-void __fastcall DestroyPortalPodArray(void* pArray)
-{
-    RawArray* pThis = (RawArray*)pArray;
-    if (pThis->_elements)
-    {
-        RedFreeToHeap(__RedCurrHeap, pThis->_elements, 0);
-        pThis->_elements = 0;
-    }
-    pThis->_numElements = 0;
-    pThis->_size = 0;
-}
+// SYNTHETIC: SWBF2 0x00622380
+// util::Vector<geo::Vector2<float>,util::BaseArray<geo::Vector2<float>,util::TNewArrayAlloc<geo::Vector2<float> > > >::~Vector<geo::Vector2<float>,util::BaseArray<geo::Vector2<float>,util::TNewArrayAlloc<geo::Vector2<float> > > >
 
 // TEMPLATE: SWBF2 0x00622480
 // PblHashTable<EntityEx,1024>::Begin
@@ -397,11 +366,8 @@ template PblHashTable<EntityEx, 1024>::Itor PblHashTable<EntityEx, 1024>::Begin(
 // PblHashTable<EntityEx,1024>::Itor::operator++
 template const PblHashTable<EntityEx, 1024>::Itor& PblHashTable<EntityEx, 1024>::Itor::operator++();
 
-// FUNCTION: SWBF2 0x006224b0
-void __fastcall DestroyPortalBaseStringArray(void* pArray)
-{
-    ((util::BaseArray<util::BaseString>*)pArray)->~BaseArray();
-}
+// SYNTHETIC: SWBF2 0x006224b0
+// util::Vector<util::BaseString,util::BaseArray<util::BaseString,util::TNewArrayAlloc<util::BaseString> > >::~Vector<util::BaseString,util::BaseArray<util::BaseString,util::TNewArrayAlloc<util::BaseString> > >
 
 // TEMPLATE: SWBF2 0x006228a0
 // util::Vector<util::BaseString,util::BaseArray<util::BaseString,util::TNewArrayAlloc<util::BaseString> > >::Add

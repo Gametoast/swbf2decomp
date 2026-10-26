@@ -26,6 +26,8 @@ public:
 
         Itor() : _pNode(0) {}
 
+        Itor(const Itor& itor) : _pNode(itor._pNode) {}
+
         Itor(const PblList<TYPE>& list) { _pNode = list._head._pNext; }
 
         // TEMPLATE: SWBF2 0x0049e1c0

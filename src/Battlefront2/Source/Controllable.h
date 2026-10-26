@@ -369,6 +369,12 @@ public:
 
     float GetThrust() const { return mControlMove; }
 
+    // FUNCTION: SWBF2 0x0049e350
+    bool WasPlayer() const { return mInitialPlayerId >= 0; }
+
+    // FUNCTION: SWBF2 0x0049e360
+    int GetInitialPlayerId() const { return mInitialPlayerId; }
+
     // FUNCTION: SWBF2 0x0051ecf0
     void SetInitialPlayerId(int iPlayerId) { mInitialPlayerId = iPlayerId; }
 

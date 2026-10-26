@@ -152,50 +152,52 @@ void LightsaberTrail::UpdatedWorldMatrix()
 void LightsaberTrail::_Update(float fDeltaTime, const PblVector3& vPos, const PblVector3& vDir,
                               const PblVector3& vPosPrev, const PblVector3& vDirPrev, bool bTrailOn)
 {
-    if (fDeltaTime > 0.0f)
+    if (fDeltaTime <= 0.0f)
     {
-        m_fTimer += fDeltaTime;
-
-        unsigned char i;
-        for (i = 0; i < m_uiNumSamples; ++i)
-        {
-            unsigned char uiSample = (unsigned char)((m_uiSampleFirst + i) % MAX_SAMPLES_PER_TRAIL);
-            if (m_afTime[uiSample] >=
-                m_fTimer - LightsaberTrailEffect::s_pInstance->m_fLIGHTSABER_TRAIL_PERSIST_TIME)
-            {
-                if (m_afDist[uiSample] > 0.0f)
-                {
-                    --i;
-                }
-                break;
-            }
-            m_afDist[uiSample] = 0.0f;
-        }
-
-        if (i)
-        {
-            if (i < m_uiNumSamples)
-            {
-                m_uiNumSamples -= i;
-            }
-            else
-            {
-                m_uiNumSamples = m_afTime[m_uiNumSamples - 1] >= m_fTimer - fDeltaTime * 1.5f;
-            }
-            m_uiSampleFirst = (unsigned char)((m_uiSampleNext - m_uiNumSamples + MAX_SAMPLES_PER_TRAIL) %
-                                              MAX_SAMPLES_PER_TRAIL);
-        }
-
-        if (bTrailOn || m_bTrailWasOn)
-        {
-            if (!m_uiNumSamples || m_fTimer - GetLastTime() > fDeltaTime * 1.5f)
-            {
-                _AddSample(m_fTimer - fDeltaTime, vPosPrev, vDirPrev, false);
-            }
-            _AddSample(m_fTimer, vPos, vDir, true);
-        }
-        m_bTrailWasOn = bTrailOn;
+        return;
     }
+
+    m_fTimer += fDeltaTime;
+
+    unsigned char i;
+    for (i = 0; i < m_uiNumSamples; ++i)
+    {
+        unsigned char uiSample = (unsigned char)((m_uiSampleFirst + i) % MAX_SAMPLES_PER_TRAIL);
+        if (m_afTime[uiSample] >=
+            m_fTimer - LightsaberTrailEffect::s_pInstance->m_fLIGHTSABER_TRAIL_PERSIST_TIME)
+        {
+            if (m_afDist[uiSample] > 0.0f)
+            {
+                --i;
+            }
+            break;
+        }
+        m_afDist[uiSample] = 0.0f;
+    }
+
+    if (i)
+    {
+        if (i < m_uiNumSamples)
+        {
+            m_uiNumSamples -= i;
+        }
+        else
+        {
+            m_uiNumSamples = m_afTime[m_uiNumSamples - 1] >= m_fTimer - fDeltaTime * 1.5f;
+        }
+        m_uiSampleFirst = (unsigned char)((m_uiSampleNext - m_uiNumSamples + MAX_SAMPLES_PER_TRAIL) %
+                                          MAX_SAMPLES_PER_TRAIL);
+    }
+
+    if (bTrailOn || m_bTrailWasOn)
+    {
+        if (!m_uiNumSamples || m_fTimer - GetLastTime() > fDeltaTime * 1.5f)
+        {
+            _AddSample(m_fTimer - fDeltaTime, vPosPrev, vDirPrev, false);
+        }
+        _AddSample(m_fTimer, vPos, vDir, true);
+    }
+    m_bTrailWasOn = bTrailOn;
 }
 
 extern PblVector3 gVectorZero;

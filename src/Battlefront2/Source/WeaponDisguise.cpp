@@ -226,7 +226,7 @@ void WeaponDisguise::FinishRaisingDisguise()
 {
     GameObjectClass* pDisguise = mOtherTeam->GetClassPtr(0);
     mOwner->GetGameObject()->SetModel(pDisguise->GetModel());
-    mRenderClass = const_cast<WeaponClass*>(pDisguise->GetWeaponClass(0));
+    mRenderClass = pDisguise->GetWeaponClass(0);
     mSoldierAnimationMap = SoldierAnimationBank::INVALID_MAP;
     if (mRenderClass->mSoldierAnimationWeapon != -1 && mOwner &&
         mOwner->GetSoldierAnimationBank() != SoldierAnimationBank::INVALID_BANK)

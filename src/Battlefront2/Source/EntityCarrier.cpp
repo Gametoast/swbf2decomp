@@ -254,37 +254,37 @@ bool EntityFlyer::CanJoinSquadron() const
 }
 
 // FUNCTION: SWBF2 0x00477b00
-int EntityFlyerClass::GetVehicleType()
+int EntityFlyerClass::GetVehicleType() const
 {
     return mVehicleType;
 }
 
 // FUNCTION: SWBF2 0x00477b10
-int EntityFlyerClass::GetWeaponCount()
+int EntityFlyerClass::GetWeaponCount() const
 {
     return mWeaponCount;
 }
 
 // FUNCTION: SWBF2 0x00477b20
-const WeaponClass* EntityFlyerClass::GetWeaponClass(int iIndex)
+const WeaponClass* EntityFlyerClass::GetWeaponClass(int iIndex) const
 {
     return mWeaponClass[iIndex];
 }
 
 // FUNCTION: SWBF2 0x00477b40
-float EntityFlyerClass::GetTimeRequiredToEject()
+float EntityFlyerClass::GetTimeRequiredToEject() const
 {
     return mTimeRequiredToEject;
 }
 
 // FUNCTION: SWBF2 0x00477b50
-float EntityFlyerClass::GetReboardTime()
+float EntityFlyerClass::GetReboardTime() const
 {
     return mTimeTilReboard;
 }
 
 // FUNCTION: SWBF2 0x00477b60
-const void* EntityFlyerClass::GetControllableClass()
+const ControllableClass* EntityFlyerClass::GetControllableClass() const
 {
     return this ? static_cast<const ControllableClass*>(this) : 0;
 }

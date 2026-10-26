@@ -331,7 +331,7 @@ bool MineHelper::SetMineWpn(bool* pbSwitching)
         Weapon* pWeapon = GetMe()->GetWeaponPtr(iWeapon);
         if (pWeapon->IsRtti(WeaponDispenser::rttiHashWeaponDispenser))
         {
-            EntityClass* pDispenseClass = static_cast<WeaponDispenserClass*>(pWeapon->mClass)->mDispenseClass;
+            EntityClass* pDispenseClass = static_cast<const WeaponDispenserClass*>(pWeapon->mClass)->mDispenseClass;
             if (pDispenseClass->IsRtti(EntityMineClass::rttiHashEntityMineClass) &&
                 sHasMines(static_cast<WeaponDispenser*>(pWeapon)))
             {

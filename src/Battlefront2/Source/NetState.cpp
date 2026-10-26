@@ -131,14 +131,22 @@ public:
  
  
 
+// GLOBAL: SWBF2 0x01eaed4c
 static QuatConvert quatConvert;
+// GLOBAL: SWBF2 0x01eaed53
 static UnitConvert unitConvert;
+// GLOBAL: SWBF2 0x01eaed54
 static PositionXZConvert positionXZConvert;
+// GLOBAL: SWBF2 0x01eaed50
 static PositionYConvert positionYConvert;
 
+// GLOBAL: SWBF2 0x01eaed55
 static SwitchConvert switchConvert;
+// GLOBAL: SWBF2 0x01eaed4f
 static ThrustConvert thrustConvert;
+// GLOBAL: SWBF2 0x01eaed52
 static AngleConvert angleConvert;
+// GLOBAL: SWBF2 0x01eaed4e
 static JetFuelConvert jetFuelConvert;
 
 // GLOBAL: SWBF2 0x01fa8c34
@@ -2563,6 +2571,7 @@ public:
     int GetBits() const { return 8; }
 };
 
+// GLOBAL: SWBF2 0x01eaed51
 static CannonStrengthConvert cannonStrengthConvert;
 
 // TEMPLATE: SWBF2 0x005f6280

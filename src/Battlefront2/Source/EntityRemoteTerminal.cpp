@@ -725,7 +725,7 @@ void EntityRemoteTerminalClass::SetProperty(unsigned int uProperty, const char* 
 
 
 // FUNCTION: SWBF2 0x004dcc80
-int EntityRemoteTerminalClass::GetVehicleType()
+int EntityRemoteTerminalClass::GetVehicleType() const
 {
     return mVehicleType;
 }

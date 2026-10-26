@@ -338,8 +338,6 @@ void SoldierElement::RenderUsingContext(const PblMatrix& mContext, const RedColo
     {
 
         RedShadingPose shadingPose;
-        shadingPose.m_pFirstEntry = 0;
-        shadingPose.m_pModel = 0;
         shadingPose.BindToModel(pRedModel);
         if (RedShadingState* pState = shadingPose.CreateShadingState(0xdc5803e9))
         {
@@ -353,7 +351,6 @@ void SoldierElement::RenderUsingContext(const PblMatrix& mContext, const RedColo
             }
         }
         pRedModel->Render(&mRender, &pose, color, 0x4000000, &shadingPose);
-        shadingPose.Reset();
     }
     else
     {

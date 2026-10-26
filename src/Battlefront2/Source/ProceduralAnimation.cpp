@@ -1,3 +1,4 @@
+#include <new>
 #include <d3dx9math.h>
 #include <string.h>
 #include "PebbleFL/Common/PblVector.h"
@@ -1119,4 +1120,3 @@ bool PAManager::Update(float fDeltaTime)
     }
     return true;
 }
-#include <new>

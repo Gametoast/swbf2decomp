@@ -599,21 +599,21 @@ const char EntityDroidClass::rttiNameEntityDroidClass[] = "EntityDroidClass";
 
 
 // FUNCTION: SWBF2 0x004995c0
-int EntityDroidClass::GetWeaponCount()
+int EntityDroidClass::GetWeaponCount() const
 {
     return mWeaponCount;
 }
 
 // FUNCTION: SWBF2 0x004995d0
-const WeaponClass* EntityDroidClass::GetWeaponClass(int iIndex)
+const WeaponClass* EntityDroidClass::GetWeaponClass(int iIndex) const
 {
     return mWeaponClass[iIndex];
 }
 
 // FUNCTION: SWBF2 0x004995f0
-const void* EntityDroidClass::GetControllableClass()
+const ControllableClass* EntityDroidClass::GetControllableClass() const
 {
-    return static_cast<ControllableClass*>(this);
+    return static_cast<const ControllableClass*>(this);
 }
 
 // SYNTHETIC: SWBF2 0x00499610

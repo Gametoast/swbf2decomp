@@ -148,9 +148,9 @@ public:
     static MemoryPool sMemoryPool;
 
     PblMatrix mFirePointMatrix;
-    WeaponClass* mStart;
-    WeaponClass* mClass;
-    WeaponClass* mRenderClass;
+    const WeaponClass* mStart;
+    const WeaponClass* mClass;
+    const WeaponClass* mRenderClass;
     Controllable* mOwner;
     Aimer* mAimer;
     Trigger* mTrigger;

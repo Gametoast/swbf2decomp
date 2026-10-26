@@ -36,9 +36,9 @@ public:
     virtual unsigned int GetDerivedRtti() const;
     virtual const char* GetDerivedRttiName() const;
     virtual void SetProperty(unsigned int uProperty, const char* pszValue);
-    virtual const void* GetControllableClass();
-    virtual int GetWeaponCount();
-    virtual const WeaponClass* GetWeaponClass(int iIndex);
+    virtual const ControllableClass* GetControllableClass() const;
+    virtual int GetWeaponCount() const;
+    virtual const WeaponClass* GetWeaponClass(int iIndex) const;
 
     static PblHash rttiHashEntityDroidClass;
     static const char rttiNameEntityDroidClass[];

@@ -62,32 +62,32 @@ public:
     virtual const char* GetDerivedRttiName() const;
     virtual void SetProperty(unsigned int uProperty, const char* pszValue);
     // FUNCTION: SWBF2 0x00478e00
-    virtual int GetVehicleType()
+    virtual int GetVehicleType() const
     {
         return mVehicleType;
     }
     // FUNCTION: SWBF2 0x00478e60
-    virtual const void* GetControllableClass()
+    virtual const ControllableClass* GetControllableClass() const
     {
         return this ? static_cast<const ControllableClass*>(this) : 0;
     }
     // FUNCTION: SWBF2 0x00478e10
-    virtual int GetWeaponCount()
+    virtual int GetWeaponCount() const
     {
         return mWeaponCount;
     }
     // FUNCTION: SWBF2 0x00478e20
-    virtual const WeaponClass* GetWeaponClass(int iIndex)
+    virtual const WeaponClass* GetWeaponClass(int iIndex) const
     {
         return mWeaponClass[iIndex];
     }
     // FUNCTION: SWBF2 0x00478e40
-    virtual float GetTimeRequiredToEject()
+    virtual float GetTimeRequiredToEject() const
     {
         return mTimeRequiredToEject;
     }
     // FUNCTION: SWBF2 0x00478e50
-    virtual float GetReboardTime()
+    virtual float GetReboardTime() const
     {
         return mTimeTilReboard;
     }
