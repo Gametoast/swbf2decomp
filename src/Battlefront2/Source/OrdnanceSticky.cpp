@@ -388,9 +388,7 @@ bool OrdnanceSticky::CheckCollision()
     if (fDist > 0.0f)
     {
         const float fInv = 1.0f / fDist;
-        vDir.x *= fInv;
-        vDir.y *= fInv;
-        vDir.z *= fInv;
+        vDir *= fInv;
 
         CollisionObject* pHitObject = 0;
         const GameObject* pIgnore = GetOwner();

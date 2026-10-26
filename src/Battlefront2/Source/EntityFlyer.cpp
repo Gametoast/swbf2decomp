@@ -3167,7 +3167,6 @@ namespace SquadCommands
 void VehicleCommand(GameObject* pObject, Character* pCharacter);
 }
 
-const PblVector3 __cdecl Normalize(const PblVector3& rv);
 
 
 

@@ -83,8 +83,20 @@ inline PblVector3& PblVector3::operator-=(const PblVector3& rhs)
 inline const PblVector3 CrossProduct(const PblVector3& lhs, const PblVector3& rhs)
 {
     PblVector3 Temp;
-    Temp.x = lhs.y * rhs.z - lhs.z * rhs.y;
-    Temp.y = lhs.z * rhs.x - lhs.x * rhs.z;
-    Temp.z = lhs.x * rhs.y - lhs.y * rhs.x;
+    D3DXVec3Cross(&Temp, &lhs, &rhs);
+    return Temp;
+}
+
+inline const PblVector3& PblVector3::operator*=(float rhs)
+{
+    D3DXVec3Scale(this, this, rhs);
+    return *this;
+}
+
+// FUNCTION: SWBF2 0x00417260
+inline const PblVector3 Normalize(const PblVector3& vVector)
+{
+    PblVector3 Temp;
+    D3DXVec3Normalize(&Temp, &vVector);
     return Temp;
 }

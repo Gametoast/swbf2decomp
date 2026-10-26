@@ -278,7 +278,6 @@ int __fastcall FindAdminSource(int iDest)
     return -1;
 }
 
-extern int joinSlots[0x1c0];
 extern bool isLAN;
 
 

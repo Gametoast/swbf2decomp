@@ -104,17 +104,7 @@ void EmitRing(VERTEX*& pVertices, const PblVector3& vPosition, float, float, flo
               const RedColor&, const RedColor&, const RedColor&, int, float, float);
 
 
-static void CompressedPos_SetBoundingBox(const PblBox& box)
-{
-    PblVector3 vMin = { box._vMin.x, box._vMin.y, box._vMin.z };
-    PblVector3 vExtent = { box._vMax.x - box._vMin.x, box._vMax.y - box._vMin.y,
-                                box._vMax.z - box._vMin.z };
-    CompressedPos::s_vMin = vMin;
-    CompressedPos::s_vScale = vExtent * (1.0f / 65535.0f);
-    CompressedPos::s_vScaleInv.x = 1.0f / CompressedPos::s_vScale.x;
-    CompressedPos::s_vScaleInv.y = 1.0f / CompressedPos::s_vScale.y;
-    CompressedPos::s_vScaleInv.z = 1.0f / CompressedPos::s_vScale.z;
-}
+
 
 static void SetSunFlareVertex(FlareVertex& v, float x, float y, float z,
                               const RedColor& color, float u, float texV)
@@ -192,7 +182,7 @@ void SunFlareEffect::Init()
         s_samplePoints = pcRedPrimitive::Create(D3DPT_POINTLIST, 0x9282, 8, 256, 0, true);
         const PblBox box(0.0f, 0.0f, 0.0f, 15.0f, 15.0f, 0.0f);
         s_samplePoints->m_bbox = box;
-        CompressedPos_SetBoundingBox(box);
+        CompressedPos::SetBoundingBox(box);
         CompressedPos* v = (CompressedPos*)s_samplePoints->BeginVertexData();
         if (!v)
         {
@@ -648,7 +638,7 @@ void SunFlare::RenderSunAndHalo(unsigned int uiPass) const
     }
 
     pcRedVertexBuffer* pBuffer = pcRedVertexBuffer::Create(300, sizeof(VERTEX), false, true);
-    CompressedPos_SetBoundingBox(s_boundingBox);
+    CompressedPos::SetBoundingBox(s_boundingBox);
     unsigned int uiStart;
     VERTEX* pBase = (VERTEX*)pBuffer->Lock(300, uiStart);
     VERTEX* pVertices = pBase;
@@ -777,7 +767,7 @@ bool CreateTextures(RedTexture* pTexture, const PblVector3& vPosition, float fSi
     pcRedPrimitive* pDisc = pcRedPrimitive::Create(D3DPT_TRIANGLESTRIP, RVF,
                                                    sizeof(VERTEX), 42, 0, false);
     pDisc->m_bbox = s_boundingBox;
-    CompressedPos_SetBoundingBox(s_boundingBox);
+    CompressedPos::SetBoundingBox(s_boundingBox);
     VERTEX* pDiscV = (VERTEX*)pDisc->BeginVertexData();
     if (!pDiscV)
     {
@@ -886,7 +876,7 @@ void RenderFlareOuts(RedTexture* pTexture, const PblVector3& vPosition, float fS
 {
     pcRedVertexBuffer* pBuffer = pcRedVertexBuffer::Create(6 * iNumFlareOuts,
                                                             sizeof(VERTEX), false, true);
-    CompressedPos_SetBoundingBox(s_boundingBox);
+    CompressedPos::SetBoundingBox(s_boundingBox);
     unsigned int startVertex;
     VERTEX* pBase = (VERTEX*)pBuffer->Lock(6 * iNumFlareOuts, startVertex);
     VERTEX* pVertex = pBase;
@@ -940,7 +930,7 @@ void SunFlare::RenderSunRings(const PblVector3& vPosition, float fSize, float fT
                              float fTexV) const
 {
     pcRedVertexBuffer* pBuffer = pcRedVertexBuffer::Create(700, sizeof(VERTEX), false, true);
-    CompressedPos_SetBoundingBox(s_boundingBox);
+    CompressedPos::SetBoundingBox(s_boundingBox);
     unsigned int uiStart;
     VERTEX* pBase = (VERTEX*)pBuffer->Lock(700, uiStart);
     VERTEX* pVertices = pBase;

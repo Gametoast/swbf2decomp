@@ -17,7 +17,7 @@ extern int netSocketErrorCount;
 void NetSocket::GetAddr(const void* pPeer, int& iIP, int& iPort)
 {
     const NetSocketPeerRecord* pRecord = (const NetSocketPeerRecord*)pPeer;
-    const sockaddr_in& addr = *(const sockaddr_in*)pRecord->mSocketAddress;
+    const sockaddr_in& addr = pRecord->mSocketAddress;
     iIP = (int)addr.sin_addr.s_addr;
     iPort = ntohs(addr.sin_port);
 }
@@ -141,7 +141,7 @@ int NetSocket::SendSocket(int iDest, char* pData, int iLen)
         int n = iDest > 64 && iDest == 68
               ? send((SOCKET)netBroadcastSendSocket, pData, iLen, 0)
               : sendto((SOCKET)netDirectSocket, pData, iLen, 0,
-                       (const sockaddr*)pPeer->mSocketAddress, sizeof(sockaddr_in));
+                       (const sockaddr*)&pPeer->mSocketAddress, sizeof(sockaddr_in));
         if (n == SOCKET_ERROR)
         {
             DecodeError(WSAGetLastError());
@@ -232,7 +232,7 @@ void NetSocket::RecvSockets()
         ((ReceiveTraceFn)JournalReceiveTraceStub)(netLanReceiveBuffer, received);
         ((ReceiveTraceFn)JournalReceiveTraceStub)(&from, sizeof(from));
         NetSocketPeerRecord peer = { galaxy::api::GalaxyID(0) };
-        memcpy(peer.mSocketAddress, &from, sizeof(from));
+        peer.mSocketAddress = from;
         ProcessReceivedPacket(netLanReceiveBuffer, received, packetPrefix.value, true, peer);
     }
     while (remaining);
@@ -273,7 +273,7 @@ void NetSocket::RecvSockets()
             ((ReceiveTraceFn)JournalReceiveTraceStub)(netLanReceiveBuffer, received);
             ((ReceiveTraceFn)JournalReceiveTraceStub)(&from, sizeof(from));
             NetSocketPeerRecord peer = { galaxy::api::GalaxyID(0) };
-            memcpy(peer.mSocketAddress, &from, sizeof(from));
+            peer.mSocketAddress = from;
             ProcessReceivedPacket(netLanReceiveBuffer, received, packetPrefix.value, false, peer);
         }
         while (remaining);

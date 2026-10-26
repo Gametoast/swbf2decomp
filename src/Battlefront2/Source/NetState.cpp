@@ -64,11 +64,6 @@ PblMatrix DirectionMatrix(const PblVector3& direction, const PblVector3& up,
 // GLOBAL: SWBF2 0x01fa8c30
 int netLOD;
 
-static int NetVectorBits()
-{
-    return netLOD == 1 ? 32 : 11;
-}
-
 class QuatConvert : public ConvertValues
 {
 public:
@@ -81,7 +76,7 @@ class UnitConvert : public ConvertValues
 public:
     float GetMin() const { return -1.0f; }
     float GetMax() const { return 1.0f; }
-    int GetBits() const { return NetVectorBits(); }
+    int GetBits() const { return netLOD == 1 ? 32 : 11; }
 };
 class PositionXZConvert : public ConvertValues
 {
@@ -207,11 +202,11 @@ void WriteString(NetPktGroup* group, const char* text, unsigned int capacity)
 // FUNCTION: SWBF2 0x005f6220
 void ReadString(NetPktGroup& group, char* text, unsigned int capacity)
 {
-    unsigned int length = 0;
+    unsigned int length;
     group.ReadBits(length, 8);
     for (unsigned int i = 0; i < length; ++i)
     {
-        unsigned int value = 0;
+        unsigned int value;
         group.ReadBits(value, 8);
         if (i < capacity)
         {
@@ -298,7 +293,7 @@ void SetNetPrecision(NetPktGroup& group)
 // FUNCTION: SWBF2 0x005f58c0
 void ReadNetLOD(NetPktGroup& group)
 {
-    unsigned int unchanged = 0;
+    unsigned int unchanged;
     group.ReadBits(unchanged, 1);
     if (!unchanged)
     {
@@ -403,7 +398,7 @@ void WriteWeapon(NetPktGroup& group, Weapon* pObject)
 // FUNCTION: SWBF2 0x005f6030
 void ReadWeapon(NetPktGroup& group, Weapon* pObject)
 {
-    unsigned int present = 0;
+    unsigned int present;
     group.ReadBits(present, 1);
     if (!present)
     {
@@ -448,7 +443,7 @@ void WalkerLegPair::Write(NetPktGroup& group)
 // FUNCTION: SWBF2 0x005ed480
 void WalkerLegPair::Read(NetPktGroup& group)
 {
-    unsigned int value = 0;
+    unsigned int value;
     group.ReadBits(value, 1);
     mFootContact[0] = value != 0;
     group.ReadBits(value, 1);
@@ -474,7 +469,7 @@ void WalkerBlend::Skip(NetPktGroup& group)
 {
     float time;
     group.ReadFixed(time, 0.0f, 10.0f, 24);
-    unsigned int count = 0;
+    unsigned int count;
     group.ReadBits(count, 2);
     mCount = count;
     for (int i = 0; i < mCount; ++i)
@@ -488,7 +483,7 @@ void WalkerBlend::Read(NetPktGroup& group)
 {
     float time;
     group.ReadFixed(time, 0.0f, 10.0f, 24);
-    unsigned int count = 0;
+    unsigned int count;
     group.ReadBits(count, 2);
     mCount = count;
     for (int i = 0; i < mCount; ++i)
@@ -572,16 +567,15 @@ static void AddSendPilots(void (*send)(GameObject*, int), GameObject& owner, int
 // FUNCTION: SWBF2 0x005eb4e0
 void Asteroid::WriteObject(NetPktGroup& group, NetObjState*)
 {
-    WriteMatrix(group, static_cast<const CollisionObject*>(this)->GetMatrix());
+    WriteMatrix(group, GetMatrix());
 }
 
 // FUNCTION: SWBF2 0x005eb550
 void Asteroid::Move(const PblMatrix& matrix)
 {
-    static_cast<CollisionObject*>(this)->SetMatrix(matrix);
-    RedSceneObject* scene = this;
-    scene->Deactivate();
-    scene->Activate();
+    SetMatrix(matrix);
+    Deactivate();
+    Activate();
 }
 
 // FUNCTION: SWBF2 0x005eb500
@@ -590,7 +584,7 @@ void Asteroid::ReadObject(NetPktGroup& group, NetObjState*)
     PblMatrix matrix;
     ReadMatrix(group, matrix);
     Move(matrix);
-    const PblVector3& position = static_cast<const CollisionObject*>(this)->GetPosition();
+    const PblVector3& position = GetPosition();
     memcpy(&mLastPosition, &position, sizeof(position));
 }
 
@@ -684,7 +678,7 @@ void FlagItem::ReadCreate(NetPktGroup& group)
 // FUNCTION: SWBF2 0x005f0970
 void FlagItem::WriteObject(NetPktGroup& group, NetObjState*)
 {
-    WriteMatrix(group, static_cast<const CollisionObject*>(this)->GetMatrix());
+    WriteMatrix(group, GetMatrix());
     group.WriteBits(mStationary != 0, 1);
     if (!mStationary)
     {
@@ -749,7 +743,7 @@ void FlagItem::ReadObject(NetPktGroup& group, NetObjState*)
             }
             else
             {
-                static_cast<RedSceneObject*>(this)->Deactivate();
+                Deactivate();
             }
             if (collision->IsInCollisionList())
             {
@@ -773,7 +767,7 @@ void FlagItem::ReadObject(NetPktGroup& group, NetObjState*)
             }
             else
             {
-                static_cast<RedSceneObject*>(this)->Activate();
+                Activate();
             }
             if (m_pLight)
             {
@@ -1213,7 +1207,7 @@ void EntityWalker::ReadObject(NetPktGroup& group, NetObjState*)
     float health;
     group.ReadFixed(health, 0.0f, mMaxHealth, 11);
     SetCurHealth(health, true, 0);
-    unsigned int value = 0;
+    unsigned int value;
     group.ReadBits(value, 1);
     mIsAlive = value != 0;
     if (mMaxShield > 0.0f)
@@ -1359,7 +1353,7 @@ void EntityDroid::ReadObject(NetPktGroup& group, NetObjState*)
     memcpy(&mLastPosition, &position, sizeof(position));
     ReadVelocity(group, mVelocity, 5120.0f, -1);
     ReadAngle(group, mPitchValue);
-    unsigned int value = 0;
+    unsigned int value;
     group.ReadBits(value, 1);
     if (value && !IsThreadActive())
     {
@@ -1511,7 +1505,7 @@ void EntityHover::ReadObject(NetPktGroup& group, NetObjState*)
     Move(matrix);
     const PblVector3& position = GetPosition();
     memcpy(&mLastPosition, &position, sizeof(position));
-    unsigned int value = 0;
+    unsigned int value;
     group.ReadBits(value, 1);
     mBoost = value != 0;
     ReadVelocity(group, mVelocity, 5120.0f, -1);
@@ -1602,14 +1596,14 @@ void EntityDroid::ReadLateState(NetPktGroup& group)
     memcpy(&mLastPosition, &position, sizeof(position));
     ReadVelocity(group, mVelocity, 5120.0f, -1);
     ReadAngle(group, mPitchValue);
-    unsigned int active = 0;
+    unsigned int active;
     group.ReadBits(active, 1);
     ReadThrust(group, mControlMove);
     ReadThrust(group, mControlStrafe);
     ReadThrust(group, mControlTurn);
     ReadThrust(group, mControlPitch);
     ReadThrust(group, mTurnBuildup);
-    unsigned int aiming = 0;
+    unsigned int aiming;
     group.ReadBits(aiming, 1);
     mTargetInfo.mIsAiming = aiming != 0;
     unsigned int state = 0;
@@ -1730,7 +1724,7 @@ void EntityWalker::ReadLateState(NetPktGroup& group)
     group.ReadBits(*(unsigned int*)&mYawValue, 32);
     group.ReadBits(*(unsigned int*)&mLegAngle, 32);
     ReadThrust(group, mTurnBuildup);
-    unsigned int value = 0;
+    unsigned int value;
     group.ReadBits(value, 1);
     mTargetInfo.mIsAiming = value != 0;
     for (int i = 0; i < mNumTurrets; ++i)
@@ -1851,7 +1845,7 @@ void MountedTurret::Read(NetPktGroup& group)
     if (mPlayerId >= 0)
     {
         ReadThrust(group, mTurnBuildup);
-        unsigned int value = 0;
+        unsigned int value;
         group.ReadBits(value, 1);
         mTargetInfo.mIsAiming = value != 0;
         if (NetGame::IsFullState() || NetGame::GetJoystickIndex(mPlayerId) >= 0)
@@ -2033,14 +2027,14 @@ void MountedTurret::ReadLateState(NetPktGroup& group)
     turret.mAimMatrix = DirectionMatrix(direction, worldUp, worldPos);
 
     ReadThrust(group, turret.mTurnBuildup);
-    unsigned int aiming = 0;
+    unsigned int aiming;
     group.ReadBits(aiming, 1);
     turret.mTargetInfo.mIsAiming = aiming != 0;
     group.ReadFixed(turret.mTurnAdjusted, -1.0f, 2.0f, 16);
     group.ReadFixed(turret.mPitchAdjusted, -1.0f, 2.0f, 16);
     group.ReadFixed(turret.mTurnAuto, -1.0f, 1.0f, 16);
     group.ReadFixed(turret.mPitchAuto, -1.0f, 1.0f, 16);
-    unsigned int adjusted = 0;
+    unsigned int adjusted;
     group.ReadBits(adjusted, 1);
     turret.mUsingTurnAdjusted = adjusted != 0;
 }
@@ -2093,12 +2087,12 @@ void EntityHover::ReadLateState(NetPktGroup& group)
     if (mClass->mJumpForce > 0.0f)
     {
         group.ReadFixed(mJumpTimer, 0.0f, mClass->mJumpTimeMax, 11);
-        unsigned int jump = 0;
+        unsigned int jump;
         group.ReadBits(jump, 1);
         mJumpMode = jump != 0;
     }
     ReadThrust(group, mTurnBuildup);
-    unsigned int aiming = 0;
+    unsigned int aiming;
     group.ReadBits(aiming, 1);
     mTargetInfo.mIsAiming = aiming != 0;
     for (int i = 0; i < mNumTurrets; ++i)
@@ -2223,7 +2217,7 @@ void WriteVelocity(NetPktGroup& group, const PblVector3& value, float fMaxSpeed,
 // FUNCTION: SWBF2 0x005f5da0
 void ReadVelocity(NetPktGroup& group, PblVector3& value, float fMaxSpeed, int iBits)
 {
-    unsigned int present = 0;
+    unsigned int present;
     group.ReadBits(present, 1);
     if (!present)
     {
@@ -2271,14 +2265,14 @@ void WriteCharacter(NetPktGroup& group, const Character* pCharacter)
 // FUNCTION: SWBF2 0x005f5f90
 Character* ReadCharacter(NetPktGroup& group)
 {
-    unsigned int kind = 0;
+    unsigned int kind;
     group.ReadBits(kind, 2);
     if (!kind)
     {
         return 0;
     }
     const int bits = kind == 1 ? 4 : (kind == 2 ? 6 : 8);
-    unsigned int index = 0;
+    unsigned int index;
     group.ReadBits(index, bits);
     if (!Character::sCharacters || index >= (unsigned int)Character::sCharacterLimit)
     {
@@ -2309,7 +2303,7 @@ void PowerupItem::ReadObject(NetPktGroup& group, NetObjState*)
     pScene->Activate();
     ReadVelocity(group, mVelocity, 5120.0f, -1);
     group.ReadFixed(mLifeTimer, -1.0f, mClass->mLifeSpan, 8);
-    unsigned int stationary = 0;
+    unsigned int stationary;
     group.ReadBits(stationary, 1);
     mStationary = stationary != 0;
 }
@@ -2410,19 +2404,18 @@ GameObject* EntityTrap::AddToClient()
     {
         if (!NetGame::IsHost())
         {
-            Thread* pThread = this;
-            pThread->DeactivateThread();
+            DeactivateThread();
             Thread::EnterClient();
-            pThread->ActivateThread(0, PER_LOCAL_TURN);
+            ActivateThread(0, PER_LOCAL_TURN);
             Thread::LeaveClient();
         }
         return this;
     }
-    static_cast<RedSceneObject*>(this)->Deactivate();
+    Deactivate();
     TargetManager::RemoveTarget(this);
     NetGame::EnterClient();
     EntityDesc desc;
-    desc.mMatrix = static_cast<CollisionObject*>(this)->GetMatrix();
+    desc.mMatrix = GetMatrix();
     desc.mNameId = 0;
     desc.mPlayerId = -1;
     GameObject* pClient = (GameObject*)GetEntityClass()->Build(desc);
@@ -2530,7 +2523,7 @@ void EntityMine::ReadObject(NetPktGroup& group, NetObjState*)
     pScene->Activate();
     ReadVelocity(group, mVelocity, 5120.0f, -1);
     group.ReadFixed(mLifeTimer, -1.0f, mClass->mLifeSpan, 8);
-    unsigned int bit = 0;
+    unsigned int bit;
     group.ReadBits(bit, 1);
     mStationary = bit != 0;
     group.ReadBits(bit, 1);
@@ -3659,7 +3652,7 @@ void EntitySoldier::SkipReadObject(NetObjState*) {}
 // FUNCTION: SWBF2 0x005f28c0
 void GameObject::WriteLateState(NetPktGroup& group)
 {
-    WriteMatrix(group, static_cast<const CollisionObject*>(this)->GetMatrix());
+    WriteMatrix(group, GetMatrix());
 }
 
 // FUNCTION: SWBF2 0x005f28e0
@@ -3667,7 +3660,7 @@ void GameObject::ReadLateState(NetPktGroup& group)
 {
     PblMatrix matrix;
     ReadMatrix(group, matrix);
-    static_cast<CollisionObject*>(this)->SetMatrix(matrix);
+    SetMatrix(matrix);
 }
 
 // FUNCTION: SWBF2 0x005ea120
@@ -3901,7 +3894,7 @@ void EntityFlyer::ReadObject(NetPktGroup& group, NetObjState* pState)
     Move(matrix);
     const PblVector3& position = GetPosition();
     memcpy(&mLastPosition, &position, sizeof(position));
-    unsigned int value = 0;
+    unsigned int value;
     group.ReadBits(value, 3);
     mState = (State)value;
     group.ReadBits(value, 2);
@@ -4082,7 +4075,7 @@ void EntityFlyer::ReadLateState(NetPktGroup& group)
     Move(matrix);
     const PblVector3& position = GetPosition();
     memcpy(&mLastPosition, &position, sizeof(position));
-    unsigned int value = 0;
+    unsigned int value;
     group.ReadBits(value, 3);
     mState = (State)value;
     float health;
@@ -4163,7 +4156,7 @@ void EntityDroideka::ReadObject(NetPktGroup& group, NetObjState*)
     {
         ReadNetLOD(group);
     }
-    unsigned int value = 0;
+    unsigned int value;
     group.ReadBits(value, 1);
     if (!value)
     {
@@ -4370,7 +4363,7 @@ void EntityDroideka::ReadObject(NetPktGroup& group, NetObjState*)
 // FUNCTION: SWBF2 0x005f47c0
 void EntityDroideka::WriteLateState(NetPktGroup& group)
 {
-    const PblMatrix& matrix = static_cast<CollisionObject*>(this)->GetMatrix();
+    const PblMatrix& matrix = GetMatrix();
     group.WriteBits(mCtrl != 0, 1);
     WriteMatrix(group, matrix);
     WriteVelocity(group, mVelocity, 5120.0f, -1);
@@ -4439,7 +4432,7 @@ void EntityDroideka::WriteLateState(NetPktGroup& group)
 // FUNCTION: SWBF2 0x005f4ba0
 void EntityDroideka::ReadLateState(NetPktGroup& group)
 {
-    unsigned int value = 0;
+    unsigned int value;
     group.ReadBits(value, 1);
     PblMatrix matrix;
     ReadMatrix(group, matrix);
@@ -4601,7 +4594,7 @@ void EntityDroideka::WriteObject(NetPktGroup& group, NetObjState*)
     {
         ++gDebugCount;
     }
-    const PblMatrix& matrix = static_cast<CollisionObject*>(this)->GetMatrix();
+    const PblMatrix& matrix = GetMatrix();
     if (!NetGame::IsFullState())
     {
         SetNetLOD(ComputeNetLOD((int)&matrix.m[3][0], mPlayerId));
@@ -4720,7 +4713,7 @@ void EntityDroideka::WriteObject(NetPktGroup& group, NetObjState*)
 void EntitySoldier::WriteObject(NetPktGroup& group, NetObjState*)
 {
     const int clientId = NetGame::GetCurDst();
-    const PblMatrix& matrix = static_cast<CollisionObject*>(this)->GetMatrix();
+    const PblMatrix& matrix = GetMatrix();
     if (!NetGame::IsFullState())
     {
         const PblVector3& position = matrix.GetTranslation();
@@ -4938,7 +4931,7 @@ void EntitySoldier::WriteObject(NetPktGroup& group, NetObjState*)
 // FUNCTION: SWBF2 0x005f2910
 void EntitySoldier::WriteLateState(NetPktGroup& group)
 {
-    const PblMatrix& matrix = static_cast<CollisionObject*>(this)->GetMatrix();
+    const PblMatrix& matrix = GetMatrix();
     const bool bHasController = mCtrl != 0;
     group.WriteBits(bHasController, 1);
     const bool bActive = static_cast<Controllable*>(this)->IsThreadActive();
@@ -5048,7 +5041,7 @@ void EntitySoldier::ReadObject(NetPktGroup& group, NetObjState*)
     {
         ReadNetLOD(group);
     }
-    unsigned int value = 0;
+    unsigned int value;
     group.ReadBits(value, 1);
     const bool bHasController = value != 0;
     group.ReadBits(value, 1);
@@ -5122,7 +5115,7 @@ void EntitySoldier::ReadObject(NetPktGroup& group, NetObjState*)
     {
         mAnimationHash = 0x144ebf32;
     }
-    unsigned int grounded = 0;
+    unsigned int grounded;
     group.ReadBits(grounded, 1);
     group.ReadBits(value, 1);
     const bool bFallTimer = value != 0;
@@ -5508,7 +5501,7 @@ void EntitySoldier::ReadObject(NetPktGroup& group, NetObjState*)
 // FUNCTION: SWBF2 0x005f2ec0
 void EntitySoldier::ReadLateState(NetPktGroup& group)
 {
-    unsigned int value = 0;
+    unsigned int value;
     group.ReadBits(value, 1);
     const bool bHasController = value != 0;
     group.ReadBits(value, 1);
@@ -5552,7 +5545,7 @@ void EntitySoldier::ReadLateState(NetPktGroup& group)
     }
     group.ReadBits(value, 4);
     mState = (SoldierState::SoldierState)value;
-    unsigned int grounded = 0;
+    unsigned int grounded;
     group.ReadBits(grounded, 1);
     group.ReadBits(value, 1);
     const bool bFallTimer = value != 0;
@@ -5703,7 +5696,7 @@ void CommandBuildingAnimatedArmed::ReadObject(NetPktGroup& group, NetObjState* s
 // FUNCTION: SWBF2 0x005f27e0
 void EntityBuildingArmedDynamic::WriteObject(NetPktGroup& group, NetObjState* state)
 {
-    WriteMatrix(group, static_cast<const CollisionObject*>(this)->GetMatrix());
+    WriteMatrix(group, GetMatrix());
     EntityBuildingArmed::WriteObject(group, state);
 }
 
@@ -5712,10 +5705,9 @@ void EntityBuildingArmedDynamic::ReadObject(NetPktGroup& group, NetObjState* sta
 {
     PblMatrix matrix;
     ReadMatrix(group, matrix);
-    static_cast<CollisionObject*>(this)->SetMatrix(matrix);
-    RedSceneObject* scene = this;
-    scene->Deactivate();
-    scene->Activate();
+    SetMatrix(matrix);
+    Deactivate();
+    Activate();
     EntityBuildingArmed::ReadObject(group, state);
 }
 
@@ -5726,19 +5718,18 @@ GameObject* PowerupStation::AddToClient()
     {
         if (!NetGame::IsHost())
         {
-            Thread* thread = this;
-            thread->DeactivateThread();
+            DeactivateThread();
             Thread::EnterClient();
-            thread->ActivateThread(0, PER_LOCAL_TURN);
+            ActivateThread(0, PER_LOCAL_TURN);
             Thread::LeaveClient();
         }
         return this;
     }
-    static_cast<RedSceneObject*>(this)->Deactivate();
+    Deactivate();
     TargetManager::RemoveTarget(this);
     NetGame::EnterClient();
     EntityDesc desc;
-    desc.mMatrix = static_cast<const CollisionObject*>(this)->GetMatrix();
+    desc.mMatrix = GetMatrix();
     desc.mNameId = 0;
     desc.mPlayerId = -1;
     EntityGeometry* client = (EntityGeometry*)GetEntityClass()->Build(desc);
@@ -5757,11 +5748,11 @@ GameObject* EntityBuildingAnimatedArmed::AddToClient()
     {
         return this;
     }
-    static_cast<RedSceneObject*>(this)->Deactivate();
+    Deactivate();
     TargetManager::RemoveTarget(this);
     NetGame::EnterClient();
     EntityDesc desc;
-    desc.mMatrix = static_cast<const CollisionObject*>(this)->GetMatrix();
+    desc.mMatrix = GetMatrix();
     desc.mNameId = 0;
     desc.mPlayerId = -1;
     EntityGeometry* client = (EntityGeometry*)GetEntityClass()->Build(desc);
@@ -5909,10 +5900,10 @@ GameObject* EntityBuilding::AddToClient()
         }
         return this;
     }
-    static_cast<RedSceneObject*>(this)->Deactivate();
+    Deactivate();
     TargetManager::RemoveTarget(this);
     NetGame::EnterClient();
-    static_cast<RedSceneObject*>(this)->Activate();
+    Activate();
     TargetManager::AddTarget(this, false);
     AddNetCollision(static_cast<CollisionObject*>(this));
     BuildEffects();
@@ -5974,11 +5965,11 @@ GameObject* CommandBuilding::AddToClient()
         }
         return this;
     }
-    static_cast<RedSceneObject*>(this)->Deactivate();
+    Deactivate();
     TargetManager::RemoveTarget(this);
     NetGame::EnterClient();
     EntityDesc desc;
-    desc.mMatrix = static_cast<const CollisionObject*>(this)->GetMatrix();
+    desc.mMatrix = GetMatrix();
     desc.mNameId = 0;
     desc.mPlayerId = -1;
     CommandPost::ForceIndex(mPost->mPostIndex);
@@ -6000,11 +5991,11 @@ GameObject* CommandWalker::AddToClient()
     {
         return this;
     }
-    static_cast<RedSceneObject*>(this)->Deactivate();
+    Deactivate();
     TargetManager::RemoveTarget(this);
     NetGame::EnterClient();
     EntityDesc desc;
-    desc.mMatrix = static_cast<const CollisionObject*>(this)->GetMatrix();
+    desc.mMatrix = GetMatrix();
     desc.mNameId = mId;
     desc.mPlayerId = static_cast<const Controllable*>(this)->mPlayerId;
     CommandWalker* client = (CommandWalker*)GetEntityClass()->Build(desc);
@@ -6024,11 +6015,11 @@ GameObject* CommandHover::AddToClient()
     {
         return this;
     }
-    static_cast<RedSceneObject*>(this)->Deactivate();
+    Deactivate();
     TargetManager::RemoveTarget(this);
     NetGame::EnterClient();
     EntityDesc desc;
-    desc.mMatrix = static_cast<const CollisionObject*>(this)->GetMatrix();
+    desc.mMatrix = GetMatrix();
     desc.mNameId = mId;
     desc.mPlayerId = static_cast<const Controllable*>(this)->mPlayerId;
     CommandHover* client = (CommandHover*)GetEntityClass()->Build(desc);
@@ -6048,11 +6039,11 @@ GameObject* CommandBuildingArmed::AddToClient()
     {
         return this;
     }
-    static_cast<RedSceneObject*>(this)->Deactivate();
+    Deactivate();
     TargetManager::RemoveTarget(this);
     NetGame::EnterClient();
     EntityDesc desc;
-    desc.mMatrix = static_cast<const CollisionObject*>(this)->GetMatrix();
+    desc.mMatrix = GetMatrix();
     desc.mNameId = mId;
     desc.mPlayerId = -1;
     CommandBuildingArmed* client = (CommandBuildingArmed*)GetEntityClass()->Build(desc);
@@ -6073,11 +6064,11 @@ GameObject* CommandBuildingAnimatedArmed::AddToClient()
     {
         return this;
     }
-    static_cast<RedSceneObject*>(this)->Deactivate();
+    Deactivate();
     TargetManager::RemoveTarget(this);
     NetGame::EnterClient();
     EntityDesc desc;
-    desc.mMatrix = static_cast<const CollisionObject*>(this)->GetMatrix();
+    desc.mMatrix = GetMatrix();
     desc.mNameId = mId;
     desc.mPlayerId = -1;
     CommandBuildingAnimatedArmed* client = (CommandBuildingAnimatedArmed*)GetEntityClass()->Build(desc);

@@ -448,7 +448,7 @@ public:
     unsigned int flag;
     unsigned __int64 mask;
     int code;
-    unsigned short msg[64];
+    unsigned short msg[128];
     PblList<NG_ChatMsg>::Node mNode;
 };
  

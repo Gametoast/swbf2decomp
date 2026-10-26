@@ -37,6 +37,13 @@ struct CompressedPosXY
 {
     short x;
     short y;
+    static void SetBoundingBox(const PblBox& box)
+    {
+        s_vMin = box.GetMin();
+        s_vScale = (box.GetMax() - box.GetMin()) / 65535.0f;
+        s_vScaleInv = PblVector3(1.0f / s_vScale.x, 1.0f / s_vScale.y, 1.0f / s_vScale.z);
+    }
+
     static PblVector3 s_vMin;
     static PblVector3 s_vScale;
     static PblVector3 s_vScaleInv;
@@ -134,29 +141,9 @@ template void LensFlare::EmitRing<FlareCompressedVertex>(FlareCompressedVertex*&
                         float, float, float, const RedColor&, const RedColor&,
                         const RedColor&, int, float, float);
 
-static void CompressedPos_SetBoundingBox(const PblBox& box)
-{
-    PblVector3 vMin = { box._vMin.x, box._vMin.y, box._vMin.z };
-    PblVector3 vExtent = { box._vMax.x - box._vMin.x, box._vMax.y - box._vMin.y,
-                                box._vMax.z - box._vMin.z };
-    CompressedPos::s_vMin = vMin;
-    CompressedPos::s_vScale = vExtent * (1.0f / 65535.0f);
-    CompressedPos::s_vScaleInv.x = 1.0f / CompressedPos::s_vScale.x;
-    CompressedPos::s_vScaleInv.y = 1.0f / CompressedPos::s_vScale.y;
-    CompressedPos::s_vScaleInv.z = 1.0f / CompressedPos::s_vScale.z;
-}
 
-static void CompressedPosXY_SetBoundingBox(const PblBox& box)
-{
-    PblVector3 vMin = { box._vMin.x, box._vMin.y, box._vMin.z };
-    PblVector3 vExtent = { box._vMax.x - box._vMin.x, box._vMax.y - box._vMin.y,
-                                box._vMax.z - box._vMin.z };
-    CompressedPosXY::s_vMin = vMin;
-    CompressedPosXY::s_vScale = vExtent * (1.0f / 65535.0f);
-    CompressedPosXY::s_vScaleInv.x = 1.0f / CompressedPosXY::s_vScale.x;
-    CompressedPosXY::s_vScaleInv.y = 1.0f / CompressedPosXY::s_vScale.y;
-    CompressedPosXY::s_vScaleInv.z = 1.0f / CompressedPosXY::s_vScale.z;
-}
+
+
 
 static short CompressedPos_Encode(float f, float fMin, float fScaleInv)
 {
@@ -218,7 +205,7 @@ void LensFlareEffect::PlatformInit()
         s_samplePoints = pcRedPrimitive::Create(D3DPT_POINTLIST, 0x1002, 8, 256, 0, true);
         const PblBox box(0.0f, 0.0f, 0.0f, 17.0f, 17.0f, 0.0f);
         s_samplePoints->m_bbox = box;
-        CompressedPos_SetBoundingBox(box);
+        CompressedPos::SetBoundingBox(box);
         short* v = (short*)s_samplePoints->BeginVertexData();
         if (!v)
         {
@@ -548,8 +535,8 @@ void LensFlareEffect::LensFlareList::Render<FlareVertex, 642>() const
         pcRedVertexBuffer* pFillBuffer = pcRedVertexBuffer::Create(96, sizeof(FlareVertex), false, true);
         pcRedVertexBuffer* pClearBuffer = pcRedVertexBuffer::Create(96, 4 * sizeof(float), false, true);
 
-        CompressedPos_SetBoundingBox(s_boundingBox);
-        CompressedPosXY_SetBoundingBox(PblBox(0.0f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f));
+        CompressedPos::SetBoundingBox(s_boundingBox);
+        CompressedPosXY::SetBoundingBox(PblBox(0.0f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f));
 
         unsigned int uiFlareStart;
         unsigned int uiFillStart;
@@ -785,8 +772,8 @@ void LensFlareEffect::LensFlareList::Render<FlareCompressedVertex, 37506>() cons
         pcRedVertexBuffer* pFillBuffer = pcRedVertexBuffer::Create(96, sizeof(FlareCompressedVertex), false, true);
         pcRedVertexBuffer* pClearBuffer = pcRedVertexBuffer::Create(96, 4 * sizeof(float), false, true);
 
-        CompressedPos_SetBoundingBox(s_boundingBox);
-        CompressedPosXY_SetBoundingBox(PblBox(0.0f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f));
+        CompressedPos::SetBoundingBox(s_boundingBox);
+        CompressedPosXY::SetBoundingBox(PblBox(0.0f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f));
 
         unsigned int uiFlareStart;
         unsigned int uiFillStart;

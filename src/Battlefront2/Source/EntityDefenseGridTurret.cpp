@@ -77,7 +77,7 @@ bool EntityDefenseGridTurret::Update(float fDeltaTime)
         if (mMatrix.m[3][1] < -500.0f)
         {
             Kill();
-            static_cast<RedSceneObject*>(this)->Deactivate();
+            Deactivate();
         }
     }
     return true;

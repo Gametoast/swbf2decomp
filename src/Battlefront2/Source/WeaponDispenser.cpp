@@ -558,9 +558,7 @@ Entity* WeaponDispenser::Fire()
                 static_cast<EntitySoldier*>(mOwner->GetGameObject())->mClass->mSkeletonRootScale;
             if (fScale != 1.0f)
             {
-                vPos.x *= fScale;
-                vPos.y *= fScale;
-                vPos.z *= fScale;
+                vPos *= fScale;
             }
         }
         PblVector3 vWorld;

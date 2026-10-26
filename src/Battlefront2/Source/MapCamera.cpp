@@ -115,11 +115,11 @@ void MapCamera::Update(float fDeltaTime)
     switch (mZoomLevel)
     {
     case ZOOM_OUT:
-        D3DXVec3Normalize((D3DXVECTOR3*)&mZoomNewDir, (const D3DXVECTOR3*)&sOffset[ZOOM_OUT]);
+        mZoomNewDir = Normalize(sOffset[ZOOM_OUT]);
         mZoomNewPos = sOffset[mZoomLevel];
         break;
     case ZOOM_NORMAL:
-        D3DXVec3Normalize((D3DXVECTOR3*)&mZoomNewDir, (const D3DXVECTOR3*)&sOffset[ZOOM_NORMAL]);
+        mZoomNewDir = Normalize(sOffset[ZOOM_NORMAL]);
         mZoomNewPos = PblVector3(mMoveCurPos.x + sOffset[mZoomLevel].x,
                                  mMoveCurPos.y + sOffset[mZoomLevel].y,
                                  mMoveCurPos.z + sOffset[mZoomLevel].z);

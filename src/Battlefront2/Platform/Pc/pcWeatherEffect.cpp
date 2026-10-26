@@ -89,17 +89,7 @@ struct UntexturedVertex
     };
 };
 
-void CompressedPos_SetBoundingBox(const PblBox& box)
-{
-    PblVector3 vMin = { box._vMin.x, box._vMin.y, box._vMin.z };
-    PblVector3 vExtent = { box._vMax.x - box._vMin.x, box._vMax.y - box._vMin.y,
-                                box._vMax.z - box._vMin.z };
-    CompressedPos::s_vMin = vMin;
-    CompressedPos::s_vScale = vExtent * (1.0f / 65535.0f);
-    CompressedPos::s_vScaleInv.x = 1.0f / CompressedPos::s_vScale.x;
-    CompressedPos::s_vScaleInv.y = 1.0f / CompressedPos::s_vScale.y;
-    CompressedPos::s_vScaleInv.z = 1.0f / CompressedPos::s_vScale.z;
-}
+
 }
 
 // FUNCTION: SWBF2 0x00433ef0
@@ -229,7 +219,7 @@ void FogCloudEffect::Render(int value)
     if (RedRenderer::pcGetGeometryMode())
     {
         pVertexBuffer = pcRedVertexBuffer::Create(usNumVertices, sizeof(TexturedVertex::VertexC), false, true);
-        CompressedPos_SetBoundingBox(bbox);
+        CompressedPos::SetBoundingBox(bbox);
     }
     else
     {
@@ -461,7 +451,7 @@ void PrecipitationEffect::Render(int value)
         {
             pPrimitive = pcRedPrimitive::Create(D3DPT_LINELIST, 0x1082, sizeof(UntexturedVertex::VertexC),
                                                 usNumVertices, 0, false);
-            CompressedPos_SetBoundingBox(box);
+            CompressedPos::SetBoundingBox(box);
         }
         else
         {

@@ -554,9 +554,7 @@ float CollisionManager::RayHit(const PblVector3& vStart, const PblVector3& vEnd,
         if (fLength != 0.0f)
         {
             float fInvLength = 1.0f / fLength;
-            vDir.x *= fInvLength;
-            vDir.y *= fInvLength;
-            vDir.z *= fInvLength;
+            vDir *= fInvLength;
             return RayHit(vStart, vDir, fLength, pHitObject, pNormal, pIgnore, iIgnoreCount, iFilter, bOrdnance);
         }
     }
@@ -595,9 +593,7 @@ bool CollisionManager::RayTest(const PblVector3& vStart, const PblVector3& vEnd,
     }
 
     float fInvLength = 1.0f / fLength;
-    vDir.x *= fInvLength;
-    vDir.y *= fInvLength;
-    vDir.z *= fInvLength;
+    vDir *= fInvLength;
     return sInstance->I_RayTest(vStart, vDir, fLength, pIgnore, iIgnoreCount,
                                 iFilter ? iFilter : kDefaultRayFilter);
 }

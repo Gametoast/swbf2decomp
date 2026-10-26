@@ -18,13 +18,9 @@ struct CompressedPos
     // FUNCTION: SWBF2 0x0040cbe0
     static void SetBoundingBox(const PblBox& box)
     {
-        s_vMin = box._vMin;
-        s_vScale.x = (box._vMax.x - box._vMin.x) * (1.0f / 65535.0f);
-        s_vScale.y = (box._vMax.y - box._vMin.y) * (1.0f / 65535.0f);
-        s_vScale.z = (box._vMax.z - box._vMin.z) * (1.0f / 65535.0f);
-        s_vScaleInv.x = 1.0f / s_vScale.x;
-        s_vScaleInv.y = 1.0f / s_vScale.y;
-        s_vScaleInv.z = 1.0f / s_vScale.z;
+        s_vMin = box.GetMin();
+        s_vScale = (box.GetMax() - box.GetMin()) / 65535.0f;
+        s_vScaleInv = PblVector3(1.0f / s_vScale.x, 1.0f / s_vScale.y, 1.0f / s_vScale.z);
     }
 
     // FUNCTION: SWBF2 0x0040cc80

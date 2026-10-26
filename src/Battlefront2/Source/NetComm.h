@@ -2,6 +2,7 @@
 #include <stddef.h>
 
 #include "NetPacket.h"
+#include "pcNetSocket.h"
 
 enum PipeType
 {
@@ -24,7 +25,7 @@ struct NetDest
     bool connected;
     NetPktGroup outQueue;
 
-    char mAddressStorage[0x18];
+    NetSocketPeerRecord mAddress;
     NetArch arch;
     float lastRecv;
     PipeType pipe;

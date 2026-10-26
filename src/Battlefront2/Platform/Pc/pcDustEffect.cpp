@@ -12,17 +12,7 @@
 // sBox
 static PblBox sBox(-400.0f, -400.0f, -400.0f, 400.0f, 400.0f, 400.0f);
 
-static void CompressedPosXY_SetBoundingBox(const PblBox& box)
-{
-    PblVector3 vMin = { box._vMin.x, box._vMin.y, box._vMin.z };
-    PblVector3 vExtent = { box._vMax.x - box._vMin.x, box._vMax.y - box._vMin.y,
-                                box._vMax.z - box._vMin.z };
-    CompressedPos::s_vMin = vMin;
-    CompressedPos::s_vScale = vExtent * (1.0f / 65535.0f);
-    CompressedPos::s_vScaleInv.x = 1.0f / CompressedPos::s_vScale.x;
-    CompressedPos::s_vScaleInv.y = 1.0f / CompressedPos::s_vScale.y;
-    CompressedPos::s_vScaleInv.z = 1.0f / CompressedPos::s_vScale.z;
-}
+
 
 static void CompressedPos_Set(short* p, float x, float y, float z)
 {
@@ -137,7 +127,7 @@ void DustEffectRenderData::Begin() const
     {
         m_pPrimitive = pcRedPrimitive::Create(D3DPT_TRIANGLELIST, 0x9282, 16,
                                               uiNumParticles * 4, uiNumParticles * 6, false);
-        CompressedPosXY_SetBoundingBox(sBox);
+        CompressedPos::SetBoundingBox(sBox);
     }
     else
     {

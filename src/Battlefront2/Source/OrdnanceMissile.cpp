@@ -185,9 +185,7 @@ bool OrdnanceMissile::Update(float fDeltaTime)
         {
             const float fLength = (float)sqrt((double)fLengthSq);
             const float fInv = 1.0f / fLength;
-            vAxis.x *= fInv;
-            vAxis.y *= fInv;
-            vAxis.z *= fInv;
+            vAxis *= fInv;
             const float fMaxTurn = fTurnRate * fDeltaTime;
             D3DXMATRIX mRotation;
             D3DXMatrixRotationAxis(&mRotation, (const D3DXVECTOR3*)&vAxis,
@@ -212,9 +210,7 @@ bool OrdnanceMissile::Update(float fDeltaTime)
         {
             const float fLength = (float)sqrt((double)fLengthSq);
             const float fInv = 1.0f / fLength;
-            vAxis.x *= fInv;
-            vAxis.y *= fInv;
-            vAxis.z *= fInv;
+            vAxis *= fInv;
             D3DXMATRIX mRotation;
             D3DXMatrixRotationAxis(&mRotation, (const D3DXVECTOR3*)&vAxis, fWaverTurn * fDeltaTime * fLength);
             PblVector3 vDir;

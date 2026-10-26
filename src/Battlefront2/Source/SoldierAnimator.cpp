@@ -742,9 +742,7 @@ void SoldierAnimator::SetWeaponComboState(int eState, bool bRestart, unsigned ch
 // FUNCTION: SWBF2 0x0063fa70
 void SoldierAnimator::SetAimDirection(const PblVector3& aimDir)
 {
-    PblVector3 vDir;
-    D3DXVec3Normalize(reinterpret_cast<D3DXVECTOR3*>(&vDir), reinterpret_cast<const D3DXVECTOR3*>(&aimDir));
-    mAimDir = vDir;
+    mAimDir = Normalize(aimDir);
 }
 
 // FUNCTION: SWBF2 0x0063faa0

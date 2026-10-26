@@ -134,9 +134,7 @@ void DropShadowRenderable::AddShadow(unsigned int uiTexture, const PblVector3& v
 
     float fLength = sqrt(fLengthSq);
     float fInvLength = 1.0f / fLength;
-    vAlong.x *= fInvLength;
-    vAlong.y *= fInvLength;
-    vAlong.z *= fInvLength;
+    vAlong *= fInvLength;
 
     float fScale = 2.0f;
     if (!(fLength > -fDot * 2.0f))

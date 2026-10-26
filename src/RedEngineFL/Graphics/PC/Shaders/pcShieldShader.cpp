@@ -255,9 +255,7 @@ void pcShieldShader::Begin_Prog1(unsigned int, unsigned int) const
         else
         {
             const float fInvLen = 1.0f / sqrtf(fLenSq);
-            s_vLightX.x *= fInvLen;
-            s_vLightX.y *= fInvLen;
-            s_vLightX.z *= fInvLen;
+            s_vLightX *= fInvLen;
         }
 
         s_vLightY = PblVector3(s_vLightDir.y * s_vLightX.z - s_vLightDir.z * s_vLightX.y,

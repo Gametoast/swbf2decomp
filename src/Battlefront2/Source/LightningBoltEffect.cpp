@@ -427,9 +427,7 @@ void LightningBoltEffectObject::Render(const PblVector3& vStart, const PblVector
     }
 
     float fInvLength = 1.0f / fLength;
-    vDir.x *= fInvLength;
-    vDir.y *= fInvLength;
-    vDir.z *= fInvLength;
+    vDir *= fInvLength;
 
     int iSegments = (int)(fLength / fBreakDistance);
     if (iSegments < 3)

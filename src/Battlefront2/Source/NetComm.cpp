@@ -69,12 +69,26 @@ NetPktGroup inPktGroups[64];
 // GLOBAL: SWBF2 0x01ecb9a0
 NetPktGroup inQueue;
 
+#pragma pack(push, 4)
+struct JoinSlot
+{
+    float reqTime;
+    NetSocketPeerRecord addr;
+};
+#pragma pack(pop)
+
+static_assert(sizeof(JoinSlot) == 28, "JoinSlot size");
+static_assert(__alignof(JoinSlot) == 4, "JoinSlot alignment");
+static_assert(offsetof(JoinSlot, reqTime) == 0, "JoinSlot request time offset");
+static_assert(offsetof(JoinSlot, addr) == 4, "JoinSlot address offset");
+
 // SYNTHETIC: SWBF2 0x00404430
 // `dynamic initializer for 'joinSlots''
 
 // GLOBAL: SWBF2 0x01ecb9c0
 // joinSlots
-int joinSlots[0x1C0];
+static JoinSlot joinSlots[64];
+static_assert(sizeof(joinSlots) == 1792, "joinSlots array size");
 
 // GLOBAL: SWBF2 0x01fa3d48
 unsigned __int64 lastTicks;
@@ -428,7 +442,7 @@ unsigned __int64* __fastcall NetCommP::GetAddr(int iDest)
         return (unsigned __int64*)&inQueue.lastPkt;
     }
 
-    return (unsigned __int64*)&joinSlots[(iDest - 69) * 7 + 1];
+    return &joinSlots[iDest - 69].addr.mGalaxyId.value;
 }
 
 // FUNCTION: SWBF2 0x005b35a0
@@ -460,7 +474,7 @@ unsigned __int64* __fastcall CopyEnteredLobbyId(unsigned __int64* pID)
 unsigned short __cdecl NetSocket::SetAddr(void* pDest, unsigned int uIP, unsigned short uPort)
 {
     NetSocketPeerRecord* pPeer = (NetSocketPeerRecord*)pDest;
-    sockaddr_in* pAddr = (sockaddr_in*)pPeer->mSocketAddress;
+    sockaddr_in* pAddr = &pPeer->mSocketAddress;
     pAddr->sin_family = AF_INET;
     pAddr->sin_addr.s_addr = uIP;
     pAddr->sin_port = htons(uPort);
@@ -493,7 +507,7 @@ void* GetGalaxyNetworkingForNetComm()
 int NetComm::GetPing(int iDest)
 {
     NetDest& dest = netDests[iDest];
-    const unsigned __int64 peer = *(unsigned __int64*)dest.mAddressStorage;
+    const unsigned __int64 peer = dest.mAddress.mGalaxyId.ToUint64();
     if (!peer)
     {
         return dest.ping;
@@ -613,7 +627,7 @@ void NetComm::Disconnect(int iDest)
     dest.downBandwidth = 0x10000;
     dest.pipe = PIPE_INTERNET;
     dest.nextGroupNum = 0;
-    unsigned __int64* pPeer = (unsigned __int64*)dest.mAddressStorage;
+    unsigned __int64* pPeer = &dest.mAddress.mGalaxyId.value;
     if (iDest == 64 && *pPeer)
     {
         void* pInterface = GetGalaxyMatchmakingForNetComm();
@@ -1189,7 +1203,7 @@ char netGameName[64] = "SWBF2";
 void __fastcall NetCommP::Connect(int iDest, const void* pAddress)
 {
     NetDest& dest = netDests[iDest];
-    memcpy(dest.mAddressStorage, pAddress, sizeof(dest.mAddressStorage));
+    dest.mAddress = *static_cast<const NetSocketPeerRecord*>(pAddress);
     dest.connected = true;
     dest.lastRecv = NetComm::GetTime();
 }
@@ -1200,35 +1214,19 @@ int __fastcall NetCommP::FindJoinSource(const int* pAddress)
     const float fNow = NetComm::GetTime();
     for (int i = 0; i < 64; ++i)
     {
-        int* pEntry = joinSlots + i * 7;
-        bool bSame;
-        if (isLAN)
+        if (IsSame(pAddress, &joinSlots[i].addr))
         {
-            int ip1, port1, ip2, port2;
-            NetSocket::GetAddr(pAddress, ip1, port1);
-            NetSocket::GetAddr(pEntry + 1, ip2, port2);
-            bSame = ip1 == ip2 && port1 == port2;
-        }
-        else
-        {
-            bSame = pAddress[0] == pEntry[1] && pAddress[1] == pEntry[2];
-        }
-        if (bSame)
-        {
-            *(float*)pEntry = fNow;
+            joinSlots[i].reqTime = fNow;
             return i + 69;
         }
     }
     for (int i = 0; i < 64; ++i)
     {
-        int* pEntry = joinSlots + i * 7;
-        const float fLast = *(float*)pEntry;
+        const float fLast = joinSlots[i].reqTime;
         if (fNow - fLast > 1.0f || fLast == 0.0f)
         {
-            pEntry[1] = pAddress[0];
-            pEntry[2] = pAddress[1];
-            memcpy(pEntry + 3, pAddress + 2, 16);
-            *(float*)pEntry = fNow;
+            joinSlots[i].addr = *reinterpret_cast<const NetSocketPeerRecord*>(pAddress);
+            joinSlots[i].reqTime = fNow;
             return i + 69;
         }
     }

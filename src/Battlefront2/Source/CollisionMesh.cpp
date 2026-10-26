@@ -406,13 +406,6 @@ float CollisionMesh::RayHit(const PblVector3& vStart, const PblVector3& vDir, fl
     return fT / fLength;
 }
 
-// FUNCTION: SWBF2 0x00417260
-const PblVector3 __cdecl Normalize(const PblVector3& rv)
-{
-    PblVector3 vResult;
-    D3DXVec3Normalize(reinterpret_cast<D3DXVECTOR3*>(&vResult), reinterpret_cast<const D3DXVECTOR3*>(&rv));
-    return vResult;
-}
 
 // FUNCTION: SWBF2 0x00461b70
 bool CollisionMesh::RayTest(const PblVector3& vStart, const PblVector3& vDir, float fLength) const

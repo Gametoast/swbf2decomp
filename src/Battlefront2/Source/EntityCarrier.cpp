@@ -589,7 +589,7 @@ void EntityFlyer::SetupCameraTrackMatrix(PblMatrix& rMatrix, float fDeltaTime)
             }
         }
         PblVector3 vCamera = rMatrix.GetTranslation();
-        const PblMatrix& mBody = static_cast<CollisionObject*>(this)->GetMatrix();
+        const PblMatrix& mBody = GetMatrix();
         PblVector3 vBack(-mBody.m[2][0], -mBody.m[2][1], -mBody.m[2][2]);
         const PblVector3& vCenter = GetCollisionCenter();
         PblVector3 vOffset(vCamera.x - vCenter.x, vCamera.y - vCenter.y, vCamera.z - vCenter.z);
@@ -597,7 +597,7 @@ void EntityFlyer::SetupCameraTrackMatrix(PblMatrix& rMatrix, float fDeltaTime)
                 mClass->mGuidedMissileDeathCamMinDistance < 0.0f)
         {
             float fPullback = mClass->mGuidedMissileDeathCamPullbackSpeed * fDeltaTime;
-            const PblMatrix& mNow = static_cast<CollisionObject*>(this)->GetMatrix();
+            const PblMatrix& mNow = GetMatrix();
             PblVector3 vDir(-mNow.m[2][0], -mNow.m[2][1], -mNow.m[2][2]);
             const GameObject* pIgnore = GetGameObject();
             CollisionObject* pHit;

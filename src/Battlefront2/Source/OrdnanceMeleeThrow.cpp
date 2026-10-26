@@ -343,9 +343,7 @@ OrdnanceMeleeThrow::OrdnanceMeleeThrow(OrdnanceMeleeThrowClass* pClass, const Or
                     fLength2 = vFront.x * vFront.x + vFront.y * vFront.y + vFront.z * vFront.z;
                 }
                 const float fInv = 1.0f / (float)sqrt((double)fLength2);
-                vFront.x *= fInv;
-                vFront.y *= fInv;
-                vFront.z *= fInv;
+                vFront *= fInv;
                 matrix.m[0][0] = vDir.y * vFront.z - vDir.z * vFront.y;
                 matrix.m[0][1] = vDir.z * vFront.x - vDir.x * vFront.z;
                 matrix.m[0][2] = vDir.x * vFront.y - vDir.y * vFront.x;

@@ -1290,9 +1290,7 @@ void EntityGeometry::CreateChunkCluster(float fScale)
             pDesc->mVelocity.y += vDir.y * fSpeed;
             pDesc->mVelocity.z += vDir.z * fSpeed;
         }
-        pDesc->mVelocity.x *= fScale;
-        pDesc->mVelocity.y *= fScale;
-        pDesc->mVelocity.z *= fScale;
+        pDesc->mVelocity *= fScale;
 
         ChunkDescriptor kChunk(*pDesc);
         pCluster->AddChunk(kChunk);

@@ -442,9 +442,7 @@ bool WeaponGrenade::Fire()
             float fScale = static_cast<EntitySoldier*>(mOwner->GetGameObject())->mClass->mSkeletonRootScale;
             if (fScale != 1.0f)
             {
-                vOffset.x *= fScale;
-                vOffset.y *= fScale;
-                vOffset.z *= fScale;
+                vOffset *= fScale;
             }
         }
         PblVector3 vPos;

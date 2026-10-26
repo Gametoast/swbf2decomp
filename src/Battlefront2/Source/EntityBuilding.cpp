@@ -479,7 +479,7 @@ const PblMatrix* EntityBuilding::GetRenderMatrix() const
 // FUNCTION: SWBF2 0x00475eb0
 const RedPose* EntityBuilding::GetRenderPose() const
 {
-    return static_cast<const CollisionObject*>(this)->GetPose();
+    return GetPose();
 }
 
 static inline Damageable* AsDamageable(EntityBuilding* pBuilding)

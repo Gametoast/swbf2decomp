@@ -269,7 +269,7 @@ const PblMatrix* EntityRemoteTerminal::GetRenderMatrix() const
 // FUNCTION: SWBF2 0x004dc9f0
 const RedPose* EntityRemoteTerminal::GetRenderPose() const
 {
-    return static_cast<const CollisionObject*>(this)->GetPose();
+    return GetPose();
 }
 
 // FUNCTION: SWBF2 0x004dca00

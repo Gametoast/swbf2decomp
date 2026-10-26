@@ -840,7 +840,7 @@ void EntityDroideka::UpdateWalkingGroundNormal()
         PblVector3 vBlend(mGroundNormal.x * fKeep + vNormal.x * fT,
                           mGroundNormal.y * fKeep + vNormal.y * fT,
                           mGroundNormal.z * fKeep + vNormal.z * fT);
-        D3DXVec3Normalize(reinterpret_cast<D3DXVECTOR3*>(&mGroundNormal), reinterpret_cast<const D3DXVECTOR3*>(&vBlend));
+        mGroundNormal = Normalize(vBlend);
     }
 }
 
@@ -855,7 +855,7 @@ bool EntityDroideka::Jump()
 
     mFallTimer = 0.1f;
 
-    const PblMatrix& rMatrix = static_cast<CollisionObject*>(this)->GetMatrix();
+    const PblMatrix& rMatrix = GetMatrix();
     const PblVector3& rVelocity = GetVelocity();
     mClass->mSoundJump.Play((const PblVector3*)&rMatrix.m[3][0], &rVelocity, true, true);
 

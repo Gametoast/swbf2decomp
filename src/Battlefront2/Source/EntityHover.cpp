@@ -2253,9 +2253,7 @@ void EntityHover::Move(float fDeltaTime, float fThrust, float fStrafe, float fTu
             if (fDragSq > fMaxDrag * fMaxDrag)
             {
                 float fScale = fMaxDrag / (float)sqrt((double)fDragSq);
-                vDrag.x *= fScale;
-                vDrag.y *= fScale;
-                vDrag.z *= fScale;
+                vDrag *= fScale;
             }
             mVelocity.x = vDrag.x * fInput + mVelocity.x;
             mVelocity.y = vDrag.y * fInput + mVelocity.y;

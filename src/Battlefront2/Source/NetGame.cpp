@@ -2357,8 +2357,15 @@ void NetGame::Create(bool bMission)
 void* clientObjMap[64];
 // GLOBAL: SWBF2 0x01e64bd0
 unsigned int suicideChangeCounts[64];
+struct SuicideInfo
+{
+    int changeCount;
+    unsigned int changedTurn;
+    bool killMeNow;
+};
+
 // GLOBAL: SWBF2 0x01e62fa0
-int suicideInfo[6];
+SuicideInfo suicideInfo[2];
 
 extern bool netAutoAssignTeamsOriginalSetting;
 
@@ -2375,12 +2382,7 @@ void NetGame::Reset()
     AtleastOnce::ResetAll();
     memset(spawnInfo, 0, sizeof(spawnInfo));
     memset(suicideChangeCounts, 0, sizeof(suicideChangeCounts));
-    suicideInfo[0] = 0;
-    suicideInfo[1] = 0;
-    suicideInfo[2] = 0;
-    suicideInfo[3] = 0;
-    suicideInfo[4] = 0;
-    suicideInfo[5] = 0;
+    memset(suicideInfo, 0, sizeof(suicideInfo));
 
     for (int i = 0; i < 64; i++)
     {
@@ -7212,8 +7214,10 @@ unsigned int ndSkippedMask[8];
 // FUNCTION: SWBF2 0x005b44d0
 void ClearSkippedND(GameObject* object)
 {
-    unsigned int index = object->mNetUniqueId - 64;
-    ndSkippedMask[index >> 5] &= ~(1u << (index & 31));
+    unsigned int netId = object->GetNetUniqueId() - 64;
+    unsigned int word = netId >> 5;
+    unsigned int bit = netId % 32;
+    ndSkippedMask[word] &= ~(1u << bit);
 }
 
 // FUNCTION: SWBF2 0x005b8490
@@ -7261,37 +7265,34 @@ CLASS* Factory<TYPE, CLASS, DESC>::FindNetIndex(int index)
 // FUNCTION: SWBF2 0x005cfbb0
 void NetGame::SelectSpawn(int player, int team, int classIndex, CommandPost* post)
 {
-    SpawnInfo& info = spawnInfo[player];
-    ++info.changeCount;
-    info.changedTurn = clientTurnNumber;
-    info.cancel = false;
-    info.autoassign = false;
-    info.classIdx = classIndex;
-    info.team = team;
-    info.post = post;
-    info.postHandle = post ? post->GetGameObject() : 0;
+    ++spawnInfo[player].changeCount;
+    spawnInfo[player].changedTurn = clientTurnNumber;
+    spawnInfo[player].cancel = false;
+    spawnInfo[player].autoassign = false;
+    spawnInfo[player].classIdx = classIndex;
+    spawnInfo[player].team = team;
+    spawnInfo[player].post = post;
+    spawnInfo[player].postHandle = post ? post->GetGameObject() : 0;
 }
 
 // FUNCTION: SWBF2 0x005cfc60
 void NetGame::CancelSpawn(int player)
 {
-    SpawnInfo& info = spawnInfo[player];
-    ++info.changeCount;
-    info.changedTurn = clientTurnNumber;
-    info.cancel = true;
+    ++spawnInfo[player].changeCount;
+    spawnInfo[player].changedTurn = clientTurnNumber;
+    spawnInfo[player].cancel = true;
 }
 
 // FUNCTION: SWBF2 0x005cfca0
 void NetGame::SpectateSpawn(int player, bool spectate)
 {
-    SpawnInfo& info = spawnInfo[player];
     if (spectate)
     {
-        ++info.changeCount;
-        info.changedTurn = clientTurnNumber;
-        info.cancel = false;
+        ++spawnInfo[player].changeCount;
+        spawnInfo[player].changedTurn = clientTurnNumber;
+        spawnInfo[player].cancel = false;
     }
-    info.spectate = spectate;
+    spawnInfo[player].spectate = spectate;
 }
 
 // FUNCTION: SWBF2 0x005cfd00
@@ -7609,16 +7610,7 @@ void HandleEvent_CorrectChunkCluster(ReliableNetEvent& event, PblMatrix& matrix)
     }
 }
 
-struct SteamChatMsg
-{
-    unsigned int playerID;
-    unsigned int flag;
-    unsigned __int64 mask;
-    int code;
-    unsigned short text[128];
-    PblList<NG_ChatMsg>::Node node;
-    unsigned int padding;
-};
+
  
  
 
@@ -7637,37 +7629,36 @@ void NetGame::AddChatMessageToQue(bool local, int player, unsigned __int64 mask,
         mask = ~(unsigned __int64)0;
         local = true;
     }
-    SteamChatMsg* message = new SteamChatMsg;
-    message->playerID = player;
+    NG_ChatMsg* message = new NG_ChatMsg;
+    message->player_id = player;
     message->mask = mask;
-    PblUnicode::ustrncpy(message->text, text, 128);
-    message->text[127] = 0;
+    PblUnicode::ustrncpy(message->msg, text, 128);
+    message->msg[127] = 0;
     message->flag = flag;
     message->code = code;
     PblList<NG_ChatMsg>& queue = local ? netGameChatMsgServer : netGameChatMsgClient;
-    queue.AddLast(&message->node, reinterpret_cast<NG_ChatMsg*>(message));
+    queue.AddLast(&message->mNode, message);
 }
 
 // FUNCTION: SWBF2 0x005d1cb0
-void LogChatMessage(const NG_ChatMsg& opaque)
+void LogChatMessage(const NG_ChatMsg& message)
 {
-    const SteamChatMsg& message = reinterpret_cast<const SteamChatMsg&>(opaque);
     if (!message.flag)
     {
-        NetAdmin::ChatMessage(message.playerID, message.text);
+        NetAdmin::ChatMessage(message.player_id, message.msg);
     }
     if (!chatLog)
     {
         return;
     }
-    const char* name = message.playerID == 64 ? "ADMIN" : netPlayers[message.playerID].name;
+    const char* name = message.player_id == 64 ? "ADMIN" : netPlayers[message.player_id].name;
     for (; *name; ++name)
     {
         fputc(*name, chatLog);
     }
     fputc(':', chatLog);
     fputc(' ', chatLog);
-    for (const unsigned short* ch = message.text; *ch; ++ch)
+    for (const unsigned short* ch = message.msg; *ch; ++ch)
     {
         fputc(*ch, chatLog);
     }
@@ -9144,9 +9135,8 @@ const char* ToString(bool);
 int netDirectPort;
 
 // FUNCTION: SWBF2 0x005d1570
-void DisplayMessage(NG_ChatMsg& opaque)
+void DisplayMessage(NG_ChatMsg& message)
 {
-    SteamChatMsg& message = reinterpret_cast<SteamChatMsg&>(opaque);
     const unsigned int requestKeys[TeamAssistManager::Max] = {
         0x0e6cfcde, 0x0f6cfe71, 0x0c6cf9b8, 0x0d6cfb4b,
         0x126d032a, 0x136d04bd, 0x106d0004, 0x116d0197
@@ -9157,7 +9147,7 @@ void DisplayMessage(NG_ChatMsg& opaque)
     PblUnicode::usnprintf(separator, 10, "%s", ": ");
     unsigned short text[128];
     PblUnicode::usnprintf(text, 128, "%s", "");
-    if (message.playerID == 64)
+    if (message.player_id == 64)
     {
         message.flag = 0;
         const unsigned short* admin = RedLocalizeDB::Find(0x10e2f4e1, true);
@@ -9173,7 +9163,7 @@ void DisplayMessage(NG_ChatMsg& opaque)
     }
     else
     {
-        sender = Character::FindPlayer(message.playerID);
+        sender = Character::FindPlayer(message.player_id);
         if (sender)
         {
             PblUnicode::ustrlcat(text, sender->GetName(), 128);
@@ -9182,7 +9172,7 @@ void DisplayMessage(NG_ChatMsg& opaque)
     PblUnicode::ustrlcat(text, separator, 128);
     if (message.code == TeamAssistManager::None)
     {
-        PblUnicode::ustrlcat(text, message.text, 128);
+        PblUnicode::ustrlcat(text, message.msg, 128);
     }
     else
     {
@@ -9211,26 +9201,18 @@ void LogChatMessage(const NG_ChatMsg& message);
 // FUNCTION: SWBF2 0x005d1900
 void NetGame::ReadChatMessageFromServer(NetPktGroup* group)
 {
-    unsigned char message[276];
-    unsigned char emptyMessage[16];
-    memset(emptyMessage, 0, sizeof(emptyMessage));
     unsigned int length = 0;
+    NG_ChatMsg message;
     group->ReadBytes((char*)&length, sizeof(length));
-    if ((length & 0xffff0000u) != 0xffff0000u)
+    if ((length & 0xffff0000u) == 0xffff0000u && (length &= 0xffffu) > 0)
     {
-        return;
+        group->ReadBytes((char*)&message, length);
+        if (!NetGame::IsHost())
+        {
+            LogChatMessage(message);
+        }
+        DisplayMessage(message);
     }
-    length &= 0xffffu;
-    if (!length)
-    {
-        return;
-    }
-    group->ReadBytes((char*)message, length);
-    if (!NetGame::IsHost())
-    {
-        LogChatMessage(*(NG_ChatMsg*)message);
-    }
-    DisplayMessage(*(NG_ChatMsg*)message);
 }
 
 namespace GameVoiceChat
@@ -10013,7 +9995,7 @@ void ReadSpawnSelect(NetPktGroup& group, int player)
 void NetGame::ReadChatMessageFromClient(NetPktGroup& group)
 {
     unsigned int size = 0;
-    SteamChatMsg message;
+    NG_ChatMsg message;
     group.ReadBytes(reinterpret_cast<char*>(&size), 4);
     if ((size & 0xffff0000) != 0xffff0000)
     {
@@ -10025,15 +10007,15 @@ void NetGame::ReadChatMessageFromClient(NetPktGroup& group)
         return;
     }
     group.ReadBytes(reinterpret_cast<char*>(&message), size);
-    LogChatMessage(reinterpret_cast<const NG_ChatMsg&>(message));
-    if (NetAdmin::ParseLineRemote(message.playerID, message.text, false, true))
+    LogChatMessage(message);
+    if (NetAdmin::ParseLineRemote(message.player_id, message.msg, false, true))
     {
         return;
     }
     bool accept = true;
-    if ((int)message.playerID < netCurMaxPlayers)
+    if ((int)message.player_id < netCurMaxPlayers)
     {
-        NetPlayer& np = netPlayers[message.playerID];
+        NetPlayer& np = netPlayers[message.player_id];
         if ((int)(NetGame::GetTurnNumber() - np.mLastStatusTurn) > netTurnsPerSecond * 3 / 2)
         {
             np.mLastStatusTurn = NetGame::GetTurnNumber();
@@ -10045,7 +10027,7 @@ void NetGame::ReadChatMessageFromClient(NetPktGroup& group)
     }
     if (accept)
     {
-        NetGame::AddChatMessageToQue(true, message.playerID, message.mask, message.code, message.text, message.flag);
+        NetGame::AddChatMessageToQue(true, message.player_id, message.mask, message.code, message.msg, message.flag);
     }
 }
 
@@ -11337,9 +11319,9 @@ bool ReceivedNextGameInfo()
 // FUNCTION: SWBF2 0x005d0980
 void NetGame::RequestSuicide(int index)
 {
-    ++suicideInfo[3 * index];
-    suicideInfo[3 * index + 1] = clientTurnNumber;
-    *(unsigned char*)&suicideInfo[3 * index + 2] = 1;
+    ++suicideInfo[index].changeCount;
+    suicideInfo[index].changedTurn = clientTurnNumber;
+    suicideInfo[index].killMeNow = true;
 }
 
 // FUNCTION: SWBF2 0x005d0da0
@@ -12311,8 +12293,10 @@ bool ReadNetIsLocalTurn() { return netIsLocalTurn; }
 // FUNCTION: SWBF2 0x005b4470
 bool IsSkippedND(const GameObject* pObject)
 {
-    unsigned int iObject = pObject->mNetUniqueId - 64;
-    return (ndSkippedMask[iObject >> 5] & (1u << (iObject & 31))) != 0;
+    unsigned int netId = pObject->GetNetUniqueId() - 64;
+    unsigned int word = netId >> 5;
+    unsigned int bit = netId % 32;
+    return (ndSkippedMask[word] & (1u << bit)) ? true : false;
 }
 
 // FUNCTION: SWBF2 0x005be3a0
@@ -12707,13 +12691,13 @@ void WriteSuicideRequest(NetPktGroup& group)
     for (int i = 0; i < 2; ++i)
     {
         bool bSend = NetComm::GetLocalIndex(i) >= 0 &&
-                     (unsigned int)suicideInfo[3 * i + 1] >
+                     suicideInfo[i].changedTurn >
                          (unsigned int)clientAckedTurnNumber;
         group.Write(bSend);
         if (bSend)
         {
-            group.WriteBits((unsigned char)suicideInfo[3 * i], 8);
-            group.Write((bool)(unsigned char)suicideInfo[3 * i + 2]);
+            group.WriteBits(suicideInfo[i].changeCount & 0xff, 8);
+            group.Write(suicideInfo[i].killMeNow);
         }
     }
 }
@@ -12836,7 +12820,6 @@ float* sendScoreList;
 // GLOBAL: SWBF2 0x01fa88b8
 int sendLateObj;
 
-const PblVector3 __cdecl Normalize(const PblVector3& rv);
 
 // FUNCTION: SWBF2 0x005bd4f0
 void ResetSend(GameObject** ppObjects, const PblVector3& center,

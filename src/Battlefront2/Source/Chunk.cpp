@@ -387,12 +387,6 @@ void Chunk::CreateSmokeEmitters()
 
 
 
-static inline const PblVector3 Normalize(const PblVector3& v)
-{
-    PblVector3 result;
-    D3DXVec3Normalize((D3DXVECTOR3*)&result, (const D3DXVECTOR3*)&v);
-    return result;
-}
 
 static inline void SetAxis(PblMatrix& m, int iRow, const PblVector3& v)
 {

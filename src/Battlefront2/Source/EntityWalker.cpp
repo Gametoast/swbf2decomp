@@ -1321,12 +1321,8 @@ void EntityWalkerClass::PostReadSetup()
 {
     if (mSkeletonRootScale != 1.0f)
     {
-        mExplosionOffset.x *= mSkeletonRootScale;
-        mExplosionOffset.y *= mSkeletonRootScale;
-        mExplosionOffset.z *= mSkeletonRootScale;
-        mFinalExplosionOffset.x *= mSkeletonRootScale;
-        mFinalExplosionOffset.y *= mSkeletonRootScale;
-        mFinalExplosionOffset.z *= mSkeletonRootScale;
+        mExplosionOffset *= mSkeletonRootScale;
+        mFinalExplosionOffset *= mSkeletonRootScale;
         mHydraulicSoundHeight *= mSkeletonRootScale;
         mHydrualicLowerHeight *= mSkeletonRootScale;
         mLegRayHitLength *= mSkeletonRootScale;
@@ -1335,9 +1331,7 @@ void EntityWalkerClass::PostReadSetup()
         for (unsigned int i = 0; i < m_uiNumAttackAnims; ++i)
         {
             m_aAttackAnims[i].fRadius *= mSkeletonRootScale;
-            m_aAttackAnims[i].vPosition.x *= mSkeletonRootScale;
-            m_aAttackAnims[i].vPosition.y *= mSkeletonRootScale;
-            m_aAttackAnims[i].vPosition.z *= mSkeletonRootScale;
+            m_aAttackAnims[i].vPosition *= mSkeletonRootScale;
         }
     }
 

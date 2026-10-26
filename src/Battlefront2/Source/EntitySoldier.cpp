@@ -3089,9 +3089,7 @@ void EntitySoldier::MoveOffGround(float fDeltaTime, float fTurn, float fForward,
     float fDrag = expf(sqrtf(mVelocity.x * mVelocity.x + mVelocity.y * mVelocity.y +
                              mVelocity.z * mVelocity.z) *
                        -IN_AIR_DRAG_FORCE * fDeltaTime);
-    mVelocity.x *= fDrag;
-    mVelocity.y *= fDrag;
-    mVelocity.z *= fDrag;
+    mVelocity *= fDrag;
 
     float fPush = fDeltaTime * fForward;
     mVelocity.x += fPush * mMatrix.m[2][0];
@@ -3857,7 +3855,7 @@ void EntitySoldier::SetupCameraTrackMatrixHUDTargeting(PblMatrix& rMatrix)
         !mFlyingInFirstPerson)
     {
         rMatrix = DirectionMatrix(PblVector3(-mEyeDir.x, -mEyeDir.y, -mEyeDir.z),
-                                  static_cast<CollisionObject*>(this)->GetMatrix().GetYAxis(), mEyePoint);
+                                  GetMatrix().GetYAxis(), mEyePoint);
         const float fBack = mTargetInfo.mIsAiming ? 0.6f : 0.3f;
         rMatrix.m[3][0] -= mEyeDir.x * fBack;
         rMatrix.m[3][1] -= mEyeDir.y * fBack;
@@ -3876,12 +3874,12 @@ void EntitySoldier::SetupCameraTrackMatrixHUDTargeting(PblMatrix& rMatrix)
     {
         pSettings[iCamera * 2 + mTargetInfo.mIsAiming].SetupCameraTrackMatrixHUDTargeting(
             pSettings[mCameraSettingPrev * 2 + mTargetInfo.mIsAiming], mCameraSettingTimer / fBlendTime,
-            rMatrix, static_cast<CollisionObject*>(this)->GetMatrix(), mEyeDir);
+            rMatrix, GetMatrix(), mEyeDir);
     }
     else
     {
         pSettings[iCamera * 2 + mTargetInfo.mIsAiming].SetupCameraTrackMatrixHUDTargeting(
-            rMatrix, static_cast<CollisionObject*>(this)->GetMatrix(), mEyeDir);
+            rMatrix, GetMatrix(), mEyeDir);
     }
 }
 
@@ -3937,7 +3935,7 @@ void EntitySoldier::SetupInterpolatedCameraTrackMatrix(PblMatrix& rMatrix)
 // FUNCTION: SWBF2 0x004f2e70
 void EntitySoldier::Move(const PblMatrix& mMatrix, const PblVector3& vVelocity)
 {
-    static_cast<CollisionObject*>(this)->SetMatrix(mMatrix);
+    SetMatrix(mMatrix);
     mVelocity = vVelocity;
     RedSceneObject* pScene = this;
     pScene->Deactivate();
@@ -9725,9 +9723,7 @@ void EntitySoldier::MoveJetHover(float fDeltaTime, float fForward, float fStrafe
     }
 
     float fDrag = (float)exp((double)(fDeltaTime * -2.0f));
-    mVelocity.x *= fDrag;
-    mVelocity.y *= fDrag;
-    mVelocity.z *= fDrag;
+    mVelocity *= fDrag;
 
     PblVector3 vLook(mEyeDir.x, (mEyeDir.y + 0.08f) * 2.0f, mEyeDir.z);
     PblVector3 vDir;

@@ -693,14 +693,10 @@ PblVector3 AIUtil::CalculateBubbleOffset(const Controllable* pControllable, cons
         }
 
         const float fSize = pTargetCtrl->mCtrl->mTargetBubbleSize_Cached;
-        vOffset.x *= fSize;
-        vOffset.y *= fSize;
-        vOffset.z *= fSize;
+        vOffset *= fSize;
 
         const float fMultiplier = pWeaponClass ? pWeaponClass->mAIBubbleSizeMultiplier : 1.0f;
-        vOffset.x *= fMultiplier;
-        vOffset.y *= fMultiplier;
-        vOffset.z *= fMultiplier;
+        vOffset *= fMultiplier;
 
         if (!IsRtti(pTarget, EntityFlyer::rttiHashEntityFlyer) || GetFlyerState(pTarget) != 2)
         {
