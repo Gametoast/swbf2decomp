@@ -1,3 +1,4 @@
+#include <d3dx9math.h>
 #include "Battlefront2/Source/SunFlare.h"
 #include "pcSunFlare.h"
 #include "PebbleFL/Common/PblHashTable.h"
@@ -70,8 +71,6 @@ static pcFlareShader* s_pRingShader;
 // GLOBAL: SWBF2 0x01f9af3c
 static pcFlareShader* s_pSunAndHaloShader;
 
-extern "C" PblVector3* __stdcall D3DXVec3TransformCoord(PblVector3* pOut, const PblVector3* pV,
-                                                         const PblMatrix* pM);
 
 // GLOBAL: SWBF2 0x007eb748
 // s_boundingBox
@@ -594,7 +593,7 @@ void SunFlare::_Render() const
     const PblVector3& vCamera = RedRenderer::GetCamera()->GetMatrix().GetTranslation();
     PblVector3 vPosition(vCamera.x + vOffset.x, vCamera.y + vOffset.y, vCamera.z + vOffset.z);
     PblVector3 vView;
-    D3DXVec3TransformCoord(&vView, &vPosition, &RedRenderer::GetCamera()->GetMatrixInverse());
+    D3DXVec3TransformCoord(reinterpret_cast<D3DXVECTOR3*>(&vView), reinterpret_cast<const D3DXVECTOR3*>(&vPosition), reinterpret_cast<const D3DXMATRIX*>(&RedRenderer::GetCamera()->GetMatrixInverse()));
     vPosition = vView;
 
     float fSize = _fSize * fDistance * 0.00833f / RedRenderer::GetCamera()->GetZoom();
@@ -642,7 +641,7 @@ void SunFlare::RenderSunAndHalo(unsigned int uiPass) const
     const PblVector3& vCamera = RedRenderer::GetCamera()->GetMatrix().GetTranslation();
     PblVector3 vPosition(vCamera.x + vOffset.x, vCamera.y + vOffset.y, vCamera.z + vOffset.z);
     PblVector3 vView;
-    D3DXVec3TransformCoord(&vView, &vPosition, &RedRenderer::GetCamera()->GetMatrixInverse());
+    D3DXVec3TransformCoord(reinterpret_cast<D3DXVECTOR3*>(&vView), reinterpret_cast<const D3DXVECTOR3*>(&vPosition), reinterpret_cast<const D3DXMATRIX*>(&RedRenderer::GetCamera()->GetMatrixInverse()));
     vPosition = vView;
 
     const float fScale = fDistance * 0.00833f;

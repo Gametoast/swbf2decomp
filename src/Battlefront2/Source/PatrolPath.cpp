@@ -78,13 +78,12 @@ AIPath* AI::PatrolPath::GetAIPath()
         return 0;
     }
 
-    const int iNumPoints = GetNumPoints();
     if (GetSplineType() == RedPath::CatmullRom)
     {
-        for (int i = 0; i < iNumPoints - 1; ++i)
+        for (int i = 0; i < GetNumPoints() - 1; ++i)
         {
-            const PblVector3& p1 = *GetPointPosition(i);
-            const PblVector3& p2 = *GetPointPosition(i + 1);
+            const PblVector3 p1 = *GetPointPosition(i);
+            const PblVector3 p2 = *GetPointPosition(i + 1);
             PblVector3 p0, p3;
             if (i > 0)
             {
@@ -98,7 +97,7 @@ AIPath* AI::PatrolPath::GetAIPath()
                                   (const D3DXVECTOR3*)&delta);
                 p0 = PblVector3(p1.x - direction.x, p1.y - direction.y, p1.z - direction.z);
             }
-            if (i < iNumPoints - 2)
+            if (i < GetNumPoints() - 2)
             {
                 p3 = *GetPointPosition(i + 2);
             }
@@ -117,13 +116,14 @@ AIPath* AI::PatrolPath::GetAIPath()
                 pPath->Append(pos, 0);
             }
         }
-        pPath->Append(*GetPointPosition(iNumPoints - 1), 0);
+        pPath->Append(*GetPointPosition(GetNumPoints() - 1), 0);
     }
     else
     {
-        for (int i = 0; i < iNumPoints; ++i)
+        for (int i = 0; i < GetNumPoints(); ++i)
         {
-            pPath->Append(*GetPointPosition(i), 0);
+            const PblVector3 point = *GetPointPosition(i);
+            pPath->Append(point, 0);
         }
     }
     return pPath;

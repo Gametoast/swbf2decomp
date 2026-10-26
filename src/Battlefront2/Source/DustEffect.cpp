@@ -1,3 +1,4 @@
+#include <d3dx9math.h>
 #include "DustEffect.h"
 
 #include <math.h>
@@ -12,7 +13,6 @@
 #include "RedEngineFL/Util/RedSceneManager.h"
 #include "RedEngineFL/Graphics/PC/pcRedRenderer.h"
 
-extern "C" PblVector3* __stdcall D3DXVec3Normalize(PblVector3* pOut, const PblVector3* pV);
 
 class PblMatrix;
 extern PblMatrix gMatrixIdentity;
@@ -62,7 +62,7 @@ DustEffect::DustEffect(DustEffectClass* pClass, const PblMatrix& matrix)
                       mMatrix.m[1][0] * vBack.z - mMatrix.m[1][2] * vBack.x,
                       mMatrix.m[1][1] * vBack.x - mMatrix.m[1][0] * vBack.y);
     PblVector3 vOut;
-    D3DXVec3Normalize(&vOut, &vRight);
+    D3DXVec3Normalize(reinterpret_cast<D3DXVECTOR3*>(&vOut), reinterpret_cast<const D3DXVECTOR3*>(&vRight));
     mMatrix.m[0][0] = vOut.x;
     mMatrix.m[0][1] = vOut.y;
     mMatrix.m[0][2] = vOut.z;
@@ -71,7 +71,7 @@ DustEffect::DustEffect(DustEffectClass* pClass, const PblMatrix& matrix)
     PblVector3 vAt(mMatrix.m[1][2] * mMatrix.m[0][1] - mMatrix.m[1][1] * mMatrix.m[0][2],
                    mMatrix.m[1][0] * mMatrix.m[0][2] - mMatrix.m[0][0] * mMatrix.m[1][2],
                    mMatrix.m[0][0] * mMatrix.m[1][1] - mMatrix.m[1][0] * mMatrix.m[0][1]);
-    D3DXVec3Normalize(&vOut, &vAt);
+    D3DXVec3Normalize(reinterpret_cast<D3DXVECTOR3*>(&vOut), reinterpret_cast<const D3DXVECTOR3*>(&vAt));
     mMatrix.m[2][0] = vOut.x;
     mMatrix.m[2][1] = vOut.y;
     mMatrix.m[2][2] = vOut.z;

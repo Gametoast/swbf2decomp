@@ -1,3 +1,4 @@
+#include <d3dx9math.h>
 #include "Battlefront2/Source/SkyDome.h"
 #include "PebbleFL/Common/PblVector.h"
 
@@ -99,8 +100,6 @@ void SkyFogRenderable::Render(int)
 
 
 
-extern "C" PblMatrix* __stdcall D3DXMatrixRotationAxis(PblMatrix* pOut, const PblVector3* pV, float fAngle);
-extern "C" PblMatrix* __stdcall D3DXMatrixMultiply(PblMatrix* pOut, const PblMatrix* pM1, const PblMatrix* pM2);
 
 // FUNCTION: SWBF2 0x00428970
 void SkyDome::Render(int value)
@@ -129,7 +128,7 @@ void SkyDome::Render(int value)
             }
 
             mat = gMatrixIdentity;
-            D3DXMatrixRotationAxis(&mat, &rDome.mRotationAxis,
+            D3DXMatrixRotationAxis(reinterpret_cast<D3DXMATRIX*>(&mat), reinterpret_cast<const D3DXVECTOR3*>(&rDome.mRotationAxis),
                                    RedRenderer::GetTimeBase()->GetTime() * rDome.mRotationSpeed *
                                        PblMath::fTwoPi);
 
@@ -153,7 +152,7 @@ void SkyDome::Render(int value)
                 PblMatrix boneMat;
                 rDome.mModel->GetBoneMatrix(rData.hardPoint, boneMat);
                 PblMatrix product;
-                D3DXMatrixMultiply(&product, &boneMat, &mat);
+                D3DXMatrixMultiply(reinterpret_cast<D3DXMATRIX*>(&product), reinterpret_cast<const D3DXMATRIX*>(&boneMat), reinterpret_cast<const D3DXMATRIX*>(&mat));
                 boneMat = product;
                 rData.pos = boneMat.GetTranslation();
 

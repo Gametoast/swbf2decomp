@@ -1,3 +1,4 @@
+#include <d3dx9math.h>
 #include "NetState.h"
 
 #include "EntityDroid.h"
@@ -57,16 +58,6 @@
 #include <string.h>
 #include "EntityProp.h"
 
-extern "C" PblQuaternion* __stdcall D3DXQuaternionNormalize(PblQuaternion* pOut,
-                                                              const PblQuaternion* pQ);
-extern "C" PblMatrix* __stdcall D3DXMatrixRotationQuaternion(PblMatrix* pOut,
-                                                               const PblQuaternion* pQ);
-extern "C" PblQuaternion* __stdcall D3DXQuaternionRotationMatrix(PblQuaternion* pOut,
-                                                                    const PblMatrix* pM);
-extern "C" PblVector3* __stdcall D3DXVec3TransformCoord(PblVector3* pOut,
-    const PblVector3* pV, const PblMatrix* pM);
-extern "C" PblVector3* __stdcall D3DXVec3TransformNormal(PblVector3* pOut,
-    const PblVector3* pV, const PblMatrix* pM);
 PblMatrix DirectionMatrix(const PblVector3& direction, const PblVector3& up,
                           const PblVector3& position);
 
@@ -1838,15 +1829,15 @@ void MountedTurret::Read(NetPktGroup& group)
         if (bone)
         {
             PblVector3 transformed;
-            D3DXVec3TransformCoord(&transformed, &mountPos, bone);
+            D3DXVec3TransformCoord(reinterpret_cast<D3DXVECTOR3*>(&transformed), reinterpret_cast<const D3DXVECTOR3*>(&mountPos), reinterpret_cast<const D3DXMATRIX*>(bone));
             mountPos = transformed;
-            D3DXVec3TransformNormal(&transformed, &mountUp, bone);
+            D3DXVec3TransformNormal(reinterpret_cast<D3DXVECTOR3*>(&transformed), reinterpret_cast<const D3DXVECTOR3*>(&mountUp), reinterpret_cast<const D3DXMATRIX*>(bone));
             mountUp = transformed;
         }
     }
     PblVector3 worldPos, worldUp;
-    D3DXVec3TransformCoord(&worldPos, &mountPos, &parentMatrix);
-    D3DXVec3TransformNormal(&worldUp, &mountUp, &parentMatrix);
+    D3DXVec3TransformCoord(reinterpret_cast<D3DXVECTOR3*>(&worldPos), reinterpret_cast<const D3DXVECTOR3*>(&mountPos), reinterpret_cast<const D3DXMATRIX*>(&parentMatrix));
+    D3DXVec3TransformNormal(reinterpret_cast<D3DXVECTOR3*>(&worldUp), reinterpret_cast<const D3DXVECTOR3*>(&mountUp), reinterpret_cast<const D3DXMATRIX*>(&parentMatrix));
     mAimMatrix = DirectionMatrix(direction, worldUp, worldPos);
 
     if (mPlayerId >= 0)
@@ -2021,16 +2012,16 @@ void MountedTurret::ReadLateState(NetPktGroup& group)
         if (bone)
         {
             PblVector3 transformed;
-            D3DXVec3TransformCoord(&transformed, &mountPos, bone);
+            D3DXVec3TransformCoord(reinterpret_cast<D3DXVECTOR3*>(&transformed), reinterpret_cast<const D3DXVECTOR3*>(&mountPos), reinterpret_cast<const D3DXMATRIX*>(bone));
             mountPos = transformed;
-            D3DXVec3TransformNormal(&transformed, &mountUp, bone);
+            D3DXVec3TransformNormal(reinterpret_cast<D3DXVECTOR3*>(&transformed), reinterpret_cast<const D3DXVECTOR3*>(&mountUp), reinterpret_cast<const D3DXMATRIX*>(bone));
             mountUp = transformed;
         }
     }
     PblVector3 worldPos;
     PblVector3 worldUp;
-    D3DXVec3TransformCoord(&worldPos, &mountPos, &parentMatrix);
-    D3DXVec3TransformNormal(&worldUp, &mountUp, &parentMatrix);
+    D3DXVec3TransformCoord(reinterpret_cast<D3DXVECTOR3*>(&worldPos), reinterpret_cast<const D3DXVECTOR3*>(&mountPos), reinterpret_cast<const D3DXMATRIX*>(&parentMatrix));
+    D3DXVec3TransformNormal(reinterpret_cast<D3DXVECTOR3*>(&worldUp), reinterpret_cast<const D3DXVECTOR3*>(&mountUp), reinterpret_cast<const D3DXMATRIX*>(&parentMatrix));
     turret.mAimMatrix = DirectionMatrix(direction, worldUp, worldPos);
 
     ReadThrust(group, turret.mTurnBuildup);
@@ -2164,8 +2155,8 @@ void ReadMatrix(NetPktGroup& group, PblMatrix& matrix)
     ReadPositionVector(group, position);
     PblQuaternion unit;
     PblMatrix rotation;
-    D3DXQuaternionNormalize(&unit, &q);
-    D3DXMatrixRotationQuaternion(&rotation, &unit);
+    D3DXQuaternionNormalize(reinterpret_cast<D3DXQUATERNION*>(&unit), reinterpret_cast<const D3DXQUATERNION*>(&q));
+    D3DXMatrixRotationQuaternion(reinterpret_cast<D3DXMATRIX*>(&rotation), reinterpret_cast<const D3DXQUATERNION*>(&unit));
     matrix = rotation;
     matrix.m[3][0] = position.x;
     matrix.m[3][1] = position.y;
@@ -5076,7 +5067,7 @@ void EntitySoldier::ReadObject(NetPktGroup& group, NetObjState*)
             q._fS = s;
             PblQuaternion unit;
             PblMatrix rotation;
-            D3DXMatrixRotationQuaternion(&rotation, D3DXQuaternionNormalize(&unit, &q));
+            D3DXMatrixRotationQuaternion(reinterpret_cast<D3DXMATRIX*>(&rotation), D3DXQuaternionNormalize(reinterpret_cast<D3DXQUATERNION*>(&unit), reinterpret_cast<const D3DXQUATERNION*>(&q)));
             matrix = rotation;
             matrix.m[3][0] = position.x;
             matrix.m[3][1] = position.y;
@@ -5536,7 +5527,7 @@ void EntitySoldier::ReadLateState(NetPktGroup& group)
             q._fS = s;
             PblQuaternion unit;
             PblMatrix rotation;
-            D3DXMatrixRotationQuaternion(&rotation, D3DXQuaternionNormalize(&unit, &q));
+            D3DXMatrixRotationQuaternion(reinterpret_cast<D3DXMATRIX*>(&rotation), D3DXQuaternionNormalize(reinterpret_cast<D3DXQUATERNION*>(&unit), reinterpret_cast<const D3DXQUATERNION*>(&q)));
             matrix = rotation;
             matrix.m[3][0] = position.x;
             matrix.m[3][1] = position.y;

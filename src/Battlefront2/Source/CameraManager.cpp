@@ -1,3 +1,4 @@
+#include <d3dx9math.h>
 #include <string.h>
 
 #include "CameraManager.h"
@@ -39,8 +40,6 @@ void SetSceneEnable(unsigned int uiView, bool bEnable);
 class PblMatrix;
 extern PblMatrix gMatrixIdentity;
 
-extern "C" PblQuaternion* __stdcall D3DXQuaternionNormalize(PblQuaternion* pOut, const PblQuaternion* pQ);
-extern "C" PblMatrix* __stdcall D3DXMatrixRotationQuaternion(PblMatrix* pOut, const PblQuaternion* pQ);
 
 extern bool netFrameLock;
 
@@ -587,7 +586,7 @@ bool CameraInterpolator::Update(float)
         PblQuaternion qRot = Interpolate(qNew, qOld, fT);
         PblQuaternion qUnit;
         PblMatrix mBlend;
-        D3DXMatrixRotationQuaternion(&mBlend, D3DXQuaternionNormalize(&qUnit, &qRot));
+        D3DXMatrixRotationQuaternion(reinterpret_cast<D3DXMATRIX*>(&mBlend), D3DXQuaternionNormalize(reinterpret_cast<D3DXQUATERNION*>(&qUnit), reinterpret_cast<const D3DXQUATERNION*>(&qRot)));
         mBlend.m[3][0] = vPos.x;
         mBlend.m[3][1] = vPos.y;
         mBlend.m[3][2] = vPos.z;

@@ -1,3 +1,10 @@
+#include <d3dx9math.h>
+#ifdef min
+#undef min
+#endif
+#ifdef max
+#undef max
+#endif
 #include <float.h>
 #include <math.h>
 #include <string.h>
@@ -11,7 +18,6 @@
 #include "PebbleFL/Common/PblHeap.h"
 #include "PebbleFL/Common/PblMatrix.h"
 
-extern "C" PblVector3* __stdcall D3DXVec3Normalize(PblVector3* pOut, const PblVector3* pV);
 
 extern int WORLD_EXTENTS;
 
@@ -167,20 +173,20 @@ PblVector3 Obstacle::GetVertexXZ(int iVertex, float fRadius, float fPushOut) con
     float fZ = mSizeZ + fRadius + fPushOut;
     PblVector3 xAxis = GetXAxis();
     PblVector3 zAxis = GetZAxis();
-    PblVector3 x(xAxis.x * fX, xAxis.y * fX, xAxis.z * fX);
-    PblVector3 z(zAxis.x * fZ, zAxis.y * fZ, zAxis.z * fZ);
+    PblVector3 x = xAxis * fX;
+    PblVector3 z = zAxis * fZ;
     PblVector3 pos = GetTranslation();
 
     switch (iVertex)
     {
     case 0:
-        return PblVector3(pos.x + x.x + z.x, pos.y + x.y + z.y, pos.z + x.z + z.z);
+        return (pos + x + z);
     case 1:
-        return PblVector3(pos.x + x.x - z.x, pos.y + x.y - z.y, pos.z + x.z - z.z);
+        return (pos + x - z);
     case 2:
-        return PblVector3(pos.x - x.x - z.x, pos.y - x.y - z.y, pos.z - x.z - z.z);
+        return (pos - x - z);
     default:
-        return PblVector3(pos.x - x.x + z.x, pos.y - x.y + z.y, pos.z - x.z + z.z);
+        return (pos - x + z);
     }
 }
 
@@ -194,7 +200,7 @@ PblVector3 Obstacle::GetPushedOutVertexXZ(int iVertex, float fRadius) const
 float GetDistanceSquaredFromLineSegment(const PblVector3& rEnd, const PblVector3& rStart,
                                         const PblVector3& rPos, PblVector3& rClosest)
 {
-    PblVector3 dir(rEnd.x - rStart.x, rEnd.y - rStart.y, rEnd.z - rStart.z);
+    PblVector3 dir = rEnd - rStart;
     float fT = (rPos.x - rStart.x) * dir.x + (rPos.y - rStart.y) * dir.y + (rPos.z - rStart.z) * dir.z;
     if (fT <= 0.0f)
     {
@@ -210,7 +216,7 @@ float GetDistanceSquaredFromLineSegment(const PblVector3& rEnd, const PblVector3
         else
         {
             fT /= fLengthSq;
-            rClosest = PblVector3(rStart.x + dir.x * fT, rStart.y + dir.y * fT, rStart.z + dir.z * fT);
+            rClosest = (rStart + dir * fT);
         }
     }
     float fDX = rPos.x - rClosest.x;
@@ -233,8 +239,8 @@ float Obstacle::GetDistFromSideXZ(const PblVector3& rPos, float fRadius, int iSi
 
     PblVector3 normal(v1.z - v0.z, 0.0f, -(v1.x - v0.x));
     PblVector3 n;
-    D3DXVec3Normalize(&n, &normal);
-    rClosest = PblVector3(closest.x + n.x * 0.1f, closest.y + n.y * 0.1f, closest.z + n.z * 0.1f);
+    D3DXVec3Normalize(reinterpret_cast<D3DXVECTOR3*>(&n), reinterpret_cast<const D3DXVECTOR3*>(&normal));
+    rClosest = (closest + n * 0.1f);
     return fDistSq;
 }
 
@@ -310,7 +316,7 @@ bool Obstacle::IntersectionNewer(const ObstacleTest& rTest, float fRadius, float
 
     *pDistSq = (dir.x * dir.x + dir.y * dir.y + dir.z * dir.z) * fBest * fBest;
     PblVector3 n;
-    D3DXVec3Normalize(&n, pNormal);
+    D3DXVec3Normalize(reinterpret_cast<D3DXVECTOR3*>(&n), reinterpret_cast<const D3DXVECTOR3*>(pNormal));
     *pNormal = n;
     return true;
 }
@@ -325,7 +331,7 @@ void Obstacle::FindCorners(const PblVector3& rSrc, const PblVector3& rDest, floa
         dir = PblVector3(1.0f, 0.0f, 0.0f);
     }
     PblVector3 dirN;
-    D3DXVec3Normalize(&dirN, &dir);
+    D3DXVec3Normalize(reinterpret_cast<D3DXVECTOR3*>(&dirN), reinterpret_cast<const D3DXVECTOR3*>(&dir));
 
     float fBestLeft = 1.0f;
     float fBestRight = 1.0f;
@@ -336,7 +342,7 @@ void Obstacle::FindCorners(const PblVector3& rSrc, const PblVector3& rDest, floa
         if (d.x * d.x + d.y * d.y + d.z * d.z > EPSILON * EPSILON)
         {
             PblVector3 n;
-            D3DXVec3Normalize(&n, &d);
+            D3DXVec3Normalize(reinterpret_cast<D3DXVECTOR3*>(&n), reinterpret_cast<const D3DXVECTOR3*>(&d));
             float fDot = dirN.x * n.x + dirN.y * n.y + dirN.z * n.z;
             float fCross = dirN.z * n.x - dirN.x * n.z;
             if (fCross < 0.0f && fDot < fBestLeft)
@@ -604,7 +610,7 @@ bool PathFinder::PushValidPoint(const PblVector3& rSrc, PblVector3& rDest, PblVe
 
     PblVector3 dir(rDest.x - rSrc.x, rDest.y - rSrc.y, rDest.z - rSrc.z);
     PblVector3 dirN;
-    D3DXVec3Normalize(&dirN, &dir);
+    D3DXVec3Normalize(reinterpret_cast<D3DXVECTOR3*>(&dirN), reinterpret_cast<const D3DXVECTOR3*>(&dir));
     data.mRayDir = dirN;
     data.mRadius = fRadius;
     data.mProhibit = eProhibit;

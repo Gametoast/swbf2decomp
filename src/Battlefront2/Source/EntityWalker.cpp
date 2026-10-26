@@ -1,3 +1,4 @@
+#include <d3dx9math.h>
 #include "RedEngineFL/Util/RedCommandConsole.h"
 
 #include <float.h>
@@ -285,7 +286,6 @@ EntityWalkerClass::EntityWalkerClass(unsigned int uHash)
     mTimeTilReboard = 10.0f;
 }
 
-extern "C" PblMatrix* __stdcall D3DXMatrixMultiply(PblMatrix* pOut, const PblMatrix* pM1, const PblMatrix* pM2);
 
 // SYNTHETIC: SWBF2 0x00402ef0
 // `dynamic initializer for 'EntityWalkerClass::rttiHashEntityWalkerClass''
@@ -316,6 +316,7 @@ const char EntityWalker::rttiNameEntityWalker[] = "EntityWalker";
 
 // GLOBAL: SWBF2 0x01ebc260
 // EntityWalker::sMemoryPool
+// STRING: SWBF2 0x0079d7d4
 MemoryPool EntityWalker::sMemoryPool("EntityWalker", 0x2100);
 
 // FUNCTION: SWBF2 0x0047fb50
@@ -361,7 +362,7 @@ void EntityWalker::RotateY(const PblAngle& rAngle)
     kRot.m[3][3] = 1.0f;
 
     PblMatrix kOut;
-    D3DXMatrixMultiply(&kOut, &kRot, &mMatrix);
+    D3DXMatrixMultiply(reinterpret_cast<D3DXMATRIX*>(&kOut), reinterpret_cast<const D3DXMATRIX*>(&kRot), reinterpret_cast<const D3DXMATRIX*>(&mMatrix));
     mMatrix = kOut;
 }
 
@@ -1434,9 +1435,6 @@ PblBitVector<64> EntityWalkerClass::HierarchyJointMask(const ZephyrSkeletonShare
     return mask;
 }
 
-extern "C" PblVector3* __stdcall D3DXVec3TransformCoord(PblVector3* pOut, const PblVector3* pV,
-                                                        const PblMatrix* pM);
-extern "C" PblVector3* __stdcall D3DXVec3Normalize(PblVector3* pOut, const PblVector3* pV);
 
 extern bool netFrameLock;
 extern bool netIsLocalTurn;
@@ -1469,7 +1467,7 @@ namespace
 inline void UpdateCollisionSphere(EntityWalker* pWalker)
 {
     PblVector3 center;
-    D3DXVec3TransformCoord(&center, &pWalker->mModel->_mModel->_BoundingSphere.GetCenter(), &pWalker->mMatrix);
+    D3DXVec3TransformCoord(reinterpret_cast<D3DXVECTOR3*>(&center), reinterpret_cast<const D3DXVECTOR3*>(&pWalker->mModel->_mModel->_BoundingSphere.GetCenter()), reinterpret_cast<const D3DXMATRIX*>(&pWalker->mMatrix));
     pWalker->SetCollisionCenter(center);
     pWalker->RecalculateAABB();
 }
@@ -2414,7 +2412,7 @@ void EntityWalker::Render(unsigned char ucViewport, float fDist, unsigned int ui
                     PblMatrix mDust = gMatrixIdentity;
                     mDust.SetTranslation(mClass->mDeathDustOffset);
                     PblMatrix mTemp;
-                    D3DXMatrixMultiply(&mTemp, &mDust, &mWorld);
+                    D3DXMatrixMultiply(reinterpret_cast<D3DXMATRIX*>(&mTemp), reinterpret_cast<const D3DXMATRIX*>(&mDust), reinterpret_cast<const D3DXMATRIX*>(&mWorld));
                     mDust = mTemp;
                     pEffect->AttachEffectToMatrix(&mDust, false);
                 }
@@ -2701,7 +2699,7 @@ bool EntityWalker::CollisionCallback(const CollisionResult* pResult, CollisionOb
             float fDist = fOverlap * fOverlap / fHorizontal;
             PblVector3 vFlat(vSeparation.x, 0.0f, vSeparation.z);
             PblVector3 vDir;
-            D3DXVec3Normalize(&vDir, &vFlat);
+            D3DXVec3Normalize(reinterpret_cast<D3DXVECTOR3*>(&vDir), reinterpret_cast<const D3DXVECTOR3*>(&vFlat));
             float fMax = fHorizontal * 2.0f;
             if (!(fMax > fDist))
             {
@@ -2752,7 +2750,7 @@ void EntityWalker::Die()
         mExplodedDeath = true;
         DamageOwner owner(mDamageOwner.mCharacter, mDamageOwner.mGameObject, mDamageOwner.mTeam, mClass, 0, 1.0f);
         PblVector3 vPos;
-        D3DXVec3TransformCoord(&vPos, &mClass->mExplosionOffset, &mMatrix);
+        D3DXVec3TransformCoord(reinterpret_cast<D3DXVECTOR3*>(&vPos), reinterpret_cast<const D3DXVECTOR3*>(&mClass->mExplosionOffset), reinterpret_cast<const D3DXMATRIX*>(&mMatrix));
         mClass->mExplosion->CreateExplosion(vPos, owner, false, COLL_UNKNOWN);
     }
 }
@@ -2860,7 +2858,7 @@ void EntityWalker::MoveForward(float fDistance)
             PblVector4{ 0.0f, 1.0f, 0.0f, 0.0f },
             PblVector4{ fTurnSin, 0.0f, fTurnCos, 0.0f },
             PblVector4{ 0.0f, 0.0f, 0.0f, 1.0f });
-        D3DXMatrixMultiply(&mTurn, &mTurn, &mMatrix);
+        D3DXMatrixMultiply(reinterpret_cast<D3DXMATRIX*>(&mTurn), reinterpret_cast<const D3DXMATRIX*>(&mTurn), reinterpret_cast<const D3DXMATRIX*>(&mMatrix));
         vPos.x = (mTurn.m[2][0] * fCos - mTurn.m[1][0] * fSin) * fDistance + vPos.x;
         vPos.y = vPos.y + (mTurn.m[2][1] * fCos - mTurn.m[1][1] * fSin) * fDistance;
         vPos.z = vPos.z + (mTurn.m[2][2] * fCos - mTurn.m[1][2] * fSin) * fDistance;
@@ -3029,9 +3027,6 @@ void EntityWalker::ActivatePhysics()
     }
 }
 
-extern "C" PblVector3* __stdcall D3DXVec3TransformNormal(PblVector3* pOut, const PblVector3* pV, const PblMatrix* pM);
-extern "C" PblQuaternion* __stdcall D3DXQuaternionNormalize(PblQuaternion* pOut, const PblQuaternion* pQ);
-extern "C" PblMatrix* __stdcall D3DXMatrixRotationQuaternion(PblMatrix* pOut, const PblQuaternion* pQ);
 
 extern bool netIsLateTurn;
 extern PblVector3 gVectorZero;
@@ -3067,7 +3062,7 @@ EntityWalker::StateTableEntry EntityWalker::sStateTable[StateCount] = {
 void EntityWalker::ApplyAttackDamage(const PblVector3& vPosition, float fRadius, float fDamage, float fPush) const
 {
     PblVector3 vAttack;
-    D3DXVec3TransformCoord(&vAttack, &vPosition, &mMatrix);
+    D3DXVec3TransformCoord(reinterpret_cast<D3DXVECTOR3*>(&vAttack), reinterpret_cast<const D3DXVECTOR3*>(&vPosition), reinterpret_cast<const D3DXMATRIX*>(&mMatrix));
     GameObject* pObjects[10];
     const int iCount = CollisionManager::GetObjectsInRange(vAttack, fRadius, pObjects, 10, this, 0x3a);
     if (!iCount)
@@ -3078,8 +3073,8 @@ void EntityWalker::ApplyAttackDamage(const PblVector3& vPosition, float fRadius,
     DamageDesc damage(mDamageOwner, fDamage);
     PblVector3 vDir;
     PblVector3 vNormal;
-    D3DXVec3TransformNormal(&vNormal, &vPosition, &mMatrix);
-    D3DXVec3Normalize(&vDir, &vNormal);
+    D3DXVec3TransformNormal(reinterpret_cast<D3DXVECTOR3*>(&vNormal), reinterpret_cast<const D3DXVECTOR3*>(&vPosition), reinterpret_cast<const D3DXMATRIX*>(&mMatrix));
+    D3DXVec3Normalize(reinterpret_cast<D3DXVECTOR3*>(&vDir), reinterpret_cast<const D3DXVECTOR3*>(&vNormal));
     for (int i = 0; i < iCount; ++i)
     {
         const PblVector3& vCenter = pObjects[i]->GetCollisionCenter();
@@ -3087,7 +3082,7 @@ void EntityWalker::ApplyAttackDamage(const PblVector3& vPosition, float fRadius,
         vDelta.x = vCenter.x - (vAttack.x - vDir.x * fRadius * 1.5f);
         vDelta.y = vCenter.y - (vAttack.y - vDir.y * fRadius * 1.5f);
         vDelta.z = vCenter.z - (vAttack.z - vDir.z * fRadius * 1.5f);
-        D3DXVec3Normalize(&vNormal, &vDelta);
+        D3DXVec3Normalize(reinterpret_cast<D3DXVECTOR3*>(&vNormal), reinterpret_cast<const D3DXVECTOR3*>(&vDelta));
         if (fDamage > 0.0f)
         {
             static_cast<Damageable*>(pObjects[i])->ApplyDamage(damage, vNormal, pObjects[i]->GetCollisionCenter(),
@@ -3984,7 +3979,7 @@ bool EntityWalker::Update(float fDeltaTime)
             mExplodedFinal = true;
             DamageOwner owner(mDamageOwner.mCharacter, mDamageOwner.mGameObject, mDamageOwner.mTeam, mClass, 0, 1.0f);
             PblVector3 vPos;
-            D3DXVec3TransformCoord(&vPos, &mClass->mFinalExplosionOffset, &mMatrix);
+            D3DXVec3TransformCoord(reinterpret_cast<D3DXVECTOR3*>(&vPos), reinterpret_cast<const D3DXVECTOR3*>(&mClass->mFinalExplosionOffset), reinterpret_cast<const D3DXMATRIX*>(&mMatrix));
             pExplosion->CreateExplosion(vPos, owner, false, COLL_UNKNOWN);
         }
         if (!(NetGame::IsEnabled() && NetGame::IsClient()))
@@ -4119,7 +4114,7 @@ bool EntityWalker::PostCollisionUpdate(float fDeltaTime)
         PblVector3 vStart(mMatrix.m[3][0] + 0.0f, mMatrix.m[3][1] + fHeight, mMatrix.m[3][2] + 0.0f);
         PblVector3 vFlat(mMatrix.m[2][0], 0.0f, mMatrix.m[2][2]);
         PblVector3 vFront;
-        D3DXVec3Normalize(&vFront, &vFlat);
+        D3DXVec3Normalize(reinterpret_cast<D3DXVECTOR3*>(&vFront), reinterpret_cast<const D3DXVECTOR3*>(&vFlat));
         PblVector3 vSide(-vFront.z, 0.0f, vFront.x);
         float fLength = fHeight;
         if (mLegPairCount > 1)
@@ -4180,7 +4175,7 @@ bool EntityWalker::PostCollisionUpdate(float fDeltaTime)
     PblMath::SinCos(&fSinYaw, &fCosYaw, mYawValue);
     PblVector3 vLocal(fSinYaw * fCosPitch, fSinPitch, fCosYaw * fCosPitch);
     PblVector3 vEyeDir;
-    D3DXVec3TransformNormal(&vEyeDir, &vLocal, &mMatrix);
+    D3DXVec3TransformNormal(reinterpret_cast<D3DXVECTOR3*>(&vEyeDir), reinterpret_cast<const D3DXVECTOR3*>(&vLocal), reinterpret_cast<const D3DXMATRIX*>(&mMatrix));
     mEyeDir = vEyeDir;
     mEyePoint = mClass->mCameraSettings.CalcEyePoint(mMatrix);
 
@@ -4208,7 +4203,7 @@ bool EntityWalker::PostCollisionUpdate(float fDeltaTime)
 
             PblQuaternion qUnit;
             PblMatrix mCamera;
-            D3DXMatrixRotationQuaternion(&mCamera, D3DXQuaternionNormalize(&qUnit, &qCamera));
+            D3DXMatrixRotationQuaternion(reinterpret_cast<D3DXMATRIX*>(&mCamera), D3DXQuaternionNormalize(reinterpret_cast<D3DXQUATERNION*>(&qUnit), reinterpret_cast<const D3DXQUATERNION*>(&qCamera)));
             mCamera.m[3][0] = gVectorZero.x;
             mCamera.m[3][1] = gVectorZero.y;
             mCamera.m[3][2] = gVectorZero.z;
@@ -4325,11 +4320,11 @@ bool EntityWalker::PostCollisionUpdate(float fDeltaTime)
         GameObject* pSoldier = mPilot->GetGameObject();
         PblMatrix mInverse = GetMatrix().GetInverseFast();
         PblMatrix mSeat;
-        D3DXMatrixMultiply(&mSeat, &pSoldier->GetMatrix(), &mInverse);
+        D3DXMatrixMultiply(reinterpret_cast<D3DXMATRIX*>(&mSeat), reinterpret_cast<const D3DXMATRIX*>(&pSoldier->GetMatrix()), reinterpret_cast<const D3DXMATRIX*>(&mInverse));
         PblMatrix mLocal = mSeat;
         PblMatrix mSmoothed = GetSmoothedMatrix();
         PblMatrix mRender;
-        D3DXMatrixMultiply(&mRender, &mLocal, &mSmoothed);
+        D3DXMatrixMultiply(reinterpret_cast<D3DXMATRIX*>(&mRender), reinterpret_cast<const D3DXMATRIX*>(&mLocal), reinterpret_cast<const D3DXMATRIX*>(&mSmoothed));
         pSoldier->SetRenderPos(mRender.GetTranslation());
     }
     return true;
@@ -4350,7 +4345,7 @@ bool EntityWalker::ApplyDamage(const DamageDesc& damage, const PblVector3& vDir,
         {
             PblMatrix mInverse = mMatrix.GetInverseFast();
             PblVector3 vLocal;
-            D3DXVec3TransformNormal(&vLocal, &vDir, &mInverse);
+            D3DXVec3TransformNormal(reinterpret_cast<D3DXVECTOR3*>(&vLocal), reinterpret_cast<const D3DXVECTOR3*>(&vDir), reinterpret_cast<const D3DXMATRIX*>(&mInverse));
             StatusDisplay::Instance(iJoystick)->SetDamageDirection(vLocal);
         }
     }
@@ -4397,7 +4392,7 @@ bool EntityWalker::UpdateIndirect(float fDeltaTime)
         PblVector3 vToDest(dest.mPos.x - GetMatrix().m[3][0], dest.mPos.y - GetMatrix().m[3][1],
                            dest.mPos.z - GetMatrix().m[3][2]);
         PblVector3 vDir;
-        D3DXVec3Normalize(&vDir, &vToDest);
+        D3DXVec3Normalize(reinterpret_cast<D3DXVECTOR3*>(&vDir), reinterpret_cast<const D3DXVECTOR3*>(&vToDest));
         if (mMe.m[2][1] * vDir.y + vDir.x * mMe.m[2][0] + mMe.m[2][2] * vDir.z > 0.8660254f)
         {
             float fStrafe = mControlStrafe;
@@ -4586,7 +4581,7 @@ void EntityWalker::SetupCameraTrackMatrix(PblMatrix& rMatrix, float fDeltaTime)
     PblMath::SinCos(&fSinYaw, &fCosYaw, mYawValue);
     PblVector3 vLocal(fSinYaw * fCosPitch, fSinPitch, fCosYaw * fCosPitch);
     PblVector3 vAim;
-    D3DXVec3TransformNormal(&vAim, &vLocal, &matrix);
+    D3DXVec3TransformNormal(reinterpret_cast<D3DXVECTOR3*>(&vAim), reinterpret_cast<const D3DXVECTOR3*>(&vLocal), reinterpret_cast<const D3DXMATRIX*>(&matrix));
     PblVector3 vEye = mClass->mCameraSettings.CalcEyePoint(matrix);
 
     const PblMatrix* pJoint = mPose.Find(mClass->mFPPoseHash);

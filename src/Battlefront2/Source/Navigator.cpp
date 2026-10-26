@@ -87,8 +87,7 @@ const char Navigator::rttiNameNavigator[] = "Navigator";
 ObstacleTest::ObstacleTest(const PblVector3& rSrc, const PblVector3& rDest)
     : mSrc(rSrc), mDest(rDest)
 {
-    mBoundCenter = PblVector3((mSrc.x + mDest.x) * 0.5f, (mSrc.y + mDest.y) * 0.5f,
-                              (mSrc.z + mDest.z) * 0.5f);
+    mBoundCenter = ((mSrc + mDest) * 0.5f);
     float fX = mBoundCenter.x - mSrc.x;
     float fY = mBoundCenter.y - mSrc.y;
     float fZ = mBoundCenter.z - mSrc.z;

@@ -1,3 +1,4 @@
+#include <d3dx9math.h>
 #include "LockOnManager.h"
 #include "CameraManager.h"
 #include "Character.h"
@@ -28,11 +29,6 @@
 #include <float.h>
 #include "CollisionManager.h"
 
-extern "C" PblVector3* __stdcall D3DXVec3TransformNormal(PblVector3* pOut, const PblVector3* pV,
-                                                         const PblMatrix* pM);
-extern "C" PblVector3* __stdcall D3DXVec3TransformCoord(PblVector3* pOut, const PblVector3* pV,
-                                                        const PblMatrix* pM);
-extern "C" PblVector3* __stdcall D3DXVec3Normalize(PblVector3* pOut, const PblVector3* pV);
 
 // GLOBAL: SWBF2 0x01e573f8
 unsigned int LockOnManager::sNumLockOnManagers;
@@ -296,7 +292,7 @@ void LockOnManager::CalculateScreenCoordinates(Controllable* const pCtrl, RedCam
 {
     LockOnManager* pThis = (LockOnManager*)this;
     PblVector3 vCamera;
-    D3DXVec3TransformCoord(&vCamera, pPos, &pCamera->GetMatrixInverse());
+    D3DXVec3TransformCoord(reinterpret_cast<D3DXVECTOR3*>(&vCamera), reinterpret_cast<const D3DXVECTOR3*>(pPos), reinterpret_cast<const D3DXMATRIX*>(&pCamera->GetMatrixInverse()));
     const PblVector3 vProjected = pCamera->TransformCameraPointToProjectionSpace(vCamera);
 
     PblVector3 vToTarget;
@@ -315,7 +311,7 @@ void LockOnManager::CalculateScreenCoordinates(Controllable* const pCtrl, RedCam
                                pPos->y - pCtrl->mEyePoint.y, pPos->z - pCtrl->mEyePoint.z);
     }
 
-    D3DXVec3Normalize(&vToTarget, &vToTarget);
+    D3DXVec3Normalize(reinterpret_cast<D3DXVECTOR3*>(&vToTarget), reinterpret_cast<const D3DXVECTOR3*>(&vToTarget));
     const float fDot = vForward.x * vToTarget.x + vForward.y * vToTarget.y +
                        vForward.z * vToTarget.z;
 
@@ -380,7 +376,7 @@ void LockOnManager::UpdateTargetVisibility(Controllable* const pCtrl, RedCamera*
     {
         if (const PblMatrix* pBone = pPose->Find(0x3483A489u))
         {
-            D3DXVec3TransformCoord(&vPos, (const PblVector3*)pBone->m[3], &pObject->GetMatrix());
+            D3DXVec3TransformCoord(reinterpret_cast<D3DXVECTOR3*>(&vPos), reinterpret_cast<const D3DXVECTOR3*>((const PblVector3*)pBone->m[3]), reinterpret_cast<const D3DXMATRIX*>(&pObject->GetMatrix()));
         }
     }
     else if (const GameModel* pModel = pObject->GetModel())
@@ -388,7 +384,7 @@ void LockOnManager::UpdateTargetVisibility(Controllable* const pCtrl, RedCamera*
         PblMatrix mBone;
         if (pModel->GetRedModel(0) && pModel->GetRedModel(0)->GetBoneMatrix(0x3483A489u, mBone))
         {
-            D3DXVec3TransformCoord(&vPos, (const PblVector3*)mBone.m[3], &pObject->GetMatrix());
+            D3DXVec3TransformCoord(reinterpret_cast<D3DXVECTOR3*>(&vPos), reinterpret_cast<const D3DXVECTOR3*>((const PblVector3*)mBone.m[3]), reinterpret_cast<const D3DXMATRIX*>(&pObject->GetMatrix()));
         }
     }
 
@@ -396,7 +392,7 @@ void LockOnManager::UpdateTargetVisibility(Controllable* const pCtrl, RedCamera*
     if (bCommon)
     {
         PblVector3 vUp(0.0f, 1.3f, 0.0f);
-        D3DXVec3TransformNormal(&vLift, &vUp, &pObject->GetMatrix());
+        D3DXVec3TransformNormal(reinterpret_cast<D3DXVECTOR3*>(&vLift), reinterpret_cast<const D3DXVECTOR3*>(&vUp), reinterpret_cast<const D3DXMATRIX*>(&pObject->GetMatrix()));
     }
     else if (rInfo.mLocked)
     {
@@ -414,7 +410,7 @@ void LockOnManager::UpdateTargetVisibility(Controllable* const pCtrl, RedCamera*
             float fUp = pObject->GetCollisionRadius() * 0.7f;
             vUp = PblVector3(0.0f, 4.0f > fUp ? fUp : 4.0f, 0.0f);
         }
-        D3DXVec3TransformNormal(&vLift, &vUp, &pObject->GetMatrix());
+        D3DXVec3TransformNormal(reinterpret_cast<D3DXVECTOR3*>(&vLift), reinterpret_cast<const D3DXVECTOR3*>(&vUp), reinterpret_cast<const D3DXMATRIX*>(&pObject->GetMatrix()));
     }
 
     float fDist = sqrtf((vPos.y - vEye.y) * (vPos.y - vEye.y) + (vPos.x - vEye.x) * (vPos.x - vEye.x) +
@@ -685,7 +681,6 @@ bool LockOnManager::IsTargetObjectTypeAllowed(GameObject* gameObject, GameObject
     return typeAllowed;
 }
 
-extern "C" PblVector3* __stdcall D3DXVec3Normalize(PblVector3* pOut, const PblVector3* pV);
 
 // FUNCTION: SWBF2 0x0057be70
 void LockOnManager::SetupNearestTargets(Controllable* const playerControllable, GameObject* const playerObject,
@@ -908,7 +903,7 @@ void LockOnManager::SetupNearestTargets(Controllable* const playerControllable, 
                 else
                 {
                     PblVector3 direction;
-                    D3DXVec3Normalize(&direction, &toTargetVector);
+                    D3DXVec3Normalize(reinterpret_cast<D3DXVECTOR3*>(&direction), reinterpret_cast<const D3DXVECTOR3*>(&toTargetVector));
                     dot = direction.x * playerControllable->mEyeDir.x + direction.y * playerControllable->mEyeDir.y +
                           direction.z * playerControllable->mEyeDir.z;
                 }
@@ -1081,7 +1076,7 @@ void LockOnManager::SetupNearestTargets(Controllable* const playerControllable, 
                                                         targetPos.y - playerControllable->mEyePoint.y,
                                                         targetPos.z - playerControllable->mEyePoint.z);
                                     PblVector3 direction;
-                                    D3DXVec3Normalize(&direction, &toTarget);
+                                    D3DXVec3Normalize(reinterpret_cast<D3DXVECTOR3*>(&direction), reinterpret_cast<const D3DXVECTOR3*>(&toTarget));
                                     dot = direction.x * playerControllable->mEyeDir.x +
                                           direction.y * playerControllable->mEyeDir.y +
                                           direction.z * playerControllable->mEyeDir.z;

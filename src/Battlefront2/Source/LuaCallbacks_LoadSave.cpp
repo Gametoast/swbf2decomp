@@ -1555,58 +1555,57 @@ namespace Lua_Callbacks
 static int WriteLuaItem(unsigned char* pOut, int iIndex, int iDepth, bool bArg)
 {
     (void)bArg;
-    lua_State* L = LuaHelper::mState;
-    lua_pushvalue(L, iIndex);
-    const int iType = lua_type(L, -1);
+    lua_pushvalue(LuaHelper::mState, iIndex);
+    const int iType = lua_type(LuaHelper::mState, -1);
     *pOut = static_cast<unsigned char>(iType);
     unsigned char* pWrite = pOut + 1;
     switch (iType)
     {
     case LUA_TBOOLEAN:
-        *pWrite++ = lua_toboolean(L, -1) != 0;
+        *pWrite++ = lua_toboolean(LuaHelper::mState, -1) != 0;
         break;
     case LUA_TLIGHTUSERDATA:
     {
-        void const* pValue = lua_topointer(L, -1);
+        void const* pValue = lua_topointer(LuaHelper::mState, -1);
         memcpy(pWrite, &pValue, sizeof(pValue));
         pWrite += sizeof(pValue);
         break;
     }
     case LUA_TNUMBER:
     {
-        float fValue = static_cast<float>(luaL_checknumber(L, -1));
+        float fValue = static_cast<float>(luaL_checknumber(LuaHelper::mState, -1));
         memcpy(pWrite, &fValue, sizeof(fValue));
         pWrite += sizeof(fValue);
         break;
     }
     case LUA_TSTRING:
     {
-        const char* pcValue = luaL_checklstring(L, -1, 0);
+        const char* pcValue = luaL_checklstring(LuaHelper::mState, -1, 0);
         const unsigned int uLength = strlen(pcValue) + 1;
         memcpy(pWrite, pcValue, uLength);
         pWrite += uLength;
         break;
     }
     case LUA_TTABLE:
-        lua_pushnil(L);
-        while (lua_next(L, -2))
+        lua_pushnil(LuaHelper::mState);
+        while (lua_next(LuaHelper::mState, -2))
         {
             pWrite += WriteLuaItem(pWrite, -2, iDepth + 1, false);
             pWrite += WriteLuaItem(pWrite, -1, iDepth + 1, false);
-            lua_settop(L, -2);
+            lua_settop(LuaHelper::mState, -2);
         }
         *pWrite++ = 0;
         break;
     case LUA_TFUNCTION:
     {
-        void const* pValue = lua_topointer(L, -1);
+        void const* pValue = lua_topointer(LuaHelper::mState, -1);
         if (Lua_Callbacks::FindLuaGlobal(pValue))
         {
-            const char* pcName = luaL_checklstring(L, -1, 0);
+            const char* pcName = luaL_checklstring(LuaHelper::mState, -1, 0);
             const unsigned int uLength = strlen(pcName) + 1;
             memcpy(pWrite, pcName, uLength);
             pWrite += uLength;
-            lua_settop(L, -2);
+            lua_settop(LuaHelper::mState, -2);
         }
         else
         {
@@ -1617,7 +1616,7 @@ static int WriteLuaItem(unsigned char* pOut, int iIndex, int iDepth, bool bArg)
     default:
         break;
     }
-    lua_settop(L, -2);
+    lua_settop(LuaHelper::mState, -2);
     return static_cast<int>(pWrite - pOut);
 }
 }
@@ -1629,21 +1628,20 @@ namespace Lua_Callbacks
 static int ReadLuaItem(unsigned char* pData, int iDepth, bool bArg)
 {
     (void)bArg;
-    lua_State* L = LuaHelper::mState;
     unsigned char* pRead = pData + 1;
     switch (*pData)
     {
     case 0xff:
         break;
     case LUA_TBOOLEAN:
-        lua_pushboolean(L, *pRead++ != 0);
+        lua_pushboolean(LuaHelper::mState, *pRead++ != 0);
         break;
     case LUA_TLIGHTUSERDATA:
     {
         void* pValue;
         memcpy(&pValue, pRead, sizeof(pValue));
         pRead += sizeof(pValue);
-        lua_pushlightuserdata(L, pValue);
+        lua_pushlightuserdata(LuaHelper::mState, pValue);
         break;
     }
     case LUA_TNUMBER:
@@ -1651,23 +1649,23 @@ static int ReadLuaItem(unsigned char* pData, int iDepth, bool bArg)
         float fValue;
         memcpy(&fValue, pRead, sizeof(fValue));
         pRead += sizeof(fValue);
-        lua_pushnumber(L, fValue);
+        lua_pushnumber(LuaHelper::mState, fValue);
         break;
     }
     case LUA_TSTRING:
     {
         const unsigned int uLength = strlen(reinterpret_cast<const char*>(pRead));
-        lua_pushlstring(L, reinterpret_cast<const char*>(pRead), uLength);
+        lua_pushlstring(LuaHelper::mState, reinterpret_cast<const char*>(pRead), uLength);
         pRead += uLength + 1;
         break;
     }
     case LUA_TTABLE:
-        lua_newtable(L);
+        lua_newtable(LuaHelper::mState);
         while (*pRead)
         {
             pRead += ReadLuaItem(pRead, iDepth + 1, false);
             pRead += ReadLuaItem(pRead, iDepth + 1, false);
-            lua_rawset(L, -3);
+            lua_rawset(LuaHelper::mState, -3);
         }
         ++pRead;
         break;
@@ -1676,7 +1674,7 @@ static int ReadLuaItem(unsigned char* pData, int iDepth, bool bArg)
         pRead += strlen(reinterpret_cast<const char*>(pRead)) + 1;
         break;
     default:
-        lua_pushnil(L);
+        lua_pushnil(LuaHelper::mState);
         break;
     }
     return static_cast<int>(pRead - pData);

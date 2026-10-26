@@ -1,3 +1,4 @@
+#include <d3dx9math.h>
 #include "SkyObject.h"
 #include "PebbleFL/Common/PblConfig.h"
 #include "PebbleFL/Common/PblHashTable.h"
@@ -9,7 +10,6 @@
 
 #include <math.h>
 
-extern "C" PblVector3* __stdcall D3DXVec3Normalize(PblVector3* pOut, const PblVector3* pV);
 
 PblMatrix DirectionMatrix(const PblVector3& vDir, const PblVector3& vUp, const PblVector3& vPos);
 
@@ -202,9 +202,7 @@ bool SkyObjectManager::SkyObjectClass::SkyObject::Update(float fDeltaTime)
         return false;
     }
 
-    mVelocity.x += mAcceleration.x * fDeltaTime;
-    mVelocity.y += mAcceleration.y * fDeltaTime;
-    mVelocity.z += mAcceleration.z * fDeltaTime;
+    mVelocity += mAcceleration * fDeltaTime;
 
     float fX = fDeltaTime * mVelocity.x;
     float fY = mVelocity.y * fDeltaTime;
@@ -229,7 +227,7 @@ void SkyObjectManager::SkyObjectClass::Spawn(int i)
         vDir = PblVector3(rand.GetFloat() - 0.5f, 0.0f, rand.GetFloat() - 0.5f);
     } while (vDir.x == 0.0f && vDir.z == 0.0f);
     PblVector3 vNorm;
-    vDir = *D3DXVec3Normalize(&vNorm, &vDir);
+    vDir = *reinterpret_cast<PblVector3*>(D3DXVec3Normalize(reinterpret_cast<D3DXVECTOR3*>(&vNorm), reinterpret_cast<const D3DXVECTOR3*>(&vDir)));
 
     PblVector3 vHeading(vDir.z - vDir.y * 0.0f, vDir.x * 0.0f - vDir.z * 0.0f, vDir.y * 0.0f - vDir.x);
     float fHeight = rand.GetFloat() * mHeightVariance + mHeight;
@@ -246,7 +244,7 @@ void SkyObjectManager::SkyObjectClass::Spawn(int i)
         vHeading.z += -vNorm.z * fIn;
     }
     PblVector3 vNorm2;
-    vDir = *D3DXVec3Normalize(&vNorm2, &vDir);
+    vDir = *reinterpret_cast<PblVector3*>(D3DXVec3Normalize(reinterpret_cast<D3DXVECTOR3*>(&vNorm2), reinterpret_cast<const D3DXVECTOR3*>(&vDir)));
 
     obj.mMatrix = DirectionMatrix(vHeading, PblVector3(0.0f, 1.0f, 0.0f), vPos);
     obj.mVelocity = PblVector3(rand.GetFloat() * mVelocityVarianceX + mVelocityX,

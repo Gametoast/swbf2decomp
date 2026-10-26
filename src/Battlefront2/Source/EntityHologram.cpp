@@ -1,3 +1,4 @@
+#include <d3dx9math.h>
 #include <math.h>
 #include <stdio.h>
 #include <string.h>
@@ -17,8 +18,6 @@
 #include "RedEngineFL/Graphics/RedCamera.h"
 #include "RedEngineFL/Graphics/PC/pcRedRenderer.h"
 
-extern "C" PblVector3* __stdcall D3DXVec3TransformCoord(PblVector3* pOut, const PblVector3* pV,
-                                                         const PblMatrix* pM);
 
 extern NoLodData noloddata;
 
@@ -29,9 +28,6 @@ bool IsReflected(const PblVector3& vPos, float fRadius, PblMatrix& mReflection, 
 unsigned int GetCurrentViewport();
 }
 
-extern "C" PblMatrix* __stdcall D3DXMatrixMultiply(PblMatrix* pOut, const PblMatrix* pM1, const PblMatrix* pM2);
-extern "C" PblMatrix* __stdcall D3DXMatrixRotationX(PblMatrix* pOut, float fAngle);
-extern "C" PblMatrix* __stdcall D3DXMatrixRotationY(PblMatrix* pOut, float fAngle);
 
 static const float kfHoloBeamWidthCone = 0.8f;
 static const float kfHoloBeamFadeFactor = 0.25f;
@@ -149,7 +145,7 @@ void LightBeam::SetHeadPosition(const PblVector3& vPos)
 {
     _vHeadPosition = vPos;
     PblVector3 vWorld;
-    D3DXVec3TransformCoord(&vWorld, &_vHeadPosition, &m_mWorldMatrix);
+    D3DXVec3TransformCoord(reinterpret_cast<D3DXVECTOR3*>(&vWorld), reinterpret_cast<const D3DXVECTOR3*>(&_vHeadPosition), reinterpret_cast<const D3DXMATRIX*>(&m_mWorldMatrix));
     _Flare.SetPosition(vWorld);
 }
 
@@ -337,13 +333,13 @@ EntityHologram::EntityHologram(EntityHologramClass* pClass, const EntityDesc& de
     float fRadius = pClass->m_fSize * 0.5f + pClass->m_fHeight * 0.5f;
     PblVector3 vOffset(0.0f, fRadius, 0.0f);
     PblVector3 vCenter;
-    D3DXVec3TransformCoord(&vCenter, &vOffset, &m_WorldMatrix);
+    D3DXVec3TransformCoord(reinterpret_cast<D3DXVECTOR3*>(&vCenter), reinterpret_cast<const D3DXVECTOR3*>(&vOffset), reinterpret_cast<const D3DXMATRIX*>(&m_WorldMatrix));
 
     PblMatrix mReflection;
     if (FLRenderer::IsReflected(vCenter, fRadius, mReflection, true))
     {
         PblVector3 vReflected;
-        D3DXVec3TransformCoord(&vReflected, &vCenter, &mReflection);
+        D3DXVec3TransformCoord(reinterpret_cast<D3DXVECTOR3*>(&vReflected), reinterpret_cast<const D3DXVECTOR3*>(&vCenter), reinterpret_cast<const D3DXMATRIX*>(&mReflection));
         float fDX = vCenter.x - vReflected.x;
         float fDY = vCenter.y - vReflected.y;
         float fDZ = vCenter.z - vReflected.z;
@@ -713,7 +709,7 @@ void EntityHologram::Render(unsigned char ucViewport, float fDist, unsigned int 
         if (bReflected)
         {
             PblMatrix mSaved(m_WorldMatrix);
-            D3DXMatrixMultiply(&m_WorldMatrix, &m_WorldMatrix, &mReflection);
+            D3DXMatrixMultiply(reinterpret_cast<D3DXMATRIX*>(&m_WorldMatrix), reinterpret_cast<const D3DXMATRIX*>(&m_WorldMatrix), reinterpret_cast<const D3DXMATRIX*>(&mReflection));
             m_pLightBeam->AttachEffectToMatrix(&m_WorldMatrix, false);
             m_pLightBeam->Render(uiFlags | 0x10000100);
             m_WorldMatrix = mSaved;
@@ -748,8 +744,8 @@ void EntityHologram::Render(unsigned char ucViewport, float fDist, unsigned int 
 
     PblMatrix mModel(gMatrixIdentity);
     PblMatrix mTemp;
-    D3DXMatrixMultiply(&mModel, &mModel, D3DXMatrixRotationX(&mTemp, m_fTilt));
-    D3DXMatrixMultiply(&mModel, &mModel, D3DXMatrixRotationY(&mTemp, pClass->m_fRotateRate * m_fRotateTimer));
+    D3DXMatrixMultiply(reinterpret_cast<D3DXMATRIX*>(&mModel), reinterpret_cast<const D3DXMATRIX*>(&mModel), D3DXMatrixRotationX(reinterpret_cast<D3DXMATRIX*>(&mTemp), m_fTilt));
+    D3DXMatrixMultiply(reinterpret_cast<D3DXMATRIX*>(&mModel), reinterpret_cast<const D3DXMATRIX*>(&mModel), D3DXMatrixRotationY(reinterpret_cast<D3DXMATRIX*>(&mTemp), pClass->m_fRotateRate * m_fRotateTimer));
 
     float fScaleXZ = m_fAspect * fSize;
     float fScaleY = fSize * fInvAspect;
@@ -764,7 +760,7 @@ void EntityHologram::Render(unsigned char ucViewport, float fDist, unsigned int 
     mModel.m[3][0] += 0.0f;
     mModel.m[3][1] += pClass->m_fHeight;
     mModel.m[3][2] += 0.0f;
-    D3DXMatrixMultiply(&mModel, &mModel, &m_WorldMatrix);
+    D3DXMatrixMultiply(reinterpret_cast<D3DXMATRIX*>(&mModel), reinterpret_cast<const D3DXMATRIX*>(&mModel), reinterpret_cast<const D3DXMATRIX*>(&m_WorldMatrix));
 
     float fNear, fUnused;
     RedRenderer::GetCamera()->GetFrustum(fNear, fUnused, fUnused, fUnused);
@@ -786,7 +782,7 @@ void EntityHologram::Render(unsigned char ucViewport, float fDist, unsigned int 
     m_pHoloModel->Render(&mModel, 0, color, uiFlags | 0x10, 0);
     if (bReflected)
     {
-        D3DXMatrixMultiply(&mTemp, &mModel, &mReflection);
+        D3DXMatrixMultiply(reinterpret_cast<D3DXMATRIX*>(&mTemp), reinterpret_cast<const D3DXMATRIX*>(&mModel), reinterpret_cast<const D3DXMATRIX*>(&mReflection));
         mReflection = mTemp;
         m_pHoloModel->Render(&mReflection, 0, color, (uiFlags & ~0x10000u) | 0x10000110, 0);
     }
@@ -837,13 +833,13 @@ void EntityHologram::SetStoredMatrix(const PblMatrix& mMatrix)
     float fRadius = pClass->m_fSize * 0.5f + pClass->m_fHeight * 0.5f;
     PblVector3 vOffset(0.0f, fRadius, 0.0f);
     PblVector3 vCenter;
-    D3DXVec3TransformCoord(&vCenter, &vOffset, &m_WorldMatrix);
+    D3DXVec3TransformCoord(reinterpret_cast<D3DXVECTOR3*>(&vCenter), reinterpret_cast<const D3DXVECTOR3*>(&vOffset), reinterpret_cast<const D3DXMATRIX*>(&m_WorldMatrix));
 
     PblMatrix mReflection;
     if (FLRenderer::IsReflected(vCenter, fRadius, mReflection, true))
     {
         PblVector3 vReflected;
-        D3DXVec3TransformCoord(&vReflected, &vCenter, &mReflection);
+        D3DXVec3TransformCoord(reinterpret_cast<D3DXVECTOR3*>(&vReflected), reinterpret_cast<const D3DXVECTOR3*>(&vCenter), reinterpret_cast<const D3DXMATRIX*>(&mReflection));
         float fDX = vCenter.x - vReflected.x;
         float fDY = vCenter.y - vReflected.y;
         float fDZ = vCenter.z - vReflected.z;

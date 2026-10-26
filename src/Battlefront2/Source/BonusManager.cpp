@@ -1,3 +1,4 @@
+#include <d3dx9math.h>
 #include <string.h>
 
 #include "BonusManager.h"
@@ -22,8 +23,6 @@
 #include "RedEngineFL/Application/RedPath.h"
 #include "RedEngineFL/Memory/RedMemoryPool.h"
 
-extern "C" PblQuaternion* __stdcall D3DXQuaternionNormalize(PblQuaternion* pOut, const PblQuaternion* pQ);
-extern "C" PblMatrix* __stdcall D3DXMatrixRotationQuaternion(PblMatrix* pOut, const PblQuaternion* pQ);
 
 extern bool netHeroesEnabled;
 extern int netHeroRuleTeam;
@@ -441,8 +440,8 @@ void BonusManager::AddTurretsToCP(CommandPostData& data, int iTeam)
                 const PblVector3& vPosition = pPath->GetPointPosition(i);
                 PblQuaternion qRotation;
                 PblMatrix matrix;
-                D3DXMatrixRotationQuaternion(&matrix,
-                                             D3DXQuaternionNormalize(&qRotation, &pPath->GetPointRotation(i)));
+                D3DXMatrixRotationQuaternion(reinterpret_cast<D3DXMATRIX*>(&matrix),
+                                             D3DXQuaternionNormalize(reinterpret_cast<D3DXQUATERNION*>(&qRotation), reinterpret_cast<const D3DXQUATERNION*>(&pPath->GetPointRotation(i))));
                 matrix.m[3][0] = vPosition.x;
                 matrix.m[3][1] = vPosition.y;
                 matrix.m[3][2] = vPosition.z;

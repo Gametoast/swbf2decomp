@@ -1,3 +1,4 @@
+#include <d3dx9math.h>
 #include "OrdnanceEmitter.h"
 #include "Explosion.h"
 #include "FLEffect.h"
@@ -19,17 +20,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-extern "C" PblMatrix* __stdcall D3DXMatrixMultiply(PblMatrix* pOut, const PblMatrix* pM1, const PblMatrix* pM2);
-extern "C" PblVector3* __stdcall D3DXVec3Normalize(PblVector3* pOut, const PblVector3* pV);
 
 extern PblVector3 gVectorZero;
-
-static inline const PblMatrix operator*(const PblMatrix& a, const PblMatrix& b)
-{
-    PblMatrix result;
-    D3DXMatrixMultiply(&result, &a, &b);
-    return result;
-}
 
 // SYNTHETIC: SWBF2 0x00405a70
 // `dynamic initializer for 'OrdnanceEmitterClass::rttiHashOrdnanceEmitterClass''
@@ -482,7 +474,7 @@ Ordnance* OrdnanceEmitterClass::Build(const OrdnanceDesc& desc)
             if (fConeLengthSq > fDistSq)
             {
                 PblVector3 vToTarget;
-                D3DXVec3Normalize(&vToTarget, &vDelta);
+                D3DXVec3Normalize(reinterpret_cast<D3DXVECTOR3*>(&vToTarget), reinterpret_cast<const D3DXVECTOR3*>(&vDelta));
                 float fWidth = fDistSq < 6.25f ? fNearConeWidth : mConeWidth;
                 if (vDir.x * vToTarget.x + vToTarget.y * vDir.y + vToTarget.z * vDir.z > fWidth)
                 {
@@ -533,7 +525,7 @@ Ordnance* OrdnanceEmitterClass::Build(const OrdnanceDesc& desc)
 
             PblVector3 vDelta(vTarget.x - vSource.x, vTarget.y - vSource.y, vTarget.z - vSource.z);
             PblVector3 vJumpDir;
-            D3DXVec3Normalize(&vJumpDir, &vDelta);
+            D3DXVec3Normalize(reinterpret_cast<D3DXVECTOR3*>(&vJumpDir), reinterpret_cast<const D3DXVECTOR3*>(&vDelta));
 
             if (pTarget->Deflect(0, vTarget, vJumpDir))
             {
@@ -916,7 +908,7 @@ PblMatrix Aimer::GetFireMatrix() const
 {
     PblVector3 vSide(mDirection.z, 0.0f, -mDirection.x);
     PblVector3 vRight;
-    D3DXVec3Normalize(&vRight, &vSide);
+    D3DXVec3Normalize(reinterpret_cast<D3DXVECTOR3*>(&vRight), reinterpret_cast<const D3DXVECTOR3*>(&vSide));
     PblVector3 vUp(mDirection.y * vRight.z - mDirection.z * vRight.y,
                    mDirection.z * vRight.x - mDirection.x * vRight.z,
                    mDirection.x * vRight.y - mDirection.y * vRight.x);

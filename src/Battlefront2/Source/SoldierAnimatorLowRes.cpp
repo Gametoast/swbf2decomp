@@ -1,3 +1,4 @@
+#include <d3dx9math.h>
 #include "SoldierAnimatorLowRes.h"
 
 #include <math.h>
@@ -33,11 +34,6 @@ extern float sClientDeltaTime;
 
 extern PblVector3 gVectorZero;
 
-extern "C" PblMatrix* __stdcall D3DXMatrixRotationAxis(PblMatrix* pOut, const PblVector3* pV, float fAngle);
-extern "C" PblMatrix* __stdcall D3DXMatrixRotationX(PblMatrix* pOut, float fAngle);
-extern "C" PblMatrix* __stdcall D3DXMatrixRotationY(PblMatrix* pOut, float fAngle);
-extern "C" PblMatrix* __stdcall D3DXMatrixMultiply(PblMatrix* pOut, const PblMatrix* pM1, const PblMatrix* pM2);
-extern "C" PblVector3* __stdcall D3DXVec3TransformNormal(PblVector3* pOut, const PblVector3* pV, const PblMatrix* pM);
 
 // GLOBAL: SWBF2 0x007e99d0
 SoldierAnimatorLowResClass::PoseClass SoldierAnimatorLowResClass::s_PoseClasses[7] = {
@@ -949,16 +945,16 @@ bool SoldierAnimatorLowRes::GetRootMatrixAnimation(const EntitySoldier& soldier,
                             vVelocity.x * kSoldier.m[2][0] + vVelocity.y * kSoldier.m[2][1] +
                                 vVelocity.z * kSoldier.m[2][2]);
 
-        D3DXMatrixRotationX(&kMatrix, soldier.mStateTimer * 8.0f + 1.0f);
+        D3DXMatrixRotationX(reinterpret_cast<D3DXMATRIX*>(&kMatrix), soldier.mStateTimer * 8.0f + 1.0f);
         PblVector3 vCenter;
-        D3DXVec3TransformNormal(&vCenter, &s_vRollCenter, &kMatrix);
+        D3DXVec3TransformNormal(reinterpret_cast<D3DXVECTOR3*>(&vCenter), reinterpret_cast<const D3DXVECTOR3*>(&s_vRollCenter), reinterpret_cast<const D3DXMATRIX*>(&kMatrix));
         kMatrix.m[3][0] = s_vRollCenter.x - vCenter.x;
         kMatrix.m[3][1] = s_vRollCenter.y - vCenter.y;
         kMatrix.m[3][2] = s_vRollCenter.z - vCenter.z;
         kMatrix.m[3][3] = 1.0f;
 
         PblMatrix kYaw;
-        D3DXMatrixMultiply(&kMatrix, &kMatrix, D3DXMatrixRotationY(&kYaw, fYaw));
+        D3DXMatrixMultiply(reinterpret_cast<D3DXMATRIX*>(&kMatrix), reinterpret_cast<const D3DXMATRIX*>(&kMatrix), D3DXMatrixRotationY(reinterpret_cast<D3DXMATRIX*>(&kYaw), fYaw));
         return true;
     }
 
@@ -998,7 +994,7 @@ bool SoldierAnimatorLowRes::GetRootMatrixAnimation(const EntitySoldier& soldier,
         fSpin = 6.0f;
     }
 
-    D3DXMatrixRotationAxis(&kMatrix, &vAxis, soldier.mStateTimer * fSpin);
+    D3DXMatrixRotationAxis(reinterpret_cast<D3DXMATRIX*>(&kMatrix), reinterpret_cast<const D3DXVECTOR3*>(&vAxis), soldier.mStateTimer * fSpin);
     kMatrix.m[3][0] = 0.0f;
     kMatrix.m[3][1] = 0.0f;
     kMatrix.m[3][2] = soldier.mState == SoldierState::FLY ? 1.0f : 0.0f;

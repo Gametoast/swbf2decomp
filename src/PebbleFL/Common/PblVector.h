@@ -21,9 +21,7 @@ public:
     // FUNCTION: SWBF2 0x0040c9e0
     PblVector3(const PblVector3& v)
     {
-        x = v.x;
-        y = v.y;
-        z = v.z;
+        *this = v;
     }
 
     // FUNCTION: SWBF2 0x0043ec00

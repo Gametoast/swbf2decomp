@@ -1,3 +1,4 @@
+#include <d3dx9math.h>
 #include "ItemTimerDisplay.h"
 
 #include <float.h>
@@ -47,15 +48,12 @@ static bool ShowTimers()
            (NetGame::IsOneWorld() && NetGame::IsHost() && !NetGame::IsDedicated());
 }
 
-extern "C" PblVector3* __stdcall D3DXVec3Normalize(PblVector3* pOut, const PblVector3* pV);
-extern "C" PblVector3* __stdcall D3DXVec3TransformCoord(PblVector3* pOut, const PblVector3* pV,
-                                                       const PblMatrix* pM);
 
 // FUNCTION: SWBF2 0x0056a6b0
 const PblVector3 RedCamera::TransformWorldPointToProjectionSpace(const PblVector3& rPoint) const
 {
     PblVector3 vCameraPoint;
-    D3DXVec3TransformCoord(&vCameraPoint, &rPoint, &_MatrixInverse);
+    D3DXVec3TransformCoord(reinterpret_cast<D3DXVECTOR3*>(&vCameraPoint), reinterpret_cast<const D3DXVECTOR3*>(&rPoint), reinterpret_cast<const D3DXMATRIX*>(&_MatrixInverse));
     return TransformCameraPointToProjectionSpace(vCameraPoint);
 }
 
@@ -224,7 +222,7 @@ bool ItemTimerDisplay::DisplayThread::Update(float fDeltaTime)
         PblVector3 vCamPos = mCamera.GetTranslation();
         PblVector3 vDelta(vPos.x - vCamPos.x, vPos.y - vCamPos.y, vPos.z - vCamPos.z);
         PblVector3 vDir;
-        D3DXVec3Normalize(&vDir, &vDelta);
+        D3DXVec3Normalize(reinterpret_cast<D3DXVECTOR3*>(&vDir), reinterpret_cast<const D3DXVECTOR3*>(&vDelta));
         if (vDir.y * -mCamera.m[2][1] + vDir.x * -mCamera.m[2][0] + vDir.z * -mCamera.m[2][2] <= 0.0f)
         {
             continue;

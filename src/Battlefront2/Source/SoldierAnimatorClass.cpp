@@ -1,3 +1,4 @@
+#include <d3dx9math.h>
 #include "SoldierAnimatorClass.h"
 #include "PebbleFL/Common/PblVector.h"
 
@@ -1543,7 +1544,6 @@ bool AnimationFinder::_AddBank(const char* pcName)
 }
 
 extern PblVector3 gVectorZero;
-extern "C" PblVector3* __stdcall D3DXVec3TransformCoord(PblVector3* pOut, const PblVector3* pV, const PblMatrix* pM);
 
 // FUNCTION: SWBF2 0x00645b70
 void SoldierAnimatorClass::_PostLoad()
@@ -2444,7 +2444,7 @@ void SoldierAnimatorClass::_PostLoad()
                         PblVector3 vHead;
                         GetAnimationBoneMatrix(eMap, s_aPosture[iPosture], eMoveAnim, uiBoneHead,
                                                iStep * NUM_SAMPLES_INV * fAnimDuration, mBone);
-                        D3DXVec3TransformCoord(&vHead, &s_vHeadOffset, &mBone);
+                        D3DXVec3TransformCoord(reinterpret_cast<D3DXVECTOR3*>(&vHead), reinterpret_cast<const D3DXVECTOR3*>(&s_vHeadOffset), reinterpret_cast<const D3DXMATRIX*>(&mBone));
                         table.avHeadPos[iEntry].x += vHead.x * NUM_SAMPLES_INV;
                         table.avHeadPos[iEntry].y += vHead.y * NUM_SAMPLES_INV;
                         table.avHeadPos[iEntry].z += vHead.z * NUM_SAMPLES_INV;
@@ -2452,7 +2452,7 @@ void SoldierAnimatorClass::_PostLoad()
                         PblVector3 vTorso;
                         GetAnimationBoneMatrix(eMap, s_aPosture[iPosture], eMoveAnim, uiBoneTorso,
                                                iStep * NUM_SAMPLES_INV * fAnimDuration, mBone);
-                        D3DXVec3TransformCoord(&vTorso, &s_vTorsoOffset, &mBone);
+                        D3DXVec3TransformCoord(reinterpret_cast<D3DXVECTOR3*>(&vTorso), reinterpret_cast<const D3DXVECTOR3*>(&s_vTorsoOffset), reinterpret_cast<const D3DXMATRIX*>(&mBone));
                         table.avTorsoPos[iEntry].x += vTorso.x * NUM_SAMPLES_INV;
                         table.avTorsoPos[iEntry].y += vTorso.y * NUM_SAMPLES_INV;
                         table.avTorsoPos[iEntry].z += vTorso.z * NUM_SAMPLES_INV;
@@ -2460,7 +2460,7 @@ void SoldierAnimatorClass::_PostLoad()
                         PblVector3 vPitch;
                         GetAnimationBoneMatrix(eMap, s_aPosture[iPosture], eMoveAnim, uiBonePitch,
                                                iStep * NUM_SAMPLES_INV * fAnimDuration, mBone);
-                        D3DXVec3TransformCoord(&vPitch, &vPitchAxisOffset, &mBone);
+                        D3DXVec3TransformCoord(reinterpret_cast<D3DXVECTOR3*>(&vPitch), reinterpret_cast<const D3DXVECTOR3*>(&vPitchAxisOffset), reinterpret_cast<const D3DXMATRIX*>(&mBone));
                         table.avPitchAxis[iEntry].x += vPitch.x * NUM_SAMPLES_INV;
                         table.avPitchAxis[iEntry].y += vPitch.y * NUM_SAMPLES_INV;
                         table.avPitchAxis[iEntry].z += vPitch.z * NUM_SAMPLES_INV;
@@ -2473,11 +2473,11 @@ void SoldierAnimatorClass::_PostLoad()
             fAnimDuration = (pAnim->GetAnimationNumFrames() - 1) * ANIM_FRAME_SPEED;
             PblVector3 vJumpHead;
             GetAnimationBoneMatrix(eMap, SoldierAnimType::JUMP_UP, uiBoneHead, fAnimDuration, mBone);
-            D3DXVec3TransformCoord(&vJumpHead, &s_vHeadOffset, &mBone);
+            D3DXVec3TransformCoord(reinterpret_cast<D3DXVECTOR3*>(&vJumpHead), reinterpret_cast<const D3DXVECTOR3*>(&s_vHeadOffset), reinterpret_cast<const D3DXMATRIX*>(&mBone));
             table.avHeadPos[16] = vJumpHead;
             PblVector3 vJumpTorso;
             GetAnimationBoneMatrix(eMap, SoldierAnimType::JUMP_UP, uiBoneTorso, fAnimDuration, mBone);
-            D3DXVec3TransformCoord(&vJumpTorso, &s_vTorsoOffset_Jump, &mBone);
+            D3DXVec3TransformCoord(reinterpret_cast<D3DXVECTOR3*>(&vJumpTorso), reinterpret_cast<const D3DXVECTOR3*>(&s_vTorsoOffset_Jump), reinterpret_cast<const D3DXMATRIX*>(&mBone));
             table.avTorsoPos[16] = vJumpTorso;
 
             GetAnimationBoneMatrix(eMap, SoldierAnimType::JUMP_UP, uiBoneRoot, fAnimDuration, mBone);
@@ -2497,12 +2497,12 @@ void SoldierAnimatorClass::_PostLoad()
                 PblVector3 vHead;
                 GetAnimationBoneMatrix(eMap, (SoldierAnimationBank::ANIMATION)iCustom, uiBoneHead, FRAME_9POSE_CENTER,
                                        mBone);
-                D3DXVec3TransformCoord(&vHead, &s_vHeadOffset, &mBone);
+                D3DXVec3TransformCoord(reinterpret_cast<D3DXVECTOR3*>(&vHead), reinterpret_cast<const D3DXVECTOR3*>(&s_vHeadOffset), reinterpret_cast<const D3DXMATRIX*>(&mBone));
                 table.avHeadPos[19 + iCustom] = vHead;
                 PblVector3 vTorso;
                 GetAnimationBoneMatrix(eMap, (SoldierAnimationBank::ANIMATION)iCustom, uiBoneTorso, FRAME_9POSE_CENTER,
                                        mBone);
-                D3DXVec3TransformCoord(&vTorso, &s_vTorsoOffset, &mBone);
+                D3DXVec3TransformCoord(reinterpret_cast<D3DXVECTOR3*>(&vTorso), reinterpret_cast<const D3DXVECTOR3*>(&s_vTorsoOffset), reinterpret_cast<const D3DXMATRIX*>(&mBone));
                 table.avTorsoPos[19 + iCustom] = vTorso;
             }
         }

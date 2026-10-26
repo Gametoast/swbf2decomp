@@ -1,3 +1,4 @@
+#include <d3dx9math.h>
 #include <float.h>
 #include "PebbleFL/Common/PblVector.h"
 
@@ -110,13 +111,11 @@ void EntityDroideka::SetupCameraTrackMatrixHUDTargeting(PblMatrix& rMatrix)
          (mTracker && mTracker->IsFirstPersonView()));
     if (bFirstPerson)
     {
-        rMatrix = DirectionMatrix(PblVector3(-mEyeDir.x, -mEyeDir.y, -mEyeDir.z),
+        rMatrix = DirectionMatrix((-mEyeDir),
                                   mMatrix.GetYAxis(), mEyePoint);
         return;
     }
-    PblVector3 vTarget(mEyePoint.x + mEyeDir.x * 65536.0f,
-                       mEyePoint.y + mEyeDir.y * 65536.0f,
-                       mEyePoint.z + mEyeDir.z * 65536.0f);
+    PblVector3 vTarget = mEyePoint + mEyeDir * 65536.0f;
     GetCameraTrackSettings()->SetupCameraTrackMatrixHUDTargeting(rMatrix, mMatrix, vTarget);
 }
 
@@ -130,7 +129,7 @@ void EntityDroideka::SetupCameraTrackMatrix(PblMatrix& rMatrix, float fDeltaTime
          (mTracker && mTracker->IsFirstPersonView()));
     if (bFirstPerson)
     {
-        rMatrix = DirectionMatrix(PblVector3(-mEyeDir.x, -mEyeDir.y, -mEyeDir.z),
+        rMatrix = DirectionMatrix((-mEyeDir),
                                   mMatrix.GetYAxis(), mEyePoint);
         int iFirstPerson = GetFirstPersonIndex();
         if (iFirstPerson >= 0 && !mTargetInfo.mIsAiming)
@@ -139,9 +138,7 @@ void EntityDroideka::SetupCameraTrackMatrix(PblMatrix& rMatrix, float fDeltaTime
         }
         return;
     }
-    PblVector3 vTarget(mEyePoint.x + mEyeDir.x * 65536.0f,
-                       mEyePoint.y + mEyeDir.y * 65536.0f,
-                       mEyePoint.z + mEyeDir.z * 65536.0f);
+    PblVector3 vTarget = mEyePoint + mEyeDir * 65536.0f;
     GetCameraTrackSettings()->SetupCameraTrackMatrix(this, rMatrix, fDeltaTime,
         mMatrix, vTarget, 0.9f, 2.0f, this);
 }
@@ -435,10 +432,6 @@ EntityDroidekaClass::EntityDroidekaClass(unsigned int uHash)
     mDebuffEffect = 0x9796A1C5u;
 }
 
-extern "C" PblMatrix* __stdcall D3DXMatrixMultiply(PblMatrix* pOut, const PblMatrix* pM1, const PblMatrix* pM2);
-extern "C" PblVector3* __stdcall D3DXVec3TransformCoord(PblVector3* pOut, const PblVector3* pV,
-                                                        const PblMatrix* pM);
-extern "C" PblVector3* __stdcall D3DXVec3Normalize(PblVector3* pOut, const PblVector3* pV);
 
 namespace GameLoop
 {
@@ -455,8 +448,8 @@ namespace
     inline void DroidekaUpdateCollisionSphere(EntityDroideka* pDroideka)
     {
         PblVector3 center;
-        D3DXVec3TransformCoord(&center, &pDroideka->mModel->_mModel->_BoundingSphere.GetCenter(),
-                               &pDroideka->mMatrix);
+        D3DXVec3TransformCoord(reinterpret_cast<D3DXVECTOR3*>(&center), reinterpret_cast<const D3DXVECTOR3*>(&pDroideka->mModel->_mModel->_BoundingSphere.GetCenter()),
+                               reinterpret_cast<const D3DXMATRIX*>(&pDroideka->mMatrix));
         pDroideka->SetCollisionCenter(center);
         pDroideka->RecalculateAABB();
     }
@@ -505,7 +498,7 @@ void EntityDroideka::MoveForward(float fDistance)
 
         PblMatrix kTurn(PblVector3(fCos, 0.0f, -fSin), PblVector3(0.0f, 1.0f, 0.0f),
                         PblVector3(fSin, 0.0f, fCos), PblVector3(0.0f, 0.0f, 0.0f));
-        D3DXMatrixMultiply(&kTurn, &kTurn, &mMatrix);
+        D3DXMatrixMultiply(reinterpret_cast<D3DXMATRIX*>(&kTurn), reinterpret_cast<const D3DXMATRIX*>(&kTurn), reinterpret_cast<const D3DXMATRIX*>(&mMatrix));
 
         vPos.x += kTurn.m[2][0] * fDistance;
         vPos.y += kTurn.m[2][1] * fDistance;
@@ -542,7 +535,7 @@ void EntityDroideka::RotateY(const PblAngle& rAngle)
     kRot.m[3][3] = 1.0f;
 
     PblMatrix kOut;
-    D3DXMatrixMultiply(&kOut, &kRot, &mMatrix);
+    D3DXMatrixMultiply(reinterpret_cast<D3DXMATRIX*>(&kOut), reinterpret_cast<const D3DXMATRIX*>(&kRot), reinterpret_cast<const D3DXMATRIX*>(&mMatrix));
     mMatrix = kOut;
 }
 
@@ -819,7 +812,7 @@ void EntityDroideka::UpdateWalkingGroundNormal()
     for (int i = 0; i < 3; ++i)
     {
         PblVector3 vWorld;
-        D3DXVec3TransformCoord(&vWorld, &vFoot[i], &mMatrix);
+        D3DXVec3TransformCoord(reinterpret_cast<D3DXVECTOR3*>(&vWorld), reinterpret_cast<const D3DXVECTOR3*>(&vFoot[i]), reinterpret_cast<const D3DXMATRIX*>(&mMatrix));
         vFoot[i] = vWorld;
     }
 
@@ -836,7 +829,7 @@ void EntityDroideka::UpdateWalkingGroundNormal()
     PblVector3 vB(vFoot[0].x - vFoot[1].x, vFoot[0].y - vFoot[1].y, vFoot[0].z - vFoot[1].z);
     PblVector3 vPlane(vA.y * vB.z - vA.z * vB.y, vA.z * vB.x - vA.x * vB.z, vA.x * vB.y - vA.y * vB.x);
     PblVector3 vNormal;
-    D3DXVec3Normalize(&vNormal, &vPlane);
+    D3DXVec3Normalize(reinterpret_cast<D3DXVECTOR3*>(&vNormal), reinterpret_cast<const D3DXVECTOR3*>(&vPlane));
 
     float fRate = GameLoop::sClientDeltaTime * 5.0f;
     PblVector3 vCross(vNormal.y * mGroundNormal.z - vNormal.z * mGroundNormal.y,
@@ -854,7 +847,7 @@ void EntityDroideka::UpdateWalkingGroundNormal()
         PblVector3 vBlend(mGroundNormal.x * fKeep + vNormal.x * fT,
                           mGroundNormal.y * fKeep + vNormal.y * fT,
                           mGroundNormal.z * fKeep + vNormal.z * fT);
-        D3DXVec3Normalize(&mGroundNormal, &vBlend);
+        D3DXVec3Normalize(reinterpret_cast<D3DXVECTOR3*>(&mGroundNormal), reinterpret_cast<const D3DXVECTOR3*>(&vBlend));
     }
 }
 
@@ -1926,7 +1919,7 @@ bool EntityDroideka::CollisionCallback(const CollisionResult* pResult, Collision
         PblVector3 vSide(vDir.x - fAlong * mMatrix.m[2][0], vDir.y - mMatrix.m[2][1] * fAlong,
                          vDir.z - mMatrix.m[2][2] * fAlong);
         PblVector3 vPush;
-        D3DXVec3Normalize(&vPush, &vSide);
+        D3DXVec3Normalize(reinterpret_cast<D3DXVECTOR3*>(&vPush), reinterpret_cast<const D3DXVECTOR3*>(&vSide));
         pObject->ApplyPush(vPush,
                            ((mMatrix.m[2][1] * vPush.y + vPush.x * mMatrix.m[2][0] + mMatrix.m[2][2] * vPush.z) +
                             1.0f) *
@@ -2505,11 +2498,6 @@ bool EntityDroideka::CollideTrisWithAllPrimitives() const
 // SYNTHETIC: SWBF2 0x004a9959
 // [thunk]:EntityDroideka::GetEntity`adjustor{576}'
 
-extern "C" PblVector3* __stdcall D3DXVec3TransformNormal(PblVector3* pOut, const PblVector3* pV, const PblMatrix* pM);
-extern "C" PblQuaternion* __stdcall D3DXQuaternionNormalize(PblQuaternion* pOut, const PblQuaternion* pQ);
-extern "C" PblMatrix* __stdcall D3DXMatrixRotationQuaternion(PblMatrix* pOut, const PblQuaternion* pQ);
-extern "C" PblMatrix* __stdcall D3DXMatrixRotationAxis(PblMatrix* pOut, const PblVector3* pV, float fAngle);
-extern "C" PblMatrix* __stdcall D3DXMatrixRotationY(PblMatrix* pOut, float fAngle);
 
 extern bool netFrameLock;
 extern bool netIsLateTurn;
@@ -3071,18 +3059,18 @@ void EntityDroideka::BuildWorldMatrices()
 
         PblQuaternion qUnit;
         PblMatrix kSpin;
-        D3DXMatrixRotationQuaternion(&kSpin, D3DXQuaternionNormalize(&qUnit, &qSpin));
+        D3DXMatrixRotationQuaternion(reinterpret_cast<D3DXMATRIX*>(&kSpin), D3DXQuaternionNormalize(reinterpret_cast<D3DXQUATERNION*>(&qUnit), reinterpret_cast<const D3DXQUATERNION*>(&qSpin)));
         kSpin.SetTranslation(gVectorZero);
 
         mZephyrSkeleton.BuildWorldMatrices(gMatrixIdentity, mClass->mSpineIdx, kDirty);
         PblMatrix& rSpine = mZephyrSkeleton.m_pWorldMatrices[mClass->mSpineIdx];
         PblMatrix kSpine;
-        D3DXMatrixMultiply(&kSpine, &kSpin, &rSpine);
+        D3DXMatrixMultiply(reinterpret_cast<D3DXMATRIX*>(&kSpine), reinterpret_cast<const D3DXMATRIX*>(&kSpin), reinterpret_cast<const D3DXMATRIX*>(&rSpine));
         rSpine = kSpine;
 
         PblVector3 vCentre(0.0f - rSpine.m[3][0], mClass->mBallRadius - rSpine.m[3][1], 0.0f - rSpine.m[3][2]);
         PblVector3 vRotated;
-        D3DXVec3TransformNormal(&vRotated, &vCentre, &rSpine);
+        D3DXVec3TransformNormal(reinterpret_cast<D3DXVECTOR3*>(&vRotated), reinterpret_cast<const D3DXVECTOR3*>(&vCentre), reinterpret_cast<const D3DXMATRIX*>(&rSpine));
         mTranslationOffset =
             PblVector3(vCentre.x - vRotated.x, vCentre.y - vRotated.y, vCentre.z - vRotated.z);
         rSpine.m[3][0] = mTranslationOffset.x + rSpine.m[3][0];
@@ -3107,7 +3095,7 @@ void EntityDroideka::BuildWorldMatrices()
         PblVector3 vFlat(vUp.y * fSin6 - fAlong * gVectorUnitY.x, vUp.y * 0.0f - fAlong * gVectorUnitY.y,
                          vUp.y * fCos6 - fAlong * gVectorUnitY.z);
         PblVector3 vFront;
-        D3DXVec3Normalize(&vFront, &vFlat);
+        D3DXVec3Normalize(reinterpret_cast<D3DXVECTOR3*>(&vFront), reinterpret_cast<const D3DXVECTOR3*>(&vFlat));
         PblVector3 vRight(vUp.y * vFront.z - vUp.z * vFront.y, vUp.z * vFront.x - vUp.x * vFront.z,
                           vUp.x * vFront.y - vUp.y * vFront.x);
 
@@ -3129,7 +3117,7 @@ void EntityDroideka::BuildWorldMatrices()
         mZephyrSkeleton.BuildWorldMatrices(gMatrixIdentity, mClass->mSpineIdx, kDirty);
         PblMatrix& rSpine = mZephyrSkeleton.m_pWorldMatrices[mClass->mSpineIdx];
         PblMatrix kSpine;
-        D3DXMatrixMultiply(&kSpine, &kTilt, &rSpine);
+        D3DXMatrixMultiply(reinterpret_cast<D3DXMATRIX*>(&kSpine), reinterpret_cast<const D3DXMATRIX*>(&kTilt), reinterpret_cast<const D3DXMATRIX*>(&rSpine));
         rSpine = kSpine;
 
         float fYaw = atan2f(fSin6, fCos6);
@@ -3142,7 +3130,7 @@ void EntityDroideka::BuildWorldMatrices()
         {
             PblVector3 vAxis(fSin6, 0.0f, fCos6);
             kLegs.SetTranslation(gVectorZero);
-            D3DXMatrixRotationAxis(&kLegs, &vAxis, fRoll * -0.3333f);
+            D3DXMatrixRotationAxis(reinterpret_cast<D3DXMATRIX*>(&kLegs), reinterpret_cast<const D3DXVECTOR3*>(&vAxis), fRoll * -0.3333f);
         }
         else
         {
@@ -3153,12 +3141,12 @@ void EntityDroideka::BuildWorldMatrices()
         {
             PblVector3 vAxis(-fCos6, 0.0f, fSin6);
             kRot.SetTranslation(gVectorZero);
-            D3DXMatrixRotationAxis(&kRot, &vAxis, fPitch * -0.3333f);
-            D3DXMatrixMultiply(&kLegs, &kLegs, &kRot);
+            D3DXMatrixRotationAxis(reinterpret_cast<D3DXMATRIX*>(&kRot), reinterpret_cast<const D3DXVECTOR3*>(&vAxis), fPitch * -0.3333f);
+            D3DXMatrixMultiply(reinterpret_cast<D3DXMATRIX*>(&kLegs), reinterpret_cast<const D3DXMATRIX*>(&kLegs), reinterpret_cast<const D3DXMATRIX*>(&kRot));
         }
         if (fabs(fHalfYaw) > 0.04f)
         {
-            D3DXMatrixMultiply(&kLegs, &kLegs, D3DXMatrixRotationY(&kRot, fHalfYaw * -0.3333f));
+            D3DXMatrixMultiply(reinterpret_cast<D3DXMATRIX*>(&kLegs), reinterpret_cast<const D3DXMATRIX*>(&kLegs), D3DXMatrixRotationY(reinterpret_cast<D3DXMATRIX*>(&kRot), fHalfYaw * -0.3333f));
         }
 
         for (int i = 0; i < 3; ++i)
@@ -3168,9 +3156,9 @@ void EntityDroideka::BuildWorldMatrices()
             PblVector3 vZ;
             PblVector3 vY;
             PblVector3 vX;
-            D3DXVec3TransformNormal(&vZ, &rJoint.GetZAxis(), &kLegs);
-            D3DXVec3TransformNormal(&vY, &rJoint.GetYAxis(), &kLegs);
-            D3DXVec3TransformNormal(&vX, &rJoint.GetXAxis(), &kLegs);
+            D3DXVec3TransformNormal(reinterpret_cast<D3DXVECTOR3*>(&vZ), reinterpret_cast<const D3DXVECTOR3*>(&rJoint.GetZAxis()), reinterpret_cast<const D3DXMATRIX*>(&kLegs));
+            D3DXVec3TransformNormal(reinterpret_cast<D3DXVECTOR3*>(&vY), reinterpret_cast<const D3DXVECTOR3*>(&rJoint.GetYAxis()), reinterpret_cast<const D3DXMATRIX*>(&kLegs));
+            D3DXVec3TransformNormal(reinterpret_cast<D3DXVECTOR3*>(&vX), reinterpret_cast<const D3DXVECTOR3*>(&rJoint.GetXAxis()), reinterpret_cast<const D3DXMATRIX*>(&kLegs));
             PblMatrix kJoint;
             kJoint.m[0][0] = vX.x;
             kJoint.m[0][1] = vX.y;
@@ -3193,7 +3181,7 @@ void EntityDroideka::BuildWorldMatrices()
 
         PblMatrix kArms;
         kArms.SetTranslation(gVectorZero);
-        D3DXMatrixRotationY(&kArms, -fHalfYaw);
+        D3DXMatrixRotationY(reinterpret_cast<D3DXMATRIX*>(&kArms), -fHalfYaw);
         for (int i = 0; i < 2; ++i)
         {
             mZephyrSkeleton.BuildWorldMatrices(gMatrixIdentity, mClass->mArmJointIdx[i], kDirty);
@@ -3201,9 +3189,9 @@ void EntityDroideka::BuildWorldMatrices()
             PblVector3 vZ;
             PblVector3 vY;
             PblVector3 vX;
-            D3DXVec3TransformNormal(&vZ, &rJoint.GetZAxis(), &kArms);
-            D3DXVec3TransformNormal(&vY, &rJoint.GetYAxis(), &kArms);
-            D3DXVec3TransformNormal(&vX, &rJoint.GetXAxis(), &kArms);
+            D3DXVec3TransformNormal(reinterpret_cast<D3DXVECTOR3*>(&vZ), reinterpret_cast<const D3DXVECTOR3*>(&rJoint.GetZAxis()), reinterpret_cast<const D3DXMATRIX*>(&kArms));
+            D3DXVec3TransformNormal(reinterpret_cast<D3DXVECTOR3*>(&vY), reinterpret_cast<const D3DXVECTOR3*>(&rJoint.GetYAxis()), reinterpret_cast<const D3DXMATRIX*>(&kArms));
+            D3DXVec3TransformNormal(reinterpret_cast<D3DXVECTOR3*>(&vX), reinterpret_cast<const D3DXVECTOR3*>(&rJoint.GetXAxis()), reinterpret_cast<const D3DXMATRIX*>(&kArms));
             PblMatrix kJoint;
             kJoint.m[0][0] = vX.x;
             kJoint.m[0][1] = vX.y;
@@ -3319,7 +3307,7 @@ bool EntityDroideka::PostCollisionUpdate(float fDeltaTime)
     vLocal.y = sinf(mPitchValue);
     vLocal.z = cosf(mPitchValue);
     PblVector3 vEyeDir;
-    D3DXVec3TransformNormal(&vEyeDir, &vLocal, &mMatrix);
+    D3DXVec3TransformNormal(reinterpret_cast<D3DXVECTOR3*>(&vEyeDir), reinterpret_cast<const D3DXVECTOR3*>(&vLocal), reinterpret_cast<const D3DXMATRIX*>(&mMatrix));
     mEyeDir = vEyeDir;
     mEyePoint = GetCameraTrackSettings()->CalcEyePoint(mMatrix);
 
@@ -3347,7 +3335,7 @@ bool EntityDroideka::PostCollisionUpdate(float fDeltaTime)
 
             PblQuaternion qUnit;
             PblMatrix mCamera;
-            D3DXMatrixRotationQuaternion(&mCamera, D3DXQuaternionNormalize(&qUnit, &qCamera));
+            D3DXMatrixRotationQuaternion(reinterpret_cast<D3DXMATRIX*>(&mCamera), D3DXQuaternionNormalize(reinterpret_cast<D3DXQUATERNION*>(&qUnit), reinterpret_cast<const D3DXQUATERNION*>(&qCamera)));
             mCamera.m[3][0] = gVectorZero.x;
             mCamera.m[3][1] = gVectorZero.y;
             mCamera.m[3][2] = gVectorZero.z;
@@ -3950,7 +3938,7 @@ bool EntityDroideka::ApplyDamage(const DamageDesc& damage, const PblVector3& vDi
         {
             PblMatrix mInverse = mMatrix.GetInverseFast();
             PblVector3 vLocal;
-            D3DXVec3TransformNormal(&vLocal, &vDir, &mInverse);
+            D3DXVec3TransformNormal(reinterpret_cast<D3DXVECTOR3*>(&vLocal), reinterpret_cast<const D3DXVECTOR3*>(&vDir), reinterpret_cast<const D3DXMATRIX*>(&mInverse));
             StatusDisplay::Instance(iJoystick)->SetDamageDirection(vLocal);
         }
     }
@@ -4225,7 +4213,7 @@ void EntityDroideka::Render(unsigned char aLod, float aFadeVal, unsigned int uiR
             FLRenderer::IsReflected(GetRenderPos(), _Sphere.w, reflectionRenderMat, false))
         {
             PblMatrix mat;
-            D3DXMatrixMultiply(&mat, &smoothedMat, &reflectionRenderMat);
+            D3DXMatrixMultiply(reinterpret_cast<D3DXMATRIX*>(&mat), reinterpret_cast<const D3DXMATRIX*>(&smoothedMat), reinterpret_cast<const D3DXMATRIX*>(&reflectionRenderMat));
             reflectionRenderMat = mat;
             mModel->Render(0, aFadeVal, &reflectionRenderMat, &mPose, RedColor::WHITE,
                            (uiRenderFlags & ~0x10000) | 0x10000100, 0);
@@ -4239,7 +4227,7 @@ void EntityDroideka::Render(unsigned char aLod, float aFadeVal, unsigned int uiR
             {
                 PblMatrix bone = *spine;
                 PblMatrix mat;
-                D3DXMatrixMultiply(&mat, &bone, &smoothedMat);
+                D3DXMatrixMultiply(reinterpret_cast<D3DXMATRIX*>(&mat), reinterpret_cast<const D3DXMATRIX*>(&bone), reinterpret_cast<const D3DXMATRIX*>(&smoothedMat));
                 reinterpret_cast<GameObject*>(flag)->SetMatrix(mat);
                 flag->RenderHelper(0, aFadeVal, uiRenderFlags);
             }
@@ -4289,9 +4277,9 @@ void EntityDroideka::Render(unsigned char aLod, float aFadeVal, unsigned int uiR
 
             PblQuaternion unit;
             PblMatrix mat;
-            D3DXMatrixRotationQuaternion(&mat, D3DXQuaternionNormalize(&unit, &roll));
+            D3DXMatrixRotationQuaternion(reinterpret_cast<D3DXMATRIX*>(&mat), D3DXQuaternionNormalize(reinterpret_cast<D3DXQUATERNION*>(&unit), reinterpret_cast<const D3DXQUATERNION*>(&roll)));
             mat.SetTranslation(offset);
-            D3DXMatrixMultiply(&mat, &mat, &mMatrix);
+            D3DXMatrixMultiply(reinterpret_cast<D3DXMATRIX*>(&mat), reinterpret_cast<const D3DXMATRIX*>(&mat), reinterpret_cast<const D3DXMATRIX*>(&mMatrix));
 
             mBallLowRes->Render(aLod, aFadeVal, &mat, &mPose, RedColor::WHITE, uiRenderFlags | 0x1000000, 0);
             FlagItem* flag = GetCarriedFlagItem();
@@ -4302,7 +4290,7 @@ void EntityDroideka::Render(unsigned char aLod, float aFadeVal, unsigned int uiR
                 {
                     PblMatrix bone(*spine);
                     PblMatrix mat2;
-                    D3DXMatrixMultiply(&mat2, &bone, &mat);
+                    D3DXMatrixMultiply(reinterpret_cast<D3DXMATRIX*>(&mat2), reinterpret_cast<const D3DXMATRIX*>(&bone), reinterpret_cast<const D3DXMATRIX*>(&mat));
                     reinterpret_cast<GameObject*>(flag)->SetMatrix(mat2);
                     flag->RenderHelper(aLod, aFadeVal, uiRenderFlags);
                 }
@@ -4320,7 +4308,7 @@ void EntityDroideka::Render(unsigned char aLod, float aFadeVal, unsigned int uiR
                 {
                     PblMatrix bone(*spine);
                     PblMatrix mat2;
-                    D3DXMatrixMultiply(&mat2, &bone, &mMatrix);
+                    D3DXMatrixMultiply(reinterpret_cast<D3DXMATRIX*>(&mat2), reinterpret_cast<const D3DXMATRIX*>(&bone), reinterpret_cast<const D3DXMATRIX*>(&mMatrix));
                     reinterpret_cast<GameObject*>(flag)->SetMatrix(mat2);
                     flag->RenderHelper(aLod, aFadeVal, uiRenderFlags);
                 }
@@ -4390,7 +4378,7 @@ void EntityDroideka::Render(unsigned char aLod, float aFadeVal, unsigned int uiR
                 PblMatrix mat2 = gMatrixIdentity;
                 mat2.SetTranslation(mClass->mDeathDustOffset);
                 PblMatrix mat;
-                D3DXMatrixMultiply(&mat, &mat2, &mMatrix);
+                D3DXMatrixMultiply(reinterpret_cast<D3DXMATRIX*>(&mat), reinterpret_cast<const D3DXMATRIX*>(&mat2), reinterpret_cast<const D3DXMATRIX*>(&mMatrix));
                 mat2 = mat;
                 particleObj->AttachEffectToMatrix(&mat2, false);
             }

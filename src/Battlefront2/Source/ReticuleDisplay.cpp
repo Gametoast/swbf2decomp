@@ -1,3 +1,4 @@
+#include <d3dx9math.h>
 #include "ReticuleDisplay.h"
 #include "CameraManager.h"
 #include "Character.h"
@@ -12,7 +13,6 @@
 #include "PebbleFL/Common/PblMatrix.h"
 #include "RedEngineFL/Graphics/RedCamera.h"
 
-extern "C" PblVector3* __stdcall D3DXVec3TransformCoord(PblVector3* pOut, const PblVector3* pV, const PblMatrix* pM);
 
 namespace
 {
@@ -216,7 +216,7 @@ bool ReticuleDisplay::Update(float fDeltaTime)
                     pControllable->mTargetInfo.mAimStart.y + pControllable->mEyeDir.y * 1024.0f,
                     pControllable->mTargetInfo.mAimStart.z + pControllable->mEyeDir.z * 1024.0f);
     PblVector3 vCamera;
-    D3DXVec3TransformCoord(&vCamera, &vAim, &pCamera->_MatrixInverse);
+    D3DXVec3TransformCoord(reinterpret_cast<D3DXVECTOR3*>(&vCamera), reinterpret_cast<const D3DXVECTOR3*>(&vAim), reinterpret_cast<const D3DXMATRIX*>(&pCamera->_MatrixInverse));
     PblVector3 vPos = pCamera->TransformCameraPointToProjectionSpace(vCamera);
 
     HUD::ElementMap* pMap = HUD::ElementMap::FindByPlayerIndex(mJoystickIndex);

@@ -401,7 +401,7 @@ bool Ordnance::CheckCollision()
 {
     const PblVector3 vStart = GetOldPosition();
     const PblVector3& vEnd = GetPosition();
-    PblVector3 vDir(vEnd.x - vStart.x, vEnd.y - vStart.y, vEnd.z - vStart.z);
+    PblVector3 vDir = vEnd - vStart;
     const float fDist = sqrtf(vDir.y * vDir.y + vDir.x * vDir.x + vDir.z * vDir.z);
     if (fDist > 0.0f)
     {
@@ -418,8 +418,7 @@ bool Ordnance::CheckCollision()
         if (fHit < 1.0f)
         {
             const float fAlong = fHit * fDist;
-            PblVector3 vHit(vDir.x * fAlong + vStart.x, vDir.y * fAlong + vStart.y,
-                            vDir.z * fAlong + vStart.z);
+            PblVector3 vHit = vDir * fAlong + vStart;
             return !Collide(pHitObject, vHit, vNormal, CollisionManager::GetLastRayHitBodyId());
         }
     }

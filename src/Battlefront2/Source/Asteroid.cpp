@@ -574,9 +574,7 @@ bool Asteroid::Update(float fDeltaTime)
         const PblQuaternion qStep(fCos, mOmega.x * fInv * fSin, mOmega.y * fInv * fSin, mOmega.z * fInv * fSin);
         qRotation = qRotation * qStep;
     }
-    vPos.x += mVelocity.x * fDeltaTime;
-    vPos.y += mVelocity.y * fDeltaTime;
-    vPos.z += mVelocity.z * fDeltaTime;
+    vPos += mVelocity * fDeltaTime;
 
     D3DXQUATERNION qNormalized;
     D3DXQuaternionNormalize(&qNormalized, (const D3DXQUATERNION*)&qRotation);

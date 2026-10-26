@@ -1,3 +1,4 @@
+#include <d3dx9math.h>
 #include "OrdnanceBullet.h"
 #include "PebbleFL/Common/PblVector.h"
 #include "RedEngineFL/Graphics/RedModel.h"
@@ -24,9 +25,6 @@ extern bool netIsLocalTurn;
 extern bool netFrameLock;
 extern bool netIsLateTurn;
 
-extern "C" PblVector3* __stdcall D3DXVec3Normalize(PblVector3* pOut, const PblVector3* pV);
-extern "C" PblMatrix* __stdcall D3DXMatrixMultiply(PblMatrix* pOut, const PblMatrix* pM1,
-                                                   const PblMatrix* pM2);
 
 const RedColor Interpolate(const RedColor& a, const RedColor& b, float t);
 
@@ -586,7 +584,7 @@ bool OrdnanceBullet::Collide(CollisionObject* pObject, const PblVector3& vPos, c
     if (pVictim)
     {
         PblVector3 vDir;
-        D3DXVec3Normalize(&vDir, &mVelocity);
+        D3DXVec3Normalize(reinterpret_cast<D3DXVECTOR3*>(&vDir), reinterpret_cast<const D3DXVECTOR3*>(&mVelocity));
         if (pVictim->Deflect(this, vPos, vDir))
         {
             return true;
@@ -637,7 +635,7 @@ bool OrdnanceBullet::Collide(CollisionObject* pObject, const PblVector3& vPos, c
             {
                 const PblVector3 vFlat(vNormal.x, 0.0f, vNormal.z);
                 PblVector3 vWind;
-                D3DXVec3Normalize(&vWind, &vFlat);
+                D3DXVec3Normalize(reinterpret_cast<D3DXVECTOR3*>(&vWind), reinterpret_cast<const D3DXVECTOR3*>(&vFlat));
                 vWind = PblVector3(vWind.x * 2.0f, vWind.y * 2.0f, vWind.z * 2.0f);
                 for (int i = 3; i; --i)
                 {
@@ -689,7 +687,7 @@ bool OrdnanceBullet::Collide(CollisionObject* pObject, const PblVector3& vPos, c
                     }
                     const PblMatrix mInverse = pVictim->GetMatrix().GetInverseFast();
                     PblMatrix mOffset;
-                    D3DXMatrixMultiply(&mOffset, &mWorld, &mInverse);
+                    D3DXMatrixMultiply(reinterpret_cast<D3DXMATRIX*>(&mOffset), reinterpret_cast<const D3DXMATRIX*>(&mWorld), reinterpret_cast<const D3DXMATRIX*>(&mInverse));
                     pEffect->AttachEffectToObject(pVictim, mOffset, true);
                 }
                 else if (bShield)

@@ -1,3 +1,4 @@
+#include <d3dx9math.h>
 #include "MountedTurret.h"
 
 #include <float.h>
@@ -36,11 +37,6 @@
 #include "RedEngineFL/Graphics/RedSkeleton.h"
 #include "SoundFL/source/sndvoicevirtualbus.h"
 
-extern "C" PblMatrix* __stdcall D3DXMatrixMultiply(PblMatrix* pOut, const PblMatrix* pM1, const PblMatrix* pM2);
-extern "C" PblQuaternion* __stdcall D3DXQuaternionNormalize(PblQuaternion* pOut, const PblQuaternion* pQ);
-extern "C" PblMatrix* __stdcall D3DXMatrixRotationQuaternion(PblMatrix* pOut, const PblQuaternion* pQ);
-extern "C" PblVector3* __stdcall D3DXVec3TransformCoord(PblVector3* pOut, const PblVector3* pV, const PblMatrix* pM);
-extern "C" PblVector3* __stdcall D3DXVec3TransformNormal(PblVector3* pOut, const PblVector3* pV, const PblMatrix* pM);
 PblMatrix DirectionMatrix(const PblVector3& vDir, const PblVector3& vUp, const PblVector3& vPos);
 
 namespace
@@ -613,17 +609,17 @@ void MountedTurret::GetPilotMatrix(const PblMatrix& mIn, PblMatrix& mOut)
 
     if (pClass->mAnimatedPilotNodeFlag)
     {
-        D3DXMatrixMultiply(&mMatrix, pBone, &mIn);
+        D3DXMatrixMultiply(reinterpret_cast<D3DXMATRIX*>(&mMatrix), reinterpret_cast<const D3DXMATRIX*>(pBone), reinterpret_cast<const D3DXMATRIX*>(&mIn));
     }
     else if (pBone)
     {
         PblMatrix mOffset;
-        D3DXMatrixMultiply(&mOffset, &pClass->mPilotOffsetMatrix, pBone);
-        D3DXMatrixMultiply(&mMatrix, &mOffset, &mIn);
+        D3DXMatrixMultiply(reinterpret_cast<D3DXMATRIX*>(&mOffset), reinterpret_cast<const D3DXMATRIX*>(&pClass->mPilotOffsetMatrix), reinterpret_cast<const D3DXMATRIX*>(pBone));
+        D3DXMatrixMultiply(reinterpret_cast<D3DXMATRIX*>(&mMatrix), reinterpret_cast<const D3DXMATRIX*>(&mOffset), reinterpret_cast<const D3DXMATRIX*>(&mIn));
     }
     else
     {
-        D3DXMatrixMultiply(&mMatrix, &pClass->mPilotOffsetMatrix, &mIn);
+        D3DXMatrixMultiply(reinterpret_cast<D3DXMATRIX*>(&mMatrix), reinterpret_cast<const D3DXMATRIX*>(&pClass->mPilotOffsetMatrix), reinterpret_cast<const D3DXMATRIX*>(&mIn));
     }
 
     if (mOldRoot.m[3][3] != 0.0f)
@@ -927,7 +923,7 @@ bool MountedTurret::Update(float aDt)
         {
             PblMatrix mInverse = parentMatrix.GetInverseFast();
             PblVector3 aimLocal;
-            D3DXVec3TransformNormal(&aimLocal, &mAimMatrix.GetZAxis(), &mInverse);
+            D3DXVec3TransformNormal(reinterpret_cast<D3DXVECTOR3*>(&aimLocal), reinterpret_cast<const D3DXVECTOR3*>(&mAimMatrix.GetZAxis()), reinterpret_cast<const D3DXMATRIX*>(&mInverse));
             float aimYaw = atan2(aimLocal.x, aimLocal.z);
             if (mClass->mShiftYaw && aimYaw < 0.0f)
             {
@@ -1010,8 +1006,8 @@ bool MountedTurret::Update(float aDt)
         const PblMatrix* pParentBone = mPose->Find(mClass->mParentHash);
         if (pParentBone)
         {
-            D3DXVec3TransformCoord(&mountPos, &mClass->mMountPos, pParentBone);
-            D3DXVec3TransformNormal(&mountUp, &mClass->mMountUp, pParentBone);
+            D3DXVec3TransformCoord(reinterpret_cast<D3DXVECTOR3*>(&mountPos), reinterpret_cast<const D3DXVECTOR3*>(&mClass->mMountPos), reinterpret_cast<const D3DXMATRIX*>(pParentBone));
+            D3DXVec3TransformNormal(reinterpret_cast<D3DXVECTOR3*>(&mountUp), reinterpret_cast<const D3DXVECTOR3*>(&mClass->mMountUp), reinterpret_cast<const D3DXMATRIX*>(pParentBone));
         }
     }
 
@@ -1104,11 +1100,11 @@ bool MountedTurret::Update(float aDt)
     {
         const PblVector3& vParentDir = mParent->GetControllable()->mEyeDir;
         PblMatrix mInverse = parentMatrix.GetInverseFast();
-        D3DXVec3TransformNormal(&aimDir, &vParentDir, &mInverse);
+        D3DXVec3TransformNormal(reinterpret_cast<D3DXVECTOR3*>(&aimDir), reinterpret_cast<const D3DXVECTOR3*>(&vParentDir), reinterpret_cast<const D3DXMATRIX*>(&mInverse));
     }
     PblMatrix mDirection = DirectionMatrix(aimDir, mountUp, mountPos);
     PblMatrix aimMat;
-    D3DXMatrixMultiply(&aimMat, &mDirection, &parentMatrix);
+    D3DXMatrixMultiply(reinterpret_cast<D3DXMATRIX*>(&aimMat), reinterpret_cast<const D3DXMATRIX*>(&mDirection), reinterpret_cast<const D3DXMATRIX*>(&parentMatrix));
     mAimMatrix = aimMat;
 
     mEyePoint = mClass->mCameraSettings.CalcEyePoint(mAimMatrix);
@@ -1136,7 +1132,7 @@ bool MountedTurret::Update(float aDt)
             tiltRot._fS = fCos;
             PblQuaternion qRot = targetRot * tiltRot;
             PblQuaternion qUnit;
-            D3DXMatrixRotationQuaternion(&aimMat, D3DXQuaternionNormalize(&qUnit, &qRot));
+            D3DXMatrixRotationQuaternion(reinterpret_cast<D3DXMATRIX*>(&aimMat), D3DXQuaternionNormalize(reinterpret_cast<D3DXQUATERNION*>(&qUnit), reinterpret_cast<const D3DXQUATERNION*>(&qRot)));
             aimMat.m[3][0] = gVectorZero.x;
             aimMat.m[3][1] = gVectorZero.y;
             aimMat.m[3][2] = gVectorZero.z;
@@ -1468,7 +1464,7 @@ void MountedTurret::Render(const PblMatrix& aRootMatrix, const PblMatrix& aInvRo
     if (pMount)
     {
         const PblVector3& vVelocity = mParent->GetVelocity();
-        D3DXVec3TransformCoord(&pThis->mTurretWorldTranslation, &pMount->GetTranslation(), &mParent->GetMatrix());
+        D3DXVec3TransformCoord(reinterpret_cast<D3DXVECTOR3*>(&pThis->mTurretWorldTranslation), reinterpret_cast<const D3DXVECTOR3*>(&pMount->GetTranslation()), reinterpret_cast<const D3DXMATRIX*>(&mParent->GetMatrix()));
         pThis->mTurretPitchSound.Update(&mClass->mTurretPitchSound, &mTurretWorldTranslation, &vVelocity);
         pThis->mTurretYawSound.Update(&mClass->mTurretYawSound, &mTurretWorldTranslation, &vVelocity);
     }

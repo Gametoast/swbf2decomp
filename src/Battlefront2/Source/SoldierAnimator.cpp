@@ -1,3 +1,4 @@
+#include <d3dx9math.h>
 #include <math.h>
 #include "PebbleFL/Common/PblVector.h"
 
@@ -35,12 +36,7 @@ static const float OVERLAY_FADEOUT_RATE = 8.0f;
 
 
 
-extern "C" PblVector3* __stdcall D3DXVec3Normalize(PblVector3* pOut, const PblVector3* pV);
 
-extern "C" PblVector3* __stdcall D3DXVec3TransformCoord(PblVector3* pOut, const PblVector3* pV, const PblMatrix* pM);
-extern "C" PblMatrix* __stdcall D3DXMatrixMultiply(PblMatrix* pOut, const PblMatrix* pM1, const PblMatrix* pM2);
-extern "C" PblMatrix* __stdcall D3DXMatrixRotationX(PblMatrix* pOut, float fAngle);
-extern "C" PblMatrix* __stdcall D3DXMatrixRotationY(PblMatrix* pOut, float fAngle);
 
 namespace GameLoop
 {
@@ -747,7 +743,7 @@ void SoldierAnimator::SetWeaponComboState(int eState, bool bRestart, unsigned ch
 void SoldierAnimator::SetAimDirection(const PblVector3& aimDir)
 {
     PblVector3 vDir;
-    D3DXVec3Normalize(&vDir, &aimDir);
+    D3DXVec3Normalize(reinterpret_cast<D3DXVECTOR3*>(&vDir), reinterpret_cast<const D3DXVECTOR3*>(&aimDir));
     mAimDir = vDir;
 }
 
@@ -1118,8 +1114,8 @@ inline PblMatrix& RotateJointWorldMatrix(ZephyrSkeleton<32>& kSkel, int iJoint, 
 {
     PblMatrix mRotate;
     PblMatrix mTemp;
-    D3DXMatrixRotationY(&mRotate, fYaw);
-    D3DXMatrixMultiply(&mRotate, &mRotate, D3DXMatrixRotationX(&mTemp, fPitch));
+    D3DXMatrixRotationY(reinterpret_cast<D3DXMATRIX*>(&mRotate), fYaw);
+    D3DXMatrixMultiply(reinterpret_cast<D3DXMATRIX*>(&mRotate), reinterpret_cast<const D3DXMATRIX*>(&mRotate), D3DXMatrixRotationX(reinterpret_cast<D3DXMATRIX*>(&mTemp), fPitch));
     kSkel.BuildWorldMatrices(gMatrixIdentity, iJoint, kDirty);
 
     PblMatrix& mWorld = kSkel.m_pWorldMatrices[iJoint];
@@ -1127,13 +1123,13 @@ inline PblMatrix& RotateJointWorldMatrix(ZephyrSkeleton<32>& kSkel, int iJoint, 
     if (pParent)
     {
         const ZephyrTransform& kBase = *(const ZephyrTransform*)kSkel.m_pShared->m_pJoints[iJoint].m_kBaseTransform;
-        D3DXVec3TransformCoord(&vOrigin, &kBase.kTrans, pParent);
+        D3DXVec3TransformCoord(reinterpret_cast<D3DXVECTOR3*>(&vOrigin), reinterpret_cast<const D3DXVECTOR3*>(&kBase.kTrans), reinterpret_cast<const D3DXMATRIX*>(pParent));
     }
     else
     {
         vOrigin = mWorld.GetTranslation();
     }
-    D3DXMatrixMultiply(&mTemp, &mWorld, &mRotate);
+    D3DXMatrixMultiply(reinterpret_cast<D3DXMATRIX*>(&mTemp), reinterpret_cast<const D3DXMATRIX*>(&mWorld), reinterpret_cast<const D3DXMATRIX*>(&mRotate));
     mWorld = mTemp;
     mWorld.m[3][0] = vOrigin.x;
     mWorld.m[3][1] = vOrigin.y;
@@ -1436,7 +1432,7 @@ bool SoldierAnimator::UpdateActionAnimation(SoldierAnimType::ActionAnimation eAc
         PblVector3 vAxis;
         if (vTravel.x * vTravel.x + vTravel.y * vTravel.y + vTravel.z * vTravel.z > 0.0001f)
         {
-            D3DXVec3Normalize(&vAxis, &vTravel);
+            D3DXVec3Normalize(reinterpret_cast<D3DXVECTOR3*>(&vAxis), reinterpret_cast<const D3DXVECTOR3*>(&vTravel));
         }
         else
         {

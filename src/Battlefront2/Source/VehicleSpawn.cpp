@@ -1,3 +1,4 @@
+#include <d3dx9math.h>
 #include "VehicleSpawn.h"
 #include "NetGame.h"
 
@@ -25,7 +26,6 @@
 
 #include <math.h>
 
-extern "C" PblVector3* __stdcall D3DXVec3TransformCoord(PblVector3* pOut, const PblVector3* pV, const PblMatrix* pM);
 
 // SYNTHETIC: SWBF2 0x00406f10
 // `dynamic initializer for 'VehicleSpawn::VehicleTracker::sMemoryPool''
@@ -233,7 +233,7 @@ void VehicleSpawn::gCalcBeginLandPos(const EntityFlyerClass& flyerClass, PblMatr
     const PblVector3 vOffset(0.0f, fTime * 0.5f * flyerClass.mLandingSpeed + flyerClass.mLandedHeight,
                              fTime * -0.5f * flyerClass.mMinFlyerSpeed);
     PblVector3 vPos;
-    D3DXVec3TransformCoord(&vPos, &vOffset, pMatrix);
+    D3DXVec3TransformCoord(reinterpret_cast<D3DXVECTOR3*>(&vPos), reinterpret_cast<const D3DXVECTOR3*>(&vOffset), reinterpret_cast<const D3DXMATRIX*>(pMatrix));
     pMatrix->m[3][0] = vPos.x;
     pMatrix->m[3][1] = vPos.y;
     pMatrix->m[3][2] = vPos.z;
@@ -371,7 +371,7 @@ void VehicleSpawn::UpdateSpawn(float fDeltaTime)
                               (box._vMax.z - box._vMin.z) * 0.5f);
     mSpawnRegion.mMatrix = mMatrix;
     PblVector3 vPos;
-    D3DXVec3TransformCoord(&vPos, &vCenter, &mMatrix);
+    D3DXVec3TransformCoord(reinterpret_cast<D3DXVECTOR3*>(&vPos), reinterpret_cast<const D3DXVECTOR3*>(&vCenter), reinterpret_cast<const D3DXMATRIX*>(&mMatrix));
     mSpawnRegion.mMatrix.SetTranslation(vPos);
 
     mSpawnRegion.mSize.x = vExtents.x;

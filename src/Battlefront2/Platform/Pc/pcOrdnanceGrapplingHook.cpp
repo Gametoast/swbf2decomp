@@ -1,3 +1,4 @@
+#include <d3dx9math.h>
 #include <math.h>
 
 #include "Battlefront2/Source/OrdnanceGrapplingHook.h"
@@ -16,9 +17,6 @@
 // GLOBAL: SWBF2 0x01e2fd30
 pcRedShader* OrdnanceGrapplingHook::sShader;
 
-extern "C" PblVector3* __stdcall D3DXVec3Normalize(PblVector3* pOut, const PblVector3* pV);
-extern "C" PblVector3* __stdcall D3DXVec3TransformCoord(PblVector3* pOut, const PblVector3* pV,
-                                                       const PblMatrix* pM);
 
 // GLOBAL: SWBF2 0x007eb740
 static RedColor kCableColor = { 0xcc, 0xcc, 0xcc, 0xff };
@@ -192,7 +190,7 @@ void OrdnanceGrapplingHook::Render(unsigned char ucViewport, float fDist, unsign
     PblVector3 vCameraRight(mCamera.m[0][0], mCamera.m[0][1], mCamera.m[0][2]);
     PblVector3 vStart = GetPosition();
     PblVector3 vEnd;
-    D3DXVec3TransformCoord(&vEnd, &mWeaponOffset, &mOwner->GetMatrix());
+    D3DXVec3TransformCoord(reinterpret_cast<D3DXVECTOR3*>(&vEnd), reinterpret_cast<const D3DXVECTOR3*>(&mWeaponOffset), reinterpret_cast<const D3DXMATRIX*>(&mOwner->GetMatrix()));
     if (mState == HOOK_LIFTING)
     {
         vEnd.x += mVelocity.x * mDeltaTime;
@@ -209,7 +207,7 @@ void OrdnanceGrapplingHook::Render(unsigned char ucViewport, float fDist, unsign
                      vSide.z * vDirection.x - vSide.x * vDirection.z,
                      vSide.x * vDirection.y - vSide.y * vDirection.x);
     PblVector3 vWaveDirection;
-    D3DXVec3Normalize(&vWaveDirection, &vWave);
+    D3DXVec3Normalize(reinterpret_cast<D3DXVECTOR3*>(&vWaveDirection), reinterpret_cast<const D3DXVECTOR3*>(&vWave));
 
     float fLength = sqrtf(vDirection.x * vDirection.x + vDirection.y * vDirection.y
                           + vDirection.z * vDirection.z);

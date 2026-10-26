@@ -1,11 +1,9 @@
+#include <d3dx9math.h>
 #include "NetPredict.h"
 #include "NetGame.h"
 
 NetInterpolator netInterpolator;
 
-extern "C" PblMatrix* __stdcall D3DXMatrixMultiply(PblMatrix* pOut, const PblMatrix* pM1, const PblMatrix* pM2);
-extern "C" PblQuaternion* __stdcall D3DXQuaternionNormalize(PblQuaternion*, const PblQuaternion*);
-extern "C" PblMatrix* __stdcall D3DXMatrixRotationQuaternion(PblMatrix*, const PblQuaternion*);
 
 // GLOBAL: SWBF2 0x01ead160
 unsigned int interpId[64];
@@ -85,11 +83,9 @@ void NetInterpolator::GetVec(int iIndex, PblVector3& vVec)
         vVec = vNew;
         return;
     }
-    const PblVector3& vOld = (&interpPos[0][0])[2 * iIndex + (interpCount[iIndex] & 1)];
     const float fRatio = NetGame::GetTurnRatio();
-    vVec.x = (vNew.x - vOld.x) * fRatio + vOld.x;
-    vVec.y = (vNew.y - vOld.y) * fRatio + vOld.y;
-    vVec.z = (vNew.z - vOld.z) * fRatio + vOld.z;
+    const PblVector3& vOld = (&interpPos[0][0])[2 * iIndex + (interpCount[iIndex] & 1)];
+    vVec = Interpolate(vOld, vNew, fRatio);
 }
 
 // FUNCTION: SWBF2 0x005dacd0
@@ -106,18 +102,21 @@ void NetInterpolator::GetMat(int iIndex, PblMatrix& mMat)
         mMat = mNew;
         return;
     }
+
+    PblQuaternion qNew(mNew);
+    const PblVector3 vNew = mNew.GetTranslation();
+    const float fRatio = NetGame::GetTurnRatio();
     const PblMatrix& mOld = (&interpMat[0][0])[2 * iIndex + (interpCount[iIndex] & 1)];
-    float fRatio = NetGame::GetTurnRatio();
-    PblQuaternion qOld(mOld), qNew(mNew);
-    PblQuaternion qInterpolated = Interpolate(qOld, qNew, fRatio);
+    PblQuaternion qOld(mOld);
+    const PblVector3 vOld = mNew.GetTranslation();
+    const PblVector3 vBlend = Interpolate(vOld, vNew, fRatio);
+    const PblQuaternion qInterpolated = Interpolate(qOld, qNew, fRatio);
     PblQuaternion qNormalized;
-    D3DXQuaternionNormalize(&qNormalized, &qInterpolated);
-    D3DXMatrixRotationQuaternion(&mMat, &qNormalized);
-    for (int i = 0; i < 3; ++i)
-    {
-        mMat.m[3][i] = (mNew.m[3][i] - mNew.m[3][i]) * fRatio + mNew.m[3][i];
-    }
-    mMat.m[3][3] = 1.0f;
+    D3DXQuaternionNormalize(reinterpret_cast<D3DXQUATERNION*>(&qNormalized), reinterpret_cast<const D3DXQUATERNION*>(&qInterpolated));
+    PblMatrix mInterpolated;
+    D3DXMatrixRotationQuaternion(reinterpret_cast<D3DXMATRIX*>(&mInterpolated), reinterpret_cast<const D3DXQUATERNION*>(&qNormalized));
+    mInterpolated.SetTranslation(vBlend);
+    mMat = mInterpolated;
 }
 
 extern int gDebugCount;
@@ -249,9 +248,9 @@ void __fastcall Filter(SmoothInfo* pInfo)
     PblQuaternion qNew(pInfo->lastRenderMat[0]);
     PblQuaternion qBlended = Interpolate(qOld, qNew, fElapsed * 10.0f);
     PblQuaternion qNormal;
-    D3DXQuaternionNormalize(&qNormal, &qBlended);
+    D3DXQuaternionNormalize(reinterpret_cast<D3DXQUATERNION*>(&qNormal), reinterpret_cast<const D3DXQUATERNION*>(&qBlended));
     PblMatrix mResult;
-    D3DXMatrixRotationQuaternion(&mResult, &qNormal);
+    D3DXMatrixRotationQuaternion(reinterpret_cast<D3DXMATRIX*>(&mResult), reinterpret_cast<const D3DXQUATERNION*>(&qNormal));
     float fPosRatio = fElapsed * 5.0f;
     for (int i = 0; i < 3; ++i)
     {
@@ -285,8 +284,8 @@ void __fastcall SmoothVehicle(SmoothInfo* pInfo)
     PblQuaternion qNew(pInfo->lastPredictMat[0]);
     PblQuaternion qBlended = Interpolate(qOld, qNew, fElapsed * 10.0f);
     PblQuaternion qNormal;
-    D3DXQuaternionNormalize(&qNormal, &qBlended);
-    D3DXMatrixRotationQuaternion(&mResult, &qNormal);
+    D3DXQuaternionNormalize(reinterpret_cast<D3DXQUATERNION*>(&qNormal), reinterpret_cast<const D3DXQUATERNION*>(&qBlended));
+    D3DXMatrixRotationQuaternion(reinterpret_cast<D3DXMATRIX*>(&mResult), reinterpret_cast<const D3DXQUATERNION*>(&qNormal));
     for (int i = 0; i < 3; ++i)
     {
         float fOld = pInfo->lastRenderMat[0].m[3][i];
@@ -328,13 +327,13 @@ void __fastcall SmoothLocal(SmoothInfo* pInfo)
     PblQuaternion qIdentity(1.0f, 0.0f, 0.0f, 0.0f);
     pInfo->mRotErr = Interpolate(pInfo->mRotErr, qIdentity, fRatio);
     PblQuaternion qNormal;
-    D3DXQuaternionNormalize(&qNormal, &pInfo->mRotErr);
+    D3DXQuaternionNormalize(reinterpret_cast<D3DXQUATERNION*>(&qNormal), reinterpret_cast<const D3DXQUATERNION*>(&pInfo->mRotErr));
     PblMatrix mCorrection, mResult;
-    D3DXMatrixRotationQuaternion(&mCorrection, &qNormal);
+    D3DXMatrixRotationQuaternion(reinterpret_cast<D3DXMATRIX*>(&mCorrection), reinterpret_cast<const D3DXQUATERNION*>(&qNormal));
     PblMatrix mPredict = pInfo->lastPredictMat[0];
     mPredict.m[3][0] = mPredict.m[3][1] = mPredict.m[3][2] = 0.0f;
     mPredict.m[3][3] = 1.0f;
-    D3DXMatrixMultiply(&mResult, &mPredict, &mCorrection);
+    D3DXMatrixMultiply(reinterpret_cast<D3DXMATRIX*>(&mResult), reinterpret_cast<const D3DXMATRIX*>(&mPredict), reinterpret_cast<const D3DXMATRIX*>(&mCorrection));
     for (int i = 0; i < 3; ++i)
     {
         mResult.m[3][i] = pInfo->lastPredictMat[0].m[3][i] + (&pInfo->mPosErr.x)[i];
@@ -440,7 +439,7 @@ void SmoothInfo::SetMat(const PblMatrix& mat, float fParam1, float fParam2)
         newRot.m[3][3] = 1.0f;
         PblMatrix newInverse = newRot.GetInverseFast();
         PblMatrix relMatrix;
-        D3DXMatrixMultiply(&relMatrix, &newInverse, &oldRot);
+        D3DXMatrixMultiply(reinterpret_cast<D3DXMATRIX*>(&relMatrix), reinterpret_cast<const D3DXMATRIX*>(&newInverse), reinterpret_cast<const D3DXMATRIX*>(&oldRot));
         mRotErr = PblQuaternion(relMatrix);
     }
 }

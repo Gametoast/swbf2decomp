@@ -1,11 +1,10 @@
+#include <d3dx9math.h>
 #include "RedSkeleton.h"
 #include "PebbleFL/Common/PblVector.h"
 #include "RedPose.h"
 #include "PebbleFL/Common/PblChunk.h"
 #include "PebbleFL/Common/PblFile.h"
 #include <new>
-extern "C" PblMatrix* __stdcall D3DXMatrixMultiply(PblMatrix* pOut, const PblMatrix* pM1,
-                                                   const PblMatrix* pM2);
 
 
 
@@ -99,7 +98,7 @@ unsigned int RedSkeleton::_PostProcess(const PblMatrix& mParent, unsigned int ui
 {
     unsigned int uiCount = 1;
     PblMatrix mWorld;
-    D3DXMatrixMultiply(&mWorld, &m_amDefaultPose[uiBone], &mParent);
+    D3DXMatrixMultiply(reinterpret_cast<D3DXMATRIX*>(&mWorld), reinterpret_cast<const D3DXMATRIX*>(&m_amDefaultPose[uiBone]), reinterpret_cast<const D3DXMATRIX*>(&mParent));
     m_amDefaultPose[uiBone] = mWorld;
     m_amDefaultPoseInv[uiBone] = m_amDefaultPose[uiBone].GetInverseFast();
     for (int iChild = m_aConnections[uiBone].iChild; iChild >= 0;

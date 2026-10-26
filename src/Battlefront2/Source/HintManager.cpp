@@ -1,3 +1,4 @@
+#include <d3dx9math.h>
 #include "HintManager.h"
 
 #include <float.h>
@@ -125,7 +126,6 @@ void BaseHint::SetReserveDelay(const GameObject* pObj, float fDelay) const
     const_cast<ReserveObject&>(mReserve).SetReserveDelay(0, fDelay);
 }
 
-extern "C" PblVector3* __stdcall D3DXVec3Normalize(PblVector3* pOut, const PblVector3* pV);
 
 // FUNCTION: SWBF2 0x00543480
 PblMatrix BaseHint::BuildMatrix() const
@@ -143,7 +143,7 @@ PblMatrix BaseHint::BuildMatrix() const
                       mForward.z * vUp.x - mForward.x * vUp.z,
                       mForward.x * vUp.y - mForward.y * vUp.x);
     PblVector3 vX;
-    D3DXVec3Normalize(&vX, &vRight);
+    D3DXVec3Normalize(reinterpret_cast<D3DXVECTOR3*>(&vX), reinterpret_cast<const D3DXVECTOR3*>(&vRight));
     mat.m[0][0] = vX.x;
     mat.m[0][1] = vX.y;
     mat.m[0][2] = vX.z;

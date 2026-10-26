@@ -1,3 +1,4 @@
+#include <d3dx9math.h>
 #include "AnimatedAddon.h"
 
 #include "GameModel.h"
@@ -6,7 +7,6 @@
 #include "RedEngineFL/Graphics/RedModel.h"
 #include "RedEngineFL/Util/RedAnimation.h"
 
-extern "C" PblMatrix* __stdcall D3DXMatrixMultiply(PblMatrix* pOut, const PblMatrix* pM1, const PblMatrix* pM2);
 
 // FUNCTION: SWBF2 0x004439f0
 AnimatedAddon::AnimatedAddon(const ZephyrSkeletonShared& parentSkeleton)
@@ -72,7 +72,7 @@ void AnimatedAddon::Render(TentacleSimulator* pTentacles, const PblVector3& vVel
     }
 
     PblMatrix mWorld;
-    D3DXMatrixMultiply(&mWorld, pJoint, &mMatrix);
+    D3DXMatrixMultiply(reinterpret_cast<D3DXMATRIX*>(&mWorld), reinterpret_cast<const D3DXMATRIX*>(pJoint), reinterpret_cast<const D3DXMATRIX*>(&mMatrix));
     RedPose pose;
     mModel->GetRedModel(0)->SetupPose(pose);
 
@@ -80,7 +80,7 @@ void AnimatedAddon::Render(TentacleSimulator* pTentacles, const PblVector3& vVel
     if (pRoot)
     {
         PblMatrix mRelative;
-        D3DXMatrixMultiply(&mRelative, pRoot, &pJoint->GetInverseFast());
+        D3DXMatrixMultiply(reinterpret_cast<D3DXMATRIX*>(&mRelative), reinterpret_cast<const D3DXMATRIX*>(pRoot), reinterpret_cast<const D3DXMATRIX*>(&pJoint->GetInverseFast()));
         PblMatrix mRoot = mRelative;
         pose.Store(0xE5B51072, &mRoot);
     }

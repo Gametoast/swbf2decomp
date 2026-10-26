@@ -1,3 +1,4 @@
+#include <d3dx9math.h>
 #include "Battlefront2/Source/ShieldEffect.h"
 #include "RedEngineFL/Graphics/PC/pcRedPrimitive.h"
 #include "RedEngineFL/Graphics/PC/Shaders/pcShieldShader.h"
@@ -87,8 +88,6 @@ const PblBox& ShieldEffect::GetBBox() const
     return m_pClass->m_pPrim->m_bbox;
 }
 
-extern "C" PblMatrix* __stdcall D3DXMatrixScaling(PblMatrix* pOut, float fSx, float fSy, float fSz);
-extern "C" PblMatrix* __stdcall D3DXMatrixMultiply(PblMatrix* pOut, const PblMatrix* pM1, const PblMatrix* pM2);
 
 // FUNCTION: SWBF2 0x004281e0
 void ShieldEffectClass::PlatformCleanup()
@@ -119,7 +118,7 @@ void ShieldEffect::PlatformRender(const PblMatrix& mMatrix, unsigned char ucView
         const PblVector3& vX = mMatrix.GetXAxis();
         const float fScale = sqrtf(vX.x * vX.x + vX.y * vX.y + vX.z * vX.z);
         PblMatrix mScale;
-        D3DXMatrixMultiply(&mBillboard, &mBillboard, D3DXMatrixScaling(&mScale, fScale, fScale, fScale));
+        D3DXMatrixMultiply(reinterpret_cast<D3DXMATRIX*>(&mBillboard), reinterpret_cast<const D3DXMATRIX*>(&mBillboard), D3DXMatrixScaling(reinterpret_cast<D3DXMATRIX*>(&mScale), fScale, fScale, fScale));
         mBillboard.m[3][0] = mMatrix.m[3][0];
         mBillboard.m[3][1] = mMatrix.m[3][1];
         mBillboard.m[3][2] = mMatrix.m[3][2];

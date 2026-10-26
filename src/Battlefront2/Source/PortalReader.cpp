@@ -1,3 +1,4 @@
+#include <d3dx9math.h>
 #include "PortalReader.h"
 
 #include "Entity.h"
@@ -9,9 +10,6 @@
 #include "PebbleFL/Common/PblQuaternion.h"
 #include <math.h>
 
-extern "C" PblQuaternion* __stdcall D3DXQuaternionNormalize(PblQuaternion* pOut, const PblQuaternion* pQ);
-extern "C" PblMatrix* __stdcall D3DXMatrixRotationQuaternion(PblMatrix* pOut, const PblQuaternion* pQ);
-extern "C" geo::Vector3<float>* __stdcall D3DXVec3TransformCoord(geo::Vector3<float>* pOut, const geo::Vector3<float>* pV, const PblMatrix* pM);
 
 namespace
 {
@@ -250,7 +248,7 @@ void PortalReader::Read(IPortal& portal, PblConfig& config, IManager& manager, c
 
         PblQuaternion unit;
         PblMatrix transform;
-        D3DXMatrixRotationQuaternion(&transform, D3DXQuaternionNormalize(&unit, &rotation));
+        D3DXMatrixRotationQuaternion(reinterpret_cast<D3DXMATRIX*>(&transform), D3DXQuaternionNormalize(reinterpret_cast<D3DXQUATERNION*>(&unit), reinterpret_cast<const D3DXQUATERNION*>(&rotation)));
         transform.m[3][0] = position.x;
         transform.m[3][1] = position.y;
         transform.m[3][2] = position.z;
@@ -261,7 +259,7 @@ void PortalReader::Read(IPortal& portal, PblConfig& config, IManager& manager, c
         for (geo::Vector3<float>* it = portal.GetPoly().points_.Begin(); it != portal.GetPoly().points_.End(); ++it, ++pCorner)
         {
             geo::Vector3<float> v;
-            D3DXVec3TransformCoord(&v, pCorner, &transform);
+            D3DXVec3TransformCoord(reinterpret_cast<D3DXVECTOR3*>(&v), reinterpret_cast<const D3DXVECTOR3*>(pCorner), reinterpret_cast<const D3DXMATRIX*>(&transform));
             *it = v;
         }
     }

@@ -1,3 +1,4 @@
+#include <d3dx9math.h>
 #include <float.h>
 #include <math.h>
 #include <stdio.h>
@@ -24,7 +25,6 @@ bool EntityItem::NoDisplayLifeTimer() const
     return mClass->mNoLifeSpanDisplay;
 }
 
-extern "C" PblMatrix* __stdcall D3DXMatrixMultiply(PblMatrix* pOut, const PblMatrix* pM1, const PblMatrix* pM2);
 
 extern PblVector3 gVectorZero;
 
@@ -465,7 +465,7 @@ void EntityItem::Render(unsigned char ucLod, float fAlpha, unsigned int uiFlags)
     if (FLRenderer::IsReflected(GetRenderPos(), _Sphere.w, mReflection, false))
     {
         PblMatrix mWorld;
-        D3DXMatrixMultiply(&mWorld, pMatrix, &mReflection);
+        D3DXMatrixMultiply(reinterpret_cast<D3DXMATRIX*>(&mWorld), reinterpret_cast<const D3DXMATRIX*>(pMatrix), reinterpret_cast<const D3DXMATRIX*>(&mReflection));
         mReflection = mWorld;
         mModel->Render(ucLod, fAlpha, &mReflection, 0, color, (uiFlags & ~0x10000) | 0x10000100, 0);
     }
@@ -506,9 +506,7 @@ bool EntityItem::CollisionCallback(const CollisionResult* pResult, CollisionObje
             {
                 float fRebound = mClass->mRebound;
                 float fFriction = mClass->mFriction * fDot * (fRebound + 1.0f);
-                mVelocity.x -= vNormal.x * fDot;
-                mVelocity.y -= vNormal.y * fDot;
-                mVelocity.z -= vNormal.z * fDot;
+                mVelocity -= vNormal * fDot;
                 float fScale = -(fFriction / sqrtf(mVelocity.x * mVelocity.x + mVelocity.y * mVelocity.y +
                                                    mVelocity.z * mVelocity.z));
                 if (!(1.0f > fScale))
@@ -519,9 +517,7 @@ bool EntityItem::CollisionCallback(const CollisionResult* pResult, CollisionObje
                 mVelocity.y -= mVelocity.y * fScale;
                 mVelocity.z -= mVelocity.z * fScale;
                 float fBounce = fRebound * fDot;
-                mVelocity.x -= vNormal.x * fBounce;
-                mVelocity.y -= vNormal.y * fBounce;
-                mVelocity.z -= vNormal.z * fBounce;
+                mVelocity -= vNormal * fBounce;
             }
         }
     }

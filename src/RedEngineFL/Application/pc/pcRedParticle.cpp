@@ -1,3 +1,4 @@
+#include <d3dx9math.h>
 #include "pcRedParticle.h"
 
 #include <float.h>
@@ -13,7 +14,6 @@
 #include "RedEngineFL/Graphics/PC/pcRedShader.h"
 #include "RedEngineFL/Graphics/PC/Shaders/pcParticleShader.h"
 
-extern "C" PblVector3* __stdcall D3DXVec3Normalize(PblVector3* pOut, const PblVector3* pV);
 
 
 
@@ -379,7 +379,7 @@ void RedParticleRenderer::AddParticleToBuffers(void* pVertices, unsigned short* 
             else
             {
                 PblVector3 vTemp;
-                D3DXVec3Normalize(&vTemp, &vNormal);
+                D3DXVec3Normalize(reinterpret_cast<D3DXVECTOR3*>(&vTemp), reinterpret_cast<const D3DXVECTOR3*>(&vNormal));
                 vNormal = vTemp;
             }
 
@@ -387,7 +387,7 @@ void RedParticleRenderer::AddParticleToBuffers(void* pVertices, unsigned short* 
             PblVector3 vSide;
             Cross(&vSide, vToStart, vWidth);
             PblVector3 vSideNorm;
-            D3DXVec3Normalize(&vSideNorm, &vSide);
+            D3DXVec3Normalize(reinterpret_cast<D3DXVECTOR3*>(&vSideNorm), reinterpret_cast<const D3DXVECTOR3*>(&vSide));
             PblVector3 vDepth = vSideNorm * fStartWidth;
 
             if (m_blendMode == BLEND_BLUR)
@@ -412,7 +412,7 @@ void RedParticleRenderer::AddParticleToBuffers(void* pVertices, unsigned short* 
                 PblVector3 vEndSide;
                 Cross(&vEndSide, vToEndCam, vEndWidth);
                 PblVector3 vEndSideNorm;
-                D3DXVec3Normalize(&vEndSideNorm, &vEndSide);
+                D3DXVec3Normalize(reinterpret_cast<D3DXVECTOR3*>(&vEndSideNorm), reinterpret_cast<const D3DXVECTOR3*>(&vEndSide));
 
                 const PblVector3 vZero(0.0f, 0.0f, 0.0f);
                 SetUV(pBlurVerts[4], info.mColor, 0.25f, 0.5f);
@@ -444,7 +444,7 @@ void RedParticleRenderer::AddParticleToBuffers(void* pVertices, unsigned short* 
             if (Dot(vDir, vDir) > 0.0f)
             {
                 PblVector3 vDirNorm;
-                D3DXVec3Normalize(&vDirNorm, &vDir);
+                D3DXVec3Normalize(reinterpret_cast<D3DXVECTOR3*>(&vDirNorm), reinterpret_cast<const D3DXVECTOR3*>(&vDir));
                 const PblVector3 vStartToCam = vCamPos - vStart;
                 const PblVector3 vOffLine = vStartToCam - vDirNorm * Dot(vStartToCam, vDirNorm);
                 if (fStartWidth * fStartWidth > Dot(vOffLine, vOffLine))
@@ -588,7 +588,7 @@ const PblVector3 CalcStreakSplitVector(const PblVector3& vPrev, const PblVector3
     }
 
     PblVector3 vNorm;
-    D3DXVec3Normalize(&vNorm, &vSplit);
+    D3DXVec3Normalize(reinterpret_cast<D3DXVECTOR3*>(&vNorm), reinterpret_cast<const D3DXVECTOR3*>(&vSplit));
     return vNorm * fWidth;
 }
 

@@ -1,3 +1,4 @@
+#include <d3dx9math.h>
 #include <math.h>
 #include <string.h>
 
@@ -8,7 +9,6 @@
 #include "RedEngineFL/Memory/RedMemoryPool.h"
 #include "RedEngineFL/Util/RedStack.h"
 
-extern "C" PblVector3* __stdcall D3DXVec3Normalize(PblVector3* pOut, const PblVector3* pV);
 
 const int MAX_TREEGRID_STACKS = 15;
 
@@ -329,7 +329,7 @@ void TreeGrid::CallbackOnLazyRay(const PblVector3& rFrom, const PblVector3& rTo,
     PblVector3 vDir(rTo.x - rFrom.x, rTo.y - rFrom.y, rTo.z - rFrom.z);
     float fLength = sqrtf(vDir.x * vDir.x + vDir.y * vDir.y + vDir.z * vDir.z);
     PblVector3 vNormal;
-    D3DXVec3Normalize(&vNormal, &vDir);
+    D3DXVec3Normalize(reinterpret_cast<D3DXVECTOR3*>(&vNormal), reinterpret_cast<const D3DXVECTOR3*>(&vDir));
     vDir = vNormal;
 
     float fDist = 1e11f;
@@ -716,7 +716,7 @@ void TreeGrid::CallbackOnFatRay(const PblVector3& rFrom, const PblVector3& rTo, 
     int aiExtents[4] = { 0, 0, 0, 0 };
     PblVector3 vDir(rTo.x - rFrom.x, rTo.y - rFrom.y, rTo.z - rFrom.z);
     PblVector3 vNormal;
-    D3DXVec3Normalize(&vNormal, &vDir);
+    D3DXVec3Normalize(reinterpret_cast<D3DXVECTOR3*>(&vNormal), reinterpret_cast<const D3DXVECTOR3*>(&vDir));
 
     PblVector3 vHalf(vNormal.x * fRadius * 0.5f, vNormal.y * fRadius * 0.5f,
                      vNormal.z * fRadius * 0.5f);

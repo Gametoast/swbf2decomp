@@ -1,3 +1,4 @@
+#include <d3dx9math.h>
 #include "pcRefractionShader.h"
 
 #include "PebbleFL/Common/PblChunk.h"
@@ -16,10 +17,6 @@
 
 void __cdecl PblTraceP(const char* Format, ...);
 
-extern "C" PblMatrix* __stdcall D3DXMatrixMultiply(PblMatrix* pOut, const PblMatrix* pM1,
-                                                   const PblMatrix* pM2);
-extern "C" PblMatrix* __stdcall D3DXMatrixRotationZ(PblMatrix* pOut, float fAngle);
-extern "C" PblMatrix* __stdcall D3DXMatrixScaling(PblMatrix* pOut, float sx, float sy, float sz);
 
 // GLOBAL: SWBF2 0x009ca4a8
 static D3DMATERIAL9 s_d3dMat;
@@ -230,12 +227,12 @@ void pcRefractionShader::Begin_Fixed(unsigned int uiState, unsigned int uiPass) 
 
         PblMatrix mTmp;
         PblMatrix mRot = _IdentityMatrix;
-        D3DXMatrixMultiply(&mRot, &mRot, D3DXMatrixRotationZ(&mTmp, fAngle));
+        D3DXMatrixMultiply(reinterpret_cast<D3DXMATRIX*>(&mRot), reinterpret_cast<const D3DXMATRIX*>(&mRot), D3DXMatrixRotationZ(reinterpret_cast<D3DXMATRIX*>(&mTmp), fAngle));
         PblMatrix mScale = _IdentityMatrix;
-        D3DXMatrixMultiply(&mScale, &mScale,
-                           D3DXMatrixScaling(&mTmp, m_distortionScale, m_distortionScale,
+        D3DXMatrixMultiply(reinterpret_cast<D3DXMATRIX*>(&mScale), reinterpret_cast<const D3DXMATRIX*>(&mScale),
+                           D3DXMatrixScaling(reinterpret_cast<D3DXMATRIX*>(&mTmp), m_distortionScale, m_distortionScale,
                                              m_distortionScale));
-        D3DXMatrixMultiply(&mTmp, &mScale, &mRot);
+        D3DXMatrixMultiply(reinterpret_cast<D3DXMATRIX*>(&mTmp), reinterpret_cast<const D3DXMATRIX*>(&mScale), reinterpret_cast<const D3DXMATRIX*>(&mRot));
         s_bumpMat = mTmp;
 
         const PblMatrix mBias(PblVector4{ 0.5f, 0.0f, 0.0f, 0.0f },
@@ -244,7 +241,7 @@ void pcRefractionShader::Begin_Fixed(unsigned int uiState, unsigned int uiPass) 
                               PblVector4{ 0.5f, 0.5f, 1.0f, 1.0f });
         PblMatrix mProj;
         RedRenderer::pcGetDevice()->GetTransform(D3DTS_PROJECTION, (D3DMATRIX*)&mProj);
-        D3DXMatrixMultiply(&mTmp, &mProj, &mBias);
+        D3DXMatrixMultiply(reinterpret_cast<D3DXMATRIX*>(&mTmp), reinterpret_cast<const D3DXMATRIX*>(&mProj), reinterpret_cast<const D3DXMATRIX*>(&mBias));
         s_refractionTexMat = mTmp;
     }
 }
@@ -284,12 +281,12 @@ void pcRefractionShader::Begin_Prog1(unsigned int uiState, unsigned int) const
 
         PblMatrix mTmp;
         PblMatrix mRot = _IdentityMatrix;
-        D3DXMatrixMultiply(&mRot, &mRot, D3DXMatrixRotationZ(&mTmp, fAngle));
+        D3DXMatrixMultiply(reinterpret_cast<D3DXMATRIX*>(&mRot), reinterpret_cast<const D3DXMATRIX*>(&mRot), D3DXMatrixRotationZ(reinterpret_cast<D3DXMATRIX*>(&mTmp), fAngle));
         PblMatrix mScale = _IdentityMatrix;
-        D3DXMatrixMultiply(&mScale, &mScale,
-                           D3DXMatrixScaling(&mTmp, m_distortionScale, m_distortionScale,
+        D3DXMatrixMultiply(reinterpret_cast<D3DXMATRIX*>(&mScale), reinterpret_cast<const D3DXMATRIX*>(&mScale),
+                           D3DXMatrixScaling(reinterpret_cast<D3DXMATRIX*>(&mTmp), m_distortionScale, m_distortionScale,
                                              m_distortionScale));
-        D3DXMatrixMultiply(&mTmp, &mScale, &mRot);
+        D3DXMatrixMultiply(reinterpret_cast<D3DXMATRIX*>(&mTmp), reinterpret_cast<const D3DXMATRIX*>(&mScale), reinterpret_cast<const D3DXMATRIX*>(&mRot));
         s_bumpMat = mTmp;
 
         RedRenderer::pcSetTextureStageState(1, D3DTSS_TEXTURETRANSFORMFLAGS, D3DTTFF_PROJECTED);
@@ -312,10 +309,10 @@ void pcRefractionShader::Begin_Prog1(unsigned int uiState, unsigned int) const
 
         const RedCamera* pCamera = RedRenderer::GetCamera();
         PblMatrix mViewProj;
-        D3DXMatrixMultiply(&mViewProj, &pCamera->GetMatrixInverse(),
-                           &RedRenderer::GetProjectionMatrix());
+        D3DXMatrixMultiply(reinterpret_cast<D3DXMATRIX*>(&mViewProj), reinterpret_cast<const D3DXMATRIX*>(&pCamera->GetMatrixInverse()),
+                           reinterpret_cast<const D3DXMATRIX*>(&RedRenderer::GetProjectionMatrix()));
         PblMatrix mTex;
-        D3DXMatrixMultiply(&mTex, &mViewProj, &kClipToTextureMatrix);
+        D3DXMatrixMultiply(reinterpret_cast<D3DXMATRIX*>(&mTex), reinterpret_cast<const D3DXMATRIX*>(&mViewProj), reinterpret_cast<const D3DXMATRIX*>(&kClipToTextureMatrix));
         s_refractionTexMat = mTex;
     }
 }
@@ -688,7 +685,7 @@ void pcRefractionShader::Render_Prog1(const RenderItem* pItem, unsigned int) con
         pRegs[40].component[3] = 0.0f;
 
         PblMatrix mTex;
-        D3DXMatrixMultiply(&mTex, pItem->pmObjWorld, &s_refractionTexMat);
+        D3DXMatrixMultiply(reinterpret_cast<D3DXMATRIX*>(&mTex), reinterpret_cast<const D3DXMATRIX*>(pItem->pmObjWorld), reinterpret_cast<const D3DXMATRIX*>(&s_refractionTexMat));
         pRegs[41].SetMatrix4x4(mTex);
 
         const RedTextureTransform& diffuse = m_material.diffuseTexTransform;

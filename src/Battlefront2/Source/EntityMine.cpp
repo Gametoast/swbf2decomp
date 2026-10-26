@@ -1,3 +1,4 @@
+#include <d3dx9math.h>
 #include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -18,10 +19,6 @@
 #include "PebbleFL/Common/PblQuaternion.h"
 #include "SoundFL/source/sndvoicevirtual.h"
 
-extern "C" PblQuaternion* __stdcall D3DXQuaternionNormalize(PblQuaternion* pOut, const PblQuaternion* pQ);
-extern "C" PblMatrix* __stdcall D3DXMatrixRotationQuaternion(PblMatrix* pOut, const PblQuaternion* pQ);
-extern "C" PblMatrix* __stdcall D3DXMatrixMultiply(PblMatrix* pOut, const PblMatrix* pM1,
-                                                   const PblMatrix* pM2);
 
 extern PblVector3 gVectorZero;
 
@@ -292,7 +289,7 @@ bool EntityMine::Update(float fDeltaTime)
         {
             PblQuaternion qRot;
             PblMatrix mStick;
-            D3DXMatrixRotationQuaternion(&mStick, D3DXQuaternionNormalize(&qRot, &mStickInfo->mLocalRotation));
+            D3DXMatrixRotationQuaternion(reinterpret_cast<D3DXMATRIX*>(&mStick), D3DXQuaternionNormalize(reinterpret_cast<D3DXQUATERNION*>(&qRot), reinterpret_cast<const D3DXQUATERNION*>(&mStickInfo->mLocalRotation)));
             mStick.m[3][0] = mStickInfo->mLocalPosition.x;
             mStick.m[3][1] = mStickInfo->mLocalPosition.y;
             mStick.m[3][2] = mStickInfo->mLocalPosition.z;
@@ -302,7 +299,7 @@ bool EntityMine::Update(float fDeltaTime)
             {
                 PblMatrix mBody = pObject->mCollisionModel->GetWorldMatrix(mStickInfo->mCollBodyID,
                                                                            pObject->GetMatrix(), pObject->GetPose());
-                D3DXMatrixMultiply(&mStick, &mStick, &mBody);
+                D3DXMatrixMultiply(reinterpret_cast<D3DXMATRIX*>(&mStick), reinterpret_cast<const D3DXMATRIX*>(&mStick), reinterpret_cast<const D3DXMATRIX*>(&mBody));
             }
             SetMatrix(mStick);
             if (fDeltaTime > 0.0f)
@@ -524,7 +521,7 @@ bool EntityMine::CollisionCallback(const CollisionResult* pResult, CollisionObje
         {
             PblMatrix mBody = pModel->GetWorldMatrix(pResult->mReceiverId, pOther->GetMatrix(), pOther->GetPose());
             const PblMatrix mInverse = mBody.GetInverseFast();
-            D3DXMatrixMultiply(&mStick, &mStick, &mInverse);
+            D3DXMatrixMultiply(reinterpret_cast<D3DXMATRIX*>(&mStick), reinterpret_cast<const D3DXMATRIX*>(&mStick), reinterpret_cast<const D3DXMATRIX*>(&mInverse));
             mStickInfo->mCollBodyID = pResult->mReceiverId;
         }
         else
@@ -556,9 +553,7 @@ bool EntityMine::CollisionCallback(const CollisionResult* pResult, CollisionObje
     {
         const float fRebound = pClass->mRebound;
         const float fFriction = pClass->mFriction * fDot * (fRebound + 1.0f);
-        mVelocity.x -= vNormal.x * fDot;
-        mVelocity.y -= vNormal.y * fDot;
-        mVelocity.z -= vNormal.z * fDot;
+        mVelocity -= vNormal * fDot;
         float fScale = -(fFriction / sqrtf(mVelocity.x * mVelocity.x + mVelocity.y * mVelocity.y +
                                            mVelocity.z * mVelocity.z));
         if (!(1.0f > fScale))
@@ -569,9 +564,7 @@ bool EntityMine::CollisionCallback(const CollisionResult* pResult, CollisionObje
         mVelocity.y -= mVelocity.y * fScale;
         mVelocity.z -= mVelocity.z * fScale;
         const float fBounce = fRebound * fDot;
-        mVelocity.x -= vNormal.x * fBounce;
-        mVelocity.y -= vNormal.y * fBounce;
-        mVelocity.z -= vNormal.z * fBounce;
+        mVelocity -= vNormal * fBounce;
         if (!mHitSurface)
         {
             mHitSurface = 1;

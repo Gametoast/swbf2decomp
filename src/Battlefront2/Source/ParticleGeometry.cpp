@@ -1,3 +1,4 @@
+#include <d3dx9math.h>
 #include "ParticleGeometry.h"
 
 #include "RedEngineFL/Graphics/RedModel.h"
@@ -7,8 +8,6 @@
 #include "PebbleFL/Common/PblMath.h"
 #include <math.h>
 
-extern "C" PblVector3* __stdcall D3DXVec3TransformNormal(PblVector3* pOut, const PblVector3* pV, const PblMatrix* pM);
-extern "C" PblMatrix* __stdcall D3DXMatrixMultiply(PblMatrix* pOut, const PblMatrix* pM1, const PblMatrix* pM2);
 namespace ParticleSystem
 {
 PblBox& GetBoundingBox();
@@ -279,7 +278,7 @@ void ParticleGeometry::Render(Particle& particle, bool bLast) const
         mLocal.m[3][2] = 0.0f;
         mLocal.m[3][3] = 1.0f;
         PblMatrix mWorld;
-        D3DXMatrixMultiply(&mWorld, &mLocal, &particle.mInfoData->mMatrix);
+        D3DXMatrixMultiply(reinterpret_cast<D3DXMATRIX*>(&mWorld), reinterpret_cast<const D3DXMATRIX*>(&mLocal), reinterpret_cast<const D3DXMATRIX*>(&particle.mInfoData->mMatrix));
         mWorld.m[3][0] = vPos.x;
         mWorld.m[3][1] = vPos.y;
         mWorld.m[3][2] = vPos.z;
@@ -379,9 +378,9 @@ void ParticleGeometry::Render(Particle& particle, bool bLast) const
         if (particle.mNoRegisterStep)
         {
             PblVector3 v;
-            D3DXVec3TransformNormal(&v, &vRight, &particle.mInfoData->mMatrix);
+            D3DXVec3TransformNormal(reinterpret_cast<D3DXVECTOR3*>(&v), reinterpret_cast<const D3DXVECTOR3*>(&vRight), reinterpret_cast<const D3DXMATRIX*>(&particle.mInfoData->mMatrix));
             vRight = v;
-            D3DXVec3TransformNormal(&v, &vUp, &particle.mInfoData->mMatrix);
+            D3DXVec3TransformNormal(reinterpret_cast<D3DXVECTOR3*>(&v), reinterpret_cast<const D3DXVECTOR3*>(&vUp), reinterpret_cast<const D3DXMATRIX*>(&particle.mInfoData->mMatrix));
             vUp = v;
         }
         redColor.b = (unsigned char)(int)(color.b * 255.0f);

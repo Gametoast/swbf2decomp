@@ -1,3 +1,4 @@
+#include <d3dx9math.h>
 #include <string.h>
 
 #include "Battlefront2/Source/Cloth.h"
@@ -9,7 +10,6 @@
 #include "RedEngineFL/Graphics/PC/pcRedShader.h"
 #include "RedEngineFL/Application/pc/pcRenderHelpers.h"
 
-extern "C" PblMatrix* __stdcall D3DXMatrixMultiply(PblMatrix* pOut, const PblMatrix* pM1, const PblMatrix* pM2);
 
 namespace
 {
@@ -106,7 +106,7 @@ void EntityCloth::PlatformRender(unsigned char ucViewport, RedColor color, unsig
         && FLRenderer::IsReflected(sphere.GetCenter(), sphere.GetRadius(), mReflection, false))
     {
         PblMatrix mReflected;
-        D3DXMatrixMultiply(&mReflected, &m_worldMat, &mReflection);
+        D3DXMatrixMultiply(reinterpret_cast<D3DXMATRIX*>(&mReflected), reinterpret_cast<const D3DXMATRIX*>(&m_worldMat), reinterpret_cast<const D3DXMATRIX*>(&mReflection));
         RedRenderer::pcRenderPrimitive(pPrimitive, mData->m_pShader,
                                        mReflected, color,
                                        uiFlags | 0x10000100, 0, 0, 0);

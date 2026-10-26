@@ -69,7 +69,7 @@ typedef LUA_UACNUMBER l_uacNumber;
 typedef unsigned long Instruction;
 
 #ifndef LUA_MAXCALLS
-#define LUA_MAXCALLS        4096
+#define LUA_MAXCALLS        256
 #endif
 
 #ifndef LUA_MAXCCALLS

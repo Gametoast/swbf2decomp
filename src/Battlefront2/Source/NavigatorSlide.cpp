@@ -1,3 +1,4 @@
+#include <d3dx9math.h>
 #include <float.h>
 #include <string.h>
 
@@ -17,7 +18,6 @@
 
 extern PblVector3 gVectorZero;
 
-extern "C" PblVector3* __stdcall D3DXVec3Normalize(PblVector3* pOut, const PblVector3* pV);
 
 class EntitySoldier
 {
@@ -291,7 +291,7 @@ void NavigatorSlide::NextInfantrySlidePos(const PblVector3& dest)
         if (delta.x * delta.x + delta.y * delta.y + delta.z * delta.z > 0.1f)
         {
             PblVector3 dir;
-            D3DXVec3Normalize(&dir, &delta);
+            D3DXVec3Normalize(reinterpret_cast<D3DXVECTOR3*>(&dir), reinterpret_cast<const D3DXVECTOR3*>(&delta));
             if (delta.x * delta.x + delta.y * delta.y + delta.z * delta.z > 1.0f)
             {
                 slideDest = PblVector3(slideDest.x - dir.x, slideDest.y - dir.y, slideDest.z - dir.z);

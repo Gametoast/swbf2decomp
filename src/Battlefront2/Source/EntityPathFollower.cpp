@@ -1,3 +1,4 @@
+#include <d3dx9math.h>
 #include <float.h>
 #include <stdio.h>
 
@@ -129,7 +130,6 @@ bool EntityPathFollowerClass::SetProperty(unsigned int uProperty, const char* ps
     return EntitySquadronClass::SetProperty(uProperty, pszValue);
 }
 
-extern "C" PblVector3* __stdcall D3DXVec3Normalize(PblVector3* pOut, const PblVector3* pV);
 
 namespace
 {
@@ -306,7 +306,7 @@ bool EntityPathFollower::HeadTowards(PblVector3& vTarget, float fDistance, Branc
     PblVector3 vPosition = params.mMatrix.GetTranslation();
     PblVector3 vDelta(vTarget.x - vPosition.x, vTarget.y - vPosition.y, vTarget.z - vPosition.z);
     PblVector3 vDir;
-    D3DXVec3Normalize(&vDir, &vDelta);
+    D3DXVec3Normalize(reinterpret_cast<D3DXVECTOR3*>(&vDir), reinterpret_cast<const D3DXVECTOR3*>(&vDelta));
     PblVector3 vEnd(vDir.x * fDistance + vPosition.x, vDir.y * fDistance + vPosition.y,
                     vDir.z * fDistance + vPosition.z);
     if (CollisionManager::RayTest(vPosition, vEnd, &pIgnore, 1, 0))
@@ -320,7 +320,7 @@ bool EntityPathFollower::HeadTowards(PblVector3& vTarget, float fDistance, Branc
                        vPosition.z - vForward.z * 30.0f);
     PblVector3 vDelta2(vTarget.x - vPosition.x, vTarget.y - vPosition.y, vTarget.z - vPosition.z);
     PblVector3 vBeyond;
-    D3DXVec3Normalize(&vBeyond, &vDelta2);
+    D3DXVec3Normalize(reinterpret_cast<D3DXVECTOR3*>(&vBeyond), reinterpret_cast<const D3DXVECTOR3*>(&vDelta2));
     float fBeyond = fDistance + 200.0f;
     vBeyond.x = vBeyond.x * fBeyond + vPosition.x;
     vBeyond.y = vBeyond.y * fBeyond + vPosition.y;
@@ -348,7 +348,7 @@ void EntityPathFollower::SmoothPath(BranchParams& params, const PblVector3* pTar
     const PblVector3& vPoint2 = GetPoint(2);
     PblVector3 vDelta(vPoint2.x - vRel.x, vPoint2.y - vRel.y, vPoint2.z - vRel.z);
     PblVector3 vDir;
-    D3DXVec3Normalize(&vDir, &vDelta);
+    D3DXVec3Normalize(reinterpret_cast<D3DXVECTOR3*>(&vDir), reinterpret_cast<const D3DXVECTOR3*>(&vDelta));
 
     PblVector3 vForward = params.mMatrix.GetZAxis();
     PblVector3 vPoint = vForward;
@@ -582,14 +582,14 @@ unsigned int EntityPathFollower::CreateSquadronForFlyby(BranchParams& params)
     PblVector3 vRandom(mRight.m[0][0] * fRight + vUp.x, mRight.m[0][1] * fRight + vUp.y,
                        mRight.m[0][2] * fRight + vUp.z);
     PblVector3 vOffset;
-    D3DXVec3Normalize(&vOffset, &vRandom);
+    D3DXVec3Normalize(reinterpret_cast<D3DXVECTOR3*>(&vOffset), reinterpret_cast<const D3DXVECTOR3*>(&vRandom));
     PblVector3 vSum(vForward.x * 85.0f + vOffset.x * 85.0f, vOffset.y * 85.0f + vForward.y * 85.0f,
                     vOffset.z * 85.0f + vForward.z * 85.0f);
     PblVector3 vEntry;
-    D3DXVec3Normalize(&vEntry, &vSum);
+    D3DXVec3Normalize(reinterpret_cast<D3DXVECTOR3*>(&vEntry), reinterpret_cast<const D3DXVECTOR3*>(&vSum));
     PblVector3 vBack(vForward.x * fSide - vOffset.x, vForward.y * fSide - vOffset.y, vForward.z * fSide - vOffset.z);
     PblVector3 vExit;
-    D3DXVec3Normalize(&vExit, &vBack);
+    D3DXVec3Normalize(reinterpret_cast<D3DXVECTOR3*>(&vExit), reinterpret_cast<const D3DXVECTOR3*>(&vBack));
     float fLead = bSameDirection ? 85.0f : 700.0f;
     PblVector3 vStart(vOffset.x * 85.0f + vPlayerPos.x + vForward.x * fLead,
                       vOffset.y * 85.0f + vPlayerPos.y + vForward.y * fLead,
@@ -608,13 +608,13 @@ unsigned int EntityPathFollower::CreateSquadronForFlyby(BranchParams& params)
         fRight = PblRandom::GetGlobalFloatRange(0.0f, 2.0f);
         vRandom = PblVector3(fRight * mRight2.m[0][0] + vUp.x, mRight2.m[0][1] * fRight + vUp.y,
                              mRight2.m[0][2] * fRight + vUp.z);
-        D3DXVec3Normalize(&vOffset, &vRandom);
+        D3DXVec3Normalize(reinterpret_cast<D3DXVECTOR3*>(&vOffset), reinterpret_cast<const D3DXVECTOR3*>(&vRandom));
         vSum = PblVector3(vForward.x * 85.0f + vOffset.x * 85.0f, vOffset.y * 85.0f + vForward.y * 85.0f,
                           vOffset.z * 85.0f + vForward.z * 85.0f);
-        D3DXVec3Normalize(&vEntry, &vSum);
+        D3DXVec3Normalize(reinterpret_cast<D3DXVECTOR3*>(&vEntry), reinterpret_cast<const D3DXVECTOR3*>(&vSum));
         vBack = PblVector3(vForward.x * fSide - vOffset.x, vForward.y * fSide - vOffset.y,
                            vForward.z * fSide - vOffset.z);
-        D3DXVec3Normalize(&vExit, &vBack);
+        D3DXVec3Normalize(reinterpret_cast<D3DXVECTOR3*>(&vExit), reinterpret_cast<const D3DXVECTOR3*>(&vBack));
         fLead = bSameDirection ? 85.0f : 700.0f;
         vStart = PblVector3(vPlayerPos.x + vOffset.x * 85.0f + vForward.x * fLead,
                             vOffset.y * 85.0f + vPlayerPos.y + vForward.y * fLead,
@@ -1166,24 +1166,24 @@ bool EntityPathFollower::Update(BranchParams& params, float fElapsed, PblVector3
         vTangent = PblVector3(fInv * vTangent.x, vTangent.y * fInv, vTangent.z * fInv);
     }
     PblVector3 vNormal;
-    D3DXVec3Normalize(&vNormal, &vLookAhead);
+    D3DXVec3Normalize(reinterpret_cast<D3DXVECTOR3*>(&vNormal), reinterpret_cast<const D3DXVECTOR3*>(&vLookAhead));
     vLookAhead = vNormal;
 
     PblMatrix rotation;
     PblMatrix* pRotation = pMatrix ? pMatrix : &rotation;
     float fTurn = Rotate(params.mPathClass, params.mMatrix, fElapsed, vTangent, vLookAhead, pRotation);
     PblMatrix& matrix = params.mMatrix;
-    D3DXVec3Normalize(&vNormal, (const PblVector3*)&matrix.m[0][0]);
+    D3DXVec3Normalize(reinterpret_cast<D3DXVECTOR3*>(&vNormal), reinterpret_cast<const D3DXVECTOR3*>((const PblVector3*)&matrix.m[0][0]));
     matrix.m[0][0] = vNormal.x;
     matrix.m[0][1] = vNormal.y;
     matrix.m[0][2] = vNormal.z;
     matrix.m[0][3] = 0.0f;
-    D3DXVec3Normalize(&vNormal, (const PblVector3*)&matrix.m[1][0]);
+    D3DXVec3Normalize(reinterpret_cast<D3DXVECTOR3*>(&vNormal), reinterpret_cast<const D3DXVECTOR3*>((const PblVector3*)&matrix.m[1][0]));
     matrix.m[1][0] = vNormal.x;
     matrix.m[1][1] = vNormal.y;
     matrix.m[1][2] = vNormal.z;
     matrix.m[1][3] = 0.0f;
-    D3DXVec3Normalize(&vNormal, (const PblVector3*)&matrix.m[2][0]);
+    D3DXVec3Normalize(reinterpret_cast<D3DXVECTOR3*>(&vNormal), reinterpret_cast<const D3DXVECTOR3*>((const PblVector3*)&matrix.m[2][0]));
     matrix.m[2][0] = vNormal.x;
     matrix.m[2][1] = vNormal.y;
     matrix.m[2][2] = vNormal.z;
@@ -1203,7 +1203,7 @@ bool EntityPathFollower::Update(BranchParams& params, float fElapsed, PblVector3
     if (InSquadron())
     {
         PblVector3 vDelta(vTarget.x - vOldPosition.x, vTarget.y - vOldPosition.y, vTarget.z - vOldPosition.z);
-        D3DXVec3Normalize(&vNormal, &vDelta);
+        D3DXVec3Normalize(reinterpret_cast<D3DXVECTOR3*>(&vNormal), reinterpret_cast<const D3DXVECTOR3*>(&vDelta));
         vTangent = vNormal;
         fTurn = Rotate(params.mPathClass, params.mMatrix, fElapsed, vTangent, vLookAhead, pRotation);
     }
@@ -1416,7 +1416,7 @@ bool EntityPathFollower::ShotAtByEnemy(BranchParams& params)
     PblVector3 vOffset(right.m[0][0] * fRight + vUp.x, right.m[0][1] * fRight + vUp.y,
                        right.m[0][2] * fRight + vUp.z);
     PblVector3 vDir;
-    D3DXVec3Normalize(&vDir, &vOffset);
+    D3DXVec3Normalize(reinterpret_cast<D3DXVECTOR3*>(&vDir), reinterpret_cast<const D3DXVECTOR3*>(&vOffset));
     PblVector3 vTarget(vDir.x * 30.0f + vAttacker.x + vAhead.x, vDir.y * 30.0f + vAttacker.y + vAhead.y,
                        vDir.z * 30.0f + vAttacker.z + vAhead.z);
 
@@ -1437,8 +1437,7 @@ static PblVector3 CalculateZeroPoint(const PblVector3& vPosition, const PblVecto
     float fDist = sqrtf((vTarget.x - vPosition.x) * (vTarget.x - vPosition.x) +
                         (vTarget.y - vPosition.y) * (vTarget.y - vPosition.y) +
                         (vTarget.z - vPosition.z) * (vTarget.z - vPosition.z));
-    return PblVector3(vTarget.x - vDirection.x * fDist * 5.0f, vTarget.y - vDirection.y * fDist * 5.0f,
-                      vTarget.z - vDirection.z * fDist * 5.0f);
+    return (vTarget - vDirection * fDist * 5.0f);
 }
 
 // FUNCTION: SWBF2 0x004d5a70
@@ -1506,7 +1505,7 @@ bool EntityPathFollower::CirclePoint(float fRadius)
     PblVector3 vPosition = params.mMatrix.GetTranslation();
     PblVector3 vToCenter(mPointToCircle.x - vPosition.x, 0.0f, mPointToCircle.z - vPosition.z);
     PblVector3 vDir;
-    D3DXVec3Normalize(&vDir, &vToCenter);
+    D3DXVec3Normalize(reinterpret_cast<D3DXVECTOR3*>(&vDir), reinterpret_cast<const D3DXVECTOR3*>(&vToCenter));
     PblVector3 vSideDir(vDir.z, 0.0f, -vDir.x);
     const PblVector3& vForward = params.mMatrix.GetZAxis();
     float fCross = vDir.z * vForward.x - vDir.x * vForward.z;
@@ -1522,7 +1521,7 @@ bool EntityPathFollower::CirclePoint(float fRadius)
     {
         const PblVector3& vLast = GetPoint(3);
         PblVector3 vFromCenter(vLast.x - mPointToCircle.x, 0.0f, vLast.z - mPointToCircle.z);
-        D3DXVec3Normalize(&vDir, &vFromCenter);
+        D3DXVec3Normalize(reinterpret_cast<D3DXVECTOR3*>(&vDir), reinterpret_cast<const D3DXVECTOR3*>(&vFromCenter));
         vDir = PblVector3(vDir.z, 0.0f, -vDir.x);
         if (fCross > 0.0f)
         {
@@ -1581,7 +1580,7 @@ void EntityPathFollower::GetNextTowardsAttackerPoint(BranchParams& params, PblVe
                            attacker.m[0][1] * fRight + attacker.m[1][1] * fUp,
                            attacker.m[0][2] * fRight + attacker.m[1][2] * fUp);
         PblVector3 vDir;
-        D3DXVec3Normalize(&vDir, &vOffset);
+        D3DXVec3Normalize(reinterpret_cast<D3DXVECTOR3*>(&vDir), reinterpret_cast<const D3DXVECTOR3*>(&vOffset));
         const PblVector3& vPosition = params.mMatrix.GetTranslation();
         vPoint = PblVector3(
             (vPosition.x + attacker.m[3][0]) * 0.5f + vDir.x * 20.0f + vAhead.x - attacker.m[2][0] * 50.0f,
@@ -1595,8 +1594,6 @@ void EntityPathFollower::GetNextTowardsAttackerPoint(BranchParams& params, PblVe
     }
 }
 
-extern "C" PblMatrix* __stdcall D3DXMatrixRotationZ(PblMatrix* pOut, float fAngle);
-extern "C" PblMatrix* __stdcall D3DXMatrixMultiply(PblMatrix* pOut, const PblMatrix* pM1, const PblMatrix* pM2);
 
 // FUNCTION: SWBF2 0x004d64a0
 bool EntityPathFollower::SetupNextSegment(const PblVector3* const pPosition, BranchParams& params, bool b1, bool b2)
@@ -1837,9 +1834,9 @@ float EntityPathFollower::Rotate(const EntityPathFollowerClass* const pClass, Pb
     float fTurnRate = (mYaw - fYaw) / fElapsed;
 
     PblMatrix roll;
-    D3DXMatrixRotationZ(&roll, Roll(pClass, fYaw, fElapsed, fTurnRate));
+    D3DXMatrixRotationZ(reinterpret_cast<D3DXMATRIX*>(&roll), Roll(pClass, fYaw, fElapsed, fTurnRate));
     PblMatrix result;
-    D3DXMatrixMultiply(&result, &roll, &matrix);
+    D3DXMatrixMultiply(reinterpret_cast<D3DXMATRIX*>(&result), reinterpret_cast<const D3DXMATRIX*>(&roll), reinterpret_cast<const D3DXMATRIX*>(&matrix));
     matrix = result;
     return fTurnRate;
 }
@@ -1850,7 +1847,7 @@ bool EntityPathFollower::CalculateDistance(const PblVector3& vPosition, const En
                                            float& fBestSquareDist)
 {
     PblVector3 vPoint = *pPath->GetPointPosition(uIndex);
-    PblVector3 vDist(vPoint.x - vPosition.x, vPoint.y - vPosition.y, vPoint.z - vPosition.z);
+    PblVector3 vDist = vPoint - vPosition;
     attrib.mPath = pPath;
     attrib.mPointIndex = uIndex;
     attrib.mVectorDist = vDist;

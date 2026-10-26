@@ -1,3 +1,4 @@
+#include <d3dx9math.h>
 #include "Controller.h"
 #include "AIDifficulty.h"
 #include "AIUtil.h"
@@ -26,7 +27,6 @@ public:
     static PblHash rttiHashEntityFlyer;
 };
 
-extern "C" PblVector3* __stdcall D3DXVec3Normalize(PblVector3* pOut, const PblVector3* pV);
 
 // SYNTHETIC: SWBF2 0x00402790
 // `dynamic initializer for 'Controller::rttiHashController''
@@ -100,7 +100,7 @@ PblVector3 Controller::GetTargetBubbleCircle() const
     PblVector3 vOffset = mTargetBubbleOffset;
     vOffset.z = 0.0f;
     PblVector3 vCircle;
-    D3DXVec3Normalize(&vCircle, &vOffset);
+    D3DXVec3Normalize(reinterpret_cast<D3DXVECTOR3*>(&vCircle), reinterpret_cast<const D3DXVECTOR3*>(&vOffset));
     return vCircle;
 }
 
@@ -251,7 +251,7 @@ void Controller::UpdateTargetBubbleSize(float dt)
     PblVector3 vRandom = PblRandom::_Global.GetVector3();
     PblVector3 vAxis(mTargetBubbleAxis.x + vRandom.x, mTargetBubbleAxis.y + vRandom.y,
                      mTargetBubbleAxis.z + vRandom.z);
-    D3DXVec3Normalize(&vRandom, &vAxis);
+    D3DXVec3Normalize(reinterpret_cast<D3DXVECTOR3*>(&vRandom), reinterpret_cast<const D3DXVECTOR3*>(&vAxis));
     mTargetBubbleAxis = vRandom;
 
     float fAngle = dt * 2.0f;

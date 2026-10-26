@@ -27,13 +27,6 @@ static const float DYNAMIC_LIFETIME = 8.0f;
 static const float STATIC_LIFETIME = 53.0f;
 static const float EPSILON = 0.0001f;
 
-static inline const PblMatrix operator*(const PblMatrix& a, const PblMatrix& b)
-{
-    PblMatrix result;
-    D3DXMatrixMultiply((D3DXMATRIX*)&result, (const D3DXMATRIX*)&a, (const D3DXMATRIX*)&b);
-    return result;
-}
-
 static inline const PblVector3 TransformCoord(const PblVector3& v, const PblMatrix& m)
 {
     PblVector3 result;
@@ -411,19 +404,6 @@ static inline void SetAxis(PblMatrix& m, int iRow, const PblVector3& v)
 
 
 
-static inline PblMatrix MatrixFromQuat(const PblQuaternion& q, const PblVector3& vPos)
-{
-    PblQuaternion qUnit;
-    PblMatrix mNew;
-    D3DXQuaternionNormalize((D3DXQUATERNION*)&qUnit, (const D3DXQUATERNION*)&q);
-    D3DXMatrixRotationQuaternion((D3DXMATRIX*)&mNew, (const D3DXQUATERNION*)&qUnit);
-    mNew.m[3][0] = vPos.x;
-    mNew.m[3][1] = vPos.y;
-    mNew.m[3][2] = vPos.z;
-    mNew.m[3][3] = 1.0f;
-    return mNew;
-}
-
 // FUNCTION: SWBF2 0x00455c90
 void Chunk::Update(float fDeltaTime)
 {
@@ -547,7 +527,7 @@ void Chunk::Update(float fDeltaTime)
     vPos.y += mVelocity.y * fDeltaTime;
     vPos.z += mVelocity.z * fDeltaTime;
 
-    mCollisionMatrix = MatrixFromQuat(q, vPos);
+    mCollisionMatrix = PblMatrix(q, vPos);
     mMatrix = mPrimitiveMatrix * mCollisionMatrix;
     SetCollisionCenter(mCollisionMatrix.GetTranslation());
     RecalculateAABB();
@@ -875,7 +855,7 @@ void Chunk::Render(unsigned char ucAlpha, float fDist, unsigned int uiFlags)
         vPos.x -= mVelocity.x * fDt;
         vPos.y -= mVelocity.y * fDt;
         vPos.z -= mVelocity.z * fDt;
-        mRender = mPrimitiveMatrix * MatrixFromQuat(q, vPos);
+        mRender = mPrimitiveMatrix * PblMatrix(q, vPos);
     }
 
     mModel->GetRedModel(0)->Render(&mRender, &pose, color, uiFlags | 8, NULL);

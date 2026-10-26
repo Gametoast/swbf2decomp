@@ -1,11 +1,9 @@
+#include <d3dx9math.h>
 #include "ZephyrSkeleton.h"
 #include "ZephyrSkeletonShared.h"
 #include "ZephyrPoseStatic.h"
 #include "PebbleFL/Common/PblBitVector.h"
 
-extern "C" PblQuaternion* __stdcall D3DXQuaternionNormalize(PblQuaternion* pOut, const PblQuaternion* pQ);
-extern "C" PblMatrix* __stdcall D3DXMatrixRotationQuaternion(PblMatrix* pOut, const PblQuaternion* pQ);
-extern "C" PblMatrix* __stdcall D3DXMatrixMultiply(PblMatrix* pOut, const PblMatrix* pM1, const PblMatrix* pM2);
 
 // SYNTHETIC: SWBF2 0x0040b0f0
 // `dynamic initializer for 'kuiDummyRootHash''
@@ -13,50 +11,6 @@ extern "C" PblMatrix* __stdcall D3DXMatrixMultiply(PblMatrix* pOut, const PblMat
 // GLOBAL: SWBF2 0x009cf404
 // kuiDummyRootHash
 static const unsigned int kuiDummyRootHash = PblTEMPHash("DummyRoot");
-
-static inline void SetLocal(PblMatrix& kLocal, const PblQuaternion& kQuat, const PblVector3& kTrans)
-{
-    PblQuaternion kUnit;
-    D3DXMatrixRotationQuaternion(&kLocal, D3DXQuaternionNormalize(&kUnit, &kQuat));
-    kLocal.m[3][0] = kTrans.x;
-    kLocal.m[3][1] = kTrans.y;
-    kLocal.m[3][2] = kTrans.z;
-    kLocal.m[3][3] = 1.0f;
-}
-
-template <int N>
-static inline void BuildRootWorldMatrix(ZephyrSkeleton<N>& kSkel, const PblMatrix& kRootMatrix)
-{
-    PblMatrix kLocal;
-    SetLocal(kLocal, kSkel.m_pPoseFinal->m_pJoints[0].kQuat, PblVector3(0.0f, 0.0f, 0.0f));
-    PblMatrix kWorld;
-    D3DXMatrixMultiply(&kWorld, &kLocal, &kRootMatrix);
-    kSkel.m_pWorldMatrices[0] = kWorld;
-}
-
-template <int N>
-static inline void BuildJointWorldMatrix(ZephyrSkeleton<N>& kSkel, char iJoint, const ZephyrJointShared* pJoint)
-{
-    if (pJoint->m_kCrc == kuiDummyRootHash)
-    {
-        kSkel.m_pWorldMatrices[iJoint] = kSkel.m_pWorldMatrices[pJoint->m_iParent];
-        return;
-    }
-
-    const ZephyrTransform& kPose = kSkel.m_pPoseFinal->m_pJoints[iJoint];
-    const ZephyrTransform& kBase = *(const ZephyrTransform*)pJoint->m_kBaseTransform;
-    PblVector3 kTrans = (pJoint->mTransformFlags & 1) ? kPose.kTrans : kBase.kTrans;
-    if (pJoint->mTransformFlags & 2)
-    {
-        kTrans = PblVector3(kTrans.x * pJoint->mScale, kTrans.y * pJoint->mScale, kTrans.z * pJoint->mScale);
-    }
-
-    PblMatrix kLocal;
-    SetLocal(kLocal, kPose.kQuat, kTrans);
-    PblMatrix kWorld;
-    D3DXMatrixMultiply(&kWorld, &kLocal, &kSkel.m_pWorldMatrices[pJoint->m_iParent]);
-    kSkel.m_pWorldMatrices[iJoint] = kWorld;
-}
 
 // TEMPLATE: SWBF2 0x0072cc30
 // ZephyrSkeleton<32>::Open
@@ -90,7 +44,9 @@ void ZephyrSkeleton<N>::Close()
 template <int N>
 void ZephyrSkeleton<N>::BuildWorldMatrices(const PblMatrix& kRootMatrix)
 {
-    BuildRootWorldMatrix(*this, kRootMatrix);
+    const ZephyrTransform* pRoot = m_pPoseFinal->GetJointTransform(0);
+    PblMatrix kLocal(pRoot->kQuat, PblVector3(0.0f, 0.0f, 0.0f));
+    m_pWorldMatrices[0] = kLocal * kRootMatrix;
 
     char iChild = m_pShared->m_pJoints[0].m_iChild;
     if (iChild >= 0)
@@ -106,7 +62,9 @@ void ZephyrSkeleton<N>::BuildWorldMatrices(const PblMatrix& kRootMatrix, PblBitV
 {
     if (kDirty.IsBitSet(0))
     {
-        BuildRootWorldMatrix(*this, kRootMatrix);
+        const ZephyrTransform* pRoot = m_pPoseFinal->GetJointTransform(0);
+        PblMatrix kLocal(pRoot->kQuat, PblVector3(0.0f, 0.0f, 0.0f));
+        m_pWorldMatrices[0] = kLocal * kRootMatrix;
         kDirty.ClearBit(0);
     }
 
@@ -125,7 +83,9 @@ void ZephyrSkeleton<N>::BuildWorldMatrices(const PblMatrix& kRootMatrix, const P
     PblBitVector<N> kDirty;
     kDirty.SetAll();
 
-    BuildRootWorldMatrix(*this, kRootMatrix);
+    const ZephyrTransform* pRoot = m_pPoseFinal->GetJointTransform(0);
+    PblMatrix kLocal(pRoot->kQuat, PblVector3(0.0f, 0.0f, 0.0f));
+    m_pWorldMatrices[0] = kLocal * kRootMatrix;
     kDirty.ClearBit(0);
 
     int iNumJoints = GetNumJoints();
@@ -143,7 +103,9 @@ void ZephyrSkeleton<N>::BuildWorldMatrices(const PblMatrix& kRootMatrix, const P
 template <int N>
 void ZephyrSkeleton<N>::BuildWorldMatrices(const PblMatrix& kRootMatrix, int iJoint)
 {
-    BuildRootWorldMatrix(*this, kRootMatrix);
+    const ZephyrTransform* pRoot = m_pPoseFinal->GetJointTransform(0);
+    PblMatrix kLocal(pRoot->kQuat, PblVector3(0.0f, 0.0f, 0.0f));
+    m_pWorldMatrices[0] = kLocal * kRootMatrix;
 
     if (iJoint)
     {
@@ -158,7 +120,9 @@ void ZephyrSkeleton<N>::BuildWorldMatrices(const PblMatrix& kRootMatrix, int iJo
 {
     if (kDirty.IsBitSet(0))
     {
-        BuildRootWorldMatrix(*this, kRootMatrix);
+        const ZephyrTransform* pRoot = m_pPoseFinal->GetJointTransform(0);
+        PblMatrix kLocal(pRoot->kQuat, PblVector3(0.0f, 0.0f, 0.0f));
+        m_pWorldMatrices[0] = kLocal * kRootMatrix;
         kDirty.ClearBit(0);
     }
 
@@ -177,7 +141,23 @@ void ZephyrSkeleton<N>::BuildWorldMatricesRecurseDown(char iJoint)
     do
     {
         const ZephyrJointShared* pJoint = &m_pShared->m_pJoints[iJoint];
-        BuildJointWorldMatrix(*this, iJoint, pJoint);
+        if (pJoint->m_kCrc == kuiDummyRootHash)
+        {
+            m_pWorldMatrices[iJoint] = m_pWorldMatrices[pJoint->m_iParent];
+        }
+        else
+        {
+            const ZephyrTransform& kPose = *m_pPoseFinal->GetJointTransform(iJoint);
+            const ZephyrTransform& kBase = *(const ZephyrTransform*)pJoint->m_kBaseTransform;
+            PblVector3 kTrans = (pJoint->mTransformFlags & 1) ? kPose.kTrans : kBase.kTrans;
+            if (pJoint->mTransformFlags & 2)
+            {
+                kTrans = PblVector3(kTrans.x * pJoint->mScale, kTrans.y * pJoint->mScale, kTrans.z * pJoint->mScale);
+            }
+
+            PblMatrix kLocal(kPose.kQuat, kTrans);
+            m_pWorldMatrices[iJoint] = kLocal * m_pWorldMatrices[pJoint->m_iParent];
+        }
 
         if (pJoint->m_iSibling >= 0)
         {
@@ -198,7 +178,23 @@ void ZephyrSkeleton<N>::BuildWorldMatricesRecurseDown(char iJoint, PblBitVector<
         const ZephyrJointShared* pJoint = &m_pShared->m_pJoints[iJoint];
         if (kDirty.IsBitSet(iJoint))
         {
-            BuildJointWorldMatrix(*this, iJoint, pJoint);
+            if (pJoint->m_kCrc == kuiDummyRootHash)
+            {
+                m_pWorldMatrices[iJoint] = m_pWorldMatrices[pJoint->m_iParent];
+            }
+            else
+            {
+                const ZephyrTransform& kPose = *m_pPoseFinal->GetJointTransform(iJoint);
+                const ZephyrTransform& kBase = *(const ZephyrTransform*)pJoint->m_kBaseTransform;
+                PblVector3 kTrans = (pJoint->mTransformFlags & 1) ? kPose.kTrans : kBase.kTrans;
+                if (pJoint->mTransformFlags & 2)
+                {
+                    kTrans = PblVector3(kTrans.x * pJoint->mScale, kTrans.y * pJoint->mScale, kTrans.z * pJoint->mScale);
+                }
+
+                PblMatrix kLocal(kPose.kQuat, kTrans);
+                m_pWorldMatrices[iJoint] = kLocal * m_pWorldMatrices[pJoint->m_iParent];
+            }
             kDirty.ClearBit(iJoint);
         }
 
@@ -222,7 +218,23 @@ void ZephyrSkeleton<N>::BuildWorldMatricesRecurseUp(char iJoint)
         BuildWorldMatricesRecurseUp(pJoint->m_iParent);
     }
 
-    BuildJointWorldMatrix(*this, iJoint, pJoint);
+    if (pJoint->m_kCrc == kuiDummyRootHash)
+    {
+        m_pWorldMatrices[iJoint] = m_pWorldMatrices[pJoint->m_iParent];
+    }
+    else
+    {
+        const ZephyrTransform& kPose = *m_pPoseFinal->GetJointTransform(iJoint);
+        const ZephyrTransform& kBase = *(const ZephyrTransform*)pJoint->m_kBaseTransform;
+        PblVector3 kTrans = (pJoint->mTransformFlags & 1) ? kPose.kTrans : kBase.kTrans;
+        if (pJoint->mTransformFlags & 2)
+        {
+            kTrans = PblVector3(kTrans.x * pJoint->mScale, kTrans.y * pJoint->mScale, kTrans.z * pJoint->mScale);
+        }
+
+        PblMatrix kLocal(kPose.kQuat, kTrans);
+        m_pWorldMatrices[iJoint] = kLocal * m_pWorldMatrices[pJoint->m_iParent];
+    }
 }
 
 // TEMPLATE: SWBF2 0x0072c9e0
@@ -238,7 +250,23 @@ void ZephyrSkeleton<N>::BuildWorldMatricesRecurseUp(char iJoint, PblBitVector<N>
         BuildWorldMatricesRecurseUp(pJoint->m_iParent, kDirty);
     }
 
-    BuildJointWorldMatrix(*this, iJoint, pJoint);
+    if (pJoint->m_kCrc == kuiDummyRootHash)
+    {
+        m_pWorldMatrices[iJoint] = m_pWorldMatrices[pJoint->m_iParent];
+    }
+    else
+    {
+        const ZephyrTransform& kPose = *m_pPoseFinal->GetJointTransform(iJoint);
+        const ZephyrTransform& kBase = *(const ZephyrTransform*)pJoint->m_kBaseTransform;
+        PblVector3 kTrans = (pJoint->mTransformFlags & 1) ? kPose.kTrans : kBase.kTrans;
+        if (pJoint->mTransformFlags & 2)
+        {
+            kTrans = PblVector3(kTrans.x * pJoint->mScale, kTrans.y * pJoint->mScale, kTrans.z * pJoint->mScale);
+        }
+
+        PblMatrix kLocal(kPose.kQuat, kTrans);
+        m_pWorldMatrices[iJoint] = kLocal * m_pWorldMatrices[pJoint->m_iParent];
+    }
 }
 
 template class ZephyrSkeleton<32>;

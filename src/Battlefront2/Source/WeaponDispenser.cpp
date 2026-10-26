@@ -1,3 +1,4 @@
+#include <d3dx9math.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -28,9 +29,6 @@ bool isInitialized(); bool checkError();
 }
 void ProcessGalaxyData();
 
-extern "C" PblVector3* __stdcall D3DXVec3TransformNormal(PblVector3* pOut, const PblVector3* pV,
-                                                         const PblMatrix* pM);
-extern "C" PblVector3* __stdcall D3DXVec3Normalize(PblVector3* pOut, const PblVector3* pV);
 
 PblMatrix DirectionMatrix(const PblVector3& vDir, const PblVector3& vUp, const PblVector3& vPos);
 
@@ -41,8 +39,6 @@ public:
     void ExpendRounds(float fRounds);
 };
 
-extern "C" PblVector3* __stdcall D3DXVec3TransformCoord(PblVector3* pOut, const PblVector3* pV,
-                                                        const PblMatrix* pM);
 
 namespace GameLoop
 {
@@ -215,14 +211,14 @@ bool WeaponDispenserClass::PostLoadInit()
                 SoldierAnimationBank::HUMAN_RIFLE, SoldierAnimType::STAND, SoldierAnimType::SHOOT_SECONDARY,
                 0x2B960099, mInitialSalvoDelay[0], mBone))
         {
-            D3DXVec3TransformCoord(&vPos, &mFirePointOffset, &mBone);
+            D3DXVec3TransformCoord(reinterpret_cast<D3DXVECTOR3*>(&vPos), reinterpret_cast<const D3DXVECTOR3*>(&mFirePointOffset), reinterpret_cast<const D3DXMATRIX*>(&mBone));
             m_avFireOffset[0] = vPos;
         }
         if (SoldierAnimatorClass::Instance()->GetAnimationBoneMatrix(
                 SoldierAnimationBank::HUMAN_RIFLE, SoldierAnimType::STAND, SoldierAnimType::SHOOT_SECONDARY2,
                 0x2B960099, mInitialSalvoDelay[1], mBone))
         {
-            D3DXVec3TransformCoord(&vPos, &mFirePointOffset, &mBone);
+            D3DXVec3TransformCoord(reinterpret_cast<D3DXVECTOR3*>(&vPos), reinterpret_cast<const D3DXVECTOR3*>(&mFirePointOffset), reinterpret_cast<const D3DXMATRIX*>(&mBone));
             m_avFireOffset[1] = vPos;
         }
     }
@@ -568,7 +564,7 @@ Entity* WeaponDispenser::Fire()
             }
         }
         PblVector3 vWorld;
-        D3DXVec3TransformCoord(&vWorld, &vPos, &mOwner->GetMatrix());
+        D3DXVec3TransformCoord(reinterpret_cast<D3DXVECTOR3*>(&vWorld), reinterpret_cast<const D3DXVECTOR3*>(&vPos), reinterpret_cast<const D3DXMATRIX*>(&mOwner->GetMatrix()));
         vPos = vWorld;
     }
     else
@@ -577,7 +573,7 @@ Entity* WeaponDispenser::Fire()
     }
 
     PblVector3 vExtra;
-    D3DXVec3TransformNormal(&vExtra, &pClass->mFirePointExtraOffset, &mOwner->GetMatrix());
+    D3DXVec3TransformNormal(reinterpret_cast<D3DXVECTOR3*>(&vExtra), reinterpret_cast<const D3DXVECTOR3*>(&pClass->mFirePointExtraOffset), reinterpret_cast<const D3DXMATRIX*>(&mOwner->GetMatrix()));
     vPos.x = vExtra.x + vPos.x;
     vPos.y = vExtra.y + vPos.y;
     vPos.z = vExtra.z + vPos.z;
@@ -588,7 +584,7 @@ Entity* WeaponDispenser::Fire()
         PblVector3 vEnd = vPos;
         PblVector3 vDelta(vPos.x - vCenter.x, vPos.y - vCenter.y, vPos.z - vCenter.z);
         PblVector3 vDir;
-        D3DXVec3Normalize(&vDir, &vDelta);
+        D3DXVec3Normalize(reinterpret_cast<D3DXVECTOR3*>(&vDir), reinterpret_cast<const D3DXVECTOR3*>(&vDelta));
         const GameObject* pIgnore = pMe;
         vEnd.x = vDir.x + vEnd.x;
         vEnd.y = vDir.y + vEnd.y;

@@ -36,19 +36,6 @@ static inline PblQuaternion RotateByOmega(const PblQuaternion& q, const PblVecto
     return q;
 }
 
-static inline PblMatrix MatrixFromQuat(const PblQuaternion& q, const PblVector3& vPos)
-{
-    PblQuaternion qUnit;
-    PblMatrix mNew;
-    D3DXQuaternionNormalize((D3DXQUATERNION*)&qUnit, (const D3DXQUATERNION*)&q);
-    D3DXMatrixRotationQuaternion((D3DXMATRIX*)&mNew, (const D3DXQUATERNION*)&qUnit);
-    mNew.m[3][0] = vPos.x;
-    mNew.m[3][1] = vPos.y;
-    mNew.m[3][2] = vPos.z;
-    mNew.m[3][3] = 1.0f;
-    return mNew;
-}
-
 // FUNCTION: SWBF2 0x00522380
 FishParticle::FishParticle()
     : RedSceneObject(&noloddata)
@@ -72,7 +59,7 @@ void FishParticle::RespawnFish(const PblVector3& vPos, const FishParticleType& t
     PblQuaternion q = PblQuaternion(gMatrixIdentity);
     q = RotateByOmega(q, PblVector3(0.0f, PblRandom::GetGlobalFloat() * PblMath::fTwoPi, 0.0f));
     mState = eState;
-    mMatrix = MatrixFromQuat(q, vPos);
+    mMatrix = PblMatrix(q, vPos);
     mBaseMatrix = mMatrix;
     mPhase = PblRandom::GetGlobalFloat() * PblMath::fTwoPi;
 
@@ -80,7 +67,7 @@ void FishParticle::RespawnFish(const PblVector3& vPos, const FishParticleType& t
     {
         q = PblQuaternion(mMatrix);
         q = RotateByOmega(q, PblVector3(0.0f, 0.0f, fHalfPi));
-        mMatrix = MatrixFromQuat(q, vPos);
+        mMatrix = PblMatrix(q, vPos);
         mBaseMatrix = mMatrix;
         mVelocity = PblVector3(0.0f, PblRandom::GetGlobalFloat() * 0.15f + 0.15f, 0.0f);
     }
@@ -149,7 +136,7 @@ bool FishParticle::UpdateSwimmingFish(float fDeltaTime)
             float fInv = 1.0f / fAngle;
             q = q * PblQuaternion(PblVector3(vOmega.x * fInv, vOmega.y * fInv, vOmega.z * fInv), fAngle);
         }
-        mBaseMatrix = MatrixFromQuat(q, vPos);
+        mBaseMatrix = PblMatrix(q, vPos);
 
         float fSpeed = sqrtf(mVelocity.x * mVelocity.x + mVelocity.y * mVelocity.y + mVelocity.z * mVelocity.z);
         mVelocity = PblVector3(mBaseMatrix.m[2][0] * fSpeed, mBaseMatrix.m[2][1] * fSpeed, mBaseMatrix.m[2][2] * fSpeed);
@@ -170,7 +157,7 @@ bool FishParticle::UpdateSwimmingFish(float fDeltaTime)
     vPos.x = mBaseMatrix.m[0][0] * fWag + vPos.x;
     vPos.y = mBaseMatrix.m[0][1] * fWag + vPos.y;
     vPos.z = mBaseMatrix.m[0][2] * fWag + vPos.z;
-    mMatrix = MatrixFromQuat(q, vPos);
+    mMatrix = PblMatrix(q, vPos);
 
     SetRenderPos(vPos);
     return true;
@@ -231,7 +218,7 @@ bool FishParticle::UpdateFloatingFish(float fDeltaTime)
     vPos.z = vWaterVelocity.z * fDeltaTime + vPos.z;
 
     PblQuaternion q = RotateByOmega(PblQuaternion(mMatrix), mOmega);
-    mMatrix = MatrixFromQuat(q, vPos);
+    mMatrix = PblMatrix(q, vPos);
     mBaseMatrix = mMatrix;
 
     SetRenderPos(vPos);

@@ -1,3 +1,4 @@
+#include <d3dx9math.h>
 #include "EntityPropAnimated.h"
 #include "PebbleFL/Common/PblVector.h"
 
@@ -21,8 +22,6 @@
 #include "Team.h"
 #include "RedEngineFL/Graphics/RedModel.h"
 
-extern "C" PblMatrix* __stdcall D3DXMatrixMultiply(PblMatrix* pOut, const PblMatrix* pM1,
-                                                   const PblMatrix* pM2);
 
 // TEMPLATE: SWBF2 0x004dc8e0
 // PblHandle<GameObject>::operator()
@@ -472,7 +471,7 @@ bool EntityPropAnimated::Update(float fDeltaTime)
             continue;
         }
         PblMatrix mWorld;
-        D3DXMatrixMultiply(&mWorld, &mBone, &mMatrix);
+        D3DXMatrixMultiply(reinterpret_cast<D3DXMATRIX*>(&mWorld), reinterpret_cast<const D3DXMATRIX*>(&mBone), reinterpret_cast<const D3DXMATRIX*>(&mMatrix));
         GameObject* pFound;
         if (CollisionManager::GetObjectsInRange(mWorld.GetTranslation(), trigger.mTriggerRadius,
                                                 &pFound, 1, 0, 2) > 0)
@@ -500,7 +499,7 @@ bool EntityPropAnimated::Update(float fDeltaTime)
                 continue;
             }
             PblMatrix mWorld;
-            D3DXMatrixMultiply(&mWorld, mAttachMatrix, &mMatrix);
+            D3DXMatrixMultiply(reinterpret_cast<D3DXMATRIX*>(&mWorld), reinterpret_cast<const D3DXMATRIX*>(mAttachMatrix), reinterpret_cast<const D3DXMATRIX*>(&mMatrix));
             GameObject* pFound;
             if (CollisionManager::GetObjectsInRange(mWorld.GetTranslation(), attach.mAttachRadius,
                                                     &pFound, 1, 0, 2) <= 0)
@@ -575,7 +574,7 @@ bool EntityPropAnimated::Update(float fDeltaTime)
     if (mAttachedSoldier && mAttachMatrix)
     {
         PblMatrix mWorld;
-        D3DXMatrixMultiply(&mWorld, mAttachMatrix, &mMatrix);
+        D3DXMatrixMultiply(reinterpret_cast<D3DXMATRIX*>(&mWorld), reinterpret_cast<const D3DXMATRIX*>(mAttachMatrix), reinterpret_cast<const D3DXMATRIX*>(&mMatrix));
         RedPose kPose;
         mAttachedSoldier->SetupPose(kPose);
         const PblMatrix* pRoot = kPose.Find(0x16E27226u);
@@ -583,7 +582,7 @@ bool EntityPropAnimated::Update(float fDeltaTime)
         {
             const PblMatrix mInverse = pRoot->GetInverseFast();
             PblMatrix mLocal;
-            D3DXMatrixMultiply(&mLocal, &mInverse, &mWorld);
+            D3DXMatrixMultiply(reinterpret_cast<D3DXMATRIX*>(&mLocal), reinterpret_cast<const D3DXMATRIX*>(&mInverse), reinterpret_cast<const D3DXMATRIX*>(&mWorld));
             mWorld = mLocal;
         }
         static_cast<EntitySoldier*>((GameObject*)mAttachedSoldier)

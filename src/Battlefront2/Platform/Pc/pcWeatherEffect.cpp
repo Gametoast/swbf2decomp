@@ -1,3 +1,4 @@
+#include <d3dx9math.h>
 #include <math.h>
 
 #include "Battlefront2/Source/CameraManager.h"
@@ -20,8 +21,6 @@
 #include "pcSunFlare.h"
 #include "RedEngineFL/Graphics/PC/Shaders/pcRainShader.h"
 
-extern "C" PblVector3* __stdcall D3DXVec3TransformNormal(PblVector3* pOut, const PblVector3* pV,
-                                                         const PblMatrix* pM);
 
 namespace
 {
@@ -420,13 +419,13 @@ void PrecipitationEffect::Render(int value)
                 if (CAMERA_CROSSVELOCITY_SCALE != 1.0f || CAMERA_AXIALVELOCITY_SCALE != 1.0f)
                 {
                     PblVector3 vLocal;
-                    D3DXVec3TransformNormal(&vLocal, &vCameraVelocity,
-                                            &RedRenderer::GetCamera()->GetMatrixInverse());
+                    D3DXVec3TransformNormal(reinterpret_cast<D3DXVECTOR3*>(&vLocal), reinterpret_cast<const D3DXVECTOR3*>(&vCameraVelocity),
+                                            reinterpret_cast<const D3DXMATRIX*>(&RedRenderer::GetCamera()->GetMatrixInverse()));
                     vCameraVelocity.x = vLocal.x * CAMERA_CROSSVELOCITY_SCALE;
                     vCameraVelocity.y = vLocal.y * CAMERA_CROSSVELOCITY_SCALE;
                     vCameraVelocity.z = CAMERA_AXIALVELOCITY_SCALE * vLocal.z;
                     PblVector3 vWorld;
-                    D3DXVec3TransformNormal(&vWorld, &vCameraVelocity, &mCamera);
+                    D3DXVec3TransformNormal(reinterpret_cast<D3DXVECTOR3*>(&vWorld), reinterpret_cast<const D3DXVECTOR3*>(&vCameraVelocity), reinterpret_cast<const D3DXMATRIX*>(&mCamera));
                     vCameraVelocity = vWorld;
                 }
                 break;

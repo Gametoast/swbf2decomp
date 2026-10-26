@@ -1,3 +1,4 @@
+#include <d3dx9math.h>
 #include "Red3DModelElement.h"
 #include "Red3DModelAnimator.h"
 
@@ -7,12 +8,6 @@
 #include "RedEngineFL/Graphics/RedModel.h"
 #include "RedEngineFL/Graphics/RedPose.h"
 
-extern "C" PblMatrix* __stdcall D3DXMatrixMultiply(PblMatrix* pOut, const PblMatrix* pM1,
-                                                   const PblMatrix* pM2);
-extern "C" PblMatrix* __stdcall D3DXMatrixRotationQuaternion(PblMatrix* pOut, const PblQuaternion* pQ);
-extern "C" PblQuaternion* __stdcall D3DXQuaternionNormalize(PblQuaternion* pOut, const PblQuaternion* pQ);
-extern "C" PblMatrix* __stdcall D3DXMatrixRotationY(PblMatrix* pOut, float fAngle);
-extern "C" PblMatrix* __stdcall D3DXMatrixScaling(PblMatrix* pOut, float sx, float sy, float sz);
 
 void __cdecl PblTraceP(const char* Format, ...);
 
@@ -85,7 +80,7 @@ void Red3DModelElement::RenderUsingContext(const PblMatrix& mContext,
         if (m_bHavePoseMatrix)
         {
             PblMatrix mWorld;
-            D3DXMatrixMultiply(&mWorld, &m_PosedMatrix, &m_DrawMatrix);
+            D3DXMatrixMultiply(reinterpret_cast<D3DXMATRIX*>(&mWorld), reinterpret_cast<const D3DXMATRIX*>(&m_PosedMatrix), reinterpret_cast<const D3DXMATRIX*>(&m_DrawMatrix));
             m_Model->Render(&mWorld, 0, color, uiFlags, 0);
         }
         return;
@@ -106,18 +101,18 @@ void Red3DModelElement::RenderUsingContext(const PblMatrix& mContext,
         PblQuaternion qRotation;
         PblMatrix mLocal;
         PblMatrix mTemp;
-        D3DXMatrixRotationQuaternion(&mLocal, D3DXQuaternionNormalize(&qRotation, &m_rotation));
+        D3DXMatrixRotationQuaternion(reinterpret_cast<D3DXMATRIX*>(&mLocal), D3DXQuaternionNormalize(reinterpret_cast<D3DXQUATERNION*>(&qRotation), reinterpret_cast<const D3DXQUATERNION*>(&m_rotation)));
         mLocal.m[3][0] = m_translation.x;
         mLocal.m[3][1] = m_translation.y;
         mLocal.m[3][2] = m_translation.z;
         mLocal.m[3][3] = 1.0f;
         if (m_OmegaY != 0.0f)
         {
-            D3DXMatrixMultiply(&mLocal, &mLocal, D3DXMatrixRotationY(&mTemp, m_Yaw * 0.017453292f));
+            D3DXMatrixMultiply(reinterpret_cast<D3DXMATRIX*>(&mLocal), reinterpret_cast<const D3DXMATRIX*>(&mLocal), D3DXMatrixRotationY(reinterpret_cast<D3DXMATRIX*>(&mTemp), m_Yaw * 0.017453292f));
             m_Yaw += m_OmegaY;
         }
-        D3DXMatrixMultiply(&mLocal, &mLocal, D3DXMatrixScaling(&mTemp, m_scale, m_scale, m_scale));
-        D3DXMatrixMultiply(&mTemp, &mLocal, &mWorld);
+        D3DXMatrixMultiply(reinterpret_cast<D3DXMATRIX*>(&mLocal), reinterpret_cast<const D3DXMATRIX*>(&mLocal), D3DXMatrixScaling(reinterpret_cast<D3DXMATRIX*>(&mTemp), m_scale, m_scale, m_scale));
+        D3DXMatrixMultiply(reinterpret_cast<D3DXMATRIX*>(&mTemp), reinterpret_cast<const D3DXMATRIX*>(&mLocal), reinterpret_cast<const D3DXMATRIX*>(&mWorld));
         mWorld = mTemp;
     }
 

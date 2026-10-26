@@ -1,3 +1,4 @@
+#include <d3dx9math.h>
 #include <math.h>
 #include <stdio.h>
 
@@ -9,8 +10,6 @@
 #include "PebbleFL/Common/PblMath.h"
 #include "PebbleFL/Common/PblRandom.h"
 
-extern "C" PblVector3* __stdcall D3DXVec3Normalize(PblVector3* pOut, const PblVector3* pV);
-extern "C" PblVector3* __stdcall D3DXVec3TransformCoord(PblVector3* pOut, const PblVector3* pV, const PblMatrix* pM);
 
 class PblMatrix;
 extern PblMatrix gMatrixIdentity;
@@ -77,7 +76,7 @@ GrassPatch::GrassPatch(GrassPatchClass* pClass, const PblMatrix& matrix)
                       mMatrix.m[1][0] * vBack.z - mMatrix.m[1][2] * vBack.x,
                       mMatrix.m[1][1] * vBack.x - mMatrix.m[1][0] * vBack.y);
     PblVector3 vOut;
-    D3DXVec3Normalize(&vOut, &vRight);
+    D3DXVec3Normalize(reinterpret_cast<D3DXVECTOR3*>(&vOut), reinterpret_cast<const D3DXVECTOR3*>(&vRight));
     mMatrix.m[0][0] = vOut.x;
     mMatrix.m[0][1] = vOut.y;
     mMatrix.m[0][2] = vOut.z;
@@ -86,7 +85,7 @@ GrassPatch::GrassPatch(GrassPatchClass* pClass, const PblMatrix& matrix)
     PblVector3 vAt(mMatrix.m[1][2] * mMatrix.m[0][1] - mMatrix.m[1][1] * mMatrix.m[0][2],
                    mMatrix.m[1][0] * mMatrix.m[0][2] - mMatrix.m[0][0] * mMatrix.m[1][2],
                    mMatrix.m[0][0] * mMatrix.m[1][1] - mMatrix.m[1][0] * mMatrix.m[0][1]);
-    D3DXVec3Normalize(&vOut, &vAt);
+    D3DXVec3Normalize(reinterpret_cast<D3DXVECTOR3*>(&vOut), reinterpret_cast<const D3DXVECTOR3*>(&vAt));
     mMatrix.m[2][0] = vOut.x;
     mMatrix.m[2][1] = vOut.y;
     mMatrix.m[2][2] = vOut.z;
@@ -98,7 +97,7 @@ GrassPatch::GrassPatch(GrassPatchClass* pClass, const PblMatrix& matrix)
     mMatrix.m[3][3] = 1.0f;
 
     PblVector3 vCenter;
-    D3DXVec3TransformCoord(&vCenter, &mClass->mBoundingOffset, &mMatrix);
+    D3DXVec3TransformCoord(reinterpret_cast<D3DXVECTOR3*>(&vCenter), reinterpret_cast<const D3DXVECTOR3*>(&mClass->mBoundingOffset), reinterpret_cast<const D3DXMATRIX*>(&mMatrix));
     SetRenderPos(vCenter);
     SetRenderRadius(mClass->mBoundingRadius);
     Activate();
@@ -363,9 +362,9 @@ void GrassPatchClass::Init()
                     const float fX = PblRandom::GetGlobalFloat() - 0.5f;
                     particle.mUp = PblVector3(fX, 0.0f, fZ);
                 } while (fabsf(particle.mUp.x) < 0.01f && fabsf(particle.mUp.z) < 0.01f);
-                D3DXVec3Normalize(&particle.mUp, &particle.mUp);
+                D3DXVec3Normalize(reinterpret_cast<D3DXVECTOR3*>(&particle.mUp), reinterpret_cast<const D3DXVECTOR3*>(&particle.mUp));
                 particle.mUp.y = (PblRandom::GetGlobalFloat() - 0.5f) * 0.3f;
-                D3DXVec3Normalize(&particle.mUp, &particle.mUp);
+                D3DXVec3Normalize(reinterpret_cast<D3DXVECTOR3*>(&particle.mUp), reinterpret_cast<const D3DXVECTOR3*>(&particle.mUp));
             }
             else
             {

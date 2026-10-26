@@ -1,3 +1,4 @@
+#include <d3dx9math.h>
 #include <float.h>
 #include <math.h>
 #include <string.h>
@@ -9,14 +10,11 @@
 #include "PebbleFL/Common/PblMath.h"
 #include "RedEngineFL/Application/pc/pcRenderHelpers.h"
 
-extern "C" PblMatrix* __stdcall D3DXMatrixMultiply(PblMatrix* pOut, const PblMatrix* pM1,
-                                                   const PblMatrix* pM2);
 
 PblMatrix DirectionMatrix(const PblVector3& vDir, const PblVector3& vUp, const PblVector3& vPos);
 
 extern PblVector3 gVectorZero;
 
-extern "C" PblVector3* __stdcall D3DXVec3Normalize(PblVector3* pOut, const PblVector3* pV);
 
 static const float EPSILON = 0.0001f;
 static const float SPOT_LIGHT_VISIBILITY_RADIUS_FUDGE = 10.0f;
@@ -78,19 +76,19 @@ void RedSpotLight::DebugDraw() const
     PblVector3 vNormal;
     if (vSide.x * vSide.x + vSide.y * vSide.y + vSide.z * vSide.z > 0.99f)
     {
-        D3DXVec3Normalize(&vNormal, &vSide);
+        D3DXVec3Normalize(reinterpret_cast<D3DXVECTOR3*>(&vNormal), reinterpret_cast<const D3DXVECTOR3*>(&vSide));
     }
     else
     {
         PblVector3 vSideY(gVectorUnitY.y * vDir.z - gVectorUnitY.z * vDir.y,
                           gVectorUnitY.z * vDir.x - gVectorUnitY.x * vDir.z,
                           gVectorUnitY.x * vDir.y - gVectorUnitY.y * vDir.x);
-        D3DXVec3Normalize(&vNormal, &vSideY);
+        D3DXVec3Normalize(reinterpret_cast<D3DXVECTOR3*>(&vNormal), reinterpret_cast<const D3DXVECTOR3*>(&vSideY));
     }
     vSide = vNormal;
 
     PblVector3 vUp;
-    D3DXVec3Normalize(&vUp, &vDir);
+    D3DXVec3Normalize(reinterpret_cast<D3DXVECTOR3*>(&vUp), reinterpret_cast<const D3DXVECTOR3*>(&vDir));
 
     PblMatrix mBase;
     mBase.m[0][0] = vSide.x;
@@ -184,7 +182,7 @@ void RedSpotLight::SetDirection(const PblVector3& vDirection)
     else
     {
         PblVector3 vNormal;
-        D3DXVec3Normalize(&vNormal, &vDirection);
+        D3DXVec3Normalize(reinterpret_cast<D3DXVECTOR3*>(&vNormal), reinterpret_cast<const D3DXVECTOR3*>(&vDirection));
         m_vDirection = vNormal;
     }
 
@@ -312,7 +310,7 @@ void RedSpotLight::_RecalculateProjectionMatrix() const
     const PblMatrix mView = DirectionMatrix(m_vDirection, vUp, m_vPos);
     const PblMatrix mInvView = mView.GetInverseFast();
     PblMatrix mResult;
-    D3DXMatrixMultiply(&mResult, &mInvView, &mProj);
+    D3DXMatrixMultiply(reinterpret_cast<D3DXMATRIX*>(&mResult), reinterpret_cast<const D3DXMATRIX*>(&mInvView), reinterpret_cast<const D3DXMATRIX*>(&mProj));
     m_mProjection = mResult;
     m_bProjectionDirty = false;
 }

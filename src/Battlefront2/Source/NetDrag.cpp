@@ -1,8 +1,8 @@
+#include <winsock2.h>
 #include "NetComm.h"
 #include "NetGame.h"
 #include "NetPacket.h"
 #include "pcNetSocket.h"
-#include <winsock2.h>
 #include "PebbleFL/Common/PblJournal.h"
 #include "PebbleFL/Common/PblRandom.h"
 

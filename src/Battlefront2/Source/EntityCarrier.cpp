@@ -1,3 +1,4 @@
+#include <d3dx9math.h>
 #include <new>
 #include <stdio.h>
 #include <string.h>
@@ -23,8 +24,6 @@
 #include "Trackable.h"
 #include <float.h>
 float GetDefaultFOV();
-extern "C" PblVector3* __stdcall D3DXVec3TransformCoord(PblVector3* pOut,
-    const PblVector3* pV, const PblMatrix* pM);
 
 // FUNCTION: SWBF2 0x004b3dd0
 CameraTrackSetting* EntityFlyer::GetCameraTrackSettings()
@@ -194,7 +193,7 @@ bool EntityCarrier::Update(float fDeltaTime)
 
         PblMatrix matrix = mMatrix;
         PblVector3 position;
-        D3DXVec3TransformCoord(&position, &mCargoArray[i].mOffset, &matrix);
+        D3DXVec3TransformCoord(reinterpret_cast<D3DXVECTOR3*>(&position), reinterpret_cast<const D3DXVECTOR3*>(&mCargoArray[i].mOffset), reinterpret_cast<const D3DXMATRIX*>(&matrix));
         matrix.SetTranslation(position);
         pObject->SetMatrix(matrix);
         pObject->SetVelocity(mVelocity);
@@ -202,8 +201,6 @@ bool EntityCarrier::Update(float fDeltaTime)
     return true;
 }
 
-extern "C" PblVector3* __stdcall D3DXVec3TransformCoord(PblVector3* pOut, const PblVector3* pV,
-                                                        const PblMatrix* pM);
 
 namespace
 {
@@ -213,7 +210,7 @@ namespace
         const PblMatrix& matrix = pFlyer->mMatrix;
         const GameModel* pModel = pFlyer->mModel;
         PblVector3 center;
-        D3DXVec3TransformCoord(&center, &pModel->_mModel->_BoundingSphere.GetCenter(), &matrix);
+        D3DXVec3TransformCoord(reinterpret_cast<D3DXVECTOR3*>(&center), reinterpret_cast<const D3DXVECTOR3*>(&pModel->_mModel->_BoundingSphere.GetCenter()), reinterpret_cast<const D3DXMATRIX*>(&matrix));
         CollisionObject* pCollision = static_cast<CollisionObject*>(pFlyer);
         pCollision->SetCollisionCenter(center);
         pCollision->RecalculateAABB();
@@ -568,11 +565,6 @@ inline void* EntityCarrier::operator new(unsigned int uSize)
     return sMemoryPool.Allocate(uSize);
 }
 
-extern "C" PblMatrix* __stdcall D3DXMatrixRotationX(PblMatrix* pOut, float fAngle);
-extern "C" PblMatrix* __stdcall D3DXMatrixRotationZ(PblMatrix* pOut, float fAngle);
-extern "C" PblMatrix* __stdcall D3DXMatrixMultiply(PblMatrix* pOut, const PblMatrix* pM1,
-                                                   const PblMatrix* pM2);
-extern "C" PblVector3* __stdcall D3DXVec3Normalize(PblVector3* pOut, const PblVector3* pV);
 
 PblMatrix DirectionMatrix(const PblVector3& vDir, const PblVector3& vUp, const PblVector3& vPos);
 
@@ -637,10 +629,10 @@ void EntityFlyer::SetupCameraTrackMatrix(PblMatrix& rMatrix, float fDeltaTime)
     {
         PblMatrix mUnbank;
         PblMatrix mUnpitch;
-        D3DXMatrixRotationZ(&mUnbank, -mBankRollAngle);
-        D3DXMatrixMultiply(&mUnbank, &mUnbank, D3DXMatrixRotationX(&mUnpitch, -mBankPitchAngle));
+        D3DXMatrixRotationZ(reinterpret_cast<D3DXMATRIX*>(&mUnbank), -mBankRollAngle);
+        D3DXMatrixMultiply(reinterpret_cast<D3DXMATRIX*>(&mUnbank), reinterpret_cast<const D3DXMATRIX*>(&mUnbank), D3DXMatrixRotationX(reinterpret_cast<D3DXMATRIX*>(&mUnpitch), -mBankPitchAngle));
         PblMatrix mBody;
-        D3DXMatrixMultiply(&mBody, &mUnbank, &mTarget);
+        D3DXMatrixMultiply(reinterpret_cast<D3DXMATRIX*>(&mBody), reinterpret_cast<const D3DXMATRIX*>(&mUnbank), reinterpret_cast<const D3DXMATRIX*>(&mTarget));
 
         if (mTowCableWalker != 0)
         {
@@ -649,7 +641,7 @@ void EntityFlyer::SetupCameraTrackMatrix(PblMatrix& rMatrix, float fDeltaTime)
             PblVector3 vPos = mBody.GetTranslation();
             const PblVector3& vWalker = mTowCableWalker->GetCollisionObject()->GetPosition();
             PblVector3 vToCamera(vPos.x - vWalker.x, vPos.y - vWalker.y, vPos.z - vWalker.z);
-            D3DXVec3Normalize(&vPos, &vToCamera);
+            D3DXVec3Normalize(reinterpret_cast<D3DXVECTOR3*>(&vPos), reinterpret_cast<const D3DXVECTOR3*>(&vToCamera));
             const float fSide = vPos.x * mTarget.m[0][0] + vPos.y * mTarget.m[0][1] + vPos.z * mTarget.m[0][2];
             rSettings.mCameraTrackOffset.y = 0.5f;
             rSettings.mCameraTrackOffset.z = 8.0f;
@@ -730,11 +722,11 @@ void EntityFlyer::SetupCameraTrackMatrix(PblMatrix& rMatrix, float fDeltaTime)
             if (mTrickCameraInterpDir > 0.0f)
             {
                 PblVector3 vPoint;
-                D3DXVec3TransformCoord(&vPoint, &vAhead, &mBody);
+                D3DXVec3TransformCoord(reinterpret_cast<D3DXVECTOR3*>(&vPoint), reinterpret_cast<const D3DXVECTOR3*>(&vAhead), reinterpret_cast<const D3DXMATRIX*>(&mBody));
                 PblVector3 vToPoint(vPoint.x - rMatrix.m[3][0], vPoint.y - rMatrix.m[3][1],
                                     vPoint.z - rMatrix.m[3][2]);
                 PblVector3 vNormal;
-                D3DXVec3Normalize(&vNormal, &vToPoint);
+                D3DXVec3Normalize(reinterpret_cast<D3DXVECTOR3*>(&vNormal), reinterpret_cast<const D3DXVECTOR3*>(&vToPoint));
                 vAim = vNormal;
             }
             else

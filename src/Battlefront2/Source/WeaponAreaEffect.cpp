@@ -1,3 +1,4 @@
+#include <d3dx9math.h>
 #include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -20,7 +21,6 @@
 extern bool netIsLocalTurn;
 extern int gDebugCount;
 
-extern "C" PblVector3* __stdcall D3DXVec3Normalize(PblVector3* pOut, const PblVector3* pV);
 
 namespace
 {
@@ -700,7 +700,7 @@ void WeaponAreaEffect::ApplyEffectsToTargets(float fDeltaTime)
         vDelta.y = mTargetMatrix.m[3][1] - mOwnerMatrix.m[3][1];
         vDelta.z = mTargetMatrix.m[3][2] - mOwnerMatrix.m[3][2];
         PblVector3 vDir;
-        D3DXVec3Normalize(&vDir, &vDelta);
+        D3DXVec3Normalize(reinterpret_cast<D3DXVECTOR3*>(&vDir), reinterpret_cast<const D3DXVECTOR3*>(&vDelta));
         ApplyEffectsToTarget(m_apTarget[i], vDir, fEffect);
     }
 }

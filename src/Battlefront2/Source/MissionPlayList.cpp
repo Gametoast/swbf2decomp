@@ -240,21 +240,20 @@ static void SetOneName(unsigned int uiHash, const char* pcKey)
 // FUNCTION: SWBF2 0x005a4930
 void MissionPlayList::PushToLua()
 {
-    lua_State* L = LuaHelper::mState;
-    int iTop = lua_gettop(L);
-    lua_getglobal(L, "ifs_missionselect");
-    if (lua_isnil(L, -1))
+    int iTop = lua_gettop(LuaHelper::mState);
+    lua_getglobal(LuaHelper::mState, "ifs_missionselect");
+    if (lua_isnil(LuaHelper::mState, -1))
     {
-        lua_pop(L, 1);
-        lua_newtable(L);
-        lua_setglobal(L, "ifs_missionselect");
-        lua_getglobal(L, "ifs_missionselect");
+        lua_pop(LuaHelper::mState, 1);
+        lua_newtable(LuaHelper::mState);
+        lua_setglobal(LuaHelper::mState, "ifs_missionselect");
+        lua_getglobal(LuaHelper::mState, "ifs_missionselect");
     }
     SetOneName(sTeam1Hash, "Team1Name");
     SetOneName(sTeam2Hash, "Team2Name");
-    lua_pop(L, 1);
+    lua_pop(LuaHelper::mState, 1);
     (void)iTop;
-    lua_gettop(L);
+    lua_gettop(LuaHelper::mState);
 }
 
 // FUNCTION: SWBF2 0x005a4a90

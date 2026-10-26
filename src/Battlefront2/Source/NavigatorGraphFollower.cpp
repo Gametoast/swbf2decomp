@@ -1,3 +1,4 @@
+#include <d3dx9math.h>
 #include <string.h>
 
 #include "NavigatorGraphFollower.h"
@@ -13,7 +14,6 @@
 #include "UnitController.h"
 #include "PebbleFL/Common/PblMatrix.h"
 
-extern "C" PblVector3* __stdcall D3DXVec3Normalize(PblVector3* pOut, const PblVector3* pV);
 
 namespace
 {
@@ -152,7 +152,7 @@ void NavigatorGraphFollower::EnterState()
             pPath->Prepend(vDest, 0);
             PblVector3 vDelta(vDest.x - vFrom.x, vDest.y - vFrom.y, vDest.z - vFrom.z);
             PblVector3 vDir;
-            D3DXVec3Normalize(&vDir, &vDelta);
+            D3DXVec3Normalize(reinterpret_cast<D3DXVECTOR3*>(&vDir), reinterpret_cast<const D3DXVECTOR3*>(&vDelta));
             PblVector3 vJump(vDir.x * 0.1f + vFrom.x, vDir.y * 0.1f + vFrom.y, vDir.z * 0.1f + vFrom.z);
             pPath->Prepend(vJump, uFlags);
             pPath->Prepend(vFrom, 0);
@@ -235,7 +235,7 @@ void NavigatorGraphFollower::ReceivePathResult(AIPath* pPath)
             pLegPath->Prepend(vTo, 0);
             PblVector3 vDelta(vTo.x - vFrom.x, vTo.y - vFrom.y, vTo.z - vFrom.z);
             PblVector3 vDir;
-            D3DXVec3Normalize(&vDir, &vDelta);
+            D3DXVec3Normalize(reinterpret_cast<D3DXVECTOR3*>(&vDir), reinterpret_cast<const D3DXVECTOR3*>(&vDelta));
             PblVector3 vJump(vDir.x * 0.1f + vFrom.x, vDir.y * 0.1f + vFrom.y, vDir.z * 0.1f + vFrom.z);
             pLegPath->Prepend(vJump, uFlags);
             pLegPath->Prepend(vFrom, 0);

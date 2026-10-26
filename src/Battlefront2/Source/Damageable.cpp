@@ -1,3 +1,4 @@
+#include <d3dx9math.h>
 #include <float.h>
 #include <string.h>
 
@@ -125,7 +126,6 @@ void Damageable::SetTeamDamageScale(float fScale)
     sSameTeamDamageScale = fScale;
 }
 
-extern "C" PblVector3* __stdcall D3DXVec3Normalize(PblVector3* pOut, const PblVector3* pV);
 
 extern PblVector3 gVectorZero;
 class PblMatrix;
@@ -573,7 +573,7 @@ bool Damageable::ApplyDamage(const DamageDesc& damage, const PblVector3& vDir,
     vFlat.y = 0.0001f;
     vFlat.z = vDir.z;
     PblVector3 vNormal;
-    D3DXVec3Normalize(&vNormal, &vFlat);
+    D3DXVec3Normalize(reinterpret_cast<D3DXVECTOR3*>(&vNormal), reinterpret_cast<const D3DXVECTOR3*>(&vFlat));
     vFlat = vNormal;
     const PblMatrix& mMatrix = GameObject_GetCollisionObject(GetGameObject())->GetMatrix();
     PblVector3 vHit;

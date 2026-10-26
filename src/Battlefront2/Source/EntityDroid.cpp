@@ -1,3 +1,4 @@
+#include <d3dx9math.h>
 #include <float.h>
 #include "PebbleFL/Common/PblVector.h"
 #include <math.h>
@@ -51,11 +52,6 @@ EntityDroidClass::~EntityDroidClass()
 // PblList<Factory<Weapon,WeaponClass,WeaponDesc> >::Itor::operator++
 template PblList<Factory<Weapon, WeaponClass, WeaponDesc> >::Itor&
 PblList<Factory<Weapon, WeaponClass, WeaponDesc> >::Itor::operator++();
-extern "C" PblMatrix* __stdcall D3DXMatrixMultiply(PblMatrix* pOut, const PblMatrix* pM1, const PblMatrix* pM2);
-extern "C" PblVector3* __stdcall D3DXVec3Normalize(PblVector3* pOut, const PblVector3* pV);
-extern "C" PblVector3* __stdcall D3DXVec3TransformNormal(PblVector3* pOut, const PblVector3* pV, const PblMatrix* pM);
-extern "C" PblQuaternion* __stdcall D3DXQuaternionNormalize(PblQuaternion* pOut, const PblQuaternion* pQ);
-extern "C" PblMatrix* __stdcall D3DXMatrixRotationQuaternion(PblMatrix* pOut, const PblQuaternion* pQ);
 
 extern bool netFrameLock;
 extern bool netIsLocalTurn;
@@ -912,7 +908,7 @@ void EntityDroid::ApplyRadiusPush(const PblVector3& vPos, float fInnerRadius, fl
         if (fEffect > 0.0f)
         {
             PblVector3 vDir;
-            D3DXVec3Normalize(&vDir, &vDiff);
+            D3DXVec3Normalize(reinterpret_cast<D3DXVECTOR3*>(&vDir), reinterpret_cast<const D3DXVECTOR3*>(&vDiff));
             mVelocity.x = vDir.x * fPush * fEffect + mVelocity.x;
             mVelocity.y = vDir.y * fPush * fEffect + mVelocity.y;
             mVelocity.z = vDir.z * fPush * fEffect + mVelocity.z;
@@ -950,7 +946,7 @@ void EntityDroid::Render(unsigned char ucViewport, float fDist, unsigned int uiF
     if (bReflected)
     {
         PblMatrix mTemp;
-        D3DXMatrixMultiply(&mTemp, &mWorld, &mReflection);
+        D3DXMatrixMultiply(reinterpret_cast<D3DXMATRIX*>(&mTemp), reinterpret_cast<const D3DXMATRIX*>(&mWorld), reinterpret_cast<const D3DXMATRIX*>(&mReflection));
         mReflection = mTemp;
     }
 
@@ -1338,7 +1334,7 @@ bool EntityDroid::Update(float fDeltaTime)
     vLocal.y = fSin;
     vLocal.z = fCos;
     PblVector3 vEyeDir;
-    D3DXVec3TransformNormal(&vEyeDir, &vLocal, &mMatrix);
+    D3DXVec3TransformNormal(reinterpret_cast<D3DXVECTOR3*>(&vEyeDir), reinterpret_cast<const D3DXVECTOR3*>(&vLocal), reinterpret_cast<const D3DXMATRIX*>(&mMatrix));
     mEyeDir = vEyeDir;
 
     if (mPlayerId >= 0 && mTracker)
@@ -1365,7 +1361,7 @@ bool EntityDroid::Update(float fDeltaTime)
 
             PblQuaternion qUnit;
             PblMatrix mCamera;
-            D3DXMatrixRotationQuaternion(&mCamera, D3DXQuaternionNormalize(&qUnit, &qCamera));
+            D3DXMatrixRotationQuaternion(reinterpret_cast<D3DXMATRIX*>(&mCamera), D3DXQuaternionNormalize(reinterpret_cast<D3DXQUATERNION*>(&qUnit), reinterpret_cast<const D3DXQUATERNION*>(&qCamera)));
             mCamera.m[3][0] = gVectorZero.x;
             mCamera.m[3][1] = gVectorZero.y;
             mCamera.m[3][2] = gVectorZero.z;
@@ -1489,7 +1485,7 @@ void EntityDroid::Move(float fDeltaTime, float fMove, float fStrafe, float fTurn
                                       (vNormal.y - mGroundNormal.y) * fBlend + mGroundNormal.y,
                                       (vNormal.z - mGroundNormal.z) * fBlend + mGroundNormal.z);
                     PblVector3 vGround;
-                    D3DXVec3Normalize(&vGround, &vBlend);
+                    D3DXVec3Normalize(reinterpret_cast<D3DXVECTOR3*>(&vGround), reinterpret_cast<const D3DXVECTOR3*>(&vBlend));
                     mGroundNormal = vGround;
                 }
             }
@@ -1507,7 +1503,7 @@ void EntityDroid::Move(float fDeltaTime, float fMove, float fStrafe, float fTurn
         mGroundRatio = fRatio;
         float fLift = mClass->mSetAltitude > 0.0f ? 0.1f : 0.0f;
         PblVector3 vTilt(mGroundNormal.x * fRatio, mGroundNormal.y + fLift, mGroundNormal.z * fRatio);
-        D3DXVec3Normalize(&vUp, &vTilt);
+        D3DXVec3Normalize(reinterpret_cast<D3DXVECTOR3*>(&vUp), reinterpret_cast<const D3DXVECTOR3*>(&vTilt));
     }
     else if (mGroundRatio == 1.0f)
     {
@@ -1624,7 +1620,7 @@ void EntityDroid::Move(float fDeltaTime, float fMove, float fStrafe, float fTurn
                        vPos.z + mVelocity.z * fDeltaTime);
     PblQuaternion qUnit;
     PblMatrix mNew;
-    D3DXMatrixRotationQuaternion(&mNew, D3DXQuaternionNormalize(&qUnit, &qOrient));
+    D3DXMatrixRotationQuaternion(reinterpret_cast<D3DXMATRIX*>(&mNew), D3DXQuaternionNormalize(reinterpret_cast<D3DXQUATERNION*>(&qUnit), reinterpret_cast<const D3DXQUATERNION*>(&qOrient)));
     mNew.m[3][0] = vNewPos.x;
     mNew.m[3][1] = vNewPos.y;
     mNew.m[3][2] = vNewPos.z;

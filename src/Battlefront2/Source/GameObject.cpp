@@ -619,28 +619,24 @@ void GameObjectInterpolator::GetMatrix(int iNetUniqueId, PblMatrix& mMatrix)
     {
         return;
     }
-    const GameObjectInterpolator& rInterp = *this;
-    int iCount = rInterp.count[iNetUniqueId];
+    const int iCount = count[iNetUniqueId];
     if (iCount < 1)
     {
         return;
     }
-    const PblMatrix* pSamples = rInterp.mat[iNetUniqueId];
     if (iCount < 2)
     {
-        mMatrix = pSamples[(iCount - 1) & 1];
+        mMatrix = mat[iNetUniqueId][(iCount - 1) & 1];
         return;
     }
-    const PblMatrix& rOld = pSamples[iCount & 1];
-    const PblMatrix& rNew = pSamples[(iCount - 1) & 1];
-    float fRatio = NetGame::GetTurnRatio();
-    PblQuaternion qOld(rOld), qNew(rNew);
-    PblQuaternion qBlend = Interpolate(qOld, qNew, fRatio);
-    const PblVector3& vOld = rOld.GetTranslation();
-    const PblVector3& vNew = rNew.GetTranslation();
-    PblVector3 vBlend(vOld.x + (vNew.x - vOld.x) * fRatio,
-                      vOld.y + (vNew.y - vOld.y) * fRatio,
-                      vOld.z + (vNew.z - vOld.z) * fRatio);
+
+    const float fRatio = NetGame::GetTurnRatio();
+    const int iSampleCount = count[iNetUniqueId];
+    const PblMatrix m0 = mat[iNetUniqueId][iSampleCount & 1];
+    const PblMatrix m1 = mat[iNetUniqueId][(iSampleCount - 1) & 1];
+    PblQuaternion q0(m0), q1(m1);
+    const PblVector3 vBlend = Interpolate(m0.GetTranslation(), m1.GetTranslation(), fRatio);
+    const PblQuaternion qBlend = Interpolate(q0, q1, fRatio);
     mMatrix = PblMatrix(qBlend, vBlend);
 }
 
@@ -708,12 +704,11 @@ void GameObjectInterpolator::GetVector(int iNetUniqueId, PblVector3& vVector)
     {
         return;
     }
-    const PblVector3& vOld = vec[iNetUniqueId][count[iNetUniqueId] & 1];
-    const PblVector3& vNew = vec[iNetUniqueId][(count[iNetUniqueId] - 1) & 1];
-    float fRatio = NetGame::GetTurnRatio();
-    vVector.x = vOld.x + (vNew.x - vOld.x) * fRatio;
-    vVector.y = vOld.y + (vNew.y - vOld.y) * fRatio;
-    vVector.z = vOld.z + (vNew.z - vOld.z) * fRatio;
+    const float fRatio = NetGame::GetTurnRatio();
+    const int iSampleCount = count[iNetUniqueId];
+    const PblVector3 v0 = vec[iNetUniqueId][iSampleCount & 1];
+    const PblVector3 v1 = vec[iNetUniqueId][(iSampleCount - 1) & 1];
+    vVector = Interpolate(v0, v1, fRatio);
 }
 
 // FUNCTION: SWBF2 0x00537660
@@ -731,8 +726,9 @@ float GameObjectInterpolator::GetFloat(int iNetUniqueId, int iIndex)
     {
         return fPrevious;
     }
-    const float fCurrent = pFloat[iCount & 1];
-    return fCurrent + (fPrevious - fCurrent) * NetGame::GetTurnRatio();
+    const float fRatio = NetGame::GetTurnRatio();
+    const float fCurrent = pFloat[count[iNetUniqueId] & 1];
+    return (fPrevious - fCurrent) * fRatio + fCurrent;
 }
 
 // FUNCTION: SWBF2 0x005377a0
@@ -753,8 +749,8 @@ float GameObjectInterpolator::GetLoopingFloat(int iNetUniqueId, int iIndex, floa
         return fPrevious;
     }
 
-    const float fCurrent = pFloat[iCount & 1];
     const float fRatio = NetGame::GetTurnRatio();
+    const float fCurrent = pFloat[count[iNetUniqueId] & 1];
     const float fDelta = fPrevious - fCurrent;
     if (fDelta * fDirection < 0.0f)
     {

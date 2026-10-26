@@ -1,3 +1,4 @@
+#include <d3dx9math.h>
 #include <math.h>
 #include <stdio.h>
 #include <string.h>
@@ -19,8 +20,6 @@ class PblMatrix;
 extern PblMatrix gMatrixIdentity;
 
 const RedColor Interpolate(const RedColor& a, const RedColor& b, float t);
-extern "C" PblVector3* __stdcall D3DXVec3TransformCoord(PblVector3* pOut, const PblVector3* pV,
-                                                        const PblMatrix* pM);
 
 // GLOBAL: SWBF2 0x01e51de0
 EntityLightFXParser* EntityLightFXParser::s_pInstance;
@@ -1506,7 +1505,7 @@ inline void ManagedLightBeam::_UpdateBoundingSphere()
     GetLocalBoundingSphere(vCenter, fRadius);
     SetRenderRadius(fRadius);
     PblVector3 vPos;
-    D3DXVec3TransformCoord(&vPos, &vCenter, &m_mWorldMatrix);
+    D3DXVec3TransformCoord(reinterpret_cast<D3DXVECTOR3*>(&vPos), reinterpret_cast<const D3DXVECTOR3*>(&vCenter), reinterpret_cast<const D3DXMATRIX*>(&m_mWorldMatrix));
     SetRenderPos(vPos);
 }
 

@@ -132,9 +132,7 @@ void ParticleTransformer::PositionTransformer::Update(PblVector3& position, PblV
     float fScale = GetScale(fTime);
     float fStep = (fScale < 1.0f ? fScale : 1.0f) * 0.5f * mLifeTime;
 
-    position.x += velocity.x * fStep;
-    position.y += velocity.y * fStep;
-    position.z += velocity.z * fStep;
+    position += velocity * fStep;
 
     switch (mType)
     {
@@ -161,9 +159,7 @@ void ParticleTransformer::PositionTransformer::Update(PblVector3& position, PblV
         }
         else
         {
-            velocity.x *= 1.0f - fScale;
-            velocity.y *= 1.0f - fScale;
-            velocity.z *= 1.0f - fScale;
+            velocity = velocity * (1.0f - fScale);
             velocity.x += mData.mReach.mVelX * fScale * fDeltaTime;
             velocity.y += mData.mReach.mVelY * fScale * fDeltaTime;
             velocity.z += mData.mReach.mVelZ * fScale * fDeltaTime;
@@ -172,9 +168,7 @@ void ParticleTransformer::PositionTransformer::Update(PblVector3& position, PblV
     case SCALE:
         if (fScale >= 1.0f)
         {
-            velocity.x *= mData.mScale.mScale;
-            velocity.y *= mData.mScale.mScale;
-            velocity.z *= mData.mScale.mScale;
+            velocity = velocity * mData.mScale.mScale;
         }
         else
         {
@@ -185,9 +179,7 @@ void ParticleTransformer::PositionTransformer::Update(PblVector3& position, PblV
         break;
     }
 
-    position.x += velocity.x * fStep;
-    position.y += velocity.y * fStep;
-    position.z += velocity.z * fStep;
+    position += velocity * fStep;
 
     if (fScale > 1.0f)
     {
@@ -198,9 +190,7 @@ void ParticleTransformer::PositionTransformer::Update(PblVector3& position, PblV
         else
         {
             float fRest = (fScale - 1.0f) * mLifeTime;
-            position.x += velocity.x * fRest;
-            position.y += velocity.y * fRest;
-            position.z += velocity.z * fRest;
+            position += velocity * fRest;
         }
     }
 }

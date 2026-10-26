@@ -549,7 +549,7 @@ float CollisionManager::RayHit(const PblVector3& vStart, const PblVector3& vEnd,
 {
     if (sInstance)
     {
-        PblVector3 vDir(vEnd.x - vStart.x, vEnd.y - vStart.y, vEnd.z - vStart.z);
+        PblVector3 vDir = vEnd - vStart;
         float fLength = sqrtf(vDir.x * vDir.x + vDir.y * vDir.y + vDir.z * vDir.z);
         if (fLength != 0.0f)
         {
@@ -587,7 +587,7 @@ bool CollisionManager::RayTest(const PblVector3& vStart, const PblVector3& vEnd,
         return false;
     }
 
-    PblVector3 vDir(vEnd.x - vStart.x, vEnd.y - vStart.y, vEnd.z - vStart.z);
+    PblVector3 vDir = vEnd - vStart;
     float fLength = sqrtf(vDir.x * vDir.x + vDir.y * vDir.y + vDir.z * vDir.z);
     if (fLength == 0.0f)
     {
@@ -1088,7 +1088,7 @@ bool CollisionManager::I_RayTest(const PblVector3& vStart, const PblVector3& vDi
     data.mBodyID = NULL;
     data.mOrdnanceCollision = true;
 
-    PblVector3 vEnd(vStart.x + vDir.x * fLength, vStart.y + vDir.y * fLength, vStart.z + vDir.z * fLength);
+    PblVector3 vEnd = vStart + vDir * fLength;
     PblVector3 vMin = Min(vStart, vEnd);
     PblVector3 vMax = Max(vStart, vEnd);
     if (mTreeGrid)
@@ -1219,13 +1219,6 @@ struct MatrixStruct
     PblMatrix* matrices;
 };
  
-
-static inline const PblMatrix operator*(const PblMatrix& a, const PblMatrix& b)
-{
-    PblMatrix result;
-    D3DXMatrixMultiply((D3DXMATRIX*)&result, (const D3DXMATRIX*)&a, (const D3DXMATRIX*)&b);
-    return result;
-}
 
 static const float EPSILON = 0.0001f;
 

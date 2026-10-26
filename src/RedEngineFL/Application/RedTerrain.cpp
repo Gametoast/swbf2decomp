@@ -1,3 +1,4 @@
+#include <d3dx9math.h>
 #include "RedTerrain.h"
 #include <new>
 #include <math.h>
@@ -26,7 +27,6 @@ bool PointInSphere(const PblVector3& vPoint, const PblVector3& vCenter, float fR
     return fRadius * fRadius > fX * fX + fY * fY + fZ * fZ;
 }
 
-extern "C" PblVector3* __stdcall D3DXVec3Normalize(PblVector3* pOut, const PblVector3* pV);
 
 static const float EPSILON = 0.001f;
 
@@ -330,7 +330,7 @@ const PblVector3 RedTerrain::GetInterpolatedNormal(float fX, float fZ)
     }
 
     PblVector3 vResult;
-    D3DXVec3Normalize(&vResult, &vNormal);
+    D3DXVec3Normalize(reinterpret_cast<D3DXVECTOR3*>(&vResult), reinterpret_cast<const D3DXVECTOR3*>(&vNormal));
     return vResult;
 }
 
@@ -753,7 +753,7 @@ float RedTerrain::_RayHit(const PblVector3& vStart, const PblVector3& vEnd, floa
     while ((vFrom.y - vTo.y) * (vFrom.y - vTo.y) + (vFrom.x - vTo.x) * (vFrom.x - vTo.x) +
                (vFrom.z - vTo.z) * (vFrom.z - vTo.z) > fTolerance2)
     {
-        const PblVector3 vMid((vTo.x + vFrom.x) * 0.5f, (vTo.y + vFrom.y) * 0.5f, (vTo.z + vFrom.z) * 0.5f);
+        const PblVector3 vMid = (vTo + vFrom) * 0.5f;
         const float fAbove = GetInterpolatedHeight(vMid.x, vMid.z) - vMid.y;
         if (fAbove > fTolerance)
         {

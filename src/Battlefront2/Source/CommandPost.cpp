@@ -1,3 +1,4 @@
+#include <d3dx9math.h>
 #include "CommandPost.h"
 
 #include <stdio.h>
@@ -62,25 +63,22 @@ extern Event<CommandPost, unsigned __int64> mFinishCapture;
 
 extern int gSpawnInvicibility;
 
-extern "C" PblVector3* __stdcall D3DXVec3Normalize(PblVector3* pOut, const PblVector3* pV);
 
 // FUNCTION: SWBF2 0x0047a570
 PblMatrix NormalMatrix(const PblVector3& vDir, const PblVector3& vNormal, const PblVector3& vPos)
 {
     PblVector3 vUp;
-    D3DXVec3Normalize(&vUp, &vNormal);
+    D3DXVec3Normalize(reinterpret_cast<D3DXVECTOR3*>(&vUp), reinterpret_cast<const D3DXVECTOR3*>(&vNormal));
     PblVector3 vSide(vUp.y * vDir.z - vUp.z * vDir.y, vUp.z * vDir.x - vUp.x * vDir.z,
                      vUp.x * vDir.y - vUp.y * vDir.x);
     PblVector3 vRight;
-    D3DXVec3Normalize(&vRight, &vSide);
+    D3DXVec3Normalize(reinterpret_cast<D3DXVECTOR3*>(&vRight), reinterpret_cast<const D3DXVECTOR3*>(&vSide));
     PblVector3 vFront(vRight.y * vUp.z - vRight.z * vUp.y, vRight.z * vUp.x - vRight.x * vUp.z,
                       vRight.x * vUp.y - vRight.y * vUp.x);
 
     return PblMatrix(vRight, vUp, vFront, vPos);
 }
 
-extern "C" PblQuaternion* __stdcall D3DXQuaternionNormalize(PblQuaternion* pOut, const PblQuaternion* pQ);
-extern "C" PblMatrix* __stdcall D3DXMatrixRotationQuaternion(PblMatrix* pOut, const PblQuaternion* pQ);
 
 // FUNCTION: SWBF2 0x0047e3e0
 CommandPostClass::CommandPostClass(unsigned int  )
@@ -394,8 +392,6 @@ void CommandPostClass::SetProperty(unsigned int uProperty, const char* pszValue,
     }
 }
 
-extern "C" PblMatrix* __stdcall D3DXMatrixMultiply(PblMatrix* pOut, const PblMatrix* pM1, const PblMatrix* pM2);
-extern "C" PblVector3* __stdcall D3DXVec3TransformCoord(PblVector3* pOut, const PblVector3* pV, const PblMatrix* pM);
 
 extern PblVector3 gVectorZero;
 
@@ -734,7 +730,7 @@ void CommandPost::Attach(GameObject* pObject)
         if (mObject->GetModel()->_mLod[0]->GetBoneMatrix(0xD1E4CC7A, mBone))
         {
             PblMatrix mWorld;
-            D3DXMatrixMultiply(&mWorld, &mBone, &mObject->GetMatrix());
+            D3DXMatrixMultiply(reinterpret_cast<D3DXMATRIX*>(&mWorld), reinterpret_cast<const D3DXMATRIX*>(&mBone), reinterpret_cast<const D3DXMATRIX*>(&mObject->GetMatrix()));
             desc.mMatrix = mWorld;
         }
         else
@@ -784,7 +780,7 @@ void CommandPost::Kill()
             vOffset.y *= mKillRegion->mSize.y;
             vOffset.z *= mKillRegion->mSize.z;
             PblVector3 vPos;
-            D3DXVec3TransformCoord(&vPos, &vOffset, &mKillRegion->mMatrix);
+            D3DXVec3TransformCoord(reinterpret_cast<D3DXVECTOR3*>(&vPos), reinterpret_cast<const D3DXVECTOR3*>(&vOffset), reinterpret_cast<const D3DXMATRIX*>(&mKillRegion->mMatrix));
 
             FLEffectClass* pEffectClass;
             switch (PblRandom::GetGlobalInt() % 3)
@@ -1201,7 +1197,7 @@ PblMatrix CommandPost::GetMatrixOnSpawnPath(bool bAlly) const
         const PblQuaternion qRotation = pPath->GetPointRotation(uPoint).Inverse();
         const PblVector3& vPosition = pPath->GetPointPosition(uPoint);
         PblQuaternion qUnit;
-        D3DXMatrixRotationQuaternion(&mMatrix, D3DXQuaternionNormalize(&qUnit, &qRotation));
+        D3DXMatrixRotationQuaternion(reinterpret_cast<D3DXMATRIX*>(&mMatrix), D3DXQuaternionNormalize(reinterpret_cast<D3DXQUATERNION*>(&qUnit), reinterpret_cast<const D3DXQUATERNION*>(&qRotation)));
         mMatrix.SetTranslation(vPosition);
         mMatrix.m[0][0] = -mMatrix.m[0][0];
         mMatrix.m[0][1] = -mMatrix.m[0][1];
@@ -1240,10 +1236,10 @@ PblMatrix CommandPost::GetMatrixOnSpawnPath(bool bAlly) const
         const PblVector3& vPosition = mClass->mSpawnPosition[uPoint];
         PblQuaternion qUnit;
         PblMatrix mSpawn;
-        D3DXMatrixRotationQuaternion(&mSpawn, D3DXQuaternionNormalize(&qUnit, &mClass->mSpawnRotation[uPoint]));
+        D3DXMatrixRotationQuaternion(reinterpret_cast<D3DXMATRIX*>(&mSpawn), D3DXQuaternionNormalize(reinterpret_cast<D3DXQUATERNION*>(&qUnit), reinterpret_cast<const D3DXQUATERNION*>(&mClass->mSpawnRotation[uPoint])));
         mSpawn.SetTranslation(vPosition);
         PblMatrix mWorld;
-        D3DXMatrixMultiply(&mWorld, &mSpawn, &mMatrix);
+        D3DXMatrixMultiply(reinterpret_cast<D3DXMATRIX*>(&mWorld), reinterpret_cast<const D3DXMATRIX*>(&mSpawn), reinterpret_cast<const D3DXMATRIX*>(&mMatrix));
         mMatrix = mWorld;
 
         if (GetGameObject())

@@ -1,3 +1,4 @@
+#include <d3dx9math.h>
 #include <stdarg.h>
 #include "PebbleFL/Common/PblVector.h"
 
@@ -23,8 +24,6 @@ void RemoveInterfaceElement(RedScreenGroupElement* pElement);
 
 void __cdecl PblTraceP(const char* Format, ...);
 
-extern "C" PblVector3* __stdcall D3DXVec3TransformCoord(PblVector3* pOut, const PblVector3* pV,
-                                                         const PblMatrix* pM);
 
 static const PblMatrix _IdentityMatrix(
     PblVector4{ 1.0f, 0.0f, 0.0f, 0.0f },
@@ -320,7 +319,7 @@ void RedDebug::DrawOBB(const PblBox& box, const PblMatrix& matrix, RedColor colo
                            (i & 2) ? box._vMax.y : box._vMin.y,
                            (i & 1) ? box._vMax.z : box._vMin.z);
         PblVector3 vOut;
-        D3DXVec3TransformCoord(&vOut, &vCorner, &matrix);
+        D3DXVec3TransformCoord(reinterpret_cast<D3DXVECTOR3*>(&vOut), reinterpret_cast<const D3DXVECTOR3*>(&vCorner), reinterpret_cast<const D3DXMATRIX*>(&matrix));
         aCorners[i] = vOut;
     }
 

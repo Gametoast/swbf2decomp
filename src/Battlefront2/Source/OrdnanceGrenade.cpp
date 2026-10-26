@@ -1,3 +1,4 @@
+#include <d3dx9math.h>
 #include "OrdnanceGrenade.h"
 
 #include <float.h>
@@ -15,7 +16,6 @@
 #include "RedEngineFL/Application/RedWater.h"
 #include "RedEngineFL/Graphics/RedModel.h"
 
-extern "C" PblVector3* __stdcall D3DXVec3Normalize(PblVector3* pOut, const PblVector3* pV);
 
 extern bool netIsLateTurn;
 extern bool netFrameLock;
@@ -254,9 +254,7 @@ bool OrdnanceGrenade::CheckCollision()
         CollisionObject* pHitObject = 0;
         const GameObject* pIgnore = GetOwner();
         const float fLength = fDist + 0.2f;
-        vStart.x -= vDir.x * 0.1f;
-        vStart.y -= vDir.y * 0.1f;
-        vStart.z -= vDir.z * 0.1f;
+        vStart -= vDir * 0.1f;
         PblVector3 vNormal;
         const float fHit = CollisionManager::RayHit(vStart, vDir, fLength, pHitObject, &vNormal, &pIgnore, 1,
                                                     mCheckStaticCollision ? 0x13BA : 0x132A, true);
@@ -307,7 +305,7 @@ bool OrdnanceGrenade::Collide(CollisionObject* pObject, const PblVector3& vPos,
             if (pVictim)
             {
                 PblVector3 vDir;
-                D3DXVec3Normalize(&vDir, &mVelocity);
+                D3DXVec3Normalize(reinterpret_cast<D3DXVECTOR3*>(&vDir), reinterpret_cast<const D3DXVECTOR3*>(&mVelocity));
                 AsDamageable(pVictim)->ApplyDamage(GetDamage(), vDir, vPos, iBodyId, 0xFFFFFFFF);
             }
         }
@@ -320,9 +318,7 @@ bool OrdnanceGrenade::Collide(CollisionObject* pObject, const PblVector3& vPos,
             mPosition = PblVector3(vPos.x + vNormal.x * 0.01f, vPos.y + vNormal.y * 0.01f,
                                    vPos.z + vNormal.z * 0.01f);
 
-            mVelocity.x -= vNormal.x * fDot;
-            mVelocity.y -= vNormal.y * fDot;
-            mVelocity.z -= vNormal.z * fDot;
+            mVelocity -= vNormal * fDot;
             float fSlow = -(fFriction * fDot * (fRebound + 1.0f) /
                             sqrtf(mVelocity.x * mVelocity.x + mVelocity.y * mVelocity.y +
                                   mVelocity.z * mVelocity.z));
@@ -332,9 +328,7 @@ bool OrdnanceGrenade::Collide(CollisionObject* pObject, const PblVector3& vPos,
             mVelocity.z -= mVelocity.z * fSlow;
 
             const float fBounce = fRebound * fDot;
-            mVelocity.x -= vNormal.x * fBounce;
-            mVelocity.y -= vNormal.y * fBounce;
-            mVelocity.z -= vNormal.z * fBounce;
+            mVelocity -= vNormal * fBounce;
             if (mVelocity.x * mVelocity.x + mVelocity.y * mVelocity.y + mVelocity.z * mVelocity.z < 1.0f)
             {
                 ++mNumBounces;

@@ -1,3 +1,4 @@
+#include <d3dx9math.h>
 #include "LuaCallbacks_IFace.h"
 #include "LuaHelper.h"
 
@@ -111,10 +112,6 @@ void IFaceSoldierAnimator::QueueUpperLowerAnimations(unsigned int uUpperAnimHash
     }
 }
 
-extern "C" PblMatrix* __stdcall D3DXMatrixMultiply(PblMatrix* pOut, const PblMatrix* pM1, const PblMatrix* pM2);
-extern "C" PblMatrix* __stdcall D3DXMatrixRotationX(PblMatrix* pOut, float fAngle);
-extern "C" PblMatrix* __stdcall D3DXMatrixRotationY(PblMatrix* pOut, float fAngle);
-extern "C" PblMatrix* __stdcall D3DXMatrixRotationZ(PblMatrix* pOut, float fAngle);
 
 namespace PblUnicode
 {
@@ -819,10 +816,10 @@ int ScriptCB_IFObj_SetRotation(lua_State* L)
 
     PblMatrix mRot;
     PblMatrix mTemp;
-    D3DXMatrixRotationY(&mRot, fY * DEG_TO_RAD);
-    D3DXMatrixMultiply(&mRot, &mRot, D3DXMatrixRotationX(&mTemp, fX * DEG_TO_RAD));
-    D3DXMatrixMultiply(&mRot, &mRot, D3DXMatrixRotationZ(&mTemp, fZ * DEG_TO_RAD));
-    D3DXMatrixMultiply(&mTemp, &mRot, &pElement->m_mLocal);
+    D3DXMatrixRotationY(reinterpret_cast<D3DXMATRIX*>(&mRot), fY * DEG_TO_RAD);
+    D3DXMatrixMultiply(reinterpret_cast<D3DXMATRIX*>(&mRot), reinterpret_cast<const D3DXMATRIX*>(&mRot), D3DXMatrixRotationX(reinterpret_cast<D3DXMATRIX*>(&mTemp), fX * DEG_TO_RAD));
+    D3DXMatrixMultiply(reinterpret_cast<D3DXMATRIX*>(&mRot), reinterpret_cast<const D3DXMATRIX*>(&mRot), D3DXMatrixRotationZ(reinterpret_cast<D3DXMATRIX*>(&mTemp), fZ * DEG_TO_RAD));
+    D3DXMatrixMultiply(reinterpret_cast<D3DXMATRIX*>(&mTemp), reinterpret_cast<const D3DXMATRIX*>(&mRot), reinterpret_cast<const D3DXMATRIX*>(&pElement->m_mLocal));
     pElement->SetMatrix(mTemp);
     return 0;
 }
@@ -2955,7 +2952,7 @@ int ScriptCB_IFModel_GetRotation(lua_State* L)
     {
         return 0;
     }
-    const PblQuaternion& rRotation = static_cast<Red3DModelElement*>(pElement)->m_rotation;
+    const PblQuaternion rRotation = static_cast<Red3DModelElement*>(pElement)->m_rotation;
     lua_pushnumber(LuaHelper::mState, rRotation._fS);
     lua_pushnumber(LuaHelper::mState, rRotation._fX);
     lua_pushnumber(LuaHelper::mState, rRotation._fY);
@@ -2972,7 +2969,7 @@ int ScriptCB_IFModel_GetTranslation(lua_State* L)
     {
         return 0;
     }
-    const PblVector3& rTranslation = static_cast<Red3DModelElement*>(pElement)->m_translation;
+    const PblVector3 rTranslation = static_cast<Red3DModelElement*>(pElement)->m_translation;
     lua_pushnumber(LuaHelper::mState, rTranslation.x);
     lua_pushnumber(LuaHelper::mState, rTranslation.y);
     lua_pushnumber(LuaHelper::mState, rTranslation.z);

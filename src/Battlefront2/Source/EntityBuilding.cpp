@@ -1,3 +1,4 @@
+#include <d3dx9math.h>
 #include "EntityBuilding.h"
 #include "PebbleFL/Common/PblVector.h"
 
@@ -35,8 +36,6 @@ const PblMatrix& EntityBuilding::GetBBoxMatrix() const
 }
 
 extern PblVector3 gVectorZero;
-extern "C" PblVector3* __stdcall D3DXVec3TransformCoord(PblVector3* pOut, const PblVector3* pV, const PblMatrix* pM);
-extern "C" PblMatrix* __stdcall D3DXMatrixMultiply(PblMatrix* pOut, const PblMatrix* pM1, const PblMatrix* pM2);
 
 // FUNCTION: SWBF2 0x00493690
 EntityBuildingClass::EntityBuildingClass(unsigned int uHash)
@@ -321,7 +320,7 @@ EntityBuilding::EntityBuilding(EntityBuildingClass* pClass, const EntityDesc& de
         SetCollisionModel(&mClass->mUnbuiltCollisionModel);
 
         PblVector3 vCenter;
-        D3DXVec3TransformCoord(&vCenter, &mModel->_mModel->_BoundingSphere.GetCenter(), &mMatrix);
+        D3DXVec3TransformCoord(reinterpret_cast<D3DXVECTOR3*>(&vCenter), reinterpret_cast<const D3DXVECTOR3*>(&mModel->_mModel->_BoundingSphere.GetCenter()), reinterpret_cast<const D3DXMATRIX*>(&mMatrix));
         SetCollisionCenter(vCenter);
         float fRadius = mModel->_mModel->_BoundingSphere.GetRadius();
         if (!(fRadius > mClass->mPotentialCollisionRadius))
@@ -347,7 +346,7 @@ EntityBuilding::EntityBuilding(EntityBuildingClass* pClass, const EntityDesc& de
             if (mClass->mUnbuiltModel->_mLod[0]->GetBoneMatrix(0xD1E4CC7A, mBone))
             {
                 PblMatrix mWorld;
-                D3DXMatrixMultiply(&mWorld, &mBone, &GetMatrix());
+                D3DXMatrixMultiply(reinterpret_cast<D3DXMATRIX*>(&mWorld), reinterpret_cast<const D3DXMATRIX*>(&mBone), reinterpret_cast<const D3DXMATRIX*>(&GetMatrix()));
                 hologramDesc.mMatrix = mWorld;
             }
             else
@@ -512,7 +511,7 @@ void EntityBuilding::ClientKill()
     DamageOwner owner(damageOwner.mCharacter, GetHandleObject(damageOwner.mGameObject), damageOwner.mTeam, pClass,
                       0, 1.0f);
     PblVector3 vPos;
-    D3DXVec3TransformCoord(&vPos, &mClass->mExplosionOffset, &mMatrix);
+    D3DXVec3TransformCoord(reinterpret_cast<D3DXVECTOR3*>(&vPos), reinterpret_cast<const D3DXVECTOR3*>(&mClass->mExplosionOffset), reinterpret_cast<const D3DXMATRIX*>(&mMatrix));
     pClass->mExplosion->CreateExplosion(vPos, owner, false, COLL_UNKNOWN);
 }
 
@@ -587,7 +586,7 @@ void EntityBuilding::Kill()
 
         SetMatrix(mMatrix);
         PblVector3 vCenter;
-        D3DXVec3TransformCoord(&vCenter, &mModel->_mModel->_BoundingSphere.GetCenter(), &mMatrix);
+        D3DXVec3TransformCoord(reinterpret_cast<D3DXVECTOR3*>(&vCenter), reinterpret_cast<const D3DXVECTOR3*>(&mModel->_mModel->_BoundingSphere.GetCenter()), reinterpret_cast<const D3DXMATRIX*>(&mMatrix));
         SetCollisionCenter(vCenter);
         float fRadius = mModel->_mModel->_BoundingSphere.GetRadius();
         if (!(fRadius > mClass->mPotentialCollisionRadius))
@@ -629,7 +628,7 @@ void EntityBuilding::Kill()
         DamageOwner owner(damageOwner.mCharacter, GetHandleObject(damageOwner.mGameObject), damageOwner.mTeam,
                           pClass, 0, 1.0f);
         PblVector3 vPos;
-        D3DXVec3TransformCoord(&vPos, &mClass->mExplosionOffset, &mMatrix);
+        D3DXVec3TransformCoord(reinterpret_cast<D3DXVECTOR3*>(&vPos), reinterpret_cast<const D3DXVECTOR3*>(&mClass->mExplosionOffset), reinterpret_cast<const D3DXMATRIX*>(&mMatrix));
         pClass->mExplosion->CreateExplosion(vPos, owner, false, COLL_UNKNOWN);
     }
 
@@ -691,7 +690,7 @@ void EntityBuilding::Respawn()
 
         SetMatrix(mMatrix);
         PblVector3 vCenter;
-        D3DXVec3TransformCoord(&vCenter, &mModel->_mModel->_BoundingSphere.GetCenter(), &mMatrix);
+        D3DXVec3TransformCoord(reinterpret_cast<D3DXVECTOR3*>(&vCenter), reinterpret_cast<const D3DXVECTOR3*>(&mModel->_mModel->_BoundingSphere.GetCenter()), reinterpret_cast<const D3DXMATRIX*>(&mMatrix));
         SetCollisionCenter(vCenter);
         float fRadius = mModel->_mModel->_BoundingSphere.GetRadius();
         if (!(fRadius > mClass->mPotentialCollisionRadius))
@@ -850,7 +849,7 @@ void EntityBuilding::Render(unsigned char uFlags, float fDist, unsigned int uMas
     if (FLRenderer::IsReflected(GetCollisionCenter(), GetCollisionRadius(), mReflection, false))
     {
         PblMatrix mWorld;
-        D3DXMatrixMultiply(&mWorld, GetRenderMatrix(), &mReflection);
+        D3DXMatrixMultiply(reinterpret_cast<D3DXMATRIX*>(&mWorld), reinterpret_cast<const D3DXMATRIX*>(GetRenderMatrix()), reinterpret_cast<const D3DXMATRIX*>(&mReflection));
         mReflection = mWorld;
         mModel->Render(uFlags, fDist, &mReflection, GetRenderPose(), color,
                        (uMask & ~0x10000) | 0x10000100, NULL);

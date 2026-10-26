@@ -1,3 +1,4 @@
+#include <d3dx9math.h>
 #include <float.h>
 #include <math.h>
 
@@ -24,9 +25,6 @@ float GetFarSceneRange();
 float GetNearSceneFadeEnd();
 }
 
-extern "C" PblVector3* __stdcall D3DXVec3Normalize(PblVector3* pOut, const PblVector3* pV);
-extern "C" PblVector3* __stdcall D3DXVec3TransformCoord(PblVector3* pOut, const PblVector3* pV,
-                                                        const PblMatrix* pM);
 
 // GLOBAL: SWBF2 0x009a08a8
 RedSceneManager* RedSceneManager::sInstance;
@@ -705,7 +703,7 @@ bool RenderObject(RedSceneObject* pObject, unsigned int uiFlags, int iClip)
         fZoom = pCamera->GetZoom();
     }
     PblVector3 vView;
-    D3DXVec3TransformCoord(&vView, &*(const PblVector3*)&pObject->_Sphere, &pCamera->GetMatrixInverse());
+    D3DXVec3TransformCoord(reinterpret_cast<D3DXVECTOR3*>(&vView), reinterpret_cast<const D3DXVECTOR3*>(&*(const PblVector3*)&pObject->_Sphere), reinterpret_cast<const D3DXMATRIX*>(&pCamera->GetMatrixInverse()));
 
     if (pLodData->HasLowRes() && !pLodData->CrossFadeLowRes())
     {
@@ -980,22 +978,22 @@ void SetupPlanes(const PblMatrix& m, float fNear, float fWidth, float fHeight,
 
     PblVector3 v, n0, n1, n2, n3;
     v = PblVector3(vFront.x - vRight.x + vUp.x, vFront.y - vRight.y + vUp.y, vFront.z - vRight.z + vUp.z);
-    D3DXVec3Normalize(&n0, &v);
+    D3DXVec3Normalize(reinterpret_cast<D3DXVECTOR3*>(&n0), reinterpret_cast<const D3DXVECTOR3*>(&v));
     v = PblVector3(vRight.x + vFront.x + vUp.x, vRight.y + vFront.y + vUp.y, vRight.z + vFront.z + vUp.z);
-    D3DXVec3Normalize(&n1, &v);
+    D3DXVec3Normalize(reinterpret_cast<D3DXVECTOR3*>(&n1), reinterpret_cast<const D3DXVECTOR3*>(&v));
     v = PblVector3(vFront.x - vRight.x - vUp.x, vFront.y - vRight.y - vUp.y, vFront.z - vRight.z - vUp.z);
-    D3DXVec3Normalize(&n2, &v);
+    D3DXVec3Normalize(reinterpret_cast<D3DXVECTOR3*>(&n2), reinterpret_cast<const D3DXVECTOR3*>(&v));
     v = PblVector3(vRight.x + vFront.x - vUp.x, vRight.y + vFront.y - vUp.y, vRight.z + vFront.z - vUp.z);
-    D3DXVec3Normalize(&n3, &v);
+    D3DXVec3Normalize(reinterpret_cast<D3DXVECTOR3*>(&n3), reinterpret_cast<const D3DXVECTOR3*>(&v));
 
     v = PblVector3(n0.z * n2.y - n0.y * n2.z, n2.z * n0.x - n0.z * n2.x, n0.y * n2.x - n2.y * n0.x);
-    D3DXVec3Normalize(&pPlanes[0], &v);
+    D3DXVec3Normalize(reinterpret_cast<D3DXVECTOR3*>(&pPlanes[0]), reinterpret_cast<const D3DXVECTOR3*>(&v));
     v = PblVector3(n3.z * n1.y - n3.y * n1.z, n1.z * n3.x - n3.z * n1.x, n3.y * n1.x - n1.y * n3.x);
-    D3DXVec3Normalize(&pPlanes[1], &v);
+    D3DXVec3Normalize(reinterpret_cast<D3DXVECTOR3*>(&pPlanes[1]), reinterpret_cast<const D3DXVECTOR3*>(&v));
     v = PblVector3(n1.z * n0.y - n1.y * n0.z, n0.z * n1.x - n1.z * n0.x, n1.y * n0.x - n0.y * n1.x);
-    D3DXVec3Normalize(&pPlanes[2], &v);
+    D3DXVec3Normalize(reinterpret_cast<D3DXVECTOR3*>(&pPlanes[2]), reinterpret_cast<const D3DXVECTOR3*>(&v));
     v = PblVector3(n3.y * n2.z - n3.z * n2.y, n3.z * n2.x - n2.z * n3.x, n2.y * n3.x - n3.y * n2.x);
-    D3DXVec3Normalize(&pPlanes[3], &v);
+    D3DXVec3Normalize(reinterpret_cast<D3DXVECTOR3*>(&pPlanes[3]), reinterpret_cast<const D3DXVECTOR3*>(&v));
 
     for (int i = 0; i < 4; ++i)
     {

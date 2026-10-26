@@ -1,3 +1,4 @@
+#include <d3dx9math.h>
 #include "Weapon.h"
 
 #include <math.h>
@@ -81,8 +82,6 @@ WeaponClass* WeaponClass::Derive(unsigned int uHash)
     return new WeaponClass(this, uHash);
 }
 
-extern "C" PblMatrix* __stdcall D3DXMatrixMultiply(PblMatrix* pOut, const PblMatrix* pM1, const PblMatrix* pM2);
-extern "C" PblVector3* __stdcall D3DXVec3TransformCoord(PblVector3* pOut, const PblVector3* pV, const PblMatrix* pM);
 
 extern bool netIsLateTurn;
 
@@ -2412,7 +2411,7 @@ void Weapon::Render(const PblMatrix& mat, const RedPose* pPose, const RedColor& 
         {
             return;
         }
-        D3DXMatrixMultiply(&mBoneMatrix, pBone, &mat);
+        D3DXMatrixMultiply(reinterpret_cast<D3DXMATRIX*>(&mBoneMatrix), reinterpret_cast<const D3DXMATRIX*>(pBone), reinterpret_cast<const D3DXMATRIX*>(&mat));
         pMatrix = &mBoneMatrix;
     }
 
@@ -2424,7 +2423,7 @@ void Weapon::Render(const PblMatrix& mat, const RedPose* pPose, const RedColor& 
 
     pThis->mFirePointMatrix = *pMatrix;
     PblVector3 vFirePos;
-    D3DXVec3TransformCoord(&vFirePos, &mRenderClass->mFirePointOffset, pMatrix);
+    D3DXVec3TransformCoord(reinterpret_cast<D3DXVECTOR3*>(&vFirePos), reinterpret_cast<const D3DXVECTOR3*>(&mRenderClass->mFirePointOffset), reinterpret_cast<const D3DXMATRIX*>(pMatrix));
     pThis->mFirePointMatrix[3] = vFirePos;
     pThis->mFirePointMatrix.m[3][3] = 1.0f;
 
@@ -2511,7 +2510,7 @@ void WeaponClass::Render(const PblMatrix& mMatrix, const RedPose* pPose, const R
         {
             return;
         }
-        D3DXMatrixMultiply(&mBoneMatrix, pBone, &mMatrix);
+        D3DXMatrixMultiply(reinterpret_cast<D3DXMATRIX*>(&mBoneMatrix), reinterpret_cast<const D3DXMATRIX*>(pBone), reinterpret_cast<const D3DXMATRIX*>(&mMatrix));
         pMatrix = &mBoneMatrix;
     }
     mModel->Render(pMatrix, 0, color, uiFlags, 0);

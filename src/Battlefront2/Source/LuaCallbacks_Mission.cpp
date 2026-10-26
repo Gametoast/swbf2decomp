@@ -1,3 +1,4 @@
+#include <d3dx9math.h>
 #include "LuaCallbacks_Mission.h"
 #include "LuaHelper.h"
 #include "EnergyBar.h"
@@ -82,8 +83,6 @@
 #include "PebbleFL/Common/PblRandom.h"
 #include "PebbleFL/Common/PblHermite.h"
 #include <math.h>
-extern "C" void* __stdcall D3DXMatrixMultiply(void*, const void*, const void*);
-extern "C" PblMatrix* __stdcall D3DXMatrixRotationAxis(PblMatrix*, const PblVector3*, float);
 namespace PopupText
 {
     void __fastcall ShowPopup(int iType, unsigned int uTextId);
@@ -133,11 +132,11 @@ static void SetNotifyRadius(float fRadius)
 // FUNCTION: SWBF2 0x0058d8d0
 void* GetRegion(lua_State* L, int iIndex)
 {
-    if (lua_type(L, iIndex) == LUA_TLIGHTUSERDATA)
+    if (lua_type(LuaHelper::mState, iIndex) == LUA_TLIGHTUSERDATA)
     {
-        return (void*)lua_topointer(L, iIndex);
+        return (void*)lua_topointer(LuaHelper::mState, iIndex);
     }
-    return PblRegion::Find(PblHash(luaL_checklstring(L, iIndex, 0)));
+    return PblRegion::Find(PblHash(luaL_checklstring(LuaHelper::mState, iIndex, 0)));
 }
 
 // FUNCTION: SWBF2 0x00491440
@@ -750,7 +749,7 @@ int SetCameraPosition(lua_State* L)
 // FUNCTION: SWBF2 0x0058b310
 int GetMapCameraPosition(lua_State* L)
 {
-    const PblMatrix& mTarget = CameraManager::Instance()->GetMapCamera(0)->mTarget;
+    const PblMatrix mTarget = CameraManager::Instance()->GetMapCamera(0)->mTarget;
     lua_pushnumber(LuaHelper::mState, mTarget.m[3][0]);
     lua_pushnumber(LuaHelper::mState, mTarget.m[3][1]);
     lua_pushnumber(LuaHelper::mState, mTarget.m[3][2]);
@@ -2143,14 +2142,14 @@ int ShowPopup(lua_State*)
 // FUNCTION: SWBF2 0x0058d660
 int IsCampaign(lua_State* L)
 {
-    lua_pushboolean(L, GameLoop::mbHistoricalRules);
+    lua_pushboolean(LuaHelper::mState, GameLoop::mbHistoricalRules);
     return 1;
 }
 
 // FUNCTION: SWBF2 0x0058d030
 int AISnipeSuitabilityDist(lua_State* L)
 {
-    float fDistance = (float)luaL_checknumber(L, 1);
+    float fDistance = (float)luaL_checknumber(LuaHelper::mState, 1);
     if (fDistance < 0.0f)
     {
         fDistance = 0.0f;
@@ -2166,7 +2165,7 @@ int AISnipeSuitabilityDist(lua_State* L)
 // FUNCTION: SWBF2 0x0058d630
 int SpaceAssaultGetScoreLimit(lua_State* L)
 {
-    lua_pushnumber(L, (float)gSpaceAssaultScoreLimit[gCurRules]);
+    lua_pushnumber(LuaHelper::mState, (float)gSpaceAssaultScoreLimit[gCurRules]);
     return 1;
 }
 
@@ -2176,11 +2175,11 @@ int GetObjectPtr(lua_State* L)
     GameObject* pObject = _GetEntity<GameObject>(L, 1);
     if (pObject)
     {
-        lua_pushlightuserdata(L, pObject);
+        lua_pushlightuserdata(LuaHelper::mState, pObject);
     }
     else
     {
-        lua_pushnil(L);
+        lua_pushnil(LuaHelper::mState);
     }
     return 1;
 }
@@ -2211,10 +2210,18 @@ int DeactivateObject(lua_State* L)
 int GetObjectHealth(lua_State* L)
 {
     GameObject* pObject = _GetEntity<GameObject>(L, 1);
-    Damageable* pDamage = pObject;
-    lua_pushnumber(L, pDamage ? pDamage->mCurHealth : 0.0f);
-    lua_pushnumber(L, pDamage ? pDamage->mMaxHealth : 0.0f);
-    lua_pushnumber(L, pDamage ? pDamage->mAddHealth : 0.0f);
+    if (pObject)
+    {
+        lua_pushnumber(LuaHelper::mState, pObject->mCurHealth);
+        lua_pushnumber(LuaHelper::mState, pObject->mMaxHealth);
+        lua_pushnumber(LuaHelper::mState, pObject->mAddHealth);
+    }
+    else
+    {
+        lua_pushnumber(LuaHelper::mState, 0.0f);
+        lua_pushnumber(LuaHelper::mState, 0.0f);
+        lua_pushnumber(LuaHelper::mState, 0.0f);
+    }
     return 3;
 }
 
@@ -2222,10 +2229,18 @@ int GetObjectHealth(lua_State* L)
 int GetObjectShield(lua_State* L)
 {
     GameObject* pObject = _GetEntity<GameObject>(L, 1);
-    Damageable* pDamage = pObject;
-    lua_pushnumber(L, pDamage ? pDamage->mCurShield : 0.0f);
-    lua_pushnumber(L, pDamage ? pDamage->mMaxShield : 0.0f);
-    lua_pushnumber(L, pDamage ? pDamage->mAddShield : 0.0f);
+    if (pObject)
+    {
+        lua_pushnumber(LuaHelper::mState, pObject->mCurShield);
+        lua_pushnumber(LuaHelper::mState, pObject->mMaxShield);
+        lua_pushnumber(LuaHelper::mState, pObject->mAddShield);
+    }
+    else
+    {
+        lua_pushnumber(LuaHelper::mState, 0.0f);
+        lua_pushnumber(LuaHelper::mState, 0.0f);
+        lua_pushnumber(LuaHelper::mState, 0.0f);
+    }
     return 3;
 }
 
@@ -2235,11 +2250,11 @@ int GetEntityPtr(lua_State* L)
     EntityEx* pEntity = _GetEntity<EntityEx>(L, 1);
     if (pEntity)
     {
-        lua_pushlightuserdata(L, pEntity);
+        lua_pushlightuserdata(LuaHelper::mState, pEntity);
     }
     else
     {
-        lua_pushnil(L);
+        lua_pushnil(LuaHelper::mState);
     }
     return 1;
 }
@@ -2250,11 +2265,11 @@ int GetEntityClass(lua_State* L)
     EntityEx* pEntity = _GetEntity<EntityEx>(L, 1);
     if (pEntity)
     {
-        lua_pushlightuserdata(L, pEntity->GetEntityClass());
+        lua_pushlightuserdata(LuaHelper::mState, pEntity->GetEntityClass());
     }
     else
     {
-        lua_pushnil(L);
+        lua_pushnil(LuaHelper::mState);
     }
     return 1;
 }
@@ -2262,7 +2277,7 @@ int GetEntityClass(lua_State* L)
 // FUNCTION: SWBF2 0x0058c850
 int SetStayInTurrets(lua_State* L)
 {
-    float fEnabled = (float)luaL_checknumber(L, 1);
+    float fEnabled = (float)luaL_checknumber(LuaHelper::mState, 1);
     AIUtil::gStayInTurrets = fEnabled != 0.0f;
     if (AIUtil::gStayInTurrets)
     {
@@ -2274,16 +2289,16 @@ int SetStayInTurrets(lua_State* L)
 // FUNCTION: SWBF2 0x0058d0e0
 int SetAIDifficulty(lua_State* L)
 {
-    int iCount = lua_gettop(L);
+    int iCount = lua_gettop(LuaHelper::mState);
     if (iCount != 2 && iCount != 3)
     {
         return 0;
     }
-    int iPlayer = (int)(float)luaL_checknumber(L, 1);
-    int iEnemy = (int)(float)luaL_checknumber(L, 2);
+    int iPlayer = (int)(float)luaL_checknumber(LuaHelper::mState, 1);
+    int iEnemy = (int)(float)luaL_checknumber(LuaHelper::mState, 2);
     if (iCount == 3)
     {
-        switch (PblHash(luaL_checkstring(L, 3)))
+        switch (PblHash(luaL_checkstring(LuaHelper::mState, 3)))
         {
         case 0x05537a1b: AIDifficulty::SetAILuaModifier(iPlayer, iEnemy, 1); return 0;
         case 0x35afd776: AIDifficulty::SetAILuaModifier(iPlayer, iEnemy, 2); return 0;
@@ -2307,9 +2322,9 @@ int SetNumFishTypes(lua_State* L)
 // FUNCTION: SWBF2 0x0058c9f0
 int SetFishType(lua_State* L)
 {
-    int iType = (int)(float)luaL_checknumber(L, 1);
-    float fSize = (float)luaL_checknumber(L, 2);
-    const char* pcTexture = luaL_checklstring(L, 3, 0);
+    int iType = (int)(float)luaL_checknumber(LuaHelper::mState, 1);
+    float fSize = (float)luaL_checknumber(LuaHelper::mState, 2);
+    const char* pcTexture = luaL_checklstring(LuaHelper::mState, 3, 0);
     FishParticleManager::SetFishType(iType, fSize, pcTexture);
     return 0;
 }
@@ -2317,23 +2332,23 @@ int SetFishType(lua_State* L)
 // FUNCTION: SWBF2 0x0058c910
 int AddLandingRegion(lua_State* L)
 {
-    TriggerRegionManager::sInstance->AddLandingRegion(luaL_checklstring(L, 1, 0));
+    TriggerRegionManager::sInstance->AddLandingRegion(luaL_checklstring(LuaHelper::mState, 1, 0));
     return 0;
 }
 
 // FUNCTION: SWBF2 0x0058c940
 int RemoveRegion(lua_State* L)
 {
-    TriggerRegionManager::sInstance->RemoveRegion(luaL_checklstring(L, 1, 0));
+    TriggerRegionManager::sInstance->RemoveRegion(luaL_checklstring(LuaHelper::mState, 1, 0));
     return 0;
 }
 
 // FUNCTION: SWBF2 0x0058c690
 int SetSpawnDelayTeam(lua_State* L)
 {
-    float fCycleDelay = (float)luaL_checknumber(L, 1);
-    float fSlotDelay = (float)luaL_checknumber(L, 2);
-    int iTeam = (int)(float)luaL_checknumber(L, 3);
+    float fCycleDelay = (float)luaL_checknumber(LuaHelper::mState, 1);
+    float fSlotDelay = (float)luaL_checknumber(LuaHelper::mState, 2);
+    int iTeam = (int)(float)luaL_checknumber(LuaHelper::mState, 3);
     if (NetGame::IsEnabled() && (iTeam == 1 || iTeam == 2))
     {
         fCycleDelay = 15.0f;
@@ -2345,16 +2360,16 @@ int SetSpawnDelayTeam(lua_State* L)
 // FUNCTION: SWBF2 0x0058f6e0
 int GetTeamSize(lua_State* L)
 {
-    int iTeam = (int)(float)luaL_checknumber(L, 1);
-    lua_pushnumber(L, (float)Team::sTeams[iTeam]->mMemberCount);
+    int iTeam = (int)(float)luaL_checknumber(LuaHelper::mState, 1);
+    lua_pushnumber(LuaHelper::mState, (float)Team::sTeams[iTeam]->mMemberCount);
     return 1;
 }
 
 // FUNCTION: SWBF2 0x0058fa40
 int AllowAISpawn(lua_State* L)
 {
-    int iTeam = (int)(float)luaL_checknumber(L, 1);
-    Team::sTeams[iTeam]->mbAllowAISpawn = lua_toboolean(L, 2) != 0;
+    int iTeam = (int)(float)luaL_checknumber(LuaHelper::mState, 1);
+    Team::sTeams[iTeam]->mbAllowAISpawn = lua_toboolean(LuaHelper::mState, 2) != 0;
     return 0;
 }
 
@@ -2405,22 +2420,22 @@ int EntityFlyerInitAsLanded(lua_State* L)
 // FUNCTION: SWBF2 0x00590f90
 int IsEffectActive(lua_State* L)
 {
-    FLEffectObject* pEffect = (FLEffectObject*)lua_topointer(L, 1);
+    FLEffectObject* pEffect = (FLEffectObject*)lua_topointer(LuaHelper::mState, 1);
     if (!pEffect)
     {
         return 0;
     }
-    lua_pushboolean(L, pEffect->IsEffectActive());
+    lua_pushboolean(LuaHelper::mState, pEffect->IsEffectActive());
     return 1;
 }
 
 // FUNCTION: SWBF2 0x00590fd0
 int SetEffectActive(lua_State* L)
 {
-    FLEffectObject* pEffect = (FLEffectObject*)lua_topointer(L, 1);
+    FLEffectObject* pEffect = (FLEffectObject*)lua_topointer(LuaHelper::mState, 1);
     if (pEffect)
     {
-        if (lua_toboolean(L, 2))
+        if (lua_toboolean(LuaHelper::mState, 2))
         {
             pEffect->ActivateEffect();
         }
@@ -2459,11 +2474,11 @@ int GetTimerRate(lua_State* L)
     Timer* pTimer = GetTimer(L, 1);
     if (pTimer)
     {
-        lua_pushnumber(L, pTimer->GetRate());
+        lua_pushnumber(LuaHelper::mState, pTimer->GetRate());
     }
     else
     {
-        lua_pushnil(L);
+        lua_pushnil(LuaHelper::mState);
     }
     return 1;
 }
@@ -2474,11 +2489,11 @@ int GetTimerName(lua_State* L)
     Timer* pTimer = GetTimer(L, 1);
     if (pTimer)
     {
-        lua_pushstring(L, pTimer->GetName());
+        lua_pushstring(LuaHelper::mState, pTimer->GetName());
     }
     else
     {
-        lua_pushnil(L);
+        lua_pushnil(LuaHelper::mState);
     }
     return 1;
 }
@@ -2505,7 +2520,7 @@ int GetObjectLastHitWeaponClass(lua_State* L)
         WeaponClass* pWeapon = pDamage->mDamageOwner.mWeapon;
         if (pWeapon)
         {
-            lua_pushstring(L, StringDB::Find(pWeapon->mId));
+            lua_pushstring(LuaHelper::mState, StringDB::Find(pWeapon->mId));
             return 1;
         }
     }
@@ -2515,14 +2530,14 @@ int GetObjectLastHitWeaponClass(lua_State* L)
 // FUNCTION: SWBF2 0x0058ccf0
 int SetMaxCollisionDistance(lua_State* L)
 {
-    CollisionManager::SetMaxCollisionDistance((float)luaL_checknumber(L, 1));
+    CollisionManager::SetMaxCollisionDistance((float)luaL_checknumber(LuaHelper::mState, 1));
     return 0;
 }
 
 // FUNCTION: SWBF2 0x0058cd20
 int SetParticleLODBias(lua_State* L)
 {
-    ParticleSystem::SetMaxDistanceBias((float)luaL_checknumber(L, 1));
+    ParticleSystem::SetMaxDistanceBias((float)luaL_checknumber(LuaHelper::mState, 1));
     return 0;
 }
 
@@ -2543,32 +2558,32 @@ int DisableAIAutoBalance(lua_State*)
 // FUNCTION: SWBF2 0x0058cfa0
 int SetAIVehicleNotifyRadius(lua_State* L)
 {
-    VehicleManager::SetNotifyRadius((float)luaL_checknumber(L, 1));
+    VehicleManager::SetNotifyRadius((float)luaL_checknumber(LuaHelper::mState, 1));
     return 0;
 }
 
 // FUNCTION: SWBF2 0x0058d2c0
 int AddMissionHint(lua_State* L)
 {
-    PopupText::AddHint(PblHash(luaL_checklstring(L, 1, 0)));
+    PopupText::AddHint(PblHash(luaL_checklstring(LuaHelper::mState, 1, 0)));
     return 0;
 }
 
 // FUNCTION: SWBF2 0x0058d360
 int SpaceAssaultEnable(lua_State* L)
 {
-    SpaceAssault::mInstance->Enable(lua_toboolean(L, 1) != 0);
+    SpaceAssault::mInstance->Enable(lua_toboolean(LuaHelper::mState, 1) != 0);
     return 0;
 }
 
 // FUNCTION: SWBF2 0x0058d390
 int SpaceAssaultAddCriticalSystem(lua_State* L)
 {
-    const char* pcName = luaL_checklstring(L, 1, 0);
-    short iPoints = (short)(int)(float)luaL_checknumber(L, 2);
-    float fHudX = (float)luaL_checknumber(L, 3);
-    float fHudY = (float)luaL_checknumber(L, 4);
-    bool bShowMarker = lua_type(L, 5) <= LUA_TNIL || lua_toboolean(L, 5) != 0;
+    const char* pcName = luaL_checklstring(LuaHelper::mState, 1, 0);
+    short iPoints = (short)(int)(float)luaL_checknumber(LuaHelper::mState, 2);
+    float fHudX = (float)luaL_checknumber(LuaHelper::mState, 3);
+    float fHudY = (float)luaL_checknumber(LuaHelper::mState, 4);
+    bool bShowMarker = lua_type(LuaHelper::mState, 5) <= LUA_TNIL || lua_toboolean(LuaHelper::mState, 5) != 0;
     SpaceAssault::mInstance->AddCriticalSystem(pcName, iPoints, fHudX, fHudY, bShowMarker);
     return 0;
 }
@@ -2576,20 +2591,20 @@ int SpaceAssaultAddCriticalSystem(lua_State* L)
 // FUNCTION: SWBF2 0x0058d440
 int SpaceAssaultLinkCriticalSystems(lua_State* L)
 {
-    if (lua_type(L, 1) == LUA_TTABLE)
+    if (lua_type(LuaHelper::mState, 1) == LUA_TTABLE)
     {
         unsigned int auHashes[32];
         int iCount = 0;
-        lua_pushnil(L);
-        while (lua_next(L, 1))
+        lua_pushnil(LuaHelper::mState);
+        while (lua_next(LuaHelper::mState, 1))
         {
-            unsigned int uHash = PblHash(luaL_checklstring(L, -1, 0));
+            unsigned int uHash = PblHash(luaL_checklstring(LuaHelper::mState, -1, 0));
             if (iCount < 32)
             {
                 auHashes[iCount] = uHash;
             }
             ++iCount;
-            lua_pop(L, 1);
+            lua_pop(LuaHelper::mState, 1);
         }
         if (iCount <= 32)
         {
@@ -2602,8 +2617,8 @@ int SpaceAssaultLinkCriticalSystems(lua_State* L)
 // FUNCTION: SWBF2 0x0058d4f0
 int SpaceAssaultSetupTeamNumbers(lua_State* L)
 {
-    int iATT = (int)(float)luaL_checknumber(L, 1);
-    int iDEF = (int)(float)luaL_checknumber(L, 2);
+    int iATT = (int)(float)luaL_checknumber(LuaHelper::mState, 1);
+    int iDEF = (int)(float)luaL_checknumber(LuaHelper::mState, 2);
     SpaceAssault::mInstance->SetTeamNumbers(iATT, iDEF);
     return 0;
 }
@@ -2614,7 +2629,7 @@ int SpaceAssaultSetupBitmaps(lua_State* L)
     unsigned int auHashes[6];
     for (int i = 0; i < 6; ++i)
     {
-        auHashes[i] = PblHash(luaL_optlstring(L, i + 1, 0, 0));
+        auHashes[i] = PblHash(luaL_optlstring(LuaHelper::mState, i + 1, 0, 0));
     }
     SpaceAssault::mInstance->SetHUDBitmaps(auHashes[0], auHashes[1], auHashes[2],
                                           auHashes[3], auHashes[4], auHashes[5]);
@@ -2624,21 +2639,21 @@ int SpaceAssaultSetupBitmaps(lua_State* L)
 // FUNCTION: SWBF2 0x0058aae0
 int FindEntityClass(lua_State* L)
 {
-    if (lua_gettop(L) <= 0)
+    if (lua_gettop(LuaHelper::mState) <= 0)
     {
         return 0;
     }
-    EntityClass* pClass = EntityClass::Find(PblHash(luaL_checklstring(L, 1, 0)));
-    lua_pushlightuserdata(L, pClass);
+    EntityClass* pClass = EntityClass::Find(PblHash(luaL_checklstring(LuaHelper::mState, 1, 0)));
+    lua_pushlightuserdata(LuaHelper::mState, pClass);
     return 1;
 }
 
 // FUNCTION: SWBF2 0x0058aba0
 int SetWorldExtents(lua_State* L)
 {
-    if (lua_gettop(L) == 1 && lua_isnumber(L, 1))
+    if (lua_gettop(LuaHelper::mState) == 1 && lua_isnumber(LuaHelper::mState, 1))
     {
-        int iExtent = (int)(float)luaL_checknumber(L, 1);
+        int iExtent = (int)(float)luaL_checknumber(LuaHelper::mState, 1);
         if (iExtent > 0)
         {
             WORLD_EXTENTS = iExtent;
@@ -2650,8 +2665,8 @@ int SetWorldExtents(lua_State* L)
 // FUNCTION: SWBF2 0x0058c5c0
 int SetCarrierClass(lua_State* L)
 {
-    int iTeam = (int)(float)luaL_checknumber(L, 1);
-    const char* pcClass = luaL_checklstring(L, 2, 0);
+    int iTeam = (int)(float)luaL_checknumber(LuaHelper::mState, 1);
+    const char* pcClass = luaL_checklstring(LuaHelper::mState, 2, 0);
     Team::sTeams[iTeam]->SetCarrier(pcClass);
     return 0;
 }
@@ -2666,9 +2681,9 @@ int SetNumBirdTypes(lua_State* L)
 // FUNCTION: SWBF2 0x0058c970
 int SetBirdType(lua_State* L)
 {
-    int iType = (int)(float)luaL_checknumber(L, 1);
-    float fSize = (float)luaL_checknumber(L, 2);
-    const char* pcTexture = luaL_checklstring(L, 3, 0);
+    int iType = (int)(float)luaL_checknumber(LuaHelper::mState, 1);
+    float fSize = (float)luaL_checknumber(LuaHelper::mState, 2);
+    const char* pcTexture = luaL_checklstring(LuaHelper::mState, 3, 0);
     BirdParticleManager::SetBirdType(iType, fSize, pcTexture);
     return 0;
 }
@@ -2676,26 +2691,26 @@ int SetBirdType(lua_State* L)
 // FUNCTION: SWBF2 0x0058f910
 int IsCharacterHuman(lua_State* L)
 {
-    Character* pCharacter = Character::GetPtr((int)(float)luaL_checknumber(L, 1));
+    Character* pCharacter = Character::GetPtr((int)(float)luaL_checknumber(LuaHelper::mState, 1));
     if (!pCharacter)
     {
         return 0;
     }
-    lua_pushboolean(L, pCharacter->mPlayerId >= 0);
+    lua_pushboolean(LuaHelper::mState, pCharacter->mPlayerId >= 0);
     return 1;
 }
 
 // FUNCTION: SWBF2 0x0058fa90
 int GetCharacterClass(lua_State* L)
 {
-    Character* pCharacter = Character::GetPtr((int)(float)luaL_checknumber(L, 1));
+    Character* pCharacter = Character::GetPtr((int)(float)luaL_checknumber(LuaHelper::mState, 1));
     if (pCharacter)
     {
-        lua_pushnumber(L, (float)pCharacter->mClassIndex);
+        lua_pushnumber(LuaHelper::mState, (float)pCharacter->mClassIndex);
     }
     else
     {
-        lua_pushnil(L);
+        lua_pushnil(LuaHelper::mState);
     }
     return 1;
 }
@@ -2703,14 +2718,14 @@ int GetCharacterClass(lua_State* L)
 // FUNCTION: SWBF2 0x0058fcd0
 int GetCharacterUnit(lua_State* L)
 {
-    Character* pCharacter = Character::GetPtr((int)(float)luaL_checknumber(L, 1));
+    Character* pCharacter = Character::GetPtr((int)(float)luaL_checknumber(LuaHelper::mState, 1));
     if (pCharacter && pCharacter->mUnit)
     {
-        lua_pushlightuserdata(L, pCharacter->mUnit->GetGameObject());
+        lua_pushlightuserdata(LuaHelper::mState, pCharacter->mUnit->GetGameObject());
     }
     else
     {
-        lua_pushnil(L);
+        lua_pushnil(LuaHelper::mState);
     }
     return 1;
 }
@@ -2718,14 +2733,14 @@ int GetCharacterUnit(lua_State* L)
 // FUNCTION: SWBF2 0x0058fd50
 int GetCharacterVehicle(lua_State* L)
 {
-    Character* pCharacter = Character::GetPtr((int)(float)luaL_checknumber(L, 1));
+    Character* pCharacter = Character::GetPtr((int)(float)luaL_checknumber(LuaHelper::mState, 1));
     if (pCharacter && pCharacter->mVehicle)
     {
-        lua_pushlightuserdata(L, pCharacter->mVehicle->GetGameObject());
+        lua_pushlightuserdata(LuaHelper::mState, pCharacter->mVehicle->GetGameObject());
     }
     else
     {
-        lua_pushnil(L);
+        lua_pushnil(LuaHelper::mState);
     }
     return 1;
 }
@@ -2733,14 +2748,14 @@ int GetCharacterVehicle(lua_State* L)
 // FUNCTION: SWBF2 0x0058fdd0
 int GetCharacterRemote(lua_State* L)
 {
-    Character* pCharacter = Character::GetPtr((int)(float)luaL_checknumber(L, 1));
+    Character* pCharacter = Character::GetPtr((int)(float)luaL_checknumber(LuaHelper::mState, 1));
     if (pCharacter && pCharacter->mRemote)
     {
-        lua_pushlightuserdata(L, pCharacter->mRemote->GetGameObject());
+        lua_pushlightuserdata(LuaHelper::mState, pCharacter->mRemote->GetGameObject());
     }
     else
     {
-        lua_pushnil(L);
+        lua_pushnil(LuaHelper::mState);
     }
     return 1;
 }
@@ -2748,7 +2763,7 @@ int GetCharacterRemote(lua_State* L)
 // FUNCTION: SWBF2 0x0058fe50
 int GetCharacterControllable(lua_State* L)
 {
-    Character* pCharacter = Character::GetPtr((int)(float)luaL_checknumber(L, 1));
+    Character* pCharacter = Character::GetPtr((int)(float)luaL_checknumber(LuaHelper::mState, 1));
     Controllable* pControllable = 0;
     if (pCharacter)
     {
@@ -2757,11 +2772,11 @@ int GetCharacterControllable(lua_State* L)
     }
     if (pControllable)
     {
-        lua_pushlightuserdata(L, pControllable->GetGameObject());
+        lua_pushlightuserdata(LuaHelper::mState, pControllable->GetGameObject());
     }
     else
     {
-        lua_pushnil(L);
+        lua_pushnil(LuaHelper::mState);
     }
     return 1;
 }
@@ -2769,18 +2784,18 @@ int GetCharacterControllable(lua_State* L)
 // FUNCTION: SWBF2 0x0058f790
 int GetTeamMember(lua_State* L)
 {
-    int iTeam = (int)(float)luaL_checknumber(L, 1);
+    int iTeam = (int)(float)luaL_checknumber(LuaHelper::mState, 1);
     Team* pTeam = Team::sTeams[iTeam];
-    int iMember = (int)(float)luaL_checknumber(L, 2);
+    int iMember = (int)(float)luaL_checknumber(LuaHelper::mState, 2);
     Character* pMember = iMember >= pTeam->mMemberCount ? 0 : pTeam->mMemberArray[iMember];
-    lua_pushnumber(L, (float)((pMember - Character::sCharacters)));
+    lua_pushnumber(LuaHelper::mState, (float)((pMember - Character::sCharacters)));
     return 1;
 }
 
 // FUNCTION: SWBF2 0x0058f8a0
 int SelectCharacterTeam(lua_State* L)
 {
-    Character* pCharacter = Character::GetPtr((int)(float)luaL_checknumber(L, 1));
+    Character* pCharacter = Character::GetPtr((int)(float)luaL_checknumber(LuaHelper::mState, 1));
     if (pCharacter)
     {
         pCharacter->SelectTeam(LuaHelper::GetInt(2));
@@ -2794,7 +2809,7 @@ int EnableBuildingLockOn(lua_State* L)
     GameObject* pObject = _GetEntity<GameObject>(L, 1);
     if (pObject)
     {
-        bool bEnable = lua_gettop(L) <= 1 || lua_toboolean(L, 2) != 0;
+        bool bEnable = lua_gettop(LuaHelper::mState) <= 1 || lua_toboolean(LuaHelper::mState, 2) != 0;
         Damageable* pDamage = pObject;
         if (pDamage->mHealthType == 4)
         {
@@ -2807,7 +2822,7 @@ int EnableBuildingLockOn(lua_State* L)
 // FUNCTION: SWBF2 0x00590da0
 int RemoveEffect(lua_State* L)
 {
-    FLEffectObject* pEffect = (FLEffectObject*)lua_topointer(L, 1);
+    FLEffectObject* pEffect = (FLEffectObject*)lua_topointer(LuaHelper::mState, 1);
     if (pEffect)
     {
         pEffect->StopAndFinish();
@@ -2830,11 +2845,11 @@ int GetEntityClassName(lua_State* L)
     }
     if (pcName)
     {
-        lua_pushstring(L, pcName);
+        lua_pushstring(LuaHelper::mState, pcName);
     }
     else
     {
-        lua_pushnil(L);
+        lua_pushnil(LuaHelper::mState);
     }
     return 1;
 }
@@ -2842,14 +2857,14 @@ int GetEntityClassName(lua_State* L)
 // FUNCTION: SWBF2 0x0058fef0
 int GetCommandPostCaptureRegion(lua_State* L)
 {
-    CommandPost* pPost = CommandPost::FindPostByName(luaL_checklstring(L, 1, 0));
+    CommandPost* pPost = CommandPost::FindPostByName(luaL_checklstring(LuaHelper::mState, 1, 0));
     if (pPost)
     {
-        lua_pushlightuserdata(L, pPost->mCaptureRegion);
+        lua_pushlightuserdata(LuaHelper::mState, pPost->mCaptureRegion);
     }
     else
     {
-        lua_pushnil(L);
+        lua_pushnil(LuaHelper::mState);
     }
     return 1;
 }
@@ -2857,15 +2872,15 @@ int GetCommandPostCaptureRegion(lua_State* L)
 // FUNCTION: SWBF2 0x0058ffc0
 int GetCommandPostTeam(lua_State* L)
 {
-    CommandPost* pPost = CommandPost::FindPostByName(luaL_checklstring(L, 1, 0));
+    CommandPost* pPost = CommandPost::FindPostByName(luaL_checklstring(LuaHelper::mState, 1, 0));
     GameObject* pObject = pPost ? pPost->GetGameObject() : 0;
     if (pObject)
     {
-        lua_pushnumber(L, (float)pObject->GetTeam());
+        lua_pushnumber(LuaHelper::mState, (float)pObject->GetTeam());
     }
     else
     {
-        lua_pushnil(L);
+        lua_pushnil(LuaHelper::mState);
     }
     return 1;
 }
@@ -2874,7 +2889,7 @@ int GetCommandPostTeam(lua_State* L)
 int SetMissionTimer(lua_State* L)
 {
     Timer* pTimer = GetTimer(L, 1);
-    int iTeam = (int)(float)luaL_optnumber(L, 2, 0.0f);
+    int iTeam = (int)(float)luaL_optnumber(LuaHelper::mState, 2, 0.0f);
     MissionTimer::Set(pTimer, MissionTimer::SHOW_NEUTRAL, iTeam);
     return 0;
 }
@@ -2882,11 +2897,11 @@ int SetMissionTimer(lua_State* L)
 // FUNCTION: SWBF2 0x0058e300
 int BroadcastVoiceOver(lua_State* L)
 {
-    unsigned int uVoiceHash = PblHash(luaL_checklstring(L, 1, 0));
+    unsigned int uVoiceHash = PblHash(luaL_checklstring(LuaHelper::mState, 1, 0));
     int iTeamMask = -1;
-    if (lua_type(L, 2) > LUA_TNIL)
+    if (lua_type(LuaHelper::mState, 2) > LUA_TNIL)
     {
-        iTeamMask = 1 << (int)(float)luaL_checknumber(L, 2);
+        iTeamMask = 1 << (int)(float)luaL_checknumber(LuaHelper::mState, 2);
     }
     NetGame::CreateEvent_PlayVoiceOver(uVoiceHash, iTeamMask);
     return 0;
@@ -2907,7 +2922,7 @@ int DeleteEntity(lua_State* L)
 int TranslateAICommand(lua_State* L)
 {
     const char* pcCommand;
-    switch ((int)(float)luaL_checknumber(L, 1))
+    switch ((int)(float)luaL_checknumber(LuaHelper::mState, 1))
     {
     case 4:  pcCommand = "waitforpickup"; break;
     case 16: pcCommand = "followchr"; break;
@@ -2916,7 +2931,7 @@ int TranslateAICommand(lua_State* L)
     case 20: pcCommand = "getoutofvehicle"; break;
     default: pcCommand = "Invalid AI Command"; break;
     }
-    lua_pushstring(L, pcCommand);
+    lua_pushstring(LuaHelper::mState, pcCommand);
     return 1;
 }
 
@@ -2927,7 +2942,7 @@ int SetEntityMatrix(lua_State* L)
     if (pEntity)
     {
         PblMatrix matrix;
-        memcpy(&matrix, lua_touserdata(L, 2), sizeof(matrix));
+        memcpy(&matrix, lua_touserdata(LuaHelper::mState, 2), sizeof(matrix));
         pEntity->SetMatrix(matrix);
     }
     return 0;
@@ -2936,10 +2951,10 @@ int SetEntityMatrix(lua_State* L)
 // FUNCTION: SWBF2 0x0058ef80
 int EnableFlyerPath(lua_State* L)
 {
-    if (lua_gettop(L) == 2)
+    if (lua_gettop(LuaHelper::mState) == 2)
     {
-        const char* pcPath = luaL_checklstring(L, 1, 0);
-        bool bEnable = (int)(float)luaL_checknumber(L, 2) != 0;
+        const char* pcPath = luaL_checklstring(LuaHelper::mState, 1, 0);
+        bool bEnable = (int)(float)luaL_checknumber(LuaHelper::mState, 2) != 0;
         EntityPath::EnablePathByName(PblHash(pcPath), bEnable);
     }
     return 0;
@@ -2948,7 +2963,7 @@ int EnableFlyerPath(lua_State* L)
 // FUNCTION: SWBF2 0x0058f4f0
 int PlayAnimation(lua_State* L)
 {
-    PAAnimationGroup* pGroup = PAAnimationGroup::_HashTable.Find(PblHash(luaL_checklstring(L, 1, 0)));
+    PAAnimationGroup* pGroup = PAAnimationGroup::_HashTable.Find(PblHash(luaL_checklstring(LuaHelper::mState, 1, 0)));
     if (pGroup)
     {
         pGroup->Play();
@@ -2959,7 +2974,7 @@ int PlayAnimation(lua_State* L)
 // FUNCTION: SWBF2 0x0058f540
 int PauseAnimation(lua_State* L)
 {
-    PAAnimationGroup* pGroup = PAAnimationGroup::_HashTable.Find(PblHash(luaL_checklstring(L, 1, 0)));
+    PAAnimationGroup* pGroup = PAAnimationGroup::_HashTable.Find(PblHash(luaL_checklstring(LuaHelper::mState, 1, 0)));
     if (pGroup)
     {
         pGroup->Pause();
@@ -2970,7 +2985,7 @@ int PauseAnimation(lua_State* L)
 // FUNCTION: SWBF2 0x0058f590
 int RewindAnimation(lua_State* L)
 {
-    PAAnimationGroup* pGroup = PAAnimationGroup::_HashTable.Find(PblHash(luaL_checklstring(L, 1, 0)));
+    PAAnimationGroup* pGroup = PAAnimationGroup::_HashTable.Find(PblHash(luaL_checklstring(LuaHelper::mState, 1, 0)));
     if (pGroup)
     {
         pGroup->SetCurrentTime(0.0f);
@@ -2982,7 +2997,7 @@ int RewindAnimation(lua_State* L)
 // FUNCTION: SWBF2 0x0058f5f0
 int SetAnimationStartPoint(lua_State* L)
 {
-    PAAnimationGroup* pGroup = PAAnimationGroup::_HashTable.Find(PblHash(luaL_checklstring(L, 1, 0)));
+    PAAnimationGroup* pGroup = PAAnimationGroup::_HashTable.Find(PblHash(luaL_checklstring(LuaHelper::mState, 1, 0)));
     if (pGroup)
     {
         pGroup->UpdateStartPositions();
@@ -2993,9 +3008,9 @@ int SetAnimationStartPoint(lua_State* L)
 // FUNCTION: SWBF2 0x0058f640
 int PlayAnimationFromTo(lua_State* L)
 {
-    const char* pcGroup = luaL_checklstring(L, 1, 0);
-    float fStart = (float)luaL_checknumber(L, 2);
-    float fEnd = (float)luaL_checknumber(L, 3);
+    const char* pcGroup = luaL_checklstring(LuaHelper::mState, 1, 0);
+    float fStart = (float)luaL_checknumber(LuaHelper::mState, 2);
+    float fEnd = (float)luaL_checknumber(LuaHelper::mState, 3);
     PAAnimationGroup* pGroup = PAAnimationGroup::_HashTable.Find(PblHash(pcGroup));
     if (pGroup && fEnd > fStart && fStart >= 0.0f && fEnd >= 0.0f)
     {
@@ -3010,7 +3025,7 @@ int PlayAnimationFromTo(lua_State* L)
 // FUNCTION: SWBF2 0x0058cfe0
 int SetAIViewMultiplier(lua_State* L)
 {
-    float fMultiplier = (float)luaL_checknumber(L, 1);
+    float fMultiplier = (float)luaL_checknumber(LuaHelper::mState, 1);
     if (fMultiplier < 0.1f)
     {
         fMultiplier = 0.1f;
@@ -3029,13 +3044,13 @@ int GetEntityMatrix(lua_State* L)
     EntityGeometry* pEntity = _GetEntity<EntityGeometry>(L, 1);
     if (!pEntity)
     {
-        lua_pushnil(L);
+        lua_pushnil(LuaHelper::mState);
         return 1;
     }
     PblMatrix matrix = pEntity->GetMatrix();
-    if (lua_isstring(L, 2))
+    if (lua_isstring(LuaHelper::mState, 2))
     {
-        unsigned int uBone = PblHash(luaL_checklstring(L, 2, 0));
+        unsigned int uBone = PblHash(luaL_checklstring(LuaHelper::mState, 2, 0));
         const PblMatrix* pBone = 0;
         const RedPose* pPose = pEntity->GetPose();
         if (pPose)
@@ -3051,7 +3066,7 @@ int GetEntityMatrix(lua_State* L)
                 if (pGameModel->_mLod[0]->GetBoneMatrix(uBone, bone))
                 {
                     PblMatrix combined;
-                    D3DXMatrixMultiply(&combined, &bone, &matrix);
+                    D3DXMatrixMultiply(reinterpret_cast<D3DXMATRIX*>(&combined), reinterpret_cast<const D3DXMATRIX*>(&bone), reinterpret_cast<const D3DXMATRIX*>(&matrix));
                     matrix = combined;
                 }
             }
@@ -3059,7 +3074,7 @@ int GetEntityMatrix(lua_State* L)
         if (pBone)
         {
             PblMatrix combined;
-            D3DXMatrixMultiply(&combined, pBone, &matrix);
+            D3DXMatrixMultiply(reinterpret_cast<D3DXMATRIX*>(&combined), reinterpret_cast<const D3DXMATRIX*>(pBone), reinterpret_cast<const D3DXMATRIX*>(&matrix));
             matrix = combined;
         }
     }
@@ -3070,11 +3085,11 @@ int GetEntityMatrix(lua_State* L)
 // FUNCTION: SWBF2 0x0058d6a0
 int ShowMessageText(lua_State* L)
 {
-    unsigned int uTextHash = PblHash(luaL_checklstring(L, 1, 0));
+    unsigned int uTextHash = PblHash(luaL_checklstring(LuaHelper::mState, 1, 0));
     unsigned int uTeamMask = -1;
-    if (lua_type(L, 2) > LUA_TNIL)
+    if (lua_type(LuaHelper::mState, 2) > LUA_TNIL)
     {
-        uTeamMask = 1u << (int)(float)luaL_checknumber(L, 2);
+        uTeamMask = 1u << (int)(float)luaL_checknumber(LuaHelper::mState, 2);
     }
     if (NetGame::IsEnabled())
     {
@@ -3097,18 +3112,18 @@ int ShowMessageText(lua_State* L)
 int MapAddRegionMarker(lua_State* L)
 {
     const RedRegion* pRegion = (const RedRegion*)GetRegion(L, 1);
-    if (pRegion && lua_type(L, 2) > LUA_TNIL)
+    if (pRegion && lua_type(LuaHelper::mState, 2) > LUA_TNIL)
     {
-        const char* pcTexture = luaL_checklstring(L, 2, 0);
-        float fScale = (float)luaL_checknumber(L, 3);
+        const char* pcTexture = luaL_checklstring(LuaHelper::mState, 2, 0);
+        float fScale = (float)luaL_checknumber(LuaHelper::mState, 3);
         if (fScale > 0.0f)
         {
-            int iTeam = (int)(float)luaL_checknumber(L, 4);
+            int iTeam = (int)(float)luaL_checknumber(LuaHelper::mState, 4);
             unsigned int uTeamMask = iTeam ? 1u << iTeam : ~0u;
-            const char* pcColor = luaL_optlstring(L, 5, 0, 0);
-            bool bShowHud = lua_gettop(L) <= 5 || lua_toboolean(L, 6) != 0;
-            bool bFlash = lua_gettop(L) <= 6 || lua_toboolean(L, 7) != 0;
-            bool bPulse = lua_gettop(L) <= 7 || lua_toboolean(L, 8) != 0;
+            const char* pcColor = luaL_optlstring(LuaHelper::mState, 5, 0, 0);
+            bool bShowHud = lua_gettop(LuaHelper::mState) <= 5 || lua_toboolean(LuaHelper::mState, 6) != 0;
+            bool bFlash = lua_gettop(LuaHelper::mState) <= 6 || lua_toboolean(LuaHelper::mState, 7) != 0;
+            bool bPulse = lua_gettop(LuaHelper::mState) <= 7 || lua_toboolean(LuaHelper::mState, 8) != 0;
             TargetManager::AddMarker(0, pRegion, PblHash(pcTexture), fScale, uTeamMask,
                                      PblHash(pcColor), bShowHud, bFlash, bPulse, fScale * 0.3f);
         }
@@ -3122,8 +3137,8 @@ int MapRemoveRegionMarker(lua_State* L)
     const RedRegion* pRegion = (const RedRegion*)GetRegion(L, 1);
     if (pRegion)
     {
-        unsigned int uTeamMask = lua_type(L, 2) > LUA_TNIL ?
-            1u << (int)(float)luaL_checknumber(L, 2) : ~0u;
+        unsigned int uTeamMask = lua_type(LuaHelper::mState, 2) > LUA_TNIL ?
+            1u << (int)(float)luaL_checknumber(LuaHelper::mState, 2) : ~0u;
         TargetManager::RemoveMarker(0, pRegion, uTeamMask);
     }
     return 0;
@@ -3133,18 +3148,18 @@ int MapRemoveRegionMarker(lua_State* L)
 int MapAddEntityMarker(lua_State* L)
 {
     GameObject* pObject = _GetEntity<GameObject>(L, 1);
-    if (pObject && lua_type(L, 2) > LUA_TNIL)
+    if (pObject && lua_type(LuaHelper::mState, 2) > LUA_TNIL)
     {
-        const char* pcTexture = luaL_checklstring(L, 2, 0);
-        float fScale = (float)luaL_checknumber(L, 3);
+        const char* pcTexture = luaL_checklstring(LuaHelper::mState, 2, 0);
+        float fScale = (float)luaL_checknumber(LuaHelper::mState, 3);
         if (fScale > 0.0f)
         {
-            int iTeam = (int)(float)luaL_checknumber(L, 4);
+            int iTeam = (int)(float)luaL_checknumber(LuaHelper::mState, 4);
             unsigned int uTeamMask = iTeam ? 1u << iTeam : ~0u;
-            const char* pcColor = luaL_optlstring(L, 5, 0, 0);
-            bool bShowHud = lua_gettop(L) <= 5 || lua_toboolean(L, 6) != 0;
-            bool bFlash = lua_gettop(L) <= 6 || lua_toboolean(L, 7) != 0;
-            bool bPulse = lua_gettop(L) <= 7 || lua_toboolean(L, 8) != 0;
+            const char* pcColor = luaL_optlstring(LuaHelper::mState, 5, 0, 0);
+            bool bShowHud = lua_gettop(LuaHelper::mState) <= 5 || lua_toboolean(LuaHelper::mState, 6) != 0;
+            bool bFlash = lua_gettop(LuaHelper::mState) <= 6 || lua_toboolean(LuaHelper::mState, 7) != 0;
+            bool bPulse = lua_gettop(LuaHelper::mState) <= 7 || lua_toboolean(LuaHelper::mState, 8) != 0;
             TargetManager::AddMarker(pObject, 0, PblHash(pcTexture), fScale, uTeamMask,
                                      PblHash(pcColor), bShowHud, bFlash, bPulse, fScale * 0.3f);
         }
@@ -3158,8 +3173,8 @@ int MapRemoveEntityMarker(lua_State* L)
     GameObject* pObject = _GetEntity<GameObject>(L, 1);
     if (pObject)
     {
-        unsigned int uTeamMask = lua_type(L, 2) > LUA_TNIL ?
-            1u << (int)(float)luaL_checknumber(L, 2) : ~0u;
+        unsigned int uTeamMask = lua_type(LuaHelper::mState, 2) > LUA_TNIL ?
+            1u << (int)(float)luaL_checknumber(LuaHelper::mState, 2) : ~0u;
         TargetManager::RemoveMarker(pObject, 0, uTeamMask);
     }
     return 0;
@@ -3168,23 +3183,23 @@ int MapRemoveEntityMarker(lua_State* L)
 // FUNCTION: SWBF2 0x0058dd10
 int MapAddClassMarker(lua_State* L)
 {
-    if (lua_type(L, 2) <= LUA_TNIL)
+    if (lua_type(LuaHelper::mState, 2) <= LUA_TNIL)
     {
         return 0;
     }
-    const char* pcClass = luaL_checklstring(L, 1, 0);
-    const char* pcTexture = luaL_checklstring(L, 2, 0);
-    float fScale = (float)luaL_checknumber(L, 3);
+    const char* pcClass = luaL_checklstring(LuaHelper::mState, 1, 0);
+    const char* pcTexture = luaL_checklstring(LuaHelper::mState, 2, 0);
+    float fScale = (float)luaL_checknumber(LuaHelper::mState, 3);
     if (fScale <= 0.0f)
     {
         return 0;
     }
-    int iTeam = (int)(float)luaL_checknumber(L, 4);
+    int iTeam = (int)(float)luaL_checknumber(LuaHelper::mState, 4);
     unsigned int uTeamMask = iTeam ? 1u << iTeam : ~0u;
-    const char* pcColor = luaL_optlstring(L, 5, 0, 0);
-    bool bShowHud = lua_gettop(L) <= 5 || lua_toboolean(L, 6) != 0;
-    bool bFlash = lua_gettop(L) <= 6 || lua_toboolean(L, 7) != 0;
-    bool bPulse = lua_gettop(L) <= 7 || lua_toboolean(L, 8) != 0;
+    const char* pcColor = luaL_optlstring(LuaHelper::mState, 5, 0, 0);
+    bool bShowHud = lua_gettop(LuaHelper::mState) <= 5 || lua_toboolean(LuaHelper::mState, 6) != 0;
+    bool bFlash = lua_gettop(LuaHelper::mState) <= 6 || lua_toboolean(LuaHelper::mState, 7) != 0;
+    bool bPulse = lua_gettop(LuaHelper::mState) <= 7 || lua_toboolean(LuaHelper::mState, 8) != 0;
     TargetManager::AddClassMarker(PblHash(pcClass), PblHash(pcTexture), fScale,
                                    uTeamMask, PblHash(pcColor), bShowHud, bFlash,
                                    bPulse, fScale * 0.3f);
@@ -3194,9 +3209,9 @@ int MapAddClassMarker(lua_State* L)
 // FUNCTION: SWBF2 0x0058dea0
 int MapRemoveClassMarker(lua_State* L)
 {
-    const char* pcClass = luaL_checklstring(L, 1, 0);
-    unsigned int uTeamMask = lua_type(L, 2) > LUA_TNIL ?
-        1u << (int)(float)luaL_checknumber(L, 2) : ~0u;
+    const char* pcClass = luaL_checklstring(LuaHelper::mState, 1, 0);
+    unsigned int uTeamMask = lua_type(LuaHelper::mState, 2) > LUA_TNIL ?
+        1u << (int)(float)luaL_checknumber(LuaHelper::mState, 2) : ~0u;
     TargetManager::RemoveClassMarker(PblHash(pcClass), uTeamMask);
     return 0;
 }
@@ -3204,7 +3219,7 @@ int MapRemoveClassMarker(lua_State* L)
 // FUNCTION: SWBF2 0x00590d40
 int CreateEffect(lua_State* L)
 {
-    FLEffectClass* pClass = FLEffect::Get(PblHash(luaL_checklstring(L, 1, 0)));
+    FLEffectClass* pClass = FLEffect::Get(PblHash(luaL_checklstring(LuaHelper::mState, 1, 0)));
     if (!pClass)
     {
         return 0;
@@ -3214,22 +3229,22 @@ int CreateEffect(lua_State* L)
     {
         return 0;
     }
-    lua_pushlightuserdata(L, pEffect);
+    lua_pushlightuserdata(LuaHelper::mState, pEffect);
     return 1;
 }
 
 // FUNCTION: SWBF2 0x00590e50
 int AttachEffectToMatrix(lua_State* L)
 {
-    FLEffectObject* pEffect = (FLEffectObject*)lua_topointer(L, 1);
+    FLEffectObject* pEffect = (FLEffectObject*)lua_topointer(LuaHelper::mState, 1);
     if (!pEffect)
     {
         return 0;
     }
     PblMatrix matrix;
-    memcpy(&matrix, lua_touserdata(L, 2), sizeof(matrix));
-    const PblMatrix* pOffset = lua_type(L, 3) > LUA_TNIL ?
-        (const PblMatrix*)lua_touserdata(L, 3) : &gMatrixIdentity;
+    memcpy(&matrix, lua_touserdata(LuaHelper::mState, 2), sizeof(matrix));
+    const PblMatrix* pOffset = lua_type(LuaHelper::mState, 3) > LUA_TNIL ?
+        (const PblMatrix*)lua_touserdata(LuaHelper::mState, 3) : &gMatrixIdentity;
     pEffect->AttachEffectToMatrix(&matrix, *pOffset, false);
     return 0;
 }
@@ -3237,11 +3252,11 @@ int AttachEffectToMatrix(lua_State* L)
 // FUNCTION: SWBF2 0x00590f20
 int SetEffectMatrix(lua_State* L)
 {
-    FLEffectObject* pEffect = (FLEffectObject*)lua_topointer(L, 1);
+    FLEffectObject* pEffect = (FLEffectObject*)lua_topointer(LuaHelper::mState, 1);
     if (pEffect)
     {
         PblMatrix matrix;
-        memcpy(&matrix, lua_touserdata(L, 2), sizeof(matrix));
+        memcpy(&matrix, lua_touserdata(LuaHelper::mState, 2), sizeof(matrix));
         pEffect->SetMatrix(matrix);
     }
     return 0;
@@ -3253,7 +3268,7 @@ int AddShieldStrength(lua_State* L)
     GameObject* pObject = _GetEntity<GameObject>(L, 1);
     if (pObject)
     {
-        float fMax = pObject->GetMaxShield() + (float)luaL_checknumber(L, 2);
+        float fMax = pObject->GetMaxShield() + (float)luaL_checknumber(LuaHelper::mState, 2);
         if (fMax < 0.0f)
         {
             fMax = 0.0f;
@@ -3289,17 +3304,17 @@ int MoveCameraToEntity(lua_State* L)
 // FUNCTION: SWBF2 0x0058ca50
 int FillAsteroidRegion(lua_State* L)
 {
-    const char* pcRegion = luaL_checklstring(L, 1, 0);
-    const char* pcClass = luaL_checklstring(L, 2, 0);
-    int iCount = (int)(float)luaL_checknumber(L, 3);
+    const char* pcRegion = luaL_checklstring(LuaHelper::mState, 1, 0);
+    const char* pcClass = luaL_checklstring(LuaHelper::mState, 2, 0);
+    int iCount = (int)(float)luaL_checknumber(LuaHelper::mState, 3);
     PblVector3 vMin;
-    vMin.x = (float)luaL_checknumber(L, 4);
-    vMin.y = (float)luaL_checknumber(L, 5);
-    vMin.z = (float)luaL_checknumber(L, 6);
+    vMin.x = (float)luaL_checknumber(LuaHelper::mState, 4);
+    vMin.y = (float)luaL_checknumber(LuaHelper::mState, 5);
+    vMin.z = (float)luaL_checknumber(LuaHelper::mState, 6);
     PblVector3 vMax;
-    vMax.x = (float)luaL_checknumber(L, 7);
-    vMax.y = (float)luaL_checknumber(L, 8);
-    vMax.z = (float)luaL_checknumber(L, 9);
+    vMax.x = (float)luaL_checknumber(LuaHelper::mState, 7);
+    vMax.y = (float)luaL_checknumber(LuaHelper::mState, 8);
+    vMax.z = (float)luaL_checknumber(LuaHelper::mState, 9);
     EntityClass* pClass = EntityClass::Find(PblHash(pcClass));
     if (pClass)
     {
@@ -3311,11 +3326,11 @@ int FillAsteroidRegion(lua_State* L)
 // FUNCTION: SWBF2 0x0058d820
 int ScriptCB_PlayerSuicide(lua_State* L)
 {
-    if (GameState::GetState() != 0x8ff60339 || !lua_isnumber(L, 1))
+    if (GameState::GetState() != 0x8ff60339 || !lua_isnumber(LuaHelper::mState, 1))
     {
         return 0;
     }
-    int iCamera = (int)(float)luaL_checknumber(L, 1);
+    int iCamera = (int)(float)luaL_checknumber(LuaHelper::mState, 1);
     if (iCamera < 0 || iCamera >= GameLoop::mNumCameras)
     {
         return 0;
@@ -3343,7 +3358,7 @@ int EnterVehicle(lua_State* L)
     {
         return 0;
     }
-    Character* pCharacter = Character::GetPtr((int)(float)luaL_checknumber(L, 1));
+    Character* pCharacter = Character::GetPtr((int)(float)luaL_checknumber(LuaHelper::mState, 1));
     Controllable* pSoldier = 0;
     if (pCharacter && pCharacter->mClassPtr && pCharacter->mUnit &&
         pCharacter->mClassPtr->IsRtti(EntitySoldierClass::rttiHashEntitySoldierClass))
@@ -3364,7 +3379,7 @@ int EnterVehicle(lua_State* L)
 // FUNCTION: SWBF2 0x0058eef0
 int ExitVehicle(lua_State* L)
 {
-    Character* pCharacter = Character::GetPtr((int)(float)luaL_checknumber(L, 1));
+    Character* pCharacter = Character::GetPtr((int)(float)luaL_checknumber(LuaHelper::mState, 1));
     Controllable* pSoldier = 0;
     if (pCharacter && pCharacter->mClassPtr && pCharacter->mUnit &&
         pCharacter->mClassPtr->IsRtti(EntitySoldierClass::rttiHashEntitySoldierClass))
@@ -3385,12 +3400,12 @@ int ExitVehicle(lua_State* L)
 // FUNCTION: SWBF2 0x00590690
 int ForceAIOutOfVehicles(lua_State* L)
 {
-    Team* pTeam = Team::GetPtr((int)(float)luaL_checknumber(L, 1));
+    Team* pTeam = Team::GetPtr((int)(float)luaL_checknumber(LuaHelper::mState, 1));
     if (!pTeam)
     {
         return 0;
     }
-    pTeam->mbAIMembersIgnoreVehicles = lua_toboolean(L, 2) != 0;
+    pTeam->mbAIMembersIgnoreVehicles = lua_toboolean(LuaHelper::mState, 2) != 0;
     if (pTeam->mbAIMembersIgnoreVehicles)
     {
         for (int i = 0; i < pTeam->mMemberCount; ++i)
@@ -3418,20 +3433,20 @@ int ForceAIOutOfVehicles(lua_State* L)
 // FUNCTION: SWBF2 0x0058fb10
 int SelectCharacterClass(lua_State* L)
 {
-    Character* pCharacter = Character::GetPtr((int)(float)luaL_checknumber(L, 1));
+    Character* pCharacter = Character::GetPtr((int)(float)luaL_checknumber(LuaHelper::mState, 1));
     if (!pCharacter)
     {
         return 0;
     }
-    if (lua_isnumber(L, 2))
+    if (lua_isnumber(LuaHelper::mState, 2))
     {
-        pCharacter->SelectClass((int)(float)luaL_checknumber(L, 2));
+        pCharacter->SelectClass((int)(float)luaL_checknumber(LuaHelper::mState, 2));
         return 0;
     }
     int iClass = 0;
-    if (lua_isstring(L, 2))
+    if (lua_isstring(LuaHelper::mState, 2))
     {
-        EntityClass* pClass = EntityClass::Find(PblHash(luaL_checklstring(L, 2, 0)));
+        EntityClass* pClass = EntityClass::Find(PblHash(luaL_checklstring(LuaHelper::mState, 2, 0)));
         Team* pTeam = pCharacter->mTeamPtr;
         for (iClass = 0; iClass < pTeam->mClassCount; ++iClass)
         {
@@ -3448,12 +3463,12 @@ int SelectCharacterClass(lua_State* L)
 // FUNCTION: SWBF2 0x0058fc20
 int SpawnCharacter(lua_State* L)
 {
-    Character* pCharacter = Character::GetPtr((int)(float)luaL_checknumber(L, 1));
-    if (pCharacter && lua_isuserdata(L, 2))
+    Character* pCharacter = Character::GetPtr((int)(float)luaL_checknumber(LuaHelper::mState, 1));
+    if (pCharacter && lua_isuserdata(LuaHelper::mState, 2))
     {
         pCharacter->SelectPost(0);
         PblMatrix matrix;
-        memcpy(&matrix, lua_touserdata(L, 2), sizeof(matrix));
+        memcpy(&matrix, lua_touserdata(LuaHelper::mState, 2), sizeof(matrix));
         pCharacter->Spawn(matrix);
     }
     return 0;
@@ -3476,8 +3491,8 @@ int TogglePlanningGraphArcs(lua_State* L)
 // FUNCTION: SWBF2 0x00590c90
 int Print3D(lua_State* L)
 {
-    const PblMatrix* pMatrix = (const PblMatrix*)lua_touserdata(L, 1);
-    const char* pcText = luaL_checklstring(L, 2, 0);
+    const PblMatrix* pMatrix = (const PblMatrix*)lua_touserdata(LuaHelper::mState, 1);
+    const char* pcText = luaL_checklstring(LuaHelper::mState, 2, 0);
     const PblVector3& vPosition = (*pMatrix)[3];
     RedDebug::Printf3D(vPosition, "%s", pcText);
     return 0;
@@ -3486,9 +3501,9 @@ int Print3D(lua_State* L)
 // FUNCTION: SWBF2 0x0058f980
 int BatchChangeTeams(lua_State* L)
 {
-    int iFrom = (int)(float)luaL_checknumber(L, 1);
-    int iTo = (int)(float)luaL_checknumber(L, 2);
-    int iRequested = (int)(float)luaL_checknumber(L, 3);
+    int iFrom = (int)(float)luaL_checknumber(LuaHelper::mState, 1);
+    int iTo = (int)(float)luaL_checknumber(LuaHelper::mState, 2);
+    int iRequested = (int)(float)luaL_checknumber(LuaHelper::mState, 3);
     SpawnManager* pSpawns = SpawnManager::sInstance;
     int iAvailable = pSpawns->GetUnitCount(iFrom);
     if (iAvailable)
@@ -3587,8 +3602,6 @@ void GetPoint(float s, LengthEntryT* parameterizedArcLength, int numEntries,
     direction = hermiteSegment[segmentIndex].getSlope(t);
 }
 
-extern "C" PblVector3* __stdcall D3DXVec3Normalize(PblVector3* pOut, const PblVector3* pV);
-extern "C" PblVector3* __stdcall D3DXVec3TransformCoord(PblVector3* pOut, const PblVector3* pV, const PblMatrix* pM);
 PblMatrix DirectionMatrix(const PblVector3& vDir, const PblVector3& vUp, const PblVector3& vPos);
 
 // FUNCTION: SWBF2 0x00445c90
@@ -3613,7 +3626,7 @@ void AsteroidClass::FillRegion(const char* pcRegion, int iCount, PblVector3 vMin
             PblVector3 vRand = PblRandom::GetSim().GetVector3();
             PblVector3 vUnit(vRand.x * 2.0f - 1.0f, vRand.y * 2.0f - 1.0f, vRand.z * 2.0f - 1.0f);
             PblVector3 vDir;
-            D3DXVec3Normalize(&vDir, &vUnit);
+            D3DXVec3Normalize(reinterpret_cast<D3DXVECTOR3*>(&vDir), reinterpret_cast<const D3DXVECTOR3*>(&vUnit));
             float fRadius = PblRandom::GetSim().GetFloat() * pRegion->mSize.w;
             const PblVector3& vCenter = pRegion->mMatrix.GetTranslation();
             vPosition.x = vCenter.x + vDir.x * fRadius;
@@ -3628,7 +3641,7 @@ void AsteroidClass::FillRegion(const char* pcRegion, int iCount, PblVector3 vMin
             PblVector3 vLocal(pRegion->mSize.x * (vRand.x * 2.0f - 1.0f),
                               pRegion->mSize.y * (vRand.y * 2.0f - 1.0f),
                               pRegion->mSize.z * (vRand.z * 2.0f - 1.0f));
-            D3DXVec3TransformCoord(&vPosition, &vLocal, &pRegion->mMatrix);
+            D3DXVec3TransformCoord(reinterpret_cast<D3DXVECTOR3*>(&vPosition), reinterpret_cast<const D3DXVECTOR3*>(&vLocal), reinterpret_cast<const D3DXMATRIX*>(&pRegion->mMatrix));
             break;
         }
         case PblRegion::type_cylinder:
@@ -3643,7 +3656,7 @@ void AsteroidClass::FillRegion(const char* pcRegion, int iCount, PblVector3 vMin
             float fLength = sqrtf(fX * fX + fZ * fZ);
             float fRadius = PblRandom::GetSim().GetFloat() * pRegion->mSize.x;
             PblVector3 vLocal(fX / fLength * fRadius, pRegion->mSize.y * fY, fZ / fLength * fRadius);
-            D3DXVec3TransformCoord(&vPosition, &vLocal, &pRegion->mMatrix);
+            D3DXVec3TransformCoord(reinterpret_cast<D3DXVECTOR3*>(&vPosition), reinterpret_cast<const D3DXVECTOR3*>(&vLocal), reinterpret_cast<const D3DXMATRIX*>(&pRegion->mMatrix));
             break;
         }
         default:
@@ -3727,7 +3740,7 @@ void AsteroidClass::FillPath(const char* pcPath, float fDensity, int iCount,
         float fRadius = PblRandom::GetSim().GetFloat() * fDensity;
         PblVector3 vOffset(fX / fOffsetLength * fRadius, fY / fOffsetLength * fRadius, 0.0f);
         PblVector3 vOffsetPosition;
-        D3DXVec3TransformCoord(&vOffsetPosition, &vOffset, &mPath);
+        D3DXVec3TransformCoord(reinterpret_cast<D3DXVECTOR3*>(&vOffsetPosition), reinterpret_cast<const D3DXVECTOR3*>(&vOffset), reinterpret_cast<const D3DXMATRIX*>(&mPath));
         vPosition = vOffsetPosition;
 
         vDir.x = (vMax.x - vMin.x) * PblRandom::GetSim().GetFloat() + vMin.x;
@@ -3909,7 +3922,7 @@ int CreateMatrix(lua_State* L)
     axis.x = (float)luaL_checknumber(LuaHelper::mState, 2);
     float fAngle = (float)luaL_checknumber(LuaHelper::mState, 1);
     PblMatrix matrix;
-    D3DXMatrixRotationAxis(&matrix, &axis, fAngle);
+    D3DXMatrixRotationAxis(reinterpret_cast<D3DXMATRIX*>(&matrix), reinterpret_cast<const D3DXVECTOR3*>(&axis), fAngle);
     matrix.m[3][2] = (float)luaL_checknumber(LuaHelper::mState, 7);
     matrix.m[3][1] = (float)luaL_checknumber(LuaHelper::mState, 6);
     matrix.m[3][0] = (float)luaL_checknumber(LuaHelper::mState, 5);
@@ -3917,7 +3930,7 @@ int CreateMatrix(lua_State* L)
     if (lua_isuserdata(LuaHelper::mState, 8))
     {
         PblMatrix combined;
-        D3DXMatrixMultiply(&combined, &matrix, lua_touserdata(LuaHelper::mState, 8));
+        D3DXMatrixMultiply(reinterpret_cast<D3DXMATRIX*>(&combined), reinterpret_cast<const D3DXMATRIX*>(&matrix), reinterpret_cast<const D3DXMATRIX*>(lua_touserdata(LuaHelper::mState, 8)));
         matrix = combined;
     }
     LuaHelper::PushObject<PblMatrix>(matrix);
@@ -3932,7 +3945,7 @@ int GetWorldPosition(lua_State* L)
     {
         return 0;
     }
-    const PblVector3& position = pEntity->GetCollisionCenter();
+    const PblVector3 position = pEntity->GetCollisionCenter();
     lua_pushnumber(LuaHelper::mState, position.x);
     lua_pushnumber(LuaHelper::mState, position.y);
     lua_pushnumber(LuaHelper::mState, position.z);
@@ -4038,9 +4051,9 @@ int GetPathPoint(lua_State* L)
     int iPoint = lua_isnumber(LuaHelper::mState, 2) ? (int)(float)luaL_checknumber(LuaHelper::mState, 2) : 0;
     PblQuaternion quaternion = pPath->GetPointRotation(iPoint).Inverse();
     PblQuaternion normalized;
-    D3DXQuaternionNormalize(&normalized, &quaternion);
+    D3DXQuaternionNormalize(reinterpret_cast<D3DXQUATERNION*>(&normalized), reinterpret_cast<const D3DXQUATERNION*>(&quaternion));
     PblMatrix matrix;
-    D3DXMatrixRotationQuaternion(&matrix, &normalized);
+    D3DXMatrixRotationQuaternion(reinterpret_cast<D3DXMATRIX*>(&matrix), reinterpret_cast<const D3DXQUATERNION*>(&normalized));
     const PblVector3& point = pPath->GetPointPosition(iPoint);
     for (int i = 0; i < 3; ++i)
     {

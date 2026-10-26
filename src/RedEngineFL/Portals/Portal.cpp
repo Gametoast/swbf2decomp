@@ -1,3 +1,4 @@
+#include <d3dx9math.h>
 #include "Portal.h"
 
 #include "RedEngineFL/Util/RedCommandConsole.h"
@@ -58,7 +59,6 @@ extern bool gSaveCam;
 extern bool gBackFaceCull;
 extern bool gProximityTest;
 
-extern "C" PblVector3* __stdcall D3DXVec3TransformNormal(PblVector3* pOut, const PblVector3* pV, const PblMatrix* pM);
 
 // FUNCTION: SWBF2 0x006de890
 geo::Frustum::Frustum(const Vector3<float>& rCenter, const Vector3<float>& rUp, const Vector3<float>& rFwd,
@@ -482,7 +482,7 @@ void pvs::Manager::GetCamFrustum(const pvs::ICamera& rCam, geo::Frustum& rFrustu
 
     PblVector3 vFwd;
     PblVector3 vBack(0.0f, 0.0f, -1.0f);
-    D3DXVec3TransformNormal(&vFwd, &vBack, &camTrans);
+    D3DXVec3TransformNormal(reinterpret_cast<D3DXVECTOR3*>(&vFwd), reinterpret_cast<const D3DXVECTOR3*>(&vBack), reinterpret_cast<const D3DXMATRIX*>(&camTrans));
     geo::Vector3<float> fwd(vFwd.x, vFwd.y, vFwd.z);
 
     const geo::Vector3<float> yAxis(0.0f, 1.0f, 0.0f);

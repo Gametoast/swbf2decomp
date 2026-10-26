@@ -1,3 +1,4 @@
+#include <d3dx9math.h>
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -6,7 +7,6 @@
 #include "GameObject.h"
 #include "OrdnanceMissile.h"
 
-extern "C" PblVector3* __stdcall D3DXVec3Normalize(PblVector3* pOut, const PblVector3* pV);
 
 namespace AIUtil
 {
@@ -173,7 +173,7 @@ void WeaponLauncher::SetupTarget(const GameObject** ppTarget, int* pBodyId) cons
                     vDelta.y = vPos.y - mOwner->mEyePoint.y;
                     vDelta.z = vPos.z - mOwner->mEyePoint.z;
                     PblVector3 vDir;
-                    D3DXVec3Normalize(&vDir, &vDelta);
+                    D3DXVec3Normalize(reinterpret_cast<D3DXVECTOR3*>(&vDir), reinterpret_cast<const D3DXVECTOR3*>(&vDelta));
                     float fDot = mOwner->mEyeDir.x * vDir.x + mOwner->mEyeDir.y * vDir.y +
                                  mOwner->mEyeDir.z * vDir.z;
                     if (fDot < 0.9f ||

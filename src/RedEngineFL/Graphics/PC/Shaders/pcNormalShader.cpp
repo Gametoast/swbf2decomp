@@ -1,3 +1,4 @@
+#include <d3dx9math.h>
 #include "pcNormalShader.h"
 
 #include "PebbleFL/Common/PblChunk.h"
@@ -27,8 +28,6 @@
 
 void __cdecl PblTraceP(const char* Format, ...);
 
-extern "C" PblMatrix* __stdcall D3DXMatrixMultiply(PblMatrix* pOut, const PblMatrix* pM1,
-                                                   const PblMatrix* pM2);
 
 unsigned int pcNormalShader::s_uiID;
 pcRedShader::GetStateFuncT pcNormalShader::GetStateFuncArray[MAX_PIPELINES];
@@ -762,7 +761,7 @@ void pcNormalShader::Begin_Fixed(unsigned int uiState, unsigned int uiPass) cons
         mShadow.m[2][0] = vU.z; mShadow.m[2][1] = vV.z; mShadow.m[2][2] = vW.z; mShadow.m[2][3] = 0.0f;
         mShadow.m[3][0] = vU.w; mShadow.m[3][1] = vV.w; mShadow.m[3][2] = vW.w; mShadow.m[3][3] = 1.0f;
         PblMatrix mTexture;
-        D3DXMatrixMultiply(&mTexture, &mCamera, &mShadow);
+        D3DXMatrixMultiply(reinterpret_cast<D3DXMATRIX*>(&mTexture), reinterpret_cast<const D3DXMATRIX*>(&mCamera), reinterpret_cast<const D3DXMATRIX*>(&mShadow));
         RedRenderer::pcFFSetTextureTransform(1, mTexture);
 
         RedRenderer::pcSetTextureStageState(0, D3DTSS_COLOROP, D3DTOP_MODULATE);

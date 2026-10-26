@@ -1,3 +1,4 @@
+#include <d3dx9math.h>
 #include "Battlefront2/Source/HeatShimmerEffect.h"
 #include "PebbleFL/Common/PblHashTable.h"
 #include "RedEngineFL/Graphics/RedColor.h"
@@ -13,8 +14,6 @@
 
 #include <math.h>
 
-extern "C" PblVector3* __stdcall D3DXVec3Normalize(PblVector3*, const PblVector3*);
-extern "C" PblMatrix* __stdcall D3DXMatrixRotationY(PblMatrix*, float);
 
 // GLOBAL: SWBF2 0x01e2fd18
 float HeatShimmerEffect::s_tileU;
@@ -156,10 +155,10 @@ void HeatShimmerEffect::PlatformRender(unsigned int) const
     pCamera->GetFrustum(fNear, fFar, fWidth, fHeight);
     PblVector3 vForward(cameraMatrix.m[2][0], 0.0f, cameraMatrix.m[2][2]);
     PblVector3 vNormalized;
-    D3DXVec3Normalize(&vNormalized, &vForward);
+    D3DXVec3Normalize(reinterpret_cast<D3DXVECTOR3*>(&vNormalized), reinterpret_cast<const D3DXVECTOR3*>(&vForward));
     PblMatrix world(PblVector4{1,0,0,0}, PblVector4{0,1,0,0},
                     PblVector4{0,0,1,0}, PblVector4{0,0,0,1});
-    D3DXMatrixRotationY(&world, -fAngle);
+    D3DXMatrixRotationY(reinterpret_cast<D3DXMATRIX*>(&world), -fAngle);
     world.m[3][0] = cameraMatrix.m[3][0] - vNormalized.x * (fFar - 10.0f);
     world.m[3][1] = 0.0f;
     world.m[3][2] = cameraMatrix.m[3][2] - vNormalized.z * (fFar - 10.0f);

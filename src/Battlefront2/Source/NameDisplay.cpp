@@ -1,3 +1,4 @@
+#include <d3dx9math.h>
 #include "NameDisplay.h"
 #include "CameraManager.h"
 #include "Character.h"
@@ -11,8 +12,6 @@
 #include "RedEngineFL/Interface/RedFont.h"
 #include "RedEngineFL/Graphics/RedCamera.h"
 
-extern "C" PblVector3* __stdcall D3DXVec3TransformCoord(PblVector3*, const PblVector3*, const PblMatrix*);
-extern "C" PblVector3* __stdcall D3DXVec3Normalize(PblVector3*, const PblVector3*);
 
 // FUNCTION: SWBF2 0x0043edd0
 bool __fastcall HasNameDisplayPilotType(const void* pCharacter)
@@ -294,7 +293,7 @@ bool NameDisplayThread::Update(float)
         vToUnit.y = vPos.y - vEye.y;
         vToUnit.z = vPos.z - vEye.z;
         PblVector3 vDir;
-        D3DXVec3Normalize(&vDir, &vToUnit);
+        D3DXVec3Normalize(reinterpret_cast<D3DXVECTOR3*>(&vDir), reinterpret_cast<const D3DXVECTOR3*>(&vToUnit));
         const PblVector3& vAt = mCamera.GetZAxis();
         if (!(vDir.y * -vAt.y + vDir.x * -vAt.x + vDir.z * -vAt.z > 0.0f))
         {

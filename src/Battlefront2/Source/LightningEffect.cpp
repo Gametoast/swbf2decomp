@@ -1,3 +1,4 @@
+#include <d3dx9math.h>
 #include "LightningEffect.h"
 #include "CameraManager.h"
 #include "LightningBoltEffect.h"
@@ -17,7 +18,6 @@
 
 #undef PlaySound
 
-extern "C" PblVector3* __stdcall D3DXVec3Normalize(PblVector3* pOut, const PblVector3* pV);
 
 namespace
 {
@@ -372,7 +372,7 @@ void LightningEffect::Update(float fDeltaTime)
                 vDir.x -= mCamera.m[2][0];
                 vDir.z -= mCamera.m[2][2];
                 PblVector3 vNormal;
-                D3DXVec3Normalize(&vNormal, &vDir);
+                D3DXVec3Normalize(reinterpret_cast<D3DXVECTOR3*>(&vNormal), reinterpret_cast<const D3DXVECTOR3*>(&vDir));
 
                 PblVector3 vPos;
                 vPos.x = mCamera.m[3][0] + vNormal.x * fBoltDist;

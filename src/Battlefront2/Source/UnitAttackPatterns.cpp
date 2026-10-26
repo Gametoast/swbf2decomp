@@ -1,3 +1,4 @@
+#include <d3dx9math.h>
 #include "UnitAttackPatterns.h"
 #include "AIDifficulty.h"
 #include "AILowLevel.h"
@@ -21,7 +22,6 @@
 
 class GameObject;
 
-extern "C" PblVector3* __stdcall D3DXVec3Normalize(PblVector3* pOut, const PblVector3* pV);
 
 extern PblVector3 gVectorZero;
 
@@ -283,7 +283,7 @@ float AttackPatterns::CalculateAngle(const Controllable* pCtrl) const
     vToMe.z = vTargetPoint.z - vEyePoint.z;
 
     PblVector3 vDir;
-    D3DXVec3Normalize(&vDir, &vToMe);
+    D3DXVec3Normalize(reinterpret_cast<D3DXVECTOR3*>(&vDir), reinterpret_cast<const D3DXVECTOR3*>(&vToMe));
     return vDir.x * vEyeDir.x + vDir.y * vEyeDir.y + vDir.z * vEyeDir.z;
 }
 
@@ -327,7 +327,7 @@ bool AttackPatterns::GetInRange()
     vDiff.y = 0.0f;
     vDiff.z = vPos.z - vTarget.z;
     PblVector3 vDir;
-    D3DXVec3Normalize(&vDir, &vDiff);
+    D3DXVec3Normalize(reinterpret_cast<D3DXVECTOR3*>(&vDir), reinterpret_cast<const D3DXVECTOR3*>(&vDiff));
 
     PblVector3 vDest;
     float fDistSq = vDiff.z * vDiff.z + vDiff.x * vDiff.x;
@@ -478,9 +478,7 @@ void AttackPatterns::DoStationary()
 
         float fRadius = GetCollisionObject(GetMe()->GetGameObject())->GetCollisionRadius();
         float fDist = AIUtil::GetRandomFloat(fRadius, fRadius * 2.0f);
-        vDest.x += vSide.x * fDist;
-        vDest.y += vSide.y * fDist;
-        vDest.z += vSide.z * fDist;
+        vDest += vSide * fDist;
         mOwner->GetLowLevel().SetNavigator_Goto(vDest, NULL, false, false);
     }
 
@@ -495,7 +493,7 @@ void AttackPatterns::SetSimpleTarget()
     vRandom.y = 0.0f;
     vRandom.x += 0.0001f;
     PblVector3 vDir;
-    D3DXVec3Normalize(&vDir, &vRandom);
+    D3DXVec3Normalize(reinterpret_cast<D3DXVECTOR3*>(&vDir), reinterpret_cast<const D3DXVECTOR3*>(&vRandom));
 
     float fDist = GetOptimalish();
     const PblVector3& vTarget = GetAttackHelper()->GetLastSeenTargetPos();
@@ -549,7 +547,7 @@ void AttackPatterns::CycleSerpDir()
 {
     PblVector3 vPos = GetMe()->GetMatrix().GetTranslation();
     const PblVector3& vTarget = GetAttackHelper()->GetLastSeenTargetPos();
-    PblVector3 vAhead = AIUtil::GetSafeNormalXZ(PblVector3(vTarget.x - vPos.x, vTarget.y - vPos.y, vTarget.z - vPos.z));
+    PblVector3 vAhead = AIUtil::GetSafeNormalXZ((vTarget - vPos));
 
     mSerpCur = (mSerpStrafe == LEFT) ? RIGHT : LEFT;
     mSerpStrafe = mSerpCur;
@@ -558,9 +556,7 @@ void AttackPatterns::CycleSerpDir()
     float fSide = (mSerpStrafe == RIGHT) ? 30.0f : -30.0f;
     float fAhead = (mSerpAhead == FORWARD) ? 30.0f : -30.0f;
 
-    PblVector3 vDest(vAhead.x * fAhead + vSide.x * fSide + vPos.x,
-                     vAhead.y * fAhead + vSide.y * fSide + vPos.y,
-                     vAhead.z * fAhead + vSide.z * fSide + vPos.z);
+    PblVector3 vDest = vAhead * fAhead + vSide * fSide + vPos;
     mOwner->GetLowLevel().SetNavigator_Slide(vDest, NULL);
 }
 
@@ -658,7 +654,7 @@ void AttackPatterns::DoFlank()
     {
         mFlankInView = false;
         PblVector3 vDir;
-        D3DXVec3Normalize(&vDir, &vDiff);
+        D3DXVec3Normalize(reinterpret_cast<D3DXVECTOR3*>(&vDir), reinterpret_cast<const D3DXVECTOR3*>(&vDiff));
 
         const Controllable* pEnemy = NULL;
         if (IsInEnemySights(PblMath::fPi / 3.0f, &pEnemy))
@@ -769,7 +765,7 @@ void AttackPatterns::DoMelee()
         float dz = vTarget.z - vPos.z;
         PblVector3 vFlat(dx, 0.0f, dz);
         PblVector3 vDir;
-        D3DXVec3Normalize(&vDir, &vFlat);
+        D3DXVec3Normalize(reinterpret_cast<D3DXVECTOR3*>(&vDir), reinterpret_cast<const D3DXVECTOR3*>(&vFlat));
 
         PblVector3 vJump(vDir.x * 0.70710677f, 0.70710677f, vDir.z * 0.70710677f);
         if (!(dx * dx + dz * dz > 25.0f))
@@ -800,7 +796,7 @@ void AttackPatterns::DoMelee()
 
         PblVector3 vJumpFlat(vJump.x, 0.0f, vJump.z);
         PblVector3 vLand;
-        D3DXVec3Normalize(&vLand, &vJumpFlat);
+        D3DXVec3Normalize(reinterpret_cast<D3DXVECTOR3*>(&vLand), reinterpret_cast<const D3DXVECTOR3*>(&vJumpFlat));
         vLand.x *= 25.0f;
         vLand.y *= 25.0f;
         vLand.z *= 25.0f;
@@ -893,7 +889,7 @@ bool AttackPatterns::IsGlanceMakingProgress()
 // FUNCTION: SWBF2 0x006612e0
 bool AttackPatterns::GonePastGlancePos() const
 {
-    PblVector3 vLeg(mGlancePos.x - mGlanceSrc.x, mGlancePos.y - mGlanceSrc.y, mGlancePos.z - mGlanceSrc.z);
+    PblVector3 vLeg = mGlancePos - mGlanceSrc;
     const PblVector3& vPos = GetMe()->GetMatrix().GetTranslation();
     return (vPos.x - mGlancePos.x) * vLeg.x + (vPos.y - mGlancePos.y) * vLeg.y +
            (vPos.z - mGlancePos.z) * vLeg.z > 0.0f;
@@ -922,7 +918,7 @@ void AttackPatterns::PickRetreatSpot()
 {
     PblVector3 vPos = GetMe()->GetMatrix().GetTranslation();
     PblVector3 vTarget = GetAttackHelper()->GetLastSeenTargetPos();
-    PblVector3 vAway = AIUtil::GetSafeNormalXZ(PblVector3(vPos.x - vTarget.x, vPos.y - vTarget.y, vPos.z - vTarget.z));
+    PblVector3 vAway = AIUtil::GetSafeNormalXZ((vPos - vTarget));
 
     float fSin, fCos;
     PblMath::SinCos(&fSin, &fCos, AIUtil::GetRandomFloat(-PblMath::fPi / 4.0f, PblMath::fPi / 4.0f));
@@ -930,7 +926,7 @@ void AttackPatterns::PickRetreatSpot()
     vAway.z = vAway.z * fCos + vAway.x * fSin;
     vAway.x = fX;
 
-    PblVector3 vDest(vAway.x * 100.0f + vPos.x, vAway.y * 100.0f + vPos.y, vAway.z * 100.0f + vPos.z);
+    PblVector3 vDest = vAway * 100.0f + vPos;
     mOwner->GetLowLevel().SetNavigator_Slide(vDest, NULL);
 }
 
@@ -1201,7 +1197,7 @@ void AttackPatterns::InitJetJumpCharge()
     const PblVector3& vMe = mMe.GetTranslation();
     PblVector3 vDiff(vTarget.x - vMe.x, vTarget.y - vMe.y, vTarget.z - vMe.z);
     PblVector3 vDir;
-    D3DXVec3Normalize(&vDir, &vDiff);
+    D3DXVec3Normalize(reinterpret_cast<D3DXVECTOR3*>(&vDir), reinterpret_cast<const D3DXVECTOR3*>(&vDiff));
     mOwner->GetLowLevel().SetJetJump(PblVector3((vDir.x + 0.0f) * 0.70710677f,
                                                 (vDir.y + 1.0f) * 0.70710677f,
                                                 (vDir.z + 0.0f) * 0.70710677f));

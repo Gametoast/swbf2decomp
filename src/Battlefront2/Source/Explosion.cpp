@@ -1,3 +1,4 @@
+#include <d3dx9math.h>
 #include <math.h>
 #include "PebbleFL/Common/PblVector.h"
 #include <stdio.h>
@@ -437,9 +438,6 @@ ExplosionClass* ExplosionClass::Derive(unsigned int uHash)
     return new ExplosionClass(this, uHash);
 }
 
-extern "C" PblVector3* __stdcall D3DXVec3Normalize(PblVector3* pOut, const PblVector3* pV);
-extern "C" PblQuaternion* __stdcall D3DXQuaternionNormalize(PblQuaternion* pOut, const PblQuaternion* pQ);
-extern "C" PblMatrix* __stdcall D3DXMatrixRotationQuaternion(PblMatrix* pOut, const PblQuaternion* pQ);
 
 static CollisionObject* GameObject_GetCollisionBase(GameObject* pObject)
 {
@@ -607,7 +605,7 @@ void ExplosionClass::CreateExplosion(const PblVector3& aPos, const DamageOwner& 
                 q._fS = fCosHalf;
                 PblQuaternion qNorm;
                 PblMatrix mRot;
-                D3DXMatrixRotationQuaternion(&mRot, D3DXQuaternionNormalize(&qNorm, &q));
+                D3DXMatrixRotationQuaternion(reinterpret_cast<D3DXMATRIX*>(&mRot), D3DXQuaternionNormalize(reinterpret_cast<D3DXQUATERNION*>(&qNorm), reinterpret_cast<const D3DXQUATERNION*>(&q)));
                 mChunkDescriptor.mMatrix = mRot;
                 mChunkDescriptor.mMatrix.SetTranslation(aPos);
 
@@ -631,7 +629,7 @@ void ExplosionClass::CreateExplosion(const PblVector3& aPos, const DamageOwner& 
                     vRand.z = (0.5f - rand.GetFloat()) * 2.0f;
                 }
                 PblVector3 vDir;
-                D3DXVec3Normalize(&vDir, &vRand);
+                D3DXVec3Normalize(reinterpret_cast<D3DXVECTOR3*>(&vDir), reinterpret_cast<const D3DXVECTOR3*>(&vRand));
                 float fSpeed;
                 if (mInitialChunkSpeedMin < 0.0f)
                 {
@@ -647,7 +645,7 @@ void ExplosionClass::CreateExplosion(const PblVector3& aPos, const DamageOwner& 
                 mChunkDescriptor.mVelocity.z = fSpeed * vDir.z;
 
                 PblVector3 vOut;
-                D3DXVec3Normalize(&vOut, &mChunkDescriptor.mVelocity);
+                D3DXVec3Normalize(reinterpret_cast<D3DXVECTOR3*>(&vOut), reinterpret_cast<const D3DXVECTOR3*>(&mChunkDescriptor.mVelocity));
                 mChunkDescriptor.mMatrix.m[3][0] = vOut.x * mChunkStartDistance + aPos.x;
                 mChunkDescriptor.mMatrix.m[3][1] = aPos.y + mChunkStartDistance * vOut.y;
                 mChunkDescriptor.mMatrix.m[3][2] = aPos.z + mChunkStartDistance * vOut.z;

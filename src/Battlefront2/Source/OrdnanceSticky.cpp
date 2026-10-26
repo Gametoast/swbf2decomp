@@ -1,3 +1,4 @@
+#include <d3dx9math.h>
 #include "OrdnanceSticky.h"
 
 #include <float.h>
@@ -15,13 +16,6 @@
 #include "RedEngineFL/Application/RedWater.h"
 #include "RedEngineFL/Graphics/RedModel.h"
 
-extern "C" PblVector3* __stdcall D3DXVec3Normalize(PblVector3* pOut, const PblVector3* pV);
-extern "C" PblVector3* __stdcall D3DXVec3TransformCoord(PblVector3* pOut, const PblVector3* pV,
-                                                        const PblMatrix* pM);
-extern "C" PblQuaternion* __stdcall D3DXQuaternionNormalize(PblQuaternion* pOut, const PblQuaternion* pQ);
-extern "C" PblMatrix* __stdcall D3DXMatrixRotationQuaternion(PblMatrix* pOut, const PblQuaternion* pQ);
-extern "C" PblMatrix* __stdcall D3DXMatrixMultiply(PblMatrix* pOut, const PblMatrix* pM1,
-                                                   const PblMatrix* pM2);
 
 extern bool netIsLateTurn;
 extern bool netFrameLock;
@@ -308,7 +302,7 @@ bool OrdnanceSticky::Update(float fDeltaTime)
         PblMatrix mBody = pObject->mCollisionModel->GetWorldMatrix(mStickInfo->mCollBodyID,
                                                                    pObject->GetMatrix(), pObject->GetPose());
         PblVector3 vWorld;
-        D3DXVec3TransformCoord(&vWorld, &mPosition, &mBody);
+        D3DXVec3TransformCoord(reinterpret_cast<D3DXVECTOR3*>(&vWorld), reinterpret_cast<const D3DXVECTOR3*>(&mPosition), reinterpret_cast<const D3DXMATRIX*>(&mBody));
         mPosition = vWorld;
     }
     SetRenderPos(mPosition);
@@ -341,7 +335,7 @@ void OrdnanceSticky::Render(unsigned char ucViewport, float fDist, unsigned int 
 
         PblQuaternion qRot;
         PblMatrix mRot;
-        D3DXMatrixRotationQuaternion(&mRot, D3DXQuaternionNormalize(&qRot, &mStickInfo->mLocalRotation));
+        D3DXMatrixRotationQuaternion(reinterpret_cast<D3DXMATRIX*>(&mRot), D3DXQuaternionNormalize(reinterpret_cast<D3DXQUATERNION*>(&qRot), reinterpret_cast<const D3DXQUATERNION*>(&mStickInfo->mLocalRotation)));
         for (int i = 0; i < 3; ++i)
         {
             for (int j = 0; j < 4; ++j)
@@ -356,7 +350,7 @@ void OrdnanceSticky::Render(unsigned char ucViewport, float fDist, unsigned int 
         {
             PblMatrix mBody = pObject->mCollisionModel->GetWorldMatrix(mStickInfo->mCollBodyID,
                                                                        pObject->GetMatrix(), pObject->GetPose());
-            D3DXMatrixMultiply(&mat, &mat, &mBody);
+            D3DXMatrixMultiply(reinterpret_cast<D3DXMATRIX*>(&mat), reinterpret_cast<const D3DXMATRIX*>(&mat), reinterpret_cast<const D3DXMATRIX*>(&mBody));
         }
     }
     else if (pClass->mAlignVertical)
@@ -401,9 +395,7 @@ bool OrdnanceSticky::CheckCollision()
         CollisionObject* pHitObject = 0;
         const GameObject* pIgnore = GetOwner();
         const float fLength = fDist + 0.2f;
-        vStart.x -= vDir.x * 0.1f;
-        vStart.y -= vDir.y * 0.1f;
-        vStart.z -= vDir.z * 0.1f;
+        vStart -= vDir * 0.1f;
         PblVector3 vNormal;
         const float fHit = CollisionManager::RayHit(vStart, vDir, fLength, pHitObject, &vNormal, &pIgnore, 1,
                                                     mCheckStaticCollision ? 0x13BA : 0x132A, true);
@@ -454,7 +446,7 @@ bool OrdnanceSticky::Collide(CollisionObject* pObject, const PblVector3& vPos,
         {
             bStick = (pClass->mStickTypes & (1 << AsDamageable(pVictim)->mHealthType)) != 0;
             PblVector3 vDir;
-            D3DXVec3Normalize(&vDir, &mVelocity);
+            D3DXVec3Normalize(reinterpret_cast<D3DXVECTOR3*>(&vDir), reinterpret_cast<const D3DXVECTOR3*>(&mVelocity));
             AsDamageable(pVictim)->ApplyDamage(GetDamage(), vDir, vPos, iBodyId, 0xFFFFFFFF);
         }
     }
@@ -480,7 +472,7 @@ bool OrdnanceSticky::Collide(CollisionObject* pObject, const PblVector3& vPos,
         {
             PblMatrix mBody = pModel->GetWorldMatrix(iBodyId, pObject->GetMatrix(), pObject->GetPose());
             const PblMatrix mInverse = mBody.GetInverseFast();
-            D3DXMatrixMultiply(&mStick, &mStick, &mInverse);
+            D3DXMatrixMultiply(reinterpret_cast<D3DXMATRIX*>(&mStick), reinterpret_cast<const D3DXMATRIX*>(&mStick), reinterpret_cast<const D3DXMATRIX*>(&mInverse));
             mStickInfo->mCollBodyID = iBodyId;
         }
         else
@@ -508,9 +500,7 @@ bool OrdnanceSticky::Collide(CollisionObject* pObject, const PblVector3& vPos,
             mPosition = PblVector3(vPos.x + vNormal.x * 0.1f, vPos.y + vNormal.y * 0.1f,
                                    vPos.z + vNormal.z * 0.1f);
 
-            mVelocity.x -= vNormal.x * fDot;
-            mVelocity.y -= vNormal.y * fDot;
-            mVelocity.z -= vNormal.z * fDot;
+            mVelocity -= vNormal * fDot;
             float fSlow = -fFriction * fDot * (fRebound + 1.0f) /
                           sqrtf(mVelocity.x * mVelocity.x + mVelocity.y * mVelocity.y +
                                 mVelocity.z * mVelocity.z);
@@ -520,9 +510,7 @@ bool OrdnanceSticky::Collide(CollisionObject* pObject, const PblVector3& vPos,
             mVelocity.z -= mVelocity.z * fSlow;
 
             const float fBounce = fDot * fRebound;
-            mVelocity.x -= vNormal.x * fBounce;
-            mVelocity.y -= vNormal.y * fBounce;
-            mVelocity.z -= vNormal.z * fBounce;
+            mVelocity -= vNormal * fBounce;
             if (mVelocity.x * mVelocity.x + mVelocity.y * mVelocity.y + mVelocity.z * mVelocity.z < 1.0f)
             {
                 ++mNumBounces;

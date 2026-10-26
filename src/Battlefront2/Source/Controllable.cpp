@@ -1,3 +1,4 @@
+#include <d3dx9math.h>
 #include <float.h>
 #include "PebbleFL/Common/PblVector.h"
 #include <stdio.h>
@@ -27,8 +28,6 @@ public:
     static PblHash rttiHashEntityFlyer;
 };
 
-extern "C" PblMatrix* __stdcall D3DXMatrixMultiply(PblMatrix* pOut, const PblMatrix* pM1,
-                                                   const PblMatrix* pM2);
 
 
 
@@ -887,7 +886,7 @@ void ControllableClass::UpdatePilotAnimation(Controllable* pPilot, const RedPose
         if (mAnimatedPilotNodeFlag)
         {
             PblMatrix mPilot;
-            D3DXMatrixMultiply(&mPilot, pNode, &mMatrix);
+            D3DXMatrixMultiply(reinterpret_cast<D3DXMATRIX*>(&mPilot), reinterpret_cast<const D3DXMATRIX*>(pNode), reinterpret_cast<const D3DXMATRIX*>(&mMatrix));
             pPilot->SetPilotInfo(mPilot, vOffset, mPilotAnimation, mIsPilotExposed,
                                  f1, f2, f3, fDeltaTime);
         }
@@ -897,12 +896,12 @@ void ControllableClass::UpdatePilotAnimation(Controllable* pPilot, const RedPose
             if (pNode)
             {
                 PblMatrix mSeat;
-                D3DXMatrixMultiply(&mSeat, &mPilotOffsetMatrix, pNode);
-                D3DXMatrixMultiply(&mPilot, &mSeat, &mMatrix);
+                D3DXMatrixMultiply(reinterpret_cast<D3DXMATRIX*>(&mSeat), reinterpret_cast<const D3DXMATRIX*>(&mPilotOffsetMatrix), reinterpret_cast<const D3DXMATRIX*>(pNode));
+                D3DXMatrixMultiply(reinterpret_cast<D3DXMATRIX*>(&mPilot), reinterpret_cast<const D3DXMATRIX*>(&mSeat), reinterpret_cast<const D3DXMATRIX*>(&mMatrix));
             }
             else
             {
-                D3DXMatrixMultiply(&mPilot, &mPilotOffsetMatrix, &mMatrix);
+                D3DXMatrixMultiply(reinterpret_cast<D3DXMATRIX*>(&mPilot), reinterpret_cast<const D3DXMATRIX*>(&mPilotOffsetMatrix), reinterpret_cast<const D3DXMATRIX*>(&mMatrix));
             }
             pPilot->SetPilotInfo(mPilot, vOffset, mPilotAnimation, mIsPilotExposed,
                                  f1, f2, f3, fDeltaTime);
@@ -990,9 +989,9 @@ void Controllable::GetPilotMatrix(const PblMatrix& mIn, PblMatrix& mOut)
         const PblMatrix& mPilotMatrix = mPilot->GetMatrix();
         const PblMatrix mInverse = static_cast<EntitySoldier*>(mPilot)->mLastVehicleMatrix.GetInverseFast();
         PblMatrix mRelative;
-        D3DXMatrixMultiply(&mRelative, &mPilotMatrix, &mInverse);
+        D3DXMatrixMultiply(reinterpret_cast<D3DXMATRIX*>(&mRelative), reinterpret_cast<const D3DXMATRIX*>(&mPilotMatrix), reinterpret_cast<const D3DXMATRIX*>(&mInverse));
         PblMatrix mResult;
-        D3DXMatrixMultiply(&mResult, &mRelative, &mIn);
+        D3DXMatrixMultiply(reinterpret_cast<D3DXMATRIX*>(&mResult), reinterpret_cast<const D3DXMATRIX*>(&mRelative), reinterpret_cast<const D3DXMATRIX*>(&mIn));
         mOut = mResult;
     }
 }

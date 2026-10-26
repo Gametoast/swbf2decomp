@@ -1,3 +1,4 @@
+#include <d3dx9math.h>
 #include "RedEngineFL/Util/RedCommandConsole.h"
 
 #include <float.h>
@@ -104,13 +105,6 @@ EntitySoldierClass::~EntitySoldierClass()
     delete mAddon;
 }
 
-extern "C" PblVector3* __stdcall D3DXVec3TransformCoord(PblVector3* pOut, const PblVector3* pV,
-                                                        const PblMatrix* pM);
-extern "C" PblVector3* __stdcall D3DXVec3TransformNormal(PblVector3* pOut, const PblVector3* pV,
-                                                         const PblMatrix* pM);
-extern "C" PblMatrix* __stdcall D3DXMatrixMultiply(PblMatrix* pOut, const PblMatrix* pM1,
-                                                   const PblMatrix* pM2);
-extern "C" PblVector3* __stdcall D3DXVec3Normalize(PblVector3* pOut, const PblVector3* pV);
 
 PblMatrix NormalMatrix(const PblVector3& vDir, const PblVector3& vNormal, const PblVector3& vPos);
 
@@ -250,7 +244,7 @@ void EntitySoldier::SetPosition(const PblVector3& vPosition)
     mMatrix.SetTranslation(vPosition);
 
     PblVector3 center;
-    D3DXVec3TransformCoord(&center, &mModel->_mModel->_BoundingSphere.GetCenter(), &mMatrix);
+    D3DXVec3TransformCoord(reinterpret_cast<D3DXVECTOR3*>(&center), reinterpret_cast<const D3DXVECTOR3*>(&mModel->_mModel->_BoundingSphere.GetCenter()), reinterpret_cast<const D3DXMATRIX*>(&mMatrix));
     SetCollisionCenter(center);
     RecalculateAABB();
 }
@@ -261,7 +255,7 @@ void EntitySoldier::SetMatrix(const PblMatrix& matrix)
     mMatrix = matrix;
 
     PblVector3 center;
-    D3DXVec3TransformCoord(&center, &mModel->_mModel->_BoundingSphere.GetCenter(), &mMatrix);
+    D3DXVec3TransformCoord(reinterpret_cast<D3DXVECTOR3*>(&center), reinterpret_cast<const D3DXVECTOR3*>(&mModel->_mModel->_BoundingSphere.GetCenter()), reinterpret_cast<const D3DXMATRIX*>(&mMatrix));
     SetCollisionCenter(center);
     RecalculateAABB();
 }
@@ -422,8 +416,8 @@ void SoldierAnimator::ModifyLegMatrixByVehicle(const PblMatrix& lastVehicleMatri
 {
     PblMatrix ma;
     PblMatrix mab;
-    D3DXMatrixMultiply(&ma, &mLegMatrix, &lastVehicleMatrix);
-    D3DXMatrixMultiply(&mab, &ma, &vehicleMatrix);
+    D3DXMatrixMultiply(reinterpret_cast<D3DXMATRIX*>(&ma), reinterpret_cast<const D3DXMATRIX*>(&mLegMatrix), reinterpret_cast<const D3DXMATRIX*>(&lastVehicleMatrix));
+    D3DXMatrixMultiply(reinterpret_cast<D3DXMATRIX*>(&mab), reinterpret_cast<const D3DXMATRIX*>(&ma), reinterpret_cast<const D3DXMATRIX*>(&vehicleMatrix));
     mLegMatrix = NormalMatrix(mab.GetZAxis(), mLegMatrix.GetYAxis(),
                             mab.GetTranslation());
 }
@@ -681,7 +675,7 @@ void EntitySoldier::UpdateFoleyFX(const RedPose& pose, const PblMatrix& mWorld)
     const float fLeftFoot = pose.Find(0x1af77461)->m[3][1];
     const float fRightFoot = pose.Find(0x2f06fa86)->m[3][1];
     PblMatrix mRoot;
-    D3DXMatrixMultiply(&mRoot, pose.Find(0x16e27226), &mWorld);
+    D3DXMatrixMultiply(reinterpret_cast<D3DXMATRIX*>(&mRoot), reinterpret_cast<const D3DXMATRIX*>(pose.Find(0x16e27226)), reinterpret_cast<const D3DXMATRIX*>(&mWorld));
     const PblVector3 vRoot = mRoot.GetTranslation();
 
     float fWaterHeight = -FLT_MAX;
@@ -719,14 +713,14 @@ void EntitySoldier::UpdateFoleyFX(const RedPose& pose, const PblMatrix& mWorld)
                 if (RedTerrain::_bEnable)
                 {
                     PblMatrix mFoot;
-                    D3DXMatrixMultiply(&mFoot, pose.Find(0x1af77461), &mWorld);
+                    D3DXMatrixMultiply(reinterpret_cast<D3DXMATRIX*>(&mFoot), reinterpret_cast<const D3DXMATRIX*>(pose.Find(0x1af77461)), reinterpret_cast<const D3DXMATRIX*>(&mWorld));
                     RedTerrain::GetInterpolatedHeight(mFoot.m[3][0], mFoot.m[3][2]);
                 }
                 if (bInWater)
                 {
                     PblVector3 vDir(GetVelocity().x, 0.0f, GetVelocity().z);
                     PblVector3 vNormal;
-                    D3DXVec3Normalize(&vNormal, &vDir);
+                    D3DXVec3Normalize(reinterpret_cast<D3DXVECTOR3*>(&vNormal), reinterpret_cast<const D3DXVECTOR3*>(&vDir));
                     WaterEffect::AddDirectionalWaterEffect(mClass->mWakeWaterSplashEffect,
                                                            GetPosition(), vNormal);
                 }
@@ -754,14 +748,14 @@ void EntitySoldier::UpdateFoleyFX(const RedPose& pose, const PblMatrix& mWorld)
                 if (RedTerrain::_bEnable)
                 {
                     PblMatrix mFoot;
-                    D3DXMatrixMultiply(&mFoot, pose.Find(0x2f06fa86), &mWorld);
+                    D3DXMatrixMultiply(reinterpret_cast<D3DXMATRIX*>(&mFoot), reinterpret_cast<const D3DXMATRIX*>(pose.Find(0x2f06fa86)), reinterpret_cast<const D3DXMATRIX*>(&mWorld));
                     RedTerrain::GetInterpolatedHeight(mFoot.m[3][0], mFoot.m[3][2]);
                 }
                 if (bInWater)
                 {
                     PblVector3 vDir(GetVelocity().x, 0.0f, GetVelocity().z);
                     PblVector3 vNormal;
-                    D3DXVec3Normalize(&vNormal, &vDir);
+                    D3DXVec3Normalize(reinterpret_cast<D3DXVECTOR3*>(&vNormal), reinterpret_cast<const D3DXVECTOR3*>(&vDir));
                     WaterEffect::AddDirectionalWaterEffect(mClass->mWakeWaterSplashEffect,
                                                            GetPosition(), vNormal);
                 }
@@ -1231,10 +1225,6 @@ void EntitySoldier::TurnOffJetEffect()
     }
 }
 
-extern "C" PblVector3* __stdcall D3DXVec3TransformNormal(PblVector3* pOut, const PblVector3* pV,
-                                                         const PblMatrix* pM);
-extern "C" PblQuaternion* __stdcall D3DXQuaternionNormalize(PblQuaternion* pOut, const PblQuaternion* pQ);
-extern "C" PblMatrix* __stdcall D3DXMatrixRotationQuaternion(PblMatrix* pOut, const PblQuaternion* pQ);
 
 extern bool netFrameLock;
 extern bool netIsLocalTurn;
@@ -1580,7 +1570,7 @@ void EntitySoldier::Render(unsigned char ucLod, float fFade, unsigned int uiFlag
         bReflected = true;
         uiReflectFlags = (uiFlags & ~0x10000) | 0x10000100;
         PblMatrix mTemp;
-        D3DXMatrixMultiply(&mTemp, &mWorld, &mReflection);
+        D3DXMatrixMultiply(reinterpret_cast<D3DXMATRIX*>(&mTemp), reinterpret_cast<const D3DXMATRIX*>(&mWorld), reinterpret_cast<const D3DXMATRIX*>(&mReflection));
         mReflection = mTemp;
     }
 
@@ -1795,7 +1785,7 @@ void EntitySoldier::Render(unsigned char ucLod, float fFade, unsigned int uiFlag
                         PblVector3 vDir = mCharacter->mVehicle->mEyeDir;
                         PblVector3 vLocal;
                         PblMatrix mInverse = mMatrix.GetInverseFast();
-                        D3DXVec3TransformNormal(&vLocal, &vDir, &mInverse);
+                        D3DXVec3TransformNormal(reinterpret_cast<D3DXVECTOR3*>(&vLocal), reinterpret_cast<const D3DXVECTOR3*>(&vDir), reinterpret_cast<const D3DXMATRIX*>(&mInverse));
                         PblVector3 vUp(pHead->m[1][0], pHead->m[1][1], pHead->m[1][2]);
                         float fDot = vUp.y * vLocal.y + vLocal.x * vUp.x + vUp.z * vLocal.z;
                         if (fDot > -1.0f)
@@ -1805,7 +1795,7 @@ void EntitySoldier::Render(unsigned char ucLod, float fFade, unsigned int uiFlag
                                 PblVector3 vPerp(vLocal.x - fDot * vUp.x, vLocal.y - fDot * vUp.y,
                                                  vLocal.z - fDot * vUp.z);
                                 PblVector3 vSide;
-                                D3DXVec3Normalize(&vSide, &vPerp);
+                                D3DXVec3Normalize(reinterpret_cast<D3DXVECTOR3*>(&vSide), reinterpret_cast<const D3DXVECTOR3*>(&vPerp));
                                 float fSin = (float)sqrt(1.0f - 0.4f * 0.4f);
                                 vLocal = PblVector3(vUp.x * 0.4f + vSide.x * fSin, vUp.y * 0.4f + vSide.y * fSin,
                                                     vUp.z * 0.4f + vSide.z * fSin);
@@ -1876,7 +1866,7 @@ void EntitySoldier::Render(unsigned char ucLod, float fFade, unsigned int uiFlag
                     PblMatrix mFoot = mWorld;
                     if (const PblMatrix* pRightFoot = pose.Find(0x2f06fa86))
                     {
-                        D3DXMatrixMultiply(&mFoot, pRightFoot, &mWorld);
+                        D3DXMatrixMultiply(reinterpret_cast<D3DXMATRIX*>(&mFoot), reinterpret_cast<const D3DXMATRIX*>(pRightFoot), reinterpret_cast<const D3DXMATRIX*>(&mWorld));
                     }
                     PblVector3 vRightFoot = mFoot.GetTranslation();
                     const PblMatrix* pLeftFoot = pose.Find(0x1af77461);
@@ -1884,7 +1874,7 @@ void EntitySoldier::Render(unsigned char ucLod, float fFade, unsigned int uiFlag
                     {
                         pLeftFoot = &gMatrixIdentity;
                     }
-                    D3DXMatrixMultiply(&mFoot, pLeftFoot, &mWorld);
+                    D3DXMatrixMultiply(reinterpret_cast<D3DXMATRIX*>(&mFoot), reinterpret_cast<const D3DXMATRIX*>(pLeftFoot), reinterpret_cast<const D3DXMATRIX*>(&mWorld));
                     PblVector3 vLeftFoot = mFoot.GetTranslation();
                     const PblVector3& vVelocity = GetVelocity();
                     float fSpeed2 = vVelocity.x * vVelocity.x + vVelocity.y * vVelocity.y + vVelocity.z * vVelocity.z;
@@ -1928,7 +1918,7 @@ void EntitySoldier::Render(unsigned char ucLod, float fFade, unsigned int uiFlag
                 if (mClass->mFootSlideEffect && fDeltaTime > 0.0f)
                 {
                     PblMatrix mRightFoot;
-                    D3DXMatrixMultiply(&mRightFoot, pose.Find(0x2f06fa86), &mWorld);
+                    D3DXMatrixMultiply(reinterpret_cast<D3DXMATRIX*>(&mRightFoot), reinterpret_cast<const D3DXMATRIX*>(pose.Find(0x2f06fa86)), reinterpret_cast<const D3DXMATRIX*>(&mWorld));
                     bool bSlide = false;
                     if (!(mFlags & flags_rightFootInWater) && (mFlags & flags_isGrounded) &&
                         m_vPosFootRight.x * m_vPosFootRight.x + m_vPosFootRight.y * m_vPosFootRight.y +
@@ -1962,7 +1952,7 @@ void EntitySoldier::Render(unsigned char ucLod, float fFade, unsigned int uiFlag
                     }
 
                     PblMatrix mLeftFoot;
-                    D3DXMatrixMultiply(&mLeftFoot, pose.Find(0x1af77461), &mWorld);
+                    D3DXMatrixMultiply(reinterpret_cast<D3DXMATRIX*>(&mLeftFoot), reinterpret_cast<const D3DXMATRIX*>(pose.Find(0x1af77461)), reinterpret_cast<const D3DXMATRIX*>(&mWorld));
                     bSlide = false;
                     if (!(mFlags & flags_leftFootInWater) && (mFlags & flags_isGrounded) &&
                         m_vPosFootLeft.x * m_vPosFootLeft.x + m_vPosFootLeft.y * m_vPosFootLeft.y +
@@ -2048,7 +2038,7 @@ void EntitySoldier::Render(unsigned char ucLod, float fFade, unsigned int uiFlag
                 PblMatrix mChoke;
                 if (pBone)
                 {
-                    D3DXMatrixMultiply(&mChoke, pBone, &mWorld);
+                    D3DXMatrixMultiply(reinterpret_cast<D3DXMATRIX*>(&mChoke), reinterpret_cast<const D3DXMATRIX*>(pBone), reinterpret_cast<const D3DXMATRIX*>(&mWorld));
                 }
                 else
                 {
@@ -2178,7 +2168,7 @@ void EntitySoldier::Render(unsigned char ucLod, float fFade, unsigned int uiFlag
         if (mSoldierAnimatorLowRes->GetRootMatrixAnimation(*this, mRoot))
         {
             PblMatrix mTemp;
-            D3DXMatrixMultiply(&mTemp, &mRoot, &mWorld);
+            D3DXMatrixMultiply(reinterpret_cast<D3DXMATRIX*>(&mTemp), reinterpret_cast<const D3DXMATRIX*>(&mRoot), reinterpret_cast<const D3DXMATRIX*>(&mWorld));
             if (mState == SoldierState::FLY || mState == SoldierState::TUMBLE)
             {
                 mRoot = mTemp;
@@ -2367,7 +2357,7 @@ void EntitySoldier::Render(unsigned char ucLod, float fFade, unsigned int uiFlag
             if (const PblMatrix* pBone = pPose->Find(pFlag->GetCarriedSoldierBoneHash()))
             {
                 PblMatrix mFlag;
-                D3DXMatrixMultiply(&mFlag, pBone, &mWorld);
+                D3DXMatrixMultiply(reinterpret_cast<D3DXMATRIX*>(&mFlag), reinterpret_cast<const D3DXMATRIX*>(pBone), reinterpret_cast<const D3DXMATRIX*>(&mWorld));
                 reinterpret_cast<GameObject*>(pFlag)->SetMatrix(mFlag);
                 pFlag->RenderHelper(ucLod, fAlpha, uiModelFlags);
             }
@@ -2505,7 +2495,7 @@ bool EntitySoldier::CollisionCallback(const CollisionResult* pResult, CollisionO
                     {
                         PblVector3 vBlend = Interpolate(vNormal, mGroundNormal, 0.5f);
                         PblVector3 vGround;
-                        D3DXVec3Normalize(&vGround, &vBlend);
+                        D3DXVec3Normalize(reinterpret_cast<D3DXVECTOR3*>(&vGround), reinterpret_cast<const D3DXVECTOR3*>(&vBlend));
                         mFlags |= flags_isGrounded;
                         mGroundNormal = vGround;
                     }
@@ -2641,7 +2631,7 @@ bool EntitySoldier::CollisionCallback(const CollisionResult* pResult, CollisionO
                 if (vPush.x != 0.0f || vPush.z != 0.0f)
                 {
                     PblVector3 vFlat;
-                    D3DXVec3Normalize(&vFlat, &vPush);
+                    D3DXVec3Normalize(reinterpret_cast<D3DXVECTOR3*>(&vFlat), reinterpret_cast<const D3DXVECTOR3*>(&vPush));
                     vPush = vFlat;
                 }
             }
@@ -2799,22 +2789,22 @@ bool EntitySoldier::PostCollisionUpdate(float fDeltaTime)
                 {
 
                     PblVector3 vSlopeDir;
-                    D3DXVec3Normalize(&vSlopeDir, &vSlope);
+                    D3DXVec3Normalize(reinterpret_cast<D3DXVECTOR3*>(&vSlopeDir), reinterpret_cast<const D3DXVECTOR3*>(&vSlope));
                     PblVector3 vBlend = Interpolate(vFront, vSlopeDir, 0.1f);
                     PblVector3 vNewFront;
-                    D3DXVec3Normalize(&vNewFront, &vBlend);
+                    D3DXVec3Normalize(reinterpret_cast<D3DXVECTOR3*>(&vNewFront), reinterpret_cast<const D3DXVECTOR3*>(&vBlend));
                     vFront = vNewFront;
 
                     PblVector3 vSide = CrossProduct(vFront, mGroundNormal);
                     vBlend = Interpolate(vRight, PblVector3(-vSide.x, -vSide.y, -vSide.z), 0.1f);
                     PblVector3 vNewRight;
-                    D3DXVec3Normalize(&vNewRight, &vBlend);
+                    D3DXVec3Normalize(reinterpret_cast<D3DXVECTOR3*>(&vNewRight), reinterpret_cast<const D3DXVECTOR3*>(&vBlend));
                     vRight = vNewRight;
 
                     vBlend = PblVector3(vNewFront.y * vNewRight.z - vNewFront.z * vNewRight.y,
                                         vNewRight.x * vNewFront.z - vNewFront.x * vNewRight.z,
                                         vNewFront.x * vNewRight.y - vNewRight.x * vNewFront.y);
-                    D3DXVec3Normalize(&vNewFront, &vBlend);
+                    D3DXVec3Normalize(reinterpret_cast<D3DXVECTOR3*>(&vNewFront), reinterpret_cast<const D3DXVECTOR3*>(&vBlend));
                     vUp = vNewFront;
 
                     const PblVector3& vOrigin = mMatrix.GetTranslation();
@@ -2918,12 +2908,12 @@ void EntitySoldier::UpdateWeaponAndAimer(float fDeltaTime)
         PblMath::SinCos(&fSin, &fCos, mPitchOffset + mPitchValue);
         PblVector3 vLocal(0.0f, fSin, fCos);
         PblVector3 vEyeDir;
-        D3DXVec3TransformNormal(&vEyeDir, &vLocal, &mMatrix);
+        D3DXVec3TransformNormal(reinterpret_cast<D3DXVECTOR3*>(&vEyeDir), reinterpret_cast<const D3DXVECTOR3*>(&vLocal), reinterpret_cast<const D3DXMATRIX*>(&mMatrix));
         mEyeDir = vEyeDir;
     }
 
     PblVector3 vEyePoint;
-    D3DXVec3TransformCoord(&vEyePoint, &sEyePointOffset[mStanceIndex], &mMatrix);
+    D3DXVec3TransformCoord(reinterpret_cast<D3DXVECTOR3*>(&vEyePoint), reinterpret_cast<const D3DXVECTOR3*>(&sEyePointOffset[mStanceIndex]), reinterpret_cast<const D3DXMATRIX*>(&mMatrix));
     mEyePoint = vEyePoint;
 
     float fForward = sEyePointRelativeWeaponOffset[mStanceIndex].z;
@@ -3002,7 +2992,7 @@ void EntitySoldier::UpdateWeaponAndAimer(float fDeltaTime)
 
             PblQuaternion qUnit;
             PblMatrix mCamera;
-            D3DXMatrixRotationQuaternion(&mCamera, D3DXQuaternionNormalize(&qUnit, &qCamera));
+            D3DXMatrixRotationQuaternion(reinterpret_cast<D3DXMATRIX*>(&mCamera), D3DXQuaternionNormalize(reinterpret_cast<D3DXQUATERNION*>(&qUnit), reinterpret_cast<const D3DXQUATERNION*>(&qCamera)));
             mCamera.m[3][0] = gVectorZero.x;
             mCamera.m[3][1] = gVectorZero.y;
             mCamera.m[3][2] = gVectorZero.z;
@@ -3055,7 +3045,7 @@ void EntitySoldier::UpdateWeaponAndAimer(float fDeltaTime)
         PblVector3 vAim(mTargetInfo.mAimPoint.x - vFire.x, mTargetInfo.mAimPoint.y - vFire.y,
                         mTargetInfo.mAimPoint.z - vFire.z);
         PblVector3 vAimDir;
-        D3DXVec3Normalize(&vAimDir, &vAim);
+        D3DXVec3Normalize(reinterpret_cast<D3DXVECTOR3*>(&vAimDir), reinterpret_cast<const D3DXVECTOR3*>(&vAim));
         mAimer.SetSoldierInfo(vFire, vAimDir);
     }
     else
@@ -3154,7 +3144,7 @@ void EntitySoldier::MoveOffGround(float fDeltaTime, float fTurn, float fForward,
         mRotation.m[3][2] = 0.0f;
         mRotation.m[3][3] = 1.0f;
         PblMatrix mNew;
-        D3DXMatrixMultiply(&mNew, &mRotation, &mMatrix);
+        D3DXMatrixMultiply(reinterpret_cast<D3DXMATRIX*>(&mNew), reinterpret_cast<const D3DXMATRIX*>(&mRotation), reinterpret_cast<const D3DXMATRIX*>(&mMatrix));
         SetMatrix(mNew);
     }
     else
@@ -3377,7 +3367,7 @@ GameObject* EntitySoldier::TryBoard(bool bArg, bool& rIsVehicle)
                                   box._vMax.z + (GetCollisionRadius() + 0.5f));
             PblMatrix mInverse = pObject->GetMatrix().GetInverseFast();
             PblVector3 vLocal;
-            D3DXVec3TransformCoord(&vLocal, &GetCollisionCenter(), &mInverse);
+            D3DXVec3TransformCoord(reinterpret_cast<D3DXVECTOR3*>(&vLocal), reinterpret_cast<const D3DXVECTOR3*>(&GetCollisionCenter()), reinterpret_cast<const D3DXMATRIX*>(&mInverse));
             if (vLocal.x < vMin.x || vMax.x < vLocal.x || vLocal.y < vMin.y || vMax.y < vLocal.y ||
                 vLocal.z < vMin.z || vMax.z < vLocal.z)
             {
@@ -3772,10 +3762,10 @@ void EntitySoldier::SetupCameraTrackMatrix(PblMatrix& rMatrix, float fDeltaTime)
         float fCos;
         PblMath::SinCos(&fSin, &fCos, mPitchOffset + mPitchValue);
         PblVector3 vLocal(0.0f, fSin, fCos);
-        D3DXVec3TransformNormal(&vAimDir, &vLocal, &mAim);
+        D3DXVec3TransformNormal(reinterpret_cast<D3DXVECTOR3*>(&vAimDir), reinterpret_cast<const D3DXVECTOR3*>(&vLocal), reinterpret_cast<const D3DXMATRIX*>(&mAim));
     }
     PblVector3 vEye;
-    D3DXVec3TransformCoord(&vEye, &sEyePointOffset[mStanceIndex], &mAim);
+    D3DXVec3TransformCoord(reinterpret_cast<D3DXVECTOR3*>(&vEye), reinterpret_cast<const D3DXVECTOR3*>(&sEyePointOffset[mStanceIndex]), reinterpret_cast<const D3DXMATRIX*>(&mAim));
 
     bool bSpectator = false;
     if (NetGame::IsEnabled() &&
@@ -4043,7 +4033,7 @@ int EntitySoldier::GetTargetBodyID(const PblVector3& vPos, const PblVector3& vDi
 PblVector3 EntitySoldier::GetTargetPoint(const PblVector3& vPos, const PblVector3& vDir, int iBodyId) const
 {
     PblVector3 vPoint;
-    D3DXVec3TransformCoord(&vPoint, &mClass->mTargetPointOffset[mStanceIndex], &mMatrix);
+    D3DXVec3TransformCoord(reinterpret_cast<D3DXVECTOR3*>(&vPoint), reinterpret_cast<const D3DXVECTOR3*>(&mClass->mTargetPointOffset[mStanceIndex]), reinterpret_cast<const D3DXMATRIX*>(&mMatrix));
     return vPoint;
 }
 
@@ -6054,9 +6044,9 @@ bool EntitySoldier::Update(float fDeltaTime)
             PblMatrix mObject = mStandingOnObj->mCollisionModel->GetWorldMatrix(
                 mStandingOnBody, mStandingOnObj->GetMatrix(), mStandingOnObj->GetPose());
             PblMatrix mLocal;
-            D3DXMatrixMultiply(&mLocal, &mMatrix, &mLastVehicleMatrix);
+            D3DXMatrixMultiply(reinterpret_cast<D3DXMATRIX*>(&mLocal), reinterpret_cast<const D3DXMATRIX*>(&mMatrix), reinterpret_cast<const D3DXMATRIX*>(&mLastVehicleMatrix));
             PblMatrix mNew;
-            D3DXMatrixMultiply(&mNew, &mLocal, &mObject);
+            D3DXMatrixMultiply(reinterpret_cast<D3DXMATRIX*>(&mNew), reinterpret_cast<const D3DXMATRIX*>(&mLocal), reinterpret_cast<const D3DXMATRIX*>(&mObject));
             const PblVector3& vUp = mMatrix.GetYAxis();
             const PblVector3& vFront = mNew.GetZAxis();
             if (fabs(vUp.y * vFront.y + vUp.x * vFront.x + vUp.z * vFront.z) < 0.99f)
@@ -6078,7 +6068,7 @@ bool EntitySoldier::Update(float fDeltaTime)
             if (fLastSpeed > fObjectSpeed && (fSpeedLost = fLastSpeed - fObjectSpeed) > 8.2f)
             {
                 PblVector3 vDir;
-                D3DXVec3Normalize(&vDir, &mStandingOnObjLastVelocity);
+                D3DXVec3Normalize(reinterpret_cast<D3DXVECTOR3*>(&vDir), reinterpret_cast<const D3DXVECTOR3*>(&mStandingOnObjLastVelocity));
                 ApplyPush(PblVector3(vDir.x + 0.0f, vDir.y + 0.3f, vDir.z + 0.0f), fSpeedLost, false);
             }
             else if (mStandingOnObj->GetMatrix().m[1][1] < 0.55f)
@@ -6114,7 +6104,7 @@ bool EntitySoldier::Update(float fDeltaTime)
         if (pHit)
         {
             PblVector3 vHitNormal;
-            D3DXVec3Normalize(&vHitNormal, &vNormal);
+            D3DXVec3Normalize(reinterpret_cast<D3DXVECTOR3*>(&vHitNormal), reinterpret_cast<const D3DXVECTOR3*>(&vNormal));
             vNormal = vHitNormal;
             if (vHitNormal.y > 0.5f)
             {
@@ -6132,7 +6122,7 @@ bool EntitySoldier::Update(float fDeltaTime)
         }
 
         PblVector3 vAxis;
-        D3DXVec3Normalize(&vAxis, &vUp);
+        D3DXVec3Normalize(reinterpret_cast<D3DXVECTOR3*>(&vAxis), reinterpret_cast<const D3DXVECTOR3*>(&vUp));
         mMatrix.m[1][0] = vAxis.x;
         mMatrix.m[1][1] = vAxis.y;
         mMatrix.m[1][2] = vAxis.z;
@@ -6141,7 +6131,7 @@ bool EntitySoldier::Update(float fDeltaTime)
         PblVector3 vCross(mMatrix.m[2][2] * mMatrix.m[1][1] - mMatrix.m[2][1] * mMatrix.m[1][2],
                           mMatrix.m[2][0] * mMatrix.m[1][2] - mMatrix.m[1][0] * mMatrix.m[2][2],
                           mMatrix.m[1][0] * mMatrix.m[2][1] - mMatrix.m[2][0] * mMatrix.m[1][1]);
-        D3DXVec3Normalize(&vAxis, &vCross);
+        D3DXVec3Normalize(reinterpret_cast<D3DXVECTOR3*>(&vAxis), reinterpret_cast<const D3DXVECTOR3*>(&vCross));
         mMatrix.m[0][0] = vAxis.x;
         mMatrix.m[0][1] = vAxis.y;
         mMatrix.m[0][2] = vAxis.z;
@@ -6150,7 +6140,7 @@ bool EntitySoldier::Update(float fDeltaTime)
         vCross = PblVector3(mMatrix.m[1][2] * mMatrix.m[0][1] - mMatrix.m[1][1] * mMatrix.m[0][2],
                             mMatrix.m[1][0] * mMatrix.m[0][2] - mMatrix.m[0][0] * mMatrix.m[1][2],
                             mMatrix.m[0][0] * mMatrix.m[1][1] - mMatrix.m[1][0] * mMatrix.m[0][1]);
-        D3DXVec3Normalize(&vAxis, &vCross);
+        D3DXVec3Normalize(reinterpret_cast<D3DXVECTOR3*>(&vAxis), reinterpret_cast<const D3DXVECTOR3*>(&vCross));
         mMatrix.m[2][0] = vAxis.x;
         mMatrix.m[2][1] = vAxis.y;
         mMatrix.m[2][2] = vAxis.z;
@@ -7943,11 +7933,11 @@ bool EntitySoldier::Stand()
         PblVector3 vCross(vUp.y * vFront.z - vUp.z * vFront.y, vUp.z * vFront.x - vUp.x * vFront.z,
                           vUp.x * vFront.y - vUp.y * vFront.x);
         PblVector3 vRight;
-        D3DXVec3Normalize(&vRight, &vCross);
+        D3DXVec3Normalize(reinterpret_cast<D3DXVECTOR3*>(&vRight), reinterpret_cast<const D3DXVECTOR3*>(&vCross));
         vCross = PblVector3(vRight.y * vUp.z - vRight.z * vUp.y, vRight.z * vUp.x - vRight.x * vUp.z,
                             vRight.x * vUp.y - vRight.y * vUp.x);
         PblVector3 vNewFront;
-        D3DXVec3Normalize(&vNewFront, &vCross);
+        D3DXVec3Normalize(reinterpret_cast<D3DXVECTOR3*>(&vNewFront), reinterpret_cast<const D3DXVECTOR3*>(&vCross));
         const PblVector3& vOrigin = mMatrix.GetTranslation();
         PblMatrix mNew;
         mNew.m[0][0] = vRight.x;
@@ -8023,7 +8013,7 @@ bool EntitySoldier::Jump()
     {
         PblVector3 vLifted(pAIDir->x, 0.01f, pAIDir->z);
         PblVector3 vDir;
-        D3DXVec3Normalize(&vDir, &vLifted);
+        D3DXVec3Normalize(reinterpret_cast<D3DXVECTOR3*>(&vDir), reinterpret_cast<const D3DXVECTOR3*>(&vLifted));
         float fSpeed = mClass->mMaxSpeed;
         float fFactor = mClass->mJumpForwardSpeedFactor;
         PblVector3 vPush(vDir.x * fSpeed * fFactor, vDir.y * fSpeed * fFactor, vDir.z * fSpeed * fFactor);
@@ -8045,13 +8035,9 @@ bool EntitySoldier::Jump()
         {
             fScale = (mClass->mJumpStrafeSpeedFactor - 1.0f) * fForward;
         }
-        mVelocity.x += vFront.x * fScale;
-        mVelocity.y += vFront.y * fScale;
-        mVelocity.z += vFront.z * fScale;
+        mVelocity += vFront * fScale;
         fScale = (mClass->mJumpStrafeSpeedFactor - 1.0f) * fSide;
-        mVelocity.x += vRight.x * fScale;
-        mVelocity.y += vRight.y * fScale;
-        mVelocity.z += vRight.z * fScale;
+        mVelocity += vRight * fScale;
     }
 
     if (FoleyFXSoldier* pFoley = static_cast<FoleyFXSoldier*>(GetFoleyFX()))
@@ -8106,7 +8092,7 @@ bool EntitySoldier::JetJump()
                      vRight.y * fStrafe + vFront.y * fForward + 1.1f,
                      vRight.z * fStrafe + vFront.z * fForward + 0.0f);
     PblVector3 vDir;
-    D3DXVec3Normalize(&vDir, &vPush);
+    D3DXVec3Normalize(reinterpret_cast<D3DXVECTOR3*>(&vDir), reinterpret_cast<const D3DXVECTOR3*>(&vPush));
     if (mPlayerId < 0)
     {
         const PblVector3& vAIDir = UnitControllerPtr(mCtrl)->GetLowLevel().mAIJetJumpDir;
@@ -8115,9 +8101,7 @@ bool EntitySoldier::JetJump()
             vDir = vAIDir;
         }
     }
-    mVelocity.x += vDir.x * fJet;
-    mVelocity.y += vDir.y * fJet;
-    mVelocity.z += vDir.z * fJet;
+    mVelocity += vDir * fJet;
 
     float fOldStateTimer = mStateTimer;
     if (m_bPrimaryWeaponIsMelee && !mClass->mJetTypeHover)
@@ -8144,9 +8128,7 @@ bool EntitySoldier::JetJump()
         }
         mVelocity = PblVector3(vFront.x * fSpeed, vFront.y * fSpeed, vFront.z * fSpeed);
         float fSide = -(mClass->mMaxStrafeSpeed * mControlStrafe);
-        mVelocity.x += vRight.x * fSide;
-        mVelocity.y += vRight.y * fSide;
-        mVelocity.z += vRight.z * fSide;
+        mVelocity += vRight * fSide;
         mVelocity.y = fVertical;
 
         if (!mSoldierAnimator ||
@@ -8290,9 +8272,9 @@ void EntitySoldier::Move(float fDeltaTime, float fForward, float fStrafe, float 
     if (fNormalY < 0.99f)
     {
         PblVector3 vUnit;
-        D3DXVec3Normalize(&vUnit, &vFront);
+        D3DXVec3Normalize(reinterpret_cast<D3DXVECTOR3*>(&vUnit), reinterpret_cast<const D3DXVECTOR3*>(&vFront));
         vFront = vUnit;
-        D3DXVec3Normalize(&vUnit, &vSide);
+        D3DXVec3Normalize(reinterpret_cast<D3DXVECTOR3*>(&vUnit), reinterpret_cast<const D3DXVECTOR3*>(&vSide));
         vSide = vUnit;
     }
 
@@ -8383,7 +8365,7 @@ void EntitySoldier::Move(float fDeltaTime, float fForward, float fStrafe, float 
         mRotation.m[3][2] = 0.0f;
         mRotation.m[3][3] = 1.0f;
         PblMatrix mNew;
-        D3DXMatrixMultiply(&mNew, &mRotation, &mMatrix);
+        D3DXMatrixMultiply(reinterpret_cast<D3DXMATRIX*>(&mNew), reinterpret_cast<const D3DXMATRIX*>(&mRotation), reinterpret_cast<const D3DXMATRIX*>(&mMatrix));
         SetMatrix(mNew);
     }
     else
@@ -8873,7 +8855,7 @@ void EntitySoldier::UpdateOrdnanceCollision(float fDeltaTime)
                               (table.avPitchAxis[i].y + vTorsoOffset.y) * fScale,
                               (table.avPitchAxis[i].z + vTorsoOffset.z) * fScale);
             PblVector3 vTurned;
-            D3DXVec3TransformNormal(&vTurned, &vPivot, &mPitch);
+            D3DXVec3TransformNormal(reinterpret_cast<D3DXVECTOR3*>(&vTurned), reinterpret_cast<const D3DXVECTOR3*>(&vPivot), reinterpret_cast<const D3DXMATRIX*>(&mPitch));
             mPitch.m[3][0] = vPivot.x - vTurned.x;
             mPitch.m[3][1] = vPivot.y - vTurned.y;
             mPitch.m[3][2] = vPivot.z - vTurned.z;
@@ -8883,13 +8865,13 @@ void EntitySoldier::UpdateOrdnanceCollision(float fDeltaTime)
                              (vHeadOffset.y + table.avHeadPos[i].y) * fScale,
                              (vHeadOffset.z + table.avHeadPos[i].z) * fScale);
             PblVector3 vOut;
-            D3DXVec3TransformCoord(&vOut, &vBody, &mPitch);
+            D3DXVec3TransformCoord(reinterpret_cast<D3DXVECTOR3*>(&vOut), reinterpret_cast<const D3DXVECTOR3*>(&vBody), reinterpret_cast<const D3DXMATRIX*>(&mPitch));
             mBody.SetTranslation(vOut);
             mCollisionBodyHead.SetMatrix(mBody);
             vBody = PblVector3((vTorsoOffset.x + table.avTorsoPos[i].x) * fScale,
                                (vTorsoOffset.y + table.avTorsoPos[i].y) * fScale,
                                (vTorsoOffset.z + table.avTorsoPos[i].z) * fScale);
-            D3DXVec3TransformCoord(&vOut, &vBody, &mPitch);
+            D3DXVec3TransformCoord(reinterpret_cast<D3DXVECTOR3*>(&vOut), reinterpret_cast<const D3DXVECTOR3*>(&vBody), reinterpret_cast<const D3DXMATRIX*>(&mPitch));
             mBody.SetTranslation(vOut);
             mCollisionBodyTorso.SetMatrix(mBody);
         }
@@ -8930,13 +8912,13 @@ void EntitySoldier::UpdateOrdnanceCollision(float fDeltaTime)
                              (table.avHeadPos[i].y + vHeadOffset.y) * fScale,
                              (table.avHeadPos[i].z + vHeadOffset.z) * fScale);
             PblVector3 vOut;
-            D3DXVec3TransformNormal(&vOut, &vBody, &mYaw);
+            D3DXVec3TransformNormal(reinterpret_cast<D3DXVECTOR3*>(&vOut), reinterpret_cast<const D3DXVECTOR3*>(&vBody), reinterpret_cast<const D3DXMATRIX*>(&mYaw));
             mBody.SetTranslation(vOut);
             mCollisionBodyHead.SetMatrix(mBody);
             vBody = PblVector3((vTorsoOffset.x + table.avTorsoPos[i].x) * fScale,
                                (vTorsoOffset.y + table.avTorsoPos[i].y) * fScale,
                                (vTorsoOffset.z + table.avTorsoPos[i].z) * fScale);
-            D3DXVec3TransformNormal(&vOut, &vBody, &mYaw);
+            D3DXVec3TransformNormal(reinterpret_cast<D3DXVECTOR3*>(&vOut), reinterpret_cast<const D3DXVECTOR3*>(&vBody), reinterpret_cast<const D3DXMATRIX*>(&mYaw));
             mBody.SetTranslation(vOut);
             mCollisionBodyTorso.SetMatrix(mBody);
         }
@@ -9581,7 +9563,7 @@ void EntitySoldier::ApplyRadiusPush(const PblVector3& vPos, float fInnerRadius, 
         if (fEffect > 0.0f)
         {
             PblVector3 vDir;
-            D3DXVec3Normalize(&vDir, &vDiff);
+            D3DXVec3Normalize(reinterpret_cast<D3DXVECTOR3*>(&vDir), reinterpret_cast<const D3DXVECTOR3*>(&vDiff));
             ApplyPush(PblVector3(vDir.x + 0.0f, vDir.y + 0.6f, vDir.z + 0.0f), fEffect * fPush, bArg);
         }
     }
@@ -9603,7 +9585,7 @@ void EntitySoldier::ApplyRadiusDamage(const PblVector3& vPos, float fInnerRadius
         const PblVector3& vPosition = mMatrix.GetTranslation();
         PblVector3 vAway(vPosition.x - vPos.x, vPosition.y - vPos.y, vPosition.z - vPos.z);
         PblVector3 vDir;
-        D3DXVec3Normalize(&vDir, &vAway);
+        D3DXVec3Normalize(reinterpret_cast<D3DXVECTOR3*>(&vDir), reinterpret_cast<const D3DXVECTOR3*>(&vAway));
         DirectionKill(vDir);
     }
 }
@@ -9613,9 +9595,7 @@ void EntitySoldier::DirectionKill(const PblVector3& vDir)
 {
     if (mState != SoldierState::PILOT_ANIMATION && mState != SoldierState::ARMED_PASSENGER)
     {
-        mVelocity.x += vDir.x * 5.0f;
-        mVelocity.y += vDir.y * 5.0f;
-        mVelocity.z += vDir.z * 5.0f;
+        mVelocity += vDir * 5.0f;
         if (mPlayerId >= 0 && mCurHealth < -100.0f)
         {
             AIDebug::StartBulletTime(0.15f, 0.08f, 0.4f);
@@ -9751,9 +9731,7 @@ void EntitySoldier::MoveJetHover(float fDeltaTime, float fForward, float fStrafe
         float fDot = mGroundNormal.x * mVelocity.x + mGroundNormal.y * mVelocity.y + mGroundNormal.z * mVelocity.z;
         if (fDot < 0.0f)
         {
-            mVelocity.x -= mGroundNormal.x * fDot;
-            mVelocity.y -= mGroundNormal.y * fDot;
-            mVelocity.z -= mGroundNormal.z * fDot;
+            mVelocity -= mGroundNormal * fDot;
         }
     }
 
@@ -9764,7 +9742,7 @@ void EntitySoldier::MoveJetHover(float fDeltaTime, float fForward, float fStrafe
 
     PblVector3 vLook(mEyeDir.x, (mEyeDir.y + 0.08f) * 2.0f, mEyeDir.z);
     PblVector3 vDir;
-    D3DXVec3Normalize(&vDir, &vLook);
+    D3DXVec3Normalize(reinterpret_cast<D3DXVECTOR3*>(&vDir), reinterpret_cast<const D3DXVECTOR3*>(&vLook));
 
     const PblVector3& vRight = mMatrix.GetXAxis();
     float fSide = mVelocity.x * vRight.x + mVelocity.y * vRight.y + mVelocity.z * vRight.z;
@@ -9788,12 +9766,8 @@ void EntitySoldier::MoveJetHover(float fDeltaTime, float fForward, float fStrafe
         fAcross = -fMax;
     }
 
-    mVelocity.x += vDir.x * fAlong;
-    mVelocity.y += vDir.y * fAlong;
-    mVelocity.z += vDir.z * fAlong;
-    mVelocity.x += vRight.x * fAcross;
-    mVelocity.y += vRight.y * fAcross;
-    mVelocity.z += vRight.z * fAcross;
+    mVelocity += vDir * fAlong;
+    mVelocity += vRight * fAcross;
 
     const PblVector3& vPos = mMatrix.GetTranslation();
     SetPosition(PblVector3(vPos.x + mVelocity.x * fDeltaTime, vPos.y + mVelocity.y * fDeltaTime,
@@ -9823,7 +9797,7 @@ void EntitySoldier::MoveJetHover(float fDeltaTime, float fForward, float fStrafe
         mRotation.m[3][2] = 0.0f;
         mRotation.m[3][3] = 1.0f;
         PblMatrix mNew;
-        D3DXMatrixMultiply(&mNew, &mRotation, &mMatrix);
+        D3DXMatrixMultiply(reinterpret_cast<D3DXMATRIX*>(&mNew), reinterpret_cast<const D3DXMATRIX*>(&mRotation), reinterpret_cast<const D3DXMATRIX*>(&mMatrix));
         SetMatrix(mNew);
     }
     else
@@ -9942,7 +9916,7 @@ bool EntitySoldier::ApplyDamage(const DamageDesc& damage, const PblVector3& vDir
         {
             PblMatrix mInverse = mMatrix.GetInverseFast();
             PblVector3 vLocal;
-            D3DXVec3TransformNormal(&vLocal, &vDir, &mInverse);
+            D3DXVec3TransformNormal(reinterpret_cast<D3DXVECTOR3*>(&vLocal), reinterpret_cast<const D3DXVECTOR3*>(&vDir), reinterpret_cast<const D3DXMATRIX*>(&mInverse));
             StatusDisplay::Instance(iJoystick)->SetDamageDirection(vLocal);
         }
     }
@@ -10364,7 +10338,7 @@ bool EntitySoldier::ExitVehicle(bool bForce, bool bEject)
         for (int i = 0; i < 9; ++i)
         {
             PblVector3 vWorld;
-            D3DXVec3TransformCoord(&vWorld, &avPoint[i], &mSeat);
+            D3DXVec3TransformCoord(reinterpret_cast<D3DXVECTOR3*>(&vWorld), reinterpret_cast<const D3DXVECTOR3*>(&avPoint[i]), reinterpret_cast<const D3DXMATRIX*>(&mSeat));
             avPoint[i] = vWorld;
             if (i != 8 && CollisionManager::RayHit(vCenter, avPoint[i], pHit, 0, apIgnore, 1, 0x98, false) != 1.0f)
             {
@@ -10451,7 +10425,7 @@ bool EntitySoldier::ExitVehicle(bool bForce, bool bEject)
         if (vAway.x * vAway.x + vAway.z * vAway.z > 0.01f)
         {
             vAway.y = 0.0f;
-            D3DXVec3Normalize(&vVelocity, &vAway);
+            D3DXVec3Normalize(reinterpret_cast<D3DXVECTOR3*>(&vVelocity), reinterpret_cast<const D3DXVECTOR3*>(&vAway));
             vNew.x += vVelocity.x * 4.0f;
             vNew.y += vVelocity.y * 4.0f;
             vNew.z += vVelocity.z * 4.0f;
@@ -10750,15 +10724,15 @@ void EntitySoldier::UpdateAcklayFoleyFX(const RedPose& pose, const PblMatrix& mW
                            : i == 1 ? &mRightFootElevation
                            : &mAcklayData->mFeetElevation[i - 2];
         PblMatrix mFoot;
-        D3DXMatrixMultiply(&mFoot, pBone, &mWorld);
+        D3DXMatrixMultiply(reinterpret_cast<D3DXMATRIX*>(&mFoot), reinterpret_cast<const D3DXMATRIX*>(pBone), reinterpret_cast<const D3DXMATRIX*>(&mWorld));
         const PblVector3& vFoot = mFoot.GetTranslation();
         const float fElevation = pBone->m[3][1] - 2.5f;
 
         PblVector3 vBone(pBone->m[0][0], pBone->m[0][1], pBone->m[0][2]);
         PblVector3 vWorldBone;
-        D3DXVec3TransformNormal(&vWorldBone, &vBone, &mWorld);
+        D3DXVec3TransformNormal(reinterpret_cast<D3DXVECTOR3*>(&vWorldBone), reinterpret_cast<const D3DXVECTOR3*>(&vBone), reinterpret_cast<const D3DXMATRIX*>(&mWorld));
         PblVector3 vDir;
-        D3DXVec3Normalize(&vDir, &vWorldBone);
+        D3DXVec3Normalize(reinterpret_cast<D3DXVECTOR3*>(&vDir), reinterpret_cast<const D3DXVECTOR3*>(&vWorldBone));
         PblVector3 vWaterTest(vFoot.x + vDir.x * 2.5f,
                               vFoot.y + vDir.y * 2.5f,
                               vFoot.z + vDir.z * 2.5f);
@@ -10784,7 +10758,7 @@ void EntitySoldier::UpdateAcklayFoleyFX(const RedPose& pose, const PblMatrix& mW
             {
                 PblVector3 vHorizontal(mVelocity.x, 0.0f, mVelocity.z);
                 PblVector3 vNormal;
-                D3DXVec3Normalize(&vNormal, &vHorizontal);
+                D3DXVec3Normalize(reinterpret_cast<D3DXVECTOR3*>(&vNormal), reinterpret_cast<const D3DXVECTOR3*>(&vHorizontal));
                 WaterEffect::AddDirectionalWaterEffect(mClass->mWakeWaterSplashEffect,
                                                        vWaterTest, vNormal);
             }

@@ -1,3 +1,4 @@
+#include <d3dx9math.h>
 #include "PlayerController.h"
 #include "AIUtil.h"
 #include "Character.h"
@@ -76,10 +77,6 @@ extern int netHeroNextPlayerID[3];
 extern int netHeroPlayerID[3];
 extern bool netIsLocalTurn;
 
-extern "C" PblVector3* __stdcall D3DXVec3Normalize(PblVector3* pOut, const PblVector3* pV);
-extern "C" PblVector3* __stdcall D3DXVec3TransformCoord(PblVector3* pOut, const PblVector3* pV,
-                                                        const PblMatrix* pM);
-extern "C" PblMatrix* __stdcall D3DXMatrixInverse(PblMatrix* pOut, float* pDeterminant, const PblMatrix* pM);
 
 static const PblMatrix& GetObjectMatrix(const GameObject* pObject)
 {
@@ -613,7 +610,7 @@ void PlayerController::Update(float dt)
                     const PblBox& box = pTarget->GetModel()->_mModel->_TotalBoundingBox;
                     PblVector3 vMid((box._vMax.x + box._vMin.x) * 0.5f, (box._vMax.y + box._vMin.y) * 0.5f,
                                     (box._vMax.z + box._vMin.z) * 0.5f);
-                    D3DXVec3TransformCoord(&vCenter, &vMid, &GetObjectMatrix(pTarget));
+                    D3DXVec3TransformCoord(reinterpret_cast<D3DXVECTOR3*>(&vCenter), reinterpret_cast<const D3DXVECTOR3*>(&vMid), reinterpret_cast<const D3DXMATRIX*>(&GetObjectMatrix(pTarget)));
                     float dx = box._vMax.x - box._vMin.x;
                     float dy = box._vMax.y - box._vMin.y;
                     float dz = box._vMax.z - box._vMin.z;
@@ -635,7 +632,7 @@ void PlayerController::Update(float dt)
                     PblVector3 vPoint = pTarget->GetTargetPoint(vStart, vDir, iBodyID);
                     PblVector3 vBack(vStart.x - vPoint.x, vStart.y - vPoint.y, vStart.z - vPoint.z);
                     PblVector3 vBackDir;
-                    D3DXVec3Normalize(&vBackDir, &vBack);
+                    D3DXVec3Normalize(reinterpret_cast<D3DXVECTOR3*>(&vBackDir), reinterpret_cast<const D3DXVECTOR3*>(&vBack));
                     vPoint.x += fRadius * vBackDir.x;
                     vPoint.y += vBackDir.y * fRadius;
                     vPoint.z += vBackDir.z * fRadius;
@@ -673,7 +670,7 @@ void PlayerController::Update(float dt)
                 PblVector3 vSearch(vDir.x * fRange * 0.5f + vStart.x, vDir.y * fRange * 0.5f + vStart.y,
                                    vDir.z * fRange * 0.5f + vStart.z);
                 PblMatrix mInverse;
-                D3DXMatrixInverse(&mInverse, 0, &GetObjectMatrix(pMe));
+                D3DXMatrixInverse(reinterpret_cast<D3DXMATRIX*>(&mInverse), 0, reinterpret_cast<const D3DXMATRIX*>(&GetObjectMatrix(pMe)));
                 GameObject* apObjects[300];
                 int iCount = CollisionManager::GetObjectsInRange(vSearch, fRange, apObjects, 300, pMe, 0x3b);
                 for (int i = 0; i < iCount; ++i)
@@ -721,7 +718,7 @@ void PlayerController::Update(float dt)
                         const PblBox& box = pObject->GetModel()->_mModel->_TotalBoundingBox;
                         PblVector3 vMid((box._vMin.x + box._vMax.x) * 0.5f, (box._vMin.y + box._vMax.y) * 0.5f,
                                         (box._vMin.z + box._vMax.z) * 0.5f);
-                        D3DXVec3TransformCoord(&vCenter, &vMid, &GetObjectMatrix(pObject));
+                        D3DXVec3TransformCoord(reinterpret_cast<D3DXVECTOR3*>(&vCenter), reinterpret_cast<const D3DXVECTOR3*>(&vMid), reinterpret_cast<const D3DXMATRIX*>(&GetObjectMatrix(pObject)));
                         float dx = box._vMax.x - box._vMin.x;
                         float dy = box._vMax.y - box._vMin.y;
                         float dz = box._vMax.z - box._vMin.z;
@@ -759,7 +756,7 @@ void PlayerController::Update(float dt)
                     PblVector3 vPoint = pObject->GetTargetPoint(vStart, vDir, iObjectBodyID);
                     PblVector3 vBack(vStart.x - vPoint.x, vStart.y - vPoint.y, vStart.z - vPoint.z);
                     PblVector3 vBackDir;
-                    D3DXVec3Normalize(&vBackDir, &vBack);
+                    D3DXVec3Normalize(reinterpret_cast<D3DXVECTOR3*>(&vBackDir), reinterpret_cast<const D3DXVECTOR3*>(&vBack));
                     vPoint.x += fRadius * vBackDir.x;
                     vPoint.y += vBackDir.y * fRadius;
                     vPoint.z += vBackDir.z * fRadius;

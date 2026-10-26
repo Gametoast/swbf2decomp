@@ -1,3 +1,4 @@
+#include <d3dx9math.h>
 #include "WeaponCannon.h"
 
 #include <math.h>
@@ -22,8 +23,6 @@
 extern int gDebugCount;
 extern bool netIsLocalTurn;
 
-extern "C" PblVector3* __stdcall D3DXVec3TransformNormal(PblVector3* pOut, const PblVector3* pV,
-                                                         const PblMatrix* pM);
 
 namespace CombatUtil
 {
@@ -752,7 +751,7 @@ bool WeaponCannon::Fire()
     desc.mPosition = mAimer->mFirePos;
     PblVector3 vDir(fSinYaw * fCosPitch, -fSinPitch, fCosYaw * fCosPitch);
     PblVector3 vWorldDir;
-    D3DXVec3TransformNormal(&vWorldDir, &vDir, &mFire);
+    D3DXVec3TransformNormal(reinterpret_cast<D3DXVECTOR3*>(&vWorldDir), reinterpret_cast<const D3DXVECTOR3*>(&vDir), reinterpret_cast<const D3DXMATRIX*>(&mFire));
     desc.mDirection = vWorldDir;
     desc.mStrength = mStrength;
     desc.mOwner = mOwner->GetGameObject();

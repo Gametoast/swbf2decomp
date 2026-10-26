@@ -1,3 +1,4 @@
+#include <d3dx9math.h>
 #include "VehicleCoverHelper.h"
 #include "AILowLevel.h"
 #include "AIUtil.h"
@@ -20,7 +21,6 @@
 #include <math.h>
 #include <stddef.h>
 
-extern "C" PblVector3* __stdcall D3DXVec3Normalize(PblVector3* pOut, const PblVector3* pV);
 
 namespace CombatUtil
 {
@@ -102,7 +102,7 @@ void VehicleCoverHelper::EnterState()
         PblVector3 vDir(vHint.x - vMe.x, vHint.y - vMe.y, vHint.z - vMe.z);
         float fDist = sqrtf(vDir.x * vDir.x + vDir.y * vDir.y + vDir.z * vDir.z);
         PblVector3 vNorm;
-        D3DXVec3Normalize(&vNorm, &vDir);
+        D3DXVec3Normalize(reinterpret_cast<D3DXVECTOR3*>(&vNorm), reinterpret_cast<const D3DXVECTOR3*>(&vDir));
         fDist += 4.0f;
         PblVector3 vDest(vNorm.x * fDist + vMe.x, vNorm.y * fDist + vMe.y, vNorm.z * fDist + vMe.z);
         GetLowLevel(GetCtrl()).SetNavigator_Goto(vDest, NULL, false, false);

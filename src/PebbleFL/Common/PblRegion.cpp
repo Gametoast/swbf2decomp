@@ -1,3 +1,4 @@
+#include <d3dx9math.h>
 #include "PblRegion.h"
 
 #include <math.h>
@@ -175,8 +176,6 @@ PblRegion::~PblRegion()
     mNode.Remove();
 }
 
-extern "C" PblVector3* __stdcall D3DXVec3TransformCoord(PblVector3* pOut, const PblVector3* pV,
-                                                        const PblMatrix* pM);
 
 // FUNCTION: SWBF2 0x00728ef0
 bool PblRegion::DoesSphereIntersect(const PblVector3& rCenter, float fRadius) const
@@ -196,14 +195,14 @@ bool PblRegion::DoesSphereIntersect(const PblVector3& rCenter, float fRadius) co
     case type_box:
     {
         const PblMatrix inv = mMatrix.GetInverseFast();
-        D3DXVec3TransformCoord(&v, &rCenter, &inv);
+        D3DXVec3TransformCoord(reinterpret_cast<D3DXVECTOR3*>(&v), reinterpret_cast<const D3DXVECTOR3*>(&rCenter), reinterpret_cast<const D3DXMATRIX*>(&inv));
         return PblRegion::DoesSphereIntersectBox(*(const PblVector3*)&mSize, v, fRadius);
     }
 
     case type_cylinder:
     {
         const PblMatrix inv = mMatrix.GetInverseFast();
-        D3DXVec3TransformCoord(&v, &rCenter, &inv);
+        D3DXVec3TransformCoord(reinterpret_cast<D3DXVECTOR3*>(&v), reinterpret_cast<const D3DXVECTOR3*>(&rCenter), reinterpret_cast<const D3DXMATRIX*>(&inv));
         return PblRegion::DoesSphereIntersectYCylinder(*(const PblVector3*)&mSize, v, fRadius);
     }
 
@@ -321,7 +320,7 @@ bool PblRegion::DoesAABoxIntersect(const PblVector3& vCenter, const PblVector3& 
         }
         const PblMatrix inv = mMatrix.GetInverseFast();
         PblVector3 v;
-        D3DXVec3TransformCoord(&v, &vCenter, &inv);
+        D3DXVec3TransformCoord(reinterpret_cast<D3DXVECTOR3*>(&v), reinterpret_cast<const D3DXVECTOR3*>(&vCenter), reinterpret_cast<const D3DXMATRIX*>(&inv));
         if ((float)fabs(v.x) >= vExtents.y * f01 + vExtents.x * f00 + vExtents.z * f02)
         {
             return false;
@@ -578,7 +577,6 @@ PblRegion* PblRegion::Find(unsigned int uId)
     return 0;
 }
 
-extern "C" PblVector3* __stdcall D3DXVec3Normalize(PblVector3* pOut, const PblVector3* pV);
 
 // FUNCTION: SWBF2 0x007292e0
 void PblRegion::Initialize(const Description& desc)
@@ -741,7 +739,7 @@ void PblRegion::Initialize(const Description& desc)
     {
         PblVector3& vNormal = mMatrix[2];
         PblVector3 v;
-        D3DXVec3Normalize(&v, &vNormal);
+        D3DXVec3Normalize(reinterpret_cast<D3DXVECTOR3*>(&v), reinterpret_cast<const D3DXVECTOR3*>(&vNormal));
         vNormal = v;
         mMatrix.m[2][3] = 0.0f;
         mSize.w = mMatrix.m[3][0] * vNormal.x + mMatrix.m[3][1] * vNormal.y

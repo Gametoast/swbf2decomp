@@ -4,18 +4,6 @@
 #include "PebbleFL/Common/PblMatrix.h"
 #include "PebbleFL/Common/PblVector.h"
 
-// FUNCTION: SWBF2 0x0043a8c0
-PblMatrix::PblMatrix(const PblQuaternion& rotation, const PblVector3& translation)
-{
-    D3DXQUATERNION normalized;
-    D3DXMatrixRotationQuaternion((D3DXMATRIX*)this,
-        D3DXQuaternionNormalize(&normalized, (const D3DXQUATERNION*)&rotation));
-    m[3][0] = translation.x;
-    m[3][1] = translation.y;
-    m[3][2] = translation.z;
-    m[3][3] = 1.0f;
-}
-
 // FUNCTION: SWBF2 0x0062c130
 PblMatrix::PblMatrix(const PblVector4& x, const PblVector4& y,
                      const PblVector4& z, const PblVector4& t)

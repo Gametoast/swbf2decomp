@@ -1,3 +1,4 @@
+#include <d3dx9math.h>
 #include "EntityDoor.h"
 #include "PebbleFL/Common/PblVector.h"
 
@@ -15,7 +16,6 @@
 #include "RedEngineFL/Application/pc/pcFLRender.h"
 
 extern bool netFrameLock;
-extern "C" PblMatrix* __stdcall D3DXMatrixMultiply(PblMatrix* pOut, const PblMatrix* pM1, const PblMatrix* pM2);
 
 
 // FUNCTION: SWBF2 0x00498460
@@ -65,7 +65,7 @@ void EntityDoor::Render(unsigned char ucViewport, float fDist, unsigned int uiFl
         if (FLRenderer::IsReflected(GetCollisionCenter(), GetCollisionRadius(), reflection, false))
         {
             PblMatrix reflected;
-            D3DXMatrixMultiply(&reflected, &mMatrix, &reflection);
+            D3DXMatrixMultiply(reinterpret_cast<D3DXMATRIX*>(&reflected), reinterpret_cast<const D3DXMATRIX*>(&mMatrix), reinterpret_cast<const D3DXMATRIX*>(&reflection));
             pModel->Render(ucViewport, fDist, &reflected, &mPose, RedColor::WHITE,
                            (uiFlags & 0xeffefeffu) | 0x10000100u, 0);
         }
@@ -99,7 +99,6 @@ EntityDoor::~EntityDoor()
 // SYNTHETIC: SWBF2 0x004992ca
 // [thunk]:EntityDoor::`scalar deleting destructor'`adjustor{12}'
 
-extern "C" PblMatrix* __stdcall D3DXMatrixMultiply(PblMatrix* pOut, const PblMatrix* pM1, const PblMatrix* pM2);
 
 namespace AI
 {
@@ -317,7 +316,7 @@ bool EntityDoor::Update(float fDeltaTime)
                 continue;
             }
             PblMatrix mWorld;
-            D3DXMatrixMultiply(&mWorld, &mBone, &mMatrix);
+            D3DXMatrixMultiply(reinterpret_cast<D3DXMATRIX*>(&mWorld), reinterpret_cast<const D3DXMATRIX*>(&mBone), reinterpret_cast<const D3DXMATRIX*>(&mMatrix));
 
             GameObject* apUnits[20];
             int iCount;

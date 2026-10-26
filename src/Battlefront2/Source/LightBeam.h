@@ -173,13 +173,13 @@ inline void ManagedLightBeam::SetHeadTailPosition(const PblVector3& vHead, const
 // FUNCTION: SWBF2 0x004bdec0
 inline void LightBeam::SetHeadTailPosition(const PblVector3& vHead, const PblVector3& vTail)
 {
-    PblVector3 vDelta(vTail.x - vHead.x, vTail.y - vHead.y, vTail.z - vHead.z);
+    PblVector3 vDelta = vTail - vHead;
     SetHeadPosition(vHead);
     SetLength(sqrtf(vDelta.x * vDelta.x + vDelta.y * vDelta.y + vDelta.z * vDelta.z));
     if (_fLength > 0.0f)
     {
         float fInv = 1.0f / _fLength;
-        SetDirection(PblVector3(vDelta.x * fInv, vDelta.y * fInv, vDelta.z * fInv));
+        SetDirection((vDelta * fInv));
     }
     else
     {

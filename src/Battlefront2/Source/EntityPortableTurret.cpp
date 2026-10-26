@@ -1,3 +1,4 @@
+#include <d3dx9math.h>
 #include "EntityPortableTurret.h"
 
 #include <float.h>
@@ -51,7 +52,6 @@ const char EntityPortableTurret::rttiNameEntityPortableTurret[] = "EntityPortabl
 // EntityPortableTurret::sMemoryPool
 MemoryPool EntityPortableTurret::sMemoryPool("EntityPortableTurret", 0x6d0);
 
-extern "C" PblVector3* __stdcall D3DXVec3Normalize(PblVector3* pOut, const PblVector3* pV);
 
 extern PblVector3 gVectorZero;
 
@@ -82,12 +82,12 @@ EntityPortableTurret::EntityPortableTurret(EntityPortableTurretClass* pClass, co
     PblVector3 vCross(vUp.y * vFront.z - vUp.z * vFront.y, vUp.z * vFront.x - vUp.x * vFront.z,
                       vUp.x * vFront.y - vUp.y * vFront.x);
     PblVector3 vNorm;
-    D3DXVec3Normalize(&vNorm, &vCross);
+    D3DXVec3Normalize(reinterpret_cast<D3DXVECTOR3*>(&vNorm), reinterpret_cast<const D3DXVECTOR3*>(&vCross));
     vRight = vNorm;
     mMatrix.m[0][3] = 0.0f;
     vCross = PblVector3(vRight.y * vUp.z - vRight.z * vUp.y, vRight.z * vUp.x - vRight.x * vUp.z,
                         vRight.x * vUp.y - vRight.y * vUp.x);
-    D3DXVec3Normalize(&vNorm, &vCross);
+    D3DXVec3Normalize(reinterpret_cast<D3DXVECTOR3*>(&vNorm), reinterpret_cast<const D3DXVECTOR3*>(&vCross));
     vFront = vNorm;
     mMatrix.m[2][3] = 0.0f;
 
@@ -230,7 +230,7 @@ bool EntityPortableTurret::CollisionCallback(const CollisionResult* pResult, Col
             (pOther->GetCollisionType() == COLL_WATER ? mClass->mCollisionWaterSound : mClass->mCollisionSound)
                 .Play((const PblVector3*)mMatrix.m[3], 0, false, true);
             PblVector3 vUnit;
-            D3DXVec3Normalize(&vUnit, &vNormal);
+            D3DXVec3Normalize(reinterpret_cast<D3DXVECTOR3*>(&vUnit), reinterpret_cast<const D3DXVECTOR3*>(&vNormal));
             if (vUnit.y > 0.7f)
             {
                 mMatrix = NormalMatrix(mMatrix.GetZAxis(), vNormal, mMatrix.GetTranslation());
@@ -241,9 +241,7 @@ bool EntityPortableTurret::CollisionCallback(const CollisionResult* pResult, Col
             {
                 float fRebound = mClass->mRebound;
                 float fFriction = mClass->mFriction * fDot * (fRebound + 1.0f);
-                mVelocity.x -= vNormal.x * fDot;
-                mVelocity.y -= vNormal.y * fDot;
-                mVelocity.z -= vNormal.z * fDot;
+                mVelocity -= vNormal * fDot;
                 float fScale = -(fFriction / sqrtf(mVelocity.x * mVelocity.x + mVelocity.y * mVelocity.y +
                                                    mVelocity.z * mVelocity.z));
                 if (!(1.0f > fScale))
@@ -254,9 +252,7 @@ bool EntityPortableTurret::CollisionCallback(const CollisionResult* pResult, Col
                 mVelocity.y -= mVelocity.y * fScale;
                 mVelocity.z -= mVelocity.z * fScale;
                 float fBounce = fRebound * fDot;
-                mVelocity.x -= vNormal.x * fBounce;
-                mVelocity.y -= vNormal.y * fBounce;
-                mVelocity.z -= vNormal.z * fBounce;
+                mVelocity -= vNormal * fBounce;
             }
         }
     }

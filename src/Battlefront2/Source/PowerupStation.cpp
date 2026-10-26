@@ -1,3 +1,4 @@
+#include <d3dx9math.h>
 #include "PowerupStation.h"
 
 #include <math.h>
@@ -423,13 +424,11 @@ bool PowerupStation::IsInsideRegion(RedRegion* pRegion, const GameObject* pObjec
     return pRegion->IsPointInside(pObject->GetMatrix().GetTranslation());
 }
 
-extern "C" PblQuaternion* __stdcall D3DXQuaternionNormalize(PblQuaternion* pOut, const PblQuaternion* pQ);
-extern "C" PblMatrix* __stdcall D3DXMatrixRotationQuaternion(PblMatrix* pOut, const PblQuaternion* pQ);
 static PblMatrix PblMatrix_FromQuaternion(const PblQuaternion& q, const PblVector3& vPos)
 {
     PblQuaternion qUnit;
     PblMatrix m;
-    D3DXMatrixRotationQuaternion(&m, D3DXQuaternionNormalize(&qUnit, &q));
+    D3DXMatrixRotationQuaternion(reinterpret_cast<D3DXMATRIX*>(&m), D3DXQuaternionNormalize(reinterpret_cast<D3DXQUATERNION*>(&qUnit), reinterpret_cast<const D3DXQUATERNION*>(&q)));
     m.m[3][0] = vPos.x;
     m.m[3][1] = vPos.y;
     m.m[3][2] = vPos.z;

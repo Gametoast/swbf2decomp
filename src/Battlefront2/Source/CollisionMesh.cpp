@@ -1,3 +1,4 @@
+#include <d3dx9math.h>
 #include "CollisionMesh.h"
 
 #include <float.h>
@@ -72,7 +73,6 @@ void CollisionMesh::Render(const PblMatrix&) const
     sCurrentRenderHandle = 0;
 }
 
-extern "C" PblVector3* __stdcall D3DXVec3TransformCoord(PblVector3* pOut, const PblVector3* pV, const PblMatrix* pM);
 
 // FUNCTION: SWBF2 0x00460f50
 CollisionMesh::CollisionMesh()
@@ -106,7 +106,7 @@ PblBox CollisionMesh::GetWorldspaceAABB(const PblMatrix& matrix) const
         vCorner.y = (i & 2) ? aabb.boxmax.y : aabb.boxmin.y;
         vCorner.z = (i & 1) ? aabb.boxmax.z : aabb.boxmin.z;
         PblVector3 v;
-        D3DXVec3TransformCoord(&v, &vCorner, &matrix);
+        D3DXVec3TransformCoord(reinterpret_cast<D3DXVECTOR3*>(&v), reinterpret_cast<const D3DXVECTOR3*>(&vCorner), reinterpret_cast<const D3DXMATRIX*>(&matrix));
         if (box._vMin.x > v.x)
         {
             box._vMin.x = v.x;
@@ -135,7 +135,6 @@ PblBox CollisionMesh::GetWorldspaceAABB(const PblMatrix& matrix) const
     return box;
 }
 
-extern "C" PblVector3* __stdcall D3DXVec3Normalize(PblVector3* pOut, const PblVector3* pV);
 
 static const float EPSILON = 0.00001f;
 
@@ -184,8 +183,7 @@ CollisionAABB sDrawThisAABB;
 // FUNCTION: SWBF2 0x004609e0
 CollisionAABB::CollisionAABB(const CollisionAABB& parent, const CompressedAABB& compressed)
 {
-    const PblVector3 dim(parent.boxmax.x - parent.boxmin.x, parent.boxmax.y - parent.boxmin.y,
-                         parent.boxmax.z - parent.boxmin.z);
+    const PblVector3 dim = parent.boxmax - parent.boxmin;
     boxmin.x = parent.boxmin.x + dim.x * u8tof32_lut[compressed.boxmin.x];
     boxmin.y = parent.boxmin.y + dim.y * u8tof32_lut[compressed.boxmin.y];
     boxmin.z = parent.boxmin.z + dim.z * u8tof32_lut[compressed.boxmin.z];
@@ -205,7 +203,7 @@ int RayConvexPoly_intersect(const PblVector3& vStart, const PblVector3& vDir, co
     const PblVector3 e2(v2.x - v0.x, v2.y - v0.y, v2.z - v0.z);
     PblVector3 vCross(e1.y * e2.z - e1.z * e2.y, e1.z * e2.x - e1.x * e2.z, e1.x * e2.y - e1.y * e2.x);
     PblVector3 vNormal;
-    D3DXVec3Normalize(&vNormal, &vCross);
+    D3DXVec3Normalize(reinterpret_cast<D3DXVECTOR3*>(&vNormal), reinterpret_cast<const D3DXVECTOR3*>(&vCross));
 
     const float fDenom = vDir.x * vNormal.x + vDir.y * vNormal.y + vDir.z * vNormal.z;
     if (fDenom > -EPSILON)
@@ -398,11 +396,11 @@ float CollisionMesh::RayHit(const PblVector3& vStart, const PblVector3& vDir, fl
         const PblVector3 v0 = mPoslList[pIndices[0]];
         const PblVector3& v1 = mPoslList[pIndices[1]];
         const PblVector3& v2 = mPoslList[pIndices[2]];
-        const PblVector3 e1(v1.x - v0.x, v1.y - v0.y, v1.z - v0.z);
-        const PblVector3 e2(v2.x - v0.x, v2.y - v0.y, v2.z - v0.z);
+        const PblVector3 e1 = v1 - v0;
+        const PblVector3 e2 = v2 - v0;
         PblVector3 vCross = CrossProduct(e1, e2);
         PblVector3 vNormal;
-        D3DXVec3Normalize(&vNormal, &vCross);
+        D3DXVec3Normalize(reinterpret_cast<D3DXVECTOR3*>(&vNormal), reinterpret_cast<const D3DXVECTOR3*>(&vCross));
         *pNormal = vNormal;
     }
     return fT / fLength;
@@ -412,7 +410,7 @@ float CollisionMesh::RayHit(const PblVector3& vStart, const PblVector3& vDir, fl
 const PblVector3 __cdecl Normalize(const PblVector3& rv)
 {
     PblVector3 vResult;
-    D3DXVec3Normalize(&vResult, &rv);
+    D3DXVec3Normalize(reinterpret_cast<D3DXVECTOR3*>(&vResult), reinterpret_cast<const D3DXVECTOR3*>(&rv));
     return vResult;
 }
 

@@ -264,7 +264,7 @@ bool SnipeHelper::IsHintSuitable(const SnipeHint* pHint, const Team* pTeam) cons
     const GameObject* pMe = GetMe()->GetGameObject();
     PblVector3 vHintPos = pHint->GetCollisionCenter();
     const PblVector3& vZ = pHint->GetZAxis();
-    PblVector3 vPos(vZ.x * fDist + vHintPos.x, vZ.y * fDist + vHintPos.y, vZ.z * fDist + vHintPos.z);
+    PblVector3 vPos = vZ * fDist + vHintPos;
 
     GameObject* apObjects[1200];
     int iCount = TeamManager::GetObjectsInRange(vPos, fDist, apObjects, 1200, pMe, AI::AFFIL_ENEMY);

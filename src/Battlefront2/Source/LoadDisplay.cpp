@@ -1,3 +1,4 @@
+#include <d3dx9math.h>
 #include "LoadDisplay.h"
 
 #include <float.h>
@@ -63,7 +64,6 @@ namespace GameLoop
 extern bool mbHistoricalRules;
 }
 
-extern "C" PblVector3* __stdcall D3DXVec3Normalize(PblVector3* pOut, const PblVector3* pV);
 
 const RedColor Interpolate(const RedColor& a, const RedColor& b, float t);
 
@@ -1055,7 +1055,7 @@ void LoadDisplay::LoadConfig(PblFileChunk& chunk)
                     m_sunDirection.y = item.GetFloatArg(1);
                     m_sunDirection.z = item.GetFloatArg(2);
                     PblVector3 vNormal;
-                    D3DXVec3Normalize(&vNormal, &m_sunDirection);
+                    D3DXVec3Normalize(reinterpret_cast<D3DXVECTOR3*>(&vNormal), reinterpret_cast<const D3DXVECTOR3*>(&m_sunDirection));
                     m_sunDirection = vNormal;
                     break;
                 }

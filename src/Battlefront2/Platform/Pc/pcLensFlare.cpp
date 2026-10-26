@@ -1,3 +1,4 @@
+#include <d3dx9math.h>
 #include "Battlefront2/Source/LensFlare.h"
 #include <math.h>
 
@@ -302,7 +303,6 @@ void LensFlareEffect::Render(int value)
     }
 }
 
-extern "C" PblVector3* __stdcall D3DXVec3TransformCoord(PblVector3* pOut, const PblVector3* pV, const PblMatrix* pM);
 
 inline const PblVector3 RedRenderer::TransformCameraPointToScreenSpace(const PblVector3& vPoint)
 {
@@ -322,7 +322,7 @@ static bool IsFlareVisible(const LensFlare* pFlare, unsigned int uiView, const P
         return false;
     }
 
-    D3DXVec3TransformCoord(&vPosition, &pFlare->m_mWorldMatrix.GetTranslation(), &mView);
+    D3DXVec3TransformCoord(reinterpret_cast<D3DXVECTOR3*>(&vPosition), reinterpret_cast<const D3DXVECTOR3*>(&pFlare->m_mWorldMatrix.GetTranslation()), reinterpret_cast<const D3DXMATRIX*>(&mView));
     fSize = pFlare->GetSize();
 
     if (fNear > -vPosition.z || -vPosition.z > fFar)

@@ -1,3 +1,4 @@
+#include <d3dx9math.h>
 #include <math.h>
 #include "PebbleFL/Common/PblVector.h"
 #include <string.h>
@@ -67,11 +68,6 @@ namespace FirstPerson
 
 PblQuaternion Interpolate(const PblQuaternion& q0, const PblQuaternion& q1, float fT);
 
-extern "C" PblMatrix* __stdcall D3DXMatrixMultiply(PblMatrix* pOut, const PblMatrix* pM1, const PblMatrix* pM2);
-extern "C" PblMatrix* __stdcall D3DXMatrixRotationY(PblMatrix* pOut, float fAngle);
-extern "C" PblMatrix* __stdcall D3DXMatrixRotationZ(PblMatrix* pOut, float fAngle);
-extern "C" PblMatrix* __stdcall D3DXMatrixRotationQuaternion(PblMatrix* pOut, const PblQuaternion* pQ);
-extern "C" PblQuaternion* __stdcall D3DXQuaternionNormalize(PblQuaternion* pOut, const PblQuaternion* pQ);
 
 namespace FLRenderer
 {
@@ -277,8 +273,8 @@ void FirstPersonRenderable::UpdateSoldierAimer(const PblMatrix& mMatrix)
 
     PblMatrix mOffset = gMatrixIdentity;
     PblMatrix mTemp;
-    D3DXMatrixMultiply(&mOffset, &mOffset, D3DXMatrixRotationY(&mTemp, 3.0f));
-    D3DXMatrixMultiply(&mOffset, &mOffset, D3DXMatrixRotationZ(&mTemp, 0.05f));
+    D3DXMatrixMultiply(reinterpret_cast<D3DXMATRIX*>(&mOffset), reinterpret_cast<const D3DXMATRIX*>(&mOffset), D3DXMatrixRotationY(reinterpret_cast<D3DXMATRIX*>(&mTemp), 3.0f));
+    D3DXMatrixMultiply(reinterpret_cast<D3DXMATRIX*>(&mOffset), reinterpret_cast<const D3DXMATRIX*>(&mOffset), D3DXMatrixRotationZ(reinterpret_cast<D3DXMATRIX*>(&mTemp), 0.05f));
     mOffset.m[3][0] = sFirstPersonOffsetX;
     mOffset.m[3][1] = sFirstPersonOffsetY;
     mOffset.m[3][2] = sFirstPersonOffsetZ;
@@ -296,15 +292,15 @@ void FirstPersonRenderable::UpdateSoldierAimer(const PblMatrix& mMatrix)
 
     PblQuaternion qRotation;
     PblMatrix mRotation;
-    D3DXMatrixRotationQuaternion(&mRotation, D3DXQuaternionNormalize(&qRotation, &mCockpitRotation));
+    D3DXMatrixRotationQuaternion(reinterpret_cast<D3DXMATRIX*>(&mRotation), D3DXQuaternionNormalize(reinterpret_cast<D3DXQUATERNION*>(&qRotation), reinterpret_cast<const D3DXQUATERNION*>(&mCockpitRotation)));
     mRotation.m[3][0] = mMatrix.m[3][0];
     mRotation.m[3][1] = mMatrix.m[3][1];
     mRotation.m[3][2] = mMatrix.m[3][2];
     mRotation.m[3][3] = 1.0f;
 
     PblMatrix mBone = *pBone;
-    D3DXMatrixMultiply(&mTemp, &mOffset, &mBone);
-    D3DXMatrixMultiply(&mModelMatrix, &mTemp, &mRotation);
+    D3DXMatrixMultiply(reinterpret_cast<D3DXMATRIX*>(&mTemp), reinterpret_cast<const D3DXMATRIX*>(&mOffset), reinterpret_cast<const D3DXMATRIX*>(&mBone));
+    D3DXMatrixMultiply(reinterpret_cast<D3DXMATRIX*>(&mModelMatrix), reinterpret_cast<const D3DXMATRIX*>(&mTemp), reinterpret_cast<const D3DXMATRIX*>(&mRotation));
 
     mModelMatrix.m[0][3] = 0.0f;
     mModelMatrix.m[1][3] = 0.0f;
@@ -345,7 +341,7 @@ void FirstPersonRenderable::UpdateDroidekaAimer(const PblMatrix& mMatrix)
 
     PblMatrix mOffset = gMatrixIdentity;
     PblMatrix mTemp;
-    D3DXMatrixMultiply(&mOffset, &mOffset, D3DXMatrixRotationY(&mTemp, 3.2f));
+    D3DXMatrixMultiply(reinterpret_cast<D3DXMATRIX*>(&mOffset), reinterpret_cast<const D3DXMATRIX*>(&mOffset), D3DXMatrixRotationY(reinterpret_cast<D3DXMATRIX*>(&mTemp), 3.2f));
     mOffset.m[3][0] = 0.01f;
     mOffset.m[3][1] = 0.35f;
     mOffset.m[3][2] = -0.0f;
@@ -363,21 +359,21 @@ void FirstPersonRenderable::UpdateDroidekaAimer(const PblMatrix& mMatrix)
 
     PblQuaternion qRotation;
     PblMatrix mRotation;
-    D3DXMatrixRotationQuaternion(&mRotation, D3DXQuaternionNormalize(&qRotation, &mCockpitRotation));
+    D3DXMatrixRotationQuaternion(reinterpret_cast<D3DXMATRIX*>(&mRotation), D3DXQuaternionNormalize(reinterpret_cast<D3DXQUATERNION*>(&qRotation), reinterpret_cast<const D3DXQUATERNION*>(&mCockpitRotation)));
     mRotation.m[3][0] = mMatrix.m[3][0];
     mRotation.m[3][1] = mMatrix.m[3][1];
     mRotation.m[3][2] = mMatrix.m[3][2];
     mRotation.m[3][3] = 1.0f;
 
     PblMatrix mBone = *pBone;
-    D3DXMatrixMultiply(&mTemp, &mOffset, &mBone);
-    D3DXMatrixMultiply(&mModelMatrix, &mTemp, &mRotation);
+    D3DXMatrixMultiply(reinterpret_cast<D3DXMATRIX*>(&mTemp), reinterpret_cast<const D3DXMATRIX*>(&mOffset), reinterpret_cast<const D3DXMATRIX*>(&mBone));
+    D3DXMatrixMultiply(reinterpret_cast<D3DXMATRIX*>(&mModelMatrix), reinterpret_cast<const D3DXMATRIX*>(&mTemp), reinterpret_cast<const D3DXMATRIX*>(&mRotation));
 
     const PblMatrix* pWeaponBone = kPose.Find(0x2b960099);
     Weapon* pWeapon = mOwner->GetWeaponPtr(mOwner->GetActiveWeaponChannel());
     if (pWeaponBone && pWeapon)
     {
-        D3DXMatrixMultiply(&mWeaponMatrix, pWeaponBone, &mModelMatrix);
+        D3DXMatrixMultiply(reinterpret_cast<D3DXMATRIX*>(&mWeaponMatrix), reinterpret_cast<const D3DXMATRIX*>(pWeaponBone), reinterpret_cast<const D3DXMATRIX*>(&mModelMatrix));
     }
 }
 
@@ -463,9 +459,9 @@ void FirstPersonRenderable::UpdateCockpitAimer(const PblMatrix& mMatrix)
 
     PblQuaternion qRotation;
     PblMatrix mRotation;
-    D3DXMatrixRotationQuaternion(&mRotation, D3DXQuaternionNormalize(&qRotation, &mCockpitRotation));
+    D3DXMatrixRotationQuaternion(reinterpret_cast<D3DXMATRIX*>(&mRotation), D3DXQuaternionNormalize(reinterpret_cast<D3DXQUATERNION*>(&qRotation), reinterpret_cast<const D3DXQUATERNION*>(&mCockpitRotation)));
     mRotation.SetTranslation(vPos);
-    D3DXMatrixMultiply(&mModelMatrix, &mOffset, &mRotation);
+    D3DXMatrixMultiply(reinterpret_cast<D3DXMATRIX*>(&mModelMatrix), reinterpret_cast<const D3DXMATRIX*>(&mOffset), reinterpret_cast<const D3DXMATRIX*>(&mRotation));
 }
 
 // FUNCTION: SWBF2 0x0051f750
@@ -1234,13 +1230,6 @@ int FirstPerson::AddGeometry(const char* pszName)
     return FirstPerson::sModelCount++;
 }
 
-extern "C" PblVector3* __stdcall D3DXVec3TransformNormal(PblVector3* pOut, const PblVector3* pV,
-                                                         const PblMatrix* pM);
-extern "C" PblMatrix* __stdcall D3DXMatrixMultiply(PblMatrix* pOut, const PblMatrix* pM1,
-                                                   const PblMatrix* pM2);
-extern "C" PblMatrix* __stdcall D3DXMatrixRotationX(PblMatrix* pOut, float fAngle);
-extern "C" PblMatrix* __stdcall D3DXMatrixRotationY(PblMatrix* pOut, float fAngle);
-extern "C" PblMatrix* __stdcall D3DXMatrixRotationZ(PblMatrix* pOut, float fAngle);
 
 
 namespace FirstPerson
@@ -1269,7 +1258,7 @@ void FirstPersonCameraManager::Update(PblMatrix& rMatrix)
         {
             PblVector3 vLin(mLinVec.x * (1.0f - fT), mLinVec.y * (1.0f - fT), mLinVec.z * (1.0f - fT));
             PblVector3 vOffset;
-            D3DXVec3TransformNormal(&vOffset, &vLin, &rMatrix);
+            D3DXVec3TransformNormal(reinterpret_cast<D3DXVECTOR3*>(&vOffset), reinterpret_cast<const D3DXVECTOR3*>(&vLin), reinterpret_cast<const D3DXMATRIX*>(&rMatrix));
             rMatrix.m[3][0] += vOffset.x;
             rMatrix.m[3][1] += vOffset.y;
             rMatrix.m[3][2] += vOffset.z;
@@ -1279,7 +1268,7 @@ void FirstPersonCameraManager::Update(PblMatrix& rMatrix)
         {
             PblVector3 vPos = mHermPos[mCurrCamPt].getValue(fT);
             PblVector3 vOffset;
-            D3DXVec3TransformNormal(&vOffset, &vPos, &rMatrix);
+            D3DXVec3TransformNormal(reinterpret_cast<D3DXVECTOR3*>(&vOffset), reinterpret_cast<const D3DXVECTOR3*>(&vPos), reinterpret_cast<const D3DXMATRIX*>(&rMatrix));
             rMatrix.m[3][0] += vOffset.x;
             rMatrix.m[3][1] += vOffset.y;
             rMatrix.m[3][2] += vOffset.z;
@@ -1289,10 +1278,10 @@ void FirstPersonCameraManager::Update(PblMatrix& rMatrix)
 
             PblMatrix mRotation = gMatrixIdentity;
             PblMatrix mTemp;
-            D3DXMatrixMultiply(&mRotation, &mRotation, D3DXMatrixRotationX(&mTemp, mCurRotVec.x));
-            D3DXMatrixMultiply(&mRotation, &mRotation, D3DXMatrixRotationY(&mTemp, mCurRotVec.y));
-            D3DXMatrixMultiply(&mRotation, &mRotation, D3DXMatrixRotationZ(&mTemp, mCurRotVec.z));
-            D3DXMatrixMultiply(&mTemp, &mRotation, &rMatrix);
+            D3DXMatrixMultiply(reinterpret_cast<D3DXMATRIX*>(&mRotation), reinterpret_cast<const D3DXMATRIX*>(&mRotation), D3DXMatrixRotationX(reinterpret_cast<D3DXMATRIX*>(&mTemp), mCurRotVec.x));
+            D3DXMatrixMultiply(reinterpret_cast<D3DXMATRIX*>(&mRotation), reinterpret_cast<const D3DXMATRIX*>(&mRotation), D3DXMatrixRotationY(reinterpret_cast<D3DXMATRIX*>(&mTemp), mCurRotVec.y));
+            D3DXMatrixMultiply(reinterpret_cast<D3DXMATRIX*>(&mRotation), reinterpret_cast<const D3DXMATRIX*>(&mRotation), D3DXMatrixRotationZ(reinterpret_cast<D3DXMATRIX*>(&mTemp), mCurRotVec.z));
+            D3DXMatrixMultiply(reinterpret_cast<D3DXMATRIX*>(&mTemp), reinterpret_cast<const D3DXMATRIX*>(&mRotation), reinterpret_cast<const D3DXMATRIX*>(&rMatrix));
             rMatrix = mTemp;
         }
         if (fT == 1.0f)

@@ -1,3 +1,4 @@
+#include <d3dx9math.h>
 #include "PebbleFL/Common/PblHashTable.h"
 
 #include <new>
@@ -48,12 +49,6 @@
 
 const RedColor Interpolate(const RedColor& a, const RedColor& b, float t);
 
-extern "C" PblMatrix* __stdcall D3DXMatrixMultiply(PblMatrix* pOut, const PblMatrix* pM1,
-                                                     const PblMatrix* pM2);
-extern "C" PblVector3* __stdcall D3DXVec3TransformCoord(PblVector3* pOut,
-                                                          const PblVector3* pV, const PblMatrix* pM);
-extern "C" PblVector3* __stdcall D3DXVec3TransformNormal(PblVector3* pOut,
-                                                           const PblVector3* pV, const PblMatrix* pM);
 extern bool netInShell;
 extern bool netEnabled;
 extern bool netEnabledNext;
@@ -136,7 +131,7 @@ void WeaponMelee::Render(const PblMatrix& matrix, const RedPose* pPose,
             const PblMatrix* pBone = pPose->Find(pClass->m_auiHardpoint[0]);
             if (pBone)
             {
-                D3DXMatrixMultiply(&aMatrix[0], pBone, &matrix);
+                D3DXMatrixMultiply(reinterpret_cast<D3DXMATRIX*>(&aMatrix[0]), reinterpret_cast<const D3DXMATRIX*>(pBone), reinterpret_cast<const D3DXMATRIX*>(&matrix));
                 apMatrix[0] = &aMatrix[0];
             }
         }
@@ -162,7 +157,7 @@ void WeaponMelee::Render(const PblMatrix& matrix, const RedPose* pPose,
         {
             continue;
         }
-        D3DXMatrixMultiply(&aMatrix[i], pBone, &matrix);
+        D3DXMatrixMultiply(reinterpret_cast<D3DXMATRIX*>(&aMatrix[i]), reinterpret_cast<const D3DXMATRIX*>(pBone), reinterpret_cast<const D3DXMATRIX*>(&matrix));
         apMatrix[i] = &aMatrix[i];
         if (bRenderModel)
         {
@@ -190,8 +185,8 @@ void WeaponMelee::Render(const PblMatrix& matrix, const RedPose* pPose,
             const_cast<WeaponMelee*>(this)->RenderLightsaberTrail(i, &mTrail, bTrailOn, uiFlags);
         }
         PblVector3 vPosition, vDirection;
-        D3DXVec3TransformCoord(&vPosition, &edge.vOffsetPos, pEdgeMatrix);
-        D3DXVec3TransformNormal(&vDirection, &edge.vOffsetDir, pEdgeMatrix);
+        D3DXVec3TransformCoord(reinterpret_cast<D3DXVECTOR3*>(&vPosition), reinterpret_cast<const D3DXVECTOR3*>(&edge.vOffsetPos), reinterpret_cast<const D3DXMATRIX*>(pEdgeMatrix));
+        D3DXVec3TransformNormal(reinterpret_cast<D3DXVECTOR3*>(&vDirection), reinterpret_cast<const D3DXVECTOR3*>(&edge.vOffsetDir), reinterpret_cast<const D3DXMATRIX*>(pEdgeMatrix));
         const float fLength = GetLightSaberLengthFactor(edge.uiAttachToWeapon) * edge.fLength;
         _RenderLightSabre(vPosition, vDirection, edge.uiTextureHash,
                            bRenderModel ? edge.uiGlowTextureHash : 0,
@@ -219,7 +214,7 @@ void WeaponMeleeClass::Render(float fTurnOn, const PblMatrix& matrix, const RedP
             const PblMatrix* pBone = pPose->Find(m_auiHardpoint[0]);
             if (pBone)
             {
-                D3DXMatrixMultiply(&aMatrix[0], pBone, &matrix);
+                D3DXMatrixMultiply(reinterpret_cast<D3DXMATRIX*>(&aMatrix[0]), reinterpret_cast<const D3DXMATRIX*>(pBone), reinterpret_cast<const D3DXMATRIX*>(&matrix));
                 apMatrix[0] = &aMatrix[0];
             }
         }
@@ -244,7 +239,7 @@ void WeaponMeleeClass::Render(float fTurnOn, const PblMatrix& matrix, const RedP
         {
             continue;
         }
-        D3DXMatrixMultiply(&aMatrix[i], pBone, &matrix);
+        D3DXMatrixMultiply(reinterpret_cast<D3DXMATRIX*>(&aMatrix[i]), reinterpret_cast<const D3DXMATRIX*>(pBone), reinterpret_cast<const D3DXMATRIX*>(&matrix));
         apMatrix[i] = &aMatrix[i];
         m_apWeaponModel[i - 1]->Render(apMatrix[i], 0, color, uiRenderFlags, 0);
     }
@@ -263,8 +258,8 @@ void WeaponMeleeClass::Render(float fTurnOn, const PblMatrix& matrix, const RedP
             continue;
         }
         PblVector3 vPosition, vDirection;
-        D3DXVec3TransformCoord(&vPosition, &edge.vOffsetPos, pEdgeMatrix);
-        D3DXVec3TransformNormal(&vDirection, &edge.vOffsetDir, pEdgeMatrix);
+        D3DXVec3TransformCoord(reinterpret_cast<D3DXVECTOR3*>(&vPosition), reinterpret_cast<const D3DXVECTOR3*>(&edge.vOffsetPos), reinterpret_cast<const D3DXMATRIX*>(pEdgeMatrix));
+        D3DXVec3TransformNormal(reinterpret_cast<D3DXVECTOR3*>(&vDirection), reinterpret_cast<const D3DXVECTOR3*>(&edge.vOffsetDir), reinterpret_cast<const D3DXMATRIX*>(pEdgeMatrix));
         _RenderLightSabre(vPosition, vDirection, edge.uiTextureHash, edge.uiGlowTextureHash,
                            edge.fLength * fTurnOn, edge.fWidth, uiRenderFlags);
         bRenderedBlade = true;
@@ -520,7 +515,6 @@ static const float MELEE_DEFAULT_TURNONDURATION = 0.2f;
 // GLOBAL: SWBF2 0x01f9a8f8
 RedColor LIGHTSABER_DEFAULT_TRAIL_COLOR;
 
-extern "C" PblVector3* __stdcall D3DXVec3Normalize(PblVector3* pOut, const PblVector3* pV);
 
 namespace
 {
@@ -618,7 +612,7 @@ void LightsaberTrailEffect::RenderLightsaberTrail(const LightsaberTrail* pTrail,
         else
         {
             PblVector3 vNormal;
-            D3DXVec3Normalize(&vNormal, &vCap);
+            D3DXVec3Normalize(reinterpret_cast<D3DXVECTOR3*>(&vNormal), reinterpret_cast<const D3DXVECTOR3*>(&vCap));
             vCap = vNormal;
         }
         pFront[0].SetPos(PblVector3(vPos.x - vCap.x * fWidth, vPos.y - vCap.y * fWidth, vPos.z - vCap.z * fWidth));
@@ -677,7 +671,7 @@ void LightsaberTrailEffect::RenderLightsaberTrail(const LightsaberTrail* pTrail,
                 else
                 {
                     PblVector3 vNormal;
-                    D3DXVec3Normalize(&vNormal, &vCap);
+                    D3DXVec3Normalize(reinterpret_cast<D3DXVECTOR3*>(&vNormal), reinterpret_cast<const D3DXVECTOR3*>(&vCap));
                     vCap = vNormal;
                 }
 
@@ -864,7 +858,7 @@ void LightsaberTrailEffect::RenderLightsaberTrail(const LightsaberTrail* pTrail,
         else
         {
             PblVector3 vNormal;
-            D3DXVec3Normalize(&vNormal, &vCap);
+            D3DXVec3Normalize(reinterpret_cast<D3DXVECTOR3*>(&vNormal), reinterpret_cast<const D3DXVECTOR3*>(&vCap));
             vCap = vNormal;
         }
         pFront[0].SetPos(PblVector3(vPos.x - vCap.x * fWidth, vPos.y - vCap.y * fWidth, vPos.z - vCap.z * fWidth));
@@ -923,7 +917,7 @@ void LightsaberTrailEffect::RenderLightsaberTrail(const LightsaberTrail* pTrail,
                 else
                 {
                     PblVector3 vNormal;
-                    D3DXVec3Normalize(&vNormal, &vCap);
+                    D3DXVec3Normalize(reinterpret_cast<D3DXVECTOR3*>(&vNormal), reinterpret_cast<const D3DXVECTOR3*>(&vCap));
                     vCap = vNormal;
                 }
 
@@ -1291,7 +1285,7 @@ bool WeaponMelee::Deflect(const Ordnance* pOrdnance, const PblVector3& pos, cons
     if (vVelocity.x * vVelocity.x + vVelocity.y * vVelocity.y + vVelocity.z * vVelocity.z > 0.09f)
     {
         PblVector3 vNormal;
-        D3DXVec3Normalize(&vNormal, &vVelocity);
+        D3DXVec3Normalize(reinterpret_cast<D3DXVECTOR3*>(&vNormal), reinterpret_cast<const D3DXVECTOR3*>(&vVelocity));
         vVelocity = vNormal;
         const PblMatrix& mOwnerMatrix = mOwner->GetMatrix();
         if (vVelocity.x * mOwnerMatrix.m[2][0] + vVelocity.y * mOwnerMatrix.m[2][1] +
@@ -1335,7 +1329,7 @@ bool WeaponMelee::Deflect(const Ordnance* pOrdnance, const PblVector3& pos, cons
                          mUpMatrix.m[1][2] * vFront.x - mUpMatrix.m[1][0] * vFront.z,
                          mUpMatrix.m[1][0] * vFront.y - mUpMatrix.m[1][1] * vFront.x);
         PblVector3 vRight;
-        D3DXVec3Normalize(&vRight, &vSide);
+        D3DXVec3Normalize(reinterpret_cast<D3DXVECTOR3*>(&vRight), reinterpret_cast<const D3DXVECTOR3*>(&vSide));
         PblVector3 vUp(vFront.y * vRight.z - vFront.z * vRight.y,
                        vFront.z * vRight.x - vFront.x * vRight.z,
                        vFront.x * vRight.y - vFront.y * vRight.x);
@@ -1367,7 +1361,7 @@ bool WeaponMelee::Deflect(const Ordnance* pOrdnance, const PblVector3& pos, cons
             }
 
             PblMatrix mBlock;
-            D3DXMatrixMultiply(&mBlock, &pClass->m_amDeflectMatrix[i], &mDeflect);
+            D3DXMatrixMultiply(reinterpret_cast<D3DXMATRIX*>(&mBlock), reinterpret_cast<const D3DXMATRIX*>(&pClass->m_amDeflectMatrix[i]), reinterpret_cast<const D3DXMATRIX*>(&mDeflect));
             const float dx = pos.x - mBlock.m[3][0];
             const float dy = pos.y - mBlock.m[3][1];
             const float dz = pos.z - mBlock.m[3][2];
@@ -1420,7 +1414,7 @@ bool WeaponMelee::Deflect(const Ordnance* pOrdnance, const PblVector3& pos, cons
                 PblVector3 vEdgePoint(edge.vOffsetDir.x * fAlong + edge.vOffsetPos.x,
                                       edge.vOffsetPos.y + edge.vOffsetDir.y * fAlong,
                                       edge.vOffsetPos.z + edge.vOffsetDir.z * fAlong);
-                D3DXVec3TransformCoord(&vHitPos, &vEdgePoint, &mBlock);
+                D3DXVec3TransformCoord(reinterpret_cast<D3DXVECTOR3*>(&vHitPos), reinterpret_cast<const D3DXVECTOR3*>(&vEdgePoint), reinterpret_cast<const D3DXMATRIX*>(&mBlock));
             }
             break;
         }
@@ -1465,7 +1459,7 @@ bool WeaponMelee::Deflect(const Ordnance* pOrdnance, const PblVector3& pos, cons
             PblVector3 vScattered(vCross.x + (mSideMatrix.m[0][0] * fCos + vAim.x),
                                   vAim.y + mSideMatrix.m[0][1] * fCos + vCross.y,
                                   vAim.z + mSideMatrix.m[0][2] * fCos + vCross.z);
-            D3DXVec3Normalize(&vDeflectDir, &vScattered);
+            D3DXVec3Normalize(reinterpret_cast<D3DXVECTOR3*>(&vDeflectDir), reinterpret_cast<const D3DXVECTOR3*>(&vScattered));
 
             m_fDeflectTimer -= GameLoop::sClientDeltaTime;
             if (m_fDeflectTimer >= 1.0f)
@@ -1491,7 +1485,7 @@ bool WeaponMelee::Deflect(const Ordnance* pOrdnance, const PblVector3& pos, cons
             PblVector3 vScattered(vAim.x + mSideMatrix.m[0][0] * fX + vCross.x,
                                   vAim.y + mSideMatrix.m[0][1] * fX + vCross.y,
                                   vAim.z + mSideMatrix.m[0][2] * fX + vCross.z);
-            D3DXVec3Normalize(&vDeflectDir, &vScattered);
+            D3DXVec3Normalize(reinterpret_cast<D3DXVECTOR3*>(&vDeflectDir), reinterpret_cast<const D3DXVECTOR3*>(&vScattered));
             m_fDeflectTimer = 0.0f;
         }
         pOrdnance->CreateRicochet(vHitPos, vDeflectDir, mOwner->GetGameObject());
@@ -2268,7 +2262,7 @@ bool WeaponMelee::UpdateFire(float fDeltaTime)
                                  mOwnerMatrix.m[1][2] * vAim.x - mOwnerMatrix.m[1][0] * vAim.z,
                                  mOwnerMatrix.m[1][0] * vAim.y - mOwnerMatrix.m[1][1] * vAim.x);
                 PblVector3 vRight;
-                D3DXVec3Normalize(&vRight, &vSide);
+                D3DXVec3Normalize(reinterpret_cast<D3DXVECTOR3*>(&vRight), reinterpret_cast<const D3DXVECTOR3*>(&vSide));
                 const PblMatrix& mOriginMatrix = mOwner->GetMatrix();
                 PblVector3 vUp(vAim.y * vRight.z - vAim.z * vRight.y, vAim.z * vRight.x - vAim.x * vRight.z,
                                vAim.x * vRight.y - vAim.y * vRight.x);
@@ -2300,7 +2294,7 @@ bool WeaponMelee::UpdateFire(float fDeltaTime)
         PblVector3 vLocalCenter((box._vMax.x + box._vMin.x) * 0.5f, (box._vMax.y + box._vMin.y) * 0.5f,
                                 (box._vMax.z + box._vMin.z) * 0.5f);
         PblVector3 vCenter;
-        D3DXVec3TransformCoord(&vCenter, &vLocalCenter, &mAttack);
+        D3DXVec3TransformCoord(reinterpret_cast<D3DXVECTOR3*>(&vCenter), reinterpret_cast<const D3DXVECTOR3*>(&vLocalCenter), reinterpret_cast<const D3DXMATRIX*>(&mAttack));
         const float dx = box._vMax.x - box._vMin.x;
         const float dy = box._vMax.y - box._vMin.y;
         const float dz = box._vMax.z - box._vMin.z;
@@ -2343,13 +2337,13 @@ bool WeaponMelee::UpdateFire(float fDeltaTime)
             {
                 const MeleeDamageSample& sample = aSample[i];
                 PblVector3 vSampleDir;
-                D3DXVec3TransformNormal(&vSampleDir, &sample.vDir, &mAttack);
+                D3DXVec3TransformNormal(reinterpret_cast<D3DXVECTOR3*>(&vSampleDir), reinterpret_cast<const D3DXVECTOR3*>(&sample.vDir), reinterpret_cast<const D3DXMATRIX*>(&mAttack));
                 vDir = vSampleDir;
                 const float fBackX = vSampleDir.x * 0.2f;
                 const float fBackY = vSampleDir.y * 0.2f;
                 const float fBackZ = vSampleDir.z * 0.2f;
                 PblVector3 vPos;
-                D3DXVec3TransformCoord(&vPos, &sample.vPos, &mAttack);
+                D3DXVec3TransformCoord(reinterpret_cast<D3DXVECTOR3*>(&vPos), reinterpret_cast<const D3DXVECTOR3*>(&sample.vPos), reinterpret_cast<const D3DXMATRIX*>(&mAttack));
                 vStart = PblVector3(vPos.x - fBackX, vPos.y - fBackY, vPos.z - fBackZ);
                 t = pCollision->RayHit(vStart, vDir, fRayLength, 0, 0, true, fWidth);
                 if (t < 1.0f)
@@ -4381,7 +4375,7 @@ void WeaponMeleeClass::SetProperty(unsigned int aId, const char* aValue)
         {
             PblVector3 vDir(fDirX, fDirY, fDirZ);
             PblVector3 vNormal;
-            D3DXVec3Normalize(&vNormal, &vDir);
+            D3DXVec3Normalize(reinterpret_cast<D3DXVECTOR3*>(&vNormal), reinterpret_cast<const D3DXVECTOR3*>(&vDir));
             m_aDamageEdge[iEdge].vOffsetDir = vNormal;
             if (iCount >= 7)
             {

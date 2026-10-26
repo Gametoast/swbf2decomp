@@ -1,3 +1,4 @@
+#include <d3dx9math.h>
 #include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -26,12 +27,6 @@ MemoryPool Aimer::sMemoryPool("Aimer", 0x220);
 
 extern PblVector3 gVectorZero;
 
-extern "C" PblQuaternion* __stdcall D3DXQuaternionNormalize(PblQuaternion* pOut, const PblQuaternion* pQ);
-extern "C" PblMatrix* __stdcall D3DXMatrixRotationQuaternion(PblMatrix* pOut, const PblQuaternion* pQ);
-extern "C" PblMatrix* __stdcall D3DXMatrixMultiply(PblMatrix* pOut, const PblMatrix* pM1, const PblMatrix* pM2);
-extern "C" PblVector3* __stdcall D3DXVec3Normalize(PblVector3* pOut, const PblVector3* pV);
-extern "C" PblVector3* __stdcall D3DXVec3TransformCoord(PblVector3* pOut, const PblVector3* pV, const PblMatrix* pM);
-extern "C" PblVector3* __stdcall D3DXVec3TransformNormal(PblVector3* pOut, const PblVector3* pV, const PblMatrix* pM);
 
 PblMatrix DirectionMatrix(const PblVector3& vDir, const PblVector3& vUp, const PblVector3& vPos);
 
@@ -79,7 +74,7 @@ namespace
     {
         PblQuaternion qUnit;
         PblMatrix m;
-        D3DXMatrixRotationQuaternion(&m, D3DXQuaternionNormalize(&qUnit, &q));
+        D3DXMatrixRotationQuaternion(reinterpret_cast<D3DXMATRIX*>(&m), D3DXQuaternionNormalize(reinterpret_cast<D3DXQUATERNION*>(&qUnit), reinterpret_cast<const D3DXQUATERNION*>(&q)));
         m.m[3][0] = v.x;
         m.m[3][1] = v.y;
         m.m[3][2] = v.z;
@@ -329,11 +324,11 @@ Aimer::Aimer(AimerClass* pClass, const Controllable* pOwner, const PblMatrix* pP
     mOmegaYaw = 0.0f;
 
     PblVector3 v;
-    D3DXVec3TransformNormal(&v, &pClass->mRestDir, mParentMatrix);
+    D3DXVec3TransformNormal(reinterpret_cast<D3DXVECTOR3*>(&v), reinterpret_cast<const D3DXVECTOR3*>(&pClass->mRestDir), reinterpret_cast<const D3DXMATRIX*>(mParentMatrix));
     mDirection = v;
     mMountPos = mOffsetPos;
     mMountRot = mClass->mOffsetRot;
-    D3DXVec3TransformCoord(&v, &mMountPos, mParentMatrix);
+    D3DXVec3TransformCoord(reinterpret_cast<D3DXVECTOR3*>(&v), reinterpret_cast<const D3DXVECTOR3*>(&mMountPos), reinterpret_cast<const D3DXMATRIX*>(mParentMatrix));
     mRootPos = v;
     mFirePos = (*mParentMatrix)[3];
     mOldRootPos.x = 0.0f;
@@ -371,7 +366,7 @@ const PblMatrix Aimer::GetMatrix() const
 {
     PblMatrix mRot = MakeMatrix(mMountRot, mMountPos);
     PblMatrix mMount;
-    D3DXMatrixMultiply(&mMount, &mRot, mParentMatrix);
+    D3DXMatrixMultiply(reinterpret_cast<D3DXMATRIX*>(&mMount), reinterpret_cast<const D3DXMATRIX*>(&mRot), reinterpret_cast<const D3DXMATRIX*>(mParentMatrix));
     return DirectionMatrix(mDirection, mMount[1], mMount[3]);
 }
 
@@ -409,9 +404,9 @@ void Aimer::SetupPose(const PblMatrix& mParent, RedPose& pose, bool bRecurse) co
         {
             PblMatrix mOffset = MakeMatrix(mClass->mOffsetRot, mOffsetPos);
             PblMatrix mMount;
-            D3DXMatrixMultiply(&mMount, &mOffset, pParentBone);
+            D3DXMatrixMultiply(reinterpret_cast<D3DXMATRIX*>(&mMount), reinterpret_cast<const D3DXMATRIX*>(&mOffset), reinterpret_cast<const D3DXMATRIX*>(pParentBone));
             PblVector3 vDir;
-            D3DXVec3TransformNormal(&vDir, &mDirection, &mParent);
+            D3DXVec3TransformNormal(reinterpret_cast<D3DXVECTOR3*>(&vDir), reinterpret_cast<const D3DXVECTOR3*>(&mDirection), reinterpret_cast<const D3DXMATRIX*>(&mParent));
             mMountPoseMatrix = DirectionMatrix(vDir, mMount[1], mMount[3]);
 
             const PblMatrix* pOld = pose.Find(mClass->mMountHash);
@@ -441,7 +436,7 @@ void Aimer::SetupPose(const PblMatrix& mParent, RedPose& pose, bool bRecurse) co
                     vOffset.z += -(barrel.mRecoil * mRecoil[i]);
                 }
                 PblVector3 vPos;
-                D3DXVec3TransformCoord(&vPos, &vOffset, &mBarrelPoseMatrix[i]);
+                D3DXVec3TransformCoord(reinterpret_cast<D3DXVECTOR3*>(&vPos), reinterpret_cast<const D3DXVECTOR3*>(&vOffset), reinterpret_cast<const D3DXMATRIX*>(&mBarrelPoseMatrix[i]));
                 mBarrelPoseMatrix[i].m[3][0] = vPos.x;
                 mBarrelPoseMatrix[i].m[3][1] = vPos.y;
                 mBarrelPoseMatrix[i].m[3][2] = vPos.z;
@@ -501,7 +496,7 @@ bool Aimer::UpdateFire(Aimer*& pNextAimer, bool bFire)
                              barrel.mOffset.y + barrel.mFireOffset.y,
                              barrel.mOffset.z + barrel.mFireOffset.z);
     PblVector3 vPos;
-    D3DXVec3TransformCoord(&vPos, &vOffset, &mMatrix);
+    D3DXVec3TransformCoord(reinterpret_cast<D3DXVECTOR3*>(&vPos), reinterpret_cast<const D3DXVECTOR3*>(&vOffset), reinterpret_cast<const D3DXMATRIX*>(&mMatrix));
     mFirePos = vPos;
     mPrevFirePos = PblVector3(mFirePos.x - mPrevFirePos.x, mFirePos.y - mPrevFirePos.y,
                               mFirePos.z - mPrevFirePos.z);
@@ -624,7 +619,7 @@ bool Aimer::Update(float fDeltaTime)
         {
             PblMatrix mOffset = MakeMatrix(mClass->mOffsetRot, mOffsetPos);
             PblMatrix mMount;
-            D3DXMatrixMultiply(&mMount, &mOffset, pParentBone);
+            D3DXMatrixMultiply(reinterpret_cast<D3DXMATRIX*>(&mMount), reinterpret_cast<const D3DXMATRIX*>(&mOffset), reinterpret_cast<const D3DXMATRIX*>(pParentBone));
             mMountPos = mMount[3];
             mMountRot = PblQuaternion(mMount);
         }
@@ -632,7 +627,7 @@ bool Aimer::Update(float fDeltaTime)
 
     PblMatrix mRot = MakeMatrix(mMountRot, mMountPos);
     PblMatrix mMount;
-    D3DXMatrixMultiply(&mMount, &mRot, mParentMatrix);
+    D3DXMatrixMultiply(reinterpret_cast<D3DXMATRIX*>(&mMount), reinterpret_cast<const D3DXMATRIX*>(&mRot), reinterpret_cast<const D3DXMATRIX*>(mParentMatrix));
     mRootPos = mMount[3];
 
     if (mWeapon)
@@ -652,7 +647,7 @@ bool Aimer::Update(float fDeltaTime)
                       vAimPoint.y - (mFirePos.y - mDirection.y * t),
                       vAimPoint.z - (mFirePos.z - mDirection.z * t));
     PblVector3 vDir;
-    D3DXVec3Normalize(&vDir, &vDelta);
+    D3DXVec3Normalize(reinterpret_cast<D3DXVECTOR3*>(&vDir), reinterpret_cast<const D3DXVECTOR3*>(&vDelta));
 
     const UnitController* pCtrl = UnitControllerPtr(mOwner);
     if (pCtrl)
@@ -722,7 +717,7 @@ bool Aimer::Update(float fDeltaTime)
                                  barrel.mOffset.y + barrel.mFireOffset.y,
                                  barrel.mOffset.z + barrel.mFireOffset.z);
         PblVector3 vPos;
-        D3DXVec3TransformCoord(&vPos, &vOffset, &mAim);
+        D3DXVec3TransformCoord(reinterpret_cast<D3DXVECTOR3*>(&vPos), reinterpret_cast<const D3DXVECTOR3*>(&vOffset), reinterpret_cast<const D3DXMATRIX*>(&mAim));
         mFirePos = vPos;
     }
     else
@@ -800,7 +795,7 @@ bool Aimer::ClampDirection(const PblMatrix& mMatrix)
     PblMath::SinCos(&fSinPitch, &fCosPitch, mPitch);
     const PblVector3 vLocal(fCosPitch * fSinYaw, fSinPitch, fCosPitch * fCosYaw);
     PblVector3 vDir;
-    D3DXVec3TransformNormal(&vDir, &vLocal, &mMatrix);
+    D3DXVec3TransformNormal(reinterpret_cast<D3DXVECTOR3*>(&vDir), reinterpret_cast<const D3DXVECTOR3*>(&vLocal), reinterpret_cast<const D3DXMATRIX*>(&mMatrix));
     mDirection = vDir;
     return bWithin;
 }

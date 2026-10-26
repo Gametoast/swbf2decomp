@@ -1,3 +1,4 @@
+#include <d3dx9math.h>
 #include "AIUtil.h"
 
 #include <math.h>
@@ -64,14 +65,6 @@
 #include "PebbleFL/Common/PblHeap.h"
 #include "TeamManager.h"
 
-extern "C" PblVector3* __stdcall D3DXVec3Normalize(PblVector3* pOut, const PblVector3* pV);
-extern "C" PblVector3* __stdcall D3DXVec3TransformNormal(PblVector3* pOut, const PblVector3* pV,
-                                                         const PblMatrix* pM);
-extern "C" PblVector3* __stdcall D3DXVec3TransformCoord(PblVector3* pOut, const PblVector3* pV,
-                                                        const PblMatrix* pM);
-extern "C" PblMatrix* __stdcall D3DXMatrixMultiply(PblMatrix* pOut, const PblMatrix* pM1,
-                                                   const PblMatrix* pM2);
-extern "C" PblMatrix* __stdcall D3DXMatrixRotationY(PblMatrix* pOut, float fAngle);
 
 extern PblVector3 gVectorZero;
 
@@ -426,7 +419,7 @@ PblVector3 AIUtil::UnrotateVector(const PblMatrix& rMatrix, const PblVector3& vD
 {
     PblVector3 vResult;
     const PblMatrix mInverse = rMatrix.GetInverseFast();
-    D3DXVec3TransformNormal(&vResult, &vDir, &mInverse);
+    D3DXVec3TransformNormal(reinterpret_cast<D3DXVECTOR3*>(&vResult), reinterpret_cast<const D3DXVECTOR3*>(&vDir), reinterpret_cast<const D3DXMATRIX*>(&mInverse));
     return vResult;
 }
 
@@ -441,7 +434,7 @@ PblVector3 AIUtil::GetSafeNormalXZ(const PblVector3& v)
         return vNormal;
     }
     PblVector3 vTmp;
-    D3DXVec3Normalize(&vTmp, &vNormal);
+    D3DXVec3Normalize(reinterpret_cast<D3DXVECTOR3*>(&vTmp), reinterpret_cast<const D3DXVECTOR3*>(&vNormal));
     vNormal = vTmp;
     return vNormal;
 }
@@ -456,7 +449,7 @@ PblVector3 AIUtil::GetSafeNormal(const PblVector3& v)
         return vNormal;
     }
     PblVector3 vTmp;
-    D3DXVec3Normalize(&vTmp, &vNormal);
+    D3DXVec3Normalize(reinterpret_cast<D3DXVECTOR3*>(&vTmp), reinterpret_cast<const D3DXVECTOR3*>(&vNormal));
     vNormal = vTmp;
     return vNormal;
 }
@@ -500,7 +493,7 @@ static void sCalculateTurnControls(const Controllable* pMe, float fScale, const 
         PblVector3 vDir;
         if (pMe->GetEntity()->IsRtti(EntityFlyer::rttiHashEntityFlyer))
         {
-            D3DXVec3Normalize(&vDir, &vLocal);
+            D3DXVec3Normalize(reinterpret_cast<D3DXVECTOR3*>(&vDir), reinterpret_cast<const D3DXVECTOR3*>(&vLocal));
         }
         else
         {
@@ -589,7 +582,7 @@ static void sCalculateTurnControls(const Controllable* pMe, float fScale, const 
     {
         const PblVector3 vLocal = UnrotateVector(mEye, vToDest2);
         PblVector3 vDir;
-        D3DXVec3Normalize(&vDir, &vLocal);
+        D3DXVec3Normalize(reinterpret_cast<D3DXVECTOR3*>(&vDir), reinterpret_cast<const D3DXVECTOR3*>(&vLocal));
 
         float fRate = fPitchRate;
         if (fRate < 1.0f)
@@ -683,12 +676,12 @@ PblVector3 AIUtil::CalculateBubbleOffset(const Controllable* pControllable, cons
             const PblVector3 vCross(vTo.y * 0.0f - vTo.z, vTo.z * 0.0f - vTo.x * 0.0f,
                                     vTo.x - vTo.y * 0.0f);
             PblVector3 vSide;
-            D3DXVec3Normalize(&vSide, &vCross);
+            D3DXVec3Normalize(reinterpret_cast<D3DXVECTOR3*>(&vSide), reinterpret_cast<const D3DXVECTOR3*>(&vCross));
             const PblVector3 vCross2(vTo.y * vSide.z - vTo.z * vSide.y,
                                      vTo.z * vSide.x - vTo.x * vSide.z,
                                      vTo.x * vSide.y - vTo.y * vSide.x);
             PblVector3 vUp;
-            D3DXVec3Normalize(&vUp, &vCross2);
+            D3DXVec3Normalize(reinterpret_cast<D3DXVECTOR3*>(&vUp), reinterpret_cast<const D3DXVECTOR3*>(&vCross2));
 
             vOffset = PblVector3(vSide.x * vCircle.x + vUp.x * vCircle.y,
                                  vSide.y * vCircle.x + vUp.y * vCircle.y,
@@ -919,7 +912,7 @@ void UpdatePhysics(const Controllable* pMe, float fScale, const ControllableDest
         else
         {
             PblVector3 vDir;
-            D3DXVec3Normalize(&vDir, &vToDest);
+            D3DXVec3Normalize(reinterpret_cast<D3DXVECTOR3*>(&vDir), reinterpret_cast<const D3DXVECTOR3*>(&vToDest));
 
             PblVector3 vFwd = pMe->GetMatrix().GetZAxis();
             PblVector3 vFwdXZ;
@@ -930,7 +923,7 @@ void UpdatePhysics(const Controllable* pMe, float fScale, const ControllableDest
             else
             {
                 vFwd.y = 0.0f;
-                D3DXVec3Normalize(&vFwdXZ, &vFwd);
+                D3DXVec3Normalize(reinterpret_cast<D3DXVECTOR3*>(&vFwdXZ), reinterpret_cast<const D3DXVECTOR3*>(&vFwd));
             }
             const float fForward = vDir.x * vFwdXZ.x + vFwdXZ.y * vDir.y + vFwdXZ.z * vDir.z;
             const float fSide = -(vFwdXZ.z * vDir.x - vDir.z * vFwdXZ.x);
@@ -1051,10 +1044,10 @@ void AIUtil::CalculateFlyerSteerPoint(const PblVector3& vPos, const PblVector3& 
 
     PblVector3 vFlat(vDir.x, 0.0f, vDir.z);
     PblVector3 vFwd;
-    D3DXVec3Normalize(&vFwd, &vFlat);
+    D3DXVec3Normalize(reinterpret_cast<D3DXVECTOR3*>(&vFwd), reinterpret_cast<const D3DXVECTOR3*>(&vFlat));
     vFlat = PblVector3(vGoalDir.x, 0.0f, vGoalDir.z);
     PblVector3 vGoalFwd;
-    D3DXVec3Normalize(&vGoalFwd, &vFlat);
+    D3DXVec3Normalize(reinterpret_cast<D3DXVECTOR3*>(&vGoalFwd), reinterpret_cast<const D3DXVECTOR3*>(&vFlat));
 
     float fGoalCircleX = fGoalX + vGoalFwd.z * fRadius;
     float fGoalCircleZ = fGoalZ - vGoalFwd.x * fRadius;
@@ -1169,7 +1162,7 @@ void AIUtil::CalculateSoldierSteerPoint(const PblVector3& vPrev, const PblVector
 {
     const PblVector3 vFrom(vPrev.x, vPos.y, vPrev.z);
     const PblVector3 vTo(vGoto.x, vPos.y, vGoto.z);
-    const PblVector3 vLeg(vTo.x - vFrom.x, vTo.y - vFrom.y, vTo.z - vFrom.z);
+    const PblVector3 vLeg = vTo - vFrom;
     if (0.0001f > vLeg.x * vLeg.x + vLeg.y * vLeg.y + vLeg.z * vLeg.z)
     {
         vSteer = vTo;
@@ -1177,7 +1170,7 @@ void AIUtil::CalculateSoldierSteerPoint(const PblVector3& vPrev, const PblVector
     }
 
     PblVector3 vDir;
-    D3DXVec3Normalize(&vDir, &vLeg);
+    D3DXVec3Normalize(reinterpret_cast<D3DXVECTOR3*>(&vDir), reinterpret_cast<const D3DXVECTOR3*>(&vLeg));
     const float fAhead = vDir.y * (vPos.y - vFrom.y) + (vPos.x - vFrom.x) * vDir.x +
                          vDir.z * (vPos.z - vFrom.z) + fSpeed + 0.2f;
     if (fAhead * fAhead > vLeg.z * vLeg.z + vLeg.x * vLeg.x)
@@ -1185,8 +1178,7 @@ void AIUtil::CalculateSoldierSteerPoint(const PblVector3& vPrev, const PblVector
         vSteer = vTo;
         return;
     }
-    vSteer = PblVector3(vDir.x * fAhead + vFrom.x, vDir.y * fAhead + vFrom.y,
-                        vDir.z * fAhead + vFrom.z);
+    vSteer = (vDir * fAhead + vFrom);
 }
 
 // FUNCTION: SWBF2 0x00440f20
@@ -1350,7 +1342,7 @@ PblVector3 AIUtil::GetRandomPtInRegion(const RedRegion* pRegion)
         const PblVector3 v = PblRandom::GetGlobalVector3();
         const PblVector3 vLocal(pRegion->mSize.x * v.x, pRegion->mSize.y * v.y, pRegion->mSize.z * v.z);
         PblVector3 vPoint;
-        D3DXVec3TransformCoord(&vPoint, &vLocal, &pRegion->mMatrix);
+        D3DXVec3TransformCoord(reinterpret_cast<D3DXVECTOR3*>(&vPoint), reinterpret_cast<const D3DXVECTOR3*>(&vLocal), reinterpret_cast<const D3DXMATRIX*>(&pRegion->mMatrix));
         return vPoint;
     }
     case PblRegion::type_cylinder:
@@ -1365,7 +1357,7 @@ PblVector3 AIUtil::GetRandomPtInRegion(const RedRegion* pRegion)
         } while (v.x * v.x + v.z * v.z > 1.0f);
         const PblVector3 vLocal(pRegion->mSize.x * v.x, pRegion->mSize.y * v.y, pRegion->mSize.z * v.z);
         PblVector3 vPoint;
-        D3DXVec3TransformCoord(&vPoint, &vLocal, &pRegion->mMatrix);
+        D3DXVec3TransformCoord(reinterpret_cast<D3DXVECTOR3*>(&vPoint), reinterpret_cast<const D3DXVECTOR3*>(&vLocal), reinterpret_cast<const D3DXMATRIX*>(&pRegion->mMatrix));
         return vPoint;
     }
     default:
@@ -1845,7 +1837,7 @@ PblVector3 AIUtil::DumbDown(const GameObject* pObject, float fDeltaTime, Aimer* 
         mAim[3] = gVectorZero;
         mAim.m[3][3] = 1.0f;
         PblMatrix mRotate;
-        D3DXMatrixMultiply(&mAim, &mAim, D3DXMatrixRotationY(&mRotate, vUp.y > 0.0f ? 0.523598790f
+        D3DXMatrixMultiply(reinterpret_cast<D3DXMATRIX*>(&mAim), reinterpret_cast<const D3DXMATRIX*>(&mAim), D3DXMatrixRotationY(reinterpret_cast<D3DXMATRIX*>(&mRotate), vUp.y > 0.0f ? 0.523598790f
                                                                                   : -0.523598790f));
         vAim = mAim.GetZAxis();
         pAimer->SetAngVel(gVectorZero);
@@ -1871,7 +1863,7 @@ PblVector3 AIUtil::DumbDown(const GameObject* pObject, float fDeltaTime, Aimer* 
     const PblVector3 vNext(vAngVel.x * fDeltaTime + vAim.x, vAngVel.y * fDeltaTime + vAim.y,
                            vAngVel.z * fDeltaTime + vAim.z);
     PblVector3 vResult;
-    D3DXVec3Normalize(&vResult, &vNext);
+    D3DXVec3Normalize(reinterpret_cast<D3DXVECTOR3*>(&vResult), reinterpret_cast<const D3DXVECTOR3*>(&vNext));
     return vResult;
 }
 
@@ -1910,8 +1902,7 @@ PblVector3 AIUtil::GetHisVisionTargetPos(const Controllable* pMe, const GameObje
         const PblVector3 vHisEye = pObj->GetControllable()->GetEyePoint();
         const PblVector3 vDir = pMe->mEyeDir;
         const PblVector3 vTarget = pObj->GetTargetPoint(vMyPos, vDir, -1);
-        return PblVector3((vTarget.x + vHisEye.x) * 0.5f, (vTarget.y + vHisEye.y) * 0.5f,
-                          (vTarget.z + vHisEye.z) * 0.5f);
+        return ((vTarget + vHisEye) * 0.5f);
     }
     return pObj->GetTargetPoint(vMyPos, pMe->mEyeDir, -1);
 }

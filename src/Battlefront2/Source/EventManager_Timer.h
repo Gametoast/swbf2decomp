@@ -68,9 +68,9 @@ public:
         callback.DetachFromParent();
         while (pParent && pParent->mParent && !pParent->mChild)
         {
-            Node* pNext = pParent->mParent;
-            pParent->DetachFromParent();
-            pParent = pNext;
+            Node* pNode = pParent;
+            pParent = pParent->mParent;
+            pNode->DetachFromParent();
         }
     }
     template <class PREDICATE>

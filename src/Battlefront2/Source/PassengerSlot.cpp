@@ -1,3 +1,4 @@
+#include <d3dx9math.h>
 #include "PassengerSlot.h"
 #include "PebbleFL/Common/PblVector.h"
 
@@ -15,8 +16,6 @@
 #include "RedEngineFL/Graphics/RedModel.h"
 #include "RedEngineFL/Memory/RedMemoryPool.h"
 
-extern "C" PblMatrix* __stdcall D3DXMatrixMultiply(PblMatrix* pOut, const PblMatrix* pM1,
-                                                   const PblMatrix* pM2);
 
 // SYNTHETIC: SWBF2 0x00405da0
 // `dynamic initializer for 'PassengerSlot::sMemoryPool''
@@ -166,7 +165,7 @@ PassengerSlot::PassengerSlot(GameObject* pParent, PassengerSlotClass* pClass, Re
     : EntityEx(0, pClass), Controllable(pClass ? static_cast<ControllableClass*>(pClass) : 0, -1),
       mPowerupTimer(0.0f), mParent(pParent), mClass(pClass)
 {
-    D3DXMatrixMultiply(&mAimMatrix, &mClass->mMountMatrix, &mParent->GetMatrix());
+    D3DXMatrixMultiply(reinterpret_cast<D3DXMATRIX*>(&mAimMatrix), reinterpret_cast<const D3DXMATRIX*>(&mClass->mMountMatrix), reinterpret_cast<const D3DXMATRIX*>(&mParent->GetMatrix()));
     mEyePoint = mClass->mCameraSettings.CalcEyePoint(mAimMatrix);
     mEyeDir = mAimMatrix.GetZAxis();
 }
@@ -295,7 +294,7 @@ bool PassengerSlot::Update(float fDeltaTime)
         }
     }
 
-    D3DXMatrixMultiply(&mAimMatrix, &mClass->mMountMatrix, &mParent->GetMatrix());
+    D3DXMatrixMultiply(reinterpret_cast<D3DXMATRIX*>(&mAimMatrix), reinterpret_cast<const D3DXMATRIX*>(&mClass->mMountMatrix), reinterpret_cast<const D3DXMATRIX*>(&mParent->GetMatrix()));
     mEyePoint = mClass->mCameraSettings.CalcEyePoint(mAimMatrix);
     mEyeDir = mAimMatrix.GetZAxis();
     mPowerupTimer += fDeltaTime;

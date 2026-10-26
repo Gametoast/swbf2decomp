@@ -578,7 +578,7 @@ void CreateTreeLineOnPath(unsigned int uPathName, PblFileChunk& chunk)
     const float fSpacingSquared = fSpacing * fSpacing;
     for (int iPoint = 1; iPoint < pPath->GetNumPoints(); ++iPoint)
     {
-        const PblVector3& vEnd = pPath->GetPointPosition(iPoint);
+        const PblVector3 vEnd = pPath->GetPointPosition(iPoint);
         PblVector3 vDelta(vEnd.x - vPrevious.x, vEnd.y - vPrevious.y, vEnd.z - vPrevious.z);
         while (vDelta.x * vDelta.x + vDelta.y * vDelta.y + vDelta.z * vDelta.z > fSpacingSquared)
         {

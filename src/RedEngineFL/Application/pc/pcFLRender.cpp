@@ -1,3 +1,4 @@
+#include <d3dx9math.h>
 #include "RedEngineFL/Util/RedCommandConsole.h"
 #include "RedEngineFL/Graphics/PC/Shaders/pcStencilShadowShader.h"
 #include "RedEngineFL/Application/RedTerrain.h"
@@ -97,8 +98,6 @@ void FLRenderer::AddInterfaceElement(RedScreenGroupElement* pElement, float fX,
 
 extern bool g_bNoRender;
 
-extern "C" PblVector3* __stdcall D3DXVec3TransformCoord(PblVector3* pOut, const PblVector3* pV,
-                                                        const PblMatrix* pM);
 
 // GLOBAL: SWBF2 0x007de9dc
 PblList<ReflectionRegion> ReflectionRegion::s_List;
@@ -792,13 +791,13 @@ void FLRenderer::AddReflectionObject(char reflectionID, const PblBox& box, bool 
     }
 
     PblVector3 vCorner;
-    D3DXVec3TransformCoord(&aPoints[0], &box._vMin, &mView);
+    D3DXVec3TransformCoord(reinterpret_cast<D3DXVECTOR3*>(&aPoints[0]), reinterpret_cast<const D3DXVECTOR3*>(&box._vMin), reinterpret_cast<const D3DXMATRIX*>(&mView));
     vCorner = PblVector3(box._vMax.x, box._vMin.y, box._vMin.z);
-    D3DXVec3TransformCoord(&aPoints[1], &vCorner, &mView);
+    D3DXVec3TransformCoord(reinterpret_cast<D3DXVECTOR3*>(&aPoints[1]), reinterpret_cast<const D3DXVECTOR3*>(&vCorner), reinterpret_cast<const D3DXMATRIX*>(&mView));
     vCorner = PblVector3(box._vMax.x, box._vMin.y, box._vMax.z);
-    D3DXVec3TransformCoord(&aPoints[2], &vCorner, &mView);
+    D3DXVec3TransformCoord(reinterpret_cast<D3DXVECTOR3*>(&aPoints[2]), reinterpret_cast<const D3DXVECTOR3*>(&vCorner), reinterpret_cast<const D3DXMATRIX*>(&mView));
     vCorner = PblVector3(box._vMin.x, box._vMin.y, box._vMax.z);
-    D3DXVec3TransformCoord(&aPoints[3], &vCorner, &mView);
+    D3DXVec3TransformCoord(reinterpret_cast<D3DXVECTOR3*>(&aPoints[3]), reinterpret_cast<const D3DXVECTOR3*>(&vCorner), reinterpret_cast<const D3DXMATRIX*>(&mView));
     aPoints[0].z = -aPoints[0].z;
     aPoints[1].z = -aPoints[1].z;
     aPoints[2].z = -aPoints[2].z;
@@ -1501,9 +1500,6 @@ void FLRenderer::Render()
     RedRenderer::EndFrame();
 }
 
-extern "C" PblMatrix* __stdcall D3DXMatrixMultiply(PblMatrix* pOut, const PblMatrix* pM1,
-                                                   const PblMatrix* pM2);
-extern "C" PblVector3* __stdcall D3DXVec3Normalize(PblVector3* pOut, const PblVector3* pV);
 
 static inline void Vec3Cross_(PblVector3& rOut, const PblVector3& a, const PblVector3& b)
 {
@@ -1747,7 +1743,7 @@ void FLRenderer::RenderReflections()
             bClipPlane = true;
 
             PblMatrix mReflected;
-            D3DXMatrixMultiply(&mReflected, &mCamera, &mReflect);
+            D3DXMatrixMultiply(reinterpret_cast<D3DXMATRIX*>(&mReflected), reinterpret_cast<const D3DXMATRIX*>(&mCamera), reinterpret_cast<const D3DXMATRIX*>(&mReflect));
             reflectCamera.SetMatrix(mReflected);
 
             float fFadeEnd = GetNearSceneFadeEnd() * fZoom;
@@ -1769,7 +1765,7 @@ void FLRenderer::RenderReflections()
                 mBasis.m[3][2] = 0.0f;
                 mBasis.m[3][3] = 1.0f;
                 PblVector3 vDir;
-                D3DXVec3Normalize(&vDir, &vCentre);
+                D3DXVec3Normalize(reinterpret_cast<D3DXVECTOR3*>(&vDir), reinterpret_cast<const D3DXVECTOR3*>(&vCentre));
                 mBasis.m[2][0] = vDir.x;
                 mBasis.m[2][1] = vDir.y;
                 mBasis.m[2][2] = vDir.z;
@@ -1779,13 +1775,13 @@ void FLRenderer::RenderReflections()
                 if (fHalfX > fHalfY)
                 {
                     Vec3Cross_(vCross, vDir, gVectorUnitX);
-                    D3DXVec3Normalize(&vUp, &vCross);
+                    D3DXVec3Normalize(reinterpret_cast<D3DXVECTOR3*>(&vUp), reinterpret_cast<const D3DXVECTOR3*>(&vCross));
                     Vec3Cross_(vRight, vUp, vDir);
                 }
                 else
                 {
                     Vec3Cross_(vCross, gVectorUnitY, vDir);
-                    D3DXVec3Normalize(&vRight, &vCross);
+                    D3DXVec3Normalize(reinterpret_cast<D3DXVECTOR3*>(&vRight), reinterpret_cast<const D3DXVECTOR3*>(&vCross));
                     Vec3Cross_(vUp, vDir, vRight);
                 }
                 mBasis.m[0][0] = vRight.x;
@@ -1802,7 +1798,7 @@ void FLRenderer::RenderReflections()
                 float fCos = (vDir.y * -0.0f - fEdgeY * fTanY * vDir.x) + vDir.z;
 
                 PblMatrix mClip;
-                D3DXMatrixMultiply(&mClip, &mBasis, &reflectCamera.GetMatrix());
+                D3DXMatrixMultiply(reinterpret_cast<D3DXMATRIX*>(&mClip), reinterpret_cast<const D3DXMATRIX*>(&mBasis), reinterpret_cast<const D3DXMATRIX*>(&reflectCamera.GetMatrix()));
                 clipCamera.SetMatrix(mClip);
                 clipCamera.SetFrustum(fNearPlane, fCos * fFadeEnd, fHalfX * 2.0f * fNearPlane,
                                       fHalfY * 2.0f * fNearPlane);

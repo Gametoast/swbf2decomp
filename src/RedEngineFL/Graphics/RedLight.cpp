@@ -1,3 +1,4 @@
+#include <d3dx9math.h>
 #include <float.h>
 #include <math.h>
 #include <stddef.h>
@@ -21,8 +22,6 @@ namespace FLRenderer
 unsigned int GetViewportCount();
 }
 
-extern "C" PblQuaternion* __stdcall D3DXQuaternionNormalize(PblQuaternion* pOut, const PblQuaternion* pQ);
-extern "C" PblMatrix* __stdcall D3DXMatrixRotationQuaternion(PblMatrix* pOut, const PblQuaternion* pQ);
 
 // GLOBAL: SWBF2 0x007deff0
 float RedShadowMap::_fShadowMapScale = 1.0f;
@@ -1274,7 +1273,7 @@ void RedLight::ReadLight(PblConfig& config, unsigned int uiName)
 
     PblQuaternion qUnit;
     PblMatrix mTransform;
-    D3DXMatrixRotationQuaternion(&mTransform, D3DXQuaternionNormalize(&qUnit, &qRotation));
+    D3DXMatrixRotationQuaternion(reinterpret_cast<D3DXMATRIX*>(&mTransform), D3DXQuaternionNormalize(reinterpret_cast<D3DXQUATERNION*>(&qUnit), reinterpret_cast<const D3DXQUATERNION*>(&qRotation)));
     mTransform.m[3][0] = vPosition.x;
     mTransform.m[3][1] = vPosition.y;
     mTransform.m[3][2] = vPosition.z;

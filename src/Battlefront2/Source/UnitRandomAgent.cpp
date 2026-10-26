@@ -83,7 +83,7 @@ void UnitRandomAgent::PickRandomDest()
 {
     PblVector3 vPos = GetMe()->GetMatrix().GetTranslation();
     PblVector3 vRand = PblRandom::GetGlobalVector3();
-    PblVector3 vDest(vPos.x + vRand.x * 10.0f, vPos.y + vRand.y * 10.0f, vPos.z + vRand.z * 10.0f);
+    PblVector3 vDest = vPos + vRand * 10.0f;
     GetLowLevel().SetNavigator_GotoDirect(vDest, true, false);
     mRandTime = GameLoop::GetMissionTime();
 }

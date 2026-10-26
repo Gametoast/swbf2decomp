@@ -1,3 +1,4 @@
+#include <d3dx9math.h>
 #include <float.h>
 #include "PebbleFL/Common/PblVector.h"
 
@@ -59,8 +60,6 @@
 #include "RedEngineFL/Graphics/RedShadingState.h"
 #include "RedEngineFL/Application/pc/pcFLRender.h"
 
-extern "C" PblVector3* __stdcall D3DXVec3TransformCoord(PblVector3* pOut, const PblVector3* pV,
-                                                        const PblMatrix* pM);
 
 namespace
 {
@@ -68,8 +67,8 @@ namespace
     inline void UpdateCollisionSphere(EntityHover* pHover)
     {
         PblVector3 center;
-        D3DXVec3TransformCoord(&center, &pHover->mModel->_mModel->_BoundingSphere.GetCenter(),
-                               &pHover->mMatrix);
+        D3DXVec3TransformCoord(reinterpret_cast<D3DXVECTOR3*>(&center), reinterpret_cast<const D3DXVECTOR3*>(&pHover->mModel->_mModel->_BoundingSphere.GetCenter()),
+                               reinterpret_cast<const D3DXMATRIX*>(&pHover->mMatrix));
         pHover->SetCollisionCenter(center);
         pHover->RecalculateAABB();
     }
@@ -1580,13 +1579,6 @@ int EntityHover::GetJoystickIndex()
     return -1;
 }
 
-extern "C" PblMatrix* __stdcall D3DXMatrixRotationX(PblMatrix* pOut, float fAngle);
-extern "C" PblMatrix* __stdcall D3DXMatrixRotationZ(PblMatrix* pOut, float fAngle);
-extern "C" PblMatrix* __stdcall D3DXMatrixMultiply(PblMatrix* pOut, const PblMatrix* pM1, const PblMatrix* pM2);
-extern "C" PblVector3* __stdcall D3DXVec3Normalize(PblVector3* pOut, const PblVector3* pV);
-extern "C" PblVector3* __stdcall D3DXVec3TransformNormal(PblVector3* pOut, const PblVector3* pV, const PblMatrix* pM);
-extern "C" PblQuaternion* __stdcall D3DXQuaternionNormalize(PblQuaternion* pOut, const PblQuaternion* pQ);
-extern "C" PblMatrix* __stdcall D3DXMatrixRotationQuaternion(PblMatrix* pOut, const PblQuaternion* pQ);
 
 extern bool netIsLocalTurn;
 
@@ -2031,10 +2023,10 @@ void EntityHover::Move(float fDeltaTime, float fThrust, float fStrafe, float fTu
 
     PblMatrix mUnbank;
     PblMatrix mUnpitch;
-    D3DXMatrixRotationZ(&mUnbank, -mBankRollAngle);
-    D3DXMatrixMultiply(&mUnbank, &mUnbank, D3DXMatrixRotationX(&mUnpitch, -mBankPitchAngle));
+    D3DXMatrixRotationZ(reinterpret_cast<D3DXMATRIX*>(&mUnbank), -mBankRollAngle);
+    D3DXMatrixMultiply(reinterpret_cast<D3DXMATRIX*>(&mUnbank), reinterpret_cast<const D3DXMATRIX*>(&mUnbank), D3DXMatrixRotationX(reinterpret_cast<D3DXMATRIX*>(&mUnpitch), -mBankPitchAngle));
     PblMatrix mBody;
-    D3DXMatrixMultiply(&mBody, &mUnbank, &mMatrix);
+    D3DXMatrixMultiply(reinterpret_cast<D3DXMATRIX*>(&mBody), reinterpret_cast<const D3DXMATRIX*>(&mUnbank), reinterpret_cast<const D3DXMATRIX*>(&mMatrix));
 
     const GameObject* pIgnore = this;
     float fInput = fabsf(fStrafe) > fabsf(fThrust) ? fabsf(fStrafe) : fabsf(fThrust);
@@ -2113,7 +2105,7 @@ void EntityHover::Move(float fDeltaTime, float fThrust, float fStrafe, float fTu
                                           (vNormal.y - mGroundNormal.y) * fBlend + mGroundNormal.y,
                                           (vNormal.z - mGroundNormal.z) * fBlend + mGroundNormal.z);
                         PblVector3 vGround;
-                        D3DXVec3Normalize(&vGround, &vBlend);
+                        D3DXVec3Normalize(reinterpret_cast<D3DXVECTOR3*>(&vGround), reinterpret_cast<const D3DXVECTOR3*>(&vBlend));
                         mGroundNormal = vGround;
                     }
                 }
@@ -2131,7 +2123,7 @@ void EntityHover::Move(float fDeltaTime, float fThrust, float fStrafe, float fTu
             mGroundRatio = fRatio;
             float fLift = mClass->mSetAltitude > 0.0f ? 0.1f : 0.0f;
             PblVector3 vTilt(mGroundNormal.x * fRatio, mGroundNormal.y + fLift, mGroundNormal.z * fRatio);
-            D3DXVec3Normalize(&vUp, &vTilt);
+            D3DXVec3Normalize(reinterpret_cast<D3DXVECTOR3*>(&vUp), reinterpret_cast<const D3DXVECTOR3*>(&vTilt));
         }
         else if (mGroundRatio == 1.0f)
         {
@@ -2409,13 +2401,13 @@ void EntityHover::Move(float fDeltaTime, float fThrust, float fStrafe, float fTu
     PblVector3 vDir;
     if (fVelocity > mClass->mForwardSpeed * 0.1f)
     {
-        D3DXVec3Normalize(&vDir, &mVelocity);
+        D3DXVec3Normalize(reinterpret_cast<D3DXVECTOR3*>(&vDir), reinterpret_cast<const D3DXVECTOR3*>(&mVelocity));
     }
     PblVector3 vNewPos(vPos.x + mVelocity.x * fDeltaTime, vPos.y + mVelocity.y * fDeltaTime,
                        vPos.z + mVelocity.z * fDeltaTime);
 
     PblVector3 vLocal;
-    D3DXVec3TransformNormal(&vLocal, &mVelocity, &mBody.GetInverseFast());
+    D3DXVec3TransformNormal(reinterpret_cast<D3DXVECTOR3*>(&vLocal), reinterpret_cast<const D3DXVECTOR3*>(&mVelocity), reinterpret_cast<const D3DXMATRIX*>(&mBody.GetInverseFast()));
     float fInvSpeed = 1.0f / mClass->mForwardSpeed;
     float fSlipSide = (vLocal.z * mOmega.y - mOmega.z * vLocal.y) * fInvSpeed;
     float fSlipFront = (mOmega.x * vLocal.y - mOmega.y * vLocal.x) * fInvSpeed;
@@ -2428,16 +2420,16 @@ void EntityHover::Move(float fDeltaTime, float fThrust, float fStrafe, float fTu
 
     PblQuaternion qUnit;
     PblMatrix mNew;
-    D3DXMatrixRotationQuaternion(&mNew, D3DXQuaternionNormalize(&qUnit, &qOrient));
+    D3DXMatrixRotationQuaternion(reinterpret_cast<D3DXMATRIX*>(&mNew), D3DXQuaternionNormalize(reinterpret_cast<D3DXQUATERNION*>(&qUnit), reinterpret_cast<const D3DXQUATERNION*>(&qOrient)));
     mNew.m[3][0] = vNewPos.x;
     mNew.m[3][1] = vNewPos.y;
     mNew.m[3][2] = vNewPos.z;
     mNew.m[3][3] = 1.0f;
     PblMatrix mBank;
     PblMatrix mBankRoll;
-    D3DXMatrixRotationX(&mBank, mBankPitchAngle);
-    D3DXMatrixMultiply(&mBank, &mBank, D3DXMatrixRotationZ(&mBankRoll, mBankRollAngle));
-    D3DXMatrixMultiply(&mBankRoll, &mBank, &mNew);
+    D3DXMatrixRotationX(reinterpret_cast<D3DXMATRIX*>(&mBank), mBankPitchAngle);
+    D3DXMatrixMultiply(reinterpret_cast<D3DXMATRIX*>(&mBank), reinterpret_cast<const D3DXMATRIX*>(&mBank), D3DXMatrixRotationZ(reinterpret_cast<D3DXMATRIX*>(&mBankRoll), mBankRollAngle));
+    D3DXMatrixMultiply(reinterpret_cast<D3DXMATRIX*>(&mBankRoll), reinterpret_cast<const D3DXMATRIX*>(&mBank), reinterpret_cast<const D3DXMATRIX*>(&mNew));
     SetMatrix(mBankRoll);
 
     if (mGroundRatio > mGroundRatioPrev && mGroundRatio <= mClass->mSoundCloseToGroundHeight && !mCloseToGround)
@@ -2554,7 +2546,6 @@ void EntityHover::Move(float fDeltaTime, float fThrust, float fStrafe, float fTu
     }
 }
 
-extern "C" PblVector3* __stdcall D3DXVec3Normalize(PblVector3* pOut, const PblVector3* pV);
 
 extern bool netFrameLock;
 extern bool netIsLateTurn;
@@ -2808,7 +2799,7 @@ bool EntityHover::PostCollisionUpdate(float fDeltaTime)
     PblMath::SinCos(&fSinYaw, &fCosYaw, mYawValue);
     PblVector3 vLocal(fSinYaw * fCosPitch, fSinPitch, fCosYaw * fCosPitch);
     PblVector3 vEyeDir;
-    D3DXVec3TransformNormal(&vEyeDir, &vLocal, &mMatrix);
+    D3DXVec3TransformNormal(reinterpret_cast<D3DXVECTOR3*>(&vEyeDir), reinterpret_cast<const D3DXVECTOR3*>(&vLocal), reinterpret_cast<const D3DXMATRIX*>(&mMatrix));
     mEyeDir = vEyeDir;
     mEyePoint = mClass->mCameraSettings.CalcEyePoint(mMatrix);
 
@@ -2836,7 +2827,7 @@ bool EntityHover::PostCollisionUpdate(float fDeltaTime)
 
             PblQuaternion qUnit;
             PblMatrix mCamera;
-            D3DXMatrixRotationQuaternion(&mCamera, D3DXQuaternionNormalize(&qUnit, &qCamera));
+            D3DXMatrixRotationQuaternion(reinterpret_cast<D3DXMATRIX*>(&mCamera), D3DXQuaternionNormalize(reinterpret_cast<D3DXQUATERNION*>(&qUnit), reinterpret_cast<const D3DXQUATERNION*>(&qCamera)));
             mCamera.SetTranslation(gVectorZero);
 
             mTargetInfo.mAimStart = mClass->mCameraSettings.CalcCameraPoint(mMatrix, mCamera);
@@ -2951,11 +2942,11 @@ bool EntityHover::PostCollisionUpdate(float fDeltaTime)
         GameObject* pSoldier = mPilot->GetGameObject();
         PblMatrix mInverse = GetMatrix().GetInverseFast();
         PblMatrix mSeat;
-        D3DXMatrixMultiply(&mSeat, &pSoldier->GetMatrix(), &mInverse);
+        D3DXMatrixMultiply(reinterpret_cast<D3DXMATRIX*>(&mSeat), reinterpret_cast<const D3DXMATRIX*>(&pSoldier->GetMatrix()), reinterpret_cast<const D3DXMATRIX*>(&mInverse));
         PblMatrix mLocal = mSeat;
         PblMatrix mSmoothed = GetSmoothedMatrix();
         PblMatrix mRender;
-        D3DXMatrixMultiply(&mRender, &mLocal, &mSmoothed);
+        D3DXMatrixMultiply(reinterpret_cast<D3DXMATRIX*>(&mRender), reinterpret_cast<const D3DXMATRIX*>(&mLocal), reinterpret_cast<const D3DXMATRIX*>(&mSmoothed));
         pSoldier->SetRenderPos(mRender.GetTranslation());
     }
     return true;
@@ -2976,7 +2967,7 @@ bool EntityHover::ApplyDamage(const DamageDesc& damage, const PblVector3& vDir, 
         {
             PblMatrix mInverse = mMatrix.GetInverseFast();
             PblVector3 vLocal;
-            D3DXVec3TransformNormal(&vLocal, &vDir, &mInverse);
+            D3DXVec3TransformNormal(reinterpret_cast<D3DXVECTOR3*>(&vLocal), reinterpret_cast<const D3DXVECTOR3*>(&vDir), reinterpret_cast<const D3DXMATRIX*>(&mInverse));
             StatusDisplay::Instance(iJoystick)->SetDamageDirection(vLocal);
         }
     }
@@ -3360,13 +3351,13 @@ bool EntityHover::UpdateIndirect(float fDeltaTime)
             PblVector3 vPos = GetMatrix().GetTranslation();
             PblVector3 vToDest(vDest.x - vPos.x, 0.0001f, vDest.z - vPos.z);
             PblVector3 vDir;
-            D3DXVec3Normalize(&vDir, &vToDest);
+            D3DXVec3Normalize(reinterpret_cast<D3DXVECTOR3*>(&vDir), reinterpret_cast<const D3DXVECTOR3*>(&vToDest));
             PblVector3 vStart(vPos.x + 0.0f, vPos.y + 1.0f, vPos.z + 0.0f);
             PblVector3 vEnd(vDir.x * fLook + vStart.x, vDir.y * fLook + vStart.y, vDir.z * fLook + vStart.z);
             PblVector3 vRay(vEnd.x - vStart.x, vEnd.y - vStart.y, vEnd.z - vStart.z);
             float fLength = sqrtf(vRay.x * vRay.x + vRay.y * vRay.y + vRay.z * vRay.z);
             PblVector3 vRayDir;
-            D3DXVec3Normalize(&vRayDir, &vRay);
+            D3DXVec3Normalize(reinterpret_cast<D3DXVECTOR3*>(&vRayDir), reinterpret_cast<const D3DXVECTOR3*>(&vRay));
             if (1.0f > CollisionManager::RayHit(vStart, vRayDir, fLength, pHit, &vHitNormal, pIgnore, 2, 0x43b,
                                                 true))
             {
@@ -3651,10 +3642,10 @@ void EntityHover::SetupCameraTrackMatrix(PblMatrix& rMatrix, float fDeltaTime)
         mTarget.m[3][3] = 1.0f;
         PblMatrix mUnbank;
         PblMatrix mUnpitch;
-        D3DXMatrixRotationZ(&mUnbank, -mBankRollAngle);
-        D3DXMatrixMultiply(&mUnbank, &mUnbank, D3DXMatrixRotationX(&mUnpitch, -mBankPitchAngle));
+        D3DXMatrixRotationZ(reinterpret_cast<D3DXMATRIX*>(&mUnbank), -mBankRollAngle);
+        D3DXMatrixMultiply(reinterpret_cast<D3DXMATRIX*>(&mUnbank), reinterpret_cast<const D3DXMATRIX*>(&mUnbank), D3DXMatrixRotationX(reinterpret_cast<D3DXMATRIX*>(&mUnpitch), -mBankPitchAngle));
         PblMatrix mBody;
-        D3DXMatrixMultiply(&mBody, &mUnbank, &mTarget);
+        D3DXMatrixMultiply(reinterpret_cast<D3DXMATRIX*>(&mBody), reinterpret_cast<const D3DXMATRIX*>(&mUnbank), reinterpret_cast<const D3DXMATRIX*>(&mTarget));
         mClass->mCameraSettings.SetupCameraTrackMatrix(static_cast<Trackable*>(this), rMatrix, fDeltaTime,
                                                         mBody, mEyeDir, 1.0f, 1.0f, this);
     }

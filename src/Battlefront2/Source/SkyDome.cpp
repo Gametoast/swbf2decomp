@@ -1,3 +1,4 @@
+#include <d3dx9math.h>
 #include "SkyDome.h"
 #include "PebbleFL/Common/PblVector.h"
 
@@ -13,7 +14,6 @@
 
 #include "RedEngineFL/Application/RedTerrain.h"
 
-extern "C" PblVector3* __stdcall D3DXVec3Normalize(PblVector3* pOut, const PblVector3* pV);
 
 
 
@@ -133,7 +133,7 @@ void SkyDome::Read(PblConfig& config)
                     PblVector3 vAxis(model.GetFloatArg(1), model.GetFloatArg(2), model.GetFloatArg(3));
 
                     PblVector3 vNormal;
-                    D3DXVec3Normalize(&vNormal, &vAxis);
+                    D3DXVec3Normalize(reinterpret_cast<D3DXVECTOR3*>(&vNormal), reinterpret_cast<const D3DXVECTOR3*>(&vAxis));
                     mDomeModels[mNumDomeModels].mRotationAxis = vNormal;
                     break;
                 }

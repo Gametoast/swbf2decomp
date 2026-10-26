@@ -1,3 +1,4 @@
+#include <d3dx9math.h>
 #include <math.h>
 #include "PebbleFL/Common/PblVector.h"
 #include <stdio.h>
@@ -649,9 +650,6 @@ void EntityCloth::ClearData()
     m_pPos = 0;
 }
 
-extern "C" PblMatrix* __stdcall D3DXMatrixMultiply(PblMatrix* pOut, const PblMatrix* pM1, const PblMatrix* pM2);
-extern "C" PblVector3* __stdcall D3DXVec3TransformCoord(PblVector3* pOut, const PblVector3* pV, const PblMatrix* pM);
-extern "C" PblVector3* __stdcall D3DXVec3Normalize(PblVector3* pOut, const PblVector3* pV);
 
 // FUNCTION: SWBF2 0x0040fe10
 void ClothData::PlatformBindInit(EntityClothClass* pClass)
@@ -788,10 +786,10 @@ void EntityCloth::SetupFixedPos()
         PblMatrix mBoneInv = *((RedSkeleton*)pSkeleton)->GetInvBoneMatrixByName(uiBone);
         PblMatrix mLocal;
         PblMatrix mFull;
-        D3DXMatrixMultiply(&mLocal, &pData->m_Transform, pParent);
-        D3DXMatrixMultiply(&mFull, &mLocal, &mBoneInv);
+        D3DXMatrixMultiply(reinterpret_cast<D3DXMATRIX*>(&mLocal), reinterpret_cast<const D3DXMATRIX*>(&pData->m_Transform), reinterpret_cast<const D3DXMATRIX*>(pParent));
+        D3DXMatrixMultiply(reinterpret_cast<D3DXMATRIX*>(&mFull), reinterpret_cast<const D3DXMATRIX*>(&mLocal), reinterpret_cast<const D3DXMATRIX*>(&mBoneInv));
         PblVector3 vFixed;
-        D3DXVec3TransformCoord(&vFixed, &pCloth->m_pPos[i], &mFull);
+        D3DXVec3TransformCoord(reinterpret_cast<D3DXVECTOR3*>(&vFixed), reinterpret_cast<const D3DXVECTOR3*>(&pCloth->m_pPos[i]), reinterpret_cast<const D3DXMATRIX*>(&mFull));
         pCloth->m_pFixedPos[i] = vFixed;
     }
 }
@@ -874,7 +872,7 @@ void EntityCloth::ComputeNormals()
     for (unsigned int i = 0; i < pData->m_uiNumParticles; ++i)
     {
         PblVector3 vNormal;
-        D3DXVec3Normalize(&vNormal, &pCloth->m_pNormal[i]);
+        D3DXVec3Normalize(reinterpret_cast<D3DXVECTOR3*>(&vNormal), reinterpret_cast<const D3DXVECTOR3*>(&pCloth->m_pNormal[i]));
         pCloth->m_pNormal[i] = vNormal;
     }
 }
@@ -930,7 +928,6 @@ template EntityCloth** util::TypedArrayAllocator<EntityCloth*, util::NewAllocato
 // util::Max_<float>
 template const float& util::Max_<float>(const float&, const float&);
 
-extern "C" PblVector3* __stdcall D3DXVec3TransformNormal(PblVector3* pOut, const PblVector3* pV, const PblMatrix* pM);
 
 // GLOBAL: SWBF2 0x007eb77c
 static PblVector3 sGravity(0.0f, -9.8f, 0.0f);
@@ -1035,7 +1032,7 @@ void EntityCloth::Render(const PblMatrix& mMatrix, const RedPose* pPose, unsigne
             if (pParent)
             {
                 PblMatrix mTemp;
-                D3DXMatrixMultiply(&mTemp, &mData->m_Transform, pParent);
+                D3DXMatrixMultiply(reinterpret_cast<D3DXMATRIX*>(&mTemp), reinterpret_cast<const D3DXMATRIX*>(&mData->m_Transform), reinterpret_cast<const D3DXMATRIX*>(pParent));
                 mLocal = mTemp;
             }
             else
@@ -1043,7 +1040,7 @@ void EntityCloth::Render(const PblMatrix& mMatrix, const RedPose* pPose, unsigne
                 mLocal = mData->m_Transform;
             }
             PblMatrix mWorld;
-            D3DXMatrixMultiply(&mWorld, &mLocal, &mMatrix);
+            D3DXMatrixMultiply(reinterpret_cast<D3DXMATRIX*>(&mWorld), reinterpret_cast<const D3DXMATRIX*>(&mLocal), reinterpret_cast<const D3DXMATRIX*>(&mMatrix));
             SetWorldMatrix(mWorld, fStep);
             InternalUpdate(mLocal, pPose, uArg, fStep);
         }
@@ -1124,14 +1121,14 @@ void EntityCloth::AccumulateForces(float fDeltaTime)
     const PblMatrix mInverse = m_worldMat.GetInverseFast();
 
     PblVector3 vWind;
-    D3DXVec3TransformNormal(&vWind, &mClass->mWindDirection, &mInverse);
+    D3DXVec3TransformNormal(reinterpret_cast<D3DXVECTOR3*>(&vWind), reinterpret_cast<const D3DXVECTOR3*>(&mClass->mWindDirection), reinterpret_cast<const D3DXMATRIX*>(&mInverse));
     const float fDampening = mClass->mDampening;
     const PblVector3 vWorldGravity(sGravity.x - mAcceleration.x * fDampening, sGravity.y - mAcceleration.y * fDampening,
                                    sGravity.z - mAcceleration.z * fDampening);
     PblVector3 vGravity;
-    D3DXVec3TransformNormal(&vGravity, &vWorldGravity, &mInverse);
+    D3DXVec3TransformNormal(reinterpret_cast<D3DXVECTOR3*>(&vGravity), reinterpret_cast<const D3DXVECTOR3*>(&vWorldGravity), reinterpret_cast<const D3DXMATRIX*>(&mInverse));
     PblVector3 vVelocity;
-    D3DXVec3TransformNormal(&vVelocity, &mVelocity, &mInverse);
+    D3DXVec3TransformNormal(reinterpret_cast<D3DXVECTOR3*>(&vVelocity), reinterpret_cast<const D3DXVECTOR3*>(&mVelocity), reinterpret_cast<const D3DXMATRIX*>(&mInverse));
 
     const float fInvDt = 1.0f / fDeltaTime;
     const float fInvMass = 1.0f / mClass->mParticleMass;
@@ -1216,13 +1213,13 @@ void EntityCloth::RestoreFixedPoints(const RedPose* pPose)
         if (pBone)
         {
             PblMatrix mTemp;
-            D3DXMatrixMultiply(&mTemp, pBone, &mParentInverse);
+            D3DXMatrixMultiply(reinterpret_cast<D3DXMATRIX*>(&mTemp), reinterpret_cast<const D3DXMATRIX*>(pBone), reinterpret_cast<const D3DXMATRIX*>(&mParentInverse));
             PblMatrix mFull;
-            D3DXMatrixMultiply(&mFull, &mTemp, &mTransformInverse);
+            D3DXMatrixMultiply(reinterpret_cast<D3DXMATRIX*>(&mFull), reinterpret_cast<const D3DXMATRIX*>(&mTemp), reinterpret_cast<const D3DXMATRIX*>(&mTransformInverse));
             mBone = mFull;
         }
         PblVector3 vPos;
-        D3DXVec3TransformCoord(&vPos, &m_pFixedPos[i], &mBone);
+        D3DXVec3TransformCoord(reinterpret_cast<D3DXVECTOR3*>(&vPos), reinterpret_cast<const D3DXVECTOR3*>(&m_pFixedPos[i]), reinterpret_cast<const D3DXMATRIX*>(&mBone));
         m_pPos[i] = vPos;
     }
 }
@@ -1279,18 +1276,18 @@ void EntityCloth::EnforceCollisions(const PblMatrix& mMatrix, const RedPose* pPo
         if (pBone)
         {
             PblMatrix mTemp;
-            D3DXMatrixMultiply(&mTemp, &collision.localMat, pBone);
+            D3DXMatrixMultiply(reinterpret_cast<D3DXMATRIX*>(&mTemp), reinterpret_cast<const D3DXMATRIX*>(&collision.localMat), reinterpret_cast<const D3DXMATRIX*>(pBone));
             const PblMatrix mInverse = mMatrix.GetInverseFast();
-            D3DXMatrixMultiply(&mCollision, &mTemp, &mInverse);
+            D3DXMatrixMultiply(reinterpret_cast<D3DXMATRIX*>(&mCollision), reinterpret_cast<const D3DXMATRIX*>(&mTemp), reinterpret_cast<const D3DXMATRIX*>(&mInverse));
         }
         else
         {
             PblMatrix mBone = gMatrixIdentity;
             RedModel::_HashTable.Find(mData->m_uiModelHash)->GetBoneMatrix(collision.parent, mBone);
             PblMatrix mTemp;
-            D3DXMatrixMultiply(&mTemp, &collision.localMat, &mBone);
+            D3DXMatrixMultiply(reinterpret_cast<D3DXMATRIX*>(&mTemp), reinterpret_cast<const D3DXMATRIX*>(&collision.localMat), reinterpret_cast<const D3DXMATRIX*>(&mBone));
             const PblMatrix mInverse = mMatrix.GetInverseFast();
-            D3DXMatrixMultiply(&mCollision, &mTemp, &mInverse);
+            D3DXMatrixMultiply(reinterpret_cast<D3DXMATRIX*>(&mCollision), reinterpret_cast<const D3DXMATRIX*>(&mTemp), reinterpret_cast<const D3DXMATRIX*>(&mInverse));
         }
 
         const PblMatrix mLocal = mCollision;

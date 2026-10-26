@@ -1,3 +1,4 @@
+#include <d3dx9math.h>
 #include "LightBeam.h"
 #include "Battlefront2Lod.h"
 #include "PebbleFL/Common/PblConfig.h"
@@ -46,7 +47,6 @@ void LightBeamEffect::ReadConfig(PblConfig&)
 {
 }
 
-extern "C" PblVector3* __stdcall D3DXVec3TransformCoord(PblVector3* pOut, const PblVector3* pV, const PblMatrix* pM);
 
 namespace
 {
@@ -335,7 +335,7 @@ void LightBeam::SetFinalWidth(float fWidthX, float fWidthZ)
 void LightBeam::UpdatedWorldMatrix()
 {
     PblVector3 vPos;
-    D3DXVec3TransformCoord(&vPos, &_vHeadPosition, &m_mWorldMatrix);
+    D3DXVec3TransformCoord(reinterpret_cast<D3DXVECTOR3*>(&vPos), reinterpret_cast<const D3DXVECTOR3*>(&_vHeadPosition), reinterpret_cast<const D3DXMATRIX*>(&m_mWorldMatrix));
     _Flare.SetPosition(vPos);
 }
 

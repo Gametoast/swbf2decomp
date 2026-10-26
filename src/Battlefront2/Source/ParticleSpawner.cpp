@@ -1,3 +1,4 @@
+#include <d3dx9math.h>
 #include "ParticleSpawner.h"
 
 #include "PebbleFL/Common/PblRandom.h"
@@ -5,9 +6,6 @@
 
 #include "Particle.h"
 
-extern "C" PblVector3* __stdcall D3DXVec3Normalize(PblVector3* pOut, const PblVector3* pV);
-extern "C" PblVector3* __stdcall D3DXVec3TransformCoord(PblVector3* pOut, const PblVector3* pV, const PblMatrix* pM);
-extern "C" PblVector3* __stdcall D3DXVec3TransformNormal(PblVector3* pOut, const PblVector3* pV, const PblMatrix* pM);
 
 // FUNCTION: SWBF2 0x0060d8d0
 void SetupRotationResult(PblVector3& vDir, const ParticleSpawner::RotationData& data,
@@ -94,7 +92,7 @@ void NormalizeSafe(PblVector3& v)
         return;
     }
     PblVector3 vNorm;
-    D3DXVec3Normalize(&vNorm, &v);
+    D3DXVec3Normalize(reinterpret_cast<D3DXVECTOR3*>(&vNorm), reinterpret_cast<const D3DXVECTOR3*>(&v));
     v = vNorm;
 }
 
@@ -106,9 +104,9 @@ void ParticleSpawner::SetupParticle(Particle& particle, const PblMatrix& mat, un
     particle.mLod = (unsigned char)(iIndex & 3);
 
     PblVector3 v;
-    D3DXVec3TransformCoord(&v, &particle.mPosition, &mat);
+    D3DXVec3TransformCoord(reinterpret_cast<D3DXVECTOR3*>(&v), reinterpret_cast<const D3DXVECTOR3*>(&particle.mPosition), reinterpret_cast<const D3DXMATRIX*>(&mat));
     particle.mPosition = v;
-    D3DXVec3TransformNormal(&v, &particle.mVelocity, &mat);
+    D3DXVec3TransformNormal(reinterpret_cast<D3DXVECTOR3*>(&v), reinterpret_cast<const D3DXVECTOR3*>(&particle.mVelocity), reinterpret_cast<const D3DXMATRIX*>(&mat));
     particle.mVelocity = v;
 
     const float fInherit = mInheritVelocityFactor.GetValue(rand) + fInheritVelocity;

@@ -40,45 +40,13 @@ static inline PblQuaternion RotateByOmega(const PblQuaternion& q, const PblVecto
     return q;
 }
 
-static inline PblMatrix MatrixFromQuat(const PblQuaternion& q, const PblVector3& vPos)
-{
-    PblQuaternion qUnit;
-    PblMatrix mNew;
-    D3DXQuaternionNormalize((D3DXQUATERNION*)&qUnit, (const D3DXQUATERNION*)&q);
-    D3DXMatrixRotationQuaternion((D3DXMATRIX*)&mNew, (const D3DXQUATERNION*)&qUnit);
-    mNew.m[3][0] = vPos.x;
-    mNew.m[3][1] = vPos.y;
-    mNew.m[3][2] = vPos.z;
-    mNew.m[3][3] = 1.0f;
-    return mNew;
-}
-
-static inline void SetWingMatrix(PblMatrix& rMatrix, const PblQuaternion& q)
-{
-    PblQuaternion qUnit;
-    PblMatrix mNew;
-    D3DXQuaternionNormalize((D3DXQUATERNION*)&qUnit, (const D3DXQUATERNION*)&q);
-    D3DXMatrixRotationQuaternion((D3DXMATRIX*)&mNew, (const D3DXQUATERNION*)&qUnit);
-    for (int i = 0; i < 3; i++)
-    {
-        for (int j = 0; j < 4; j++)
-        {
-            rMatrix.m[i][j] = mNew.m[i][j];
-        }
-    }
-    rMatrix.m[3][0] = 0.0f;
-    rMatrix.m[3][1] = 0.0f;
-    rMatrix.m[3][2] = 0.0f;
-    rMatrix.m[3][3] = 1.0f;
-}
-
 static inline void PoseWing(PblMatrix& rMatrix, float fRoll)
 {
     rMatrix = gMatrixIdentity;
     PblQuaternion q = PblQuaternion(rMatrix);
     q = q * PblQuaternion(PblVector3(0.0f, 0.0f, 1.0f), fRoll);
     q = q * PblQuaternion(PblVector3(0.0f, 1.0f, 0.0f), fHalfPi * 0.5f);
-    SetWingMatrix(rMatrix, q);
+    rMatrix = PblMatrix(q, PblVector3(0.0f, 0.0f, 0.0f));
 }
 
 // FUNCTION: SWBF2 0x00427110
@@ -380,7 +348,7 @@ bool BirdParticle::UpdateWalkingCircleBird(float fDeltaTime)
     q = RotateByOmega(q, PblVector3(0.0f, fAngle + fHalfPi, 0.0f));
     q = RotateByOmega(q, PblVector3(fHalfPi * -0.5f, 0.0f, 0.0f));
     q = RotateByOmega(q, PblVector3(0.0f, 0.0f, PblMath::Sin(mFlapTime * 10.0f) * 0.5f));
-    mMatrix = MatrixFromQuat(q, vPos);
+    mMatrix = PblMatrix(q, vPos);
     SetRenderPos(vPos);
     return true;
 }
@@ -441,7 +409,7 @@ bool BirdParticle::UpdateStandingBird(float fDeltaTime)
         PblVector3 vPos(vOld.x + mVelocity.x * fDeltaTime, vOld.y + mVelocity.y * fDeltaTime,
                         vOld.z + mVelocity.z * fDeltaTime);
         vPos.y = RedTerrain::GetHoleHeight(vPos) + mType.mSize * 0.125f;
-        mMatrix = MatrixFromQuat(q, vPos);
+        mMatrix = PblMatrix(q, vPos);
         SetRenderPos(vPos);
 
         if (mTotalLifetime > 1.5f)
@@ -734,7 +702,7 @@ void BirdParticle::RespawnGroundBird(const PblVector3& vPos, const BirdParticleT
     vNewPos.z += mCircleRadius * fCos;
     vNewPos.y = RedTerrain::GetHoleHeight(vNewPos) + type.mSize * 0.125f;
 
-    mMatrix = MatrixFromQuat(q, vNewPos);
+    mMatrix = PblMatrix(q, vNewPos);
     mInitMatrix = mMatrix;
     mIsValid = true;
     mType = type;
@@ -807,7 +775,7 @@ void BirdParticle::RespawnScatterBird(const PblVector3& vPos, const BirdParticle
     PblQuaternion q = PblQuaternion(gMatrixIdentity);
     q = RotateByOmega(q, PblVector3(0.0f, PblRandom::GetGlobalFloat() * PblMath::fTwoPi, 0.0f));
     q = RotateByOmega(q, PblVector3((-0.25f - PblRandom::GetGlobalFloat() * 0.25f) * fHalfPi, 0.0f, 0.0f));
-    mMatrix = MatrixFromQuat(q, vPos);
+    mMatrix = PblMatrix(q, vPos);
 
     mRandomness = PblRandom::GetGlobalFloat();
 
@@ -857,9 +825,7 @@ void BirdParticle::UpdateFlying(float fDeltaTime)
 
     float fBob = PblMath::Sin(fWing2) * 0.1f;
     const PblVector3& vUp = mInitMatrix.GetYAxis();
-    PblVector3 vPos(mVelocity.x * mTotalLifetime + (vInitPos.x - vUp.x * fBob),
-                    mVelocity.y * mTotalLifetime + (vInitPos.y - vUp.y * fBob),
-                    mVelocity.z * mTotalLifetime + (vInitPos.z - vUp.z * fBob));
+    PblVector3 vPos = mVelocity * mTotalLifetime + (vInitPos - vUp * fBob);
     mMatrix.m[3][0] = vPos.x;
     mMatrix.m[3][1] = vPos.y;
     mMatrix.m[3][2] = vPos.z;

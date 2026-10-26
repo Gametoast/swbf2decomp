@@ -1,3 +1,4 @@
+#include <d3dx9math.h>
 #include <math.h>
 
 #include "LightsaberTrailEffect.h"
@@ -61,10 +62,6 @@ void LightsaberTrailEffect::Destroy()
     s_pInstance = 0;
 }
 
-extern "C" PblVector3* __stdcall D3DXVec3TransformCoord(PblVector3* pOut, const PblVector3* pV,
-                                                        const PblMatrix* pM);
-extern "C" PblVector3* __stdcall D3DXVec3TransformNormal(PblVector3* pOut, const PblVector3* pV,
-                                                         const PblMatrix* pM);
 namespace GameLoop
 {
 
@@ -133,8 +130,8 @@ void LightsaberTrail::UpdatedWorldMatrix()
     if (fDeltaTime > 0.0f)
     {
         PblVector3 vPos, vDir;
-        D3DXVec3TransformCoord(&vPos, &m_pClass->m_vOffsetPos, &m_mWorldMatrix);
-        D3DXVec3TransformNormal(&vDir, &m_pClass->m_vOffsetDir, &m_mWorldMatrix);
+        D3DXVec3TransformCoord(reinterpret_cast<D3DXVECTOR3*>(&vPos), reinterpret_cast<const D3DXVECTOR3*>(&m_pClass->m_vOffsetPos), reinterpret_cast<const D3DXMATRIX*>(&m_mWorldMatrix));
+        D3DXVec3TransformNormal(reinterpret_cast<D3DXVECTOR3*>(&vDir), reinterpret_cast<const D3DXVECTOR3*>(&m_pClass->m_vOffsetDir), reinterpret_cast<const D3DXMATRIX*>(&m_mWorldMatrix));
 
         const float dx = vPos.x - m_vPosPrev.x;
         const float dy = vPos.y - m_vPosPrev.y;

@@ -1,3 +1,4 @@
+#include <d3dx9math.h>
 #include <math.h>
 #include <string.h>
 
@@ -20,7 +21,6 @@
 #include "PebbleFL/Common/PblHeap.h"
 #include "PebbleFL/Common/PblMatrix.h"
 
-extern "C" PblVector3* __stdcall D3DXVec3Normalize(PblVector3* pOut, const PblVector3* pV);
 
 namespace AI
 {
@@ -307,7 +307,7 @@ void PathFollower::SetLocalPoints(const PblVector3& vPrev, const PblList<AIPathN
             PblVector3 vDelta(mNextPoint.x - mGotoPoint.x, mNextPoint.y - mGotoPoint.y,
                               mNextPoint.z - mGotoPoint.z);
             PblVector3 vDir;
-            D3DXVec3Normalize(&vDir, &vDelta);
+            D3DXVec3Normalize(reinterpret_cast<D3DXVECTOR3*>(&vDir), reinterpret_cast<const D3DXVECTOR3*>(&vDelta));
             mSafeHeight = SH_TAPER;
             mDir = vDir;
             mDestSide = DS_EITHER;
@@ -317,7 +317,7 @@ void PathFollower::SetLocalPoints(const PblVector3& vPrev, const PblList<AIPathN
             PblVector3 vDelta(mNextPoint.x - mGotoPoint.x, mNextPoint.y - mGotoPoint.y,
                               mNextPoint.z - mGotoPoint.z);
             PblVector3 vDir;
-            D3DXVec3Normalize(&vDir, &vDelta);
+            D3DXVec3Normalize(reinterpret_cast<D3DXVECTOR3*>(&vDir), reinterpret_cast<const D3DXVECTOR3*>(&vDelta));
             mDir = vDir;
             mSafeHeight = SH_NONE;
             float fSide = (mNextPoint.x - mGotoPoint.x) * mDir.z +
@@ -334,7 +334,7 @@ void PathFollower::SetLocalPoints(const PblVector3& vPrev, const PblList<AIPathN
             PblVector3 vDelta(mGotoPoint.x - mPrevPoint.x, mGotoPoint.y - mPrevPoint.y,
                               mGotoPoint.z - mPrevPoint.z);
             PblVector3 vDir;
-            D3DXVec3Normalize(&vDir, &vDelta);
+            D3DXVec3Normalize(reinterpret_cast<D3DXVECTOR3*>(&vDir), reinterpret_cast<const D3DXVECTOR3*>(&vDelta));
             mSafeHeight = SH_NONE;
             mDir = vDir;
             mDestSide = DS_EITHER;
@@ -379,7 +379,7 @@ bool PathFollower::CloseToDest() const
                           mGotoPoint.z - mNow.m[3][2]);
         vDelta.y = 0.0f;
         PblVector3 vRoll;
-        D3DXVec3Normalize(&vRoll, &vDelta);
+        D3DXVec3Normalize(reinterpret_cast<D3DXVECTOR3*>(&vRoll), reinterpret_cast<const D3DXVECTOR3*>(&vDelta));
         LowLevel(mCtrl).SetRoll(vRoll);
         mItor->mFlags &= ~AIPathNode::AIPN_ROLLIN;
     }
@@ -575,7 +575,7 @@ void PathFollower::Update(float dt)
                     const PblMatrix& mMe = mCtrl->mOwner->GetMatrix();
                     vJump = PblVector3(pNext->mPos.x - mMe.m[3][0], 0.0f, pNext->mPos.z - mMe.m[3][2]);
                     PblVector3 vDir;
-                    D3DXVec3Normalize(&vDir, &vJump);
+                    D3DXVec3Normalize(reinterpret_cast<D3DXVECTOR3*>(&vDir), reinterpret_cast<const D3DXVECTOR3*>(&vJump));
                     vJump = PblVector3(vDir.x * 0.70710677f, 0.70710677f, vDir.z * 0.70710677f);
                 }
 
@@ -602,7 +602,7 @@ void PathFollower::Update(float dt)
                 {
                     const PblMatrix& mMe = mCtrl->mOwner->GetMatrix();
                     PblVector3 vDelta(pNext->mPos.x - mMe.m[3][0], 0.0f, pNext->mPos.z - mMe.m[3][2]);
-                    D3DXVec3Normalize(&vRoll, &vDelta);
+                    D3DXVec3Normalize(reinterpret_cast<D3DXVECTOR3*>(&vRoll), reinterpret_cast<const D3DXVECTOR3*>(&vDelta));
                 }
                 LowLevel(mCtrl).SetRoll(vRoll);
             }
@@ -656,7 +656,7 @@ void PathFollower::UpdateControllableMoving()
         const PblMatrix& mFlyer = EntityGetMatrix(pFlyer);
         PblVector3 vForward(mFlyer.m[2][0] + 0.0001f, 0.0f, mFlyer.m[2][2]);
         PblVector3 vDir;
-        D3DXVec3Normalize(&vDir, &vForward);
+        D3DXVec3Normalize(reinterpret_cast<D3DXVECTOR3*>(&vDir), reinterpret_cast<const D3DXVECTOR3*>(&vForward));
         vForward = vDir;
         AIUtil::CalculateFlyerSteerPoint(mGotoPoint, mDir, (EntityGetMatrix(pFlyer)).GetTranslation(), vForward,
                                          fTurn, vSteer, mDestSide);
@@ -698,7 +698,7 @@ void PathFollower::UpdateControllableMoving()
         if (vNormal.x * vNormal.x + vNormal.y * vNormal.y + vNormal.z * vNormal.z > 0.0f)
         {
             PblVector3 vN;
-            D3DXVec3Normalize(&vN, &vNormal);
+            D3DXVec3Normalize(reinterpret_cast<D3DXVECTOR3*>(&vN), reinterpret_cast<const D3DXVECTOR3*>(&vNormal));
             PblVector3 vAlong(vN.z, 0.0f, -vN.x);
             PblVector3 vPos = mCtrl->mOwner->GetMatrix().GetTranslation();
 
@@ -706,7 +706,7 @@ void PathFollower::UpdateControllableMoving()
             {
                 PblVector3 vAway(vPos.x - mGotoPoint.x, vPos.y - mGotoPoint.y, vPos.z - mGotoPoint.z);
                 PblVector3 vAwayN;
-                D3DXVec3Normalize(&vAwayN, &vAway);
+                D3DXVec3Normalize(reinterpret_cast<D3DXVECTOR3*>(&vAwayN), reinterpret_cast<const D3DXVECTOR3*>(&vAway));
                 float fDot = vAwayN.x * vAlong.x + vAwayN.y * 0.0f + vAwayN.z * vAlong.z;
                 cDir = fDot <= 0.0f ? 1 : -1;
             }

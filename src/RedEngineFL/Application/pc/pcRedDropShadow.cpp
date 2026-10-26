@@ -1,3 +1,4 @@
+#include <d3dx9math.h>
 #include "pcRedDropShadow.h"
 
 #include <math.h>
@@ -14,7 +15,6 @@
 #include "RedEngineFL/Graphics/PC/pcRedStencilShadow.h"
 #include "RedEngineFL/Graphics/PC/Shaders/pcParticleShader.h"
 
-extern "C" PblVector3* __stdcall D3DXVec3Normalize(PblVector3* pOut, const PblVector3* pV);
 
 extern PblMatrix gMatrixIdentity;
 
@@ -119,7 +119,7 @@ void DropShadowRenderable::AddShadow(unsigned int uiTexture, const PblVector3& v
                          vPos.y - camMatrix.m[3][1],
                          vPos.z - camMatrix.m[3][2]);
     PblVector3 vView;
-    D3DXVec3Normalize(&vView, &vToShadow);
+    D3DXVec3Normalize(reinterpret_cast<D3DXVECTOR3*>(&vView), reinterpret_cast<const D3DXVECTOR3*>(&vToShadow));
     float fCosView = -(vNormal.x * vView.x + vView.y * vNormal.y + vView.z * vNormal.z);
     if (MIN_COS_VIEW_ANGLE >= fCosView)
     {
@@ -148,7 +148,7 @@ void DropShadowRenderable::AddShadow(unsigned int uiTexture, const PblVector3& v
                       vDir.z * vNormal.x - vNormal.z * vDir.x,
                       vNormal.y * vDir.x - vDir.y * vNormal.x);
     PblVector3 vSide;
-    D3DXVec3Normalize(&vSide, &vCross);
+    D3DXVec3Normalize(reinterpret_cast<D3DXVECTOR3*>(&vSide), reinterpret_cast<const D3DXVECTOR3*>(&vCross));
 
     if (FADE_COS_VIEW_ANGLE > fCosView)
     {

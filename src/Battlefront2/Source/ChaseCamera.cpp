@@ -1,3 +1,4 @@
+#include <d3dx9math.h>
 #include <math.h>
 
 #include "ChaseCamera.h"
@@ -37,10 +38,6 @@ unsigned int GetViewHeight(unsigned int uView);
 float GetDefaultFOV();
 float GetWidescreenFOVAdjustment(float fFOV);
 
-extern "C" PblMatrix* __stdcall D3DXMatrixMultiply(PblMatrix* pOut, const PblMatrix* pM1, const PblMatrix* pM2);
-extern "C" PblMatrix* __stdcall D3DXMatrixRotationX(PblMatrix* pOut, float fAngle);
-extern "C" PblMatrix* __stdcall D3DXMatrixRotationY(PblMatrix* pOut, float fAngle);
-extern "C" PblMatrix* __stdcall D3DXMatrixRotationZ(PblMatrix* pOut, float fAngle);
 
 namespace AIUtil
 {
@@ -341,7 +338,7 @@ void ChaseCamera::SetupCamera(RedCamera* pCamera, float fDeltaTime)
             PblQuaternion qRot = Interpolate(qOld, qNew, fRotBlend);
             PblQuaternion qUnit;
             PblMatrix mNew;
-            D3DXMatrixRotationQuaternion(&mNew, D3DXQuaternionNormalize(&qUnit, &qRot));
+            D3DXMatrixRotationQuaternion(reinterpret_cast<D3DXMATRIX*>(&mNew), D3DXQuaternionNormalize(reinterpret_cast<D3DXQUATERNION*>(&qUnit), reinterpret_cast<const D3DXQUATERNION*>(&qRot)));
             mNew.SetTranslation(vPos);
             mMatrix = mNew;
 
@@ -350,7 +347,7 @@ void ChaseCamera::SetupCamera(RedCamera* pCamera, float fDeltaTime)
             vPos.z = (vOldPos.z + vPos.z) * 0.5f;
             PblQuaternion qMid = Interpolate(qOld, qNew, 0.5f);
             PblMatrix mMid;
-            D3DXMatrixRotationQuaternion(&mMid, D3DXQuaternionNormalize(&qUnit, &qMid));
+            D3DXMatrixRotationQuaternion(reinterpret_cast<D3DXMATRIX*>(&mMid), D3DXQuaternionNormalize(reinterpret_cast<D3DXQUATERNION*>(&qUnit), reinterpret_cast<const D3DXQUATERNION*>(&qMid)));
             mMid.SetTranslation(vPos);
 
             float fSwing = sqrtf(vDelta.x * vDelta.x + vDelta.y * vDelta.y + vDelta.z * vDelta.z) * 0.5f
@@ -406,11 +403,11 @@ void ChaseCamera::SetupCamera(RedCamera* pCamera, float fDeltaTime)
     {
         PblMatrix mShakeRot = gMatrixIdentity;
         PblMatrix mAxis;
-        D3DXMatrixMultiply(&mShakeRot, &mShakeRot, D3DXMatrixRotationX(&mAxis, BiasedRandom() * mShake * 0.1f));
-        D3DXMatrixMultiply(&mShakeRot, &mShakeRot, D3DXMatrixRotationY(&mAxis, BiasedRandom() * mShake * 0.1f));
-        D3DXMatrixMultiply(&mShakeRot, &mShakeRot, D3DXMatrixRotationZ(&mAxis, BiasedRandom() * mShake * 0.1f));
+        D3DXMatrixMultiply(reinterpret_cast<D3DXMATRIX*>(&mShakeRot), reinterpret_cast<const D3DXMATRIX*>(&mShakeRot), D3DXMatrixRotationX(reinterpret_cast<D3DXMATRIX*>(&mAxis), BiasedRandom() * mShake * 0.1f));
+        D3DXMatrixMultiply(reinterpret_cast<D3DXMATRIX*>(&mShakeRot), reinterpret_cast<const D3DXMATRIX*>(&mShakeRot), D3DXMatrixRotationY(reinterpret_cast<D3DXMATRIX*>(&mAxis), BiasedRandom() * mShake * 0.1f));
+        D3DXMatrixMultiply(reinterpret_cast<D3DXMATRIX*>(&mShakeRot), reinterpret_cast<const D3DXMATRIX*>(&mShakeRot), D3DXMatrixRotationZ(reinterpret_cast<D3DXMATRIX*>(&mAxis), BiasedRandom() * mShake * 0.1f));
         mPreShakeMatrix = mMatrix;
-        D3DXMatrixMultiply(&mAxis, &mShakeRot, &mMatrix);
+        D3DXMatrixMultiply(reinterpret_cast<D3DXMATRIX*>(&mAxis), reinterpret_cast<const D3DXMATRIX*>(&mShakeRot), reinterpret_cast<const D3DXMATRIX*>(&mMatrix));
         mMatrix = mAxis;
     }
     else if (mDoSwingFlag)

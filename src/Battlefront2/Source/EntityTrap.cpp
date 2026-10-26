@@ -1,3 +1,4 @@
+#include <d3dx9math.h>
 #include "EntityTrap.h"
 #include "PebbleFL/Common/PblVector.h"
 
@@ -24,7 +25,6 @@
 #include "Zephyr/Source/ZephyrAnim.h"
 #include "Zephyr/Source/ZephyrPoseStatic.h"
 
-extern "C" PblMatrix* __stdcall D3DXMatrixMultiply(PblMatrix* pOut, const PblMatrix* pM1, const PblMatrix* pM2);
 
 static PblMatrix _IdentityMatrix(
     PblVector4{ 1.0f, 0.0f, 0.0f, 0.0f },
@@ -607,9 +607,9 @@ bool EntityTrap::Update(float fDeltaTime)
         PblMatrix mOffset = _IdentityMatrix;
         mOffset.SetTranslation(mTrapClass->mTriggerOffset);
         PblMatrix mLocal;
-        D3DXMatrixMultiply(&mLocal, &mOffset, &mNode);
+        D3DXMatrixMultiply(reinterpret_cast<D3DXMATRIX*>(&mLocal), reinterpret_cast<const D3DXMATRIX*>(&mOffset), reinterpret_cast<const D3DXMATRIX*>(&mNode));
         PblMatrix mWorld;
-        D3DXMatrixMultiply(&mWorld, &mLocal, &mMatrix);
+        D3DXMatrixMultiply(reinterpret_cast<D3DXMATRIX*>(&mWorld), reinterpret_cast<const D3DXMATRIX*>(&mLocal), reinterpret_cast<const D3DXMATRIX*>(&mMatrix));
 
         PblVector3 vTrigger = mWorld.GetTranslation();
         if (RedTerrain::_bEnable)
@@ -719,9 +719,9 @@ bool EntityTrap::Update(float fDeltaTime)
         PblMatrix mOffset(_IdentityMatrix);
         mOffset.SetTranslation(mTrapClass->mTriggerOffset);
         PblMatrix mLocal;
-        D3DXMatrixMultiply(&mLocal, &mOffset, &mNode);
+        D3DXMatrixMultiply(reinterpret_cast<D3DXMATRIX*>(&mLocal), reinterpret_cast<const D3DXMATRIX*>(&mOffset), reinterpret_cast<const D3DXMATRIX*>(&mNode));
         PblMatrix mWorld;
-        D3DXMatrixMultiply(&mWorld, &mLocal, &mMatrix);
+        D3DXMatrixMultiply(reinterpret_cast<D3DXMATRIX*>(&mWorld), reinterpret_cast<const D3DXMATRIX*>(&mLocal), reinterpret_cast<const D3DXMATRIX*>(&mMatrix));
 
         PblVector3 vTrigger = mWorld.GetTranslation();
         if (RedTerrain::_bEnable)
@@ -798,7 +798,7 @@ Entity* EntityTrapClass::Build(const EntityDesc& desc)
     if (mBuildBoxOdf)
     {
         EntityDesc kBoxDesc;
-        D3DXMatrixMultiply(&kBoxDesc.mMatrix, &mBuildOffset, &desc.mMatrix);
+        D3DXMatrixMultiply(reinterpret_cast<D3DXMATRIX*>(&kBoxDesc.mMatrix), reinterpret_cast<const D3DXMATRIX*>(&mBuildOffset), reinterpret_cast<const D3DXMATRIX*>(&desc.mMatrix));
         PblVector3 vPos = kBoxDesc.mMatrix.GetTranslation();
         if (RedTerrain::_bEnable)
         {
@@ -818,7 +818,7 @@ Entity* EntityTrapClass::Build(const EntityDesc& desc)
                     PblMatrix mBone;
                     if (pProp->GetModel()->GetRedModel(0)->GetBoneMatrix(0xD1E4CC7A, mBone))
                     {
-                        D3DXMatrixMultiply(&mHologram, &mBone, &pProp->GetMatrix());
+                        D3DXMatrixMultiply(reinterpret_cast<D3DXMATRIX*>(&mHologram), reinterpret_cast<const D3DXMATRIX*>(&mBone), reinterpret_cast<const D3DXMATRIX*>(&pProp->GetMatrix()));
                     }
                     else
                     {
@@ -852,7 +852,7 @@ Entity* EntityTrapClass::Build(const EntityDesc& desc)
         mBody.m[3][3] = 1.0f;
         PblMatrix mInverse = pTrap->GetMatrix().GetInverseFast();
         PblMatrix mLocal;
-        D3DXMatrixMultiply(&mLocal, &mBody, &mInverse);
+        D3DXMatrixMultiply(reinterpret_cast<D3DXMATRIX*>(&mLocal), reinterpret_cast<const D3DXMATRIX*>(&mBody), reinterpret_cast<const D3DXMATRIX*>(&mInverse));
 
         mBuildBoxCollisionModel.AddBody(new CollisionBodyPrimitive(kPrimitive, "main_body", mLocal, 0));
         pTrap->SetCollisionModel(&mBuildBoxCollisionModel);

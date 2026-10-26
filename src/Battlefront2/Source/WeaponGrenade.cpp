@@ -1,3 +1,4 @@
+#include <d3dx9math.h>
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -12,8 +13,6 @@
 #include "SoldierAnimatorClass.h"
 #include "Trigger.h"
 
-extern "C" PblVector3* __stdcall D3DXVec3TransformCoord(PblVector3* pOut, const PblVector3* pV, const PblMatrix* pM);
-extern "C" PblVector3* __stdcall D3DXVec3Normalize(PblVector3* pOut, const PblVector3* pV);
 
 extern bool netIsLocalTurn;
 
@@ -206,14 +205,14 @@ bool WeaponGrenadeClass::PostLoadInit()
                 SoldierAnimationBank::HUMAN_RIFLE, SoldierAnimType::STAND, SoldierAnimType::SHOOT_SECONDARY,
                 0x2b960099, mInitialSalvoDelay[0], matrix))
         {
-            D3DXVec3TransformCoord(&v, &mFirePointOffset, &matrix);
+            D3DXVec3TransformCoord(reinterpret_cast<D3DXVECTOR3*>(&v), reinterpret_cast<const D3DXVECTOR3*>(&mFirePointOffset), reinterpret_cast<const D3DXMATRIX*>(&matrix));
             m_avFireOffset[0] = v;
         }
         if (SoldierAnimatorClass::Instance()->GetAnimationBoneMatrix(
                 SoldierAnimationBank::HUMAN_RIFLE, SoldierAnimType::STAND, SoldierAnimType::SHOOT_SECONDARY2,
                 0x2b960099, mInitialSalvoDelay[1], matrix))
         {
-            D3DXVec3TransformCoord(&v, &mFirePointOffset, &matrix);
+            D3DXVec3TransformCoord(reinterpret_cast<D3DXVECTOR3*>(&v), reinterpret_cast<const D3DXVECTOR3*>(&mFirePointOffset), reinterpret_cast<const D3DXMATRIX*>(&matrix));
             m_avFireOffset[1] = v;
         }
     }
@@ -449,7 +448,7 @@ bool WeaponGrenade::Fire()
             }
         }
         PblVector3 vPos;
-        D3DXVec3TransformCoord(&vPos, &vOffset, &mOwner->GetMatrix());
+        D3DXVec3TransformCoord(reinterpret_cast<D3DXVECTOR3*>(&vPos), reinterpret_cast<const D3DXVECTOR3*>(&vOffset), reinterpret_cast<const D3DXMATRIX*>(&mOwner->GetMatrix()));
         desc.mPosition = vPos;
     }
     else
@@ -462,7 +461,7 @@ bool WeaponGrenade::Fire()
     {
         desc.mDirection.y += ((const WeaponGrenadeClass*)mClass)->mShotElevate;
         PblVector3 vDir;
-        D3DXVec3Normalize(&vDir, &desc.mDirection);
+        D3DXVec3Normalize(reinterpret_cast<D3DXVECTOR3*>(&vDir), reinterpret_cast<const D3DXVECTOR3*>(&desc.mDirection));
         desc.mDirection = vDir;
     }
     desc.mStrength = mStrength;

@@ -1,3 +1,4 @@
+#include <d3dx9math.h>
 #pragma once
 
 #include <stddef.h>
@@ -8,8 +9,6 @@
 
 class Trackable;
 
-extern "C" PblQuaternion* __stdcall D3DXQuaternionNormalize(PblQuaternion* pOut, const PblQuaternion* pQ);
-extern "C" PblMatrix* __stdcall D3DXMatrixRotationQuaternion(PblMatrix* pOut, const PblQuaternion* pQ);
 
 // VTABLE: SWBF2 0x00797178
 class ChaseCamera : public GameCamera
@@ -43,7 +42,7 @@ public:
     {
         PblQuaternion qUnit;
         PblMatrix mRot;
-        D3DXMatrixRotationQuaternion(&mRot, D3DXQuaternionNormalize(&qUnit, &qRot));
+        D3DXMatrixRotationQuaternion(reinterpret_cast<D3DXMATRIX*>(&mRot), D3DXQuaternionNormalize(reinterpret_cast<D3DXQUATERNION*>(&qUnit), reinterpret_cast<const D3DXQUATERNION*>(&qRot)));
         mRot.m[3][0] = mMatrix.m[3][0];
         mRot.m[3][1] = mMatrix.m[3][1];
         mRot.m[3][2] = mMatrix.m[3][2];

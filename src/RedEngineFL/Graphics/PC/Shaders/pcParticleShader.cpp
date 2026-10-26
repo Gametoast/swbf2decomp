@@ -1,3 +1,4 @@
+#include <d3dx9math.h>
 #include "pcParticleShader.h"
 
 #include "PebbleFL/Common/PblChunk.h"
@@ -12,8 +13,6 @@
 
 void __cdecl PblTraceP(const char* Format, ...);
 
-extern "C" PblMatrix* __stdcall D3DXMatrixMultiply(PblMatrix* pOut, const PblMatrix* pM1,
-                                                   const PblMatrix* pM2);
 
 // SYNTHETIC: SWBF2 0x00409a70
 // `dynamic initializer for 's_blurTexMatrix''
@@ -95,10 +94,10 @@ void pcParticleShader::Begin_Prog1(unsigned int, unsigned int) const
 
         const RedCamera* pCamera = RedRenderer::GetCamera();
         PblMatrix mViewProj;
-        D3DXMatrixMultiply(&mViewProj, &pCamera->GetMatrixInverse(),
-                           &RedRenderer::GetProjectionMatrix());
+        D3DXMatrixMultiply(reinterpret_cast<D3DXMATRIX*>(&mViewProj), reinterpret_cast<const D3DXMATRIX*>(&pCamera->GetMatrixInverse()),
+                           reinterpret_cast<const D3DXMATRIX*>(&RedRenderer::GetProjectionMatrix()));
         PblMatrix mTex;
-        D3DXMatrixMultiply(&mTex, &mViewProj, &s_BiasToTextureMatrix);
+        D3DXMatrixMultiply(reinterpret_cast<D3DXMATRIX*>(&mTex), reinterpret_cast<const D3DXMATRIX*>(&mViewProj), reinterpret_cast<const D3DXMATRIX*>(&s_BiasToTextureMatrix));
         s_blurTexMatrix = mTex;
 
         RedRenderer::pcSetSamplerState(1, D3DSAMP_ADDRESSU, D3DTADDRESS_CLAMP);
@@ -141,9 +140,9 @@ void pcParticleShader::Begin_Fixed(unsigned int uiState, unsigned int) const
         RedRenderer::pcGetDevice()->GetTransform(D3DTS_PROJECTION, (D3DMATRIX*)&mProjection);
         RedRenderer::pcGetDevice()->GetTransform(D3DTS_VIEW, (D3DMATRIX*)&mView);
         PblMatrix mViewProj;
-        D3DXMatrixMultiply(&mViewProj, &mView, &mProjection);
+        D3DXMatrixMultiply(reinterpret_cast<D3DXMATRIX*>(&mViewProj), reinterpret_cast<const D3DXMATRIX*>(&mView), reinterpret_cast<const D3DXMATRIX*>(&mProjection));
         PblMatrix mTex;
-        D3DXMatrixMultiply(&mTex, &mViewProj, &mBias);
+        D3DXMatrixMultiply(reinterpret_cast<D3DXMATRIX*>(&mTex), reinterpret_cast<const D3DXMATRIX*>(&mViewProj), reinterpret_cast<const D3DXMATRIX*>(&mBias));
         s_blurTexMatrix = mTex;
 
         RedRenderer::pcSetSamplerState(1, D3DSAMP_ADDRESSU, D3DTADDRESS_CLAMP);
@@ -212,9 +211,9 @@ void pcParticleShader::Render_Fixed(const RenderItem* pItem, unsigned int) const
         PblMatrix mInvWorld = pItem->pmObjWorld->GetInverseFast();
         mInvWorld.m[3][0] = 0.0f; mInvWorld.m[3][1] = 0.0f; mInvWorld.m[3][2] = 0.0f; mInvWorld.m[3][3] = 1.0f;
         PblMatrix m1, m2, m3;
-        D3DXMatrixMultiply(&m1, &mInvView, &mInvWorld);
-        D3DXMatrixMultiply(&m2, &m1, pItem->pmObjWorld);
-        D3DXMatrixMultiply(&m3, &m2, &s_blurTexMatrix);
+        D3DXMatrixMultiply(reinterpret_cast<D3DXMATRIX*>(&m1), reinterpret_cast<const D3DXMATRIX*>(&mInvView), reinterpret_cast<const D3DXMATRIX*>(&mInvWorld));
+        D3DXMatrixMultiply(reinterpret_cast<D3DXMATRIX*>(&m2), reinterpret_cast<const D3DXMATRIX*>(&m1), reinterpret_cast<const D3DXMATRIX*>(pItem->pmObjWorld));
+        D3DXMatrixMultiply(reinterpret_cast<D3DXMATRIX*>(&m3), reinterpret_cast<const D3DXMATRIX*>(&m2), reinterpret_cast<const D3DXMATRIX*>(&s_blurTexMatrix));
         RedRenderer::pcFFSetTextureTransform(1, m3);
         RedRenderer::pcSetTexture(0, RedTexture::Find(m_uiTextureHash));
         RedRenderer::pcSetTexture(1, m_blurBuffer);
@@ -357,7 +356,7 @@ void pcParticleShader::Render_Prog1(const RenderItem* pItem, unsigned int) const
         pRegs[41].component[2] = 0.0f;
         pRegs[41].component[3] = 0.0f;
         PblMatrix mTex;
-        D3DXMatrixMultiply(&mTex, pItem->pmObjWorld, &s_blurTexMatrix);
+        D3DXMatrixMultiply(reinterpret_cast<D3DXMATRIX*>(&mTex), reinterpret_cast<const D3DXMATRIX*>(pItem->pmObjWorld), reinterpret_cast<const D3DXMATRIX*>(&s_blurTexMatrix));
         pRegs[42].SetMatrix4x4(mTex);
         RedRenderer::pcUnlockVertexShaderConstants(pRegs);
         RedRenderer::pcSetTexture(0, RedTexture::s_textureHashTable.Find(m_uiTextureHash));

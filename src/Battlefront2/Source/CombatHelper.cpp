@@ -1,3 +1,4 @@
+#include <d3dx9math.h>
 #include "CombatHelper.h"
 
 #include "AIUtil.h"
@@ -26,9 +27,6 @@
 
 class Weapon;
 
-extern "C" PblVector3* __stdcall D3DXVec3Normalize(PblVector3* pOut, const PblVector3* pV);
-extern "C" PblMatrix* __stdcall D3DXMatrixMultiply(PblMatrix* pOut, const PblMatrix* pM1, const PblMatrix* pM2);
-extern "C" PblMatrix* __stdcall D3DXMatrixRotationY(PblMatrix* pOut, float fAngle);
 
 namespace CombatUtil
 {
@@ -113,8 +111,8 @@ namespace
         PblVector3 a, b, vFacingXZ = vFacing, vTargetXZ = vTarget;
         vTargetXZ.y = 0.0f;
         vFacingXZ.y = 0.0f;
-        D3DXVec3Normalize(&a, &vFacingXZ);
-        D3DXVec3Normalize(&b, &vTargetXZ);
+        D3DXVec3Normalize(reinterpret_cast<D3DXVECTOR3*>(&a), reinterpret_cast<const D3DXVECTOR3*>(&vFacingXZ));
+        D3DXVec3Normalize(reinterpret_cast<D3DXVECTOR3*>(&b), reinterpret_cast<const D3DXVECTOR3*>(&vTargetXZ));
         return a.x * b.x + a.y * b.y + a.z * b.z;
     }
 }
@@ -370,7 +368,7 @@ void CombatHelper::SetRandomHeading()
 
     PblMatrix mLook = GetMe()->GetMatrix();
     PblMatrix mRot;
-    D3DXMatrixMultiply(&mLook, &mLook, D3DXMatrixRotationY(&mRot, mLookAngle));
+    D3DXMatrixMultiply(reinterpret_cast<D3DXMATRIX*>(&mLook), reinterpret_cast<const D3DXMATRIX*>(&mLook), D3DXMatrixRotationY(reinterpret_cast<D3DXMATRIX*>(&mRot), mLookAngle));
     const float fX = mLook.m[2][0] * 100.0f;
     const float fZ = mLook.m[2][2] * 100.0f;
     const PblMatrix& mMe = GetMe()->GetMatrix();

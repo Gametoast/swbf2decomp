@@ -1,3 +1,4 @@
+#include <d3dx9math.h>
 #include "NavigatorFollowTarget.h"
 #include "AILowLevel.h"
 #include "CollisionObject.h"
@@ -14,8 +15,6 @@
 #include "PebbleFL/Common/PblMatrix.h"
 #include "PebbleFL/Common/PblRandom.h"
 
-extern "C" PblVector3* __stdcall D3DXVec3TransformCoord(PblVector3* pOut, const PblVector3* pV,
-                                                        const PblMatrix* pM);
 
 namespace ReserveManager
 {
@@ -249,7 +248,7 @@ void NavigatorFollowTarget::UpdateTarget()
     const PblVector3 vOffset(vWobble.x * 0.3f, vWobble.y * 0.3f, vWobble.z * 0.3f);
 
     PblVector3 vPos;
-    D3DXVec3TransformCoord(&vPos, &mFollowOffset, &GameObjectMatrix(HandleObject(mFollowTarget)));
+    D3DXVec3TransformCoord(reinterpret_cast<D3DXVECTOR3*>(&vPos), reinterpret_cast<const D3DXVECTOR3*>(&mFollowOffset), reinterpret_cast<const D3DXMATRIX*>(&GameObjectMatrix(HandleObject(mFollowTarget))));
     PblVector3& vHead = mCrumbBuffer[mCrumbHead];
     vHead = PblVector3(vPos.x + vOffset.x, vPos.y + vOffset.y, vPos.z + vOffset.z);
 

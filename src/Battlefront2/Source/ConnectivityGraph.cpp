@@ -1,3 +1,4 @@
+#include <d3dx9math.h>
 #include <float.h>
 #include <math.h>
 #include <string.h>
@@ -18,7 +19,6 @@
 
 #include "ZlibFL/zlib.h"
 
-extern "C" PblVector3* __stdcall D3DXVec3Normalize(PblVector3* pOut, const PblVector3* pV);
 
 // GLOBAL: SWBF2 0x01f9c264
 
@@ -59,7 +59,7 @@ PblVector3 ConnectivityNode::GetRandomPointInside(float fBuffer) const
     }
     const PblVector3 vRandom = PblRandom::GetSim().GetVector3();
     PblVector3 vDir;
-    D3DXVec3Normalize(&vDir, &vRandom);
+    D3DXVec3Normalize(reinterpret_cast<D3DXVECTOR3*>(&vDir), reinterpret_cast<const D3DXVECTOR3*>(&vRandom));
     return PblVector3(x + vDir.x * fRadius, y + vDir.y * fRadius, z + vDir.z * fRadius);
 }
 
@@ -420,7 +420,7 @@ bool ConnectivityGraph::Read(PblFileChunk& chunk)
         const ConnectivityNode* pN2 = mArcs[i].n2;
         const PblVector3 vDelta(pN2->x - pN1->x, pN2->y - pN1->y, pN2->z - pN1->z);
         PblVector3 vDir;
-        D3DXVec3Normalize(&vDir, &vDelta);
+        D3DXVec3Normalize(reinterpret_cast<D3DXVECTOR3*>(&vDir), reinterpret_cast<const D3DXVECTOR3*>(&vDelta));
 
         pN1 = mArcs[i].n1;
         const PblVector3 vStart(pN1->x - vDir.x * pN1->w, pN1->y - vDir.y * pN1->w,

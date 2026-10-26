@@ -1,3 +1,4 @@
+#include <d3dx9math.h>
 #include "UnitWaitSecondaryAgent.h"
 #include "AILowLevel.h"
 #include "AIUtil.h"
@@ -12,7 +13,6 @@
 #include "PebbleFL/Common/PblMatrix.h"
 #include "PebbleFL/Common/PblVector.h"
 
-extern "C" PblVector3* __stdcall D3DXVec3Normalize(PblVector3* pOut, const PblVector3* pV);
 
 class EntityFlyer
 {
@@ -130,7 +130,7 @@ GameObject* UnitWaitSecondaryAgent::IsPlayerLookingAtVehicle()
         }
 
         PblVector3 vDir;
-        D3DXVec3Normalize(&vDir, &vDelta);
+        D3DXVec3Normalize(reinterpret_cast<D3DXVECTOR3*>(&vDir), reinterpret_cast<const D3DXVECTOR3*>(&vDelta));
         if (mHim.m[2][0] * vDir.x + mHim.m[2][1] * vDir.y + mHim.m[2][2] * vDir.z > 0.866f)
         {
             return pCharacter->mUnit->GetGameObject();

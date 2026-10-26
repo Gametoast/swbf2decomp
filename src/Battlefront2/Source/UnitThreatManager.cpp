@@ -1,3 +1,4 @@
+#include <d3dx9math.h>
 #include <float.h>
 #include <string.h>
 
@@ -14,7 +15,6 @@
 #include "UnitController.h"
 #include "VisionManager.h"
 
-extern "C" PblVector3* __stdcall D3DXVec3Normalize(PblVector3* pOut, const PblVector3* pV);
 
 class EntityFlyer
 {
@@ -68,7 +68,7 @@ unsigned char Threat::GetPriority(float fTime, Controllable* pMe) const
     PblVector3 vToMe(mMe.GetTranslation().x - vHim.x, mMe.GetTranslation().y - vHim.y,
                      mMe.GetTranslation().z - vHim.z);
     PblVector3 vDir;
-    D3DXVec3Normalize(&vDir, &vToMe);
+    D3DXVec3Normalize(reinterpret_cast<D3DXVECTOR3*>(&vDir), reinterpret_cast<const D3DXVECTOR3*>(&vToMe));
 
     if (pMe->GetEntity()->IsRtti(EntityFlyer::rttiHashEntityFlyer))
     {

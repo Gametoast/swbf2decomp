@@ -1,3 +1,4 @@
+#include <d3dx9math.h>
 #include "pcTerrainShader.h"
 
 #include <string.h>
@@ -16,8 +17,6 @@
 #include "RedEngineFL/Graphics/PC/pcRedVertexFormat.h"
 #include "RedEngineFL/Graphics/RedCamera.h"
 
-extern "C" PblMatrix* __stdcall D3DXMatrixMultiply(PblMatrix* pOut, const PblMatrix* pM1,
-                                                   const PblMatrix* pM2);
 
 void __cdecl PblTraceP(const char* Format, ...);
 
@@ -240,7 +239,7 @@ static void SetCameraSpaceTransform(unsigned int uiStage, const PblMatrix& mWorl
 {
     const PblMatrix mCamera = CameraToWorld();
     PblMatrix mTexture;
-    D3DXMatrixMultiply(&mTexture, &mCamera, &mWorldToTexture);
+    D3DXMatrixMultiply(reinterpret_cast<D3DXMATRIX*>(&mTexture), reinterpret_cast<const D3DXMATRIX*>(&mCamera), reinterpret_cast<const D3DXMATRIX*>(&mWorldToTexture));
     RedRenderer::pcFFSetTextureTransform(uiStage, mTexture);
 }
 

@@ -1,3 +1,4 @@
+#include <d3dx9math.h>
 #include <windows.h>
 #include <new>
 #include <string.h>
@@ -9,7 +10,6 @@
 #include "PathFinder.h"
 #include "UnitController.h"
 
-extern "C" PblVector3* __stdcall D3DXVec3Normalize(PblVector3* pOut, const PblVector3* pV);
 
 // FUNCTION: SWBF2 0x0050b400
 void PblRef::Kill()
@@ -202,10 +202,10 @@ bool AIPath::SmoothCorners(float fCornerDist, float fRadius, int eProhibit)
 
         PblVector3 vIn = vCur - vPrev;
         PblVector3 vDirIn;
-        D3DXVec3Normalize(&vDirIn, &vIn);
+        D3DXVec3Normalize(reinterpret_cast<D3DXVECTOR3*>(&vDirIn), reinterpret_cast<const D3DXVECTOR3*>(&vIn));
         PblVector3 vOut = vNext - vCur;
         PblVector3 vDirOut;
-        D3DXVec3Normalize(&vDirOut, &vOut);
+        D3DXVec3Normalize(reinterpret_cast<D3DXVECTOR3*>(&vDirOut), reinterpret_cast<const D3DXVECTOR3*>(&vOut));
         if (DotProduct(vDirIn, vDirOut) > 0.984f)
         {
             continue;

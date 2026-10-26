@@ -1,3 +1,4 @@
+#include <d3dx9math.h>
 #include <math.h>
 #include <stdlib.h>
 
@@ -21,9 +22,6 @@
 
 extern bool netIsLocalTurn;
 
-extern "C" PblMatrix* __stdcall D3DXMatrixMultiply(PblMatrix* pOut, const PblMatrix* pM1, const PblMatrix* pM2);
-extern "C" PblMatrix* __stdcall D3DXMatrixRotationQuaternion(PblMatrix* pOut, const PblQuaternion* pQ);
-extern "C" PblQuaternion* __stdcall D3DXQuaternionNormalize(PblQuaternion* pOut, const PblQuaternion* pQ);
 
 class AmmoCounter
 {
@@ -137,7 +135,7 @@ void WeaponCatapult::SetArmAngle(float fAngle)
 
     PblQuaternion qUnit;
     PblMatrix mPose;
-    D3DXMatrixRotationQuaternion(&mPose, D3DXQuaternionNormalize(&qUnit, &qArm));
+    D3DXMatrixRotationQuaternion(reinterpret_cast<D3DXMATRIX*>(&mPose), D3DXQuaternionNormalize(reinterpret_cast<D3DXQUATERNION*>(&qUnit), reinterpret_cast<const D3DXQUATERNION*>(&qArm)));
     mPose.m[3][0] = pArm->m[3][0];
     mPose.m[3][1] = pArm->m[3][1];
     mPose.m[3][2] = pArm->m[3][2];
@@ -308,7 +306,7 @@ void WeaponCatapult::Render(const PblMatrix& matrix, const RedPose* pPose, const
             const float fZ = pArm->m[3][2] + vBase.z - vFirePos.z;
             const float fDist = sqrtf(fX * fX + fY * fY + fZ * fZ);
             PblMatrix mOrdnance;
-            D3DXMatrixMultiply(&mOrdnance, pArm, &mCatapultBuilding->GetMatrix());
+            D3DXMatrixMultiply(reinterpret_cast<D3DXMATRIX*>(&mOrdnance), reinterpret_cast<const D3DXMATRIX*>(pArm), reinterpret_cast<const D3DXMATRIX*>(&mCatapultBuilding->GetMatrix()));
             mOrdnance.m[3][0] += mOrdnance.m[1][0] * fDist;
             mOrdnance.m[3][1] += mOrdnance.m[1][1] * fDist;
             mOrdnance.m[3][2] += mOrdnance.m[1][2] * fDist;

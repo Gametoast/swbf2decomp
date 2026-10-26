@@ -1,10 +1,10 @@
+#include <d3dx9math.h>
 #include "Primitives.h"
 #include "basics.h"
 #include "polygons.h"
 #include "PebbleFL/Common/PblMatrix.h"
 #include "PebbleFL/Common/PblVector.h"
 
-extern "C" PblVector3* __stdcall D3DXVec3TransformCoord(PblVector3* pOut, const PblVector3* pV, const PblMatrix* pM);
 
 // FUNCTION: SWBF2 0x00724ef0
 int __cdecl geo::PolyPoly2D::LineSegPolyC(const geo::Vector2<float>& rA0, const geo::Vector2<float>& rA1, const geo::BasePoly2D& rPoly)
@@ -37,7 +37,7 @@ const Vector3<T> operator*(const PblMatrix& rMat, const Vector3<T>& rVec)
 {
     PblVector3 vIn(rVec.x, rVec.y, rVec.z);
     PblVector3 vOut;
-    D3DXVec3TransformCoord(&vOut, &vIn, &rMat);
+    D3DXVec3TransformCoord(reinterpret_cast<D3DXVECTOR3*>(&vOut), reinterpret_cast<const D3DXVECTOR3*>(&vIn), reinterpret_cast<const D3DXMATRIX*>(&rMat));
     return Vector3<T>(vOut.x, vOut.y, vOut.z);
 }
 

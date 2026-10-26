@@ -22,13 +22,6 @@
 
 
 
-static inline const PblMatrix operator*(const PblMatrix& a, const PblMatrix& b)
-{
-    PblMatrix result;
-    D3DXMatrixMultiply((D3DXMATRIX*)&result, (const D3DXMATRIX*)&a, (const D3DXMATRIX*)&b);
-    return result;
-}
-
 static inline const PblVector3& LastPosition(const CollisionObject* pObject)
 {
     return pObject->mLastPosition;
