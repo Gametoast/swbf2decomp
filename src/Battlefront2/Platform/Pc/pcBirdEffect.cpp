@@ -41,7 +41,7 @@ void BirdParticleManager::PlatformInit()
         RedRenderer::pcGetGeometryMode() == GEOMETRYMODE_COMPRESSED ? 0x9282 : 0x282;
     for (int i = 0; i < sNumBirdTypes; i++)
     {
-        sBirdTypes[i].m_pShader = pcRedShader::Create(PblHash("Normal"), uiFormat, &sBirdTypes[i].mTexture, 1,
+        sBirdTypes[i].m_pShader = pcRedShader::Create(kuiNormalShader, uiFormat, &sBirdTypes[i].mTexture, 1,
                                                  0x10004, RedColor::WHITE, RedColor::BLACK, 32.0f);
     }
 }

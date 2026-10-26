@@ -33,7 +33,7 @@ pcRefractionShader* HeatShimmerEffect::s_pShimmerShader;
 void HeatShimmerEffect::PlatformPreReadInit()
 {
     s_pShimmerShader = (pcRefractionShader*)pcRedShader::Create(
-        PblHash("Refraction"), 0x282, 0, 0, 4, RedColor::WHITE, RedColor::BLACK, 32.0f);
+        kuiShimmerShader, 0x282, 0, 0, 4, RedColor::WHITE, RedColor::BLACK, 32.0f);
     s_pPrimitive = 0;
     s_tileU = 1.0f;
     s_tileV = 1.0f;

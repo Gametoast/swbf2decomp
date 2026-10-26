@@ -143,10 +143,6 @@ template <>
 void Event<GameObject, DamageOwner>::Callback::Trigger(GameObject& item, DamageOwner& param);
 }
 
-static PblList<Controllable>& GameObject_GetControllableList(GameObject* pObject)
-{
-    return pObject->mControllableList;
-}
 
 static int GameObject_GetTeam(const GameObject* pObject)
 {
@@ -188,7 +184,7 @@ static GameObject* GetHandleObject(const PblHandle<GameObject>& handle)
 
 static inline void FlashLocalPlayers(Damageable* pThis, GameObject* pObject, float fHealthLost)
 {
-    PblList<Controllable>& list = GameObject_GetControllableList(pObject);
+    const PblList<Controllable>& list = pObject->GetControllableList();
     for (PblList<Controllable>::Itor it = list.Begin(); it != list.End(); ++it)
     {
         if (it->mPlayerId < 0)
@@ -304,7 +300,7 @@ void Damageable::InstantDeath(const DamageOwner& owner, bool bCheckProtection)
         }
         if (GameLoop::gInvincible && !NetGame::IsEnabled())
         {
-            PblList<Controllable>& list = GameObject_GetControllableList(GetGameObject());
+            const PblList<Controllable>& list = GetGameObject()->GetControllableList();
             for (PblList<Controllable>::Itor it = list.Begin(); it != list.End(); ++it)
             {
                 if (it->mPlayerId >= 0)
@@ -393,7 +389,7 @@ void Damageable::ApplyDamageCommon(const DamageDesc& damage, unsigned int uFlags
     }
     if (GameLoop::gInvincible && !NetGame::IsEnabled())
     {
-        PblList<Controllable>& list = GameObject_GetControllableList(pObject);
+        const PblList<Controllable>& list = pObject->GetControllableList();
         for (PblList<Controllable>::Itor it = list.Begin(); it != list.End(); ++it)
         {
             if (it->mPlayerId >= 0)
@@ -627,7 +623,7 @@ void Damageable::SpreadDamageEvent(const DamageDesc& damage, bool bIsShot, const
         pObject = pObject->GetControllable()->mCharacter->mVehicle->GetGameObject();
     }
 
-    PblList<Controllable>& list = GameObject_GetControllableList(pObject);
+    const PblList<Controllable>& list = pObject->GetControllableList();
     for (PblList<Controllable>::Itor it = list.Begin(); it != list.End(); ++it)
     {
         Controller* pController = it->mCtrl;

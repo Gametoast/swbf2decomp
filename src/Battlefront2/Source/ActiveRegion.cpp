@@ -60,10 +60,6 @@ static bool GameObject_IsAlive(const GameObject* pObject)
     return pObject->mIsAlive;
 }
 
-static const PblList<Controllable>& GameObject_GetControllableList(const GameObject* pObject)
-{
-    return pObject->mControllableList;
-}
 
 namespace ActiveRegions
 {
@@ -253,7 +249,7 @@ PblBitVector<600> ActiveRegion::GetPlayersInRegion()
         {
             continue;
         }
-        for (PblList<Controllable>::Itor itor(GameObject_GetControllableList(pObjects[i])); itor; ++itor)
+        for (PblList<Controllable>::Itor itor(pObjects[i]->GetControllableList()); itor; ++itor)
         {
             Character* pChr = itor->mCharacter;
             if (pChr)
@@ -294,21 +290,5 @@ void* __fastcall InitRawListIterator(void** pCurrent, void*, const void* pSource
     return pCurrent;
 }
 
-// FUNCTION: SWBF2 0x00437dd0
-void* __fastcall sub_437DD0(void** pCurrent)
-{
-    return *(void**)((char*)*pCurrent + 0x0c);
-}
 
-// FUNCTION: SWBF2 0x00437de0
-void* __fastcall sub_437DE0(void** pCurrent)
-{
-    return *(void**)((char*)*pCurrent + 0x0c);
-}
 
-// FUNCTION: SWBF2 0x00437df0
-void* __fastcall AdvanceRawListIterator(void** pCurrent)
-{
-    *pCurrent = *(void**)((char*)*pCurrent + 4);
-    return pCurrent;
-}

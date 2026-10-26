@@ -15,7 +15,7 @@ RedTexture* s_glowTextures[2];
 void HDREffect::PlatformInit()
 {
     m_pHDRShader = (pcHDRShader*)pcRedShader::Create(
-        PblHash("hdr"), 0x201, 0, 0, 0, RedColor::WHITE, RedColor::BLACK, 32.0f);
+        kuiHDRShader, 0x201, 0, 0, 0, RedColor::WHITE, RedColor::BLACK, 32.0f);
     m_downSizeFactor = 0.25f;
     m_numBloomPasses = 5;
     m_maxTotalWeight = 1.2f;

@@ -93,7 +93,7 @@ void FishParticleManager::PlatformInit()
         RedRenderer::pcGetGeometryMode() == GEOMETRYMODE_COMPRESSED ? 0x9282 : 0x282;
     for (int i = 0; i < sNumFishTypes; i++)
     {
-        sFishTypes[i].m_pShader = pcRedShader::Create(PblHash("Normal"), uiFormat, &sFishTypes[i].mTexture, 1,
+        sFishTypes[i].m_pShader = pcRedShader::Create(kuiNormalShader, uiFormat, &sFishTypes[i].mTexture, 1,
                                                  0x50002, RedColor::WHITE, RedColor::BLACK, 32.0f);
     }
 }

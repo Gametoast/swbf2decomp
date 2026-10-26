@@ -116,10 +116,6 @@ inline EntitySoldier* PilotSoldier(Controllable* pPilot)
     return pPilot ? static_cast<EntitySoldier*>(pPilot) : 0;
 }
 
-inline PblList<Controllable>& GameObject_GetControllableList(GameObject* pObject)
-{
-    return pObject->mControllableList;
-}
 }
 
 // FUNCTION: SWBF2 0x004dcc90
@@ -424,7 +420,7 @@ bool EntityRemoteTerminal::Update(float fDeltaTime)
         GameObject* pRemote = GetRemoteGameObject();
         if (pRemote)
         {
-            PblList<Controllable>& list = GameObject_GetControllableList(pRemote);
+            const PblList<Controllable>& list = pRemote->GetControllableList();
             if (list.GetCount() > 0)
             {
                 Controllable* pRemoteControl = list.GetFirst()->_pObject;
@@ -559,7 +555,7 @@ void EntityRemoteTerminal::SetPilot(Controllable* pPilot)
         GameObject* pRemote = GetRemoteGameObject();
         if (pRemote)
         {
-            for (PblList<Controllable>::Itor it(GameObject_GetControllableList(pRemote)); (Controllable*)it; ++it)
+            for (PblList<Controllable>::Itor it(pRemote->GetControllableList()); (Controllable*)it; ++it)
             {
                 if (it->mPilotType != PILOT_REMOTE)
                 {

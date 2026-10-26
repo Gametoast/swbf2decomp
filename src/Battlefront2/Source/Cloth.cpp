@@ -670,7 +670,7 @@ void ClothData::PlatformBindInit(EntityClothClass* pClass)
         uiMode = 5;
     }
 
-    pData->m_pShader = pcRedShader::Create(PblHash("Normal"), 0x222, &pData->m_uiTextureNameHash, 1, uiMode,
+    pData->m_pShader = pcRedShader::Create(kuiNormalShader, 0x222, &pData->m_uiTextureNameHash, 1, uiMode,
                                            RedColor::WHITE, RedColor::BLACK, 32.0f);
 }
 

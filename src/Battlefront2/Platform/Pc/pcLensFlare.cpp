@@ -193,12 +193,12 @@ void LensFlareEffect::PlatformInit()
         s_samplePoints->EndVertexData();
 
         s_pFlareShader = (pcFlareShader*)pcRedShader::Create(
-            PblHash("flare"), 0x282, 0, 0, 0x130040, RedColor::WHITE, RedColor::BLACK, 32.0f);
+            kuiFlareShader, 0x282, 0, 0, 0x130040, RedColor::WHITE, RedColor::BLACK, 32.0f);
         s_pFlareShader->SetTexture(s_intensityTex);
         s_pFillShader = (pcFlareShader*)pcRedShader::Create(
-            PblHash("flare"), 0x82, 0, 0, 0x10040, RedColor::WHITE, RedColor::BLACK, 32.0f);
+            kuiFlareShader, 0x82, 0, 0, 0x10040, RedColor::WHITE, RedColor::BLACK, 32.0f);
         s_pSampleShader = (pcSampleShader*)pcRedShader::Create(
-            PblHash("sample"), 2, 0, 0, 0, RedColor::WHITE, RedColor::BLACK, 32.0f);
+            kuiSampleShader, 2, 0, 0, 0, RedColor::WHITE, RedColor::BLACK, 32.0f);
     }
     else
     {
@@ -227,12 +227,12 @@ void LensFlareEffect::PlatformInit()
         s_samplePoints->EndVertexData();
 
         s_pFlareShader = (pcFlareShader*)pcRedShader::Create(
-            PblHash("flare"), 0x9282, 0, 0, 0x130040, RedColor::WHITE, RedColor::BLACK, 32.0f);
+            kuiFlareShader, 0x9282, 0, 0, 0x130040, RedColor::WHITE, RedColor::BLACK, 32.0f);
         s_pFlareShader->SetTexture(s_intensityTex);
         s_pFillShader = (pcFlareShader*)pcRedShader::Create(
-            PblHash("flare"), 0x1082, 0, 0, 0x10040, RedColor::WHITE, RedColor::BLACK, 32.0f);
+            kuiFlareShader, 0x1082, 0, 0, 0x10040, RedColor::WHITE, RedColor::BLACK, 32.0f);
         s_pSampleShader = (pcSampleShader*)pcRedShader::Create(
-            PblHash("sample"), 0x1002, 0, 0, 0, RedColor::WHITE, RedColor::BLACK, 32.0f);
+            kuiSampleShader, 0x1002, 0, 0, 0, RedColor::WHITE, RedColor::BLACK, 32.0f);
     }
 
     s_pSampleShader->SetOutputPosition(0.0f, 0.0f);

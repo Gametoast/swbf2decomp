@@ -55,6 +55,3 @@ RedRegion* __fastcall Find(lua_State* L, int iIndex);
 }
 
 void* __fastcall InitRawListIterator(void** pCurrent, void* pEdx, const void* pSource);
-void* __fastcall sub_437DD0(void** pCurrent);
-void* __fastcall sub_437DE0(void** pCurrent);
-void* __fastcall AdvanceRawListIterator(void** pCurrent);
