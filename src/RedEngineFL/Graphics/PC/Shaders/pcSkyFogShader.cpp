@@ -64,16 +64,16 @@ pcRedShaderDef* pcSkyFogShader::GetShaderDef() const
     return &s_shaderDef;
 }
 
-// GLOBAL: SWBF2 0x007849b0
-static const pcRedShaderDef::FixedFunctionStateT kFixedFunctionStates[1] =
-{
-    { 1, { 0x21, 0x00, 0x00, 0x00 } },
-};
-
 // FUNCTION: SWBF2 0x007040f0
 void pcSkyFogShader::InitFixedFunctionShaderDef() const
 {
-    GetShaderDef()->InitFixedFunction(0x10, 1, kFixedFunctionStates);
+    // GLOBAL: SWBF2 0x007849b0
+    static const pcRedShaderDef::FixedFunctionStateT aFFStates[1] =
+    {
+        { 1, { 0x21, 0x00, 0x00, 0x00 } },
+    };
+
+    GetShaderDef()->InitFixedFunction(0x10, 1, aFFStates);
 }
 
 // FUNCTION: SWBF2 0x00704270

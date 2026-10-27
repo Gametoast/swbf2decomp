@@ -165,17 +165,17 @@ unsigned int pcZPrepassShader::GetState_Prog1(const RenderItem*) const
     return m_material.diffuseMapHash != 0;
 }
 
-// GLOBAL: SWBF2 0x00784828
-static const pcRedShaderDef::FixedFunctionStateT kFixedFunctionStates[2] =
-{
-    { 1, { 0x21, 0x00, 0x00, 0x00 } },
-    { 1, { 0x21, 0x00, 0x00, 0x00 } },
-};
-
 // FUNCTION: SWBF2 0x007027d0
 void pcZPrepassShader::InitFixedFunctionShaderDef() const
 {
-    GetShaderDef()->InitFixedFunction(0x28, 2, kFixedFunctionStates);
+    // GLOBAL: SWBF2 0x00784828
+    static const pcRedShaderDef::FixedFunctionStateT aFFStates[2] =
+    {
+        { 1, { 0x21, 0x00, 0x00, 0x00 } },
+        { 1, { 0x21, 0x00, 0x00, 0x00 } },
+    };
+
+    GetShaderDef()->InitFixedFunction(0x28, 2, aFFStates);
 }
 
 // FUNCTION: SWBF2 0x007027f0

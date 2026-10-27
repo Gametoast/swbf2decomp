@@ -148,16 +148,16 @@ unsigned int pcFlareShader::GetState_Prog1(const RenderItem*) const
     return m_texture == 0;
 }
 
-// GLOBAL: SWBF2 0x00784c20
-static const pcRedShaderDef::FixedFunctionStateT kFixedFunctionStates[1] =
-{
-    { 1, { 0x21, 0x00, 0x00, 0x00 } },
-};
-
 // FUNCTION: SWBF2 0x00706280
 void pcFlareShader::InitFixedFunctionShaderDef() const
 {
-    GetShaderDef()->InitFixedFunction(0x24, 1, kFixedFunctionStates);
+    // GLOBAL: SWBF2 0x00784c20
+    static const pcRedShaderDef::FixedFunctionStateT aFFStates[1] =
+    {
+        { 1, { 0x21, 0x00, 0x00, 0x00 } },
+    };
+
+    GetShaderDef()->InitFixedFunction(0x24, 1, aFFStates);
 }
 
 // FUNCTION: SWBF2 0x007062a0

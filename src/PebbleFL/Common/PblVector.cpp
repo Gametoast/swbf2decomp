@@ -6,33 +6,29 @@
 
 
 // FUNCTION: SWBF2 0x00729f90
-const PblBox PblBox::GetTransformedBox(const PblMatrix& rMatrix) const
+const PblBox PblBox::GetTransformedBox(const PblMatrix& m) const
 {
-    PblBox box;
-    box._vMin = *(const PblVector3*)&rMatrix.m[3][0];
-    box._vMax = box._vMin;
-    const float* pMin = &_vMin.x;
-    const float* pMax = &_vMax.x;
-    float* pOutMin = &box._vMin.x;
-    float* pOutMax = &box._vMax.x;
+    PblVector3 vMin = m.GetTranslation();
+    PblVector3 vMax = vMin;
     for (int i = 0; i < 3; ++i)
     {
+        const float _vMin_i = _vMin[i];
+        const float _vMax_i = _vMax[i];
         for (int j = 0; j < 3; ++j)
         {
-            float f = rMatrix.m[i][j];
-            if (f < 0.0f)
+            if (m(i, j) >= 0.0f)
             {
-                pOutMax[j] += f * pMin[i];
-                pOutMin[j] += f * pMax[i];
+                vMin[j] += m(i, j) * _vMin_i;
+                vMax[j] += m(i, j) * _vMax_i;
             }
             else
             {
-                pOutMax[j] += f * pMax[i];
-                pOutMin[j] += f * pMin[i];
+                vMin[j] += m(i, j) * _vMax_i;
+                vMax[j] += m(i, j) * _vMin_i;
             }
         }
     }
-    return box;
+    return PblBox(vMin, vMax);
 }
 
 // GLOBAL: SWBF2 0x007e2d14

@@ -130,16 +130,16 @@ unsigned int pcHDRShader::GetState_Prog1(const RenderItem*) const
     return m_state;
 }
 
-// GLOBAL: SWBF2 0x00785790
-static const pcRedShaderDef::FixedFunctionStateT kFixedFunctionStates[1] =
-{
-    { 1, { 0x11, 0x00, 0x00, 0x00 } },
-};
-
 // FUNCTION: SWBF2 0x00713c50
 void pcHDRShader::InitFixedFunctionShaderDef() const
 {
-    GetShaderDef()->InitFixedFunction(0, 1, kFixedFunctionStates);
+    // GLOBAL: SWBF2 0x00785790
+    static const pcRedShaderDef::FixedFunctionStateT aFFStates[1] =
+    {
+        { 1, { 0x11, 0x00, 0x00, 0x00 } },
+    };
+
+    GetShaderDef()->InitFixedFunction(0, 1, aFFStates);
 }
 
 // FUNCTION: SWBF2 0x00713c70

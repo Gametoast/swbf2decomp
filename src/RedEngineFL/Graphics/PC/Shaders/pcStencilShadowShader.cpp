@@ -268,16 +268,16 @@ unsigned int pcStencilShadowShader::GetState_Prog1(const RenderItem* pItem) cons
     return STATES_ARRAY[1][m_mode];
 }
 
-// GLOBAL: SWBF2 0x00784e1c
-static const pcRedShaderDef::FixedFunctionStateT kFixedFunctionStates[1] =
-{
-    { 2, { 0x21, 0x00, 0x00, 0x00 } },
-};
-
 // FUNCTION: SWBF2 0x00707410
 void pcStencilShadowShader::InitFixedFunctionShaderDef() const
 {
-    GetShaderDef()->InitFixedFunction(0, 1, kFixedFunctionStates);
+    // GLOBAL: SWBF2 0x00784e1c
+    static const pcRedShaderDef::FixedFunctionStateT aFFStates[1] =
+    {
+        { 2, { 0x21, 0x00, 0x00, 0x00 } },
+    };
+
+    GetShaderDef()->InitFixedFunction(0, 1, aFFStates);
 }
 
 // FUNCTION: SWBF2 0x00707430

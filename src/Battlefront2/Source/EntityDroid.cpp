@@ -1919,14 +1919,13 @@ void EntityDroid::SetupCameraFOV(float& rFOV)
         rFOV = GetDefaultFOV();
         return;
     }
-    const ControllableClass* pClass = GetControllableClass();
     if (mTargetInfo.mIsAiming || (mTracker && mTracker->IsFirstPersonView()))
     {
-        rFOV = pClass->mFirstPersonFOV;
+        rFOV = GetControllableClass()->mFirstPersonFOV;
     }
     else
     {
-        rFOV = pClass->mThirdPersonFOV;
+        rFOV = GetControllableClass()->mThirdPersonFOV;
     }
 }
 

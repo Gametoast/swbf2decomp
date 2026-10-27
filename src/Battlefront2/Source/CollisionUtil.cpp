@@ -873,51 +873,43 @@ namespace CollisionUtil
 float RayHitBubble(const PblVector3& vStart, const PblVector3& vDir, float fLength, const PblMatrix& matrix,
                  const PblVector3& vSize, PblVector3* pNormal)
 {
-    float fInvX = 1.0f / vSize.x;
-    float fInvY = 1.0f / vSize.y;
-    float fInvZ = 1.0f / vSize.z;
-
-    float fDX = vStart.x - matrix.m[3][0];
-    float fDY = vStart.y - matrix.m[3][1];
-    float fDZ = vStart.z - matrix.m[3][2];
-    float fSX = (matrix.m[0][0] * fDX + matrix.m[0][1] * fDY + matrix.m[0][2] * fDZ) * fInvX;
-    float fSY = (matrix.m[1][0] * fDX + matrix.m[1][1] * fDY + matrix.m[1][2] * fDZ) * fInvY;
-    float fSZ = (matrix.m[2][0] * fDX + matrix.m[2][1] * fDY + matrix.m[2][2] * fDZ) * fInvZ;
-    float fC = fSX * fSX + fSY * fSY + fSZ * fSZ;
-    if (fC < 1.0f)
+    PblVector3 vSizeInv(1.0f / vSize.x, 1.0f / vSize.y, 1.0f / vSize.z);
+    PblVector3 vStartPosRel = vStart - matrix.GetTranslation();
+    PblVector3 vStartPosLocal(DotProduct(matrix.GetXAxis(), vStartPosRel) * vSizeInv.x,
+                             DotProduct(matrix.GetYAxis(), vStartPosRel) * vSizeInv.y,
+                             DotProduct(matrix.GetZAxis(), vStartPosRel) * vSizeInv.z);
+    float fDistSqr = SquaredLength(vStartPosLocal);
+    if (fDistSqr < 1.0f)
     {
         return 1.0f;
     }
 
-    float fRX = (matrix.m[0][0] * vDir.x + matrix.m[0][1] * vDir.y + matrix.m[0][2] * vDir.z) * (fInvX * fLength);
-    float fRY = (matrix.m[1][0] * vDir.x + matrix.m[1][1] * vDir.y + matrix.m[1][2] * vDir.z) * (fInvY * fLength);
-    float fRZ = (matrix.m[2][0] * vDir.x + matrix.m[2][1] * vDir.y + matrix.m[2][2] * vDir.z) * (fInvZ * fLength);
-    float fB = fRX * fSX + fRY * fSY + fRZ * fSZ;
-    if (fB >= 0.0f)
+    PblVector3 vRayLocal(DotProduct(matrix.GetXAxis(), vDir) * (vSizeInv.x * fLength),
+                        DotProduct(matrix.GetYAxis(), vDir) * (vSizeInv.y * fLength),
+                        DotProduct(matrix.GetZAxis(), vDir) * (vSizeInv.z * fLength));
+    float fRayDotR = DotProduct(vRayLocal, vStartPosLocal);
+    if (fRayDotR >= 0.0f)
     {
         return 1.0f;
     }
 
-    float fA = fRX * fRX + fRY * fRY + fRZ * fRZ;
-    float fDisc = fB * fB - (fC - 1.0f) * fA;
-    if (fDisc <= 0.0f)
+    float fRaySqr = SquaredLength(vRayLocal);
+    float fQ = fRayDotR * fRayDotR - (fDistSqr - 1.0f) * fRaySqr;
+    if (fQ <= 0.0f)
     {
         return 1.0f;
     }
-    float fEnd = fA + fB;
-    if (fEnd < 0.0f && fEnd * fEnd > fDisc)
+    float fEnd = fRaySqr + fRayDotR;
+    if (fEnd < 0.0f && fEnd * fEnd > fQ)
     {
         return 1.0f;
     }
 
-    float fT = (-fB - (float)sqrt((double)fDisc)) / fA;
+    float fT = (-fRayDotR - sqrtf(fQ)) / fRaySqr;
     if (pNormal)
     {
-        PblVector3 vLocal((fSX + fRX * fT) * fInvX, (fSY + fRY * fT) * fInvY, (fSZ + fRZ * fT) * fInvZ);
-        PblVector3 vWorld, vUnit;
-        D3DXVec3TransformNormal((D3DXVECTOR3*)&vWorld, (const D3DXVECTOR3*)&vLocal, (const D3DXMATRIX*)&matrix);
-        D3DXVec3Normalize((D3DXVECTOR3*)&vUnit, (const D3DXVECTOR3*)&vWorld);
-        *pNormal = vUnit;
+        PblVector3 vNormal = (vStartPosLocal + vRayLocal * fT) * vSizeInv;
+        *pNormal = Normalize(matrix.ApplyRotation(vNormal));
     }
     return fT;
 }

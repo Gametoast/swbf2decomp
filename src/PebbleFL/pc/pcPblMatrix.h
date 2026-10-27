@@ -160,3 +160,34 @@ inline void PblMatrix::Scale(float fScaleX, float fScaleY, float fScaleZ)
     D3DXMATRIXA16 Temp;
     D3DXMatrixMultiply(reinterpret_cast<D3DXMATRIX*>(this), reinterpret_cast<const D3DXMATRIX*>(this), D3DXMatrixScaling(&Temp, fScaleX, fScaleY, fScaleZ));
 }
+
+inline float& PblMatrix::operator()(int iRow, int iColumn)
+{
+    return m[iRow][iColumn];
+}
+
+inline float PblMatrix::operator()(int iRow, int iColumn) const
+{
+    return m[iRow][iColumn];
+}
+
+inline const PblMatrix& PblMatrix::operator*=(const PblMatrix& rhs)
+{
+    D3DXMatrixMultiply(reinterpret_cast<D3DXMATRIX*>(this),
+                       reinterpret_cast<const D3DXMATRIX*>(this),
+                       reinterpret_cast<const D3DXMATRIX*>(&rhs));
+    return *this;
+}
+
+inline const PblVector3 PblMatrix::ApplyTranslation(const PblVector3& vector) const
+{
+    return PblVector3(m[3][0] + vector.x, m[3][1] + vector.y, m[3][2] + vector.z);
+}
+
+inline const PblMatrix PblMatrix::GetInverse() const
+{
+    PblMatrix result;
+    D3DXMatrixInverse(reinterpret_cast<D3DXMATRIX*>(&result), 0,
+                      reinterpret_cast<const D3DXMATRIX*>(this));
+    return result;
+}

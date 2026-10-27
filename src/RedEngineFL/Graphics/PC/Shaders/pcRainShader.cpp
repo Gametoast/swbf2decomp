@@ -138,16 +138,16 @@ unsigned int pcRainShader::GetState_Prog1(const RenderItem*) const
     return 0;
 }
 
-// GLOBAL: SWBF2 0x00784af8
-static const pcRedShaderDef::FixedFunctionStateT kFixedFunctionStates[1] =
-{
-    { 1, { 0x21, 0x00, 0x00, 0x00 } },
-};
-
 // FUNCTION: SWBF2 0x00704fb0
 void pcRainShader::InitFixedFunctionShaderDef() const
 {
-    GetShaderDef()->InitFixedFunction(4, 1, kFixedFunctionStates);
+    // GLOBAL: SWBF2 0x00784af8
+    static const pcRedShaderDef::FixedFunctionStateT aFFStates[1] =
+    {
+        { 1, { 0x21, 0x00, 0x00, 0x00 } },
+    };
+
+    GetShaderDef()->InitFixedFunction(4, 1, aFFStates);
 }
 
 // FUNCTION: SWBF2 0x00704fd0

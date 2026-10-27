@@ -350,7 +350,7 @@ void OrdnanceSticky::Render(unsigned char ucViewport, float fDist, unsigned int 
         {
             PblMatrix mBody = pObject->mCollisionModel->GetWorldMatrix(mStickInfo->mCollBodyID,
                                                                        pObject->GetMatrix(), pObject->GetPose());
-            D3DXMatrixMultiply(reinterpret_cast<D3DXMATRIX*>(&mat), reinterpret_cast<const D3DXMATRIX*>(&mat), reinterpret_cast<const D3DXMATRIX*>(&mBody));
+            mat *= mBody;
         }
     }
     else if (pClass->mAlignVertical)
@@ -470,7 +470,7 @@ bool OrdnanceSticky::Collide(CollisionObject* pObject, const PblVector3& vPos,
         {
             PblMatrix mBody = pModel->GetWorldMatrix(iBodyId, pObject->GetMatrix(), pObject->GetPose());
             const PblMatrix mInverse = mBody.GetInverseFast();
-            D3DXMatrixMultiply(reinterpret_cast<D3DXMATRIX*>(&mStick), reinterpret_cast<const D3DXMATRIX*>(&mStick), reinterpret_cast<const D3DXMATRIX*>(&mInverse));
+            mStick *= mInverse;
             mStickInfo->mCollBodyID = iBodyId;
         }
         else

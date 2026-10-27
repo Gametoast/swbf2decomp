@@ -669,8 +669,7 @@ void PlayerController::Update(float dt)
             {
                 PblVector3 vSearch(vDir.x * fRange * 0.5f + vStart.x, vDir.y * fRange * 0.5f + vStart.y,
                                    vDir.z * fRange * 0.5f + vStart.z);
-                PblMatrix mInverse;
-                D3DXMatrixInverse(reinterpret_cast<D3DXMATRIX*>(&mInverse), 0, reinterpret_cast<const D3DXMATRIX*>(&GetObjectMatrix(pMe)));
+                PblMatrix mInverse = GetObjectMatrix(pMe).GetInverse();
                 GameObject* apObjects[300];
                 int iCount = CollisionManager::GetObjectsInRange(vSearch, fRange, apObjects, 300, pMe, 0x3b);
                 for (int i = 0; i < iCount; ++i)
@@ -1021,11 +1020,11 @@ void PlayerController::CheckForAutoFollow(float dt)
     }
 
     const PblVector3& vVelocity = mOwner->GetGameObject()->GetVelocity();
-    float fSpeedSq = vVelocity.x * vVelocity.x + vVelocity.y * vVelocity.y + vVelocity.z * vVelocity.z;
+    float fSpeedSq = SquaredLength(vVelocity);
     if (pSoldier->GetMaxSpeed() * pSoldier->GetMaxSpeed() * 0.9f * 0.9f > fSpeedSq)
     {
         float fTime = mAutoFollowTime - dt * 4.0f;
-        mAutoFollowTime = 0.0f > fTime ? 0.0f : fTime;
+        mAutoFollowTime = Max(0.0f, fTime);
         return;
     }
 
@@ -1036,13 +1035,11 @@ void PlayerController::CheckForAutoFollow(float dt)
         return;
     }
     float fTime = mAutoFollowTime - 1.0f;
-    mAutoFollowTime = 0.0f > fTime ? 0.0f : fTime;
+    mAutoFollowTime = Max(0.0f, fTime);
 
     const Team* pTeam = Team::GetPtr(pSoldier->GetTeam());
-    PblVector3 vBehind(mMatrix.m[2][0] * vVelocity.x * 10.0f * 0.5f, mMatrix.m[2][1] * vVelocity.y * 10.0f * 0.5f,
-                       mMatrix.m[2][2] * vVelocity.z * 10.0f * 0.5f);
-    const PblVector3& vPos = pSoldier->GetPosition();
-    PblVector3 vCenter(vPos.x - vBehind.x, vPos.y - vBehind.y, vPos.z - vBehind.z);
+    PblVector3 vBehind = (mMatrix.GetZAxis() * vVelocity) * 10.0f / 2.0f;
+    PblVector3 vCenter = pSoldier->GetPosition() - vBehind;
     GameObject* apObjects[15];
     int iCount = TeamManager::GetObjectsInRange(vCenter, 10.0f, apObjects, 15, pTeam, 4);
     for (int i = 0; i < iCount; ++i)

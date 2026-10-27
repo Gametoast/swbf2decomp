@@ -1164,7 +1164,7 @@ bool AILowLevel::CalcHeadLookMatrix(const PblMatrix* pHead, PblMatrix* pOut)
 
         *pOut = PblMatrix(vX, vY, vZ, mHead.GetTranslation());
         const PblMatrix mInv = GetMatrix().GetInverseFast();
-        D3DXMatrixMultiply(reinterpret_cast<D3DXMATRIX*>(pOut), reinterpret_cast<const D3DXMATRIX*>(pOut), reinterpret_cast<const D3DXMATRIX*>(&mInv));
+        *pOut *= mInv;
         return true;
     }
 
@@ -1188,7 +1188,7 @@ bool AILowLevel::CalcHeadLookMatrix(const PblMatrix* pHead, PblMatrix* pOut)
     pOut->m[3][2] = 0.0f;
     pOut->m[3][3] = 1.0f;
     const PblMatrix mHeadCopy = *pHead;
-    D3DXMatrixMultiply(reinterpret_cast<D3DXMATRIX*>(pOut), reinterpret_cast<const D3DXMATRIX*>(pOut), reinterpret_cast<const D3DXMATRIX*>(&mHeadCopy));
+    *pOut *= mHeadCopy;
     return true;
 }
 

@@ -39,7 +39,7 @@ public:
         enum { MAX_OBJECTS_PER_ATTACK = 8 };
 
         float fTime;
-        void* pAttack;
+        const void* pAttack;
         int iNumObjects;
         GameObject* apObject[8];
         DamageData* pNext;
@@ -60,8 +60,8 @@ public:
 
         int GetCount() const { return m_uiCount; }
         bool IsButtonDown(unsigned char uiButton) const { return (m_uiButtonDown & (1 << uiButton)) != 0; }
-        const Event& GetEvent(int iEvent) const { return m_aEventQueue[(m_uiStart + iEvent) & INPUT_QUEUE_MASK]; }
-        const Event& operator[](int iEvent) const { return GetEvent(iEvent); }
+        const Event& GetEvent(int iEvent) const { return m_aEventQueue[(m_uiStart + static_cast<unsigned char>(m_uiCount - iEvent - 1)) & INPUT_QUEUE_MASK]; }
+        const Event& operator[](int iEvent) const { return m_aEventQueue[(m_uiStart + static_cast<unsigned char>(iEvent)) & INPUT_QUEUE_MASK]; }
         void Update(unsigned char uiButtons, float fTime);
         void Clear() { m_uiCount = 0; m_uiStart = 0; }
         void ClearAll() { Clear(); m_uiButtonDown = 0; }
@@ -82,11 +82,11 @@ public:
         }
         void Pop(int iCount)
         {
-            if (iCount == m_uiCount)
+            if (iCount >= m_uiCount)
             {
                 Clear();
             }
-            else
+            else if (iCount > 0)
             {
                 m_uiCount -= iCount;
                 m_uiStart = (m_uiStart + iCount) & INPUT_QUEUE_MASK;

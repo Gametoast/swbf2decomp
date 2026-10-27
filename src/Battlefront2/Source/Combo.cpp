@@ -23,8 +23,6 @@
 #include <float.h>
 #include <d3dx9math.h>
 
-bool __fastcall StateHasBothResolveFlags(const void* pState);
-
 // FUNCTION: SWBF2 0x00475640
 const Combo* Combo::ResolveForWeapon(const WeaponMelee* pWeapon,
                                      const ZephyrSkeletonShared* pSkeleton) const
@@ -35,60 +33,54 @@ const Combo* Combo::ResolveForWeapon(const WeaponMelee* pWeapon,
         return 0;
     }
     const unsigned int uiNameHash = Combo::GetNameHashForMap(m_uiNameHash, (SoldierAnimationBank::MAP)eMap);
-    const Combo* pFound = s_ComboTable.Find(uiNameHash);
+    const Combo* pFound = Find(uiNameHash);
     if (pFound)
     {
         return pFound;
     }
-    if (sMemoryPool.mUsed >= sMemoryPool.mCount)
+    if (sMemoryPool.IsFull())
     {
         return 0;
     }
-    Combo* pResolved = static_cast<Combo*>(sMemoryPool.Allocate(0x24));
-    if (pResolved)
-    {
-        pResolved->CopyConstructor(*this);
-    }
+    Combo* pResolved = new Combo(*this);
     pResolved->m_uiNameHash = uiNameHash;
-    pResolved->m_pSkeleton = const_cast<ZephyrSkeletonShared*>(pSkeleton);
+    pResolved->m_pSkeleton = pSkeleton;
     pResolved->m_eMap = eMap;
     if (pResolved->m_aState != m_aState)
     {
-        for (unsigned int i = 0; i < pResolved->m_uiNumStates; ++i)
+        for (unsigned int i = 0; i < pResolved->GetNumStates(); ++i)
         {
-            State& state = pResolved->m_aState[i];
+            State& state = *pResolved->GetState(i);
             float fDuration = 0.0f;
             float fVelocityZ = 0.0f;
             float fVelocityX = 0.0f;
-            if (state.m_uiDuration != State::DURATION_INVALID &&
-                (!state.m_bAnimatedMove || !state.m_bVelocityZFromAnim) &&
-                !StateHasBothResolveFlags(&state))
+            if (state.IsDuration() && !state.IsVelocityZFromAnim() && !state.IsVelocityXFromAnim())
             {
                 goto resolve_damage;
             }
-            if (state.m_uiAnimIndex < 0xa4)
+            if (state.GetAnimIndex() < 0xa4)
             {
                 SoldierAnimatorClass* pAnimator = SoldierAnimatorClass::Instance();
                 const SoldierAnimation* pAnim = pAnimator->GetUpperBodyAnimation(
-                    (SoldierAnimationBank::MAP)eMap, (unsigned char)state.m_uiAnimIndex);
+                    (SoldierAnimationBank::MAP)eMap, (unsigned char)state.GetAnimIndex());
                 if (pAnim)
                 {
-                    fDuration = (pAnim->m_pZephyrAnim->GetNumFrames() - 1) * 0.033333335f;
-                    fVelocityZ = pAnim->m_iVelocityZ * 0.01f;
-                    fVelocityX = pAnim->m_iVelocityX * 0.01f;
+                    fDuration = pAnim->GetAnimationLength();
+                    fVelocityZ = pAnim->GetVelocityZ();
+                    fVelocityX = pAnim->GetVelocityX();
                 }
             }
-            if (state.m_uiDuration == State::DURATION_INVALID)
+            if (!state.IsDuration())
             {
                 state.SetDuration(fDuration);
             }
-            if (state.m_bVelocityZFromAnim && state.m_bAnimatedMove)
+            if (state.IsVelocityZFromAnim())
             {
-                state.SetVelocityZ(state.m_iVelocityZ * 0.02f * fVelocityZ, false);
+                state.SetVelocityZ(state.GetVelocityZ() * fVelocityZ, false);
             }
-            if (state.m_bVelocityXFromAnim && state.m_bAnimatedMove)
+            if (state.IsVelocityXFromAnim())
             {
-                state.SetVelocityX(state.m_iVelocityX * 0.02f * fVelocityX, false);
+                state.SetVelocityX(state.GetVelocityX() * fVelocityX, false);
             }
 resolve_damage:
             const WeaponMeleeClass* pClass = static_cast<const WeaponMeleeClass*>(pWeapon->mClass);
@@ -97,16 +89,16 @@ resolve_damage:
             {
                 continue;
             }
-            for (unsigned int j = 0; j < state.m_uiNumAttacks; ++j)
+            for (unsigned int j = 0; j < state.GetNumAttacks(); ++j)
             {
-                Attack& attack = state.m_aAttack[j];
-                if (attack.m_uiDamageEdge >= nEdges)
+                Attack& attack = *state.GetAttack(j);
+                if (attack.GetDamageEdge() >= nEdges)
                 {
                     continue;
                 }
                 unsigned int uiAttach;
                 PblVector3 vBegin, vEnd;
-                pClass->GetDamageEdgeRay(attack.m_uiDamageEdge, uiAttach, vBegin, vEnd);
+                pClass->GetDamageEdgeRay(attack.GetDamageEdge(), uiAttach, vBegin, vEnd);
                 attack._ResolveDamageData(pResolved, &state, uiAttach,
                     vBegin, vEnd);
             }
@@ -235,47 +227,36 @@ bool Combo::Deflect::TestDeflect(const float* pMatrix, const float* pRight, cons
     return true;
 }
 
-// FUNCTION: SWBF2 0x00470ea0
-bool __fastcall StateHasBothResolveFlags(const void* pState)
-{
-    unsigned int value = static_cast<const Combo::State*>(pState)->m_auiPackedData[3];
-    return (value & 0x00880000u) == 0x00880000u;
-}
-
 // FUNCTION: SWBF2 0x00475d60
-void* Combo::_AllocDamageSample()
+Combo::DamageSample* Combo::_AllocDamageSample()
 {
-    MemoryPool& pool = Combo::DamageSample::sMemoryPool;
-    if (pool.mUsed >= pool.mCount)
+    if (DamageSample::sMemoryPool.IsFull())
     {
         return 0;
     }
-    return pool.Allocate(0x1c);
+    return new DamageSample;
 }
 
 // FUNCTION: SWBF2 0x00473280
 void Combo::Attack::AddDamageSample(float fTime, const PblVector3& vBegin, const PblVector3& vEnd)
 {
-    Combo::Attack* pAttack = (Combo::Attack*)this;
-    char* pSample = static_cast<char*>(Combo::_AllocDamageSample());
+    DamageSample* pSample = Combo::_AllocDamageSample();
     if (!pSample)
     {
         return;
     }
-    if (pAttack->m_uiNumDamageSamples == 0)
+    if (m_uiNumDamageSamples == 0)
     {
-        pAttack->m_aDamageSample = reinterpret_cast<Combo::DamageSample*>(pSample);
+        m_aDamageSample = pSample;
     }
-    if (pAttack->m_uiNumDamageSamples < 255)
+    if (m_uiNumDamageSamples < 255)
     {
-        ++pAttack->m_uiNumDamageSamples;
-        *reinterpret_cast<float*>(pSample) = fTime;
-        memcpy(pSample + 4, &vBegin, sizeof(PblVector3));
-        memcpy(pSample + 16, &vEnd, sizeof(PblVector3));
+        ++m_uiNumDamageSamples;
+        pSample->fTime = fTime;
+        pSample->vPos = vBegin;
+        pSample->vDir = vEnd;
     }
 }
-
-
 
 // FUNCTION: SWBF2 0x004727a0
 bool Combo::Attack::_ResolveDamageData(const Combo* pCombo, const State* pState,
@@ -313,7 +294,7 @@ bool Combo::Attack::_ResolveDamageData(const Combo* pCombo, const State* pState,
     const SoldierAnimation* pUpperAnim =
         SoldierAnimatorClass::Instance()->GetUpperBodyAnimation(eMap, uiAnimIndex);
     const SoldierAnimation* pLowerAnim;
-    if (pState->m_bAnimatedMove)
+    if (pState->IsAnimatedMove())
     {
         pLowerAnim = SoldierAnimatorClass::Instance()->GetLowerBodyAnimation(eMap, uiAnimIndex);
         if (!pLowerAnim)
@@ -334,12 +315,12 @@ bool Combo::Attack::_ResolveDamageData(const Combo* pCombo, const State* pState,
         bLowerAnim = false;
     }
 
-    float fTimeStart = m_uiDamageTimeStart * 0.01f;
-    float fTimeEnd = m_uiDamageTimeEnd * 0.01f;
-    float fDuration = pState->m_uiDuration * 0.01f;
+    float fTimeStart = GetDamageTimeStart();
+    float fTimeEnd = GetDamageTimeEnd();
+    float fDuration = pState->GetDuration();
     if (fDuration > 0.0f)
     {
-        if (m_bDamageTimeStartFromAnim)
+        if (IsDamageTimeEndFromAnim())
         {
             fTimeEnd = fDuration * fTimeEnd;
         }
@@ -351,8 +332,8 @@ bool Combo::Attack::_ResolveDamageData(const Combo* pCombo, const State* pState,
     }
     else
     {
-        fDuration = (pUpperAnim->m_pZephyrAnim->GetNumFrames() - 1) * 0.033333335f;
-        if (m_bDamageTimeStartFromAnim)
+        fDuration = pUpperAnim->GetAnimationLength();
+        if (IsDamageTimeEndFromAnim())
         {
             fTimeEnd = FLT_MAX;
             SetDamageTimeEnd(1.0f, true);
@@ -366,7 +347,7 @@ bool Combo::Attack::_ResolveDamageData(const Combo* pCombo, const State* pState,
             SetDamageTimeEnd(fTimeEnd, false);
         }
     }
-    if (m_bDamageTimeStartFromAnim)
+    if (IsDamageTimeStartFromAnim())
     {
         fTimeStart = fDuration * fTimeStart;
     }
@@ -376,13 +357,13 @@ bool Combo::Attack::_ResolveDamageData(const Combo* pCombo, const State* pState,
     }
     SetDamageTimeStart(fTimeStart, false);
 
-    if (fTimeStart > (pUpperAnim->m_pZephyrAnim->GetNumFrames() - 1) * 0.033333335f)
+    if (fTimeStart > pUpperAnim->GetAnimationLength())
     {
-        fTimeStart = (pUpperAnim->m_pZephyrAnim->GetNumFrames() - 1) * 0.033333335f;
+        fTimeStart = pUpperAnim->GetAnimationLength();
     }
-    if (fTimeEnd > (pUpperAnim->m_pZephyrAnim->GetNumFrames() - 1) * 0.033333335f)
+    if (fTimeEnd > pUpperAnim->GetAnimationLength())
     {
-        fTimeEnd = (pUpperAnim->m_pZephyrAnim->GetNumFrames() - 1) * 0.033333335f;
+        fTimeEnd = pUpperAnim->GetAnimationLength();
     }
 
     kUpperPose.SetAnimation(pUpperAnim->m_pZephyrAnim, 30.0f);
@@ -402,10 +383,10 @@ bool Combo::Attack::_ResolveDamageData(const Combo* pCombo, const State* pState,
     kPose.Set(kUpperPose, kUpperMask, true);
     kPose.Set(kLowerPose, kLowerMask, true);
     kSkel.BuildWorldMatrices(gMatrixIdentity, iJoint);
-    const PblMatrix& mJoint = kSkel.m_pWorldMatrices[iJoint];
+    const PblMatrix* pJointMatrix = kSkel.GetWorldMatrix(iJoint);
     PblVector3 vPos, vDir;
-    D3DXVec3TransformCoord((D3DXVECTOR3*)&vPos, (const D3DXVECTOR3*)&vBegin, (const D3DXMATRIX*)&mJoint);
-    D3DXVec3TransformNormal((D3DXVECTOR3*)&vDir, (const D3DXVECTOR3*)&vEnd, (const D3DXMATRIX*)&mJoint);
+    vPos = pJointMatrix->ApplyTransform(vBegin);
+    vDir = pJointMatrix->ApplyRotation(vEnd);
     AddDamageSample(fTimeStart, vPos, vDir);
 
     while (fTimeEnd > fTimeStart)
@@ -424,24 +405,18 @@ bool Combo::Attack::_ResolveDamageData(const Combo* pCombo, const State* pState,
         kPose.Set(kLowerPose, kLowerMask, true);
         kSkel.BuildWorldMatrices(gMatrixIdentity, iJoint);
         PblVector3 vNewPos, vNewDir;
-        D3DXVec3TransformCoord((D3DXVECTOR3*)&vNewPos, (const D3DXVECTOR3*)&vBegin, (const D3DXMATRIX*)&mJoint);
-        D3DXVec3TransformNormal((D3DXVECTOR3*)&vNewDir, (const D3DXVECTOR3*)&vEnd, (const D3DXMATRIX*)&mJoint);
+        vNewPos = pJointMatrix->ApplyTransform(vBegin);
+        vNewDir = pJointMatrix->ApplyRotation(vEnd);
 
         for (;;)
         {
-            const float dx = vNewPos.x - vPos.x;
-            const float dy = vNewPos.y - vPos.y;
-            const float dz = vNewPos.z - vPos.z;
-            const float fBaseMoveSq = dx * dx + dy * dy + dz * dz;
-            const float tx = (vNewDir.x + vNewPos.x) - vPos.x - vDir.x;
-            const float ty = (vNewDir.y + vNewPos.y) - vPos.y - vDir.y;
-            const float tz = (vNewDir.z + vNewPos.z) - vPos.z - vDir.z;
-            const float fTipMoveSq = tx * tx + ty * ty + tz * tz;
+            const float fBaseMoveSq = SquaredLength(vNewPos - vPos);
+            const float fTipMoveSq = SquaredLength((vNewDir + vNewPos) - (vPos + vDir));
             if (fBaseMoveSq <= fMaxMoveSq && fTipMoveSq <= fMaxMoveSq)
             {
                 break;
             }
-            const float fMove = (float)sqrt((double)(fBaseMoveSq > fTipMoveSq ? fBaseMoveSq : fTipMoveSq));
+            const float fMove = sqrtf(fBaseMoveSq > fTipMoveSq ? fBaseMoveSq : fTipMoveSq);
             const float fNewStep = fStep * 0.5f * 0.9f / fMove;
             if (fMinTimeStep > fNewStep)
             {
@@ -458,8 +433,8 @@ bool Combo::Attack::_ResolveDamageData(const Combo* pCombo, const State* pState,
             kPose.Set(kUpperPose, kUpperMask, true);
             kPose.Set(kLowerPose, kLowerMask, true);
             kSkel.BuildWorldMatrices(gMatrixIdentity, iJoint);
-            D3DXVec3TransformCoord((D3DXVECTOR3*)&vNewPos, (const D3DXVECTOR3*)&vBegin, (const D3DXMATRIX*)&mJoint);
-            D3DXVec3TransformNormal((D3DXVECTOR3*)&vNewDir, (const D3DXVECTOR3*)&vEnd, (const D3DXMATRIX*)&mJoint);
+            vNewPos = pJointMatrix->ApplyTransform(vBegin);
+            vNewDir = pJointMatrix->ApplyRotation(vEnd);
         }
 
         fTimeStart = fStep + fTimeStart;
@@ -495,7 +470,7 @@ const Combo::State& Combo::State::operator=(const State& other)
 }
 
 // FUNCTION: SWBF2 0x00474fd0
-Combo* Combo::CopyConstructor(const Combo& other)
+const Combo& Combo::operator=(const Combo& other)
 {
     m_uiNameHash = other.m_uiNameHash;
     m_eCombo = other.m_eCombo;
@@ -506,18 +481,13 @@ Combo* Combo::CopyConstructor(const Combo& other)
     m_uiDeflectButton = other.m_uiDeflectButton;
 
     bool bDeepCopy = false;
-    for (unsigned int i = 0; i < other.m_uiNumStates; ++i)
+    for (unsigned int i = 0; i < other.GetNumStates() && !bDeepCopy; ++i)
     {
-        const State& state = other.m_aState[i];
-        const unsigned int* pWords = reinterpret_cast<const unsigned int*>(&state);
-        const unsigned int flags = pWords[10];
-        if (state.m_uiDuration == 1023 ||
-            ((flags & 0x00400000u) && (flags & 0x00080000u)) ||
-            ((flags & 0x00800000u) && (flags & 0x00080000u)) ||
-            state.m_uiNumAttacks)
+        const State* pState = other.GetState(i);
+        bDeepCopy = !pState->IsDuration() || pState->IsVelocityZFromAnim() || pState->IsVelocityXFromAnim();
+        if (pState->GetNumAttacks())
         {
             bDeepCopy = true;
-            break;
         }
     }
     if (!bDeepCopy)
@@ -526,20 +496,20 @@ Combo* Combo::CopyConstructor(const Combo& other)
         m_pCatchState = other.m_pCatchState;
         m_pTakeKneeState = other.m_pTakeKneeState;
         m_uiNumStates = other.m_uiNumStates;
-        return this;
+        return *this;
     }
     m_uiNumStates = 0;
     m_aState = 0;
-    for (unsigned int i = 0; i < other.m_uiNumStates; ++i)
+    for (unsigned int i = 0; i < other.GetNumStates(); ++i)
     {
-        State* pState = AddState(other.m_aState[i].m_uiNameHash);
+        State* pState = AddState(other.GetState(i)->m_uiNameHash);
         if (!pState)
         {
             break;
         }
-        *pState = other.m_aState[i];
+        *pState = *other.GetState(i);
     }
-    return this;
+    return *this;
 }
 
 // FUNCTION: SWBF2 0x00475b20

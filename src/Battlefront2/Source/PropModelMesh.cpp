@@ -386,7 +386,7 @@ void PropObjectMesh::Render(const RedCamera* pCamera, float fDist, unsigned int 
                 color.g = mColor.g * kInv255;
                 color.b = mColor.b * kInv255;
                 color.a = mColor.a * kInv255;
-                PblMatrix matrix(mMatrix);
+                PblMatrix matrix(reinterpret_cast<const _D3DXMATRIXA16*>(&mMatrix));
 
                 mModel->mRenderObj.mGrassClass->RenderMaxDist(
                     matrix, GetPropDistanceScale(mModel->mType) * mModel->mGeometryMaxDist, color,
@@ -429,7 +429,7 @@ void PropObjectMesh::Render(const RedCamera* pCamera, float fDist, unsigned int 
                 color.g = mColor.g * kInv255;
                 color.b = mColor.b * kInv255;
                 color.a = mColor.a * kInv255;
-                PblMatrix matrix(mMatrix);
+                PblMatrix matrix(reinterpret_cast<const _D3DXMATRIXA16*>(&mMatrix));
 
                 mModel->mRenderObj.mLeafClass->RenderMaxDist(
                     matrix, fCamDist, uiRenderFlags,

@@ -307,18 +307,18 @@ unsigned int pcWaterShader::GetState_Prog2(const RenderItem*) const
     return m_projectedNormalMap ? 3 : 5;
 }
 
-// GLOBAL: SWBF2 0x00784fac
-static const pcRedShaderDef::FixedFunctionStateT kFixedFunctionStates[3] =
-{
-    { 1, { 0x42, 0x00, 0x00, 0x00 } },
-    { 1, { 0x41, 0x41, 0x00, 0x00 } },
-    { 3, { 0x41, 0x41, 0x41, 0x00 } },
-};
-
 // FUNCTION: SWBF2 0x007097a0
 void pcWaterShader::InitFixedFunctionShaderDef() const
 {
-    GetShaderDef()->InitFixedFunction(0x10, 3, kFixedFunctionStates);
+    // GLOBAL: SWBF2 0x00784fac
+    static const pcRedShaderDef::FixedFunctionStateT aFFStates[3] =
+    {
+        { 1, { 0x42, 0x00, 0x00, 0x00 } },
+        { 1, { 0x41, 0x41, 0x00, 0x00 } },
+        { 3, { 0x41, 0x41, 0x41, 0x00 } },
+    };
+
+    GetShaderDef()->InitFixedFunction(0x10, 3, aFFStates);
 }
 
 // FUNCTION: SWBF2 0x00709e90

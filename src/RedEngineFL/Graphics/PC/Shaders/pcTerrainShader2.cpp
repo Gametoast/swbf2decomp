@@ -713,29 +713,30 @@ void pcTerrainShader2::_InitMaps(float fScale)
         s_PipelineVersion = 1.1f;
         return;
     }
-    if (s_PipelineVersion < 2.0f)
+    if (s_PipelineVersion >= 2.0f)
     {
-        return;
+        _InitNoiseMap(0, PblHash("height0"),
+                      PblVector4(1.0f / fScale, 1.0f / fScale, 0.0f, 0.0f), PblVector4(0.0f));
+        _InitNoiseMap(1, PblHash("terrain_amb"),
+                      PblVector4(1.0f / fScale, 1.0f / fScale, 0.0f, 0.0f), PblVector4(0.0f));
+        _InitNoiseMap(3, PblHash("fractal0"),
+                      PblVector4(1.0f / fScale, 1.0f / fScale, 0.0f, 0.0f), PblVector4(0.0f));
+        _InitNoiseMap(4, PblHash("noise0"),
+                      PblVector4(1.1f / fScale, 1.1f / fScale, 0.0f, 0.0f), PblVector4(0.0f));
+        _InitNoiseMap(5, PblHash("noise0"),
+                      PblVector4(2.0f / fScale, 2.0f / fScale, 0.0f, 0.0f), PblVector4(0.0f));
+        _InitNoiseMap(6, PblHash("noise0"),
+                      PblVector4(3.9f / fScale, 3.9f / fScale, 0.0f, 0.0f), PblVector4(0.0f));
+
+        _InitDiffuseMap(0, PblHash("diffuse0"),
+                        PblVector4(99.0f / fScale, 99.0f / fScale, 0.0f, 0.0f));
+        _InitDiffuseMap(1, PblHash("diffuse1"),
+                        PblVector4(99.0f / fScale, 99.0f / fScale, 0.0f, 0.0f));
+        _InitDiffuseMap(2, PblHash("diffuse2"),
+                        PblVector4(99.0f / fScale, 99.0f / fScale, 0.0f, 0.0f));
+        _InitDiffuseMap(3, PblHash("diffuse3"),
+                        PblVector4(99.0f / fScale, 99.0f / fScale, 0.0f, 0.0f));
     }
-
-    const PblVector4 vZero = { 0.0f, 0.0f, 0.0f, 0.0f };
-    const float fInv = 1.0f / fScale;
-    PblVector4 vScale = { fInv, fInv, 0.0f, 0.0f };
-    _InitNoiseMap(0, PblHash("height0"), vScale, vZero);
-    _InitNoiseMap(1, PblHash("terrain_amb"), vScale, vZero);
-    _InitNoiseMap(3, PblHash("fractal0"), vScale, vZero);
-    vScale.x = vScale.y = 1.1f / fScale;
-    _InitNoiseMap(4, PblHash("noise0"), vScale, vZero);
-    vScale.x = vScale.y = 2.0f / fScale;
-    _InitNoiseMap(5, PblHash("noise0"), vScale, vZero);
-    vScale.x = vScale.y = 3.9f / fScale;
-    _InitNoiseMap(6, PblHash("noise0"), vScale, vZero);
-
-    vScale.x = vScale.y = 99.0f / fScale;
-    _InitDiffuseMap(0, PblHash("diffuse0"), vScale);
-    _InitDiffuseMap(1, PblHash("diffuse1"), vScale);
-    _InitDiffuseMap(2, PblHash("diffuse2"), vScale);
-    _InitDiffuseMap(3, PblHash("diffuse3"), vScale);
 }
 
 // FUNCTION: SWBF2 0x006fe140

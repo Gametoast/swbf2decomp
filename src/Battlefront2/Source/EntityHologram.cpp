@@ -662,7 +662,7 @@ void EntityHologram::Render(unsigned char ucViewport, float fDist, unsigned int 
         if (bReflected)
         {
             PblMatrix mSaved(m_WorldMatrix);
-            D3DXMatrixMultiply(reinterpret_cast<D3DXMATRIX*>(&m_WorldMatrix), reinterpret_cast<const D3DXMATRIX*>(&m_WorldMatrix), reinterpret_cast<const D3DXMATRIX*>(&mReflection));
+            m_WorldMatrix *= mReflection;
             m_pLightBeam->AttachEffectToMatrix(&m_WorldMatrix, false);
             m_pLightBeam->Render(uiFlags | 0x10000100);
             m_WorldMatrix = mSaved;
@@ -713,7 +713,7 @@ void EntityHologram::Render(unsigned char ucViewport, float fDist, unsigned int 
     mModel.m[3][0] += 0.0f;
     mModel.m[3][1] += pClass->m_fHeight;
     mModel.m[3][2] += 0.0f;
-    D3DXMatrixMultiply(reinterpret_cast<D3DXMATRIX*>(&mModel), reinterpret_cast<const D3DXMATRIX*>(&mModel), reinterpret_cast<const D3DXMATRIX*>(&m_WorldMatrix));
+    mModel *= m_WorldMatrix;
 
     float fNear, fUnused;
     RedRenderer::GetCamera()->GetFrustum(fNear, fUnused, fUnused, fUnused);

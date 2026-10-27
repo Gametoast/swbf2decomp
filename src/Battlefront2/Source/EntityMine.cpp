@@ -299,7 +299,7 @@ bool EntityMine::Update(float fDeltaTime)
             {
                 PblMatrix mBody = pObject->mCollisionModel->GetWorldMatrix(mStickInfo->mCollBodyID,
                                                                            pObject->GetMatrix(), pObject->GetPose());
-                D3DXMatrixMultiply(reinterpret_cast<D3DXMATRIX*>(&mStick), reinterpret_cast<const D3DXMATRIX*>(&mStick), reinterpret_cast<const D3DXMATRIX*>(&mBody));
+                mStick *= mBody;
             }
             SetMatrix(mStick);
             if (fDeltaTime > 0.0f)
@@ -521,7 +521,7 @@ bool EntityMine::CollisionCallback(const CollisionResult* pResult, CollisionObje
         {
             PblMatrix mBody = pModel->GetWorldMatrix(pResult->mReceiverId, pOther->GetMatrix(), pOther->GetPose());
             const PblMatrix mInverse = mBody.GetInverseFast();
-            D3DXMatrixMultiply(reinterpret_cast<D3DXMATRIX*>(&mStick), reinterpret_cast<const D3DXMATRIX*>(&mStick), reinterpret_cast<const D3DXMATRIX*>(&mInverse));
+            mStick *= mInverse;
             mStickInfo->mCollBodyID = pResult->mReceiverId;
         }
         else

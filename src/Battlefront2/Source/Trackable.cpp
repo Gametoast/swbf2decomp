@@ -551,8 +551,7 @@ void CameraTrackSetting::SetupCameraTrackMatrix(Trackable* pTrackable, PblMatrix
     if (!bSnap)
     {
         PblVector3 vMove(vCamera.x - vCurrent.x, vCamera.y - vCurrent.y, vCamera.z - vCurrent.z);
-        PblMatrix mInverse;
-        D3DXMatrixInverse(reinterpret_cast<D3DXMATRIX*>(&mInverse), 0, reinterpret_cast<const D3DXMATRIX*>(&mCamera));
+        PblMatrix mInverse = mCamera.GetInverse();
         PblVector3 vLocal;
         D3DXVec3TransformNormal(reinterpret_cast<D3DXVECTOR3*>(&vLocal), reinterpret_cast<const D3DXVECTOR3*>(&vMove), reinterpret_cast<const D3DXMATRIX*>(&mInverse));
 
@@ -685,8 +684,7 @@ void CameraTrackSetting::SetupCameraTrackMatrix(Trackable* pTrackable, const Cam
     if (!bSnap)
     {
         PblVector3 vMove(vCamera.x - vCurrent.x, vCamera.y - vCurrent.y, vCamera.z - vCurrent.z);
-        PblMatrix mInverse;
-        D3DXMatrixInverse(reinterpret_cast<D3DXMATRIX*>(&mInverse), 0, reinterpret_cast<const D3DXMATRIX*>(&mCamera));
+        PblMatrix mInverse = mCamera.GetInverse();
         PblVector3 vLocal;
         D3DXVec3TransformNormal(reinterpret_cast<D3DXVECTOR3*>(&vLocal), reinterpret_cast<const D3DXVECTOR3*>(&vMove), reinterpret_cast<const D3DXMATRIX*>(&mInverse));
 

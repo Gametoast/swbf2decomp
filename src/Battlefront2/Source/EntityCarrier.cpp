@@ -42,61 +42,7 @@ void EntityFlyer::SetupCameraZoomFactor(float& rZoom)
     }
 }
 
-// FUNCTION: SWBF2 0x004b5c10
-void EntityFlyer::SetupCameraFOV(float& rFOV)
-{
-    if (!IsAlive())
-    {
-        rFOV = GetDefaultFOV();
-        return;
-    }
 
-    const bool bFirstPerson = mTargetInfo.mIsAiming ||
-        (mTracker && mTracker->IsFirstPersonView());
-    ControllableClass* pControlClass = GetControllableClass();
-    float fDefaultFOV = bFirstPerson ? pControlClass->mFirstPersonFOV :
-                                     pControlClass->mThirdPersonFOV;
-    float fEffectFOV = bFirstPerson ? mClass->mFOVEffect1st :
-                                    mClass->mFOVEffect3rd;
-    float fBlend = 0.0f;
-    if (mGetSpeedSpeed > 0.0f && fEffectFOV != 0.0f)
-    {
-        float fMaxSpeed = GetFlyerMaxSpeed();
-        if (fMaxSpeed < mClass->mBoostFlyerSpeed)
-        {
-            fMaxSpeed = mClass->mBoostFlyerSpeed;
-        }
-        fBlend = mGetSpeedSpeed / fMaxSpeed;
-        if (fBlend < 0.0f)
-        {
-            fBlend = 0.0f;
-        }
-        else if (fBlend > 1.0f)
-        {
-            fBlend = 1.0f;
-        }
-        rFOV = fDefaultFOV * (1.0f - fBlend) + fEffectFOV * fBlend;
-    }
-    else
-    {
-        rFOV = fDefaultFOV;
-    }
-
-    if (!bFirstPerson)
-    {
-        PblVector3 vOffset(
-            mClass->mFOVEFFectMinCamOffset3rd.x * (1.0f - fBlend) +
-                mClass->mFOVEFFectMaxCamOffset3rd.x * fBlend,
-            mClass->mFOVEFFectMinCamOffset3rd.y * (1.0f - fBlend) +
-                mClass->mFOVEFFectMaxCamOffset3rd.y * fBlend,
-            mClass->mFOVEFFectMinCamOffset3rd.z * (1.0f - fBlend) +
-                mClass->mFOVEFFectMaxCamOffset3rd.z * fBlend);
-        if (vOffset.x != 0.0f || vOffset.y != 0.0f || vOffset.z != 0.0f)
-        {
-            mClass->mCameraSettings.mCameraTrackOffset = vOffset;
-        }
-    }
-}
 
 // SYNTHETIC: SWBF2 0x00496ea0
 // EntityCarrier::`scalar deleting destructor'

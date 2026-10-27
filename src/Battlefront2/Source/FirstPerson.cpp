@@ -997,7 +997,7 @@ void FirstPersonRenderable::RenderSoldier(unsigned int uFlags) const
 
     if (mCurrentWeapon)
     {
-        mCurrentWeapon->Render(PblMatrix(mWeaponMatrix), &pose, RedColor::WHITE, uFlags, true);
+        mCurrentWeapon->Render(PblMatrix(reinterpret_cast<const _D3DXMATRIXA16*>(&mWeaponMatrix)), &pose, RedColor::WHITE, uFlags, true);
     }
 
     if (bShadow)
@@ -1539,7 +1539,7 @@ void FirstPersonRenderable::RenderDroideka(unsigned int uFlags) const
     Weapon* pWeapon = mOwner->GetWeaponPtr(mOwner->GetActiveWeaponChannel());
     if (pWeapon)
     {
-        pWeapon->Render(PblMatrix(mWeaponMatrix), &pose, RedColor::WHITE, uFlags, true);
+        pWeapon->Render(PblMatrix(reinterpret_cast<const _D3DXMATRIXA16*>(&mWeaponMatrix)), &pose, RedColor::WHITE, uFlags, true);
     }
 
     if (bShadow)

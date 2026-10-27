@@ -77,7 +77,7 @@ void Red3DModelElementLite::RenderUsingContext(const PblMatrix& mContext,
     PblMatrix mBone;
     if (m_boneHash && m_Model->GetBoneMatrix(m_boneHash, mBone))
     {
-        D3DXMatrixMultiply(reinterpret_cast<D3DXMATRIX*>(&mWorld), reinterpret_cast<const D3DXMATRIX*>(&mWorld), reinterpret_cast<const D3DXMATRIX*>(&mBone));
+        mWorld *= mBone;
     }
 
     LocalToWorld(mWorld);

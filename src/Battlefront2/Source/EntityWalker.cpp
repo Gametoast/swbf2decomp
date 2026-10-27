@@ -1576,9 +1576,14 @@ void EntityWalker::SetupCameraFOV(float& rFOV)
         rFOV = GetDefaultFOV();
         return;
     }
-    const ControllableClass* pSettings = GetControllableClass();
-    rFOV = mTargetInfo.mIsAiming || (mTracker && mTracker->IsFirstPersonView())
-        ? pSettings->mFirstPersonFOV : pSettings->mThirdPersonFOV;
+    if (mTargetInfo.mIsAiming || (mTracker && mTracker->IsFirstPersonView()))
+    {
+        rFOV = GetControllableClass()->mFirstPersonFOV;
+    }
+    else
+    {
+        rFOV = GetControllableClass()->mThirdPersonFOV;
+    }
 }
 
 // FUNCTION: SWBF2 0x00507340
@@ -2835,7 +2840,7 @@ void EntityWalker::MoveForward(float fDistance)
             PblVector3(0.0f, 1.0f, 0.0f),
             PblVector3(fTurnSin, 0.0f, fTurnCos),
             PblVector3(0.0f, 0.0f, 0.0f));
-        D3DXMatrixMultiply(reinterpret_cast<D3DXMATRIX*>(&mTurn), reinterpret_cast<const D3DXMATRIX*>(&mTurn), reinterpret_cast<const D3DXMATRIX*>(&mMatrix));
+        mTurn *= mMatrix;
         vPos.x = (mTurn.m[2][0] * fCos - mTurn.m[1][0] * fSin) * fDistance + vPos.x;
         vPos.y = vPos.y + (mTurn.m[2][1] * fCos - mTurn.m[1][1] * fSin) * fDistance;
         vPos.z = vPos.z + (mTurn.m[2][2] * fCos - mTurn.m[1][2] * fSin) * fDistance;

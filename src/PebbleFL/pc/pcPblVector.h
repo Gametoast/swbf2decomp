@@ -58,7 +58,7 @@ inline const float SquaredLength(const PblVector3& vVector)
     return vVector.x * vVector.x + vVector.y * vVector.y + vVector.z * vVector.z;
 }
 
-inline PblVector3& PblVector3::operator+=(const PblVector3& rhs)
+inline const PblVector3& PblVector3::operator+=(const PblVector3& rhs)
 {
     x += rhs.x;
     y += rhs.y;
@@ -71,7 +71,7 @@ inline const PblVector3 PblVector3::operator-() const
     return PblVector3(-x, -y, -z);
 }
 
-inline PblVector3& PblVector3::operator-=(const PblVector3& rhs)
+inline const PblVector3& PblVector3::operator-=(const PblVector3& rhs)
 {
     x -= rhs.x;
     y -= rhs.y;
@@ -120,4 +120,47 @@ inline void PblVector3::MulY(float value)
 inline const float SquaredLengthXZ(const PblVector3& vector)
 {
     return vector.x * vector.x + vector.z * vector.z;
+}
+
+inline float& PblVector3::operator[](int i)
+{
+    return (&x)[i];
+}
+
+inline float PblVector3::operator[](int i) const
+{
+    return (&x)[i];
+}
+
+inline float& PblVector3::operator()(int i)
+{
+    return (&x)[i];
+}
+
+inline float PblVector3::operator()(int i) const
+{
+    return (&x)[i];
+}
+
+inline const PblVector3 operator*(float lhs, const PblVector3& rhs)
+{
+    PblVector3 Temp;
+    Temp.x = lhs * rhs.x;
+    Temp.y = lhs * rhs.y;
+    Temp.z = lhs * rhs.z;
+    return Temp;
+}
+
+inline const PblVector3 operator*(const PblVector3& lhs, const PblVector3& rhs)
+{
+    PblVector3 Temp;
+    Temp.x = lhs.x * rhs.x;
+    Temp.y = lhs.y * rhs.y;
+    Temp.z = lhs.z * rhs.z;
+    return Temp;
+}
+
+inline PblVector4::PblVector4(float fValue)
+    : D3DXVECTOR4(fValue, fValue, fValue, fValue)
+{
 }

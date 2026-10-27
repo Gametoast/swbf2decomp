@@ -84,20 +84,20 @@ pcRedShaderDef* pcNormalShader::GetShaderDef() const
     return &s_shaderDef;
 }
 
-// GLOBAL: SWBF2 0x00784668
-static const pcRedShaderDef::FixedFunctionStateT kFixedFunctionStates[5] =
-{
-    { 1, { 0x42, 0x00, 0x00, 0x00 } },
-    { 1, { 0x42, 0x00, 0x00, 0x00 } },
-    { 2, { 0x42, 0x21, 0x00, 0x00 } },
-    { 1, { 0x42, 0x00, 0x00, 0x00 } },
-    { 2, { 0x42, 0x21, 0x00, 0x00 } },
-};
-
 // FUNCTION: SWBF2 0x006ff990
 void pcNormalShader::InitFixedFunctionShaderDef() const
 {
-    GetShaderDef()->InitFixedFunction(0x28, 5, kFixedFunctionStates);
+    // GLOBAL: SWBF2 0x00784668
+    static const pcRedShaderDef::FixedFunctionStateT aFFStates[5] =
+    {
+        { 1, { 0x42, 0x00, 0x00, 0x00 } },
+        { 1, { 0x42, 0x00, 0x00, 0x00 } },
+        { 2, { 0x42, 0x21, 0x00, 0x00 } },
+        { 1, { 0x42, 0x00, 0x00, 0x00 } },
+        { 2, { 0x42, 0x21, 0x00, 0x00 } },
+    };
+
+    GetShaderDef()->InitFixedFunction(0x28, 5, aFFStates);
 }
 
 // FUNCTION: SWBF2 0x007011d0

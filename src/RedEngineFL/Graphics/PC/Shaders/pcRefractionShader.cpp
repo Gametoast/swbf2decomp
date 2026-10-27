@@ -427,19 +427,19 @@ unsigned int pcRefractionShader::GetZPrepassState() const
     return (m_material.materialFlags >> 1) & 1;
 }
 
-// GLOBAL: SWBF2 0x007852a8
-static const pcRedShaderDef::FixedFunctionStateT kFixedFunctionStates[4] =
-{
-    { 1, { 0x42, 0x00, 0x00, 0x00 } },
-    { 2, { 0x21, 0x42, 0x00, 0x00 } },
-    { 1, { 0x42, 0x00, 0x00, 0x00 } },
-    { 1, { 0x21, 0x00, 0x00, 0x00 } },
-};
-
 // FUNCTION: SWBF2 0x0070da30
 void pcRefractionShader::InitFixedFunctionShaderDef() const
 {
-    GetShaderDef()->InitFixedFunction(0x18, 4, kFixedFunctionStates);
+    // GLOBAL: SWBF2 0x007852a8
+    static const pcRedShaderDef::FixedFunctionStateT aFFStates[4] =
+    {
+        { 1, { 0x42, 0x00, 0x00, 0x00 } },
+        { 2, { 0x21, 0x42, 0x00, 0x00 } },
+        { 1, { 0x42, 0x00, 0x00, 0x00 } },
+        { 1, { 0x21, 0x00, 0x00, 0x00 } },
+    };
+
+    GetShaderDef()->InitFixedFunction(0x18, 4, aFFStates);
 }
 
 // FUNCTION: SWBF2 0x0070da50

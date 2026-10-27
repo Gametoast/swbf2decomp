@@ -3,6 +3,7 @@
 #include <stddef.h>
 
 #include "PebbleFL/Common/PblHashTable.h"
+#include "PebbleFL/Common/PblVector.h"
 #include "RedEngineFL/Memory/RedMemoryPool.h"
 #include "GameSound.h"
 #include "SoldierAnimationBank.h"
@@ -204,9 +205,38 @@ public:
         };
     };
 
+    class DamageSample
+    {
+    public:
+        static MemoryPool sMemoryPool;
+        static void* operator new(unsigned int uiSize) { return sMemoryPool.Allocate(uiSize); }
+        static void operator delete(void* pBlock) { sMemoryPool.Free(pBlock); }
+
+        float fTime;
+        PblVector3 vPos;
+        PblVector3 vDir;
+    };
+
+
     class Attack
     {
     public:
+        unsigned int GetAttackId() const { return m_uiAttackId; }
+        unsigned int GetDamageEdge() const { return m_uiDamageEdge; }
+        bool IsDamageTimeStartFromAnim() const { return m_bDamageTimeStartFromAnim != 0; }
+        bool IsDamageTimeEndFromAnim() const { return m_bDamageTimeStartFromAnim != 0; }
+        float GetDamageTimeStart() const { return m_uiDamageTimeStart * 0.01f; }
+        float GetDamageTimeEnd() const { return m_uiDamageTimeEnd * 0.01f; }
+        bool IsDamageLengthFromEdge() const { return m_bDamageLengthFromEdge != 0; }
+        bool IsDamageWidthFromEdge() const { return m_bDamageWidthFromEdge != 0; }
+        float GetDamageLength() const { return m_uiDamageLength * 0.01f; }
+        float GetDamageWidth() const { return m_uiDamageWidth * 0.01f; }
+        float GetDamage() const { return static_cast<float>(m_uiDamage); }
+        bool IsPush() const { return m_uiSpecialType == 0; }
+        float GetPushStrength() const { return m_uiSpecial * 0.1f; }
+        unsigned int GetNumDamageSamples() const { return m_uiNumDamageSamples; }
+        const DamageSample* GetDamageSample(unsigned int iSample) const { return &m_aDamageSample[iSample]; }
+
         void AddDamageSample(float fTime, const PblVector3& vBegin, const PblVector3& vEnd);
         bool _ResolveDamageData(const Combo* pCombo, const State* pState,
                                 unsigned int uiAttach, const PblVector3& vBegin,
@@ -312,6 +342,19 @@ public:
         unsigned char GetAnimIndex() const { return (unsigned char)m_uiAnimIndex; }
         const Deflect* GetDeflect() const { return m_pDeflect; }
         unsigned int GetNumAttacks() const { return m_uiNumAttacks; }
+        Attack* GetAttack(unsigned int iAttack) { return &m_aAttack[iAttack]; }
+        const Attack* GetAttack(unsigned int iAttack) const { return &m_aAttack[iAttack]; }
+        float GetDuration() const { return m_uiDuration * 0.01f; }
+        bool IsAnimatedMove() const { return m_bAnimatedMove != 0; }
+        bool IsDuration() const { return m_uiDuration != DURATION_INVALID; }
+        bool IsVelocityZFromAnim() const { return m_bVelocityZFromAnim && m_bAnimatedMove; }
+        // FUNCTION: SWBF2 0x00470ea0
+        bool IsVelocityXFromAnim() const { return m_bVelocityXFromAnim && m_bAnimatedMove; }
+        float GetVelocityZ() const { return m_iVelocityZ * 0.02f; }
+        float GetVelocityX() const { return m_iVelocityX * 0.02f; }
+        float GetVelocityFromThrust() const { return m_uiVelocityFromThrust * 0.1f; }
+        float GetVelocityFromStrafe() const { return m_uiVelocityFromStrafe * 0.1f; }
+        bool IsAlignedToThrust() const { return m_bAlignToThrust != 0; }
 
         void SetDuration(float fDuration);
 
@@ -504,8 +547,6 @@ public:
             unsigned int m_auiPackedData[6];
         };
     };
-    class DamageSample { public: static MemoryPool sMemoryPool; };
-
     class Deflect
     {
     public:
@@ -579,13 +620,18 @@ public:
     static void Init();
 
     Combo();
-    Combo* CopyConstructor(const Combo& other);
+    Combo(const Combo& copy) { *this = copy; }
+    const Combo& operator=(const Combo& copy);
     void ReadConfig(PblConfig& config);
     static void PostLoad();
     static void* operator new(unsigned int uiSize) { return sMemoryPool.Allocate(uiSize); }
+    // SYNTHETIC: SWBF2 0x00470950
+    // Combo::operator delete
+    static void operator delete(void* pBlock) { sMemoryPool.Free(pBlock); }
 
     static const Combo* Find(unsigned int uiNameHash) { return s_ComboTable.Find(uiNameHash); }
     unsigned int GetNumStates() const { return m_uiNumStates; }
+    State* GetState(unsigned int i) { return &m_aState[i]; }
     const State* GetState(unsigned int i) const { return &m_aState[i]; }
 
     static MemoryPool sMemoryPool;
@@ -616,14 +662,14 @@ private:
 
 public:
 
-    static void* _AllocDamageSample();
+    static DamageSample* _AllocDamageSample();
 
     static unsigned int __fastcall GetNameHashForMap(unsigned int uComboHash, SoldierAnimationBank::MAP eMap);
 
     unsigned int m_uiNameHash;
     int m_eCombo;
     int m_eMap;
-    ZephyrSkeletonShared* m_pSkeleton;
+    const ZephyrSkeletonShared* m_pSkeleton;
     State* m_aState;
     State* m_pCatchState;
     State* m_pTakeKneeState;

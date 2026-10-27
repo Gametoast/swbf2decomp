@@ -202,16 +202,16 @@ unsigned int pcFilterCopyShader::GetState_Prog1(const RenderItem*) const
     return m_numSamples % 4;
 }
 
-// GLOBAL: SWBF2 0x00785408
-static const pcRedShaderDef::FixedFunctionStateT kFixedFunctionStates[1] =
-{
-    { 1, { 0x11, 0x00, 0x00, 0x00 } },
-};
-
 // FUNCTION: SWBF2 0x0070fdc0
 void pcFilterCopyShader::InitFixedFunctionShaderDef() const
 {
-    GetShaderDef()->InitFixedFunction(0x10, 1, kFixedFunctionStates);
+    // GLOBAL: SWBF2 0x00785408
+    static const pcRedShaderDef::FixedFunctionStateT aFFStates[1] =
+    {
+        { 1, { 0x11, 0x00, 0x00, 0x00 } },
+    };
+
+    GetShaderDef()->InitFixedFunction(0x10, 1, aFFStates);
 }
 
 // FUNCTION: SWBF2 0x0070fde0

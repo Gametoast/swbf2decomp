@@ -268,17 +268,17 @@ unsigned int pcParticleShader::GetState_Prog1(const RenderItem*) const
     return m_blurEnable != 0;
 }
 
-// GLOBAL: SWBF2 0x007848c8
-static const pcRedShaderDef::FixedFunctionStateT kFixedFunctionStates[2] =
-{
-    { 1, { 0x21, 0x00, 0x00, 0x00 } },
-    { 1, { 0x41, 0x00, 0x00, 0x00 } },
-};
-
 // FUNCTION: SWBF2 0x00703500
 void pcParticleShader::InitFixedFunctionShaderDef() const
 {
-    GetShaderDef()->InitFixedFunction(0x14, 2, kFixedFunctionStates);
+    // GLOBAL: SWBF2 0x007848c8
+    static const pcRedShaderDef::FixedFunctionStateT aFFStates[2] =
+    {
+        { 1, { 0x21, 0x00, 0x00, 0x00 } },
+        { 1, { 0x41, 0x00, 0x00, 0x00 } },
+    };
+
+    GetShaderDef()->InitFixedFunction(0x14, 2, aFFStates);
 }
 
 // FUNCTION: SWBF2 0x00703710

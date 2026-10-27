@@ -1278,16 +1278,14 @@ PblVector3 AIUtil::GetRandomPtInRegion(const RedRegion* pRegion)
         do
         {
             v = PblRandom::GetGlobalVector3();
-        } while (v.x * v.x + v.y * v.y + v.z * v.z > 1.0f);
-        const PblVector3& vCenter = pRegion->mMatrix.GetTranslation();
-        return PblVector3(vCenter.x + v.x * pRegion->mSize.x, vCenter.y + v.y * pRegion->mSize.x,
-                          vCenter.z + v.z * pRegion->mSize.x);
+        } while (SquaredLength(v) > 1.0f);
+        return pRegion->mMatrix.ApplyTranslation(v * pRegion->mSize.x);
     }
     case PblRegion::type_box:
     case PblRegion::type_box_aligned:
     {
         const PblVector3 v = PblRandom::GetGlobalVector3();
-        const PblVector3 vLocal(pRegion->mSize.x * v.x, pRegion->mSize.y * v.y, pRegion->mSize.z * v.z);
+        const PblVector3 vLocal = pRegion->mSize * v;
         PblVector3 vPoint;
         D3DXVec3TransformCoord(reinterpret_cast<D3DXVECTOR3*>(&vPoint), reinterpret_cast<const D3DXVECTOR3*>(&vLocal), reinterpret_cast<const D3DXMATRIX*>(&pRegion->mMatrix));
         return vPoint;
@@ -1301,8 +1299,8 @@ PblVector3 AIUtil::GetRandomPtInRegion(const RedRegion* pRegion)
         do
         {
             v = PblRandom::GetGlobalVector3();
-        } while (v.x * v.x + v.z * v.z > 1.0f);
-        const PblVector3 vLocal(pRegion->mSize.x * v.x, pRegion->mSize.y * v.y, pRegion->mSize.z * v.z);
+        } while (SquaredLengthXZ(v) > 1.0f);
+        const PblVector3 vLocal = pRegion->mSize * v;
         PblVector3 vPoint;
         D3DXVec3TransformCoord(reinterpret_cast<D3DXVECTOR3*>(&vPoint), reinterpret_cast<const D3DXVECTOR3*>(&vLocal), reinterpret_cast<const D3DXMATRIX*>(&pRegion->mMatrix));
         return vPoint;

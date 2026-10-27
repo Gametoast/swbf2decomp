@@ -27,7 +27,11 @@ public:
         memcpy(m, &other, sizeof(m));
     }
 
-    PblMatrix* CopyFrom(const PblMatrix* pSrc);
+    // FUNCTION: SWBF2 0x0043a880
+    PblMatrix(const _D3DXMATRIXA16* other)
+    {
+        memcpy(m, other, sizeof(m));
+    }
 
     PblMatrix(const PblQuaternion& rotation, const PblVector3& translation);
 
@@ -37,10 +41,14 @@ public:
     PblMatrix(const PblVector3& x, const PblVector3& y,
               const PblVector3& z, const PblVector3& t);
 
+    const PblMatrix& operator*=(const PblMatrix& rhs);
+
+    const PblMatrix GetInverse() const;
     const PblMatrix GetInverseFast() const;
 
     const PblVector3 ApplyRotation(const PblVector3& vector) const;
     const PblVector3 ApplyTransform(const PblVector3& vector) const;
+    const PblVector3 ApplyTranslation(const PblVector3& vector) const;
 
     void Reset();
 
@@ -82,6 +90,9 @@ public:
     void SetZAxis(float fX, float fY, float fZ, float fW);
     void SetTranslation(float fX, float fY, float fZ, float fW);
     void SetTranslation(const PblVector3& vTranslation);
+
+    float& operator()(int iRow, int iColumn);
+    float operator()(int iRow, int iColumn) const;
 
     PblVector3& operator[](int iRow);
     const PblVector3& operator[](int iRow) const;

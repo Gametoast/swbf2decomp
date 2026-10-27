@@ -3,7 +3,8 @@
 // FUNCTION: SWBF2 0x0072af70
 void PblCatmullRom::CalculatePoint(float t, PblVector3& vResult) const
 {
-    CalculatePoint(t, mPoints[0], mPoints[1], mPoints[2], mPoints[3], vResult);
+    CalculatePoint(t, PblVector3(mPoints[0]), PblVector3(mPoints[1]),
+                   PblVector3(mPoints[2]), PblVector3(mPoints[3]), vResult);
 }
 
 // FUNCTION: SWBF2 0x0072ac00
@@ -47,11 +48,10 @@ void PblCatmullRom::CalculateFirstDerivative(float t, const PblVector3& p0, cons
                                              const PblVector3& p2, const PblVector3& p3,
                                              PblVector3& vResult)
 {
-    PblVector3 a, b, c;
-    a = p0 * -0.5f + p1 * 1.5f + p2 * -1.5f + p3 * 0.5f;
-    b = p0 + p1 * -2.5f + p2 * 2.0f + p3 * -0.5f;
-    c = p0 * -0.5f + p2 * 0.5f;
-    vResult = (a * 3.0f * t + b * 2.0f) * t + c;
+    PblVector3 c2 = -0.5f * p0 + 0.5f * p2;
+    PblVector3 c3 = 1.0f * p0 + -2.5f * p1 + 2.0f * p2 + -0.5f * p3;
+    PblVector3 c4 = -0.5f * p0 + 1.5f * p1 + -1.5f * p2 + 0.5f * p3;
+    vResult = (c4 * 3.0f * t + c3 * 2.0f) * t + c2;
 }
 
 // FUNCTION: SWBF2 0x0072b000
@@ -59,11 +59,11 @@ void PblCatmullRom::CalculatePoint(float t, const PblVector3& p0, const PblVecto
                                    const PblVector3& p2, const PblVector3& p3,
                                    PblVector3& vResult)
 {
-    PblVector3 a, b, c;
-    a = p0 * -0.5f + p1 * 1.5f + p2 * -1.5f + p3 * 0.5f;
-    b = p0 + p1 * -2.5f + p2 * 2.0f + p3 * -0.5f;
-    c = p0 * -0.5f + p2 * 0.5f;
-    vResult = ((a * t + b) * t + c) * t + p1;
+    PblVector3 c1 = 1.0f * p1;
+    PblVector3 c2 = -0.5f * p0 + 0.5f * p2;
+    PblVector3 c3 = 1.0f * p0 + -2.5f * p1 + 2.0f * p2 + -0.5f * p3;
+    PblVector3 c4 = -0.5f * p0 + 1.5f * p1 + -1.5f * p2 + 0.5f * p3;
+    vResult = ((c4 * t + c3) * t + c2) * t + c1;
 }
 
 // FUNCTION: SWBF2 0x0072b280

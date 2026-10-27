@@ -226,17 +226,17 @@ unsigned int pcOceanShader::GetZPrepassState() const
     return 0;
 }
 
-// GLOBAL: SWBF2 0x007851e4
-static const pcRedShaderDef::FixedFunctionStateT kFixedFunctionStates[2] =
-{
-    { 1, { 0x42, 0x00, 0x00, 0x00 } },
-    { 2, { 0x42, 0x21, 0x00, 0x00 } },
-};
-
 // FUNCTION: SWBF2 0x0070c330
 void pcOceanShader::InitFixedFunctionShaderDef() const
 {
-    GetShaderDef()->InitFixedFunction(0x14, 2, kFixedFunctionStates);
+    // GLOBAL: SWBF2 0x007851e4
+    static const pcRedShaderDef::FixedFunctionStateT aFFStates[2] =
+    {
+        { 1, { 0x42, 0x00, 0x00, 0x00 } },
+        { 2, { 0x42, 0x21, 0x00, 0x00 } },
+    };
+
+    GetShaderDef()->InitFixedFunction(0x14, 2, aFFStates);
 }
 
 // FUNCTION: SWBF2 0x0070c350

@@ -3539,30 +3539,37 @@ void EntityHover::SetupCameraFOV(float& rFOV)
         rFOV = GetDefaultFOV();
         return;
     }
-
-    const bool bFirstPerson = mTargetInfo.mIsAiming || (mTracker && mTracker->IsFirstPersonView());
-    const ControllableClass* pSettings = GetControllableClass();
-    const float fNormalFOV = bFirstPerson ? pSettings->mFirstPersonFOV : pSettings->mThirdPersonFOV;
-    const float fForwardSpeed = mVelocity.x * mMatrix.m[2][0]
-                              + mVelocity.y * mMatrix.m[2][1]
-                              + mVelocity.z * mMatrix.m[2][2];
-    if (fForwardSpeed <= mClass->mForwardSpeed || mClass->mBoostSpeed <= mClass->mForwardSpeed ||
-        mClass->mBoostFOV == 0.0f)
+    const float fNormalSpeed = mClass->mForwardSpeed;
+    const float fBoostSpeed = mClass->mBoostSpeed;
+    const float fForwardSpeed = DotProduct(mVelocity, mMatrix.GetZAxis());
+    if (mTargetInfo.mIsAiming || (mTracker && mTracker->IsFirstPersonView()))
     {
-        rFOV = fNormalFOV;
-        return;
+        if (fForwardSpeed > fNormalSpeed && fBoostSpeed > fNormalSpeed && mClass->mBoostFOV != 0.0f)
+        {
+            const float fBlend = Clamp((fForwardSpeed - fNormalSpeed) /
+                                      (fBoostSpeed - fNormalSpeed), 0.0f, 1.0f);
+            const float fNormalFOV = GetControllableClass()->mFirstPersonFOV;
+            rFOV = (1.0f - fBlend) * fNormalFOV + mClass->mBoostFOV * fBlend;
+        }
+        else
+        {
+            rFOV = GetControllableClass()->mFirstPersonFOV;
+        }
     }
-    float fBlend = (fForwardSpeed - mClass->mForwardSpeed) /
-                   (mClass->mBoostSpeed - mClass->mForwardSpeed);
-    if (fBlend < 0.0f)
+    else
     {
-        fBlend = 0.0f;
+        if (fForwardSpeed > fNormalSpeed && fBoostSpeed > fNormalSpeed && mClass->mBoostFOV != 0.0f)
+        {
+            const float fBlend = Clamp((fForwardSpeed - fNormalSpeed) /
+                                      (fBoostSpeed - fNormalSpeed), 0.0f, 1.0f);
+            const float fNormalFOV = GetControllableClass()->mThirdPersonFOV;
+            rFOV = (1.0f - fBlend) * fNormalFOV + mClass->mBoostFOV * fBlend;
+        }
+        else
+        {
+            rFOV = GetControllableClass()->mThirdPersonFOV;
+        }
     }
-    else if (fBlend > 1.0f)
-    {
-        fBlend = 1.0f;
-    }
-    rFOV = (1.0f - fBlend) * fNormalFOV + fBlend * mClass->mBoostFOV;
 }
 
 // FUNCTION: SWBF2 0x004c7bc0

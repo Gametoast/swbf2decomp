@@ -150,17 +150,17 @@ unsigned int pcPerVertexDiffuseLightingShader::GetState_Prog1(const RenderItem* 
     return (pItem->flags & 0x10) ? 0 : 4;
 }
 
-// GLOBAL: SWBF2 0x007854a4
-static const pcRedShaderDef::FixedFunctionStateT kFixedFunctionStates[2] =
-{
-    { 1, { 0x21, 0x00, 0x00, 0x00 } },
-    { 1, { 0x21, 0x00, 0x00, 0x00 } },
-};
-
 // FUNCTION: SWBF2 0x00710940
 void pcPerVertexDiffuseLightingShader::InitFixedFunctionShaderDef() const
 {
-    GetShaderDef()->InitFixedFunction(0x28, 2, kFixedFunctionStates);
+    // GLOBAL: SWBF2 0x007854a4
+    static const pcRedShaderDef::FixedFunctionStateT aFFStates[2] =
+    {
+        { 1, { 0x21, 0x00, 0x00, 0x00 } },
+        { 1, { 0x21, 0x00, 0x00, 0x00 } },
+    };
+
+    GetShaderDef()->InitFixedFunction(0x28, 2, aFFStates);
 }
 
 // FUNCTION: SWBF2 0x00710960

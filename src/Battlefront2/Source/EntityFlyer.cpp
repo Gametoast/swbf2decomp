@@ -5620,3 +5620,56 @@ bool bRenderContrails = true;
 // SYNTHETIC: SWBF2 0x00402af0
 // `dynamic initializer for 'cvRenderContrails''
 RedCommandConsole cvRenderContrails("flyer.contrailsActive", MultiVar(&bRenderContrails));
+
+// FUNCTION: SWBF2 0x004b5c10
+void EntityFlyer::SetupCameraFOV(float& rFOV)
+{
+    if (!IsAlive())
+    {
+        rFOV = GetDefaultFOV();
+        return;
+    }
+    if (mTargetInfo.mIsAiming || (mTracker && mTracker->IsFirstPersonView()))
+    {
+        const float fSpeed = mGetSpeedSpeed;
+        const float fEffectFOV = mClass->mFOVEffect1st;
+        if (fSpeed > 0.0f && fEffectFOV != 0.0f)
+        {
+            const float fMinSpeed = 0.0f;
+            const float fMaxSpeed = Max(GetFlyerMaxSpeed(), mClass->mBoostFlyerSpeed);
+            const float fBlend = Clamp((fSpeed - fMinSpeed) / (fMaxSpeed - fMinSpeed), 0.0f, 1.0f);
+            rFOV = GetControllableClass()->mFirstPersonFOV * (1.0f - fBlend) + fEffectFOV * fBlend;
+        }
+        else
+        {
+            rFOV = GetControllableClass()->mFirstPersonFOV;
+        }
+    }
+    else
+    {
+        const float fSpeed = mGetSpeedSpeed;
+        const float fEffectFOV = mClass->mFOVEffect3rd;
+        if (fSpeed > 0.0f && fEffectFOV != 0.0f)
+        {
+            const float fMinSpeed = 0.0f;
+            const float fMaxSpeed = Max(GetFlyerMaxSpeed(), mClass->mBoostFlyerSpeed);
+            const float fBlend = Clamp((fSpeed - fMinSpeed) / (fMaxSpeed - fMinSpeed), 0.0f, 1.0f);
+            rFOV = GetControllableClass()->mThirdPersonFOV * (1.0f - fBlend) + fEffectFOV * fBlend;
+            const PblVector3 vOffset = mClass->mFOVEFFectMinCamOffset3rd * (1.0f - fBlend) +
+                                      mClass->mFOVEFFectMaxCamOffset3rd * fBlend;
+            if (vOffset != PblVector3(0.0f, 0.0f, 0.0f))
+            {
+                mClass->mCameraSettings.mCameraTrackOffset = vOffset;
+            }
+        }
+        else
+        {
+            rFOV = GetControllableClass()->mThirdPersonFOV;
+            const PblVector3 vOffset = mClass->mFOVEFFectMinCamOffset3rd;
+            if (vOffset != PblVector3(0.0f, 0.0f, 0.0f))
+            {
+                mClass->mCameraSettings.mCameraTrackOffset = vOffset;
+            }
+        }
+    }
+}

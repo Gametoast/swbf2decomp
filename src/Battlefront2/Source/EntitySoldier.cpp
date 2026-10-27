@@ -1818,19 +1818,19 @@ void EntitySoldier::Render(unsigned char ucLod, float fFade, unsigned int uiFlag
 
                 if (mJetEffectHandle)
                 {
-                    PblMatrix mOffset = *pose.Find(0xe5b51072);
+                    PblMatrix mOffset(reinterpret_cast<const _D3DXMATRIXA16*>(pose.Find(0xe5b51072)));
                     mJetEffectHandle->SetLocalOffsetMatrix(mOffset);
                 }
                 if (mJetIdleEffectHandle)
                 {
-                    PblMatrix mOffset = *pose.Find(0xe5b51072);
+                    PblMatrix mOffset(reinterpret_cast<const _D3DXMATRIXA16*>(pose.Find(0xe5b51072)));
                     mJetIdleEffectHandle->SetLocalOffsetMatrix(mOffset);
                 }
                 for (int i = 0; i < 5; ++i)
                 {
                     if (mSmolderEffectHandle[i])
                     {
-                        PblMatrix mOffset = *pose.Find(mSmolderEffectBone[i]);
+                        PblMatrix mOffset(reinterpret_cast<const _D3DXMATRIXA16*>(pose.Find(mSmolderEffectBone[i])));
                         mSmolderEffectHandle[i]->SetLocalOffsetMatrix(mOffset);
                     }
                 }
@@ -1894,8 +1894,7 @@ void EntitySoldier::Render(unsigned char ucLod, float fFade, unsigned int uiFlag
                 float fDeltaTime = GameLoop::sClientDeltaTime;
                 if (mClass->mFootSlideEffect && fDeltaTime > 0.0f)
                 {
-                    PblMatrix mRightFoot;
-                    D3DXMatrixMultiply(reinterpret_cast<D3DXMATRIX*>(&mRightFoot), reinterpret_cast<const D3DXMATRIX*>(pose.Find(0x2f06fa86)), reinterpret_cast<const D3DXMATRIX*>(&mWorld));
+                    PblMatrix mRightFoot = PblMatrix(reinterpret_cast<const _D3DXMATRIXA16*>(pose.Find(0x2f06fa86))) * mWorld;
                     bool bSlide = false;
                     if (!(mFlags & flags_rightFootInWater) && (mFlags & flags_isGrounded) &&
                         m_vPosFootRight.x * m_vPosFootRight.x + m_vPosFootRight.y * m_vPosFootRight.y +
@@ -1928,8 +1927,7 @@ void EntitySoldier::Render(unsigned char ucLod, float fFade, unsigned int uiFlag
                         }
                     }
 
-                    PblMatrix mLeftFoot;
-                    D3DXMatrixMultiply(reinterpret_cast<D3DXMATRIX*>(&mLeftFoot), reinterpret_cast<const D3DXMATRIX*>(pose.Find(0x1af77461)), reinterpret_cast<const D3DXMATRIX*>(&mWorld));
+                    PblMatrix mLeftFoot = PblMatrix(reinterpret_cast<const _D3DXMATRIXA16*>(pose.Find(0x1af77461))) * mWorld;
                     bSlide = false;
                     if (!(mFlags & flags_leftFootInWater) && (mFlags & flags_isGrounded) &&
                         m_vPosFootLeft.x * m_vPosFootLeft.x + m_vPosFootLeft.y * m_vPosFootLeft.y +
@@ -2161,7 +2159,7 @@ void EntitySoldier::Render(unsigned char ucLod, float fFade, unsigned int uiFlag
         }
         if (mJetIdleEffectHandle && pPose)
         {
-            PblMatrix mOffset = *pPose->Find(0xe5b51072);
+            PblMatrix mOffset(reinterpret_cast<const _D3DXMATRIXA16*>(pPose->Find(0xe5b51072)));
             mJetIdleEffectHandle->SetLocalOffsetMatrix(mOffset);
         }
         if (const RedPose* pLowResPose = mSoldierAnimatorLowRes->GetPose())
@@ -2170,7 +2168,7 @@ void EntitySoldier::Render(unsigned char ucLod, float fFade, unsigned int uiFlag
             {
                 if (mSmolderEffectHandle[i])
                 {
-                    PblMatrix mOffset = *pLowResPose->Find(mSmolderEffectBone[i]);
+                    PblMatrix mOffset(reinterpret_cast<const _D3DXMATRIXA16*>(pLowResPose->Find(mSmolderEffectBone[i])));
                     mSmolderEffectHandle[i]->SetLocalOffsetMatrix(mOffset);
                 }
             }

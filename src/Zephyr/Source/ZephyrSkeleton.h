@@ -27,6 +27,8 @@ public:
     void BuildWorldMatrices(const PblMatrix& kRootMatrix, int iJoint, PblBitVector<N>& kDirty);
     void BuildWorldMatrices(const PblMatrix& kRootMatrix, const PblBitVector<N>& kMask);
 
+    PblMatrix* GetWorldMatrix(int iJoint) { return &m_pWorldMatrices[iJoint]; }
+    const PblMatrix* GetWorldMatrix(int iJoint) const { return &m_pWorldMatrices[iJoint]; }
     int GetNumJoints() const { return m_pShared->m_uNumJoints; }
     const ZephyrJointShared* GetJointShared(int iJoint) const { return &m_pShared->m_pJoints[iJoint]; }
 

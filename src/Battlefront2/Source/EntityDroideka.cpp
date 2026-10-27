@@ -86,14 +86,13 @@ void EntityDroideka::SetupCameraFOV(float& rFOV)
         rFOV = GetDefaultFOV();
         return;
     }
-    const ControllableClass* pClass = GetControllableClass();
     if (mTargetInfo.mIsAiming || (mTracker && mTracker->IsFirstPersonView()))
     {
-        rFOV = pClass->mFirstPersonFOV;
+        rFOV = GetControllableClass()->mFirstPersonFOV;
     }
     else
     {
-        rFOV = pClass->mThirdPersonFOV;
+        rFOV = GetControllableClass()->mThirdPersonFOV;
     }
 }
 
@@ -491,7 +490,7 @@ void EntityDroideka::MoveForward(float fDistance)
 
         PblMatrix kTurn(PblVector3(fCos, 0.0f, -fSin), PblVector3(0.0f, 1.0f, 0.0f),
                         PblVector3(fSin, 0.0f, fCos), PblVector3(0.0f, 0.0f, 0.0f));
-        D3DXMatrixMultiply(reinterpret_cast<D3DXMATRIX*>(&kTurn), reinterpret_cast<const D3DXMATRIX*>(&kTurn), reinterpret_cast<const D3DXMATRIX*>(&mMatrix));
+        kTurn *= mMatrix;
 
         vPos.x += kTurn.m[2][0] * fDistance;
         vPos.y += kTurn.m[2][1] * fDistance;
@@ -3119,7 +3118,7 @@ void EntityDroideka::BuildWorldMatrices()
             PblVector3 vAxis(-fCos6, 0.0f, fSin6);
             kRot.SetTranslation(gVectorZero);
             D3DXMatrixRotationAxis(reinterpret_cast<D3DXMATRIX*>(&kRot), reinterpret_cast<const D3DXVECTOR3*>(&vAxis), fPitch * -0.3333f);
-            D3DXMatrixMultiply(reinterpret_cast<D3DXMATRIX*>(&kLegs), reinterpret_cast<const D3DXMATRIX*>(&kLegs), reinterpret_cast<const D3DXMATRIX*>(&kRot));
+            kLegs *= kRot;
         }
         if (fabs(fHalfYaw) > 0.04f)
         {
@@ -4195,7 +4194,7 @@ void EntityDroideka::Render(unsigned char aLod, float aFadeVal, unsigned int uiR
             const PblMatrix* spine = mPose.Find(flag->GetCarriedDroidekaBoneHash());
             if (spine)
             {
-                PblMatrix bone = *spine;
+                PblMatrix bone(reinterpret_cast<const _D3DXMATRIXA16*>(spine));
                 PblMatrix mat;
                 D3DXMatrixMultiply(reinterpret_cast<D3DXMATRIX*>(&mat), reinterpret_cast<const D3DXMATRIX*>(&bone), reinterpret_cast<const D3DXMATRIX*>(&smoothedMat));
                 reinterpret_cast<GameObject*>(flag)->SetMatrix(mat);
@@ -4249,7 +4248,7 @@ void EntityDroideka::Render(unsigned char aLod, float aFadeVal, unsigned int uiR
             PblMatrix mat;
             D3DXMatrixRotationQuaternion(reinterpret_cast<D3DXMATRIX*>(&mat), D3DXQuaternionNormalize(reinterpret_cast<D3DXQUATERNION*>(&unit), reinterpret_cast<const D3DXQUATERNION*>(&roll)));
             mat.SetTranslation(offset);
-            D3DXMatrixMultiply(reinterpret_cast<D3DXMATRIX*>(&mat), reinterpret_cast<const D3DXMATRIX*>(&mat), reinterpret_cast<const D3DXMATRIX*>(&mMatrix));
+            mat *= mMatrix;
 
             mBallLowRes->Render(aLod, aFadeVal, &mat, &mPose, RedColor::WHITE, uiRenderFlags | 0x1000000, 0);
             FlagItem* flag = GetCarriedFlagItem();
@@ -4258,7 +4257,7 @@ void EntityDroideka::Render(unsigned char aLod, float aFadeVal, unsigned int uiR
                 const PblMatrix* spine = mPose.Find(flag->GetCarriedDroidekaBoneHash());
                 if (spine)
                 {
-                    PblMatrix bone(*spine);
+                    PblMatrix bone(reinterpret_cast<const _D3DXMATRIXA16*>(spine));
                     PblMatrix mat2;
                     D3DXMatrixMultiply(reinterpret_cast<D3DXMATRIX*>(&mat2), reinterpret_cast<const D3DXMATRIX*>(&bone), reinterpret_cast<const D3DXMATRIX*>(&mat));
                     reinterpret_cast<GameObject*>(flag)->SetMatrix(mat2);
@@ -4276,7 +4275,7 @@ void EntityDroideka::Render(unsigned char aLod, float aFadeVal, unsigned int uiR
                 const PblMatrix* spine = mPose.Find(flag->GetCarriedDroidekaBoneHash());
                 if (spine)
                 {
-                    PblMatrix bone(*spine);
+                    PblMatrix bone(reinterpret_cast<const _D3DXMATRIXA16*>(spine));
                     PblMatrix mat2;
                     D3DXMatrixMultiply(reinterpret_cast<D3DXMATRIX*>(&mat2), reinterpret_cast<const D3DXMATRIX*>(&bone), reinterpret_cast<const D3DXMATRIX*>(&mMatrix));
                     reinterpret_cast<GameObject*>(flag)->SetMatrix(mat2);
@@ -4356,9 +4355,4 @@ void EntityDroideka::Render(unsigned char aLod, float aFadeVal, unsigned int uiR
     }
 }
 
-// FUNCTION: SWBF2 0x0043a880
-PblMatrix* PblMatrix::CopyFrom(const PblMatrix* pSrc)
-{
-    *this = *pSrc;
-    return this;
-}
+

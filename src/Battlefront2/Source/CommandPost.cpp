@@ -761,12 +761,8 @@ void CommandPost::Kill()
     {
         for (int i = 0; i < 15; i++)
         {
-            PblVector3 vOffset = PblRandom::GetGlobalVector3();
-            vOffset.x *= mKillRegion->mSize.x;
-            vOffset.y *= mKillRegion->mSize.y;
-            vOffset.z *= mKillRegion->mSize.z;
-            PblVector3 vPos;
-            D3DXVec3TransformCoord(reinterpret_cast<D3DXVECTOR3*>(&vPos), reinterpret_cast<const D3DXVECTOR3*>(&vOffset), reinterpret_cast<const D3DXMATRIX*>(&mKillRegion->mMatrix));
+            PblVector3 vPos = mKillRegion->mMatrix.ApplyTransform(
+                mKillRegion->mSize * PblRandom::GetGlobalVector3());
 
             FLEffectClass* pEffectClass;
             switch (PblRandom::GetGlobalInt() % 3)

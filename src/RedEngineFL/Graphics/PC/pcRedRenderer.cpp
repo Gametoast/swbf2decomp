@@ -4163,10 +4163,10 @@ void RedRenderer::internalUpdateSceneConstants()
 
     if (RedRenderer::m_userNearClipPlaneEnable)
     {
-        PblMatrix mViewProj, mClip;
+        PblMatrix mViewProj;
         D3DXMatrixMultiply((D3DXMATRIX*)&mViewProj, (const D3DXMATRIX*)&rView,
                            (const D3DXMATRIX*)&rProj);
-        D3DXMatrixInverse((D3DXMATRIX*)&mClip, 0, (const D3DXMATRIX*)&mViewProj);
+        PblMatrix mClip = mViewProj.GetInverse();
         mClip.Transpose4x4();
 
         PblVector4 vPlane(RedRenderer::m_userNearClipPlane.GetA(),
@@ -4190,16 +4190,14 @@ void RedRenderer::internalUpdateSceneConstants()
             mOblique.m[1][2] = vClip.y;
             mOblique.m[2][2] = vClip.z;
             mOblique.m[3][2] = vClip.w;
-            D3DXMatrixMultiply((D3DXMATRIX*)&rProj, (const D3DXMATRIX*)&rProj,
-                               (const D3DXMATRIX*)&mOblique);
+            rProj *= mOblique;
         }
     }
 
     PblMatrix mOffset = rIdentity;
     mOffset.m[3][0] = 2.0f / (float)m_d3dpp.BackBufferWidth * RedRenderer::m_screenOffsetX;
     mOffset.m[3][1] = -(2.0f / (float)m_d3dpp.BackBufferHeight * RedRenderer::m_screenOffsetY);
-    D3DXMatrixMultiply((D3DXMATRIX*)&rProj, (const D3DXMATRIX*)&rProj,
-                       (const D3DXMATRIX*)&mOffset);
+    rProj *= mOffset;
 
     if (stateManagerEnabled_)
     {
