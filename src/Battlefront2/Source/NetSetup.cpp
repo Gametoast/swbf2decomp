@@ -1708,16 +1708,6 @@ extern int netNoCableCount;
 extern char const* gameErrorMsg;
 extern int gameErrorLvl;
 
-// FUNCTION: SWBF2 0x005d7620
-NetAddr* NetAddr::CopyFieldsFrom(const NetAddr* pOther)
-{
-    mGalaxyId = pOther->mGalaxyId;
-    this->hasPriv = pOther->hasPriv;
-    this->privAddr = pOther->privAddr;
-    this->privPort = pOther->privPort;
-    return this;
-}
-
 // FUNCTION: SWBF2 0x005e7200
 int NetSetup::GetMaxPlayers()
 {
@@ -2710,7 +2700,7 @@ NetGameDesc::NetGameDesc(const NetAddr& addr)
     mRulesAreValid = false;
     mValid = false;
     mHasSessionData = false;
-    mAddr.CopyFieldsFrom(&addr);
+    mAddr = addr;
     mStamp = NetComm::GetTime();
     mFindData.mDidServerPing = false;
     mFindData.mQuerySentTime = -1.0f;
@@ -3564,7 +3554,7 @@ void CNetPostLoadJoinGame::Update()
 void CNetFindGame::GetHostAddr(NetAddr* address, NetKey* key) const
 {
     NetGameDesc* game = curGame;
-    address->CopyFieldsFrom(&game->mAddr);
+    *address = game->mAddr;
     *key = game->mKey;
     game->mFindData.mQuerySeqNo = 69;
     if (game->mFindData.mConnecting || game->mFindData.mConnected)
@@ -3580,7 +3570,7 @@ void NetGameDesc::Update(const NetAddr* address, const NetKey* key, const NetSes
 {
     NetGameDesc* game = (NetGameDesc*)this;
     game->mValid = true;
-    game->mAddr.CopyFieldsFrom(address);
+    game->mAddr = *address;
     game->mFindData.mNumPlayers = data->mNumPlayers;
     game->mFindData.mMaxPlayers = data->mMaxPlayers;
     strlcpy(game->mFindData.mName, data->mName, sizeof(game->mFindData.mName));
@@ -4218,7 +4208,7 @@ void ReadJoin(NetPktGroup& group, int player, unsigned int guestCount, ShellStat
     NetMatch::HostGetAddr(&seenHostAddr, &clientAddr, player);
     if (NetGame::GetJoystickIndex(player) < 0)
     {
-        clientAddrs[player].CopyFieldsFrom(&clientAddr);
+        clientAddrs[player] = clientAddr;
         if (IsSameNet((const unsigned int*)&clientAddrs[player], (const unsigned int*)&seenHostAddr))
         {
             NetCommP::GetPipe(player) = PIPE_LAN;
@@ -4634,7 +4624,7 @@ bool ReadShellUpdate(NetPktGroup& group, ShellUpdate& update, ShellMove& move)
                     }
                     if (!guest)
                     {
-                        clientAddrs[j].CopyFieldsFrom(&peer);
+                        clientAddrs[j] = peer;
                     }
                 }
             }
@@ -4715,7 +4705,7 @@ void CNetJoinGame::Update()
         if (connected)
         {
             connecting = false;
-            hostAddrs[0].CopyFieldsFrom(&hostAddr);
+            hostAddrs[0] = hostAddr;
             int connectMark = 736;
             PblJournal::Record(connectMark, PJT_FULL);
             unsigned int address[6];
@@ -5518,7 +5508,7 @@ bool CNetFindGame::Update()
                         }
                         if (game->mFindData.mQueryId == queryId)
                         {
-                            address.CopyFieldsFrom(&game->mAddr);
+                            address = game->mAddr;
                             data = game->mFindData;
                             found = true;
                             break;

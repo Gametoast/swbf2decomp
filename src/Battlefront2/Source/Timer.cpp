@@ -32,10 +32,7 @@ bool Timer::Update(float fDeltaTime)
         if (mTime <= 0.0f)
         {
             DeactivateThread();
-            if (!NetGame::IsEnabled() || !NetGame::IsClient())
-            {
-                EventManager::TimerEvent::mElapsed.Trigger(*this, EventManager::noContext);
-            }
+            EventManager::TimerEvent::mElapsed.Trigger(*this, EventManager::noContext);
         }
     }
     return true;

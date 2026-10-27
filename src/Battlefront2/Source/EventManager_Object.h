@@ -8,8 +8,6 @@
 namespace EventManager
 {
 
-template <>
-void Event<GameObject, DamageOwner>::Trigger(GameObject& object, DamageOwner& owner);
 
 template <>
 bool LuaPushItem<GameObject>(GameObject& object);

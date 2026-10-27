@@ -36,10 +36,7 @@ static int Trigger(lua_State*)
         (Event<LuaObject, LuaObject>*)lua_topointer(LuaHelper::mState, lua_upvalueindex(1));
     LuaObject item(LuaHelper::mState, 1);
     LuaObject param(LuaHelper::mState, 2);
-    if (!NetGame::IsEnabled() || !NetGame::IsClient())
-    {
-        pEvent->Trigger(item, param);
-    }
+    pEvent->Trigger(item, param);
     return 0;
 }
 }

@@ -4,6 +4,7 @@
 #include "PebbleFL/Common/PblHandle.h"
 #include "Timer.h"
 #include "LuaHelper.h"
+#include "NetGame.h"
 
 namespace EventManager
 {
@@ -101,7 +102,21 @@ public:
     void Init() {}
     void Cleanup() { mRoot.Clear(); }
 
-    void Trigger(ITEM& item, PARAM& param) { mRoot.Trigger(item, param); }
+    // TEMPLATE: SWBF2 0x0042cd60
+    // EventManager::Event<Character,char>::Trigger
+    // TEMPLATE: SWBF2 0x00489c50
+    // EventManager::Event<GameObject,DamageOwner>::Trigger
+    // TEMPLATE: SWBF2 0x004b97e0
+    // EventManager::Event<Character,GameObject>::Trigger
+    // TEMPLATE: SWBF2 0x00525c30
+    // EventManager::Event<FlagItem,Character>::Trigger
+    void Trigger(ITEM& item, PARAM& param)
+    {
+        if (!NetGame::IsEnabled() || !NetGame::IsClient())
+        {
+            mRoot.Trigger(item, param);
+        }
+    }
 
     char* mName;
     Callback mRoot;

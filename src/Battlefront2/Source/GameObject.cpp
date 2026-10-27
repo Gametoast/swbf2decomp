@@ -150,10 +150,7 @@ bool __fastcall IsSpied(const Character* pCharacter, const Character* pOther);
 // FUNCTION: SWBF2 0x00535480
 void GameObject::Init()
 {
-    if (!NetGame::IsEnabled() || !NetGame::IsClient())
-    {
-        EventManager::ObjectEvent::mInit.Trigger(*this, EventManager::noContext);
-    }
+    EventManager::ObjectEvent::mInit.Trigger(*this, EventManager::noContext);
 }
 
 // FUNCTION: SWBF2 0x005354c0
@@ -165,10 +162,7 @@ void GameObject::ClientKill()
 // FUNCTION: SWBF2 0x005354d0
 void GameObject::Kill()
 {
-    if (!NetGame::IsEnabled() || !NetGame::IsClient())
-    {
-        EventManager::ObjectEvent::mKill.Trigger(*this, mDamageOwner);
-    }
+    EventManager::ObjectEvent::mKill.Trigger(*this, mDamageOwner);
     TargetManager::RemoveMarker(this, 0, (unsigned int)-1);
     SetPortalActive(false);
 }
@@ -176,10 +170,7 @@ void GameObject::Kill()
 // FUNCTION: SWBF2 0x00535540
 void GameObject::Respawn()
 {
-    if (!NetGame::IsEnabled() || !NetGame::IsClient())
-    {
-        EventManager::ObjectEvent::mRespawn.Trigger(*this, EventManager::noContext);
-    }
+    EventManager::ObjectEvent::mRespawn.Trigger(*this, EventManager::noContext);
 }
 
 // FUNCTION: SWBF2 0x00535590
@@ -798,10 +789,7 @@ GameObject::GameObject(GameObjectClass* pClass, const EntityDesc& desc, Collisio
     mHealthType = pClass->mHealthType;
     mHealthTypeForLockOn = pClass->mHealthTypeForLockOn;
 
-    if (!NetGame::IsEnabled() || !NetGame::IsClient())
-    {
-        EventManager::ObjectEvent::mCreate.Trigger(*this, EventManager::noContext);
-    }
+    EventManager::ObjectEvent::mCreate.Trigger(*this, EventManager::noContext);
 }
 
 // FUNCTION: SWBF2 0x005352e0
@@ -815,10 +803,7 @@ GameObject::~GameObject()
         }
     }
     TargetManager::RemoveMarker(this, 0, (unsigned int)-1);
-    if (!NetGame::IsEnabled() || !NetGame::IsClient())
-    {
-        EventManager::ObjectEvent::mDelete.Trigger(*this, EventManager::noContext);
-    }
+    EventManager::ObjectEvent::mDelete.Trigger(*this, EventManager::noContext);
     SetPortalActive(false);
     pvs::IManager::GetInstance().UnregisterDynamic(*this);
     TeamManager::RemoveObject(this);

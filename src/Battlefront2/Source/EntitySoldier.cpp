@@ -7589,10 +7589,7 @@ bool EntitySoldier::Update(float fDeltaTime)
                         AI::VOHelper::Play(AI::VOT_SC_VehicleWaitUpResponse, pDriver, this, this,
                                            fDelay + GameLoop::GetMissionTime());
                         AI::EventType eCommand = AI::EVT_Vehicle_WaitForPickUp;
-                        if (!(NetGame::IsEnabled() && NetGame::IsClient()))
-                        {
-                            EventManager::CharacterEvent::mIssueAICommand.Trigger(*mCharacter, eCommand);
-                        }
+                        EventManager::CharacterEvent::mIssueAICommand.Trigger(*mCharacter, eCommand);
                         const unsigned short* pText = RedLocalizeDB::Find(0xa0590ed7, false);
                         for (unsigned int i = 0; i < NetGame::GetNumLocalPlayers(); ++i)
                         {
@@ -7617,10 +7614,7 @@ bool EntitySoldier::Update(float fDeltaTime)
                         pUnit->SendEvent(&stopInfo);
                         AI::VOHelper::Play(AI::VOT_SC_StopFollow, this, 0, pTarget, 0.0f);
                         AI::EventType eCommand = AI::EVT_SC_StopFollowChr;
-                        if (!(NetGame::IsEnabled() && NetGame::IsClient()))
-                        {
-                            EventManager::CharacterEvent::mIssueAICommand.Trigger(*mCharacter, eCommand);
-                        }
+                        EventManager::CharacterEvent::mIssueAICommand.Trigger(*mCharacter, eCommand);
                         const unsigned short* pText = RedLocalizeDB::Find(0x0e0280e5, false);
                         for (unsigned int i = 0; i < NetGame::GetNumLocalPlayers(); ++i)
                         {
@@ -7643,10 +7637,7 @@ bool EntitySoldier::Update(float fDeltaTime)
                         pUnit->SendEvent(&followInfo);
                         AI::VOHelper::Play(AI::VOT_SC_Follow, this, 0, pTarget, 0.0f);
                         AI::EventType eCommand = AI::EVT_SC_FollowChr;
-                        if (!(NetGame::IsEnabled() && NetGame::IsClient()))
-                        {
-                            EventManager::CharacterEvent::mIssueAICommand.Trigger(*mCharacter, eCommand);
-                        }
+                        EventManager::CharacterEvent::mIssueAICommand.Trigger(*mCharacter, eCommand);
                         const unsigned short* pText = RedLocalizeDB::Find(0x731fd493, false);
                         for (unsigned int i = 0; i < NetGame::GetNumLocalPlayers(); ++i)
                         {
@@ -7675,10 +7666,7 @@ bool EntitySoldier::Update(float fDeltaTime)
                     ControllerManager::BroadcastEvent(&stopInfo, 1000);
                     AI::VOHelper::Play(AI::VOT_SC_StopFollow, this, 0, 0, 0.0f);
                     AI::EventType eCommand = AI::EVT_SC_StopFollowChr;
-                    if (!(NetGame::IsEnabled() && NetGame::IsClient()))
-                    {
-                        EventManager::CharacterEvent::mIssueAICommand.Trigger(*mCharacter, eCommand);
-                    }
+                    EventManager::CharacterEvent::mIssueAICommand.Trigger(*mCharacter, eCommand);
                     const unsigned short* pText = RedLocalizeDB::Find(0x0e0280e5, false);
                     for (unsigned int i = 0; i < NetGame::GetNumLocalPlayers(); ++i)
                     {
@@ -9700,10 +9688,7 @@ bool EntitySoldier::ApplyDamage(const DamageDesc& damage, const PblVector3& vDir
     if (iBodyPart == 0)
     {
         GameObject* pObject = GetGameObject();
-        if (!(NetGame::IsEnabled() && NetGame::IsClient()))
-        {
-            EventManager::ObjectEvent::mHeadshot.Trigger(*pObject, const_cast<DamageOwner&>(damage.mDamageOwner));
-        }
+        EventManager::ObjectEvent::mHeadshot.Trigger(*pObject, const_cast<DamageOwner&>(damage.mDamageOwner));
     }
 
     if (Damageable::ApplyDamage(damage, vDir, vPos, iBodyPart, uFlags))
@@ -9924,10 +9909,7 @@ bool EntitySoldier::EnterControllable(Controllable* pControllable)
     TurnOffJetEffect();
     TurnOffJetIdleEffect();
     GameObject* pVehicle = pControllable->GetGameObject();
-    if (!(NetGame::IsEnabled() && NetGame::IsClient()))
-    {
-        EventManager::CharacterEvent::mEnterVehicle.Trigger(*mCharacter, *pVehicle);
-    }
+    EventManager::CharacterEvent::mEnterVehicle.Trigger(*mCharacter, *pVehicle);
     if (NetGame::IsEnabled() && !NetGame::IsClient() && mPlayerId >= 0)
     {
         NetGame::SetEnterVehicleTurn(mPlayerId);

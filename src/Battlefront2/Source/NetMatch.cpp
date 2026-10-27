@@ -519,7 +519,7 @@ void NetMatch::HostGetAddr(const NetAddr* pAddr, void* pOut, int iDest)
         output->privAddr = ip;
         output->privPort = port;
     }
-    myAddr.CopyFieldsFrom(pAddr);
+    myAddr = *pAddr;
     return;
 }
 

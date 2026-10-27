@@ -496,6 +496,8 @@ public:
     {
         return mTimeTilReboard;
     }
+    WalkerAnimation* GetAnimation(int i) { return mAnimations[i]; }
+
     virtual bool InitAnimations(const char* pszName);
 
     PblBitVector<64> HierarchyJointMask(const ZephyrSkeletonShared* pSkeleton, int iJoint);

@@ -522,10 +522,7 @@ void Team::Update(float)
 void Team::SetCurReinforcements(int iCount)
 {
     mCurReinforcements = iCount;
-    if (!NetGame::IsEnabled() || !NetGame::IsClient())
-    {
-        EventManager::TeamEvent::mTicketCountChange.Trigger(*this, mCurReinforcements);
-    }
+    EventManager::TeamEvent::mTicketCountChange.Trigger(*this, mCurReinforcements);
 }
 
 // FUNCTION: SWBF2 0x00653c10
@@ -536,10 +533,7 @@ void Team::AddReinforcements(int iCount)
         return;
     }
     mCurReinforcements += iCount;
-    if (!NetGame::IsEnabled() || !NetGame::IsClient())
-    {
-        EventManager::TeamEvent::mTicketCountChange.Trigger(*this, mCurReinforcements);
-    }
+    EventManager::TeamEvent::mTicketCountChange.Trigger(*this, mCurReinforcements);
 }
 
 // FUNCTION: SWBF2 0x00653c70
@@ -737,20 +731,14 @@ void Team::SetCarrier(const char* pcName)
 void Team::SetBleedRate(float fRate)
 {
     mBleedRate = fRate;
-    if (!NetGame::IsEnabled() || !NetGame::IsClient())
-    {
-        EventManager::TeamEvent::mTicketBleedChange.Trigger(*this, mBleedRate);
-    }
+    EventManager::TeamEvent::mTicketBleedChange.Trigger(*this, mBleedRate);
 }
 
 // FUNCTION: SWBF2 0x00654130
 void Team::SetPoints(int iPoints)
 {
     mPoints = iPoints;
-    if (!NetGame::IsEnabled() || !NetGame::IsClient())
-    {
-        EventManager::TeamEvent::mPointsChange.Trigger(*this, mPoints);
-    }
+    EventManager::TeamEvent::mPointsChange.Trigger(*this, mPoints);
 }
 
 // FUNCTION: SWBF2 0x00654180
@@ -761,10 +749,7 @@ void Team::AddPoints(int iPoints)
         return;
     }
     mPoints += iPoints;
-    if (!NetGame::IsEnabled() || !NetGame::IsClient())
-    {
-        EventManager::TeamEvent::mPointsChange.Trigger(*this, mPoints);
-    }
+    EventManager::TeamEvent::mPointsChange.Trigger(*this, mPoints);
 }
 
 // FUNCTION: SWBF2 0x006541e0

@@ -228,7 +228,7 @@ void EntityTrap::HealthChangeCallback(bool bArg, float fDelta)
         {
 
             EntityProp* pProp = static_cast<EntityProp*>(mBuildBox);
-            static_cast<RedSceneObject*>(pProp)->Deactivate();
+            pProp->Deactivate();
             pProp->RemoveFromCollisionManager();
         }
         pDamageable->mHealthType = HEALTH_TYPE_BUILDING;
@@ -776,7 +776,7 @@ bool EntityTrap::Update(float fDeltaTime)
         if (mBuildBox->IsRtti(EntityProp::rttiHashEntityProp))
         {
             EntityProp* pProp = static_cast<EntityProp*>(mBuildBox);
-            static_cast<RedSceneObject*>(pProp)->Activate();
+            pProp->Activate();
             pProp->AddStaticToCollisionManager();
         }
         mBuildingTrap = false;

@@ -95,12 +95,6 @@ unsigned int LockOnManager::GetTargetLockedChangedTurn() const
     return mLockedObjChangedTurn;
 }
 
-// FUNCTION: SWBF2 0x00483590
-LockOnManager* LockOnManager::GetByPlayerIndex(unsigned int uIndex)
-{
-    return sLockOnManagers[uIndex];
-}
-
 // FUNCTION: SWBF2 0x004835a0
 Controllable::Controllable(ControllableClass* pClass, int iPlayerId)
     : mControlMove(0.0f),

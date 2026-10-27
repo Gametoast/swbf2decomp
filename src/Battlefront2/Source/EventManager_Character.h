@@ -142,10 +142,6 @@ void Init();
 void Cleanup();
 }
 
-template <>
-void Event<Character, char>::Trigger(Character& item, char& param);
 
-template <>
-void Event<Character, GameObject>::Trigger(Character& item, GameObject& param);
 
 }

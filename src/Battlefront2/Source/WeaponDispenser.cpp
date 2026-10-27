@@ -658,17 +658,11 @@ Entity* WeaponDispenser::Fire()
     if (pObject->IsRtti(EntityItem::rttiHashEntityItem))
     {
         static_cast<EntityItem*>(pObject)->mOwner = mOwner->mCharacter;
-        if (!NetGame::IsEnabled() || !NetGame::IsClient())
-        {
-            EventManager::CharacterEvent::mDispensePowerup.Trigger(*mOwner->mCharacter, *pObject);
-        }
+        EventManager::CharacterEvent::mDispensePowerup.Trigger(*mOwner->mCharacter, *pObject);
     }
     else
     {
-        if (!NetGame::IsEnabled() || !NetGame::IsClient())
-        {
-            EventManager::CharacterEvent::mDispenseControllable.Trigger(*mOwner->mCharacter, *pObject);
-        }
+        EventManager::CharacterEvent::mDispenseControllable.Trigger(*mOwner->mCharacter, *pObject);
 
         Controllable* pControllable = pObject->GetControllable();
         if (pControllable &&

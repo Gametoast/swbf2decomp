@@ -101,6 +101,7 @@ public:
 
     void SetAIDamageThreshold(float fThreshold) { mAIDamageThreshold = fThreshold; }
 
+    // FUNCTION: SWBF2 0x00450380
     void InstantVanish()
     {
         mIsAlive = false;

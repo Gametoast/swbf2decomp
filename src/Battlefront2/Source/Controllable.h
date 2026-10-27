@@ -358,6 +358,11 @@ protected:
 
 public:
     void Initialize();
+
+    void SetThrust(float value) { mControlMove = value; }
+    void SetStrafe(float value) { mControlStrafe = value; }
+    void SetTurn(float value) { mControlTurn = value; }
+    void SetPitch(float value) { mControlPitch = value; }
     void ClearControllable();
     void ResetControls();
     void SetSwitch(float fValue, int iIndex);

@@ -1326,10 +1326,7 @@ void Character::Died()
         return;
     }
 
-    if (!NetGame::IsEnabled() || !NetGame::IsClient())
-    {
-        EventManager::CharacterEvent::mDeath.Trigger(*this, rOwner);
-    }
+    EventManager::CharacterEvent::mDeath.Trigger(*this, rOwner);
     GetPlayerStats(this).AddDeath(rOwner.mCharacter);
 
     Team* pEnemyTeam = Team::GetPtr(3 - mTeamNumber);
@@ -1553,15 +1550,7 @@ void Event<Character, DamageOwner>::Callback::Trigger(Character& item, DamageOwn
 namespace EventManager
 {
 
-// FUNCTION: SWBF2 0x0042cd60
-template <>
-void Event<Character, char>::Trigger(Character& item, char& param)
-{
-    if (!NetGame::IsEnabled() || !NetGame::IsClient())
-    {
-        mRoot.Trigger(item, param);
-    }
-}
+
 
 // FUNCTION: SWBF2 0x0042cdb0
 template <>

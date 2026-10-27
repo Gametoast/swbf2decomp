@@ -45,8 +45,6 @@ extern Event<FlagItem, char> mReset;
 }
 
 template <>
-void Event<FlagItem, Character>::Trigger(FlagItem& item, Character& param);
-template <>
 void Event<FlagItem, Character>::Callback::Trigger(FlagItem& item, Character& param);
 template <>
 void Event<FlagItem, char>::Callback::Trigger(FlagItem& item, char& param);
@@ -615,15 +613,7 @@ EntityClass* FlagItemClass::Derive(unsigned int uHash)
     return new FlagItemClass(this, uHash);
 }
 
-// FUNCTION: SWBF2 0x00525c30
-template <>
-void EventManager::Event<FlagItem, Character>::Trigger(FlagItem& item, Character& param)
-{
-    if (!NetGame::IsEnabled() || !netEnabledNext || !netClientActive)
-    {
-        mRoot.Trigger(item, param);
-    }
-}
+
 
 // FUNCTION: SWBF2 0x005240b0
 FlagItem::FlagItem(FlagItemClass* pClass, const EntityDesc& desc)

@@ -233,6 +233,8 @@ struct IntraSessionPlayer
     bool isTeam1;
 };
 
+// SYNTHETIC: SWBF2 0x005d7620
+// NetAddr::operator=
 #pragma pack(push, 4)
 struct NetAddr
 {
@@ -252,7 +254,7 @@ struct NetAddr
                other.mGalaxyId == mGalaxyId;
     }
 
-    NetAddr* CopyFieldsFrom(const NetAddr* other);
+
 
     char GetAddr(void* pOut, int pKey) const;
 };

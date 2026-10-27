@@ -429,37 +429,6 @@ ExplosionClass* ExplosionClass::Derive(unsigned int uHash)
 }
 
 
-static CollisionObject* GameObject_GetCollisionBase(GameObject* pObject)
-{
-    return static_cast<CollisionObject*>(pObject);
-}
-static Damageable* GameObject_GetDamageable(GameObject* pObject)
-{
-    return static_cast<Damageable*>(pObject);
-}
-static inline bool GameObject_IsRtti(GameObject* pObject, unsigned int uRtti)
-{
-    return reinterpret_cast<Entity*>(pObject)->IsRtti(uRtti);
-}
-
-static GameObject* GetHandleObject(const PblHandle<GameObject>& handle)
-{
-    PblHandle<GameObject>& h = const_cast<PblHandle<GameObject>&>(handle);
-    if (h.mObject &&
-        h.mObject->mHandleId !=
-            h.mSavedHandleId)
-    {
-        h.mObject = 0;
-        h.mSavedHandleId = 0;
-    }
-    return h.mObject;
-}
-
-static const GameSound& ParticleEmitterClass_GetAmbientSound(const FLEffectClass* pClass)
-{
-    return static_cast<const ParticleEmitterClass*>(pClass)->mAmbientSound;
-}
-
 // FUNCTION: SWBF2 0x0051dc10
 void ExplosionClass::CreateExplosion(const PblVector3& aPos, const DamageOwner& aOwner, bool aFlying,
                                      CollisionObjectType aCollType)
@@ -559,7 +528,7 @@ void ExplosionClass::CreateExplosion(const PblVector3& aPos, const DamageOwner& 
         FLEffectClass* pEffectClass = mEffects[iEffect];
         if (pEffectClass && pEffectClass->mType == 1)
         {
-            ParticleEmitterClass_GetAmbientSound(pEffectClass).Play(&aPos, 0, false, true);
+            static_cast<const ParticleEmitterClass*>(pEffectClass)->mAmbientSound.Play(&aPos, 0, false, true);
         }
     }
 
@@ -664,15 +633,15 @@ void ExplosionClass::CreateExplosion(const PblVector3& aPos, const DamageOwner& 
         while (count--)
         {
             GameObject* pObject = array[count];
-            if (!mDoDamageToOwner && GetHandleObject(aOwner.mGameObject) &&
-                pObject == GetHandleObject(aOwner.mGameObject))
+            if (!mDoDamageToOwner && aOwner.mGameObject &&
+                pObject == aOwner.mGameObject)
             {
                 continue;
             }
 
-            CollisionObject* pBase = GameObject_GetCollisionBase(pObject);
+            GameObject* pBase = pObject;
             if (pBase->GetCollisionType() == COLL_ITEM &&
-                !GameObject_IsRtti(pObject, EntityMine::rttiHashEntityMine))
+                !pObject->IsRtti(EntityMine::rttiHashEntityMine))
             {
                 continue;
             }
@@ -696,7 +665,7 @@ void ExplosionClass::CreateExplosion(const PblVector3& aPos, const DamageOwner& 
             {
                 pObject->ApplyRadiusDamage(aPos, mDamageRadius[0], mDamageRadius[1], damage);
             }
-            if (!mPushDeadOnly || !GameObject_GetDamageable(pObject)->mIsAlive)
+            if (!mPushDeadOnly || !pObject->IsAlive())
             {
                 if (mPushRadius[1] > 0.0f)
                 {

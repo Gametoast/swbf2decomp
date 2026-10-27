@@ -5105,9 +5105,13 @@ unsigned int GetUniqObjectId(const GameObject* pObject)
     {
         return 63;
     }
-    PblHashTable<HandleToIndex, 128>* pTable = handleToIndexMapPtr;
-    HandleToIndex* pId = pTable->Find(pObject->GetHandleId());
-    return pId ? pId->index : 63;
+    unsigned int id = pObject->GetHandleId();
+    HandleToIndex* h2i = handleToIndexMapPtr->Find(id);
+    if (!h2i)
+    {
+        return 63;
+    }
+    return h2i->index;
 }
 
 // FUNCTION: SWBF2 0x005ce480
@@ -11140,15 +11144,6 @@ float SquaredLength(const float* value)
 
 
 
-// FUNCTION: SWBF2 0x00450380
-unsigned int __fastcall SetDamageableVanishFlags(unsigned int* pThis)
-{
-    pThis[47] = (pThis[47] & ~0x18u) | 0x10u;
-    return pThis[47];
-}
-
-
-
 // FUNCTION: SWBF2 0x005b7370
 bool NetGame::CanExitVehicle(unsigned int player)
 {
@@ -11896,7 +11891,7 @@ void NetGame::HeroSelected(int team)
     {
         unit->ExitVehicle(true, true);
     }
-    SetDamageableVanishFlags((unsigned int*)static_cast<Damageable*>(target));
+    target->InstantVanish();
 }
 
 // FUNCTION: SWBF2 0x005ce780
@@ -13009,8 +13004,7 @@ void AdjustClock()
 // FUNCTION: SWBF2 0x005cc600
 void GetLastObjState(GameObject* pObject, NetObjState*& pState, unsigned int& uId)
 {
-    PblHashTable<HandleToIndex, 128>* pTable = handleToIndexMapPtr;
-    HandleToIndex* pEntry = pTable->Find(pObject->GetHandleId());
+    HandleToIndex* pEntry = handleToIndexMapPtr->Find(pObject->GetHandleId());
     uId = pEntry->index;
     if (!pEntry->isNew)
     {
@@ -13120,7 +13114,7 @@ void NetGame::VanishAllPlayer()
         {
             pUnit->ExitVehicle(true, true);
         }
-        SetDamageableVanishFlags((unsigned int*)static_cast<Damageable*>(pObject));
+        pObject->InstantVanish();
     }
 }
 

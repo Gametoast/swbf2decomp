@@ -1394,15 +1394,7 @@ void Event<Character, GameObject>::Callback::Trigger(Character& item, GameObject
 namespace EventManager
 {
 
-// FUNCTION: SWBF2 0x004b97e0
-template <>
-void Event<Character, GameObject>::Trigger(Character& item, GameObject& param)
-{
-    if (!NetGame::IsEnabled() || !NetGame::IsClient())
-    {
-        mRoot.Trigger(item, param);
-    }
-}
+
 }
 
 extern PblVector3 gVectorZero;
@@ -1493,10 +1485,7 @@ void EntityFlyer::SendLandedEvent()
     if (mCharacter)
     {
         GameObject* pObject = GetGameObject();
-        if (!(NetGame::IsEnabled() && NetGame::IsClient()))
-        {
-            EventManager::CharacterEvent::mLandedFlyer.Trigger(*mCharacter, *pObject);
-        }
+        EventManager::CharacterEvent::mLandedFlyer.Trigger(*mCharacter, *pObject);
     }
 }
 

@@ -123,7 +123,8 @@ public:
     GameObject* GetLockedTarget() const;
     void ForceNewTargetLock(GameObject* pObject);
     unsigned int GetTargetLockedChangedTurn() const;
-    static LockOnManager* GetByPlayerIndex(unsigned int uIndex);
+    // FUNCTION: SWBF2 0x00483590
+    static LockOnManager* GetByPlayerIndex(unsigned int uIndex) { return sLockOnManagers[uIndex]; }
     void RemoveTargetLock();
 
     bool IsGameObjectTargeted(const GameObject* const pObject);

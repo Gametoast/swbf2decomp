@@ -752,10 +752,7 @@ void CommandPost::Kill()
                 Character::GetPlayerStats(pKiller).AddCommandPostPoints(0, false);
             }
         }
-        if (!NetGame::IsEnabled() || !NetGame::IsClient())
-        {
-            EventManager::CommandPostEvent::mKill.Trigger(*this, mObject->mDamageOwner);
-        }
+        EventManager::CommandPostEvent::mKill.Trigger(*this, mObject->mDamageOwner);
     }
 
     TurnHologramOff();
@@ -810,10 +807,7 @@ void CommandPost::Respawn()
     }
     TargetManager::RemoveTarget(mObject);
     TargetManager::AddPost(this);
-    if (!NetGame::IsEnabled() || !NetGame::IsClient())
-    {
-        EventManager::CommandPostEvent::mRespawn.Trigger(*this, EventManager::noContext);
-    }
+    EventManager::CommandPostEvent::mRespawn.Trigger(*this, EventManager::noContext);
     ActivateThread(-20, PER_TURN);
     ++*sActivePostCount;
 }
@@ -1412,7 +1406,7 @@ bool CommandPost::Update(float fDeltaTime)
         const float fCaptureTime = GetCaptureTime();
         if (mHoldTeam > 0)
         {
-            if (mHoldTeam != iOldHoldTeam && (!NetGame::IsEnabled() || !NetGame::IsClient()))
+            if (mHoldTeam != iOldHoldTeam)
             {
                 EventManager::CommandPostEvent::mBeginCapture.Trigger(*this, mHoldPlayerMask);
             }
@@ -1460,10 +1454,7 @@ bool CommandPost::Update(float fDeltaTime)
                     GetGameObject()->SetTeam(mHoldTeam);
                     GetGameObject()->mPerceivedTeam = mHoldTeam;
                 }
-                if (!NetGame::IsEnabled() || !NetGame::IsClient())
-                {
-                    EventManager::CommandPostEvent::mFinishCapture.Trigger(*this, mHoldPlayerMask);
-                }
+                EventManager::CommandPostEvent::mFinishCapture.Trigger(*this, mHoldPlayerMask);
                 mSoundTransition.Stop(true);
 
                 Team* pTeam = Team::sTeams[GetGameObject()->mTeam];
@@ -1497,7 +1488,7 @@ bool CommandPost::Update(float fDeltaTime)
         }
         else if (mHoldTeam == -1)
         {
-            if (iOldHoldTeam != -1 && (!NetGame::IsEnabled() || !NetGame::IsClient()))
+            if (iOldHoldTeam != -1)
             {
                 EventManager::CommandPostEvent::mAbortCapture.Trigger(*this, mHoldPlayerMask);
             }
@@ -1511,7 +1502,7 @@ bool CommandPost::Update(float fDeltaTime)
         }
         else
         {
-            if (mHoldTeam != iOldHoldTeam && (!NetGame::IsEnabled() || !NetGame::IsClient()))
+            if (mHoldTeam != iOldHoldTeam)
             {
                 EventManager::CommandPostEvent::mAbortCapture.Trigger(*this, mHoldPlayerMask);
             }
@@ -1523,7 +1514,7 @@ bool CommandPost::Update(float fDeltaTime)
 
         const float fNeutralizeTime = GetNeutralizeTime();
         const bool bDisputed = mNeutralizeTimer == 0.0f && mHoldTeam == -1;
-        if (mNeutralizeTimer == 0.0f && (!NetGame::IsEnabled() || !NetGame::IsClient()))
+        if (mNeutralizeTimer == 0.0f)
         {
             EventManager::CommandPostEvent::mBeginNeutralize.Trigger(*this, mHoldPlayerMask);
         }
@@ -1582,10 +1573,7 @@ bool CommandPost::Update(float fDeltaTime)
                 GetGameObject()->mPerceivedTeam = 0;
             }
             mSoundTransition.Stop(true);
-            if (!NetGame::IsEnabled() || !NetGame::IsClient())
-            {
-                EventManager::CommandPostEvent::mFinishNeutralize.Trigger(*this, mHoldPlayerMask);
-            }
+            EventManager::CommandPostEvent::mFinishNeutralize.Trigger(*this, mHoldPlayerMask);
         }
         if (mNeutralizeTimer >= fNeutralizeTime - mClass->m_fHoloTurnOnTime)
         {
@@ -1595,10 +1583,7 @@ bool CommandPost::Update(float fDeltaTime)
     else if (mNeutralizeTimer > 0.0f)
     {
 
-        if (!NetGame::IsEnabled() || !NetGame::IsClient())
-        {
-            EventManager::CommandPostEvent::mAbortNeutralize.Trigger(*this, mHoldPlayerMask);
-        }
+        EventManager::CommandPostEvent::mAbortNeutralize.Trigger(*this, mHoldPlayerMask);
         if (mNeutralizeTimer > 0.0f)
         {
             float fRate = 0.0f;

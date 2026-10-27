@@ -423,9 +423,14 @@ void NetPktGroup::ReadBits(unsigned int& uValue, int iBits)
 // FUNCTION: SWBF2 0x005d9790
 void NetPktGroup::WriteFixed(float f, float fMin, float fMax, int iBits)
 {
-    if (doHiRes || iBits >= 32)
+    if (doHiRes)
     {
-        WriteBits(*(unsigned int*)&f, 32);
+        Write(f);
+        return;
+    }
+    if (iBits >= 32)
+    {
+        Write(f);
         return;
     }
     if (f <= fMin)
@@ -445,26 +450,30 @@ void NetPktGroup::WriteFixed(float f, float fMin, float fMax, int iBits)
 // FUNCTION: SWBF2 0x005d9860
 void NetPktGroup::ReadFixed(float& f, float fMin, float fMax, int iBits)
 {
-    if (doHiRes || iBits >= 32)
+    if (doHiRes)
     {
-        ReadBits(*(unsigned int*)&f, 32);
+        Read(f);
+        return;
+    }
+    if (iBits >= 32)
+    {
+        Read(f);
         return;
     }
     unsigned int uValue;
     ReadBits(uValue, iBits);
-    const unsigned int uMax = (1 << iBits) - 1;
     if (uValue == 0)
     {
         f = fMin;
+        return;
     }
-    else if (uValue == uMax)
+    if (uValue == (unsigned int)((1 << iBits) - 1))
     {
         f = fMax;
+        return;
     }
-    else
-    {
-        f = (float)uValue / (float)(uMax - 1) * (fMax - fMin) + fMin;
-    }
+    f = (float)uValue / (float)(unsigned int)((1 << iBits) - 2) *
+        (fMax - fMin) + fMin;
 }
 
 // FUNCTION: SWBF2 0x005d9920
@@ -582,23 +591,27 @@ bool NetPacket::Write(unsigned char value)
 // FUNCTION: SWBF2 0x005d9010
 bool NetPacket::Read(unsigned char& value)
 {
-    if (mCurIndex + 1 > mMaxIndex)
+    int iByte = mCurIndex;
+    if (iByte + 1 > mMaxIndex)
     {
         return false;
     }
-    value = mData[mCurIndex++];
+    value = mData[iByte];
+    mCurIndex += 1;
     return true;
 }
 
 // FUNCTION: SWBF2 0x005d9040
 bool NetPacket::Write(unsigned short value)
 {
-    if (mCurIndex + 2 > mMaxIndex)
+    const int iByte = mCurIndex;
+    if (iByte + 2 > mMaxIndex)
     {
         return false;
     }
-    mData[mCurIndex] = (char)value;
-    mData[mCurIndex + 1] = (char)(value >> 8);
+    const char* pSrc = (const char*)&value;
+    mData[iByte] = pSrc[0];
+    mData[iByte + 1] = pSrc[1];
     mCurIndex += 2;
     return true;
 }
