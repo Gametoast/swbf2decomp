@@ -1,3 +1,4 @@
+#include "AmmoCounter.h"
 #include <d3dx9math.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -32,12 +33,7 @@ void ProcessGalaxyData();
 
 PblMatrix DirectionMatrix(const PblVector3& vDir, const PblVector3& vUp, const PblVector3& vPos);
 
-class AmmoCounter
-{
-public:
-    bool CanExpendRounds(float fRounds) const;
-    void ExpendRounds(float fRounds);
-};
+
 
 
 namespace GameLoop
@@ -676,7 +672,7 @@ Entity* WeaponDispenser::Fire()
 
         Controllable* pControllable = pObject->GetControllable();
         if (pControllable &&
-            (pControllable->mPilotType == PILOT_SELF || pControllable->mPilotType == PILOT_VEHICLESELF) &&
+            (pControllable->IsSelfPilotable()) &&
             !pControllable->GetPilot())
         {
             Controller* pController = pControllable->mCtrl;

@@ -1,3 +1,4 @@
+#include "AmmoCounter.h"
 #define _CRT_SECURE_NO_WARNINGS
 
 #include "GameVoiceChatNode.h"
@@ -1475,7 +1476,7 @@ class MountedTurret { public: static MemoryPool sMemoryPool; };
 class PowerupItem { public: static MemoryPool sMemoryPool; };
 class EntityBuildingArmedDynamic { public: static MemoryPool sMemoryPool; };
 class WalkerLegPair { public: static MemoryPool sMemoryPool; };
-class AmmoCounter { public: static MemoryPool sMemoryPool; };
+
 
 class OrdnanceTowCable { public: static MemoryPool sMemoryPool; };
 
@@ -3286,7 +3287,7 @@ void EntityItem::WriteCreate(NetPktGroup& group)
         group.Write(false);
         return;
     }
-    Controllable* unit = mOwner->GetControllable();
+    Controllable* unit = mOwner->GetUnit();
     Entity* entity = unit ? unit->GetEntity() : 0;
     if (entity && entity->IsRtti(EntitySoldier::GetRtti()))
     {
@@ -3333,7 +3334,7 @@ void EntityItem::ReadCreate(NetPktGroup& group)
     {
         return;
     }
-    Controllable* unit = mOwner->GetControllable();
+    Controllable* unit = mOwner->GetUnit();
     Entity* entity = unit ? unit->GetEntity() : 0;
     if (!entity || !entity->IsRtti(EntitySoldier::GetRtti()))
     {
@@ -3787,7 +3788,7 @@ void HandleEvent_Message(ReliableNetEvent& event)
 
     if (bKill)
     {
-        for (unsigned int i = 0; i < GameLoop::GetNumCameras(); i++)
+        for (unsigned int i = 0; i < NetGame::GetNumLocalPlayers(); i++)
         {
             if (!NetGame::GetLocalPlayer(i))
             {
@@ -3829,7 +3830,7 @@ void HandleEvent_Message(ReliableNetEvent& event)
                 }
             }
         }
-        for (unsigned int j = 0; j < GameLoop::GetNumCameras(); j++)
+        for (unsigned int j = 0; j < NetGame::GetNumLocalPlayers(); j++)
         {
             if (NetGame::GetLocalPlayer(j))
             {
@@ -7396,7 +7397,7 @@ int NetGame::FindSpectateTarget(int player)
         if (NetGame::IsPlaying(candidate, false) && netPlayers[candidate].mSpectateID == -1)
         {
             Character* character = Character::FindPlayer(candidate);
-            if (character && character->mUnit)
+            if (character && character->GetUnit())
             {
                 return candidate;
             }
@@ -7418,7 +7419,7 @@ int NetGame::FindSpectateTarget(int player, int team)
         if (NetGame::IsPlaying(candidate, false) && netPlayers[candidate].mSpectateID == -1)
         {
             Character* character = Character::FindPlayer(candidate);
-            if (character && character->mUnit && character->mTeamNumber == team)
+            if (character && character->GetUnit() && character->mTeamNumber == team)
             {
                 return candidate;
             }
@@ -8064,7 +8065,7 @@ void Unlink(GameObject* object)
             {
                 character->SetVehicle(0);
             }
-            if (character->mUnit && character->mUnit->GetGameObject() == object)
+            if (character->GetUnit() && character->GetUnit()->GetGameObject() == object)
             {
                 character->SetUnit(0);
             }
@@ -8099,11 +8100,11 @@ void ReadSuicideRequest(NetPktGroup& group, unsigned int player)
             continue;
         }
         Character* character = Character::FindPlayer(guest);
-        if (!character || !character->mUnit)
+        if (!character || !character->GetUnit())
         {
             continue;
         }
-        Controllable* unit = character->mUnit;
+        Controllable* unit = character->GetUnit();
         if (character->mRemote)
         {
             unit->ExitRemote();
@@ -13961,7 +13962,7 @@ void AddSendBefore(GameObject* pObject, int iBefore)
 // FUNCTION: SWBF2 0x005bdc70
 bool IsUnmanned(const GameObject* pObject)
 {
-    const PblList<Controllable>& controllables = pObject->mControllableList;
+    const PblList<Controllable>& controllables = pObject->GetControllableList();
     for (PblList<Controllable>::Itor it(controllables);
          it.GetNode() != controllables.End().GetNode(); ++it)
     {
@@ -14059,7 +14060,7 @@ void WriteTrackable(NetPktGroup& group, Trackable* pTrackable)
     }
     group.Write(false);
     unsigned int slot = 0;
-    for (PblList<Controllable>::Itor it(pObject->mControllableList);
+    for (PblList<Controllable>::Itor it(pObject->GetControllableList());
          (Controllable*)it && it->GetTrackable() != pTrackable; ++it)
     {
         ++slot;

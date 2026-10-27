@@ -11,8 +11,9 @@ static const ZephyrTransform& GetBaseTransform(const ZephyrJointShared* pJoint)
 // TEMPLATE: SWBF2 0x0072da90
 // ZephyrPoseStatic<32>::ZephyrPoseStatic<32>
 template <int N>
-ZephyrPoseStatic<N>::ZephyrPoseStatic() : m_pSkel(0)
+ZephyrPoseStatic<N>::ZephyrPoseStatic()
 {
+    m_pSkel = 0;
 }
 
 // TEMPLATE: SWBF2 0x0072db10

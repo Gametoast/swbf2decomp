@@ -278,7 +278,7 @@ bool PassengerSlot::Update(float fDeltaTime)
                 {
                     pPilot->ExitRemote();
                 }
-                else if (mPilotType == PILOT_VEHICLE || mPilotType == PILOT_VEHICLESELF)
+                else if (IsPilotable())
                 {
                     if (pPilot->mCharacter && pPilot->mCharacter->mRemote)
                     {

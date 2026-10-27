@@ -31,12 +31,12 @@ public:
     unsigned short Release() const
     {
         --mRefCount;
-        unsigned short count = (unsigned short)mRefCount;
-        if (count == 0)
+        if (mRefCount == 0)
         {
             delete this;
+            return 0;
         }
-        return count;
+        return mRefCount;
     }
 
     bool IsAlive() const

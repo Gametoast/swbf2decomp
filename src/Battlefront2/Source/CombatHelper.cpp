@@ -69,22 +69,6 @@ namespace
 {
 
 
-    inline const GameObject* HandleObject(PblHandle<const GameObject>& handle)
-    {
-        if (handle.mObject &&
-            handle.mObject->mHandleId != handle.mSavedHandleId)
-        {
-            handle.mObject = 0;
-            handle.mSavedHandleId = 0;
-        }
-        return handle.mObject;
-    }
-
-    void HandleSet(PblHandle<const GameObject>& handle, const GameObject* pObj)
-    {
-        handle.mObject = pObj;
-        handle.mSavedHandleId = pObj ? pObj->mHandleId : 0;
-    }
 
     inline const PblVector3& GetPosition(const GameObject* pObj)
     {
@@ -177,11 +161,10 @@ void CombatHelper::Init(const UnitCombatInfo& info)
     case UnitCombatInfo::INVESTIGATE:
     {
         SetNextState(STATE_Investigate);
-        HandleSet(mTargetHandle, info.GetWho());
-        const GameObject* pTarget = HandleObject(mTargetHandle);
-        if (pTarget)
+        mTargetHandle = info.GetWho();
+        if (mTargetHandle)
         {
-            mTargetPos = GetPosition(pTarget);
+            mTargetPos = mTargetHandle->GetPosition();
         }
         else
         {
@@ -478,9 +461,9 @@ void CombatHelper::UpdateState(float dt)
             const float fTurnTo = AIUtil::GetRandomFloat(0.1f, 0.3f);
             const float fStay = AIUtil::GetRandomFloat(0.4f, 0.7f);
             const float fTurnBack = AIUtil::GetRandomFloat(0.1f, 0.3f);
-            if ((PblRandom::GetGlobalInt() & 1) && HandleObject(mTargetHandle))
+            if ((PblRandom::GetGlobalInt() & 1) && static_cast<const GameObject*>(mTargetHandle))
             {
-                GetLowLevel().HeadLook_Object(HandleObject(mTargetHandle), fTurnTo, fStay, fTurnBack);
+                GetLowLevel().HeadLook_Object(static_cast<const GameObject*>(mTargetHandle), fTurnTo, fStay, fTurnBack);
             }
             else
             {
@@ -575,13 +558,13 @@ void CombatHelper::UpdateState(float dt)
         break;
 
     case STATE_ShootDeadBody:
-        if (HandleObject(mTargetHandle) == 0)
+        if (mTargetHandle == 0)
         {
             SetNextState(STATE_Engage);
             break;
         }
         GetLowLevel().SetTarget(0);
-        GetLowLevel().SetHeading(GetPosition(HandleObject(mTargetHandle)), 0.0f);
+        GetLowLevel().SetHeading(mTargetHandle->GetPosition(), 0.0f);
         GetLowLevel().SetNextWeapon(mDeadBodyWeaponIdx);
         GetLowLevel().SetFireRequest(true, false);
         return;

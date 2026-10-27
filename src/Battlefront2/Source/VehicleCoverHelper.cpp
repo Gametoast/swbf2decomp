@@ -57,11 +57,8 @@ namespace
 
 // FUNCTION: SWBF2 0x0066bd20
 VehicleCoverHelper::VehicleCoverHelper(UnitAgent* pOwner)
-    : HelperFsm(STATE_START, STATE_START)
+    : HelperFsm(STATE_START, STATE_START), mOwner(pOwner)
 {
-    mOwner = pOwner;
-    mVehicleCoverTarget.mObject = NULL;
-    mVehicleCoverTarget.mSavedHandleId = 0;
     mHint = NULL;
 }
 

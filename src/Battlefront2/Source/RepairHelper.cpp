@@ -1,3 +1,4 @@
+#include "AmmoCounter.h"
 #include <float.h>
 #include <math.h>
 
@@ -75,19 +76,7 @@ int GetOpenReservableSlots(const GameObject* pObj, int iTeam, ReserveType eType)
 void Reserve(const GameObject* pObj, const GameObject* pReserver, ReserveType eType);
 }
 
-class AmmoCounter
-{
-public:
-    float GetMaxClips() const { return mMaxClips; }
-    float GetNumClips() const { return mNumClips; }
-    int GetNumRounds() const;
 
-    AmmoCounterClass* m_pClass;
-    float mDefaultMaxClips;
-    float mMaxClips;
-    float mNumClips;
-    float mCurClip;
-};
 
 namespace
 {
@@ -156,8 +145,6 @@ namespace
 RepairHelper::RepairHelper(UnitAgent* pAgent)
     : mAgent(pAgent)
 {
-    mAidTarget.mObject = 0;
-    mAidTarget.mSavedHandleId = 0;
     mCheckForRecipientTime = 0.0f;
 }
 

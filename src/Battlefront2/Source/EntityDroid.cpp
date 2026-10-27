@@ -547,7 +547,7 @@ const Aimer* EntityDroid::GetAimer(int iIndex) const
 // FUNCTION: SWBF2 0x004994d0
 EnergyBar* EntityDroid::GetEnergyBar()
 {
-    return reinterpret_cast<EnergyBar*>(mEnergyBar);
+    return &mEnergyBar;
 }
 
 // FUNCTION: SWBF2 0x004994e0
@@ -725,11 +725,9 @@ template WeaponClass* Factory<Weapon, WeaponClass, WeaponDesc>::Find(unsigned in
 EntityDroid::EntityDroid(EntityDroidClass* pClass, const EntityDesc& desc)
     : GameObject(pClass, desc, COLL_SOFT, &pClass->mModel->_mLodData)
     , Controllable(pClass, desc.mPlayerId)
+    , mEnergyBar(&pClass->mEnergyBarClass)
     , mPostCollision(this)
 {
-    new (mEnergyBar) EnergyBar(&pClass->mEnergyBarClass);
-    mDestructChargeEffectHandle = NULL;
-
     mControllableList.AddLast(&this->Controllable::mNode, this);
     mMatrix = NormalMatrix(desc.mMatrix.GetZAxis(), PblVector3(0.0f, 1.0f, 0.0f), desc.mMatrix.GetTranslation());
     mClass = pClass;
@@ -826,7 +824,6 @@ EntityDroid::~EntityDroid()
     }
     mAmbientSound.Stop(true);
     mAmbient2Sound.Stop(true);
-    reinterpret_cast<EnergyBar*>(mEnergyBar)->~EnergyBar();
 }
 
 // FUNCTION: SWBF2 0x00499ce0
@@ -1197,7 +1194,7 @@ bool EntityDroid::Update(float fDeltaTime)
                     pPilot->ExitRemote();
                 }
 
-                else if (mPilotType == PILOT_VEHICLE || mPilotType == PILOT_VEHICLESELF)
+                else if (IsPilotable())
                 {
                     if (pPilot->mCharacter && pPilot->mCharacter->mRemote)
                     {

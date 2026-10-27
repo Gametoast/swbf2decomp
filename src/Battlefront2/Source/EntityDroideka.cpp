@@ -435,7 +435,7 @@ namespace
 {
     inline EnergyBar* DroidekaEnergyBar(EntityDroideka* pDroideka)
     {
-        return reinterpret_cast<EnergyBar*>(pDroideka->mEnergyBar);
+        return &pDroideka->mEnergyBar;
     }
 
     inline void DroidekaUpdateCollisionSphere(EntityDroideka* pDroideka)
@@ -703,7 +703,7 @@ bool EntityDroideka::IsFirstPersonAvailablePS2() const
 // FUNCTION: SWBF2 0x0049e990
 EnergyBar* EntityDroideka::GetEnergyBar()
 {
-    return (EnergyBar*)mEnergyBar;
+    return &mEnergyBar;
 }
 
 // FUNCTION: SWBF2 0x0049e9a0
@@ -1658,9 +1658,9 @@ EntityDroideka::EntityDroideka(EntityDroidekaClass* pClass, const EntityDesc& de
     , mBallAngularVelocity(0.0f)
     , mStompTime(0.0f)
     , mFallTimer(0.0f)
+    , mEnergyBar(&pClass->mEnergyBarClass)
     , mDebuffDamageOwner(0, 0, 0, 0, 0, 1.0f)
 {
-    new (mEnergyBar) EnergyBar(&pClass->mEnergyBarClass);
 
     mHealthGainEffectHandle = NULL;
     mAmmoGainEffectHandle = NULL;
@@ -3894,7 +3894,6 @@ EntityDroideka::~EntityDroideka()
         delete mAimer[i];
     }
     TurnOffEffects();
-    reinterpret_cast<EnergyBar*>(mEnergyBar)->~EnergyBar();
 }
 
 // FUNCTION: SWBF2 0x0049ffa0

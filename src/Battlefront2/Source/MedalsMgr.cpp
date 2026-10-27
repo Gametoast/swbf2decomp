@@ -69,7 +69,7 @@ void MedalsMgr::HudIndication(int iType, const char* pPrefix, const RedColor& co
     if (!NetGame::IsEnabled() || NetGame::IsClient() ||
         (NetGame::IsHost() && NetGame::IsOneWorld() && !NetGame::IsDedicated()))
     {
-        for (unsigned int i = 0; i < GameLoop::GetNumCameras(); ++i)
+        for (unsigned int i = 0; i < NetGame::GetNumLocalPlayers(); ++i)
         {
             if (NetGame::GetLocalPlayer(i) != mOwner)
             {

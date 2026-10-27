@@ -71,29 +71,6 @@ int RequestVehiclesInRange(const PblVector3& vPos, GameObject** ppOut, float fRa
 namespace
 {
 
-    inline GameObject* ResolveHandle(PblHandle<GameObject>& handle)
-    {
-        GameObject* pObj = handle.mObject;
-        if (pObj)
-        {
-            if (pObj->mHandleId == handle.mSavedHandleId)
-            {
-                return pObj;
-            }
-            handle.mObject = 0;
-            handle.mSavedHandleId = 0;
-        }
-        return 0;
-    }
-
-    inline PblHandle<GameObject> MakeHandle(GameObject* pObj)
-    {
-        PblHandle<GameObject> handle;
-        handle.mObject = pObj;
-        handle.mSavedHandleId =
-            pObj ? pObj->mHandleId : 0;
-        return handle;
-    }
 }
 
 // SYNTHETIC: SWBF2 0x00406d30
@@ -168,7 +145,7 @@ void UnitTrooperAgent::EnterState()
             SetNextState(STATE_Goto);
             SquadCommands::SquadCommandOrder order(
                 SquadCommands::SC_FOLLOW, mCtrl->mOwner->mCharacter,
-                MakeHandle(static_cast<Trackable*>(mCtrl->mOwner)->GetGameObject()));
+                PblHandle<GameObject>(static_cast<Trackable*>(mCtrl->mOwner)->GetGameObject()));
             SquadCommands::AIShoutOrder(order, 0.0f);
         }
         break;
@@ -279,7 +256,7 @@ bool UnitTrooperAgent::CheckForVehicleConvoy()
         }
         if (ReserveManager::GetOpenReservableSlots(pObj, pMe->GetTeam(), RT_FORMATION) > 0)
         {
-            mConvoyParent = MakeHandle(pObj);
+            mConvoyParent = pObj;
             SetNextState(STATE_Convoy);
             return true;
         }
@@ -384,20 +361,20 @@ void UnitTrooperAgent::UpdateStatePostVision(float dt)
 
     case STATE_Convoy:
     {
-        if (!ResolveHandle(mConvoyParent) || !ResolveHandle(mConvoyParent)->GetControllable()
-            || !ResolveHandle(mConvoyParent)->GetControllable()->mCtrl)
+        if (!static_cast<GameObject*>(mConvoyParent) || !mConvoyParent->GetControllable()
+            || !mConvoyParent->GetControllable()->mCtrl)
         {
             SetNextState(STATE_Goto);
             break;
         }
         float fDist = (AIUtil::GetCollisionRadius(static_cast<Trackable*>(mCtrl->mOwner)->GetGameObject())
-                       + AIUtil::GetCollisionRadius(ResolveHandle(mConvoyParent)))
+                       + AIUtil::GetCollisionRadius(static_cast<GameObject*>(mConvoyParent)))
                       * 2.5f;
         PblVector3 vOffset = ReserveManager::ReserveOffset(
-            ResolveHandle(mConvoyParent), static_cast<Trackable*>(mCtrl->mOwner)->GetGameObject(),
+            static_cast<GameObject*>(mConvoyParent), static_cast<Trackable*>(mCtrl->mOwner)->GetGameObject(),
             FT_CONVOY);
         PblVector3 vFollow(vOffset.x * fDist, vOffset.y * fDist, vOffset.z * fDist * 0.3f);
-        GetLowLevel().SetNavigator_FollowTarget(ResolveHandle(mConvoyParent), vFollow);
+        GetLowLevel().SetNavigator_FollowTarget(static_cast<GameObject*>(mConvoyParent), vFollow);
         break;
     }
 
@@ -481,13 +458,13 @@ int UnitTrooperAgent::EventHandler(AI::EventInfo* pInfo)
         switch (mCurState)
         {
         case STATE_Patrol:
-            bInterrupt = mPatrolHelper.HELPERVehicleNearbyInterrupt(ResolveHandle(pInfo->mGameObject));
+            bInterrupt = mPatrolHelper.HELPERVehicleNearbyInterrupt(static_cast<GameObject*>(pInfo->mGameObject));
             break;
         case STATE_MineLaying:
-            bInterrupt = mMineHelper.HELPERVehicleNearbyInterrupt(ResolveHandle(pInfo->mGameObject));
+            bInterrupt = mMineHelper.HELPERVehicleNearbyInterrupt(static_cast<GameObject*>(pInfo->mGameObject));
             break;
         case STATE_Snipe:
-            bInterrupt = mSnipeHelper.HELPERVehicleNearbyInterrupt(ResolveHandle(pInfo->mGameObject));
+            bInterrupt = mSnipeHelper.HELPERVehicleNearbyInterrupt(static_cast<GameObject*>(pInfo->mGameObject));
             break;
         default:
             return UnitAgent::EventHandler(pInfo);
@@ -557,13 +534,13 @@ int UnitTrooperAgent::EventHandler(AI::EventInfo* pInfo)
         switch (mCurState)
         {
         case STATE_Patrol:
-            bInterrupt = mPatrolHelper.HELPERSeeEnemyInterrupt(ResolveHandle(pInfo->mGameObject));
+            bInterrupt = mPatrolHelper.HELPERSeeEnemyInterrupt(static_cast<GameObject*>(pInfo->mGameObject));
             break;
         case STATE_MineLaying:
-            bInterrupt = mMineHelper.HELPERSeeEnemyInterrupt(ResolveHandle(pInfo->mGameObject));
+            bInterrupt = mMineHelper.HELPERSeeEnemyInterrupt(static_cast<GameObject*>(pInfo->mGameObject));
             break;
         case STATE_Snipe:
-            bInterrupt = mSnipeHelper.HELPERSeeEnemyInterrupt(ResolveHandle(pInfo->mGameObject));
+            bInterrupt = mSnipeHelper.HELPERSeeEnemyInterrupt(static_cast<GameObject*>(pInfo->mGameObject));
             break;
         case STATE_Goto:
             if (AreNearbyUnitsInCombat())
@@ -583,13 +560,13 @@ int UnitTrooperAgent::EventHandler(AI::EventInfo* pInfo)
         switch (mCurState)
         {
         case STATE_Patrol:
-            bInterrupt = mPatrolHelper.HELPERHearEnemyInterrupt(ResolveHandle(pInfo->mGameObject));
+            bInterrupt = mPatrolHelper.HELPERHearEnemyInterrupt(static_cast<GameObject*>(pInfo->mGameObject));
             break;
         case STATE_MineLaying:
-            bInterrupt = mMineHelper.HELPERHearEnemyInterrupt(ResolveHandle(pInfo->mGameObject));
+            bInterrupt = mMineHelper.HELPERHearEnemyInterrupt(static_cast<GameObject*>(pInfo->mGameObject));
             break;
         case STATE_Snipe:
-            bInterrupt = mSnipeHelper.HELPERHearEnemyInterrupt(ResolveHandle(pInfo->mGameObject));
+            bInterrupt = mSnipeHelper.HELPERHearEnemyInterrupt(static_cast<GameObject*>(pInfo->mGameObject));
             break;
         case STATE_Goto:
             if (AreNearbyUnitsInCombat())
@@ -618,7 +595,7 @@ int VehicleManager::RequestVehiclesInRange(const PblVector3& vPos, GameObject** 
     int iCount = 0;
     for (int i = 0; i < VehicleManager::sVehicles->GetLength(); ++i)
     {
-        GameObject* pObj = ResolveHandle((*VehicleManager::sVehicles)[i]);
+        GameObject* pObj = static_cast<GameObject*>((*VehicleManager::sVehicles)[i]);
         const PblMatrix& m = static_cast<const CollisionObject*>(pObj)->GetMatrix();
         const float dx = m.m[3][0] - vPos.x;
         const float dy = m.m[3][1] - vPos.y;

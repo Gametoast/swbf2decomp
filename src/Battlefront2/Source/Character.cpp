@@ -1,3 +1,4 @@
+#include "AmmoCounter.h"
 #include <float.h>
 #include <math.h>
 #include <string.h>
@@ -267,17 +268,7 @@ namespace AIDebug
 PblMatrix GetTestSpawnMatrix(Character* pCharacter);
 }
 
-class AmmoCounter
-{
-public:
-    void LoadClip();
 
-    AmmoCounterClass* m_pClass;
-    float mDefaultMaxClips;
-    float mMaxClips;
-    float mNumClips;
-    float mCurClip;
-};
 
 namespace
 {
@@ -991,9 +982,7 @@ void Character::Spawn(const PblMatrix& mMatrix)
         int iJoystick = NetGame::GetJoystickIndex(mPlayerId);
         if (iJoystick >= 0)
         {
-            HUD::Event event;
-            event.mClass = HUD::GameEvents::gPlayerEvents[iJoystick].spawn;
-            event.mData.boolValue = true;
+            HUD::Event event(HUD::GameEvents::gPlayerEvents[iJoystick].spawn, true);
             event.Send();
             if (!PauseMenu::GetPaused(iJoystick))
             {
@@ -1096,8 +1085,8 @@ void Character::Spawn(const PblMatrix& mMatrix)
     }
 
     if (mPlayerId >= 0 &&
-        ((GameLoop::GetNumCameras() == 1 && mPlayerId == NetGame::GetLocalIndex(0)) ||
-         GameLoop::GetNumCameras() > 1))
+        ((NetGame::GetNumLocalPlayers() == 1 && mPlayerId == NetGame::GetLocalIndex(0)) ||
+         NetGame::GetNumLocalPlayers() > 1))
     {
         VoiceOverManager::sInstance->Enable(true);
     }
@@ -1539,8 +1528,13 @@ void Event<Character, DamageOwner>::Callback::Trigger(Character& item, DamageOwn
         if (pChild)
         {
             pChild->AddRef();
-            while (pChild->IsAlive())
+            while (pChild)
             {
+                if (!pChild->IsAlive())
+                {
+                    pChild->Release();
+                    break;
+                }
                 Callback* pNext = (Callback*)pChild->mSibling;
                 if (pNext)
                 {
@@ -1549,14 +1543,6 @@ void Event<Character, DamageOwner>::Callback::Trigger(Character& item, DamageOwn
                 pChild->Trigger(item, param);
                 pChild->Release();
                 pChild = pNext;
-                if (!pChild)
-                {
-                    break;
-                }
-            }
-            if (pChild)
-            {
-                pChild->Release();
             }
         }
     }
@@ -1588,8 +1574,13 @@ void Event<Character, char>::Callback::Trigger(Character& item, char& param)
         if (pChild)
         {
             pChild->AddRef();
-            while (pChild->IsAlive())
+            while (pChild)
             {
+                if (!pChild->IsAlive())
+                {
+                    pChild->Release();
+                    break;
+                }
                 Callback* pNext = (Callback*)pChild->mSibling;
                 if (pNext)
                 {
@@ -1598,14 +1589,6 @@ void Event<Character, char>::Callback::Trigger(Character& item, char& param)
                 pChild->Trigger(item, param);
                 pChild->Release();
                 pChild = pNext;
-                if (!pChild)
-                {
-                    break;
-                }
-            }
-            if (pChild)
-            {
-                pChild->Release();
             }
         }
     }

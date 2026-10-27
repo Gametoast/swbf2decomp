@@ -1049,7 +1049,7 @@ void EntityWalker::WriteObject(NetPktGroup& group, NetObjState*)
     }
     WriteMatrix(group, matrix);
     WriteVelocity(group, mVelocity, 5120.0f, -1);
-    ((EnergyBar*)mEnergyBar)->Write(group);
+    mEnergyBar.Write(group);
     MarkWriteAlign(group);
     group.WriteBits(mDirection, 2);
     group.WriteBits(mState, 4);
@@ -1136,7 +1136,7 @@ void EntityWalker::ReadObject(NetPktGroup& group, NetObjState*)
     ReadVelocity(group, mVelocity, 5120.0f, -1);
     mVelocityNoGrav = mVelocity;
     mVelocityNoGrav.y = 0.0f;
-    ((EnergyBar*)mEnergyBar)->Read(group);
+    mEnergyBar.Read(group);
     CheckReadAlign(group);
     unsigned int direction = 0, state = 0;
     group.ReadBits(direction, 2);
@@ -1333,7 +1333,7 @@ void EntityDroid::WriteObject(NetPktGroup& group, NetObjState*)
             }
         }
     }
-    ((EnergyBar*)mEnergyBar)->Write(group);
+    mEnergyBar.Write(group);
     group.WriteBits(mState, 2);
     group.WriteFixed(mKillTimer, 0.0f, 5.0f, 8);
     SetNetLOD(0);
@@ -1402,7 +1402,7 @@ void EntityDroid::ReadObject(NetPktGroup& group, NetObjState*)
             }
         }
     }
-    ((EnergyBar*)mEnergyBar)->Read(group);
+    mEnergyBar.Read(group);
     group.ReadBits(value, 2);
     mState = (State)value;
     group.ReadFixed(mKillTimer, 0.0f, 5.0f, 8);
@@ -1434,7 +1434,7 @@ void EntityHover::WriteObject(NetPktGroup& group, NetObjState*)
     group.WriteBits(mBoost ? 1u : 0u, 1);
     WriteVelocity(group, mVelocity, 5120.0f, -1);
     WriteVelocity(group, mOmega, 5120.0f, -1);
-    ((EnergyBar*)mEnergyBar)->Write(group);
+    mEnergyBar.Write(group);
     WriteAngle(group, mBankPitchAngle);
     WriteAngle(group, mBankRollAngle);
     WriteAngle(group, mPitchValue);
@@ -1510,7 +1510,7 @@ void EntityHover::ReadObject(NetPktGroup& group, NetObjState*)
     mBoost = value != 0;
     ReadVelocity(group, mVelocity, 5120.0f, -1);
     ReadVelocity(group, mOmega, 5120.0f, -1);
-    ((EnergyBar*)mEnergyBar)->Read(group);
+    mEnergyBar.Read(group);
     ReadAngle(group, mBankPitchAngle);
     ReadAngle(group, mBankRollAngle);
     ReadAngle(group, mPitchValue);
@@ -4177,7 +4177,7 @@ void EntityDroideka::ReadObject(NetPktGroup& group, NetObjState*)
     const PblVector3& position = GetPosition();
     memcpy(&mLastPosition, &position, sizeof(position));
     ReadVelocity(group, mVelocity, 5120.0f, -1);
-    ((EnergyBar*)mEnergyBar)->Read(group);
+    mEnergyBar.Read(group);
     group.ReadBits(value, 2);
     mDirection = (eDirection)value;
     group.ReadBits(value, 2);
@@ -4603,7 +4603,7 @@ void EntityDroideka::WriteObject(NetPktGroup& group, NetObjState*)
     group.WriteBits(mCtrl != 0, 1);
     WriteMatrix(group, matrix);
     WriteVelocity(group, mVelocity, 5120.0f, -1);
-    ((EnergyBar*)mEnergyBar)->Write(group);
+    mEnergyBar.Write(group);
     group.WriteBits(mDirection, 2);
     if (UnitControllerPtr(mCtrl))
     {
@@ -4756,7 +4756,7 @@ void EntitySoldier::WriteObject(NetPktGroup& group, NetObjState*)
         }
         WriteVelocity(group, mVelocity,
                    mClass->mJumpVerticalSpeed * 2.0f + mClass->mMaxSpeed + mClass->mJetJump, -1);
-        ((EnergyBar*)mEnergyBar)->Write(group);
+        mEnergyBar.Write(group);
         group.WriteBits(mActiveIndex + 1, 4);
         group.WriteBits(mActiveChannel + 1, 2);
     }
@@ -5082,7 +5082,7 @@ void EntitySoldier::ReadObject(NetPktGroup& group, NetObjState*)
         Move(matrix, velocity);
         const PblVector3& position = static_cast<CollisionObject*>(this)->GetPosition();
         memcpy(&mLastPosition, &position, sizeof(position));
-        ((EnergyBar*)mEnergyBar)->Read(group);
+        mEnergyBar.Read(group);
         const int iOldIndex = mActiveIndex;
         const int iOldChannel = mActiveChannel;
         group.ReadBits(value, 4);

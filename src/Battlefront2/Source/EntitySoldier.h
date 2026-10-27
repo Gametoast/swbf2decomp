@@ -752,7 +752,7 @@ public:
     float mLeftFootElevation;
     float mRightFootElevation;
 
-    unsigned char mEnergyBar[12];
+    EnergyBar mEnergyBar;
     int mCameraSettingPrev;
     float mCameraSettingTimer;
     float mDrownTime;

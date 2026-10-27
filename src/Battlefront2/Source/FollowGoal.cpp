@@ -8,28 +8,8 @@
 
 namespace
 {
-inline unsigned int GameObjectHandleId(const GameObject* pObject)
-{
-    return pObject->mHandleId;
-}
 
-inline const GameObject* ReadHandle(PblHandle<const GameObject>& handle)
-{
-    if (handle.mObject && GameObjectHandleId(handle.mObject) != handle.mSavedHandleId)
-    {
-        handle.mObject = 0;
-        handle.mSavedHandleId = 0;
-    }
-    return handle.mObject;
-}
 
-inline PblHandle<GameObject> MakeHandle(const GameObject* pObject)
-{
-    PblHandle<GameObject> handle;
-    handle.mObject = const_cast<GameObject*>(pObject);
-    handle.mSavedHandleId = pObject ? GameObjectHandleId(pObject) : 0;
-    return handle;
-}
 
 inline bool IsAlive(const GameObject* pObject)
 {
@@ -68,16 +48,16 @@ void AI::FollowGoal::Update()
 {
     if (mEnabled)
     {
-        if (mTarget.mType == GTT_GAMEOBJECT && ReadHandle(mTarget.mGameObj) &&
-            !IsAlive(ReadHandle(mTarget.mGameObj)))
+        if (mTarget.mType == GTT_GAMEOBJECT && static_cast<const GameObject*>(mTarget.mGameObj) &&
+            !IsAlive(static_cast<const GameObject*>(mTarget.mGameObj)))
         {
             SetEnabled(false);
             return;
         }
         AIGoal::Update();
     }
-    else if (mTarget.mType == GTT_GAMEOBJECT && ReadHandle(mTarget.mGameObj) &&
-             IsAlive(ReadHandle(mTarget.mGameObj)))
+    else if (mTarget.mType == GTT_GAMEOBJECT && static_cast<const GameObject*>(mTarget.mGameObj) &&
+             IsAlive(static_cast<const GameObject*>(mTarget.mGameObj)))
     {
         SetEnabled(true);
     }
@@ -100,6 +80,6 @@ void AI::FollowGoal::Assign(Character* pChr)
     const GameObject* pObject = mTarget.GetGameObject();
     if (pObject)
     {
-        pCtrl->ForceCommand(UnitFollowInfo(MakeHandle(pObject), PblHandle<GameObject>(), true));
+        pCtrl->ForceCommand(UnitFollowInfo(PblHandle<GameObject>(const_cast<GameObject*>(pObject)), PblHandle<GameObject>(), true));
     }
 }

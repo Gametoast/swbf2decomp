@@ -186,22 +186,6 @@ GuiManager* SpawnDisplay::m_pGuiManager;
 namespace
 {
 
-void SendEvent(HUD::EventClass* pClass, bool bValue)
-{
-    HUD::Event event;
-    event.mClass = pClass;
-    event.mData.boolValue = bValue;
-    event.Send();
-}
-
-void SendEvent(HUD::EventClass* pClass, int iValue)
-{
-    HUD::Event event;
-    event.mClass = pClass;
-    event.mData.intValue = iValue;
-    event.Send();
-}
-
 const Damageable* GetDamageable(const GameObject* pObject)
 {
     return static_cast<const Damageable*>(pObject);
@@ -478,7 +462,7 @@ void SpawnDisplay::Show(Character* pCharacter)
                 pBus->Fade(sInGameBusFadeTime, sInGameBusGain, -1.0f);
             }
         }
-        SendEvent(HUD::GameEvents::gPlayerEvents[mJoystickIndex].spawnDisplayEnable, true);
+        HUD::Event(HUD::GameEvents::gPlayerEvents[mJoystickIndex].spawnDisplayEnable, true).Send();
         mVisible = true;
         mVisibleTimer = 0.0f;
         ScreenTransition::sInstance->SetTransition(0, ScreenTransition::BLUR);
@@ -525,8 +509,8 @@ void SpawnDisplay::Show(Character* pCharacter)
     mGroupMainCB.Visible(true);
     mTextReady.Enable(true);
     mTextReady.Visible(true);
-    SendEvent(HUD::GameEvents::gPlayerEvents[mPlayerIdx].mapMode, 2);
-    SendEvent(HUD::GameEvents::gPlayerEvents[mPlayerIdx].index, mPlayerIdx);
+    HUD::Event(HUD::GameEvents::gPlayerEvents[mPlayerIdx].mapMode, 2).Send();
+    HUD::Event(HUD::GameEvents::gPlayerEvents[mPlayerIdx].index, mPlayerIdx).Send();
     BootDisplay::Instance(mPlayerIdx)->SetSpawnMode(true);
     HeroMessageDisplay::Instance(mPlayerIdx)->SetSpawnMode(true);
     mTextSpawnTimer.Enable(false);
@@ -587,7 +571,7 @@ void SpawnDisplay::Show(Character* pCharacter)
         SetupSlots();
         break;
     case eFINISHED:
-        SendEvent(HUD::GameEvents::gPlayerEvents[mPlayerIdx].mapMode, 0);
+        HUD::Event(HUD::GameEvents::gPlayerEvents[mPlayerIdx].mapMode, 0).Send();
         BootDisplay::Instance(mPlayerIdx)->SetSpawnMode(false);
         HeroMessageDisplay::Instance(mPlayerIdx)->SetSpawnMode(false);
         mGroupTimer.Enable(true);
@@ -670,12 +654,12 @@ void SpawnDisplay::Hide(Character* pCharacter)
     mTextSpawnTimer.Enable(false);
     mTextSpawnTimer.Visible(false);
     mTextSpawnTimer.SetText("", true);
-    SendEvent(HUD::GameEvents::gPlayerEvents[iPlayerIdx].mapMode, 0);
+    HUD::Event(HUD::GameEvents::gPlayerEvents[iPlayerIdx].mapMode, 0).Send();
     BootDisplay::Instance(iPlayerIdx)->SetSpawnMode(false);
     HeroMessageDisplay::Instance(iPlayerIdx)->SetSpawnMode(false);
     mBackdropModel.Enable(false);
     mBackdropModel.Visible(false);
-    SendEvent(HUD::GameEvents::gPlayerEvents[mJoystickIndex].spawnDisplayDisable, true);
+    HUD::Event(HUD::GameEvents::gPlayerEvents[mJoystickIndex].spawnDisplayDisable, true).Send();
 }
 
 // FUNCTION: SWBF2 0x0042a670
@@ -1110,7 +1094,7 @@ void SpawnDisplay::ChangeMode(Mode)
         static_cast<RedGroupElement*>(RedInterfaceElement::Find(acBuffer))->AddElement(m_pEntityElement);
         m_pEntityElement->Enable(true);
         m_pEntityElement->Visible(true);
-        SendEvent(HUD::GameEvents::gPlayerEvents[mPlayerIdx].mapDisable, true);
+        HUD::Event(HUD::GameEvents::gPlayerEvents[mPlayerIdx].mapDisable, true).Send();
         BootDisplay::Instance(0)->SetSpawnMode(false);
         HeroMessageDisplay::Instance(0)->SetSpawnMode(false);
         UpdateSideSelectText(1);
@@ -1147,7 +1131,7 @@ void SpawnDisplay::ChangeMode(Mode)
             m_pGuiManager->PushScreen(acBuffer, 0, 0);
             SelectTeam(mTeamNumber);
         }
-        SendEvent(HUD::GameEvents::gPlayerEvents[mPlayerIdx].mapMode, 2);
+        HUD::Event(HUD::GameEvents::gPlayerEvents[mPlayerIdx].mapMode, 2).Send();
         mTextReady.Enable(false);
         mTextReady.Visible(false);
         mGroupTimer.Enable(false);
@@ -1176,7 +1160,7 @@ void SpawnDisplay::ChangeMode(Mode)
             }
             m_pGuiManager->PushScreen(acScreen, 0, 0);
         }
-        SendEvent(HUD::GameEvents::gPlayerEvents[mPlayerIdx].mapMode, 0);
+        HUD::Event(HUD::GameEvents::gPlayerEvents[mPlayerIdx].mapMode, 0).Send();
         mGroupTimer.Enable(true);
         mGroupTimer.Visible(true);
         mTextReady.Enable(true);

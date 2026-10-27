@@ -7,7 +7,6 @@ namespace Snd
 StreamConsumer::StreamConsumer()
     : mReady(0)
 {
-    StreamNodeSink::Connect(0, 0);
 }
 
 }

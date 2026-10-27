@@ -289,7 +289,7 @@ bool __fastcall ShouldStayInVehicle(Controllable* pMe)
     {
         return true;
     }
-    if (pMe->mPilotType != PILOT_VEHICLE && pMe->mPilotType != PILOT_VEHICLESELF)
+    if (!pMe->IsPilotable())
     {
         return true;
     }

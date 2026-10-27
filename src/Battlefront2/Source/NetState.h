@@ -3,6 +3,7 @@
 #include <stddef.h>
 
 #include "Aimer.h"
+#include "AmmoCounter.h"
 #include "Character.h"
 #include "Controllable.h"
 #include "EnergyBar.h"
@@ -50,19 +51,7 @@ unsigned int GetUniqObjectId(const GameObject* pObject);
 int GetUniqObjectBits();
 GameObject* FindClientObject(unsigned int uId);
 
-class AmmoCounter
-{
-public:
-    void Write(NetPktGroup& group) const;
-    void Read(NetPktGroup& group);
 
-    AmmoCounterClass* m_pClass;
-    float mDefaultMaxClips;
-    float mMaxClips;
-    float mNumClips;
-    float mCurClip;
-    unsigned int m_uiRefCount;
-};
  
 
 class WeaponDisguise : public Weapon

@@ -366,9 +366,3 @@ bool Controller::IsInCrowd() const
     return mCrowdAllies > 3 && !mCrowdEnemies;
 }
 
-// FUNCTION: SWBF2 0x00485b10
-bool IsPilotControlState(const void* pControllable)
-{
-    const unsigned int state = static_cast<const Controllable*>(pControllable)->mPilotType;
-    return state == 1 || state == 4;
-}

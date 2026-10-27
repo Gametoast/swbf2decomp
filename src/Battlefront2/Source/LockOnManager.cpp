@@ -55,10 +55,6 @@ static inline void ClearHandle(PblHandle<GameObject>& handle)
 LockOnManager::LockOnManager(int iPlayerIndex)
     : mPlayerIndex(iPlayerIndex), mPlayerCharacter(0)
 {
-    ClearHandle(mNewAttacker);
-    ClearHandle(mLockedObj);
-    ClearHandle(mForceNewLockTarget);
-
     mPlayerCharacter = Character::FindPlayer(NetGame::GetLocalIndex(mPlayerIndex));
 
     ClearHandle(mNewAttacker);
@@ -149,9 +145,7 @@ void LockOnManager::SetDisplayIconsOnEverything(bool bEverything)
             mTargetPlayer[i].SetObj(0, &mTargetPlayerInfo[i]);
             if (mPlayerIndex >= 0)
             {
-                HUD::Event event;
-                event.mClass = HUD::GameEvents::gPlayerEvents[mPlayerIndex].targetResetPlayer;
-                event.mData.uintValue = i;
+                HUD::Event event(HUD::GameEvents::gPlayerEvents[mPlayerIndex].targetResetPlayer, i);
                 event.Send();
             }
         }
@@ -1152,9 +1146,7 @@ void LockOnManager::SetupNearestTargets(Controllable* const playerControllable, 
                     if (mPlayerIndex >= 0)
                     {
 
-                        HUD::Event resetTargetPlayer;
-                        resetTargetPlayer.mClass = HUD::GameEvents::gPlayerEvents[mPlayerIndex].targetResetPlayer;
-                        resetTargetPlayer.mData.uintValue = i;
+                        HUD::Event resetTargetPlayer(HUD::GameEvents::gPlayerEvents[mPlayerIndex].targetResetPlayer, i);
                         resetTargetPlayer.Send();
                     }
 

@@ -62,30 +62,6 @@ const PblVector3* GetUnitPosition(Controllable* pUnit)
     return (const PblVector3*)&pUnit->GetMatrix().m[3][0];
 }
 
-void SendEvent(HUD::EventClass* pClass, bool bValue)
-{
-    HUD::Event event;
-    event.mClass = pClass;
-    event.mData.boolValue = bValue;
-    event.Send();
-}
-
-void SendEvent(HUD::EventClass* pClass, float fValue)
-{
-    HUD::Event event;
-    event.mClass = pClass;
-    event.mData.floatValue = fValue;
-    event.Send();
-}
-
-void SendEvent(HUD::EventClass* pClass, unsigned short* pString)
-{
-    HUD::Event event;
-    event.mClass = pClass;
-    event.mData.string = pString;
-    event.Send();
-}
-
 Character* GetHeroCharacter(int iTeam)
 {
     if (netHeroPlayerID[iTeam] == -1)
@@ -302,7 +278,7 @@ void HeroMessageDisplay::Hide()
     mVisible = false;
     if ((unsigned int)mViewport < CameraManager::sInstance->m_iNumCam)
     {
-        SendEvent(HUD::GameEvents::gPlayerEvents[mViewport].heroSelectDisable, true);
+        HUD::Event(HUD::GameEvents::gPlayerEvents[mViewport].heroSelectDisable, true).Send();
     }
 }
 
@@ -374,9 +350,9 @@ void HeroMessageDisplay::UpdateHeroSelect(float fDeltaTime, int iTeam, float& fT
     if ((unsigned int)mViewport < CameraManager::sInstance->m_iNumCam)
     {
         HUD::GameEvents::PlayerEvents& events = HUD::GameEvents::gPlayerEvents[mViewport];
-        SendEvent(events.heroSelectTimer, fTimeLeft);
-        SendEvent(events.heroSelectTimerFraction, fTimeLeft / fTotalTime);
-        SendEvent(events.heroSelectMessage, message);
+        HUD::Event(events.heroSelectTimer, fTimeLeft).Send();
+        HUD::Event(events.heroSelectTimerFraction, fTimeLeft / fTotalTime).Send();
+        HUD::Event(events.heroSelectMessage, reinterpret_cast<const wchar_t*>(message)).Send();
     }
 }
 
@@ -411,7 +387,7 @@ bool HeroMessageDisplay::Update(float fDeltaTime)
     }
 
     mIsInHeroSelecting = false;
-    SendEvent(HUD::GameEvents::gPlayerEvents[mViewport].heroSelectDisable, true);
+    HUD::Event(HUD::GameEvents::gPlayerEvents[mViewport].heroSelectDisable, true).Send();
 
     Character* pCharacter = Character::FindPlayer(NetGame::GetLocalIndex(mJoystickIndex));
     if (!pCharacter)

@@ -76,12 +76,6 @@ SkyDome::DomeModel::DomeModel()
 {
 }
 
-// FUNCTION: SWBF2 0x006377c0
-SkyDome::EffectData::EffectData()
-{
-    effect.mObject = 0;
-    effect.mSavedHandleId = 0;
-}
 
 // FUNCTION: SWBF2 0x006378a0
 void SkyDome::Read(PblConfig& config)

@@ -136,33 +136,7 @@ namespace
     return pObj->GetTeam();
     }
 
-    unsigned int GetHandleId(const GameObject* pObj)
-    {
-        return pObj->mHandleId;
-    }
 
-    inline GameObject* ResolveHandle(PblHandle<GameObject>& handle)
-    {
-        GameObject* pObj = handle.mObject;
-        if (pObj)
-        {
-            if (GetHandleId(pObj) == handle.mSavedHandleId)
-            {
-                return pObj;
-            }
-            handle.mObject = 0;
-            handle.mSavedHandleId = 0;
-        }
-        return 0;
-    }
-
-    inline PblHandle<const GameObject> MakeHandle(const GameObject* pObj)
-    {
-        PblHandle<const GameObject> handle;
-        handle.mObject = pObj;
-        handle.mSavedHandleId = pObj ? GetHandleId(pObj) : 0;
-        return handle;
-    }
 
     inline const Entity* AsEntity(const GameObject* pObj)
     {
@@ -603,11 +577,11 @@ int UnitAgent::HandleSquadCommandEvent(AI::EventInfo* pInfo)
     if (pInfo->mType == AI::EVT_SC_GetIntoVehicle)
     {
         int iVOHandle = -1;
-        if (FirstControllable(ResolveHandle(pInfo->mGameObject)) &&
-            FirstControllable(ResolveHandle(pInfo->mGameObject))->mPlayerId >= 0)
+        if (FirstControllable(static_cast<GameObject*>(pInfo->mGameObject)) &&
+            FirstControllable(static_cast<GameObject*>(pInfo->mGameObject))->mPlayerId >= 0)
         {
             Controllable* pMe = GetMe();
-            GameObject* pVehicle = ResolveHandle(pInfo->mGameObject);
+            GameObject* pVehicle = static_cast<GameObject*>(pInfo->mGameObject);
             iVOHandle = AI::VOHelper::Play(AI::VOT_SC_GetInResponse, pMe->GetGameObject(), 0, pVehicle,
                                            AIUtil::GetRandomFloat(0.5f, 1.2f) + GameLoop::GetMissionTime());
         }
@@ -631,7 +605,7 @@ int UnitAgent::HandleSquadCommandEvent(AI::EventInfo* pInfo)
 // FUNCTION: SWBF2 0x0065eab0
 int UnitAgent::Handle_Vision_CanSeeEnemy(AI::EventInfo* pInfo)
 {
-    GameObject* pEnemy = ResolveHandle(pInfo->mGameObject);
+    GameObject* pEnemy = static_cast<GameObject*>(pInfo->mGameObject);
 
     if (GetMe()->GetControllableClass() &&
         !GetMe()->GetControllableClass()->DoesCombatInterrupt())
@@ -657,7 +631,7 @@ int UnitAgent::Handle_Vision_CanSeeEnemy(AI::EventInfo* pInfo)
         return 0;
     }
 
-    pInfo->mNextCmd = UnitCombatInfo(UnitCombatInfo::ENGAGE, MakeHandle(pEnemy));
+    pInfo->mNextCmd = UnitCombatInfo(UnitCombatInfo::ENGAGE, PblHandle<const GameObject>(pEnemy));
     return 1;
 }
 
@@ -690,15 +664,15 @@ int UnitAgent::Handle_Audible_CanHearEnemy(AI::EventInfo* pInfo)
         return AI::EVT_Ignored;
     }
 
-    if (CombatUtil::EngageInCombat(mCtrl, ResolveHandle(pInfo->mGameObject), false))
+    if (CombatUtil::EngageInCombat(mCtrl, static_cast<GameObject*>(pInfo->mGameObject), false))
     {
-        pInfo->mNextCmd = UnitCombatInfo(UnitCombatInfo::INVESTIGATE, MakeHandle(ResolveHandle(pInfo->mGameObject)));
+        pInfo->mNextCmd = UnitCombatInfo(UnitCombatInfo::INVESTIGATE, PblHandle<const GameObject>(static_cast<GameObject*>(pInfo->mGameObject)));
         HeardEnemy(GetMe()->GetGameObject());
         return 1;
     }
 
     PblVector3 vMyPos = GetMe()->GetMatrix().GetTranslation();
-    PblVector3 vEnemyPos = (GetCollisionObject(ResolveHandle(pInfo->mGameObject))->GetMatrix()).GetTranslation();
+    PblVector3 vEnemyPos = (pInfo->mGameObject->GetMatrix()).GetTranslation();
     PblVector3 vDiff(vEnemyPos.x - vMyPos.x, vEnemyPos.y - vMyPos.y, vEnemyPos.z - vMyPos.z);
     float fRange = CombatUtil::GetCombatRange(GetMe());
     if (AIUtil::GetEntityType(GetMe()->GetEntity()) == AIUtil::ENTITY_DROIDEKA)
@@ -723,12 +697,12 @@ int UnitAgent::EventHandler(AI::EventInfo* pInfo)
     switch (pInfo->mType)
     {
     case AI::EVT_EmptyVehicle:
-        if (!ShouldAgentGetInNearbyVehicle(ResolveHandle(pInfo->mGameObject)))
+        if (!ShouldAgentGetInNearbyVehicle(static_cast<GameObject*>(pInfo->mGameObject)))
         {
             return 0;
         }
         pInfo->mNextCmd = UnitBoardInfo(pInfo->mGameObject, -1);
-        ReserveManager::Reserve(ResolveHandle(pInfo->mGameObject), GetMe()->GetGameObject(), RT_BOARD);
+        ReserveManager::Reserve(static_cast<GameObject*>(pInfo->mGameObject), GetMe()->GetGameObject(), RT_BOARD);
         return 1;
 
     case AI::EVT_Grenade:
@@ -805,7 +779,7 @@ int UnitAgent::EventHandler(AI::EventInfo* pInfo)
 
     case AI::EVT_EndInvisibility:
         pInfo->mNextCmd = UnitCombatInfo(UnitCombatInfo::TURN,
-                                         GetCollisionObject(ResolveHandle(pInfo->mGameObject))->GetPosition(), true);
+                                         pInfo->mGameObject->GetPosition(), true);
         return 1;
     }
     return 0;

@@ -13,8 +13,8 @@ class ReticuleInterpolator : public Thread
 {
 public:
 
-    // FUNCTION: SWBF2 0x00630480
-    ReticuleInterpolator() {}
+    // SYNTHETIC: SWBF2 0x00630480
+    // ReticuleInterpolator::ReticuleInterpolator
     // SYNTHETIC: SWBF2 0x00630490
     // ReticuleInterpolator::~ReticuleInterpolator
 

@@ -667,10 +667,6 @@ bool StatusDisplay::Update(float fDeltaTime)
     return true;
 }
 
-// FUNCTION: SWBF2 0x006509c0
-DamageArrowGroup::Arrow::Arrow()
-{
-}
 
 // FUNCTION: SWBF2 0x00650e60
 SquadCommandGroup::Command::Command()

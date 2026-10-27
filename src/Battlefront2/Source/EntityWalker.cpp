@@ -1609,7 +1609,7 @@ bool EntityWalker::Jump()
                           mVelocity.y * mMatrix.m[2][1] +
                           mVelocity.z * mMatrix.m[2][2];
     if (fForwardSpeed < mClass->mJumpMinSpeed ||
-        !((EnergyBar*)mEnergyBar)->SpendEnergy(mClass->mEnergyCostJump))
+        !mEnergyBar.SpendEnergy(mClass->mEnergyCostJump))
     {
         return false;
     }
@@ -1683,13 +1683,13 @@ EntityWalker::EntityWalker(EntityWalkerClass* pClass, const EntityDesc& desc)
     , mFootWaterState(0)
     , mState(Idle)
     , mDirection(None)
+    , mEnergyBar(&pClass->mEnergyBarClass)
     , mPostCollision(this)
 {
     mMainMask.SetAll();
     mPivotOffset.x = 0.0f;
     mPivotOffset.y = 0.0f;
     mPivotOffset.z = 0.0f;
-    new (mEnergyBar) EnergyBar(&pClass->mEnergyBarClass);
     mBoost = false;
     mSpeedPrev = 0.0f;
     mEjectTimer = 0.0f;
@@ -1872,7 +1872,6 @@ EntityWalker::~EntityWalker()
     }
     TargetManager::RemoveTarget(this);
     VehicleManager::Remove(this);
-    reinterpret_cast<EnergyBar*>(mEnergyBar)->~EnergyBar();
 }
 
 // FUNCTION: SWBF2 0x00500410
@@ -2756,7 +2755,7 @@ void EntityWalker::UpdatePilot()
         {
             pPilot->ExitRemote();
         }
-        else if (mPilotType == PILOT_VEHICLE || mPilotType == PILOT_VEHICLESELF)
+        else if (IsPilotable())
         {
             if (pPilot->mCharacter && pPilot->mCharacter->mRemote)
             {
@@ -3310,7 +3309,7 @@ void EntityWalker::UpdateState(float fDeltaTime, float fMove, float fStrafe, flo
         Jump();
     }
 
-    EnergyBar* pEnergyBar = reinterpret_cast<EnergyBar*>(mEnergyBar);
+    EnergyBar* pEnergyBar = &mEnergyBar;
     if (m_bIsJumping)
     {
         mAttackControlTimer = 0.0f;

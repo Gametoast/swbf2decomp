@@ -11,7 +11,13 @@ class PblQuaternion
 public:
 
     // FUNCTION: SWBF2 0x0043ce60
-    PblQuaternion() : _fX(0.0f), _fY(0.0f), _fZ(0.0f), _fS(1.0f) {}
+    PblQuaternion()
+    {
+        _fS = 1.0f;
+        _fX = 0.0f;
+        _fY = 0.0f;
+        _fZ = 0.0f;
+    }
     PblQuaternion(float fS, float fX, float fY, float fZ)
     {
         _fS = fS;

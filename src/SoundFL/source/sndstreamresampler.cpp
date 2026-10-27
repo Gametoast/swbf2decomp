@@ -16,7 +16,6 @@ StreamResampler::StreamResampler()
       mPrevSample(0)
 {
 
-    StreamNodeSink::Connect(0, 0);
 }
 
 // FUNCTION: SWBF2 0x0074ceb0

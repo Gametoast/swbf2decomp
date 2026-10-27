@@ -1,3 +1,4 @@
+#include "AmmoCounter.h"
 #include <d3dx9math.h>
 #include <float.h>
 #include <math.h>
@@ -44,17 +45,7 @@ namespace
     }
 }
 
-class AmmoCounter
-{
-public:
-    int GetNumRounds() const;
 
-    AmmoCounterClass* m_pClass;
-    float mDefaultMaxClips;
-    float mMaxClips;
-    float mNumClips;
-    float mCurClip;
-};
 
 inline float Weapon::GetHeat() const
 {

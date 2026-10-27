@@ -72,9 +72,7 @@ bool TipType::SetState(FsmState eState, float fTime)
 {
     if (mState == STATE_Active && !g_noDisableHUD)
     {
-        HUD::Event event;
-        event.mClass = HUD::GameEvents::gPlayerEvents[mCameraIdx].disableToolTips;
-        event.mData.boolValue = false;
+        HUD::Event event(HUD::GameEvents::gPlayerEvents[mCameraIdx].disableToolTips, false);
         event.Send();
     }
     mState = eState;
@@ -83,9 +81,7 @@ bool TipType::SetState(FsmState eState, float fTime)
     {
     case STATE_Active:
     {
-        HUD::Event event;
-        event.mClass = HUD::GameEvents::gPlayerEvents[mCameraIdx].displayToolTips;
-        event.mData.uintValue = mClass->hash;
+        HUD::Event event(HUD::GameEvents::gPlayerEvents[mCameraIdx].displayToolTips, mClass->hash);
         event.Send();
         break;
     }

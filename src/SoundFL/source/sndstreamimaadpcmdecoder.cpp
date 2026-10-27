@@ -10,7 +10,6 @@ StreamIMAADPCMDecoder::StreamIMAADPCMDecoder()
       mNextPos(0)
 {
 
-    StreamNodeSink::Connect(0, 0);
 }
 
 }

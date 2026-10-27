@@ -79,21 +79,14 @@ float Controllable::GetSoundRadius() const
 // FUNCTION: SWBF2 0x00483510
 GameObject* LockOnManager::GetLockedTarget() const
 {
-    PblHandle<GameObject>& hLocked = const_cast<PblHandle<GameObject>&>(mLockedObj);
-    if (hLocked.mObject && GameObjectHandleId(hLocked.mObject) != hLocked.mSavedHandleId)
-    {
-        hLocked.mObject = 0;
-        hLocked.mSavedHandleId = 0;
-    }
-    return hLocked.mObject;
+    return mLockedObj;
 }
 
 // FUNCTION: SWBF2 0x00483540
 void LockOnManager::ForceNewTargetLock(GameObject* pObject)
 {
     mForceNewLock = 5;
-    mForceNewLockTarget.mObject = pObject;
-    mForceNewLockTarget.mSavedHandleId = pObject ? GameObjectHandleId(pObject) : 0;
+    mForceNewLockTarget = pObject;
 }
 
 // FUNCTION: SWBF2 0x00483580
@@ -127,17 +120,6 @@ Controllable::Controllable(ControllableClass* pClass, int iPlayerId)
       mEnemyLockedOnMeDistance(FLT_MAX),
       mPilotType(pClass->mPilotType)
 {
-    mCollisionObj.mObject = 0;
-    mCollisionObj.mSavedHandleId = 0;
-    mTargetLockedObj.mObject = 0;
-    mTargetLockedObj.mSavedHandleId = 0;
-    for (int i = 0; i < 2; ++i)
-    {
-        mReticuleTarget[i].mObject = 0;
-        mReticuleTarget[i].mSavedHandleId = 0;
-        mAIReticuleTarget[i].mObject = 0;
-        mAIReticuleTarget[i].mSavedHandleId = 0;
-    }
     ClearControllable();
     Initialize();
     NetGame::AddLateFence(mPlayerId);
@@ -452,7 +434,7 @@ void Controllable::SetPilot(Controllable* pPilot)
     {
         GameObject* pPilotObject = mPilot->GetGameObject();
         if (pObject &&
-            (mPilotType == PILOT_VEHICLE || mPilotType == PILOT_VEHICLESELF || mPilotType == PILOT_REMOTE) &&
+            (IsPilotable() || mPilotType == PILOT_REMOTE) &&
             pPilotObject)
         {
             pPilotObject->GetCollisionObject()->mParent = 0;
@@ -481,7 +463,7 @@ void Controllable::SetPilot(Controllable* pPilot)
         SetCharacter(mPilot->mCharacter);
         SetupController();
         if (pObject &&
-            (mPilotType == PILOT_VEHICLE || mPilotType == PILOT_VEHICLESELF || mPilotType == PILOT_REMOTE) &&
+            (IsPilotable() || mPilotType == PILOT_REMOTE) &&
             pPilotObject)
         {
             pPilotObject->GetCollisionObject()->mParent = pObject->GetCollisionObject();
@@ -623,20 +605,13 @@ GameObject* Controllable::GetTargetLockedObj()
                 if (pManager)
                 {
                     GameObject* pLocked = pManager->GetLockedTarget();
-                    mTargetLockedObj.mObject = pLocked;
-                    mTargetLockedObj.mSavedHandleId = pLocked ? GameObjectHandleId(pLocked) : 0;
+                    mTargetLockedObj = pLocked;
                 }
             }
         }
     }
 
-    if (mTargetLockedObj.mObject &&
-        GameObjectHandleId(mTargetLockedObj.mObject) != mTargetLockedObj.mSavedHandleId)
-    {
-        mTargetLockedObj.mObject = 0;
-        mTargetLockedObj.mSavedHandleId = 0;
-    }
-    return mTargetLockedObj.mObject;
+    return mTargetLockedObj;
 }
 
 // FUNCTION: SWBF2 0x00484460
@@ -654,21 +629,13 @@ void Controllable::SetTargetLockedObj(GameObject* pObject)
 {
     if (mPlayerId < 0 || GetEnteredRemoteOrVehicleIfNotMe())
     {
-        mTargetLockedObj.mObject = pObject;
-        mTargetLockedObj.mSavedHandleId = pObject ? GameObjectHandleId(pObject) : 0;
+        mTargetLockedObj = pObject;
         return;
     }
 
-    if (mTargetLockedObj.mObject &&
-        GameObjectHandleId(mTargetLockedObj.mObject) != mTargetLockedObj.mSavedHandleId)
+    if (mTargetLockedObj != pObject)
     {
-        mTargetLockedObj.mObject = 0;
-        mTargetLockedObj.mSavedHandleId = 0;
-    }
-    if (mTargetLockedObj.mObject != pObject)
-    {
-        mTargetLockedObj.mObject = pObject;
-        mTargetLockedObj.mSavedHandleId = pObject ? GameObjectHandleId(pObject) : 0;
+        mTargetLockedObj = pObject;
     }
 
     if (!NetGame::IsEnabled() || NetGame::IsClient() ||

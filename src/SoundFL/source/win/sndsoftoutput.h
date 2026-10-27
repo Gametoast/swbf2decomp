@@ -36,7 +36,8 @@ public:
     class BusMixerInfo
     {
     public:
-        BusMixerInfo();
+        // SYNTHETIC: SWBF2 0x00746720
+        // Snd::SoftOutput::BusMixerInfo::BusMixerInfo
         ~BusMixerInfo();
 
         StreamPacket mMixersPackets[2];
@@ -76,7 +77,6 @@ public:
         PostOutputMixFlusher()
         {
 
-            StreamNodeSink::Connect(0, 0);
             mSoftOutput = 0;
         }
 

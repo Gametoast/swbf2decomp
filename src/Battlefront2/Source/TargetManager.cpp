@@ -59,9 +59,7 @@ void LockOnManager::AddTargetCommon(GameObject* pActor, unsigned int uTeamMask)
             LockOnManager::ClearVisibilityChecked(pManager->mTargetCommonInfo, 32);
         }
     }
-    HUD::Event event;
-    event.mClass = HUD::GameEvents::gTargetResetCommon;
-    event.mData.uintValue = i;
+    HUD::Event event(HUD::GameEvents::gTargetResetCommon, i);
     event.Send();
 }
 
@@ -92,14 +90,6 @@ inline EntityClass* CharacterClass(const Character* pCharacter)
 inline GameObject* UnitObject(Controllable* pUnit)
 {
     return static_cast<Trackable*>(pUnit)->GetGameObject();
-}
-
-inline void SendRefresh(HUD::EventClass* pClass, unsigned int uIndex)
-{
-    HUD::Event event;
-    event.mClass = pClass;
-    event.mData.uintValue = uIndex;
-    event.Send();
 }
 
 inline const RedColor Interpolate(const RedColor& a, const RedColor& b, float t)
@@ -319,7 +309,8 @@ void AddTarget(GameObject* const actor, bool alwaysVisibleToFriends)
         target.actor.mSavedHandleId = HandleId(actor);
         target.alwaysVisibleToFriends = alwaysVisibleToFriends;
         target.mapParams = pClass->mMapParams;
-        SendRefresh(HUD::GameEvents::gPlayerEvents[0].mapRefreshTarget, uIndex);
+        HUD::Event event(HUD::GameEvents::gPlayerEvents[0].mapRefreshTarget, uIndex);
+        event.Send();
     }
 }
 
@@ -345,7 +336,8 @@ void RemoveTarget(GameObject* const actor)
 
     if (i != MAX_TARGETS)
     {
-        SendRefresh(HUD::GameEvents::gPlayerEvents[0].mapRefreshTarget, i);
+        HUD::Event event(HUD::GameEvents::gPlayerEvents[0].mapRefreshTarget, i);
+        event.Send();
     }
 }
 
@@ -452,7 +444,8 @@ void AddPost(CommandPost* const post)
     {
         _gPost[uIndex].actor = post;
         _gPost[uIndex].mapParams = pClass->mMapParams;
-        SendRefresh(HUD::GameEvents::gPlayerEvents[0].mapRefreshPost, uIndex);
+        HUD::Event event(HUD::GameEvents::gPlayerEvents[0].mapRefreshPost, uIndex);
+        event.Send();
     }
 }
 
@@ -482,7 +475,8 @@ void RemovePost(CommandPost* const post)
             break;
         }
     }
-    SendRefresh(HUD::GameEvents::gPlayerEvents[0].mapRefreshPost, i);
+    HUD::Event event(HUD::GameEvents::gPlayerEvents[0].mapRefreshPost, i);
+    event.Send();
 }
 
 // FUNCTION: SWBF2 0x00652a40
@@ -581,7 +575,8 @@ void AddMarker(GameObject* const actor, const RedRegion* const region, unsigned 
     }
     if (UpdateInterface())
     {
-        SendRefresh(HUD::GameEvents::gPlayerEvents[0].mapRefreshMarker, uIndex);
+        HUD::Event event(HUD::GameEvents::gPlayerEvents[0].mapRefreshMarker, uIndex);
+        event.Send();
     }
 }
 

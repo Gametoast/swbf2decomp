@@ -1,3 +1,4 @@
+#include "AmmoCounter.h"
 #include <stdio.h>
 #include <new>
 
@@ -14,11 +15,7 @@
 
 extern bool netIsLocalTurn;
 
-class AmmoCounter
-{
-public:
-    void ExpendRounds(float fRounds);
-};
+
 
 // SYNTHETIC: SWBF2 0x004070e0
 // `dynamic initializer for 'WeaponDestruct::rttiHashWeaponDestruct''

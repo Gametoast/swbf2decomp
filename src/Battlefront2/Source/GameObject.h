@@ -194,7 +194,8 @@ public:
 class GameObjectInterpolator
 {
 public:
-    GameObjectInterpolator();
+    // SYNTHETIC: SWBF2 0x005373f0
+    // GameObjectInterpolator::GameObjectInterpolator
 
     void GetMatrix(int iNetUniqueId, PblMatrix& mMatrix);
 

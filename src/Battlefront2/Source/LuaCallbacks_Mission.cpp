@@ -1,3 +1,4 @@
+#include "AmmoCounter.h"
 #include <d3dx9math.h>
 #include "LuaCallbacks_Mission.h"
 #include "LuaHelper.h"
@@ -185,11 +186,7 @@ const char* Timer::GetName()
 
 unsigned int Hash16(unsigned short const* pusString);
 
-class AmmoCounter
-{
-public:
-    static MemoryPool sMemoryPool;
-};
+
 
 extern bool netHeroesEnabled;
 extern int netHeroRuleRespawn;

@@ -1,3 +1,4 @@
+#include "AmmoCounter.h"
 #include <d3dx9math.h>
 #include "WeaponCannon.h"
 
@@ -33,12 +34,7 @@ namespace GameLoop
 extern float sClientDeltaTime;
 }
 
-class AmmoCounter
-{
-public:
-    bool CanExpendRounds(float fRounds) const;
-    void ExpendRounds(float fRounds);
-};
+
 
 namespace
 {

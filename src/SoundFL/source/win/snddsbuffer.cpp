@@ -186,25 +186,20 @@ DSBuffer::WaveFormat::WaveFormat(SampleInfo::Format eFormat,
 
 // FUNCTION: SWBF2 0x00743b30
 DSBuffer::DSBuffer()
+    : mBuffer(0),
+      mBuffer3D(0),
+      mProperties(0),
+      mDirectSound(0),
+      mFlags(0),
+      mSampleRate(48000),
+      mFrequency(0),
+      mTargetFrequency(0),
+      mGain(1.0f),
+      mTargetGain(1.0f),
+      mLength(0),
+      mResourcesAcquired(0),
+      mInterpolation(0)
 {
-
-     
-
-    mBuffer = 0;
-    mBuffer3D = 0;
-    mProperties = 0;
-    mDirectSound = 0;
-    mFlags = 0;
-    mSampleRate = 48000;
-    mFrequency = 0;
-    mTargetFrequency = 0;
-    mGain = 1.0f;
-    mTargetGain = 1.0f;
-    mLength = 0;
-    mNode.mNext = 0;
-    mNode.mPrev = 0;
-    mResourcesAcquired = 0;
-    mInterpolation = 0;
 }
 
 // FUNCTION: SWBF2 0x00743ca0

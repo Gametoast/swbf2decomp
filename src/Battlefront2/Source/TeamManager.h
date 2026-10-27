@@ -29,8 +29,8 @@ namespace TeamManager
 struct ObjCacheData
 {
 
-    // FUNCTION: SWBF2 0x00654fb0
-    ObjCacheData() {}
+    // SYNTHETIC: SWBF2 0x00654fb0
+    // TeamManager::ObjCacheData::ObjCacheData
 
     // FUNCTION: SWBF2 0x00654fc0
     ~ObjCacheData() {}

@@ -63,19 +63,18 @@ public:
             mHeap = RedSetCurrentHeap(gEditHeap);
         }
     }
-    ~EditHeap();
+    // FUNCTION: SWBF2 0x00544c70
+    ~EditHeap()
+    {
+        if (gEditHeap != -1)
+        {
+            RedSetCurrentHeap(mHeap);
+        }
+    }
 
     int mHeap;
 };
 
-// FUNCTION: SWBF2 0x00544c70
-EditHeap::~EditHeap()
-{
-    if (gEditHeap != -1)
-    {
-        RedSetCurrentHeap(mHeap);
-    }
-}
 }
 
 static RedKeyboard* GetInputsKeyboard(RawControllerInputs* const pInputs)

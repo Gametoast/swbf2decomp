@@ -349,7 +349,7 @@ void EntityRemoteTerminal::Init()
     reinterpret_cast<GameObject*>(this)->GameObject::Init();
     if (!NetGame::IsEnabled() || !NetGame::IsClient())
     {
-        for (PblList<Controllable>::Itor it(mControllableList); (Controllable*)it; ++it)
+        for (PblList<Controllable>::Itor it(GetControllableList()); (Controllable*)it; ++it)
         {
             it->SetupController();
         }

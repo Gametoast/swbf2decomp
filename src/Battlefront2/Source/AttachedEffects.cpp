@@ -144,12 +144,6 @@ AttachedEffects* AttachedEffectsClass::BuildEffects(const EntityGeometry* pGeome
     return pEffects;
 }
 
-// FUNCTION: SWBF2 0x00447650
-AttachedEffects::AttachData::AttachData()
-{
-    pEffect.mObject = 0;
-    pEffect.mSavedHandleId = 0;
-}
 
 
 // FUNCTION: SWBF2 0x00447670

@@ -260,7 +260,7 @@ void PauseMenu::_SetPauseAudio(bool bPause)
         GameSoundEngine::StopAll();
     }
 
-    if (NetGame::IsEnabled() && GameLoop::GetNumCameras() > 1)
+    if (NetGame::IsEnabled() && NetGame::GetNumLocalPlayers() > 1)
     {
         return;
     }

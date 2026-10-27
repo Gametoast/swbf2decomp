@@ -339,7 +339,7 @@ void EntityBuildingArmed::Respawn()
         for (PblList<Controllable>::Itor it(GetControllableList()); it; ++it)
         {
             Controllable* pControllable = it;
-            if (pControllable->mPilotType != PILOT_SELF && pControllable->mPilotType != PILOT_VEHICLESELF)
+            if (!pControllable->IsSelfPilotable())
             {
                 continue;
             }

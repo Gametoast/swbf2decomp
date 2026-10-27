@@ -13,12 +13,6 @@
 #include "RedEngineFL/Graphics/RedCamera.h"
 
 
-// FUNCTION: SWBF2 0x0043edd0
-bool __fastcall HasNameDisplayPilotType(const void* pCharacter)
-{
-    const int iState = static_cast<const Controllable*>(pCharacter)->mPilotType;
-    return iState == 2 || iState == 4;
-}
 
 namespace FLRenderer
 {
@@ -333,7 +327,7 @@ bool NameDisplayThread::Update(float)
             for (PblList<Controllable>::Itor it = riders.Begin(); (Controllable*)it; ++it)
             {
                 Controllable* pRider = it;
-                if ((HasNameDisplayPilotType(pRider) || pRider->mPilotType == PILOT_REMOTE) && pRider->GetPilot())
+                if ((pRider->IsPilotable() || pRider->mPilotType == PILOT_REMOTE) && pRider->GetPilot())
                 {
                     if (pRider == pVehicle)
                     {

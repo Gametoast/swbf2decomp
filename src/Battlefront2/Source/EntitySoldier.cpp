@@ -317,7 +317,7 @@ Weapon* EntitySoldier::GetWeaponPtr(int iIndex) const
 // FUNCTION: SWBF2 0x004de340
 EnergyBar* EntitySoldier::GetEnergyBar()
 {
-    return (EnergyBar*)mEnergyBar;
+    return &mEnergyBar;
 }
 
 // FUNCTION: SWBF2 0x004de350
@@ -795,10 +795,10 @@ EntitySoldier::EntitySoldier(EntitySoldierClass* pClass, const EntityDesc& desc)
     , mPostCollision(this)
     , mAimer(pClass->mAimerClass, this, &mMatrix, 0, 0)
     , mFlags(0)
+    , mEnergyBar(&pClass->mEnergyBarClass)
     , mDebuffDamageOwner(0, 0, 0, 0, 0, 1.0f)
     , mSmolderDamageOwner(0, 0, 0, 0, 0, 1.0f)
 {
-    new (mEnergyBar) EnergyBar(&pClass->mEnergyBarClass);
 
     mStandingOnObj = NULL;
     mSoldierMusic = pClass->mSoldierMusic;
@@ -3715,12 +3715,12 @@ bool EntitySoldier::CanEnterVehicleInternal(const GameObject* pObject, bool bRem
     {
         Controllable* pSeat = it;
         if (bRemote ? pSeat->mPilotType != PILOT_REMOTE
-                    : (pSeat->mPilotType != PILOT_VEHICLE && pSeat->mPilotType != PILOT_VEHICLESELF))
+                    : (!pSeat->IsPilotable()))
         {
             continue;
         }
         if (!pSeat->GetPilot() &&
-            (mPlayerId >= 0 || (pSeat->mPilotType != PILOT_SELF && pSeat->mPilotType != PILOT_VEHICLESELF)))
+            (mPlayerId >= 0 || (!pSeat->IsSelfPilotable())))
         {
             return true;
         }
@@ -6791,7 +6791,7 @@ bool EntitySoldier::Update(float fDeltaTime)
     {
         pWeapon->OverrideSoldierEnergyRestore(fEnergyRestore);
     }
-    EnergyBar* pEnergyBar = reinterpret_cast<EnergyBar*>(mEnergyBar);
+    EnergyBar* pEnergyBar = &mEnergyBar;
     if (fEnergyRestore < 0.0f)
     {
         pEnergyBar->SpendEnergy(-(fEnergyRestore * fDeltaTime));
@@ -8055,7 +8055,7 @@ bool EntitySoldier::JetJump()
     {
         return false;
     }
-    if (!reinterpret_cast<EnergyBar*>(mEnergyBar)->SpendEnergy(mClass->mJetEnergyDrain))
+    if (!mEnergyBar.SpendEnergy(mClass->mJetEnergyDrain))
     {
         return false;
     }
@@ -9104,7 +9104,6 @@ EntitySoldier::~EntitySoldier()
     mSoldierMusic.Stop();
     mAISoldierMusic.Stop();
 
-    reinterpret_cast<EnergyBar*>(mEnergyBar)->~EnergyBar();
 }
 
 // FUNCTION: SWBF2 0x004dfee0
@@ -9448,7 +9447,7 @@ void EntitySoldier::ApplyPush(const PblVector3& vPush, float fArg, bool bArg)
     {
         if (fArg > 8.0f)
         {
-            if (GameLoop::GetNumCameras() == 1 && mPlayerId >= 0)
+            if (NetGame::GetNumLocalPlayers() == 1 && mPlayerId >= 0)
             {
                 mSoundState |= 0x10;
             }
@@ -9467,7 +9466,7 @@ void EntitySoldier::ApplyPush(const PblVector3& vPush, float fArg, bool bArg)
     {
         if (fArg > 5.0f)
         {
-            if (GameLoop::GetNumCameras() == 1 && mPlayerId >= 0)
+            if (NetGame::GetNumLocalPlayers() == 1 && mPlayerId >= 0)
             {
                 mSoundState |= 0x10;
             }
@@ -9484,7 +9483,7 @@ void EntitySoldier::ApplyPush(const PblVector3& vPush, float fArg, bool bArg)
 
     if (mVelocity.x * mGroundNormal.x + mVelocity.y * mGroundNormal.y + mVelocity.z * mGroundNormal.z > 3.0f)
     {
-        if (GameLoop::GetNumCameras() == 1 && mPlayerId >= 0)
+        if (NetGame::GetNumLocalPlayers() == 1 && mPlayerId >= 0)
         {
             mSoundState |= 0x10;
         }
@@ -10030,12 +10029,12 @@ bool EntitySoldier::EnterVehicle(GameObject* pObject)
     for (PblList<Controllable>::Itor it(pObject->GetControllableList()); it; ++it)
     {
         Controllable* pTest = it;
-        if (pTest->mPilotType != PILOT_VEHICLE && pTest->mPilotType != PILOT_VEHICLESELF)
+        if (!pTest->IsPilotable())
         {
             continue;
         }
         if (!pTest->GetPilot() &&
-            (mPlayerId >= 0 || (pTest->mPilotType != PILOT_SELF && pTest->mPilotType != PILOT_VEHICLESELF)))
+            (mPlayerId >= 0 || (!pTest->IsSelfPilotable())))
         {
             pSeat = pTest;
             break;
@@ -10173,7 +10172,7 @@ bool EntitySoldier::CyclePosition(bool bForward)
     for (;;)
     {
         Controllable* pSeat = it;
-        if (pSeat && (pSeat->mPilotType == PILOT_VEHICLE || pSeat->mPilotType == PILOT_VEHICLESELF) &&
+        if (pSeat && (pSeat->IsPilotable()) &&
             !(pVehicle && pVehicle->GetEntity()->IsRtti(PassengerSlot::rttiHashPassengerSlot) &&
               pSeat->GetEntity()->IsRtti(PassengerSlot::rttiHashPassengerSlot)))
         {
@@ -10273,7 +10272,7 @@ bool EntitySoldier::CyclePosition(bool bForward)
         for (PblList<Controllable>::Itor itFree(pSeat->GetGameObject()->GetControllableList()); itFree; ++itFree)
         {
             Controllable* pTest = itFree;
-            if ((pTest->mPilotType == PILOT_VEHICLE || pTest->mPilotType == PILOT_VEHICLESELF) &&
+            if ((pTest->IsPilotable()) &&
                 !pTest->GetPilot())
             {
                 pFree = pTest;
@@ -10365,13 +10364,13 @@ bool EntitySoldier::ExitVehicle(bool bForce, bool bEject)
         pVehicle->GetGameObject()->ReserveForPlayer(30.0f);
     }
 
-    if (bForce && pVehicle->mPilotType != PILOT_SELF && pVehicle->mPilotType != PILOT_VEHICLESELF)
+    if (bForce && !pVehicle->IsSelfPilotable())
     {
         Controllable* pPassenger = 0;
         for (PblList<Controllable>::Itor it(&pVehicle->mNode); it; ++it)
         {
             Controllable* pSeat = it;
-            if ((pSeat->mPilotType == PILOT_VEHICLE || pSeat->mPilotType == PILOT_VEHICLESELF) &&
+            if ((pSeat->IsPilotable()) &&
                 pSeat->GetPilot() && pSeat->GetPilot()->mPlayerId < 0)
             {
                 pPassenger = pSeat;
@@ -10617,7 +10616,7 @@ bool EntitySoldier::JumpUsingEnergy()
     {
         fCost = mClass->mEnergyCostJumpSprint;
     }
-    EnergyBar* pBar = reinterpret_cast<EnergyBar*>(mEnergyBar);
+    EnergyBar* pBar = &mEnergyBar;
     if (!pBar->SpendEnergy(fCost))
     {
         return false;
@@ -10633,7 +10632,7 @@ bool EntitySoldier::JumpUsingEnergy()
 // FUNCTION: SWBF2 0x004edd30
 bool EntitySoldier::RollUsingEnergy()
 {
-    EnergyBar* pBar = reinterpret_cast<EnergyBar*>(mEnergyBar);
+    EnergyBar* pBar = &mEnergyBar;
     const float fCost = mClass->mEnergyCostRoll;
     if (!pBar->SpendEnergy(fCost))
     {
@@ -10650,7 +10649,7 @@ bool EntitySoldier::RollUsingEnergy()
 // FUNCTION: SWBF2 0x004edd90
 bool EntitySoldier::SprintUsingEnergy()
 {
-    return !reinterpret_cast<EnergyBar*>(mEnergyBar)->IsOverheating() && Sprint();
+    return !mEnergyBar.IsOverheating() && Sprint();
 }
 
 // FUNCTION: SWBF2 0x004e0bc0

@@ -15,7 +15,6 @@ SubstreamSplitter::SubstreamSplitter()
       mLockPos(0)
 {
 
-    StreamNodeSink::Connect(0, 0);
 }
 
 }

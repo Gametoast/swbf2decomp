@@ -119,8 +119,8 @@ class CameraInterpolator : public Thread
 {
 public:
 
-    // FUNCTION: SWBF2 0x0044e4e0
-    CameraInterpolator() {}
+    // SYNTHETIC: SWBF2 0x0044e4e0
+    // CameraInterpolator::CameraInterpolator
 
     // SYNTHETIC: SWBF2 0x0044e4f0
     // CameraInterpolator::~CameraInterpolator

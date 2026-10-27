@@ -1,6 +1,5 @@
 #pragma once
 
-bool __fastcall HasNameDisplayPilotType(const void* pCharacter);
 
 #include <stddef.h>
 

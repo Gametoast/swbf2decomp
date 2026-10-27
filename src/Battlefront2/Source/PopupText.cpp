@@ -131,7 +131,7 @@ void __fastcall PopupText::ShowPopup(int iType, unsigned int uTextId)
 
     if (iType == HINT)
     {
-        HUD::Event(HUD::GameEvents::gObjectiveEvents.hintPopup, (int)gHints[gCurHint]).Send();
+        HUD::Event(HUD::GameEvents::gObjectiveEvents.hintPopup, gHints[gCurHint]).Send();
         unsigned short page[16];
         PblUnicode::usnprintf(page, 16, "%d/%d", gCurHint + 1, gNumHints);
         HUD::Event(HUD::GameEvents::gObjectiveEvents.hintPopupPageNumber,
@@ -140,12 +140,12 @@ void __fastcall PopupText::ShowPopup(int iType, unsigned int uTextId)
     else if (iType == OBJECTIVE && uTextId)
     {
         gLastObjectiveTextID = uTextId;
-        HUD::Event(HUD::GameEvents::gObjectiveEvents.objectivePopup, (int)uTextId).Send();
+        HUD::Event(HUD::GameEvents::gObjectiveEvents.objectivePopup, uTextId).Send();
     }
     else if (iType == SELECTION && uTextId)
     {
         gLastObjectiveTextID = 0;
-        HUD::Event(HUD::GameEvents::gObjectiveEvents.selectionPopup, (int)uTextId).Send();
+        HUD::Event(HUD::GameEvents::gObjectiveEvents.selectionPopup, uTextId).Send();
     }
 
     HUD::Event(HUD::GameEvents::gPlayerEvents[0].pressSelectToReturnDisable, true).Send();

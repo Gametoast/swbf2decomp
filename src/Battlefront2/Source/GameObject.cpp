@@ -596,10 +596,6 @@ void GameObject::TriggerDisabledEffect()
     }
 }
 
-// FUNCTION: SWBF2 0x005373f0
-GameObjectInterpolator::GameObjectInterpolator()
-{
-}
 
 // SYNTHETIC: SWBF2 0x00403de0
 // `dynamic initializer for 'gameObjectInterpolator''
@@ -1221,8 +1217,13 @@ void Event<GameObject, char>::Callback::Trigger(GameObject& item, char& param)
         if (pChild)
         {
             pChild->AddRef();
-            while (pChild->IsAlive())
+            while (pChild)
             {
+                if (!pChild->IsAlive())
+                {
+                    pChild->Release();
+                    break;
+                }
                 Callback* pNext = (Callback*)pChild->mSibling;
                 if (pNext)
                 {
@@ -1231,14 +1232,6 @@ void Event<GameObject, char>::Callback::Trigger(GameObject& item, char& param)
                 pChild->Trigger(item, param);
                 pChild->Release();
                 pChild = pNext;
-                if (!pChild)
-                {
-                    break;
-                }
-            }
-            if (pChild)
-            {
-                pChild->Release();
             }
         }
     }

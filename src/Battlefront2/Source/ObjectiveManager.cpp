@@ -143,13 +143,9 @@ void SetObjectiveState(unsigned int uiTextHashID, int iState)
             HUD::ElementMap* pMap = HUD::ElementMap::FindByPlayerIndex(pList->GetViewport());
             if (pMap && pMap->GetMode() == HUD::ElementMap::mode_Small)
             {
-                HUD::Event event;
-                event.mClass = HUD::GameEvents::gPlayerEvents[pList->GetViewport()].objectivesUpdated;
-                event.mData.boolValue = true;
+                HUD::Event event(HUD::GameEvents::gPlayerEvents[pList->GetViewport()].objectivesUpdated, true);
                 event.SendDelayed(0.25f);
-                HUD::Event eventOff;
-                eventOff.mClass = HUD::GameEvents::gPlayerEvents[it->GetViewport()].objectivesUpdatedDisable;
-                eventOff.mData.boolValue = true;
+                HUD::Event eventOff(HUD::GameEvents::gPlayerEvents[it->GetViewport()].objectivesUpdatedDisable, true);
                 eventOff.SendDelayed(6.0f);
             }
         }

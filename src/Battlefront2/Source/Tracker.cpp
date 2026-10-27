@@ -33,7 +33,7 @@ Tracker* Tracker::GetTracker(int iIndex)
 // FUNCTION: SWBF2 0x0065acc0
 void Tracker::RemoveTrackable(Trackable* pTrackable)
 {
-    int iCount = NetGame::IsEnabled() ? netCurMaxPlayers : (int)GameLoop::GetNumCameras();
+    int iCount = NetGame::IsEnabled() ? netCurMaxPlayers : (int)NetGame::GetNumLocalPlayers();
     for (int i = 0; i < iCount; ++i)
     {
         if ((*sInstances)[i].mTrackable == pTrackable)

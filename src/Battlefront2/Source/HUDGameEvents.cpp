@@ -91,7 +91,7 @@ void HUD::GameEvents::DisplayTextChatMessage(unsigned int uViewport, const unsig
 // FUNCTION: SWBF2 0x00563880
 void HUD::GameEvents::ShowTeamPoints(int iTeam, bool bShow)
 {
-    const unsigned int uNumCameras = GameLoop::GetNumCameras();
+    const unsigned int uNumCameras = NetGame::GetNumLocalPlayers();
     for (unsigned int i = 0; i < uNumCameras; ++i)
     {
         Character* pCharacter = NetGame::GetLocalPlayer(i);
@@ -2298,7 +2298,7 @@ void HUD::GameEvents::HideObjectiveDetailsElements(PlayerEvents& events, PlayerD
 void HUD::GameEvents::DisplayCenterMessage(unsigned int uTextHash, unsigned int uTeamMask,
                                            const RedColor* const pColor)
 {
-    const unsigned int uNumCameras = GameLoop::GetNumCameras();
+    const unsigned int uNumCameras = NetGame::GetNumLocalPlayers();
     for (unsigned int i = 0; i < uNumCameras; ++i)
     {
         Character* pCharacter = NetGame::GetLocalPlayer(i);

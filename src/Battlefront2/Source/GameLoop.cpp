@@ -1,3 +1,4 @@
+#include "AmmoCounter.h"
 #include "PerformanceTimer.h"
 
 #include <math.h>
@@ -198,12 +199,7 @@ public:
     }
     static MemoryPool sMemoryPool;
 };
-class AmmoCounter
-{
-public:
-    static void SetupMemoryPool(unsigned int uCount, unsigned int uSize, unsigned int uGrow) { sMemoryPool.Setup(uCount, uSize, uGrow); }
-    static MemoryPool sMemoryPool;
-};
+
 class StickInfo
 {
 public:

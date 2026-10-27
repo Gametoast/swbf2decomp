@@ -252,7 +252,7 @@ public:
     // FUNCTION: SWBF2 0x0047fc60
     virtual EnergyBar* GetEnergyBar()
     {
-        return (EnergyBar*)mEnergyBar;
+        return &mEnergyBar;
     }
     virtual void SetWeaponIndex(int iChannel, int iIndex);
     // FUNCTION: SWBF2 0x0047fbb0
@@ -369,7 +369,7 @@ public:
     int mState;
     PblVector3 mPrevAimerPos;
     eDirection mDirection;
-    char mEnergyBar[12];
+    EnergyBar mEnergyBar;
     PblAngle mTurnOffset;
     PblAngle mPitchOffset;
     PblAngle mRollOffset;

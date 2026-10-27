@@ -58,7 +58,8 @@ public:
     struct EffectData
     {
 
-        EffectData();
+        // SYNTHETIC: SWBF2 0x006377c0
+        // SkyDome::EffectData::EffectData
 
         // FUNCTION: SWBF2 0x006377e0
         ~EffectData() {}

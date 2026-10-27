@@ -1,3 +1,4 @@
+#include "AmmoCounter.h"
 #include <float.h>
 #include "PebbleFL/Common/PblVector.h"
 #include <stdio.h>
@@ -21,20 +22,7 @@ namespace GameLoop
 extern float sClientDeltaTime;
 }
 
-class AmmoCounter
-{
-public:
 
-    bool HasInfiniteAmmo() const { return mMaxClips == FLT_MAX; }
-    void ExpendRounds(float fRounds);
-
-    AmmoCounterClass* m_pClass;
-    float mDefaultMaxClips;
-    float mMaxClips;
-    float mNumClips;
-    float mCurClip;
-    unsigned int m_uiRefCount;
-};
 
 
 

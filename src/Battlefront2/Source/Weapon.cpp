@@ -85,28 +85,7 @@ WeaponClass* WeaponClass::Derive(unsigned int uHash)
 
 extern bool netIsLateTurn;
 
-class AmmoCounter
-{
-public:
-    AmmoCounter(const AmmoCounterClass* pClass, int iNumClips);
-    AmmoCounter* AddRef();
 
-    unsigned int Release();
-    void UnloadClip();
-    void LoadClip();
-
-    void UnloadClip_Unlimitted();
-    void LoadClip_Unlimitted();
-
-    static MemoryPool sMemoryPool;
-
-    const AmmoCounterClass* m_pClass;
-    float mDefaultMaxClips;
-    float mMaxClips;
-    float mNumClips;
-    float mCurClip;
-    unsigned int m_uiRefCount;
-};
 
 namespace GameLoop
 {
@@ -1428,63 +1407,32 @@ bool WeaponClass::PostLoadInit()
 
 // FUNCTION: SWBF2 0x00677840
 Weapon::Weapon(const WeaponClass* pClass, const WeaponDesc& desc)
+    : mStart(pClass),
+      mClass(pClass),
+      mRenderClass(pClass),
+      mOwner(desc.mOwner),
+      mAimer(desc.mAimer),
+      mTrigger(desc.mTrigger),
+      mReload(desc.mReload),
+      m_pAmmoCounter(desc.m_pAmmoCounter ? desc.m_pAmmoCounter->AddRef()
+                                       : new AmmoCounter(&pClass->mAmmoCounterClass, desc.mNumClips)),
+      m_pEnergyBar(desc.m_pEnergyBar ? desc.m_pEnergyBar->AddRef()
+                                   : new EnergyBar(&pClass->mEnergyBarClass)),
+      mHideWeapon(0),
+      mFiredFlag(0),
+      mSelectedFlag(0),
+      mState(IDLE),
+      mStateTimer(0.0f),
+      mStateLimit(1.0f),
+      mZoom(pClass->mZoomMin),
+      mZoomTurnScale(pClass->mZoomTurnDivisorMin),
+      mSoldierAnimationMap(-1),
+      mSkipTime(0.0f),
+      mSkip(false),
+      mCharged(false),
+      mDeactivateScheduled(0),
+      mTargetBodyID(-1)
 {
-    mStart = pClass;
-    mClass = pClass;
-    mRenderClass = pClass;
-    mOwner = desc.mOwner;
-    mAimer = desc.mAimer;
-    mTrigger = desc.mTrigger;
-    mReload = desc.mReload;
-
-    if (desc.m_pAmmoCounter)
-    {
-        m_pAmmoCounter = desc.m_pAmmoCounter->AddRef();
-    }
-    else
-    {
-        void* p = AmmoCounter::sMemoryPool.Allocate(sizeof(AmmoCounter));
-        m_pAmmoCounter = p ? new (p) AmmoCounter(&pClass->mAmmoCounterClass, desc.mNumClips) : 0;
-    }
-
-    EnergyBar* pEnergyBar;
-    if (desc.m_pEnergyBar)
-    {
-        pEnergyBar = desc.m_pEnergyBar->AddRef();
-    }
-    else
-    {
-        pEnergyBar = static_cast<EnergyBar*>(EnergyBar::sMemoryPool.Allocate(sizeof(EnergyBar)));
-        if (pEnergyBar)
-        {
-            pEnergyBar->m_pClass = &pClass->mEnergyBarClass;
-            pEnergyBar->m_fEnergy = pClass->mEnergyBarClass.m_fEnergyMax;
-            pEnergyBar->m_bOverheat = 0;
-            pEnergyBar->m_uiRefCount = 1;
-        }
-    }
-    mHideWeapon = 0;
-    mFiredFlag = 0;
-    mSelectedFlag = 0;
-    m_pEnergyBar = pEnergyBar;
-
-    mState = IDLE;
-    mStateTimer = 0.0f;
-    mStateLimit = 1.0f;
-    mZoom = pClass->mZoomMin;
-    mZoomTurnScale = pClass->mZoomTurnDivisorMin;
-    mSoldierAnimationMap = -1;
-
-    mChargeUpEmitter.mObject = 0;
-    mChargeUpEmitter.mSavedHandleId = 0;
-    mSkip = false;
-    mCharged = false;
-    mSkipTime = 0.0f;
-    mDeactivateScheduled = 0;
-    mTarget.mObject = 0;
-    mTarget.mSavedHandleId = 0;
-    mTargetBodyID = -1;
-
     mAimer->SetWeapon(this);
 
     if (pClass->mSoldierAnimationWeapon != -1 && mOwner &&

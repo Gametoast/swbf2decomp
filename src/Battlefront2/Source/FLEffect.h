@@ -114,8 +114,6 @@ public:
         , m_pmAttachedToMatrix(0)
         , m_pmLocalOffsetMatrix(0)
     {
-        m_hobjAttachedToObject.mObject = 0;
-        m_hobjAttachedToObject.mSavedHandleId = 0;
     }
 
     virtual ~FLEffectObject();

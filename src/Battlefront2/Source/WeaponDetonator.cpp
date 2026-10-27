@@ -11,7 +11,6 @@
 #include "Trigger.h"
 #include "PebbleFL/Common/PblVector.h"
 
-bool IsPilotControlState(const void* pControllable);
 
 // SYNTHETIC: SWBF2 0x00407110
 // `dynamic initializer for 'WeaponDetonatorClass::rttiHashWeaponDetonatorClass''
@@ -166,7 +165,7 @@ void WeaponDetonator::NetAttachItem(Entity* pAttach)
     {
         EventManager::CharacterEvent::mDispenseControllable.Trigger(*pCharacter, *pObject);
         Controllable* pControllable = pObject->GetControllable();
-        if (pControllable && IsPilotControlState(pControllable) && !pControllable->GetPilot())
+        if (pControllable && pControllable->IsSelfPilotable() && !pControllable->GetPilot())
         {
             Controller* pController = pControllable->mCtrl;
             if (pController && pController->IsRtti(UnitController::rttiHashUnitController) &&

@@ -381,6 +381,10 @@ public:
     // FUNCTION: SWBF2 0x004959b0
     PilotType GetPilotType() const { return mPilotType; }
 
+    // FUNCTION: SWBF2 0x0043edd0
+    bool IsPilotable() const { return mPilotType == PILOT_VEHICLE || mPilotType == PILOT_VEHICLESELF; }
+
+    // FUNCTION: SWBF2 0x00485b10
     bool IsSelfPilotable() const { return GetPilotType() == PILOT_SELF || GetPilotType() == PILOT_VEHICLESELF; }
 
     // FUNCTION: SWBF2 0x00483450

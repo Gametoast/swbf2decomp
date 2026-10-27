@@ -366,8 +366,8 @@ EntityHover::EntityHover(EntityHoverClass* pClass, const EntityDesc& desc)
     , VehicleEngine(pClass)
     , mObstacle(0)
     , mPostCollision(this)
+    , mEnergyBar(&pClass->mEnergyBarClass)
 {
-    new (mEnergyBar) EnergyBar(&pClass->mEnergyBarClass);
     mBoost = false;
 
     mControllableList.AddLast(&this->Controllable::mNode, this);
@@ -1497,7 +1497,6 @@ EntityHover::~EntityHover()
             pEmitter->DeactivateEffect();
         }
     }
-    reinterpret_cast<EnergyBar*>(mEnergyBar)->~EnergyBar();
 }
 
 // FUNCTION: SWBF2 0x004c76d0
@@ -1793,7 +1792,7 @@ bool EntityHover::Update(float fDeltaTime)
                 {
                     pPilot->ExitRemote();
                 }
-                else if (mPilotType == PILOT_VEHICLE || mPilotType == PILOT_VEHICLESELF)
+                else if (IsPilotable())
                 {
                     if (pPilot->mCharacter && pPilot->mCharacter->mRemote)
                     {
@@ -2009,7 +2008,7 @@ void EntityHover::Move(float fDeltaTime, float fThrust, float fStrafe, float fTu
     const GameObject* pIgnore = this;
     float fInput = fabsf(fStrafe) > fabsf(fThrust) ? fabsf(fStrafe) : fabsf(fThrust);
 
-    EnergyBar* pEnergy = reinterpret_cast<EnergyBar*>(mEnergyBar);
+    EnergyBar* pEnergy = &mEnergyBar;
     if (rBoost && !(mClass->mBoostSpeed > 0.0f && pEnergy->SpendEnergy(mClass->mEnergyBoostDrain * fDeltaTime)))
     {
         rBoost = false;
@@ -2449,7 +2448,7 @@ void EntityHover::Move(float fDeltaTime, float fThrust, float fStrafe, float fTu
             iSide = mPilot->mCharacter->mTeamPtr->mSide;
         }
         VehicleMusic::Update(mClass, fDeltaTime,
-                             mPilot && mPilot->mPlayerId >= 0 && GameLoop::GetNumCameras() == 1, fForward, iSide);
+                             mPilot && mPilot->mPlayerId >= 0 && NetGame::GetNumLocalPlayers() == 1, fForward, iSide);
     }
 
     if (mPilot && mClass->mAnimObj && mClass->mAnimFins)

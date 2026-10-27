@@ -1,3 +1,4 @@
+#include "AmmoCounter.h"
 #include <stdio.h>
 
 #include "WeaponLaser.h"
@@ -22,11 +23,7 @@ namespace CombatUtil
 void SendDamageEvent(const Controllable* pOwner, const GameObject* pTarget, const Trigger* pTrigger);
 }
 
-class AmmoCounter
-{
-public:
-    void ExpendRounds(float fRounds);
-};
+
 
 namespace
 {

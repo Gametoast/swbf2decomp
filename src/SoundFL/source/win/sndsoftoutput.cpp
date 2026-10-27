@@ -450,15 +450,6 @@ void SoftOutput::Update()
 namespace Snd
 {
 
-// FUNCTION: SWBF2 0x00746720
-SoftOutput::BusMixerInfo::BusMixerInfo()
-{
-    for (int i = 0; i < 32; ++i)
-    {
-        mMixerConns[i].mInputNode = 0;
-        mMixerConns[i].mInputNodeOutputIndex = 0;
-    }
-}
 }
 
 namespace Snd

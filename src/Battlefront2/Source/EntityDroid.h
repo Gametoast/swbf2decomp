@@ -246,7 +246,7 @@ public:
     int mWeaponIndex[2];
     GameSoundControllable mAmbientSound;
     GameSoundControllable mAmbient2Sound;
-    char mEnergyBar[12];
+    EnergyBar mEnergyBar;
     State mState;
     float mKillTimer;
     PblHandle<FLEffectObject> mDestructChargeEffectHandle;

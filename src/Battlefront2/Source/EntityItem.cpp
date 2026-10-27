@@ -265,8 +265,6 @@ EntityItem::EntityItem(EntityItemClass* pClass, const EntityDesc& desc)
     mLifeTimer = pClass->mLifeSpan;
     mOwner = 0;
     m_pLight = 0;
-    mTrailEmitterObj.mObject = 0;
-    mTrailEmitterObj.mSavedHandleId = 0;
 
     Activate();
 

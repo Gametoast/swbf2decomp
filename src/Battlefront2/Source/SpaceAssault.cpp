@@ -331,22 +331,19 @@ bool SpaceAssault::Update(float fDeltaTime)
         HUD::ElementMap* pMap = HUD::ElementMap::FindByPlayerIndex(iView);
         if (pMap)
         {
-            HUD::Event event;
             if (GetMapMode(pMap) == HUD::ElementMap::mode_Small)
             {
                 if (!vp.isVisible)
                 {
                     vp.isVisible = true;
-                    event.mClass = HUD::GameEvents::gPlayerEvents[iView].spaceAssaultStatus;
-                    event.mData.boolValue = true;
+                    HUD::Event event(HUD::GameEvents::gPlayerEvents[iView].spaceAssaultStatus, true);
                     event.Send();
                 }
             }
             else if (vp.isVisible)
             {
                 vp.isVisible = false;
-                event.mClass = HUD::GameEvents::gPlayerEvents[iView].spaceAssaultStatusDisable;
-                event.mData.boolValue = true;
+                HUD::Event event(HUD::GameEvents::gPlayerEvents[iView].spaceAssaultStatusDisable, true);
                 event.Send();
             }
         }

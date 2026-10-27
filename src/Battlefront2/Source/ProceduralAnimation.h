@@ -70,8 +70,8 @@ public:
 struct PAAnimationData
 {
 
-    // FUNCTION: SWBF2 0x00626bf0
-    PAAnimationData() {}
+    // SYNTHETIC: SWBF2 0x00626bf0
+    // PAAnimationData::PAAnimationData
 
     unsigned int mAnimHash;
     unsigned int mObjHash;
@@ -170,7 +170,6 @@ public:
 class PAManagerInterpolator : public Thread
 {
 public:
-    PAManagerInterpolator() {}
     virtual bool Update(float fDeltaTime);
 
     void Create();

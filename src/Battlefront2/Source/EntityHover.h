@@ -439,7 +439,7 @@ public:
     // FUNCTION: SWBF2 0x00478d60
     virtual EnergyBar* GetEnergyBar()
     {
-        return (EnergyBar*)mEnergyBar;
+        return &mEnergyBar;
     }
     virtual void SetWeaponIndex(int iChannel, int iIndex);
     // FUNCTION: SWBF2 0x00478ce0
@@ -539,7 +539,7 @@ public:
     float mGroundBank;
     float mGroundPitchVel;
     float mGroundBankVel;
-    char mEnergyBar[12];
+    EnergyBar mEnergyBar;
     float mEjectTimer;
     float mTimeSinceLastHack;
     float mJumpTimer;

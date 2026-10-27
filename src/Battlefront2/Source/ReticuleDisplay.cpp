@@ -227,9 +227,7 @@ bool ReticuleDisplay::Update(float fDeltaTime)
             vPos.x = 0.5f;
             vPos.y = vPos.y * 0.5f + 0.5f;
             vPos.z = 0.0f;
-            HUD::Event event;
-            event.mClass = HUD::GameEvents::gPlayerEvents[mJoystickIndex].weapons[i].reticulePosition;
-            event.mData.vector3 = &vPos;
+            HUD::Event event(HUD::GameEvents::gPlayerEvents[mJoystickIndex].weapons[i].reticulePosition, &vPos);
             event.Send();
         }
     }

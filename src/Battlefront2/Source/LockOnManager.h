@@ -22,12 +22,8 @@ public:
     struct Target
     {
 
-        // FUNCTION: SWBF2 0x0057abd0
-        Target()
-        {
-            obj.mObject = 0;
-            obj.mSavedHandleId = 0;
-        }
+        // SYNTHETIC: SWBF2 0x0057abd0
+        // LockOnManager::Target::Target
 
         // FUNCTION: SWBF2 0x0057abe0
         ~Target() {}
@@ -53,11 +49,6 @@ public:
         TargetHistory()
         {
 
-            for (int i = 0; i < 64; i++)
-            {
-                mHistory[i].mObject = 0;
-                mHistory[i].mSavedHandleId = 0;
-            }
             Clear();
         }
         // FUNCTION: SWBF2 0x0057ab40

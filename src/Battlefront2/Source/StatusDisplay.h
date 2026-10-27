@@ -18,7 +18,8 @@ public:
     struct Arrow
     {
 
-        Arrow();
+        // SYNTHETIC: SWBF2 0x006509c0
+        // DamageArrowGroup::Arrow::Arrow
 
         RedScreenGroupElement mGroup;
         RedBitmapElement mBitmap;

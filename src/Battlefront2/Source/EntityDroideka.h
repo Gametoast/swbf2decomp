@@ -500,7 +500,7 @@ public:
     float mStompTime;
     float mFallTimer;
 
-    unsigned char mEnergyBar[12];
+    EnergyBar mEnergyBar;
     PblHandle<FLEffectObject> mWakeEmitter;
     float mTurnState;
     float mBuffOffenseTimer;

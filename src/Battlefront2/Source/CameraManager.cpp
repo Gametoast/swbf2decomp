@@ -76,13 +76,6 @@ void CameraManager::Create(int iNumCameras)
 // FUNCTION: SWBF2 0x0044e6f0
 CameraManager::CameraManager()
 {
-    for (int i = 0; i < 16; i++)
-    {
-        mShotRotation[i]._fX = 0.0f;
-        mShotRotation[i]._fY = 0.0f;
-        mShotRotation[i]._fZ = 0.0f;
-        mShotRotation[i]._fS = 1.0f;
-    }
 
     m_iNumCam = 0;
     float fAspectRatio = RedRenderer::GetScreenAspectRatio();

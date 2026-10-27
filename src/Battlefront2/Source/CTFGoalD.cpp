@@ -11,32 +11,13 @@
 
 namespace
 {
-inline unsigned int GameObjectHandleId(const GameObject* pObject)
-{
-    return pObject->mHandleId;
-}
+
 
 inline int GameObjectTeam(const GameObject* pObject)
 {
     return pObject->mTeam;
 }
 
-inline const GameObject* ReadHandle(const PblHandle<const GameObject>& handle)
-{
-    PblHandle<const GameObject>& h = const_cast<PblHandle<const GameObject>&>(handle);
-    if (h.mObject && GameObjectHandleId(h.mObject) != h.mSavedHandleId)
-    {
-        h.mObject = 0;
-        h.mSavedHandleId = 0;
-    }
-    return h.mObject;
-}
-
-inline void SetHandle(PblHandle<const GameObject>& handle, const GameObject* pObject)
-{
-    handle.mObject = pObject;
-    handle.mSavedHandleId = pObject ? GameObjectHandleId(pObject) : 0;
-}
 
 inline const RedRegion* FlagHomeRegion(const GameObject* pFlag)
 {
@@ -84,15 +65,15 @@ AI::GoalTarget::GoalTarget(const GameObject* pObject)
 AI::CTFGoalD::CTFGoalD(unsigned char uTeam, float fWeight, const GoalTarget& target)
     : AIGoal(AIGOAL_CTFDEFENSE, uTeam, fWeight)
 {
-    SetHandle(mFlag, ReadHandle(target.mGameObj));
-    if (!ReadHandle(mFlag))
+    mFlag = static_cast<const GameObject*>(target.mGameObj);
+    if (!static_cast<const GameObject*>(mFlag))
     {
         for (PblList<FlagItem>::Itor it(*FlagItem::sList); it; ++it)
         {
             const GameObject* pFlag = reinterpret_cast<const GameObject*>(static_cast<FlagItem*>(it));
             if (GameObjectTeam(pFlag) == uTeam)
             {
-                SetHandle(mFlag, pFlag);
+                mFlag = pFlag;
                 break;
             }
         }
@@ -102,7 +83,7 @@ AI::CTFGoalD::CTFGoalD(unsigned char uTeam, float fWeight, const GoalTarget& tar
 // FUNCTION: SWBF2 0x00488190
 void AI::CTFGoalD::Assign(Character* pChr)
 {
-    if (!ReadHandle(mFlag) || !pChr || !pChr->GetControllable())
+    if (!static_cast<const GameObject*>(mFlag) || !pChr || !pChr->GetControllable())
     {
         return;
     }
@@ -113,10 +94,10 @@ void AI::CTFGoalD::Assign(Character* pChr)
         return;
     }
 
-    GoalTarget target(RegionPosition(FlagHomeRegion(ReadHandle(mFlag))));
+    GoalTarget target(RegionPosition(FlagHomeRegion(static_cast<const GameObject*>(mFlag))));
     if (pCtrl->GetRandomSeed() % 2 == 1)
     {
-        target = GoalTarget(ReadHandle(mFlag));
+        target = GoalTarget(static_cast<const GameObject*>(mFlag));
     }
     pCtrl->ForceCommand(UnitGoalAgentInfo(CMD_DEFEND, &target));
 }

@@ -1,3 +1,4 @@
+#include "AmmoCounter.h"
 #include <d3dx9math.h>
 #include <math.h>
 #include <stdlib.h>
@@ -23,11 +24,7 @@
 extern bool netIsLocalTurn;
 
 
-class AmmoCounter
-{
-public:
-    void ExpendRounds(float fRounds);
-};
+
 
 namespace
 {
