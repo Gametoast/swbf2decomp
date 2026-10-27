@@ -15,6 +15,7 @@
 #include "PebbleFL/Common/PblChunk.h"
 #include "PebbleFL/Common/PblFile.h"
 #include "RedEngineFL/Interface/RedInterfaceScreen.h"
+#include "PebbleFL/Common/PblMath.h"
 
 namespace FLRenderer
 {
@@ -362,10 +363,7 @@ void RedModel::Render(const PblMatrix* pMatrix, const RedPose* pPose, const RedC
     float fDistance = -((pMatrix->m[3][1] - camMatrix.m[3][1]) * camMatrix.m[2][1] +
                         (pMatrix->m[3][0] - camMatrix.m[3][0]) * camMatrix.m[2][0] +
                         (pMatrix->m[3][2] - camMatrix.m[3][2]) * camMatrix.m[2][2]);
-    if (fDistance <= 0.0f)
-    {
-        fDistance = 0.0f;
-    }
+    fDistance = Max(fDistance, 0.0f);
     fDistance -= RedRenderer::GetCamera()->GetNearPlane();
     float fRadius = _BoundingSphere.w;
 

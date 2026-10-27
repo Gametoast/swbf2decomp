@@ -8,6 +8,7 @@
 #include "CollisionManager.h"
 #include "RedEngineFL/Application/pc/pcRedParticle.h"
 #include "PebbleFL/Common/PblVector.h"
+#include "PebbleFL/Common/PblMath.h"
 
 extern bool netIsLateTurn;
 
@@ -233,15 +234,9 @@ OrdnanceLaser::OrdnanceLaser(OrdnanceLaserClass* pClass, const OrdnanceDesc& des
     const OrdnanceLaserClass* pNext = (const OrdnanceLaserClass*)pLaser->mNextCharge;
     float fMax = ChargeLerp(pLaser->mLaserLength, pNext->mLaserLength, mRatio);
     const float fGlow = ChargeLerp(pLaser->mGlowLength, pNext->mGlowLength, mRatio);
-    if (fMax <= fGlow)
-    {
-        fMax = fGlow;
-    }
+    fMax = Max(fMax, fGlow);
     const float fBlur = ChargeLerp(pLaser->mBlurLength, pNext->mBlurLength, mRatio);
-    if (fMax <= fBlur)
-    {
-        fMax = fBlur;
-    }
+    fMax = Max(fMax, fBlur);
     mMaxLength = fMax;
     SetRenderRadius(mMaxLength * 2.0f);
 }
@@ -354,14 +349,7 @@ void OrdnanceLaser::Render(unsigned char, float, unsigned int)
             if (pClass->mDamageTransitionPeriod > 0.0f)
             {
                 t = fElapsed / pClass->mDamageTransitionPeriod;
-                if (t < 0.0f)
-                {
-                    t = 0.0f;
-                }
-                else if (t > 1.0f)
-                {
-                    t = 1.0f;
-                }
+                t = Clamp(t, 0.0f, 1.0f);
             }
             color.b = (unsigned char)(int)(pClass->mEndGlowColor.b * t + color.b * (1.0f - t) + 0.5f);
             color.g = (unsigned char)(int)(pClass->mEndGlowColor.g * t + color.g * (1.0f - t) + 0.5f);
@@ -379,14 +367,8 @@ void OrdnanceLaser::Render(unsigned char, float, unsigned int)
     }
 
     float fWidth = (mFadeOutTime * 0.9f + 0.1f) * fLaserWidth;
-    if (mGrowLength <= fLaserLength)
-    {
-        fLaserLength = mGrowLength;
-    }
-    if (mGrowLength <= fGlowLength)
-    {
-        fGlowLength = mGrowLength;
-    }
+    fLaserLength = Min(fLaserLength, mGrowLength);
+    fGlowLength = Min(fGlowLength, mGrowLength);
 
     const float fRadius = (fWidth * 3.0f + mGrowLength) * 2.0f;
     const PblVector3 vMax(mPosition.x + fRadius, mPosition.y + fRadius, mPosition.z + fRadius);

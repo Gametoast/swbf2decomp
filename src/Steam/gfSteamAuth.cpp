@@ -28,6 +28,9 @@ extern bool gFriendsStarted;
 // gEncryptedAppTicket
 std::string gEncryptedAppTicket;
 
+// TEMPLATE: SWBF2 0x0052f2d0
+// std::basic_string<char,std::char_traits<char>,std::allocator<char> >::~basic_string<char,std::char_traits<char>,std::allocator<char> >
+
 // SYNTHETIC: SWBF2 0x00403bf0
 // `dynamic initializer for 'gFriendConnectionStrings''
 // SYNTHETIC: SWBF2 0x00768880
@@ -36,6 +39,9 @@ std::string gEncryptedAppTicket;
 // GLOBAL: SWBF2 0x01ec0bf0
 // gFriendConnectionStrings
 std::unordered_map<unsigned __int64, std::string> gFriendConnectionStrings;
+
+// TEMPLATE: SWBF2 0x0052f9a0
+// std::list<std::pair<unsigned __int64 const ,std::basic_string<char,std::char_traits<char>,std::allocator<char> > >,std::allocator<std::pair<unsigned __int64 const ,std::basic_string<char,std::char_traits<char>,std::allocator<char> > > > >::~list<std::pair<unsigned __int64 const ,std::basic_string<char,std::char_traits<char>,std::allocator<char> > >,std::allocator<std::pair<unsigned __int64 const ,std::basic_string<char,std::char_traits<char>,std::allocator<char> > > > >
 
 // TEMPLATE: SWBF2 0x0052fbb0
 // std::_Uhash_compare<unsigned __int64,std::hash<unsigned __int64>,std::equal_to<unsigned __int64> >::_Uhash_compare<unsigned __int64,std::hash<unsigned __int64>,std::equal_to<unsigned __int64> >

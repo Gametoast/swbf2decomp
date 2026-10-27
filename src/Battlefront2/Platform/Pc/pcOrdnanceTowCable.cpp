@@ -11,6 +11,7 @@
 #include "PebbleFL/Common/PblHermite.h"
 #include "RedEngineFL/Application/pc/pcRenderHelpers.h"
 #include "pcSunFlare.h"
+#include "PebbleFL/Common/PblMath.h"
 
 // GLOBAL: SWBF2 0x01e2fd34
 pcRedShader* OrdnanceTowCable::sShader;
@@ -142,14 +143,7 @@ void sRenderHermiteSegment(PblHermiteVector3& segment, unsigned char ucViewport,
                            unsigned int uiFlags)
 {
     int iNumPoints = (int)(segment.GetLengthApproximation(10) * 0.5f);
-    if (iNumPoints < 2)
-    {
-        iNumPoints = 2;
-    }
-    else if (iNumPoints > 25)
-    {
-        iNumPoints = 25;
-    }
+    iNumPoints = Clamp(iNumPoints, 2, 25);
 
     PblVector3 vSlopes[25];
     PblVector3 vPoints[25];
@@ -161,30 +155,12 @@ void sRenderHermiteSegment(PblHermiteVector3& segment, unsigned char ucViewport,
     for (float fT = 0.0f; fEnd > fT; fT += fStep)
     {
         vPoints[i] = segment.getValue(fT);
-        if (vPoints[i].x <= vMin.x)
-        {
-            vMin.x = vPoints[i].x;
-        }
-        if (vPoints[i].y <= vMin.y)
-        {
-            vMin.y = vPoints[i].y;
-        }
-        if (vPoints[i].z <= vMin.z)
-        {
-            vMin.z = vPoints[i].z;
-        }
-        if (vMax.x <= vPoints[i].x)
-        {
-            vMax.x = vPoints[i].x;
-        }
-        if (vMax.y <= vPoints[i].y)
-        {
-            vMax.y = vPoints[i].y;
-        }
-        if (vMax.z <= vPoints[i].z)
-        {
-            vMax.z = vPoints[i].z;
-        }
+        vMin.x = Min(vMin.x, vPoints[i].x);
+        vMin.y = Min(vMin.y, vPoints[i].y);
+        vMin.z = Min(vMin.z, vPoints[i].z);
+        vMax.x = Max(vMax.x, vPoints[i].x);
+        vMax.y = Max(vMax.y, vPoints[i].y);
+        vMax.z = Max(vMax.z, vPoints[i].z);
         vSlopes[i] = segment.getSlope(fT);
         i++;
     }

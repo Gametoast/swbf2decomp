@@ -398,30 +398,12 @@ void LeafPatchClass::Init()
         particle.mPos.z += vOffset.z;
 
         const float fHalfSize = particle.mSize * 0.5f;
-        if (particle.mPos.x - fHalfSize <= vMin.x)
-        {
-            vMin.x = particle.mPos.x - fHalfSize;
-        }
-        if ((particle.mPos.y - fHalfSize) * mHeightScale <= vMin.y)
-        {
-            vMin.y = (particle.mPos.y - fHalfSize) * mHeightScale;
-        }
-        if (particle.mPos.z - fHalfSize <= vMin.z)
-        {
-            vMin.z = particle.mPos.z - fHalfSize;
-        }
-        if (fHalfSize + particle.mPos.x >= vMax.x)
-        {
-            vMax.x = fHalfSize + particle.mPos.x;
-        }
-        if ((fHalfSize + particle.mPos.y) * mHeightScale >= vMax.y)
-        {
-            vMax.y = (fHalfSize + particle.mPos.y) * mHeightScale;
-        }
-        if (fHalfSize + particle.mPos.z >= vMax.z)
-        {
-            vMax.z = fHalfSize + particle.mPos.z;
-        }
+        vMin.x = Min(vMin.x, particle.mPos.x - fHalfSize);
+        vMin.y = Min(vMin.y, (particle.mPos.y - fHalfSize) * mHeightScale);
+        vMin.z = Min(vMin.z, particle.mPos.z - fHalfSize);
+        vMax.x = Max(vMax.x, fHalfSize + particle.mPos.x);
+        vMax.y = Max(vMax.y, (fHalfSize + particle.mPos.y) * mHeightScale);
+        vMax.z = Max(vMax.z, fHalfSize + particle.mPos.z);
     }
 
     mBoundingOffset.x = (vMax.x + vMin.x) * 0.5f;
@@ -441,8 +423,8 @@ void LeafPatchClass::Init()
         const float fHalfSize = particle.mSize * 0.5f;
         const float fDist = sqrtf(fX * fX + fY * fY + fZ * fZ);
         const float fScaled = mHeightScale * fHalfSize;
-        const float fRadius = fDist + (fHalfSize > fScaled ? fHalfSize : fScaled);
-        mBoundingRadius = fRadius > mBoundingRadius ? fRadius : mBoundingRadius;
+        const float fRadius = fDist + Max(fHalfSize, fScaled);
+        mBoundingRadius = Max(fRadius, mBoundingRadius);
     }
 
     ActivateThread(0, PER_FRAME);

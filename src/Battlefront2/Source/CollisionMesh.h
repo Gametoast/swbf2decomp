@@ -183,6 +183,8 @@ template <int N>
 class PolyListContainer
 {
 public:
+    // TEMPLATE: SWBF2 0x004644a0
+    // PolyListContainer<100>::PolyListContainer<100>
     PolyListContainer() {}
 
     void Clear()

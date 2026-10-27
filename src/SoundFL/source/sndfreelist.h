@@ -17,10 +17,6 @@ public:
 
         Block(void* pAllocAddress)
         {
-            mNode.mNext = 0;
-            mBitmap.mBitmap = 0;
-            mBitmap.mBitmapSize = 0;
-            mBitmap.mSearchEntry = 0;
             mAllocAddress = pAllocAddress;
         }
 

@@ -29,6 +29,7 @@
 #include "SoundFL/source/sndspace.h"
 #include "SoundFL/source/win/sndlistener.h"
 #include "SoundFL/source/win/sndengine.h"
+#include "PebbleFL/Common/PblMath.h"
 
 namespace FLRenderer
 {
@@ -492,10 +493,7 @@ bool CameraManager::IsInsideAnyCamera(const PblVector3& vPos, float fRadius, flo
             float fMaxDistance = pCamera->GetZoom() * 8.0f + fDistance;
             float fNear, fFar, fWidth, fHeight;
             pCamera->GetFrustum(fNear, fFar, fWidth, fHeight);
-            if (fFar <= fMaxDistance)
-            {
-                fMaxDistance = fFar;
-            }
+            fMaxDistance = Min(fMaxDistance, fFar);
 
             RedCamera::VisibilityT eVisibility;
             if (fRadius > 0.0f)
@@ -540,10 +538,7 @@ float CameraManager::UpdateTrackDistance(int iCam, float fDistance, float fDelta
     if (fDistance == 1.0f || fDistance > fCurrent + 0.15f)
     {
         float fNew = fDeltaTime * 0.75f + fCurrent;
-        if (fDistance <= fNew)
-        {
-            fNew = fDistance;
-        }
+        fNew = Min(fNew, fDistance);
         mTrackDistance[iCam] = fNew;
         return fNew;
     }

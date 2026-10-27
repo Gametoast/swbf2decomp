@@ -18,37 +18,16 @@
 #include "RedEngineFL/Memory/RedMemory.h"
 #include "RedEngineFL/input/RedKeyboard.h"
 #include "PlayerController.h"
+#include "PebbleFL/Common/PblMath.h"
 
 // GLOBAL: SWBF2 0x007e6900
 HUD::Editor::Mode HUD::gEditMode = HUD::Editor::mode_Disabled;
 
 static const float EPSILON = 0.0001f;
 
-static inline int const Clamp(int iValue, int iMin, int iMax)
-{
-    if (iValue < iMin)
-    {
-        return iMin;
-    }
-    if (iValue > iMax)
-    {
-        return iMax;
-    }
-    return iValue;
-}
 
-static inline float const Clamp(float fValue, float fMin, float fMax)
-{
-    if (fValue < fMin)
-    {
-        return fMin;
-    }
-    if (fValue > fMax)
-    {
-        return fMax;
-    }
-    return fValue;
-}
+
+
 
 namespace HUD
 {

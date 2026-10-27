@@ -503,33 +503,17 @@ static void sCalculateTurnControls(const Controllable* pMe, float fScale, const 
             fSide = fSide < 0.0f ? -1.0f : 1.0f;
         }
 
-        float fRate = fTurnRate;
-        if (fRate < 1.0f)
-        {
-            fRate = 1.0f;
-        }
-        else if (fRate > 3.0f)
-        {
-            fRate = 3.0f;
-        }
+        const float fRate = Clamp(fTurnRate, 1.0f, 3.0f);
         const float fGain = 4.5f - fRate;
 
         float fTurn = 0.0f;
         if (fSide < 0.0f)
         {
-            fTurn = fGain * fSide;
-            if (fTurn <= -1.0f)
-            {
-                fTurn = -1.0f;
-            }
+            fTurn = Max(fGain * fSide, -1.0f);
         }
         else if (fSide > 0.0f)
         {
-            fTurn = fGain * fSide;
-            if (fTurn >= 1.0f)
-            {
-                fTurn = 1.0f;
-            }
+            fTurn = Min(fGain * fSide, 1.0f);
         }
         *pfTurn = fTurn * fTurn * (fTurn < 0.0f ? -1.0f : 1.0f);
     }
@@ -559,14 +543,7 @@ static void sCalculateTurnControls(const Controllable* pMe, float fScale, const 
         const UnitController* pUnit = UnitControllerPtr(static_cast<const Controller*>(pMe->mCtrl));
         const float fMax =
             pUnit->mLowLevel.UseFastTurn() ? 2.0f : 1.0f;
-        if (-fMax > *pfTurn)
-        {
-            *pfTurn = -fMax;
-        }
-        else if (*pfTurn > fMax)
-        {
-            *pfTurn = fMax;
-        }
+        *pfTurn = Clamp(*pfTurn, -fMax, fMax);
     }
 
     const PblMatrix mEye = DirectionMatrix(pMe->mEyeDir, gVectorUnitY, pMe->mEyePoint);
@@ -581,33 +558,17 @@ static void sCalculateTurnControls(const Controllable* pMe, float fScale, const 
         PblVector3 vDir;
         D3DXVec3Normalize(reinterpret_cast<D3DXVECTOR3*>(&vDir), reinterpret_cast<const D3DXVECTOR3*>(&vLocal));
 
-        float fRate = fPitchRate;
-        if (fRate < 1.0f)
-        {
-            fRate = 1.0f;
-        }
-        else if (fRate > 3.0f)
-        {
-            fRate = 3.0f;
-        }
+        const float fRate = Clamp(fPitchRate, 1.0f, 3.0f);
         const float fGain = 5.0f - fRate;
 
         float fPitch = 0.0f;
         if (vDir.y < 0.0f)
         {
-            fPitch = vDir.y * fGain;
-            if (fPitch <= -1.0f)
-            {
-                fPitch = -1.0f;
-            }
+            fPitch = Max(vDir.y * fGain, -1.0f);
         }
         else if (vDir.y > 0.0f)
         {
-            fPitch = vDir.y * fGain;
-            if (fPitch >= 1.0f)
-            {
-                fPitch = 1.0f;
-            }
+            fPitch = Min(vDir.y * fGain, 1.0f);
         }
         *pfPitch = fPitch * fPitch * (fPitch < 0.0f ? -1.0f : 1.0f);
         return;
@@ -634,14 +595,7 @@ static void sCalculateTurnControls(const Controllable* pMe, float fScale, const 
         fPitch /= fDiv;
     }
     *pfPitch = fPitch;
-    if (-1.0f > fPitch)
-    {
-        *pfPitch = -1.0f;
-    }
-    else if (fPitch > 1.0f)
-    {
-        *pfPitch = 1.0f;
-    }
+    *pfPitch = Clamp(fPitch, -1.0f, 1.0f);
 }
 }
 

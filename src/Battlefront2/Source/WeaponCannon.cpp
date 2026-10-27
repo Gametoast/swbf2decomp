@@ -20,6 +20,7 @@
 #include "WeaponCannonInstance.h"
 #include "PebbleFL/Common/PblRandom.h"
 #include "SoundFL/source/sndvoicevirtualbus.h"
+#include "PebbleFL/Common/PblMath.h"
 
 extern int gDebugCount;
 extern bool netIsLocalTurn;
@@ -82,18 +83,6 @@ namespace
         return h.mObject;
     }
 
-    inline float Clamp(float f, float fMin, float fMax)
-    {
-        if (fMin > f)
-        {
-            return fMin;
-        }
-        if (f > fMax)
-        {
-            return fMax;
-        }
-        return f;
-    }
 }
 
 // FUNCTION: SWBF2 0x00680050

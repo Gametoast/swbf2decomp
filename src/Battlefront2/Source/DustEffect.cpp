@@ -12,6 +12,7 @@
 #include "RedEngineFL/Graphics/RedCamera.h"
 #include "RedEngineFL/Util/RedSceneManager.h"
 #include "RedEngineFL/Graphics/PC/pcRedRenderer.h"
+#include "PebbleFL/Common/PblMath.h"
 
 
 class PblMatrix;
@@ -129,10 +130,7 @@ void DustEffect::Render(unsigned char ucViewport, float fDist, unsigned int uiFl
     }
 
     float fAlpha = (mClass->mMaxDistance - fDistance) * 0.005f;
-    if (fAlpha >= 1.0f)
-    {
-        fAlpha = 1.0f;
-    }
+    fAlpha = Min(fAlpha, 1.0f);
     if (mClass->mMinDistance > 0.0f && mClass->mMinDistance + 100.0f > fDistance)
     {
         fAlpha = (fDistance - mClass->mMinDistance) * 0.01f;

@@ -31,6 +31,7 @@
 #include "RedEngineFL/Graphics/RedPose.h"
 #include "RedEngineFL/Util/RedLocalizeDB.h"
 #include "RedEngineFL/Graphics/RedMaterial.h"
+#include "PebbleFL/Common/PblMath.h"
 
 // FUNCTION: SWBF2 0x00679250
 bool Weapon::CheckFire() const
@@ -128,18 +129,6 @@ namespace
         return h.mObject;
     }
 
-    inline float Clamp(float f, float fMin, float fMax)
-    {
-        if (fMin > f)
-        {
-            return fMin;
-        }
-        if (f > fMax)
-        {
-            return fMax;
-        }
-        return f;
-    }
 
     inline bool ObjectIsRtti(GameObject* pObject, unsigned int uRtti)
     {

@@ -7,6 +7,8 @@ class AllocBitmap
 {
 public:
 
+    AllocBitmap() : mBitmap(0), mBitmapSize(0), mSearchEntry(0) {}
+
     class Handle
     {
     public:
@@ -44,6 +46,8 @@ public:
 class MemoryBitmap : public AllocBitmap
 {
 public:
+
+    MemoryBitmap();
 
     class MemoryHandle : public AllocBitmap::Handle
     {

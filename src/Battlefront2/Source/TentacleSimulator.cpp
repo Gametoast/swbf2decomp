@@ -64,25 +64,25 @@ void TentacleSimulator::EnforceBoxCollision(const PblMatrix& matrix, float fX, f
             {
                 continue;
             }
-            const float* axis = m;
-            float penetration = depthX;
-            float projection = projX;
-            if (depthY <= penetration)
+            if (depthY > depthX)
             {
-                axis = m + 4;
-                penetration = depthY;
-                projection = projY;
+                if (depthZ > depthX)
+                {
+                    pos += matrix.GetXAxis() * (PblMath::Sign(projX) * depthX);
+                }
+                else
+                {
+                    pos += matrix.GetZAxis() * (PblMath::Sign(projZ) * depthZ);
+                }
             }
-            if (depthZ <= penetration)
+            else if (depthZ > depthY)
             {
-                axis = m + 8;
-                penetration = depthZ;
-                projection = projZ;
+                pos += matrix.GetYAxis() * (PblMath::Sign(projY) * depthY);
             }
-            const float signedDepth = projection >= 0.0f ? penetration : -penetration;
-            pos.x += axis[0] * signedDepth;
-            pos.y += axis[1] * signedDepth;
-            pos.z += axis[2] * signedDepth;
+            else
+            {
+                pos += matrix.GetZAxis() * (PblMath::Sign(projZ) * depthZ);
+            }
         }
     }
 }
@@ -113,18 +113,18 @@ void TentacleSimulator::EnforceCylinderCollision(const PblMatrix& matrix, float 
             {
                 continue;
             }
-            if (axialDepth <= radialDepth)
-            {
-                pos.x += m[4] * axialDepth;
-                pos.y += m[5] * axialDepth;
-                pos.z += m[6] * axialDepth;
-            }
-            else
+            if (axialDepth > radialDepth)
             {
                 const float scale = radialDepth / radialDistance;
                 pos.x += (m[0] * radialX + m[8] * radialZ) * scale;
                 pos.y += (m[1] * radialX + m[9] * radialZ) * scale;
                 pos.z += (m[2] * radialX + m[10] * radialZ) * scale;
+            }
+            else
+            {
+                pos.x += m[4] * axialDepth;
+                pos.y += m[5] * axialDepth;
+                pos.z += m[6] * axialDepth;
             }
         }
     }

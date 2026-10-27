@@ -459,9 +459,9 @@ void EntityFlyer::SetTowCableWalker(GameObject* pWalker)
 float EntityFlyer::GetFlyerMaxSpeed() const
 {
     float speed = mClass->mMaxFlyerSpeed;
-    if (mInLandingRegionFactor != 0.0f && speed >= 60.0f)
+    if (mInLandingRegionFactor != 0.0f)
     {
-        speed = 60.0f;
+        speed = Min(speed, 60.0f);
     }
     return speed;
 }
@@ -470,9 +470,9 @@ float EntityFlyer::GetFlyerMaxSpeed() const
 float EntityFlyer::GetFlyerMidSpeed() const
 {
     float speed = mClass->mMidFlyerSpeed;
-    if (mInLandingRegionFactor != 0.0f && speed >= 20.0f)
+    if (mInLandingRegionFactor != 0.0f)
     {
-        speed = 20.0f;
+        speed = Min(speed, 20.0f);
     }
     return speed;
 }
@@ -484,10 +484,7 @@ float EntityFlyer::GetFlyerMinSpeed() const
     if (mInLandingRegionFactor != 0.0f)
     {
         speed *= 0.2f;
-        if (speed >= 10.0f)
-        {
-            speed = 10.0f;
-        }
+        speed = Min(speed, 10.0f);
     }
     return speed;
 }

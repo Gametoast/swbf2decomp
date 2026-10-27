@@ -9,6 +9,7 @@
 #include "RedEngineFL/Graphics/RedCamera.h"
 #include "RedEngineFL/Graphics/RedMaterial.h"
 #include "RedEngineFL/Graphics/PC/pcRedRenderer.h"
+#include "PebbleFL/Common/PblMath.h"
 
 struct CacheParticle
 {
@@ -117,10 +118,7 @@ bool PrepareForRender(ParticleEmitter* pEmitter, const PblVector3& vPos, int iUn
         if (fDist > fFadeStart)
         {
             float fT = (fDist - fFadeStart) / (fFadeEnd - fFadeStart);
-            if (fT >= 1.0f)
-            {
-                fT = 1.0f;
-            }
+            fT = Min(fT, 1.0f);
             fAlpha = (1.0f - fT) * fAlpha;
         }
     }
@@ -131,27 +129,14 @@ bool PrepareForRender(ParticleEmitter* pEmitter, const PblVector3& vPos, int iUn
     }
 
     const float fDepth = fDist - fRadius;
-    if (fMaxDist >= 90.0f)
-    {
-        fMaxDist = 90.0f;
-    }
+    fMaxDist = Min(fMaxDist, 90.0f);
     mFadeVal = fAlpha;
 
     float fLod = (4.0f / (fMaxDist + ParticleSystem::mFadeBias - 20.0f)) * (fDepth - 20.0f);
-    if (fLod <= 0.0f)
-    {
-        fLod = 0.0f;
-    }
-    else if (fLod >= 3.0f)
-    {
-        fLod = 3.0f;
-    }
+    fLod = Clamp(fLod, 0.0f, 3.0f);
     const int iLod = (int)fLod;
     mLodFadeVal = 1.0f - (fLod - (float)iLod);
-    if (fLod < 1.0f)
-    {
-        fLod = 1.0f;
-    }
+    fLod = Max(1.0f, fLod);
     ParticleSystem::mCurrentLod = iLod;
     mSizeMultiplier = fLod * 0.1f + 1.2f;
     mMinParticleSize = fDepth * 0.002f + 0.01f;

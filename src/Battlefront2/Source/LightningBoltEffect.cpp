@@ -11,6 +11,7 @@
 #include "PebbleFL/Common/PblHashTable.h"
 #include "PebbleFL/Common/PblRandom.h"
 #include "RedEngineFL/Application/pc/pcRedParticle.h"
+#include "PebbleFL/Common/PblMath.h"
 
 // GLOBAL: SWBF2 0x01e573e0
 LightningBoltEffect* LightningBoltEffect::sInstance;
@@ -360,10 +361,7 @@ void LightningBoltEffectObject::Render(unsigned char, float, unsigned int)
     RedParticleRenderer::SubmitTexture(mClass->mTexture, BLEND_ADDITIVE, 0);
 
     float fFade = mLifeTime * 2.0f / mClass->mFadeTime;
-    if (fFade >= 1.0f)
-    {
-        fFade = 1.0f;
-    }
+    fFade = Min(fFade, 1.0f);
     float fAlpha = (mStrength * 0.5f + 0.5f) * fFade;
     float fWidthScale = mStrength * 0.7f + 0.3f;
 

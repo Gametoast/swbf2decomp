@@ -1,5 +1,6 @@
 #include "RedShadowBlob.h"
 #include "PebbleFL/Common/PblRandom.h"
+#include "PebbleFL/Common/PblMath.h"
 
 // GLOBAL: SWBF2 0x009c8954
 RedShadowBlob* RedShadowBlob::sInstance;
@@ -50,10 +51,7 @@ void RedShadowBlob::Update()
                 intensity += data[col][row + 1].blurValue * gShadowBlurNeighborWeight;
                 intensity += data[col - 1][row].blurValue * gShadowBlurNeighborWeight;
                 intensity += data[col][row - 1].blurValue * gShadowBlurNeighborWeight;
-                if (intensity >= 1.0f)
-                {
-                    intensity = 1.0f;
-                }
+                intensity = Min(intensity, 1.0f);
                 v.intensity = intensity;
             }
         }

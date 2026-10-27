@@ -2668,7 +2668,7 @@ float netMaxWorldXZ;
 // GLOBAL: SWBF2 0x01e62f98
 float netMaxWorldY;
 
-float Max(float fA, float fB);
+
 namespace AIUtil
 {
 extern float gMaxFlyHeight;
@@ -3986,7 +3986,7 @@ void ClearTeamDeclinedHero(int iTeam)
     }
 }
 
-const int Max(int iA, int iB);
+
 
 extern int netHeroRulePlayer;
 
@@ -8140,7 +8140,15 @@ void RecordLag(int player, int turn, unsigned int sampleTurn)
     }
 }
 
-extern float CAPTURE_RATIO_SCALE;
+static const unsigned int CAPTURE_RATIO_BITS = 6;
+static const unsigned int CAPTURE_RATIO_MAX = (1U << CAPTURE_RATIO_BITS) - 1U;
+
+// SYNTHETIC: SWBF2 0x004054e0
+// `dynamic initializer for 'CAPTURE_RATIO_SCALE''
+
+// GLOBAL: SWBF2 0x01ecb9bc
+// CAPTURE_RATIO_SCALE
+static const float CAPTURE_RATIO_SCALE = 1.0f / CAPTURE_RATIO_MAX;
 
 // FUNCTION: SWBF2 0x005cb970
 void ReadCaptureDisplay(NetPktGroup& group, int player)
@@ -8158,14 +8166,14 @@ void ReadCaptureDisplay(NetPktGroup& group, int player)
         unsigned int team = 0, otherTeam = 0, ratio = 0;
         group.ReadBits(team, 3);
         group.ReadBits(otherTeam, 3);
-        group.ReadBits(ratio, 6);
+        group.ReadBits(ratio, CAPTURE_RATIO_BITS);
         display->UpdateCapture(team, otherTeam, (float)ratio * CAPTURE_RATIO_SCALE);
     }
     else if (state == 2 || state == 4)
     {
         unsigned int team = 0, ratio = 0;
         group.ReadBits(team, 3);
-        group.ReadBits(ratio, 6);
+        group.ReadBits(ratio, CAPTURE_RATIO_BITS);
         display->UpdateNeutralize(team, (float)ratio * CAPTURE_RATIO_SCALE);
     }
 }
@@ -11130,11 +11138,7 @@ float SquaredLength(const float* value)
     return value[0] * value[0] + value[1] * value[1] + value[2] * value[2];
 }
 
-// FUNCTION: SWBF2 0x00438a30
-int Min(int a, int b)
-{
-    return a < b ? a : b;
-}
+
 
 // FUNCTION: SWBF2 0x00450380
 unsigned int __fastcall SetDamageableVanishFlags(unsigned int* pThis)
@@ -12079,19 +12083,7 @@ int* __fastcall InitControllableIterator(int* pThis, void*, const int* pSource)
 }
 
 
-// FUNCTION: SWBF2 0x0040f720
-inline double Clamp(float fValue, float fLow, float fHigh)
-{
-    if (fLow > fValue)
-    {
-        return fLow;
-    }
-    if (fValue > fHigh)
-    {
-        return fHigh;
-    }
-    return fValue;
-}
+
 
 
 
@@ -12377,13 +12369,6 @@ void AloHeroData::Set()
 }
 
 
-// FUNCTION: SWBF2 0x0048c8e0
-float* __fastcall SetFloatPair(float* pResult, void*, float fFirst, float fSecond)
-{
-    pResult[0] = fFirst;
-    pResult[1] = fSecond;
-    return pResult;
-}
 
 inline bool AtleastOnceUniq::IsConfirmed()
 {
@@ -12923,7 +12908,7 @@ int GetLag(int iPlayer)
 // GLOBAL: SWBF2 0x01faa6ac
 unsigned int lastClockAdjustTurn;
 
-int const Clamp(int iValue, int iMin, int iMax);
+
 
 // FUNCTION: SWBF2 0x005c8590
 void AdjustClock()
@@ -13967,7 +13952,7 @@ float FrontAngle(const PblVector3& point, const PblMatrix& matrix)
     PblVector3 offset = point - matrix.GetTranslation();
     const PblMatrix inverse = matrix.GetInverseFast();
     const PblVector3 local = inverse.ApplyRotation(offset);
-    return PblMath::Atan2(local.GetX(), local.GetZ()) * (180.0f / 3.1415927f);
+    return PblMath::Atan2(local.GetX(), local.GetZ()) * (180.0f / PblMath::fPi);
 }
 
 // FUNCTION: SWBF2 0x005c2d30
@@ -14205,7 +14190,7 @@ void WriteCaptureDisplay(NetPktGroup& group, int player)
                 group.WriteBits(event, 3);
                 group.WriteBits(team, 3);
                 group.WriteBits((unsigned int)(pPost->GetNeutralizeRatio() *
-                                               63.0f + 0.5f), 6);
+                                               CAPTURE_RATIO_MAX + 0.5f), CAPTURE_RATIO_BITS);
             }
             else
             {
@@ -14223,7 +14208,7 @@ void WriteCaptureDisplay(NetPktGroup& group, int player)
                 }
                 group.WriteBits(otherTeam, 3);
                 group.WriteBits((unsigned int)(pPost->GetCaptureRatio() *
-                                               63.0f + 0.5f), 6);
+                                               CAPTURE_RATIO_MAX + 0.5f), CAPTURE_RATIO_BITS);
             }
             break;
         }
@@ -14908,10 +14893,10 @@ void ListNearObjects()
     // TEMPLATE: SWBF2 0x005d41f0
     // std::_Median<GameObject * *,bool (__cdecl*)(GameObject *,GameObject *)>
     // TEMPLATE: SWBF2 0x005d42e0
-    // std::sort_heap<GameObject * *,bool (__cdecl*)(GameObject *,GameObject *)>
+    // std::_Sort_heap<GameObject * *,bool (__cdecl*)(GameObject *,GameObject *)>
 
     // TEMPLATE: SWBF2 0x005d4340
-    // std::_Insertion_sort<GameObject * *,bool (__cdecl*)(GameObject *,GameObject *)>
+    // std::_Insertion_sort1<GameObject * *,bool (__cdecl*)(GameObject *,GameObject *),GameObject *>
     // TEMPLATE: SWBF2 0x005d4430
     // std::_Med3<GameObject * *,bool (__cdecl*)(GameObject *,GameObject *)>
     // TEMPLATE: SWBF2 0x005d44e0
@@ -16456,12 +16441,7 @@ PblTimeBase frameLockTimeBase;
 // SYNTHETIC: SWBF2 0x00404710
 // `dynamic initializer for 'MAX_DOUBLETAP_INTERVAL_TICKS''
 
-// SYNTHETIC: SWBF2 0x004054e0
-// `dynamic initializer for 'CAPTURE_RATIO_SCALE''
 
-// GLOBAL: SWBF2 0x01ecb9bc
-// CAPTURE_RATIO_SCALE
-float CAPTURE_RATIO_SCALE = 1.0f / 63.0f;
 
 // FUNCTION: SWBF2 0x005c5cc0
 AloMapDisplayMarkers::AloMapDisplayMarkers()

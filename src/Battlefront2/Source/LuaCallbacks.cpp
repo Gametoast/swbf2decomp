@@ -46,12 +46,9 @@
 #include "RedEngineFL/Graphics/PC/pcRedRenderer.h"
 #include "RedEngineFL/Application/pc/pcRedTerrain.h"
 #include "NetGame.h"
+#include "PebbleFL/Common/PblMath.h"
 
-// FUNCTION: SWBF2 0x0042ced0
-const int Max(int iA, int iB)
-{
-    return iA > iB ? iA : iB;
-}
+
 
 namespace Lua_Callbacks
 {

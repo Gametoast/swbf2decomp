@@ -314,10 +314,10 @@
 // _aulldiv
 
 // LIBRARY: SWBF2 0x007536e0
-// sub_007536e0
+// ___vdecl_cos2
 
 // LIBRARY: SWBF2 0x007536f0
-// sub_007536f0
+// ___vdecl_sin2
 
 // LIBRARY: SWBF2 0x007536f6
 // exit
@@ -341,10 +341,10 @@
 // __dllonexit
 
 // LIBRARY: SWBF2 0x00753740
-// _SEH_prolog4
+// __SEH_prolog4
 
 // LIBRARY: SWBF2 0x00753785
-// _SEH_epilog4
+// __SEH_epilog4
 
 // LIBRARY: SWBF2 0x00753799
 // _except_handler4
@@ -413,19 +413,10 @@
 // _except1
 
 // LIBRARY: SWBF2 0x00753c20
-// __sse2_cos2
-
-// LIBRARY: SWBF2 0x00753d4f
-// sub_00753d4f
+// ___sse2_cos2
 
 // LIBRARY: SWBF2 0x00753dc0
-// __sse2_sin2
-
-// LIBRARY: SWBF2 0x00753ef2
-// sub_00753ef2
-
-// LIBRARY: SWBF2 0x00753f7b
-// sub_00753f7b
+// ___sse2_sin2
 
 // LIBRARY: SWBF2 0x00753f80
 // _except_handler4_common
@@ -440,22 +431,19 @@
 // _controlfp_s
 
 // LIBRARY: SWBF2 0x00753fa0
-// __common_sin_reduction_LA
+// ___common_sin_reduction_LA
 
 // LIBRARY: SWBF2 0x00754290
-// __common_srl
+// ___common_srl
 
 // LIBRARY: SWBF2 0x007542c0
-// __common_sll
-
-// LIBRARY: SWBF2 0x007542eb
-// sub_007542eb
+// ___common_sll
 
 // LIBRARY: SWBF2 0x007542f0
-// __common_cos_reduction_LA
+// ___common_cos_reduction_LA
 
 // LIBRARY: SWBF2 0x007545e0
-// __common_pi04_reduction_LA
+// ___common_pi04_reduction_LA
 
 // LIBRARY: SWBF2 0x007548f0
 // D3DXVec4Transform

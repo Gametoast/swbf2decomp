@@ -21,6 +21,7 @@ public:
 };
  
 
+// FUNCTION: SWBF2 0x00727ad0
 SinCosTable::SinCosTable()
 {
     int i;

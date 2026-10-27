@@ -81,6 +81,12 @@ bool AllocBitmap::Alloc(unsigned int uiNumEntries, Handle& handle)
     return true;
 }
 
+// FUNCTION: SWBF2 0x007452f0
+MemoryBitmap::MemoryBitmap()
+    : mStartAddress(0), mMemorySize(0), mEntrySize(0)
+{
+}
+
 // FUNCTION: SWBF2 0x00745430
 bool MemoryBitmap::Alloc(unsigned int uiSize, MemoryHandle& handle)
 {

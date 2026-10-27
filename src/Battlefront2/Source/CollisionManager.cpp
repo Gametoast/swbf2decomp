@@ -16,6 +16,7 @@
 
 #include <d3dx9math.h>
 #include "TreeGridCache.h"
+#include "PebbleFL/Common/PblMath.h"
 
 class EntityWater : public CollisionObject
 {
@@ -113,10 +114,7 @@ struct RayData : public CollisionObjectCallbackData
 };
  
 
-static inline float Max(float a, float b)
-{
-    return a > b ? a : b;
-}
+
 
 // FUNCTION: SWBF2 0x0045db70
 PblVector3 Min(const PblVector3& a, const PblVector3& b)

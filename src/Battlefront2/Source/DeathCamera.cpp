@@ -8,6 +8,7 @@
 #include "Trackable.h"
 #include "RedEngineFL/Graphics/RedCamera.h"
 #include "PebbleFL/Common/PblQuaternion.h"
+#include "PebbleFL/Common/PblMath.h"
 
 static CollisionObject* GetCollisionObject(GameObject* pObject);
 
@@ -105,19 +106,12 @@ void DeathCamera::Update(float fDeltaTime)
     PblVector3 vOldPos(mMatrix.m[3][0], mMatrix.m[3][1], mMatrix.m[3][2]);
     PblVector3 vTarget = mDeathPos;
     PblVector3 vEye = mDeathMidPos;
-    float fBlend = 1.0f;
+    float fBlend = Min(mTimer, 1.0f);
 
-    if (mTimer < 1.0f)
-    {
-        fBlend = mTimer;
-    }
-    else if (mTimer > 1.5f && mKiller)
+    if (mTimer > 1.5f && mKiller)
     {
         fBlend = (mTimer - 1.5f) * 0.5f;
-        if (fBlend >= 1.0f)
-        {
-            fBlend = 1.0f;
-        }
+        fBlend = Min(fBlend, 1.0f);
 
         Controllable* pUnit = mKiller->mVehicle;
         if (!pUnit)
@@ -143,7 +137,7 @@ void DeathCamera::Update(float fDeltaTime)
     vBack = PblVector3(-vDir.x, -vDir.y, -vDir.z);
     float fHitLower = CollisionManager::RayHit(vLower, vBack, 6.0f, pHitObject, NULL, NULL, 0, 0x90, false);
 
-    float fHit = fHitLower > fHitUpper ? fHitUpper : fHitLower;
+    float fHit = Min(fHitLower, fHitUpper);
     float fDist = fHit * 6.0f - 1.0f;
     PblVector3 vPos(vEye.x - vDir.x * fDist, vEye.y - vDir.y * fDist, vEye.z - vDir.z * fDist);
 

@@ -1006,13 +1006,25 @@ void EntityCloth::EnforceBoxCollision(const PblMatrix& mMatrix, float fWidth, fl
         {
             continue;
         }
-        const int axis = p1 <= p0 ? (p2 > p1 ? 1 : 2) : (p2 <= p0 ? 2 : 0);
-        const float penetration = axis == 0 ? p0 : axis == 1 ? p1 : p2;
-        const float side = (axis == 0 ? d0 : axis == 1 ? d1 : d2) >= 0.0f ? 1.0f : -1.0f;
-        const float offset = penetration * side;
-        vPos.x += mMatrix.m[axis][0] * offset;
-        vPos.y += mMatrix.m[axis][1] * offset;
-        vPos.z += mMatrix.m[axis][2] * offset;
+        if (p1 > p0)
+        {
+            if (p2 > p0)
+            {
+                vPos += mMatrix.GetXAxis() * (PblMath::Sign(d0) * p0);
+            }
+            else
+            {
+                vPos += mMatrix.GetZAxis() * (PblMath::Sign(d2) * p2);
+            }
+        }
+        else if (p2 > p1)
+        {
+            vPos += mMatrix.GetYAxis() * (PblMath::Sign(d1) * p1);
+        }
+        else
+        {
+            vPos += mMatrix.GetZAxis() * (PblMath::Sign(d2) * p2);
+        }
     }
 }
 
@@ -1338,28 +1350,30 @@ void EntityCloth::EnforceCylinderCollision(const PblMatrix& mMatrix, float fHeig
         const float fDZ = vPos.z - mMatrix.m[3][2];
         const float fDepth =
             fLength - fabsf(mMatrix.m[1][0] * fDX + mMatrix.m[1][1] * fDY + mMatrix.m[1][2] * fDZ);
-        if (fDepth > 0.0f)
+        if (fDepth <= 0.0f)
         {
-            const PblVector3 vRadial(mMatrix.m[0][0] * fDX + mMatrix.m[0][1] * fDY + mMatrix.m[0][2] * fDZ, 0.0f,
-                                     mMatrix.m[2][0] * fDX + mMatrix.m[2][1] * fDY + mMatrix.m[2][2] * fDZ);
-            const float fDist = sqrtf(vRadial.x * vRadial.x + vRadial.y * vRadial.y + vRadial.z * vRadial.z);
-            const float fPenetration = fRadius - fDist;
-            if (fPenetration > 0.0f)
-            {
-                if (fDepth > fPenetration)
-                {
-                    const float fScale = fPenetration / fDist;
-                    vPos.x += (mMatrix.m[0][0] * vRadial.x + mMatrix.m[2][0] * vRadial.z) * fScale;
-                    vPos.y += (mMatrix.m[0][1] * vRadial.x + mMatrix.m[2][1] * vRadial.z) * fScale;
-                    vPos.z += (mMatrix.m[0][2] * vRadial.x + mMatrix.m[2][2] * vRadial.z) * fScale;
-                }
-                else
-                {
-                    vPos.x += mMatrix.m[1][0] * fDepth;
-                    vPos.y += mMatrix.m[1][1] * fDepth;
-                    vPos.z += mMatrix.m[1][2] * fDepth;
-                }
-            }
+            continue;
+        }
+        const PblVector3 vRadial(mMatrix.m[0][0] * fDX + mMatrix.m[0][1] * fDY + mMatrix.m[0][2] * fDZ, 0.0f,
+                                 mMatrix.m[2][0] * fDX + mMatrix.m[2][1] * fDY + mMatrix.m[2][2] * fDZ);
+        const float fDist = sqrtf(vRadial.x * vRadial.x + vRadial.y * vRadial.y + vRadial.z * vRadial.z);
+        const float fPenetration = fRadius - fDist;
+        if (fPenetration <= 0.0f)
+        {
+            continue;
+        }
+        if (fDepth > fPenetration)
+        {
+            const float fScale = fPenetration / fDist;
+            vPos.x += (mMatrix.m[0][0] * vRadial.x + mMatrix.m[2][0] * vRadial.z) * fScale;
+            vPos.y += (mMatrix.m[0][1] * vRadial.x + mMatrix.m[2][1] * vRadial.z) * fScale;
+            vPos.z += (mMatrix.m[0][2] * vRadial.x + mMatrix.m[2][2] * vRadial.z) * fScale;
+        }
+        else
+        {
+            vPos.x += mMatrix.m[1][0] * fDepth;
+            vPos.y += mMatrix.m[1][1] * fDepth;
+            vPos.z += mMatrix.m[1][2] * fDepth;
         }
     }
 }

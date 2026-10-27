@@ -42,10 +42,67 @@ namespace PblMath
     float __cdecl Cos(float fAngle);
     void __cdecl SinCos(float* pSin, float* pCos, float fAngle);
 
+    inline float Sign(float f) { return f < 0.0f ? -1.0f : 1.0f; }
+
     inline int Ceiling(float f) { return (int)(f - 4194304.0f) + 4194304; }
 
     inline int Floor(float f) { return (int)(f + 4194304.0f) - 4194304; }
     inline int Round(float f) { return Floor(f + 0.5f); }
+}
+
+// FUNCTION: SWBF2 0x00414900
+inline const int Clamp(int iValue, int iMin, int iMax)
+{
+    if (iValue < iMin)
+    {
+        return iMin;
+    }
+    if (iValue > iMax)
+    {
+        return iMax;
+    }
+    return iValue;
+}
+
+// FUNCTION: SWBF2 0x0040f720
+inline const float Clamp(float fValue, float fLow, float fHigh)
+{
+    if (fLow > fValue)
+    {
+        return fLow;
+    }
+    if (fValue > fHigh)
+    {
+        return fHigh;
+    }
+    return fValue;
+}
+
+// FUNCTION: SWBF2 0x00438a30
+inline const int Min(int a, int b)
+{
+    return a < b ? a : b;
+}
+
+// FUNCTION: SWBF2 0x0042ced0
+inline const int Max(int iA, int iB)
+{
+    return iA > iB ? iA : iB;
+}
+
+inline const float Min(float a, float b)
+{
+    return a < b ? a : b;
+}
+
+// FUNCTION: SWBF2 0x0041fa40
+inline const float Max(float fA, float fB)
+{
+    if (fA > fB)
+    {
+        return fA;
+    }
+    return fB;
 }
 
 #include "PebbleFL/pc/pcPblMath.h"

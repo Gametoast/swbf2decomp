@@ -385,30 +385,12 @@ void GrassPatchClass::Init()
         }
 
         const float fHalfSize = particle.mSize * 0.5f;
-        if (particle.mPos.x - fHalfSize <= vMin.x)
-        {
-            vMin.x = particle.mPos.x - fHalfSize;
-        }
-        if (particle.mPos.y - particle.mSize <= vMin.y)
-        {
-            vMin.y = particle.mPos.y - particle.mSize;
-        }
-        if (particle.mPos.z - fHalfSize <= vMin.z)
-        {
-            vMin.z = particle.mPos.z - fHalfSize;
-        }
-        if (particle.mPos.x + fHalfSize >= vMax.x)
-        {
-            vMax.x = particle.mPos.x + fHalfSize;
-        }
-        if (particle.mPos.y + particle.mSize >= vMax.y)
-        {
-            vMax.y = particle.mPos.y + particle.mSize;
-        }
-        if (particle.mPos.z + fHalfSize >= vMax.z)
-        {
-            vMax.z = particle.mPos.z + fHalfSize;
-        }
+        vMin.x = Min(vMin.x, particle.mPos.x - fHalfSize);
+        vMin.y = Min(vMin.y, particle.mPos.y - particle.mSize);
+        vMin.z = Min(vMin.z, particle.mPos.z - fHalfSize);
+        vMax.x = Max(vMax.x, particle.mPos.x + fHalfSize);
+        vMax.y = Max(vMax.y, particle.mPos.y + particle.mSize);
+        vMax.z = Max(vMax.z, particle.mPos.z + fHalfSize);
     }
 
     mBoundingOffset.x = (vMax.x + vMin.x) * 0.5f;
@@ -426,10 +408,7 @@ void GrassPatchClass::Init()
         const float fY = vPos.y - mBoundingOffset.y;
         const float fZ = vPos.z - mBoundingOffset.z;
         const float fRadius = sqrtf(fX * fX + fY * fY + fZ * fZ) + mParticle[i].mSize;
-        if (fRadius > mBoundingRadius)
-        {
-            mBoundingRadius = fRadius;
-        }
+        mBoundingRadius = Max(fRadius, mBoundingRadius);
     }
 
     ActivateThread(0, PER_FRAME);

@@ -2,8 +2,9 @@
 
 #include "sndstreamrenderer.h"
 
-// TEMPLATE: SWBF2 0x00749120
-// Snd::Allocator<Snd::DSBufferRenderer>::operator delete
+// TEMPLATE: SWBF2 0x00749120 SYMBOL
+// ??3?$Allocator@VDSBufferRenderer@Snd@@@Snd@@SAXPAX0_N@Z
+// Snd::Allocator<Snd::DSBufferRenderer>::operator delete(void*, void*, bool)
 
 #include "SoundFL/source/sndglobals.h"
 #include "sndsoftoutput.h"

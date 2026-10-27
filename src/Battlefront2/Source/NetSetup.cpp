@@ -5013,7 +5013,7 @@ void CNetJoinGame::Update()
 char* netGameVersion = "1.1";
 
 void* GetGalaxyNetworkingInterface();
-int Min(int a, int b);
+
 
 // GLOBAL: SWBF2 0x01faa724
 int netHostUpdateCount;

@@ -21,6 +21,7 @@
 #include "RedEngineFL/input/pc/pcRedInputManager.h"
 #include "RedEngineFL/Interface/RedFont.h"
 #include "RedEngineFL/Util/RedLocalizeDB.h"
+#include "PebbleFL/Common/PblMath.h"
 
 extern bool mSafeMode;
 extern eGAMELANGUAGE gForceLang;
@@ -178,19 +179,7 @@ namespace RedLocalizeDB
     void ForceLanguageID(int iLanguage);
 }
 
-// FUNCTION: SWBF2 0x00414900
-int const Clamp(int iValue, int iMin, int iMax)
-{
-    if (iValue < iMin)
-    {
-        return iMin;
-    }
-    if (iValue > iMax)
-    {
-        return iMax;
-    }
-    return iValue;
-}
+
 
 // FUNCTION: SWBF2 0x004795a0
 void ParseCommandLine(char const* pcAppName, char const* pcCmdLine)

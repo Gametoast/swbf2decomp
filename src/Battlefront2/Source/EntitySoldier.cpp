@@ -1357,10 +1357,7 @@ void EntitySoldier::Render(unsigned char ucLod, float fFade, unsigned int uiFlag
         if (mSmolderVanishDeath && mSmolderTimer > 0.0f)
         {
             float fVanish = 0.5f - mStateTimer;
-            if (fVanish < 0.0f)
-            {
-                fVanish = 0.0f;
-            }
+            fVanish = Max(fVanish, 0.0f);
             fAlpha *= fVanish;
         }
         else if (mStateTimer > 3.0f)
@@ -1444,10 +1441,7 @@ void EntitySoldier::Render(unsigned char ucLod, float fFade, unsigned int uiFlag
                 (mCamera.m[3][1] - (vOffset.y + mWorld.m[3][1])) * mCamera.m[2][1] +
                 (mCamera.m[3][0] - (vOffset.x + mWorld.m[3][0])) * mCamera.m[2][0] +
                 (mCamera.m[3][2] - (vOffset.z + mWorld.m[3][2])) * mCamera.m[2][2];
-            if (fDepth <= 0.0f)
-            {
-                fDepth = 0.0f;
-            }
+            fDepth = Max(fDepth, 0.0f);
             if (fDepth < 2.2f)
             {
                 float fNear = 0.0f;
@@ -1466,10 +1460,7 @@ void EntitySoldier::Render(unsigned char ucLod, float fFade, unsigned int uiFlag
                     {
                         fAlpha = fClear / 1.2f * fAlpha;
                     }
-                    if (fAlpha <= 0.06f)
-                    {
-                        fAlpha = 0.06f;
-                    }
+                    fAlpha = Max(fAlpha, 0.06f);
                 }
             }
         }
@@ -1495,10 +1486,7 @@ void EntitySoldier::Render(unsigned char ucLod, float fFade, unsigned int uiFlag
         fLight = RedTerrain::GetInterpolatedLight(mWorld.m[3][0], mWorld.m[3][2]);
     }
     float fBrightness = fLight * 1.2f + 0.3f;
-    if (fBrightness >= 1.0f)
-    {
-        fBrightness = 1.0f;
-    }
+    fBrightness = Min(fBrightness, 1.0f);
 
     GameModel* pModel = (ucLod || (gLowResModelsEnabled && !NetGame::IsEnabled())) ? mModelLowRes : mModel;
     if (!pModel)

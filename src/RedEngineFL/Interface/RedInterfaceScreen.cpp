@@ -11,6 +11,7 @@
 #include "RedEngineFL/Graphics/RedLight.h"
 #include "RedEngineFL/Graphics/RedDirectionalLight.h"
 #include "RedEngineFL/Graphics/PC/pcRedRenderer.h"
+#include "PebbleFL/Common/PblMath.h"
 
 class PblMatrix;
 extern PblMatrix gMatrixIdentity;
@@ -134,14 +135,7 @@ void RedInterfaceScreen::SetDimensions(unsigned int uiWidth, unsigned int uiHeig
 // FUNCTION: SWBF2 0x006c14e0
 void RedInterfaceScreen::SetSafeZone(float fPercent)
 {
-    if (0.0f > fPercent)
-    {
-        fPercent = 0.0f;
-    }
-    else if (fPercent > 1.0f)
-    {
-        fPercent = 1.0f;
-    }
+    fPercent = Clamp(fPercent, 0.0f, 1.0f);
 
     m_fSafeZoneHeight = fPercent;
     m_fSafeZoneWidth = fPercent;
@@ -155,50 +149,22 @@ void RedInterfaceScreen::SetSafeZone(float fPercent)
 void RedInterfaceScreen::SetSafeZone(float fWidth, float fHeight, float fOffsetX, float fOffsetY)
 {
     float fRight = fWidth + fOffsetX;
-    if (0.0f > fRight)
-    {
-        fRight = 0.0f;
-    }
-    else if (fRight > 1.0f)
-    {
-        fRight = 1.0f;
-    }
+    fRight = Clamp(fRight, 0.0f, 1.0f);
 
     float fBottom = fHeight + fOffsetY;
-    if (0.0f > fBottom)
-    {
-        fBottom = 0.0f;
-    }
-    else if (fBottom > 1.0f)
-    {
-        fBottom = 1.0f;
-    }
+    fBottom = Clamp(fBottom, 0.0f, 1.0f);
 
-    if (0.0f > fOffsetX)
-    {
-        fOffsetX = 0.0f;
-    }
-    else if (fOffsetX > 1.0f)
-    {
-        fOffsetX = 1.0f;
-    }
+    fOffsetX = Clamp(fOffsetX, 0.0f, 1.0f);
     m_fSafeZoneOffsetX = fOffsetX;
 
-    if (0.0f > fOffsetY)
-    {
-        fOffsetY = 0.0f;
-    }
-    else if (fOffsetY > 1.0f)
-    {
-        fOffsetY = 1.0f;
-    }
+    fOffsetY = Clamp(fOffsetY, 0.0f, 1.0f);
     m_fSafeZoneOffsetY = fOffsetY;
 
     float fW = fRight - fOffsetX;
-    m_fSafeZoneWidth = (fW > 0.0f) ? fW : 0.0f;
+    m_fSafeZoneWidth = Max(fW, 0.0f);
 
     float fH = fBottom - fOffsetY;
-    m_fSafeZoneHeight = (fH > 0.0f) ? fH : 0.0f;
+    m_fSafeZoneHeight = Max(fH, 0.0f);
 }
 
 static const float kInv255 = 1.0f / 255.0f;
@@ -385,7 +351,7 @@ void RedInterfaceScreen::Render() const
 }
 
 // SYNTHETIC: SWBF2 0x007698e0
-// RedInterfaceScreen::Render's `dynamic atexit destructor for 'camera'' (the
+// `RedInterfaceScreen::Render'::`5'::`dynamic atexit destructor for 'camera''
 
 // SYNTHETIC: SWBF2 0x006c0ae0
 // RedDirectionalLight::`scalar deleting destructor'
