@@ -99,8 +99,7 @@ class QueueLockBase
 {
 public:
 
-    // FUNCTION: SWBF2 0x00745030
-    QueueLockBase() { mLock = 0; }
+    QueueLockBase();
 
     ~QueueLockBase();
 

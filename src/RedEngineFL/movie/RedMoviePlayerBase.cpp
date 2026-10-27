@@ -9,6 +9,7 @@
 #include "RedEngineFL/Memory/RedMemory.h"
 #include <new>
 
+// GLOBAL: SWBF2 0x007e2740
 PblList<RedMoviePlayerBase> RedMoviePlayerBase::sMovieList;
 
 // GLOBAL: SWBF2 0x007e272c
@@ -16,29 +17,33 @@ PblList<RedMoviePlayerBase::Info> RedMoviePlayerBase::Info::sInfoList;
 
 // FUNCTION: SWBF2 0x00725220
 RedMoviePlayerBase::RedMoviePlayerBase(unsigned int uiMediaSectorSize)
+    : mTextures(0), mNumTextures(0), mNotifyCallback(0), mNotifyCallbackData(0),
+      mBufferingCallback(0), mBufferingCallbackData(0), mInfo(0), mCurrentSegment(0),
+      mCurrentPlayState(playState_stopped), mDesiredPlayState(playState_stopped),
+      mInvalidStartData(0), mReadBuffer(0), mFileReadSize(0), mFileScheduledReadSize(0),
+      mMediaSectorSize(uiMediaSectorSize), mNumReallocTextures(0), mFlags(0)
 {
-    mTextures = 0;
-    mNumTextures = 0;
-    mNotifyCallback = 0;
-    mNotifyCallbackData = 0;
-    mBufferingCallback = 0;
-    mBufferingCallbackData = 0;
-    mInfo = 0;
-    mCurrentSegment = 0;
-
-    mCurrentPlayState = playState_stopped;
-    mDesiredPlayState = playState_stopped;
-
-    mInvalidStartData = 0;
-    mReadBuffer = 0;
-
-    mMediaSectorSize = uiMediaSectorSize;
-    mFileReadSize = 0;
-    mFileScheduledReadSize = 0;
-    mNumReallocTextures = 0;
-    mFlags = 0;
-
     sMovieList.AddLast(this, this);
+}
+
+// FUNCTION: SWBF2 0x007253c0
+RedMoviePlayerBase::SegmentSequence::SegmentSequence()
+{
+    mSegment = 0;
+    mFlags = 0;
+}
+
+// FUNCTION: SWBF2 0x007253d0
+RedMoviePlayerBase::TextureQueue::TextureQueue()
+{
+    mHead = 0;
+    mUsed = 0;
+}
+
+// FUNCTION: SWBF2 0x007253e0
+RedMoviePlayerBase::TextureStack::TextureStack()
+{
+    mHeight = 0;
 }
 
 // FUNCTION: SWBF2 0x007263f0
@@ -394,10 +399,16 @@ unsigned int RedMoviePlayerBase::GetNumReallocTextures() const
     return mNumReallocTextures;
 }
 
+// FUNCTION: SWBF2 0x00725b40
+unsigned int RedMoviePlayerBase::TextureQueue::GetNumEntries() const
+{
+    return mUsed;
+}
+
 // FUNCTION: SWBF2 0x00725b70
 unsigned int RedMoviePlayerBase::GetNumUsedTextures() const
 {
-    return mUsedTextures.mUsed;
+    return mUsedTextures.GetNumEntries();
 }
 
 // FUNCTION: SWBF2 0x00725f10
@@ -410,8 +421,8 @@ void RedMoviePlayerBase::Play()
 unsigned int RedMoviePlayerBase::GetDataLeft() const
 {
     unsigned int uiEnd = mCurrentSegment->mStartPos + mCurrentSegment->mLength;
-    unsigned int uiPos = mFile.mFile.GetPos();
-    return uiEnd > uiPos ? uiEnd - mFile.mFile.GetPos() : 0;
+    unsigned int uiPos = mFile.GetPos();
+    return uiEnd > uiPos ? uiEnd - mFile.GetPos() : 0;
 }
 
 // FUNCTION: SWBF2 0x00725bb0
@@ -730,25 +741,6 @@ stopped_or_playing:
         }
         mFlags &= ~flags_ResetSegment;
     }
-}
-
-// FUNCTION: SWBF2 0x00726c70
-unsigned int RedFileAsync::GetPos() const
-{
-    return mFile.GetPos();
-}
-
-// FUNCTION: SWBF2 0x00726ce0
-void RedFileAsync::Read(void* pBuffer, unsigned int uiSize)
-{
-    mFileOpComplete = false;
-    mFile.Read(pBuffer, uiSize);
-}
-
-// FUNCTION: SWBF2 0x00726cf0
-void RedFileAsync::Seek(unsigned int uiPos)
-{
-    mFile.Seek(uiPos);
 }
 
 namespace Snd
