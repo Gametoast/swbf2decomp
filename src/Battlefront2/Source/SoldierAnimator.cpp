@@ -2255,6 +2255,7 @@ float SoldierAnimator::GetLowerBodyBlendFactor()
 // FUNCTION: SWBF2 0x00642760
 void SoldierAnimator::RotateLowerBody(float fAngle)
 {
+    // GLOBAL: SWBF2 0x01fac1f0
     static unsigned short uiRoot = (unsigned short)mZephyrSkeleton.m_pShared->GetJointIdxByCrc(0x4446e9b8);
     mZephyrPoseStatic.m_pJoints[uiRoot].kQuat = PblQuaternion(PblVector3(0.0f, 1.0f, 0.0f), fAngle);
 }

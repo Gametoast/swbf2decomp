@@ -8,6 +8,7 @@
 // FUNCTION: SWBF2 0x006dc640
 PblList<MemoryPool>* GetMemoryPoolList()
 {
+    // GLOBAL: SWBF2 0x0099e7d0
     static PblList<MemoryPool> sPoolList;
     return &sPoolList;
 }
@@ -61,6 +62,7 @@ void MemoryPool::Create(unsigned int uiCount, unsigned int uiSize, unsigned int 
     mFree = mPool;
 }
 
+// GLOBAL: SWBF2 0x0099e7c8
 bool MemoryPool::sErrorOnExpansion;
 
 // FUNCTION: SWBF2 0x006dc370

@@ -1634,7 +1634,9 @@ bool CombatUtil::sIsTargetLinedUpPos(const Controllable* pMe, const PblVector3& 
     PblVector3 vDir = AIUtil::GetSafeNormal(vDelta);
     float fDot = pMe->mEyeDir.x * vDir.x + pMe->mEyeDir.y * vDir.y + pMe->mEyeDir.z * vDir.z;
 
+    // GLOBAL: SWBF2 0x01faa7dc
     static const float sCosNarrow = PblMath::Cos(PblMath::fPi / 8.0f);
+    // GLOBAL: SWBF2 0x01faa7d8
     static const float sCosWide = PblMath::Cos(PblMath::fPi / 4.0f);
     float fCos = sCosNarrow;
     if (pWpn->IsRtti(kRttiHashWeaponMelee))

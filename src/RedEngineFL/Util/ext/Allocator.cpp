@@ -102,6 +102,7 @@ void* Allocate_(unsigned int uiSize, IAllocator& rAlloc)
     return buf.data_;
 }
 
+// GLOBAL: SWBF2 0x009a1a34
 HashMultiAllocator* HashMultiAllocator::sDefault;
 
 // FUNCTION: SWBF2 0x006e90c0

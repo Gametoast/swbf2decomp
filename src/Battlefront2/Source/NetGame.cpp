@@ -1271,6 +1271,7 @@ float timeScale;
 int timeStableCount;
 // GLOBAL: SWBF2 0x01fa8789
 bool hostQuit;
+// GLOBAL: SWBF2 0x01fa878a
 bool canQuit;
 // GLOBAL: SWBF2 0x01fa8790
 int predictLocalTurnNumber;
@@ -1300,6 +1301,7 @@ int lateTurnNumber;
 bool hostCommProblems;
 // GLOBAL: SWBF2 0x01fa88a8
 unsigned __int64 hostNextPlayingMask;
+// GLOBAL: SWBF2 0x01fa88bc
 float canQuitTimeOut;
 
 // GLOBAL: SWBF2 0x01fa88c0
@@ -15411,6 +15413,7 @@ void AddSend(GameObject* pObject)
             }
             PblVector3 side(sendFront.GetZ(), 0.0f, -sendFront.GetX());
             float sideways = (float)AbsFloat(DotProduct(offset, side));
+            // GLOBAL: SWBF2 0x01faab30
             static float sSideLimit = sqrtf(0.5f);
             if (sideways / facing > sSideLimit)
             {

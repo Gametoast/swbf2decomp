@@ -350,7 +350,9 @@ bool RedTerrain::PointInHole(const PblVector3& vPos)
         return false;
     }
 
+    // GLOBAL: SWBF2 0x0093eb80
     static PblVector3 vLastPos(FLT_MAX, FLT_MAX, FLT_MAX);
+    // GLOBAL: SWBF2 0x0093eb90
     static bool bLastInHole;
     if (vPos.x == vLastPos.x && vPos.y == vLastPos.y && vPos.z == vLastPos.z)
     {

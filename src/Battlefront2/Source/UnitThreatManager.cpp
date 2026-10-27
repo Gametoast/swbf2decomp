@@ -210,6 +210,7 @@ const GameObject* UnitThreatManager::GetVisibleObject() const
 // FUNCTION: SWBF2 0x0066a1e0
 const PblVector3& UnitThreatManager::GetVisibleObjectPos() const
 {
+    // GLOBAL: SWBF2 0x01fac37c
     static PblVector3 sZero(0.0f, 0.0f, 0.0f);
     if (mVisibleObjectIndex < 0)
     {

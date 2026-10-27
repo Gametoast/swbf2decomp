@@ -383,6 +383,7 @@ extern int gNetSetup_errState;
 
 // GLOBAL: SWBF2 0x1e563ac
 GameState::State* _pNextState;
+// GLOBAL: SWBF2 0x01e563b0
 bool _bDoChangeState;
 // GLOBAL: SWBF2 0x1e563b4
 unsigned int mNextStateHash;
@@ -453,7 +454,9 @@ PblTimeBase::Stamp SystemTimeStamp;
 PblTimeBase::Stamp AppTimeStamp;
 // GLOBAL: SWBF2 0x1ec5fa8
 PblTimeBase::Stamp TotalTimeStamp;
+// GLOBAL: SWBF2 0x01f9c2c8
 float sDeltaTime;
+// GLOBAL: SWBF2 0x01f9c2cc
 float sSystemDeltaTime;
 LARGE_INTEGER perfCount;
 LARGE_INTEGER oldPerfCount;

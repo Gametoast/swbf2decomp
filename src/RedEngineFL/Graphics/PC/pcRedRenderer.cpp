@@ -1775,6 +1775,7 @@ STDMETHODIMP FakeD3DVolumeTexture::UnlockBox(UINT)
     return 0;
 }
 
+// GLOBAL: SWBF2 0x007f58e8
 RedViewport RedRenderer::m_normalizedViewport;
 
 // FUNCTION: SWBF2 0x006b8480

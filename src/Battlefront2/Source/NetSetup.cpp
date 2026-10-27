@@ -67,6 +67,7 @@ bool autoNetEnabled;
 // GLOBAL: SWBF2 0x01ead479
 // autoNetLan
 bool autoNetLan;
+// GLOBAL: SWBF2 0x01ead47a
 bool autoNetRandomize;
 // GLOBAL: SWBF2 0x01ead47b
 bool g_bNoRender;
@@ -94,6 +95,7 @@ int netDifficulty;
 // GLOBAL: SWBF2 0x01ead4ac
 // g_bNoWait
 bool g_bNoWait;
+// GLOBAL: SWBF2 0x01ead4ad
 bool g_bNoSound;
 
  

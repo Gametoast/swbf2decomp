@@ -627,8 +627,10 @@ MemoryPool Combo::Attack::sMemoryPool("Combo::Attack", 0x10);
 MemoryPool Combo::State::sMemoryPool("Combo::State", 0x34);
 
 const float Combo::Condition::TIME_SCALE_INV = 100.0f;
+// GLOBAL: SWBF2 0x0078e014
 const float Combo::Condition::TIME_SCALE = 1.0f / Combo::Condition::TIME_SCALE_INV;
 const float Combo::Condition::ENERGY_SCALE_INV = 10.0f;
+// GLOBAL: SWBF2 0x0078e008
 const float Combo::Condition::ENERGY_SCALE = 1.0f / Combo::Condition::ENERGY_SCALE_INV;
 const float Combo::Condition::INPUT_MAG_SCALE_INV = 100.0f;
 const float Combo::Condition::INPUT_MAG_SCALE = 1.0f / Combo::Condition::INPUT_MAG_SCALE_INV;

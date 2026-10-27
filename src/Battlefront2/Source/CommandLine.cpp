@@ -56,6 +56,7 @@ void ForceLanguageID(int iLanguage)
 // GLOBAL: SWBF2 0x01e3073c
 // gGamespyAutoName
 char gGamespyAutoName[32];
+// GLOBAL: SWBF2 0x01e30760
 char gGamespyAutoConnectAddr[64];
 // GLOBAL: SWBF2 0x01e307a0
 char gGamespyAutoPassStr[128];
@@ -70,6 +71,7 @@ unsigned int gGamespyAutoPass;
 // GLOBAL: SWBF2 0x01e30736
 bool gBootLagger;
 bool gShowLoadSpam;
+// GLOBAL: SWBF2 0x01e3075c
 bool gLogFinalScore;
 // GLOBAL: SWBF2 0x007e6310
 int gBootLaggerPing = 300;

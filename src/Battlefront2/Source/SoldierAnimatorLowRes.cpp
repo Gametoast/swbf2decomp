@@ -1068,7 +1068,8 @@ const RedPose* SoldierAnimatorLowRes_Pool::GetPose()
     {
         mZephyrPoseDyn.Update(fElapsed);
         mZephyrPoseStatic.Set(mZephyrPoseDyn, true);
-        mZephyrSkeleton.BuildWorldMatrices(gMatrixIdentity, mZephyrJointMask);
+        const PblBitVector<32>& kMask = mZephyrJointMask;
+        mZephyrSkeleton.BuildWorldMatrices(gMatrixIdentity, kMask);
         m_iLastFrame = iFrame;
     }
 

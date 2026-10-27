@@ -1421,6 +1421,7 @@ namespace AIUtil
 // FUNCTION: SWBF2 0x00441860
 bool __cdecl CanPotentiallySee(Controllable* pMe, const GameObject* pObject, float* pOut)
 {
+    // GLOBAL: SWBF2 0x01faa7d0
     static const float sCosHalfFOV = PblMath::Cos(FOV_ANGLE * 0.5f);
 
     const PblVector3 vTarget = pObject->GetTargetPoint(pMe->mEyePoint, pMe->mEyeDir, -1);

@@ -14,6 +14,7 @@ char sAsciiCodeMap[256][2];
 unsigned char sRedKeyMap[256];
 // GLOBAL: SWBF2 0x00960f10
 float s_keyRepeatDelay;
+// GLOBAL: SWBF2 0x00960f14
 float s_keyRepeatSpeed;
 
 // FUNCTION: SWBF2 0x006c6230

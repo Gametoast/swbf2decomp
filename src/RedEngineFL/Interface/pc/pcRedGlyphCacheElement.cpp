@@ -20,6 +20,7 @@ bool RedGlyphCacheElement::s_bQuadsInUse;
 // RedGlyphCacheElement::s_pMemoryManager
 RedGlyphMemoryManager* RedGlyphCacheElement::s_pMemoryManager;
 
+// GLOBAL: SWBF2 0x009984f0
 RedGlyphCacheElement::Quad RedGlyphCacheElement::s_aQuads[512];
 
 // FUNCTION: SWBF2 0x006dafc0

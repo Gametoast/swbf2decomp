@@ -93,7 +93,7 @@ EntityPropAnimated::EntityPropAnimated(EntityPropAnimatedClass* pClass, const En
     {
         mShadowProxy->Deactivate();
     }
-    mZephyrSkeleton.Open(*mAnimObj->GetZephyrSkeletonShared());
+    mZephyrSkeleton.Open(*mAnimObj->GetZephyrSkeletonShared(), mZephyrPoseStatic);
     mZephyrPoseStatic.Open(mZephyrSkeleton);
     mZephyrPoseDyn.Open(mZephyrSkeleton);
     mAttachedSoldier.mObject = 0;

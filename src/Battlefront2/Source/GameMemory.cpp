@@ -26,11 +26,15 @@ int ArtistHeap;
 int TEMP_GamespyHeap;
 }
 
+// GLOBAL: SWBF2 0x01e56154
 char* gArenaStart;
+// GLOBAL: SWBF2 0x01e56140
 char* gArenaEnd;
 // GLOBAL: SWBF2 0x01f9c2b0
 char* GamespyHeapstart;
+// GLOBAL: SWBF2 0x01f9c2b4
 char* GamespyHeapend;
+// GLOBAL: SWBF2 0x01e56148
 char* g_Heap3Start;
 // GLOBAL: SWBF2 0x01e56150
 void* gTempHeapBlock;

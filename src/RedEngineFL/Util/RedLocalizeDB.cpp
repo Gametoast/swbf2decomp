@@ -34,6 +34,7 @@ PblHashTable<FLLocalizeEntry, 16384> sMasterLocalizeHash;
 // GLOBAL: SWBF2 0x00960c04
 char const* gLanguageStr;
 
+// GLOBAL: SWBF2 0x007def94
 eGAMELANGUAGE gForceLang = eLANG_AUTODETERMINE;
 
 namespace PblBuildType

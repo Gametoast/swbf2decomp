@@ -84,6 +84,7 @@ int PCDebugHeap;
 
 // GLOBAL: SWBF2 0x01eaeddc
 int pcHeight;
+// GLOBAL: SWBF2 0x01eaede0
 int pcWidth;
 
 // GLOBAL: SWBF2 0x01fa8c58

@@ -1332,6 +1332,7 @@ void pcNormalShader::UpdateAnimation()
     }
     else if (m_material.materialFlags & 0x2000000)
     {
+        // GLOBAL: SWBF2 0x009c94dc
         static float s_fBlinkScale = PblMath::fTwoPi * 10.0f * kInv255;
         const float fSin = PblMath::Sin(pAnim->blinkRate * s_fBlinkScale * fTime) * 0.5f + 0.5f;
         const float fIntensity = pAnim->minIntensity * kInv255 * (1.0f - fSin) + fSin;
@@ -1342,6 +1343,7 @@ void pcNormalShader::UpdateAnimation()
 
     if (m_material.materialFlags & 0x8000000)
     {
+        // GLOBAL: SWBF2 0x009c94e4
         static RedColorValue s_minColor(0.2f, 0.2f, 0.2f, 1.0f);
         if (!m_material.animationData->attachedLight)
         {

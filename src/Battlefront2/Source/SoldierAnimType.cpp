@@ -222,6 +222,7 @@ const char* GetScopeExtension(Scope scope)
 // FUNCTION: SWBF2 0x0064a5a0
 const char* AnimIndexToName(unsigned char animIndex, Scope scope)
 {
+    // GLOBAL: SWBF2 0x01fac250
     static char s_szName[256];
 
     int length;

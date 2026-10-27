@@ -6003,7 +6003,9 @@ bool EntitySoldier::Update(float fDeltaTime)
 {
     static int updateCount;
     static const int updateCheck = -1;
+    // GLOBAL: SWBF2 0x01faa460
     static float s_fSplashTimeout;
+    // GLOBAL: SWBF2 0x01faa46c
     static float s_fWakeTimer;
 
     if (NetGame::IsSkipped(this, fDeltaTime))

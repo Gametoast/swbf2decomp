@@ -150,6 +150,7 @@ int axtoi(char const* pszHex, int iMaxDigits)
     return iValue;
 }
 
+// GLOBAL: SWBF2 0x007e1170
 PblList<VidConfig> VidConfig::sConfigs;
 
 // FUNCTION: SWBF2 0x006e9a80

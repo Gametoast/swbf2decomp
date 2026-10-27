@@ -2628,6 +2628,9 @@
     <ClCompile Include="src\RedEngineFL\Application\pc\pcShadowQuadRenderable.cpp">
       <InlineFunctionExpansion Condition="'$(Configuration)'=='Release'">OnlyExplicitInline</InlineFunctionExpansion>
     </ClCompile>
+    <ClCompile Include="src\RedEngineFL\Graphics\PC\pcRedShader.cpp">
+      <InlineFunctionExpansion Condition="'$(Configuration)'=='Release'">OnlyExplicitInline</InlineFunctionExpansion>
+    </ClCompile>
     <ClCompile Include="src\RedEngineFL\Graphics\PC\Shaders\pcClearShader.cpp">
       <InlineFunctionExpansion Condition="'$(Configuration)'=='Release'">OnlyExplicitInline</InlineFunctionExpansion>
     </ClCompile>
@@ -2729,9 +2732,6 @@
       <InlineFunctionExpansion Condition="'$(Configuration)'=='Release'">OnlyExplicitInline</InlineFunctionExpansion>
     </ClCompile>
     <ClCompile Include="src\RedEngineFL\Graphics\PC\pcRedSegment.cpp">
-      <InlineFunctionExpansion Condition="'$(Configuration)'=='Release'">OnlyExplicitInline</InlineFunctionExpansion>
-    </ClCompile>
-    <ClCompile Include="src\RedEngineFL\Graphics\PC\pcRedShader.cpp">
       <InlineFunctionExpansion Condition="'$(Configuration)'=='Release'">OnlyExplicitInline</InlineFunctionExpansion>
     </ClCompile>
     <ClCompile Include="src\RedEngineFL\Graphics\PC\pcRedStencilShadow.cpp">
