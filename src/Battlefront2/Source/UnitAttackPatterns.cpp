@@ -1,4 +1,7 @@
 #include <d3dx9math.h>
+
+#include "EntityHover.h"
+#include "EntityWalker.h"
 #include "UnitAttackPatterns.h"
 #include "AIDifficulty.h"
 #include "AILowLevel.h"
@@ -51,9 +54,6 @@ namespace VisionManager
 namespace
 {
 
-    const PblHash kRttiHashEntitySoldier("EntitySoldier");
-    const PblHash kRttiHashEntityHover("EntityHover");
-    const PblHash kRttiHashEntityWalker("EntityWalker");
 
     inline bool IsRtti(const GameObject* pObj, unsigned int uRtti)
     {
@@ -371,10 +371,10 @@ bool AttackPatterns::ToggleToCover(int iReturnState, float fPercentMult)
 // FUNCTION: SWBF2 0x0065fae0
 bool AttackPatterns::ToggleToVehicleCover(int iReturnState)
 {
-    if (GetMe()->GetEntity()->IsRtti(kRttiHashEntityHover) &&
+    if (GetMe()->GetEntity()->IsRtti(EntityHover::rttiHashEntityHover) &&
         GetMaxStrafe(GetMe()->GetGameObject()) > 0.0001f &&
         GetAttackHelper()->GetVisibleTarget() &&
-        !IsRtti(GetAttackHelper()->GetVisibleTarget(), kRttiHashEntitySoldier) &&
+        !IsRtti(GetAttackHelper()->GetVisibleTarget(), EntitySoldier::rttiHashEntitySoldier) &&
         GameLoop::GetMissionTime() > mSwitchToVehicleCoverTimer)
     {
         mSwitchToVehicleCoverTimer = AIUtil::GetRandomInt(2, 5) + GameLoop::GetMissionTime();
@@ -391,7 +391,7 @@ bool AttackPatterns::ToggleToVehicleCover(int iReturnState)
 // FUNCTION: SWBF2 0x0065fbe0
 bool AttackPatterns::ToggleToJetJump(int iReturnState)
 {
-    if (GetMe()->GetEntity()->IsRtti(kRttiHashEntitySoldier))
+    if (GetMe()->GetEntity()->IsRtti(EntitySoldier::rttiHashEntitySoldier))
     {
         const Entity* pSoldier = GetMe()->GetEntity();
         const EntitySoldierClass* pClass = GetSoldierClass(pSoldier);
@@ -410,7 +410,7 @@ bool AttackPatterns::ToggleToJetJump(int iReturnState)
 // FUNCTION: SWBF2 0x0065fca0
 bool AttackPatterns::ToggleToJetJumpHint(int iReturnState)
 {
-    if (GetMe()->GetEntity()->IsRtti(kRttiHashEntitySoldier))
+    if (GetMe()->GetEntity()->IsRtti(EntitySoldier::rttiHashEntitySoldier))
     {
         const Entity* pSoldier = GetMe()->GetEntity();
         const EntitySoldierClass* pClass = GetSoldierClass(pSoldier);
@@ -461,8 +461,8 @@ void AttackPatterns::DoStationary()
         return;
     }
 
-    if ((IsRtti(GetMe()->GetGameObject(), kRttiHashEntityHover) ||
-         IsRtti(GetMe()->GetGameObject(), kRttiHashEntityWalker)) &&
+    if ((IsRtti(GetMe()->GetGameObject(), EntityHover::rttiHashEntityHover) ||
+         IsRtti(GetMe()->GetGameObject(), EntityWalker::rttiHashEntityWalker)) &&
         GetMaxSpeed(GetMe()->GetGameObject()) < 13.0f &&
         GetMaxStrafe(GetMe()->GetGameObject()) > 0.0001f &&
         AIUtil::GetRandomIntPerSecond(1, 13) == 1)
@@ -742,7 +742,7 @@ void AttackPatterns::DoMelee()
 
     mOwner->FaceTarget(HEIGHT_STAND);
 
-    if (GetMe()->GetEntity()->IsRtti(kRttiHashEntitySoldier) && GetAcklayData(GetMe()->GetEntity()))
+    if (GetMe()->GetEntity()->IsRtti(EntitySoldier::rttiHashEntitySoldier) && GetAcklayData(GetMe()->GetEntity()))
     {
         const PblMatrix& mTarget = GetGeometryCollision(GetAttackHelper()->GetTarget())->GetMatrix();
         const PblMatrix& mMe = GetMe()->GetMatrix();
@@ -1074,7 +1074,7 @@ void AttackPatterns::CleanJetJumpHint()
 // FUNCTION: SWBF2 0x00661a70
 bool AttackPatterns::ToggleToJetJumpCharge(int iReturnState)
 {
-    if (!GetMe()->GetEntity()->IsRtti(kRttiHashEntitySoldier))
+    if (!GetMe()->GetEntity()->IsRtti(EntitySoldier::rttiHashEntitySoldier))
     {
         return false;
     }

@@ -270,10 +270,12 @@ public:
 
     // FUNCTION: SWBF2 0x00444310
     virtual const GameObject* GetGameObject() const { return this; }
-    // SYNTHETIC: SWBF2 0x00446e09
     // [thunk]:GameObject::GetGameObject`adjustor{320}'
-    // SYNTHETIC: SWBF2 0x00446e1c
+    // SYNTHETIC: SWBF2 0x00446e09
+    // ?GetGameObject@GameObject@@WBEA@BEPBV1@XZ
     // [thunk]:GameObject::GetGameObject`adjustor{12}'
+    // SYNTHETIC: SWBF2 0x00446e1c
+    // ?GetGameObject@GameObject@@WM@BEPBV1@XZ
     // FUNCTION: SWBF2 0x00444300
     virtual GameObject* GetGameObject() { return this; }
     virtual void Init();

@@ -98,8 +98,9 @@ public:
     // SYNTHETIC: SWBF2 0x00637750
     // SkyDome::`scalar deleting destructor'
 
-    // SYNTHETIC: SWBF2 0x00638719
     // [thunk]:SkyDome::`vector deleting destructor'
+    // SYNTHETIC: SWBF2 0x00638719
+    // ??_ESkyDome@@WBM@AEPAXI@Z
 
     virtual void Render(int value);
 

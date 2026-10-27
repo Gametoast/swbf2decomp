@@ -195,14 +195,11 @@ void EncryptedAppTicketDownloader::OnEncryptedAppTicketResponse(EncryptedAppTick
     }
 }
 
-// TEMPLATE: SWBF2 0x0052ff30
-// `anonymous namespace'::CCallResult<`anonymous namespace'::EncryptedAppTicketDownloader,`anonymous namespace'::EncryptedAppTicketResponse_t>::Run
 
-// TEMPLATE: SWBF2 0x0052ff70
-// `anonymous namespace'::CCallResult<`anonymous namespace'::EncryptedAppTicketDownloader,`anonymous namespace'::EncryptedAppTicketResponse_t>::Run
 
-// TEMPLATE: SWBF2 0x0052f440
-// `anonymous namespace'::CCallResult<`anonymous namespace'::EncryptedAppTicketDownloader,`anonymous namespace'::EncryptedAppTicketResponse_t>::GetCallbackSizeBytes
+
+
+
 
 class GalaxyFriendListListener
     : public galaxy::api::SelfRegisteringListener<galaxy::api::IFriendListListener>
@@ -579,16 +576,16 @@ bool gf::friends::isFriend(const galaxy::api::GalaxyID& id)
 // std::_Hash<std::_Umap_traits<unsigned __int64,std::basic_string<char,std::char_traits<char>,std::allocator<char> >,std::_Uhash_compare<unsigned __int64,std::hash<unsigned __int64>,std::equal_to<unsigned __int64> >,std::allocator<std::pair<unsigned __int64 const ,std::basic_string<char,std::char_traits<char>,std::allocator<char> > > >,0> >::find
 
 // TEMPLATE: SWBF2 0x005300e0
-// std::_Hash<std::_Umap_traits<unsigned __int64,std::basic_string<char,std::char_traits<char>,std::allocator<char> >,std::_Uhash_compare<unsigned __int64,std::hash<unsigned __int64>,std::equal_to<unsigned __int64> >,std::allocator<std::pair<unsigned __int64 const ,std::basic_string<char,std::char_traits<char>,std::allocator<char> > > >,0> >::emplace
+// std::_Hash<std::_Umap_traits<unsigned __int64,std::basic_string<char,std::char_traits<char>,std::allocator<char> >,std::_Uhash_compare<unsigned __int64,std::hash<unsigned __int64>,std::equal_to<unsigned __int64> >,std::allocator<std::pair<unsigned __int64 const ,std::basic_string<char,std::char_traits<char>,std::allocator<char> > > >,0> >::emplace<std::piecewise_construct_t const &,std::tuple<unsigned __int64 const &>,std::tuple<> >
 
 // TEMPLATE: SWBF2 0x00530350
-// std::_Hash<std::_Umap_traits<unsigned __int64,std::basic_string<char,std::char_traits<char>,std::allocator<char> >,std::_Uhash_compare<unsigned __int64,std::hash<unsigned __int64>,std::equal_to<unsigned __int64> >,std::allocator<std::pair<unsigned __int64 const ,std::basic_string<char,std::char_traits<char>,std::allocator<char> > > >,0> >::_Insert
+// std::_Hash<std::_Umap_traits<unsigned __int64,std::basic_string<char,std::char_traits<char>,std::allocator<char> >,std::_Uhash_compare<unsigned __int64,std::hash<unsigned __int64>,std::equal_to<unsigned __int64> >,std::allocator<std::pair<unsigned __int64 const ,std::basic_string<char,std::char_traits<char>,std::allocator<char> > > >,0> >::_Insert<std::pair<unsigned __int64 const ,std::basic_string<char,std::char_traits<char>,std::allocator<char> > > &,std::_List_unchecked_iterator<std::_List_val<std::_List_simple_types<std::pair<unsigned __int64 const ,std::basic_string<char,std::char_traits<char>,std::allocator<char> > > > > > >
 
 // TEMPLATE: SWBF2 0x005304e0
 // std::_Hash<std::_Umap_traits<unsigned __int64,std::basic_string<char,std::char_traits<char>,std::allocator<char> >,std::_Uhash_compare<unsigned __int64,std::hash<unsigned __int64>,std::equal_to<unsigned __int64> >,std::allocator<std::pair<unsigned __int64 const ,std::basic_string<char,std::char_traits<char>,std::allocator<char> > > >,0> >::_Check_size
 
 // TEMPLATE: SWBF2 0x00530490
-// std::list<std::pair<unsigned __int64 const ,std::basic_string<char,std::char_traits<char>,std::allocator<char> > >,std::allocator<std::pair<unsigned __int64 const ,std::basic_string<char,std::char_traits<char>,std::allocator<char> > > > >::erase
+// std::_Hash<std::_Umap_traits<unsigned __int64,std::basic_string<char,std::char_traits<char>,std::allocator<char> >,std::_Uhash_compare<unsigned __int64,std::hash<unsigned __int64>,std::equal_to<unsigned __int64> >,std::allocator<std::pair<unsigned __int64 const ,std::basic_string<char,std::char_traits<char>,std::allocator<char> > > >,0> >::_Destroy_if_not_nil
 
 // TEMPLATE: SWBF2 0x005305a0
 // std::_List_buy<std::pair<unsigned __int64 const ,std::basic_string<char,std::char_traits<char>,std::allocator<char> > >,std::allocator<std::pair<unsigned __int64 const ,std::basic_string<char,std::char_traits<char>,std::allocator<char> > > > >::_Buynode<std::piecewise_construct_t const &,std::tuple<unsigned __int64 const &>,std::tuple<> >
@@ -639,3 +636,30 @@ const char* gf::friends::connectionStringByIndex(unsigned int index)
 
 // LIBRARY: SWBF2 0x0052e610
 // `anonymous namespace'::CSteamAPIContext::Init
+
+// std::string byte allocator temporary construction
+// TEMPLATE: SWBF2 0x52fbc0
+// std::_Wrap_alloc<std::allocator<char> >::_Wrap_alloc<std::allocator<char> >
+
+// unordered map bucket vector trivial range destruction
+// TEMPLATE: SWBF2 0x52fc60
+// std::vector<std::_List_unchecked_iterator<std::_List_val<std::_List_simple_types<std::pair<unsigned __int64 const ,std::basic_string<char,std::char_traits<char>,std::allocator<char> > > > > >,std::_Wrap_alloc<std::allocator<std::_List_unchecked_iterator<std::_List_val<std::_List_simple_types<std::pair<unsigned __int64 const ,std::basic_string<char,std::char_traits<char>,std::allocator<char> > > > > > > > >::_Destroy
+
+// unordered map bucket allocator temporary construction
+// TEMPLATE: SWBF2 0x52fc70
+// std::_Wrap_alloc<std::_Wrap_alloc<std::allocator<std::_List_unchecked_iterator<std::_List_val<std::_List_simple_types<std::pair<unsigned __int64 const ,std::basic_string<char,std::char_traits<char>,std::allocator<char> > > > > > > > >::_Wrap_alloc<std::_Wrap_alloc<std::allocator<std::_List_unchecked_iterator<std::_List_val<std::_List_simple_types<std::pair<unsigned __int64 const ,std::basic_string<char,std::char_traits<char>,std::allocator<char> > > > > > > > >
+
+// unordered map node allocator temporary construction
+// TEMPLATE: SWBF2 0x52fc80
+// std::_Wrap_alloc<std::allocator<std::_List_node<std::pair<unsigned __int64 const ,std::basic_string<char,std::char_traits<char>,std::allocator<char> > >,void *> > >::_Wrap_alloc<std::allocator<std::_List_node<std::pair<unsigned __int64 const ,std::basic_string<char,std::char_traits<char>,std::allocator<char> > >,void *> > >
+
+// std::string allocator destroy char pointer payload
+// TEMPLATE: SWBF2 0x530150
+// std::_Wrap_alloc<std::allocator<char> >::destroy<char *>
+
+// unordered map allocator destroy node pointer links
+// TEMPLATE: SWBF2 0x530160
+// std::_Wrap_alloc<std::allocator<std::_List_node<std::pair<unsigned __int64 const ,std::basic_string<char,std::char_traits<char>,std::allocator<char> > >,void *> > >::destroy<std::_List_node<std::pair<unsigned __int64 const ,std::basic_string<char,std::char_traits<char>,std::allocator<char> > >,void *> *>
+
+// LIBRARY: SWBF2 0x0052e3c0
+// std::_Hash_seq

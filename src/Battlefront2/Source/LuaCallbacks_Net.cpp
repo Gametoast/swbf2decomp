@@ -63,16 +63,6 @@ bool __fastcall LuaHelper::IsString(int iArg)
     return lua_isstring(LuaHelper::mState, iArg) != 0;
 }
 
-// FUNCTION: SWBF2 0x0052e3c0
-unsigned int __fastcall HashGalaxyID(const unsigned char* pID)
-{
-    unsigned int hash = 0x811c9dc5;
-    for (int i = 0; i < 8; ++i)
-    {
-        hash = (hash ^ pID[i]) * 0x01000193;
-    }
-    return hash;
-}
 
 // FUNCTION: SWBF2 0x0053dc00
 void GameVoiceChat::Node::GetSendMask(Transport::Mask& mask, bool& enable, bool& maskExisting) const
@@ -3691,11 +3681,6 @@ char gLoginName[256];
 // FUNCTION: SWBF2 0x0052e430
 void sub_52E430() {}
 
-// FUNCTION: SWBF2 0x00530150
-void __stdcall sub_530150(unsigned int) {}
-
-// FUNCTION: SWBF2 0x00530160
-void __stdcall sub_530160(unsigned int) {}
 
 // FUNCTION: SWBF2 0x00530170
 int __cdecl FillWordRange(unsigned int first, unsigned int last, const int* value)

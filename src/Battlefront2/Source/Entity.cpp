@@ -243,5 +243,6 @@ EntityEx::~EntityEx()
 
 
 
-// SYNTHETIC: SWBF2 0x005a93fc
 // [thunk]:MountedTurret::GetEntity`adjustor{12}'
+// SYNTHETIC: SWBF2 0x005a93fc
+// ?GetEntity@MountedTurret@@WM@AEPAVEntity@@XZ

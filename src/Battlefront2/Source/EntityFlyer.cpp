@@ -5607,8 +5607,9 @@ void EntityFlyer::SetupInterpolatedCameraTrackMatrix(PblMatrix& rMatrix)
 #endif
 template ParticleEmitterObject* PblHandle<ParticleEmitterObject>::GetObjectA() const;
 
-// SYNTHETIC: SWBF2 0x0047852f
 // [thunk]:CommandFlyer::`scalar deleting destructor'`adjustor{320}'
+// SYNTHETIC: SWBF2 0x0047852f
+// ??_ECommandFlyer@@WBEA@AEPAXI@Z
 // SYNTHETIC: SWBF2 0x0047853a
 // ??_ECommandFlyer@@WDMM@AEPAXI@Z
 // SYNTHETIC: SWBF2 0x00478545

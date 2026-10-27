@@ -34,6 +34,8 @@ public:
         // PblList<Factory<Weapon,WeaponClass,WeaponDesc> >::Itor::Itor
         // TEMPLATE: SWBF2 0x005d3b50
         // PblList<Factory<Ordnance,OrdnanceClass,OrdnanceDesc> >::Itor::Itor
+        // TEMPLATE: SWBF2 0x00446d80
+        // PblList<Factory<Entity,EntityClass,EntityDesc> >::Itor::Itor
         Itor(Node* pNode) : _pNode(pNode) {}
 
         // TEMPLATE: SWBF2 0x0049e1f0
@@ -44,6 +46,8 @@ public:
         // PblList<FlagItem>::Itor::operator FlagItem *
         // TEMPLATE: SWBF2 0x00437de0
         // PblList<Controllable>::Itor::operator Controllable *
+        // TEMPLATE: SWBF2 0x00446db0
+        // PblList<Factory<Entity,EntityClass,EntityDesc> >::Itor::operator Factory<Entity,EntityClass,EntityDesc> *
         operator TYPE*() const { return _pNode->_pObject; }
 
         // TEMPLATE: SWBF2 0x0049e1e0
@@ -69,6 +73,8 @@ public:
         // PblList<FlagItem>::Itor::operator++
         // TEMPLATE: SWBF2 0x00437df0
         // PblList<Controllable>::Itor::operator++
+        // TEMPLATE: SWBF2 0x00446dc0
+        // PblList<Factory<Entity,EntityClass,EntityDesc> >::Itor::operator++
         Itor& operator++() { _pNode = _pNode->_pNext; return *this; }
 
         Itor& operator--() { _pNode = _pNode->_pPrev; return *this; }
@@ -93,6 +99,8 @@ public:
     // PblList<Factory<Weapon,WeaponClass,WeaponDesc> >::GetFirst
     // TEMPLATE: SWBF2 0x00487fa0
     // PblList<FlagItem>::GetFirst
+    // TEMPLATE: SWBF2 0x00446d70
+    // PblList<Factory<Entity,EntityClass,EntityDesc> >::GetFirst
     Node* GetFirst() const { return _head._pNext; }
 
     Itor Begin() const { return Itor(GetFirst()); }

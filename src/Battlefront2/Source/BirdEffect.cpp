@@ -1041,18 +1041,7 @@ bool BirdParticleManager::Update(float fDeltaTime)
     return true;
 }
 
-// FUNCTION: SWBF2 0x00446d70
-int __fastcall ReadIteratorSecondWord(const unsigned int* pThis)
-{
-    return pThis[1];
-}
 
-// FUNCTION: SWBF2 0x00446d80
-unsigned int* __fastcall SetIteratorNodeWord(unsigned int* pThis, void*, unsigned int value)
-{
-    *pThis = value;
-    return pThis;
-}
 
 // FUNCTION: SWBF2 0x00446d90
 unsigned int __fastcall sub_446D90(const unsigned int* pThis)
@@ -1066,15 +1055,4 @@ unsigned int __fastcall sub_446DA0(const unsigned int* pThis)
     return *(const unsigned int*)(*pThis + 12);
 }
 
-// FUNCTION: SWBF2 0x00446db0
-unsigned int __fastcall sub_446DB0(const unsigned int* pThis)
-{
-    return *(const unsigned int*)(*pThis + 12);
-}
 
-// FUNCTION: SWBF2 0x00446dc0
-unsigned int* __fastcall AdvanceIteratorNodeWord(unsigned int* pThis)
-{
-    *pThis = *(const unsigned int*)(*pThis + 4);
-    return pThis;
-}

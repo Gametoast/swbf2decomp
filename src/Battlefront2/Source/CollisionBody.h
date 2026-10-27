@@ -104,7 +104,11 @@ public:
 
     static void ClearAll();
 
-    static CollisionBodyPrimitive* Find(unsigned int uHash);
+    // FUNCTION: SWBF2 0x004920c0
+    static CollisionBodyPrimitive* Find(unsigned int uHash)
+    {
+        return _HashTable.Find(uHash);
+    }
 
     CollisionPrimitive mPrimitive;
     static PblHashTable<CollisionBodyPrimitive, 1024> _HashTable;

@@ -127,7 +127,11 @@ public:
     static PblHashTable<CollisionMesh, 1024> _HashTable;
     static void ClearAll();
 
-    static const CollisionMesh* Find(unsigned int uHash);
+    // FUNCTION: SWBF2 0x004447f0
+    static const CollisionMesh* Find(unsigned int uHash)
+    {
+        return _HashTable.Find(uHash);
+    }
 
     void _Read(PblFileChunk& chunk);
 

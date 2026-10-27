@@ -152,11 +152,7 @@ float GameObjectClass::GetReboardTime() const
     return 0.0f;
 }
 
-// FUNCTION: SWBF2 0x004447f0
-const CollisionMesh* CollisionMesh::Find(unsigned int uHash)
-{
-    return _HashTable.Find(uHash);
-}
+
 
 // FUNCTION: SWBF2 0x00445570
 void AsteroidClass::SetProperty(unsigned int uProperty, const char* pszValue)

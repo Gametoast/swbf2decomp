@@ -142,20 +142,20 @@ typedef RedJoystick* tJoystickPorts10[10];
 typedef unsigned char tBytes4C[0x4c];
 typedef unsigned char tBytes168[0x168];
 
-// GLOBAL: SWBF2 0x01ebe078
+
 RawControllerInputs& gPrimaryRawInputs = FLInputManager::s_instance.mJoysticks[0];
-// GLOBAL: SWBF2 0x01ec0640
+
 void*& gGuiInputTarget = FLIM_AT(void*, 0x428 + 0x25c8);
-// GLOBAL: SWBF2 0x01ec0644
+
 bool& gProcessAfterReading = FLIM_AT(bool, 0x428 + 0x25cc);
-// GLOBAL: SWBF2 0x01ec0648
+
 void*& gProcessedInputTarget = FLIM_AT(void*, 0x428 + 0x25d0);
 
 RedJoystick* (&gJoystickPorts)[10] = FLIM_AT(tJoystickPorts10, 0x29fc);
 
 unsigned char (&gProcessedInputStorage)[0x4c] = FLIM_AT(tBytes4C, 0x2cc8);
 unsigned char (&gGuiInputStorage)[0x168] = FLIM_AT(tBytes168, 0x2d14);
-// GLOBAL: SWBF2 0x01ec0acc
+
 bool& gControllerMissingFlag = FLIM_AT(bool, 0x2e7c);
 #undef FLIM_AT
 

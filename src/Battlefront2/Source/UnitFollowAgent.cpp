@@ -1,4 +1,6 @@
 #include "UnitFollowAgent.h"
+
+#include "EntityDroideka.h"
 #include "GameObject.h"
 
 #include "EventInfo.h"
@@ -87,8 +89,6 @@ namespace
         return h;
     }
 
-    const PblHash kRttiHashEntitySoldier("EntitySoldier");
-    const PblHash kRttiHashEntityDroideka("EntityDroideka");
 
     inline Controllable* SeatOf(const GameObject* pTarget)
     {
@@ -277,7 +277,7 @@ void UnitFollowAgent::UpdateStatePostVision(float dt)
             if (pDeep)
             {
                 Entity* pOwnerEntity = mCtrl->mOwner->GetEntity();
-                if (!pOwnerEntity->IsRtti(kRttiHashEntityDroideka))
+                if (!pOwnerEntity->IsRtti(EntityDroideka::rttiHashEntityDroideka))
                 {
 
                     GameObject* pDeepGameObject =
@@ -300,7 +300,7 @@ void UnitFollowAgent::UpdateStatePostVision(float dt)
         {
             bool bIsSeatedSoldier = false;
             GameObject* pSelfObj = mCtrl->mOwner->GetGameObject();
-            if (pSelfObj->IsRtti(kRttiHashEntitySoldier) &&
+            if (pSelfObj->IsRtti(EntitySoldier::rttiHashEntitySoldier) &&
                 static_cast<EntitySoldier*>(mCtrl->mOwner->GetGameObject())->mState == SoldierState::JET_HOVER)
             {
                 bIsSeatedSoldier = true;

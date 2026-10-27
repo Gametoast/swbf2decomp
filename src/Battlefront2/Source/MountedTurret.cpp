@@ -1800,7 +1800,7 @@ bool MountedTurretClass::SetProperty(unsigned int uHash, const char* pcValue, co
 // ?GetGameObject@MountedTurret@@WCE@BEPBVGameObject@@XZ
 
 // SYNTHETIC: SWBF2 0x005a9404
-// ?GetEntity@MountedTurret@@WM@AEPAVEntity@@XZ
+// ?GetEntity@MountedTurret@@WM@BEPBVEntity@@XZ
 
 // SYNTHETIC: SWBF2 0x005a940c
 // ??_EMountedTurret@@WCE@AEPAXI@Z

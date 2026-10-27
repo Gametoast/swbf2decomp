@@ -6234,28 +6234,6 @@ bool netLobbyRequestPending;
 // GLOBAL: SWBF2 0x01e65032
 bool netLeavingLobby;
 
-// FUNCTION: SWBF2 0x0052fbc0
-void* __fastcall ReturnUnorderedMapThis(void* pThis)
-{
-    return pThis;
-}
-
-// FUNCTION: SWBF2 0x0052fc60
-void __stdcall NoOpListCleanup(int, int)
-{
-}
-
-// FUNCTION: SWBF2 0x0052fc70
-void* __fastcall ReturnListThis(void* pThis)
-{
-    return pThis;
-}
-
-// FUNCTION: SWBF2 0x0052fc80
-void* __fastcall ReturnListEnd(void* pThis)
-{
-    return pThis;
-}
 
 // FUNCTION: SWBF2 0x005e7350
 const char* GetEncodedLobbyPassword()
@@ -6267,10 +6245,10 @@ const char* GetEncodedLobbyPassword()
 // std::error_category::default_error_condition
 
 // LIBRARY: SWBF2 0x005d4720
-// std::error_category::equivalent(int, std::error_condition const&)
+// std::error_category::equivalent
 
 // LIBRARY: SWBF2 0x005d4760
-// std::error_category::equivalent(std::error_code const&, int)
+// std::error_category::equivalent
 
 // LIBRARY: SWBF2 0x005d4780
 // std::_Generic_error_category::name
@@ -6363,7 +6341,7 @@ const char* GetNextMissionForLobby()
 }
 
 // LIBRARY: SWBF2 0x005d7d30
-// std::basic_string<char>::insert(size_type, size_type, char)
+// std::basic_string<char,std::char_traits<char>,std::allocator<char> >::insert
 
 // LIBRARY: SWBF2 0x005d8a40
 // std::back_insert_iterator<std::string>::operator=(const char&)

@@ -59,10 +59,12 @@ public:
 public:
     LensFlare();
     LensFlare(const LensFlare& that);
-    // SYNTHETIC: SWBF2 0x004c0902
     // [thunk]:LensFlare::`scalar deleting destructor' adjustor{40}
-    // SYNTHETIC: SWBF2 0x004c090a
+    // SYNTHETIC: SWBF2 0x004c0902
+    // ??_ELensFlare@@WCI@AEPAXI@Z
     // [thunk]:LensFlare::`scalar deleting destructor' adjustor{16}
+    // SYNTHETIC: SWBF2 0x004c090a
+    // ??_ELensFlare@@WBA@AEPAXI@Z
     // SYNTHETIC: SWBF2 0x004bdb80
     // LensFlare::`scalar deleting destructor'
     // FUNCTION: SWBF2 0x004bdb00

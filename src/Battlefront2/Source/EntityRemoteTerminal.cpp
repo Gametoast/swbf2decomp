@@ -284,7 +284,7 @@ Trackable* EntityRemoteTerminal::GetTrackable()
 }
 
 // SYNTHETIC: SWBF2 0x004dde99
-// ?GetControllable@EntityRemoteTerminal@@WCFI@AEPAVControllable@@XZ
+// ?GetControllable@EntityRemoteTerminal@@WCFI@BEPBVControllable@@XZ
 // FUNCTION: SWBF2 0x004dcae0
 Controllable* EntityRemoteTerminal::GetControllable()
 {
@@ -292,7 +292,7 @@ Controllable* EntityRemoteTerminal::GetControllable()
 }
 
 // SYNTHETIC: SWBF2 0x004dde8e
-// ?GetControllable@EntityRemoteTerminal@@WCFI@BEPBVControllable@@XZ
+// ?GetControllable@EntityRemoteTerminal@@WCFI@AEPAVControllable@@XZ
 // FUNCTION: SWBF2 0x004dcad0
 const Controllable* EntityRemoteTerminal::GetControllable() const
 {
@@ -323,33 +323,9 @@ float EntityRemoteTerminal::GetMaxStrafe() const
     return 0.0f;
 }
 
-// FUNCTION: SWBF2 0x004dcb30
-EntityRemoteTerminal* EntityRemoteTerminal::GetNextLinkedTerminal()
-{
-    if (!mNextLinkedTerminal)
-    {
-        EntityEx* pEntity = EntityEx::mIdMap.Find(mNextLinkedTerminalHash);
-        if (pEntity && pEntity->IsRtti(rttiHashEntityRemoteTerminal))
-        {
-            mNextLinkedTerminal = reinterpret_cast<EntityRemoteTerminal*>(pEntity);
-        }
-    }
-    return mNextLinkedTerminal;
-}
 
-// FUNCTION: SWBF2 0x004dcb90
-EntityRemoteTerminal* EntityRemoteTerminal::GetPrevLinkedTerminal()
-{
-    if (!mPrevLinkedTerminal)
-    {
-        EntityEx* pEntity = EntityEx::mIdMap.Find(mPrevLinkedTerminalHash);
-        if (pEntity && pEntity->IsRtti(rttiHashEntityRemoteTerminal))
-        {
-            mPrevLinkedTerminal = reinterpret_cast<EntityRemoteTerminal*>(pEntity);
-        }
-    }
-    return mPrevLinkedTerminal;
-}
+
+
 
 // FUNCTION: SWBF2 0x0046db50
 GameObject* EntityRemoteTerminal::GetRemoteGameObject()

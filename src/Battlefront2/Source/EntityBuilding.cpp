@@ -730,17 +730,9 @@ bool EntityBuilding::ApplyDamage(const DamageDesc& damage, const PblVector3& vDi
 
 
 
-// FUNCTION: SWBF2 0x004439c0
-const GameModel* GameModel::Find(unsigned int uHash)
-{
-    return _HashTable.Find(uHash);
-}
 
-// FUNCTION: SWBF2 0x004920c0
-CollisionBodyPrimitive* CollisionBodyPrimitive::Find(unsigned int uHash)
-{
-    return _HashTable.Find(uHash);
-}
+
+
 
 // FUNCTION: SWBF2 0x00493280
 void EntityBuilding::SetPosition(const PblVector3& vPos)

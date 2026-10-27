@@ -1,5 +1,21 @@
 #include "CombatUtil.h"
 
+#include "CommandFlyer.h"
+#include "EntityBuilding.h"
+#include "EntityDroid.h"
+#include "EntityDroideka.h"
+#include "EntityFlyer.h"
+#include "EntityHover.h"
+#include "EntityTrap.h"
+#include "EntityWalker.h"
+#include "OrdnanceBeam.h"
+#include "OrdnanceGrenade.h"
+#include "OrdnanceHaywire.h"
+#include "OrdnanceShell.h"
+#include "OrdnanceSticky.h"
+#include "WeaponMelee.h"
+#include "WeaponMeleeInstance.h"
+
 #include <math.h>
 
 #include "AIDifficulty.h"
@@ -61,32 +77,7 @@ bool sHasSetDenseFlag;
 namespace
 {
 
-    const PblHash kRttiHashEntitySoldier("EntitySoldier");
-    const PblHash kRttiHashEntityDroideka("EntityDroideka");
-    const PblHash kRttiHashEntityDroid("EntityDroid");
-    const PblHash kRttiHashOrdnanceMissileClass("OrdnanceMissileClass");
-    const PblHash kRttiHashOrdnanceBeamClass("OrdnanceBeamClass");
-    const PblHash kRttiHashWeaponCannonClass("WeaponCannonClass");
-    const PblHash kRttiHashWeaponGrenadeClass("WeaponGrenadeClass");
-    const PblHash kRttiHashWeaponMeleeThrowClass("WeaponMeleeThrowClass");
-    const PblHash kRttiHashWeaponMeleeClass("WeaponMeleeClass");
-    const PblHash kRttiHashWeaponMelee("WeaponMelee");
-    const PblHash kRttiHashEntityRemoteTerminal("EntityRemoteTerminal");
-    const PblHash kRttiHashWeaponRemoteClass("WeaponRemoteClass");
-    const PblHash kRttiHashEntityFlyerClass("EntityFlyerClass");
-    const PblHash kRttiHashEntityFlyer("EntityFlyer");
-    const PblHash kRttiHashEntityWalker("EntityWalker");
-    const PblHash kRttiHashEntityHover("EntityHover");
 
-    const PblHash kRttiHashCommandFlyer("CommandFlyer");
-    const PblHash kRttiHashEntityBuilding("EntityBuilding");
-    const PblHash kRttiHashEntityBuildingArmed("EntityBuildingArmed");
-    const PblHash kRttiHashEntityTrap("EntityTrap");
-    const PblHash kRttiHashMountedTurret("MountedTurret");
-    const PblHash kRttiHashOrdnanceGrenadeClass("OrdnanceGrenadeClass");
-    const PblHash kRttiHashOrdnanceStickyClass("OrdnanceStickyClass");
-    const PblHash kRttiHashOrdnanceHaywireClass("OrdnanceHaywireClass");
-    const PblHash kRttiHashOrdnanceShellClass("OrdnanceShellClass");
 
     inline const WeaponClass* WeaponGetClass(const Weapon* pWpn)
     {
@@ -253,9 +244,9 @@ float CombatUtil::sGetWpnMaxRange(const Controllable* pMe, const WeaponClass* pC
     float fRange = pClass->mMaxRange;
     if (pClass->mMaxRangeDefault)
     {
-        if (!pMe->GetEntity()->IsRtti(kRttiHashEntitySoldier) &&
-            !pMe->GetEntity()->IsRtti(kRttiHashEntityDroideka) &&
-            !pMe->GetEntity()->IsRtti(kRttiHashEntityDroid))
+        if (!pMe->GetEntity()->IsRtti(EntitySoldier::rttiHashEntitySoldier) &&
+            !pMe->GetEntity()->IsRtti(EntityDroideka::rttiHashEntityDroideka) &&
+            !pMe->GetEntity()->IsRtti(EntityDroid::rttiHashEntityDroid))
         {
             fRange *= 2.0f;
         }
@@ -357,11 +348,11 @@ float CombatUtil::sCalcImpactTime(const DamageOwner& owner, const OrdnanceClass*
                                   const GameObject* pTarget)
 {
     OrdnanceClass* pOrdnance = const_cast<OrdnanceClass*>(pClass);
-    if (pOrdnance->IsRtti(kRttiHashOrdnanceMissileClass))
+    if (pOrdnance->IsRtti(OrdnanceMissileClass::rttiHashOrdnanceMissileClass))
     {
         return sCalcImpactTime_Missile(owner, (const OrdnanceMissileClass*)pClass, pTarget);
     }
-    if (pOrdnance->IsRtti(kRttiHashOrdnanceBeamClass))
+    if (pOrdnance->IsRtti(OrdnanceBeamClass::rttiHashOrdnanceBeamClass))
     {
         return 0.0f;
     }
@@ -511,23 +502,23 @@ float CombatUtil::sCalcDamagePerSecond(Controllable* pMe, const WeaponClass* pCl
                       pMe->GetOffenseMultiplier());
 
     WeaponClass* pWeapon = const_cast<WeaponClass*>(pClass);
-    if (pWeapon->IsRtti(kRttiHashWeaponCannonClass))
+    if (pWeapon->IsRtti(WeaponCannonClass::rttiHashWeaponCannonClass))
     {
         return sCalcDamagePerSecond_Cannon(owner, (const WeaponCannonClass*)pClass, pTarget);
     }
-    if (pWeapon->IsRtti(kRttiHashWeaponGrenadeClass))
+    if (pWeapon->IsRtti(WeaponGrenadeClass::rttiHashWeaponGrenadeClass))
     {
         return sCalcDamagePerSecond_Grenade(owner, (const WeaponGrenadeClass*)pClass, pTarget);
     }
-    if (pWeapon->IsRtti(kRttiHashWeaponMeleeThrowClass))
+    if (pWeapon->IsRtti(WeaponMeleeThrowClass::rttiHashWeaponMeleeThrowClass))
     {
         return sCalcDamagePerSecond_MeleeThrow(owner, (const WeaponMeleeThrowClass*)pClass, pTarget);
     }
-    if (pWeapon->IsRtti(kRttiHashWeaponMeleeClass))
+    if (pWeapon->IsRtti(WeaponMeleeClass::rttiHashWeaponMeleeClass))
     {
         return 100.0f;
     }
-    if (pWeapon->IsRtti(kRttiHashWeaponRemoteClass))
+    if (pWeapon->IsRtti(WeaponRemoteClass::rttiHashWeaponRemoteClass))
     {
         return 1000.0f;
     }
@@ -590,22 +581,22 @@ bool CombatUtil::sCauseDamage(Controllable* pMe, const Weapon* pWpn, const Weapo
     OrdnanceClass* pOrdnance = pClass->mOrdnanceClass;
     if (!pOrdnance)
     {
-        if (pWeaponClass->IsRtti(kRttiHashWeaponRemoteClass))
+        if (pWeaponClass->IsRtti(WeaponRemoteClass::rttiHashWeaponRemoteClass))
         {
             EntityClass* pDispense = ((const WeaponRemoteClass*)pClass)->mDispenseClass;
-            if (pDispense && pDispense->IsRtti(kRttiHashEntityFlyerClass))
+            if (pDispense && pDispense->IsRtti(EntityFlyerClass::rttiHashEntityFlyerClass))
             {
                 return false;
             }
             *pDamagePerSecond = 1000.0f;
             return true;
         }
-        if (pWeaponClass->IsRtti(kRttiHashWeaponMeleeClass) &&
-            (EntityIsRtti(pTarget, kRttiHashEntitySoldier) ||
-             EntityIsRtti(pTarget, kRttiHashEntityDroideka) ||
-             EntityIsRtti(pTarget, kRttiHashEntityWalker) ||
-             EntityIsRtti(pTarget, kRttiHashEntityHover) ||
-             EntityIsRtti(pTarget, kRttiHashEntityBuildingArmed)))
+        if (pWeaponClass->IsRtti(WeaponMeleeClass::rttiHashWeaponMeleeClass) &&
+            (EntityIsRtti(pTarget, EntitySoldier::rttiHashEntitySoldier) ||
+             EntityIsRtti(pTarget, EntityDroideka::rttiHashEntityDroideka) ||
+             EntityIsRtti(pTarget, EntityWalker::rttiHashEntityWalker) ||
+             EntityIsRtti(pTarget, EntityHover::rttiHashEntityHover) ||
+             EntityIsRtti(pTarget, EntityBuildingArmed::rttiHashEntityBuildingArmed)))
         {
             *pDamagePerSecond = 1000.0f;
             return true;
@@ -616,18 +607,18 @@ bool CombatUtil::sCauseDamage(Controllable* pMe, const Weapon* pWpn, const Weapo
     {
         return false;
     }
-    if (EntityIsRtti(pTarget, kRttiHashEntityTrap))
+    if (EntityIsRtti(pTarget, EntityTrap::rttiHashEntityTrap))
     {
         return false;
     }
     if (!(pClass->mAITargetTypes & (1 << GetHealthType(pTarget))) &&
-        !(EntityIsRtti(pTarget, kRttiHashEntityDroideka) && (pClass->mAITargetTypes & 8)))
+        !(EntityIsRtti(pTarget, EntityDroideka::rttiHashEntityDroideka) && (pClass->mAITargetTypes & 8)))
     {
-        if (!pMe->GetEntity()->IsRtti(kRttiHashEntitySoldier))
+        if (!pMe->GetEntity()->IsRtti(EntitySoldier::rttiHashEntitySoldier))
         {
             return false;
         }
-        if (!EntityIsRtti(pTarget, kRttiHashEntitySoldier))
+        if (!EntityIsRtti(pTarget, EntitySoldier::rttiHashEntitySoldier))
         {
             return false;
         }
@@ -649,10 +640,10 @@ bool CombatUtil::sCauseDamage(Controllable* pMe, const Weapon* pWpn, const Weapo
         return true;
     }
 
-    if (pMe->GetEntity()->IsRtti(kRttiHashEntityHover) ||
-        pMe->GetEntity()->IsRtti(kRttiHashEntityWalker) ||
-        pMe->GetEntity()->IsRtti(kRttiHashEntityBuildingArmed) ||
-        pMe->GetEntity()->IsRtti(kRttiHashMountedTurret))
+    if (pMe->GetEntity()->IsRtti(EntityHover::rttiHashEntityHover) ||
+        pMe->GetEntity()->IsRtti(EntityWalker::rttiHashEntityWalker) ||
+        pMe->GetEntity()->IsRtti(EntityBuildingArmed::rttiHashEntityBuildingArmed) ||
+        pMe->GetEntity()->IsRtti(MountedTurret::rttiHashMountedTurret))
     {
         if (fDamagePerSecond > 0.0f && GetDamageable(pTarget)->mCurHealth < 1.0e16f)
         {
@@ -662,7 +653,7 @@ bool CombatUtil::sCauseDamage(Controllable* pMe, const Weapon* pWpn, const Weapo
     }
 
     bool bSlowFlyer = false;
-    if (EntityIsRtti(pTarget, kRttiHashEntityFlyer))
+    if (EntityIsRtti(pTarget, EntityFlyer::rttiHashEntityFlyer))
     {
         int iState = GetFlyerState(pTarget);
         if (iState == 0 || iState == 3 || iState == 1 || LengthSq(GetVelocity(pTarget)) < 256.0f)
@@ -670,17 +661,17 @@ bool CombatUtil::sCauseDamage(Controllable* pMe, const Weapon* pWpn, const Weapo
             bSlowFlyer = true;
         }
     }
-    if (!bSlowFlyer && !EntityIsRtti(pTarget, kRttiHashEntityHover) &&
-        !EntityIsRtti(pTarget, kRttiHashEntityWalker) &&
-        !(IsTargetable(pTarget) && EntityIsRtti(pTarget, kRttiHashEntityBuilding)))
+    if (!bSlowFlyer && !EntityIsRtti(pTarget, EntityHover::rttiHashEntityHover) &&
+        !EntityIsRtti(pTarget, EntityWalker::rttiHashEntityWalker) &&
+        !(IsTargetable(pTarget) && EntityIsRtti(pTarget, EntityBuilding::rttiHashEntityBuilding)))
     {
         return false;
     }
 
     if (fDamagePerSecond > 0.0f)
     {
-        if (pOrdnance->IsRtti(kRttiHashOrdnanceGrenadeClass) ||
-            pOrdnance->IsRtti(kRttiHashOrdnanceStickyClass))
+        if (pOrdnance->IsRtti(OrdnanceGrenadeClass::rttiHashOrdnanceGrenadeClass) ||
+            pOrdnance->IsRtti(OrdnanceStickyClass::rttiHashOrdnanceStickyClass))
         {
             if (LengthSq(GetVelocity(pTarget)) < 144.0f)
             {
@@ -688,10 +679,10 @@ bool CombatUtil::sCauseDamage(Controllable* pMe, const Weapon* pWpn, const Weapo
                 return true;
             }
         }
-        else if (pOrdnance->IsRtti(kRttiHashOrdnanceBeamClass) ||
-                 pOrdnance->IsRtti(kRttiHashOrdnanceHaywireClass) ||
-                 pOrdnance->IsRtti(kRttiHashOrdnanceMissileClass) ||
-                 pOrdnance->IsRtti(kRttiHashOrdnanceShellClass))
+        else if (pOrdnance->IsRtti(OrdnanceBeamClass::rttiHashOrdnanceBeamClass) ||
+                 pOrdnance->IsRtti(OrdnanceHaywireClass::rttiHashOrdnanceHaywireClass) ||
+                 pOrdnance->IsRtti(OrdnanceMissileClass::rttiHashOrdnanceMissileClass) ||
+                 pOrdnance->IsRtti(OrdnanceShellClass::rttiHashOrdnanceShellClass))
         {
             *pDamagePerSecond = fDamagePerSecond;
             return true;
@@ -705,18 +696,18 @@ void CombatUtil::sUseGrenadeAgainstCrowds(const Controllable* pMe, bool bSoldier
                                           const GameObject* pTarget, const WeaponClass* pClass,
                                           bool* pbUse)
 {
-    if (!const_cast<WeaponClass*>(pClass)->IsRtti(kRttiHashWeaponGrenadeClass) || !bSoldier)
+    if (!const_cast<WeaponClass*>(pClass)->IsRtti(WeaponGrenadeClass::rttiHashWeaponGrenadeClass) || !bSoldier)
     {
         return;
     }
 
     const Entity* pEntity = reinterpret_cast<const Entity*>(pTarget);
-    if (pEntity->IsRtti(kRttiHashEntitySoldier))
+    if (pEntity->IsRtti(EntitySoldier::rttiHashEntitySoldier))
     {
         *pbUse = false;
     }
     const Controllable* pHim = GetControllable(pTarget);
-    if ((pHim && pHim->mCtrl && pHim->mCtrl->IsInCrowd()) || pEntity->IsRtti(kRttiHashEntityDroideka))
+    if ((pHim && pHim->mCtrl && pHim->mCtrl->IsInCrowd()) || pEntity->IsRtti(EntityDroideka::rttiHashEntityDroideka))
     {
         Controller* pCtrl = pMe->mCtrl;
         int iRoll = (((UnitController*)pCtrl)->GetRandomSeed() -
@@ -736,8 +727,8 @@ bool CombatUtil::CanGetFireReservation(const WeaponClass* pClass, const GameObje
     OrdnanceClass* pOrdnance = pClass->mOrdnanceClass;
     if (pOrdnance)
     {
-        bool bGrenade = pOrdnance->IsRtti(kRttiHashOrdnanceGrenadeClass);
-        bool bMissile = pOrdnance->IsRtti(kRttiHashOrdnanceMissileClass);
+        bool bGrenade = pOrdnance->IsRtti(OrdnanceGrenadeClass::rttiHashOrdnanceGrenadeClass);
+        bool bMissile = pOrdnance->IsRtti(OrdnanceMissileClass::rttiHashOrdnanceMissileClass);
         if (bGrenade || bMissile)
         {
             if (!ReserveManager::IsReservedBy(pTarget, pMe, RT_HeavyWeapons) &&
@@ -789,7 +780,7 @@ bool CombatUtil::sSelectBestWeaponType(Controllable* pMe, const GameObject* pTar
     float fDistSq = (vPoint.y - pMe->mEyePoint.y) * (vPoint.y - pMe->mEyePoint.y) +
                     (vPoint.x - pMe->mEyePoint.x) * (vPoint.x - pMe->mEyePoint.x) +
                     (vPoint.z - pMe->mEyePoint.z) * (vPoint.z - pMe->mEyePoint.z);
-    bool bSoldier = pMe->GetEntity()->IsRtti(kRttiHashEntitySoldier);
+    bool bSoldier = pMe->GetEntity()->IsRtti(EntitySoldier::rttiHashEntitySoldier);
 
     for (int i = 0; i < pMe->GetWeaponCount(); ++i)
     {
@@ -1186,9 +1177,9 @@ void CombatUtil::InfantryVsVehicle(Controllable* pMe, GameObjectClass::SoldierTy
         }
         break;
     case WeaponClass::MELEE:
-        if (EntityIsRtti(pTarget, kRttiHashEntityBuildingArmed) ||
-            EntityIsRtti(pTarget, kRttiHashEntityWalker) ||
-            EntityIsRtti(pTarget, kRttiHashEntityHover))
+        if (EntityIsRtti(pTarget, EntityBuildingArmed::rttiHashEntityBuildingArmed) ||
+            EntityIsRtti(pTarget, EntityWalker::rttiHashEntityWalker) ||
+            EntityIsRtti(pTarget, EntityHover::rttiHashEntityHover))
         {
             *pDesc->mCoverPercent = 0.0f;
             *pDesc->mPattern = AttackPatterns::STATE_MELEE;
@@ -1240,7 +1231,7 @@ void CombatUtil::SoldierVsFlyer(Controllable* pMe, const GameObject* pTarget, Co
     EntitySoldier* pSoldier = (EntitySoldier*)pMe->GetEntity();
     GameObjectClass::SoldierType eType = (GameObjectClass::SoldierType)pSoldier->mClass->GetSoldierType();
     if (GetFlyerState(pTarget) == 0 &&
-        const_cast<GameObject*>(pTarget)->IsRtti(kRttiHashCommandFlyer))
+        const_cast<GameObject*>(pTarget)->IsRtti(CommandFlyer::rttiHashCommandFlyer))
     {
         InfantryVsVehicle(pMe, eType, pTarget, pDesc);
     }
@@ -1639,7 +1630,7 @@ bool CombatUtil::sIsTargetLinedUpPos(const Controllable* pMe, const PblVector3& 
     // GLOBAL: SWBF2 0x01faa7d8
     static const float sCosWide = PblMath::Cos(PblMath::fPi / 4.0f);
     float fCos = sCosNarrow;
-    if (pWpn->IsRtti(kRttiHashWeaponMelee))
+    if (pWpn->IsRtti(WeaponMelee::rttiHashWeaponMelee))
     {
         fCos = sCosWide;
     }
@@ -1650,8 +1641,8 @@ bool CombatUtil::sIsTargetLinedUpPos(const Controllable* pMe, const PblVector3& 
 
     vDir = AIUtil::GetSafeNormal(pAimer->GetDirection());
     if (!(pMe->mEyeDir.x * vDir.x + pMe->mEyeDir.y * vDir.y + pMe->mEyeDir.z * vDir.z > fCos) &&
-        !pWpn->IsRtti(kRttiHashWeaponMelee) &&
-        !pMe->GetGameObject()->IsRtti(kRttiHashEntityDroideka))
+        !pWpn->IsRtti(WeaponMelee::rttiHashWeaponMelee) &&
+        !pMe->GetGameObject()->IsRtti(EntityDroideka::rttiHashEntityDroideka))
     {
         return false;
     }
@@ -1761,11 +1752,11 @@ bool CombatUtil::CanTurretFaceDisturbance(const Controllable* pMe, const Mounted
 // FUNCTION: SWBF2 0x00470680
 bool CombatUtil::CanFaceDisturbance(const GameObject* pObj, const PblVector3& vPos)
 {
-    if (pObj->IsRtti(kRttiHashEntityRemoteTerminal))
+    if (pObj->IsRtti(EntityRemoteTerminal::rttiHashEntityRemoteTerminal))
     {
         pObj = reinterpret_cast<EntityRemoteTerminal*>(const_cast<GameObject*>(pObj))->GetRemoteGameObject();
     }
-    if (!pObj->IsRtti(kRttiHashEntityBuildingArmed))
+    if (!pObj->IsRtti(EntityBuildingArmed::rttiHashEntityBuildingArmed))
     {
         return false;
     }

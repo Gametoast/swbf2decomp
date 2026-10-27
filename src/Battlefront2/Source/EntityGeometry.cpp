@@ -433,8 +433,9 @@ void ChunkDescriptor::Init()
     mAngularDamping = 0.0f;
 }
 
-// SYNTHETIC: SWBF2 0x004bb0b0
-// ChunkDescriptor::ChunkDescriptor(class ChunkDescriptor const &)
+// ChunkDescriptor::ChunkDescriptor(const ChunkDescriptor&)
+// SYNTHETIC: SWBF2 0x004bb0b0 SYMBOL
+// ??0ChunkDescriptor@@QAE@ABV0@@Z
 
 
 // GLOBAL: SWBF2 0x007e650c
@@ -1312,8 +1313,9 @@ void EntityGeometry::CreateChunkCluster(float fScale)
 // SYNTHETIC: SWBF2 0x00446e24
 // ?GetEntity@EntityGeometry@@WM@AEPAVEntity@@XZ
 
-// SYNTHETIC: SWBF2 0x004bd360
-// ChunkDescriptor::ChunkDescriptor(void)
+// ChunkDescriptor::ChunkDescriptor()
+// SYNTHETIC: SWBF2 0x004bd360 SYMBOL
+// ??0ChunkDescriptor@@QAE@XZ
 
 
 // SYNTHETIC: SWBF2 0x004992d2

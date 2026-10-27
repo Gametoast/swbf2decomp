@@ -94,8 +94,32 @@ public:
     virtual bool UpdateIndirect(float fDeltaTime);
 
     GameObject* GetRemoteGameObject();
-    EntityRemoteTerminal* GetNextLinkedTerminal();
-    EntityRemoteTerminal* GetPrevLinkedTerminal();
+    // FUNCTION: SWBF2 0x004dcb30
+    EntityRemoteTerminal* GetNextLinkedTerminal()
+    {
+        if (!mNextLinkedTerminal)
+        {
+            EntityEx* pEntity = EntityEx::mIdMap.Find(mNextLinkedTerminalHash);
+            if (pEntity && pEntity->IsRtti(rttiHashEntityRemoteTerminal))
+            {
+                mNextLinkedTerminal = reinterpret_cast<EntityRemoteTerminal*>(pEntity);
+            }
+        }
+        return mNextLinkedTerminal;
+    }
+    // FUNCTION: SWBF2 0x004dcb90
+    EntityRemoteTerminal* GetPrevLinkedTerminal()
+    {
+        if (!mPrevLinkedTerminal)
+        {
+            EntityEx* pEntity = EntityEx::mIdMap.Find(mPrevLinkedTerminalHash);
+            if (pEntity && pEntity->IsRtti(rttiHashEntityRemoteTerminal))
+            {
+                mPrevLinkedTerminal = reinterpret_cast<EntityRemoteTerminal*>(pEntity);
+            }
+        }
+        return mPrevLinkedTerminal;
+    }
     bool IsTerminalAvailable(const EntitySoldier* pSoldier);
     EntityRemoteTerminal* GetNextAvailableTerminal(const EntitySoldier* pSoldier);
     EntityRemoteTerminal* GetPrevAvailableTerminal(const EntitySoldier* pSoldier);

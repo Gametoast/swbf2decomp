@@ -179,8 +179,9 @@ public:
     virtual void SetProperty(unsigned int uProperty, const char* pszValue);
     // FUNCTION: SWBF2 0x00444120
     virtual Entity* GetEntity() { return this; }
-    // SYNTHETIC: SWBF2 0x00446e2c
     // [thunk]:EntityGeometry::GetEntity`adjustor{12}'
+    // SYNTHETIC: SWBF2 0x00446e2c
+    // ?GetEntity@EntityGeometry@@WM@BEPBVEntity@@XZ
 
     // FUNCTION: SWBF2 0x00444110
     virtual const Entity* GetEntity() const { return this; }

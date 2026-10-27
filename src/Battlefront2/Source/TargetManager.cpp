@@ -152,7 +152,7 @@ Post _gPost[MAX_POSTS];
 Target _gTarget[MAX_TARGETS];
 
 // SYNTHETIC: SWBF2 0x00406610
-// `dynamic initializer for 'gColorTable''
+// TargetManager::`dynamic initializer for 'gColorTable''
 
 // GLOBAL: SWBF2 0x007ec320
 // gColorTable

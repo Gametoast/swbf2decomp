@@ -1,4 +1,7 @@
 #include <d3dx9math.h>
+
+#include "EntityHover.h"
+#include "EntityWalker.h"
 #include <math.h>
 #include <string.h>
 
@@ -50,11 +53,6 @@ MemoryPool PathFollower::sMemoryPool("PathFollower", sizeof(PathFollower));
 namespace
 {
 
-    const PblHash kRttiHashEntityFlyer("EntityFlyer");
-    const PblHash kRttiHashEntityHover("EntityHover");
-    const PblHash kRttiHashEntityWalker("EntityWalker");
-    const PblHash kRttiHashEntityDroideka("EntityDroideka");
-    const PblHash kRttiHashEntitySoldier("EntitySoldier");
 
     const int kMaxPathNodes = 32;
 
@@ -215,8 +213,8 @@ void PathFollower::ConstructorCommon()
     float dy = mMe.m[3][1] - vFirst.y;
     float dz = mMe.m[3][2] - vFirst.z;
     if (dx * dx + dy * dy + dz * dz < 100.0f &&
-        (mCtrl->mOwner->GetEntity()->IsRtti(kRttiHashEntityHover) ||
-         mCtrl->mOwner->GetEntity()->IsRtti(kRttiHashEntityFlyer)))
+        (mCtrl->mOwner->GetEntity()->IsRtti(EntityHover::rttiHashEntityHover) ||
+         mCtrl->mOwner->GetEntity()->IsRtti(EntityFlyer::rttiHashEntityFlyer)))
     {
         SetLocalPoints(mItor->mPos, mItor);
     }
@@ -263,7 +261,7 @@ void PathFollower::AppendPath(const AIPath* pPath, bool b)
     if (mCtrl->mLodState >= 3)
     {
         float fRadius = AIUtil::GetCollisionRadius(mCtrl->mOwner->GetGameObject());
-        if (!GameObjectIsRtti(mCtrl->mOwner->GetGameObject(), kRttiHashEntityWalker) || fRadius > 3.0f)
+        if (!GameObjectIsRtti(mCtrl->mOwner->GetGameObject(), EntityWalker::rttiHashEntityWalker) || fRadius > 3.0f)
         {
             int eType = AIUtil::GetAIType(mCtrl->mOwner->GetGameObject());
             mPath->SmoothCorners(fRadius * 10.0f, fRadius, eType);
@@ -505,7 +503,7 @@ void PathFollower::Update(float dt)
         return;
     }
 
-    bool bFlyer = mCtrl->mOwner->GetEntity()->IsRtti(kRttiHashEntityFlyer);
+    bool bFlyer = mCtrl->mOwner->GetEntity()->IsRtti(EntityFlyer::rttiHashEntityFlyer);
     if (!mDone && !bFlyer)
     {
         CheckStuck(dt);
@@ -643,7 +641,7 @@ void PathFollower::UpdateControllableMoving()
 {
     PblVector3 vSteer = mGotoPoint;
 
-    if (mCtrl->mOwner->GetEntity()->IsRtti(kRttiHashEntityFlyer))
+    if (mCtrl->mOwner->GetEntity()->IsRtti(EntityFlyer::rttiHashEntityFlyer))
     {
         Entity* pFlyer = mCtrl->mOwner->GetEntity();
         const EntityFlyerClass* pClass = static_cast<const EntityFlyerClass*>(pFlyer->GetEntityClass());
@@ -662,7 +660,7 @@ void PathFollower::UpdateControllableMoving()
                                          fTurn, vSteer, mDestSide);
     }
 
-    if (mCtrl->mOwner->GetEntity()->IsRtti(kRttiHashEntityHover))
+    if (mCtrl->mOwner->GetEntity()->IsRtti(EntityHover::rttiHashEntityHover))
     {
         PblVector3 vPos = mCtrl->mOwner->GetMatrix().GetTranslation();
         const PblVector3& vVel = EntityGetVelocity(mCtrl->mOwner->GetEntity());
@@ -670,14 +668,14 @@ void PathFollower::UpdateControllableMoving()
         AIUtil::CalculateSoldierSteerPoint(mPrevPoint, mGotoPoint, vPos, fSpeed, vSteer);
     }
 
-    if (mCtrl->mOwner->GetEntity()->IsRtti(kRttiHashEntityWalker))
+    if (mCtrl->mOwner->GetEntity()->IsRtti(EntityWalker::rttiHashEntityWalker))
     {
         PblVector3 vPos = mCtrl->mOwner->GetMatrix().GetTranslation();
         AIUtil::CalculateSoldierSteerPoint(mPrevPoint, mGotoPoint, vPos, 20.0f, vSteer);
     }
 
-    bool bDroideka = mCtrl->mOwner->GetEntity()->IsRtti(kRttiHashEntityDroideka);
-    bool bSoldier = mCtrl->mOwner->GetEntity()->IsRtti(kRttiHashEntitySoldier);
+    bool bDroideka = mCtrl->mOwner->GetEntity()->IsRtti(EntityDroideka::rttiHashEntityDroideka);
+    bool bSoldier = mCtrl->mOwner->GetEntity()->IsRtti(EntitySoldier::rttiHashEntitySoldier);
     if (bSoldier || bDroideka)
     {
         PblVector3 vNormal;

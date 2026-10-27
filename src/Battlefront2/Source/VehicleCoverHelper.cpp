@@ -1,4 +1,6 @@
 #include <d3dx9math.h>
+
+#include "EntityHover.h"
 #include "VehicleCoverHelper.h"
 #include "AILowLevel.h"
 #include "AIUtil.h"
@@ -30,7 +32,6 @@ namespace CombatUtil
 namespace
 {
 
-    const PblHash kRttiHashEntityHover("EntityHover");
 
 
     inline AILowLevel& GetLowLevel(UnitController* pCtrl)
@@ -67,7 +68,7 @@ VehicleCoverHelper::VehicleCoverHelper(UnitAgent* pOwner)
 // FUNCTION: SWBF2 0x0066bd60
 bool VehicleCoverHelper::CheckForHintAndInit(const GameObject* pTarget)
 {
-    if (!GetMe()->GetEntity()->IsRtti(kRttiHashEntityHover))
+    if (!GetMe()->GetEntity()->IsRtti(EntityHover::rttiHashEntityHover))
     {
         return false;
     }

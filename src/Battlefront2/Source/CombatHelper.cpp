@@ -1,4 +1,11 @@
 #include <d3dx9math.h>
+
+#include "EntityCarrier.h"
+#include "EntityDroideka.h"
+#include "EntityHover.h"
+#include "EntitySoldier.h"
+#include "EntityWalker.h"
+#include "MountedTurret.h"
 #include "CombatHelper.h"
 
 #include "AIUtil.h"
@@ -61,13 +68,6 @@ float GetCombatRange(const Controllable* pMe);
 namespace
 {
 
-    const PblHash kRttiHashEntityFlyer("EntityFlyer");
-    const PblHash kRttiHashEntitySoldier("EntitySoldier");
-    const PblHash kRttiHashEntityDroideka("EntityDroideka");
-    const PblHash kRttiHashEntityHover("EntityHover");
-    const PblHash kRttiHashEntityWalker("EntityWalker");
-    const PblHash kRttiHashWeaponMelee("WeaponMelee");
-    const PblHash kRttiHashMountedTurret("MountedTurret");
 
     inline const GameObject* HandleObject(PblHandle<const GameObject>& handle)
     {
@@ -213,11 +213,11 @@ void CombatHelper::EnterState()
     mEnterStateTime = GameLoop::GetMissionTime();
     GetLowLevel().mFoldStatus = FOLD_UNFOLD;
 
-    if ((GetMe()->GetEntity()->IsRtti(kRttiHashEntityFlyer) &&
+    if ((GetMe()->GetEntity()->IsRtti(EntityFlyer::rttiHashEntityFlyer) &&
          mCurState > STATE_START && mCurState < STATE_FINAL && mCurState != STATE_Engage) ||
         (mCurState == STATE_LookAround &&
-         !GetMe()->GetEntity()->IsRtti(kRttiHashEntitySoldier) &&
-         !GetMe()->GetEntity()->IsRtti(kRttiHashEntityDroideka)))
+         !GetMe()->GetEntity()->IsRtti(EntitySoldier::rttiHashEntitySoldier) &&
+         !GetMe()->GetEntity()->IsRtti(EntityDroideka::rttiHashEntityDroideka)))
     {
         SetNextState(100);
         return;
@@ -285,8 +285,8 @@ void CombatHelper::EnterState()
         PblVector3 vDest(vDir.x * 20.0f + mMe.m[3][0], mMe.m[3][1] + vDir.y * 20.0f,
                          vDir.z * 20.0f + mMe.m[3][2]);
 
-        if (GetMe()->GetEntity()->IsRtti(kRttiHashEntityHover) ||
-            GetMe()->GetEntity()->IsRtti(kRttiHashEntityWalker))
+        if (GetMe()->GetEntity()->IsRtti(EntityHover::rttiHashEntityHover) ||
+            GetMe()->GetEntity()->IsRtti(EntityWalker::rttiHashEntityWalker))
         {
 
             const PblMatrix& mNow = GetMe()->GetMatrix();
@@ -329,7 +329,7 @@ void CombatHelper::ExitState()
     GetLowLevel().mFoldStatus = FOLD_FOLD;
 
     Weapon* pWpn = GetMe()->GetCurWpn();
-    if (pWpn && WeaponIsRtti(pWpn, kRttiHashWeaponMelee))
+    if (pWpn && WeaponIsRtti(pWpn, WeaponMelee::rttiHashWeaponMelee))
     {
         AI_ForceDeflectState(pWpn, false);
     }
@@ -383,7 +383,7 @@ void CombatHelper::UpdateState(float dt)
     GetLowLevel().SetAlert();
 
     Weapon* pWpn = GetMe()->GetCurWpn();
-    if (pWpn && WeaponIsRtti(pWpn, kRttiHashWeaponMelee))
+    if (pWpn && WeaponIsRtti(pWpn, WeaponMelee::rttiHashWeaponMelee))
     {
         if (GameLoop::GetMissionTime() > mDeflectTimer)
         {
@@ -544,7 +544,7 @@ void CombatHelper::UpdateState(float dt)
         mAttackPatternHelper.FSMUpdate(dt, false);
         const bool bOverrideFire = mAttackPatternHelper.HELPERGetOverrideFire();
 
-        if (GetMe()->GetEntity()->IsRtti(kRttiHashEntityDroideka))
+        if (GetMe()->GetEntity()->IsRtti(EntityDroideka::rttiHashEntityDroideka))
         {
             const Damageable* pDamageable = GetDamageable(GetMe()->GetGameObject());
             if (!IsShielded(pDamageable) &&
@@ -563,8 +563,8 @@ void CombatHelper::UpdateState(float dt)
     }
 
     case STATE_FleeEvent:
-        if (GetMe()->GetEntity()->IsRtti(kRttiHashEntityHover) ||
-            GetMe()->GetEntity()->IsRtti(kRttiHashEntityWalker))
+        if (GetMe()->GetEntity()->IsRtti(EntityHover::rttiHashEntityHover) ||
+            GetMe()->GetEntity()->IsRtti(EntityWalker::rttiHashEntityWalker))
         {
             GetLowLevel().SetHeight(HEIGHT_SPRINT);
         }
@@ -611,7 +611,7 @@ bool CombatHelper::DeadBodyCheck()
     }
 
     GameObject* pMe = GetMe()->GetGameObject();
-    if (!pMe->IsRtti(kRttiHashEntitySoldier))
+    if (!pMe->IsRtti(EntitySoldier::rttiHashEntitySoldier))
     {
         return false;
     }
@@ -630,7 +630,7 @@ bool CombatHelper::DeadBodyCheck()
         {
             continue;
         }
-        if (!pObject->IsRtti(kRttiHashEntitySoldier))
+        if (!pObject->IsRtti(EntitySoldier::rttiHashEntitySoldier))
         {
             continue;
         }
@@ -666,7 +666,7 @@ int CombatHelper::EventHandler(AI::EventInfo* pInfo)
         return mOwner->RunForVehicle(pInfo->mGameObject) ? AI::EVT_NotHandled : AI::EVT_Ignored;
 
     case AI::EVT_Grenade:
-        if (GetMe()->GetEntity()->IsRtti(kRttiHashMountedTurret) || mCurState == STATE_FleeEvent)
+        if (GetMe()->GetEntity()->IsRtti(MountedTurret::rttiHashMountedTurret) || mCurState == STATE_FleeEvent)
         {
             return AI::EVT_Ignored;
         }
@@ -680,8 +680,8 @@ int CombatHelper::EventHandler(AI::EventInfo* pInfo)
         mOwner->DamagedEventPlayerCentricness(pInfo);
         mOwner->PlayDamageEventVO(pInfo);
 
-        if ((GetMe()->GetEntity()->IsRtti(kRttiHashEntityHover) ||
-             GetMe()->GetEntity()->IsRtti(kRttiHashEntityWalker)) &&
+        if ((GetMe()->GetEntity()->IsRtti(EntityHover::rttiHashEntityHover) ||
+             GetMe()->GetEntity()->IsRtti(EntityWalker::rttiHashEntityWalker)) &&
             pDamaged->mIsCriticalHit && mCurState != STATE_FleeEvent)
         {
             PblVector3 vFrom = GetMe()->GetMatrix().GetTranslation();
