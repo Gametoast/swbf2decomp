@@ -182,8 +182,8 @@ public:
     Snd::QueueCircular<const SegmentInfo*, 11> mSegmentInfoQueue;
     Properties* mPropertiesCur;
     SegmentInfo* mSegmentCur;
-    Properties* mPropertiesPrev;
-    Properties* mPropertiesNext;
+    const Properties* mPropertiesPrev;
+    const Properties* mPropertiesNext;
     SegmentInfo* mSegmentNext;
     int mPosX;
     int mPosY;

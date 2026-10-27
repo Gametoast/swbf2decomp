@@ -211,7 +211,7 @@ bool RedMoviePlayerBase::TextureStack::Exists(RedTexture** const ppTextures,
 {
     for (unsigned int i = 0; i < mHeight; ++i)
     {
-        if (ppTextures[i] == pTexture)
+        if (pTexture == ppTextures[i])
         {
             return true;
         }
@@ -270,32 +270,35 @@ void RedMoviePlayerBase::Flush()
     mFlags &= ~flags_BufferFull;
 
     RedTexture* pTexture;
-    while ((pTexture = mUsedTextures.Get(GetUsedTextures(), mNumTextures)) != 0)
+    do
     {
-        mFreeTextures.Push(GetFreeTextures(), pTexture, mNumTextures);
-    }
+        pTexture = mUsedTextures.Get(GetUsedTextures(), mNumTextures);
+        if (pTexture)
+        {
+            mFreeTextures.Push(GetFreeTextures(), pTexture, mNumTextures);
+        }
+    } while (pTexture);
 }
 
 // FUNCTION: SWBF2 0x00725a60
 RedTexture* RedMoviePlayerBase::TextureQueue::Get(RedTexture** const ppTextures,
                                                   unsigned int uiSize)
 {
-    if (mUsed == 0)
+    if (mUsed != 0)
     {
-        return 0;
+        unsigned int uiIndex;
+        if (mHead >= mUsed)
+        {
+            uiIndex = mHead - mUsed;
+        }
+        else
+        {
+            uiIndex = mHead - mUsed + uiSize;
+        }
+        --mUsed;
+        return ppTextures[uiIndex];
     }
-
-    unsigned int uiIndex;
-    if (mHead < mUsed)
-    {
-        uiIndex = mHead - mUsed + uiSize;
-    }
-    else
-    {
-        uiIndex = mHead - mUsed;
-    }
-    --mUsed;
-    return ppTextures[uiIndex];
+    return 0;
 }
 
 // FUNCTION: SWBF2 0x00726330
@@ -500,21 +503,21 @@ void RedMoviePlayerBase::Pause()
 // FUNCTION: SWBF2 0x00725ef0
 RedTexture* RedMoviePlayerBase::TextureStack::Peek(RedTexture** const ppTextures)
 {
-    if (!mHeight)
+    if (mHeight)
     {
-        return 0;
+        return ppTextures[mHeight - 1];
     }
-    return ppTextures[mHeight - 1];
+    return 0;
 }
 
 // FUNCTION: SWBF2 0x00725f30
 RedTexture* RedMoviePlayerBase::TextureStack::Pop(RedTexture** const ppTextures)
 {
-    if (!mHeight)
+    if (mHeight)
     {
-        return 0;
+        return ppTextures[--mHeight];
     }
-    return ppTextures[--mHeight];
+    return 0;
 }
 
 // FUNCTION: SWBF2 0x007264f0
@@ -539,8 +542,9 @@ Snd::QueueLock<RedMoviePlayerBase::SegmentSequence, 10>::Lock();
 // FUNCTION: SWBF2 0x00726390
 void RedMoviePlayerBase::SeekSegment(const Segment* const pSegment, bool bPlayAtEnd)
 {
-    SegmentSequence* pSequence = (SegmentSequence*)mSegmentQueue.Snd::QueueBase::Add(
-        sizeof(SegmentSequence), mSegmentQueue.mElements, 10);
+    Snd::Queue<SegmentSequence, 10>& rQueue = mSegmentQueue;
+    SegmentSequence* pSequence = (SegmentSequence*)rQueue.Snd::QueueBase::Add(
+        sizeof(SegmentSequence), rQueue.mElements, 10);
     if (pSequence)
     {
         pSequence->Setup(const_cast<Segment*>(pSegment), bPlayAtEnd);
@@ -561,25 +565,22 @@ void RedMoviePlayerBase::ReallocTextures(unsigned int uiWidth,
     RedTexture** ppAlloc = GetAllocTextures();
     for (unsigned int i = 0; i < mNumTextures; ++i)
     {
-        RedTexture* pOldAlloc = ppAlloc[i];
-        if (!pOldAlloc || TextureUsed(pOldAlloc))
+        if (!ppAlloc[i] || TextureUsed(ppAlloc[i]))
         {
             continue;
         }
 
-        RedTexture* pCurrent = mTextures[i];
-        if (pCurrent)
+        if (mTextures[i])
         {
-            mFreeTextures.Remove(GetFreeTextures(), pCurrent);
-            FreeTexture(pCurrent, i, ucFlags);
+            mFreeTextures.Remove(GetFreeTextures(), mTextures[i]);
+            FreeTexture(mTextures[i], i, ucFlags);
         }
 
-        pCurrent = AllocTexture(CreateTextureHash(i), uiWidth, uiHeight,
-                                uiFormat, i, ucFlags);
-        mTextures[i] = pCurrent;
-        if (pCurrent)
+        mTextures[i] = AllocTexture(CreateTextureHash(i), uiWidth, uiHeight,
+                                    uiFormat, i, ucFlags);
+        if (mTextures[i])
         {
-            mFreeTextures.Push(GetFreeTextures(), pCurrent, mNumTextures);
+            mFreeTextures.Push(GetFreeTextures(), mTextures[i], mNumTextures);
             ppAlloc[i] = 0;
             --mNumReallocTextures;
         }
@@ -594,16 +595,13 @@ bool RedMoviePlayerBase::SetupStart()
         return false;
     }
 
-    const unsigned int uiAlign = mFileReadSize;
-    if (mBuffer.GetFreeAligned(uiAlign) < uiAlign)
+    if (mBuffer.GetFreeAligned(mFileReadSize) < mFileReadSize)
     {
         return false;
     }
-    const unsigned int uiWriteOffset = mBuffer.GetWriteOffset();
-    const unsigned int uiReadAligned = uiAlign * (mBuffer.mPos / uiAlign);
     const unsigned int uiWriteAligned =
-        uiAlign * ((uiAlign + uiWriteOffset - 1) / uiAlign);
-    const unsigned int uiPadding = uiWriteAligned - uiWriteOffset;
+        mFileReadSize * ((mBuffer.GetWriteOffset() - 1 + mFileReadSize) / mFileReadSize);
+    const unsigned int uiPadding = uiWriteAligned - mBuffer.GetWriteOffset();
     if (uiPadding > mBuffer.GetFree())
     {
         return false;
@@ -611,7 +609,7 @@ bool RedMoviePlayerBase::SetupStart()
 
     mBufferStart = mBuffer;
     mReadBuffer = &mBufferStart;
-    mInvalidStartData = mBufferStart.mUsed;
+    mInvalidStartData = mBufferStart.GetUsed();
     mBufferStart.UpdateWritePos(uiPadding);
     mInvalidStartData += uiPadding;
     return true;
@@ -620,123 +618,133 @@ bool RedMoviePlayerBase::SetupStart()
 // FUNCTION: SWBF2 0x00726590
 void RedMoviePlayerBase::Update()
 {
-    PlayState state = mCurrentPlayState;
-stopped_or_playing:
-    if (state == playState_stopped)
+    PlayState state = GetPlayState();
+    for (;;)
     {
-        mFlags = (mFlags & 0xdb) | flags_ResetSegment;
-        if ((mFlags & flags_Reading) && mFile.mFileOpComplete)
+        if (state == playState_stopped)
         {
-            mFlags &= ~flags_Reading;
-            mFileScheduledReadSize = 0;
-        }
-    }
-    else
-    {
-        while (state > playState_stopped && state <= playState_playing)
-        {
-            if (mFlags & flags_Reading)
+            mFlags = (mFlags & 0xdb) | flags_ResetSegment;
+            if ((mFlags & flags_Reading) && mFile.FileOperationComplete())
             {
-                if (!mFile.mFileOpComplete)
-                {
-                    break;
-                }
-                if (!(mFlags & flags_ResetSegment))
-                {
-                    mReadBuffer->UpdateWritePos(mFileScheduledReadSize);
-                }
                 mFlags &= ~flags_Reading;
                 mFileScheduledReadSize = 0;
-                break;
-            }
-            if (mFlags & flags_ResetSegment)
-            {
-                break;
-            }
-
-            unsigned int uiFreeBlock = mReadBuffer->GetFreeBlock();
-            unsigned int uiDataLeft = GetDataLeft();
-            const SegmentSequence* pNext = 0;
-            if (!mSegmentQueue.IsEmpty())
-            {
-                pNext = mSegmentQueue.Peek(0);
-            }
-            Segment* pNextSegment = pNext ? pNext->GetSegment() : 0;
-            bool bPlayAtEnd = pNext && pNext->PlayAtEnd();
-
-            if (!(uiDataLeft && (!pNextSegment || bPlayAtEnd)))
-            {
-                bool bContinue = (mFlags & flags_BufferingEnd) != 0;
-                if (!bContinue)
-                {
-                    Notify(notifyType_BufferingComplete);
-                    mFlags |= flags_BufferingEnd;
-                    bContinue = mSegmentQueue.IsEmpty();
-                }
-                if (!bContinue && !pNextSegment)
-                {
-                    state = mCurrentPlayState;
-                    if (state == playState_stopped)
-                    {
-                        goto stopped_or_playing;
-                    }
-                    continue;
-                }
-
-                if ((GetLooping() || pNextSegment) &&
-                    !(mFlags & (flags_End | flags_Discontinuity)))
-                {
-                    if (!SetupStart())
-                    {
-                        return;
-                    }
-                    Segment* pSegment = pNextSegment ? pNextSegment : mCurrentSegment;
-                    mFile.Seek(pSegment->mStartPos);
-                    if (pNextSegment)
-                    {
-                        SegmentSequence* pLocked = mSegmentQueue.Lock();
-                        mSegmentQueue.Unlock(pLocked);
-                    }
-                    mCurrentSegment = pSegment;
-                    mFlags |= uiDataLeft ? flags_Discontinuity : flags_End;
-                    uiFreeBlock = mReadBuffer->GetFreeBlock();
-                    uiDataLeft = GetDataLeft();
-                }
-            }
-
-            unsigned int uiReadSize = uiFreeBlock;
-            if (uiReadSize > uiDataLeft)
-            {
-                uiReadSize = uiDataLeft;
-            }
-            if (uiReadSize > mFileReadSize)
-            {
-                uiReadSize = mFileReadSize;
-            }
-            const unsigned int uiAlignedSize = mMediaSectorSize *
-                ((uiReadSize + mMediaSectorSize - 1) / mMediaSectorSize);
-            if ((uiReadSize >= mFileReadSize || uiReadSize == uiDataLeft) &&
-                uiAlignedSize && mReadBuffer->GetFreeBlock() >= uiAlignedSize)
-            {
-                mFlags &= ~flags_BufferFull;
-                mFile.Read(mReadBuffer->GetWritePos(), uiAlignedSize);
-                mFlags |= flags_Reading;
-                mFileScheduledReadSize = uiReadSize;
-            }
-            else
-            {
-                mFlags |= flags_BufferFull;
             }
             break;
         }
+        if (state <= playState_stopped || state > playState_playing)
+        {
+            break;
+        }
+        if (mFlags & flags_Reading)
+        {
+            if (!mFile.FileOperationComplete())
+            {
+                break;
+            }
+            if (!(mFlags & flags_ResetSegment))
+            {
+                mReadBuffer->UpdateWritePos(mFileScheduledReadSize);
+            }
+            mFlags &= ~flags_Reading;
+            mFileScheduledReadSize = 0;
+            break;
+        }
+        if (mFlags & flags_ResetSegment)
+        {
+            break;
+        }
+
+        unsigned int uiFreeBlock = mReadBuffer->GetFreeBlock();
+        unsigned int uiDataLeft = GetDataLeft();
+        bool bPlayAtEnd = false;
+        Segment* pNextSegment = 0;
+        if (!mSegmentQueue.IsEmpty())
+        {
+            const SegmentSequence* pNext = mSegmentQueue.Peek(0);
+            if (pNext)
+            {
+                pNextSegment = pNext->GetSegment();
+                bPlayAtEnd = pNext->PlayAtEnd();
+            }
+        }
+
+        if (!(uiDataLeft && (!pNextSegment || bPlayAtEnd)))
+        {
+            bool bQueueDone = true;
+            if (!(mFlags & flags_BufferingEnd))
+            {
+                Notify(notifyType_BufferingComplete);
+                mFlags |= flags_BufferingEnd;
+                bQueueDone = mSegmentQueue.IsEmpty();
+            }
+            if (!bQueueDone && !pNextSegment)
+            {
+                state = GetPlayState();
+                continue;
+            }
+
+            if ((GetLooping() || pNextSegment) &&
+                !(mFlags & (flags_End | flags_Discontinuity)))
+            {
+                if (!SetupStart())
+                {
+                    return;
+                }
+                Segment* pSegment = pNextSegment ? pNextSegment : mCurrentSegment;
+                mFile.Seek(pSegment->mStartPos);
+                if (pNextSegment)
+                {
+                    SegmentSequence* pLocked = mSegmentQueue.Lock();
+                    mSegmentQueue.Unlock(pLocked);
+                }
+                mCurrentSegment = pSegment;
+                if (!uiDataLeft)
+                {
+                    mFlags |= flags_End;
+                }
+                else
+                {
+                    mFlags |= flags_Discontinuity;
+                }
+                uiFreeBlock = mReadBuffer->GetFreeBlock();
+                uiDataLeft = GetDataLeft();
+            }
+        }
+
+        unsigned int uiReadSize = uiFreeBlock;
+        if (uiReadSize > uiDataLeft)
+        {
+            uiReadSize = uiDataLeft;
+        }
+        if (uiReadSize > mFileReadSize)
+        {
+            uiReadSize = mFileReadSize;
+        }
+        if (uiReadSize < mFileReadSize && uiReadSize != uiDataLeft)
+        {
+            mFlags |= flags_BufferFull;
+            break;
+        }
+        const unsigned int uiAlignedSize = mMediaSectorSize *
+            ((uiReadSize + mMediaSectorSize - 1) / mMediaSectorSize);
+        if (!uiAlignedSize || mReadBuffer->GetFreeBlock() < uiAlignedSize)
+        {
+            mFlags |= flags_BufferFull;
+            break;
+        }
+        mFlags &= ~flags_BufferFull;
+        mFile.Read(mReadBuffer->GetWritePos(), uiAlignedSize);
+        mFlags |= flags_Reading;
+        mFileScheduledReadSize = uiReadSize;
+        break;
     }
 
     if ((mFlags & flags_ResetSegment) && !(mFlags & flags_Reading))
     {
-        unsigned int uiStart = mCurrentSegment->mStartPos;
+        const unsigned int uiStart = mCurrentSegment->mStartPos;
         if (mFile.GetPos() != uiStart)
         {
-            mFile.Seek(uiStart);
+            mFile.Seek(mCurrentSegment->mStartPos);
             Flush();
         }
         mFlags &= ~flags_ResetSegment;
@@ -766,7 +774,7 @@ void* QueueBase::Add(unsigned int uiElementSize, void* const pElements,
 
 // FUNCTION: SWBF2 0x00745080
 void* QueueLockBase::Get(QueueBase* const pQueue, unsigned int uiElementSize,
-                         void* const pElements, unsigned int uiCapacity)
+                         void* const pElements, unsigned short usCapacity)
 {
     if (mLock == pQueue->mHead)
     {
@@ -774,7 +782,7 @@ void* QueueLockBase::Get(QueueBase* const pQueue, unsigned int uiElementSize,
     }
     unsigned short i = mLock++;
     void* pResult = (char*)pElements + i * uiElementSize;
-    if (mLock == uiCapacity)
+    if (mLock == usCapacity)
     {
         mLock = 0;
     }
@@ -867,36 +875,29 @@ bool RedMoviePlayerBase::Open(const char* const pFileName, RedTexture** ppTextur
                               void* pBuffer, unsigned int uiBufferSize, unsigned int uiReadSize,
                               unsigned int uiArg8)
 {
+    bool bOpened = false;
     PblFile file;
-    if (!file.Open(pFileName, true, false, true))
+    if (file.Open(pFileName, true, false, true))
     {
-        return false;
+        PblFileChunk chunk(&file);
+        bool bHeader = OpenHeader(chunk, iHeap, uiArg4);
+        file.Close();
+        if (bHeader && mFile.Open(pFileName, uiArg8, true))
+        {
+            mBuffer.SetBuffer(pBuffer, uiBufferSize);
+            mBufferStart.SetBuffer(pBuffer, uiBufferSize);
+            mCurrentSegment = const_cast<Segment*>(mInfo->FindSegmentByIndex(0));
+            mFileReadSize = uiReadSize;
+            mTextures = ppTextures;
+            mNumTextures = uiNumTextures;
+            mInvalidStartData = 0;
+            mReadBuffer = &mBuffer;
+            mFlags = (mFlags & ~(flags_Reading | flags_BufferFull)) | flags_ResetSegment;
+            memset(ppTextures, 0, uiNumTextures * 4 * sizeof(RedTexture*));
+            bOpened = true;
+        }
     }
-
-    PblFileChunk chunk(&file);
-    bool bHeader = OpenHeader(chunk, iHeap, uiArg4);
-    file.Close();
-    if (!bHeader)
-    {
-        return false;
-    }
-
-    if (!mFile.Open(pFileName, uiArg8, true))
-    {
-        return false;
-    }
-
-    mBuffer.SetBuffer(pBuffer, uiBufferSize);
-    mBufferStart.SetBuffer(pBuffer, uiBufferSize);
-    mCurrentSegment = const_cast<Segment*>(mInfo->FindSegmentByIndex(0));
-    mFileReadSize = uiReadSize;
-    mNumTextures = uiNumTextures;
-    mInvalidStartData = 0;
-    mReadBuffer = &mBuffer;
-    mTextures = ppTextures;
-    mFlags = (mFlags & ~(flags_Reading | flags_BufferFull)) | flags_ResetSegment;
-    memset(ppTextures, 0, uiNumTextures * 4 * sizeof(RedTexture*));
-    return true;
+    return bOpened;
 }
 
 // FUNCTION: SWBF2 0x00725de0
@@ -1003,8 +1004,8 @@ bool RedMoviePlayerBase::Info::ReadSegments(PblFileChunk& chunk, unsigned int ui
         }
 
         unsigned int uiHashID = 0;
-        unsigned int uiGap = 0;
         unsigned int uiLength = 0;
+        unsigned int uiGap = 0;
         bool bReading = true;
         while (chunk.HasMoreChildren() && bReading)
         {

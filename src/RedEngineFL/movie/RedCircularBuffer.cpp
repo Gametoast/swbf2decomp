@@ -36,30 +36,37 @@ void RedCircularBuffer::UpdateReadPos(unsigned int uiSize)
 // FUNCTION: SWBF2 0x006f8800
 unsigned int RedCircularBuffer::ReadData(void* pDest, unsigned int uiSize, bool bUpdate)
 {
-    unsigned int remaining = uiSize < GetUsed() ? uiSize : GetUsed();
-    unsigned int first = mSize - mPos;
-    if (first > remaining)
+    unsigned int total = 0;
+    unsigned int used = GetUsed();
+    if (uiSize > used)
     {
-        first = remaining;
+        uiSize = used;
     }
-    unsigned int pos = mPos + first;
-    if (pos == mSize)
+    unsigned int pos = mPos;
+    unsigned int first = mSize - pos;
+    if (first > uiSize)
     {
-        pos = 0;
+        first = uiSize;
     }
     if (first)
     {
-        memcpy(pDest, mBuffer + mPos, first);
+        memcpy(pDest, mBuffer + pos, first);
         if (bUpdate)
         {
             UpdateReadPos(first);
         }
+        pos += first;
+        if (pos == mSize)
+        {
+            pos = 0;
+        }
+        uiSize -= first;
+        total = first;
     }
-    remaining -= first;
     unsigned int second = mSize - pos;
-    if (second > remaining)
+    if (second > uiSize)
     {
-        second = remaining;
+        second = uiSize;
     }
     if (second)
     {
@@ -69,7 +76,7 @@ unsigned int RedCircularBuffer::ReadData(void* pDest, unsigned int uiSize, bool 
             UpdateReadPos(second);
         }
     }
-    return first + second;
+    return total + second;
 }
 
 // FUNCTION: SWBF2 0x006f86e0
@@ -114,8 +121,12 @@ unsigned int RedCircularBuffer::GetFreeAligned(unsigned int uiAlign) const
 {
     unsigned int uiRead = uiAlign * (mPos / uiAlign);
     unsigned int uiWrite = uiAlign * ((uiAlign + GetWriteOffset() - 1) / uiAlign);
-    unsigned int uiDistance = uiWrite < uiRead ? mSize - uiRead + uiWrite : uiWrite - uiRead;
-    return mSize <= uiDistance ? 0 : mSize - uiDistance;
+    unsigned int uiDistance = uiWrite >= uiRead ? uiWrite - uiRead : uiWrite + (mSize - uiRead);
+    if (mSize > uiDistance)
+    {
+        return mSize - uiDistance;
+    }
+    return 0;
 }
 
 // FUNCTION: SWBF2 0x006f87a0
