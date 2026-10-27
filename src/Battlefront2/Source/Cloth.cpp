@@ -119,17 +119,28 @@ void ClothData::_Read(PblFileChunk& chunk)
         switch (child._iId)
         {
         case 0x4D524658:
-            for (int r = 0; r < 4; r++)
-            {
-                float fX = pFile->ReadFloat();
-                float fY = pFile->ReadFloat();
-                float fZ = pFile->ReadFloat();
-                m_Transform.m[r][0] = fX;
-                m_Transform.m[r][1] = fY;
-                m_Transform.m[r][2] = fZ;
-                m_Transform.m[r][3] = (r == 3) ? 1.0f : 0.0f;
-            }
+        {
+            float x = pFile->ReadFloat();
+            float y = pFile->ReadFloat();
+            float z = pFile->ReadFloat();
+            m_Transform.SetXAxis(x, y, z, 0.0f);
+
+            x = pFile->ReadFloat();
+            y = pFile->ReadFloat();
+            z = pFile->ReadFloat();
+            m_Transform.SetYAxis(x, y, z, 0.0f);
+
+            x = pFile->ReadFloat();
+            y = pFile->ReadFloat();
+            z = pFile->ReadFloat();
+            m_Transform.SetZAxis(x, y, z, 0.0f);
+
+            x = pFile->ReadFloat();
+            y = pFile->ReadFloat();
+            z = pFile->ReadFloat();
+            m_Transform.SetTranslation(x, y, z, 1.0f);
             break;
+        }
         case 0x41544144:
         {
             child.ReadString(acString, sizeof(acString));
@@ -225,16 +236,25 @@ void ClothData::_Read(PblFileChunk& chunk)
                 coll.width = pFile->ReadFloat();
                 coll.height = pFile->ReadFloat();
                 coll.depth = pFile->ReadFloat();
-                for (int r = 0; r < 4; r++)
-                {
-                    float fX = pFile->ReadFloat();
-                    float fY = pFile->ReadFloat();
-                    float fZ = pFile->ReadFloat();
-                    m_pCollisionVolumes[i].localMat.m[r][0] = fX;
-                    m_pCollisionVolumes[i].localMat.m[r][1] = fY;
-                    m_pCollisionVolumes[i].localMat.m[r][2] = fZ;
-                    m_pCollisionVolumes[i].localMat.m[r][3] = (r == 3) ? 1.0f : 0.0f;
-                }
+                float x = pFile->ReadFloat();
+                float y = pFile->ReadFloat();
+                float z = pFile->ReadFloat();
+                m_pCollisionVolumes[i].localMat.SetXAxis(x, y, z, 0.0f);
+
+                x = pFile->ReadFloat();
+                y = pFile->ReadFloat();
+                z = pFile->ReadFloat();
+                m_pCollisionVolumes[i].localMat.SetYAxis(x, y, z, 0.0f);
+
+                x = pFile->ReadFloat();
+                y = pFile->ReadFloat();
+                z = pFile->ReadFloat();
+                m_pCollisionVolumes[i].localMat.SetZAxis(x, y, z, 0.0f);
+
+                x = pFile->ReadFloat();
+                y = pFile->ReadFloat();
+                z = pFile->ReadFloat();
+                m_pCollisionVolumes[i].localMat.SetTranslation(x, y, z, 1.0f);
             }
             break;
         }

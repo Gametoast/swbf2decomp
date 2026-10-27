@@ -1,3 +1,4 @@
+#include <string.h>
 #include <stdlib.h>
 
 #include "EntityBuildingArmed.h"
@@ -24,10 +25,7 @@ static int sCurrentSection = -1;
 EntityBuildingArmedClass::EntityBuildingArmedClass(unsigned int uHash)
     : EntityBuildingClass(uHash)
 {
-    for (int i = 0; i < 8; i++)
-    {
-        mTurretClass[i] = 0;
-    }
+    memset(mTurretClass, 0, sizeof(mTurretClass));
     sCurrentSection = -1;
     mRespawnTime = 120.0f;
 }
@@ -373,9 +371,10 @@ void EntityBuildingArmed::SetProperty(unsigned int uProperty, const char* pszVal
 // FUNCTION: SWBF2 0x00476e50
 Controllable* EntityBuildingArmed::GetControllable()
 {
-    if (mControllableList.GetCount() == 1)
+    const PblList<Controllable>& list = GetControllableList();
+    if (list.GetCount() == 1)
     {
-        return mControllableList.GetFirst()->_pObject;
+        return list.GetFirst()->_pObject;
     }
     return 0;
 }
@@ -383,9 +382,10 @@ Controllable* EntityBuildingArmed::GetControllable()
 // FUNCTION: SWBF2 0x00476e30
 const Controllable* EntityBuildingArmed::GetControllable() const
 {
-    if (mControllableList.GetCount() == 1)
+    const PblList<Controllable>& list = GetControllableList();
+    if (list.GetCount() == 1)
     {
-        return mControllableList.GetFirst()->_pObject;
+        return list.GetFirst()->_pObject;
     }
     return 0;
 }

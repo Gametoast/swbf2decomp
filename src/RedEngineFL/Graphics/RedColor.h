@@ -9,6 +9,8 @@ public:
 
     // FUNCTION: SWBF2 0x0040f750
     RedColor(const RedColor& c) : b(c.b), g(c.g), r(c.r), a(c.a) {}
+    RedColor(const RedColor& color, unsigned char aA)
+        : b(color.b), g(color.g), r(color.r), a(aA) {}
     RedColor(unsigned char aR, unsigned char aG, unsigned char aB, unsigned char aA)
         : b(aB), g(aG), r(aR), a(aA) {}
 

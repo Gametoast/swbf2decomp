@@ -56,10 +56,7 @@ SoldierElement::SoldierElement()
     mIsSetup = false;
     mID = reinterpret_cast<EntitySoldier*>(this);
     mGroundNormal = PblVector3(0.0f, 1.0f, 0.0f);
-    for (int i = 0; i < 8; ++i)
-    {
-        mClothPiece[i] = 0;
-    }
+    memset(mClothPiece, 0, sizeof(mClothPiece));
     mTentacles = 0;
     Reset();
 }

@@ -95,14 +95,6 @@ pcWaterShader::pcWaterShader(unsigned int uiFlags,
                              const RedColor& color1,
                              float fArg7)
 {
-    m_normalMapTransform1.m_bTransform = 0;
-    m_normalMapTransform2.m_bTransform = 0;
-    m_bumpMapTransform1.m_bTransform = 0;
-    m_bumpMapTransform2.m_bTransform = 0;
-    m_diffuseMapTransform1.m_bTransform = 0;
-    m_diffuseMapTransform2.m_bTransform = 0;
-    m_specularMaskTransform1.m_bTransform = 0;
-    m_specularMaskTransform2.m_bTransform = 0;
     _BindPipeline(GetStateFuncArray, BeginFuncArray, EndFuncArray, RenderFuncArray);
     _Init(uiFlags, pParams, uiNumParams, uiMaterialFlags, color0, color1, fArg7);
 }

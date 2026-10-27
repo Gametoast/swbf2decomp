@@ -235,16 +235,12 @@ extern bool netIsLateTurn;
 OrdnanceMeleeThrow::OrdnanceMeleeThrow(OrdnanceMeleeThrowClass* pClass, const OrdnanceDesc& desc)
     : Ordnance(pClass, desc),
       RedSceneObject(&((OrdnanceMeleeThrowClass*)mClass)->mLodData),
-      m_pOwner(desc.mOwner)
+      m_pOwner(desc.mOwner),
+      mOldPosition(desc.mPosition),
+      mVelocity(desc.mDirection * Interpolate(
+          ((const OrdnanceMeleeThrowClass*)mClass)->mVelocity,
+          ((const OrdnanceMeleeThrowClass*)mClass->mNextCharge)->mVelocity, mRatio))
 {
-    mOldPosition = desc.mPosition;
-    OrdnanceMeleeThrowClass* pCharge = (OrdnanceMeleeThrowClass*)mClass;
-    const float fSpeed =
-        (((OrdnanceMeleeThrowClass*)pCharge->mNextCharge)->mVelocity - pCharge->mVelocity) * mRatio +
-        pCharge->mVelocity;
-    mVelocity.x = fSpeed * desc.mDirection.x;
-    mVelocity.y = desc.mDirection.y * fSpeed;
-    mVelocity.z = desc.mDirection.z * fSpeed;
     m_pDamageData = 0;
     m_pLight = 0;
     mOffscreenTime = 0.0f;

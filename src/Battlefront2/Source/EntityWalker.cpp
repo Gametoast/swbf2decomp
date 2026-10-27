@@ -208,10 +208,7 @@ EntityWalkerClass::EntityWalkerClass(unsigned int uHash)
     mPassengerSlotClass = 0;
     mNumPassengerSlots = 0;
 
-    for (int i = 0; i < 8; ++i)
-    {
-        mTurretClass[i] = 0;
-    }
+    memset(mTurretClass, 0, sizeof(mTurretClass));
 
     mExplosion = 0;
     mExplosionOffset.x = 0.0f;
@@ -1735,14 +1732,8 @@ EntityWalker::EntityWalker(EntityWalkerClass* pClass, const EntityDesc& desc)
     mVelocityNoGrav.x = 0.0f;
     mVelocityNoGrav.y = 0.0f;
     mVelocityNoGrav.z = 0.0f;
-    for (int i = 0; i < 4; ++i)
-    {
-        mAimer[i] = 0;
-    }
-    for (int i = 0; i < 4; ++i)
-    {
-        mWeapon[i] = 0;
-    }
+    memset(mAimer, 0, sizeof(mAimer));
+    memset(mWeapon, 0, sizeof(mWeapon));
 
     for (int i = 0; i < mClass->mWeaponCount; ++i)
     {
@@ -3021,7 +3012,6 @@ extern PblVector3 gVectorZero;
 
 PblMatrix DirectionMatrix(const PblVector3& vDir, const PblVector3& vUp, const PblVector3& vPos);
 
-Controllable* GetControllablePilot(Controllable* pControllable);
 
 namespace SquadCommands
 {
@@ -3955,7 +3945,7 @@ bool EntityWalker::Update(float fDeltaTime)
         if (!(NetGame::IsEnabled() && NetGame::IsClient()) && mDamageOwner.mCharacter)
         {
             AwardVehicleKillPoints(mClass->GetVehicleType(),
-                                   GetControllablePilot(this) == 0 && !IsRtti(CommandWalker::rttiHashCommandWalker));
+                                   this->GetPilot() == 0 && !IsRtti(CommandWalker::rttiHashCommandWalker));
         }
         ExplosionClass* pExplosion = mClass->mFinalExplosion;
         if (!pExplosion)

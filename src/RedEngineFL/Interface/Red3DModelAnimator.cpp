@@ -1,3 +1,4 @@
+#include <string.h>
 #include "Red3DModelAnimator.h"
 #include "PebbleFL/Common/PblVector.h"
 
@@ -28,10 +29,7 @@ Red3DModelAnimator::Red3DModelAnimator()
     mAnimationTime = -1.0f;
     mAnimationTimeTotal = 0.0f;
     mLooping = true;
-    for (int i = 0; i < 5; ++i)
-    {
-        mAnimBankHash[i] = 0;
-    }
+    memset(mAnimBankHash, 0, sizeof(mAnimBankHash));
     Open();
 }
 

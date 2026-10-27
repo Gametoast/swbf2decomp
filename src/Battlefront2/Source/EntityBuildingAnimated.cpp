@@ -1,3 +1,4 @@
+#include <string.h>
 #include "EntityBuildingAnimated.h"
 #include "PebbleFL/Common/PblVector.h"
 
@@ -29,14 +30,8 @@ EntityBuildingAnimatedClass::EntityBuildingAnimatedClass(unsigned int uHash)
     mAnimObj = 0;
     mAnimations[0] = 0;
     mAnimations[1] = 0;
-    for (int i = 0; i < 5; i++)
-    {
-        mDeathEffectHash[i] = 0;
-    }
-    for (int i = 0; i < 5; i++)
-    {
-        mDeathEffectNodeHash[i] = 0;
-    }
+    memset(mDeathEffectHash, 0, sizeof(mDeathEffectHash));
+    memset(mDeathEffectNodeHash, 0, sizeof(mDeathEffectNodeHash));
     mDeathExplosions = false;
 }
 

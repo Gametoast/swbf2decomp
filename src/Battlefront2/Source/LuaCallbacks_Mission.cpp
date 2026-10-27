@@ -486,7 +486,7 @@ unsigned int RedGetHeapSize(int heap);
 
 bool RedMoveHeapEnd(int heap, int iDelta);
 extern "C" HeapObj* heapobj;
-void* RedAllocFromHeapInternal(int heap, unsigned int size, int bTop);
+void* RedAllocFromHeapInternal(int heap, unsigned int size, bool bTop);
 bool RedFreeToHeapInternal(int heap, void* block, unsigned int flags);
 void TagRemoveList(TagList* pList, Tag* pTag);
 void TagAddList(TagList* pList, Tag* pTag);

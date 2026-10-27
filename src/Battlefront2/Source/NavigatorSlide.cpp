@@ -103,11 +103,8 @@ NavigatorSlide* NavigatorSlidePtr(Navigator* pNavigator)
 // FUNCTION: SWBF2 0x005ade90
 NavigatorSlide::NavigatorSlide(AILowLevel* pOwner, const PblVector3& globalDest,
                                const Obstacle** ppIgnore, int iIgnoreCnt)
-    : Navigator(pOwner)
+    : Navigator(pOwner), mGlobalDest(globalDest)
 {
-    mGlobalDest = globalDest;
-    mSlideObj.mObject = 0;
-    mSlideObj.mSavedHandleId = 0;
     mUseAttackHelper = false;
     mOffset = 0.0f;
     mCurState = STATE_START;
@@ -130,12 +127,8 @@ NavigatorSlide::NavigatorSlide(AILowLevel* pOwner, const PblVector3& globalDest,
 // FUNCTION: SWBF2 0x005adfa0
 NavigatorSlide::NavigatorSlide(AILowLevel* pOwner, const GameObject* pSlideObj, float fOffset,
                                bool bUseAttackHelper, const Obstacle** ppIgnore, int iIgnoreCnt)
-    : Navigator(pOwner)
+    : Navigator(pOwner), mGlobalDest(0.0f, 0.0f, 0.0f), mSlideObj(pSlideObj)
 {
-    mGlobalDest = PblVector3(0, 0, 0);
-    mSlideObj.mObject = pSlideObj;
-    mSlideObj.mSavedHandleId =
-        pSlideObj ? pSlideObj->mHandleId : 0;
     mUseAttackHelper = bUseAttackHelper;
     mOffset = fOffset;
     mCurState = STATE_START;

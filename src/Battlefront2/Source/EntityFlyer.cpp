@@ -328,10 +328,7 @@ EntityFlyerClass::EntityFlyerClass(unsigned int uHash)
     mPassengerSlotClass = 0;
     mNumPassengerSlots = 0;
 
-    for (int i = 0; i < 8; ++i)
-    {
-        mTurretClass[i] = 0;
-    }
+    memset(mTurretClass, 0, sizeof(mTurretClass));
 
     mExplosionCritical = 0;
     mExplosionDestruct = 0;
@@ -1631,14 +1628,8 @@ EntityFlyer::EntityFlyer(EntityFlyerClass* pClass, const EntityDesc& desc)
     mAmbientShiftSpeed.x = 0.0f;
     mAmbientShiftSpeed.y = 0.0f;
     mAmbientShiftSpeed.z = 0.0f;
-    for (int i = 0; i < 4; ++i)
-    {
-        mAimer[i] = 0;
-    }
-    for (int i = 0; i < 4; ++i)
-    {
-        mWeapon[i] = 0;
-    }
+    memset(mAimer, 0, sizeof(mAimer));
+    memset(mWeapon, 0, sizeof(mWeapon));
 
     for (int i = 0; i < mClass->mWeaponCount; ++i)
     {

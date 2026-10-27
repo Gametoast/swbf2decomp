@@ -39,7 +39,6 @@ namespace AIDebug
 {
     bool GetTestSpawnMode();
 }
-Controllable* GetControllablePilot(Controllable* pControllable);
 
 // GLOBAL: SWBF2 0x01faa69c
 
@@ -334,7 +333,7 @@ bool NameDisplayThread::Update(float)
             for (PblList<Controllable>::Itor it = riders.Begin(); (Controllable*)it; ++it)
             {
                 Controllable* pRider = it;
-                if ((HasNameDisplayPilotType(pRider) || pRider->mPilotType == PILOT_REMOTE) && GetControllablePilot(pRider))
+                if ((HasNameDisplayPilotType(pRider) || pRider->mPilotType == PILOT_REMOTE) && pRider->GetPilot())
                 {
                     if (pRider == pVehicle)
                     {

@@ -84,15 +84,9 @@ PblHash EntityTrap::rttiHashEntityTrap("EntityTrap");
 // EntityTrap::rttiNameEntityTrap
 const char EntityTrap::rttiNameEntityTrap[] = "EntityTrap";
 
-static inline CollisionObject* AsCollisionObject(EntityTrap* pTrap)
-{
-    return static_cast<CollisionObject*>(pTrap);
-}
 
-static inline Damageable* AsDamageable(EntityTrap* pTrap)
-{
-    return static_cast<Damageable*>(pTrap);
-}
+
+
 
 // FUNCTION: SWBF2 0x004fcd90
 EntityTrap::EntityTrap(EntityTrapClass* pClass, const EntityDesc& desc)
@@ -166,7 +160,7 @@ void EntityTrap::SetAnimation(const ZephyrAnim* pAnim)
 void EntityTrap::Render(unsigned char uFlags, float fDist, unsigned int uMask)
 {
     if (mTrapClass->mHideUnbuiltModel && mState == STATE_UNBUILT &&
-        AsCollisionObject(this)->mCollisionModel == &mTrapClass->mBuildBoxCollisionModel)
+        mCollisionModel == &mTrapClass->mBuildBoxCollisionModel)
     {
         return;
     }
@@ -186,7 +180,7 @@ bool EntityTrap::CollisionCallback(const CollisionResult* pResult, CollisionObje
             pDamageable->InstantDeath(DamageOwner(0, 0, 0, 0, 0, 1.0f), true);
         }
     }
-    return AsCollisionObject(this)->CollisionObject::CollisionCallback(pResult, pOther, pRestrictor);
+    return CollisionObject::CollisionCallback(pResult, pOther, pRestrictor);
 }
 
 // FUNCTION: SWBF2 0x004fdef0
@@ -195,10 +189,10 @@ void EntityTrap::HealthChangeCallback(bool bArg, float fDelta)
     typedef void(__thiscall * SetModelFn)(void*, const GameModel*);
     typedef void(__thiscall * DeactivateFn)(void*);
 
-    Damageable* pDamageable = AsDamageable(this);
+    Damageable* pDamageable = this;
     if (mState == STATE_UNBUILT && pDamageable->mCurHealth >= pDamageable->mMaxHealth)
     {
-        CollisionObject* pCollision = AsCollisionObject(this);
+        CollisionObject* pCollision = this;
         if (mTrapClass->mBuildBoxOdf)
         {
             pCollision->SetCollisionModel(&mTrapClass->mTrapCollisionModel);

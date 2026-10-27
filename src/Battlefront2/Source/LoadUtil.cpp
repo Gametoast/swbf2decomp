@@ -545,20 +545,6 @@ bool LoadUtil::ReadDataFile(PblFile& file, void* pUnused, unsigned int const* pu
     return true;
 }
 
-static void ReadTransform(PblFile* pFile, PblMatrix& mMatrix)
-{
-    for (int iRow = 0; iRow < 4; iRow++)
-    {
-        const float fX = pFile->ReadFloat();
-        const float fY = pFile->ReadFloat();
-        const float fZ = pFile->ReadFloat();
-        mMatrix.m[iRow][0] = fX;
-        mMatrix.m[iRow][1] = fY;
-        mMatrix.m[iRow][2] = fZ;
-        mMatrix.m[iRow][3] = (iRow == 3) ? 1.0f : 0.0f;
-    }
-}
-
 // FUNCTION: SWBF2 0x00579c50
 void LoadUtil::ProcessWorld(PblFileChunk& chunk)
 {
@@ -626,8 +612,25 @@ Entity* LoadUtil::ProcessEntityInfo(PblFileChunk& chunk)
                 PblHash(child.ReadString(acName, sizeof(acName))));
             break;
         case 0x4D524658:
-            ReadTransform(child._pFile, desc.mMatrix);
+        {
+            float x = child._pFile->ReadFloat();
+            float y = child._pFile->ReadFloat();
+            float z = child._pFile->ReadFloat();
+            desc.mMatrix.SetXAxis(x, y, z, 0.0f);
+            x = child._pFile->ReadFloat();
+            y = child._pFile->ReadFloat();
+            z = child._pFile->ReadFloat();
+            desc.mMatrix.SetYAxis(x, y, z, 0.0f);
+            x = child._pFile->ReadFloat();
+            y = child._pFile->ReadFloat();
+            z = child._pFile->ReadFloat();
+            desc.mMatrix.SetZAxis(x, y, z, 0.0f);
+            x = child._pFile->ReadFloat();
+            y = child._pFile->ReadFloat();
+            z = child._pFile->ReadFloat();
+            desc.mMatrix.SetTranslation(x, y, z, 1.0f);
             break;
+        }
         }
     }
 
@@ -696,8 +699,25 @@ RedRegion* LoadUtil::ProcessRegionInfo(PblFileChunk& chunk)
             break;
         }
         case 0x4D524658:
-            ReadTransform(child._pFile, desc.mMatrix);
+        {
+            float x = child._pFile->ReadFloat();
+            float y = child._pFile->ReadFloat();
+            float z = child._pFile->ReadFloat();
+            desc.mMatrix.SetXAxis(x, y, z, 0.0f);
+            x = child._pFile->ReadFloat();
+            y = child._pFile->ReadFloat();
+            z = child._pFile->ReadFloat();
+            desc.mMatrix.SetYAxis(x, y, z, 0.0f);
+            x = child._pFile->ReadFloat();
+            y = child._pFile->ReadFloat();
+            z = child._pFile->ReadFloat();
+            desc.mMatrix.SetZAxis(x, y, z, 0.0f);
+            x = child._pFile->ReadFloat();
+            y = child._pFile->ReadFloat();
+            z = child._pFile->ReadFloat();
+            desc.mMatrix.SetTranslation(x, y, z, 1.0f);
             break;
+        }
         }
     }
 
@@ -764,8 +784,25 @@ BaseHint* ProcessHintInfo(PblFileChunk& chunk)
             uType = PblHash(child.ReadString(acName, sizeof(acName)));
             break;
         case 0x4D524658:
-            ReadTransform(child._pFile, desc.mMatrix);
+        {
+            float x = child._pFile->ReadFloat();
+            float y = child._pFile->ReadFloat();
+            float z = child._pFile->ReadFloat();
+            desc.mMatrix.SetXAxis(x, y, z, 0.0f);
+            x = child._pFile->ReadFloat();
+            y = child._pFile->ReadFloat();
+            z = child._pFile->ReadFloat();
+            desc.mMatrix.SetYAxis(x, y, z, 0.0f);
+            x = child._pFile->ReadFloat();
+            y = child._pFile->ReadFloat();
+            z = child._pFile->ReadFloat();
+            desc.mMatrix.SetZAxis(x, y, z, 0.0f);
+            x = child._pFile->ReadFloat();
+            y = child._pFile->ReadFloat();
+            z = child._pFile->ReadFloat();
+            desc.mMatrix.SetTranslation(x, y, z, 1.0f);
             break;
+        }
         }
     }
 
@@ -864,9 +901,25 @@ void ProcessBarrierInfo(PblFileChunk& chunk)
             break;
         }
         case 0x4D524658:
-            ReadTransform(child._pFile, mMatrix);
-            mMatrix.m[3][2] = -mMatrix.m[3][2];
+        {
+            float x = child._pFile->ReadFloat();
+            float y = child._pFile->ReadFloat();
+            float z = child._pFile->ReadFloat();
+            mMatrix.SetXAxis(x, y, z, 0.0f);
+            x = child._pFile->ReadFloat();
+            y = child._pFile->ReadFloat();
+            z = child._pFile->ReadFloat();
+            mMatrix.SetYAxis(x, y, z, 0.0f);
+            x = child._pFile->ReadFloat();
+            y = child._pFile->ReadFloat();
+            z = child._pFile->ReadFloat();
+            mMatrix.SetZAxis(x, y, z, 0.0f);
+            x = child._pFile->ReadFloat();
+            y = child._pFile->ReadFloat();
+            z = child._pFile->ReadFloat();
+            mMatrix.SetTranslation(x, y, -z, 1.0f);
             break;
+        }
         }
     }
 

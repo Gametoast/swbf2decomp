@@ -138,7 +138,7 @@ void LightBeamEffect::_PlatformInit()
 }
 
 // FUNCTION: SWBF2 0x00410ba0
-void VertexC::SetPos(const PblVector3& v)
+inline void VertexC::SetPos(const PblVector3& v)
 {
     pos.x = (short)((v.x - CompressedPos::s_vMin.x) * CompressedPos::s_vScaleInv.x - 32767.5f);
     pos.y = (short)((v.y - CompressedPos::s_vMin.y) * CompressedPos::s_vScaleInv.y - 32767.5f);

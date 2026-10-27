@@ -55,8 +55,6 @@ pcNormalMapAdderShader::pcNormalMapAdderShader(unsigned int uiFlags,
                                                const RedColor& color1,
                                                float fArg7)
 {
-    m_textureTransform1.m_bTransform = 0;
-    m_textureTransform2.m_bTransform = 0;
     _BindPipeline(GetStateFuncArray, BeginFuncArray, EndFuncArray, RenderFuncArray);
     _Init(uiFlags, pParams, uiNumParams, uiMaterialFlags, color0, color1, fArg7);
 }

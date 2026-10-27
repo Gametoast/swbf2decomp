@@ -10,10 +10,6 @@ pcRedVertexBuffer::pcRedVertexBuffer(unsigned int uiMaxVertices,
                                      bool bStatic, bool bShared)
 {
 
-    m_listNode._pList = 0;
-    m_listNode._pNext = 0;
-    m_listNode._pPrev = 0;
-    m_listNode._pObject = 0;
 
     m_static = bStatic;
     m_maxVertices = uiMaxVertices;

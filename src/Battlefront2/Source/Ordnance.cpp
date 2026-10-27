@@ -78,17 +78,9 @@ MemoryPool Ordnance::sMemoryPool("Ordnance", 0x98);
 
 // FUNCTION: SWBF2 0x005f7e70
 OrdnanceClass::OrdnanceClass(unsigned int uHash)
-    : Factory<Ordnance, OrdnanceClass, OrdnanceDesc>(uHash)
+    : Factory<Ordnance, OrdnanceClass, OrdnanceDesc>(uHash),
+      mDamage(DamageOwner(0, 0, 0, 0, 0, 1.0f), 0.0f)
 {
-    DamageOwner owner(0, 0, 0, 0, 0, 1.0f);
-    mDamage.mDamageOwner = owner;
-    mDamage.mBaseValue = 0.0f;
-    for (int i = 0; i < 8; ++i)
-    {
-        mDamage.mHealthScale[i] = 1.0f;
-    }
-    mDamage.mShieldScale = 1.0f;
-
     mStrengthLimit = 0.0f;
     mNextCharge = this;
     mLifeSpan = FLT_MAX;
@@ -428,17 +420,9 @@ bool Ordnance::CheckCollision()
 
 // FUNCTION: SWBF2 0x005f7fe0
 OrdnanceClass::OrdnanceClass(OrdnanceClass* pBase, unsigned int uHash)
-    : Factory<Ordnance, OrdnanceClass, OrdnanceDesc>(pBase, uHash)
+    : Factory<Ordnance, OrdnanceClass, OrdnanceDesc>(pBase, uHash),
+      mDamage(DamageOwner(0, 0, 0, 0, 0, 1.0f), 0.0f)
 {
-    DamageOwner owner(0, 0, 0, 0, 0, 1.0f);
-    mDamage.mDamageOwner = owner;
-    mDamage.mBaseValue = 0.0f;
-    for (int i = 0; i < 8; ++i)
-    {
-        mDamage.mHealthScale[i] = 1.0f;
-    }
-    mDamage.mShieldScale = 1.0f;
-
     mStrengthLimit = pBase->mStrengthLimit;
     mNextCharge = this;
     mLifeSpan = pBase->mLifeSpan;

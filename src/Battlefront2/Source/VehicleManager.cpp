@@ -34,10 +34,6 @@ namespace
         return handle.mObject;
     }
 
-    const PblList<Controllable>& ControllableList(const GameObject* pObject)
-    {
-        return pObject->mControllableList;
-    }
 
     inline const Controllable* GetControllable(const GameObject* pObject)
     {
@@ -145,7 +141,7 @@ template void ListPool<PblHandle<GameObject>, int>::RemoveObject(const PblHandle
 // FUNCTION: SWBF2 0x0066ddf0
 bool VehicleManager::sIsFull(const GameObject* pObject)
 {
-    for (PblList<Controllable>::Itor it(ControllableList(pObject)); (Controllable*)it; ++it)
+    for (PblList<Controllable>::Itor it(pObject->GetControllableList()); (Controllable*)it; ++it)
     {
         const Controllable* pSeat = it;
         PilotType type = pSeat->mPilotType;

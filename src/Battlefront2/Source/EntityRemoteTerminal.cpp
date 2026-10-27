@@ -96,10 +96,7 @@ inline Controllable* AsControllable(EntityRemoteTerminal* pTerminal)
 {
     return static_cast<Controllable*>(pTerminal);
 }
-inline Damageable* AsDamageable(EntityRemoteTerminal* pTerminal)
-{
-    return static_cast<Damageable*>(pTerminal);
-}
+
 
 inline const Controllable* SoldierControllable(const EntitySoldier* pSoldier)
 {
@@ -398,7 +395,7 @@ ControllableClass* EntityRemoteTerminal::GetControllableClass()
 // FUNCTION: SWBF2 0x004dcf90
 bool EntityRemoteTerminal::UpdateIndirect(float fDeltaTime)
 {
-    UnitControllerPtr(AsControllable(this)->mCtrl)->mLowLevel
+    UnitControllerPtr(mCtrl)->mLowLevel
         .UpdateIndirect(fDeltaTime);
     return true;
 }
@@ -413,7 +410,7 @@ bool EntityRemoteTerminal::Update(float fDeltaTime)
 
     UpdateHealthRemote(0.0f);
 
-    Controllable* pThis = AsControllable(this);
+    Controllable* pThis = this;
     if (!(NetGame::IsEnabled() && NetGame::IsClient()) && pThis->mPilot &&
         pThis->mPilot->GetEntity()->IsRtti(EntitySoldier::rttiHashEntitySoldier))
     {
@@ -483,11 +480,11 @@ void EntityRemoteTerminal::UpdateHealthRemote(float fAddHealth)
 
         float fOldHealth = mCurHealth;
         mMaxHealth = fMaxHealth;
-        AsDamageable(this)->SetCurHealth(fHealth, false, 0);
+        SetCurHealth(fHealth, false, 0);
         mHealthType = pRemoteDamageable->mHealthType;
         if (fOldHealth != fHealth)
         {
-            AsDamageable(this)->Damageable::HealthChangeCallback(false, fOldHealth - fHealth);
+            Damageable::HealthChangeCallback(false, fOldHealth - fHealth);
         }
     }
     else
@@ -497,7 +494,7 @@ void EntityRemoteTerminal::UpdateHealthRemote(float fAddHealth)
 
     if (mCurHealth <= 0.0f)
     {
-        Controllable* pPilot = AsControllable(this)->mPilot;
+        Controllable* pPilot = mPilot;
         if (pPilot)
         {
             pPilot->Kill();
@@ -527,7 +524,7 @@ void EntityRemoteTerminal::HealthChangeCallback(bool bUnused, float fDelta)
 // FUNCTION: SWBF2 0x004dd2f0
 void EntityRemoteTerminal::SetupController()
 {
-    Controllable* pThis = AsControllable(this);
+    Controllable* pThis = this;
     Controller* pController = 0;
     if (pThis->mPlayerId >= 0)
     {
@@ -548,7 +545,7 @@ void EntityRemoteTerminal::SetupController()
 // FUNCTION: SWBF2 0x004dd5d0
 void EntityRemoteTerminal::SetPilot(Controllable* pPilot)
 {
-    Controllable* pThis = AsControllable(this);
+    Controllable* pThis = this;
     if (pPilot)
     {
         pThis->Controllable::SetPilot(pPilot);
@@ -617,13 +614,15 @@ EntityRemoteTerminal* EntityRemoteTerminal::GetPrevAvailableTerminal(const Entit
 // FUNCTION: SWBF2 0x004dd7c0
 void EntityRemoteTerminal::ActivatePhysics()
 {
-    AsControllable(this)->ActivateThread(0, PER_TURN);
+    Controllable* pThis = this;
+    pThis->ActivateThread(0, PER_TURN);
 }
 
 // FUNCTION: SWBF2 0x004dd7e0
 void EntityRemoteTerminal::DeactivatePhysics()
 {
-    AsControllable(this)->DeactivateThread();
+    Controllable* pThis = this;
+    pThis->DeactivateThread();
 }
 
 // FUNCTION: SWBF2 0x004dd7f0

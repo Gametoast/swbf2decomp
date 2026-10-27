@@ -45,6 +45,7 @@ public:
     PblVector3& operator+=(const PblVector3& rhs);
     PblVector3& operator-=(const PblVector3& rhs);
     const PblVector3& operator*=(float rhs);
+    const PblVector3& operator/=(float rhs);
     const PblVector3 operator-() const;
 
     float GetX() const;

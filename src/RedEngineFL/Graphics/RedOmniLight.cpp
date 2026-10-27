@@ -32,10 +32,8 @@ RedOmniLight RedOmniLight::BLACK(PblVector3(0.0f, 0.0f, 0.0f), 0.0f,
 
 // FUNCTION: SWBF2 0x006ee990
 RedOmniLight::RedOmniLight(const PblVector3& pos, float fRadius, const RedColorValue& color)
-    : RedLight(TYPE_POINT)
+    : RedLight(TYPE_POINT), m_mProjection(gMatrixIdentity), m_bProjectionDirty(true)
 {
-    memcpy(&m_mProjection, &gMatrixIdentity, sizeof(m_mProjection));
-    m_bProjectionDirty = true;
     memset(&m_d3dLight, 0, sizeof(m_d3dLight));
     m_d3dLight.Type = D3DLIGHT_POINT;
     m_d3dLight.Range = 1.0f;

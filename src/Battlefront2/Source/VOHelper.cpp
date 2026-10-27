@@ -459,7 +459,7 @@ void _Play(VOType eType, const GameObject* pSpeaker, const GameObject* pTarget,
     }
 
     const GameObject* pVoice = pSpeaker;
-    Controllable* pSpeakerCtrl = const_cast<Controllable*>(pSpeaker->GetControllable());
+    const Controllable* pSpeakerCtrl = pSpeaker->GetControllable();
     if (pSpeakerCtrl && pSpeakerCtrl->GetPilot())
     {
         pVoice = pSpeakerCtrl->GetPilot()->GetGameObject();

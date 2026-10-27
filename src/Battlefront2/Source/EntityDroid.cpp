@@ -62,7 +62,6 @@ PblMatrix NormalMatrix(const PblVector3& vDir, const PblVector3& vNormal, const 
 
 PblMatrix DirectionMatrix(const PblVector3& vDir, const PblVector3& vUp, const PblVector3& vPos);
 
-Controllable* GetControllablePilot(Controllable* pControllable);
 
 // GLOBAL: SWBF2 0x01e51d94
 static int sWeaponSection;
@@ -1186,7 +1185,7 @@ bool EntityDroid::Update(float fDeltaTime)
 
     if (!(NetGame::IsEnabled() && NetGame::IsClient()))
     {
-        Controllable* pPilot = GetControllablePilot(this);
+        Controllable* pPilot = this->GetPilot();
         if (pPilot && mState == NORMAL)
         {
             if (mControlUse.IsPressed() || IsDisabled())

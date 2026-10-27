@@ -156,9 +156,9 @@ void WriteUnitVector(NetPktGroup& group, const PblVector3& value);
 void ReadUnitVector(NetPktGroup& group, PblVector3& value);
 void WriteCharacter(NetPktGroup& group, const Character* pCharacter);
 Character* ReadCharacter(NetPktGroup& group);
-static void WritePilots(NetPktGroup& group, GameObject& owner);
-int ComputeNetLOD(int position, int playerId);
-static void ReadPilots(NetPktGroup& group, GameObject& owner);
+static void WritePilots(NetPktGroup& group, GameObject* owner);
+int ComputeNetLOD(const PblVector3& position, int playerId);
+static void ReadPilots(NetPktGroup& group, GameObject* owner);
 bool IsNeverDies(EntityType type);
 void CheckReadAlign(NetPktGroup& group);
 extern int gDebugCount;
@@ -539,9 +539,9 @@ void Aimer::Read(NetPktGroup&)
 }
 
 // FUNCTION: SWBF2 0x005f0c40
-static void AddSendPilots(void (*send)(GameObject*, int), GameObject& owner, int depth)
+static void AddSendPilots(void (*send)(GameObject*, int), GameObject* owner, int depth)
 {
-    for (PblList<Controllable>::Itor it(owner.GetControllableList()); it; ++it)
+    for (PblList<Controllable>::Itor it(owner->GetControllableList()); it; ++it)
     {
         Controllable* pControl = &*it;
         const PilotType type = pControl->GetPilotType();
@@ -798,7 +798,7 @@ void EntityBuildingArmed::WriteObject(NetPktGroup& group, NetObjState*)
     {
         return;
     }
-    WritePilots(group, *this);
+    WritePilots(group, this);
     for (int i = 0; i < mNumTurrets; ++i)
     {
         mTurret[i]->Write(group);
@@ -850,7 +850,7 @@ void EntityBuildingArmed::ReadObject(NetPktGroup& group, NetObjState*)
         }
         return;
     }
-    ReadPilots(group, *this);
+    ReadPilots(group, this);
     for (int i = 0; i < mNumTurrets; ++i)
     {
         mTurret[i]->Read(group);
@@ -989,7 +989,7 @@ void EntityFlyer::AddSends(void (*send)(GameObject*, int), int depth)
     {
         send(static_cast<Trackable*>(mPilot)->GetGameObject(), depth);
     }
-    AddSendPilots(send, *this, depth);
+    AddSendPilots(send, this, depth);
     if (mPlayerId != NetGame::GetCurDst() || !mCtrl)
     {
         return;
@@ -1007,13 +1007,13 @@ void EntityFlyer::AddSends(void (*send)(GameObject*, int), int depth)
 // FUNCTION: SWBF2 0x005f1980
 void EntityBuildingAnimatedArmed::AddSends(void (*send)(GameObject*, int), int depth)
 {
-    AddSendPilots(send, *this, depth);
+    AddSendPilots(send, this, depth);
 }
 
 // FUNCTION: SWBF2 0x005f1490
 void EntityBuildingArmed::AddSends(void (*send)(GameObject*, int), int depth)
 {
-    AddSendPilots(send, *this, depth);
+    AddSendPilots(send, this, depth);
 }
 
 // FUNCTION: SWBF2 0x005f27d0
@@ -1030,7 +1030,7 @@ void EntityWalker::AddSends(void (*send)(GameObject*, int), int depth)
         Trackable* pTrackable = static_cast<Trackable*>(mPilot);
         send(pTrackable->GetGameObject(), depth);
     }
-    AddSendPilots(send, *this, depth);
+    AddSendPilots(send, this, depth);
 }
 
 // FUNCTION: SWBF2 0x005ec860
@@ -1044,7 +1044,7 @@ void EntityWalker::WriteObject(NetPktGroup& group, NetObjState*)
     const PblMatrix& matrix = GetMatrix();
     if (!NetGame::IsFullState())
     {
-        SetNetLOD(ComputeNetLOD((int)&matrix.m[3][0], mPlayerId));
+        SetNetLOD(ComputeNetLOD(matrix.GetTranslation(), mPlayerId));
         SetNetPrecision(group);
     }
     WriteMatrix(group, matrix);
@@ -1083,7 +1083,7 @@ void EntityWalker::WriteObject(NetPktGroup& group, NetObjState*)
     group.WriteBits(reinterpret_cast<const unsigned int&>(mPitchValue), 32);
     group.WriteBits(reinterpret_cast<const unsigned int&>(mYawValue), 32);
     group.WriteBits(reinterpret_cast<const unsigned int&>(mLegAngle), 32);
-    WritePilots(group, *this);
+    WritePilots(group, this);
     if (mPlayerId >= 0)
     {
         WriteThrust(group, mTurnBuildup);
@@ -1241,7 +1241,7 @@ void EntityWalker::ReadObject(NetPktGroup& group, NetObjState*)
     group.ReadBits(*(unsigned int*)&mPitchValue, 32);
     group.ReadBits(*(unsigned int*)&mYawValue, 32);
     group.ReadBits(*(unsigned int*)&mLegAngle, 32);
-    ReadPilots(group, *this);
+    ReadPilots(group, this);
     if (mPlayerId >= 0)
     {
         ReadThrust(group, mTurnBuildup);
@@ -1282,7 +1282,7 @@ void EntityDroid::AddSends(void (*send)(GameObject*, int), int depth)
         Trackable* pTrackable = static_cast<Trackable*>(mPilot);
         send(pTrackable->GetGameObject(), depth);
     }
-    AddSendPilots(send, *this, depth);
+    AddSendPilots(send, this, depth);
 }
 
 // FUNCTION: SWBF2 0x005ee8b0
@@ -1292,7 +1292,7 @@ void EntityDroid::WriteObject(NetPktGroup& group, NetObjState*)
     const PblMatrix& matrix = GetMatrix();
     if (!NetGame::IsFullState())
     {
-        SetNetLOD(ComputeNetLOD((int)&matrix.m[3][0], mPlayerId));
+        SetNetLOD(ComputeNetLOD(matrix.GetTranslation(), mPlayerId));
         SetNetPrecision(group);
     }
     WriteMatrix(group, matrix);
@@ -1312,7 +1312,7 @@ void EntityDroid::WriteObject(NetPktGroup& group, NetObjState*)
         group.WriteFixed(mCurShield, 0.0f, mMaxShield, 11);
         group.WriteBits(mIsShielded ? 1u : 0u, 1);
     }
-    WritePilots(group, *this);
+    WritePilots(group, this);
     if (mPlayerId >= 0)
     {
         WriteThrust(group, mTurnBuildup);
@@ -1380,7 +1380,7 @@ void EntityDroid::ReadObject(NetPktGroup& group, NetObjState*)
         group.ReadBits(value, 1);
         mIsShielded = value != 0;
     }
-    ReadPilots(group, *this);
+    ReadPilots(group, this);
     if (mPlayerId >= 0)
     {
         ReadThrust(group, mTurnBuildup);
@@ -1417,7 +1417,7 @@ void EntityHover::AddSends(void (*send)(GameObject*, int), int depth)
         Trackable* pTrackable = static_cast<Trackable*>(mPilot);
         send(pTrackable->GetGameObject(), depth);
     }
-    AddSendPilots(send, *this, depth);
+    AddSendPilots(send, this, depth);
 }
 
 // FUNCTION: SWBF2 0x005eef30
@@ -1427,7 +1427,7 @@ void EntityHover::WriteObject(NetPktGroup& group, NetObjState*)
     const PblMatrix& matrix = GetMatrix();
     if (!NetGame::IsFullState())
     {
-        SetNetLOD(ComputeNetLOD((int)&matrix.m[3][0], mPlayerId));
+        SetNetLOD(ComputeNetLOD(matrix.GetTranslation(), mPlayerId));
         SetNetPrecision(group);
     }
     WriteMatrix(group, matrix);
@@ -1455,7 +1455,7 @@ void EntityHover::WriteObject(NetPktGroup& group, NetObjState*)
         group.WriteFixed(mCurShield, 0.0f, mMaxShield, 11);
         group.WriteBits(mIsShielded ? 1u : 0u, 1);
     }
-    WritePilots(group, *this);
+    WritePilots(group, this);
     if (mPlayerId >= 0)
     {
         WriteThrust(group, mTurnBuildup);
@@ -1536,7 +1536,7 @@ void EntityHover::ReadObject(NetPktGroup& group, NetObjState*)
         group.ReadBits(value, 1);
         mIsShielded = value != 0;
     }
-    ReadPilots(group, *this);
+    ReadPilots(group, this);
     if (mPlayerId >= 0)
     {
         ReadThrust(group, mTurnBuildup);
@@ -1886,9 +1886,9 @@ void MountedTurret::Read(NetPktGroup& group)
 }
 
 // FUNCTION: SWBF2 0x005f0d50
-static void WritePilots(NetPktGroup& group, GameObject& owner)
+static void WritePilots(NetPktGroup& group, GameObject* owner)
 {
-    for (PblList<Controllable>::Itor it(owner.GetControllableList()); it; ++it)
+    for (PblList<Controllable>::Itor it(owner->GetControllableList()); it; ++it)
     {
         Controllable* pControl = &*it;
         const PilotType type = pControl->GetPilotType();
@@ -1901,7 +1901,7 @@ static void WritePilots(NetPktGroup& group, GameObject& owner)
         if (pPilot)
         {
             Trackable* pTrackable = static_cast<Trackable*>(pPilot);
-            AddSendLate(pTrackable->GetGameObject(), &owner);
+            AddSendLate(pTrackable->GetGameObject(), owner);
             pCharacter = pPilot->GetCharacter();
         }
         WriteCharacter(group, pCharacter);
@@ -1909,9 +1909,9 @@ static void WritePilots(NetPktGroup& group, GameObject& owner)
 }
 
 // FUNCTION: SWBF2 0x005f0de0
-static void ReadPilots(NetPktGroup& group, GameObject& owner)
+static void ReadPilots(NetPktGroup& group, GameObject* owner)
 {
-    for (PblList<Controllable>::Itor it(owner.GetControllableList()); it; ++it)
+    for (PblList<Controllable>::Itor it(owner->GetControllableList()); it; ++it)
     {
         Controllable* control = &*it;
         const PilotType type = control->GetPilotType();
@@ -1936,7 +1936,7 @@ static void ReadPilots(NetPktGroup& group, GameObject& owner)
                 if (oldCharacter->GetRemote())
                 {
                     Trackable* trackable = static_cast<Trackable*>(oldCharacter->GetRemote());
-                    if (trackable->GetGameObject() == &owner)
+                    if (trackable->GetGameObject() == owner)
                     {
                         oldCharacter->SetRemote(0);
                     }
@@ -1944,7 +1944,7 @@ static void ReadPilots(NetPktGroup& group, GameObject& owner)
                 if (oldCharacter->GetVehicle())
                 {
                     Trackable* trackable = static_cast<Trackable*>(oldCharacter->GetVehicle());
-                    if (trackable->GetGameObject() == &owner)
+                    if (trackable->GetGameObject() == owner)
                     {
                         oldCharacter->SetVehicle(0);
                     }
@@ -2429,19 +2429,19 @@ GameObject* EntityTrap::AddToClient()
 // FUNCTION: SWBF2 0x005f11a0
 void EntityRemoteTerminal::WriteObject(NetPktGroup& group, NetObjState*)
 {
-    WritePilots(group, *this);
+    WritePilots(group, this);
 }
 
 // FUNCTION: SWBF2 0x005f11c0
 void EntityRemoteTerminal::ReadObject(NetPktGroup& group, NetObjState*)
 {
-    ReadPilots(group, *this);
+    ReadPilots(group, this);
 }
 
 // FUNCTION: SWBF2 0x005f1180
 void EntityRemoteTerminal::AddSends(void (*pfnSend)(GameObject*, int), int iArg)
 {
-    AddSendPilots(pfnSend, *this, iArg);
+    AddSendPilots(pfnSend, this, iArg);
 }
 
 // FUNCTION: SWBF2 0x005f1010
@@ -3776,7 +3776,7 @@ void EntityFlyer::WriteObject(NetPktGroup& group, NetObjState* pState)
     const PblMatrix& matrix = GetMatrix();
     if (!NetGame::IsFullState())
     {
-        SetNetLOD(ComputeNetLOD((int)&matrix.m[3][0], mPlayerId));
+        SetNetLOD(ComputeNetLOD(matrix.GetTranslation(), mPlayerId));
         SetNetPrecision(group);
     }
     WriteMatrix(group, matrix);
@@ -3795,7 +3795,7 @@ void EntityFlyer::WriteObject(NetPktGroup& group, NetObjState* pState)
         group.WriteFixed(mCurShield, 0.0f, mMaxShield, 11);
         group.WriteBits(mIsShielded ? 1u : 0u, 1);
     }
-    WritePilots(group, *this);
+    WritePilots(group, this);
     if (mState != LANDED)
     {
         group.WriteBits(mBoost ? 1u : 0u, 1);
@@ -3912,7 +3912,7 @@ void EntityFlyer::ReadObject(NetPktGroup& group, NetObjState* pState)
         group.ReadBits(value, 1);
         mIsShielded = value != 0;
     }
-    ReadPilots(group, *this);
+    ReadPilots(group, this);
     if (mState != LANDED)
     {
         group.ReadBits(value, 1);
@@ -4268,7 +4268,7 @@ void EntityDroideka::ReadObject(NetPktGroup& group, NetObjState*)
     group.ReadBits(*(unsigned int*)&mBallAngularVelocity, 32);
     ReadCosSin(group, (float*)&mBallOrientation);
     ReadCosSin(group, (float*)&mBallLean);
-    ReadPilots(group, *this);
+    ReadPilots(group, this);
     group.ReadBits(value, 1);
     if (value)
     {
@@ -4597,7 +4597,7 @@ void EntityDroideka::WriteObject(NetPktGroup& group, NetObjState*)
     const PblMatrix& matrix = GetMatrix();
     if (!NetGame::IsFullState())
     {
-        SetNetLOD(ComputeNetLOD((int)&matrix.m[3][0], mPlayerId));
+        SetNetLOD(ComputeNetLOD(matrix.GetTranslation(), mPlayerId));
         SetNetPrecision(group);
     }
     group.WriteBits(mCtrl != 0, 1);
@@ -4632,7 +4632,7 @@ void EntityDroideka::WriteObject(NetPktGroup& group, NetObjState*)
     group.WriteBits(*(const unsigned int*)&mBallAngularVelocity, 32);
     WriteCosSin(group, (const float*)&mBallOrientation);
     WriteCosSin(group, (const float*)&mBallLean);
-    WritePilots(group, *this);
+    WritePilots(group, this);
     const bool bOffense = mBuffOffenseTimer > 0.0f;
     group.WriteBits(bOffense, 1);
     if (bOffense)
@@ -4717,7 +4717,7 @@ void EntitySoldier::WriteObject(NetPktGroup& group, NetObjState*)
     if (!NetGame::IsFullState())
     {
         const PblVector3& position = matrix.GetTranslation();
-        int precision = ComputeNetLOD((int)&position, mPlayerId);
+        int precision = ComputeNetLOD(position, mPlayerId);
         if (!precision && gSoldierLodCount < 3)
         {
             const float dx = gCameraFrontPos.x - position.x;

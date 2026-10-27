@@ -199,7 +199,7 @@ int NetMatch::GetPercentDone()
 }
 
 // FUNCTION: SWBF2 0x005d5f20
-char __fastcall NetMatch::EndFindGames(bool clearMatchmaking)
+void __fastcall NetMatch::EndFindGames(bool clearMatchmaking)
 {
     if (clearMatchmaking)
     {
@@ -214,12 +214,11 @@ char __fastcall NetMatch::EndFindGames(bool clearMatchmaking)
     {
         closesocket((SOCKET)netBroadcastSendSocket);
         netBroadcastSendSocket = 0;
-        int result = closesocket((SOCKET)netBroadcastRecvSocket);
+        closesocket((SOCKET)netBroadcastRecvSocket);
         netBroadcastRecvSocket = 0;
-        return (char)result;
+        return;
     }
     netLobbyState = 0;
-    return 0;
 }
 
 // FUNCTION: SWBF2 0x005d5f70
@@ -278,11 +277,10 @@ void NetMatch::StartJoinGame(NetAddr& address, NetKey&)
 }
 
 // FUNCTION: SWBF2 0x005d6040
-char NetMatch::EndJoinGame()
+void NetMatch::EndJoinGame()
 {
     netMatchOperation = 0;
-    char result = NetComm::IsLAN();
-    if (result)
+    if (NetComm::IsLAN())
     {
         if (netLanRegisterState != 2)
         {
@@ -295,7 +293,6 @@ char NetMatch::EndJoinGame()
         netLobbyState = 0;
     }
     netEnteredLobbyId = 0;
-    return result;
 }
 
 // FUNCTION: SWBF2 0x005d60a0
@@ -338,7 +335,7 @@ bool NetMatch::UpdateConnect(const NetAddr* pAddr, const NetKey* pKey, int iDest
 void NetMatch::EndConnect(NetAddr&, NetKey&, int) {}
 
 // FUNCTION: SWBF2 0x005d6310
-char NetMatch::SetNoCableError()
+void NetMatch::SetNoCableError()
 {
     int count = ++netNoCableCount;
     if (count > 4 && netLoginErrorLevel < 9)
@@ -347,9 +344,8 @@ char NetMatch::SetNoCableError()
         bool link = NetComm::IsLAN();
         netLoginErrorLevel = 9;
         netLoginErrorMessage = link ? "xlive.errors.nocable_syslink" : "xlive.errors.nocable";
-        return link;
+        return;
     }
-    return (char)count;
 }
 
 // FUNCTION: SWBF2 0x005d6580
@@ -501,13 +497,13 @@ void UpdateFindLanGames()
 }
 
 // FUNCTION: SWBF2 0x005d7770
-unsigned int NetMatch::HostGetAddr(const NetAddr* pAddr, void* pOut, int iDest)
+void NetMatch::HostGetAddr(const NetAddr* pAddr, void* pOut, int iDest)
 {
     unsigned __int64* peer = NetCommP::GetAddr(iDest);
     if (!NetComm::IsLAN())
     {
         memcpy(pOut, peer, sizeof(*peer));
-        return (unsigned int)(*peer >> 32);
+        return;
     }
     int ip, port;
     NetSocket::GetAddr(peer, ip, port);
@@ -524,7 +520,7 @@ unsigned int NetMatch::HostGetAddr(const NetAddr* pAddr, void* pOut, int iDest)
         output->privPort = port;
     }
     myAddr.CopyFieldsFrom(pAddr);
-    return (unsigned int)&myAddr;
+    return;
 }
 
 // FUNCTION: SWBF2 0x005d7830
@@ -709,11 +705,10 @@ bool NetMatch::UpdateFindAddress()
 }
 
 // FUNCTION: SWBF2 0x005d7820
-int __fastcall NetMatch::SetAddr(unsigned int* pOut, const unsigned int* pIn)
+void __fastcall NetMatch::SetAddr(unsigned int* pOut, const unsigned int* pIn)
 {
     pOut[0] = pIn[0];
     pOut[1] = pIn[1];
-    return pIn[1];
 }
 
 // FUNCTION: SWBF2 0x005d5ba0

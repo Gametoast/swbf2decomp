@@ -69,8 +69,6 @@ pcOceanShader::pcOceanShader(unsigned int uiFlags,
                              const RedColor& color1,
                              float fArg7)
 {
-    m_textureTransform.m_bTransform = 0;
-    m_foamMapTransform.m_bTransform = 0;
     _BindPipeline(GetStateFuncArray, BeginFuncArray, EndFuncArray, RenderFuncArray);
     _Init(uiFlags, pParams, uiNumParams, uiMaterialFlags, color0, color1, fArg7);
 }

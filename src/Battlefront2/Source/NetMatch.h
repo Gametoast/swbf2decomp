@@ -11,13 +11,13 @@ public:
 
     static char* GetIPAddr();
 
-    static char SetNoCableError();
+    static void SetNoCableError();
 
     static void ClearGameError();
 
     static int GetPercentDone();
 
-    static char __fastcall EndFindGames(bool bCancel);
+    static void __fastcall EndFindGames(bool bCancel);
 
     static void StartRegisterGame(bool bMatchService);
 
@@ -26,7 +26,7 @@ public:
 
     static void StartJoinGame(NetAddr& address, NetKey& key);
 
-    static char EndJoinGame();
+    static void EndJoinGame();
 
     static bool StartConnect(NetAddr& address, NetKey& key, int destination);
 
@@ -42,7 +42,7 @@ public:
 
     static bool GetPlayerDataByAddress();
 
-    static unsigned int HostGetAddr(const NetAddr* pAddr, void* pOut, int iDest);
+    static void HostGetAddr(const NetAddr* pAddr, void* pOut, int iDest);
 
     static unsigned int __fastcall GetSessionId(NetSessionId* pId);
 
@@ -77,7 +77,7 @@ public:
     static void EndFindAddress();
     static bool UpdateFindAddress();
     static void ClientGetAddr();
-    static int __fastcall SetAddr(unsigned int* pOut, const unsigned int* pIn);
+    static void __fastcall SetAddr(unsigned int* pOut, const unsigned int* pIn);
 };
 
 bool __fastcall IsPrivateIP(unsigned long netAddr);

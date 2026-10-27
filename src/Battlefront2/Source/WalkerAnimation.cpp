@@ -1,3 +1,4 @@
+#include <string.h>
 #include <new>
 #include "WalkerAnimation.h"
 
@@ -36,10 +37,7 @@ WalkerBlend::WalkerBlend(int iTotal, ZephyrSkeleton<64>& rSkeleton)
       mTime(0.0f),
       mSpeed(0.0f)
 {
-    for (int i = 0; i < 8; ++i)
-    {
-        mUnits[i] = 0;
-    }
+    memset(mUnits, 0, sizeof(mUnits));
 
     for (int i = 0; i < mTotal; ++i)
     {

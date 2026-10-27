@@ -2,6 +2,11 @@
 
 #include <math.h>
 
+inline const float Interpolate(float f0, float f1, float fT)
+{
+    return (f1 - f0) * fT + f0;
+}
+
 namespace PblMath
 {
     static const float fPi = 3.141592654f;

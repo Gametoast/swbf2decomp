@@ -3785,17 +3785,9 @@ bool WeaponMelee::Update(float fDeltaTime)
 
 // FUNCTION: SWBF2 0x0068d270
 WeaponMeleeClass::WeaponMeleeClass(unsigned int uHash)
-    : WeaponClass(uHash)
+    : WeaponClass(uHash),
+      mDamage(DamageOwner(0, 0, 0, 0, 0, 1.0f), 0.0f)
 {
-    DamageOwner owner(0, 0, 0, 0, 0, 1.0f);
-    mDamage.mDamageOwner = owner;
-    mDamage.mBaseValue = 0.0f;
-    for (int i = 0; i < 8; ++i)
-    {
-        mDamage.mHealthScale[i] = 1.0f;
-    }
-    mDamage.mShieldScale = 1.0f;
-
     m_uiNumHitEffects = 0;
     m_pComboODF = 0;
     m_pCombo = 0;
@@ -3816,17 +3808,9 @@ WeaponMeleeClass::WeaponMeleeClass(unsigned int uHash)
 
 // FUNCTION: SWBF2 0x0068d420
 WeaponMeleeClass::WeaponMeleeClass(WeaponMeleeClass* aParent, unsigned int aId)
-    : WeaponClass(aParent, aId)
+    : WeaponClass(aParent, aId),
+      mDamage(DamageOwner(0, 0, 0, 0, 0, 1.0f), 0.0f)
 {
-    DamageOwner owner(0, 0, 0, 0, 0, 1.0f);
-    mDamage.mDamageOwner = owner;
-    mDamage.mBaseValue = 0.0f;
-    for (int i = 0; i < 8; ++i)
-    {
-        mDamage.mHealthScale[i] = 1.0f;
-    }
-    mDamage.mShieldScale = 1.0f;
-
     m_pCombo = aParent->m_pCombo;
     m_pComboODF = 0;
     m_uiNumHitEffects = aParent->m_uiNumHitEffects;

@@ -1,3 +1,4 @@
+#include <string.h>
 #include <d3dx9math.h>
 #include <math.h>
 #include "PebbleFL/Common/PblVector.h"
@@ -48,17 +49,9 @@ Ordnance* ExplosionClass::Build(const OrdnanceDesc&)
 
 // FUNCTION: SWBF2 0x0051c9a0
 ExplosionClass::ExplosionClass(unsigned int uHash)
-    : Factory<Ordnance, ExplosionClass, OrdnanceDesc>(uHash)
+    : Factory<Ordnance, ExplosionClass, OrdnanceDesc>(uHash),
+      mDamage(DamageOwner(0, 0, 0, 0, 0, 1.0f), 0.0f)
 {
-    DamageOwner owner(0, 0, 0, 0, 0, 1.0f);
-    mDamage.mDamageOwner = owner;
-    mDamage.mBaseValue = 0.0f;
-    for (int i = 0; i < 8; ++i)
-    {
-        mDamage.mHealthScale[i] = 1.0f;
-    }
-    mDamage.mShieldScale = 1.0f;
-
     mDamageRadius[0] = 0.0f;
     mDamageRadius[1] = 0.0f;
     mRumbleLight = 0.0f;
@@ -76,10 +69,7 @@ ExplosionClass::ExplosionClass(unsigned int uHash)
     mPushRadius[1] = 0.0f;
     mPushDeadOnly = true;
     mNumEffects = 0;
-    for (int i = 0; i < 5; ++i)
-    {
-        mEffects[i] = 0;
-    }
+    memset(mEffects, 0, sizeof(mEffects));
     mDecalHash = 0;
     mWaterEffectHash = 0;
     mShieldEffectHash = 0x6B369C5Fu;

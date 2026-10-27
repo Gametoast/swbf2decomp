@@ -92,10 +92,6 @@ namespace
         return pObj->GetMaxStrafe();
     }
 
-    PblList<Controllable>& GetControllableList(const GameObject* pObj)
-    {
-        return const_cast<PblList<Controllable>&>(pObj->mControllableList);
-    }
 
     inline const EntitySoldierClass* GetSoldierClass(const Entity* pSoldier)
     {
@@ -299,7 +295,7 @@ bool AttackPatterns::IsInEnemySights(float fAngle, const Controllable** ppEnemy)
     }
 
     float fBest = -1.1f;
-    for (PblList<Controllable>::Itor it(GetControllableList(pTarget)); it; ++it)
+    for (PblList<Controllable>::Itor it(pTarget->GetControllableList()); it; ++it)
     {
         const Controllable* pCtrl = it;
         if (pCtrl->mCtrl)

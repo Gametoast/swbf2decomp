@@ -401,7 +401,6 @@ public:
     static PblHash rttiHashCommandWalker;
 };
 
-static char sEventParam;
 
 // GLOBAL: SWBF2 0x01e308e0
 static CommandPost* sPostArrayHost[16];
@@ -593,14 +592,8 @@ CommandPost::CommandPost(CommandPostClass* pClass, int iIndex)
     mName = 0;
     mLabel = 0;
     mLocalizeName = 0;
-    for (int i = 0; i < 8; i++)
-    {
-        mHoldCount[i] = 0;
-    }
-    mSpawnQueue[0][0] = 0;
-    mSpawnQueue[0][1] = 0;
-    mSpawnQueue[1][0] = 0;
-    mSpawnQueue[1][1] = 0;
+    memset(mHoldCount, 0, sizeof(mHoldCount));
+    memset(mSpawnQueue, 0, sizeof(mSpawnQueue));
     for (int i = 0; i < 8; i++)
     {
         mBleedValue[i] = pClass->mBleedValue[i];
@@ -819,7 +812,7 @@ void CommandPost::Respawn()
     TargetManager::AddPost(this);
     if (!NetGame::IsEnabled() || !NetGame::IsClient())
     {
-        EventManager::CommandPostEvent::mRespawn.Trigger(*this, sEventParam);
+        EventManager::CommandPostEvent::mRespawn.Trigger(*this, EventManager::noContext);
     }
     ActivateThread(-20, PER_TURN);
     ++*sActivePostCount;

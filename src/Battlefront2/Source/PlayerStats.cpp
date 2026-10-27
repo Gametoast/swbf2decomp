@@ -437,7 +437,6 @@ void PlayerStats::Reset()
     ResetStats();
 }
 
-Controllable* GetControllablePilot(Controllable* pControllable);
 
 namespace AI
 {
@@ -469,7 +468,7 @@ void PlayerStats::AddKill(Character* pVictim, GameObject* pObject)
     {
         Character* pCharacter = Character::GetPtr(mStatId);
         if (pCharacter && pCharacter->mUnit &&
-            (!pCharacter->GetControllable() || !GetControllablePilot(pCharacter->GetControllable())))
+            (!pCharacter->GetControllable() || !pCharacter->GetControllable()->GetPilot()))
         {
             GameObject* pUnitObject = pCharacter->mUnit->GetGameObject();
             float fHealth;

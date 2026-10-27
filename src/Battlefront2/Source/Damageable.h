@@ -84,6 +84,7 @@ public:
     virtual ~Damageable();
     virtual void Kill();
     virtual void Respawn();
+    void ResetStatus();
     virtual GameObject* GetGameObject();
     virtual const GameObject* GetGameObject() const;
     virtual bool ApplyDamage(const DamageDesc& damage, const PblVector3& vDir, const PblVector3& vPos, int iBodyPart, unsigned int uFlags);
@@ -179,4 +180,12 @@ inline DamageDesc::DamageDesc(DamageOwner owner, float fBaseValue)
         mHealthScale[i] = 1.0f;
     }
     mShieldScale = 1.0f;
+}
+
+// FUNCTION: SWBF2 0x004922b0
+inline void Damageable::ResetStatus()
+{
+    mCurHealth = mMaxHealth;
+    mCurShield = mMaxShield;
+    mDamageOwner = DamageOwner(0, 0, 0, 0, 0, 1.0f);
 }

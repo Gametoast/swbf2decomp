@@ -70,15 +70,10 @@ bool AllowUpdateFreeCamSpeeds()
 
 // FUNCTION: SWBF2 0x0052d650
 FreeCamera::FreeCamera(CameraManager* pManager, int iView)
-    : GameCamera(pManager, iView)
+    : GameCamera(pManager, iView),
+      mPitch(0.0f), mYaw(0.0f), mMultiplier(1.0f), mTurnMultiplier(1.0f),
+      mButtonFasterDown(false), mButtonSlowerDown(false), mVelocity(gVectorZero)
 {
-    mPitch = 0.0f;
-    mYaw = 0.0f;
-    mMultiplier = 1.0f;
-    mTurnMultiplier = 1.0f;
-    mButtonFasterDown = false;
-    mButtonSlowerDown = false;
-    mVelocity = gVectorZero;
     mMatrix.Reset();
 }
 

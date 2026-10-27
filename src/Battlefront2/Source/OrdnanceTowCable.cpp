@@ -413,7 +413,7 @@ bool OrdnanceTowCable::Update(float fDeltaTime)
             Damageable::SetTeamDamageScale(1.0f);
             if (mOwner)
             {
-                for (PblList<Controllable>::Itor itor(mOwner->mControllableList); (Controllable*)itor; ++itor)
+                for (PblList<Controllable>::Itor itor(mOwner->GetControllableList()); (Controllable*)itor; ++itor)
                 {
                     if (!itor->GetPilot())
                     {

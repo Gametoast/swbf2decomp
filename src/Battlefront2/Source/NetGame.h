@@ -306,7 +306,7 @@ public:
     static int FindPlayerByGSID(int low, int high);
     static void ClearPlayerCDKey(int);
     static void ClearAllCDKeyInfo();
-    static int GetGuestOf(unsigned int iPlayer);
+    static int GetGuestOf(int iPlayer);
     static int FindSpectateTarget(int player);
     static int FindSpectateTarget(int player, int team);
     static bool ChangeSpectateTrack(int player, int spectator);
@@ -840,7 +840,7 @@ void WriteSpawnDisplay(NetPktGroup& group);
 void WritePlayerMoves(NetPktGroup& group);
 void WriteSpawnCamera(NetPktGroup& group);
 void AddSendLate(GameObject* object, GameObject* owner);
-int ComputeNetLOD(int iUnused, int iPlayer);
+int ComputeNetLOD(const PblVector3& position, int iPlayer);
 
 class AloBootVote
 {

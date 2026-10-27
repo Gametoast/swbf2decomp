@@ -109,11 +109,6 @@ int sCurBarrel;
 // FUNCTION: SWBF2 0x0043e4c0
 AimerClass::AimerClass()
 {
-    mOffsetRot._fS = 1.0f;
-    mOffsetRot._fX = 0.0f;
-    mOffsetRot._fY = 0.0f;
-    mOffsetRot._fZ = 0.0f;
-
     memset(mBarrelInfo, 0, sizeof(mBarrelInfo));
 
     mNumBarrels = 0;
@@ -130,6 +125,7 @@ AimerClass::AimerClass()
     mOffsetPos.x = 0.0f;
     mOffsetPos.y = 0.0f;
     mOffsetPos.z = 0.0f;
+    mOffsetRot = PblQuaternion(1.0f, 0.0f, 0.0f, 0.0f);
     mMountHash = 0;
     mParentHash = 0;
     mIsInert = false;
@@ -302,10 +298,6 @@ Aimer::Aimer(AimerClass* pClass, const Controllable* pOwner, const PblMatrix* pP
     mParentMatrix = pParentMatrix;
     mClass = pClass;
     mOwner = pOwner;
-    mMountRot._fX = 0.0f;
-    mMountRot._fY = 0.0f;
-    mMountRot._fZ = 0.0f;
-    mMountRot._fS = 1.0f;
     mPose = pPose;
     mWithinLimitsFlag = true;
     mOffsetPos = pClass->mOffsetPos;
@@ -583,7 +575,7 @@ bool Aimer::Update(float fDeltaTime)
         }
         const GameObject* pObject = 0;
 
-        Controllable* pOwner = const_cast<Controllable*>(mOwner);
+        const Controllable* pOwner = mOwner;
         if (pOwner->GetPilot())
         {
             pObject = pOwner->GetPilot()->GetGameObject();

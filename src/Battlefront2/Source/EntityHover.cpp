@@ -277,10 +277,7 @@ EntityHoverClass::EntityHoverClass(unsigned int uHash)
     mPassengerSlotClass = 0;
     mNumPassengerSlots = 0;
 
-    for (int i = 0; i < 8; ++i)
-    {
-        mTurretClass[i] = 0;
-    }
+    memset(mTurretClass, 0, sizeof(mTurretClass));
 
     mExplosion = 0;
     mAttachHash = 0;
@@ -420,14 +417,8 @@ EntityHover::EntityHover(EntityHoverClass* pClass, const EntityDesc& desc)
     mFinRollValue = 0.0f;
     mYawValue = 0.0f;
     mPitchValue = 0.0f;
-    for (int i = 0; i < 4; ++i)
-    {
-        mAimer[i] = 0;
-    }
-    for (int i = 0; i < 4; ++i)
-    {
-        mWeapon[i] = 0;
-    }
+    memset(mAimer, 0, sizeof(mAimer));
+    memset(mWeapon, 0, sizeof(mWeapon));
 
     for (int i = 0; i < mClass->mWeaponCount; ++i)
     {
@@ -484,14 +475,8 @@ EntityHover::EntityHover(EntityHoverClass* pClass, const EntityDesc& desc)
     mEyeDir = mMatrix.GetZAxis();
     mEyePoint = mClass->mCameraSettings.CalcEyePoint(mMatrix);
     _uiRenderFlags &= 3;
-    for (int i = 0; i < 4; ++i)
-    {
-        mWheelTextureU[i] = 0.0f;
-    }
-    for (int i = 0; i < 4; ++i)
-    {
-        mWheelTextureV[i] = 0.0f;
-    }
+    memset(mWheelTextureU, 0, sizeof(mWheelTextureU));
+    memset(mWheelTextureV, 0, sizeof(mWheelTextureV));
     memset(mWakeEmitters, 0, sizeof(mWakeEmitters));
     mSpeedPrev = 0.0f;
     mGroundRatioPrev = 1.0f;
@@ -1578,7 +1563,6 @@ extern bool netIsLocalTurn;
 
 extern PblVector3 gVectorZero;
 
-Controllable* GetControllablePilot(Controllable* pControllable);
 
 PblMatrix NormalMatrix(const PblVector3& vDir, const PblVector3& vNormal, const PblVector3& vPos);
 
@@ -1614,7 +1598,7 @@ bool EntityHover::Update(float fDeltaTime)
             }
             if (!(NetGame::IsEnabled() && NetGame::IsClient()) && mDamageOwner.mCharacter)
             {
-                AwardVehicleKillPoints(mClass->GetVehicleType(), GetControllablePilot(this) == 0);
+                AwardVehicleKillPoints(mClass->GetVehicleType(), this->GetPilot() == 0);
             }
             if (mClass->mExplosion)
             {
@@ -3335,7 +3319,7 @@ bool EntityHover::UpdateIndirect(float fDeltaTime)
             CollisionObject* pHit;
             const GameObject* pIgnore[2];
             pIgnore[0] = this;
-            pIgnore[1] = GetControllablePilot(this)->GetGameObject();
+            pIgnore[1] = this->GetPilot()->GetGameObject();
             PblVector3 vDest = dest.mPos;
             PblVector3 vPos = GetMatrix().GetTranslation();
             PblVector3 vToDest(vDest.x - vPos.x, 0.0001f, vDest.z - vPos.z);

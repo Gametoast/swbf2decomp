@@ -229,5 +229,4 @@ Particle sParticleCache[128];
 // sEmitterCache
 Particle sEmitterCache[32];
 
-// SYNTHETIC: SWBF2 0x0048ebf0
-// RedColorValue::RedColorValue
+

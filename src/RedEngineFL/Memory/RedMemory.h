@@ -35,7 +35,7 @@ extern "C"
     void RedDestroyHeap(int heap);
     int RedSetCurrentHeap(int heap);
     void RedSetDebugHeap(int heap);
-    void* RedAllocFromHeap(int heap, unsigned int size, int bTop);
+    void* RedAllocFromHeap(int heap, unsigned int size, bool bTop);
     void RedFreeToHeap(int heap, void* block, int flags);
     void RedMarkHeapPermanent(int heap, bool permanent);
     void RedSetTempHeap(int heap);

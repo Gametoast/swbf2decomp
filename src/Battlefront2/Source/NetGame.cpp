@@ -3344,9 +3344,9 @@ void EntityItem::ReadCreate(NetPktGroup& group)
 }
 
 // FUNCTION: SWBF2 0x005c3840
-int NetGame::GetGuestOf(unsigned int iPlayer)
+int NetGame::GetGuestOf(int iPlayer)
 {
-    if (iPlayer >= 64)
+    if (iPlayer < 0 || iPlayer >= 64)
     {
         return -1;
     }
@@ -5110,7 +5110,7 @@ unsigned int GetUniqObjectId(const GameObject* pObject)
 }
 
 // FUNCTION: SWBF2 0x005ce480
-int ComputeNetLOD(int, int iPlayer)
+int ComputeNetLOD(const PblVector3&, int iPlayer)
 {
     if (iPlayer < 0)
     {
@@ -10031,7 +10031,6 @@ void NetGame::ReadChatMessageFromClient(NetPktGroup& group)
     }
 }
 
-Controllable* GetControllablePilot(Controllable* pControllable);
 unsigned int GetWalkerClassRtti();
 unsigned int GetHoverClassRtti();
 unsigned int GetFlyerClassRtti();
@@ -10157,13 +10156,13 @@ GameObject* CreateObject(unsigned int uniqId, EntityClass* entityClass, int init
 
     if (character)
     {
-        if (character->mRemote && GetControllablePilot(character->mRemote))
+        if (character->mRemote && character->mRemote->GetPilot())
         {
             Controllable* remote = character->mRemote;
             remote->SetPilot(0);
             character->SetRemote(0);
         }
-        if (character->GetVehicle() && GetControllablePilot(character->GetVehicle()))
+        if (character->GetVehicle() && character->GetVehicle()->GetPilot())
         {
             Controllable* vehicle = character->GetVehicle();
             vehicle->SetPilot(0);

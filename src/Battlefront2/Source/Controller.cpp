@@ -81,10 +81,6 @@ Controller::Controller(Controllable* pOwner)
       mCrowdEnemies(0),
       mCrowdAllies(0)
 {
-    mTargetBubbleRotation._fX = 0.0f;
-    mTargetBubbleRotation._fY = 0.0f;
-    mTargetBubbleRotation._fZ = 0.0f;
-    mTargetBubbleRotation._fS = 1.0f;
 }
 
 // FUNCTION: SWBF2 0x004856d0

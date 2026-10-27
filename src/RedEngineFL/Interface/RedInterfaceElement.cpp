@@ -60,23 +60,16 @@ RedInterfaceElement::RedInterfaceElement(const char* pcName)
     m_zorder = 128;
     m_bEnabled = true;
 
-    m_groupNode._pList = 0;
-    m_groupNode._pNext = 0;
-    m_groupNode._pPrev = 0;
-    m_groupNode._pObject = 0;
 
     m_color.b = 0xFF;
     m_color.g = 0xFF;
     m_color.r = 0xFF;
     m_color.a = 0xFF;
 
-    for (int i = 0; i < 4; i++)
-    {
-        for (int j = 0; j < 4; j++)
-        {
-            m_mLocal.m[i][j] = (i == j) ? 1.0f : 0.0f;
-        }
-    }
+    m_mLocal.SetXAxis(1.0f, 0.0f, 0.0f, 0.0f);
+    m_mLocal.SetYAxis(0.0f, 1.0f, 0.0f, 0.0f);
+    m_mLocal.SetZAxis(0.0f, 0.0f, 1.0f, 0.0f);
+    m_mLocal.SetTranslation(0.0f, 0.0f, 0.0f, 1.0f);
 
     m_bInAllObjectList = false;
     m_uiFlags = 0;
@@ -92,23 +85,16 @@ RedInterfaceElement::RedInterfaceElement()
     m_zorder = 128;
     m_bEnabled = true;
 
-    m_groupNode._pList = 0;
-    m_groupNode._pNext = 0;
-    m_groupNode._pPrev = 0;
-    m_groupNode._pObject = 0;
 
     m_color.b = 0xFF;
     m_color.g = 0xFF;
     m_color.r = 0xFF;
     m_color.a = 0xFF;
 
-    for (int i = 0; i < 4; i++)
-    {
-        for (int j = 0; j < 4; j++)
-        {
-            m_mLocal.m[i][j] = (i == j) ? 1.0f : 0.0f;
-        }
-    }
+    m_mLocal.SetXAxis(1.0f, 0.0f, 0.0f, 0.0f);
+    m_mLocal.SetYAxis(0.0f, 1.0f, 0.0f, 0.0f);
+    m_mLocal.SetZAxis(0.0f, 0.0f, 1.0f, 0.0f);
+    m_mLocal.SetTranslation(0.0f, 0.0f, 0.0f, 1.0f);
 
     m_crcName = s_uiUnnamedCRC++;
 
@@ -167,22 +153,10 @@ void RedInterfaceElement::SendToBack()
 void RedInterfaceElement::SetMatrixPosScale(float fX, float fY, float fScaleX,
                                             float fScaleY)
 {
-    m_mLocal.m[0][0] = fScaleX;
-    m_mLocal.m[0][1] = 0.0f;
-    m_mLocal.m[0][2] = 0.0f;
-    m_mLocal.m[0][3] = 0.0f;
-    m_mLocal.m[1][0] = 0.0f;
-    m_mLocal.m[1][1] = fScaleY;
-    m_mLocal.m[1][2] = 0.0f;
-    m_mLocal.m[1][3] = 0.0f;
-    m_mLocal.m[2][0] = 0.0f;
-    m_mLocal.m[2][1] = 0.0f;
-    m_mLocal.m[2][2] = 1.0f;
-    m_mLocal.m[2][3] = 0.0f;
-    m_mLocal.m[3][0] = fX;
-    m_mLocal.m[3][1] = fY;
-    m_mLocal.m[3][2] = 0.0f;
-    m_mLocal.m[3][3] = 1.0f;
+    m_mLocal.SetXAxis(fScaleX, 0.0f, 0.0f, 0.0f);
+    m_mLocal.SetYAxis(0.0f, fScaleY, 0.0f, 0.0f);
+    m_mLocal.SetZAxis(0.0f, 0.0f, 1.0f, 0.0f);
+    m_mLocal.SetTranslation(fX, fY, 0.0f, 1.0f);
 }
 
 // FUNCTION: SWBF2 0x006c0510
@@ -229,12 +203,7 @@ void RedInterfaceElement::SetZOrder(unsigned char uZOrder)
 // FUNCTION: SWBF2 0x006c0820
 void RedInterfaceElement::SetPosition(float fX, float fY)
 {
-    const float fZ = m_mLocal.m[3][2];
-
-    m_mLocal.m[3][0] = fX;
-    m_mLocal.m[3][1] = fY;
-    m_mLocal.m[3][2] = fZ;
-    m_mLocal.m[3][3] = 1.0f;
+    m_mLocal.SetTranslation(fX, fY, m_mLocal.m[3][2], 1.0f);
 }
 
 // FUNCTION: SWBF2 0x006c0850
@@ -249,7 +218,7 @@ void RedInterfaceElement::SetPosition(float fX, float fY, float fZ)
 // FUNCTION: SWBF2 0x006c0800
 void RedInterfaceElement::SetPosition(const PblVector3& vPos)
 {
-    SetPosition(vPos.x, vPos.y, vPos.z);
+    m_mLocal.SetTranslation(vPos);
 }
 
 // FUNCTION: SWBF2 0x006c0210
@@ -293,14 +262,10 @@ void RedInterfaceElement::Reset()
 // FUNCTION: SWBF2 0x006c05f0
 void RedInterfaceElement::SetMatrix(const PblMatrix& matrix)
 {
-    for (int i = 0; i < 4; i++)
-    {
-        m_mLocal.m[i][0] = matrix.m[i][0];
-        m_mLocal.m[i][1] = matrix.m[i][1];
-        m_mLocal.m[i][2] = matrix.m[i][2];
-        m_mLocal.m[i][3] = 0.0f;
-    }
-    m_mLocal.m[3][3] = 1.0f;
+    m_mLocal.SetXAxis(matrix.m[0][0], matrix.m[0][1], matrix.m[0][2], 0.0f);
+    m_mLocal.SetYAxis(matrix.m[1][0], matrix.m[1][1], matrix.m[1][2], 0.0f);
+    m_mLocal.SetZAxis(matrix.m[2][0], matrix.m[2][1], matrix.m[2][2], 0.0f);
+    m_mLocal.SetTranslation(matrix.m[3][0], matrix.m[3][1], matrix.m[3][2], 1.0f);
 }
 
 // FUNCTION: SWBF2 0x006c0680
@@ -309,20 +274,8 @@ void RedInterfaceElement::SetMatrixPosRotScale(float fX, float fY, float fRotati
 {
     float fSin, fCos;
     PblMath::SinCos(&fSin, &fCos, fRotation);
-    m_mLocal.m[0][0] = fCos * fScaleX;
-    m_mLocal.m[0][1] = fSin * fScaleX;
-    m_mLocal.m[0][2] = 0.0f;
-    m_mLocal.m[0][3] = 0.0f;
-    m_mLocal.m[1][0] = -(fSin * fScaleY);
-    m_mLocal.m[1][1] = fCos * fScaleY;
-    m_mLocal.m[1][2] = 0.0f;
-    m_mLocal.m[1][3] = 0.0f;
-    m_mLocal.m[2][0] = 0.0f;
-    m_mLocal.m[2][1] = 0.0f;
-    m_mLocal.m[2][2] = 1.0f;
-    m_mLocal.m[2][3] = 0.0f;
-    m_mLocal.m[3][0] = fX;
-    m_mLocal.m[3][1] = fY;
-    m_mLocal.m[3][2] = 0.0f;
-    m_mLocal.m[3][3] = 1.0f;
+    m_mLocal.SetXAxis(fCos * fScaleX, fSin * fScaleX, 0.0f, 0.0f);
+    m_mLocal.SetYAxis(-(fSin * fScaleY), fCos * fScaleY, 0.0f, 0.0f);
+    m_mLocal.SetZAxis(0.0f, 0.0f, 1.0f, 0.0f);
+    m_mLocal.SetTranslation(fX, fY, 0.0f, 1.0f);
 }

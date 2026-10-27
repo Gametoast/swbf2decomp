@@ -65,6 +65,10 @@ public:
     // FUNCTION: SWBF2 0x0040cb70
     const PblVector3& GetZAxis() const { return *(const PblVector3*)&m[2][0]; }
 
+    void SetXAxis(float fX, float fY, float fZ, float fW);
+    void SetYAxis(float fX, float fY, float fZ, float fW);
+    void SetZAxis(float fX, float fY, float fZ, float fW);
+    void SetTranslation(float fX, float fY, float fZ, float fW);
     void SetTranslation(const PblVector3& vTranslation);
 
     PblVector3& operator[](int iRow);

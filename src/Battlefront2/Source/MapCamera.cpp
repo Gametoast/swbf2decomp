@@ -46,22 +46,13 @@ PblVector3 MapCamera::GetVelocity()
 
 // FUNCTION: SWBF2 0x005a1c90
 MapCamera::MapCamera(CameraManager* pManager, int iView)
-    : GameCamera(pManager, iView)
+    : GameCamera(pManager, iView),
+      mMatrix(gMatrixIdentity), mTarget(gMatrixIdentity), mVelocity(gVectorZero),
+      mMoveRatio(1.0f), mMoveCurPos(gVectorZero), mMoveOldPos(gVectorZero),
+      mZoomDir(0), mZoomLevel(ZOOM_NORMAL), mZoomRatio(1.0f),
+      mZoomOldDir(gVectorZero), mZoomOldPos(gVectorZero),
+      mZoomNewDir(gVectorZero), mZoomNewPos(gVectorZero), mZoomDist(0.0f)
 {
-    mMatrix = gMatrixIdentity;
-    mTarget = gMatrixIdentity;
-    mVelocity = gVectorZero;
-    mMoveRatio = 1.0f;
-    mMoveCurPos = gVectorZero;
-    mMoveOldPos = gVectorZero;
-    mZoomDir = 0;
-    mZoomLevel = ZOOM_NORMAL;
-    mZoomRatio = 1.0f;
-    mZoomOldDir = gVectorZero;
-    mZoomOldPos = gVectorZero;
-    mZoomNewDir = gVectorZero;
-    mZoomNewPos = gVectorZero;
-    mZoomDist = 0.0f;
 }
 
 // SYNTHETIC: SWBF2 0x005a1e10

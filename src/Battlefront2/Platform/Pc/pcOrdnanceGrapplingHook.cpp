@@ -23,16 +23,18 @@ static RedColor kCableColor = { 0xcc, 0xcc, 0xcc, 0xff };
 
 
 
-namespace
+struct CableCompressedVertex
 {
-struct HookVertex
+    CompressedPos pos;
+    RedColor color;
+    CompressedTexCoord uv;
+};
+struct CableVertex
 {
     PblVector3 pos;
     RedColor color;
     TexCoord uv;
 };
- 
-}
 
 // FUNCTION: SWBF2 0x004243a0
 pcRedPrimitive* sCreateGrapplingHookGeometry(const PblBox& box, const PblVector3& vStart,
@@ -41,10 +43,10 @@ pcRedPrimitive* sCreateGrapplingHookGeometry(const PblBox& box, const PblVector3
                             const PblVector3& vWaveDirection, const PblVector3& vOffset,
                             float fWaveHeight, float fWaveLength, bool bWavy, float fLength)
 {
-    pcRedPrimitive* pPrimitive = pcRedPrimitive::Create(D3DPT_TRIANGLESTRIP, 0x282, 24,
+    pcRedPrimitive* pPrimitive = pcRedPrimitive::Create(D3DPT_TRIANGLESTRIP, 0x282, sizeof(CableVertex),
                                                          2 * iSegments + 2, 0, false);
     pPrimitive->m_bbox = box;
-    HookVertex* pVertices = (HookVertex*)pPrimitive->BeginVertexData();
+    CableVertex* pVertices = (CableVertex*)pPrimitive->BeginVertexData();
     if (pVertices)
     {
         const float fSegmentLength = fLength / (float)iSegments;
@@ -70,42 +72,22 @@ pcRedPrimitive* sCreateGrapplingHookGeometry(const PblBox& box, const PblVector3
                 vCenter.z += vWaveDirection.z * fWave;
             }
 
-            HookVertex& front = pVertices[i * 2];
-            HookVertex& back = pVertices[i * 2 + 1];
+            CableVertex& front = pVertices[i * 2];
+            CableVertex& back = pVertices[i * 2 + 1];
             front.pos.x = vCenter.x + vOffset.x * 0.02f;
             front.pos.y = vCenter.y + vOffset.y * 0.02f;
             front.pos.z = vCenter.z + vOffset.z * 0.02f;
             back.pos.x = front.pos.x - vOffset.x * 0.04f;
             back.pos.y = front.pos.y - vOffset.y * 0.04f;
             back.pos.z = front.pos.z - vOffset.z * 0.04f;
-            front.color.b = back.color.b = 0xcc;
-            front.color.g = back.color.g = 0xcc;
-            front.color.r = back.color.r = 0xcc;
-            front.color.a = back.color.a = ucAlpha;
+            front.color = RedColor(kCableColor, ucAlpha);
+            back.color = RedColor(kCableColor, ucAlpha);
             front.uv = pTexCoords[(i & 1) ? 2 : 0];
             back.uv = pTexCoords[(i & 1) ? 3 : 1];
         }
         pPrimitive->EndVertexData();
     }
     return pPrimitive;
-}
-
-namespace
-{
-struct HookVertexCompressed
-{
-    short pos[4];
-    RedColor color;
-    short u, v;
-};
- 
-}
-
-static void HookCompressedPos_Set(short* p, float x, float y, float z)
-{
-    p[0] = (short)(int)((x - CompressedPos::s_vMin.x) * CompressedPos::s_vScaleInv.x - 32767.5f);
-    p[1] = (short)(int)((y - CompressedPos::s_vMin.y) * CompressedPos::s_vScaleInv.y - 32767.5f);
-    p[2] = (short)(int)((z - CompressedPos::s_vMin.z) * CompressedPos::s_vScaleInv.z - 32767.5f);
 }
 
 // FUNCTION: SWBF2 0x00423f30
@@ -115,20 +97,13 @@ pcRedPrimitive* sCreateGrapplingHookCompressedGeometry(const PblBox& box, const 
                            const PblVector3& vWaveDirection, const PblVector3& vOffset,
                            float fWaveHeight, float fWaveLength, bool bWavy, float fLength)
 {
-    pcRedPrimitive* pPrimitive = pcRedPrimitive::Create(D3DPT_TRIANGLESTRIP, 0x9282, 16,
+    pcRedPrimitive* pPrimitive = pcRedPrimitive::Create(D3DPT_TRIANGLESTRIP, 0x9282, sizeof(CableCompressedVertex),
                                                          2 * iSegments + 2, 0, false);
     pPrimitive->m_bbox = box;
 
-    PblVector3 vMin = { box._vMin.x, box._vMin.y, box._vMin.z };
-    PblVector3 vExtent = { box._vMax.x - box._vMin.x, box._vMax.y - box._vMin.y,
-                                box._vMax.z - box._vMin.z };
-    CompressedPos::s_vMin = vMin;
-    CompressedPos::s_vScale = vExtent * (1.0f / 65535.0f);
-    CompressedPos::s_vScaleInv.x = 1.0f / CompressedPos::s_vScale.x;
-    CompressedPos::s_vScaleInv.y = 1.0f / CompressedPos::s_vScale.y;
-    CompressedPos::s_vScaleInv.z = 1.0f / CompressedPos::s_vScale.z;
+    CompressedPos::SetBoundingBox(box);
 
-    HookVertexCompressed* pVertices = (HookVertexCompressed*)pPrimitive->BeginVertexData();
+    CableCompressedVertex* pVertices = (CableCompressedVertex*)pPrimitive->BeginVertexData();
     if (pVertices)
     {
         const float fSegmentLength = fLength / (float)iSegments;
@@ -158,20 +133,16 @@ pcRedPrimitive* sCreateGrapplingHookCompressedGeometry(const PblBox& box, const 
             const float fz = vCenter.z + vOffset.z * 0.02f;
             const TexCoord* pRow = (i & 1) ? pTexCoords + 2 : pTexCoords;
 
-            HookVertexCompressed& front = pVertices[i * 2];
-            HookVertexCompressed& back = pVertices[i * 2 + 1];
-            HookCompressedPos_Set(front.pos, fx, fy, fz);
-            front.u = (short)(int)(pRow[0].u * 2048.0f);
-            front.v = (short)(int)(pRow[0].v * 2048.0f);
-            front.color = kCableColor;
-            front.color.a = (unsigned char)(int)(fAlpha * 255.0f);
+            CableCompressedVertex& front = pVertices[i * 2];
+            CableCompressedVertex& back = pVertices[i * 2 + 1];
+            front.pos.SetPos( fx, fy, fz);
+            front.uv.SetUV(pRow[0].u, pRow[0].v);
+            front.color = RedColor(kCableColor, (unsigned char)(int)(fAlpha * 255.0f));
 
-            HookCompressedPos_Set(back.pos, fx - vOffset.x * 0.04f, fy - vOffset.y * 0.04f,
+            back.pos.SetPos( fx - vOffset.x * 0.04f, fy - vOffset.y * 0.04f,
                                   fz - vOffset.z * 0.04f);
-            back.u = (short)(int)(pRow[1].u * 2048.0f);
-            back.v = (short)(int)(pRow[1].v * 2048.0f);
-            back.color = kCableColor;
-            back.color.a = (unsigned char)(int)(fAlpha * 255.0f);
+            back.uv.SetUV(pRow[1].u, pRow[1].v);
+            back.color = RedColor(kCableColor, (unsigned char)(int)(fAlpha * 255.0f));
         }
         pPrimitive->EndVertexData();
     }

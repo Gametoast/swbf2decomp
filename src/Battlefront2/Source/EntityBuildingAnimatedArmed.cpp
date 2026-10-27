@@ -1,3 +1,4 @@
+#include <string.h>
 #include "EntityBuildingAnimatedArmed.h"
 #include "Controllable.h"
 #include "NetGame.h"
@@ -12,10 +13,7 @@ static int sCurrentSection = -1;
 EntityBuildingAnimatedArmedClass::EntityBuildingAnimatedArmedClass(unsigned int uHash)
     : EntityBuildingAnimatedClass(uHash)
 {
-    for (int i = 0; i < 8; i++)
-    {
-        mTurretClass[i] = 0;
-    }
+    memset(mTurretClass, 0, sizeof(mTurretClass));
     sCurrentSection = -1;
     mRespawnTime = 120.0f;
 }

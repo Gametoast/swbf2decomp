@@ -689,7 +689,7 @@ HUD::EventClass* HUD::Item::CreateEventA(const char* const pName, EventClass::Ty
 }
 
 // FUNCTION: SWBF2 0x00564890
-unsigned int HUD::CopyName(char** ppDest, const char* const pSource, bool bUseUnnamed)
+void HUD::CopyName(char** ppDest, const char* const pSource, bool bUseUnnamed)
 {
     if (pSource)
     {
@@ -707,8 +707,6 @@ unsigned int HUD::CopyName(char** ppDest, const char* const pSource, bool bUseUn
     {
         *ppDest = bUseUnnamed ? sDefaultNames[1] : sDefaultNames[0];
     }
-
-    return (unsigned int)(*ppDest);
 }
 
 // FUNCTION: SWBF2 0x005648f0

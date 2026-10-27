@@ -441,9 +441,10 @@ float EntityBuilding::GetMaxStrafe() const
 // FUNCTION: SWBF2 0x00475e60
 Controllable* EntityBuilding::GetControllable()
 {
-    if (mControllableList.GetCount() == 1)
+    const PblList<Controllable>& list = GetControllableList();
+    if (list.GetCount() == 1)
     {
-        return mControllableList.GetFirst()->_pObject;
+        return list.GetFirst()->_pObject;
     }
     return 0;
 }
@@ -451,9 +452,10 @@ Controllable* EntityBuilding::GetControllable()
 // FUNCTION: SWBF2 0x00475e40
 const Controllable* EntityBuilding::GetControllable() const
 {
-    if (mControllableList.GetCount() == 1)
+    const PblList<Controllable>& list = GetControllableList();
+    if (list.GetCount() == 1)
     {
-        return mControllableList.GetFirst()->_pObject;
+        return list.GetFirst()->_pObject;
     }
     return 0;
 }
@@ -482,10 +484,7 @@ const RedPose* EntityBuilding::GetRenderPose() const
     return GetPose();
 }
 
-static inline Damageable* AsDamageable(EntityBuilding* pBuilding)
-{
-    return static_cast<Damageable*>(pBuilding);
-}
+
 
 static GameObject* GetHandleObject(PblHandle<GameObject>& handle)
 {
@@ -507,7 +506,7 @@ void EntityBuilding::ClientKill()
     {
         return;
     }
-    DamageOwner& damageOwner = AsDamageable(this)->mDamageOwner;
+    DamageOwner& damageOwner = mDamageOwner;
     DamageOwner owner(damageOwner.mCharacter, GetHandleObject(damageOwner.mGameObject), damageOwner.mTeam, pClass,
                       0, 1.0f);
     PblVector3 vPos;
@@ -518,7 +517,7 @@ void EntityBuilding::ClientKill()
 // FUNCTION: SWBF2 0x004929b0
 void EntityBuilding::HealthChangeCallback(bool bArg, float fDelta)
 {
-    Damageable* pDamageable = AsDamageable(this);
+    Damageable* pDamageable = this;
     bool bClient = NetGame::IsEnabled() && NetGame::IsClient();
     if (pDamageable->mCurHealth > 0.0f)
     {
@@ -644,14 +643,6 @@ void EntityBuilding::Kill()
     GameObject::Kill();
 }
 
-// FUNCTION: SWBF2 0x004922b0
-void __fastcall RestoreDamageableHealth(Damageable* pDamageable)
-{
-    pDamageable->mCurHealth = pDamageable->mMaxHealth;
-    pDamageable->mCurShield = pDamageable->mMaxShield;
-    pDamageable->mDamageOwner = DamageOwner(0, 0, 0, 0, 0, 1.0f);
-}
-
 // FUNCTION: SWBF2 0x00492f30
 void EntityBuilding::Respawn()
 {
@@ -713,7 +704,7 @@ void EntityBuilding::Respawn()
     }
 
     mAddHealth = mClass->mAddHealth;
-    RestoreDamageableHealth(AsDamageable(this));
+    ResetStatus();
     SetCurShield(mClass->mAddShield > 0.0f ? 0.0f : mClass->mMaxShield, false, 0);
     mMaxShield = mClass->mMaxShield;
     mAddShield = mClass->mAddShield;

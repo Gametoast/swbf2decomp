@@ -273,7 +273,7 @@ void FreeName(char** ppName);
 unsigned int TranslateString(const char* const* ppStrings, unsigned int uCount, const char* const pString);
 
 // FUNCTION: SWBF2 0x00564890
-unsigned int CopyName(char** ppDest, const char* const pSource, bool bUseUnnamed);
+void CopyName(char** ppDest, const char* const pSource, bool bUseUnnamed);
 }
 
  

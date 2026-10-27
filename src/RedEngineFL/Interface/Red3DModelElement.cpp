@@ -29,10 +29,6 @@ PblQuaternion AxisAngle(const PblVector3& vAxis, float fAngle)
 // FUNCTION: SWBF2 0x006da8d0
 Red3DModelElement::Red3DModelElement()
 {
-    m_rotation._fX = 0.0f;
-    m_rotation._fY = 0.0f;
-    m_rotation._fZ = 0.0f;
-    m_rotation._fS = 1.0f;
 
     PblMatrix mIdentity;
     mIdentity.Reset();
@@ -154,10 +150,6 @@ void Red3DModelElement::SetPosedMatrix(const PblMatrix& mPosed)
 Red3DModelElement::Red3DModelElement(const char* pcName)
     : Red3DModelElementLite(pcName)
 {
-    m_rotation._fX = 0.0f;
-    m_rotation._fY = 0.0f;
-    m_rotation._fZ = 0.0f;
-    m_rotation._fS = 1.0f;
 
     PblMatrix mIdentity;
     mIdentity.Reset();

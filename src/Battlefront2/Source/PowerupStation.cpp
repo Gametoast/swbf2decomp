@@ -1,3 +1,4 @@
+#include <string.h>
 #include <d3dx9math.h>
 #include "PowerupStation.h"
 
@@ -29,12 +30,9 @@ PowerupStationClass::PowerupStationClass(unsigned int uHash)
     : EntityBuildingClass(uHash)
 {
     mPowerupDelay = 0.5f;
-    for (int i = 0; i < 8; i++)
-    {
-        mAddHealth[i] = 0.0f;
-        mAddAmmo[i] = 0.0f;
-        mAddEnergy[i] = 0.0f;
-    }
+    memset(mAddHealth, 0, sizeof(mAddHealth));
+    memset(mAddAmmo, 0, sizeof(mAddAmmo));
+    memset(mAddEnergy, 0, sizeof(mAddEnergy));
     mBuffOffenseTimer = 0.0f;
     mBuffOffenseMult = 0.0f;
     mBuffDefenseTimer = 0.0f;
@@ -50,10 +48,7 @@ PowerupStationClass::PowerupStationClass(unsigned int uHash)
     mIdleWobbleFactor = 0.0f;
     mIdleWobbleLeftFootHash = 0;
     mIdleWobbleRightFootHash = 0;
-    for (int i = 0; i < 4; i++)
-    {
-        mActiveRotateHash[i] = 0;
-    }
+    memset(mActiveRotateHash, 0, sizeof(mActiveRotateHash));
     mActiveSpinHash = 0;
 }
 

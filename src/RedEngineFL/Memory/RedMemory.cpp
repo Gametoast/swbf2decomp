@@ -84,7 +84,7 @@ void __cdecl operator delete[](void* block)
 }
 
 // FUNCTION: SWBF2 0x006c35c0
-void* RedAllocFromHeapInternal(int heap, unsigned int size, int bTop)
+void* RedAllocFromHeapInternal(int heap, unsigned int size, bool bTop)
 {
     if (!isHeapObjInitialized)
     {
@@ -299,7 +299,7 @@ void TagRemoveList(TagList* list, Tag* tag)
 }
 
 // FUNCTION: SWBF2 0x006c38d0
-void* RedAllocFromHeap(int heap, unsigned int size, int bTop)
+void* RedAllocFromHeap(int heap, unsigned int size, bool bTop)
 {
     void* p = RedAllocFromHeapInternal(heap, size, bTop);
     if (!p)

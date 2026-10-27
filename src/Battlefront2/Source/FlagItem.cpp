@@ -1,3 +1,4 @@
+#include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -667,10 +668,7 @@ FlagItem::FlagItem(FlagItemClass* pClass, const EntityDesc& desc)
     SetPortalActive(false);
     pvs::IManager::GetInstance().UnregisterDynamic(*this);
 
-    for (int i = 0; i < 8; ++i)
-    {
-        mClothPiece[i] = 0;
-    }
+    memset(mClothPiece, 0, sizeof(mClothPiece));
     for (unsigned int i = 0; i < mModel->mClothCount; ++i)
     {
         EntityClass* pClothClass = EntityClass::Find(mModel->mClothList[i]);

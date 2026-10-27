@@ -31,10 +31,7 @@ EntityPropAnimatedClass::EntityPropAnimatedClass(unsigned int uHash)
     : EntityPropClass(uHash)
 {
     mAnimObj = 0;
-    for (int i = 0; i < 5; i++)
-    {
-        mAnimations[i] = 0;
-    }
+    memset(mAnimations, 0, sizeof(mAnimations));
     for (int i = 0; i < 3; i++)
     {
         mAnimationTriggers[i].mTriggerPoint = 0;

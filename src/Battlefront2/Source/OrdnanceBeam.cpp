@@ -100,9 +100,9 @@ static BeamLodData beamloddata;
 // FUNCTION: SWBF2 0x005f96d0
 OrdnanceBeam::OrdnanceBeam(OrdnanceBeamClass* pClass, const OrdnanceDesc& desc)
     : Ordnance(pClass, desc),
-      RedSceneObject(&beamloddata)
+      RedSceneObject(&beamloddata),
+      mDirection(desc.mDirection)
 {
-    mDirection = desc.mDirection;
     mLength = 0.0f;
     mAttachAimer = 0;
     m_pRicochet = 0;

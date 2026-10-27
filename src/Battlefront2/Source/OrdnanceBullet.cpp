@@ -361,16 +361,12 @@ void OrdnanceBullet::Render(unsigned char, float, unsigned int uiFlags)
 // FUNCTION: SWBF2 0x005fa890
 OrdnanceBullet::OrdnanceBullet(OrdnanceBulletClass* pClass, const OrdnanceDesc& desc)
     : Ordnance(pClass, desc),
-      RedSceneObject(&((OrdnanceBulletClass*)mClass)->mLodData)
+      RedSceneObject(&((OrdnanceBulletClass*)mClass)->mLodData),
+      mOldPosition(desc.mPosition),
+      mVelocity(desc.mDirection * Interpolate(
+          ((const OrdnanceBulletClass*)mClass)->mVelocity,
+          ((const OrdnanceBulletClass*)mClass->mNextCharge)->mVelocity, mRatio))
 {
-    mOldPosition = desc.mPosition;
-    OrdnanceBulletClass* pCharge = (OrdnanceBulletClass*)mClass;
-    const float fSpeed =
-        (((OrdnanceBulletClass*)pCharge->mNextCharge)->mVelocity - pCharge->mVelocity) * mRatio +
-        pCharge->mVelocity;
-    mVelocity.x = fSpeed * desc.mDirection.x;
-    mVelocity.y = desc.mDirection.y * fSpeed;
-    mVelocity.z = desc.mDirection.z * fSpeed;
     mFinalCollision = 0;
     mFinalCollisionOnNextUpdate = false;
     m_pLight = 0;

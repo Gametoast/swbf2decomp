@@ -342,27 +342,10 @@ static bool IsFlareVisible(const LensFlare* pFlare, unsigned int uiView, const P
     return true;
 }
 
-static void SetClearVertex(float* pVertex, float fX, float fY)
-{
-    pVertex[0] = fX;
-    pVertex[1] = fY;
-    pVertex[2] = 0.0f;
-    pVertex[3] = 1.0f;
-}
-
 static void SetFillVertex(FlareCompressedVertex& vertex, float fX, float fY, float fZ)
 {
     CompressedPos_SetPos(vertex.pos, fX, fY, fZ);
     vertex.color = RedColor::WHITE;
-}
-
-static void SetFlareVertex(FlareCompressedVertex& vertex, float x, float y, float z,
-                           const RedColor& color, short u, short v)
-{
-    CompressedPos_SetPos(vertex.pos, x, y, z);
-    vertex.color = color;
-    vertex.uv.u = u;
-    vertex.uv.v = v;
 }
 
 // FUNCTION: SWBF2 0x0041e980
@@ -371,51 +354,64 @@ void LensFlare::Emit<FlareCompressedVertex>(FlareCompressedVertex*& pVertices,
                                            const PblVector3& pos, float fU,
                                            float fV, float fFade)
 {
-    const float size = _fSize * 2.0f;
     const float angle = ((pos.y * 2.0f * 3.1415901f + pos.x * 3.1415901f) / pos.z)
                       + _fSize * 1.0472f + _fRandomRotOffset;
-    float s1, c1, s2, c2;
-    PblMath::SinCos(&s1, &c1, angle);
-    PblMath::SinCos(&s2, &c2, 1.0472f - angle);
+    float fSin[2], fCos[2];
+    PblMath::SinCos(&fSin[0], &fCos[0], angle);
+    PblMath::SinCos(&fSin[1], &fCos[1], 1.0472f - angle);
+    const float size = _fSize * 2.0f;
+    PblVector3 vVert[6];
+    vVert[0] = pos + PblVector3(fCos[0] * size, fSin[0] * (size * 2.0f), 0.0f);
+    vVert[1] = pos + PblVector3((fCos[0] * -0.5f - fSin[0] * 0.866f) * size,
+                               (fCos[0] * 0.866f - fSin[0] * 0.5f) * (size * 2.0f), 0.0f);
+    vVert[2] = pos + PblVector3((fCos[0] * -0.5f - fSin[0] * -0.866f) * size,
+                               (fSin[0] * -0.5f - fCos[0] * 0.866f) * (size * 2.0f), 0.0f);
+    vVert[3] = pos + PblVector3(fCos[1] * (size * 3.5f), fSin[1] * size, 0.0f);
+    vVert[4] = pos + PblVector3((fCos[1] * -0.5f - fSin[1] * 0.866f) * (size * 3.5f),
+                               (fCos[1] * 0.866f - fSin[1] * 0.5f) * size, 0.0f);
+    vVert[5] = pos + PblVector3((fCos[1] * -0.5f - fSin[1] * -0.866f) * (size * 3.5f),
+                               (fSin[1] * -0.5f - fCos[1] * 0.866f) * size, 0.0f);
 
-    const float x0 = pos.x + c1 * size;
-    const float y0 = pos.y + s1 * size * 2.0f;
-    const float x1 = pos.x + (c1 * -0.5f - s1 * 0.866f) * size;
-    const float y1 = pos.y + (c1 * 0.866f - s1 * 0.5f) * size * 2.0f;
-    const float x2 = pos.x + (c1 * -0.5f + s1 * 0.866f) * size;
-    const float y2 = pos.y + (s1 * -0.5f - c1 * 0.866f) * size * 2.0f;
-    const float x3 = pos.x + c2 * size * 3.5f;
-    const float y3 = pos.y + s2 * size;
-    const float x4 = pos.x + (c2 * -0.5f - s2 * 0.866f) * size * 3.5f;
-    const float y4 = pos.y + (c2 * 0.866f - s2 * 0.5f) * size;
-    const float x5 = pos.x + (c2 * -0.5f + s2 * 0.866f) * size * 3.5f;
-    const float y5 = pos.y + (s2 * -0.5f - c2 * 0.866f) * size;
-
-    RedColor faded = _color;
-    faded.a = (unsigned char)(int)((float)_color.a * fFade);
-    const RedColor black = { 0, 0, 0, 0 };
-    const short u = (short)(int)(fU * 2048.0f);
-    const short v = (short)(int)(fV * 2048.0f);
-    SetFlareVertex(pVertices[0], x0, y0, pos.z, black, u, v);
+    RedColor faded(_color, (unsigned char)(int)((float)_color.a * fFade));
+    RedColor black(RedColor::BLACK, 0);
+    pVertices[0].pos.SetPos(vVert[0].x, vVert[0].y, vVert[0].z);
+    pVertices[0].uv.SetUV(fU, fV);
+    pVertices[0].color = black;
     pVertices[1] = pVertices[0];
-    SetFlareVertex(pVertices[2], x1, y1, pos.z, black, u, v);
-    SetFlareVertex(pVertices[3], pos.x, pos.y, pos.z, faded, u, v);
-    SetFlareVertex(pVertices[4], x2, y2, pos.z, black, u, v);
-    SetFlareVertex(pVertices[5], x0, y0, pos.z, black, u, v);
+    pVertices[2].pos.SetPos(vVert[1].x, vVert[1].y, vVert[1].z);
+    pVertices[2].uv.SetUV(fU, fV);
+    pVertices[2].color = black;
+    pVertices[3].pos.SetPos(pos.x, pos.y, pos.z);
+    pVertices[3].uv.SetUV(fU, fV);
+    pVertices[3].color = faded;
+    pVertices[4].pos.SetPos(vVert[2].x, vVert[2].y, vVert[2].z);
+    pVertices[4].uv.SetUV(fU, fV);
+    pVertices[4].color = black;
+    pVertices[5].pos.SetPos(vVert[0].x, vVert[0].y, vVert[0].z);
+    pVertices[5].uv.SetUV(fU, fV);
+    pVertices[5].color = black;
     pVertices[6] = pVertices[5];
-    SetFlareVertex(pVertices[7], x3, y3, pos.z, black, u, v);
+    pVertices[7].pos.SetPos(vVert[3].x, vVert[3].y, vVert[3].z);
+    pVertices[7].uv.SetUV(fU, fV);
+    pVertices[7].color = black;
     pVertices[8] = pVertices[7];
-    SetFlareVertex(pVertices[9], x4, y4, pos.z, black, u, v);
-    SetFlareVertex(pVertices[10], pos.x, pos.y, pos.z, faded, u, v);
-    SetFlareVertex(pVertices[11], x5, y5, pos.z, black, u, v);
-    SetFlareVertex(pVertices[12], x3, y3, pos.z, black, u, v);
+    pVertices[9].pos.SetPos(vVert[4].x, vVert[4].y, vVert[4].z);
+    pVertices[9].uv.SetUV(fU, fV);
+    pVertices[9].color = black;
+    pVertices[10].pos.SetPos(pos.x, pos.y, pos.z);
+    pVertices[10].uv.SetUV(fU, fV);
+    pVertices[10].color = faded;
+    pVertices[11].pos.SetPos(vVert[5].x, vVert[5].y, vVert[5].z);
+    pVertices[11].uv.SetUV(fU, fV);
+    pVertices[11].color = black;
+    pVertices[12].pos.SetPos(vVert[3].x, vVert[3].y, vVert[3].z);
+    pVertices[12].uv.SetUV(fU, fV);
+    pVertices[12].color = black;
     pVertices[13] = pVertices[12];
     pVertices += 14;
 
-    RedColor half = _color;
-    half.a >>= 1;
-    RedColor clear = _color;
-    clear.a = 0;
+    RedColor half(_color, _color.a >> 1);
+    RedColor clear(_color, 0);
     EmitRing(pVertices, pos, angle, 0.0f, _fSize, _fSize * 4.0f,
              _color, half, clear, 12, fU, fV);
 }
@@ -428,17 +424,6 @@ static void SetFillVertex(FlareVertex& vertex, float fX, float fY, float fZ)
     vertex.color = RedColor::WHITE;
 }
 
-static void SetFlareVertex(FlareVertex& vertex, float x, float y, float z,
-                           const RedColor& color, float u, float v)
-{
-    vertex.pos.x = x;
-    vertex.pos.y = y;
-    vertex.pos.z = z;
-    vertex.color = color;
-    vertex.uv.u = u;
-    vertex.uv.v = v;
-}
-
 // FUNCTION: SWBF2 0x0041e3b0
 template <>
 void LensFlare::Emit<FlareVertex>(FlareVertex*& pVertices, const PblVector3& pos, float fU,
@@ -446,51 +431,64 @@ void LensFlare::Emit<FlareVertex>(FlareVertex*& pVertices, const PblVector3& pos
 {
     const float angle = ((pos.y * 2.0f * 3.1415901f + pos.x * 3.1415901f) / pos.z)
                       + _fSize * 1.0472f + _fRandomRotOffset;
-    float s1, c1, s2, c2;
-    PblMath::SinCos(&s1, &c1, angle);
-    PblMath::SinCos(&s2, &c2, 1.0472f - angle);
-
+    float fSin[2], fCos[2];
+    PblMath::SinCos(&fSin[0], &fCos[0], angle);
+    PblMath::SinCos(&fSin[1], &fCos[1], 1.0472f - angle);
     const float size = _fSize * 2.0f;
-    const float z = pos.z + 0.0f;
-    const float x0 = pos.x + c1 * size;
-    const float y0 = pos.y + s1 * (size * 2.0f);
-    const float x1 = pos.x + (c1 * -0.5f - s1 * 0.866f) * size;
-    const float y1 = pos.y + (c1 * 0.866f - s1 * 0.5f) * (size * 2.0f);
-    const float x2 = pos.x + (c1 * -0.5f - s1 * -0.866f) * size;
-    const float y2 = pos.y + (s1 * -0.5f - c1 * 0.866f) * (size * 2.0f);
-    const float x3 = pos.x + c2 * (size * 3.5f);
-    const float y3 = pos.y + s2 * size;
-    const float x4 = pos.x + (c2 * -0.5f - s2 * 0.866f) * (size * 3.5f);
-    const float y4 = pos.y + (c2 * 0.866f - s2 * 0.5f) * size;
-    const float x5 = pos.x + (c2 * -0.5f - s2 * -0.866f) * (size * 3.5f);
-    const float y5 = pos.y + (s2 * -0.5f - c2 * 0.866f) * size;
+    PblVector3 vVert[6];
+    vVert[0] = pos + PblVector3(fCos[0] * size, fSin[0] * (size * 2.0f), 0.0f);
+    vVert[1] = pos + PblVector3((fCos[0] * -0.5f - fSin[0] * 0.866f) * size,
+                               (fCos[0] * 0.866f - fSin[0] * 0.5f) * (size * 2.0f), 0.0f);
+    vVert[2] = pos + PblVector3((fCos[0] * -0.5f - fSin[0] * -0.866f) * size,
+                               (fSin[0] * -0.5f - fCos[0] * 0.866f) * (size * 2.0f), 0.0f);
+    vVert[3] = pos + PblVector3(fCos[1] * (size * 3.5f), fSin[1] * size, 0.0f);
+    vVert[4] = pos + PblVector3((fCos[1] * -0.5f - fSin[1] * 0.866f) * (size * 3.5f),
+                               (fCos[1] * 0.866f - fSin[1] * 0.5f) * size, 0.0f);
+    vVert[5] = pos + PblVector3((fCos[1] * -0.5f - fSin[1] * -0.866f) * (size * 3.5f),
+                               (fSin[1] * -0.5f - fCos[1] * 0.866f) * size, 0.0f);
 
-    RedColor faded = _color;
-    faded.a = (unsigned char)(int)((float)_color.a * fFade);
-    RedColor black = RedColor::BLACK;
-    black.a = 0;
-    SetFlareVertex(pVertices[0], x0, y0, z, black, fU, fV);
+    RedColor faded(_color, (unsigned char)(int)((float)_color.a * fFade));
+    RedColor black(RedColor::BLACK, 0);
+    pVertices[0].pos.SetPos(vVert[0].x, vVert[0].y, vVert[0].z);
+    pVertices[0].uv.SetUV(fU, fV);
+    pVertices[0].color = black;
     pVertices[1] = pVertices[0];
-    SetFlareVertex(pVertices[2], x1, y1, z, black, fU, fV);
-    SetFlareVertex(pVertices[3], pos.x, pos.y, pos.z, faded, fU, fV);
-    SetFlareVertex(pVertices[4], x2, y2, z, black, fU, fV);
-    SetFlareVertex(pVertices[5], x0, y0, z, black, fU, fV);
+    pVertices[2].pos.SetPos(vVert[1].x, vVert[1].y, vVert[1].z);
+    pVertices[2].uv.SetUV(fU, fV);
+    pVertices[2].color = black;
+    pVertices[3].pos.SetPos(pos.x, pos.y, pos.z);
+    pVertices[3].uv.SetUV(fU, fV);
+    pVertices[3].color = faded;
+    pVertices[4].pos.SetPos(vVert[2].x, vVert[2].y, vVert[2].z);
+    pVertices[4].uv.SetUV(fU, fV);
+    pVertices[4].color = black;
+    pVertices[5].pos.SetPos(vVert[0].x, vVert[0].y, vVert[0].z);
+    pVertices[5].uv.SetUV(fU, fV);
+    pVertices[5].color = black;
     pVertices[6] = pVertices[5];
-    SetFlareVertex(pVertices[7], x3, y3, z, black, fU, fV);
+    pVertices[7].pos.SetPos(vVert[3].x, vVert[3].y, vVert[3].z);
+    pVertices[7].uv.SetUV(fU, fV);
+    pVertices[7].color = black;
     pVertices[8] = pVertices[7];
-    SetFlareVertex(pVertices[9], x4, y4, z, black, fU, fV);
-    SetFlareVertex(pVertices[10], pos.x, pos.y, pos.z, faded, fU, fV);
-    SetFlareVertex(pVertices[11], x5, y5, z, black, fU, fV);
-    SetFlareVertex(pVertices[12], x3, y3, z, black, fU, fV);
+    pVertices[9].pos.SetPos(vVert[4].x, vVert[4].y, vVert[4].z);
+    pVertices[9].uv.SetUV(fU, fV);
+    pVertices[9].color = black;
+    pVertices[10].pos.SetPos(pos.x, pos.y, pos.z);
+    pVertices[10].uv.SetUV(fU, fV);
+    pVertices[10].color = faded;
+    pVertices[11].pos.SetPos(vVert[5].x, vVert[5].y, vVert[5].z);
+    pVertices[11].uv.SetUV(fU, fV);
+    pVertices[11].color = black;
+    pVertices[12].pos.SetPos(vVert[3].x, vVert[3].y, vVert[3].z);
+    pVertices[12].uv.SetUV(fU, fV);
+    pVertices[12].color = black;
     pVertices[13] = pVertices[12];
     pVertices += 14;
 
-    RedColor half = _color;
-    half.a >>= 1;
-    RedColor clear = _color;
-    clear.a = 0;
+    RedColor half(_color, _color.a >> 1);
+    RedColor clear(_color, 0);
     EmitRing(pVertices, pos, angle, 0.0f, _fSize, _fSize * 4.0f,
-               _color, half, clear, 12, fU, fV);
+             _color, half, clear, 12, fU, fV);
 }
 
 // FUNCTION: SWBF2 0x0041c1b0
@@ -545,8 +543,8 @@ void LensFlareEffect::LensFlareList::Render<FlareVertex, 642>() const
         FlareVertex* const pFlareBase = pFlareVertices;
         FlareVertex* pFillVertices = (FlareVertex*)pFillBuffer->Lock(96, uiFillStart);
         FlareVertex* const pFillBase = pFillVertices;
-        float* pClearVertices = (float*)pClearBuffer->Lock(96, uiClearStart);
-        float* const pClearBase = pClearVertices;
+        PblVector4* pClearVertices = (PblVector4*)pClearBuffer->Lock(96, uiClearStart);
+        PblVector4* const pClearBase = pClearVertices;
 
         RECT destRects[16];
         RECT sourceRects[16];
@@ -571,13 +569,13 @@ void LensFlareEffect::LensFlareList::Render<FlareVertex, 642>() const
             const PblVector3 vScreenMax = RedRenderer::TransformCameraPointToScreenSpace(
                 PblVector3(fMaxX, fMaxY, vPosition.z));
 
-            SetClearVertex(pClearVertices + 0, vScreenMin.x - 2.0f, vScreenMax.y - 2.0f);
-            SetClearVertex(pClearVertices + 4, vScreenMin.x - 2.0f, vScreenMin.y + 2.0f);
-            SetClearVertex(pClearVertices + 8, vScreenMax.x + 2.0f, vScreenMax.y - 2.0f);
-            SetClearVertex(pClearVertices + 12, vScreenMin.x - 2.0f, vScreenMin.y + 2.0f);
-            SetClearVertex(pClearVertices + 16, vScreenMax.x + 2.0f, vScreenMax.y - 2.0f);
-            SetClearVertex(pClearVertices + 20, vScreenMax.x + 2.0f, vScreenMin.y + 2.0f);
-            pClearVertices += 24;
+            pClearVertices[0].Set(vScreenMin.x - 2.0f, vScreenMax.y - 2.0f, 0.0f, 1.0f);
+            pClearVertices[1].Set(vScreenMin.x - 2.0f, vScreenMin.y + 2.0f, 0.0f, 1.0f);
+            pClearVertices[2].Set(vScreenMax.x + 2.0f, vScreenMax.y - 2.0f, 0.0f, 1.0f);
+            pClearVertices[3].Set(vScreenMin.x - 2.0f, vScreenMin.y + 2.0f, 0.0f, 1.0f);
+            pClearVertices[4].Set(vScreenMax.x + 2.0f, vScreenMax.y - 2.0f, 0.0f, 1.0f);
+            pClearVertices[5].Set(vScreenMax.x + 2.0f, vScreenMin.y + 2.0f, 0.0f, 1.0f);
+            pClearVertices += 6;
 
             const float fZ = vPosition.z + fSize;
             SetFillVertex(pFillVertices[0], fMinX, fMaxY, fZ);
@@ -645,7 +643,7 @@ void LensFlareEffect::LensFlareList::Render<FlareVertex, 642>() const
 
         const int iNumFillVertices = pFillVertices - pFillBase;
         const int iNumFlareVertices = pFlareVertices - pFlareBase;
-        const int iNumClearVertices = (pClearVertices - pClearBase) / 4;
+        const int iNumClearVertices = pClearVertices - pClearBase;
         pFillBuffer->Unlock();
         pFlareBuffer->Unlock();
         pClearBuffer->Unlock();
@@ -665,8 +663,7 @@ void LensFlareEffect::LensFlareList::Render<FlareVertex, 642>() const
         RedColor clearColor = { 0, 0, 0, 0 };
         RedRenderer::pcRenderPrimitive(pClearPrimitive, s_pClearShader, gMatrixIdentity,
                                        clearColor, 0x200, 0, 0, 0);
-        RedColor fillColor = RedColor::BLACK;
-        fillColor.a = 255;
+        RedColor fillColor(RedColor::BLACK, 255);
         RedRenderer::pcRenderPrimitive(pFillPrimitive, s_pFillShader,
                                        RedRenderer::GetCamera()->GetMatrix(), fillColor, 0x200, 0, 0, 0);
 
@@ -688,8 +685,7 @@ void LensFlareEffect::LensFlareList::Render<FlareVertex, 642>() const
         RedViewport viewport;
         RedRenderer::pcGetViewport(viewport);
         RedRenderer::pcSetRenderTarget(s_intensityTex, 0);
-        RedColor intensityClear = RedColor::BLACK;
-        intensityClear.a = 0;
+        RedColor intensityClear(RedColor::BLACK, 0);
         RedRenderer::pcClear(1, intensityClear, 1.0f, 0);
 
         float fOutputX = 0.0f;
@@ -782,8 +778,8 @@ void LensFlareEffect::LensFlareList::Render<FlareCompressedVertex, 37506>() cons
         FlareCompressedVertex* const pFlareBase = pFlareVertices;
         FlareCompressedVertex* pFillVertices = (FlareCompressedVertex*)pFillBuffer->Lock(96, uiFillStart);
         FlareCompressedVertex* const pFillBase = pFillVertices;
-        float* pClearVertices = (float*)pClearBuffer->Lock(96, uiClearStart);
-        float* const pClearBase = pClearVertices;
+        PblVector4* pClearVertices = (PblVector4*)pClearBuffer->Lock(96, uiClearStart);
+        PblVector4* const pClearBase = pClearVertices;
 
         RECT destRects[16];
         RECT sourceRects[16];
@@ -808,13 +804,13 @@ void LensFlareEffect::LensFlareList::Render<FlareCompressedVertex, 37506>() cons
             const PblVector3 vScreenMax = RedRenderer::TransformCameraPointToScreenSpace(
                 PblVector3(fMaxX, fMaxY, vPosition.z));
 
-            SetClearVertex(pClearVertices + 0, vScreenMin.x - 2.0f, vScreenMax.y - 2.0f);
-            SetClearVertex(pClearVertices + 4, vScreenMin.x - 2.0f, vScreenMin.y + 2.0f);
-            SetClearVertex(pClearVertices + 8, vScreenMax.x + 2.0f, vScreenMax.y - 2.0f);
-            SetClearVertex(pClearVertices + 12, vScreenMin.x - 2.0f, vScreenMin.y + 2.0f);
-            SetClearVertex(pClearVertices + 16, vScreenMax.x + 2.0f, vScreenMax.y - 2.0f);
-            SetClearVertex(pClearVertices + 20, vScreenMax.x + 2.0f, vScreenMin.y + 2.0f);
-            pClearVertices += 24;
+            pClearVertices[0].Set(vScreenMin.x - 2.0f, vScreenMax.y - 2.0f, 0.0f, 1.0f);
+            pClearVertices[1].Set(vScreenMin.x - 2.0f, vScreenMin.y + 2.0f, 0.0f, 1.0f);
+            pClearVertices[2].Set(vScreenMax.x + 2.0f, vScreenMax.y - 2.0f, 0.0f, 1.0f);
+            pClearVertices[3].Set(vScreenMin.x - 2.0f, vScreenMin.y + 2.0f, 0.0f, 1.0f);
+            pClearVertices[4].Set(vScreenMax.x + 2.0f, vScreenMax.y - 2.0f, 0.0f, 1.0f);
+            pClearVertices[5].Set(vScreenMax.x + 2.0f, vScreenMin.y + 2.0f, 0.0f, 1.0f);
+            pClearVertices += 6;
 
             const float fZ = vPosition.z + fSize;
             SetFillVertex(pFillVertices[0], fMinX, fMaxY, fZ);
@@ -882,7 +878,7 @@ void LensFlareEffect::LensFlareList::Render<FlareCompressedVertex, 37506>() cons
 
         const int iNumFillVertices = pFillVertices - pFillBase;
         const int iNumFlareVertices = pFlareVertices - pFlareBase;
-        const int iNumClearVertices = (pClearVertices - pClearBase) / 4;
+        const int iNumClearVertices = pClearVertices - pClearBase;
         pFillBuffer->Unlock();
         pFlareBuffer->Unlock();
         pClearBuffer->Unlock();
@@ -902,8 +898,7 @@ void LensFlareEffect::LensFlareList::Render<FlareCompressedVertex, 37506>() cons
         RedColor clearColor = { 0, 0, 0, 0 };
         RedRenderer::pcRenderPrimitive(pClearPrimitive, s_pClearShader, gMatrixIdentity,
                                        clearColor, 0x200, 0, 0, 0);
-        RedColor fillColor = RedColor::BLACK;
-        fillColor.a = 255;
+        RedColor fillColor(RedColor::BLACK, 255);
         RedRenderer::pcRenderPrimitive(pFillPrimitive, s_pFillShader,
                                        RedRenderer::GetCamera()->GetMatrix(), fillColor, 0x200, 0, 0, 0);
 
@@ -925,8 +920,7 @@ void LensFlareEffect::LensFlareList::Render<FlareCompressedVertex, 37506>() cons
         RedViewport viewport;
         RedRenderer::pcGetViewport(viewport);
         RedRenderer::pcSetRenderTarget(s_intensityTex, 0);
-        RedColor intensityClear = RedColor::BLACK;
-        intensityClear.a = 0;
+        RedColor intensityClear(RedColor::BLACK, 0);
         RedRenderer::pcClear(1, intensityClear, 1.0f, 0);
 
         float fOutputX = 0.0f;

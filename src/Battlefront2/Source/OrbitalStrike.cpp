@@ -33,10 +33,9 @@ OrbitalStrikeClass::OrbitalStrikeClass(OrbitalStrikeClass* pBase, unsigned int u
 
 // FUNCTION: SWBF2 0x005f6aa0
 OrbitalStrike::OrbitalStrike(const OrbitalStrikeClass* pClass, OrbitalStrikeDesc& desc)
-    : Thread(), PblHandled(), mClass(const_cast<OrbitalStrikeClass*>(pClass))
+    : Thread(), PblHandled(), mClass(const_cast<OrbitalStrikeClass*>(pClass)),
+      mPosition(desc.mPosition), mDamageOwner(desc.mDamageOwner)
 {
-    mPosition = desc.mPosition;
-    mDamageOwner = desc.mDamageOwner;
     mSalvoCount = pClass->mSalvoCount;
     mSalvoDelay = pClass->mInitialSalvoDelay;
     ActivateThread(-40, PER_LOCAL_TURN);

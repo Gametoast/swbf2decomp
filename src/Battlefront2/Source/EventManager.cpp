@@ -81,6 +81,9 @@ void Init();
 namespace EventManager
 {
 
+// GLOBAL: SWBF2 0x01e51e25
+char noContext;
+
 // FUNCTION: SWBF2 0x0050b3a0
 void Init()
 {

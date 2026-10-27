@@ -832,10 +832,7 @@ EntitySoldier::EntitySoldier(EntitySoldierClass* pClass, const EntityDesc& desc)
     mPrevZoom = -1.0f;
     mSquadCommandClearTimer = 0.0f;
 
-    for (int i = 0; i < 8; ++i)
-    {
-        mWeapon[i] = 0;
-    }
+    memset(mWeapon, 0, sizeof(mWeapon));
     m_bPrimaryWeaponIsMelee = 0;
     for (int i = 0; i < mClass->mWeaponCount; ++i)
     {
@@ -1012,10 +1009,7 @@ EntitySoldier::EntitySoldier(EntitySoldierClass* pClass, const EntityDesc& desc)
     mSafeMatrix = mMatrix;
     mCollisionState = COLLSTATE_NONE;
 
-    for (int i = 0; i < 8; ++i)
-    {
-        mClothPiece[i] = 0;
-    }
+    memset(mClothPiece, 0, sizeof(mClothPiece));
     for (unsigned int i = 0; i < mModel->mClothCount; ++i)
     {
         EntityClass* pClothClass = EntityClass::Find(mModel->mClothList[i]);

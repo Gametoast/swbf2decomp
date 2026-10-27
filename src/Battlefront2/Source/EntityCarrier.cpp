@@ -439,13 +439,7 @@ EntityCarrierClass::EntityCarrierClass(unsigned int uHash)
 {
     mPilotType = PILOT_NONE;
 
-    for (int i = 0; i < 4; ++i)
-    {
-        mCargoInfo[i].mHash = 0;
-        mCargoInfo[i].mOffset.x = 0.0f;
-        mCargoInfo[i].mOffset.y = 0.0f;
-        mCargoInfo[i].mOffset.z = 0.0f;
-    }
+    memset(mCargoInfo, 0, sizeof(mCargoInfo));
 
     mCargoCount = 0;
 }

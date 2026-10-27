@@ -93,6 +93,12 @@ inline const PblVector3& PblVector3::operator*=(float rhs)
     return *this;
 }
 
+inline const PblVector3& PblVector3::operator/=(float rhs)
+{
+    D3DXVec3Scale(this, this, 1.0f / rhs);
+    return *this;
+}
+
 // FUNCTION: SWBF2 0x00417260
 inline const PblVector3 Normalize(const PblVector3& vVector)
 {

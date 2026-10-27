@@ -1,5 +1,7 @@
 #pragma once
 
+#include <string.h>
+
 template <int N>
 class PblBitVector
 {
@@ -15,10 +17,7 @@ public:
 
     void ClearAll()
     {
-        for (unsigned int i = 0; i < NUM_UINTS; ++i)
-        {
-            m_auiData[i] = 0;
-        }
+        memset(m_auiData, 0, sizeof(m_auiData));
     }
 
     void Or(const PblBitVector& rOther)

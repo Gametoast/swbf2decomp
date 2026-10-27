@@ -99,11 +99,9 @@ NavigatorFollowTarget* NavigatorFollowTargetPtr(Navigator* pNavigator)
 NavigatorFollowTarget::NavigatorFollowTarget(AILowLevel* pOwner, const GameObject* pTarget,
                                              const Obstacle** ppIgnore, int iIgnoreCnt,
                                              const PblVector3& followOffset)
-    : NavigatorGraphFollower(pOwner, GameObjectPosition(pTarget), ppIgnore, iIgnoreCnt, false)
+    : NavigatorGraphFollower(pOwner, GameObjectPosition(pTarget), ppIgnore, iIgnoreCnt, false),
+      mFollowTarget(pTarget), mFollowOffset(followOffset)
 {
-    mFollowTarget.mObject = pTarget;
-    mFollowTarget.mSavedHandleId = GameObjectHandleId(pTarget);
-    mFollowOffset = followOffset;
     mGraphFollower = 0;
     mCrumbHead = 0;
     mCrumbTail = 0;

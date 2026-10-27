@@ -5,50 +5,13 @@
 #include "AIUtil.h"
 #include "GameObject.h"
 
-static unsigned int GetHandleId(const GameObject* pObject)
-{
-    return pObject->mHandleId;
-}
-
-static const GameObject* GetObject(PblHandle<const GameObject>& handle)
-{
-    if (handle.mObject && GetHandleId(handle.mObject) != handle.mSavedHandleId)
-    {
-        handle.mObject = 0;
-        handle.mSavedHandleId = 0;
-    }
-    return handle.mObject;
-}
-
-static void SetObject(PblHandle<GameObject>& handle, const GameObject* pObject)
-{
-    handle.mObject = const_cast<GameObject*>(pObject);
-    handle.mSavedHandleId = pObject ? GetHandleId(pObject) : 0;
-}
-
-static GameObject* GetObject(PblHandle<GameObject>& handle)
-{
-    if (handle.mObject && GetHandleId(handle.mObject) != handle.mSavedHandleId)
-    {
-        handle.mObject = 0;
-        handle.mSavedHandleId = 0;
-    }
-    return handle.mObject;
-}
-
-static void SetObject(PblHandle<const GameObject>& handle, const GameObject* pObject)
-{
-    handle.mObject = pObject;
-    handle.mSavedHandleId = pObject ? GetHandleId(pObject) : 0;
-}
-
 // FUNCTION: SWBF2 0x00662a70
 DroidRepairInfo::DroidRepairInfo(PblHandle<const GameObject> who,
                                  PblHandle<const GameObject> owner)
     : UnitCmdInfo(CMD_REPAIR, 0, PblVector3(0, 0, 0), 0)
 {
-    SetObject(mWho, GetObject(who));
-    SetObject(mOwner, GetObject(owner));
+    mWho = const_cast<GameObject*>(static_cast<const GameObject*>(who));
+    mOwner = const_cast<GameObject*>(static_cast<const GameObject*>(owner));
 }
 
 // FUNCTION: SWBF2 0x006626b0
@@ -82,7 +45,7 @@ UnitCombatInfo::UnitCombatInfo(State eState, PblHandle<const GameObject> who)
     : UnitCmdInfo(CMD_COMBAT, 0, PblVector3(0, 0, 0), 0)
 {
     SetState(eState);
-    SetObject(mWho, GetObject(who));
+    mWho = const_cast<GameObject*>(static_cast<const GameObject*>(who));
 }
 
 // FUNCTION: SWBF2 0x006627d0
@@ -188,7 +151,7 @@ UnitGoalAgentInfo::UnitGoalAgentInfo(UnitControllerCommand eCmd, const AI::GoalT
     mPos = pTarget->mPos;
     mParam = pTarget->mType;
     mChr = pTarget->mChr;
-    SetObject(mWho, GetObject(const_cast<AI::GoalTarget*>(pTarget)->mGameObj));
+    mWho = const_cast<GameObject*>(static_cast<const GameObject*>(pTarget->mGameObj));
 }
 
 // FUNCTION: SWBF2 0x00662c70
@@ -196,7 +159,7 @@ UnitGoalAgentInfo::UnitGoalAgentInfo(UnitControllerCommand eCmd, const FlagItem*
     : UnitCmdInfo(eCmd, 0, PblVector3(0, 0, 0), 0)
 {
     mPos = vPos;
-    SetObject(mFlag, reinterpret_cast<const GameObject*>(pFlag));
+    mFlag = reinterpret_cast<const GameObject*>(pFlag);
     mParam = 4;
 }
 
@@ -213,7 +176,7 @@ const PblVector3 UnitGoalAgentInfo::GetPos() const
 // FUNCTION: SWBF2 0x00662d70
 const FlagItem* UnitGoalAgentInfo::GetFlag() const
 {
-    return reinterpret_cast<const FlagItem*>(GetObject(const_cast<PblHandle<const GameObject>&>(mFlag)));
+    return reinterpret_cast<const FlagItem*>(static_cast<const GameObject*>(mFlag));
 }
 
 // FUNCTION: SWBF2 0x00662da0
@@ -222,5 +185,5 @@ void UnitGoalAgentInfo::GetGoalTarget(AI::GoalTarget& target) const
     target.mType = (AI::GoalTargetType)mParam;
     target.mPos = mPos;
     target.mChr = mChr;
-    SetObject(target.mGameObj, GetObject(const_cast<PblHandle<GameObject>&>(mWho)));
+    target.mGameObj = static_cast<GameObject*>(mWho);
 }

@@ -996,13 +996,3 @@ void Controllable::GetPilotMatrix(const PblMatrix& mIn, PblMatrix& mOut)
     }
 }
 
-// FUNCTION: SWBF2 0x0043aad0
-Controllable* GetControllablePilot(Controllable* pControllable)
-{
-    if (pControllable->mPilotType == PILOT_SELF ||
-        (pControllable->mPilotType == PILOT_VEHICLESELF && pControllable->mPilot == pControllable))
-    {
-        return 0;
-    }
-    return pControllable->mPilot;
-}

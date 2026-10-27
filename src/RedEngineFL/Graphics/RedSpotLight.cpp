@@ -27,10 +27,10 @@ RedSpotLight::RedSpotLight(const RedColorValue& color, const PblVector3& vDirect
     , m_fRadius(fRadius)
     , m_vDirection(vDirection)
     , m_vPos(vPosition)
+    , m_mProjection(gMatrixIdentity)
+    , m_bProjectionDirty(true)
+    , m_bBidirectional(false)
 {
-    memcpy(&m_mProjection, &gMatrixIdentity, sizeof(m_mProjection));
-    m_bProjectionDirty = true;
-    m_bBidirectional = false;
 
     memset(&m_d3dLight, 0, sizeof(m_d3dLight));
     m_d3dLight.Type = D3DLIGHT_SPOT;

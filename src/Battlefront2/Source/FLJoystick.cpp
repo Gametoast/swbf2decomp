@@ -30,10 +30,7 @@ void RawControllerInputs::ClearInputsToOff()
 // FUNCTION: SWBF2 0x0052b620
 ProcessedInputs::ProcessedInputs()
 {
-    for (int i = 0; i < 4; i++)
-    {
-        mFloatInputs[i] = 0.0f;
-    }
+    memset(mFloatInputs, 0, sizeof(mFloatInputs));
     bits.mBoolInputs = 0;
     bits.mMouseMode = 2;
 }

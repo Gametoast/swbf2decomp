@@ -14,16 +14,11 @@ static const float EPSILON = 0.0001f;
 // FUNCTION: SWBF2 0x006d8c00
 RedDirectionalLight::RedDirectionalLight(const PblVector3& vDirection,
                                          const RedColorValue& color)
-    : RedLight(TYPE_DIRECTIONAL)
+    : RedLight(TYPE_DIRECTIONAL),
+      m_uiRegionName(0), m_boundingRegion(0), m_mProjection(gMatrixIdentity),
+      m_bProjectionDirty(true), m_fProjTexOffsetU(1.0f), m_fProjTexOffsetV(1.0f),
+      m_fProjTexTileU(1.0f), m_fProjTexTileV(1.0f)
 {
-    m_uiRegionName = 0;
-    m_boundingRegion = 0;
-    memcpy(&m_mProjection, &gMatrixIdentity, sizeof(m_mProjection));
-    m_bProjectionDirty = true;
-    m_fProjTexOffsetU = 1.0f;
-    m_fProjTexOffsetV = 1.0f;
-    m_fProjTexTileU = 1.0f;
-    m_fProjTexTileV = 1.0f;
     memset(&m_d3dLight, 0, sizeof(m_d3dLight));
     m_d3dLight.Type = D3DLIGHT_DIRECTIONAL;
 
@@ -145,22 +140,11 @@ void RedDirectionalLight::_RecalculateProjectionMatrix() const
     const float vy = (gVectorUnitZ.y - m_vDirection.y * m_vDirection.z) * fInvTileV;
     const float vz = (gVectorUnitZ.z - m_vDirection.z * m_vDirection.z) * fInvTileV;
 
-    m_mProjection.m[0][0] = ux;
-    m_mProjection.m[0][2] = 0.0f;
-    m_mProjection.m[0][3] = 0.0f;
-    m_mProjection.m[0][1] = vx;
-    m_mProjection.m[1][0] = uy;
-    m_mProjection.m[1][1] = vy;
-    m_mProjection.m[1][2] = 0.0f;
-    m_mProjection.m[1][3] = 0.0f;
-    m_mProjection.m[2][0] = uz;
-    m_mProjection.m[2][2] = 1.0f;
-    m_mProjection.m[2][3] = 0.0f;
-    m_mProjection.m[2][1] = vz;
-    m_mProjection.m[3][2] = 0.0f;
-    m_mProjection.m[3][3] = 1.0f;
-    m_mProjection.m[3][1] = m_fProjTexOffsetV / m_fProjTexTileV;
-    m_mProjection.m[3][0] = m_fProjTexOffsetU / m_fProjTexTileU;
+    m_mProjection.SetXAxis(ux, vx, 0.0f, 0.0f);
+    m_mProjection.SetYAxis(uy, vy, 0.0f, 0.0f);
+    m_mProjection.SetZAxis(uz, vz, 1.0f, 0.0f);
+    m_mProjection.SetTranslation(m_fProjTexOffsetU / m_fProjTexTileU,
+                                 m_fProjTexOffsetV / m_fProjTexTileV, 0.0f, 1.0f);
 
     m_bProjectionDirty = false;
 }

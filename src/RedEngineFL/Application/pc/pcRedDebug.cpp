@@ -191,12 +191,9 @@ RedDebug::Text3D::Text3D()
 
 // FUNCTION: SWBF2 0x006f07b0
 RedShape::RedShape()
-    : Renderable(6)
+    : Renderable(6), _Matrix(gMatrixIdentity), _pMatrix(&_Matrix),
+      _vMin(-1.0f, -1.0f, -1.0f), _vMax(1.0f, 1.0f, 1.0f)
 {
-    _Matrix = _IdentityMatrix;
-    _pMatrix = &_Matrix;
-    _vMin = PblVector3(-1.0f, -1.0f, -1.0f);
-    _vMax = PblVector3(1.0f, 1.0f, 1.0f);
     SetColor(RedColor::WHITE);
 }
 

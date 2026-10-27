@@ -22,12 +22,6 @@ PblHashTable<Timer, 64> Timer::sMap;
 // GLOBAL: SWBF2 0x01f99418
 // Timer::sMemoryPool
 MemoryPool Timer::sMemoryPool("Timer", 0x2c);
-namespace EventManager
-{
-
-// GLOBAL: SWBF2 0x01e51e25
-static char noContext;
-}
 
 // FUNCTION: SWBF2 0x00657a80
 bool Timer::Update(float fDeltaTime)

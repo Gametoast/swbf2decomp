@@ -58,10 +58,7 @@ GameObjectClass::GameObjectClass(unsigned int uHash)
     mAIType = 1;
     mSwitchClassRadius = -1.0f;
 
-    for (int i = 0; i < 10; ++i)
-    {
-        mDamageEffectClass[i] = 0;
-    }
+    memset(mDamageEffectClass, 0, sizeof(mDamageEffectClass));
 
     mVOSoundList = 0;
     mVOUnitType = 0;
@@ -149,14 +146,13 @@ namespace AIUtil
 bool __fastcall IsSpied(const Character* pCharacter, const Character* pOther);
 }
 
-static char sEventParam;
 
 // FUNCTION: SWBF2 0x00535480
 void GameObject::Init()
 {
     if (!NetGame::IsEnabled() || !NetGame::IsClient())
     {
-        EventManager::ObjectEvent::mInit.Trigger(*this, sEventParam);
+        EventManager::ObjectEvent::mInit.Trigger(*this, EventManager::noContext);
     }
 }
 
@@ -182,7 +178,7 @@ void GameObject::Respawn()
 {
     if (!NetGame::IsEnabled() || !NetGame::IsClient())
     {
-        EventManager::ObjectEvent::mRespawn.Trigger(*this, sEventParam);
+        EventManager::ObjectEvent::mRespawn.Trigger(*this, EventManager::noContext);
     }
 }
 
@@ -808,7 +804,7 @@ GameObject::GameObject(GameObjectClass* pClass, const EntityDesc& desc, Collisio
 
     if (!NetGame::IsEnabled() || !NetGame::IsClient())
     {
-        EventManager::ObjectEvent::mCreate.Trigger(*this, sEventParam);
+        EventManager::ObjectEvent::mCreate.Trigger(*this, EventManager::noContext);
     }
 }
 
@@ -825,7 +821,7 @@ GameObject::~GameObject()
     TargetManager::RemoveMarker(this, 0, (unsigned int)-1);
     if (!NetGame::IsEnabled() || !NetGame::IsClient())
     {
-        EventManager::ObjectEvent::mDelete.Trigger(*this, sEventParam);
+        EventManager::ObjectEvent::mDelete.Trigger(*this, EventManager::noContext);
     }
     SetPortalActive(false);
     pvs::IManager::GetInstance().UnregisterDynamic(*this);

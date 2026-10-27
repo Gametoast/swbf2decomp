@@ -468,10 +468,6 @@ void FirstPersonRenderable::UpdateCockpitAimer(const PblMatrix& mMatrix)
 FirstPersonRenderable::FirstPersonRenderable(unsigned int uCameraId, const ZephyrSkeletonShared* pShared)
     : Renderable(8)
 {
-    mCockpitRotation._fX = 0.0f;
-    mCockpitRotation._fY = 0.0f;
-    mCockpitRotation._fZ = 0.0f;
-    mCockpitRotation._fS = 1.0f;
     mObjectType = TYPE_NONE;
     mObjectModel = 0;
     mOwner = 0;
