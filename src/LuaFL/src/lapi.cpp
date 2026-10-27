@@ -248,7 +248,7 @@ LUA_API int lua_isuserdata (lua_State *L, int idx) {
   return (o != NULL && (ttisuserdata(o) || ttislightuserdata(o)));
 }
 
-// LIBRARY: SWBF2 0x0069bd20
+// LIBRARY: SWBF2 0x0069c120
 // lua_rawequal
 LUA_API int lua_rawequal (lua_State *L, int index1, int index2) {
   StkId o1 = luaA_indexAcceptable(L, index1);
@@ -257,7 +257,7 @@ LUA_API int lua_rawequal (lua_State *L, int index1, int index2) {
                                     : luaO_rawequalObj(o1, o2);
 }
 
-// LIBRARY: SWBF2 0x0069c120
+// LIBRARY: SWBF2 0x0069ba00
 // lua_equal
 LUA_API int lua_equal (lua_State *L, int index1, int index2) {
   StkId o1, o2;
@@ -271,7 +271,7 @@ LUA_API int lua_equal (lua_State *L, int index1, int index2) {
   return i;
 }
 
-// LIBRARY: SWBF2 0x0069ba00
+// LIBRARY: SWBF2 0x0069bd20
 // lua_lessthan
 LUA_API int lua_lessthan (lua_State *L, int index1, int index2) {
   StkId o1, o2;

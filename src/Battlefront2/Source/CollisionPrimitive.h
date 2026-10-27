@@ -8,8 +8,8 @@ class PblBox;
 class PblMatrix;
 class PblVector3;
 
-// VTABLE: SWBF2 0x00796e90
 template <int N> class PolyListContainer;
+// VTABLE: SWBF2 0x00796e90
 class CollisionPrimitive
 {
 public:

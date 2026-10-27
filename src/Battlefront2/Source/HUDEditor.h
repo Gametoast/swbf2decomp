@@ -20,10 +20,9 @@ namespace HUD
 class Element;
 }
 
-// VTABLE: SWBF2 0x007a0578
-
 namespace HUD
 {
+// VTABLE: SWBF2 0x007a0578
 class Editor : public RedInputEventHandler
 {
 public:

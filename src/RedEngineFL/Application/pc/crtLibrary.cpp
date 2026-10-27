@@ -491,10 +491,13 @@
 // `dynamic atexit destructor for 'std::_Error_objects<int>::_Generic_object''
 
 // SYNTHETIC: SWBF2 0x005d46d0
+// std::error_category::`scalar deleting destructor'
 
 // SYNTHETIC: SWBF2 0x005d4810
+// std::_Generic_error_category::`scalar deleting destructor'
 
 // SYNTHETIC: SWBF2 0x005d48a0
+// std::_Iostream_error_category::`scalar deleting destructor'
 
 // SYNTHETIC: SWBF2 0x005d49a0
 // std::_System_error_category::`scalar deleting destructor'
