@@ -362,6 +362,7 @@ namespace Lua_Callbacks
 // FUNCTION: SWBF2 0x0057dc80
 void DoPeriodicLuaGC(bool bForce)
 {
+    // GLOBAL: SWBF2 0x01faa690
     static unsigned int uCount;
 
     if (bForce || (uCount & 0x3f) == 0)

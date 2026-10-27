@@ -444,6 +444,8 @@ void EntityItem::Render(unsigned char ucLod, float fAlpha, unsigned int uiFlags)
     {
         uiFlags |= 0x80;
     }
+    // GLOBAL: SWBF2 0x01faa924
+    // sPlayerShadow
     static PblHash sPlayerShadow("player_shadow");
     SetupShadow(this, mModel, ucLod, uiFlags, sPlayerShadow);
 

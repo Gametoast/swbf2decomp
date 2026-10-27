@@ -943,6 +943,8 @@ void EntityDroid::Render(unsigned char ucViewport, float fDist, unsigned int uiF
         mReflection = mTemp;
     }
 
+    // GLOBAL: SWBF2 0x01faa918
+    // sPlayerShadow
     static PblHash sPlayerShadow("player_shadow");
     unsigned int uShadow = sPlayerShadow;
     if (GetControllable() && GetControllable()->mPilotType == PILOT_REMOTE)

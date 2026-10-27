@@ -406,7 +406,9 @@ int WeaponAreaEffect::UpdateTargets()
 int WeaponAreaEffect::UpdateTargets(GameObject** ppTargets, int iNumTargets)
 {
     static const float fInner = 0.5625f;
+    // GLOBAL: SWBF2 0x01fac388
     static const float fScale = 1.0f / (1.0f - fInner);
+    // GLOBAL: SWBF2 0x01fac390
     static const float fOffset = -(fInner / (1.0f - fInner));
 
     m_iNumTargets = 0;

@@ -295,6 +295,7 @@ void RedInterfaceScreen::Render() const
     RedRenderer::SetFogEnable(false);
     const RedCamera* pOldCamera = RedRenderer::GetCamera();
 
+    // GLOBAL: SWBF2 0x0093e750
     static RedCamera camera;
     camera.SetMatrix(gMatrixIdentity);
     camera.SetFrustum(sfNear, sfFar, sfWidth,

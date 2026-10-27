@@ -120,6 +120,8 @@ void EntityPropAnimated::Render(unsigned char ucLod, float fAlpha, unsigned int 
         uFlags |= 0x80u;
     }
 
+    // GLOBAL: SWBF2 0x01faa92c
+    // sPlayerShadow
     static PblHash sPlayerShadow("player_shadow");
     SetupShadow(0, mModel, ucLod, uFlags, sPlayerShadow);
     const GameModel* pModel = GetModel();

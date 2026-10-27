@@ -4425,6 +4425,7 @@ void RedRenderer::BeginFrame()
     RedRenderer::m_curVisibilityIndex = (RedRenderer::m_frameNumber & 1) ? 0x7E8 : 0;
     sOcclusionQuerySubmitIndex = (RedRenderer::m_frameNumber & 1) ? 700 : 0;
 
+    // GLOBAL: SWBF2 0x008eed60
     static util::VariableSet<util::SingletonAllocator<util::DefaultStaticAllocator> >& s_perFrame =
         util::Globals::GetInstance().GetSet("perFrame");
     s_perFrame.ResetAll();
@@ -6009,6 +6010,7 @@ void RedRenderer::pcSetTexture(unsigned int uiStage, const RedTexture* pTexture)
     if (pTexture && pTexture->m_uiLastFrameUsed < (unsigned int)RedRenderer::m_frameNumber)
     {
         const_cast<RedTexture*>(pTexture)->m_uiLastFrameUsed = RedRenderer::m_frameNumber;
+        // GLOBAL: SWBF2 0x008eed68
         static util::VariableSet<util::SingletonAllocator<util::DefaultStaticAllocator> >& s_perFrame =
             util::Globals::GetInstance().GetSet("perFrame");
         static int& s_numTexUsed = s_perFrame.GetInt("numTexUsed");

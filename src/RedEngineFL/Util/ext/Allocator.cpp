@@ -128,6 +128,7 @@ IAllocator& DefaultStackAllocator::GetInstance()
 // FUNCTION: SWBF2 0x006e91b0
 IAllocator& DefaultStaticAllocator::GetInstance()
 {
+    // GLOBAL: SWBF2 0x007e0fd8
     static bool first_ = true;
     if (first_)
     {
