@@ -17,6 +17,7 @@
 #include "RedEngineFL/Graphics/RedColor.h"
 
 #include "NetGame.h"
+#include "CameraManager.h"
 #include "pcNetSocket.h"
 #include "LockOnManager.h"
 #include "EnergyBar.h"
@@ -1480,11 +1481,6 @@ class WalkerLegPair { public: static MemoryPool sMemoryPool; };
 
 class OrdnanceTowCable { public: static MemoryPool sMemoryPool; };
 
-class CameraManager { public: static void CreateClient();
-
-    static CameraManager* Instance() { return sInstance; }
-    bool IsFreeLook(int iCam) const;
-    static CameraManager* sInstance; };
 class TriggerRegionManager { public: static void CreateClient(); static void DestroyClient(); };
 
 class DustEffectClass { public: static void CreateClient(); };
@@ -13318,23 +13314,6 @@ void WriteEvent_ConnectTowCable(NetPktGroup& group, ReliableNetEvent& event)
 
 
 
-// FUNCTION: SWBF2 0x00411e90
-PblVector3* __fastcall TransformNormalByMatrix(const PblMatrix* pMatrix, void*,
-                                  PblVector3* pOut, const PblVector3* pIn)
-{
-    D3DXVec3TransformNormal((D3DXVECTOR3*)pOut, (const D3DXVECTOR3*)pIn,
-                            (const D3DXMATRIX*)pMatrix);
-    return pOut;
-}
-
-// FUNCTION: SWBF2 0x0051ecb0
-void* __fastcall CopyCameraRecord(const void* pThis, void*, void* pOut, int iIndex)
-{
-    const void* pSource = *(const void* const*)((const char*)pThis +
-                                            0x28 + iIndex * 4);
-    memcpy(pOut, (const char*)pSource + 16, 64);
-    return pOut;
-}
 
 // FUNCTION: SWBF2 0x005d2260
 void WriteTurnLowBits(NetPktGroup* pGroup, unsigned int uTurn)
@@ -13987,8 +13966,7 @@ float FrontAngle(const PblVector3& point, const PblMatrix& matrix)
 {
     PblVector3 offset = point - matrix.GetTranslation();
     const PblMatrix inverse = matrix.GetInverseFast();
-    PblVector3 local;
-    TransformNormalByMatrix(&inverse, 0, &local, &offset);
+    const PblVector3 local = inverse.ApplyRotation(offset);
     return PblMath::Atan2(local.GetX(), local.GetZ()) * (180.0f / 3.1415927f);
 }
 
@@ -14982,8 +14960,7 @@ void WriteSpawnCamera(NetPktGroup& group)
         return;
     }
 
-    PblMatrix camera;
-    CopyCameraRecord(CameraManager::Instance(), 0, &camera, 0);
+    PblMatrix camera = CameraManager::Instance()->GetChaseCameraTransform(0);
     WritePositionVector(group, camera.GetTranslation());
     const float direction[2] = { camera.m[2][0], camera.m[2][2] };
     WriteCosSin(group, direction);

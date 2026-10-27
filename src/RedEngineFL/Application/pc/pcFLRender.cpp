@@ -1742,8 +1742,7 @@ void FLRenderer::RenderReflections()
             mReflect.m[3][2] = plane.GetC() * fScale * plane.GetD();
             bClipPlane = true;
 
-            PblMatrix mReflected;
-            D3DXMatrixMultiply(reinterpret_cast<D3DXMATRIX*>(&mReflected), reinterpret_cast<const D3DXMATRIX*>(&mCamera), reinterpret_cast<const D3DXMATRIX*>(&mReflect));
+            PblMatrix mReflected = mCamera * mReflect;
             reflectCamera.SetMatrix(mReflected);
 
             float fFadeEnd = GetNearSceneFadeEnd() * fZoom;
@@ -1797,8 +1796,7 @@ void FLRenderer::RenderReflections()
                 float fNearPlane = vMin.z;
                 float fCos = (vDir.y * -0.0f - fEdgeY * fTanY * vDir.x) + vDir.z;
 
-                PblMatrix mClip;
-                D3DXMatrixMultiply(reinterpret_cast<D3DXMATRIX*>(&mClip), reinterpret_cast<const D3DXMATRIX*>(&mBasis), reinterpret_cast<const D3DXMATRIX*>(&reflectCamera.GetMatrix()));
+                PblMatrix mClip = mBasis * reflectCamera.GetMatrix();
                 clipCamera.SetMatrix(mClip);
                 clipCamera.SetFrustum(fNearPlane, fCos * fFadeEnd, fHalfX * 2.0f * fNearPlane,
                                       fHalfY * 2.0f * fNearPlane);

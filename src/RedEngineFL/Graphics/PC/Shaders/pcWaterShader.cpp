@@ -872,12 +872,14 @@ void pcWaterShader::Begin_Prog2(unsigned int uiState, unsigned int uiPass) const
 
     const PblMatrix& mCamera = RedRenderer::GetCamera()->GetMatrix();
     const float fAngle = (float)atan2((double)mCamera.m[2][2], (double)mCamera.m[2][0]) - PblMath::fHalfPi;
-    D3DXMATRIXA16 mRotation, mFacing, mScale, mScaled;
-    D3DXMatrixIdentity(&mFacing);
-    D3DXMatrixIdentity(&mScaled);
-    D3DXMatrixMultiply(&mFacing, &mFacing, D3DXMatrixRotationZ(&mRotation, fAngle));
-    D3DXMatrixMultiply(&mScaled, &mScaled, D3DXMatrixScaling(&mScale, 0.03f, 0.03f, 0.03f));
-    D3DXMatrixMultiply(&_IdentityMatrix, &mScaled, &mFacing);
+    PblMatrix mFacing;
+    PblMatrix mScaled;
+    D3DXMatrixIdentity(reinterpret_cast<D3DXMATRIX*>(&mFacing));
+    D3DXMatrixIdentity(reinterpret_cast<D3DXMATRIX*>(&mScaled));
+    mFacing.RotateZ(fAngle);
+    mScaled.Scale(0.03f, 0.03f, 0.03f);
+    D3DXMatrixMultiply(&_IdentityMatrix, reinterpret_cast<const D3DXMATRIX*>(&mScaled),
+                       reinterpret_cast<const D3DXMATRIX*>(&mFacing));
 }
 
 // FUNCTION: SWBF2 0x00708c00

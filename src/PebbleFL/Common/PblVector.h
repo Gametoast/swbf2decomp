@@ -52,6 +52,9 @@ public:
     float GetY() const;
     float GetZ() const;
 
+    void AddY(float value);
+    void MulY(float value);
+
 };
 
  
@@ -67,6 +70,7 @@ const PblVector3 operator/(const PblVector3& lhs, float rhs);
 float DotProduct(const PblVector3& vVector1, const PblVector3& vVector2);
 const float Length(const PblVector3& vVector);
 const float SquaredLength(const PblVector3& vVector);
+const float SquaredLengthXZ(const PblVector3& vVector);
 const PblVector3 CrossProduct(const PblVector3& lhs, const PblVector3& rhs);
 const PblVector3 Normalize(const PblVector3& vVector);
 

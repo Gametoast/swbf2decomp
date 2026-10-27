@@ -1834,9 +1834,9 @@ float EntityPathFollower::Rotate(const EntityPathFollowerClass* const pClass, Pb
     float fTurnRate = (mYaw - fYaw) / fElapsed;
 
     PblMatrix roll;
-    D3DXMatrixRotationZ(reinterpret_cast<D3DXMATRIX*>(&roll), Roll(pClass, fYaw, fElapsed, fTurnRate));
+    roll.SetRotateZ(Roll(pClass, fYaw, fElapsed, fTurnRate));
     PblMatrix result;
-    D3DXMatrixMultiply(reinterpret_cast<D3DXMATRIX*>(&result), reinterpret_cast<const D3DXMATRIX*>(&roll), reinterpret_cast<const D3DXMATRIX*>(&matrix));
+    result = roll * matrix;
     matrix = result;
     return fTurnRate;
 }

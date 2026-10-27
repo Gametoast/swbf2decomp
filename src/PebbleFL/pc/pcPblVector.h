@@ -106,3 +106,18 @@ inline const PblVector3 Normalize(const PblVector3& vVector)
     D3DXVec3Normalize(&Temp, &vVector);
     return Temp;
 }
+
+inline void PblVector3::AddY(float value)
+{
+    y += value;
+}
+
+inline void PblVector3::MulY(float value)
+{
+    y *= value;
+}
+
+inline const float SquaredLengthXZ(const PblVector3& vector)
+{
+    return vector.x * vector.x + vector.z * vector.z;
+}

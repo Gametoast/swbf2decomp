@@ -2355,7 +2355,7 @@ void Weapon::Render(const PblMatrix& mat, const RedPose* pPose, const RedColor& 
         {
             return;
         }
-        D3DXMatrixMultiply(reinterpret_cast<D3DXMATRIX*>(&mBoneMatrix), reinterpret_cast<const D3DXMATRIX*>(pBone), reinterpret_cast<const D3DXMATRIX*>(&mat));
+        mBoneMatrix = *pBone * mat;
         pMatrix = &mBoneMatrix;
     }
 
@@ -2454,7 +2454,7 @@ void WeaponClass::Render(const PblMatrix& mMatrix, const RedPose* pPose, const R
         {
             return;
         }
-        D3DXMatrixMultiply(reinterpret_cast<D3DXMATRIX*>(&mBoneMatrix), reinterpret_cast<const D3DXMATRIX*>(pBone), reinterpret_cast<const D3DXMATRIX*>(&mMatrix));
+        mBoneMatrix = *pBone * mMatrix;
         pMatrix = &mBoneMatrix;
     }
     mModel->Render(pMatrix, 0, color, uiFlags, 0);

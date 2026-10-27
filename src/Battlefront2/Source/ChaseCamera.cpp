@@ -333,19 +333,14 @@ void ChaseCamera::SetupCamera(RedCamera* pCamera, float fDeltaTime)
             PblQuaternion qNew = PblQuaternion(mMatrix);
 
             PblQuaternion qRot = Interpolate(qOld, qNew, fRotBlend);
-            PblQuaternion qUnit;
-            PblMatrix mNew;
-            D3DXMatrixRotationQuaternion(reinterpret_cast<D3DXMATRIX*>(&mNew), D3DXQuaternionNormalize(reinterpret_cast<D3DXQUATERNION*>(&qUnit), reinterpret_cast<const D3DXQUATERNION*>(&qRot)));
-            mNew.SetTranslation(vPos);
+            PblMatrix mNew(qRot, vPos);
             mMatrix = mNew;
 
             vPos.x = (vOldPos.x + vPos.x) * 0.5f;
             vPos.y = (vOldPos.y + vPos.y) * 0.5f;
             vPos.z = (vOldPos.z + vPos.z) * 0.5f;
             PblQuaternion qMid = Interpolate(qOld, qNew, 0.5f);
-            PblMatrix mMid;
-            D3DXMatrixRotationQuaternion(reinterpret_cast<D3DXMATRIX*>(&mMid), D3DXQuaternionNormalize(reinterpret_cast<D3DXQUATERNION*>(&qUnit), reinterpret_cast<const D3DXQUATERNION*>(&qMid)));
-            mMid.SetTranslation(vPos);
+            PblMatrix mMid(qMid, vPos);
 
             float fSwing = sqrtf(vDelta.x * vDelta.x + vDelta.y * vDelta.y + vDelta.z * vDelta.z) * 0.5f
                            * (1.0f - fBlend);
@@ -400,9 +395,9 @@ void ChaseCamera::SetupCamera(RedCamera* pCamera, float fDeltaTime)
     {
         PblMatrix mShakeRot = gMatrixIdentity;
         PblMatrix mAxis;
-        D3DXMatrixMultiply(reinterpret_cast<D3DXMATRIX*>(&mShakeRot), reinterpret_cast<const D3DXMATRIX*>(&mShakeRot), D3DXMatrixRotationX(reinterpret_cast<D3DXMATRIX*>(&mAxis), BiasedRandom() * mShake * 0.1f));
-        D3DXMatrixMultiply(reinterpret_cast<D3DXMATRIX*>(&mShakeRot), reinterpret_cast<const D3DXMATRIX*>(&mShakeRot), D3DXMatrixRotationY(reinterpret_cast<D3DXMATRIX*>(&mAxis), BiasedRandom() * mShake * 0.1f));
-        D3DXMatrixMultiply(reinterpret_cast<D3DXMATRIX*>(&mShakeRot), reinterpret_cast<const D3DXMATRIX*>(&mShakeRot), D3DXMatrixRotationZ(reinterpret_cast<D3DXMATRIX*>(&mAxis), BiasedRandom() * mShake * 0.1f));
+        mShakeRot.RotateX(BiasedRandom() * mShake * 0.1f);
+        mShakeRot.RotateY(BiasedRandom() * mShake * 0.1f);
+        mShakeRot.RotateZ(BiasedRandom() * mShake * 0.1f);
         mPreShakeMatrix = mMatrix;
         D3DXMatrixMultiply(reinterpret_cast<D3DXMATRIX*>(&mAxis), reinterpret_cast<const D3DXMATRIX*>(&mShakeRot), reinterpret_cast<const D3DXMATRIX*>(&mMatrix));
         mMatrix = mAxis;

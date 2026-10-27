@@ -936,7 +936,7 @@ void EntityDroid::Render(unsigned char ucViewport, float fDist, unsigned int uiF
     if (bReflected)
     {
         PblMatrix mTemp;
-        D3DXMatrixMultiply(reinterpret_cast<D3DXMATRIX*>(&mTemp), reinterpret_cast<const D3DXMATRIX*>(&mWorld), reinterpret_cast<const D3DXMATRIX*>(&mReflection));
+        mTemp = mWorld * mReflection;
         mReflection = mTemp;
     }
 
@@ -1351,13 +1351,7 @@ bool EntityDroid::Update(float fDeltaTime)
             qTilt._fS = fTiltCos;
             PblQuaternion qCamera = qLook * qTilt;
 
-            PblQuaternion qUnit;
-            PblMatrix mCamera;
-            D3DXMatrixRotationQuaternion(reinterpret_cast<D3DXMATRIX*>(&mCamera), D3DXQuaternionNormalize(reinterpret_cast<D3DXQUATERNION*>(&qUnit), reinterpret_cast<const D3DXQUATERNION*>(&qCamera)));
-            mCamera.m[3][0] = gVectorZero.x;
-            mCamera.m[3][1] = gVectorZero.y;
-            mCamera.m[3][2] = gVectorZero.z;
-            mCamera.m[3][3] = 1.0f;
+            PblMatrix mCamera(qCamera, gVectorZero);
 
             mTargetInfo.mAimStart = mClass->mCameraSettings.CalcCameraPoint(mMatrix, mCamera);
             float fAlong = mEyeDir.y * (mEyePoint.y - mTargetInfo.mAimStart.y) +

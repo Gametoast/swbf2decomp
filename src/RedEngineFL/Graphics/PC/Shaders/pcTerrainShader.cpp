@@ -201,16 +201,7 @@ pcTerrainShader::pcTerrainShader(unsigned int uiFlags,
 // kuiLinearRamp
 static unsigned int kuiLinearRamp = PblHash("linear_ramp");
 
-static PblMatrix AxesMatrix(float rx, float ry, float rz, float ux, float uy, float uz,
-                            float fx, float fy, float fz, float ox, float oy, float oz)
-{
-    PblMatrix m;
-    m.m[0][0] = rx; m.m[0][1] = ry; m.m[0][2] = rz; m.m[0][3] = 0.0f;
-    m.m[1][0] = ux; m.m[1][1] = uy; m.m[1][2] = uz; m.m[1][3] = 0.0f;
-    m.m[2][0] = fx; m.m[2][1] = fy; m.m[2][2] = fz; m.m[2][3] = 0.0f;
-    m.m[3][0] = ox; m.m[3][1] = oy; m.m[3][2] = oz; m.m[3][3] = 1.0f;
-    return m;
-}
+
 
 static PblMatrix CameraToWorld()
 {
@@ -224,7 +215,7 @@ static PblMatrix CameraToWorld()
 
 static PblMatrix XZTextureMatrix(const PblVector4& v)
 {
-    return AxesMatrix(v.x, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, v.y, 0.0f, v.z, v.w, 0.0f);
+    return PblMatrix(PblVector3(v.x, 0.0f, 0.0f), PblVector3(0.0f, 0.0f, 0.0f), PblVector3(0.0f, v.y, 0.0f), PblVector3(v.z, v.w, 0.0f));
 }
 
 static void SetCameraSpaceTransform(unsigned int uiStage, const PblMatrix& mWorldToTexture)
@@ -397,8 +388,7 @@ void pcTerrainShader::Begin_Fixed(unsigned int uiState, unsigned int uiPass) con
             const PblVector4& vU = RedShadowMap::_vShadowMapTransformU;
             const PblVector4& vV = RedShadowMap::_vShadowMapTransformV;
             const PblVector4& vW = RedShadowMap::_vShadowMapTransformW;
-            SetCameraSpaceTransform(1, AxesMatrix(vU.x, vV.x, vW.x, vU.y, vV.y, vW.y,
-                                                  vU.z, vV.z, vW.z, vU.w, vV.w, vW.w));
+            SetCameraSpaceTransform(1, PblMatrix(PblVector3(vU.x, vV.x, vW.x), PblVector3(vU.y, vV.y, vW.y), PblVector3(vU.z, vV.z, vW.z), PblVector3(vU.w, vV.w, vW.w)));
             RedRenderer::pcSetTextureStageState(1, D3DTSS_TEXCOORDINDEX, D3DTSS_TCI_CAMERASPACEPOSITION);
             RedRenderer::pcSetTextureStageState(1, D3DTSS_TEXTURETRANSFORMFLAGS,
                                                 D3DTTFF_COUNT3 | D3DTTFF_PROJECTED);
@@ -431,8 +421,7 @@ void pcTerrainShader::Begin_Fixed(unsigned int uiState, unsigned int uiPass) con
     SetMipBias(0, kfDetailTextureMipBias);
     const PblVector4& vT0 = s_DetailTextureTransform[0];
     const PblVector4& vT1 = s_DetailTextureTransform[1];
-    SetCameraSpaceTransform(0, AxesMatrix(vT0.x, vT1.x, 0.0f, vT0.y, vT1.y, 0.0f,
-                                          vT0.z, vT1.z, 0.0f, vT0.w, vT1.w, 0.0f));
+    SetCameraSpaceTransform(0, PblMatrix(PblVector3(vT0.x, vT1.x, 0.0f), PblVector3(vT0.y, vT1.y, 0.0f), PblVector3(vT0.z, vT1.z, 0.0f), PblVector3(vT0.w, vT1.w, 0.0f)));
     RedRenderer::pcSetTextureStageState(0, D3DTSS_TEXCOORDINDEX, D3DTSS_TCI_CAMERASPACEPOSITION);
     RedRenderer::pcSetTextureStageState(0, D3DTSS_TEXTURETRANSFORMFLAGS, D3DTTFF_COUNT2);
 
@@ -445,8 +434,7 @@ void pcTerrainShader::Begin_Fixed(unsigned int uiState, unsigned int uiPass) con
 
     const float fHalf = s_fDetailFadeDistance * 0.5f;
     const float fScale = 1.0f / (s_fDetailFadeDistance - fHalf);
-    const PblMatrix mFade = AxesMatrix(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f,
-                                       fScale, 0.0f, 0.0f, -(fScale * fHalf), 0.0f, 0.0f);
+    const PblMatrix mFade = PblMatrix(PblVector3(0.0f, 0.0f, 0.0f), PblVector3(0.0f, 0.0f, 0.0f), PblVector3(fScale, 0.0f, 0.0f), PblVector3(-(fScale * fHalf), 0.0f, 0.0f));
     RedRenderer::pcFFSetTextureTransform(1, mFade);
     RedRenderer::pcSetTextureStageState(1, D3DTSS_TEXCOORDINDEX, D3DTSS_TCI_CAMERASPACEPOSITION);
     RedRenderer::pcSetTextureStageState(1, D3DTSS_TEXTURETRANSFORMFLAGS, D3DTTFF_COUNT2);
@@ -852,7 +840,7 @@ static PblMatrix LayerTextureMatrix(unsigned int uiLayer)
 {
     const PblVector4& v0 = pcTerrainShader::s_TextureTransform[uiLayer][0];
     const PblVector4& v1 = pcTerrainShader::s_TextureTransform[uiLayer][1];
-    return AxesMatrix(v0.x, v1.x, 0.0f, v0.y, v1.y, 0.0f, v0.z, v1.z, 0.0f, v0.w, v1.w, 0.0f);
+    return PblMatrix(PblVector3(v0.x, v1.x, 0.0f), PblVector3(v0.y, v1.y, 0.0f), PblVector3(v0.z, v1.z, 0.0f), PblVector3(v0.w, v1.w, 0.0f));
 }
 
 // FUNCTION: SWBF2 0x006faf00

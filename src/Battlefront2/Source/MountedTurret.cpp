@@ -48,12 +48,6 @@ bool IsTurretCameraTargeting(const MountedTurret& turret)
             (turret.mTracker && turret.mTracker->IsFirstPersonView()));
 }
 
-PblMatrix TurretDirectionMatrix(const MountedTurret& turret)
-{
-    PblVector3 vDirection(-turret.mEyeDir.x, -turret.mEyeDir.y, -turret.mEyeDir.z);
-    const PblVector3& vUp = turret.mAimMatrix.GetYAxis();
-    return DirectionMatrix(vDirection, vUp, turret.mEyePoint);
-}
 }
 
 // FUNCTION: SWBF2 0x005a8500
@@ -67,7 +61,7 @@ void MountedTurret::SetupCameraTrackMatrixHUDTargeting(PblMatrix& rMatrix)
 {
     if (IsTurretCameraTargeting(*this))
     {
-        rMatrix = TurretDirectionMatrix(*this);
+        rMatrix = DirectionMatrix(-mEyeDir, mAimMatrix.GetYAxis(), mEyePoint);
         return;
     }
     const PblMatrix& rTarget = mClass->mTrackUseRoot ? mParent->GetMatrix() : mAimMatrix;
@@ -80,7 +74,7 @@ void MountedTurret::SetupCameraTrackMatrix(PblMatrix& rMatrix, float fDeltaTime)
 {
     if (IsTurretCameraTargeting(*this))
     {
-        rMatrix = TurretDirectionMatrix(*this);
+        rMatrix = DirectionMatrix(-mEyeDir, mAimMatrix.GetYAxis(), mEyePoint);
         int iView = GetFirstPersonIndex();
         if (iView >= 0 && !mTargetInfo.mIsAiming)
         {
@@ -1104,7 +1098,7 @@ bool MountedTurret::Update(float aDt)
     }
     PblMatrix mDirection = DirectionMatrix(aimDir, mountUp, mountPos);
     PblMatrix aimMat;
-    D3DXMatrixMultiply(reinterpret_cast<D3DXMATRIX*>(&aimMat), reinterpret_cast<const D3DXMATRIX*>(&mDirection), reinterpret_cast<const D3DXMATRIX*>(&parentMatrix));
+    aimMat = mDirection * parentMatrix;
     mAimMatrix = aimMat;
 
     mEyePoint = mClass->mCameraSettings.CalcEyePoint(mAimMatrix);

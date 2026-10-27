@@ -40,7 +40,7 @@ void __fastcall TableReadColor(const char* pcKey, float* pfColor);
 }
 namespace Lua_Callbacks
 {
-void __fastcall TableReadDirection(int iUnused, float* pfDirection);
+void __fastcall TableReadDirection(const char* pcKey, PblVector3* pDirection);
 }
 bool ToggleInvincibilityCheat();
 

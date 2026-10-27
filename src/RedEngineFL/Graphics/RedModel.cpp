@@ -189,9 +189,7 @@ bool RedModel::GetHierarchicalBoneMatrix(unsigned int uiBone, PblMatrix& mat) co
                 else
                 {
                     PblMatrix inv = pSkeleton->m_amDefaultPose[iParent].GetInverseFast();
-                    PblMatrix result;
-                    D3DXMatrixMultiply((D3DXMATRIX*)&result, (const D3DXMATRIX*)&bone,
-                                       (const D3DXMATRIX*)&inv);
+                    PblMatrix result = bone * inv;
                     mat = result;
                 }
                 return true;
@@ -267,10 +265,7 @@ unsigned int RedModel::GetParentBoneAndOffsetMatrix(unsigned int uiBone, PblMatr
                     return 0;
                 }
                 PblMatrix inv = pSkeleton->m_amDefaultPose[iParent].GetInverseFast();
-                PblMatrix result;
-                D3DXMatrixMultiply((D3DXMATRIX*)&result,
-                                   (const D3DXMATRIX*)&pSkeleton->m_amDefaultPose[i],
-                                   (const D3DXMATRIX*)&inv);
+                PblMatrix result = pSkeleton->m_amDefaultPose[i] * inv;
                 mat = result;
                 return _pSkeleton->m_auiNameHash[iParent];
             }
@@ -446,10 +441,7 @@ void RedModel::Render(const PblMatrix* pMatrix, const RedPose* pPose, const RedC
                 unsigned int uiBone = pSegment->m_uiBoneIndex;
                 if (!apBoneMatrices[uiBone])
                 {
-                    PblMatrix mBone;
-                    D3DXMatrixMultiply((D3DXMATRIX*)&mBone,
-                                       (const D3DXMATRIX*)&pPose->_GetBoneMatrix(uiBone),
-                                       (const D3DXMATRIX*)pMatrix);
+                    PblMatrix mBone = pPose->_GetBoneMatrix(uiBone) * *pMatrix;
                     apBoneMatrices[uiBone] = RedRenderer::AllocMatrixInCache(mBone);
                 }
                 const RedColor* pColor = &color;
@@ -556,14 +548,7 @@ void RedModel::_Read(PblFileChunk& chunk)
             vOrigin.y = child._pFile->ReadFloat();
             vOrigin.z = child._pFile->ReadFloat();
 
-            const PblVector3* apRows[4] = { &vRight, &vUp, &vFront, &vOrigin };
-            for (int r = 0; r < 4; ++r)
-            {
-                _Matrix.m[r][0] = apRows[r]->x;
-                _Matrix.m[r][1] = apRows[r]->y;
-                _Matrix.m[r][2] = apRows[r]->z;
-                _Matrix.m[r][3] = r == 3 ? 1.0f : 0.0f;
-            }
+            _Matrix = PblMatrix(vRight, vUp, vFront, vOrigin);
             _bHasTransform = true;
             break;
         }

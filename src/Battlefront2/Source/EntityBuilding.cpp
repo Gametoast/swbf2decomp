@@ -345,8 +345,7 @@ EntityBuilding::EntityBuilding(EntityBuildingClass* pClass, const EntityDesc& de
             PblMatrix mBone;
             if (mClass->mUnbuiltModel->_mLod[0]->GetBoneMatrix(0xD1E4CC7A, mBone))
             {
-                PblMatrix mWorld;
-                D3DXMatrixMultiply(reinterpret_cast<D3DXMATRIX*>(&mWorld), reinterpret_cast<const D3DXMATRIX*>(&mBone), reinterpret_cast<const D3DXMATRIX*>(&GetMatrix()));
+                PblMatrix mWorld = mBone * GetMatrix();
                 hologramDesc.mMatrix = mWorld;
             }
             else
@@ -827,8 +826,7 @@ void EntityBuilding::Render(unsigned char uFlags, float fDist, unsigned int uMas
     PblMatrix mReflection;
     if (FLRenderer::IsReflected(GetCollisionCenter(), GetCollisionRadius(), mReflection, false))
     {
-        PblMatrix mWorld;
-        D3DXMatrixMultiply(reinterpret_cast<D3DXMATRIX*>(&mWorld), reinterpret_cast<const D3DXMATRIX*>(GetRenderMatrix()), reinterpret_cast<const D3DXMATRIX*>(&mReflection));
+        PblMatrix mWorld = *GetRenderMatrix() * mReflection;
         mReflection = mWorld;
         mModel->Render(uFlags, fDist, &mReflection, GetRenderPose(), color,
                        (uMask & ~0x10000) | 0x10000100, NULL);

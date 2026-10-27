@@ -252,8 +252,7 @@ OrdnanceMeleeThrow::OrdnanceMeleeThrow(OrdnanceMeleeThrowClass* pClass, const Or
     m_pWeapon->NotifyThrow();
     m_bLastFrameIndicator = false;
 
-    D3DXMatrixMultiply((D3DXMATRIX*)&m_mMatrix, (const D3DXMATRIX*)&m_pWeapon->m_mThrow0Local,
-                       (const D3DXMATRIX*)&m_pOwner->GetMatrix());
+    m_mMatrix = m_pWeapon->m_mThrow0Local * m_pOwner->GetMatrix();
 
     const WeaponMeleeClass* pWeaponClass = (const WeaponMeleeClass*)m_pWeapon->m_pPrimaryWeapon->mClass;
     PblVector3 vEdgeDir = gVectorUnitZ;
@@ -418,7 +417,7 @@ bool OrdnanceMeleeThrow::Update(float fDeltaTime)
         mPosition.z += mVelocity.z * fStep;
         PblMatrix mRotate = gMatrixIdentity;
         D3DXMatrixRotationAxis((D3DXMATRIX*)&mRotate, (const D3DXVECTOR3*)&m_vRotationAxis, pClass->m_fOmega * fStep);
-        D3DXMatrixMultiply((D3DXMATRIX*)&m_mMatrix, (const D3DXMATRIX*)&m_mMatrix, (const D3DXMATRIX*)&mRotate);
+        m_mMatrix = m_mMatrix * mRotate;
         m_mMatrix.SetTranslation(mPosition);
 
         if (!Ordnance::Update(fStep) && mLifeTime > 0.0f)
@@ -464,7 +463,7 @@ bool OrdnanceMeleeThrow::Update(float fDeltaTime)
     PblMatrix mRotate(gMatrixIdentity);
     D3DXMatrixRotationAxis((D3DXMATRIX*)&mRotate, (const D3DXVECTOR3*)&m_vRotationAxis,
                            pClass->m_fOmega * fDeltaTime * 0.5f);
-    D3DXMatrixMultiply((D3DXMATRIX*)&m_mMatrix, (const D3DXMATRIX*)&m_mMatrix, (const D3DXMATRIX*)&mRotate);
+    m_mMatrix = m_mMatrix * mRotate;
     m_mMatrix.SetTranslation(mPosition);
     m_pWeapon->m_pPrimaryWeapon->UpdateEffects(fDeltaTime, mPosition, mVelocity, 0);
     SetRenderPos(mPosition);
@@ -508,7 +507,7 @@ void OrdnanceMeleeThrow::ApplyDamage(float fDeltaTime)
     PblMatrix mRotate = gMatrixIdentity;
     D3DXMatrixRotationAxis((D3DXMATRIX*)&mRotate, (const D3DXVECTOR3*)&m_vRotationAxis, fStep * pClass->m_fOmega);
     PblMatrix mFirst;
-    D3DXMatrixMultiply((D3DXMATRIX*)&mFirst, (const D3DXMATRIX*)&m_mMatrix, (const D3DXMATRIX*)&mRotate);
+    mFirst = m_mMatrix * mRotate;
     mFirst.m[3][0] = m_mMatrix.m[3][0] + mVelocity.x * fStep;
     mFirst.m[3][1] = m_mMatrix.m[3][1] + mVelocity.y * fStep;
     mFirst.m[3][2] = m_mMatrix.m[3][2] + mVelocity.z * fStep;
@@ -518,7 +517,7 @@ void OrdnanceMeleeThrow::ApplyDamage(float fDeltaTime)
     {
         D3DXMatrixRotationAxis((D3DXMATRIX*)&mRotate, (const D3DXVECTOR3*)&m_vRotationAxis,
                                fDeltaTime * pClass->m_fOmega);
-        D3DXMatrixMultiply((D3DXMATRIX*)&mLast, (const D3DXMATRIX*)&m_mMatrix, (const D3DXMATRIX*)&mRotate);
+        mLast = m_mMatrix * mRotate;
         mLast.m[3][0] = mVelocity.x * fDeltaTime + m_mMatrix.m[3][0];
         mLast.m[3][1] = m_mMatrix.m[3][1] + mVelocity.y * fDeltaTime;
         mLast.m[3][2] = m_mMatrix.m[3][2] + mVelocity.z * fDeltaTime;
@@ -605,7 +604,7 @@ void OrdnanceMeleeThrow::ApplyDamage(float fDeltaTime)
         {
             D3DXMatrixRotationAxis((D3DXMATRIX*)&mRotate, (const D3DXVECTOR3*)&m_vRotationAxis,
                                    fTime * pClass->m_fOmega);
-            D3DXMatrixMultiply((D3DXMATRIX*)&mStep, (const D3DXMATRIX*)&m_mMatrix, (const D3DXMATRIX*)&mRotate);
+            mStep = m_mMatrix * mRotate;
             mStep.m[3][0] = mVelocity.x * fTime + m_mMatrix.m[3][0];
             mStep.m[3][1] = m_mMatrix.m[3][1] + mVelocity.y * fTime;
             mStep.m[3][2] = m_mMatrix.m[3][2] + mVelocity.z * fTime;

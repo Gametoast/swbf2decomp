@@ -166,13 +166,17 @@ namespace Lua_Callbacks
 {
 
 // FUNCTION: SWBF2 0x00587f60
-void __fastcall TableReadDirection(int iUnused, float* pfDirection)
+void __fastcall TableReadDirection(const char* pcKey, PblVector3* pDirection)
 {
-    lua_pushstring(LuaHelper::mState, "direction");
+    float x = pDirection->x;
+    float y = pDirection->y;
+    float z = pDirection->z;
+    lua_pushstring(LuaHelper::mState, pcKey);
     lua_rawget(LuaHelper::mState, -2);
-    Lua_Callbacks::TableReadValWithDefault("x", pfDirection);
-    Lua_Callbacks::TableReadValWithDefault("y", pfDirection + 1);
-    Lua_Callbacks::TableReadValWithDefault("z", pfDirection + 2);
+    Lua_Callbacks::TableReadValWithDefault("x", &x);
+    Lua_Callbacks::TableReadValWithDefault("y", &y);
+    Lua_Callbacks::TableReadValWithDefault("z", &z);
+    *pDirection = PblVector3(x, y, z);
     lua_settop(LuaHelper::mState, -2);
 }
 }
@@ -4096,7 +4100,7 @@ int ScriptCB_SetIFaceLighting(lua_State* L)
                 PblVector3 direction;
                 RedColorValue color;
                 RedInterfaceScreen::GetDirectionalLight(i, direction, color);
-                Lua_Callbacks::TableReadDirection(0, &direction.x);
+                Lua_Callbacks::TableReadDirection("direction", &direction);
                 Lua_Callbacks::TableReadColor("color", &color.r);
                 RedInterfaceScreen::s_directionalLight[i].SetDirection(direction);
                 RedInterfaceScreen::s_directionalLight[i].SetColor(color);

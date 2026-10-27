@@ -528,7 +528,7 @@ void EntityDroideka::RotateY(const PblAngle& rAngle)
     kRot.m[3][3] = 1.0f;
 
     PblMatrix kOut;
-    D3DXMatrixMultiply(reinterpret_cast<D3DXMATRIX*>(&kOut), reinterpret_cast<const D3DXMATRIX*>(&kRot), reinterpret_cast<const D3DXMATRIX*>(&mMatrix));
+    kOut = kRot * mMatrix;
     mMatrix = kOut;
 }
 
@@ -3089,20 +3089,7 @@ void EntityDroideka::BuildWorldMatrices()
         PblVector3 vRight(vUp.y * vFront.z - vUp.z * vFront.y, vUp.z * vFront.x - vUp.x * vFront.z,
                           vUp.x * vFront.y - vUp.y * vFront.x);
 
-        PblMatrix kTilt;
-        kTilt.m[0][0] = vRight.x;
-        kTilt.m[0][1] = vRight.y;
-        kTilt.m[0][2] = vRight.z;
-        kTilt.m[0][3] = 0.0f;
-        kTilt.m[1][0] = vUp.x;
-        kTilt.m[1][1] = vUp.y;
-        kTilt.m[1][2] = vUp.z;
-        kTilt.m[1][3] = 0.0f;
-        kTilt.m[2][0] = vFront.x;
-        kTilt.m[2][1] = vFront.y;
-        kTilt.m[2][2] = vFront.z;
-        kTilt.m[2][3] = 0.0f;
-        kTilt.SetTranslation(gVectorZero);
+        PblMatrix kTilt(vRight, vUp, vFront, gVectorZero);
 
         mZephyrSkeleton.BuildWorldMatrices(gMatrixIdentity, mClass->mSpineIdx, kDirty);
         PblMatrix& rSpine = mZephyrSkeleton.m_pWorldMatrices[mClass->mSpineIdx];
@@ -3136,7 +3123,7 @@ void EntityDroideka::BuildWorldMatrices()
         }
         if (fabs(fHalfYaw) > 0.04f)
         {
-            D3DXMatrixMultiply(reinterpret_cast<D3DXMATRIX*>(&kLegs), reinterpret_cast<const D3DXMATRIX*>(&kLegs), D3DXMatrixRotationY(reinterpret_cast<D3DXMATRIX*>(&kRot), fHalfYaw * -0.3333f));
+            kLegs.RotateY(fHalfYaw * -0.3333f);
         }
 
         for (int i = 0; i < 3; ++i)
@@ -3171,7 +3158,7 @@ void EntityDroideka::BuildWorldMatrices()
 
         PblMatrix kArms;
         kArms.SetTranslation(gVectorZero);
-        D3DXMatrixRotationY(reinterpret_cast<D3DXMATRIX*>(&kArms), -fHalfYaw);
+        kArms.SetRotateY(-fHalfYaw);
         for (int i = 0; i < 2; ++i)
         {
             mZephyrSkeleton.BuildWorldMatrices(gMatrixIdentity, mClass->mArmJointIdx[i], kDirty);
@@ -3323,13 +3310,7 @@ bool EntityDroideka::PostCollisionUpdate(float fDeltaTime)
             qTilt._fS = fCos;
             PblQuaternion qCamera = qLook * qTilt;
 
-            PblQuaternion qUnit;
-            PblMatrix mCamera;
-            D3DXMatrixRotationQuaternion(reinterpret_cast<D3DXMATRIX*>(&mCamera), D3DXQuaternionNormalize(reinterpret_cast<D3DXQUATERNION*>(&qUnit), reinterpret_cast<const D3DXQUATERNION*>(&qCamera)));
-            mCamera.m[3][0] = gVectorZero.x;
-            mCamera.m[3][1] = gVectorZero.y;
-            mCamera.m[3][2] = gVectorZero.z;
-            mCamera.m[3][3] = 1.0f;
+            PblMatrix mCamera(qCamera, gVectorZero);
 
             mTargetInfo.mAimStart = GetCameraTrackSettings()->CalcCameraPoint(mMatrix, mCamera);
             float fAlong = mEyeDir.y * (mEyePoint.y - mTargetInfo.mAimStart.y) +

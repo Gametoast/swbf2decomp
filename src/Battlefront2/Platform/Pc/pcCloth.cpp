@@ -105,8 +105,7 @@ void EntityCloth::PlatformRender(unsigned char ucViewport, RedColor color, unsig
     if (!(uiFlags & 0x200000)
         && FLRenderer::IsReflected(sphere.GetCenter(), sphere.GetRadius(), mReflection, false))
     {
-        PblMatrix mReflected;
-        D3DXMatrixMultiply(reinterpret_cast<D3DXMATRIX*>(&mReflected), reinterpret_cast<const D3DXMATRIX*>(&m_worldMat), reinterpret_cast<const D3DXMATRIX*>(&mReflection));
+        PblMatrix mReflected = m_worldMat * mReflection;
         RedRenderer::pcRenderPrimitive(pPrimitive, mData->m_pShader,
                                        mReflected, color,
                                        uiFlags | 0x10000100, 0, 0, 0);

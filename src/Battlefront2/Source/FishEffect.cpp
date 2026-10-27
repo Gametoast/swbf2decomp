@@ -25,16 +25,7 @@ static const float fHalfPi = PblMath::fPi * 0.5f;
 
 
 
-static inline PblQuaternion RotateByOmega(const PblQuaternion& q, const PblVector3& vOmega)
-{
-    float fAngle = sqrtf(vOmega.x * vOmega.x + vOmega.y * vOmega.y + vOmega.z * vOmega.z);
-    if (fAngle > EPSILON)
-    {
-        float fInv = 1.0f / fAngle;
-        return q * PblQuaternion(PblVector3(vOmega.x * fInv, vOmega.y * fInv, vOmega.z * fInv), fAngle);
-    }
-    return q;
-}
+
 
 // FUNCTION: SWBF2 0x00522380
 FishParticle::FishParticle()
@@ -57,7 +48,14 @@ void FishParticle::RespawnFish(const PblVector3& vPos, const FishParticleType& t
     mType = type;
 
     PblQuaternion q = PblQuaternion(gMatrixIdentity);
-    q = RotateByOmega(q, PblVector3(0.0f, PblRandom::GetGlobalFloat() * PblMath::fTwoPi, 0.0f));
+    {
+        PblVector3 initomega = PblVector3(0.0f, PblRandom::GetGlobalFloat() * PblMath::fTwoPi, 0.0f);
+        float initAngle = Length(initomega);
+        if (initAngle > EPSILON)
+        {
+            q *= PblQuaternion(initomega / initAngle, initAngle);
+        }
+    }
     mState = eState;
     mMatrix = PblMatrix(q, vPos);
     mBaseMatrix = mMatrix;
@@ -66,7 +64,14 @@ void FishParticle::RespawnFish(const PblVector3& vPos, const FishParticleType& t
     if (mState == FISH_FLOAT)
     {
         q = PblQuaternion(mMatrix);
-        q = RotateByOmega(q, PblVector3(0.0f, 0.0f, fHalfPi));
+        {
+            PblVector3 initomega = PblVector3(0.0f, 0.0f, fHalfPi);
+            float initAngle = Length(initomega);
+            if (initAngle > EPSILON)
+            {
+                q *= PblQuaternion(initomega / initAngle, initAngle);
+            }
+        }
         mMatrix = PblMatrix(q, vPos);
         mBaseMatrix = mMatrix;
         mVelocity = PblVector3(0.0f, PblRandom::GetGlobalFloat() * 0.15f + 0.15f, 0.0f);
@@ -129,12 +134,11 @@ bool FishParticle::UpdateSwimmingFish(float fDeltaTime)
 
         PblQuaternion q = PblQuaternion(mBaseMatrix);
         PblVector3 vOmega(0.0f, mNextTurnAngle, 0.0f);
-        float fAngle = sqrtf(vOmega.x * vOmega.x + vOmega.y * vOmega.y + vOmega.z * vOmega.z);
+        float fAngle = Length(vOmega);
         if (fAngle > EPSILON)
         {
             mTotalStraightTime = 0.0f;
-            float fInv = 1.0f / fAngle;
-            q = q * PblQuaternion(PblVector3(vOmega.x * fInv, vOmega.y * fInv, vOmega.z * fInv), fAngle);
+            q *= PblQuaternion(vOmega / fAngle, fAngle);
         }
         mBaseMatrix = PblMatrix(q, vPos);
 
@@ -152,7 +156,14 @@ bool FishParticle::UpdateSwimmingFish(float fDeltaTime)
     mMatrix = mBaseMatrix;
 
     PblQuaternion q = PblQuaternion(mMatrix);
-    q = RotateByOmega(q, PblVector3(0.0f, PblMath::Sin(mPhase) * (fHalfPi * 0.25f), 0.0f));
+    {
+        PblVector3 initomega = PblVector3(0.0f, PblMath::Sin(mPhase) * (fHalfPi * 0.25f), 0.0f);
+        float initAngle = Length(initomega);
+        if (initAngle > EPSILON)
+        {
+            q *= PblQuaternion(initomega / initAngle, initAngle);
+        }
+    }
     float fWag = PblMath::Sin(mPhase) * (mType.mSize * 0.07f);
     vPos.x = mBaseMatrix.m[0][0] * fWag + vPos.x;
     vPos.y = mBaseMatrix.m[0][1] * fWag + vPos.y;
@@ -217,7 +228,12 @@ bool FishParticle::UpdateFloatingFish(float fDeltaTime)
     vPos.y = vWaterVelocity.y * fDeltaTime + fBob;
     vPos.z = vWaterVelocity.z * fDeltaTime + vPos.z;
 
-    PblQuaternion q = RotateByOmega(PblQuaternion(mMatrix), mOmega);
+    PblQuaternion q(mMatrix);
+    float initAngle = Length(mOmega);
+    if (initAngle > EPSILON)
+    {
+        q *= PblQuaternion(mOmega / initAngle, initAngle);
+    }
     mMatrix = PblMatrix(q, vPos);
     mBaseMatrix = mMatrix;
 

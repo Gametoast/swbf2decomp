@@ -278,9 +278,9 @@ void FreeCamera::UpdateOrientation(const ProcessedInputs& rInputs, float fDeltaT
     mYaw -= fTurn * pJoystick->GetMouseX();
     mPitch -= fTurn * fMouseY;
 
-    D3DXMATRIX mRot, mRotY;
-    D3DXMatrixRotationX(&mRot, mPitch);
-    D3DXMatrixMultiply(&mRot, &mRot, D3DXMatrixRotationY(&mRotY, mYaw));
+    PblMatrix mRot;
+    mRot.SetRotateX(mPitch);
+    mRot.RotateY(mYaw);
 
     for (int i = 0; i < 3; i++)
     {
@@ -301,7 +301,7 @@ void FreeCamera::UpdateTranslation(const ProcessedInputs& rInputs, float fDeltaT
                       (float)iHeight * sHeightScale,
                       -rInputs.GetMoveAxis() * sMoveScale);
 
-    D3DXMATRIX mRotY;
+    PblMatrix mRotY;
     const D3DXMATRIX* pMatrix;
     if (sQuakeControl)
     {
@@ -309,7 +309,8 @@ void FreeCamera::UpdateTranslation(const ProcessedInputs& rInputs, float fDeltaT
     }
     else
     {
-        pMatrix = D3DXMatrixRotationY(&mRotY, mYaw);
+        mRotY.SetRotateY(mYaw);
+        pMatrix = reinterpret_cast<const D3DXMATRIX*>(&mRotY);
     }
 
     D3DXVECTOR3 vOut;

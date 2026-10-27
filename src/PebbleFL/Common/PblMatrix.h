@@ -39,7 +39,19 @@ public:
 
     const PblMatrix GetInverseFast() const;
 
+    const PblVector3 ApplyRotation(const PblVector3& vector) const;
+    const PblVector3 ApplyTransform(const PblVector3& vector) const;
+
     void Reset();
+
+    void SetRotateX(float fAngle);
+    void SetRotateY(float fAngle);
+    void SetRotateZ(float fAngle);
+    void RotateX(float fAngle);
+    void RotateY(float fAngle);
+    void RotateZ(float fAngle);
+    void Scale(float fScaleX, float fScaleY, float fScaleZ);
+    void Scale(float fScale) { Scale(fScale, fScale, fScale); }
 
     void Transpose3x3();
 

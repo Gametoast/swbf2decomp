@@ -71,16 +71,14 @@ void AnimatedAddon::Render(TentacleSimulator* pTentacles, const PblVector3& vVel
         return;
     }
 
-    PblMatrix mWorld;
-    D3DXMatrixMultiply(reinterpret_cast<D3DXMATRIX*>(&mWorld), reinterpret_cast<const D3DXMATRIX*>(pJoint), reinterpret_cast<const D3DXMATRIX*>(&mMatrix));
+    PblMatrix mWorld = *pJoint * mMatrix;
     RedPose pose;
     mModel->GetRedModel(0)->SetupPose(pose);
 
     const PblMatrix* pRoot = pPose->Find(0xE5B51072);
     if (pRoot)
     {
-        PblMatrix mRelative;
-        D3DXMatrixMultiply(reinterpret_cast<D3DXMATRIX*>(&mRelative), reinterpret_cast<const D3DXMATRIX*>(pRoot), reinterpret_cast<const D3DXMATRIX*>(&pJoint->GetInverseFast()));
+        PblMatrix mRelative = *pRoot * pJoint->GetInverseFast();
         PblMatrix mRoot = mRelative;
         pose.Store(0xE5B51072, &mRoot);
     }

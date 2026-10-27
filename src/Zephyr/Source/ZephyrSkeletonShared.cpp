@@ -43,7 +43,7 @@ void ZephyrSkeletonShared::SetJointScale(int iJoint, float fScale)
 void ZephyrSkeletonShared::CalcBasePoseInverses(char iJointIdx)
 {
     ZephyrJointShared& kJoint = m_pJoints[iJointIdx];
-    const ZephyrTransform& kBase = *(const ZephyrTransform*)kJoint.m_kBaseTransform;
+    const ZephyrTransform& kBase = kJoint.m_kBaseTransform;
     PblMatrix& mInverse = kJoint.m_kBaseInverse;
 
     D3DXQUATERNION qUnit;
@@ -55,9 +55,7 @@ void ZephyrSkeletonShared::CalcBasePoseInverses(char iJointIdx)
 
     if (kJoint.m_iParent >= 0)
     {
-        PblMatrix mWorld;
-        D3DXMatrixMultiply((D3DXMATRIX*)&mWorld, (const D3DXMATRIX*)&mInverse,
-                           (const D3DXMATRIX*)&m_pJoints[kJoint.m_iParent].m_kBaseInverse);
+        PblMatrix mWorld = mInverse * m_pJoints[kJoint.m_iParent].m_kBaseInverse;
         mInverse = mWorld;
     }
 
@@ -123,7 +121,7 @@ bool ZephyrSkeletonShared::Open(PblMemChunk& kChunk, int iNumJoints, const DataO
         }
 
         ZephyrJointShared& kJoint = m_pJoints[i];
-        ZephyrTransform& kBase = *(ZephyrTransform*)kJoint.m_kBaseTransform;
+        ZephyrTransform& kBase = kJoint.m_kBaseTransform;
 
         kJoint.m_kCrc = (unsigned int)kChunkJoint.Read32();
 
@@ -132,16 +130,14 @@ bool ZephyrSkeletonShared::Open(PblMemChunk& kChunk, int iNumJoints, const DataO
         {
             pRot[j] = kChunkJoint.ReadFloat();
         }
-        kBase.kQuat = *(const PblQuaternion*)pRot;
+        kBase.kQuat = PblQuaternion(pRot[3], pRot[0], pRot[1], pRot[2]);
 
         float pTrans[3];
         for (int j = 0; j < 3; j++)
         {
             pTrans[j] = kChunkJoint.ReadFloat();
         }
-        kBase.kTrans.x = pTrans[0];
-        kBase.kTrans.y = pTrans[1];
-        kBase.kTrans.z = pTrans[2];
+        kBase.kTrans = PblVector3(pTrans[0], pTrans[1], pTrans[2]);
 
         kJoint.mTransformFlags = 1;
 

@@ -228,8 +228,7 @@ void SoldierElement::RenderUsingContext(const PblMatrix& mContext, const RedColo
     PblMatrix mWorld(mRotation, mTranslation);
 
     PblMatrix mScaling;
-    D3DXMatrixMultiply((D3DXMATRIX*)&mWorld, (const D3DXMATRIX*)&mWorld,
-                       D3DXMatrixScaling((D3DXMATRIX*)&mScaling, mScale, mScale, mScale));
+    mWorld.Scale(mScale);
     D3DXMatrixMultiply((D3DXMATRIX*)&mScaling, (const D3DXMATRIX*)&mWorld,
                        (const D3DXMATRIX*)&mScreen);
     mScreen = mScaling;

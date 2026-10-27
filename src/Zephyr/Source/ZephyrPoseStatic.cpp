@@ -5,7 +5,7 @@
 
 static const ZephyrTransform& GetBaseTransform(const ZephyrJointShared* pJoint)
 {
-    return *(const ZephyrTransform*)pJoint->m_kBaseTransform;
+    return pJoint->m_kBaseTransform;
 }
 
 // TEMPLATE: SWBF2 0x0072da90

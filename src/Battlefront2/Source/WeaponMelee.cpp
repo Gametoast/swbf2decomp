@@ -131,7 +131,7 @@ void WeaponMelee::Render(const PblMatrix& matrix, const RedPose* pPose,
             const PblMatrix* pBone = pPose->Find(pClass->m_auiHardpoint[0]);
             if (pBone)
             {
-                D3DXMatrixMultiply(reinterpret_cast<D3DXMATRIX*>(&aMatrix[0]), reinterpret_cast<const D3DXMATRIX*>(pBone), reinterpret_cast<const D3DXMATRIX*>(&matrix));
+                aMatrix[0] = *pBone * matrix;
                 apMatrix[0] = &aMatrix[0];
             }
         }
@@ -157,7 +157,7 @@ void WeaponMelee::Render(const PblMatrix& matrix, const RedPose* pPose,
         {
             continue;
         }
-        D3DXMatrixMultiply(reinterpret_cast<D3DXMATRIX*>(&aMatrix[i]), reinterpret_cast<const D3DXMATRIX*>(pBone), reinterpret_cast<const D3DXMATRIX*>(&matrix));
+        aMatrix[i] = *pBone * matrix;
         apMatrix[i] = &aMatrix[i];
         if (bRenderModel)
         {
@@ -214,7 +214,7 @@ void WeaponMeleeClass::Render(float fTurnOn, const PblMatrix& matrix, const RedP
             const PblMatrix* pBone = pPose->Find(m_auiHardpoint[0]);
             if (pBone)
             {
-                D3DXMatrixMultiply(reinterpret_cast<D3DXMATRIX*>(&aMatrix[0]), reinterpret_cast<const D3DXMATRIX*>(pBone), reinterpret_cast<const D3DXMATRIX*>(&matrix));
+                aMatrix[0] = *pBone * matrix;
                 apMatrix[0] = &aMatrix[0];
             }
         }
@@ -239,7 +239,7 @@ void WeaponMeleeClass::Render(float fTurnOn, const PblMatrix& matrix, const RedP
         {
             continue;
         }
-        D3DXMatrixMultiply(reinterpret_cast<D3DXMATRIX*>(&aMatrix[i]), reinterpret_cast<const D3DXMATRIX*>(pBone), reinterpret_cast<const D3DXMATRIX*>(&matrix));
+        aMatrix[i] = *pBone * matrix;
         apMatrix[i] = &aMatrix[i];
         m_apWeaponModel[i - 1]->Render(apMatrix[i], 0, color, uiRenderFlags, 0);
     }
@@ -1335,23 +1335,7 @@ bool WeaponMelee::Deflect(const Ordnance* pOrdnance, const PblVector3& pos, cons
                        vFront.x * vRight.y - vFront.y * vRight.x);
         const PblMatrix& mOriginMatrix = mOwner->GetMatrix();
 
-        PblMatrix mDeflect;
-        mDeflect.m[0][0] = vRight.x;
-        mDeflect.m[0][1] = vRight.y;
-        mDeflect.m[0][2] = vRight.z;
-        mDeflect.m[0][3] = 0.0f;
-        mDeflect.m[1][0] = vUp.x;
-        mDeflect.m[1][1] = vUp.y;
-        mDeflect.m[1][2] = vUp.z;
-        mDeflect.m[1][3] = 0.0f;
-        mDeflect.m[2][0] = vFront.x;
-        mDeflect.m[2][1] = vFront.y;
-        mDeflect.m[2][2] = vFront.z;
-        mDeflect.m[2][3] = 0.0f;
-        mDeflect.m[3][0] = mOriginMatrix.m[3][0];
-        mDeflect.m[3][1] = mOriginMatrix.m[3][1];
-        mDeflect.m[3][2] = mOriginMatrix.m[3][2];
-        mDeflect.m[3][3] = 1.0f;
+        PblMatrix mDeflect(vRight, vUp, vFront, mOriginMatrix.GetTranslation());
 
         for (unsigned int i = 0; i < pDeflect->m_uiNumDeflectAnimations; ++i)
         {
@@ -1361,7 +1345,7 @@ bool WeaponMelee::Deflect(const Ordnance* pOrdnance, const PblVector3& pos, cons
             }
 
             PblMatrix mBlock;
-            D3DXMatrixMultiply(reinterpret_cast<D3DXMATRIX*>(&mBlock), reinterpret_cast<const D3DXMATRIX*>(&pClass->m_amDeflectMatrix[i]), reinterpret_cast<const D3DXMATRIX*>(&mDeflect));
+            mBlock = pClass->m_amDeflectMatrix[i] * mDeflect;
             const float dx = pos.x - mBlock.m[3][0];
             const float dy = pos.y - mBlock.m[3][1];
             const float dz = pos.z - mBlock.m[3][2];
@@ -2267,22 +2251,7 @@ bool WeaponMelee::UpdateFire(float fDeltaTime)
                 PblVector3 vUp(vAim.y * vRight.z - vAim.z * vRight.y, vAim.z * vRight.x - vAim.x * vRight.z,
                                vAim.x * vRight.y - vAim.y * vRight.x);
 
-                mAttack.m[0][0] = vRight.x;
-                mAttack.m[0][1] = vRight.y;
-                mAttack.m[0][2] = vRight.z;
-                mAttack.m[0][3] = 0.0f;
-                mAttack.m[1][0] = vUp.x;
-                mAttack.m[1][1] = vUp.y;
-                mAttack.m[1][2] = vUp.z;
-                mAttack.m[1][3] = 0.0f;
-                mAttack.m[2][0] = vAim.x;
-                mAttack.m[2][1] = vAim.y;
-                mAttack.m[2][2] = vAim.z;
-                mAttack.m[2][3] = 0.0f;
-                mAttack.m[3][0] = mOriginMatrix.m[3][0];
-                mAttack.m[3][1] = mOriginMatrix.m[3][1];
-                mAttack.m[3][2] = mOriginMatrix.m[3][2];
-                mAttack.m[3][3] = 1.0f;
+                mAttack = PblMatrix(vRight, vUp, vAim, mOriginMatrix.GetTranslation());
             }
             else
             {

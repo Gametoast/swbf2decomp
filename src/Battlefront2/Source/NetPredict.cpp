@@ -439,7 +439,7 @@ void SmoothInfo::SetMat(const PblMatrix& mat, float fParam1, float fParam2)
         newRot.m[3][3] = 1.0f;
         PblMatrix newInverse = newRot.GetInverseFast();
         PblMatrix relMatrix;
-        D3DXMatrixMultiply(reinterpret_cast<D3DXMATRIX*>(&relMatrix), reinterpret_cast<const D3DXMATRIX*>(&newInverse), reinterpret_cast<const D3DXMATRIX*>(&oldRot));
+        relMatrix = newInverse * oldRot;
         mRotErr = PblQuaternion(relMatrix);
     }
 }

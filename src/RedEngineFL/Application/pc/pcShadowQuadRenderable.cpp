@@ -246,15 +246,9 @@ void pcShadowQuadRenderable::Render(int value)
                          0.5f / (float)target->m_uiHeight,
                      0.0f, 1.0f });
 
-    PblMatrix projection;
-    PblMatrix view;
     const RedCamera* camera = RedRenderer::GetCamera();
-    D3DXMatrixMultiply((D3DXMATRIX*)&view, (const D3DXMATRIX*)&camera->_MatrixInverse,
-                       (const D3DXMATRIX*)&RedRenderer::GetProjectionMatrix());
-    D3DXMatrixMultiply((D3DXMATRIX*)&projection, (const D3DXMATRIX*)&view,
-                       (const D3DXMATRIX*)&scaleOffset);
-    RedShadowMap::SetScreenSpaceShadowMap((RedTexture*)target,
-                                         *(const PblMatrix*)&projection);
+    PblMatrix shadowMatrix = camera->_MatrixInverse * RedRenderer::GetProjectionMatrix() * scaleOffset;
+    RedShadowMap::SetScreenSpaceShadowMap((RedTexture*)target, shadowMatrix);
 
     RedShadowMap::_uiShadowMapWrapMode = 3;
 

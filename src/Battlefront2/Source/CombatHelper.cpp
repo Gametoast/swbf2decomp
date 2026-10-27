@@ -345,8 +345,7 @@ void CombatHelper::SetRandomHeading()
     }
 
     PblMatrix mLook = GetMe()->GetMatrix();
-    PblMatrix mRot;
-    D3DXMatrixMultiply(reinterpret_cast<D3DXMATRIX*>(&mLook), reinterpret_cast<const D3DXMATRIX*>(&mLook), D3DXMatrixRotationY(reinterpret_cast<D3DXMATRIX*>(&mRot), mLookAngle));
+    mLook.RotateY(mLookAngle);
     const float fX = mLook.m[2][0] * 100.0f;
     const float fZ = mLook.m[2][2] * 100.0f;
     const PblMatrix& mMe = GetMe()->GetMatrix();

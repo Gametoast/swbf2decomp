@@ -21,8 +21,7 @@ PblMatrix HUD::Element::CalculateGroupMatrix(HUD::ElementGroupBase* const pGroup
     if (pElement->mGroup)
     {
         const PblMatrix parent = CalculateGroupMatrix(pElement->mGroup);
-        D3DXMatrixMultiply((D3DXMATRIX*)&result, (const D3DXMATRIX*)&local,
-                           (const D3DXMATRIX*)&parent);
+        result = local * parent;
     }
     else
     {
@@ -321,13 +320,9 @@ void HUD::Matrix::SetRotation(float fX, float fY, float fZ)
     }
 
     PblMatrix matrix = gMatrixIdentity;
-    PblMatrix rotation;
-    D3DXMatrixMultiply((D3DXMATRIX*)&matrix, (D3DXMATRIX*)&matrix,
-                       D3DXMatrixRotationX((D3DXMATRIX*)&rotation, fX * 0.017453292f));
-    D3DXMatrixMultiply((D3DXMATRIX*)&matrix, (D3DXMATRIX*)&matrix,
-                       D3DXMatrixRotationY((D3DXMATRIX*)&rotation, fY * 0.017453292f));
-    D3DXMatrixMultiply((D3DXMATRIX*)&matrix, (D3DXMATRIX*)&matrix,
-                       D3DXMatrixRotationZ((D3DXMATRIX*)&rotation, fZ * 0.017453292f));
+    matrix.RotateX(fX * 0.017453292f);
+    matrix.RotateY(fY * 0.017453292f);
+    matrix.RotateZ(fZ * 0.017453292f);
 
     float fPosX = mMatrix->m[3][0];
     float fPosY = mMatrix->m[3][1];
@@ -380,9 +375,7 @@ void HUD::Matrix::ApplyScale()
         mMatrix->m[i][3] = 0.0f;
     }
 
-    PblMatrix scaling;
-    D3DXMatrixMultiply((D3DXMATRIX*)mMatrix, (D3DXMATRIX*)mMatrix,
-                       D3DXMatrixScaling((D3DXMATRIX*)&scaling, mScale.x, mScale.y, mScale.z));
+    (*mMatrix).Scale(mScale.x, mScale.y, mScale.z);
 
     mMatrix->m[3][0] = fPosX;
     mMatrix->m[3][1] = fPosY;
@@ -1269,9 +1262,7 @@ PblMatrix HUD::Element::CalculateScreenMatrix() const
     if (mGroup)
     {
         const PblMatrix parent = CalculateGroupMatrix(mGroup);
-        PblMatrix combined;
-        D3DXMatrixMultiply((D3DXMATRIX*)&combined, (const D3DXMATRIX*)&parent,
-                           (const D3DXMATRIX*)&result);
+        PblMatrix combined = parent * result;
         result = combined;
     }
     return result;

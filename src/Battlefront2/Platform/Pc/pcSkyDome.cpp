@@ -151,8 +151,7 @@ void SkyDome::Render(int value)
 
                 PblMatrix boneMat;
                 rDome.mModel->GetBoneMatrix(rData.hardPoint, boneMat);
-                PblMatrix product;
-                D3DXMatrixMultiply(reinterpret_cast<D3DXMATRIX*>(&product), reinterpret_cast<const D3DXMATRIX*>(&boneMat), reinterpret_cast<const D3DXMATRIX*>(&mat));
+                PblMatrix product = boneMat * mat;
                 boneMat = product;
                 rData.pos = boneMat.GetTranslation();
 

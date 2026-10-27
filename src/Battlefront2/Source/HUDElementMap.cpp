@@ -860,11 +860,9 @@ void HUD::ElementMap::Update(const float fElapsed)
             }
 
             PblMatrix rotation;
-            D3DXMatrixRotationZ((D3DXMATRIX*)&rotation, fRotation);
+            rotation.SetRotateZ(fRotation);
             rotation.SetTranslation(gVectorZero);
-            PblMatrix matrix;
-            D3DXMatrixMultiply((D3DXMATRIX*)&matrix, (const D3DXMATRIX*)&rotation,
-                               (const D3DXMATRIX*)&mGroupMatrix);
+            PblMatrix matrix = rotation * mGroupMatrix;
             RedGroupElement::SetMatrix(matrix);
             UpdateBackdropTexCoords();
         }
@@ -970,9 +968,7 @@ void HUD::ElementMap::UpdateNorthIcon(float)
         {
             fAngle = 0.0f;
         }
-        PblMatrix rotation;
-        D3DXMatrixMultiply((D3DXMATRIX*)&matrix, (const D3DXMATRIX*)&matrix,
-                           D3DXMatrixRotationZ((D3DXMATRIX*)&rotation, fAngle));
+        matrix.RotateZ(fAngle);
         mNorthIcon[mMode].SetMatrix(matrix);
     }
 }
@@ -1025,14 +1021,11 @@ void HUD::ElementMap::UpdatePlayerIcon()
         PblVector4{ 0.0f, 0.0f, -1.0f, 0.0f },
         PblVector4{ 0.0f, 1.0f, 0.0f, 0.0f },
         PblVector4{ 0.0f, 0.0f, 0.0f, 1.0f });
-    PblMatrix temp;
 
     const PblVector3& vViewScale = mPlayerFOV[mMode].HUD::Element::mMatrix.GetScale();
     PblMatrix matrix = mFlat;
-    D3DXMatrixMultiply((D3DXMATRIX*)&matrix, (const D3DXMATRIX*)&matrix,
-                       D3DXMatrixRotationZ((D3DXMATRIX*)&temp, fViewAngle - PblMath::fPi));
-    D3DXMatrixMultiply((D3DXMATRIX*)&matrix, (const D3DXMATRIX*)&matrix,
-                       D3DXMatrixScaling((D3DXMATRIX*)&temp, vViewScale.x, vViewScale.y, vViewScale.z));
+    matrix.RotateZ(fViewAngle - PblMath::fPi);
+    matrix.Scale(vViewScale.x, vViewScale.y, vViewScale.z);
     matrix.m[3][0] = fX;
     matrix.m[3][1] = fY;
     matrix.m[3][2] = 0.0f;
@@ -1044,10 +1037,8 @@ void HUD::ElementMap::UpdatePlayerIcon()
     {
         const PblVector3& vMoveScale = mDirection[mMode].HUD::Element::mMatrix.GetScale();
         matrix = mFlat;
-        D3DXMatrixMultiply((D3DXMATRIX*)&matrix, (const D3DXMATRIX*)&matrix,
-                           D3DXMatrixRotationZ((D3DXMATRIX*)&temp, fMoveAngle - PblMath::fPi));
-        D3DXMatrixMultiply((D3DXMATRIX*)&matrix, (const D3DXMATRIX*)&matrix,
-                           D3DXMatrixScaling((D3DXMATRIX*)&temp, vMoveScale.x, vMoveScale.y, vMoveScale.z));
+        matrix.RotateZ(fMoveAngle - PblMath::fPi);
+        matrix.Scale(vMoveScale.x, vMoveScale.y, vMoveScale.z);
         matrix.m[3][0] = fX;
         matrix.m[3][1] = fY;
         matrix.m[3][2] = 0.0f;
@@ -1675,11 +1666,9 @@ void HUD::ElementMap::SetMode(Mode eMode)
     if (mMode != mode_Small && mInitialized)
     {
         PblMatrix rotation;
-        D3DXMatrixRotationZ((D3DXMATRIX*)&rotation, 0.0f);
+        rotation.SetRotateZ(0.0f);
         rotation.SetTranslation(gVectorZero);
-        PblMatrix matrix;
-        D3DXMatrixMultiply((D3DXMATRIX*)&matrix, (const D3DXMATRIX*)&rotation,
-                           (const D3DXMATRIX*)&mGroupMatrix);
+        PblMatrix matrix = rotation * mGroupMatrix;
         RedGroupElement::SetMatrix(matrix);
     }
 
@@ -1923,9 +1912,9 @@ void HUD::ElementMap::WriteData(HUD::File& file, unsigned int uTabs)
 {
     for (unsigned int i = 0; i < mode_MAX; ++i)
     {
-        PblMatrix matrix(PblVector4{ 1.0f, 0.0f, 0.0f, 0.0f }, PblVector4{ 0.0f, 1.0f, 0.0f, 0.0f },
-                         PblVector4{ 0.0f, 0.0f, 1.0f, 0.0f },
-                         PblVector4{ mPosition[i].x, mPosition[i].y, mPosition[i].z, 1.0f });
+        PblMatrix matrix;
+        matrix.Reset();
+        matrix.SetTranslation(mPosition[i]);
         mMatrix[i].SetMatrix(&matrix);
         char buffer[256];
         _snprintf(buffer, sizeof(buffer), "Position%s", sModeStrings[i]);

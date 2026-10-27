@@ -97,8 +97,7 @@ void RedSkeleton::SetupPose(RedPose& pose) const
 unsigned int RedSkeleton::_PostProcess(const PblMatrix& mParent, unsigned int uiBone)
 {
     unsigned int uiCount = 1;
-    PblMatrix mWorld;
-    D3DXMatrixMultiply(reinterpret_cast<D3DXMATRIX*>(&mWorld), reinterpret_cast<const D3DXMATRIX*>(&m_amDefaultPose[uiBone]), reinterpret_cast<const D3DXMATRIX*>(&mParent));
+    PblMatrix mWorld = m_amDefaultPose[uiBone] * mParent;
     m_amDefaultPose[uiBone] = mWorld;
     m_amDefaultPoseInv[uiBone] = m_amDefaultPose[uiBone].GetInverseFast();
     for (int iChild = m_aConnections[uiBone].iChild; iChild >= 0;

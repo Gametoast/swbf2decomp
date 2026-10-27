@@ -70,17 +70,7 @@ namespace
 
 
 
-    PblMatrix MakeMatrix(const PblQuaternion& q, const PblVector3& v)
-    {
-        PblQuaternion qUnit;
-        PblMatrix m;
-        D3DXMatrixRotationQuaternion(reinterpret_cast<D3DXMATRIX*>(&m), D3DXQuaternionNormalize(reinterpret_cast<D3DXQUATERNION*>(&qUnit), reinterpret_cast<const D3DXQUATERNION*>(&q)));
-        m.m[3][0] = v.x;
-        m.m[3][1] = v.y;
-        m.m[3][2] = v.z;
-        m.m[3][3] = 1.0f;
-        return m;
-    }
+
 
     void PoseRemove(RedPose& pose, unsigned int uHash)
     {
@@ -356,7 +346,7 @@ Aimer::Aimer(AimerClass* pClass, const Controllable* pOwner, const PblMatrix* pP
 // FUNCTION: SWBF2 0x0043ce90
 const PblMatrix Aimer::GetMatrix() const
 {
-    PblMatrix mRot = MakeMatrix(mMountRot, mMountPos);
+    PblMatrix mRot = PblMatrix(mMountRot, mMountPos);
     PblMatrix mMount;
     D3DXMatrixMultiply(reinterpret_cast<D3DXMATRIX*>(&mMount), reinterpret_cast<const D3DXMATRIX*>(&mRot), reinterpret_cast<const D3DXMATRIX*>(mParentMatrix));
     return DirectionMatrix(mDirection, mMount[1], mMount[3]);
@@ -394,9 +384,9 @@ void Aimer::SetupPose(const PblMatrix& mParent, RedPose& pose, bool bRecurse) co
         const PblMatrix* pParentBone = pose.Find(mClass->mParentHash);
         if (pParentBone)
         {
-            PblMatrix mOffset = MakeMatrix(mClass->mOffsetRot, mOffsetPos);
+            PblMatrix mOffset = PblMatrix(mClass->mOffsetRot, mOffsetPos);
             PblMatrix mMount;
-            D3DXMatrixMultiply(reinterpret_cast<D3DXMATRIX*>(&mMount), reinterpret_cast<const D3DXMATRIX*>(&mOffset), reinterpret_cast<const D3DXMATRIX*>(pParentBone));
+            mMount = mOffset * *pParentBone;
             PblVector3 vDir;
             D3DXVec3TransformNormal(reinterpret_cast<D3DXVECTOR3*>(&vDir), reinterpret_cast<const D3DXVECTOR3*>(&mDirection), reinterpret_cast<const D3DXMATRIX*>(&mParent));
             mMountPoseMatrix = DirectionMatrix(vDir, mMount[1], mMount[3]);
@@ -609,7 +599,7 @@ bool Aimer::Update(float fDeltaTime)
         const PblMatrix* pParentBone = mPose->Find(mClass->mParentHash);
         if (pParentBone)
         {
-            PblMatrix mOffset = MakeMatrix(mClass->mOffsetRot, mOffsetPos);
+            PblMatrix mOffset = PblMatrix(mClass->mOffsetRot, mOffsetPos);
             PblMatrix mMount;
             D3DXMatrixMultiply(reinterpret_cast<D3DXMATRIX*>(&mMount), reinterpret_cast<const D3DXMATRIX*>(&mOffset), reinterpret_cast<const D3DXMATRIX*>(pParentBone));
             mMountPos = mMount[3];
@@ -617,7 +607,7 @@ bool Aimer::Update(float fDeltaTime)
         }
     }
 
-    PblMatrix mRot = MakeMatrix(mMountRot, mMountPos);
+    PblMatrix mRot = PblMatrix(mMountRot, mMountPos);
     PblMatrix mMount;
     D3DXMatrixMultiply(reinterpret_cast<D3DXMATRIX*>(&mMount), reinterpret_cast<const D3DXMATRIX*>(&mRot), reinterpret_cast<const D3DXMATRIX*>(mParentMatrix));
     mRootPos = mMount[3];

@@ -1228,7 +1228,7 @@ PblMatrix CommandPost::GetMatrixOnSpawnPath(bool bAlly) const
         D3DXMatrixRotationQuaternion(reinterpret_cast<D3DXMATRIX*>(&mSpawn), D3DXQuaternionNormalize(reinterpret_cast<D3DXQUATERNION*>(&qUnit), reinterpret_cast<const D3DXQUATERNION*>(&mClass->mSpawnRotation[uPoint])));
         mSpawn.SetTranslation(vPosition);
         PblMatrix mWorld;
-        D3DXMatrixMultiply(reinterpret_cast<D3DXMATRIX*>(&mWorld), reinterpret_cast<const D3DXMATRIX*>(&mSpawn), reinterpret_cast<const D3DXMATRIX*>(&mMatrix));
+        mWorld = mSpawn * mMatrix;
         mMatrix = mWorld;
 
         if (GetGameObject())

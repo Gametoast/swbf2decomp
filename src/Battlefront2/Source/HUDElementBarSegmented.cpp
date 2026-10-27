@@ -195,7 +195,7 @@ float HUD::ElementBarSegmented::SetValue(const float fValue)
             const float fX = fSin * fHalfWidth + fHalfWidth;
             const float fY = fHalfHeight - 0.75f / RedRenderer::GetScreenAspectRatio() * (fCos * fHalfHeight);
 
-            D3DXMatrixRotationZ((D3DXMATRIX*)&matrix, fAngle);
+            matrix.SetRotateZ(fAngle);
             matrix.m[3][0] = fX;
             matrix.m[3][1] = fY;
             matrix.m[3][2] = 0.0f;

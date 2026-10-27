@@ -309,8 +309,7 @@ void RedSpotLight::_RecalculateProjectionMatrix() const
 
     const PblMatrix mView = DirectionMatrix(m_vDirection, vUp, m_vPos);
     const PblMatrix mInvView = mView.GetInverseFast();
-    PblMatrix mResult;
-    D3DXMatrixMultiply(reinterpret_cast<D3DXMATRIX*>(&mResult), reinterpret_cast<const D3DXMATRIX*>(&mInvView), reinterpret_cast<const D3DXMATRIX*>(&mProj));
+    PblMatrix mResult = mInvView * mProj;
     m_mProjection = mResult;
     m_bProjectionDirty = false;
 }

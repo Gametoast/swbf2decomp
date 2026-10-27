@@ -372,7 +372,7 @@ bool EntityBuildingAnimated::Update(float fDeltaTime)
                 PblMatrix mEffect;
                 GetModel()->GetRedModel(0)->GetBoneMatrix(mAnimatedClass->mDeathEffectNodeHash[i], mEffect);
                 PblMatrix mWorld;
-                D3DXMatrixMultiply((D3DXMATRIX*)&mWorld, (const D3DXMATRIX*)&mMatrix, (const D3DXMATRIX*)&mEffect);
+                mWorld = mMatrix * mEffect;
                 mEffect = mWorld;
                 if (CameraManager::sInstance->IsInsideAnyCamera(mEffect.GetTranslation(), 60.0f, 70.0f))
                 {

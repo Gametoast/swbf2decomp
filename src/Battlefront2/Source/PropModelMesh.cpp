@@ -800,8 +800,7 @@ void PropModelMesh::SetupMatrix(PblMatrix& matrix, float rotation)
 
         const PblMatrix frame = NormalMatrix(vDir, vNormal, vPos);
         PblMatrix result;
-        D3DXMatrixMultiply((D3DXMATRIX*)&result, (const D3DXMATRIX*)&scale,
-                           (const D3DXMATRIX*)&frame);
+        result = scale * frame;
         matrix = result;
         return;
     }

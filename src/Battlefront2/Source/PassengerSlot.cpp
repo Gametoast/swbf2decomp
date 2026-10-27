@@ -165,7 +165,7 @@ PassengerSlot::PassengerSlot(GameObject* pParent, PassengerSlotClass* pClass, Re
     : EntityEx(0, pClass), Controllable(pClass ? static_cast<ControllableClass*>(pClass) : 0, -1),
       mPowerupTimer(0.0f), mParent(pParent), mClass(pClass)
 {
-    D3DXMatrixMultiply(reinterpret_cast<D3DXMATRIX*>(&mAimMatrix), reinterpret_cast<const D3DXMATRIX*>(&mClass->mMountMatrix), reinterpret_cast<const D3DXMATRIX*>(&mParent->GetMatrix()));
+    mAimMatrix = mClass->mMountMatrix * mParent->GetMatrix();
     mEyePoint = mClass->mCameraSettings.CalcEyePoint(mAimMatrix);
     mEyeDir = mAimMatrix.GetZAxis();
 }
@@ -294,7 +294,7 @@ bool PassengerSlot::Update(float fDeltaTime)
         }
     }
 
-    D3DXMatrixMultiply(reinterpret_cast<D3DXMATRIX*>(&mAimMatrix), reinterpret_cast<const D3DXMATRIX*>(&mClass->mMountMatrix), reinterpret_cast<const D3DXMATRIX*>(&mParent->GetMatrix()));
+    mAimMatrix = mClass->mMountMatrix * mParent->GetMatrix();
     mEyePoint = mClass->mCameraSettings.CalcEyePoint(mAimMatrix);
     mEyeDir = mAimMatrix.GetZAxis();
     mPowerupTimer += fDeltaTime;

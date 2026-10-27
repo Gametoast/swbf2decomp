@@ -65,41 +65,6 @@ CollisionObject* FlagCollision(FlagItem* pItem)
     return static_cast<CollisionObject*>(pItem);
 }
 
-RedSceneObject* FlagScene(FlagItem* pItem)
-{
-    return static_cast<RedSceneObject*>(pItem);
-}
-
-void SetFlagTransform(FlagItem* pItem, const PblVector3& pos)
-{
-    D3DXQUATERNION normalized;
-    PblMatrix matrix;
-    D3DXQuaternionNormalize(&normalized,
-        reinterpret_cast<const D3DXQUATERNION*>(&pItem->mStartRotation));
-    D3DXMatrixRotationQuaternion(reinterpret_cast<D3DXMATRIX*>(&matrix), &normalized);
-    memcpy(&matrix.m[3][0], &pos, sizeof(pos));
-    matrix.m[3][3] = 1.0f;
-    FlagCollision(pItem)->SetMatrix(matrix);
-}
-
-void RestoreFlagModel(FlagItem* pItem)
-{
-    GameModel* pModel = pItem->mDroppedModel;
-    GameModel* pLanding = pItem->mDroppedInLandingZoneModel;
-    if (pLanding && pItem->IsInLandingZone())
-    {
-        reinterpret_cast<EntityGeometry*>(pItem)->SetModel(pLanding);
-    }
-    else if (pModel)
-    {
-        reinterpret_cast<EntityGeometry*>(pItem)->SetModel(pModel);
-    }
-    else
-    {
-        FlagScene(pItem)->Activate();
-        pItem->SetupCollisionGeometry();
-    }
-}
 }
 
 // FUNCTION: SWBF2 0x00523fd0
@@ -138,10 +103,8 @@ bool FlagItem::Drop()
     Character* pCarrier = reinterpret_cast<EntityItem*>(pItem)->mOwner;
     if (pCarrier && pCarrier->mUnit)
     {
-        const PblMatrix& carrierMatrix = pCarrier->mUnit->GetMatrix();
-        const PblVector3& vPos = carrierMatrix.GetTranslation();
-        PblVector3 dropPos(vPos.x, vPos.y + 1.0f, vPos.z);
-        SetFlagTransform(pItem, dropPos);
+        static_cast<CollisionObject*>(pItem)->SetMatrix(PblMatrix(pItem->mStartRotation,
+            pCarrier->mUnit->GetMatrix().GetTranslation() + PblVector3(0.0f, 1.0f, 0.0f)));
         reinterpret_cast<EntityItem*>(pItem)->mVelocity = PblVector3(0.0f, 0.0f, 0.0f);
     }
 
@@ -149,7 +112,19 @@ bool FlagItem::Drop()
     pItem->ClearCarrierFlagItem();
     reinterpret_cast<EntityItem*>(pItem)->mOwner = 0;
     reinterpret_cast<EntityItem*>(pItem)->mStationary = false;
-    RestoreFlagModel(pItem);
+    if (pItem->mDroppedInLandingZoneModel && pItem->IsInLandingZone())
+    {
+        reinterpret_cast<EntityGeometry*>(pItem)->SetModel(pItem->mDroppedInLandingZoneModel);
+    }
+    else if (pItem->mDroppedModel)
+    {
+        reinterpret_cast<EntityGeometry*>(pItem)->SetModel(pItem->mDroppedModel);
+    }
+    else
+    {
+        static_cast<RedSceneObject*>(pItem)->Activate();
+        pItem->SetupCollisionGeometry();
+    }
 
     if (reinterpret_cast<EntityItem*>(pItem)->m_pLight)
     {
@@ -175,10 +150,9 @@ bool FlagItem::Drop()
 void FlagItem::ResetFlag()
 {
     FlagItem* pItem = this;
-    const PblVector3& startPos = pItem->mStartPosition;
-    SetFlagTransform(pItem, startPos);
-    PblVector3& pos = pItem->mLastPosition;
-    pos = startPos;
+    static_cast<CollisionObject*>(pItem)->SetMatrix(PblMatrix(pItem->mStartRotation,
+        pItem->mStartPosition));
+    pItem->mLastPosition = pItem->mStartPosition;
 
     if (!NetGame::IsEnabled() || !netEnabledNext || !netClientActive)
     {
@@ -192,7 +166,19 @@ void FlagItem::ResetFlag()
     pItem->ClearCarrierFlagItem();
     reinterpret_cast<EntityItem*>(pItem)->mOwner = 0;
     reinterpret_cast<EntityItem*>(pItem)->mStationary = false;
-    RestoreFlagModel(pItem);
+    if (pItem->mDroppedInLandingZoneModel && pItem->IsInLandingZone())
+    {
+        reinterpret_cast<EntityGeometry*>(pItem)->SetModel(pItem->mDroppedInLandingZoneModel);
+    }
+    else if (pItem->mDroppedModel)
+    {
+        reinterpret_cast<EntityGeometry*>(pItem)->SetModel(pItem->mDroppedModel);
+    }
+    else
+    {
+        static_cast<RedSceneObject*>(pItem)->Activate();
+        pItem->SetupCollisionGeometry();
+    }
     reinterpret_cast<EntityGeometry*>(pItem)->SetVelocity(gVectorZero);
     if (reinterpret_cast<EntityItem*>(pItem)->m_pLight)
     {

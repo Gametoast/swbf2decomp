@@ -697,8 +697,8 @@ void EntityHologram::Render(unsigned char ucViewport, float fDist, unsigned int 
 
     PblMatrix mModel(gMatrixIdentity);
     PblMatrix mTemp;
-    D3DXMatrixMultiply(reinterpret_cast<D3DXMATRIX*>(&mModel), reinterpret_cast<const D3DXMATRIX*>(&mModel), D3DXMatrixRotationX(reinterpret_cast<D3DXMATRIX*>(&mTemp), m_fTilt));
-    D3DXMatrixMultiply(reinterpret_cast<D3DXMATRIX*>(&mModel), reinterpret_cast<const D3DXMATRIX*>(&mModel), D3DXMatrixRotationY(reinterpret_cast<D3DXMATRIX*>(&mTemp), pClass->m_fRotateRate * m_fRotateTimer));
+    mModel.RotateX(m_fTilt);
+    mModel.RotateY(pClass->m_fRotateRate * m_fRotateTimer);
 
     float fScaleXZ = m_fAspect * fSize;
     float fScaleY = fSize * fInvAspect;

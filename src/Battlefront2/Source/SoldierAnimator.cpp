@@ -1120,7 +1120,7 @@ inline PblMatrix& RotateJointWorldMatrix(ZephyrSkeleton<32>& kSkel, int iJoint, 
     PblVector3 vOrigin;
     if (pParent)
     {
-        const ZephyrTransform& kBase = *(const ZephyrTransform*)kSkel.m_pShared->m_pJoints[iJoint].m_kBaseTransform;
+        const ZephyrTransform& kBase = kSkel.m_pShared->m_pJoints[iJoint].m_kBaseTransform;
         D3DXVec3TransformCoord(reinterpret_cast<D3DXVECTOR3*>(&vOrigin), reinterpret_cast<const D3DXVECTOR3*>(&kBase.kTrans), reinterpret_cast<const D3DXMATRIX*>(pParent));
     }
     else

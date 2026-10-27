@@ -309,20 +309,14 @@ void RedStencilShadow::Render(const PblMatrix* pMatrix,
                 {
                     if (!ppBoneMatrices[uBone])
                     {
-                        PblMatrix bone;
-                        D3DXMatrixMultiply((D3DXMATRIX*)&bone,
-                                           (const D3DXMATRIX*)&pPose->_GetBoneMatrix(uBone),
-                                           (const D3DXMATRIX*)pMatrix);
+                        PblMatrix bone = pPose->_GetBoneMatrix(uBone) * *pMatrix;
                         ppBoneMatrices[uBone] = RedRenderer::AllocMatrixInCache(bone);
                     }
                     pWorld = ppBoneMatrices[uBone];
                 }
                 else
                 {
-                    PblMatrix bone;
-                    D3DXMatrixMultiply((D3DXMATRIX*)&bone,
-                                       (const D3DXMATRIX*)&pPose->_GetBoneMatrix(uBone),
-                                       (const D3DXMATRIX*)pMatrix);
+                    PblMatrix bone = pPose->_GetBoneMatrix(uBone) * *pMatrix;
                     pWorld = RedRenderer::AllocMatrixInCache(bone);
                 }
             }

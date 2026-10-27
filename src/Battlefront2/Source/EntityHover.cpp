@@ -1999,9 +1999,8 @@ void EntityHover::Move(float fDeltaTime, float fThrust, float fStrafe, float fTu
     float fHeight = 0.0f;
 
     PblMatrix mUnbank;
-    PblMatrix mUnpitch;
-    D3DXMatrixRotationZ(reinterpret_cast<D3DXMATRIX*>(&mUnbank), -mBankRollAngle);
-    D3DXMatrixMultiply(reinterpret_cast<D3DXMATRIX*>(&mUnbank), reinterpret_cast<const D3DXMATRIX*>(&mUnbank), D3DXMatrixRotationX(reinterpret_cast<D3DXMATRIX*>(&mUnpitch), -mBankPitchAngle));
+    mUnbank.SetRotateZ(-mBankRollAngle);
+    mUnbank.RotateX(-mBankPitchAngle);
     PblMatrix mBody;
     D3DXMatrixMultiply(reinterpret_cast<D3DXMATRIX*>(&mBody), reinterpret_cast<const D3DXMATRIX*>(&mUnbank), reinterpret_cast<const D3DXMATRIX*>(&mMatrix));
 
@@ -2402,8 +2401,8 @@ void EntityHover::Move(float fDeltaTime, float fThrust, float fStrafe, float fTu
     mNew.m[3][3] = 1.0f;
     PblMatrix mBank;
     PblMatrix mBankRoll;
-    D3DXMatrixRotationX(reinterpret_cast<D3DXMATRIX*>(&mBank), mBankPitchAngle);
-    D3DXMatrixMultiply(reinterpret_cast<D3DXMATRIX*>(&mBank), reinterpret_cast<const D3DXMATRIX*>(&mBank), D3DXMatrixRotationZ(reinterpret_cast<D3DXMATRIX*>(&mBankRoll), mBankRollAngle));
+    mBank.SetRotateX(mBankPitchAngle);
+    mBank.RotateZ(mBankRollAngle);
     D3DXMatrixMultiply(reinterpret_cast<D3DXMATRIX*>(&mBankRoll), reinterpret_cast<const D3DXMATRIX*>(&mBank), reinterpret_cast<const D3DXMATRIX*>(&mNew));
     SetMatrix(mBankRoll);
 
@@ -3613,9 +3612,8 @@ void EntityHover::SetupCameraTrackMatrix(PblMatrix& rMatrix, float fDeltaTime)
         }
         mTarget.m[3][3] = 1.0f;
         PblMatrix mUnbank;
-        PblMatrix mUnpitch;
-        D3DXMatrixRotationZ(reinterpret_cast<D3DXMATRIX*>(&mUnbank), -mBankRollAngle);
-        D3DXMatrixMultiply(reinterpret_cast<D3DXMATRIX*>(&mUnbank), reinterpret_cast<const D3DXMATRIX*>(&mUnbank), D3DXMatrixRotationX(reinterpret_cast<D3DXMATRIX*>(&mUnpitch), -mBankPitchAngle));
+        mUnbank.SetRotateZ(-mBankRollAngle);
+        mUnbank.RotateX(-mBankPitchAngle);
         PblMatrix mBody;
         D3DXMatrixMultiply(reinterpret_cast<D3DXMATRIX*>(&mBody), reinterpret_cast<const D3DXMATRIX*>(&mUnbank), reinterpret_cast<const D3DXMATRIX*>(&mTarget));
         mClass->mCameraSettings.SetupCameraTrackMatrix(static_cast<Trackable*>(this), rMatrix, fDeltaTime,

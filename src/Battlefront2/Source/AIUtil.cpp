@@ -417,10 +417,7 @@ int AIUtil::GetRandomIntPerSecond(int iMin, int iMax)
 // FUNCTION: SWBF2 0x0043f300
 PblVector3 AIUtil::UnrotateVector(const PblMatrix& rMatrix, const PblVector3& vDir)
 {
-    PblVector3 vResult;
-    const PblMatrix mInverse = rMatrix.GetInverseFast();
-    D3DXVec3TransformNormal(reinterpret_cast<D3DXVECTOR3*>(&vResult), reinterpret_cast<const D3DXVECTOR3*>(&vDir), reinterpret_cast<const D3DXMATRIX*>(&mInverse));
-    return vResult;
+    return rMatrix.GetInverseFast().ApplyRotation(vDir);
 }
 
 // FUNCTION: SWBF2 0x0043f340
@@ -1824,15 +1821,7 @@ PblVector3 AIUtil::DumbDown(const GameObject* pObject, float fDeltaTime, Aimer* 
                              vDir.x * vAim.y - vDir.y * vAim.x);
         const PblVector3 vRight(vDir.y * vUp.z - vDir.z * vUp.y, vDir.z * vUp.x - vDir.x * vUp.z,
                                 vDir.x * vUp.y - vDir.y * vUp.x);
-        PblMatrix mAim;
-        mAim[0] = vRight;
-        mAim.m[0][3] = 0.0f;
-        mAim[1] = vUp;
-        mAim.m[1][3] = 0.0f;
-        mAim[2] = vDir;
-        mAim.m[2][3] = 0.0f;
-        mAim[3] = gVectorZero;
-        mAim.m[3][3] = 1.0f;
+        PblMatrix mAim(vRight, vUp, vDir, gVectorZero);
         PblMatrix mRotate;
         D3DXMatrixMultiply(reinterpret_cast<D3DXMATRIX*>(&mAim), reinterpret_cast<const D3DXMATRIX*>(&mAim), D3DXMatrixRotationY(reinterpret_cast<D3DXMATRIX*>(&mRotate), vUp.y > 0.0f ? 0.523598790f
                                                                                   : -0.523598790f));

@@ -64,14 +64,13 @@ bool OrbitalStrike::Update(float fDeltaTime)
 
         while (mSalvoDelay <= 0.0f)
         {
-            D3DXMATRIXA16 aim;
-            D3DXMATRIXA16 yaw;
-            D3DXMatrixRotationX(&aim, -mClass->mAimElevation);
-            D3DXMatrixMultiply(&aim, &aim, D3DXMatrixRotationY(&yaw, mClass->mAimAzimuth));
-            aim._41 = mPosition.x;
-            aim._42 = mPosition.y;
-            aim._43 = mPosition.z;
-            aim._44 = 1.0f;
+            PblMatrix aim;
+            aim.SetRotateX(-mClass->mAimElevation);
+            aim.RotateY(mClass->mAimAzimuth);
+            aim.m[3][0] = mPosition.x;
+            aim.m[3][1] = mPosition.y;
+            aim.m[3][2] = mPosition.z;
+            aim.m[3][3] = 1.0f;
 
             OrdnanceDesc desc;
             PblRandom& rand = PblRandom::GetSim();
@@ -79,9 +78,9 @@ bool OrbitalStrike::Update(float fDeltaTime)
                                      (rand.GetFloat() - rand.GetFloat()) * mClass->mScatterDistance,
                                      mClass->mAimDistance);
             D3DXVECTOR3 pos;
-            D3DXVec3TransformCoord(&pos, &offset, &aim);
+            D3DXVec3TransformCoord(&pos, &offset, reinterpret_cast<const D3DXMATRIX*>(&aim));
             desc.mPosition = PblVector3(pos.x, pos.y, pos.z);
-            desc.mDirection = PblVector3(-aim._31, -aim._32, -aim._33);
+            desc.mDirection = PblVector3(-aim.m[2][0], -aim.m[2][1], -aim.m[2][2]);
             desc.mDamageOwner = mDamageOwner;
 
             if (NetGame::IsEnabled() && !NetGame::IsClient())

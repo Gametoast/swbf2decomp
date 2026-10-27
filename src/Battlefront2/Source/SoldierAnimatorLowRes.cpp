@@ -913,15 +913,7 @@ bool SoldierAnimatorLowRes::GetRootMatrixAnimation(const EntitySoldier& soldier,
         PblVector3 vFront(fRight * fInvSpeed, 0.0f, fFront * fInvSpeed);
         PblVector3 vRight(vFront.z, 0.0f, -vFront.x);
 
-        PblMatrix kRoot;
-        kRoot[0] = vRight;
-        kRoot.m[0][3] = 0.0f;
-        kRoot[1] = gVectorUnitY;
-        kRoot.m[1][3] = 0.0f;
-        kRoot[2] = vFront;
-        kRoot.m[2][3] = 0.0f;
-        kRoot[3] = gVectorZero;
-        kRoot.m[3][3] = 1.0f;
+        PblMatrix kRoot(vRight, gVectorUnitY, vFront, gVectorZero);
         kMatrix = kRoot;
         return true;
     }
@@ -937,7 +929,7 @@ bool SoldierAnimatorLowRes::GetRootMatrixAnimation(const EntitySoldier& soldier,
                             vVelocity.x * kSoldier.m[2][0] + vVelocity.y * kSoldier.m[2][1] +
                                 vVelocity.z * kSoldier.m[2][2]);
 
-        D3DXMatrixRotationX(reinterpret_cast<D3DXMATRIX*>(&kMatrix), soldier.mStateTimer * 8.0f + 1.0f);
+        kMatrix.SetRotateX(soldier.mStateTimer * 8.0f + 1.0f);
         PblVector3 vCenter;
         D3DXVec3TransformNormal(reinterpret_cast<D3DXVECTOR3*>(&vCenter), reinterpret_cast<const D3DXVECTOR3*>(&s_vRollCenter), reinterpret_cast<const D3DXMATRIX*>(&kMatrix));
         kMatrix.m[3][0] = s_vRollCenter.x - vCenter.x;
@@ -945,8 +937,7 @@ bool SoldierAnimatorLowRes::GetRootMatrixAnimation(const EntitySoldier& soldier,
         kMatrix.m[3][2] = s_vRollCenter.z - vCenter.z;
         kMatrix.m[3][3] = 1.0f;
 
-        PblMatrix kYaw;
-        D3DXMatrixMultiply(reinterpret_cast<D3DXMATRIX*>(&kMatrix), reinterpret_cast<const D3DXMATRIX*>(&kMatrix), D3DXMatrixRotationY(reinterpret_cast<D3DXMATRIX*>(&kYaw), fYaw));
+        kMatrix.RotateY(fYaw);
         return true;
     }
 
@@ -1106,15 +1097,7 @@ bool SoldierAnimatorLowRes_Pool::GetRootMatrixAnimation(const EntitySoldier& sol
     PblVector3 vFront(fSin, 0.0f, fCos);
     PblVector3 vRight(fCos, 0.0f, -fSin);
 
-    PblMatrix kRoot;
-    kRoot[0] = vRight;
-    kRoot.m[0][3] = 0.0f;
-    kRoot[1] = gVectorUnitY;
-    kRoot.m[1][3] = 0.0f;
-    kRoot[2] = vFront;
-    kRoot.m[2][3] = 0.0f;
-    kRoot[3] = gVectorZero;
-    kRoot.m[3][3] = 1.0f;
+    PblMatrix kRoot(vRight, gVectorUnitY, vFront, gVectorZero);
     kMatrix = kRoot;
     return true;
 }

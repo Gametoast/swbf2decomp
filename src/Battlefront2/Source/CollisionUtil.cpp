@@ -543,7 +543,7 @@ bool CollisionUtil::CollideBoxes(const PblVector3& vVelocityA, const PblMatrix& 
 
     PblMatrix mInvA = mA.GetInverseFast();
     PblMatrix mRel;
-    D3DXMatrixMultiply((D3DXMATRIX*)&mRel, (const D3DXMATRIX*)&mB, (const D3DXMATRIX*)&mInvA);
+    mRel = mB * mInvA;
 
     PblVector3 vRelVel(vVelocityB.x - vVelocityA.x, vVelocityB.y - vVelocityA.y, vVelocityB.z - vVelocityA.z);
     PblVector3 vRelDir;

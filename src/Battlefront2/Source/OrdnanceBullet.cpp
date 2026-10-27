@@ -681,7 +681,7 @@ bool OrdnanceBullet::Collide(CollisionObject* pObject, const PblVector3& vPos, c
                     }
                     const PblMatrix mInverse = pVictim->GetMatrix().GetInverseFast();
                     PblMatrix mOffset;
-                    D3DXMatrixMultiply(reinterpret_cast<D3DXMATRIX*>(&mOffset), reinterpret_cast<const D3DXMATRIX*>(&mWorld), reinterpret_cast<const D3DXMATRIX*>(&mInverse));
+                    mOffset = mWorld * mInverse;
                     pEffect->AttachEffectToObject(pVictim, mOffset, true);
                 }
                 else if (bShield)

@@ -191,8 +191,7 @@ void EntityRemoteTerminal::Render(unsigned char ucViewport, float fDist, unsigne
     {
         return;
     }
-    PblMatrix mWorld;
-    D3DXMatrixMultiply((D3DXMATRIX*)&mWorld, (const D3DXMATRIX*)GetRenderMatrix(), (const D3DXMATRIX*)&mReflection);
+    PblMatrix mWorld = *GetRenderMatrix() * mReflection;
     mModel->Render(ucViewport, fDist, &mWorld, GetRenderPose(), color,
                    (uiFlags & ~0x10000) | 0x10000100, 0);
 }

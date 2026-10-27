@@ -1192,7 +1192,7 @@ void EntityGeometry::CreateChunkCluster(float fScale)
             if (const PblMatrix* pAttach = pPose->Find(pClass->mChunkAttachPoints[i]))
             {
                 PblMatrix mAttached;
-                D3DXMatrixMultiply((D3DXMATRIX*)&mAttached, (const D3DXMATRIX*)pAttach, (const D3DXMATRIX*)&mMatrix);
+                mAttached = *pAttach * mMatrix;
                 pDesc->mMatrix = mAttached;
             }
         }
@@ -1239,7 +1239,7 @@ void EntityGeometry::CreateChunkCluster(float fScale)
             if (const PblMatrix* pAttach = pPose->Find(pClass->mChunkAttachPoints[i]))
             {
                 PblMatrix mAttached;
-                D3DXMatrixMultiply((D3DXMATRIX*)&mAttached, (const D3DXMATRIX*)pAttach, (const D3DXMATRIX*)&mMatrix);
+                mAttached = *pAttach * mMatrix;
                 pDesc->mMatrix = mAttached;
             }
         }

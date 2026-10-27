@@ -278,7 +278,7 @@ void ParticleGeometry::Render(Particle& particle, bool bLast) const
         mLocal.m[3][2] = 0.0f;
         mLocal.m[3][3] = 1.0f;
         PblMatrix mWorld;
-        D3DXMatrixMultiply(reinterpret_cast<D3DXMATRIX*>(&mWorld), reinterpret_cast<const D3DXMATRIX*>(&mLocal), reinterpret_cast<const D3DXMATRIX*>(&particle.mInfoData->mMatrix));
+        mWorld = mLocal * particle.mInfoData->mMatrix;
         mWorld.m[3][0] = vPos.x;
         mWorld.m[3][1] = vPos.y;
         mWorld.m[3][2] = vPos.z;

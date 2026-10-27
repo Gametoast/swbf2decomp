@@ -2206,7 +2206,7 @@ void EntityFlyer::Render(unsigned char renderMode, float lod, unsigned int flags
     if (!(flags & 0x200000) && FLRenderer::IsReflected(GetRenderPos(), _Sphere.w, mReflection, false))
     {
         PblMatrix mat;
-        D3DXMatrixMultiply(reinterpret_cast<D3DXMATRIX*>(&mat), reinterpret_cast<const D3DXMATRIX*>(&mWorld), reinterpret_cast<const D3DXMATRIX*>(&mReflection));
+        mat = mWorld * mReflection;
         mReflection = mat;
         mModel->Render(renderMode, lod, &mReflection, &mPose, RedColor::WHITE,
                        (flags & ~0x10000) | 0x10000100, 0);
@@ -2923,9 +2923,8 @@ bool EntityFlyer::PostCollisionUpdate(float fDeltaTime)
     }
 
     PblMatrix mUnbank;
-    PblMatrix mUnpitch;
-    D3DXMatrixRotationZ(reinterpret_cast<D3DXMATRIX*>(&mUnbank), -mBankRollAngle);
-    D3DXMatrixMultiply(reinterpret_cast<D3DXMATRIX*>(&mUnbank), reinterpret_cast<const D3DXMATRIX*>(&mUnbank), D3DXMatrixRotationX(reinterpret_cast<D3DXMATRIX*>(&mUnpitch), -mBankPitchAngle));
+    mUnbank.SetRotateZ(-mBankRollAngle);
+    mUnbank.RotateX(-mBankPitchAngle);
     PblMatrix mBody;
     D3DXMatrixMultiply(reinterpret_cast<D3DXMATRIX*>(&mBody), reinterpret_cast<const D3DXMATRIX*>(&mUnbank), reinterpret_cast<const D3DXMATRIX*>(&mMatrix));
     mEyeDir = mBody.GetZAxis();
@@ -2953,13 +2952,7 @@ bool EntityFlyer::PostCollisionUpdate(float fDeltaTime)
             qTilt._fS = fCos;
             PblQuaternion qCamera = qLook * qTilt;
 
-            PblQuaternion qUnit;
-            PblMatrix mCamera;
-            D3DXMatrixRotationQuaternion(reinterpret_cast<D3DXMATRIX*>(&mCamera), D3DXQuaternionNormalize(reinterpret_cast<D3DXQUATERNION*>(&qUnit), reinterpret_cast<const D3DXQUATERNION*>(&qCamera)));
-            mCamera.m[3][0] = gVectorZero.x;
-            mCamera.m[3][1] = gVectorZero.y;
-            mCamera.m[3][2] = gVectorZero.z;
-            mCamera.m[3][3] = 1.0f;
+            PblMatrix mCamera(qCamera, gVectorZero);
 
             mTargetInfo.mAimStart = mClass->mCameraSettings.CalcCameraPoint(mMatrix, mCamera);
             float fAlong = mEyeDir.y * (mEyePoint.y - mTargetInfo.mAimStart.y) +
@@ -3667,10 +3660,9 @@ bool EntityFlyer::Update(float fDeltaTime)
     {
         EntityPathFollower::Reset(mClass);
         PblMatrix mUnbank;
-        PblMatrix mUnpitch;
-        D3DXMatrixRotationZ(reinterpret_cast<D3DXMATRIX*>(&mUnbank), -mBankRollAngle);
-        D3DXMatrixMultiply(reinterpret_cast<D3DXMATRIX*>(&mUnbank), reinterpret_cast<const D3DXMATRIX*>(&mUnbank), D3DXMatrixRotationX(reinterpret_cast<D3DXMATRIX*>(&mUnpitch), -mBankPitchAngle));
-        D3DXMatrixMultiply(reinterpret_cast<D3DXMATRIX*>(&matrix), reinterpret_cast<const D3DXMATRIX*>(&mUnbank), reinterpret_cast<const D3DXMATRIX*>(&mMatrix));
+        mUnbank.SetRotateZ(-mBankRollAngle);
+        mUnbank.RotateX(-mBankPitchAngle);
+        matrix = mUnbank * mMatrix;
         RollUpdate(fDeltaTime);
         FlipUpdate(fDeltaTime, matrix);
         SideRollUpdate(fDeltaTime);
@@ -4186,8 +4178,8 @@ bool EntityFlyer::Update(float fDeltaTime)
         {
             PblMatrix mRoll;
             PblMatrix mRolled;
-            D3DXMatrixRotationZ(reinterpret_cast<D3DXMATRIX*>(&mRoll), mClass->mRollRate * mWorldRoll * fDeltaTime);
-            D3DXMatrixMultiply(reinterpret_cast<D3DXMATRIX*>(&mRolled), reinterpret_cast<const D3DXMATRIX*>(&mRoll), reinterpret_cast<const D3DXMATRIX*>(&matrix));
+            mRoll.SetRotateZ(mClass->mRollRate * mWorldRoll * fDeltaTime);
+            mRolled = mRoll * matrix;
             matrix = mRolled;
             if (fRoll != 0.0f)
             {
@@ -4557,10 +4549,9 @@ bool EntityFlyer::Update(float fDeltaTime)
         mFrame.SetTranslation(vPos);
         matrix = mFrame;
         PblMatrix mBank;
-        PblMatrix mBankRoll;
-        D3DXMatrixRotationX(reinterpret_cast<D3DXMATRIX*>(&mBank), mBankPitchAngle);
-        D3DXMatrixMultiply(reinterpret_cast<D3DXMATRIX*>(&mBank), reinterpret_cast<const D3DXMATRIX*>(&mBank), D3DXMatrixRotationZ(reinterpret_cast<D3DXMATRIX*>(&mBankRoll), mBankRollAngle));
-        D3DXMatrixMultiply(reinterpret_cast<D3DXMATRIX*>(&mFrame), reinterpret_cast<const D3DXMATRIX*>(&mBank), reinterpret_cast<const D3DXMATRIX*>(&matrix));
+        mBank.SetRotateX(mBankPitchAngle);
+        mBank.RotateZ(mBankRollAngle);
+        mFrame = mBank * matrix;
         SetMatrix(mFrame);
     }
 

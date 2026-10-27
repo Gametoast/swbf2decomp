@@ -142,12 +142,8 @@ void DroidekaElement::RenderUsingContext(const PblMatrix& mContext, const RedCol
 
     PblMatrix mWorld(mRotation, mTranslation);
 
-    PblMatrix mScaling;
-    D3DXMatrixMultiply((D3DXMATRIX*)&mWorld, (const D3DXMATRIX*)&mWorld,
-                       D3DXMatrixScaling((D3DXMATRIX*)&mScaling, mScale, mScale, mScale));
-    D3DXMatrixMultiply((D3DXMATRIX*)&mScaling, (const D3DXMATRIX*)&mWorld,
-                       (const D3DXMATRIX*)&mScreen);
-    mScreen = mScaling;
+    mWorld.Scale(mScale);
+    mScreen = mWorld * mScreen;
 
     BuildWorldMatrices();
     mModel->GetRedModel(0)->Render(&mScreen, &mPose, color, 0x4000000, 0);

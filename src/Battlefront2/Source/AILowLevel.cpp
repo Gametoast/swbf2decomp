@@ -1162,14 +1162,7 @@ bool AILowLevel::CalcHeadLookMatrix(const PblMatrix* pHead, PblMatrix* pOut)
                             vZ.x * vY.z - vZ.z * vY.x,
                             vZ.y * vY.x - vY.y * vZ.x);
 
-        const PblVector3* pRows[4] = { &vX, &vY, &vZ, (const PblVector3*)&mHead.m[3][0] };
-        for (int r = 0; r < 4; ++r)
-        {
-            pOut->m[r][0] = pRows[r]->x;
-            pOut->m[r][1] = pRows[r]->y;
-            pOut->m[r][2] = pRows[r]->z;
-            pOut->m[r][3] = r == 3 ? 1.0f : 0.0f;
-        }
+        *pOut = PblMatrix(vX, vY, vZ, mHead.GetTranslation());
         const PblMatrix mInv = GetMatrix().GetInverseFast();
         D3DXMatrixMultiply(reinterpret_cast<D3DXMATRIX*>(pOut), reinterpret_cast<const D3DXMATRIX*>(pOut), reinterpret_cast<const D3DXMATRIX*>(&mInv));
         return true;

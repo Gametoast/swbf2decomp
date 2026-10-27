@@ -273,12 +273,10 @@ void pcRefractionShader::Begin_Prog1(unsigned int uiState, unsigned int) const
 
         PblMatrix mTmp;
         PblMatrix mRot = _IdentityMatrix;
-        D3DXMatrixMultiply(reinterpret_cast<D3DXMATRIX*>(&mRot), reinterpret_cast<const D3DXMATRIX*>(&mRot), D3DXMatrixRotationZ(reinterpret_cast<D3DXMATRIX*>(&mTmp), fAngle));
+        mRot.RotateZ(fAngle);
         PblMatrix mScale = _IdentityMatrix;
-        D3DXMatrixMultiply(reinterpret_cast<D3DXMATRIX*>(&mScale), reinterpret_cast<const D3DXMATRIX*>(&mScale),
-                           D3DXMatrixScaling(reinterpret_cast<D3DXMATRIX*>(&mTmp), m_distortionScale, m_distortionScale,
-                                             m_distortionScale));
-        D3DXMatrixMultiply(reinterpret_cast<D3DXMATRIX*>(&mTmp), reinterpret_cast<const D3DXMATRIX*>(&mScale), reinterpret_cast<const D3DXMATRIX*>(&mRot));
+        mScale.Scale(m_distortionScale, m_distortionScale, m_distortionScale);
+        mTmp = mScale * mRot;
         s_bumpMat = mTmp;
 
         RedRenderer::pcSetTextureStageState(1, D3DTSS_TEXTURETRANSFORMFLAGS, D3DTTFF_PROJECTED);
@@ -300,11 +298,8 @@ void pcRefractionShader::Begin_Prog1(unsigned int uiState, unsigned int) const
             PblVector4{ 0.5f, 0.5f, 0.5f, 1.0f });
 
         const RedCamera* pCamera = RedRenderer::GetCamera();
-        PblMatrix mViewProj;
-        D3DXMatrixMultiply(reinterpret_cast<D3DXMATRIX*>(&mViewProj), reinterpret_cast<const D3DXMATRIX*>(&pCamera->GetMatrixInverse()),
-                           reinterpret_cast<const D3DXMATRIX*>(&RedRenderer::GetProjectionMatrix()));
-        PblMatrix mTex;
-        D3DXMatrixMultiply(reinterpret_cast<D3DXMATRIX*>(&mTex), reinterpret_cast<const D3DXMATRIX*>(&mViewProj), reinterpret_cast<const D3DXMATRIX*>(&kClipToTextureMatrix));
+        PblMatrix mViewProj = pCamera->GetMatrixInverse() * RedRenderer::GetProjectionMatrix();
+        PblMatrix mTex = mViewProj * kClipToTextureMatrix;
         s_refractionTexMat = mTex;
     }
 }
@@ -676,8 +671,7 @@ void pcRefractionShader::Render_Prog1(const RenderItem* pItem, unsigned int) con
         pRegs[40].component[2] = m_distortionScale * 8.0f;
         pRegs[40].component[3] = 0.0f;
 
-        PblMatrix mTex;
-        D3DXMatrixMultiply(reinterpret_cast<D3DXMATRIX*>(&mTex), reinterpret_cast<const D3DXMATRIX*>(pItem->pmObjWorld), reinterpret_cast<const D3DXMATRIX*>(&s_refractionTexMat));
+        PblMatrix mTex = *pItem->pmObjWorld * s_refractionTexMat;
         pRegs[41].SetMatrix4x4(mTex);
 
         const RedTextureTransform& diffuse = m_material.diffuseTexTransform;

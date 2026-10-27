@@ -792,7 +792,7 @@ Entity* EntityTrapClass::Build(const EntityDesc& desc)
     if (mBuildBoxOdf)
     {
         EntityDesc kBoxDesc;
-        D3DXMatrixMultiply(reinterpret_cast<D3DXMATRIX*>(&kBoxDesc.mMatrix), reinterpret_cast<const D3DXMATRIX*>(&mBuildOffset), reinterpret_cast<const D3DXMATRIX*>(&desc.mMatrix));
+        kBoxDesc.mMatrix = mBuildOffset * desc.mMatrix;
         PblVector3 vPos = kBoxDesc.mMatrix.GetTranslation();
         if (RedTerrain::_bEnable)
         {
@@ -812,7 +812,7 @@ Entity* EntityTrapClass::Build(const EntityDesc& desc)
                     PblMatrix mBone;
                     if (pProp->GetModel()->GetRedModel(0)->GetBoneMatrix(0xD1E4CC7A, mBone))
                     {
-                        D3DXMatrixMultiply(reinterpret_cast<D3DXMATRIX*>(&mHologram), reinterpret_cast<const D3DXMATRIX*>(&mBone), reinterpret_cast<const D3DXMATRIX*>(&pProp->GetMatrix()));
+                        mHologram = mBone * pProp->GetMatrix();
                     }
                     else
                     {
@@ -845,8 +845,7 @@ Entity* EntityTrapClass::Build(const EntityDesc& desc)
         mBody.m[3][2] = kBoxDesc.mMatrix.m[3][2] + vOffset.z;
         mBody.m[3][3] = 1.0f;
         PblMatrix mInverse = pTrap->GetMatrix().GetInverseFast();
-        PblMatrix mLocal;
-        D3DXMatrixMultiply(reinterpret_cast<D3DXMATRIX*>(&mLocal), reinterpret_cast<const D3DXMATRIX*>(&mBody), reinterpret_cast<const D3DXMATRIX*>(&mInverse));
+        PblMatrix mLocal = mBody * mInverse;
 
         mBuildBoxCollisionModel.AddBody(new CollisionBodyPrimitive(kPrimitive, "main_body", mLocal, 0));
         pTrap->SetCollisionModel(&mBuildBoxCollisionModel);

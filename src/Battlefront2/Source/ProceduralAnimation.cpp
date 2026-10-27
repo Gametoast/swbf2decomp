@@ -554,9 +554,9 @@ void PAAnimation::CalculateNextMatrix(float fDeltaTime, float& fTime, const PblM
             InterpolateKeys(key0, key1, fTime, key);
             PblMatrix rot = gMatrixIdentity;
             PblMatrix temp;
-            D3DXMatrixMultiply(reinterpret_cast<D3DXMATRIX*>(&rot), reinterpret_cast<const D3DXMATRIX*>(&rot), D3DXMatrixRotationX(reinterpret_cast<D3DXMATRIX*>(&temp), key.mVal.x));
-            D3DXMatrixMultiply(reinterpret_cast<D3DXMATRIX*>(&rot), reinterpret_cast<const D3DXMATRIX*>(&rot), D3DXMatrixRotationY(reinterpret_cast<D3DXMATRIX*>(&temp), key.mVal.y));
-            D3DXMatrixMultiply(reinterpret_cast<D3DXMATRIX*>(&rot), reinterpret_cast<const D3DXMATRIX*>(&rot), D3DXMatrixRotationZ(reinterpret_cast<D3DXMATRIX*>(&temp), key.mVal.z));
+            rot.RotateX(key.mVal.x);
+            rot.RotateY(key.mVal.y);
+            rot.RotateZ(key.mVal.z);
             D3DXMatrixMultiply(reinterpret_cast<D3DXMATRIX*>(&temp), reinterpret_cast<const D3DXMATRIX*>(&rot), reinterpret_cast<const D3DXMATRIX*>(&result));
             result = temp;
         }
@@ -629,9 +629,9 @@ void PAAnimation::CalculateNextMatrix(float fDeltaTime, float& fTime, const PblM
             PblMatrix rot = gMatrixIdentity;
             InterpolateKeys(key0, key1, fKeyTime, key);
             PblMatrix temp;
-            D3DXMatrixMultiply(reinterpret_cast<D3DXMATRIX*>(&rot), reinterpret_cast<const D3DXMATRIX*>(&rot), D3DXMatrixRotationX(reinterpret_cast<D3DXMATRIX*>(&temp), key.mVal.x));
-            D3DXMatrixMultiply(reinterpret_cast<D3DXMATRIX*>(&rot), reinterpret_cast<const D3DXMATRIX*>(&rot), D3DXMatrixRotationY(reinterpret_cast<D3DXMATRIX*>(&temp), key.mVal.y));
-            D3DXMatrixMultiply(reinterpret_cast<D3DXMATRIX*>(&rot), reinterpret_cast<const D3DXMATRIX*>(&rot), D3DXMatrixRotationZ(reinterpret_cast<D3DXMATRIX*>(&temp), key.mVal.z));
+            rot.RotateX(key.mVal.x);
+            rot.RotateY(key.mVal.y);
+            rot.RotateZ(key.mVal.z);
             PblVector3 vPos = result.GetTranslation();
             D3DXMatrixMultiply(reinterpret_cast<D3DXMATRIX*>(&temp), reinterpret_cast<const D3DXMATRIX*>(&rot), reinterpret_cast<const D3DXMATRIX*>(&start));
             result = temp;
@@ -945,7 +945,7 @@ void PAAnimationGroup::UpdateAnimations(float fDeltaTime)
                 if (pObject && pObject->CanProcedurallyAnimate())
                 {
                     PblMatrix world;
-                    D3DXMatrixMultiply(reinterpret_cast<D3DXMATRIX*>(&world), reinterpret_cast<const D3DXMATRIX*>(&pHierarchy->mObjs[n].mLocalMatrix), reinterpret_cast<const D3DXMATRIX*>(&matrix));
+                    world = pHierarchy->mObjs[n].mLocalMatrix * matrix;
                     (*pHierarchy->mObjs[n].mGeometry)->SetMatrix(world);
                     UpdateTreeGrid(*pHierarchy->mObjs[n].mGeometry);
                 }

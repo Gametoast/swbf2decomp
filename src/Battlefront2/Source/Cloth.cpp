@@ -806,8 +806,8 @@ void EntityCloth::SetupFixedPos()
         PblMatrix mBoneInv = *((RedSkeleton*)pSkeleton)->GetInvBoneMatrixByName(uiBone);
         PblMatrix mLocal;
         PblMatrix mFull;
-        D3DXMatrixMultiply(reinterpret_cast<D3DXMATRIX*>(&mLocal), reinterpret_cast<const D3DXMATRIX*>(&pData->m_Transform), reinterpret_cast<const D3DXMATRIX*>(pParent));
-        D3DXMatrixMultiply(reinterpret_cast<D3DXMATRIX*>(&mFull), reinterpret_cast<const D3DXMATRIX*>(&mLocal), reinterpret_cast<const D3DXMATRIX*>(&mBoneInv));
+        mLocal = pData->m_Transform * *pParent;
+        mFull = mLocal * mBoneInv;
         PblVector3 vFixed;
         D3DXVec3TransformCoord(reinterpret_cast<D3DXVECTOR3*>(&vFixed), reinterpret_cast<const D3DXVECTOR3*>(&pCloth->m_pPos[i]), reinterpret_cast<const D3DXMATRIX*>(&mFull));
         pCloth->m_pFixedPos[i] = vFixed;
@@ -1233,9 +1233,9 @@ void EntityCloth::RestoreFixedPoints(const RedPose* pPose)
         if (pBone)
         {
             PblMatrix mTemp;
-            D3DXMatrixMultiply(reinterpret_cast<D3DXMATRIX*>(&mTemp), reinterpret_cast<const D3DXMATRIX*>(pBone), reinterpret_cast<const D3DXMATRIX*>(&mParentInverse));
+            mTemp = *pBone * mParentInverse;
             PblMatrix mFull;
-            D3DXMatrixMultiply(reinterpret_cast<D3DXMATRIX*>(&mFull), reinterpret_cast<const D3DXMATRIX*>(&mTemp), reinterpret_cast<const D3DXMATRIX*>(&mTransformInverse));
+            mFull = mTemp * mTransformInverse;
             mBone = mFull;
         }
         PblVector3 vPos;

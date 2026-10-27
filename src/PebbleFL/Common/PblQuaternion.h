@@ -74,6 +74,11 @@ PblQuaternion Interpolate(const PblQuaternion& q0, const PblQuaternion& q1, floa
 
 PblQuaternion operator*(const PblQuaternion& q0, const PblQuaternion& q1);
 
+inline PblQuaternion operator*=(PblQuaternion& lhs, const PblQuaternion& rhs)
+{
+    return lhs = lhs * rhs;
+}
+
  
 
 inline PblQuaternion operator+(const PblQuaternion& lhs, const PblQuaternion& rhs)

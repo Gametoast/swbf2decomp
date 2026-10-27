@@ -12,6 +12,22 @@
 // kuiDummyRootHash
 static const unsigned int kuiDummyRootHash = PblTEMPHash("DummyRoot");
 
+// TEMPLATE: SWBF2 0x0072bbf0
+// ZephyrSkeleton<32>::ZephyrSkeleton<32>
+template <int N>
+ZephyrSkeleton<N>::ZephyrSkeleton()
+{
+    m_pShared = 0;
+}
+
+// TEMPLATE: SWBF2 0x0072bc10
+// ZephyrSkeleton<32>::~ZephyrSkeleton<32>
+template <int N>
+ZephyrSkeleton<N>::~ZephyrSkeleton()
+{
+    m_pShared = 0;
+}
+
 // TEMPLATE: SWBF2 0x0072cc30
 // ZephyrSkeleton<32>::Open
 template <int N>
@@ -148,7 +164,7 @@ void ZephyrSkeleton<N>::BuildWorldMatricesRecurseDown(char iJoint)
         else
         {
             const ZephyrTransform& kPose = *m_pPoseFinal->GetJointTransform(iJoint);
-            const ZephyrTransform& kBase = *(const ZephyrTransform*)pJoint->m_kBaseTransform;
+            const ZephyrTransform& kBase = pJoint->m_kBaseTransform;
             PblVector3 kTrans = (pJoint->mTransformFlags & 1) ? kPose.kTrans : kBase.kTrans;
             if (pJoint->mTransformFlags & 2)
             {
@@ -185,7 +201,7 @@ void ZephyrSkeleton<N>::BuildWorldMatricesRecurseDown(char iJoint, PblBitVector<
             else
             {
                 const ZephyrTransform& kPose = *m_pPoseFinal->GetJointTransform(iJoint);
-                const ZephyrTransform& kBase = *(const ZephyrTransform*)pJoint->m_kBaseTransform;
+                const ZephyrTransform& kBase = pJoint->m_kBaseTransform;
                 PblVector3 kTrans = (pJoint->mTransformFlags & 1) ? kPose.kTrans : kBase.kTrans;
                 if (pJoint->mTransformFlags & 2)
                 {
@@ -225,7 +241,7 @@ void ZephyrSkeleton<N>::BuildWorldMatricesRecurseUp(char iJoint)
     else
     {
         const ZephyrTransform& kPose = *m_pPoseFinal->GetJointTransform(iJoint);
-        const ZephyrTransform& kBase = *(const ZephyrTransform*)pJoint->m_kBaseTransform;
+        const ZephyrTransform& kBase = pJoint->m_kBaseTransform;
         PblVector3 kTrans = (pJoint->mTransformFlags & 1) ? kPose.kTrans : kBase.kTrans;
         if (pJoint->mTransformFlags & 2)
         {
@@ -257,7 +273,7 @@ void ZephyrSkeleton<N>::BuildWorldMatricesRecurseUp(char iJoint, PblBitVector<N>
     else
     {
         const ZephyrTransform& kPose = *m_pPoseFinal->GetJointTransform(iJoint);
-        const ZephyrTransform& kBase = *(const ZephyrTransform*)pJoint->m_kBaseTransform;
+        const ZephyrTransform& kBase = pJoint->m_kBaseTransform;
         PblVector3 kTrans = (pJoint->mTransformFlags & 1) ? kPose.kTrans : kBase.kTrans;
         if (pJoint->mTransformFlags & 2)
         {

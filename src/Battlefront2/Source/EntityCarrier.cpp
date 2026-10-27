@@ -622,9 +622,8 @@ void EntityFlyer::SetupCameraTrackMatrix(PblMatrix& rMatrix, float fDeltaTime)
     else
     {
         PblMatrix mUnbank;
-        PblMatrix mUnpitch;
-        D3DXMatrixRotationZ(reinterpret_cast<D3DXMATRIX*>(&mUnbank), -mBankRollAngle);
-        D3DXMatrixMultiply(reinterpret_cast<D3DXMATRIX*>(&mUnbank), reinterpret_cast<const D3DXMATRIX*>(&mUnbank), D3DXMatrixRotationX(reinterpret_cast<D3DXMATRIX*>(&mUnpitch), -mBankPitchAngle));
+        mUnbank.SetRotateZ(-mBankRollAngle);
+        mUnbank.RotateX(-mBankPitchAngle);
         PblMatrix mBody;
         D3DXMatrixMultiply(reinterpret_cast<D3DXMATRIX*>(&mBody), reinterpret_cast<const D3DXMATRIX*>(&mUnbank), reinterpret_cast<const D3DXMATRIX*>(&mTarget));
 

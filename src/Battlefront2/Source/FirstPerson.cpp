@@ -191,6 +191,7 @@ WEAPONCLASS _GetWeaponClassFromWeapon(const Weapon* pWeapon)
     }
 }
 
+// FUNCTION: SWBF2 0x0051ecb0
 PblMatrix CameraManager::GetChaseCameraTransform(int iCam)
 {
     return mChaseCamera[iCam]->GetMatrix();
@@ -273,8 +274,8 @@ void FirstPersonRenderable::UpdateSoldierAimer(const PblMatrix& mMatrix)
 
     PblMatrix mOffset = gMatrixIdentity;
     PblMatrix mTemp;
-    D3DXMatrixMultiply(reinterpret_cast<D3DXMATRIX*>(&mOffset), reinterpret_cast<const D3DXMATRIX*>(&mOffset), D3DXMatrixRotationY(reinterpret_cast<D3DXMATRIX*>(&mTemp), 3.0f));
-    D3DXMatrixMultiply(reinterpret_cast<D3DXMATRIX*>(&mOffset), reinterpret_cast<const D3DXMATRIX*>(&mOffset), D3DXMatrixRotationZ(reinterpret_cast<D3DXMATRIX*>(&mTemp), 0.05f));
+    mOffset.RotateY(3.0f);
+    mOffset.RotateZ(0.05f);
     mOffset.m[3][0] = sFirstPersonOffsetX;
     mOffset.m[3][1] = sFirstPersonOffsetY;
     mOffset.m[3][2] = sFirstPersonOffsetZ;
@@ -341,7 +342,7 @@ void FirstPersonRenderable::UpdateDroidekaAimer(const PblMatrix& mMatrix)
 
     PblMatrix mOffset = gMatrixIdentity;
     PblMatrix mTemp;
-    D3DXMatrixMultiply(reinterpret_cast<D3DXMATRIX*>(&mOffset), reinterpret_cast<const D3DXMATRIX*>(&mOffset), D3DXMatrixRotationY(reinterpret_cast<D3DXMATRIX*>(&mTemp), 3.2f));
+    mOffset.RotateY(3.2f);
     mOffset.m[3][0] = 0.01f;
     mOffset.m[3][1] = 0.35f;
     mOffset.m[3][2] = -0.0f;
@@ -461,7 +462,7 @@ void FirstPersonRenderable::UpdateCockpitAimer(const PblMatrix& mMatrix)
     PblMatrix mRotation;
     D3DXMatrixRotationQuaternion(reinterpret_cast<D3DXMATRIX*>(&mRotation), D3DXQuaternionNormalize(reinterpret_cast<D3DXQUATERNION*>(&qRotation), reinterpret_cast<const D3DXQUATERNION*>(&mCockpitRotation)));
     mRotation.SetTranslation(vPos);
-    D3DXMatrixMultiply(reinterpret_cast<D3DXMATRIX*>(&mModelMatrix), reinterpret_cast<const D3DXMATRIX*>(&mOffset), reinterpret_cast<const D3DXMATRIX*>(&mRotation));
+    mModelMatrix = mOffset * mRotation;
 }
 
 // FUNCTION: SWBF2 0x0051f750
@@ -1271,9 +1272,9 @@ void FirstPersonCameraManager::Update(PblMatrix& rMatrix)
 
             PblMatrix mRotation = gMatrixIdentity;
             PblMatrix mTemp;
-            D3DXMatrixMultiply(reinterpret_cast<D3DXMATRIX*>(&mRotation), reinterpret_cast<const D3DXMATRIX*>(&mRotation), D3DXMatrixRotationX(reinterpret_cast<D3DXMATRIX*>(&mTemp), mCurRotVec.x));
-            D3DXMatrixMultiply(reinterpret_cast<D3DXMATRIX*>(&mRotation), reinterpret_cast<const D3DXMATRIX*>(&mRotation), D3DXMatrixRotationY(reinterpret_cast<D3DXMATRIX*>(&mTemp), mCurRotVec.y));
-            D3DXMatrixMultiply(reinterpret_cast<D3DXMATRIX*>(&mRotation), reinterpret_cast<const D3DXMATRIX*>(&mRotation), D3DXMatrixRotationZ(reinterpret_cast<D3DXMATRIX*>(&mTemp), mCurRotVec.z));
+            mRotation.RotateX(mCurRotVec.x);
+            mRotation.RotateY(mCurRotVec.y);
+            mRotation.RotateZ(mCurRotVec.z);
             D3DXMatrixMultiply(reinterpret_cast<D3DXMATRIX*>(&mTemp), reinterpret_cast<const D3DXMATRIX*>(&mRotation), reinterpret_cast<const D3DXMATRIX*>(&rMatrix));
             rMatrix = mTemp;
         }

@@ -302,8 +302,7 @@ void WeaponCatapult::Render(const PblMatrix& matrix, const RedPose* pPose, const
             const float fY = pArm->m[3][1] + vBase.y - vFirePos.y;
             const float fZ = pArm->m[3][2] + vBase.z - vFirePos.z;
             const float fDist = sqrtf(fX * fX + fY * fY + fZ * fZ);
-            PblMatrix mOrdnance;
-            D3DXMatrixMultiply(reinterpret_cast<D3DXMATRIX*>(&mOrdnance), reinterpret_cast<const D3DXMATRIX*>(pArm), reinterpret_cast<const D3DXMATRIX*>(&mCatapultBuilding->GetMatrix()));
+            PblMatrix mOrdnance = *pArm * mCatapultBuilding->GetMatrix();
             mOrdnance.m[3][0] += mOrdnance.m[1][0] * fDist;
             mOrdnance.m[3][1] += mOrdnance.m[1][1] * fDist;
             mOrdnance.m[3][2] += mOrdnance.m[1][2] * fDist;

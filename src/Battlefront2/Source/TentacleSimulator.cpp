@@ -282,12 +282,8 @@ void TentacleSimulator::UpdatePose(RedPose* pPose, const PblMatrix& mParent,
             if (b > 0)
             {
                 const PblMatrix mInverse = pBones[t][b - 1]->GetInverseFast();
-                PblMatrix mLocal;
-                D3DXMatrixMultiply((D3DXMATRIX*)&mLocal, (const D3DXMATRIX*)&m,
-                                   (const D3DXMATRIX*)&mInverse);
-                PblMatrix mResult;
-                D3DXMatrixMultiply((D3DXMATRIX*)&mResult, (const D3DXMATRIX*)&mLocal,
-                                   (const D3DXMATRIX*)(&m - 1));
+                PblMatrix mLocal = m * mInverse;
+                PblMatrix mResult = mLocal * *(&m - 1);
                 m = mResult;
             }
 
@@ -504,8 +500,7 @@ void TentacleSimulator::EnforceCollisions(const RedPose* pPose, const PblMatrix&
 
     if (sDrawCollisionShapes)
     {
-        D3DXMatrixMultiply((D3DXMATRIX*)&mCollision, (const D3DXMATRIX*)&mCollision,
-                           (const D3DXMATRIX*)&mParent);
+        mCollision = mCollision * mParent;
         switch (mCollType)
         {
         case 0:

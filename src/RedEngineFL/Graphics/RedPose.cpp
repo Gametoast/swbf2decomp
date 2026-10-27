@@ -39,10 +39,7 @@ void RedPose::GetSkinMatrices(PblMatrix* pMatrices, unsigned char const* pIndice
         }
         else
         {
-            PblMatrix mSkin;
-            D3DXMatrixMultiply((D3DXMATRIX*)&mSkin,
-                               (const D3DXMATRIX*)&m_pSkeleton->m_amDefaultPoseInv[uiBone],
-                               (const D3DXMATRIX*)&rBone);
+            PblMatrix mSkin = m_pSkeleton->m_amDefaultPoseInv[uiBone] * rBone;
             pMatrices[i] = mSkin;
         }
     }

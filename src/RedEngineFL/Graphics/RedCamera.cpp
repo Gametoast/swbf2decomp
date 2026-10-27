@@ -243,8 +243,7 @@ RedCamera::VisibilityT RedCamera::ClassifyBoxInternal(const PblMatrix& rMatrix, 
 // FUNCTION: SWBF2 0x00692c70
 RedCamera::VisibilityT RedCamera::ClassifyBox(const PblMatrix& rMatrix, const PblVector3& vExtents) const
 {
-    PblMatrix m;
-    D3DXMatrixMultiply((D3DXMATRIX*)&m, (const D3DXMATRIX*)&rMatrix, (const D3DXMATRIX*)&_MatrixInverse);
+    PblMatrix m = rMatrix * _MatrixInverse;
     return ClassifyBoxInternal(m, m.GetTranslation(), vExtents);
 }
 
@@ -492,9 +491,7 @@ void RedCamera::UpdateFrustumDependents()
 void RedCamera::UpdateMatrixAndFrustumDependents()
 {
     ComputeProjMatrix(_ProjMatrix);
-    PblMatrix mViewProj;
-    D3DXMatrixMultiply((D3DXMATRIX*)&mViewProj, (const D3DXMATRIX*)&_MatrixInverse,
-                       (const D3DXMATRIX*)&_ProjMatrix);
+    PblMatrix mViewProj = _MatrixInverse * _ProjMatrix;
     _ViewProjMatrix = mViewProj;
 
     const float* vRight = _Matrix.m[0];

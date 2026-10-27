@@ -6304,8 +6304,7 @@ void RedRenderer::internalStateStackPop()
         }
     }
 
-    PblMatrix mViewProj;
-    D3DXMatrixMultiply((D3DXMATRIX*)&mViewProj, (const D3DXMATRIX*)&rView, (const D3DXMATRIX*)&rProj);
+    PblMatrix mViewProj = rView * rProj;
     RedRenderer::m_mViewProjection = mViewProj;
 }
 

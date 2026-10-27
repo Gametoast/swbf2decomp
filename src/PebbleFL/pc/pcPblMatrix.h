@@ -106,3 +106,57 @@ inline void PblMatrix::SetTranslation(float fX, float fY, float fZ, float fW)
     m[3][2] = fZ;
     m[3][3] = fW;
 }
+
+// FUNCTION: SWBF2 0x00411e90
+inline const PblVector3 PblMatrix::ApplyRotation(const PblVector3& vector) const
+{
+    PblVector3 result;
+    D3DXVec3TransformNormal(&result, &vector, reinterpret_cast<const D3DXMATRIX*>(this));
+    return result;
+}
+
+inline const PblVector3 PblMatrix::ApplyTransform(const PblVector3& vector) const
+{
+    PblVector3 result;
+    D3DXVec3TransformCoord(&result, &vector, reinterpret_cast<const D3DXMATRIX*>(this));
+    return result;
+}
+
+inline void PblMatrix::SetRotateX(float fAngle)
+{
+    D3DXMatrixRotationX(reinterpret_cast<D3DXMATRIX*>(this), fAngle);
+}
+
+inline void PblMatrix::RotateX(float fAngle)
+{
+    D3DXMATRIXA16 Temp;
+    D3DXMatrixMultiply(reinterpret_cast<D3DXMATRIX*>(this), reinterpret_cast<const D3DXMATRIX*>(this), D3DXMatrixRotationX(&Temp, fAngle));
+}
+
+inline void PblMatrix::SetRotateY(float fAngle)
+{
+    D3DXMatrixRotationY(reinterpret_cast<D3DXMATRIX*>(this), fAngle);
+}
+
+inline void PblMatrix::RotateY(float fAngle)
+{
+    D3DXMATRIXA16 Temp;
+    D3DXMatrixMultiply(reinterpret_cast<D3DXMATRIX*>(this), reinterpret_cast<const D3DXMATRIX*>(this), D3DXMatrixRotationY(&Temp, fAngle));
+}
+
+inline void PblMatrix::SetRotateZ(float fAngle)
+{
+    D3DXMatrixRotationZ(reinterpret_cast<D3DXMATRIX*>(this), fAngle);
+}
+
+inline void PblMatrix::RotateZ(float fAngle)
+{
+    D3DXMATRIXA16 Temp;
+    D3DXMatrixMultiply(reinterpret_cast<D3DXMATRIX*>(this), reinterpret_cast<const D3DXMATRIX*>(this), D3DXMatrixRotationZ(&Temp, fAngle));
+}
+
+inline void PblMatrix::Scale(float fScaleX, float fScaleY, float fScaleZ)
+{
+    D3DXMATRIXA16 Temp;
+    D3DXMatrixMultiply(reinterpret_cast<D3DXMATRIX*>(this), reinterpret_cast<const D3DXMATRIX*>(this), D3DXMatrixScaling(&Temp, fScaleX, fScaleY, fScaleZ));
+}

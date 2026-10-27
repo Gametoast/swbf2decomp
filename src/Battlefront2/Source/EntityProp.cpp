@@ -319,8 +319,7 @@ void EntityProp::Render(unsigned char ucViewport, float fDist, unsigned int uiFl
         if (FLRenderer::IsReflected(*(const PblVector3*)&_Sphere, _Sphere.w, mReflection, false))
         {
             PblMatrix mWorld;
-            D3DXMatrixMultiply((D3DXMATRIX*)&mWorld, (const D3DXMATRIX*)&mMatrix,
-                               (const D3DXMATRIX*)&mReflection);
+            mWorld = mMatrix * mReflection;
             mReflection = mWorld;
             mModel->Render(ucViewport, fDist, &mReflection, NULL, mGeometryColor,
                            (uiFlags & ~0x10000) | 0x10000100, NULL);
@@ -892,8 +891,7 @@ Entity* EntityPropClass::Build(const EntityDesc& desc)
                 EntityDesc attachDesc;
                 attachDesc.mMatrix = gMatrixIdentity;
                 PblMatrix matrix;
-                D3DXMatrixMultiply((D3DXMATRIX*)&matrix, (const D3DXMATRIX*)&mAttachedOdfs[i].mMatrix,
-                                   (const D3DXMATRIX*)&desc.mMatrix);
+                matrix = mAttachedOdfs[i].mMatrix * desc.mMatrix;
                 attachDesc.mMatrix = matrix;
                 Entity* pEntity = mAttachedOdfs[i].mClass->Build(attachDesc);
                 if (pEntity && mAttachedOdfs[i].mDistance > -0.0001f)

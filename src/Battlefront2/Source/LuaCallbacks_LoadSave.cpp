@@ -1631,8 +1631,7 @@ static int ReadLuaItem(unsigned char* pData, int iDepth, bool bArg)
     unsigned char* pRead = pData + 1;
     switch (*pData)
     {
-    case 0xff:
-        break;
+
     case LUA_TBOOLEAN:
         lua_pushboolean(LuaHelper::mState, *pRead++ != 0);
         break;
@@ -1654,9 +1653,10 @@ static int ReadLuaItem(unsigned char* pData, int iDepth, bool bArg)
     }
     case LUA_TSTRING:
     {
-        const unsigned int uLength = strlen(reinterpret_cast<const char*>(pRead));
-        lua_pushlstring(LuaHelper::mState, reinterpret_cast<const char*>(pRead), uLength);
+        const char* pcValue = reinterpret_cast<const char*>(pRead);
+        const unsigned int uLength = strlen(pcValue);
         pRead += uLength + 1;
+        lua_pushlstring(LuaHelper::mState, pcValue, uLength);
         break;
     }
     case LUA_TTABLE:
@@ -1670,9 +1670,12 @@ static int ReadLuaItem(unsigned char* pData, int iDepth, bool bArg)
         ++pRead;
         break;
     case LUA_TFUNCTION:
-        LuaHelper::GetGlobal(reinterpret_cast<const char*>(pRead));
-        pRead += strlen(reinterpret_cast<const char*>(pRead)) + 1;
+    {
+        const char* pcName = reinterpret_cast<const char*>(pRead);
+        pRead += strlen(pcName) + 1;
+        LuaHelper::GetGlobal(pcName);
         break;
+    }
     default:
         lua_pushnil(LuaHelper::mState);
         break;

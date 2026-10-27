@@ -65,7 +65,7 @@ void EntityDoor::Render(unsigned char ucViewport, float fDist, unsigned int uiFl
         if (FLRenderer::IsReflected(GetCollisionCenter(), GetCollisionRadius(), reflection, false))
         {
             PblMatrix reflected;
-            D3DXMatrixMultiply(reinterpret_cast<D3DXMATRIX*>(&reflected), reinterpret_cast<const D3DXMATRIX*>(&mMatrix), reinterpret_cast<const D3DXMATRIX*>(&reflection));
+            reflected = mMatrix * reflection;
             pModel->Render(ucViewport, fDist, &reflected, &mPose, RedColor::WHITE,
                            (uiFlags & 0xeffefeffu) | 0x10000100u, 0);
         }
@@ -316,7 +316,7 @@ bool EntityDoor::Update(float fDeltaTime)
                 continue;
             }
             PblMatrix mWorld;
-            D3DXMatrixMultiply(reinterpret_cast<D3DXMATRIX*>(&mWorld), reinterpret_cast<const D3DXMATRIX*>(&mBone), reinterpret_cast<const D3DXMATRIX*>(&mMatrix));
+            mWorld = mBone * mMatrix;
 
             GameObject* apUnits[20];
             int iCount;

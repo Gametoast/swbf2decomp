@@ -169,11 +169,7 @@ void pcShieldShader::Render_Fixed(const RenderItem* pItem, unsigned int) const
         if (pItem->uiShaderState == 1)
         {
             RedRenderer::pcSetTexture(0, RedTexture::Find(m_uiTextureHash));
-            PblMatrix mOffset;
-            mOffset.m[0][0] = 1.0f; mOffset.m[0][1] = 0.0f; mOffset.m[0][2] = 0.0f; mOffset.m[0][3] = 0.0f;
-            mOffset.m[1][0] = 0.0f; mOffset.m[1][1] = 1.0f; mOffset.m[1][2] = 0.0f; mOffset.m[1][3] = 0.0f;
-            mOffset.m[2][0] = m_fOffsetU; mOffset.m[2][1] = m_fOffsetV; mOffset.m[2][2] = 0.0f; mOffset.m[2][3] = 0.0f;
-            mOffset.m[3][0] = 0.0f; mOffset.m[3][1] = 0.0f; mOffset.m[3][2] = 0.0f; mOffset.m[3][3] = 1.0f;
+            PblMatrix mOffset(PblVector3(1.0f, 0.0f, 0.0f), PblVector3(0.0f, 1.0f, 0.0f), PblVector3(m_fOffsetU, m_fOffsetV, 0.0f), PblVector3(0.0f, 0.0f, 0.0f));
             RedRenderer::pcFFSetTextureTransform(0, mOffset);
         }
         else

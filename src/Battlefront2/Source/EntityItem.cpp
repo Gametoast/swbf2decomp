@@ -465,7 +465,7 @@ void EntityItem::Render(unsigned char ucLod, float fAlpha, unsigned int uiFlags)
     if (FLRenderer::IsReflected(GetRenderPos(), _Sphere.w, mReflection, false))
     {
         PblMatrix mWorld;
-        D3DXMatrixMultiply(reinterpret_cast<D3DXMATRIX*>(&mWorld), reinterpret_cast<const D3DXMATRIX*>(pMatrix), reinterpret_cast<const D3DXMATRIX*>(&mReflection));
+        mWorld = *pMatrix * mReflection;
         mReflection = mWorld;
         mModel->Render(ucLod, fAlpha, &mReflection, 0, color, (uiFlags & ~0x10000) | 0x10000100, 0);
     }

@@ -493,8 +493,7 @@ void Asteroid::Kill()
                 mModel->_mLod[0]->GetBoneMatrix(pClass->mChildren[i].mHardPointHash, mBone))
             {
                 PblMatrix mChild;
-                D3DXMatrixMultiply((D3DXMATRIX*)&mChild, (const D3DXMATRIX*)&mBone,
-                                   (const D3DXMATRIX*)&mMatrix);
+                mChild = mBone * mMatrix;
                 desc.mMatrix = mChild;
                 Entity* pChild = pChildClass->Build(desc);
                 if (pChild)

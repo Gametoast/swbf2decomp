@@ -503,21 +503,14 @@ void HUD::ElementGroupBase::EventRotation(const HUD::Event& event, void* const p
 
     const float fDegToRad = 0.017453292f;
     PblMatrix mResult = gMatrixIdentity;
-    D3DXMATRIX mTemp;
-    D3DXMatrixRotationX((D3DXMATRIX*)&mResult, pRotation->x * fDegToRad);
-    D3DXMatrixMultiply((D3DXMATRIX*)&mResult, (D3DXMATRIX*)&mResult,
-                       D3DXMatrixRotationY(&mTemp, pRotation->y * fDegToRad));
-    D3DXMatrixMultiply((D3DXMATRIX*)&mResult, (D3DXMATRIX*)&mResult,
-                       D3DXMatrixRotationZ(&mTemp, pRotation->z * fDegToRad));
+    mResult.SetRotateX(pRotation->x * fDegToRad);
+    mResult.RotateY(pRotation->y * fDegToRad);
+    mResult.RotateZ(pRotation->z * fDegToRad);
 
     const PblVector3& vX = mCurrent.GetXAxis();
     const PblVector3& vY = mCurrent.GetYAxis();
     const PblVector3& vZ = mCurrent.GetZAxis();
-    D3DXMatrixMultiply((D3DXMATRIX*)&mResult, (D3DXMATRIX*)&mResult,
-                       D3DXMatrixScaling(&mTemp,
-                                         sqrtf(vX.x * vX.x + vX.y * vX.y + vX.z * vX.z),
-                                         sqrtf(vY.x * vY.x + vY.y * vY.y + vY.z * vY.z),
-                                         sqrtf(vZ.x * vZ.x + vZ.y * vZ.y + vZ.z * vZ.z)));
+    mResult.Scale(sqrtf(vX.x * vX.x + vX.y * vX.y + vX.z * vX.z), sqrtf(vY.x * vY.x + vY.y * vY.y + vY.z * vY.z), sqrtf(vZ.x * vZ.x + vZ.y * vZ.y + vZ.z * vZ.z));
 
     mResult.SetTranslation(vPosition);
     pGroup->mElement->SetMatrix(mResult);

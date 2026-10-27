@@ -111,29 +111,28 @@ bool OrdnanceBeacon::Update(float fDeltaTime)
     {
         OrdnanceBeaconClass* pClass = static_cast<OrdnanceBeaconClass*>(mClass);
 
-        D3DXMATRIXA16 aim;
-        D3DXMATRIXA16 yaw;
-        D3DXMatrixRotationX(&aim, -pClass->mAimElevation);
-        D3DXMatrixMultiply(&aim, &aim, D3DXMatrixRotationY(&yaw, pClass->mAimAzimuth));
+        PblMatrix aim;
+        aim.SetRotateX(-pClass->mAimElevation);
+        aim.RotateY(pClass->mAimAzimuth);
 
         OrdnanceDesc desc;
         desc.mPosition = mPosition;
         const float fDist = pClass->mAimDistance;
-        desc.mPosition.x += aim._31 * fDist;
-        desc.mPosition.y += aim._32 * fDist;
-        desc.mPosition.z += aim._33 * fDist;
+        desc.mPosition.x += aim.m[2][0] * fDist;
+        desc.mPosition.y += aim.m[2][1] * fDist;
+        desc.mPosition.z += aim.m[2][2] * fDist;
 
         PblRandom& rand = PblRandom::GetSim();
         const float fRight = (rand.GetFloat() - rand.GetFloat()) * pClass->mScatterDistance;
-        desc.mPosition.x += aim._11 * fRight;
-        desc.mPosition.y += aim._12 * fRight;
-        desc.mPosition.z += aim._13 * fRight;
+        desc.mPosition.x += aim.m[0][0] * fRight;
+        desc.mPosition.y += aim.m[0][1] * fRight;
+        desc.mPosition.z += aim.m[0][2] * fRight;
         const float fUp = (rand.GetFloat() - rand.GetFloat()) * pClass->mScatterDistance;
-        desc.mPosition.x += aim._21 * fUp;
-        desc.mPosition.y += aim._22 * fUp;
-        desc.mPosition.z += aim._23 * fUp;
+        desc.mPosition.x += aim.m[1][0] * fUp;
+        desc.mPosition.y += aim.m[1][1] * fUp;
+        desc.mPosition.z += aim.m[1][2] * fUp;
 
-        desc.mDirection = PblVector3(-aim._31, -aim._32, -aim._33);
+        desc.mDirection = PblVector3(-aim.m[2][0], -aim.m[2][1], -aim.m[2][2]);
         desc.mStrength = 1.0f;
         desc.mOwner = ResolveHandle(mOwner);
         desc.mDamageOwner = mDamageOwner;
