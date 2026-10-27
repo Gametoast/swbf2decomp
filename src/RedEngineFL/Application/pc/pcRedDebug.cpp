@@ -706,7 +706,7 @@ void RedDebug::_DrawPrintf()
 }
 
 // SYNTHETIC: SWBF2 0x004090a0
-// `dynamic initializer for 'PblMath::fOneOverHalfPi''
+// PblMath::`dynamic initializer for 'fOneOverHalfPi''
 
 // SYNTHETIC: SWBF2 0x004090c0
-// `dynamic initializer for 'PblMath::fOneOverTwoPi''
+// PblMath::`dynamic initializer for 'fOneOverTwoPi''

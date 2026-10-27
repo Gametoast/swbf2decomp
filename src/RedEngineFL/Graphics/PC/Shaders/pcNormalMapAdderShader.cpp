@@ -312,10 +312,10 @@ void pcNormalMapAdderShader::_StaticInit() const
 unsigned int pcNormalMapAdderShader::s_uiRenderTypeHash = PblHash("NormalMapAdder");
 
 // SYNTHETIC: SWBF2 0x0040a190
-// `dynamic initializer for 'PblMath::fOneOverHalfPi''
+// PblMath::`dynamic initializer for 'fOneOverHalfPi''
 
 // SYNTHETIC: SWBF2 0x0040a1b0
-// `dynamic initializer for 'PblMath::fOneOverTwoPi''
+// PblMath::`dynamic initializer for 'fOneOverTwoPi''
 
 // SYNTHETIC: SWBF2 0x0040a130
 // `dynamic initializer for 'pcNormalMapAdderShader::s_Factory''

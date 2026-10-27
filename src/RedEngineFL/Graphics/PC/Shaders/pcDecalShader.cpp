@@ -340,10 +340,10 @@ pcRedShaderDef pcDecalShader::s_shaderDef("decal_shader.xml");
 static unsigned int kuiLinearRamp = PblHash("linear_ramp");
 
 // SYNTHETIC: SWBF2 0x0040a410
-// `dynamic initializer for 'PblMath::fOneOverHalfPi''
+// PblMath::`dynamic initializer for 'fOneOverHalfPi''
 
 // SYNTHETIC: SWBF2 0x0040a430
-// `dynamic initializer for 'PblMath::fOneOverTwoPi''
+// PblMath::`dynamic initializer for 'fOneOverTwoPi''
 
 // GLOBAL: SWBF2 0x009ca668
 // g_pcDecalShader

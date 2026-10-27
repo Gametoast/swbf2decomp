@@ -327,10 +327,10 @@ void pcSampleShader::_StaticInit() const
 unsigned int pcSampleShader::s_uiRenderTypeHash = PblHash("sample");
 
 // SYNTHETIC: SWBF2 0x00409ce0
-// `dynamic initializer for 'PblMath::fOneOverHalfPi''
+// PblMath::`dynamic initializer for 'fOneOverHalfPi''
 
 // SYNTHETIC: SWBF2 0x00409d00
-// `dynamic initializer for 'PblMath::fOneOverTwoPi''
+// PblMath::`dynamic initializer for 'fOneOverTwoPi''
 
 // SYNTHETIC: SWBF2 0x00409c80
 // `dynamic initializer for 'pcSampleShader::s_Factory''

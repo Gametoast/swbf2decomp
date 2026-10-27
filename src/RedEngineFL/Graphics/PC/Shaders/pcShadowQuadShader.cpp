@@ -283,10 +283,10 @@ void pcShadowQuadShader::_StaticInit() const
 unsigned int pcShadowQuadShader::s_uiRenderTypeHash = PblHash("ShadowQuad");
 
 // SYNTHETIC: SWBF2 0x00409f60
-// `dynamic initializer for 'PblMath::fOneOverHalfPi''
+// PblMath::`dynamic initializer for 'fOneOverHalfPi''
 
 // SYNTHETIC: SWBF2 0x00409f80
-// `dynamic initializer for 'PblMath::fOneOverTwoPi''
+// PblMath::`dynamic initializer for 'fOneOverTwoPi''
 
 // SYNTHETIC: SWBF2 0x00409f00
 // `dynamic initializer for 'pcShadowQuadShader::s_Factory''

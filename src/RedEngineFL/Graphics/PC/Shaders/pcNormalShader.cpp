@@ -1405,10 +1405,10 @@ pcNormalShader pcNormalShader::s_Factory;
 pcRedShaderDef pcNormalShader::s_shaderDef("normal_shader.xml");
 
 // SYNTHETIC: SWBF2 0x00409810
-// `dynamic initializer for 'PblMath::fOneOverHalfPi''
+// PblMath::`dynamic initializer for 'fOneOverHalfPi''
 
 // SYNTHETIC: SWBF2 0x00409830
-// `dynamic initializer for 'PblMath::fOneOverTwoPi''
+// PblMath::`dynamic initializer for 'fOneOverTwoPi''
 
 // GLOBAL: SWBF2 0x009c9268
 // g_pcNormalShader

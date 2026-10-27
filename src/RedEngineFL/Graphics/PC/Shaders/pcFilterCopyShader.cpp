@@ -442,10 +442,10 @@ void pcFilterCopyShader::_StaticInit() const
 unsigned int pcFilterCopyShader::s_uiRenderTypeHash = PblHash("FilterCopy");
 
 // SYNTHETIC: SWBF2 0x0040a4d0
-// `dynamic initializer for 'PblMath::fOneOverHalfPi''
+// PblMath::`dynamic initializer for 'fOneOverHalfPi''
 
 // SYNTHETIC: SWBF2 0x0040a4f0
-// `dynamic initializer for 'PblMath::fOneOverTwoPi''
+// PblMath::`dynamic initializer for 'fOneOverTwoPi''
 
 // SYNTHETIC: SWBF2 0x0040a470
 // `dynamic initializer for 'pcFilterCopyShader::s_Factory''

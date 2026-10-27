@@ -428,10 +428,10 @@ pcInterfaceShader pcInterfaceShader::s_Factory;
 pcRedShaderDef pcInterfaceShader::s_shaderDef("interface_shader.xml");
 
 // SYNTHETIC: SWBF2 0x004098f0
-// `dynamic initializer for 'PblMath::fOneOverTwoPi''
+// PblMath::`dynamic initializer for 'fOneOverTwoPi''
 
 // SYNTHETIC: SWBF2 0x004098d0
-// `dynamic initializer for 'PblMath::fOneOverHalfPi''
+// PblMath::`dynamic initializer for 'fOneOverHalfPi''
 
 // GLOBAL: SWBF2 0x009c9538
 // g_pcInterfaceShader

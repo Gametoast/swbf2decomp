@@ -6382,19 +6382,19 @@ utf8::invalid_utf8::~invalid_utf8() {}
 utf8::not_enough_room::~not_enough_room() {}
 
 // SYNTHETIC: SWBF2 0x004056c0
-// `dynamic initializer for 'PblMath::fTwoPi''
+// PblMath::`dynamic initializer for 'fTwoPi''
 
 // SYNTHETIC: SWBF2 0x004056e0
-// `dynamic initializer for 'PblMath::fHalfPi''
+// PblMath::`dynamic initializer for 'fHalfPi''
 
 // SYNTHETIC: SWBF2 0x00405700
-// `dynamic initializer for 'PblMath::fOneOverPi''
+// PblMath::`dynamic initializer for 'fOneOverPi''
 
 // SYNTHETIC: SWBF2 0x00405720
-// `dynamic initializer for 'PblMath::fOneOverTwoPi''
+// PblMath::`dynamic initializer for 'fOneOverTwoPi''
 
 // SYNTHETIC: SWBF2 0x00405740
-// `dynamic initializer for 'PblMath::fOneOverHalfPi''
+// PblMath::`dynamic initializer for 'fOneOverHalfPi''
 
 // SYNTHETIC: SWBF2 0x00405760
 // `dynamic initializer for '_IdentityMatrix''

@@ -1164,7 +1164,7 @@ void RedSceneManager::_Update(RedSceneObject* pObject)
 }
 
 // SYNTHETIC: SWBF2 0x00408990
-// `dynamic initializer for 'PblMath::fOneOverHalfPi''
+// PblMath::`dynamic initializer for 'fOneOverHalfPi''
 
 // SYNTHETIC: SWBF2 0x004089b0
-// `dynamic initializer for 'PblMath::fOneOverTwoPi''
+// PblMath::`dynamic initializer for 'fOneOverTwoPi''

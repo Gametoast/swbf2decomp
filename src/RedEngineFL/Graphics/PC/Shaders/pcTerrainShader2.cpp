@@ -31,10 +31,10 @@ pcRedShader::RenderFuncT pcTerrainShader2::RenderFuncArray[MAX_PIPELINES];
 unsigned int pcTerrainShader2::s_uiRenderTypeHash = PblHash("Terrain2");
 
 // SYNTHETIC: SWBF2 0x004095c0
-// `dynamic initializer for 'PblMath::fOneOverHalfPi''
+// PblMath::`dynamic initializer for 'fOneOverHalfPi''
 
 // SYNTHETIC: SWBF2 0x004095e0
-// `dynamic initializer for 'PblMath::fOneOverTwoPi''
+// PblMath::`dynamic initializer for 'fOneOverTwoPi''
 
 // SYNTHETIC: SWBF2 0x00409580
 // `dynamic initializer for 'pcTerrainShader2::s_shaderDef''

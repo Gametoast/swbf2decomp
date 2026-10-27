@@ -98,10 +98,10 @@ PblList<RedMovie::Properties> RedMovie::Properties::sPropertyList;
 PblRandom RedMovie::Properties::sRandom;
 
 // SYNTHETIC: SWBF2 0x004091a0
-// `dynamic initializer for 'PblMath::fOneOverHalfPi''
+// PblMath::`dynamic initializer for 'fOneOverHalfPi''
 
 // SYNTHETIC: SWBF2 0x004091c0
-// `dynamic initializer for 'PblMath::fOneOverTwoPi''
+// PblMath::`dynamic initializer for 'fOneOverTwoPi''
 
 // GLOBAL: SWBF2 0x009c8434
 // RedMovie::sSubtitlesEnabled

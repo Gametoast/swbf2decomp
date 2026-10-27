@@ -309,10 +309,10 @@ unsigned int pcClearShader::s_uiRenderTypeHash = PblHash("clear");
 pcClearShader pcClearShader::s_Factory;
 
 // SYNTHETIC: SWBF2 0x00409e20
-// `dynamic initializer for 'PblMath::fOneOverHalfPi''
+// PblMath::`dynamic initializer for 'fOneOverHalfPi''
 
 // SYNTHETIC: SWBF2 0x00409e40
-// `dynamic initializer for 'PblMath::fOneOverTwoPi''
+// PblMath::`dynamic initializer for 'fOneOverTwoPi''
 
 // GLOBAL: SWBF2 0x009c9c20
 // g_pcClearShader

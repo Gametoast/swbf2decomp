@@ -2499,10 +2499,10 @@ RedColor RedRenderer::m_colorFog = RedColor::BLACK;
 RedColor RedRenderer::m_lightingScaleColor;
 
 // SYNTHETIC: SWBF2 0x00408c60
-// `dynamic initializer for 'PblMath::fOneOverHalfPi''
+// PblMath::`dynamic initializer for 'fOneOverHalfPi''
 
 // SYNTHETIC: SWBF2 0x00408c80
-// `dynamic initializer for 'PblMath::fOneOverTwoPi''
+// PblMath::`dynamic initializer for 'fOneOverTwoPi''
 
 // FUNCTION: SWBF2 0x006b1a90
 void RedRenderer::Init()

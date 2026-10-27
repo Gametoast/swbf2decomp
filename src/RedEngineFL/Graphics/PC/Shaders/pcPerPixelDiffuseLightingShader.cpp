@@ -582,10 +582,10 @@ pcPerPixelDiffuseLightingShader pcPerPixelDiffuseLightingShader::s_Factory;
 pcRedShaderDef pcPerPixelDiffuseLightingShader::s_shaderDef("perpixeldiffuselighting_shader.xml");
 
 // SYNTHETIC: SWBF2 0x0040a630
-// `dynamic initializer for 'PblMath::fOneOverTwoPi''
+// PblMath::`dynamic initializer for 'fOneOverTwoPi''
 
 // SYNTHETIC: SWBF2 0x0040a610
-// `dynamic initializer for 'PblMath::fOneOverHalfPi''
+// PblMath::`dynamic initializer for 'fOneOverHalfPi''
 
 // GLOBAL: SWBF2 0x009ca908
 // g_pcPerPixelDiffuseLightingShader

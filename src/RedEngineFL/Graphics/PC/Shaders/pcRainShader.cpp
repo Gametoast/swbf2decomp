@@ -331,10 +331,10 @@ void pcRainShader::_StaticInit() const
 unsigned int pcRainShader::s_uiRenderTypeHash = PblHash("Rain");
 
 // SYNTHETIC: SWBF2 0x00409c40
-// `dynamic initializer for 'PblMath::fOneOverHalfPi''
+// PblMath::`dynamic initializer for 'fOneOverHalfPi''
 
 // SYNTHETIC: SWBF2 0x00409c60
-// `dynamic initializer for 'PblMath::fOneOverTwoPi''
+// PblMath::`dynamic initializer for 'fOneOverTwoPi''
 
 // SYNTHETIC: SWBF2 0x00409be0
 // `dynamic initializer for 'pcRainShader::s_Factory''

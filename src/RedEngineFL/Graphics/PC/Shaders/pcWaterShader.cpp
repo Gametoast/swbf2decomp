@@ -812,10 +812,10 @@ void pcWaterShader::_StaticInit() const
 unsigned int pcWaterShader::s_uiRenderTypeHash = PblHash("Water");
 
 // SYNTHETIC: SWBF2 0x0040a000
-// `dynamic initializer for 'PblMath::fOneOverHalfPi''
+// PblMath::`dynamic initializer for 'fOneOverHalfPi''
 
 // SYNTHETIC: SWBF2 0x0040a020
-// `dynamic initializer for 'PblMath::fOneOverTwoPi''
+// PblMath::`dynamic initializer for 'fOneOverTwoPi''
 
 // SYNTHETIC: SWBF2 0x00409fa0
 // `dynamic initializer for 'pcWaterShader::s_Factory''

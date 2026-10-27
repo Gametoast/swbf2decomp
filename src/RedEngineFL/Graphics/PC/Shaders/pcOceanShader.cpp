@@ -394,10 +394,10 @@ void pcOceanShader::_StaticInit() const
 unsigned int pcOceanShader::s_uiRenderTypeHash = PblHash("Ocean");
 
 // SYNTHETIC: SWBF2 0x0040a250
-// `dynamic initializer for 'PblMath::fOneOverHalfPi''
+// PblMath::`dynamic initializer for 'fOneOverHalfPi''
 
 // SYNTHETIC: SWBF2 0x0040a270
-// `dynamic initializer for 'PblMath::fOneOverTwoPi''
+// PblMath::`dynamic initializer for 'fOneOverTwoPi''
 
 // SYNTHETIC: SWBF2 0x0040a1f0
 // `dynamic initializer for 'pcOceanShader::s_Factory''

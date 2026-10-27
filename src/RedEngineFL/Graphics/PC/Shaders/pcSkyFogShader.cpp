@@ -307,10 +307,10 @@ void pcSkyFogShader::_StaticInit() const
 unsigned int pcSkyFogShader::s_uiRenderTypeHash = PblHash("SkyFog");
 
 // SYNTHETIC: SWBF2 0x00409ae0
-// `dynamic initializer for 'PblMath::fOneOverHalfPi''
+// PblMath::`dynamic initializer for 'fOneOverHalfPi''
 
 // SYNTHETIC: SWBF2 0x00409b00
-// `dynamic initializer for 'PblMath::fOneOverTwoPi''
+// PblMath::`dynamic initializer for 'fOneOverTwoPi''
 
 // SYNTHETIC: SWBF2 0x00409a80
 // `dynamic initializer for 'pcSkyFogShader::s_Factory''

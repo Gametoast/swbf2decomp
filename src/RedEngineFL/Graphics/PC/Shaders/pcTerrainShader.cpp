@@ -1255,10 +1255,10 @@ pcTerrainShader pcTerrainShader::s_Factory;
 pcRedShaderDef pcTerrainShader::s_shaderDef("terrain_shader.xml");
 
 // SYNTHETIC: SWBF2 0x00409420
-// `dynamic initializer for 'PblMath::fOneOverTwoPi''
+// PblMath::`dynamic initializer for 'fOneOverTwoPi''
 
 // SYNTHETIC: SWBF2 0x00409400
-// `dynamic initializer for 'PblMath::fOneOverHalfPi''
+// PblMath::`dynamic initializer for 'fOneOverHalfPi''
 
 // GLOBAL: SWBF2 0x009c8510
 // g_pcTerrainShader

@@ -1259,7 +1259,7 @@ static const PblMatrix& _GetSkinMatrix(unsigned int uiNumBones, const unsigned c
 }
 
 // SYNTHETIC: SWBF2 0x00408aa0
-// `dynamic initializer for 'PblMath::fOneOverHalfPi''
+// PblMath::`dynamic initializer for 'fOneOverHalfPi''
 
 // SYNTHETIC: SWBF2 0x00408ac0
-// `dynamic initializer for 'PblMath::fOneOverTwoPi''
+// PblMath::`dynamic initializer for 'fOneOverTwoPi''

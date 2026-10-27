@@ -16441,19 +16441,19 @@ void sub_5D3BF0(void*, int) {}
 PblTimeBase frameLockTimeBase;
 
 // SYNTHETIC: SWBF2 0x004044d0
-// `dynamic initializer for 'PblMath::fTwoPi''
+// PblMath::`dynamic initializer for 'fTwoPi''
 
 // SYNTHETIC: SWBF2 0x004044f0
-// `dynamic initializer for 'PblMath::fHalfPi''
+// PblMath::`dynamic initializer for 'fHalfPi''
 
 // SYNTHETIC: SWBF2 0x00404510
-// `dynamic initializer for 'PblMath::fOneOverPi''
+// PblMath::`dynamic initializer for 'fOneOverPi''
 
 // SYNTHETIC: SWBF2 0x00404530
-// `dynamic initializer for 'PblMath::fOneOverTwoPi''
+// PblMath::`dynamic initializer for 'fOneOverTwoPi''
 
 // SYNTHETIC: SWBF2 0x00404550
-// `dynamic initializer for 'PblMath::fOneOverHalfPi''
+// PblMath::`dynamic initializer for 'fOneOverHalfPi''
 
 // SYNTHETIC: SWBF2 0x00404570
 // `dynamic initializer for '_IdentityMatrix''

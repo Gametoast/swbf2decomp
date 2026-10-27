@@ -237,10 +237,10 @@ void pcPreReflectionShader::_StaticInit() const
 unsigned int pcPreReflectionShader::s_uiRenderTypeHash = PblHash("PreReflection");
 
 // SYNTHETIC: SWBF2 0x0040a0f0
-// `dynamic initializer for 'PblMath::fOneOverHalfPi''
+// PblMath::`dynamic initializer for 'fOneOverHalfPi''
 
 // SYNTHETIC: SWBF2 0x0040a110
-// `dynamic initializer for 'PblMath::fOneOverTwoPi''
+// PblMath::`dynamic initializer for 'fOneOverTwoPi''
 
 // SYNTHETIC: SWBF2 0x0040a090
 // `dynamic initializer for 'pcPreReflectionShader::s_Factory''

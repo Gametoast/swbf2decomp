@@ -2131,7 +2131,7 @@ int fskip(PblFile& rFile, char const* pcToken)
 }
 
 // SYNTHETIC: SWBF2 0x00408b60
-// `dynamic initializer for 'PblMath::fOneOverHalfPi''
+// PblMath::`dynamic initializer for 'fOneOverHalfPi''
 
 // SYNTHETIC: SWBF2 0x00408b80
-// `dynamic initializer for 'PblMath::fOneOverTwoPi''
+// PblMath::`dynamic initializer for 'fOneOverTwoPi''

@@ -356,10 +356,10 @@ pcZPrepassShader pcZPrepassShader::s_Factory;
 pcRedShaderDef pcZPrepassShader::s_shaderDef("zprepass_shader.xml");
 
 // SYNTHETIC: SWBF2 0x00409990
-// `dynamic initializer for 'PblMath::fOneOverTwoPi''
+// PblMath::`dynamic initializer for 'fOneOverTwoPi''
 
 // SYNTHETIC: SWBF2 0x00409970
-// `dynamic initializer for 'PblMath::fOneOverHalfPi''
+// PblMath::`dynamic initializer for 'fOneOverHalfPi''
 
 // GLOBAL: SWBF2 0x009c95dc
 // g_pcZPrepassShader

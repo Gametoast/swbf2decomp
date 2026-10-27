@@ -347,10 +347,10 @@ void pcFlareShader::_StaticInit() const
 unsigned int pcFlareShader::s_uiRenderTypeHash = PblHash("flare");
 
 // SYNTHETIC: SWBF2 0x00409d80
-// `dynamic initializer for 'PblMath::fOneOverHalfPi''
+// PblMath::`dynamic initializer for 'fOneOverHalfPi''
 
 // SYNTHETIC: SWBF2 0x00409da0
-// `dynamic initializer for 'PblMath::fOneOverTwoPi''
+// PblMath::`dynamic initializer for 'fOneOverTwoPi''
 
 // SYNTHETIC: SWBF2 0x00409d20
 // `dynamic initializer for 'pcFlareShader::s_Factory''
