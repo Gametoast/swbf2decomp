@@ -2421,106 +2421,158 @@
     <ClCompile Include="src\LuaFL\src\lapi.cpp">
       <AdditionalIncludeDirectories>src;src\LuaFL\include;src\LuaFL\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <InlineFunctionExpansion Condition="'$(Configuration)'=='Release'">OnlyExplicitInline</InlineFunctionExpansion>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <OmitDefaultLibName>true</OmitDefaultLibName>
     </ClCompile>
     <ClCompile Include="src\LuaFL\src\lcode.cpp">
       <AdditionalIncludeDirectories>src;src\LuaFL\include;src\LuaFL\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <InlineFunctionExpansion Condition="'$(Configuration)'=='Release'">OnlyExplicitInline</InlineFunctionExpansion>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <OmitDefaultLibName>true</OmitDefaultLibName>
     </ClCompile>
     <ClCompile Include="src\LuaFL\src\ldebug.cpp">
       <AdditionalIncludeDirectories>src;src\LuaFL\include;src\LuaFL\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <InlineFunctionExpansion Condition="'$(Configuration)'=='Release'">OnlyExplicitInline</InlineFunctionExpansion>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <OmitDefaultLibName>true</OmitDefaultLibName>
     </ClCompile>
     <ClCompile Include="src\LuaFL\src\ldo.cpp">
       <AdditionalIncludeDirectories>src;src\LuaFL\include;src\LuaFL\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <InlineFunctionExpansion Condition="'$(Configuration)'=='Release'">OnlyExplicitInline</InlineFunctionExpansion>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <OmitDefaultLibName>true</OmitDefaultLibName>
     </ClCompile>
     <ClCompile Include="src\LuaFL\src\ldump.cpp">
       <AdditionalIncludeDirectories>src;src\LuaFL\include;src\LuaFL\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <InlineFunctionExpansion Condition="'$(Configuration)'=='Release'">OnlyExplicitInline</InlineFunctionExpansion>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <OmitDefaultLibName>true</OmitDefaultLibName>
     </ClCompile>
     <ClCompile Include="src\LuaFL\src\lfunc.cpp">
       <AdditionalIncludeDirectories>src;src\LuaFL\include;src\LuaFL\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <InlineFunctionExpansion Condition="'$(Configuration)'=='Release'">OnlyExplicitInline</InlineFunctionExpansion>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <OmitDefaultLibName>true</OmitDefaultLibName>
     </ClCompile>
     <ClCompile Include="src\LuaFL\src\lgc.cpp">
       <AdditionalIncludeDirectories>src;src\LuaFL\include;src\LuaFL\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <InlineFunctionExpansion Condition="'$(Configuration)'=='Release'">OnlyExplicitInline</InlineFunctionExpansion>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <OmitDefaultLibName>true</OmitDefaultLibName>
     </ClCompile>
     <ClCompile Include="src\LuaFL\src\lib\lauxlib.cpp">
       <AdditionalIncludeDirectories>src;src\LuaFL\include;src\LuaFL\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <InlineFunctionExpansion Condition="'$(Configuration)'=='Release'">OnlyExplicitInline</InlineFunctionExpansion>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <OmitDefaultLibName>true</OmitDefaultLibName>
     </ClCompile>
     <ClCompile Include="src\LuaFL\src\lib\lbaselib.cpp">
       <AdditionalIncludeDirectories>src;src\LuaFL\include;src\LuaFL\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <InlineFunctionExpansion Condition="'$(Configuration)'=='Release'">OnlyExplicitInline</InlineFunctionExpansion>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <OmitDefaultLibName>true</OmitDefaultLibName>
     </ClCompile>
     <ClCompile Include="src\LuaFL\src\lib\ldblib.cpp">
       <AdditionalIncludeDirectories>src;src\LuaFL\include;src\LuaFL\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <InlineFunctionExpansion Condition="'$(Configuration)'=='Release'">OnlyExplicitInline</InlineFunctionExpansion>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <OmitDefaultLibName>true</OmitDefaultLibName>
     </ClCompile>
     <ClCompile Include="src\LuaFL\src\lib\liolib.cpp">
       <AdditionalIncludeDirectories>src;src\LuaFL\include;src\LuaFL\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <InlineFunctionExpansion Condition="'$(Configuration)'=='Release'">OnlyExplicitInline</InlineFunctionExpansion>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <OmitDefaultLibName>true</OmitDefaultLibName>
     </ClCompile>
     <ClCompile Include="src\LuaFL\src\lib\lmathlib.cpp">
       <AdditionalIncludeDirectories>src;src\LuaFL\include;src\LuaFL\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <InlineFunctionExpansion Condition="'$(Configuration)'=='Release'">OnlyExplicitInline</InlineFunctionExpansion>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <OmitDefaultLibName>true</OmitDefaultLibName>
     </ClCompile>
     <ClCompile Include="src\LuaFL\src\lib\lstrlib.cpp">
       <AdditionalIncludeDirectories>src;src\LuaFL\include;src\LuaFL\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <InlineFunctionExpansion Condition="'$(Configuration)'=='Release'">OnlyExplicitInline</InlineFunctionExpansion>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <OmitDefaultLibName>true</OmitDefaultLibName>
     </ClCompile>
     <ClCompile Include="src\LuaFL\src\lib\ltablib.cpp">
       <AdditionalIncludeDirectories>src;src\LuaFL\include;src\LuaFL\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <InlineFunctionExpansion Condition="'$(Configuration)'=='Release'">OnlyExplicitInline</InlineFunctionExpansion>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <OmitDefaultLibName>true</OmitDefaultLibName>
     </ClCompile>
     <ClCompile Include="src\LuaFL\src\llex.cpp">
       <AdditionalIncludeDirectories>src;src\LuaFL\include;src\LuaFL\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <InlineFunctionExpansion Condition="'$(Configuration)'=='Release'">OnlyExplicitInline</InlineFunctionExpansion>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <OmitDefaultLibName>true</OmitDefaultLibName>
     </ClCompile>
     <ClCompile Include="src\LuaFL\src\lmem.cpp">
       <AdditionalIncludeDirectories>src;src\LuaFL\include;src\LuaFL\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <InlineFunctionExpansion Condition="'$(Configuration)'=='Release'">OnlyExplicitInline</InlineFunctionExpansion>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <OmitDefaultLibName>true</OmitDefaultLibName>
     </ClCompile>
     <ClCompile Include="src\LuaFL\src\lobject.cpp">
       <AdditionalIncludeDirectories>src;src\LuaFL\include;src\LuaFL\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <InlineFunctionExpansion Condition="'$(Configuration)'=='Release'">OnlyExplicitInline</InlineFunctionExpansion>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <OmitDefaultLibName>true</OmitDefaultLibName>
     </ClCompile>
     <ClCompile Include="src\LuaFL\src\lopcodes.cpp">
       <AdditionalIncludeDirectories>src;src\LuaFL\include;src\LuaFL\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <InlineFunctionExpansion Condition="'$(Configuration)'=='Release'">OnlyExplicitInline</InlineFunctionExpansion>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <OmitDefaultLibName>true</OmitDefaultLibName>
     </ClCompile>
     <ClCompile Include="src\LuaFL\src\lparser.cpp">
       <AdditionalIncludeDirectories>src;src\LuaFL\include;src\LuaFL\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <InlineFunctionExpansion Condition="'$(Configuration)'=='Release'">OnlyExplicitInline</InlineFunctionExpansion>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <OmitDefaultLibName>true</OmitDefaultLibName>
     </ClCompile>
     <ClCompile Include="src\LuaFL\src\lstate.cpp">
       <AdditionalIncludeDirectories>src;src\LuaFL\include;src\LuaFL\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <InlineFunctionExpansion Condition="'$(Configuration)'=='Release'">OnlyExplicitInline</InlineFunctionExpansion>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <OmitDefaultLibName>true</OmitDefaultLibName>
     </ClCompile>
     <ClCompile Include="src\LuaFL\src\lstring.cpp">
       <AdditionalIncludeDirectories>src;src\LuaFL\include;src\LuaFL\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <InlineFunctionExpansion Condition="'$(Configuration)'=='Release'">OnlyExplicitInline</InlineFunctionExpansion>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <OmitDefaultLibName>true</OmitDefaultLibName>
     </ClCompile>
     <ClCompile Include="src\LuaFL\src\ltable.cpp">
       <AdditionalIncludeDirectories>src;src\LuaFL\include;src\LuaFL\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <InlineFunctionExpansion Condition="'$(Configuration)'=='Release'">OnlyExplicitInline</InlineFunctionExpansion>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <OmitDefaultLibName>true</OmitDefaultLibName>
     </ClCompile>
     <ClCompile Include="src\LuaFL\src\ltm.cpp">
       <AdditionalIncludeDirectories>src;src\LuaFL\include;src\LuaFL\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <InlineFunctionExpansion Condition="'$(Configuration)'=='Release'">OnlyExplicitInline</InlineFunctionExpansion>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <OmitDefaultLibName>true</OmitDefaultLibName>
     </ClCompile>
     <ClCompile Include="src\LuaFL\src\lundump.cpp">
       <AdditionalIncludeDirectories>src;src\LuaFL\include;src\LuaFL\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <InlineFunctionExpansion Condition="'$(Configuration)'=='Release'">OnlyExplicitInline</InlineFunctionExpansion>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <OmitDefaultLibName>true</OmitDefaultLibName>
     </ClCompile>
     <ClCompile Include="src\LuaFL\src\lvm.cpp">
       <AdditionalIncludeDirectories>src;src\LuaFL\include;src\LuaFL\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <InlineFunctionExpansion Condition="'$(Configuration)'=='Release'">OnlyExplicitInline</InlineFunctionExpansion>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <OmitDefaultLibName>true</OmitDefaultLibName>
     </ClCompile>
     <ClCompile Include="src\LuaFL\src\lzio.cpp">
       <AdditionalIncludeDirectories>src;src\LuaFL\include;src\LuaFL\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <InlineFunctionExpansion Condition="'$(Configuration)'=='Release'">OnlyExplicitInline</InlineFunctionExpansion>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <OmitDefaultLibName>true</OmitDefaultLibName>
     </ClCompile>
     <ClCompile Include="src\PebbleFL\Common\PblCatmullRom.cpp">
       <InlineFunctionExpansion Condition="'$(Configuration)'=='Release'">OnlyExplicitInline</InlineFunctionExpansion>

@@ -10,7 +10,7 @@
 
 #undef PI
 #define PI (3.14159265358979323846)
-#define RADIANS_PER_DEGREE (PI/180.0)
+#define RADIANS_PER_DEGREE ((lua_Number)(PI/180.0))
 
 #ifdef USE_DEGREES
 #define FROMRAD(a)	((a)/RADIANS_PER_DEGREE)
