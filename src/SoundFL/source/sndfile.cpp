@@ -19,6 +19,7 @@ bool File::smFileSystemOpen;
 // GLOBAL: SWBF2 0x009cf46c
 // File::smQueuedFileOpListLock
 Semaphore File::smQueuedFileOpListLock;
+// GLOBAL: SWBF2 0x009cf47c
 Thread File::smFileThread;
 // SYNTHETIC: SWBF2 0x0040b3e0
 // `dynamic initializer for 'Snd::File::smQueuedCommands''

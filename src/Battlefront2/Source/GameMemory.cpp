@@ -28,6 +28,7 @@ int TEMP_GamespyHeap;
 
 char* gArenaStart;
 char* gArenaEnd;
+// GLOBAL: SWBF2 0x01f9c2b0
 char* GamespyHeapstart;
 char* GamespyHeapend;
 char* g_Heap3Start;

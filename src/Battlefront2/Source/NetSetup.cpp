@@ -70,6 +70,7 @@ bool autoNetLan;
 bool autoNetRandomize;
 // GLOBAL: SWBF2 0x01ead47b
 bool g_bNoRender;
+// GLOBAL: SWBF2 0x01ead47c
 unsigned int netCrashAddr;
 // GLOBAL: SWBF2 0x01ead480
 // autoNetScript
@@ -77,6 +78,7 @@ char autoNetScript[32];
 // GLOBAL: SWBF2 0x01ead4a0
 // g_fFixedRate
 float g_fFixedRate;
+// GLOBAL: SWBF2 0x01ead4a4
 unsigned int netPasswordHash;
 
 // GLOBAL: SWBF2 0x01ead474
@@ -87,6 +89,7 @@ unsigned char netPasswordSha512[64];
 
 // GLOBAL: SWBF2 0x01ead4f8
 unsigned char netEncodedPassword[512];
+// GLOBAL: SWBF2 0x01ead4a8
 int netDifficulty;
 // GLOBAL: SWBF2 0x01ead4ac
 // g_bNoWait

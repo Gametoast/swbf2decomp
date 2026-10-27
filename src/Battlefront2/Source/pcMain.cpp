@@ -46,6 +46,7 @@ extern bool sPauseMenuSoundEnabled;
 
 char appName[260] = "Star Wars Battlefront II";
 
+// GLOBAL: SWBF2 0x007e8eeb
 bool gAppActive = true;
 
 void* s_memoryArena;
@@ -56,6 +57,7 @@ void* g_hMutex;
 // GLOBAL: SWBF2 0x01eaedd4
 bool gAltMeleeHitEffects;
 
+// GLOBAL: SWBF2 0x01eaedd6
 bool pcForceFixedFunction;
 // GLOBAL: SWBF2 0x01eaedd7
 // pcWindowed
@@ -63,10 +65,12 @@ bool pcWindowed;
 // GLOBAL: SWBF2 0x01eaedd8
 // hGlobalWnd
 HWND hGlobalWnd;
+// GLOBAL: SWBF2 0x01eaede4
 bool pcPostInstall;
 
 // GLOBAL: SWBF2 0x01eaede5
 bool gIsQuitting;
+// GLOBAL: SWBF2 0x01eaede6
 bool pcEnableLogging;
 // GLOBAL: SWBF2 0x01eaede7
 // gbMutexValid
@@ -78,9 +82,11 @@ HINSTANCE hGlobalInstance;
 // PCDebugHeap
 int PCDebugHeap;
 
+// GLOBAL: SWBF2 0x01eaeddc
 int pcHeight;
 int pcWidth;
 
+// GLOBAL: SWBF2 0x01fa8c58
 D3DGAMMARAMP s_originalGammaRamp;
 
 // FUNCTION: SWBF2 0x006170f0

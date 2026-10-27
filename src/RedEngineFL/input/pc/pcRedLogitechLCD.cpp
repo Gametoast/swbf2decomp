@@ -14,6 +14,7 @@
 // gLCDPanels
 RedLogitechLCD gLCDPanels[1];
 
+// GLOBAL: SWBF2 0x007e1438
 char* lpString2 = "Arial";
 
 // GLOBAL: SWBF2 0x007e143c

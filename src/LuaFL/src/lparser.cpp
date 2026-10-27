@@ -770,10 +770,10 @@ static BinOpr getbinopr (int op) {
   }
 }
 
+// GLOBAL: SWBF2 0x007717a0
 static const struct {
   lu_byte left;
   lu_byte right;
-// GLOBAL: SWBF2 0x7717a0
 } priority[] = {
    {6, 6}, {6, 6}, {7, 7}, {7, 7},
    {10, 9}, {5, 4},

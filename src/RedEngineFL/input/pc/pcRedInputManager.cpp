@@ -134,6 +134,7 @@ static IDirectInput8A* CreateFakeInput()
 namespace RedInputManager
 {
 
+// GLOBAL: SWBF2 0x0099cd01
 bool isReadingJournal;
 IDirectInput8A* m_pDI;
 unsigned int m_numJoysticks;

@@ -461,10 +461,12 @@ LARGE_INTEGER oldPerfCount;
 __int64 maxAdvanceTicks;
 // GLOBAL: SWBF2 0x1e563c0
 __int64 normalAdvanceTicks;
+// GLOBAL: SWBF2 0x01e563c8
 float g_fFrameRateScale;
 // GLOBAL: SWBF2 0x01e5639f
 // sIgnoreNextTime
 bool sIgnoreNextTime;
+// GLOBAL: SWBF2 0x01e563b3
 bool gMemoryPoolErrors;
 
 namespace GameState

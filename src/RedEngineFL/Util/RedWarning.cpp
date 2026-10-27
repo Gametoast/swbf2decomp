@@ -21,7 +21,9 @@ bool GetBreakOnWarning()
     return gBreakOnWarning;
 }
 
+// GLOBAL: SWBF2 0x007e15cc
 static char* kapcSEVERITYSHORT[6] = { "*", "?", "#", "$", "%", "!" };
+// GLOBAL: SWBF2 0x007e15e4
 static char* kapcSEVERITYLONG[6] = { "VERBOSE", "INFORM", "WARNING", "ERROR", "BUG", "FATAL" };
 
 namespace RedWarning

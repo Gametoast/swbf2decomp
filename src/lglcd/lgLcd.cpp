@@ -9,10 +9,12 @@ int dword_1E2FD04;
 // GLOBAL: SWBF2 0x01fac3b0
 lgLcdInterface* dword_1FAC3B0;
 
+// GLOBAL: SWBF2 0x01e2fbf8
 HMODULE hLibModule;
 // GLOBAL: SWBF2 0x01e2fbfc
 void* dword_1E2FBFC;
 
+// GLOBAL: SWBF2 0x007e57c0
 char* lpSubKey =
     "SOFTWARE\\Classes\\CLSID\\{FE750200-B72E-11d9-829B-0050DA1A72D3}\\ServerBinary";
 

@@ -27,6 +27,7 @@ Voice* EngineBase::smVoices;
 // GLOBAL: SWBF2 0x009d8418
 bool EngineBase::smOpened;
 
+// GLOBAL: SWBF2 0x009d8420
 unsigned char EngineBase::smVoiceStorage[0xA800];
 
 unsigned char EngineBase::smStreamStorage[0x1446A68];

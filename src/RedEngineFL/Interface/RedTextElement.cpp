@@ -31,6 +31,7 @@ float CURSOR_Y;
 
 // GLOBAL: SWBF2 0x9982dc
 util::HashTable<unsigned short, unsigned int, util::NewAllocator>* mMagicCharMap_;
+// GLOBAL: SWBF2 0x009982e0
 bool sFindReplaceError;
 
 unsigned int FindReplaceMagicStrings_(const unsigned short* const pcSource,

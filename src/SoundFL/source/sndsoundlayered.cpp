@@ -34,6 +34,7 @@ namespace Snd
 SoundLayered::FireForgetLayer* SoundLayered::smFireForgetLayers;
 // GLOBAL: SWBF2 0x01e29db4
 bool SoundLayered::smIsOpen;
+// GLOBAL: SWBF2 0x01e29db8
 unsigned char SoundLayered::smFireForgetLayerStorage[5888];
 // SYNTHETIC: SWBF2 0x0040bbb0
 // `dynamic initializer for 'Snd::SoundLayered::FireForgetLayer::smInactiveList''

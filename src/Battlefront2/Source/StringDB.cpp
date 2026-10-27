@@ -16,6 +16,7 @@ char* mPool;
 // GLOBAL: SWBF2 0x01eafb94
 // mNext
 char* mNext;
+// GLOBAL: SWBF2 0x01eafb98
 int mPoolSize;
 
 // FUNCTION: SWBF2 0x00651ed0

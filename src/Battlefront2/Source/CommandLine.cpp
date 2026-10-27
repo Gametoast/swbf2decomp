@@ -57,6 +57,7 @@ void ForceLanguageID(int iLanguage)
 // gGamespyAutoName
 char gGamespyAutoName[32];
 char gGamespyAutoConnectAddr[64];
+// GLOBAL: SWBF2 0x01e307a0
 char gGamespyAutoPassStr[128];
 // GLOBAL: SWBF2 0x01e30820
 // gGamespyAutoEmail
@@ -64,6 +65,7 @@ char gGamespyAutoEmail[64];
 // GLOBAL: SWBF2 0x01e30860
 // gGamespyAutoPPass
 char gGamespyAutoPPass[32];
+// GLOBAL: SWBF2 0x01e30880
 unsigned int gGamespyAutoPass;
 // GLOBAL: SWBF2 0x01e30736
 bool gBootLagger;
@@ -79,6 +81,7 @@ bool sLoadNestedLevels = true;
 // GLOBAL: SWBF2 0x007e666d
 bool GameMovie::sUseMovies = true;
 
+// GLOBAL: SWBF2 0x01e57a10
 char Destination[16];
 
 namespace PlayerPrefs

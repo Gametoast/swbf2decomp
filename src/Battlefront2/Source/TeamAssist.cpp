@@ -21,6 +21,7 @@ int Play(VOType eType, const GameObject* pSpeaker, const GameObject* pTarget,
 // GLOBAL: SWBF2 0x01eafcc4
 unsigned int TeamAssist::sColorHash;
 
+// GLOBAL: SWBF2 0x0078b5d0
 static const unsigned int sMarkerTexture[TeamAssistManager::Max] = {
     0x1e9ab20a,
     0x16d1df7b,

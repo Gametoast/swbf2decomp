@@ -8,8 +8,11 @@ void __cdecl PblTraceP(const char* Format, ...);
 
 extern HWND hGlobalWnd;
 
+// GLOBAL: SWBF2 0x00960c10
 char sAsciiCodeMap[256][2];
+// GLOBAL: SWBF2 0x00960e10
 unsigned char sRedKeyMap[256];
+// GLOBAL: SWBF2 0x00960f10
 float s_keyRepeatDelay;
 float s_keyRepeatSpeed;
 

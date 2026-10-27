@@ -206,7 +206,9 @@ int netCurMaxHosts;
 // GLOBAL: SWBF2 0x01e62f0c
 // netHostIndex
 int netHostIndex;
+// GLOBAL: SWBF2 0x01e62f40
 int journalMode;
+// GLOBAL: SWBF2 0x01e62f91
 bool netIsSplit;
 // GLOBAL: SWBF2 0x01fa8788
 // netPreGameEnabled
