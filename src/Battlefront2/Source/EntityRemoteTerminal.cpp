@@ -137,17 +137,17 @@ EntityRemoteTerminal::EntityRemoteTerminal(EntityRemoteTerminalClass* pClass, co
 }
 
 // SYNTHETIC: SWBF2 0x004ddea4
-// [thunk]:EntityRemoteTerminal::`scalar deleting destructor' adjustor{320}
+// ??_EEntityRemoteTerminal@@WBEA@AEPAXI@Z
 // SYNTHETIC: SWBF2 0x004ddeaf
-// [thunk]:EntityRemoteTerminal::`scalar deleting destructor' adjustor{600}
+// ??_EEntityRemoteTerminal@@WCFI@AEPAXI@Z
 // SYNTHETIC: SWBF2 0x004ddeba
-// [thunk]:EntityRemoteTerminal::`scalar deleting destructor' adjustor{12}
+// ??_EEntityRemoteTerminal@@WM@AEPAXI@Z
 // SYNTHETIC: SWBF2 0x004ddec2
-// [thunk]:EntityRemoteTerminal::`scalar deleting destructor' adjustor{512}
+// ??_EEntityRemoteTerminal@@WCAA@AEPAXI@Z
 // SYNTHETIC: SWBF2 0x004ddecd
-// [thunk]:EntityRemoteTerminal::`scalar deleting destructor' adjustor{576}
+// ??_EEntityRemoteTerminal@@WCEA@AEPAXI@Z
 // SYNTHETIC: SWBF2 0x004ddee3
-// [thunk]:EntityRemoteTerminal::`scalar deleting destructor' adjustor{148}
+// ??_EEntityRemoteTerminal@@WJE@AEPAXI@Z
 
 // FUNCTION: SWBF2 0x004dce60
 EntityRemoteTerminal::~EntityRemoteTerminal()
@@ -201,9 +201,9 @@ void EntityRemoteTerminal::Render(unsigned char ucViewport, float fDist, unsigne
 
 
 // SYNTHETIC: SWBF2 0x004dde83
-// [thunk]:EntityRemoteTerminal::GetEntity const adjustor{576}
+// ?GetEntity@EntityRemoteTerminal@@WCEA@BEPBVEntity@@XZ
 // SYNTHETIC: SWBF2 0x004ddef6
-// [thunk]:EntityRemoteTerminal::GetEntity const adjustor{12}
+// ?GetEntity@EntityRemoteTerminal@@WM@BEPBVEntity@@XZ
 // FUNCTION: SWBF2 0x004dc9c0
 const Entity* EntityRemoteTerminal::GetEntity() const
 {
@@ -211,9 +211,9 @@ const Entity* EntityRemoteTerminal::GetEntity() const
 }
 
 // SYNTHETIC: SWBF2 0x004dde78
-// [thunk]:EntityRemoteTerminal::GetEntity adjustor{576}
+// ?GetEntity@EntityRemoteTerminal@@WCEA@AEPAVEntity@@XZ
 // SYNTHETIC: SWBF2 0x004ddeee
-// [thunk]:EntityRemoteTerminal::GetEntity adjustor{12}
+// ?GetEntity@EntityRemoteTerminal@@WM@AEPAVEntity@@XZ
 // FUNCTION: SWBF2 0x004dc9b0
 Entity* EntityRemoteTerminal::GetEntity()
 {
@@ -221,11 +221,11 @@ Entity* EntityRemoteTerminal::GetEntity()
 }
 
 // SYNTHETIC: SWBF2 0x004dde47
-// [thunk]:EntityRemoteTerminal::GetGameObject const adjustor{320}
+// ?GetGameObject@EntityRemoteTerminal@@WBEA@BEPBVGameObject@@XZ
 // SYNTHETIC: SWBF2 0x004dde5d
-// [thunk]:EntityRemoteTerminal::GetGameObject const adjustor{600}
+// ?GetGameObject@EntityRemoteTerminal@@WCFI@BEPBVGameObject@@XZ
 // SYNTHETIC: SWBF2 0x004dde70
-// [thunk]:EntityRemoteTerminal::GetGameObject const adjustor{12}
+// ?GetGameObject@EntityRemoteTerminal@@WM@BEPBVGameObject@@XZ
 // FUNCTION: SWBF2 0x004dc9a0
 const GameObject* EntityRemoteTerminal::GetGameObject() const
 {
@@ -233,11 +233,11 @@ const GameObject* EntityRemoteTerminal::GetGameObject() const
 }
 
 // SYNTHETIC: SWBF2 0x004dde3c
-// [thunk]:EntityRemoteTerminal::GetGameObject adjustor{320}
+// ?GetGameObject@EntityRemoteTerminal@@WBEA@AEPAVGameObject@@XZ
 // SYNTHETIC: SWBF2 0x004dde52
-// [thunk]:EntityRemoteTerminal::GetGameObject adjustor{600}
+// ?GetGameObject@EntityRemoteTerminal@@WCFI@AEPAVGameObject@@XZ
 // SYNTHETIC: SWBF2 0x004dde68
-// [thunk]:EntityRemoteTerminal::GetGameObject adjustor{12}
+// ?GetGameObject@EntityRemoteTerminal@@WM@AEPAVGameObject@@XZ
 // FUNCTION: SWBF2 0x004dc990
 GameObject* EntityRemoteTerminal::GetGameObject()
 {
@@ -245,7 +245,7 @@ GameObject* EntityRemoteTerminal::GetGameObject()
 }
 
 // SYNTHETIC: SWBF2 0x004dded8
-// [thunk]:EntityRemoteTerminal::GetMatrix adjustor{564}
+// ?GetMatrix@EntityRemoteTerminal@@WCDE@BEABVPblMatrix@@XZ
 
 // FUNCTION: SWBF2 0x004dc9d0
 const PblMatrix& EntityRemoteTerminal::GetMatrix() const
@@ -284,7 +284,7 @@ Trackable* EntityRemoteTerminal::GetTrackable()
 }
 
 // SYNTHETIC: SWBF2 0x004dde99
-// [thunk]:EntityRemoteTerminal::GetControllable adjustor{600}
+// ?GetControllable@EntityRemoteTerminal@@WCFI@AEPAVControllable@@XZ
 // FUNCTION: SWBF2 0x004dcae0
 Controllable* EntityRemoteTerminal::GetControllable()
 {
@@ -292,7 +292,7 @@ Controllable* EntityRemoteTerminal::GetControllable()
 }
 
 // SYNTHETIC: SWBF2 0x004dde8e
-// [thunk]:EntityRemoteTerminal::GetControllable const adjustor{600}
+// ?GetControllable@EntityRemoteTerminal@@WCFI@BEPBVControllable@@XZ
 // FUNCTION: SWBF2 0x004dcad0
 const Controllable* EntityRemoteTerminal::GetControllable() const
 {

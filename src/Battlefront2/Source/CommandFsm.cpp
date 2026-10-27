@@ -2,22 +2,22 @@
 #include "UnitMobileController.h"
 
 // SYNTHETIC: SWBF2 0x00667ef2
-// [thunk]:UnitFlyController::`scalar deleting destructor' adjustor{120}
+// ??_EUnitFlyController@@WHI@AEPAXI@Z
 
 // SYNTHETIC: SWBF2 0x00667ee7
-// [thunk]:UnitFlyController::`scalar deleting destructor' adjustor{452}
+// ??_EUnitFlyController@@WBME@AEPAXI@Z
 
 // SYNTHETIC: SWBF2 0x00669317
-// [thunk]:UnitMobileController::`scalar deleting destructor' adjustor{120}
+// ??_EUnitMobileController@@WHI@AEPAXI@Z
 
 // SYNTHETIC: SWBF2 0x0066930c
-// [thunk]:UnitMobileController::`scalar deleting destructor' adjustor{452}
+// ??_EUnitMobileController@@WBME@AEPAXI@Z
 
 // SYNTHETIC: SWBF2 0x00669890
-// [thunk]:UnitStationaryController::`scalar deleting destructor' adjustor{452}
+// ??_EUnitStationaryController@@WBME@AEPAXI@Z
 
 // SYNTHETIC: SWBF2 0x0066989b
-// [thunk]:UnitStationaryController::`scalar deleting destructor' adjustor{120}
+// ??_EUnitStationaryController@@WHI@AEPAXI@Z
 
 
 

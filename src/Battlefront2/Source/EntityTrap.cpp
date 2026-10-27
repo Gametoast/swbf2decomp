@@ -114,15 +114,15 @@ EntityTrap::~EntityTrap()
 // SYNTHETIC: SWBF2 0x004fcd00
 // EntityTrap::`scalar deleting destructor'
 // SYNTHETIC: SWBF2 0x004ff4ab
-// [thunk]:EntityTrap::`scalar deleting destructor' adjustor{320}
+// ??_EEntityTrap@@WBEA@AEPAXI@Z
 // SYNTHETIC: SWBF2 0x004ff4b6
-// [thunk]:EntityTrap::`scalar deleting destructor' adjustor{12}
+// ??_EEntityTrap@@WM@AEPAXI@Z
 // SYNTHETIC: SWBF2 0x004ff4be
-// [thunk]:EntityTrap::`scalar deleting destructor' adjustor{512}
+// ??_EEntityTrap@@WCAA@AEPAXI@Z
 // SYNTHETIC: SWBF2 0x004ff4c9
-// [thunk]:EntityTrap::`scalar deleting destructor' adjustor{608}
+// ??_EEntityTrap@@WCGA@AEPAXI@Z
 // SYNTHETIC: SWBF2 0x004ff4d4
-// [thunk]:EntityTrap::`scalar deleting destructor' adjustor{148}
+// ??_EEntityTrap@@WJE@AEPAXI@Z
 
 
 

@@ -68,7 +68,7 @@ float HUD::Element::GetFadeHoldElapsed() const
 }
 
 // SYNTHETIC: SWBF2 0x00558b63
-// [thunk]:HUD::ElementMultilineText::Line::`scalar deleting destructor' adjustor{256}
+// ??_ELine@ElementMultilineText@HUD@@WBAA@AEPAXI@Z
 
 
 
@@ -114,7 +114,7 @@ HUD::ElementMultilineText::ElementMultilineText(const char* const pName,
 }
 
 // SYNTHETIC: SWBF2 0x00558b6e
-// [thunk]:HUD::ElementMultilineText::`scalar deleting destructor' adjustor{368}
+// ??_EElementMultilineText@HUD@@WBHA@AEPAXI@Z
 
 // FUNCTION: SWBF2 0x00557630
 HUD::ElementMultilineText::~ElementMultilineText()

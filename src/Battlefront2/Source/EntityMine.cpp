@@ -204,15 +204,15 @@ EntityMine::~EntityMine()
 // SYNTHETIC: SWBF2 0x004cf550
 // EntityMine::`scalar deleting destructor'
 // SYNTHETIC: SWBF2 0x004d0cc9
-// [thunk]:EntityMine::`vector deleting destructor'`adjustor{148}'
+// ??_EEntityMine@@WJE@AEPAXI@Z
 // SYNTHETIC: SWBF2 0x004d0cd4
-// [thunk]:EntityMine::`vector deleting destructor'`adjustor{320}'
+// ??_EEntityMine@@WBEA@AEPAXI@Z
 // SYNTHETIC: SWBF2 0x004d0cdf
-// [thunk]:EntityMine::`vector deleting destructor'`adjustor{12}'
+// ??_EEntityMine@@WM@AEPAXI@Z
 // SYNTHETIC: SWBF2 0x004d0ce7
-// [thunk]:EntityMine::`vector deleting destructor'`adjustor{512}'
+// ??_EEntityMine@@WCAA@AEPAXI@Z
 // SYNTHETIC: SWBF2 0x004d0cf2
-// [thunk]:EntityMine::`vector deleting destructor'`adjustor{576}'
+// ??_EEntityMine@@WCEA@AEPAXI@Z
 
 
 

@@ -311,7 +311,7 @@ void FLEffectObject::Init()
 }
 
 // SYNTHETIC: SWBF2 0x00433dd0
-// [thunk]:FLEffectObject::`scalar deleting destructor' adjustor{24}
+// ??_EFLEffectObject@@WBI@AEPAXI@Z
 // FUNCTION: SWBF2 0x00527130
 FLEffectObject::~FLEffectObject()
 {

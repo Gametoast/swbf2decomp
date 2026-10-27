@@ -88,7 +88,7 @@ public:
     // SYNTHETIC: SWBF2 0x00573df0
     // LightsaberTrail::`scalar deleting destructor'
     // SYNTHETIC: SWBF2 0x0057552c
-    // [thunk]:LightsaberTrail::`scalar deleting destructor' adjustor{24}
+    // ??_ELightsaberTrail@@WBI@AEPAXI@Z
     virtual ~LightsaberTrail()
     {
         m_bEffectActive = false;

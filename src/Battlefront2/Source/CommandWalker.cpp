@@ -112,7 +112,7 @@ EntityType CommandWalker::GetEntityType() const
 // CommandWalker::`scalar deleting destructor'
 
 // SYNTHETIC: SWBF2 0x004803bb
-// [thunk]:CommandWalker::`scalar deleting destructor'`adjustor{576}'
+// ??_ECommandWalker@@WCEA@AEPAXI@Z
 
 // FUNCTION: SWBF2 0x0047fe70
 CommandWalker::CommandWalker(CommandWalkerClass* pClass, const EntityDesc& desc)

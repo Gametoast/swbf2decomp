@@ -64,9 +64,9 @@ void EntityGeometry::SetupPose(RedPose& pose) const
 
 
 // SYNTHETIC: SWBF2 0x004bd7fe
-// [thunk]:EntityGeometry::`scalar deleting destructor' adjustor{12}
+// ??_EEntityGeometry@@WM@AEPAXI@Z
 // SYNTHETIC: SWBF2 0x004bd806
-// [thunk]:EntityGeometry::`scalar deleting destructor' adjustor{148}
+// ??_EEntityGeometry@@WJE@AEPAXI@Z
 // SYNTHETIC: SWBF2 0x004ba0a0
 // EntityGeometry::`scalar deleting destructor'
 
@@ -1310,11 +1310,11 @@ void EntityGeometry::CreateChunkCluster(float fScale)
 }
 
 // SYNTHETIC: SWBF2 0x00446e24
-// [thunk]:EntityGeometry::GetEntity`adjustor{12}'
+// ?GetEntity@EntityGeometry@@WM@AEPAVEntity@@XZ
 
 // SYNTHETIC: SWBF2 0x004bd360
 // ChunkDescriptor::ChunkDescriptor(void)
 
 
 // SYNTHETIC: SWBF2 0x004992d2
-// [thunk]:EntityGeometry::GetGameObject`adjustor{12}'
+// ?GetGameObject@EntityGeometry@@WM@AEPAVGameObject@@XZ

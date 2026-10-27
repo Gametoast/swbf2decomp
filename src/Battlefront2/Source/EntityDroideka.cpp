@@ -2440,53 +2440,53 @@ bool EntityDroideka::CollideTrisWithAllPrimitives() const
 }
 
 // SYNTHETIC: SWBF2 0x004a98ec
-// [thunk]:EntityDroideka::GetMatrix`adjustor{564}'
+// ?GetMatrix@EntityDroideka@@WCDE@BEABVPblMatrix@@XZ
 
 // SYNTHETIC: SWBF2 0x004a9902
-// [thunk]:EntityDroideka::GetEntity`adjustor{12}'
+// ?GetEntity@EntityDroideka@@WM@AEPAVEntity@@XZ
 
 // SYNTHETIC: SWBF2 0x004a9912
-// [thunk]:EntityDroideka::GetGameObject`adjustor{320}'
+// ?GetGameObject@EntityDroideka@@WBEA@AEPAVGameObject@@XZ
 
 // SYNTHETIC: SWBF2 0x004a9928
-// [thunk]:EntityDroideka::GetGameObject`adjustor{600}'
+// ?GetGameObject@EntityDroideka@@WCFI@AEPAVGameObject@@XZ
 
 // SYNTHETIC: SWBF2 0x004a9933
-// [thunk]:EntityDroideka::GetGameObject`adjustor{600}'
+// ?GetGameObject@EntityDroideka@@WCFI@BEPBVGameObject@@XZ
 
 // SYNTHETIC: SWBF2 0x004a993e
-// [thunk]:EntityDroideka::GetGameObject`adjustor{12}'
+// ?GetGameObject@EntityDroideka@@WM@AEPAVGameObject@@XZ
 
 // SYNTHETIC: SWBF2 0x004a994e
-// [thunk]:EntityDroideka::GetEntity`adjustor{576}'
+// ?GetEntity@EntityDroideka@@WCEA@AEPAVEntity@@XZ
 
 // SYNTHETIC: SWBF2 0x004a98ce
-// [thunk]:EntityDroideka::`scalar deleting destructor' adjustor{12}
+// ??_EEntityDroideka@@WM@AEPAXI@Z
 // SYNTHETIC: SWBF2 0x004a98d6
-// [thunk]:EntityDroideka::`scalar deleting destructor' adjustor{512}
+// ??_EEntityDroideka@@WCAA@AEPAXI@Z
 // SYNTHETIC: SWBF2 0x004a98f7
-// [thunk]:EntityDroideka::`scalar deleting destructor' adjustor{148}
+// ??_EEntityDroideka@@WJE@AEPAXI@Z
 // SYNTHETIC: SWBF2 0x004a990a
-// [thunk]:EntityDroideka::GetEntity adjustor{12}
+// ?GetEntity@EntityDroideka@@WM@BEPBVEntity@@XZ
 // SYNTHETIC: SWBF2 0x004a991d
-// [thunk]:EntityDroideka::GetGameObject adjustor{320}
+// ?GetGameObject@EntityDroideka@@WBEA@BEPBVGameObject@@XZ
 // SYNTHETIC: SWBF2 0x004a9946
-// [thunk]:EntityDroideka::GetGameObject adjustor{12}
+// ?GetGameObject@EntityDroideka@@WM@BEPBVGameObject@@XZ
 // SYNTHETIC: SWBF2 0x004a9964
-// [thunk]:EntityDroideka::GetControllable adjustor{600}
+// ?GetControllable@EntityDroideka@@WCFI@AEPAVControllable@@XZ
 // SYNTHETIC: SWBF2 0x004a996f
-// [thunk]:EntityDroideka::GetControllable adjustor{600}
+// ?GetControllable@EntityDroideka@@WCFI@BEPBVControllable@@XZ
 // SYNTHETIC: SWBF2 0x004a997a
-// [thunk]:EntityDroideka::Kill adjustor{256}
+// ?Kill@EntityDroideka@@WBAA@AEXXZ
 // SYNTHETIC: SWBF2 0x004a9985
-// [thunk]:EntityDroideka::`scalar deleting destructor' adjustor{320}
+// ??_EEntityDroideka@@WBEA@AEPAXI@Z
 // SYNTHETIC: SWBF2 0x004a9990
-// [thunk]:EntityDroideka::`scalar deleting destructor' adjustor{972}
+// ??_EEntityDroideka@@WDMM@AEPAXI@Z
 // SYNTHETIC: SWBF2 0x004a999b
-// [thunk]:EntityDroideka::`scalar deleting destructor' adjustor{600}
+// ??_EEntityDroideka@@WCFI@AEPAXI@Z
 
 // SYNTHETIC: SWBF2 0x004a9959
-// [thunk]:EntityDroideka::GetEntity`adjustor{576}'
+// ?GetEntity@EntityDroideka@@WCEA@BEPBVEntity@@XZ
 
 
 extern bool netFrameLock;
@@ -3874,7 +3874,7 @@ bool EntityDroideka::Update(float fDeltaTime)
 // EntityDroideka::`scalar deleting destructor'
 
 // SYNTHETIC: SWBF2 0x004a98e1
-// [thunk]:EntityDroideka::`scalar deleting destructor'`adjustor{576}'
+// ??_EEntityDroideka@@WCEA@AEPAXI@Z
 
 // FUNCTION: SWBF2 0x0049f270
 EntityDroideka::~EntityDroideka()

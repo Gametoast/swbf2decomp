@@ -8,7 +8,7 @@
 #include "PebbleFL/Common/PblRandom.h"
 
 // SYNTHETIC: SWBF2 0x00631377
-// [thunk]:RumbleEffectClass::`scalar deleting destructor' adjustor{24}
+// ??_ERumbleEffectClass@@WBI@AEPAXI@Z
 
 // SYNTHETIC: SWBF2 0x00406220
 // `dynamic initializer for 'RumbleEffectClass::s_RumbleEffectClassList''

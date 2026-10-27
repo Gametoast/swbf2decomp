@@ -247,9 +247,9 @@ OrdnanceLaser::OrdnanceLaser(OrdnanceLaserClass* pClass, const OrdnanceDesc& des
 }
 
 // SYNTHETIC: SWBF2 0x00602165
-// [thunk]:OrdnanceLaser::`scalar deleting destructor' adjustor{152}
+// ??_EOrdnanceLaser@@WJI@AEPAXI@Z
 // SYNTHETIC: SWBF2 0x00602170
-// [thunk]:OrdnanceLaser::`scalar deleting destructor' adjustor{24}
+// ??_EOrdnanceLaser@@WBI@AEPAXI@Z
 // SYNTHETIC: SWBF2 0x00601150
 // OrdnanceLaser::`scalar deleting destructor'
 

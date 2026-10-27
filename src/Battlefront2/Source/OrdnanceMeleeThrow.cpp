@@ -29,9 +29,9 @@ OrdnanceMeleeThrow::~OrdnanceMeleeThrow()
 }
 
 // SYNTHETIC: SWBF2 0x006048b6
-// [thunk]:OrdnanceMeleeThrow::`scalar deleting destructor' adjustor{24}
+// ??_EOrdnanceMeleeThrow@@WBI@AEPAXI@Z
 // SYNTHETIC: SWBF2 0x006048be
-// [thunk]:OrdnanceMeleeThrow::`scalar deleting destructor' adjustor{152}
+// ??_EOrdnanceMeleeThrow@@WJI@AEPAXI@Z
 // SYNTHETIC: SWBF2 0x006021f0
 // OrdnanceMeleeThrow::`scalar deleting destructor'
 

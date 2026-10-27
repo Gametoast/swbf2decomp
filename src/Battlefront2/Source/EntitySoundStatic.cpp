@@ -101,7 +101,7 @@ EntitySoundStatic::EntitySoundStatic(EntitySoundStaticClass* pClass, const Entit
 // EntitySoundStatic::`scalar deleting destructor'
 
 // SYNTHETIC: SWBF2 0x004fb835
-// [thunk]:EntitySoundStatic::`vector deleting destructor'
+// ??_EEntitySoundStatic@@WCI@AEPAXI@Z
 
 // FUNCTION: SWBF2 0x004fb580
 EntitySoundStatic::~EntitySoundStatic()

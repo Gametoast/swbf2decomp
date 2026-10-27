@@ -702,15 +702,15 @@ FlagItem::~FlagItem()
 // SYNTHETIC: SWBF2 0x005242f0
 // FlagItem::`scalar deleting destructor'
 // SYNTHETIC: SWBF2 0x00525ea7
-// [thunk]:FlagItem::`scalar deleting destructor' adjustor{512}
+// ??_EFlagItem@@WCAA@AEPAXI@Z
 // SYNTHETIC: SWBF2 0x00525eb2
-// [thunk]:FlagItem::`scalar deleting destructor' adjustor{576}
+// ??_EFlagItem@@WCEA@AEPAXI@Z
 // SYNTHETIC: SWBF2 0x00525ebd
-// [thunk]:FlagItem::`scalar deleting destructor' adjustor{148}
+// ??_EFlagItem@@WJE@AEPAXI@Z
 // SYNTHETIC: SWBF2 0x00525ec8
-// [thunk]:FlagItem::`scalar deleting destructor' adjustor{320}
+// ??_EFlagItem@@WBEA@AEPAXI@Z
 // SYNTHETIC: SWBF2 0x00525ed3
-// [thunk]:FlagItem::`scalar deleting destructor' adjustor{12}
+// ??_EFlagItem@@WM@AEPAXI@Z
 
 // FUNCTION: SWBF2 0x005244f0
 bool FlagItem::PickUp(GameObject* pObject)

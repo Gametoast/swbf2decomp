@@ -835,13 +835,13 @@ GameObject::~GameObject()
 // SYNTHETIC: SWBF2 0x005350a0
 // GameObject::`scalar deleting destructor'
 // SYNTHETIC: SWBF2 0x00537ae7
-// [thunk]:GameObject::`scalar deleting destructor' adjustor{320}
+// ??_EGameObject@@WBEA@AEPAXI@Z
 // SYNTHETIC: SWBF2 0x00537af2
-// [thunk]:GameObject::`scalar deleting destructor' adjustor{12}
+// ??_EGameObject@@WM@AEPAXI@Z
 // SYNTHETIC: SWBF2 0x00537afa
-// [thunk]:GameObject::`scalar deleting destructor' adjustor{512}
+// ??_EGameObject@@WCAA@AEPAXI@Z
 // SYNTHETIC: SWBF2 0x00537b05
-// [thunk]:GameObject::`scalar deleting destructor' adjustor{148}
+// ??_EGameObject@@WJE@AEPAXI@Z
 
 // FUNCTION: SWBF2 0x005362a0
 GameObjectClass::GameObjectClass(GameObjectClass* pBase, unsigned int uHash)
@@ -1247,7 +1247,7 @@ void Event<GameObject, char>::Callback::Trigger(GameObject& item, char& param)
 }
 
 // SYNTHETIC: SWBF2 0x00446dfe
-// [thunk]:GameObject::GetGameObject`adjustor{320}'
+// ?GetGameObject@GameObject@@WBEA@AEPAV1@XZ
 
 // SYNTHETIC: SWBF2 0x00446e14
-// [thunk]:GameObject::GetGameObject`adjustor{12}'
+// ?GetGameObject@GameObject@@WM@AEPAV1@XZ

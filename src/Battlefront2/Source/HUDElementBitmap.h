@@ -136,7 +136,7 @@ public:
     ElementBitmapMasked(const char* const pName = 0, Factory::ItemCallback pCallback = 0,
                         void* const pUserData = 0);
     // SYNTHETIC: SWBF2 0x0054e1a9
-    // [thunk]:HUD::ElementBitmapMasked::`scalar deleting destructor' adjustor{288}
+    // ??_EElementBitmapMasked@HUD@@WBCA@AEPAXI@Z
     // SYNTHETIC: SWBF2 0x0054cc40
     // HUD::ElementBitmapMasked::`scalar deleting destructor'
     // FUNCTION: SWBF2 0x0054cbc0

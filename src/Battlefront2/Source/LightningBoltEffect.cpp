@@ -226,7 +226,7 @@ LightningBoltEffectClass::~LightningBoltEffectClass()
 }
 
 // SYNTHETIC: SWBF2 0x00572827
-// [thunk]:LightningBoltEffectClass::`scalar deleting destructor' adjustor{12}
+// ??_ELightningBoltEffectClass@@WM@AEPAXI@Z
 
 // FUNCTION: SWBF2 0x005715d0
 FLEffectObject* LightningBoltEffectClass::BuildEffect()
@@ -284,9 +284,9 @@ LightningBoltEffectObject::LightningBoltEffectObject(const LightningBoltEffectCl
 }
 
 // SYNTHETIC: SWBF2 0x00572814
-// [thunk]:LightningBoltEffectObject::`scalar deleting destructor' adjustor{24}
+// ??_ELightningBoltEffectObject@@WBI@AEPAXI@Z
 // SYNTHETIC: SWBF2 0x0057281c
-// [thunk]:LightningBoltEffectObject::`scalar deleting destructor' adjustor{128}
+// ??_ELightningBoltEffectObject@@WIA@AEPAXI@Z
 // SYNTHETIC: SWBF2 0x00571880
 // LightningBoltEffectObject::`scalar deleting destructor'
 

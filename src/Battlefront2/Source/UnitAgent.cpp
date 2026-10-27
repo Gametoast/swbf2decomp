@@ -508,7 +508,7 @@ int UnitAgent::DamagedEventPlayerCentricness(AI::EventInfo* pEvent)
 }
 
 // SYNTHETIC: SWBF2 0x0065e4c0
-// AI::EventInfo_Damaged::EventInfo_Damaged(const AI::EventInfo_Damaged&)
+// ??0EventInfo_Damaged@AI@@QAE@ABV01@@Z
 
 // FUNCTION: SWBF2 0x0065e530
 int UnitAgent::HandleDamagedEvent(AI::EventInfo* pEvent)

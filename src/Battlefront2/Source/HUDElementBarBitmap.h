@@ -21,9 +21,9 @@ public:
     // SYNTHETIC: SWBF2 0x0054abe0
     // HUD::ElementBarBitmap::`scalar deleting destructor'
     // SYNTHETIC: SWBF2 0x0054b761
-    // [thunk]:HUD::ElementBarBitmap::`scalar deleting destructor' adjustor{288}
+    // ??_EElementBarBitmap@HUD@@WBCA@AEPAXI@Z
     // SYNTHETIC: SWBF2 0x0054b777
-    // [thunk]:HUD::ElementBarBitmap::`scalar deleting destructor' adjustor{544}
+    // ??_EElementBarBitmap@HUD@@WCCA@AEPAXI@Z
     // SYNTHETIC: SWBF2 0x0054ac10
     // HUD::ElementBarBitmap::~ElementBarBitmap
 

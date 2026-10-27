@@ -3663,65 +3663,65 @@ void EntityHover::DeactivatePhysics()
 }
 
 // SYNTHETIC: SWBF2 0x004794d0
-// [thunk]:EntityHover::GetEntity`adjustor{12}'
+// ?GetEntity@EntityHover@@WM@AEPAVEntity@@XZ
 
 // SYNTHETIC: SWBF2 0x004794e0
-// [thunk]:EntityHover::GetGameObject`adjustor{320}'
+// ?GetGameObject@EntityHover@@WBEA@AEPAVGameObject@@XZ
 
 // SYNTHETIC: SWBF2 0x00479501
-// [thunk]:EntityHover::GetGameObject`adjustor{600}'
+// ?GetGameObject@EntityHover@@WCFI@AEPAVGameObject@@XZ
 
 // SYNTHETIC: SWBF2 0x0047950c
-// [thunk]:EntityHover::GetGameObject`adjustor{600}'
+// ?GetGameObject@EntityHover@@WCFI@BEPBVGameObject@@XZ
 
 // SYNTHETIC: SWBF2 0x00479517
-// [thunk]:EntityHover::GetGameObject`adjustor{12}'
+// ?GetGameObject@EntityHover@@WM@AEPAVGameObject@@XZ
 
 // SYNTHETIC: SWBF2 0x00479527
-// [thunk]:EntityHover::GetEntity`adjustor{576}'
+// ?GetEntity@EntityHover@@WCEA@AEPAVEntity@@XZ
 
 // SYNTHETIC: SWBF2 0x00479532
-// [thunk]:EntityHover::GetEntity`adjustor{576}'
+// ?GetEntity@EntityHover@@WCEA@BEPBVEntity@@XZ
 
 // SYNTHETIC: SWBF2 0x00479587
-// [thunk]:EntityHover::GetMatrix`adjustor{564}'
+// ?GetMatrix@EntityHover@@WCDE@BEABVPblMatrix@@XZ
 
 // SYNTHETIC: SWBF2 0x004caaad
-// [thunk]:EntityHover::`scalar deleting destructor'`adjustor{576}'
+// ??_EEntityHover@@WCEA@AEPAXI@Z
 
 // SYNTHETIC: SWBF2 0x004794c5
-// [thunk]:CommandHover::`scalar deleting destructor'`adjustor{148}'
+// ??_ECommandHover@@WJE@AEPAXI@Z
 // SYNTHETIC: SWBF2 0x004794d8
-// [thunk]:EntityHover::GetEntity`adjustor{12}'
+// ?GetEntity@EntityHover@@WM@BEPBVEntity@@XZ
 // SYNTHETIC: SWBF2 0x004794eb
-// [thunk]:EntityHover::GetGameObject`adjustor{320}'
+// ?GetGameObject@EntityHover@@WBEA@BEPBVGameObject@@XZ
 // SYNTHETIC: SWBF2 0x0047951f
-// [thunk]:EntityHover::GetGameObject`adjustor{12}'
+// ?GetGameObject@EntityHover@@WM@BEPBVGameObject@@XZ
 // SYNTHETIC: SWBF2 0x0047953d
-// [thunk]:EntityHover::GetControllable`adjustor{600}'
+// ?GetControllable@EntityHover@@WCFI@AEPAVControllable@@XZ
 // SYNTHETIC: SWBF2 0x00479548
-// [thunk]:EntityHover::GetControllable`adjustor{600}'
+// ?GetControllable@EntityHover@@WCFI@BEPBVControllable@@XZ
 // SYNTHETIC: SWBF2 0x00479553
-// [thunk]:CommandHover::Kill`adjustor{256}'
+// ?Kill@CommandHover@@WBAA@AEXXZ
 // SYNTHETIC: SWBF2 0x0047955e
-// [thunk]:CommandHover::`scalar deleting destructor'`adjustor{320}'
+// ??_ECommandHover@@WBEA@AEPAXI@Z
 // SYNTHETIC: SWBF2 0x00479569
-// [thunk]:CommandHover::`scalar deleting destructor'`adjustor{600}'
+// ??_ECommandHover@@WCFI@AEPAXI@Z
 // SYNTHETIC: SWBF2 0x00479574
-// [thunk]:CommandHover::`scalar deleting destructor'`adjustor{12}'
+// ??_ECommandHover@@WM@AEPAXI@Z
 // SYNTHETIC: SWBF2 0x0047957c
-// [thunk]:CommandHover::`scalar deleting destructor'`adjustor{512}'
+// ??_ECommandHover@@WCAA@AEPAXI@Z
 // SYNTHETIC: SWBF2 0x00479592
-// [thunk]:CommandHover::`scalar deleting destructor'`adjustor{576}'
+// ??_ECommandHover@@WCEA@AEPAXI@Z
 // SYNTHETIC: SWBF2 0x004caa79
-// [thunk]:EntityHover::Kill`adjustor{256}'
+// ?Kill@EntityHover@@WBAA@AEXXZ
 // SYNTHETIC: SWBF2 0x004caa84
-// [thunk]:EntityHover::`scalar deleting destructor'`adjustor{320}'
+// ??_EEntityHover@@WBEA@AEPAXI@Z
 // SYNTHETIC: SWBF2 0x004caa8f
-// [thunk]:EntityHover::`scalar deleting destructor'`adjustor{600}'
+// ??_EEntityHover@@WCFI@AEPAXI@Z
 // SYNTHETIC: SWBF2 0x004caa9a
-// [thunk]:EntityHover::`scalar deleting destructor'`adjustor{12}'
+// ??_EEntityHover@@WM@AEPAXI@Z
 // SYNTHETIC: SWBF2 0x004caaa2
-// [thunk]:EntityHover::`scalar deleting destructor'`adjustor{512}'
+// ??_EEntityHover@@WCAA@AEPAXI@Z
 // SYNTHETIC: SWBF2 0x004caab8
-// [thunk]:EntityHover::`scalar deleting destructor'`adjustor{148}'
+// ??_EEntityHover@@WJE@AEPAXI@Z

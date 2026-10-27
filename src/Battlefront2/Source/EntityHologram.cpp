@@ -185,9 +185,9 @@ void LightBeam::RemoveFromRenderList()
 
 
 // SYNTHETIC: SWBF2 0x004c08ea
-// [thunk]:LightBeam::`scalar deleting destructor' adjustor{40}
+// ??_ELightBeam@@WCI@AEPAXI@Z
 // SYNTHETIC: SWBF2 0x004c08fa
-// [thunk]:LightBeam::`scalar deleting destructor' adjustor{16}
+// ??_ELightBeam@@WBA@AEPAXI@Z
 // SYNTHETIC: SWBF2 0x004be180
 // LightBeam::`scalar deleting destructor'
 
@@ -208,7 +208,7 @@ bool EntityHologram::MyThread::Update(float fDeltaTime)
 
 
 // SYNTHETIC: SWBF2 0x004c08f2
-// [thunk]:EntityHologram::`scalar deleting destructor' adjustor{12}
+// ??_EEntityHologram@@WM@AEPAXI@Z
 // SYNTHETIC: SWBF2 0x004be270
 // EntityHologram::`scalar deleting destructor'
 

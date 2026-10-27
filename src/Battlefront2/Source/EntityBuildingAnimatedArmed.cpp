@@ -131,15 +131,15 @@ EntityBuildingAnimatedArmed::EntityBuildingAnimatedArmed(
 // SYNTHETIC: SWBF2 0x00495010
 // EntityBuildingAnimatedArmed::`scalar deleting destructor'
 // SYNTHETIC: SWBF2 0x0049597a
-// [thunk]:EntityBuildingAnimatedArmed::`scalar deleting destructor'`adjustor{512}'
+// ??_EEntityBuildingAnimatedArmed@@WCAA@AEPAXI@Z
 // SYNTHETIC: SWBF2 0x00495985
-// [thunk]:EntityBuildingAnimatedArmed::`scalar deleting destructor'`adjustor{608}'
+// ??_EEntityBuildingAnimatedArmed@@WCGA@AEPAXI@Z
 // SYNTHETIC: SWBF2 0x00495990
-// [thunk]:EntityBuildingAnimatedArmed::`scalar deleting destructor'`adjustor{148}'
+// ??_EEntityBuildingAnimatedArmed@@WJE@AEPAXI@Z
 // SYNTHETIC: SWBF2 0x0049599b
-// [thunk]:EntityBuildingAnimatedArmed::`scalar deleting destructor'`adjustor{320}'
+// ??_EEntityBuildingAnimatedArmed@@WBEA@AEPAXI@Z
 // SYNTHETIC: SWBF2 0x004959a6
-// [thunk]:EntityBuildingAnimatedArmed::`scalar deleting destructor'`adjustor{12}'
+// ??_EEntityBuildingAnimatedArmed@@WM@AEPAXI@Z
 
 // FUNCTION: SWBF2 0x004951a0
 EntityBuildingAnimatedArmed::~EntityBuildingAnimatedArmed()

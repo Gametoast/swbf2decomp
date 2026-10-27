@@ -86,9 +86,9 @@ float OrdnanceShellClass::GetGravity()
 
 
 // SYNTHETIC: SWBF2 0x005f95d6
-// [thunk]:OrdnanceBeacon::`scalar deleting destructor' adjustor{152}
+// ??_EOrdnanceBeacon@@WJI@AEPAXI@Z
 // SYNTHETIC: SWBF2 0x005f95e1
-// [thunk]:OrdnanceBeacon::`scalar deleting destructor' adjustor{24}
+// ??_EOrdnanceBeacon@@WBI@AEPAXI@Z
 // SYNTHETIC: SWBF2 0x005f8cd0
 // OrdnanceBeacon::`scalar deleting destructor'
 

@@ -264,7 +264,7 @@ Ordnance::~Ordnance()
 }
 
 // SYNTHETIC: SWBF2 0x005f8ace
-// [thunk]:Ordnance::`vector deleting destructor' adjustor{24}
+// ??_EOrdnance@@WBI@AEPAXI@Z
 
 // FUNCTION: SWBF2 0x005f7880
 void Ordnance::AddOrdnanceToCollisionManager()

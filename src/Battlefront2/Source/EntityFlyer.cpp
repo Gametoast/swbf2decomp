@@ -1456,31 +1456,31 @@ const PblMatrix& EntityFlyer::GetMatrix() const
 }
 
 // SYNTHETIC: SWBF2 0x00478584
-// [thunk]:EntityFlyer::GetGameObject`adjustor{600}'
+// ?GetGameObject@EntityFlyer@@WCFI@AEPAVGameObject@@XZ
 
 // SYNTHETIC: SWBF2 0x004785a5
-// [thunk]:EntityFlyer::GetGameObject`adjustor{12}'
+// ?GetGameObject@EntityFlyer@@WM@AEPAVGameObject@@XZ
 
 // SYNTHETIC: SWBF2 0x00478524
-// [thunk]:EntityFlyer::GetMatrix`adjustor{564}'
+// ?GetMatrix@EntityFlyer@@WCDE@BEABVPblMatrix@@XZ
 
 // SYNTHETIC: SWBF2 0x0047856e
-// [thunk]:EntityFlyer::GetGameObject`adjustor{320}'
+// ?GetGameObject@EntityFlyer@@WBEA@AEPAVGameObject@@XZ
 
 // SYNTHETIC: SWBF2 0x0047858f
-// [thunk]:EntityFlyer::GetGameObject`adjustor{600}'
+// ?GetGameObject@EntityFlyer@@WCFI@BEPBVGameObject@@XZ
 
 // SYNTHETIC: SWBF2 0x004785b5
-// [thunk]:EntityFlyer::GetEntity`adjustor{12}'
+// ?GetEntity@EntityFlyer@@WM@AEPAVEntity@@XZ
 
 // SYNTHETIC: SWBF2 0x004785c5
-// [thunk]:EntityFlyer::GetEntity`adjustor{576}'
+// ?GetEntity@EntityFlyer@@WCEA@AEPAVEntity@@XZ
 
 // SYNTHETIC: SWBF2 0x004785d0
-// [thunk]:EntityFlyer::GetEntity`adjustor{576}'
+// ?GetEntity@EntityFlyer@@WCEA@BEPBVEntity@@XZ
 
 // SYNTHETIC: SWBF2 0x004b9942
-// [thunk]:EntityFlyer::`scalar deleting destructor'`adjustor{576}'
+// ??_EEntityFlyer@@WCEA@AEPAXI@Z
 
 // FUNCTION: SWBF2 0x004ac0c0
 bool EntityFlyer::ResetSquadronTime()
@@ -5610,33 +5610,33 @@ template ParticleEmitterObject* PblHandle<ParticleEmitterObject>::GetObjectA() c
 // SYNTHETIC: SWBF2 0x0047852f
 // [thunk]:CommandFlyer::`scalar deleting destructor'`adjustor{320}'
 // SYNTHETIC: SWBF2 0x0047853a
-// [thunk]:CommandFlyer::`scalar deleting destructor'`adjustor{972}'
+// ??_ECommandFlyer@@WDMM@AEPAXI@Z
 // SYNTHETIC: SWBF2 0x00478545
-// [thunk]:CommandFlyer::`scalar deleting destructor'`adjustor{600}'
+// ??_ECommandFlyer@@WCFI@AEPAXI@Z
 // SYNTHETIC: SWBF2 0x00478550
-// [thunk]:CommandFlyer::`scalar deleting destructor'`adjustor{12}'
+// ??_ECommandFlyer@@WM@AEPAXI@Z
 // SYNTHETIC: SWBF2 0x00478558
-// [thunk]:CommandFlyer::`scalar deleting destructor'`adjustor{512}'
+// ??_ECommandFlyer@@WCAA@AEPAXI@Z
 // SYNTHETIC: SWBF2 0x00478563
-// [thunk]:CommandFlyer::`scalar deleting destructor'`adjustor{576}'
+// ??_ECommandFlyer@@WCEA@AEPAXI@Z
 // SYNTHETIC: SWBF2 0x0047859a
-// [thunk]:CommandFlyer::`scalar deleting destructor'`adjustor{148}'
+// ??_ECommandFlyer@@WJE@AEPAXI@Z
 // SYNTHETIC: SWBF2 0x00478607
-// [thunk]:CommandFlyer::Kill`adjustor{256}'
+// ?Kill@CommandFlyer@@WBAA@AEXXZ
 // SYNTHETIC: SWBF2 0x004b9937
-// [thunk]:EntityFlyer::`scalar deleting destructor'`adjustor{512}'
+// ??_EEntityFlyer@@WCAA@AEPAXI@Z
 // SYNTHETIC: SWBF2 0x004b994d
-// [thunk]:EntityFlyer::`scalar deleting destructor'`adjustor{148}'
+// ??_EEntityFlyer@@WJE@AEPAXI@Z
 // SYNTHETIC: SWBF2 0x004b9958
-// [thunk]:EntityFlyer::Kill`adjustor{256}'
+// ?Kill@EntityFlyer@@WBAA@AEXXZ
 // SYNTHETIC: SWBF2 0x004b9963
-// [thunk]:EntityFlyer::`scalar deleting destructor'`adjustor{320}'
+// ??_EEntityFlyer@@WBEA@AEPAXI@Z
 // SYNTHETIC: SWBF2 0x004b996e
-// [thunk]:EntityFlyer::`scalar deleting destructor'`adjustor{972}'
+// ??_EEntityFlyer@@WDMM@AEPAXI@Z
 // SYNTHETIC: SWBF2 0x004b9979
-// [thunk]:EntityFlyer::`scalar deleting destructor'`adjustor{600}'
+// ??_EEntityFlyer@@WCFI@AEPAXI@Z
 // SYNTHETIC: SWBF2 0x004b9984
-// [thunk]:EntityFlyer::`scalar deleting destructor'`adjustor{12}'
+// ??_EEntityFlyer@@WM@AEPAXI@Z
 
 // GLOBAL: SWBF2 0x007e6323
 // bRenderContrails

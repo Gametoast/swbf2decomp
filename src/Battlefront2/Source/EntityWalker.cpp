@@ -1629,31 +1629,31 @@ bool EntityWalker::Jump()
 }
 
 // SYNTHETIC: SWBF2 0x004803a5
-// [thunk]:EntityWalker::GetGameObject`adjustor{600}'
+// ?GetGameObject@EntityWalker@@WCFI@AEPAVGameObject@@XZ
 
 // SYNTHETIC: SWBF2 0x004803b0
-// [thunk]:EntityWalker::GetGameObject`adjustor{600}'
+// ?GetGameObject@EntityWalker@@WCFI@BEPBVGameObject@@XZ
 
 // SYNTHETIC: SWBF2 0x004803c6
-// [thunk]:EntityWalker::GetGameObject`adjustor{12}'
+// ?GetGameObject@EntityWalker@@WM@AEPAVGameObject@@XZ
 
 // SYNTHETIC: SWBF2 0x004803d6
-// [thunk]:EntityWalker::GetEntity`adjustor{576}'
+// ?GetEntity@EntityWalker@@WCEA@AEPAVEntity@@XZ
 
 // SYNTHETIC: SWBF2 0x004803e1
-// [thunk]:EntityWalker::GetEntity`adjustor{576}'
+// ?GetEntity@EntityWalker@@WCEA@BEPBVEntity@@XZ
 
 // SYNTHETIC: SWBF2 0x0048040d
-// [thunk]:EntityWalker::GetMatrix`adjustor{564}'
+// ?GetMatrix@EntityWalker@@WCDE@BEABVPblMatrix@@XZ
 
 // SYNTHETIC: SWBF2 0x0048044c
-// [thunk]:EntityWalker::GetEntity`adjustor{12}'
+// ?GetEntity@EntityWalker@@WM@AEPAVEntity@@XZ
 
 // SYNTHETIC: SWBF2 0x00480467
-// [thunk]:EntityWalker::GetGameObject`adjustor{320}'
+// ?GetGameObject@EntityWalker@@WBEA@AEPAVGameObject@@XZ
 
 // SYNTHETIC: SWBF2 0x0050b00e
-// [thunk]:EntityWalker::`scalar deleting destructor'`adjustor{576}'
+// ??_EEntityWalker@@WCEA@AEPAXI@Z
 
 // FUNCTION: SWBF2 0x004ff600
 bool EntityWalker::PostCollision::Update(float fDeltaTime)
@@ -4585,41 +4585,41 @@ void EntityWalker::SetupCameraTrackMatrix(PblMatrix& rMatrix, float fDeltaTime)
 }
 
 // SYNTHETIC: SWBF2 0x004803ce
-// [thunk]:EntityWalker::GetGameObject`adjustor{12}'
+// ?GetGameObject@EntityWalker@@WM@BEPBVGameObject@@XZ
 // SYNTHETIC: SWBF2 0x004803ec
-// [thunk]:EntityWalker::GetControllable`adjustor{600}'
+// ?GetControllable@EntityWalker@@WCFI@AEPAVControllable@@XZ
 // SYNTHETIC: SWBF2 0x004803f7
-// [thunk]:EntityWalker::GetControllable`adjustor{600}'
+// ?GetControllable@EntityWalker@@WCFI@BEPBVControllable@@XZ
 // SYNTHETIC: SWBF2 0x00480402
-// [thunk]:CommandWalker::`scalar deleting destructor'`adjustor{148}'
+// ??_ECommandWalker@@WJE@AEPAXI@Z
 // SYNTHETIC: SWBF2 0x00480418
-// [thunk]:CommandWalker::Kill`adjustor{256}'
+// ?Kill@CommandWalker@@WBAA@AEXXZ
 // SYNTHETIC: SWBF2 0x00480423
-// [thunk]:CommandWalkerClass::`scalar deleting destructor'`adjustor{3536}'
+// ??_ECommandWalkerClass@@WNNA@AEPAXI@Z
 // SYNTHETIC: SWBF2 0x0048042e
-// [thunk]:CommandWalker::`scalar deleting destructor'`adjustor{320}'
+// ??_ECommandWalker@@WBEA@AEPAXI@Z
 // SYNTHETIC: SWBF2 0x00480439
-// [thunk]:CommandWalker::`scalar deleting destructor'`adjustor{600}'
+// ??_ECommandWalker@@WCFI@AEPAXI@Z
 // SYNTHETIC: SWBF2 0x00480444
-// [thunk]:CommandWalker::`scalar deleting destructor'`adjustor{12}'
+// ??_ECommandWalker@@WM@AEPAXI@Z
 // SYNTHETIC: SWBF2 0x00480454
-// [thunk]:EntityWalker::GetEntity`adjustor{12}'
+// ?GetEntity@EntityWalker@@WM@BEPBVEntity@@XZ
 // SYNTHETIC: SWBF2 0x0048045c
-// [thunk]:CommandWalker::`scalar deleting destructor'`adjustor{512}'
+// ??_ECommandWalker@@WCAA@AEPAXI@Z
 // SYNTHETIC: SWBF2 0x00480472
-// [thunk]:EntityWalker::GetGameObject`adjustor{320}'
+// ?GetGameObject@EntityWalker@@WBEA@BEPBVGameObject@@XZ
 // SYNTHETIC: SWBF2 0x0050afda
-// [thunk]:EntityWalker::Kill`adjustor{256}'
+// ?Kill@EntityWalker@@WBAA@AEXXZ
 // SYNTHETIC: SWBF2 0x0050afe5
-// [thunk]:EntityWalker::`scalar deleting destructor'`adjustor{320}'
+// ??_EEntityWalker@@WBEA@AEPAXI@Z
 // SYNTHETIC: SWBF2 0x0050aff0
-// [thunk]:EntityWalker::`scalar deleting destructor'`adjustor{600}'
+// ??_EEntityWalker@@WCFI@AEPAXI@Z
 // SYNTHETIC: SWBF2 0x0050affb
-// [thunk]:EntityWalker::`scalar deleting destructor'`adjustor{12}'
+// ??_EEntityWalker@@WM@AEPAXI@Z
 // SYNTHETIC: SWBF2 0x0050b003
-// [thunk]:EntityWalker::`scalar deleting destructor'`adjustor{512}'
+// ??_EEntityWalker@@WCAA@AEPAXI@Z
 // SYNTHETIC: SWBF2 0x0050b019
-// [thunk]:EntityWalker::`scalar deleting destructor'`adjustor{148}'
+// ??_EEntityWalker@@WJE@AEPAXI@Z
 
 // GLOBAL: SWBF2 0x01e51e13
 // g_bWalkerShowDamage

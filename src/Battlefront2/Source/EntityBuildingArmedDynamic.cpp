@@ -105,15 +105,15 @@ EntityBuildingArmedDynamic::EntityBuildingArmedDynamic(EntityBuildingArmedDynami
 // SYNTHETIC: SWBF2 0x00496b50
 // EntityBuildingArmedDynamic::`scalar deleting destructor'
 // SYNTHETIC: SWBF2 0x00496dda
-// [thunk]:EntityBuildingArmedDynamic::`scalar deleting destructor' adjustor{148}
+// ??_EEntityBuildingArmedDynamic@@WJE@AEPAXI@Z
 // SYNTHETIC: SWBF2 0x00496de5
-// [thunk]:EntityBuildingArmedDynamic::`scalar deleting destructor' adjustor{320}
+// ??_EEntityBuildingArmedDynamic@@WBEA@AEPAXI@Z
 // SYNTHETIC: SWBF2 0x00496df0
-// [thunk]:EntityBuildingArmedDynamic::`scalar deleting destructor' adjustor{12}
+// ??_EEntityBuildingArmedDynamic@@WM@AEPAXI@Z
 // SYNTHETIC: SWBF2 0x00496df8
-// [thunk]:EntityBuildingArmedDynamic::`scalar deleting destructor' adjustor{512}
+// ??_EEntityBuildingArmedDynamic@@WCAA@AEPAXI@Z
 // SYNTHETIC: SWBF2 0x00496e03
-// [thunk]:EntityBuildingArmedDynamic::`scalar deleting destructor' adjustor{608}
+// ??_EEntityBuildingArmedDynamic@@WCGA@AEPAXI@Z
 
 inline void* EntityBuildingArmedDynamic::operator new(unsigned int uSize)
 {

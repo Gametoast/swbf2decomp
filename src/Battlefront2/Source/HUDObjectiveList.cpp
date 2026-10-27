@@ -92,7 +92,7 @@ HUD::ObjectiveList::ObjectiveList(const char* const pName, Factory::ItemCallback
 // HUD::ObjectiveList::`scalar deleting destructor'
 
 // SYNTHETIC: SWBF2 0x00566740
-// [thunk]:HUD::ObjectiveList::`scalar deleting destructor' adjustor{368}
+// ??_EObjectiveList@HUD@@WBHA@AEPAXI@Z
 // FUNCTION: SWBF2 0x00566070
 HUD::ObjectiveList::~ObjectiveList()
 {

@@ -130,16 +130,16 @@ EntityPortableTurret::EntityPortableTurret(EntityPortableTurretClass* pClass, co
 // SYNTHETIC: SWBF2 0x004d7c50
 // EntityPortableTurret::`scalar deleting destructor'
 // SYNTHETIC: SWBF2 0x004d8d10
-// [thunk]:EntityPortableTurret::`scalar deleting destructor' adjustor{320}
+// ??_EEntityPortableTurret@@WBEA@AEPAXI@Z
 // SYNTHETIC: SWBF2 0x004d8d1b
-// [thunk]:EntityPortableTurret::`scalar deleting destructor' adjustor{12}
+// ??_EEntityPortableTurret@@WM@AEPAXI@Z
 // SYNTHETIC: SWBF2 0x004d8d23
-// [thunk]:EntityPortableTurret::`scalar deleting destructor' adjustor{512}
+// ??_EEntityPortableTurret@@WCAA@AEPAXI@Z
 // SYNTHETIC: SWBF2 0x004d8d39
-// [thunk]:EntityPortableTurret::`scalar deleting destructor' adjustor{148}
+// ??_EEntityPortableTurret@@WJE@AEPAXI@Z
 
 // SYNTHETIC: SWBF2 0x004d8d2e
-// [thunk]:EntityPortableTurret::`scalar deleting destructor'`adjustor{608}'
+// ??_EEntityPortableTurret@@WCGA@AEPAXI@Z
 
 // FUNCTION: SWBF2 0x004d8230
 bool EntityPortableTurret::Update(float fDeltaTime)

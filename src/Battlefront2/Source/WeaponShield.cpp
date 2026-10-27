@@ -219,7 +219,7 @@ WeaponShield::WeaponShield(const WeaponShieldClass* pClass, const WeaponDesc& de
 // SYNTHETIC: SWBF2 0x00691990
 // WeaponShield::`scalar deleting destructor'
 // SYNTHETIC: SWBF2 0x0069271d
-// [thunk]:WeaponShield::`scalar deleting destructor' adjustor{272}
+// ??_EWeaponShield@@WBBA@AEPAXI@Z
 
 // FUNCTION: SWBF2 0x006919c0
 WeaponShield::~WeaponShield()

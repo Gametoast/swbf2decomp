@@ -104,7 +104,7 @@ HUD::ElementText::ElementText(const char* const pName, Factory::ItemCallback pCa
 // HUD::ElementText::`scalar deleting destructor'
 
 // SYNTHETIC: SWBF2 0x0055c892
-// [thunk]:HUD::ElementText::`scalar deleting destructor' adjustor{256}
+// ??_EElementText@HUD@@WBAA@AEPAXI@Z
 // FUNCTION: SWBF2 0x0055b310
 HUD::ElementText::~ElementText()
 {

@@ -54,7 +54,7 @@ HUD::Item* HUD::ElementBarSegmented::Factory::CreateItem(const char* const pName
 
 
 // SYNTHETIC: SWBF2 0x0054cae2
-// [thunk]:HUD::ElementBarSegmented::Segment::`scalar deleting destructor' adjustor{288}
+// ??_ESegment@ElementBarSegmented@HUD@@WBCA@AEPAXI@Z
 
 
 // FUNCTION: SWBF2 0x0054b990
@@ -107,9 +107,9 @@ HUD::ElementBarSegmented::ElementBarSegmented(const char* const pName, Factory::
 }
 
 // SYNTHETIC: SWBF2 0x0054caa0
-// [thunk]:HUD::ElementBarSegmented::`scalar deleting destructor' adjustor{512}
+// ??_EElementBarSegmented@HUD@@WCAA@AEPAXI@Z
 // SYNTHETIC: SWBF2 0x0054cac1
-// [thunk]:HUD::ElementBarSegmented::`scalar deleting destructor' adjustor{368}
+// ??_EElementBarSegmented@HUD@@WBHA@AEPAXI@Z
 // FUNCTION: SWBF2 0x0054bec0
 HUD::ElementBarSegmented::~ElementBarSegmented()
 {
@@ -117,7 +117,7 @@ HUD::ElementBarSegmented::~ElementBarSegmented()
 }
 
 // SYNTHETIC: SWBF2 0x0054caab
-// [thunk]:HUD::ElementBarSegmented::SetProperty adjustor{512}
+// ?SetProperty@ElementBarSegmented@HUD@@WCAA@AE_NIQBX@Z
 // FUNCTION: SWBF2 0x0054bf90
 bool HUD::ElementBarSegmented::SetProperty(const unsigned int uHashID, const void* const pValue)
 {
@@ -147,7 +147,7 @@ bool HUD::ElementBarSegmented::SetProperty(const unsigned int uHashID, const voi
 }
 
 // SYNTHETIC: SWBF2 0x0054cacc
-// [thunk]:HUD::ElementBarSegmented::GetProperty adjustor{512}
+// ?GetProperty@ElementBarSegmented@HUD@@WCAA@AE_NIPAX@Z
 // FUNCTION: SWBF2 0x0054c070
 bool HUD::ElementBarSegmented::GetProperty(const unsigned int uHashID, void* pValue)
 {
@@ -297,7 +297,7 @@ void HUD::ElementBarSegmented::SetupSegments(unsigned int uNumSegments)
 }
 
 // SYNTHETIC: SWBF2 0x0054cad7
-// [thunk]:HUD::ElementBarSegmented::PostReadSetup adjustor{512}
+// ?PostReadSetup@ElementBarSegmented@HUD@@OCAA@AEXXZ
 // FUNCTION: SWBF2 0x0054c790
 void HUD::ElementBarSegmented::PostReadSetup()
 {
@@ -340,7 +340,7 @@ void HUD::ElementBarSegmented::Read(PblConfig& config, Factory::ItemCallback pCa
 }
 
 // SYNTHETIC: SWBF2 0x0054caed
-// [thunk]:HUD::ElementBarSegmented::ReadData adjustor{512}
+// ?ReadData@ElementBarSegmented@HUD@@OCAA@AE_NAAVPblConfig@@AAVData@3@@Z
 // FUNCTION: SWBF2 0x0054c8f0
 bool HUD::ElementBarSegmented::ReadData(PblConfig& config, PblConfig::Data& data)
 {
@@ -363,7 +363,7 @@ bool HUD::ElementBarSegmented::ReadData(PblConfig& config, PblConfig::Data& data
 }
 
 // SYNTHETIC: SWBF2 0x0054cab6
-// [thunk]:HUD::ElementBarSegmented::WriteData adjustor{512}
+// ?WriteData@ElementBarSegmented@HUD@@OCAA@AEXAAVFile@2@I@Z
 
 // FUNCTION: SWBF2 0x0054c9e0
 void HUD::ElementBarSegmented::WriteData(HUD::File& file, unsigned int uTabs)

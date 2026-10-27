@@ -90,9 +90,9 @@ ParticleEmitterObject::ParticleEmitterObject(const ParticleEmitterClass* pClass)
 }
 
 // SYNTHETIC: SWBF2 0x0060b8f5
-// [thunk]:ParticleEmitterObject::`scalar deleting destructor' adjustor{24}
+// ??_EParticleEmitterObject@@WBI@AEPAXI@Z
 // SYNTHETIC: SWBF2 0x0060b8fd
-// [thunk]:ParticleEmitterObject::`scalar deleting destructor' adjustor{128}
+// ??_EParticleEmitterObject@@WIA@AEPAXI@Z
 // FUNCTION: SWBF2 0x0060bc60
 ParticleEmitterObject::~ParticleEmitterObject()
 {

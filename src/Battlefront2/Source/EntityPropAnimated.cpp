@@ -131,13 +131,13 @@ void EntityPropAnimated::Render(unsigned char ucLod, float fAlpha, unsigned int 
 // SYNTHETIC: SWBF2 0x004db340
 // EntityPropAnimated::`scalar deleting destructor'
 // SYNTHETIC: SWBF2 0x004992da
-// [thunk]:EntityGeometry::GetGameObject`adjustor{12}'
+// ?GetGameObject@EntityGeometry@@WM@BEPBVGameObject@@XZ
 // SYNTHETIC: SWBF2 0x004dc901
-// [thunk]:EntityPropAnimated::`vector deleting destructor'`adjustor{384}'
+// ??_EEntityPropAnimated@@WBIA@AEPAXI@Z
 // SYNTHETIC: SWBF2 0x004dc90c
-// [thunk]:EntityPropAnimated::`vector deleting destructor'`adjustor{12}'
+// ??_EEntityPropAnimated@@WM@AEPAXI@Z
 // SYNTHETIC: SWBF2 0x004dc914
-// [thunk]:EntityPropAnimated::`vector deleting destructor'`adjustor{148}'
+// ??_EEntityPropAnimated@@WJE@AEPAXI@Z
 
 
 

@@ -125,9 +125,9 @@ OrdnanceMissile::~OrdnanceMissile()
 }
 
 // SYNTHETIC: SWBF2 0x00605b26
-// [thunk]:OrdnanceMissile::`scalar deleting destructor' adjustor{24}
+// ??_EOrdnanceMissile@@WBI@AEPAXI@Z
 // SYNTHETIC: SWBF2 0x00605b2e
-// [thunk]:OrdnanceMissile::`scalar deleting destructor' adjustor{152}
+// ??_EOrdnanceMissile@@WJI@AEPAXI@Z
 // SYNTHETIC: SWBF2 0x00604920
 // OrdnanceMissile::`scalar deleting destructor'
 

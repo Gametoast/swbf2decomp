@@ -283,9 +283,9 @@ PblHash OrdnanceBullet::rttiHashOrdnanceBullet("OrdnanceBullet");
 const char OrdnanceBullet::rttiNameOrdnanceBullet[] = "OrdnanceBullet";
 
 // SYNTHETIC: SWBF2 0x005fc2c6
-// [thunk]:OrdnanceBullet::`scalar deleting destructor' adjustor{152}
+// ??_EOrdnanceBullet@@WJI@AEPAXI@Z
 // SYNTHETIC: SWBF2 0x005fc2d1
-// [thunk]:OrdnanceBullet::`scalar deleting destructor' adjustor{24}
+// ??_EOrdnanceBullet@@WBI@AEPAXI@Z
 // SYNTHETIC: SWBF2 0x005fa840
 // OrdnanceBullet::`scalar deleting destructor'
 

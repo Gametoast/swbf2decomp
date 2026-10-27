@@ -61,9 +61,9 @@ OrdnanceGrapplingHook::OrdnanceGrapplingHook(OrdnanceGrapplingHookClass* pClass,
 // SYNTHETIC: SWBF2 0x005ff0e0
 // OrdnanceGrapplingHook::`scalar deleting destructor'
 // SYNTHETIC: SWBF2 0x00600011
-// [thunk]:OrdnanceGrapplingHook::`scalar deleting destructor' adjustor{24}
+// ??_EOrdnanceGrapplingHook@@WBI@AEPAXI@Z
 // SYNTHETIC: SWBF2 0x00600019
-// [thunk]:OrdnanceGrapplingHook::`scalar deleting destructor' adjustor{152}
+// ??_EOrdnanceGrapplingHook@@WJI@AEPAXI@Z
 // FUNCTION: SWBF2 0x005ff360
 OrdnanceGrapplingHook::~OrdnanceGrapplingHook()
 {

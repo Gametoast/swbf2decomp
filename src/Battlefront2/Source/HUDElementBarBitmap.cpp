@@ -66,7 +66,7 @@ void* HUD::ElementBitmap::GetParent()
 // HUD::ElementBitmap::`scalar deleting destructor'
 
 // SYNTHETIC: SWBF2 0x0054b78d
-// [thunk]:HUD::ElementBitmap::`scalar deleting destructor' adjustor{288}
+// ??_EElementBitmap@HUD@@WBCA@AEPAXI@Z
 
 
 
@@ -101,7 +101,7 @@ HUD::ElementBarBitmap::ElementBarBitmap(const char* const pName, HUD::Item::Fact
 }
 
 // SYNTHETIC: SWBF2 0x0054b756
-// [thunk]:HUD::ElementBarBitmap::PostReadSetup adjustor{544}
+// ?PostReadSetup@ElementBarBitmap@HUD@@OCCA@AEXXZ
 // FUNCTION: SWBF2 0x0054b320
 void HUD::ElementBarBitmap::PostReadSetup()
 {
@@ -147,7 +147,7 @@ void HUD::ElementBarBitmap::RefreshFlashyBit()
 }
 
 // SYNTHETIC: SWBF2 0x0054b76c
-// [thunk]:HUD::ElementBarBitmap::ReadData adjustor{544}
+// ?ReadData@ElementBarBitmap@HUD@@OCCA@AE_NAAVPblConfig@@AAVData@3@@Z
 // FUNCTION: SWBF2 0x0054b480
 bool HUD::ElementBarBitmap::ReadData(PblConfig& config, PblConfig::Data& data)
 {
@@ -219,7 +219,7 @@ void HUD::ElementBarBitmap::EventDisable(const HUD::Event& event, void* const pD
 }
 
 // SYNTHETIC: SWBF2 0x0054b782
-// [thunk]:HUD::ElementBarBitmap::SetProperty adjustor{544}
+// ?SetProperty@ElementBarBitmap@HUD@@WCCA@AE_NIQBX@Z
 // FUNCTION: SWBF2 0x0054acb0
 bool HUD::ElementBarBitmap::SetProperty(const unsigned int uHashID, const void* const pValue)
 {
@@ -243,7 +243,7 @@ bool HUD::ElementBarBitmap::SetProperty(const unsigned int uHashID, const void* 
 }
 
 // SYNTHETIC: SWBF2 0x0054b7a3
-// [thunk]:HUD::ElementBarBitmap::GetProperty adjustor{544}
+// ?GetProperty@ElementBarBitmap@HUD@@WCCA@AE_NIQAX@Z
 // FUNCTION: SWBF2 0x0054adc0
 bool HUD::ElementBarBitmap::GetProperty(const unsigned int uHashID, void* const pValue)
 {
@@ -266,7 +266,7 @@ void HUD::ElementBarBitmap::GetSize(float& rfWidth, float& rfHeight)
 }
 
 // SYNTHETIC: SWBF2 0x0054b798
-// [thunk]:HUD::ElementBarBitmap::WriteData adjustor{544}
+// ?WriteData@ElementBarBitmap@HUD@@OCCA@AEXAAVFile@2@I@Z
 // FUNCTION: SWBF2 0x0054b580
 void HUD::ElementBarBitmap::WriteData(HUD::File& file, unsigned int uTabs)
 {

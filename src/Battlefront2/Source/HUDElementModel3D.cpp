@@ -179,7 +179,7 @@ HUD::ElementModel3D::ElementModel3D(const char* const pName, Factory::ItemCallba
 
 
 // SYNTHETIC: SWBF2 0x00557103
-// [thunk]:HUD::ElementModel3D::`scalar deleting destructor' adjustor{256}
+// ??_EElementModel3D@HUD@@WBAA@AEPAXI@Z
 // FUNCTION: SWBF2 0x005562a0
 HUD::ElementModel3D::~ElementModel3D()
 {

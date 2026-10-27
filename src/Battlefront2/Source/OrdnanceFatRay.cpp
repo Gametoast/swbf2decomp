@@ -31,9 +31,9 @@ OrdnanceFatRay::~OrdnanceFatRay()
 }
 
 // SYNTHETIC: SWBF2 0x005ff076
-// [thunk]:OrdnanceFatRay::`scalar deleting destructor' adjustor{24}
+// ??_EOrdnanceFatRay@@WBI@AEPAXI@Z
 // SYNTHETIC: SWBF2 0x005ff07e
-// [thunk]:OrdnanceFatRay::`scalar deleting destructor' adjustor{152}
+// ??_EOrdnanceFatRay@@WJI@AEPAXI@Z
 // SYNTHETIC: SWBF2 0x005fe780
 // OrdnanceFatRay::`scalar deleting destructor'
 

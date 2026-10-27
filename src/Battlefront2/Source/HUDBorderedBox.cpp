@@ -26,7 +26,7 @@ void HUD::ElementGroupBase::GetSize(float& fWidth, float& fHeight)
 // HUD::ElementGroup::`scalar deleting destructor'
 
 // SYNTHETIC: SWBF2 0x00544937
-// [thunk]:HUD::ElementGroup::`scalar deleting destructor' adjustor{368}
+// ??_EElementGroup@HUD@@WBHA@AEPAXI@Z
 
 // FUNCTION: SWBF2 0x00544040
 void* HUD::ElementGroup::GetParent()
@@ -76,7 +76,7 @@ HUD::BorderedBox::BorderedBox(const char* const pName, Factory::ItemCallback pCa
 // HUD::BorderedBox::`scalar deleting destructor'
 
 // SYNTHETIC: SWBF2 0x0054492c
-// [thunk]:HUD::BorderedBox::`scalar deleting destructor' adjustor{368}
+// ??_EBorderedBox@HUD@@WBHA@AEPAXI@Z
 // FUNCTION: SWBF2 0x005444a0
 HUD::BorderedBox::~BorderedBox()
 {

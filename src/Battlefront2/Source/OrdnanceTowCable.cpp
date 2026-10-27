@@ -65,9 +65,9 @@ unsigned int OrdnanceTowCable::sTextureHash;
 
 
 // SYNTHETIC: SWBF2 0x00609c29
-// [thunk]:OrdnanceTowCable::`scalar deleting destructor' adjustor{24}
+// ??_EOrdnanceTowCable@@WBI@AEPAXI@Z
 // SYNTHETIC: SWBF2 0x00609c31
-// [thunk]:OrdnanceTowCable::`scalar deleting destructor' adjustor{152}
+// ??_EOrdnanceTowCable@@WJI@AEPAXI@Z
 // SYNTHETIC: SWBF2 0x00607300
 // OrdnanceTowCable::`scalar deleting destructor'
 

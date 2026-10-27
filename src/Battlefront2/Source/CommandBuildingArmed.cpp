@@ -41,15 +41,15 @@ CommandBuildingArmed::~CommandBuildingArmed()
 // SYNTHETIC: SWBF2 0x00476f60
 // CommandBuildingArmed::`scalar deleting destructor'
 // SYNTHETIC: SWBF2 0x00477496
-// [thunk]:CommandBuildingArmed::`scalar deleting destructor' adjustor{12}
+// ??_ECommandBuildingArmed@@WM@AEPAXI@Z
 // SYNTHETIC: SWBF2 0x0047746a
-// [thunk]:CommandBuildingArmed::`scalar deleting destructor' adjustor{512}
+// ??_ECommandBuildingArmed@@WCAA@AEPAXI@Z
 // SYNTHETIC: SWBF2 0x00477475
-// [thunk]:CommandBuildingArmed::`scalar deleting destructor' adjustor{608}
+// ??_ECommandBuildingArmed@@WCGA@AEPAXI@Z
 // SYNTHETIC: SWBF2 0x00477480
-// [thunk]:CommandBuildingArmed::`scalar deleting destructor' adjustor{148}
+// ??_ECommandBuildingArmed@@WJE@AEPAXI@Z
 // SYNTHETIC: SWBF2 0x0047748b
-// [thunk]:CommandBuildingArmed::`scalar deleting destructor' adjustor{320}
+// ??_ECommandBuildingArmed@@WBEA@AEPAXI@Z
 
 // FUNCTION: SWBF2 0x004770e0
 void CommandBuildingArmed::Init()
@@ -110,7 +110,7 @@ CommandBuildingArmedClass::~CommandBuildingArmedClass()
 // SYNTHETIC: SWBF2 0x00477200
 // CommandBuildingArmedClass::`scalar deleting destructor'
 // SYNTHETIC: SWBF2 0x0047749e
-// [thunk]:CommandBuildingArmedClass::`scalar deleting destructor' adjustor{1656}
+// ??_ECommandBuildingArmedClass@@WGHI@AEPAXI@Z
 
 // SYNTHETIC: SWBF2 0x00402670
 // `dynamic initializer for 'CommandBuildingArmedClass::rttiHashCommandBuildingArmedClass''

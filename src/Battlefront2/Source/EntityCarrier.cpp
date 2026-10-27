@@ -101,19 +101,19 @@ void EntityFlyer::SetupCameraFOV(float& rFOV)
 // SYNTHETIC: SWBF2 0x00496ea0
 // EntityCarrier::`scalar deleting destructor'
 // SYNTHETIC: SWBF2 0x00497941
-// [thunk]:EntityCarrier::`scalar deleting destructor'`adjustor{576}'
+// ??_EEntityCarrier@@WCEA@AEPAXI@Z
 // SYNTHETIC: SWBF2 0x0049794c
-// [thunk]:EntityCarrier::`scalar deleting destructor'`adjustor{148}'
+// ??_EEntityCarrier@@WJE@AEPAXI@Z
 // SYNTHETIC: SWBF2 0x00497962
-// [thunk]:EntityCarrier::`scalar deleting destructor'`adjustor{320}'
+// ??_EEntityCarrier@@WBEA@AEPAXI@Z
 // SYNTHETIC: SWBF2 0x0049796d
-// [thunk]:EntityCarrier::`scalar deleting destructor'`adjustor{972}'
+// ??_EEntityCarrier@@WDMM@AEPAXI@Z
 // SYNTHETIC: SWBF2 0x00497978
-// [thunk]:EntityCarrier::`scalar deleting destructor'`adjustor{600}'
+// ??_EEntityCarrier@@WCFI@AEPAXI@Z
 // SYNTHETIC: SWBF2 0x00497983
-// [thunk]:EntityCarrier::`scalar deleting destructor'`adjustor{12}'
+// ??_EEntityCarrier@@WM@AEPAXI@Z
 // SYNTHETIC: SWBF2 0x0049798b
-// [thunk]:EntityCarrier::`scalar deleting destructor'`adjustor{512}'
+// ??_EEntityCarrier@@WCAA@AEPAXI@Z
 
 // FUNCTION: SWBF2 0x00497060
 EntityCarrier::~EntityCarrier()
@@ -121,17 +121,17 @@ EntityCarrier::~EntityCarrier()
 }
 
 // SYNTHETIC: SWBF2 0x00478579
-// [thunk]:EntityFlyer::GetGameObject`adjustor{320}'
+// ?GetGameObject@EntityFlyer@@WBEA@BEPBVGameObject@@XZ
 // SYNTHETIC: SWBF2 0x004785ad
-// [thunk]:EntityFlyer::GetGameObject`adjustor{12}'
+// ?GetGameObject@EntityFlyer@@WM@BEPBVGameObject@@XZ
 // SYNTHETIC: SWBF2 0x004785bd
-// [thunk]:EntityFlyer::GetEntity`adjustor{12}'
+// ?GetEntity@EntityFlyer@@WM@BEPBVEntity@@XZ
 // SYNTHETIC: SWBF2 0x004785db
-// [thunk]:EntityFlyer::GetControllable`adjustor{600}'
+// ?GetControllable@EntityFlyer@@WCFI@AEPAVControllable@@XZ
 // SYNTHETIC: SWBF2 0x004785e6
-// [thunk]:EntityFlyer::GetControllable`adjustor{600}'
+// ?GetControllable@EntityFlyer@@WCFI@BEPBVControllable@@XZ
 // SYNTHETIC: SWBF2 0x004785fc
-// [thunk]:EntityFlyer::GetMatrix`adjustor{960}'
+// ?GetMatrix@EntityFlyer@@WDMA@BEABVPblMatrix@@XZ
 
 // FUNCTION: SWBF2 0x00496f60
 EntityCarrier::EntityCarrier(EntityCarrierClass* pClass, const EntityDesc& desc)
@@ -145,7 +145,7 @@ EntityCarrier::EntityCarrier(EntityCarrierClass* pClass, const EntityDesc& desc)
 }
 
 // SYNTHETIC: SWBF2 0x00497957
-// [thunk]:EntityCarrier::Kill`adjustor{256}'
+// ?Kill@EntityCarrier@@WBAA@AEXXZ
 
 // FUNCTION: SWBF2 0x00497110
 void EntityCarrier::Kill()
@@ -461,7 +461,7 @@ CommandFlyerClass::~CommandFlyerClass()
 }
 
 // SYNTHETIC: SWBF2 0x004785f1
-// [thunk]:CommandFlyerClass::`scalar deleting destructor'`adjustor{4256}'
+// ??_ECommandFlyerClass@@WBAKA@AEPAXI@Z
 
 // FUNCTION: SWBF2 0x00497610
 EntityCarrierClass::EntityCarrierClass(EntityCarrierClass* pSrc, unsigned int uHash)

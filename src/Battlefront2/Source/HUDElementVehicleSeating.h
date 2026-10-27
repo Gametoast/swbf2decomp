@@ -50,7 +50,7 @@ public:
         // HUD::ElementVehicleSeating::SeatingMarker::`default constructor closure'
 
         // SYNTHETIC: SWBF2 0x0055d8e6
-        // [thunk]:HUD::ElementVehicleSeating::SeatingMarker::`scalar deleting destructor' adjustor{256}
+        // ??_ESeatingMarker@ElementVehicleSeating@HUD@@WBAA@AEPAXI@Z
         // SYNTHETIC: SWBF2 0x0055c9b0
         // HUD::ElementVehicleSeating::SeatingMarker::`scalar deleting destructor'
         // FUNCTION: SWBF2 0x0055c920
@@ -81,7 +81,7 @@ public:
         // SYNTHETIC: SWBF2 0x0055c9f0
         // HUD::ElementVehicleSeating::SeatingText::`scalar deleting destructor'
         // SYNTHETIC: SWBF2 0x0055d8f1
-        // [thunk]:HUD::ElementVehicleSeating::SeatingText::`scalar deleting destructor' adjustor{256}
+        // ??_ESeatingText@ElementVehicleSeating@HUD@@WBAA@AEPAXI@Z
         // SYNTHETIC: SWBF2 0x0055ca20
         // HUD::ElementVehicleSeating::SeatingText::~SeatingText
         virtual bool SetProperty(const unsigned int uHashID, const void* pValue);

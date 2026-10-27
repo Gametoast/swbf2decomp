@@ -219,7 +219,7 @@ public:
     // SYNTHETIC: SWBF2 0x0053e4b0
     // GodrayEffectObject::`scalar deleting destructor'
     // SYNTHETIC: SWBF2 0x005409d7
-    // [thunk]:GodrayEffectObject::`scalar deleting destructor' adjustor{24}
+    // ??_EGodrayEffectObject@@WBI@AEPAXI@Z
     virtual ~GodrayEffectObject()
     {
         GodrayManager::s_pInstance->RemoveGodray(m_hGodray);

@@ -372,15 +372,15 @@ Asteroid::~Asteroid()
 // SYNTHETIC: SWBF2 0x00444760
 // Asteroid::`scalar deleting destructor'
 // SYNTHETIC: SWBF2 0x00446dca
-// [thunk]:Asteroid::`scalar deleting destructor' adjustor{320}
+// ??_EAsteroid@@WBEA@AEPAXI@Z
 // SYNTHETIC: SWBF2 0x00446dd5
-// [thunk]:Asteroid::`scalar deleting destructor' adjustor{12}
+// ??_EAsteroid@@WM@AEPAXI@Z
 // SYNTHETIC: SWBF2 0x00446ddd
-// [thunk]:Asteroid::`scalar deleting destructor' adjustor{512}
+// ??_EAsteroid@@WCAA@AEPAXI@Z
 // SYNTHETIC: SWBF2 0x00446de8
-// [thunk]:Asteroid::`scalar deleting destructor' adjustor{576}
+// ??_EAsteroid@@WCEA@AEPAXI@Z
 // SYNTHETIC: SWBF2 0x00446df3
-// [thunk]:Asteroid::`scalar deleting destructor' adjustor{148}
+// ??_EAsteroid@@WJE@AEPAXI@Z
 
 
 

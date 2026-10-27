@@ -173,9 +173,9 @@ PassengerSlot::PassengerSlot(GameObject* pParent, PassengerSlotClass* pClass, Re
 // SYNTHETIC: SWBF2 0x0060f530
 // PassengerSlot::`scalar deleting destructor'
 // SYNTHETIC: SWBF2 0x0060ff08
-// [thunk]:PassengerSlot::`scalar deleting destructor' adjustor{36}
+// ??_EPassengerSlot@@WCE@AEPAXI@Z
 // SYNTHETIC: SWBF2 0x0060ff10
-// [thunk]:PassengerSlot::`scalar deleting destructor' adjustor{12}
+// ??_EPassengerSlot@@WM@AEPAXI@Z
 // FUNCTION: SWBF2 0x0060f6a0
 PassengerSlot::~PassengerSlot()
 {
@@ -190,22 +190,22 @@ unsigned int PassengerSlot::GetDerivedRtti() const { return rttiHashPassengerSlo
 const char* PassengerSlot::GetDerivedRttiName() const { return rttiNamePassengerSlot; }
 
 // SYNTHETIC: SWBF2 0x0060fef8
-// [thunk]:PassengerSlot::GetEntity adjustor{12}
+// ?GetEntity@PassengerSlot@@WM@AEPAVEntity@@XZ
 // FUNCTION: SWBF2 0x0060f4b0
 Entity* PassengerSlot::GetEntity() { return this; }
 
 // SYNTHETIC: SWBF2 0x0060ff00
-// [thunk]:PassengerSlot::GetEntity const adjustor{12}
+// ?GetEntity@PassengerSlot@@WM@BEPBVEntity@@XZ
 // FUNCTION: SWBF2 0x0060f4c0
 const Entity* PassengerSlot::GetEntity() const { return this; }
 
 // SYNTHETIC: SWBF2 0x0060fee8
-// [thunk]:PassengerSlot::GetGameObject adjustor{36}
+// ?GetGameObject@PassengerSlot@@WCE@AEPAVGameObject@@XZ
 // FUNCTION: SWBF2 0x0060f4d0
 GameObject* PassengerSlot::GetGameObject() { return mParent; }
 
 // SYNTHETIC: SWBF2 0x0060fef0
-// [thunk]:PassengerSlot::GetGameObject const adjustor{36}
+// ?GetGameObject@PassengerSlot@@WCE@BEPBVGameObject@@XZ
 // FUNCTION: SWBF2 0x0060f4e0
 const GameObject* PassengerSlot::GetGameObject() const { return mParent; }
 

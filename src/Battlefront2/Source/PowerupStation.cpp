@@ -346,15 +346,15 @@ PowerupStation::~PowerupStation()
 // SYNTHETIC: SWBF2 0x00624760
 // PowerupStation::`scalar deleting destructor'
 // SYNTHETIC: SWBF2 0x00626650
-// [thunk]:PowerupStation::`scalar deleting destructor' adjustor{320}
+// ??_EPowerupStation@@WBEA@AEPAXI@Z
 // SYNTHETIC: SWBF2 0x0062665b
-// [thunk]:PowerupStation::`scalar deleting destructor' adjustor{12}
+// ??_EPowerupStation@@WM@AEPAXI@Z
 // SYNTHETIC: SWBF2 0x00626663
-// [thunk]:PowerupStation::`scalar deleting destructor' adjustor{512}
+// ??_EPowerupStation@@WCAA@AEPAXI@Z
 // SYNTHETIC: SWBF2 0x0062666e
-// [thunk]:PowerupStation::`scalar deleting destructor' adjustor{608}
+// ??_EPowerupStation@@WCGA@AEPAXI@Z
 // SYNTHETIC: SWBF2 0x00626679
-// [thunk]:PowerupStation::`scalar deleting destructor' adjustor{148}
+// ??_EPowerupStation@@WJE@AEPAXI@Z
 
 // FUNCTION: SWBF2 0x00624850
 void PowerupStation::SetProperty(unsigned int uProperty, const char* pszValue)

@@ -43,7 +43,7 @@ EntityWater::~EntityWater()
 // SYNTHETIC: SWBF2 0x0050b180
 // EntityWater::`scalar deleting destructor'
 // SYNTHETIC: SWBF2 0x0050b2d0
-// [thunk]:EntityWater::`scalar deleting destructor' adjustor{136}
+// ??_EEntityWater@@WII@AEPAXI@Z
 
 // FUNCTION: SWBF2 0x0050b030
 const PblVector3& EntityWater::GetPosition() const

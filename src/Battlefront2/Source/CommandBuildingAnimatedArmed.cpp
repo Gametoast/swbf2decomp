@@ -45,7 +45,7 @@ const char CommandBuildingAnimatedArmedClass::rttiNameCommandBuildingAnimatedArm
 // SYNTHETIC: SWBF2 0x00476b00
 // CommandBuildingAnimatedArmedClass::`scalar deleting destructor'
 // SYNTHETIC: SWBF2 0x00476d93
-// [thunk]:CommandBuildingAnimatedArmedClass::`scalar deleting destructor' adjustor{1712}
+// ??_ECommandBuildingAnimatedArmedClass@@WGLA@AEPAXI@Z
 
 // FUNCTION: SWBF2 0x00476b30
 CommandBuildingAnimatedArmedClass::CommandBuildingAnimatedArmedClass(CommandBuildingAnimatedArmedClass* pBase,
@@ -95,15 +95,15 @@ CommandBuildingAnimatedArmed::~CommandBuildingAnimatedArmed()
 // SYNTHETIC: SWBF2 0x00476860
 // CommandBuildingAnimatedArmed::`scalar deleting destructor'
 // SYNTHETIC: SWBF2 0x00476d6a
-// [thunk]:CommandBuildingAnimatedArmed::`scalar deleting destructor' adjustor{320}
+// ??_ECommandBuildingAnimatedArmed@@WBEA@AEPAXI@Z
 // SYNTHETIC: SWBF2 0x00476d75
-// [thunk]:CommandBuildingAnimatedArmed::`scalar deleting destructor' adjustor{12}
+// ??_ECommandBuildingAnimatedArmed@@WM@AEPAXI@Z
 // SYNTHETIC: SWBF2 0x00476d7d
-// [thunk]:CommandBuildingAnimatedArmed::`scalar deleting destructor' adjustor{512}
+// ??_ECommandBuildingAnimatedArmed@@WCAA@AEPAXI@Z
 // SYNTHETIC: SWBF2 0x00476d88
-// [thunk]:CommandBuildingAnimatedArmed::`scalar deleting destructor' adjustor{608}
+// ??_ECommandBuildingAnimatedArmed@@WCGA@AEPAXI@Z
 // SYNTHETIC: SWBF2 0x00476d9e
-// [thunk]:CommandBuildingAnimatedArmed::`scalar deleting destructor' adjustor{148}
+// ??_ECommandBuildingAnimatedArmed@@WJE@AEPAXI@Z
 
 // FUNCTION: SWBF2 0x004769e0
 void CommandBuildingAnimatedArmed::Init()

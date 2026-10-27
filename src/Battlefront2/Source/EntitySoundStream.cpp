@@ -103,7 +103,7 @@ EntitySoundStream::~EntitySoundStream()
 }
 
 // SYNTHETIC: SWBF2 0x004fbe08
-// [thunk]:EntitySoundStream::`scalar deleting destructor' adjustor{40}
+// ??_EEntitySoundStream@@WCI@AEPAXI@Z
 // SYNTHETIC: SWBF2 0x004fba60
 // EntitySoundStream::`scalar deleting destructor'
 

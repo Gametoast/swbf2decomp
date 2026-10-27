@@ -50,7 +50,7 @@ OrbitalStrike::~OrbitalStrike()
 // OrbitalStrike::`scalar deleting destructor'
 
 // SYNTHETIC: SWBF2 0x005f7193
-// [thunk]:OrbitalStrike::`scalar deleting destructor' adjustor{24}
+// ??_EOrbitalStrike@@WBI@AEPAXI@Z
 
 // FUNCTION: SWBF2 0x005f6ba0
 bool OrbitalStrike::Update(float fDeltaTime)

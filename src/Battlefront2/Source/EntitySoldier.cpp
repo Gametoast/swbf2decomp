@@ -197,9 +197,9 @@ GameObject* EntitySoldier::GetGameObject()
 }
 
 // SYNTHETIC: SWBF2 0x004fab77
-// [thunk]:EntitySoldier::GetGameObject const adjustor{320}
+// ?GetGameObject@EntitySoldier@@WBEA@BEPBVGameObject@@XZ
 // SYNTHETIC: SWBF2 0x004faba0
-// [thunk]:EntitySoldier::GetGameObject const adjustor{12}
+// ?GetGameObject@EntitySoldier@@WM@BEPBVGameObject@@XZ
 // FUNCTION: SWBF2 0x004de0c0
 const GameObject* EntitySoldier::GetGameObject() const
 {
@@ -213,7 +213,7 @@ Entity* EntitySoldier::GetEntity()
 }
 
 // SYNTHETIC: SWBF2 0x004fab64
-// [thunk]:EntitySoldier::GetEntity const adjustor{12}
+// ?GetEntity@EntitySoldier@@WM@BEPBVEntity@@XZ
 // FUNCTION: SWBF2 0x004de0e0
 const Entity* EntitySoldier::GetEntity() const
 {
@@ -8989,31 +8989,31 @@ void EntitySoldier::UpdateOrdnanceCollision(float fDeltaTime)
 }
 
 // SYNTHETIC: SWBF2 0x004fab5c
-// [thunk]:EntitySoldier::GetEntity`adjustor{12}'
+// ?GetEntity@EntitySoldier@@WM@AEPAVEntity@@XZ
 
 // SYNTHETIC: SWBF2 0x004fab82
-// [thunk]:EntitySoldier::GetGameObject`adjustor{600}'
+// ?GetGameObject@EntitySoldier@@WCFI@AEPAVGameObject@@XZ
 
 // SYNTHETIC: SWBF2 0x004fab8d
-// [thunk]:EntitySoldier::GetGameObject`adjustor{600}'
+// ?GetGameObject@EntitySoldier@@WCFI@BEPBVGameObject@@XZ
 
 // SYNTHETIC: SWBF2 0x004fabbe
-// [thunk]:EntitySoldier::GetControllable`adjustor{600}'
+// ?GetControllable@EntitySoldier@@WCFI@AEPAVControllable@@XZ
 
 // SYNTHETIC: SWBF2 0x004fabc9
-// [thunk]:EntitySoldier::GetControllable`adjustor{600}'
+// ?GetControllable@EntitySoldier@@WCFI@BEPBVControllable@@XZ
 
 // SYNTHETIC: SWBF2 0x004fab98
-// [thunk]:EntitySoldier::GetGameObject`adjustor{12}'
+// ?GetGameObject@EntitySoldier@@WM@AEPAVGameObject@@XZ
 
 // SYNTHETIC: SWBF2 0x004faba8
-// [thunk]:EntitySoldier::GetEntity`adjustor{576}'
+// ?GetEntity@EntitySoldier@@WCEA@AEPAVEntity@@XZ
 
 // SYNTHETIC: SWBF2 0x004fabb3
-// [thunk]:EntitySoldier::GetEntity`adjustor{576}'
+// ?GetEntity@EntitySoldier@@WCEA@BEPBVEntity@@XZ
 
 // SYNTHETIC: SWBF2 0x004fac1e
-// [thunk]:EntitySoldier::GetMatrix`adjustor{564}'
+// ?GetMatrix@EntitySoldier@@WCDE@BEABVPblMatrix@@XZ
 
 class PowerupItem
 {
@@ -9029,17 +9029,17 @@ void StartBulletTime(float f0, float f1, float f2);
 // SYNTHETIC: SWBF2 0x004de820
 // EntitySoldier::`scalar deleting destructor'
 // SYNTHETIC: SWBF2 0x004fab51
-// [thunk]:EntitySoldier::`scalar deleting destructor' adjustor{148}
+// ??_EEntitySoldier@@WJE@AEPAXI@Z
 // SYNTHETIC: SWBF2 0x004fabdf
-// [thunk]:EntitySoldier::`scalar deleting destructor' adjustor{320}
+// ??_EEntitySoldier@@WBEA@AEPAXI@Z
 // SYNTHETIC: SWBF2 0x004fabea
-// [thunk]:EntitySoldier::`scalar deleting destructor' adjustor{972}
+// ??_EEntitySoldier@@WDMM@AEPAXI@Z
 // SYNTHETIC: SWBF2 0x004fabf5
-// [thunk]:EntitySoldier::`scalar deleting destructor' adjustor{600}
+// ??_EEntitySoldier@@WCFI@AEPAXI@Z
 // SYNTHETIC: SWBF2 0x004fac00
-// [thunk]:EntitySoldier::`scalar deleting destructor' adjustor{12}
+// ??_EEntitySoldier@@WM@AEPAXI@Z
 // SYNTHETIC: SWBF2 0x004fac08
-// [thunk]:EntitySoldier::`scalar deleting destructor' adjustor{512}
+// ??_EEntitySoldier@@WCAA@AEPAXI@Z
 
 // FUNCTION: SWBF2 0x004dfa20
 EntitySoldier::~EntitySoldier()
@@ -10584,13 +10584,13 @@ void EntitySoldier::Charge()
 }
 
 // SYNTHETIC: SWBF2 0x004fab6c
-// [thunk]:EntitySoldier::GetGameObject`adjustor{320}'
+// ?GetGameObject@EntitySoldier@@WBEA@AEPAVGameObject@@XZ
 
 // SYNTHETIC: SWBF2 0x004fabd4
-// [thunk]:EntitySoldier::Kill`adjustor{256}'
+// ?Kill@EntitySoldier@@WBAA@AEXXZ
 
 // SYNTHETIC: SWBF2 0x004fac13
-// [thunk]:EntitySoldier::`scalar deleting destructor'`adjustor{576}'
+// ??_EEntitySoldier@@WCEA@AEPAXI@Z
 
 // FUNCTION: SWBF2 0x004ee210
 bool EntitySoldier::CheckMoveControlForSprint(float fThrust, float fStrafe)

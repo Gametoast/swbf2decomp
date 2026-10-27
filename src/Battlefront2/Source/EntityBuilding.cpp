@@ -408,13 +408,13 @@ EntityBuilding::~EntityBuilding()
 // SYNTHETIC: SWBF2 0x00492360
 // EntityBuilding::`scalar deleting destructor'
 // SYNTHETIC: SWBF2 0x004940b5
-// [thunk]:EntityBuilding::`scalar deleting destructor' adjustor{320}
+// ??_EEntityBuilding@@WBEA@AEPAXI@Z
 // SYNTHETIC: SWBF2 0x004940c0
-// [thunk]:EntityBuilding::`scalar deleting destructor' adjustor{12}
+// ??_EEntityBuilding@@WM@AEPAXI@Z
 // SYNTHETIC: SWBF2 0x004940c8
-// [thunk]:EntityBuilding::`scalar deleting destructor' adjustor{512}
+// ??_EEntityBuilding@@WCAA@AEPAXI@Z
 // SYNTHETIC: SWBF2 0x004940d3
-// [thunk]:EntityBuilding::`scalar deleting destructor' adjustor{148}
+// ??_EEntityBuilding@@WJE@AEPAXI@Z
 
 
 

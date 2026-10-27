@@ -202,15 +202,15 @@ EntityBuildingArmed::~EntityBuildingArmed()
 // SYNTHETIC: SWBF2 0x004959f0
 // EntityBuildingArmed::`scalar deleting destructor'
 // SYNTHETIC: SWBF2 0x00496a81
-// [thunk]:EntityBuildingArmed::`scalar deleting destructor' adjustor{320}
+// ??_EEntityBuildingArmed@@WBEA@AEPAXI@Z
 // SYNTHETIC: SWBF2 0x00496a8c
-// [thunk]:EntityBuildingArmed::`scalar deleting destructor' adjustor{12}
+// ??_EEntityBuildingArmed@@WM@AEPAXI@Z
 // SYNTHETIC: SWBF2 0x00496a94
-// [thunk]:EntityBuildingArmed::`scalar deleting destructor' adjustor{512}
+// ??_EEntityBuildingArmed@@WCAA@AEPAXI@Z
 // SYNTHETIC: SWBF2 0x00496a9f
-// [thunk]:EntityBuildingArmed::`scalar deleting destructor' adjustor{608}
+// ??_EEntityBuildingArmed@@WCGA@AEPAXI@Z
 // SYNTHETIC: SWBF2 0x00496aaa
-// [thunk]:EntityBuildingArmed::`scalar deleting destructor' adjustor{148}
+// ??_EEntityBuildingArmed@@WJE@AEPAXI@Z
 
 // FUNCTION: SWBF2 0x00495d90
 void EntityBuildingArmed::Init()

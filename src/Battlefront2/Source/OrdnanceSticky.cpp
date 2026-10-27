@@ -246,9 +246,9 @@ OrdnanceSticky::~OrdnanceSticky()
 }
 
 // SYNTHETIC: SWBF2 0x00607286
-// [thunk]:OrdnanceSticky::`scalar deleting destructor' adjustor{24}
+// ??_EOrdnanceSticky@@WBI@AEPAXI@Z
 // SYNTHETIC: SWBF2 0x0060728e
-// [thunk]:OrdnanceSticky::`scalar deleting destructor' adjustor{152}
+// ??_EOrdnanceSticky@@WJI@AEPAXI@Z
 // SYNTHETIC: SWBF2 0x00605f80
 // OrdnanceSticky::`scalar deleting destructor'
 

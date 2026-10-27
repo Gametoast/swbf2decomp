@@ -274,10 +274,10 @@ UnitController::~UnitController()
 // UnitController::`scalar deleting destructor'
 
 // SYNTHETIC: SWBF2 0x006645cb
-// [thunk]:UnitController::`scalar deleting destructor' adjustor{120}
+// ??_EUnitController@@OHI@AEPAXI@Z
 
 // SYNTHETIC: SWBF2 0x006645d3
-// [thunk]:UnitController::`scalar deleting destructor' adjustor{452}
+// ??_EUnitController@@OBME@AEPAXI@Z
 
 // FUNCTION: SWBF2 0x006634a0
 void UnitController::KillController()

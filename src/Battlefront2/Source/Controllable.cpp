@@ -263,7 +263,7 @@ void Controllable::Initialize()
 }
 
 // SYNTHETIC: SWBF2 0x004850ef
-// [thunk]:Controllable::`scalar deleting destructor' adjustor{24}
+// ??_EControllable@@WBI@AEPAXI@Z
 // FUNCTION: SWBF2 0x00483af0
 Controllable::~Controllable()
 {

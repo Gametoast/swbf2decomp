@@ -119,7 +119,7 @@ const char CommandHoverClass::rttiNameCommandHoverClass[] = "CommandHoverClass";
 // SYNTHETIC: SWBF2 0x00479220
 // CommandHoverClass::`scalar deleting destructor'
 // SYNTHETIC: SWBF2 0x004794f6
-// [thunk]:CommandHoverClass::`scalar deleting destructor'`adjustor{3696}'
+// ??_ECommandHoverClass@@WOHA@AEPAXI@Z
 
 // FUNCTION: SWBF2 0x00479250
 CommandHoverClass::CommandHoverClass(CommandHoverClass* pBase, unsigned int uHash)

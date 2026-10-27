@@ -804,7 +804,7 @@ GodrayClass::GodrayClass(unsigned int uHash)
 // GodrayClass::`scalar deleting destructor'
 
 // SYNTHETIC: SWBF2 0x005409cf
-// [thunk]:GodrayClass::`scalar deleting destructor' adjustor{96}
+// ??_EGodrayClass@@WGA@AEPAXI@Z
 
 // FUNCTION: SWBF2 0x00540330
 GodrayClass::GodrayClass(PblConfig& config)

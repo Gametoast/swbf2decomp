@@ -77,7 +77,7 @@ HUD::ViewPort::ViewPort(const char* const pName, HUD::Item::Factory::ItemCallbac
 // HUD::ViewPort::`scalar deleting destructor'
 
 // SYNTHETIC: SWBF2 0x00569928
-// [thunk]:HUD::ViewPort::`scalar deleting destructor' adjustor{256}
+// ??_EViewPort@HUD@@WBAA@AEPAXI@Z
 // FUNCTION: SWBF2 0x00568de0
 HUD::ViewPort::~ViewPort()
 {

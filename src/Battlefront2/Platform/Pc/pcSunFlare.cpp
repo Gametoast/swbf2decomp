@@ -488,9 +488,9 @@ SunFlare::SunFlare(const SunFlare& that)
 }
 
 // SYNTHETIC: SWBF2 0x00433dd8
-// [thunk]:SunFlare::`scalar deleting destructor' adjustor{40}
+// ??_ESunFlare@@WCI@AEPAXI@Z
 // SYNTHETIC: SWBF2 0x00433de0
-// [thunk]:SunFlare::`scalar deleting destructor' adjustor{16}
+// ??_ESunFlare@@WBA@AEPAXI@Z
 // FUNCTION: SWBF2 0x0042e4d0
 SunFlare::~SunFlare()
 {

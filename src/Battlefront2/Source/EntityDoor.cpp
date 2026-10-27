@@ -93,11 +93,11 @@ EntityDoor::~EntityDoor()
 // SYNTHETIC: SWBF2 0x00497fc0
 // EntityDoor::`scalar deleting destructor'
 // SYNTHETIC: SWBF2 0x004992b4
-// [thunk]:EntityDoor::`scalar deleting destructor'`adjustor{148}'
+// ??_EEntityDoor@@WJE@AEPAXI@Z
 // SYNTHETIC: SWBF2 0x004992bf
-// [thunk]:EntityDoor::`scalar deleting destructor'`adjustor{384}'
+// ??_EEntityDoor@@WBIA@AEPAXI@Z
 // SYNTHETIC: SWBF2 0x004992ca
-// [thunk]:EntityDoor::`scalar deleting destructor'`adjustor{12}'
+// ??_EEntityDoor@@WM@AEPAXI@Z
 
 
 namespace AI

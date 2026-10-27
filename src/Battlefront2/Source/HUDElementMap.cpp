@@ -152,7 +152,7 @@ bool HUD::ElementMap::BitmapGroup::SetProperty(const unsigned int uHashID, const
 // HUD::ElementMap::BitmapGroup::`scalar deleting destructor'
 
 // SYNTHETIC: SWBF2 0x00555c35
-// [thunk]:HUD::ElementMap::BitmapGroup::`scalar deleting destructor' adjustor{288}
+// ??_EBitmapGroup@ElementMap@HUD@@WBCA@AEPAXI@Z
 
 
 // SYNTHETIC: SWBF2 0x0054fe40
@@ -177,7 +177,7 @@ bool HUD::ElementMap::BitmapGroup::SetProperty(const unsigned int uHashID, const
 // HUD::ElementText::`default constructor closure'
 
 // SYNTHETIC: SWBF2 0x00555c2a
-// [thunk]:HUD::ElementMap::`scalar deleting destructor' adjustor{384}
+// ??_EElementMap@HUD@@WBIA@AEPAXI@Z
 
 // FUNCTION: SWBF2 0x005511b0
 HUD::ElementMap::~ElementMap()

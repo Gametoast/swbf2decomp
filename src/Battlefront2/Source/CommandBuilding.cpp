@@ -23,7 +23,7 @@ CommandBuildingClass::~CommandBuildingClass()
 // SYNTHETIC: SWBF2 0x00476430
 // CommandBuildingClass::`scalar deleting destructor'
 // SYNTHETIC: SWBF2 0x004766c3
-// [thunk]:CommandBuildingClass::`scalar deleting destructor' adjustor{1680}
+// ??_ECommandBuildingClass@@WGJA@AEPAXI@Z
 
 // SYNTHETIC: SWBF2 0x00402630
 // `dynamic initializer for 'CommandBuildingClass::rttiHashCommandBuildingClass''
@@ -56,15 +56,15 @@ const char CommandBuilding::rttiNameCommandBuilding[] = "CommandBuilding";
 // SYNTHETIC: SWBF2 0x00476070
 // CommandBuilding::`scalar deleting destructor'
 // SYNTHETIC: SWBF2 0x0047669a
-// [thunk]:CommandBuilding::`scalar deleting destructor' adjustor{608}
+// ??_ECommandBuilding@@WCGA@AEPAXI@Z
 // SYNTHETIC: SWBF2 0x004766a5
-// [thunk]:CommandBuilding::`scalar deleting destructor' adjustor{148}
+// ??_ECommandBuilding@@WJE@AEPAXI@Z
 // SYNTHETIC: SWBF2 0x004766b0
-// [thunk]:CommandBuilding::`scalar deleting destructor' adjustor{320}
+// ??_ECommandBuilding@@WBEA@AEPAXI@Z
 // SYNTHETIC: SWBF2 0x004766bb
-// [thunk]:CommandBuilding::`scalar deleting destructor' adjustor{12}
+// ??_ECommandBuilding@@WM@AEPAXI@Z
 // SYNTHETIC: SWBF2 0x004766ce
-// [thunk]:CommandBuilding::`scalar deleting destructor' adjustor{512}
+// ??_ECommandBuilding@@WCAA@AEPAXI@Z
 
 // FUNCTION: SWBF2 0x004761c0
 CommandBuilding::~CommandBuilding()

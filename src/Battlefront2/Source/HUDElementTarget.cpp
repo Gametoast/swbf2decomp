@@ -119,7 +119,7 @@ HUD::ElementTarget::Target::Target(const char* const pName, Factory::ItemCallbac
 // HUD::ElementTarget::Target::`scalar deleting destructor'
 
 // SYNTHETIC: SWBF2 0x0055acc8
-// [thunk]:HUD::ElementTarget::Target::`scalar deleting destructor' adjustor{288}
+// ??_ETarget@ElementTarget@HUD@@WBCA@AEPAXI@Z
 // FUNCTION: SWBF2 0x00558ed0
 HUD::ElementTarget::Target::~Target()
 {
@@ -530,7 +530,7 @@ HUD::ElementTarget::ElementTarget(const char* const pName, Factory::ItemCallback
 // HUD::ElementTarget::Target::`default constructor closure'
 
 // SYNTHETIC: SWBF2 0x0055acbd
-// [thunk]:HUD::ElementTarget::`scalar deleting destructor' adjustor{384}
+// ??_EElementTarget@HUD@@WBIA@AEPAXI@Z
 
 // FUNCTION: SWBF2 0x0055a210
 HUD::ElementTarget::~ElementTarget()

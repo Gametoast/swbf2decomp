@@ -185,9 +185,9 @@ OrdnanceGrenade::~OrdnanceGrenade()
 }
 
 // SYNTHETIC: SWBF2 0x00600d36
-// [thunk]:OrdnanceGrenade::`scalar deleting destructor' adjustor{24}
+// ??_EOrdnanceGrenade@@WBI@AEPAXI@Z
 // SYNTHETIC: SWBF2 0x00600d3e
-// [thunk]:OrdnanceGrenade::`scalar deleting destructor' adjustor{152}
+// ??_EOrdnanceGrenade@@WJI@AEPAXI@Z
 // SYNTHETIC: SWBF2 0x00600090
 // OrdnanceGrenade::`scalar deleting destructor'
 

@@ -134,11 +134,11 @@ public:
 
     ManagedLightBeam(const LightBeam& beam);
     // SYNTHETIC: SWBF2 0x004cf48c
-    // [thunk]:ManagedLightBeam::`scalar deleting destructor' adjustor{96}
+    // ??_EManagedLightBeam@@WGA@AEPAXI@Z
     // SYNTHETIC: SWBF2 0x004cf494
-    // [thunk]:ManagedLightBeam::`scalar deleting destructor' adjustor{136}
+    // ??_EManagedLightBeam@@WII@AEPAXI@Z
     // SYNTHETIC: SWBF2 0x004cf4a7
-    // [thunk]:ManagedLightBeam::`scalar deleting destructor' adjustor{112}
+    // ??_EManagedLightBeam@@WHA@AEPAXI@Z
     // SYNTHETIC: SWBF2 0x004cc9b0
     // ManagedLightBeam::`scalar deleting destructor'
     // SYNTHETIC: SWBF2 0x004cca10

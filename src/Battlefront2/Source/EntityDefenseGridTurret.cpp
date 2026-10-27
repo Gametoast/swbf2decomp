@@ -84,15 +84,15 @@ bool EntityDefenseGridTurret::Update(float fDeltaTime)
 }
 
 // SYNTHETIC: SWBF2 0x00497dd2
-// [thunk]:EntityDefenseGridTurret::`vector deleting destructor'`adjustor{148}'
+// ??_EEntityDefenseGridTurret@@WJE@AEPAXI@Z
 // SYNTHETIC: SWBF2 0x00497ddd
-// [thunk]:EntityDefenseGridTurret::`vector deleting destructor'`adjustor{320}'
+// ??_EEntityDefenseGridTurret@@WBEA@AEPAXI@Z
 // SYNTHETIC: SWBF2 0x00497de8
-// [thunk]:EntityDefenseGridTurret::`vector deleting destructor'`adjustor{12}'
+// ??_EEntityDefenseGridTurret@@WM@AEPAXI@Z
 // SYNTHETIC: SWBF2 0x00497df0
-// [thunk]:EntityDefenseGridTurret::`vector deleting destructor'`adjustor{512}'
+// ??_EEntityDefenseGridTurret@@WCAA@AEPAXI@Z
 // SYNTHETIC: SWBF2 0x00497dfb
-// [thunk]:EntityDefenseGridTurret::`vector deleting destructor'`adjustor{608}'
+// ??_EEntityDefenseGridTurret@@WCGA@AEPAXI@Z
 
 
 

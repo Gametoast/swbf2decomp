@@ -249,15 +249,15 @@ EntityBuildingAnimated::EntityBuildingAnimated(EntityBuildingAnimatedClass* pCla
 // SYNTHETIC: SWBF2 0x00494110
 // EntityBuildingAnimated::`scalar deleting destructor'
 // SYNTHETIC: SWBF2 0x00494f98
-// [thunk]: EntityBuildingAnimated::`scalar deleting destructor' adjustor{320}
+// ??_EEntityBuildingAnimated@@WBEA@AEPAXI@Z
 // SYNTHETIC: SWBF2 0x00494fa3
-// [thunk]: EntityBuildingAnimated::`scalar deleting destructor' adjustor{12}
+// ??_EEntityBuildingAnimated@@WM@AEPAXI@Z
 // SYNTHETIC: SWBF2 0x00494fab
-// [thunk]: EntityBuildingAnimated::`scalar deleting destructor' adjustor{512}
+// ??_EEntityBuildingAnimated@@WCAA@AEPAXI@Z
 // SYNTHETIC: SWBF2 0x00494fb6
-// [thunk]: EntityBuildingAnimated::`scalar deleting destructor' adjustor{608}
+// ??_EEntityBuildingAnimated@@WCGA@AEPAXI@Z
 // SYNTHETIC: SWBF2 0x00494fc1
-// [thunk]: EntityBuildingAnimated::`scalar deleting destructor' adjustor{148}
+// ??_EEntityBuildingAnimated@@WJE@AEPAXI@Z
 
 // FUNCTION: SWBF2 0x00494320
 EntityBuildingAnimated::~EntityBuildingAnimated()

@@ -123,7 +123,7 @@ VehicleSpawn::VehicleSpawn(VehicleSpawnClass* pClass, const EntityDesc& desc)
 }
 
 // SYNTHETIC: SWBF2 0x00670155
-// [thunk]:VehicleSpawn::`scalar deleting destructor' adjustor{4}
+// ??_EVehicleSpawn@@W3AEPAXI@Z
 // SYNTHETIC: SWBF2 0x0066e9f0
 // VehicleSpawn::`scalar deleting destructor'
 

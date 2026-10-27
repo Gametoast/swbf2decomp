@@ -30,7 +30,7 @@ LeafPatchClass::~LeafPatchClass()
 }
 
 // SYNTHETIC: SWBF2 0x0056f41d
-// [thunk]:LeafPatchClass::`scalar deleting destructor' adjustor{24}
+// ??_ELeafPatchClass@@WBI@AEPAXI@Z
 
 
 // FUNCTION: SWBF2 0x0056dc00
@@ -545,9 +545,9 @@ LeafPatch::~LeafPatch()
 }
 
 // SYNTHETIC: SWBF2 0x0056f415
-// [thunk]:LeafPatch::`scalar deleting destructor' adjustor{88}
+// ??_ELeafPatch@@WFI@AEPAXI@Z
 // SYNTHETIC: SWBF2 0x0056f425
-// [thunk]:LeafPatch::`scalar deleting destructor' adjustor{96}
+// ??_ELeafPatch@@WGA@AEPAXI@Z
 // SYNTHETIC: SWBF2 0x0056d400
 // LeafPatch::`scalar deleting destructor'
 

@@ -111,7 +111,7 @@ GrassPatch::~GrassPatch()
 }
 
 // SYNTHETIC: SWBF2 0x005421b5
-// [thunk]:GrassPatch::`scalar deleting destructor' adjustor{88}
+// ??_EGrassPatch@@WFI@AEPAXI@Z
 // SYNTHETIC: SWBF2 0x00540c70
 // GrassPatch::`scalar deleting destructor'
 
@@ -135,7 +135,7 @@ GrassPatchClass::~GrassPatchClass()
 // GrassPatchClass::`scalar deleting destructor'
 
 // SYNTHETIC: SWBF2 0x005421bd
-// [thunk]:GrassPatchClass::`scalar deleting destructor' adjustor{24}
+// ??_EGrassPatchClass@@WBI@AEPAXI@Z
 
 // FUNCTION: SWBF2 0x00540f70
 void GrassPatchClass::CreateClient()

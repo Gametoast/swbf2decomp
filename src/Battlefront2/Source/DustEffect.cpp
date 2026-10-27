@@ -90,7 +90,7 @@ DustEffect::DustEffect(DustEffectClass* pClass, const PblMatrix& matrix)
 }
 
 // SYNTHETIC: SWBF2 0x00490b1d
-// [thunk]:DustEffect::`scalar deleting destructor' adjustor{88}
+// ??_EDustEffect@@WFI@AEPAXI@Z
 // SYNTHETIC: SWBF2 0x0048eed0
 // DustEffect::`scalar deleting destructor'
 
@@ -333,9 +333,9 @@ DustEffectClass::DustEffectClass(unsigned int uHash)
 }
 
 // SYNTHETIC: SWBF2 0x00490b0d
-// [thunk]:DustEffectClass::`scalar deleting destructor' adjustor{24}
+// ??_EDustEffectClass@@WBI@AEPAXI@Z
 // SYNTHETIC: SWBF2 0x00490b15
-// [thunk]:DustEffectClass::`scalar deleting destructor' adjustor{120}
+// ??_EDustEffectClass@@WHI@AEPAXI@Z
 // SYNTHETIC: SWBF2 0x0048fa10
 // DustEffectClass::`scalar deleting destructor'
 
@@ -682,7 +682,7 @@ CloudClusterObject::~CloudClusterObject()
 }
 
 // SYNTHETIC: SWBF2 0x00490b05
-// [thunk]:CloudClusterObject::`scalar deleting destructor' adjustor{88}
+// ??_ECloudClusterObject@@WFI@AEPAXI@Z
 // SYNTHETIC: SWBF2 0x004909e0
 // CloudClusterObject::`scalar deleting destructor'
 

@@ -22,9 +22,9 @@ OrdnanceHaywire::~OrdnanceHaywire()
 }
 
 // SYNTHETIC: SWBF2 0x006010e6
-// [thunk]:OrdnanceHaywire::`scalar deleting destructor' adjustor{24}
+// ??_EOrdnanceHaywire@@WBI@AEPAXI@Z
 // SYNTHETIC: SWBF2 0x006010ee
-// [thunk]:OrdnanceHaywire::`scalar deleting destructor' adjustor{152}
+// ??_EOrdnanceHaywire@@WJI@AEPAXI@Z
 // SYNTHETIC: SWBF2 0x00600db0
 // OrdnanceHaywire::`scalar deleting destructor'
 

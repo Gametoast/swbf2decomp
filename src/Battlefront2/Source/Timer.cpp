@@ -96,7 +96,7 @@ Timer::Timer(const char* pcName)
 // Timer::`scalar deleting destructor'
 
 // SYNTHETIC: SWBF2 0x00657ce7
-// [thunk]:Timer::`scalar deleting destructor' adjustor{24}
+// ??_ETimer@@WBI@AEPAXI@Z
 
 namespace EventManager
 {

@@ -246,9 +246,9 @@ void EntityProp::Kill()
 // SYNTHETIC: SWBF2 0x004d8d70
 // EntityProp::`scalar deleting destructor'
 // SYNTHETIC: SWBF2 0x004db282
-// [thunk]: EntityProp::`scalar deleting destructor' adjustor{12}
+// ??_EEntityProp@@WM@AEPAXI@Z
 // SYNTHETIC: SWBF2 0x004db28a
-// [thunk]: EntityProp::`scalar deleting destructor' adjustor{148}
+// ??_EEntityProp@@WJE@AEPAXI@Z
 
 // FUNCTION: SWBF2 0x004d9660
 EntityProp::~EntityProp()

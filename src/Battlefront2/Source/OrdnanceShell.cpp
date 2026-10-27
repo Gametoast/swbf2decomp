@@ -102,9 +102,9 @@ OrdnanceShell::~OrdnanceShell()
 }
 
 // SYNTHETIC: SWBF2 0x00605f46
-// [thunk]:OrdnanceShell::`scalar deleting destructor' adjustor{24}
+// ??_EOrdnanceShell@@WBI@AEPAXI@Z
 // SYNTHETIC: SWBF2 0x00605f4e
-// [thunk]:OrdnanceShell::`scalar deleting destructor' adjustor{152}
+// ??_EOrdnanceShell@@WJI@AEPAXI@Z
 // SYNTHETIC: SWBF2 0x00605b60
 // OrdnanceShell::`scalar deleting destructor'
 

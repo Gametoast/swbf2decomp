@@ -43,7 +43,7 @@ LightFlash::~LightFlash()
 }
 
 // SYNTHETIC: SWBF2 0x00570df7
-// [thunk]:LightFlash::`scalar deleting destructor' adjustor{32}
+// ??_ELightFlash@@WCA@AEPAXI@Z
 
 // FUNCTION: SWBF2 0x00570c00
 bool LightFlash::Update(float fDeltaTime)

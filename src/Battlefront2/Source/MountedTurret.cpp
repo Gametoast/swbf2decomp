@@ -1797,16 +1797,16 @@ bool MountedTurretClass::SetProperty(unsigned int uHash, const char* pcValue, co
 }
 
 // SYNTHETIC: SWBF2 0x005a93f4
-// [thunk]:MountedTurret::GetGameObject`adjustor{36}'
+// ?GetGameObject@MountedTurret@@WCE@BEPBVGameObject@@XZ
 
 // SYNTHETIC: SWBF2 0x005a9404
-// [thunk]:MountedTurret::GetEntity`adjustor{12}'
+// ?GetEntity@MountedTurret@@WM@AEPAVEntity@@XZ
 
 // SYNTHETIC: SWBF2 0x005a940c
-// [thunk]:MountedTurret::`vector deleting destructor' adjustor{36}
+// ??_EMountedTurret@@WCE@AEPAXI@Z
 
 // SYNTHETIC: SWBF2 0x005a9414
-// [thunk]:MountedTurret::`vector deleting destructor' adjustor{12}
+// ??_EMountedTurret@@WM@AEPAXI@Z
 
 // SYNTHETIC: SWBF2 0x005a93ec
-// [thunk]:MountedTurret::GetGameObject`adjustor{36}'
+// ?GetGameObject@MountedTurret@@WCE@AEPAVGameObject@@XZ

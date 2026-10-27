@@ -1765,54 +1765,54 @@ Entity* EntityDroidClass::Build(const EntityDesc& desc)
 }
 
 // SYNTHETIC: SWBF2 0x0049e20a
-// [thunk]:EntityDroid::GetMatrix`adjustor{564}'
+// ?GetMatrix@EntityDroid@@WCDE@BEABVPblMatrix@@XZ
 
 // SYNTHETIC: SWBF2 0x0049e220
-// [thunk]:EntityDroid::GetEntity`adjustor{12}'
+// ?GetEntity@EntityDroid@@WM@AEPAVEntity@@XZ
 
 // SYNTHETIC: SWBF2 0x0049e230
-// [thunk]:EntityDroid::GetGameObject`adjustor{320}'
+// ?GetGameObject@EntityDroid@@WBEA@AEPAVGameObject@@XZ
 
 // SYNTHETIC: SWBF2 0x0049e246
-// [thunk]:EntityDroid::GetGameObject`adjustor{600}'
+// ?GetGameObject@EntityDroid@@WCFI@AEPAVGameObject@@XZ
 
 // SYNTHETIC: SWBF2 0x0049e251
-// [thunk]:EntityDroid::GetGameObject`adjustor{600}'
+// ?GetGameObject@EntityDroid@@WCFI@BEPBVGameObject@@XZ
 
 // SYNTHETIC: SWBF2 0x0049e25c
-// [thunk]:EntityDroid::GetGameObject`adjustor{12}'
+// ?GetGameObject@EntityDroid@@WM@AEPAVGameObject@@XZ
 
 // SYNTHETIC: SWBF2 0x0049e26c
-// [thunk]:EntityDroid::GetEntity`adjustor{576}'
+// ?GetEntity@EntityDroid@@WCEA@AEPAVEntity@@XZ
 
 // SYNTHETIC: SWBF2 0x0049e277
-// [thunk]:EntityDroid::GetEntity`adjustor{576}'
+// ?GetEntity@EntityDroid@@WCEA@BEPBVEntity@@XZ
 
 // SYNTHETIC: SWBF2 0x0049e2cc
-// [thunk]:EntityDroid::`scalar deleting destructor'`adjustor{576}'
+// ??_EEntityDroid@@WCEA@AEPAXI@Z
 
 // SYNTHETIC: SWBF2 0x0049e215
-// [thunk]:EntityDroid::`scalar deleting destructor' adjustor{148}
+// ??_EEntityDroid@@WJE@AEPAXI@Z
 // SYNTHETIC: SWBF2 0x0049e228
-// [thunk]:EntityDroid::GetEntity adjustor{12}
+// ?GetEntity@EntityDroid@@WM@BEPBVEntity@@XZ
 // SYNTHETIC: SWBF2 0x0049e23b
-// [thunk]:EntityDroid::GetGameObject adjustor{320}
+// ?GetGameObject@EntityDroid@@WBEA@BEPBVGameObject@@XZ
 // SYNTHETIC: SWBF2 0x0049e264
-// [thunk]:EntityDroid::GetGameObject adjustor{12}
+// ?GetGameObject@EntityDroid@@WM@BEPBVGameObject@@XZ
 // SYNTHETIC: SWBF2 0x0049e282
-// [thunk]:EntityDroid::GetControllable adjustor{600}
+// ?GetControllable@EntityDroid@@WCFI@AEPAVControllable@@XZ
 // SYNTHETIC: SWBF2 0x0049e28d
-// [thunk]:EntityDroid::GetControllable adjustor{600}
+// ?GetControllable@EntityDroid@@WCFI@BEPBVControllable@@XZ
 // SYNTHETIC: SWBF2 0x0049e298
-// [thunk]:EntityDroid::Kill adjustor{256}
+// ?Kill@EntityDroid@@WBAA@AEXXZ
 // SYNTHETIC: SWBF2 0x0049e2a3
-// [thunk]:EntityDroid::`scalar deleting destructor' adjustor{320}
+// ??_EEntityDroid@@WBEA@AEPAXI@Z
 // SYNTHETIC: SWBF2 0x0049e2ae
-// [thunk]:EntityDroid::`scalar deleting destructor' adjustor{600}
+// ??_EEntityDroid@@WCFI@AEPAXI@Z
 // SYNTHETIC: SWBF2 0x0049e2b9
-// [thunk]:EntityDroid::`scalar deleting destructor' adjustor{12}
+// ??_EEntityDroid@@WM@AEPAXI@Z
 // SYNTHETIC: SWBF2 0x0049e2c1
-// [thunk]:EntityDroid::`scalar deleting destructor' adjustor{512}
+// ??_EEntityDroid@@WCAA@AEPAXI@Z
 
 // FUNCTION: SWBF2 0x005eedf0
 const PblMatrix& EntityDroid::GetSmoothedMatrix() const

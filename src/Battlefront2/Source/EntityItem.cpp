@@ -352,15 +352,15 @@ EntityItem::~EntityItem()
 // SYNTHETIC: SWBF2 0x004caba0
 // EntityItem::`scalar deleting destructor'
 // SYNTHETIC: SWBF2 0x004cc2df
-// [thunk]:EntityItem::`scalar deleting destructor' adjustor{320}
+// ??_EEntityItem@@WBEA@AEPAXI@Z
 // SYNTHETIC: SWBF2 0x004cc2ea
-// [thunk]:EntityItem::`scalar deleting destructor' adjustor{12}
+// ??_EEntityItem@@WM@AEPAXI@Z
 // SYNTHETIC: SWBF2 0x004cc2f2
-// [thunk]:EntityItem::`scalar deleting destructor' adjustor{512}
+// ??_EEntityItem@@WCAA@AEPAXI@Z
 // SYNTHETIC: SWBF2 0x004cc2fd
-// [thunk]:EntityItem::`scalar deleting destructor' adjustor{576}
+// ??_EEntityItem@@WCEA@AEPAXI@Z
 // SYNTHETIC: SWBF2 0x004cc308
-// [thunk]:EntityItem::`scalar deleting destructor' adjustor{148}
+// ??_EEntityItem@@WJE@AEPAXI@Z
 
 // FUNCTION: SWBF2 0x004cab40
 const PblVector3& EntityItem::GetVelocity() const

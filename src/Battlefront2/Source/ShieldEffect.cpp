@@ -214,9 +214,9 @@ ShieldEffect::ShieldEffect(const ShieldEffectClass* pClass)
 }
 
 // SYNTHETIC: SWBF2 0x006371ab
-// [thunk]:ShieldEffect::`scalar deleting destructor' adjustor{24}
+// ??_EShieldEffect@@WBI@AEPAXI@Z
 // SYNTHETIC: SWBF2 0x006371b3
-// [thunk]:ShieldEffect::`scalar deleting destructor' adjustor{128}
+// ??_EShieldEffect@@WIA@AEPAXI@Z
 // SYNTHETIC: SWBF2 0x00636d80
 // ShieldEffect::`scalar deleting destructor'
 

@@ -632,7 +632,7 @@ float EntityCloth::GetPriority()
 }
 
 // SYNTHETIC: SWBF2 0x0045cb32
-// [thunk]:EntityCloth::`scalar deleting destructor' adjustor{4}
+// ??_EEntityCloth@@W3AEPAXI@Z
 // SYNTHETIC: SWBF2 0x0045a230
 // EntityCloth::`scalar deleting destructor'
 

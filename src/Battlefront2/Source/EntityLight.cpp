@@ -585,9 +585,9 @@ EntityLight::EntityLight()
 }
 
 // SYNTHETIC: SWBF2 0x004cf49f
-// [thunk]:EntityLight::`scalar deleting destructor' adjustor{40}
+// ??_EEntityLight@@WCI@AEPAXI@Z
 // SYNTHETIC: SWBF2 0x004cf4af
-// [thunk]:EntityLight::`scalar deleting destructor' adjustor{16}
+// ??_EEntityLight@@WBA@AEPAXI@Z
 // SYNTHETIC: SWBF2 0x004ccdf0
 // EntityLight::`scalar deleting destructor'
 
@@ -1032,7 +1032,7 @@ EntityLightClass::EntityLightClass(unsigned int uHash)
 }
 
 // SYNTHETIC: SWBF2 0x004cf484
-// [thunk]:EntityLightClass::`scalar deleting destructor' adjustor{96}
+// ??_EEntityLightClass@@WGA@AEPAXI@Z
 // SYNTHETIC: SWBF2 0x004cddd0
 // EntityLightClass::`scalar deleting destructor'
 

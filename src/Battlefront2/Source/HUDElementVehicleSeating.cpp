@@ -68,7 +68,7 @@ void* HUD::ElementVehicleSeating::GetParent()
 // HUD::ElementVehicleSeating::`scalar deleting destructor'
 
 // SYNTHETIC: SWBF2 0x0055d8db
-// [thunk]:HUD::ElementVehicleSeating::`scalar deleting destructor' adjustor{384}
+// ??_EElementVehicleSeating@HUD@@WBIA@AEPAXI@Z
 // FUNCTION: SWBF2 0x0055ce20
 HUD::ElementVehicleSeating::~ElementVehicleSeating()
 {

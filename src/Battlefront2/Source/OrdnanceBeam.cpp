@@ -143,9 +143,9 @@ OrdnanceBeam::~OrdnanceBeam()
 }
 
 // SYNTHETIC: SWBF2 0x005fa7ff
-// [thunk]:OrdnanceBeam::`scalar deleting destructor' adjustor{24}
+// ??_EOrdnanceBeam@@WBI@AEPAXI@Z
 // SYNTHETIC: SWBF2 0x005fa807
-// [thunk]:OrdnanceBeam::`scalar deleting destructor' adjustor{152}
+// ??_EOrdnanceBeam@@WJI@AEPAXI@Z
 // SYNTHETIC: SWBF2 0x005f96a0
 // OrdnanceBeam::`scalar deleting destructor'
 

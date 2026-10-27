@@ -186,16 +186,16 @@ EntityClass* PowerupItemClass::Derive(unsigned int uHash)
 // SYNTHETIC: SWBF2 0x00623990
 // PowerupItem::`scalar deleting destructor'
 // SYNTHETIC: SWBF2 0x006244ba
-// [thunk]:PowerupItem::`scalar deleting destructor' adjustor{320}
+// ??_EPowerupItem@@WBEA@AEPAXI@Z
 // SYNTHETIC: SWBF2 0x006244c5
-// [thunk]:PowerupItem::`scalar deleting destructor' adjustor{12}
+// ??_EPowerupItem@@WM@AEPAXI@Z
 // SYNTHETIC: SWBF2 0x006244cd
-// [thunk]:PowerupItem::`scalar deleting destructor' adjustor{512}
+// ??_EPowerupItem@@WCAA@AEPAXI@Z
 // SYNTHETIC: SWBF2 0x006244e3
-// [thunk]:PowerupItem::`scalar deleting destructor' adjustor{148}
+// ??_EPowerupItem@@WJE@AEPAXI@Z
 
 // SYNTHETIC: SWBF2 0x006244d8
-// [thunk]:PowerupItem::`scalar deleting destructor'`adjustor{576}'
+// ??_EPowerupItem@@WCEA@AEPAXI@Z
 
 // SYNTHETIC: SWBF2 0x00405f60
 // `dynamic initializer for 'PowerupItem::sMemoryPool''
