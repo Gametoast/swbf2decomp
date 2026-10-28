@@ -27,16 +27,16 @@ StreamGSMDecoder::StreamGSMDecoder()
 // FUNCTION: SWBF2 0x0073d250
 StreamPacket* StreamGSMDecoder::GetPacket(unsigned int uiOutput)
 {
-    StreamNode* const pNode = this;
+    StreamPacket* pPacket;
 
-    if (pNode->GetCurrentPlayState() == SourceTransport::playState_playing)
+    if (StreamNode::GetCurrentPlayState() == SourceTransport::playState_playing)
     {
         StreamPacket* const pPacket = StreamSourceProducer::GetPacket(uiOutput);
         if (pPacket != 0)
         {
             if (pPacket->GetLast())
             {
-                pNode->Stop();
+                StreamNode::Stop();
             }
             return pPacket;
         }
@@ -44,22 +44,20 @@ StreamPacket* StreamGSMDecoder::GetPacket(unsigned int uiOutput)
 
     Update();
 
-    if (pNode->GetCurrentPlayState() != SourceTransport::playState_playing)
+    if (StreamNode::GetCurrentPlayState() == SourceTransport::playState_playing)
     {
-        return 0;
+        StreamPacket* const pPacket = StreamSourceProducer::GetPacket(uiOutput);
+        if (pPacket != 0)
+        {
+            if (pPacket->GetLast())
+            {
+                StreamNode::Stop();
+            }
+            return pPacket;
+        }
     }
 
-    StreamPacket* const pPacket = StreamSourceProducer::GetPacket(uiOutput);
-    if (pPacket == 0)
-    {
-        return 0;
-    }
-
-    if (pPacket->GetLast())
-    {
-        pNode->Stop();
-    }
-    return pPacket;
+    return 0;
 }
 
 // FUNCTION: SWBF2 0x0073d170

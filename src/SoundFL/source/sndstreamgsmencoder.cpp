@@ -10,7 +10,7 @@
 #include "sndsourcetransport.h"
 
 extern "C" void __cdecl gsm_encode(char* pGsm, short* pFrame, unsigned char* pOut);
-extern "C" void __cdecl gsm_option(void* pGsm, int iOption, unsigned char* pValue);
+extern "C" void __cdecl gsm_option(void* pGsm, int iOption, int* pValue);
 
 namespace Snd
 {
@@ -79,28 +79,37 @@ void Snd::StreamGSMEncoder::Flush()
 // FUNCTION: SWBF2 0x00741910
 StreamPacket* StreamGSMEncoder::GetPacket(unsigned int uiOutput)
 {
-    SourceTransport* const pTransport = this;
-
     StreamPacket* pPacket;
-    if (pTransport->GetCurrentPlayState() != SourceTransport::playState_playing ||
-        (pPacket = StreamSourceProducer::GetPacket(uiOutput)) == 0)
+
+    if (StreamNode::GetCurrentPlayState() == SourceTransport::playState_playing)
     {
-        Update();
-        if (pTransport->GetCurrentPlayState() != SourceTransport::playState_playing)
+        StreamPacket* const pPacket = StreamSourceProducer::GetPacket(uiOutput);
+        if (pPacket != 0)
         {
-            return 0;
-        }
-        pPacket = StreamSourceProducer::GetPacket(uiOutput);
-        if (pPacket == 0)
-        {
-            return 0;
+            if (pPacket->mFlags & 1)
+            {
+                StreamNode::Stop();
+            }
+            return pPacket;
         }
     }
-    if (pPacket->mFlags & 1)
+
+    Update();
+
+    if (StreamNode::GetCurrentPlayState() == SourceTransport::playState_playing)
     {
-        pTransport->Stop();
+        StreamPacket* const pPacket = StreamSourceProducer::GetPacket(uiOutput);
+        if (pPacket != 0)
+        {
+            if (pPacket->mFlags & 1)
+            {
+                StreamNode::Stop();
+            }
+            return pPacket;
+        }
     }
-    return pPacket;
+
+    return 0;
 }
 
 // FUNCTION: SWBF2 0x007419c0

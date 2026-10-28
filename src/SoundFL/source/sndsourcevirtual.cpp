@@ -12,17 +12,15 @@ namespace Snd
 // FUNCTION: SWBF2 0x0074b4a0
 bool SourceVirtual::Read(PblFileChunk& chunk, unsigned int uiPropertyID)
 {
-    PblFile* const pFile = chunk._pFile;
-    if (uiPropertyID == 0x94E4E309u)
+    switch (uiPropertyID)
     {
-        pFile->Read8();
-        SetPriority(pFile->ReadFloat());
+    case 0x94E4E309u:
+        chunk._pFile->Read8();
+        SetPriority(chunk._pFile->ReadFloat());
         return true;
-    }
-    if (uiPropertyID == 0xBA467EC4u)
-    {
-        pFile->Read8();
-        SetBias(pFile->ReadFloat());
+    case 0xBA467EC4u:
+        chunk._pFile->Read8();
+        SetBias(chunk._pFile->ReadFloat());
         return true;
     }
     return false;

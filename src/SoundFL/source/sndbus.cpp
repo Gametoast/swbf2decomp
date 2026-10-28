@@ -49,7 +49,7 @@ void Bus::Update(float fDeltaTime, bool bForce)
 {
     const float fOldGain = Fader::mGain;
     Fader::Update(fDeltaTime);
-    if (Fader::mGain != fOldGain || bForce)
+    if (fOldGain != Fader::mGain || bForce)
     {
         UpdateFinalGain();
         bForce = true;
@@ -109,9 +109,14 @@ void __cdecl Bus::MuteAll(Bus* pBus)
 // FUNCTION: SWBF2 0x00730db0
 void Bus::DestroySubBuses()
 {
-    while (!mSubBusList.IsEmpty())
+    for (;;)
     {
-        Bus* pBus = BusFromNode(mSubBusList.mHead.mNext);
+        PblListSingle::Node* const pNode = mSubBusList.mHead.mNext;
+        if (pNode == &mSubBusList.mHead)
+        {
+            break;
+        }
+        Bus* const pBus = BusFromNode(pNode);
         if (!pBus)
         {
             break;
@@ -161,42 +166,42 @@ void Bus::Read(PblFileChunk& chunk)
     {
         PblFileChunk child = chunk.ReadNextChild();
         PblFile* const pFile = child._pFile;
-        switch (pFile->Read32())
+        switch (child._pFile->Read32())
         {
         case 0x247DB064u:
-            pFile->Read8();
-            mAttenuateBus = FindByHashID(pFile->Read32());
+            child._pFile->Read8();
+            mAttenuateBus = FindByHashID(child._pFile->Read32());
             break;
         case 0x1B5426FEu:
-            pFile->Read8();
-            SetGain(Clamp(pFile->ReadFloat(), 0.0f, 1.0f), true);
+            child._pFile->Read8();
+            SetGain(Clamp(child._pFile->ReadFloat(), 0.0f, 1.0f), true);
             break;
         case 0x5BA00EF7u:
-            pFile->Read8();
-            mAttenuation = Clamp(pFile->ReadFloat(), 0.0f, 1.0f);
+            child._pFile->Read8();
+            mAttenuation = Clamp(child._pFile->ReadFloat(), 0.0f, 1.0f);
             break;
         case 0x8D39BDE6u:
-            pFile->Read8();
-            mHashID = pFile->Read32();
+            child._pFile->Read8();
+            mHashID = child._pFile->Read32();
             break;
         case 0xD16089AAu:
-            pFile->Read8();
-            mAttenuationLeadInTime = pFile->ReadFloat();
+            child._pFile->Read8();
+            mAttenuationLeadInTime = child._pFile->ReadFloat();
             break;
         case 0xE9634B4Au:
-            pFile->Read8();
+            child._pFile->Read8();
             mFlags = (unsigned char)((mFlags & ~flags_Mute) | flags_Solo);
             smBusSolo = true;
             break;
         case 0xD6069F54u:
-            pFile->Read8();
+            child._pFile->Read8();
             SetGain(0.0f, true);
             mFlags |= flags_Mute;
             break;
         case 0xEACDFCFDu:
         {
-            pFile->Read8();
-            Bus* const pParent = FindByHashID(pFile->Read32());
+            child._pFile->Read8();
+            Bus* const pParent = FindByHashID(child._pFile->Read32());
             mNode.Remove();
             pParent->mSubBusList.AddLast(&mNode);
             mParentBus = pParent;
@@ -204,8 +209,8 @@ void Bus::Read(PblFileChunk& chunk)
             break;
         }
         case 0xF247D163u:
-            pFile->Read8();
-            mAttenuationLeadOutTime = pFile->ReadFloat();
+            child._pFile->Read8();
+            mAttenuationLeadOutTime = child._pFile->ReadFloat();
             break;
         }
     }

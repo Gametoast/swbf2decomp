@@ -42,7 +42,7 @@ void __cdecl StreamSource::FileOpComplete(File* pFile, void* pCallbackData,
 
         if ((pThis->mFlags & flags_SeekPending) != 0)
         {
-            pThis->mFlags &= (unsigned char)~flags_SeekPending;
+            pThis->mFlags &= ~flags_SeekPending;
             pThis->mFlags |= (unsigned char)flags_SeekReady;
 
             pPacket->mFlags |= 2;
@@ -130,7 +130,7 @@ void StreamSource::Flush()
 
     if ((mFlags & flags_SeekPending) != 0)
     {
-        mFlags &= (unsigned char)~flags_SeekPending;
+        mFlags = (unsigned char)(mFlags & ~flags_SeekPending);
         mFlags |= (unsigned char)flags_SeekReady;
     }
 
@@ -233,10 +233,10 @@ void StreamSource::Update()
 {
     for (;;)
     {
-        const PlayState eDesired = QueryDesiredPlayState();
+        const PlayState eDesired = SourceTransport::QueryDesiredPlayState();
         SourceTransport::mFlags = (unsigned short)
             (SourceTransport::mFlags & ~(unsigned int)flags_updateTransport);
-        const PlayState eCurrent = GetCurrentPlayState();
+        const PlayState eCurrent = SourceTransport::GetCurrentPlayState();
 
         const bool bSeek =
             (SourceTransport::mFlags & flags_updatePlaybackPosition) != 0;

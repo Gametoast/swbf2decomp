@@ -114,15 +114,15 @@ File::File(void(__cdecl* pfnOpComplete)(File*, void*, bool), void* pCallbackData
 
 // FUNCTION: SWBF2 0x007305b0
 File::File()
+    : mOpCompleteFunc(0),
+      mCallbackData(0),
+      mFileOp(fileOp_nothing),
+      mHashID(0),
+      mAccessFlags(0),
+      mBufferSize(0),
+      mSectorSize(0),
+      mAlignment(0)
 {
-    mOpCompleteFunc = 0;
-    mCallbackData = 0;
-    mFileOp = fileOp_nothing;
-    mHashID = 0;
-    mAccessFlags = 0;
-    mBufferSize = 0;
-    mSectorSize = 0;
-    mAlignment = 0;
     mLock.Create(1, 1);
 }
 
@@ -229,11 +229,11 @@ void File::FileThread(void* pStartedSignal)
 
         smQueuedFileOpListLock.Wait();
 
-        File* pFile = 0;
         PblListDoubleSorted::Node* pNode = smQueuedFileOpList.GetFirst();
-        if (pNode != smQueuedFileOpList.GetTerminator())
+        File* pFile = (File*)((char*)pNode - offsetof(File, mNode));
+        if (pNode == smQueuedFileOpList.GetTerminator())
         {
-            pFile = (File*)((char*)pNode - offsetof(File, mNode));
+            pFile = 0;
         }
         if (pFile)
         {
@@ -295,7 +295,12 @@ void File::Read(void* pBuffer, unsigned int uiSize)
     mBlockSize = uiSize;
     mFileOp = fileOp_read;
 
-    if (mFile.IsDataBuffered(mFilePos, uiSize) || mFileOp == fileOp_open)
+    if (mFile.IsDataBuffered(mFilePos, uiSize))
+    {
+        CompleteFileOp();
+        return;
+    }
+    if (mFileOp == fileOp_open)
     {
         CompleteFileOp();
         return;

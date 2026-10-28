@@ -317,7 +317,7 @@ bool SoundStream::Properties::SetupStream(Stream* pStream, unsigned int uiSegmen
     if (GetRandomPlayPosition())
     {
         pStream->mPlaybackPosition =
-            (unsigned int)(sndRandom.GetFloat() * (float)pSegment->mLengthSamples);
+            (unsigned int)((float)pSegment->mLengthSamples * sndRandom.GetFloat());
         pStream->SourceTransport::mFlags |= SourceTransport::flags_updatePlaybackPosition;
     }
     return true;

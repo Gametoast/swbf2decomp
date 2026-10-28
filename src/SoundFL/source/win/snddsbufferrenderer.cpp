@@ -68,8 +68,8 @@ void DSBufferRenderer::SetLowTideMark(float fMilliseconds)
 {
     const float fBufferMs = GetBufferSizeMs();
 
-    mBufferFillSize = (unsigned int)(fMilliseconds / fBufferMs
-                                     * (float)(unsigned int)mBufferSize);
+    mBufferFillSize = (unsigned int)((float)(unsigned int)mBufferSize
+                                     * (fMilliseconds / fBufferMs));
 }
 
 // FUNCTION: SWBF2 0x0073e2a0

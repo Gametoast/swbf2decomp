@@ -262,8 +262,8 @@ bool StreamBase::Open(PblFileChunk& chunk, unsigned int uiHashID, const char* pc
                       void (__cdecl* pfnIdle)(StreamBase*, void*), void* pIdleData,
                       bool bNoPadding)
 {
-    Info* pInfo = 0;
     bool bInfo = false;
+    Info* pInfo = 0;
     bool bNewInfo = true;
 
     while (chunk.HasMoreChildren())

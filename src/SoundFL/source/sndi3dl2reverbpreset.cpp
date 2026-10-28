@@ -52,14 +52,14 @@ void I3DL2ReverbPreset::Read(PblFileChunk& chunk)
     {
         PblFileChunk child = chunk.ReadNextChild();
         const unsigned int uiID = child._pFile->Read32();
-        if (uiID == 0x8D39BDE6u)
+        if (uiID != 0x8D39BDE6u)
         {
-            child._pFile->Read8();
-            mHashID = child._pFile->Read32();
+            I3DL2Reverb::Read(child, uiID);
         }
         else
         {
-            I3DL2Reverb::Read(child, uiID);
+            child._pFile->Read8();
+            mHashID = child._pFile->Read32();
         }
     }
 }

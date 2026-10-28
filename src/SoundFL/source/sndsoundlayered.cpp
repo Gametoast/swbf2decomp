@@ -244,9 +244,6 @@ SoundLayered::SoundLayered()
       mStopTime(FLT_MAX),
       mProperties(0)
 {
-
-    mPlaybackPosition = 0;
-    SourceTransport::mFlags = (unsigned short)flags_stopped;
     smSoundLayeredList.AddLast(&mNode);
 }
 
@@ -597,7 +594,9 @@ void SoundLayered::Properties::Read(PblFileChunk& chunk)
     {
         PblFileChunk child = chunk.ReadNextChild();
         const unsigned int uiID = child._pFile->Read32();
-        if (uiID == 0x07A640F6u)
+        switch (uiID)
+        {
+        case 0x07A640F6u:
         {
             const char cVersion = child._pFile->Read8();
             const unsigned int uiHashID = child._pFile->Read32();
@@ -612,11 +611,14 @@ void SoundLayered::Properties::Read(PblFileChunk& chunk)
                 new Layer(pSoundProps, fDelay, fDelayVar, fPlayTime, fPlayTimeVar, uiHashID,
                           mLayerList);
             }
+            break;
         }
-        else if (uiID == 0x8D39BDE6u)
+        case 0x8D39BDE6u:
         {
             child._pFile->Read8();
             mHashID = child._pFile->Read32();
+            break;
+        }
         }
     }
 }

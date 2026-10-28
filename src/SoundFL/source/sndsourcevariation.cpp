@@ -23,17 +23,15 @@ SourceVariation::SourceVariation()
 // FUNCTION: SWBF2 0x00743aa0
 bool SourceVariation::Read(PblFileChunk& chunk, unsigned int uiPropertyID)
 {
-    PblFile* const pFile = chunk._pFile;
-    if (uiPropertyID == 0x35119EB8u)
+    switch (uiPropertyID)
     {
-        pFile->Read8();
-        mPitchDev = pFile->ReadFloat();
+    case 0x35119EB8u:
+        chunk._pFile->Read8();
+        mPitchDev = chunk._pFile->ReadFloat();
         return true;
-    }
-    if (uiPropertyID == 0xF60B6465u)
-    {
-        pFile->Read8();
-        mGainDev = Clamp(pFile->ReadFloat(), 0.0f, 1.0f);
+    case 0xF60B6465u:
+        chunk._pFile->Read8();
+        mGainDev = Clamp(chunk._pFile->ReadFloat(), 0.0f, 1.0f);
         return true;
     }
     return SourceTransportControl::Read(chunk, uiPropertyID);

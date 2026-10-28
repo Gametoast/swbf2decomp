@@ -41,11 +41,7 @@ unsigned short QueueBase::GetNumItems(unsigned short usCapacity) const
     {
         return usCapacity;
     }
-    if (mHead >= mTail)
-    {
-        return mHead - mTail;
-    }
-    return usCapacity + mHead - mTail;
+    return mHead >= mTail ? mHead - mTail : usCapacity + mHead - mTail;
 }
 
 // FUNCTION: SWBF2 0x007389a0

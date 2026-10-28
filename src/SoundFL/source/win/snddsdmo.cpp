@@ -55,15 +55,15 @@ MediaType::MediaType(const StreamFormat& rFormat)
 
     majortype = kMediaTypeAudio;
     subtype = kMediaSubTypePcm;
-    formattype = kFormatWaveFormatEx;
 
-    bFixedSizeSamples = TRUE;
-    bTemporalCompression = FALSE;
+    pbFormat = (BYTE*)&mWaveformat;
     lSampleSize = mWaveformat.Format.wBitsPerSample >> 3;
 
-    pUnk = 0;
+    formattype = kFormatWaveFormatEx;
     cbFormat = sizeof(WAVEFORMATEX);
-    pbFormat = (BYTE*)&mWaveformat;
+    bFixedSizeSamples = TRUE;
+    bTemporalCompression = FALSE;
+    pUnk = 0;
 }
 
 // FUNCTION: SWBF2 0x0074d370
@@ -72,12 +72,8 @@ bool DSDMO::Create(const _GUID& rCLSID, const StreamFormat* const pInput,
 {
     if (Engine::Failed(CoCreateInstance(rCLSID, 0, CLSCTX_INPROC,
                                         IID_IMediaObject, (void**)&mObject),
-                       "source\\win\\snddsdmo.cpp", 88))
-    {
-        return false;
-    }
-
-    if (!mObject)
+                       "source\\win\\snddsdmo.cpp", 88)
+        || !mObject)
     {
         return false;
     }
@@ -143,13 +139,12 @@ bool DSDMO::IsValid() const
 // FUNCTION: SWBF2 0x0074d6a0
 bool DSDMO::IsInputDataComplete()
 {
-    if (mInputData.GetRefCount() != 1)
+    if (mInputData.GetRefCount() == 1)
     {
-        return false;
+        mInputData.SetBuffer(0, 0, 0);
+        return true;
     }
-
-    mInputData.SetBuffer(0, 0, 0);
-    return true;
+    return false;
 }
 
 }

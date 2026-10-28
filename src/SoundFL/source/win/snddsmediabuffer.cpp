@@ -91,11 +91,14 @@ long DSMediaBuffer::Create(unsigned char* pData, long lMaxLength, const _GUID& r
     if (pMediaBuffer == NULL)
     {
         pMediaBuffer = new DSMediaBuffer(pData, lMaxLength);
-        if (pMediaBuffer == NULL)
+        if (pMediaBuffer != NULL)
+        {
+            pMediaBuffer->mDynamic = true;
+        }
+        else
         {
             return E_OUTOFMEMORY;
         }
-        pMediaBuffer->mDynamic = true;
     }
 
     pMediaBuffer->SetBuffer(pData, 0, lMaxLength);

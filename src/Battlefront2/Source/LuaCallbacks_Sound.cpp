@@ -101,6 +101,11 @@ void Snd::StreamBase::Play(bool bRestart)
     }
 }
 
+// FUNCTION: SWBF2 0x0050b470
+void LuaHelper::PushInt(int iStream)
+{
+    lua_pushnumber(LuaHelper::mState, (float)iStream);
+}
 
 namespace Lua_Callbacks
 {
@@ -1334,9 +1339,10 @@ StreamBase::Info* StreamBase::Info::Find(unsigned int uiHashID, StreamBase* pStr
         }
         else
         {
-            pInfo->mStreamManager.mVoiceList.AddLast(&pStream->mNode);
-            pStream->mManager = &pInfo->mStreamManager;
-            ++pInfo->mStreamManager.mNumManagedVoices;
+            VoiceVirtualManager* const pManager = &pInfo->mStreamManager;
+            pManager->mVoiceList.AddLast(&pStream->mNode);
+            pStream->mManager = pManager;
+            ++pManager->mNumManagedVoices;
         }
     }
     if (bAddRef)

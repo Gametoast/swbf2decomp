@@ -105,9 +105,9 @@ bool StreamCaptureSourceBase::Open(unsigned char  ,
     mNumPackets = ucNumPackets;
     mPackets = pPackets;
 
+    unsigned int uiIndex = 0;
     if (mNumPackets != 0)
     {
-        unsigned int uiIndex = 0;
         do
         {
 

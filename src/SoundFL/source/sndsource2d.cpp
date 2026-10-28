@@ -10,11 +10,12 @@ namespace Snd
 void Source2D::CalculateGain(float fGain, float fReverbGain,
                              GainMatrix& rMatrix) const
 {
-    if (mPan > 0.0f)
+    const float fPan = mPan;
+    if (fPan > 0.0f)
     {
 
         rMatrix.frontRight = fGain;
-        rMatrix.frontLeft = (1.0f - mPan) * fGain;
+        rMatrix.frontLeft = (1.0f - fPan) * fGain;
 
     }
     else

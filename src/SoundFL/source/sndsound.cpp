@@ -147,7 +147,9 @@ void Sound::Properties::Read(PblFileChunk& chunk)
     {
         PblFileChunk child = chunk.ReadNextChild();
         const unsigned int uiID = child._pFile->Read32();
-        if (uiID == 0x4143ACAFu)
+        switch (uiID)
+        {
+        case 0x4143ACAFu:
         {
             child = chunk.ReadNextChild();
             if (mObjectWeightList.ReadObjectWeights(child, 0x96E382A7u,
@@ -155,8 +157,9 @@ void Sound::Properties::Read(PblFileChunk& chunk)
             {
                 mSelObjectWeightList = &mObjectWeightList;
             }
+            break;
         }
-        else if (uiID == 0xCA04EFE0u)
+        case 0xCA04EFE0u:
         {
             child._pFile->Read8();
             const unsigned int uiParentID = child._pFile->Read32();
@@ -194,13 +197,17 @@ void Sound::Properties::Read(PblFileChunk& chunk)
                 SetRandomPlayPosition(pParent->GetRandomPlayPosition());
                 break;
             }
+            break;
         }
-        else if (!SoundProperties::Read(child, uiID)
-                 && !Source2D3D::Read(child, uiID)
-                 && !SourceVirtual::Read(child, uiID)
-                 && !SourceVariation::Read(child, uiID))
-        {
-            mObjectWeightList.Read(child, uiID);
+        default:
+            if (!SoundProperties::Read(child, uiID)
+                && !Source2D3D::Read(child, uiID)
+                && !SourceVirtual::Read(child, uiID)
+                && !SourceVariation::Read(child, uiID))
+            {
+                mObjectWeightList.Read(child, uiID);
+            }
+            break;
         }
     }
 }
@@ -454,8 +461,9 @@ void Sound::Properties::SetupVoiceVirtual(VoiceVirtualBus* pVoice, Source3D* pSo
 
     if (GetRandomPlayPosition())
     {
+        const float fLength = (float)pSample->mLengthSamples;
         pVoice->mPlaybackPosition =
-            (unsigned int)(sndRandom.GetFloat() * (float)pSample->mLengthSamples);
+            (unsigned int)(sndRandom.GetFloat() * fLength);
         pVoice->SourceTransport::mFlags |= SourceTransport::flags_updatePlaybackPosition;
     }
 
@@ -541,7 +549,8 @@ void Sound::Play(bool bRestart)
     SetSample((const Sample*)mProperties->mSelObjectWeightList->GetObjectA());
     if (mProperties->GetRandomPlayPosition())
     {
-        mPlaybackPosition = (unsigned int)(sndRandom.GetFloat() * (float)mSample->mLengthSamples);
+        const float fLength = (float)mSample->mLengthSamples;
+        mPlaybackPosition = (unsigned int)(sndRandom.GetFloat() * fLength);
         SourceTransport::mFlags |= SourceTransport::flags_updatePlaybackPosition;
     }
 
@@ -658,14 +667,13 @@ void __cdecl Sound::ParamSetRollOff(Sound* pSound, float fValue)
 // FUNCTION: SWBF2 0x0073a290
 void __cdecl Sound::ParamSetTrigger(Sound* pSound, float fValue)
 {
-    SourceTransport* pTransport = static_cast<SourceTransport*>(pSound);
-    if (pTransport->GetPlayState() == SourceTransport::playState_stopped && fValue > 0.5f)
+    if (pSound->SourceTransport::GetPlayState() == SourceTransport::playState_stopped && fValue > 0.5f)
     {
         pSound->Play(true);
     }
-    else if (pTransport->GetPlayState() == SourceTransport::playState_playing)
+    else if (pSound->SourceTransport::GetPlayState() == SourceTransport::playState_playing)
     {
-        pSound->SourceBus::Stop(pTransport);
+        pSound->SourceBus::Stop(static_cast<SourceTransport*>(pSound));
         pSound->VoiceVirtual::Stop();
     }
 }

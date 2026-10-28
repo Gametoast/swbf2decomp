@@ -70,36 +70,39 @@ bool StreamAuxRenderer::Open(unsigned char ucDeviceIndex,
     }
     else
     {
-        if (uiIndex == 0xFFu)
+
+        switch (uiIndex)
         {
+        case 0xFFu:
 
             cGuidDevice = DSDEVID_DefaultVoicePlayback;
-        }
-        else
-        {
-
-            DSDeviceEnumerator cContext;
-
-            if (!cContext.Enumerate(DSDeviceEnumerator::type_Render, false))
-            {
-                return false;
-            }
-
-            cGuidDevice = cContext.GetDeviceIDByIndex(uiIndex);
-
-            GUID cNull;
-            memset(&cNull, 0, sizeof(cNull));
-
-            if (memcmp(&cGuidDevice, &DSDEVID_DefaultPlayback, sizeof(GUID)) == 0
-                || memcmp(&cGuidDevice, &cNull, sizeof(GUID)) == 0)
+            break;
+        default:
             {
 
-                if (Engine::smDirectSound != 0)
+                DSDeviceEnumerator cContext;
+
+                if (!cContext.Enumerate(DSDeviceEnumerator::type_Render, false))
                 {
-                    return Open(0xFE, cFormat, fBufferMs);
+                    return false;
                 }
-            }
 
+                cGuidDevice = cContext.GetDeviceIDByIndex(uiIndex);
+
+                GUID cNull;
+                memset(&cNull, 0, sizeof(cNull));
+
+                if (memcmp(&cGuidDevice, &DSDEVID_DefaultPlayback, sizeof(GUID)) == 0
+                    || memcmp(&cGuidDevice, &cNull, sizeof(GUID)) == 0)
+                {
+
+                    if (Engine::smDirectSound != 0)
+                    {
+                        return Open(0xFE, cFormat, fBufferMs);
+                    }
+                }
+
+            }
         }
 
         IDirectSound** const ppDS = &mDevice;

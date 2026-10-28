@@ -253,25 +253,22 @@ void Source3D::CalculateGain(float fGain, float fReverbGain, GainMatrix& rMatrix
 // FUNCTION: SWBF2 0x0073b590
 void Source3D::CalculateNormalizedDirection(::PblVector3& rvDirection) const
 {
+    ::PblVector3 vNormal;
+
     if (0.0f == mDistance.x && 0.0f == mDistance.y && 0.0f == mDistance.z)
     {
         rvDirection = *mClosestListener->mFront;
-        return;
     }
-
-    ::PblVector3 vNormal;
-
-    if (EngineBase::smSpeakerConfig == EngineBase::speakerConfig_AnalogSurround)
+    else if (EngineBase::smSpeakerConfig == EngineBase::speakerConfig_AnalogSurround)
     {
         D3DXVec3Normalize((D3DXVECTOR3*)&vNormal,
                            (const D3DXVECTOR3*)&mDistance);
+        rvDirection = vNormal;
     }
     else
     {
-        vNormal = NormalizeEst(mDistance);
+        rvDirection = NormalizeEst(mDistance);
     }
-
-    rvDirection = vNormal;
 }
 
 // FUNCTION: SWBF2 0x0073b6f0

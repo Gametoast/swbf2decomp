@@ -804,9 +804,11 @@ bool Engine::DSClose()
 
     sndEngineThreadUpdate.Pause(false);
 
-    for (unsigned int uiStream = 0; uiStream < 6; uiStream++)
+    for (unsigned int uiOffset = 0; uiOffset < sizeof(EngineBase::smStreamStorage);
+         uiOffset += sizeof(Stream))
     {
-        Stream* const pStream = &EngineBase::smStreams[uiStream];
+        Stream* const pStream =
+            (Stream*)((char*)EngineBase::smStreams + uiOffset);
 
         pStream->SourceBus::Stop(pStream);
 

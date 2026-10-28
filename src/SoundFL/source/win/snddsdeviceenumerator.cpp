@@ -12,9 +12,9 @@ namespace Snd
 // FUNCTION: SWBF2 0x0074be00
 DSDeviceEnumerator::DSDeviceEnumerator()
 {
-    memset(mDeviceNames, 0, sizeof(mDeviceNames));
     mDeviceCount = 0;
     mGetNames = 0;
+    memset(mDeviceNames, 0, sizeof(mDeviceNames));
 }
 
 void DSDeviceEnumerator::FreeNames()

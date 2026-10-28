@@ -50,11 +50,7 @@ StreamPacket* SubstreamSplitter::GetPacket(unsigned int uiSubstream)
 {
     Update();
 
-    if (GetCurrentPlayState() != playState_playing)
-    {
-        return 0;
-    }
-    if (mPackets == 0 || mLockPos == 0)
+    if (GetCurrentPlayState() != playState_playing || mPackets == 0 || mLockPos == 0)
     {
         return 0;
     }

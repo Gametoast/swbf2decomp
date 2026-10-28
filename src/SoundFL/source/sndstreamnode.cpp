@@ -77,6 +77,7 @@ void StreamNode::SetStarved(bool bStarved)
 bool StreamNode::UpdateNode(bool bAllowPausing)
 {
 
+    bool bResult = false;
     const PlayState eDesired = QueryDesiredPlayState();
 
     SourceTransport::mFlags = (unsigned short)
@@ -86,25 +87,27 @@ bool StreamNode::UpdateNode(bool bAllowPausing)
     {
     case playState_playing:
         SetPlayState(playState_playing);
-        return false;
+        break;
 
     case playState_paused:
         SetStarved(false);
 
         SetPlayState(bAllowPausing ? playState_pausing : playState_paused);
-        return false;
+        break;
 
     case playState_stopped:
         SetStarved(false);
 
+        bResult = true;
         SourceTransport::mPlaybackPosition = 0;
         SetPlayState(playState_stopped);
-        return true;
+        break;
 
     default:
 
-        return false;
+        break;
     }
+    return bResult;
 }
 
 }

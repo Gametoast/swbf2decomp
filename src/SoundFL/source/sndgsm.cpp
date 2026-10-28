@@ -9,7 +9,7 @@ extern "C" void __cdecl gsm_encode(char* pGsm, short* pFrame, unsigned char* pOu
 namespace Snd
 {
 
-extern "C" void __cdecl gsm_option(void* pGsm, int iOption, unsigned char* pValue);
+extern "C" void __cdecl gsm_option(void* pGsm, int iOption, int* pValue);
 
 // FUNCTION: SWBF2 0x0074bca0
 void GSM::Decode(unsigned char (*pFrame)[33], short (*pSamples)[160])
@@ -30,11 +30,11 @@ void GSM::Init()
     nrp = 40;
 
     {
-        unsigned char ucValue = 1;
+        int ucValue = 1;
         gsm_option(this, 2, &ucValue);
     }
     {
-        unsigned char ucValue = 1;
+        int ucValue = 1;
         gsm_option(this, 3, &ucValue);
     }
 }

@@ -129,12 +129,13 @@ void Voice::Update3DMode()
     case Engine::mixConfig_DirectSoundSoftware:
     {
         const bool b3D = Get3DMode();
-        if (mRenderer.mFormat != SampleInfo::format_Unknown
-            && (mRenderer.Get3DMode()) != b3D
-            && mRenderer.mNumChannels == 1)
+        StreamRenderer* const pRenderer = &mRenderer;
+        if (pRenderer->mFormat != SampleInfo::format_Unknown
+            && (pRenderer->Get3DMode()) != b3D
+            && pRenderer->mNumChannels == 1)
         {
-            mRenderer.SetFormat(mRenderer.mFormat, 1, mRenderer.mFrequency, b3D,
-                                mRenderer.mChannelMask, 200.0f);
+            pRenderer->SetFormat(pRenderer->mFormat, 1, pRenderer->mFrequency, b3D,
+                                 pRenderer->mChannelMask, 200.0f);
         }
         break;
     }
@@ -395,7 +396,34 @@ void __cdecl Voice::UpdatePlayState(Voice* pVoice, PlayState ePlayState)
 void Voice::UpdateSample()
 {
     const Sample* pSample = VoiceBase::mSample;
-    if (!pSample)
+    if (pSample)
+    {
+        switch (Engine::GetMixConfig())
+        {
+        case Engine::mixConfig_DirectSoundHardware:
+            if (Engine::GetBassManagement() && Get3DMode())
+            {
+                mSourceResamplerLFE.ClearAll();
+                mSourceResamplerLFE.Setup(pSample, mSetupPackets);
+                mSourceResamplerLFE.Stop();
+                mSourceResamplerLFE.Flush();
+            }
+
+        case Engine::mixConfig_DirectSoundSoftware:
+            mRenderer.Flush();
+
+        case Engine::mixConfig_Software:
+            mSourceResampler.ClearAll();
+            mSourceResampler.Setup(pSample, mSetupPackets);
+            mSourceResampler.Stop();
+            mSourceResampler.Flush();
+            mSetupPackets = false;
+            break;
+        default:
+            break;
+        }
+    }
+    else
     {
         if ((unsigned int)(Engine::GetMixConfig() - 1) <= 2)
         {
@@ -403,32 +431,6 @@ void Voice::UpdateSample()
         }
         SourceTransport::Stop();
         mSample = 0;
-        return;
-    }
-
-    switch (Engine::GetMixConfig())
-    {
-    case Engine::mixConfig_DirectSoundHardware:
-        if (Engine::GetBassManagement() && Get3DMode())
-        {
-            mSourceResamplerLFE.ClearAll();
-            mSourceResamplerLFE.Setup(pSample, mSetupPackets);
-            mSourceResamplerLFE.Stop();
-            mSourceResamplerLFE.Flush();
-        }
-
-    case Engine::mixConfig_DirectSoundSoftware:
-        mRenderer.Flush();
-
-    case Engine::mixConfig_Software:
-        mSourceResampler.ClearAll();
-        mSourceResampler.Setup(pSample, mSetupPackets);
-        mSourceResampler.Stop();
-        mSourceResampler.Flush();
-        mSetupPackets = false;
-        break;
-    default:
-        break;
     }
 }
 
@@ -449,7 +451,10 @@ namespace Snd
 // FUNCTION: SWBF2 0x00745a90
 void Voice::SourceResampler::ClearAll()
 {
-    if (mPackets[0].mRefCount == 0)
+    if (mPackets[0].mRefCount > 0)
+    {
+    }
+    else
     {
         mPackets[0].mBuffer = 0;
         mPackets[0].mBufferUsed = 0;

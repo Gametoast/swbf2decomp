@@ -98,11 +98,11 @@ StreamPacket* StreamRenderer::GetPacket(unsigned int)
 {
     StreamNodeSource* const pInputNode = mConnection.mInputNode;
 
-    if (pInputNode == 0)
+    if (pInputNode != 0)
     {
-        return 0;
+        return pInputNode->GetPacket(mConnection.mInputNodeOutputIndex);
     }
-    return pInputNode->GetPacket(mConnection.mInputNodeOutputIndex);
+    return 0;
 }
 
 // FUNCTION: SWBF2 0x007493c0

@@ -217,8 +217,8 @@ DSBuffer::~DSBuffer()
 bool DSBuffer::AcquireResources()
 {
     DWORD dwFlags;
-    if ((mFlags & DSBCAPS_CTRL3D) != 0
-        && mDirectSound == (IDirectSound*)Engine::smDirectSound
+    if (((unsigned char)(mFlags >> 4) & 1) != 0
+        && (IDirectSound*)Engine::smDirectSound == mDirectSound
         && Engine::GetMixConfig() == Engine::mixConfig_DirectSoundHardware)
     {
         dwFlags = DSBPLAY_LOCHARDWARE;
@@ -507,12 +507,15 @@ unsigned long DSBuffer::GetStatus()
 // FUNCTION: SWBF2 0x00744640
 bool DSBuffer::IsPlaying()
 {
-    if (!mBuffer)
+    bool bPlaying = false;
+    if (mBuffer)
     {
-        return false;
+        if ((GetStatus() & DSBSTATUS_PLAYING) != 0)
+        {
+            bPlaying = true;
+        }
     }
-
-    return (GetStatus() & DSBSTATUS_PLAYING) != 0;
+    return bPlaying;
 }
 
 // FUNCTION: SWBF2 0x00744660
@@ -526,7 +529,7 @@ bool DSBuffer::Play(bool bLooping, unsigned int uiPriority, bool bImmediate,
                     bool bRewind) const
 {
     DWORD dwFlags;
-    if ((mFlags & DSBCAPS_CTRL3D) != 0
+    if (((unsigned char)(mFlags >> 4) & 1) != 0
         && mDirectSound == (IDirectSound*)Engine::smDirectSound
         && Engine::GetMixConfig() == Engine::mixConfig_DirectSoundHardware)
     {
@@ -548,10 +551,7 @@ bool DSBuffer::Play(bool bLooping, unsigned int uiPriority, bool bImmediate,
         dwFlags = 0;
     }
 
-    if (bLooping)
-    {
-        dwFlags |= DSBPLAY_LOOPING;
-    }
+    dwFlags = dwFlags | (unsigned long)(bLooping != false);
 
     return mBuffer->Play(0, bImmediate ? 0 : uiPriority, dwFlags) >= 0;
 }
@@ -589,20 +589,15 @@ void DSBuffer::ResetGainInterpolation()
 bool DSBuffer::SetFormat(WaveFormat& rFormat) const
 {
     HRESULT hr;
-    for (;;)
+    do
     {
         hr = mBuffer->SetFormat(&rFormat.Format);
         rFormat.Format.wBitsPerSample -= 8;
-
         if (rFormat.Format.wBitsPerSample == 0)
         {
             break;
         }
-        if (Engine::Succeeded(hr, "source\\win\\snddsbuffer.cpp", 849))
-        {
-            break;
-        }
-    }
+    } while (!Engine::Succeeded(hr, "source\\win\\snddsbuffer.cpp", 849));
 
     if (!Engine::Succeeded(hr, "source\\win\\snddsbuffer.cpp", 852))
     {
@@ -614,7 +609,8 @@ bool DSBuffer::SetFormat(WaveFormat& rFormat) const
     unsigned int uiSampleRate;
     GetFormat(eFormat, uiNumChannels, uiSampleRate);
 
-    rFormat = WaveFormat(eFormat, uiNumChannels, uiSampleRate, false, 0);
+    const WaveFormat format(eFormat, uiNumChannels, uiSampleRate, false, 0);
+    rFormat = format;
     return true;
 }
 
@@ -711,15 +707,35 @@ void DSBuffer::SetGain(float fGain)
             mGain = fGain;
         }
 
-        if ((float)fabs(mGain - fGain) <= kGainEpsilon
-            && (ucInterpolation & 0x08) == 0)
+        if ((float)fabs(mGain - fGain) > kGainEpsilon
+            || (ucInterpolation & 0x08) != 0)
         {
-            return;
+            mGain += (fGain - mGain) * 0.5f;
+
+            long lVolume = ConvertLinearToLog(mGain);
+            if (lVolume < DSBVOLUME_MIN)
+            {
+                lVolume = DSBVOLUME_MIN;
+            }
+            else if (lVolume > DSBVOLUME_MAX)
+            {
+                lVolume = DSBVOLUME_MAX;
+            }
+
+            mBuffer->SetVolume(lVolume);
+            mInterpolation &= ~0x08;
         }
+        return;
+    }
 
-        mGain += (fGain - mGain) * 0.5f;
+    if ((float)fabs(fGain - mGain) > kGainEpsilon
+        || (ucInterpolation & 0x08) != 0)
+    {
+        mInterpolation = (unsigned char)(ucInterpolation & ~0x08);
+        mGain = fGain;
+        mTargetGain = fGain;
 
-        long lVolume = ConvertLinearToLog(mGain);
+        long lVolume = ConvertLinearToLog(fGain);
         if (lVolume < DSBVOLUME_MIN)
         {
             lVolume = DSBVOLUME_MIN;
@@ -730,31 +746,7 @@ void DSBuffer::SetGain(float fGain)
         }
 
         mBuffer->SetVolume(lVolume);
-        mInterpolation &= ~0x08;
-        return;
     }
-
-    if ((float)fabs(fGain - mGain) <= kGainEpsilon
-        && (ucInterpolation & 0x08) == 0)
-    {
-        return;
-    }
-
-    mInterpolation = (unsigned char)(ucInterpolation & ~0x08);
-    mGain = fGain;
-    mTargetGain = fGain;
-
-    long lVolume = ConvertLinearToLog(fGain);
-    if (lVolume < DSBVOLUME_MIN)
-    {
-        lVolume = DSBVOLUME_MIN;
-    }
-    else if (lVolume > DSBVOLUME_MAX)
-    {
-        lVolume = DSBVOLUME_MAX;
-    }
-
-    mBuffer->SetVolume(lVolume);
 }
 
 // FUNCTION: SWBF2 0x00744c20

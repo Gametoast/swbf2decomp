@@ -112,35 +112,32 @@ void StreamMixer::SetGainArray(int* pGains)
 {
     const unsigned int uiNumInputs = StreamNodeSinkNInput::GetNumInputs();
 
-    if (uiNumInputs == 0)
+    if (uiNumInputs != 0)
     {
-        mGain = 0;
-        return;
-    }
+        mGain = pGains;
 
-    mGain = pGains;
+        const unsigned int uiOutputs = mOutputChannels;
 
-    const unsigned int uiOutputs = mOutputChannels;
-
-    if (pGains == 0)
-    {
-        return;
-    }
-
-    unsigned int uiSlotA = 0;
-    unsigned int uiSlotB = uiOutputs * uiNumInputs;
-
-    for (unsigned int i = 0; i < uiNumInputs; ++i)
-    {
-        for (unsigned int j = 0; j < uiOutputs; ++j)
+        if (pGains != 0)
         {
-            mGain[uiSlotA + j] = 0x7FFF0000;
-            mGain[uiSlotB + j] = 0x7FFF0000;
-        }
+            unsigned int uiSlotA = 0;
+            unsigned int uiSlotB = uiOutputs * uiNumInputs;
 
-        uiSlotA += uiOutputs;
-        uiSlotB += uiOutputs;
+            for (unsigned int i = 0; i < uiNumInputs; ++i)
+            {
+                for (unsigned int j = 0; j < uiOutputs; ++j)
+                {
+                    mGain[uiSlotA + j] = 0x7FFF0000;
+                    mGain[uiSlotB + j] = 0x7FFF0000;
+                }
+
+                uiSlotA += uiOutputs;
+                uiSlotB += uiOutputs;
+            }
+        }
+        return;
     }
+    mGain = 0;
 }
 
 // FUNCTION: SWBF2 0x0073fd80
@@ -282,7 +279,7 @@ bool StreamMixer::IsActive() const
     bool bActive = false;
     for (unsigned int i = 0; i < sizeof(mActive); ++i)
     {
-        bActive |= (mActive[i] != 0);
+        bActive |= (mActive[i] > 0);
     }
     return bActive;
 }

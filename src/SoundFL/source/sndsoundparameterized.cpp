@@ -200,17 +200,20 @@ void SoundParameterized::Layer::Properties::Read(PblFileChunk& chunk)
         PblFileChunk child = chunk.ReadNextChild();
         const unsigned int uiID = child._pFile->Read32();
         child._pFile->Read8();
-        if (uiID == 0x8D39BDE6u)
+        switch (uiID)
         {
+        case 0x8D39BDE6u:
             mHashID = child._pFile->Read32();
-        }
-        else if (uiID == 0xE657A914u)
+            break;
+        case 0xE657A914u:
         {
             Controller::Properties* const pController = new Controller::Properties;
             pController->mInputParameterID = child._pFile->Read32();
             pController->mGraph = ParameterGraph::FindByHashID(child._pFile->Read32());
             pController->mSoundParameterID = child._pFile->Read32();
             mControllerPropertyList.AddLast(&pController->mNode);
+            break;
+        }
         }
     }
 }
@@ -223,20 +226,22 @@ void SoundParameterized::Properties::Read(PblFileChunk& chunk)
         PblFileChunk child = chunk.ReadNextChild();
         const unsigned int uiID = child._pFile->Read32();
         child._pFile->Read8();
-        if (uiID == 0x07A640F6u)
+        switch (uiID)
+        {
+        case 0x07A640F6u:
         {
             Layer::Properties* const pLayer = new Layer::Properties;
             mLayerList.AddLast(&pLayer->mNode);
             child = chunk.ReadNextChild();
             pLayer->Read(child);
+            break;
         }
-        else if (uiID == 0x8D39BDE6u)
-        {
+        case 0x8D39BDE6u:
             mHashID = child._pFile->Read32();
-        }
-        else if (uiID == 0xA54A2138u)
-        {
+            break;
+        case 0xA54A2138u:
             mSoundLayeredProps = SoundLayered::Properties::FindByHashID(child._pFile->Read32());
+            break;
         }
     }
 
