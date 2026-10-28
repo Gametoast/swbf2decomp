@@ -10631,7 +10631,7 @@ void ReadUpdate(NetPktGroup& group)
         {
             UpdateCurMaxPlayers(clientPlayingMask, true);
         }
-        NetSetup::ReadGameUpdate(&group);
+        NetSetup::ReadGameUpdate(group);
         if (clientPlayingMask != lastMask)
         {
             unsigned __int64 left = lastMask & ~clientPlayingMask;

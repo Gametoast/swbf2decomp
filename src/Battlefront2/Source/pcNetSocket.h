@@ -32,5 +32,5 @@ public:
 
     static void RecvGalaxySockets();
 
-    static unsigned short __cdecl SetAddr(void* pDest, unsigned int uIP, unsigned short uPort);
+    static void SetAddr(NetSocketPeerRecord& peer, int ip, int port);
 };

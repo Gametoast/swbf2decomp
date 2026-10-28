@@ -110,35 +110,35 @@ unsigned long GetPrivateIP()
 }
 
 // FUNCTION: SWBF2 0x005d5a60
-char NetAddr::GetAddr(void* pOut, int) const
+void NetAddr::GetAddr(NetSocketPeerRecord& out, NetKey*) const
 {
-    ((NetSocketPeerRecord*)pOut)->mGalaxyId = mGalaxyId;
-    if (!NetComm::IsLAN())
+    out.mGalaxyId = mGalaxyId;
+    if (NetComm::IsLAN())
     {
-        return 0;
+        if (!hasPriv)
+        {
+            __debugbreak();
+        }
+        NetSocket::SetAddr(out, privAddr, privPort);
     }
-    if (!hasPriv)
-    {
-        __debugbreak();
-    }
-    return (char)NetSocket::SetAddr(pOut, (unsigned int)privAddr, (unsigned short)privPort);
 }
 
 // FUNCTION: SWBF2 0x005d5b70
-bool __fastcall IsSameNet(const unsigned int* pLeft, const unsigned int* pRight)
+bool IsSameNet(NetAddr& left, NetAddr& right)
 {
-    return NetComm::IsLAN() ||
-           (pLeft[0] == pRight[0] && pLeft[1] == pRight[1]);
+    if (NetComm::IsLAN())
+    {
+        return true;
+    }
+    return left.mGalaxyId.value == right.mGalaxyId.value;
 }
 
 // FUNCTION: SWBF2 0x005d5bc0
-int __fastcall ReadSessionId(NetPktGroup* pGroup, unsigned int* pWords)
+void ReadSessionId(NetPktGroup& group, NetSessionId& session)
 {
-    unsigned int words[2];
-    pGroup->ReadBytes((char*)words, sizeof(words));
-    pWords[0] = words[0];
-    pWords[1] = words[1];
-    return words[1];
+    unsigned __int64 bits;
+    group.ReadBytes((char*)&bits, sizeof(bits));
+    session.id = bits;
 }
 
 // FUNCTION: SWBF2 0x005d5bf0
@@ -181,7 +181,7 @@ void NetMatch::StartRegisterGame(bool)
 }
 
 // FUNCTION: SWBF2 0x005d5e50
-bool NetMatch::GetPlayerDataByAddress()
+bool NetMatch::GetPlayerDataByAddress(const NetAddr&, int, FindGamePlayer&)
 {
     return false;
 }
@@ -302,33 +302,36 @@ bool NetMatch::StartConnect(NetAddr& address, NetKey& key, int destination)
 }
 
 // FUNCTION: SWBF2 0x005d60b0
-bool NetMatch::UpdateConnect(const NetAddr* pAddr, const NetKey* pKey, int iDest, int* pReason)
+bool NetMatch::UpdateConnect(NetAddr&, NetKey&, int, int& connected)
 {
     if (NetComm::IsLAN())
     {
-        *pReason = 13;
+        connected = 13;
         return true;
     }
-    *pReason = netEnteredLobbyId != 0 ? 13 : JRR_CONNECTION_LOST;
+    bool hasLobby = netEnteredLobbyId != 0;
+    connected = hasLobby ? 13 : JRR_CONNECTION_LOST;
     PumpGalaxyMatchmaking();
     if (netLobbyState == 3)
     {
         return true;
     }
-    switch (netConnectState)
+    int state = netConnectState;
+    switch (state)
     {
     case 0:
-        return true;
+        break;
     case 1:
-        *pReason = 11;
-        return false;
+        connected = 11;
+        break;
     case 2:
-        *pReason = JRR_FULL;
-        return false;
+        connected = JRR_FULL;
+        break;
     default:
-        *pReason = 12;
-        return false;
+        connected = 12;
+        break;
     }
+    return state == 0;
 }
 
 // FUNCTION: SWBF2 0x005d6150
@@ -394,7 +397,8 @@ void __fastcall HandleFindPacket(NetPacket* packet)
     NetPktGroup group;
     group.Set(packet);
     group.BeginRead();
-    unsigned int challenge = 0, type = 0;
+    unsigned int challenge = 0;
+    unsigned int type;
     group.ReadBits(challenge, 32);
     group.ReadBits(type, 12);
     bool accepted = false;
@@ -443,30 +447,33 @@ void __fastcall HandleFoundPacket(NetPacket* packet, const void* source)
             if (type == 1)
             {
                 group.ReadBits(type, 2);
-                FindGameData data = {};
+                FindGameData data;
                 ReadString(group, data.mName, 64);
                 ReadString(group, data.mMapType, 32);
                 NetAddr address;
-                memset(&address, 0, sizeof(address));
                 NetKey key;
 
                 NetSessionId session;
                 if (NetComm::IsLAN())
                 {
-                    group.ReadBits(key.id, 32);
-                    unsigned int unusedAddress;
-                    group.ReadBits(unusedAddress, 32);
-                    unsigned int port;
-                    group.ReadBits(port, 16);
+                    unsigned int bits;
+                    group.ReadBits(bits, 32);
+                    key.id = bits;
+                    group.ReadBits(bits, 32);
+                    group.ReadBits(bits, 16);
                     int sourceIp, sourcePort;
                     NetSocket::GetAddr(source, sourceIp, sourcePort);
-                    NetAddr from(sourceIp, port, 0);
+                    NetAddr from(sourceIp, bits, 0);
                     address = from;
                 }
-                group.ReadBits((unsigned int&)data.mMaxPlayers, 6);
-                group.ReadBits((unsigned int&)data.mNumPlayers, 6);
-                NetSetupP::AddGame(&address);
-                NetSetupP::UpdateGame(&address, &key, &session, NetSetup::GetGameVersion(), &data, 0);
+                unsigned int maxPlayers, numPlayers;
+                group.ReadBits(maxPlayers, 6);
+                group.ReadBits(numPlayers, 6);
+                data.mNumPlayers = numPlayers;
+                data.mMaxPlayers = maxPlayers;
+                data.mMapName[0] = 0;
+                NetSetupP::AddGame(address);
+                NetSetupP::UpdateGame(address, &key, &session, NetSetup::GetGameVersion(), data, 0);
             }
         }
     }
@@ -497,30 +504,30 @@ void UpdateFindLanGames()
 }
 
 // FUNCTION: SWBF2 0x005d7770
-void NetMatch::HostGetAddr(const NetAddr* pAddr, void* pOut, int iDest)
+void NetMatch::HostGetAddr(NetAddr& address, NetAddr& output, int destination)
 {
-    unsigned __int64* peer = NetCommP::GetAddr(iDest);
-    if (!NetComm::IsLAN())
+    unsigned __int64* peer = NetCommP::GetAddr(destination);
+    if (NetComm::IsLAN())
     {
-        memcpy(pOut, peer, sizeof(*peer));
-        return;
-    }
-    int ip, port;
-    NetSocket::GetAddr(peer, ip, port);
-    if (!IsPrivateIP(ip))
-    {
-        __debugbreak();
+        int ip, port;
+        NetSocket::GetAddr(peer, ip, port);
+        if (IsPrivateIP(ip))
+        {
+            output.mGalaxyId = address.mGalaxyId;
+            output.hasPriv = address.hasPriv;
+            output.privAddr = ip;
+            output.privPort = port;
+        }
+        else
+        {
+            __debugbreak();
+        }
+        NetSetupP::GetMyAddr() = address;
     }
     else
     {
-        NetAddr* output = (NetAddr*)pOut;
-        output->mGalaxyId = pAddr->mGalaxyId;
-        output->hasPriv = pAddr->hasPriv;
-        output->privAddr = ip;
-        output->privPort = port;
+        output.mGalaxyId.value = *peer;
     }
-    myAddr = *pAddr;
-    return;
 }
 
 // FUNCTION: SWBF2 0x005d7830
@@ -540,10 +547,9 @@ char* NetMatch::GetIPAddr()
 }
 
 // FUNCTION: SWBF2 0x005d7890
-unsigned int __fastcall NetMatch::GetSessionId(NetSessionId* pId)
+void NetMatch::GetSessionId(NetSessionId& session)
 {
-    pId->id = netCreatedLobbyId;
-    return (unsigned int)(netCreatedLobbyId >> 32);
+    session.id = netCreatedLobbyId;
 }
 
 // FUNCTION: SWBF2 0x005d6370
@@ -683,18 +689,20 @@ int gameErrorLvl;
 int updatePercent;
 
 // FUNCTION: SWBF2 0x005d5b00
-void __fastcall ReadAddr(NetPktGroup* pGroup, NetAddr* pAddr)
+void ReadAddr(NetPktGroup& group, NetAddr& address)
 {
-    pGroup->ReadBytes((char*)pAddr, 8);
-    unsigned int uValue;
-    pGroup->ReadBits(uValue, 1);
-    pAddr->hasPriv = uValue != 0;
-    if (pAddr->hasPriv)
+    unsigned __int64 publicId;
+    group.ReadBytes((char*)&publicId, sizeof(publicId));
+    address.mGalaxyId.value = publicId;
+    unsigned int bits;
+    group.ReadBits(bits, 1);
+    address.hasPriv = bits != 0;
+    if (address.hasPriv)
     {
-        pGroup->ReadBits(uValue, 32);
-        pAddr->privAddr = uValue;
-        pGroup->ReadBits(uValue, 16);
-        pAddr->privPort = uValue;
+        group.ReadBits(bits, 32);
+        address.privAddr = bits;
+        group.ReadBits(bits, 16);
+        address.privPort = bits;
     }
 }
 
@@ -705,29 +713,28 @@ bool NetMatch::UpdateFindAddress()
 }
 
 // FUNCTION: SWBF2 0x005d7820
-void __fastcall NetMatch::SetAddr(unsigned int* pOut, const unsigned int* pIn)
+void NetMatch::SetAddr(NetAddr& address, const NetSocketPeerRecord& peer)
 {
-    pOut[0] = pIn[0];
-    pOut[1] = pIn[1];
+    address.mGalaxyId = peer.mGalaxyId;
 }
 
 // FUNCTION: SWBF2 0x005d5ba0
-void __fastcall WriteSessionId(NetPktGroup* pGroup, const unsigned int* pWords)
+void WriteSessionId(NetPktGroup& group, NetSessionId& session)
 {
-    unsigned int words[2] = { pWords[0], pWords[1] };
-    pGroup->WriteBytes((const char*)words, sizeof(words));
+    unsigned __int64 bits = session.id;
+    group.WriteBytes((const char*)&bits, sizeof(bits));
 }
 
 // FUNCTION: SWBF2 0x005d5aa0
-void __fastcall WriteAddr(NetPktGroup* pGroup, const NetAddr* pAddr)
+void WriteAddr(NetPktGroup& group, NetAddr& address)
 {
-    unsigned __int64 publicId = pAddr->mGalaxyId.value;
-    pGroup->WriteBytes((const char*)&publicId, sizeof(publicId));
-    pGroup->WriteBits(pAddr->hasPriv ? 1 : 0, 1);
-    if (pAddr->hasPriv)
+    unsigned __int64 publicId = address.mGalaxyId.value;
+    group.WriteBytes((const char*)&publicId, sizeof(publicId));
+    group.WriteBits(address.hasPriv ? 1 : 0, 1);
+    if (address.hasPriv)
     {
-        pGroup->WriteBits((unsigned int)pAddr->privAddr, 32);
-        pGroup->WriteBits((unsigned int)pAddr->privPort, 16);
+        group.WriteBits((unsigned int)address.privAddr, 32);
+        group.WriteBits((unsigned int)address.privPort, 16);
     }
 }
 
@@ -735,7 +742,7 @@ void __fastcall WriteAddr(NetPktGroup* pGroup, const NetAddr* pAddr)
 void NetMatch::EndFindAddress() {}
 
 // FUNCTION: SWBF2 0x005d7810
-void NetMatch::ClientGetAddr() {}
+void NetMatch::ClientGetAddr(NetAddr&) {}
 
 // FUNCTION: SWBF2 0x005d6730
 NetAddr::NetAddr(int addr, int port, int overridePort)
@@ -879,7 +886,7 @@ static void StartFindLanGames()
 }
 
 // FUNCTION: SWBF2 0x005d5e70
-void NetMatch::StartFindGames(int, const NetSessionId* id)
+void NetMatch::StartFindGames(bool, FindType, const char*, NetSessionId* id)
 {
     if (id)
     {
@@ -931,7 +938,7 @@ static void HandleQueryPackets()
                 continue;
             }
 
-            int iSrc = (unsigned char)pPkt->mData[3];
+            int iSrc = GetSrc(pPkt);
             NetPktGroup group;
             group.Set(pPkt);
             group.BeginRead();

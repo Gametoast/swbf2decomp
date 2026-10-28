@@ -33,6 +33,7 @@ struct stAutoNetMission
 };
 
 class PblRandom;
+class CNetFindGame;
 
 extern char autoNetSession[64];
 extern stAutoNetMission autoNetMissions[256];
@@ -148,9 +149,9 @@ public:
     virtual char* GetName() = 0;
     virtual int GetMaxPlayers() = 0;
     virtual int GetMaxBots() = 0;
-    virtual bool GetInfo(char*& pcName, char*& pcMission, int& iNumPlayers, int& iMaxPlayers,
-                         bool& bPassword, float& fPing, int& iArg7, int& iArg8, bool& bArg9,
-                         bool& bArg10, char*& pcArg11, bool& bArg12) = 0;
+    virtual bool GetInfo(char*& name, char*& mapName, int& numPlayers, int& maxPlayers,
+                         bool& isMetagame, float& ping, int& serverType, int& sortOrder, bool& isLocked,
+                         bool& versionMatches, char*& gameVersion, bool& isFavorite) = 0;
     virtual bool GetFiltered() = 0;
     virtual void SetFiltered(bool bFiltered) = 0;
     virtual bool GetRules(FindGameRules& rules) = 0;
@@ -256,7 +257,7 @@ struct NetAddr
 
 
 
-    char GetAddr(void* pOut, int pKey) const;
+    void GetAddr(NetSocketPeerRecord& out, NetKey* key) const;
 };
 #pragma pack(pop)
  
@@ -415,14 +416,14 @@ public:
     virtual bool IsCancelled();
     virtual void ForceWriteShellMove();
 
-    CNetJoinGame* NextHost(int);
+    void NextHost(int);
 
     float timer;
     int changeCount;
     int tryCount;
     bool hostLaunched;
     bool clientLaunched;
-    void* cFind;
+    CNetFindGame* cFind;
     char gameName[64];
     char gameEra[64];
     unsigned int hostRequest;
@@ -503,9 +504,9 @@ public:
     virtual char* GetName();
     virtual int GetMaxPlayers();
     virtual int GetMaxBots();
-    virtual bool GetInfo(char*& pcName, char*& pcMission, int& iNumPlayers, int& iMaxPlayers,
-                         bool& bPassword, float& fPing, int& iArg7, int& iArg8, bool& bArg9,
-                         bool& bArg10, char*& pcArg11, bool& bArg12);
+    virtual bool GetInfo(char*& name, char*& mapName, int& numPlayers, int& maxPlayers,
+                         bool& isMetagame, float& ping, int& serverType, int& sortOrder, bool& isLocked,
+                         bool& versionMatches, char*& gameVersion, bool& isFavorite);
     virtual bool GetFiltered();
     virtual void SetFiltered(bool bFiltered);
     virtual bool GetRules(FindGameRules& rules);
@@ -531,10 +532,10 @@ public:
     virtual bool IsMetaGame();
     virtual const char* GetEra();
 
-    void AddGame(const NetAddr* address);
-    void UpdateGame(const NetAddr* address, const void* session, const void* key,
-                    const char* version, const void* playerData, const void* extra);
-    void GetHostAddr(NetAddr* address, NetKey* key) const;
+    void AddGame(const NetAddr& address);
+    void UpdateGame(const NetAddr& address, const NetKey* key, const NetSessionId* session,
+                    const char* version, const FindGameData& data, const FindGameRules* rules);
+    void GetHostAddr(NetAddr& address, NetKey& key) const;
 
     bool mDirty;
     int mNumVisible;
@@ -629,8 +630,8 @@ public:
     NetGameDesc(const NetAddr& addr);
 
     bool operator==(const NetGameDesc& other);
-    void Update(const NetAddr* address, const NetKey* key, const NetSessionId* session,
-                const char* version, const FindGameData* data, const FindGameRules* rules);
+    void Update(const NetAddr& address, const NetKey* key, const NetSessionId* session,
+                const char* version, const FindGameData& data, const FindGameRules* rules);
 
     PblList<NetGameDesc>::Node mNode;
     bool mValid;
@@ -703,7 +704,7 @@ public:
     static void PlayerDataChanged(int iChangedPlayer);
     static void AddGamePlayer(int iChangedPlayer);
     static void RemoveGamePlayer(int iPlayer);
-    static void ReadGameUpdate(NetPktGroup* pGroup);
+    static void ReadGameUpdate(NetPktGroup& group);
     static unsigned int CalcPassword(char const* password);
     static void SetPassword(char const* password);
 
@@ -788,9 +789,9 @@ public:
     static void Recv(NetPacket* pPacket, const void* pSource);
     static void RecvLan(NetPacket* packet, const void* source);
     static void NextHost(int direction);
-    static void AddGame(const NetAddr* address);
-    static void UpdateGame(const NetAddr* address, const void* session, const void* key,
-                           const char* version, const void* playerData, const void* extra);
+    static void AddGame(const NetAddr& address);
+    static void UpdateGame(const NetAddr& address, const NetKey* key, const NetSessionId* session,
+                           const char* version, const FindGameData& data, const FindGameRules* rules);
 };
 
 extern NetHostGame* hostGame;

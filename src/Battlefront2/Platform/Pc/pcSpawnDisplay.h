@@ -57,6 +57,9 @@ public:
     void ChangeClass(Character* pCharacter);
     void Write(NetPktGroup& group, int iPlayer);
 
+    void SetWaitingForTeam(bool waiting) { mNetWaitingForTeam = waiting; }
+    bool IsWaitingForTeam() { return mNetWaitingForTeam; }
+
     void SelectTeam(int iTeam);
     void SelectClass(int iClass);
     void SelectPost(CommandPost* pPost);

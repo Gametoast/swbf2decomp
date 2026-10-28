@@ -512,14 +512,11 @@ unsigned __int64* __fastcall CopyEnteredLobbyId(unsigned __int64* pID)
 }
 
 // FUNCTION: SWBF2 0x00618560
-unsigned short __cdecl NetSocket::SetAddr(void* pDest, unsigned int uIP, unsigned short uPort)
+void NetSocket::SetAddr(NetSocketPeerRecord& peer, int ip, int port)
 {
-    NetSocketPeerRecord* pPeer = (NetSocketPeerRecord*)pDest;
-    sockaddr_in* pAddr = &pPeer->mSocketAddress;
-    pAddr->sin_family = AF_INET;
-    pAddr->sin_addr.s_addr = uIP;
-    pAddr->sin_port = htons(uPort);
-    return pAddr->sin_port;
+    peer.mSocketAddress.sin_family = AF_INET;
+    peer.mSocketAddress.sin_addr.s_addr = ip;
+    peer.mSocketAddress.sin_port = htons(port);
 }
 
 // FUNCTION: SWBF2 0x005b2300
@@ -640,7 +637,7 @@ void __fastcall ClearGroup(NetPktGroup* pGroup, int iDest)
     for (NetPacket* pPacket = pGroup->GetFront(); pPacket; )
     {
         NetPacket* pNext = pPacket->GetNext();
-        if (NetComm::Header(pPacket).src == iDest)
+        if (GetSrc(pPacket) == iDest)
         {
             pGroup->Remove(pPacket);
         }
@@ -666,7 +663,7 @@ void NetComm::Disconnect(int iDest)
         gf::checkError();
     }
     *pPeer = 0;
-    NetSocket::SetAddr(pPeer, 0, 0);
+    NetSocket::SetAddr(dest.mAddress, 0, 0);
 }
 
 // GLOBAL: SWBF2 0x01e62e98
@@ -708,7 +705,7 @@ void NetCommP::FreePackets()
 // FUNCTION: SWBF2 0x005b2e30
 void __fastcall SendLow(NetPacket* pPacket)
 {
-    const unsigned int iDest = NetComm::Header(pPacket).src;
+    const unsigned int iDest = GetSrc(pPacket);
     HandleCommPacketOut(pPacket);
     NetDrag::Send(pPacket, iDest);
     if (iDest < MAX_DESTS && iDest != 64)

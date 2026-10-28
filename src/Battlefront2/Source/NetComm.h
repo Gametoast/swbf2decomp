@@ -194,6 +194,12 @@ public:
     static int __fastcall FindJoinSource(const int* pAddress);
 };
 
+// FUNCTION: SWBF2 0x005aecb0
+inline int GetSrc(NetPacket* pkt)
+{
+    return NetComm::Header(pkt).src;
+}
+
 // FUNCTION: SWBF2 0x005b2350
 inline void SetGroup(NetPacket* pkt, int group, int idx, int count)
 {

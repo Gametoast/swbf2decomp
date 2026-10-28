@@ -227,7 +227,7 @@ void gf::GalaxyLobbyListListener::OnLobbyList(unsigned int lobbyCount, bool ioFa
         galaxy::api::GalaxyID lobby = ((galaxy::api::IMatchmaking*)pMatchmaking)->GetLobbyByIndex(i);
         NetAddr address;
         address.mGalaxyId = lobby;
-        NetSetupP::AddGame(&address);
+        NetSetupP::AddGame(address);
         pMatchmaking = GetGalaxyMatchmaking();
         ((galaxy::api::IMatchmaking*)pMatchmaking)->RequestLobbyData(lobby);
     }
@@ -401,7 +401,7 @@ void gf::GalaxyLobbyDataListener::OnLobbyDataUpdated(const galaxy::api::GalaxyID
         return;
     }
     data.mPingTime = 0.0f;
-    NetSetupP::UpdateGame(&address, &key, &session, NetSetup::GetGameVersion(), &data, &rules);
+    NetSetupP::UpdateGame(address, &key, &session, NetSetup::GetGameVersion(), data, &rules);
 }
 
 // FUNCTION: SWBF2 0x005d5a00

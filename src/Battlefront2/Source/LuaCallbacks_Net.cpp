@@ -127,10 +127,6 @@ int gFriendListIcon;
 
 namespace GameVoiceChat
 {
-    void* GetNode();
-}
-namespace GameVoiceChat
-{
     void* FindNodeByDeviceID();
 }
 namespace GameVoiceChat
@@ -153,7 +149,7 @@ static void VoiceLocalEchoEnable(const bool bEnable)
     {
         for (unsigned int i = 0; i < uNumNodes; ++i)
         {
-            void* pNode = GameVoiceChat::GetNode();
+            GameVoiceChat::Node* pNode = GameVoiceChat::GetNode(i);
             if (pNode && ((VoiceChat::Node*)pNode)->IsOpen())
             {
                 ((GameVoiceChat::Node*)pNode)->SetID(i);
@@ -163,7 +159,7 @@ static void VoiceLocalEchoEnable(const bool bEnable)
 
     for (unsigned int i = 0; i < uNumNodes; ++i)
     {
-        const unsigned char ucID = ((VoiceChat::Node*)GameVoiceChat::GetNode())->GetID();
+        const unsigned char ucID = GameVoiceChat::GetNode(i)->GetID();
         if (ucID != 0xFF)
         {
             pTransport->SetSendEnable(ucID, ucID, bEnable, false);
@@ -175,7 +171,7 @@ static void VoiceLocalEchoEnable(const bool bEnable)
     {
         for (unsigned int i = 0; i < uNumNodes; ++i)
         {
-            void* pNode = GameVoiceChat::GetNode();
+            GameVoiceChat::Node* pNode = GameVoiceChat::GetNode(i);
             if (pNode && ((VoiceChat::Node*)pNode)->IsOpen())
             {
                 ((GameVoiceChat::Node*)pNode)->SetID(0xFF);

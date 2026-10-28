@@ -6,6 +6,7 @@ namespace GameVoiceChat
     void Reset();
 
     class Node;
+    Node* GetNode(unsigned int nodeIndex);
     Node* GetEnabledNode(unsigned int uiEnabledIndex, unsigned int& uiIndex);
     Node* GetEnabledNode(unsigned int uiEnabledIndex);
     unsigned int GetNumEnabledNodes();

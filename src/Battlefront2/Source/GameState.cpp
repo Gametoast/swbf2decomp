@@ -212,6 +212,7 @@
 #include "RedEngineFL/Graphics/RedModel.h"
 
 #include "SoundDebugDisplay.h"
+#include "GameVoiceChat.h"
 #include "GameVoiceChatNode.h"
 #include "PebbleFL/Common/PblJournal.h"
 
@@ -373,10 +374,6 @@ namespace SaveGameManager
 namespace GameVoiceChat
 {
     unsigned int GetNumNodes();
-}
-namespace GameVoiceChat
-{
-    void* GetNode();
 }
 
 extern int gNetSetup_errState;
@@ -1596,10 +1593,10 @@ void GameState::PostStateCleanup(bool bMission)
     {
         for (int i = GameVoiceChat::GetNumNodes(); i != 0; --i)
         {
-            void* pObject = GameVoiceChat::GetNode();
+            GameVoiceChat::Node* pObject = GameVoiceChat::GetNode(i - 1);
             if (pObject)
             {
-                ((GameVoiceChat::Node*)pObject)->SetID(0xff);
+                pObject->SetID(0xff);
             }
         }
     }

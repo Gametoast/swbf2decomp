@@ -97,14 +97,14 @@ void GameVoiceChat::Reset()
 {
     for (unsigned int i = (unsigned int)GameVoiceChat::GetNumNodes(); i; --i)
     {
-        void* pNode = GameVoiceChat::gNodes[0];
+        GameVoiceChat::Node* pNode = GameVoiceChat::GetNode(i - 1);
         if (!pNode)
         {
             continue;
         }
-        ((GameVoiceChat::Node*)pNode)->SetSendMask(GameVoiceChat::Transport::mask_TeamFriend, true, false);
-        ((GameVoiceChat::Node*)pNode)->SetReceiveMask(GameVoiceChat::Transport::mask_Everyone, true, false);
-        ((GameVoiceChat::Node*)pNode)->SetID(0xFF);
+        pNode->SetSendMask(GameVoiceChat::Transport::mask_TeamFriend, true, false);
+        pNode->SetReceiveMask(GameVoiceChat::Transport::mask_Everyone, true, false);
+        pNode->SetID(0xFF);
     }
 }
 
@@ -304,9 +304,9 @@ namespace GameVoiceChat
 {
 
 // FUNCTION: SWBF2 0x0053c4e0
-void* GetNode()
+Node* GetNode(const unsigned int nodeIndex)
 {
-    return GameVoiceChat::gNodes[0];
+    return (Node*)GameVoiceChat::gNodes[0];
 }
 
 }

@@ -2,16 +2,13 @@
 
 #include "NetGame.h"
 #include "GameVoiceChat.h"
+#include "GameVoiceChatNode.h"
 #include "GameVoiceChatTransport.h"
 #include "VoiceChatNode.h"
 
 #include "NetPacket.h"
 #include "SoundFL/source/sndqueue.h"
 
-namespace GameVoiceChat
-{
-void* GetNode();
-}
 
 // FUNCTION: SWBF2 0x0053e300
 void* VoiceChat::NetPacketAudio::Receive()
@@ -115,7 +112,7 @@ bool __cdecl SendVoice(NetPacket* packet, unsigned char destination, unsigned in
                 unsigned int i = 0;
                 if (count)
                 {
-                    VoiceChat::Node* voiceNode = (VoiceChat::Node*)GameVoiceChat::GetNode();
+                    VoiceChat::Node* voiceNode = GameVoiceChat::GetNode(i);
                     while (i < count)
                     {
                         if (voiceNode && voiceNode->GetID() == node)

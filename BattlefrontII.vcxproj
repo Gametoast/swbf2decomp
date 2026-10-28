@@ -1540,6 +1540,7 @@
       <InlineFunctionExpansion Condition="'$(Configuration)'=='Release'">OnlyExplicitInline</InlineFunctionExpansion>
     </ClCompile>
     <ClCompile Include="src\Battlefront2\Source\NetGame.cpp">
+      <IntrinsicFunctions Condition="'$(Configuration)'=='Release'">true</IntrinsicFunctions>
       <Optimization>Disabled</Optimization>
       <StringPooling Condition="'$(Configuration)'=='Release'">true</StringPooling>
       <BufferSecurityCheck>false</BufferSecurityCheck>
@@ -1567,6 +1568,7 @@
       <InlineFunctionExpansion Condition="'$(Configuration)'=='Release'">OnlyExplicitInline</InlineFunctionExpansion>
     </ClCompile>
     <ClCompile Include="src\Battlefront2\Source\NetSetup.cpp">
+      <IntrinsicFunctions Condition="'$(Configuration)'=='Release'">true</IntrinsicFunctions>
       <Optimization>Disabled</Optimization>
       <StringPooling Condition="'$(Configuration)'=='Release'">true</StringPooling>
       <BufferSecurityCheck>false</BufferSecurityCheck>
