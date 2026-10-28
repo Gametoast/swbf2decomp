@@ -878,7 +878,7 @@ void UpdatePhysics(const Controllable* pMe, float fScale, const ControllableDest
             float fSpeed = 1.0f;
             if (bStopping)
             {
-                fSpeed = sqrtf(vToDest.x * vToDest.x + vToDest.z * vToDest.z) / fStop;
+                fSpeed = LengthXZ(vToDest) / fStop;
                 if (0.0f > fSpeed)
                 {
                     fSpeed = 0.0f;

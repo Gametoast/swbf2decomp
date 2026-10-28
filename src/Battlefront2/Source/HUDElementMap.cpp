@@ -810,7 +810,7 @@ void HUD::ElementMap::Update(const float fElapsed)
             {
                 GameObject* pControlled = pControllable->GetGameObject();
                 const PblVector3& vVelocity = pControlled->GetVelocity();
-                const float fSpeed = sqrtf(vVelocity.x * vVelocity.x + vVelocity.z * vVelocity.z);
+                const float fSpeed = LengthXZ(vVelocity);
 
                 Controllable* pPilot = 0;
                 const PblList<Controllable>& list = pControlled->GetControllableList();

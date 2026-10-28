@@ -1960,10 +1960,3 @@ void EntityDroid::SetupCameraTrackMatrix(PblMatrix& rMatrix, float fDeltaTime)
                                     1.0f, 1.0f, this);
 }
 
-// FUNCTION: SWBF2 0x0049e2e0
-unsigned int* __fastcall InitializeSpawnCameraFloatPair(unsigned int* pThis)
-{
-    pThis[0] = 0x3f800000u;
-    pThis[1] = 0;
-    return pThis;
-}

@@ -1671,7 +1671,6 @@ bool netIsHostDedicated;
 // GLOBAL: SWBF2 0x01e57930
 int sortTopTeam;
 
-extern NetDest netDests[MAX_DESTS];
 extern int netPlayerLimit;
 
 // FUNCTION: SWBF2 0x00592120

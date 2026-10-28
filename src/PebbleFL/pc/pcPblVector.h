@@ -50,7 +50,7 @@ inline PblVector4::operator const PblVector3&() const
 // FUNCTION: SWBF2 0x004213a0
 inline const float Length(const PblVector3& vVector)
 {
-    return sqrtf(vVector.x * vVector.x + vVector.y * vVector.y + vVector.z * vVector.z);
+    return D3DXVec3Length(&vVector);
 }
 
 inline const float SquaredLength(const PblVector3& vVector)
@@ -115,6 +115,11 @@ inline void PblVector3::AddY(float value)
 inline void PblVector3::MulY(float value)
 {
     y *= value;
+}
+
+inline const float LengthXZ(const PblVector3& vector)
+{
+    return sqrtf(vector.x * vector.x + vector.z * vector.z);
 }
 
 inline const float SquaredLengthXZ(const PblVector3& vector)

@@ -331,7 +331,7 @@ GameObject* EntityRemoteTerminal::GetRemoteGameObject()
 {
     if (!HandleObject(mRemoteGameObject))
     {
-        EntityEx* pEntity = EntityEx::mIdMap.Find(mRemoteGameObjectHash);
+        EntityEx* pEntity = EntityEx::Find(mRemoteGameObjectHash);
         if (pEntity)
         {
             GameObject* pObject = pEntity->GetGameObject();

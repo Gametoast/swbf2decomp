@@ -28,6 +28,9 @@ public:
 
         Itor(const Itor& itor) : _pNode(itor._pNode) {}
 
+        // TEMPLATE: SWBF2 0x004433d0
+        // ??0Itor@?$PblList@VControllable@@@@QAE@ABV1@@Z
+        // PblList<Controllable>::Itor::Itor(const PblList<Controllable>&)
         Itor(const PblList<TYPE>& list) { _pNode = list._head._pNext; }
 
         // TEMPLATE: SWBF2 0x0049e1c0

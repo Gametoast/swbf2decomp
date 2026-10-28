@@ -11,49 +11,10 @@ public:
     static void FreePackets();
 };
 
-extern NetPktGroup inQueue;
-extern NetPktGroup inPktGroups[64];
-extern NetDest netDests[MAX_DESTS];
 extern NetPktGroup bandwidthQueue[3];
 extern NetPktGroup lossQueue;
 extern NetPktGroup latencyQueue;
 extern NetPktGroup localQueue;
-
-// GLOBAL: SWBF2 0x01e62e98
-int freeGroupCycle;
-
-// FUNCTION: SWBF2 0x005b2be0
-void NetCommP::FreePackets()
-{
-    if (inQueue.pktCount)
-    {
-        unsigned int iCycle = (unsigned int)freeGroupCycle;
-        inPktGroups[iCycle].Free();
-        freeGroupCycle = iCycle < 64 ? iCycle : 0;
-        for (int i = 0; i < 64; ++i)
-        {
-            NetPacket* pPacket = inQueue.PopFront();
-            if (!pPacket)
-            {
-                break;
-            }
-            pPacket->Free();
-        }
-    }
-    else
-    {
-        inQueue.Free();
-        for (int i = 0; i < MAX_DESTS; ++i)
-        {
-            netDests[i].outQueue.Free();
-        }
-        for (int i = 0; i < 64; ++i)
-        {
-            inPktGroups[i].Free();
-        }
-    }
-}
-
 
 // FUNCTION: SWBF2 0x0053e0a0
 void NetPktGroup::Write(bool bValue)
@@ -134,11 +95,11 @@ NetPacket* NetPacket::Alloc(bool bSmall)
         pPacket = freePackets.PopFront();
         if (!pPacket)
         {
-            for (int i = 0; i < MAX_BIG_PACKETS; ++i)
+            for (int i = 0; i < _countof(netBigPackets); ++i)
             {
                 freeBigPackets.PushBack(&netBigPackets[i]);
             }
-            for (int i = 0; i < MAX_SMALL_PACKETS; ++i)
+            for (int i = 0; i < _countof(netSmallPackets); ++i)
             {
                 freeSmallPackets.PushBack(&netSmallPackets[i]);
             }

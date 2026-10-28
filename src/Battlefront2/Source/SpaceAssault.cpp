@@ -363,7 +363,7 @@ void SpaceAssault::AddCriticalSystem(const char* pName, short pointValue, float 
     }
 
     unsigned int uNameHashId = PblHash(pName);
-    EntityEx* pEntity = EntityEx::mIdMap.Find(uNameHashId);
+    EntityEx* pEntity = EntityEx::Find(uNameHashId);
     if (!pEntity)
     {
         return;
@@ -425,7 +425,7 @@ short SpaceAssault::GetPointValue(unsigned int uNameHashId, Character* pCharacte
         }
     }
 
-    EntityEx* pEntity = EntityEx::mIdMap.Find(uNameHashId);
+    EntityEx* pEntity = EntityEx::Find(uNameHashId);
     if (pEntity && GetTeam(pEntity->GetGameObject()) == pCharacter->mTeamNumber)
     {
         return -value;

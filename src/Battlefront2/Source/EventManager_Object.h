@@ -32,7 +32,7 @@ public:
 
     ObjectMatches(GameObject* pObject) : mObject(pObject) {}
 
-    ObjectMatches(const char* pcName) : mObject(EntityEx::mIdMap.Find(PblHash(pcName))) {}
+    ObjectMatches(const char* pcName) : mObject(EntityEx::Find(PblHash(pcName))) {}
 
     static const char* GetName() { return "Match"; }
 

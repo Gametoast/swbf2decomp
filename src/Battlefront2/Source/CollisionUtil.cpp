@@ -734,7 +734,7 @@ bool CollisionUtil::CollideAxisAlignedCylinders(PblVector3& vDelta, float fRadiu
                                                 float fHeightB, float& fDepth)
 {
     float fAbsY = Fabs(vDelta.y);
-    float fDistXZ = sqrtf(vDelta.x * vDelta.x + vDelta.z * vDelta.z);
+    float fDistXZ = LengthXZ(vDelta);
     float fRadii = fRadiusA + fRadiusB;
     if (fDistXZ >= fRadii)
     {

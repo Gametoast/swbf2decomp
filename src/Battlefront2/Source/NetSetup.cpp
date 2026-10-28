@@ -206,10 +206,7 @@ bool netInMultiplayer;
 char netLoginNames[1][32];
 
 // GLOBAL: SWBF2 0x01ead8f8
-unsigned int intraSessionPlayerId0;
-
-// GLOBAL: SWBF2 0x01ead8fc
-unsigned int intraSessionPlayerIdRest[1];
+unsigned int intraSessionPlayerId[2];
 // GLOBAL: SWBF2 0x01ead92a
 bool gOverrideCable;
 // GLOBAL: SWBF2 0x01ead92b
@@ -1699,7 +1696,6 @@ bool CNetHostGame::IsFailed()
     return hostFailed;
 }
 
-extern NetDest netDests[MAX_DESTS];
 extern int netPlayerLimit;
 extern int netLobbyState;
 extern char const* netLoginErrorMessage;
@@ -3495,38 +3491,47 @@ extern bool g_SpectatorEnabled[1];
 void WriteJoin(NetPktGroup& group, unsigned int guestCount)
 {
     group.WriteBits(guestCount, 3);
-    unsigned int connectionType = netScript == NS_CLIENT && g_bNoRender ? 3 : 1;
-    group.WriteBits(connectionType, 2);
-
-    const unsigned char* input = (const unsigned char*)FLInputManager::Instance();
-    int playerIndexes[2];
-    int count = 0;
-    for (int i = 0; i < 1; ++i)
+    NetArch arch = NET_ARCH_PC;
+    if (netScript == NS_CLIENT && g_bNoRender)
     {
-        if (input[0x2e6c + i])
+        arch = NET_ARCH_FAKE;
+    }
+    group.WriteBits(arch, 2);
+
+    FLInputManager* input = FLInputManager::Instance();
+    int playerIndexes[1];
+    unsigned int count = 0;
+    unsigned int viewport;
+    for (viewport = 0; viewport < _countof(playerIndexes); ++viewport)
+    {
+        if (input->mActiveControllers[viewport])
         {
-            playerIndexes[count++] = i;
+            playerIndexes[count++] = viewport;
         }
     }
-    for (int i = count; i < 1; ++i)
+    for (viewport = count; viewport < _countof(playerIndexes); ++viewport)
     {
-        playerIndexes[i] = -1;
+        playerIndexes[viewport] = -1;
     }
-    WriteString(&group, (const char*)netLoginNames + 32 * playerIndexes[0], 32);
+    int joystick = playerIndexes[0];
+    WriteString(&group, (const char*)netLoginNames + 32 * joystick, 32);
 
     unsigned __int64 id = NetMatch::GetLocalGSID();
     group.WriteBytes((const char*)&id, sizeof(id));
+    count = 1;
     for (unsigned int guest = 0; guest < guestCount; ++guest)
     {
-        PlayerProfile::tProfile* profile = PlayerProfile::GetProfile((unsigned int)playerIndexes[guest + 1]);
-        char converted[68];
-        PblUnicode::ustrncnv(converted, profile->GetName(), 66);
-        WriteString(&group, converted, 66);
+        joystick = playerIndexes[count];
+        PlayerProfile::tProfile* profile = PlayerProfile::GetProfile((unsigned int)joystick);
+        char converted[66];
+        PblUnicode::ustrncnv(converted, profile->GetName(), _countof(converted));
+        WriteString(&group, converted, _countof(converted));
+        ++count;
     }
-    group.WriteBits(intraSessionPlayerId0, 32);
+    group.WriteBits(intraSessionPlayerId[0], 32);
     for (unsigned int guest = 0; guest < guestCount; ++guest)
     {
-        group.WriteBits(intraSessionPlayerIdRest[guest], 32);
+        group.WriteBits(intraSessionPlayerId[guest + 1], 32);
     }
     group.Write(netCrashAddr != 0);
     if (netCrashAddr)
@@ -4364,7 +4369,7 @@ void WriteShellUpdate(NetPktGroup& group, int player, ShellUpdate& update, Shell
     }
     if (player != NetGame::GetLocalIndex(0))
     {
-        NetGameP::SetKey(64, intraSessionPlayerId0);
+        NetGameP::SetKey(64, intraSessionPlayerId[0]);
     }
 
     unsigned __int64 playingMask = 0;
@@ -4646,14 +4651,14 @@ bool ReadShellUpdate(NetPktGroup& group, ShellUpdate& update, ShellMove& move)
     unsigned int turn;
     group.ReadBits(turn, 21);
     update.turnNumber = turn;
-    group.ReadBits(intraSessionPlayerId0, 32);
+    group.ReadBits(intraSessionPlayerId[0], 32);
     for (i = 0; i < guestCount; ++i)
     {
-        group.ReadBits(intraSessionPlayerIdRest[i], 32);
+        group.ReadBits(intraSessionPlayerId[i + 1], 32);
     }
     if (!isLocal)
     {
-        NetGameP::SetKey(64, intraSessionPlayerId0);
+        NetGameP::SetKey(64, intraSessionPlayerId[0]);
     }
 
     unsigned __int64 playingMask;
@@ -5717,11 +5722,11 @@ void CNetLoadGame::Update()
             {
                 break;
             }
-            unsigned int player = GetPacketSourceHost(ack);
+            int player = GetPacketSourceHost(ack);
             if (!(ackedMask & (1ULL << player)))
             {
                 ackedMask |= 1ULL << player;
-                for (int slot = 0; slot < 1; ++slot)
+                for (unsigned int slot = 0; slot < 1; ++slot)
                 {
                     int guest = NetGame::GetMyGuest(player, slot);
                     if (guest >= 0)

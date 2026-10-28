@@ -389,7 +389,7 @@ void VehicleSpawn::UpdateSpawn(float fDeltaTime)
     desc.mMatrix = mMatrix;
     desc.mNameId = mNameId;
     int iIndex = 0;
-    while (EntityEx::GetEntityMap().Find(desc.mNameId))
+    while (EntityEx::Find(desc.mNameId))
     {
         char acName[256];
         _snprintf(acName, 255, "%s%d", StringDB::Find(desc.mNameId), ++iIndex);

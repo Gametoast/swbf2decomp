@@ -2,11 +2,7 @@
 
 #include <stddef.h>
 
-struct SpawnCameraFloatPair
-{
-    float mFirstValue;
-    float mSecondValue;
-};
+
  
 
 void ParseCommandLine(char const* pcAppName, char const* pcCmdLine);

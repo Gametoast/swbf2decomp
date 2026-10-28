@@ -154,7 +154,7 @@ int axtoi(char const* pszHex, int iMaxDigits)
 PblList<VidConfig> VidConfig::sConfigs;
 
 // FUNCTION: SWBF2 0x006e9a80
-VidConfig::VidConfig(unsigned long ulVendorId, unsigned long ulDeviceId, unsigned long ulHint)
+inline VidConfig::VidConfig(unsigned long ulVendorId, unsigned long ulDeviceId, unsigned long ulHint)
 {
     mVendorId = ulVendorId;
     mDeviceId = ulDeviceId;
@@ -164,7 +164,7 @@ VidConfig::VidConfig(unsigned long ulVendorId, unsigned long ulDeviceId, unsigne
 }
 
 // FUNCTION: SWBF2 0x006e9b00
-void VidConfig::AddVidMode(int iWidth, int iHeight, D3DMULTISAMPLE_TYPE eMultiSampleType,
+inline void VidConfig::AddVidMode(int iWidth, int iHeight, D3DMULTISAMPLE_TYPE eMultiSampleType,
                            unsigned long ulMultiSampleQuality, bool bSupported)
 {
     VidMode* pVidMode = new VidMode;
@@ -505,18 +505,15 @@ void DoAutoDetection()
 }
 
 // FUNCTION: SWBF2 0x006ea1c0
-VidConfig* VidConfig::GetConfig(unsigned long ulVendorId, unsigned long ulDeviceId,
+inline VidConfig* VidConfig::GetConfig(unsigned long ulVendorId, unsigned long ulDeviceId,
                                 unsigned long ulHint)
 {
-    for (PblList<VidConfig>::Node* pNode = sConfigs.GetFirst(); pNode->_pObject;
-         pNode = pNode->_pNext)
+    for (PblList<VidConfig>::Itor config(sConfigs); config; ++config)
     {
-        VidConfig* pConfig = pNode->_pObject;
-
-        if (pConfig->mVendorId == ulVendorId && pConfig->mDeviceId == ulDeviceId
-            && pConfig->mHint == ulHint)
+        if (config->mVendorId == ulVendorId && config->mDeviceId == ulDeviceId
+            && config->mHint == ulHint)
         {
-            return pConfig;
+            return config;
         }
     }
 
@@ -555,14 +552,11 @@ unsigned long GetCpuSpeed()
 bool VidConfig::VidModeTested(int iWidth, int iHeight, D3DMULTISAMPLE_TYPE eMultiSampleType,
                               unsigned long ulMultiSampleQuality)
 {
-    for (PblList<VidMode>::Node* pNode = VidModeList.GetFirst(); pNode->_pObject;
-         pNode = pNode->_pNext)
+    for (PblList<VidMode>::Itor mode(VidModeList); mode; ++mode)
     {
-        VidMode* pVidMode = pNode->_pObject;
-
-        if (pVidMode->Width == iWidth && pVidMode->Height == iHeight
-            && pVidMode->MultiSampleType == eMultiSampleType
-            && pVidMode->MultiSampleQuality == ulMultiSampleQuality)
+        if (mode->Width == iWidth && mode->Height == iHeight
+            && mode->MultiSampleType == eMultiSampleType
+            && mode->MultiSampleQuality == ulMultiSampleQuality)
         {
             return true;
         }
@@ -575,16 +569,13 @@ bool VidConfig::VidModeTested(int iWidth, int iHeight, D3DMULTISAMPLE_TYPE eMult
 bool VidConfig::VidModeAvailable(int iWidth, int iHeight, D3DMULTISAMPLE_TYPE eMultiSampleType,
                                  unsigned long ulMultiSampleQuality)
 {
-    for (PblList<VidMode>::Node* pNode = VidModeList.GetFirst(); pNode->_pObject;
-         pNode = pNode->_pNext)
+    for (PblList<VidMode>::Itor mode(VidModeList); mode; ++mode)
     {
-        VidMode* pVidMode = pNode->_pObject;
-
-        if (pVidMode->Width == iWidth && pVidMode->Height == iHeight
-            && pVidMode->MultiSampleType == eMultiSampleType
-            && pVidMode->MultiSampleQuality == ulMultiSampleQuality)
+        if (mode->Width == iWidth && mode->Height == iHeight
+            && mode->MultiSampleType == eMultiSampleType
+            && mode->MultiSampleQuality == ulMultiSampleQuality)
         {
-            return pVidMode->bSupported;
+            return mode->bSupported;
         }
     }
 
@@ -600,18 +591,15 @@ bool VidConfig::GetMaxMultisamplingModeForScreenSize(int iWidth, int iHeight,
     rMultiSampleType = D3DMULTISAMPLE_NONE;
     rMultiSampleQuality = 0;
 
-    for (PblList<VidMode>::Node* pNode = VidModeList.GetFirst(); pNode->_pObject;
-         pNode = pNode->_pNext)
+    for (PblList<VidMode>::Itor mode(VidModeList); mode; ++mode)
     {
-        VidMode* pVidMode = pNode->_pObject;
-
-        if (pVidMode->Width == iWidth && pVidMode->Height == iHeight && pVidMode->bSupported
-            && ((unsigned long)rMultiSampleType < (unsigned long)pVidMode->MultiSampleType
-                || (rMultiSampleType == pVidMode->MultiSampleType
-                    && rMultiSampleQuality < pVidMode->MultiSampleQuality)))
+        if (mode->Width == iWidth && mode->Height == iHeight && mode->bSupported
+            && ((unsigned long)rMultiSampleType < (unsigned long)mode->MultiSampleType
+                || (rMultiSampleType == mode->MultiSampleType
+                    && rMultiSampleQuality < mode->MultiSampleQuality)))
         {
-            rMultiSampleType = pVidMode->MultiSampleType;
-            rMultiSampleQuality = pVidMode->MultiSampleQuality;
+            rMultiSampleType = mode->MultiSampleType;
+            rMultiSampleQuality = mode->MultiSampleQuality;
             bFound = true;
         }
     }
@@ -627,18 +615,15 @@ bool VidConfig::GetMaxScreenSizeForMultisamplingMode(D3DMULTISAMPLE_TYPE eMultiS
     rHeight = 0;
     rWidth = 0;
 
-    for (PblList<VidMode>::Node* pNode = VidModeList.GetFirst(); pNode->_pObject;
-         pNode = pNode->_pNext)
+    for (PblList<VidMode>::Itor mode(VidModeList); mode; ++mode)
     {
-        VidMode* pVidMode = pNode->_pObject;
-
-        if (pVidMode->MultiSampleType == eMultiSampleType
-            && pVidMode->MultiSampleQuality == ulMultiSampleQuality && pVidMode->bSupported
-            && (rWidth < pVidMode->Width
-                || (rWidth == pVidMode->Width && rHeight < pVidMode->Height)))
+        if (mode->MultiSampleType == eMultiSampleType
+            && mode->MultiSampleQuality == ulMultiSampleQuality && mode->bSupported
+            && (rWidth < mode->Width
+                || (rWidth == mode->Width && rHeight < mode->Height)))
         {
-            rWidth = pVidMode->Width;
-            rHeight = pVidMode->Height;
+            rWidth = mode->Width;
+            rHeight = mode->Height;
         }
     }
 
@@ -646,7 +631,7 @@ bool VidConfig::GetMaxScreenSizeForMultisamplingMode(D3DMULTISAMPLE_TYPE eMultiS
 }
 
 // FUNCTION: SWBF2 0x006ea440
-void VidConfig::LoadConfigFile()
+inline void VidConfig::LoadConfigFile()
 {
     PblFile file;
     int iLen = 0;
@@ -675,8 +660,10 @@ void VidConfig::LoadConfigFile()
                             char const* pcDevice = strstr(pcVendor, "0x") + 2;
                             char const* pcHint = strstr(pcDevice, "0x");
 
-                            pConfig = new VidConfig(axtoi(pcVendor, 4), axtoi(pcDevice, 4),
-                                                    axtoi(pcHint + 2, 8));
+                            const unsigned long vendorId = axtoi(pcVendor, 4);
+                            const unsigned long deviceId = axtoi(pcDevice, 4);
+                            const unsigned long hint = axtoi(pcHint + 2, 8);
+                            pConfig = new VidConfig(vendorId, deviceId, hint);
                         }
                         else
                         {
@@ -719,23 +706,17 @@ void VidConfig::SaveConfigFile()
     if (file.OpenCreate("Data\\_LVL_PC\\vidmode.ini", false, true, false)
         || file.OpenCreate("vidmode.ini", false, true, false))
     {
-        for (PblList<VidConfig>::Node* pNode = sConfigs.GetFirst(); pNode->_pObject;
-             pNode = pNode->_pNext)
+        for (PblList<VidConfig>::Itor config(sConfigs); config; ++config)
         {
-            VidConfig* pConfig = pNode->_pObject;
-
             sprintf(acBuffer, "[Vendor 0x%04X Device 0x%04X Hint 0x%08X]\r\n",
-                    pConfig->mVendorId, pConfig->mDeviceId, pConfig->mHint);
+                    config->mVendorId, config->mDeviceId, config->mHint);
             file.WriteString(acBuffer);
 
-            for (PblList<VidMode>::Node* pModeNode = pConfig->VidModeList.GetFirst();
-                 pModeNode->_pObject; pModeNode = pModeNode->_pNext)
+            for (PblList<VidMode>::Itor mode(config->VidModeList); mode; ++mode)
             {
-                VidMode* pVidMode = pModeNode->_pObject;
-
-                sprintf(acBuffer, "%d %d %d %d %d\r\n", pVidMode->Width, pVidMode->Height,
-                        pVidMode->MultiSampleType, pVidMode->MultiSampleQuality,
-                        pVidMode->bSupported);
+                sprintf(acBuffer, "%d %d %d %d %d\r\n", mode->Width, mode->Height,
+                        mode->MultiSampleType, mode->MultiSampleQuality,
+                        mode->bSupported);
                 file.WriteString(acBuffer);
             }
 

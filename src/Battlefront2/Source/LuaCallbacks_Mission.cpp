@@ -541,7 +541,7 @@ static T* _GetEntity(lua_State* L, int iIndex)
     }
     else
     {
-        pEntity = EntityEx::mIdMap.Find(PblHash(LuaHelper::GetString(iIndex)));
+        pEntity = EntityEx::Find(PblHash(LuaHelper::GetString(iIndex)));
     }
     if (pEntity && pEntity->IsRtti(T::GetRtti()))
     {

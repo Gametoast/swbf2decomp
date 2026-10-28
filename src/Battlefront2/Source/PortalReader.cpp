@@ -25,7 +25,7 @@ void PortalReader::FindRegisterStatics(ISector& sector)
 {
     for (unsigned int* it = sector.GetStaticNames().Begin(); it != sector.GetStaticNames().End(); ++it)
     {
-        EntityEx* pEntity = EntityEx::GetEntityMap().Find(*it);
+        EntityEx* pEntity = EntityEx::Find(*it);
         if (pEntity && pEntity->IsRtti(EntityProp::GetRtti()))
         {
             IDisplayable& displayable = *static_cast<EntityProp*>(pEntity);

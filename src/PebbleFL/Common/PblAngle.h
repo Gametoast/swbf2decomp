@@ -6,6 +6,7 @@ class PblAngle
 {
 public:
 
+    // FUNCTION: SWBF2 0x0049e2e0
     PblAngle() : mCos(1.0f), mSin(0.0f) {}
     // FUNCTION: SWBF2 0x0048c8e0
     PblAngle(float fCos, float fSin) : mCos(fCos), mSin(fSin) {}
@@ -44,7 +45,9 @@ public:
         return *this;
     }
 
+    // FUNCTION: SWBF2 0x0047a550
     float GetCos() const { return mCos; }
+    // FUNCTION: SWBF2 0x0047a560
     float GetSin() const { return mSin; }
 
     float mCos;

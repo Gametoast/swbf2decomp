@@ -20,23 +20,7 @@ enum NetArch
     NET_ARCH_FAKE = 3
 };
 
-struct NetDest
-{
-    bool connected;
-    NetPktGroup outQueue;
 
-    NetSocketPeerRecord mAddress;
-    NetArch arch;
-    float lastRecv;
-    PipeType pipe;
-    int ping;
-    int PLKills;
-    int PLDeaths;
-    int PLCPs;
-    int upBandwidth;
-    int downBandwidth;
-    int nextGroupNum;
-};
  
 
 const int MAX_DESTS = 67;
@@ -209,3 +193,12 @@ public:
     static unsigned __int64* __fastcall GetAddr(int iDest);
     static int __fastcall FindJoinSource(const int* pAddress);
 };
+
+// FUNCTION: SWBF2 0x005b2350
+inline void SetGroup(NetPacket* pkt, int group, int idx, int count)
+{
+    NetComm::PktHeader& header = NetComm::Header(pkt);
+    header.count = count;
+    header.group = group;
+    header.idx = idx;
+}

@@ -99,7 +99,7 @@ public:
     {
         if (!mNextLinkedTerminal)
         {
-            EntityEx* pEntity = EntityEx::mIdMap.Find(mNextLinkedTerminalHash);
+            EntityEx* pEntity = EntityEx::Find(mNextLinkedTerminalHash);
             if (pEntity && pEntity->IsRtti(rttiHashEntityRemoteTerminal))
             {
                 mNextLinkedTerminal = reinterpret_cast<EntityRemoteTerminal*>(pEntity);
@@ -112,7 +112,7 @@ public:
     {
         if (!mPrevLinkedTerminal)
         {
-            EntityEx* pEntity = EntityEx::mIdMap.Find(mPrevLinkedTerminalHash);
+            EntityEx* pEntity = EntityEx::Find(mPrevLinkedTerminalHash);
             if (pEntity && pEntity->IsRtti(rttiHashEntityRemoteTerminal))
             {
                 mPrevLinkedTerminal = reinterpret_cast<EntityRemoteTerminal*>(pEntity);
