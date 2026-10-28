@@ -172,7 +172,7 @@ void Team::CopyFromHost()
         pTeam->SetCurReinforcements(sHostTeams[i]->mCurReinforcements);
         for (int j = 0; j < 8; ++j)
         {
-            sTeams[i]->mColor[j] = sHostTeams[i]->mColor[j];
+            sTeams[i]->mColor[j] = sHostTeams[i]->GetColor(j);
             sTeams[i]->mAffiliation[j] = sHostTeams[i]->mAffiliation[j];
         }
         sTeams[i]->SetPoints(sHostTeams[i]->mPoints);

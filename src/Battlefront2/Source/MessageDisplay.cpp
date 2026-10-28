@@ -68,7 +68,7 @@ void MessageDisplay::AddKillMessage(const Character* pVictim, const Character* p
             FLInputManager::s_instance.ProcessChatMessageInput(message);
         }
     }
-    AddMessage(message, pTeam->mColor[iTeam]);
+    AddMessage(message, pTeam->GetColor(iTeam));
 }
 
 // FUNCTION: SWBF2 0x005a38e0

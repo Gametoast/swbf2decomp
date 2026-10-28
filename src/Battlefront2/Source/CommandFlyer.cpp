@@ -47,7 +47,7 @@ const char CommandFlyerClass::rttiNameCommandFlyerClass[] = "CommandFlyerClass";
 
 
 // FUNCTION: SWBF2 0x00477c70
-unsigned int GetFlyerClassRtti()
+unsigned int CommandFlyerClass::GetRtti()
 {
     return CommandFlyerClass::rttiHashCommandFlyerClass;
 }

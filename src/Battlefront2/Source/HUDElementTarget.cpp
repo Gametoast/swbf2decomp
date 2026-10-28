@@ -238,7 +238,7 @@ void HUD::ElementTarget::Target::Update(float fDeltaTime, HUD::ElementBitmap& bi
     {
 
         const GameObject* pTeamObject = target.obj;
-        color = pCharacter->mTeamPtr->mColor[pTeamObject->mTeam];
+        color = pCharacter->mTeamPtr->GetColor(pTeamObject->mTeam);
         color.a = bLocked ? 0xd0 : 0xa0;
     }
 

@@ -238,7 +238,7 @@ int Play(VOType eType, const GameObject* pSpeaker, const GameObject* pTarget,
 }
 }
 
-extern int netHeroKillerID[3];
+extern int netHeroKillerID[4];
 extern bool netHeroUnlocked[3];
 
 static char sEventParam;
@@ -1610,7 +1610,7 @@ void Character::SetUnit(Controllable* pUnit)
 }
 
 // FUNCTION: SWBF2 0x00453080
-void Character::InitAll()
+void Character::Validate()
 {
     return;
 }

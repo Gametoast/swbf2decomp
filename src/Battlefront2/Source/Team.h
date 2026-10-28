@@ -213,7 +213,8 @@ public:
 
     const GameObjectClass* GetHeroClass() const;
 
-    RedColor GetColor(int iTeam) const;
+    // FUNCTION: SWBF2 0x00429300
+    RedColor GetColor(int iTeam) const { return mColor[iTeam]; }
 
     virtual ~Team();
     virtual void Init();

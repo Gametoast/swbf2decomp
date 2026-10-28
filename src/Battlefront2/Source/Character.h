@@ -220,6 +220,7 @@ public:
     static void CreateAll(int iCount);
 
     static void InitAll();
+    void Validate();
     static void AddPlayer(int iPlayerId);
     static void RemovePlayer(int iPlayerId);
     void MakeAI();

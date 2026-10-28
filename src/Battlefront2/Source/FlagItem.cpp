@@ -399,7 +399,7 @@ void FlagItem::RenderHelper(unsigned char ucLod, float fAlpha, unsigned int uiFl
         Team* pTeam = pCharacter && pCharacter->mPlayerId == iLocal
                     ? pCharacter->mTeamPtr : Team::sTeams[1];
         const int iFlagTeam = mTeam;
-        RedColor color = pTeam->mColor[iFlagTeam];
+        RedColor color = pTeam->GetColor(iFlagTeam);
         const float fLife = mLifeTimer;
         const float fFade = fLife + 1.0f > 1.0f ? 1.0f : fLife + 1.0f;
         color.a = static_cast<unsigned char>(static_cast<int>(color.a * fAlpha * fFade));

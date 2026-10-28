@@ -1003,8 +1003,8 @@ void SpawnDisplay::SelectTeam(int iTeam)
     {
         mSpawnPointChange.Play(0, 0, false, true);
     }
-    m_pSideModel[0]->SetColor(pTeam->mColor[1]);
-    m_pSideModel[1]->SetColor(pTeam->mColor[2]);
+    m_pSideModel[0]->SetColor(pTeam->GetColor(1));
+    m_pSideModel[1]->SetColor(pTeam->GetColor(2));
     LuaHelper::CallGlobalProc("ifs_pc_spawnselect_animateicons", (float)iTeam - 1.0f);
     mTeamDisplayRot = 3.14159265f;
     m_pInfoBoxText[mClassIndex]->m_color.a = 0x80;
@@ -1252,7 +1252,7 @@ void SpawnDisplay::Initialize()
             break;
         }
         m_pSideModel[i]->SetModel(uModel);
-        m_pSideModel[i]->SetColor(pTeam->mColor[i + 1]);
+        m_pSideModel[i]->SetColor(pTeam->GetColor(i + 1));
         m_pSideModel[i]->Enable(true);
         m_pSideModel[i]->Visible(true);
         m_pSideModel[i]->BringToFront();

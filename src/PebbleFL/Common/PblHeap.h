@@ -32,7 +32,7 @@ public:
     KEY Value(int i) const { return mPool[i + 1].mKey; }
     bool IsEmpty() { return mCount == 0; }
 
-    bool IsFull() { return mCount == mMaxCount; }
+    bool IsFull() { return mCount == GetMaxSize(); }
 
     T Get(int i) { return mPool[i + 1].mObj; }
 

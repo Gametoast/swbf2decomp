@@ -31,6 +31,8 @@ public:
     // TEMPLATE: SWBF2 0x00439a80
     // PblHandle<GameObject>::PblHandle<GameObject>
     PblHandle(TYPE* pObject) : mObject(pObject), mSavedHandleId(pObject ? pObject->mHandleId : 0) {}
+    // TEMPLATE: SWBF2 0x0042e950
+    // PblHandle<GameObject const >::PblHandle<GameObject const >
     PblHandle() : mObject(0), mSavedHandleId(0) {}
 
     // TEMPLATE: SWBF2 0x0042cd10

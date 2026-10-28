@@ -469,6 +469,20 @@ public:
     static NetObjStateMap* Alloc();
     void Free();
 
+    void Add(NetObjState* state, unsigned int uniqId)
+    {
+        stateMap[uniqId] = state;
+    }
+
+    NetObjState* Find(unsigned int uniqId)
+    {
+        if (uniqId == 63)
+        {
+            return 0;
+        }
+        return stateMap[uniqId];
+    }
+
     NetObjState* stateMap[64];
     NetObjStateMap* next;
     unsigned int turn;
@@ -868,19 +882,8 @@ public:
 };
  
 
-struct RecentObjectHandle
-{
-
-    // FUNCTION: SWBF2 0x0042e950
-    RecentObjectHandle() : mObject(0), mHandleId(0) {}
-    ~RecentObjectHandle() {}
-
-    void* mObject;
-    unsigned int mHandleId;
-};
-
 struct RecentGuestObjectRecord
 {
-    RecentObjectHandle mObjectHandle;
+    PblHandle<const GameObject> mObjectHandle;
     float mRecordedTime;
 };

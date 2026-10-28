@@ -40,12 +40,6 @@ namespace FriendBuddyList
     bool __fastcall IsFriendBuddy(int ignored, int iPlayer);
 }
 
-// FUNCTION: SWBF2 0x00429300
-RedColor Team::GetColor(int iTeam) const
-{
-    return mColor[iTeam];
-}
-
 namespace Lua_Callbacks
 {
     // GLOBAL: SWBF2 0x01e57728

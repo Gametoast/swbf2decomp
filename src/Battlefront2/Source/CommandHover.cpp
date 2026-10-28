@@ -146,7 +146,7 @@ EntityClass* CommandHoverClass::Derive(unsigned int uHash)
 }
 
 // FUNCTION: SWBF2 0x00478f70
-unsigned int GetHoverClassRtti()
+unsigned int CommandHoverClass::GetRtti()
 {
     return CommandHoverClass::rttiHashCommandHoverClass;
 }

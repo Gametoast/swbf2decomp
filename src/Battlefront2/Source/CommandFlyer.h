@@ -27,6 +27,8 @@ public:
     virtual const char* GetDerivedRttiName() const;
     virtual void SetProperty(unsigned int uProperty, const char* pszValue);
 
+    static unsigned int GetRtti();
+
     static PblHash rttiHashCommandFlyerClass;
     static const char rttiNameCommandFlyerClass[];
 };

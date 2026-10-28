@@ -332,7 +332,7 @@ const Controllable* EntityBuildingAnimatedArmed::GetTurretPtr(int iIndex) const
 }
 
 // FUNCTION: SWBF2 0x00476730
-unsigned int GetArmedBuildingRttiHash()
+unsigned int EntityBuildingAnimatedArmed::GetRtti()
 {
     return EntityBuildingAnimatedArmed::rttiHashEntityBuildingAnimatedArmed;
 }

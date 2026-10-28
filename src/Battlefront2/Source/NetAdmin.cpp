@@ -2459,7 +2459,7 @@ void NetAdmin::ReceiveConsole()
     for (NetPacket* pPacket = NetComm::Recv(PKT_CONSOLE, PKT_NONE);
          pPacket; pPacket = NetComm::Recv(PKT_CONSOLE, PKT_NONE))
     {
-        int iDest = (unsigned char)pPacket->mData[3];
+        int iDest = GetSrc(pPacket);
         pPacket->BeginRead();
         unsigned char uCommand, uKey;
         pPacket->Read(uCommand);

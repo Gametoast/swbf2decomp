@@ -461,7 +461,7 @@ bool EntityHologram::Update(float fDeltaTime)
             Character* pCharacter = Character::FindPlayer(iPlayer);
             Team* pTeam = pCharacter ? pCharacter->mTeamPtr : Team::sTeams[1];
 
-            lightColor = pTeam->mColor[m_iTeam];
+            lightColor = pTeam->GetColor(m_iTeam);
         }
     }
 
@@ -646,7 +646,7 @@ void EntityHologram::Render(unsigned char ucViewport, float fDist, unsigned int 
         }
         Character* pCharacter = Character::FindPlayer(iPlayer);
         Team* pTeam = pCharacter ? pCharacter->mTeamPtr : Team::sTeams[1];
-        color = pTeam->mColor[m_iTeam];
+        color = pTeam->GetColor(m_iTeam);
     }
     else
     {

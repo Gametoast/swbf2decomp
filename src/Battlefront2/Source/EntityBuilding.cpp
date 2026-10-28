@@ -809,7 +809,7 @@ void EntityBuilding::Render(unsigned char uFlags, float fDist, unsigned int uMas
         Character* pCharacter = Character::FindPlayer(iPlayer);
         Team* pTeam = pCharacter ? pCharacter->mTeamPtr : Team::sTeams[1];
 
-        color *= pTeam->mColor[GetGameObject()->GetTeam()];
+        color *= pTeam->GetColor(GetGameObject()->GetTeam());
     }
 
     if (!mModel)

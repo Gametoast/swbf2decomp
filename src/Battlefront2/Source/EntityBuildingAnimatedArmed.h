@@ -69,6 +69,8 @@ public:
     virtual GameObject* AddToClient();
     virtual const Controllable* GetTurretPtr(int iIndex) const;
 
+    static unsigned int GetRtti();
+
     static PblHash rttiHashEntityBuildingAnimatedArmed;
     static const char rttiNameEntityBuildingAnimatedArmed[];
 

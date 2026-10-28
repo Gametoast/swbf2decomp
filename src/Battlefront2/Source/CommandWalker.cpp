@@ -170,7 +170,7 @@ void CommandWalker::SetProperty(unsigned int uProperty, const char* pszValue)
 }
 
 // FUNCTION: SWBF2 0x0047fe40
-unsigned int GetWalkerClassRtti()
+unsigned int CommandWalkerClass::GetRtti()
 {
     return CommandWalkerClass::rttiHashCommandWalkerClass;
 }

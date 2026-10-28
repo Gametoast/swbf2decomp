@@ -1096,7 +1096,7 @@ void HUD::ElementMap::UpdateTargetIcons(const Controllable* pPlayer)
         }
 
         const Team* pPlayerTeam = GetPlayerTeam();
-        RedColor color = pPlayerTeam->mColor[iTeam];
+        RedColor color = pPlayerTeam->GetColor(iTeam);
         const int iAffiliation = pTeam->GetAffiliation(pPlayerTeam->mTeamNumber);
         bitmap.m_color.a = (unsigned char)(int)(mTargetAll[mMode].mAlpha * 255.0f);
 
@@ -1326,7 +1326,7 @@ void HUD::ElementMap::UpdatePostIcons(float fElapsed, float fRotation)
             if (post.actor->GetGameObject() && post.actor->GetGameObject()->IsAlive())
             {
                 const int iTeam = post.actor->GetGameObject()->GetTeam();
-                bitmap.SetColorOnly(pTeam->mColor[iTeam]);
+                bitmap.SetColorOnly(pTeam->GetColor(iTeam));
 
                 const int iHoldTeam = post.actor->mHoldTeam;
                 if (iHoldTeam != 0 && iHoldTeam != iTeam)
@@ -1334,7 +1334,7 @@ void HUD::ElementMap::UpdatePostIcons(float fElapsed, float fRotation)
                     const float fTime = (float)fmod((double)GameLoop::GetMissionTime(), 1.0);
                     if (fTime < 0.25f)
                     {
-                        const RedColor holdColor = pTeam->mColor[iHoldTeam < 0 ? 0 : iHoldTeam];
+                        const RedColor holdColor = pTeam->GetColor(iHoldTeam < 0 ? 0 : iHoldTeam);
                         if (fTime < 0.125f)
                         {
                             bitmap.m_color = Interpolate(bitmap.m_color, holdColor, fTime * 8.0f);
@@ -1477,7 +1477,7 @@ void HUD::ElementMap::UpdateMarkerIcons()
             vPosition.z = vCenter.z + fOffsetZ;
             if (marker.color.a == 0)
             {
-                color = pTeam->mColor[((GameObject*)marker.actor)->GetTeam()];
+                color = pTeam->GetColor(((GameObject*)marker.actor)->GetTeam());
             }
         }
         bitmap.m_color = color;

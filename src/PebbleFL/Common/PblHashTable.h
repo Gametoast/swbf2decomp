@@ -34,19 +34,19 @@ public:
 
     PblHashTable() { Clear(); }
 
-    void Clear() { _Clear(_uiTable, SLOTS); _iNumEntries = 0; }
-    TYPE* Find(unsigned int uiHash) const { return (TYPE*)_Find(_uiTable, 2 * SLOTS, uiHash); }
+    void Clear() { _Clear(&_uiTable[0], SLOTS); _iNumEntries = 0; }
+    TYPE* Find(unsigned int uiHash) const { return (TYPE*)_Find(&_uiTable[0], 2 * SLOTS, uiHash); }
 
     void Store(unsigned int uiHash, TYPE* pValue)
     {
-        if (_Store(_uiTable, 2 * SLOTS, uiHash, (void*)pValue))
+        if (_Store(&_uiTable[0], 2 * SLOTS, uiHash, (void*)pValue))
         {
             ++_iNumEntries;
         }
     }
     void Remove(unsigned int uiHash)
     {
-        if (_Remove(_uiTable, 2 * SLOTS, uiHash))
+        if (_Remove(&_uiTable[0], 2 * SLOTS, uiHash))
         {
             --_iNumEntries;
         }

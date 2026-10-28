@@ -869,7 +869,7 @@ int ScriptCB_TeamStatsGetTeamColor(lua_State* L)
     Team* pTeam = Team::sTeams[(int)fTeam];
     if (pTeam)
     {
-        RedColor color = pTeam->mColor[(int)fSlot];
+        RedColor color = pTeam->GetColor((int)fSlot);
         lua_pushnumber(LuaHelper::mState, (float)color.r);
         lua_pushnumber(LuaHelper::mState, (float)color.g);
         lua_pushnumber(LuaHelper::mState, (float)color.b);
@@ -927,10 +927,10 @@ int ScriptCB_TeamStatsSetTitles(lua_State* L)
     {
         Red3DModelElementLite* pIcon = (Red3DModelElementLite*)RedInterfaceElement::Find(0xb0fcda7cu);
         pIcon->SetModel(GetSideIcon(pTeam1->GetSide()));
-        pIcon->SetColor(pTeam1->mColor[(int)fSlot]);
+        pIcon->SetColor(pTeam1->GetColor((int)fSlot));
         pIcon = (Red3DModelElementLite*)RedInterfaceElement::Find(0x14bdc17du);
         pIcon->SetModel(GetSideIcon(pTeam2->GetSide()));
-        pIcon->SetColor(pTeam2->mColor[(int)fSlot]);
+        pIcon->SetColor(pTeam2->GetColor((int)fSlot));
     }
     return 0;
 }
@@ -945,7 +945,7 @@ int ScriptCB_PersonalStatsSetTitles(lua_State* L)
         Team* pTeam = Team::sTeams[iTeam];
         Red3DModelElementLite* pIcon = (Red3DModelElementLite*)RedInterfaceElement::Find(0x262d6743u);
         pIcon->SetModel(GetSideIcon(pTeam->GetSide()));
-        pIcon->SetColor(pTeam->mColor[iSlot]);
+        pIcon->SetColor(pTeam->GetColor(iSlot));
     }
     return 0;
 }
@@ -1221,7 +1221,7 @@ int ScriptCB_GetAwardStats(lua_State* L)
                 Team* pAwardTeam = pCharacter->mTeamPtr;
                 pIcon->SetModel(GetSideIcon(pAwardTeam->GetSide()));
 
-                RedColor color = pAwardTeam->mColor[(int)fTeam];
+                RedColor color = pAwardTeam->GetColor((int)fTeam);
                 color.a = 0;
                 pIcon->SetColor(color);
                 LuaHelper::CallGlobalProc("ifs_awardstats_seticonstartside",

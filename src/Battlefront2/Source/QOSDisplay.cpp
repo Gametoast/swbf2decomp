@@ -26,7 +26,7 @@ extern float netSecondsPerTurn;
 extern unsigned int clientTurnNumber;
 extern int netTurnsPerSecond;
 extern int clientAhead;
-extern int clientHostTurnNumber;
+extern unsigned int clientHostTurnNumber;
 extern int clientUpdateCount;
 extern bool netIsClient;
 
