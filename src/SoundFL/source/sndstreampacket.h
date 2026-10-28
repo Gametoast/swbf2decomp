@@ -39,7 +39,7 @@ struct StreamPacket
             --mRefCount;
         }
 
-        if (mRefCount == 0)
+        if (0 == mRefCount)
         {
             if (mCallback != 0)
             {

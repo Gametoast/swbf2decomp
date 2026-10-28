@@ -10,8 +10,6 @@ namespace Snd
 // FUNCTION: SWBF2 0x007467b0
 SoftOutput::SoftOutput()
 {
-    mPlaybackPosition = 0;
-    mFlags = flags_stopped;
     mMixBuffer = 0;
     mEffectsEnabled = false;
 
@@ -273,7 +271,7 @@ bool SoftOutput::SetReverb(const I3DL2Reverb* const pReverb)
         return false;
     }
 
-    IDirectSoundFXI3DL2Reverb8* pFX = 0;
+    IDirectSoundFXI3DL2Reverb8* pFX;
     if (Engine::Failed(mDMO.mDMO.GetMediaObject()->QueryInterface(
                            IID_IDirectSoundFXI3DL2Reverb8, (void**)&pFX),
                        "source\\win\\sndsoftoutput.cpp", 0x188))
@@ -387,20 +385,20 @@ StreamPacket* SoftOutput::PostOutputMixFlusher::GetPacket(unsigned int  )
                                                     unsigned int uiOutput);
 
     StreamNodeSource* const pSource = StreamNodeSink::mConnection.mInputNode;
-    if (pSource == 0)
+    if (pSource != 0)
     {
-        return 0;
-    }
-
-    StreamPacket* const pPacket = pSource->GetPacket(StreamNodeSink::mConnection.mInputNodeOutputIndex);
-    if (pPacket != 0 && (pPacket->GetDiscontinuity() || pPacket->GetLast()))
-    {
+        StreamPacket* const pPacket = pSource->GetPacket(StreamNodeSink::mConnection.mInputNodeOutputIndex);
+        if (pPacket == 0 || (!pPacket->GetDiscontinuity() && !pPacket->GetLast()))
+        {
+            return pPacket;
+        }
         mSoftOutput->mDMO.StreamNode::Play(true);
         mSoftOutput->mSplitter.StreamNode::Play(true);
         mSoftOutput->mMixer.StreamNode::Play(true);
         pPacket->mFlags = (unsigned short)((pPacket->mFlags & ~1u) | 2u);
+        return pPacket;
     }
-    return pPacket;
+    return 0;
 }
 
 // FUNCTION: SWBF2 0x00747670

@@ -106,8 +106,8 @@ PblListSingle Sound::smSoundList;
 
 // FUNCTION: SWBF2 0x00739b70
 Sound::Properties::Properties()
+    : mSelObjectWeightList(&mObjectWeightList)
 {
-    mSelObjectWeightList = &mObjectWeightList;
     smPropertyList.AddLast(&mNode);
 }
 
@@ -222,7 +222,7 @@ void __cdecl Sound::RemoveAll()
         pSound->VoiceVirtual::Stop();
         pSound->SetBus(&Bus::smRootBus);
         pSound->mProperties = 0;
-        pSound->mNode.Remove();
+        smSoundList.GetFirst()->Remove();
     }
 }
 
@@ -675,7 +675,7 @@ unsigned int __cdecl Sound::FindParameterIndexByHashID(unsigned int uiHashID)
 {
     for (unsigned int i = 0; i < 11; ++i)
     {
-        if (smParameterFunctions[i].GetHashID() == uiHashID)
+        if (uiHashID == smParameterFunctions[i].GetHashID())
         {
             return i;
         }

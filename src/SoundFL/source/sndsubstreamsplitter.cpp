@@ -17,6 +17,11 @@ SubstreamSplitter::SubstreamSplitter()
 
 }
 
+// FUNCTION: SWBF2 0x0074ae90
+SubstreamSplitter::~SubstreamSplitter()
+{
+}
+
 }
 
 namespace Snd

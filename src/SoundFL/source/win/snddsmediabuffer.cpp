@@ -137,6 +137,17 @@ long __stdcall DSMediaBuffer::GetBufferAndLength(unsigned char** ppBuffer, unsig
 namespace Snd
 {
 
+// FUNCTION: SWBF2 0x00750f40
+unsigned int DSMediaBuffer::GetLength() const
+{
+    const DSMediaBuffer* pBuffer = (const DSMediaBuffer*)this;
+    return pBuffer->mLength;
+}
+}
+
+namespace Snd
+{
+
 // FUNCTION: SWBF2 0x00750f50
 long __stdcall DSMediaBuffer::GetMaxLength(unsigned long* pulMaxLength)
 {

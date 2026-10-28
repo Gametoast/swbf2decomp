@@ -5,17 +5,11 @@ namespace Snd
 
 // FUNCTION: SWBF2 0x0074c770
 StreamSourceMemory::StreamSourceMemory()
+    : mData(0),
+      mDataSize(0),
+      mAudioFrameSize(1),
+      mLooping(0)
 {
-
-    mSegment.mOffset = 0;
-    mSegment.mLength = 0;
-    mNextSegment.mOffset = 0;
-    mNextSegment.mLength = 0;
-    mData = 0;
-    mDataSize = 0;
-    mAudioFrameSize = 1;
-
-    mLooping = 0;
 }
 
 
@@ -169,9 +163,10 @@ void StreamSourceMemory::Setup(const StreamFormat& rFormat, void* const pData,
 
     if (mData)
     {
-        const unsigned int uiFrameSize = SampleInfo::GetFrameSize(mFormat.GetFormat());
+        unsigned int uiFrameSize = SampleInfo::GetFrameSize(mFormat.GetFormat());
+        uiFrameSize *= mFormat.GetNumChannels();
         mSegment.mLength = mDataSize;
-        mAudioFrameSize = uiFrameSize * mFormat.GetNumChannels();
+        mAudioFrameSize = uiFrameSize;
     }
     else
     {

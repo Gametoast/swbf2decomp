@@ -531,7 +531,8 @@ void __cdecl Voice::UpdateGain(Voice* pVoice, GainMatrix& rMatrix, bool bPanChan
     case Engine::mixConfig_Software:
         if (pVoice->Get3DMode())
         {
-            const float fGain = pVoice->mGain * pVoice->CalculateGainEstimate();
+            float fGain = pVoice->mGain;
+            fGain *= pVoice->CalculateGainEstimate();
             pVoice->Source3D::CalculateGain(fGain, pVoice->mReverbGain, rMatrix);
         }
         else

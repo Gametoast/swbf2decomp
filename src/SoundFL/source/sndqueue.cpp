@@ -70,9 +70,9 @@ void QueueBase::Empty(unsigned int uiElementSize, void* const pElements,
         }
         else
         {
-            mFull = false;
             mHead = 0;
             mTail = 0;
+            mFull = false;
         }
     }
 }

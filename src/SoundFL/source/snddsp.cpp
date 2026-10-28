@@ -42,8 +42,8 @@ void HighLowPassFilter::Process16(const short* const pIn, unsigned int uiNumSamp
 unsigned int TurningPointsFrequency16(const short* pSamples, unsigned int uiCount,
                                        unsigned int uiSampleRate)
 {
-    short prevData[2] = { 0, 0 };
     unsigned int turns = 0;
+    short prevData[2] = { 0, 0 };
     for (unsigned int i = 0; i < uiCount; ++i)
     {
         const short& sample = pSamples[i];

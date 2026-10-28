@@ -63,12 +63,12 @@ extern const GUID kEAX30BufferPropertySet =
     { 0x1B86B823, 0x22DF, 0x4EAE, { 0x8B, 0x3C, 0x12, 0x78, 0xCE, 0x54, 0x42, 0x27 } };
 // GLOBAL: SWBF2 0x00787cbc
 
-static const GUID kEAX20ListenerPropertySet =
+extern const GUID kEAX20ListenerPropertySet =
     { 0x0CF95C8F, 0xA3CC, 0x4849, { 0xB0, 0xB6, 0x83, 0x2E, 0xCC, 0x18, 0x22, 0xDF } };
 
 // GLOBAL: SWBF2 0x00787dbc
 
-static const GUID kAlternateDirectSoundClassId =
+extern const GUID kAlternateDirectSoundClassId =
     { 0xCA503B60, 0xB176, 0x11D4, { 0xA0, 0x94, 0xD0, 0xC0, 0xBF, 0x3A, 0x56, 0x0C } };
 
 // GLOBAL: SWBF2 0x009cfda0
@@ -243,9 +243,10 @@ void Engine::PrintDSError(long hr, const char* pcFile, unsigned int uiLine)
 
     switch (hr)
     {
-    case DSERR_UNSUPPORTED:
-
-        return;
+    case DSERR_ACCESSDENIED:
+        PrintDebugMessage("DirectSound Error: The request failed because "
+                          "access was denied.\n", pcFile, uiLine);
+        break;
 
     case DSERR_ALLOCATED:
         PrintDebugMessage("DirectSound Error: The request failed because "
@@ -253,39 +254,9 @@ void Engine::PrintDSError(long hr, const char* pcFile, unsigned int uiLine)
                           "in use by another caller. \n", pcFile, uiLine);
         break;
 
-    case DSERR_CONTROLUNAVAIL:
-        PrintDebugMessage("DirectSound Error: The buffer control (volume, "
-                          "pan, and so on) requested by the caller is not "
-                          "available. \n", pcFile, uiLine);
-        break;
-
-    case DSERR_INVALIDPARAM:
-        PrintDebugMessage("DirectSound Error: An invalid parameter was passed "
-                          "to the returning function. \n", pcFile, uiLine);
-        break;
-
-    case DSERR_INVALIDCALL:
-        PrintDebugMessage("DirectSound Error: This function is not valid for "
-                          "the current state of this object. \n",
-                          pcFile, uiLine);
-        break;
-
-    case DSERR_GENERIC:
-        PrintDebugMessage("DirectSound Error: An undetermined error occurred "
-                          "inside the DirectSound subsystem. \n",
-                          pcFile, uiLine);
-        break;
-
-    case DSERR_PRIOLEVELNEEDED:
-        PrintDebugMessage("DirectSound Error: The caller does not have the "
-                          "priority level required for the function to "
-                          "succeed. \n", pcFile, uiLine);
-        break;
-
-    case DSERR_OUTOFMEMORY:
-        PrintDebugMessage("DirectSound Error: The DirectSound subsystem could "
-                          "not allocate sufficient memory to complete the "
-                          "caller's request. \n", pcFile, uiLine);
+    case DSERR_ALREADYINITIALIZED:
+        PrintDebugMessage("DirectSound Error: The object is already "
+                          "initialized. \n", pcFile, uiLine);
         break;
 
     case DSERR_BADFORMAT:
@@ -293,20 +264,10 @@ void Engine::PrintDSError(long hr, const char* pcFile, unsigned int uiLine)
                           "not supported.\n", pcFile, uiLine);
         break;
 
-    case DSERR_NODRIVER:
-        PrintDebugMessage("DirectSound Error: No sound driver is available "
-                          "for use, or the given GUID is not a valid "
-                          "DirectSound device ID. \n", pcFile, uiLine);
-        break;
-
-    case DSERR_ALREADYINITIALIZED:
-        PrintDebugMessage("DirectSound Error: The object is already "
-                          "initialized. \n", pcFile, uiLine);
-        break;
-
-    case DSERR_NOAGGREGATION:
-        PrintDebugMessage("DirectSound Error: The object does not support "
-                          "aggregation. \n", pcFile, uiLine);
+    case DSERR_BADSENDBUFFERGUID:
+        PrintDebugMessage("DirectSound Error: The GUID specified in an "
+                          "audiopath file does not match a valid mix-in "
+                          "buffer.\n", pcFile, uiLine);
         break;
 
     case DSERR_BUFFERLOST:
@@ -314,33 +275,16 @@ void Engine::PrintDSError(long hr, const char* pcFile, unsigned int uiLine)
                           "and must be restored.\n", pcFile, uiLine);
         break;
 
-    case DSERR_OTHERAPPHASPRIO:
-        PrintDebugMessage("DirectSound Error: Another application has a "
-                          "higher priority level, preventing this call from "
-                          "succeeding. \n", pcFile, uiLine);
-        break;
-
-    case DSERR_UNINITIALIZED:
-        PrintDebugMessage("DirectSound Error: The IDirectSound8::Initialize "
-                          "method has not been called or has not been called "
-                          "successfully before other methods were called. \n",
-                          pcFile, uiLine);
-        break;
-
-    case DSERR_NOINTERFACE:
-        PrintDebugMessage("DirectSound Error: The requested COM interface is "
-                          "not available. \n", pcFile, uiLine);
-        break;
-
-    case DSERR_ACCESSDENIED:
-        PrintDebugMessage("DirectSound Error: The request failed because "
-                          "access was denied.\n", pcFile, uiLine);
-        break;
-
     case DSERR_BUFFERTOOSMALL:
         PrintDebugMessage("DirectSound Error: The buffer size is not great "
                           "enough to enable effects processing. \n",
                           pcFile, uiLine);
+        break;
+
+    case DSERR_CONTROLUNAVAIL:
+        PrintDebugMessage("DirectSound Error: The buffer control (volume, "
+                          "pan, and so on) requested by the caller is not "
+                          "available. \n", pcFile, uiLine);
         break;
 
     case DSERR_DS8_REQUIRED:
@@ -357,21 +301,77 @@ void Engine::PrintDSError(long hr, const char* pcFile, unsigned int uiLine)
                           "software. \n", pcFile, uiLine);
         break;
 
-    case DSERR_SENDLOOP:
-        PrintDebugMessage("DirectSound Error: A circular loop of send effects "
-                          "was detected. \n", pcFile, uiLine);
+    case DSERR_GENERIC:
+        PrintDebugMessage("DirectSound Error: An undetermined error occurred "
+                          "inside the DirectSound subsystem. \n",
+                          pcFile, uiLine);
         break;
 
-    case DSERR_BADSENDBUFFERGUID:
-        PrintDebugMessage("DirectSound Error: The GUID specified in an "
-                          "audiopath file does not match a valid mix-in "
-                          "buffer.\n", pcFile, uiLine);
+    case DSERR_INVALIDCALL:
+        PrintDebugMessage("DirectSound Error: This function is not valid for "
+                          "the current state of this object. \n",
+                          pcFile, uiLine);
+        break;
+
+    case DSERR_INVALIDPARAM:
+        PrintDebugMessage("DirectSound Error: An invalid parameter was passed "
+                          "to the returning function. \n", pcFile, uiLine);
+        break;
+
+    case DSERR_NOAGGREGATION:
+        PrintDebugMessage("DirectSound Error: The object does not support "
+                          "aggregation. \n", pcFile, uiLine);
+        break;
+
+    case DSERR_NODRIVER:
+        PrintDebugMessage("DirectSound Error: No sound driver is available "
+                          "for use, or the given GUID is not a valid "
+                          "DirectSound device ID. \n", pcFile, uiLine);
+        break;
+
+    case DSERR_NOINTERFACE:
+        PrintDebugMessage("DirectSound Error: The requested COM interface is "
+                          "not available. \n", pcFile, uiLine);
         break;
 
     case DSERR_OBJECTNOTFOUND:
         PrintDebugMessage("DirectSound Error: The requested object was not "
                           "found. \n", pcFile, uiLine);
         break;
+
+    case DSERR_OTHERAPPHASPRIO:
+        PrintDebugMessage("DirectSound Error: Another application has a "
+                          "higher priority level, preventing this call from "
+                          "succeeding. \n", pcFile, uiLine);
+        break;
+
+    case DSERR_OUTOFMEMORY:
+        PrintDebugMessage("DirectSound Error: The DirectSound subsystem could "
+                          "not allocate sufficient memory to complete the "
+                          "caller's request. \n", pcFile, uiLine);
+        break;
+
+    case DSERR_PRIOLEVELNEEDED:
+        PrintDebugMessage("DirectSound Error: The caller does not have the "
+                          "priority level required for the function to "
+                          "succeed. \n", pcFile, uiLine);
+        break;
+
+    case DSERR_SENDLOOP:
+        PrintDebugMessage("DirectSound Error: A circular loop of send effects "
+                          "was detected. \n", pcFile, uiLine);
+        break;
+
+    case DSERR_UNINITIALIZED:
+        PrintDebugMessage("DirectSound Error: The IDirectSound8::Initialize "
+                          "method has not been called or has not been called "
+                          "successfully before other methods were called. \n",
+                          pcFile, uiLine);
+        break;
+
+    case DSERR_UNSUPPORTED:
+
+        return;
 
     default:
         PrintDebugMessage("DirectSound Error: Undocumented DirectSound error "
@@ -834,8 +834,8 @@ bool Engine::DSClose()
     if (smDirectSound)
     {
         smDirectSound->Release();
-        smDirectSound = 0;
     }
+    smDirectSound = 0;
 
     if (smSampleRAM)
     {

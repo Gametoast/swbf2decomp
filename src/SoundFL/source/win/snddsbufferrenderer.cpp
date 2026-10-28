@@ -189,15 +189,11 @@ void DSBufferRenderer::ResetGain()
         return;
     }
 
-    int* pCurrent = mGainCurrent;
     for (unsigned int i = 0; i < mNumChannels; ++i)
     {
-        *pCurrent = pCurrent[-2];
-        ++pCurrent;
+        mGainCurrent[i] = mGainCurrent[i - 2];
     }
 }
-
-static const char kFile[] = "source\\win\\snddsbufferrenderer.cpp";
 
 // FUNCTION: SWBF2 0x0073e250
 void DSBufferRenderer::StopBuffer()
@@ -216,7 +212,7 @@ void DSBufferRenderer::StopBuffer()
     DSBuffer::Stop();
 
     if (!Engine::Succeeded(DSBuffer::GetBuffer()->SetCurrentPosition(0),
-                           kFile, 578))
+                           "source\win\snddsbufferrenderer.cpp", 578))
     {
         PblTraceP("DSBufferRenderer : unable to reset buffer play cursor\n");
 
@@ -336,7 +332,8 @@ void DSBufferRenderer::Flush()
         {
             DSBuffer::Stop();
 
-            if (!Engine::Succeeded(pBuffer->SetCurrentPosition(0), kFile, 578))
+            const HRESULT hResult = pBuffer->SetCurrentPosition(0);
+            if (!Engine::Succeeded(hResult, "source\\win\\snddsbufferrenderer.cpp", 578))
             {
                 PblTraceP("DSBufferRenderer : unable to reset buffer"
                           " play cursor\n");
@@ -347,10 +344,10 @@ void DSBufferRenderer::Flush()
         unsigned long ulBytes1;
         void* pAudio2;
         unsigned long ulBytes2;
-        if (Engine::Succeeded(pBuffer->Lock(0, mBufferSize,
-                                            &pAudio1, &ulBytes1,
-                                            &pAudio2, &ulBytes2, 0),
-                              kFile, 85))
+        const HRESULT hResult = pBuffer->Lock(0, mBufferSize,
+                                              &pAudio1, &ulBytes1,
+                                              &pAudio2, &ulBytes2, 0);
+        if (Engine::Succeeded(hResult, "source\\win\\snddsbufferrenderer.cpp", 85))
         {
             if (pAudio1 != 0)
             {
@@ -757,7 +754,7 @@ void DSBufferRenderer::UpdateObject()
     unsigned long ulPlayPos;
     unsigned long ulWritePos;
     if (!Engine::Succeeded(pBuffer->GetCurrentPosition(&ulPlayPos, &ulWritePos),
-                           kFile, 268))
+                           "source\win\snddsbufferrenderer.cpp", 268))
     {
         return;
     }
@@ -804,11 +801,11 @@ void DSBufferRenderer::UpdateObject()
     }
 
     unsigned int uiLockSize = mBufferSize - uiBuffered;
-    const bool bLockBehindPlay =
+    const int iLockBehindPlay =
         DSBuffer::IsPlaying() ? (ulPlayPos >= mNextLockPos)
                               : (ulPlayPos > mNextLockPos);
     const unsigned int uiToPlayCursor =
-        bLockBehindPlay ? (ulPlayPos - mNextLockPos)
+        iLockBehindPlay ? (ulPlayPos - mNextLockPos)
                         : (ulPlayPos + (mBufferSize - mNextLockPos));
 
     if (uiLockSize > uiToPlayCursor)
@@ -827,7 +824,7 @@ void DSBufferRenderer::UpdateObject()
         if (!Engine::Succeeded(pBuffer->Lock(mNextLockPos, uiLockSize,
                                              &pAudio1, &ulBytes1,
                                              &pAudio2, &ulBytes2, 0),
-                               kFile, 361))
+                               "source\\win\\snddsbufferrenderer.cpp", 361))
         {
             return;
         }
@@ -956,7 +953,7 @@ bool DSBufferRenderer::SetFormat(SampleInfo::Format eFormat,
                 caps.dwSize = sizeof(DSBCAPS);
 
                 if (Engine::Succeeded(DSBuffer::GetBuffer()->GetCaps(&caps),
-                                      kFile, 884))
+                                      "source\win\snddsbufferrenderer.cpp", 884))
                 {
                     mBufferSize = caps.dwBufferBytes;
                     mFrameSize = SampleInfo::GetFrameSize(mFormat)

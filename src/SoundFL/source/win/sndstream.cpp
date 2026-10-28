@@ -277,8 +277,8 @@ namespace Snd
 bool Stream::AppendSegments(PblFileChunk& chunk, unsigned int uiHashID, const char* pcFileName,
                             void (__cdecl* pfnIdle)(StreamBase*, void*), void* pIdleData)
 {
-    const bool bWasClosed = !IsOpen();
     bool bOk = false;
+    const bool bWasClosed = !IsOpen();
 
     Engine::GetThreadUpdate()->Pause(false);
     if (StreamBase::AppendSegments(chunk, uiHashID, pcFileName, 0, 0, false))

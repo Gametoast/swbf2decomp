@@ -152,9 +152,8 @@ PblListSingle SoundStream::smList;
 
 // FUNCTION: SWBF2 0x007366f0
 SoundStream::Properties::Properties()
-    : mStreamID(0)
+    : mSelObjectWeightList(&mObjectWeightList), mStreamID(0)
 {
-    mSelObjectWeightList = &mObjectWeightList;
     smPropertyList.AddLast(&mNode);
 }
 

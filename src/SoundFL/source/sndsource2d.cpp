@@ -36,9 +36,8 @@ bool Source2D::Read(PblFileChunk& chunk, unsigned int uiPropertyID)
     {
         return false;
     }
-    PblFile* const pFile = chunk._pFile;
-    pFile->Read8();
-    SetPan(Clamp(pFile->ReadFloat(), -1.0f, 1.0f));
+    chunk._pFile->Read8();
+    SetPan(Clamp(chunk._pFile->ReadFloat(), -1.0f, 1.0f));
     return true;
 }
 

@@ -111,7 +111,7 @@ SampleBankBase::SampleBankBase(unsigned int uiHashID, unsigned int uiSize,
       mFormat(eFormat),
       mHandle(),
       mNode(),
-      mTemplate(bTemplate)
+      mTemplate(bTemplate != false)
 {
     if (uiSize && bAllocate && !EngineBase::smSoundRAMAllocator.Alloc(uiSize, mHandle))
     {

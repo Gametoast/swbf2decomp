@@ -14,8 +14,7 @@ class SubstreamSplitter : public StreamNode,
 public:
     SubstreamSplitter();
 
-    // FUNCTION: SWBF2 0x0074ae90
-    virtual ~SubstreamSplitter() {}
+    virtual ~SubstreamSplitter();
 
     virtual StreamPacket* GetPacket(unsigned int uiSubstream);
     void Flush();

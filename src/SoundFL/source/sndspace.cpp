@@ -389,8 +389,8 @@ void Space::Read(PblFileChunk& chunk)
                     continue;
                 }
                 entry._pFile->Read8();
-                const unsigned int uiHashID = entry._pFile->Read32();
-                const float fGainFactor = entry._pFile->ReadFloat();
+                const unsigned int uiHashID = child._pFile->Read32();
+                const float fGainFactor = child._pFile->ReadFloat();
                 Space* const pOther = Find(uiHashID);
                 if (pOther)
                 {
@@ -423,7 +423,7 @@ void __cdecl Space::Load(PblFileChunk& chunk, bool bOnce)
 
         Space* const pSpace = new Space(true);
         pSpace->Read(child);
-        if (pSpace->mHashID == smDefaultSpace.mHashID)
+        if (smDefaultSpace.mHashID == pSpace->mHashID)
         {
             smDefaultSpace.SetReverbPreset((I3DL2ReverbPreset*)pSpace->mReverbPreset);
             smDefaultSpace.CopyParameters(*pSpace);

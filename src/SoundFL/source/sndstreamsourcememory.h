@@ -20,6 +20,12 @@ public:
     class SegmentProperties
     {
     public:
+        SegmentProperties()
+            : mOffset(0),
+              mLength(0)
+        {
+        }
+
         unsigned int mOffset;
         unsigned int mLength;
     };

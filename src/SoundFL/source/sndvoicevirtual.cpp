@@ -19,7 +19,7 @@ void VoiceVirtual::ResetPriority()
 // FUNCTION: SWBF2 0x00737be0
 void VoiceVirtual::Pause()
 {
-    if (mFlags & flags_active)
+    if (((unsigned char)(mFlags >> 1)) & 1)
     {
         mVoiceManager->RemoveVoice(this);
         mFlags &= ~(unsigned int)flags_active;

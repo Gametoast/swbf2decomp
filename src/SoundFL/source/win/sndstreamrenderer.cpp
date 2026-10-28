@@ -114,7 +114,7 @@ bool StreamRenderer::SetFormat(SampleInfo::Format eFormat,
 
     mChannelMask = ulFlags;
 
-    bool bOk = true;
+    bool bOk;
 
     if (mHardwareRenderer != 0)
     {
@@ -128,6 +128,10 @@ bool StreamRenderer::SetFormat(SampleInfo::Format eFormat,
             mFrequency = 0;
             return false;
         }
+    }
+    else
+    {
+        bOk = true;
     }
 
     mFormat = eFormat;

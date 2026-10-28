@@ -271,10 +271,10 @@ void File::Open(char const* pcFileName, unsigned int uiAccessFlags, unsigned int
     mAccessFlags = uiAccessFlags;
     mBufferSize = uiBufferSize;
     mSectorSize = uiSectorSize;
-    mAlignment = uiAlignment;
     mFilePos = 0;
     mBlockSize = 0;
     mFileOp = fileOp_open;
+    mAlignment = uiAlignment;
     CompleteFileOp();
 }
 

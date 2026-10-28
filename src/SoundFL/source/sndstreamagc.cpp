@@ -13,9 +13,9 @@ StreamAGC::StreamAGC()
       mGainDest(0x7FFF),
       mGain(0x7FFF),
       mGainMax(0x7FFF),
-      mShiftRateMask(0xFFFFFFF8u),
       mShiftRate(4)
 {
+    mShiftRateMask = 0xFFFFFFF8u;
 }
 
 // FUNCTION: SWBF2 0x00741e00

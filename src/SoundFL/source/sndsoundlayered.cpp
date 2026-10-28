@@ -130,11 +130,9 @@ void Allocator<SoundLayered::FireForgetLayer>::operator delete(void* p,
 // FUNCTION: SWBF2 0x00738f40
 void SoundLayered::Open()
 {
-    FireForgetLayer* pStorage = (FireForgetLayer*)smFireForgetLayerStorage;
-
     for (unsigned int i = 0; i < 64; ++i)
     {
-        new (&pStorage[i], false) FireForgetLayer();
+        new (&((FireForgetLayer*)smFireForgetLayerStorage)[i], false) FireForgetLayer();
     }
 
     smFireForgetLayers = (FireForgetLayer*)smFireForgetLayerStorage;

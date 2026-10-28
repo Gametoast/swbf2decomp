@@ -10,13 +10,6 @@
 namespace Snd
 {
 
-// FUNCTION: SWBF2 0x00750f40
-unsigned int Snd::DSMediaBuffer::GetLength() const
-{
-    const DSMediaBuffer* pBuffer = (const DSMediaBuffer*)this;
-    return pBuffer->mLength;
-}
-
 // FUNCTION: SWBF2 0x0074d530
 bool DSDMO::DeliverInputData(void* const pData, unsigned int uiSize)
 {
@@ -28,14 +21,14 @@ bool DSDMO::DeliverInputData(void* const pData, unsigned int uiSize)
 unsigned int DSDMO::GetOutputData(void* const pData, unsigned int uiSize)
 {
     DSMediaBuffer buffer;
-    IMediaBuffer* pMediaBuffer = 0;
+    IMediaBuffer* pMediaBuffer;
     DSMediaBuffer::Create((unsigned char*)pData, uiSize, IID_IMediaBuffer,
                           (void**)&pMediaBuffer, &buffer);
 
     DMO_OUTPUT_DATA_BUFFER output = { pMediaBuffer, 0, 0, 0 };
     DWORD dwStatus;
     const HRESULT hr = mObject->ProcessOutput(1, 1, &output, &dwStatus);
-    unsigned int uiLength = ((Snd::DSMediaBuffer*)(&buffer))->GetLength();
+    unsigned int uiLength = buffer.GetLength();
     pMediaBuffer->Release();
     if (Engine::Failed(hr, "source\\win\\snddsdmo.cpp", 252))
     {

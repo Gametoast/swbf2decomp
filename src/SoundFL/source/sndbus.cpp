@@ -233,7 +233,8 @@ void __cdecl Bus::Load(PblFileChunk& chunk, bool bOnce)
 
         child._pFile->Read32();
         child = chunk.ReadNextChild();
-        smRootBus.AddSubBus(0)->Read(child);
+        Bus* const pBus = smRootBus.AddSubBus(0);
+        pBus->Read(child);
         if (bOnce)
         {
             break;

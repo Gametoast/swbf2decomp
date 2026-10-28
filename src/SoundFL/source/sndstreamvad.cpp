@@ -11,10 +11,10 @@ namespace Snd
 // FUNCTION: SWBF2 0x00741fc0
 StreamVAD::StreamVAD()
     : mSampleRate(0x1F40),
-      mReleaseTimeBytes(0x0AF0),
       mReleaseTimeBytesRemaining(0),
       mActive(false)
 {
+    mReleaseTimeBytes = 0x0AF0;
 }
 
 // FUNCTION: SWBF2 0x00742050
@@ -51,10 +51,11 @@ StreamPacket* StreamVAD::GetPacket(unsigned int uiOutput)
             bool bVoice = false;
 
             if (DSP::SignalPower16((const short*)pPacket->mBuffer,
-                                   uiBytes >> 1) > 30000)
+                                   pPacket->mBufferUsed >> 1) > 30000)
             {
+                const unsigned int uiNumSamples = pPacket->mBufferUsed >> 1;
                 const unsigned int uiFrequency = DSP::TurningPointsFrequency16(
-                    (const short*)pPacket->mBuffer, pPacket->mBufferUsed >> 1,
+                    (const short*)pPacket->mBuffer, uiNumSamples,
                     mSampleRate);
                 if ((uiFrequency > 120 && uiFrequency < 7000) ||
                     uiFrequency - 10001 <= 1998)
@@ -130,8 +131,8 @@ void Snd::StreamVAD::Flush()
         pPacket->Unlock();
     }
 
-    mActive = false;
     mReleaseTimeBytesRemaining = 0;
+    mActive = false;
 }
 
 // FUNCTION: SWBF2 0x00742350

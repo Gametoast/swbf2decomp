@@ -55,7 +55,7 @@ void StreamCaptureSourceBase::Flush()
     {
         StreamPacket* const pPacket = mPackets + uiIndex;
 
-        if (pPacket->mRefCount == 0 && pPacket->mBufferUsed != 0)
+        if (!pPacket->IsLocked() && pPacket->mBufferUsed != 0)
         {
             pPacket->mBufferUsed = 0;
         }
@@ -74,7 +74,7 @@ StreamPacket* StreamCaptureSourceBase::GetPacket(unsigned int  )
 
     const unsigned char ucIndex = mLockPacketIndex;
     StreamPacket* const pPacket = mPackets + ucIndex;
-    if (pPacket->mBufferUsed == 0 || pPacket->mRefCount != 0)
+    if (pPacket->mBufferUsed == 0 || pPacket->IsLocked())
     {
         return 0;
     }
