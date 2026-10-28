@@ -37,8 +37,6 @@ unsigned int DSDMO::GetOutputData(void* const pData, unsigned int uiSize)
     return uiLength;
 }
 
-static const char kFile[] = "source\\win\\snddsdmo.cpp";
-
 static const GUID kMediaTypeAudio =
     { 0x73647561, 0x0000, 0x0010, { 0x80, 0x00, 0x00, 0xAA, 0x00, 0x38, 0x9B, 0x71 } };
 
@@ -74,7 +72,7 @@ bool DSDMO::Create(const _GUID& rCLSID, const StreamFormat* const pInput,
 {
     if (Engine::Failed(CoCreateInstance(rCLSID, 0, CLSCTX_INPROC,
                                         IID_IMediaObject, (void**)&mObject),
-                       kFile, 88))
+                       "source\\win\\snddsdmo.cpp", 88))
     {
         return false;
     }
@@ -94,12 +92,12 @@ bool DSDMO::Create(const _GUID& rCLSID, const StreamFormat* const pInput,
     MediaType output(*pOutput);
 
     if (Engine::Succeeded(mObject->SetInputType(0, &input, DMO_SET_TYPEF_TEST_ONLY),
-                          kFile, 105)
-        && Engine::Succeeded(mObject->SetInputType(0, &input, 0), kFile, 108)
+                          "source\\win\\snddsdmo.cpp", 105)
+        && Engine::Succeeded(mObject->SetInputType(0, &input, 0), "source\\win\\snddsdmo.cpp", 108)
         && Engine::Succeeded(mObject->SetOutputType(0, &output, DMO_SET_TYPEF_TEST_ONLY),
-                             kFile, 110)
-        && Engine::Succeeded(mObject->SetOutputType(0, &output, 0), kFile, 113)
-        && Engine::Succeeded(mObject->AllocateStreamingResources(), kFile, 115))
+                             "source\\win\\snddsdmo.cpp", 110)
+        && Engine::Succeeded(mObject->SetOutputType(0, &output, 0), "source\\win\\snddsdmo.cpp", 113)
+        && Engine::Succeeded(mObject->AllocateStreamingResources(), "source\\win\\snddsdmo.cpp", 115))
     {
         return true;
     }

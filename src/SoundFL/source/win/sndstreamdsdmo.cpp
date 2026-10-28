@@ -356,13 +356,9 @@ StreamPacket* StreamDSDMO::GetPacket(unsigned int uiOutput)
     {
         Update();
         pPacket = StreamSourceProducer::GetPacket(uiOutput);
-        if (pPacket == 0)
-        {
-            return 0;
-        }
     }
 
-    if ((pPacket->mFlags & 0x01) != 0)
+    if (pPacket != 0 && (pPacket->mFlags & 0x01) != 0)
     {
 
         StreamNode::Stop();

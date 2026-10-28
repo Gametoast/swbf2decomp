@@ -163,7 +163,7 @@ public:
     static void Update();
     static void Send(int iDest, PktType uType, NetPacket* pPacket);
     static void Send(int iDest, int uType, NetPktGroup* pGroup);
-    static bool Recv(NetPktGroup* pGroup, int eType);
+    static bool Recv(NetPktGroup& group, PktType eType);
     static void Disconnect(int iDest);
 };
  

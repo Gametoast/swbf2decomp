@@ -1539,6 +1539,11 @@
       <WholeProgramOptimization Condition="'$(Configuration)'=='Release'">true</WholeProgramOptimization>
       <InlineFunctionExpansion Condition="'$(Configuration)'=='Release'">OnlyExplicitInline</InlineFunctionExpansion>
     </ClCompile>
+    <ClCompile Include="src\Battlefront2\Source\ProceduralAnimation.cpp">
+      <BufferSecurityCheck>false</BufferSecurityCheck>
+      <WholeProgramOptimization Condition="'$(Configuration)'=='Release'">true</WholeProgramOptimization>
+      <InlineFunctionExpansion Condition="'$(Configuration)'=='Release'">OnlyExplicitInline</InlineFunctionExpansion>
+    </ClCompile>
     <ClCompile Include="src\Battlefront2\Source\NetGame.cpp">
       <IntrinsicFunctions Condition="'$(Configuration)'=='Release'">true</IntrinsicFunctions>
       <Optimization>Disabled</Optimization>
@@ -1801,11 +1806,6 @@
       <InlineFunctionExpansion Condition="'$(Configuration)'=='Release'">OnlyExplicitInline</InlineFunctionExpansion>
     </ClCompile>
     <ClCompile Include="src\Battlefront2\Source\PowerupUtility.cpp">
-      <BufferSecurityCheck>false</BufferSecurityCheck>
-      <WholeProgramOptimization Condition="'$(Configuration)'=='Release'">true</WholeProgramOptimization>
-      <InlineFunctionExpansion Condition="'$(Configuration)'=='Release'">OnlyExplicitInline</InlineFunctionExpansion>
-    </ClCompile>
-    <ClCompile Include="src\Battlefront2\Source\ProceduralAnimation.cpp">
       <BufferSecurityCheck>false</BufferSecurityCheck>
       <WholeProgramOptimization Condition="'$(Configuration)'=='Release'">true</WholeProgramOptimization>
       <InlineFunctionExpansion Condition="'$(Configuration)'=='Release'">OnlyExplicitInline</InlineFunctionExpansion>

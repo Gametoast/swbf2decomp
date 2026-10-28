@@ -333,7 +333,6 @@ inline CommandPost* CommandPostHandle::operator->() const
  
  
 
-unsigned int __fastcall GetDoorEntityId(const unsigned int* pRecord);
 
 inline void CommandPostHandle::operator=(CommandPost* pPost)
 {

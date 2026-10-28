@@ -191,8 +191,14 @@ bool useMatchService = true;
 // GLOBAL: SWBF2 0x007e8eda
 bool gCableConnected = true;
 
+enum GameMode
+{
+    GM_LOBBY = 0,
+    GM_GAME = 1
+};
+
 // GLOBAL: SWBF2 0x007e8ee0
-int netHostSetupReady = 1;
+static GameMode setupMode = GM_GAME;
 
 // GLOBAL: SWBF2 0x01ead4ae
 bool netGameError;
@@ -756,10 +762,12 @@ bool NetSetup::IsErrorDismissed()
     switch (gNetSetup_errState)
     {
     case 0:
-        pGui->OpenError((GuiManager::eErrorSeverity)iSeverity,
-                        RedLocalizeDB::Find(PblHash(pcError), false), 0, 0);
+    {
+        const unsigned short* pLocalizedStr = RedLocalizeDB::Find(PblHash(pcError), false);
+        pGui->OpenError((GuiManager::eErrorSeverity)iSeverity, pLocalizedStr, 0, 0);
         gNetSetup_errState = 1;
         break;
+    }
     case 2:
         bDismissed = true;
         break;
@@ -891,6 +899,7 @@ void ShellPlayer::Init()
 // FUNCTION: SWBF2 0x005dbd20
 CNetHostGame::CNetHostGame()
 {
+    unsigned int i;
     FindAddress();
 
     PlayerProfile::tProfile* pProfile = PlayerProfile::GetCurProfile();
@@ -902,7 +911,7 @@ CNetHostGame::CNetHostGame()
     netLoginError = false;
     netGameError = false;
     NetComm::AdvanceTime(true);
-    netHostSetupReady = 0;
+    setupMode = GM_LOBBY;
 
     changeCount = 0;
     timer = 0.0f;
@@ -921,9 +930,9 @@ CNetHostGame::CNetHostGame()
     if (NetGame::IsDedicated())
     {
         hostPlayer = -1;
-        for (unsigned int i = 0; i < 2; i++)
+        for (unsigned int joyId = 0; joyId < 2; joyId++)
         {
-            NetCommP::GetLocalIndex(i) = -1;
+            NetCommP::GetLocalIndex(joyId) = -1;
         }
         NetComm::SetPing(64, 33);
     }
@@ -932,7 +941,6 @@ CNetHostGame::CNetHostGame()
         FLInputManager* pInput = FLInputManager::Instance();
         int aiJoystick[1];
         unsigned int uiCount = 0;
-        unsigned int j;
 
         if (autoNetEnabled)
         {
@@ -940,74 +948,75 @@ CNetHostGame::CNetHostGame()
         }
         else
         {
-            for (j = 0; j < 1; j++)
+            for (i = 0; i < 1; i++)
             {
-                bool bActive = ((unsigned char*)pInput)[0x2e6c + j] != 0;
+                bool bActive = pInput->mActiveControllers[i];
                 if (bActive)
                 {
-                    aiJoystick[uiCount++] = j;
+                    aiJoystick[uiCount++] = i;
                 }
             }
         }
-        for (j = uiCount; j < 1; j++)
+        for (i = uiCount; i < 1; i++)
         {
-            aiJoystick[j] = -1;
+            aiJoystick[i] = -1;
         }
 
-        for (j = 0; j < 2; j++)
+        for (i = 0; i < 2; i++)
         {
             int iJoystick = -1;
-            if (j < 1)
+            if (i < 1)
             {
-                iJoystick = aiJoystick[j];
+                iJoystick = aiJoystick[i];
             }
 
             if (iJoystick >= 0)
             {
                 hostPlayer = 0;
-                NetCommP::GetConnected(j) = true;
-                NetCommP::GetLastRecv(j) = NetComm::GetTime();
-                NetCommP::GetLocalIndex(j) = j;
-                NetCommP::GetPipe(j) = PIPE_LAN;
+                NetCommP::GetConnected(i) = true;
+                NetCommP::GetLastRecv(i) = NetComm::GetTime();
+                NetCommP::GetLocalIndex(i) = i;
+                NetCommP::GetPipe(i) = PIPE_LAN;
 
                 char acName[64];
                 PblUnicode::ustrncnv(acName, PlayerProfile::GetProfile(iJoystick)->GetName(), 64);
-                NetGameP::SetPlayerName(j, acName);
-                if (j == 0)
+                NetGameP::SetPlayerName(i, acName);
+                if (i == 0)
                 {
                     *NetGameP::GetHostIndex(0) = 0;
                 }
-                *NetGameP::GetClientOfIndex(j) = 0;
-                if (j == 0)
+                *NetGameP::GetClientOfIndex(i) = 0;
+                if (i == 0)
                 {
-                    NetGameP::SetGuestOf(j, -1);
+                    NetGameP::SetGuestOf(i, -1);
                 }
                 else
                 {
-                    NetGameP::SetGuestOf(j, 0);
+                    NetGameP::SetGuestOf(i, 0);
                 }
-                if (j > 0)
+                if (i > 0)
                 {
-                    UpdateCurMaxPlayers((unsigned __int64)1 << j, true);
+                    UpdateCurMaxPlayers((unsigned __int64)1 << i, true);
                 }
             }
             else
             {
-                NetCommP::GetLocalIndex(j) = -1;
+                NetCommP::GetLocalIndex(i) = -1;
             }
         }
         changeCount++;
     }
 
     shellState.canceled = false;
-    for (unsigned int j = 0; j < 64; j++)
+    for (i = 0; i < 64; i++)
     {
-        shellState.players[j].Init();
-        clientAddrs[j] = NetAddr();
-        bootTime[j] = 0.0f;
+        shellState.players[i].Init();
+        clientAddrs[i] = NetAddr();
+        bootTime[i] = 0.0f;
     }
 
-    strlcpy(netGameType, "duel", sizeof(netGameType));
+    char* gameType = "duel";
+    strlcpy(netGameType, gameType, sizeof(netGameType));
     NetMatch::StartRegisterGame(useMatchService);
     isInSession = true;
     if (!NetSetup::InNetGame())
@@ -1016,10 +1025,10 @@ CNetHostGame::CNetHostGame()
     }
     NetMatch::GetSessionId(netSessionId);
 
-    for (unsigned int j = 0; j < 64; j++)
+    for (i = 0; i < 64; i++)
     {
-        playerChangeTurn[j] = 0;
-        playerChangedMask[j] = 0;
+        playerChangeTurn[i] = 0;
+        playerChangedMask[i] = 0;
     }
     playerChangedSendMask = 0;
 
@@ -1045,11 +1054,22 @@ CNetHostGame::CNetHostGame()
 // FUNCTION: SWBF2 0x005dc240
 CNetHostGame::~CNetHostGame()
 {
-    if (shellState.canceled)
+    int i;
+    if (!shellState.canceled)
+    {
+        for (i = 0; i < netCurMaxPlayers; i++)
+        {
+            if (NetComm::IsConnected(i))
+            {
+                intraSessionPlayers[i].playerId = shellState.players[i].playerId;
+            }
+        }
+    }
+    else
     {
         netInGame = false;
         isInSession = false;
-        for (int i = 0; i < netCurMaxPlayers; i++)
+        for (i = 0; i < netCurMaxPlayers; i++)
         {
             if (NetComm::IsConnected(i))
             {
@@ -1061,25 +1081,15 @@ CNetHostGame::~CNetHostGame()
             NetComm::Disconnect(64);
         }
         NetMatch::EndRegisterGame();
-        for (int j = 0; j < 64; j++)
+        for (i = 0; i < 64; i++)
         {
-            NetGame::SetPlayerGSID(j, 0);
-            NetGame::ClearPlayerCDKey(j);
-            NetGameP::SetPlayerName(j, "");
+            NetGame::SetPlayerGSID(i, 0);
+            NetGame::ClearPlayerCDKey(i);
+            NetGameP::SetPlayerName(i, "");
         }
         NetGameP::GetHostIndex() = -1;
         netIsDedicated = false;
         NetQOS::CancelGame();
-    }
-    else
-    {
-        for (int k = 0; k < netCurMaxPlayers; k++)
-        {
-            if (NetComm::IsConnected(k))
-            {
-                intraSessionPlayers[k].playerId = shellState.players[k].playerId;
-            }
-        }
     }
 }
 
@@ -1114,12 +1124,20 @@ bool CNetHostGame::IsCancelled()
     bool bCancelled = true;
     for (int i = 0; i < netCurMaxPlayers; i++)
     {
-        if (NetComm::IsConnected(i) && NetGame::GetJoystickIndex(i) < 0 &&
-            !shellState.players[i].quitRequested)
+        if (!NetComm::IsConnected(i))
         {
-            bCancelled = false;
-            break;
+            continue;
         }
+        if (NetGame::GetJoystickIndex(i) >= 0)
+        {
+            continue;
+        }
+        if (shellState.players[i].quitRequested)
+        {
+            continue;
+        }
+        bCancelled = false;
+        break;
     }
     return bCancelled;
 }
@@ -1208,13 +1226,15 @@ void AddAutoNetMission(char const* pcArg, int iA, int iB);
 // FUNCTION: SWBF2 0x005e4030
 void AddAutoNetMission(char const* pcArg, int iA, int iB)
 {
-    if (autoNetMissionCount < 256)
+    if (autoNetMissionCount >= 256)
     {
-        stAutoNetMission& mission = autoNetMissions[autoNetMissionCount++];
-        strlcpy(mission.name, pcArg, sizeof(mission.name));
-        mission.tickets[0] = iA;
-        mission.tickets[1] = iB;
+        return;
     }
+    int i = autoNetMissionCount;
+    char* mission = autoNetMissions[autoNetMissionCount++].name;
+    strlcpy(mission, pcArg, sizeof(autoNetMissions[i].name));
+    autoNetMissions[i].tickets[0] = iA;
+    autoNetMissions[i].tickets[1] = iB;
 }
 
 // FUNCTION: SWBF2 0x005e3fb0
@@ -1257,7 +1277,15 @@ void NetSetupP::UpdateScreen()
         else
         {
             NetSetup::RequestQuit(NetGame::GetTurnNumber());
-            ShellLoop::SetNetCableErrorOnEnter(GuiManager::ERROR_LOGOFF_CABLE, NetComm::IsLAN() ? 0 : "common.mp.errors.nocable");
+            GuiManager::eErrorSeverity Severity = GuiManager::ERROR_LOGOFF_CABLE;
+            if (!NetComm::IsLAN())
+            {
+                ShellLoop::SetNetCableErrorOnEnter(Severity, "common.mp.errors.nocable");
+            }
+            else
+            {
+                ShellLoop::SetNetCableErrorOnEnter(Severity, 0);
+            }
         }
     }
 
@@ -1409,15 +1437,16 @@ void NetSetupP::UpdateScreen()
     {
         if (autoNetCounter == 20)
         {
-            unsigned short usName[64];
-            PblUnicode::ustrncnv(usName, "<NULL>", 64);
+            const int kSTR_LEN = 64;
+            unsigned short usName[kSTR_LEN];
+            PblUnicode::ustrncnv(usName, "<NULL>", kSTR_LEN);
             if (autoNetLast == 1)
             {
-                PblUnicode::ustrncnv(usName, "AUTONET", 64);
+                PblUnicode::ustrncnv(usName, "AUTONET", kSTR_LEN);
             }
             else if (autoNetLast == 2)
             {
-                PblUnicode::ustrncnv(usName, "LY", 64);
+                PblUnicode::ustrncnv(usName, autoNetSession, kSTR_LEN);
             }
             LuaHelper::CallTableProcWThis(pcScreen, "AcceptString", usName);
         }
@@ -1441,22 +1470,26 @@ void NetSetupP::UpdateScreen()
     }
     else if (strcmp(pcScreen, "ifs_missionselect") == 0)
     {
-        switch (autoNetCounter)
+        if (autoNetCounter == 10)
         {
-        case 10:
-        case 20:
             LuaHelper::CallTableProcWThis(pcScreen, "Input_Accept");
-            break;
-        case 30:
+        }
+        else if (autoNetCounter == 20)
+        {
+            LuaHelper::CallTableProcWThis(pcScreen, "Input_Accept");
+        }
+        else if (autoNetCounter == 30)
+        {
             LuaHelper::CallTableProcWThis(pcScreen, "Input_GeneralLeft");
-            break;
-        case 40:
+        }
+        else if (autoNetCounter == 40)
+        {
             LuaHelper::CallTableProcWThis(pcScreen, "Input_GeneralUp");
-            break;
-        case 50:
+        }
+        else if (autoNetCounter == 50)
+        {
             LuaHelper::CallTableProcWThis(pcScreen, "Input_Accept");
             autoNetCounter = 0;
-            break;
         }
     }
     else if (strcmp(pcScreen, "ifs_mp_maptype") == 0)
@@ -1473,9 +1506,8 @@ void NetSetupP::UpdateScreen()
     }
     else if (strcmp(pcScreen, "ifs_mp_gameopts") == 0)
     {
-        switch (autoNetCounter)
+        if (autoNetCounter == 10)
         {
-        case 10:
             if (!autoNetMissionCount)
             {
                 AddAutoNetMission("hot1i", 250, 250);
@@ -1488,8 +1520,9 @@ void NetSetupP::UpdateScreen()
             }
             MissionPlayList::SelectNextEntry();
             autoNetRepeat = -1;
-            break;
-        case 20:
+        }
+        else if (autoNetCounter == 20)
+        {
             if (netScript == NS_DEDICATED)
             {
                 LuaHelper::CallTableProcWThis(pcScreen, "Input_GeneralDown");
@@ -1502,17 +1535,18 @@ void NetSetupP::UpdateScreen()
                     autoNetCounter = 11;
                 }
             }
-            break;
-        case 30:
+        }
+        else if (autoNetCounter == 30)
+        {
             if (netScript == NS_DEDICATED)
             {
                 LuaHelper::CallTableProcWThis(pcScreen, "Input_GeneralRight");
             }
-            break;
-        case 50:
+        }
+        else if (autoNetCounter == 50)
+        {
             LuaHelper::CallTableProcWThis(pcScreen, "Input_Accept");
             autoNetCounter = 0;
-            break;
         }
     }
     else if (strcmp(pcScreen, "ifs_mp_lobby") == 0 || strcmp(pcScreen, "ifs_lobby") == 0)
@@ -1562,7 +1596,7 @@ void NetSetupP::UpdateScreen()
                 LuaHelper::PushString("namestr");
                 LuaHelper::RawGetFromTable(-2);
                 char const* pcName = LuaHelper::GetString(-1);
-                bFound = _stricmp(pcName, "LY") == 0;
+                bFound = _stricmp(pcName, autoNetSession) == 0;
                 LuaHelper::Pop(3);
             }
 
@@ -1573,9 +1607,10 @@ void NetSetupP::UpdateScreen()
             }
             else if (iSelected == iCount)
             {
-                for (; iSelected > 1; iSelected--)
+                while (iSelected > 1)
                 {
                     LuaHelper::CallTableProcWThis(pcScreen, "Input_GeneralUp");
+                    --iSelected;
                 }
             }
             else
@@ -1674,14 +1709,19 @@ const char* CNetHostGame::GetPlayerName(int iPlayer)
     {
         return 0;
     }
-    strlcpy(hostPlayerNameBuffer, NetGame::GetPlayerName(iPlayer), sizeof(hostPlayerNameBuffer));
+    const char* name = NetGame::GetPlayerName(iPlayer);
+    strlcpy(hostPlayerNameBuffer, name, sizeof(hostPlayerNameBuffer));
     return hostPlayerNameBuffer;
 }
 
 // FUNCTION: SWBF2 0x005dd300
 int CNetHostGame::GetStartTeam(int iPlayer)
 {
-    return iPlayer >= 0 ? NetGame::GetStartTeam(iPlayer) : 0;
+    if (iPlayer < 0)
+    {
+        return 0;
+    }
+    return NetGame::GetStartTeam(iPlayer);
 }
 
 // FUNCTION: SWBF2 0x005dd500
@@ -1928,7 +1968,8 @@ void WriteLoad(NetPktGroup& group, int, unsigned __int64 firstMask,
     group.WriteBits(netCurMaxPlayers, 7);
     WriteDestMask(group, firstMask);
     WriteDestMask(group, secondMask);
-    group.WriteBits(NetGame::GetTurnNumber(), 32);
+    unsigned int hostTurnNumber = NetGame::GetTurnNumber();
+    group.WriteBits(hostTurnNumber, 32);
     group.Write(Lua_Callbacks::gHuntScoreLimit[Lua_Callbacks::gCurRules]);
     group.Write(Lua_Callbacks::gHuntShowScoreLimit);
     group.Write(Lua_Callbacks::gSpaceAssaultScoreLimit[Lua_Callbacks::gCurRules]);
@@ -1954,7 +1995,8 @@ void ReadLoad(NetPktGroup& group, bool& bReady)
     group.Read(Lua_Callbacks::gSpaceAssaultScoreLimit[Lua_Callbacks::gCurRules]);
     if (bReady)
     {
-        NetGameP::SetClientTurnNumber(turn + 4);
+        unsigned int lagTurns = 4;
+        NetGameP::SetClientTurnNumber(turn + lagTurns);
     }
 }
 
@@ -2018,17 +2060,18 @@ bool CNetJoinGame::IsLaunchReady()
 // FUNCTION: SWBF2 0x005e0980
 bool CNetJoinGame::IsHostPlaying()
 {
-    return shellUpdate.hostLoadDone || shellUpdate.turnNumber > 0;
+    return shellUpdate.hostLoadDone | (shellUpdate.turnNumber > 0);
 }
 
 // FUNCTION: SWBF2 0x005e09c0
 void CNetJoinGame::Launch()
 {
-    if (!clientLaunched)
+    if (clientLaunched)
     {
-        clientLaunched = true;
-        timer = NetComm::GetTime();
+        return;
     }
+    clientLaunched = true;
+    timer = NetComm::GetTime();
 }
 
 // FUNCTION: SWBF2 0x005e0b80
@@ -2296,24 +2339,25 @@ char* CNetFindGame::GetDescriptorExtension()
 // FUNCTION: SWBF2 0x005df340
 bool CNetFindGame::IsMetaGame()
 {
-    return _strnicmp(curGame._pNode->_pObject->mFindData.mMapType,
-                     "metagame", 8) == 0;
+    NetGameDesc* desc = curGame._pNode->_pObject;
+    return _strnicmp(desc->mFindData.mMapType, "metagame", 8) == 0;
 }
 
 // FUNCTION: SWBF2 0x005e07d0
 void CNetJoinGame::Cancel()
 {
-    if (!shellMove.quitRequested)
+    if (shellMove.quitRequested)
     {
-        cancelTimer = NetComm::GetTime() + 5.0f;
-        shellMove.quitRequested = true;
-        timer = 0.0f;
-        for (int i = 0; i < netCurMaxPlayers; ++i)
+        return;
+    }
+    cancelTimer = NetComm::GetTime() + 5.0f;
+    shellMove.quitRequested = true;
+    timer = 0.0f;
+    for (int i = 0; i < netCurMaxPlayers; ++i)
+    {
+        if (NetComm::IsConnected(i))
         {
-            if (NetComm::IsConnected(i))
-            {
-                NetComm::Disconnect(i);
-            }
+            NetComm::Disconnect(i);
         }
     }
 }
@@ -2321,21 +2365,26 @@ void CNetJoinGame::Cancel()
 // FUNCTION: SWBF2 0x005e0860
 bool CNetJoinGame::IsCancelled()
 {
+    bool doneCancel = false;
     if (connecting)
     {
-        return true;
+        doneCancel = true;
     }
-    int iLocal = NetComm::GetLocalIndex(0);
-    if (iLocal < 0)
+    else if (NetComm::GetLocalIndex(0) < 0)
     {
+        doneCancel = true;
         if (NetComm::IsConnected(64))
         {
             NetComm::Disconnect(64);
         }
-        return true;
     }
-    return (shellUpdate.quitMask & (1ULL << iLocal)) != 0 ||
-           NetComm::GetTime() > cancelTimer;
+    else
+    {
+        float now = NetComm::GetTime();
+        doneCancel = (shellUpdate.quitMask & (1ULL << NetComm::GetLocalIndex(0))) != 0 ||
+                     now > cancelTimer;
+    }
+    return doneCancel;
 }
 
 // FUNCTION: SWBF2 0x005e0b00
@@ -2374,8 +2423,9 @@ void CNetPostLoadJoinGame::Cancel()
 // FUNCTION: SWBF2 0x005df390
 const char* CNetFindGame::GetEra()
 {
-    const char* era = curGame._pNode->_pObject->mFindData.mMapType;
-    return _strnicmp(era, "metagame", 8) == 0 ? era + 8 : "";
+    NetGameDesc* desc = curGame._pNode->_pObject;
+    return _strnicmp(desc->mFindData.mMapType, "metagame", 8) == 0
+        ? desc->mFindData.mMapType + 8 : "";
 }
 
 void ReadString(NetPktGroup& group, char* text, unsigned int capacity);
@@ -2436,7 +2486,7 @@ void ReadFiles(NetPktGroup& group, SendStateDst& state)
 }
 
 
-void WriteString(NetPktGroup* group, const char* text, unsigned int capacity);
+void WriteString(NetPktGroup& group, const char* text, unsigned int capacity);
 
 // FUNCTION: SWBF2 0x005e7670
 void WriteFiles(NetPktGroup& group, SendStateSrc& state)
@@ -2522,7 +2572,7 @@ void WriteFiles(NetPktGroup& group, SendStateSrc& state)
         if (block == 0)
         {
             char** fileNames = (char**)state.files;
-            WriteString(&group, fileNames[state.fileNum], 32);
+            WriteString(group, fileNames[state.fileNum], 32);
         }
         group.WriteBytes(state.curFile + block * 2048, 2048);
         if (++state.blockCycle >= 32)
@@ -2628,19 +2678,32 @@ extern int updatePercent;
 // FUNCTION: SWBF2 0x005dd470
 bool CNetHostGame::IsLaunchReady()
 {
-    if (!launchReady || !NetQOS::IsDone())
+    if (!launchReady)
+    {
+        return false;
+    }
+    if (!NetQOS::IsDone())
     {
         return false;
     }
     bool ready = true;
     for (int i = 0; i < netCurMaxPlayers; ++i)
     {
-        if (NetComm::IsConnected(i) && !shellState.players[i].joinAck)
+        if (!NetComm::IsConnected(i))
         {
-            ready = false;
+            continue;
         }
+        if (shellState.players[i].joinAck)
+        {
+            continue;
+        }
+        ready = false;
     }
-    return ready;
+    if (!ready)
+    {
+        return false;
+    }
+    return true;
 }
 
 // FUNCTION: SWBF2 0x005ddc80
@@ -2877,7 +2940,8 @@ CNetPostLoadHostGame::~CNetPostLoadHostGame()
 {
     if (canceled)
     {
-        for (int i = 0; i < netCurMaxPlayers; ++i)
+        int i;
+        for (i = 0; i < netCurMaxPlayers; ++i)
         {
             if (NetComm::IsConnected(i))
             {
@@ -2893,7 +2957,7 @@ CNetPostLoadHostGame::~CNetPostLoadHostGame()
         NetMatch::EndRegisterGame();
         isInSession = false;
         GameVoiceChat::Reset();
-        for (int i = 0; i < 64; ++i)
+        for (i = 0; i < 64; ++i)
         {
             NetGame::SetPlayerGSID(i, 0);
             NetAdmin::RemovePlayer(i);
@@ -2959,7 +3023,7 @@ void CNetHostGame::DropPlayer(int iPlayer)
 // GLOBAL: SWBF2 0x01faa720
 bool netHandlingFindPacket;
 
-void WriteString(NetPktGroup* pGroup, const char* text, unsigned int capacity);
+void WriteString(NetPktGroup& pGroup, const char* text, unsigned int capacity);
 
 // FUNCTION: SWBF2 0x005e73b0
 void NetSetupP::AddGame(const NetAddr& address)
@@ -3051,9 +3115,10 @@ NetPostLoadJoinGame* NetSetup::PostLoadJoinGame()
 CNetPostLoadHostGame::CNetPostLoadHostGame()
 {
     canceled = false;
-    netHostSetupReady = 1;
+    setupMode = GM_GAME;
     needSendMask = 0;
     loadingMask = 0;
+    NetMatch::ChangeRegisterGame();
     StatsManager::BeginMatch();
     timer = 0.0f;
     shellState.canceled = false;
@@ -3187,17 +3252,21 @@ void CNetHostGame::BootPlayer(int player)
     int index = 0;
     for (; index < netCurMaxPlayers; ++index)
     {
-        if (NetComm::IsConnected(index) &&
-            strcmp(name, NetGame::GetPlayerName(index)) == 0)
+        if (!NetComm::IsConnected(index))
+        {
+            continue;
+        }
+        if (strcmp(name, NetGame::GetPlayerName(index)) == 0)
         {
             break;
         }
     }
-    if (index != netCurMaxPlayers)
+    if (index == netCurMaxPlayers)
     {
-        bootMask |= 1ULL << index;
-        bootTime[index] = NetComm::GetTime() + 5.0f;
+        return;
     }
+    bootMask |= 1ULL << index;
+    bootTime[index] = NetComm::GetTime() + 5.0f;
 }
 
 // SYNTHETIC: SWBF2 0x005e3740
@@ -3206,13 +3275,14 @@ void CNetHostGame::BootPlayer(int player)
 // FUNCTION: SWBF2 0x005e3470
 CNetPostLoadJoinGame::~CNetPostLoadJoinGame()
 {
+    int i;
     if (canceled)
     {
         netPrevSessionId = netSessionId;
         NetMatch::EndJoinGame();
         isInSession = false;
         GameVoiceChat::Reset();
-        for (int i = 0; i < netCurMaxPlayers; ++i)
+        for (i = 0; i < netCurMaxPlayers; ++i)
         {
             if (NetComm::IsConnected(i))
             {
@@ -3224,7 +3294,7 @@ CNetPostLoadJoinGame::~CNetPostLoadJoinGame()
         {
             NetComm::Disconnect(64);
         }
-        for (int i = 0; i < 64; ++i)
+        for (i = 0; i < 64; ++i)
         {
             NetGame::SetPlayerGSID(i, 0);
             NetGame::ClearPlayerCDKey(i);
@@ -3237,7 +3307,7 @@ CNetPostLoadJoinGame::~CNetPostLoadJoinGame()
     NetComm::AdvanceTime(true);
     float now = NetComm::GetTime();
     float finishTime = now + 0.5f;
-    for (;;)
+    while (true)
     {
         SetupSleep();
         NetComm::AdvanceTime(true);
@@ -3256,15 +3326,26 @@ CNetPostLoadJoinGame::~CNetPostLoadJoinGame()
             break;
         }
         NetComm::Update();
-        for (NetPacket* packet = NetComm::Recv(PKT_GAME_UPDATE, PKT_NONE);
-             packet; packet = NetComm::Recv(PKT_GAME_UPDATE, PKT_NONE))
+        while (true)
         {
-            packet->Free();
+            NetPacket* packet = NetComm::Recv(PKT_GAME_UPDATE, PKT_NONE);
+            if (!packet)
+            {
+                break;
+            }
+            if (packet)
+            {
+                packet->Free();
+            }
             finishTime = now + 3.0f;
         }
-        NetPktGroup incoming;
-        while (NetComm::Recv(&incoming, 20))
+        while (true)
         {
+            NetPktGroup incoming;
+            if (!NetComm::Recv(incoming, PKT_STATS_UPDATE))
+            {
+                break;
+            }
             incoming.BeginRead();
             bool accepted;
             incoming.Read(accepted);
@@ -3305,7 +3386,7 @@ void NetSetup::WriteGameUpdate(NetPktGroup& group)
                     group.Write(NetGame::GetStartTeam(i) == 1);
                     if (i != player)
                     {
-                        WriteString(&group, NetGame::GetPlayerName(i), 32);
+                        WriteString(group, NetGame::GetPlayerName(i), 32);
                         unsigned __int64 id = NetGame::GetPlayerGSID(i);
                         group.WriteBytes((const char*)&id, sizeof(id));
                         bool isGuest = NetGame::GetGuestOf(i) >= 0;
@@ -3330,7 +3411,8 @@ void NetSetup::WriteGameUpdate(NetPktGroup& group)
 // FUNCTION: SWBF2 0x005e40b0
 void NetSetupP::NextHost(int direction)
 {
-    LuaHelper::GetTop();
+    int top = LuaHelper::GetTop();
+    (void)top;
     LuaHelper::GetGlobal("lobby_listbox_layout");
     LuaHelper::PushString("SelectedIdx");
     LuaHelper::RawGetFromTable(-2);
@@ -3352,8 +3434,15 @@ void NetSetupP::NextHost(int direction)
                     --selected;
                 }
             }
-            bool changed = direction > 0 ? SelectNextHostMode(player) :
-                           direction < 0 ? SelectNextHost(player) : false;
+            bool changed = false;
+            if (direction > 0)
+            {
+                changed = SelectNextHostMode(player);
+            }
+            else if (direction < 0)
+            {
+                changed = SelectNextHost(player);
+            }
             if (changed && hostGame)
             {
                 ++((CNetHostGame*)hostGame)->changeCount;
@@ -3376,7 +3465,7 @@ extern int gDebugCount;
 void WriteShellMove(NetPktGroup& group, ShellUpdate& update, ShellMove& move)
 {
     int viewport = FLInputManager::Instance()->GetPrimaryPort();
-    WriteString(&group, (const char*)netLoginNames + 32 * viewport, 32);
+    WriteString(group, (const char*)netLoginNames + 32 * viewport, 32);
     if (move.launchGuestHost)
     {
         ++gDebugCount;
@@ -3386,8 +3475,8 @@ void WriteShellMove(NetPktGroup& group, ShellUpdate& update, ShellMove& move)
     group.Write(move.quitRequested);
     char mission[64];
     strlcpy(mission, GameLoop::GetNextMission(), sizeof(mission));
-    WriteString(&group, netGameName, 64);
-    WriteString(&group, mission, 64);
+    WriteString(group, netGameName, 64);
+    WriteString(group, mission, 64);
     group.WriteBits(move.hostRequest, 16);
     group.WriteBits(move.moveNum, 24);
     for (int local = 0; local < 2; ++local)
@@ -3506,6 +3595,7 @@ void WriteJoin(NetPktGroup& group, unsigned int guestCount)
     int playerIndexes[1];
     unsigned int count = 0;
     unsigned int viewport;
+    unsigned int guest;
     for (viewport = 0; viewport < _countof(playerIndexes); ++viewport)
     {
         if (input->mActiveControllers[viewport])
@@ -3518,22 +3608,21 @@ void WriteJoin(NetPktGroup& group, unsigned int guestCount)
         playerIndexes[viewport] = -1;
     }
     int joystick = playerIndexes[0];
-    WriteString(&group, (const char*)netLoginNames + 32 * joystick, 32);
+    WriteString(group, (const char*)netLoginNames + 32 * joystick, 32);
 
     unsigned __int64 id = NetMatch::GetLocalGSID();
     group.WriteBytes((const char*)&id, sizeof(id));
     count = 1;
-    for (unsigned int guest = 0; guest < guestCount; ++guest)
+    for (guest = 0; guest < guestCount; ++guest)
     {
         joystick = playerIndexes[count];
-        PlayerProfile::tProfile* profile = PlayerProfile::GetProfile((unsigned int)joystick);
         char converted[66];
-        PblUnicode::ustrncnv(converted, profile->GetName(), _countof(converted));
-        WriteString(&group, converted, _countof(converted));
+        PblUnicode::ustrncnv(converted, PlayerProfile::GetProfile((unsigned int)joystick)->GetName(), _countof(converted));
+        WriteString(group, converted, _countof(converted));
         ++count;
     }
     group.WriteBits(intraSessionPlayerId[0], 32);
-    for (unsigned int guest = 0; guest < guestCount; ++guest)
+    for (guest = 0; guest < guestCount; ++guest)
     {
         group.WriteBits(intraSessionPlayerId[guest + 1], 32);
     }
@@ -3730,7 +3819,7 @@ void WriteLaunch(NetPktGroup& group, bool bAcked, int player, bool bPlaying)
     char mission[64];
     strlcpy(mission, GameLoop::GetNextMission(), sizeof(mission));
     mission[63] = 0;
-    WriteString(&group, mission, 64);
+    WriteString(group, mission, 64);
     WriteSessionId(group, netSessionId);
 
     group.Write(netHeroesEnabled);
@@ -3749,7 +3838,53 @@ void WriteLaunch(NetPktGroup& group, bool bAcked, int player, bool bPlaying)
     group.Write(netShowNames);
 
     int hostIndex = *NetGameP::GetHostIndex(player);
-    if (hostIndex < 0)
+    if (hostIndex >= 0)
+    {
+        if (*NetGameP::GetHostMode(hostIndex))
+        {
+            group.Write(true);
+            group.WriteBits(hostIndex, 2);
+            NetCommP::Connect(hostIndex + 64, NetCommP::GetAddr(player));
+
+            unsigned __int64 clientMask = 0;
+            for (i = 0; i < netCurMaxPlayers; ++i)
+            {
+                if (*NetGameP::GetClientOfIndex(i) == hostIndex)
+                {
+                    clientMask |= 1ULL << i;
+                }
+            }
+            WriteDestMask(group, clientMask);
+            for (i = 0; i < netCurMaxPlayers; ++i)
+            {
+                unsigned __int64 bit = clientMask & (1ULL << i);
+                if (bit && i != player)
+                {
+                    WriteAddr(group, clientAddrs[i]);
+                }
+            }
+
+            int hostType = *NetGameP::GetHostMode(player);
+            group.Write(hostType == 2);
+            unsigned int hostMask = 0;
+            for (i = 0; i < netCurMaxHosts; ++i)
+            {
+                if (*NetGameP::GetHostMode(i) == hostType)
+                {
+                    hostMask |= 1 << i;
+                }
+            }
+            group.WriteBits(hostMask, 3);
+            for (i = 0; i < netCurMaxHosts; ++i)
+            {
+                if ((hostMask & (1 << i)) && i != hostIndex)
+                {
+                    WriteAddr(group, hostAddrs[i]);
+                }
+            }
+        }
+    }
+    else
     {
         group.Write(false);
         int clientOf = *NetGameP::GetClientOfIndex(player);
@@ -3757,50 +3892,6 @@ void WriteLaunch(NetPktGroup& group, bool bAcked, int player, bool bPlaying)
         if (clientOf > 0)
         {
             WriteAddr(group, hostAddrs[clientOf]);
-        }
-    }
-    else if (*NetGameP::GetHostMode(hostIndex))
-    {
-        group.Write(true);
-        group.WriteBits(hostIndex, 2);
-        NetCommP::Connect(hostIndex + 64, NetCommP::GetAddr(player));
-
-        unsigned __int64 clientMask = 0;
-        for (i = 0; i < netCurMaxPlayers; ++i)
-        {
-            if (*NetGameP::GetClientOfIndex(i) == hostIndex)
-            {
-                clientMask |= 1ULL << i;
-            }
-        }
-        WriteDestMask(group, clientMask);
-        for (i = 0; i < netCurMaxPlayers; ++i)
-        {
-            unsigned __int64 bit = clientMask & (1ULL << i);
-            if (bit && i != player)
-            {
-                WriteAddr(group, clientAddrs[i]);
-            }
-        }
-
-        int hostType = *NetGameP::GetHostMode(player);
-        bool dedicated = hostType == 2;
-        group.Write(dedicated);
-        unsigned int hostMask = 0;
-        for (i = 0; i < netCurMaxHosts; ++i)
-        {
-            if (*NetGameP::GetHostMode(i) == hostType)
-            {
-                hostMask |= 1 << i;
-            }
-        }
-        group.WriteBits(hostMask, 3);
-        for (i = 0; i < netCurMaxHosts; ++i)
-        {
-            if ((hostMask & (1 << i)) && i != hostIndex)
-            {
-                WriteAddr(group, hostAddrs[i]);
-            }
         }
     }
 
@@ -3912,17 +4003,17 @@ void ReadLaunch(NetPktGroup& group, bool& bAcked)
                 if (hostMask & (1 << i))
                 {
                     *NetGameP::GetHostMode(i) = hostType;
-                    if (i == hostIndex)
-                    {
-                        NetSocket::SetAddr(address, 0, 0);
-                        galaxy::api::GalaxyID self(0);
-                        address.mGalaxyId = self;
-                    }
-                    else
+                    if (i != hostIndex)
                     {
                         NetAddr peer;
                         ReadAddr(group, peer);
                         peer.GetAddr(address, 0);
+                    }
+                    else
+                    {
+                        NetSocket::SetAddr(address, 0, 0);
+                        galaxy::api::GalaxyID self(0);
+                        address.mGalaxyId = self;
                     }
                     NetCommP::Connect(i + 64, &address);
                 }
@@ -3961,6 +4052,7 @@ void ReadLaunch(NetPktGroup& group, bool& bAcked)
 // FUNCTION: SWBF2 0x005e1770
 void CNetLaunchGame::Update()
 {
+    int i;
     SetupSleep();
     NetComm::AdvanceTime(true);
     float now = NetComm::GetTime();
@@ -3994,7 +4086,7 @@ void CNetLaunchGame::Update()
         {
             float oldest = now + 1.0f;
             int player = -1;
-            for (int i = 0; i < netCurMaxPlayers; ++i)
+            for (i = 0; i < netCurMaxPlayers; ++i)
             {
                 if (!NetComm::IsConnected(i))
                 {
@@ -4081,7 +4173,7 @@ void CNetLaunchGame::Update()
         if (!launchAcked)
         {
             bool allAcked = true;
-            for (int i = 0; i < netCurMaxPlayers; ++i)
+            for (i = 0; i < netCurMaxPlayers; ++i)
             {
                 if (NetComm::IsConnected(i) && !launchAcks[i])
                 {
@@ -4147,15 +4239,17 @@ void ReadJoin(NetPktGroup& group, int player, unsigned int guestCount, ShellStat
     int j;
     group.ReadBits(playerId, 32);
     state.players[player].playerId = netRandom.GetInt();
-    bool newSession = !IsGalaxyIdValid(&netPrevSessionId.id);
-    if (!newSession && playerId)
+    if (IsGalaxyIdValid(&netPrevSessionId.id))
     {
-        for (j = 0; j < 64; ++j)
+        if (playerId != 0)
         {
-            if (intraSessionPlayers[j].playerId == playerId)
+            for (j = 0; j < 64; ++j)
             {
-                state.players[player].playerId = playerId;
-                break;
+                if (intraSessionPlayers[j].playerId == playerId)
+                {
+                    state.players[player].playerId = playerId;
+                    break;
+                }
             }
         }
     }
@@ -4165,15 +4259,17 @@ void ReadJoin(NetPktGroup& group, int player, unsigned int guestCount, ShellStat
         int guest = NetGame::GetMyGuest(player, i);
         group.ReadBits(playerId, 32);
         state.players[guest].playerId = netRandom.GetInt();
-        bool guestNewSession = !IsGalaxyIdValid(&netPrevSessionId.id);
-        if (!guestNewSession && playerId)
+        if (IsGalaxyIdValid(&netPrevSessionId.id))
         {
-            for (j = 0; j < netCurMaxPlayers; ++j)
+            if (playerId != 0)
             {
-                if (intraSessionPlayers[j].playerId == playerId)
+                for (j = 0; j < netCurMaxPlayers; ++j)
                 {
-                    state.players[guest].playerId = playerId;
-                    break;
+                    if (intraSessionPlayers[j].playerId == playerId)
+                    {
+                        state.players[guest].playerId = playerId;
+                        break;
+                    }
                 }
             }
         }
@@ -4280,15 +4376,14 @@ void WriteShellUpdate(NetPktGroup& group, int player, ShellUpdate& update, Shell
     group.Write(netIsDedicated);
     group.WriteBits(NetComm::GetMyArch(), 2);
     int localIndex = NetComm::GetLocalIndex(0);
-    bool hasLocal = localIndex >= 0;
-    group.Write(hasLocal);
+    group.Write(localIndex >= 0);
     if (localIndex >= 0)
     {
         group.WriteBits(localIndex, 6);
     }
 
     ShellPlayer& self = state.players[player];
-    bool booted = (update.bootMask & (1ULL << player)) != 0;
+    bool booted = update.bootMask & (1ULL << player);
     group.Write(booted);
     bool quitKnown = state.canceled || state.players[player].quitRequested;
     group.Write(quitKnown);
@@ -4335,7 +4430,7 @@ void WriteShellUpdate(NetPktGroup& group, int player, ShellUpdate& update, Shell
             group.Write(true);
             char name[32];
             strlcpy(name, NetGame::GetPlayerName(j), sizeof(name));
-            WriteString(&group, name, 32);
+            WriteString(group, name, 32);
             group.Write(netAutoAssignTeams);
             group.Write(netAutoAssignTeamsOriginalSetting);
             bool teamOne = NetGame::GetStartTeam(j) == 1;
@@ -4353,8 +4448,7 @@ void WriteShellUpdate(NetPktGroup& group, int player, ShellUpdate& update, Shell
         }
     }
 
-    bool hostPostLoad = update.postLoad && !loadGame;
-    group.Write(hostPostLoad);
+    group.Write(update.postLoad && !loadGame);
     unsigned int turn = 0;
     if (update.postLoad)
     {
@@ -4383,19 +4477,20 @@ void WriteShellUpdate(NetPktGroup& group, int player, ShellUpdate& update, Shell
         }
     }
     WriteDestMask(group, playingMask);
-    WriteString(&group, GameLoop::GetNextMission(), 64);
+    WriteString(group, GameLoop::GetNextMission(), 64);
 
     unsigned int team1, team2;
     MissionPlayList::GetCurrentTeamNames(team1, team2);
     group.WriteBits(team1, 32);
     group.WriteBits(team2, 32);
-    unsigned int mission;
-    for (mission = MissionPlayList::GetFirstMission(); mission; mission = MissionPlayList::GetNextMission())
+    unsigned int mission = MissionPlayList::GetFirstMission();
+    while (mission)
     {
         if (DownloadableContent::IsMissionDownloaded(mission))
         {
             group.WriteBits(mission, 32);
         }
+        mission = MissionPlayList::GetNextMission();
     }
     group.WriteBits(mission, 32);
     group.WriteBits(update.moveNum, 32);
@@ -4424,9 +4519,9 @@ void WriteShellUpdate(NetPktGroup& group, int player, ShellUpdate& update, Shell
 bool ReadShellUpdate(NetPktGroup& group, ShellUpdate& update, ShellMove& move)
 {
     bool changed = false;
-    unsigned int value;
-    group.ReadBits(value, 6);
-    int host = value;
+    unsigned int index;
+    group.ReadBits(index, 6);
+    int host = index;
     unsigned int guestCount;
     group.ReadBits(guestCount, 3);
     int guests[1];
@@ -4435,8 +4530,8 @@ bool ReadShellUpdate(NetPktGroup& group, ShellUpdate& update, ShellMove& move)
     {
         if (i < guestCount)
         {
-            group.ReadBits(value, 6);
-            guests[i] = value;
+            group.ReadBits(index, 6);
+            guests[i] = index;
         }
         else
         {
@@ -4486,6 +4581,7 @@ bool ReadShellUpdate(NetPktGroup& group, ShellUpdate& update, ShellMove& move)
     {
         netIsHostDedicated = flag;
     }
+    unsigned int value;
     group.ReadBits(value, 2);
     if (!isLocal)
     {
@@ -4500,7 +4596,8 @@ bool ReadShellUpdate(NetPktGroup& group, ShellUpdate& update, ShellMove& move)
         hostPlayer = value;
         if (!NetComm::IsConnected(hostPlayer))
         {
-            NetCommP::Connect(hostPlayer, NetCommP::GetAddr(64));
+            unsigned __int64* address = NetCommP::GetAddr(64);
+            NetCommP::Connect(hostPlayer, address);
         }
     }
 
@@ -4546,15 +4643,15 @@ bool ReadShellUpdate(NetPktGroup& group, ShellUpdate& update, ShellMove& move)
         NetComm::SetPing(64, ping);
     }
 
-    unsigned __int64* connectMask = &update.connectMask;
-    *connectMask = 0;
+    unsigned __int64& connectMask = update.connectMask;
+    connectMask = 0;
     for (int j = 0; j < 64; ++j)
     {
         bool present;
         group.Read(present);
         if (present)
         {
-            *connectMask |= 1ULL << j;
+            connectMask |= 1ULL << j;
             if (!NetComm::IsConnected(j))
             {
                 changed = true;
@@ -4614,13 +4711,13 @@ bool ReadShellUpdate(NetPktGroup& group, ShellUpdate& update, ShellMove& move)
                     }
                     netAutoAssignTeams = flagA;
                     netAutoAssignTeamsOriginalSetting = flagB;
-                    bool wasTeamOne = NetGame::GetStartTeam(j) == 1;
-                    if (wasTeamOne != teamOne)
+                    if ((NetGame::GetStartTeam(j) == 1) != teamOne)
                     {
                         changed = true;
                         NetGame::SetStartTeam(j, teamOne ? 1 : 2);
                     }
-                    if (NetGame::GetPlayerGSID(j) != id)
+                    unsigned __int64 CurGSID = NetGame::GetPlayerGSID(j);
+                    if (CurGSID != id)
                     {
                         changed = true;
                         NetGame::SetPlayerGSID(j, id);
@@ -4641,8 +4738,8 @@ bool ReadShellUpdate(NetPktGroup& group, ShellUpdate& update, ShellMove& move)
             NetGame::ClearPlayerCDKey(j);
         }
     }
-    NetGameP::SetPlaying(*connectMask, 0);
-    UpdateCurMaxPlayers(*connectMask, true);
+    NetGameP::SetPlaying(connectMask, 0);
+    UpdateCurMaxPlayers(connectMask, true);
 
     bool hostLoadDone;
     group.Read(hostLoadDone);
@@ -4822,7 +4919,8 @@ void CNetJoinGame::Update()
                 }
                 NetPktGroup group;
                 group.BeginWrite();
-                shellMove.moveNum = moveNum++;
+                shellMove.moveNum = moveNum;
+                ++moveNum;
                 shellMove.launchGuestHost = false;
                 shellMove.isTeamOne = NetGame::GetStartTeam(NetComm::GetLocalIndex(0)) == 1;
                 shellMove.hostRequest = hostRequest;
@@ -4862,7 +4960,7 @@ void CNetJoinGame::Update()
         while (true)
         {
             NetPktGroup group;
-            if (!NetComm::Recv(&group, PKT_SHELL_UPDATE))
+            if (!NetComm::Recv(group, PKT_SHELL_UPDATE))
             {
                 break;
             }
@@ -4882,16 +4980,16 @@ void CNetJoinGame::Update()
             group.Free();
             UpdateCurMaxPlayers(shellUpdate.connectMask, false);
 
-            int newLocal = NetComm::GetLocalIndex(0);
+            const int newLocal = NetComm::GetLocalIndex(0);
             if (newLocal != oldLocal)
             {
                 timer = 0.0f;
                 tryCount = 0;
                 int joystick = FLInputManager::Instance()->GetHWPort(0);
-                GameVoiceChat::Node* node = joystick < 0 ? 0 : GameVoiceChat::GetNode(joystick);
+                GameVoiceChat::Node* node = joystick >= 0 ? GameVoiceChat::GetNode(joystick) : 0;
                 if (node)
                 {
-                    unsigned char channel = (unsigned char)newLocal;
+                    const unsigned char channel = (unsigned char)newLocal;
                     node->SetID(channel);
                     GameVoiceChat::Transport* transport = GameVoiceChat::GetTransport();
                     transport->SetSendEnable(channel, channel, false, false);
@@ -4947,7 +5045,7 @@ void CNetJoinGame::Update()
             NetComm::Disconnect(64);
         }
 
-        float timeout = NetComm::GetLocalIndex(0) < 0 ? 60.0f : 15.0f;
+        float timeout = NetComm::GetLocalIndex(0) >= 0 ? 15.0f : 60.0f;
         if (NetComm::IsConnected(64) && now - NetComm::GetLastRecv(64) >= timeout)
         {
             NetComm::Disconnect(64);
@@ -5019,34 +5117,33 @@ void CNetHostGame::SendUpdates()
 {
     for (int tries = 0; needSendMask && tries < 4; ++tries)
     {
-        const int start = (unsigned char)netRandom.GetInt();
+        int start = netRandom.GetInt() & 0xff;
         for (int j = 0; j < 64; ++j)
         {
-            const int player = (start + j) % 64;
-            if (!(needSendMask & (1ULL << player)))
+            int player = (j + start) % 64;
+            if (needSendMask & (1ULL << player))
             {
-                continue;
-            }
-            if (NetComm::IsConnected(player) && NetGame::GetGuestOf(player) < 0)
-            {
-                ShellPlayer& shellPlayer = shellState.players[player];
-                NetPktGroup group;
-                group.BeginWrite();
-                ShellUpdate update;
-                update.postLoad = false;
-                update.moveNum = shellPlayer.moveNum;
-                update.bootMask = bootMask;
-                if (shellPlayer.quitRequested)
+                if (NetComm::IsConnected(player) && NetGame::GetGuestOf(player) < 0)
                 {
-                    NetGameP::SetPlayerName(player, "");
-                    update.quitMask = 1ULL << player;
+                    ShellPlayer& shellPlayer = shellState.players[player];
+                    NetPktGroup group;
+                    group.BeginWrite();
+                    ShellUpdate update;
+                    update.postLoad = false;
+                    update.moveNum = shellPlayer.moveNum;
+                    update.bootMask = bootMask;
+                    if (shellPlayer.quitRequested)
+                    {
+                        NetGameP::SetPlayerName(player, "");
+                        update.quitMask = 1ULL << player;
+                    }
+                    WriteShellUpdate(group, player, update, shellState);
+                    group.EndWrite();
+                    NetComm::Send(player, PKT_SHELL_UPDATE, &group);
                 }
-                WriteShellUpdate(group, player, update, shellState);
-                group.EndWrite();
-                NetComm::Send(player, PKT_SHELL_UPDATE, &group);
+                needSendMask &= ~(1ULL << player);
+                break;
             }
-            needSendMask &= ~(1ULL << player);
-            break;
         }
     }
 }
@@ -5054,6 +5151,7 @@ void CNetHostGame::SendUpdates()
 // FUNCTION: SWBF2 0x005dc4e0
 void CNetHostGame::Update()
 {
+    int i;
     ++netHostUpdateCount;
     PblJournal::Record(netHostUpdateCount, PJT_FULL);
     NetComm::AdvanceTime(true);
@@ -5083,7 +5181,6 @@ void CNetHostGame::Update()
         else if (!BanIP(from, join))
         {
             int player = -1;
-            int i;
             for (i = 0; i < netCurMaxPlayers; ++i)
             {
                 if (NetComm::IsConnected(i) && NetCommP::SameAddr(i, from))
@@ -5103,22 +5200,21 @@ void CNetHostGame::Update()
                 int slots = Min(netCurMaxPlayers + 2, netPlayerLimit);
                 for (i = 0; i < slots; ++i)
                 {
-                    if (NetComm::IsConnected(i))
+                    if (!NetComm::IsConnected(i))
                     {
-                        continue;
-                    }
-                    if (player == -1)
-                    {
-                        player = i;
-                    }
-                    else
-                    {
-                        for (j = 0; j < 1; ++j)
+                        if (player == -1)
                         {
-                            if (guests[j] == -1)
+                            player = i;
+                        }
+                        else
+                        {
+                            for (j = 0; j < 1; ++j)
                             {
-                                guests[j] = i;
-                                break;
+                                if (guests[j] == -1)
+                                {
+                                    guests[j] = i;
+                                    break;
+                                }
                             }
                         }
                     }
@@ -5242,8 +5338,7 @@ void CNetHostGame::Update()
 
     if (!launchReady)
     {
-        bool newSession = !IsGalaxyIdValid(&netPrevSessionId.id);
-        float delay = newSession ? 0.1f : 5.0f;
+        float delay = !IsGalaxyIdValid(&netPrevSessionId.id) ? 0.1f : 5.0f;
         if (now - launchTimer > delay)
         {
             launchReady = true;
@@ -5253,7 +5348,7 @@ void CNetHostGame::Update()
     while (true)
     {
         NetPktGroup group;
-        if (!NetComm::Recv(&group, PKT_SHELL_UPDATE))
+        if (!NetComm::Recv(group, PKT_SHELL_UPDATE))
         {
             break;
         }
@@ -5268,6 +5363,8 @@ void CNetHostGame::Update()
             NetPktGroup group;
             group.BeginWrite();
             ShellMove move;
+            move.moveNum = 0;
+            move.hostRequest = 0;
             move.launchGuestHost = false;
             move.isTeamOne = NetGame::GetStartTeam(NetComm::GetLocalIndex(0)) == 1;
             move.quitRequested = false;
@@ -5280,7 +5377,6 @@ void CNetHostGame::Update()
     int oldPlayerCount = playerCount;
     playerCount = 0;
     unsigned __int64 joinedMask = 0;
-    int i;
     for (i = 0; i < netCurMaxPlayers; ++i)
     {
         if (NetComm::IsConnected(i) && shellState.players[i].joinAck)
@@ -5825,34 +5921,33 @@ void CNetPostLoadHostGame::SendUpdates()
 {
     for (int tries = 0; needSendMask && tries < 4; ++tries)
     {
-        const int start = (unsigned char)netRandom.GetInt();
+        int start = netRandom.GetInt() & 0xff;
         for (int j = 0; j < 64; ++j)
         {
-            const int player = (start + j) % 64;
-            if (!(needSendMask & (1ULL << player)))
+            int player = (j + start) % 64;
+            if (needSendMask & (1ULL << player))
             {
-                continue;
-            }
-            if (NetComm::IsConnected(player) && NetGame::GetGuestOf(player) < 0)
-            {
-                ShellPlayer& shellPlayer = shellState.players[player];
-                NetPktGroup group;
-                group.BeginWrite();
-                ShellUpdate update;
-                update.postLoad = true;
-                update.moveNum = shellPlayer.moveNum;
-                update.bootMask = 0;
-                if (shellPlayer.quitRequested)
+                if (NetComm::IsConnected(player) && NetGame::GetGuestOf(player) < 0)
                 {
-                    NetGameP::SetPlayerName(player, "");
-                    update.quitMask = 1ULL << player;
+                    ShellPlayer& shellPlayer = shellState.players[player];
+                    NetPktGroup group;
+                    group.BeginWrite();
+                    ShellUpdate update;
+                    update.postLoad = true;
+                    update.moveNum = shellPlayer.moveNum;
+                    update.bootMask = 0;
+                    if (shellPlayer.quitRequested)
+                    {
+                        NetGameP::SetPlayerName(player, "");
+                        update.quitMask = 1ULL << player;
+                    }
+                    WriteShellUpdate(group, player, update, shellState);
+                    group.EndWrite();
+                    NetComm::Send(player, PKT_SHELL_UPDATE, &group);
                 }
-                WriteShellUpdate(group, player, update, shellState);
-                group.EndWrite();
-                NetComm::Send(player, PKT_SHELL_UPDATE, &group);
+                needSendMask &= ~(1ULL << player);
+                break;
             }
-            needSendMask &= ~(1ULL << player);
-            break;
         }
     }
 }
@@ -5860,6 +5955,7 @@ void CNetPostLoadHostGame::SendUpdates()
 // FUNCTION: SWBF2 0x005e2640
 void CNetPostLoadHostGame::Update()
 {
+    int i;
     NetComm::AdvanceTime(true);
     float now = NetComm::GetTime();
     if (timer > now)
@@ -5916,6 +6012,8 @@ void CNetPostLoadHostGame::Update()
                     join = 0;
                     group.BeginWrite();
                     WriteJoinReject(group, JRR_PASSWORD);
+                    group.EndWrite();
+                    NetComm::Send(from, PKT_REJECT, &group);
                 }
                 else
                 {
@@ -5929,15 +6027,14 @@ void CNetPostLoadHostGame::Update()
                     join = 0;
                     group.BeginWrite();
                     WriteJoinReject(group, JRR_BUSY);
+                    group.EndWrite();
+                    NetComm::Send(from, PKT_REJECT, &group);
                 }
-                group.EndWrite();
-                NetComm::Send(from, PKT_REJECT, &group);
             }
         }
         else if (!BanIP(from, join))
         {
             int player = -1;
-            int i;
             for (i = 0; i < netCurMaxPlayers; ++i)
             {
                 if (NetComm::IsConnected(i) && NetCommP::SameAddr(i, from))
@@ -5957,22 +6054,21 @@ void CNetPostLoadHostGame::Update()
                 int slots = Min(netCurMaxPlayers + 2, netPlayerLimit);
                 for (i = 0; i < slots; ++i)
                 {
-                    if (NetComm::IsConnected(i) || NetGame::IsPlaying(i, false))
+                    if (!NetComm::IsConnected(i) && !NetGame::IsPlaying(i, false))
                     {
-                        continue;
-                    }
-                    if (player == -1)
-                    {
-                        player = i;
-                    }
-                    else
-                    {
-                        for (j = 0; j < 1; ++j)
+                        if (player == -1)
                         {
-                            if (guests[j] == -1)
+                            player = i;
+                        }
+                        else
+                        {
+                            for (j = 0; j < 1; ++j)
                             {
-                                guests[j] = i;
-                                break;
+                                if (guests[j] == -1)
+                                {
+                                    guests[j] = i;
+                                    break;
+                                }
                             }
                         }
                     }
@@ -6101,7 +6197,6 @@ void CNetPostLoadHostGame::Update()
         loadingMask |= 1ULL << player;
     }
 
-    int i;
     while (true)
     {
         NetPacket* ack = NetComm::Recv(PKT_LOAD_ACK, PKT_NONE);
@@ -6121,7 +6216,7 @@ void CNetPostLoadHostGame::Update()
             }
         }
         mask |= 1ULL << player;
-        for (int slot = 0; slot < 1; ++slot)
+        for (unsigned int slot = 0; slot < 1; ++slot)
         {
             int guest = NetGame::GetMyGuest(player, slot);
             if (guest >= 0)
@@ -6140,7 +6235,11 @@ void CNetPostLoadHostGame::Update()
 
     for (i = 0; i < netCurMaxPlayers; ++i)
     {
-        if (!NetComm::IsConnected(i) || NetGame::IsPlaying(i, false))
+        if (!NetComm::IsConnected(i))
+        {
+            continue;
+        }
+        if (NetGame::IsPlaying(i, false))
         {
             continue;
         }

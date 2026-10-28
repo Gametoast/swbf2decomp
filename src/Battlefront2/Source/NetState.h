@@ -23,7 +23,7 @@ class WeaponMelee;
 
 void BeginNetLOD();
 Team* ReadTeam(NetPktGroup& group);
-void WriteString(NetPktGroup* group, const char* text, unsigned int capacity);
+void WriteString(NetPktGroup& group, const char* text, unsigned int capacity);
 void ReadString(NetPktGroup& group, char* text, unsigned int capacity);
 
 void __fastcall PropagateTeam(Character* pCharacter, int iTeam);

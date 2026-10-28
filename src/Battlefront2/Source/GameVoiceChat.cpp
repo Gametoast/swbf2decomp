@@ -315,9 +315,9 @@ namespace GameVoiceChat
 {
 
 // FUNCTION: SWBF2 0x0053c4f0
-void* FindNodeByDeviceID()
+Node* FindNodeByDeviceID(const unsigned int deviceID)
 {
-    return GameVoiceChat::gNodes[0];
+    return (Node*)GameVoiceChat::gNodes[0];
 }
 
 }

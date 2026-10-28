@@ -34,6 +34,8 @@ public:
     // FUNCTION: SWBF2 0x004294f0
     Trackable* GetTrackable() const { return mTrackable; }
 
+    void SetSpectating(bool spectating) { mIsSpectating = spectating; }
+
     Trackable* mTrackable;
     bool mIsFirstPersonView;
     bool mIsSpectating;

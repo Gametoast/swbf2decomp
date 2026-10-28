@@ -337,7 +337,7 @@ public:
     static void RequestSuicide(int index);
     static void ForceBootPlayer(int player);
     static void AddChatMessageToQue(bool local, int player, unsigned __int64 mask, int code, const unsigned short* text, int flag);
-    static void ReadChatMessageFromServer(NetPktGroup* group);
+    static void ReadChatMessageFromServer(NetPktGroup& group);
     static void GetScore(int* count1, int* count2, int* limit1, int* limit2, bool* limits, bool* points);
 };
 

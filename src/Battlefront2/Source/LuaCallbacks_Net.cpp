@@ -121,10 +121,6 @@ int gFriendListIcon;
 
 namespace GameVoiceChat
 {
-    void* FindNodeByDeviceID();
-}
-namespace GameVoiceChat
-{
     unsigned int GetNumNodes();
 }
 
@@ -1134,24 +1130,18 @@ int ScriptCB_GetGSProfileInfo(lua_State* L)
 // FUNCTION: SWBF2 0x00596280
 int ScriptCB_GetVoiceEnable(lua_State* L)
 {
-    int iJoystick;
-    if (lua_gettop(LuaHelper::mState) >= 1)
-    {
-        iJoystick = LuaHelper::GetInt(1);
-    }
-    else
-    {
-        iJoystick = PauseMenu::GetPausingJoystick();
-    }
+    const unsigned int iJoystick = lua_gettop(LuaHelper::mState) >= 1
+        ? LuaHelper::GetInt(1) : PauseMenu::GetPausingJoystick();
+    int iPlayer = iJoystick;
     if (GameState::GetState() != 0x11e1fc01)
     {
-        iJoystick = NetGame::GetLocalIndex(PauseMenu::GetPausingViewport());
+        iPlayer = NetGame::GetLocalIndex(PauseMenu::GetPausingViewport());
     }
 
     bool bEnabled = false;
-    if (iJoystick >= 0)
+    if (iPlayer >= 0)
     {
-        VoiceChat::Node* pNode = (VoiceChat::Node*)GameVoiceChat::FindNodeByDeviceID();
+        VoiceChat::Node* pNode = (VoiceChat::Node*)GameVoiceChat::FindNodeByDeviceID(iJoystick);
         bEnabled = pNode && pNode->GetID() != 0xFF;
     }
     lua_pushboolean(LuaHelper::mState, bEnabled);
@@ -1172,7 +1162,7 @@ int ScriptCB_GetVoiceCaptureConnected(lua_State* L)
     {
         return 0;
     }
-    VoiceChat::Node* pNode = (VoiceChat::Node*)GameVoiceChat::FindNodeByDeviceID();
+    VoiceChat::Node* pNode = (VoiceChat::Node*)GameVoiceChat::FindNodeByDeviceID(PauseMenu::GetPausingJoystick());
     if (!pNode || pNode->GetID() == 0xFF)
     {
         return 0;
@@ -1191,7 +1181,7 @@ int ScriptCB_GetVoiceTVGain(lua_State* L)
     int iGain = 0;
     if (GameVoiceChat::IsOpen())
     {
-        VoiceChat::Node* pNode = (VoiceChat::Node*)GameVoiceChat::FindNodeByDeviceID();
+        VoiceChat::Node* pNode = (VoiceChat::Node*)GameVoiceChat::FindNodeByDeviceID(PauseMenu::GetPausingJoystick());
         if (pNode && pNode->GetID() != 0xFF && pNode->GetDecoder().GetNumOutputs() > 1)
         {
             iGain = (unsigned char)(int)(pNode->GetDecoder().GetGain(1) * 10.0f);
@@ -1876,7 +1866,7 @@ int ScriptCB_GetVoiceRenderConnected(lua_State*)
     {
         return 0;
     }
-    VoiceChat::Node* pNode = (VoiceChat::Node*)GameVoiceChat::FindNodeByDeviceID();
+    VoiceChat::Node* pNode = (VoiceChat::Node*)GameVoiceChat::FindNodeByDeviceID(PauseMenu::GetPausingJoystick());
     if (!pNode || pNode->GetID() == 0xFF)
     {
         return 0;
@@ -3171,7 +3161,7 @@ int ScriptCB_SetVoiceSendPreset(lua_State*)
     if (GameVoiceChat::IsOpen())
     {
         const GameVoiceChat::Transport::Mask preset = static_cast<GameVoiceChat::Transport::Mask>(LuaHelper::GetInt(1));
-        void* node = GameVoiceChat::FindNodeByDeviceID();
+        GameVoiceChat::Node* node = GameVoiceChat::FindNodeByDeviceID(PauseMenu::GetPausingJoystick());
         if (node)
         {
             ((GameVoiceChat::Node*)node)->SetSendMask(preset, true, false);
@@ -3187,7 +3177,7 @@ int ScriptCB_GetVoiceSendPreset(lua_State*)
     GameVoiceChat::Transport::Mask preset = GameVoiceChat::Transport::mask_Noone;
     if (GameVoiceChat::IsOpen())
     {
-        void* node = GameVoiceChat::FindNodeByDeviceID();
+        GameVoiceChat::Node* node = GameVoiceChat::FindNodeByDeviceID(PauseMenu::GetPausingJoystick());
         if (node)
         {
             bool enabled, keepCurrent;
@@ -3204,7 +3194,7 @@ int ScriptCB_SetVoiceReceivePreset(lua_State*)
     if (GameVoiceChat::IsOpen())
     {
         const GameVoiceChat::Transport::Mask preset = static_cast<GameVoiceChat::Transport::Mask>(LuaHelper::GetInt(1));
-        void* node = GameVoiceChat::FindNodeByDeviceID();
+        GameVoiceChat::Node* node = GameVoiceChat::FindNodeByDeviceID(PauseMenu::GetPausingJoystick());
         if (node)
         {
             ((GameVoiceChat::Node*)node)->SetReceiveMask(preset, true, false);
@@ -3220,7 +3210,7 @@ int ScriptCB_GetVoiceReceivePreset(lua_State*)
     GameVoiceChat::Transport::Mask preset = GameVoiceChat::Transport::mask_Noone;
     if (GameVoiceChat::IsOpen())
     {
-        void* node = GameVoiceChat::FindNodeByDeviceID();
+        GameVoiceChat::Node* node = GameVoiceChat::FindNodeByDeviceID(PauseMenu::GetPausingJoystick());
         if (node)
         {
             bool enabled, keepCurrent;
@@ -3238,7 +3228,7 @@ int ScriptCB_SetVoiceSendEnable(lua_State*)
     {
         const unsigned int selected = LuaHelper::GetInt(1);
         const unsigned char player = (unsigned char)GetLobbyPlayerIndex(selected);
-        VoiceChat::Node* node = (VoiceChat::Node*)GameVoiceChat::FindNodeByDeviceID();
+        VoiceChat::Node* node = (VoiceChat::Node*)GameVoiceChat::FindNodeByDeviceID(PauseMenu::GetPausingJoystick());
         if (node)
         {
             const bool enabled = LuaHelper::GetBool(2);
@@ -3255,7 +3245,7 @@ int ScriptCB_SetVoiceReceiveEnable(lua_State*)
     {
         const unsigned int selected = LuaHelper::GetInt(1);
         const unsigned char player = (unsigned char)GetLobbyPlayerIndex(selected);
-        VoiceChat::Node* node = (VoiceChat::Node*)GameVoiceChat::FindNodeByDeviceID();
+        VoiceChat::Node* node = (VoiceChat::Node*)GameVoiceChat::FindNodeByDeviceID(PauseMenu::GetPausingJoystick());
         if (node)
         {
             const bool enabled = LuaHelper::GetBool(2);
@@ -3275,7 +3265,7 @@ int ScriptCB_GetVoiceSendStatus(lua_State*)
             ? GetLobbyPlayerIndex(LuaHelper::GetInt(1))
             : PauseMenu::GetPausingJoystick();
         const unsigned char selected = (unsigned char)player;
-        VoiceChat::Node* node = (VoiceChat::Node*)GameVoiceChat::FindNodeByDeviceID();
+        VoiceChat::Node* node = (VoiceChat::Node*)GameVoiceChat::FindNodeByDeviceID(PauseMenu::GetPausingJoystick());
         GameVoiceChat::Transport* transport = GameVoiceChat::GetTransport();
         if (!node || node->GetID() == 0xff)
         {
@@ -3322,7 +3312,7 @@ int ScriptCB_GetVoiceReceiveStatus(lua_State*)
             ? GetLobbyPlayerIndex(LuaHelper::GetInt(1))
             : PauseMenu::GetPausingJoystick();
         const unsigned char selected = (unsigned char)player;
-        VoiceChat::Node* node = (VoiceChat::Node*)GameVoiceChat::FindNodeByDeviceID();
+        VoiceChat::Node* node = (VoiceChat::Node*)GameVoiceChat::FindNodeByDeviceID(PauseMenu::GetPausingJoystick());
         GameVoiceChat::Transport* transport = GameVoiceChat::GetTransport();
         if (!node || node->GetID() == 0xff)
         {
@@ -3385,7 +3375,7 @@ int ScriptCB_VoiceEnable(lua_State*)
     VoiceChat::Decoder* decoder = 0;
     if (local >= 0)
     {
-        VoiceChat::Node* node = (VoiceChat::Node*)GameVoiceChat::FindNodeByDeviceID();
+        VoiceChat::Node* node = (VoiceChat::Node*)GameVoiceChat::FindNodeByDeviceID(joystick);
         if (node)
         {
             enabled = LuaHelper::GetBool(1);

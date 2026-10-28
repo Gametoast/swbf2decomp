@@ -1,6 +1,7 @@
 #include "AmmoCounter.h"
 #define _CRT_SECURE_NO_WARNINGS
 
+#include "GameVoiceChat.h"
 #include "GameVoiceChatNode.h"
 #include "PlayerController.h"
 #include "RedEngineFL/Util/RedSceneObject.h"
@@ -1578,6 +1579,7 @@ public:
     ~NetObjState() {}
 
     static void* operator new(size_t uSize) { return sMemoryPool.Allocate(uSize); }
+    // FUNCTION: SWBF2 0x005b46a0
     static void operator delete(void* pBlock) { sMemoryPool.Free(pBlock); }
 
     PblHandle<GameObject> handle;
@@ -2227,7 +2229,7 @@ void NetGame::Create(bool bMission)
         Tracker* pTracker = Tracker::GetTracker(i);
         if (pTracker)
         {
-            pTracker->mIsSpectating = IsSpectator(i);
+            pTracker->SetSpectating(IsSpectator(i));
         }
     }
 
@@ -3177,18 +3179,17 @@ void NetGame::ApplyLateMoves()
         return;
     }
 
-    unsigned __int64* const pLateRecv = lateRecv;
-
     if (hasPendingLateRecv)
     {
         int iSlot = (hostTurnNumber - 1) & 7;
-        pLateRecv[iSlot] |= (unsigned __int64)1 << lateRecvPlayerIndex;
+        lateRecv[iSlot] |= (unsigned __int64)1 << lateRecvPlayerIndex;
     }
 
     unsigned int uTurn;
     for (uTurn = hostTurnNumber - 3; uTurn < (unsigned int)hostTurnNumber; uTurn++)
     {
-        if (pLateRecv[uTurn & 7] & hostPlayingMask)
+        int iSlot = uTurn & 7;
+        if (lateRecv[iSlot] & hostPlayingMask)
         {
             break;
         }
@@ -3202,7 +3203,8 @@ void NetGame::ApplyLateMoves()
     unsigned __int64 uMask = 0;
     for (uTurn = lateTurnNumber; uTurn < (unsigned int)hostTurnNumber; uTurn++)
     {
-        uMask |= pLateRecv[uTurn & 7] & hostPlayingMask;
+        int iSlot = uTurn & 7;
+        uMask |= lateRecv[iSlot] & hostPlayingMask;
     }
 
     int i;
@@ -3219,37 +3221,36 @@ void NetGame::ApplyLateMoves()
     }
 
     int iGroup = lateTurnNumber & 7;
-    NetPktGroup* pGroup = &lateState[iGroup];
-    pGroup->BeginRead();
+    NetPktGroup& group = lateState[iGroup];
+    group.BeginRead();
     BeginNetLOD();
     SetNetLOD(1);
     lateObjCount = 0;
     for (i = 0; i < netCurMaxPlayers; i++)
     {
-        if (!(uMask & ((unsigned __int64)1 << i)))
+        if (uMask & ((unsigned __int64)1 << i))
         {
-            continue;
+            Character* pCharacter = Character::FindPlayer(i);
+            if (!pCharacter)
+            {
+                continue;
+            }
+            Controllable* pControllable = pCharacter->GetUnit();
+            if (!pControllable)
+            {
+                continue;
+            }
+            if (pCharacter->GetVehicle())
+            {
+                pControllable = pCharacter->GetVehicle();
+            }
+            GameObject* pObject = pControllable->GetGameObject();
+            lateObjects[lateObjCount++] = pObject;
+            group.Seek(lateStateOffset[iGroup][i]);
+            pObject->ReadLateState(group);
         }
-        Character* pCharacter = Character::FindPlayer(i);
-        if (!pCharacter)
-        {
-            continue;
-        }
-        Controllable* pControllable = pCharacter->GetUnit();
-        if (!pControllable)
-        {
-            continue;
-        }
-        if (pCharacter->GetVehicle())
-        {
-            pControllable = pCharacter->GetVehicle();
-        }
-        GameObject* pObject = pControllable->GetGameObject();
-        lateObjects[lateObjCount++] = pObject;
-        pGroup->Seek(lateStateOffset[iGroup][i]);
-        pObject->ReadLateState(*pGroup);
     }
-    pGroup->EndRead();
+    group.EndRead();
 
     netIsLateTurn = true;
     float fDeltaTime = netSecondsPerTurn;
@@ -3266,7 +3267,8 @@ void NetGame::ApplyLateMoves()
         }
         ControllerManager::Update(fDeltaTime);
         Thread::UpdateAll(fDeltaTime, false, false);
-        pLateRecv[lateTurnNumber & 7] &= ~uMask;
+        iTurn = lateTurnNumber & 7;
+        lateRecv[iTurn] &= ~uMask;
         lateTurnNumber++;
     }
     netIsLateTurn = false;
@@ -4763,17 +4765,17 @@ bool NetGame::IsSkipped(const GameObject* pObject, float& fDeltaTime)
     return false;
 }
 
-void WriteTurnLowBits(NetPktGroup* pGroup, unsigned int uTurn);
-void WriteSwitchResponse(NetPktGroup* pGroup, SwitchResponse response, unsigned int turn);
+void WriteTurnLowBits(NetPktGroup& group, unsigned int uTurn);
+void WriteSwitchResponse(NetPktGroup& group, SwitchResponse response, unsigned int turn);
 void WriteMiniMove(NetPktGroup& group, ProcessedInputs* inputs);
 void WriteMove(NetPktGroup& group, ProcessedInputs* previous, ProcessedInputs* current);
 bool IsNetObjectFeatureEnabled();
 int SetNetLOD(int precision);
-void WriteSpawnSelect(NetPktGroup* pGroup);
+void WriteSpawnSelect(NetPktGroup& group);
 void WriteLockedTargets(NetPktGroup& group);
-void WriteBootRequest(NetPktGroup* pGroup);
+void WriteBootRequest(NetPktGroup& group);
 void WriteSpawnCamera(NetPktGroup& group);
-void WriteUpload(NetPktGroup* pGroup);
+void WriteUpload(NetPktGroup& group);
 void WriteSuicideRequest(NetPktGroup& group);
 
 // GLOBAL: SWBF2 0x01fa6708
@@ -4821,8 +4823,7 @@ void NetGame::SendClient()
 
     if (netGameOver)
     {
-        NetPktGroup group;
-        group.isSmall = true;
+        NetPktGroup group(true);
         group.BeginWrite();
         group.Write(true);
         group.WriteBits(clientHostTurnNumber, 19);
@@ -4835,12 +4836,12 @@ void NetGame::SendClient()
     {
         if (fTime > miniMoveTime)
         {
-            NetPktGroup group;
-            group.isSmall = true;
+            NetPktGroup group(true);
             group.BeginWrite();
             group.Write(true);
             int iSlot = (clientTurnNumber - 1) & 0x1f;
-            WriteMiniMove(group, &localClientTurns[iSlot][0]);
+            ProcessedInputs* inputs = &localClientTurns[iSlot][0];
+            WriteMiniMove(group, inputs);
             group.EndWrite();
             NetComm::Send(64, 11, &group);
             sendTurnNumber = clientTurnNumber;
@@ -4849,12 +4850,11 @@ void NetGame::SendClient()
     }
     else
     {
-        NetPktGroup group;
-        group.isSmall = true;
+        NetPktGroup group(true);
         group.BeginWrite();
         group.Write(false);
         unsigned int uTurn = clientTurnNumber - 1;
-        WriteTurnLowBits(&group, uTurn);
+        WriteTurnLowBits(group, uTurn);
         IsNetObjectFeatureEnabled();
         if (clientTurnNumber >= 0x3d9a)
         {
@@ -4867,22 +4867,22 @@ void NetGame::SendClient()
             switch (netHosts[netHostIndex].hostMode)
             {
             case HM_RELAY:
-                WriteTurnLowBits(&group, hostTurnNumber);
+                WriteTurnLowBits(group, hostTurnNumber);
                 break;
             case HM_REPLICA:
-                WriteTurnLowBits(&group, hostTurnNumber);
+                WriteTurnLowBits(group, hostTurnNumber);
                 break;
             }
         }
-        WriteTurnLowBits(&group, clientHostTurnNumber ? clientHostTurnNumber : -1);
-        WriteSwitchResponse(&group, clientSwitchObjects, clientSwitchObjTurn);
+        WriteTurnLowBits(group, clientHostTurnNumber ? clientHostTurnNumber : -1);
+        WriteSwitchResponse(group, clientSwitchObjects, clientSwitchObjTurn);
         SetNetLOD(1);
-        WriteSpawnSelect(&group);
+        WriteSpawnSelect(group);
         WriteLockedTargets(group);
-        WriteBootRequest(&group);
+        WriteBootRequest(group);
         WriteSpawnCamera(group);
         NetGame::SendChatMessageToServer(group);
-        WriteUpload(&group);
+        WriteUpload(group);
         WriteSuicideRequest(group);
 
         unsigned int uLastTurn = uTurn;
@@ -4931,7 +4931,8 @@ void NetGame::SendClient()
             group.Write(bCockpitCam);
 
             uTurn = uLastTurn;
-            ProcessedInputs* pPrev = &localClientTurns[uTurn & 0x1f][curIndex];
+            int iSlot = uTurn & 0x1f;
+            ProcessedInputs* pPrev = &localClientTurns[iSlot][curIndex];
             WriteMove(group, &noInputs, pPrev);
             unsigned int uOldest = sendTurnNumber - 4;
             if (uOldest > (unsigned int)sendTurnNumber)
@@ -4941,7 +4942,8 @@ void NetGame::SendClient()
             while (uTurn > uOldest)
             {
                 uTurn--;
-                ProcessedInputs* pCur = &localClientTurns[uTurn & 0x1f][curIndex];
+                iSlot = uTurn & 0x1f;
+                ProcessedInputs* pCur = &localClientTurns[iSlot][curIndex];
                 WriteMove(group, pPrev, pCur);
                 pPrev = pCur;
             }
@@ -5139,7 +5141,8 @@ void ReadDamageOwner(NetPktGroup& group, DamageOwner& owner)
 // FUNCTION: SWBF2 0x005bc380
 void WriteObjectPtr(NetPktGroup& group, const GameObject* pObject)
 {
-    const bool bSpecial = IsNeverDies(pObject->GetEntityType());
+    EntityType entType = pObject->GetEntityType();
+    const bool bSpecial = IsNeverDies(entType);
     group.Write(bSpecial);
     if (bSpecial)
     {
@@ -5809,7 +5812,7 @@ unsigned int clientTurnLeadLimit;
 // GLOBAL: SWBF2 0x01faa6bc
 int multiTurnSubmitCount;
 
-void WriteWaiting(NetPktGroup* pGroup);
+void WriteWaiting(NetPktGroup& group);
 void ReceivePrimary();
 void ReceiveReplica();
 void ReceiveRelay();
@@ -5864,7 +5867,7 @@ void NetGame::ReceiveHost()
             group.EndRead();
             pPkt->Free();
             group.BeginWrite();
-            WriteWaiting(&group);
+            WriteWaiting(group);
             group.EndWrite();
             NetComm::Send(iSrc, PKT_WAITING, &group);
         }
@@ -5997,19 +6000,10 @@ void NetGame::SubmitMove(int iTurns)
         NetCommP::GetLastRecv(64) = fNow;
     }
 
-    int iWindow = netTurnsPerSecond * 3;
-    int iAcked = clientHostTurnNumber;
-    bool bRunaway;
-    if (iAcked == 0 && clientTurnNumber > (unsigned int)(iWindow + 10))
-    {
-        bRunaway = true;
-    }
-    else
-    {
-        bRunaway = false;
-    }
-    bool bFree = bRunaway;
-    if (clientTurnNumber + iTurns > (unsigned int)(iAcked + iWindow) && !bFree)
+    const unsigned int iWindow = netTurnsPerSecond * 3;
+    unsigned int iAcked = clientHostTurnNumber;
+    bool bFree = iAcked == 0 && clientTurnNumber > iWindow + 10;
+    if (clientTurnNumber + iTurns > iAcked + iWindow && !bFree)
     {
         clientTurnNumber = iAcked + iWindow - iTurns;
         clientTurnHeldBack = true;
@@ -6024,36 +6018,35 @@ void NetGame::SubmitMove(int iTurns)
     unsigned int i;
     for (i = 0; i < 2; ++i)
     {
-        if (NetComm::GetLocalIndex(i) < 0)
-        {
-            apInputs[i] = 0;
-        }
-        else
+        if (NetComm::GetLocalIndex(i) >= 0)
         {
             apInputs[i] = FLInputManager::Instance()->GetPlayerInputs(i);
         }
+        else
+        {
+            apInputs[i] = 0;
+        }
     }
 
-    for (int iTurn = 0; iTurn < iTurns; ++iTurn)
+    int iTurn;
+    for (iTurn = 0; iTurn < iTurns; ++iTurn)
     {
         int iSlot = clientTurnNumber & 0x1f;
         for (i = 0; i < 2; ++i)
         {
-            if (!apInputs[i])
+            if (apInputs[i])
             {
-                continue;
-            }
-            ProcessedInputs* pInputs = apInputs[i];
-            localClientTurns[iSlot][i] = *pInputs;
-            ClampMove(&localClientTurns[iSlot][i]);
-            if (iTurn > 0)
-            {
-                ClearPressed(&localClientTurns[iSlot][i]);
-            }
-            if (PauseMenu::GetPaused(i) || FLInputManager::s_instance.AnyMissing() || CameraManager::Instance()->IsFreeLook(i) ||
-                !((PlayerController::sEnabled & (1 << i)) != 0))
-            {
-                localClientTurns[iSlot][i].Clear();
+                localClientTurns[iSlot][i] = *apInputs[i];
+                ClampMove(&localClientTurns[iSlot][i]);
+                if (iTurn > 0)
+                {
+                    ClearPressed(&localClientTurns[iSlot][i]);
+                }
+                if (PauseMenu::GetPaused(i) || FLInputManager::Instance()->AnyMissing() || CameraManager::Instance()->IsFreeLook(i) ||
+                    !((PlayerController::sEnabled & (1 << i)) != 0))
+                {
+                    localClientTurns[iSlot][i].Clear();
+                }
             }
         }
         ++clientTurnNumber;
@@ -6088,7 +6081,6 @@ bool NetGame::IsTurnReady()
         return true;
     }
 
-    const unsigned __int64* puRecv = hostRecv;
     unsigned int uTurn = hostTurnNumber;
     stepTurns = 0;
     while (true)
@@ -6098,7 +6090,7 @@ bool NetGame::IsTurnReady()
             break;
         }
         int iSlot = uTurn & 0x1f;
-        bool bReady = (puRecv[iSlot] & hostNextPlayingMask) == hostNextPlayingMask;
+        bool bReady = (hostRecv[iSlot] & hostNextPlayingMask) == hostNextPlayingMask;
         bReady = bReady & NetGame::IsReadyToPlay();
         unsigned int uDelay = 3;
         if (!netWaitLate)
@@ -6122,22 +6114,19 @@ bool NetGame::IsTurnReady()
                 FillTurn(uTurn);
                 for (i = 0; i < netCurMaxPlayers; ++i)
                 {
-                    if (!(hostNextPlayingMask & ((unsigned __int64)1 << i)))
+                    if ((hostNextPlayingMask & ((unsigned __int64)1 << i)) &&
+                        !(hostRecv[iSlot] & ((unsigned __int64)1 << i)))
                     {
-                        continue;
-                    }
-                    if (puRecv[iSlot] & ((unsigned __int64)1 << i))
-                    {
-                        continue;
-                    }
-                    if (hostPlayingMask & ((unsigned __int64)1 << i))
-                    {
-                        hostTurns[iSlot].moves[i] = hostTurns[(uTurn - 1) & 0x1f].moves[i];
-                        ++netPlayers[i].filledCount;
-                    }
-                    else
-                    {
-                        hostTurns[iSlot].moves[i] = noInputs;
+                        if (hostPlayingMask & ((unsigned __int64)1 << i))
+                        {
+                            int previousSlot = (uTurn - 1) & 0x1f;
+                            hostTurns[iSlot].moves[i] = hostTurns[previousSlot].moves[i];
+                            ++netPlayers[i].filledCount;
+                        }
+                        else
+                        {
+                            hostTurns[iSlot].moves[i] = noInputs;
+                        }
                     }
                 }
                 bReady = true;
@@ -6422,8 +6411,8 @@ void NetGame::GetScore(int* count1, int* count2, int* limit1, int* limit2, bool*
 }
 
 void ReadWaiting(NetPktGroup& group);
-unsigned int GetUpdateTurn(NetPktGroup* group);
-void ReceiveUpdate(NetPktGroup* group);
+unsigned int GetUpdateTurn(NetPktGroup& group);
+void ReceiveUpdate(NetPktGroup& group);
 extern bool netInGame;
 
 // FUNCTION: SWBF2 0x005b8f70
@@ -6438,12 +6427,13 @@ void NetGame::ReceiveClient()
     {
         return;
     }
-    if (!IsReadyToPlay())
+    bool isReadyToPlay = IsReadyToPlay();
+    if (!isReadyToPlay)
     {
-        for (;;)
+        while (true)
         {
             NetPktGroup group;
-            if (!NetComm::Recv(&group, PKT_WAITING))
+            if (!NetComm::Recv(group, PKT_WAITING))
             {
                 break;
             }
@@ -6457,18 +6447,22 @@ void NetGame::ReceiveClient()
     char journal = 53;
     PblJournal::Record(journal, (PblJournalType)0);
     float now = NetComm::GetTime();
-    for (;;)
+    while (true)
     {
         NetPktGroup group[2];
-        if (!NetComm::Recv(&group[0], PKT_GAME_UPDATE))
+        if (!NetComm::Recv(group[0], PKT_GAME_UPDATE))
         {
             break;
         }
         int discard = 1;
-        while (NetComm::Recv(&group[discard], PKT_GAME_UPDATE))
+        while (true)
         {
-            unsigned int previous = GetUpdateTurn(&group[discard ^ 1]);
-            unsigned int received = GetUpdateTurn(&group[discard]);
+            if (!NetComm::Recv(group[discard], PKT_GAME_UPDATE))
+            {
+                break;
+            }
+            unsigned int previous = GetUpdateTurn(group[discard ^ 1]);
+            unsigned int received = GetUpdateTurn(group[discard]);
             if (received > previous)
             {
                 discard ^= 1;
@@ -6477,7 +6471,7 @@ void NetGame::ReceiveClient()
         }
         journal = 54;
         PblJournal::Record(journal, (PblJournalType)0);
-        ReceiveUpdate(&group[discard ^ 1]);
+        ReceiveUpdate(group[discard ^ 1]);
         NetCommP::GetLastRecv(host + 64) = now;
         hostCycleTime = now + 3.0f;
     }
@@ -6493,17 +6487,17 @@ void NetGame::ReceiveClient()
             NetComm::Disconnect(host + 64);
         }
     }
-    for (;;)
+    while (true)
     {
         NetPktGroup group;
-        if (!NetComm::Recv(&group, PKT_STATS_UPDATE))
+        if (!NetComm::Recv(group, PKT_STATS_UPDATE))
         {
             break;
         }
         group.BeginRead();
-        unsigned int active;
-        group.ReadBits(active, 1);
-        NetGame::ReadChatMessageFromServer(&group);
+        bool active;
+        group.Read(active);
+        NetGame::ReadChatMessageFromServer(group);
         if (active)
         {
             hostCycleTime = now + 3.0f;
@@ -6590,8 +6584,10 @@ void ReadTurnLowBits(NetPktGroup& group, unsigned int& turn)
 // FUNCTION: SWBF2 0x005d24b0
 void WriteDestMask(NetPktGroup& group, unsigned __int64 mask)
 {
-    group.WriteBits((unsigned int)mask, 32);
-    group.WriteBits((unsigned int)(mask >> 32), 32);
+    unsigned int lowBits = (unsigned int)mask;
+    unsigned int highBits = (unsigned int)(mask >> 32);
+    group.WriteBits(lowBits, 32);
+    group.WriteBits(highBits, 32);
 }
 
 // FUNCTION: SWBF2 0x005d24f0
@@ -6774,7 +6770,7 @@ void NetGame::SetEnterVehicleTurn(unsigned int player)
 }
 
 // FUNCTION: SWBF2 0x005bd480
-void BeginReadAlign()
+void BeginReadAlign(NetPktGroup& group)
 {
     alignCount = 0;
 }
@@ -6789,12 +6785,6 @@ void ClearPressed(ProcessedInputs* inputs)
 int GetUniqObjectBits()
 {
     return 6;
-}
-
-// FUNCTION: SWBF2 0x005b46a0
-void ClearPacketReadState(void* state)
-{
-    NetObjState::sMemoryPool.Free(state);
 }
 
 // FUNCTION: SWBF2 0x005bf500
@@ -7009,17 +6999,17 @@ void AloTrackable::Read(NetPktGroup& group)
 // FUNCTION: SWBF2 0x005c8b20
 void FillTurns(int player, unsigned int endTurn)
 {
-    const unsigned __int64 playerBit = (unsigned __int64)1 << player;
     for (unsigned int turn = hostTurnNumber; turn < endTurn; ++turn)
     {
-        unsigned int slot = turn & 31;
-        unsigned __int64* received = hostRecv;
-        if (!(received[slot] & playerBit))
+        int slot = turn & 31;
+        if (hostRecv[slot] & ((unsigned __int64)1 << player))
         {
-            hostTurns[slot].moves[player] = hostTurns[(turn - 1) & 31].moves[player];
-            received[slot] |= playerBit;
-            ++netPlayers[player].filledCount;
+            continue;
         }
+        int previousSlot = (turn - 1) & 31;
+        hostTurns[slot].moves[player] = hostTurns[previousSlot].moves[player];
+        hostRecv[slot] |= (unsigned __int64)1 << player;
+        ++netPlayers[player].filledCount;
     }
 }
 
@@ -7188,7 +7178,7 @@ void NetGame::SetSpectator(int player, int spectator)
         Tracker* tracker = Tracker::GetTracker(player);
         if (tracker)
         {
-            tracker->mIsSpectating = spectator != -1;
+            tracker->SetSpectating(spectator != -1);
         }
     }
 }
@@ -8424,13 +8414,13 @@ SwitchResponse ReadSwitchResponse(NetPktGroup& group, unsigned int turn, unsigne
 }
 
 // FUNCTION: SWBF2 0x005bb570
-unsigned int GetUpdateTurn(NetPktGroup* group)
+unsigned int GetUpdateTurn(NetPktGroup& group)
 {
-    group->BeginRead();
-    BeginReadAlign();
+    group.BeginRead();
+    BeginReadAlign(group);
     unsigned int turn;
-    ReadTurnLowBits(*group, turn);
-    group->EndRead();
+    ReadTurnLowBits(group, turn);
+    group.EndRead();
     return turn;
 }
 
@@ -8586,17 +8576,17 @@ void ReadSwitchObjRequest(NetPktGroup& group)
     }
 }
 
-void WriteString(NetPktGroup* group, const char* text, unsigned int capacity);
+void WriteString(NetPktGroup& group, const char* text, unsigned int capacity);
 
 // FUNCTION: SWBF2 0x005d23a0
-void WriteWaiting(NetPktGroup* group)
+void WriteWaiting(NetPktGroup& group)
 {
-    group->WriteBits(netMinPlayersToAutoLaunchDedicated, 7);
-    group->WriteBits(netCurMaxPlayers, 7);
+    group.WriteBits(netMinPlayersToAutoLaunchDedicated, 7);
+    group.WriteBits(netCurMaxPlayers, 7);
     for (int player = 0; player < netCurMaxPlayers; ++player)
     {
         bool connected = NetComm::IsConnected(player);
-        group->Write(connected);
+        group.Write(connected);
         if (NetComm::IsConnected(player))
         {
             WriteString(group, NetGame::GetPlayerName(player), 32);
@@ -8676,23 +8666,23 @@ void ReadSpectatorInfo(NetPktGroup& group, int player)
 // FUNCTION: SWBF2 0x005d2a80
 void ReadPlayerMoves(NetPktGroup& group)
 {
+    int player;
     while (true)
     {
-        unsigned int player;
-        group.ReadBits(player, 6);
-        if (player == (unsigned int)curDst)
+        group.ReadBits((unsigned int&)player, 6);
+        if (player == curDst)
         {
             break;
         }
-        ProcessedInputs& move = remoteClientTurns.moves[player];
-        ReadFixed<StickAxisConvert>(stickAxisConvert, group, move.mFloatInputs[0]);
-        ReadFixed<StickAxisConvert>(stickAxisConvert, group, move.mFloatInputs[1]);
-        ReadFixed<MouseAxisConvert>(mouseAxisConvert, group, move.mFloatInputs[2]);
-        ReadFixed<MouseAxisConvert>(mouseAxisConvert, group, move.mFloatInputs[3]);
+        ProcessedInputs* move = &remoteClientTurns.moves[player];
+        ReadFixed<StickAxisConvert>(stickAxisConvert, group, move->mFloatInputs[0]);
+        ReadFixed<StickAxisConvert>(stickAxisConvert, group, move->mFloatInputs[1]);
+        ReadFixed<MouseAxisConvert>(mouseAxisConvert, group, move->mFloatInputs[2]);
+        ReadFixed<MouseAxisConvert>(mouseAxisConvert, group, move->mFloatInputs[3]);
         unsigned int buttons;
         group.ReadBits(buttons, 4);
-        move.bits.mBoolInputs = buttons;
-        move.bits.mMouseMode = NetComm::GetArch(player) == NET_ARCH_PC ? 1 : 0;
+        remoteClientTurns.moves[player].bits.mBoolInputs = buttons;
+        remoteClientTurns.moves[player].bits.mMouseMode = NetComm::GetArch(player) == NET_ARCH_PC ? 1 : 0;
     }
 }
 
@@ -8729,8 +8719,9 @@ void HandleEvent_UpdateInvincibility(ReliableNetEvent& event)
 // FUNCTION: SWBF2 0x005c2be0
 void RecordTurn(unsigned int turn)
 {
+    int slot = turn & 31;
+    NetTurn& turnData = hostTurns[slot];
     PblJournal::Record(hostPlayingMask, PJT_MOVES);
-    NetTurn& turnData = hostTurns[turn & 31];
     for (unsigned int player = 0; player < 64; ++player)
     {
         if (hostPlayingMask & (1ui64 << player))
@@ -8860,9 +8851,9 @@ unsigned int ReadMoves(NetPktGroup& group, int player, unsigned int turn)
     ProcessedInputs* previous = &noInputs;
     while (true)
     {
-        unsigned int slot = turn & 31;
-        ProcessedInputs& current = hostTurns[slot].moves[player];
-        if (!ReadMove(group, previous, &current))
+        int slot = turn & 31;
+        ProcessedInputs* current = &hostTurns[slot].moves[player];
+        if (!ReadMove(group, previous, current))
         {
             break;
         }
@@ -8870,7 +8861,7 @@ unsigned int ReadMoves(NetPktGroup& group, int player, unsigned int turn)
         {
             hostRecv[slot] |= 1ui64 << player;
         }
-        previous = &current;
+        previous = current;
         ++turn;
     }
     return turn - 1;
@@ -9157,14 +9148,14 @@ void ReadEvent_ConnectTowCable(NetPktGroup& group, ReliableNetEvent& event)
 void ReadUpdate(NetPktGroup& group);
 
 // FUNCTION: SWBF2 0x005bb530
-void ReceiveUpdate(NetPktGroup* group)
+void ReceiveUpdate(NetPktGroup& group)
 {
-    group->BeginRead();
-    BeginReadAlign();
+    group.BeginRead();
+    BeginReadAlign(group);
     isFullState = false;
-    ReadUpdate(*group);
-    group->EndRead();
-    group->Free();
+    ReadUpdate(group);
+    group.EndRead();
+    group.Free();
 }
 
 Character* ReadCharacter(NetPktGroup& group);
@@ -9396,14 +9387,14 @@ void DisplayMessage(NG_ChatMsg& message)
 void LogChatMessage(const NG_ChatMsg& message);
 
 // FUNCTION: SWBF2 0x005d1900
-void NetGame::ReadChatMessageFromServer(NetPktGroup* group)
+void NetGame::ReadChatMessageFromServer(NetPktGroup& group)
 {
     unsigned int length = 0;
     NG_ChatMsg message;
-    group->ReadBytes((char*)&length, sizeof(length));
+    group.ReadBytes((char*)&length, sizeof(length));
     if ((length & 0xffff0000u) == 0xffff0000u && (length &= 0xffffu) > 0)
     {
-        group->ReadBytes((char*)&message, length);
+        group.ReadBytes((char*)&message, length);
         if (!NetGame::IsHost())
         {
             LogChatMessage(message);
@@ -9412,17 +9403,13 @@ void NetGame::ReadChatMessageFromServer(NetPktGroup* group)
     }
 }
 
-namespace GameVoiceChat
-{
-void* FindNodeByDeviceID();
-}
 
 // FUNCTION: SWBF2 0x005b7ee0
 void NetGame::AddPlayer(int iPlayer)
 {
     Character* character = 0;
-    const bool spectator = IsSpectator(iPlayer);
-    const bool flag = NetGame::IsSpawning(iPlayer);
+    int spectator = IsSpectator(iPlayer);
+    int flag = NetGame::IsSpawning(iPlayer);
     bool makeCharacter = true;
     if (spectator && !flag)
     {
@@ -9437,78 +9424,78 @@ void NetGame::AddPlayer(int iPlayer)
     const int joystick = GetJoystickIndex(iPlayer);
     if (joystick >= 0)
     {
-        void* node = GameVoiceChat::FindNodeByDeviceID();
+        GameVoiceChat::Node* node = GameVoiceChat::FindNodeByDeviceID(joystick);
         if (node)
         {
             ((GameVoiceChat::Node*)node)->SetID((unsigned char)iPlayer);
         }
     }
-    if (!IsHost() || IsClient())
+    if (IsHost() && !IsClient())
     {
-        return;
-    }
-
-    Character* player = Character::FindPlayer(iPlayer);
-    if (player)
-    {
-        MedalsMgr* medals = player->GetMedalsManager();
-        if (medals)
+        Character* player = Character::FindPlayer(iPlayer);
+        if (player)
         {
-            medals->Init();
-        }
-    }
-    unsigned char team1 = 0, team2 = 0;
-    for (int i = 0; i < netCurMaxPlayers; ++i)
-    {
-        if (i == iPlayer)
-        {
-            continue;
-        }
-        if (IsPlaying(i, false))
-        {
-            if (GetStartTeam(i) == 1)
+            MedalsMgr* medals = player->GetMedalsManager();
+            if (medals)
             {
-                ++team1;
-            }
-            else
-            {
-                ++team2;
+                medals->Init();
             }
         }
-    }
-    if (team1 < team2)
-    {
-        NetGame::SetStartTeam(iPlayer, 1);
-    }
-    else
-    {
-        NetGame::SetStartTeam(iPlayer, 2);
-    }
-    netPlayers[iPlayer].lastObjState = NetObjStateMap::Alloc();
-    netPlayers[iPlayer].nextObjState = NetObjStateMap::Alloc();
-    netPlayers[iPlayer].reliableEventTail = reliableNetEventTail;
-    if (makeCharacter)
-    {
-        CreateEvent_Message((MessageType)8, character, 0, 0, 0, 0, 0);
-        NetGame::CreateEvent_ChangeCommandPostTeams(1ui64 << iPlayer);
-        EntityDoor::BeginIter();
-        for (EntityDoor* door = EntityDoor::GetCurrentIter(); door; door = EntityDoor::GetCurrentIter())
+        unsigned char team1 = 0, team2 = 0;
+        for (int i = 0; i < netCurMaxPlayers; ++i)
         {
-            NetGame::CreateEvent_UpdateDoorState(GetDoorEntityId((const unsigned int*)door), 1ui64 << iPlayer);
-            EntityDoor::IncrementIter();
+            if (i == iPlayer)
+            {
+                continue;
+            }
+            if (IsPlaying(i, false))
+            {
+                if (GetStartTeam(i) == 1)
+                {
+                    ++team1;
+                }
+                else
+                {
+                    ++team2;
+                }
+            }
         }
-        HUD::ObjectiveList* objectives = ObjectiveManager::GetObjectiveList();
-        objectives->BeginIter();
-        for (HUD::Objective* objective = objectives->GetCurrentIter(); objective;
-             objective = objectives->GetCurrentIter())
+        if (team1 < team2)
         {
-            const unsigned __int64 mask = 1ui64 << iPlayer;
-            NetGame::CreateEvent_UpdateObjective(objective, mask);
-            objectives->IncrementIter();
+            NetGame::SetStartTeam(iPlayer, 1);
         }
+        else
+        {
+            NetGame::SetStartTeam(iPlayer, 2);
+        }
+        netPlayers[iPlayer].lastObjState = NetObjStateMap::Alloc();
+        netPlayers[iPlayer].nextObjState = NetObjStateMap::Alloc();
+        netPlayers[iPlayer].reliableEventTail = reliableNetEventTail;
+        if (makeCharacter)
+        {
+            CreateEvent_Message((MessageType)8, character, 0, 0, 0, 0, 0);
+            NetGame::CreateEvent_ChangeCommandPostTeams(1ui64 << iPlayer);
+            EntityDoor::BeginIter();
+            EntityDoor* door = EntityDoor::GetCurrentIter();
+            while (door)
+            {
+                NetGame::CreateEvent_UpdateDoorState(door->GetId(), 1ui64 << iPlayer);
+                EntityDoor::IncrementIter();
+                door = EntityDoor::GetCurrentIter();
+            }
+            HUD::ObjectiveList* objectives = ObjectiveManager::GetObjectiveList();
+            objectives->BeginIter();
+            HUD::Objective* objective = objectives->GetCurrentIter();
+            while (objective)
+            {
+                NetGame::CreateEvent_UpdateObjective(objective, 1ui64 << iPlayer);
+                objectives->IncrementIter();
+                objective = objectives->GetCurrentIter();
+            }
+        }
+        netPlayers[iPlayer].mLastReceivedTurn = hostTurnNumber;
+        NetAdmin::AddPlayer(iPlayer);
     }
-    netPlayers[iPlayer].mLastReceivedTurn = hostTurnNumber;
-    NetAdmin::AddPlayer(iPlayer);
 }
 
 // FUNCTION: SWBF2 0x005b8190
@@ -9549,7 +9536,7 @@ void NetGame::RemovePlayer(int iPlayer)
         Tracker* tracker = Tracker::GetTracker(iPlayer);
         if (tracker)
         {
-            tracker->mIsSpectating = IsSpectator(iPlayer);
+            tracker->SetSpectating(IsSpectator(iPlayer));
         }
         AtleastOnce::DropAll(iPlayer);
         CleanReliableNetEvents(iPlayer);
@@ -9573,7 +9560,7 @@ void NetGame::RemovePlayer(int iPlayer)
         Tracker* tracker = Tracker::GetTracker(iPlayer);
         if (tracker)
         {
-            tracker->mIsSpectating = IsSpectator(iPlayer);
+            tracker->SetSpectating(IsSpectator(iPlayer));
         }
         NetComm::Disconnect(iPlayer);
     }
@@ -9732,11 +9719,11 @@ void ReceiveRelay()
         {
             group.Set(packet);
         }
-        if (relayReadsOwnPacket || NetComm::Recv(&group, PKT_GAME_RELAY_UPDATE_LOCAL))
+        if (relayReadsOwnPacket || NetComm::Recv(group, PKT_GAME_RELAY_UPDATE_LOCAL))
         {
             ClearRelay();
             group.BeginRead();
-            BeginReadAlign();
+            BeginReadAlign(group);
             isFullState = true;
             curDst = -1;
             saveObjState = false;
@@ -9771,7 +9758,7 @@ void ReceiveReplica()
         unsigned int lastTurn;
         unsigned int updateTurn;
         NetPktGroup pktGroup;
-        if (!NetComm::Recv(&pktGroup, PKT_GAME_REPLICA_UPDATE))
+        if (!NetComm::Recv(pktGroup, PKT_GAME_REPLICA_UPDATE))
         {
             return;
         }
@@ -10005,6 +9992,7 @@ void FindCreateObj(EntityClass* entityClass, int player)
 // FUNCTION: SWBF2 0x005d02a0
 void ReadSpawnSelect(NetPktGroup& group, int player)
 {
+    unsigned int bits;
     for (int i = 0; i < 2; ++i)
     {
         int id = i == 0 ? player : NetGame::GetMyGuest(player, i - 1);
@@ -10033,7 +10021,8 @@ void ReadSpawnSelect(NetPktGroup& group, int player)
                     {
                         if (!NetGame::IsSpectator(id))
                         {
-                            NetGame::SetSpectator(id, NetGame::FindSpectateTarget(id));
+                            int spectate_id = NetGame::FindSpectateTarget(id);
+                            NetGame::SetSpectator(id, spectate_id);
                         }
                         NetGame::SetSpawning(id, false);
                     }
@@ -10088,7 +10077,6 @@ void ReadSpawnSelect(NetPktGroup& group, int player)
                         bool isTeam1;
                         group.Read(isTeam1);
                         team = isTeam1 ? 1 : 2;
-                        unsigned int bits;
                         group.ReadBits(bits, 4);
                         classIndex = bits;
                         bool randomPost;
@@ -10154,7 +10142,8 @@ void ReadSpawnSelect(NetPktGroup& group, int player)
                     int spawnTeam = np.isTeam1 ? 1 : 2;
                     int spawnClass = np.spawnClass;
                     CommandPost* spawnPost = CommandPost::FindPostByIndex(np.spawnPost);
-                    if (spawnClass >= Team::GetPtr(spawnTeam)->GetClassCount())
+                    Team* teamPtr = Team::GetPtr(spawnTeam);
+                    if (spawnClass >= teamPtr->GetClassCount())
                     {
                         spawnClass = 0;
                     }
@@ -10168,11 +10157,12 @@ void ReadSpawnSelect(NetPktGroup& group, int player)
                 }
                 else if (character->GetUnit())
                 {
-                    if (!character->GetVehicle() && !character->mRemote)
+                    if (!character->GetVehicle() && !character->GetRemote())
                     {
                         int spawnTeam = np.isTeam1 ? 1 : 2;
                         int spawnClass = np.spawnClass;
-                        if (spawnClass >= Team::GetPtr(spawnTeam)->GetClassCount())
+                        Team* teamPtr = Team::GetPtr(spawnTeam);
+                        if (spawnClass >= teamPtr->GetClassCount())
                         {
                             spawnClass = 0;
                         }
@@ -10189,7 +10179,8 @@ void ReadSpawnSelect(NetPktGroup& group, int player)
         if (character && !character->GetUnit())
         {
             int team = (player & 1) + 1;
-            character->SelectSpawn(team, 0, SpawnManager::Instance()->GetRandomSpawnPoint(team));
+            CommandPost* post = SpawnManager::Instance()->GetRandomSpawnPoint(team);
+            character->SelectSpawn(team, 0, post);
             character->SetSpawnReady(true);
         }
     }
@@ -10239,11 +10230,11 @@ void ReadQuaternion(NetPktGroup& group, PblQuaternion& value);
 
 namespace StatsManager
 {
-void ReadStatsChallenge();
+void ReadStatsChallenge(int player, NetPktGroup& group);
 }
 namespace StatsManager
 {
-void ReadStatsResponse();
+void ReadStatsResponse(int player, NetPktGroup& group);
 }
 
 // FUNCTION: SWBF2 0x005bc740
@@ -10346,7 +10337,8 @@ GameObject* CreateObject(unsigned int uniqId, EntityClass* entityClass, int init
         NetObj* netObj = new NetObj;
         netObj->obj = object;
         netObj->usedTurn = clientHostTurnNumber;
-        unsigned int handleId = object->GetHandleId();
+        PblValues::Record(uniqId, PVT_FULL);
+        PblValues::Record(object->GetHandleId(), PVT_FULL);
         unsigned int index = uniqId;
         if (index == 63)
         {
@@ -10400,9 +10392,9 @@ GameObject* CreateObject(unsigned int uniqId, EntityClass* entityClass, int init
         NetObjState* state = new NetObjState;
         state->handle = object;
         state->classIdx = (unsigned char)entityClass->GetNetIndex();
-        state->playerId = playerId < 0 ? 0xff : (unsigned char)playerId;
-        state->initialPlayerId = initialPlayerId < 0 ? 0xff : (unsigned char)initialPlayerId;
-        state->character = character ? (unsigned char)(character - Character::GetPtr(0)) : 0xff;
+        state->playerId = playerId >= 0 ? (unsigned char)playerId : (unsigned char)-1;
+        state->initialPlayerId = initialPlayerId >= 0 ? (unsigned char)initialPlayerId : (unsigned char)-1;
+        state->character = character ? (unsigned char)(character - Character::GetPtr(0)) : (unsigned char)-1;
         state->rotation = rotation;
         state->position = position;
         state->team = (unsigned char)team->GetNumber();
@@ -10571,9 +10563,9 @@ bool ReadObject(NetPktGroup& group)
                 state = new NetObjState;
                 state->handle = object;
                 state->classIdx = (unsigned char)object->GetEntityClass()->GetNetIndex();
-                state->playerId = playerId < 0 ? 0xff : (unsigned char)playerId;
-                state->initialPlayerId = initialPlayerId < 0 ? 0xff : (unsigned char)initialPlayerId;
-                state->character = character ? (unsigned char)(character - Character::GetPtr(0)) : 0xff;
+                state->playerId = playerId >= 0 ? (unsigned char)playerId : (unsigned char)-1;
+                state->initialPlayerId = initialPlayerId >= 0 ? (unsigned char)initialPlayerId : (unsigned char)-1;
+                state->character = character ? (unsigned char)(character - Character::GetPtr(0)) : (unsigned char)-1;
                 state->position = object->GetMatrix().GetTranslation();
                 state->team = (unsigned char)object->GetTeam();
                 state->perceivedTeam = (unsigned char)object->GetPerceivedTeam();
@@ -10605,7 +10597,8 @@ void ReadObjects(NetPktGroup& group)
         group.Read(hasRemoves);
         if (hasRemoves)
         {
-            for (readCount = 0;; ++readCount)
+            readCount = 0;
+            while (true)
             {
                 unsigned int index;
                 group.ReadBits(index, 6);
@@ -10621,6 +10614,7 @@ void ReadObjects(NetPktGroup& group)
                     Remove(netObj, flag);
                 }
                 removed[index] = true;
+                ++readCount;
             }
         }
         for (i = 0; i < 64; ++i)
@@ -10653,7 +10647,8 @@ void ReadObjects(NetPktGroup& group)
         group.Read(hasCreates);
         if (hasCreates)
         {
-            for (readCount = 0;; ++readCount)
+            readCount = 0;
+            while (true)
             {
                 unsigned int index;
                 group.ReadBits(index, 6);
@@ -10666,6 +10661,7 @@ void ReadObjects(NetPktGroup& group)
                     ++gDebugCount;
                 }
                 ReadCreate(group, index);
+                ++readCount;
             }
         }
         for (i = 0; i < createPoolCount; ++i)
@@ -10703,7 +10699,8 @@ void ReadObjects(NetPktGroup& group)
     {
         ndSkippedMask[k] = (unsigned int)-1;
     }
-    for (readCount = 0;; ++readCount)
+    readCount = 0;
+    while (true)
     {
         if (readCount == debugReadObjectOrdinal && clientHostTurnNumber == debugReadHostTurn)
         {
@@ -10714,6 +10711,7 @@ void ReadObjects(NetPktGroup& group)
             break;
         }
         CheckReadAlign(group);
+        ++readCount;
     }
 
     for (i = 0; i < 64; ++i)
@@ -10881,7 +10879,8 @@ void ReadUpdate(NetPktGroup& group)
                 int ping = NetComm::GetPing(NetComm::GetLocalIndex(0));
 
                 float turns = (float)netTurnsPerSecond * ((float)ping / 1000.0f);
-                clientTurnNumber = (unsigned int)(turns + 0.9f) + clientHostTurnNumber;
+                unsigned int nextTurn = (unsigned int)(turns + 0.9f) + clientHostTurnNumber;
+                clientTurnNumber = nextTurn;
                 sendTurnNumber = clientTurnNumber - 1;
                 clientLag = 0;
                 timeScale = 1.0f;
@@ -10948,14 +10947,14 @@ void ReadUpdate(NetPktGroup& group)
             }
         }
         CheckReadAlign(group);
-        StatsManager::ReadStatsChallenge();
+        StatsManager::ReadStatsChallenge(curDst, group);
         ReadSpawnDisplay(group);
         CheckReadAlign(group);
         PAManager::ReadObjects(group);
         CheckReadAlign(group);
         ReceiveReliableNetEvents(group);
         CheckReadAlign(group);
-        NetGame::ReadChatMessageFromServer(&group);
+        NetGame::ReadChatMessageFromServer(group);
         ReceiveNetEvents(group);
     }
     if (!isFullState)
@@ -10986,17 +10985,15 @@ void ReceivePrimary()
         return;
     }
 
-    unsigned __int64* received = hostRecv;
-    unsigned __int64* lateMoves = lateRecv;
-
     while (true)
     {
         NetPktGroup group;
-        if (!NetComm::Recv(&group, PKT_STATS_MOVE))
+        if (!NetComm::Recv(group, PKT_STATS_MOVE))
         {
             break;
         }
-        int player = GetSrc(NetPacket::Get(group.firstPkt));
+        NetPacket* packet = NetPacket::Get(group.firstPkt);
+        int player = GetSrc(packet);
         group.BeginRead();
         bool hasTurn;
         group.Read(hasTurn);
@@ -11034,7 +11031,7 @@ void ReceivePrimary()
         }
     }
 
-    unsigned int lag[64];
+    int lag[64];
     unsigned int lastTurn[64];
     unsigned int firstTurn[64];
     int i;
@@ -11048,11 +11045,12 @@ void ReceivePrimary()
     while (true)
     {
         NetPktGroup group;
-        if (!NetComm::Recv(&group, PKT_GAME_MOVE))
+        if (!NetComm::Recv(group, PKT_GAME_MOVE))
         {
             break;
         }
-        int player = GetSrc(NetPacket::Get(group.firstPkt));
+        NetPacket* packet = NetPacket::Get(group.firstPkt);
+        int player = GetSrc(packet);
         group.BeginRead();
         if (player == gDebugDst)
         {
@@ -11070,10 +11068,10 @@ void ReceivePrimary()
         if (isLate)
         {
             unsigned int lateTurn = hostTurnNumber;
-            unsigned int slot = lateTurn & 31;
+            int slot = lateTurn & 31;
             for (i = 0; i < 4; ++i)
             {
-                if (!(received[slot] & ((unsigned __int64)1 << player)))
+                if (!(hostRecv[slot] & ((unsigned __int64)1 << player)))
                 {
                     break;
                 }
@@ -11081,9 +11079,12 @@ void ReceivePrimary()
             }
             if (i < 4)
             {
-                ReadMiniMove(group, &hostTurns[slot].moves[player]);
-                received[slot] |= (unsigned __int64)1 << player;
+                ProcessedInputs* inputs = &hostTurns[slot].moves[player];
+                ReadMiniMove(group, inputs);
+                hostRecv[slot] |= (unsigned __int64)1 << player;
             }
+            group.EndRead();
+            group.Free();
         }
         else
         {
@@ -11161,17 +11162,20 @@ void ReceivePrimary()
                 }
             }
             ReceivedUpdateAck(player, clientTurn);
-            if (stale || !NetGame::IsPlaying(player, false))
+            if (!stale && NetGame::IsPlaying(player, false))
             {
-                SkipSwitchResponses(group);
-            }
-            else if (netPlayers[player].clientOfIndex == netHostIndex)
-            {
-                ReadSwitchResponses(group, netPlayers[player]);
+                if (netPlayers[player].clientOfIndex == netHostIndex)
+                {
+                    ReadSwitchResponses(group, netPlayers[player]);
+                }
+                else
+                {
+                    ReadRelaySwitchResponse(group, netPlayers[player].objSwitchRelay);
+                }
             }
             else
             {
-                ReadRelaySwitchResponse(group, netPlayers[player].objSwitchRelay);
+                SkipSwitchResponses(group);
             }
 
             curDst = player;
@@ -11187,7 +11191,7 @@ void ReceivePrimary()
             unsigned int moveTurn = turn;
             while (true)
             {
-                StatsManager::ReadStatsResponse();
+                StatsManager::ReadStatsResponse(curDst, group);
                 group.Read(cockpitCams[curDst]);
                 turn = moveTurn;
                 if (turn + 3 < (unsigned int)hostTurnNumber)
@@ -11202,7 +11206,7 @@ void ReceivePrimary()
                 {
                     firstTurn[curDst] = turn;
                 }
-                unsigned int slot = turn & 31;
+                int slot = turn & 31;
                 ProcessedInputs* inputs = &hostTurns[slot].moves[curDst];
                 if (turn < (unsigned int)hostTurnNumber)
                 {
@@ -11213,16 +11217,16 @@ void ReceivePrimary()
                 {
                     if (turn >= (unsigned int)hostTurnNumber)
                     {
-                        received[slot] |= (unsigned __int64)1 << curDst;
+                        hostRecv[slot] |= (unsigned __int64)1 << curDst;
                     }
                     else
                     {
                         ProcessedInputs* hostInputs = &hostTurns[slot].moves[curDst];
-                        if (!(received[slot] & ((unsigned __int64)1 << curDst)))
+                        if (!(hostRecv[slot] & ((unsigned __int64)1 << curDst)))
                         {
                             if (IsSame(inputs, hostInputs))
                             {
-                                received[slot] |= (unsigned __int64)1 << curDst;
+                                hostRecv[slot] |= (unsigned __int64)1 << curDst;
                             }
                             else
                             {
@@ -11230,14 +11234,14 @@ void ReceivePrimary()
                                 Controllable* unit = character ? character->GetUnit() : 0;
                                 if (unit)
                                 {
-                                    received[slot] |= (unsigned __int64)1 << curDst;
+                                    hostRecv[slot] |= (unsigned __int64)1 << curDst;
                                     slot = turn & 7;
-                                    lateMoves[slot] |= (unsigned __int64)1 << curDst;
+                                    lateRecv[slot] |= (unsigned __int64)1 << curDst;
                                     *hostInputs = *inputs;
                                 }
                                 else
                                 {
-                                    received[slot] |= (unsigned __int64)1 << curDst;
+                                    hostRecv[slot] |= (unsigned __int64)1 << curDst;
                                 }
                             }
                         }
@@ -11266,37 +11270,39 @@ void ReceivePrimary()
                         break;
                     }
                     inputs = next;
-                    if (turn + 3 < (unsigned int)hostTurnNumber)
+                    if (turn + 3 >= (unsigned int)hostTurnNumber)
                     {
-                        continue;
-                    }
-                    if (turn >= (unsigned int)hostTurnNumber)
-                    {
-                        received[slot] |= (unsigned __int64)1 << curDst;
-                        continue;
-                    }
-                    next = &hostTurns[slot].moves[curDst];
-                    if (received[slot] & ((unsigned __int64)1 << curDst))
-                    {
-                        continue;
-                    }
-                    if (IsSame(next, inputs))
-                    {
-                        received[slot] |= (unsigned __int64)1 << curDst;
-                        continue;
-                    }
-                    Character* character = Character::FindPlayer(curDst);
-                    Controllable* unit = character ? character->GetUnit() : 0;
-                    if (unit)
-                    {
-                        received[slot] |= (unsigned __int64)1 << curDst;
-                        slot = turn & 7;
-                        lateMoves[slot] |= (unsigned __int64)1 << curDst;
-                        *next = *inputs;
-                    }
-                    else
-                    {
-                        received[slot] |= (unsigned __int64)1 << curDst;
+                        if (turn >= (unsigned int)hostTurnNumber)
+                        {
+                            hostRecv[slot] |= (unsigned __int64)1 << curDst;
+                        }
+                        else
+                        {
+                            next = &hostTurns[slot].moves[curDst];
+                            if (!(hostRecv[slot] & ((unsigned __int64)1 << curDst)))
+                            {
+                                if (IsSame(next, inputs))
+                                {
+                                    hostRecv[slot] |= (unsigned __int64)1 << curDst;
+                                }
+                                else
+                                {
+                                    Character* character = Character::FindPlayer(curDst);
+                                    Controllable* unit = character ? character->GetUnit() : 0;
+                                    if (unit)
+                                    {
+                                        hostRecv[slot] |= (unsigned __int64)1 << curDst;
+                                        slot = turn & 7;
+                                        lateRecv[slot] |= (unsigned __int64)1 << curDst;
+                                        *next = *inputs;
+                                    }
+                                    else
+                                    {
+                                        hostRecv[slot] |= (unsigned __int64)1 << curDst;
+                                    }
+                                }
+                            }
+                        }
                     }
                 }
 
@@ -11308,9 +11314,9 @@ void ReceivePrimary()
                 }
                 group.ReadBits((unsigned int&)curDst, 5);
             }
+            group.EndRead();
+            group.Free();
         }
-        group.EndRead();
-        group.Free();
     }
 
     for (i = 0; i < netCurMaxPlayers; ++i)
@@ -12290,7 +12296,14 @@ void NetGameP::SetPlayerCanHost(int iPlayer, char bReplica, char bRelay)
 // FUNCTION: SWBF2 0x005b8790
 void NetGameP::SetTurnRate(int iDuration, int iTurns)
 {
-    netTurnsPerSecond = iTurns ? iDuration / iTurns : 16666;
+    if (iTurns)
+    {
+        netTurnsPerSecond = iDuration / iTurns;
+    }
+    else
+    {
+        netTurnsPerSecond = 16666;
+    }
     netSecondsPerTurn = 1.0f / (float)netTurnsPerSecond;
     MAX_PREDICT_STEPS = 2 * netTurnsPerSecond / 3;
 }
@@ -12299,7 +12312,7 @@ void NetGameP::SetTurnRate(int iDuration, int iTurns)
 unsigned int NetGame::GetAckedUpdateTurn(int iPlayer) { return netPlayers[iPlayer].clientTurn; }
 
 // FUNCTION: SWBF2 0x005bd430
-void BeginWriteAlign() { alignCount = 0; }
+void BeginWriteAlign(NetPktGroup& group) { alignCount = 0; }
 
 // GLOBAL: SWBF2 0x01fa87a4
 int sendObjCount;
@@ -12351,7 +12364,8 @@ void NetGame::WriteSpectator(NetPktGroup& group)
 {
     for (int iPlayer = 0; iPlayer < 64; ++iPlayer)
     {
-        group.WriteBits(GetSpectator(iPlayer) + 1, 6);
+        int spectator = GetSpectator(iPlayer) + 1;
+        group.WriteBits(spectator, 6);
     }
 }
 
@@ -12577,8 +12591,9 @@ void WriteNullObject(NetPktGroup& group)
 // FUNCTION: SWBF2 0x005c3fe0
 void NetGame::WritePreGame(NetPktGroup& group)
 {
+    unsigned int bits = netPreGameTime;
     group.Write(netPreGameEnabled);
-    group.WriteBits(netPreGameTime, 10);
+    group.WriteBits(bits, 10);
 }
 
 // FUNCTION: SWBF2 0x005c4ff0
@@ -12748,7 +12763,8 @@ void AloMissionTimer::Write(NetPktGroup& group)
             group.WriteFixed(timerRate, -16.0f, 16.0f, 8);
         }
         group.Write(timerActive);
-        group.WriteBits(timerShow + 1, 2);
+        unsigned int show = timerShow + 1;
+        group.WriteBits(show, 2);
         group.WriteBits(timerTeam, 3);
     }
 }
@@ -13492,31 +13508,32 @@ void WriteEvent_ConnectTowCable(NetPktGroup& group, ReliableNetEvent& event)
 
 
 // FUNCTION: SWBF2 0x005d2260
-void WriteTurnLowBits(NetPktGroup* pGroup, unsigned int uTurn)
+void WriteTurnLowBits(NetPktGroup& group, unsigned int uTurn)
 {
     bool bLast = false;
     if (uTurn != (unsigned int)-1)
     {
-        if ((uTurn & 0x7ff) == 0x7ff)
+        unsigned int maskedTurn = uTurn & 0x7ff;
+        if (maskedTurn == 0x7ff)
         {
             bLast = false;
             uTurn = (unsigned int)-2;
         }
-        else if ((uTurn & 0x7ff) == 0x7fe)
+        else if (maskedTurn == 0x7fe)
         {
             bLast = true;
             uTurn = (unsigned int)-2;
         }
     }
-    pGroup->WriteBits(uTurn, 11);
+    group.WriteBits(uTurn, 11);
     if (uTurn == (unsigned int)-2)
     {
-        pGroup->Write(bLast);
+        group.Write(bLast);
     }
 }
 
 // FUNCTION: SWBF2 0x005c3320
-void WriteSwitchResponse(NetPktGroup* pGroup, SwitchResponse response, unsigned int turn)
+void WriteSwitchResponse(NetPktGroup& group, SwitchResponse response, unsigned int turn)
 {
     bool canSwitch = false;
     switch (response)
@@ -13528,8 +13545,8 @@ void WriteSwitchResponse(NetPktGroup* pGroup, SwitchResponse response, unsigned 
         canSwitch = true;
         break;
     }
-    pGroup->Write(canSwitch);
-    WriteTurnLowBits(pGroup, turn);
+    group.Write(canSwitch);
+    WriteTurnLowBits(group, turn);
 }
 
 // FUNCTION: SWBF2 0x005d1e20
@@ -13549,19 +13566,19 @@ void NetGame::NominateBootPlayer(int iPlayer, int iReason, int iJoystick)
 }
 
 // FUNCTION: SWBF2 0x005d1180
-void WriteBootRequest(NetPktGroup* pGroup)
+void WriteBootRequest(NetPktGroup& group)
 {
     bool bPending = bootInfo.changedTurn > (unsigned int)clientAckedTurnNumber;
-    pGroup->Write(bPending);
+    group.Write(bPending);
     if (bPending)
     {
         bool bNomination = bootInfo.bootRequest == BR_NOMINATE;
-        pGroup->Write(bNomination);
-        pGroup->WriteBits(bootInfo.joystick, BOOT_JOYSTICK_BITS);
+        group.Write(bNomination);
+        group.WriteBits(bootInfo.joystick, BOOT_JOYSTICK_BITS);
         if (bNomination)
         {
-            pGroup->WriteBits(bootInfo.dst, 6);
-            pGroup->WriteBits(bootInfo.reason, BOOT_REASON_BITS);
+            group.WriteBits(bootInfo.dst, 6);
+            group.WriteBits(bootInfo.reason, BOOT_REASON_BITS);
         }
     }
 }
@@ -13683,8 +13700,8 @@ void WriteEvent_AddObjective(NetPktGroup& group, ReliableNetEvent& event)
 void WriteSwitchObjRequest(NetPktGroup& group)
 {
     NetPlayer& player = netPlayers[curDst];
-    WriteTurnLowBits(&group, player.lastObjState->turn);
-    WriteTurnLowBits(&group, player.nextObjState->turn);
+    WriteTurnLowBits(group, player.lastObjState->turn);
+    WriteTurnLowBits(group, player.nextObjState->turn);
     saveObjState = player.nextObjState->turn == (unsigned int)hostTurnNumber;
 }
 
@@ -13762,7 +13779,7 @@ void AloStats::Update(NetPktGroup& group)
     }
 }
 
-void WriteString(NetPktGroup* pGroup, const char* pszText, unsigned int uCapacity);
+void WriteString(NetPktGroup& pGroup, const char* pszText, unsigned int uCapacity);
 
 // FUNCTION: SWBF2 0x005c70d0
 void AloNextGameInfo::Write(NetPktGroup& group)
@@ -13773,7 +13790,7 @@ void AloNextGameInfo::Write(NetPktGroup& group)
         const char* pszName = "";
         unsigned int iFirst, iSecond;
         MissionPlayList::PeekNextEntry(pszName, iFirst, iSecond);
-        WriteString(&group, pszName, 64);
+        WriteString(group, pszName, 64);
         group.WriteBits(iFirst, 32);
         group.WriteBits(iSecond, 32);
         group.WriteBits(Team::GetWinningTeams(), 32);
@@ -14094,10 +14111,13 @@ void WritePingData(NetPktGroup& group)
 void AddSendBefore(GameObject* pObject, int iBefore)
 {
     int i;
-    if (pObject->GetEntityType() == ENT_BUILDING &&
-        !((EntityBuildingClass*)pObject->GetGameObjectClass())->IsDestructableBuilding())
+    if (pObject->GetEntityType() == ENT_BUILDING)
     {
-        return;
+        EntityBuildingClass* entClass = (EntityBuildingClass*)pObject->GetGameObjectClass();
+        if (!entClass->IsDestructableBuilding())
+        {
+            return;
+        }
     }
     for (i = 0; i < iBefore; ++i)
     {
@@ -14252,49 +14272,49 @@ void WriteTrackable(NetPktGroup& group, Trackable* pTrackable)
 }
 
 // FUNCTION: SWBF2 0x005d0080
-void WriteSpawnSelect(NetPktGroup* pGroup)
+void WriteSpawnSelect(NetPktGroup& group)
 {
     for (int i = 0; i < 2; ++i)
     {
-        SpawnInfo& info = spawnInfo[i];
-        const bool changed = NetComm::GetLocalIndex(i) >= 0 &&
-                             info.changedTurn > (unsigned int)clientAckedTurnNumber;
+        bool hasData = NetComm::GetLocalIndex(i) >= 0 &&
+                       spawnInfo[i].changedTurn > (unsigned int)clientAckedTurnNumber;
         if (NetGame::IsHost() && NetGame::IsOneWorld())
         {
-            info.changedTurn = clientAckedTurnNumber;
+            spawnInfo[i].changedTurn = clientAckedTurnNumber;
         }
-        pGroup->Write(changed);
-        if (!changed)
+        group.Write(hasData);
+        if (hasData)
         {
-            continue;
-        }
-        pGroup->WriteBits((unsigned char)info.changeCount, 8);
-        pGroup->Write(info.cancel);
-        if (info.cancel)
-        {
-            continue;
-        }
-        pGroup->Write(info.spectate);
-        if (info.spectate)
-        {
-            continue;
-        }
-        pGroup->Write(info.autoassign);
-        if (info.autoassign)
-        {
-            continue;
-        }
-        pGroup->Write(info.team == 1);
-        pGroup->WriteBits(info.classIdx, 4);
-        CommandPost* pPost = info.post;
-        if (pPost && pPost->GetGameObject() != info.postHandle)
-        {
-            pPost = 0;
-        }
-        pGroup->Write(pPost == 0);
-        if (pPost)
-        {
-            pGroup->WriteBits(pPost->GetIndex(), 4);
+            group.WriteBits(spawnInfo[i].changeCount & 0xff, 8);
+            group.Write(spawnInfo[i].cancel);
+            if (spawnInfo[i].cancel)
+            {
+                continue;
+            }
+            group.Write(spawnInfo[i].spectate);
+            if (spawnInfo[i].spectate)
+            {
+                continue;
+            }
+            group.Write(spawnInfo[i].autoassign);
+            if (spawnInfo[i].autoassign)
+            {
+                continue;
+            }
+            bool isTeam1 = spawnInfo[i].team == 1;
+            group.Write(isTeam1);
+            group.WriteBits(spawnInfo[i].classIdx, 4);
+            CommandPost* post = spawnInfo[i].post;
+            if (!post || post->GetGameObject() != spawnInfo[i].postHandle)
+            {
+                post = 0;
+            }
+            bool isNull = post == 0;
+            group.Write(isNull);
+            if (!isNull)
+            {
+                group.WriteBits(post->GetIndex(), 4);
+            }
         }
     }
 }
@@ -14312,10 +14332,10 @@ ScopeInfo scopeInfo[2] = {{3.0f, 300.0f}, {1000.0f, 2000.0f}};
 // FUNCTION: SWBF2 0x005c8810
 int GetObjectsInScope(const PblVector3& center, GameObject** ppObjects, int maxCount)
 {
-    const unsigned int oldTurn = hostTurnNumber < (unsigned int)netTurnsPerSecond
-        ? 0 : hostTurnNumber - netTurnsPerSecond / 2;
-    int count = 0;
+    const unsigned int oldTurn = hostTurnNumber >= (unsigned int)netTurnsPerSecond
+        ? hostTurnNumber - netTurnsPerSecond / 2 : 0;
     NetEntityList::Itor it(*netEntities);
+    int count = 0;
     while (it)
     {
         NetEntity& pEntity = *it;
@@ -14376,7 +14396,7 @@ int GetObjectsInScope(const PblVector3& center, GameObject** ppObjects, int maxC
         if (count >= maxCount)
         {
             ++gDebugCount;
-            return count;
+            break;
         }
     }
     return count;
@@ -14465,10 +14485,10 @@ int __cdecl ReadJournalFile(char*, int size)
 }
 
 // FUNCTION: SWBF2 0x005c49e0
-void WriteUpload(NetPktGroup* pGroup)
+void WriteUpload(NetPktGroup& group)
 {
     const bool enabled = clientUploadState < 100;
-    pGroup->Write(enabled);
+    group.Write(enabled);
     if (!enabled)
     {
         return;
@@ -14531,13 +14551,13 @@ void WriteUpload(NetPktGroup* pGroup)
                 }
                 DisableWriteUpload();
             }
-            pGroup->Write(true);
-            pGroup->WriteBits(clientUploadSeqNo, 32);
-            pGroup->Write(clientMoreFiles);
+            group.Write(true);
+            group.WriteBits(clientUploadSeqNo, 32);
+            group.Write(clientMoreFiles);
             if (clientMoreFiles)
             {
-                WriteString(pGroup, clientFileName, 16);
-                pGroup->WriteBits(clientUploadSizeLeft, 32);
+                WriteString(group, clientFileName, 16);
+                group.WriteBits(clientUploadSizeLeft, 32);
             }
             ++clientUploadTryCount;
             sent = true;
@@ -14575,11 +14595,11 @@ void WriteUpload(NetPktGroup* pGroup)
             }
             else
             {
-                pGroup->Write(false);
-                pGroup->WriteBits(clientUploadSeqNo, 32);
+                group.Write(false);
+                group.WriteBits(clientUploadSeqNo, 32);
                 const int chunkSize = clientUploadSizeLeft < 1012 ? clientUploadSizeLeft : 1012;
-                pGroup->WriteBits(chunkSize, 10);
-                pGroup->WriteBytes(clientUploadPkt->mData, chunkSize);
+                group.WriteBits(chunkSize, 10);
+                group.WriteBytes(clientUploadPkt->mData, chunkSize);
                 ++clientUploadTryCount;
                 sent = true;
             }
@@ -14760,14 +14780,11 @@ void AloNextGameInfo::Update(NetPktGroup& group)
 void WriteMoves(NetPktGroup& group, int iPlayer, unsigned int uTurn)
 {
     ProcessedInputs* pPrevious = &noInputs;
-    const unsigned __int64* pReceived =
-        hostRecv;
-    const unsigned __int64 uPlayer = 1ui64 << iPlayer;
     while (true)
     {
-        const unsigned int iSlot = uTurn & 31;
+        int iSlot = uTurn & 31;
         if (uTurn >= (unsigned int)hostTurnNumber &&
-            !(pReceived[iSlot] & uPlayer))
+            !(hostRecv[iSlot] & (1ui64 << iPlayer)))
         {
             break;
         }
@@ -14848,9 +14865,15 @@ void SendToReplicas()
     }
     for (iHost = 0; iHost < netCurMaxHosts; ++iHost)
     {
-        NetHost& host = netHosts[iHost];
-        if (!NetComm::IsConnected(iHost + 64) || host.hostMode != 2 ||
-            (unsigned int)hostTurnNumber <= host.updateTurn)
+        if (!NetComm::IsConnected(iHost + 64))
+        {
+            continue;
+        }
+        if (netHosts[iHost].hostMode != 2)
+        {
+            continue;
+        }
+        if ((unsigned int)hostTurnNumber <= netHosts[iHost].updateTurn)
         {
             continue;
         }
@@ -14858,29 +14881,30 @@ void SendToReplicas()
         NetPktGroup group;
         group.BeginWrite();
         WriteDestMask(group, hostPlayingMask);
-        WriteTurnLowBits(&group, host.hostAckedUpdateTurn);
+        WriteTurnLowBits(group, netHosts[iHost].hostAckedUpdateTurn);
         for (iPlayer = 0; iPlayer < netCurMaxPlayers; ++iPlayer)
         {
             NetPlayer& player = netPlayers[iPlayer];
-            if (player.clientOfIndex == iHost)
+            if (player.clientOfIndex != iHost)
             {
-                WriteTurnLowBits(&group, player.clientTurn);
-                group.WriteBits(GetLag(iPlayer) + 128, 8);
-                WriteSwitchResponse(&group,
-                    player.objSwitchRelay.switchResponse,
-                    player.objSwitchRelay.switchTurn);
+                continue;
             }
+            WriteTurnLowBits(group, player.clientTurn);
+            group.WriteBits(GetLag(iPlayer) + 128, 8);
+            WriteSwitchResponse(group,
+                player.objSwitchRelay.switchResponse,
+                player.objSwitchRelay.switchTurn);
         }
         for (iPlayer = 0; iPlayer < netCurMaxPlayers; ++iPlayer)
         {
             if (hostPlayingMask & (1ui64 << iPlayer))
             {
-                WriteMoves(group, iPlayer, host.hostAckedUpdateTurn);
+                WriteMoves(group, iPlayer, netHosts[iHost].hostAckedUpdateTurn);
             }
         }
         group.EndWrite();
         NetComm::Send(iHost + 64, 15, &group);
-        host.updateTurn = hostTurnNumber;
+        netHosts[iHost].updateTurn = hostTurnNumber;
     }
 }
 
@@ -14982,54 +15006,78 @@ void AloTrackable::Write(NetPktGroup& group)
 // FUNCTION: SWBF2 0x005cc1e0
 void WriteSpawnDisplay(NetPktGroup& group)
 {
-    Character* pPlayer = Character::FindPlayer(curDst);
-    const bool bLocalSpawning = pPlayer && pPlayer->IsPlayer() && !pPlayer->GetUnit();
-    int teamOneCount = 0;
-    int teamTwoCount = 0;
-    for (int iPlayer = 0; iPlayer < netCurMaxPlayers; ++iPlayer)
+    Character* player = Character::FindPlayer(curDst);
+    bool hasData = false;
+    if (player && player->IsPlayer() && !player->GetUnit())
     {
-        if (!NetGame::IsPlaying(iPlayer, false))
+        hasData = true;
+    }
+    unsigned int numLiveHumans1 = 0;
+    unsigned int numLiveHumans2 = 0;
+    for (int i = 0; i < netCurMaxPlayers; ++i)
+    {
+        if (NetGame::IsPlaying(i, false))
         {
-            continue;
-        }
-        Character* pCharacter = Character::FindPlayer(iPlayer);
-        if (pCharacter && pCharacter->GetUnit())
-        {
-            if (netPlayers[iPlayer].isTeam1)
+            Character* c = Character::FindPlayer(i);
+            if (c && c->GetUnit())
             {
-                ++teamOneCount;
-            }
-            else
-            {
-                ++teamTwoCount;
+                if (netPlayers[i].isTeam1)
+                {
+                    ++numLiveHumans1;
+                }
+                else
+                {
+                    ++numLiveHumans2;
+                }
             }
         }
     }
-    SpawnDisplay::sNumLiveHumansTeam1 = teamOneCount;
-    SpawnDisplay::sNumLiveHumansTeam2 = teamTwoCount;
-    group.WriteBits(teamOneCount, 6);
-    group.WriteBits(teamTwoCount, 6);
-    group.Write(bLocalSpawning);
-    if (bLocalSpawning)
+    SpawnDisplay::sNumLiveHumansTeam1 = numLiveHumans1;
+    SpawnDisplay::sNumLiveHumansTeam2 = numLiveHumans2;
+    group.WriteBits(numLiveHumans1, 6);
+    group.WriteBits(numLiveHumans2, 6);
+    group.Write(hasData);
+    if (hasData)
     {
         SpawnDisplay::Instance(0)->Write(group, curDst);
-        group.Write(pPlayer->GetDelayTimer() >= 0.0f);
-        group.WriteBits(netPlayers[curDst].mSpawnOrder + 1, 8);
+        bool hasDelay = false;
+        if (player->GetDelayTimer() >= 0.0f)
+        {
+            hasDelay = true;
+        }
+        group.Write(hasDelay);
+        unsigned int bits = netPlayers[curDst].mSpawnOrder + 1;
+        group.WriteBits(bits, 8);
     }
-    const int iGuest = NetGame::GetMyGuest(curDst, 0);
-    if (iGuest < 0)
+    for (unsigned int guestIdx = 0; guestIdx < 1; ++guestIdx)
     {
-        group.Write(false);
-        return;
-    }
-    Character* pGuest = Character::FindPlayer(iGuest);
-    const bool bGuestSpawning = pGuest && pGuest->IsPlayer() && !pGuest->GetUnit();
-    group.Write(bGuestSpawning);
-    if (bGuestSpawning)
-    {
-        SpawnDisplay::Instance(0)->Write(group, iGuest);
-        group.Write(pGuest->GetDelayTimer() >= 0.0f);
-        group.WriteBits(netPlayers[iGuest].mSpawnOrder + 1, 8);
+        int guestDst = NetGame::GetMyGuest(curDst, guestIdx);
+        bool hasData = false;
+        if (guestDst >= 0)
+        {
+            player = Character::FindPlayer(guestDst);
+            if (player && player->IsPlayer() && !player->GetUnit())
+            {
+                hasData = true;
+            }
+            group.Write(hasData);
+            if (hasData)
+            {
+                SpawnDisplay::Instance(0)->Write(group, guestDst);
+                bool hasDelay = false;
+                if (player->GetDelayTimer() >= 0.0f)
+                {
+                    hasDelay = true;
+                }
+                group.Write(hasDelay);
+                unsigned int bits = netPlayers[guestDst].mSpawnOrder + 1;
+                group.WriteBits(bits, 8);
+            }
+        }
+        else
+        {
+            group.Write(hasData);
+        }
     }
 }
 
@@ -15039,7 +15087,7 @@ void WritePlayerMoves(NetPktGroup& group)
     PblHeap<int, float>::RECORD records[65];
     PblHeap<int, float> nearest(64, 1000000.0f, records);
     int iTracker = curDst;
-    const int iSpectator = NetGame::GetSpectator(iTracker);
+    const int iSpectator = NetGame::GetSpectator(curDst);
     if (iSpectator != -1)
     {
         iTracker = iSpectator;
@@ -15054,34 +15102,32 @@ void WritePlayerMoves(NetPktGroup& group)
 
     for (int iPlayer = 0; iPlayer < netCurMaxPlayers; ++iPlayer)
     {
-        if (!(hostPlayingMask & ((unsigned __int64)1 << iPlayer)) ||
-            iPlayer == curDst)
+        if ((hostPlayingMask & ((unsigned __int64)1 << iPlayer)) &&
+            iPlayer != curDst)
         {
-            continue;
+            pTrackable = Tracker::GetTracker(iPlayer)->GetTrackable();
+            if (pTrackable && pTrackable != (Trackable*)-1 &&
+                pTrackable->GetTracker() != (Tracker*)0xdddddddd)
+            {
+                nearest.Push(iPlayer,
+                    -Length(pTrackable->GetGameObject()->GetMatrix().GetTranslation() - center));
+            }
         }
-        pTrackable = Tracker::GetTracker(iPlayer)->GetTrackable();
-        if (!pTrackable || pTrackable == (Trackable*)-1 ||
-            pTrackable->GetTracker() == (Tracker*)0xdddddddd)
-        {
-            continue;
-        }
-        const PblVector3 difference =
-            pTrackable->GetGameObject()->GetMatrix().GetTranslation() - center;
-        const float distance = Length(difference);
-        nearest.Push(iPlayer, -distance);
     }
 
-    const int iTurn = (hostTurnNumber - 1) & 31;
-    for (int i = 0; i < 5 && !nearest.IsEmpty(); ++i)
+    int iTurn = (hostTurnNumber - 1) & 31;
+    int numSendMoves = 5;
+    while (!nearest.IsEmpty() && numSendMoves > 0)
     {
-        const int iPlayer = nearest.Get(0);
+        --numSendMoves;
+        int iPlayer = nearest.Get(0);
         group.WriteBits(iPlayer, 6);
-        ProcessedInputs& move = hostTurns[iTurn].moves[iPlayer];
-        WriteFixed<StickAxisConvert>(stickAxisConvert, group, move.mFloatInputs[0]);
-        WriteFixed<StickAxisConvert>(stickAxisConvert, group, move.mFloatInputs[1]);
-        WriteFixed<MouseAxisConvert>(mouseAxisConvert, group, move.mFloatInputs[2]);
-        WriteFixed<MouseAxisConvert>(mouseAxisConvert, group, move.mFloatInputs[3]);
-        group.WriteBits(move.bits.mBoolInputs & 0x3fffffff, 4);
+        ProcessedInputs* move = &hostTurns[iTurn].moves[iPlayer];
+        WriteFixed<StickAxisConvert>(stickAxisConvert, group, move->mFloatInputs[0]);
+        WriteFixed<StickAxisConvert>(stickAxisConvert, group, move->mFloatInputs[1]);
+        WriteFixed<MouseAxisConvert>(mouseAxisConvert, group, move->mFloatInputs[2]);
+        WriteFixed<MouseAxisConvert>(mouseAxisConvert, group, move->mFloatInputs[3]);
+        group.WriteBits(move->bits.mBoolInputs & 0x3fffffff, 4);
         nearest.Pop();
     }
     group.WriteBits(curDst, 6);
@@ -15171,7 +15217,8 @@ void WriteSpawnCamera(NetPktGroup& group)
     if (writeCamera)
     {
         PblMatrix camera = CameraManager::Instance()->GetChaseCameraTransform(0);
-        WritePositionVector(group, camera.GetTranslation());
+        const PblVector3& spawnPos = camera.GetTranslation();
+        WritePositionVector(group, spawnPos);
         const PblVector3& front = camera.GetZAxis();
         PblAngle frontAngle(front.GetX(), front.GetZ());
         WriteCosSin(group, frontAngle);
@@ -15374,13 +15421,8 @@ void WriteNetEvent(NetEvent& event, NetPktGroup& group)
     case 0:
     {
         NetEvent::U::OrdnanceEvent& data = event.u.ordnance;
-        NetGameObjectHandle& ownerHandle = data.mOwner;
-        if (ownerHandle.ptr && ownerHandle.ptr->GetHandleId() != ownerHandle.id)
-        {
-            ownerHandle.ptr = 0;
-            ownerHandle.id = 0;
-        }
-        const GameObject* owner = ownerHandle.ptr;
+        const GameObject* owner;
+        data.mOwner.Get(owner);
         unsigned int ownerId = GetUniqObjectId(owner);
         WeaponClass* weaponClass = data.mWpnClassIndex < 0xff ? Factory<Weapon, WeaponClass, WeaponDesc>::FindNetIndex(data.mWpnClassIndex) : 0;
         if (ownerId == 63 && weaponClass &&
@@ -15392,9 +15434,9 @@ void WriteNetEvent(NetEvent& event, NetPktGroup& group)
         group.Write(true);
         group.WriteBits(event.mType, 3);
         PblVector3 vector;
-        vector = PblVector3(data.mPosition.x, data.mPosition.y, data.mPosition.z);
+        vector = data.mPosition.Get();
         WritePositionVector(group, vector);
-        vector = PblVector3(data.mDirection.x, data.mDirection.y, data.mDirection.z);
+        vector = data.mDirection.Get();
         WriteUnitVector(group, vector);
         group.WriteFixed(data.mStrength, 0.0f, 1.0f, 10);
         bool hasOwner = owner != 0;
@@ -15413,27 +15455,20 @@ void WriteNetEvent(NetEvent& event, NetPktGroup& group)
         {
             group.Write(false);
         }
-        if (data.mDamageMultiplier == 1.0f)
-        {
-            group.Write(false);
-        }
-        else
+        if (data.mDamageMultiplier != 1.0f)
         {
             group.Write(true);
             group.WriteFixed(data.mDamageMultiplier, 0.0f, 10.0f, 16);
         }
+        else
+        {
+            group.Write(false);
+        }
         group.WriteBits(data.mOrdClassIndex, 8);
         group.WriteBits(data.mWpnClassIndex, 8);
         group.WriteBits(data.mEntClassIndex, 8);
-        unsigned int targetId;
-        if (data.mTarget && data.mTarget->GetHandleId() == data.mTargetId)
-        {
-            targetId = GetUniqObjectId(data.mTarget);
-        }
-        else
-        {
-            targetId = 63;
-        }
+        unsigned int targetId = data.mTarget && data.mTarget->GetHandleId() == data.mTargetId
+            ? GetUniqObjectId(data.mTarget) : 63;
         group.WriteBits(targetId, GetUniqObjectBits());
         if (owner && data.mFireWeapon)
         {
@@ -15701,11 +15736,11 @@ void FinishSend(GameObject** ppSends, GameObject* (*ppScopes)[64], int*)
     PblList<FlagItem>::Itor iter = FlagItem::sList->GetFirst();
     while ((FlagItem*)iter)
     {
-        FlagItem* pFlag = &*iter;
-        AddSendBefore(pFlag->GetGameObject(), sendObjCount);
-        if (pFlag->GetCarrier())
+        FlagItem& flag = *iter;
+        AddSendBefore(flag.GetGameObject(), sendObjCount);
+        if (flag.GetCarrier())
         {
-            AddSendBefore(pFlag->GetCarrier(), sendObjCount);
+            AddSendBefore(flag.GetCarrier(), sendObjCount);
         }
         ++iter;
     }
@@ -15721,7 +15756,7 @@ void FinishSend(GameObject** ppSends, GameObject* (*ppScopes)[64], int*)
         if (pObject->GetEntityType() == ENT_POST_HOVER ||
              pObject->GetEntityType() == ENT_POST_WALKER ||
              pObject->GetEntityType() == ENT_POST_FLYER ||
-             static_cast<Damageable*>(pObject)->GetMaxHealth() < FLT_MAX)
+             pObject->GetMaxHealth() < FLT_MAX)
         {
             AddSendBefore(pObject, sendObjCount);
         }
@@ -15806,11 +15841,8 @@ unsigned int debugWriteObjectTurn = 0x354;
 // FUNCTION: SWBF2 0x005cc720
 void WriteObjects(NetPktGroup& group)
 {
-    GameObject* nearObjects[512];
     GameObject* scopes[2][64];
-    unsigned int removed[64];
     float priorities[64];
-    bool isSoldier[64];
     GameObject* sends[64];
     int scopeCounts[2];
     unsigned int i;
@@ -15827,6 +15859,8 @@ void WriteObjects(NetPktGroup& group)
 
     if (!isFullState)
     {
+        GameObject* nearObjects[512];
+        int removed[64];
         memset(scopes, 0, sizeof(scopes));
         memset(sends, 0, sizeof(sends));
         for (j = 0; j < 2; ++j)
@@ -15900,13 +15934,13 @@ void WriteObjects(NetPktGroup& group)
             NetObjState* state = lastMap->stateMap[i];
             if (state)
             {
-                HandleToIndex* entry = &handlePoolPtr->Add();
-                entry->index = i;
-                entry->isNew = false;
+                HandleToIndex& entry = handlePoolPtr->Add();
+                entry.index = i;
+                entry.isNew = false;
                 GameObject* pObject = static_cast<GameObject*>(state->handle);
                 if (pObject)
                 {
-                    handleToIndexMapPtr->Store(pObject->GetHandleId(), entry);
+                    handleToIndexMapPtr->Store(pObject->GetHandleId(), &entry);
                 }
                 else
                 {
@@ -15917,6 +15951,7 @@ void WriteObjects(NetPktGroup& group)
         for (i = 0; i < (unsigned int)GetSendObjCount(); ++i)
         {
             GameObject* pObject = sends[i];
+            PblValues::Record(pObject->GetHandleId(), PVT_FULL);
             HandleToIndex* entry = handleToIndexMapPtr->Find(pObject->GetHandleId());
             if (entry)
             {
@@ -15945,11 +15980,12 @@ void WriteObjects(NetPktGroup& group)
         }
         else
         {
+            bool isSoldier[64];
             group.Write(true);
             written = 0;
             for (i = 0; i < removedCount; ++i)
             {
-                unsigned int index = removed[i];
+                int index = removed[i];
                 NetObjState* state = lastMap->stateMap[index];
                 EntityClass* entityClass = Factory<Entity, EntityClass, EntityDesc>::FindNetIndex(state->classIdx);
                 isSoldier[index] = entityClass->IsRtti(EntitySoldierClass::GetRtti());
@@ -15964,7 +16000,7 @@ void WriteObjects(NetPktGroup& group)
             }
             for (i = 0; i < removedCount; ++i)
             {
-                unsigned int index = removed[i];
+                int index = removed[i];
                 NetObjState* state = lastMap->stateMap[index];
                 if (!isSoldier[index])
                 {
@@ -15984,7 +16020,8 @@ void WriteObjects(NetPktGroup& group)
         for (i = 0; i < (unsigned int)GetSendObjCount(); ++i)
         {
             GameObject* pObject = sends[i];
-            if (IsNeverDies(pObject->GetEntityType()))
+            EntityType entType = pObject->GetEntityType();
+            if (IsNeverDies(entType))
             {
                 continue;
             }
@@ -16012,12 +16049,14 @@ void WriteObjects(NetPktGroup& group)
                     {
                         break;
                     }
+                    PblValues::Record(freeIndex & 64, PVT_FULL);
                     ++freeIndex;
                 }
                 if (freeIndex >= 63)
                 {
                     __debugbreak();
                 }
+                PblValues::Record(freeIndex, PVT_FULL);
                 group.WriteBits(freeIndex, 6);
                 entry = &handlePoolPtr->Add();
                 entry->index = freeIndex++;
@@ -16049,6 +16088,7 @@ void WriteObjects(NetPktGroup& group)
                     state->classIdx = (unsigned char)pObject->GetEntityClass()->GetNetIndex();
                 }
                 PblValues::Record(entry->index, PVT_FULL);
+                PblValues::Record(pObject->GetHandleId(), PVT_FULL);
                 netPlayers[curDst].nextObjState->Add(state, entry->index);
             }
         }
@@ -16068,12 +16108,14 @@ void WriteObjects(NetPktGroup& group)
             int bestSkips = 3;
             for (i = start; i < (unsigned int)GetSendObjCount(); ++i)
             {
-                HandleToIndex* entry = handleToIndexMapPtr->Find(sends[i]->GetHandleId());
+                GameObject* pObject = sends[i];
+                HandleToIndex* entry = handleToIndexMapPtr->Find(pObject->GetHandleId());
                 if (!entry)
                 {
                     continue;
                 }
-                if (netPlayers[curDst].skippedSends[entry->index] > bestSkips)
+                int skips = netPlayers[curDst].skippedSends[entry->index];
+                if (skips > bestSkips)
                 {
                     best = i;
                     bestSkips = netPlayers[curDst].skippedSends[entry->index];
@@ -16127,7 +16169,8 @@ void WriteObjects(NetPktGroup& group)
         }
         for (; i < (unsigned int)GetSendObjCount(); ++i)
         {
-            HandleToIndex* entry = handleToIndexMapPtr->Find(sends[i]->GetHandleId());
+            GameObject* pObject = sends[i];
+            HandleToIndex* entry = handleToIndexMapPtr->Find(pObject->GetHandleId());
             if (entry)
             {
                 ++netPlayers[curDst].skippedSends[entry->index];
@@ -16148,7 +16191,9 @@ void WriteObjects(NetPktGroup& group)
             {
                 continue;
             }
-            if (pEntity.obj->GetEntityType() == ENT_SOLDIER)
+            GameObject* pObject = pEntity.obj;
+            EntityType entType = pObject->GetEntityType();
+            if (entType == ENT_SOLDIER)
             {
                 AddSendFull(pEntity.obj);
             }
@@ -16163,14 +16208,17 @@ void WriteObjects(NetPktGroup& group)
             {
                 continue;
             }
-            if (pEntity.obj->GetEntityType() != ENT_SOLDIER)
+            GameObject* pObject = pEntity.obj;
+            EntityType entType = pObject->GetEntityType();
+            if (entType != ENT_SOLDIER)
             {
                 AddSendFull(pEntity.obj);
             }
         }
         for (i = 0; i < (unsigned int)GetSendObjCount(); ++i)
         {
-            WriteObject(group, sends[i]);
+            GameObject* pObject = sends[i];
+            WriteObject(group, pObject);
             MarkWriteAlign(group);
         }
     }
@@ -16191,14 +16239,13 @@ void WriteUpdate(NetPktGroup& group)
         }
         else
         {
-            WriteTurnLowBits(&group, hostTurnNumber);
+            WriteTurnLowBits(group, hostTurnNumber);
         }
         WriteDestMask(group, hostPlayingMask);
         NetSetup::WriteGameUpdate(group);
         if (curDst >= 0)
         {
-            float lastRecv = NetComm::GetLastRecv(curDst);
-            hostCommProblems = NetComm::GetTime() - 0.5f > lastRecv;
+            hostCommProblems = NetComm::GetLastRecv(curDst) < NetComm::GetTime() - 0.5f;
             group.Write(hostCommProblems);
             bool quit = GameLoop::IsQuitRequested() || netPlayers[curDst].requestedQuit;
             group.Write(quit);
@@ -16217,24 +16264,24 @@ void WriteUpdate(NetPktGroup& group)
     if (curDst >= 0)
     {
         group.WriteBits(GetLag(curDst) + 128, 8);
-        int pingDelta = hostTurnNumber - netPlayers[curDst].mLastReceivedTurn + 128;
-        group.WriteBits(pingDelta, 8);
-        NetPlayer* player = &netPlayers[curDst];
+        unsigned int clientTurnDelta = hostTurnNumber - netPlayers[curDst].mLastReceivedTurn + 128;
+        group.WriteBits(clientTurnDelta, 8);
+        NetPlayer& netPlayer = netPlayers[curDst];
         if (!isFullState)
         {
-            if (player->nextObjState->turn == (unsigned int)-1 &&
-                (player->lastObjState->turn == (unsigned int)-1 ||
-                 player->lastObjState->turn < (unsigned int)(netTurnsPerSecond + hostTurnNumber)))
+            if (netPlayer.nextObjState->turn == (unsigned int)-1 &&
+                (netPlayer.lastObjState->turn == (unsigned int)-1 ||
+                 netPlayer.lastObjState->turn < hostTurnNumber + netTurnsPerSecond))
             {
-                player->nextObjState->turn = hostTurnNumber;
+                netPlayer.nextObjState->turn = hostTurnNumber;
             }
             WriteSwitchObjRequest(group);
         }
         else
         {
-            WriteTurnLowBits(&group, player->clientTurn);
-            WriteSwitchResponse(&group, player->objSwitchRelay.switchResponse,
-                                player->objSwitchRelay.switchTurn);
+            WriteTurnLowBits(group, netPlayer.clientTurn);
+            WriteSwitchResponse(group, netPlayer.objSwitchRelay.switchResponse,
+                                netPlayer.objSwitchRelay.switchTurn);
         }
     }
 
@@ -16256,12 +16303,12 @@ void WriteUpdate(NetPktGroup& group)
         WritePingData(group);
         MarkWriteAlign(group);
         WriteCaptureDisplay(group, curDst);
-        for (int i = 0; i < 1; ++i)
+        for (unsigned int guestIdx = 0; guestIdx < 1; ++guestIdx)
         {
-            int guest = NetGame::GetMyGuest(curDst, i);
-            if (guest >= 0)
+            int guestDst = NetGame::GetMyGuest(curDst, guestIdx);
+            if (guestDst >= 0)
             {
-                WriteCaptureDisplay(group, guest);
+                WriteCaptureDisplay(group, guestDst);
             }
         }
         MarkWriteAlign(group);
@@ -16341,7 +16388,7 @@ void SendUpdate(int iPlayer)
     curDst = iPlayer;
     NetPktGroup group;
     group.BeginWrite();
-    BeginWriteAlign();
+    BeginWriteAlign(group);
     WriteUpdate(group);
     group.EndWrite();
     int iBytes = group.GetBytes();
@@ -16533,7 +16580,7 @@ void SendToRelays()
 
     NetPktGroup group;
     group.BeginWrite();
-    BeginWriteAlign();
+    BeginWriteAlign(group);
     isFullState = true;
     curDst = -1;
     saveObjState = false;

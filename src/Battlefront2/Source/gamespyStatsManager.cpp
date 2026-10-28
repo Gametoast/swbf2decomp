@@ -36,7 +36,7 @@ namespace StatsManager
 {
 
 // FUNCTION: SWBF2 0x00530890
-void ReadStatsChallenge()
+void ReadStatsChallenge(int player, NetPktGroup& group)
 {
 }
 }
@@ -45,7 +45,7 @@ namespace StatsManager
 {
 
 // FUNCTION: SWBF2 0x005308b0
-void ReadStatsResponse()
+void ReadStatsResponse(int player, NetPktGroup& group)
 {
 }
 }

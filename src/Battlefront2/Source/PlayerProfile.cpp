@@ -25,6 +25,7 @@
 #include "SoundFL/source/win/sndengine.h"
 
 #include <math.h>
+#include "GameVoiceChat.h"
 #include "GameVoiceChatNode.h"
 #include "NetMatch.h"
 #include "RedEngineFL/input/RedJoystick.h"
@@ -49,10 +50,6 @@ void SetFadeBias(float fBias);
 }
 using ParticleSystem::SetFadeBias;
 
-namespace GameVoiceChat
-{
-void* FindNodeByDeviceID();
-}
 
 // SYNTHETIC: SWBF2 0x00405f40
 // `dynamic initializer for 'mProfiles''
@@ -733,7 +730,7 @@ void PlayerProfile::tOnlineOpt::ApplySettings()
     unsigned int uiState = GameState::GetState();
     bool bShellOrNet = uiState == 0x11E1FC01 || NetGame::IsEnabled();
 
-    VoiceChat::Node* pNode = (VoiceChat::Node*)GameVoiceChat::FindNodeByDeviceID();
+    VoiceChat::Node* pNode = (VoiceChat::Node*)GameVoiceChat::FindNodeByDeviceID(iIndex);
     int iPlayer = FLInputManager::s_instance.GetPlayerFromHWPort(iIndex);
     if (uiState != 0x11E1FC01)
     {

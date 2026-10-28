@@ -303,7 +303,7 @@ extern int netCurMaxPlayers;
 extern char remoteResponse[0x1800];
 extern bool remoteLoggedIn;
 extern int adminBandwidth;
-void WriteString(NetPktGroup* pGroup, const char* pText, unsigned int uCapacity);
+void WriteString(NetPktGroup& pGroup, const char* pText, unsigned int uCapacity);
 
 // FUNCTION: SWBF2 0x005b1920
 void __fastcall SendAdminMessage(char* pcMessage)
@@ -326,7 +326,7 @@ void __fastcall SendAdminMessage(char* pcMessage)
             group.BeginWrite();
             group.WriteBits((char)adminKey[adminKeyCount & 1], 8);
             group.WriteBits(1, 8);
-            WriteString(&group, pcMessage, 128);
+            WriteString(group, pcMessage, 128);
             group.WriteBits(0, 8);
             group.EndWrite();
             NetComm::Send(iDest, PKT_CONSOLE_ACK, &group);
@@ -2465,7 +2465,9 @@ void NetAdmin::ReceiveConsole()
         pPacket->Read(uCommand);
         pPacket->Read(uKey);
 
-        if (uCommand == 0x29)
+        switch (uCommand)
+        {
+        case 0x29:
         {
             HeartBeat(NetCommP::GetAddr(iDest));
             unsigned char uUnused;
@@ -2478,31 +2480,34 @@ void NetAdmin::ReceiveConsole()
             reply.WriteBits(0, 8);
             reply.EndWrite();
             NetComm::Send(iDest, PKT_CONSOLE_ACK, &reply);
+            break;
         }
-        else if (uCommand == 's')
+        case 's':
         {
             pPacket->Free();
             NetPktGroup reply;
             reply.BeginWrite();
             reply.WriteBits((char)adminKey[adminKeyCount & 1], 8);
             reply.WriteBits(1, 8);
-            WriteString(&reply, "hello", 128);
+            WriteString(reply, "hello", 128);
             reply.WriteBits(0, 8);
             reply.EndWrite();
             NetComm::Send(iDest, PKT_CONSOLE_ACK, &reply);
+            break;
         }
-        else if (uCommand == 'J')
+        case 'J':
         {
             unsigned char uUnused, uLength;
             pPacket->Read(uUnused);
             pPacket->Read(uLength);
             unsigned short ausLine[64];
-            const char* pcData = pPacket->mData + pPacket->mCurIndex;
-            for (unsigned int i = 0; i < uLength; ++i)
+            char* p1 = pPacket->mData + pPacket->mCurIndex;
+            unsigned short* p2 = ausLine;
+            while (uLength--)
             {
-                ausLine[i] = (short)pcData[i];
+                *p2++ = *p1++;
             }
-            ausLine[uLength] = 0;
+            *p2 = 0;
             pPacket->Free();
 
             int iAdmin = FindAdminSource(iDest);
@@ -2527,16 +2532,17 @@ void NetAdmin::ReceiveConsole()
                 }
                 *pcEnd = 0;
                 reply.WriteBits(1, 8);
-                WriteString(&reply, pcLine, 128);
+                WriteString(reply, pcLine, 128);
                 pcLine = pcEnd + 1;
             }
             reply.WriteBits(0, 8);
             reply.EndWrite();
             NetComm::Send(iDest, PKT_CONSOLE_ACK, &reply);
+            break;
         }
-        else
-        {
+        default:
             pPacket->Free();
+            break;
         }
     }
     SendStateTransitions();

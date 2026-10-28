@@ -186,17 +186,17 @@ Team* ReadTeam(NetPktGroup& group)
 }
 
 // FUNCTION: SWBF2 0x005f61c0
-void WriteString(NetPktGroup* group, const char* text, unsigned int capacity)
+void WriteString(NetPktGroup& group, const char* text, unsigned int capacity)
 {
     unsigned int length = (unsigned int)strlen(text);
     if (length >= capacity)
     {
         length = capacity - 1;
     }
-    group->WriteBits(length, 8);
+    group.WriteBits(length, 8);
     for (unsigned int i = 0; i < length; ++i)
     {
-        group->WriteBits(text[i], 8);
+        group.WriteBits(text[i], 8);
     }
 }
 
@@ -221,55 +221,6 @@ void ReadString(NetPktGroup& group, char* text, unsigned int capacity)
     }
 }
 
-// FUNCTION: SWBF2 0x005e7e40
-int __fastcall EncodeTriggerAction(unsigned int type)
-{
-    switch (type)
-    {
-    case 1: return 2;
-    case 3: return 1;
-    case 4: return 4;
-    case 6: return 3;
-    case 8: return 7;
-    case 9: return 5;
-    case 10: return 6;
-    case 12:
-    case 28: return 15;
-    case 17: return 9;
-    case 19: return 8;
-    case 20: return 11;
-    case 22: return 10;
-    case 24: return 14;
-    case 25: return 12;
-    case 26: return 13;
-    default: return 0;
-    }
-}
-
-// FUNCTION: SWBF2 0x005e7f20
-int __fastcall DecodeTriggerAction(unsigned int type)
-{
-    switch (type)
-    {
-    case 1: return 3;
-    case 2: return 1;
-    case 3: return 6;
-    case 4: return 4;
-    case 5: return 9;
-    case 6: return 10;
-    case 7: return 8;
-    case 8: return 19;
-    case 9: return 17;
-    case 10: return 22;
-    case 11: return 20;
-    case 12: return 25;
-    case 13: return 26;
-    case 14: return 24;
-    case 15: return 12;
-    default: return 0;
-    }
-}
-
 // FUNCTION: SWBF2 0x005f5850
 int SetNetLOD(int precision)
 {
@@ -279,7 +230,7 @@ int SetNetLOD(int precision)
 }
 
 // FUNCTION: SWBF2 0x005f5880
-void SetNetPrecision(NetPktGroup& group)
+void WriteNetLOD(NetPktGroup& group)
 {
     if (netLOD == lastNetLOD)
     {
@@ -306,7 +257,7 @@ void ReadNetLOD(NetPktGroup& group)
 // FUNCTION: SWBF2 0x005f60b0
 void NetTrigger::Write(NetPktGroup& group)
 {
-    group.WriteBits(EncodeTriggerAction(m_uiActionState), 4);
+    group.WriteBits(_ActionStateToNetworkState(m_uiActionState), 4);
     if (m_uiActionState == ACTIONSTATE_CLEAR && !m_uiTimerNet)
     {
         group.WriteBits(1, 5);
@@ -322,7 +273,7 @@ void NetTrigger::Read(NetPktGroup& group)
 {
     unsigned int uiCode;
     group.ReadBits(uiCode, 4);
-    m_uiActionState = (unsigned int)DecodeTriggerAction(uiCode);
+    m_uiActionState = _NetworkStateToActionState(uiCode);
     unsigned int uiTimerNet;
     group.ReadBits(uiTimerNet, 5);
     m_uiTimerNet = uiTimerNet;
@@ -384,13 +335,15 @@ void ReadCosSin(NetPktGroup& group, PblAngle& angle)
 // FUNCTION: SWBF2 0x005f6000
 void WriteWeapon(NetPktGroup& group, Weapon* pObject)
 {
-    if (!pObject)
+    if (pObject)
+    {
+        group.WriteBits(1, 1);
+        pObject->Write(group);
+    }
+    else
     {
         group.WriteBits(0, 1);
-        return;
     }
-    group.WriteBits(1, 1);
-    pObject->Write(group);
 }
 
 // FUNCTION: SWBF2 0x005f6030
@@ -432,8 +385,8 @@ void ReadAngle(NetPktGroup& group, float& value)
 // FUNCTION: SWBF2 0x005ed430
 void WalkerLegPair::Write(NetPktGroup& group)
 {
-    group.WriteBits(mFootContact[0] ? 1u : 0u, 1);
-    group.WriteBits(mFootContact[1] ? 1u : 0u, 1);
+    group.WriteBits(mFootContact[0], 1);
+    group.WriteBits(mFootContact[1], 1);
     group.WriteBits(mIdleBlendFoot, 2);
     WriteUnitScalar(group, mLastIdleBlend);
 }
@@ -541,22 +494,22 @@ static void AddSendPilots(void (*send)(GameObject*, int), GameObject* owner, int
 {
     for (PblList<Controllable>::Itor it(owner->GetControllableList()); it; ++it)
     {
-        Controllable* pControl = &*it;
-        const PilotType type = pControl->GetPilotType();
+        Controllable& control = *it;
+        const PilotType type = control.GetPilotType();
         if (type == PILOT_NONE || type == PILOT_SELF)
         {
             continue;
         }
-        Controllable* pPilot = pControl->GetPilot();
+        Controllable* pPilot = control.GetPilot();
         if (pPilot)
         {
             send(static_cast<Trackable*>(pPilot)->GetGameObject(), depth);
         }
-        if (pControl->GetPlayerId() == NetGame::GetCurDst() && pControl->mCtrl)
+        if (control.GetPlayerId() == NetGame::GetCurDst() && control.mCtrl)
         {
-            if (pControl->mReticuleTarget[0])
+            if (control.mReticuleTarget[0])
             {
-                send(const_cast<GameObject*>((const GameObject*)pControl->mReticuleTarget[0]), depth + 1);
+                send(const_cast<GameObject*>((const GameObject*)control.mReticuleTarget[0]), depth + 1);
             }
         }
     }
@@ -652,8 +605,8 @@ void FlagItem::WriteCreate(NetPktGroup& group)
 {
     group.WriteBits(mDroppedModel ? mDroppedModel->_uiNameHash : 0, 32);
     group.WriteBits(mCarriedModel ? mCarriedModel->_uiNameHash : 0, 32);
-    group.WriteBits(mAllowTeamPickup != 0, 1);
-    group.WriteBits(mAllowAIPickup != 0, 1);
+    group.Write(mAllowTeamPickup != 0);
+    group.Write(mAllowAIPickup != 0);
     group.WriteBits(mHomeRegionId, 32);
 }
 
@@ -665,10 +618,8 @@ void FlagItem::ReadCreate(NetPktGroup& group)
     mDroppedModel = value ? const_cast<GameModel*>(GameModel::Find(value)) : 0;
     group.ReadBits(value, 32);
     mCarriedModel = value ? const_cast<GameModel*>(GameModel::Find(value)) : 0;
-    group.ReadBits(value, 1);
-    mAllowTeamPickup = value != 0;
-    group.ReadBits(value, 1);
-    mAllowAIPickup = value != 0;
+    group.Read(mAllowTeamPickup);
+    group.Read(mAllowAIPickup);
     group.ReadBits(mHomeRegionId, 32);
     mHomeRegion = RedRegion::Find(mHomeRegionId);
 }
@@ -677,7 +628,7 @@ void FlagItem::ReadCreate(NetPktGroup& group)
 void FlagItem::WriteObject(NetPktGroup& group, NetObjState*)
 {
     WriteMatrix(group, GetMatrix());
-    group.WriteBits(mStationary != 0, 1);
+    group.Write(mStationary != 0);
     if (!mStationary)
     {
         WriteVelocity(group, mVelocity, 5120.0f, -1);
@@ -692,7 +643,7 @@ void FlagItem::WriteObject(NetPktGroup& group, NetObjState*)
         group.WriteBits(0, 1);
     }
     WriteCharacter(group, mOwner);
-    group.WriteBits(mMoved != 0, 1);
+    group.Write(mMoved != 0);
 }
 
 // FUNCTION: SWBF2 0x005f0a40
@@ -704,8 +655,7 @@ void FlagItem::ReadObject(NetPktGroup& group, NetObjState*)
     collision->SetMatrix(matrix);
     memcpy(&collision->mLastPosition, &collision->GetPosition(), sizeof(PblVector3));
     unsigned int value;
-    group.ReadBits(value, 1);
-    mStationary = value != 0;
+    group.Read(mStationary);
     if (mStationary)
     {
         mVelocity = PblVector3(0.0f, 0.0f, 0.0f);
@@ -773,8 +723,7 @@ void FlagItem::ReadObject(NetPktGroup& group, NetObjState*)
             }
         }
     }
-    group.ReadBits(value, 1);
-    mMoved = value != 0;
+    group.Read(mMoved);
 }
 
 // FUNCTION: SWBF2 0x005f14b0
@@ -806,11 +755,11 @@ void EntityBuildingArmed::WriteObject(NetPktGroup& group, NetObjState*)
         group.WriteFixed(mCurShield, 0.0f, mMaxShield, 11);
         group.WriteBits(mIsShielded, 1);
         const bool writeAddShield = (PblRandom::_Global.GetInt() & 3) == 0;
-        group.WriteBits(writeAddShield, 1);
+        group.Write(writeAddShield);
         if (writeAddShield)
         {
             const bool zero = mAddShield == 0.0f;
-            group.WriteBits(zero, 1);
+            group.Write(zero);
             if (!zero)
             {
                 group.WriteFixed(mAddShield, 0.0f, mMaxShield, 11);
@@ -986,7 +935,7 @@ void EntityFlyer::AddSends(void (*send)(GameObject*, int), int depth)
         send(static_cast<Trackable*>(mPilot)->GetGameObject(), depth);
     }
     AddSendPilots(send, this, depth);
-    if (mPlayerId != NetGame::GetCurDst() || !mCtrl)
+    if (GetPlayerId() != NetGame::GetCurDst() || !mCtrl)
     {
         return;
     }
@@ -1041,7 +990,7 @@ void EntityWalker::WriteObject(NetPktGroup& group, NetObjState*)
     if (!NetGame::IsFullState())
     {
         SetNetLOD(ComputeNetLOD(matrix.GetTranslation(), mPlayerId));
-        SetNetPrecision(group);
+        WriteNetLOD(group);
     }
     WriteMatrix(group, matrix);
     WriteVelocity(group, mVelocity, 5120.0f, -1);
@@ -1083,7 +1032,7 @@ void EntityWalker::WriteObject(NetPktGroup& group, NetObjState*)
     if (mPlayerId >= 0)
     {
         WriteThrust(group, mTurnBuildup);
-        group.WriteBits(mTargetInfo.mIsAiming ? 1u : 0u, 1);
+        group.Write(mTargetInfo.mIsAiming);
         if (mTargetLockedObj &&
             (IsNeverDies(mTargetLockedObj->GetEntityType()) ||
              GetUniqObjectId(mTargetLockedObj) != 63))
@@ -1247,8 +1196,7 @@ void EntityWalker::ReadObject(NetPktGroup& group, NetObjState*)
     if (mPlayerId >= 0)
     {
         ReadThrust(group, mTurnBuildup);
-        group.ReadBits(value, 1);
-        mTargetInfo.mIsAiming = value != 0;
+        group.Read(mTargetInfo.mIsAiming);
         group.ReadBits(value, 1);
         SetTargetLockedObj(value ? ReadObjectPtr(group) : 0);
         if (NetGame::IsFullState() || NetGame::GetJoystickIndex(mPlayerId) >= 0)
@@ -1295,12 +1243,12 @@ void EntityDroid::WriteObject(NetPktGroup& group, NetObjState*)
     if (!NetGame::IsFullState())
     {
         SetNetLOD(ComputeNetLOD(matrix.GetTranslation(), mPlayerId));
-        SetNetPrecision(group);
+        WriteNetLOD(group);
     }
     WriteMatrix(group, matrix);
     WriteVelocity(group, mVelocity, 5120.0f, -1);
     WriteAngle(group, mPitchValue);
-    group.WriteBits(IsThreadActive() ? 1u : 0u, 1);
+    group.Write(IsThreadActive());
     group.WriteBits(mTeam, 2);
     group.WriteBits(mPerceivedTeam, 2);
     WriteThrust(group, mControlMove);
@@ -1318,7 +1266,7 @@ void EntityDroid::WriteObject(NetPktGroup& group, NetObjState*)
     if (mPlayerId >= 0)
     {
         WriteThrust(group, mTurnBuildup);
-        group.WriteBits(mTargetInfo.mIsAiming ? 1u : 0u, 1);
+        group.Write(mTargetInfo.mIsAiming);
         if (NetGame::IsFullState() || NetGame::IsLocalTo(clientId, mPlayerId))
         {
             if (mWeapon[0])
@@ -1391,8 +1339,7 @@ void EntityDroid::ReadObject(NetPktGroup& group, NetObjState*)
     if (mPlayerId >= 0)
     {
         ReadThrust(group, mTurnBuildup);
-        group.ReadBits(value, 1);
-        mTargetInfo.mIsAiming = value != 0;
+        group.Read(mTargetInfo.mIsAiming);
         if (NetGame::IsFullState() || NetGame::GetJoystickIndex(mPlayerId) >= 0)
         {
             if (mWeapon[0])
@@ -1435,10 +1382,10 @@ void EntityHover::WriteObject(NetPktGroup& group, NetObjState*)
     if (!NetGame::IsFullState())
     {
         SetNetLOD(ComputeNetLOD(matrix.GetTranslation(), mPlayerId));
-        SetNetPrecision(group);
+        WriteNetLOD(group);
     }
     WriteMatrix(group, matrix);
-    group.WriteBits(mBoost ? 1u : 0u, 1);
+    group.Write(mBoost);
     WriteVelocity(group, mVelocity, 5120.0f, -1);
     WriteVelocity(group, mOmega, 5120.0f, -1);
     mEnergyBar.Write(group);
@@ -1453,7 +1400,7 @@ void EntityHover::WriteObject(NetPktGroup& group, NetObjState*)
     if (mClass->mJumpForce > 0.0f)
     {
         group.WriteFixed(mJumpTimer, 0.0f, mClass->mJumpTimeMax, 11);
-        group.WriteBits(mJumpMode ? 1u : 0u, 1);
+        group.Write(mJumpMode);
     }
     group.WriteFixed(mCurHealth, 0.0f, mMaxHealth, 11);
     group.WriteBits(mIsAlive ? 1u : 0u, 1);
@@ -1466,7 +1413,7 @@ void EntityHover::WriteObject(NetPktGroup& group, NetObjState*)
     if (mPlayerId >= 0)
     {
         WriteThrust(group, mTurnBuildup);
-        group.WriteBits(mTargetInfo.mIsAiming ? 1u : 0u, 1);
+        group.Write(mTargetInfo.mIsAiming);
         if (mTargetLockedObj &&
             (IsNeverDies(mTargetLockedObj->GetEntityType()) ||
              GetUniqObjectId(mTargetLockedObj) != 63))
@@ -1516,8 +1463,7 @@ void EntityHover::ReadObject(NetPktGroup& group, NetObjState*)
     const PblVector3& position = GetPosition();
     memcpy(&mLastPosition, &position, sizeof(position));
     unsigned int value;
-    group.ReadBits(value, 1);
-    mBoost = value != 0;
+    group.Read(mBoost);
     ReadVelocity(group, mVelocity, 5120.0f, -1);
     ReadVelocity(group, mOmega, 5120.0f, -1);
     mEnergyBar.Read(group);
@@ -1555,8 +1501,7 @@ void EntityHover::ReadObject(NetPktGroup& group, NetObjState*)
     if (mPlayerId >= 0)
     {
         ReadThrust(group, mTurnBuildup);
-        group.ReadBits(value, 1);
-        mTargetInfo.mIsAiming = value != 0;
+        group.Read(mTargetInfo.mIsAiming);
         group.ReadBits(value, 1);
         SetTargetLockedObj(value ? ReadObjectPtr(group) : 0);
         if (NetGame::IsFullState() || NetGame::GetJoystickIndex(mPlayerId) >= 0)
@@ -1590,13 +1535,13 @@ void EntityDroid::WriteLateState(NetPktGroup& group)
     WriteMatrix(group, GetMatrix());
     WriteVelocity(group, mVelocity, 5120.0f, -1);
     WriteAngle(group, mPitchValue);
-    group.WriteBits(IsThreadActive() ? 1u : 0u, 1);
+    group.Write(IsThreadActive());
     WriteThrust(group, mControlMove);
     WriteThrust(group, mControlStrafe);
     WriteThrust(group, mControlTurn);
     WriteThrust(group, mControlPitch);
     WriteThrust(group, mTurnBuildup);
-    group.WriteBits(mTargetInfo.mIsAiming ? 1u : 0u, 1);
+    group.Write(mTargetInfo.mIsAiming);
     group.WriteBits(mState, 2);
     group.WriteFixed(mKillTimer, 0.0f, 5.0f, 8);
 }
@@ -1623,9 +1568,7 @@ void EntityDroid::ReadLateState(NetPktGroup& group)
     ReadThrust(group, fVal);
     SetPitch(fVal);
     ReadThrust(group, mTurnBuildup);
-    unsigned int aiming;
-    group.ReadBits(aiming, 1);
-    mTargetInfo.mIsAiming = aiming != 0;
+    group.Read(mTargetInfo.mIsAiming);
     unsigned int state = 0;
     group.ReadBits(state, 2);
     mState = (State)state;
@@ -1660,7 +1603,7 @@ void EntityWalker::WriteLateState(NetPktGroup& group)
     group.WriteBits(reinterpret_cast<const unsigned int&>(mYawValue), 32);
     group.WriteBits(reinterpret_cast<const unsigned int&>(mLegAngle), 32);
     WriteThrust(group, mTurnBuildup);
-    group.WriteBits(mTargetInfo.mIsAiming ? 1u : 0u, 1);
+    group.Write(mTargetInfo.mIsAiming);
     for (int i = 0; i < mNumTurrets; ++i)
     {
         ((MountedTurret&)(*mTurret[i])).WriteLateState(group);
@@ -1747,9 +1690,7 @@ void EntityWalker::ReadLateState(NetPktGroup& group)
     group.ReadBits(*(unsigned int*)&mYawValue, 32);
     group.ReadBits(*(unsigned int*)&mLegAngle, 32);
     ReadThrust(group, mTurnBuildup);
-    unsigned int value;
-    group.ReadBits(value, 1);
-    mTargetInfo.mIsAiming = value != 0;
+    group.Read(mTargetInfo.mIsAiming);
     for (int i = 0; i < mNumTurrets; ++i)
     {
         ((MountedTurret&)(*mTurret[i])).ReadLateState(group);
@@ -1770,12 +1711,12 @@ void MountedTurret::WriteLateState(NetPktGroup& group)
     group.WriteFixed(turret.mOmegaYaw, -turret.mClass->mTurnRate,
                      turret.mClass->mTurnRate, 16);
     WriteThrust(group, turret.mTurnBuildup);
-    group.WriteBits(turret.mTargetInfo.mIsAiming ? 1u : 0u, 1);
+    group.Write(turret.mTargetInfo.mIsAiming);
     group.WriteFixed(turret.mTurnAdjusted, -1.0f, 2.0f, 16);
     group.WriteFixed(turret.mPitchAdjusted, -1.0f, 2.0f, 16);
     group.WriteFixed(turret.mTurnAuto, -1.0f, 1.0f, 16);
     group.WriteFixed(turret.mPitchAuto, -1.0f, 1.0f, 16);
-    group.WriteBits(turret.mUsingTurnAdjusted ? 1u : 0u, 1);
+    group.Write(turret.mUsingTurnAdjusted);
 }
 
 // FUNCTION: SWBF2 0x005ef7d0
@@ -1799,7 +1740,7 @@ void MountedTurret::Write(NetPktGroup& group)
         return;
     }
     WriteThrust(group, mTurnBuildup);
-        group.WriteBits(mTargetInfo.mIsAiming ? 1u : 0u, 1);
+        group.Write(mTargetInfo.mIsAiming);
         if (NetGame::IsFullState() || NetGame::IsLocalTo(clientId, mPlayerId))
         {
             if (mWeapon[0])
@@ -1819,7 +1760,7 @@ void MountedTurret::Write(NetPktGroup& group)
     group.WriteFixed(mPitchAdjusted, -1.0f, 2.0f, 16);
     group.WriteFixed(mTurnAuto, -1.0f, 1.0f, 16);
     group.WriteFixed(mPitchAuto, -1.0f, 1.0f, 16);
-    group.WriteBits(mUsingTurnAdjusted ? 1u : 0u, 1);
+    group.Write(mUsingTurnAdjusted);
     if (mTargetLockedObj &&
         (IsNeverDies(mTargetLockedObj->GetEntityType()) ||
          GetUniqObjectId(mTargetLockedObj) != 63))
@@ -1872,8 +1813,7 @@ void MountedTurret::Read(NetPktGroup& group)
     {
         ReadThrust(group, mTurnBuildup);
         unsigned int value;
-        group.ReadBits(value, 1);
-        mTargetInfo.mIsAiming = value != 0;
+        group.Read(mTargetInfo.mIsAiming);
         if (NetGame::IsFullState() || NetGame::GetJoystickIndex(mPlayerId) >= 0)
         {
             if (mWeapon[0])
@@ -1893,8 +1833,7 @@ void MountedTurret::Read(NetPktGroup& group)
         group.ReadFixed(mPitchAdjusted, -1.0f, 2.0f, 16);
         group.ReadFixed(mTurnAuto, -1.0f, 1.0f, 16);
         group.ReadFixed(mPitchAuto, -1.0f, 1.0f, 16);
-        group.ReadBits(value, 1);
-        mUsingTurnAdjusted = value != 0;
+        group.Read(mUsingTurnAdjusted);
         group.ReadBits(value, 1);
         SetTargetLockedObj(value ? ReadObjectPtr(group) : 0);
     }
@@ -1916,13 +1855,13 @@ static void WritePilots(NetPktGroup& group, GameObject* owner)
 {
     for (PblList<Controllable>::Itor it(owner->GetControllableList()); it; ++it)
     {
-        Controllable* pControl = &*it;
-        const PilotType type = pControl->GetPilotType();
+        Controllable& control = *it;
+        const PilotType type = control.GetPilotType();
         if (type == PILOT_NONE || type == PILOT_SELF)
         {
             continue;
         }
-        Controllable* pPilot = pControl->GetPilot();
+        Controllable* pPilot = control.GetPilot();
         Character* pCharacter = 0;
         if (pPilot)
         {
@@ -1939,22 +1878,77 @@ static void ReadPilots(NetPktGroup& group, GameObject* owner)
 {
     for (PblList<Controllable>::Itor it(owner->GetControllableList()); it; ++it)
     {
-        Controllable* control = &*it;
-        const PilotType type = control->GetPilotType();
+        Controllable& control = *it;
+        const PilotType type = control.GetPilotType();
         if (type == PILOT_NONE || type == PILOT_SELF)
         {
             continue;
         }
 
-        Controllable* oldPilot = control->GetPilot();
+        Controllable* oldPilot = control.GetPilot();
         Character* character = ReadCharacter(group);
-        Controllable* newPilot = character ? character->GetUnit() : 0;
-        if (oldPilot == newPilot)
+        if (character)
         {
-            continue;
+            Controllable* newPilot = character->GetUnit();
+            if (oldPilot != newPilot)
+            {
+                if (oldPilot)
+                {
+                    Character* oldCharacter = oldPilot->mCharacter;
+                    if (oldCharacter)
+                    {
+                        if (oldCharacter->mRemote)
+                        {
+                            Trackable* trackable = static_cast<Trackable*>(oldCharacter->mRemote);
+                            if (trackable->GetGameObject() == owner)
+                            {
+                                oldCharacter->SetRemote(0);
+                            }
+                        }
+                        if (oldCharacter->mVehicle)
+                        {
+                            Trackable* trackable = static_cast<Trackable*>(oldCharacter->mVehicle);
+                            if (trackable->GetGameObject() == owner)
+                            {
+                                oldCharacter->SetVehicle(0);
+                            }
+                        }
+                    }
+                    control.SetPilot(0);
+                }
+                if (newPilot)
+                {
+                    if (character->mRemote && character->mRemote->GetPilot() == newPilot)
+                    {
+                        character->mRemote->SetPilot(0);
+                        character->SetRemote(0);
+                    }
+                    if (character->mVehicle && character->mVehicle->GetPilot() == newPilot)
+                    {
+                        character->mVehicle->SetPilot(0);
+                        character->SetVehicle(0);
+                    }
+                }
+                control.SetPilot(newPilot);
+                if (control.GetPilotType() == PILOT_REMOTE)
+                {
+                    character->SetRemote(&control);
+                }
+                else if (control.GetPilotType() == PILOT_VEHICLE)
+                {
+                    character->SetVehicle(&control);
+                    if (newPilot)
+                    {
+                        Entity* entity = newPilot->GetEntity();
+                        if (entity && entity->IsRtti(EntitySoldier::rttiHashEntitySoldier))
+                        {
+                            static_cast<EntitySoldier*>(entity)->TurnOffJetEffect();
+                        }
+                    }
+                }
+            }
         }
-
-        if (oldPilot)
+        else if (oldPilot)
         {
             Character* oldCharacter = oldPilot->mCharacter;
             if (oldCharacter)
@@ -1976,42 +1970,7 @@ static void ReadPilots(NetPktGroup& group, GameObject* owner)
                     }
                 }
             }
-            control->SetPilot(0);
-        }
-        if (!character)
-        {
-            continue;
-        }
-
-        if (newPilot)
-        {
-            if (character->mRemote && character->mRemote->GetPilot() == newPilot)
-            {
-                character->mRemote->SetPilot(0);
-                character->SetRemote(0);
-            }
-            if (character->mVehicle && character->mVehicle->GetPilot() == newPilot)
-            {
-                character->mVehicle->SetPilot(0);
-                character->SetVehicle(0);
-            }
-        }
-        control->SetPilot(newPilot);
-        if (control->GetPilotType() == PILOT_REMOTE)
-        {
-            character->SetRemote(control);
-        }
-        else if (control->GetPilotType() == PILOT_VEHICLE)
-        {
-            character->SetVehicle(control);
-            if (newPilot)
-            {
-                Entity* entity = newPilot->GetEntity();
-                if (entity && entity->IsRtti(EntitySoldier::rttiHashEntitySoldier))
-                {
-                    static_cast<EntitySoldier*>(entity)->TurnOffJetEffect();
-                }
-            }
+            control.SetPilot(0);
         }
     }
 }
@@ -2048,16 +2007,12 @@ void MountedTurret::ReadLateState(NetPktGroup& group)
     mAimMatrix = DirectionMatrix(direction, mountUp, mountPos);
 
     ReadThrust(group, mTurnBuildup);
-    unsigned int aiming;
-    group.ReadBits(aiming, 1);
-    mTargetInfo.mIsAiming = aiming != 0;
+    group.Read(mTargetInfo.mIsAiming);
     group.ReadFixed(mTurnAdjusted, -1.0f, 2.0f, 16);
     group.ReadFixed(mPitchAdjusted, -1.0f, 2.0f, 16);
     group.ReadFixed(mTurnAuto, -1.0f, 1.0f, 16);
     group.ReadFixed(mPitchAuto, -1.0f, 1.0f, 16);
-    unsigned int adjusted;
-    group.ReadBits(adjusted, 1);
-    mUsingTurnAdjusted = adjusted != 0;
+    group.Read(mUsingTurnAdjusted);
 }
 
 // FUNCTION: SWBF2 0x005f4490
@@ -2077,10 +2032,10 @@ void EntityHover::WriteLateState(NetPktGroup& group)
     if (mClass->mJumpForce > 0.0f)
     {
         group.WriteFixed(mJumpTimer, 0.0f, mClass->mJumpTimeMax, 11);
-        group.WriteBits(mJumpMode ? 1u : 0u, 1);
+        group.Write(mJumpMode);
     }
     WriteThrust(group, mTurnBuildup);
-    group.WriteBits(mTargetInfo.mIsAiming ? 1u : 0u, 1);
+    group.Write(mTargetInfo.mIsAiming);
     for (int i = 0; i < mNumTurrets; ++i)
     {
         ((MountedTurret&)(*mTurret[i])).WriteLateState(group);
@@ -2118,9 +2073,7 @@ void EntityHover::ReadLateState(NetPktGroup& group)
         mJumpMode = jump != 0;
     }
     ReadThrust(group, mTurnBuildup);
-    unsigned int aiming;
-    group.ReadBits(aiming, 1);
-    mTargetInfo.mIsAiming = aiming != 0;
+    group.Read(mTargetInfo.mIsAiming);
     for (int i = 0; i < mNumTurrets; ++i)
     {
         ((MountedTurret&)(*mTurret[i])).ReadLateState(group);
@@ -2209,78 +2162,92 @@ void ReadQuaternion(NetPktGroup& group, PblQuaternion& value)
 
 // FUNCTION: SWBF2 0x005f5c90
 void WriteVelocity(NetPktGroup& group, const PblVector3& value, float fMaxSpeed,
-                int iBits)
+                int forceBits)
 {
     const float length = Length(value);
     const bool present = length > 0.0001f;
-    group.WriteBits(present ? 1u : 0u, 1);
+    group.Write(present);
     if (!present)
     {
         return;
     }
-    if (iBits == -1)
+    int numBits = 1;
+    if (forceBits != -1)
     {
-        iBits = 1;
+        numBits = forceBits;
+    }
+    else
+    {
         const int units = (int)(fMaxSpeed * 20.0f);
         if (units > 1)
         {
             do
             {
-                if (iBits >= 32)
+                if (numBits >= 32)
                 {
                     break;
                 }
-                ++iBits;
+                ++numBits;
             }
-            while ((1 << (iBits - 1)) < units);
+            while ((1 << (numBits - 1)) < units);
         }
     }
     const PblVector3 direction = value / length;
     WriteUnitVector(group, direction);
-    group.WriteFixed(length, 0.0f, fMaxSpeed, iBits);
+    group.WriteFixed(length, 0.0f, fMaxSpeed, numBits);
 }
 
 // FUNCTION: SWBF2 0x005f5da0
-void ReadVelocity(NetPktGroup& group, PblVector3& value, float fMaxSpeed, int iBits)
+void ReadVelocity(NetPktGroup& group, PblVector3& value, float fMaxSpeed, int forceBits)
 {
     unsigned int present;
     group.ReadBits(present, 1);
-    if (!present)
+    if (present)
     {
-        value = PblVector3(0.0f, 0.0f, 0.0f);
-        return;
-    }
-    if (iBits == -1)
-    {
-        iBits = 1;
-        const int units = (int)(fMaxSpeed * 20.0f);
-        if (units > 1)
+        int numBits = 1;
+        if (forceBits != -1)
         {
-            do
-            {
-                if (iBits >= 32)
-                {
-                    break;
-                }
-                ++iBits;
-            }
-            while ((1 << (iBits - 1)) < units);
+            numBits = forceBits;
         }
+        else
+        {
+            const int units = (int)(fMaxSpeed * 20.0f);
+            if (units > 1)
+            {
+                do
+                {
+                    if (numBits >= 32)
+                    {
+                        break;
+                    }
+                    ++numBits;
+                }
+                while ((1 << (numBits - 1)) < units);
+            }
+        }
+        PblVector3 direction;
+        ReadUnitVector(group, direction);
+        float length;
+        group.ReadFixed(length, 0.0f, fMaxSpeed, numBits);
+        value = direction * length;
     }
-    PblVector3 direction;
-    ReadUnitVector(group, direction);
-    float length;
-    group.ReadFixed(length, 0.0f, fMaxSpeed, iBits);
-    value = direction * length;
+    else
+    {
+        value.SetAll(0.0f);
+    }
 }
 
 // FUNCTION: SWBF2 0x005f5f00
 void WriteCharacter(NetPktGroup& group, const Character* pCharacter)
 {
     int index = 0;
-    unsigned int kind = 0;
+    unsigned int kind;
     int bits = 0;
-    if (pCharacter)
+    if (!pCharacter)
+    {
+        kind = 0;
+    }
+    else
     {
         Character* pBase = Character::GetPtr(0);
         index = (int)(pCharacter - pBase);
@@ -2316,7 +2283,7 @@ void PowerupItem::WriteObject(NetPktGroup& group, NetObjState*)
     WriteMatrix(group, GetMatrix());
     WriteVelocity(group, mVelocity, 5120.0f, -1);
     group.WriteFixed(mLifeTimer, -1.0f, mClass->mLifeSpan, 8);
-    group.WriteBits(mStationary ? 1u : 0u, 1);
+    group.Write(mStationary);
 }
 
 // FUNCTION: SWBF2 0x005f02a0
@@ -2332,9 +2299,7 @@ void PowerupItem::ReadObject(NetPktGroup& group, NetObjState*)
     pScene->Activate();
     ReadVelocity(group, mVelocity, 5120.0f, -1);
     group.ReadFixed(mLifeTimer, -1.0f, mClass->mLifeSpan, 8);
-    unsigned int stationary;
-    group.ReadBits(stationary, 1);
-    mStationary = stationary != 0;
+    group.Read(mStationary);
 }
 
 // FUNCTION: SWBF2 0x005eb1c0
@@ -2414,16 +2379,14 @@ void EntityBuilding::ReadObject(NetPktGroup& group, NetObjState*)
 void EntityTrap::WriteObject(NetPktGroup& group, NetObjState* pState)
 {
     EntityBuilding::WriteObject(group, pState);
-    group.WriteBits(mTriggered, 1);
+    group.Write(mTriggered);
 }
 
 // FUNCTION: SWBF2 0x005f07e0
 void EntityTrap::ReadObject(NetPktGroup& group, NetObjState* pState)
 {
     EntityBuilding::ReadObject(group, pState);
-    unsigned int value;
-    group.ReadBits(value, 1);
-    mTriggered = value != 0;
+    group.Read(mTriggered);
 }
 
 // FUNCTION: SWBF2 0x005f0650
@@ -2516,11 +2479,11 @@ void EntityMine::WriteObject(NetPktGroup& group, NetObjState*)
     WriteMatrix(group, GetMatrix());
     WriteVelocity(group, mVelocity, 5120.0f, -1);
     group.WriteFixed(mLifeTimer, -1.0f, mClass->mLifeSpan, 8);
-    group.WriteBits(mStationary ? 1u : 0u, 1);
-    group.WriteBits(mTrigger ? 1u : 0u, 1);
+    group.Write(mStationary);
+    group.Write(mTrigger);
     WriteCharacter(group, mOwner);
     const bool bStuck = mStickInfo != 0;
-    group.WriteBits(bStuck ? 1u : 0u, 1);
+    group.Write(bStuck);
     if (!bStuck)
     {
         return;
@@ -2553,10 +2516,8 @@ void EntityMine::ReadObject(NetPktGroup& group, NetObjState*)
     ReadVelocity(group, mVelocity, 5120.0f, -1);
     group.ReadFixed(mLifeTimer, -1.0f, mClass->mLifeSpan, 8);
     unsigned int bit;
-    group.ReadBits(bit, 1);
-    mStationary = bit != 0;
-    group.ReadBits(bit, 1);
-    mTrigger = bit != 0;
+    group.Read(mStationary);
+    group.Read(mTrigger);
     mOwner = ReadCharacter(group);
     group.ReadBits(bit, 1);
     if (bit)
@@ -2810,7 +2771,7 @@ void Weapon::Write(NetPktGroup& group)
             }
             else
             {
-                group.WriteBits(mZoom == pClass->mZoomMax, 1);
+                group.Write(mZoom == pClass->mZoomMax);
             }
         }
     }
@@ -2974,7 +2935,7 @@ void WeaponCannon::Write(NetPktGroup& group)
     {
         group.WriteFixed(mWarmCoolTimer, 0.0f, fWarmCoolTime, 8);
     }
-    group.WriteBits(mWarmUp, 1);
+    group.Write(mWarmUp);
     group.WriteBits(mSalvoCount, 6);
     float fSalvoDelay =
         static_cast<const WeaponCannonClass*>(mClass)->mSalvoDelayMax >
@@ -3146,8 +3107,8 @@ void WeaponMeleeThrow::Read(NetPktGroup& group)
 void WeaponDispenser::Write(NetPktGroup& group)
 {
     Weapon::Write(group);
-    group.WriteBits(mFired != 0, 1);
-    group.WriteBits(mNetFiredFlag != 0, 1);
+    group.Write(mFired != 0);
+    group.Write(mNetFiredFlag != 0);
     group.WriteFixed(mStrength, 0.0f, 1.0f, 8);
 }
 
@@ -3157,8 +3118,7 @@ void WeaponDispenser::Read(NetPktGroup& group)
     bool bBusy = IsBusy();
     Weapon::Read(group);
     unsigned int uValue;
-    group.ReadBits(uValue, 1);
-    mFired = uValue != 0;
+    group.Read(mFired);
     group.ReadBits(uValue, 1);
     if (!mFiredFlag && uValue && !bBusy)
     {
@@ -3171,8 +3131,8 @@ void WeaponDispenser::Read(NetPktGroup& group)
 void WeaponGrenade::Write(NetPktGroup& group)
 {
     Weapon::Write(group);
-    group.WriteBits(mFired != 0, 1);
-    group.WriteBits(mNetFiredFlag != 0, 1);
+    group.Write(mFired != 0);
+    group.Write(mNetFiredFlag != 0);
     group.WriteFixed(mStrength, 0.0f, 1.0f, 8);
 }
 
@@ -3182,8 +3142,7 @@ void WeaponGrenade::Read(NetPktGroup& group)
     bool bBusy = IsBusy();
     Weapon::Read(group);
     unsigned int uValue;
-    group.ReadBits(uValue, 1);
-    mFired = uValue != 0;
+    group.Read(mFired);
     group.ReadBits(uValue, 1);
     if (!mFiredFlag && uValue && !bBusy)
     {
@@ -3214,19 +3173,16 @@ void WeaponGrenade::Read(NetPktGroup& group)
 void WeaponInvisibility::Write(NetPktGroup& group)
 {
     Weapon::Write(group);
-    group.WriteBits(mFired != 0, 1);
-    group.WriteBits(m_bInvisibilityActive != 0, 1);
+    group.Write(mFired != 0);
+    group.Write(m_bInvisibilityActive != 0);
 }
 
 // FUNCTION: SWBF2 0x005e8fc0
 void WeaponInvisibility::Read(NetPktGroup& group)
 {
     Weapon::Read(group);
-    unsigned int uValue;
-    group.ReadBits(uValue, 1);
-    mFired = uValue != 0;
-    group.ReadBits(uValue, 1);
-    m_bInvisibilityActive = uValue != 0;
+    group.Read(mFired);
+    group.Read(m_bInvisibilityActive);
     if (mState == FIRE)
     {
         mStateLimit = ((const WeaponInvisibilityClass*)mClass)->mInitialSalvoDelay;
@@ -3251,16 +3207,14 @@ void WeaponLaser::Read(NetPktGroup& group)
 void WeaponLauncher::Write(NetPktGroup& group)
 {
     WeaponCannon::Write(group);
-    group.WriteBits(mLocked != 0, 1);
+    group.Write(mLocked != 0);
 }
 
 // FUNCTION: SWBF2 0x005e90e0
 void WeaponLauncher::Read(NetPktGroup& group)
 {
     WeaponCannon::Read(group);
-    unsigned int uLocked;
-    group.ReadBits(uLocked, 1);
-    mLocked = uLocked != 0;
+    group.Read(mLocked);
     if (mState == CHARGE)
     {
         mStateLimit = ((const WeaponLauncherClass*)mClass)->mLockTime;
@@ -3341,10 +3295,10 @@ void WeaponAreaEffect::Write(NetPktGroup& group)
     Weapon::Write(group);
     if (mState == FIRE)
     {
-        group.WriteBits(m_bFired != 0, 1);
+        group.Write(m_bFired != 0);
         if (((const WeaponAreaEffectClass*)mClass)->m_eFireType == 1 && m_bFired)
         {
-            group.WriteBits(m_iNumTargets > 0, 1);
+            group.Write(m_iNumTargets > 0);
         }
     }
 }
@@ -3356,8 +3310,7 @@ void WeaponAreaEffect::Read(NetPktGroup& group)
     if (mState == FIRE)
     {
         unsigned int uValue;
-        group.ReadBits(uValue, 1);
-        m_bFired = uValue != 0;
+        group.Read(m_bFired);
         if (((const WeaponAreaEffectClass*)mClass)->m_eFireType == 1 && m_bFired)
         {
             group.ReadBits(uValue, 1);
@@ -3422,7 +3375,7 @@ bool EntitySoldier::Smooth(float fDeltaTime) const
 // FUNCTION: SWBF2 0x005eb6d0
 void EntityPathFollower::WriteObject(NetPktGroup& group, NetObjState* pState, float fMinSpeed, float fMaxSpeed)
 {
-    group.WriteBits(mPath != 0, 1);
+    group.Write(mPath != 0);
     if (mPath)
     {
         unsigned int uPath = 0;
@@ -3442,7 +3395,7 @@ void EntityPathFollower::WriteObject(NetPktGroup& group, NetObjState* pState, fl
             WritePositionVector(group, mPathSpline.GetControlPoints()[i]);
         }
     }
-    group.WriteBits(mDirection == 1, 1);
+    group.Write(mDirection == 1);
     group.WriteFixed(mCurSpeed, fMinSpeed, fMaxSpeed, 16);
 }
 
@@ -3784,7 +3737,7 @@ void ReadJetFuel(NetPktGroup& group, float& value)
 // FUNCTION: SWBF2 0x005e9550
 void EntitySoldier::AddSends(void (*send)(GameObject*, int), int depth)
 {
-    if (mPlayerId != NetGame::GetCurDst() || !mCtrl)
+    if (GetPlayerId() != NetGame::GetCurDst() || !mCtrl)
     {
         return;
     }
@@ -3803,7 +3756,7 @@ void EntitySoldier::AddSends(void (*send)(GameObject*, int), int depth)
 // FUNCTION: SWBF2 0x005ed7b0
 void EntityDroideka::AddSends(void (*send)(GameObject*, int), int depth)
 {
-    if (mPlayerId != NetGame::GetCurDst() || !mCtrl)
+    if (GetPlayerId() != NetGame::GetCurDst() || !mCtrl)
     {
         return;
     }
@@ -3825,7 +3778,7 @@ void EntityFlyer::WriteObject(NetPktGroup& group, NetObjState* pState)
     if (!NetGame::IsFullState())
     {
         SetNetLOD(ComputeNetLOD(matrix.GetTranslation(), mPlayerId));
-        SetNetPrecision(group);
+        WriteNetLOD(group);
     }
     WriteMatrix(group, matrix);
     group.WriteBits(mState, 3);
@@ -3846,7 +3799,7 @@ void EntityFlyer::WriteObject(NetPktGroup& group, NetObjState* pState)
     WritePilots(group, this);
     if (mState != LANDED)
     {
-        group.WriteBits(mBoost ? 1u : 0u, 1);
+        group.Write(mBoost);
         WriteVelocity(group, mVelocity,
                    mClass->mMaxFlyerSpeed > mClass->mBoostFlyerSpeed ? mClass->mMaxFlyerSpeed
                                                                      : mClass->mBoostFlyerSpeed, -1);
@@ -3868,8 +3821,8 @@ void EntityFlyer::WriteObject(NetPktGroup& group, NetObjState* pState)
         WriteThrust(group, mTurnControllerPrevUpdate);
         group.WriteFixed(mTrick, -1.0f, 1.0f, 9);
         group.WriteBits(*(const unsigned int*)&mTrickDoubleclick, 32);
-        group.WriteBits(mInRoll ? 1u : 0u, 1);
-        group.WriteBits(mInFlip ? 1u : 0u, 1);
+        group.Write(mInRoll);
+        group.Write(mInFlip);
         WriteAngle(group, mRoll);
         group.WriteFixed(mRollTarget, -13.35176944732666f, 13.35176944732666f, 16);
         group.WriteFixed(mSideRoll.x, -1.0f, 1.0f, 16);
@@ -3881,7 +3834,7 @@ void EntityFlyer::WriteObject(NetPktGroup& group, NetObjState* pState)
         }
         if (mPlayerId < 0)
         {
-            group.WriteBits(mFollowingPath ? 1u : 0u, 1);
+            group.Write(mFollowingPath);
             group.WriteFixed(mAIEng.ai.mFreeFlyTime, 0.0f, mClass->mFreeFlyTime + 1.0f, 16);
             EntityPathFollower::WriteObject(
                 group, pState, mClass->mMinFlyerSpeed > 0.0f ? 0.0f : mClass->mMinFlyerSpeed,
@@ -3895,7 +3848,7 @@ void EntityFlyer::WriteObject(NetPktGroup& group, NetObjState* pState)
         if (mPlayerId >= 0)
         {
             WriteThrust(group, mTurnBuildup);
-            group.WriteBits(mTargetInfo.mIsAiming ? 1u : 0u, 1);
+            group.Write(mTargetInfo.mIsAiming);
             if (NetGame::IsFullState() || NetGame::IsLocalTo(clientId, mPlayerId))
             {
                 WriteTrigger(group, &mControlSprint);
@@ -4033,8 +3986,7 @@ void EntityFlyer::ReadObject(NetPktGroup& group, NetObjState* pState)
         if (mPlayerId >= 0)
         {
             ReadThrust(group, mTurnBuildup);
-            group.ReadBits(value, 1);
-            mTargetInfo.mIsAiming = value != 0;
+            group.Read(mTargetInfo.mIsAiming);
             if (NetGame::IsFullState() || NetGame::GetJoystickIndex(mPlayerId) >= 0)
             {
                 ReadTrigger(group, &mControlSprint);
@@ -4100,8 +4052,8 @@ void EntityFlyer::WriteLateState(NetPktGroup& group)
     WriteThrust(group, mTurnControllerPrevUpdate);
     group.WriteFixed(mTrick, -1.0f, 1.0f, 9);
     group.WriteBits(*(const unsigned int*)&mTrickDoubleclick, 32);
-    group.WriteBits(mInRoll ? 1u : 0u, 1);
-    group.WriteBits(mInFlip ? 1u : 0u, 1);
+    group.Write(mInRoll);
+    group.Write(mInFlip);
     WriteAngle(group, mRoll);
     group.WriteFixed(mRollTarget, -13.35176944732666f, 13.35176944732666f, 16);
     group.WriteFixed(mSideRoll.x, -1.0f, 1.0f, 16);
@@ -4116,7 +4068,7 @@ void EntityFlyer::WriteLateState(NetPktGroup& group)
     WriteThrust(group, mControlTurn);
     WriteThrust(group, mControlPitch);
     WriteThrust(group, mTurnBuildup);
-    group.WriteBits(mTargetInfo.mIsAiming ? 1u : 0u, 1);
+    group.Write(mTargetInfo.mIsAiming);
     for (int i = 0; i < mNumTurrets; ++i)
     {
         ((MountedTurret&)(*mTurret[i])).WriteLateState(group);
@@ -4202,8 +4154,7 @@ void EntityFlyer::ReadLateState(NetPktGroup& group)
     ReadThrust(group, fVal);
     SetPitch(fVal);
     ReadThrust(group, mTurnBuildup);
-    group.ReadBits(value, 1);
-    mTargetInfo.mIsAiming = value != 0;
+    group.Read(mTargetInfo.mIsAiming);
     for (int i = 0; i < mNumTurrets; ++i)
     {
         ((MountedTurret&)(*mTurret[i])).ReadLateState(group);
@@ -4389,14 +4340,12 @@ void EntityDroideka::ReadObject(NetPktGroup& group, NetObjState*)
             ((PlayerController*)mCtrl)->mMouseTurnBuildup = turn;
         }
         ReadThrust(group, mTurnBuildup);
-        group.ReadBits(value, 1);
-        mTargetInfo.mIsAiming = value != 0;
+        group.Read(mTargetInfo.mIsAiming);
         group.ReadFixed(mTurnAdjusted, -1.0f, 2.0f, 16);
         group.ReadFixed(mPitchAdjusted, -1.0f, 2.0f, 16);
         group.ReadFixed(mTurnAuto, -1.0f, 1.0f, 16);
         group.ReadFixed(mPitchAuto, -1.0f, 1.0f, 16);
-        group.ReadBits(value, 1);
-        mUsingTurnAdjusted = value != 0;
+        group.Read(mUsingTurnAdjusted);
         group.ReadBits(value, 1);
         SetTargetLockedObj(value ? ReadObjectPtr(group) : 0);
         if (NetGame::IsFullState() || NetGame::GetJoystickIndex(mPlayerId) >= 0)
@@ -4430,7 +4379,7 @@ void EntityDroideka::ReadObject(NetPktGroup& group, NetObjState*)
 void EntityDroideka::WriteLateState(NetPktGroup& group)
 {
     const PblMatrix& matrix = GetMatrix();
-    group.WriteBits(mCtrl != 0, 1);
+    group.Write(mCtrl != 0);
     WriteMatrix(group, matrix);
     WriteVelocity(group, mVelocity, 5120.0f, -1);
     group.WriteBits(mDirection, 2);
@@ -4455,44 +4404,44 @@ void EntityDroideka::WriteLateState(NetPktGroup& group)
     WriteCosSin(group, mBallOrientation);
     WriteCosSin(group, mBallLean);
     const bool bOffense = mBuffOffenseTimer > 0.0f;
-    group.WriteBits(bOffense, 1);
+    group.Write(bOffense);
     if (bOffense)
     {
         group.WriteFixed(mBuffOffenseTimer, 0.0f, 350.0f, 16);
         group.WriteFixed(mBuffOffenseMult, 0.0f, 1.0f, 16);
     }
     const bool bDefense = mBuffDefenseTimer > 0.0f;
-    group.WriteBits(bDefense, 1);
+    group.Write(bDefense);
     if (bDefense)
     {
         group.WriteFixed(mBuffDefenseTimer, 0.0f, 350.0f, 16);
         group.WriteFixed(mBuffDefenseMult, 0.0f, 1.0f, 16);
     }
     const bool bHealth = mBuffHealthTimer > 0.0f;
-    group.WriteBits(bHealth, 1);
+    group.Write(bHealth);
     if (bHealth)
     {
         group.WriteFixed(mBuffHealthTimer, 0.0f, 350.0f, 16);
         group.WriteFixed(mBuffHealthRate, 0.0f, 1000.0f, 16);
     }
     const bool bDebuff = mDebuffDamageTimer > 0.0f;
-    group.WriteBits(bDebuff, 1);
+    group.Write(bDebuff);
     if (bDebuff)
     {
         group.WriteFixed(mDebuffDamageTimer, 0.0f, 350.0f, 16);
         group.WriteFixed(mDebuffDamageRate, 0.0f, 1000.0f, 16);
     }
-    group.WriteBits(mLastCollidedWithNonTerrain, 1);
+    group.Write(mLastCollidedWithNonTerrain);
     WritePositionVector(group, mLastPosition);
     WriteUnitVector(group, mGroundNormal);
     WriteThrust(group, mCtrl ? ((PlayerController*)mCtrl)->GetMouseBuildup() : 0.0f);
     WriteThrust(group, mTurnBuildup);
-    group.WriteBits(mTargetInfo.mIsAiming, 1);
+    group.Write(mTargetInfo.mIsAiming);
     group.WriteFixed(mTurnAdjusted, -1.0f, 2.0f, 16);
     group.WriteFixed(mPitchAdjusted, -1.0f, 2.0f, 16);
     group.WriteFixed(mTurnAuto, -1.0f, 1.0f, 16);
     group.WriteFixed(mPitchAuto, -1.0f, 1.0f, 16);
-    group.WriteBits(mUsingTurnAdjusted, 1);
+    group.Write(mUsingTurnAdjusted);
 }
 
 // FUNCTION: SWBF2 0x005f4ba0
@@ -4635,14 +4584,12 @@ void EntityDroideka::ReadLateState(NetPktGroup& group)
         ((PlayerController*)mCtrl)->mMouseTurnBuildup = turn;
     }
     ReadThrust(group, mTurnBuildup);
-    group.ReadBits(value, 1);
-    mTargetInfo.mIsAiming = value != 0;
+    group.Read(mTargetInfo.mIsAiming);
     group.ReadFixed(mTurnAdjusted, -1.0f, 2.0f, 16);
     group.ReadFixed(mPitchAdjusted, -1.0f, 2.0f, 16);
     group.ReadFixed(mTurnAuto, -1.0f, 1.0f, 16);
     group.ReadFixed(mPitchAuto, -1.0f, 1.0f, 16);
-    group.ReadBits(value, 1);
-    mUsingTurnAdjusted = value != 0;
+    group.Read(mUsingTurnAdjusted);
 }
 
 extern PblVector3 gCameraFrontPos;
@@ -4669,9 +4616,9 @@ void EntityDroideka::WriteObject(NetPktGroup& group, NetObjState*)
     if (!NetGame::IsFullState())
     {
         SetNetLOD(ComputeNetLOD(matrix.GetTranslation(), mPlayerId));
-        SetNetPrecision(group);
+        WriteNetLOD(group);
     }
-    group.WriteBits(mCtrl != 0, 1);
+    group.Write(mCtrl != 0);
     WriteMatrix(group, matrix);
     WriteVelocity(group, mVelocity, 5120.0f, -1);
     mEnergyBar.Write(group);
@@ -4705,28 +4652,28 @@ void EntityDroideka::WriteObject(NetPktGroup& group, NetObjState*)
     WriteCosSin(group, mBallLean);
     WritePilots(group, this);
     const bool bOffense = mBuffOffenseTimer > 0.0f;
-    group.WriteBits(bOffense, 1);
+    group.Write(bOffense);
     if (bOffense)
     {
         group.WriteFixed(mBuffOffenseTimer, 0.0f, 350.0f, 16);
         group.WriteFixed(mBuffOffenseMult, 0.0f, 1.0f, 16);
     }
     const bool bDefense = mBuffDefenseTimer > 0.0f;
-    group.WriteBits(bDefense, 1);
+    group.Write(bDefense);
     if (bDefense)
     {
         group.WriteFixed(mBuffDefenseTimer, 0.0f, 350.0f, 16);
         group.WriteFixed(mBuffDefenseMult, 0.0f, 1.0f, 16);
     }
     const bool bHealth = mBuffHealthTimer > 0.0f;
-    group.WriteBits(bHealth, 1);
+    group.Write(bHealth);
     if (bHealth)
     {
         group.WriteFixed(mBuffHealthTimer, 0.0f, 350.0f, 16);
         group.WriteFixed(mBuffHealthRate, 0.0f, 1000.0f, 16);
     }
     const bool bDebuff = mDebuffDamageTimer > 0.0f;
-    group.WriteBits(bDebuff, 1);
+    group.Write(bDebuff);
     if (bDebuff)
     {
         group.WriteFixed(mDebuffDamageTimer, 0.0f, 350.0f, 16);
@@ -4735,17 +4682,17 @@ void EntityDroideka::WriteObject(NetPktGroup& group, NetObjState*)
     }
     if (mPlayerId >= 0)
     {
-        group.WriteBits(mLastCollidedWithNonTerrain, 1);
+        group.Write(mLastCollidedWithNonTerrain);
         WritePositionVector(group, mLastPosition);
         WriteUnitVector(group, mGroundNormal);
         WriteThrust(group, mCtrl ? ((PlayerController*)mCtrl)->GetMouseBuildup() : 0.0f);
         WriteThrust(group, mTurnBuildup);
-        group.WriteBits(mTargetInfo.mIsAiming, 1);
+        group.Write(mTargetInfo.mIsAiming);
         group.WriteFixed(mTurnAdjusted, -1.0f, 2.0f, 16);
         group.WriteFixed(mPitchAdjusted, -1.0f, 2.0f, 16);
         group.WriteFixed(mTurnAuto, -1.0f, 1.0f, 16);
         group.WriteFixed(mPitchAuto, -1.0f, 1.0f, 16);
-        group.WriteBits(mUsingTurnAdjusted, 1);
+        group.Write(mUsingTurnAdjusted);
         if (mTargetLockedObj && GetUniqObjectId(mTargetLockedObj) != 63)
         {
             group.WriteBits(1, 1);
@@ -4759,7 +4706,7 @@ void EntityDroideka::WriteObject(NetPktGroup& group, NetObjState*)
         {
             WriteTrigger(group, const_cast<Trigger*>(&mControlSprint));
             WriteTrigger(group, const_cast<Trigger*>(&mControlThrustFwd));
-            group.WriteBits(mFallTimer >= 0.1f, 1);
+            group.Write(mFallTimer >= 0.1f);
             WriteTrigger(group, const_cast<Trigger*>(&mControlJump));
             WriteTrigger(group, const_cast<Trigger*>(&mControlZoom));
             for (int i = 0; i < 2; ++i)
@@ -4800,12 +4747,12 @@ void EntitySoldier::WriteObject(NetPktGroup& group, NetObjState*)
             }
         }
         SetNetLOD(precision);
-        SetNetPrecision(group);
+        WriteNetLOD(group);
     }
     const bool bHasController = mCtrl != 0;
-    group.WriteBits(bHasController, 1);
+    group.Write(bHasController);
     const bool bActive = static_cast<Controllable*>(this)->IsThreadActive();
-    group.WriteBits(bActive, 1);
+    group.Write(bActive);
     if (bActive)
     {
         bool bFullMatrix = true;
@@ -4814,7 +4761,7 @@ void EntitySoldier::WriteObject(NetPktGroup& group, NetObjState*)
         {
             bFullMatrix = false;
         }
-        group.WriteBits(bFullMatrix, 1);
+        group.Write(bFullMatrix);
         if (bFullMatrix)
         {
             WriteMatrix(group, matrix);
@@ -4832,18 +4779,18 @@ void EntitySoldier::WriteObject(NetPktGroup& group, NetObjState*)
         group.WriteBits(mActiveChannel + 1, 2);
     }
     group.WriteBits(mState, 4);
-    group.WriteBits((mFlags & flags_isGrounded) != 0, 1);
-    group.WriteBits((mFlags & flags_fallTimer) != 0, 1);
+    group.Write((mFlags & flags_isGrounded) != 0);
+    group.Write((mFlags & flags_fallTimer) != 0);
     group.WriteFixed(mStateTimer, 0.0f, 8.0f, 13);
     group.WriteBits(mStanceIndex, 4);
-    group.WriteBits(_bActive, 1);
+    group.Write(_bActive);
     int collision = 0;
     if (IsInCollisionList())
     {
         collision = static_cast<CollisionObject*>(this)->GetObjectData(0) == COLL_SOFT ? 1 : 2;
     }
     group.WriteBits(collision, 2);
-    group.WriteBits(mTargetInfo.mIsAiming, 1);
+    group.Write(mTargetInfo.mIsAiming);
     group.WriteBits(mTeam, 2);
     group.WriteBits(mPerceivedTeam, 2);
     WriteCharacter(group, mCharacter);
@@ -4889,28 +4836,28 @@ void EntitySoldier::WriteObject(NetPktGroup& group, NetObjState*)
         WriteJetFuel(group, mJetFuel);
     }
     const bool bOffense = mBuffOffenseTimer > 0.0f;
-    group.WriteBits(bOffense, 1);
+    group.Write(bOffense);
     if (bOffense)
     {
         group.WriteFixed(mBuffOffenseTimer, 0.0f, 350.0f, 16);
         group.WriteFixed(mBuffOffenseMult, 0.0f, 1.0f, 16);
     }
     const bool bDefense = mBuffDefenseTimer > 0.0f;
-    group.WriteBits(bDefense, 1);
+    group.Write(bDefense);
     if (bDefense)
     {
         group.WriteFixed(mBuffDefenseTimer, 0.0f, 350.0f, 16);
         group.WriteFixed(mBuffDefenseMult, 0.0f, 1.0f, 16);
     }
     const bool bHealth = mBuffHealthTimer > 0.0f;
-    group.WriteBits(bHealth, 1);
+    group.Write(bHealth);
     if (bHealth)
     {
         group.WriteFixed(mBuffHealthTimer, 0.0f, 350.0f, 16);
         group.WriteFixed(mBuffHealthRate, 0.0f, 1000.0f, 16);
     }
     const bool bDebuff = mDebuffDamageTimer > 0.0f;
-    group.WriteBits(bDebuff, 1);
+    group.Write(bDebuff);
     if (bDebuff)
     {
         group.WriteFixed(mDebuffDamageTimer, 0.0f, 350.0f, 16);
@@ -4918,7 +4865,7 @@ void EntitySoldier::WriteObject(NetPktGroup& group, NetObjState*)
         WriteDamageOwner(group, mDebuffDamageOwner);
     }
     const bool bSmolder = mSmolderTimer > 0.0f;
-    group.WriteBits(bSmolder, 1);
+    group.Write(bSmolder);
     if (bSmolder)
     {
         group.WriteFixed(mSmolderTimer, 0.0f, 350.0f, 16);
@@ -4929,7 +4876,7 @@ void EntitySoldier::WriteObject(NetPktGroup& group, NetObjState*)
     {
         if (static_cast<Controllable*>(this)->IsThreadActive())
         {
-            group.WriteBits(mLastCollidedWithNonTerrain, 1);
+            group.Write(mLastCollidedWithNonTerrain);
             WritePositionVector(group, mLastPosition);
             WriteUnitVector(group, mGroundNormal);
         }
@@ -4938,7 +4885,7 @@ void EntitySoldier::WriteObject(NetPktGroup& group, NetObjState*)
         group.WriteFixed(mPitchAdjusted, -1.0f, 2.0f, 16);
         group.WriteFixed(mTurnAuto, -1.0f, 1.0f, 16);
         group.WriteFixed(mPitchAuto, -1.0f, 1.0f, 16);
-        group.WriteBits(mUsingTurnAdjusted, 1);
+        group.Write(mUsingTurnAdjusted);
         if (mTargetLockedObj && (IsNeverDies(mTargetLockedObj->GetEntityType()) ||
                                  GetUniqObjectId(mTargetLockedObj) != 63))
         {
@@ -5003,9 +4950,9 @@ void EntitySoldier::WriteLateState(NetPktGroup& group)
 {
     const PblMatrix& matrix = GetMatrix();
     const bool bHasController = mCtrl != 0;
-    group.WriteBits(bHasController, 1);
+    group.Write(bHasController);
     const bool bActive = static_cast<Controllable*>(this)->IsThreadActive();
-    group.WriteBits(bActive, 1);
+    group.Write(bActive);
     if (bActive)
     {
         bool bFullMatrix = true;
@@ -5014,7 +4961,7 @@ void EntitySoldier::WriteLateState(NetPktGroup& group)
         {
             bFullMatrix = false;
         }
-        group.WriteBits(bFullMatrix, 1);
+        group.Write(bFullMatrix);
         if (bFullMatrix)
         {
             WriteMatrix(group, matrix);
@@ -5029,11 +4976,11 @@ void EntitySoldier::WriteLateState(NetPktGroup& group)
                    mClass->mJumpVerticalSpeed * 2.0f + mClass->mMaxSpeed + mClass->mJetJump, -1);
     }
     group.WriteBits(mState, 4);
-    group.WriteBits((mFlags & flags_isGrounded) != 0, 1);
-    group.WriteBits((mFlags & flags_fallTimer) != 0, 1);
+    group.Write((mFlags & flags_isGrounded) != 0);
+    group.Write((mFlags & flags_fallTimer) != 0);
     group.WriteFixed(mStateTimer, 0.0f, 8.0f, 13);
     group.WriteBits(mStanceIndex, 4);
-    group.WriteBits(mTargetInfo.mIsAiming, 1);
+    group.Write(mTargetInfo.mIsAiming);
     WriteThrust(group, mControlMove);
     WriteThrust(group, mControlStrafe);
     WriteThrust(group, mControlTurn);
@@ -5049,35 +4996,35 @@ void EntitySoldier::WriteLateState(NetPktGroup& group)
         WriteJetFuel(group, mJetFuel);
     }
     const bool bOffense = mBuffOffenseTimer > 0.0f;
-    group.WriteBits(bOffense, 1);
+    group.Write(bOffense);
     if (bOffense)
     {
         group.WriteFixed(mBuffOffenseTimer, 0.0f, 350.0f, 16);
         group.WriteFixed(mBuffOffenseMult, 0.0f, 1.0f, 16);
     }
     const bool bDefense = mBuffDefenseTimer > 0.0f;
-    group.WriteBits(bDefense, 1);
+    group.Write(bDefense);
     if (bDefense)
     {
         group.WriteFixed(mBuffDefenseTimer, 0.0f, 350.0f, 16);
         group.WriteFixed(mBuffDefenseMult, 0.0f, 1.0f, 16);
     }
     const bool bHealth = mBuffHealthTimer > 0.0f;
-    group.WriteBits(bHealth, 1);
+    group.Write(bHealth);
     if (bHealth)
     {
         group.WriteFixed(mBuffHealthTimer, 0.0f, 350.0f, 16);
         group.WriteFixed(mBuffHealthRate, 0.0f, 1000.0f, 16);
     }
     const bool bDebuff = mDebuffDamageTimer > 0.0f;
-    group.WriteBits(bDebuff, 1);
+    group.Write(bDebuff);
     if (bDebuff)
     {
         group.WriteFixed(mDebuffDamageTimer, 0.0f, 350.0f, 16);
         group.WriteFixed(mDebuffDamageRate, 0.0f, 1000.0f, 16);
     }
     const bool bSmolder = mSmolderTimer > 0.0f;
-    group.WriteBits(bSmolder, 1);
+    group.Write(bSmolder);
     if (bSmolder)
     {
         group.WriteFixed(mSmolderTimer, 0.0f, 350.0f, 16);
@@ -5085,7 +5032,7 @@ void EntitySoldier::WriteLateState(NetPktGroup& group)
     }
     if (static_cast<Controllable*>(this)->IsThreadActive())
     {
-        group.WriteBits(mLastCollidedWithNonTerrain, 1);
+        group.Write(mLastCollidedWithNonTerrain);
         WritePositionVector(group, mLastPosition);
         WriteUnitVector(group, mGroundNormal);
     }
@@ -5094,7 +5041,7 @@ void EntitySoldier::WriteLateState(NetPktGroup& group)
     group.WriteFixed(mPitchAdjusted, -1.0f, 2.0f, 16);
     group.WriteFixed(mTurnAuto, -1.0f, 1.0f, 16);
     group.WriteFixed(mPitchAuto, -1.0f, 1.0f, 16);
-    group.WriteBits(mUsingTurnAdjusted, 1);
+    group.Write(mUsingTurnAdjusted);
     WriteTrigger(group, const_cast<Trigger*>(&mControlZoom));
     WriteTrigger(group, const_cast<Trigger*>(&mControlJump));
     if (bHasController)
@@ -5282,8 +5229,7 @@ void EntitySoldier::ReadObject(NetPktGroup& group, NetObjState*)
         }
         pCollision->AddAttachedToCollisionManager();
     }
-    group.ReadBits(value, 1);
-    mTargetInfo.mIsAiming = value != 0;
+    group.Read(mTargetInfo.mIsAiming);
     group.ReadBits(value, 2);
     SetTeam(value);
     group.ReadBits(value, 2);
@@ -5492,8 +5438,7 @@ void EntitySoldier::ReadObject(NetPktGroup& group, NetObjState*)
         group.ReadFixed(mPitchAdjusted, -1.0f, 2.0f, 16);
         group.ReadFixed(mTurnAuto, -1.0f, 1.0f, 16);
         group.ReadFixed(mPitchAuto, -1.0f, 1.0f, 16);
-        group.ReadBits(value, 1);
-        mUsingTurnAdjusted = value != 0;
+        group.Read(mUsingTurnAdjusted);
         group.ReadBits(value, 1);
         SetTargetLockedObj(value ? ReadObjectPtr(group) : 0);
         if (NetGame::GetJoystickIndex(mPlayerId) >= 0 || NetGame::IsFullState())
@@ -5624,8 +5569,7 @@ void EntitySoldier::ReadLateState(NetPktGroup& group)
     {
         mFlags &= ~flags_fallTimer;
     }
-    group.ReadBits(grounded, 1);
-    mTargetInfo.mIsAiming = grounded != 0;
+    group.Read(mTargetInfo.mIsAiming);
     float fSwitch;
     ReadThrust(group, fSwitch);
     mControlMove = fSwitch;
@@ -5708,8 +5652,7 @@ void EntitySoldier::ReadLateState(NetPktGroup& group)
     group.ReadFixed(mPitchAdjusted, -1.0f, 2.0f, 16);
     group.ReadFixed(mTurnAuto, -1.0f, 1.0f, 16);
     group.ReadFixed(mPitchAuto, -1.0f, 1.0f, 16);
-    group.ReadBits(grounded, 1);
-    mUsingTurnAdjusted = grounded != 0;
+    group.Read(mUsingTurnAdjusted);
     ReadTrigger(group, &mControlZoom);
     ReadTrigger(group, &mControlJump);
     if (bHasController)

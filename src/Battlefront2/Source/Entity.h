@@ -89,6 +89,7 @@ public:
     // FUNCTION: SWBF2 0x00443f00
     virtual const EntityClass* GetEntityClass() const { return mEntityClass; }
 
+    // FUNCTION: SWBF2 0x0047a670
     unsigned int GetId() const { return mId; }
 
     unsigned int mId;

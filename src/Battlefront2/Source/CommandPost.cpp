@@ -1754,12 +1754,6 @@ void Event<CommandPost, char>::Callback::Trigger(CommandPost& item, char& param)
 }
 }
 
-// FUNCTION: SWBF2 0x0047a670
-unsigned int __fastcall GetDoorEntityId(const unsigned int* pRecord)
-{
-    return pRecord[1];
-}
-
 // FUNCTION: SWBF2 0x0047ab60
 void CommandPost::ForceIndex(int iIndex)
 {

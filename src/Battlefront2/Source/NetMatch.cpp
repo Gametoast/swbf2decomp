@@ -72,7 +72,7 @@ bool PumpGalaxyMatchmaking();
 void ResetLanRegistration();
 
 void ReadString(NetPktGroup& group, char* text, unsigned int capacity);
-void WriteString(NetPktGroup* group, const char* text, unsigned int capacity);
+void WriteString(NetPktGroup& group, const char* text, unsigned int capacity);
 
 // FUNCTION: SWBF2 0x005d4690
 unsigned int NetSetup::GetPassword()
@@ -414,8 +414,8 @@ void __fastcall HandleFindPacket(NetPacket* packet)
         group.WriteBits(challenge, 32);
         group.WriteBits(1, 12);
         group.WriteBits(NetComm::GetMyArch(), 2);
-        WriteString(&group, NetSetup::GetHostName(), 64);
-        WriteString(&group, NetSetup::GetGameType(), 64);
+        WriteString(group, NetSetup::GetHostName(), 64);
+        WriteString(group, NetSetup::GetGameType(), 64);
         if (NetComm::IsLAN())
         {
             group.WriteBits(0, 32);
@@ -973,9 +973,9 @@ static void HandleQueryPackets()
             group.BeginWrite();
             group.WriteBits(uWord, 32);
             group.WriteBits(uNibble, 4);
-            WriteString(&group, NetSetup::GetHostName(), 64);
-            WriteString(&group, NetSetup::GetGameType(), 64);
-            WriteString(&group, GetNextMissionForLobby(), 64);
+            WriteString(group, NetSetup::GetHostName(), 64);
+            WriteString(group, NetSetup::GetGameType(), 64);
+            WriteString(group, GetNextMissionForLobby(), 64);
             group.WriteBits(netAutoAim != 0, 1);
             group.WriteBits(netAutoAssignTeams != 0, 1);
             group.WriteBits(netTeamDamage != 0, 1);

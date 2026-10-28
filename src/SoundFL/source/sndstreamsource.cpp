@@ -430,7 +430,7 @@ bool StreamSource::Open(File& rFile, unsigned int uiPacketSize, unsigned char ui
     }
     else
     {
-        mFlags &= ~flags_MediaSecBase2;
+        mFlags &= 0x7f;
     }
 
     for (unsigned int i = 0; i < uiNumPackets; ++i)

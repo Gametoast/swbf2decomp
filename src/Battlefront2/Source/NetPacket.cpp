@@ -16,20 +16,6 @@ extern NetPktGroup lossQueue;
 extern NetPktGroup latencyQueue;
 extern NetPktGroup localQueue;
 
-// FUNCTION: SWBF2 0x0053e0a0
-void NetPktGroup::Write(bool bValue)
-{
-    WriteBits(bValue != 0, 1);
-}
-
-// FUNCTION: SWBF2 0x0053e0c0
-void NetPktGroup::Read(bool& bValue)
-{
-    unsigned int uValue;
-    ReadBits(uValue, 1);
-    bValue = uValue != 0;
-}
-
 // FUNCTION: SWBF2 0x0053e0f0
 void NetPktGroup::Write(const float& fValue)
 {
@@ -128,11 +114,11 @@ void NetPacket::Create()
     freeBigPackets.Reset();
     freeSmallPackets.Reset();
 
-    for (int i = 0; i < MAX_BIG_PACKETS; i++)
+    for (unsigned int i = 0; i < MAX_BIG_PACKETS; i++)
     {
         freeBigPackets.PushBack(NetPacket::Get(i));
     }
-    for (int i = MAX_BIG_PACKETS; i < MAX_BIG_PACKETS + MAX_SMALL_PACKETS; i++)
+    for (unsigned int i = MAX_BIG_PACKETS; i < MAX_BIG_PACKETS + MAX_SMALL_PACKETS; i++)
     {
         freeSmallPackets.PushBack(NetPacket::Get(i));
     }
@@ -599,7 +585,11 @@ bool NetPktGroup::IsEnd() const
     {
         return true;
     }
-    return pktPtr->GetNum() == lastPkt && pktPtr->mCurIndex >= pktPtr->mMaxIndex;
+    if (pktPtr->GetNum() != lastPkt)
+    {
+        return false;
+    }
+    return pktPtr->mCurIndex >= pktPtr->mMaxIndex;
 }
 
 // FUNCTION: SWBF2 0x005d92d0
@@ -778,7 +768,7 @@ NetPacket* NetPktGroup::GetFront()
 void NetPktGroup::Seek(const NetPktGroupOffset& offset)
 {
     pktPtr = NetPacket::Get(firstPkt);
-    for (int i = 0; i < offset.pktNum; ++i)
+    for (int n = offset.pktNum; n; --n)
     {
         pktPtr = NetPacket::Get(pktPtr->mNextPkt);
     }

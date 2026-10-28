@@ -957,7 +957,7 @@ void PAAnimationGroup::UpdateAnimations(float fDeltaTime)
 // FUNCTION: SWBF2 0x00628c20
 void PAAnimationGroup::WriteObject(NetPktGroup& group)
 {
-    group.WriteBits(*mActive != 0, 1);
+    group.Write(*mActive);
     if (!*mActive || !mNumAnims)
     {
         return;
@@ -989,9 +989,7 @@ void PAAnimationGroup::WriteObject(NetPktGroup& group)
 // FUNCTION: SWBF2 0x00628d30
 void PAAnimationGroup::ReadObject(NetPktGroup& group)
 {
-    unsigned int uActive;
-    group.ReadBits(uActive, 1);
-    *mActive = uActive != 0;
+    group.Read(*mActive);
     if (!*mActive || !mNumAnims)
     {
         return;
