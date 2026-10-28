@@ -14,9 +14,7 @@ inline const PblVector3 operator+(const PblVector3& lhs, const PblVector3& rhs)
 inline const PblVector3 operator-(const PblVector3& lhs, const PblVector3& rhs)
 {
     PblVector3 Temp;
-    Temp.x = lhs.x - rhs.x;
-    Temp.y = lhs.y - rhs.y;
-    Temp.z = lhs.z - rhs.z;
+    D3DXVec3Subtract(&Temp, &lhs, &rhs);
     return Temp;
 }
 

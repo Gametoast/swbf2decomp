@@ -43,20 +43,14 @@ void ZephyrSkeletonShared::SetJointScale(int iJoint, float fScale)
 void ZephyrSkeletonShared::CalcBasePoseInverses(char iJointIdx)
 {
     ZephyrJointShared& kJoint = m_pJoints[iJointIdx];
-    const ZephyrTransform& kBase = kJoint.m_kBaseTransform;
-    PblMatrix& mInverse = kJoint.m_kBaseInverse;
 
-    D3DXQUATERNION qUnit;
-    PblMatrix mLocal;
-    D3DXMatrixRotationQuaternion((D3DXMATRIX*)&mLocal,
-                                 D3DXQuaternionNormalize(&qUnit, (const D3DXQUATERNION*)&kBase.kQuat));
-    mLocal.SetTranslation(kBase.kTrans);
-    mInverse = mLocal;
+    // Until the root's loop below, m_kBaseInverse holds the joint's base pose in model space:
+    // its local base transform, then its parent's (already computed) model-space pose.
+    kJoint.m_kBaseInverse = PblMatrix(kJoint.m_kBaseTransform.kQuat, kJoint.m_kBaseTransform.kTrans);
 
     if (kJoint.m_iParent >= 0)
     {
-        PblMatrix mWorld = mInverse * m_pJoints[kJoint.m_iParent].m_kBaseInverse;
-        mInverse = mWorld;
+        kJoint.m_kBaseInverse = kJoint.m_kBaseInverse * m_pJoints[kJoint.m_iParent].m_kBaseInverse;
     }
 
     if (kJoint.m_iSibling >= 0)
@@ -69,6 +63,7 @@ void ZephyrSkeletonShared::CalcBasePoseInverses(char iJointIdx)
         CalcBasePoseInverses(kJoint.m_iChild);
     }
 
+    // Back in the root's call, every joint has its model-space pose: invert them all.
     if (kJoint.m_iParent < 0)
     {
         for (unsigned int i = 0; i < m_uNumJoints; i++)
@@ -92,6 +87,23 @@ unsigned int ZephyrSkeletonShared::GetRequiredMemSize(int iNumJoints, DataOffset
     uSize += iNumJoints * sizeof(ZephyrJointShared);
 
     return uSize;
+}
+
+inline bool ZephyrSkeletonShared::InitJointHierarchy(unsigned int kCrc, char& iDest)
+{
+    if (kCrc)
+    {
+        iDest = (char)GetJointIdxByCrc(kCrc);
+        if (iDest < 0)
+        {
+            return false;
+        }
+    }
+    else
+    {
+        iDest = -1;
+    }
+    return true;
 }
 
 // FUNCTION: SWBF2 0x0072e9c0
@@ -155,8 +167,8 @@ bool ZephyrSkeletonShared::Open(PblMemChunk& kChunk, int iNumJoints, const DataO
                 pRel[i] = kRel;
 
                 ZephyrJointShared kTemp = m_pJoints[0];
-                m_pJoints[0] = m_pJoints[i];
-                m_pJoints[i] = kTemp;
+                m_pJoints[0] = kJoint;
+                kJoint = kTemp;
             }
         }
     }
@@ -200,19 +212,3 @@ bool ZephyrSkeletonShared::Open(PblMemChunk& kChunk, int iNumJoints, const DataO
     return true;
 }
 
-bool ZephyrSkeletonShared::InitJointHierarchy(unsigned int kCrc, char& iDest)
-{
-    if (kCrc)
-    {
-        iDest = (char)GetJointIdxByCrc(kCrc);
-        if (iDest < 0)
-        {
-            return false;
-        }
-    }
-    else
-    {
-        iDest = -1;
-    }
-    return true;
-}

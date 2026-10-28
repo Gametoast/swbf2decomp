@@ -87,9 +87,7 @@ const PblVector3 Normalize(const PblVector3& vVector);
 inline const PblVector3 Interpolate(const PblVector3& v0, const PblVector3& v1, float fT)
 {
     PblVector3 v;
-    v.x = (v1.x - v0.x) * fT + v0.x;
-    v.y = (v1.y - v0.y) * fT + v0.y;
-    v.z = (v1.z - v0.z) * fT + v0.z;
+    D3DXVec3Lerp(&v, &v0, &v1, fT);
     return v;
 }
 

@@ -10,15 +10,12 @@ bool ZephyrSkinReader::ReadFile(PblMemChunk& kChunk)
     ZephyrSkinShared::DataOffsets kOffsets;
 
     unsigned int uMemSize = ZephyrSkinShared::GetRequiredMemSize(kZafChunk, kOffsets);
-    bool bResult = false;
-    if (uMemSize)
-    {
-        m_pSkin = (ZephyrSkinShared*)new char[uMemSize];
-        kZafChunk = PblMemChunk(pcData);
-        if (m_pSkin->Open(kZafChunk, kOffsets, uMemSize))
-        {
-            bResult = true;
-        }
-    }
-    return bResult;
+    if (uMemSize == 0)
+        return false;
+
+    m_pSkin = (ZephyrSkinShared*)new char[uMemSize];
+    kZafChunk = PblMemChunk(pcData);
+    if (m_pSkin->Open(kZafChunk, kOffsets, uMemSize))
+        return true;
+    return false;
 }

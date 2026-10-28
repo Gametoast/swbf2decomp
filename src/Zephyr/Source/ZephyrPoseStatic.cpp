@@ -3,7 +3,7 @@
 #include "ZephyrSkeletonShared.h"
 #include "PebbleFL/Common/PblBitVector.h"
 
-static const ZephyrTransform& GetBaseTransform(const ZephyrJointShared* pJoint)
+static inline const ZephyrTransform& GetBaseTransform(const ZephyrJointShared* pJoint)
 {
     return pJoint->m_kBaseTransform;
 }

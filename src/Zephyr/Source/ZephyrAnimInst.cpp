@@ -23,18 +23,18 @@ void ZephyrAnimInst<N>::SetAnim(const ZephyrAnim* pkAnim, const ZephyrSkeleton<N
         return;
     }
 
-    for (int i = 0; i < GetNumSkelJoints(); i++)
+    for (int i = 0; i < pSkel->GetNumJoints(); i++)
     {
         m_piAnimJointIdx[i] = -1;
     }
 
-    for (unsigned short j = 0; j < m_pkAnim->m_u16NumJoints; j++)
+    for (int j = 0; j < m_pkAnim->m_u16NumJoints; j++)
     {
-        short iSkel = (short)((int)pSkel->m_pShared->m_kHashCRC2Joint.Find(
-                                  m_pkAnim->m_pkJoints[j].GetNameCRC()) - 1);
+        unsigned short u16Joint = (unsigned short)j;
+        short iSkel = (short)pSkel->m_pShared->GetJointIdxByCrc(m_pkAnim->m_pkJoints[u16Joint].GetNameCRC());
         if (iSkel >= 0)
         {
-            m_piAnimJointIdx[iSkel] = j;
+            m_piAnimJointIdx[iSkel] = u16Joint;
         }
         m_piSkelJointIdx[j] = iSkel;
         m_pkJointQuatStates[j].u16Frame = ZephyrAnimJoint::INVALID_FRAME;

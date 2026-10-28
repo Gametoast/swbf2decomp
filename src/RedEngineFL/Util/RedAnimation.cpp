@@ -89,33 +89,6 @@ void RedAnimation::_ReadEvents(PblMemChunk& chunk)
     }
 }
 
-// FUNCTION: SWBF2 0x0072ee50
-void ZephyrEventList::AddEvent(float fTime, unsigned int uiMessage)
-{
-    for (int i = 0; i < _iNumEvents; ++i)
-    {
-        if (_pEventMessages[i] == 0)
-        {
-            _pEventTimes[i] = fTime;
-            _pEventMessages[i] = uiMessage;
-            return;
-        }
-    }
-}
-
-// FUNCTION: SWBF2 0x0072ef00
-void ZephyrEventList::Init(short iNumEvents)
-{
-    _iNumEvents = iNumEvents;
-    if (_iNumEvents > 0)
-    {
-        _pEventTimes = static_cast<float*>(::operator new(4u * _iNumEvents));
-        _pEventMessages = static_cast<unsigned int*>(::operator new(4u * _iNumEvents));
-        memset(_pEventTimes, 0, 4u * _iNumEvents);
-        memset(_pEventMessages, 0, 4u * _iNumEvents);
-    }
-}
-
 // FUNCTION: SWBF2 0x006ddab0
 void RedAnimation::_ReadZaa(PblMemChunk& kChunk)
 {

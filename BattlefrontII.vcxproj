@@ -3097,18 +3097,42 @@
       <WholeProgramOptimization Condition="'$(Configuration)'=='Release'">true</WholeProgramOptimization>
       <InlineFunctionExpansion Condition="'$(Configuration)'=='Release'">OnlyExplicitInline</InlineFunctionExpansion>
     </ClCompile>
-    <ClCompile Include="src\Zephyr\Source\ZephyrAnim.cpp" />
-    <ClCompile Include="src\Zephyr\Source\ZephyrAnimBank.cpp" />
-    <ClCompile Include="src\Zephyr\Source\ZephyrAnimBankReader.cpp" />
-    <ClCompile Include="src\Zephyr\Source\ZephyrAnimInst.cpp" />
-    <ClCompile Include="src\Zephyr\Source\ZephyrAnimJoint.cpp" />
-    <ClCompile Include="src\Zephyr\Source\ZephyrEvent.cpp" />
-    <ClCompile Include="src\Zephyr\Source\ZephyrPoseDyn.cpp" />
-    <ClCompile Include="src\Zephyr\Source\ZephyrPoseStatic.cpp" />
-    <ClCompile Include="src\Zephyr\Source\ZephyrSkeleton.cpp" />
-    <ClCompile Include="src\Zephyr\Source\ZephyrSkeletonShared.cpp" />
-    <ClCompile Include="src\Zephyr\Source\ZephyrSkinReader.cpp" />
-    <ClCompile Include="src\Zephyr\Source\ZephyrSkinShared.cpp" />
+    <ClCompile Include="src\Zephyr\Source\ZephyrAnim.cpp">
+      <InlineFunctionExpansion Condition="'$(Configuration)'=='Release'">OnlyExplicitInline</InlineFunctionExpansion>
+    </ClCompile>
+    <ClCompile Include="src\Zephyr\Source\ZephyrAnimBank.cpp">
+      <InlineFunctionExpansion Condition="'$(Configuration)'=='Release'">OnlyExplicitInline</InlineFunctionExpansion>
+    </ClCompile>
+    <ClCompile Include="src\Zephyr\Source\ZephyrAnimBankReader.cpp">
+      <InlineFunctionExpansion Condition="'$(Configuration)'=='Release'">OnlyExplicitInline</InlineFunctionExpansion>
+    </ClCompile>
+    <ClCompile Include="src\Zephyr\Source\ZephyrAnimInst.cpp">
+      <InlineFunctionExpansion Condition="'$(Configuration)'=='Release'">OnlyExplicitInline</InlineFunctionExpansion>
+    </ClCompile>
+    <ClCompile Include="src\Zephyr\Source\ZephyrAnimJoint.cpp">
+      <InlineFunctionExpansion Condition="'$(Configuration)'=='Release'">OnlyExplicitInline</InlineFunctionExpansion>
+    </ClCompile>
+    <ClCompile Include="src\Zephyr\Source\ZephyrEvent.cpp">
+      <InlineFunctionExpansion Condition="'$(Configuration)'=='Release'">OnlyExplicitInline</InlineFunctionExpansion>
+    </ClCompile>
+    <ClCompile Include="src\Zephyr\Source\ZephyrPoseDyn.cpp">
+      <InlineFunctionExpansion Condition="'$(Configuration)'=='Release'">OnlyExplicitInline</InlineFunctionExpansion>
+    </ClCompile>
+    <ClCompile Include="src\Zephyr\Source\ZephyrPoseStatic.cpp">
+      <InlineFunctionExpansion Condition="'$(Configuration)'=='Release'">OnlyExplicitInline</InlineFunctionExpansion>
+    </ClCompile>
+    <ClCompile Include="src\Zephyr\Source\ZephyrSkeleton.cpp">
+      <InlineFunctionExpansion Condition="'$(Configuration)'=='Release'">OnlyExplicitInline</InlineFunctionExpansion>
+    </ClCompile>
+    <ClCompile Include="src\Zephyr\Source\ZephyrSkeletonShared.cpp">
+      <InlineFunctionExpansion Condition="'$(Configuration)'=='Release'">OnlyExplicitInline</InlineFunctionExpansion>
+    </ClCompile>
+    <ClCompile Include="src\Zephyr\Source\ZephyrSkinReader.cpp">
+      <InlineFunctionExpansion Condition="'$(Configuration)'=='Release'">OnlyExplicitInline</InlineFunctionExpansion>
+    </ClCompile>
+    <ClCompile Include="src\Zephyr\Source\ZephyrSkinShared.cpp">
+      <InlineFunctionExpansion Condition="'$(Configuration)'=='Release'">OnlyExplicitInline</InlineFunctionExpansion>
+    </ClCompile>
     <ClCompile Include="src\ZlibFL\adler32.c" />
     <ClCompile Include="src\ZlibFL\compress.c" />
     <ClCompile Include="src\ZlibFL\crc32.c" />

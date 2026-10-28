@@ -37,12 +37,12 @@ public:
     }
     void ClearBit(unsigned int uBit)
     {
-        m_auiData[NUM_UINTS == 1 ? 0 : (uBit >> 5)] &= ~(1 << (uBit & 31));
+        m_auiData[NUM_UINTS == 1 ? 0 : (uBit >> 5)] &= ~(1 << (NUM_UINTS == 1 ? uBit : (uBit & 31)));
     }
 
     void SetBit(unsigned int uBit)
     {
-        m_auiData[NUM_UINTS == 1 ? 0 : (uBit >> 5)] |= 1 << (uBit & 31);
+        m_auiData[NUM_UINTS == 1 ? 0 : (uBit >> 5)] |= 1 << (NUM_UINTS == 1 ? uBit : (uBit & 31));
     }
     void InvertAll()
     {
@@ -70,7 +70,7 @@ public:
     }
     bool IsBitSet(unsigned int uBit) const
     {
-        return (m_auiData[NUM_UINTS == 1 ? 0 : (uBit >> 5)] & (1 << (uBit & 31))) != 0;
+        return (m_auiData[NUM_UINTS == 1 ? 0 : (uBit >> 5)] & (1 << (NUM_UINTS == 1 ? uBit : (uBit & 31)))) != 0;
     }
 
     unsigned int m_auiData[NUM_UINTS];
