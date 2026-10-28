@@ -1,4 +1,5 @@
 #include <ctype.h>
+#include "PebbleFL/Common/PblMath.h"
 #include <stdlib.h>
 #include <string.h>
 
@@ -416,7 +417,7 @@ RedCommandConsole::Command* RedCommandConsole::_FindCommand(char const* pcPath)
     char acName[32];
     if (*pcEnd)
     {
-        strlcpy(acName, pcName, iLen + 1 < 32 ? iLen + 1 : 32);
+        strlcpy(acName, pcName, Min(iLen + 1, 32));
         pcName = acName;
     }
     return pGroup->FindCommand(pcName);

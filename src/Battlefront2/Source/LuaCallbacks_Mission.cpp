@@ -483,10 +483,10 @@ unsigned int RedGetHeapSize(int heap);
 
 bool RedMoveHeapEnd(int heap, int iDelta);
 extern "C" HeapObj* heapobj;
-void* RedAllocFromHeapInternal(int heap, unsigned int size, bool bTop);
-bool RedFreeToHeapInternal(int heap, void* block, unsigned int flags);
-void TagRemoveList(TagList* pList, Tag* pTag);
-void TagAddList(TagList* pList, Tag* pTag);
+
+
+
+
 
 namespace ObjectiveManager
 {
@@ -1739,10 +1739,10 @@ int MissionVictory(lua_State* L)
     }
     else if (lua_type(LuaHelper::mState, 1) == LUA_TTABLE)
     {
-        int iCount = luaL_getn(LuaHelper::mState, 1);
+        int iCount = LuaHelper::TableGetN(1);
         for (int i = 1; i <= iCount; ++i)
         {
-            lua_rawgeti(LuaHelper::mState, 1, i);
+            LuaHelper::TableGetByPosition(1, i);
             if (lua_isnumber(LuaHelper::mState, -1))
             {
                 float fTeam = (float)luaL_checknumber(LuaHelper::mState, -1);
@@ -1765,10 +1765,10 @@ int MissionDefeat(lua_State* L)
     }
     else if (lua_type(LuaHelper::mState, 1) == LUA_TTABLE)
     {
-        int iCount = luaL_getn(LuaHelper::mState, 1);
+        int iCount = LuaHelper::TableGetN(1);
         for (int i = 1; i <= iCount; ++i)
         {
-            lua_rawgeti(LuaHelper::mState, 1, i);
+            LuaHelper::TableGetByPosition(1, i);
             if (lua_isnumber(LuaHelper::mState, -1))
             {
                 float fTeam = (float)luaL_checknumber(LuaHelper::mState, -1);
@@ -3531,29 +3531,7 @@ FlagItem* GetFlagItemArg1()
     return _GetEntity<FlagItem>(LuaHelper::mState, 1);
 }
 
-// FUNCTION: SWBF2 0x006c3b40
-bool RedMoveHeapEnd(int iHeap, int iDelta)
-{
-    int iSource = iDelta < 0 ? iHeap + 1 : iHeap;
-    int iTarget = iDelta < 0 ? iHeap : iHeap + 1;
-    unsigned int uAmount = iDelta < 0 ? -iDelta : iDelta;
-    unsigned int uTargetAlign = heapobj[iTarget].align;
-    unsigned int uTagSize = (uTargetAlign + sizeof(Tag) - 1) & ~(uTargetAlign - 1);
-    unsigned int uAlign = heapobj[iSource].align;
-    if (uTargetAlign > uAlign)
-    {
-        uAlign = uTargetAlign;
-    }
-    unsigned int uAllocation = (uAmount & ~(uAlign - 1)) - uTagSize;
-    void* pBlock = RedAllocFromHeapInternal(iTarget, uAllocation, iDelta < 0);
-    Tag* pTag = (Tag*)((char*)pBlock - uTagSize);
-    heapobj[iHeap].size += iDelta;
-    heapobj[iHeap + 1].start = (char*)heapobj[iHeap + 1].start + iDelta;
-    heapobj[iHeap + 1].size -= iDelta;
-    TagRemoveList(&heapobj[iTarget].used, pTag);
-    TagAddList(&heapobj[iSource].used, pTag);
-    return RedFreeToHeapInternal(iSource, pBlock, 0);
-}
+
 
 struct LengthEntryT
 {

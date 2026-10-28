@@ -51,6 +51,7 @@ inline const float Length(const PblVector3& vVector)
     return D3DXVec3Length(&vVector);
 }
 
+// FUNCTION: SWBF2 0x0041bba0
 inline const float SquaredLength(const PblVector3& vVector)
 {
     return vVector.x * vVector.x + vVector.y * vVector.y + vVector.z * vVector.z;

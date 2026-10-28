@@ -1,5 +1,6 @@
 #include "CommandFsm.h"
 #include "UnitMobileController.h"
+#include "PebbleFL/Common/PblMath.h"
 
 // SYNTHETIC: SWBF2 0x00667ef2
 // ??_EUnitFlyController@@WHI@AEPAXI@Z
@@ -97,7 +98,7 @@ void CommandFsm::QueueCommand(const CmdInfo& cmd)
 // FUNCTION: SWBF2 0x004788e0
 void CommandFsm::RemoveQueuedCommands(int what)
 {
-    int count = mCmdCount < 5 ? mCmdCount : 5;
+    int count = Min(mCmdCount, 5);
     int kept = 0;
     for (int i = 0; i < count; i++)
     {
@@ -121,7 +122,7 @@ void CommandFsm::PrependQueueCommand(const CmdInfo& cmd)
         return;
     }
 
-    mCmdCount = mCmdCount + 1 < 5 ? mCmdCount + 1 : 5;
+    mCmdCount = Min(mCmdCount + 1, 5);
     for (int i = mCmdCount - 1; i > 0; i--)
     {
         mCmdQueue[i] = mCmdQueue[i - 1];
@@ -138,7 +139,7 @@ void CommandFsm::PrependQueueCommands(const CmdInfo& cmdA, const CmdInfo& cmdB)
         return;
     }
 
-    mCmdCount = mCmdCount + 2 < 5 ? mCmdCount + 2 : 5;
+    mCmdCount = Min(mCmdCount + 2, 5);
     for (int i = mCmdCount - 1; i > 1; i--)
     {
         mCmdQueue[i] = mCmdQueue[i - 2];

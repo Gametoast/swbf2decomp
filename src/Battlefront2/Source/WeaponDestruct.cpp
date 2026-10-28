@@ -245,7 +245,7 @@ void WeaponDestruct::ExitFire()
 {
     Weapon::ExitFire();
     GameObject* pObject = mOwner->GetGameObject();
-    DamageOwner owner(mOwner->mCharacter, pObject, pObject->GetTeam(),
+    DamageOwner owner(mOwner->GetCharacter(), pObject, pObject->GetTeam(),
                       pObject->GetEntityClass(), mClass, 1.0f);
     WeaponDestructClass* pClass = (WeaponDestructClass*)mClass;
     if (pClass->mExplosionClass)

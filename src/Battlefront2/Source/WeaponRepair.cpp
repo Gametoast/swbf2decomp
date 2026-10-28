@@ -274,7 +274,7 @@ bool WeaponRepair::IsLocked() const
     {
         PilotType ePilot = pTarget->GetControllable()->mPilotType;
         if ((ePilot == PILOT_VEHICLE || ePilot == PILOT_VEHICLESELF ||
-             pTarget->GetControllable()->mPilotType == PILOT_REMOTE) &&
+             pTarget->GetControllable()->IsRemoteVehicle()) &&
             mOwner->GetGameObject() && mOwner->GetGameObject()->IsMyEnemy(pTarget))
         {
             bHack = true;

@@ -1100,7 +1100,7 @@ void HUD::GameEvents::UpdateLockOn(unsigned int uIndex, const GameObject* const 
     if (pObject->GetEntity() &&
         (pObject->GetEntity()->IsRtti(EntityFlyer::rttiHashEntityFlyer) ||
          (pObject->IsRtti(EntityBuildingArmed::rttiHashEntityBuildingArmed) && pObject->GetControllable() &&
-          pObject->GetControllable()->mPilotType == PILOT_REMOTE)))
+          pObject->GetControllable()->IsRemoteVehicle())))
     {
         pTarget = pLockOn->mLockedObj;
     }
@@ -1659,7 +1659,7 @@ void HUD::GameEvents::UpdateHealth(const Character* const pCharacter, const Game
         fHealth = 0.0f;
     }
 
-    const bool bHero = pObject->GetGameObjectClass()->mHeroFlag;
+    const bool bHero = pObject->GetGameObjectClass()->GetHeroFlag();
     if (data.isHero != bHero)
     {
         HUD::Event(bHero ? events.healthAsHeroDisable : events.healthDisable, true).Send();

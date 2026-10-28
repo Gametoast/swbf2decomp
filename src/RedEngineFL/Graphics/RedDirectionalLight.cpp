@@ -117,9 +117,7 @@ void RedDirectionalLight::SetDirection(const PblVector3& vDirection)
     }
     else
     {
-        PblVector3 vNormal;
-        D3DXVec3Normalize(reinterpret_cast<D3DXVECTOR3*>(&vNormal), reinterpret_cast<const D3DXVECTOR3*>(&vDirection));
-        m_vDirection = vNormal;
+        m_vDirection = Normalize(vDirection);
     }
 
     m_d3dLight.Direction = *(const D3DVECTOR*)&m_vDirection;

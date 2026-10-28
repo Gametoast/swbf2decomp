@@ -53,29 +53,13 @@ namespace PblMath
 // FUNCTION: SWBF2 0x00414900
 inline const int Clamp(int iValue, int iMin, int iMax)
 {
-    if (iValue < iMin)
-    {
-        return iMin;
-    }
-    if (iValue > iMax)
-    {
-        return iMax;
-    }
-    return iValue;
+    return iValue < iMin ? iMin : (iValue > iMax ? iMax : iValue);
 }
 
 // FUNCTION: SWBF2 0x0040f720
 inline const float Clamp(float fValue, float fLow, float fHigh)
 {
-    if (fLow > fValue)
-    {
-        return fLow;
-    }
-    if (fValue > fHigh)
-    {
-        return fHigh;
-    }
-    return fValue;
+    return fLow > fValue ? fLow : (fValue > fHigh ? fHigh : fValue);
 }
 
 // FUNCTION: SWBF2 0x00438a30
@@ -98,11 +82,7 @@ inline const float Min(float a, float b)
 // FUNCTION: SWBF2 0x0041fa40
 inline const float Max(float fA, float fB)
 {
-    if (fA > fB)
-    {
-        return fA;
-    }
-    return fB;
+    return fA > fB ? fA : fB;
 }
 
 #include "PebbleFL/pc/pcPblMath.h"

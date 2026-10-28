@@ -224,7 +224,7 @@ void SquadCommands::VehicleGetIn(GameObject* pObject, Character* pCharacter)
                        pObject, 0.0f);
     AI::EventType eType = AI::EVT_SC_GetIntoVehicle;
     Controllable* pVehicle = pObject->GetControllable();
-    EventManager::CharacterEvent::mIssueAICommand.Trigger(*pVehicle->mCharacter, eType);
+    EventManager::CharacterEvent::mIssueAICommand.Trigger(*pVehicle->GetCharacter(), eType);
 
     const unsigned short* pText = RedLocalizeDB::Find(0xf00699adu, false);
     for (unsigned int i = 0; i < NetGame::GetNumLocalPlayers(); ++i)

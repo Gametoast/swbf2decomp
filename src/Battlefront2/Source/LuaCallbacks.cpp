@@ -1055,7 +1055,7 @@ int ScriptCB_GetMaxMissionQueue(lua_State*)
 // FUNCTION: SWBF2 0x0057ee20
 int ScriptCB_SetMissionNames(lua_State*)
 {
-    if (lua_gettop(LuaHelper::mState) != 2)
+    if (LuaHelper::GetTop() != 2)
     {
         return 0;
     }
@@ -1071,19 +1071,19 @@ int ScriptCB_SetMissionNames(lua_State*)
     {
         lua_gettop(LuaHelper::mState);
         MissionPlayList::ClearEntries();
-        int iCount = luaL_getn(LuaHelper::mState, 1);
+        int iCount = LuaHelper::TableGetN(1);
         for (int i = 1; i <= iCount; ++i)
         {
             char acMap[64];
             char acTeam1[64];
             char acTeam2[64];
             int iSide;
-            lua_rawgeti(LuaHelper::mState, 1, i);
+            LuaHelper::TableGetByPosition(1, i);
             LuaHelper::TableReadVal("Map", acMap, sizeof(acMap), false);
             LuaHelper::TableReadVal("Side", iSide, false);
             LuaHelper::TableReadVal("Team1", acTeam1, sizeof(acTeam1), true);
             LuaHelper::TableReadVal("Team2", acTeam2, sizeof(acTeam2), true);
-            lua_settop(LuaHelper::mState, -2);
+            LuaHelper::Pop(1);
             if (!MissionPlayList::AddEntry(acMap, (unsigned char)iSide, acTeam1, acTeam2, 0, 0))
             {
                 break;

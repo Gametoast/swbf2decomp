@@ -716,7 +716,7 @@ void WeaponAreaEffect::ApplyEffectsToTarget(GameObject* pTarget, const PblVector
         const float fDamage = pClass->m_fDamage * fStrength;
         GameObject* pOwnerObject = mOwner->GetGameObject();
         const int iTeam = mOwner->GetGameObject()->GetTeam();
-        DamageDesc damage(DamageOwner(mOwner->mCharacter, mOwner->GetGameObject(), iTeam,
+        DamageDesc damage(DamageOwner(mOwner->GetCharacter(), mOwner->GetGameObject(), iTeam,
                                       GetEntityClass(pOwnerObject), mClass, 1.0f),
                           fDamage);
         pTarget->ApplyDamage(damage, vDir, pTarget->GetCollisionCenter(), -1, (unsigned int)-1);

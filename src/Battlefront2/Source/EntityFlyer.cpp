@@ -3773,7 +3773,7 @@ bool EntityFlyer::Update(float fDeltaTime)
             if ((mState == LANDED || mClass->mGuidedMissile) && (mControlUse.IsPressed() || IsDisabled()))
             {
                 SpaceDustEffect::Stop(GetJoystickIndex());
-                if (mPilotType == PILOT_REMOTE || mClass->mGuidedMissile)
+                if (IsRemoteVehicle() || mClass->mGuidedMissile)
                 {
                     pPilot->ExitRemote();
                 }

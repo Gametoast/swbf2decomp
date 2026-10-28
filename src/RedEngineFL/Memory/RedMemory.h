@@ -41,6 +41,7 @@ extern "C"
     void RedSetTempHeap(int heap);
 
     unsigned int RedGetHeapFree(int heap);
+    bool RedMoveHeapEnd(int heap, int offset);
 
     extern int __RedCurrHeap;
     extern int __RedDebugHeap;

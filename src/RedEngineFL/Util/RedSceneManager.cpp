@@ -535,11 +535,7 @@ void RenderFarObjects()
     float fMinScreenSize = RedLodManager::GetMinScreenSize();
     RedSceneObject* objects[256];
     int iCount = 0;
-    int iMax = 256;
-    if (sMaxNumFarObjects < iMax)
-    {
-        iMax = sMaxNumFarObjects;
-    }
+    int iMax = Min(sMaxNumFarObjects, 256);
     int iClass2Budget = 10;
     sMaxNumFarObjects = iMax;
     float fMinRatio = fMinScreenSize * fMinScreenSize / 798720.0f;
@@ -621,11 +617,7 @@ void RenderFarObjects()
                     + (p->_Sphere.y - sRedSceneCamera.mPosition.y) * sRedSceneCamera.mFront.y
                     + (p->_Sphere.z - sRedSceneCamera.mPosition.z) * sRedSceneCamera.mFront.z
                     + fRadius;
-        float fAlpha = (fDist - fFadeStart) / 20.0f;
-        if (!(1.0f > fAlpha))
-        {
-            fAlpha = 1.0f;
-        }
+        float fAlpha = Min((fDist - fFadeStart) / 20.0f, 1.0f);
         float fLimit = fRadius + fFarRange;
         if (fDist >= fLimit - 20.0f)
         {

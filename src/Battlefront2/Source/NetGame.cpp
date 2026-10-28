@@ -122,6 +122,7 @@
 #include "Character.h"
 
 #include <float.h>
+#include <limits.h>
 #include "EntityPropAnimated.h"
 #include "EntityWater.h"
 
@@ -4080,12 +4081,8 @@ void NetGame::HeroRulesUpdate(int iTeam)
                         return;
                     }
 
-                    int aiBest[2];
-                    aiBest[0] = 0x80000000;
-                    aiBest[1] = 0x80000000;
-                    int aiCount[2];
-                    aiCount[0] = 0;
-                    aiCount[1] = 0;
+                    int aiBest[2] = {INT_MIN, INT_MIN};
+                    int aiCount[2] = {0, 0};
                     int iNumHumans = 0;
                     int aaiCandidates[2][600];
                     for (int j = 0; j < 600; j++)
@@ -5634,9 +5631,7 @@ void SpawnDisplay::AcceptSideSelect()
 // FUNCTION: SWBF2 0x005cc000
 void SpawnDisplay::UpdateSideSelectText(int iScreen)
 {
-    int aiCount[2];
-    aiCount[0] = 0;
-    aiCount[1] = 0;
+    int aiCount[2] = {0, 0};
 
     if (NetGame::IsEnabled())
     {
@@ -11161,11 +11156,6 @@ void ReceivePrimary()
 }
 
 
-// FUNCTION: SWBF2 0x0041bba0
-float SquaredLength(const float* value)
-{
-    return value[0] * value[0] + value[1] * value[1] + value[2] * value[2];
-}
 
 
 
@@ -11792,7 +11782,7 @@ int NetGame::GetObjectsInRange(const PblVector3& position, float radius, GameObj
         }
         const PblVector3& targetPosition = info->GetCollisionSphere().GetCenter();
         const PblVector3 difference = position - targetPosition;
-        if (radiusSquared > SquaredLength((const float*)&difference))
+        if (radiusSquared > SquaredLength(difference))
         {
             found[count++] = entry->obj;
             if (count >= capacity)
@@ -12169,13 +12159,6 @@ int sendObjCount;
 // FUNCTION: SWBF2 0x005be380
 int GetSendObjCount() { return sendObjCount; }
 
-// FUNCTION: SWBF2 0x0041bbe0
-unsigned int RedColor::GetARGB() const
-{
-    const unsigned char* pBytes = reinterpret_cast<const unsigned char*>(this);
-    return (unsigned int)pBytes[0] | ((unsigned int)pBytes[1] << 8) |
-           ((unsigned int)pBytes[2] << 16) | ((unsigned int)pBytes[3] << 24);
-}
 
 
 // FUNCTION: SWBF2 0x005caf90
@@ -14638,7 +14621,7 @@ float GetNetEventScore(NetEvent& event)
     }
     const PblVector3 projected = GetClosestOrdnancePos(ordnance);
     const PblVector3 difference = sendCenter - projected;
-    if (SquaredLength((const float*)&difference) > 22500.0f)
+    if (SquaredLength(difference) > 22500.0f)
     {
         return -1.0f;
     }

@@ -232,11 +232,7 @@ public:
 
     void SetCollisionType(CollisionObjectType eType)
     {
-        if (mStackPtr)
-        {
-            mStackPtr->mData[0][mStackIdx] = eType;
-        }
-        mData[0] = eType;
+        SetObjectData(0, eType);
     }
     CollisionObjectType GetCollisionType() const;
 

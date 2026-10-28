@@ -188,7 +188,7 @@ void UnitFlyAgent::EnterState()
             {
                 mHint->SetReserveDelay(static_cast<Trackable*>(mCtrl->mOwner)->GetGameObject(), 20.0f);
                 mCtrl->mOwner->SetExitVehicle(mHint->GetCommandPost());
-                mCtrl->mOwner->mCharacter->SetVehicleBlockTime(GameLoop::GetMissionTime() + 15.0f);
+                mCtrl->mOwner->GetCharacter()->SetVehicleBlockTime(GameLoop::GetMissionTime() + 15.0f);
                 return;
             }
         }

@@ -57,11 +57,7 @@ namespace Lua_Callbacks
 extern unsigned short sTempReturnString16[256];
 }
 
-// FUNCTION: SWBF2 0x00437550
-bool __fastcall LuaHelper::IsString(int iArg)
-{
-    return lua_isstring(LuaHelper::mState, iArg) != 0;
-}
+
 
 
 // FUNCTION: SWBF2 0x0053dc00
@@ -346,7 +342,7 @@ int ScriptCB_StartLoginDedicatedServer(lua_State* L)
 // FUNCTION: SWBF2 0x00592640
 int ScriptCB_UpdateLobby(lua_State* L)
 {
-    const bool bForce = lua_toboolean(LuaHelper::mState, 1) != 0;
+    const bool bForce = LuaHelper::GetBool(1);
     GuiManager* pGui = GuiManager::Instance();
 
     if (!NetGame::InShell())
@@ -501,16 +497,16 @@ int ScriptCB_LobbyAction(lua_State* L)
     const int iTop = lua_gettop(LuaHelper::mState);
     if (iTop == 3)
     {
-        if (!lua_isnumber(LuaHelper::mState, 1) || !lua_isstring(LuaHelper::mState, 2) ||
-            !lua_isstring(LuaHelper::mState, iTop))
+        if (!LuaHelper::IsNumber(1) || !LuaHelper::IsString(2) ||
+            !LuaHelper::IsString(iTop))
         {
             return 0;
         }
 
-        const int iIndex = (int)luaL_checknumber(LuaHelper::mState, 1);
+        const int iIndex = LuaHelper::GetInt(1);
         const int iCount = GetLobbyPlayerCount();
-        luaL_checkstring(LuaHelper::mState, 2);
-        const unsigned int uiAction = PblHash(luaL_checkstring(LuaHelper::mState, iTop));
+        LuaHelper::GetString(2);
+        const unsigned int uiAction = PblHash(LuaHelper::GetString(iTop));
 
         if (uiAction == 0x789A24E4u)
         {
@@ -548,16 +544,16 @@ int ScriptCB_LobbyAction(lua_State* L)
     {
         return 0;
     }
-    if (!lua_isnumber(LuaHelper::mState, 1) || !lua_isstring(LuaHelper::mState, 2) ||
-        !lua_isnumber(LuaHelper::mState, 3) || !lua_isstring(LuaHelper::mState, 4))
+    if (!LuaHelper::IsNumber(1) || !LuaHelper::IsString(2) ||
+        !LuaHelper::IsNumber(3) || !LuaHelper::IsString(4))
     {
         return 0;
     }
 
-    const int iIndex = (int)luaL_checknumber(LuaHelper::mState, 1);
+    const int iIndex = LuaHelper::GetInt(1);
     const int iCount = GetLobbyPlayerCount();
     const float fReason = (float)luaL_checknumber(LuaHelper::mState, 3);
-    const char* pcAction = luaL_checkstring(LuaHelper::mState, 4);
+    const char* pcAction = LuaHelper::GetString(4);
     int iJoystick = PauseMenu::GetPausingJoystick();
     if (iTop == 5)
     {
@@ -593,12 +589,12 @@ int ScriptCB_LobbyAction(lua_State* L)
 // FUNCTION: SWBF2 0x00592c60
 int ScriptCB_VoteKick(lua_State* L)
 {
-    if (lua_gettop(LuaHelper::mState) != 1 || !lua_isstring(LuaHelper::mState, 1))
+    if (lua_gettop(LuaHelper::mState) != 1 || !LuaHelper::IsString(1))
     {
         return 0;
     }
 
-    const char* pcName = luaL_checkstring(LuaHelper::mState, 1);
+    const char* pcName = LuaHelper::GetString(1);
     for (int i = 0; i < GetLobbyPlayerCount(); ++i)
     {
         const int iPlayer = GetLobbyPlayerIndex(i);
@@ -652,7 +648,7 @@ int ScriptCB_UpdateSessionList(lua_State* L)
 {
     if (!findGame)
     {
-        lua_pushnumber(LuaHelper::mState, 0.0f);
+        LuaHelper::PushInt(0);
         return 1;
     }
 
@@ -660,20 +656,20 @@ int ScriptCB_UpdateSessionList(lua_State* L)
     lua_gettable(LuaHelper::mState, LUA_GLOBALSINDEX);
     int iSelected;
     LuaHelper::TableReadVal("SelectedIdx", iSelected, true);
-    lua_settop(LuaHelper::mState, -2);
+    LuaHelper::Pop(1);
 
     if (iSelected > 0)
     {
         lua_pushstring(LuaHelper::mState, "mpsessionlist_listbox_contents");
         lua_gettable(LuaHelper::mState, LUA_GLOBALSINDEX);
         int iSession = iSelected;
-        if (iSelected <= luaL_getn(LuaHelper::mState, -1))
+        if (iSelected <= LuaHelper::TableGetN(-1))
         {
-            lua_rawgeti(LuaHelper::mState, -1, iSelected);
+            LuaHelper::TableGetByPosition(-1, iSelected);
             LuaHelper::TableReadVal("sessionIdx", iSession, false);
-            lua_settop(LuaHelper::mState, -2);
+            LuaHelper::Pop(1);
         }
-        lua_settop(LuaHelper::mState, -2);
+        LuaHelper::Pop(1);
         findGame->SetSelectedSession(iSession - 1);
     }
     else
@@ -709,7 +705,7 @@ int ScriptCB_UpdateSessionList(lua_State* L)
         }
     }
 
-    lua_pushnumber(LuaHelper::mState, (float)(iCount > 0));
+    LuaHelper::PushInt(iCount > 0);
     return 1;
 }
 
@@ -720,18 +716,18 @@ int ScriptCB_LaunchSessionList(lua_State* L)
     lua_gettable(LuaHelper::mState, LUA_GLOBALSINDEX);
     int iSelected;
     LuaHelper::TableReadVal("SelectedIdx", iSelected, false);
-    lua_settop(LuaHelper::mState, -2);
+    LuaHelper::Pop(1);
 
     lua_pushstring(LuaHelper::mState, "mpsessionlist_listbox_contents");
     lua_gettable(LuaHelper::mState, LUA_GLOBALSINDEX);
     int iSession = iSelected;
-    if (iSelected <= luaL_getn(LuaHelper::mState, -1))
+    if (iSelected <= LuaHelper::TableGetN(-1))
     {
-        lua_rawgeti(LuaHelper::mState, -1, iSelected);
+        LuaHelper::TableGetByPosition(-1, iSelected);
         LuaHelper::TableReadVal("sessionIdx", iSession, false);
-        lua_settop(LuaHelper::mState, -2);
+        LuaHelper::Pop(1);
     }
-    lua_settop(LuaHelper::mState, -2);
+    LuaHelper::Pop(1);
 
     findGame->SelectFirst();
     if (iSession > 1)
@@ -888,9 +884,9 @@ int ScriptCB_IsAutoNet(lua_State* L)
 int ScriptCB_OpenNetShell(lua_State* L)
 {
     int iStage = 1;
-    if (lua_gettop(LuaHelper::mState) == 1 && lua_isnumber(LuaHelper::mState, 1))
+    if (lua_gettop(LuaHelper::mState) == 1 && LuaHelper::IsNumber(1))
     {
-        iStage = (int)luaL_checknumber(LuaHelper::mState, 1);
+        iStage = LuaHelper::GetInt(1);
     }
     NetGame::BeginShell(iStage);
     return 0;
@@ -924,7 +920,7 @@ int ScriptCB_CheckForPatch(lua_State* L)
     }
 
     int iResult = 0;
-    switch ((int)luaL_checknumber(LuaHelper::mState, 1))
+    switch (LuaHelper::GetInt(1))
     {
     case 1:
         InitPatchCheck();
@@ -954,7 +950,7 @@ int ScriptCB_ResetSkipToNTGUI(lua_State* L)
 // FUNCTION: SWBF2 0x00591660
 int ScriptCB_SetInNetGame(lua_State* L)
 {
-    NetSetup::SetInNetGame(lua_toboolean(LuaHelper::mState, 1) != 0);
+    NetSetup::SetInNetGame(LuaHelper::GetBool(1));
     return 1;
 }
 
@@ -969,9 +965,9 @@ int ScriptCB_InMultiplayer(lua_State* L)
 int ScriptCB_CloseNetShell(lua_State* L)
 {
     int iStage = 1;
-    if (lua_gettop(LuaHelper::mState) == 1 && lua_isnumber(LuaHelper::mState, 1))
+    if (lua_gettop(LuaHelper::mState) == 1 && LuaHelper::IsNumber(1))
     {
-        iStage = (int)luaL_checknumber(LuaHelper::mState, 1);
+        iStage = LuaHelper::GetInt(1);
     }
     NetGame::EndShell(iStage);
     return 0;
@@ -980,12 +976,12 @@ int ScriptCB_CloseNetShell(lua_State* L)
 // FUNCTION: SWBF2 0x00591a10
 int ScriptCB_SetConnectType(lua_State* L)
 {
-    if (lua_gettop(LuaHelper::mState) != 1 || !lua_isstring(LuaHelper::mState, 1))
+    if (lua_gettop(LuaHelper::mState) != 1 || !LuaHelper::IsString(1))
     {
         return 0;
     }
 
-    if (strcmp(luaL_checkstring(LuaHelper::mState, 1), "lan") == 0)
+    if (strcmp(LuaHelper::GetString(1), "lan") == 0)
     {
         NetComm::SetConnectType(CT_LAN);
         NetSetup::EnableOnlineService(false);
@@ -1041,7 +1037,7 @@ int ScriptCB_IsCmdlineJoinPending(lua_State* L)
 // FUNCTION: SWBF2 0x005915c0
 int ScriptCB_SetAmHost(lua_State* L)
 {
-    if (lua_toboolean(LuaHelper::mState, 1))
+    if (LuaHelper::GetBool(1))
     {
         NetSetup::SetAsHost();
         gWasHost = true;
@@ -1064,7 +1060,7 @@ int ScriptCB_InNetGame(lua_State* L)
 // FUNCTION: SWBF2 0x00591780
 int ScriptCB_SetDedicated(lua_State* L)
 {
-    NetSetup::SetAsDedicated(lua_toboolean(LuaHelper::mState, 1) != 0);
+    NetSetup::SetAsDedicated(LuaHelper::GetBool(1));
     return 0;
 }
 
@@ -1151,7 +1147,7 @@ int ScriptCB_GetVoiceEnable(lua_State* L)
     int iJoystick;
     if (lua_gettop(LuaHelper::mState) >= 1)
     {
-        iJoystick = (int)luaL_checknumber(LuaHelper::mState, 1);
+        iJoystick = LuaHelper::GetInt(1);
     }
     else
     {
@@ -1175,7 +1171,7 @@ int ScriptCB_GetVoiceEnable(lua_State* L)
 // FUNCTION: SWBF2 0x00596310
 int ScriptCB_SetVoiceLocalEchoEnable(lua_State* L)
 {
-    VoiceLocalEchoEnable((int)luaL_checknumber(LuaHelper::mState, 1) > 0);
+    VoiceLocalEchoEnable(LuaHelper::GetInt(1) > 0);
     return 0;
 }
 
@@ -1979,17 +1975,17 @@ int ScriptCB_IsBadNetworkConnection(lua_State*)
     lua_pushstring(LuaHelper::mState, "mpsessionlist_listbox_layout");
     lua_gettable(LuaHelper::mState, LUA_GLOBALSINDEX);
     LuaHelper::TableReadVal("SelectedIdx", selected, false);
-    lua_settop(LuaHelper::mState, -2);
+    LuaHelper::Pop(1);
     lua_pushstring(LuaHelper::mState, "mpsessionlist_listbox_contents");
     lua_gettable(LuaHelper::mState, LUA_GLOBALSINDEX);
     int session = selected;
-    if (selected <= luaL_getn(LuaHelper::mState, -1))
+    if (selected <= LuaHelper::TableGetN(-1))
     {
-        lua_rawgeti(LuaHelper::mState, -1, selected);
+        LuaHelper::TableGetByPosition(-1, selected);
         LuaHelper::TableReadVal("sessionIdx", session, false);
-        lua_settop(LuaHelper::mState, -2);
+        LuaHelper::Pop(1);
     }
-    lua_settop(LuaHelper::mState, -2);
+    LuaHelper::Pop(1);
     findGame->SelectFirst();
     if (session > 1)
     {
@@ -2130,7 +2126,7 @@ int ScriptCB_IsNetCableIn(lua_State*)
 // FUNCTION: SWBF2 0x005955a0
 int ScriptCB_SetNoticeNoCable(lua_State*)
 {
-    NetSetup::mNoticeNoCable = lua_toboolean(LuaHelper::mState, 1) != 0;
+    NetSetup::mNoticeNoCable = LuaHelper::GetBool(1);
     return 0;
 }
 
@@ -2144,7 +2140,7 @@ int ScriptCB_GetIPAddr(lua_State*)
 // FUNCTION: SWBF2 0x005955e0
 int ScriptCB_SetNetLoginName(lua_State*)
 {
-    if (lua_gettop(LuaHelper::mState) == 1 && lua_isstring(LuaHelper::mState, 1))
+    if (lua_gettop(LuaHelper::mState) == 1 && LuaHelper::IsString(1))
     {
         unsigned short name[34];
         const char* pcName = luaL_checklstring(LuaHelper::mState, 1, 0);
@@ -2245,9 +2241,9 @@ int ScriptCB_BeginJoinSpecial(lua_State*)
 int ScriptCB_LaunchQuickmatch(lua_State*)
 {
     const char* password = 0;
-    if (lua_gettop(LuaHelper::mState) == 1 && lua_isstring(LuaHelper::mState, 1))
+    if (lua_gettop(LuaHelper::mState) == 1 && LuaHelper::IsString(1))
     {
-        password = luaL_checkstring(LuaHelper::mState, 1);
+        password = LuaHelper::GetString(1);
         if (password && !password[0])
         {
             password = 0;
@@ -2261,10 +2257,10 @@ int ScriptCB_LaunchQuickmatch(lua_State*)
 // FUNCTION: SWBF2 0x00593e70
 int ScriptCB_SetFilters(lua_State*)
 {
-    if (lua_gettop(LuaHelper::mState) != 6 || !lua_isstring(LuaHelper::mState, 1) ||
-        !lua_isnumber(LuaHelper::mState, 2) || !lua_isnumber(LuaHelper::mState, 3) ||
-        !lua_isnumber(LuaHelper::mState, 4) || !lua_isnumber(LuaHelper::mState, 5) ||
-        !lua_isnumber(LuaHelper::mState, 6))
+    if (lua_gettop(LuaHelper::mState) != 6 || !LuaHelper::IsString(1) ||
+        !LuaHelper::IsNumber(2) || !LuaHelper::IsNumber(3) ||
+        !LuaHelper::IsNumber(4) || !LuaHelper::IsNumber(5) ||
+        !LuaHelper::IsNumber(6))
     {
         return 0;
     }
@@ -2273,11 +2269,11 @@ int ScriptCB_SetFilters(lua_State*)
     if (pProfile)
     {
         PlayerProfile::tOnlineOpt& options = pProfile->mOnlineOptions;
-        strlcpy(options.mGameNameFilter, luaL_checkstring(LuaHelper::mState, 1), sizeof(options.mGameNameFilter));
-        options.mMinPlayers = (unsigned char)(int)(float)luaL_checknumber(LuaHelper::mState, 2);
-        options.mMapIdx = (unsigned char)(int)(float)luaL_checknumber(LuaHelper::mState, 3);
-        options.mEraIdx = (unsigned char)(int)(float)luaL_checknumber(LuaHelper::mState, 4);
-        int maxPing = (int)(float)luaL_checknumber(LuaHelper::mState, 5);
+        strlcpy(options.mGameNameFilter, LuaHelper::GetString(1), sizeof(options.mGameNameFilter));
+        options.mMinPlayers = (unsigned char)LuaHelper::GetInt(2);
+        options.mMapIdx = (unsigned char)LuaHelper::GetInt(3);
+        options.mEraIdx = (unsigned char)LuaHelper::GetInt(4);
+        int maxPing = LuaHelper::GetInt(5);
         if (maxPing < 0)
         {
             maxPing = 0;
@@ -2287,7 +2283,7 @@ int ScriptCB_SetFilters(lua_State*)
             maxPing = 65520;
         }
         options.mMaxPing = (unsigned short)maxPing;
-        options.mServerIdx = (unsigned char)(int)(float)luaL_checknumber(LuaHelper::mState, 6);
+        options.mServerIdx = (unsigned char)LuaHelper::GetInt(6);
         pProfile->UpdateProfCRC();
     }
     return 0;
@@ -2303,11 +2299,11 @@ int ScriptCB_ApplyFilters(lua_State*)
     pFilters[6][0] = 0;
     for (int i = 0; i < 7; ++i)
     {
-        if (!lua_isstring(LuaHelper::mState, i + 1))
+        if (!LuaHelper::IsString(i + 1))
         {
             return 0;
         }
-        strlcpy(pFilters[i], luaL_checkstring(LuaHelper::mState, i + 1), sizeof(pFilters[i]));
+        strlcpy(pFilters[i], LuaHelper::GetString(i + 1), sizeof(pFilters[i]));
     }
     const char* all = "ifs.gsprofile.all";
     const int allFilters[] = {2, 3, 5, 6};
@@ -2330,9 +2326,9 @@ int ScriptCB_ApplyFilters(lua_State*)
 // FUNCTION: SWBF2 0x005941a0
 int ScriptCB_SetSessionSortMode(lua_State*)
 {
-    if (lua_gettop(LuaHelper::mState) == 1 && lua_isnumber(LuaHelper::mState, 1))
+    if (lua_gettop(LuaHelper::mState) == 1 && LuaHelper::IsNumber(1))
     {
-        int mode = (int)(float)luaL_checknumber(LuaHelper::mState, 1);
+        int mode = LuaHelper::GetInt(1);
         if (mode < 1)
         {
             mode = 1;
@@ -2358,12 +2354,12 @@ int ScriptCB_SetSessionSortMode(lua_State*)
 // FUNCTION: SWBF2 0x00594230
 int ScriptCB_SetAsFavorite(lua_State*)
 {
-    if (lua_gettop(LuaHelper::mState) != 2 || !lua_isnumber(LuaHelper::mState, 1) || lua_type(LuaHelper::mState, 2) != LUA_TBOOLEAN)
+    if (lua_gettop(LuaHelper::mState) != 2 || !LuaHelper::IsNumber(1) || !LuaHelper::IsBool(2))
     {
         return 0;
     }
-    const int index = (int)(float)luaL_checknumber(LuaHelper::mState, 1) - 1;
-    const bool favorite = lua_toboolean(LuaHelper::mState, 2) != 0;
+    const int index = LuaHelper::GetInt(1) - 1;
+    const bool favorite = LuaHelper::GetBool(2);
     if (findGame)
     {
         findGame->SelectFirst();
@@ -2939,16 +2935,16 @@ int ScriptCB_BeginJoin(lua_State*)
     lua_pushstring(LuaHelper::mState, "mpsessionlist_listbox_layout");
     lua_gettable(LuaHelper::mState, LUA_GLOBALSINDEX);
     LuaHelper::TableReadVal("SelectedIdx", session, false);
-    lua_settop(LuaHelper::mState, -2);
+    LuaHelper::Pop(1);
     lua_pushstring(LuaHelper::mState, "mpsessionlist_listbox_contents");
     lua_gettable(LuaHelper::mState, LUA_GLOBALSINDEX);
-    if (session <= luaL_getn(LuaHelper::mState, -1))
+    if (session <= LuaHelper::TableGetN(-1))
     {
-        lua_rawgeti(LuaHelper::mState, -1, session);
+        LuaHelper::TableGetByPosition(-1, session);
         LuaHelper::TableReadVal("sessionIdx", session, false);
-        lua_settop(LuaHelper::mState, -2);
+        LuaHelper::Pop(1);
     }
-    lua_settop(LuaHelper::mState, -2);
+    LuaHelper::Pop(1);
 
     findGame->SelectFirst();
     if (session > 1)
@@ -2972,9 +2968,9 @@ int ScriptCB_BeginJoin(lua_State*)
     }
 
     const char* password = 0;
-    if (lua_gettop(LuaHelper::mState) == 1 && lua_isstring(LuaHelper::mState, 1))
+    if (LuaHelper::GetTop() == 1 && LuaHelper::IsString(1))
     {
-        password = luaL_checkstring(LuaHelper::mState, 1);
+        password = LuaHelper::GetString(1);
     }
     NetSetup::SetPassword(password);
     if (!NetComm::IsLAN() && password)
@@ -2999,10 +2995,10 @@ int ScriptCB_GetLobbyPlayerFlags(lua_State*)
     bool isFriend = false;
     bool canKick = false;
     bool friendUnavailable = true;
-    if (lua_gettop(LuaHelper::mState) == 2 && lua_isstring(LuaHelper::mState, 1))
+    if (lua_gettop(LuaHelper::mState) == 2 && LuaHelper::IsString(1))
     {
-        const char* name = luaL_checkstring(LuaHelper::mState, 1);
-        const int wantedPlayer = (int)(float)luaL_checknumber(LuaHelper::mState, 2);
+        const char* name = LuaHelper::GetString(1);
+        const int wantedPlayer = LuaHelper::GetInt(2);
         for (int i = 0; i < GetLobbyPlayerCount(); ++i)
         {
             const int player = GetLobbyPlayerIndex(i);
@@ -3058,7 +3054,7 @@ namespace Lua_Callbacks
 // FUNCTION: SWBF2 0x00595c70
 int ScriptCB_BeginFriends(lua_State*)
 {
-    lua_toboolean(LuaHelper::mState, 1);
+    LuaHelper::GetBool(1);
     RefreshLuaFriends(false);
     return 0;
 }
@@ -3066,7 +3062,7 @@ int ScriptCB_BeginFriends(lua_State*)
 // FUNCTION: SWBF2 0x00595ca0
 int ScriptCB_UpdateFriends(lua_State*)
 {
-    lua_toboolean(LuaHelper::mState, 1);
+    LuaHelper::GetBool(1);
     if (gf::friends::getAndResetDirty())
     {
         RefreshLuaFriends(false);
@@ -3098,11 +3094,11 @@ int ScriptCB_GetFriendActions(lua_State*)
 // FUNCTION: SWBF2 0x00595d70
 int ScriptCB_DoFriendAction(lua_State*)
 {
-    if (lua_gettop(LuaHelper::mState) != 2 || !lua_isstring(LuaHelper::mState, 1))
+    if (lua_gettop(LuaHelper::mState) != 2 || !LuaHelper::IsString(1))
     {
         return 0;
     }
-    const char* action = luaL_checkstring(LuaHelper::mState, 1);
+    const char* action = LuaHelper::GetString(1);
     int index = 14;
     for (int i = 0; i < 14; ++i)
     {
@@ -3132,18 +3128,18 @@ int ScriptCB_SetGSProfileInfo(lua_State*)
 {
     PlayerProfile::tProfile* pProfile = PlayerProfile::GetCurProfile();
     if (!pProfile || lua_gettop(LuaHelper::mState) != 5 ||
-        !lua_isstring(LuaHelper::mState, 1) || !lua_isstring(LuaHelper::mState, 2) ||
-        !lua_isstring(LuaHelper::mState, 3) || !lua_isstring(LuaHelper::mState, 4) ||
-        !lua_isnumber(LuaHelper::mState, 5))
+        !LuaHelper::IsString(1) || !LuaHelper::IsString(2) ||
+        !LuaHelper::IsString(3) || !LuaHelper::IsString(4) ||
+        !LuaHelper::IsNumber(5))
     {
         return 0;
     }
 
     luaL_checkstring(LuaHelper::mState, 1);
-    const char* email = luaL_checkstring(LuaHelper::mState, 2);
-    const char* password = luaL_checkstring(LuaHelper::mState, 3);
-    const char* saveInfo = luaL_checkstring(LuaHelper::mState, 4);
-    int autoLogin = (int)(float)luaL_checknumber(LuaHelper::mState, 5);
+    const char* email = LuaHelper::GetString(2);
+    const char* password = LuaHelper::GetString(3);
+    const char* saveInfo = LuaHelper::GetString(4);
+    int autoLogin = LuaHelper::GetInt(5);
     if (autoLogin < 0)
     {
         autoLogin = 0;
@@ -3184,7 +3180,7 @@ int ScriptCB_SetVoiceSendPreset(lua_State*)
 {
     if (GameVoiceChat::IsOpen())
     {
-        const GameVoiceChat::Transport::Mask preset = static_cast<GameVoiceChat::Transport::Mask>((int)(float)luaL_checknumber(LuaHelper::mState, 1));
+        const GameVoiceChat::Transport::Mask preset = static_cast<GameVoiceChat::Transport::Mask>(LuaHelper::GetInt(1));
         void* node = GameVoiceChat::FindNodeByDeviceID();
         if (node)
         {
@@ -3217,7 +3213,7 @@ int ScriptCB_SetVoiceReceivePreset(lua_State*)
 {
     if (GameVoiceChat::IsOpen())
     {
-        const GameVoiceChat::Transport::Mask preset = static_cast<GameVoiceChat::Transport::Mask>((int)(float)luaL_checknumber(LuaHelper::mState, 1));
+        const GameVoiceChat::Transport::Mask preset = static_cast<GameVoiceChat::Transport::Mask>(LuaHelper::GetInt(1));
         void* node = GameVoiceChat::FindNodeByDeviceID();
         if (node)
         {
@@ -3255,7 +3251,7 @@ int ScriptCB_SetVoiceSendEnable(lua_State*)
         VoiceChat::Node* node = (VoiceChat::Node*)GameVoiceChat::FindNodeByDeviceID();
         if (node)
         {
-            const bool enabled = lua_toboolean(LuaHelper::mState, 2) != 0;
+            const bool enabled = LuaHelper::GetBool(2);
             GameVoiceChat::GetTransport()->SetSendEnable(node->GetID(), player, enabled, false);
         }
     }
@@ -3272,7 +3268,7 @@ int ScriptCB_SetVoiceReceiveEnable(lua_State*)
         VoiceChat::Node* node = (VoiceChat::Node*)GameVoiceChat::FindNodeByDeviceID();
         if (node)
         {
-            const bool enabled = lua_toboolean(LuaHelper::mState, 2) != 0;
+            const bool enabled = LuaHelper::GetBool(2);
             GameVoiceChat::GetTransport()->SetReceiveEnable(node->GetID(), player, enabled, false);
         }
     }
@@ -3392,7 +3388,7 @@ int ScriptCB_VoiceEnable(lua_State*)
         return 0;
     }
     const int joystick = lua_gettop(LuaHelper::mState) >= 2
-        ? (int)(float)luaL_checknumber(LuaHelper::mState, 2) : PauseMenu::GetPausingJoystick();
+        ? LuaHelper::GetInt(2) : PauseMenu::GetPausingJoystick();
     const int local = GameState::GetState() == 0x11e1fc01
         ? joystick : NetGame::GetLocalIndex(PauseMenu::GetPausingViewport());
     bool enabled = false;
@@ -3402,7 +3398,7 @@ int ScriptCB_VoiceEnable(lua_State*)
         VoiceChat::Node* node = (VoiceChat::Node*)GameVoiceChat::FindNodeByDeviceID();
         if (node)
         {
-            enabled = lua_toboolean(LuaHelper::mState, 1) != 0;
+            enabled = LuaHelper::GetBool(1);
             ((GameVoiceChat::Node*)node)->SetID(enabled ? local : 0xff);
             if (enabled)
             {
@@ -3511,9 +3507,9 @@ namespace Lua_Callbacks
 // FUNCTION: SWBF2 0x005919c0
 int ScriptCB_SetGameName(lua_State*)
 {
-    if (lua_gettop(LuaHelper::mState) == 1 && lua_isstring(LuaHelper::mState, 1))
+    if (lua_gettop(LuaHelper::mState) == 1 && LuaHelper::IsString(1))
     {
-        NetSetup::SetGameName(luaL_checklstring(LuaHelper::mState, 1, 0));
+        NetSetup::SetGameName(LuaHelper::GetString(1));
     }
     return 0;
 }
@@ -3537,7 +3533,7 @@ namespace Lua_Callbacks
 {
 
 // FUNCTION: SWBF2 0x00591ef0
-int ScriptCB_TrackLoginErrors(lua_State*) { NetSetup::mLoginErrorsAreFatal = lua_toboolean(LuaHelper::mState, 1) != 0; return 0; }
+int ScriptCB_TrackLoginErrors(lua_State*) { NetSetup::mLoginErrorsAreFatal = LuaHelper::GetBool(1); return 0; }
 }
 
 namespace Lua_Callbacks
@@ -3607,7 +3603,7 @@ namespace Lua_Callbacks
 // FUNCTION: SWBF2 0x00596a20
 int ScriptCB_SetBandwidth(lua_State*)
 {
-    if (lua_isnumber(LuaHelper::mState, 1))
+    if (LuaHelper::IsNumber(1))
     {
         float bandwidth = (float)luaL_checknumber(LuaHelper::mState, 1);
         TEMP_bandwith = (int)bandwidth;

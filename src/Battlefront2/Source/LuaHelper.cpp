@@ -245,29 +245,29 @@ bool CallTableProcWThis(char const* pcTable, char const* pcFunc, unsigned short 
 void TableReadVal(char const* pcKey, float& fVal, bool bRequired)
 {
     (void)bRequired;
-    lua_pushstring(mState, pcKey);
-    lua_rawget(mState, -2);
-    if (lua_isnumber(mState, -1))
+    PushString(pcKey);
+    RawGetFromTable(-2);
+    if (IsNumber(-1))
     {
-        fVal = luaL_checknumber(mState, -1);
-        lua_settop(mState, -2);
+        fVal = GetFloat(-1);
+        Pop(1);
     }
     else
     {
         fVal = 0.0f;
-        lua_settop(mState, -2);
+        Pop(1);
     }
 }
 
 // FUNCTION: SWBF2 0x005a1300
 void TableReadVal(char const* pcKey, int& iVal, bool bRequired)
 {
-    lua_pushstring(mState, pcKey);
-    lua_rawget(mState, -2);
-    if (lua_isnumber(mState, -1))
+    PushString(pcKey);
+    RawGetFromTable(-2);
+    if (IsNumber(-1))
     {
         iVal = LuaHelper::GetInt(-1);
-        lua_settop(mState, -2);
+        Pop(1);
     }
     else
     {
@@ -276,20 +276,20 @@ void TableReadVal(char const* pcKey, int& iVal, bool bRequired)
         {
             lua_type(mState, -1);
         }
-        lua_settop(mState, -2);
+        Pop(1);
     }
 }
 
 // FUNCTION: SWBF2 0x005a13e0
 void TableReadVal(char const* pcKey, char* pcVal, unsigned int uSize, bool bRequired)
 {
-    lua_pushstring(mState, pcKey);
-    lua_rawget(mState, -2);
+    PushString(pcKey);
+    RawGetFromTable(-2);
     memset(pcVal, 0, uSize);
-    if (lua_isstring(mState, -1))
+    if (IsString(-1))
     {
-        strlcpy(pcVal, luaL_checklstring(mState, -1, 0), uSize);
-        lua_settop(mState, -2);
+        strlcpy(pcVal, GetString(-1), uSize);
+        Pop(1);
     }
     else
     {
@@ -297,7 +297,7 @@ void TableReadVal(char const* pcKey, char* pcVal, unsigned int uSize, bool bRequ
         {
             lua_type(mState, -1);
         }
-        lua_settop(mState, -2);
+        Pop(1);
     }
 }
 
@@ -336,10 +336,10 @@ void TableWriteVal(char const* pcKey, char const* pcVal)
 // FUNCTION: SWBF2 0x005a1390
 void TableReadVal(char const* pcKey, bool& bVal)
 {
-    lua_pushstring(mState, pcKey);
-    lua_rawget(mState, -2);
-    bVal = lua_toboolean(mState, -1) != 0;
-    lua_pop(mState, 1);
+    PushString(pcKey);
+    RawGetFromTable(-2);
+    bVal = GetBool(-1);
+    Pop(1);
 }
 
 // FUNCTION: SWBF2 0x005a15a0

@@ -2755,7 +2755,7 @@ void EntityWalker::UpdatePilot()
     }
     if (mControlUse.IsPressed() || IsDisabled())
     {
-        if (mPilotType == PILOT_REMOTE)
+        if (IsRemoteVehicle())
         {
             pPilot->ExitRemote();
         }

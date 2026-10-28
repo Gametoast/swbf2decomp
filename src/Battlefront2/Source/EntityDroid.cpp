@@ -1189,7 +1189,7 @@ bool EntityDroid::Update(float fDeltaTime)
         {
             if (mControlUse.IsPressed() || IsDisabled())
             {
-                if (mPilotType == PILOT_REMOTE)
+                if (IsRemoteVehicle())
                 {
                     pPilot->ExitRemote();
                 }
@@ -1203,7 +1203,7 @@ bool EntityDroid::Update(float fDeltaTime)
                     pPilot->ExitVehicle(true, true);
                 }
             }
-            if ((mControlSwitch[0] > 0.0f || mControlSwitch[1] > 0.0f) && mPilotType == PILOT_REMOTE)
+            if ((mControlSwitch[0] > 0.0f || mControlSwitch[1] > 0.0f) && IsRemoteVehicle())
             {
                 pPilot->ExitRemote();
             }

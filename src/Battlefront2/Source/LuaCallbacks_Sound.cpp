@@ -101,11 +101,6 @@ void Snd::StreamBase::Play(bool bRestart)
     }
 }
 
-// FUNCTION: SWBF2 0x0050b470
-void LuaHelper::PushInt(int iStream)
-{
-    lua_pushnumber(LuaHelper::mState, (float)iStream);
-}
 
 namespace Lua_Callbacks
 {

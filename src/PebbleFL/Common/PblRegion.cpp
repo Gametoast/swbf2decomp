@@ -74,9 +74,7 @@ bool PblRegion::IsPointInside(const PblVector3& rPoint) const
 
     case type_plane:
 
-        return mSize.w > mMatrix.m[2][1] * rPoint.y
-                       + mMatrix.m[2][0] * rPoint.x
-                       + mMatrix.m[2][2] * rPoint.z;
+        return mSize.w > DotProduct(mMatrix.GetZAxis(), rPoint);
 
     case type_box_aligned:
     {
@@ -207,9 +205,7 @@ bool PblRegion::DoesSphereIntersect(const PblVector3& rCenter, float fRadius) co
     }
 
     case type_plane:
-        return mSize.w + fRadius > mMatrix.m[2][1] * rCenter.y
-                                 + mMatrix.m[2][0] * rCenter.x
-                                 + mMatrix.m[2][2] * rCenter.z;
+        return mSize.w + fRadius > DotProduct(mMatrix.GetZAxis(), rCenter);
 
     case type_box_aligned:
         v.x = rCenter.x - mMatrix.m[3][0];
@@ -244,10 +240,11 @@ bool PblRegion::DoesSphereIntersectBox(const PblVector3& vSize, const PblVector3
     const float fAx = (float)fabs(vPoint.x);
     const float fAy = (float)fabs(vPoint.y);
     const float fAz = (float)fabs(vPoint.z);
-    const float fDz = fAz > vSize.z ? fAz - vSize.z : 0.0f;
-    const float fDy = fAy > vSize.y ? fAy - vSize.y : 0.0f;
-    const float fDx = fAx > vSize.x ? fAx - vSize.x : 0.0f;
-    return fRadius * fRadius > fDx * fDx + fDy * fDy + fDz * fDz;
+    PblVector3 vTest;
+    vTest.z = fAz > vSize.z ? fAz - vSize.z : 0.0f;
+    vTest.y = fAy > vSize.y ? fAy - vSize.y : 0.0f;
+    vTest.x = fAx > vSize.x ? fAx - vSize.x : 0.0f;
+    return fRadius * fRadius > SquaredLength(vTest);
 }
 
 // FUNCTION: SWBF2 0x007291d0
@@ -334,8 +331,7 @@ bool PblRegion::DoesAABoxIntersect(const PblVector3& vCenter, const PblVector3& 
 
     case type_plane:
     {
-        const float fDist = vCenter.y * mMatrix.m[2][1] + vCenter.x * mMatrix.m[2][0]
-                          + vCenter.z * mMatrix.m[2][2];
+        const float fDist = DotProduct(vCenter, mMatrix.GetZAxis());
         if (mSize.w > fDist)
         {
             return true;
@@ -590,12 +586,11 @@ void PblRegion::Initialize(const Description& desc)
     {
     case type_box:
     {
-        float afLen[3];
-        for (int i = 0; i < 3; ++i)
-        {
-            const float* r = mMatrix.m[i];
-            afLen[i] = (float)sqrt((double)(r[0] * r[0] + r[1] * r[1] + r[2] * r[2]));
-        }
+        float afLen[3] = {
+            Length(mMatrix.GetXAxis()),
+            Length(mMatrix.GetYAxis()),
+            Length(mMatrix.GetZAxis())
+        };
 
         unsigned int auMask[3] = { 7, 7, 7 };
         int i;
@@ -663,12 +658,11 @@ void PblRegion::Initialize(const Description& desc)
 
     case type_cylinder:
     {
-        float afLen[3];
-        for (int i = 0; i < 3; ++i)
-        {
-            const float* r = mMatrix.m[i];
-            afLen[i] = (float)sqrt((double)(r[0] * r[0] + r[1] * r[1] + r[2] * r[2]));
-        }
+        float afLen[3] = {
+            Length(mMatrix.GetXAxis()),
+            Length(mMatrix.GetYAxis()),
+            Length(mMatrix.GetZAxis())
+        };
 
         unsigned int uMask = 7;
         if ((float)fabs(mMatrix.m[1][0]) > 0.02f)

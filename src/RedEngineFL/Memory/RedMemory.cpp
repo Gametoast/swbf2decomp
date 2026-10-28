@@ -1,4 +1,5 @@
 #include <stdlib.h>
+#include "PebbleFL/Common/PblMath.h"
 #include <string.h>
 
 #include "RedMemory.h"
@@ -445,4 +446,26 @@ void RedSetTempHeap(int heap)
 unsigned int RedGetHeapSize(int heap)
 {
     return heapobj[heap].size;
+}
+
+// FUNCTION: SWBF2 0x006c3b40
+bool RedMoveHeapEnd(int iHeap, int iDelta)
+{
+    int iSource = iDelta < 0 ? iHeap + 1 : iHeap;
+    int iTarget = iDelta < 0 ? iHeap : iHeap + 1;
+    unsigned int uAmount = iDelta < 0 ? -iDelta : iDelta;
+    unsigned int uTargetAlign = heapobj[iTarget].align;
+    unsigned int uTagSize = (uTargetAlign + sizeof(Tag) - 1) & ~(uTargetAlign - 1);
+    int align = heapobj[iSource].align;
+    int targetAlign = uTargetAlign;
+    align = Max(align, targetAlign);
+    unsigned int uAllocation = (uAmount & ~(align - 1)) - uTagSize;
+    void* pBlock = RedAllocFromHeapInternal(iTarget, uAllocation, iDelta < 0);
+    Tag* pTag = (Tag*)((char*)pBlock - uTagSize);
+    heapobj[iHeap].size += iDelta;
+    heapobj[iHeap + 1].start = (char*)heapobj[iHeap + 1].start + iDelta;
+    heapobj[iHeap + 1].size -= iDelta;
+    TagRemoveList(&heapobj[iTarget].used, pTag);
+    TagAddList(&heapobj[iSource].used, pTag);
+    return RedFreeToHeapInternal(iSource, pBlock, 0);
 }

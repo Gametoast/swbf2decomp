@@ -1209,7 +1209,7 @@ void WeaponMelee::EnterState(ComboState eState)
         (!(netInShell ? netEnabled : netEnabledNext) || netIsLocalTurn))
     {
         GameObject* pObject = mOwner->GetGameObject();
-        DamageOwner owner(mOwner->mCharacter, pObject, pObject->GetTeam(),
+        DamageOwner owner(mOwner->GetCharacter(), pObject, pObject->GetTeam(),
                           0, mClass, 1.0f);
         const PblVector3& vOwnerPos = mOwner->GetMatrix().GetTranslation();
         PblVector3 vPos(vOwnerPos.x, vOwnerPos.y + 0.2f, vOwnerPos.z);
@@ -1531,7 +1531,7 @@ bool WeaponMelee::UpdateFire(float fDeltaTime)
 
         FLEffectClass* pHitEffectClass = 0;
         GameObject* pOwnerObject = mOwner->GetGameObject();
-        DamageDesc damage(DamageOwner(mOwner->mCharacter, mOwner->GetGameObject(),
+        DamageDesc damage(DamageOwner(mOwner->GetCharacter(), mOwner->GetGameObject(),
                                       mOwner->GetGameObject()->GetTeam(), pOwnerObject->GetEntityClass(),
                                       mClass, 1.0f),
                           fDamage);

@@ -1788,7 +1788,7 @@ bool EntityHover::Update(float fDeltaTime)
         {
             if (mControlUse.IsPressed() || IsDisabled())
             {
-                if (mPilotType == PILOT_REMOTE)
+                if (IsRemoteVehicle())
                 {
                     pPilot->ExitRemote();
                 }

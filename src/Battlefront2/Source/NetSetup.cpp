@@ -1851,35 +1851,10 @@ namespace gf
 bool isInitialized();
 }
 
-// FUNCTION: SWBF2 0x00437590
-void LuaHelper::PushString(const char* pString)
-{
-    lua_pushstring(LuaHelper::mState, pString);
-}
 
-// FUNCTION: SWBF2 0x0057dc20
-int LuaHelper::GetTop()
-{
-    return lua_gettop(LuaHelper::mState);
-}
 
-// FUNCTION: SWBF2 0x0057dc50
-int LuaHelper::TableGetN(int iStack)
-{
-    return luaL_getn(LuaHelper::mState, iStack);
-}
 
-// FUNCTION: SWBF2 0x0057dc60
-void LuaHelper::TableGetByPosition(int iStack, int iIndex)
-{
-    lua_rawgeti(LuaHelper::mState, iStack, iIndex);
-}
 
-// FUNCTION: SWBF2 0x005808a0
-void LuaHelper::RawGetFromTable(int iStack)
-{
-    lua_rawget(LuaHelper::mState, iStack);
-}
 
 // FUNCTION: SWBF2 0x005e7bc0
 void WriteFilesAck(NetPktGroup& group, SendStateDst& state)

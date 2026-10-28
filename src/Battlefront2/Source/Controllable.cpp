@@ -428,7 +428,7 @@ void Controllable::SetPilot(Controllable* pPilot)
     {
         GameObject* pPilotObject = mPilot->GetGameObject();
         if (pObject &&
-            (IsPilotable() || mPilotType == PILOT_REMOTE) &&
+            (IsPilotable() || IsRemoteVehicle()) &&
             pPilotObject)
         {
             pPilotObject->GetCollisionObject()->mParent = 0;
@@ -457,7 +457,7 @@ void Controllable::SetPilot(Controllable* pPilot)
         SetCharacter(mPilot->mCharacter);
         SetupController();
         if (pObject &&
-            (IsPilotable() || mPilotType == PILOT_REMOTE) &&
+            (IsPilotable() || IsRemoteVehicle()) &&
             pPilotObject)
         {
             pPilotObject->GetCollisionObject()->mParent = pObject->GetCollisionObject();
@@ -656,7 +656,7 @@ void Controllable::SetTargetLockedObj(GameObject* pObject)
             unsigned int uChangedTurn = pManager->mLockedObjChangedTurn;
             int iGrace = netTurnsPerSecond / 2;
             unsigned int uTurn = NetGame::GetClientAckedTurnNumber();
-            if (uChangedTurn + (iGrace > 5 ? iGrace : 5) >= uTurn)
+            if (uChangedTurn + Max(iGrace, 5) >= uTurn)
             {
                 mTargetLockedObj.mObject = pLocked;
                 mTargetLockedObj.mSavedHandleId = pLocked ? GameObjectHandleId(pLocked) : 0;

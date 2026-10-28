@@ -753,7 +753,7 @@ bool MountedTurret::Update(float aDt)
                 mParent->GetTeam() != pPilot->GetGameObject()->GetTeam())
             {
                 SpaceDustEffect::Stop(iJoystick);
-                if (mPilotType == PILOT_REMOTE)
+                if (IsRemoteVehicle())
                 {
                     pPilot->ExitRemote();
                 }
@@ -1029,7 +1029,7 @@ bool MountedTurret::Update(float aDt)
         }
     }
 
-    if (mPilotType != PILOT_REMOTE)
+    if (!IsRemoteVehicle())
     {
         if (mClass->mIsPilotAnimation9Pose)
         {

@@ -327,7 +327,7 @@ bool NameDisplayThread::Update(float)
             for (PblList<Controllable>::Itor it = riders.Begin(); (Controllable*)it; ++it)
             {
                 Controllable* pRider = it;
-                if ((pRider->IsPilotable() || pRider->mPilotType == PILOT_REMOTE) && pRider->GetPilot())
+                if ((pRider->IsPilotable() || pRider->IsRemoteVehicle()) && pRider->GetPilot())
                 {
                     if (pRider == pVehicle)
                     {

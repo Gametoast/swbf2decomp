@@ -1289,17 +1289,17 @@ void InitStats()
 // FUNCTION: SWBF2 0x005a0730
 int ScriptCB_SetPlayerStatsPoints(lua_State*)
 {
-    if (lua_gettop(LuaHelper::mState) == 1 && lua_type(LuaHelper::mState, 1) == LUA_TTABLE)
+    if (LuaHelper::GetTop() == 1 && lua_type(LuaHelper::mState, 1) == LUA_TTABLE)
     {
         lua_gettop(LuaHelper::mState);
-        int iCount = luaL_getn(LuaHelper::mState, 1);
+        int iCount = LuaHelper::TableGetN(1);
         for (int i = 1; i <= iCount; ++i)
         {
-            lua_rawgeti(LuaHelper::mState, 1, i);
+            LuaHelper::TableGetByPosition(1, i);
             int iPoints = 0;
             LuaHelper::TableReadVal("point_gain", iPoints, false);
             PlayerStats::SetPointsTable(i - 1, iPoints);
-            lua_settop(LuaHelper::mState, -2);
+            LuaHelper::Pop(1);
         }
         lua_gettop(LuaHelper::mState);
     }

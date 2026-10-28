@@ -1,4 +1,5 @@
 #include <string.h>
+#include "PebbleFL/Common/PblMath.h"
 
 #include "pcRedInputManager.h"
 #include "RedEngineFL/Application/pc/pcFLRender.h"
@@ -111,10 +112,8 @@ void RedMouse::SetCursorPos(int iX, int iY)
     m_X = iX;
     m_Y = iY;
 
-    const int iWidth = (int)RedInterfaceScreen::GetScreenWidth();
-    const int iHeight = (int)RedInterfaceScreen::GetScreenHeight();
-    m_X = (iX < 0) ? 0 : (iX > iWidth ? iWidth : iX);
-    m_Y = (iY < 0) ? 0 : (iY > iHeight ? iHeight : iY);
+    m_X = Clamp(iX, 0, (int)RedInterfaceScreen::GetScreenWidth());
+    m_Y = Clamp(iY, 0, (int)RedInterfaceScreen::GetScreenHeight());
     FLRenderer::SetCursorPos((float)m_X, (float)m_Y);
 
     ::SetCursorPos(iX, iY);
@@ -168,10 +167,8 @@ void RedMouse::Update(float fDeltaTime)
     m_Y += m_dY;
     m_Z += m_dZ;
 
-    const int iWidth = (int)RedInterfaceScreen::GetScreenWidth();
-    const int iHeight = (int)RedInterfaceScreen::GetScreenHeight();
-    m_X = (m_X < 0) ? 0 : (m_X > iWidth ? iWidth : m_X);
-    m_Y = (m_Y < 0) ? 0 : (m_Y > iHeight ? iHeight : m_Y);
+    m_X = Clamp(m_X, 0, (int)RedInterfaceScreen::GetScreenWidth());
+    m_Y = Clamp(m_Y, 0, (int)RedInterfaceScreen::GetScreenHeight());
     FLRenderer::SetCursorPos((float)m_X, (float)m_Y);
 
     const unsigned int uiPrevDown = m_uiDownButtons;

@@ -47,14 +47,42 @@ bool PushRefProc(int iRef);
 
 void PushString(unsigned short const* pusString);
 
-void PushString(const char* pString);
+// FUNCTION: SWBF2 0x00437590
+inline void PushString(const char* pString)
+{
+    lua_pushstring(mState, pString);
+}
 
-bool __fastcall IsString(int iIndex);
-void PushInt(int iValue);
-int GetTop();
-int TableGetN(int iStack);
-void TableGetByPosition(int iStack, int iIndex);
-void RawGetFromTable(int iStack);
+// FUNCTION: SWBF2 0x00437550
+inline bool IsString(int iIndex)
+{
+    return lua_isstring(mState, iIndex) != 0;
+}
+// FUNCTION: SWBF2 0x0050b470
+inline void PushInt(int iValue)
+{
+    lua_pushnumber(mState, (float)iValue);
+}
+// FUNCTION: SWBF2 0x0057dc20
+inline int GetTop()
+{
+    return lua_gettop(mState);
+}
+// FUNCTION: SWBF2 0x0057dc50
+inline int TableGetN(int iStack)
+{
+    return luaL_getn(mState, iStack);
+}
+// FUNCTION: SWBF2 0x0057dc60
+inline void TableGetByPosition(int iStack, int iIndex)
+{
+    lua_rawgeti(mState, iStack, iIndex);
+}
+// FUNCTION: SWBF2 0x005808a0
+inline void RawGetFromTable(int iStack)
+{
+    lua_rawget(mState, iStack);
+}
 bool PushGlobalProc(char const* pcFunc);
 bool PushTableProc(char const* pcTable, char const* pcFunc);
 bool PushTableProcWThis(char const* pcTable, char const* pcFunc);

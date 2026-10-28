@@ -274,7 +274,7 @@ bool PassengerSlot::Update(float fDeltaTime)
         {
             if (mControlUse.IsPressed() || mParent->mDisableTime > 0.0f)
             {
-                if (mPilotType == PILOT_REMOTE)
+                if (IsRemoteVehicle())
                 {
                     pPilot->ExitRemote();
                 }

@@ -1,5 +1,6 @@
 #include <math.h>
 #include <string.h>
+#include "PebbleFL/Common/PblMath.h"
 
 #include "pcRedInputManager.h"
 #include "RedEngineFL/Interface/RedInterfaceScreen.h"
@@ -224,26 +225,10 @@ void RedJoystick::Update(float fDeltaTime)
         pMouse->m_Y += iDY;
         pMouse->m_dY = iDY;
 
-        int iX = pMouse->m_X;
-        if (iX < 0)
-        {
-            iX = 0;
-        }
-        else if (iX > (int)RedInterfaceScreen::GetScreenWidth())
-        {
-            iX = RedInterfaceScreen::GetScreenWidth();
-        }
+        int iX = Clamp(pMouse->m_X, 0, (int)RedInterfaceScreen::GetScreenWidth());
         pMouse->m_X = iX;
 
-        int iY = pMouse->m_Y;
-        if (iY < 0)
-        {
-            iY = 0;
-        }
-        else if (iY > (int)RedInterfaceScreen::GetScreenHeight())
-        {
-            iY = RedInterfaceScreen::GetScreenHeight();
-        }
+        int iY = Clamp(pMouse->m_Y, 0, (int)RedInterfaceScreen::GetScreenHeight());
         pMouse->m_Y = iY;
 
         FLRenderer::SetCursorPos((float)iX, (float)iY);

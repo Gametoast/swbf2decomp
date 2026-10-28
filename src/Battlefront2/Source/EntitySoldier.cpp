@@ -3080,7 +3080,7 @@ bool EntitySoldier::UpdateBoardVsChangeClass()
     int iJoystick = GetJoystickIndex();
     if (NetGame::IsEnabled() && NetGame::IsClient())
     {
-        if (iJoystick < 0 || !mControlUse.IsPressed() || !netIsLocalTurn || mClass->mHeroFlag)
+        if (iJoystick < 0 || !mControlUse.IsPressed() || !netIsLocalTurn || mClass->GetHeroFlag())
         {
             return false;
         }
@@ -3230,7 +3230,7 @@ bool EntitySoldier::UpdateBoardVsChangeClass()
             }
         }
     }
-    if (mClass->mHeroFlag)
+    if (mClass->GetHeroFlag())
     {
         mCanChangeClass = false;
     }
@@ -3648,7 +3648,7 @@ bool EntitySoldier::CanEnterVehicleInternal(const GameObject* pObject, bool bRem
     for (PblList<Controllable>::Itor it(pObject->GetControllableList()); it; ++it)
     {
         Controllable* pSeat = it;
-        if (bRemote ? pSeat->mPilotType != PILOT_REMOTE
+        if (bRemote ? !pSeat->IsRemoteVehicle()
                     : (!pSeat->IsPilotable()))
         {
             continue;
@@ -6259,9 +6259,9 @@ bool EntitySoldier::Update(float fDeltaTime)
     if (!IsAlive())
     {
         int iPlayer = mInitialPlayerId;
-        if (iPlayer >= 0 && !Character::GetPtr(iPlayer)->mUnit)
+        if (WasPlayer() && !Character::GetPtr(iPlayer)->mUnit)
         {
-            Trackable::TrackDeath(iPlayer, mClass->mHeroFlag ? 0 : mDamageOwner.mCharacter);
+            Trackable::TrackDeath(iPlayer, mClass->GetHeroFlag() ? 0 : mDamageOwner.mCharacter);
             if (mTracker && mTracker->IsFirstPersonView() && iJoystick >= 0)
             {
                 FirstPerson::Activate(iJoystick, false);
@@ -7599,7 +7599,7 @@ bool EntitySoldier::Update(float fDeltaTime)
                         }
                     }
                 }
-                else if (mClass->mHeroFlag)
+                else if (mClass->GetHeroFlag())
                 {
                     AI::VOHelper::Play(AI::VOT_SC_Follow, this, 0, pTarget, 0.0f);
                 }
@@ -8281,7 +8281,7 @@ void EntitySoldier::SetFirstPersonView(int iView, bool bFirstPerson)
 // FUNCTION: SWBF2 0x004f3750
 void EntitySoldier::BuffOffense(float fTimer, float fMult)
 {
-    if (mClass->mHeroFlag || mClass->m_bIsAcklay)
+    if (mClass->GetHeroFlag() || mClass->m_bIsAcklay)
     {
         mBuffOffenseTimer = 0.0f;
     }
@@ -8295,7 +8295,7 @@ void EntitySoldier::BuffOffense(float fTimer, float fMult)
 // FUNCTION: SWBF2 0x004f3790
 void EntitySoldier::BuffDefense(float fTimer, float fMult)
 {
-    if (mClass->mHeroFlag || mClass->m_bIsAcklay)
+    if (mClass->GetHeroFlag() || mClass->m_bIsAcklay)
     {
         mBuffDefenseTimer = 0.0f;
     }
@@ -8309,7 +8309,7 @@ void EntitySoldier::BuffDefense(float fTimer, float fMult)
 // FUNCTION: SWBF2 0x004f37d0
 void EntitySoldier::BuffHealth(float fTimer, float fRate)
 {
-    if (mClass->mHeroFlag || mClass->m_bIsAcklay)
+    if (mClass->GetHeroFlag() || mClass->m_bIsAcklay)
     {
         mBuffHealthTimer = 0.0f;
     }
@@ -8333,7 +8333,7 @@ void EntitySoldier::UpdateBuffTimers(float fDeltaTime)
         return;
     }
 
-    if (mClass->mHeroFlag || mClass->m_bIsAcklay)
+    if (mClass->GetHeroFlag() || mClass->m_bIsAcklay)
     {
         mBuffOffenseTimer = 0.0f;
         mBuffDefenseTimer = 0.0f;
@@ -8841,7 +8841,7 @@ void StartBulletTime(float f0, float f1, float f2);
 // FUNCTION: SWBF2 0x004dfa20
 EntitySoldier::~EntitySoldier()
 {
-    if ((!NetGame::IsEnabled() || NetGame::IsClient()) && mInitialPlayerId >= 0 && mTracker &&
+    if ((!NetGame::IsEnabled() || NetGame::IsClient()) && WasPlayer() && mTracker &&
         mTracker->IsFirstPersonView())
     {
         int iJoystick = NetGame::GetJoystickIndex(mInitialPlayerId);
@@ -9154,7 +9154,7 @@ void EntitySoldier::Kill()
         }
         if (!mVanishing)
         {
-            Trackable::TrackDeath(mPlayerId, mClass->mHeroFlag ? 0 : mDamageOwner.mCharacter);
+            Trackable::TrackDeath(mPlayerId, mClass->GetHeroFlag() ? 0 : mDamageOwner.mCharacter);
         }
     }
 
@@ -9176,7 +9176,7 @@ void EntitySoldier::Kill()
 
     if (mState != SoldierState::FLY)
     {
-        if (mClass->mHeroFlag || mClass->mFleeLikeAHero)
+        if (mClass->GetHeroFlag() || mClass->mFleeLikeAHero)
         {
             switch (mState)
             {
@@ -10537,7 +10537,7 @@ bool EntitySoldier::CheckMoveControlForRoll(float fThrust, float fStrafe)
 // FUNCTION: SWBF2 0x004f3810
 void EntitySoldier::DebuffDamage(float fTimer, float fRate, const DamageOwner& owner)
 {
-    if (mClass->mHeroFlag || mClass->m_bIsAcklay)
+    if (mClass->GetHeroFlag() || mClass->m_bIsAcklay)
     {
         mDebuffDamageTimer = 0.0f;
     }

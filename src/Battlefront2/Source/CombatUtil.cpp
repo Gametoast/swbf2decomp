@@ -493,7 +493,7 @@ float CombatUtil::sCalcDamagePerSecond(Controllable* pMe, const WeaponClass* pCl
     }
 
     GameObject* pObj = pMe->GetGameObject();
-    DamageOwner owner(pMe->mCharacter, pMe->GetGameObject(), GetTeam(pMe->GetGameObject()),
+    DamageOwner owner(pMe->GetCharacter(), pMe->GetGameObject(), GetTeam(pMe->GetGameObject()),
                       GetEntityClass(pObj), const_cast<WeaponClass*>(pClass),
                       pMe->GetOffenseMultiplier());
 
@@ -531,7 +531,7 @@ float CombatUtil::CalcDamagePerSecond(Controllable* pMe, const WeaponClass* pCla
     }
 
     GameObject* pObj = pMe->GetGameObject();
-    DamageOwner owner(pMe->mCharacter, pMe->GetGameObject(), GetTeam(pMe->GetGameObject()),
+    DamageOwner owner(pMe->GetCharacter(), pMe->GetGameObject(), GetTeam(pMe->GetGameObject()),
                       GetEntityClass(pObj), const_cast<WeaponClass*>(pClass),
                       pMe->GetOffenseMultiplier());
 
