@@ -3,6 +3,7 @@
 
 #include <float.h>
 #include "PebbleFL/Common/PblVector.h"
+#include "PebbleFL/Common/PblValues.h"
 #include <math.h>
 #include <new>
 #include <stdio.h>
@@ -6350,7 +6351,12 @@ bool EntitySoldier::Update(float fDeltaTime)
         if (mIndirectControlFlag)
         {
 
-            UnitControllerPtr(mCtrl);
+            const ControllableDestination& dest = UnitControllerPtr(mCtrl)->GetLowLevel().GetDest();
+            PblValues::Record(dest.mHasDest, PVT_MOVES_HIGH);
+            if (dest.mHasDest)
+            {
+                PblValues::Record(dest.mPos.x, PVT_MOVES_HIGH);
+            }
             if (sNoAiMovements)
             {
                 mControlMove = 0.0f;

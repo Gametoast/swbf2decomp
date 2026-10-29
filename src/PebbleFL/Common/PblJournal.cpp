@@ -37,10 +37,6 @@ PblJournal* PblJournal::Get(PblJournalType  )
     return &sJournalInstance;
 }
 
-// FUNCTION: SWBF2 0x005b4230
-void PblJournal::RecordLow(void*  , int  )
-{
-}
 
 // FUNCTION: SWBF2 0x0072b360
 void JournalString(char* pcString, int iMax)
@@ -51,11 +47,6 @@ void JournalString(char* pcString, int iMax)
         iLength = iMax;
     }
     pcString[iLength] = '\0';
-}
-
-// FUNCTION: SWBF2 0x00453680
-void JournalRecordStub()
-{
 }
 
 // FUNCTION: SWBF2 0x0072b350

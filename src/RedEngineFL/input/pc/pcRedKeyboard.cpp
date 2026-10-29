@@ -3,6 +3,7 @@
 #include "pcRedInputManager.h"
 #include "RedEngineFL/input/RedInputEventHandler.h"
 #include "PebbleFL/Common/PblJournal.h"
+#include "PebbleFL/Common/PblValues.h"
 
 void __cdecl PblTraceP(const char* Format, ...);
 
@@ -304,6 +305,8 @@ void RedKeyboard::Update(float fDeltaTime)
             ;
         return;
     }
+
+    PblValues::Record(0x141, PVT_FULL);
 
     unsigned char aucOldKeys[256];
     memcpy(aucOldKeys, pc_DownKeys, sizeof(aucOldKeys));

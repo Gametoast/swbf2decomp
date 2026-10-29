@@ -43,9 +43,6 @@ void Create()
 
 }
 
-// TEMPLATE: SWBF2 0x00458950
-// PblJournal::Record<char>
-template void PblJournal::Record<char>(char& value, PblJournalType type);
 
 // FUNCTION: SWBF2 0x0052d510
 void FrameUpdate::Update()

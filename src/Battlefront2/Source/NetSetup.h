@@ -61,6 +61,8 @@ enum FindType
     FT_CURRENT = 4
 };
 
+bool __fastcall IsGalaxyIdValid(const unsigned __int64* pThis);
+
 struct NetSessionId
 {
 
@@ -73,6 +75,8 @@ struct NetSessionId
 
     // FUNCTION: SWBF2 0x00591440
     void SetNULL() { id = 0; }
+
+    bool IsNULL() { return !IsGalaxyIdValid(&id); }
 };
 
 struct FindGamePlayer;
@@ -251,8 +255,18 @@ struct NetAddr
 
     bool operator==(const NetAddr& other)
     {
-        return (!hasPriv || (privAddr == other.privAddr && privPort == other.privPort)) &&
-               other.mGalaxyId == mGalaxyId;
+        if (hasPriv)
+        {
+            if (privAddr != other.privAddr)
+            {
+                return false;
+            }
+            if (privPort != other.privPort)
+            {
+                return false;
+            }
+        }
+        return other.mGalaxyId == mGalaxyId;
     }
 
 

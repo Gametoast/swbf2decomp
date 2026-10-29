@@ -5,6 +5,7 @@
 #include "VoiceChatUtil.h"
 #include "VOHelper.h"
 #include "NetPacket.h"
+#include "PebbleFL/Common/PblValues.h"
 #include "GameVoiceChatUtil.h"
 #include "GameVoiceChatDecoder.h"
 #include <float.h>
@@ -398,7 +399,6 @@ void VoiceChat::Node::CloseStatic()
 
 }
 
-void sub_5D3BF0(void* p, int i);
 
 // FUNCTION: SWBF2 0x00672f40
 float VoiceChat::Node::GetLastSendTime() const
@@ -458,7 +458,7 @@ void VoiceChat::Node::Send()
     {
         if (packet->mSize || packet->mDiscontinuity)
         {
-            sub_5D3BF0(&packet->mSize, 0);
+            PblValues::Record(packet->mSize, PVT_FULL);
             mLastCaptureTime = GetTime();
             SendAudioPacket(packet);
         }

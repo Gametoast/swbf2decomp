@@ -1240,20 +1240,15 @@ void AddAutoNetMission(char const* pcArg, int iA, int iB)
 // FUNCTION: SWBF2 0x005e3fb0
 void NetSetupP::Update()
 {
-    char cMark1 = 'Z';
-    PblJournal::Record(cMark1, PJT_FULL);
+    PblValues::Record('Z', PVT_FULL);
     NetMatch::UpdateLogin(-1);
-    char cMark2 = 'Z';
-    PblJournal::Record(cMark2, PJT_FULL);
+    PblValues::Record('Z', PVT_FULL);
     NetMatch::UpdatePresence(false);
-    char cMark3 = 'Z';
-    PblJournal::Record(cMark3, PJT_FULL);
+    PblValues::Record('Z', PVT_FULL);
     NetMatch::UpdateRegisterGame();
-    char cMark4 = 'Z';
-    PblJournal::Record(cMark4, PJT_FULL);
+    PblValues::Record('Z', PVT_FULL);
     StatsManager::Update();
-    char cMark5 = 'Z';
-    PblJournal::Record(cMark5, PJT_FULL);
+    PblValues::Record('Z', PVT_FULL);
 }
 
 // FUNCTION: SWBF2 0x005e41e0
@@ -2423,9 +2418,15 @@ void CNetPostLoadJoinGame::Cancel()
 // FUNCTION: SWBF2 0x005df390
 const char* CNetFindGame::GetEra()
 {
-    NetGameDesc* desc = curGame._pNode->_pObject;
-    return _strnicmp(desc->mFindData.mMapType, "metagame", 8) == 0
-        ? desc->mFindData.mMapType + 8 : "";
+    NetGameDesc& desc = *curGame;
+    if (_strnicmp(desc.mFindData.mMapType, "metagame", 8) == 0)
+    {
+        return &desc.mFindData.mMapType[8];
+    }
+    else
+    {
+        return "";
+    }
 }
 
 void ReadString(NetPktGroup& group, char* text, unsigned int capacity);
@@ -2784,7 +2785,11 @@ NetGameDesc::NetGameDesc(const NetAddr& addr)
 // FUNCTION: SWBF2 0x005dd6b0
 bool NetGameDesc::operator==(const NetGameDesc& rOther)
 {
-    return mAddr == rOther.mAddr;
+    if (mAddr == rOther.mAddr)
+    {
+        return true;
+    }
+    return false;
 }
 
 // GLOBAL: SWBF2 0x01ee7d48
@@ -2900,11 +2905,12 @@ void CNetFindGame::SetSelectedSession(int session)
     }
     int validIndex = 0;
     PblList<NetGameDesc>::Itor itor = gameList.GetFirst();
+    itor = gameList.Begin();
     while (itor)
     {
-        NetGameDesc* game = itor;
+        NetGameDesc& game = *itor;
         ++itor;
-        if (!game->mValid)
+        if (!game.mValid)
         {
             continue;
         }
@@ -2912,13 +2918,12 @@ void CNetFindGame::SetSelectedSession(int session)
         {
             continue;
         }
-        if (!game->mFindData.mDidServerPing)
+        if (!game.mFindData.mDidServerPing)
         {
-            game->mFindData.mDidServerPing = NetMatch::PingServerByAddress(game->mAddr);
+            game.mFindData.mDidServerPing = NetMatch::PingServerByAddress(game.mAddr);
         }
     }
-    char journalCode = 'c';
-    PblJournal::Record(journalCode, PJT_FULL);
+    PblValues::Record('c', PVT_FULL);
 }
 
 void __fastcall HandleFindPacket(NetPacket* packet);
@@ -3598,7 +3603,8 @@ void WriteJoin(NetPktGroup& group, unsigned int guestCount)
     unsigned int guest;
     for (viewport = 0; viewport < _countof(playerIndexes); ++viewport)
     {
-        if (input->mActiveControllers[viewport])
+        bool active = input->mActiveControllers[viewport];
+        if (active)
         {
             playerIndexes[count++] = viewport;
         }
@@ -3731,8 +3737,7 @@ void CNetFindGame::AddGame(const NetAddr& address)
 void CNetFindGame::UpdateGame(const NetAddr& address, const NetKey* key, const NetSessionId* session,
                                const char* version, const FindGameData& data, const FindGameRules* rules)
 {
-    char journalCode = 'u';
-    PblJournal::Record(journalCode, PJT_FULL);
+    PblValues::Record('u', PVT_FULL);
     NetGameDesc probe(address);
     PblList<NetGameDesc>::Itor itor = gameList.GetFirst();
     while (itor)
@@ -4794,11 +4799,10 @@ bool ReadShellUpdate(NetPktGroup& group, ShellUpdate& update, ShellMove& move)
 // FUNCTION: SWBF2 0x005dfc50
 void CNetJoinGame::Update()
 {
-    int entryMark = 733;
-    PblJournal::Record(entryMark, PJT_FULL);
+    PblValues::Record(733, PVT_FULL);
     NetComm::AdvanceTime(true);
     float now = NetComm::GetTime();
-    PblJournal::Record(now, PJT_FULL);
+    PblValues::Record(now, PVT_FULL);
     NetComm::Update();
 
     if (connecting)
@@ -4807,8 +4811,7 @@ void CNetJoinGame::Update()
         {
             connecting = false;
             hostAddrs[0] = hostAddr;
-            int connectMark = 736;
-            PblJournal::Record(connectMark, PJT_FULL);
+            PblValues::Record(736, PVT_FULL);
             NetSocketPeerRecord address;
             hostAddr.GetAddr(address, 0);
             NetCommP::Connect(64, &address);
@@ -4848,9 +4851,8 @@ void CNetJoinGame::Update()
     }
     else if (!joinFailed)
     {
-        int localIndex = NetComm::GetLocalIndex(0);
-        PblJournal::Record(localIndex, PJT_FULL);
-        PblJournal::Record(timer, PJT_FULL);
+        PblValues::Record(NetComm::GetLocalIndex(0), PVT_FULL);
+        PblValues::Record(timer, PVT_FULL);
         if (NetComm::GetLocalIndex(0) == -1)
         {
             if (now > timer && !shellMove.quitRequested)
@@ -4878,8 +4880,7 @@ void CNetJoinGame::Update()
                 WriteJoin(group, guestCount);
                 group.EndWrite();
                 NetComm::Send(64, PKT_JOIN, group.pktPtr);
-                int joinMark = 735;
-                PblJournal::Record(joinMark, PJT_FULL);
+                PblValues::Record(735, PVT_FULL);
             }
         }
         else if (now > timer)
@@ -5096,8 +5097,7 @@ void CNetJoinGame::Update()
     }
     NetMatch::UpdateLogin(-1);
     NetMatch::UpdatePresence(false);
-    int exitMark = 734;
-    PblJournal::Record(exitMark, PJT_FULL);
+    PblValues::Record(734, PVT_FULL);
 }
 
 // GLOBAL: SWBF2 0x007e8ee4
@@ -5153,7 +5153,7 @@ void CNetHostGame::Update()
 {
     int i;
     ++netHostUpdateCount;
-    PblJournal::Record(netHostUpdateCount, PJT_FULL);
+    PblValues::Record(netHostUpdateCount, PVT_FULL);
     NetComm::AdvanceTime(true);
     float now = NetComm::GetTime();
     NetComm::Update();
@@ -5338,8 +5338,7 @@ void CNetHostGame::Update()
 
     if (!launchReady)
     {
-        float delay = !IsGalaxyIdValid(&netPrevSessionId.id) ? 0.1f : 5.0f;
-        if (now - launchTimer > delay)
+        if (now - launchTimer > (netPrevSessionId.IsNULL() ? 0.1f : 5.0f))
         {
             launchReady = true;
         }
@@ -5427,34 +5426,32 @@ void CNetHostGame::Update()
 // FUNCTION: SWBF2 0x005ddc90
 bool CNetFindGame::Update()
 {
-    int entryMark = 533;
-    PblJournal::Record(entryMark, PJT_FULL);
+    PblValues::Record(533, PVT_FULL);
     SetupSleep();
     NetComm::AdvanceTime(true);
     NetComm::Update();
     NetMatch::UpdateFindGames();
-    int pumpMark = 536;
-    PblJournal::Record(pumpMark, PJT_FULL);
+    PblValues::Record(536, PVT_FULL);
     float now = NetComm::GetTime();
     bool updated = false;
     bool doQueries = true;
 
     if (doQueries && !joinGame)
     {
-        int gameCount = gameList._iCount;
-        PblJournal::Record(gameCount, PJT_FULL);
+        PblValues::Record(gameList.GetCount(), PVT_FULL);
         int queryBudget = 4;
         PblList<NetGameDesc>::Itor itor = gameList.GetFirst();
         int maxConnecting = 64;
         int connectingCount = 0;
-        while (NetGameDesc* game = itor)
+        while (itor)
         {
+            NetGameDesc& game = *itor;
             ++itor;
-            if (!game->mValid)
+            if (!game.mValid)
             {
                 continue;
             }
-            if (game->mFindData.mConnected || game->mFindData.mConnecting)
+            if (game.mFindData.mConnected || game.mFindData.mConnecting)
             {
                 ++connectingCount;
             }
@@ -5462,106 +5459,106 @@ bool CNetFindGame::Update()
 
         if (NetComm::IsLAN())
         {
-            itor = PblList<NetGameDesc>::Itor(gameList);
+            itor = gameList.Begin();
             while (itor && queryBudget > 0)
             {
-                NetGameDesc* game = itor;
+                NetGameDesc& game = *itor;
                 ++itor;
-                if (!game->mValid)
+                if (!game.mValid)
                 {
                     continue;
                 }
-                if (!game->mFindData.mConnected && !game->mFindData.mConnecting && gSelectionTimer + 1.0f > now)
+                if (!game.mFindData.mConnected && !game.mFindData.mConnecting && gSelectionTimer + 1.0f > now)
                 {
                     continue;
                 }
                 float connectTime = 5.0f;
-                if (game->mFindData.mQuerySeqNo >= 8)
+                if (game.mFindData.mQuerySeqNo >= 8)
                 {
-                    if (game->mFindData.mConnected)
+                    if (game.mFindData.mConnected)
                     {
-                        NetMatch::EndConnect(game->mAddr, game->mKey, 64);
-                        game->mFindData.mConnected = false;
-                        game->mFindData.mConnecting = false;
+                        NetMatch::EndConnect(game.mAddr, game.mKey, 64);
+                        game.mFindData.mConnected = false;
+                        game.mFindData.mConnecting = false;
                     }
                     continue;
                 }
-                if (game->mFindData.mResponseRecvTime > 0.0f && game->mFindData.mQuerySeqNo >= 5)
+                if (game.mFindData.mResponseRecvTime > 0.0f && game.mFindData.mQuerySeqNo >= 5)
                 {
-                    if (game->mFindData.mConnected)
+                    if (game.mFindData.mConnected)
                     {
-                        NetMatch::EndConnect(game->mAddr, game->mKey, 64);
-                        game->mFindData.mConnected = false;
-                        game->mFindData.mConnecting = false;
+                        NetMatch::EndConnect(game.mAddr, game.mKey, 64);
+                        game.mFindData.mConnected = false;
+                        game.mFindData.mConnecting = false;
                     }
-                    game->mFindData.mQuerySeqNo = 8;
+                    game.mFindData.mQuerySeqNo = 8;
                     continue;
                 }
-                if (game->mFindData.mConnecting && !game->mFindData.mConnected && now > game->mFindData.mConnectTimeout)
+                if (game.mFindData.mConnecting && !game.mFindData.mConnected && now > game.mFindData.mConnectTimeout)
                 {
-                    NetMatch::EndConnect(game->mAddr, game->mKey, 64);
-                    game->mFindData.mConnected = false;
-                    game->mFindData.mConnecting = false;
-                    game->mFindData.mQuerySeqNo = 8;
+                    NetMatch::EndConnect(game.mAddr, game.mKey, 64);
+                    game.mFindData.mConnected = false;
+                    game.mFindData.mConnecting = false;
+                    game.mFindData.mQuerySeqNo = 8;
                 }
-                PblJournal::Record(game->mFindData.mQuerySentTime, PJT_FULL);
-                int seqNo = game->mFindData.mQuerySeqNo;
-                if (now > (float)(seqNo * seqNo) * 0.2f + game->mFindData.mQuerySentTime)
+                PblValues::Record(game.mFindData.mQuerySentTime, PVT_FULL);
+                int seqNo = game.mFindData.mQuerySeqNo;
+                if (now > (float)(seqNo * seqNo) * 0.2f + game.mFindData.mQuerySentTime)
                 {
                     --queryBudget;
-                    PblJournal::Record(game->mFindData.mConnected, PJT_FULL);
-                    if (!game->mFindData.mConnected)
+                    PblValues::Record(game.mFindData.mConnected, PVT_FULL);
+                    if (!game.mFindData.mConnected)
                     {
-                        PblJournal::Record(game->mFindData.mConnecting, PJT_FULL);
+                        PblValues::Record(game.mFindData.mConnecting, PVT_FULL);
                     }
-                    if (game->mFindData.mConnected)
+                    if (game.mFindData.mConnected)
                     {
                         NetSocketPeerRecord address;
-                        game->mAddr.GetAddr(address, &game->mKey);
+                        game.mAddr.GetAddr(address, &game.mKey);
                         int dest = NetCommP::FindJoinSource((const int*)&address);
                         if (dest >= 0)
                         {
-                            if (game->mFindData.mQuerySeqNo == 0)
+                            if (game.mFindData.mQuerySeqNo == 0)
                             {
-                                game->mFindData.mQuerySentTime = NetComm::GetTime();
+                                game.mFindData.mQuerySentTime = NetComm::GetTime();
                             }
                             NetPktGroup group;
                             group.BeginWrite();
                             group.Write(false);
-                            group.WriteBits(game->mFindData.mQueryId, 32);
-                            group.WriteBits(game->mFindData.mQuerySeqNo, 4);
+                            group.WriteBits(game.mFindData.mQueryId, 32);
+                            group.WriteBits(game.mFindData.mQuerySeqNo, 4);
                             group.EndWrite();
                             NetComm::Send(dest, PKT_QUERY, group.pktPtr);
                             ++netFindQueryCount;
-                            ++game->mFindData.mQuerySeqNo;
+                            ++game.mFindData.mQuerySeqNo;
                         }
                     }
-                    else if (game->mFindData.mConnecting)
+                    else if (game.mFindData.mConnecting)
                     {
                         int reason;
-                        if (NetMatch::UpdateConnect(game->mAddr, game->mKey, 64, reason))
+                        if (NetMatch::UpdateConnect(game.mAddr, game.mKey, 64, reason))
                         {
                             if (reason == 13)
                             {
-                                game->mFindData.mConnected = true;
-                                game->mFindData.mConnecting = false;
+                                game.mFindData.mConnected = true;
+                                game.mFindData.mConnecting = false;
                             }
                             else
                             {
-                                NetMatch::EndConnect(game->mAddr, game->mKey, 64);
-                                game->mFindData.mConnecting = false;
-                                game->mFindData.mQuerySeqNo = 8;
+                                NetMatch::EndConnect(game.mAddr, game.mKey, 64);
+                                game.mFindData.mConnecting = false;
+                                game.mFindData.mQuerySeqNo = 8;
                             }
                         }
                     }
                     else if (connectingCount < maxConnecting)
                     {
-                        game->mFindData.mConnecting = true;
-                        game->mFindData.mConnectTimeout = now + connectTime;
-                        if (NetMatch::StartConnect(game->mAddr, game->mKey, 64))
+                        game.mFindData.mConnecting = true;
+                        game.mFindData.mConnectTimeout = now + connectTime;
+                        if (NetMatch::StartConnect(game.mAddr, game.mKey, 64))
                         {
-                            game->mFindData.mConnected = true;
-                            game->mFindData.mConnecting = false;
+                            game.mFindData.mConnected = true;
+                            game.mFindData.mConnecting = false;
                         }
                         ++connectingCount;
                     }
@@ -5569,8 +5566,7 @@ bool CNetFindGame::Update()
             }
         }
 
-        int recvMark = 535;
-        PblJournal::Record(recvMark, PJT_FULL);
+        PblValues::Record(535, PVT_FULL);
         if (NetComm::IsLAN())
         {
             while (true)
@@ -5599,17 +5595,18 @@ bool CNetFindGame::Update()
                 }
                 else
                 {
-                    for (itor = PblList<NetGameDesc>::Itor(gameList); itor; ++itor)
+                    itor = gameList.Begin();
+                    for (itor = gameList.Begin(); itor; ++itor)
                     {
-                        NetGameDesc* game = itor;
-                        if (!game->mValid)
+                        if (!itor->mValid)
                         {
                             continue;
                         }
-                        if (game->mFindData.mQueryId == queryId)
+                        if (itor->mFindData.mQueryId == queryId)
                         {
-                            address = game->mAddr;
-                            data = game->mFindData;
+                            NetGameDesc& game = *itor;
+                            address = game.mAddr;
+                            data = game.mFindData;
                             found = true;
                             break;
                         }
@@ -5617,7 +5614,7 @@ bool CNetFindGame::Update()
                 }
 
                 unsigned int tps = 0;
-                PblJournal::Record(found, PJT_FULL);
+                PblValues::Record(found, PVT_FULL);
                 ReadString(group, data.mName, sizeof(data.mName));
                 ReadString(group, data.mMapType, sizeof(data.mMapType));
                 ReadString(group, data.mMapName, sizeof(data.mMapName));
@@ -5671,37 +5668,42 @@ bool CNetFindGame::Update()
                 }
                 else if (found)
                 {
-                    NetGameDesc* game = itor;
-                    float ping = now - ((float)(seqNo * seqNo) * 0.2f + game->mFindData.mQuerySentTime);
+                    NetGameDesc& game = *itor;
+                    float ping = now - ((float)(int)(seqNo * seqNo) * 0.2f + game.mFindData.mQuerySentTime);
                     if (data.mPingTime > ping)
                     {
                         data.mPingTime = ping;
                     }
-                    game->mStamp = NetComm::GetTime();
+                    game.mStamp = NetComm::GetTime();
                     PlayerProfile::tProfile* profile = PlayerProfile::GetCurProfile();
-                    int myTps = profile ? profile->mOnlineOptions.mu8TurnsPerSecond : 30;
-                    unsigned char tpsLimit = (unsigned char)myTps;
+                    unsigned char tpsLimit = profile ? profile->mOnlineOptions.mu8TurnsPerSecond : 30;
                     bool tpsOk = tps <= tpsLimit;
                     bool versionOk = true;
-                    game->mHasSessionData = tpsOk && versionOk;
-                    game->mRulesAreValid = true;
-                    game->mFindRules = rules;
-                    game->mFindData.mPingTime = data.mPingTime;
-                    game->mFindData.mLocked = data.mLocked;
-                    game->mFindData.mServerType = data.mServerType;
-                    strlcpy(game->mFindData.mName, data.mName, sizeof(game->mFindData.mName));
-                    strlcpy(game->mFindData.mMapType, data.mMapType, sizeof(game->mFindData.mMapType));
-                    strlcpy(game->mFindData.mMapName, data.mMapName, sizeof(game->mFindData.mMapName));
-                    game->mFindData.mNumPlayers = data.mNumPlayers;
-                    game->mFindData.mMaxPlayers = data.mMaxPlayers;
-                    game->mFindData.mbIsFavorite = false;
-                    memset(game->mFindData.mGalaxyLobbyPasswordData, 0, sizeof(game->mFindData.mGalaxyLobbyPasswordData));
-                    if (game->mHasSessionData && GetGameCount() == 1)
+                    if (tpsOk && versionOk)
+                    {
+                        game.mHasSessionData = true;
+                    }
+                    else
+                    {
+                        game.mHasSessionData = false;
+                    }
+                    game.mRulesAreValid = true;
+                    game.mFindRules = rules;
+                    game.mFindData.mPingTime = data.mPingTime;
+                    game.mFindData.mLocked = data.mLocked;
+                    game.mFindData.mServerType = data.mServerType;
+                    strlcpy(game.mFindData.mName, data.mName, sizeof(game.mFindData.mName));
+                    strlcpy(game.mFindData.mMapType, data.mMapType, sizeof(game.mFindData.mMapType));
+                    strlcpy(game.mFindData.mMapName, data.mMapName, sizeof(game.mFindData.mMapName));
+                    game.mFindData.mNumPlayers = data.mNumPlayers;
+                    game.mFindData.mMaxPlayers = data.mMaxPlayers;
+                    game.mFindData.mbIsFavorite = false;
+                    memset(game.mFindData.mGalaxyLobbyPasswordData, 0, sizeof(game.mFindData.mGalaxyLobbyPasswordData));
+                    if (game.mHasSessionData && GetGameCount() == 1)
                     {
                         curGame = itor;
                         NetSocketPeerRecord endpoint;
-                        NetGameDesc* selected = curGame;
-                        selected->mAddr.GetAddr(endpoint, &selected->mKey);
+                        curGame->mAddr.GetAddr(endpoint, &curGame->mKey);
                         int ip, port;
                         NetSocket::GetAddr(&endpoint, ip, port);
                     }
@@ -5711,30 +5713,28 @@ bool CNetFindGame::Update()
         }
         else
         {
-            for (itor = PblList<NetGameDesc>::Itor(gameList); itor; ++itor)
+            itor = gameList.Begin();
+            for (itor = gameList.Begin(); itor; ++itor)
             {
-                NetGameDesc* game = itor;
-                if (!game->mValid)
+                if (!itor->mValid)
                 {
                     continue;
                 }
                 void* networking = GetGalaxyNetworkingInterface();
-                int ping = ((galaxy::api::INetworking*)networking)->GetPingWith(game->mAddr.mGalaxyId);
-                game->mFindData.mPingTime = fmaxf(0.0f, (float)ping * 0.001f);
+                int ping = ((galaxy::api::INetworking*)networking)->GetPingWith(itor->mAddr.mGalaxyId);
+                float pingTime = fmaxf(0.0f, (float)ping * 0.001f);
+                itor->mFindData.mPingTime = pingTime;
             }
         }
-        int doneMark = 538;
-        PblJournal::Record(doneMark, PJT_FULL);
+        PblValues::Record(538, PVT_FULL);
     }
 
     RemoveOld(now - prevFindStartTime);
     NetMatch::UpdateLogin(-1);
     mPercentDone = NetMatch::GetPercentDone();
-    int pumpDoneMark = 535;
-    PblJournal::Record(pumpDoneMark, PJT_FULL);
+    PblValues::Record(535, PVT_FULL);
     NetMatch::UpdatePresence(false);
-    int exitMark = 534;
-    PblJournal::Record(exitMark, PJT_FULL);
+    PblValues::Record(534, PVT_FULL);
     if (netLoginError)
     {
         netInGame = false;
@@ -6271,8 +6271,7 @@ void CNetPostLoadHostGame::Update()
     SendUpdates();
     NetMatch::UpdateLogin(-1);
     NetMatch::UpdateRegisterGame();
-    char exitMark = 'c';
-    PblJournal::Record(exitMark, PJT_FULL);
+    PblValues::Record('c', PVT_FULL);
 }
 
 // FUNCTION: SWBF2 0x005db010
@@ -6398,36 +6397,6 @@ const char* GetEncodedLobbyPassword()
 // TEMPLATE: SWBF2 0x005d82e0
 // utf8::replace_invalid<std::_String_iterator<std::_String_val<std::_Simple_types<char> > >,std::back_insert_iterator<std::basic_string<char,std::char_traits<char>,std::allocator<char> > > >
 
-// FUNCTION: SWBF2 0x005d49d0
-const char* utf8::invalid_code_point::what() const throw()
-{
-    return "Invalid code point";
-}
-
-// FUNCTION: SWBF2 0x005d4a50
-const char* utf8::invalid_utf8::what() const throw()
-{
-    return "Invalid UTF-8";
-}
-
-// FUNCTION: SWBF2 0x005d4aa0
-const char* utf8::not_enough_room::what() const throw()
-{
-    return "Not enough space";
-}
-
-// FUNCTION: SWBF2 0x005d85f0
-utf8::not_enough_room::not_enough_room(const not_enough_room& rhs) : exception(rhs) {}
-
-// FUNCTION: SWBF2 0x005d8610
-utf8::exception::exception(const exception& rhs) : std::exception(rhs) {}
-
-// FUNCTION: SWBF2 0x005d8630
-utf8::invalid_utf8::invalid_utf8(const invalid_utf8& rhs) : exception(rhs), byte(rhs.byte) {}
-
-// FUNCTION: SWBF2 0x005d8660
-utf8::invalid_code_point::invalid_code_point(const invalid_code_point& rhs) : exception(rhs), code(rhs.code) {}
-
 // FUNCTION: SWBF2 0x005d3460
 void __fastcall CallEmptySessionElementHook(void*)
 {
@@ -6453,16 +6422,16 @@ void RemoveFoundGameByAddress(const NetAddr* address)
 }
 
 
-utf8::invalid_code_point::~invalid_code_point() {}
 
 
-utf8::exception::~exception() {}
 
 
-utf8::invalid_utf8::~invalid_utf8() {}
 
 
-utf8::not_enough_room::~not_enough_room() {}
+
+
+
+
 
 // SYNTHETIC: SWBF2 0x004056c0
 // PblMath::`dynamic initializer for 'fTwoPi''

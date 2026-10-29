@@ -41,6 +41,12 @@ public:
         // PblList<Factory<Entity,EntityClass,EntityDesc> >::Itor::Itor
         Itor(Node* pNode) : _pNode(pNode) {}
 
+        const Itor& operator=(Node* pNode)
+        {
+            _pNode = pNode;
+            return *this;
+        }
+
         // TEMPLATE: SWBF2 0x0049e1f0
         // PblList<Factory<Weapon,WeaponClass,WeaponDesc> >::Itor::operator Factory<Weapon,WeaponClass,WeaponDesc> *
         // TEMPLATE: SWBF2 0x005d3bb0

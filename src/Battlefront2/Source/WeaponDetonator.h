@@ -1,7 +1,5 @@
 #pragma once
 
-unsigned int GetWeaponDetonatorRttiHash();
-
 #include "PebbleFL/Common/PblHashTable.h"
 
 #include <stddef.h>
@@ -55,6 +53,9 @@ public:
     virtual bool CheckCharge() const;
     virtual bool CheckFire() const;
 
+    // FUNCTION: SWBF2 0x005b4250
+    static unsigned int GetRtti() { return rttiHashWeaponDetonator; }
+
     static PblHash rttiHashWeaponDetonator;
     static const char rttiNameWeaponDetonator[];
 };
@@ -97,7 +98,7 @@ inline const char* WeaponDetonatorClass::GetDerivedRttiName() const
 // FUNCTION: SWBF2 0x00682460
 inline bool WeaponDetonator::IsRtti(unsigned int uRtti) const
 {
-    if (uRtti == GetWeaponDetonatorRttiHash())
+    if (GetRtti() == uRtti)
     {
         return true;
     }

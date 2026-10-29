@@ -516,19 +516,11 @@ public:
 // FUNCTION: SWBF2 0x0043aad0
 inline Controllable* Controllable::GetPilot()
 {
-    if (mPilotType == PILOT_SELF || (mPilotType == PILOT_VEHICLESELF && mPilot == this))
-    {
-        return 0;
-    }
-    return mPilot;
+    return mPilotType == PILOT_SELF || (mPilotType == PILOT_VEHICLESELF && mPilot == this) ? 0 : mPilot;
 }
 
 // FUNCTION: SWBF2 0x0043cf70
 inline const Controllable* Controllable::GetPilot() const
 {
-    if (mPilotType == PILOT_SELF || (mPilotType == PILOT_VEHICLESELF && mPilot == this))
-    {
-        return 0;
-    }
-    return mPilot;
+    return mPilotType == PILOT_SELF || (mPilotType == PILOT_VEHICLESELF && mPilot == this) ? 0 : mPilot;
 }

@@ -49,11 +49,6 @@ unsigned int WeaponDetonator::GetNameHash() const
     return Weapon::GetNameHash();
 }
 
-// FUNCTION: SWBF2 0x005b4250
-unsigned int GetWeaponDetonatorRttiHash()
-{
-    return (unsigned int)WeaponDetonator::rttiHashWeaponDetonator;
-}
 
 // FUNCTION: SWBF2 0x00682aa0
 WeaponDetonatorClass::WeaponDetonatorClass(unsigned int uHash)

@@ -32,7 +32,7 @@ public:
     PblList<Tracker>::Node m_AllListNode;
 
     // FUNCTION: SWBF2 0x004294f0
-    Trackable* GetTrackable() const { return mTrackable; }
+    Trackable* GetTrackable() { return mTrackable; }
 
     void SetSpectating(bool spectating) { mIsSpectating = spectating; }
 

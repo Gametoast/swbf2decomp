@@ -4,6 +4,7 @@
 #include <string.h>
 
 #include "Character.h"
+#include "PebbleFL/Common/PblValues.h"
 #include "AIGoalManager.h"
 #include "AIUtil.h"
 #include "BonusManager.h"
@@ -1219,20 +1220,21 @@ void Character::SelectClass(int iClassIndex)
 // FUNCTION: SWBF2 0x004524f0
 void Character::SelectPost(CommandPost* pPost)
 {
-    if (mPost == pPost)
+    PblValues::Record(pPost ? pPost->GetIndex() : 0, PVT_MOVES_HIGH);
+    if (mPost != pPost)
     {
-        return;
+        if (mPost)
+        {
+            mPost->PopSpawnQueue(mPlayerId >= 0, mTeamNumber == GetTeam(mPost->GetGameObject()));
+        }
+        mPost = pPost;
+        mSpawnSlot = -1;
+        if (mPost)
+        {
+            mSpawnSlot = mPost->PushSpawnQueue(mPlayerId >= 0, mTeamNumber == GetTeam(mPost->GetGameObject()));
+        }
     }
-    if (mPost)
-    {
-        mPost->PopSpawnQueue(mPlayerId >= 0, mTeamNumber == GetTeam(mPost->GetGameObject()));
-    }
-    mPost = pPost;
-    mSpawnSlot = -1;
-    if (mPost)
-    {
-        mSpawnSlot = mPost->PushSpawnQueue(mPlayerId >= 0, mTeamNumber == GetTeam(mPost->GetGameObject()));
-    }
+    PblValues::Record(mSpawnSlot, PVT_MOVES_HIGH);
 }
 
 // FUNCTION: SWBF2 0x00452700
@@ -1416,10 +1418,7 @@ void Character::Respawn()
     SetSpawnReady(iClassIndex >= 0);
     SelectPost(SpawnManager::Instance()->RequestSpawnPoint(mPost, this));
 
-    if (mPost)
-    {
-        mPost->GetGameObject();
-    }
+    PblValues::Record(mPost ? mPost->GetIndex() : 0, PVT_MOVES_HIGH);
     mSpawnCycle = SpawnManager::Instance()->GetCycleIndex(mTeamNumber) + 1;
 }
 

@@ -1,4 +1,5 @@
 #include "Chunk.h"
+#include "PebbleFL/Common/PblValues.h"
 #include "PebbleFL/Common/PblVector.h"
 
 #include <d3dx9math.h>
@@ -1238,6 +1239,7 @@ bool ChunkClusterManager::Update(float fDeltaTime)
 {
     for (int i = 0; i < 8; i++)
     {
+        PblValues::Record((char)i, PVT_MOVES_HIGH);
         mChunkClusters[i].Update(fDeltaTime);
     }
     return true;

@@ -81,6 +81,8 @@ public:
     float GetTurnAxis() const { return mFloatInputs[2]; }
     float GetPitchAxis() const { return mFloatInputs[3]; }
 
+    int GetMouseMode() { return bits.mMouseMode; }
+
     // FUNCTION: SWBF2 0x005b4010
     bool IsPrimaryFireButtonDown() const { return (bits.mBoolInputs & 0x1) != 0; }
     bool IsSecondaryFireButtonDown() const { return (bits.mBoolInputs & 0x2) != 0; }

@@ -664,3 +664,5 @@ Marker _gClientMarkers[MAX_MARKERS];
 
 // SYNTHETIC: SWBF2 0x005c6370
 // TargetManager::Marker::Marker
+// SYNTHETIC: SWBF2 0x005c63c0
+// TargetManager::Marker::~Marker

@@ -1,6 +1,7 @@
 #include "pcRedInputManager.h"
 
 #include "PebbleFL/Common/PblJournal.h"
+#include "PebbleFL/Common/PblValues.h"
 #include "Battlefront2/Source/NetSetup.h"
 #include "lglcd/lgLcd.h"
 
@@ -172,6 +173,7 @@ RedMouse* GetMouse(unsigned char ucPort)
 // FUNCTION: SWBF2 0x006dbf50
 void Init()
 {
+    PblValues::Record('i', PVT_FULL);
 
     isReadingJournal = (PblJournal::Get(PJT_FULL)->mMode == PJM_READING);
 

@@ -1,11 +1,27 @@
 #pragma once
+#include "NetGame.h"
 
 namespace GameLoop
 {
 
     void Update(float fDeltaTime, float fSystemDeltaTime);
 
-    bool IsQuitRequested();
+    extern bool sQuitRequested;
+    extern unsigned int sQuitTurn;
+
+    // FUNCTION: SWBF2 0x005aecc0
+    inline bool IsQuitRequested()
+    {
+        if (!GameLoop::sQuitRequested)
+        {
+            return false;
+        }
+        if (NetGame::GetTurnNumber() == 0)
+        {
+            return true;
+        }
+        return NetGame::GetTurnNumber() >= GameLoop::sQuitTurn;
+    }
 
 extern char mMissionScript[64];
 
