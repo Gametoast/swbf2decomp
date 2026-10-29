@@ -20,12 +20,14 @@ namespace SaveGameManager
     extern unsigned int mReqSaveFile1Size;
 }
 
+// GLOBAL: SWBF2 0x01faa220
+// sNextFileName
+
 namespace SaveGameManager
 {
 
 static const float EPSILON = 0.0001f;
 
-// GLOBAL: SWBF2 0x01faa220
 static unsigned short sNextFileName[260];
 
 }
@@ -241,7 +243,7 @@ bool IsUniqueFilename(unsigned short const* pusFilename, int iType)
     ResetFileList();
     for (SaveFile* pFile = mSaveFsm.GetNextFile(); pFile; pFile = mSaveFsm.GetNextFile())
     {
-        if (pFile->GetType() == iType &&
+        if (iType == pFile->GetType() &&
             !_wcsicmp((wchar_t const*)pFile->GetGameName(), (wchar_t const*)pusFilename))
         {
             return false;

@@ -33,8 +33,11 @@ namespace RedWarning
 bool g_bOverwriteLogFile = true;
 }
 
+// GLOBAL: SWBF2 0x0078403c
 static char kpcNullFileName[7] = "[NULL]";
+// GLOBAL: SWBF2 0x00784044
 static char kpcNullDate[7] = "[NULL]";
+// GLOBAL: SWBF2 0x0078404c
 static char kpcNullTime[7] = "[NULL]";
 
 namespace RedWarning
@@ -66,6 +69,7 @@ int g_iLineNumber;
 bool g_bFormatted;
 // GLOBAL: SWBF2 0x009c8491
 bool g_bValidLogFile;
+// GLOBAL: SWBF2 0x009c8492
 bool g_bInitialized;
 
 // GLOBAL: SWBF2 0x009c8498

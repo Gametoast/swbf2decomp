@@ -44,11 +44,13 @@ void CloseJournal();
 
 extern bool sPauseMenuSoundEnabled;
 
+// GLOBAL: SWBF2 0x007e8ef8
 char appName[260] = "Star Wars Battlefront II";
 
 // GLOBAL: SWBF2 0x007e8eeb
 bool gAppActive = true;
 
+// GLOBAL: SWBF2 0x01fa8c50
 void* s_memoryArena;
 // GLOBAL: SWBF2 0x01fa8c54
 // g_hMutex

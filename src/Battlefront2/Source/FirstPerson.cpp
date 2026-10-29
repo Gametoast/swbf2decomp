@@ -97,13 +97,15 @@ float sFirstPersonOffsetX;
 float sFirstPersonOffsetY = 0.35f;
 float sFirstPersonOffsetZ = 0.05f;
 
+// GLOBAL: SWBF2 0x00789760
+// FirstPersonAnimName
+
 namespace FirstPerson
 {
 
 // GLOBAL: SWBF2 0x01e55e30
 ZephyrAnim* mAnim[48];
 
-// GLOBAL: SWBF2 0x00789760
 static const char* const FirstPersonAnimName[48] = {
     "humanfp_rifle_idle", "humanfp_rifle_run", "humanfp_rifle_shoot", 0, 0,
     "humanfp_rifle_reload", 0, "humanfp_rifle_jump", "humanfp_rifle_flail",

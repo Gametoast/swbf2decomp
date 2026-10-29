@@ -1510,8 +1510,10 @@ void SoldierAnimator::UpdateMovementAnimation(float fDeltaTime, const ZephyrAnim
                 if (eMove <= SoldierAnimType::IDLE_LOOK_AROUND)
                 {
 
+                    // GLOBAL: SWBF2 0x01faa738
                     static const float sTurnLeftLimit[SoldierAnimType::NUM_STANDARD_POSTURES] = {
                         PblMath::fHalfPi * 0.25f, PblMath::fHalfPi * 0.25f, PblMath::fHalfPi * 0.3f };
+                    // GLOBAL: SWBF2 0x01faa744
                     static const float sTurnRightLimit[SoldierAnimType::NUM_STANDARD_POSTURES] = {
                         PblMath::fHalfPi * -0.45f, PblMath::fHalfPi * -0.45f, PblMath::fHalfPi * -0.3f };
                     if (fLegAngle > sTurnLeftLimit[mPosture])

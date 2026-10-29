@@ -684,9 +684,14 @@ bool SpawnDisplay::Update(float fDeltaTime)
         return true;
     }
 
+    // GLOBAL: SWBF2 0x01faa7b0
+    // sLightDir
     static PblVector3 sLightDir(-0.57735f, -0.57735f, -0.57735f);
+    // GLOBAL: SWBF2 0x01faa78c
     static RedColorValue sLightColor(1.0f, 1.0f, 1.0f, 1.0f);
+    // GLOBAL: SWBF2 0x01faa79c
     static RedColorValue sAmbientTop(0.5f, 0.5f, 0.5f, 1.0f);
+    // GLOBAL: SWBF2 0x01faa77c
     static RedColorValue sAmbientBottom(0.5f, 0.5f, 0.5f, 1.0f);
     RedInterfaceScreen::s_directionalLight[0].SetDirection(sLightDir);
     RedInterfaceScreen::s_directionalLight[0].SetColor(sLightColor);

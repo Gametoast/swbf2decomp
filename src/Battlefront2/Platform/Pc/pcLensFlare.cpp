@@ -63,7 +63,9 @@ PblVector3 CompressedPosXY::s_vScaleInv = { 65535.0f, 65535.0f, 65535.0f };
 static PblBox s_boundingBox(-2200.0f, -2200.0f, -2200.0f, 2200.0f, 2200.0f, 2200.0f);
 
 static const float kfFadeDrawDistance = 0.9f;
+// GLOBAL: SWBF2 0x0078c920
 static const float kfFadeDrawDistanceSquared = kfFadeDrawDistance * kfFadeDrawDistance;
+// GLOBAL: SWBF2 0x0078c91c
 static const float kfFadeDrawDistanceFactor = 1.0f / (1.0f - kfFadeDrawDistanceSquared);
 
 struct FlareCompressedVertex

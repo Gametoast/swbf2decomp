@@ -138,7 +138,7 @@ unsigned int RedModel::GetBoneIndex(unsigned int uiName) const
     {
         for (unsigned int i = 0; i < pSkeleton->m_uiNumBones; ++i)
         {
-            if (pSkeleton->m_auiNameHash[i] == uiName)
+            if (uiName == pSkeleton->m_auiNameHash[i])
             {
                 return i;
             }

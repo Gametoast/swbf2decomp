@@ -692,7 +692,7 @@ bool Node::Header::Read(const Transport& transport, NetPacketAudio* const pPacke
     const Format format = GetFormat();
     const unsigned int nBits = CalculateSize(transport, format);
     const unsigned int nBytes = ((nBits + 7) >> 3) - 1;
-    if (pPacket->Read((char*)mBitmap + 1, nBytes) != nBytes)
+    if (nBytes != pPacket->Read((char*)mBitmap + 1, nBytes))
     {
         return false;
     }

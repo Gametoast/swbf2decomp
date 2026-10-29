@@ -6051,6 +6051,7 @@ void RedRenderer::pcSetTexture(unsigned int uiStage, const RedTexture* pTexture)
         // GLOBAL: SWBF2 0x008eed68
         static util::VariableSet<util::SingletonAllocator<util::DefaultStaticAllocator> >& s_perFrame =
             util::Globals::GetInstance().GetSet("perFrame");
+        // GLOBAL: SWBF2 0x008eed70
         static int& s_numTexUsed = s_perFrame.GetInt("numTexUsed");
         ++s_numTexUsed;
     }
@@ -6603,6 +6604,7 @@ void RedRenderer::pcSetImmediateMode(int iValue)
 // FUNCTION: SWBF2 0x006b9650
 void RedRenderer::pcSetRenderTarget(RedTexture* pTarget, IDirect3DSurface9* pDepth)
 {
+    // GLOBAL: SWBF2 0x00772314
     static const RedViewport s_fullViewport = { 0.0f, 0.0f, 1.0f, 1.0f };
 
     for (int i = 0; i < 4; ++i)

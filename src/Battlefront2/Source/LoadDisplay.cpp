@@ -37,6 +37,8 @@
 #include "RedEngineFL/Util/RedLocalizeDB.h"
 #include "RedEngineFL/Application/pc/pcRenderHelpers.h"
 
+// GLOBAL: SWBF2 0x007b2980
+// __xmm@80000000800000008000000080000000
 namespace Lua_Callbacks
 {
 bool IsTrainingMission();

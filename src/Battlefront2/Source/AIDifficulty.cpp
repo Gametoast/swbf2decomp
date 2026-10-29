@@ -23,12 +23,15 @@
 #include "Team.h"
 #include "WeaponCannonInstance.h"
 
+// GLOBAL: SWBF2 0x007887a0
+// sDifficultyPlayer
+// GLOBAL: SWBF2 0x007887ac
+// sDifficultyEnemy
+
 namespace AIDifficulty
 {
-// GLOBAL: SWBF2 0x007887a0
 static const int sDifficultyPlayer[3] = { 6, 11, 11 };
 
-// GLOBAL: SWBF2 0x007887ac
 static const int sDifficultyEnemy[3] = { 4, 14, 17 };
 
 // GLOBAL: SWBF2 0x01e2fda4

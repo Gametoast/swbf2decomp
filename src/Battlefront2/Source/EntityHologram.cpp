@@ -38,7 +38,9 @@ static const float kfHoloPopRotateProbability = 0.7f;
 static const float kfHoloMaxTilt = 30.0f;
 
 static const float kfFadeDrawDistance = 0.9f;
+// GLOBAL: SWBF2 0x0078f430
 static const float kfFadeDrawDistanceSquared = kfFadeDrawDistance * kfFadeDrawDistance;
+// GLOBAL: SWBF2 0x0078f42c
 static const float kfFadeDrawDistanceFactor = 1.0f / (1.0f - kfFadeDrawDistanceSquared);
 
 

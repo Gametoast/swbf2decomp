@@ -204,6 +204,7 @@ void RedBorderElement::BeforeRender()
 // FUNCTION: SWBF2 0x006f7720
 void RedBorderElement::RenderUsingContext(const PblMatrix& mContext, const RedColor& color)
 {
+    // GLOBAL: SWBF2 0x00784140
     static const unsigned short sIndices[28] = {
         0, 4, 1, 5, 2, 6, 3, 7, 7, 4,
         4, 8, 5, 9, 6, 10, 7, 11, 11, 8,

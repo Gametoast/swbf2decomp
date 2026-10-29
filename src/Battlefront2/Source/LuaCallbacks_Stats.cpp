@@ -741,6 +741,9 @@ int __cdecl TeamStatSortCallback(const void* pA, const void* pB)
     return 0;
 }
 
+// GLOBAL: SWBF2 0x007e8540
+// sStatsCallbacks
+
 namespace Lua_Callbacks
 {
 
@@ -1275,7 +1278,6 @@ int ScriptCB_ClientGotStats(lua_State* L)
     return 1;
 }
 
-// GLOBAL: SWBF2 0x007e8540
 static const CallbackEntryT sStatsCallbacks[18] =
 {
     { "ScriptCB_ClientGotStats", ScriptCB_ClientGotStats },

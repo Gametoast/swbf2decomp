@@ -248,7 +248,7 @@ void VoiceChat::Transport::SetColumnBits(unsigned char* const bitmap, unsigned c
 {
     for (unsigned char i = 0; i < mNumNodes; ++i)
     {
-        if (i != except)
+        if (except != i)
         {
             SetBit(bitmap, x, i, value, 0, true);
         }
@@ -261,7 +261,7 @@ void VoiceChat::Transport::SetRowBits(unsigned char* const bitmap, unsigned char
 {
     for (unsigned char i = 0; i < mNumNodes; ++i)
     {
-        if (i != except)
+        if (except != i)
         {
             SetBit(bitmap, i, y, value, 0, true);
         }

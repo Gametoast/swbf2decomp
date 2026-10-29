@@ -22,6 +22,9 @@ int markMouseX;
 // GLOBAL: SWBF2 0x01e57964
 int markMouseY;
 
+// GLOBAL: SWBF2 0x007e8270
+// sPCCallbacks
+
 namespace Lua_Callbacks
 {
 
@@ -440,7 +443,6 @@ int ScriptCB_GetAutodetectPCVideoOptions(lua_State*)
 
 static int ScriptCB_EnableCursor(lua_State* L);
 
-// GLOBAL: SWBF2 0x007e8270
 static const CallbackEntryT sPCCallbacks[36] =
 {
     { "ScriptCB_GetMouseSensitivity", ScriptCB_GetMouseSensitivity },

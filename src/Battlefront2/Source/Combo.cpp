@@ -627,11 +627,14 @@ const float Combo::Condition::ENERGY_SCALE_INV = 10.0f;
 // GLOBAL: SWBF2 0x0078e008
 const float Combo::Condition::ENERGY_SCALE = 1.0f / Combo::Condition::ENERGY_SCALE_INV;
 const float Combo::Condition::INPUT_MAG_SCALE_INV = 100.0f;
+// GLOBAL: SWBF2 0x0078e004
 const float Combo::Condition::INPUT_MAG_SCALE = 1.0f / Combo::Condition::INPUT_MAG_SCALE_INV;
 const float Combo::Condition::INPUT_DIR_SCALE_RAD = 0.017453292f;
 const float Combo::Condition::VELOCITYY_MAG_SCALE_INV = 4.0f;
+// GLOBAL: SWBF2 0x0078e080
 const float Combo::Condition::VELOCITYY_MAG_SCALE = 1.0f / Combo::Condition::VELOCITYY_MAG_SCALE_INV;
 const float Combo::Condition::VELOCITYY_VAL_SCALE_INV = 2.0f;
+// GLOBAL: SWBF2 0x0078e0a4
 const float Combo::Condition::VELOCITYY_VAL_SCALE = 1.0f / Combo::Condition::VELOCITYY_VAL_SCALE_INV;
 const float Combo::Condition::VELOCITYY_VAL_OFFSET = -16.0f;
 const float Combo::Condition::VELOCITYXZ_MAG_SCALE_INV = 100.0f;

@@ -250,6 +250,7 @@ void pcOceanShader::RenderZPrepass(const RenderItem* pItem) const
 // FUNCTION: SWBF2 0x0070c580
 void pcOceanShader::Render_Prog1(const RenderItem* pItem, unsigned int) const
 {
+    // GLOBAL: SWBF2 0x009ca35c
     static RedColor s_colorUnused = RedColor::BLACK;
 
     pcRedVertexShaderConstantRegister* pRegs = RedRenderer::pcLockVertexShaderConstants(39, 5);

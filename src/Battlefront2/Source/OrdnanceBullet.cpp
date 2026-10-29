@@ -532,6 +532,8 @@ bool OrdnanceBullet::Update(float fDeltaTime)
         }
     }
 
+    // GLOBAL: SWBF2 0x01faab98
+    // sWorldBox
     static const PblBox sWorldBox(-5000.0f, -5000.0f, -5000.0f, 5000.0f, 5000.0f, 5000.0f);
     const PblVector3& vRenderPos = GetRenderPos();
     if (vRenderPos.x < sWorldBox._vMin.x || sWorldBox._vMax.x < vRenderPos.x ||

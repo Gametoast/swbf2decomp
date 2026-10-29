@@ -1933,6 +1933,7 @@ void EntityDroid::SetupCameraFOV(float& rFOV)
 void EntityDroid::SetupCameraTrackMatrix(PblMatrix& rMatrix, float fDeltaTime)
 {
 
+    // GLOBAL: SWBF2 0x01faa90c
     static PblVector3 vCameraOffset(0.0f, 0.0f, 8.5f);
     (void)&vCameraOffset;
     CameraTrackSetting settings = mClass->mCameraSettings;

@@ -90,7 +90,7 @@ FoleyFX* FoleyFXGroup::FindFoleyFX(unsigned int uClassID) const
          pNode = pNode->mNext)
     {
         FoleyFX* pFX = (FoleyFX*)((const Snd::ObjectList::Node*)pNode)->mObject;
-        if (pFX->GetClassID() == uClassID)
+        if (uClassID == pFX->GetClassID())
         {
             return pFX;
         }

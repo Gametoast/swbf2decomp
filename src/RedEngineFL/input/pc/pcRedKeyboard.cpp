@@ -5,6 +5,8 @@
 #include "PebbleFL/Common/PblJournal.h"
 #include "PebbleFL/Common/PblValues.h"
 
+// GLOBAL: SWBF2 0x00772cd0
+// __xmm@2a3826375e3625352434233340322131
 // GLOBAL: SWBF2 0x00772ce0
 // __xmm@2b2b3636353534342d2d003900380037
 // GLOBAL: SWBF2 0x00772cf0

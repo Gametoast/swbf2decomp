@@ -124,6 +124,7 @@ void PropCluster::Render(unsigned char ucViewport, float fDist, unsigned int uiF
 
     if (gTracePropClusterRenders)
     {
+        // GLOBAL: SWBF2 0x01fac1ac
         static const RedCamera* s_pLastCamera = pCamera;
         ++gPropClusterRenderCount;
         gPropClusterRenderedObjectCount += iNumObjects;

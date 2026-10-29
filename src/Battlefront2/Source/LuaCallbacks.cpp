@@ -132,6 +132,9 @@ public:
     static void UpdateScreen();
 };
 
+// GLOBAL: SWBF2 0x007e69e0
+// sCallbacks
+
 namespace Lua_Callbacks
 {
 
@@ -197,7 +200,6 @@ int BeginScreenTransition(lua_State*)
     return 0;
 }
 
-// GLOBAL: SWBF2 0x007e69e0
 static const CallbackEntryT sCallbacks[91] =
 {
     { "ScriptCB_DoFile", ScriptCB_DoFile },

@@ -1207,10 +1207,12 @@ int ScriptCB_CanClientLeaveStats(lua_State* L)
 }
 }
 
+// GLOBAL: SWBF2 0x007e7a60
+// sNetCallbacks
+
 namespace Lua_Callbacks
 {
 
-// GLOBAL: SWBF2 0x007e7a60
 static const CallbackEntryT sNetCallbacks[135] =
 {
     { "ScriptCB_AutoNetJoin", ScriptCB_AutoNetJoin },

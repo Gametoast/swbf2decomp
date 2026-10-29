@@ -103,6 +103,7 @@ PblMatrix FreeCamera::GetMatrix() const
 // FUNCTION: SWBF2 0x0052d7b0
 void FreeCamera::Update(float fDeltaTime)
 {
+    // GLOBAL: SWBF2 0x01faa97c
     static PblVector3 sTetherOffset;
 
     GUIInputs* pGuiInputs = FLInputManager::s_instance.GetPlayerGuiInputs(mView);

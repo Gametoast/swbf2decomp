@@ -545,7 +545,7 @@ LockOnManager::Target* LockOnManager::FindTargetByGameObject(Target* const pTarg
     for (unsigned int i = 0; i < uNumTargets; ++i)
     {
         Target* const target = &pTargets[i];
-        if ((GameObject*)target->obj == pObject)
+        if (pObject == (GameObject*)target->obj)
         {
             return target;
         }
@@ -1193,7 +1193,7 @@ bool LockOnManager::TargetHistory::Check(GameObject* const pObject) const
 {
     for (unsigned int i = 0; i < mCount; ++i)
     {
-        if ((GameObject*)mHistory[i] == pObject)
+        if (pObject == (GameObject*)mHistory[i])
         {
             return true;
         }

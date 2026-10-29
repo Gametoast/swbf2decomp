@@ -130,11 +130,14 @@ void pcParticleShader::Begin_Fixed(unsigned int uiState, unsigned int) const
 
     if (uiState == 1)
     {
+        // GLOBAL: SWBF2 0x009c97b0
         static const PblMatrix mBias(PblVector4{ 0.5f, 0.0f, 0.0f, 0.0f },
                                      PblVector4{ 0.0f, -0.5f, 0.0f, 0.0f },
                                      PblVector4{ 0.0f, 0.0f, 0.0f, 0.0f },
                                      PblVector4{ 0.5f, 0.5f, 1.0f, 1.0f });
+        // GLOBAL: SWBF2 0x009c9800
         static PblMatrix mProjection;
+        // GLOBAL: SWBF2 0x009c9840
         static PblMatrix mView;
         RedRenderer::pcGetDevice()->GetTransform(D3DTS_PROJECTION, (D3DMATRIX*)&mProjection);
         RedRenderer::pcGetDevice()->GetTransform(D3DTS_VIEW, (D3DMATRIX*)&mView);

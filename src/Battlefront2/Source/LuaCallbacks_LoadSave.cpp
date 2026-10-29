@@ -1115,6 +1115,9 @@ static void SortSavegames(OneSavegame* pSavegames, int iCount)
     qsort(pSavegames, iCount, sizeof(OneSavegame), SavegameSortCallback);
 }
 
+// GLOBAL: SWBF2 0x007e7170
+// sLoadSaveCallbacks
+
 namespace Lua_Callbacks
 {
 
@@ -1442,7 +1445,6 @@ static int FindLuaGlobal(void const* pValue)
     return 0;
 }
 
-// GLOBAL: SWBF2 0x007e7170
 static const CallbackEntryT sLoadSaveCallbacks[64] =
 {
     { "ScriptCB_IsCurProfileDirty", ScriptCB_IsCurProfileDirty },

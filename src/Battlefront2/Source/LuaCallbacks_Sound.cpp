@@ -101,6 +101,9 @@ void Snd::StreamBase::Play(bool bRestart)
     }
 }
 
+// GLOBAL: SWBF2 0x007e8390
+// sSoundCallbacks
+
 namespace Lua_Callbacks
 {
 
@@ -634,7 +637,6 @@ int ScriptCB_ScaleSoundParameter(lua_State*)
     return 0;
 }
 
-// GLOBAL: SWBF2 0x007e8390
 static const CallbackEntryT sSoundCallbacks[53] =
 {
     { "ScriptCB_SndBusFade", ScriptCB_SndBusFade },

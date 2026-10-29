@@ -414,10 +414,18 @@ void RedInterfaceElement::CreateHotSpot(float fLeft, float fTop, float fRight, f
     m_pHotSpot->SetRect(fLeft, fTop, fRight, fBottom);
 }
 
+// GLOBAL: SWBF2 0x007e6cc0
+// sIFaceCallbacks
+// GLOBAL: SWBF2 0x00789de0
+// sKeyboardCmdsPerMode
+// GLOBAL: SWBF2 0x0078a148
+// sIndexToButtonName
+// GLOBAL: SWBF2 0x01faa694
+// sMoviePlayingLastFrame
+
 namespace Lua_Callbacks
 {
 
-// GLOBAL: SWBF2 0x007e6cc0
 static const CallbackEntryT sIFaceCallbacks[150] =
 {
     { "ScriptCB_AddIFText", ScriptCB_AddIFText },
@@ -2153,8 +2161,6 @@ int ScriptCB_PlayMovie(lua_State* L)
     return 0;
 }
 
-// GLOBAL: SWBF2 0x01faa694
-
 static bool sMoviePlayingLastFrame;
 
 // FUNCTION: SWBF2 0x005856a0
@@ -2216,7 +2222,6 @@ int ScriptCB_IsErrorBoxOpen(lua_State* L)
     return 1;
 }
 
-// GLOBAL: SWBF2 0x00789de0
 static ePROCESSEDINPUT_TYPE sKeyboardCmdsPerMode[5][43] =
 {
     {
@@ -2446,7 +2451,6 @@ static ePROCESSEDINPUT_TYPE sKeyboardCmdsPerMode[5][43] =
     },
 };
 
-// GLOBAL: SWBF2 0x0078a148
 static unsigned int sIndexToButtonName[76] =
 {
     0xe7f720c1u, 0xe6f71f2eu, 0xe5f71d9bu, 0xe4f71c08u,

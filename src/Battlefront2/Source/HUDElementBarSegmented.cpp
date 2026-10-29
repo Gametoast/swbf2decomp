@@ -321,7 +321,7 @@ void HUD::ElementBarSegmented::Read(PblConfig& config, Factory::ItemCallback pCa
         PblConfig::Data data = config.ReadNextData();
         if (config.m_pChunk->PeekNextChildId() == 0x504f4353)
         {
-            if (data.GetId() == mSegmentAll.GetNameHash())
+            if (mSegmentAll.GetNameHash() == data.GetId())
             {
                 PblConfig scope(config.ReadNextScope(), true);
                 mSegmentAll.Read(scope, 0, 0);

@@ -1177,6 +1177,7 @@ void RedWater::RenderUnderWaterView(unsigned int uiView)
         mCamera.m[3][3] = 1.0f;
     }
 
+    // GLOBAL: SWBF2 0x0096617c
     static const PblVector3 s_screenCorners[4] = {
         PblVector3(-1.0f, -1.0f, 0.0f), PblVector3(-1.0f, 1.0f, 0.0f),
         PblVector3(1.0f, 1.0f, 0.0f), PblVector3(1.0f, -1.0f, 0.0f)};

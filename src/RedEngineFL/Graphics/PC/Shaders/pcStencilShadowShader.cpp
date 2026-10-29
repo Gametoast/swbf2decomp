@@ -12,6 +12,8 @@
 #include "RedEngineFL/Graphics/RedOmniLight.h"
 #include "RedEngineFL/Graphics/RedSpotLight.h"
 
+// GLOBAL: SWBF2 0x00784e30
+// __xmm@3dcccccd3f4ccccd3e4ccccd3f4ccccd
 // GLOBAL: SWBF2 0x00784e40
 // __xmm@3e99999a00000000000000003f800000
 // GLOBAL: SWBF2 0x00784e50
@@ -348,7 +350,9 @@ void pcStencilShadowShader::Render_Fixed(const RenderItem* pItem, unsigned int u
 {
     if (s_bDebugShadowVolumes)
     {
+        // GLOBAL: SWBF2 0x009c9d3c
         static const RedColorValue backColor(0.2f, 0.2f, 1.0f, 0.3f);
+        // GLOBAL: SWBF2 0x009c9d50
         static const RedColorValue frontColor(1.0f, 0.0f, 0.0f, 0.3f);
         RedRenderer::pcSetRenderState(D3DRS_TEXTUREFACTOR,
                                       ColorValueToARGB(uiPass ? backColor : frontColor));
@@ -359,7 +363,9 @@ void pcStencilShadowShader::Render_Fixed(const RenderItem* pItem, unsigned int u
 
     if (s_bDebugShadowVolumes)
     {
+        // GLOBAL: SWBF2 0x009c9d60
         static const RedColorValue visibleColor(1.0f, 0.0f, 1.0f, 0.3f);
+        // GLOBAL: SWBF2 0x009c9d70
         static const RedColorValue hiddenColor(0.8f, 0.2f, 0.8f, 0.1f);
         RedRenderer::pcSetCullMode(PCREDCULL_NONE);
         RedRenderer::pcSetRenderState(D3DRS_FILLMODE, D3DFILL_WIREFRAME);

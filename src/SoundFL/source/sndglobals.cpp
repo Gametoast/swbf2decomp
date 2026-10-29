@@ -46,6 +46,7 @@ void* (__cdecl* smAllocPerm)(size_t) = 0;
 // smFreePerm
 void (__cdecl* smFreePerm)(void*) = 0;
 
+// GLOBAL: SWBF2 0x007e3370
 void (__cdecl* smWarningFunction)(char const*) = PrintDebugMessageDefault;
 
 // GLOBAL: SWBF2 0x009d83b4

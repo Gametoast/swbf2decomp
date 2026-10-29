@@ -30,6 +30,7 @@ bool EngineBase::smOpened;
 // GLOBAL: SWBF2 0x009d8420
 unsigned char EngineBase::smVoiceStorage[0xA800];
 
+// GLOBAL: SWBF2 0x009e2c20
 unsigned char EngineBase::smStreamStorage[0x1446A68];
 
 // GLOBAL: SWBF2 0x01e29688

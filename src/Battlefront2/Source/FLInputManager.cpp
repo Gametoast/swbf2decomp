@@ -353,6 +353,7 @@ HUD::ObjectiveList* GetObjectiveList();
 // FUNCTION: SWBF2 0x0052a280
 bool FLInputManager::Update(float fDeltaTime)
 {
+    // GLOBAL: SWBF2 0x01faa474
     static int sDelay;
 
     BindPlayerInput();

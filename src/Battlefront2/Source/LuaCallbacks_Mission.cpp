@@ -239,10 +239,12 @@ namespace Lua_Callbacks
     int gTeamSetReinforcementMult;
 }
 
+// GLOBAL: SWBF2 0x007e7380
+// sMissionCallbacks
+
 namespace Lua_Callbacks
 {
 
-// GLOBAL: SWBF2 0x007e7380
 static const CallbackEntryT sMissionCallbacks[220] =
 {
     { "FindEntityClass", FindEntityClass },

@@ -97,6 +97,8 @@
 #include "EventManager_Object.h"
 #include "StatusDisplay.h"
 
+// GLOBAL: SWBF2 0x007b2950
+// __xmm@7fffffff7fffffff7fffffff7fffffff
 // GLOBAL: SWBF2 0x007b2820
 // __xmm@3f8000003e19999a3f11eb8600000000
 // GLOBAL: SWBF2 0x007b28a0
@@ -2261,6 +2263,8 @@ void EntitySoldier::Render(unsigned char ucLod, float fFade, unsigned int uiFlag
 
     if (bDropShadow)
     {
+        // GLOBAL: SWBF2 0x01faa960
+        // sPlayerShadow
         static PblHash sPlayerShadow("player_shadow");
         if (!(uiModelFlags & 0x220000) && fAttachAlpha > 0.0f && pPose)
         {
@@ -7292,6 +7296,7 @@ bool EntitySoldier::Update(float fDeltaTime)
         float fOmega = 0.0f;
         if (fSpeedSq > 0.01f)
         {
+            // GLOBAL: SWBF2 0x01faa94c
             static const float sMaxSoldierTurnRate = PblMath::fTwoPi * 3.0f;
             float fAngle = (float)atan2(fSideSpeed, fForwardSpeed);
             if (fAngle > sMaxSoldierTurnRate * fDeltaTime)
@@ -7377,6 +7382,7 @@ bool EntitySoldier::Update(float fDeltaTime)
         {
             mControlReload.Clear();
         }
+        // GLOBAL: SWBF2 0x01faa970
         static const float CHOKE_MAX_ROTATE_RATE = PblMath::fPi;
         float fOmega = 0.0f;
         float fFront = m_vChokeDir.x * mMatrix.m[2][0] + m_vChokeDir.y * mMatrix.m[2][1] + m_vChokeDir.z * mMatrix.m[2][2];
@@ -10470,6 +10476,7 @@ void EntitySoldier::UpdateAcklayFoleyFX(const RedPose& pose, const PblMatrix& mW
         return;
     }
 
+    // GLOBAL: SWBF2 0x0079d070
     static const unsigned int kFootBone[6] = {
         0xc08d2ca3u, 0xcdce0a7au, 0xc90f17cdu,
         0x730bf271u, 0x7e48d4a8u, 0x7a89c91fu

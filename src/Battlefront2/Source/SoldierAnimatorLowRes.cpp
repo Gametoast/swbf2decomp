@@ -921,6 +921,7 @@ bool SoldierAnimatorLowRes::GetRootMatrixAnimation(const EntitySoldier& soldier,
 
     if (soldier.mState == SoldierState::ROLL)
     {
+        // GLOBAL: SWBF2 0x01fac23c
         static PblVector3 s_vRollCenter(0.0f, 0.5f, 0.0f);
 
         const PblVector3& vVelocity = soldier.GetVelocity();

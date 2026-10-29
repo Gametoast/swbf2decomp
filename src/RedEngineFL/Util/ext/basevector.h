@@ -78,7 +78,7 @@ public:
     {
         for (int i = 0; i < this->_numElements; i++)
         {
-            if (this->_elements[i] == rElem)
+            if (rElem == this->_elements[i])
             {
                 return &this->_elements[i];
             }

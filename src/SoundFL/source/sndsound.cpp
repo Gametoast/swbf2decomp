@@ -19,6 +19,7 @@ namespace Snd
 // GLOBAL: SWBF2 0x01e2b4c0
 // Sound::smVoiceVirtuals
 Sound::FireForget* Sound::smVoiceVirtuals;
+// GLOBAL: SWBF2 0x01e2b4c8
 unsigned char Sound::smVoiceVirtualStorage[12800];
 
 // SYNTHETIC: SWBF2 0x00739c30

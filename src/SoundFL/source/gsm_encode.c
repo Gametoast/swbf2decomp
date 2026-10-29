@@ -35,6 +35,7 @@ short __cdecl gsm_mult(short a, short b)
 // FUNCTION: SWBF2 0x00750590
 short __cdecl gsm_norm(int value)
 {
+    // GLOBAL: SWBF2 0x00786d98
     static const unsigned char bitoff[256] = {
         8, 7, 6, 6, 5, 5, 5, 5, 4, 4, 4, 4, 4, 4, 4, 4,
         3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3,

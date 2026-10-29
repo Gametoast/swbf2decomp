@@ -257,6 +257,7 @@ int __cdecl Gsm_Long_Term_Synthesis_Filtering(int state, short lag, short gain, 
     {
         _wassert(L"Nr >= 40 && Nr <= 120", L"source\\gsm-1.0.10\\long_term.c", 0x3a0);
     }
+    // GLOBAL: SWBF2 0x007e3c78
     static const short kGain[4] = { 3277, 11469, 21299, 32767 };
     const short factor = kGain[gain];
     if (factor == (short)0x8000)

@@ -25,6 +25,7 @@ int RedTextElement::SetTextFormatted(const char* pcFormat, ...)
     return result;
 }
 
+// GLOBAL: SWBF2 0x007df480
 unsigned short CURSOR_CHAR = 124;
 // GLOBAL: SWBF2 0x007df484
 float CURSOR_X = -0.5f;

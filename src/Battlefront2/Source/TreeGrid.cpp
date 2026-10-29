@@ -468,7 +468,9 @@ bool TreeGrid::ProcessNeighborhood(int iX, int iZ, int iGridSize, int iStartInde
                                    TreeGridCallback pCallback, TreeGridCallbackData* pData,
                                    float& fDist, bool bFull)
 {
+    // GLOBAL: SWBF2 0x01fac368
     static int sLastX;
+    // GLOBAL: SWBF2 0x01fac364
     static int sLastZ;
 
     if (bFull)

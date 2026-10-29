@@ -58,6 +58,7 @@ extern "C"
     // GLOBAL: SWBF2 0x0093eb94
     // OnFailure
     void (*OnFailure)();
+    // GLOBAL: SWBF2 0x0093ebb0
     int sRecursionDepth;
 }
 
@@ -74,7 +75,9 @@ extern "C" unsigned int RedGetHeapFree(int heap)
 
 namespace RedMemory
 {
+    // GLOBAL: SWBF2 0x0093eb98
     int failHeap;
+    // GLOBAL: SWBF2 0x0093eb9c
     unsigned int failSize;
 }
 

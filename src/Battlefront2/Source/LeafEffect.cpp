@@ -98,8 +98,10 @@ void FallingLeafParticle::SetConstantWindVelocity(const PblVector3& vVelocity)
 void FallingLeafParticle::DoFlutterUpdate(float fDeltaTime)
 {
 
+    // GLOBAL: SWBF2 0x01faaa58
     static PblVector3 sFlutterSinkVelocity(0.0f, -0.5f, 0.0f);
 
+    // GLOBAL: SWBF2 0x01faaa68
     static float sFlutterMaxRockAngle = PblMath::fPi * 0.25f;
 
     float fSin = PblMath::Sin(mFallTime * 2.0f);

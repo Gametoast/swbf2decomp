@@ -205,6 +205,9 @@ int EnumToLuaFunctionIndex(int iEnum, int iMode)
     return 0;
 }
 
+// GLOBAL: SWBF2 0x007e8050
+// sOptionsCallbacks
+
 namespace Lua_Callbacks
 {
 
@@ -1474,7 +1477,6 @@ int ScriptCB_GetControlScale(lua_State*)
     return 1;
 }
 
-// GLOBAL: SWBF2 0x007e8050
 static const CallbackEntryT sOptionsCallbacks[61] =
 {
     { "ScriptCB_SetSplitscreen", ScriptCB_SetSplitscreen },

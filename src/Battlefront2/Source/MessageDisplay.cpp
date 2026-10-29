@@ -116,7 +116,7 @@ void MessageDisplay::GetInfo(unsigned int& uViewport, DISPLAY_TYPE& eType) const
     {
         for (unsigned int j = 0; j < DISPLAY_END; ++j)
         {
-            if (sInstance[i][j] == this)
+            if (this == sInstance[i][j])
             {
                 uViewport = i;
                 eType = (DISPLAY_TYPE)j;

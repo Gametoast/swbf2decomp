@@ -279,6 +279,7 @@ inline void __cdecl SteamInternal_OnContextInit(void* p)
 inline CSteamAPIContext& SteamInternal_ModuleContext()
 {
 
+    // GLOBAL: SWBF2 0x007ec468
     static void* volatile s_CallbackCounterAndContext[2 + sizeof(CSteamAPIContext) / sizeof(void*)] =
         { (void*)&SteamInternal_OnContextInit, 0 };
     return *(CSteamAPIContext*)SteamInternal_ContextInit((void*)s_CallbackCounterAndContext);
