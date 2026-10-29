@@ -1821,8 +1821,9 @@ void SetMasterQuality(RenderOptionsT* pOptions, int iLevel)
     pOptions->mGraphicsTier = iLevel;
     pOptions->textureQuality = TEXTURE_QUALITY_COMPRESSED;
 
-    if (iLevel == 0)
+    switch (iLevel)
     {
+    case 0:
         pOptions->textureDetail = QUALITY_LOW;
         pOptions->terrainQuality = QUALITY_LOW;
         pOptions->waterQuality = QUALITY_LOW;
@@ -1835,61 +1836,61 @@ void SetMasterQuality(RenderOptionsT* pOptions, int iLevel)
         pOptions->mEnableHDR = false;
         pOptions->mNearSceneFadeFactor = 0.2f;
         pOptions->mFarSceneRangeFactor = 0.2f;
-    }
-    else
-    {
+        break;
+
+    case 1:
         pOptions->specularQuality = QUALITY2_HIGH;
         pOptions->motionBlur = true;
         pOptions->distortion = true;
+        pOptions->textureDetail = QUALITY_MEDIUM;
+        pOptions->terrainQuality = QUALITY_MEDIUM;
+        pOptions->waterQuality = QUALITY_MEDIUM;
+        pOptions->particleQuality = QUALITY_MEDIUM;
+        pOptions->shadowQuality = QUALITY2_LOW;
+        pOptions->bumpMapping = false;
+        pOptions->mEnableHDR = false;
+        pOptions->mNearSceneFadeFactor = 0.5f;
+        pOptions->mFarSceneRangeFactor = 0.5f;
 
-        if (iLevel == 1)
+        if (RedVideoConfig::VidMode_Usable(1024, 768, D3DMULTISAMPLE_NONE, 0))
         {
-            pOptions->textureDetail = QUALITY_MEDIUM;
-            pOptions->terrainQuality = QUALITY_MEDIUM;
-            pOptions->waterQuality = QUALITY_MEDIUM;
-            pOptions->particleQuality = QUALITY_MEDIUM;
-            pOptions->shadowQuality = QUALITY2_LOW;
-            pOptions->bumpMapping = false;
-            pOptions->mEnableHDR = false;
-            pOptions->mNearSceneFadeFactor = 0.5f;
-            pOptions->mFarSceneRangeFactor = 0.5f;
-
-            if (RedVideoConfig::VidMode_Usable(1024, 768, D3DMULTISAMPLE_NONE, 0))
-            {
-                pOptions->defaultWidth = 1024;
-                pOptions->defaultHeight = 768;
-                _SetGeneration(pOptions);
-                return;
-            }
+            pOptions->defaultWidth = 1024;
+            pOptions->defaultHeight = 768;
+            _SetGeneration(pOptions);
+            return;
         }
-        else
+        break;
+
+    default:
+        pOptions->specularQuality = QUALITY2_HIGH;
+        pOptions->motionBlur = true;
+        pOptions->distortion = true;
+        pOptions->textureDetail = QUALITY_HIGH;
+        pOptions->terrainQuality = QUALITY_HIGH;
+        pOptions->waterQuality = QUALITY_HIGH;
+        pOptions->particleQuality = QUALITY_HIGH;
+        pOptions->shadowQuality = QUALITY2_HIGH;
+        pOptions->bumpMapping = true;
+        pOptions->mEnableHDR = true;
+        pOptions->mNearSceneFadeFactor = 0.7f;
+        pOptions->mFarSceneRangeFactor = 0.7f;
+
+        if (RedVideoConfig::VidMode_Usable(1280, 960, D3DMULTISAMPLE_NONE, 0))
         {
-            pOptions->textureDetail = QUALITY_HIGH;
-            pOptions->terrainQuality = QUALITY_HIGH;
-            pOptions->waterQuality = QUALITY_HIGH;
-            pOptions->particleQuality = QUALITY_HIGH;
-            pOptions->shadowQuality = QUALITY2_HIGH;
-            pOptions->bumpMapping = true;
-            pOptions->mEnableHDR = true;
-            pOptions->mNearSceneFadeFactor = 0.7f;
-            pOptions->mFarSceneRangeFactor = 0.7f;
-
-            if (RedVideoConfig::VidMode_Usable(1280, 960, D3DMULTISAMPLE_NONE, 0))
-            {
-                pOptions->defaultWidth = 1280;
-                pOptions->defaultHeight = 960;
-                _SetGeneration(pOptions);
-                return;
-            }
-
-            if (RedVideoConfig::VidMode_Usable(1024, 768, D3DMULTISAMPLE_NONE, 0))
-            {
-                pOptions->defaultWidth = 1024;
-                pOptions->defaultHeight = 768;
-                _SetGeneration(pOptions);
-                return;
-            }
+            pOptions->defaultWidth = 1280;
+            pOptions->defaultHeight = 960;
+            _SetGeneration(pOptions);
+            return;
         }
+
+        if (RedVideoConfig::VidMode_Usable(1024, 768, D3DMULTISAMPLE_NONE, 0))
+        {
+            pOptions->defaultWidth = 1024;
+            pOptions->defaultHeight = 768;
+            _SetGeneration(pOptions);
+            return;
+        }
+        break;
     }
 
     pOptions->defaultWidth = 800;

@@ -10,6 +10,7 @@
 #include "ScreenTransition.h"
 #include "Team.h"
 #include "VoiceOverManager.h"
+#include "PebbleFL/Common/PblTime.h"
 #include "RedEngineFL/Graphics/RedColor.h"
 #include "SoundFL/source/sndbus.h"
 #include "SoundFL/source/win/sndstream.h"
@@ -260,9 +261,8 @@ void GameMovie::StartInGameMoviePlay(const char* pcFile, const char* pcName)
     strcpy(g_InGameMovieFilename, "Movies\\");
     strcat(g_InGameMovieFilename, pcFile);
     strcpy(ingame_movie_idname, pcName);
-    LARGE_INTEGER start;
-    QueryPerformanceCounter(&start);
-    g_InGameMovieStartTime = start.QuadPart;
+    unsigned __int64 perfCount = PblTime::GetTickCount();
+    g_InGameMovieStartTime = perfCount;
 }
 
 // FUNCTION: SWBF2 0x004912e0

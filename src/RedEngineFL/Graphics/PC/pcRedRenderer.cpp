@@ -43,6 +43,44 @@
 // GLOBAL: SWBF2 0x007727a0
 // __xmm@3f0000003f0000003f0000003f000000
 
+class pcRedVertexShaderConstants
+{
+public:
+
+    pcRedVertexShaderConstantRegister* GetRegisters(int creg0, int numregs)
+    {
+        int iLast = creg0 + numregs - 1;
+        if (m_iMinConstantSet > creg0)
+        {
+            m_iMinConstantSet = creg0;
+        }
+        if (m_iMaxConstantSet < iLast)
+        {
+            m_iMaxConstantSet = iLast;
+        }
+        return m_Registers;
+    }
+
+    pcRedVertexShaderConstantRegister* GetRegisterArray(int iFirst, int iCount)
+    {
+        if (m_iMinConstantSet > iFirst)
+        {
+            m_iMinConstantSet = iFirst;
+        }
+        if (m_iMaxConstantSet < iFirst + iCount - 1)
+        {
+            m_iMaxConstantSet = iFirst + iCount - 1;
+        }
+        return m_Registers;
+    }
+
+    void Update();
+
+    pcRedVertexShaderConstantRegister m_Registers[96];
+    int m_iMinConstantSet;
+    int m_iMaxConstantSet;
+};
+
 // FUNCTION: SWBF2 0x006b01e0
 STDMETHODIMP_(ULONG) FakeD3D::AddRef()
 {
@@ -1961,7 +1999,7 @@ float RedRenderer::m_fStencilShadowLength;
 int RedRenderer::m_iImmediateMode;
 // GLOBAL: SWBF2 0x007fa04c
 // RedRenderer::m_uiCurMatrixPoolOffset
-int RedRenderer::m_uiCurMatrixPoolOffset;
+unsigned int RedRenderer::m_uiCurMatrixPoolOffset;
 // GLOBAL: SWBF2 0x007fa050
 // RedRenderer::m_curRenderItemOffset
 unsigned int RedRenderer::m_curRenderItemOffset;
@@ -2493,7 +2531,7 @@ int RedRenderer::m_frameNumber;
 // GLOBAL: SWBF2 0x007f58e7
 bool RedRenderer::m_bFogEnable;
 // GLOBAL: SWBF2 0x007fa054
-int RedRenderer::m_uiCurLightingStatePoolOffset;
+unsigned int RedRenderer::m_uiCurLightingStatePoolOffset;
 
 // SYNTHETIC: SWBF2 0x004075b0
 // `dynamic initializer for 'RedRenderer::m_colorFog''
@@ -3615,7 +3653,7 @@ void RedRenderer::internalStateStackInit()
 pcRedVertexShaderConstantRegister* RedRenderer::pcLockVertexShaderConstants(int iFirst,
                                                                             int iCount)
 {
-    return m_VSConstants.GetRegisterArray(iFirst, iCount);
+    return m_VSConstants.GetRegisters(iFirst, iCount);
 }
 
 // FUNCTION: SWBF2 0x006b9800
@@ -3698,10 +3736,7 @@ void RedRenderer::SetLightingScale(float fScale)
 {
     m_lightingScale = fScale;
     unsigned char uc = (unsigned char)(int)(fScale * 255.0f);
-    m_lightingScaleColor.b = uc;
-    m_lightingScaleColor.g = uc;
-    m_lightingScaleColor.r = uc;
-    m_lightingScaleColor.a = 0xFF;
+    m_lightingScaleColor = RedColor(uc, uc, uc, 0xFF);
 }
 
 // FUNCTION: SWBF2 0x006b9590
@@ -4376,7 +4411,7 @@ PblMatrix* RedRenderer::AllocBoneMatricesInCache(unsigned int uiCount)
 RedLightingState* RedRenderer::AllocLightingStateInCache()
 {
     RedLightingState* pState = &m_aLightingStatePool[RedRenderer::m_uiCurLightingStatePoolOffset];
-    RedRenderer::m_uiCurLightingStatePoolOffset = (unsigned int)(RedRenderer::m_uiCurLightingStatePoolOffset + 1) < 2048 ? RedRenderer::m_uiCurLightingStatePoolOffset + 1 : 1;
+    RedRenderer::m_uiCurLightingStatePoolOffset = RedRenderer::m_uiCurLightingStatePoolOffset + 1 < 2048 ? RedRenderer::m_uiCurLightingStatePoolOffset + 1 : 1;
     memset(pState, 0, sizeof(RedLightingState));
     return pState;
 }
@@ -4385,7 +4420,7 @@ RedLightingState* RedRenderer::AllocLightingStateInCache()
 const PblMatrix* RedRenderer::AllocMatrixInCache(const PblMatrix& mat)
 {
     PblMatrix* pMatrix = &RedRenderer::m_amMatrixPool[RedRenderer::m_uiCurMatrixPoolOffset];
-    if ((unsigned int)(RedRenderer::m_uiCurMatrixPoolOffset + 1) >= 3062)
+    if (RedRenderer::m_uiCurMatrixPoolOffset + 1 >= 3062)
     {
         RedRenderer::m_uiCurMatrixPoolOffset = 0;
     }

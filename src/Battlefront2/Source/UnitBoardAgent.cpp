@@ -29,10 +29,6 @@ Obstacle* GetGameObjectBarrier(GameObject* pObj);
 
 namespace AI
 {
-enum VOType
-{
-    VOT_JustBoardedVehicle = 38
-};
 namespace VOHelper
 {
 

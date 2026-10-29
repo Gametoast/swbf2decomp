@@ -106,18 +106,24 @@ void CreateAll()
 }
 
 // FUNCTION: SWBF2 0x005b3940
-bool __fastcall DoDrag(int iDest)
+bool DoDrag(int iDest)
 {
-    if (!dragEnabled)
+    if (dragEnabled)
     {
-        return false;
+        if (dragEnabledHost || !netIsHost)
+        {
+            return true;
+        }
+        if (iDest != 64 && iDest != NetComm::GetLocalIndex(0))
+        {
+            return true;
+        }
     }
-    return dragEnabledHost || !netIsHost ||
-           (iDest != 64 && iDest != NetComm::GetLocalIndex(0));
+    return false;
 }
 
 // FUNCTION: SWBF2 0x005b3980
-int __fastcall GetPipe(int iDest)
+int GetPipe(int iDest)
 {
     if (netIsHost)
     {
@@ -344,11 +350,16 @@ void NetDrag::Reset()
 // FUNCTION: SWBF2 0x005b39f0
 float GetLatency(int iDest)
 {
+    float latency;
     if (netIsHost && (iDest == 64 || iDest == NetComm::GetLocalIndex(0)))
     {
-        return 2.5f * 0.001f;
+        latency = 2.5f;
     }
-    return (float)dragLatency * 0.001f;
+    else
+    {
+        latency = (float)dragLatency;
+    }
+    return latency * 0.001f;
 }
 
 // FUNCTION: SWBF2 0x005b3a30

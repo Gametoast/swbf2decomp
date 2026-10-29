@@ -7,21 +7,20 @@
 #include "LuaHelper.h"
 #include "RedEngineFL/input/RedJoystick.h"
 #include "GameLoop.h"
+#include "PebbleFL/Common/PblMath.h"
 
 extern bool gAttractMode;
 
 // FUNCTION: SWBF2 0x0052b490
 void RawControllerInputs::ClearInputsToOff()
 {
-    const float* pRaw = (const float*)&mRawInputStorage[0x14 - 4];
-    bool* pLocked = (bool*)&mRawInputStorage[0x17d4 - 4];
-    for (int i = 0; i < 10 * 76; i += 76)
+    for (int i = 0; i < 10; i++)
     {
         for (int j = 0; j < 76; j++)
         {
             if ((j >= 66 && j <= 75) || j <= 4)
             {
-                pLocked[i + j] = (float)fabs(pRaw[i + j]) >= 0.125f;
+                mLockedRawInputBool[i][j] = fabsf(mRawInputFloat[i][j]) >= 0.125f;
             }
         }
     }
@@ -45,10 +44,7 @@ bool ProcessedInputs::GetDigital(ePROCESSEDINPUT_TYPE eType) const
 void ProcessedInputs::Clear()
 {
     bits.mBoolInputs = 0;
-    for (int i = 0; i < 4; i++)
-    {
-        mFloatInputs[i] = 0.0f;
-    }
+    memset(mFloatInputs, 0, sizeof(mFloatInputs));
 }
 
 // FUNCTION: SWBF2 0x0052b920
@@ -147,38 +143,24 @@ bool RawControllerInputs::IsDefaultBindings(int iMode)
 // FUNCTION: SWBF2 0x0052b510
 float RawControllerInputs::AdjustValueForSensitivity(float fValue, unsigned char ucSensitivity)
 {
-    float fScale = (float)(ucSensitivity + 1) * 0.2f;
-    float fDeadZone = 0.85f;
-    if (fScale > 1.0f && fScale * fDeadZone > 1.0f)
+    float fBelowKneeScale = (ucSensitivity + 1.0f) * 0.2f;
+    float fKneePoint = 0.85f;
+    if (fBelowKneeScale > 1.0f && fBelowKneeScale * fKneePoint > 1.0f)
     {
-        fDeadZone = 1.0f / fScale;
+        fKneePoint = 1.0f / fBelowKneeScale;
     }
 
-    float fMagnitude = (float)fabs(fValue);
-    if (fMagnitude >= fDeadZone)
+    float fScale;
+    if (fabsf(fValue) < fKneePoint)
     {
-        float fBlend = (fMagnitude - fDeadZone) / (1.0f - fDeadZone);
-        if (fBlend < 0.0f)
-        {
-            fBlend = 0.0f;
-        }
-        else if (fBlend > 1.0f)
-        {
-            fBlend = 1.0f;
-        }
-        fScale = fScale * (1.0f - fBlend) + fBlend;
+        fScale = fBelowKneeScale;
     }
-
-    float fResult = fScale * fValue;
-    if (fResult < -1.0f)
+    else
     {
-        return -1.0f;
+        fScale = Clamp((fabsf(fValue) - fKneePoint) / (1.0f - fKneePoint), 0.0f, 1.0f);
+        fScale = fBelowKneeScale * (1.0f - fScale) + fScale;
     }
-    if (fResult > 1.0f)
-    {
-        return 1.0f;
-    }
-    return fResult;
+    return Clamp(fScale * fValue, -1.0f, 1.0f);
 }
 
 // FUNCTION: SWBF2 0x0052bab0

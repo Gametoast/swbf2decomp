@@ -48,22 +48,22 @@ int gTeamStatsSortMode;
 bool gTeamStatsSortInvert;
 
 // FUNCTION: SWBF2 0x0059eac0
-const char* GetSideIcon(int iSide)
+static const char* GetSideIcon(int iSide)
 {
-    static const char* const sIcons[] =
+    static const char* sideIcons[7] =
     {
         0, "com_icon_alliance", "com_icon_imperial", "com_icon_republic", "com_icon_CIS", 0, 0
     };
-    if (iSide == Team::side_Locals)
+    if (iSide != Team::side_Locals)
     {
-        if (GameLoop::mMissionScriptHash == 0x2b6c2d0d || GameLoop::mMissionScriptHash == 0x41c2e16a ||
-            GameLoop::mMissionScriptHash == 0xcdb830bd)
-        {
-            return "com_icon_republic";
-        }
-        return 0;
+        return sideIcons[iSide];
     }
-    return sIcons[iSide];
+    if (GameLoop::mMissionScriptHash == 0x2b6c2d0d || GameLoop::mMissionScriptHash == 0x41c2e16a ||
+        GameLoop::mMissionScriptHash == 0xcdb830bd)
+    {
+        return "com_icon_republic";
+    }
+    return 0;
 }
 
 // FUNCTION: SWBF2 0x005a3180
@@ -102,8 +102,11 @@ short MedalsMgr::GetMedalsThisGame(int iType) const
         return 0;
     }
     PlayerProfile::tProfile* pProfile = mOwner->GetProfile();
-    short sCurrent = GetMedals(iType);
-    return pProfile ? sCurrent - pProfile->mGameOptions.mMedalsGathered[iType] : sCurrent;
+    if (!pProfile)
+    {
+        return GetMedals(iType);
+    }
+    return GetMedals(iType) - pProfile->mGameOptions.mMedalsGathered[iType];
 }
 
 namespace Lua_Callbacks
@@ -254,14 +257,15 @@ int ScriptCB_GetMedalStats(lua_State*)
 // FUNCTION: SWBF2 0x005a00a0
 int ScriptCB_GetCareerRank(lua_State*)
 {
-    if (lua_gettop(LuaHelper::mState) != 1 || !lua_isnumber(LuaHelper::mState, 1))
+    int numArgs = LuaHelper::GetTop();
+    if (numArgs != 1 || !LuaHelper::IsNumber(1))
     {
         return 0;
     }
-    int iCharacter = (int)luaL_checknumber(LuaHelper::mState, 1);
-    Character* pCharacter = Character::sCharacters && iCharacter >= 0 &&
-        iCharacter < Character::sCharacterLimit ? &Character::sCharacters[iCharacter] : 0;
-    lua_pushnumber(LuaHelper::mState, (float)pCharacter->mMedalsMgr->GetRank());
+    int charIdx = LuaHelper::GetInt(1);
+    Character* c = Character::GetPtr(charIdx);
+    int rank = c->mMedalsMgr->GetRank();
+    LuaHelper::PushInt(rank);
     return 1;
 }
 
@@ -1267,7 +1271,7 @@ int ScriptCB_ClientGotStats(lua_State* L)
     {
         bGotStats = PlayerStats::mGotMPStats;
     }
-    lua_pushboolean(LuaHelper::mState, bGotStats);
+    LuaHelper::PushBool(bGotStats);
     return 1;
 }
 
@@ -1306,9 +1310,9 @@ void InitStats()
 // FUNCTION: SWBF2 0x005a0730
 int ScriptCB_SetPlayerStatsPoints(lua_State*)
 {
-    if (LuaHelper::GetTop() == 1 && lua_type(LuaHelper::mState, 1) == LUA_TTABLE)
+    if (LuaHelper::GetTop() == 1 && LuaHelper::IsTable(1))
     {
-        lua_gettop(LuaHelper::mState);
+        LuaHelper::GetStackSpace();
         int iCount = LuaHelper::TableGetN(1);
         for (int i = 1; i <= iCount; ++i)
         {
@@ -1318,7 +1322,7 @@ int ScriptCB_SetPlayerStatsPoints(lua_State*)
             PlayerStats::SetPointsTable(i - 1, iPoints);
             LuaHelper::Pop(1);
         }
-        lua_gettop(LuaHelper::mState);
+        LuaHelper::GetStackSpace();
     }
     return 0;
 }

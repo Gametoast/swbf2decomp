@@ -60,12 +60,6 @@ unsigned int __cdecl ustrlcpy(unsigned short* pusDest, unsigned short const* pus
                               unsigned int uiSize);
 }
 
-namespace LuaHelper
-{
-
-bool CallGlobalProc(char const* pcFunc, bool bArg);
-}
-
 namespace PblBuildType
 {
 extern unsigned char gCreateMemoryProfile;
@@ -273,11 +267,11 @@ int ScriptCB_IsProfileDirty(lua_State* L)
 // FUNCTION: SWBF2 0x00588770
 int ScriptCB_SetProfileNotDirty(lua_State* L)
 {
-    lua_gettop(LuaHelper::mState);
-    unsigned int uiIndex = (int)luaL_checknumber(LuaHelper::mState, 1) - 1;
-    if (uiIndex < 1)
+    LuaHelper::GetTop();
+    int iIndex = LuaHelper::GetInt(1) - 1;
+    if (iIndex >= 0 && iIndex < 1)
     {
-        PlayerProfile::tProfile* pProfile = PlayerProfile::GetProfile(uiIndex - 1);
+        PlayerProfile::tProfile* pProfile = PlayerProfile::GetProfile(iIndex - 1);
         if (pProfile)
         {
             pProfile->UpdateProfCRC();
@@ -400,19 +394,23 @@ int ScriptCB_GetCurrentProfileName(lua_State* L)
 // FUNCTION: SWBF2 0x00588a40
 int ScriptCB_GetProfileName(lua_State* L)
 {
-    lua_gettop(LuaHelper::mState);
-    unsigned int uiIndex = (int)luaL_checknumber(LuaHelper::mState, 1) - 1;
-    if (uiIndex >= 1)
+    LuaHelper::GetTop();
+    int iIndex = LuaHelper::GetInt(1) - 1;
+    if (iIndex < 0 || iIndex >= 1)
     {
         return 0;
     }
-    PlayerProfile::tProfile* pProfile = PlayerProfile::GetProfile(uiIndex);
-    if (pProfile && pProfile->mName[0])
+    PlayerProfile::tProfile* pProfile = PlayerProfile::GetProfile(iIndex);
+    if (pProfile)
     {
-        LuaHelper::PushString(pProfile->mName);
-        return 1;
+        const unsigned short* pName = pProfile->GetTrueProfileName();
+        if (pName[0])
+        {
+            LuaHelper::PushString(pName);
+            return 1;
+        }
     }
-    lua_pushnil(LuaHelper::mState);
+    LuaHelper::PushNil();
     return 1;
 }
 
@@ -754,20 +752,21 @@ namespace Lua_Callbacks
 // FUNCTION: SWBF2 0x00589240
 int ScriptCB_StartSaveProfile(lua_State* L)
 {
-    if (lua_gettop(LuaHelper::mState) != 1)
+    int iNumArgs = LuaHelper::GetTop();
+    if (iNumArgs != 1)
     {
-        lua_pushnil(LuaHelper::mState);
+        LuaHelper::PushNil();
         return 1;
     }
-    unsigned int uiIndex = (int)luaL_checknumber(LuaHelper::mState, 1) - 1;
-    if (uiIndex < 1)
+    int iIndex = LuaHelper::GetInt(1) - 1;
+    if (iIndex >= 0 && iIndex < 1)
     {
-        savedWhich = uiIndex;
-        PlayerProfile::tProfile* pProfile = PlayerProfile::GetProfile(uiIndex);
+        savedWhich = iIndex;
+        PlayerProfile::tProfile* pProfile = PlayerProfile::GetProfile(iIndex);
         if (pProfile->mIsDirty)
         {
             SaveGameManager::StartQueue();
-            SaveGameManager::QueueSave(pProfile->mName, 1, pProfile, sizeof(PlayerProfile::tProfile));
+            SaveGameManager::QueueSave(pProfile->GetTrueProfileName(), 1, pProfile, sizeof(PlayerProfile::tProfile));
             SaveGameManager::FinishQueue(SaveProfileDoneCallback);
         }
     }
@@ -1056,18 +1055,18 @@ int ScriptCB_IsMemoryCardInsertted(lua_State* L)
 // FUNCTION: SWBF2 0x005899b0
 int ScriptCB_DoesProfileExistOnCard(lua_State* L)
 {
-    unsigned int uiIndex = (int)luaL_checknumber(LuaHelper::mState, 1) - 1;
-    if (uiIndex >= 1)
+    int iIndex = LuaHelper::GetInt(1) - 1;
+    if (iIndex < 0 || iIndex >= 1)
     {
         return 0;
     }
     bool bExists = false;
-    PlayerProfile::tProfile* pProfile = PlayerProfile::GetProfile(uiIndex);
+    PlayerProfile::tProfile* pProfile = PlayerProfile::GetProfile(iIndex);
     if (pProfile)
     {
         bExists = !SaveGameManager::IsUniqueFilename(pProfile->mName, 1);
     }
-    lua_pushboolean(LuaHelper::mState, bExists);
+    LuaHelper::PushBool(bExists);
     return 1;
 }
 
@@ -1706,17 +1705,20 @@ static void __cdecl _zlibFree(void*, void* pBlock)
 static unsigned int _zlibcompress(unsigned char* pDest, int iCapacity, unsigned char* pSource, int iSize)
 {
     z_stream stream;
-    memset(&stream, 0, sizeof(stream));
     stream.zalloc = _zlibAlloc;
     stream.zfree = _zlibFree;
-    if (deflateInit(&stream, 9))
+    stream.opaque = 0;
+    int ret = deflateInit(&stream, 9);
+    if (ret != Z_OK)
     {
         return 0;
     }
     stream.next_in = pSource;
     stream.avail_in = iSize;
+    stream.total_in = 0;
     stream.next_out = pDest;
     stream.avail_out = iCapacity;
+    stream.total_out = 0;
     deflate(&stream, Z_FINISH);
     deflateEnd(&stream);
     return stream.total_out;
@@ -1726,17 +1728,20 @@ static unsigned int _zlibcompress(unsigned char* pDest, int iCapacity, unsigned 
 static unsigned int _zlibuncompress(unsigned char* pDest, int iCapacity, unsigned char* pSource, int iSize)
 {
     z_stream stream;
-    memset(&stream, 0, sizeof(stream));
     stream.zalloc = _zlibAlloc;
     stream.zfree = _zlibFree;
-    if (inflateInit_(&stream, ZLIB_VERSION, sizeof(stream)))
+    stream.opaque = 0;
+    int ret = inflateInit_(&stream, ZLIB_VERSION, sizeof(stream));
+    if (ret != Z_OK)
     {
         return 0;
     }
     stream.next_in = pSource;
     stream.avail_in = iSize;
+    stream.total_in = 0;
     stream.next_out = pDest;
     stream.avail_out = iCapacity;
+    stream.total_out = 0;
     inflate(&stream, Z_FINISH);
     inflateEnd(&stream);
     return stream.total_out;

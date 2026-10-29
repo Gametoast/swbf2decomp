@@ -960,7 +960,7 @@ int Init()
     HeroMessageDisplay::InitAll();
     ScopeDisplay::InitAll();
     StatusDisplay::InitAll();
-    EndDisplay::sInstance->Init();
+    EndDisplay::Instance()->Init();
     NameDisplay::Init();
     ItemTimerDisplay::Init();
     QOSDisplay::InitClient();
@@ -1550,20 +1550,20 @@ void Update(float fDeltaTime, float fSystemDeltaTime)
         NetGame::EnterClient();
     }
 
-    if (bGameOverNow && !EndDisplay::sInstance->HasBeenDisplayed())
+    if (bGameOverNow && !EndDisplay::Instance()->HasBeenDisplayed())
     {
-        EndDisplay::sInstance->Show(Team::sWinningTeams, END_DISPLAY_TIME);
+        EndDisplay::Instance()->Show(Team::sWinningTeams, END_DISPLAY_TIME);
         SpawnDisplay::Instance(0)->Hide(0);
     }
 
     if (sGameOver)
     {
-        if (!EndDisplay::sInstance->IsFinished())
+        if (!EndDisplay::Instance()->IsFinished())
         {
-            EndDisplay::sInstance->Update(fSystemDeltaTime);
+            EndDisplay::Instance()->Update(fSystemDeltaTime);
         }
 
-        if (sGameOver && EndDisplay::sInstance->IsFinished())
+        if (sGameOver && EndDisplay::Instance()->IsFinished())
         {
             if (!NetGame::IsEnabled() || netIsClient)
             {
@@ -1607,10 +1607,10 @@ void Update(float fDeltaTime, float fSystemDeltaTime)
             endTimer.Update(fSystemDeltaTime);
             if (!NetGame::IsEnabled() || NetGame::IsGameOver())
             {
-                if ((EndDisplay::sInstance->IsFinished() || endTimer.IsFinished()) && !GameLoop::sShowStats &&
+                if ((EndDisplay::Instance()->IsFinished() || endTimer.IsFinished()) && !GameLoop::sShowStats &&
                     (NetGame::IsEnabled() || !PauseMenu::GetPaused(0)))
                 {
-                    EndDisplay::sInstance->Hide();
+                    EndDisplay::Instance()->Hide();
                     PauseMenu::SetPaused(0, false);
                     GameLoop::sShowStats = true;
                     if (!NetGame::IsEnabled())

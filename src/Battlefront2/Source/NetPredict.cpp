@@ -20,10 +20,13 @@ extern PblMatrix interpMat[64][2];
 // FUNCTION: SWBF2 0x005daa90
 bool NetInterpolator::GetIndex(int& iIndex, int iId, unsigned int uHandleId)
 {
-    if (iIndex < 0 || interpCat[iIndex] != iId || interpId[iIndex] != uHandleId)
+    if (iIndex < 0 || iId != interpCat[iIndex] || uHandleId != interpId[iIndex])
     {
         iIndex = interpNext;
-        interpNext = interpNext + 1 < 64 ? interpNext + 1 : 0;
+        if (++interpNext >= sizeof(interpId) / sizeof(interpId[0]))
+        {
+            interpNext = 0;
+        }
         interpCount[iIndex] = 0;
         interpCat[iIndex] = iId;
         interpId[iIndex] = uHandleId;
@@ -40,33 +43,35 @@ void NetInterpolator::Prev(int iIndex)
 // FUNCTION: SWBF2 0x005dab10
 void NetInterpolator::SetNext(int iIndex, const PblVector3* pVec)
 {
-    if (iIndex < 0)
+    if (iIndex >= 0)
     {
-        return;
+        if (pVec)
+        {
+            interpPos[iIndex][interpCount[iIndex] & 1] = *pVec;
+            ++interpCount[iIndex];
+        }
+        else
+        {
+            interpCount[iIndex] = 0;
+        }
     }
-    if (!pVec)
-    {
-        interpCount[iIndex] = 0;
-        return;
-    }
-    interpPos[iIndex][interpCount[iIndex] & 1] = *pVec;
-    ++interpCount[iIndex];
 }
 
 // FUNCTION: SWBF2 0x005dac60
 void NetInterpolator::SetNext(int iIndex, const PblMatrix* pMat)
 {
-    if (iIndex < 0)
+    if (iIndex >= 0)
     {
-        return;
+        if (pMat)
+        {
+            interpMat[iIndex][interpCount[iIndex] & 1] = *pMat;
+            ++interpCount[iIndex];
+        }
+        else
+        {
+            interpCount[iIndex] = 0;
+        }
     }
-    if (!pMat)
-    {
-        interpCount[iIndex] = 0;
-        return;
-    }
-    interpMat[iIndex][interpCount[iIndex] & 1] = *pMat;
-    ++interpCount[iIndex];
 }
 
 // FUNCTION: SWBF2 0x005dab70
@@ -133,29 +138,29 @@ extern SmoothInfo smoothInfo[64];
 // FUNCTION: SWBF2 0x005da0a0
 void SmoothInfo::SetRenderMatrix(const PblMatrix& mat)
 {
-    SmoothInfo& info = *(SmoothInfo*)this;
-    for (int i = 3; i > 0; --i)
-    {
-        info.lastRenderMat[i] = info.lastRenderMat[i - 1];
-        info.lastRenderTime[i] = info.lastRenderTime[i - 1];
-    }
-    info.lastRenderMat[0] = mat;
-    info.lastRenderTime[0] = renderTime;
-    ++info.renderCount;
+    lastRenderMat[3] = lastRenderMat[2];
+    lastRenderMat[2] = lastRenderMat[1];
+    lastRenderMat[1] = lastRenderMat[0];
+    lastRenderMat[0] = mat;
+    lastRenderTime[3] = lastRenderTime[2];
+    lastRenderTime[2] = lastRenderTime[1];
+    lastRenderTime[1] = lastRenderTime[0];
+    lastRenderTime[0] = renderTime;
+    ++renderCount;
 }
 
 // FUNCTION: SWBF2 0x005da1b0
 PblMatrix& SmoothInfo::GetRenderMatrix()
 {
     int i = 0;
-    for (; i < 4; ++i)
+    for (; i < sizeof(lastRenderTime) / sizeof(lastRenderTime[0]); ++i)
     {
         if (renderTime == lastRenderTime[i])
         {
             break;
         }
     }
-    if (i == 4)
+    if (i >= sizeof(lastRenderTime) / sizeof(lastRenderTime[0]))
     {
         i = 0;
     }
@@ -427,18 +432,16 @@ void SmoothInfo::SetMat(const PblMatrix& mat, float fParam1, float fParam2)
 // FUNCTION: SWBF2 0x005d9c20
 void SmoothInfo::ResetMat(const PblMatrix& mat)
 {
+    PblQuaternion z;
     lastPredictMat[0] = mat;
     predictCount = 1;
     lastRenderMat[0] = mat;
     renderCount = 1;
     lastRenderTime[0] = renderTime;
     mErrTime = 0.0f;
-    mPosErr = PblVector3(0.0001f, 0.0001f, 0.0001f);
-    mFrontErr = PblVector3(0.0001f, 0.0001f, 0.0001f);
-    mRotErr._fX = 0.0f;
-    mRotErr._fY = 0.0f;
-    mRotErr._fZ = 0.0f;
-    mRotErr._fS = 1.0f;
+    mPosErr.x = mPosErr.y = mPosErr.z = 0.0001f;
+    mFrontErr.x = mFrontErr.y = mFrontErr.z = 0.0001f;
+    mRotErr = z;
 }
 
 // SYNTHETIC: SWBF2 0x00405680

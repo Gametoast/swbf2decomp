@@ -916,7 +916,8 @@ int SetTeamIcon(lua_State* L)
 int SetTeamAsEnemy(lua_State* L)
 {
     int iTeam = LuaHelper::GetInt(1);
-    Team::sTeams[iTeam]->SetAffiliation(LuaHelper::GetInt(2), -1);
+    int iOtherTeam = LuaHelper::GetInt(2);
+    Team::sTeams[iTeam]->SetAffiliation(iOtherTeam, -1);
     return 0;
 }
 
@@ -924,7 +925,8 @@ int SetTeamAsEnemy(lua_State* L)
 int SetTeamAsNeutral(lua_State* L)
 {
     int iTeam = LuaHelper::GetInt(1);
-    Team::sTeams[iTeam]->SetAffiliation(LuaHelper::GetInt(2), 0);
+    int iOtherTeam = LuaHelper::GetInt(2);
+    Team::sTeams[iTeam]->SetAffiliation(iOtherTeam, 0);
     return 0;
 }
 
@@ -932,7 +934,8 @@ int SetTeamAsNeutral(lua_State* L)
 int SetTeamAsFriend(lua_State* L)
 {
     int iTeam = LuaHelper::GetInt(1);
-    Team::sTeams[iTeam]->SetAffiliation(LuaHelper::GetInt(2), 1);
+    int iOtherTeam = LuaHelper::GetInt(2);
+    Team::sTeams[iTeam]->SetAffiliation(iOtherTeam, 1);
     return 0;
 }
 
@@ -1017,7 +1020,8 @@ int GetReinforcementCount(lua_State* L)
 int AddReinforcements(lua_State* L)
 {
     int iTeam = LuaHelper::GetInt(1);
-    Team::sTeams[iTeam]->AddReinforcements(LuaHelper::GetInt(2));
+    int iCount = LuaHelper::GetInt(2);
+    Team::sTeams[iTeam]->AddReinforcements(iCount);
     return 0;
 }
 
@@ -1025,7 +1029,8 @@ int AddReinforcements(lua_State* L)
 int SetTeamPoints(lua_State* L)
 {
     int iTeam = LuaHelper::GetInt(1);
-    Team::sTeams[iTeam]->SetPoints(LuaHelper::GetInt(2));
+    int iPoints = LuaHelper::GetInt(2);
+    Team::sTeams[iTeam]->SetPoints(iPoints);
     return 0;
 }
 
@@ -1041,7 +1046,8 @@ int GetTeamPoints(lua_State* L)
 int AddTeamPoints(lua_State* L)
 {
     int iTeam = LuaHelper::GetInt(1);
-    Team::sTeams[iTeam]->AddPoints(LuaHelper::GetInt(2));
+    int iPoints = LuaHelper::GetInt(2);
+    Team::sTeams[iTeam]->AddPoints(iPoints);
     return 0;
 }
 
@@ -1333,7 +1339,14 @@ int GetBleedRate(lua_State* L)
 {
     int iTeam = LuaHelper::GetInt(1);
     Team* pTeam = Team::sTeams[iTeam];
-    lua_pushnumber(LuaHelper::mState, pTeam ? pTeam->mBleedRate : 0.0f);
+    if (pTeam)
+    {
+        LuaHelper::PushFloat(pTeam->GetBleedRate());
+    }
+    else
+    {
+        LuaHelper::PushFloat(0.0f);
+    }
     return 1;
 }
 
@@ -1505,8 +1518,15 @@ int GetNumTeamMembersAlive(lua_State* L)
 // FUNCTION: SWBF2 0x0058f730
 int GetTeamClassCount(lua_State* L)
 {
-    Team* pTeam = Team::sTeams[LuaHelper::GetInt(1)];
-    lua_pushnumber(LuaHelper::mState, pTeam ? (float)pTeam->GetClassCount() : 0.0f);
+    int iTeam = LuaHelper::GetInt(1);
+    if (Team::sTeams[iTeam])
+    {
+        LuaHelper::PushInt(Team::sTeams[iTeam]->GetClassCount());
+    }
+    else
+    {
+        LuaHelper::PushInt(0);
+    }
     return 1;
 }
 
@@ -2146,16 +2166,8 @@ int IsCampaign(lua_State* L)
 // FUNCTION: SWBF2 0x0058d030
 int AISnipeSuitabilityDist(lua_State* L)
 {
-    float fDistance = (float)luaL_checknumber(LuaHelper::mState, 1);
-    if (fDistance < 0.0f)
-    {
-        fDistance = 0.0f;
-    }
-    else if (fDistance > 100.0f)
-    {
-        fDistance = 100.0f;
-    }
-    AIUtil::gSnipeSuitabilityDist = fDistance;
+    float fDistance = LuaHelper::GetFloat(1);
+    AIUtil::gSnipeSuitabilityDist = Clamp(fDistance, 0.0f, 100.0f);
     return 0;
 }
 
@@ -2781,11 +2793,11 @@ int GetCharacterControllable(lua_State* L)
 // FUNCTION: SWBF2 0x0058f790
 int GetTeamMember(lua_State* L)
 {
-    int iTeam = (int)(float)luaL_checknumber(LuaHelper::mState, 1);
+    int iTeam = LuaHelper::GetInt(1);
     Team* pTeam = Team::sTeams[iTeam];
-    int iMember = (int)(float)luaL_checknumber(LuaHelper::mState, 2);
-    Character* pMember = iMember >= pTeam->mMemberCount ? 0 : pTeam->mMemberArray[iMember];
-    lua_pushnumber(LuaHelper::mState, (float)((pMember - Character::sCharacters)));
+    int iMember = LuaHelper::GetInt(2);
+    Character* pMember = pTeam->GetMemberPtr(iMember);
+    LuaHelper::PushInt(Character::GetIndex(pMember));
     return 1;
 }
 
@@ -2894,13 +2906,13 @@ int SetMissionTimer(lua_State* L)
 // FUNCTION: SWBF2 0x0058e300
 int BroadcastVoiceOver(lua_State* L)
 {
-    unsigned int uVoiceHash = PblHash(luaL_checklstring(LuaHelper::mState, 1, 0));
-    int iTeamMask = -1;
-    if (lua_type(LuaHelper::mState, 2) > LUA_TNIL)
+    unsigned int uVoiceHash = PblHash(LuaHelper::GetString(1));
+    unsigned int uTeamMask = ~0u;
+    if (!LuaHelper::IsNoneOrNil(2))
     {
-        iTeamMask = 1 << (int)(float)luaL_checknumber(LuaHelper::mState, 2);
+        uTeamMask = 1u << LuaHelper::GetInt(2);
     }
-    NetGame::CreateEvent_PlayVoiceOver(uVoiceHash, iTeamMask);
+    NetGame::CreateEvent_PlayVoiceOver(uVoiceHash, uTeamMask);
     return 0;
 }
 
@@ -3795,8 +3807,8 @@ int SetClassProperty(lua_State* L)
 // FUNCTION: SWBF2 0x00590b40
 int SetMapNorthAngle(lua_State* L)
 {
-    bool bFlipNorth = lua_gettop(LuaHelper::mState) > 1 && lua_toboolean(LuaHelper::mState, 2) != 0;
-    float fNorth = (float)luaL_checknumber(LuaHelper::mState, 1) * 0.017453292f;
+    bool bFlipNorth = LuaHelper::GetTop() > 1 && LuaHelper::GetBool(2);
+    float fNorth = LuaHelper::GetFloat(1) * 0.017453292f;
     HUD::ElementMap::SetNorth(fNorth, bFlipNorth);
     return 0;
 }
@@ -3955,24 +3967,24 @@ int SetMissionEndMovie(lua_State* L)
     case 4: pcMovieFile = "ingamegr.mvs"; break;
     default: pcMovieFile = "ingame.mvs"; break;
     }
-    EndDisplay::sInstance->SetEndMovie(pcMovieFile, luaL_checklstring(LuaHelper::mState, 2, 0));
+    EndDisplay::Instance()->SetEndMovie(pcMovieFile, luaL_checklstring(LuaHelper::mState, 2, 0));
     return 0;
 }
 
 // FUNCTION: SWBF2 0x00590bb0
 int CanCharacterInteractWithFlag(lua_State* L)
 {
-    int iCharacter = (int)(float)luaL_checknumber(LuaHelper::mState, 1);
+    int iCharacter = LuaHelper::GetInt(1);
+    Character* pCharacter = Character::GetPtr(iCharacter);
     bool bCanInteract = false;
-    if (Character::sCharacters && iCharacter >= 0 && iCharacter < Character::sCharacterLimit)
+    if (pCharacter)
     {
-        Character* pCharacter = &Character::sCharacters[iCharacter];
         if (!pCharacter->mRemote && pCharacter->TimeSinceLastVehicleOrRemoteChange() > 0.3f)
         {
             bCanInteract = true;
         }
     }
-    lua_pushboolean(LuaHelper::mState, bCanInteract);
+    LuaHelper::PushBool(bCanInteract);
     return 1;
 }
 

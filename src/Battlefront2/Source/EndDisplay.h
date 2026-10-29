@@ -46,6 +46,9 @@ public:
     bool mHideIt : 1;
 
     static void Create();
+    static EndDisplay* Instance() { return sInstance; }
+
+private:
     static EndDisplay* sInstance;
     static bool sCanRender;
 };

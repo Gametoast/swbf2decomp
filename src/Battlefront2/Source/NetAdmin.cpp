@@ -39,12 +39,19 @@ public:
     static bool ParseLineLocal(unsigned short* pusLine, bool bConsole);
 };
 
+struct MD5_CTX
+{
+    unsigned int state[4];
+    unsigned int count[2];
+    unsigned char buffer[64];
+};
+
 void __cdecl MD5Transform(unsigned int* pState, const unsigned char* pBlock);
-void __cdecl MD5EncodeWords(void* pDest, const void* pSource, unsigned int uLength);
-void __cdecl MD5DecodeWords(unsigned int* pWords, const unsigned char* pBlock);
+void __cdecl MD5EncodeWords(unsigned char* pDest, const unsigned int* pSource, unsigned int uLength);
+void __cdecl MD5DecodeWords(unsigned int* pWords, const unsigned char* pBlock, unsigned int uLength);
 void* __cdecl MD5CopyBytes(void* pDest, const void* pSource, unsigned int uLength);
-void* __cdecl MD5ClearBytes(void* pDest, unsigned int uLength);
-void __cdecl MD5Update(unsigned int* pState, const unsigned char* pData, unsigned int uLength);
+void __cdecl MD5ClearBytes(void* pDest, int iValue, unsigned int uLength);
+void __cdecl MD5Update(MD5_CTX* pState, const unsigned char* pData, unsigned int uLength);
 void __cdecl MD5Print(const unsigned char* pDigest, char* pcHex);
 extern char adminPlayerIdText[32];
 
@@ -52,51 +59,51 @@ extern char adminPlayerIdText[32];
 unsigned char md5Padding[64] = { 0x80 };
 
 // FUNCTION: SWBF2 0x005a2730
-void __cdecl MD5Init(unsigned int* pState)
+void __cdecl MD5Init(MD5_CTX* pState)
 {
-    pState[4] = pState[5] = 0;
-    pState[0] = 0x67452301;
-    pState[1] = 0xefcdab89;
-    pState[2] = 0x98badcfe;
-    pState[3] = 0x10325476;
+    pState->count[0] = pState->count[1] = 0;
+    pState->state[0] = 0x67452301;
+    pState->state[1] = 0xefcdab89;
+    pState->state[2] = 0x98badcfe;
+    pState->state[3] = 0x10325476;
 }
 
 // FUNCTION: SWBF2 0x005a2760
-void __cdecl MD5Update(unsigned int* pState, const unsigned char* pData, unsigned int uLength)
+void __cdecl MD5Update(MD5_CTX* pState, const unsigned char* pData, unsigned int uLength)
 {
-    unsigned int uIndex = (pState[4] >> 3) & 63;
+    unsigned int uIndex = (pState->count[0] >> 3) & 63;
     unsigned int uBits = uLength << 3;
-    pState[4] += uBits;
-    if (pState[4] < uBits)
+    pState->count[0] += uBits;
+    if (pState->count[0] < uBits)
     {
-        ++pState[5];
+        ++pState->count[1];
     }
-    pState[5] += uLength >> 29;
+    pState->count[1] += uLength >> 29;
     unsigned int uPart = 64 - uIndex;
     unsigned int i = 0;
     if (uLength >= uPart)
     {
-        MD5CopyBytes((unsigned char*)(pState + 6) + uIndex, pData, uPart);
-        MD5Transform(pState, (unsigned char*)(pState + 6));
+        MD5CopyBytes(pState->buffer + uIndex, pData, uPart);
+        MD5Transform(pState->state, pState->buffer);
         for (i = uPart; i + 63 < uLength; i += 64)
         {
-            MD5Transform(pState, pData + i);
+            MD5Transform(pState->state, pData + i);
         }
         uIndex = 0;
     }
-    MD5CopyBytes((unsigned char*)(pState + 6) + uIndex, pData + i, uLength - i);
+    MD5CopyBytes(pState->buffer + uIndex, pData + i, uLength - i);
 }
 
 // FUNCTION: SWBF2 0x005a2810
-void __cdecl MD5Final(unsigned char* pDigest, unsigned int* pState)
+void __cdecl MD5Final(unsigned char* pDigest, MD5_CTX* pState)
 {
     unsigned char aucBits[8];
-    MD5EncodeWords(aucBits, pState + 4, 8);
-    unsigned int uIndex = (pState[4] >> 3) & 63;
+    MD5EncodeWords(aucBits, pState->count, 8);
+    unsigned int uIndex = (pState->count[0] >> 3) & 63;
     MD5Update(pState, md5Padding, (uIndex < 56 ? 56 : 120) - uIndex);
     MD5Update(pState, aucBits, 8);
-    MD5EncodeWords(pDigest, pState, 16);
-    MD5ClearBytes(pState, 88);
+    MD5EncodeWords(pDigest, pState->state, 16);
+    MD5ClearBytes(pState, 0, sizeof(*pState));
 }
 
 #define MD5_F(x, y, z) (((x) & (y)) | (~(x) & (z)))
@@ -111,7 +118,7 @@ void __cdecl MD5Transform(unsigned int* pState, const unsigned char* pBlock)
 {
     unsigned int a = pState[0], b = pState[1], c = pState[2], d = pState[3];
     unsigned int x[16];
-    MD5DecodeWords(x, pBlock);
+    MD5DecodeWords(x, pBlock, 64);
 
     MD5_STEP(MD5_F, a, b, c, d, x[ 0],  7, 0xd76aa478); MD5_STEP(MD5_F, d, a, b, c, x[ 1], 12, 0xe8c7b756);
     MD5_STEP(MD5_F, c, d, a, b, x[ 2], 17, 0x242070db); MD5_STEP(MD5_F, b, c, d, a, x[ 3], 22, 0xc1bdceee);
@@ -156,9 +163,9 @@ void __cdecl MD5Transform(unsigned int* pState, const unsigned char* pBlock)
 }
 
 // FUNCTION: SWBF2 0x005a2f40
-void __cdecl MD5EncodeWords(void* pDest, const void* pSource, unsigned int uLength)
+void __cdecl MD5EncodeWords(unsigned char* pDest, const unsigned int* pSource, unsigned int uLength)
 {
-    unsigned char* pOut = (unsigned char*)pDest;
+    unsigned char* pOut = pDest;
     const unsigned char* pIn = (const unsigned char*)pSource;
     for (unsigned int i = 0; i < uLength; i += 4)
     {
@@ -170,14 +177,14 @@ void __cdecl MD5EncodeWords(void* pDest, const void* pSource, unsigned int uLeng
 }
 
 // FUNCTION: SWBF2 0x005a2f90
-void __cdecl MD5DecodeWords(unsigned int* pWords, const unsigned char* pBlock)
+void __cdecl MD5DecodeWords(unsigned int* pWords, const unsigned char* pBlock, unsigned int uLength)
 {
-    for (int i = 0; i < 16; ++i)
+    for (unsigned int i = 0, j = 0; j < uLength; ++i, j += 4)
     {
-        pWords[i] = (unsigned int)pBlock[i * 4] |
-                    ((unsigned int)pBlock[i * 4 + 1] << 8) |
-                    ((unsigned int)pBlock[i * 4 + 2] << 16) |
-                    ((unsigned int)pBlock[i * 4 + 3] << 24);
+        pWords[i] = (unsigned int)pBlock[j] |
+                    ((unsigned int)pBlock[j + 1] << 8) |
+                    ((unsigned int)pBlock[j + 2] << 16) |
+                    ((unsigned int)pBlock[j + 3] << 24);
     }
 }
 
@@ -188,9 +195,9 @@ void* __cdecl MD5CopyBytes(void* pDest, const void* pSource, unsigned int uLengt
 }
 
 // FUNCTION: SWBF2 0x005a2ff0
-void* __cdecl MD5ClearBytes(void* pDest, unsigned int uLength)
+void __cdecl MD5ClearBytes(void* pDest, int iValue, unsigned int uLength)
 {
-    return memset(pDest, 0, uLength);
+    memset(pDest, iValue, uLength);
 }
 
 // FUNCTION: SWBF2 0x005a3010
@@ -206,11 +213,11 @@ void __cdecl MD5Print(const unsigned char* pDigest, char* pcHex)
 // FUNCTION: SWBF2 0x005a3050
 void MD5Digest(const char* pcText, unsigned int uLength, char* pcHex)
 {
-    unsigned int auiState[22];
-    unsigned char aucDigest[20];
-    MD5Init(auiState);
-    MD5Update(auiState, (const unsigned char*)pcText, uLength);
-    MD5Final(aucDigest, auiState);
+    MD5_CTX context;
+    unsigned char aucDigest[16];
+    MD5Init(&context);
+    MD5Update(&context, (const unsigned char*)pcText, uLength);
+    MD5Final(aucDigest, &context);
     MD5Print(aucDigest, pcHex);
 }
 
@@ -487,7 +494,7 @@ extern FILE* Stream;
 extern bool adminStatusRequested;
 
 // GLOBAL: SWBF2 0x01fa24d0
-bool admins[64];
+static bool admins[64];
 
 extern char Destination[16];
 
@@ -600,17 +607,17 @@ bool GetCommand(char* pcToken, AdminCommand& cmd, bool& bNo)
         return false;
     }
 
-    char* pcName = pcToken + 1;
+    ++pcToken;
     bNo = false;
-    if ((pcName[0] == 'n' || pcName[0] == 'N') && (pcName[1] == 'o' || pcName[1] == 'O'))
+    if ((pcToken[0] == 'n' || pcToken[0] == 'N') && (pcToken[1] == 'o' || pcToken[1] == 'O'))
     {
         bNo = true;
-        pcName += 2;
+        pcToken += 2;
     }
 
     for (int i = 0; i < 94; ++i)
     {
-        if (!_stricmp(adminCommands[i].token, pcName))
+        if (!_stricmp(adminCommands[i].token, pcToken))
         {
             cmd = adminCommands[i].cmd;
             return true;
@@ -872,17 +879,18 @@ static bool IsMatch(char* pcMatch, unsigned short* pusLine)
     }
     ++pusLine;
 
-    int c = *pcMatch;
-    while (c)
+    int c1 = *pcMatch;
+    int c2 = *pusLine;
+    while (c1)
     {
-        if (c != *pusLine && c + 32 != *pusLine)
+        if (c1 != c2 && c1 + 32 != c2)
         {
             return false;
         }
-        c = *++pcMatch;
-        ++pusLine;
+        c1 = *++pcMatch;
+        c2 = *++pusLine;
     }
-    return c == ' ' || c == 0;
+    return c1 == ' ' || c1 == 0;
 }
 
 // FUNCTION: SWBF2 0x005b1300
@@ -918,18 +926,26 @@ static bool GetNextArg(unsigned short*& pusLine, char* pcArg, int iMax)
     for (;;)
     {
         --iMax;
-        unsigned short c = *pusLine++;
+        int c = *pusLine++;
         if (bQuoted && c == '"')
         {
             --pusLine;
             break;
         }
         *pcArg++ = (char)c;
-        if (bQuoted ? *pusLine == '"' : *pusLine == ' ')
+        c = *pusLine;
+        if (bQuoted)
+        {
+            if (c == '"')
+            {
+                break;
+            }
+        }
+        else if (c == ' ')
         {
             break;
         }
-        if (*pusLine == 0 || iMax <= 0)
+        if (c == 0 || iMax <= 0)
         {
             break;
         }
@@ -977,12 +993,18 @@ static void PutMsg(char* pcMsg)
 // FUNCTION: SWBF2 0x005b1480
 bool IsNum(unsigned short c)
 {
-    return c >= '0' && c <= '9';
+    if (c < '0')
+    {
+        return false;
+    }
+    return c <= '9';
 }
 
 // FUNCTION: SWBF2 0x005b14a0
 static bool IsNextArgInt(unsigned short* pusLine)
 {
+    char token[8];
+    char* p = token;
     while (*pusLine == ' ')
     {
         ++pusLine;
@@ -992,7 +1014,7 @@ static bool IsNextArgInt(unsigned short* pusLine)
         return false;
     }
 
-    for (int i = 0; i < 8; ++i)
+    do
     {
         unsigned short c = *++pusLine;
         if (c == ' ' || c == 0)
@@ -1003,7 +1025,7 @@ static bool IsNextArgInt(unsigned short* pusLine)
         {
             return false;
         }
-    }
+    } while (++p != token + sizeof(token));
     return false;
 }
 
@@ -1014,7 +1036,11 @@ static bool IsNextArgString(unsigned short* pusLine)
     {
         ++pusLine;
     }
-    return *pusLine != '/' && *pusLine != 0;
+    if (*pusLine == '/')
+    {
+        return false;
+    }
+    return *pusLine != 0;
 }
 
 // FUNCTION: SWBF2 0x005aecf0

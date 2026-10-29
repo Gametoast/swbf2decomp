@@ -54,7 +54,7 @@ protected:
 public:
     float m_fDepth;
     unsigned int m_uiModelHash;
-    RedModel* m_Model;
+    const RedModel* m_Model;
     unsigned int m_boneHash;
     bool m_bLightingEnabled : 1;
     bool m_searchForModel : 1;

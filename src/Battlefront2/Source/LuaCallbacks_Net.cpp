@@ -936,7 +936,8 @@ int ScriptCB_ResetSkipToNTGUI(lua_State* L)
 // FUNCTION: SWBF2 0x00591660
 int ScriptCB_SetInNetGame(lua_State* L)
 {
-    NetSetup::SetInNetGame(LuaHelper::GetBool(1));
+    bool tOrF = LuaHelper::GetBool(1);
+    NetSetup::SetInNetGame(tOrF);
     return 1;
 }
 
@@ -1046,7 +1047,8 @@ int ScriptCB_InNetGame(lua_State* L)
 // FUNCTION: SWBF2 0x00591780
 int ScriptCB_SetDedicated(lua_State* L)
 {
-    NetSetup::SetAsDedicated(LuaHelper::GetBool(1));
+    bool tOrF = LuaHelper::GetBool(1);
+    NetSetup::SetAsDedicated(tOrF);
     return 0;
 }
 
@@ -3174,17 +3176,19 @@ int ScriptCB_SetVoiceSendPreset(lua_State*)
 // FUNCTION: SWBF2 0x00596390
 int ScriptCB_GetVoiceSendPreset(lua_State*)
 {
-    GameVoiceChat::Transport::Mask preset = GameVoiceChat::Transport::mask_Noone;
     if (GameVoiceChat::IsOpen())
     {
         GameVoiceChat::Node* node = GameVoiceChat::FindNodeByDeviceID(PauseMenu::GetPausingJoystick());
         if (node)
         {
-            bool enabled, keepCurrent;
-            ((GameVoiceChat::Node*)node)->GetSendMask(preset, enabled, keepCurrent);
+            GameVoiceChat::Transport::Mask sendMask;
+            bool enable, maskExisting;
+            node->GetSendMask(sendMask, enable, maskExisting);
+            LuaHelper::PushInt(sendMask);
+            return 1;
         }
     }
-    lua_pushnumber(LuaHelper::mState, (float)(int)preset);
+    LuaHelper::PushInt(GameVoiceChat::Transport::mask_Noone);
     return 1;
 }
 
@@ -3207,17 +3211,19 @@ int ScriptCB_SetVoiceReceivePreset(lua_State*)
 // FUNCTION: SWBF2 0x00596440
 int ScriptCB_GetVoiceReceivePreset(lua_State*)
 {
-    GameVoiceChat::Transport::Mask preset = GameVoiceChat::Transport::mask_Noone;
     if (GameVoiceChat::IsOpen())
     {
         GameVoiceChat::Node* node = GameVoiceChat::FindNodeByDeviceID(PauseMenu::GetPausingJoystick());
         if (node)
         {
-            bool enabled, keepCurrent;
-            ((GameVoiceChat::Node*)node)->GetReceiveMask(preset, enabled, keepCurrent);
+            GameVoiceChat::Transport::Mask receiveMask;
+            bool enable, maskExisting;
+            node->GetReceiveMask(receiveMask, enable, maskExisting);
+            LuaHelper::PushInt(receiveMask);
+            return 1;
         }
     }
-    lua_pushnumber(LuaHelper::mState, (float)(int)preset);
+    LuaHelper::PushInt(GameVoiceChat::Transport::mask_Noone);
     return 1;
 }
 

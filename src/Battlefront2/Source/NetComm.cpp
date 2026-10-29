@@ -726,12 +726,11 @@ void __fastcall PackHeader(NetPacket* pPacket)
 {
     pPacket->mCommIndex = pPacket->mDataIndex - 5;
     pPacket->mCurIndex = (signed char)pPacket->mCommIndex;
-    const unsigned int a = *(unsigned int*)&NetComm::Header(pPacket).group;
-    const unsigned int b = *(unsigned int*)&NetComm::Header(pPacket).idx;
-    pPacket->Write((unsigned char)(a >> 16));
-    pPacket->Write((unsigned short)a);
-    pPacket->Write((unsigned char)b);
-    pPacket->Write((unsigned char)((b >> 8) | (((b >> 16) & 0xff) ? 0x80 : 0)));
+    NetComm::PktHeader header = NetComm::Header(pPacket);
+    pPacket->Write(header.type);
+    pPacket->Write(header.group);
+    pPacket->Write(header.idx);
+    pPacket->Write((unsigned char)(header.count | (header.compressed ? 0x80 : 0)));
 }
 
 // FUNCTION: SWBF2 0x005b3130

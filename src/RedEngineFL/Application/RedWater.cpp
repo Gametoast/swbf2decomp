@@ -814,11 +814,11 @@ float RedWater::OceanPhillipsSpectrum(float kx, float kz)
     {
         return 0.0f;
     }
-    float fK = (float)sqrt(fK2);
-    float fKDotW = (float)fabs(kz / fK * m_windDirectionZ + kx / fK * m_windDirectionX);
+    float fK = sqrtf(fK2);
+    float fKDotW = fabsf(kz / fK * m_windDirectionZ + kx / fK * m_windDirectionX);
     float fl = fL / 75.0f;
     float fP = (float)exp(-1.0f / (fL * fL * fK2)) * m_phillipsConstant * fKDotW * fKDotW / (fK2 * fK2);
-    return fP * (float)exp(-(fl * fK2 * fl));
+    return fP * expf(-(fl * fK2 * fl));
 }
 
 // FUNCTION: SWBF2 0x006cf8f0

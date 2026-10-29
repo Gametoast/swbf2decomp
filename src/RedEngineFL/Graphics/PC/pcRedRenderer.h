@@ -893,29 +893,7 @@ struct pcRedVertexShaderConstantRegister
 };
  
 
-class pcRedVertexShaderConstants
-{
-public:
-
-    pcRedVertexShaderConstantRegister* GetRegisterArray(int iFirst, int iCount)
-    {
-        if (m_iMinConstantSet > iFirst)
-        {
-            m_iMinConstantSet = iFirst;
-        }
-        if (m_iMaxConstantSet < iFirst + iCount - 1)
-        {
-            m_iMaxConstantSet = iFirst + iCount - 1;
-        }
-        return m_Registers;
-    }
-
-    void Update();
-
-    pcRedVertexShaderConstantRegister m_Registers[96];
-    int m_iMinConstantSet;
-    int m_iMaxConstantSet;
-};
+class pcRedVertexShaderConstants;
  
  
 
@@ -1422,9 +1400,9 @@ public:
     static bool m_bScreenSpaceShadows;
     static float m_fStencilShadowLength;
     static int m_iImmediateMode;
-    static int m_uiCurMatrixPoolOffset;
+    static unsigned int m_uiCurMatrixPoolOffset;
     static unsigned int m_curRenderItemOffset;
-    static int m_uiCurLightingStatePoolOffset;
+    static unsigned int m_uiCurLightingStatePoolOffset;
     static int m_bIsSetTransformViewUndo;
     static int m_bIsSetTransformProjectionUndo;
     static RedLightingState* m_pLightingState;

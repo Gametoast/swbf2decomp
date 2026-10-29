@@ -6,6 +6,7 @@
 
 #include <string.h>
 #include "GameLoop.h"
+#include "LuaCallbacks_IFace.h"
 #include "PebbleFL/Common/PblUnicode.h"
 
 namespace StatsManager
@@ -70,12 +71,11 @@ namespace StatsManager
 {
 
 // FUNCTION: SWBF2 0x005308c0
-bool __fastcall ReadStatsGetResults(int iUnused, void* pData)
+bool ReadStatsGetResults(unsigned int iPlayer, LeaderBoardPlayerStatsT* pStats)
 {
-    memset(pData, 0, 0x460);
-    int* pWords = static_cast<int*>(pData);
-    pWords[131] = 10;
-    pWords[132] = 10;
+    memset(pStats, 0, sizeof(*pStats));
+    pStats->factionStats[2].wins = 10;
+    pStats->factionStats[2].losses = 10;
     return true;
 }
 }

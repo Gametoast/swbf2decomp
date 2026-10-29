@@ -32,6 +32,8 @@ inline bool IsNumber(int iIndex) { return lua_isnumber(mState, iIndex) != 0; }
 
 // FUNCTION: SWBF2 0x00580860
 inline bool IsNoneOrNil(int iIndex) { return lua_type(mState, iIndex) <= LUA_TNIL; }
+inline bool IsNil(int iIndex) { return lua_type(mState, iIndex) == LUA_TNIL; }
+inline bool IsTable(int iIndex) { return lua_type(mState, iIndex) == LUA_TTABLE; }
 // FUNCTION: SWBF2 0x00580880
 inline bool IsBool(int iIndex) { return lua_type(mState, iIndex) == LUA_TBOOLEAN; }
 
@@ -63,11 +65,32 @@ inline void PushInt(int iValue)
 {
     lua_pushnumber(mState, (float)iValue);
 }
+inline void PushFloat(float fValue)
+{
+    lua_pushnumber(mState, fValue);
+}
+inline void PushBool(bool bValue)
+{
+    lua_pushboolean(mState, bValue);
+}
+inline void PushNil()
+{
+    lua_pushnil(mState);
+}
+inline void PushEmptyTable()
+{
+    lua_newtable(mState);
+}
 // FUNCTION: SWBF2 0x0057dc20
 inline int GetTop()
 {
     return lua_gettop(mState);
 }
+inline int GetStackSpace()
+{
+    return lua_gettop(mState);
+}
+
 // FUNCTION: SWBF2 0x0057dc50
 inline int TableGetN(int iStack)
 {
@@ -83,15 +106,20 @@ inline void RawGetFromTable(int iStack)
 {
     lua_rawget(mState, iStack);
 }
+inline void RawSetToTable(int iStack)
+{
+    lua_rawset(mState, iStack);
+}
 bool PushGlobalProc(char const* pcFunc);
 bool PushTableProc(char const* pcTable, char const* pcFunc);
 bool PushTableProcWThis(char const* pcTable, char const* pcFunc);
 
-int CallProc(int);
+int CallProc(int aReturns);
 bool CallProc(char const* pcName);
 bool CallGlobalProc(char const* pcFunc);
 
 bool CallGlobalProc(char const* pcFunc, float fArg);
+bool CallGlobalProc(char const* pcFunc, bool bArg);
 
 bool CallGlobalProc(char const* pcFunc, unsigned short const* pusArg);
 bool CallTableProcWThis(char const* pcTable, char const* pcFunc);
@@ -126,9 +154,9 @@ inline void SetGlobal(char const* pcName)
 {
     lua_setglobal(mState, pcName);
 }
-void TableReadVal(char const* pcKey, float& fVal, bool bRequired);
-void TableReadVal(char const* pcKey, int& iVal, bool bRequired);
+void TableReadVal(char const* pcKey, float& fVal, bool aNilOk);
+void TableReadVal(char const* pcKey, int& iVal, bool aNilOk);
 void TableReadVal(char const* pcKey, bool& bVal);
-void TableReadVal(char const* pcKey, char* pcVal, unsigned int uSize, bool bRequired);
+void TableReadVal(char const* pcKey, char* pcVal, unsigned int uSize, bool aNilOk);
 
 }

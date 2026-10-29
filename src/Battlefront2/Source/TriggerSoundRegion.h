@@ -93,6 +93,8 @@ public:
 
         float GetReinforcementCount() const;
 
+        void Enable(const bool enabled) { mEnabled = enabled; }
+
         bool IsEnabled() const { return mEnabled; }
 
         unsigned int mID;

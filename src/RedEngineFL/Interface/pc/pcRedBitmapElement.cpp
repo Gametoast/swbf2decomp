@@ -130,11 +130,11 @@ void RedBitmapElement::SetTexCoords(float fU0, float fV0, float fU1, float fV1,
     m_vertices[1].u0 = fU0;
     m_vertices[1].v0 = fV1;
 
-    m_vertices[2].u0 = fU1;
-    m_vertices[2].v0 = fV0;
-
     m_vertices[3].u0 = bSwapDiagonal ? fU0 : fU1;
     m_vertices[3].v0 = bSwapDiagonal ? fV0 : fV1;
+
+    m_vertices[2].u0 = fU1;
+    m_vertices[2].v0 = fV0;
 }
 
 // FUNCTION: SWBF2 0x006e4c20

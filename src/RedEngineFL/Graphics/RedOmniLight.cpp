@@ -77,7 +77,7 @@ void RedOmniLight::SetColor(const RedColorValue& color)
 {
     float fScale = (m_radius * 0.5f) * (m_radius * 0.5f);
     m_color = color;
-    m_d3dLight.Diffuse = *(const D3DCOLORVALUE*)&color;
+    m_d3dLight.Diffuse = color;
     m_d3dLight.Diffuse.r *= fScale;
     m_d3dLight.Diffuse.g *= fScale;
     m_d3dLight.Diffuse.b *= fScale;
@@ -105,17 +105,14 @@ void RedOmniLight::SetRadius(float fRadius)
 // FUNCTION: SWBF2 0x006eec90
 void RedOmniLight::_RecalculateProjectionMatrix() const
 {
-    memcpy(&m_mProjection, &gMatrixIdentity, sizeof(m_mProjection));
+    m_mProjection = gMatrixIdentity;
     if (m_radius > 0.0f)
     {
         float fInv = 1.0f / m_radius;
         m_mProjection.m[0][0] = fInv;
         m_mProjection.m[1][1] = fInv;
         m_mProjection.m[2][2] = fInv;
-        m_mProjection.m[3][0] = -m_pos.x * fInv;
-        m_mProjection.m[3][1] = -m_pos.y * fInv;
-        m_mProjection.m[3][2] = -m_pos.z * fInv;
-        m_mProjection.m[3][3] = 1.0f;
+        m_mProjection.SetTranslation(-m_pos * fInv);
     }
     m_bProjectionDirty = false;
 }

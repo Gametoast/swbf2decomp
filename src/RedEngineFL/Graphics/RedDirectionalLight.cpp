@@ -102,16 +102,15 @@ bool RedDirectionalLight::IsVisible(const RedCamera* pCamera) const
 void RedDirectionalLight::SetColor(const RedColorValue& color)
 {
     m_color = color;
-    m_d3dLight.Diffuse = m_d3dLight.Specular = *(const D3DCOLORVALUE*)&color;
+    m_d3dLight.Diffuse = m_d3dLight.Specular = color;
 }
 
 // FUNCTION: SWBF2 0x006d8fe0
 void RedDirectionalLight::SetDirection(const PblVector3& vDirection)
 {
-    float fLengthSq = vDirection.x * vDirection.x + vDirection.y * vDirection.y
-                    + vDirection.z * vDirection.z;
+    float fLengthSq = SquaredLength(vDirection);
 
-    if (EPSILON >= fabs(fLengthSq - 1.0f))
+    if (EPSILON >= fabsf(fLengthSq - 1.0f))
     {
         m_vDirection = vDirection;
     }
@@ -127,20 +126,12 @@ void RedDirectionalLight::SetDirection(const PblVector3& vDirection)
 // FUNCTION: SWBF2 0x006d9090
 void RedDirectionalLight::_RecalculateProjectionMatrix() const
 {
-    const float fInvTileU = 1.0f / m_fProjTexTileU;
-    const float fInvTileV = 1.0f / m_fProjTexTileV;
+    PblVector3 vU = (gVectorUnitX - m_vDirection * m_vDirection.x) / m_fProjTexTileU;
+    PblVector3 vV = (gVectorUnitZ - m_vDirection * m_vDirection.z) / m_fProjTexTileV;
 
-    const float ux = (gVectorUnitX.x - m_vDirection.x * m_vDirection.x) * fInvTileU;
-    const float uy = (gVectorUnitX.y - m_vDirection.y * m_vDirection.x) * fInvTileU;
-    const float uz = (gVectorUnitX.z - m_vDirection.z * m_vDirection.x) * fInvTileU;
-
-    const float vx = (gVectorUnitZ.x - m_vDirection.x * m_vDirection.z) * fInvTileV;
-    const float vy = (gVectorUnitZ.y - m_vDirection.y * m_vDirection.z) * fInvTileV;
-    const float vz = (gVectorUnitZ.z - m_vDirection.z * m_vDirection.z) * fInvTileV;
-
-    m_mProjection.SetXAxis(ux, vx, 0.0f, 0.0f);
-    m_mProjection.SetYAxis(uy, vy, 0.0f, 0.0f);
-    m_mProjection.SetZAxis(uz, vz, 1.0f, 0.0f);
+    m_mProjection.SetXAxis(vU.x, vV.x, 0.0f, 0.0f);
+    m_mProjection.SetYAxis(vU.y, vV.y, 0.0f, 0.0f);
+    m_mProjection.SetZAxis(vU.z, vV.z, 1.0f, 0.0f);
     m_mProjection.SetTranslation(m_fProjTexOffsetU / m_fProjTexTileU,
                                  m_fProjTexOffsetV / m_fProjTexTileV, 0.0f, 1.0f);
 

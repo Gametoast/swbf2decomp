@@ -83,7 +83,6 @@ public:
     static void SetAddr(NetAddr& address, const NetSocketPeerRecord& peer);
 };
 
-bool __fastcall IsPrivateIP(unsigned long netAddr);
 unsigned long GetPrivateIP();
 void __fastcall HandleFindPacket(NetPacket* pPacket);
 void __fastcall HandleFoundPacket(NetPacket* pPacket, const void* pSource);

@@ -138,15 +138,15 @@ namespace Lua_Callbacks
 {
 
 // FUNCTION: SWBF2 0x00587ea0
-void __fastcall TableReadValWithDefault(const char* pcKey, float* pfValue)
+void TableReadValWithDefault(const char* pcKey, float& fValue)
 {
-    lua_pushstring(LuaHelper::mState, pcKey);
-    lua_rawget(LuaHelper::mState, -2);
+    LuaHelper::PushString(pcKey);
+    LuaHelper::RawGetFromTable(-2);
     if (lua_type(LuaHelper::mState, -1) != LUA_TNIL)
     {
-        *pfValue = (float)luaL_checknumber(LuaHelper::mState, -1);
+        fValue = LuaHelper::GetFloat(-1);
     }
-    lua_settop(LuaHelper::mState, -2);
+    LuaHelper::Pop(1);
 }
 }
 
@@ -154,14 +154,14 @@ namespace Lua_Callbacks
 {
 
 // FUNCTION: SWBF2 0x00587f00
-void __fastcall TableReadColor(const char* pcKey, float* pfColor)
+void TableReadColor(const char* pcKey, RedColorValue& color)
 {
-    lua_pushstring(LuaHelper::mState, pcKey);
-    lua_rawget(LuaHelper::mState, -2);
-    Lua_Callbacks::TableReadValWithDefault("red", pfColor);
-    Lua_Callbacks::TableReadValWithDefault("green", pfColor + 1);
-    Lua_Callbacks::TableReadValWithDefault("blue", pfColor + 2);
-    lua_settop(LuaHelper::mState, -2);
+    LuaHelper::PushString(pcKey);
+    LuaHelper::RawGetFromTable(-2);
+    Lua_Callbacks::TableReadValWithDefault("red", color.r);
+    Lua_Callbacks::TableReadValWithDefault("green", color.g);
+    Lua_Callbacks::TableReadValWithDefault("blue", color.b);
+    LuaHelper::Pop(1);
 }
 }
 
@@ -169,18 +169,18 @@ namespace Lua_Callbacks
 {
 
 // FUNCTION: SWBF2 0x00587f60
-void __fastcall TableReadDirection(const char* pcKey, PblVector3* pDirection)
+void TableReadDirection(const char* pcKey, PblVector3& direction)
 {
-    float x = pDirection->x;
-    float y = pDirection->y;
-    float z = pDirection->z;
-    lua_pushstring(LuaHelper::mState, pcKey);
-    lua_rawget(LuaHelper::mState, -2);
-    Lua_Callbacks::TableReadValWithDefault("x", &x);
-    Lua_Callbacks::TableReadValWithDefault("y", &y);
-    Lua_Callbacks::TableReadValWithDefault("z", &z);
-    *pDirection = PblVector3(x, y, z);
-    lua_settop(LuaHelper::mState, -2);
+    float x = direction.x;
+    float y = direction.y;
+    float z = direction.z;
+    LuaHelper::PushString(pcKey);
+    LuaHelper::RawGetFromTable(-2);
+    Lua_Callbacks::TableReadValWithDefault("x", x);
+    Lua_Callbacks::TableReadValWithDefault("y", y);
+    Lua_Callbacks::TableReadValWithDefault("z", z);
+    direction = PblVector3(x, y, z);
+    LuaHelper::Pop(1);
 }
 }
 
@@ -2190,22 +2190,22 @@ int ScriptCB_SetMovieAudioBus(lua_State* L)
 // FUNCTION: SWBF2 0x00585860
 int ScriptCB_GetScreenInfo(lua_State* L)
 {
-    lua_gettop(LuaHelper::mState);
-    lua_pushnumber(LuaHelper::mState, (float)RedInterfaceScreen::GetScreenWidth());
-    lua_pushnumber(LuaHelper::mState, (float)RedInterfaceScreen::GetScreenHeight());
-    lua_pushnumber(LuaHelper::mState, RedInterfaceScreen::GetScreenBottomV());
-    lua_pushnumber(LuaHelper::mState, 0.75f / RedRenderer::GetScreenAspectRatio());
+    LuaHelper::GetTop();
+    LuaHelper::PushFloat((float)RedInterfaceScreen::GetScreenWidth());
+    LuaHelper::PushFloat((float)RedInterfaceScreen::GetScreenHeight());
+    LuaHelper::PushFloat(RedInterfaceScreen::GetScreenBottomV());
+    LuaHelper::PushFloat(0.75f / RedRenderer::GetScreenAspectRatio());
     return 4;
 }
 
 // FUNCTION: SWBF2 0x00585920
 int ScriptCB_GetSafeScreenInfo(lua_State* L)
 {
-    lua_gettop(LuaHelper::mState);
+    LuaHelper::GetTop();
     float fSafeZone = RedInterfaceScreen::GetScreenSafeZone();
-    lua_pushnumber(LuaHelper::mState, (float)RedInterfaceScreen::GetScreenWidth() * fSafeZone);
-    lua_pushnumber(LuaHelper::mState, (float)RedInterfaceScreen::GetScreenHeight() * fSafeZone);
-    lua_pushnumber(LuaHelper::mState, 1.0f);
+    LuaHelper::PushFloat((float)RedInterfaceScreen::GetScreenWidth() * fSafeZone);
+    LuaHelper::PushFloat((float)RedInterfaceScreen::GetScreenHeight() * fSafeZone);
+    LuaHelper::PushFloat(1.0f);
     return 3;
 }
 
@@ -4078,8 +4078,8 @@ int ScriptCB_SetIFaceLighting(lua_State* L)
         RedAmbientLight& rAmbient = RedInterfaceScreen::s_lightingState.ambientLight;
         RedColorValue top = rAmbient.GetTopColor();
         RedColorValue bottom = rAmbient.GetBottomColor();
-        Lua_Callbacks::TableReadColor("top", &top.r);
-        Lua_Callbacks::TableReadColor("bottom", &bottom.r);
+        Lua_Callbacks::TableReadColor("top", top);
+        Lua_Callbacks::TableReadColor("bottom", bottom);
         rAmbient.SetTopColor(top);
         rAmbient.SetBottomColor(bottom);
         RedColorValue mean;
@@ -4103,8 +4103,8 @@ int ScriptCB_SetIFaceLighting(lua_State* L)
                 PblVector3 direction;
                 RedColorValue color;
                 RedInterfaceScreen::GetDirectionalLight(i, direction, color);
-                Lua_Callbacks::TableReadDirection("direction", &direction);
-                Lua_Callbacks::TableReadColor("color", &color.r);
+                Lua_Callbacks::TableReadDirection("direction", direction);
+                Lua_Callbacks::TableReadColor("color", color);
                 RedInterfaceScreen::s_directionalLight[i].SetDirection(direction);
                 RedInterfaceScreen::s_directionalLight[i].SetColor(color);
             }

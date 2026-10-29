@@ -184,9 +184,10 @@ bool PushTableProcWThis(char const* pcTable, char const* pcFunc)
 }
 
 // FUNCTION: SWBF2 0x005a1070
-int CallProc(int)
+int CallProc(int aReturns)
 {
-    int iResult = lua_pcall(mState, lua_gettop(mState) - mStackPos, 0, 0);
+    int aNumArgs = GetTop() - mStackPos;
+    int iResult = lua_pcall(mState, aNumArgs, aReturns, 0);
     if (iResult)
     {
         lua_pop(mState, 1);
@@ -213,7 +214,7 @@ bool CallGlobalProc(char const* pcFunc, float fArg)
     {
         return false;
     }
-    lua_pushnumber(mState, fArg);
+    PushFloat(fArg);
     CallProc(0);
     return true;
 }
@@ -242,95 +243,96 @@ bool CallTableProcWThis(char const* pcTable, char const* pcFunc, unsigned short 
 }
 
 // FUNCTION: SWBF2 0x005a1290
-void TableReadVal(char const* pcKey, float& fVal, bool bRequired)
+void TableReadVal(char const* pcKey, float& fVal, bool aNilOk)
 {
-    (void)bRequired;
     PushString(pcKey);
     RawGetFromTable(-2);
     if (IsNumber(-1))
     {
         fVal = GetFloat(-1);
-        Pop(1);
     }
     else
     {
         fVal = 0.0f;
-        Pop(1);
+        if (aNilOk)
+        {
+            IsNil(-1);
+        }
     }
+    Pop(1);
 }
 
 // FUNCTION: SWBF2 0x005a1300
-void TableReadVal(char const* pcKey, int& iVal, bool bRequired)
+void TableReadVal(char const* pcKey, int& iVal, bool aNilOk)
 {
     PushString(pcKey);
     RawGetFromTable(-2);
     if (IsNumber(-1))
     {
         iVal = LuaHelper::GetInt(-1);
-        Pop(1);
     }
     else
     {
         iVal = 0;
-        if (bRequired)
+        if (aNilOk)
         {
-            lua_type(mState, -1);
+            IsNil(-1);
         }
-        Pop(1);
     }
+    Pop(1);
 }
 
 // FUNCTION: SWBF2 0x005a13e0
-void TableReadVal(char const* pcKey, char* pcVal, unsigned int uSize, bool bRequired)
+void TableReadVal(char const* pcKey, char* pcVal, unsigned int uSize, bool aNilOk)
 {
     PushString(pcKey);
     RawGetFromTable(-2);
     memset(pcVal, 0, uSize);
     if (IsString(-1))
     {
-        strlcpy(pcVal, GetString(-1), uSize);
-        Pop(1);
+        const char* Str = GetString(-1);
+        strlcpy(pcVal, Str, uSize);
     }
     else
     {
-        if (bRequired)
+        if (aNilOk)
         {
-            lua_type(mState, -1);
+            IsNil(-1);
         }
-        Pop(1);
     }
+    Pop(1);
 }
 
 // FUNCTION: SWBF2 0x005a1480
 void TableWriteVal(char const* pcKey, float fVal)
 {
-    lua_pushstring(mState, pcKey);
-    lua_pushnumber(mState, fVal);
-    lua_rawset(mState, -3);
+    PushString(pcKey);
+    PushFloat(fVal);
+    RawSetToTable(-3);
 }
 
 // FUNCTION: SWBF2 0x005a14d0
 void TableWriteVal(char const* pcKey, int iVal)
 {
-    lua_pushstring(mState, pcKey);
-    lua_pushnumber(mState, (lua_Number)iVal);
-    lua_rawset(mState, -3);
+    PushString(pcKey);
+    PushInt(iVal);
+    RawSetToTable(-3);
 }
 
 // FUNCTION: SWBF2 0x005a1570
 void TableWriteVal(char const* pcKey, unsigned short const* pusVal)
 {
-    lua_pushstring(mState, pcKey);
+    PushString(pcKey);
     PushString(pusVal);
-    lua_rawset(mState, -3);
+    RawSetToTable(-3);
 }
 
 // FUNCTION: SWBF2 0x005a1540
 void TableWriteVal(char const* pcKey, char const* pcVal)
 {
-    lua_pushstring(mState, pcKey);
-    lua_pushstring(mState, pcVal);
-    lua_rawset(mState, -3);
+    PushString(pcKey);
+    PushString(pcVal);
+    RawSetToTable(-3);
 }
 
 // FUNCTION: SWBF2 0x005a1390
@@ -345,9 +347,9 @@ void TableReadVal(char const* pcKey, bool& bVal)
 // FUNCTION: SWBF2 0x005a15a0
 void TableWriteNil(char const* pcKey)
 {
-    lua_pushstring(mState, pcKey);
-    lua_pushnil(mState);
-    lua_rawset(mState, -3);
+    PushString(pcKey);
+    PushNil();
+    RawSetToTable(-3);
 }
 
 }
@@ -368,7 +370,7 @@ bool CallGlobalProc(char const* pcFunc, bool bArg)
     {
         return false;
     }
-    lua_pushboolean(mState, bArg);
+    PushBool(bArg);
     CallProc(0);
     return true;
 }
@@ -397,7 +399,7 @@ bool LuaHelper::CallTableProcWThis(char const* pcTable, char const* pcFunc, floa
     {
         return false;
     }
-    lua_pushnumber(mState, fArg);
+    PushFloat(fArg);
     CallProc(0);
     return true;
 }
@@ -409,8 +411,8 @@ bool LuaHelper::CallTableProcWThis(char const* pcTable, char const* pcFunc, floa
     {
         return false;
     }
-    lua_pushnumber(mState, fArg1);
-    lua_pushnumber(mState, fArg2);
+    PushFloat(fArg1);
+    PushFloat(fArg2);
     CallProc(0);
     return true;
 }
@@ -421,8 +423,8 @@ namespace LuaHelper
 // FUNCTION: SWBF2 0x005a1510
 void TableWriteVal(char const* pcKey, bool bVal)
 {
-    lua_pushstring(mState, pcKey);
-    lua_pushboolean(mState, bVal);
-    lua_rawset(mState, -3);
+    PushString(pcKey);
+    PushBool(bVal);
+    RawSetToTable(-3);
 }
 }

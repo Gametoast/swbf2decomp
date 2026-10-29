@@ -63,7 +63,8 @@ public:
     void SetInputMode(unsigned int uiMode) { mMode = uiMode; }
 
     bool GetFlip() { return mFlip[GetInputMode()] != 0; }
-    bool GetMouseAssist() const { return mMouseAssist[GetInputMode()] != 0; }
+    bool GetMouseAssist() const { return mMouseAssist[GetInputMode()]; }
+    void SetMouseAssist(bool assist, int mode) { mMouseAssist[mode] = assist; }
 
     void SetFlip(bool bFlip) { mFlip[GetInputMode()] = bFlip; }
     bool GetFlipForMode(int iMode) const { return mFlip[iMode]; }

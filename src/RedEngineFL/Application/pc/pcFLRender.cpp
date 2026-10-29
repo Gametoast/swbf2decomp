@@ -91,7 +91,7 @@ void FLRenderer::AddInterfaceElement(RedScreenGroupElement* pElement, float fX,
 {
     pElement->m_fScreenRelativeX = fX;
     pElement->m_fScreenRelativeY = fY;
-    pElement->m_bUseSafeZone = bUseSafeZone;
+    pElement->SetUseSafezone(bUseSafeZone);
 
     RedInterfaceScreen::s_screenFull.AddElement(pElement);
 }
@@ -374,16 +374,8 @@ float FLRenderer::GetNearPlane()
 // FUNCTION: SWBF2 0x006bc6c0
 float FLRenderer::GetNearSceneFadeEnd()
 {
-    float fFactor = RedRenderer::pcGetRenderOptions().mNearSceneFadeFactor;
-    if (0.0f > fFactor)
-    {
-        fFactor = 0.0f;
-    }
-    else if (fFactor > 1.0f)
-    {
-        fFactor = 1.0f;
-    }
-    return (m_fViewNearSceneFadeEnd[1] - m_fViewNearSceneFadeEnd[0]) * fFactor +
+    return (m_fViewNearSceneFadeEnd[1] - m_fViewNearSceneFadeEnd[0]) *
+           Clamp(RedRenderer::pcGetRenderOptions().mNearSceneFadeFactor, 0.0f, 1.0f) +
            m_fViewNearSceneFadeEnd[0];
 }
 
@@ -772,7 +764,7 @@ void FLRenderer::AddInterfaceElement(unsigned int uiView, RedScreenGroupElement*
 {
     pElement->m_fScreenRelativeX = fX;
     pElement->m_fScreenRelativeY = fY;
-    pElement->m_bUseSafeZone = bUseSafeZone;
+    pElement->SetUseSafezone(bUseSafeZone);
 
     m_pViewInterfaceScreen[uiView]->AddElement(pElement);
 }
@@ -1116,16 +1108,9 @@ bool FLRenderer::GetFadeAdjustWithZoom()
 // FUNCTION: SWBF2 0x006bc650
 float FLRenderer::GetFarSceneRange()
 {
-    float fFactor = RedRenderer::pcGetRenderOptions().mFarSceneRangeFactor;
-    if (0.0f > fFactor)
-    {
-        fFactor = 0.0f;
-    }
-    else if (fFactor > 1.0f)
-    {
-        fFactor = 1.0f;
-    }
-    return (m_fViewFarPlane[1] - m_fViewFarPlane[0]) * fFactor + m_fViewFarPlane[0];
+    return (m_fViewFarPlane[1] - m_fViewFarPlane[0]) *
+           Clamp(RedRenderer::pcGetRenderOptions().mFarSceneRangeFactor, 0.0f, 1.0f) +
+           m_fViewFarPlane[0];
 }
 
 // FUNCTION: SWBF2 0x006bc6a0
@@ -1137,16 +1122,8 @@ RedInterfaceScreen* FLRenderer::GetInterfaceView(int iView)
 // FUNCTION: SWBF2 0x006bc710
 float FLRenderer::GetNearSceneFadeStart()
 {
-    float fFactor = RedRenderer::pcGetRenderOptions().mNearSceneFadeFactor;
-    if (0.0f > fFactor)
-    {
-        fFactor = 0.0f;
-    }
-    else if (fFactor > 1.0f)
-    {
-        fFactor = 1.0f;
-    }
-    return (m_fViewNearSceneFadeStart[1] - m_fViewNearSceneFadeStart[0]) * fFactor +
+    return (m_fViewNearSceneFadeStart[1] - m_fViewNearSceneFadeStart[0]) *
+           Clamp(RedRenderer::pcGetRenderOptions().mNearSceneFadeFactor, 0.0f, 1.0f) +
            m_fViewNearSceneFadeStart[0];
 }
 

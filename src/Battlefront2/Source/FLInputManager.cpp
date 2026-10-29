@@ -801,17 +801,17 @@ void FLInputManager::SetReadAll(bool bReadAll)
 }
 
 // FUNCTION: SWBF2 0x0052ac50
-int FLInputManager::GetPlayerFromHWPort(int iHWPort) const
+int FLInputManager::GetPlayerFromHWPort(const int hwPort) const
 {
-    const int* piHWPort = m_HWPort;
+    const int* phwPort = m_HWPort;
     int iPlayer = 0;
-    for (unsigned int i = 0; i < 1; ++i, ++piHWPort)
+    for (unsigned int i = 0; i < 1; ++i, ++phwPort)
     {
-        if (*piHWPort == iHWPort)
+        if (*phwPort == hwPort)
         {
             return iPlayer;
         }
-        if (*piHWPort >= 0)
+        if (*phwPort >= 0)
         {
             ++iPlayer;
         }
@@ -871,7 +871,7 @@ bool is_rumble_enable(int iPlayer)
     bool bEnabled = true;
     if (NetGame::IsEnabled())
     {
-        if (!netEnabledNext || !netClientActive)
+        if (!NetGame::OnClient())
         {
             if (!NetGame::IsHost())
             {

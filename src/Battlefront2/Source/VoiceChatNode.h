@@ -223,13 +223,13 @@ public:
     static const ReceiveMetrics& GetReceiveMetrics(unsigned char node);
     static const SendMetrics& GetSendMetrics(unsigned char node);
 public:
-    static void* sTransport;
+    static Transport* sTransport;
     static unsigned char sSkipDropped;
     static float sBufferSizeMs;
     static unsigned short sRepeatMax;
-    static void* sSendMetrics;
-    static void* sReceiveMetrics;
-    static int sTime;
+    static SendMetrics* sSendMetrics;
+    static ReceiveMetrics* sReceiveMetrics;
+    static float sTime;
     static void* sList[4];
     static unsigned short sSeqNumVariance;
     static float sReceiveBufferSize;

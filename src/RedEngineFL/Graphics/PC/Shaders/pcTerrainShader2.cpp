@@ -429,7 +429,10 @@ void pcTerrainShader2::InitFixedFunctionShaderDef() const
 // FUNCTION: SWBF2 0x006fd230
 bool pcTerrainShader2::IsEnabled()
 {
-    s_Enabled = s_Enabled && RedRenderer::pcGetRenderCaps().pipeline != 0;
+    if (RedRenderer::pcGetRenderCaps().pipeline == PIPELINE_FIXED)
+    {
+        s_Enabled = false;
+    }
     return s_Enabled;
 }
 
@@ -680,14 +683,11 @@ void pcTerrainShader2::_InitDetail(unsigned int uiHash,
 // FUNCTION: SWBF2 0x006fdcc0
 void pcTerrainShader2::_InitDiffuseMap(int iIndex, unsigned int uiHash, const PblVector4& vScale)
 {
-    s_diffuseTextures[iIndex] = uiHash ? RedTexture::s_textureHashTable.Find(uiHash) : 0;
+    s_diffuseTextures[iIndex] = uiHash ? RedTexture::Find(uiHash) : 0;
     const float fHalf = RedTerrain::_fMetersPerPoint * 0.5f;
-    PblVector4 v;
-    v.x = vScale.x;
-    v.y = vScale.y;
-    v.z = fHalf - 0.5f + 0.0f;
-    v.w = -0.5f - fHalf + 0.0f;
-    s_DiffuseTexTransform[iIndex] = v;
+    PblVector4 scaleoff(vScale.x, vScale.y,
+                        fHalf - 0.5f + 0.0f, -0.5f - fHalf + 0.0f);
+    s_DiffuseTexTransform[iIndex] = scaleoff;
 }
 
 // FUNCTION: SWBF2 0x006fdd60
@@ -750,22 +750,23 @@ void pcTerrainShader2::_InitMaps(float fScale)
 void pcTerrainShader2::_InitNoiseMap(int iIndex, unsigned int uiHash,
                                      const PblVector4& vScale, const PblVector4& vOffset)
 {
-    RedTexture* pTexture = uiHash ? RedTexture::s_textureHashTable.Find(uiHash) : 0;
+    RedTexture* pTexture = uiHash ? RedTexture::Find(uiHash) : 0;
     s_noiseTextures[iIndex] = pTexture;
 
     float fWidth = 1.0f;
     float fHeight = 1.0f;
     if (pTexture)
     {
-        fWidth = (float)pTexture->m_uiWidth;
-        fHeight = (float)pTexture->m_uiHeight;
+        fWidth = (float)pTexture->GetWidth();
+        fHeight = (float)pTexture->GetHeight();
     }
     float fBaseWidth = fWidth;
     float fBaseHeight = fHeight;
-    if (s_noiseTextures[0])
+    const RedTexture* basetex = s_noiseTextures[0];
+    if (basetex)
     {
-        fBaseWidth = (float)s_noiseTextures[0]->m_uiWidth;
-        fBaseHeight = (float)s_noiseTextures[0]->m_uiHeight;
+        fBaseWidth = (float)basetex->GetWidth();
+        fBaseHeight = (float)basetex->GetHeight();
     }
 
     PblVector4 v;

@@ -8,6 +8,7 @@ class RedInterfaceElement;
 class RedScreenGroupElement;
 class RedColorValue;
 class PblVector3;
+struct LeaderBoardPlayerStatsT;
 
 namespace StatsManager
 {
@@ -16,7 +17,7 @@ int GetState();
 void StatsManagerSetStoppedState();
 namespace StatsManager
 {
-bool __fastcall ReadStatsGetResults(int iUnused, void* pData);
+bool ReadStatsGetResults(unsigned int iPlayer, LeaderBoardPlayerStatsT* pStats);
 }
 namespace StatsManager
 {
@@ -32,15 +33,15 @@ bool ResetPlayer();
 }
 namespace Lua_Callbacks
 {
-void __fastcall TableReadValWithDefault(const char* pcKey, float* pfValue);
+void TableReadValWithDefault(const char* pcKey, float& fValue);
 }
 namespace Lua_Callbacks
 {
-void __fastcall TableReadColor(const char* pcKey, float* pfColor);
+void TableReadColor(const char* pcKey, RedColorValue& color);
 }
 namespace Lua_Callbacks
 {
-void __fastcall TableReadDirection(const char* pcKey, PblVector3* pDirection);
+void TableReadDirection(const char* pcKey, PblVector3& direction);
 }
 bool ToggleInvincibilityCheat();
 

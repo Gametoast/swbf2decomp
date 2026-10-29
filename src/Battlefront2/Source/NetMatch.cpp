@@ -81,13 +81,13 @@ unsigned int NetSetup::GetPassword()
 }
 
 // FUNCTION: SWBF2 0x005d4b00
-bool __fastcall IsPrivateIP(unsigned long netAddr)
+static bool IsPrivateIP(unsigned long addr)
 {
-    unsigned long hostAddr = ntohl(netAddr);
-    unsigned int first = hostAddr >> 24;
-    unsigned int second = (hostAddr >> 16) & 0xff;
-    return first == 10 || (first == 172 && second >= 16 && second <= 31) ||
-           (first == 192 && second == 168);
+    unsigned int ip = ntohl(addr);
+    int b1 = ip >> 24;
+    int b2 = (ip >> 16) & 0xff;
+    return b1 == 10 || (b1 == 172 && b2 >= 16 && b2 <= 31) ||
+           (b1 == 192 && b2 == 168);
 }
 
 // FUNCTION: SWBF2 0x005d4b40

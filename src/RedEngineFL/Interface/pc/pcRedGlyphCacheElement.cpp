@@ -339,7 +339,7 @@ void RedGlyphCacheElement::SetFont(const RedFont* pFont)
         m_ppInterfaceShader[i] = 0;
     }
 
-    m_pFont = const_cast<RedFont*>(pFont);
+    m_pFont = pFont;
     ReallocateCache();
 }
 

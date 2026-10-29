@@ -346,13 +346,6 @@ int VOSoundCompareCallback(const void* pA, const void* pB)
 
 }
 
-enum VOType
-{
-    VOT_NONE = 0,
-    VOT_AcquiredTarget = 1,
-    VOT_PathFollowWait = 6,
-    VOT_RebelsShootDeadBody = 11
-};
 
 namespace VOHelper
 {
@@ -612,17 +605,17 @@ void CancelQueuedSound(int iHandle)
  
 
 // FUNCTION: SWBF2 0x00671940
-int AI::VOHelper::TypeStrToEnum(const char* pszType)
+AI::VOType AI::VOHelper::TypeStrToEnum(const char* pszType)
 {
-    PblHash hash(pszType);
-    for (int i = 0; i < 48; ++i)
+    unsigned int hash = PblHash(pszType);
+    for (int i = 0; i < VOT_Count; ++i)
     {
         if (hash == VOTypeNames[i])
         {
-            return i;
+            return static_cast<VOType>(i);
         }
     }
-    return 0;
+    return VOT_NONE;
 }
 
 // FUNCTION: SWBF2 0x00671970
