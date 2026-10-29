@@ -101,7 +101,7 @@ class FirstPersonRenderable : public Renderable
 {
 public:
 
-    void SetAnimAndTransition(float fTime);
+    void SetAnimAndTransition(SOLDIERANIMATION aAnim, SOLDIERANIMATION aTrans, float aTime);
     FirstPersonRenderable(unsigned int uCameraId, const ZephyrSkeletonShared* pShared);
     virtual ~FirstPersonRenderable();
 

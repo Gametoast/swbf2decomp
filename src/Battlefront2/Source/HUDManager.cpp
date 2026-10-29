@@ -301,7 +301,7 @@ void HUD::Manager::Open()
     HUD::gScreenGroup->m_fScreenRelativeX = 0.0f;
     HUD::gScreenGroup->m_fScreenRelativeY = 0.0f;
     HUD::gScreenGroup->Enable(true);
-    HUD::gScreenGroup->m_bUseSafeZone = false;
+    HUD::gScreenGroup->SetUseSafezone(false);
     HUD::gScreenGroup->m_bUsePerspectiveHack = true;
     HUD::gScreenGroup->AddToRedScreen();
 
@@ -309,7 +309,7 @@ void HUD::Manager::Open()
     HUD::gScreenGroupEdit->m_fScreenRelativeX = 0.0f;
     HUD::gScreenGroupEdit->m_fScreenRelativeY = 0.0f;
     HUD::gScreenGroupEdit->Enable(HUD::gScreenGroupEditEnabled);
-    HUD::gScreenGroupEdit->m_bUseSafeZone = false;
+    HUD::gScreenGroupEdit->SetUseSafezone(false);
     HUD::gScreenGroupEdit->m_bUsePerspectiveHack = true;
     HUD::gScreenGroupEdit->AddToRedScreen();
 
@@ -429,7 +429,7 @@ void HUD::Manager::Load(PblFileChunk& chunk)
             HUD::gScreenGroup[i + 1].m_fScreenRelativeX = 0.0f;
             HUD::gScreenGroup[i + 1].m_fScreenRelativeY = 0.0f;
             HUD::gScreenGroup[i + 1].Enable(true);
-            HUD::gScreenGroup[i + 1].m_bUseSafeZone = false;
+            HUD::gScreenGroup[i + 1].SetUseSafezone(false);
             HUD::gScreenGroup[i + 1].m_bUsePerspectiveHack = true;
             AdjustScreenGroupAspect(&HUD::gScreenGroup[i + 1]);
             FLRenderer::AddInterfaceElement(i, &HUD::gScreenGroup[i + 1], RedInterfaceScreen::LEFT,
@@ -441,7 +441,7 @@ void HUD::Manager::Load(PblFileChunk& chunk)
             HUD::gScreenGroupEdit[i + 1].m_fScreenRelativeX = 0.0f;
             HUD::gScreenGroupEdit[i + 1].m_fScreenRelativeY = 0.0f;
             HUD::gScreenGroupEdit[i + 1].Enable(HUD::gScreenGroupEditEnabled);
-            HUD::gScreenGroupEdit[i + 1].m_bUseSafeZone = false;
+            HUD::gScreenGroupEdit[i + 1].SetUseSafezone(false);
             HUD::gScreenGroupEdit[i + 1].m_bUsePerspectiveHack = true;
             FLRenderer::AddInterfaceElement(i, &HUD::gScreenGroupEdit[i + 1], RedInterfaceScreen::LEFT,
                                             RedInterfaceScreen::TOP, false);

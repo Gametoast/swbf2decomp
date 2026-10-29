@@ -367,13 +367,13 @@ float UnitThreatManager::TimeSinceLastRaytest(const GameObject* pObj) const
 bool UnitThreatManager::ShouldRaytestUnit(const GameObject* pObj) const
 {
     bool bPlayer = false;
-    Controllable* pHim = pObj->mControllableList.GetFirst()->_pObject;
+    Controllable* pHim = pObj->GetFirstControllable();
     if (pHim && pHim->mCtrl)
     {
         bPlayer = PlayerControllerPtr(pHim->mCtrl) != 0;
     }
 
-    float fRaytestInterval[5] = { 4.0f, 4.0f, 2.0f, 1.0f, 1.0f };
+    const float fRaytestInterval[5] = { 4.0f, 4.0f, 2.0f, 1.0f, 1.0f };
     if (!bPlayer)
     {
         const GameObject* pVisible = GetVisibleObject();
@@ -381,7 +381,7 @@ bool UnitThreatManager::ShouldRaytestUnit(const GameObject* pObj) const
         {
             return true;
         }
-        Controllable* pVisCtl = pVisible->mControllableList.GetFirst()->_pObject;
+        Controllable* pVisCtl = pVisible->GetFirstControllable();
         if (pVisCtl && pVisCtl->mCtrl && PlayerControllerPtr(pVisCtl->mCtrl))
         {
             return false;

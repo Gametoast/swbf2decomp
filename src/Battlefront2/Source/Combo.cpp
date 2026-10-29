@@ -487,7 +487,7 @@ const Combo::State& Combo::State::operator=(const State& other)
         {
             break;
         }
-        *pAttack = other.m_aAttack[i];
+        *pAttack = *other.GetAttack(i);
     }
     return *this;
 }
@@ -938,7 +938,7 @@ bool Combo::Condition::TestInputThrust(float fThrust, float fStrafe) const
     if (m_uiInputMagCnd)
     {
         float fMagSq = fThrust * fThrust + fStrafe * fStrafe;
-        float fRef = m_uiInputMagRef * INPUT_MAG_SCALE;
+        float fRef = GetInputMagRef();
         fRef *= fRef;
         if (m_bInputMagLess)
         {
@@ -2595,9 +2595,9 @@ unsigned int Combo::_GetDeflectButton() const
 
     const State* pIdleState = &m_aState[0];
     const Transition* pTransition = 0;
-    for (unsigned int i = 0; i < pIdleState->m_uiNumTransitions; ++i)
+    for (unsigned int i = 0; i < pIdleState->GetNumTransitions(); ++i)
     {
-        pTransition = &pIdleState->m_aTransition[i];
+        pTransition = pIdleState->GetTransition(i);
         if (pTransition->m_uiTargetState == uiState)
         {
             break;
@@ -2605,12 +2605,12 @@ unsigned int Combo::_GetDeflectButton() const
     }
     if (pTransition)
     {
-        for (unsigned int i = 0; i < pTransition->m_uiNumConditions; ++i)
+        for (unsigned int i = 0; i < pTransition->GetNumConditions(); ++i)
         {
-            unsigned int uiButton = pTransition->m_aCondition[i].m_uiButton;
-            if (uiButton)
+            Condition::BUTTON eButton = pTransition->GetCondition(i)->GetButton();
+            if (eButton != Condition::BUTTON_NONE)
             {
-                return uiButton;
+                return eButton;
             }
         }
     }

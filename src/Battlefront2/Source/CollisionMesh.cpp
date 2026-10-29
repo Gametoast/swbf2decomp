@@ -246,10 +246,8 @@ int RayConvexPoly_intersect(const PblVector3& vStart, const PblVector3& vDir, co
 // FUNCTION: SWBF2 0x00461800
 float BoxDistSq(const PblVector3& vPoint, const CollisionAABB& aabb)
 {
-    const float dx = vPoint.x - (aabb.boxmin.x + aabb.boxmax.x) * 0.5f;
-    const float dy = vPoint.y - (aabb.boxmin.y + aabb.boxmax.y) * 0.5f;
-    const float dz = vPoint.z - (aabb.boxmin.z + aabb.boxmax.z) * 0.5f;
-    return dx * dx + dy * dy + dz * dz;
+    PblVector3 Vector = aabb.GetMidPoint() - vPoint;
+    return DotProduct(Vector, Vector);
 }
 
 // FUNCTION: SWBF2 0x004615e0

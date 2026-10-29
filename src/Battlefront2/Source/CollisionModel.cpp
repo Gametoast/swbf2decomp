@@ -447,8 +447,7 @@ bool CollisionModel::PrepareCollision(CollisionObject*, const CollisionModel*, C
         }
         else
         {
-            (*sCollisionMask)[i].mMask[0] = 0;
-            (*sCollisionMask)[i].mMask[1] = 0;
+            (*sCollisionMask)[i].ClearAll();
         }
     }
     return true;

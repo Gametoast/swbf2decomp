@@ -103,6 +103,7 @@ public:
         void SetFriendly(bool bFriendly) { mFriendly = bFriendly; }
         void SetFlagCarrier(bool bFlagCarrier) { mFlagCarrier = bFlagCarrier; }
         void ClearPositionValid() { mPositionValid = false; }
+        bool GetOnScreen() const { return mOnScreen; }
         bool GetVisible() const { return mVisible; }
         bool GetFlagCarrier() const { return mFlagCarrier; }
 
@@ -132,7 +133,7 @@ public:
 
 protected:
 
-    static Target* FindTargetByGameObject(Target* const pTargets, unsigned int uNumTargets,
+    static Target* FindTargetByGameObject(Target* const pTargets, const unsigned int uNumTargets,
                                           const GameObject* const pObject);
 
 public:
@@ -188,7 +189,7 @@ public:
 
     static void AddTargetCommon(GameObject* pActor, unsigned int uTeamMask);
 
-    static void RemoveTargetCommon(GameObject* pActor, unsigned int uTeamMask);
+    static void RemoveTargetCommon(GameObject* const pActor, unsigned int uTeamMask);
 protected:
     void SetLockedTarget(GameObject* const pObject, TargetInfo* const pInfo);
     void SetupNearestTargets(Controllable* const playerControllable, GameObject* const playerObject,

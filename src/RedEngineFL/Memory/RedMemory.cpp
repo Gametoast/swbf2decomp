@@ -5,6 +5,36 @@
 #include "RedMemory.h"
 #include "RedEngineFL/Memory/engineAlloc.h"
 
+struct Tag
+{
+    Tag* prev_;
+    Tag* next_;
+    unsigned int size;
+
+    void New() { prev_ = next_ = 0; }
+};
+
+
+struct TagList
+{
+    Tag* first;
+    Tag* last;
+};
+
+
+struct HeapObj
+{
+    void* start;
+    TagList free;
+    TagList used;
+    unsigned int size;
+    const char* name;
+    unsigned int align;
+    bool frozen;
+    bool permanent;
+};
+
+
 extern "C"
 {
     // GLOBAL: SWBF2 0x0093eba1
@@ -315,7 +345,7 @@ void* RedAllocFromHeap(int heap, unsigned int size, bool bTop)
 }
 
 // FUNCTION: SWBF2 0x006c3900
-int RedCreateHeap(void* start, void* end, int align, char const* name)
+int RedCreateHeap(void* start, void* end, unsigned int align, char const* name)
 {
     unsigned int mask = ~(align - 1);
     char* s = (char*)(((unsigned int)start + align - 1) & mask);
@@ -341,8 +371,7 @@ int RedCreateHeap(void* start, void* end, int align, char const* name)
 
     Tag* tag = (Tag*)s;
     tag->size = size;
-    tag->next_ = 0;
-    tag->prev_ = 0;
+    tag->New();
 
     HeapObj& heap = heapobj[i];
     heap.start = s;
@@ -352,7 +381,7 @@ int RedCreateHeap(void* start, void* end, int align, char const* name)
     heap.used.first = 0;
     heap.used.last = 0;
     heap.align = align;
-    heap.name = (char*)name;
+    heap.name = name;
     heap.frozen = false;
     return i;
 }
@@ -372,7 +401,7 @@ void RedDestroyHeap(int heap)
 }
 
 // FUNCTION: SWBF2 0x006c3a00
-void RedFreeToHeap(int heap, void* block, int flags)
+void RedFreeToHeap(int heap, void* block, unsigned int flags)
 {
     if (RedFreeToHeapInternal(heap, block, flags))
     {
@@ -389,7 +418,7 @@ void RedFreeToHeap(int heap, void* block, int flags)
 }
 
 // FUNCTION: SWBF2 0x006c3aa0
-char* RedInitHeap(void* start, void* end, int maxheaps)
+void* RedInitHeap(void* start, void* end, int maxheaps)
 {
     (void)end;
     ::maxheaps = maxheaps;

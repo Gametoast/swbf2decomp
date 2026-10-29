@@ -2319,7 +2319,7 @@ void EntitySoldier::ResetObject()
     mOldState = SoldierState::STAND;
     mStateTimer = 0.0f;
     mSoldierAnimator = 0;
-    mEyePoint = (&mClass->mCameraSettings[0][0])[mStanceIndex * 2 + mTargetInfo.mIsAiming].CalcEyePoint(mMatrix);
+    mEyePoint = mClass->mCameraSettings[mStanceIndex][mTargetInfo.mIsAiming].CalcEyePoint(mMatrix);
     mEyeDir = mMatrix.GetZAxis();
     mSoundState = 0;
     mFlags = 0;

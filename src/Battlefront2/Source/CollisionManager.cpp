@@ -6,6 +6,8 @@
 #include "CollisionObject.h"
 #include "EntityMine.h"
 #include "EntityTerrain.h"
+#include "EntityWater.h"
+#include "Ordnance.h"
 #include "GameObject.h"
 #include "NetGame.h"
 #include "RedEngineFL/Graphics/RedCamera.h"
@@ -21,29 +23,6 @@
 // GLOBAL: SWBF2 0x007b2770
 // __xmm@01010101010101010101010101010101
 
-class EntityWater : public CollisionObject
-{
-public:
-    virtual ~EntityWater();
-    virtual float RayHit(const PblVector3& vStart, const PblVector3& vDir, float fLength, PblVector3* pNormal,
-                         int* pBodyId, bool bOrdnance);
-};
-
-class Ordnance : public Thread
-{
-public:
-    virtual bool IsRtti(unsigned int uRtti);
-    virtual unsigned int GetDerivedRtti();
-    virtual const char* GetDerivedRttiName();
-    virtual const PblVector3& GetPosition() const;
-    virtual const PblVector3& GetOldPosition() const;
-    virtual const PblVector3& GetVelocity() const;
-    virtual void KillOrdnance();
-    virtual bool CheckCollision();
-
-    char mOrdnanceFields[0x78 - 0x18];
-    PblList<Ordnance>::Node mCollisionManagerNode;
-};
 
 namespace TeamManager
 {
@@ -77,7 +56,7 @@ struct GetObjectsRectData : public CollisionObjectCallbackData
     int mLength;
     PblVector3 mMinPos;
     PblVector3 mMaxPos;
-    GameObject* mMe;
+    const GameObject* mMe;
 };
  
 
@@ -88,7 +67,7 @@ struct GetObjectsRangeData : public CollisionObjectCallbackData
     int mLength;
     PblVector3 mCenter;
     float mRadius;
-    GameObject* mMe;
+    const GameObject* mMe;
 };
  
 
@@ -97,8 +76,8 @@ struct GetObjectsRegionData : public CollisionObjectCallbackData
     GameObject** mArray;
     int mMaxLength;
     int mLength;
-    RedRegion* mRegion;
-    GameObject* mMe;
+    const RedRegion* mRegion;
+    const GameObject* mMe;
 };
  
 
@@ -830,7 +809,7 @@ int CollisionManager::I_GetObjectsInRect(const PblVector3& vMin, const PblVector
     data.mLength = 0;
     data.mMinPos = vMin;
     data.mMaxPos = vMax;
-    data.mMe = (GameObject*)pIgnore;
+    data.mMe = pIgnore;
 
     if (mTreeGrid)
     {
@@ -885,17 +864,19 @@ int CollisionManager::I_GetObjectsInRange(const PblVector3& vCenter, float fRadi
     data.mLength = 0;
     data.mCenter = vCenter;
     data.mRadius = fRadius;
-    data.mMe = (GameObject*)pIgnore;
+    data.mMe = pIgnore;
 
-    PblVector3 vMin(vCenter.x - fRadius, vCenter.y - fRadius, vCenter.z - fRadius);
-    PblVector3 vMax(vCenter.x + fRadius, vCenter.y + fRadius, vCenter.z + fRadius);
     if (mTreeGrid)
     {
-        mTreeGrid->CallbackOnRect(vMin, vMax, GetObjectsRangeCallback, &data);
+        mTreeGrid->CallbackOnRect(vCenter - PblVector3(fRadius, fRadius, fRadius),
+                                  vCenter + PblVector3(fRadius, fRadius, fRadius),
+                                  GetObjectsRangeCallback, &data);
     }
     else
     {
-        I_GetObjectsFromLists(vMin, vMax, GetObjectsRangeCallback, iFilter, &data);
+        I_GetObjectsFromLists(vCenter - PblVector3(fRadius, fRadius, fRadius),
+                              vCenter + PblVector3(fRadius, fRadius, fRadius),
+                              GetObjectsRangeCallback, iFilter, &data);
     }
     return data.mLength;
 }
@@ -936,13 +917,13 @@ int CollisionManager::I_GetObjectsInRegion(const RedRegion& rRegion, GameObject*
     data.mArray = pObjects;
     data.mMaxLength = iMaxCount;
     data.mLength = 0;
-    data.mRegion = (RedRegion*)&rRegion;
-    data.mMe = (GameObject*)pIgnore;
+    data.mRegion = &rRegion;
+    data.mMe = pIgnore;
 
     const PblVector3& vPos = rRegion.mMatrix.GetTranslation();
     float fRadius = rRegion.mSize.w;
-    PblVector3 vMin(vPos.x - fRadius, vPos.y - fRadius, vPos.z - fRadius);
-    PblVector3 vMax(vPos.x + fRadius, vPos.y + fRadius, vPos.z + fRadius);
+    PblVector3 vMin = vPos - PblVector3(fRadius, fRadius, fRadius);
+    PblVector3 vMax = vPos + PblVector3(fRadius, fRadius, fRadius);
     if (mTreeGrid)
     {
         mTreeGrid->CallbackOnRect(vMin, vMax, GetObjectsRegionCallback, &data);
@@ -964,7 +945,7 @@ int CollisionManager::I_GetObjectsInFatRay(const PblVector3& vFrom, const PblVec
     data.mArray = pObjects;
     data.mMaxLength = iMaxCount;
     data.mLength = 0;
-    data.mMe = (GameObject*)pIgnore;
+    data.mMe = pIgnore;
 
     if (!mTreeGrid)
     {

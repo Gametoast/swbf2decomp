@@ -176,26 +176,6 @@ void CameraManager::SetNumCameras(unsigned int uiNumCameras)
     }
 }
 
-// FUNCTION: SWBF2 0x0044e3c0
-bool Tracker::IsFirstPersonView()
-{
-    Trackable* pTrackable = mTrackable;
-    if (pTrackable && pTrackable != (Trackable*)-1 &&
-        (unsigned int)pTrackable->mTracker != 0xDDDDDDDDu &&
-        pTrackable->GetControllable())
-    {
-        Controllable* pCtrl = pTrackable->GetControllable();
-        switch (pCtrl->GetControllableClass()->mForceMode)
-        {
-        case 1:
-            return false;
-        case 2:
-            return true;
-        }
-    }
-    return mIsFirstPersonView;
-}
-
 // SYNTHETIC: SWBF2 0x0044e500
 // CameraInterpolator::`scalar deleting destructor'
 
@@ -536,20 +516,15 @@ int CameraManager::GetCameraIdForView(unsigned int uiView) const
 // FUNCTION: SWBF2 0x0044f640
 float CameraManager::UpdateTrackDistance(int iCam, float fDistance, float fDeltaTime)
 {
-    float fCurrent = mTrackDistance[iCam];
-    if (fCurrent > fDistance)
+    if (mTrackDistance[iCam] > fDistance)
     {
         mTrackDistance[iCam] = fDistance;
-        return fDistance;
     }
-    if (fDistance == 1.0f || fDistance > fCurrent + 0.15f)
+    else if (fDistance == 1.0f || fDistance > mTrackDistance[iCam] + 0.15f)
     {
-        float fNew = fDeltaTime * 0.75f + fCurrent;
-        fNew = Min(fNew, fDistance);
-        mTrackDistance[iCam] = fNew;
-        return fNew;
+        mTrackDistance[iCam] = Min(fDeltaTime * 0.75f + mTrackDistance[iCam], fDistance);
     }
-    return fCurrent;
+    return mTrackDistance[iCam];
 }
 
 // FUNCTION: SWBF2 0x0044f6b0
@@ -624,5 +599,5 @@ float GetWidescreenFOVAdjustment(float fFOV)
         ((float)FLRenderer::GetViewHeight(0) * (float)uScreenWidth) /
         ((float)FLRenderer::GetViewWidth(0) * (float)uScreenHeight);
     const float fScale = 0.75f / fAspect;
-    return (float)atan((double)(fScale * (float)tan((double)(fFOV * 0.5f)))) * 2.0f;
+    return atanf(fScale * tanf(fFOV * 0.5f)) * 2.0f;
 }

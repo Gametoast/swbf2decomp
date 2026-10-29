@@ -524,9 +524,10 @@ void LockOnManager::RemoveTargetLock()
     TargetInfo* pInfo = 0;
     for (unsigned int i = 0; i < 64; i++)
     {
-        if ((GameObject*)mLockedObj == (GameObject*)mTargetPlayer[i].obj)
+        Target& target = mTargetPlayer[i];
+        if (target.obj == (GameObject*)mLockedObj)
         {
-            mTargetPlayer[i].SetObj(0, 0);
+            target.SetObj(0, 0);
             pInfo = &mTargetPlayerInfo[i];
             pInfo->Clean();
             break;
@@ -538,14 +539,15 @@ void LockOnManager::RemoveTargetLock()
 }
 
 // FUNCTION: SWBF2 0x0057db80
-LockOnManager::Target* LockOnManager::FindTargetByGameObject(Target* const pTargets, unsigned int uNumTargets,
+LockOnManager::Target* LockOnManager::FindTargetByGameObject(Target* const pTargets, const unsigned int uNumTargets,
                                                              const GameObject* const pObject)
 {
     for (unsigned int i = 0; i < uNumTargets; ++i)
     {
-        if ((GameObject*)pTargets[i].obj == pObject)
+        Target* const target = &pTargets[i];
+        if ((GameObject*)target->obj == pObject)
         {
-            return &pTargets[i];
+            return target;
         }
     }
     return 0;
@@ -1242,29 +1244,28 @@ void LockOnManager::DestroyAll()
 }
 
 // FUNCTION: SWBF2 0x0057db10
-void LockOnManager::RemoveTargetCommon(GameObject* pActor, unsigned int uTeamMask)
+void LockOnManager::RemoveTargetCommon(GameObject* const pActor, unsigned int uTeamMask)
 {
+    unsigned int teamMaskLeft = uTeamMask;
     for (unsigned int i = 0; i < 32; ++i)
     {
         LockOnManager::Target& target = LockOnManager::sTargetCommon[i];
-        if ((GameObject*)target.obj != pActor)
+        if (!(target.obj == pActor))
         {
             continue;
         }
-        const unsigned int uTaken = target.teamMask & uTeamMask;
-        if (!uTaken)
+        unsigned int turnOff = target.teamMask & teamMaskLeft;
+        if (!turnOff)
         {
             continue;
         }
-        uTeamMask &= ~uTaken;
-        target.teamMask &= ~uTaken;
+        teamMaskLeft &= ~turnOff;
+        target.teamMask &= ~turnOff;
         if (!target.teamMask)
         {
-            target.obj.mObject = 0;
-            target.obj.mSavedHandleId = 0;
-            target.teamMask = 0;
+            target.SetObj(0, 0);
         }
-        if (!uTeamMask)
+        if (!teamMaskLeft)
         {
             break;
         }

@@ -91,15 +91,15 @@ public:
 class ConstCommandPostHandle
 {
 public:
-    ConstCommandPostHandle(const CommandPost* pPost) : mPost(const_cast<CommandPost*>(pPost)) {}
+    ConstCommandPostHandle(const CommandPost* pPost) : mPost(pPost) {}
 
-    void operator=(const CommandPost* pPost) { mPost = const_cast<CommandPost*>(pPost); }
+    void operator=(const CommandPost* pPost) { mPost = pPost; }
 
     operator const CommandPost*() const;
 
     const CommandPost* operator->() const;
 
-    CommandPost* mPost;
+    const CommandPost* mPost;
 };
 
 #include "GameSoundStream.h"
@@ -217,7 +217,7 @@ public:
     // FUNCTION: SWBF2 0x0043ed40
     const GameObject* GetGameObject() const
     {
-        return const_cast<CommandPost*>(this)->GetGameObject();
+        return mObject;
     }
 
     int GetStrategicDefendValue(Team::Side eSide) const;
@@ -312,7 +312,14 @@ inline CommandPostHandle::operator CommandPost*() const
 // FUNCTION: SWBF2 0x004503e0
 inline CommandPost* CommandPostHandle::operator->() const
 {
-    return *this;
+    if (mPost)
+    {
+        if (!mPost->GetGameObject())
+        {
+            return 0;
+        }
+    }
+    return mPost;
 }
  
  
@@ -344,14 +351,7 @@ inline ConstCommandPostHandle::operator const CommandPost*() const
 {
     if (mPost)
     {
-        PblHandle<GameObject>& object = mPost->mObject;
-        if (object.mObject &&
-            object.mObject->mHandleId != object.mSavedHandleId)
-        {
-            object.mObject = 0;
-            object.mSavedHandleId = 0;
-        }
-        if (!object.mObject)
+        if (!mPost->GetGameObject())
         {
             return 0;
         }
@@ -362,7 +362,14 @@ inline ConstCommandPostHandle::operator const CommandPost*() const
 // FUNCTION: SWBF2 0x0066e7e0
 inline const CommandPost* ConstCommandPostHandle::operator->() const
 {
-    return *this;
+    if (mPost)
+    {
+        if (!mPost->GetGameObject())
+        {
+            return 0;
+        }
+    }
+    return mPost;
 }
 
 // FUNCTION: SWBF2 0x0043ed70

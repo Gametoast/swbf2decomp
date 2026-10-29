@@ -25,7 +25,7 @@ public:
 
     bool m_bHasTiltAnims;
     bool m_bFullWalkAnim;
-    ZephyrAnim** mAnimations;
+    const ZephyrAnim** mAnimations;
     float mSpeed;
     float mTimeTotal;
 };

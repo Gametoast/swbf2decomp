@@ -416,32 +416,22 @@ void GameObject::PlayDamageRegionSound(unsigned int uRegionId)
     mGameObjectAttachedSound.Play(&pSound->mSound, &matrix.GetTranslation(), &GetVelocity(), true);
 }
 
-static FlagItem* GetPilotFlag(const Controllable* pControllable)
-{
-    PilotType eType = pControllable->mPilotType;
-    if ((eType == PILOT_VEHICLE || eType == PILOT_VEHICLESELF || eType == PILOT_SELF) &&
-        pControllable->mCharacter && pControllable->mCharacter->mCarriedFlagPtr)
-    {
-        return pControllable->mCharacter->mCarriedFlagPtr;
-    }
-    return 0;
-}
-
 // FUNCTION: SWBF2 0x00535cc0
 FlagItem* GameObject::GetCarriedFlagItem() const
 {
-    if (GetControllable())
+    if (GetControllable() &&
+        (GetControllable()->IsPilotable() || GetControllable()->GetPilotType() == PILOT_SELF) &&
+        GetControllable()->GetCharacter() && GetControllable()->GetCharacter()->mCarriedFlagPtr)
     {
-        if (FlagItem* pFlag = GetPilotFlag(GetControllable()))
-        {
-            return pFlag;
-        }
+        return GetControllable()->GetCharacter()->mCarriedFlagPtr;
     }
     for (PblList<Controllable>::Itor it(GetControllableList()); (Controllable*)it; ++it)
     {
-        if (FlagItem* pFlag = GetPilotFlag(it))
+        Controllable* pControllable = it;
+        if ((pControllable->IsPilotable() || pControllable->GetPilotType() == PILOT_SELF) &&
+            pControllable->GetCharacter() && pControllable->GetCharacter()->mCarriedFlagPtr)
         {
-            return pFlag;
+            return pControllable->GetCharacter()->mCarriedFlagPtr;
         }
     }
     return 0;
@@ -653,7 +643,11 @@ void GameObjectInterpolator::SetNextFloat(int iNetUniqueId, int iIndex, float fV
 // FUNCTION: SWBF2 0x005376f0
 float GameObjectInterpolator::GetCurFloat(int iNetUniqueId, int iIndex)
 {
-    if (iNetUniqueId < 0 || count[iNetUniqueId] < 1)
+    if (iNetUniqueId < 0)
+    {
+        return 0.0f;
+    }
+    if (count[iNetUniqueId] < 1)
     {
         return 0.0f;
     }
@@ -663,12 +657,19 @@ float GameObjectInterpolator::GetCurFloat(int iNetUniqueId, int iIndex)
 // FUNCTION: SWBF2 0x00537730
 float GameObjectInterpolator::GetPrevFloat(int iNetUniqueId, int iIndex)
 {
-    if (iNetUniqueId < 0 || count[iNetUniqueId] < 1)
+    if (iNetUniqueId < 0)
     {
         return 0.0f;
     }
-    int iSample = count[iNetUniqueId] < 2 ? (count[iNetUniqueId] - 1) & 1 : count[iNetUniqueId] & 1;
-    return mFloats[iNetUniqueId][iIndex][iSample];
+    if (count[iNetUniqueId] < 1)
+    {
+        return 0.0f;
+    }
+    if (count[iNetUniqueId] < 2)
+    {
+        return mFloats[iNetUniqueId][iIndex][(count[iNetUniqueId] - 1) & 1];
+    }
+    return mFloats[iNetUniqueId][iIndex][count[iNetUniqueId] & 1];
 }
 
 // FUNCTION: SWBF2 0x005378b0
@@ -697,66 +698,68 @@ void GameObjectInterpolator::GetVector(int iNetUniqueId, PblVector3& vVector)
 // FUNCTION: SWBF2 0x00537660
 float GameObjectInterpolator::GetFloat(int iNetUniqueId, int iIndex)
 {
-    if (iNetUniqueId < 0 || count[iNetUniqueId] < 1)
+    if (iNetUniqueId < 0)
+    {
+        return 0.0f;
+    }
+    if (count[iNetUniqueId] < 1)
     {
         return 0.0f;
     }
 
-    const float* pFloat = mFloats[iNetUniqueId][iIndex];
-    const int iCount = count[iNetUniqueId];
-    const float fPrevious = pFloat[(iCount - 1) & 1];
-    if (iCount < 2)
+    const float fPrevious = mFloats[iNetUniqueId][iIndex][(count[iNetUniqueId] - 1) & 1];
+    if (count[iNetUniqueId] < 2)
     {
         return fPrevious;
     }
     const float fRatio = NetGame::GetTurnRatio();
-    const float fCurrent = pFloat[count[iNetUniqueId] & 1];
-    return (fPrevious - fCurrent) * fRatio + fCurrent;
+    return Interpolate(mFloats[iNetUniqueId][iIndex][count[iNetUniqueId] & 1], fPrevious, fRatio);
 }
 
 // FUNCTION: SWBF2 0x005377a0
-float GameObjectInterpolator::GetLoopingFloat(int iNetUniqueId, int iIndex, float fMax,
-                                               float fDirection, bool& bWrapped)
+float GameObjectInterpolator::GetLoopingFloat(int iNetUniqueId, int iIndex, float fDirection,
+                                               float fMax, bool& bWrapped)
 {
     bWrapped = false;
-    if (iNetUniqueId < 0 || count[iNetUniqueId] < 1)
+    if (iNetUniqueId < 0)
+    {
+        return 0.0f;
+    }
+    if (count[iNetUniqueId] < 1)
     {
         return 0.0f;
     }
 
-    const float* pFloat = mFloats[iNetUniqueId][iIndex];
-    const int iCount = count[iNetUniqueId];
-    const float fPrevious = pFloat[(iCount - 1) & 1];
-    if (iCount < 2)
+    const float fPrevious = mFloats[iNetUniqueId][iIndex][(count[iNetUniqueId] - 1) & 1];
+    if (count[iNetUniqueId] < 2)
     {
         return fPrevious;
     }
 
     const float fRatio = NetGame::GetTurnRatio();
-    const float fCurrent = pFloat[count[iNetUniqueId] & 1];
-    const float fDelta = fPrevious - fCurrent;
-    if (fDelta * fDirection < 0.0f)
+    float fCurrent = mFloats[iNetUniqueId][iIndex][count[iNetUniqueId] & 1];
+    if ((fPrevious - fCurrent) * fDirection < 0.0f)
     {
-        if (fDirection <= 0.0f)
+        if (fDirection > 0.0f)
         {
-            const float fBase = fCurrent + fMax;
-            float fValue = (fPrevious - fBase) * fRatio + fBase;
+            float fValue = Interpolate(fCurrent, fPrevious + fMax, fRatio);
             if (fValue <= fMax)
             {
+                bWrapped = true;
                 return fValue;
             }
-            bWrapped = true;
             return fValue - fMax;
         }
-        float fValue = fCurrent + (fPrevious + fMax - fCurrent) * fRatio;
-        if (fValue <= fMax)
+        fCurrent += fMax;
+        float fValue = Interpolate(fCurrent, fPrevious, fRatio);
+        if (fValue > fMax)
         {
             bWrapped = true;
-            return fValue;
+            fValue -= fMax;
         }
-        return fValue - fMax;
+        return fValue;
     }
-    return fCurrent + fDelta * fRatio;
+    return Interpolate(fCurrent, fPrevious, fRatio);
 }
 
 extern bool netHeroesEnabled;

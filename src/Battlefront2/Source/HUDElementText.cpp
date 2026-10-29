@@ -359,22 +359,21 @@ void HUD::ElementText::FreeString(char** ppString)
 void HUD::ElementText::EventText(const HUD::Event& event, void* const pData)
 {
     ElementText* pText = (ElementText*)pData;
-    RedTextElement& textElement = static_cast<RedTextElement&>(pText->GetRedInterfaceElement());
     switch (event.GetClass()->GetType())
     {
     case EventClass::type_Uint:
-        textElement.SetText(RedLocalizeDB::Find(event.GetData().uintValue, false), true);
+        static_cast<RedTextElement&>(pText->GetRedInterfaceElement()).SetText(RedLocalizeDB::Find(event.GetData().uintValue, false), true);
         break;
     case EventClass::type_String:
     {
         const unsigned short* pString = event.GetData().string;
         if (pString)
         {
-            textElement.SetText(pString, true);
+            static_cast<RedTextElement&>(pText->GetRedInterfaceElement()).SetText(pString, true);
         }
         else
         {
-            textElement.SetText("", true);
+            static_cast<RedTextElement&>(pText->GetRedInterfaceElement()).SetText("", true);
         }
         break;
     }

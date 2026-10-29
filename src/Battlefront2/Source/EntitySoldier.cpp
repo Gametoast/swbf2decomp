@@ -437,7 +437,7 @@ bool IsNotFirstPersonState(SoldierState::SoldierState eState)
 // FUNCTION: SWBF2 0x004de600
 bool EntitySoldier::InNonFirstPersonState()
 {
-    return IsNotFirstPersonState(mState);
+    return mState == SoldierState::FLY || mState == SoldierState::TUMBLE;
 }
 
 // FUNCTION: SWBF2 0x004de620
@@ -477,8 +477,7 @@ void AcklayData::SetupBasePose(const ZephyrSkeletonShared* pSkeleton)
 // FUNCTION: SWBF2 0x004e7bf0
 FoleyFX* EntitySoldier::GetFoleyFX() const
 {
-    const CollisionObject* pCollision = static_cast<const CollisionObject*>(this);
-    return pCollision->GetFoleyFX(0xd098618c);
+    return CollisionObject::GetFoleyFX(0xd098618c);
 }
 
 // FUNCTION: SWBF2 0x004e7c00
@@ -947,7 +946,7 @@ EntitySoldier::EntitySoldier(EntitySoldierClass* pClass, const EntityDesc& desc)
     mModelLowRes = pClass->mModelLowRes;
 
     int iCamera = (mState == SoldierState::SPRINT) ? 3 : mStanceIndex;
-    mEyePoint = (&mClass->mCameraSettings[0][0])[iCamera * 2 + mTargetInfo.mIsAiming].CalcEyePoint(mMatrix);
+    mEyePoint = mClass->mCameraSettings[iCamera][mTargetInfo.mIsAiming].CalcEyePoint(mMatrix);
     mCameraSettingPrev = iCamera;
     mCameraSettingTimer = 0.0f;
     mEyeDir = mMatrix.GetZAxis();
@@ -1170,16 +1169,15 @@ void EntitySoldier::RecalculateAABB()
 // FUNCTION: SWBF2 0x004e1660
 float EntitySoldier::GetSmallestCollisionDim() const
 {
-    if (mState == SoldierState::CROUCH)
+    switch (mState)
     {
+    case SoldierState::CROUCH:
         return 0.9f;
-    }
-    if (mState == SoldierState::PRONE)
-    {
+    case SoldierState::PRONE:
         return 0.275f;
+    default:
+        return 1.1400001f;
     }
-
-    return 1.1400001f;
 }
 
 // FUNCTION: SWBF2 0x004e21f0
@@ -2937,7 +2935,7 @@ void EntitySoldier::UpdateWeaponAndAimer(float fDeltaTime)
         else
         {
 
-            CameraTrackSetting& rCamera = (&mClass->mCameraSettings[0][0])[iCamera * 2 + mTargetInfo.mIsAiming];
+            CameraTrackSetting& rCamera = mClass->mCameraSettings[iCamera][mTargetInfo.mIsAiming];
             mEyePoint = rCamera.CalcEyePoint(mMatrix);
             PblMatrix mLook = DirectionMatrix(PblVector3(-mEyeDir.x, -mEyeDir.y, -mEyeDir.z), mMatrix.GetYAxis(),
                                               gVectorZero);
@@ -2963,7 +2961,7 @@ void EntitySoldier::UpdateWeaponAndAimer(float fDeltaTime)
             mTargetInfo.mAimStart.z = mEyeDir.z * fAlong + mTargetInfo.mAimStart.z;
         }
 
-        float fBehind = (&mClass->mCameraSettings[0][0])[iCamera * 2 + mTargetInfo.mIsAiming].mCameraTrackOffset.z +
+        float fBehind = mClass->mCameraSettings[iCamera][mTargetInfo.mIsAiming].mCameraTrackOffset.z +
                         2.0f;
         if (bCastRay)
         {
@@ -3351,16 +3349,20 @@ GameObject* EntitySoldier::TryBoard(bool bArg, bool& rIsVehicle)
 // FUNCTION: SWBF2 0x004f00d0
 int EntitySoldier::GetReservableSlots(ReserveType eType) const
 {
-    if (eType != RT_FORMATION)
+    int num = 1;
+    if (eType == RT_FORMATION)
     {
-        return 1;
+        MedalsMgr* mm = mCharacter ? mCharacter->mMedalsMgr : 0;
+        if (mm)
+        {
+            num = mm->GetRank() + 1;
+        }
+        else
+        {
+            num = 4;
+        }
     }
-    MedalsMgr* pMedals = mCharacter ? mCharacter->mMedalsMgr : 0;
-    if (pMedals)
-    {
-        return pMedals->GetRank() + 1;
-    }
-    return 4;
+    return num;
 }
 
 // FUNCTION: SWBF2 0x004f0110
@@ -3729,11 +3731,10 @@ void EntitySoldier::SetupCameraTrackMatrix(PblMatrix& rMatrix, float fDeltaTime)
         }
         const float fMoveTension = (mState == SoldierState::PRONE) ? 0.5f : 1.0f;
         const float fAimTension = IsAlive() ? 1.0f : 0.1f;
-        CameraTrackSetting* pSettings = &mClass->mCameraSettings[0][0];
-        CameraTrackSetting& rCamera = pSettings[iCamera * 2 + mTargetInfo.mIsAiming];
+        CameraTrackSetting& rCamera = mClass->mCameraSettings[iCamera][mTargetInfo.mIsAiming];
         if (fBlendTime > mCameraSettingTimer)
         {
-            rCamera.SetupCameraTrackMatrix(this, pSettings[mCameraSettingPrev * 2 + mTargetInfo.mIsAiming],
+            rCamera.SetupCameraTrackMatrix(this, mClass->mCameraSettings[mCameraSettingPrev][mTargetInfo.mIsAiming],
                                            mCameraSettingTimer / fBlendTime, rMatrix, fDeltaTime, mAim, vAimDir,
                                            fMoveTension, fAimTension, this);
         }
@@ -3803,16 +3804,15 @@ void EntitySoldier::SetupCameraTrackMatrixHUDTargeting(PblMatrix& rMatrix)
     {
         fBlendTime = mClass->mCameraSettingBlendTime[(iCamera > mCameraSettingPrev ? iCamera : mCameraSettingPrev) - 1];
     }
-    CameraTrackSetting* pSettings = &mClass->mCameraSettings[0][0];
     if (fBlendTime > mCameraSettingTimer)
     {
-        pSettings[iCamera * 2 + mTargetInfo.mIsAiming].SetupCameraTrackMatrixHUDTargeting(
-            pSettings[mCameraSettingPrev * 2 + mTargetInfo.mIsAiming], mCameraSettingTimer / fBlendTime,
+        mClass->mCameraSettings[iCamera][mTargetInfo.mIsAiming].SetupCameraTrackMatrixHUDTargeting(
+            mClass->mCameraSettings[mCameraSettingPrev][mTargetInfo.mIsAiming], mCameraSettingTimer / fBlendTime,
             rMatrix, GetMatrix(), mEyeDir);
     }
     else
     {
-        pSettings[iCamera * 2 + mTargetInfo.mIsAiming].SetupCameraTrackMatrixHUDTargeting(
+        mClass->mCameraSettings[iCamera][mTargetInfo.mIsAiming].SetupCameraTrackMatrixHUDTargeting(
             rMatrix, GetMatrix(), mEyeDir);
     }
 }
@@ -4214,43 +4214,15 @@ EntitySoldierClass::EntitySoldierClass(unsigned int uHash)
     mCameraSettings[0][1].mCameraMoveTensionB = FLT_MAX;
     mCameraSettings[0][1].mCameraAimTension = FLT_MAX;
 
-    mCameraSettings[0][2].mCameraEyePointOffset.x = 0.0f;
-    mCameraSettings[0][2].mCameraEyePointOffset.y = 1.2f;
-    mCameraSettings[0][2].mCameraEyePointOffset.z = 0.0f;
-    mCameraSettings[0][2].mCameraTrackCenter.x = 0.0f;
-    mCameraSettings[0][2].mCameraTrackCenter.y = 1.3f;
-    mCameraSettings[0][2].mCameraTrackCenter.z = 0.0f;
-    mCameraSettings[0][2].mCameraTrackOffset.x = 0.0f;
-    mCameraSettings[0][2].mCameraTrackOffset.y = 0.0f;
-    mCameraSettings[0][2].mCameraTrackOffset.z = 3.5f;
-    mCameraSettings[0][2].mCameraMoveTensionL = 15.0f;
-    mCameraSettings[0][2].mCameraMoveTensionR = 15.0f;
-    mCameraSettings[0][2].mCameraMoveTensionU = 15.0f;
-    mCameraSettings[0][2].mCameraMoveTensionD = 15.0f;
-    mCameraSettings[0][2].mCameraMoveTensionF = 15.0f;
-    mCameraSettings[0][2].mCameraMoveTensionB = 15.0f;
-    mCameraSettings[0][2].mCameraAimTension = FLT_MAX;
-
-    mCameraSettings[0][3].mCameraEyePointOffset = mCameraSettings[0][2].mCameraEyePointOffset;
-    mCameraSettings[0][3].mCameraTrackCenter = mCameraSettings[0][2].mCameraEyePointOffset;
-    mCameraSettings[0][3].mCameraTrackOffset = gVectorZero;
-    mCameraSettings[0][3].mCameraMoveTensionL = FLT_MAX;
-    mCameraSettings[0][3].mCameraMoveTensionR = FLT_MAX;
-    mCameraSettings[0][3].mCameraMoveTensionU = FLT_MAX;
-    mCameraSettings[0][3].mCameraMoveTensionD = FLT_MAX;
-    mCameraSettings[0][3].mCameraMoveTensionF = FLT_MAX;
-    mCameraSettings[0][3].mCameraMoveTensionB = FLT_MAX;
-    mCameraSettings[0][3].mCameraAimTension = FLT_MAX;
-
     mCameraSettings[1][0].mCameraEyePointOffset.x = 0.0f;
-    mCameraSettings[1][0].mCameraEyePointOffset.y = 0.3f;
+    mCameraSettings[1][0].mCameraEyePointOffset.y = 1.2f;
     mCameraSettings[1][0].mCameraEyePointOffset.z = 0.0f;
     mCameraSettings[1][0].mCameraTrackCenter.x = 0.0f;
-    mCameraSettings[1][0].mCameraTrackCenter.y = 0.5f;
+    mCameraSettings[1][0].mCameraTrackCenter.y = 1.3f;
     mCameraSettings[1][0].mCameraTrackCenter.z = 0.0f;
     mCameraSettings[1][0].mCameraTrackOffset.x = 0.0f;
     mCameraSettings[1][0].mCameraTrackOffset.y = 0.0f;
-    mCameraSettings[1][0].mCameraTrackOffset.z = 2.5f;
+    mCameraSettings[1][0].mCameraTrackOffset.z = 3.5f;
     mCameraSettings[1][0].mCameraMoveTensionL = 15.0f;
     mCameraSettings[1][0].mCameraMoveTensionR = 15.0f;
     mCameraSettings[1][0].mCameraMoveTensionU = 15.0f;
@@ -4270,33 +4242,61 @@ EntitySoldierClass::EntitySoldierClass(unsigned int uHash)
     mCameraSettings[1][1].mCameraMoveTensionB = FLT_MAX;
     mCameraSettings[1][1].mCameraAimTension = FLT_MAX;
 
-    mCameraSettings[1][2].mCameraEyePointOffset.x = 0.0f;
-    mCameraSettings[1][2].mCameraEyePointOffset.y = 1.8f;
-    mCameraSettings[1][2].mCameraEyePointOffset.z = 0.0f;
-    mCameraSettings[1][2].mCameraTrackCenter.x = 0.0f;
-    mCameraSettings[1][2].mCameraTrackCenter.y = 2.3f;
-    mCameraSettings[1][2].mCameraTrackCenter.z = 0.0f;
-    mCameraSettings[1][2].mCameraTrackOffset.x = 0.0f;
-    mCameraSettings[1][2].mCameraTrackOffset.y = 0.0f;
-    mCameraSettings[1][2].mCameraTrackOffset.z = 4.5f;
-    mCameraSettings[1][2].mCameraMoveTensionL = 15.0f;
-    mCameraSettings[1][2].mCameraMoveTensionR = 15.0f;
-    mCameraSettings[1][2].mCameraMoveTensionU = 15.0f;
-    mCameraSettings[1][2].mCameraMoveTensionD = 15.0f;
-    mCameraSettings[1][2].mCameraMoveTensionF = 15.0f;
-    mCameraSettings[1][2].mCameraMoveTensionB = 15.0f;
-    mCameraSettings[1][2].mCameraAimTension = FLT_MAX;
+    mCameraSettings[2][0].mCameraEyePointOffset.x = 0.0f;
+    mCameraSettings[2][0].mCameraEyePointOffset.y = 0.3f;
+    mCameraSettings[2][0].mCameraEyePointOffset.z = 0.0f;
+    mCameraSettings[2][0].mCameraTrackCenter.x = 0.0f;
+    mCameraSettings[2][0].mCameraTrackCenter.y = 0.5f;
+    mCameraSettings[2][0].mCameraTrackCenter.z = 0.0f;
+    mCameraSettings[2][0].mCameraTrackOffset.x = 0.0f;
+    mCameraSettings[2][0].mCameraTrackOffset.y = 0.0f;
+    mCameraSettings[2][0].mCameraTrackOffset.z = 2.5f;
+    mCameraSettings[2][0].mCameraMoveTensionL = 15.0f;
+    mCameraSettings[2][0].mCameraMoveTensionR = 15.0f;
+    mCameraSettings[2][0].mCameraMoveTensionU = 15.0f;
+    mCameraSettings[2][0].mCameraMoveTensionD = 15.0f;
+    mCameraSettings[2][0].mCameraMoveTensionF = 15.0f;
+    mCameraSettings[2][0].mCameraMoveTensionB = 15.0f;
+    mCameraSettings[2][0].mCameraAimTension = FLT_MAX;
 
-    mCameraSettings[1][3].mCameraEyePointOffset = mCameraSettings[1][2].mCameraEyePointOffset;
-    mCameraSettings[1][3].mCameraTrackCenter = mCameraSettings[1][2].mCameraEyePointOffset;
-    mCameraSettings[1][3].mCameraTrackOffset = gVectorZero;
-    mCameraSettings[1][3].mCameraMoveTensionL = FLT_MAX;
-    mCameraSettings[1][3].mCameraMoveTensionR = FLT_MAX;
-    mCameraSettings[1][3].mCameraMoveTensionU = FLT_MAX;
-    mCameraSettings[1][3].mCameraMoveTensionD = FLT_MAX;
-    mCameraSettings[1][3].mCameraMoveTensionF = FLT_MAX;
-    mCameraSettings[1][3].mCameraMoveTensionB = FLT_MAX;
-    mCameraSettings[1][3].mCameraAimTension = FLT_MAX;
+    mCameraSettings[2][1].mCameraEyePointOffset = mCameraSettings[2][0].mCameraEyePointOffset;
+    mCameraSettings[2][1].mCameraTrackCenter = mCameraSettings[2][0].mCameraEyePointOffset;
+    mCameraSettings[2][1].mCameraTrackOffset = gVectorZero;
+    mCameraSettings[2][1].mCameraMoveTensionL = FLT_MAX;
+    mCameraSettings[2][1].mCameraMoveTensionR = FLT_MAX;
+    mCameraSettings[2][1].mCameraMoveTensionU = FLT_MAX;
+    mCameraSettings[2][1].mCameraMoveTensionD = FLT_MAX;
+    mCameraSettings[2][1].mCameraMoveTensionF = FLT_MAX;
+    mCameraSettings[2][1].mCameraMoveTensionB = FLT_MAX;
+    mCameraSettings[2][1].mCameraAimTension = FLT_MAX;
+
+    mCameraSettings[3][0].mCameraEyePointOffset.x = 0.0f;
+    mCameraSettings[3][0].mCameraEyePointOffset.y = 1.8f;
+    mCameraSettings[3][0].mCameraEyePointOffset.z = 0.0f;
+    mCameraSettings[3][0].mCameraTrackCenter.x = 0.0f;
+    mCameraSettings[3][0].mCameraTrackCenter.y = 2.3f;
+    mCameraSettings[3][0].mCameraTrackCenter.z = 0.0f;
+    mCameraSettings[3][0].mCameraTrackOffset.x = 0.0f;
+    mCameraSettings[3][0].mCameraTrackOffset.y = 0.0f;
+    mCameraSettings[3][0].mCameraTrackOffset.z = 4.5f;
+    mCameraSettings[3][0].mCameraMoveTensionL = 15.0f;
+    mCameraSettings[3][0].mCameraMoveTensionR = 15.0f;
+    mCameraSettings[3][0].mCameraMoveTensionU = 15.0f;
+    mCameraSettings[3][0].mCameraMoveTensionD = 15.0f;
+    mCameraSettings[3][0].mCameraMoveTensionF = 15.0f;
+    mCameraSettings[3][0].mCameraMoveTensionB = 15.0f;
+    mCameraSettings[3][0].mCameraAimTension = FLT_MAX;
+
+    mCameraSettings[3][1].mCameraEyePointOffset = mCameraSettings[3][0].mCameraEyePointOffset;
+    mCameraSettings[3][1].mCameraTrackCenter = mCameraSettings[3][0].mCameraEyePointOffset;
+    mCameraSettings[3][1].mCameraTrackOffset = gVectorZero;
+    mCameraSettings[3][1].mCameraMoveTensionL = FLT_MAX;
+    mCameraSettings[3][1].mCameraMoveTensionR = FLT_MAX;
+    mCameraSettings[3][1].mCameraMoveTensionU = FLT_MAX;
+    mCameraSettings[3][1].mCameraMoveTensionD = FLT_MAX;
+    mCameraSettings[3][1].mCameraMoveTensionF = FLT_MAX;
+    mCameraSettings[3][1].mCameraMoveTensionB = FLT_MAX;
+    mCameraSettings[3][1].mCameraAimTension = FLT_MAX;
 
     mCameraSettingBlendTime[0] = 0.75f;
     mCameraSettingBlendTime[1] = 1.0f;
@@ -4463,9 +4463,9 @@ EntitySoldierClass::EntitySoldierClass(EntitySoldierClass* pBase, unsigned int u
     mSoldierType = pBase->mSoldierType;
     mImmuneToMines = pBase->mImmuneToMines;
     mAimerClass = pBase->mAimerClass;
-    for (int r = 0; r < 2; ++r)
+    for (int r = 0; r < 4; ++r)
     {
-        for (int c = 0; c < 4; ++c)
+        for (int c = 0; c < 2; ++c)
         {
             mCameraSettings[r][c] = pBase->mCameraSettings[r][c];
         }
@@ -4666,8 +4666,8 @@ void EntitySoldierClass::PostReadSetup()
         mCollisionModels[0].AddBody(new CollisionBodyPrimitive(primitive, "coll_body_upper", matrix, 0));
         mCameraSettings[0][0].mCameraSafePoint = matrix.GetTranslation();
         mCameraSettings[0][1].mCameraSafePoint = matrix.GetTranslation();
-        mCameraSettings[1][2].mCameraSafePoint = matrix.GetTranslation();
-        mCameraSettings[1][3].mCameraSafePoint = matrix.GetTranslation();
+        mCameraSettings[3][0].mCameraSafePoint = matrix.GetTranslation();
+        mCameraSettings[3][1].mCameraSafePoint = matrix.GetTranslation();
 
         primitive.SetSphere(fHeadRadius);
         matrix.m[3][0] = 0.0f;
@@ -4718,8 +4718,8 @@ void EntitySoldierClass::PostReadSetup()
             matrix.m[3][1] = 0.62700003f;
         }
         mCollisionModels[1].AddBody(new CollisionBodyPrimitive(primitive, "coll_body_upper", matrix, 0));
-        mCameraSettings[0][2].mCameraSafePoint = matrix.GetTranslation();
-        mCameraSettings[0][3].mCameraSafePoint = matrix.GetTranslation();
+        mCameraSettings[1][0].mCameraSafePoint = matrix.GetTranslation();
+        mCameraSettings[1][1].mCameraSafePoint = matrix.GetTranslation();
 
         primitive.SetSphere(fHeadRadius);
         matrix.m[3][0] = -0.07f;
@@ -4762,8 +4762,8 @@ void EntitySoldierClass::PostReadSetup()
         matrix.m[3][2] = fHeight;
         matrix.m[3][3] = 1.0f;
         mCollisionModels[2].AddBody(new CollisionBodyPrimitive(primitive, "coll_body_upper", matrix, 0));
-        mCameraSettings[1][0].mCameraSafePoint = matrix.GetTranslation();
-        mCameraSettings[1][1].mCameraSafePoint = matrix.GetTranslation();
+        mCameraSettings[2][0].mCameraSafePoint = matrix.GetTranslation();
+        mCameraSettings[2][1].mCameraSafePoint = matrix.GetTranslation();
 
         matrix.m[3][0] = 0.0f;
         matrix.m[3][1] = 0.34649998f;
@@ -5666,7 +5666,7 @@ void EntitySoldierClass::SetProperty(unsigned int uProperty, const char* pszValu
                 !PlayableEntitySoundsClass::SetProperty(uProperty, pszValue) &&
                 !mAimerClass->SetProperty(uProperty, pszValue, pModel, 0) &&
                 ((sCurrentCameraSplit && CameraManager::sInstance->m_iNumCam <= 1) ||
-                 !(&mCameraSettings[0][0])[sCurrentCameraStance * 2 + sCurrentCameraZoomed].SetProperty(uProperty, pszValue)) &&
+                 !mCameraSettings[sCurrentCameraStance][sCurrentCameraZoomed].SetProperty(uProperty, pszValue)) &&
                 !ControllableClass::SetProperty(uProperty, pszValue, pModel))
             {
                 GameObjectClass::SetProperty(uProperty, pszValue);
@@ -10565,8 +10565,8 @@ void EntitySoldier::GetPitchYawLimits(float& fPitchMin, float& fPitchMax, float&
 {
     fPitchMin = mClass->mMinPitch;
     fPitchMax = mClass->mMaxPitch;
-    fYawMin = 1.5707964f * -0.35f;
-    fYawMax = 1.5707964f * 0.35f;
+    fYawMin = PblMath::fHalfPi * -0.35f;
+    fYawMax = PblMath::fHalfPi * 0.35f;
 }
 
 // FUNCTION: SWBF2 0x004e21b0
@@ -10643,7 +10643,7 @@ void EntitySoldier::PreparingForDamage()
 CameraTrackSetting* EntitySoldier::GetCameraTrackSettings()
 {
     const int iStance = mState == 3 ? 3 : mStanceIndex;
-    return &((CameraTrackSetting*)mClass->mCameraSettings)[2 * iStance + (mTargetInfo.mIsAiming ? 1 : 0)];
+    return &mClass->mCameraSettings[iStance][mTargetInfo.mIsAiming];
 }
 
 // FUNCTION: SWBF2 0x004ee440

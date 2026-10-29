@@ -957,22 +957,13 @@ static PblVector3 sGravity(0.0f, -9.8f, 0.0f);
 // FUNCTION: SWBF2 0x0045b3b0
 void EntityCloth::EnforceSphereCollision(const PblMatrix& mMatrix, float fRadius)
 {
-    EntityCloth* pCloth = (EntityCloth*)this;
-    ClothData* pData = pCloth->mData;
-    const float fRadiusSq = fRadius * fRadius;
-    for (unsigned int i = pData->m_uiNumFixedPoints; i < pData->m_uiNumParticles; ++i)
+    for (unsigned int i = mData->m_uiNumFixedPoints; i < mData->m_uiNumParticles; ++i)
     {
-        PblVector3& vPos = pCloth->m_pPos[i];
-        const float x = vPos.x - mMatrix.m[3][0];
-        const float y = vPos.y - mMatrix.m[3][1];
-        const float z = vPos.z - mMatrix.m[3][2];
-        const float fDistSq = x * x + y * y + z * z;
-        if (fDistSq < fRadiusSq)
+        PblVector3 dir = m_pPos[i] - mMatrix.GetTranslation();
+        float sqDist = SquaredLength(dir);
+        if (sqDist < fRadius * fRadius)
         {
-            const float fScale = fRadius / sqrtf(fDistSq);
-            vPos.x = mMatrix.m[3][0] + x * fScale;
-            vPos.y = mMatrix.m[3][1] + y * fScale;
-            vPos.z = mMatrix.m[3][2] + z * fScale;
+            m_pPos[i] = mMatrix.GetTranslation() + dir * (fRadius / PblMath::Sqrt(sqDist));
         }
     }
 }

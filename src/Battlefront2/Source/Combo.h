@@ -23,55 +23,25 @@ public:
     class Transition;
     class State;
 
-    class Transition
-    {
-    public:
-
-        Condition* AddCondition();
-
-        void SetEnergyCost(float fCost)
-        {
-            int iCost = (int)(fCost * ENERGY_SCALE_INV);
-            if (iCost < 0)
-            {
-                iCost = 0;
-            }
-            else if (iCost > 1023)
-            {
-                iCost = 1023;
-            }
-            m_uiEnergyCost = iCost;
-        }
-
-    private:
-        friend class State;
-
-        void _Init(unsigned int uiTargetState)
-        {
-            memset(this, 0, sizeof(*this));
-            m_uiTargetState = uiTargetState;
-        }
-
-        void _ReadConfig(PblConfig& config, const char* pszComboName, const char* pszStateName);
-
-    public:
-
-        static MemoryPool sMemoryPool;
-
-        static void* operator new(unsigned int uiSize) { return sMemoryPool.Allocate(uiSize); }
-
-        static const float ENERGY_SCALE_INV;
-
-        unsigned int m_uiTargetState;
-        Condition* m_aCondition;
-        unsigned int m_uiNumConditions : 6;
-        unsigned int m_uiEnergyCost : 10;
-        unsigned int z_uiReserved0 : 16;
-    };
-
     class Condition
     {
     public:
+
+        enum BUTTON
+        {
+            BUTTON_NONE = 0,
+            BUTTON_FIRE = 1,
+            BUTTON_FIRE_SECONDARY = 2,
+            BUTTON_JUMP = 3,
+            BUTTON_SPRINT = 4,
+            BUTTON_CROUCH = 5,
+            BUTTON_RELOAD = 6,
+            BUTTON_FIRE_BOTH = 7,
+            NUM_VIRTUAL_BUTTONS = 8,
+            NUM_BUTTONS = 7
+        };
+
+        BUTTON GetButton() const { return (BUTTON)m_uiButton; }
 
         bool TestSoldierState(int iState, float fTime) const;
 
@@ -81,6 +51,7 @@ public:
 
         bool TestVelocity(float fX, float fY, float fZ) const;
 
+        float GetInputMagRef() const { return m_uiInputMagRef * INPUT_MAG_SCALE; }
         float GetInputDirMinRad() const { return m_iInputDirMin * INPUT_DIR_SCALE_RAD; }
         float GetInputDirMaxRad() const { return m_iInputDirMax * INPUT_DIR_SCALE_RAD; }
         float GetVelocityXZDirMinRad() const { return m_iVelocityXZDirMin * VELOCITYXZ_DIR_SCALE_RAD; }
@@ -229,6 +200,55 @@ public:
             };
             unsigned int m_auiPackedData[5];
         };
+    };
+
+    class Transition
+    {
+    public:
+
+        unsigned int GetNumConditions() const { return m_uiNumConditions; }
+        const Condition* GetCondition(unsigned int iCondition) const { return &m_aCondition[iCondition]; }
+
+        Condition* AddCondition();
+
+        void SetEnergyCost(float fCost)
+        {
+            int iCost = (int)(fCost * ENERGY_SCALE_INV);
+            if (iCost < 0)
+            {
+                iCost = 0;
+            }
+            else if (iCost > 1023)
+            {
+                iCost = 1023;
+            }
+            m_uiEnergyCost = iCost;
+        }
+
+    private:
+        friend class State;
+
+        void _Init(unsigned int uiTargetState)
+        {
+            memset(this, 0, sizeof(*this));
+            m_uiTargetState = uiTargetState;
+        }
+
+        void _ReadConfig(PblConfig& config, const char* pszComboName, const char* pszStateName);
+
+    public:
+
+        static MemoryPool sMemoryPool;
+
+        static void* operator new(unsigned int uiSize) { return sMemoryPool.Allocate(uiSize); }
+
+        static const float ENERGY_SCALE_INV;
+
+        unsigned int m_uiTargetState;
+        Condition* m_aCondition;
+        unsigned int m_uiNumConditions : 6;
+        unsigned int m_uiEnergyCost : 10;
+        unsigned int z_uiReserved0 : 16;
     };
 
     class DamageSample
@@ -410,6 +430,8 @@ public:
         unsigned char GetAnimIndex() const { return (unsigned char)m_uiAnimIndex; }
         void SetAnimIndex(unsigned char uiAnimIndex) { m_uiAnimIndex = uiAnimIndex; }
         const Deflect* GetDeflect() const { return m_pDeflect; }
+        unsigned int GetNumTransitions() const { return m_uiNumTransitions; }
+        const Transition* GetTransition(unsigned int iTransition) const { return &m_aTransition[iTransition]; }
         unsigned int GetNumAttacks() const { return m_uiNumAttacks; }
         Attack* GetAttack(unsigned int iAttack) { return &m_aAttack[iAttack]; }
         const Attack* GetAttack(unsigned int iAttack) const { return &m_aAttack[iAttack]; }

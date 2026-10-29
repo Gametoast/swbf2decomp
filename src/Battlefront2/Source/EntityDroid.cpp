@@ -653,7 +653,7 @@ int EntityDroid::GetFirstPersonIndex()
 // FUNCTION: SWBF2 0x0049a470
 int EntityDroid::GetJoystickIndex()
 {
-    if (mPlayerId < 0)
+    if (!IsPlayer())
     {
         return -1;
     }

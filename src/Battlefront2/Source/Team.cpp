@@ -13,6 +13,7 @@
 #include "GameObject.h"
 #include "NetGame.h"
 #include "PebbleFL/Common/PblHashTable.h"
+#include "PebbleFL/Common/PblMath.h"
 #include "PebbleFL/Common/PblUnicode.h"
 #include "RedEngineFL/Memory/RedMemoryPool.h"
 #include "RedEngineFL/Util/RedLocalizeDB.h"
@@ -615,10 +616,10 @@ Character* Team::GetRandomLiveCharacter() const
     }
     if (iCount > 0)
     {
-        unsigned int uPick = PblRandom::GetGlobalInt() % iCount;
+        int pick = PblRandom::GetGlobalInt() % iCount;
         for (int i = 0; i < mMemberCount; ++i)
         {
-            if (mMemberArray[i]->mUnit && uPick-- == 0)
+            if (mMemberArray[i]->mUnit && pick-- == 0)
             {
                 return mMemberArray[i];
             }
@@ -656,7 +657,8 @@ bool Team::AddSpecialClass(GameObjectClass* pClass)
     if (mClassCount < mClassLimit)
     {
         pClass->SetHeroFlag();
-        mClassArray[mClassCount++] = pClass;
+        ++mClassCount;
+        mClassArray[mClassCount - 1] = pClass;
         ++mSpecialClassCount;
         _SetClassUnitCounts(mClassCount - 1, 0, 1);
         return true;
@@ -925,9 +927,7 @@ void Team::SetAggressiveness(float fAggressiveness)
 // FUNCTION: SWBF2 0x00654770
 int Team::GetTeamMemberCount(int& iTeam1, int& iTeam2)
 {
-    int aiCount[3];
-    aiCount[1] = 0;
-    aiCount[2] = 0;
+    int aiCount[2] = {0, 0};
     for (int i = 0; i < netCurMaxPlayers; ++i)
     {
         if (!NetGame::IsPlaying(i, false))
@@ -937,11 +937,11 @@ int Team::GetTeamMemberCount(int& iTeam1, int& iTeam2)
         Character* pCharacter = Character::GetPtr(i);
         if (pCharacter && pCharacter->mUnit && pCharacter->mTeamNumber > 0)
         {
-            ++aiCount[pCharacter->mTeamNumber];
+            ++aiCount[pCharacter->mTeamNumber - 1];
         }
     }
-    iTeam1 = aiCount[1];
-    iTeam2 = aiCount[2];
+    iTeam1 = aiCount[0];
+    iTeam2 = aiCount[1];
     return iTeam1 >= iTeam2 ? 2 : 1;
 }
 
@@ -997,27 +997,8 @@ void Team::_ClampClassCounts(int iIndex)
     }
 
     MemoryPool* pPool = MemoryPool::Find("EntityDroideka");
-    int iMin = mClassMinUnits[iIndex];
-    if (iMin < 0)
-    {
-        iMin = 0;
-    }
-    else if (iMin > (int)pPool->GetCount())
-    {
-        iMin = pPool->GetCount();
-    }
-    mClassMinUnits[iIndex] = iMin;
-
-    int iMax = mClassMaxUnits[iIndex];
-    if (iMax < 0)
-    {
-        iMax = 0;
-    }
-    else if (iMax > (int)pPool->GetCount())
-    {
-        iMax = pPool->GetCount();
-    }
-    mClassMaxUnits[iIndex] = iMax;
+    mClassMinUnits[iIndex] = Clamp(mClassMinUnits[iIndex], 0, (int)pPool->GetCount());
+    mClassMaxUnits[iIndex] = Clamp(mClassMaxUnits[iIndex], 0, (int)pPool->GetCount());
 }
 
 namespace EventManager

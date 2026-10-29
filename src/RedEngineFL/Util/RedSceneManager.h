@@ -142,7 +142,7 @@ protected:
     RedScene mScene;
     bool mDoScene;
     bool mTransparentPhase;
-    void* mTransparentObjects;
+    PblHeap<RedSceneObject*, float>* mTransparentObjects;
 };
 
  

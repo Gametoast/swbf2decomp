@@ -13910,7 +13910,7 @@ void AloMissionTimer::Update(NetPktGroup& group)
     if (CanChange())
     {
         bool bFallback = false;
-        Timer* pTimer = MissionTimer::GetTimer();
+        const Timer* pTimer = MissionTimer::GetTimer();
         if (!pTimer)
         {
             bFallback = true;

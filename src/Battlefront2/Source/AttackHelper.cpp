@@ -82,8 +82,7 @@ AttackHelper::AttackHelper(UnitAgent* pAgent)
 // FUNCTION: SWBF2 0x00447ab0
 void AttackHelper::Reset()
 {
-    mTargetHandle.mObject = 0;
-    mTargetHandle.mSavedHandleId = 0;
+    mTargetHandle = 0;
     mWaitingForTarget = false;
     mTargetVisible = false;
     mLastTimeSeen = -1000.0f;
@@ -242,13 +241,14 @@ Controllable* AttackHelper::GetMe()
 // FUNCTION: SWBF2 0x00447ea0
 bool AttackHelper::HasTarget() const
 {
-    return GetTarget() != 0;
+    const GameObject* target = AIUtil::GetAlivePtr(mTargetHandle, false);
+    return target != 0;
 }
 
 // FUNCTION: SWBF2 0x00447eb0
 GameObject const* AttackHelper::GetVisibleTarget() const
 {
-    return mTargetVisible ? GetTarget() : 0;
+    return mTargetVisible ? AIUtil::GetAlivePtr(mTargetHandle, false) : 0;
 }
 
 // FUNCTION: SWBF2 0x00447ec0

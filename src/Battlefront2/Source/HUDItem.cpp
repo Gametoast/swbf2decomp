@@ -229,18 +229,17 @@ void HUD::Item::Factory::Property::Init(char* pName, PblListSingle& list, Type e
 }
 
 // FUNCTION: SWBF2 0x00563f80
-void HUD::Item::Factory::Property::InitVectorRange(Axis eAxis, float fMin, float fMax,
-                                                   float fStep)
+void HUD::Item::Factory::Property::InitVectorRange(Axis eAxis, const float fMin,
+                                                   const float fMax, const float fStep)
 {
     if (!mData)
     {
         return;
     }
 
-    Info::FloatRange& range = mData->mInfo.vectorRange.range[eAxis - 1];
-    range.minValue = fMin;
-    range.maxValue = fMax;
-    range.stepValue = fStep;
+    mData->mInfo.vectorRange.range[eAxis - 1].minValue = fMin;
+    mData->mInfo.vectorRange.range[eAxis - 1].maxValue = fMax;
+    mData->mInfo.vectorRange.range[eAxis - 1].stepValue = fStep;
 }
 
 // FUNCTION: SWBF2 0x00563fc0
@@ -363,8 +362,8 @@ const HUD::Item::Factory::Property* HUD::Item::Factory::PropertyGetFirst() const
     {
         return 0;
     }
-    const PblListSingle::Node* pNode = mProperties.mHead.mNext;
-    return pNode != &mProperties.mHead ? (const Property*)pNode : 0;
+    return static_cast<const Property*>(
+        mProperties.GetFirst()->GetObjectA(&mProperties, offsetof(Property, mNode)));
 }
 
 // FUNCTION: SWBF2 0x00564220
@@ -387,31 +386,25 @@ const HUD::Item::Factory::Property* HUD::Item::Factory::PropertyGetLast() const
 const HUD::Item::Factory::Property* HUD::Item::Factory::PropertyGetNext(
     const Property* const pProperty) const
 {
-    const PblListSingle::Node* pNode = pProperty->mNode.mNext;
-    return pNode != &mProperties.mHead ? (const Property*)pNode : 0;
+    PblListSingle::Node* const node = pProperty->mNode.GetNext();
+    return static_cast<const Property*>(node->GetObjectA(&mProperties, offsetof(Property, mNode)));
 }
 
 // FUNCTION: SWBF2 0x00564270
 const HUD::Item::Factory::Property* HUD::Item::Factory::PropertyGetPrevious(
     const Property* const pProperty) const
 {
-    const PblListSingle::Node* pPrev;
-    const PblListSingle::Node* pNode = &pProperty->mNode;
-    do
-    {
-        pPrev = pNode;
-        pNode = pNode->mNext;
-    } while (pNode != &pProperty->mNode);
-    return pPrev != &mProperties.mHead ? (const Property*)pPrev : 0;
+    return static_cast<const Property*>(
+        pProperty->mNode.GetPrevious()->GetObjectA(&mProperties, offsetof(Property, mNode)));
 }
 
 // FUNCTION: SWBF2 0x005642a0
 HUD::Item::Factory* HUD::Item::Factory::FindByHashID(unsigned int uHashID)
 {
-    for (PblListDouble::Node* pNode = sList.mTerminator.mNext; pNode != &sList.mTerminator;
-         pNode = pNode->mNext)
+    for (PblListDouble::Itor itor(sList); itor.GetNode() != sList.GetTerminator(); ++itor)
     {
-        Factory* pFactory = (Factory*)((char*)pNode - offsetof(Factory, mNode));
+        Factory* pFactory = static_cast<Factory*>(
+            itor.GetNode()->GetObjectA(&sList, offsetof(Factory, mNode)));
         if (pFactory->mHashID == uHashID)
         {
             return pFactory;

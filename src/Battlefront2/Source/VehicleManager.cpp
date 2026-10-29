@@ -19,22 +19,6 @@ class FlagItem;
 
 namespace
 {
-    inline unsigned int GameObjectHandleId(const GameObject* pObject)
-    {
-        return pObject->mHandleId;
-    }
-
-    inline GameObject* HandleObject(PblHandle<GameObject>& handle)
-    {
-        if (handle.mObject && GameObjectHandleId(handle.mObject) != handle.mSavedHandleId)
-        {
-            handle.mObject = 0;
-            handle.mSavedHandleId = 0;
-        }
-        return handle.mObject;
-    }
-
-
     inline const Controllable* GetControllable(const GameObject* pObject)
     {
         return pObject->GetControllable();
@@ -110,17 +94,15 @@ void VehicleManager::Add(GameObject* pObject)
         return;
     }
 
-    PblHandle<GameObject> handle;
-    handle.mObject = pObject;
-    handle.mSavedHandleId = GameObjectHandleId(pObject);
+    PblHandle<GameObject> handle(pObject);
     for (int i = 0; i < sVehicles->GetLength(); ++i)
     {
-        if (HandleObject(handle) == HandleObject((*sVehicles)[i]))
+        if ((*sVehicles)[i] == handle)
         {
             return;
         }
     }
-    sVehicles->Append(handle);
+    sVehicles->Append(pObject);
 }
 
 // FUNCTION: SWBF2 0x0066ddc0
@@ -144,17 +126,9 @@ bool VehicleManager::sIsFull(const GameObject* pObject)
     for (PblList<Controllable>::Itor it(pObject->GetControllableList()); (Controllable*)it; ++it)
     {
         const Controllable* pSeat = it;
-        PilotType type = pSeat->mPilotType;
-        if (type != PILOT_VEHICLE && type != PILOT_VEHICLESELF)
+        if (pSeat->IsPilotable() && !pSeat->GetPilot() && !pSeat->IsSelfPilotable())
         {
-            continue;
-        }
-        if (type == PILOT_SELF || (type == PILOT_VEHICLESELF && pSeat->mPilot == pSeat) || !pSeat->mPilot)
-        {
-            if (type != PILOT_SELF && type != PILOT_VEHICLESELF)
-            {
-                return false;
-            }
+            return false;
         }
     }
     return true;

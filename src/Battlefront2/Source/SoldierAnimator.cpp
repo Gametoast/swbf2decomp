@@ -644,13 +644,12 @@ void SoldierAnimator::SetWeaponAnimationMap(SoldierAnimationBank::MAP eMap)
 
     mWeaponState = 0;
     mWeaponAnimationMap = eMap;
-    bool bMelee = SoldierAnimationBank::GetWeaponRoot(SoldierAnimationBank::GetMapWeapon(eMap)) ==
-                  SoldierAnimationBank::MELEE;
+    mWeaponAnim = SoldierAnimationBank::GetWeaponRoot(SoldierAnimationBank::GetMapWeapon(eMap)) ==
+                      SoldierAnimationBank::MELEE ? SoldierAnimType::WEAPON_MELEE : SoldierAnimType::WEAPON_IDLE;
     mWeaponMeleeAnim = NO_MELEE_ANIM;
     mWeaponMeleeAnimNext = NO_MELEE_ANIM;
     m_fAlertTimer = 0.0f;
     m_fAlertBlendDuration = 0.5f;
-    mWeaponAnim = bMelee ? SoldierAnimType::WEAPON_MELEE : SoldierAnimType::WEAPON_IDLE;
     m_bAlert = false;
     m_bRestartWeaponAnim = false;
     m_bAnimControlledMove = false;
@@ -2347,25 +2346,6 @@ void SoldierAnimator::SetAlert(bool bAlert)
 // FUNCTION: SWBF2 0x00643650
 void SoldierAnimation::SetVelocity(float fVelocityX, float fVelocityZ)
 {
-    float fX = fVelocityX * 100.0f + 16383.0f + 0.5f;
-    if (fX < 0.0f)
-    {
-        fX = 0.0f;
-    }
-    else if (fX > 32767.0f)
-    {
-        fX = 32767.0f;
-    }
-    m_iVelocityX = (int)fX - 16383;
-
-    float fZ = fVelocityZ * 100.0f + 16383.0f + 0.5f;
-    if (fZ < 0.0f)
-    {
-        fZ = 0.0f;
-    }
-    else if (fZ > 32767.0f)
-    {
-        fZ = 32767.0f;
-    }
-    m_iVelocityZ = (int)fZ - 16383;
+    m_iVelocityX = (int)Clamp(fVelocityX * 100.0f + 16383.0f + 0.5f, 0.0f, 32767.0f) - 16383;
+    m_iVelocityZ = (int)Clamp(fVelocityZ * 100.0f + 16383.0f + 0.5f, 0.0f, 32767.0f) - 16383;
 }

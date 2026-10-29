@@ -53,6 +53,7 @@ public:
     virtual Ordnance* CreateOrdnance(OrdnanceDesc& desc);
     void NotifyThrow();
     void NotifyReturned();
+    bool IsCurrentlyThrown() const { return m_bThrow; }
     virtual bool IsBusy() const;
     virtual bool Update(float fDeltaTime);
     virtual void Write(NetPktGroup& group);

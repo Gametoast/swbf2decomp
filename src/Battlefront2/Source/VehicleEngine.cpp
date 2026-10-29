@@ -65,7 +65,7 @@ bool VehicleEngine::UpdateEnabled()
     {
         return false;
     }
-    if (NetGame::IsClient() || NetGame::IsOneWorld())
+    if (NetGame::OnClient() || NetGame::IsOneWorld())
     {
         return netIsLocalTurn;
     }
@@ -446,7 +446,8 @@ void VehicleEngine::DeactivateAll()
 {
     while (!sEngineList.IsEmpty())
     {
-        VehicleEngine* pEngine = (VehicleEngine*)sEngineList.mHead.mNext;
+        VehicleEngine* pEngine = (VehicleEngine*)sEngineList.GetFirst()->GetObjectA(
+            &sEngineList, offsetof(VehicleEngine, mNode));
         pEngine->DeactivateEngine();
         pEngine->mNode.Remove();
     }
@@ -524,7 +525,7 @@ void VehicleEngineClass::Boost::DestroyAll()
 {
     while (!sGlobalList.IsEmpty())
     {
-        delete (Boost*)((char*)sGlobalList.mHead.mNext - offsetof(Boost, mGlobalLink));
+        delete (Boost*)sGlobalList.GetFirst()->GetObjectA(&sGlobalList, offsetof(Boost, mGlobalLink));
     }
 }
 

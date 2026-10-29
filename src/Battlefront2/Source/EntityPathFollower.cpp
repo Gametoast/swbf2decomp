@@ -156,18 +156,14 @@ template void PblList<EntityPathFollower>::RemoveAll();
 
 // FUNCTION: SWBF2 0x004d2710
 EntityPathFollower::BranchParams::BranchParams(const EntityPathFollowerClass* pPathClass, PblMatrix& matrix,
-                                               float fDiameter, GameObject* const pGameObject,
-                                               float fWorldSpeed, float fRange, unsigned int uBranchPaths,
-                                               float fCosMaxAngle, bool bOverrideBranching,
-                                               bool bFallbackToClosest)
+                                               const float fDiameter, GameObject* const pGameObject,
+                                               const float fWorldSpeed, const float fRange, const unsigned int uBranchPaths,
+                                               const float fCosMaxAngle, const bool bOverrideBranching,
+                                               const bool bFallbackToClosest)
     : mPathClass(pPathClass), mMatrix(matrix), mDiameter(fDiameter), mGameObject(pGameObject),
       mWorldSpeed(fWorldSpeed)
 {
-    if (fRange < FLT_MAX)
-    {
-        fRange *= fRange;
-    }
-    mSquareRange = fRange;
+    mSquareRange = fRange < FLT_MAX ? fRange * fRange : fRange;
     mBranchPaths = uBranchPaths;
     mCosMaxAngle = fCosMaxAngle;
     mOverrideBranching = bOverrideBranching;
@@ -207,7 +203,7 @@ EntityPathFollower::EntityPathFollower(const EntityPathFollowerClass* const pCla
         mSpeed = pClass->mSpeed;
         mAcceleration = pClass->mAcceleration;
     }
-    sList.AddLast(this, this);
+    sList.Add(this, this);
     mAttacker = 0;
 }
 
@@ -473,9 +469,8 @@ void EntityPathFollower::DelayPath(BranchParams& params, float fDistance)
     {
         SetPoint(GetPoint(2), 3);
         const PblMatrix& m = params.mMatrix;
-        PblVector3 vAhead(m.m[2][0] * fDistance + m.m[3][0], m.m[2][1] * fDistance + m.m[3][1],
-                          m.m[2][2] * fDistance + m.m[3][2]);
-        SetPoint(vAhead, 2);
+        PblVector3 pt2 = m.GetTranslation() + m.GetZAxis() * fDistance;
+        SetPoint(pt2, 2);
         mbDelayIndexIncrement = true;
     }
     mbStraightLine = true;
@@ -1434,10 +1429,8 @@ bool EntityPathFollower::ShotAtByEnemy(BranchParams& params)
 static PblVector3 CalculateZeroPoint(const PblVector3& vPosition, const PblVector3& vDirection,
                                      const PblVector3& vTarget)
 {
-    float fDist = sqrtf((vTarget.x - vPosition.x) * (vTarget.x - vPosition.x) +
-                        (vTarget.y - vPosition.y) * (vTarget.y - vPosition.y) +
-                        (vTarget.z - vPosition.z) * (vTarget.z - vPosition.z));
-    return (vTarget - vDirection * fDist * 5.0f);
+    float d = Length(vTarget - vPosition);
+    return vTarget - vDirection * d * 5.0f;
 }
 
 // FUNCTION: SWBF2 0x004d5a70
@@ -1843,15 +1836,15 @@ float EntityPathFollower::Rotate(const EntityPathFollowerClass* const pClass, Pb
 
 // FUNCTION: SWBF2 0x004d6df0
 bool EntityPathFollower::CalculateDistance(const PblVector3& vPosition, const EntityPath* const pPath,
-                                           unsigned int uIndex, float fMinDist, PathAttributes& attrib,
+                                           const unsigned int uIndex, const float fMinDist, PathAttributes& attrib,
                                            float& fBestSquareDist)
 {
-    PblVector3 vPoint = *pPath->GetPointPosition(uIndex);
-    PblVector3 vDist = vPoint - vPosition;
+    PblVector3 vDist = *pPath->GetPointPosition(uIndex);
+    vDist -= vPosition;
     attrib.mPath = pPath;
     attrib.mPointIndex = uIndex;
-    attrib.mVectorDist = vDist;
-    attrib.mSquareDist = vDist.x * vDist.x + vDist.y * vDist.y + vDist.z * vDist.z;
+    attrib.SetVectorDistance(vDist);
+    attrib.mSquareDist = SquaredLength(vDist);
     if (fBestSquareDist > attrib.mSquareDist && attrib.mSquareDist > fMinDist * fMinDist)
     {
         fBestSquareDist = attrib.mSquareDist;

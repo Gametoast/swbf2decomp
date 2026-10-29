@@ -808,8 +808,8 @@ void HUD::ElementTarget::EventRefreshTargetPlayer(const HUD::Event& event, void*
 HUD::ElementTarget::TargetCommonState HUD::ElementTarget::TranslateCommonTargetInfo(
     const LockOnManager::TargetInfo& info)
 {
-    return (TargetCommonState)((info.mFlagCarrier ? targetCommonState_FlagOnScreen : targetCommonState_OnScreen) +
-                               (info.mOnScreen ? 0 : 2) + (info.mVisible ? 0 : 1));
+    TargetCommonState state = info.GetFlagCarrier() ? targetCommonState_FlagOnScreen : targetCommonState_OnScreen;
+    return (TargetCommonState)(state + (info.GetOnScreen() ? 0 : 2) + (info.mVisible ? 0 : 1));
 }
 
 // FUNCTION: SWBF2 0x0055ac80

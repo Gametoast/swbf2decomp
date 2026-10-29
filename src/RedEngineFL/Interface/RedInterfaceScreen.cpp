@@ -202,21 +202,21 @@ void RedScreenGroupElement::AddToRedScreen()
 // FUNCTION: SWBF2 0x006c0b20
 bool RedInterfaceScreen::AddElement(RedScreenGroupElement* pElement)
 {
-    if (pElement->m_groupNode._pList)
+    PblList<RedScreenGroupElement>::Node* pNode =
+        (PblList<RedScreenGroupElement>::Node*)&pElement->m_groupNode;
+    if (pNode->_pList)
     {
         return false;
     }
 
-    PblList<RedScreenGroupElement>::Node* pAt = m_children.GetFirst();
-    while (pAt->_pObject != m_children._head._pObject &&
-           pElement->m_zorder <= pAt->_pObject->m_zorder)
+    const unsigned char uiOrder = pElement->m_zorder;
+    PblList<RedScreenGroupElement>::Itor it = m_children.Begin();
+    while (it != m_children.End() && uiOrder <= it->m_zorder)
     {
-        pAt = pAt->_pNext;
+        ++it;
     }
 
-    m_children.AddBefore(pAt,
-                         (PblList<RedScreenGroupElement>::Node*)&pElement->m_groupNode,
-                         pElement);
+    m_children.AddBefore(it.GetNode(), pNode, pElement);
     return true;
 }
 

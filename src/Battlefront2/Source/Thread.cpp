@@ -17,10 +17,10 @@ void Update();
 
 // FUNCTION: SWBF2 0x00657400
 ThreadGroup::ThreadGroup(int iPriority)
+    : mPriority(iPriority)
+    , mNext(this)
+    , mPrev(this)
 {
-    mPriority = iPriority;
-    mNext = this;
-    mPrev = this;
 }
 
 // FUNCTION: SWBF2 0x00657440
@@ -114,22 +114,18 @@ Thread::~Thread()
 // FUNCTION: SWBF2 0x006576f0
 void Thread::ActivateThread(int iOrder, ThreadType eThreadType)
 {
-    ThreadGroup* pGroup;
+    ThreadGroup* pList = sTurnThreadList;
     if (eThreadType == PER_FRAME)
     {
-        pGroup = sFrameThreadList;
+        pList = sFrameThreadList;
     }
-    else if (NetGame::IsEnabled() && sTurnThreadList == &sClientTurnThreadList &&
+    else if (NetGame::IsEnabled() && pList == &sClientTurnThreadList &&
              eThreadType != PER_TURN)
     {
-        pGroup = &sClientLocalTurnThreadList;
-    }
-    else
-    {
-        pGroup = sTurnThreadList;
+        pList = &sClientLocalTurnThreadList;
     }
 
-    pGroup = pGroup->FindCreate(-iOrder);
+    ThreadGroup* pGroup = pList->FindCreate(-iOrder);
     pGroup->mThreads.Add(&mThreadListNode, this, (int)this);
 }
 

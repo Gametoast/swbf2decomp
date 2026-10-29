@@ -18,13 +18,14 @@ void MessageDisplay::AddMessage(const unsigned short* pText, RedColor color)
     unsigned int uViewport;
     DISPLAY_TYPE eType;
     GetInfo(uViewport, eType);
-    if (eType == DISPLAY_SYSTEM_MSG)
+    switch (eType)
     {
+    case DISPLAY_SYSTEM_MSG:
         HUD::GameEvents::DisplayMessage(uViewport, pText, &color);
-    }
-    else if (eType == DISPLAY_PLAYER_CHAT)
-    {
+        break;
+    case DISPLAY_PLAYER_CHAT:
         HUD::GameEvents::DisplayTextChatMessage(uViewport, pText, &color);
+        break;
     }
 }
 

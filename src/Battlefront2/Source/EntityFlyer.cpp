@@ -186,7 +186,8 @@ float EntityFlyer::GetMaxStrafe() const
 // FUNCTION: SWBF2 0x004b65d0
 bool EntityFlyer::ShouldShowReticule() const
 {
-    return IsAlive() && !mInFlip && (!mClass->mGuidedMissile || mEnergyBar.m_fEnergy > 0.0f);
+    return GameObject::ShouldShowReticule() && !mInFlip &&
+           (!mClass->mGuidedMissile || mEnergyBar.m_fEnergy > 0.0f);
 }
 
 // FUNCTION: SWBF2 0x004b9720
@@ -2524,7 +2525,7 @@ void EntityFlyer::SideRollUpdate(float fDeltaTime)
         return;
     }
     if ((mSideRoll.x != 0.0f || mSideRoll.y != 0.0f) && mRoll == mRollTarget &&
-        0.8f > (float)fabs((double)mBankRollAngleDelta))
+        0.8f > fabsf(mBankRollAngleDelta))
     {
         mSideRoll.x = 0.0f;
         mSideRoll.y = 0.0f;
@@ -5545,23 +5546,11 @@ void EntityFlyer::SetupInterpolatedCameraTrackMatrix(PblMatrix& rMatrix)
 {
     if (NetGame::IsEnabled())
     {
-        float fMaxSpeed = mClass->mMaxFlyerSpeed;
-        if (fMaxSpeed < mClass->mBoostFlyerSpeed)
+        float fMaxSpeed = Max(mClass->mMaxFlyerSpeed, mClass->mBoostFlyerSpeed);
+        if (IsPlayer() && mGetSpeedSpeed > mClass->mBlurStartV)
         {
-            fMaxSpeed = mClass->mBoostFlyerSpeed;
-        }
-        if (mPlayerId >= 0 && mGetSpeedSpeed > mClass->mBlurStartV)
-        {
-            float fRatio = (mGetSpeedSpeed - mClass->mBlurStartV) /
-                           (fMaxSpeed - mClass->mBlurStartV);
-            if (fRatio < 0.0f)
-            {
-                fRatio = 0.0f;
-            }
-            else if (fRatio > 1.0f)
-            {
-                fRatio = 1.0f;
-            }
+            float fRatio = Clamp((mGetSpeedSpeed - mClass->mBlurStartV) /
+                                 (fMaxSpeed - mClass->mBlurStartV), 0.0f, 1.0f);
             const float fBlur = mClass->mBlurEffect * fRatio;
             if (fBlur > 0.0f)
             {

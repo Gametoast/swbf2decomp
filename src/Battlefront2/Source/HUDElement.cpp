@@ -104,6 +104,8 @@ float HUD::ConvertRelativeToPixels(RelativeMode eMode, float fValue, float fFram
 {
     switch (eMode)
     {
+    case relativeMode_Pixels:
+        return fValue;
     case relativeMode_Screen:
         return fValue * fScreenSize;
     case relativeMode_Viewport:
@@ -120,6 +122,8 @@ float HUD::ConvertPixelsToRelative(RelativeMode eMode, float fValue, float fFram
 {
     switch (eMode)
     {
+    case relativeMode_Pixels:
+        return fValue;
     case relativeMode_Screen:
         return fScreenSize != 0.0f ? fValue / fScreenSize : 0.0f;
     case relativeMode_Viewport:
@@ -1148,10 +1152,9 @@ void HUD::Element::UpdateEnableState(EnableState eState)
 // FUNCTION: SWBF2 0x00549e50
 void HUD::Element::SetRuntimeScaleAll(float fScale)
 {
-    for (PblListDouble::Node* pNode = sList.mTerminator.mNext; pNode != &sList.mTerminator;
-         pNode = pNode->mNext)
+    for (PblListDouble::Itor itor(&sList); itor.GetNode() != sList.GetTerminator(); ++itor)
     {
-        Element* pElement = (Element*)((char*)pNode - offsetof(Element, mNode));
+        Element* pElement = static_cast<Element*>(itor.GetNode()->GetObjectA(&sList, offsetof(Element, mNode)));
         pElement->SetRuntimeScale(fScale);
     }
     sRuntimeScale = fScale;
@@ -1301,7 +1304,7 @@ HUD::Element* HUD::Element::FindByHashID(unsigned int uHashID)
 {
     for (Element* pElement = GetFirst(); pElement; pElement = GetNext(pElement))
     {
-        if (pElement->mNameHash == uHashID)
+        if (pElement->GetNameHash() == uHashID)
         {
             return pElement;
         }

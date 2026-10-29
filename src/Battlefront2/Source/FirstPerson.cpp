@@ -61,12 +61,12 @@ namespace FirstPerson
 namespace FirstPerson
 {
     // GLOBAL: SWBF2 0x01e55f04
-    int sModel;
+    const RedModel* sModel[1];
 }
 namespace FirstPerson
 {
     // GLOBAL: SWBF2 0x01e55f08
-    int sModelId;
+    int sModelId[1];
 }
 
 PblQuaternion Interpolate(const PblQuaternion& q0, const PblQuaternion& q1, float fT);
@@ -877,7 +877,7 @@ bool HideFirstPersonHands(int iPlayer)
         return false;
     }
 
-    Trackable* pTrackable = Tracker::GetTracker(iLocal)->mTrackable;
+    Trackable* pTrackable = Tracker::GetTracker(iLocal)->GetTrackable();
     if (!pTrackable)
     {
         return false;
@@ -1037,9 +1037,9 @@ void FirstPersonRenderable::Render(int value)
 void FirstPerson::PreInit()
 {
     FirstPerson::sModelCount = 0;
-    FirstPerson::sModel = 0;
-    FirstPerson::sModelId = 0;
-    FirstPerson::sModelId = -2;
+    FirstPerson::sModel[0] = 0;
+    FirstPerson::sModelId[0] = 0;
+    FirstPerson::sModelId[0] = -2;
     s_pZephyrSkeletonShared = (ZephyrSkeletonShared*)-2;
     s_pRenderable[0] = 0;
 }
@@ -1325,23 +1325,23 @@ void FirstPerson::Update(unsigned int uPlayer, eViewObjectType eType, int iArg,
     {
         return;
     }
-    if (iArg != (&FirstPerson::sModelId)[uPlayer] && GameLoop::mNumCameras == 1)
+    if (iArg != FirstPerson::sModelId[uPlayer] && GameLoop::mNumCameras == 1)
     {
         if (iArg == -1 || iArg == -2)
         {
-            (&FirstPerson::sModel)[uPlayer] = 0;
+            FirstPerson::sModel[uPlayer] = 0;
             pRenderable->bReadyToRender = false;
             pRenderable->bStreamingModel = false;
-            (&FirstPerson::sModelId)[uPlayer] = iArg;
+            FirstPerson::sModelId[uPlayer] = iArg;
         }
         else
         {
             const RedModel* pModel = LoadDynamicModel(sModelName[iArg], true);
-            (&FirstPerson::sModel)[uPlayer] = (int)pModel;
+            FirstPerson::sModel[uPlayer] = pModel;
             if (pModel)
             {
                 pRenderable->bStreamingModel = false;
-                (&FirstPerson::sModelId)[uPlayer] = iArg;
+                FirstPerson::sModelId[uPlayer] = iArg;
             }
             else
             {
@@ -1350,7 +1350,7 @@ void FirstPerson::Update(unsigned int uPlayer, eViewObjectType eType, int iArg,
             }
         }
     }
-    const RedModel* pModel = (const RedModel*)(&FirstPerson::sModel)[uPlayer];
+    const RedModel* pModel = FirstPerson::sModel[uPlayer];
     switch (eType)
     {
     case TYPE_SOLDIER:
@@ -1395,22 +1395,22 @@ void FirstPerson::UpdateAimer(unsigned int uPlayer, const PblMatrix& rMatrix)
 }
 
 // FUNCTION: SWBF2 0x00520e60
-void FirstPersonRenderable::SetAnimAndTransition(float fTime)
+void FirstPersonRenderable::SetAnimAndTransition(SOLDIERANIMATION aAnim,
+                                                SOLDIERANIMATION aTrans, float aTime)
 {
-    FirstPersonRenderable* pRenderable = (FirstPersonRenderable*)this;
-    if (!FirstPerson::IsActive(pRenderable->mCameraId))
+    if (!FirstPerson::IsActive(mCameraId))
     {
         return;
     }
-    int iWeaponClass = pRenderable->mWeaponClass;
+    int iWeaponClass = mWeaponClass;
     if (iWeaponClass == WEAPONCLASS_NONE)
     {
         iWeaponClass = RIFLE;
     }
-    pRenderable->fTransitionTimer = 0.0f;
-    pRenderable->fTransitionTimerMax = fTime;
-    pRenderable->mTransitionAnim = JUMP_LAND;
-    pRenderable->SetAnimation(FirstPerson::mAnim[iWeaponClass * NUM_SOLDIERANIMATIONS + HANDSDOWN], false);
+    fTransitionTimer = 0.0f;
+    fTransitionTimerMax = aTime;
+    mTransitionAnim = aTrans;
+    SetAnimation(FirstPerson::mAnim[iWeaponClass * NUM_SOLDIERANIMATIONS + aAnim], false);
 }
 
 // FUNCTION: SWBF2 0x0051fb50
@@ -1436,7 +1436,7 @@ void FirstPerson::RollLeft(unsigned int uPlayer)
 {
     if (IsActive(uPlayer))
     {
-        ((FirstPersonRenderable*)s_pRenderable[uPlayer])->SetAnimAndTransition(mFPCamera[uPlayer].RollLeft());
+        s_pRenderable[uPlayer]->SetAnimAndTransition(HANDSDOWN, JUMP_LAND, mFPCamera[uPlayer].RollLeft());
     }
 }
 
@@ -1445,7 +1445,7 @@ void FirstPerson::RollRight(unsigned int uPlayer)
 {
     if (IsActive(uPlayer))
     {
-        ((FirstPersonRenderable*)s_pRenderable[uPlayer])->SetAnimAndTransition(mFPCamera[uPlayer].RollRight());
+        s_pRenderable[uPlayer]->SetAnimAndTransition(HANDSDOWN, JUMP_LAND, mFPCamera[uPlayer].RollRight());
     }
 }
 
@@ -1454,7 +1454,7 @@ void FirstPerson::ProneToStand(unsigned int uPlayer)
 {
     if (IsActive(uPlayer))
     {
-        ((FirstPersonRenderable*)s_pRenderable[uPlayer])->SetAnimAndTransition(mFPCamera[uPlayer].ProneToStand());
+        s_pRenderable[uPlayer]->SetAnimAndTransition(HANDSDOWN, JUMP_LAND, mFPCamera[uPlayer].ProneToStand());
     }
 }
 

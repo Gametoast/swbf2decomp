@@ -703,9 +703,9 @@ bool HUD::ElementMap::ReadData(PblConfig& config, PblConfig::Data& data)
 // FUNCTION: SWBF2 0x00555840
 HUD::ElementMap* HUD::ElementMap::FindByPlayerIndex(int iPlayerIndex)
 {
-    for (PblListSingle::Node* pNode = sMapList.mHead.mNext; pNode != &sMapList.mHead; pNode = pNode->mNext)
+    for (PblListSingle::Itor itor(sMapList); itor.GetNode() != &sMapList.mHead; ++itor)
     {
-        ElementMap* pMap = (ElementMap*)((char*)pNode - offsetof(ElementMap, mMapNode));
+        ElementMap* pMap = (ElementMap*)((char*)itor.GetNode() - offsetof(ElementMap, mMapNode));
         if (pMap->mPlayerIndex == iPlayerIndex)
         {
             return pMap;
@@ -1756,11 +1756,11 @@ CommandPost* HUD::ElementMap::GetPost(float fX, float fY, CommandPost* pExcluded
             continue;
         }
         GameObject* pObject = post.actor->mObject;
-        if (pObject->mTeam != iTeam || !mPost[i].m_pHotSpot)
+        if (pObject->mTeam != iTeam)
         {
             continue;
         }
-        if (mPost[i].m_pHotSpot->IsPointInside(fX, fY) && post.actor != pExcludedPost)
+        if (mPost[i].TestHotSpot(fX, fY) && post.actor != pExcludedPost)
         {
             return post.actor;
         }

@@ -120,12 +120,11 @@ bool ConnectivityNode::HasClosedDynamicArc(const ConnectivityGraph& graph, unsig
 void ConnectivityNode::Read(PblFileChunk& chunk, int iNumNodes)
 {
     chunk._pFile->ReadData(sDiscardedRecordLabel, 16);
-    const float fX = chunk._pFile->ReadFloat();
-    const float fY = chunk._pFile->ReadFloat();
-    const float fZ = chunk._pFile->ReadFloat();
-    x = fX;
-    y = fY;
-    z = fZ;
+    PblVector3 pos;
+    pos.x = chunk._pFile->ReadFloat();
+    pos.y = chunk._pFile->ReadFloat();
+    pos.z = chunk._pFile->ReadFloat();
+    SetCenter(pos);
     w = chunk._pFile->ReadFloat();
     chunk._pFile->ReadData(mArcs, 8);
     memset(mBranchingTable, 0, sizeof(mBranchingTable));
@@ -161,31 +160,26 @@ void ConnectivityArc::Read(PblFileChunk& chunk, ConnectivityGraph& graph)
 // FUNCTION: SWBF2 0x00480860
 bool ConnectivityNode::IsPointInside(const PblVector3& v) const
 {
-    return w * w > (x - v.x) * (x - v.x) + (z - v.z) * (z - v.z);
+    return w * w > SquaredLengthXZ(GetCenter() - v);
 }
 
 // FUNCTION: SWBF2 0x004808a0
 bool ConnectivityArc::IsPointInside(const PblVector3& v) const
 {
-    if ((v.x - mBoundingCenter.x) * (v.x - mBoundingCenter.x)
-            + (v.z - mBoundingCenter.z) * (v.z - mBoundingCenter.z)
-        > mBoundingRadius * mBoundingRadius)
+    if (SquaredLengthXZ(v - mBoundingCenter) > mBoundingRadius * mBoundingRadius)
     {
         return false;
     }
-    const PblVector3 vA = n1->GetCenter();
-    const PblVector3 vAB(n2->x - vA.x, n2->y - vA.y, n2->z - vA.z);
-    const float fT = ((v.x - vA.x) * vAB.x + (v.y - vA.y) * vAB.y + (v.z - vA.z) * vAB.z)
-                     / (vAB.x * vAB.x + vAB.y * vAB.y + vAB.z * vAB.z);
-    if (fT < 0.0f || fT > 1.0f)
+    PblVector3 B = n1->GetCenter();
+    PblVector3 M = n2->GetCenter() - B;
+    float t = DotProduct(v - B, M) / DotProduct(M, M);
+    if (t < 0.0f || t > 1.0f)
     {
         return false;
     }
-    const float fDX = v.x - (vAB.x * fT + vA.x);
-    const float fDY = v.y - (vAB.y * fT + vA.y);
-    const float fDZ = v.z - (vAB.z * fT + vA.z);
-    const float fDist = sqrtf(fDX * fDX + fDY * fDY + fDZ * fDZ);
-    return (1.0f - fT) * n1->w + n2->w * fT > fDist;
+    float d = Length(v - (B + t * M));
+    float w = (1.0f - t) * n1->w + n2->w * t;
+    return w > d;
 }
 
 // FUNCTION: SWBF2 0x00480a10

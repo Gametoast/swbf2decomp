@@ -40,7 +40,7 @@ public:
     static PblHash rttiHashEntityDoorClass;
     static const char rttiNameEntityDoorClass[];
 
-    ZephyrAnim* mAnimation;
+    const ZephyrAnim* mAnimation;
     RedAnimation* mAnimObj;
     AnimationTrigger mAnimationTriggers[3];
     GameSound mOpenSound;

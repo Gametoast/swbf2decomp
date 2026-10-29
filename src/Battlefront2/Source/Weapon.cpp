@@ -117,19 +117,6 @@ namespace
     }
 
 
-    inline const GameObject* GetHandleObject(const PblHandle<const GameObject>& handle)
-    {
-        PblHandle<const GameObject>& h = const_cast<PblHandle<const GameObject>&>(handle);
-        if (h.mObject &&
-            h.mObject->mHandleId != h.mSavedHandleId)
-        {
-            h.mObject = 0;
-            h.mSavedHandleId = 0;
-        }
-        return h.mObject;
-    }
-
-
     inline bool ObjectIsRtti(GameObject* pObject, unsigned int uRtti)
     {
         return pObject->IsRtti(uRtti);
@@ -1285,13 +1272,13 @@ inline void* Weapon::operator new(size_t uSize)
 // FUNCTION: SWBF2 0x00677660
 bool Weapon::IsLocked() const
 {
-    return GetHandleObject(mTarget) != 0;
+    return mTarget != 0;
 }
 
 // FUNCTION: SWBF2 0x006776a0
 const GameObject* Weapon::GetLocked() const
 {
-    return GetHandleObject(mTarget);
+    return &mTarget();
 }
 
 // FUNCTION: SWBF2 0x006776d0
@@ -1476,49 +1463,42 @@ void Weapon::Init()
 // FUNCTION: SWBF2 0x00677bf0
 void Weapon::UpdateZoom(float fDeltaTime, float fInput)
 {
-    const WeaponClass* pClass = mClass;
-    float fZoom = mZoom * fInput * pClass->mZoomRate * fDeltaTime + mZoom;
-    if (pClass->mZoomMin > fZoom)
+    mZoom = Clamp(mZoom * fInput * mClass->mZoomRate * fDeltaTime + mZoom,
+                  mClass->mZoomMin, mClass->mZoomMax);
+    if (mClass->mZoomMax - mClass->mZoomMin > 0.0001f)
     {
-        fZoom = pClass->mZoomMin;
-    }
-    else if (fZoom > pClass->mZoomMax)
-    {
-        fZoom = pClass->mZoomMax;
-    }
-    mZoom = fZoom;
-
-    float fRange = pClass->mZoomMax - pClass->mZoomMin;
-    if (fRange > 0.0001f)
-    {
-        float t = (fZoom - pClass->mZoomMin) / fRange;
-        mZoomTurnScale = (1.0f - t) * pClass->mZoomTurnDivisorMin + pClass->mZoomTurnDivisorMax * t;
+        const float scaleT = (mZoom - mClass->mZoomMin) / (mClass->mZoomMax - mClass->mZoomMin);
+        mZoomTurnScale = (1.0f - scaleT) * mClass->mZoomTurnDivisorMin +
+                         mClass->mZoomTurnDivisorMax * scaleT;
     }
     else
     {
-        mZoomTurnScale = pClass->mZoomTurnDivisorMax;
+        mZoomTurnScale = mClass->mZoomTurnDivisorMax;
     }
 }
 
 // FUNCTION: SWBF2 0x00677ca0
 bool Weapon::CycleZoom(bool bCycle)
 {
-    const WeaponClass* pClass = mClass;
-    if (!bCycle)
+    if (bCycle)
     {
-        mZoom = pClass->mZoomMin;
-        mZoomTurnScale = pClass->mZoomTurnDivisorMin;
+        if (mZoom == mClass->mZoomMin && mClass->mZoomMin != mClass->mZoomMax &&
+            mClass->mZoomRate == 0.0f)
+        {
+            mZoom = mClass->mZoomMax;
+            mZoomTurnScale = mClass->mZoomTurnDivisorMax;
+            return true;
+        }
+        mZoom = mClass->mZoomMin;
+        mZoomTurnScale = mClass->mZoomTurnDivisorMin;
+        return false;
+    }
+    else
+    {
+        mZoom = mClass->mZoomMin;
+        mZoomTurnScale = mClass->mZoomTurnDivisorMin;
         return true;
     }
-    if (mZoom == pClass->mZoomMin && pClass->mZoomMin != pClass->mZoomMax && pClass->mZoomRate == 0.0f)
-    {
-        mZoom = pClass->mZoomMax;
-        mZoomTurnScale = pClass->mZoomTurnDivisorMax;
-        return true;
-    }
-    mZoom = pClass->mZoomMin;
-    mZoomTurnScale = pClass->mZoomTurnDivisorMin;
-    return false;
 }
 
 // FUNCTION: SWBF2 0x00677d40

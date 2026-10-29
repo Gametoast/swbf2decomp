@@ -1,6 +1,7 @@
 #include <stdlib.h>
 
 #include "AIDifficulty.h"
+#include "PebbleFL/Common/PblMath.h"
 
 #include "AIUtil.h"
 #include "Controllable.h"
@@ -350,24 +351,17 @@ float AIDifficulty::GetFlyerReactionTime()
 // FUNCTION: SWBF2 0x004390c0
 float AIDifficulty::GetRangedSpeed(float fSkill, float fMin, float fMid, float fMax, float fBoost)
 {
-    if (fSkill < 0.0f)
-    {
-        fSkill = 0.0f;
-    }
-    else if (fSkill > 1.5f)
-    {
-        fSkill = 1.5f;
-    }
+    fSkill = Clamp(fSkill, 0.0f, 1.5f);
 
     if (fSkill < 0.5f)
     {
-        return (fMid - fMin) * (fSkill * 2.0f) + fMin;
+        return Interpolate(fMin, fMid, fSkill * 2.0f);
     }
     if (fSkill < 1.0f)
     {
-        return (fMax - fMid) * ((fSkill - 0.5f) * 2.0f) + fMid;
+        return Interpolate(fMid, fMax, (fSkill - 0.5f) * 2.0f);
     }
-    return (fBoost - fMax) * ((fSkill - 1.0f) * 2.0f) + fMax;
+    return Interpolate(fMax, fBoost, (fSkill - 1.0f) * 2.0f);
 }
 
 // FUNCTION: SWBF2 0x00439160

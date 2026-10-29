@@ -242,15 +242,10 @@ bool AIPath::SmoothCorners(float fCornerDist, float fRadius, int eProhibit)
 // PblRef::`scalar deleting destructor'
 
 // FUNCTION: SWBF2 0x006148b0
-bool PathManager::GetPathPriority(const PblVector3* a, const PblVector3* b)
+unsigned char PathManager::GetPathPriority(const PblVector3& aSrc, const PblVector3& aDest)
 {
-    float dx = a->x - b->x;
-    float dz = a->z - b->z;
-    if (dx * dx + dz * dz < 2500.0f)
-    {
-        return false;
-    }
-    return true;
+    float lengthSqXZ = SquaredLengthXZ(aSrc - aDest);
+    return lengthSqXZ < 2500.0f ? 0 : 1;
 }
 
 namespace PathManager
@@ -321,14 +316,14 @@ void LowerRequestPriority(UnitController* pCtrl)
         return;
     }
 
-    for (PblList<PathRequest>::Itor it(*sRequests); it != sRequests->End(); ++it)
+    for (PblList<PathRequest>::Itor it(*sRequests); it; ++it)
     {
         PathRequest* pReq = it;
         if (pReq->mUnit == pCtrl)
         {
             if (pReq->mPriority)
             {
-                pReq->mPriority = pCtrl->mLowLevel.GetPathQueueDepth();
+                pReq->mPriority = pReq->mUnit->mLowLevel.GetPathQueueDepth();
             }
             return;
         }

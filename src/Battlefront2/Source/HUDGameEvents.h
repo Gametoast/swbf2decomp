@@ -273,7 +273,7 @@ extern PlayerEvents gPlayerEvents[1];
 extern ObjectiveEvents gObjectiveEvents;
 extern PlayerData gPlayerData[1];
 extern EventClass* gTargetResetCommon;
-extern Timer* gObjectiveTimer;
+extern const Timer* gObjectiveTimer;
 
 // FUNCTION: SWBF2 0x0055e3a0
 void Open();

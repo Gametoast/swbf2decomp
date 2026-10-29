@@ -470,7 +470,7 @@ void WeaponDispenser::ExitEmpty()
 // FUNCTION: SWBF2 0x00683b80
 bool WeaponDispenser::CheckCharge() const
 {
-    if (!mTrigger || !(((const WeaponDispenserClass*)mClass)->mMaxPressedTime > 0.0f))
+    if (!mTrigger || ((const WeaponDispenserClass*)mClass)->mMaxPressedTime <= 0.0f)
     {
         return false;
     }
@@ -705,13 +705,7 @@ const GameObject* WeaponDispenser::GetItem(int iIndex) const
     {
         return 0;
     }
-    PblHandle<GameObject>& h = (*mItemArray)[iIndex];
-    if (h.mObject && h.mObject->mHandleId != h.mSavedHandleId)
-    {
-        h.mObject = 0;
-        h.mSavedHandleId = 0;
-    }
-    return h.mObject;
+    return (*mItemArray)[iIndex];
 }
 
 // FUNCTION: SWBF2 0x005d5a40

@@ -191,13 +191,13 @@ void RedInterfaceElement::SetZOrder(unsigned char uZOrder)
 
     pList->Remove(&m_groupNode);
 
-    PblList<RedInterfaceElement>::Node* pAt = pList->GetFirst();
-    while (pAt->_pObject != pList->_head._pObject && uZOrder < pAt->_pObject->m_zorder)
+    PblList<RedInterfaceElement>::Itor it(*pList);
+    while (it != pList->End() && uZOrder < it->m_zorder)
     {
-        pAt = pAt->_pNext;
+        ++it;
     }
 
-    pList->AddBefore(pAt, &m_groupNode, this);
+    pList->AddBefore(it.GetNode(), &m_groupNode, this);
 }
 
 // FUNCTION: SWBF2 0x006c0820

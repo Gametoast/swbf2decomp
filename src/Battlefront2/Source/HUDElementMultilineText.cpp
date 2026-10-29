@@ -347,8 +347,8 @@ void HUD::ElementMultilineText::Update(const float fElapsed)
 void HUD::ElementMultilineText::RefreshTextBoxSize(unsigned int uLineHeight, unsigned int uWidth,
                                                    unsigned int uHeight)
 {
-    GetText(mFormat).SetTextBox(uWidth, uHeight);
-    mMaxDisplayLines = GetText(mFormat).GetMaxLines(uLineHeight);
+    mFormat.RedTextElement::SetTextBox(uWidth, uHeight);
+    mMaxDisplayLines = mFormat.RedTextElement::GetMaxLines(uLineHeight);
 }
 
 // FUNCTION: SWBF2 0x00557d70
@@ -686,8 +686,8 @@ void HUD::ElementMultilineText::EventColor(const HUD::Event& event, void* const 
     {
         ElementMultilineText* pDisplay = (ElementMultilineText*)pData;
         pDisplay->mFormat.RedInterfaceElement::SetColor(*event.GetData().color);
-        pDisplay->mFormat.mColorDefault = *event.GetData().color;
-        pDisplay->mFormat.mAlpha = (float)event.GetData().color->a / 255.0f;
+        pDisplay->mFormat.SetColorDefault(*event.GetData().color);
+        pDisplay->mFormat.SetAlpha((float)event.GetData().color->a / 255.0f);
     }
 }
 

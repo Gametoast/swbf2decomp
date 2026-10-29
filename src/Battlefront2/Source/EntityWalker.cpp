@@ -2302,10 +2302,11 @@ void EntityWalker::Render(unsigned char ucViewport, float fDist, unsigned int ui
     {
         bool bWrapped;
         float fDir = mDirection == Backward ? -1.0f : 1.0f;
-        float fBlendState = gameObjectInterpolator.GetLoopingFloat(mNetUniqueId, 0, mBlend->GetStateLimit(), fDir,
+        float fBlendState = gameObjectInterpolator.GetLoopingFloat(mNetUniqueId, 0, fDir, mBlend->GetStateLimit(),
                                                                     bWrapped);
-        float fLegState = gameObjectInterpolator.GetLoopingFloat(mNetUniqueId, 1, mLegPairs[0]->GetStateLimit(),
-                                                                  mDirection == Backward ? -1.0f : 1.0f, bWrapped);
+        float fLegState = gameObjectInterpolator.GetLoopingFloat(mNetUniqueId, 1,
+                                                                  mDirection == Backward ? -1.0f : 1.0f,
+                                                                  mLegPairs[0]->GetStateLimit(), bWrapped);
         mBlend->SetFrameState(fBlendState);
         mLegPairs[0]->SetFrameState(fLegState);
         if (mLegPairCount > 1)
@@ -2316,7 +2317,7 @@ void EntityWalker::Render(unsigned char ucViewport, float fDist, unsigned int ui
                 fDir = 1.0f;
             }
             mLegPairs[1]->SetFrameState(gameObjectInterpolator.GetLoopingFloat(
-                mNetUniqueId, 2, mLegPairs[1]->GetStateLimit(), fDir, bWrapped));
+                mNetUniqueId, 2, fDir, mLegPairs[1]->GetStateLimit(), bWrapped));
         }
         BuildWorldMatrices();
     }

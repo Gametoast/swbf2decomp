@@ -177,6 +177,7 @@ public:
     void TurnOff(float fDuration);
 
     float GetLightSaberLengthFactor() const;
+    bool IsOn() const { return m_bLightsaberOn || m_fTurnOnTimer < m_fTurnOnDuration; }
     bool IsOn(unsigned int uiBlade) const;
     float GetLightSaberLengthFactor(unsigned int uiBlade) const;
     void RenderLightsaberTrail(unsigned int uiEdge, const PblMatrix* pMatrix, bool bTrailOn,

@@ -101,6 +101,8 @@ public:
     // FUNCTION: SWBF2 0x004294a0
     static unsigned int GetRtti() { return rttiHashEntitySoldierClass; }
 
+    bool CanJetJump() const { return mJetFuelRechargeRate > 0.0f; }
+
     float GetJetFuelMinBorder() const { return mJetFuelMinBorder; }
 
     bool JetJumpShowHUD() const { return mJetShowHud != 0; }
@@ -178,7 +180,7 @@ public:
     int mSoldierType;
     bool mImmuneToMines;
     AimerClass* mAimerClass;
-    CameraTrackSetting mCameraSettings[2][4];
+    CameraTrackSetting mCameraSettings[4][2];
     float mCameraSettingBlendTime[3];
     CollisionModel mCollisionModels[3];
     CollisionModel mDeadCollision;

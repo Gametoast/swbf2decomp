@@ -510,7 +510,7 @@ void HUD::ElementGroupBase::EventRotation(const HUD::Event& event, void* const p
     const PblVector3& vX = mCurrent.GetXAxis();
     const PblVector3& vY = mCurrent.GetYAxis();
     const PblVector3& vZ = mCurrent.GetZAxis();
-    mResult.Scale(sqrtf(vX.x * vX.x + vX.y * vX.y + vX.z * vX.z), sqrtf(vY.x * vY.x + vY.y * vY.y + vY.z * vY.z), sqrtf(vZ.x * vZ.x + vZ.y * vZ.y + vZ.z * vZ.z));
+    mResult.Scale(Length(vX), Length(vY), Length(vZ));
 
     mResult.SetTranslation(vPosition);
     pGroup->mElement->SetMatrix(mResult);

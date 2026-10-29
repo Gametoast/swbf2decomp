@@ -59,13 +59,13 @@ char* GameMovie::sFilename;
 unsigned int gMovieOpenFailures;
 
 // FUNCTION: SWBF2 0x005343f0
-void GameMovie::Create()
+void GameMovie::Create(const int defaultHeap)
 {
     if (GameMovie::sUseMovies)
     {
 
-        sDefaultHeap = GameMemory::RunTimeHeap;
-        int iOldHeap = RedSetCurrentHeap(GameMemory::RunTimeHeap);
+        sDefaultHeap = defaultHeap == -1 ? GameMemory::RunTimeHeap : defaultHeap;
+        const int iOldHeap = RedSetCurrentHeap(sDefaultHeap);
 
         sRedMovie = new RedMovie;
 
@@ -289,7 +289,7 @@ void UpdatInGameMovie()
         if (g_InGameMoviePlayerFrame == 0)
         {
             GameSoundEngine::StopAll();
-            GameMovie::Create();
+            GameMovie::Create(GameMemory::RunTimeHeap);
             GameMovie::Open(g_InGameMovieFilename, ingame_movie_idname,
                             GameMemory::RunTimeHeap, GameMemory::RunTimeHeap);
             g_InGameMoviePlayerState = 2;
@@ -388,7 +388,7 @@ bool GameMovie::PropertiesPlaying(const char* const pcProperties, bool bCurrent)
 
     if (bCurrent)
     {
-        const RedMovie::Properties* pCurrent = sRedMovie->GetProperties();
+        const RedMovie::Properties* const pCurrent = sRedMovie->GetProperties();
         if (!pCurrent)
         {
             return false;
@@ -396,7 +396,7 @@ bool GameMovie::PropertiesPlaying(const char* const pcProperties, bool bCurrent)
         return pCurrent->GetHashID() == PblHash(pcProperties);
     }
 
-    const RedMovie::Properties* pProperties =
+    const RedMovie::Properties* const pProperties =
         RedMovie::Properties::FindByHashID(PblHash(pcProperties));
     if (pProperties)
     {

@@ -535,7 +535,7 @@ void EntityDoorClass::SetProperty(unsigned int uProperty, const char* pszValue)
     case 0xe145ee5d:
         if (mAnimObj)
         {
-            mAnimation = (ZephyrAnim*)mAnimObj->FindAnimation(pszValue);
+            mAnimation = mAnimObj->FindAnimation(pszValue);
         }
         break;
 

@@ -83,14 +83,14 @@ namespace PathFinder
     public:
 
         PathNode(const PblVector3& rPos, float fCostSoFar, const PathNode* pParent)
-            : mPos(rPos), mCostSoFar(fCostSoFar), mParentNode(const_cast<PathNode*>(pParent))
+            : mPos(rPos), mCostSoFar(fCostSoFar), mParentNode(pParent)
         {
         }
         void Set(const PblVector3& rPos, float fCostSoFar, const PathNode* pParent)
         {
             mPos = rPos;
             mCostSoFar = fCostSoFar;
-            mParentNode = const_cast<PathNode*>(pParent);
+            mParentNode = pParent;
         }
 
         static void* operator new(unsigned int uSize) { return sMemoryPool.Allocate(uSize); }
@@ -101,7 +101,7 @@ namespace PathFinder
 
         PblVector3 mPos;
         float mCostSoFar;
-        PathNode* mParentNode;
+        const PathNode* mParentNode;
         PblList<PathNode>::Node mNode;
 
         static MemoryPool sMemoryPool;

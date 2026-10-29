@@ -150,7 +150,7 @@ public:
             void Init(char* pName, PblListSingle& list, Type eType);
 
             // FUNCTION: SWBF2 0x00563f80
-            void InitVectorRange(Axis eAxis, float fMin, float fMax, float fStep);
+            void InitVectorRange(Axis eAxis, const float fMin, const float fMax, const float fStep);
 
             const char* GetName() const;
             unsigned int GetHashID() const;

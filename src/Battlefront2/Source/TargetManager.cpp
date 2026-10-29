@@ -13,12 +13,11 @@
 // FUNCTION: SWBF2 0x0057acb0
 void LockOnManager::Target::InitCommon(GameObject* const pObject, unsigned int uTeamMask)
 {
-    obj.mObject = pObject;
-    obj.mSavedHandleId = pObject ? pObject->mHandleId : 0;
+    obj = pObject;
     teamMask = uTeamMask;
     maxDistTrack = 10000.0f;
-    maxDist = 10000.0f;
     minDist = 100.0f;
+    maxDist = 10000.0f;
     timer = 0.0f;
 }
 
@@ -65,32 +64,6 @@ void LockOnManager::AddTargetCommon(GameObject* pActor, unsigned int uTeamMask)
 
 namespace
 {
-
-inline GameObject* HandleObject(PblHandle<GameObject>& handle)
-{
-    if (handle.mObject &&
-        handle.mObject->mHandleId != handle.mSavedHandleId)
-    {
-        handle.mObject = 0;
-        handle.mSavedHandleId = 0;
-    }
-    return handle.mObject;
-}
-
-inline unsigned int HandleId(const GameObject* pObject)
-{
-    return pObject->mHandleId;
-}
-
-inline EntityClass* CharacterClass(const Character* pCharacter)
-{
-    return pCharacter->mClassPtr;
-}
-
-inline GameObject* UnitObject(Controllable* pUnit)
-{
-    return static_cast<Trackable*>(pUnit)->GetGameObject();
-}
 
 inline const RedColor Interpolate(const RedColor& a, const RedColor& b, float t)
 {
@@ -186,9 +159,9 @@ void ClassMarker::Clear()
         {
             Character* pCharacter = Character::GetPtr(i);
             Controllable* pUnit = pCharacter->mUnit;
-            if (pUnit && CharacterClass(pCharacter)->mId == classID)
+            if (pUnit && pCharacter->mClassPtr->mId == classID)
             {
-                RemoveMarker(UnitObject(pUnit), 0, teamMask);
+                RemoveMarker(pUnit->GetGameObject(), 0, teamMask);
             }
         }
     }
@@ -211,9 +184,9 @@ const RedColor& ColorByHash(unsigned int hashID)
 // FUNCTION: SWBF2 0x00652360
 unsigned int HashByColor(RedColor& color)
 {
-    for (int i = 0; i < MAX_COLORS; ++i)
+    for (unsigned int i = 0; i < MAX_COLORS; ++i)
     {
-        if (memcmp(&color, &gColorTable[i].color, sizeof(color)) == 0)
+        if (color.GetARGB() == gColorTable[i].color.GetARGB())
         {
             return gColorTable[i].hashID;
         }
@@ -291,12 +264,12 @@ void AddTarget(GameObject* const actor, bool alwaysVisibleToFriends)
     unsigned int uIndex = MAX_TARGETS;
     for (unsigned int i = 0; i < MAX_TARGETS; ++i)
     {
-        if (HandleObject(_gTarget[i].actor) == actor)
+        if (_gTarget[i].actor == actor)
         {
             uIndex = i;
             break;
         }
-        if (uIndex == MAX_TARGETS && !HandleObject(_gTarget[i].actor))
+        if (uIndex == MAX_TARGETS && !_gTarget[i].actor)
         {
             uIndex = i;
         }
@@ -305,8 +278,7 @@ void AddTarget(GameObject* const actor, bool alwaysVisibleToFriends)
     if (uIndex != MAX_TARGETS)
     {
         Target& target = _gTarget[uIndex];
-        target.actor.mObject = actor;
-        target.actor.mSavedHandleId = HandleId(actor);
+        target.actor = actor;
         target.alwaysVisibleToFriends = alwaysVisibleToFriends;
         target.mapParams = pClass->mMapParams;
         HUD::Event event(HUD::GameEvents::gPlayerEvents[0].mapRefreshTarget, uIndex);
@@ -325,10 +297,9 @@ void RemoveTarget(GameObject* const actor)
     unsigned int i;
     for (i = 0; i < MAX_TARGETS; ++i)
     {
-        if (HandleObject(_gTarget[i].actor) == actor)
+        if (_gTarget[i].actor == actor)
         {
-            _gTarget[i].actor.mObject = 0;
-            _gTarget[i].actor.mSavedHandleId = 0;
+            _gTarget[i].actor = 0;
             _gTarget[i].alwaysVisibleToFriends = false;
             break;
         }
@@ -387,9 +358,9 @@ void AddClassMarker(unsigned int classID, unsigned int textureHash, float scale,
     {
         Character* pCharacter = Character::GetPtr(i);
         Controllable* pUnit = pCharacter->mUnit;
-        if (pUnit && CharacterClass(pCharacter)->mId == classID)
+        if (pUnit && pCharacter->mClassPtr->mId == classID)
         {
-            AddMarker(UnitObject(pUnit), 0, textureHash, scale, teamMask, colorHash,
+            AddMarker(pUnit->GetGameObject(), 0, textureHash, scale, teamMask, colorHash,
                       showHudTarget, flashAlpha, pulseSize, pulseStartScale);
         }
     }
@@ -415,7 +386,7 @@ void AddPost(CommandPost* const post)
     {
         return;
     }
-    GameObject* pObject = HandleObject(post->mObject);
+    GameObject* pObject = post->mObject;
     if (!pObject)
     {
         return;
@@ -456,7 +427,7 @@ void RemovePost(CommandPost* const post)
     {
         return;
     }
-    GameObject* pObject = HandleObject(post->mObject);
+    GameObject* pObject = post->mObject;
     if (!pObject)
     {
         return;
@@ -507,7 +478,7 @@ void AddMarker(GameObject* const actor, const RedRegion* const region, unsigned 
             }
             continue;
         }
-        if (!((actor && HandleObject(marker.actor) == actor) ||
+        if (!((actor && marker.actor == actor) ||
               (region && marker.region == region)))
         {
             continue;
@@ -551,8 +522,7 @@ void AddMarker(GameObject* const actor, const RedRegion* const region, unsigned 
         if (uIndex < MAX_MARKERS)
         {
             Marker& marker = _gMarkers[uIndex];
-            marker.actor.mObject = actor;
-            marker.actor.mSavedHandleId = actor ? HandleId(actor) : 0;
+            marker.actor = actor;
             marker.region = const_cast<RedRegion*>(region);
             marker.teamMask = teamMask;
             marker.scale = scale;
@@ -592,7 +562,7 @@ void RemoveMarker(GameObject* const actor, const RedRegion* const region, unsign
     for (unsigned int i = 0; i < MAX_MARKERS; ++i)
     {
         Marker& marker = _gMarkers[i];
-        if (!((actor && HandleObject(marker.actor) == actor) ||
+        if (!((actor && marker.actor == actor) ||
               (region && marker.region == region)))
         {
             continue;

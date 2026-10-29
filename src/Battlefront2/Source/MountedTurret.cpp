@@ -1331,7 +1331,7 @@ int MountedTurret::GetFirstPersonIndex()
 // FUNCTION: SWBF2 0x005a7b00
 int MountedTurret::GetJoystickIndex()
 {
-    if (mPlayerId < 0)
+    if (!IsPlayer())
     {
         return -1;
     }

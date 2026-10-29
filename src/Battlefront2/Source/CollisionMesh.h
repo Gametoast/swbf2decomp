@@ -89,6 +89,8 @@ public:
     CollisionAABB() {}
     CollisionAABB(const CollisionAABB& parent, const CompressedAABB& compressed);
 
+    PblVector3 GetMidPoint() const { return 0.5f * (boxmin + boxmax); }
+
     PblVector3 boxmin;
     PblVector3 boxmax;
 };

@@ -780,25 +780,26 @@ static const unsigned int s_auiRootJoints[2] = { 0x16e27226, 0 };
 // FUNCTION: SWBF2 0x00649380
 void SoldierAnimatorLowResClass::SetupJointTransformAnimationFlag(ZephyrSkeletonShared* pSkeleton)
 {
-    if ((int)pSkeleton->m_kHashCRC2Joint.Find(0x7a89c91f) - 1 >= 0)
+    int idx = pSkeleton->GetJointIdxByCrc(0x7a89c91f);
+    if (idx < 0)
     {
-        for (int i = 0; s_auiRootJoints[i]; ++i)
+        for (idx = 1; idx < (int)pSkeleton->m_uNumJoints; ++idx)
         {
-            int iJoint = (int)pSkeleton->m_kHashCRC2Joint.Find(s_auiRootJoints[i]) - 1;
-            pSkeleton->SetJointTransformAnimationFlag(iJoint, true);
+            pSkeleton->SetJointTransformAnimationFlag(idx, false);
+        }
+
+        for (int t = 0; t < 2; ++t)
+        {
+            idx = pSkeleton->GetJointIdxByCrc(s_auiNoRootJoints[t]);
+            pSkeleton->SetJointTransformAnimationFlag(idx, true);
         }
     }
     else
     {
-        for (int i = 1; i < (int)pSkeleton->m_uNumJoints; ++i)
+        for (int t = 0; s_auiRootJoints[t]; ++t)
         {
-            pSkeleton->SetJointTransformAnimationFlag(i, false);
-        }
-
-        for (int i = 0; i < 2; ++i)
-        {
-            int iJoint = (int)pSkeleton->m_kHashCRC2Joint.Find(s_auiNoRootJoints[i]) - 1;
-            pSkeleton->SetJointTransformAnimationFlag(iJoint, true);
+            idx = pSkeleton->GetJointIdxByCrc(s_auiRootJoints[t]);
+            pSkeleton->SetJointTransformAnimationFlag(idx, true);
         }
     }
 }
@@ -1214,9 +1215,8 @@ void SoldierAnimatorLowRes_HighResPool::ResetAnim(SoldierAnimationBank::MAP eMap
     m_eMap = eMap;
     m_uiAnimIndex = uiAnimIndex;
     const SoldierAnimation* pAnimation = SoldierAnimatorClass::Instance()->GetUpperBodyAnimation(eMap, uiAnimIndex);
-    const ZephyrAnim* pAnim = pAnimation->GetAnimation();
-    mZephyrPoseDyn.SetAnimation(pAnim, 30.0f);
-    if (pAnim)
+    mZephyrPoseDyn.SetAnimation(pAnimation->GetAnimation(), 30.0f);
+    if (pAnimation->GetAnimation())
     {
         mZephyrPoseDyn.SetCurTime(0.0f);
     }

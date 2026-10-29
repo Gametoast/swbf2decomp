@@ -302,7 +302,7 @@ void WeaponGrenade::EnterFire()
 // FUNCTION: SWBF2 0x00685330
 bool WeaponGrenade::CheckCharge() const
 {
-    if (!mTrigger || !(((const WeaponGrenadeClass*)mClass)->mMaxPressedTime > 0.0f))
+    if (!mTrigger || ((const WeaponGrenadeClass*)mClass)->mMaxPressedTime <= 0.0f)
     {
         return false;
     }

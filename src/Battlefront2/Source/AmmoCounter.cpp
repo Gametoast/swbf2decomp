@@ -42,11 +42,7 @@ bool AmmoCounterClass::SetProperty(unsigned int uiHash, const char* pcValue)
 // FUNCTION: SWBF2 0x00443790
 int AmmoCounter::GetMaxNumRounds() const
 {
-    if (m_pClass->mRoundsPerClip == INT_MAX)
-    {
-        return INT_MAX;
-    }
-    if (mMaxClips == FLT_MAX)
+    if (m_pClass->mRoundsPerClip == INT_MAX || mMaxClips == FLT_MAX)
     {
         return INT_MAX;
     }
@@ -56,11 +52,7 @@ int AmmoCounter::GetMaxNumRounds() const
 // FUNCTION: SWBF2 0x004437d0
 int AmmoCounter::GetNumRounds() const
 {
-    if (m_pClass->mRoundsPerClip == INT_MAX)
-    {
-        return INT_MAX;
-    }
-    if (mNumClips == FLT_MAX)
+    if (m_pClass->mRoundsPerClip == INT_MAX || mNumClips == FLT_MAX)
     {
         return INT_MAX;
     }
@@ -86,7 +78,7 @@ void AmmoCounter::ExpendRounds(float fRounds)
 // FUNCTION: SWBF2 0x00443860
 void AmmoCounter::AddClips(float fClips)
 {
-    float fMaxClips = mMaxClips - (float)(mCurClip >= m_pClass->mAmmoPerRound);
+    float fMaxClips = mMaxClips - (float)!IsClipEmpty();
     mNumClips += fClips;
     if (mNumClips > fMaxClips)
     {

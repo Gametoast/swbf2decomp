@@ -227,10 +227,7 @@ void PropObjectMesh::Init(PropModelMesh* pModel, float x, float z, float rotatio
     mModel = pModel;
     mRotation = rotation;
     mMatrix = gMatrixIdentity;
-    mMatrix.m[3][0] = x;
-    mMatrix.m[3][1] = 0.0f;
-    mMatrix.m[3][2] = -z;
-    mMatrix.m[3][3] = 1.0f;
+    mMatrix.SetTranslation(x, 0.0f, -z, 1.0f);
     mSetupFlag = 0;
     mSound.Stop(true);
     mElapsedTime = 0.0f;

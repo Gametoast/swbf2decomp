@@ -845,11 +845,11 @@ void PAAnimationGroup::GeometryCreated(unsigned int uObjHash, CollisionObject* p
 // FUNCTION: SWBF2 0x00628820
 void PAAnimationGroup::GeometryDeleted(CollisionObject* pObject)
 {
-    for (PAAnimationData* pData = sPAAnims; pData < sPAAnims + 255; ++pData)
+    for (int i = 0; i < 255; ++i)
     {
-        if (*pData->mGeometry == pObject)
+        if (*sPAAnims[i].mGeometry == pObject)
         {
-            *pData->mGeometry = 0;
+            *sPAAnims[i].mGeometry = 0;
         }
     }
 
@@ -873,12 +873,14 @@ void PAAnimationGroup::GeometryDeleted(CollisionObject* pObject)
 // FUNCTION: SWBF2 0x006288e0
 void PAAnimationGroup::UpdateTreeGrid(CollisionObject* pObject)
 {
-    if (pObject && CollisionManager::sInstance && CollisionManager::sInstance->mTreeGrid &&
-        pObject->IsInCollisionList())
+    if (pObject)
     {
-        CollisionManager::sInstance->mTreeGrid->Update(pObject, pObject->GetCollisionCenter(),
-                                                       pObject->GetCollisionRadius() * 2.0f,
-                                                       pObject->m2dRadius * 2.0f);
+        TreeGrid* grid = CollisionManager::GetTreeGrid();
+        if (grid && pObject->IsInCollisionList())
+        {
+            grid->Update(pObject, pObject->GetCollisionCenter(),
+                         pObject->GetCollisionRadius() * 2.0f, pObject->m2dRadius * 2.0f);
+        }
     }
 }
 

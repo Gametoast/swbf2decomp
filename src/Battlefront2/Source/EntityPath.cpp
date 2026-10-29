@@ -145,9 +145,9 @@ void EntityPath::NodeProperties::CalculateNodePosition(const PblVector3* const p
 PblVector3 EntityPath::NodeProperties::RandomVector(const PblVector3& v, float fX, float fY, float fZ)
 {
     PblVector3 vResult;
-    vResult.x = (PblRandom::GetGlobalFloat() - 0.5f) * fX + v.x;
-    vResult.y = (PblRandom::GetGlobalFloat() - 0.5f) * fY + v.y;
-    vResult.z = (PblRandom::GetGlobalFloat() - 0.5f) * fZ + v.z;
+    vResult.x = PblRandom::GetGlobalFloatRange(v.x, fX);
+    vResult.y = PblRandom::GetGlobalFloatRange(v.y, fY);
+    vResult.z = PblRandom::GetGlobalFloatRange(v.z, fZ);
     return vResult;
 }
 
@@ -652,9 +652,10 @@ void EntityPath::EnablePathByName(unsigned int uName, bool bEnable)
 {
     for (PblList<EntityPath>::Itor it(sList); it; ++it)
     {
-        if (it->GetName() == uName)
+        EntityPath* const path = it;
+        if (path->mName == uName)
         {
-            it->mEnabled = bEnable;
+            path->mEnabled = bEnable;
         }
     }
 }

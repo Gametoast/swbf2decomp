@@ -4149,7 +4149,7 @@ void EntityDroideka::Render(unsigned char aLod, float aFadeVal, unsigned int uiR
             {
                 bool isPrev = false;
                 float legFloat = gameObjectInterpolator.GetLoopingFloat(
-                    mNetUniqueId, 0, GetStateLimit(), mDirection == Backward ? -1.0f : 1.0f, isPrev);
+                    mNetUniqueId, 0, mDirection == Backward ? -1.0f : 1.0f, GetStateLimit(), isPrev);
                 if (isPrev)
                 {
                     int lastState = (int)(gameObjectInterpolator.GetPrevFloat(mNetUniqueId, 1) + 0.5f);

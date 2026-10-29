@@ -377,17 +377,18 @@ void HUD::ElementVehicleSeating::Update(const float fElapsed)
 }
 
 // FUNCTION: SWBF2 0x0055d8b0
-HUD::ElementVehicleSeating* HUD::ElementVehicleSeating::FindByPlayerIndex(int iPlayerIndex)
+HUD::ElementVehicleSeating* HUD::ElementVehicleSeating::FindByPlayerIndex(const int playerIndex)
 {
-    PblListSingle::Node* pHead = &sSeatingDisplays.mHead;
-    for (PblListSingle::Node* pNode = pHead->mNext; pNode != pHead; pNode = pNode->mNext)
+    PblListSingle::Itor itor(sSeatingDisplays);
+    while (itor.GetNode() != sSeatingDisplays.GetTerminator())
     {
         ElementVehicleSeating* pDisplay = reinterpret_cast<ElementVehicleSeating*>(
-            reinterpret_cast<char*>(pNode) - offsetof(ElementVehicleSeating, mNode));
-        if (pDisplay->mPlayerIndex == iPlayerIndex)
+            reinterpret_cast<char*>(itor.GetNode()) - offsetof(ElementVehicleSeating, mNode));
+        if (pDisplay->mPlayerIndex == playerIndex)
         {
             return pDisplay;
         }
+        ++itor;
     }
     return 0;
 }

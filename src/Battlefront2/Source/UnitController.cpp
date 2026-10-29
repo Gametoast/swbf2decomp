@@ -117,13 +117,7 @@ namespace
 {
 
 
-    inline PblHandle<const GameObject> MakeHandle(const GameObject* pObject)
-    {
-        PblHandle<const GameObject> h;
-        h.mObject = pObject;
-    h.mSavedHandleId = pObject ? pObject->mHandleId : 0;
-        return h;
-    }
+
 
     inline const PblVector3& GetPosition(const GameObject* pObject)
     {
@@ -145,10 +139,7 @@ namespace
         return 0;
     }
 
-    inline AttackHelper* GetAttackHelper(UnitAgent* pAgent)
-    {
-        return &pAgent->mAttackHelper;
-    }
+
 }
 
 // SYNTHETIC: SWBF2 0x00406c50
@@ -387,7 +378,7 @@ void UnitController::EnterState()
     {
         const UnitFollowInfo* pInfo = static_cast<const UnitFollowInfo*>(GetCurCmd());
         PblHandle<GameObject> who = pInfo->GetWho();
-        mAgent = new UnitFollowAgent(this, MakeHandle(Resolve(who)), pInfo->GetParam() != 0);
+        mAgent = new UnitFollowAgent(this, PblHandle<const GameObject>(Resolve(who)), pInfo->GetParam() != 0);
         break;
     }
     case STATE_SC_HOLD:
@@ -543,7 +534,8 @@ const GameObject* UnitController::GetAttackHelperTarget() const
     {
         return 0;
     }
-    return AIUtil::GetAlivePtr(MakeHandle(GetAttackHelper(mAgent)->GetTarget()), false);
+    const GameObject* obj = mAgent->mAttackHelper.GetTarget();
+    return AIUtil::GetAlivePtr(obj, false);
 }
 
 // FUNCTION: SWBF2 0x00663c70
@@ -553,7 +545,8 @@ const GameObject* UnitController::GetAttackHelperVisibleTarget() const
     {
         return 0;
     }
-    return AIUtil::GetAlivePtr(MakeHandle(GetAttackHelper(mAgent)->GetVisibleTarget()), false);
+    const GameObject* obj = mAgent->mAttackHelper.GetVisibleTarget();
+    return AIUtil::GetAlivePtr(obj, false);
 }
 
 // FUNCTION: SWBF2 0x00663cc0
@@ -561,7 +554,7 @@ const PblVector3& UnitController::GetAttackHelperTargetLastSeenPosition() const
 {
     if (mAgent)
     {
-        return GetAttackHelper(mAgent)->GetLastSeenTargetPos();
+        return mAgent->mAttackHelper.GetLastSeenTargetPos();
     }
     return gMatrixIdentity.GetTranslation();
 }
@@ -571,7 +564,7 @@ void UnitController::ForceSetAttackHelperTarget(const GameObject* pTarget)
 {
     if (mAgent)
     {
-        GetAttackHelper(mAgent)->SetVisibleTarget(pTarget);
+        mAgent->mAttackHelper.SetVisibleTarget(pTarget);
     }
 }
 

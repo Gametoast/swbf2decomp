@@ -917,13 +917,13 @@ void AILowLevel::SetNavigator_Goto(const PblVector3& dest, const Obstacle* pIgno
     PathFinder::GetClosestValidPoint(vDest, vDest, AIUtil::GetCollisionRadius(pObj),
                                      AIUtil::GetAIType(pObj), ignore, 2);
 
-    bool bFar = true;
+    unsigned char priority = 1;
     if (!bFlyerIgnoreBarriers)
     {
-        bFar = PathManager::GetPathPriority(&pos, &vDest);
+        priority = PathManager::GetPathPriority(pos, vDest);
     }
 
-    if (!mOwner->mOwner->GetEntity()->IsRtti(EntityFlyer::rttiHashEntityFlyer) && bFar)
+    if (!mOwner->mOwner->GetEntity()->IsRtti(EntityFlyer::rttiHashEntityFlyer) && priority)
     {
         if (ConnectivityGraphManager::GetWorldGraph((ConnectivityGraph::ProhibitFlag)-1)
             && (ConnectivityGraphManager::GetWorldGraph((ConnectivityGraph::ProhibitFlag)-1)->mAllowTypes

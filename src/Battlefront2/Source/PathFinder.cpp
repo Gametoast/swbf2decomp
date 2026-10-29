@@ -152,13 +152,10 @@ bool Obstacle::IsPointInside(const PblVector3& rPos, float fRadius) const
         return false;
     }
 
-    PblVector3 pos = GetTranslation();
-    PblVector3 d(pos.x - rPos.x, pos.y - rPos.y, pos.z - rPos.z);
-    PblVector3 xAxis = GetXAxis();
-    if ((float)fabs(xAxis.x * d.x + xAxis.y * d.y + xAxis.z * d.z) < mSizeX + fRadius)
+    PblVector3 dist = GetTranslation() - rPos;
+    if (fabsf(DotProduct(GetXAxis(), dist)) < mSizeX + fRadius)
     {
-        PblVector3 zAxis = GetZAxis();
-        if ((float)fabs(zAxis.x * d.x + zAxis.y * d.y + zAxis.z * d.z) < mSizeZ + fRadius)
+        if (fabsf(DotProduct(GetZAxis(), dist)) < mSizeZ + fRadius)
         {
             return true;
         }
@@ -169,24 +166,19 @@ bool Obstacle::IsPointInside(const PblVector3& rPos, float fRadius) const
 // FUNCTION: SWBF2 0x006101d0
 PblVector3 Obstacle::GetVertexXZ(int iVertex, float fRadius, float fPushOut) const
 {
-    float fX = mSizeX + fRadius + fPushOut;
-    float fZ = mSizeZ + fRadius + fPushOut;
-    PblVector3 xAxis = GetXAxis();
-    PblVector3 zAxis = GetZAxis();
-    PblVector3 x = xAxis * fX;
-    PblVector3 z = zAxis * fZ;
-    PblVector3 pos = GetTranslation();
+    PblVector3 x = GetXAxis() * (mSizeX + fRadius + fPushOut);
+    PblVector3 z = GetZAxis() * (mSizeZ + fRadius + fPushOut);
 
     switch (iVertex)
     {
     case 0:
-        return (pos + x + z);
+        return (GetTranslation() + x + z);
     case 1:
-        return (pos + x - z);
+        return (GetTranslation() + x - z);
     case 2:
-        return (pos - x - z);
+        return (GetTranslation() - x - z);
     default:
-        return (pos - x + z);
+        return (GetTranslation() - x + z);
     }
 }
 
@@ -201,14 +193,14 @@ float GetDistanceSquaredFromLineSegment(const PblVector3& rEnd, const PblVector3
                                         const PblVector3& rPos, PblVector3& rClosest)
 {
     PblVector3 dir = rEnd - rStart;
-    float fT = (rPos.x - rStart.x) * dir.x + (rPos.y - rStart.y) * dir.y + (rPos.z - rStart.z) * dir.z;
+    float fT = DotProduct(rPos - rStart, dir);
     if (fT <= 0.0f)
     {
         rClosest = rStart;
     }
     else
     {
-        float fLengthSq = dir.x * dir.x + dir.y * dir.y + dir.z * dir.z;
+        float fLengthSq = DotProduct(dir, dir);
         if (fT >= fLengthSq)
         {
             rClosest = rEnd;
@@ -219,10 +211,7 @@ float GetDistanceSquaredFromLineSegment(const PblVector3& rEnd, const PblVector3
             rClosest = (rStart + dir * fT);
         }
     }
-    float fDX = rPos.x - rClosest.x;
-    float fDY = rPos.y - rClosest.y;
-    float fDZ = rPos.z - rClosest.z;
-    return fDX * fDX + fDY * fDY + fDZ * fDZ;
+    return SquaredLength(rPos - rClosest);
 }
 
 // FUNCTION: SWBF2 0x00610420
@@ -689,10 +678,7 @@ bool PathFinder::GetClosestValidPoint(const PblVector3& rPos, PblVector3& rOut, 
 // FUNCTION: SWBF2 0x00611750
 float PathFinder::sInvertedTotalCost(const PathNode* pNode)
 {
-    const PblVector3& rPos = pNode->GetPos();
-    float fDX = sDestPos.x - rPos.x;
-    float fDZ = sDestPos.z - rPos.z;
-    float fCost = sqrtf(fDX * fDX + fDZ * fDZ) + pNode->GetCostSoFar() + 0.01f;
+    float fCost = LengthXZ(sDestPos - pNode->GetPos()) + pNode->GetCostSoFar() + 0.01f;
     if (fCost < HEAP_MAX_VALUE)
     {
         return HEAP_MAX_VALUE - fCost;
@@ -859,9 +845,7 @@ bool PathFinder::TestTrivialStraightLineHit(const PblVector3& from, const PblVec
 // FUNCTION: SWBF2 0x00611d20
 bool PathFinder::sSamePosXZ(const PblVector3& a, const PblVector3& b)
 {
-    float fDX = a.x - b.x;
-    float fDZ = a.z - b.z;
-    return fDX * fDX + fDZ * fDZ < EPSILON * EPSILON;
+    return SquaredLengthXZ(a - b) < EPSILON * EPSILON;
 }
 
 // FUNCTION: SWBF2 0x00611d50

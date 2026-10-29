@@ -206,7 +206,7 @@ public:
 
     void GetVector(int iNetUniqueId, PblVector3& vVector);
 
-    float GetLoopingFloat(int iNetUniqueId, int iIndex, float fMax, float fDirection, bool& bWrapped);
+    float GetLoopingFloat(int iNetUniqueId, int iIndex, float fDirection, float fMax, bool& bWrapped);
 
     float GetFloat(int iNetUniqueId, int iIndex);
 
@@ -386,6 +386,7 @@ public:
     // FUNCTION: SWBF2 0x00438ac0
     GameObjectClass* GetGameObjectClass() { return (GameObjectClass*)mEntityClass; }
     const GameObjectClass* GetGameObjectClass() const { return (const GameObjectClass*)mEntityClass; }
+    Controllable* GetFirstControllable() const { return PblList<Controllable>::Itor(mControllableList); }
     const PblList<Controllable>& GetControllableList() const;
 
     // FUNCTION: SWBF2 0x00499310

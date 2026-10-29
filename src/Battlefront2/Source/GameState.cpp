@@ -652,27 +652,24 @@ void GameState::UpdateTime()
 // FUNCTION: SWBF2 0x0053ae10
 void GameState::SetState(unsigned int uiState)
 {
-
     _bDoChangeState = true;
-
-    if (uiState == 0x8FF60339)
+    switch (uiState)
     {
+    case 0x8FF60339:
         _pNextState = &_MissionState;
         mNextStateHash = 0x8FF60339;
-    }
-    else if (uiState == 0x11E1FC01)
-    {
+        break;
+    case 0x11E1FC01:
         _pNextState = &_ShellState;
         mNextStateHash = 0x11E1FC01;
-    }
-    else if (uiState == 0)
-    {
+        break;
+    case 0:
         _pNextState = 0;
         mNextStateHash = 0;
-    }
-    else
-    {
+        break;
+    default:
         _bDoChangeState = false;
+        break;
     }
 }
 
@@ -800,10 +797,10 @@ namespace SaveGameManager
 // FUNCTION: SWBF2 0x00632ee0
 void Init()
 {
-    SaveGameManager::mReqSaveFile2Data = 0;
     SaveGameManager::mOnDone = 0;
-    SaveGameManager::mReqSaveFile2Size = 0;
+    SaveGameManager::mReqSaveFile2Data = 0;
     SaveGameManager::mReqSaveFile1Data = 0;
+    SaveGameManager::mReqSaveFile2Size = 0;
     SaveGameManager::mReqSaveFile1Size = 0;
     SaveGameManager::mForceNoSaveDevice = PblBuildType::gCreateMemoryProfile;
 }
@@ -1004,7 +1001,7 @@ void GameState::PreStateInit(bool bMission)
 
     if (!bMission)
     {
-        GameMovie::Create();
+        GameMovie::Create(GameMemory::RunTimeHeap);
     }
 
     SaveGameManager::Init();
@@ -1210,13 +1207,14 @@ void GameState::MissionState::PlayState::State::Exit()
 // FUNCTION: SWBF2 0x0053ba90
 void GameState::MissionState::SetState(unsigned int uiState)
 {
-    if (uiState == 0)
+    switch (uiState)
     {
+    case 0:
         _SetState(0);
-    }
-    else if (uiState == 0xc2cbd863)
-    {
+        break;
+    case 0xc2cbd863:
         _SetState(&_PlayState);
+        break;
     }
 }
 

@@ -801,7 +801,7 @@ void CommandPost::Respawn()
     {
         return;
     }
-    TargetManager::RemoveTarget(mObject);
+    TargetManager::RemoveTarget(GetGameObject());
     TargetManager::AddPost(this);
     EventManager::CommandPostEvent::mRespawn.Trigger(*this, EventManager::noContext);
     ActivateThread(-20, PER_TURN);

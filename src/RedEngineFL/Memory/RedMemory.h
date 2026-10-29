@@ -1,42 +1,18 @@
 #pragma once
 
-struct Tag
-{
-    Tag* prev_;
-    Tag* next_;
-    unsigned int size;
-};
- 
-
-struct TagList
-{
-    Tag* first;
-    Tag* last;
-};
- 
-
-struct HeapObj
-{
-    void* start;
-    TagList free;
-    TagList used;
-    unsigned int size;
-    char* name;
-    unsigned int align;
-    bool frozen;
-    bool permanent;
-};
- 
+struct Tag;
+struct TagList;
+struct HeapObj;
 
 extern "C"
 {
-    char* RedInitHeap(void* start, void* end, int maxheaps);
-    int RedCreateHeap(void* start, void* end, int align, char const* name);
+    void* RedInitHeap(void* start, void* end, int maxheaps);
+    int RedCreateHeap(void* start, void* end, unsigned int align, char const* name);
     void RedDestroyHeap(int heap);
     int RedSetCurrentHeap(int heap);
     void RedSetDebugHeap(int heap);
     void* RedAllocFromHeap(int heap, unsigned int size, bool bTop);
-    void RedFreeToHeap(int heap, void* block, int flags);
+    void RedFreeToHeap(int heap, void* block, unsigned int flags);
     void RedMarkHeapPermanent(int heap, bool permanent);
     void RedSetTempHeap(int heap);
 

@@ -81,7 +81,7 @@ HUD::Editor::Editor()
 
     mSafeZone.Enable(false);
 
-    mScreenElement.m_bUseSafeZone = false;
+    mScreenElement.SetUseSafezone(false);
     mScreenElement.SetZOrder(0);
     mScreenElement.Enable(true);
     mScreenElement.AddElement(&mInfo);
@@ -131,7 +131,7 @@ void HUD::Editor::Enable(bool bEnable)
 
     if (bEnable)
     {
-        mScreenElement.m_bUseSafeZone = false;
+        mScreenElement.SetUseSafezone(false);
         FLRenderer::AddInterfaceElement(&mScreenElement,
                                         RedInterfaceScreen::LEFT,
                                         RedInterfaceScreen::TOP, true);

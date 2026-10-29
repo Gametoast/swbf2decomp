@@ -1545,7 +1545,7 @@ int EntityHover::GetFirstPersonIndex()
 // FUNCTION: SWBF2 0x004c3330
 int EntityHover::GetJoystickIndex()
 {
-    if (mPlayerId < 0)
+    if (!IsPlayer())
     {
         return -1;
     }

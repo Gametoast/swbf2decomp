@@ -22,6 +22,7 @@
 #include "Battlefront2/Platform/Pc/pcSpawnDisplay.h"
 #include "RedEngineFL/Util/RedLocalizeDB.h"
 #include "PebbleFL/Common/PblHashTable.h"
+#include "PebbleFL/Common/PblMath.h"
 #include "PebbleFL/Common/PblUnicode.h"
 #include "RedEngineFL/Graphics/PC/pcRedTexture.h"
 #include "RedEngineFL/Graphics/RedCamera.h"
@@ -130,7 +131,7 @@ HUD::GameEvents::ObjectiveEvents HUD::GameEvents::gObjectiveEvents;
 HUD::EventClass* HUD::GameEvents::gTargetResetCommon;
 
 // GLOBAL: SWBF2 0x01e56fa8
-Timer* HUD::GameEvents::gObjectiveTimer;
+const Timer* HUD::GameEvents::gObjectiveTimer;
 
 namespace HUD
 {
@@ -786,9 +787,10 @@ void HUD::GameEvents::SetObjectiveTimer(const Timer* const pTimer)
 {
     if (gObjectiveTimer && !pTimer)
     {
-        HUD::Event(gObjectiveEvents.timerDisable, true).Send();
+        HUD::Event timerDisable(gObjectiveEvents.timerDisable, true);
+        timerDisable.Send();
     }
-    gObjectiveTimer = const_cast<Timer*>(pTimer);
+    gObjectiveTimer = pTimer;
 }
 
 // FUNCTION: SWBF2 0x00562bd0
@@ -825,12 +827,13 @@ void HUD::GameEvents::Update(float fDeltaTime)
 
     HUD::Event(gTime, GameLoop::GetMissionTime()).Send();
 
-    Timer* pTimer = gObjectiveTimer;
+    const Timer* pTimer = gObjectiveTimer;
     const bool bTimer = pTimer != 0;
     HUD::ElementMap* pMap = HUD::ElementMap::FindByPlayerIndex(0);
     if ((CameraManager::Instance()->GetNumCameras() == 1 && pMap && pMap->GetMode()) || !bTimer)
     {
-        HUD::Event(gObjectiveEvents.timerDisable, true).Send();
+        HUD::Event timerDisable(gObjectiveEvents.timerDisable, true);
+        timerDisable.Send();
     }
     else
     {
@@ -1818,55 +1821,56 @@ void HUD::GameEvents::UpdateVehicleHealth(int iIndex, const Character* const pCh
 void HUD::GameEvents::UpdateJetpack(const GameObject* const pObject, const EntitySoldierClass* const pClass,
                                     PlayerEvents& events, PlayerData& data)
 {
-    const bool bJetpack = pClass && pClass->mJetFuelRechargeRate > 0.0f && pClass->JetJumpShowHUD();
-    if (data.hasJetpack != bJetpack)
+    const bool hasJetpack = pClass && pClass->CanJetJump() && pClass->JetJumpShowHUD();
+    if (data.hasJetpack != hasJetpack)
     {
-        if (bJetpack)
+        if (hasJetpack)
         {
-            HUD::Event(events.jetFuelThreshold, pClass->GetJetFuelMinBorder()).Send();
+            HUD::Event jetFuelThreshold(events.jetFuelThreshold, pClass->GetJetFuelMinBorder());
+            jetFuelThreshold.Send();
         }
         else
         {
-            HUD::Event(events.jetDisable, true).Send();
+            HUD::Event jetDisableEvent(events.jetDisable, true);
+            jetDisableEvent.Send();
             data.jetFuel = -1.0f;
         }
-        data.hasJetpack = bJetpack;
+        data.hasJetpack = hasJetpack;
     }
 
     if (!data.hasJetpack)
     {
         return;
     }
-    const float fJetFuel = static_cast<const EntitySoldier*>(pObject)->mJetFuel;
-    if (fJetFuel == data.jetFuel)
+    float jetFuel = static_cast<const EntitySoldier*>(pObject)->mJetFuel;
+    if (jetFuel == data.jetFuel)
     {
         return;
     }
-    float fWarning = 0.0f;
-    const float fMinBorder = pClass->GetJetFuelMinBorder();
-    if (!(fJetFuel > fMinBorder))
-    {
-        fWarning = 1.0f - fJetFuel / fMinBorder;
-    }
-    HUD::Event(events.jetFuelWarning, fWarning).Send();
-    HUD::Event(events.jetFuelFraction, fJetFuel).Send();
-    data.jetFuel = fJetFuel;
+    const float jetFuelWarning = jetFuel > pClass->GetJetFuelMinBorder() ? 0.0f :
+        1.0f - jetFuel / pClass->GetJetFuelMinBorder();
+    HUD::Event jetFuelWarningEvent(events.jetFuelWarning, jetFuelWarning);
+    jetFuelWarningEvent.Send();
+    HUD::Event jetFuelEvent(events.jetFuelFraction, jetFuel);
+    jetFuelEvent.Send();
+    data.jetFuel = jetFuel;
 }
 
 // FUNCTION: SWBF2 0x00562060
 void HUD::GameEvents::UpdateShield(const GameObject* const pObject, PlayerEvents& events, PlayerData& data)
 {
-    const float fMaxShield = pObject->mMaxShield;
+    const float maxShield = pObject->mMaxShield;
     const float fShield = pObject->mCurShield;
-    const bool bShield = fMaxShield > 0.0f && fShield > 0.0001f;
-    if (bShield != data.hasShield)
+    const bool hasShield = maxShield > 0.0f && fShield > 0.0001f;
+    if (hasShield != data.hasShield)
     {
-        if (!bShield)
+        if (!hasShield)
         {
-            HUD::Event(events.jetDisable, true).Send();
+            HUD::Event shieldDisable(events.jetDisable, true);
+            shieldDisable.Send();
             data.shield = -1.0f;
         }
-        data.hasShield = bShield;
+        data.hasShield = hasShield;
     }
 
     if (!data.hasShield)
@@ -1875,7 +1879,8 @@ void HUD::GameEvents::UpdateShield(const GameObject* const pObject, PlayerEvents
     }
     if (data.unknownBool00D8)
     {
-        HUD::Event(events.jetDisable, true).Send();
+        HUD::Event shieldDisable(events.jetDisable, true);
+        shieldDisable.Send();
         data.shield = -1.0f;
         return;
     }
@@ -1883,18 +1888,13 @@ void HUD::GameEvents::UpdateShield(const GameObject* const pObject, PlayerEvents
     {
         return;
     }
-    float fFraction = fShield / fMaxShield;
-    if (0.0f > fFraction)
-    {
-        fFraction = 0.0f;
-    }
-    else if (fFraction > 1.0f)
-    {
-        fFraction = 1.0f;
-    }
-    HUD::Event(events.jetFuelFraction, fFraction).Send();
-    HUD::Event(events.jetFuelWarning, 1.0f - fFraction).Send();
-    HUD::Event(events.jetFuelThreshold, 0.0f).Send();
+    const float shieldFraction = Clamp(fShield / maxShield, 0.0f, 1.0f);
+    HUD::Event shieldFractionEvent(events.jetFuelFraction, shieldFraction);
+    shieldFractionEvent.Send();
+    HUD::Event shieldWarning(events.jetFuelWarning, 1.0f - shieldFraction);
+    shieldWarning.Send();
+    HUD::Event shieldThreshold(events.jetFuelThreshold, 0.0f);
+    shieldThreshold.Send();
 }
 
 // FUNCTION: SWBF2 0x005621a0
@@ -2289,9 +2289,12 @@ void HUD::GameEvents::UpdateMissleLock(const GameObject* const pObject, const Co
 void HUD::GameEvents::HideObjectiveDetailsElements(PlayerEvents& events, PlayerData& data)
 {
     (void)data;
-    HUD::Event(events.pressSelectToReturnDisable, true).Send();
-    HUD::Event(events.objectiveDetailsDisable, true).Send();
-    HUD::Event(events.hintsAvailableDisable, true).Send();
+    HUD::Event hidePressSelectToReturn(events.pressSelectToReturnDisable, true);
+    hidePressSelectToReturn.Send();
+    HUD::Event hideDetails(events.objectiveDetailsDisable, true);
+    hideDetails.Send();
+    HUD::Event hideHints(events.hintsAvailableDisable, true);
+    hideHints.Send();
 }
 
 // FUNCTION: SWBF2 0x00563740

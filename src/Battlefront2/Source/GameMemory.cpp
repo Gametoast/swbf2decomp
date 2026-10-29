@@ -53,7 +53,7 @@ void GameMemory::InitApplicationMemory(char* pStart, char* pEnd)
 {
     gArenaStart = pStart;
     gArenaEnd = pEnd;
-    gArenaStart = RedInitHeap(pStart, pEnd, 9);
+    gArenaStart = (char*)RedInitHeap(pStart, pEnd, 9);
 
     if (ApplicationHeap)
     {

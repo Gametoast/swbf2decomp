@@ -45,6 +45,7 @@ public:
     void Read(NetPktGroup& group);
 
     bool HasInfiniteAmmo() const { return mMaxClips == FLT_MAX; }
+    bool IsClipEmpty() const { return m_pClass->mAmmoPerRound > mCurClip; }
     bool IsReserveFull() const { return mNumClips >= mMaxClips - 1.0f; }
     float GetMaxClips() const { return mMaxClips; }
     float GetNumClips() const { return mNumClips; }

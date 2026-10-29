@@ -1063,12 +1063,7 @@ void SpawnDisplay::SetCommandPost(CommandPost* pPost)
         ++gDebugCount;
     }
     mCommandPost = pPost;
-    GameObject* pObject = 0;
-    if (pPost)
-    {
-        pObject = pPost->GetGameObject();
-    }
-    mCommandObject = pObject;
+    mCommandObject = pPost ? pPost->GetGameObject() : 0;
 }
 
 // FUNCTION: SWBF2 0x0042ba40

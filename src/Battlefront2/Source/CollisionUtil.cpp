@@ -41,11 +41,9 @@ bool CollisionUtil::CollideSphereAABB(const PblVector3& rCenter, float fRadius,
 bool CollisionUtil::CollideSphereRay(const PblVector3& rCenter, float fRadius,
                                      const PblVector3& rFrom, const PblVector3& rDir, float fLength)
 {
-    float fX = rCenter.x - rFrom.x;
-    float fY = rCenter.y - rFrom.y;
-    float fZ = rCenter.z - rFrom.z;
-    float fProj = fX * rDir.x + rDir.y * fY + rDir.z * fZ;
-    float fDist2 = fX * fX + fY * fY + fZ * fZ;
+    PblVector3 vDelta = rCenter - rFrom;
+    float fProj = DotProduct(vDelta, rDir);
+    float fDist2 = DotProduct(vDelta, vDelta);
     float fRadius2 = fRadius * fRadius;
 
     if (fRadius2 > fDist2)
@@ -61,7 +59,7 @@ bool CollisionUtil::CollideSphereRay(const PblVector3& rCenter, float fRadius,
     {
         return false;
     }
-    float fHalfChord = sqrtf(fRadius2 - fPerp2);
+    float fHalfChord = PblMath::Sqrt(fRadius2 - fPerp2);
     float fHit = fDist2 > fRadius2 ? fProj - fHalfChord : fProj + fHalfChord;
     if (fHit < 0.0f)
     {
@@ -74,10 +72,10 @@ bool CollisionUtil::CollideSphereRay(const PblVector3& rCenter, float fRadius,
 bool CollisionUtil::CollideSpheres2(const PblVector3& rCenter1, float fRadius1,
                                     const PblVector3& rCenter2, float fRadius2)
 {
-    float fX = rCenter2.x - rCenter1.x;
-    float fY = rCenter2.y - rCenter1.y;
-    float fZ = rCenter2.z - rCenter1.z;
-    return fX * fX + fY * fY + fZ * fZ < (fRadius1 + fRadius2) * (fRadius1 + fRadius2);
+    PblVector3 vDelta = rCenter2 - rCenter1;
+    float fRadii = fRadius1 + fRadius2;
+    float fDist2 = SquaredLength(vDelta);
+    return fDist2 < fRadii * fRadii;
 }
 
 // FUNCTION: SWBF2 0x0046ae60
@@ -175,7 +173,7 @@ bool IsPointInsideAxisAlignedCylinder(const PblVector3& vOffset, float fRadius, 
     {
         return false;
     }
-    return fRadius * fRadius > vOffset.x * vOffset.x + vOffset.z * vOffset.z;
+    return fRadius * fRadius > SquaredLengthXZ(vOffset);
 }
 }
 
@@ -200,24 +198,21 @@ namespace CollisionUtil
 bool CollideSpheres(const PblVector3& vCenter, float fRadius, const PblVector3& vSphereCenter, float fSphereRadius,
                 PblVector3& vNormal, float& fDepth)
 {
-    float fX = vSphereCenter.x - vCenter.x;
-    float fY = vSphereCenter.y - vCenter.y;
-    float fZ = vSphereCenter.z - vCenter.z;
+    PblVector3 vDelta = vSphereCenter - vCenter;
     float fRadii = fRadius + fSphereRadius;
-    float fDist = fX * fX + fY * fY + fZ * fZ;
+    float fDist = SquaredLength(vDelta);
     if (fDist >= fRadii * fRadii)
     {
         return false;
     }
     if (fDist > 0.0f)
     {
-        fDist = (float)sqrt((double)fDist);
+        fDist = sqrtf(fDist);
     }
     fDepth = fRadii - fDist;
     if (fDist > 0.0f)
     {
-        float fInv = 1.0f / fDist;
-        vNormal = PblVector3(fX * fInv, fY * fInv, fZ * fInv);
+        vNormal = vDelta / fDist;
     }
     else
     {
@@ -1135,23 +1130,22 @@ namespace CollisionUtil
 void GetClosestPoint_SegmentPoint(const PblVector3& vSegStart, const PblVector3& vSegEnd, const PblVector3& vPoint,
                 PblVector3& vClosest)
 {
-    float fDX = vSegEnd.x - vSegStart.x;
-    float fDY = vSegEnd.y - vSegStart.y;
-    float fDZ = vSegEnd.z - vSegStart.z;
-    float fProj = (vPoint.x - vSegStart.x) * fDX + (vPoint.y - vSegStart.y) * fDY + (vPoint.z - vSegStart.z) * fDZ;
+    PblVector3 vDelta = vSegEnd - vSegStart;
+    PblVector3 vOffset = vPoint - vSegStart;
+    float fProj = DotProduct(vOffset, vDelta);
     if (fProj <= 0.0f)
     {
         vClosest = vSegStart;
         return;
     }
-    float fLen2 = fDX * fDX + fDY * fDY + fDZ * fDZ;
+    float fLen2 = DotProduct(vDelta, vDelta);
     if (fProj >= fLen2)
     {
         vClosest = vSegEnd;
         return;
     }
     float fT = fProj / fLen2;
-    vClosest = PblVector3(vSegStart.x + fDX * fT, vSegStart.y + fDY * fT, vSegStart.z + fDZ * fT);
+    vClosest = vSegStart + fT * vDelta;
 }
 }
 

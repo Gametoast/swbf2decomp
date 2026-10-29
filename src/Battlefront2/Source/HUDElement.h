@@ -157,6 +157,9 @@ public:
     float GetContainerViewWidth() const;
     float GetContainerViewHeight() const;
 
+    void SetAlpha(const float alpha) { mAlpha = alpha; }
+    void SetColorDefault(const RedColor& color) { mColorDefault = color; }
+
     void Enable(bool bEnable);
 
     static Element* FindByHashID(unsigned int uHashID);

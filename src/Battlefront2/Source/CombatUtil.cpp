@@ -741,14 +741,15 @@ bool CombatUtil::CanGetFireReservation(const WeaponClass* pClass, const GameObje
 // FUNCTION: SWBF2 0x0046ed90
 bool CombatUtil::sIsWeaponUnlocked(const Controllable* pMe, const WeaponClass* pClass)
 {
-    if (pMe && pMe->mCharacter)
+    if (pMe && pMe->GetCharacter())
     {
-        const MedalsMgr* pMedals = pMe->mCharacter->mMedalsMgr;
-        if (pMedals && pClass->mMedalsTypeToUnlock != -1)
+        MedalsMgr* pMedals = pMe->GetCharacter()->GetMedalsManager();
+        short level = pClass->mMedalsTypeToUnlock;
+        if (pMedals && level != -1)
         {
-            bool bUnlocked = pMedals->IsAwardAvailable(pClass->mMedalsTypeToUnlock);
-            if (bUnlocked && pClass->mMedalsTypeToLock != -1 &&
-                pMedals->IsAwardAvailable(pClass->mMedalsTypeToLock))
+            bool bUnlocked = pMedals->IsAwardAvailable(level);
+            level = pClass->mMedalsTypeToLock;
+            if (bUnlocked && level != -1 && pMedals->IsAwardAvailable(level))
             {
                 bUnlocked = false;
             }
@@ -1009,11 +1010,11 @@ void CombatUtil::sRegularInfantryAttackPattern(Controllable* pMe, const GameObje
         return;
     }
 
-    static const AttackPatterns::State kPatterns[4] = {
+    AttackPatterns::State cPatterns[4] = {
         AttackPatterns::STATE_STATIONARY, AttackPatterns::STATE_SIMPLE,
         AttackPatterns::STATE_SERPENTINE, AttackPatterns::STATE_FLANK
     };
-    static const int kWeights[3][4] = {
+    const int cPatternWeights[3][4] = {
         { 3, 1, 1, 1 },
         { 2, 2, 1, 1 },
         { 1, 1, 5, 1 }
@@ -1025,22 +1026,22 @@ void CombatUtil::sRegularInfantryAttackPattern(Controllable* pMe, const GameObje
     int iTotal = 0;
     if (fOpenRadius > -1.0f)
     {
-        iTotal = kWeights[iDifficulty][0] + kWeights[iDifficulty][1];
+        iTotal = cPatternWeights[iDifficulty][0] + cPatternWeights[iDifficulty][1];
     }
     if (fOpenRadius > 10.0f)
     {
-        iTotal += kWeights[iDifficulty][2];
+        iTotal += cPatternWeights[iDifficulty][2];
     }
     if (fOpenRadius > 5.0f)
     {
-        iTotal += kWeights[iDifficulty][3];
+        iTotal += cPatternWeights[iDifficulty][3];
     }
 
     int iRoll = ((UnitController*)pMe->mCtrl)->GetRandomSeed() % iTotal;
     int i;
     for (i = 0; i < 4; ++i)
     {
-        iRoll -= kWeights[iDifficulty][i];
+        iRoll -= cPatternWeights[iDifficulty][i];
         if (iRoll < 0)
         {
             break;
@@ -1051,7 +1052,7 @@ void CombatUtil::sRegularInfantryAttackPattern(Controllable* pMe, const GameObje
         *pDesc->mPattern = AttackPatterns::STATE_SIMPLE;
         return;
     }
-    *pDesc->mPattern = kPatterns[i];
+    *pDesc->mPattern = cPatterns[i];
     if (!bInOptimalRange && *pDesc->mPattern == AttackPatterns::STATE_STATIONARY)
     {
         *pDesc->mPattern = AttackPatterns::STATE_SIMPLE;
@@ -1266,13 +1267,16 @@ void CombatUtil::WalkerVsVehicle(Controllable* pMe, const GameObject* pTarget, C
     bool bInOptimalRange;
     *pDesc->mSuitableWpn = VehicleWeapon(pMe, pTarget, pDesc->mSwitchWpn, &bInRange, &bInOptimalRange,
                                          pDesc->mIgnoreRanges);
-    if (!*pDesc->mSuitableWpn)
+    if (*pDesc->mSuitableWpn)
+    {
+        if (bInRange)
+        {
+            *pDesc->mPattern = AttackPatterns::STATE_STATIONARY;
+        }
+    }
+    else
     {
         *pDesc->mPattern = kNoPattern;
-    }
-    else if (bInRange)
-    {
-        *pDesc->mPattern = AttackPatterns::STATE_STATIONARY;
     }
 }
 
@@ -1551,33 +1555,33 @@ bool CombatUtil::EngageInCombat(const UnitController* pCtrl, const GameObject* p
 float CombatUtil::GetWeaponOptimalRange(const Controllable* pMe)
 {
     const Weapon* pWpn = pMe->GetCurWpn();
-    if (!pWpn)
+    if (pWpn)
     {
-        return 0.0f;
+        return pWpn->GetClass()->mOptimalRange;
     }
-    return WeaponGetClass(pWpn)->mOptimalRange;
+    return 0.0f;
 }
 
 // FUNCTION: SWBF2 0x00470070
 float CombatUtil::GetWeaponMaxRange(const Controllable* pMe)
 {
     const Weapon* pWpn = pMe->GetCurWpn();
-    if (!pWpn)
+    if (pWpn)
     {
-        return 0.0f;
+        return sGetWpnMaxRange(pMe, pWpn->GetClass());
     }
-    return sGetWpnMaxRange(pMe, WeaponGetClass(pWpn));
+    return 0.0f;
 }
 
 // FUNCTION: SWBF2 0x00470090
 float CombatUtil::GetWeaponMinRange(const Controllable* pMe)
 {
     const Weapon* pWpn = pMe->GetCurWpn();
-    if (!pWpn)
+    if (pWpn)
     {
-        return 0.0f;
+        return pWpn->GetClass()->mMinRange;
     }
-    return WeaponGetClass(pWpn)->mMinRange;
+    return 0.0f;
 }
 
 namespace CombatUtil

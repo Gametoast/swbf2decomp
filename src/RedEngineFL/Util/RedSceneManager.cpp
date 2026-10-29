@@ -1031,11 +1031,9 @@ void RedSceneManager::_Add(RedSceneObject* pObject)
 // FUNCTION: SWBF2 0x006e4350
 void RedSceneManager::_AddTransparentObject(RedSceneObject* pObject, float fDist)
 {
-    PblHeap<RedSceneObject*, float>* pHeap =
-        static_cast<PblHeap<RedSceneObject*, float>*>(mTransparentObjects);
-    if (!pHeap->IsFull())
+    if (!mTransparentObjects->IsFull())
     {
-        pHeap->Push(pObject, fDist);
+        mTransparentObjects->Push(pObject, fDist);
     }
 }
 
