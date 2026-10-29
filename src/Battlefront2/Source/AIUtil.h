@@ -191,7 +191,7 @@ void __fastcall AddSpied(Character* pWatcher, Character* pTarget);
 }
 namespace AIUtil
 {
-bool __fastcall IsSpied(const Character* pWatcher, const Character* pTarget);
+bool __fastcall IsSpied(Character* pWatcher, Character* pTarget);
 }
 namespace AIUtil
 {
@@ -212,7 +212,7 @@ float GetThreatSwitchTime(const UnitController* pCtrl);
 
 namespace AIUtil
 {
-float GetTargetSpeedForRealSpeed(float fNum, float fDenom);
+float GetTargetSpeedForRealSpeed(float aSpd, float aMinSpd, float aMidSpd, float aMaxSpd);
 }
 namespace AIUtil
 {

@@ -185,9 +185,9 @@ bool MissionPlayList::SelectNextEntry()
     const PlaylistEntry& entry = sPlaylist[sPlaylistPosn];
     if (GameLoop::mbHistoricalRules)
     {
-        playerTeamNumbers[11] = entry.mSide;
+        PlayerPrefs::mAllUserPrefs[1].mTeamNum = entry.mSide;
     }
-    playerTeamNumbers[0] = entry.mSide;
+    PlayerPrefs::mAllUserPrefs[0].mTeamNum = entry.mSide;
     sTeam1Hash = entry.mTeam1Hash;
     sTeam2Hash = entry.mTeam2Hash;
     PushToLua();

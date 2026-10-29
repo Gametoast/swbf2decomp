@@ -479,7 +479,7 @@ bool PauseMenu::Update(float fDeltaTime)
     }
 
     bool bGameOver = GameLoop::IsGameOver();
-    if (bStart && bGameOver && playerJoystickNumbers[11 * iViewport] != FLInputManager::Instance()->GetPrimaryPort())
+    if (bStart && bGameOver && PlayerPrefs::mAllUserPrefs[iViewport].mJoystick != FLInputManager::Instance()->GetPrimaryPort())
     {
         bStart = false;
         bPlayerList = false;

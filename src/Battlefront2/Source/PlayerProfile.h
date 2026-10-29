@@ -318,14 +318,10 @@ struct OnePrefs
  
 
 extern OnePrefs mAllUserPrefs[1];
+int __fastcall FindByPlayerId(int iPlayer);
+int __fastcall FindByViewport(int iViewport);
+int FindByJoystick(int aJoystick);
 }
-
-// GLOBAL: SWBF2 0x01ef7fa8
-
-static int* const playerJoystickNumbers = &PlayerPrefs::mAllUserPrefs[0].mJoystick;
-// GLOBAL: SWBF2 0x01ef7fac
-
-static int* const playerTeamNumbers = &PlayerPrefs::mAllUserPrefs[0].mTeamNum;
 
 namespace PlayerProfile
 {

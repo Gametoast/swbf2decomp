@@ -77,20 +77,18 @@ bool TipType::SetState(FsmState eState, float fTime)
     }
     mState = eState;
     mTimer = fTime;
-    switch (eState)
-    {
-    case STATE_Active:
+    if (eState == STATE_Active)
     {
         HUD::Event event(HUD::GameEvents::gPlayerEvents[mCameraIdx].displayToolTips, mClass->hash);
         event.Send();
-        break;
     }
-    case STATE_CoolOff:
+    else if (eState == STATE_CoolOff)
+    {
         mTimer = mClass->mCoolOff;
-        break;
-    case STATE_Waiting:
+    }
+    else if (eState == STATE_Waiting)
+    {
         mTimer = mClass->mTimeout;
-        break;
     }
     return mState == STATE_Active;
 }
@@ -99,7 +97,7 @@ bool TipType::SetState(FsmState eState, float fTime)
 void TipType::Setup(unsigned char cameraIdx, const TipClass* pClass)
 {
     mCameraIdx = cameraIdx;
-    mClass = (TipClass*)pClass;
+    mClass = pClass;
     mInput.mFilterRate = pClass->mInputHold;
     SetState(STATE_Waiting, 0.0f);
 }
@@ -167,11 +165,10 @@ void ToolTipsDisplay::Init()
     mAlwaysOff = false;
 
     int iSlot = PlayerPrefs::FindByViewport(mCameraIndex);
-    PlayerProfile::tProfile* pProfile =
-        *(PlayerProfile::tProfile**)((char*)&PlayerPrefs::mAllUserPrefs + 0x14 + iSlot * 0x2c);
+    PlayerProfile::tProfile* pProfile = PlayerPrefs::mAllUserPrefs[iSlot].pProfile;
     if (pProfile)
     {
-        if (pProfile->mToolTipOptions.mOn)
+        if (pProfile->mToolTipOptions.mOn == true)
         {
             for (int i = 0; i < TTT_COUNT; ++i)
             {
@@ -179,7 +176,7 @@ void ToolTipsDisplay::Init()
             }
             mAlwaysOn = true;
         }
-        else if (pProfile->mToolTipOptions.mOff)
+        else if (pProfile->mToolTipOptions.mOff == true)
         {
             for (int i = 0; i < TTT_COUNT; ++i)
             {
@@ -314,11 +311,11 @@ bool TipType::Update(float fDeltaTime, bool bArg)
 // FUNCTION: SWBF2 0x00658500
 bool ToolTipsDisplay::ShouldTestForToolTipState(ToolTipType eType)
 {
-    if (mAlwaysOn)
+    if (mAlwaysOn == true)
     {
         return true;
     }
-    if (mAlwaysOff)
+    if (mAlwaysOff == true)
     {
         return false;
     }
@@ -367,14 +364,15 @@ void TipType::CancelTip(bool bArg)
 // FUNCTION: SWBF2 0x00657ea0
 void TipType::Reset()
 {
-    if (mState == STATE_Active)
+    switch (mState)
     {
+    case STATE_Active:
         mTimer = mClass->mActiveTime;
-    }
-    else if (mState == STATE_Resetting)
-    {
+        break;
+    case STATE_Resetting:
         mState = STATE_Waiting;
         mTimer = 0.0f;
+        break;
     }
 }
 

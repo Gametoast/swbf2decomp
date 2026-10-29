@@ -91,6 +91,11 @@ public:
         return 0;
     }
 
+    static int GetIndex(Character* aChar)
+    {
+        return aChar - sCharacters;
+    }
+
     // FUNCTION: SWBF2 0x00437510
     static Character* GetPtr(int iIndex)
     {

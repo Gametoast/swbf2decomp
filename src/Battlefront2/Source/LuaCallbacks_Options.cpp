@@ -1410,7 +1410,7 @@ int ScriptCB_SetPlayerSide(lua_State*)
             int iPlayer = 0;
             if (iArgs != 2 || (LuaHelper::IsNumber(iArgs) && (iPlayer = LuaHelper::GetInt(iArgs)) == 0))
             {
-                playerTeamNumbers[11 * iPlayer] = iSide;
+                PlayerPrefs::mAllUserPrefs[iPlayer].mTeamNum = iSide;
             }
         }
     }

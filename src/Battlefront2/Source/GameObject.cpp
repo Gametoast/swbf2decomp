@@ -143,7 +143,7 @@ bool GameObject::Deflect(const Ordnance* pOrdnance, const PblVector3& vPos, cons
 
 namespace AIUtil
 {
-bool __fastcall IsSpied(const Character* pCharacter, const Character* pOther);
+bool __fastcall IsSpied(Character* pCharacter, Character* pOther);
 }
 
 
@@ -334,8 +334,8 @@ int GameObject::GetAffiliationToMe(const GameObject* pObject) const
     }
     if (iReal < iPerceived)
     {
-        const Character* pMine = GetControllable() ? GetControllable()->mCharacter : 0;
-        const Character* pTheirs =
+        Character* pMine = GetControllable() ? GetControllable()->mCharacter : 0;
+        Character* pTheirs =
             pObject->GetControllable() ? pObject->GetControllable()->mCharacter : 0;
         if (pMine && pTheirs && AIUtil::IsSpied(pMine, pTheirs))
         {

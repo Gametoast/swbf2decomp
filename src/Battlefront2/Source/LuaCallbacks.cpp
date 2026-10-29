@@ -1445,7 +1445,7 @@ int ScriptCB_Unpause(lua_State*)
         return 0;
     }
     if (uiState == MISSION_STATE && GameLoop::sShowStats && GameLoop::mNumCameras > 1 &&
-        playerJoystickNumbers[0] == FLInputManager::Instance()->GetPrimaryPort())
+        PlayerPrefs::mAllUserPrefs[0].mJoystick == FLInputManager::Instance()->GetPrimaryPort())
     {
         iViewport = 0;
     }

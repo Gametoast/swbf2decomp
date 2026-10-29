@@ -98,6 +98,7 @@ public:
 
     virtual bool Update(float fDeltaTime);
 
+    Character* GetOwner() const { return mOwner; }
     float GetLifeTimer() const { return mLifeTimer; }
     bool NoDisplayLifeTimer() const;
 

@@ -115,10 +115,12 @@ inline CLASS* Factory<TYPE, CLASS, DESC>::Find(unsigned int uHash)
 
 
 
-// FUNCTION: SWBF2 0x00491e70
+// TEMPLATE: SWBF2 0x00491e70 SYMBOL
+// ??0?$Factory@VEntity@@VEntityClass@@UEntityDesc@@@@QAE@I@Z
 template Factory<Entity, EntityClass, EntityDesc>::Factory(unsigned int);
 
-// FUNCTION: SWBF2 0x00491ef0
+// TEMPLATE: SWBF2 0x00491ef0 SYMBOL
+// ??0?$Factory@VEntity@@VEntityClass@@UEntityDesc@@@@QAE@PAVEntityClass@@I@Z
 template Factory<Entity, EntityClass, EntityDesc>::Factory(EntityClass*, unsigned int);
 
 // VTABLE: SWBF2 0x007ac47c
@@ -135,10 +137,12 @@ template Factory<Ordnance, OrdnanceClass, OrdnanceDesc>::Factory(unsigned int);
 
 
 
-// FUNCTION: SWBF2 0x0067bfe0
+// TEMPLATE: SWBF2 0x0067bfe0 SYMBOL
+// ??0?$Factory@VWeapon@@VWeaponClass@@UWeaponDesc@@@@QAE@I@Z
 template Factory<Weapon, WeaponClass, WeaponDesc>::Factory(unsigned int);
 
-// FUNCTION: SWBF2 0x0067c060
+// TEMPLATE: SWBF2 0x0067c060 SYMBOL
+// ??0?$Factory@VWeapon@@VWeaponClass@@UWeaponDesc@@@@QAE@PAVWeaponClass@@I@Z
 template Factory<Weapon, WeaponClass, WeaponDesc>::Factory(WeaponClass*, unsigned int);
 
 // VTABLE: SWBF2 0x0079e8ac

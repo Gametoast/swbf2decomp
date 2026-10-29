@@ -247,19 +247,16 @@ static unsigned __int64 sSpied[600];
 // FUNCTION: SWBF2 0x004417d0
 void AIUtil::ResetSpied(Character* pWatcher)
 {
-    sSpied[pWatcher - Character::sCharacters] = 0;
+    sSpied[Character::GetIndex(pWatcher)] = 0;
 }
 
 namespace AIUtil
 {
 
 // FUNCTION: SWBF2 0x00441780
-void __fastcall AddSpied(Character* pWatcher, Character* pTarget)
+void __fastcall AddSpied(Character* aSpy, Character* aSpotter)
 {
-    const int watcher = pWatcher - Character::sCharacters;
-    const int target = pTarget - Character::sCharacters;
-    const unsigned int mask = 1u << (target & 31);
-    sSpied[watcher] |= (unsigned __int64)mask | ((unsigned __int64)((int)mask < 0 ? 0xffffffffu : 0u) << 32);
+    sSpied[Character::GetIndex(aSpy)] |= 1 << Character::GetIndex(aSpotter);
 }
 }
 
@@ -267,14 +264,9 @@ namespace AIUtil
 {
 
 // FUNCTION: SWBF2 0x00441800
-bool __fastcall IsSpied(const Character* pWatcher, const Character* pTarget)
+bool __fastcall IsSpied(Character* aSpy, Character* aSpotter)
 {
-    const int watcher = pWatcher - Character::sCharacters;
-    const int target = pTarget - Character::sCharacters;
-    const unsigned int mask = 1u << (target & 31);
-    const unsigned __int64 bits = (unsigned __int64)mask |
-        ((unsigned __int64)((int)mask < 0 ? 0xffffffffu : 0u) << 32);
-    return (sSpied[watcher] & bits) != 0;
+    return (sSpied[Character::GetIndex(aSpy)] & (1 << Character::GetIndex(aSpotter))) != 0;
 }
 }
 
@@ -1110,17 +1102,15 @@ void AIUtil::CalculateSoldierSteerPoint(const PblVector3& vPrev, const PblVector
     const PblVector3 vFrom(vPrev.x, vPos.y, vPrev.z);
     const PblVector3 vTo(vGoto.x, vPos.y, vGoto.z);
     const PblVector3 vLeg = vTo - vFrom;
-    if (0.0001f > vLeg.x * vLeg.x + vLeg.y * vLeg.y + vLeg.z * vLeg.z)
+    if (0.0001f > SquaredLength(vLeg))
     {
         vSteer = vTo;
         return;
     }
 
-    PblVector3 vDir;
-    D3DXVec3Normalize(reinterpret_cast<D3DXVECTOR3*>(&vDir), reinterpret_cast<const D3DXVECTOR3*>(&vLeg));
-    const float fAhead = vDir.y * (vPos.y - vFrom.y) + (vPos.x - vFrom.x) * vDir.x +
-                         vDir.z * (vPos.z - vFrom.z) + fSpeed + 0.2f;
-    if (fAhead * fAhead > vLeg.z * vLeg.z + vLeg.x * vLeg.x)
+    PblVector3 vDir = Normalize(vLeg);
+    const float fAhead = DotProduct(vDir, vPos - vFrom) + fSpeed + 0.2f;
+    if (fAhead * fAhead > SquaredLengthXZ(vLeg))
     {
         vSteer = vTo;
         return;
@@ -1499,18 +1489,10 @@ namespace AIUtil
 {
 
 // FUNCTION: SWBF2 0x00441f60
-float GetTargetSpeedForRealSpeed(float fNum, float fDenom)
+float GetTargetSpeedForRealSpeed(float aSpd, float aMinSpd, float aMidSpd, float aMaxSpd)
 {
-    const float f = fNum / fDenom;
-    if (0.0f > f)
-    {
-        return 0.0f;
-    }
-    if (f > 1.0f)
-    {
-        return 1.0f;
-    }
-    return f;
+    float targetSpeed = aSpd / aMaxSpd;
+    return Clamp(targetSpeed, 0.0f, 1.0f);
 }
 }
 

@@ -238,9 +238,9 @@ bool Trackable::CheckFirstPerson(int iPlayer) const
         }
         return false;
     }
-    if (iLocal < 1 && playerJoystickNumbers[11 * iLocal] >= 0)
+    if (iLocal < 1 && PlayerPrefs::mAllUserPrefs[iLocal].mJoystick >= 0)
     {
-        PlayerProfile::tProfile* pProfile = PlayerProfile::GetProfile(playerJoystickNumbers[11 * iLocal]);
+        PlayerProfile::tProfile* pProfile = PlayerProfile::GetProfile(PlayerPrefs::mAllUserPrefs[iLocal].mJoystick);
         if (pProfile)
         {
             if (GetGameObject() && GameObject_IsRtti(GetGameObject(), EntityFlyer::rttiHashEntityFlyer))
@@ -278,9 +278,9 @@ bool Trackable::RenderTrackable(unsigned int uView) const
 void Trackable::SwitchControlView(int iPlayer)
 {
     int iLocal = NetGame::GetJoystickIndex(iPlayer);
-    if (iLocal >= 0 && iLocal < 1 && playerJoystickNumbers[11 * iLocal] >= 0)
+    if (iLocal >= 0 && iLocal < 1 && PlayerPrefs::mAllUserPrefs[iLocal].mJoystick >= 0)
     {
-        PlayerProfile::tProfile* pProfile = PlayerProfile::GetProfile(playerJoystickNumbers[11 * iLocal]);
+        PlayerProfile::tProfile* pProfile = PlayerProfile::GetProfile(PlayerPrefs::mAllUserPrefs[iLocal].mJoystick);
         if (pProfile)
         {
             if (GetGameObject() && GameObject_IsRtti(GetGameObject(), EntityFlyer::rttiHashEntityFlyer))

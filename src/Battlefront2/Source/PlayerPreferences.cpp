@@ -16,4 +16,16 @@ int __fastcall FindByViewport(int iValue)
     return -1;
 }
 
+int FindByJoystick(int aJoystick)
+{
+    for (unsigned int i = 0; i < sizeof(mAllUserPrefs) / sizeof(mAllUserPrefs[0]); ++i)
+    {
+        if (mAllUserPrefs[i].mJoystick == aJoystick)
+        {
+            return i;
+        }
+    }
+    return -1;
+}
+
 }

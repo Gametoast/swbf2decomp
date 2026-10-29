@@ -218,7 +218,7 @@ void GuiManager::UpdateAll(float fElapsed)
             GUIInputs* pInputs = 0;
             if (bSplitScreen)
             {
-                if (playerJoystickNumbers[0] == iPrimary)
+                if (PlayerPrefs::mAllUserPrefs[0].mJoystick == iPrimary)
                 {
                     iController = 0;
                 }

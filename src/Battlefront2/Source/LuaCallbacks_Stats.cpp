@@ -832,14 +832,14 @@ int ScriptCB_GetTeamstats(lua_State* L)
         if (apSorted[i]->mPlayerId >= 0)
         {
             int iLocal = NetGame::GetJoystickIndex(apSorted[i]->mPlayerId);
-            if (iLocal < 0 || playerJoystickNumbers[iLocal * 11] < 0)
+            if (iLocal < 0 || PlayerPrefs::mAllUserPrefs[iLocal].mJoystick < 0)
             {
                 color = RedColor::YELLOW;
             }
             else
             {
                 color = RedColor::WHITE;
-                if (playerJoystickNumbers[iLocal * 11] == GetStatsPageJoystick())
+                if (PlayerPrefs::mAllUserPrefs[iLocal].mJoystick == GetStatsPageJoystick())
                 {
                     iLocalRank = i;
                 }

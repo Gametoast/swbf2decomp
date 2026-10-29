@@ -1928,7 +1928,8 @@ bool EntityFlyer::UpdateIndirect(float fDeltaTime)
             {
                 fRatio = fMinRatio;
             }
-            float fFloor = AIUtil::GetTargetSpeedForRealSpeed(5.0f, GetFlyerMaxSpeed());
+            float fFloor = AIUtil::GetTargetSpeedForRealSpeed(5.0f, GetFlyerMinSpeed(),
+                                                           GetFlyerMidSpeed(), GetFlyerMaxSpeed());
             if (!(fRatio > fFloor))
             {
                 fRatio = fFloor;
@@ -5357,7 +5358,8 @@ void EntityFlyer::RaiseHeight(const PblVector3& vPos, bool bTaper, PblVector3* p
         {
             fHeight = fTop;
         }
-        *pfSpeedScale = AIUtil::GetTargetSpeedForRealSpeed(20.0f, GetFlyerMaxSpeed());
+        *pfSpeedScale = AIUtil::GetTargetSpeedForRealSpeed(20.0f, GetFlyerMinSpeed(),
+                                                        GetFlyerMidSpeed(), GetFlyerMaxSpeed());
     }
 
     float fGround = RedTerrain::_bEnable ? RedTerrain::GetInterpolatedHeight(vPos.x, vPos.z) : -FLT_MAX;
@@ -5514,7 +5516,8 @@ bool EntityFlyer::CalculateDest(float fDeltaTime, ControllableDestination* pDest
     }
     float fSpeed = ((fAlign * 2.0f - 1.0f) * (1.0f - fNear) + fNear) * *pfSpeedScale;
     *pfSpeedScale = fSpeed;
-    float fFloor = AIUtil::GetTargetSpeedForRealSpeed(20.0f, GetFlyerMaxSpeed());
+    float fFloor = AIUtil::GetTargetSpeedForRealSpeed(20.0f, GetFlyerMinSpeed(),
+                                                        GetFlyerMidSpeed(), GetFlyerMaxSpeed());
     if (fScale > fSpeed)
     {
         *pfSpeedScale = fSpeed > fFloor ? fSpeed : fFloor;

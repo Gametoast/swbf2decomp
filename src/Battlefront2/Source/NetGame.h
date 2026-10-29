@@ -12,6 +12,8 @@ extern int netHostIndex;
 extern bool netIsDedicated;
 extern bool netIsOneWorld;
 extern bool netClientActive;
+extern bool netIsLocalTurn;
+extern bool netIsLateTurn;
 
 class Character;
 class ChunkCluster;
@@ -184,6 +186,26 @@ public:
 
     // FUNCTION: SWBF2 0x004292b0
     static bool IsClient() { return netEnabledNext && netClientActive; }
+
+    static bool OnClient() { return netEnabledNext && netClientActive; }
+
+    // FUNCTION: SWBF2 0x004ddf50
+    static bool IsOnceClientTurn()
+    {
+        if (!IsEnabled())
+        {
+            return true;
+        }
+        if (IsDedicated())
+        {
+            return false;
+        }
+        if (IsClient())
+        {
+            return netIsLocalTurn;
+        }
+        return IsOneWorld() && !netIsLateTurn;
+    }
 
     enum MessageType
     {

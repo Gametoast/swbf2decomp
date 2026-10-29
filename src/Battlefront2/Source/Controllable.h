@@ -397,6 +397,8 @@ public:
 
     // FUNCTION: SWBF2 0x0047a700
     int GetPlayerId() const { return mPlayerId; }
+
+    bool IsPlayer() const { return mPlayerId >= 0; }
     Controllable* GetEnteredRemoteOrVehicleIfNotMe();
 
     Controllable* GetPilot();

@@ -935,9 +935,9 @@ void Character::ChangeClass(int iClassIndex)
 PlayerProfile::tProfile* Character::GetProfile() const
 {
     int iLocal = NetGame::GetJoystickIndex(mPlayerId);
-    if (iLocal >= 0 && iLocal < 1 && playerJoystickNumbers[iLocal * 11] >= 0)
+    if (iLocal >= 0 && iLocal < 1 && PlayerPrefs::mAllUserPrefs[iLocal].mJoystick >= 0)
     {
-        return PlayerProfile::GetProfile(playerJoystickNumbers[iLocal * 11]);
+        return PlayerProfile::GetProfile(PlayerPrefs::mAllUserPrefs[iLocal].mJoystick);
     }
     return 0;
 }

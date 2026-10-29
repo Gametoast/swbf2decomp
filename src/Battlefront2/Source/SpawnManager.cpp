@@ -175,7 +175,7 @@ void SpawnManager::AddPlayerCharacter(int iTeam, int iPlayer)
         int iSlot = PlayerPrefs::FindByPlayerId(iPlayer);
         if (iSlot >= 0)
         {
-            pProfile = PlayerProfile::GetProfile(playerJoystickNumbers[11 * iSlot]);
+            pProfile = PlayerProfile::GetProfile(PlayerPrefs::mAllUserPrefs[iSlot].mJoystick);
         }
         const unsigned short* pName = pProfile->GetName();
         if (pProfile && *pName)
@@ -329,7 +329,7 @@ void SpawnManager::InitialUpdate()
             int iSlot = PlayerPrefs::FindByPlayerId(i);
             if (iSlot >= 0)
             {
-                iTeam = playerTeamNumbers[11 * iSlot];
+                iTeam = PlayerPrefs::mAllUserPrefs[iSlot].mTeamNum;
             }
             AddPlayerCharacter(iTeam, i);
         }

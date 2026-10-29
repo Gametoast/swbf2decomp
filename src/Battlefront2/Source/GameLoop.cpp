@@ -1051,9 +1051,9 @@ int PostLoad()
         const unsigned int uNumCameras = CameraManager::Instance()->GetNumCameras();
         for (unsigned int i = 0; i < uNumCameras; ++i)
         {
-            if (i < 1 && playerJoystickNumbers[i * 11] >= 0)
+            if (i < 1 && PlayerPrefs::mAllUserPrefs[i].mJoystick >= 0)
             {
-                PlayerProfile::tProfile* pProfile = PlayerProfile::GetProfile(playerJoystickNumbers[i * 11]);
+                PlayerProfile::tProfile* pProfile = PlayerProfile::GetProfile(PlayerPrefs::mAllUserPrefs[i].mJoystick);
                 LockOnManager* pLockOn = LockOnManager::sLockOnManagers[i];
                 if (pProfile && pLockOn)
                 {

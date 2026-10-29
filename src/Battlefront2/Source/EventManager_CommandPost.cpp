@@ -444,10 +444,11 @@ PostMatchesTeam<DamageOwner> LuaGetItem<PostMatchesTeam<DamageOwner> >(int)
 template <>
 PostMatchesTeam<char> LuaGetItem<PostMatchesTeam<char> >(int)
 {
-// FUNCTION: SWBF2 0x0050ff30
     return PostMatchesTeam<char>((int)luaL_checknumber(LuaHelper::mState, 2));
 }
 
+// TEMPLATE: SWBF2 0x0050ff30
+// EventManager::UnregisterLuaCallback<CommandPost,unsigned __int64>
 template <class ITEM, class PARAM>
 int UnregisterLuaCallback(lua_State*)
 {
