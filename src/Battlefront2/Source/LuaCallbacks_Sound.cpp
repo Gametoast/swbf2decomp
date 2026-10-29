@@ -1356,7 +1356,8 @@ void StreamBase::SeekSegment(const Segment* pSegment)
     mCurrentSegment = const_cast<Segment*>(pSegment);
     if (SourceTransport::GetPlayState() == SourceTransport::playState_playing)
     {
-        Play(true);
+        SourceBus::Play(this);
+        SourceTransport::Play(true);
     }
 }
 }

@@ -40,7 +40,7 @@ public:
     void Setup(const StreamFormat& rFormat, void* const pData, unsigned int uiDataSize,
                unsigned int uiPacketSize, StreamPacket* pPackets, unsigned char uiNumPackets,
                bool bLooping);
-    void SetLooping(bool bLooping);
+    void SetLooping(unsigned char bLooping);
     void Flush()
     {
         StartFlush();
@@ -59,7 +59,7 @@ public:
     unsigned int mDataSize;
     unsigned int mAudioFrameSize;
     StreamFormat mFormat;
-    unsigned char mLooping;
+    bool mLooping;
 };
 
  

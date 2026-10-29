@@ -124,21 +124,24 @@ StreamPacket* StreamSourceProducer::GetPacket(unsigned int uiOutput)
 // FUNCTION: SWBF2 0x0073c930
 unsigned int StreamSourceProducer::GetNumQueuedPackets() const
 {
-    const StreamPacket* const pPackets = mPackets;
-    const unsigned int uiNumPackets = mNumPackets;
     unsigned int uiIndex = mReadPacketIndex;
     unsigned int uiQueued = 0;
+    const unsigned int uiNumPackets = mNumPackets;
 
-    for (unsigned int i = uiNumPackets; i != 0; --i)
+    if (uiNumPackets != 0)
     {
-        const StreamPacket& packet = pPackets[uiIndex++];
-        if (packet.mRefCount != 0 || packet.mBufferUsed != 0)
+        const StreamPacket* const pPackets = mPackets;
+        for (unsigned int i = uiNumPackets; i != 0; --i)
         {
-            ++uiQueued;
-        }
-        if (uiIndex == uiNumPackets)
-        {
-            uiIndex = 0;
+            const StreamPacket& packet = pPackets[uiIndex++];
+            if (packet.mRefCount > 0 || packet.mBufferUsed != 0)
+            {
+                ++uiQueued;
+            }
+            if (uiIndex == uiNumPackets)
+            {
+                uiIndex = 0;
+            }
         }
     }
     return uiQueued;

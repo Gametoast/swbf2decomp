@@ -130,8 +130,8 @@ public:
     void SetPosVel3D(::PblVector3* pPos, ::PblVector3* pVel)
     {
         mFlags |= (unsigned char)(flags_pos3DChanged | flags_vel3DChanged);
-        mPos3D = pPos;
-        mVel3D = pVel;
+        mPos3D = pPos ? pPos : &Globals::smNullVector;
+        mVel3D = pVel ? pVel : &Globals::smNullVector;
     }
 
     void SetPosition(const ::PblVector3* pPos)

@@ -96,18 +96,16 @@ void StreamCaptureSource::Close()
     mLock.Wait();
     StreamCaptureSourceBase::Flush();
 
-    IDirectSoundCaptureBuffer8* const pBuffer =
-        mCaptureBuffer;
-    if (pBuffer != 0)
+    if (mCaptureBuffer != 0)
     {
-        pBuffer->Stop();
+        mCaptureBuffer->Stop();
 
-        void* pvAudio1 = 0;
-        DWORD dwAudio1 = 0;
-        void* pvAudio2 = 0;
-        DWORD dwAudio2 = 0;
-        pBuffer->Lock(0, mPacketSize,
-                      &pvAudio1, &dwAudio1, &pvAudio2, &dwAudio2, 0);
+        DWORD dwAudio1;
+        void* pvAudio1;
+        DWORD dwAudio2;
+        void* pvAudio2;
+        mCaptureBuffer->Lock(0, mPacketSize,
+                             &pvAudio1, &dwAudio1, &pvAudio2, &dwAudio2, 0);
 
         if (dwAudio1 != 0)
         {
@@ -119,30 +117,22 @@ void StreamCaptureSource::Close()
             memset(pvAudio1, 0, dwAudio2);
         }
 
-        pBuffer->Unlock(pvAudio1, dwAudio1,
-                        pvAudio2, dwAudio2);
+        mCaptureBuffer->Unlock(pvAudio1, dwAudio1,
+                               pvAudio2, dwAudio2);
 
         mNextLockPos = 0;
         mOutputPacket.Reset();
     }
 
-    {
-        IDirectSoundCaptureBuffer8* const pRelease =
-            mCaptureBuffer;
+    mCaptureBuffer->Release();
 
-        pRelease->Release();
+    mCaptureBuffer = 0;
+    mCaptureBufferSize = 0;
 
-        IDirectSoundCapture* const pDevice =
-            mCaptureDevice;
+    mCaptureDevice->Release();
 
-        mCaptureBuffer = 0;
-        mCaptureBufferSize = 0;
-
-        pDevice->Release();
-
-        mCaptureDevice = 0;
-        mFrameSize = 0;
-    }
+    mCaptureDevice = 0;
+    mFrameSize = 0;
 
     StreamCaptureSourceBase::Close(true);
     mLock.Signal();
@@ -158,18 +148,16 @@ void StreamCaptureSource::Flush(bool bAlreadyLocked)
 
     StreamCaptureSourceBase::Flush();
 
-    IDirectSoundCaptureBuffer8* const pBuffer =
-        mCaptureBuffer;
-    if (pBuffer != 0)
+    if (mCaptureBuffer != 0)
     {
-        pBuffer->Stop();
+        mCaptureBuffer->Stop();
 
-        void* pvAudio1 = 0;
-        DWORD dwAudio1 = 0;
-        void* pvAudio2 = 0;
-        DWORD dwAudio2 = 0;
-        pBuffer->Lock(0, mPacketSize,
-                      &pvAudio1, &dwAudio1, &pvAudio2, &dwAudio2, 0);
+        DWORD dwAudio1;
+        void* pvAudio1;
+        DWORD dwAudio2;
+        void* pvAudio2;
+        mCaptureBuffer->Lock(0, mPacketSize,
+                             &pvAudio1, &dwAudio1, &pvAudio2, &dwAudio2, 0);
 
         if (dwAudio1 != 0)
         {
@@ -181,7 +169,7 @@ void StreamCaptureSource::Flush(bool bAlreadyLocked)
             memset(pvAudio1, 0, dwAudio2);
         }
 
-        pBuffer->Unlock(pvAudio1, dwAudio1, pvAudio2, dwAudio2);
+        mCaptureBuffer->Unlock(pvAudio1, dwAudio1, pvAudio2, dwAudio2);
 
         mNextLockPos = 0;
         mOutputPacket.Reset();
@@ -294,26 +282,26 @@ void StreamCaptureSource::UpdateObject()
         break;
 
     case SourceTransport::playState_paused:
-    case SourceTransport::playState_playing:
+        if (mCaptureBuffer != 0)
         {
-            IDirectSoundCaptureBuffer8* const pBuffer =
-                mCaptureBuffer;
-            if (pBuffer != 0)
-            {
-                if (eAction == SourceTransport::playState_paused)
-                {
-                    pBuffer->Stop();
-                }
-                else
-                {
-                    pBuffer->Start(DSCBSTART_LOOPING);
-                }
-            }
-            else
-            {
+            mCaptureBuffer->Stop();
+        }
+        else
+        {
 
-                SourceTransport::Stop();
-            }
+            SourceTransport::Stop();
+        }
+        break;
+
+    case SourceTransport::playState_playing:
+        if (mCaptureBuffer != 0)
+        {
+            mCaptureBuffer->Start(DSCBSTART_LOOPING);
+        }
+        else
+        {
+
+            SourceTransport::Stop();
         }
         break;
 
@@ -322,9 +310,7 @@ void StreamCaptureSource::UpdateObject()
         break;
     }
 
-    IDirectSoundCaptureBuffer8* const pBuffer =
-        mCaptureBuffer;
-    if (pBuffer != 0)
+    if (mCaptureBuffer != 0)
     {
         const SourceTransport::PlayState eState =
             GetCurrentPlayState();
@@ -334,7 +320,7 @@ void StreamCaptureSource::UpdateObject()
             || eState == SourceTransport::playState_pausing)
         {
             const unsigned int uiPacketSize = mPacketSize;
-            StreamPacketIOLite* const pIO = &mOutputPacket;
+            
 
             bool bContinue = true;
 
@@ -354,9 +340,9 @@ void StreamCaptureSource::UpdateObject()
                     break;
                 }
 
-                DWORD dwCapturePos = 0;
-                DWORD dwReadPos = 0;
-                pBuffer->GetCurrentPosition(&dwCapturePos,
+                DWORD dwCapturePos;
+                DWORD dwReadPos;
+                mCaptureBuffer->GetCurrentPosition(&dwCapturePos,
                                             &dwReadPos);
 
                 {
@@ -409,7 +395,7 @@ void StreamCaptureSource::UpdateObject()
                 unsigned int uiChunk = uiAvailable;
                 {
                     const unsigned int uiDataLeft =
-                        pIO->GetDataLeft(uiPacketSize);
+                        mOutputPacket.GetDataLeft(uiPacketSize);
                     if (uiChunk > uiDataLeft)
                     {
                         uiChunk = uiDataLeft;
@@ -418,11 +404,11 @@ void StreamCaptureSource::UpdateObject()
 
                 if (uiChunk != 0)
                 {
-                    void* pvAudio1 = 0;
-                    DWORD dwAudio1 = 0;
-                    void* pvAudio2 = 0;
-                    DWORD dwAudio2 = 0;
-                    pBuffer->Lock(mNextLockPos,
+                    DWORD dwAudio1;
+                    void* pvAudio1;
+                    DWORD dwAudio2;
+                    void* pvAudio2;
+                    mCaptureBuffer->Lock(mNextLockPos,
                                   uiChunk,
                                   &pvAudio1, &dwAudio1,
                                   &pvAudio2, &dwAudio2, 0);
@@ -437,20 +423,20 @@ void StreamCaptureSource::UpdateObject()
 
                     if (dwAudio1 != 0)
                     {
-                        memcpy(pIO->GetData(pPacket), pvAudio1, dwAudio1);
-                        pIO->UpdateOffset(uiPacketSize, dwAudio1);
+                        memcpy(mOutputPacket.GetData(pPacket), pvAudio1, dwAudio1);
+                        mOutputPacket.UpdateOffset(uiPacketSize, dwAudio1);
                     }
 
                     if (dwAudio2 != 0)
                     {
-                        memcpy(pIO->GetData(pPacket), pvAudio2, dwAudio2);
-                        pIO->UpdateOffset(uiPacketSize, dwAudio2);
+                        memcpy(mOutputPacket.GetData(pPacket), pvAudio2, dwAudio2);
+                        mOutputPacket.UpdateOffset(uiPacketSize, dwAudio2);
                     }
 
-                    pBuffer->Unlock(pvAudio1, dwAudio1,
+                    mCaptureBuffer->Unlock(pvAudio1, dwAudio1,
                                     pvAudio2, dwAudio2);
 
-                    if (pIO->GetDataLeft(uiPacketSize) == 0)
+                    if (mOutputPacket.GetDataLeft(uiPacketSize) == 0)
                     {
                         const unsigned int uiPos =
                             mPlaybackPosition;
@@ -459,7 +445,7 @@ void StreamCaptureSource::UpdateObject()
                         pPacket->mFlags = (unsigned short)
                             (pPacket->mFlags & 0xFFFCu);
                         pPacket->mPos = uiPos;
-                        pIO->Reset();
+                        mOutputPacket.Reset();
 
                         mPlaybackPosition =
                             uiPos

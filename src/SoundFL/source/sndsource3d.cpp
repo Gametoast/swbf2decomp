@@ -343,40 +343,39 @@ void Source3D::DetermineClosestListener()
 // FUNCTION: SWBF2 0x0073b990
 bool Source3D::Properties::Read(PblFileChunk& chunk, unsigned int uiPropertyID)
 {
-    PblFile* const pFile = chunk._pFile;
     switch (uiPropertyID)
     {
     case 0x1CE8C2E1u:
-        pFile->Read8();
-        SetRollIn(pFile->ReadFloat());
+        chunk._pFile->Read8();
+        SetRollIn(chunk._pFile->ReadFloat());
         return true;
     case 0x0FBA43F2u:
-        pFile->Read8();
-        SetDopplerMode(pFile->ReadFloat() > 0.0f);
+        chunk._pFile->Read8();
+        SetDopplerMode(chunk._pFile->ReadFloat() > 0.0f);
         return true;
     case 0x47C87922u:
-        pFile->Read8();
-        mSpaceDistance = pFile->ReadFloat();
+        chunk._pFile->Read8();
+        mSpaceDistance = chunk._pFile->ReadFloat();
         return true;
     case 0x80A163FEu:
-        pFile->Read8();
-        SetRollInDistance(pFile->ReadFloat());
+        chunk._pFile->Read8();
+        SetRollInDistance(chunk._pFile->ReadFloat());
         return true;
     case 0xAB59D4BBu:
-        pFile->Read8();
-        SetRollOff(pFile->ReadFloat());
+        chunk._pFile->Read8();
+        SetRollOff(chunk._pFile->ReadFloat());
         return true;
     case 0xB835CF50u:
-        pFile->Read8();
-        SetMinDistance(pFile->ReadFloat());
+        chunk._pFile->Read8();
+        SetMinDistance(chunk._pFile->ReadFloat());
         return true;
     case 0xE4B12EDFu:
-        pFile->Read8();
-        SetMuteDistance(pFile->ReadFloat());
+        chunk._pFile->Read8();
+        SetMuteDistance(chunk._pFile->ReadFloat());
         return true;
     case 0xE6915CF6u:
-        pFile->Read8();
-        SetMaxDistance(pFile->ReadFloat());
+        chunk._pFile->Read8();
+        SetMaxDistance(chunk._pFile->ReadFloat());
         return true;
     }
     return false;

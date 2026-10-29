@@ -433,25 +433,23 @@ bool DSBuffer::GetFormat(SampleInfo::Format& reFormat,
     bool bResult = false;
 
     DWORD dwSize;
-    HRESULT hr = mBuffer->GetFormat(0, 0, &dwSize);
-    if (!Engine::Succeeded(hr, "source\\win\\snddsbuffer.cpp", 758))
+    if (Engine::Succeeded(mBuffer->GetFormat(0, 0, &dwSize),
+                          "source\\win\\snddsbuffer.cpp", 758))
     {
-        return bResult;
-    }
-
-    WAVEFORMATEX* pwfx = (WAVEFORMATEX*)AllocTemp(dwSize);
-    if (pwfx)
-    {
-        hr = mBuffer->GetFormat(pwfx, dwSize, 0);
-        if (Engine::Succeeded(hr, "source\\win\\snddsbuffer.cpp", 763))
+        WAVEFORMATEX* pwfx = (WAVEFORMATEX*)AllocTemp(dwSize);
+        if (pwfx)
         {
-            bResult = true;
-            reFormat = (pwfx->wBitsPerSample == 8) ? SampleInfo::format_PCM8
-                                                   : SampleInfo::format_PCM16;
-            ruiNumChannels = pwfx->nChannels;
-            ruiSampleRate = pwfx->nSamplesPerSec;
+            if (Engine::Succeeded(mBuffer->GetFormat(pwfx, dwSize, 0),
+                                  "source\\win\\snddsbuffer.cpp", 763))
+            {
+                bResult = true;
+                reFormat = (pwfx->wBitsPerSample == 8) ? SampleInfo::format_PCM8
+                                                       : SampleInfo::format_PCM16;
+                ruiNumChannels = pwfx->nChannels;
+                ruiSampleRate = pwfx->nSamplesPerSec;
+            }
+            FreeTemp(pwfx);
         }
-        FreeTemp(pwfx);
     }
 
     return bResult;
@@ -562,7 +560,7 @@ void DSBuffer::ResetBuffers()
     for (PblListDouble::Itor itor(&smList);
          itor.GetNode() != smList.GetTerminator(); ++itor)
     {
-        DSBuffer* pBuffer = (DSBuffer*)((char*)itor.GetNode() - offsetof(DSBuffer, mNode));
+        DSBuffer* pBuffer = (DSBuffer*)itor.GetNode()->GetObjectA(&smList, offsetof(DSBuffer, mNode));
         if (pBuffer->mBuffer)
         {
             pBuffer->ResetGainInterpolation();
@@ -627,7 +625,6 @@ void DSBuffer::SetFrequency(unsigned int uiFrequency)
     }
 
     const unsigned char ucInterpolation = mInterpolation;
-    const int iMax = (int)Engine::smSecBufSampleRateMax;
 
     if ((ucInterpolation & 0x01) != 0)
     {
@@ -650,9 +647,9 @@ void DSBuffer::SetFrequency(unsigned int uiFrequency)
         {
             iHz = 100;
         }
-        else if (iHz > iMax)
+        else if (iHz > (int)Engine::smSecBufSampleRateMax)
         {
-            iHz = iMax;
+            iHz = (int)Engine::smSecBufSampleRateMax;
         }
 
         mBuffer->SetFrequency(iHz);
@@ -673,9 +670,9 @@ void DSBuffer::SetFrequency(unsigned int uiFrequency)
     {
         iHz = 100;
     }
-    else if (iHz > iMax)
+    else if (iHz > (int)Engine::smSecBufSampleRateMax)
     {
-        iHz = iMax;
+        iHz = (int)Engine::smSecBufSampleRateMax;
     }
 
     mBuffer->SetFrequency(iHz);
@@ -830,12 +827,12 @@ void DSBuffer::Stop()
 bool DSBuffer::TestProperty(const GUID& rguidPropSet, unsigned long ulId) const
 {
     ULONG ulSupport;
-    if (mProperties->QuerySupport(rguidPropSet, ulId, &ulSupport) < 0)
+    if (mProperties->QuerySupport(rguidPropSet, ulId, &ulSupport) >= 0 &&
+        (ulSupport & 3) == 3)
     {
-        return false;
+        return true;
     }
-
-    return (ulSupport & 3) == 3;
+    return false;
 }
 
 // FUNCTION: SWBF2 0x00744760

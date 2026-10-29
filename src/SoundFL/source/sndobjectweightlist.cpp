@@ -38,14 +38,14 @@ ObjectWeightList::ObjectWeightList()
 // FUNCTION: SWBF2 0x0074ba20
 bool ObjectWeightList::Read(PblFileChunk& chunk, unsigned int uiPropertyID)
 {
+    bool bOK = true;
     if (uiPropertyID != 0x4D5AF670u)
     {
         return false;
     }
-    PblFile* const pFile = chunk._pFile;
-    pFile->Read8();
-    mSelectMode = (unsigned char)((int)Clamp(pFile->ReadFloat(), 0.0f, 3.0f) + 1);
-    return true;
+    chunk._pFile->Read8();
+    mSelectMode = (unsigned char)((int)Clamp(chunk._pFile->ReadFloat(), 0.0f, 3.0f) + 1);
+    return bOK;
 }
 
 // FUNCTION: SWBF2 0x0074ba80
@@ -59,15 +59,14 @@ bool ObjectWeightList::ReadObjectWeights(PblFileChunk& chunk, unsigned int uiObj
         float fInterval = 0.0f;
         float fIntervalDev = 0.0f;
         PblFileChunk child = chunk.ReadNextChild();
-        PblFile* const pFile = child._pFile;
-        pFile->Read32();
-        const int iType = pFile->Read8();
-        const unsigned int uiHash = (unsigned int)pFile->Read32();
-        const float fWeight = pFile->ReadFloat();
+        child._pFile->Read32();
+        const int iType = child._pFile->Read8();
+        const unsigned int uiHash = (unsigned int)child._pFile->Read32();
+        const float fWeight = child._pFile->ReadFloat();
         if (iType == 4)
         {
-            fInterval = pFile->ReadFloat();
-            fIntervalDev = pFile->ReadFloat();
+            fInterval = child._pFile->ReadFloat();
+            fIntervalDev = child._pFile->ReadFloat();
         }
 
         void const* pObject = (void const*)uiHash;

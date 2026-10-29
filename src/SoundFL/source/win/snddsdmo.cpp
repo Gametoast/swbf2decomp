@@ -133,7 +133,12 @@ IMediaObject* DSDMO::GetMediaObject() const
 // FUNCTION: SWBF2 0x0074d6d0
 bool DSDMO::IsValid() const
 {
-    return mObject != 0;
+    if (mObject == 0)
+    {
+        return false;
+    }
+
+    return true;
 }
 
 // FUNCTION: SWBF2 0x0074d6a0

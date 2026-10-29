@@ -46,11 +46,13 @@ unsigned long __stdcall DSMediaBuffer::Release()
         if (mDynamic)
         {
             delete this;
-            return lRef;
         }
-        mData = 0;
-        mMaxLength = 0;
-        mLength = 0;
+        else
+        {
+            mData = 0;
+            mMaxLength = 0;
+            mLength = 0;
+        }
     }
     return lRef;
 }

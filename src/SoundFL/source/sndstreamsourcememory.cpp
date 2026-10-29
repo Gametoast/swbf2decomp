@@ -17,22 +17,22 @@ StreamSourceMemory::StreamSourceMemory()
 StreamPacket* StreamSourceMemory::GetPacket(unsigned int uiOutput, bool bUpdate)
 {
     StreamPacket* const pPacket = StreamSourceProducer::GetPacket(uiOutput);
-    if (pPacket == 0)
+    if (pPacket != 0)
     {
-        if (!bUpdate)
+        if (pPacket->mFlags & 1)
         {
-            return 0;
+            Stop();
         }
-        Update();
-        return GetPacket(uiOutput, false);
+
+        return pPacket;
     }
 
-    if (pPacket->mFlags & 1)
+    if (!bUpdate)
     {
-        Stop();
+        return 0;
     }
-
-    return pPacket;
+    Update();
+    return GetPacket(uiOutput, false);
 }
 
 // FUNCTION: SWBF2 0x0074c8c0
@@ -138,7 +138,7 @@ namespace Snd
 {
 
 // FUNCTION: SWBF2 0x0074c910
-void StreamSourceMemory::SetLooping(bool bLooping)
+void StreamSourceMemory::SetLooping(unsigned char bLooping)
 {
     mLooping = bLooping;
 }

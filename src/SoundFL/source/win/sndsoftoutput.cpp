@@ -155,8 +155,10 @@ bool SoftOutput::SetOutputBufferSize(float fBufferMs, bool bRestart, bool bEffec
 
     Engine::GetThreadUpdate()->Resume();
 
-    if (mRenderer.mNumChannels != format.GetNumChannels()
-        || mRenderer.mFormat != format.GetFormat())
+    const unsigned int uiChannels = mRenderer.mNumChannels;
+    const unsigned int uiFormat = mRenderer.mFormat;
+    if (uiChannels != format.GetNumChannels()
+        || uiFormat != format.GetFormat())
     {
         if (!bRestart)
         {

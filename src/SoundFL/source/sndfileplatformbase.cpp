@@ -153,8 +153,10 @@ void FilePlatformBase::Flush()
             }
         }
 
+        const unsigned int uiSize = mBuffer.GetSize();
+        void* const pBuffer = mBuffer.GetBuffer();
         CommitSeek(true);
-        RealWrite(mBuffer.GetBuffer(), mBuffer.GetSize());
+        RealWrite(pBuffer, uiSize);
 
         mFlags &= ~4;
         Seek(mPos + mBuffer.GetUsed(), false);

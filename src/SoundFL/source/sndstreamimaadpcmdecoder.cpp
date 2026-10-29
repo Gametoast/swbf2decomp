@@ -186,8 +186,22 @@ void StreamIMAADPCMDecoder::Flush()
 // FUNCTION: SWBF2 0x0074aad0
 StreamPacket* StreamIMAADPCMDecoder::GetPacket(unsigned int uiOutput)
 {
-    StreamPacket* pPacket = StreamCodec::GetPacket(uiOutput);
-    if (pPacket == 0 && !IsFlushing())
+    StreamPacket* pPacket = 0;
+
+    if (StreamNode::GetCurrentPlayState() == SourceTransport::playState_playing)
+    {
+        pPacket = StreamSourceProducer::GetPacket(uiOutput);
+        if (pPacket != 0)
+        {
+            if (pPacket->GetLast())
+            {
+                StreamNode::Stop();
+            }
+            return pPacket;
+        }
+    }
+
+    if (!IsFlushing())
     {
         Update();
         pPacket = StreamCodec::GetPacket(uiOutput);

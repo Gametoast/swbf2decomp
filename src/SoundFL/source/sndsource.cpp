@@ -12,7 +12,6 @@ namespace Snd
 // FUNCTION: SWBF2 0x0074dee0
 bool Source::Read(PblFileChunk& chunk, unsigned int uiPropertyID)
 {
-    PblFile* const pFile = chunk._pFile;
     switch (uiPropertyID)
     {
     case 0xBD324AB1u:

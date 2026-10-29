@@ -28,39 +28,38 @@ void StreamLowHighPass::Flush()
 // FUNCTION: SWBF2 0x00747ef0
 StreamPacket* StreamLowHighPass::GetPacket(unsigned int uiOutput)
 {
-    typedef StreamPacket* (__thiscall* GetPacketFn)(StreamNodeSource* pThis,
-                                                    unsigned int uiOutput);
     (void)uiOutput;
 
-    if (mInputPacket.GetPacket() == 0)
+    StreamPacketIO* const pIO = &mInputPacket;
+    if (pIO->GetPacket() == 0)
     {
 
         StreamNodeSource* const pNode = StreamNodeSink::mConnection.mInputNode;
-        mInputPacket.SetPacket(
+        pIO->SetPacket(
             pNode != 0
                 ? pNode->GetPacket(StreamNodeSink::mConnection.mInputNodeOutputIndex)
                 : 0);
     }
 
-    StreamPacket* const pInput = mInputPacket.GetPacket();
+    StreamPacket* const pInput = pIO->GetPacket();
     if (pInput == 0 || mOutputPacket.mRefCount > 0)
     {
         return 0;
     }
 
     short* const pOut = (short*)mOutputPacket.mBuffer;
-    unsigned int uiSize = mInputPacket.GetDataLeft(pInput->mBufferUsed);
+    unsigned int uiSize = pIO->GetDataLeft(pInput->mBufferUsed);
     if (uiSize > mBufferSize)
     {
         uiSize = mBufferSize;
     }
 
-    DSP::HighLowPassFilter::Process16((const short*)mInputPacket.GetData(), uiSize >> 1, pOut);
+    DSP::HighLowPassFilter::Process16((const short*)pIO->GetData(), uiSize >> 1, pOut);
 
     mOutputPacket.mBufferUsed = uiSize;
-    mOutputPacket.mPos = pInput->mPos + (mInputPacket.GetOffset() >> 1);
+    mOutputPacket.mPos = pInput->mPos + (pIO->GetOffset() >> 1);
 
-    if (mInputPacket.UpdateOffset(pInput->mBufferUsed, uiSize))
+    if (pIO->UpdateOffset(pInput->mBufferUsed, uiSize))
     {
         if ((pInput->mFlags & 1) != 0)
         {

@@ -8,11 +8,12 @@ namespace Snd
 // FUNCTION: SWBF2 0x0074b2a0
 float Source2D3D::CalculatePitch(const Source3D* pSource3D) const
 {
-    if (!Get3DMode())
+    if (Get3DMode())
     {
-        return mPitch;
+        const float fPitch = mPitch;
+        return pSource3D->CalculatePitch() * fPitch;
     }
-    return pSource3D->CalculatePitch() * mPitch;
+    return mPitch;
 }
 
 // FUNCTION: SWBF2 0x0074b2d0

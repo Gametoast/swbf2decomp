@@ -9,7 +9,6 @@ namespace Snd
 // FUNCTION: SWBF2 0x0074b750
 bool SoundProperties::Read(PblFileChunk& chunk, unsigned int uiPropertyID)
 {
-    PblFile* const pFile = chunk._pFile;
     switch (uiPropertyID)
     {
     case 0x5FB91E8Cu:

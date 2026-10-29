@@ -570,41 +570,41 @@ void Engine::SetGlobalReverb(const I3DL2Reverb* pReverb)
         {
             EAXREVERBPROPERTIES props;
 
-            props.ulEnvironment = 0;
-            props.flEnvironmentSize = 7.5f;
+            props.flDecayHFRatio =
+                ClampRange(pReverb->mDecayHFRatio, 0.1f, 2.0f);
+            props.flAirAbsorptionHF = 0.0f;
+            props.flDecayTime =
+                ClampRange(pReverb->mDecayTime, 0.1f, 20.0f);
+            props.flDecayLFRatio = 1.0f;
             props.flEnvironmentDiffusion =
                 ClampRange(pReverb->mDiffusion, 0.0f, 1.0f);
+            props.flEchoDepth = 0.0f;
+            props.flEchoTime = 0.25f;
+            props.flHFReference =
+                ClampRange(pReverb->mHFReference, 1000.0f, 20000.0f);
+            props.flEnvironmentSize = 7.5f;
+            props.flReflectionsDelay =
+                ClampRange(pReverb->mERDelay, 0.0f, 0.3f);
+            props.flLFReference = 250.0f;
+            props.flModulationDepth = 0.0f;
+            props.flModulationTime = 0.25f;
+            props.flReverbDelay =
+                ClampRange(pReverb->mReverbDelay, 0.0f, 0.1f);
+            props.flRoomRolloffFactor =
+                ClampRange(pReverb->mRoomRollOff, 0.0f, 10.0f);
+            props.lReflections = ConvertLinearToLog(pReverb->mERGain);
+            props.lReverb = ConvertLinearToLog(pReverb->mReverbGain);
             props.lRoom = ConvertLinearToLog(pReverb->mRoomGain);
             props.lRoomHF = ConvertLinearToLog(pReverb->mRoomHFGain);
             props.lRoomLF = 0;
-            props.flDecayTime =
-                ClampRange(pReverb->mDecayTime, 0.1f, 20.0f);
-            props.flDecayHFRatio =
-                ClampRange(pReverb->mDecayHFRatio, 0.1f, 2.0f);
-            props.flDecayLFRatio = 1.0f;
-            props.lReflections = ConvertLinearToLog(pReverb->mERGain);
-            props.flReflectionsDelay =
-                ClampRange(pReverb->mERDelay, 0.0f, 0.3f);
+            props.ulEnvironment = 0;
+            props.ulFlags = 0;
             props.vReflectionsPan[0] = 0.0f;
             props.vReflectionsPan[1] = 0.0f;
             props.vReflectionsPan[2] = 0.0f;
-            props.lReverb = ConvertLinearToLog(pReverb->mReverbGain);
-            props.flReverbDelay =
-                ClampRange(pReverb->mReverbDelay, 0.0f, 0.1f);
             props.vReverbPan[0] = 0.0f;
             props.vReverbPan[1] = 0.0f;
             props.vReverbPan[2] = 0.0f;
-            props.flEchoTime = 0.25f;
-            props.flEchoDepth = 0.0f;
-            props.flModulationTime = 0.25f;
-            props.flModulationDepth = 0.0f;
-            props.flAirAbsorptionHF = 0.0f;
-            props.flHFReference =
-                ClampRange(pReverb->mHFReference, 1000.0f, 20000.0f);
-            props.flLFReference = 250.0f;
-            props.flRoomRolloffFactor =
-                ClampRange(pReverb->mRoomRollOff, 0.0f, 10.0f);
-            props.ulFlags = 0;
 
             smDummySecBuffer.SetProperty(*smEAXFXSlot, 1, &props,
                                          sizeof(props));
@@ -623,31 +623,11 @@ void Engine::SetSpeakerConfig(EngineBase::SpeakerConfig eConfig)
 {
     if (eConfig != EngineBase::smSpeakerConfig)
     {
-        if (smMixConfig == mixConfig_Software)
+        if (smMixConfig != mixConfig_Software &&
+            smMixConfig >= mixConfig_DirectSoundHardware &&
+            smMixConfig <= mixConfig_DirectSoundSoftware)
         {
-            unsigned long ulSpeakerConfig;
-
-            if (eConfig > EngineBase::speakerConfig_AnalogSurround)
-            {
-                eConfig = EngineBase::speakerConfig_AnalogSurround;
-                ulSpeakerConfig = DSSPEAKER_STEREO;
-            }
-            else if (eConfig == EngineBase::speakerConfig_Mono)
-            {
-                ulSpeakerConfig = DSSPEAKER_MONO;
-            }
-            else
-            {
-                ulSpeakerConfig = DSSPEAKER_STEREO;
-            }
-
-            smDirectSound->SetSpeakerConfig(ulSpeakerConfig);
-            EngineBase::SetSpeakerConfig(eConfig);
-        }
-        else if (smMixConfig == mixConfig_DirectSoundHardware ||
-                 smMixConfig == mixConfig_DirectSoundSoftware)
-        {
-            unsigned long ulSpeakerConfig;
+            unsigned long ulSpeakerConfig = 0;
 
             switch (eConfig)
             {
@@ -672,9 +652,6 @@ void Engine::SetSpeakerConfig(EngineBase::SpeakerConfig eConfig)
             case EngineBase::speakerConfig_7point1:
                 ulSpeakerConfig = DSSPEAKER_7POINT1;
                 break;
-            default:
-                ulSpeakerConfig = 0;
-                break;
             }
 
             if (SUCCEEDED(smDirectSound->SetSpeakerConfig(ulSpeakerConfig)))
@@ -687,6 +664,18 @@ void Engine::SetSpeakerConfig(EngineBase::SpeakerConfig eConfig)
                      ulSpeakerConfig == DSSPEAKER_7POINT1) &&
                     smMixConfig == mixConfig_DirectSoundHardware);
             }
+        }
+        else if (smMixConfig == mixConfig_Software)
+        {
+            if (eConfig > EngineBase::speakerConfig_AnalogSurround)
+            {
+                eConfig = EngineBase::speakerConfig_AnalogSurround;
+            }
+
+            smDirectSound->SetSpeakerConfig(eConfig == EngineBase::speakerConfig_Mono
+                                                ? DSSPEAKER_MONO
+                                                : DSSPEAKER_STEREO);
+            EngineBase::SetSpeakerConfig(eConfig);
         }
     }
 

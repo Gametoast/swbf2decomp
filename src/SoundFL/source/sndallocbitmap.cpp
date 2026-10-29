@@ -94,7 +94,7 @@ bool MemoryBitmap::Alloc(unsigned int uiSize, MemoryHandle& handle)
 }
 
 // FUNCTION: SWBF2 0x00745450
-void AllocBitmap::Free(Handle& handle)
+inline void AllocBitmap::Free(Handle& handle)
 {
     Reserve(handle.mStartEntry, handle.mNumEntries, false);
 

@@ -349,9 +349,9 @@ void __cdecl SoundStream::UpdateAll()
         smPlayingVel[i] = pFF->mVel;
         pStream->SetPitch(pFF->mPitch);
         pStream->SetGain(pFF->mGain);
-        pStream->SetPosition(&smPlayingPos[i]);
-        pStream->SetVelocity(&smPlayingVel[i]);
-        pStream->Play(true);
+        pStream->SetPosVel3D(&smPlayingPos[i], &smPlayingVel[i]);
+        pStream->SourceBus::Play(pStream);
+        pStream->SourceTransport::Play(true);
     }
 
     for (PblListSingle::Node* pNode = smList.mHead.mNext; pNode != &smList.mHead;

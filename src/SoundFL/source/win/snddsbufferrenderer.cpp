@@ -52,9 +52,9 @@ DSBufferRenderer::DSBufferRenderer()
 float DSBufferRenderer::GetBufferSizeMs() const
 {
 
+    const float fBufferBytes = (float)(unsigned int)mBufferSize;
     const unsigned int uiFrameBytes = SampleInfo::GetFrameSize(mFormat) * mNumChannels;
-    const float fFrames = (float)(unsigned int)mBufferSize
-                        / (float)(unsigned int)uiFrameBytes;
+    const float fFrames = fBufferBytes / (float)(unsigned int)uiFrameBytes;
     const float fSamples = (float)(unsigned int)SampleInfo::GetSamplesPerFrame(mFormat)
                          * fFrames;
     const float fRate = (float)(unsigned int)mFrequency
@@ -85,70 +85,73 @@ void DSBufferRenderer::UpdateBufferParameters(IDirectSoundBuffer* const pBuffer,
     DSBuffer::SetFrequency(
         (int)((float)(unsigned int)mFrequency * Source::mPitch));
 
-    if (!Source2D3D::Get3DMode())
+    if (Source2D3D::Get3DMode())
     {
-        UpdateGain(false, 1.0f);
-        return;
-    }
-
-    if (Source3D::mClosestListener == 0)
-    {
-        Source3D::mFlags |=
-            (unsigned char)(unsigned int)Source3D::flags_updateListener;
-
-        Source3D::DetermineClosestListener();
-    }
-
-    if (Source3D::mClosestListener->mSpace != 0)
-    {
-
-        SourceI3DL2Interpolated::Update(
-            Source3D::mClosestListener,
-            Source3D::mPos3D,
-            Source3D::mProps->mSpaceDistance,
-            SourceTransport::GetCurrentPlayState()
-                == SourceTransport::playState_playing);
-    }
-
-    if (DSBuffer::GetBuffer3D() != 0)
-    {
-        DS3DBUFFER params;
-        Engine::Calculate3DParams(this, &params);
-        if (!DSBuffer::Set3DParams(params, bImmediate))
+        Listener* pListener = Source3D::mClosestListener;
+        if (pListener == 0)
         {
-            PblTraceP("DSBufferRenderer : unable to set 3D parameters\n");
+            Source3D::mFlags |=
+                (unsigned char)(unsigned int)Source3D::flags_updateListener;
 
+            Source3D::DetermineClosestListener();
+            pListener = Source3D::mClosestListener;
         }
-    }
 
-    float fGain;
-    Source3D::CalculateGain(fGain);
-
-    if (DSBuffer::GetPropertySet() != 0 && mNumChannels <= 1)
-    {
-        const unsigned short usFlags = SourceI3DL2::mFlags;
-        const bool bChanged =
-            (usFlags & SourceI3DL2::flags_changed) != 0;
-
-        SourceI3DL2::mFlags = (unsigned short)(usFlags & 0xFE00u);
-
-        if (bChanged)
+        if (pListener->mSpace != 0)
         {
-            Engine::SetupDirectSoundEffects(this, this);
+            const float fSpaceDistance = Source3D::mProps->mSpaceDistance;
+
+            SourceI3DL2Interpolated::Update(
+                pListener,
+                Source3D::mPos3D,
+                fSpaceDistance,
+                SourceTransport::GetCurrentPlayState()
+                    == SourceTransport::playState_playing);
         }
+
+        if (DSBuffer::GetBuffer3D() != 0)
+        {
+            DS3DBUFFER params;
+            Engine::Calculate3DParams(this, &params);
+            if (!DSBuffer::Set3DParams(params, bImmediate))
+            {
+                PblTraceP("DSBufferRenderer : unable to set 3D parameters\n");
+
+            }
+        }
+
+        float fGain;
+        Source3D::CalculateGain(fGain);
+
+        if (DSBuffer::GetPropertySet() != 0 && mNumChannels <= 1)
+        {
+            const unsigned short usFlags = SourceI3DL2::mFlags;
+            const bool bChanged =
+                (usFlags & SourceI3DL2::flags_changed) != 0;
+
+            SourceI3DL2::mFlags = (unsigned short)(usFlags & 0xFE00u);
+
+            if (bChanged)
+            {
+                Engine::SetupDirectSoundEffects(this, this);
+            }
+        }
+        else
+        {
+
+            fGain *= SourceI3DL2::CalculateGainEstimate();
+        }
+
+        UpdateGain(true, fGain);
+
+        DSBuffer::SetFrequency(
+            (unsigned int)((float)(unsigned int)mFrequency
+                           * (Source3D::CalculatePitch() * Source::mPitch)));
     }
     else
     {
-
-        fGain *= SourceI3DL2::CalculateGainEstimate();
+        UpdateGain(false, 1.0f);
     }
-
-    UpdateGain(true, fGain);
-
-    DSBuffer::SetFrequency(
-        (unsigned int)((float)(unsigned int)mFrequency
-                       * (Source3D::CalculatePitch() * Source::mPitch)));
-
 }
 
 // FUNCTION: SWBF2 0x0073dd80

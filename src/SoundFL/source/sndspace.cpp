@@ -234,53 +234,54 @@ void Space::SetupSourceInterpolated(SourceI3DL2Interpolated* pSource,
                                   fObstructionLFRatio, fOcclusionLFRatio,
                                   bInsideSpace);
 
-    pSource->mTarget.mFlags |=
+    SourceI3DL2* const pTarget = &pSource->mTarget;
+    pTarget->mFlags |=
         (unsigned short)SourceI3DL2::flags_obstructionHFGain;
-    pSource->mTarget.mObstructionHFGain = fObstructionHFGain;
+    pTarget->mObstructionHFGain = fObstructionHFGain;
     pSource->mFlags |=
         (unsigned char)SourceI3DL2Interpolated::flags_interpolate;
 
-    pSource->mTarget.mFlags |=
+    pTarget->mFlags |=
         (unsigned short)SourceI3DL2::flags_obstructionLFRatio;
-    pSource->mTarget.mObstructionLFRatio = fObstructionLFRatio;
+    pTarget->mObstructionLFRatio = fObstructionLFRatio;
     pSource->mFlags |=
         (unsigned char)SourceI3DL2Interpolated::flags_interpolate;
 
-    pSource->mTarget.mFlags |=
+    pTarget->mFlags |=
         (unsigned short)SourceI3DL2::flags_occlusionHFGain;
-    pSource->mTarget.mOcclusionHFGain = fOcclusionHFGain;
+    pTarget->mOcclusionHFGain = fOcclusionHFGain;
     pSource->mFlags |=
         (unsigned char)SourceI3DL2Interpolated::flags_interpolate;
 
-    pSource->mTarget.mFlags |=
+    pTarget->mFlags |=
         (unsigned short)SourceI3DL2::flags_occlusionLFRatio;
-    pSource->mTarget.mOcclusionLFRatio = fOcclusionLFRatio;
+    pTarget->mOcclusionLFRatio = fOcclusionLFRatio;
     pSource->mFlags |=
         (unsigned char)SourceI3DL2Interpolated::flags_interpolate;
 
-    pSource->mTarget.mFlags |= (unsigned short)SourceI3DL2::flags_directGain;
-    pSource->mTarget.mDirectGain = mDirectGain;
+    pTarget->mFlags |= (unsigned short)SourceI3DL2::flags_directGain;
+    pTarget->mDirectGain = mDirectGain;
     pSource->mFlags |=
         (unsigned char)SourceI3DL2Interpolated::flags_interpolate;
 
-    pSource->mTarget.mFlags |= (unsigned short)SourceI3DL2::flags_directHFGain;
-    pSource->mTarget.mDirectHFGain = mDirectHFGain;
+    pTarget->mFlags |= (unsigned short)SourceI3DL2::flags_directHFGain;
+    pTarget->mDirectHFGain = mDirectHFGain;
     pSource->mFlags |=
         (unsigned char)SourceI3DL2Interpolated::flags_interpolate;
 
-    pSource->mTarget.mFlags |= (unsigned short)SourceI3DL2::flags_roomGain;
-    pSource->mTarget.mRoomGain = mRoomGain;
+    pTarget->mFlags |= (unsigned short)SourceI3DL2::flags_roomGain;
+    pTarget->mRoomGain = mRoomGain;
     pSource->mFlags |=
         (unsigned char)SourceI3DL2Interpolated::flags_interpolate;
 
-    pSource->mTarget.mFlags |= (unsigned short)SourceI3DL2::flags_roomHFGain;
-    pSource->mTarget.mRoomHFGain = mRoomHFGain;
+    pTarget->mFlags |= (unsigned short)SourceI3DL2::flags_roomHFGain;
+    pTarget->mRoomHFGain = mRoomHFGain;
     pSource->mFlags |=
         (unsigned char)SourceI3DL2Interpolated::flags_interpolate;
 
-    pSource->mTarget.mFlags |=
+    pTarget->mFlags |=
         (unsigned short)SourceI3DL2::flags_roomRollOffFactor;
-    pSource->mTarget.mRoomRollOffFactor = mRoomRollOffFactor;
+    pTarget->mRoomRollOffFactor = mRoomRollOffFactor;
     pSource->mFlags |=
         (unsigned char)SourceI3DL2Interpolated::flags_interpolate;
 }

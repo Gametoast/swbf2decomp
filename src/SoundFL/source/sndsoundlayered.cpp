@@ -180,7 +180,7 @@ void SoundLayered::SoundLayerDestroy(SoundLayer* pLayer)
     delete pLayer;
 }
 
-void SoundLayered::FreeLayers(void (__cdecl* pLayerDestroy)(SoundLayer*))
+__forceinline void SoundLayered::FreeLayers(void (__cdecl* pLayerDestroy)(SoundLayer*))
 {
     if (mProperties)
     {
@@ -276,10 +276,11 @@ void SoundLayered::Update(float fDeltaTime)
 {
     PlayState ePlayState = GetCurrentPlayState();
     const PlayState eDesired = QueryDesiredPlayState();
+    const Properties* const pProps = mProperties;
     SourceTransport::mFlags = (unsigned short)
         (SourceTransport::mFlags & ~(unsigned int)flags_updateTransport);
 
-    if (mProperties && eDesired != playState_invalid && ePlayState != eDesired)
+    if (pProps && eDesired != playState_invalid && ePlayState != eDesired)
     {
         PblListSingle::Node* pSoundNode = mSoundList.mHead.mNext;
         switch (eDesired)
@@ -287,8 +288,8 @@ void SoundLayered::Update(float fDeltaTime)
         case playState_playing:
             mTimeElapsed = 0.0f;
             mStopTime = 0.0f;
-            for (const PblListSingle::Node* pNode = mProperties->mLayerList.mHead.mNext;
-                 pNode != &mProperties->mLayerList.mHead;
+            for (const PblListSingle::Node* pNode = pProps->mLayerList.mHead.mNext;
+                 pNode != &pProps->mLayerList.mHead;
                  pNode = pNode->mNext, pSoundNode = pSoundNode->mNext)
             {
                 const Properties::Layer* pLayer = (const Properties::Layer*)
@@ -364,12 +365,13 @@ inline float __cdecl SoundLayered::FireForgetLayer::CalculatePriority(Source3D* 
     transport.mPlaybackPosition = 0;
     transport.mFlags = SourceTransport::flags_stopped;
     transport.Play(true);
+    const Source2D3D* pSource2D3D = pProps;
     const Sample* pSample = (const Sample*)pProps->mSelObjectWeightList->GetObjectA();
-    return pProps->SourceVirtual::CalculatePriority(&transport, pProps, pSource3D, 0, pSample,
-                                                    1.0f, false);
+    return pProps->SourceVirtual::CalculatePriority(&transport, pSource2D3D, pSource3D, 0,
+                                                    pSample, 1.0f, false);
 }
 
-inline SoundLayered::FireForgetLayer* __cdecl SoundLayered::FireForgetLayer::StealLayer(float fPriority)
+__forceinline SoundLayered::FireForgetLayer* __cdecl SoundLayered::FireForgetLayer::StealLayer(float fPriority)
 {
     FireForgetLayer* pSteal = 0;
     float fLowest = FLT_MAX;
@@ -428,32 +430,40 @@ void SoundLayered::FireForgetLayer::Play(Source3D* pSource3D, const Properties::
 // FUNCTION: SWBF2 0x007391d0
 void __cdecl SoundLayered::Play(Source3D* pSource3D, const Properties* pProps)
 {
-    for (PblListSingle::Itor it(pProps->mLayerList); it.GetNode() != pProps->mLayerList.GetTerminator(); ++it)
+    PblListSingle* const pList = const_cast<PblListSingle*>(&pProps->mLayerList);
+    PblListSingle::Node* pNode = pList->mHead.mNext;
+    if (pNode != &pList->mHead)
     {
-        const Properties::Layer* pLayer =
-            (const Properties::Layer*)((char*)it.GetNode() - offsetof(Properties::Layer, mNode));
-        Sound::Properties* pSoundProps = pLayer->mSoundProps;
-        if (pLayer->mDelay == 0.0f)
+        do
         {
-            Sound::Play(pSoundProps->Get3DMode() ? pSource3D : 0, pSoundProps, 0, 0, true);
-            continue;
-        }
-
-        float fPriority = 0.0f;
-        FireForgetLayer* pFireForget = FireForgetLayer::GetFreeLayer();
-        pSource3D->mFlags |= Source3D::flags_updateListener;
-        pSource3D->SetProperties(pSoundProps);
-        pSource3D->DetermineClosestListener();
-        if (!pFireForget)
-        {
-            fPriority = FireForgetLayer::CalculatePriority(pSource3D, pSoundProps);
-            pFireForget = FireForgetLayer::StealLayer(fPriority);
-        }
-        if (pFireForget)
-        {
-            pFireForget->Play(pSource3D, pLayer, fPriority);
-        }
-        pSource3D->SetProperties(0);
+            Properties::Layer* const pLayer =
+                (Properties::Layer*)((char*)pNode - offsetof(Properties::Layer, mNode));
+            if (0.0f == pLayer->mDelay)
+            {
+                Sound::Play(pLayer->mSoundProps->Get3DMode() ? pSource3D : 0,
+                            pLayer->mSoundProps, 0, 0, true);
+            }
+            else
+            {
+                float fPriority = 0.0f;
+                FireForgetLayer* pFireForget = FireForgetLayer::GetFreeLayer();
+                pSource3D->mFlags |= Source3D::flags_updateListener;
+                pSource3D->SetProperties(pLayer->mSoundProps);
+                pSource3D->DetermineClosestListener();
+                if (!pFireForget)
+                {
+                    fPriority = FireForgetLayer::CalculatePriority(pSource3D,
+                                                                 pLayer->mSoundProps);
+                    pFireForget = FireForgetLayer::StealLayer(fPriority);
+                }
+                if (pFireForget)
+                {
+                    pFireForget->Play(pSource3D, pLayer, fPriority);
+                }
+                pSource3D->SetProperties(0);
+            }
+            pNode = pNode->mNext;
+        } while (pNode != &pList->mHead);
     }
 }
 
