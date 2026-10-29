@@ -54,6 +54,11 @@ public:
 
     bool IsDefaultBindings(int iMode);
 
+    ActionKey GetCurKeyBinding(unsigned int uiMode, ePROCESSEDINPUT_TYPE uiAction)
+    {
+        return mCurKeyboardBindings[uiMode][uiAction];
+    }
+
     unsigned int GetInputMode() const { return mMode; }
     void SetInputMode(unsigned int uiMode) { mMode = uiMode; }
 
@@ -211,7 +216,7 @@ public:
     GUIInputs* GetPlayerGuiInputs(int iPlayer);
     ProcessedInputs* GetPlayerInputs(int iPlayer);
 
-    int GetHWPort(int iViewport);
+    int GetHWPort(int iViewport) const;
     void SetHotController(int iJoystick);
 
     static void Reset();
@@ -294,6 +299,6 @@ public:
 
 void InitMagicCharMap(void);
 
-unsigned short GetRawFromProcessed_(unsigned int uiAction);
+wchar_t GetRawFromProcessed_(ePROCESSEDINPUT_TYPE uiAction);
 
 bool CanProcessChatMessage(void);

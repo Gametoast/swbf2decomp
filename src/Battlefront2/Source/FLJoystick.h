@@ -212,8 +212,11 @@ class Rumble
 {
 public:
 
-    Rumble() : mRumbleMode(eNone), mJoystick(0), mHeavyDecay(0), mLightDecay(0),
-        mLight(0), mHeavy(0), mInterval(0), mEnabled(true) {}
+    Rumble() : mJoystick(0), mHeavyDecay(0), mLightDecay(0), mLight(0), mHeavy(0),
+        mInterval(0), mEnabled(true)
+    {
+        mRumbleMode = eNone;
+    }
 
     enum RumbleMode
     {
@@ -221,6 +224,8 @@ public:
         eRumble = 1,
         eIntermittent = 2
     };
+
+    void Enable(bool bEnable) { mEnabled = bEnable; }
 
     void StopAllRumble();
 

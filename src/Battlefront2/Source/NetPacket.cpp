@@ -100,11 +100,14 @@ NetPacket* NetPacket::Alloc(bool bSmall)
 // FUNCTION: SWBF2 0x005d8f60
 void NetPacket::BeginWrite()
 {
-    memset(mData, 0, sizeof(NetComm::PktHeader));
+    const int iSmall = GetNumSmall(this);
+    unsigned int* headerWords = (unsigned int*)mData;
+    headerWords[0] = 0;
+    headerWords[1] = 0;
     SetCompressed(this, false);
     NetComm::Header(this).group = 0xffff;
     mDataIndex = 14;
-    mMaxIndex = mDataIndex + (GetNumSmall(this) >= 0 ? 102 : 998);
+    mMaxIndex = mDataIndex + (iSmall >= 0 ? 102 : 998);
     mCurIndex = mDataIndex;
 }
 
@@ -128,7 +131,7 @@ void NetPacket::Create()
 int NetPacket::GetNum() const
 {
     const int iSmall = (int)((NetSmallPacket const*)this - netSmallPackets);
-    if ((unsigned int)iSmall < (unsigned int)MAX_SMALL_PACKETS)
+    if ((unsigned int)iSmall <= (unsigned int)(MAX_SMALL_PACKETS - 1))
     {
         return iSmall + MAX_BIG_PACKETS;
     }
@@ -372,26 +375,28 @@ void NetPktGroup::WriteFixed(float f, float fMin, float fMax, int iBits)
 {
     if (doHiRes)
     {
-        Write(f);
+        WriteBits(*(const unsigned int*)&f, 32);
         return;
     }
     if (iBits >= 32)
     {
-        Write(f);
+        WriteBits(*(const unsigned int*)&f, 32);
         return;
     }
+    unsigned int uValue;
     if (f <= fMin)
     {
-        WriteBits(0, iBits);
+        uValue = 0;
     }
     else if (f >= fMax)
     {
-        WriteBits(0xffffffff, iBits);
+        uValue = 0xffffffff;
     }
     else
     {
-        WriteBits((unsigned int)((float)(unsigned int)((1 << iBits) - 2) * ((f - fMin) / (fMax - fMin)) + 0.5f), iBits);
+        uValue = (unsigned int)((float)(unsigned int)((1 << iBits) - 2) * ((f - fMin) / (fMax - fMin)) + 0.5f);
     }
+    WriteBits(uValue, iBits);
 }
 
 // FUNCTION: SWBF2 0x005d9860
@@ -399,12 +404,12 @@ void NetPktGroup::ReadFixed(float& f, float fMin, float fMax, int iBits)
 {
     if (doHiRes)
     {
-        Read(f);
+        ReadBits(*(unsigned int*)&f, 32);
         return;
     }
     if (iBits >= 32)
     {
-        Read(f);
+        ReadBits(*(unsigned int*)&f, 32);
         return;
     }
     unsigned int uValue;
@@ -455,7 +460,7 @@ void NetPktGroupClampFixed(float& f, float fMin, float fMax, int iBits)
     }
     else
     {
-        f = (float)uValue / (float)(uMax - 1) * (fMax - fMin) + fMin;
+        f = (float)uValue / (float)(unsigned int)((1 << iBits) - 2) * (fMax - fMin) + fMin;
     }
 }
 
@@ -566,9 +571,10 @@ bool NetPacket::Write(unsigned short value)
 // FUNCTION: SWBF2 0x005d9200
 void NetPktGroup::Set(NetPacket* pPkt)
 {
-    firstPkt = pPkt->GetNum();
+    const int iFirst = pPkt->GetNum();
     pktCount = 1;
-    int last = firstPkt;
+    firstPkt = iFirst;
+    int last = iFirst;
     while (pPkt->mNextPkt != -1)
     {
         ++pktCount;
@@ -661,8 +667,8 @@ NetPacket* NetPktGroup::PopBack()
     {
         NetPacket::Get(lastPkt)->mNextPkt = -1;
     }
-    pPkt->mNextPkt = -1;
     pPkt->mPrevPkt = -1;
+    pPkt->mNextPkt = -1;
     return pPkt;
 }
 

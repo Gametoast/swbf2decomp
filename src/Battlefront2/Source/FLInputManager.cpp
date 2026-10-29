@@ -45,11 +45,9 @@ FLInputManager FLInputManager::s_instance;
 // FUNCTION: SWBF2 0x00529ef0
 FLInputManager::FLInputManager()
 {
-    m_HWPort_Full[0] = -1;
-    m_bHudGroupsEnabled[0] = false;
-    m_bHudGroupsEnabled[1] = false;
+    memset(m_HWPort_Full, -1, sizeof(m_HWPort_Full));
+    memset(m_bHudGroupsEnabled, 0, sizeof(m_bHudGroupsEnabled));
     mChatText[0] = 0;
-    m_bHudGroupsEnabled[2] = false;
     mBindAll = false;
     m_HWPort[0] = 0;
     mPrimaryPort = 0;
@@ -77,12 +75,12 @@ FLInputManager::~FLInputManager()
 // FUNCTION: SWBF2 0x0052a190
 RawControllerInputs* FLInputManager::GetPlayerJoystick(int iPlayer)
 {
-    if ((unsigned int)iPlayer >= 1)
+    if (iPlayer >= 0 && iPlayer < 1)
     {
-        return 0;
+        return &mJoysticks[iPlayer];
     }
 
-    return &mJoysticks[iPlayer];
+    return 0;
 }
 
 unsigned short __cdecl RawInputToActionKey(unsigned short usRawInput);
@@ -137,77 +135,73 @@ void FLInputManager::InitCustomFontData()
     }
 }
 
-#define FLIM_AT(T, off) (*reinterpret_cast<T*>(reinterpret_cast<unsigned char*>(&FLInputManager::s_instance) + (off)))
-typedef RedJoystick* tJoystickPorts10[10];
-typedef unsigned char tBytes4C[0x4c];
-typedef unsigned char tBytes168[0x168];
-
-
-RawControllerInputs& gPrimaryRawInputs = FLInputManager::s_instance.mJoysticks[0];
-
-void*& gGuiInputTarget = FLIM_AT(void*, 0x428 + 0x25c8);
-
-bool& gProcessAfterReading = FLIM_AT(bool, 0x428 + 0x25cc);
-
-void*& gProcessedInputTarget = FLIM_AT(void*, 0x428 + 0x25d0);
-
-RedJoystick* (&gJoystickPorts)[10] = FLIM_AT(tJoystickPorts10, 0x29fc);
-
-unsigned char (&gProcessedInputStorage)[0x4c] = FLIM_AT(tBytes4C, 0x2cc8);
-unsigned char (&gGuiInputStorage)[0x168] = FLIM_AT(tBytes168, 0x2d14);
-
-bool& gControllerMissingFlag = FLIM_AT(bool, 0x2e7c);
-#undef FLIM_AT
-
 struct ProcessedInputMap
 {
     unsigned int hashID;
-    unsigned int input;
+    ePROCESSEDINPUT_TYPE input;
 };
 
 // GLOBAL: SWBF2 0x007e67d0
 static const ProcessedInputMap gProcessedInputMap[0x22] =
 {
-    { 0x9e5f87d9u,  0 }, { 0x880ddb41u,  1 }, { 0x0fd525a1u,  2 },
-    { 0x2c4caa39u,  3 }, { 0x48d1dc33u,  4 }, { 0x20b0229au,  5 },
-    { 0x9ddbe9ccu,  6 }, { 0x9b656248u,  7 }, { 0xbfe61030u,  8 },
-    { 0xf85071beu,  9 }, { 0xac98902du, 10 }, { 0xcd1022bdu, 11 },
-    { 0x1ed91b8bu, 12 }, { 0xc00bacc0u, 13 }, { 0x287ca200u, 14 },
-    { 0x55cacad8u, 15 }, { 0x356988b8u, 16 }, { 0x0b3b6548u, 17 },
-    { 0xa24bf9abu, 18 }, { 0x20a43ce3u, 19 }, { 0x43a268abu, 20 },
-    { 0x42a26718u, 21 }, { 0x45a26bd1u, 22 }, { 0x44a26a3eu, 23 },
-    { 0x47a26ef7u, 24 }, { 0x46a26d64u, 25 }, { 0x49a2721du, 26 },
-    { 0x48a2708au, 27 }, { 0xdfa2efb1u, 28 }, { 0xc3b9429eu, 29 },
-    { 0x82feda2eu, 30 }, { 0xbd8888f0u, 31 }, { 0x9537fa8au, 32 },
-    { 0xf8b15dcfu, 33 },
+    { 0x9e5f87d9u,  ePROCESSEDINPUT_primaryFireButtonDown },
+    { 0x880ddb41u,  ePROCESSEDINPUT_secondaryFireButtonDown },
+    { 0x0fd525a1u,  ePROCESSEDINPUT_sprintButtonDown },
+    { 0x2c4caa39u,  ePROCESSEDINPUT_jumpButtonDown },
+    { 0x48d1dc33u,  ePROCESSEDINPUT_crouchButtonDown },
+    { 0x20b0229au,  ePROCESSEDINPUT_zoomButtonDown },
+    { 0x9ddbe9ccu,  ePROCESSEDINPUT_viewButtonDown },
+    { 0x9b656248u,  ePROCESSEDINPUT_reloadButtonDown },
+    { 0xbfe61030u,  ePROCESSEDINPUT_useButtonPressed },
+    { 0xf85071beu,  ePROCESSEDINPUT_squadCommandButtonPressed },
+    { 0xac98902du, ePROCESSEDINPUT_acceptHeroPressed },
+    { 0xcd1022bdu, ePROCESSEDINPUT_declineHeroPressed },
+    { 0x1ed91b8bu, ePROCESSEDINPUT_lockTargetButtonPressed },
+    { 0xc00bacc0u, ePROCESSEDINPUT_primaryNextButtonPressed },
+    { 0x287ca200u, ePROCESSEDINPUT_primaryPrevButtonPressed },
+    { 0x55cacad8u, ePROCESSEDINPUT_secondaryNextButtonPressed },
+    { 0x356988b8u, ePROCESSEDINPUT_secondaryPrevButtonPressed },
+    { 0x0b3b6548u, ePROCESSEDINPUT_playerList },
+    { 0xa24bf9abu, ePROCESSEDINPUT_chat },
+    { 0x20a43ce3u, ePROCESSEDINPUT_friendChat },
+    { 0x43a268abu, ePROCESSEDINPUT_Comm_Chat_0 },
+    { 0x42a26718u, ePROCESSEDINPUT_Comm_Chat_1 },
+    { 0x45a26bd1u, ePROCESSEDINPUT_Comm_Chat_2 },
+    { 0x44a26a3eu, ePROCESSEDINPUT_Comm_Chat_3 },
+    { 0x47a26ef7u, ePROCESSEDINPUT_Comm_Chat_4 },
+    { 0x46a26d64u, ePROCESSEDINPUT_Comm_Chat_5 },
+    { 0x49a2721du, ePROCESSEDINPUT_Comm_Chat_6 },
+    { 0x48a2708au, ePROCESSEDINPUT_Comm_Chat_7 },
+    { 0xdfa2efb1u, ePROCESSEDINPUT_Map },
+    { 0xc3b9429eu, ePROCESSEDINPUT_TakeScreenshot },
+    { 0x82feda2eu, ePROCESSEDINPUT_STRAFE_AXIS },
+    { 0xbd8888f0u, ePROCESSEDINPUT_MOVE_AXIS },
+    { 0x9537fa8au, ePROCESSEDINPUT_TURN_AXIS },
+    { 0xf8b15dcfu, ePROCESSEDINPUT_PITCH_AXIS },
 };
 
 // FUNCTION: SWBF2 0x00529c10
-unsigned short GetRawFromProcessed_(unsigned int uiAction)
+wchar_t GetRawFromProcessed_(ePROCESSEDINPUT_TYPE uiAction)
 {
-    unsigned char* pBindings =
-        (unsigned char*)FLInputManager::s_instance.GetPlayerJoystick(PauseMenu::GetPausingViewport());
+    RawControllerInputs* pBindings =
+        FLInputManager::s_instance.GetPlayerJoystick(PauseMenu::GetPausingViewport());
+    const ActionKey key = pBindings->GetCurKeyBinding(pBindings->GetInputMode(), uiAction);
+    wchar_t charcode = key.mKey[0];
 
-    const unsigned int uiIndex = *(unsigned int*)(pBindings + 8) * 0x2b + uiAction;
-    const unsigned short uKey =
-        *(unsigned short*)(pBindings + uiIndex * 6 + 0x20bc);
-
-    const unsigned short uUnused =
-        *(unsigned short*)(pBindings + uiIndex * 6 + 0x20c0);
-    (void)uUnused;
-
-    if (uKey > 0x100)
+    if (charcode > 0x100)
     {
-        return (unsigned short)(uKey + 0x8000);
+        charcode = (wchar_t)(charcode + 0x8000);
+    }
+    else
+    {
+        RedKeyboard* const keyboard = RedInputManager::GetKeyboard(0);
+        if (keyboard)
+        {
+            charcode = keyboard->pcGetAsciiValue(charcode);
+        }
     }
 
-    RedKeyboard* pKeyboard = RedInputManager::GetKeyboard(0);
-    if (pKeyboard)
-    {
-        return pKeyboard->pcGetAsciiValue(uKey);
-    }
-
-    return uKey;
+    return charcode;
 }
 
 // FUNCTION: SWBF2 0x00529ca0
@@ -216,11 +210,8 @@ void InitMagicCharMap(void)
     util::HashTable<unsigned short, unsigned int, util::NewAllocator>& rMap =
         *RedTextElement::GetMagicCharMap();
 
-    unsigned int uiKey = 0xE70B21B8u;
-    rMap[uiKey] = 0x8100;
-
-    uiKey = 0x1E8375FAu;
-    rMap[uiKey] = 0x8101;
+    rMap[0xE70B21B8u] = 0x8100;
+    rMap[0x1E8375FAu] = 0x8101;
 
     for (unsigned int i = 0; i < 0x22; i++)
     {
@@ -237,20 +228,20 @@ void FLInputManager::Init(void)
     {
         if (RedInputManager::GetJoystick(i)->m_connected)
         {
-            gJoystickPorts[i] = RedInputManager::GetJoystick(i);
+            s_instance.mJoysticks[0]._redJoystick[i] = RedInputManager::GetJoystick(i);
         }
         else
         {
-            gJoystickPorts[i] = 0;
+            s_instance.mJoysticks[0]._redJoystick[i] = 0;
         }
     }
 
-    gProcessAfterReading = true;
-    gProcessedInputTarget = gProcessedInputStorage;
-    gGuiInputTarget = gGuiInputStorage;
-    gControllerMissingFlag = false;
+    s_instance.mJoysticks[0].mProcessAfterReading = true;
+    s_instance.mJoysticks[0].mProcessDestination = s_instance.m_inputs;
+    s_instance.mJoysticks[0].m_pGuiInputs = s_instance.m_guiInputs;
+    s_instance.m_bIsMissing[0] = false;
 
-    gPrimaryRawInputs.CloseChatMode();
+    s_instance.mJoysticks[0].CloseChatMode();
     InitMagicCharMap();
 
     RedLogitechLCD* pPanel = RedInputManager::GetLCDPanel(0);
@@ -306,34 +297,34 @@ void FLInputManager::RescanForMissing()
 // FUNCTION: SWBF2 0x0052a1c0
 ProcessedInputs* FLInputManager::GetPlayerInputs(int iPlayer)
 {
-    if ((unsigned int)iPlayer >= 1)
+    if (iPlayer >= 0 && iPlayer < 1)
     {
-        return 0;
+        return &m_inputs[iPlayer];
     }
 
-    return &m_inputs[iPlayer];
+    return 0;
 }
 
 // FUNCTION: SWBF2 0x0052a1e0
 GUIInputs* FLInputManager::GetPlayerGuiInputs(int iPlayer)
 {
-    if ((unsigned int)iPlayer >= 1)
+    if (iPlayer >= 0 && iPlayer < 1)
     {
-        return 0;
+        return &m_guiInputs[iPlayer];
     }
 
-    return &m_guiInputs[iPlayer];
+    return 0;
 }
 
 // FUNCTION: SWBF2 0x0052a210
 bool FLInputManager::IsControllerBound(int iPlayer) const
 {
-    if ((unsigned int)iPlayer >= 1)
+    if (iPlayer >= 0 && iPlayer < 1)
     {
-        return false;
+        return mActiveControllers[iPlayer];
     }
 
-    return mActiveControllers[iPlayer];
+    return false;
 }
 
 // FUNCTION: SWBF2 0x0052a230
@@ -346,9 +337,8 @@ void FLInputManager::ProcessChatMessageInput(const unsigned short* pwText)
 // FUNCTION: SWBF2 0x0052a260
 bool CanProcessChatMessage(void)
 {
-    const unsigned char* pObj =
-        *(const unsigned char* const*)((const unsigned char*)&FLInputManager::s_instance + 0x2a24);
-    return pObj && pObj[5];
+    const RedLogitechLCD* pPanel = FLInputManager::s_instance.mJoysticks[0].mLCDPanel;
+    return pPanel && pPanel->mOpened;
 }
 
 // GLOBAL: SWBF2 0x009cef76
@@ -363,7 +353,7 @@ HUD::ObjectiveList* GetObjectiveList();
 // FUNCTION: SWBF2 0x0052a280
 bool FLInputManager::Update(float fDeltaTime)
 {
-    static unsigned int s_uiFrame;
+    static int sDelay;
 
     BindPlayerInput();
     RedInputManager::Update(fDeltaTime);
@@ -417,7 +407,7 @@ bool FLInputManager::Update(float fDeltaTime)
         }
         int& iPageIndex = mPageIndex;
 
-        RedLogitechLCD* pLcd = mJoysticks[0].mLCDPanel;
+        RedLogitechLCD* pLcd = s_instance.mJoysticks[0].mLCDPanel;
         if (!pLcd || !pLcd->mOpened)
         {
             continue;
@@ -425,7 +415,7 @@ bool FLInputManager::Update(float fDeltaTime)
 
         const int iLocal = NetGame::GetLocalIndex(0);
         Character* pCharacter = 0;
-        if ((unsigned int)iLocal < 64)
+        if (iLocal >= 0 && iLocal < 64)
         {
             pCharacter = Character::GetPtr(iLocal);
         }
@@ -440,26 +430,20 @@ bool FLInputManager::Update(float fDeltaTime)
                     mLCDPageToggle[0] = !mLCDPageToggle[0];
                 }
 
-                bool bObjectives;
                 if ((pLcd->mSoftButtons & 2) && !(pLcd->mPrevSoftButtons & 2))
                 {
-                    if (fPageTimer > 0.0f)
-                    {
-                        iPageIndex++;
-                    }
-                    else
+                    if (fPageTimer <= 0.0f)
                     {
                         iPageIndex = 0;
                     }
+                    else
+                    {
+                        iPageIndex++;
+                    }
                     fPageTimer = 4.0f;
-                    bObjectives = true;
-                }
-                else
-                {
-                    bObjectives = fPageTimer > 0.0f;
                 }
 
-                if (bObjectives)
+                if (fPageTimer > 0.0f)
                 {
                     HUD::ObjectiveList* pList = ObjectiveManager::GetObjectiveList();
                     if (pList && pList->GetOwner())
@@ -516,7 +500,7 @@ bool FLInputManager::Update(float fDeltaTime)
                     const float fRounds = (float)pClass->mAmmoCounterClass.mRoundsPerClip;
 
                     const AmmoCounter* pAmmo = pWeapon->m_pAmmoCounter;
-                    const float fNumClips = pAmmo->mNumClips;
+                    const float fNumClips = pAmmo->GetNumClips();
 
                     char acBuffer[32];
                     if (fRounds >= (float)INT_MAX || pClass->mAmmoCounterClass.mAmmoPerRound == 0.0f)
@@ -563,20 +547,20 @@ bool FLInputManager::Update(float fDeltaTime)
                     const Damageable* pDamageable = static_cast<const Damageable*>(pObject);
                     const int iWidth = pLcd->mWidth;
 
-                    if (pDamageable->mMaxShield > 0.0f)
+                    if (pDamageable->GetMaxShield() > 0.0f)
                     {
-                        const int iLen = (int)((float)iWidth * pDamageable->mCurShield /
-                                               pDamageable->mMaxShield);
+                        const int iLen = (int)((float)iWidth * pDamageable->GetCurShield() /
+                                               pDamageable->GetMaxShield());
                         if (iLen > 0)
                         {
                             pLcd->DrawLCDLine(0, 32, iLen - 1, 32);
                         }
                     }
 
-                    if (pDamageable->mMaxHealth > 0.0f)
+                    if (pDamageable->GetMaxHealth() > 0.0f)
                     {
                         const int iLen = (int)((float)iWidth * pDamageable->mCurHealth /
-                                               pDamageable->mMaxHealth);
+                                               pDamageable->GetMaxHealth());
                         if (iLen > 0)
                         {
                             pLcd->DrawLCDLine(0, 35, iLen - 1, 35);
@@ -588,11 +572,11 @@ bool FLInputManager::Update(float fDeltaTime)
                     const EnergyBar* pBar = pControllable->GetEnergyBar();
                     if (pBar)
                     {
-                        const float fMax = pBar->m_pClass->m_fEnergyMax;
+                        const float fMax = pBar->GetEnergyMax();
                         if (fMax > 0.0f)
                         {
                             const int iLen =
-                                (int)((float)iWidth * pBar->m_fEnergy / fMax);
+                                (int)((float)iWidth * pBar->GetEnergy() / fMax);
                             if (iLen > 0)
                             {
                                 pLcd->DrawLCDLine(0, 40, iLen - 1, 40);
@@ -617,7 +601,7 @@ bool FLInputManager::Update(float fDeltaTime)
 
     m_rumble[0].Update(fDeltaTime);
 
-    if ((++s_uiFrame & 7) == 0)
+    if ((++sDelay & 7) == 0)
     {
         InitMagicCharMap();
     }
@@ -628,34 +612,34 @@ bool FLInputManager::Update(float fDeltaTime)
 // FUNCTION: SWBF2 0x0052a890
 void FLInputManager::UnbindController(int iPlayer)
 {
-    const int i = iPlayer - 1;
+    iPlayer--;
 
-    if ((unsigned int)i < 1)
+    if (iPlayer >= 0 && iPlayer < 1)
     {
-        mActiveControllers[i] = 0;
-        m_HWPort[i] = -1;
-        m_HWPort_Full[i] = -1;
+        mActiveControllers[iPlayer] = 0;
+        m_HWPort[iPlayer] = -1;
+        m_HWPort_Full[iPlayer] = -1;
 
-        mJoysticks[i].ClearInputsToOff();
-        m_inputs[i].Clear();
-        m_guiInputs[i].Clear();
+        mJoysticks[iPlayer].ClearInputsToOff();
+        m_inputs[iPlayer].Clear();
+        m_guiInputs[iPlayer].Clear();
 
-        if (i == mPrimaryPort)
+        if (iPlayer == mPrimaryPort)
         {
             mPrimaryPort = -1;
             mShadowPrimary = -1;
         }
-        if (i == mSecondaryPort)
+        if (iPlayer == mSecondaryPort)
         {
             mSecondaryPort = -1;
             mShadowSecondary = -1;
         }
-        if (m_MissingPort == i)
+        if (m_MissingPort == iPlayer)
         {
             m_MissingPort = -1;
             GuiManager* pGui = GuiManager::Instance();
             pGui->CloseError(false, false);
-            LuaHelper::CallTableProcWThis(pGui->mCurrentScope, "fnPostMissingController");
+            LuaHelper::CallTableProcWThis(pGui->GetCurrentScreen(), "fnPostMissingController");
         }
     }
 
@@ -740,35 +724,18 @@ void FLInputManager::RestorePrimarySecondary()
     mShadowSecondary = -1;
 }
 
+bool is_rumble_enable(int iPlayer);
+
 // FUNCTION: SWBF2 0x0052ad10
 void FLInputManager::StopIntermittentRumble(int iPlayer)
 {
-    bool eligible = true;
-    if (NetGame::IsEnabled())
+    if (is_rumble_enable(iPlayer))
     {
-        if (netEnabledNext && netClientActive)
+        const int iJoystick = NetGame::GetJoystickIndex(iPlayer);
+        if (iJoystick >= 0)
         {
-            eligible = !NetGame::IsSpectator(iPlayer);
+            m_rumble[iJoystick].StopIntermittent();
         }
-        else
-        {
-            eligible = NetGame::IsHost() && !netIsDedicated && netIsOneWorld;
-        }
-    }
-    if (!eligible)
-    {
-        return;
-    }
-
-    const int iJoystick = NetGame::GetJoystickIndex(iPlayer);
-    if (iJoystick < 0)
-    {
-        return;
-    }
-    Rumble* pRumble = &m_rumble[iJoystick];
-    if (pRumble->mRumbleMode == Rumble::eIntermittent)
-    {
-        pRumble->mRumbleMode = Rumble::eNone;
     }
 }
 
@@ -838,13 +805,13 @@ int FLInputManager::GetPlayerFromHWPort(int iHWPort) const
 {
     const int* piHWPort = m_HWPort;
     int iPlayer = 0;
-    for (unsigned int i = 0; i < 1; ++i)
+    for (unsigned int i = 0; i < 1; ++i, ++piHWPort)
     {
-        if (piHWPort[i] == iHWPort)
+        if (*piHWPort == iHWPort)
         {
             return iPlayer;
         }
-        if (piHWPort[i] >= 0)
+        if (*piHWPort >= 0)
         {
             ++iPlayer;
         }
@@ -864,16 +831,15 @@ void FLInputManager::StopAllRumble()
 // FUNCTION: SWBF2 0x0052ad60
 void FLInputManager::EnableRumble(int iPort, bool bEnable)
 {
-    m_rumble[iPort].mEnabled = bEnable;
+    m_rumble[iPort].Enable(bEnable);
 }
 
 // FUNCTION: SWBF2 0x0052aa00
 bool FLInputManager::AnyMissing() const
 {
-    const bool* pbChat = &gControllerMissingFlag;
     for (unsigned char i = 0; i < 1; i++)
     {
-        if (pbChat[i])
+        if (s_instance.m_bIsMissing[i])
         {
             return true;
         }
@@ -882,17 +848,16 @@ bool FLInputManager::AnyMissing() const
 }
 
 // FUNCTION: SWBF2 0x0052ac10
-int FLInputManager::GetHWPort(int iViewport)
+int FLInputManager::GetHWPort(int iViewport) const
 {
-    const int* piPort = m_HWPort;
     int iBound = 0;
     for (unsigned int i = 0; i < 1; i++)
     {
-        if (piPort[i] >= 0)
+        if (m_HWPort[i] >= 0)
         {
             if (iViewport == iBound)
             {
-                return piPort[i];
+                return m_HWPort[i];
             }
             iBound++;
         }
@@ -901,17 +866,26 @@ int FLInputManager::GetHWPort(int iViewport)
 }
 
 // FUNCTION: SWBF2 0x0052ac90
-bool __fastcall is_rumble_enable(int iPlayer)
+bool is_rumble_enable(int iPlayer)
 {
-    if (!NetGame::IsEnabled())
+    bool bEnabled = true;
+    if (NetGame::IsEnabled())
     {
-        return true;
+        if (!netEnabledNext || !netClientActive)
+        {
+            if (!NetGame::IsHost())
+            {
+                bEnabled = false;
+            }
+            else if (netIsDedicated || !netIsOneWorld)
+            {
+                bEnabled = false;
+            }
+        }
+        else if (NetGame::IsSpectator(iPlayer))
+        {
+            bEnabled = false;
+        }
     }
-    if (netEnabledNext && netClientActive)
-    {
-        return !NetGame::IsSpectator(iPlayer);
-    }
-    return NetGame::IsHost() && !netIsDedicated && netIsOneWorld;
+    return bEnabled;
 }
-
-

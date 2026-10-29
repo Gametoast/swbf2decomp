@@ -1,6 +1,7 @@
 #pragma once
 
 #include <stddef.h>
+#include <string.h>
 
 #include "PebbleFL/Common/PblHashTable.h"
 #include "PebbleFL/Common/PblVector.h"
@@ -9,6 +10,7 @@
 #include "SoldierAnimationBank.h"
 
 class PblConfig;
+class PblMatrix;
 class WeaponMelee;
 class ZephyrSkeletonShared;
 
@@ -46,11 +48,8 @@ public:
 
         void _Init(unsigned int uiTargetState)
         {
+            memset(this, 0, sizeof(*this));
             m_uiTargetState = uiTargetState;
-            m_aCondition = 0;
-            m_uiNumConditions = 0;
-            m_uiEnergyCost = 0;
-            z_uiReserved0 = 0;
         }
 
         void _ReadConfig(PblConfig& config, const char* pszComboName, const char* pszStateName);
@@ -82,6 +81,20 @@ public:
 
         bool TestVelocity(float fX, float fY, float fZ) const;
 
+        float GetInputDirMinRad() const { return m_iInputDirMin * INPUT_DIR_SCALE_RAD; }
+        float GetInputDirMaxRad() const { return m_iInputDirMax * INPUT_DIR_SCALE_RAD; }
+        float GetVelocityXZDirMinRad() const { return m_iVelocityXZDirMin * VELOCITYXZ_DIR_SCALE_RAD; }
+        float GetVelocityXZDirMaxRad() const { return m_iVelocityXZDirMax * VELOCITYXZ_DIR_SCALE_RAD; }
+        float GetVelocityYRef() const
+        {
+            float fRef = (float)m_uiVelocityYRef;
+            if (m_bVelocityYSigned)
+            {
+                return fRef * VELOCITYY_VAL_SCALE + VELOCITYY_VAL_OFFSET;
+            }
+            return fRef * VELOCITYY_MAG_SCALE;
+        }
+
         void SetTimeStart(float fTime, bool bFromEnd);
         void SetTimeEnd(float fTime, bool bFromEnd, bool b);
         void SetInputMag(float fMag, bool bLess);
@@ -90,7 +103,23 @@ public:
         void SetSoldierStateTime(float fTime, bool bLess);
         void SetEnergy(float fEnergy, bool bLess);
         void SetInputDir(float fMin, float fMax);
-        void SetVelocityY(float fVelocity, bool bSigned, bool bLess);
+        // FUNCTION: SWBF2 0x00470bd0
+        void SetVelocityY(float fVelocity, bool bSigned, bool bLess)
+        {
+            int iVelocity = (int)(bSigned ? (fVelocity - VELOCITYY_VAL_OFFSET) * VELOCITYY_VAL_SCALE_INV
+                                          : fVelocity * VELOCITYY_MAG_SCALE_INV);
+            if (iVelocity < 0)
+            {
+                iVelocity = 0;
+            }
+            else if (iVelocity > 63)
+            {
+                iVelocity = 63;
+            }
+            m_uiVelocityYRef = iVelocity;
+            m_bVelocityYSigned = bSigned;
+            m_bVelocityYLess = bLess;
+        }
         void SetVelocityXZMag(float fMag, bool bLess);
         void SetVelocityXZDir(float fMin, float fMax);
 
@@ -116,10 +145,7 @@ public:
 
         void _Init()
         {
-            for (int i = 0; i < 5; ++i)
-            {
-                m_auiPackedData[i] = 0;
-            }
+            memset(m_auiPackedData, 0, sizeof(m_auiPackedData));
             m_bTimeEndFromEnd = 1;
         }
 
@@ -244,9 +270,51 @@ public:
 
         void _Init();
 
-        void SetDamageTimeStart(float fTime, bool bFromAnim);
-        void SetDamageTimeEnd(float fTime, bool bFromAnim);
-        void SetDamageLength(float fLength, bool bFromEdge);
+        // FUNCTION: SWBF2 0x00470d10
+        void SetDamageTimeStart(float fTime, bool bFromAnim)
+        {
+            int iTime = (int)(fTime * TIME_SCALE_INV);
+            if (iTime < 0)
+            {
+                iTime = 0;
+            }
+            else if (iTime > 1023)
+            {
+                iTime = 1023;
+            }
+            m_uiDamageTimeStart = iTime;
+            m_bDamageTimeStartFromAnim = bFromAnim;
+        }
+        // FUNCTION: SWBF2 0x00470d60
+        void SetDamageTimeEnd(float fTime, bool bFromAnim)
+        {
+            int iTime = (int)(fTime * TIME_SCALE_INV);
+            if (iTime < 0)
+            {
+                iTime = 0;
+            }
+            else if (iTime > 1023)
+            {
+                iTime = 1023;
+            }
+            m_uiDamageTimeEnd = iTime;
+            m_bDamageTimeEndFromAnim = bFromAnim;
+        }
+        // FUNCTION: SWBF2 0x00470db0
+        void SetDamageLength(float fLength, bool bFromEdge)
+        {
+            int iLength = (int)(fLength * LENGTH_SCALE_INV);
+            if (iLength < 0)
+            {
+                iLength = 0;
+            }
+            else if (iLength > 1023)
+            {
+                iLength = 1023;
+            }
+            m_uiDamageLength = iLength;
+            m_bDamageLengthFromEdge = bFromEdge;
+        }
         void SetDamage(float fDamage);
 
         void SetDamage() { m_uiDamage = 0xfff; }
@@ -340,6 +408,7 @@ public:
     public:
 
         unsigned char GetAnimIndex() const { return (unsigned char)m_uiAnimIndex; }
+        void SetAnimIndex(unsigned char uiAnimIndex) { m_uiAnimIndex = uiAnimIndex; }
         const Deflect* GetDeflect() const { return m_pDeflect; }
         unsigned int GetNumAttacks() const { return m_uiNumAttacks; }
         Attack* GetAttack(unsigned int iAttack) { return &m_aAttack[iAttack]; }
@@ -356,29 +425,133 @@ public:
         float GetVelocityFromStrafe() const { return m_uiVelocityFromStrafe * 0.1f; }
         bool IsAlignedToThrust() const { return m_bAlignToThrust != 0; }
 
-        void SetDuration(float fDuration);
+        // FUNCTION: SWBF2 0x00470ec0
+        void SetDuration(float fDuration)
+        {
+            if (fDuration < 0.0f)
+            {
+                m_uiDuration = DURATION_INVALID;
+                return;
+            }
+            int iDuration = (int)(fDuration * TIME_SCALE_INV);
+            if (iDuration < 0)
+            {
+                iDuration = 0;
+            }
+            else if (iDuration > DURATION_MAX)
+            {
+                iDuration = DURATION_MAX;
+            }
+            m_uiDuration = iDuration;
+        }
 
         void SetSound(const char* pName, float fTime);
 
-        void SetVelocityZ(float fVelocity, bool bFromAnim);
+        // FUNCTION: SWBF2 0x00470f70
+        void SetVelocityZ(float fVelocity, bool bFromAnim)
+        {
+            int iVelocity = (int)(fVelocity * VELOCITY_SCALE_INV);
+            if (iVelocity < VELOCITY_MIN)
+            {
+                iVelocity = VELOCITY_MIN;
+            }
+            else if (iVelocity > VELOCITY_MAX)
+            {
+                iVelocity = VELOCITY_MAX;
+            }
+            m_iVelocityZ = iVelocity;
+            m_bVelocityZFromAnim = bFromAnim;
+        }
 
-        void SetVelocityX(float fVelocity, bool bFromAnim);
+        // FUNCTION: SWBF2 0x00470fc0
+        void SetVelocityX(float fVelocity, bool bFromAnim)
+        {
+            int iVelocity = (int)(fVelocity * VELOCITY_SCALE_INV);
+            if (iVelocity < VELOCITY_MIN)
+            {
+                iVelocity = VELOCITY_MIN;
+            }
+            else if (iVelocity > VELOCITY_MAX)
+            {
+                iVelocity = VELOCITY_MAX;
+            }
+            m_iVelocityX = iVelocity;
+            m_bVelocityXFromAnim = bFromAnim;
+        }
 
         void SetInputLock(unsigned int uiInputLock, float fDuration);
 
         void SetEnergyRestoreRate(float fRate, bool b);
 
-        void SetThrustFactor(float fFactor);
+        // FUNCTION: SWBF2 0x004710c0
+        void SetThrustFactor(float fFactor)
+        {
+            int iFactor = (int)(fFactor * INPUT_SCALE_INV);
+            if (iFactor < 0)
+            {
+                iFactor = 0;
+            }
+            else if (iFactor > INPUT_MAX)
+            {
+                iFactor = INPUT_MAX;
+            }
+            m_uiThrustFactor = iFactor;
+        }
 
-        void SetStrafeFactor(float fFactor);
+        // FUNCTION: SWBF2 0x004710f0
+        void SetStrafeFactor(float fFactor)
+        {
+            int iFactor = (int)(fFactor * INPUT_SCALE_INV);
+            if (iFactor < 0)
+            {
+                iFactor = 0;
+            }
+            else if (iFactor > INPUT_MAX)
+            {
+                iFactor = INPUT_MAX;
+            }
+            m_uiStrafeFactor = iFactor;
+        }
 
-        void SetPitchFactor(float fFactor);
+        // FUNCTION: SWBF2 0x00471120
+        void SetPitchFactor(float fFactor)
+        {
+            int iFactor = (int)(fFactor * INPUT_SCALE_INV);
+            if (iFactor < 0)
+            {
+                iFactor = 0;
+            }
+            else if (iFactor > INPUT_MAX)
+            {
+                iFactor = INPUT_MAX;
+            }
+            m_uiPitchFactor = iFactor;
+        }
 
         void SetGravity(float fGravity);
 
-        void SetGravityVelocityYTarget(float fVelocity, bool bZeroAtTarget);
+        // FUNCTION: SWBF2 0x00471180
+        void SetGravityVelocityYTarget(float fVelocity, bool bZeroAtTarget)
+        {
+            int iVelocity = (int)(fVelocity * VELOCITYY_SCALE_INV);
+            if (iVelocity < VELOCITYY_MIN)
+            {
+                iVelocity = VELOCITYY_MIN;
+            }
+            else if (iVelocity > VELOCITYY_MAX)
+            {
+                iVelocity = VELOCITYY_MAX;
+            }
+            m_iGravityVelocityYTarget = iVelocity;
+            m_bGravityZeroAtTarget = bZeroAtTarget;
+        }
 
-        void SetVelocityYImpulse(float fVelocity, bool bZeroAtTarget);
+        // FUNCTION: SWBF2 0x004711e0
+        void SetVelocityYImpulse(float fVelocity, bool bZeroAtTarget)
+        {
+            m_iGravity = GRAVITY_IMPULSE;
+            SetGravityVelocityYTarget(fVelocity, bZeroAtTarget);
+        }
 
         Transition* AddTransition(unsigned int uiTargetState);
         Attack* AddAttack();
@@ -480,6 +653,7 @@ public:
         static const float GRAVITY_SCALE_INV;
         static const float VELOCITYY_SCALE_INV;
         static const float VELOCITYDELTA_SCALE_INV;
+        static const unsigned char ANIMATION_INVALID = 0xff;
         static const int DURATION_MAX = 1022;
         static const unsigned int DURATION_INVALID = 0x3ff;
         static const int INPUTLOCK_DURATION_MAX = 1023;
@@ -551,8 +725,21 @@ public:
     {
     public:
 
-        bool TestDeflect(const float* pMatrix, const float* pRight, const float* pAttack, int iUnused,
-                         unsigned char uiFallback, unsigned char* pResult) const;
+        enum DEFLECT_DIRECTION
+        {
+            DEFLECT_FORWARD = 1,
+            DEFLECT_RIGHT = 2,
+            DEFLECT_BACK_RIGHT = 4,
+            DEFLECT_LEFT = 8,
+            DEFLECT_BACK_LEFT = 16,
+            DEFLECT_BACK = 32,
+            DEFLECT_ALL = 63,
+            NUM_DIRECTIONS = 6
+        };
+
+        bool TestDeflect(const PblMatrix& mSoldier, const PblVector3& vFacingDir,
+                         const PblVector3& vDir, const PblVector3& vCollisionPoint,
+                         unsigned char uiAnimIndexPrev, unsigned char& o_uiAnimIndex) const;
         struct DEFLECT_ANIM
         {
             unsigned char uiAnimIndex;
@@ -587,10 +774,7 @@ public:
 
         void _Init()
         {
-            for (int i = 0; i < 9; ++i)
-            {
-                m_auiPackedData[i] = 0;
-            }
+            memset(m_auiPackedData, 0, sizeof(m_auiPackedData));
         }
 
         void _ReadConfig(PblConfig& config, const Combo& combo, const char* pszStateName);

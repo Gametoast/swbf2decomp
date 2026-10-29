@@ -531,7 +531,7 @@ bool WeaponMelee::Deflect(const Ordnance* pOrdnance, const PblVector3& pos, cons
 
     unsigned char uiAnim;
 
-    if (!((Combo::Deflect*)pDeflect)->TestDeflect(&mOwner->GetMatrix().m[0][0], &vVelocity.x, &dir.x, reinterpret_cast<int>(&pos), m_uiAnimIndex, &uiAnim))
+    if (!pDeflect->TestDeflect(mOwner->GetMatrix(), vVelocity, dir, pos, m_uiAnimIndex, uiAnim))
     {
         m_uiAnimIndex = state.m_uiAnimIndex;
         return false;
