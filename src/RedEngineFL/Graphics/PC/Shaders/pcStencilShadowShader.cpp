@@ -12,6 +12,13 @@
 #include "RedEngineFL/Graphics/RedOmniLight.h"
 #include "RedEngineFL/Graphics/RedSpotLight.h"
 
+// GLOBAL: SWBF2 0x00784e40
+// __xmm@3e99999a00000000000000003f800000
+// GLOBAL: SWBF2 0x00784e50
+// __xmm@3e99999a3f800000000000003f800000
+// GLOBAL: SWBF2 0x00784e60
+// __xmm@3e99999a3f8000003e4ccccd3e4ccccd
+
 void __cdecl PblTraceP(const char* Format, ...);
 
 unsigned int pcStencilShadowShader::s_uiID;

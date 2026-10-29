@@ -22,9 +22,15 @@ bool Source2D3D::Read(PblFileChunk& chunk, unsigned int uiPropertyID)
     bool bResult = true;
     if (uiPropertyID != 0x1A8B16B5u)
     {
-        bResult = Source::Read(chunk, uiPropertyID)
-                  || Source2D::Read(chunk, uiPropertyID)
-                  || Source3D::Properties::Read(chunk, uiPropertyID);
+        bResult = Source::Read(chunk, uiPropertyID);
+        if (!bResult)
+        {
+            bResult = Source2D::Read(chunk, uiPropertyID);
+        }
+        if (!bResult)
+        {
+            bResult = Source3D::Properties::Read(chunk, uiPropertyID);
+        }
     }
     else
     {

@@ -60,6 +60,9 @@
 #include "PebbleFL/Common/PblHandle.h"
 #include "PebbleFL/Common/PblMatrix.h"
 
+// GLOBAL: SWBF2 0x007b2630
+// __xmm@00000000000000003f80000000000000
+
 PblMatrix DirectionMatrix(const PblVector3& vDir, const PblVector3& vUp,
                           const PblVector3& vPos);
 

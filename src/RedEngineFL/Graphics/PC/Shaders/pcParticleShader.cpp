@@ -12,6 +12,15 @@
 #include "RedEngineFL/Graphics/RedCamera.h"
 #include "PebbleFL/Common/PblVector.h"
 
+// GLOBAL: SWBF2 0x007848f0
+// __xmm@0000000000000000000000003f000000
+// GLOBAL: SWBF2 0x00784900
+// __xmm@00000000000000003f00000000000000
+// GLOBAL: SWBF2 0x00784910
+// __xmm@0000000000000000bf00000000000000
+// GLOBAL: SWBF2 0x00784920
+// __xmm@3f8000003f8000003f0000003f000000
+
 void __cdecl PblTraceP(const char* Format, ...);
 
 

@@ -650,11 +650,14 @@ void DSBufferRenderer::UpdateObject()
 
     IDirectSoundBuffer8* const pBuffer = DSBuffer::GetBuffer();
 
+    SourceTransport* const pTransport =
+        static_cast<SourceTransport*>(this);
+
     const SourceTransport::PlayState eDesired =
         StreamNode::QueryDesiredPlayState();
 
-    StreamNode::SourceTransport::mFlags =
-        (unsigned short)(StreamNode::SourceTransport::mFlags
+    pTransport->mFlags =
+        (unsigned short)(pTransport->mFlags
                          & ~(unsigned int)SourceTransport::flags_updateTransport);
 
     switch (eDesired)

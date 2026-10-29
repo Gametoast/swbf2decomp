@@ -287,8 +287,8 @@ bool StreamBase::Open(PblFileChunk& chunk, unsigned int uiHashID, const char* pc
             unsigned int uiChannelInterleave = 0;
             unsigned int uiNumSubstreams = 0;
             unsigned int uiSubstreamInterleave = 0;
-            unsigned int uiFormat = 0;
             bool bContinue = true;
+            unsigned int uiFormat = 0;
             bInfo = true;
 
             while (child.HasMoreChildren() && bContinue)

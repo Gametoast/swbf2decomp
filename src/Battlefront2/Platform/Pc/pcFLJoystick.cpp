@@ -15,6 +15,11 @@
 #include "RedEngineFL/Util/RedLocalizeDB.h"
 #include "PebbleFL/Common/PblUnicode.h"
 
+// GLOBAL: SWBF2 0x007b2960
+// __xmm@7fffffffffffffff7fffffffffffffff
+// GLOBAL: SWBF2 0x007b2970
+// __xmm@80000000000000008000000000000000
+
 // FUNCTION: SWBF2 0x00415c60
 void RawControllerInputs::CloseChatMode()
 {

@@ -18,6 +18,9 @@
 #include "TreeGridCache.h"
 #include "PebbleFL/Common/PblMath.h"
 
+// GLOBAL: SWBF2 0x007b2770
+// __xmm@01010101010101010101010101010101
+
 class EntityWater : public CollisionObject
 {
 public:

@@ -3,6 +3,9 @@
 #include "PblQuaternion.h"
 #include "PblVector.h"
 
+// GLOBAL: SWBF2 0x00785af0
+// __xmm@3b490fdb3b490fdb3b490fdb3b490fdb
+
 #define TABLE_SIZE 2048
 #define TABLE_MASK (TABLE_SIZE - 1)
 

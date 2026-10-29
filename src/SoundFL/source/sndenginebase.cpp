@@ -127,9 +127,9 @@ Listener* EngineBase::GetFreeListener()
 Stream* EngineBase::GetOpenStream(unsigned int uiHashID)
 {
     Stream* pResult = 0;
-    for (unsigned int uiOffset = 0; uiOffset < 0x1446A68; uiOffset += sizeof(Stream))
+    for (unsigned int i = 0; i < sizeof(smStreamStorage) / sizeof(Stream); ++i)
     {
-        Stream* pStream = (Stream*)((unsigned char*)smStreams + uiOffset);
+        Stream* const pStream = &smStreams[i];
         if (pStream->mInfoList.IsEmpty())
         {
             continue;
@@ -138,7 +138,7 @@ Stream* EngineBase::GetOpenStream(unsigned int uiHashID)
         {
             if (pInfo->mHashID == uiHashID)
             {
-                pResult = (Stream*)((unsigned char*)smStreams + uiOffset);
+                pResult = &smStreams[i];
                 if (pResult->GetPlayState() == SourceTransport::playState_stopped)
                 {
                     return pResult;
@@ -218,14 +218,14 @@ void EngineBase::Update(float fDeltaTime, bool b)
                 }
             }
 
-            for (unsigned int uiOffset = 0; uiOffset < 0xA800; uiOffset += sizeof(Voice))
+            for (unsigned int i = 0; i < sizeof(smVoiceStorage) / sizeof(Voice); ++i)
             {
-                ((Voice*)((unsigned char*)smVoices + uiOffset))->Update();
+                smVoices[i].Update();
             }
 
-            for (unsigned int uiOffset = 0; uiOffset < 0x1446A68; uiOffset += sizeof(Stream))
+            for (unsigned int i = 0; i < sizeof(smStreamStorage) / sizeof(Stream); ++i)
             {
-                ((Stream*)((unsigned char*)smStreams + uiOffset))->Update(fDeltaTime);
+                smStreams[i].Update(fDeltaTime);
             }
 
             StreamBase::Info::UpdateAll(fDeltaTime);
@@ -381,9 +381,9 @@ void EngineBase::DestroyAll()
     I3DL2ReverbPreset::DestroyAll();
     SampleBankBase::DestroyAllBanks();
 
-    for (unsigned int uiOffset = 0; uiOffset < 0x1446A68; uiOffset += sizeof(Stream))
+    for (unsigned int i = 0; i < sizeof(smStreamStorage) / sizeof(Stream); ++i)
     {
-        ((Stream*)((unsigned char*)smStreams + uiOffset))->SourceBus::SetBus(&Bus::smRootBus);
+        smStreams[i].SourceBus::SetBus(&Bus::smRootBus);
     }
 
     Bus::smRootBus.DestroySubBuses();
@@ -398,20 +398,19 @@ void EngineBase::Close()
     SoundStream::Init();
     Sound::Close();
 
-    for (unsigned int uiOffset = 0; uiOffset < 0xA800; uiOffset += sizeof(Voice))
+    for (unsigned int i = 0; i < sizeof(smVoiceStorage) / sizeof(Voice); ++i)
     {
-        Voice* const pVoice = (Voice*)((unsigned char*)smVoices + uiOffset);
-        if (pVoice->mNode.mNext)
+        if (smVoices[i].mNode.mNext)
         {
-            pVoice->RemoveFromManager();
+            smVoices[i].RemoveFromManager();
         }
-        delete pVoice;
+        delete &smVoices[i];
     }
     smVoices = 0;
 
-    for (unsigned int uiOffset = 0; uiOffset < 0x1446A68; uiOffset += sizeof(Stream))
+    for (unsigned int i = 0; i < sizeof(smStreamStorage) / sizeof(Stream); ++i)
     {
-        delete (Stream*)((unsigned char*)smStreams + uiOffset);
+        delete &smStreams[i];
     }
     smStreams = 0;
     smOpened = false;

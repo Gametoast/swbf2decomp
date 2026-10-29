@@ -15,6 +15,13 @@
 #include "RedEngineFL/Graphics/PC/pcRedTexture.h"
 #include "RedEngineFL/Graphics/PC/pcRedVertexFormat.h"
 
+// GLOBAL: SWBF2 0x00784560
+// __xmm@3f68f5c33f68f5c33f68f5c33f68f5c3
+// GLOBAL: SWBF2 0x00784570
+// __xmm@3fdc28f63fdc28f63fdc28f63fdc28f6
+// GLOBAL: SWBF2 0x00784580
+// __xmm@404ccccd404ccccd404ccccd404ccccd
+
 void __cdecl PblTraceP(const char* Format, ...);
 
 unsigned int pcTerrainShader2::s_uiID;

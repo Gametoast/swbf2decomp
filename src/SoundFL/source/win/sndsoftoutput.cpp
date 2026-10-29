@@ -4,6 +4,11 @@
 #include "SoundFL/source/sndi3dl2reverb.h"
 #include "sndsoftoutput.h"
 
+// GLOBAL: SWBF2 0x00787524
+// IID_IDirectSoundFXI3DL2Reverb
+// GLOBAL: SWBF2 0x007875a4
+// GUID_DSFX_STANDARD_I3DL2REVERB
+
 namespace Snd
 {
 

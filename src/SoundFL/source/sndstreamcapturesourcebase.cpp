@@ -101,13 +101,13 @@ bool StreamCaptureSourceBase::Open(unsigned char  ,
                                    StreamPacket* pPackets)
 {
     mPacketSize = uiPacketSize;
+    unsigned int uiIndex = 0;
 
     mNumPackets = ucNumPackets;
     mPackets = pPackets;
 
     if (mNumPackets != 0)
     {
-        unsigned int uiIndex = 0;
         do
         {
 

@@ -38,6 +38,11 @@
 #include "pcRedPixelShader.h"
 #include "pcRedVertexShader.h"
 
+// GLOBAL: SWBF2 0x00772760
+// __xmm@000000003f8000003f8000003f800000
+// GLOBAL: SWBF2 0x007727a0
+// __xmm@3f0000003f0000003f0000003f000000
+
 // FUNCTION: SWBF2 0x006b01e0
 STDMETHODIMP_(ULONG) FakeD3D::AddRef()
 {

@@ -136,13 +136,13 @@ public:
 
     void SetPosition(const ::PblVector3* pPos)
     {
-        mPos3D = pPos ? const_cast< ::PblVector3*>(pPos) : &Globals::smNullVector;
         mFlags |= flags_pos3DChanged;
+        mPos3D = pPos ? const_cast< ::PblVector3*>(pPos) : &Globals::smNullVector;
     }
     void SetVelocity(const ::PblVector3* pVel)
     {
-        mVel3D = pVel ? const_cast< ::PblVector3*>(pVel) : &Globals::smNullVector;
         mFlags |= flags_vel3DChanged;
+        mVel3D = pVel ? const_cast< ::PblVector3*>(pVel) : &Globals::smNullVector;
     }
 
     void SetProperties(Properties* pProps) { mProps = pProps; }

@@ -18,6 +18,11 @@
 #include "RedEngineFL/Application/RedWater.h"
 #include "RedEngineFL/Graphics/RedCamera.h"
 
+// GLOBAL: SWBF2 0x007b2750
+// __xmm@00000010000000100000000000000000
+// GLOBAL: SWBF2 0x007b2910
+// __xmm@41700000000000000000000000000000
+
 namespace FLRenderer
 {
 float GetNearSceneFadeStart();

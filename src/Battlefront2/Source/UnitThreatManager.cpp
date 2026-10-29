@@ -16,6 +16,9 @@
 #include "VisionManager.h"
 
 
+// GLOBAL: SWBF2 0x007b28c0
+// __xmm@3f800000400000004080000040800000
+
 class EntityFlyer
 {
 public:

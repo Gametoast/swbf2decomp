@@ -172,9 +172,11 @@ unsigned int FilePlatformBase::GetPos() const
 {
     if (mFlags & 4)
     {
-        return mPos + mBuffer.GetUsed();
+        const unsigned int uiUsed = mBuffer.GetUsed();
+        return mPos + uiUsed;
     }
-    return mPos + mBuffer.GetReadOffset();
+    const unsigned int uiReadOffset = mBuffer.GetReadOffset();
+    return mPos + uiReadOffset;
 }
 
 // FUNCTION: SWBF2 0x00730380

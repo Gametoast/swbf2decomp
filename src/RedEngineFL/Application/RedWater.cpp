@@ -12,6 +12,11 @@
 #include "PebbleFL/Common/PblMath.h"
 #include "PebbleFL/Common/PblRandom.h"
 
+// GLOBAL: SWBF2 0x00772ff0
+// __xmm@00000000bf8000003f80000000000000
+// GLOBAL: SWBF2 0x00773000
+// __xmm@bf80000000000000bf800000bf800000
+
 // FUNCTION: SWBF2 0x006d0ac0
 void RedWater::UpdateEventCache()
 {

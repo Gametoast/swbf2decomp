@@ -7,6 +7,21 @@
 #include "sndengine.h"
 #include "sndsoftoutput.h"
 
+// GLOBAL: SWBF2 0x00787dcc
+// IID_IMediaBuffer
+// GLOBAL: SWBF2 0x00787ddc
+// IID_IMediaObject
+// GLOBAL: SWBF2 0x00787dfc
+// IID_IMediaObjectInPlace
+// GLOBAL: SWBF2 0x00787e5c
+// kMediaTypeAudio
+// GLOBAL: SWBF2 0x00787e6c
+// kMediaSubTypePcm
+// GLOBAL: SWBF2 0x00787e7c
+// kFormatWaveFormatEx
+// GLOBAL: SWBF2 0x00787e8c
+// IID_IUnknown
+
 namespace Snd
 {
 

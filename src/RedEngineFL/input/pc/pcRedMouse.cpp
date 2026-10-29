@@ -5,6 +5,11 @@
 #include "RedEngineFL/Application/pc/pcFLRender.h"
 #include "RedEngineFL/Interface/RedInterfaceScreen.h"
 
+// GLOBAL: SWBF2 0x00787484
+// GUID_SysMouse
+// GLOBAL: SWBF2 0x00787bc4
+// c_dfDIMouse2
+
 extern HWND hGlobalWnd;
 
 // FUNCTION: SWBF2 0x006da310

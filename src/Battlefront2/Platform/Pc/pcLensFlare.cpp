@@ -17,6 +17,9 @@
 #include "RedEngineFL/Graphics/PC/Shaders/pcSampleShader.h"
 #include "RedEngineFL/Application/pc/pcRenderHelpers.h"
 
+// GLOBAL: SWBF2 0x007b2920
+// __xmm@41880000000000000000000000000000
+
 // GLOBAL: SWBF2 0x01f9a924
 static RedTexture* s_sampleTex;
 // GLOBAL: SWBF2 0x01f9ae40

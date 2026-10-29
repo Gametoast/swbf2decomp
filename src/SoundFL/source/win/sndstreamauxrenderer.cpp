@@ -11,6 +11,9 @@
 #include "sndengine.h"
 #include "sndsoftoutput.h"
 
+// GLOBAL: SWBF2 0x007874c4
+// DSDEVID_DefaultVoicePlayback
+
 namespace Snd
 {
 

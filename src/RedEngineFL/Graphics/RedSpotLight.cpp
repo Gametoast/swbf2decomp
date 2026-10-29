@@ -11,6 +11,9 @@
 #include "RedEngineFL/Application/pc/pcRenderHelpers.h"
 
 
+// GLOBAL: SWBF2 0x00783df0
+// __xmm@3f800000000000003f0000003f000000
+
 PblMatrix DirectionMatrix(const PblVector3& vDir, const PblVector3& vUp, const PblVector3& vPos);
 
 extern PblVector3 gVectorZero;

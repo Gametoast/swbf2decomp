@@ -276,9 +276,9 @@ void SoundLayered::Update(float fDeltaTime)
 {
     PlayState ePlayState = GetCurrentPlayState();
     const PlayState eDesired = QueryDesiredPlayState();
-    const Properties* const pProps = mProperties;
     SourceTransport::mFlags = (unsigned short)
         (SourceTransport::mFlags & ~(unsigned int)flags_updateTransport);
+    const Properties* const pProps = mProperties;
 
     if (pProps && eDesired != playState_invalid && ePlayState != eDesired)
     {
@@ -417,7 +417,7 @@ void SoundLayered::FireForgetLayer::Play(Source3D* pSource3D, const Properties::
     mTriggerTime = (sndRandom.GetFloat() - 0.5f) * pLayer->mDelayVar * 2.0f + pLayer->mDelay;
     mNode.Remove();
     smActiveList.AddLast(&mNode);
-    if (fPriority == 0.0f)
+    if (0.0f == fPriority)
     {
         mPriority = CalculatePriority(pSource3D, pLayer->mSoundProps);
     }

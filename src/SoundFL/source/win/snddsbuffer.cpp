@@ -8,6 +8,15 @@
 #include "SoundFL/source/sndglobals.h"
 #include "sndengine.h"
 
+// GLOBAL: SWBF2 0x00786ab8
+// kSubFormatPcm
+// GLOBAL: SWBF2 0x00786ac8
+// GUID_NULL
+// GLOBAL: SWBF2 0x00787504
+// IID_IDirectSound3DBuffer
+// GLOBAL: SWBF2 0x00787514
+// IID_IKsPropertySet
+
 namespace Snd
 {
 
@@ -549,7 +558,7 @@ bool DSBuffer::Play(bool bLooping, unsigned int uiPriority, bool bImmediate,
         dwFlags = 0;
     }
 
-    dwFlags = dwFlags | (unsigned long)(bLooping != false);
+    dwFlags |= (unsigned long)(bLooping != false);
 
     return mBuffer->Play(0, bImmediate ? 0 : uiPriority, dwFlags) >= 0;
 }

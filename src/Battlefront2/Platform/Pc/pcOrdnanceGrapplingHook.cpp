@@ -14,6 +14,11 @@
 #include "RedEngineFL/Application/pc/pcRenderHelpers.h"
 #include "pcSunFlare.h"
 
+// GLOBAL: SWBF2 0x007b2810
+// __xmm@3f800000000000000000000000000000
+// GLOBAL: SWBF2 0x007b2860
+// __xmm@3f8000003f800000000000003f800000
+
 // GLOBAL: SWBF2 0x01e2fd30
 pcRedShader* OrdnanceGrapplingHook::sShader;
 

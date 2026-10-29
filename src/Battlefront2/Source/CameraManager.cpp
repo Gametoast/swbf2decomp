@@ -31,6 +31,13 @@
 #include "SoundFL/source/win/sndengine.h"
 #include "PebbleFL/Common/PblMath.h"
 
+// GLOBAL: SWBF2 0x007b27e0
+// __xmm@3f0000003f8000000000000000000000
+// GLOBAL: SWBF2 0x007b27f0
+// __xmm@3f0000003f8000003f00000000000000
+// GLOBAL: SWBF2 0x007b2850
+// __xmm@3f8000003f8000000000000000000000
+
 namespace FLRenderer
 {
 unsigned int AddView(const RedViewport& rViewport, RedCamera* pCamera);

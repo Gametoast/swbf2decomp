@@ -5,6 +5,21 @@
 #include "PebbleFL/Common/PblJournal.h"
 #include "PebbleFL/Common/PblValues.h"
 
+// GLOBAL: SWBF2 0x00772ce0
+// __xmm@2b2b3636353534342d2d003900380037
+// GLOBAL: SWBF2 0x00772cf0
+// __xmm@4b6b4a6a486847674666446453734161
+// GLOBAL: SWBF2 0x00772d00
+// __xmm@4d6d4e6e42625676436358785a7a7c5c
+// GLOBAL: SWBF2 0x00772d10
+// __xmm@50704f6f496955755979547452724565
+// GLOBAL: SWBF2 0x00772d20
+// __xmm@57775171090908082b3d5f2d29302839
+// GLOBAL: SWBF2 0x00787494
+// GUID_SysKeyboard
+// GLOBAL: SWBF2 0x007879bc
+// c_dfDIKeyboard
+
 void __cdecl PblTraceP(const char* Format, ...);
 
 extern HWND hGlobalWnd;

@@ -10,6 +10,19 @@
 #include "RedEngineFL/Application/pc/pcRenderHelpers.h"
 #include "pcSunFlare.h"
 
+// GLOBAL: SWBF2 0x007b2650
+// __xmm@000000003eaa7efa0000000000000000
+// GLOBAL: SWBF2 0x007b2660
+// __xmm@000000003f800000000000003f2a7efa
+// GLOBAL: SWBF2 0x007b27d0
+// __xmm@3f0000003eaa7efa3f00000000000000
+// GLOBAL: SWBF2 0x007b2800
+// __xmm@3f0000003f8000003f0000003f2a7efa
+// GLOBAL: SWBF2 0x007b2830
+// __xmm@3f8000003eaa7efa3f80000000000000
+// GLOBAL: SWBF2 0x007b2880
+// __xmm@3f8000003f8000003f8000003f2a7efa
+
 // FUNCTION: SWBF2 0x00411f90
 void FishParticle::Render(unsigned char, float, unsigned int)
 {

@@ -41,6 +41,9 @@
 #include "OrdnanceEmitter.h"
 #include "WeaponDispenser.h"
 
+// GLOBAL: SWBF2 0x007b28b0
+// __xmm@3f800000400000004040000040800000
+
 class EntitySoldier { public: static PblHash rttiHashEntitySoldier; };
 
 class EntityWalker { public: static PblHash rttiHashEntityWalker; };

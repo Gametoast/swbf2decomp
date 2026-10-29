@@ -24,6 +24,13 @@
 #include "sndstream.h"
 #include "sndvoice.h"
 
+// GLOBAL: SWBF2 0x007874a4
+// DSDEVID_DefaultPlayback
+// GLOBAL: SWBF2 0x007874e4
+// IID_IDirectSound8
+// GLOBAL: SWBF2 0x007874f4
+// IID_IDirectSound3DListener
+
 // FUNCTION: SWBF2 0x00731830
 template <> void Snd::Allocator<Snd::SoftOutput>::operator delete(void* p, void*, bool)
 {
@@ -498,11 +505,11 @@ void Engine::SetCentrePeakMode(bool bEnable)
         return;
     }
 
-    for (unsigned int uiOffset = 0; uiOffset < 0xA800; uiOffset += 0x540)
+    for (unsigned int i = 0;
+         i < sizeof(EngineBase::smVoiceStorage) / sizeof(Voice); ++i)
     {
 
-        Voice& rVoice =
-            *(Voice*)((unsigned char*)EngineBase::smVoices + uiOffset);
+        Voice& rVoice = EngineBase::smVoices[i];
 
         if (bWanted)
         {
@@ -570,24 +577,24 @@ void Engine::SetGlobalReverb(const I3DL2Reverb* pReverb)
         {
             EAXREVERBPROPERTIES props;
 
+            props.flAirAbsorptionHF = 0.0f;
             props.flDecayHFRatio =
                 ClampRange(pReverb->mDecayHFRatio, 0.1f, 2.0f);
-            props.flAirAbsorptionHF = 0.0f;
+            props.flDecayLFRatio = 1.0f;
             props.flDecayTime =
                 ClampRange(pReverb->mDecayTime, 0.1f, 20.0f);
-            props.flDecayLFRatio = 1.0f;
-            props.flEnvironmentDiffusion =
-                ClampRange(pReverb->mDiffusion, 0.0f, 1.0f);
             props.flEchoDepth = 0.0f;
             props.flEchoTime = 0.25f;
+            props.flEnvironmentDiffusion =
+                ClampRange(pReverb->mDiffusion, 0.0f, 1.0f);
+            props.flEnvironmentSize = 7.5f;
             props.flHFReference =
                 ClampRange(pReverb->mHFReference, 1000.0f, 20000.0f);
-            props.flEnvironmentSize = 7.5f;
-            props.flReflectionsDelay =
-                ClampRange(pReverb->mERDelay, 0.0f, 0.3f);
             props.flLFReference = 250.0f;
             props.flModulationDepth = 0.0f;
             props.flModulationTime = 0.25f;
+            props.flReflectionsDelay =
+                ClampRange(pReverb->mERDelay, 0.0f, 0.3f);
             props.flReverbDelay =
                 ClampRange(pReverb->mReverbDelay, 0.0f, 0.1f);
             props.flRoomRolloffFactor =
@@ -793,11 +800,10 @@ bool Engine::DSClose()
 
     sndEngineThreadUpdate.Pause(false);
 
-    for (unsigned int uiOffset = 0; uiOffset < sizeof(EngineBase::smStreamStorage);
-         uiOffset += sizeof(Stream))
+    for (unsigned int i = 0;
+         i < sizeof(EngineBase::smStreamStorage) / sizeof(Stream); ++i)
     {
-        Stream* const pStream =
-            (Stream*)((char*)EngineBase::smStreams + uiOffset);
+        Stream* const pStream = &EngineBase::smStreams[i];
 
         pStream->SourceBus::Stop(pStream);
 
@@ -807,7 +813,7 @@ bool Engine::DSClose()
                                 SourceTransport::flags_updatePause)) |
                              SourceTransport::flags_updateStop);
 
-        pStream->Update(0.0f);
+        EngineBase::smStreams[i].Update(0.0f);
     }
 
     DSBufferRenderer::UpdateParameters();

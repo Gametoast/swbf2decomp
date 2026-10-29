@@ -40,8 +40,9 @@ void Stream::Flush(bool bThreadPaused, bool bFlushRenderers)
     mSource.Stop();
     mSource.Update();
 
-    const Info* pInfo =
-        (const Info*)ObjectList::Itor(&mInfoList).GetObjectA(&mInfoList);
+    const Info* pInfo = mInfoList.IsEmpty()
+        ? 0
+        : (const Info*)ObjectList::Itor(&mInfoList).GetObjectA(&mInfoList);
 
     for (unsigned int i = 0; i < pInfo->mNumSubstreams; ++i)
     {
@@ -136,8 +137,9 @@ void Stream::Update(float fDeltaTime)
     mSource.SetLooping(GetLooping());
     StreamBase::Update(fDeltaTime);
 
-    const Info* pInfo =
-        (const Info*)ObjectList::Itor(&mInfoList).GetObjectA(&mInfoList);
+    const Info* pInfo = mInfoList.IsEmpty()
+        ? 0
+        : (const Info*)ObjectList::Itor(&mInfoList).GetObjectA(&mInfoList);
     const unsigned int uiNumSubstreams = pInfo->mNumSubstreams;
 
     if (GetGainChanged())
@@ -332,8 +334,9 @@ namespace Snd
 // FUNCTION: SWBF2 0x00734c80
 void Stream::Open(File& rFile)
 {
-    const Info* pInfo =
-        (const Info*)ObjectList::Itor(&mInfoList).GetObjectA(&mInfoList);
+    const Info* pInfo = mInfoList.IsEmpty()
+        ? 0
+        : (const Info*)ObjectList::Itor(&mInfoList).GetObjectA(&mInfoList);
     const Segment* pSegment = mCurrentSegment;
     const unsigned int uiNumSubstreams = pInfo->mNumSubstreams;
     SampleInfo::Format eFormat = pInfo->mFormat;

@@ -46,10 +46,11 @@ void SourceBus::Stop(SourceTransport* pTransport)
         return;
     }
 
-    Bus* const pAttenuateBus = mBus->mAttenuateBus;
-    if (pAttenuateBus && --mBus->mAttenuationRefCount == 0)
+    Bus* const pBus = mBus;
+    Bus* const pAttenuateBus = pBus->mAttenuateBus;
+    if (pAttenuateBus && --pBus->mAttenuationRefCount == 0)
     {
-        pAttenuateBus->Fade(mBus->mAttenuationLeadOutTime, 1.0f, -1.0f);
+        pAttenuateBus->Fade(pBus->mAttenuationLeadOutTime, 1.0f, -1.0f);
     }
     mPlayState = SourceTransport::playState_stopped;
 }
@@ -69,10 +70,11 @@ void SourceBus::Update(Source* pSource, SourceTransport* pTransport)
     if (mPlayState == SourceTransport::playState_playing
         && pTransport->GetPlayState() == SourceTransport::playState_stopped)
     {
-        Bus* const pAttenuateBus = mBus->mAttenuateBus;
-        if (pAttenuateBus && --mBus->mAttenuationRefCount == 0)
+        Bus* const pBus = mBus;
+        Bus* const pAttenuateBus = pBus->mAttenuateBus;
+        if (pAttenuateBus && --pBus->mAttenuationRefCount == 0)
         {
-            pAttenuateBus->Fade(mBus->mAttenuationLeadOutTime, 1.0f, -1.0f);
+            pAttenuateBus->Fade(pBus->mAttenuationLeadOutTime, 1.0f, -1.0f);
         }
         mPlayState = SourceTransport::playState_stopped;
     }

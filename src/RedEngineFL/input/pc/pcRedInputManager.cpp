@@ -5,6 +5,9 @@
 #include "Battlefront2/Source/NetSetup.h"
 #include "lglcd/lgLcd.h"
 
+// GLOBAL: SWBF2 0x007873e4
+// IID_IDirectInput8A
+
 extern HINSTANCE hGlobalInstance;
 
 // FUNCTION: SWBF2 0x006dbc00

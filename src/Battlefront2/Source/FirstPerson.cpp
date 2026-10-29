@@ -29,6 +29,9 @@
 #include "Zephyr/Source/ZephyrAnimBank.h"
 #include "PebbleFL/Common/PblHermite.h"
 
+// GLOBAL: SWBF2 0x007b27a0
+// __xmm@3e4ccccd3e4ccccd3e4ccccd3e4ccccd
+
 extern bool netFrameLock;
 
 namespace FirstPerson

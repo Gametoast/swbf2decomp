@@ -13,6 +13,13 @@
 #include "SoundFL/source/sndglobals.h"
 #include "SoundFL/source/sndsampleinfo.h"
 #include "SoundFL/source/sndsourcetransport.h"
+
+// GLOBAL: SWBF2 0x007869d4
+// kFile
+// GLOBAL: SWBF2 0x007874b4
+// kDSDevIdDefaultCapture
+// GLOBAL: SWBF2 0x007874d4
+// kDSDevIdDefaultVoiceCapture
 #include "SoundFL/source/sndstreamformat.h"
 #include "SoundFL/source/sndstreampacket.h"
 #include "SoundFL/source/sndstreampacketio.h"

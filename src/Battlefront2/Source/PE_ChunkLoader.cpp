@@ -9,6 +9,9 @@
 #include "ParticleEmitter.h"
 #include "ParticleGeometry.h"
 
+// GLOBAL: SWBF2 0x007b2780
+// __xmm@3b8080813b8080813b8080813b808081
+
 extern SmallEffectLodData smallEffectLodData;
 extern MediumEffectLodData mediumEffectLodData;
 extern LargeEffectLodData largeEffectLodData;

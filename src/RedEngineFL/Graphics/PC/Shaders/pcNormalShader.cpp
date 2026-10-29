@@ -26,6 +26,9 @@
 #include "RedEngineFL/Graphics/RedSegment.h"
 #include "RedEngineFL/Graphics/RedCamera.h"
 
+// GLOBAL: SWBF2 0x007846d0
+// __xmm@3f8000003e4ccccd3e4ccccd3e4ccccd
+
 void __cdecl PblTraceP(const char* Format, ...);
 
 

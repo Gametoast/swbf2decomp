@@ -16,6 +16,9 @@
 #include "PebbleFL/Common/PblMath.h"
 #include <math.h>
 
+// GLOBAL: SWBF2 0x00784ff0
+// __xmm@3cf5c28f3cf5c28f3cf5c28f3cf5c28f
+
 void __cdecl PblTraceP(const char* Format, ...);
 
 // TEMPLATE: SWBF2 0x006fe970

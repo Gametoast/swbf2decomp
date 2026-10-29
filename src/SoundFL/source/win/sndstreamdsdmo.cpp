@@ -9,6 +9,9 @@
 #include "sndengine.h"
 #include "sndsoftoutput.h"
 
+// GLOBAL: SWBF2 0x007e3be4
+// kStandardEffects
+
 namespace Snd
 {
 }

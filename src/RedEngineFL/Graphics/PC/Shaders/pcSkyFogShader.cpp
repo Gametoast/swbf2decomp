@@ -12,6 +12,9 @@
 
 #include "PebbleFL/Common/PblMatrix.h"
 
+// GLOBAL: SWBF2 0x007849d0
+// __xmm@3f800000bf8000000000000000000000
+
 void __cdecl PblTraceP(const char* Format, ...);
 
 class PblMatrix;

@@ -21,6 +21,9 @@
 #include "PebbleFL/Common/PblRandom.h"
 #include "RedEngineFL/Application/RedWater.h"
 
+// GLOBAL: SWBF2 0x007b2940
+// __xmm@459c4000c59c4000c59c4000c59c4000
+
 extern bool netIsLocalTurn;
 extern bool netFrameLock;
 extern bool netIsLateTurn;

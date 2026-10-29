@@ -13,6 +13,9 @@
 #include "RedEngineFL/Graphics/PC/pcRedRenderer.h"
 #include "PebbleFL/Common/PblMath.h"
 
+// GLOBAL: SWBF2 0x00772a70
+// __xmm@000000003f8000000000000000000000
+
 class PblMatrix;
 extern PblMatrix gMatrixIdentity;
 

@@ -97,6 +97,11 @@
 #include "EventManager_Object.h"
 #include "StatusDisplay.h"
 
+// GLOBAL: SWBF2 0x007b2820
+// __xmm@3f8000003e19999a3f11eb8600000000
+// GLOBAL: SWBF2 0x007b28a0
+// __xmm@3f8000003f8000003f80000041f00000
+
 // SYNTHETIC: SWBF2 0x004f5c90
 // EntitySoldierClass::`scalar deleting destructor'
 

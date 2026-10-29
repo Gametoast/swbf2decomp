@@ -103,36 +103,34 @@ void ThreadUpdate::RemoveObject(Object* pObject)
     pObject->mNode.Remove();
     pObject->mUpdate = 0;
 
-    if (!mUpdateList.IsEmpty())
+    if (mUpdateList.IsEmpty())
     {
+        Semaphore done;
+        if (!done.Create(0, 1))
+        {
+            PrintDebugMessage("Unable to create semaphore out of system resources!");
+            exit(0);
+        }
+
+        mCompleteCallbackData = &done;
+
         if (mAccess.IsValid())
         {
             mPausing = false;
             mUpdating = true;
             mAccess.Signal();
         }
-        return;
+
+        done.Wait();
+        done.Destroy();
+        mCompleteCallbackData = 0;
     }
-
-    Semaphore done;
-    if (!done.Create(0, 1))
-    {
-        PrintDebugMessage("Unable to create semaphore out of system resources!");
-        exit(0);
-    }
-
-    mCompleteCallbackData = &done;
-
-    if (mAccess.IsValid())
+    else if (mAccess.IsValid())
     {
         mPausing = false;
         mUpdating = true;
         mAccess.Signal();
     }
-
-    done.Wait();
-    done.Destroy();
-    mCompleteCallbackData = 0;
 }
 
 // FUNCTION: SWBF2 0x0073c4b0

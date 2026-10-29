@@ -61,6 +61,9 @@
 #include <math.h>
 #include <stdio.h>
 #include <time.h>
+// GLOBAL: SWBF2 0x007b28d0
+// __xmm@3f800000437f0000437f0000437f0000
+
 #ifndef DIRECTINPUT_VERSION
 #define DIRECTINPUT_VERSION 0x0800
 #endif

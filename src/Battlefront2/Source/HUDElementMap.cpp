@@ -39,6 +39,11 @@
 
 #include "Steam/gfGalaxy.h"
 
+// GLOBAL: SWBF2 0x007b2620
+// __xmm@0000000000000000000000003f800000
+// GLOBAL: SWBF2 0x007b2670
+// __xmm@00000000bf8000000000000000000000
+
 static const unsigned int kEventToggleMapModeHash = 0x233d39ec;
 static const unsigned int kEventChangeMapModeHash = 0x0d533bd4;
 static const unsigned int kEventPostHideHash = 0x6d95d5e9;

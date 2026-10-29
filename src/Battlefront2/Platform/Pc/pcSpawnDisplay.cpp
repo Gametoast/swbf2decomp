@@ -48,6 +48,11 @@
 #include "RedEngineFL/Util/RedLocalizeDB.h"
 #include "SoundFL/source/sndbus.h"
 
+// GLOBAL: SWBF2 0x007b2840
+// __xmm@3f8000003f0000003f0000003f000000
+// GLOBAL: SWBF2 0x007b2890
+// __xmm@3f8000003f8000003f8000003f800000
+
 // FUNCTION: SWBF2 0x0042cb80
 void SpawnDisplay::UpdateSpectate(Character* pCharacter)
 {

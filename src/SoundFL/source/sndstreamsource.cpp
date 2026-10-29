@@ -114,9 +114,13 @@ void StreamSource::Flush()
 
     StartFlush();
 
-    StreamPacket* pPacket;
-    while ((pPacket = GetPacket(0)) != 0)
+    for (;;)
     {
+        StreamPacket* const pPacket = GetPacket(0);
+        if (pPacket == 0)
+        {
+            break;
+        }
         pPacket->Unlock();
     }
 

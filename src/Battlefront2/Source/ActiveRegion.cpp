@@ -9,6 +9,9 @@
 #include "StringDB.h"
 #include <new>
 
+// GLOBAL: SWBF2 0x007b2990
+// __xmm@ffffffffffffffffffffffffffffffff
+
 // TEMPLATE: SWBF2 0x00437f20
 // PblBitVector<600>::InvertAll
 template void PblBitVector<600>::InvertAll();

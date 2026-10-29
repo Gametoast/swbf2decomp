@@ -29,6 +29,9 @@
  
  
 
+// GLOBAL: SWBF2 0x00784440
+// __xmm@000000003f0000000000000000000000
+
 // GLOBAL: SWBF2 0x009c893c
 pcShadowQuadRenderable* pcShadowQuadRenderable::s_pInstance;
 

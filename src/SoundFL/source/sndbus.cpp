@@ -58,7 +58,8 @@ __declspec(noinline) void Bus::Update(float fDeltaTime, bool bForce)
     for (PblListSingle::Node* pNode = mSubBusList.mHead.mNext;
          pNode != &mSubBusList.mHead; pNode = pNode->mNext)
     {
-        BusFromNode(pNode)->Update(fDeltaTime, bForce);
+        Bus* const pSub = BusFromNode(pNode);
+        pSub->Update(fDeltaTime, bForce);
     }
 }
 
@@ -81,7 +82,8 @@ void Bus::SetGain(float fGain, bool bStopFade)
     for (PblListSingle::Node* pNode = mSubBusList.mHead.mNext;
          pNode != &mSubBusList.mHead; pNode = pNode->mNext)
     {
-        BusFromNode(pNode)->Update(0.0f, true);
+        Bus* const pSub = BusFromNode(pNode);
+        pSub->Update(0.0f, true);
     }
 }
 

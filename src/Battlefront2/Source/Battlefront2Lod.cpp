@@ -1,6 +1,9 @@
 #include "Battlefront2Lod.h"
 #include "RedEngineFL/Graphics/RedModel.h"
 
+// GLOBAL: SWBF2 0x007b2640
+// __xmm@00000000000000010000000100000001
+
 // FUNCTION: SWBF2 0x00448830
 OrdnanceLodData::OrdnanceLodData()
 {
