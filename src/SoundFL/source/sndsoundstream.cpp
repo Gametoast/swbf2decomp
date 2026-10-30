@@ -58,13 +58,13 @@ SoundStream::FireForget::FireForget()
 SoundStream::FireForget SoundStream::smFireForget[24];
 
 // SYNTHETIC: SWBF2 0x0040b960
-// `dynamic initializer for 'Snd::SoundStream::smPlayingVel''
+// `dynamic initializer for 'Snd::SoundStream::smPlayingPos''
 
 // GLOBAL: SWBF2 0x01e297d0
 // SoundStream::smPlayingPos
 PblVector3 SoundStream::smPlayingPos[6];
 // SYNTHETIC: SWBF2 0x0040b980
-// `dynamic initializer for 'Snd::SoundStream::smPlayingPos''
+// `dynamic initializer for 'Snd::SoundStream::smPlayingVel''
 
 // GLOBAL: SWBF2 0x01e29d40
 // SoundStream::smPlayingVel

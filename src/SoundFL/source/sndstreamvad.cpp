@@ -18,7 +18,7 @@ StreamVAD::StreamVAD()
 }
 
 // FUNCTION: SWBF2 0x00742050
-inline StreamVAD::~StreamVAD()
+StreamVAD::~StreamVAD()
 {
 }
 

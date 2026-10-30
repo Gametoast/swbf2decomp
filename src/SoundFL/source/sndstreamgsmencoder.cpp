@@ -10,7 +10,7 @@
 #include "sndsourcetransport.h"
 
 extern "C" void __cdecl gsm_encode(char* pGsm, short* pFrame, unsigned char* pOut);
-extern "C" void __cdecl gsm_option(void* pGsm, int iOption, int* pValue);
+extern "C" int __cdecl gsm_option(void* pGsm, int iOption, int* pValue);
 
 namespace Snd
 {
@@ -76,41 +76,7 @@ void Snd::StreamGSMEncoder::Flush()
 }
 
 
-// FUNCTION: SWBF2 0x00741910
-StreamPacket* StreamGSMEncoder::GetPacket(unsigned int uiOutput)
-{
-    StreamPacket* pPacket;
 
-    if (StreamNode::GetCurrentPlayState() == SourceTransport::playState_playing)
-    {
-        StreamPacket* const pPacket = StreamSourceProducer::GetPacket(uiOutput);
-        if (pPacket != 0)
-        {
-            if (pPacket->mFlags & 1)
-            {
-                StreamNode::Stop();
-            }
-            return pPacket;
-        }
-    }
-
-    Update();
-
-    if (StreamNode::GetCurrentPlayState() == SourceTransport::playState_playing)
-    {
-        StreamPacket* const pPacket = StreamSourceProducer::GetPacket(uiOutput);
-        if (pPacket != 0)
-        {
-            if (pPacket->mFlags & 1)
-            {
-                StreamNode::Stop();
-            }
-            return pPacket;
-        }
-    }
-
-    return 0;
-}
 
 // FUNCTION: SWBF2 0x007419c0
 void StreamGSMEncoder::Update()
@@ -213,10 +179,9 @@ void StreamGSMEncoder::Update()
 
             if (mInputPacketOffset == mInputPacketSize)
             {
-                const unsigned short uiFlags = mInputPacket->mFlags;
-                bFlag0 = (uiFlags & 1) != 0;
-                bFlag1 = (uiFlags & 2) != 0;
-                bLast = bFlag0 || bFlag1;
+                bFlag0 = mInputPacket->GetLast();
+                bFlag1 = mInputPacket->GetDiscontinuity();
+                bLast = bFlag0 | bFlag1;
 
                 if (bLast && mInputFrameOffset != 0 && mOutputPacketOffset < GetPacketSize())
                 {

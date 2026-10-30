@@ -154,11 +154,10 @@ void SoundLayered::FireForgetLayer::Update(float fDeltaTime)
 // FUNCTION: SWBF2 0x00739a70
 void SoundLayered::FireForgetLayer::UpdateAll(float fDeltaTime)
 {
-    PblListDouble::Node* pLink = smActiveList.mTerminator.mNext;
-    while (pLink != &smActiveList.mTerminator)
+    for (PblListDouble::Itor itor(smActiveList); itor.GetNode() != smActiveList.GetTerminator();)
     {
-        FireForgetLayer* pLayer = (FireForgetLayer*)pLink->GetObjectA(&smActiveList, offsetof(FireForgetLayer, mNode));
-        pLink = pLink->mNext;
+        FireForgetLayer* const pLayer = (FireForgetLayer*)itor.GetNode()->GetObjectA(&smActiveList, offsetof(FireForgetLayer, mNode));
+        ++itor;
         pLayer->Update(fDeltaTime);
     }
 }
@@ -188,21 +187,18 @@ __forceinline void SoundLayered::FreeLayers(void (__cdecl* pLayerDestroy)(SoundL
     }
     while (!mSoundList.IsEmpty())
     {
-        PblListSingle::Node* pFirst = mSoundList.mHead.mNext;
-        pLayerDestroy(pFirst == &mSoundList.mHead
-                          ? 0
-                          : (SoundLayer*)((char*)pFirst - offsetof(SoundLayer, mLayerNode)));
+        pLayerDestroy((SoundLayer*)mSoundList.GetFirst()->GetObjectA(
+            &mSoundList, offsetof(SoundLayer, mLayerNode)));
     }
 }
 
 // FUNCTION: SWBF2 0x007394b0
 void SoundLayered::RemoveAll()
 {
-    PblListDouble::Node* pLink = smSoundLayeredList.mTerminator.mNext;
-    while (pLink != &smSoundLayeredList.mTerminator)
+    for (PblListDouble::Itor itor(smSoundLayeredList); itor.GetNode() != smSoundLayeredList.GetTerminator();)
     {
-        SoundLayered* pSound = (SoundLayered*)pLink->GetObjectA(&smSoundLayeredList, offsetof(SoundLayered, mNode));
-        pLink = pLink->mNext;
+        SoundLayered* const pSound = (SoundLayered*)itor.GetNode()->GetObjectA(&smSoundLayeredList, offsetof(SoundLayered, mNode));
+        ++itor;
         pSound->Stop();
         pSound->mNode.Remove();
         pSound->FreeLayers(SoundLayerDestroy);
@@ -212,11 +208,10 @@ void SoundLayered::RemoveAll()
 // FUNCTION: SWBF2 0x00739780
 void SoundLayered::FireForgetLayer::StopAll()
 {
-    PblListDouble::Node* pLink = smActiveList.mTerminator.mNext;
-    while (pLink != &smActiveList.mTerminator)
+    for (PblListDouble::Itor itor(smActiveList); itor.GetNode() != smActiveList.GetTerminator();)
     {
-        FireForgetLayer* pLayer = (FireForgetLayer*)pLink->GetObjectA(&smActiveList, offsetof(FireForgetLayer, mNode));
-        pLink = pLink->mNext;
+        FireForgetLayer* const pLayer = (FireForgetLayer*)itor.GetNode()->GetObjectA(&smActiveList, offsetof(FireForgetLayer, mNode));
+        ++itor;
         pLayer->Stop();
     }
 }
@@ -282,21 +277,19 @@ void SoundLayered::Update(float fDeltaTime)
 
     if (pProps && eDesired != playState_invalid && ePlayState != eDesired)
     {
-        PblListSingle::Node* pSoundNode = mSoundList.mHead.mNext;
+        PblListSingle::Itor soundItor(mSoundList);
         switch (eDesired)
         {
         case playState_playing:
             mTimeElapsed = 0.0f;
             mStopTime = 0.0f;
-            for (const PblListSingle::Node* pNode = pProps->mLayerList.mHead.mNext;
-                 pNode != &pProps->mLayerList.mHead;
-                 pNode = pNode->mNext, pSoundNode = pSoundNode->mNext)
+            for (PblListSingle::Itor itor(pProps->mLayerList);
+                 itor.GetNode() != pProps->mLayerList.GetTerminator(); ++itor, ++soundItor)
             {
-                const Properties::Layer* pLayer = (const Properties::Layer*)
-                    ((const char*)pNode - offsetof(Properties::Layer, mNode));
-                SoundLayer* pSound = pSoundNode == &mSoundList.mHead
-                    ? 0
-                    : (SoundLayer*)((char*)pSoundNode - offsetof(SoundLayer, mLayerNode));
+                const Properties::Layer* const pLayer = (const Properties::Layer*)itor.GetNode()->GetObjectA(
+                    &pProps->mLayerList, offsetof(Properties::Layer, mNode));
+                SoundLayer* const pSound = (SoundLayer*)soundItor.GetNode()->GetObjectA(
+                    &mSoundList, offsetof(SoundLayer, mLayerNode));
                 pSound->mPlayTime =
                     (sndRandom.GetFloat() - 0.5f) * pLayer->mDelayVar * 2.0f + pLayer->mDelay;
                 pSound->mStopTime =
@@ -310,17 +303,17 @@ void SoundLayered::Update(float fDeltaTime)
             break;
 
         case playState_paused:
-            for (; pSoundNode != &mSoundList.mHead; pSoundNode = pSoundNode->mNext)
+            for (; soundItor.GetNode() != mSoundList.GetTerminator(); ++soundItor)
             {
-                ((SoundLayer*)((char*)pSoundNode - offsetof(SoundLayer, mLayerNode)))->Pause();
+                ((SoundLayer*)soundItor.GetNode()->GetObjectA(&mSoundList, offsetof(SoundLayer, mLayerNode)))->Pause();
             }
             break;
 
         case playState_stopped:
-            for (; pSoundNode != &mSoundList.mHead; pSoundNode = pSoundNode->mNext)
+            for (; soundItor.GetNode() != mSoundList.GetTerminator(); ++soundItor)
             {
-                SoundLayer* pSound =
-                    (SoundLayer*)((char*)pSoundNode - offsetof(SoundLayer, mLayerNode));
+                SoundLayer* const pSound = (SoundLayer*)soundItor.GetNode()->GetObjectA(
+                    &mSoundList, offsetof(SoundLayer, mLayerNode));
                 pSound->SourceBus::Stop(pSound);
                 pSound->VoiceVirtual::Stop();
             }
@@ -332,11 +325,11 @@ void SoundLayered::Update(float fDeltaTime)
 
     if (ePlayState == playState_playing && mProperties)
     {
-        for (PblListSingle::Node* pSoundNode = mSoundList.mHead.mNext;
-             pSoundNode != &mSoundList.mHead; pSoundNode = pSoundNode->mNext)
+        for (PblListSingle::Itor soundItor(mSoundList);
+             soundItor.GetNode() != mSoundList.GetTerminator(); ++soundItor)
         {
-            SoundLayer* pSound =
-                (SoundLayer*)((char*)pSoundNode - offsetof(SoundLayer, mLayerNode));
+            SoundLayer* const pSound = (SoundLayer*)soundItor.GetNode()->GetObjectA(
+                &mSoundList, offsetof(SoundLayer, mLayerNode));
             if (pSound->GetPlayState() == playState_playing)
             {
                 if (mTimeElapsed >= pSound->mStopTime)
@@ -430,40 +423,35 @@ void SoundLayered::FireForgetLayer::Play(Source3D* pSource3D, const Properties::
 // FUNCTION: SWBF2 0x007391d0
 void __cdecl SoundLayered::Play(Source3D* pSource3D, const Properties* pProps)
 {
-    PblListSingle* const pList = const_cast<PblListSingle*>(&pProps->mLayerList);
-    PblListSingle::Node* pNode = pList->mHead.mNext;
-    if (pNode != &pList->mHead)
+    const PblListSingle* const pList = &pProps->mLayerList;
+    for (PblListSingle::Itor itor(pList); itor.GetNode() != pList->GetTerminator(); ++itor)
     {
-        do
+        Properties::Layer* const pLayer = (Properties::Layer*)itor.GetNode()->GetObjectA(
+            pList, offsetof(Properties::Layer, mNode));
+        if (0.0f == pLayer->mDelay)
         {
-            Properties::Layer* const pLayer =
-                (Properties::Layer*)((char*)pNode - offsetof(Properties::Layer, mNode));
-            if (0.0f == pLayer->mDelay)
+            Sound::Play(pLayer->mSoundProps->Get3DMode() ? pSource3D : 0,
+                        pLayer->mSoundProps, 0, 0, true);
+        }
+        else
+        {
+            float fPriority = 0.0f;
+            FireForgetLayer* pFireForget = FireForgetLayer::GetFreeLayer();
+            pSource3D->mFlags |= Source3D::flags_updateListener;
+            pSource3D->SetProperties(pLayer->mSoundProps);
+            pSource3D->DetermineClosestListener();
+            if (!pFireForget)
             {
-                Sound::Play(pLayer->mSoundProps->Get3DMode() ? pSource3D : 0,
-                            pLayer->mSoundProps, 0, 0, true);
+                fPriority = FireForgetLayer::CalculatePriority(pSource3D,
+                                                             pLayer->mSoundProps);
+                pFireForget = FireForgetLayer::StealLayer(fPriority);
             }
-            else
+            if (pFireForget)
             {
-                float fPriority = 0.0f;
-                FireForgetLayer* pFireForget = FireForgetLayer::GetFreeLayer();
-                pSource3D->mFlags |= Source3D::flags_updateListener;
-                pSource3D->SetProperties(pLayer->mSoundProps);
-                pSource3D->DetermineClosestListener();
-                if (!pFireForget)
-                {
-                    fPriority = FireForgetLayer::CalculatePriority(pSource3D,
-                                                                 pLayer->mSoundProps);
-                    pFireForget = FireForgetLayer::StealLayer(fPriority);
-                }
-                if (pFireForget)
-                {
-                    pFireForget->Play(pSource3D, pLayer, fPriority);
-                }
-                pSource3D->SetProperties(0);
+                pFireForget->Play(pSource3D, pLayer, fPriority);
             }
-            pNode = pNode->mNext;
-        } while (pNode != &pList->mHead);
+            pSource3D->SetProperties(0);
+        }
     }
 }
 
@@ -492,7 +480,7 @@ void SoundLayered::SetProperties(const Properties* pProps, SoundLayer* (__cdecl*
     for (PblListSingle::Itor it(pProps->mLayerList); it.GetNode() != pProps->mLayerList.GetTerminator(); ++it)
     {
         const Properties::Layer* pLayer =
-            (const Properties::Layer*)((char*)it.GetNode() - offsetof(Properties::Layer, mNode));
+            (const Properties::Layer*)it.GetNode()->GetObjectA(&pProps->mLayerList, offsetof(Properties::Layer, mNode));
         SoundLayer* pSound = pLayerCreate();
         if (!pSound)
         {

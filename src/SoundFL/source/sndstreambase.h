@@ -118,7 +118,7 @@ public:
         for (PblListSingle::Node* pLink = smInfoList.mHead.mNext; pLink != &smInfoList.mHead;
              pLink = pLink->mNext)
         {
-            Info* pInfo = (Info*)((char*)pLink - offsetof(Info, mNode));
+            Info* pInfo = (Info*)pLink->GetObjectA(&smInfoList, offsetof(Info, mNode));
             if (pInfo->mHashID == uiHashID)
             {
                 return pInfo;
@@ -144,7 +144,7 @@ protected:
         for (PblListSingle::Node* pLink = smInfoList.mHead.mNext; pLink != &smInfoList.mHead;
              pLink = pLink->mNext)
         {
-            Info* pInfo = (Info*)((char*)pLink - offsetof(Info, mNode));
+            Info* pInfo = (Info*)pLink->GetObjectA(&smInfoList, offsetof(Info, mNode));
             if (!pInfo->mOverrideManager)
             {
                 pInfo->mStreamManager.Update(fDeltaTime);

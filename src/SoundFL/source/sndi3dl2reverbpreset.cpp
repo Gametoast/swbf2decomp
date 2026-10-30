@@ -95,11 +95,11 @@ namespace Snd
 // FUNCTION: SWBF2 0x00744e30
 void __cdecl I3DL2ReverbPreset::DestroyAll()
 {
-    for (PblListSingle::Node* pNode = smList.mHead.mNext; pNode != &smList.mHead;)
+    for (PblListSingle::Itor itor(smList); itor.GetNode() != smList.GetTerminator();)
     {
-        I3DL2ReverbPreset* const pPreset =
-            (I3DL2ReverbPreset*)((char*)pNode - offsetof(I3DL2ReverbPreset, mNode));
-        pNode = pNode->mNext;
+        I3DL2ReverbPreset* const pPreset = (I3DL2ReverbPreset*)itor.GetNode()->GetObjectA(
+            &smList, offsetof(I3DL2ReverbPreset, mNode));
+        ++itor;
         delete pPreset;
     }
 }

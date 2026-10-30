@@ -11,10 +11,11 @@ namespace Snd
 // FUNCTION: SWBF2 0x00748900
 VoiceBase* VoiceVirtualManager::GetFreeVoice()
 {
-    for (PblListSingle::Node* pLink = mVoiceList.mHead.mNext; pLink != &mVoiceList.mHead;
-         pLink = pLink->mNext)
+    for (PblListSingle::Itor itor(mVoiceList);
+         itor.GetNode() != mVoiceList.GetTerminator(); ++itor)
     {
-        VoiceBase* pVoice = (VoiceBase*)((char*)pLink - offsetof(VoiceBase, mNode));
+        VoiceBase* const pVoice = (VoiceBase*)itor.GetNode()->GetObjectA(
+            &mVoiceList, offsetof(VoiceBase, mNode));
         if (!pVoice->GetLocked())
         {
             return pVoice;

@@ -1,20 +1,20 @@
-#include <emmintrin.h>
 #include <string.h>
 
 #include "sndgsm.h"
 
-extern int __cdecl gsm_decode(const __m128i* state, unsigned char* frame, short* samples);
+struct gsm_state;
+extern "C" int __cdecl gsm_decode(gsm_state* state, unsigned char* frame, short* samples);
 extern "C" void __cdecl gsm_encode(char* pGsm, short* pFrame, unsigned char* pOut);
 
 namespace Snd
 {
 
-extern "C" void __cdecl gsm_option(void* pGsm, int iOption, int* pValue);
+extern "C" int __cdecl gsm_option(void* pGsm, int iOption, int* pValue);
 
 // FUNCTION: SWBF2 0x0074bca0
 void GSM::Decode(unsigned char (*pFrame)[33], short (*pSamples)[160])
 {
-    ::gsm_decode((const __m128i*)this, *pFrame, *pSamples);
+    ::gsm_decode((gsm_state*)this, *pFrame, *pSamples);
 }
 
 // FUNCTION: SWBF2 0x0074bcc0

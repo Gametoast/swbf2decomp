@@ -143,7 +143,8 @@ Bus* Bus::FindSubBusByHashID(unsigned int uiHashID)
     for (PblListSingle::Node* pNode = mSubBusList.mHead.mNext;
          pNode != &mSubBusList.mHead; pNode = pNode->mNext)
     {
-        Bus* const pFound = BusFromNode(pNode)->FindSubBusByHashID(uiHashID);
+        Bus* const pSub = (Bus*)pNode->GetObjectA(&mSubBusList, offsetof(Bus, mNode));
+        Bus* const pFound = pSub->FindSubBusByHashID(uiHashID);
         if (pFound)
         {
             return pFound;

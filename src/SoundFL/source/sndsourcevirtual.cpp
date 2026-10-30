@@ -35,16 +35,16 @@ namespace Snd
 float SourceVirtual::CalculatePriority(unsigned char ePlayState, float fArg, bool bLooping,
                                        float fBusGain) const
 {
-    if (ePlayState != SourceTransport::playState_playing)
+    if (ePlayState == SourceTransport::playState_playing)
     {
-        return 0.0f;
+        float fScale = 1.0f;
+        if (!bLooping)
+        {
+            fScale = (1.0f - fArg) * 0.0099999998f + 0.99000001f;
+        }
+        return ((1.0f - mBias) * fBusGain + mBias * mPriority) * fScale;
     }
-    float fScale = 1.0f;
-    if (!bLooping)
-    {
-        fScale = (1.0f - fArg) * 0.0099999998f + 0.99000001f;
-    }
-    return ((1.0f - mBias) * fBusGain + mBias * mPriority) * fScale;
+    return 0.0f;
 }
 }
 

@@ -21,7 +21,17 @@ class StreamGSMEncoder : public StreamCodec
 public:
     StreamGSMEncoder();
     virtual ~StreamGSMEncoder();
-    virtual StreamPacket* GetPacket(unsigned int uiOutput);
+    // FUNCTION: SWBF2 0x00741910
+    virtual StreamPacket* GetPacket(unsigned int uiOutput)
+    {
+        StreamPacket* const pPacket = StreamCodec::GetPacket(uiOutput);
+        if (pPacket != 0)
+        {
+            return pPacket;
+        }
+        Update();
+        return StreamCodec::GetPacket(uiOutput);
+    }
     void Update();
     void Flush();
     void SetPackets(unsigned int uiPacketSize, StreamPacket* pPackets,

@@ -138,11 +138,11 @@ Sample const* SampleBankBase::FindSampleByHashID(unsigned int uiHashID) const
 Sample const* __cdecl SampleBankBase::AllBanksFindSampleByHashID(unsigned int uiHashID,
                                                                  bool bIncludeTemplates)
 {
-    for (PblListSingle::Node* pNode = smSampleBankList.mHead.mNext;
-         pNode != &smSampleBankList.mHead; pNode = pNode->mNext)
+    for (PblListSingle::Itor itor(smSampleBankList);
+         itor.GetNode() != smSampleBankList.GetTerminator(); ++itor)
     {
-        SampleBankBase* const pBank =
-            (SampleBankBase*)((char*)pNode - offsetof(SampleBankBase, mNode));
+        SampleBankBase* const pBank = (SampleBankBase*)itor.GetNode()->GetObjectA(
+            &smSampleBankList, offsetof(SampleBankBase, mNode));
         if (pBank->mTemplate == 1 && !bIncludeTemplates)
         {
             continue;
@@ -477,7 +477,7 @@ void __cdecl SampleBankBase::DestroyAllBanks()
     while (!smSampleBankList.IsEmpty())
     {
         SampleBankBase* const pBank =
-            (SampleBankBase*)((char*)smSampleBankList.mHead.mNext - offsetof(SampleBankBase, mNode));
+            (SampleBankBase*)smSampleBankList.GetFirst()->GetObjectA(&smSampleBankList, offsetof(SampleBankBase, mNode));
         const AllocType eType = pBank->GetAllocType();
         delete pBank;
         if (eType == allocType_custom)

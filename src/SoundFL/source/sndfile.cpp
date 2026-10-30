@@ -230,11 +230,7 @@ void File::FileThread(void* pStartedSignal)
         smQueuedFileOpListLock.Wait();
 
         PblListDoubleSorted::Node* pNode = smQueuedFileOpList.GetFirst();
-        File* pFile = (File*)((char*)pNode - offsetof(File, mNode));
-        if (pNode == smQueuedFileOpList.GetTerminator())
-        {
-            pFile = 0;
-        }
+        File* const pFile = (File*)pNode->GetObjectA(&smQueuedFileOpList, offsetof(File, mNode));
         if (pFile)
         {
             pFile->mNode.mNode.Remove();

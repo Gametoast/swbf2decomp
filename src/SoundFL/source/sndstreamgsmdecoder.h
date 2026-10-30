@@ -18,7 +18,17 @@ public:
     StreamGSMDecoder();
 
     virtual ~StreamGSMDecoder() {}
-    virtual StreamPacket* GetPacket(unsigned int uiOutput);
+    // FUNCTION: SWBF2 0x0073d250
+    virtual StreamPacket* GetPacket(unsigned int uiOutput)
+    {
+        StreamPacket* const pPacket = StreamCodec::GetPacket(uiOutput);
+        if (pPacket != 0)
+        {
+            return pPacket;
+        }
+        Update();
+        return StreamCodec::GetPacket(uiOutput);
+    }
     void Flush();
     void Update();
     void SetPackets(unsigned int uiPacketSize, StreamPacket* pPackets,

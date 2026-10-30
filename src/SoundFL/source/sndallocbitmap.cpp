@@ -207,7 +207,7 @@ void AllocBitmap::Reserve(unsigned int uiStartEntry, unsigned int uiNumEntries, 
 // FUNCTION: SWBF2 0x007456c0
 bool AllocBitmap::Resize(unsigned int uiNumEntries, Handle& handle)
 {
-    const unsigned int uiOldEntries = handle.mNumEntries;
+    const Handle tempHandle = handle;
 
     Free(handle);
 
@@ -216,7 +216,7 @@ bool AllocBitmap::Resize(unsigned int uiNumEntries, Handle& handle)
         return true;
     }
 
-    Alloc(uiOldEntries, handle);
+    Alloc(tempHandle.GetNumAllocatedEntries(), handle);
     return false;
 }
 

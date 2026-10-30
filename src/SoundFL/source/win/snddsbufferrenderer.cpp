@@ -215,7 +215,7 @@ void DSBufferRenderer::StopBuffer()
     DSBuffer::Stop();
 
     if (!Engine::Succeeded(DSBuffer::GetBuffer()->SetCurrentPosition(0),
-                           "source\win\snddsbufferrenderer.cpp", 578))
+                           "source\\win\\snddsbufferrenderer.cpp", 578))
     {
         PblTraceP("DSBufferRenderer : unable to reset buffer play cursor\n");
 
@@ -760,7 +760,7 @@ void DSBufferRenderer::UpdateObject()
     unsigned long ulPlayPos;
     unsigned long ulWritePos;
     if (!Engine::Succeeded(pBuffer->GetCurrentPosition(&ulPlayPos, &ulWritePos),
-                           "source\win\snddsbufferrenderer.cpp", 268))
+                           "source\\win\\snddsbufferrenderer.cpp", 268))
     {
         return;
     }
@@ -959,7 +959,7 @@ bool DSBufferRenderer::SetFormat(SampleInfo::Format eFormat,
                 caps.dwSize = sizeof(DSBCAPS);
 
                 if (Engine::Succeeded(DSBuffer::GetBuffer()->GetCaps(&caps),
-                                      "source\win\snddsbufferrenderer.cpp", 884))
+                                      "source\\win\\snddsbufferrenderer.cpp", 884))
                 {
                     mBufferSize = caps.dwBufferBytes;
                     mFrameSize = SampleInfo::GetFrameSize(mFormat)

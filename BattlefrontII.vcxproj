@@ -3050,11 +3050,23 @@
     <ClCompile Include="src\SoundFL\source\sndstreamformat.cpp" />
     <ClCompile Include="src\SoundFL\source\sndstreamgsmdecoder.cpp" />
     <ClCompile Include="src\SoundFL\source\sndstreamgsmencoder.cpp" />
-    <ClCompile Include="src\SoundFL\source\gsm_encode.c">
+    <ClCompile Include="src\SoundFL\source\gsm-1.0.10\gsm_encode.c">
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <OmitDefaultLibName>true</OmitDefaultLibName>
     </ClCompile>
-    <ClCompile Include="src\SoundFL\source\gsm_option.c">
+    <ClCompile Include="src\SoundFL\source\gsm-1.0.10\long_term.c">
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <OmitDefaultLibName>true</OmitDefaultLibName>
+    </ClCompile>
+    <ClCompile Include="src\SoundFL\source\gsm-1.0.10\short_term.c">
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <OmitDefaultLibName>true</OmitDefaultLibName>
+    </ClCompile>
+    <ClCompile Include="src\SoundFL\source\gsm-1.0.10\gsm_decode.c">
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <OmitDefaultLibName>true</OmitDefaultLibName>
+    </ClCompile>
+    <ClCompile Include="src\SoundFL\source\gsm-1.0.10\gsm_option.c">
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <OmitDefaultLibName>true</OmitDefaultLibName>
     </ClCompile>
@@ -3777,6 +3789,7 @@
     <ClInclude Include="src\SoundFL\source\sndfreelist.h" />
     <ClInclude Include="src\SoundFL\source\sndglobals.h" />
     <ClInclude Include="src\SoundFL\source\sndgsm.h" />
+    <ClInclude Include="src\SoundFL\source\gsm-1.0.10\private.h" />
     <ClInclude Include="src\SoundFL\source\sndi3dl2reverb.h" />
     <ClInclude Include="src\SoundFL\source\sndi3dl2reverbpreset.h" />
     <ClInclude Include="src\SoundFL\source\sndlistenerbase.h" />

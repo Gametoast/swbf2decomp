@@ -73,29 +73,11 @@ StreamCaptureSource::~StreamCaptureSource()
     mDestructing = 1;
 }
 
-// FUNCTION: SWBF2 0x00741020
-void* __fastcall sub_741020(void* pCaptureSource, int, unsigned int uiFlags)
-{
-    char* const pThis = (char*)pCaptureSource;
+// SYNTHETIC: SWBF2 0x00741020
+// Snd::StreamCaptureSource::`scalar deleting destructor'
 
-    ((StreamCaptureSource*)pThis)
-        ->StreamCaptureSource::~StreamCaptureSource();
-
-    if ((uiFlags & 1) != 0)
-    {
-        ::operator delete(pThis);
-    }
-
-    return pThis;
-}
-
-// FUNCTION: SWBF2 0x0074100e
-void* __fastcall sub_74100E(void* pObject, int, unsigned int uiFlags)
-{
-    StreamCaptureSource* const pSource = static_cast<StreamCaptureSource*>(
-        static_cast<ThreadUpdate::Object*>(pObject));
-    return sub_741020(pSource, 0, uiFlags);
-}
+// SYNTHETIC: SWBF2 0x0074100e SYMBOL
+// ??_EStreamCaptureSource@Snd@@WCA@AEPAXI@Z
 
 // FUNCTION: SWBF2 0x00741050
 void StreamCaptureSource::Close()

@@ -115,10 +115,10 @@ namespace Snd
 // FUNCTION: SWBF2 0x0074b7f0
 ObjectWeightList::~ObjectWeightList()
 {
-    for (PblListSingle::Node* pNode = mHead.mNext; pNode != &mHead;)
+    for (PblListSingle::Itor itor(this); itor.GetNode() != GetTerminator();)
     {
-        ObjectWeight* const pWeight = (ObjectWeight*)((char*)pNode - offsetof(ObjectWeight, mNode));
-        pNode = pNode->mNext;
+        ObjectWeight* const pWeight = (ObjectWeight*)itor.GetNode()->GetObjectA(this, offsetof(ObjectWeight, mNode));
+        ++itor;
         delete pWeight;
     }
 }
@@ -180,10 +180,10 @@ const ObjectWeight* ObjectWeightList::GetObjectNode(const ObjectWeight* const pE
     const float fRandom = sndRandom.GetFloat();
     const ObjectWeight* pPrev = 0;
     const ObjectWeight* pWeight = 0;
-    for (const PblListSingle::Node* pNode = mHead.mNext; pNode != &mHead; pNode = pNode->mNext)
+    for (PblListSingle::Itor itor(this); itor.GetNode() != GetTerminator(); ++itor)
     {
         pPrev = pWeight;
-        pWeight = pNode == &mHead ? 0 : reinterpret_cast<const ObjectWeight*>(reinterpret_cast<const char*>(pNode) - offsetof(ObjectWeight, mNode));
+        pWeight = (const ObjectWeight*)itor.GetNode()->GetObjectA(this, offsetof(ObjectWeight, mNode));
         if (fRandom >= pWeight->mPlayProbability && pWeight != pExclude)
         {
             return pWeight;

@@ -63,11 +63,9 @@ void StreamMixer::SetLastPacketInfo(bool b)
 // FUNCTION: SWBF2 0x0073fcb0
 void StreamMixer::SetMixBuffer(int* const pBuffer)
 {
-    const unsigned int uiSize = (GetPacketSize() >> 1) << 2;
-
     mMixBuffer = pBuffer;
-    mMixBufferSize = uiSize;
-    memset(pBuffer, 0, uiSize);
+    mMixBufferSize = (GetPacketSize() >> 1) * sizeof(*pBuffer);
+    memset(mMixBuffer, 0, mMixBufferSize);
     mMixBufferDataSize = 0;
 }
 
@@ -81,7 +79,7 @@ void StreamMixer::SetPacketArray(StreamPacketIO* const pIO,
     mInputPackets = pIO;
     mMixBufferOffsets = puOffsets;
 
-    if (puOffsets == 0 || uiNumInputs == 0)
+    if (puOffsets == 0)
     {
         return;
     }
@@ -713,8 +711,10 @@ namespace Snd
 void StreamMixer::SetGain(unsigned int uiInput, unsigned int uiChannel,
                           float fGain, bool bImmediate)
 {
+    const unsigned char ucOutputChannels = mOutputChannels;
     const unsigned int uiTarget =
-        StreamNodeSinkNInput::GetNumInputs() * mOutputChannels + uiInput * mOutputChannels + uiChannel;
+        StreamNodeSinkNInput::GetNumInputs() * ucOutputChannels
+        + uiInput * ucOutputChannels + uiChannel;
     int iGain;
     if (fGain > 0.0f)
     {

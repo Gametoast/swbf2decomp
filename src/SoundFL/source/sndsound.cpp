@@ -224,7 +224,7 @@ void __cdecl Sound::RemoveAll()
 {
     while (!smSoundList.IsEmpty())
     {
-        Sound* const pSound = (Sound*)((char*)smSoundList.mHead.mNext - offsetof(Sound, mNode));
+        Sound* const pSound = (Sound*)smSoundList.GetFirst()->GetObjectA(&smSoundList, offsetof(Sound, mNode));
         pSound->VoiceVirtual::RemoveAll();
         pSound->SourceBus::Stop(pSound);
         pSound->VoiceVirtual::Stop();
@@ -256,17 +256,15 @@ extern PblRandom sndRandom;
 VoiceVirtual* __cdecl Sound::GetFreeVoice(VoiceVirtualManager* pManager)
 {
     const PblListDoubleSorted* const pList = &pManager->mInactiveList;
-    for (PblListDoubleSorted::Itor itor(pList);
-         itor.GetNode(pList) != pList->GetTerminator(); ++itor)
+    for (PblListDoubleSorted::Itor itor(pList); ; ++itor)
     {
-        VoiceVirtual* pVoice = (VoiceVirtual*)itor.GetNode(pList)->GetObjectA(
+        VoiceVirtual* const pVoice = (VoiceVirtual*)itor.GetNode(pList)->GetObjectA(
             pList, offsetof(VoiceVirtual, mNode));
-        if (pVoice->GetCustomFlags() == (unsigned int)smVoiceVirtuals)
+        if (pVoice == 0 || pVoice->GetCustomFlags() == (unsigned int)smVoiceVirtuals)
         {
             return pVoice;
         }
     }
-    return 0;
 }
 
 // FUNCTION: SWBF2 0x0073acf0
@@ -536,7 +534,8 @@ VoiceVirtual* __cdecl Sound::VoiceVirtualHandleToVoiceVirtual(unsigned short uHa
 // FUNCTION: SWBF2 0x0073afb0
 unsigned short __cdecl Sound::VoiceVirtualToVoiceVirtualHandle(const VoiceVirtual* const pVoice)
 {
-    return (unsigned short)(static_cast<const FireForget*>(pVoice) - smVoiceVirtuals + 1);
+    return (unsigned short)(((unsigned int)pVoice - (unsigned int)smVoiceVirtuals)
+                            / sizeof(*smVoiceVirtuals) + 1);
 }
 
 // FUNCTION: SWBF2 0x0073a2f0
@@ -703,7 +702,7 @@ void __cdecl Sound::Properties::DestroyAll()
 {
     while (!smPropertyList.IsEmpty())
     {
-        delete (Properties*)((char*)smPropertyList.mHead.mNext - offsetof(Properties, mNode));
+        delete (Properties*)smPropertyList.GetFirst()->GetObjectA(&smPropertyList, offsetof(Properties, mNode));
     }
 }
 }

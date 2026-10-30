@@ -145,12 +145,8 @@ void __cdecl ParameterGraph::DestroyAll()
 {
     while (!smParameterGraphs.IsEmpty())
     {
-        ParameterGraph* const pGraph = reinterpret_cast<ParameterGraph*>(reinterpret_cast<char*>(smParameterGraphs.mHead.mNext) - offsetof(ParameterGraph, mNode));
-        if (pGraph)
-        {
-            pGraph->~ParameterGraph();
-            smFreeList.Free(pGraph);
-        }
+        delete (ParameterGraph*)smParameterGraphs.GetFirst()->GetObjectA(
+            &smParameterGraphs, offsetof(ParameterGraph, mNode));
     }
 }
 }

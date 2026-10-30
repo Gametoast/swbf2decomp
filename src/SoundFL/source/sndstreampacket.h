@@ -55,6 +55,18 @@ struct StreamPacket
 
     bool GetDiscontinuity() const { return ((mFlags >> 1) & 1) != 0; }
 
+    void SetLast(bool bLast)
+    {
+        if (bLast)
+        {
+            mFlags |= 1;
+        }
+        else
+        {
+            mFlags &= 0xFFFE;
+        }
+    }
+
     void SetDiscontinuity(bool bDiscontinuity);
 
     unsigned int mPos;

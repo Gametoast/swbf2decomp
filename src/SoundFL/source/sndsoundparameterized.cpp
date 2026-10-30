@@ -10,6 +10,16 @@
 namespace Snd
 {
 
+// SYNTHETIC: SWBF2 0x0040b7f0
+// `dynamic initializer for 'Snd::SoundParameterized::Layer::smFreeList''
+// SYNTHETIC: SWBF2 0x0076a250
+// `dynamic atexit destructor for 'Snd::SoundParameterized::Layer::smFreeList''
+
+// GLOBAL: SWBF2 0x007e3504
+// SoundParameterized::Layer::smFreeList
+FreeList SoundParameterized::Layer::smFreeList(0x100, 1, true, 0xa0);
+
+
 // SYNTHETIC: SWBF2 0x0040b810
 // `dynamic initializer for 'Snd::SoundParameterized::Controller::Properties::smFreeList''
 // SYNTHETIC: SWBF2 0x0076a260
@@ -172,17 +182,17 @@ void __cdecl SoundParameterized::Properties::Load(PblFileChunk& chunk, bool bOnc
 // FUNCTION: SWBF2 0x00735df0
 bool SoundParameterized::Properties::QueryParameter(unsigned int uiParameterID) const
 {
-    for (const PblListSingle::Node* pLayerNode = mLayerList.mHead.mNext;
-         pLayerNode != &mLayerList.mHead; pLayerNode = pLayerNode->mNext)
+    for (PblListSingle::Itor layerItor(mLayerList);
+         layerItor.GetNode() != mLayerList.GetTerminator(); ++layerItor)
     {
         const Layer::Properties* pLayer =
-            (const Layer::Properties*)((const char*)pLayerNode - offsetof(Layer::Properties, mNode));
-        for (const PblListSingle::Node* pNode = pLayer->mControllerPropertyList.mHead.mNext;
-             pNode != &pLayer->mControllerPropertyList.mHead; pNode = pNode->mNext)
+            (const Layer::Properties*)layerItor.GetNode()->GetObjectA(&mLayerList, offsetof(Layer::Properties, mNode));
+        for (PblListSingle::Itor controllerItor(pLayer->mControllerPropertyList);
+             controllerItor.GetNode() != pLayer->mControllerPropertyList.GetTerminator(); ++controllerItor)
         {
             const Controller::Properties* pController =
-                (const Controller::Properties*)((const char*)pNode
-                                                - offsetof(Controller::Properties, mNode));
+                (const Controller::Properties*)controllerItor.GetNode()->GetObjectA(
+                    &pLayer->mControllerPropertyList, offsetof(Controller::Properties, mNode));
             if (pController->mInputParameterID == uiParameterID)
             {
                 return true;
@@ -275,11 +285,12 @@ void __cdecl SoundParameterized::RemoveAll()
 // FUNCTION: SWBF2 0x007360c0
 void SoundParameterized::ResetParameters()
 {
-    for (const PblListSingle::Node* pNode = mProperties->mLayerList.mHead.mNext;
-         pNode != &mProperties->mLayerList.mHead; pNode = pNode->mNext)
+    const PblListSingle& layerList = mProperties->mLayerList;
+    for (PblListSingle::Itor itor(layerList);
+         itor.GetNode() != layerList.GetTerminator(); ++itor)
     {
         const Layer::Properties* pLayerProps =
-            (const Layer::Properties*)((const char*)pNode - offsetof(Layer::Properties, mNode));
+            (const Layer::Properties*)itor.GetNode()->GetObjectA(&layerList, offsetof(Layer::Properties, mNode));
         Layer* pLayer = static_cast<Layer*>(FindLayerByHashID(pLayerProps->mHashID));
         if (pLayer)
         {
@@ -291,17 +302,19 @@ void SoundParameterized::ResetParameters()
 // FUNCTION: SWBF2 0x00736120
 void SoundParameterized::SetParameter(unsigned int uiParameterID, float fValue, bool bScale)
 {
-    for (const PblListSingle::Node* pLayerNode = mProperties->mLayerList.mHead.mNext;
-         pLayerNode != &mProperties->mLayerList.mHead; pLayerNode = pLayerNode->mNext)
+    const PblListSingle& layerList = mProperties->mLayerList;
+    for (PblListSingle::Itor layerItor(layerList);
+         layerItor.GetNode() != layerList.GetTerminator(); ++layerItor)
     {
         const Layer::Properties* pLayerProps =
-            (const Layer::Properties*)((const char*)pLayerNode - offsetof(Layer::Properties, mNode));
-        for (const PblListSingle::Node* pNode = pLayerProps->mControllerPropertyList.mHead.mNext;
-             pNode != &pLayerProps->mControllerPropertyList.mHead; pNode = pNode->mNext)
+            (const Layer::Properties*)layerItor.GetNode()->GetObjectA(&layerList, offsetof(Layer::Properties, mNode));
+        const PblListSingle& controlList = pLayerProps->mControllerPropertyList;
+        for (PblListSingle::Itor controlItor(controlList);
+             controlItor.GetNode() != controlList.GetTerminator(); ++controlItor)
         {
             const Controller::Properties* pController =
-                (const Controller::Properties*)((const char*)pNode
-                                                - offsetof(Controller::Properties, mNode));
+                (const Controller::Properties*)controlItor.GetNode()->GetObjectA(
+                    &controlList, offsetof(Controller::Properties, mNode));
             if (pController->mInputParameterID != uiParameterID)
             {
                 continue;
@@ -372,32 +385,53 @@ void SoundParameterized::Update(float fDeltaTime)
         SetParameter(0x5D3C9BE4u, mTimeElapsed, false);
     }
 
-    for (const PblListSingle::Node* pNode = mProperties->mLayerList.mHead.mNext;
-         pNode != &mProperties->mLayerList.mHead; pNode = pNode->mNext)
+    const PblListSingle& layerList = mProperties->mLayerList;
+    for (PblListSingle::Itor itor(layerList);
+         itor.GetNode() != layerList.GetTerminator(); ++itor)
     {
         const Layer::Properties* pLayerProps =
-            (const Layer::Properties*)((const char*)pNode - offsetof(Layer::Properties, mNode));
+            (const Layer::Properties*)itor.GetNode()->GetObjectA(&layerList, offsetof(Layer::Properties, mNode));
         Layer* pLayer = static_cast<Layer*>(FindLayerByHashID(pLayerProps->mHashID));
         if (!pLayer)
         {
             continue;
         }
 
-        const Sound::Properties* pProps = pLayer->mProperties;
-        const float* pValues = pLayer->mParameterValues;
-        pLayer->SetGain(Clamp(pProps->mGain * pValues[0], 0.0f, 1.0f));
-        pLayer->SetPitch(Clamp(pProps->mPitch * pValues[1], 0.1f, FLT_MAX));
-        pLayer->SetReverbGain(Clamp(pProps->mReverbGain * pValues[2], 0.0f, FLT_MAX));
-        pLayer->SetPan(Clamp(pProps->mPan * pValues[3], -1.0f, 1.0f));
-        const float fMinDistance = Clamp(pProps->mMinDistance * pValues[4], 0.0f, FLT_MAX);
+        pLayer->SetGain(Clamp(pLayer->mProperties->mGain * pLayer->mParameterValues[0], 0.0f, 1.0f));
+        pLayer->SetPitch(Clamp(pLayer->mProperties->mPitch * pLayer->mParameterValues[1], 0.1f, FLT_MAX));
+        pLayer->SetReverbGain(Clamp(pLayer->mProperties->mReverbGain * pLayer->mParameterValues[2], 0.0f, FLT_MAX));
+        pLayer->SetPan(Clamp(pLayer->mProperties->mPan * pLayer->mParameterValues[3], -1.0f, 1.0f));
+        const float fMinDistance = Clamp(pLayer->mProperties->mMinDistance * pLayer->mParameterValues[4], 0.0f, FLT_MAX);
         pLayer->SetMinDistance(fMinDistance);
-        const float fMuteDistance = Clamp(pProps->mMuteDistance * pValues[5], fMinDistance, FLT_MAX);
+        const float fMuteDistance = Clamp(pLayer->mProperties->mMuteDistance * pLayer->mParameterValues[5], fMinDistance, FLT_MAX);
         pLayer->SetMuteDistance(fMuteDistance);
-        pLayer->SetMaxDistance(Clamp(pProps->mMaxDistance * pValues[6], fMuteDistance, FLT_MAX));
-        pLayer->SetRollOff(Clamp(pProps->mRollOffFactor * pValues[7], 0.0f, FLT_MAX));
-        pLayer->SetRollIn(Clamp(pProps->mRollInFactor * pValues[9], 0.0f, FLT_MAX));
-        pLayer->SetRollInDistance(Clamp(pProps->mRollInDistance * pValues[10], 0.0f, FLT_MAX));
+        pLayer->SetMaxDistance(Clamp(pLayer->mProperties->mMaxDistance * pLayer->mParameterValues[6], fMuteDistance, FLT_MAX));
+        pLayer->SetRollOff(Clamp(pLayer->mProperties->mRollOffFactor * pLayer->mParameterValues[7], 0.0f, FLT_MAX));
+        pLayer->SetRollIn(Clamp(pLayer->mProperties->mRollInFactor * pLayer->mParameterValues[9], 0.0f, FLT_MAX));
+        pLayer->SetRollInDistance(Clamp(pLayer->mProperties->mRollInDistance * pLayer->mParameterValues[10], 0.0f, FLT_MAX));
     }
 }
 
+}
+
+namespace Snd
+{
+// FUNCTION: SWBF2 0x00735b00
+void SoundParameterized::Alloc()
+{
+    unsigned int uiBlocks = 0;
+    for (const PblListSingle::Node* pNode = Layer::smFreeList.mBlockList.mHead.mNext;
+         pNode != &Layer::smFreeList.mBlockList.mHead;
+         pNode = pNode->mNext)
+    {
+        ++uiBlocks;
+    }
+
+    if (uiBlocks == 0)
+    {
+
+        Layer::smFreeList.AllocBlocks(1, 0);
+        Layer::smFreeList.mFlags |= FreeList::flags_locked;
+    }
+}
 }

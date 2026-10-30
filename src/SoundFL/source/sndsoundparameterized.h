@@ -118,6 +118,7 @@ public:
     static void __cdecl RemoveAll();
 
     static void __cdecl UpdateAll(float fDeltaTime);
+    static void __cdecl Alloc();
     static void __cdecl Free();
     static SoundLayer* __cdecl LayerCreate();
     static void __cdecl LayerDestroy(SoundLayer* pLayer);

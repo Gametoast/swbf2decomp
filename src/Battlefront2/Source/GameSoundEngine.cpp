@@ -260,14 +260,6 @@ bool Init(unsigned int uiFlags, bool bEnable)
 
 }
 
-// SYNTHETIC: SWBF2 0x0040b7f0
-// `dynamic initializer for 'Snd::SoundParameterized::Layer::smFreeList''
-// SYNTHETIC: SWBF2 0x0076a250
-// `dynamic atexit destructor for 'Snd::SoundParameterized::Layer::smFreeList''
-
-// GLOBAL: SWBF2 0x007e3504
-// Snd::SoundParameterized::Layer::smFreeList
-Snd::FreeList Snd::SoundParameterized::Layer::smFreeList(0x100, 1, true, 0xa0);
 
 namespace GameSoundEngine
 {
@@ -285,20 +277,7 @@ void Create()
 
     Snd::SoundStream::Init();
 
-    unsigned int uiBlocks = 0;
-    for (const PblListSingle::Node* pNode = Snd::SoundParameterized::Layer::smFreeList.mBlockList.mHead.mNext;
-         pNode != &Snd::SoundParameterized::Layer::smFreeList.mBlockList.mHead;
-         pNode = pNode->mNext)
-    {
-        ++uiBlocks;
-    }
-
-    if (uiBlocks == 0)
-    {
-
-        Snd::SoundParameterized::Layer::smFreeList.AllocBlocks(1, 0);
-        Snd::SoundParameterized::Layer::smFreeList.mFlags |= 2;
-    }
+    Snd::SoundParameterized::Alloc();
 }
 
 }
