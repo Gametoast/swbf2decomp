@@ -1,4 +1,3 @@
-#include <new>
 #include <stdlib.h>
 
 #include "sndstreamagc.h"

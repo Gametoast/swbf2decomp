@@ -2277,6 +2277,9 @@
     <ClCompile Include="src\Zephyr\Source\ZephyrEvent.cpp">
       <Filter>src\Zephyr\Source</Filter>
     </ClCompile>
+    <ClCompile Include="src\Zephyr\Source\ZephyrFile.cpp">
+      <Filter>src\Zephyr\Source</Filter>
+    </ClCompile>
     <ClCompile Include="src\Zephyr\Source\ZephyrPoseDyn.cpp">
       <Filter>src\Zephyr\Source</Filter>
     </ClCompile>

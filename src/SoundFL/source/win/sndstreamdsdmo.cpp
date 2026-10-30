@@ -1,6 +1,5 @@
 #include <windows.h>
 #include <string.h>
-#include <new>
 
 #include "sndstreamdsdmo.h"
 

@@ -1,4 +1,3 @@
-#include <new>
 #include <string.h>
 
 #include "SoundFL/source/sndglobals.h"

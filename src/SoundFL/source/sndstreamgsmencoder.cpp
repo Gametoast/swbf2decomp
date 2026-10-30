@@ -1,4 +1,3 @@
-#include <new>
 #include <assert.h>
 #include <stddef.h>
 #include <string.h>

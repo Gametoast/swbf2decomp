@@ -1,4 +1,3 @@
-#include <new>
 
 #include "snddsp.h"
 #include "sndqueue.h"

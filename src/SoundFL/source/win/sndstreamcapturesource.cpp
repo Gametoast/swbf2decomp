@@ -6,7 +6,6 @@
 #include <windows.h>
 #include <dsound.h>
 
-#include <new>
 #include <stdlib.h>
 #include <string.h>
 
