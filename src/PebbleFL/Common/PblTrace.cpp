@@ -4,6 +4,7 @@
 #include <stdarg.h>
 #include <stdio.h>
 
+// GLOBAL: SWBF2 0x009ceff0
 char lastTraceMessage[1024];
 
 // FUNCTION: SWBF2 0x0072b3a0

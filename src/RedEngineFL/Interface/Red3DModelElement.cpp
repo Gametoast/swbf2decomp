@@ -14,7 +14,7 @@ void __cdecl PblTraceP(const char* Format, ...);
 namespace
 {
 
-PblQuaternion AxisAngle(const PblVector3& vAxis, float fAngle)
+inline PblQuaternion AxisAngle(const PblVector3& vAxis, float fAngle)
 {
     const float fLen2 = vAxis.x * vAxis.x + vAxis.y * vAxis.y + vAxis.z * vAxis.z;
     if ((float)fabs(fLen2 - 1.0) > 0.0001f)
@@ -39,12 +39,12 @@ Red3DModelElement::Red3DModelElement()
     m_bHavePoseMatrix = false;
     m_bLightingEnabled = false;
     m_uiModelHash = 0;
-    m_Model = 0;
     m_scale = 1.0f;
-    m_OmegaY = 0.0f;
-    m_Yaw = 0.0f;
     m_uiHardpointHash = 0;
     m_AttachedObj = 0;
+    m_Model = 0;
+    m_OmegaY = 0.0f;
+    m_Yaw = 0.0f;
     m_translation = PblVector3(0.0f, 0.0f, 0.0f);
     m_rotation = AxisAngle(PblVector3(0.0f, 0.0f, 1.0f), 0.0f);
     m_bApplyRotationScale = true;
@@ -93,9 +93,9 @@ void Red3DModelElement::RenderUsingContext(const PblMatrix& mContext,
 
     if (m_bApplyRotationScale)
     {
-        PblQuaternion qRotation;
+        D3DXQUATERNION qRotation;
         PblMatrix mLocal;
-        D3DXMatrixRotationQuaternion(reinterpret_cast<D3DXMATRIX*>(&mLocal), D3DXQuaternionNormalize(reinterpret_cast<D3DXQUATERNION*>(&qRotation), reinterpret_cast<const D3DXQUATERNION*>(&m_rotation)));
+        D3DXMatrixRotationQuaternion(reinterpret_cast<D3DXMATRIX*>(&mLocal), D3DXQuaternionNormalize(&qRotation, reinterpret_cast<const D3DXQUATERNION*>(&m_rotation)));
         mLocal.m[3][0] = m_translation.x;
         mLocal.m[3][1] = m_translation.y;
         mLocal.m[3][2] = m_translation.z;
@@ -139,8 +139,8 @@ void Red3DModelElement::SetDrawMatrix(const PblMatrix& mDraw)
 // FUNCTION: SWBF2 0x006daf20
 void Red3DModelElement::SetPosedMatrix(const PblMatrix& mPosed)
 {
-    m_bHavePoseMatrix = true;
     m_PosedMatrix = mPosed;
+    m_bHavePoseMatrix = true;
 }
 
 // FUNCTION: SWBF2 0x006da6d0
@@ -157,12 +157,12 @@ Red3DModelElement::Red3DModelElement(const char* pcName)
     m_bHavePoseMatrix = false;
     m_bLightingEnabled = false;
     m_uiModelHash = 0;
-    m_Model = 0;
     m_scale = 1.0f;
-    m_OmegaY = 0.0f;
-    m_Yaw = 0.0f;
     m_uiHardpointHash = 0;
     m_AttachedObj = 0;
+    m_Model = 0;
+    m_OmegaY = 0.0f;
+    m_Yaw = 0.0f;
     m_translation = PblVector3(0.0f, 0.0f, 0.0f);
     m_rotation = AxisAngle(PblVector3(0.0f, 0.0f, 1.0f), 0.0f);
     m_bApplyRotationScale = true;

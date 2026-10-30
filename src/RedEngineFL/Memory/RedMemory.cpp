@@ -81,7 +81,7 @@ namespace RedMemory
     unsigned int failSize;
 }
 
-extern "C" void Startup_RedInitHeap();
+extern "C" void Startup_RedInitHeap(int, int);
 
 void TagAddList(TagList* list, Tag* tag);
 void TagMergeIntoList(TagList* list, Tag* tag);
@@ -122,7 +122,7 @@ void* RedAllocFromHeapInternal(int heap, unsigned int size, bool bTop)
 {
     if (!isHeapObjInitialized)
     {
-        Startup_RedInitHeap();
+        Startup_RedInitHeap(0x80, 0x80);
     }
     if (heap < 0 || heap >= maxheaps)
     {
@@ -130,9 +130,14 @@ void* RedAllocFromHeapInternal(int heap, unsigned int size, bool bTop)
     }
 
     HeapObj& h = heapobj[heap];
-    unsigned int mask = ~(h.align - 1);
-    unsigned int hdr = (h.align + sizeof(Tag) - 1) & mask;
-    unsigned int need = ((size ? size : 1) + h.align - 1 + hdr) & mask;
+    unsigned int align = h.align;
+    unsigned int mask = ~(align - 1);
+    unsigned int hdr = (align + sizeof(Tag) - 1) & mask;
+    if (size == 0)
+    {
+        size = 1;
+    }
+    unsigned int need = (size + align - 1 + hdr) & mask;
 
     Tag* tag;
     if (bTop)
@@ -291,8 +296,8 @@ void TagMergeIntoList(TagList* list, Tag* tag)
         prev->next_ = tag;
         if ((char*)prev + prev->size == (char*)tag)
         {
-            prev->next_ = next;
             prev->size += tag->size;
+            prev->next_ = next;
             if (next)
             {
                 next->prev_ = prev;
@@ -328,8 +333,8 @@ void TagRemoveList(TagList* list, Tag* tag)
     {
         list->first = tag->next_;
     }
-    tag->next_ = 0;
     tag->prev_ = 0;
+    tag->next_ = 0;
 }
 
 // FUNCTION: SWBF2 0x006c38d0
@@ -410,7 +415,8 @@ void RedFreeToHeap(int heap, void* block, unsigned int flags)
     {
         return;
     }
-    for (int i = 0; i < maxheaps; ++i)
+    int numHeaps = maxheaps;
+    for (int i = 0; i < numHeaps; ++i)
     {
         if (RedFreeToHeapInternal(i, block, flags))
         {
@@ -425,11 +431,12 @@ void* RedInitHeap(void* start, void* end, int maxheaps)
 {
     (void)end;
     ::maxheaps = maxheaps;
-    heapobj = (HeapObj*)(((unsigned int)start + 3) & ~3);
-    char* pNext = (char*)(((unsigned int)heapobj + maxheaps * sizeof(HeapObj) + 3) & ~3);
+    HeapObj* heaps = (HeapObj*)(((unsigned int)start + 3) & ~3);
+    heapobj = heaps;
+    char* pNext = (char*)(((unsigned int)heaps + maxheaps * sizeof(HeapObj) + 3) & ~3);
     for (int i = 0; i < maxheaps; ++i)
     {
-        HeapObj& h = heapobj[i];
+        HeapObj& h = heaps[i];
         h.start = 0;
         h.free.first = 0;
         h.free.last = 0;
@@ -483,21 +490,27 @@ unsigned int RedGetHeapSize(int heap)
 // FUNCTION: SWBF2 0x006c3b40
 bool RedMoveHeapEnd(int iHeap, int iDelta)
 {
-    int iSource = iDelta < 0 ? iHeap + 1 : iHeap;
-    int iTarget = iDelta < 0 ? iHeap : iHeap + 1;
-    unsigned int uAmount = iDelta < 0 ? -iDelta : iDelta;
-    unsigned int uTargetAlign = heapobj[iTarget].align;
-    unsigned int uTagSize = (uTargetAlign + sizeof(Tag) - 1) & ~(uTargetAlign - 1);
-    int align = heapobj[iSource].align;
-    int targetAlign = uTargetAlign;
-    align = Max(align, targetAlign);
+    int iSource = iHeap;
+    int iTarget = iHeap + 1;
+    unsigned int uAmount = iDelta;
+    if (iDelta < 0)
+    {
+        iSource = iHeap + 1;
+        iTarget = iHeap;
+        uAmount = -iDelta;
+    }
+    int sourceAlign = heapobj[iSource].align;
+    int targetAlign = heapobj[iTarget].align;
+    unsigned int uTagSize = (targetAlign + sizeof(Tag) - 1) & ~(targetAlign - 1);
+    int align = Max(sourceAlign, targetAlign);
     unsigned int uAllocation = (uAmount & ~(align - 1)) - uTagSize;
     void* pBlock = RedAllocFromHeapInternal(iTarget, uAllocation, iDelta < 0);
+    HeapObj* heaps = heapobj;
     Tag* pTag = (Tag*)((char*)pBlock - uTagSize);
-    heapobj[iHeap].size += iDelta;
-    heapobj[iHeap + 1].start = (char*)heapobj[iHeap + 1].start + iDelta;
-    heapobj[iHeap + 1].size -= iDelta;
-    TagRemoveList(&heapobj[iTarget].used, pTag);
-    TagAddList(&heapobj[iSource].used, pTag);
+    heaps[iHeap].size += iDelta;
+    heaps[iHeap + 1].start = (char*)heaps[iHeap + 1].start + iDelta;
+    heaps[iHeap + 1].size -= iDelta;
+    TagRemoveList(&heaps[iTarget].used, pTag);
+    TagAddList(&heaps[iSource].used, pTag);
     return RedFreeToHeapInternal(iSource, pBlock, 0);
 }

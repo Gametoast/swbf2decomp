@@ -162,7 +162,7 @@ void Startup_DebugHeap()
 
 // FUNCTION: SWBF2 0x00617200
 
-extern "C" void Startup_RedInitHeap()
+extern "C" void Startup_RedInitHeap(int, int)
 {
     Startup_InitApplicationMemory();
     Startup_DebugHeap();

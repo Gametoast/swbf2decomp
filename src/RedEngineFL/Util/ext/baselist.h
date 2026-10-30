@@ -70,12 +70,12 @@ public:
 
     bool InsertLast(const T& rElem)
     {
-        if (!alloc_)
+        if (alloc_)
         {
-            return false;
+            NODE* pNode = new (*alloc_) NODE(rElem);
+            return InsertLast_(pNode);
         }
-        NODE* pNode = new (*alloc_) NODE(rElem);
-        return InsertLast_(pNode);
+        return false;
     }
 
     bool InsertLast_(NODE* pNode)
@@ -106,13 +106,16 @@ public:
                 if (pPrev)
                 {
                     pPrev->next_ = pNext;
-                    if (!pNext)
+                    if (pNext)
+                    {
+                        if (pNode == last_)
+                        {
+                            last_ = pNext;
+                        }
+                    }
+                    else
                     {
                         last_ = pPrev;
-                    }
-                    else if (pNode == last_)
-                    {
-                        last_ = pNext;
                     }
                 }
                 else

@@ -1909,7 +1909,7 @@ void HUD::GameEvents::UpdateFlags(const Character* const pCharacter, const Contr
     bool bPlayerCarrier = false;
     for (PblList<FlagItem>::Itor it(*FlagItem::sList); (FlagItem*)it; ++it)
     {
-        const FlagItem* pFlag = it;
+        const FlagItem* pFlag = &*it;
         const Team* pTeam = pCharacter->mTeamPtr;
         const int iAffiliation = pTeam->GetAffiliation(reinterpret_cast<const GameObject*>(pFlag)->GetTeam());
         const Character* pCarrier = reinterpret_cast<const EntityItem*>(pFlag)->mOwner;

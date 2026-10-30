@@ -58,21 +58,23 @@ void RedMouse::Init(unsigned char ucPortNum)
         return;
     }
 
-    HRESULT hrDataFormat = pc_device->SetDataFormat(&c_dfDIMouse2);
+    HRESULT hr = pc_device->SetDataFormat(&c_dfDIMouse2);
 
     DIPROPRANGE diprg;
+    diprg.diph.dwHow = DIPH_DEVICE;
+    diprg.diph.dwObj = 0;
     diprg.diph.dwSize = sizeof(DIPROPRANGE);
     diprg.diph.dwHeaderSize = sizeof(DIPROPHEADER);
-    diprg.diph.dwObj = 0;
-    diprg.diph.dwHow = DIPH_DEVICE;
     diprg.lMin = (LONG)0x80000000;
     diprg.lMax = 0x7FFFFFFF;
     pc_device->GetProperty(DIPROP_RANGE, &diprg.diph);
     pc_device->SetProperty(DIPROP_RANGE, &diprg.diph);
 
-    if (FAILED(hrDataFormat)
-        || FAILED(pc_device->SetCooperativeLevel(hGlobalWnd,
-                                                 DISCL_EXCLUSIVE | DISCL_FOREGROUND)))
+    if (SUCCEEDED(hr))
+    {
+        hr = pc_device->SetCooperativeLevel(hGlobalWnd, DISCL_EXCLUSIVE | DISCL_FOREGROUND);
+    }
+    if (FAILED(hr))
     {
         pc_device->Release();
         pc_device = 0;
@@ -185,7 +187,6 @@ void RedMouse::Update(float fDeltaTime)
             m_uiDownButtons |= 1 << i;
         }
     }
-    const unsigned int uiChanged = uiPrevDown ^ m_uiDownButtons;
-    m_uiPressedButtons = m_uiDownButtons & uiChanged;
-    m_uiReleasedButtons = uiPrevDown & uiChanged;
+    m_uiPressedButtons = m_uiDownButtons & (m_uiDownButtons ^ uiPrevDown);
+    m_uiReleasedButtons = uiPrevDown & (m_uiDownButtons ^ uiPrevDown);
 }

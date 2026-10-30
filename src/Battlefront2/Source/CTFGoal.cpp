@@ -49,7 +49,7 @@ AI::CTFGoal::CTFGoal(unsigned char uTeam, float fWeight, const GoalTarget& targe
     mFlag = static_cast<const GameObject*>(target.mGameObj);
     if (!static_cast<const GameObject*>(mFlag))
     {
-        for (PblList<FlagItem>::Itor it(*FlagItem::sList); it; ++it)
+        for (PblList<FlagItem>::Itor it = FlagItem::sList->Begin(); it; ++it)
         {
             const GameObject* pFlag = reinterpret_cast<const GameObject*>(static_cast<FlagItem*>(it));
             if (GameObjectTeam(pFlag) != uTeam)

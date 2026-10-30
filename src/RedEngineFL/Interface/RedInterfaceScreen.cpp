@@ -151,23 +151,14 @@ void RedInterfaceScreen::SetSafeZone(float fPercent)
 // FUNCTION: SWBF2 0x006c1530
 void RedInterfaceScreen::SetSafeZone(float fWidth, float fHeight, float fOffsetX, float fOffsetY)
 {
-    float fRight = fWidth + fOffsetX;
-    fRight = Clamp(fRight, 0.0f, 1.0f);
+    float fRight = Clamp(fWidth + fOffsetX, 0.0f, 1.0f);
+    float fBottom = Clamp(fHeight + fOffsetY, 0.0f, 1.0f);
 
-    float fBottom = fHeight + fOffsetY;
-    fBottom = Clamp(fBottom, 0.0f, 1.0f);
+    m_fSafeZoneOffsetX = Clamp(fOffsetX, 0.0f, 1.0f);
+    m_fSafeZoneOffsetY = Clamp(fOffsetY, 0.0f, 1.0f);
 
-    fOffsetX = Clamp(fOffsetX, 0.0f, 1.0f);
-    m_fSafeZoneOffsetX = fOffsetX;
-
-    fOffsetY = Clamp(fOffsetY, 0.0f, 1.0f);
-    m_fSafeZoneOffsetY = fOffsetY;
-
-    float fW = fRight - fOffsetX;
-    m_fSafeZoneWidth = Max(fW, 0.0f);
-
-    float fH = fBottom - fOffsetY;
-    m_fSafeZoneHeight = Max(fH, 0.0f);
+    m_fSafeZoneWidth = Max(fRight - m_fSafeZoneOffsetX, 0.0f);
+    m_fSafeZoneHeight = Max(fBottom - m_fSafeZoneOffsetY, 0.0f);
 }
 
 static const float kInv255 = 1.0f / 255.0f;
@@ -209,10 +200,15 @@ bool RedInterfaceScreen::AddElement(RedScreenGroupElement* pElement)
         return false;
     }
 
-    const unsigned char uiOrder = pElement->m_zorder;
+    const unsigned char uOrder = pElement->m_zorder;
     PblList<RedScreenGroupElement>::Itor it = m_children.Begin();
-    while (it != m_children.End() && uiOrder <= it->m_zorder)
+    while (it != m_children.End())
     {
+        unsigned char uOther = it->m_zorder;
+        if (uOrder > uOther)
+        {
+            break;
+        }
         ++it;
     }
 
@@ -233,8 +229,8 @@ void RedInterfaceElement::Render(const PblMatrix& mParent, const RedColor& color
                        (const D3DXMATRIX*)&m_mLocal,
                        (const D3DXMATRIX*)&mParent);
 
-    mContext.m[3][0] = (float)floor(mContext.m[3][0] + 0.5f);
-    mContext.m[3][1] = (float)floor(mContext.m[3][1] + 0.5f);
+    mContext.m[3][0] = floorf(mContext.m[3][0] + 0.5f);
+    mContext.m[3][1] = floorf(mContext.m[3][1] + 0.5f);
 
     RedColor modulated;
     modulated.r = (unsigned char)((float)m_color.r * kInv255 * (float)color.r + 0.5f);
@@ -279,7 +275,7 @@ void RedInterfaceScreen::Render() const
     RedRenderer::BeginScene();
     RedHotSpot::UpdateCamera();
 
-    gRedInterfaceTranslateZ = gRedInterfaceScaleX = 640.0f / (float)GetScreenWidth();
+    gRedInterfaceScaleX = gRedInterfaceTranslateZ = 640.0f / (float)GetScreenWidth();
     gRedInterfaceScaleY = 480.0f / (float)GetScreenHeight();
     const float fDepth = (float)m_uiWidthInPixels / sfWidth;
 
@@ -287,6 +283,25 @@ void RedInterfaceScreen::Render() const
     GetScale(fScaleX, fScaleY, fUnitX, fUnitY);
 
     PblMatrix mScreen;
+    PblMatrix mPerspective;
+
+    mPerspective.m[0][0] = gRedInterfaceScaleX * fUnitX;
+    mPerspective.m[0][1] = 0.0f;
+    mPerspective.m[0][2] = 0.0f;
+    mPerspective.m[0][3] = 0.0f;
+    mPerspective.m[1][0] = 0.0f;
+    mPerspective.m[1][1] = gRedInterfaceScaleY * fUnitY;
+    mPerspective.m[1][2] = 0.0f;
+    mPerspective.m[1][3] = 0.0f;
+    mPerspective.m[2][0] = 0.0f;
+    mPerspective.m[2][1] = 0.0f;
+    mPerspective.m[2][2] = 1.0f;
+    mPerspective.m[2][3] = 0.0f;
+    mPerspective.m[3][0] = 0.0f;
+    mPerspective.m[3][1] = 0.0f;
+    mPerspective.m[3][2] = 0.0f;
+    mPerspective.m[3][3] = 1.0f;
+
     mScreen.m[0][0] = fUnitX;
     mScreen.m[0][1] = 0.0f;
     mScreen.m[0][2] = 0.0f;
@@ -303,10 +318,6 @@ void RedInterfaceScreen::Render() const
     mScreen.m[3][1] = 0.0f;
     mScreen.m[3][2] = 0.0f;
     mScreen.m[3][3] = 1.0f;
-
-    PblMatrix mPerspective = mScreen;
-    mPerspective.m[0][0] = gRedInterfaceScaleX * fUnitX;
-    mPerspective.m[1][1] = gRedInterfaceScaleY * fUnitY;
 
     for (PblList<RedScreenGroupElement>::Itor it = m_children.Begin(); it != m_children.End(); ++it)
     {
@@ -327,16 +338,15 @@ void RedInterfaceScreen::Render() const
         Red3DModelElementLite::SetPerspectiveHack(bPerspective);
         if (bPerspective)
         {
-            mPerspective.m[3][0] = gRedInterfaceScaleX * fScaleX * (fX - 0.5f) * gRedInterfaceTranslateX;
-            mPerspective.m[3][1] = gRedInterfaceScaleY * fScaleY * (fY - 0.5f) * gRedInterfaceTranslateY;
-            mPerspective.m[3][2] = -(gRedInterfaceTranslateZ * fDepth);
+            mPerspective[3] = PblVector3(
+                gRedInterfaceScaleX * fScaleX * (fX - 0.5f) * gRedInterfaceTranslateX,
+                gRedInterfaceScaleY * fScaleY * (fY - 0.5f) * gRedInterfaceTranslateY,
+                -(gRedInterfaceTranslateZ * fDepth));
             mPerspective.m[3][3] = 1.0f;
         }
         else
         {
-            mScreen.m[3][0] = (fX - 0.5f) * fScaleX;
-            mScreen.m[3][1] = (fY - 0.5f) * fScaleY;
-            mScreen.m[3][2] = -fDepth;
+            mScreen[3] = PblVector3((fX - 0.5f) * fScaleX, (fY - 0.5f) * fScaleY, -fDepth);
             mScreen.m[3][3] = 1.0f;
         }
         it->Render(it->m_bUsePerspectiveHack ? mPerspective : mScreen, RedColor::WHITE);

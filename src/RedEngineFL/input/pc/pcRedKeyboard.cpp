@@ -223,8 +223,7 @@ unsigned short AnsiToUnicode(char cAnsi)
 unsigned char RedKeyboard::pcGetAsciiValue(unsigned int uiScanCode)
 {
 
-    unsigned short achChar[10];
-    memset(achChar, 0, sizeof(achChar));
+    unsigned short achChar[10] = { 0 };
 
     UINT uVirtKey = MapVirtualKeyA(uiScanCode, MAPVK_VSC_TO_VK);
 
@@ -258,20 +257,20 @@ unsigned char RedKeyboard::pcGetAsciiValue(unsigned int uiScanCode)
     if (iCount != 0)
     {
 
-        const unsigned char cChar = (unsigned char)uiChar;
+        unsigned char cChar = (unsigned char)uiChar;
 
         if (cChar >= 0xAC && cChar <= 0xB8)
         {
             if (cChar == 0xAC || cChar == 0xB1 || cChar == 0xB2
                 || cChar == 0xB3 || cChar == 0xB4 || cChar == 0xB8)
             {
-                return 0;
+                cChar = 0;
             }
         }
 
         else if (cChar == 0xFE)
         {
-            return 0;
+            cChar = 0;
         }
 
         return cChar;
@@ -318,8 +317,11 @@ void RedKeyboard::Update(float fDeltaTime)
 
     if (FAILED(pc_pKeyboardDevice->Poll()))
     {
-        while (pc_pKeyboardDevice->Acquire() == DIERR_INPUTLOST)
-            ;
+        HRESULT hr = pc_pKeyboardDevice->Acquire();
+        while (hr == DIERR_INPUTLOST)
+        {
+            hr = pc_pKeyboardDevice->Acquire();
+        }
         return;
     }
 
@@ -417,8 +419,8 @@ bool RedKeyboard::pcGetKeyName(unsigned int uiKey, unsigned short* pusName, unsi
 {
     (void)uiSize;
     DIPROPSTRING dips;
-    dips.diph.dwSize = sizeof(DIPROPSTRING);
     dips.diph.dwHeaderSize = sizeof(DIPROPHEADER);
+    dips.diph.dwSize = sizeof(DIPROPSTRING);
     dips.diph.dwObj = uiKey;
     dips.diph.dwHow = DIPH_BYOFFSET;
     memset(dips.wsz, 0, sizeof(dips.wsz));
@@ -426,13 +428,12 @@ bool RedKeyboard::pcGetKeyName(unsigned int uiKey, unsigned short* pusName, unsi
     HRESULT hr = pc_pKeyboardDevice->GetProperty(DIPROP_KEYNAME, &dips.diph);
     dips.wsz[MAX_PATH - 1] = 0;
     memcpy(pusName, dips.wsz, MAX_PATH - 1);
-    if (hr != DI_OK)
+    if (hr == DI_OK)
     {
-        return false;
+        PblJournal::Get(PJT_FULL);
+        return true;
     }
-
-    PblJournal::Get(PJT_FULL);
-    return true;
+    return false;
 }
 
 // FUNCTION: SWBF2 0x006c6120

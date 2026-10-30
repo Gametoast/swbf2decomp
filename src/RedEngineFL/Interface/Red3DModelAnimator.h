@@ -88,7 +88,11 @@ public:
 // FUNCTION: SWBF2 0x0056a110
 inline bool Red3DModelAnimator::IsRtti(unsigned int uRtti) const
 {
-    return rttiHashRed3DModelAnimator == uRtti;
+    if (rttiHashRed3DModelAnimator == uRtti)
+    {
+        return true;
+    }
+    return false;
 }
 
 // FUNCTION: SWBF2 0x006f83a0

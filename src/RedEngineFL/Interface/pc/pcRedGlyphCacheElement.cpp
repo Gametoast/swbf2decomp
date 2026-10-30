@@ -59,10 +59,10 @@ void RedGlyphCacheElement::AddGlyph(const RedFont::Glyph& rGlyph,
     m_puiNumGlyphs[uiPage]++;
     q.texnum = (unsigned char)uiPage;
 
-    q.x0 = (float)floor(rGlyph.left * fScaleX + fX + 0.5f);
-    q.y0 = (float)floor(rGlyph.top * fScaleY + fY + 0.5f);
-    q.x1 = (float)floor(rGlyph.right * fScaleX + fX + 0.5f);
-    q.y1 = (float)floor(rGlyph.bottom * fScaleY + fY + 0.5f);
+    q.x0 = floorf(rGlyph.left * fScaleX + fX + 0.5f);
+    q.y0 = floorf(rGlyph.top * fScaleY + fY + 0.5f);
+    q.x1 = floorf(rGlyph.right * fScaleX + fX + 0.5f);
+    q.y1 = floorf(rGlyph.bottom * fScaleY + fY + 0.5f);
 
     q.u0 = rGlyph.uLeft;
     q.v0 = rGlyph.vTop;
@@ -275,10 +275,9 @@ void RedGlyphCacheElement::RenderUsingContext(const PblMatrix& mContext,
         }
 
         for (RedGlyphMemoryManager::Iterator it(m_ppGlyphData[i]); it;
-             it.NextBlock())
+             it.NextBlock(), pVertexData += 48 * sizeof(GlyphVertexT))
         {
             memcpy(pVertexData, &*it, it.GetBlockSize() * sizeof(GlyphVertexT));
-            pVertexData += 48 * sizeof(GlyphVertexT);
         }
 
         pPrimitive->EndVertexData();
@@ -304,27 +303,14 @@ void RedGlyphCacheElement::RenderUsingContext(const PblMatrix& mContext,
 // FUNCTION: SWBF2 0x006dbae0
 void RedGlyphCacheElement::SetFont(unsigned int uiFontHash)
 {
-    if (uiFontHash)
-    {
-        SetFont(RedFont::Find(uiFontHash));
-    }
-    else
-    {
-        SetFont((const RedFont*)0);
-    }
+    SetFont(uiFontHash ? RedFont::Find(uiFontHash) : (const RedFont*)0);
 }
 
 // FUNCTION: SWBF2 0x006dbb20
 void RedGlyphCacheElement::SetFont(const char* pcName)
 {
-    if (pcName && *pcName)
-    {
-        SetFont(RedFont::Find(pcName));
-    }
-    else
-    {
-        SetFont((const RedFont*)0);
-    }
+    const RedFont* pFont = (pcName && *pcName) ? RedFont::Find(pcName) : 0;
+    SetFont(pFont);
 }
 
 // FUNCTION: SWBF2 0x006dbb60

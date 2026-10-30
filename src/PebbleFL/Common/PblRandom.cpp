@@ -27,22 +27,22 @@ float sCachedNormal;
 // FUNCTION: SWBF2 0x00729e20
 float PblRandom::GetNormal()
 {
-    if (sHasCachedNormal)
+    if (!sHasCachedNormal)
     {
-        sHasCachedNormal = 0;
-        return sCachedNormal;
+        float fV1, fV2, fRsq;
+        do
+        {
+            fV1 = GetFloat() * 2.0f - 1.0f;
+            fV2 = GetFloat() * 2.0f - 1.0f;
+            fRsq = fV2 * fV2 + fV1 * fV1;
+        } while (fRsq >= 1.0f || fRsq == 0.0f);
+
+        float fFac = (float)sqrt((double)((float)log((double)fRsq) * -2.0f / fRsq));
+        sHasCachedNormal = 1;
+        sCachedNormal = fFac * fV1;
+        return fFac * fV2;
     }
 
-    float fV1, fV2, fRsq;
-    do
-    {
-        fV1 = GetFloat() * 2.0f - 1.0f;
-        fV2 = GetFloat() * 2.0f - 1.0f;
-        fRsq = fV2 * fV2 + fV1 * fV1;
-    } while (fRsq >= 1.0f || fRsq == 0.0f);
-
-    float fFac = (float)sqrt((double)((float)log((double)fRsq) * -2.0f / fRsq));
-    sHasCachedNormal = 1;
-    sCachedNormal = fFac * fV1;
-    return fFac * fV2;
+    sHasCachedNormal = 0;
+    return sCachedNormal;
 }

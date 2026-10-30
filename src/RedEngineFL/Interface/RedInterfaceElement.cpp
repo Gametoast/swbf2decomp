@@ -8,17 +8,10 @@ void RedInterfaceElement::Rotate(float fAngle)
 {
     float fSin, fCos;
     PblMath::SinCos(&fSin, &fCos, fAngle);
-    float oldX[3], oldY[3];
-    for (int i = 0; i != 3; ++i)
-    {
-        oldX[i] = m_mLocal.m[0][i];
-        oldY[i] = m_mLocal.m[1][i];
-    }
-    for (int i = 0; i != 3; ++i)
-    {
-        m_mLocal.m[0][i] = oldX[i] * fCos + oldY[i] * fSin;
-        m_mLocal.m[1][i] = oldX[i] * -fSin + oldY[i] * fCos;
-    }
+    PblVector3 vY = m_mLocal[1];
+    PblVector3 vX = m_mLocal[0];
+    m_mLocal[0] = vX * fCos + vY * fSin;
+    m_mLocal[1] = vX * -fSin + vY * fCos;
     m_mLocal.m[0][3] = 0.0f;
     m_mLocal.m[1][3] = 0.0f;
 }
@@ -28,20 +21,13 @@ void RedInterfaceElement::Rotate(float fX, float fY, float fAngle)
 {
     float fSin, fCos;
     PblMath::SinCos(&fSin, &fCos, fAngle);
-    float oldX[3], oldY[3];
-    for (int i = 0; i != 3; ++i)
-    {
-        oldX[i] = m_mLocal.m[0][i];
-        oldY[i] = m_mLocal.m[1][i];
-    }
-    for (int i = 0; i != 3; ++i)
-    {
-        m_mLocal.m[0][i] = oldX[i] * fCos + oldY[i] * fSin;
-        m_mLocal.m[1][i] = oldX[i] * -fSin + oldY[i] * fCos;
-        m_mLocal.m[3][i] = m_mLocal.m[3][i] + oldX[i] * fX + oldY[i] * fY;
-    }
+    PblVector3 vX = m_mLocal[0];
+    PblVector3 vY = m_mLocal[1];
+    m_mLocal[0] = vX * fCos + vY * fSin;
     m_mLocal.m[0][3] = 0.0f;
+    m_mLocal[1] = vX * -fSin + vY * fCos;
     m_mLocal.m[1][3] = 0.0f;
+    m_mLocal[3] = m_mLocal[3] + vX * fX + vY * fY;
     m_mLocal.m[3][3] = 1.0f;
 }
 
@@ -56,20 +42,17 @@ PblHashTable<RedInterfaceElement, 32768> RedInterfaceElement::sAllObjectsList;
 
 // FUNCTION: SWBF2 0x006bfeb0
 RedInterfaceElement::RedInterfaceElement(const char* pcName)
+    : m_color(0xFF, 0xFF, 0xFF, 0xFF)
 {
     m_zorder = 128;
     m_bEnabled = true;
-
-
-    m_color.b = 0xFF;
-    m_color.g = 0xFF;
-    m_color.r = 0xFF;
-    m_color.a = 0xFF;
 
     m_mLocal.SetXAxis(1.0f, 0.0f, 0.0f, 0.0f);
     m_mLocal.SetYAxis(0.0f, 1.0f, 0.0f, 0.0f);
     m_mLocal.SetZAxis(0.0f, 0.0f, 1.0f, 0.0f);
     m_mLocal.SetTranslation(0.0f, 0.0f, 0.0f, 1.0f);
+
+    SetColor(RedColor(0xFF, 0xFF, 0xFF, 0xFF));
 
     m_bInAllObjectList = false;
     m_uiFlags = 0;
@@ -81,22 +64,20 @@ RedInterfaceElement::RedInterfaceElement(const char* pcName)
 
 // FUNCTION: SWBF2 0x006bff90
 RedInterfaceElement::RedInterfaceElement()
+    : m_zorder(128)
+    , m_bEnabled(true)
+    , m_color(0xFF, 0xFF, 0xFF, 0xFF)
 {
-    m_zorder = 128;
-    m_bEnabled = true;
-
-
-    m_color.b = 0xFF;
-    m_color.g = 0xFF;
-    m_color.r = 0xFF;
-    m_color.a = 0xFF;
-
     m_mLocal.SetXAxis(1.0f, 0.0f, 0.0f, 0.0f);
     m_mLocal.SetYAxis(0.0f, 1.0f, 0.0f, 0.0f);
     m_mLocal.SetZAxis(0.0f, 0.0f, 1.0f, 0.0f);
     m_mLocal.SetTranslation(0.0f, 0.0f, 0.0f, 1.0f);
 
-    m_crcName = s_uiUnnamedCRC++;
+    SetColor(RedColor(0xFF, 0xFF, 0xFF, 0xFF));
+
+    const unsigned int uiCRC = s_uiUnnamedCRC;
+    m_crcName = uiCRC;
+    s_uiUnnamedCRC = uiCRC + 1;
 
     m_bInAllObjectList = false;
     m_uiFlags = 0;
@@ -162,13 +143,9 @@ void RedInterfaceElement::SetMatrixPosScale(float fX, float fY, float fScaleX,
 // FUNCTION: SWBF2 0x006c0510
 void RedInterfaceElement::Scale(float fScaleX, float fScaleY)
 {
-    m_mLocal.m[0][0] *= fScaleX;
-    m_mLocal.m[0][1] *= fScaleX;
-    m_mLocal.m[0][2] *= fScaleX;
+    m_mLocal[0] = fScaleX * m_mLocal[0];
     m_mLocal.m[0][3] = 0.0f;
-    m_mLocal.m[1][0] *= fScaleY;
-    m_mLocal.m[1][1] *= fScaleY;
-    m_mLocal.m[1][2] *= fScaleY;
+    m_mLocal[1] = fScaleY * m_mLocal[1];
     m_mLocal.m[1][3] = 0.0f;
 }
 
@@ -192,8 +169,13 @@ void RedInterfaceElement::SetZOrder(unsigned char uZOrder)
     pList->Remove(&m_groupNode);
 
     PblList<RedInterfaceElement>::Itor it(*pList);
-    while (it != pList->End() && uZOrder < it->m_zorder)
+    while (it != pList->End())
     {
+        unsigned char uOther = it->m_zorder;
+        if (uZOrder >= uOther)
+        {
+            break;
+        }
         ++it;
     }
 

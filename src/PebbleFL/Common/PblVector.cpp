@@ -12,19 +12,19 @@ const PblBox PblBox::GetTransformedBox(const PblMatrix& m) const
     PblVector3 vMax = vMin;
     for (int i = 0; i < 3; ++i)
     {
-        const float _vMin_i = _vMin[i];
         const float _vMax_i = _vMax[i];
+        const float _vMin_i = _vMin[i];
         for (int j = 0; j < 3; ++j)
         {
             if (m(i, j) >= 0.0f)
             {
-                vMin[j] += m(i, j) * _vMin_i;
                 vMax[j] += m(i, j) * _vMax_i;
+                vMin[j] += m(i, j) * _vMin_i;
             }
             else
             {
-                vMin[j] += m(i, j) * _vMax_i;
                 vMax[j] += m(i, j) * _vMin_i;
+                vMin[j] += m(i, j) * _vMax_i;
             }
         }
     }

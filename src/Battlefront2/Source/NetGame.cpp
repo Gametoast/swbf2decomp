@@ -4568,10 +4568,6 @@ void SetTurnHighBits(unsigned int uBits)
     turnHighBits = uBits;
 }
 
-// TEMPLATE: SWBF2 0x005b3fd0
-// PblJournal::Record<int>
-template void PblJournal::Record<int>(int& value, PblJournalType type);
-
 // GLOBAL: SWBF2 0x01e64a2d
 bool frameLockEnabled;
 

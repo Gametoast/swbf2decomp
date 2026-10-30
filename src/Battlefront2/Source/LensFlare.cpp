@@ -81,6 +81,12 @@ LensFlare::LensFlare(const LensFlare& that)
 {
 }
 
+// FUNCTION: SWBF2 0x0056f8c0
+void LensFlareEffect::LensFlareList::Cleanup()
+{
+    RemoveAll();
+}
+
 // FUNCTION: SWBF2 0x0056f8d0
 void LensFlareEffect::LensFlareList::Add(LensFlare* pFlare)
 {

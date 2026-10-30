@@ -12,7 +12,8 @@ int __cdecl geo::PolyPoly2D::LineSegPolyC(const geo::Vector2<float>& rA0, const 
     int iCount = 0;
     for (int i = 0; i < rPoly.numPoints_; ++i)
     {
-        if (geo::Overlap2D::LineSegLineSeg(rA0, rA1, rPoly.points_[i], rPoly.points_[(i + 1) % rPoly.numPoints_]))
+        const int iNext = (i + 1) % rPoly.numPoints_;
+        if (geo::Overlap2D::LineSegLineSeg(rA0, rA1, rPoly.points_[i], rPoly.points_[iNext]))
         {
             ++iCount;
         }
@@ -29,11 +30,11 @@ bool PolyPoly2D::PointInPolyCN(const Vector2<float>& rPoint, const BasePoly2D& r
     Vector2<float> farPoint;
     farPoint.x = rPoint.x + 1000000000.0f;
     farPoint.y = rPoint.y + 2000000000.0f;
-    return (geo::PolyPoly2D::LineSegPolyC(rPoint, farPoint, rPoly) % 2) != 0;
+    return (geo::PolyPoly2D::LineSegPolyC(rPoint, farPoint, rPoly) % 2) ? true : false;
 }
 
 template <class T>
-const Vector3<T> operator*(const PblMatrix& rMat, const Vector3<T>& rVec)
+inline const Vector3<T> operator*(const PblMatrix& rMat, const Vector3<T>& rVec)
 {
     PblVector3 vIn(rVec.x, rVec.y, rVec.z);
     PblVector3 vOut;
@@ -44,11 +45,13 @@ const Vector3<T> operator*(const PblMatrix& rMat, const Vector3<T>& rVec)
 // FUNCTION: SWBF2 0x00724f40
 void ProjClip::Op(const BasePoly3D& rIn, BasePoly3D& rOut)
 {
+    // GLOBAL: SWBF2 0x00785a50
+    static const float kMinW = 1e-7f;
     for (int i = 0; i < rIn.numPoints_; ++i)
     {
         Vector3<float> v = rIn.points_[i];
         float fNegZ = -v.z;
-        float fW = Max_(fNegZ, 1e-7f);
+        float fW = Max_(fNegZ, kMinW);
         float fInv = 1.0f / fW;
         rOut.points_[i] = Vector3<float>(v.x * fInv, v.y * fInv, fInv * fW);
     }
@@ -71,7 +74,9 @@ void __cdecl geo::Transform::Op(const geo::BasePoly3D& rIn, geo::BasePoly2D& rOu
 {
     for (int i = 0; i < rIn.numPoints_; ++i)
     {
-        rOut.points_[i].x = geo::dot(rIn.points_[i], rX);
-        rOut.points_[i].y = geo::dot(rIn.points_[i], rY);
+        Vector2<float> vProj;
+        vProj.x = geo::dot(rX, rIn.points_[i]);
+        vProj.y = geo::dot(rY, rIn.points_[i]);
+        rOut.points_[i] = vProj;
     }
 }

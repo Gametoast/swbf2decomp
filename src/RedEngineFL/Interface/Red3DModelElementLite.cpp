@@ -17,12 +17,12 @@ Red3DModelElementLite::Red3DModelElementLite()
 // FUNCTION: SWBF2 0x006d6d60
 void Red3DModelElementLite::Init()
 {
-    m_fDepth = 0.01f;
     m_uiModelHash = 0;
     m_Model = 0;
-    m_boneHash = 0;
-    m_bLightingEnabled = true;
+    m_fDepth = 0.01f;
     m_searchForModel = false;
+    m_bLightingEnabled = true;
+    m_boneHash = 0;
 }
 
 // FUNCTION: SWBF2 0x006d6fc0
@@ -101,8 +101,8 @@ void Red3DModelElementLite::SetBone(char const* const pcBoneName)
 void Red3DModelElementLite::SetModel(const RedModel* const pModel)
 {
     m_Model = pModel;
-    m_searchForModel = false;
     m_uiModelHash = pModel ? pModel->GetName() : 0;
+    m_searchForModel = false;
 }
 
 // FUNCTION: SWBF2 0x006d6c60
@@ -126,15 +126,18 @@ bool Red3DModelElementLite::FindModel()
 // FUNCTION: SWBF2 0x006d6d40
 unsigned int Red3DModelElementLite::GetRenderFlags() const
 {
-    return m_bLightingEnabled ? 0x4000280 : 0x4000290;
+    unsigned int uFlags = 0x4000280;
+    if (!m_bLightingEnabled)
+    {
+        uFlags = 0x4000290;
+    }
+    return uFlags;
 }
 
 // FUNCTION: SWBF2 0x006d6d90
 void Red3DModelElementLite::LocalToWorld(PblMatrix& mMatrix) const
 {
-    mMatrix.m[1][0] *= -1.0f;
-    mMatrix.m[1][1] *= -1.0f;
-    mMatrix.m[1][2] *= -1.0f;
+    mMatrix[1] = mMatrix[1] * -1.0f;
     mMatrix.m[1][3] = 0.0f;
 
     const float fScale = GetDepthMultiplier(sPerspectiveHackEnabled) * m_fDepth;

@@ -1,10 +1,18 @@
 #include <string.h>
-#include <math.h>
 
 #include "PblFile.h"
 #include "PblChunk.h"
 #include "PblVector.h"
-#include "RedEngineFL/Interface/RedInterfaceScreen.h"
+
+inline void PblFileChunk::Realign()
+{
+    _pFile->SeekAlign(4);
+}
+
+inline void PblMemChunk::Realign()
+{
+    _pData = _pData + ((-(int)_pData) & 3);
+}
 
 // FUNCTION: SWBF2 0x0072a8a0
 PblFileChunk::PblFileChunk(PblFile* pFile)
@@ -49,7 +57,7 @@ PblFileChunk PblFileChunk::ReadNextChild()
     _pFile->Seek(_iNext, PblFile::SeekFromStart);
     Realign();
     PblFileChunk Chunk(_pFile);
-    _iNext = _pFile->Tell() + Chunk._iSize;
+    _iNext = _pFile->Tell() + Chunk.GetSize();
     return Chunk;
 }
 
@@ -65,8 +73,8 @@ char* PblFileChunk::ReadString(char* pcBuffer, int iBufSize)
             return 0;
         }
         *pcOut++ = cChar;
-        --iBufSize;
         cChar = _pFile->Read8();
+        --iBufSize;
     }
     if (iBufSize <= 0)
     {
@@ -158,16 +166,6 @@ PblMemChunk PblMemChunk::ReadNextChild()
     return Chunk;
 }
 
-void PblFileChunk::Realign()
-{
-    _pFile->SeekAlign(4);
-}
-
-void PblMemChunk::Realign()
-{
-    _pData = _pData + ((-(int)_pData) & 3);
-}
-
 int PblMemChunk::GetSize() const
 {
     return _iSize;
@@ -177,24 +175,4 @@ void PblMemChunk::ReadData(void* pBuffer, int iNumBytes)
 {
     memcpy(pBuffer, _pData, iNumBytes);
     _pData += iNumBytes;
-}
-
-
-
-
-
-// FUNCTION: SWBF2 0x00565060
-void AdjustScreenGroupAspect(RedScreenGroupElement* pGroup)
-{
-    float fHeight = (float)RedInterfaceScreen::GetScreenHeight();
-    float fHeight43 = (float)RedInterfaceScreen::GetScreenWidth() * 3.0f / 4.0f;
-    if (fabsf(fHeight - fHeight43) >= 2.0f)
-    {
-        PblVector3 vPos = pGroup->GetPosition();
-        if (fHeight43 > fHeight)
-        {
-            pGroup->SetMatrixPosScale(vPos.x, (fHeight43 - fHeight) * 0.5f, 1.0f,
-                                      1.0f - (fHeight43 - fHeight) / fHeight);
-        }
-    }
 }

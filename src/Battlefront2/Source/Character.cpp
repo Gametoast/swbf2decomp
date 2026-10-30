@@ -1166,17 +1166,8 @@ void Character::SelectTeam(int iTeam)
     }
     if (mPlayerId >= 0)
     {
-        int iClass = mClassIndex;
-        int iLast = mTeamPtr->GetClassCount() - 1;
-        if (iClass < 0)
-        {
-            iClass = 0;
-        }
-        else if (iClass > iLast)
-        {
-            iClass = iLast;
-        }
-        SelectClass(iClass);
+        const int iLast = mTeamPtr->GetClassCount() - 1;
+        SelectClass(Clamp(mClassIndex, 0, iLast));
     }
     else
     {

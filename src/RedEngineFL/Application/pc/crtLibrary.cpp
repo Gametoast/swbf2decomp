@@ -202,6 +202,15 @@
 // LIBRARY: SWBF2 0x00753070
 // _ftol2_sse
 
+// LIBRARY: SWBF2 0x00753079
+// _ftol2_pentium4
+
+// LIBRARY: SWBF2 0x0075308c
+// _ftol2_sse_excpt
+
+// LIBRARY: SWBF2 0x007530a6
+// _ftol2
+
 // LIBRARY: SWBF2 0x0075311c
 // frexp
 

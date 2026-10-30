@@ -33,7 +33,14 @@ public:
     int Tell() const;
     void Seek(int iOffset, SeekType eFrom);
 
-    void SeekAlign(int iAlign);
+    void SeekAlign(int iAlign)
+    {
+        int iPad = -Tell() & (iAlign - 1);
+        if (iPad)
+        {
+            Seek(iPad, SeekFromHere);
+        }
+    }
 
     char Read8();
     short Read16();

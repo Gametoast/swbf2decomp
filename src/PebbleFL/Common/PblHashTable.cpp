@@ -83,24 +83,26 @@ bool __cdecl PblHashTableCode::_Remove(unsigned int* pTable, int iCount, unsigne
 
     *pSlot = 0;
 
-    for (;;)
+    if (pSlot <= pTable)
     {
+        pSlot += iHalf;
+    }
+    --pSlot;
+
+    while (*pSlot)
+    {
+        const unsigned int uiMoved = *pSlot;
+        *pSlot = 0;
+        _Store(pTable, iCount, uiMoved, (void*)pSlot[iHalf]);
+
         if (pSlot <= pTable)
         {
             pSlot += iHalf;
         }
         --pSlot;
-
-        if (!*pSlot)
-        {
-            return true;
-        }
-
-        const unsigned int uiMoved = *pSlot;
-        void* const pMovedValue = (void*)pSlot[iHalf];
-        *pSlot = 0;
-        _Store(pTable, iCount, uiMoved, pMovedValue);
     }
+
+    return true;
 }
 
 // FUNCTION: SWBF2 0x00726e50
@@ -204,7 +206,7 @@ unsigned int __cdecl PblTEMPHash(const char* pcText)
     {
         do
         {
-            char cChar = *pcText++;
+            char cChar = *pcText;
 
             if (cChar >= 'A' && cChar <= 'Z')
             {
@@ -212,6 +214,7 @@ unsigned int __cdecl PblTEMPHash(const char* pcText)
             }
 
             uiCRC = (uiCRC << 8) ^ _auiCRCTable[(uiCRC >> 24) ^ (unsigned char)cChar];
+            pcText++;
         } while (--uiLength);
     }
 

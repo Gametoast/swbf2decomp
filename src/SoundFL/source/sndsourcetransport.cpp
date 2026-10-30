@@ -24,7 +24,7 @@ SourceTransport::PlayState SourceTransport::GetCurrentPlayState() const
         return playState_pausing;
     }
 
-    return (PlayState)(((unsigned char)uiFlags) >> 4);
+    return (PlayState)(((unsigned char)uiFlags & flags_stopped) >> 4);
 }
 
 // FUNCTION: SWBF2 0x00736560

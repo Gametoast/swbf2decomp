@@ -11,6 +11,8 @@ class Vector2
 public:
     Vector2() : x(0), y(0) {}
 
+    Vector2(T ux, T uy) : x(ux), y(uy) {}
+
     T x;
     T y;
 };
@@ -28,6 +30,18 @@ public:
     T y;
     T z;
 };
+
+template <class T>
+inline const Vector2<T> operator-(const Vector2<T>& a, const Vector2<T>& b)
+{
+    return Vector2<T>(a.x - b.x, a.y - b.y);
+}
+
+template <class T>
+inline T cross(const Vector2<T>& a, const Vector2<T>& b)
+{
+    return a.x * b.y - a.y * b.x;
+}
 
 template <class T>
 inline const Vector3<T> operator+(const Vector3<T>& a, const Vector3<T>& b)

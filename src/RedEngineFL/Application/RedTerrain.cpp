@@ -266,7 +266,7 @@ static PblVector3 TriangleNormal(const PblVector3& p0, const PblVector3& p1, con
 {
     const PblVector3 a(p1.x - p0.x, p1.y - p0.y, p1.z - p0.z);
     const PblVector3 b(p2.x - p0.x, p2.y - p0.y, p2.z - p0.z);
-    return PblVector3(b.y * a.z - b.z * a.y, b.z * a.x - b.x * a.z, b.x * a.y - b.y * a.x);
+    return CrossProduct(b, a);
 }
 
 // FUNCTION: SWBF2 0x006c1b50

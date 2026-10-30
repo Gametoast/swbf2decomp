@@ -46,30 +46,23 @@ template const float& util::Min_<float>(const float&, const float&);
 
 // FUNCTION: SWBF2 0x006d72f0
 RedTextElement::RedTextElement()
+    : m_bUnknown0090(1),
+      m_uiWidth(0),
+      m_uiHeight(0),
+      m_fScaleX(1.0f),
+      m_fScaleY(1.0f),
+      m_iTextExtent(0),
+      m_uiNumLines(0),
+      m_leading(0),
+      m_iSpacing(1),
+      m_uiTabSpacing(0),
+      m_uiCursorPos(0xffff),
+      m_halign(TEXT_HALIGN_LEFT),
+      m_valign(TEXT_VALIGN_TOP),
+      m_break(TEXT_BREAK_WORD),
+      m_clip(TEXT_CLIP_CHARACTER),
+      m_dirtyGlyphCache(0)
 {
-    m_uiWidth = 0;
-    m_uiHeight = 0;
-
-    m_iTextExtent = 0;
-    m_uiNumLines = 0;
-
-    m_bUnknown0090 = 1;
-
-    m_fScaleX = 1.0f;
-    m_fScaleY = 1.0f;
-
-    m_leading = 0;
-    m_iSpacing = 1;
-
-    m_uiTabSpacing = 0;
-    m_uiCursorPos = 0xffff;
-
-    m_halign = TEXT_HALIGN_LEFT;
-    m_valign = TEXT_VALIGN_TOP;
-    m_break = TEXT_BREAK_WORD;
-    m_clip = TEXT_CLIP_CHARACTER;
-    m_dirtyGlyphCache = 0;
-
     m_text.SetSize(32);
 }
 
@@ -97,9 +90,8 @@ unsigned int RedTextElement::ClipString(const unsigned short* const pcText,
                                         unsigned int uiTextHeight,
                                         short& rsCursorX)
 {
-    const unsigned int eBreak = m_break;
-    const bool bWordBreak = eBreak == TEXT_BREAK_WORD || eBreak == TEXT_BREAK_WORD_REFORMAT;
-    const bool bReformat = eBreak == TEXT_BREAK_NONE_REFORMAT || eBreak == TEXT_BREAK_WORD_REFORMAT;
+    const bool bWordBreak = m_break == TEXT_BREAK_WORD || m_break == TEXT_BREAK_WORD_REFORMAT;
+    const bool bReformat = m_break == TEXT_BREAK_NONE_REFORMAT || m_break == TEXT_BREAK_WORD_REFORMAT;
 
     const unsigned int uiTab = (unsigned short)GetTabSpacing();
     unsigned int uiLine = 0;
@@ -134,9 +126,9 @@ unsigned int RedTextElement::ClipString(const unsigned short* const pcText,
         }
         else if (c == '\t')
         {
-            bSpace = true;
             sWidth = (short)(unsigned short)(uiTab - rsCursorX % (short)uiTab);
             sAdvance = sWidth;
+            bSpace = true;
         }
         else
         {
@@ -145,7 +137,10 @@ unsigned int RedTextElement::ClipString(const unsigned short* const pcText,
             {
                 sWidth = (short)(int)(pGlyph->width * m_fScaleX + 0.5f);
                 sAdvance = (short)(sWidth + m_iSpacing);
-                bSpace = !m_pFont->IsPrintingChar(*rpcEnd);
+                if (!m_pFont->IsPrintingChar(c))
+                {
+                    bSpace = true;
+                }
             }
         }
 
@@ -208,13 +203,14 @@ unsigned int RedTextElement::ClipString(const unsigned short* const pcText,
             pcLineStart = rpcEnd + 1;
             rsCursorX = 0;
 
-            if (rLine.iWidth > 0xffff)
+            int iExtent = rLine.iWidth;
+            if (iExtent > 0xffff)
             {
-                m_uiMaxLineExtent = 0xffff;
+                iExtent = 0xffff;
             }
-            else if (rLine.iWidth > 0 && m_uiMaxLineExtent < (unsigned short)rLine.iWidth)
+            if (iExtent > 0 && m_uiMaxLineExtent < (unsigned short)iExtent)
             {
-                m_uiMaxLineExtent = (unsigned short)rLine.iWidth;
+                m_uiMaxLineExtent = (unsigned short)iExtent;
             }
 
             uiLine = ++ruiNumLines % ruiMaxLines;
@@ -255,13 +251,14 @@ unsigned int RedTextElement::ClipString(const unsigned short* const pcText,
                 }
             }
 
-            if (rLine.iWidth > 0xffff)
+            int iExtent = rLine.iWidth;
+            if (iExtent > 0xffff)
             {
-                m_uiMaxLineExtent = 0xffff;
+                iExtent = 0xffff;
             }
-            else if (rLine.iWidth > 0 && m_uiMaxLineExtent < (unsigned short)rLine.iWidth)
+            if (iExtent > 0 && m_uiMaxLineExtent < (unsigned short)iExtent)
             {
-                m_uiMaxLineExtent = (unsigned short)rLine.iWidth;
+                m_uiMaxLineExtent = (unsigned short)iExtent;
             }
 
             uiLine = ++ruiNumLines % ruiMaxLines;
@@ -286,13 +283,15 @@ unsigned int RedTextElement::ClipString(const unsigned short* const pcText,
 
     aLines[uiLine].pcEnd = (unsigned short*)rpcEnd;
     aLines[uiLine].iWidth = rsCursorX;
-    if (aLines[uiLine].iWidth > 0xffff)
+
+    int iExtent = aLines[uiLine].iWidth;
+    if (iExtent > 0xffff)
     {
-        m_uiMaxLineExtent = 0xffff;
+        iExtent = 0xffff;
     }
-    else if (aLines[uiLine].iWidth > 0 && m_uiMaxLineExtent < (unsigned short)aLines[uiLine].iWidth)
+    if (iExtent > 0 && m_uiMaxLineExtent < (unsigned short)iExtent)
     {
-        m_uiMaxLineExtent = (unsigned short)aLines[uiLine].iWidth;
+        m_uiMaxLineExtent = (unsigned short)iExtent;
     }
 
     return ++ruiNumLines % ruiMaxLines;
@@ -364,16 +363,14 @@ void RedTextElement::SetTextScale(float fScaleX, float fScaleY)
 // FUNCTION: SWBF2 0x006d85a0
 void RedTextElement::Visible(bool bVisible)
 {
-    const bool bWasVisible = m_bVisible != 0;
-
-    if (!bWasVisible && bVisible)
+    if (!m_bVisible && bVisible)
     {
         if (m_text.GetData())
         {
             WriteCache(m_text.GetData());
         }
     }
-    else if (bWasVisible && !bVisible)
+    else if (m_bVisible && !bVisible)
     {
         ClearCache();
     }
@@ -610,7 +607,8 @@ unsigned short FindMagicChar_(unsigned int uiHash)
     unsigned short c = (*mMagicCharMap_)[uiHash];
     if (c == 0)
     {
-        return RedFont::GetMagicCharFontData().defaultMap_[uiHash];
+        CustomFontData& rFontData = RedFont::GetMagicCharFontData();
+        c = rFontData.defaultMap_[uiHash];
     }
     return c;
 }
@@ -640,14 +638,14 @@ unsigned int FindReplaceMagicStrings_(const unsigned short* const pcSource,
                 acMagic[uiLen] = 0;
                 PblUnicode::ustrncnv(acMagicA, acMagic, 256);
                 const unsigned short c = FindMagicChar_(PblHash(acMagicA));
-                if (c)
+                if (!c)
                 {
-                    *pcDest++ = c;
-                    ++uiCount;
+                    *pcDest++ = ' ';
                 }
                 else
                 {
-                    *pcDest++ = ' ';
+                    ++uiCount;
+                    *pcDest++ = c;
                 }
             }
             else
@@ -687,7 +685,7 @@ void RedTextElement::GetRect(float& rfLeft, float& rfTop, float& rfRight, float&
     rfLeft = 0.0f;
     rfTop = 0.0f;
 
-    const float fWidth = (float)(m_uiNumLines > 1 ? m_uiMaxLineExtent : m_iTextExtent);
+    const float fWidth = m_uiNumLines > 1 ? (float)m_uiMaxLineExtent : (float)m_iTextExtent;
     if (m_halign == TEXT_HALIGN_RIGHT)
     {
         rfLeft = (float)m_uiWidth - fWidth;
@@ -699,17 +697,17 @@ void RedTextElement::GetRect(float& rfLeft, float& rfTop, float& rfRight, float&
 
     const float fHeight =
         (float)(unsigned int)(m_pFont->m_uiHeight * m_fScaleY + 0.5f) * (float)m_uiNumLines;
-    switch (m_valign)
+    if (m_valign == TEXT_VALIGN_BOTTOM)
     {
-    case TEXT_VALIGN_BOTTOM:
         rfTop = (float)m_uiHeight - fHeight;
-        break;
-    case TEXT_VALIGN_CENTER:
+    }
+    else if (m_valign == TEXT_VALIGN_CENTER)
+    {
         rfTop = (float)m_uiHeight * 0.5f - fHeight * 0.5f;
-        break;
-    case TEXT_VALIGN_BASELINE:
+    }
+    else if (m_valign == TEXT_VALIGN_BASELINE)
+    {
         rfTop = -(float)(int)(m_pFont->m_iAscent * m_fScaleY + 0.5f);
-        break;
     }
 
     rfRight = rfLeft + fWidth;
@@ -793,56 +791,52 @@ int RedTextElement::SetText(const char* pcText, bool bFlag)
 // FUNCTION: SWBF2 0x006d8390
 int RedTextElement::SetText(const unsigned short* pcText, bool bFlag)
 {
-    if (!pcText)
+    if (pcText)
     {
-        ClearCache();
-        return 0;
-    }
+        m_text.SetSizeGrow(PblUnicode::ustrlen(pcText) + 1);
+        PblUnicode::ustrncpy(m_text.GetData(), pcText, PblUnicode::ustrlen(pcText) + 1);
 
-    m_text.SetSizeGrow(PblUnicode::ustrlen(pcText) + 1);
-    PblUnicode::ustrncpy(m_text.GetData(), pcText, PblUnicode::ustrlen(pcText) + 1);
-
-    if (bFlag)
-    {
-        const int iResult = WriteCache(pcText);
-        if (!m_bVisible)
+        int iResult;
+        if (bFlag)
         {
-            ClearCache();
+            iResult = WriteCache(pcText);
+            if (!m_bVisible)
+            {
+                ClearCache();
+            }
+        }
+        else
+        {
+            iResult = 0;
+            m_dirtyGlyphCache = 1;
         }
         return iResult;
     }
 
-    m_dirtyGlyphCache = 1;
+    ClearCache();
     return 0;
 }
 
 // FUNCTION: SWBF2 0x006d7150
 RedTextElement::RedTextElement(const char* pcName)
-    : RedGlyphCacheElement(pcName)
+    : RedGlyphCacheElement(pcName),
+      m_bUnknown0090(1),
+      m_uiWidth(0),
+      m_uiHeight(0),
+      m_fScaleX(1.0f),
+      m_fScaleY(1.0f),
+      m_iTextExtent(0),
+      m_uiNumLines(0),
+      m_leading(0),
+      m_iSpacing(1),
+      m_uiTabSpacing(0),
+      m_uiCursorPos(0xffff),
+      m_halign(TEXT_HALIGN_LEFT),
+      m_valign(TEXT_VALIGN_TOP),
+      m_break(TEXT_BREAK_WORD),
+      m_clip(TEXT_CLIP_CHARACTER),
+      m_dirtyGlyphCache(0)
 {
-    m_uiWidth = 0;
-    m_uiHeight = 0;
-
-    m_iTextExtent = 0;
-    m_uiNumLines = 0;
-
-    m_bUnknown0090 = 1;
-
-    m_fScaleX = 1.0f;
-    m_fScaleY = 1.0f;
-
-    m_leading = 0;
-    m_iSpacing = 1;
-
-    m_uiTabSpacing = 0;
-    m_uiCursorPos = 0xffff;
-
-    m_halign = TEXT_HALIGN_LEFT;
-    m_valign = TEXT_VALIGN_TOP;
-    m_break = TEXT_BREAK_WORD;
-    m_clip = TEXT_CLIP_CHARACTER;
-    m_dirtyGlyphCache = 0;
-
     m_text.SetSize(32);
 }
 

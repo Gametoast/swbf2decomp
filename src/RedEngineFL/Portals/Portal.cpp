@@ -284,22 +284,14 @@ bool pvs::Portal::Clip(const pvs::ICamera& rCam, geo::Box& rBox, const geo::Frus
         rCam.GetViewTrans(camTrans);
     }
 
-    float fDX = sbound_.center_.x - camPos.x;
-    float fDY = sbound_.center_.y - camPos.y;
-    float fDZ = sbound_.center_.z - camPos.z;
-    float fInv = 1.0f / (float)sqrt((double)(fDX * fDX + fDY * fDY + fDZ * fDZ));
-    fDX *= fInv;
-    fDY *= fInv;
-    fDZ *= fInv;
+    geo::Vector3<float> dirToPortal = geo::normalize(sbound_.center_ - camPos);
 
     bool bRoot = GetLeft() == pRoot || GetRight() == pRoot;
 
     geo::Vector3<float> norm = norm_;
-    if (GetLeft() != &rSect)
+    if (&rSect != GetLeft())
     {
-        norm.x = norm_.x * -1.0f;
-        norm.y = norm_.y * -1.0f;
-        norm.z = norm_.z * -1.0f;
+        norm = norm_ * -1.0f;
     }
 
     if (gProximityTest)
@@ -313,8 +305,7 @@ bool pvs::Portal::Clip(const pvs::ICamera& rCam, geo::Box& rBox, const geo::Frus
 
     if (!bRoot && gBackFaceCull)
     {
-        if (norm.x * norm.x + norm.y * norm.y + norm.z * norm.z > 0.1f &&
-            norm.x * fDX + norm.y * fDY + norm.z * fDZ < 0.0f)
+        if (geo::dot(norm, norm) > 0.1f && geo::dot(norm, dirToPortal) < 0.0f)
         {
             return false;
         }
@@ -381,7 +372,8 @@ pvs::IPortal* pvs::Manager::FindNearestPortal(const geo::Sphere& rSphere, float 
             continue;
         }
 
-        for (Portal** ppPortal = pSect->portals_.Begin(); ppPortal != pSect->portals_.End(); ++ppPortal)
+        Portal** ppEnd = pSect->portals_.End();
+        for (Portal** ppPortal = pSect->portals_.Begin(); ppPortal < ppEnd; ++ppPortal)
         {
             Portal* pPortal = *ppPortal;
             if (!pPortal)
@@ -412,15 +404,9 @@ void pvs::Portal::FindNormal()
     const geo::Vector3<float>& p1 = poly.points_[1];
     const geo::Vector3<float>& pn = poly.points_[poly.numPoints_ - 1];
 
-    float fAX = p1.x - p0.x, fAY = p1.y - p0.y, fAZ = p1.z - p0.z;
-    float fBX = pn.x - p0.x, fBY = pn.y - p0.y, fBZ = pn.z - p0.z;
-    float fNX = fAY * fBZ - fAZ * fBY;
-    float fNY = fAZ * fBX - fAX * fBZ;
-    float fNZ = fAX * fBY - fAY * fBX;
-    float fInv = 1.0f / (float)sqrt((double)(fNX * fNX + fNY * fNY + fNZ * fNZ));
-    norm_.x = fNX * fInv;
-    norm_.y = fNY * fInv;
-    norm_.z = fNZ * fInv;
+    geo::Vector3<float> edgeA = p1 - p0;
+    geo::Vector3<float> edgeB = pn - p0;
+    norm_ = geo::normalize(geo::cross(edgeA, edgeB));
 
     geo::Vector3<float> left = sbound_.center_;
     geo::Vector3<float> right = sbound_.center_;
@@ -434,12 +420,8 @@ void pvs::Portal::FindNormal()
         right = right_->GetSphereBound().center_;
     }
 
-    float fDX = right.x - left.x, fDY = right.y - left.y, fDZ = right.z - left.z;
-    float fDInv = 1.0f / (float)sqrt((double)(fDX * fDX + fDY * fDY + fDZ * fDZ));
-    fDX *= fDInv;
-    fDY *= fDInv;
-    fDZ *= fDInv;
-    if (!(norm_.x * fDX + norm_.y * fDY + norm_.z * fDZ > 0.0f))
+    geo::Vector3<float> dir = geo::normalize(right - left);
+    if (!(geo::dot(norm_, dir) > 0.0f))
     {
         norm_.x *= -1.0f;
         norm_.y *= -1.0f;
@@ -481,19 +463,8 @@ void pvs::Manager::GetCamFrustum(const pvs::ICamera& rCam, geo::Frustum& rFrustu
     geo::Vector3<float> fwd(vFwd.x, vFwd.y, vFwd.z);
 
     const geo::Vector3<float> yAxis(0.0f, 1.0f, 0.0f);
-    float fRX = yAxis.y * fwd.z - yAxis.z * fwd.y;
-    float fRY = yAxis.z * fwd.x - yAxis.x * fwd.z;
-    float fRZ = yAxis.x * fwd.y - yAxis.y * fwd.x;
-    float fInv = 1.0f / (float)sqrt((double)(fRX * fRX + fRY * fRY + fRZ * fRZ));
-    fRX *= fInv;
-    fRY *= fInv;
-    fRZ *= fInv;
-
-    float fUX = fwd.y * fRZ - fwd.z * fRY;
-    float fUY = fwd.z * fRX - fwd.x * fRZ;
-    float fUZ = fwd.x * fRY - fwd.y * fRX;
-    fInv = 1.0f / (float)sqrt((double)(fUX * fUX + fUY * fUY + fUZ * fUZ));
-    geo::Vector3<float> up(fUX * fInv, fUY * fInv, fUZ * fInv);
+    geo::Vector3<float> side = geo::normalize(geo::cross(yAxis, fwd));
+    geo::Vector3<float> up = geo::normalize(geo::cross(fwd, side));
 
     rFrustum = geo::Frustum(camPos, up, fwd, 100000.0f, 100000.0f, 0.1f, 100000.0f);
 }
@@ -728,9 +699,10 @@ pvs::Sector* pvs::Sector::PortalCrossingCheck(const geo::Sphere& rSphere, const 
         float fTol = geo::Max_(geo::Max_((float)fabs(fDist), (float)fabs(0.0f)), 1.0f) * 9.5367431640625e-07f + 0.0f;
         if (fDist <= fTol)
         {
+            geo::BasePoly3D portalPoly(pPortal->GetPoly());
             geo::Vector3<float> vDir(rSphere.center_.x - rLastPos.x, rSphere.center_.y - rLastPos.y,
                                      rSphere.center_.z - rLastPos.z);
-            if (geo::Overlap3D::Op(geo::BasePoly3D(pPortal->GetPoly()), geo::Ray<geo::Vector3<float> >(rLastPos, vDir)))
+            if (geo::Overlap3D::Op(portalPoly, geo::Ray<geo::Vector3<float> >(rLastPos, vDir)))
             {
                 return pOther;
             }
@@ -859,7 +831,12 @@ void pvs::Portal::SetRight(pvs::ISector* pRight)
 template <class T>
 void pvs::BaseDisplayable<T>::SetSector(pvs::Sector* pSector)
 {
-    if (this->PortalActive() && pSector)
+    if (!this->PortalActive())
+    {
+        sector_ = pSector;
+        return;
+    }
+    if (pSector)
     {
         this->SetPortalActive(true);
     }
@@ -873,7 +850,12 @@ template void pvs::BaseDisplayable<pvs::IDisplayable>::SetSector(pvs::Sector*);
 // FUNCTION: SWBF2 0x006e1620
 void pvs::DynDisplayable::SetSector(pvs::Sector* pSector)
 {
-    if (PortalActive() && pSector)
+    if (!PortalActive())
+    {
+        sector_ = pSector;
+        return;
+    }
+    if (pSector)
     {
         SetPortalActive(true);
     }
@@ -898,33 +880,16 @@ bool pvs::Sector::TestWindingOrder()
         return false;
     }
 
-    const geo::Vector2<float>* pPts = bound_.points_._elements;
-    float fDX = pPts[1].x - pPts[0].x;
-    float fDY = pPts[1].y - pPts[0].y;
-    float fDZ = 0.0f;
-    float fInv = 1.0f / (float)sqrt((double)(fDX * fDX + fDY * fDY + fDZ * fDZ));
-    fDX *= fInv;
-    fDY *= fInv;
-    fDZ *= fInv;
-
-    float fNX = fDY * 1.0f - fDZ * 0.0f;
-    float fNY = fDZ * 0.0f - fDX * 1.0f;
-    float fNZ = fDX * 0.0f - fDY * 0.0f;
-
-    geo::Vector3<float> vTest;
-    vTest.x = (pPts[0].x + pPts[1].x) * 0.5f + fNX * -0.00001f;
-    vTest.y = (pPts[0].y + pPts[1].y) * 0.5f + fNY * -0.00001f;
-    vTest.z = fNZ * -0.00001f + 0.0f;
+    const geo::Vector2<float>& rP0 = bound_.points_._elements[0];
+    const geo::Vector2<float>& rP1 = bound_.points_._elements[1];
+    geo::Vector3<float> edge(rP1.x - rP0.x, rP1.y - rP0.y, 0.0f);
+    geo::Vector3<float> edgeDir = geo::normalize(edge);
+    geo::Vector3<float> edgeNormal = geo::cross(edgeDir, geo::Vector3<float>(0.0f, 0.0f, 1.0f));
+    geo::Vector3<float> edgeMid((rP0.x + rP1.x) * 0.5f, (rP0.y + rP1.y) * 0.5f, 0.0f);
+    geo::Vector3<float> vTest = edgeMid + edgeNormal * -0.00001f;
 
     bool bResult = Contains(vTest);
-    if (bResult)
-    {
-        windingMult_ = 1.0f;
-    }
-    else
-    {
-        windingMult_ = -1.0f;
-    }
+    windingMult_ = bResult ? 1.0f : -1.0f;
     return bResult;
 }
 
@@ -986,13 +951,16 @@ void pvs::Sector::Traverse(const pvs::ICamera& rCam, const geo::Box& rBox, const
 void pvs::Manager::TraversePortals(const pvs::ICamera& rCam, pvs::ITraverser* pTrav)
 {
     const BaseCamera* pCam = static_cast<const BaseCamera*>(&rCam);
-    geo::Box box(geo::Vector3<float>(-1.0f, -1.0f, 1.0f), geo::Vector3<float>(1.0f, 1.0f, 1.0f));
+    const geo::Vector3<float> boxMin(-1.0f, -1.0f, 1.0f);
+    const geo::Vector3<float> boxMax(1.0f, 1.0f, 1.0f);
+    geo::Box box(boxMin, boxMax);
     geo::Frustum frustum;
     static_cast<Manager&>(IManager::GetInstance()).GetCamFrustum(*pCam, frustum);
     FindSectors(*pCam, camsectors_, scache_);
     for (int i = 0; i < camsectors_._numElements; ++i)
     {
-        camsectors_[i]->Traverse(*pCam, box, frustum, pTrav, camsectors_[i]);
+        Sector* pSector = camsectors_[i];
+        pSector->Traverse(*pCam, box, frustum, pTrav, pSector);
     }
 }
 
@@ -1041,10 +1009,7 @@ void pvs::DynDisplayable::Update(pvs::Manager& rMan)
     geo::Sphere sphere;
     GetSphereBound(sphere);
 
-    float fX = lastCheckPos_.x - sphere.center_.x;
-    float fY = lastCheckPos_.y - sphere.center_.y;
-    float fZ = lastCheckPos_.z - sphere.center_.z;
-    float fDist = (float)sqrt((double)(fX * fX + fY * fY + fZ * fZ));
+    float fDist = geo::length(lastCheckPos_ - sphere.center_);
 
     bool bInside = true;
     if (rand() % 10 == 3)
@@ -1052,7 +1017,7 @@ void pvs::DynDisplayable::Update(pvs::Manager& rMan)
         bInside = sector_->Overlap(sphere);
     }
 
-    if (!bInside || fDist > nextCheckDist_)
+    if (!bInside || !(nextCheckDist_ >= fDist))
     {
         nextCheckDist_ = 10.0f;
         Sector* pNew = sector_->PortalCrossingCheck(sphere, lastCheckPos_, nextCheckDist_);

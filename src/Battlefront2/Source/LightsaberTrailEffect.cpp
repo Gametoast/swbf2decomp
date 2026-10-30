@@ -365,7 +365,7 @@ PblBox LightsaberTrail::GetBoundingBox(float fLength) const
         }
         uiSamplePrev = uiSample;
     }
-    bbox.SetMax(bbox.GetMax() + PblVector3(fLength * 1.5f, fLength * 1.5f, fLength * 1.5f));
+    bbox.SetMax(PblVector3(fLength * 1.5f, fLength * 1.5f, fLength * 1.5f) + bbox.GetMax());
     bbox.SetMin(bbox.GetMin() - PblVector3(fLength * 1.5f, fLength * 1.5f, fLength * 1.5f));
     return bbox;
 }

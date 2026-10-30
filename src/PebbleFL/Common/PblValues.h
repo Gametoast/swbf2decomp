@@ -27,7 +27,7 @@ public:
 // TEMPLATE: SWBF2 0x0043cd30
 // PblValues::Record<float>
 template <class T>
-void PblValues::Record(const T& value, PblValuesType type)
+inline void PblValues::Record(const T& value, PblValuesType type)
 {
     (void)value;
     (void)type;

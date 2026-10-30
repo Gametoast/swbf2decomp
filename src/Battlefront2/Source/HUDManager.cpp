@@ -1,5 +1,6 @@
 #include <new>
 #include <string.h>
+#include <math.h>
 
 #include "HUDManager.h"
 
@@ -30,7 +31,21 @@
 #include "HUDTransformNumberVector3.h"
 #include "HUDViewPort.h"
 
-void AdjustScreenGroupAspect(RedScreenGroupElement* pGroup);
+// FUNCTION: SWBF2 0x00565060
+void AdjustScreenGroupAspect(RedScreenGroupElement* pGroup)
+{
+    float fHeight = (float)RedInterfaceScreen::GetScreenHeight();
+    float fHeight43 = (float)RedInterfaceScreen::GetScreenWidth() * 3.0f / 4.0f;
+    if (fabsf(fHeight - fHeight43) < 2.0f)
+        return;
+
+    PblVector3 vPos = pGroup->GetPosition();
+    if (fHeight43 > fHeight)
+    {
+        float fExtra = fHeight43 - fHeight;
+        pGroup->SetMatrixPosScale(vPos.x, fExtra * 0.5f, 1.0f, 1.0f - fExtra / fHeight);
+    }
+}
 
 #pragma warning(disable : 4316)
 

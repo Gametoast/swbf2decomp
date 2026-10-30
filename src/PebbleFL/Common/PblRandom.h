@@ -47,8 +47,7 @@ public:
     // FUNCTION: SWBF2 0x0043ec30
     const PblVector3 GetVector3()
     {
-        return PblVector3((GetFloat() - 0.5f) * 2.0f, (GetFloat() - 0.5f) * 2.0f,
-                          (GetFloat() - 0.5f) * 2.0f);
+        return PblVector3(GetFloat() - 0.5f, GetFloat() - 0.5f, GetFloat() - 0.5f) * 2.0f;
     }
 
     static const PblVector3 GetGlobalVector3() { return _Global.GetVector3(); }

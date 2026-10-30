@@ -19,7 +19,7 @@ namespace RedMissionLog
 }
 
 // GLOBAL: SWBF2 0x01e2fd3c
-int _fileOpCompleted;
+volatile int _fileOpCompleted;
 
 // GLOBAL: SWBF2 0x01e2fd38
 // PblFile::_blockCallbackFunc
@@ -151,7 +151,7 @@ bool PblFile::Open(const char* pcFileName, bool bAsynchronous, bool bOSBuffer, b
         _Buffer = (char*)new Snd::FilePlatform();
         if (_Buffer)
         {
-            _bIsOpen = ((Snd::FilePlatform*)_Buffer)->Open(pcFileName, bOSBuffer ? 8 | 1 : 1,
+            _bIsOpen = ((Snd::FilePlatform*)_Buffer)->Open(pcFileName, (bOSBuffer ? 8 : 0) | 1,
                                                            bBuffer ? 0x20000 : 0, 0x800, 4);
             if (_bIsOpen)
             {
@@ -313,7 +313,12 @@ void PblFile::WriteData(void* pBuffer, int iNumBytes)
 // FUNCTION: SWBF2 0x00425e10
 void PblFile::WriteString(const char* pcText)
 {
-    WriteData((void*)pcText, strlen(pcText));
+    int iLength = 0;
+    for (const char* pc = pcText; *pc; ++pc)
+    {
+        ++iLength;
+    }
+    WriteData((void*)pcText, iLength);
 }
 
 // FUNCTION: SWBF2 0x00425e40
@@ -369,15 +374,6 @@ int PblFile::Tell() const
         return ((Snd::File*)_Buffer)->GetPos();
     }
     return ((Snd::FilePlatform*)_Buffer)->GetPos();
-}
-
-void PblFile::SeekAlign(int iAlign)
-{
-    int iPad = -Tell() & (iAlign - 1);
-    if (iPad)
-    {
-        Seek(iPad, SeekFromHere);
-    }
 }
 
 namespace RedMissionLog

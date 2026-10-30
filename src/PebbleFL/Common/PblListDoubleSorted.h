@@ -147,34 +147,21 @@ public:
     void Sort()
     {
         PblListDouble::Node* pLink = mTerminator.mNext;
-        Node* pPrev = (pLink == &mTerminator) ? 0 : (Node*)((char*)pLink - offsetof(Node, mNode));
+        Node* pPrev = (Node*)pLink->GetObjectA(this, offsetof(Node, mNode));
 
-        for (pLink = pLink->mNext; pLink != &mTerminator; pLink = pLink->mNext)
+        pLink = pLink->mNext;
+        Node* pNode = (Node*)pLink->GetObjectA(this, offsetof(Node, mNode));
+        while (pNode)
         {
-            Node* pNode = (Node*)((char*)pLink - offsetof(Node, mNode));
-            if (pNode == 0)
-            {
-                break;
-            }
-
             if (pNode->mSortValue > pPrev->mSortValue)
             {
                 Node* pAfter;
                 PblListDouble::Node* pScan = &pNode->mNode;
-                for (;;)
+                do
                 {
                     pScan = pScan->mPrev;
-                    if (pScan == &mTerminator)
-                    {
-                        pAfter = 0;
-                        break;
-                    }
-                    pAfter = (Node*)((char*)pScan - offsetof(Node, mNode));
-                    if (pAfter == 0 || !(pNode->mSortValue > pAfter->mSortValue))
-                    {
-                        break;
-                    }
-                }
+                    pAfter = (Node*)pScan->GetObjectA(this, offsetof(Node, mNode));
+                } while (pAfter && pNode->mSortValue > pAfter->mSortValue);
 
                 pNode->mNode.Remove();
 
@@ -183,7 +170,8 @@ public:
             }
 
             pPrev = pNode;
-            pLink = &pNode->mNode;
+            pLink = pNode->mNode.mNext;
+            pNode = (Node*)pLink->GetObjectA(this, offsetof(Node, mNode));
         }
     }
 

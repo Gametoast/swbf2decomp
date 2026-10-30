@@ -34,7 +34,7 @@ public:
         {
             PblListSingle::Node* pNode = PblListSingle::Itor::GetNode();
             return pNode == static_cast<const PblListSingle*>(pList)->GetTerminator()
-                ? (Node*)pNode
+                ? const_cast<Node*>(pList->GetTerminator())
                 : (Node*)((char*)pNode - offsetof(Node, mNode));
         }
     };

@@ -74,10 +74,13 @@ PblQuaternion operator*(const PblQuaternion& q0, const PblQuaternion& q1)
 // FUNCTION: SWBF2 0x0072a380
 PblQuaternion Interpolate(const PblQuaternion& q0, const PblQuaternion& q1, float fT)
 {
-    const float fCos = q0.DotProduct(q1);
+    const float fCos = q0.GetS() * q1.GetS() + q0.GetX() * q1.GetX()
+                     + q0.GetY() * q1.GetY() + q0.GetZ() * q1.GetZ();
 
     float fScale0;
     float fScale1;
+    float fAngle;
+    float fInvSin;
     if (fCos >= 0.0f)
     {
         if (1.0f - fCos < 0.0001f)
@@ -87,8 +90,8 @@ PblQuaternion Interpolate(const PblQuaternion& q0, const PblQuaternion& q1, floa
         }
         else
         {
-            const float fAngle = acosf(fCos);
-            const float fInvSin = 1.0f / PblMath::Sin(fAngle);
+            fAngle = acosf(fCos);
+            fInvSin = 1.0f / PblMath::Sin(fAngle);
             fScale0 = PblMath::Sin((1.0f - fT) * fAngle) * fInvSin;
             fScale1 = PblMath::Sin(fAngle * fT) * fInvSin;
         }
@@ -103,8 +106,8 @@ PblQuaternion Interpolate(const PblQuaternion& q0, const PblQuaternion& q1, floa
         }
         else
         {
-            const float fAngle = acosf(fNegCos);
-            const float fInvSin = 1.0f / PblMath::Sin(fAngle);
+            fAngle = acosf(fNegCos);
+            fInvSin = 1.0f / PblMath::Sin(fAngle);
             fScale0 = PblMath::Sin((1.0f - fT) * fAngle) * fInvSin;
             fScale1 = -(PblMath::Sin(fAngle * fT) * fInvSin);
         }

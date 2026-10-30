@@ -605,7 +605,7 @@ static void Stats_AddLabelNameTime(const unsigned short* pusLabel, const unsigne
     if (pusName)
     {
         ustrlcpy(usText, pusName, 64);
-        for (unsigned short* p = ustrchr(usText, '\n'); p; p = ustrchr(usText, '\n'))
+        for (unsigned short* p = ustrrchr(usText, '\n'); p; p = ustrrchr(usText, '\n'))
         {
             *p = ' ';
         }

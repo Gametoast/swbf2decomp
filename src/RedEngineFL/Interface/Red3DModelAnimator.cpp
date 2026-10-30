@@ -21,14 +21,9 @@ const char Red3DModelAnimator::rttiNameRed3DModelAnimator[] = "Red3DModelAnimato
 
 // FUNCTION: SWBF2 0x006f8190
 Red3DModelAnimator::Red3DModelAnimator()
+    : mAnimHash(0), mQueuedAnim(0), mAnimTransitionTime(0.0f), mAnimTransitionTimeTotal(0.0f),
+      mAnimationTime(-1.0f), mAnimationTimeTotal(0.0f), mLooping(true)
 {
-    mAnimHash = 0;
-    mQueuedAnim = 0;
-    mAnimTransitionTime = 0.0f;
-    mAnimTransitionTimeTotal = 0.0f;
-    mAnimationTime = -1.0f;
-    mAnimationTimeTotal = 0.0f;
-    mLooping = true;
     memset(mAnimBankHash, 0, sizeof(mAnimBankHash));
     Open();
 }
@@ -137,16 +132,20 @@ RedPose* Red3DModelAnimator::UpdatePose()
         mZephyrPoseDyn.SetFrameNum(RedRenderer::GetFrameNumber() % iNumFrames);
         mZephyrPoseDyn.Update(0.0f);
     }
-    if (mAnimTransitionTimeTotal > 0.0f && mAnimTransitionTime < mAnimTransitionTimeTotal)
+    if (mAnimTransitionTimeTotal > 0.0f)
     {
-        mZephyrPoseStatic.Blend(mZephyrPoseDyn, mAnimTransitionTime / mAnimTransitionTimeTotal);
+        if (mAnimTransitionTime >= mAnimTransitionTimeTotal)
+        {
+            mAnimTransitionTimeTotal = 0.0f;
+            mZephyrPoseStatic.Set(mZephyrPoseDyn, true);
+        }
+        else
+        {
+            mZephyrPoseStatic.Blend(mZephyrPoseDyn, mAnimTransitionTime / mAnimTransitionTimeTotal);
+        }
     }
     else
     {
-        if (mAnimTransitionTimeTotal > 0.0f)
-        {
-            mAnimTransitionTimeTotal = 0.0f;
-        }
         mZephyrPoseStatic.Set(mZephyrPoseDyn, true);
     }
     mZephyrSkeleton.BuildWorldMatrices(gMatrixIdentity);

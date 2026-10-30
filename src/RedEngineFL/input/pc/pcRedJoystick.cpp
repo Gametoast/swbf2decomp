@@ -5,9 +5,17 @@
 #include "pcRedInputManager.h"
 #include "RedEngineFL/Interface/RedInterfaceScreen.h"
 
+// GLOBAL: SWBF2 0x007877b4
+// c_dfDIJoystick2
+
 extern HWND hGlobalWnd;
 
 BOOL CALLBACK EnumObjectsCallback(DIDEVICEOBJECTINSTANCEA const* pObject, void* pvRef);
+
+static inline float AbsValue(float f)
+{
+    return f < 0.0f ? -f : f;
+}
 
 // FUNCTION: SWBF2 0x006c54a0
 void RedJoystick::Insert()
@@ -19,11 +27,11 @@ void RedJoystick::Insert()
     memset(&pc_state, 0, sizeof(pc_state));
     pc_device->Unacquire();
     pc_device->SetCooperativeLevel(hGlobalWnd, DISCL_EXCLUSIVE | DISCL_FOREGROUND);
-    HRESULT result;
-    do
+    HRESULT result = pc_device->Acquire();
+    while (result == DIERR_INPUTLOST)
     {
         result = pc_device->Acquire();
-    } while (result == DIERR_INPUTLOST);
+    }
     m_connected = result == DI_OK;
 }
 
@@ -53,7 +61,6 @@ void RedJoystick::Init(unsigned char ucPortNum)
 // FUNCTION: SWBF2 0x006c5a60
 bool RedJoystick::pcCreateDevice(DIDEVICEINSTANCEA const* pInstance)
 {
-
     mPreviousAxisX = 1000.0f;
     mPreviousAxisY = 1000.0f;
 
@@ -69,17 +76,28 @@ bool RedJoystick::pcCreateDevice(DIDEVICEINSTANCEA const* pInstance)
         return false;
     }
 
-    if (SUCCEEDED(pc_device->SetDataFormat(&c_dfDIJoystick2))
-        && SUCCEEDED(pc_device->SetCooperativeLevel(hGlobalWnd,
-                                                    DISCL_EXCLUSIVE | DISCL_FOREGROUND))
-        && SUCCEEDED(pc_device->EnumObjects(EnumObjectsCallback, this, DIDFT_ALL)))
+    if (FAILED(pc_device->SetDataFormat(&c_dfDIJoystick2)))
     {
-        return true;
+        pc_device->Release();
+        pc_device = 0;
+        return false;
     }
 
-    pc_device->Release();
-    pc_device = 0;
-    return false;
+    if (FAILED(pc_device->SetCooperativeLevel(hGlobalWnd, DISCL_EXCLUSIVE | DISCL_FOREGROUND)))
+    {
+        pc_device->Release();
+        pc_device = 0;
+        return false;
+    }
+
+    if (FAILED(pc_device->EnumObjects(EnumObjectsCallback, this, DIDFT_ALL)))
+    {
+        pc_device->Release();
+        pc_device = 0;
+        return false;
+    }
+
+    return true;
 }
 
 // FUNCTION: SWBF2 0x006c53a0
@@ -102,8 +120,8 @@ BOOL CALLBACK EnumObjectsCallback(DIDEVICEOBJECTINSTANCEA const* pObject, void* 
         DIPROPDWORD dipdw;
         dipdw.diph.dwSize = sizeof(DIPROPDWORD);
         dipdw.diph.dwHeaderSize = sizeof(DIPROPHEADER);
-        dipdw.diph.dwObj = pObject->dwType;
         dipdw.diph.dwHow = DIPH_BYID;
+        dipdw.diph.dwObj = pObject->dwType;
         dipdw.dwData = (DWORD)(pJoystick->mDeadZoneScale * 16384.0f);
         pJoystick->pc_device->SetProperty(DIPROP_DEADZONE, &dipdw.diph);
 
@@ -210,8 +228,8 @@ void RedJoystick::Update(float fDeltaTime)
         mPreviousAxisY = fY;
     }
 
-    if ((fabsf(fX) > 0.4f && mPreviousAxisX != 0.0f && fabsf(fX - mPreviousAxisX) > 0.03f)
-        || (fabsf(fY) > 0.4f && mPreviousAxisY != 0.0f && fabsf(fY - mPreviousAxisY) > 0.03f))
+    if ((AbsValue(fX) > 0.4f && mPreviousAxisX != 0.0f && AbsValue(fX - mPreviousAxisX) > 0.03f)
+        || (AbsValue(fY) > 0.4f && mPreviousAxisY != 0.0f && AbsValue(fY - mPreviousAxisY) > 0.03f))
     {
         pMouse->pCursorImage = this;
     }

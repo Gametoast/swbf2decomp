@@ -218,6 +218,10 @@ void Deliver(NetPacket* pPacket, int iDest)
 // PblJournal::Record<bool>
 template void PblJournal::Record<bool>(bool& value, PblJournalType type);
 
+// TEMPLATE: SWBF2 0x005b3fd0
+// PblJournal::Record<int>
+template void PblJournal::Record<int>(int& value, PblJournalType type);
+
 // GLOBAL: SWBF2 0x01fa3d6c
 float thisDrag;
 // GLOBAL: SWBF2 0x01fa3d64

@@ -162,7 +162,8 @@ public:
         }
         else if (iSize > this->_size)
         {
-            int iGranule = Max_(1 << (Int_::ilog(iSize) - 2), 4);
+            const int iMinGranule = 4;
+            int iGranule = Max_(1 << (Int_::ilog(iSize) - 2), iMinGranule);
 
             int iRounded = iSize;
             if (iSize % iGranule != 0)

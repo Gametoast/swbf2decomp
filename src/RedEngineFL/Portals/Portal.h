@@ -290,7 +290,7 @@ public:
 
     bool Clip(const pvs::ICamera &, geo::Box &, const geo::Frustum &, const pvs::Sector &);
 
-    pvs::Sector* GetOther(pvs::Sector* pSect) { return left_ == pSect ? right_ : left_; }
+    pvs::Sector* GetOther(pvs::Sector* pSect) { return pSect == left_ ? right_ : left_; }
 
     pvs::Sector* left_;
     pvs::Sector* right_;

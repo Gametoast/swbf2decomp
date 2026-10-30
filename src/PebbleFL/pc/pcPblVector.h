@@ -22,9 +22,7 @@ inline const PblVector3 operator-(const PblVector3& lhs, const PblVector3& rhs)
 inline const PblVector3 operator*(const PblVector3& lhs, float rhs)
 {
     PblVector3 Temp;
-    Temp.x = lhs.x * rhs;
-    Temp.y = lhs.y * rhs;
-    Temp.z = lhs.z * rhs;
+    D3DXVec3Scale(&Temp, &lhs, rhs);
     return Temp;
 }
 
@@ -37,7 +35,7 @@ inline const PblVector3 operator/(const PblVector3& lhs, float rhs)
 // FUNCTION: SWBF2 0x00410b60
 inline float DotProduct(const PblVector3& vVector1, const PblVector3& vVector2)
 {
-    return vVector1.y * vVector2.y + vVector1.x * vVector2.x + vVector1.z * vVector2.z;
+    return D3DXVec3Dot(&vVector1, &vVector2);
 }
 
 inline PblVector4::operator const PblVector3&() const
@@ -54,14 +52,12 @@ inline const float Length(const PblVector3& vVector)
 // FUNCTION: SWBF2 0x0041bba0
 inline const float SquaredLength(const PblVector3& vVector)
 {
-    return vVector.x * vVector.x + vVector.y * vVector.y + vVector.z * vVector.z;
+    return D3DXVec3LengthSq(&vVector);
 }
 
 inline const PblVector3& PblVector3::operator+=(const PblVector3& rhs)
 {
-    x += rhs.x;
-    y += rhs.y;
-    z += rhs.z;
+    D3DXVec3Add(this, this, &rhs);
     return *this;
 }
 
@@ -72,9 +68,7 @@ inline const PblVector3 PblVector3::operator-() const
 
 inline const PblVector3& PblVector3::operator-=(const PblVector3& rhs)
 {
-    x -= rhs.x;
-    y -= rhs.y;
-    z -= rhs.z;
+    D3DXVec3Subtract(this, this, &rhs);
     return *this;
 }
 

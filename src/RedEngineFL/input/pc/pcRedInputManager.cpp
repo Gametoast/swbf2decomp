@@ -180,16 +180,17 @@ void Init()
 
     isReadingJournal = (PblJournal::Get(PJT_FULL)->mMode == PJM_READING);
 
-    if (g_bNoRender)
+    if (!g_bNoRender)
     {
-
-        m_pDI = 0;
+        if (!isReadingJournal)
+        {
+            DirectInput8Create(hGlobalInstance, DIRECTINPUT_VERSION, IID_IDirectInput8A,
+                               (void**)&m_pDI, 0);
+        }
     }
-    else if (!isReadingJournal)
+    else
     {
-
-        DirectInput8Create(hGlobalInstance, DIRECTINPUT_VERSION, IID_IDirectInput8A,
-                           (void**)&m_pDI, 0);
+        m_pDI = 0;
     }
 
     if (!m_pDI)
@@ -217,13 +218,11 @@ void Init()
     m_numJoysticks = 0;
     if (!isReadingJournal)
     {
-
         m_pDI->EnumDevices(DI8DEVCLASS_GAMECTRL, pcEnumJoystickDevice, 0,
                            DIEDFL_ATTACHEDONLY);
     }
     else
     {
-
         bool bMoreJoysticks = false;
         while (bMoreJoysticks)
         {
@@ -285,10 +284,10 @@ RedLogitechLCD* GetLCDPanel(unsigned char ucPort)
 // FUNCTION: SWBF2 0x006dbc30
 void Cleanup()
 {
-    for (unsigned char ucPort = 0; ucPort < 10; ++ucPort)
+    for (int iPort = 0; iPort < 10; ++iPort)
     {
-        m_joysticks[ucPort].Remove();
-        m_joysticks[ucPort].Cleanup();
+        m_joysticks[iPort].Remove();
+        m_joysticks[iPort].Cleanup();
     }
 
     m_keyboards[0].Remove();

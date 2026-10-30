@@ -18,7 +18,7 @@ public:
     {
     public:
 
-        void Cleanup() { RemoveAll(); }
+        void Cleanup();
 
         void Add(LensFlare* pFlare);
         void Remove(LensFlare* pFlare);

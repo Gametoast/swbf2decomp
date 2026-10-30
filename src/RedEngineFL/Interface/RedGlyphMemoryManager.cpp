@@ -80,11 +80,12 @@ RedGlyphMemoryManager::Iterator RedGlyphMemoryManager::Alloc(unsigned int uiNumQ
 RedGlyphMemoryManager::VertexBlock* RedGlyphMemoryManager::AllocBlock()
 {
     VertexBlock* pBlock = m_pFirstFree;
-    if (pBlock)
+    if (!pBlock)
     {
-        m_pFirstFree = pBlock->pNext;
-        pBlock->uiNumVertices = 48;
+        return 0;
     }
+    m_pFirstFree = pBlock->pNext;
+    pBlock->uiNumVertices = 48;
     return pBlock;
 }
 

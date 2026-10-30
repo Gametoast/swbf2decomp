@@ -246,10 +246,9 @@ void RedLogitechLCD::ConnectLCDPanel(unsigned char ucPortIndex)
 
     if (pThis->mConnected)
     {
-
+        pThis->mConnectCtx.isAutostartable = 0;
         pThis->mConnectCtx.appFriendlyName = "Star Wars Battlefront II";
         pThis->mConnectCtx.isPersistent = 1;
-        pThis->mConnectCtx.isAutostartable = 0;
         pThis->mConnectCtx.configCallback = 0;
         pThis->mConnectCtx.configContext = 0;
         pThis->mConnectCtx.connection = -1;
@@ -304,35 +303,32 @@ void RedLogitechLCD::OpenLCDPanel()
 
     const int iInfoSize = sizeof(BITMAPINFO) + 256 * sizeof(RGBQUAD);
     pThis->mpBitmapInfo = (BITMAPINFO*)new BYTE[iInfoSize];
-    memset(pThis->mpBitmapInfo, 0, iInfoSize);
-
     pThis->mWidth = 160;
     pThis->mHeight = 43;
+    memset(pThis->mpBitmapInfo, 0, iInfoSize);
 
-    BITMAPINFO* pInfo = pThis->mpBitmapInfo;
-    pInfo->bmiHeader.biSize = sizeof(BITMAPINFOHEADER);
-    pInfo->bmiHeader.biWidth = pThis->mWidth;
+    pThis->mpBitmapInfo->bmiHeader.biSize = sizeof(BITMAPINFOHEADER);
+    pThis->mpBitmapInfo->bmiHeader.biWidth = pThis->mWidth;
+    pThis->mpBitmapInfo->bmiHeader.biHeight = -pThis->mHeight;
+    pThis->mpBitmapInfo->bmiHeader.biPlanes = 1;
+    pThis->mpBitmapInfo->bmiHeader.biBitCount = 8;
+    pThis->mpBitmapInfo->bmiHeader.biCompression = BI_RGB;
 
-    pInfo->bmiHeader.biHeight = -pThis->mHeight;
-    pInfo->bmiHeader.biPlanes = 1;
-    pInfo->bmiHeader.biBitCount = 8;
-    pInfo->bmiHeader.biCompression = BI_RGB;
-
-    pInfo->bmiHeader.biSizeImage = pInfo->bmiHeader.biBitCount
-                                   * pInfo->bmiHeader.biHeight
-                                   * pInfo->bmiHeader.biWidth / 8;
-    pInfo->bmiHeader.biXPelsPerMeter = 3200;
-    pInfo->bmiHeader.biYPelsPerMeter = 3200;
-    pInfo->bmiHeader.biClrUsed = 256;
-    pInfo->bmiHeader.biClrImportant = 256;
+    pThis->mpBitmapInfo->bmiHeader.biSizeImage = pThis->mpBitmapInfo->bmiHeader.biBitCount
+                                                 * pThis->mpBitmapInfo->bmiHeader.biHeight
+                                                 * pThis->mpBitmapInfo->bmiHeader.biWidth / 8;
+    pThis->mpBitmapInfo->bmiHeader.biXPelsPerMeter = 3200;
+    pThis->mpBitmapInfo->bmiHeader.biYPelsPerMeter = 3200;
+    pThis->mpBitmapInfo->bmiHeader.biClrUsed = 256;
+    pThis->mpBitmapInfo->bmiHeader.biClrImportant = 256;
 
     for (int i = 0; i < 256; i++)
     {
         BYTE cLevel = (i <= 128) ? 0 : 0xFF;
-        pInfo->bmiColors[i].rgbRed = cLevel;
-        pInfo->bmiColors[i].rgbGreen = cLevel;
-        pInfo->bmiColors[i].rgbBlue = cLevel;
-        pInfo->bmiColors[i].rgbReserved = 0;
+        pThis->mpBitmapInfo->bmiColors[i].rgbRed = cLevel;
+        pThis->mpBitmapInfo->bmiColors[i].rgbGreen = cLevel;
+        pThis->mpBitmapInfo->bmiColors[i].rgbBlue = cLevel;
+        pThis->mpBitmapInfo->bmiColors[i].rgbReserved = 0;
     }
 
     pThis->mhBitmap = CreateDIBSection(pThis->mhDC, pThis->mpBitmapInfo, DIB_RGB_COLORS,

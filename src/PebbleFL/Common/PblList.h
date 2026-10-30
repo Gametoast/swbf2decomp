@@ -167,7 +167,7 @@ public:
 
     // TEMPLATE: SWBF2 0x0043a180
     // PblList<Character>::RemoveAll
-    // TEMPLATE: SWBF2 0x0056f8c0
+    // TEMPLATE: SWBF2 0x0056fa50
     // PblList<LensFlare>::RemoveAll
     // TEMPLATE: SWBF2 0x00695020
     // PblList<PrecipitationEffect::RainShadowRegion>::RemoveAll
