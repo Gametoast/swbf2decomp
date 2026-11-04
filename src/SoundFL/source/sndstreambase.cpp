@@ -117,11 +117,11 @@ void StreamBase::Close()
         RemoveFromManager();
     }
 
-    PblListSingle::Node* pNode = mInfoList.mHead.mNext;
-    while (pNode != &mInfoList.mHead)
+    ObjectList::Itor itor(mInfoList);
+    while (itor.GetNode() != (ObjectList::Node*)mInfoList.GetTerminator())
     {
-        Info* const pInfo = (Info*)((ObjectList::Node*)pNode)->mObject;
-        pNode = pNode->mNext;
+        Info* const pInfo = (Info*)itor.GetNode()->GetObjectA();
+        ++itor;
         mInfoList.Remove(pInfo);
         if (--pInfo->mRefCount == 0)
         {
@@ -246,9 +246,8 @@ bool StreamBase::LoadSegments(PblFileChunk& chunk, Segment* pSegments,
                 }
             }
             uiOffset += uiSize;
-            new (&pSegments[uiCount], false) Segment(uiHashID, bAlias ? uiAliasOffset : uiOffset - uiSize,
-                                         uiLength, uiLengthSamples, uiFrequency, uiPadding);
-            ++uiCount;
+            new (&pSegments[uiCount++], false) Segment(uiHashID, bAlias ? uiAliasOffset : uiOffset - uiSize,
+                                           uiLength, uiLengthSamples, uiFrequency, uiPadding);
         }
         --uiRemaining;
     }

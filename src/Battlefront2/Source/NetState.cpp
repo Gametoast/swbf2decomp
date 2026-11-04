@@ -1569,9 +1569,7 @@ void EntityDroid::ReadLateState(NetPktGroup& group)
     SetPitch(fVal);
     ReadThrust(group, mTurnBuildup);
     group.Read(mTargetInfo.mIsAiming);
-    unsigned int state = 0;
-    group.ReadBits(state, 2);
-    mState = (State)state;
+    group.ReadBits(reinterpret_cast<unsigned int&>(mState), 2);
     group.ReadFixed(mKillTimer, 0.0f, 5.0f, 8);
 }
 
@@ -2233,7 +2231,9 @@ void ReadVelocity(NetPktGroup& group, PblVector3& value, float fMaxSpeed, int fo
     }
     else
     {
-        value.SetAll(0.0f);
+        value.x = 0.0f;
+        value.y = 0.0f;
+        value.z = 0.0f;
     }
 }
 
