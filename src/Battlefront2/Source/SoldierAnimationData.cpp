@@ -66,7 +66,8 @@ float SoldierAnimationData::GetBlendTime(float fTime, unsigned char uiAnimIndex)
             return m_aBlendOverride[i].GetBlendTime();
         }
     }
-    return GetBlendTime(fTime);
+    const float fBlendOut = GetBlendOutTime();
+    return (fTime > fBlendOut) ? fBlendOut : fTime;
 }
 
 // FUNCTION: SWBF2 0x0063cf10
@@ -282,24 +283,29 @@ void SoldierAnimationData::InitLoadTimeData()
     memset(s_auiSyncTypeTable, 0, 256 * sizeof(unsigned int));
     memset(s_aszSyncTypeNames, 0, 256 * sizeof(char*));
 
+    int iScope;
     for (int iAnim = 0; iAnim < NUM_ACTION_ANIMATIONS; ++iAnim)
     {
+        iScope = 0;
         unsigned char uiAnimIndex = SoldierAnimType::GetAnimIndex((ActionAnimation)iAnim);
-        for (int iScope = 0; iScope < NUM_SCOPES; ++iScope)
+        const unsigned int uiBase = uiAnimIndex * 2;
+        for (; iScope < NUM_SCOPES; ++iScope)
         {
             s_pAnimationNameTable->Store(PblHash(AnimIndexToName(uiAnimIndex, (Scope)iScope)),
-                                         (void*)((uiAnimIndex * 2 + iScope) | 0x80000000));
+                                         (void*)((uiBase + iScope) | 0x80000000));
         }
     }
     for (int iPosture = 0; iPosture < NUM_POSTURES; ++iPosture)
     {
         for (int iAnim = 0; iAnim < NUM_MOVEMENT_ANIMATIONS; ++iAnim)
         {
+            iScope = 0;
             unsigned char uiAnimIndex = SoldierAnimType::GetAnimIndex((Posture)iPosture, (MovementAnimation)iAnim);
-            for (int iScope = 0; iScope < NUM_SCOPES; ++iScope)
+            const unsigned int uiBase = uiAnimIndex * 2;
+            for (; iScope < NUM_SCOPES; ++iScope)
             {
                 s_pAnimationNameTable->Store(PblHash(AnimIndexToName(uiAnimIndex, (Scope)iScope)),
-                                             (void*)((uiAnimIndex * 2 + iScope) | 0x80000000));
+                                             (void*)((uiBase + iScope) | 0x80000000));
             }
         }
     }
@@ -307,11 +313,13 @@ void SoldierAnimationData::InitLoadTimeData()
     {
         for (int iAnim = 0; iAnim < NUM_WEAPON_ANIMATIONS; ++iAnim)
         {
+            iScope = 0;
             unsigned char uiAnimIndex = SoldierAnimType::GetAnimIndex((Posture)iPosture, (WeaponAnimation)iAnim);
-            for (int iScope = 0; iScope < NUM_SCOPES; ++iScope)
+            const unsigned int uiBase = uiAnimIndex * 2;
+            for (; iScope < NUM_SCOPES; ++iScope)
             {
                 s_pAnimationNameTable->Store(PblHash(AnimIndexToName(uiAnimIndex, (Scope)iScope)),
-                                             (void*)((uiAnimIndex * 2 + iScope) | 0x80000000));
+                                             (void*)((uiBase + iScope) | 0x80000000));
             }
         }
     }
@@ -671,7 +679,11 @@ SoldierAnimationData* SoldierAnimationData::Find(unsigned int uiNameHash)
 SoldierAnimationData* SoldierAnimationData::Find(SoldierAnimationBank::COMBO_ANIMATION eAnimation,
                                                  Scope eScope)
 {
-    if (!s_pAnimationNameTable || eAnimation == SoldierAnimationBank::INVALID_COMBO_ANIMATION)
+    if (!s_pAnimationNameTable)
+    {
+        return 0;
+    }
+    if (eAnimation == SoldierAnimationBank::INVALID_COMBO_ANIMATION)
     {
         return 0;
     }
@@ -689,7 +701,11 @@ SoldierAnimationData* SoldierAnimationData::Find(SoldierAnimationBank::COMBO_ANI
 // FUNCTION: SWBF2 0x0063e4b0
 unsigned char SoldierAnimationData::AddSyncType(const char* pcName, bool bByTime)
 {
-    if (!*pcName || !s_auiSyncTypeTable)
+    if (!*pcName)
+    {
+        return 0;
+    }
+    if (!s_auiSyncTypeTable)
     {
         return 0;
     }
@@ -751,46 +767,43 @@ void SoldierAnimationData::Read(PblFileChunk& chunk)
     while (!config.IsDone())
     {
         PblConfig::Data data = config.ReadNextData();
-        if (data.GetId() != 0xe145ee5d || !config.IsScopeNext())
+        if (data.GetId() == 0xe145ee5d && config.IsScopeNext())
         {
-            continue;
-        }
-
-        if (!data.IsStringArg(0))
-        {
-            config.ReadNextScope();
-            continue;
-        }
-
-        const char* pcName = data.GetStringArg(0);
-        const char* pcScope = strrchr(pcName, '_');
-        unsigned int uiHash = PblHash(pcName);
-        if (pcScope && _stricmp(pcScope, GetScopeExtension(LOWER)) &&
-            _stricmp(pcScope, GetScopeExtension(UPPER)))
-        {
-            pcScope = 0;
-        }
-
-        PblConfig scope(config.ReadNextScope(), true);
-
-        SoldierAnimationData* pData =
-            Find(pcScope ? uiHash : (unsigned int)PblHash(uiHash, GetScopeExtension(UPPER)));
-        if (!pData)
-        {
-            continue;
-        }
-
-        if (!pData->m_bReadFromConfig)
-        {
-            pData->ReadConfig(scope, pcName);
-        }
-
-        if (!pcScope)
-        {
-            SoldierAnimationData* pLower = Find(PblHash(uiHash, GetScopeExtension(LOWER)));
-            if (pLower && !pLower->m_bReadFromConfig)
+            if (data.IsStringArg(0))
             {
-                pLower->ConvertScope(*pData);
+                const char* pcName = data.GetStringArg(0);
+                const char* pcScope = strrchr(pcName, '_');
+                unsigned int uiHash = PblHash(pcName);
+                if (pcScope && _stricmp(pcScope, GetScopeExtension(LOWER)) &&
+                    _stricmp(pcScope, GetScopeExtension(UPPER)))
+                {
+                    pcScope = 0;
+                }
+
+                PblConfig scope(config.ReadNextScope(), true);
+
+                SoldierAnimationData* pData =
+                    Find(pcScope ? uiHash : (unsigned int)PblHash(uiHash, GetScopeExtension(UPPER)));
+                if (pData)
+                {
+                    if (!pData->m_bReadFromConfig)
+                    {
+                        pData->ReadConfig(scope, pcName);
+                    }
+
+                    if (!pcScope)
+                    {
+                        SoldierAnimationData* pLower = Find(PblHash(uiHash, GetScopeExtension(LOWER)));
+                        if (pLower && !pLower->m_bReadFromConfig)
+                        {
+                            pLower->ConvertScope(*pData);
+                        }
+                    }
+                }
+            }
+            else
+            {
+                config.ReadNextScope();
             }
         }
     }

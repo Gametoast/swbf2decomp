@@ -52,9 +52,8 @@ void MuzzleFlashRenderer::RenderFlash(MuzzleFlashData const& data, RedColor cons
 void MuzzleFlashRenderer::RenderStreak(MuzzleFlashData const& data, RedColor const& color) const
 {
     const PblVector3 vPos = data.m_pAimer->mFirePos;
-    const PblVector3 vMin(vPos.x - 50.0f, vPos.y - 50.0f, vPos.z - 50.0f);
-    const PblVector3 vMax(vPos.x + 50.0f, vPos.y + 50.0f, vPos.z + 50.0f);
-    RedParticleRenderer::SubmitBounds(vMin, vMax);
+    RedParticleRenderer::SubmitBounds(PblVector3(vPos.x - 50.0f, vPos.y - 50.0f, vPos.z - 50.0f),
+                                      PblVector3(vPos.x + 50.0f, vPos.y + 50.0f, vPos.z + 50.0f));
     RedParticleRenderer::TexCoords texCoords;
     texCoords.u0 = 0;
     texCoords.v0 = 0;
@@ -63,15 +62,9 @@ void MuzzleFlashRenderer::RenderStreak(MuzzleFlashData const& data, RedColor con
     RedParticleRenderer::SubmitParticle(PIT_STREAK_HEAD, vPos, color, 0.15f, 0.0f,
                                         texCoords, gVectorUnitX, gVectorUnitY);
     const float fHalfLength = data.mLength * 0.5f;
-    const PblVector3 vMid(vPos.x + data.mDir.x * fHalfLength,
-                          vPos.y + data.mDir.y * fHalfLength,
-                          vPos.z + data.mDir.z * fHalfLength);
-    RedParticleRenderer::SubmitParticle(PIT_STREAK, vMid, color, data.mWidth, 0.5f,
+    RedParticleRenderer::SubmitParticle(PIT_STREAK, vPos + data.mDir * fHalfLength, color, data.mWidth, 0.5f,
                                         texCoords, gVectorUnitX, gVectorUnitY);
-    const PblVector3 vEnd(vPos.x + data.mDir.x * data.mLength,
-                          vPos.y + data.mDir.y * data.mLength,
-                          vPos.z + data.mDir.z * data.mLength);
-    RedParticleRenderer::SubmitParticle(PIT_STREAK_TAIL, vEnd, color, data.mWidth, 1.0f,
+    RedParticleRenderer::SubmitParticle(PIT_STREAK_TAIL, vPos + data.mDir * data.mLength, color, data.mWidth, 1.0f,
                                         texCoords, gVectorUnitX, gVectorUnitY);
 }
 
@@ -92,7 +85,8 @@ void MuzzleFlashRenderer::Render(int)
         RedColor color = data.mColor;
         const float fDot = data.mDir.x * mCamera.m[2][0] + data.mDir.y * mCamera.m[2][1] +
                            data.mDir.z * mCamera.m[2][2];
-        color.a = (unsigned char)(int)((1.0f - fabsf(fDot) * 0.3f) * 255.0f);
+        const float fAbsDot = fDot < 0.0f ? -fDot : fDot;
+        color.a = (unsigned char)(int)((1.0f - fAbsDot * 0.3f) * 255.0f);
         if (color.a)
         {
             RenderStreak(data, color);
@@ -104,7 +98,8 @@ void MuzzleFlashRenderer::Render(int)
         RedColor color = data.mColor;
         const float fDot = data.mDir.x * mCamera.m[2][0] + data.mDir.y * mCamera.m[2][1] +
                            data.mDir.z * mCamera.m[2][2];
-        color.a = (unsigned char)(int)((1.0f - fabsf(fDot) * 0.3f) * 128.0f);
+        const float fAbsDot = fDot < 0.0f ? -fDot : fDot;
+        color.a = (unsigned char)(int)((1.0f - fAbsDot * 0.3f) * 128.0f);
         if (color.a)
         {
             RenderStreak(data, color);

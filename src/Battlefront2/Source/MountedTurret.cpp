@@ -59,20 +59,23 @@ CameraTrackSetting* MountedTurret::GetCameraTrackSettings()
 // FUNCTION: SWBF2 0x005a8520
 void MountedTurret::SetupCameraTrackMatrixHUDTargeting(PblMatrix& rMatrix)
 {
-    if (IsTurretCameraTargeting(*this))
+    if (mParent->IsAlive() &&
+        (mTargetInfo.mIsAiming || (mTracker && mTracker->IsFirstPersonView())))
     {
-        rMatrix = DirectionMatrix(-mEyeDir, mAimMatrix.GetYAxis(), mEyePoint);
+        PblVector3 vDirection(-mEyeDir.x, -mEyeDir.y, -mEyeDir.z);
+        rMatrix = DirectionMatrix(vDirection, *(const PblVector3*)&mAimMatrix.m[1][0], mEyePoint);
         return;
     }
     const PblMatrix& rTarget = mClass->mTrackUseRoot ? mParent->GetMatrix() : mAimMatrix;
-    const PblVector3& vAimDir = mAimMatrix.GetZAxis();
+    const PblVector3& vAimDir = *(const PblVector3*)&mAimMatrix.m[2][0];
     mClass->mCameraSettings.SetupCameraTrackMatrixHUDTargeting(rMatrix, rTarget, vAimDir);
 }
 
 // FUNCTION: SWBF2 0x005a8640
 void MountedTurret::SetupCameraTrackMatrix(PblMatrix& rMatrix, float fDeltaTime)
 {
-    if (IsTurretCameraTargeting(*this))
+    if (mParent->IsAlive() &&
+        (mTargetInfo.mIsAiming || (mTracker && mTracker->IsFirstPersonView())))
     {
         rMatrix = DirectionMatrix(-mEyeDir, mAimMatrix.GetYAxis(), mEyePoint);
         int iView = GetFirstPersonIndex();
@@ -91,7 +94,8 @@ void MountedTurret::SetupCameraTrackMatrix(PblMatrix& rMatrix, float fDeltaTime)
 // FUNCTION: SWBF2 0x005a87b0
 void MountedTurret::SetupInterpolatedCameraTrackMatrix(PblMatrix& rMatrix)
 {
-    if (IsTurretCameraTargeting(*this))
+    if (mParent->IsAlive() &&
+        (mTargetInfo.mIsAiming || (mTracker && mTracker->IsFirstPersonView())))
     {
         int iView = GetFirstPersonIndex();
         if (iView >= 0 && !mTargetInfo.mIsAiming)
@@ -104,23 +108,29 @@ void MountedTurret::SetupInterpolatedCameraTrackMatrix(PblMatrix& rMatrix)
 // FUNCTION: SWBF2 0x005a8810
 void MountedTurret::SetupCameraFOV(float& rFOV)
 {
-    ControllableClass* pClass = GetControllableClass();
-    rFOV = (mTargetInfo.mIsAiming || (mTracker && mTracker->IsFirstPersonView()))
-        ? pClass->mFirstPersonFOV : pClass->mThirdPersonFOV;
+    if (mTargetInfo.mIsAiming || (mTracker && mTracker->IsFirstPersonView()))
+    {
+        rFOV = GetControllableClass()->mFirstPersonFOV;
+    }
+    else
+    {
+        rFOV = GetControllableClass()->mThirdPersonFOV;
+    }
 }
 
 // FUNCTION: SWBF2 0x005a8870
 void MountedTurret::SetupCameraZoomFactor(float& rZoom)
 {
-    int iWeapon = mWeaponIndex[0];
-    if (mTargetInfo.mIsAiming && iWeapon >= 0 && mWeapon[iWeapon])
+    if (mTargetInfo.mIsAiming)
     {
-        rZoom = mWeapon[iWeapon]->mZoom;
+        int iWeapon = mWeaponIndex[0];
+        if (iWeapon >= 0 && mWeapon[iWeapon])
+        {
+            rZoom = mWeapon[iWeapon]->mZoom;
+            return;
+        }
     }
-    else
-    {
-        rZoom = 1.0f;
-    }
+    rZoom = 1.0f;
 }
 
 PblMatrix DirectionMatrix(const PblVector3& vDir, const PblVector3& vUp, const PblVector3& vPos);
@@ -134,12 +144,10 @@ void RemoveChildren(const GameObject* pObject, RedPose& rPose, int iBone);
 // FUNCTION: SWBF2 0x005a7c50
 void RemoveChildren(const GameObject* pObject, RedPose& rPose, int iBone)
 {
-    const RedSkeleton* pSkeleton = pObject->GetModel()->GetRedModel(0)->GetSkeleton();
     for (;;)
     {
-        const RedSkeleton::Connection& rConnection = pSkeleton->m_aConnections[iBone];
-        int iChild = rConnection.iChild;
-        int iSibling = rConnection.iSibling;
+        int iChild = pObject->GetModel()->GetRedModel(0)->GetSkeleton()->m_aConnections[iBone].iChild;
+        int iSibling = pObject->GetModel()->GetRedModel(0)->GetSkeleton()->m_aConnections[iBone].iSibling;
         if (iChild != -1)
         {
             PblMatrix& rMatrix = const_cast<PblMatrix&>(rPose._GetBoneMatrix(iChild));
@@ -321,24 +329,20 @@ MountedTurret::MountedTurret(GameObject* pParent, MountedTurretClass* pClass, Re
 
     mYaw = 0.0f;
     mPitch = 0.0f;
-    if (mClass->mMinYaw > 0.0f || mClass->mMaxYaw < 0.0f)
+    if (pClass->mMinYaw > 0.0f || pClass->mMaxYaw < 0.0f)
     {
-        mYaw = (mClass->mMaxYaw + mClass->mMinYaw) * 0.5f;
+        mYaw = (pClass->mMaxYaw + pClass->mMinYaw) * 0.5f;
     }
-    if (mClass->mMinPitch > 0.0f || mClass->mMaxPitch < 0.0f)
+    if (pClass->mMinPitch > 0.0f || pClass->mMaxPitch < 0.0f)
     {
-        mPitch = (mClass->mMaxPitch + mClass->mMinPitch) * 0.5f;
+        mPitch = (pClass->mMaxPitch + pClass->mMinPitch) * 0.5f;
     }
     mOmegaPitch = 0.0f;
     mOmegaYaw = 0.0f;
 
-    for (int i = 0; i < 4; ++i)
-    {
-        mAimer[i] = 0;
-        mWeapon[i] = 0;
-    }
+    memset(mAimer, 0, sizeof(mAimer) + sizeof(mWeapon));
 
-    mRootMatrix = mParent->GetMatrix();
+    mRootMatrix = pParent->GetMatrix();
     mAimMatrix = mParent->GetMatrix();
     mEyeDir = mAimMatrix.GetZAxis();
     mEyePoint = mClass->mCameraSettings.CalcEyePoint(mAimMatrix);
@@ -350,18 +354,20 @@ MountedTurret::MountedTurret(GameObject* pParent, MountedTurretClass* pClass, Re
             continue;
         }
 
-        mAimer[i] = new Aimer(&mClass->mAimerClass[i], this,
-                              mClass->mMountHash ? &mAimMatrix : &mParent->GetMatrix(),
+        mAimer[i] = new Aimer(&pClass->mAimerClass[i], this,
+                              pClass->mMountHash ? &mAimMatrix : &pParent->GetMatrix(),
                               mPose, 0);
 
         WeaponDesc desc;
         desc.mOwner = this;
         desc.mAimer = mAimer[i];
-        desc.mTrigger = &mControlFire[mClass->mWeaponChannel[i]];
-        desc.mReload = &mControlReload;
+        desc.mTrigger = 0;
+        desc.mReload = 0;
         desc.mNumClips = 0;
         desc.m_pAmmoCounter = 0;
         desc.m_pEnergyBar = 0;
+        desc.mTrigger = &mControlFire[mClass->mWeaponChannel[i]];
+        desc.mReload = &mControlReload;
 
         const WeaponAmmoDesc& ammo = mClass->mWeaponAmmo[i];
         if (ammo.bFlagShareAmmo)
@@ -551,7 +557,8 @@ bool MountedTurret::PostCollisionUpdate(float)
 void MountedTurret::GetPilotMatrix(const PblMatrix& mIn, PblMatrix& mOut)
 {
     RedPose* pPose = mPose;
-    if (!mPilot)
+    Controllable* pPilot = mPilot;
+    if (!pPilot)
     {
         return;
     }
@@ -565,7 +572,7 @@ void MountedTurret::GetPilotMatrix(const PblMatrix& mIn, PblMatrix& mOut)
 
     PblMatrix mMatrix;
     PblMatrix mOldRoot;
-    mOldRoot.m[3][0] = mOldRoot.m[3][1] = mOldRoot.m[3][2] = mOldRoot.m[3][3] = 0.0f;
+    memset(mOldRoot.m[3], 0, sizeof(mOldRoot.m[3]));
     const PblMatrix* pBone = 0;
 
     if (pPose && pClass->mPilotParentNodeHash)
@@ -578,7 +585,7 @@ void MountedTurret::GetPilotMatrix(const PblMatrix& mIn, PblMatrix& mOut)
             if (!netFrameLock && NetGame::IsEnabled())
             {
                 int iIndex = mInterpIndex;
-                if (netInterpolator.GetIndex(iIndex, 1, static_cast<EntitySoldier*>(mPilot)->mHandleId) &&
+                if (netInterpolator.GetIndex(iIndex, 1, static_cast<EntitySoldier*>(pPilot)->mHandleId) &&
                     iIndex == mInterpIndex)
                 {
                     netInterpolator.GetMat(mInterpIndex, mMatrix);
@@ -1249,18 +1256,26 @@ void MountedTurret::UpdateSound(int prevAngle, int angle, float fAngle, float fA
     else if (controllable.GetPlaying())
     {
         Snd::VoiceVirtualBus* pVoice = static_cast<Snd::VoiceVirtualBus*>(controllable.GetVoiceVirtual());
-        if (pVoice && pVoice->GetGain() > 0.0001f)
+        if (pVoice)
         {
-            float fGain = pVoice->GetGain() - pVoice->GetGain() * 0.4f;
-            if (0.0f > fGain)
+            Snd::SourceBus* pBus = pVoice;
+            if (pBus->GetGain() > 0.0001f)
             {
-                fGain = 0.0f;
+                float fGain = pBus->GetGain() - pBus->GetGain() * 0.4f;
+                if (0.0f > fGain)
+                {
+                    fGain = 0.0f;
+                }
+                else if (fGain > 1.0f)
+                {
+                    fGain = 1.0f;
+                }
+                pVoice->SetGain(fGain);
             }
-            else if (fGain > 1.0f)
+            else
             {
-                fGain = 1.0f;
+                controllable.Stop(true);
             }
-            pVoice->SetGain(fGain);
         }
         else
         {
@@ -1385,11 +1400,12 @@ void MountedTurret::Render(const PblMatrix& aRootMatrix, const PblMatrix& aInvRo
                     aPose.Remove(mClass->mMountHash);
                     aPose.Store(mClass->mMountHash, &mRootMatrix);
                 }
-                aSaveMatrix = mRootMatrix;
-                pThis->mRootMatrix.m[3][0] = 0.0f;
-                pThis->mRootMatrix.m[3][1] = 0.0f;
-                pThis->mRootMatrix.m[3][2] = -1000.0f;
-                pThis->mRootMatrix.m[3][3] = 1.0f;
+                PblMatrix& rRoot = pThis->mRootMatrix;
+                aSaveMatrix = rRoot;
+                rRoot.m[3][0] = 0.0f;
+                rRoot.m[3][1] = 0.0f;
+                rRoot.m[3][2] = -1000.0f;
+                rRoot.m[3][3] = 1.0f;
                 RemoveChildren(GetGameObject(), aPose,
                                GetGameObject()->GetModel()->GetRedModel(0)->GetBoneIndex(mClass->mMountHash));
             }
@@ -1408,8 +1424,9 @@ void MountedTurret::Render(const PblMatrix& aRootMatrix, const PblMatrix& aInvRo
             if (!netFrameLock && NetGame::IsEnabled() && mPilot &&
                 mPilot->GetEntity()->IsRtti(EntitySoldier::rttiHashEntitySoldier))
             {
+                EntitySoldier* pSoldier = (EntitySoldier*)mPilot->GetEntity();
                 int idx = mInterpIndex;
-                if (netInterpolator.GetIndex(idx, 1, ((EntitySoldier*)mPilot->GetEntity())->mHandleId) &&
+                if (netInterpolator.GetIndex(idx, 1, pSoldier->mHandleId) &&
                     idx == mInterpIndex)
                 {
                     netInterpolator.GetMat(mInterpIndex, smoothedMat);
@@ -1437,8 +1454,9 @@ void MountedTurret::Render(const PblMatrix& aRootMatrix, const PblMatrix& aInvRo
         if (i == 0 && !netFrameLock && NetGame::IsEnabled() && mPilot &&
             mPilot->GetEntity()->IsRtti(EntitySoldier::rttiHashEntitySoldier))
         {
+            EntitySoldier* pSoldier = (EntitySoldier*)mPilot->GetEntity();
             int idx = mInterpIndex;
-            if (netInterpolator.GetIndex(idx, 1, ((EntitySoldier*)mPilot->GetEntity())->mHandleId) &&
+            if (netInterpolator.GetIndex(idx, 1, pSoldier->mHandleId) &&
                 idx == mInterpIndex)
             {
                 bSmoothed = true;
@@ -1458,7 +1476,9 @@ void MountedTurret::Render(const PblMatrix& aRootMatrix, const PblMatrix& aInvRo
     if (pMount)
     {
         const PblVector3& vVelocity = mParent->GetVelocity();
-        D3DXVec3TransformCoord(reinterpret_cast<D3DXVECTOR3*>(&pThis->mTurretWorldTranslation), reinterpret_cast<const D3DXVECTOR3*>(&pMount->GetTranslation()), reinterpret_cast<const D3DXMATRIX*>(&mParent->GetMatrix()));
+        PblVector3 vWorldTranslation;
+        D3DXVec3TransformCoord(reinterpret_cast<D3DXVECTOR3*>(&vWorldTranslation), reinterpret_cast<const D3DXVECTOR3*>(&pMount->GetTranslation()), reinterpret_cast<const D3DXMATRIX*>(&mParent->GetMatrix()));
+        pThis->mTurretWorldTranslation = vWorldTranslation;
         pThis->mTurretPitchSound.Update(&mClass->mTurretPitchSound, &mTurretWorldTranslation, &vVelocity);
         pThis->mTurretYawSound.Update(&mClass->mTurretYawSound, &mTurretWorldTranslation, &vVelocity);
     }
@@ -1514,7 +1534,7 @@ void MountedTurret::SetupController()
 // FUNCTION: SWBF2 0x005a8510
 PilotDeathType MountedTurret::GetPilotDeathType()
 {
-    return static_cast<ControllableClass*>(mClass)->mPilotDeathType;
+    return mClass->mPilotDeathType;
 }
 
 // FUNCTION: SWBF2 0x005a88b0
@@ -1534,17 +1554,17 @@ MountedTurretClass::MountedTurretClass(unsigned int uHash)
     mMinPitch = -10.0f;
     mMaxPitch = 10.0f;
 
+    memset(mWeaponClass, 0, sizeof(mWeaponClass));
+    sWeaponSection = 0;
+    memset(mWeaponAmmo, 0, sizeof(mWeaponAmmo));
     for (int i = 0; i < 4; ++i)
     {
-        mWeaponClass[i] = 0;
-        mWeaponAmmo[i].uiAmmo = 0;
-        mWeaponAmmo[i].uiHeat = 0;
         mWeaponAmmo[i].bFlagAmmoInfinite = 1;
-        mWeaponAmmo[i].bFlagShareHeat = 0;
-        mWeaponAmmo[i].bFlagShareAmmo = 0;
+    }
+    for (int i = 0; i < 4; ++i)
+    {
         mWeaponChannel[i] = i;
     }
-    sWeaponSection = 0;
     mWeaponCount = 0;
 
     mTurnRate = 2.0f;
@@ -1725,12 +1745,11 @@ bool MountedTurretClass::SetProperty(unsigned int uHash, const char* pcValue, co
     {
         int iAmmo = 0;
         sscanf(pcValue, "%d", &iAmmo);
-        WeaponAmmoDesc& ammo = mWeaponAmmo[sWeaponSection];
-        ammo.bFlagShareAmmo = 0;
-        ammo.bFlagAmmoInfinite = iAmmo <= 0;
-        if (!ammo.bFlagAmmoInfinite)
+        mWeaponAmmo[sWeaponSection].bFlagShareAmmo = 0;
+        mWeaponAmmo[sWeaponSection].bFlagAmmoInfinite = iAmmo <= 0;
+        if (!mWeaponAmmo[sWeaponSection].bFlagAmmoInfinite)
         {
-            ammo.uiAmmo = iAmmo;
+            mWeaponAmmo[sWeaponSection].uiAmmo = iAmmo;
         }
         break;
     }
@@ -1738,17 +1757,17 @@ bool MountedTurretClass::SetProperty(unsigned int uHash, const char* pcValue, co
     {
         int iWeapon = 0;
         sscanf(pcValue, "%d", &iWeapon);
-        WeaponAmmoDesc& ammo = mWeaponAmmo[sWeaponSection];
         if (iWeapon > 0 && iWeapon <= sWeaponSection)
         {
-            ammo.bFlagAmmoInfinite = 0;
-            ammo.bFlagShareAmmo = 1;
-            ammo.uiAmmo = iWeapon - 1;
+            mWeaponAmmo[sWeaponSection].bFlagAmmoInfinite = 0;
+            mWeaponAmmo[sWeaponSection].bFlagShareAmmo = 1;
+            mWeaponAmmo[sWeaponSection].uiAmmo = iWeapon - 1;
         }
         else
         {
-            ammo.bFlagShareAmmo = 0;
-            ammo.bFlagAmmoInfinite = 1;
+            mWeaponAmmo[sWeaponSection].bFlagShareAmmo = 0;
+            mWeaponAmmo[sWeaponSection].bFlagAmmoInfinite = 0;
+            mWeaponAmmo[sWeaponSection].bFlagAmmoInfinite = 1;
         }
         break;
     }
@@ -1756,15 +1775,14 @@ bool MountedTurretClass::SetProperty(unsigned int uHash, const char* pcValue, co
     {
         int iWeapon = 0;
         sscanf(pcValue, "%d", &iWeapon);
-        WeaponAmmoDesc& ammo = mWeaponAmmo[sWeaponSection];
         if (iWeapon > 0 && iWeapon <= sWeaponSection)
         {
-            ammo.bFlagShareHeat = 1;
-            ammo.uiHeat = iWeapon - 1;
+            mWeaponAmmo[sWeaponSection].bFlagShareHeat = 1;
+            mWeaponAmmo[sWeaponSection].uiHeat = iWeapon - 1;
         }
         else
         {
-            ammo.bFlagShareHeat = 0;
+            mWeaponAmmo[sWeaponSection].bFlagShareHeat = 0;
         }
         break;
     }

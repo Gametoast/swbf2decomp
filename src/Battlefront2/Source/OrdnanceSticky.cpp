@@ -327,20 +327,21 @@ void OrdnanceSticky::Render(unsigned char ucViewport, float fDist, unsigned int 
     }
 
     PblMatrix mat;
-    if (mStickInfo)
+    StickInfo* pStick = mStickInfo;
+    if (pStick)
     {
-        if (!mStickInfo->mCollObject)
+        if (!pStick->mCollObject)
         {
             return;
         }
 
         {
-            PblQuaternion qRot;
+            D3DXQUATERNION qRot;
             PblMatrix mRot;
-            D3DXMatrixRotationQuaternion(reinterpret_cast<D3DXMATRIX*>(&mRot), D3DXQuaternionNormalize(reinterpret_cast<D3DXQUATERNION*>(&qRot), reinterpret_cast<const D3DXQUATERNION*>(&mStickInfo->mLocalRotation)));
+            D3DXMatrixRotationQuaternion(reinterpret_cast<D3DXMATRIX*>(&mRot), D3DXQuaternionNormalize(&qRot, reinterpret_cast<const D3DXQUATERNION*>(&pStick->mLocalRotation)));
+            mRot.SetTranslation(pStick->mLocalPosition.x, pStick->mLocalPosition.y, pStick->mLocalPosition.z, 1.0f);
             mat = mRot;
         }
-        mat.SetTranslation(mStickInfo->mLocalPosition);
 
         CollisionObject* pObject = mStickInfo->mCollObject;
         CollisionModel* pModel = pObject->mCollisionModel;
@@ -481,7 +482,7 @@ bool OrdnanceSticky::Collide(CollisionObject* pObject, const PblVector3& vPos,
 
     if (mNumBounces < 4)
     {
-        const float fDot = mVelocity.x * vNormal.x + mVelocity.y * vNormal.y + mVelocity.z * vNormal.z;
+        const float fDot = DotProduct(mVelocity, vNormal);
         if (fDot < 0.0f)
         {
             const float fRebound = 0.37f;
@@ -493,12 +494,10 @@ bool OrdnanceSticky::Collide(CollisionObject* pObject, const PblVector3& vPos,
                           PblMath::Sqrt(mVelocity.x * mVelocity.x + mVelocity.y * mVelocity.y +
                                         mVelocity.z * mVelocity.z);
             fSlow = fSlow < 1.0f ? fSlow : 1.0f;
-            mVelocity.x -= fSlow * mVelocity.x;
-            mVelocity.y -= mVelocity.y * fSlow;
-            mVelocity.z -= mVelocity.z * fSlow;
+            mVelocity -= mVelocity * fSlow;
 
             const float fBounce = fDot * fRebound;
-            mVelocity -= vNormal * fBounce;
+            mVelocity -= fBounce * vNormal;
             if (mVelocity.x * mVelocity.x + mVelocity.y * mVelocity.y + mVelocity.z * mVelocity.z < 1.0f)
             {
                 ++mNumBounces;

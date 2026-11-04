@@ -164,14 +164,17 @@ void LockOnManager::SetDisplayIconsOnEverything(bool bEverything)
 void LockOnManager::CreateAll()
 {
     sTargetLockSound.SetID(0x6a942216u, false, false);
-    for (unsigned int i = 0; i < CameraManager::Instance()->GetNumCameras(); i++)
+    const unsigned int uNumCameras = CameraManager::Instance()->GetNumCameras();
+    for (unsigned int i = 0; i < uNumCameras; i++)
     {
         new LockOnManager(i);
     }
-    for (unsigned int i = 0; i < 32; i++)
+    LockOnManager::Target* pTarget = sTargetCommon;
+    for (int n = 32; n != 0; --n, ++pTarget)
     {
-        sTargetCommon[i].obj = 0;
-        sTargetCommon[i].teamMask = 0;
+        pTarget->obj.mObject = 0;
+        pTarget->teamMask = 0;
+        pTarget->obj.mSavedHandleId = 0;
     }
 }
 
@@ -290,42 +293,49 @@ void LockOnManager::CalculateScreenCoordinates(Controllable* const pCtrl, RedCam
     const PblVector3 vProjected = pCamera->TransformCameraPointToProjectionSpace(vCamera);
 
     PblVector3 vToTarget;
-    PblVector3 vForward;
+    float fDot;
     if (bAimRay)
     {
         const PblMatrix& mCamera = pCamera->GetMatrix();
-        vForward = PblVector3(-mCamera.m[2][0], -mCamera.m[2][1], -mCamera.m[2][2]);
+        const PblVector3 vForward(-mCamera.m[2][0], -mCamera.m[2][1], -mCamera.m[2][2]);
         vToTarget = PblVector3(pPos->x - mCamera.m[3][0], pPos->y - mCamera.m[3][1],
                                pPos->z - mCamera.m[3][2]);
+        D3DXVec3Normalize(reinterpret_cast<D3DXVECTOR3*>(&vToTarget), reinterpret_cast<const D3DXVECTOR3*>(&vToTarget));
+        fDot = vForward.x * vToTarget.x + vForward.y * vToTarget.y + vForward.z * vToTarget.z;
     }
     else
     {
-        vForward = pCtrl->mEyeDir;
-        vToTarget = PblVector3(pPos->x - pCtrl->mEyePoint.x,
-                               pPos->y - pCtrl->mEyePoint.y, pPos->z - pCtrl->mEyePoint.z);
+        vToTarget.x = pPos->x - pCtrl->mEyePoint.x;
+        vToTarget.y = pPos->y - pCtrl->mEyePoint.y;
+        vToTarget.z = pPos->z - pCtrl->mEyePoint.z;
+        D3DXVec3Normalize(reinterpret_cast<D3DXVECTOR3*>(&vToTarget), reinterpret_cast<const D3DXVECTOR3*>(&vToTarget));
+        fDot = pCtrl->mEyeDir.x * vToTarget.x + pCtrl->mEyeDir.y * vToTarget.y + pCtrl->mEyeDir.z * vToTarget.z;
     }
 
-    D3DXVec3Normalize(reinterpret_cast<D3DXVECTOR3*>(&vToTarget), reinterpret_cast<const D3DXVECTOR3*>(&vToTarget));
-    const float fDot = vForward.x * vToTarget.x + vForward.y * vToTarget.y +
-                       vForward.z * vToTarget.z;
-
-    *pScreenX = vCamera.z > 0.0f ? -vProjected.x : vProjected.x;
-    *pScreenY = vCamera.z > 0.0f ? -vProjected.y : vProjected.y;
+    if (vCamera.z > 0.0f)
+    {
+        *pScreenX = -vProjected.x;
+        *pScreenY = -vProjected.y;
+    }
+    else
+    {
+        *pScreenX = vProjected.x;
+        *pScreenY = vProjected.y;
+    }
     const float fAbsX = fabsf(*pScreenX);
     float fAbsY = fabsf(*pScreenY);
-    GameObject* pObject = pCtrl->GetGameObject();
-    if (!pObject || !pObject->IsRtti(EntityFlyer::rttiHashEntityFlyer))
+    if (!pCtrl->GetEntity() || !pCtrl->GetEntity()->IsRtti(EntityFlyer::rttiHashEntityFlyer))
     {
         if (fDot < 0.2f && fAbsY > fAbsX * 0.3f)
         {
             float fLimit = fAbsX * 0.3f;
-            if (fDot > 0.0f)
+            if (!(fDot <= 0.0f))
             {
                 fLimit += (fAbsY - fLimit) * (fDot / 0.2f);
             }
             const float fScale = fLimit / fAbsY;
-            *pScreenY *= fScale;
             fAbsY = fScale * fAbsY;
+            *pScreenY *= fScale;
         }
     }
 
@@ -361,10 +371,7 @@ void LockOnManager::UpdateTargetVisibility(Controllable* const pCtrl, RedCamera*
     PblVector3 vPos = pObject->GetCollisionCenter();
     if (pObject->GetObjectData(0) == COLL_ATTACHED)
     {
-        const PblMatrix& mObject = pObject->GetMatrix();
-        vPos.x += mObject.m[1][0] * 0.4f;
-        vPos.y += mObject.m[1][1] * 0.4f;
-        vPos.z += mObject.m[1][2] * 0.4f;
+        vPos += pObject->GetMatrix()[1] * 0.4f;
     }
     if (const RedPose* pPose = pObject->GetPose())
     {
@@ -527,8 +534,8 @@ void LockOnManager::RemoveTargetLock()
         Target& target = mTargetPlayer[i];
         if (target.obj == (GameObject*)mLockedObj)
         {
-            target.SetObj(0, 0);
             pInfo = &mTargetPlayerInfo[i];
+            target.SetObj(0, 0);
             pInfo->Clean();
             break;
         }
@@ -562,19 +569,18 @@ bool LockOnManager::IsGameObjectTargeted(const GameObject* const pObject)
 // FUNCTION: SWBF2 0x0057dbd0
 bool LockOnManager::IsGameObjectTargetedAll(const GameObject* const pObject)
 {
-    if (!pObject)
+    if (pObject)
     {
-        return false;
-    }
-    if (FindTargetByGameObject(sTargetCommon, 32, pObject))
-    {
-        return true;
-    }
-    for (unsigned int i = 0; i < 4; ++i)
-    {
-        if (sLockOnManagers[i] && sLockOnManagers[i]->IsGameObjectTargeted(pObject))
+        if (FindTargetByGameObject(sTargetCommon, 32, pObject))
         {
             return true;
+        }
+        for (unsigned int i = 0; i < 4; ++i)
+        {
+            if (sLockOnManagers[i] && sLockOnManagers[i]->IsGameObjectTargeted(pObject))
+            {
+                return true;
+            }
         }
     }
     return false;
@@ -1205,13 +1211,22 @@ bool LockOnManager::TargetHistory::Check(GameObject* const pObject) const
 void LockOnManager::Target::InitPlayer(GameObject* const initObj, unsigned int initTeamMask,
                                        TargetInfo& targetInfo, bool isFriendly)
 {
+    GameObjectClass* pClass = initObj ? static_cast<GameObjectClass*>(initObj->mEntityClass) : 0;
     obj = initObj;
     teamMask = initTeamMask;
     timer = 0.0f;
-    GameObjectClass* pClass = initObj ? static_cast<GameObjectClass*>(initObj->mEntityClass) : 0;
-    maxDistTrack = pClass ? pClass->mLockOnMaxTrackDist : 200000.0f;
-    maxDist = pClass ? pClass->mLockOnMaxDist : 500.0f;
-    minDist = pClass ? pClass->mLockOnMinDist : 100.0f;
+    if (pClass)
+    {
+        maxDistTrack = pClass->mLockOnMaxTrackDist;
+        minDist = pClass->mLockOnMinDist;
+        maxDist = pClass->mLockOnMaxDist;
+    }
+    else
+    {
+        maxDistTrack = 200000.0f;
+        minDist = 100.0f;
+        maxDist = 500.0f;
+    }
     targetInfo.mVisibilityChecked = false;
     targetInfo.mVisible = false;
     targetInfo.mPositionValid = true;
@@ -1259,8 +1274,8 @@ void LockOnManager::RemoveTargetCommon(GameObject* const pActor, unsigned int uT
         {
             continue;
         }
-        teamMaskLeft &= ~turnOff;
         target.teamMask &= ~turnOff;
+        teamMaskLeft &= ~turnOff;
         if (!target.teamMask)
         {
             target.SetObj(0, 0);

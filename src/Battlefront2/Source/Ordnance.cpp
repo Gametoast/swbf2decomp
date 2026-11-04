@@ -209,12 +209,18 @@ Ordnance::Ordnance(OrdnanceClass* pClass, const OrdnanceDesc& desc)
 
     const bool bBuildTrail =
         !NetGame::IsEnabled() || NetGame::IsClient() || (NetGame::IsOneWorld() && NetGame::IsHost());
-    mTrailEmitterObj = (pClass->mTrailEffect && bBuildTrail) ? pClass->mTrailEffect->BuildEffect() : 0;
-
-    if (mTrailEmitterObj)
+    if (pClass->mTrailEffect && bBuildTrail)
     {
-        mTrailEmitterObj->AttachEffectToVector(&mPosition, true);
-        mTrailEmitterObj->SetOrientation(desc.mDirection);
+        mTrailEmitterObj = pClass->mTrailEffect->BuildEffect();
+        if (mTrailEmitterObj)
+        {
+            mTrailEmitterObj->AttachEffectToVector(&mPosition, true);
+            mTrailEmitterObj->SetOrientation(desc.mDirection);
+        }
+    }
+    else
+    {
+        mTrailEmitterObj = 0;
     }
 
     if (!(NetGame::IsEnabled() && NetGame::IsClient()))
@@ -502,7 +508,16 @@ void OrdnanceClass::Read(PblFileChunk& chunk)
         case 0x45505954:
         {
             const unsigned int uType = PblHash(child.ReadString(acBuffer, sizeof(acBuffer)));
-            if (Find(uType))
+            OrdnanceClass* pExisting = 0;
+            for (PblList<OrdnanceFactory>::Itor it(OrdnanceFactory::sList.GetFirst()); it; ++it)
+            {
+                if (it->mId == uType)
+                {
+                    pExisting = static_cast<OrdnanceClass*>(&*it);
+                    break;
+                }
+            }
+            if (pExisting)
             {
                 return;
             }

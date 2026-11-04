@@ -157,7 +157,7 @@ WeaponClass::WeaponClass(unsigned int uHash)
     mModel = 0;
     mHighResModel = 0;
     mReloadTime = 0.6f;
-    mExtremeRange = 0.0f;
+    mMinRange = 0.0f;
     mOptimalRange = 30.0f;
     mMaxRange = 60.0f;
     mZoomMin = 1.0f;
@@ -188,10 +188,10 @@ WeaponClass::WeaponClass(unsigned int uHash)
     mChargeDelayLight = 0.0f;
     mChargeDelayHeavy = 0.0f;
     mTimeAtMaxCharge = 2.0f;
+    mExtremeRange = 0.0f;
     mLockOnRange = 0.0f;
     mLockOnAngle = 0.0f;
     mLockOffAngle = 0.0f;
-    mMinRange = 0.0f;
     mTargetSides = 1;
     mTargetTypes = -97;
     mAITargetTypes = -97;
@@ -231,8 +231,8 @@ WeaponClass::WeaponClass(unsigned int uHash)
     mBarrageMin = 3;
     mBarrageMax = 6;
     mBarrageDelay = 2.0f;
-    mEnergyDrain = 0.0f;
     mChargeUpEffect = 0;
+    mEnergyDrain = 0.0f;
     mAIBubbleSizeMultiplier = 1.0f;
     mAIBubbleScaleDistDivider = 20.0f;
     mAIBubbleScaleClamp = 10.0f;
@@ -1695,7 +1695,8 @@ bool Weapon::Update(float fDeltaTime)
     }
 
     GameObject* pObject = mOwner->GetGameObject();
-    const PblVector3& vPos = (GetCollisionMatrix(pObject)).GetTranslation();
+    EntityGeometry& rGeometry = *pObject;
+    const PblVector3& vPos = rGeometry.GetMatrix().GetTranslation();
     const PblVector3& vVel = GetVelocity(pObject);
     if (mSoundControl.mFlags & GameSoundControllable::flags_playing)
     {
@@ -1780,8 +1781,8 @@ bool Weapon::Update(float fDeltaTime)
                     mTrigger->IsPressed())
                 {
                     mSoundPropsFire = mClass->mFireEmptySound;
-                    mSoundControlFire.Play(&mSoundPropsFire, &(GetCollisionMatrix(pObject)).GetTranslation(),
-                                           &GetVelocity(pObject), true);
+                    const PblVector3& vFirePos = rGeometry.GetMatrix().GetTranslation();
+                    mSoundControlFire.Play(&mSoundPropsFire, &vFirePos, &GetVelocity(pObject), true);
                 }
                 return true;
             }
@@ -1825,8 +1826,8 @@ bool Weapon::Update(float fDeltaTime)
                 if (mOwner && mOwner->mPlayerId >= 0 && mSelectedFlag && mTrigger->IsPressed())
                 {
                     mSoundPropsFire = mClass->mFireEmptySound;
-                    mSoundControlFire.Play(&mSoundPropsFire, &(GetCollisionMatrix(pObject)).GetTranslation(),
-                                           &GetVelocity(pObject), true);
+                    const PblVector3& vFirePos = rGeometry.GetMatrix().GetTranslation();
+                    mSoundControlFire.Play(&mSoundPropsFire, &vFirePos, &GetVelocity(pObject), true);
                 }
                 return true;
             }
@@ -1842,8 +1843,8 @@ bool Weapon::Update(float fDeltaTime)
                 if (mSelectedFlag && mTrigger->IsPressed() && mOwner && mOwner->mPlayerId >= 0)
                 {
                     mSoundPropsFire = mClass->mFireEmptySound;
-                    mSoundControlFire.Play(&mSoundPropsFire, &(GetCollisionMatrix(pObject)).GetTranslation(),
-                                           &GetVelocity(pObject), true);
+                    const PblVector3& vFirePos = rGeometry.GetMatrix().GetTranslation();
+                    mSoundControlFire.Play(&mSoundPropsFire, &vFirePos, &GetVelocity(pObject), true);
                 }
                 return true;
             }
@@ -1861,8 +1862,8 @@ bool Weapon::Update(float fDeltaTime)
                 if (mOwner && mOwner->mPlayerId >= 0 && mSelectedFlag && mTrigger->IsPressed())
                 {
                     mSoundPropsFire = mClass->mFireEmptySound;
-                    mSoundControlFire.Play(&mSoundPropsFire, &(GetCollisionMatrix(pObject)).GetTranslation(),
-                                           &GetVelocity(pObject), true);
+                    const PblVector3& vFirePos = rGeometry.GetMatrix().GetTranslation();
+                    mSoundControlFire.Play(&mSoundPropsFire, &vFirePos, &GetVelocity(pObject), true);
                 }
                 return true;
             }
@@ -1953,8 +1954,8 @@ void Weapon::EnterIdle()
 // FUNCTION: SWBF2 0x006789c0
 bool Weapon::UpdateIdle(float fDeltaTime)
 {
-    mStateTimer += fDeltaTime;
     WeaponState eOld = mState;
+    mStateTimer += fDeltaTime;
     mState = CheckOverheat() ? OVERHEAT : IDLE;
     if (eOld == OVERHEAT)
     {

@@ -80,8 +80,8 @@ ExplosionClass::ExplosionClass(unsigned int uHash)
     mInitialChunkSpeedMin = -1.0f;
     mInitialChunkSpeedMax = -1.0f;
     mChunkStartDistance = 0.0f;
-    mDoDamageToOwner = true;
     mLightColor = RedColor::BLACK;
+    mDoDamageToOwner = true;
     mLightRadius = 0.0f;
     mLightDuration = 0.0f;
     mVisibleRadius = 60.0f;
@@ -92,7 +92,8 @@ ExplosionClass::ExplosionClass(unsigned int uHash)
 
 // FUNCTION: SWBF2 0x0051cba0
 ExplosionClass::ExplosionClass(ExplosionClass* pParent, unsigned int uHash)
-    : Factory<Ordnance, ExplosionClass, OrdnanceDesc>(pParent, uHash)
+    : Factory<Ordnance, ExplosionClass, OrdnanceDesc>(pParent, uHash),
+      mDamage(DamageOwner(0, 0, 0, 0, 0, 1.0f), 0.0f)
 {
     mDamage = pParent->mDamage;
     mDamageRadius[0] = pParent->mDamageRadius[0];
@@ -111,10 +112,7 @@ ExplosionClass::ExplosionClass(ExplosionClass* pParent, unsigned int uHash)
     mPushRadius[0] = pParent->mPushRadius[0];
     mPushRadius[1] = pParent->mPushRadius[1];
     mPushDeadOnly = pParent->mPushDeadOnly;
-    for (int i = 0; i < 5; ++i)
-    {
-        mEffects[i] = pParent->mEffects[i];
-    }
+    memcpy(mEffects, pParent->mEffects, sizeof(mEffects));
     mNumEffects = pParent->mNumEffects;
     mDecalHash = pParent->mDecalHash;
     mWaterEffectHash = pParent->mWaterEffectHash;
@@ -167,7 +165,8 @@ void ExplosionClass::Read(PblFileChunk& chunk)
         case 0x504F5250:
         {
             const unsigned int uProperty = child._pFile->Read32();
-            pClass->SetProperty(uProperty, child.ReadString(acBuffer, sizeof(acBuffer)));
+            const char* pcValue = child.ReadString(acBuffer, sizeof(acBuffer));
+            pClass->SetProperty(uProperty, pcValue);
             break;
         }
         }
@@ -269,13 +268,34 @@ void ExplosionClass::SetProperty(unsigned int uProperty, const char* pszValue)
         }
         break;
     case 0xde15f6ae:
-        mDecalHash = *pszValue ? (unsigned int)PblHash(pszValue) : 0;
+        if (*pszValue)
+        {
+            mDecalHash = PblHash(pszValue);
+        }
+        else
+        {
+            mDecalHash = 0;
+        }
         break;
     case 0x87733801:
-        mWaterEffectHash = *pszValue ? (unsigned int)PblHash(pszValue) : 0;
+        if (*pszValue)
+        {
+            mWaterEffectHash = PblHash(pszValue);
+        }
+        else
+        {
+            mWaterEffectHash = 0;
+        }
         break;
     case 0xddb924a1:
-        mShieldEffectHash = *pszValue ? (unsigned int)PblHash(pszValue) : 0;
+        if (*pszValue)
+        {
+            mShieldEffectHash = PblHash(pszValue);
+        }
+        else
+        {
+            mShieldEffectHash = 0;
+        }
         break;
     case 0xf350b4e5:
         mSound.SetID(pszValue, false, false);
@@ -290,17 +310,17 @@ void ExplosionClass::SetProperty(unsigned int uProperty, const char* pszValue)
     case 0xda328455:
     {
         mChunkDescriptor.Init();
-        mChunkDescriptor.mModel = const_cast<GameModel*>(GameModel::Find(PblHash(pszValue)));
+        mChunkDescriptor.mModel = GameModel::_HashTable.Find(PblHash(pszValue));
 
         char acName[128];
         _snprintf(acName, 127, "%s0", pszValue);
         acName[127] = 0;
-        mChunkDescriptor.mPrimitive = CollisionBodyPrimitive::Find(PblHash(acName));
+        mChunkDescriptor.mPrimitive = CollisionBodyPrimitive::_HashTable.Find(PblHash(acName));
         _snprintf(acName, 127, "%s1", pszValue);
         acName[127] = 0;
         if (!mChunkDescriptor.mPrimitive || CollisionBodyPrimitive::Find(PblHash(acName)))
         {
-            const PblBox& box = mChunkDescriptor.mModel->_mModel->_TotalBoundingBox;
+            const PblBox box = mChunkDescriptor.mModel->_mModel->_TotalBoundingBox;
             float fCenterX = (box._vMin.x + box._vMax.x) * 0.5f;
             float fCenterY = (box._vMin.y + box._vMax.y) * 0.5f;
             float fCenterZ = (box._vMin.z + box._vMax.z) * 0.5f;
@@ -333,17 +353,17 @@ void ExplosionClass::SetProperty(unsigned int uProperty, const char* pszValue)
     case 0xc8e32dc3:
     {
         const unsigned int uType = PblHash(pszValue);
-        if (uType == 0x2648cd55)
+        switch (uType)
         {
+        case 0x2648cd55:
             mChunkDescriptor.mPhysicsType = 3;
-        }
-        else if (uType == 0xd290c23b)
-        {
+            break;
+        case 0xd290c23b:
             mChunkDescriptor.mPhysicsType = 2;
-        }
-        else
-        {
+            break;
+        default:
             mChunkDescriptor.mPhysicsType = uType != 0xff79b33c;
+            break;
         }
         break;
     }
@@ -366,14 +386,14 @@ void ExplosionClass::SetProperty(unsigned int uProperty, const char* pszValue)
         break;
     }
     case 0x94f0544b:
-        if (sCurrentTrail < sizeof(mChunkDescriptor.mTrailEffect) / sizeof(mChunkDescriptor.mTrailEffect[0]))
+        if (sCurrentTrail <= 2u)
         {
             mChunkDescriptor.mTrailEffect[sCurrentTrail] = PblHash(pszValue);
             ++sCurrentTrail;
         }
         break;
     case 0xd350c3de:
-        if (sCurrentSmoke < sizeof(mChunkDescriptor.mSmokeEffect) / sizeof(mChunkDescriptor.mSmokeEffect[0]))
+        if (sCurrentSmoke <= 2u)
         {
             mChunkDescriptor.mSmokeEffect[sCurrentSmoke] = PblHash(pszValue);
             ++sCurrentSmoke;
@@ -392,22 +412,20 @@ void ExplosionClass::SetProperty(unsigned int uProperty, const char* pszValue)
         RedColor color;
         if (iCount >= 4)
         {
+            color.a = 255;
             color.b = (unsigned char)(b * a / 255);
             color.g = (unsigned char)(g * a / 255);
             color.r = (unsigned char)(r * a / 255);
+            mLightColor = color;
         }
         else if (iCount == 3)
         {
             color.b = (unsigned char)b;
             color.g = (unsigned char)g;
             color.r = (unsigned char)r;
+            color.a = 255;
+            mLightColor = color;
         }
-        else
-        {
-            break;
-        }
-        color.a = 255;
-        mLightColor = color;
         break;
     }
     case 0x2776564d:

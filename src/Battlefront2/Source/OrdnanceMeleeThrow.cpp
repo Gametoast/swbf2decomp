@@ -70,8 +70,8 @@ bool OrdnanceMeleeThrow::Collide(CollisionObject* pObject, const PblVector3& vPo
         if (pObject->mParent)
         {
             pVictim = pObject->mParent->GetGameObject();
-            iReturn = 1;
             iBodyId = -1;
+            iReturn = 1;
         }
     }
     else if (pObject->mParent)
@@ -235,9 +235,9 @@ OrdnanceMeleeThrow::OrdnanceMeleeThrow(OrdnanceMeleeThrowClass* pClass, const Or
       RedSceneObject(&((OrdnanceMeleeThrowClass*)mClass)->mLodData),
       m_pOwner(desc.mOwner),
       mOldPosition(desc.mPosition),
-      mVelocity(Interpolate(((const OrdnanceMeleeThrowClass*)mClass)->mVelocity,
-                            ((const OrdnanceMeleeThrowClass*)mClass->mNextCharge)->mVelocity, mRatio) *
-                desc.mDirection)
+      mVelocity(desc.mDirection * Interpolate(((const OrdnanceMeleeThrowClass*)mClass)->mVelocity,
+                                              ((const OrdnanceMeleeThrowClass*)mClass->mNextCharge)->mVelocity,
+                                              mRatio))
 {
     m_pDamageData = 0;
     m_pLight = 0;

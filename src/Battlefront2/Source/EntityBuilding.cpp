@@ -41,9 +41,7 @@ extern PblVector3 gVectorZero;
 EntityBuildingClass::EntityBuildingClass(unsigned int uHash)
     : GameObjectClass(uHash)
 {
-    mExplosionOffset.x = 0.0f;
-    mExplosionOffset.y = 0.0f;
-    mExplosionOffset.z = 0.0f;
+    mExplosionOffset = PblVector3(0.0f, 0.0f, 0.0f);
     mHealthType = HEALTH_TYPE_BUILDING;
     mDestroyedModel = 0;
     mUnbuiltModel = 0;
@@ -190,7 +188,7 @@ void EntityBuildingClass::SetProperty(unsigned int uProperty, const char* pszVal
     case 0x5dc6e917:
     {
         mDestroyedModel = (GameModel*)GameModel::Find(PblHash(pszValue));
-        const CollisionMesh* pMesh = CollisionMesh::_HashTable.Find(PblHash(pszValue));
+        const CollisionMesh* pMesh = CollisionMesh::Find(PblHash(pszValue));
         if (pMesh)
         {
             mDestroyedCollisionModel.AddBody(new CollisionBodyMesh(pMesh, "DestroyedCollisionMesh", gMatrixIdentity, 0));
@@ -485,7 +483,7 @@ const RedPose* EntityBuilding::GetRenderPose() const
 
 
 
-static GameObject* GetHandleObject(PblHandle<GameObject>& handle)
+static inline GameObject* GetHandleObject(PblHandle<GameObject>& handle)
 {
     if (handle.mObject &&
         handle.mObject->mHandleId !=
@@ -516,28 +514,24 @@ void EntityBuilding::ClientKill()
 // FUNCTION: SWBF2 0x004929b0
 void EntityBuilding::HealthChangeCallback(bool bArg, float fDelta)
 {
-    Damageable* pDamageable = this;
     bool bClient = NetGame::IsEnabled() && NetGame::IsClient();
-    if (pDamageable->mCurHealth > 0.0f)
+    if (mCurHealth <= 0.0f)
     {
-        if (pDamageable->mCurHealth >= pDamageable->mMaxHealth)
-        {
-            pDamageable->mCurHealth = pDamageable->mMaxHealth;
-            if (!bClient && mState != STATE_ALIVE)
-            {
-                pDamageable->Respawn();
-            }
-        }
-    }
-    else
-    {
-        pDamageable->mCurHealth = 0.0f;
+        mCurHealth = 0.0f;
         if (mState == STATE_ALIVE)
         {
-            pDamageable->Kill();
+            Kill();
         }
     }
-    pDamageable->Damageable::HealthChangeCallback(bArg, fDelta);
+    else if (mCurHealth >= mMaxHealth)
+    {
+        mCurHealth = mMaxHealth;
+        if (!bClient && mState != STATE_ALIVE)
+        {
+            Respawn();
+        }
+    }
+    Damageable::HealthChangeCallback(bArg, fDelta);
 }
 
 // FUNCTION: SWBF2 0x00492b00
@@ -718,13 +712,12 @@ bool EntityBuilding::ApplyDamage(const DamageDesc& damage, const PblVector3& vDi
     {
         return true;
     }
-    if (!Damageable::ApplyDamage(damage, vDir, vPos, iBodyPart, uFlags))
+    if (Damageable::ApplyDamage(damage, vDir, vPos, iBodyPart, uFlags))
     {
-        return false;
+        mClass->mSoundHurt.Play(&mMatrix.GetTranslation(), 0, false, true);
+        return true;
     }
-
-    mClass->mSoundHurt.Play(&mMatrix.GetTranslation(), 0, false, true);
-    return true;
+    return false;
 }
 
 
@@ -748,15 +741,17 @@ void EntityBuilding::SetMatrix(const PblMatrix& matrix)
 // FUNCTION: SWBF2 0x004932a0
 void EntityBuilding::RecalculateAABB()
 {
-    mAABB = mModel->_mModel->_TotalBoundingBox.GetTransformedBox(mMatrix);
+    const PblBox& modelBox = mModel->_mModel->_TotalBoundingBox;
+    mAABB = modelBox.GetTransformedBox(mMatrix);
 }
 
 // FUNCTION: SWBF2 0x004932e0
 void EntityBuilding::Update(float fDeltaTime)
 {
     bool bPlaying = mAmbientSound.GetPlaying();
-    PblVector3 vPos = mMatrix.GetTranslation();
-    if (IsAlive())
+    PblVector3 vPos;
+    vPos = mMatrix.GetTranslation();
+    if (mIsAlive)
     {
         if (!bPlaying)
         {
@@ -776,13 +771,13 @@ void EntityBuilding::Render(unsigned char uFlags, float fDist, unsigned int uMas
 
     Update(0.0f);
 
-    if (mClass->m_bDynamicLighting)
+    if (!mClass->m_bDynamicLighting)
     {
-        uMask &= ~0x80;
+        uMask |= 0x80;
     }
     else
     {
-        uMask |= 0x80;
+        uMask &= ~0x80;
     }
     if (mpShadow && mpShadow->IsInScene())
     {

@@ -66,11 +66,10 @@ void DamageRegion::Update(float fDeltaTime) const
     do
     {
         GameObject* pObject = apObjects[--iCount];
-        Damageable* pDamageable = GetDamageable(pObject);
-        if (pDamageable->mIsAlive && GameLoop::GetMissionTime() > pDamageable->mDamageRegionTime)
+        if (pObject->IsAlive() && GameLoop::GetMissionTime() > pObject->mDamageRegionTime)
         {
-            pDamageable->SetDamageRegionTime();
-            pDamageable->ApplyDamage(damage, 0xFFFFFFFB);
+            pObject->SetDamageRegionTime();
+            pObject->ApplyDamage(damage, 0xFFFFFFFB);
             pObject->PlayDamageRegionSound(mId);
         }
     } while (iCount);
@@ -111,7 +110,7 @@ void DamageRegion::Create()
 // FUNCTION: SWBF2 0x0048a180
 void DamageRegion::Destroy()
 {
-    ClearList();
+    sList.RemoveAll();
     mUpdateThread = 0;
 }
 

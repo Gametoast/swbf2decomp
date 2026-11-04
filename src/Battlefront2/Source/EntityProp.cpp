@@ -149,8 +149,12 @@ EntityProp::EntityProp(EntityPropClass* pClass, const EntityDesc& desc)
     mClass = pClass;
 
     PblBox box;
-    box._vMin = PblVector3(FLT_MAX, FLT_MAX, FLT_MAX);
-    box._vMax = PblVector3(-FLT_MAX, -FLT_MAX, -FLT_MAX);
+    box._vMin.x = FLT_MAX;
+    box._vMin.y = FLT_MAX;
+    box._vMin.z = FLT_MAX;
+    box._vMax.x = -FLT_MAX;
+    box._vMax.y = -FLT_MAX;
+    box._vMax.z = -FLT_MAX;
     bool bHaveBody = false;
     for (int i = 0; i < mCollisionModel->GetNumBodies(); ++i)
     {
@@ -160,23 +164,28 @@ EntityProp::EntityProp(EntityPropClass* pClass, const EntityDesc& desc)
             continue;
         }
         bHaveBody = true;
-        PblBox bodyBox;
         if (pBody->bIsMesh)
         {
-            bodyBox = static_cast<CollisionBodyMesh*>(pBody)->mMesh->GetWorldspaceAABB(
+            PblBox bodyBox = static_cast<CollisionBodyMesh*>(pBody)->mMesh->GetWorldspaceAABB(
                 pBody->GetWorldMatrix(mMatrix, 0));
+            box._vMin.x = bodyBox._vMin.x > box._vMin.x ? box._vMin.x : bodyBox._vMin.x;
+            box._vMin.y = bodyBox._vMin.y > box._vMin.y ? box._vMin.y : bodyBox._vMin.y;
+            box._vMin.z = bodyBox._vMin.z > box._vMin.z ? box._vMin.z : bodyBox._vMin.z;
+            box._vMax.x = box._vMax.x > bodyBox._vMax.x ? box._vMax.x : bodyBox._vMax.x;
+            box._vMax.y = box._vMax.y > bodyBox._vMax.y ? box._vMax.y : bodyBox._vMax.y;
+            box._vMax.z = box._vMax.z > bodyBox._vMax.z ? box._vMax.z : bodyBox._vMax.z;
         }
         else
         {
-            bodyBox = static_cast<CollisionBodyPrimitive*>(pBody)->mPrimitive.GetWorldspaceAABB(
+            PblBox bodyBox = static_cast<CollisionBodyPrimitive*>(pBody)->mPrimitive.GetWorldspaceAABB(
                 pBody->GetWorldMatrix(mMatrix, 0));
+            box._vMin.x = bodyBox._vMin.x > box._vMin.x ? box._vMin.x : bodyBox._vMin.x;
+            box._vMin.y = bodyBox._vMin.y > box._vMin.y ? box._vMin.y : bodyBox._vMin.y;
+            box._vMin.z = bodyBox._vMin.z > box._vMin.z ? box._vMin.z : bodyBox._vMin.z;
+            box._vMax.x = box._vMax.x > bodyBox._vMax.x ? box._vMax.x : bodyBox._vMax.x;
+            box._vMax.y = box._vMax.y > bodyBox._vMax.y ? box._vMax.y : bodyBox._vMax.y;
+            box._vMax.z = box._vMax.z > bodyBox._vMax.z ? box._vMax.z : bodyBox._vMax.z;
         }
-        box._vMin.x = bodyBox._vMin.x > box._vMin.x ? box._vMin.x : bodyBox._vMin.x;
-        box._vMin.y = bodyBox._vMin.y > box._vMin.y ? box._vMin.y : bodyBox._vMin.y;
-        box._vMin.z = bodyBox._vMin.z > box._vMin.z ? box._vMin.z : bodyBox._vMin.z;
-        box._vMax.x = box._vMax.x > bodyBox._vMax.x ? box._vMax.x : bodyBox._vMax.x;
-        box._vMax.y = box._vMax.y > bodyBox._vMax.y ? box._vMax.y : bodyBox._vMax.y;
-        box._vMax.z = box._vMax.z > bodyBox._vMax.z ? box._vMax.z : bodyBox._vMax.z;
     }
     if (bHaveBody)
     {
@@ -185,7 +194,7 @@ EntityProp::EntityProp(EntityPropClass* pClass, const EntityDesc& desc)
 
     float fHalfX = (mAABB._vMax.x - mAABB._vMin.x) * 0.5f;
     float fHalfZ = (mAABB._vMax.z - mAABB._vMin.z) * 0.5f;
-    float f2dRadius = sqrtf(fHalfX * fHalfX + fHalfZ * fHalfZ);
+    float f2dRadius = sqrtf(fHalfX * fHalfX + 0.0f + fHalfZ * fHalfZ);
     if (GetCollisionRadius() > f2dRadius)
     {
         Set2DCollisionRadius(f2dRadius);
@@ -239,7 +248,7 @@ EntityProp::EntityProp(EntityPropClass* pClass, const EntityDesc& desc)
 // FUNCTION: SWBF2 0x00497ea0
 void EntityProp::Kill()
 {
-    CollisionManager::RemoveBody(this);
+    CollisionObject::RemoveFromCollisionManager();
     Deactivate();
 }
 
@@ -263,38 +272,37 @@ EntityProp::~EntityProp()
 // FUNCTION: SWBF2 0x004d9710
 void EntityProp::SetProperty(unsigned int uProperty, const char* pszValue)
 {
-    if (uProperty == 0xb2e7fe34)
-    {
-        int r, g, b, a;
-        sscanf(pszValue, "%i %i %i %i", &r, &g, &b, &a);
-        mGeometryColor.r = (unsigned char)r;
-        mGeometryColor.g = (unsigned char)g;
-        mGeometryColor.b = (unsigned char)b;
-        mGeometryColor.a = (unsigned char)a;
-    }
-    else
+    if (uProperty != 0xb2e7fe34)
     {
         reinterpret_cast<EntityGeometry*>(this)->EntityGeometry::SetProperty(uProperty, pszValue);
+        return;
     }
+
+    int r, g, b, a;
+    sscanf(pszValue, "%i %i %i %i", &r, &g, &b, &a);
+    mGeometryColor.r = (unsigned char)r;
+    mGeometryColor.g = (unsigned char)g;
+    mGeometryColor.b = (unsigned char)b;
+    mGeometryColor.a = (unsigned char)a;
 }
 
 // FUNCTION: SWBF2 0x004d9790
 void EntityProp::RecalculateAABB()
 {
-    mAABB = mModel->_mModel->_TotalBoundingBox.GetTransformedBox(mMatrix);
+    const PblBox& modelBox = mModel->_mModel->_TotalBoundingBox;
+    mAABB = modelBox.GetTransformedBox(mMatrix);
 }
 
 // FUNCTION: SWBF2 0x004d97d0
 void EntityProp::Render(unsigned char ucViewport, float fDist, unsigned int uiFlags)
 {
-    const EntityPropClass* pClass = static_cast<const EntityPropClass*>(mEntityClass);
-    if (pClass->m_bDynamicLighting)
+    if (!static_cast<const EntityPropClass*>(mEntityClass)->m_bDynamicLighting)
     {
-        uiFlags &= ~0x80;
+        uiFlags |= 0x80;
     }
     else
     {
-        uiFlags |= 0x80;
+        uiFlags &= ~0x80;
     }
     if (mShadowProxy && mShadowProxy->IsInScene())
     {
@@ -307,13 +315,13 @@ void EntityProp::Render(unsigned char ucViewport, float fDist, unsigned int uiFl
     {
         if (mClothPiece[i])
         {
-            RedColor color = RedColor::WHITE;
-            color.a = (unsigned char)(int)(fDist * 255.0f);
-            mClothPiece[i]->Render(mMatrix, NULL, ucViewport, color, uiFlags, 1);
+            mClothPiece[i]->Render(mMatrix, NULL, ucViewport,
+                                   RedColor(RedColor::WHITE, (unsigned char)(int)(fDist * 255.0f)),
+                                   uiFlags, 1);
         }
     }
 
-    if (pClass->mReflected && !(uiFlags & 0x200000))
+    if (static_cast<const EntityPropClass*>(mEntityClass)->mReflected && !(uiFlags & 0x200000))
     {
         PblMatrix mReflection;
         if (FLRenderer::IsReflected(*(const PblVector3*)&_Sphere, _Sphere.w, mReflection, false))
@@ -423,14 +431,13 @@ EntityPropClass::EntityPropClass(unsigned int uHash)
     mReflected = false;
     mAttachedSoundOnlyMoving = false;
 
-    mGeometryColorMax.b = 0xFF;
-    mGeometryColorMax.g = 0xFF;
-    mGeometryColorMax.r = 0xFF;
-    mGeometryColorMax.a = 0xFF;
-    mGeometryColorMin.b = 0xFF;
-    mGeometryColorMin.g = 0xFF;
-    mGeometryColorMin.r = 0xFF;
-    mGeometryColorMin.a = 0xFF;
+    RedColor kWhite;
+    kWhite.b = 0xFF;
+    kWhite.g = 0xFF;
+    kWhite.r = 0xFF;
+    kWhite.a = 0xFF;
+    mGeometryColorMax = kWhite;
+    mGeometryColorMin = kWhite;
 
     mLODClass = 0;
     m_bDynamicLighting = false;
@@ -889,7 +896,6 @@ Entity* EntityPropClass::Build(const EntityDesc& desc)
             for (int i = 0; i < mNumAttachedOdfs; ++i)
             {
                 EntityDesc attachDesc;
-                attachDesc.mMatrix = gMatrixIdentity;
                 PblMatrix matrix;
                 matrix = mAttachedOdfs[i].mMatrix * desc.mMatrix;
                 attachDesc.mMatrix = matrix;

@@ -38,22 +38,22 @@ EntityTrapClass::EntityTrapClass(unsigned int uHash)
 {
     mAnimObj = 0;
     mAnimBuildTrap = 0;
-    mBuildOffset = _IdentityMatrix;
+    mBuildOffset = gMatrixIdentity;
     mBuildBoxOdf = 0;
     mAnimTriggerTrap = 0;
     mTriggerSide = 0;
     mResetSide = 0;
     mTriggerNode = 0;
-    mTriggerOffset.x = 0.0f;
-    mTriggerOffset.y = 0.0f;
     mTriggerOffset.z = 0.0f;
+    mTriggerOffset.y = 0.0f;
+    mTriggerOffset.x = 0.0f;
     mTriggerRadius = 3.0f;
     mMinEnemyRadius = 0.0f;
     mDeathTime = -1.0f;
     mDeathEffect = 0;
-    mDeathEffectOffset.x = 0.0f;
-    mDeathEffectOffset.y = 0.0f;
     mDeathEffectOffset.z = 0.0f;
+    mDeathEffectOffset.y = 0.0f;
+    mDeathEffectOffset.x = 0.0f;
     mCollisionOnTrigger = false;
     mCollisionOnBuilt = false;
     mHideUnbuiltModel = false;
@@ -152,7 +152,7 @@ void EntityTrap::SetAnimation(const ZephyrAnim* pAnim)
     mZephyrSkeleton.Open(*mZephyrSkeleton.m_pShared, kPose);
     kPose.Open(mZephyrSkeleton);
     kPose.Set(mZephyrPoseDyn, true);
-    mZephyrSkeleton.BuildWorldMatrices(_IdentityMatrix);
+    mZephyrSkeleton.BuildWorldMatrices(gMatrixIdentity);
     mPose.ConvertFromZephyrPose(mZephyrSkeleton);
 }
 
@@ -186,37 +186,32 @@ bool EntityTrap::CollisionCallback(const CollisionResult* pResult, CollisionObje
 // FUNCTION: SWBF2 0x004fdef0
 void EntityTrap::HealthChangeCallback(bool bArg, float fDelta)
 {
-    typedef void(__thiscall * SetModelFn)(void*, const GameModel*);
-    typedef void(__thiscall * DeactivateFn)(void*);
-
-    Damageable* pDamageable = this;
-    if (mState == STATE_UNBUILT && pDamageable->mCurHealth >= pDamageable->mMaxHealth)
+    if (mState == STATE_UNBUILT && mCurHealth >= mMaxHealth)
     {
-        CollisionObject* pCollision = this;
         if (mTrapClass->mBuildBoxOdf)
         {
-            pCollision->SetCollisionModel(&mTrapClass->mTrapCollisionModel);
-            pCollision->SetCollisionCenter(mTrapCollisionSphere.GetCenter());
-            pCollision->SetCollisionRadius(mTrapCollisionSphere.GetRadius());
-            pCollision->RecalculateAABB();
-            if (pCollision->IsInCollisionList())
+            SetCollisionModel(&mTrapClass->mTrapCollisionModel);
+            SetCollisionCenter(mTrapCollisionSphere.GetCenter());
+            SetCollisionRadius(mTrapCollisionSphere.GetRadius());
+            RecalculateAABB();
+            if (IsInCollisionList())
             {
-                pCollision->RemoveFromCollisionManager();
+                RemoveFromCollisionManager();
             }
         }
-        if (mTrapClass->mCollisionOnBuilt)
+        if (!mTrapClass->mCollisionOnBuilt)
         {
-            if (!pCollision->IsInCollisionList())
+            if (IsInCollisionList())
             {
-                pCollision->AddStaticToCollisionManager();
+                RemoveFromCollisionManager();
             }
         }
-        else if (pCollision->IsInCollisionList())
+        else if (!IsInCollisionList())
         {
-            pCollision->RemoveFromCollisionManager();
+            AddStaticToCollisionManager();
         }
 
-        pDamageable->mIsAlive = true;
+        mIsAlive = true;
         mState = STATE_ALIVE;
 
         SetModel(mTrapClass->mModel);
@@ -226,18 +221,17 @@ void EntityTrap::HealthChangeCallback(bool bArg, float fDelta)
         }
         if (mBuildBox->IsRtti(EntityProp::rttiHashEntityProp))
         {
-
             EntityProp* pProp = static_cast<EntityProp*>(mBuildBox);
             pProp->Deactivate();
             pProp->RemoveFromCollisionManager();
         }
-        pDamageable->mHealthType = HEALTH_TYPE_BUILDING;
+        mHealthType = HEALTH_TYPE_BUILDING;
         mBuildingTrap = true;
         mTriggered = false;
-        pDamageable->mCurHealth = pDamageable->mMaxHealth;
+        mCurHealth = mMaxHealth;
     }
-    pDamageable->Damageable::HealthChangeCallback(bArg, fDelta);
-    if (!pDamageable->mIsAlive)
+    Damageable::HealthChangeCallback(bArg, fDelta);
+    if (!mIsAlive)
     {
         mTriggered = true;
     }
@@ -300,7 +294,7 @@ EntityTrapClass::~EntityTrapClass()
 bool EntityTrapClass::InitAnimations(const char* pszName)
 {
     mAnimObj = RedAnimation::Find(PblHash(pszName));
-    return mAnimObj != 0;
+    return mAnimObj ? true : false;
 }
 
 // FUNCTION: SWBF2 0x004fe510
@@ -342,8 +336,14 @@ void EntityTrapClass::SetProperty(unsigned int uProperty, const char* pszValue)
 
     case 0x619005ab:
     {
-        GameModel* pModel = mUnbuiltModel ? mUnbuiltModel : mModel;
-        pModel->GetRedModel(0)->GetBoneMatrix(PblTEMPHash(pszValue), mBuildOffset);
+        if (mUnbuiltModel)
+        {
+            mUnbuiltModel->GetRedModel(0)->GetBoneMatrix(PblTEMPHash(pszValue), mBuildOffset);
+        }
+        else
+        {
+            mModel->GetRedModel(0)->GetBoneMatrix(PblTEMPHash(pszValue), mBuildOffset);
+        }
         break;
     }
 
@@ -357,7 +357,7 @@ void EntityTrapClass::SetProperty(unsigned int uProperty, const char* pszValue)
         const CollisionMesh* pMesh = CollisionMesh::Find(PblHash(pszValue));
         if (pMesh)
         {
-            mTrapCollisionModel.AddBody(new CollisionBodyMesh(pMesh, "CollisionMesh", _IdentityMatrix, 0));
+            mTrapCollisionModel.AddBody(new CollisionBodyMesh(pMesh, "CollisionMesh", gMatrixIdentity, 0));
         }
 
         CollisionBodyPrimitive* pPrimitive;
@@ -567,7 +567,7 @@ bool EntityTrap::Update(float fDeltaTime)
         mZephyrSkeleton.Open(*mZephyrSkeleton.m_pShared, kPose);
         kPose.Open(mZephyrSkeleton);
         kPose.Set(mZephyrPoseDyn, true);
-        mZephyrSkeleton.BuildWorldMatrices(_IdentityMatrix);
+        mZephyrSkeleton.BuildWorldMatrices(gMatrixIdentity);
         mPose.ConvertFromZephyrPose(mZephyrSkeleton);
 
         if (mTrapClass->mAnimBuildTrap)
@@ -593,12 +593,12 @@ bool EntityTrap::Update(float fDeltaTime)
 
     if (!mTriggered)
     {
-        PblMatrix mNode = _IdentityMatrix;
+        PblMatrix mNode = gMatrixIdentity;
         if (mTrapClass->mTriggerNode)
         {
             GetModel()->GetRedModel(0)->GetBoneMatrix(mTrapClass->mTriggerNode, mNode);
         }
-        PblMatrix mOffset = _IdentityMatrix;
+        PblMatrix mOffset = gMatrixIdentity;
         mOffset.SetTranslation(mTrapClass->mTriggerOffset);
         PblMatrix mLocal;
         D3DXMatrixMultiply(reinterpret_cast<D3DXMATRIX*>(&mLocal), reinterpret_cast<const D3DXMATRIX*>(&mOffset), reinterpret_cast<const D3DXMATRIX*>(&mNode));
@@ -621,10 +621,8 @@ bool EntityTrap::Update(float fDeltaTime)
         {
             PblBox kBox = GetModel()->_mModel->_TotalBoundingBox;
             float fHalfWidth = (kBox._vMax.x - kBox._vMin.x) * 0.5f;
-            PblVector3 vFrom(vPos.x - vRight.x * fHalfWidth, vPos.y - vRight.y * fHalfWidth,
-                             vPos.z - vRight.z * fHalfWidth);
-            PblVector3 vTo(vPos.x + vRight.x * fHalfWidth, vPos.y + vRight.y * fHalfWidth,
-                           vPos.z + vRight.z * fHalfWidth);
+            PblVector3 vFrom = vPos - vRight * fHalfWidth;
+            PblVector3 vTo = vPos + vRight * fHalfWidth;
             iCount = CollisionManager::GetObjectsInFatRay(vTo, vFrom, mTrapClass->mRayTriggerWidth, apObjects,
                                                          5, 0, 10);
         }
@@ -644,15 +642,15 @@ bool EntityTrap::Update(float fDeltaTime)
             if (mTrapClass->mRayTriggerWidth > 0.0f)
             {
                 const PblVector3& vCenter = pCollision->GetCollisionCenter();
-                float fDist = (float)fabs((vPos.x - vCenter.x) * vForward.x + vForward.y * (vPos.y - vCenter.y) +
-                                          vForward.z * (vPos.z - vCenter.z));
+                float fDist = (float)fabs((double)((vPos.x - vCenter.x) * vForward.x + vForward.y * (vPos.y - vCenter.y) +
+                                                   vForward.z * (vPos.z - vCenter.z)));
                 if (fDist > pCollision->GetCollisionRadius() + mTrapClass->mRayTriggerWidth)
                 {
                     continue;
                 }
                 PblVector3 vVelocity = pCollision->GetGameObject()->GetVelocity();
                 if (mTrapClass->mRayTriggerMinSpeed >
-                    (float)fabs(vVelocity.x * vForward.x + vVelocity.y * vForward.y + vVelocity.z * vForward.z))
+                    (float)fabs((double)(vVelocity.x * vForward.x + vVelocity.y * vForward.y + vVelocity.z * vForward.z)))
                 {
                     continue;
                 }
@@ -705,12 +703,12 @@ bool EntityTrap::Update(float fDeltaTime)
     if (fDeathTime > 0.0f && fDeathTime > mAnimationTime && mAnimationTime + fDeltaTime >= fDeathTime)
     {
         bool bKilled = false;
-        PblMatrix mNode(_IdentityMatrix);
+        PblMatrix mNode(gMatrixIdentity);
         if (mTrapClass->mTriggerNode)
         {
             GetModel()->GetRedModel(0)->GetBoneMatrix(mTrapClass->mTriggerNode, mNode);
         }
-        PblMatrix mOffset(_IdentityMatrix);
+        PblMatrix mOffset(gMatrixIdentity);
         mOffset.SetTranslation(mTrapClass->mTriggerOffset);
         PblMatrix mLocal;
         D3DXMatrixMultiply(reinterpret_cast<D3DXMATRIX*>(&mLocal), reinterpret_cast<const D3DXMATRIX*>(&mOffset), reinterpret_cast<const D3DXMATRIX*>(&mNode));
@@ -739,7 +737,7 @@ bool EntityTrap::Update(float fDeltaTime)
             FLEffectClass* pEffectClass = FLEffect::Get(mTrapClass->mDeathEffect);
             if (pEffectClass)
             {
-                PblMatrix mEffect = _IdentityMatrix;
+                PblMatrix mEffect = gMatrixIdentity;
                 mEffect.SetTranslation(mTrapClass->mDeathEffectOffset);
                 FLEffectObject* pEffect = pEffectClass->BuildEffect();
                 if (pEffect)
@@ -757,7 +755,7 @@ bool EntityTrap::Update(float fDeltaTime)
     mZephyrSkeleton.Open(*mZephyrSkeleton.m_pShared, kPose);
     kPose.Open(mZephyrSkeleton);
     kPose.Set(mZephyrPoseDyn, true);
-    mZephyrSkeleton.BuildWorldMatrices(_IdentityMatrix);
+    mZephyrSkeleton.BuildWorldMatrices(gMatrixIdentity);
     mPose.ConvertFromZephyrPose(mZephyrSkeleton);
 
     if (!mTrapClass->mAnimTriggerTrap ||
@@ -840,12 +838,10 @@ Entity* EntityTrapClass::Build(const EntityDesc& desc)
 
         PblVector3 vOffset(0.0f, vHalfSize.y * 0.5f, 0.0f);
         PblMatrix mBody = kBoxDesc.mMatrix;
-        mBody.m[3][0] = kBoxDesc.mMatrix.m[3][0] + vOffset.x;
-        mBody.m[3][1] = kBoxDesc.mMatrix.m[3][1] + vOffset.y;
-        mBody.m[3][2] = kBoxDesc.mMatrix.m[3][2] + vOffset.z;
+        mBody.SetTranslation(kBoxDesc.mMatrix.GetTranslation() + vOffset);
         mBody.m[3][3] = 1.0f;
-        PblMatrix mInverse = pTrap->GetMatrix().GetInverseFast();
-        PblMatrix mLocal = mBody * mInverse;
+        PblMatrix mLocal;
+        mLocal = mBody * pTrap->GetMatrix().GetInverseFast();
 
         mBuildBoxCollisionModel.AddBody(new CollisionBodyPrimitive(kPrimitive, "main_body", mLocal, 0));
         pTrap->SetCollisionModel(&mBuildBoxCollisionModel);
@@ -867,7 +863,7 @@ Entity* EntityTrapClass::Build(const EntityDesc& desc)
     {
         pTrap->BuildEffects();
     }
-    static_cast<Thread*>(pTrap)->ActivateThread(0, PER_FRAME);
+    pTrap->ActivateThread(0, PER_FRAME);
     pTrap->mCurHealth = pTrap->mMaxHealth;
     pTrap->HealthChangeCallback(false, 0.0f);
     if (mAnimBuildTrap)
