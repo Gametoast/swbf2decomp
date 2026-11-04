@@ -1131,39 +1131,6 @@ void SoldierAnimator::SetupPose(RedPose& pose)
     }
 }
 
-namespace
-{
-
-inline PblMatrix& RotateJointWorldMatrix(ZephyrSkeleton<32>& kSkel, int iJoint, float fYaw, float fPitch,
-                                         PblBitVector<32>& kDirty, const PblMatrix* pParent)
-{
-    PblMatrix mRotate;
-    PblMatrix mTemp;
-    D3DXMatrixRotationY(reinterpret_cast<D3DXMATRIX*>(&mRotate), fYaw);
-    D3DXMatrixMultiply(reinterpret_cast<D3DXMATRIX*>(&mRotate), reinterpret_cast<const D3DXMATRIX*>(&mRotate), D3DXMatrixRotationX(reinterpret_cast<D3DXMATRIX*>(&mTemp), fPitch));
-    kSkel.BuildWorldMatrices(gMatrixIdentity, iJoint, kDirty);
-
-    PblMatrix& mWorld = kSkel.m_pWorldMatrices[iJoint];
-    PblVector3 vOrigin;
-    if (pParent)
-    {
-        const ZephyrTransform& kBase = kSkel.m_pShared->m_pJoints[iJoint].m_kBaseTransform;
-        D3DXVec3TransformCoord(reinterpret_cast<D3DXVECTOR3*>(&vOrigin), reinterpret_cast<const D3DXVECTOR3*>(&kBase.kTrans), reinterpret_cast<const D3DXMATRIX*>(pParent));
-    }
-    else
-    {
-        vOrigin = mWorld.GetTranslation();
-    }
-    D3DXMatrixMultiply(reinterpret_cast<D3DXMATRIX*>(&mTemp), reinterpret_cast<const D3DXMATRIX*>(&mWorld), reinterpret_cast<const D3DXMATRIX*>(&mRotate));
-    mWorld = mTemp;
-    mWorld.m[3][0] = vOrigin.x;
-    mWorld.m[3][1] = vOrigin.y;
-    mWorld.m[3][2] = vOrigin.z;
-    mWorld.m[3][3] = 1.0f;
-    return mWorld;
-}
-}
-
 // FUNCTION: SWBF2 0x00642860
 void SoldierAnimator::ApplyProceduralAnimationAndBuildWorldMatrices(float fDeltaTime)
 {
@@ -1273,52 +1240,86 @@ void SoldierAnimator::ApplyProceduralAnimationAndBuildWorldMatrices(float fDelta
     float fAimPitch = mAimXAngle;
     PblBitVector<32> kDirty;
     kDirty.SetAll();
-    const ZephyrSkeletonShared* pShared;
+    PblMatrix worldRotation;
+    PblMatrix* mat;
 
     if (fTorsoWeight > 0.0f)
     {
-        float fTorsoYaw;
-        float fTorsoPitch;
-        const PblMatrix* pSpine;
-        pShared = mZephyrSkeleton.m_pShared;
-        int iJoint = pShared->GetJointIdxByCrc(0x5de52389);
+        int iJoint = mZephyrSkeleton.m_pShared->GetJointIdxByCrc(0x5de52389);
+        float fTorsoYaw = fAimYaw * fTorsoWeight;
+        float fTorsoPitch = fAimPitch * fTorsoWeight;
         if (iJoint >= 0)
         {
-            fTorsoYaw = fAimYaw * fTorsoWeight;
-            fTorsoPitch = fAimPitch * fTorsoWeight;
-            const PblMatrix& mLower =
-                RotateJointWorldMatrix(mZephyrSkeleton, iJoint, fTorsoYaw * 0.125f, fTorsoPitch * 0.125f, kDirty, 0);
-            pSpine = &RotateJointWorldMatrix(mZephyrSkeleton, mZephyrSkeleton.m_pShared->GetJointIdxByCrc(0x8c1c9bba),
-                                             fTorsoYaw * 0.375f, fTorsoPitch * 0.375f, kDirty, &mLower);
+            worldRotation.SetRotateY(fTorsoYaw * 0.125f);
+            worldRotation.RotateX(fTorsoPitch * 0.125f);
+            mZephyrSkeleton.BuildWorldMatrices(gMatrixIdentity, iJoint, kDirty);
+            mat = &mZephyrSkeleton.m_pWorldMatrices[iJoint];
+            PblVector3 pos = mat->GetTranslation();
+            *mat = *mat * worldRotation;
+            mat->SetTranslation(pos);
+            iJoint = mZephyrSkeleton.m_pShared->GetJointIdxByCrc(0x8c1c9bba);
+            worldRotation.SetRotateY(fTorsoYaw * 0.375f);
+            worldRotation.RotateX(fTorsoPitch * 0.375f);
+            mZephyrSkeleton.BuildWorldMatrices(gMatrixIdentity, iJoint, kDirty);
+            pos = mat->ApplyTransform(mZephyrSkeleton.m_pShared->m_pJoints[iJoint].m_kBaseTransform.kTrans);
+            mat = &mZephyrSkeleton.m_pWorldMatrices[iJoint];
+            *mat = *mat * worldRotation;
+            mat->SetTranslation(pos);
         }
         else
         {
-            int iSpine = pShared->GetJointIdxByCrc(0x93e93819);
-            fTorsoYaw = fAimYaw * fTorsoWeight;
-            fTorsoPitch = fAimPitch * fTorsoWeight;
-            pSpine = &RotateJointWorldMatrix(mZephyrSkeleton, iSpine, fTorsoYaw * 0.5f, fTorsoPitch * 0.5f, kDirty, 0);
+            iJoint = mZephyrSkeleton.m_pShared->GetJointIdxByCrc(0x93e93819);
+            worldRotation.SetRotateY(fTorsoYaw * 0.5f);
+            worldRotation.RotateX(fTorsoPitch * 0.5f);
+            mZephyrSkeleton.BuildWorldMatrices(gMatrixIdentity, iJoint, kDirty);
+            mat = &mZephyrSkeleton.m_pWorldMatrices[iJoint];
+            PblVector3 pos = mat->GetTranslation();
+            *mat = *mat * worldRotation;
+            mat->SetTranslation(pos);
         }
-        RotateJointWorldMatrix(mZephyrSkeleton, mZephyrSkeleton.m_pShared->GetJointIdxByCrc(0xe5b51072),
-                               fTorsoYaw * 0.5f, fTorsoPitch * 0.5f, kDirty, pSpine);
+        iJoint = mZephyrSkeleton.m_pShared->GetJointIdxByCrc(0xe5b51072);
+        worldRotation.SetRotateY(fTorsoYaw * 0.5f);
+        worldRotation.RotateX(fTorsoPitch * 0.5f);
+        mZephyrSkeleton.BuildWorldMatrices(gMatrixIdentity, iJoint, kDirty);
+        PblVector3 pos = mat->ApplyTransform(mZephyrSkeleton.m_pShared->m_pJoints[iJoint].m_kBaseTransform.kTrans);
+        mat = &mZephyrSkeleton.m_pWorldMatrices[iJoint];
+        *mat = *mat * worldRotation;
+        mat->SetTranslation(pos);
     }
 
     if (fHeadWeight > 0.0f)
     {
-        pShared = mZephyrSkeleton.m_pShared;
-        int iNeck = pShared->GetJointIdxByCrc(0xd2afb28a);
-        if (iNeck >= 0)
+        int iJoint = mZephyrSkeleton.m_pShared->GetJointIdxByCrc(0xd2afb28a);
+        float fHeadYaw = fAimYaw * fHeadWeight;
+        float fHeadPitch = fAimPitch * fHeadWeight;
+        if (iJoint >= 0)
         {
-            float fHeadYaw = fAimYaw * fHeadWeight;
-            float fHeadPitch = fAimPitch * fHeadWeight;
-            const PblMatrix& mNeck =
-                RotateJointWorldMatrix(mZephyrSkeleton, iNeck, fHeadYaw * 0.25f, fHeadPitch * 0.25f, kDirty, 0);
-            RotateJointWorldMatrix(mZephyrSkeleton, mZephyrSkeleton.m_pShared->GetJointIdxByCrc(0x8afdf5e4),
-                                   fHeadYaw * 0.375f, fHeadPitch * 0.375f, kDirty, &mNeck);
+            worldRotation.SetRotateY(fHeadYaw * 0.25f);
+            worldRotation.RotateX(fHeadPitch * 0.25f);
+            mZephyrSkeleton.BuildWorldMatrices(gMatrixIdentity, iJoint, kDirty);
+            mat = &mZephyrSkeleton.m_pWorldMatrices[iJoint];
+            PblVector3 pos = mat->GetTranslation();
+            *mat = *mat * worldRotation;
+            mat->SetTranslation(pos);
+            iJoint = mZephyrSkeleton.m_pShared->GetJointIdxByCrc(0x8afdf5e4);
+            worldRotation.SetRotateY(fHeadYaw * 0.375f);
+            worldRotation.RotateX(fHeadPitch * 0.375f);
+            mZephyrSkeleton.BuildWorldMatrices(gMatrixIdentity, iJoint, kDirty);
+            pos = mat->ApplyTransform(mZephyrSkeleton.m_pShared->m_pJoints[iJoint].m_kBaseTransform.kTrans);
+            mat = &mZephyrSkeleton.m_pWorldMatrices[iJoint];
+            *mat = *mat * worldRotation;
+            mat->SetTranslation(pos);
         }
         else
         {
-            RotateJointWorldMatrix(mZephyrSkeleton, pShared->GetJointIdxByCrc(0x8afdf5e4),
-                                   fAimYaw * fHeadWeight * 0.625f, fAimPitch * fHeadWeight * 0.625f, kDirty, 0);
+            iJoint = mZephyrSkeleton.m_pShared->GetJointIdxByCrc(0x8afdf5e4);
+            worldRotation.SetRotateY(fHeadYaw * 0.625f);
+            worldRotation.RotateX(fHeadPitch * 0.625f);
+            mZephyrSkeleton.BuildWorldMatrices(gMatrixIdentity, iJoint, kDirty);
+            mat = &mZephyrSkeleton.m_pWorldMatrices[iJoint];
+            PblVector3 pos = mat->GetTranslation();
+            *mat = *mat * worldRotation;
+            mat->SetTranslation(pos);
         }
     }
 

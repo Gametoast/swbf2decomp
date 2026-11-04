@@ -360,7 +360,7 @@ void ParticleEmitter::Render(float fTime)
                     mat.m[r][3] = 0.0f;
                 }
             }
-            pClass->mSpawner.SetupParticle(particle, mat, spawnRand.GetInt(), sCount, fAge, mSize, pInfo->mVelocity, mInheritVelocityFactor, pClass->mNoRegisterStep);
+            pClass->mSpawner.SetupParticle(particle, mat, spawnRand.GetInt(), sCount, fAge, PblVector3(mSize, mSize, mSize), PblVector3(mSize, mSize, mSize), mSize, pInfo->mVelocity, mInheritVelocityFactor, pClass->mNoRegisterStep);
             particle.mInfoData = pInfo;
             sParticleCache[i].mFrameIndex = pClass->mGeometry.mType == ParticleGeometry::PT_ANIMATED ? 0 : -1;
             if (pClass->mGeometry.mType == ParticleGeometry::PT_STREAK)
@@ -558,7 +558,7 @@ void ParticleEmitter::RenderAsEmitter(float fTime)
             Particle step;
             float fStepTime = 0.0f;
             float fStepDelta = 0.3f;
-            mClass->mSpawner.SetupParticle(particle, mat, spawnRand.GetInt(), sCount, fAge, mSize, pInfo->mVelocity, mInheritVelocityFactor, mClass->mNoRegisterStep);
+            mClass->mSpawner.SetupParticle(particle, mat, spawnRand.GetInt(), sCount, fAge, PblVector3(mSize, mSize, mSize), PblVector3(mSize, mSize, mSize), mSize, pInfo->mVelocity, mInheritVelocityFactor, mClass->mNoRegisterStep);
             particle.mInfoData = pInfo;
             if (fAge >= 0.0f)
             {

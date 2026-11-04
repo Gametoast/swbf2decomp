@@ -377,14 +377,8 @@ void Aimer::SetupPose(const PblMatrix& mParent, RedPose& pose, bool bRecurse) co
         const PblMatrix* pParentBone = pose.Find(mClass->mParentHash);
         if (pParentBone)
         {
-            PblMatrix mMount;
-            {
-                PblMatrix mOffset = PblMatrix(mClass->mOffsetRot, mOffsetPos);
-                mMount = mOffset * *pParentBone;
-            }
-            PblVector3 vDir;
-            D3DXVec3TransformNormal(reinterpret_cast<D3DXVECTOR3*>(&vDir), reinterpret_cast<const D3DXVECTOR3*>(&mDirection), reinterpret_cast<const D3DXMATRIX*>(&mParent));
-            mMountPoseMatrix = DirectionMatrix(vDir, mMount[1], mMount[3]);
+            PblMatrix mMount = PblMatrix(mClass->mOffsetRot, mOffsetPos) * *pParentBone;
+            mMountPoseMatrix = DirectionMatrix(mParent.ApplyRotation(mDirection), mMount[1], mMount[3]);
 
             const PblMatrix* pOld = pose.Find(mClass->mMountHash);
             if (pOld != &mMountPoseMatrix)
@@ -411,10 +405,7 @@ void Aimer::SetupPose(const PblMatrix& mParent, RedPose& pose, bool bRecurse) co
                 {
                     vOffset.z += -mClass->mBarrelInfo[i].mRecoil * mRecoil[i];
                 }
-                PblVector3 vPos;
-                D3DXVec3TransformCoord(reinterpret_cast<D3DXVECTOR3*>(&vPos), reinterpret_cast<const D3DXVECTOR3*>(&vOffset), reinterpret_cast<const D3DXMATRIX*>(&mBarrelPoseMatrix[i]));
-                mBarrelPoseMatrix[i][3] = vPos;
-                mBarrelPoseMatrix[i].m[3][3] = 1.0f;
+                mBarrelPoseMatrix[i].SetTranslation(mBarrelPoseMatrix[i].ApplyTransform(vOffset));
 
                 const PblMatrix* pOld = pose.Find(mClass->mBarrelInfo[i].mHash);
                 if (pOld != &mBarrelPoseMatrix[i])

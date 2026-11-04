@@ -446,14 +446,6 @@ namespace
         return &pDroideka->mEnergyBar;
     }
 
-    inline void DroidekaUpdateCollisionSphere(EntityDroideka* pDroideka)
-    {
-        PblVector3 center;
-        D3DXVec3TransformCoord(reinterpret_cast<D3DXVECTOR3*>(&center), reinterpret_cast<const D3DXVECTOR3*>(&pDroideka->mModel->_mModel->_BoundingSphere.GetCenter()),
-                               reinterpret_cast<const D3DXMATRIX*>(&pDroideka->mMatrix));
-        pDroideka->SetCollisionCenter(center);
-        pDroideka->RecalculateAABB();
-    }
 }
 
 // SYNTHETIC: SWBF2 0x00402a80
@@ -690,20 +682,6 @@ GameObjectType EntityDroideka::GetGameObjectType()
 EntityType EntityDroideka::GetEntityType() const
 {
     return ENT_DROIDEKA;
-}
-
-// FUNCTION: SWBF2 0x0049e820
-void EntityDroideka::SetPosition(const PblVector3& vPos)
-{
-    mMatrix.SetTranslation(vPos);
-    DroidekaUpdateCollisionSphere(this);
-}
-
-// FUNCTION: SWBF2 0x0049e8c0
-void EntityDroideka::SetMatrix(const PblMatrix& mMatrixIn)
-{
-    mMatrix = mMatrixIn;
-    DroidekaUpdateCollisionSphere(this);
 }
 
 // FUNCTION: SWBF2 0x0049e970

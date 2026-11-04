@@ -65,7 +65,7 @@ public:
 
 namespace VehicleManager
 {
-int RequestVehiclesInRange(const PblVector3& vPos, GameObject** ppOut, float fRadius, int iMax);
+int RequestVehiclesInRange(const PblVector3& vPos, float fRadius, GameObject** ppOut, int iMax);
 }
 
 namespace
@@ -222,7 +222,7 @@ bool UnitTrooperAgent::CheckForVehicleConvoy()
     }
 
     GameObject* nearby[10];
-    int iCount = VehicleManager::RequestVehiclesInRange(myPos, nearby, 50.0f, 10);
+    int iCount = VehicleManager::RequestVehiclesInRange(myPos, 50.0f, nearby, 10);
     for (int i = 0; i < iCount; ++i)
     {
         GameObject* pObj = nearby[i];

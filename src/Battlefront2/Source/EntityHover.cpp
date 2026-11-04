@@ -61,19 +61,6 @@
 #include "RedEngineFL/Application/pc/pcFLRender.h"
 
 
-namespace
-{
-
-    inline void UpdateCollisionSphere(EntityHover* pHover)
-    {
-        const PblMatrix& matrix = pHover->mMatrix;
-        PblVector3 center;
-        D3DXVec3TransformCoord(reinterpret_cast<D3DXVECTOR3*>(&center), reinterpret_cast<const D3DXVECTOR3*>(&pHover->mModel->_mModel->_BoundingSphere.GetCenter()),
-                               reinterpret_cast<const D3DXMATRIX*>(&matrix));
-        pHover->SetCollisionCenter(center);
-        pHover->RecalculateAABB();
-    }
-}
 
 // SYNTHETIC: SWBF2 0x00402ba0
 // `dynamic initializer for 'EntityHover::rttiHashEntityHover''
@@ -130,20 +117,6 @@ Entity* EntityHover::GetEntity()
 const Entity* EntityHover::GetEntity() const
 {
     return this;
-}
-
-// FUNCTION: SWBF2 0x00478b10
-void EntityHover::SetPosition(const PblVector3& vPosition)
-{
-    mMatrix.SetTranslation(vPosition);
-    UpdateCollisionSphere(this);
-}
-
-// FUNCTION: SWBF2 0x00478bb0
-void EntityHover::SetMatrix(const PblMatrix& matrix)
-{
-    mMatrix = matrix;
-    UpdateCollisionSphere(this);
 }
 
 // FUNCTION: SWBF2 0x00478c80

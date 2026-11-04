@@ -185,16 +185,17 @@ CollisionTreeLeaf* sDrawThisLeaf;
 CollisionAABB sDrawThisAABB;
 
 // FUNCTION: SWBF2 0x004609e0
-CollisionAABB::CollisionAABB(const CollisionAABB& parent, const CompressedAABB& compressed)
+void CollisionAABB::Init(const CollisionAABB& parent, const CompressedAABB& compressed)
 {
-    const PblVector3 dim(parent.boxmax.x - parent.boxmin.x, parent.boxmax.y - parent.boxmin.y,
-                         parent.boxmax.z - parent.boxmin.z);
-    boxmin = PblVector3(parent.boxmin.x + dim.x * u8tof32_lut[compressed.boxmin.x],
-                        parent.boxmin.y + dim.y * u8tof32_lut[compressed.boxmin.y],
-                        parent.boxmin.z + dim.z * u8tof32_lut[compressed.boxmin.z]);
-    boxmax = PblVector3(parent.boxmin.x + dim.x * u8tof32_lut[compressed.boxmax.x],
-                        parent.boxmin.y + dim.y * u8tof32_lut[compressed.boxmax.y],
-                        parent.boxmin.z + dim.z * u8tof32_lut[compressed.boxmax.z]);
+    PblVector3 dim = parent.GetDim();
+    PblVector3 fltmin(u8tof32_lut[compressed.boxmin.x],
+                            u8tof32_lut[compressed.boxmin.y],
+                            u8tof32_lut[compressed.boxmin.z]);
+    PblVector3 fltmax(u8tof32_lut[compressed.boxmax.x],
+                            u8tof32_lut[compressed.boxmax.y],
+                            u8tof32_lut[compressed.boxmax.z]);
+    boxmin = parent.boxmin + dim * fltmin;
+    boxmax = parent.boxmin + dim * fltmax;
 }
 
 // FUNCTION: SWBF2 0x00460b10
@@ -272,75 +273,73 @@ CollisionAABB* CopyCollisionAABB(CollisionAABB* pThis, const CollisionAABB& src)
 
 // FUNCTION: SWBF2 0x00461610
 bool CollisionMesh::_RayTestAABB(const PblVector3& vStart, const PblVector3& vDir, float fLength, const CollisionAABB& aabb,
-                PblVector3& vCoord)
+                PblVector3& vCoord) const
 {
-    bool bInside = true;
-    float maxT[3] = { -1.0f, -1.0f, -1.0f };
-    const PblVector3 minB = aabb.boxmin;
-    const PblVector3 maxB = aabb.boxmax;
-    const PblVector3 origin = vStart;
-    const PblVector3 dir = vDir;
+    bool Inside = true;
+    int WhichPlane;
+    int i;
+    float MaxT[3] = { -1.0f, -1.0f, -1.0f };
+    PblVector3 MinB = aabb.GetMin();
+    PblVector3 MaxB = aabb.GetMax();
+    PblVector3 origin = vStart;
+    PblVector3 dir = vDir;
     PblVector3 coord;
-    const float* pMin = &minB.x;
-    const float* pMax = &maxB.x;
-    const float* pOrigin = &origin.x;
-    const float* pDir = &dir.x;
-    float* pCoord = &coord.x;
 
-    for (int i = 0; i < 3; ++i)
+    for (i = 0; i < 3; ++i)
     {
-        float fPlane;
-        if (pOrigin[i] < pMin[i])
+        if (origin(i) < MinB(i))
         {
-            fPlane = pMin[i];
+            coord(i) = MinB(i);
+            Inside = false;
+            if (dir(i) != 0.0f)
+            {
+                MaxT[i] = (MinB(i) - origin(i)) / dir(i);
+            }
         }
-        else if (pOrigin[i] > pMax[i])
+        else if (origin(i) > MaxB(i))
         {
-            fPlane = pMax[i];
-        }
-        else
-        {
-            continue;
-        }
-        bInside = false;
-        pCoord[i] = fPlane;
-        if (pDir[i] != 0.0f)
-        {
-            maxT[i] = (fPlane - pOrigin[i]) / pDir[i];
+            coord(i) = MaxB(i);
+            Inside = false;
+            if (dir(i) != 0.0f)
+            {
+                MaxT[i] = (MaxB(i) - origin(i)) / dir(i);
+            }
         }
     }
-    if (bInside)
+    if (Inside)
     {
         vCoord = origin;
         return true;
     }
-
-    int whichPlane = (maxT[1] > maxT[0]) ? 1 : 0;
-    if (maxT[2] > maxT[whichPlane])
+    WhichPlane = 0;
+    for (i = 1; i < 3; ++i)
     {
-        whichPlane = 2;
+        if (MaxT[i] > MaxT[WhichPlane])
+        {
+            WhichPlane = i;
+        }
     }
-    const float t = maxT[whichPlane];
-    if (t < 0.0f || t > fabsf(fLength / pDir[whichPlane]))
+    if (MaxT[WhichPlane] < 0.0f)
     {
         return false;
     }
-    for (int i = 0; i < 3; ++i)
+    if (MaxT[WhichPlane] > fabsf(fLength / dir(WhichPlane)))
     {
-        if (i == whichPlane)
+        return false;
+    }
+    for (i = 0; i < 3; ++i)
+    {
+        if (i != WhichPlane)
         {
-            continue;
-        }
-        pCoord[i] = pDir[i] * t + pOrigin[i];
-        if (pCoord[i] < pMin[i] - EPSILON || pCoord[i] > pMax[i] + EPSILON)
-        {
-            return false;
+            coord(i) = dir(i) * MaxT[WhichPlane] + origin(i);
+            if (coord(i) < MinB(i) - EPSILON || coord(i) > MaxB(i) + EPSILON)
+            {
+                return false;
+            }
         }
     }
-    const float dx = pCoord[0] - pOrigin[0];
-    const float dy = pCoord[1] - pOrigin[1];
-    const float dz = pCoord[2] - pOrigin[2];
-    if (dx * dx + dy * dy + dz * dz > fLength * fLength)
+    PblVector3 Ray = coord - origin;
+    if (SquaredLength(Ray) > fLength * fLength)
     {
         return false;
     }
@@ -417,7 +416,11 @@ float CollisionMesh::RayHit(const PblVector3& vStart, const PblVector3& vDir, fl
 bool CollisionMesh::RayTest(const PblVector3& vStart, const PblVector3& vDir, float fLength) const
 {
     PblVector3 vHit;
-    return CollisionMesh::_RayTestAABB(vStart, vDir, fLength, mAABB, vHit);
+    if (_RayTestAABB(vStart, vDir, fLength, mAABB, vHit))
+    {
+        return true;
+    }
+    return false;
 }
 
 // FUNCTION: SWBF2 0x00460f00

@@ -55,12 +55,9 @@ void GameModel::Render(unsigned char lod, float fAlpha, const PblMatrix* pMatrix
         return;
     }
 
-    RedColor renderColor = color;
-    if (fAlpha < 1.0f)
-    {
-        renderColor.a = (unsigned char)(int)((float)color.a * fAlpha);
-    }
-    pModel->Render(pMatrix, pPose, renderColor, uiFlags, pShadingPose);
+    pModel->Render(pMatrix, pPose,
+                   fAlpha < 1.0f ? RedColor(color, (unsigned char)(int)((float)color.a * fAlpha)) : color,
+                   uiFlags, pShadingPose);
 }
 
 // FUNCTION: SWBF2 0x00533ea0

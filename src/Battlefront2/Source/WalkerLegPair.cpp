@@ -131,10 +131,10 @@ void WalkerLegPair::InitDone()
     mLegTransform[Left] = mParent->mZephyrSkeleton.m_pWorldMatrices[mLegJoints[Left]];
     mLegTransform[Right] = mParent->mZephyrSkeleton.m_pWorldMatrices[mLegJoints[Right]];
 
-    const CollisionModel* pModel = mParent->GetCollisionModel();
-    float fRight = pModel->GetLocalMatrix(mFootCollisionBody[Right], mParent->GetPose()).m[3][2];
-    float fLeft = pModel->GetLocalMatrix(mFootCollisionBody[Left], mParent->GetPose()).m[3][2];
-    mLocalZOffset = (fLeft + fRight) * 0.5f;
+    PblVector3 vMid =
+        (mParent->GetCollisionModel()->GetLocalMatrix(mFootCollisionBody[Left], mParent->GetPose()).GetTranslation() +
+         mParent->GetCollisionModel()->GetLocalMatrix(mFootCollisionBody[Right], mParent->GetPose()).GetTranslation()) * 0.5f;
+    mLocalZOffset = vMid.z;
 }
 
 // FUNCTION: SWBF2 0x00676900
@@ -175,15 +175,13 @@ void WalkerLegPair::SetupGroundCollision(const PblMatrix& mMatrix, float fPitch,
 {
     float fLegLength = mParent->mClass->mLegRayHitLength;
     PblVector3 vOrigin = mMatrix.GetTranslation();
-    vOrigin.y -= sinf(fPitch * 2.0f) * mLocalZOffset;
+    vOrigin.y += -sinf(fPitch * 2.0f) * mLocalZOffset;
     float fRayLength = fLegLength * 2.0f;
 
     for (int i = 0; i < FootCount; ++i)
     {
-        PblVector3 vStart = vOrigin;
-        vStart.x = vStart.x + mMatrix.m[0][0] * pFeet[i].x + mMatrix.m[2][0] * pFeet[i].z;
-        vStart.y = vStart.y + mMatrix.m[0][1] * pFeet[i].x + mMatrix.m[2][1] * pFeet[i].z + fLegLength;
-        vStart.z = vStart.z + mMatrix.m[0][2] * pFeet[i].x + mMatrix.m[2][2] * pFeet[i].z;
+        PblVector3 vStart = vOrigin + mMatrix.GetXAxis() * pFeet[i].x + mMatrix.GetZAxis() * pFeet[i].z;
+        vStart.y += fLegLength;
         CollisionObject* pHitObject;
         float fHit = CollisionManager::RayHit(vStart, PblVector3(0.0f, -1.0f, 0.0f), fRayLength, pHitObject,
                                               NULL, NULL, 0, 0x90, false);

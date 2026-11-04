@@ -2,8 +2,14 @@
 #include <d3dx9math.h>
 
 #include "CollisionUtil.h"
+#include "RedEngineFL/Graphics/RedColor.h"
 #include "PebbleFL/Common/PblVector.h"
 #include "PebbleFL/Common/PblMatrix.h"
+
+// FUNCTION: SWBF2 0x0046c020
+void CollisionUtil::RenderBox(const PblMatrix&, float, float, float, RedColor)
+{
+}
 
 // FUNCTION: SWBF2 0x00469060
 bool CollisionUtil::CollideSphereAABB(const PblVector3& rCenter, float fRadius,
@@ -348,14 +354,11 @@ namespace CollisionUtil
 bool CollideCylinderSphere(const PblMatrix& matrix, float fRadius, float fHalfHeight, const PblVector3& vSphereCenter,
                 float fSphereRadius, PblVector3& vNormal, float& fDepth)
 {
-    PblVector3 vXAxis = matrix.GetXAxis();
-    PblVector3 vYAxis = matrix.GetYAxis();
-    PblVector3 vZAxis = matrix.GetZAxis();
-    PblVector3 vOffset(vSphereCenter.x - matrix.m[3][0], vSphereCenter.y - matrix.m[3][1],
-                       vSphereCenter.z - matrix.m[3][2]);
-    PblVector3 vLocal(vXAxis.x * vOffset.x + vXAxis.y * vOffset.y + vXAxis.z * vOffset.z,
-                      vYAxis.x * vOffset.x + vYAxis.y * vOffset.y + vYAxis.z * vOffset.z,
-                      vZAxis.x * vOffset.x + vZAxis.y * vOffset.y + vZAxis.z * vOffset.z);
+    PblVector3 faceNormals[3] = { matrix.GetXAxis(), matrix.GetYAxis(), matrix.GetZAxis() };
+    PblVector3 kDiff = vSphereCenter - matrix.GetTranslation();
+    PblVector3 vLocal(DotProduct(kDiff, faceNormals[0]),
+                      DotProduct(kDiff, faceNormals[1]),
+                      DotProduct(kDiff, faceNormals[2]));
     float fDist2 = vLocal.x * vLocal.x + vLocal.z * vLocal.z;
 
     if (!(vLocal.y > fHalfHeight || -fHalfHeight > vLocal.y))
@@ -369,13 +372,11 @@ bool CollideCylinderSphere(const PblMatrix& matrix, float fRadius, float fHalfHe
         }
         if (fDist > 0.0001f)
         {
-            float fInv = 1.0f / fDist;
-            float fWorldX = fInv * vLocal.x;
-            float fWorldY = fInv * 0.0f;
-            float fWorldZ = vLocal.z * fInv;
-            vNormal = PblVector3(vXAxis.x * fWorldX + vYAxis.x * fWorldY + vZAxis.x * fWorldZ,
-                                 vXAxis.y * fWorldX + vYAxis.y * fWorldY + vZAxis.y * fWorldZ,
-                                 vXAxis.z * fWorldX + vYAxis.z * fWorldY + vZAxis.z * fWorldZ);
+            PblVector3 tmpDir(vLocal.x, 0.0f, vLocal.z);
+            tmpDir = tmpDir / fDist;
+            vNormal = tmpDir.x * matrix.GetXAxis() +
+                      tmpDir.y * matrix.GetYAxis() +
+                      tmpDir.z * matrix.GetZAxis();
         }
         else
         {
@@ -395,11 +396,11 @@ bool CollideCylinderSphere(const PblMatrix& matrix, float fRadius, float fHalfHe
         }
         if (0.0f > vLocal.y)
         {
-            vNormal = PblVector3(matrix.m[1][0] * -1.0f, matrix.m[1][1] * -1.0f, matrix.m[1][2] * -1.0f);
+            vNormal = -1.0f * faceNormals[1];
         }
         else
         {
-            vNormal = matrix.GetYAxis();
+            vNormal = faceNormals[1];
         }
         return true;
     }
@@ -417,13 +418,11 @@ bool CollideCylinderSphere(const PblMatrix& matrix, float fRadius, float fHalfHe
     }
     float fEdgeDist = (float)sqrt((double)fEdgeDist2);
     fDepth = fSphereRadius - fEdgeDist;
-    float fInv = 1.0f / fEdgeDist;
-    float fWorldX = fX * fInv;
-    float fWorldY = fY * fInv;
-    float fWorldZ = fZ * fInv;
-    vNormal = PblVector3(vXAxis.x * fWorldX + vYAxis.x * fWorldY + vZAxis.x * fWorldZ,
-                         vXAxis.y * fWorldX + vYAxis.y * fWorldY + vZAxis.y * fWorldZ,
-                         vXAxis.z * fWorldX + vYAxis.z * fWorldY + vZAxis.z * fWorldZ);
+    PblVector3 tmpDir(fX, fY, fZ);
+    tmpDir = tmpDir / fEdgeDist;
+    vNormal = tmpDir.x * matrix.GetXAxis() +
+              tmpDir.y * matrix.GetYAxis() +
+              tmpDir.z * matrix.GetZAxis();
     return true;
 }
 }
@@ -432,7 +431,7 @@ namespace CollisionUtil
 {
 
 // FUNCTION: SWBF2 0x004696b0
-bool GetClosestPointInPolygon(const PblVector3& vPos, int iNumCorners, const PblVector3* pCorners, PblVector3& vOutPos,
+bool GetClosestPointInPolygon(PblVector3& vPos, int iNumCorners, const PblVector3* pCorners, PblVector3& vOutPos,
                 float fMaxDist)
 {
     PblVector3 c0 = pCorners[0];
@@ -939,13 +938,6 @@ float RayHitBubble(const PblVector3& vStart, const PblVector3& vDir, float fLeng
 }
 
 
-static inline PblVector3 InverseRotate(const PblMatrix& m, float x, float y, float z)
-{
-    return PblVector3(m.m[0][0] * x + m.m[0][1] * y + m.m[0][2] * z,
-                      m.m[1][0] * x + m.m[1][1] * y + m.m[1][2] * z,
-                      m.m[2][0] * x + m.m[2][1] * y + m.m[2][2] * z);
-}
-
 namespace CollisionUtil
 {
 
@@ -953,9 +945,13 @@ namespace CollisionUtil
 float RayHitBox(const PblVector3& vStart, const PblVector3& vDir, float fLength, const PblMatrix& matrix,
                  float fWidth, float fDepth, float fHeight, PblVector3* pNormal)
 {
-    const PblVector3& vPos = matrix.GetTranslation();
-    PblVector3 vLocalStart = InverseRotate(matrix, vStart.x - vPos.x, vStart.y - vPos.y, vStart.z - vPos.z);
-    PblVector3 vLocalDir = InverseRotate(matrix, vDir.x, vDir.y, vDir.z);
+    PblVector3 kDiff = vStart - matrix.GetTranslation();
+    PblVector3 vLocalStart(DotProduct(kDiff, matrix.GetXAxis()),
+                          DotProduct(kDiff, matrix.GetYAxis()),
+                          DotProduct(kDiff, matrix.GetZAxis()));
+    PblVector3 vLocalDir(DotProduct(vDir, matrix.GetXAxis()),
+                        DotProduct(vDir, matrix.GetYAxis()),
+                        DotProduct(vDir, matrix.GetZAxis()));
 
     float fHit = 0.0f;
     int face = FindAACenteredBoxRayIntersection(vLocalStart, vLocalDir, fLength, fWidth, fHeight, fDepth, fHit);
@@ -971,13 +967,13 @@ float RayHitBox(const PblVector3& vStart, const PblVector3& vDir, float fLength,
         case 2: *pNormal = matrix.GetYAxis(); break;
         case 3: *pNormal = matrix.GetZAxis(); break;
         case -1:
-            *pNormal = PblVector3(matrix.m[0][0] * -1.0f, matrix.m[0][1] * -1.0f, matrix.m[0][2] * -1.0f);
+            *pNormal = -1.0f * matrix.GetXAxis();
             break;
         case -2:
-            *pNormal = PblVector3(matrix.m[1][0] * -1.0f, matrix.m[1][1] * -1.0f, matrix.m[1][2] * -1.0f);
+            *pNormal = -1.0f * matrix.GetYAxis();
             break;
         case -3:
-            *pNormal = PblVector3(matrix.m[2][0] * -1.0f, matrix.m[2][1] * -1.0f, matrix.m[2][2] * -1.0f);
+            *pNormal = -1.0f * matrix.GetZAxis();
             break;
         default:
             pNormal->x = 0.0f;
@@ -1148,19 +1144,22 @@ namespace CollisionUtil
 float RayHitCylinder(const PblVector3& vStart, const PblVector3& vDir, float fLength, const PblMatrix& matrix,
                  float fRadius, float fHalfHeight, PblVector3* pNormal)
 {
-    const PblVector3& vPos = matrix.GetTranslation();
-    PblVector3 vLocalStart = InverseRotate(matrix, vStart.x - vPos.x, vStart.y - vPos.y, vStart.z - vPos.z);
-    PblVector3 vLocalDir = InverseRotate(matrix, vDir.x, vDir.y, vDir.z);
+    PblVector3 kDiff = vStart - matrix.GetTranslation();
+    PblVector3 vLocalStart(DotProduct(kDiff, matrix.GetXAxis()),
+                          DotProduct(kDiff, matrix.GetYAxis()),
+                          DotProduct(kDiff, matrix.GetZAxis()));
+    PblVector3 vLocalDir(DotProduct(vDir, matrix.GetXAxis()),
+                        DotProduct(vDir, matrix.GetYAxis()),
+                        DotProduct(vDir, matrix.GetZAxis()));
     PblVector3 vCenter(0.0f, 0.0f, 0.0f);
     PblVector3 vLocalNormal;
 
     float fHit = CollisionUtil::RayHitAxisAlignedCylinder(vLocalStart, vLocalDir, fLength, vCenter, fRadius, fHalfHeight, &vLocalNormal);
     if (fHit < 1.0f && pNormal)
     {
-        *pNormal = PblVector3(
-            matrix.m[0][0] * vLocalNormal.x + matrix.m[1][0] * vLocalNormal.y + matrix.m[2][0] * vLocalNormal.z,
-            matrix.m[0][1] * vLocalNormal.x + matrix.m[1][1] * vLocalNormal.y + matrix.m[2][1] * vLocalNormal.z,
-            matrix.m[0][2] * vLocalNormal.x + matrix.m[1][2] * vLocalNormal.y + matrix.m[2][2] * vLocalNormal.z);
+        *pNormal = vLocalNormal.x * matrix.GetXAxis() +
+                   vLocalNormal.y * matrix.GetYAxis() +
+                   vLocalNormal.z * matrix.GetZAxis();
     }
     return fHit;
 }

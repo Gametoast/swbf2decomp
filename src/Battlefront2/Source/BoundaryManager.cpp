@@ -129,15 +129,17 @@ void BoundaryManager::AddPath(unsigned int uPathID)
 }
 
 // FUNCTION: SWBF2 0x0044e110
-bool BoundaryManager::IsOutOfBounds(const PblVector3& vPos) const
+bool BoundaryManager::IsOutOfBounds(const PblVector3& vPos)
 {
     if (!mBoundaries)
     {
         return false;
     }
+    float x = vPos.x;
+    float z = vPos.z;
     for (Boundary* pBoundary = mBoundaries; pBoundary; pBoundary = pBoundary->mNext)
     {
-        if (pBoundary->IsInBounds(vPos))
+        if (pBoundary->IsInBounds(x, z))
         {
             return false;
         }
@@ -169,11 +171,11 @@ Boundary::~Boundary()
 }
 
 // FUNCTION: SWBF2 0x0044e260
-bool Boundary::IsInBounds(const PblVector3& vPos) const
+bool Boundary::IsInBounds(float x, float z)
 {
     for (int i = 0; i < mCount; ++i)
     {
-        if ((vPos.z - mEdges[i].z) * mEdges[i].nz + (vPos.x - mEdges[i].x) * mEdges[i].nx > 0.0f)
+        if ((z - mEdges[i].z) * mEdges[i].nz + (x - mEdges[i].x) * mEdges[i].nx > 0.0f)
         {
             return false;
         }

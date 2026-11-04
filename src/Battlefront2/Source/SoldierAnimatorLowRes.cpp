@@ -102,30 +102,6 @@ inline ZephyrAnim* FindBankAnimation(const RedAnimation* pAnimation, unsigned in
     return const_cast<ZephyrAnim*>(pAnimation->_pZephyrAnimBank->Find(uiHash));
 }
 
-inline void FindLowResAnimation(ZephyrAnim*& pAnim, char* acName, int iPrefixLen, int iSuffixSize,
-                                const char* pcAnimName, RedAnimation* const* apAnimation, int iNumAnimations)
-{
-    int iLen = iPrefixLen + _snprintf(&acName[iPrefixLen], iSuffixSize, pcAnimName);
-    char* pcEnd = &acName[iLen];
-    _snprintf(pcEnd, 256 - iLen, "_full");
-    unsigned int uiFullHash = PblTEMPHash(acName);
-    *pcEnd = 0;
-    unsigned int uiHash = PblTEMPHash(acName);
-
-    pAnim = FindBankAnimation(apAnimation[0], uiHash);
-    if (!pAnim)
-    {
-        pAnim = FindBankAnimation(apAnimation[0], uiFullHash);
-        for (int i = 1; i < iNumAnimations && !pAnim; ++i)
-        {
-            pAnim = FindBankAnimation(apAnimation[i], uiHash);
-            if (!pAnim)
-            {
-                pAnim = FindBankAnimation(apAnimation[i], uiFullHash);
-            }
-        }
-    }
-}
 
 struct HighResPoseClass
 {
@@ -134,45 +110,7 @@ struct HighResPoseClass
     unsigned short uiFrame;
 };
 
-inline void AddHighResPose(HighResPoseClass* aHighResPoseClass, int& iNumHighResPoses,
-                           SoldierAnimationBank::MAP eMap, unsigned char uiAnimIndex)
-{
 
-    if (uiAnimIndex >= 164)
-    {
-        return;
-    }
-
-    const SoldierAnimationData* pData = SoldierAnimationData::Get(uiAnimIndex, SoldierAnimType::UPPER);
-    if (!pData->IsLowResPose())
-    {
-        return;
-    }
-
-    int i;
-    for (i = 0; i < iNumHighResPoses; ++i)
-    {
-        if (aHighResPoseClass[i].eMap == eMap && aHighResPoseClass[i].uiAnimIndex == uiAnimIndex)
-        {
-            break;
-        }
-    }
-    if (i != iNumHighResPoses)
-    {
-        return;
-    }
-
-    if (!SoldierAnimatorClass::Instance()->GetUpperBodyAnimation(eMap, uiAnimIndex) ||
-        !SoldierAnimatorClass::Instance()->GetUpperBodyAnimation(eMap, uiAnimIndex)->GetAnimation())
-    {
-        return;
-    }
-
-    aHighResPoseClass[i].eMap = eMap;
-    aHighResPoseClass[i].uiAnimIndex = uiAnimIndex;
-    aHighResPoseClass[i].uiFrame = pData->GetLowResPoseFrame();
-    iNumHighResPoses = i + 1;
-}
 }
 
 // FUNCTION: SWBF2 0x00647d40
@@ -213,8 +151,26 @@ void SoldierAnimatorLowResClass::PostLoad()
         for (i = 0; i < NUM_BASE_POSES; ++i)
         {
             Pose* pPose = &pClass->m_aPose[i];
-            FindLowResAnimation(pPose->m_pZephyrAnim, acName, iPrefixLen, iSuffixSize, s_PoseClasses[i].m_szName,
-                                apAnimation, iNumAnimations);
+            int iLen = iPrefixLen + _snprintf(&acName[iPrefixLen], iSuffixSize, s_PoseClasses[i].m_szName);
+            char* pcEnd = &acName[iLen];
+            _snprintf(pcEnd, sizeof(acName) - iLen, "_full");
+            unsigned int uiFullHash = PblTEMPHash(acName);
+            *pcEnd = 0;
+            unsigned int uiHash = PblTEMPHash(acName);
+
+            pPose->m_pZephyrAnim = FindBankAnimation(apAnimation[0], uiHash);
+            if (!pPose->m_pZephyrAnim)
+            {
+                pPose->m_pZephyrAnim = FindBankAnimation(apAnimation[0], uiFullHash);
+                for (int iAnimation = 1; iAnimation < iNumAnimations && !pPose->m_pZephyrAnim; ++iAnimation)
+                {
+                    pPose->m_pZephyrAnim = FindBankAnimation(apAnimation[iAnimation], uiHash);
+                    if (!pPose->m_pZephyrAnim)
+                    {
+                        pPose->m_pZephyrAnim = FindBankAnimation(apAnimation[iAnimation], uiFullHash);
+                    }
+                }
+            }
             if (!pPose->m_pZephyrAnim)
             {
                 if (pClass->m_pParent)
@@ -236,10 +192,27 @@ void SoldierAnimatorLowResClass::PostLoad()
         for (; i < iNumPoses; ++i)
         {
             Pose* pPose = &pClass->m_aPose[i];
-            FindLowResAnimation(pPose->m_pZephyrAnim, acName, iPrefixLen, iSuffixSize,
-                                SoldierAnimationBank::GetAnimationName(
-                                    (SoldierAnimationBank::ANIMATION)(i - NUM_BASE_POSES)),
-                                apAnimation, iNumAnimations);
+            int iLen = iPrefixLen + _snprintf(&acName[iPrefixLen], iSuffixSize, SoldierAnimationBank::GetAnimationName(
+                                (SoldierAnimationBank::ANIMATION)(i - NUM_BASE_POSES)));
+            char* pcEnd = &acName[iLen];
+            _snprintf(pcEnd, sizeof(acName) - iLen, "_full");
+            unsigned int uiFullHash = PblTEMPHash(acName);
+            *pcEnd = 0;
+            unsigned int uiHash = PblTEMPHash(acName);
+
+            pPose->m_pZephyrAnim = FindBankAnimation(apAnimation[0], uiHash);
+            if (!pPose->m_pZephyrAnim)
+            {
+                pPose->m_pZephyrAnim = FindBankAnimation(apAnimation[0], uiFullHash);
+                for (int iAnimation = 1; iAnimation < iNumAnimations && !pPose->m_pZephyrAnim; ++iAnimation)
+                {
+                    pPose->m_pZephyrAnim = FindBankAnimation(apAnimation[iAnimation], uiHash);
+                    if (!pPose->m_pZephyrAnim)
+                    {
+                        pPose->m_pZephyrAnim = FindBankAnimation(apAnimation[iAnimation], uiFullHash);
+                    }
+                }
+            }
             if (!pPose->m_pZephyrAnim && pClass->m_pParent)
             {
                 pPose->m_pZephyrAnim = pClass->m_pParent->m_aPose[i].m_pZephyrAnim;
@@ -277,8 +250,26 @@ void SoldierAnimatorLowResClass::PostLoad()
 
             for (int j = 0; j < pPoolClass->m_iNumAnims; ++j)
             {
-                FindLowResAnimation(apZephyrAnim[j], acName, iPrefixLen, iSuffixSize,
-                                    pPoolClass->m_aAnims[j].m_szName, apAnimation, iNumAnimations);
+                int iLen = iPrefixLen + _snprintf(&acName[iPrefixLen], iSuffixSize, pPoolClass->m_aAnims[j].m_szName);
+                char* pcEnd = &acName[iLen];
+                _snprintf(pcEnd, sizeof(acName) - iLen, "_full");
+                unsigned int uiFullHash = PblTEMPHash(acName);
+                *pcEnd = 0;
+                unsigned int uiHash = PblTEMPHash(acName);
+
+                apZephyrAnim[j] = FindBankAnimation(apAnimation[0], uiHash);
+                if (!apZephyrAnim[j])
+                {
+                    apZephyrAnim[j] = FindBankAnimation(apAnimation[0], uiFullHash);
+                    for (int iAnimation = 1; iAnimation < iNumAnimations && !apZephyrAnim[j]; ++iAnimation)
+                    {
+                        apZephyrAnim[j] = FindBankAnimation(apAnimation[iAnimation], uiHash);
+                        if (!apZephyrAnim[j])
+                        {
+                            apZephyrAnim[j] = FindBankAnimation(apAnimation[iAnimation], uiFullHash);
+                        }
+                    }
+                }
                 if (!apZephyrAnim[j])
                 {
                     if (apParentAnim)
@@ -383,15 +374,89 @@ void SoldierAnimatorLowResClass::PostLoad()
                 const Combo::State* pState = pCombo->GetState(uiState);
                 if (pState->GetNumAttacks())
                 {
-                    AddHighResPose(aHighResPoseClass, pClass->m_iNumHighResPoses, eMap, pState->GetAnimIndex());
+                    unsigned char uiAnimIndex = pState->GetAnimIndex();
+                    if (uiAnimIndex < 164)
+                    {
+                        const SoldierAnimationData* pData = SoldierAnimationData::Get(uiAnimIndex, SoldierAnimType::UPPER);
+                        if (pData->IsLowResPose())
+                        {
+                            int iPose;
+                            for (iPose = 0; iPose < pClass->m_iNumHighResPoses; ++iPose)
+                            {
+                                if (aHighResPoseClass[iPose].eMap == eMap &&
+                                    aHighResPoseClass[iPose].uiAnimIndex == uiAnimIndex)
+                                {
+                                    break;
+                                }
+                            }
+                            if (iPose == pClass->m_iNumHighResPoses &&
+                                SoldierAnimatorClass::Instance()->GetUpperBodyAnimation(eMap, uiAnimIndex) &&
+                                SoldierAnimatorClass::Instance()->GetUpperBodyAnimation(eMap, uiAnimIndex)->GetAnimation())
+                            {
+                                aHighResPoseClass[iPose].eMap = eMap;
+                                aHighResPoseClass[iPose].uiAnimIndex = uiAnimIndex;
+                                aHighResPoseClass[iPose].uiFrame = pData->GetLowResPoseFrame();
+                                pClass->m_iNumHighResPoses = iPose + 1;
+                            }
+                        }
+                    }
                 }
                 else if (const Combo::Deflect* pDeflect = pState->GetDeflect())
                 {
-                    AddHighResPose(aHighResPoseClass, pClass->m_iNumHighResPoses, eMap, pState->GetAnimIndex());
+                    unsigned char uiAnimIndex = pState->GetAnimIndex();
+                    if (uiAnimIndex < 164)
+                    {
+                        const SoldierAnimationData* pData = SoldierAnimationData::Get(uiAnimIndex, SoldierAnimType::UPPER);
+                        if (pData->IsLowResPose())
+                        {
+                            int iPose;
+                            for (iPose = 0; iPose < pClass->m_iNumHighResPoses; ++iPose)
+                            {
+                                if (aHighResPoseClass[iPose].eMap == eMap &&
+                                    aHighResPoseClass[iPose].uiAnimIndex == uiAnimIndex)
+                                {
+                                    break;
+                                }
+                            }
+                            if (iPose == pClass->m_iNumHighResPoses &&
+                                SoldierAnimatorClass::Instance()->GetUpperBodyAnimation(eMap, uiAnimIndex) &&
+                                SoldierAnimatorClass::Instance()->GetUpperBodyAnimation(eMap, uiAnimIndex)->GetAnimation())
+                            {
+                                aHighResPoseClass[iPose].eMap = eMap;
+                                aHighResPoseClass[iPose].uiAnimIndex = uiAnimIndex;
+                                aHighResPoseClass[iPose].uiFrame = pData->GetLowResPoseFrame();
+                                pClass->m_iNumHighResPoses = iPose + 1;
+                            }
+                        }
+                    }
                     for (unsigned int j = 0; j < pDeflect->GetNumDeflectAnimations(); ++j)
                     {
-                        AddHighResPose(aHighResPoseClass, pClass->m_iNumHighResPoses, eMap,
-                                       pDeflect->GetDeflectAnimIndex(j));
+                        unsigned char uiAnimIndex = pDeflect->GetDeflectAnimIndex(j);
+                        if (uiAnimIndex < 164)
+                        {
+                            const SoldierAnimationData* pData = SoldierAnimationData::Get(uiAnimIndex, SoldierAnimType::UPPER);
+                            if (pData->IsLowResPose())
+                            {
+                                int iPose;
+                                for (iPose = 0; iPose < pClass->m_iNumHighResPoses; ++iPose)
+                                {
+                                    if (aHighResPoseClass[iPose].eMap == eMap &&
+                                        aHighResPoseClass[iPose].uiAnimIndex == uiAnimIndex)
+                                    {
+                                        break;
+                                    }
+                                }
+                                if (iPose == pClass->m_iNumHighResPoses &&
+                                    SoldierAnimatorClass::Instance()->GetUpperBodyAnimation(eMap, uiAnimIndex) &&
+                                    SoldierAnimatorClass::Instance()->GetUpperBodyAnimation(eMap, uiAnimIndex)->GetAnimation())
+                                {
+                                    aHighResPoseClass[iPose].eMap = eMap;
+                                    aHighResPoseClass[iPose].uiAnimIndex = uiAnimIndex;
+                                    aHighResPoseClass[iPose].uiFrame = pData->GetLowResPoseFrame();
+                                    pClass->m_iNumHighResPoses = iPose + 1;
+                                }
+                            }
+                        }
                     }
                 }
             }

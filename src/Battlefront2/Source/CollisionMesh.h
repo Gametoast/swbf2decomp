@@ -87,7 +87,16 @@ class CollisionAABB
 {
 public:
     CollisionAABB() {}
-    CollisionAABB(const CollisionAABB& parent, const CompressedAABB& compressed);
+    CollisionAABB(const CollisionAABB& parent, const CompressedAABB& compressed)
+    {
+        Init(parent, compressed);
+    }
+
+    void Init(const CollisionAABB& parent, const CompressedAABB& compressed);
+
+    PblVector3 GetMin() const { return boxmin; }
+    PblVector3 GetMax() const { return boxmax; }
+    PblVector3 GetDim() const { return boxmax - boxmin; }
 
     PblVector3 GetMidPoint() const { return 0.5f * (boxmin + boxmax); }
 
@@ -107,8 +116,8 @@ class CollisionMesh
 {
 public:
 
-    static bool _RayTestAABB(const PblVector3& vStart, const PblVector3& vDir, float fLength,
-                             const CollisionAABB& aabb, PblVector3& vCoord);
+    bool _RayTestAABB(const PblVector3& vStart, const PblVector3& vDir, float fLength,
+                             const CollisionAABB& aabb, PblVector3& vCoord) const;
     int _RayHit(const PblVector3& vStart, const PblVector3& vDir, float fLength, CollisionTreeNode* pNode,
                 const CollisionAABB& aabb, float& fT, CollisionTreeNode** ppHitLeaf) const;
     void __GetTriHits(const PblVector3& vPos, float fRadius2, const PblVector3& vMin, const PblVector3& vMax,

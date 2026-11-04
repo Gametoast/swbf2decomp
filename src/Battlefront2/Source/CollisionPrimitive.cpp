@@ -13,6 +13,7 @@
 #include "PebbleFL/Common/PblVector.h"
 #include "PebbleFL/Common/PblMatrix.h"
 #include "RedEngineFL/Application/RedTerrain.h"
+#include "RedEngineFL/Graphics/RedColor.h"
 
 
 static inline PblVector3 ApplyRotation(const PblMatrix& m, const PblVector3& v)
@@ -121,9 +122,12 @@ PblBox CollisionPrimitive::GetWorldspaceAABB(const PblMatrix& matrix) const
     {
     case BOX:
     {
-        PblVector3 x = ApplyRotation(matrix, PblVector3(mWidth, 0.0f, 0.0f));
-        PblVector3 y = ApplyRotation(matrix, PblVector3(0.0f, mHeight, 0.0f));
-        PblVector3 z = ApplyRotation(matrix, PblVector3(0.0f, 0.0f, mDepth));
+        PblVector3 x(mWidth, 0.0f, 0.0f);
+        PblVector3 y(0.0f, mHeight, 0.0f);
+        PblVector3 z(0.0f, 0.0f, mDepth);
+        x = matrix.ApplyRotation(x);
+        y = matrix.ApplyRotation(y);
+        z = matrix.ApplyRotation(z);
         corners[0] += x + y + z;
         corners[1] += x + y + -z;
         corners[2] += x + -y + z;
@@ -138,9 +142,12 @@ PblBox CollisionPrimitive::GetWorldspaceAABB(const PblMatrix& matrix) const
         break;
     case CYLINDER:
     {
-        PblVector3 x = ApplyRotation(matrix, PblVector3(mRadius, 0.0f, 0.0f));
-        PblVector3 y = ApplyRotation(matrix, PblVector3(0.0f, mHeight * 0.5f, 0.0f));
-        PblVector3 z = ApplyRotation(matrix, PblVector3(0.0f, 0.0f, mRadius));
+        PblVector3 x(mRadius, 0.0f, 0.0f);
+        PblVector3 y(0.0f, mHeight * 0.5f, 0.0f);
+        PblVector3 z(0.0f, 0.0f, mRadius);
+        x = matrix.ApplyRotation(x);
+        y = matrix.ApplyRotation(y);
+        z = matrix.ApplyRotation(z);
         corners[0] += x + y + z;
         corners[1] += x + y + -z;
         corners[2] += x + -y + z;
@@ -351,9 +358,15 @@ bool CollisionPrimitive::RayTest(const PblMatrix& matrix, const PblVector3& vSta
     }
 }
 
-// FUNCTION: SWBF2 0x0046c020
-void CollisionPrimitive::Render(const PblMatrix&) const
+// FUNCTION: SWBF2 0x004685b0
+void CollisionPrimitive::Render(const PblMatrix& matrix) const
 {
+    switch (mType)
+    {
+    case BOX:
+        CollisionUtil::RenderBox(matrix, mWidth, mHeight, mDepth, RedColor(255, 0, 255, 255));
+        break;
+    }
 }
 
 // FUNCTION: SWBF2 0x00465cf0

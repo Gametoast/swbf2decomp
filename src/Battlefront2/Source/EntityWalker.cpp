@@ -399,10 +399,7 @@ EntityWalkerClass::EntityWalkerClass(EntityWalkerClass* pBase, unsigned int uHas
     mHoldForPlayer = true;
 
     mNumAnimObjs = pBase->mNumAnimObjs;
-    for (int i = 0; i < 3; ++i)
-    {
-        mAnimObj[i] = pBase->mAnimObj[i];
-    }
+    memcpy(mAnimObj, pBase->mAnimObj, sizeof(mAnimObj));
     m_pZephyrSkeletonShared = pBase->m_pZephyrSkeletonShared;
     mSkeletonRootScale = pBase->mSkeletonRootScale;
     mAnimationCount = pBase->mAnimationCount;
@@ -417,10 +414,7 @@ EntityWalkerClass::EntityWalkerClass(EntityWalkerClass* pBase, unsigned int uHas
 
     m_bAnimationBlending = pBase->m_bAnimationBlending;
     m_uiNumAttackAnims = pBase->m_uiNumAttackAnims;
-    for (int i = 0; i < 4; ++i)
-    {
-        m_aAttackAnims[i] = pBase->m_aAttackAnims[i];
-    }
+    memcpy(m_aAttackAnims, pBase->m_aAttackAnims, sizeof(m_aAttackAnims));
 
     mVehicleType = pBase->mVehicleType;
     mAcceleration = pBase->mAcceleration;
@@ -456,14 +450,8 @@ EntityWalkerClass::EntityWalkerClass(EntityWalkerClass* pBase, unsigned int uHas
     }
     mCollisionInflict = pBase->mCollisionInflict;
 
-    for (int i = 0; i < 4; ++i)
-    {
-        mWeaponClass[i] = pBase->mWeaponClass[i];
-    }
-    for (int i = 0; i < 4; ++i)
-    {
-        mWeaponAmmo[i] = pBase->mWeaponAmmo[i];
-    }
+    memcpy(mWeaponClass, pBase->mWeaponClass, sizeof(mWeaponClass));
+    memcpy(mWeaponAmmo, pBase->mWeaponAmmo, sizeof(mWeaponAmmo));
     for (int i = 0; i < 4; ++i)
     {
         mWeaponChannel[i] = pBase->mWeaponChannel[i];
@@ -490,10 +478,7 @@ EntityWalkerClass::EntityWalkerClass(EntityWalkerClass* pBase, unsigned int uHas
 
     mPassengerSlotClass = pBase->mPassengerSlotClass;
     mNumPassengerSlots = pBase->mNumPassengerSlots;
-    for (int i = 0; i < 8; ++i)
-    {
-        mTurretClass[i] = pBase->mTurretClass[i];
-    }
+    memcpy(mTurretClass, pBase->mTurretClass, sizeof(mTurretClass));
 
     mExplosion = pBase->mExplosion;
     mExplosionOffset = pBase->mExplosionOffset;
@@ -513,12 +498,12 @@ EntityWalkerClass::EntityWalkerClass(EntityWalkerClass* pBase, unsigned int uHas
     mDeathShakeRadius = pBase->mDeathShakeRadius;
     mDeathFadeTimeStart = pBase->mDeathFadeTimeStart;
     mDeathFadeTimeEnd = pBase->mDeathFadeTimeEnd;
+    mAIUseHoverPhysics = pBase->mAIUseHoverPhysics;
     m_fThrustAngleToStrafe_Tan = pBase->m_fThrustAngleToStrafe_Tan;
     m_fThrustAngleToTurn_Tan = pBase->m_fThrustAngleToTurn_Tan;
     m_fThrustAngleToStop_Tan = pBase->m_fThrustAngleToStop_Tan;
     m_fSteerTowardAimRate = pBase->m_fSteerTowardAimRate;
 
-    mAIUseHoverPhysics = pBase->mAIUseHoverPhysics;
     mSteerAtYawLimit = pBase->mSteerAtYawLimit;
     mSteerAtStrafeLimit = pBase->mSteerAtStrafeLimit;
     mCorrectAimForSteering = pBase->mCorrectAimForSteering;
@@ -528,10 +513,7 @@ EntityWalkerClass::EntityWalkerClass(EntityWalkerClass* pBase, unsigned int uHas
 
     mStompDetectionType = pBase->mStompDetectionType;
     mNumFeet = pBase->mNumFeet;
-    for (int i = 0; i < 6; ++i)
-    {
-        mFootPrimitives[i] = pBase->mFootPrimitives[i];
-    }
+    memcpy(mFootPrimitives, pBase->mFootPrimitives, sizeof(mFootPrimitives));
     mStompThreshold = pBase->mStompThreshold;
     mLegRayHitLength = pBase->mLegRayHitLength;
     mLegPairCount = pBase->mLegPairCount;
@@ -550,14 +532,8 @@ EntityWalkerClass::EntityWalkerClass(EntityWalkerClass* pBase, unsigned int uHas
     }
     mFPWalkScale = pBase->mFPWalkScale;
     mFPPoseHash = pBase->mFPPoseHash;
-    for (int i = 0; i < 12; ++i)
-    {
-        mTowCableCollisionBodyID[i] = pBase->mTowCableCollisionBodyID[i];
-    }
-    for (int i = 0; i < 12; ++i)
-    {
-        mTowCableCollisionOffset[i] = pBase->mTowCableCollisionOffset[i];
-    }
+    memcpy(mTowCableCollisionBodyID, pBase->mTowCableCollisionBodyID, sizeof(mTowCableCollisionBodyID));
+    memcpy(mTowCableCollisionOffset, pBase->mTowCableCollisionOffset, sizeof(mTowCableCollisionOffset));
     mNumTowCableCollisions = pBase->mNumTowCableCollisions;
     mFirstPersonModelHandle = pBase->mFirstPersonModelHandle;
     mIgnorableCollisions = pBase->mIgnorableCollisions;
@@ -1495,14 +1471,6 @@ inline void WalkerLegPair::SetInterpolate(bool bInterpolate)
 namespace
 {
 
-inline void UpdateCollisionSphere(EntityWalker* pWalker)
-{
-    PblVector3 center;
-    D3DXVec3TransformCoord(reinterpret_cast<D3DXVECTOR3*>(&center), reinterpret_cast<const D3DXVECTOR3*>(&pWalker->mModel->_mModel->_BoundingSphere.GetCenter()), reinterpret_cast<const D3DXMATRIX*>(&pWalker->mMatrix));
-    pWalker->SetCollisionCenter(center);
-    pWalker->RecalculateAABB();
-}
-
 inline void SmashParkedFlyer(EntityWalker* pWalker, CollisionObject* pOther, Entity* pEntity)
 {
     if (pOther->GetCollisionType() == COLL_STATIC && pWalker->mClass->mSmashParkedFlyers && pEntity &&
@@ -1542,20 +1510,6 @@ Entity* EntityWalker::GetEntity()
 const Entity* EntityWalker::GetEntity() const
 {
     return this;
-}
-
-// FUNCTION: SWBF2 0x0047f9d0
-void EntityWalker::SetPosition(const PblVector3& vPosition)
-{
-    mMatrix.SetTranslation(vPosition);
-    UpdateCollisionSphere(this);
-}
-
-// FUNCTION: SWBF2 0x0047fa70
-void EntityWalker::SetMatrix(const PblMatrix& matrix)
-{
-    mMatrix = matrix;
-    UpdateCollisionSphere(this);
 }
 
 // FUNCTION: SWBF2 0x005027a0
@@ -3264,22 +3218,27 @@ void EntityWalker::CorrectJoints()
         }
     }
 
-    mZephyrPoseStatic.m_pJoints[0].kQuat =
-        mZephyrPoseStatic.m_pJoints[0].kQuat * PblQuaternion(mTurnOffset.mCos, 0.0f, mTurnOffset.mSin, 0.0f);
+    PblQuaternion turn(mTurnOffset.mCos, 0.0f, mTurnOffset.mSin, 0.0f);
+    mZephyrPoseStatic.m_pJoints[0].kQuat = mZephyrPoseStatic.m_pJoints[0].kQuat * turn;
 
     unsigned short uiRoot = (unsigned short)mZephyrSkeleton.m_pShared->GetJointIdxByCrc(0x16e27226);
     ZephyrTransform* pRoot = &mZephyrPoseStatic.m_pJoints[uiRoot];
-    if (mClass->mSkeletonRootScale != 1.0f)
+    const float fRootScale = mClass->mSkeletonRootScale;
+    if (fRootScale != 1.0f)
     {
-        mZephyrSkeleton.m_pShared->SetJointScale(uiRoot, mClass->mSkeletonRootScale);
+        ZephyrJointShared* pJoint = &mZephyrSkeleton.m_pShared->m_pJoints[uiRoot];
+        pJoint->mTransformFlags |= 2;
+        pJoint->mScale = fRootScale;
     }
     if (mBodyPitch != 0.0f && pRoot)
     {
-        pRoot->kQuat = pRoot->kQuat * PblQuaternion(mPitchOffset.mCos, mPitchOffset.mSin, 0.0f, 0.0f);
+        PblQuaternion pitch(mPitchOffset.mCos, mPitchOffset.mSin, 0.0f, 0.0f);
+        pRoot->kQuat = pRoot->kQuat * pitch;
     }
     if (mRollOffset.mCos < 1.0f && pRoot)
     {
-        pRoot->kQuat = pRoot->kQuat * PblQuaternion(mRollOffset.mCos, 0.0f, 0.0f, mRollOffset.mSin);
+        PblQuaternion roll(mRollOffset.mCos, 0.0f, 0.0f, mRollOffset.mSin);
+        pRoot->kQuat = pRoot->kQuat * roll;
     }
 }
 
@@ -3290,15 +3249,19 @@ void EntityWalker::RestoreJoints()
     ZephyrTransform* pRoot = &mZephyrPoseStatic.m_pJoints[uiRoot];
     if (mClass->mSkeletonRootScale != 1.0f)
     {
-        mZephyrSkeleton.m_pShared->SetJointScale(uiRoot, 1.0f);
+        ZephyrJointShared* pJoint = &mZephyrSkeleton.m_pShared->m_pJoints[uiRoot];
+        pJoint->mTransformFlags &= ~2;
+        pJoint->mScale = 1.0f;
     }
     if (mRollOffset.mCos < 1.0f && pRoot)
     {
-        pRoot->kQuat = pRoot->kQuat * PblQuaternion(mRollOffset.mCos, 0.0f, 0.0f, -mRollOffset.mSin);
+        PblQuaternion roll(mRollOffset.mCos, 0.0f, 0.0f, -mRollOffset.mSin);
+        pRoot->kQuat = pRoot->kQuat * roll;
     }
     if (mBodyPitch != 0.0f && pRoot)
     {
-        pRoot->kQuat = pRoot->kQuat * PblQuaternion(mPitchOffset.mCos, -mPitchOffset.mSin, 0.0f, 0.0f);
+        PblQuaternion pitch(mPitchOffset.mCos, -mPitchOffset.mSin, 0.0f, 0.0f);
+        pRoot->kQuat = pRoot->kQuat * pitch;
     }
     mZephyrPoseStatic.m_pJoints[0].kQuat =
         mZephyrPoseStatic.m_pJoints[0].kQuat * PblQuaternion(mTurnOffset.mCos, 0.0f, mTurnOffset.mSin, 0.0f).Inverse();
