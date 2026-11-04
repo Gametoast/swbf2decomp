@@ -1242,11 +1242,9 @@ void LoadDisplay::ProgressIndicator::SetAllOn()
     for (int i = 0; i < m_numLEDs; ++i)
     {
         m_pIntensity[i] = 1.0f;
-        RedColor color;
-        color.r = (unsigned char)(m_pColor[i].r * m_pIntensity[i]);
-        color.g = (unsigned char)(m_pColor[i].g * m_pIntensity[i]);
-        color.b = (unsigned char)(m_pColor[i].b * m_pIntensity[i]);
-        color.a = m_pColor[i].a;
+        RedColor color((unsigned char)(m_pColor[i].r * m_pIntensity[i]),
+                       (unsigned char)(m_pColor[i].g * m_pIntensity[i]),
+                       (unsigned char)(m_pColor[i].b * m_pIntensity[i]), m_pColor[i].a);
         m_pLED[i].SetColor(color);
     }
 }
@@ -1309,14 +1307,14 @@ void LoadDisplay::ProgressIndicator::Update(float fDelta, GameSound* const pSoun
         const float fOff = LED_OFF_INTENSITY;
         for (int i = 0; i < m_numLEDs; ++i)
         {
-            m_pIntensity[i] = (m_pIntensity[i] - fOff) * 0.95f + fOff;
+            m_pIntensity[i] = Interpolate(fOff, m_pIntensity[i], 0.95f);
             RedColor color((unsigned char)(m_pColor[i].r * m_pIntensity[i]),
                            (unsigned char)(m_pColor[i].g * m_pIntensity[i]),
                            (unsigned char)(m_pColor[i].b * m_pIntensity[i]),
                            m_pColor[i].a);
             m_pLED[i].SetColor(color);
         }
-        m_pIntensity[m_curOnLED] = (1.0f - fOff) * m_OnLEDFraction + fOff;
+        m_pIntensity[m_curOnLED] = Interpolate(fOff, 1.0f, m_OnLEDFraction);
     }
     else
     {
@@ -1324,7 +1322,7 @@ void LoadDisplay::ProgressIndicator::Update(float fDelta, GameSound* const pSoun
         {
             return;
         }
-        m_pIntensity[m_curOnLED] = (1.0f - LED_OFF_INTENSITY) * m_OnLEDFraction + LED_OFF_INTENSITY;
+        m_pIntensity[m_curOnLED] = Interpolate(LED_OFF_INTENSITY, 1.0f, m_OnLEDFraction);
     }
     RedColor color((unsigned char)(m_pColor[m_curOnLED].r * m_pIntensity[m_curOnLED]),
                    (unsigned char)(m_pColor[m_curOnLED].g * m_pIntensity[m_curOnLED]),

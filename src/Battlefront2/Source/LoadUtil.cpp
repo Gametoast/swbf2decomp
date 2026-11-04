@@ -454,13 +454,10 @@ bool LoadUtil::ReadDataFileOnHeap(char const* pName, int iHeap,
     pcFileName[i] = '\0';
     if (pName[i++] == ';')
     {
-        const char* pcSrc = pName + i;
         int j = 0;
-        while (*pcSrc != '\0')
+        for (; pName[i] != '\0'; ++i)
         {
-            pcLvlName[j] = *pcSrc;
-            ++pcSrc;
-            ++j;
+            pcLvlName[j++] = pName[i];
         }
         pcLvlName[j] = '\0';
     }

@@ -383,15 +383,6 @@ static unsigned int sAnimationBankHashes[5];
 
 
 
-// FUNCTION: SWBF2 0x0048c9e0
-void RedInterfaceElement::CreateHotSpot(float fLeft, float fTop, float fRight, float fBottom)
-{
-    if (!m_pHotSpot)
-    {
-        m_pHotSpot = new RedHotSpot;
-    }
-    m_pHotSpot->SetRect(fLeft, fTop, fRight, fBottom);
-}
 
 // GLOBAL: SWBF2 0x007e6cc0
 // sIFaceCallbacks
@@ -4438,7 +4429,7 @@ int ScriptCB_GetEntityWeaponMesh(lua_State* L)
             const WeaponClass* pWeapon = pObjectClass->GetWeaponClass(0);
             if (pWeapon && pWeapon->mModel)
             {
-                lua_pushlightuserdata(LuaHelper::mState, pWeapon->mModel);
+                lua_pushlightuserdata(LuaHelper::mState, const_cast<RedModel*>(pWeapon->mModel));
                 return 1;
             }
         }

@@ -166,7 +166,7 @@ WeaponClass* WeaponInvisibilityClass::Derive(unsigned int uHash)
 
 inline float Controllable::GetEnergy() const
 {
-    EnergyBar* pEnergyBar = const_cast<Controllable*>(this)->GetEnergyBar();
+    const EnergyBar* pEnergyBar = GetEnergyBar();
     return pEnergyBar ? pEnergyBar->GetEnergy() : 0.0f;
 }
 

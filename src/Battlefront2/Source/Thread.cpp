@@ -77,10 +77,10 @@ ThreadGroup* ThreadGroup::FindCreate(int iPriority)
 // FUNCTION: SWBF2 0x00657540
 void ThreadGroup::Update(float fDeltaTime)
 {
-    Thread::sExecutingThread = mThreads._head._pNext;
-    while (Thread* pThread = Thread::sExecutingThread->_pObject)
+    Thread::sExecutingThread = mThreads.Begin();
+    while (Thread* pThread = Thread::sExecutingThread)
     {
-        Thread::sExecutingThread = Thread::sExecutingThread->_pNext;
+        ++Thread::sExecutingThread;
         if (!pThread->Update(fDeltaTime))
         {
             delete pThread;
@@ -137,9 +137,9 @@ void Thread::DeactivateThread()
         return;
     }
 
-    if (sExecutingThread->_pObject != 0 && sExecutingThread->_pObject == this)
+    if (sExecutingThread && this == sExecutingThread)
     {
-        sExecutingThread = sExecutingThread->_pNext;
+        ++sExecutingThread;
     }
 
     mThreadListNode._pList->Remove(&mThreadListNode);
@@ -246,7 +246,7 @@ bool sClientThreadIsEven = true;
 
 // GLOBAL: SWBF2 0x01f7ce84
 // Thread::sExecutingThread
-Thread::ThreadListNode* Thread::sExecutingThread = sFrameThreadList->mThreads._head._pNext;
+Thread::ThreadList::Itor Thread::sExecutingThread(sFrameThreadList->mThreads);
 
 // FUNCTION: SWBF2 0x00657650
 void Thread::Reset()

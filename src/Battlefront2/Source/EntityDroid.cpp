@@ -738,7 +738,9 @@ EntityDroid::EntityDroid(EntityDroidClass* pClass, const EntityDesc& desc)
 
         mAimer[i] = new Aimer(&pClass->mAimerClass[i], this, &mMatrix, 0, 0);
 
-        WeaponDesc weaponDesc = { this, mAimer[i] };
+        WeaponDesc weaponDesc;
+        weaponDesc.mOwner = this;
+        weaponDesc.mAimer = mAimer[i];
         weaponDesc.mTrigger = &mControlFire[mClass->mWeaponChannel[i]];
         weaponDesc.mReload = &mControlReload;
 

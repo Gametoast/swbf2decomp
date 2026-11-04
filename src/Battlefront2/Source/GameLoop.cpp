@@ -22,6 +22,8 @@
 #include "EntityTerrain.h"
 #include "FirstPerson.h"
 #include "FishEffect.h"
+#include "EntityWater.h"
+#include "BirdEffect.h"
 #include "FlagItem.h"
 #include "FLGuiManager.h"
 #include "FLInputManager.h"
@@ -107,7 +109,6 @@
 
 class VideoEffect { public: static void Init(); };
 class LetterboxEffect { public: static void Init(); };
-class BirdParticleManager { public: static void PlatformInit(); };
 
 class WeaponMeleeClass { public: static void PostLoad(); };
 class WeaponMelee { public: static void PostLoad() { WeaponMeleeClass::PostLoad(); } };
@@ -135,13 +136,6 @@ namespace RedMissionLog
     bool Enabled();
 }
 
-class EntityWater
-{
-public:
-    EntityWater();
-
-    unsigned char mOpaqueWaterState[0xa4];
-};
 
 class EntitySoldier
 {

@@ -8,6 +8,8 @@ GameObject* FindFirstAIInVehicle(GameObject* pVehicle);
 }
 
 #include "PebbleFL/Common/PblHandle.h"
+#include "CollisionObject.h"
+#include "PathFollower.h"
 
 class Aimer;
 class BaseHint;
@@ -159,7 +161,7 @@ namespace AIUtil
 
     void CalculateFlyerSteerPoint(const PblVector3& vGoto, const PblVector3& vDir,
                                   const PblVector3& vPos, const PblVector3& vForward,
-                                  float fTurn, PblVector3& vSteer, int eDestSide);
+                                  float fTurn, PblVector3& vSteer, ForceDestSide eDestSide);
     void CalculateSoldierSteerPoint(const PblVector3& vPrev, const PblVector3& vGoto,
                                     const PblVector3& vPos, float fSpeed,
                                     PblVector3& vSteer);
@@ -199,7 +201,7 @@ bool __fastcall ShouldStayInVehicle(const Controllable* pMe);
 }
 namespace AIUtil
 {
-bool ShouldSoldierDodgeThisType(int eType);
+bool ShouldSoldierDodgeThisType(CollisionObjectType eType);
 }
 namespace AIUtil
 {

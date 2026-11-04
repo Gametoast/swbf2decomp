@@ -217,7 +217,7 @@ void WeaponDisguise::InputToggleDisguise()
 // FUNCTION: SWBF2 0x00682f10
 void WeaponDisguise::StartRaisingDisguise()
 {
-    mSavedOwnerModel = const_cast<GameModel*>(mOwner->GetGameObject()->GetModel());
+    mSavedOwnerModel = mOwner->GetGameObject()->GetModel();
 }
 
 // FUNCTION: SWBF2 0x00682f30

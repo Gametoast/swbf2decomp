@@ -397,7 +397,7 @@ void WeaponClass::Read(PblFileChunk& chunk)
             {
                 *pcUnderscore = '.';
             }
-            pCharge->mLabel = (unsigned short*)RedLocalizeDB::Find(PblHash(acBuffer), true);
+            pCharge->mLabel = RedLocalizeDB::Find(PblHash(acBuffer), true);
             break;
         }
         case 0x45534142:
@@ -735,7 +735,7 @@ void WeaponClass::SetProperty(unsigned int uProperty, const char* pszValue)
         sscanf(pszValue, "%f", &mFlashRadius);
         break;
     case 0x8B3185DD:
-        mHighResModel = RedModel::_HashTable.Find(PblHash(pszValue));
+        mHighResModel = RedModel::Find(PblHash(pszValue));
         break;
     case 0x8474EA2C:
         sscanf(pszValue, "%f", &mExtremeRange);
@@ -919,7 +919,7 @@ void WeaponClass::SetProperty(unsigned int uProperty, const char* pszValue)
         {
             mNameHash = PblHash(pszValue);
         }
-        mModel = RedModel::_HashTable.Find(PblHash(pszValue));
+        mModel = RedModel::Find(PblHash(pszValue));
         if (mModel)
         {
             mModel->GetParentBoneAndOffset(0xB3EA0EE8, mFirePointOffset);
@@ -1030,7 +1030,7 @@ void WeaponClass::SetProperty(unsigned int uProperty, const char* pszValue)
         sscanf(pszValue, "%f", &mMinRange);
         break;
     case 0x1F63537B:
-        mMuzzleFlashModel = RedModel::_HashTable.Find(PblHash(pszValue));
+        mMuzzleFlashModel = RedModel::Find(PblHash(pszValue));
         break;
     case 0x3935C7CA:
         if (sscanf(pszValue, "%f", &mLockOnAngle))
@@ -2300,7 +2300,7 @@ void Weapon::Render(const PblMatrix& mat, const RedPose* pPose, const RedColor& 
         return;
     }
 
-    RedModel* pModel;
+    const RedModel* pModel;
     if (!bArg || (pModel = mRenderClass->mHighResModel) == 0)
     {
         pModel = mRenderClass->mModel;
@@ -2359,18 +2359,18 @@ void Weapon::Render(const PblMatrix& mat, const RedPose* pPose, const RedColor& 
         }
         if (mChargeUpEmitter)
         {
-            mChargeUpEmitter().AttachEffectToMatrix(&mFirePointMatrix, false);
+            mChargeUpEmitter->AttachEffectToMatrix(&mFirePointMatrix, false);
 
             RedColorValue chargeColor;
             chargeColor.r = chargeColor.g = chargeColor.b = chargeColor.a = mStateTimer / mStateLimit;
-            mChargeUpEmitter().SetEmitterColor(chargeColor);
+            mChargeUpEmitter->SetEmitterColor(chargeColor);
             static_cast<ParticleEmitterObject*>(mChargeUpEmitter)->Update(0.0f);
             static_cast<ParticleEmitterObject*>(mChargeUpEmitter)->Render(1, 1.0f, 0);
         }
     }
     else if (mChargeUpEmitter)
     {
-        mChargeUpEmitter().StopNow();
+        mChargeUpEmitter->StopNow();
     }
 }
 
@@ -2413,7 +2413,7 @@ void WeaponClass::Render(const PblMatrix& mMatrix, const RedPose* pPose, const R
     {
         return;
     }
-    RedModel* pModel = mModel;
+    const RedModel* pModel = mModel;
     if (!pModel)
     {
         return;

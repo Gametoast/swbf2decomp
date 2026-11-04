@@ -729,12 +729,11 @@ int AddCameraShot(lua_State* L)
 // FUNCTION: SWBF2 0x0058b0e0
 int SetCameraRotation(lua_State* L)
 {
-    PblQuaternion qRot;
-    qRot._fS = LuaHelper::GetFloat(1);
-    qRot._fX = LuaHelper::GetFloat(2);
-    qRot._fY = LuaHelper::GetFloat(3);
-    qRot._fZ = LuaHelper::GetFloat(4);
-    CameraManager::sInstance->mChaseCamera[0]->SetRotation(qRot);
+    float rotS = LuaHelper::GetFloat(1);
+    float rotX = LuaHelper::GetFloat(2);
+    float rotY = LuaHelper::GetFloat(3);
+    float rotZ = LuaHelper::GetFloat(4);
+    CameraManager::sInstance->mChaseCamera[0]->SetRotation(PblQuaternion(rotS, rotX, rotY, rotZ));
     return 0;
 }
 
@@ -2612,10 +2611,7 @@ int SpaceAssaultLinkCriticalSystems(lua_State* L)
         while (lua_next(LuaHelper::mState, 1))
         {
             unsigned int uHash = PblHash(luaL_checklstring(LuaHelper::mState, -1, 0));
-            if (iCount < 32)
-            {
-                auHashes[iCount] = uHash;
-            }
+            auHashes[iCount] = uHash;
             ++iCount;
             lua_pop(LuaHelper::mState, 1);
         }

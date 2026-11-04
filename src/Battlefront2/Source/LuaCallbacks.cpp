@@ -359,13 +359,14 @@ namespace Lua_Callbacks
 void DoPeriodicLuaGC(bool bForce)
 {
     // GLOBAL: SWBF2 0x01faa690
-    static unsigned int uCount;
+    // CallCount
+    static int CallCount;
 
-    if (bForce || (uCount & 0x3f) == 0)
+    if (bForce || (CallCount & 0x3f) == 0)
     {
         lua_setgcthreshold(LuaHelper::mState, lua_getgccount(LuaHelper::mState));
     }
-    ++uCount;
+    ++CallCount;
 }
 
 // FUNCTION: SWBF2 0x0057dcc0
@@ -1035,9 +1036,9 @@ int ScriptCB_ReadLeftstick(lua_State*)
     }
 
     RawControllerInputs* pJoystick = FLInputManager::Instance()->GetPlayerJoystick(iJoystick);
-    const float* pfRaw = (const float*)&pJoystick->mRawInputStorage[0x10 - 4];
-    lua_pushnumber(LuaHelper::mState, pfRaw[iJoystick * 76 + 49]);
-    lua_pushnumber(LuaHelper::mState, pfRaw[iJoystick * 76 + 51]);
+    const float* pfRaw = pJoystick->mRawInputFloat[0];
+    lua_pushnumber(LuaHelper::mState, pfRaw[iJoystick * 76 + 48]);
+    lua_pushnumber(LuaHelper::mState, pfRaw[iJoystick * 76 + 50]);
     return 2;
 }
 

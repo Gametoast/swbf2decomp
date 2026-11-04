@@ -8,6 +8,7 @@
 #include "Controllable.h"
 #include "ControllerManager.h"
 #include "Entity.h"
+#include "EntityCarrier.h"
 #include "FlagItem.h"
 #include "GameLoop.h"
 #include "GameObject.h"
@@ -18,12 +19,6 @@
 
 // GLOBAL: SWBF2 0x007b28c0
 // __xmm@3f800000400000004080000040800000
-
-class EntityFlyer
-{
-public:
-    static PblHash rttiHashEntityFlyer;
-};
 
 namespace AI
 {
@@ -70,7 +65,7 @@ unsigned char Threat::GetPriority(float fTime, Controllable* pMe) const
     const PblVector3& vHim = mThreatObject->GetPosition();
     const PblVector3 vToMe = mMe.GetTranslation() - vHim;
     PblVector3 vDir;
-    D3DXVec3Normalize(reinterpret_cast<D3DXVECTOR3*>(&vDir), reinterpret_cast<const D3DXVECTOR3*>(&vToMe));
+    vDir = Normalize(vToMe);
 
     if (pMe->GetEntity()->IsRtti(EntityFlyer::rttiHashEntityFlyer))
     {

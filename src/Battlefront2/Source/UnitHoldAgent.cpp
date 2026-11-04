@@ -60,15 +60,7 @@ void UnitHoldAgent::SetNewSearchHeading()
     if (mCtrl->IsLookAheadOnly())
     {
         float fAngle = AIUtil::GetRandomFloat(-0.52359879f, 0.52359879f);
-        PblVector3 vRotated;
-        {
-            const PblVector3& vAhead = mCtrl->GetOriginalAheadDir();
-            float fSin, fCos;
-            PblMath::SinCos(&fSin, &fCos, fAngle);
-            vRotated = PblVector3(vAhead.x * fCos - vAhead.z * fSin,
-                                  vAhead.y,
-                                  vAhead.z * fCos + vAhead.x * fSin);
-        }
+        PblVector3 vRotated = RotateY(mCtrl->GetOriginalAheadDir(), fAngle);
 
         mSearchPos = GetMe()->GetMatrix().GetTranslation() + vRotated * 10.0f;
     }

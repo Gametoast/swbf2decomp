@@ -132,12 +132,9 @@ int UnitBoardAgent::EventHandler(AI::EventInfo* pInfo)
         {
             return 0;
         }
-        Controllable* pMe = GetMe();
-        GameObject* pVehicle = mVehicle.operator->();
-        const float fVehicleDistSq = DistSq(pVehicle->GetPosition(), pMe->GetMatrix().GetTranslation());
-        pMe = GetMe();
-        GameObject* pEmptyVehicle = pInfo->mGameObject.operator->();
-        if (fVehicleDistSq > DistSq(pEmptyVehicle->GetPosition(), pMe->GetMatrix().GetTranslation()))
+        const float fVehicleDistSq = SquaredLength(mVehicle->GetPosition() - GetMe()->GetMatrix().GetTranslation());
+        const float fEmptyDistSq = SquaredLength(pInfo->mGameObject->GetPosition() - GetMe()->GetMatrix().GetTranslation());
+        if (fVehicleDistSq > fEmptyDistSq)
         {
             if (UnitAgent::EventHandler(pInfo) == 1)
             {

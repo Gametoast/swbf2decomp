@@ -372,7 +372,7 @@ bool PathFollower::CloseToDest() const
             PblVector3 vRoll = mGotoPoint - mCtrl->mOwner->GetMatrix().GetTranslation();
             vRoll.y = 0.0f;
             PblVector3 vDir;
-            D3DXVec3Normalize(reinterpret_cast<D3DXVECTOR3*>(&vDir), reinterpret_cast<const D3DXVECTOR3*>(&vRoll));
+            vDir = Normalize(vRoll);
             vRoll = vDir;
             LowLevel(mCtrl).SetRoll(vRoll);
             mItor->mFlags &= ~AIPathNode::AIPN_ROLLIN;
@@ -656,7 +656,7 @@ void PathFollower::UpdateControllableMoving()
 
         PblVector3 vForward = EntityGetMatrix(pFlyer).GetZAxis();
         vForward.y = 0.0f;
-        vForward.x += 0.0001f;
+        vForward.AddX(0.0001f);
         PblVector3 vDir;
         D3DXVec3Normalize(reinterpret_cast<D3DXVECTOR3*>(&vDir), reinterpret_cast<const D3DXVECTOR3*>(&vForward));
         vForward = vDir;

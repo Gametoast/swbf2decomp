@@ -1688,7 +1688,9 @@ EntityDroideka::EntityDroideka(EntityDroidekaClass* pClass, const EntityDesc& de
 
         mAimer[i] = new Aimer(&pClass->mAimerClass[i], this, &mMatrix, &mPose, 0);
 
-        WeaponDesc weaponDesc = { this, mAimer[i] };
+        WeaponDesc weaponDesc;
+        weaponDesc.mOwner = this;
+        weaponDesc.mAimer = mAimer[i];
         weaponDesc.mTrigger = &mControlFire[mClass->mWeaponChannel[i]];
         weaponDesc.mReload = &mControlReload;
 

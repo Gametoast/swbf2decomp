@@ -261,7 +261,7 @@ bool UnitFlyAgent::IsNearLandingPt()
                                                          mGotoNonOwnedCP);
         if (iCount > 0)
         {
-            mHint = const_cast<BaseHint*>(candidates[AIUtil::GetRandomInt(0, iCount - 1)]);
+            mHint = candidates[AIUtil::GetRandomInt(0, iCount - 1)];
             mHint->Reserve(mCtrl->mOwner->GetGameObject());
             return true;
         }

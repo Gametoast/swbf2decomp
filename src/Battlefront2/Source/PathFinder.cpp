@@ -35,6 +35,18 @@ static const float EXTRA_OBSTACLE_PUSHOUT_OFFSET = 0.5f;
 // Obstacle::sMemoryPool
 MemoryPool Obstacle::sMemoryPool("Obstacle", sizeof(Obstacle));
 
+PathFinder::PathNode::PathNode(const PblVector3& rPos, float fLocalCost, const PathNode* pParent)
+{
+    Set(rPos, fLocalCost, pParent);
+}
+
+void PathFinder::PathNode::Set(const PblVector3& rPos, float fLocalCost, const PathNode* pParent)
+{
+    mPos = rPos;
+    mCostSoFar = pParent ? pParent->GetCostSoFar() + fLocalCost : fLocalCost;
+    mParentNode = pParent;
+}
+
 // SYNTHETIC: SWBF2 0x00405df0
 // `dynamic initializer for 'PathFinder::PathNode::sMemoryPool''
 // SYNTHETIC: SWBF2 0x007692b0
@@ -81,7 +93,7 @@ PblVector3 sSrcPos;
 PblVector3 sDestPos;
 
 // GLOBAL: SWBF2 0x01fa8c38
-Obstacle* sIgnore[2];
+const Obstacle* sIgnore[2];
 
 // GLOBAL: SWBF2 0x01fa8c40
 float sPerpLength;
@@ -308,7 +320,7 @@ bool Obstacle::IntersectionNewer(const ObstacleTest& rTest, float fRadius, float
     {
         *pDistSq = (dir.x * dir.x + dir.y * dir.y + dir.z * dir.z) * fBest * fBest;
         PblVector3 n;
-        D3DXVec3Normalize(reinterpret_cast<D3DXVECTOR3*>(&n), reinterpret_cast<const D3DXVECTOR3*>(pNormal));
+        n = Normalize(*pNormal);
         *pNormal = n;
         return true;
     }
@@ -320,12 +332,12 @@ void Obstacle::FindCorners(const PblVector3& rSrc, const PblVector3& rDest, floa
                            PblVector3* pLeft, PblVector3* pRight) const
 {
     PblVector3 dir(rDest.x - rSrc.x, 0.0f, rDest.z - rSrc.z);
-    if (dir.x * dir.x + dir.y * dir.y + dir.z * dir.z < EPSILON * EPSILON)
+    if (SquaredLength(dir) < EPSILON * EPSILON)
     {
         dir = PblVector3(1.0f, 0.0f, 0.0f);
     }
     PblVector3 dirN;
-    D3DXVec3Normalize(reinterpret_cast<D3DXVECTOR3*>(&dirN), reinterpret_cast<const D3DXVECTOR3*>(&dir));
+    dirN = Normalize(dir);
 
     float fBestLeft = 1.0f;
     float fBestRight = 1.0f;
@@ -333,12 +345,12 @@ void Obstacle::FindCorners(const PblVector3& rSrc, const PblVector3& rDest, floa
     {
         PblVector3 vertex = GetPushedOutVertexXZ(i, fRadius);
         PblVector3 d(vertex.x - rSrc.x, 0.0f, vertex.z - rSrc.z);
-        if (d.x * d.x + d.y * d.y + d.z * d.z > EPSILON * EPSILON)
+        if (SquaredLength(d) > EPSILON * EPSILON)
         {
             PblVector3 n;
-            D3DXVec3Normalize(reinterpret_cast<D3DXVECTOR3*>(&n), reinterpret_cast<const D3DXVECTOR3*>(&d));
-            float fDot = dirN.x * n.x + dirN.y * n.y + dirN.z * n.z;
-            float fCross = dirN.z * n.x - dirN.x * n.z;
+            n = Normalize(d);
+            float fDot = DotProduct(dirN, n);
+            float fCross = CrossProduct(dirN, n).y;
             if (fCross < 0.0f && fDot < fBestLeft)
             {
                 fBestLeft = fDot;
@@ -505,7 +517,7 @@ bool PathFinder::PointValidCallback(const TreeGridObject* pObj, TreeGridCallback
     if (pObstacle->Prohibits(pValid->mProhibit) && pObstacle->IsPointInside(pValid->mPos, pValid->mRadius))
     {
         pValid->hit = true;
-        pValid->hitObs = (Obstacle*)pObstacle;
+        pValid->hitObs = pObstacle;
         return false;
     }
     return true;
@@ -675,7 +687,7 @@ bool PathFinder::GenerateObstacleListCallback(const TreeGridObject* pObj, TreeGr
     ObstacleData* pList = (ObstacleData*)pData;
     if (pList->mLength < 300)
     {
-        pList->mArray[pList->mLength] = (Obstacle*)pObj;
+        pList->mArray[pList->mLength] = (const Obstacle*)pObj;
         pList->mLength++;
         return true;
     }
@@ -844,7 +856,7 @@ void PathFinder::sExpandNode(PathFinder::PathNode* pParent, const PblVector3& rP
     float fDistSq = -1.0f;
 
     if (FindClosestObstacleIntersection(pParent->GetPos(), rPos, sRadiusVehicle, sProhibit, &pHit,
-                                        &fDistSq, false, (const Obstacle**)sIgnore, sIgnoreCnt))
+                                        &fDistSq, false, sIgnore, sIgnoreCnt))
     {
         PblVector3 vLeft;
         PblVector3 vRight;
@@ -866,7 +878,7 @@ void PathFinder::sExpandNode(PathFinder::PathNode* pParent, const PblVector3& rP
         {
             if (pNode->GetCostSoFar() > fCost)
             {
-                pNode->Set(rPos, pParent->GetCostSoFar() + fDist, pParent);
+                pNode->Set(rPos, fDist, pParent);
                 sOpenList->ReplaceLowest(pNode, sInvertedTotalCost(pNode), i);
             }
             return;
@@ -880,13 +892,13 @@ void PathFinder::sExpandNode(PathFinder::PathNode* pParent, const PblVector3& rP
         {
             if (pNode->GetCostSoFar() > fCost)
             {
-                pNode->Set(rPos, pParent->GetCostSoFar() + fDist, pParent);
+                pNode->Set(rPos, fDist, pParent);
             }
             return;
         }
     }
 
-    PathNode* pNode = new PathNode(rPos, pParent->GetCostSoFar() + PblMath::Sqrt(SquaredLengthXZ(rPos - pParent->GetPos())),
+    PathNode* pNode = new PathNode(rPos, PblMath::Sqrt(SquaredLengthXZ(rPos - pParent->GetPos())),
                                    pParent);
     if (pNode)
     {
