@@ -145,35 +145,36 @@ void HUD::ElementVehicleSeating::Read(PblConfig& config, Factory::ItemCallback p
         PblConfig::Data data = config.ReadNextData();
         if (config.m_pChunk->PeekNextChildId() == 0x504f4353)
         {
-            unsigned int i;
-            for (i = 0; i < 4; ++i)
+            bool bFound = false;
+            for (unsigned int i = 0; i < 4; ++i)
             {
                 if (mMarkerTemplates[i].GetNameHash() == data.GetId())
                 {
                     PblConfig scope(config.ReadNextScope(), true);
                     mMarkerTemplates[i].Read(scope, 0, 0);
+                    bFound = true;
                     break;
                 }
                 if (mMarkerTextTemplate[i].GetNameHash() == data.GetId())
                 {
                     PblConfig scope(config.ReadNextScope(), true);
                     mMarkerTextTemplate[i].Read(scope, 0, 0);
+                    bFound = true;
                     break;
                 }
             }
-            if (i < 4)
-            {
-                continue;
-            }
 
-            if (mBackdrop.GetNameHash() == data.GetId())
+            if (!bFound)
             {
-                PblConfig scope(config.ReadNextScope(), true);
-                mBackdrop.Read(scope, 0, 0);
-            }
-            else
-            {
-                ReadChild(config, data, pCallback, pUserData);
+                if (mBackdrop.GetNameHash() == data.GetId())
+                {
+                    PblConfig scope(config.ReadNextScope(), true);
+                    mBackdrop.Read(scope, 0, 0);
+                }
+                else
+                {
+                    ReadChild(config, data, pCallback, pUserData);
+                }
             }
         }
         else
@@ -244,21 +245,23 @@ void HUD::ElementVehicleSeating::UpdateSeatingState(unsigned int uSeat, SeatingS
             PblMatrix mHardpoint;
             if (pModel->GetBoneMatrix(sHPNames[uSeat], mHardpoint))
             {
-                const float fInvDepth =
-                    1.0f / (mBackdrop.GetDepth() * Red3DModelElementLite::GetDepthMultiplier(true));
+                const float fDepth = mBackdrop.GetDepth() * Red3DModelElementLite::GetDepthMultiplier(true);
+                const float fInvDepth = 1.0f / fDepth;
                 const PblVector3 vPos = mHardpoint.GetTranslation();
-                vOffset.x = vPos.x * fInvDepth;
-                vOffset.y = -(vPos.y * fInvDepth);
+                vOffset.x = fInvDepth * vPos.x;
+                vOffset.y = -(fInvDepth * vPos.y);
                 vOffset.z = vPos.z;
             }
         }
         else
         {
+            float fY = 0.0f;
             for (unsigned int i = uSeat; i > 0; --i)
             {
                 const RedFont* pFont = mSeatingText[i - 1].GetFont();
-                vOffset.y -= pFont ? (float)pFont->GetHeight() : 0.0f;
+                fY -= pFont ? (float)pFont->GetHeight() : 0.0f;
             }
+            vOffset.y = fY;
         }
 
         const RedFont* pFont = rText.GetFont();
@@ -386,16 +389,14 @@ void HUD::ElementVehicleSeating::Update(const float fElapsed)
 // FUNCTION: SWBF2 0x0055d8b0
 HUD::ElementVehicleSeating* HUD::ElementVehicleSeating::FindByPlayerIndex(const int playerIndex)
 {
-    PblListSingle::Itor itor(sSeatingDisplays);
-    while (itor.GetNode() != sSeatingDisplays.GetTerminator())
+    for (PblListSingle::Itor itor(sSeatingDisplays); itor.GetNode() != sSeatingDisplays.GetTerminator(); ++itor)
     {
-        ElementVehicleSeating* pDisplay = reinterpret_cast<ElementVehicleSeating*>(
-            reinterpret_cast<char*>(itor.GetNode()) - offsetof(ElementVehicleSeating, mNode));
+        ElementVehicleSeating* pDisplay = static_cast<ElementVehicleSeating*>(
+            itor.GetNode()->GetObjectA(&sSeatingDisplays, offsetof(ElementVehicleSeating, mNode)));
         if (pDisplay->mPlayerIndex == playerIndex)
         {
             return pDisplay;
         }
-        ++itor;
     }
     return 0;
 }

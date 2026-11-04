@@ -185,10 +185,14 @@ void HUD::ElementBarBitmap::Update(const float fElapsed)
     float fFlashyLeft, fFlashyTop, fFlashyRight, fFlashyBottom;
     mFlashyBit.RedBitmapElement::GetRect(fFlashyLeft, fFlashyTop, fFlashyRight, fFlashyBottom);
 
-    float fFade = 0.0f;
+    float fFade;
     if (mFlashyBit.mFader.GetPhase() == HUD::Envelope::phase_Release)
     {
         fFade = mFlashyBit.mFader.GetElapsed();
+    }
+    else
+    {
+        fFade = 0.0f;
     }
     const float fT = fFade < 0.0f ? 0.0f : (fFade > 1.0f ? 1.0f : fFade);
 
@@ -231,7 +235,11 @@ bool HUD::ElementBarBitmap::SetProperty(const unsigned int uHashID, const void* 
     case 0x1ffad2e0u: mBarU1 = ((const float*)pValue)[2]; break;
     case 0x967ad461u: mBarWidth = *(const float*)pValue; break;
     }
-    return ElementBitmapBase::SetProperty(uHashID, pValue) || ElementBar::SetProperty(uHashID, pValue);
+    if (!ElementBitmapBase::SetProperty(uHashID, pValue) && !ElementBar::SetProperty(uHashID, pValue))
+    {
+        return false;
+    }
+    return true;
 }
 
 // SYNTHETIC: SWBF2 0x0054b7a3
@@ -247,15 +255,11 @@ bool HUD::ElementBarBitmap::GetProperty(const unsigned int uHashID, void* const 
     case kScaleTexture: *(bool*)pValue = mScaleTex; return true;
     case kScaleSize: *(bool*)pValue = mScaleSize; return true;
     }
-    if (ElementBitmapBase::GetProperty(uHashID, pValue))
+    if (!ElementBitmapBase::GetProperty(uHashID, pValue) && !ElementBar::GetProperty(uHashID, pValue))
     {
-        return true;
+        return false;
     }
-    if (ElementBar::GetProperty(uHashID, pValue))
-    {
-        return true;
-    }
-    return false;
+    return true;
 }
 
 // FUNCTION: SWBF2 0x0054ae90

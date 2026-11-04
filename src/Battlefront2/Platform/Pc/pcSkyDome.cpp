@@ -55,16 +55,9 @@ void SkyFogRenderable::Init()
 
     m_pPrimitive = pcRedPrimitive::Create(D3DPT_TRIANGLESTRIP, 0x202, 0x14, 4,
                                           0, true);
-    m_pPrimitive->m_bbox._vMin = PblVector3(-1.0f, -1.0f, -1.0f);
-    m_pPrimitive->m_bbox._vMax = PblVector3(1.0f, 1.0f, 1.0f);
-
-    PblVector3 vMin = { -1.0f, -1.0f, -1.0f };
-    PblVector3 vExtent = { 2.0f, 2.0f, 2.0f };
-    CompressedPos::s_vMin = vMin;
-    CompressedPos::s_vScale = vExtent * (1.0f / 65535.0f);
-    CompressedPos::s_vScaleInv.x = 1.0f / CompressedPos::s_vScale.x;
-    CompressedPos::s_vScaleInv.y = 1.0f / CompressedPos::s_vScale.y;
-    CompressedPos::s_vScaleInv.z = 1.0f / CompressedPos::s_vScale.z;
+    PblBox box(-1.0f, -1.0f, -1.0f, 1.0f, 1.0f, 1.0f);
+    m_pPrimitive->m_bbox = box;
+    CompressedPos::SetBoundingBox(box);
 
     struct FogVertex
     {
@@ -147,13 +140,17 @@ void SkyDome::Render(int value)
                                        6.2831855f);
 
             const PblMatrix& camMatrix = pCamera->GetMatrix();
-            PblVector3 pos = camMatrix.GetTranslation();
             if (rDome.mType == STATIC_HEIGHT)
             {
-                float fHeight = mDomeHeight + rDome.mOffset;
+                PblVector3 pos = camMatrix.GetTranslation();
+                float fHeight = rDome.mOffset + mDomeHeight;
                 pos.y = fHeight - (fHeight - pos.y) * rDome.mMovementScale;
+                mat.SetTranslation(pos);
             }
-            mat.SetTranslation(pos);
+            else
+            {
+                mat.SetTranslation(camMatrix.GetTranslation());
+            }
 
             for (int j = 0; j < rDome.mNumEffectData; ++j)
             {
@@ -167,12 +164,13 @@ void SkyDome::Render(int value)
                 rDome.mModel->GetBoneMatrix(rData.hardPoint, boneMat);
                 PblMatrix product = boneMat * mat;
                 boneMat = product;
-                rData.pos = boneMat.GetTranslation();
+                const PblVector3& vEffectPos = boneMat.GetTranslation();
+                rData.pos = vEffectPos;
 
                 const PblVector3& camPos = camMatrix.GetTranslation();
                 const PblVector3& camZ = camMatrix.GetZAxis();
-                if (camZ.y * (rData.pos.y - camPos.y) + (rData.pos.x - camPos.x) * camZ.x +
-                        camZ.z * (rData.pos.z - camPos.z) < 0.0f)
+                if (camZ.y * (vEffectPos.y - camPos.y) + (vEffectPos.x - camPos.x) * camZ.x +
+                        camZ.z * (vEffectPos.z - camPos.z) < 0.0f)
                 {
                     rData.effect->Update(0.0f);
                     rData.effect->Render(0, 1.0f, 0);

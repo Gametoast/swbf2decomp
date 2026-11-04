@@ -441,16 +441,16 @@ void SpawnDisplay::UpdateObjectText(GameObjectClass* pClass, int iSlot)
                 continue;
             }
 
-            if (pWeapon->mLabel)
-            {
-                PblUnicode::ustrlcat(text, pWeapon->mLabel, 256);
-            }
-            else
+            if (!pWeapon->mLabel)
             {
                 unsigned short name[128];
                 memset(name, 0, sizeof(name));
                 PblUnicode::ustrncnv(name, pWeapon->mFilename, 128);
                 PblUnicode::ustrlcat(text, name, 256);
+            }
+            else
+            {
+                PblUnicode::ustrlcat(text, pWeapon->mLabel, 256);
             }
         }
         PblUnicode::ustrlcat(text, sNewlineStr16, 256);
@@ -708,10 +708,14 @@ bool SpawnDisplay::Update(float fDeltaTime)
     RedAmbientLight& ambient = RedInterfaceScreen::s_lightingState.ambientLight;
     ambient.SetTopColor(sAmbientTop);
     ambient.SetBottomColor(sAmbientBottom);
-    RedColorValue average((sAmbientBottom.r + sAmbientTop.r) * 0.5f,
-                          (sAmbientBottom.g + sAmbientTop.g) * 0.5f,
-                          (sAmbientBottom.b + sAmbientTop.b) * 0.5f,
-                          (sAmbientBottom.a + sAmbientTop.a) * 0.5f);
+    RedColorValue average(sAmbientBottom.r + sAmbientTop.r,
+                          sAmbientBottom.g + sAmbientTop.g,
+                          sAmbientBottom.b + sAmbientTop.b,
+                          sAmbientBottom.a + sAmbientTop.a);
+    average.r *= 0.5f;
+    average.g *= 0.5f;
+    average.b *= 0.5f;
+    average.a *= 0.5f;
     ambient.SetColor(average);
 
     m_pEntityElement->SetSelected(true);
@@ -739,11 +743,9 @@ bool SpawnDisplay::Update(float fDeltaTime)
         return true;
     }
 
-    bool bOwnerAlive = false;
-    if (mOwner && mOwner->GetControllable() && mOwner->GetControllable()->GetGameObject())
-    {
-        bOwnerAlive = GetDamageable(mOwner->GetControllable()->GetGameObject())->IsAlive();
-    }
+    const bool bOwnerAlive = (mOwner && mOwner->GetControllable() && mOwner->GetControllable()->GetGameObject())
+                                 ? mOwner->GetControllable()->GetGameObject()->IsAlive()
+                                 : false;
     if (mWasOwnerAliveLastUpdate && !bOwnerAlive)
     {
         mMode = eSPAWNDISPLAY;
@@ -889,8 +891,7 @@ void SpawnDisplay::UpdateTimer()
     if (NetGame::IsEnabled() && NetGame::IsClient())
     {
         unsigned int uTurn = NetGame::GetTurnNumber();
-        fTime = mLastSpawnTime;
-        if (fTime > 0.0f)
+        if (mLastSpawnTime > 0.0f)
         {
             fTime = mBaseCycleTime - (float)(int)(uTurn - mBaseTurn) * netSecondsPerTurn;
             if (fTime < 0.0f)
@@ -898,7 +899,11 @@ void SpawnDisplay::UpdateTimer()
                 fTime = 0.0f;
             }
         }
-        if (mTextSpawnTimer.IsEnabled() && fTime != mLastSpawnTime)
+        else
+        {
+            fTime = mLastSpawnTime;
+        }
+        if (mTextSpawnTimer.IsEnabled() && mLastSpawnTime != fTime)
         {
             mLastSpawnTime = fTime;
             char acText[32];

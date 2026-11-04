@@ -664,7 +664,11 @@ bool Util_CreateGroupInHierarchy(const char* pcName)
         else
         {
             RedInterfaceElement* pParent = RedInterfaceElement::Find(acParent);
-            if (!pParent || !pParent->IsGroup())
+            if (!pParent)
+            {
+                return false;
+            }
+            if (!pParent->IsGroup())
             {
                 return false;
             }
@@ -2711,13 +2715,13 @@ int ScriptCB_GetKeyBoardCmds(lua_State* L)
     lua_newtable(LuaHelper::mState);
 
     unsigned short usColon[16];
+    unsigned short usNum[16];
     unsigned short usComma[16];
     unsigned short usHash[16];
     unsigned short usButton[256];
     unsigned short usAction[256];
     unsigned short usKeys[256];
     unsigned short usKey[256];
-    unsigned short usNum[16];
 
     usColon[0] = ':';
     usColon[1] = ' ';
@@ -2749,13 +2753,10 @@ int ScriptCB_GetKeyBoardCmds(lua_State* L)
         RedLocalizeDB::GetLocalizedString(usAction, sizeof(usAction), GetActionName(iAction, iMode));
         PblUnicode::ustrlcat(usAction, usColon, 256);
 
-        ActionKey& rKey = pProfile->mGameOptions.mKeyboardBindings[iMode][iAction];
-
-        const unsigned char* pucMods = (const unsigned char*)&rKey.mKey[2];
         for (int j = 0; j < 2; ++j)
         {
             char acKey[128] = { 0 };
-            unsigned short usRaw = rKey.mKey[j];
+            unsigned short usRaw = pProfile->mGameOptions.mKeyboardBindings[iMode][iAction].mKey[j];
             if (!usRaw)
             {
                 continue;
@@ -2765,6 +2766,7 @@ int ScriptCB_GetKeyBoardCmds(lua_State* L)
             {
                 RedLocalizeDB::GetLocalizedString(usButton, sizeof(usButton),
                                                   GetButtonName(ActionKeyToRawInput(usRaw)));
+                const unsigned char* pucMods = (const unsigned char*)&pProfile->mGameOptions.mKeyboardBindings[iMode][iAction].mKey[2];
                 unsigned char ucMod = pucMods[j];
                 if (ucMod)
                 {
@@ -2782,7 +2784,7 @@ int ScriptCB_GetKeyBoardCmds(lua_State* L)
             }
             else
             {
-                pJoystick->GetKeyboard()->pcGetKeyName((unsigned char)usRaw, usKey, 256);
+                pJoystick->GetKeyboard()->pcGetKeyName((unsigned char)pProfile->mGameOptions.mKeyboardBindings[iMode][iAction].mKey[j], usKey, 256);
                 _wcsupr((wchar_t*)usKey);
             }
 
@@ -3766,20 +3768,25 @@ int ScriptCB_IFModel_SetAnimationBanks(lua_State* L)
 {
     RedInterfaceElement* pElement;
     int iArg;
-    if (!Util_GetRedInterfaceElement(1, pElement, iArg, false) || !pElement->IsModel())
+    if (!Util_GetRedInterfaceElement(1, pElement, iArg, false))
+    {
+        return 0;
+    }
+    if (!pElement->IsModel())
     {
         return 0;
     }
 
     memset(sAnimationBankHashes, 0, sizeof(sAnimationBankHashes));
     int iNumArgs = lua_gettop(LuaHelper::mState);
+    unsigned int* pHash = sAnimationBankHashes;
     for (int i = 0; iArg < iNumArgs + 1; ++iArg, ++i)
     {
         if (i >= 5)
         {
             return 0;
         }
-        sAnimationBankHashes[i] = PblHash(luaL_optlstring(LuaHelper::mState, iArg, "", 0));
+        *pHash++ = PblHash(luaL_optlstring(LuaHelper::mState, iArg, "", 0));
     }
     static_cast<Red3DModelElement*>(pElement)->SetAnimationBanks(sAnimationBankHashes);
     return 0;

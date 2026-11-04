@@ -233,9 +233,12 @@ void ClothData::_Read(PblFileChunk& chunk)
                 child.ReadString(acParent, sizeof(acParent));
                 m_pCollisionVolumes[i].parent = PblTEMPHash(acParent);
                 m_pCollisionVolumes[i].type = (ClothCollisionType)child._pFile->Read32();
-                m_pCollisionVolumes[i].width = child._pFile->ReadFloat();
-                m_pCollisionVolumes[i].height = child._pFile->ReadFloat();
-                m_pCollisionVolumes[i].depth = child._pFile->ReadFloat();
+                const float fWidth = child._pFile->ReadFloat();
+                m_pCollisionVolumes[i].width = fWidth;
+                const float fHeight = child._pFile->ReadFloat();
+                m_pCollisionVolumes[i].height = fHeight;
+                const float fDepth = child._pFile->ReadFloat();
+                m_pCollisionVolumes[i].depth = fDepth;
                 float x = child._pFile->ReadFloat();
                 float y = child._pFile->ReadFloat();
                 float z = child._pFile->ReadFloat();
@@ -823,22 +826,20 @@ void EntityCloth::SetWorldMatrix(const PblMatrix& mWorld, float fDeltaTime)
 
     const PblVector3& vPos = pCloth->m_worldMat.GetTranslation();
     pCloth->mVelocity = (vPos - pCloth->mOldPosition) * fInvDt;
-    PblVector3& v = pCloth->mVelocity;
-    float fLength2 = v.x * v.x + v.y * v.y + v.z * v.z;
+    float fLength2 = SquaredLength(pCloth->mVelocity);
     if (fLength2 > pClass->mMaxVelocity * pClass->mMaxVelocity)
     {
         float fScale = 1.0f / sqrtf(fLength2);
-        v = v * fScale * pClass->mMaxVelocity;
+        pCloth->mVelocity = pCloth->mVelocity * fScale * pClass->mMaxVelocity;
     }
     pCloth->mOldPosition = vPos;
 
-    pCloth->mAcceleration = (v - pCloth->mOldVelocity) * fInvDt;
-    PblVector3& a = pCloth->mAcceleration;
-    fLength2 = a.x * a.x + a.y * a.y + a.z * a.z;
+    pCloth->mAcceleration = (pCloth->mVelocity - pCloth->mOldVelocity) * fInvDt;
+    fLength2 = SquaredLength(pCloth->mAcceleration);
     if (fLength2 > pClass->mMaxAcceleration * pClass->mMaxAcceleration)
     {
         float fScale = 1.0f / sqrtf(fLength2);
-        a = a * fScale * pClass->mMaxAcceleration;
+        pCloth->mAcceleration = pCloth->mAcceleration * fScale * pClass->mMaxAcceleration;
     }
 }
 
@@ -1101,10 +1102,9 @@ void EntityCloth::Verlet(float fDeltaTime)
     for (unsigned int i = mData->m_uiNumFixedPoints; i < mData->m_uiNumParticles; ++i)
     {
         PblVector3& vPos = m_pPos[i];
-        PblVector3& vOld = m_pOldPos[i];
-        const PblVector3& vAccel = m_pAcceleration[i];
         const PblVector3 vTemp = vPos;
-        vPos += (vPos - vOld) + vAccel * fDt2;
+        PblVector3& vOld = m_pOldPos[i];
+        vPos += (vPos - vOld) + m_pAcceleration[i] * fDt2;
         vOld = vTemp;
     }
 }
@@ -1259,40 +1259,40 @@ void EntityCloth::EnforceConstraint(ClothConstraint& constraint, float fRestitut
 // FUNCTION: SWBF2 0x0045ba40
 void EntityCloth::EnforceCollisions(const PblMatrix& mMatrix, const RedPose* pPose)
 {
-    for (unsigned int i = 0; i < mData->m_uiNumCollisionVolumes; ++i)
+    ClothCollision* pCollision = mData->m_pCollisionVolumes;
+    for (unsigned int i = 0; i < mData->m_uiNumCollisionVolumes; ++i, ++pCollision)
     {
-        ClothCollision& collision = mData->m_pCollisionVolumes[i];
-        const PblMatrix* pBone = pPose ? pPose->Find(collision.parent) : 0;
+        const PblMatrix* pBone = pPose ? pPose->Find(pCollision->parent) : 0;
 
         PblMatrix mCollision;
         if (pBone)
         {
             PblMatrix mTemp;
-            D3DXMatrixMultiply(reinterpret_cast<D3DXMATRIX*>(&mTemp), reinterpret_cast<const D3DXMATRIX*>(&collision.localMat), reinterpret_cast<const D3DXMATRIX*>(pBone));
+            D3DXMatrixMultiply(reinterpret_cast<D3DXMATRIX*>(&mTemp), reinterpret_cast<const D3DXMATRIX*>(&pCollision->localMat), reinterpret_cast<const D3DXMATRIX*>(pBone));
             const PblMatrix mInverse = mMatrix.GetInverseFast();
             D3DXMatrixMultiply(reinterpret_cast<D3DXMATRIX*>(&mCollision), reinterpret_cast<const D3DXMATRIX*>(&mTemp), reinterpret_cast<const D3DXMATRIX*>(&mInverse));
         }
         else
         {
             PblMatrix mBone = gMatrixIdentity;
-            RedModel::_HashTable.Find(mData->m_uiModelHash)->GetBoneMatrix(collision.parent, mBone);
+            RedModel::_HashTable.Find(mData->m_uiModelHash)->GetBoneMatrix(pCollision->parent, mBone);
             PblMatrix mTemp;
-            D3DXMatrixMultiply(reinterpret_cast<D3DXMATRIX*>(&mTemp), reinterpret_cast<const D3DXMATRIX*>(&collision.localMat), reinterpret_cast<const D3DXMATRIX*>(&mBone));
+            D3DXMatrixMultiply(reinterpret_cast<D3DXMATRIX*>(&mTemp), reinterpret_cast<const D3DXMATRIX*>(&pCollision->localMat), reinterpret_cast<const D3DXMATRIX*>(&mBone));
             const PblMatrix mInverse = mMatrix.GetInverseFast();
             D3DXMatrixMultiply(reinterpret_cast<D3DXMATRIX*>(&mCollision), reinterpret_cast<const D3DXMATRIX*>(&mTemp), reinterpret_cast<const D3DXMATRIX*>(&mInverse));
         }
 
         const PblMatrix mLocal = mCollision;
-        switch (collision.type)
+        switch (pCollision->type)
         {
         case CLOTH_COLLISION_SPHERE:
-            EnforceSphereCollision(mLocal, collision.width);
+            EnforceSphereCollision(mLocal, pCollision->width);
             break;
         case CLOTH_COLLISION_CYLINDER:
-            EnforceCylinderCollision(mLocal, collision.height, collision.width);
+            EnforceCylinderCollision(mLocal, pCollision->height, pCollision->width);
             break;
         case CLOTH_COLLISION_BOX:
-            EnforceBoxCollision(mLocal, collision.width, collision.height, collision.depth);
+            EnforceBoxCollision(mLocal, pCollision->width, pCollision->height, pCollision->depth);
             break;
         }
     }

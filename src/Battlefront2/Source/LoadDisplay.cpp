@@ -741,23 +741,15 @@ void LoadDisplay::Render()
 
     RedRenderer::SetCamera(m_redCamera);
 
-    RedColorValue ambient;
-    ambient.r = m_ambientColor.r * (1.0f / 255.0f);
-    ambient.g = m_ambientColor.g * (1.0f / 255.0f);
-    ambient.b = m_ambientColor.b * (1.0f / 255.0f);
-    ambient.a = m_ambientColor.a * (1.0f / 255.0f);
-    RedInterfaceScreen::s_lightingState.ambientLight.m_topColor = ambient;
-    RedInterfaceScreen::s_lightingState.ambientLight.m_bottomColor = ambient;
-    RedInterfaceScreen::s_lightingState.ambientLight.m_color.r = (ambient.r + ambient.r) * 0.5f;
-    RedInterfaceScreen::s_lightingState.ambientLight.m_color.g = (ambient.g + ambient.g) * 0.5f;
-    RedInterfaceScreen::s_lightingState.ambientLight.m_color.b = (ambient.b + ambient.b) * 0.5f;
-    RedInterfaceScreen::s_lightingState.ambientLight.m_color.a = (ambient.a + ambient.a) * 0.5f;
+    RedColorValue top(m_ambientColor);
+    RedColorValue bottom(m_ambientColor);
+    RedInterfaceScreen::s_lightingState.ambientLight.m_topColor = top;
+    RedInterfaceScreen::s_lightingState.ambientLight.m_bottomColor = bottom;
+    RedInterfaceScreen::s_lightingState.ambientLight.m_color =
+        RedColorValue((top.r + bottom.r) * 0.5f, (top.g + bottom.g) * 0.5f, (top.b + bottom.b) * 0.5f,
+                      (top.a + bottom.a) * 0.5f);
+    RedColorValue sun(m_sunColor);
     light.SetDirection(m_sunDirection);
-    RedColorValue sun;
-    sun.r = m_sunColor.r * (1.0f / 255.0f);
-    sun.g = m_sunColor.g * (1.0f / 255.0f);
-    sun.b = m_sunColor.b * (1.0f / 255.0f);
-    sun.a = m_sunColor.a * (1.0f / 255.0f);
     light.SetColor(sun);
 
     ColorControl::s_pInstance->Enable(false);
@@ -1233,12 +1225,11 @@ void LoadDisplay::ProgressIndicator::Init(int iNumLEDs, float fSpacing,
         m_pLED[i].SetPosition(fX, 0.0f);
 
         const float fIntensity = m_pIntensity[m_curOnLED];
-        const RedColor& onColor = m_pColor[m_curOnLED];
         RedColor color;
-        color.b = (unsigned char)(int)(onColor.b * fIntensity);
-        color.g = (unsigned char)(int)(onColor.g * fIntensity);
-        color.r = (unsigned char)(int)(onColor.r * fIntensity);
-        color.a = onColor.a;
+        color.b = (unsigned char)(int)(m_pColor[m_curOnLED].b * fIntensity);
+        color.g = (unsigned char)(int)(m_pColor[m_curOnLED].g * fIntensity);
+        color.r = (unsigned char)(int)(m_pColor[m_curOnLED].r * fIntensity);
+        color.a = m_pColor[m_curOnLED].a;
         m_pLED[i].SetColor(color);
 
         AddElement(&m_pLED[i]);

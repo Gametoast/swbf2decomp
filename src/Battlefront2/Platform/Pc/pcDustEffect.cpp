@@ -139,8 +139,8 @@ void DustEffectRenderData::Begin() const
 void DustEffectRenderData::AddParticle(const PblVector3& vPos, float fSize, const RedColor& color,
                                        float fOffset) const
 {
-    PblVector3 up = m_vUp * fSize;
-    PblVector3 right = m_vRight * fSize;
+    PblVector3 up = fSize * m_vUp;
+    PblVector3 right = fSize * m_vRight;
     PblVector3 pos = (vPos - up * 0.5f) + right * (fOffset - 0.5f);
 
     if (RedRenderer::pcGetGeometryMode())
@@ -168,30 +168,35 @@ void DustEffectRenderData::AddParticle(const PblVector3& vPos, float fSize, cons
     }
     else
     {
-        DustVertex*& v = (DustVertex*&)m_pVertices;
-        v->pos = pos;
-        v->color = color;
-        v->u = 1.0f;
-        v->v = 0.0f;
-        ++v;
+        DustVertex* pVertex;
 
-        v->pos = pos + right;
-        v->color = color;
-        v->u = 1.0f;
-        v->v = 1.0f;
-        ++v;
+        ((DustVertex*)m_pVertices)->pos = pos;
+        ((DustVertex*)m_pVertices)->color = color;
+        pVertex = (DustVertex*)m_pVertices;
+        pVertex->u = 1.0f;
+        pVertex->v = 0.0f;
+        m_pVertices = pVertex + 1;
 
-        v->pos = (pos + up) + right;
-        v->color = color;
-        v->u = 0.0f;
-        v->v = 1.0f;
-        ++v;
+        ((DustVertex*)m_pVertices)->pos = pos + right;
+        ((DustVertex*)m_pVertices)->color = color;
+        pVertex = (DustVertex*)m_pVertices;
+        pVertex->u = 1.0f;
+        pVertex->v = 1.0f;
+        m_pVertices = pVertex + 1;
 
-        v->pos = pos + up;
-        v->color = color;
-        v->u = 0.0f;
-        v->v = 0.0f;
-        ++v;
+        ((DustVertex*)m_pVertices)->pos = (pos + up) + right;
+        ((DustVertex*)m_pVertices)->color = color;
+        pVertex = (DustVertex*)m_pVertices;
+        pVertex->u = 0.0f;
+        pVertex->v = 1.0f;
+        m_pVertices = pVertex + 1;
+
+        ((DustVertex*)m_pVertices)->pos = pos + up;
+        ((DustVertex*)m_pVertices)->color = color;
+        pVertex = (DustVertex*)m_pVertices;
+        pVertex->u = 0.0f;
+        pVertex->v = 0.0f;
+        m_pVertices = pVertex + 1;
     }
 }
 

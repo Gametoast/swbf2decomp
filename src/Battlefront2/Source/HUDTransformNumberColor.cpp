@@ -115,20 +115,11 @@ RedColor HUD::TransformNumberColor::CalculateOutputColor(float fInput) const
     {
         ++i;
     }
-    const NumberColor& high = mMapping[(i == mNumMappings) ? i - 1 : i];
-    const RedColor highColor = high.color;
-    const NumberColor& low = mMapping[i ? i - 1 : 0];
-    const RedColor lowColor = low.color;
+    const NumberColor high = mMapping[(i == mNumMappings) ? i - 1 : i];
+    const NumberColor low = mMapping[i ? i - 1 : 0];
     const float fDelta = high.number - low.number;
-    RedColor result;
-    if (fDelta == 0.0f)
-    {
-        result = highColor;
-    }
-    else
-    {
-        result = Interpolate(lowColor, highColor, (fValue - low.number) / fDelta);
-    }
+    const RedColor result =
+        (fDelta != 0.0f) ? Interpolate(low.color, high.color, (fValue - low.number) / fDelta) : high.color;
     return result;
 }
 
@@ -148,7 +139,8 @@ void HUD::TransformNumberColor::EventInput(const HUD::Event& event, void* const 
         }
         const RedColor color = pTransform->CalculateOutputColor(
             event.GetDataFloat() * pTransform->mInputFactorConstant * pTransform->mInputFactor);
-        HUD::Event(pTransform->mEventClassOutput, &color).Send();
+        HUD::Event outEvent(pTransform->mEventClassOutput, &color);
+        outEvent.Send();
         break;
     }
     default:

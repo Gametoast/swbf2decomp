@@ -208,9 +208,8 @@ void LensFlareEffect::PlatformInit()
     else
     {
         s_samplePoints = pcRedPrimitive::Create(D3DPT_POINTLIST, 0x1002, 8, 256, 0, true);
-        const PblBox box(0.0f, 0.0f, 0.0f, 17.0f, 17.0f, 0.0f);
-        s_samplePoints->m_bbox = box;
-        CompressedPos::SetBoundingBox(box);
+        s_samplePoints->m_bbox = PblBox(0.0f, 0.0f, 0.0f, 17.0f, 17.0f, 0.0f);
+        CompressedPos::SetBoundingBox(PblBox(0.0f, 0.0f, 0.0f, 17.0f, 17.0f, 0.0f));
         short* v = (short*)s_samplePoints->BeginVertexData();
         if (!v)
         {
@@ -487,8 +486,8 @@ void LensFlare::Emit<FlareVertex>(FlareVertex*& pVertices, const PblVector3& pos
     pVertices[13] = pVertices[12];
     pVertices += 14;
 
-    RedColor half(_color, _color.a >> 1);
     RedColor clear(_color, 0);
+    RedColor half(_color, _color.a >> 1);
     EmitRing(pVertices, pos, angle, 0.0f, _fSize, _fSize * 4.0f,
              _color, half, clear, 12, fU, fV);
 }
