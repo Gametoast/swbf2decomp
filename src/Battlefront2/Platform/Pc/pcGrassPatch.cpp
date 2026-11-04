@@ -64,41 +64,53 @@ GrassPatchRenderable::GrassPatchRenderable(const GrassPatchClass* pClass)
       m_pPrimitive(0), m_pPrimitiveFar(0), m_pClass(const_cast<GrassPatchClass*>(pClass)),
       m_pVertices(0)
 {
-    const unsigned int vertexFormat = RedRenderer::pcGetGeometryMode() == GEOMETRYMODE_UNCOMPRESSED
-        ? 0x2a2 : 0xd2a2;
-    m_pShader = pcRedShader::Create(0xe68b9c52, vertexFormat, &pClass->mTextureHash,
-                                    1, 0x10006, RedColor::WHITE, RedColor::BLACK, 32.0f);
-    m_pShaderFar = pcRedShader::Create(0xe68b9c52, vertexFormat, &pClass->mTextureHash,
-                                       1, 0x10002, RedColor::WHITE, RedColor::BLACK, 32.0f);
-    m_pShaderTransparent = pcRedShader::Create(0xe68b9c52, vertexFormat, &pClass->mTextureHash,
-                                                1, 0x10004, RedColor::WHITE, RedColor::BLACK, 32.0f);
+    if (RedRenderer::pcGetGeometryMode() == GEOMETRYMODE_UNCOMPRESSED)
+    {
+        m_pShader = pcRedShader::Create(0xe68b9c52, 0x2a2, &m_pClass->mTextureHash,
+                                        1, 0x10006, RedColor::WHITE, RedColor::BLACK, 32.0f);
+        m_pShaderFar = pcRedShader::Create(0xe68b9c52, 0x2a2, &m_pClass->mTextureHash,
+                                           1, 0x10002, RedColor::WHITE, RedColor::BLACK, 32.0f);
+        m_pShaderTransparent = pcRedShader::Create(0xe68b9c52, 0x2a2, &m_pClass->mTextureHash,
+                                                    1, 0x10004, RedColor::WHITE, RedColor::BLACK, 32.0f);
+    }
+    else
+    {
+        m_pShader = pcRedShader::Create(0xe68b9c52, 0xd2a2, &m_pClass->mTextureHash,
+                                        1, 0x10006, RedColor::WHITE, RedColor::BLACK, 32.0f);
+        m_pShaderFar = pcRedShader::Create(0xe68b9c52, 0xd2a2, &m_pClass->mTextureHash,
+                                           1, 0x10002, RedColor::WHITE, RedColor::BLACK, 32.0f);
+        m_pShaderTransparent = pcRedShader::Create(0xe68b9c52, 0xd2a2, &m_pClass->mTextureHash,
+                                                    1, 0x10004, RedColor::WHITE, RedColor::BLACK, 32.0f);
+    }
     m_bReflection = false;
     m_pVB = 0;
-    const int count = pClass->mNumParticles;
+    const int count = m_pClass->mNumParticles;
     m_pIBReverse = pcRedIndexBuffer::Create(6 * count, true, true);
     unsigned short* indices = m_pIBReverse->Lock(6 * count, m_startIndexReverse);
-    for (int i = count - 1, j = 0; i >= 0; --i, j += 6)
+    for (short i = (short)(count - 1); i >= 0; --i)
     {
-        const int base = i * 4;
-        indices[j] = (unsigned short)base;
-        indices[j + 1] = (unsigned short)(base + 1);
-        indices[j + 2] = (unsigned short)(base + 2);
-        indices[j + 3] = (unsigned short)base;
-        indices[j + 4] = (unsigned short)(base + 2);
-        indices[j + 5] = (unsigned short)(base + 3);
+        const unsigned short base = (unsigned short)(i * 4);
+        indices[0] = base;
+        indices[1] = (unsigned short)(base + 1);
+        indices[2] = (unsigned short)(base + 2);
+        indices[3] = base;
+        indices[4] = (unsigned short)(base + 2);
+        indices[5] = (unsigned short)(base + 3);
+        indices += 6;
     }
     m_pIBReverse->Unlock();
     m_pIBForward = pcRedIndexBuffer::Create(6 * count, true, true);
     indices = m_pIBForward->Lock(6 * count, m_startIndexForward);
-    for (int i = 0, j = 0; i < count; ++i, j += 6)
+    for (short i = 0; i < count; ++i)
     {
-        const int base = i * 4;
-        indices[j] = (unsigned short)base;
-        indices[j + 1] = (unsigned short)(base + 1);
-        indices[j + 2] = (unsigned short)(base + 2);
-        indices[j + 3] = (unsigned short)base;
-        indices[j + 4] = (unsigned short)(base + 2);
-        indices[j + 5] = (unsigned short)(base + 3);
+        const unsigned short base = (unsigned short)(i * 4);
+        indices[0] = base;
+        indices[1] = (unsigned short)(base + 1);
+        indices[2] = (unsigned short)(base + 2);
+        indices[3] = base;
+        indices[4] = (unsigned short)(base + 2);
+        indices[5] = (unsigned short)(base + 3);
+        indices += 6;
     }
     m_pIBForward->Unlock();
     mHeap = new PblHeap<int, float>(count, 1000000.0f, 0);
@@ -177,15 +189,14 @@ void GrassPatchClass::RenderMaxDist(const PblMatrix& matrix, float fMaxDist,
     }
     fMaxDist = fMaxDist * 20.0f / 20.0f;
     const PblMatrix& cam = RedRenderer::GetCamera()->_Matrix;
-    const float distance = cam.m[2][0] * (cam.m[3][0] - matrix.m[3][0]) +
-                           cam.m[2][1] * (cam.m[3][1] - matrix.m[3][1]) +
-                           cam.m[2][2] * (cam.m[3][2] - matrix.m[3][2]);
+    const PblVector3 vDelta(cam.m[3][0] - matrix.m[3][0], cam.m[3][1] - matrix.m[3][1],
+                            cam.m[3][2] - matrix.m[3][2]);
+    const float distance = cam.m[2][0] * vDelta.x + cam.m[2][1] * vDelta.y + cam.m[2][2] * vDelta.z;
     if (distance < -mBoundingRadius || distance - mBoundingRadius > fMaxDist)
     {
         return;
     }
     static float FADE = 20.0f;
-    static float inverseFADE = 1.0f / FADE;
     float alpha = 1.0f;
     if (uiFlags & 0x20000000)
     {
@@ -210,6 +221,7 @@ void GrassPatchClass::RenderMaxDist(const PblMatrix& matrix, float fMaxDist,
     }
     else if (distance > fMaxDist - FADE)
     {
+        static float inverseFADE = 1.0f / FADE;
         alpha = 1.0f - (distance - (fMaxDist - FADE)) * inverseFADE;
         if (alpha < 0.0f)
         {
@@ -245,10 +257,10 @@ void GrassPatchRenderable::RenderInstance(const PblMatrix& matrix, const RedColo
     }
 
     PblSphere sphere;
+    sphere.w = m_pClass->mBoundingRadius;
     sphere.x = matrix.m[3][0];
     sphere.y = matrix.m[3][1];
     sphere.z = matrix.m[3][2];
-    sphere.w = m_pClass->mBoundingRadius;
     RedRenderer::SetLightingState(*RedLight::GetLightingState(sphere, 4, false, false, false));
 
     const PblMatrix& camMat = RedRenderer::GetCamera()->_Matrix;
@@ -276,22 +288,13 @@ void GrassPatchRenderable::RenderInstance(const PblMatrix& matrix, const RedColo
                                               uiFlags | 8);
         }
     }
-    else if (fDist < m_fDistanceFarShader)
-    {
-        if (m_pPrimitive)
-        {
-            RenderPrimitive(m_pPrimitive, m_pShader, &matrix, &color, uiFlags);
-        }
-    }
-    else
+    else if (fDist >= m_fDistanceFarShader)
     {
         PblMatrix mat = matrix;
+        mat.m[1][3] = 0.0f;
         float fAlpha = 1.0f - (float)color.a * (1.0f / 255.0f);
         float fFade = 1.0f - fAlpha * fAlpha;
-        mat.m[1][0] *= fFade;
-        mat.m[1][1] *= fFade;
-        mat.m[1][2] *= fFade;
-        mat.m[1][3] = 0.0f;
+        mat[1] = mat[1] * fFade;
 
         RedColor opaque;
         opaque.b = color.b;
@@ -302,6 +305,13 @@ void GrassPatchRenderable::RenderInstance(const PblMatrix& matrix, const RedColo
         if (m_pPrimitiveFar)
         {
             RenderPrimitive(m_pPrimitiveFar, m_pShaderFar, &mat, &opaque, uiFlags);
+        }
+    }
+    else
+    {
+        if (m_pPrimitive)
+        {
+            RenderPrimitive(m_pPrimitive, m_pShader, &matrix, &color, uiFlags);
         }
     }
 }
@@ -404,7 +414,8 @@ void GrassPatchRenderable::Begin()
     {
 
         float f = (float)(i % 5) * (1.0f - (float)(i & 1) * 2.0f) * 0.05f;
-        float fRight = (1.0f - fabsf(f)) * 1.1f;
+        float fAbs = f < 0.0f ? -f : f;
+        float fRight = (1.0f - fAbs) * 1.1f;
         float fFront = f * 1.1f;
         m_avRight[i] = PblVector3(vFront.x * fFront + vRight.x * fRight, vFront.y * fFront + vRight.y * fRight,
                                   vFront.z * fFront + vRight.z * fRight);
@@ -442,7 +453,7 @@ void GrassPatchRenderable::AddParticle(const GrassPatchClass::GrassParticle& par
 
     if (particle.mFlatType)
     {
-        float fSwing = pClass->mFlatGrassSwingFlag ? particle.mOffset * 0.03f : 0.0f;
+        float fSwing = !pClass->mFlatGrassSwingFlag ? 0.0f : particle.mOffset * 0.03f;
         float fFace = pClass->mFlatFaceFactor + fSwing;
         PblVector3 vDir(0.0f - m_vFlatFront.x * fFace, 1.0f - m_vFlatFront.y * fFace,
                         0.0f - m_vFlatFront.z * fFace);
@@ -451,17 +462,18 @@ void GrassPatchRenderable::AddParticle(const GrassPatchClass::GrassParticle& par
 
         PblVector3 vSide(u.y * vDir.z - u.z * vDir.y, u.z * vDir.x - u.x * vDir.z, u.x * vDir.y - u.y * vDir.x);
         vSide.y = u.y + vSide.y;
-        PblVector3 n1;
-        D3DXVec3Normalize(reinterpret_cast<D3DXVECTOR3*>(&n1), reinterpret_cast<const D3DXVECTOR3*>(&vSide));
+        PblVector3 vNorm;
+        D3DXVec3Normalize(reinterpret_cast<D3DXVECTOR3*>(&vNorm), reinterpret_cast<const D3DXVECTOR3*>(&vSide));
+        vSide = vNorm;
 
-        PblVector3 vCross(n1.y * vDir.z - n1.z * vDir.y, n1.z * vDir.x - n1.x * vDir.z,
-                          n1.x * vDir.y - n1.y * vDir.x);
-        PblVector3 n2;
-        D3DXVec3Normalize(reinterpret_cast<D3DXVECTOR3*>(&n2), reinterpret_cast<const D3DXVECTOR3*>(&vCross));
+        PblVector3 vCross(vSide.y * vDir.z - vSide.z * vDir.y, vSide.z * vDir.x - vSide.x * vDir.z,
+                          vSide.x * vDir.y - vSide.y * vDir.x);
+        D3DXVec3Normalize(reinterpret_cast<D3DXVECTOR3*>(&vNorm), reinterpret_cast<const D3DXVECTOR3*>(&vCross));
+        vCross = vNorm;
 
         float fSize = particle.mSize * fScale;
-        vRight = PblVector3(n1.x * fSize, n1.y * fSize, n1.z * fSize);
-        PblVector3 vHalfUp(n2.x * fSize * 0.5f, n2.y * fSize * 0.5f, n2.z * fSize * 0.5f);
+        vRight = PblVector3(vSide.x * fSize, vSide.y * fSize, vSide.z * fSize);
+        PblVector3 vHalfUp(vCross.x * fSize * 0.5f, vCross.y * fSize * 0.5f, vCross.z * fSize * 0.5f);
         PblVector3 vHalfRight(vRight.x * 0.5f, vRight.y * 0.5f, vRight.z * 0.5f);
 
         vTop = PblVector3(vHalfUp.x + vPos.x - vHalfRight.x, vHalfUp.y + vPos.y - vHalfRight.y,
@@ -501,32 +513,7 @@ void GrassPatchRenderable::AddParticle(const GrassPatchClass::GrassParticle& par
         vBottom,
     };
 
-    if (eMode != GEOMETRYMODE_UNCOMPRESSED)
-    {
-        const CompressedTexCoord* pUV = s_CompressedTexCoords[m_iTexCoordType][particle.mTexture];
-        unsigned short usV = (unsigned short)pUV[0].v;
-        if (fClip != 0.0f)
-        {
-            usV = (unsigned short)(int)(((float)pUV[2].v - (float)pUV[0].v) * fClip + (float)pUV[0].v);
-        }
-
-        CompressedTexCoord uv[4] = { pUV[2], pUV[3], { pUV[1].u, (short)usV }, { pUV[0].u, (short)usV } };
-
-        for (int i = 0; i < 4; ++i)
-        {
-            GrassVertexCompressed* pv = (GrassVertexCompressed*)m_pVertices;
-            pv->pos[0] = (short)(int)corners[i].x;
-            pv->pos[1] = (short)(int)corners[i].y;
-            pv->pos[2] = (short)(int)corners[i].z;
-            pv->normal[0] = 0x7f;
-            pv->normal[1] = 0xff;
-            pv->normal[2] = 0x7f;
-            pv->color = ToRedColor(particle.mColor);
-            pv->uv = uv[i];
-            m_pVertices = pv + 1;
-        }
-    }
-    else
+    if (eMode == GEOMETRYMODE_UNCOMPRESSED)
     {
         const TexCoord* pUV = s_TexCoords[m_iTexCoordType][particle.mTexture];
         float fV = pUV[0].v;
@@ -535,21 +522,106 @@ void GrassPatchRenderable::AddParticle(const GrassPatchClass::GrassParticle& par
             fV = (pUV[2].v - fV) * fClip + fV;
         }
 
-        TexCoord uv[4] = { pUV[2], pUV[3], { pUV[1].u, fV }, { pUV[0].u, fV } };
+        GrassVertexUncompressed* pv = (GrassVertexUncompressed*)m_pVertices;
+        pv->pos[0] = corners[0].x;
+        pv->pos[1] = corners[0].y;
+        pv->pos[2] = corners[0].z;
+        pv->normal[0] = 0.0f;
+        pv->normal[1] = 1.0f;
+        pv->normal[2] = 0.0f;
+        pv->color = ToRedColor(particle.mColor);
+        pv->uv = pUV[2];
+        m_pVertices = pv + 1;
 
-        for (int i = 0; i < 4; ++i)
+        pv = (GrassVertexUncompressed*)m_pVertices;
+        pv->pos[0] = corners[1].x;
+        pv->pos[1] = corners[1].y;
+        pv->pos[2] = corners[1].z;
+        pv->normal[0] = 0.0f;
+        pv->normal[1] = 1.0f;
+        pv->normal[2] = 0.0f;
+        pv->color = ToRedColor(particle.mColor);
+        pv->uv = pUV[3];
+        m_pVertices = pv + 1;
+
+        pv = (GrassVertexUncompressed*)m_pVertices;
+        pv->pos[0] = corners[2].x;
+        pv->pos[1] = corners[2].y;
+        pv->pos[2] = corners[2].z;
+        pv->normal[0] = 0.0f;
+        pv->normal[1] = 1.0f;
+        pv->normal[2] = 0.0f;
+        pv->color = ToRedColor(particle.mColor);
+        pv->uv.u = pUV[1].u;
+        pv->uv.v = fV;
+        m_pVertices = pv + 1;
+
+        pv = (GrassVertexUncompressed*)m_pVertices;
+        pv->pos[0] = corners[3].x;
+        pv->pos[1] = corners[3].y;
+        pv->pos[2] = corners[3].z;
+        pv->normal[0] = 0.0f;
+        pv->normal[1] = 1.0f;
+        pv->normal[2] = 0.0f;
+        pv->color = ToRedColor(particle.mColor);
+        pv->uv.u = pUV[0].u;
+        pv->uv.v = fV;
+        m_pVertices = pv + 1;
+    }
+    else
+    {
+        const CompressedTexCoord* pUV = s_CompressedTexCoords[m_iTexCoordType][particle.mTexture];
+        unsigned short usV = (unsigned short)pUV[0].v;
+        if (fClip != 0.0f)
         {
-            GrassVertexUncompressed* pv = (GrassVertexUncompressed*)m_pVertices;
-            pv->pos[0] = corners[i].x;
-            pv->pos[1] = corners[i].y;
-            pv->pos[2] = corners[i].z;
-            pv->normal[0] = 0.0f;
-            pv->normal[1] = 1.0f;
-            pv->normal[2] = 0.0f;
-            pv->color = ToRedColor(particle.mColor);
-            pv->uv = uv[i];
-            m_pVertices = pv + 1;
+            usV = (unsigned short)(int)(((float)pUV[2].v - (float)pUV[0].v) * fClip + (float)pUV[0].v);
         }
+
+        GrassVertexCompressed* pv = (GrassVertexCompressed*)m_pVertices;
+        pv->pos[0] = (short)(int)corners[0].x;
+        pv->pos[1] = (short)(int)corners[0].y;
+        pv->pos[2] = (short)(int)corners[0].z;
+        pv->normal[0] = 0x7f;
+        pv->normal[1] = 0xff;
+        pv->normal[2] = 0x7f;
+        pv->color = ToRedColor(particle.mColor);
+        pv->uv = pUV[2];
+        m_pVertices = pv + 1;
+
+        pv = (GrassVertexCompressed*)m_pVertices;
+        pv->pos[0] = (short)(int)corners[1].x;
+        pv->pos[1] = (short)(int)corners[1].y;
+        pv->pos[2] = (short)(int)corners[1].z;
+        pv->normal[0] = 0x7f;
+        pv->normal[1] = 0xff;
+        pv->normal[2] = 0x7f;
+        pv->color = ToRedColor(particle.mColor);
+        pv->uv = pUV[3];
+        m_pVertices = pv + 1;
+
+        pv = (GrassVertexCompressed*)m_pVertices;
+        pv->pos[0] = (short)(int)corners[2].x;
+        pv->pos[1] = (short)(int)corners[2].y;
+        pv->pos[2] = (short)(int)corners[2].z;
+        pv->normal[0] = 0x7f;
+        pv->normal[1] = 0xff;
+        pv->normal[2] = 0x7f;
+        pv->color = ToRedColor(particle.mColor);
+        pv->uv.u = pUV[1].u;
+        pv->uv.v = (short)usV;
+        m_pVertices = pv + 1;
+
+        pv = (GrassVertexCompressed*)m_pVertices;
+        pv->pos[0] = (short)(int)corners[3].x;
+        pv->pos[1] = (short)(int)corners[3].y;
+        pv->pos[2] = (short)(int)corners[3].z;
+        pv->normal[0] = 0x7f;
+        pv->normal[1] = 0xff;
+        pv->normal[2] = 0x7f;
+        pv->color = ToRedColor(particle.mColor);
+        pv->uv.u = pUV[0].u;
+        pv->uv.v = (short)usV;
+        m_pVertices = pv + 1;
     }
 }
 

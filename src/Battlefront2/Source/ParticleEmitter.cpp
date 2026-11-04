@@ -93,9 +93,9 @@ void ParticleEmitter::Reset(const ParticleEmitterClass* pClass)
     {
         uSeed = PblRandom::GetGlobalInt();
     }
-    mSeed = uSeed;
 
     PblRandom rand(uSeed ^ 0xC71C2830u);
+    mSeed = uSeed;
     mMaxParticles = (short)mClass->mMaxParticles.GetValue(rand);
     if (mMaxParticles > 128)
     {
@@ -155,23 +155,26 @@ void ParticleEmitter::StopAndFinish(float fStopTime)
 // FUNCTION: SWBF2 0x0060a560
 void ParticleEmitter::SetColor(const RedColorValue& color)
 {
-    for (ParticleEmitter* p = this; p; p = p->mNext)
+    mColor = color;
+    if (mNext)
     {
-        p->mColor = color;
+        mNext->SetColor(color);
     }
 }
 
 // FUNCTION: SWBF2 0x0060a4f0
 void ParticleEmitter::Register(ParticleEmitterInfoData* pInfo)
 {
-    for (ParticleEmitter* p = this; p; p = p->mNext)
+    ParticleEmitter* p = this;
+    do
     {
         pInfo->AddRef();
         if (!p->mFirstInfo)
         {
             p->mFirstInfo = pInfo;
         }
-    }
+        p = p->mNext;
+    } while (p);
 }
 
 // FUNCTION: SWBF2 0x00609d80
@@ -209,9 +212,10 @@ void ParticleEmitter::Cleanup()
 // FUNCTION: SWBF2 0x00609cb0
 void ParticleEmitterClass::SetNextSeed(unsigned int uSeed)
 {
-    for (ParticleEmitterClass* p = this; p; p = p->mNext)
+    mNextSeed = uSeed;
+    if (mNext)
     {
-        p->mNextSeed = uSeed;
+        mNext->SetNextSeed(uSeed);
     }
 }
 

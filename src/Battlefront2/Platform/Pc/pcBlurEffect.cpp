@@ -26,9 +26,9 @@ void BlurEffect::PlatformInit()
     m_constantBlend = 0.25f;
     m_downSizeFactor = 0.25f;
     m_pFilterShader = (pcFilterCopyShader*)pcRedShader::Create(
-        PblHash("FilterCopy"), 0x202, 0, 0, 0, RedColor::WHITE, RedColor::BLACK, 32.0f);
+        0xfb9eb106, 0x202, 0, 0, 0, RedColor::WHITE, RedColor::BLACK, 32.0f);
     m_pClearShader = (pcClearShader*)pcRedShader::Create(
-        PblHash("Clear"), 0x203, 0, 0, 4, RedColor::WHITE, RedColor::BLACK, 32.0f);
+        0x5c6e1222, 0x203, 0, 0, 4, RedColor::WHITE, RedColor::BLACK, 32.0f);
 }
 
 // FUNCTION: SWBF2 0x0040f810
@@ -49,16 +49,22 @@ void BlurEffect::PlatformCleanup()
 // FUNCTION: SWBF2 0x0040f890
 void BlurEffect::PlatformReadConfigData(PblConfig::Data& data)
 {
-    switch (data.GetId())
+    const unsigned int uiId = data.GetId();
+    if (uiId > 0x7E6C7187u)
     {
-    case 0x7E1194B8u:
-        m_constantBlend = data.GetFloatArg(0);
-        break;
-    case 0x7E6C7187u:
+        return;
+    }
+    if (uiId == 0x7E6C7187u)
+    {
         m_downSizeFactor = data.GetFloatArg(0);
-        break;
-    case 0x055CEA38u:
-        break;
+    }
+    else if (uiId == 0x055CEA38u)
+    {
+        (void)data.GetFloatArg(0);
+    }
+    else if (uiId == 0x7E1194B8u)
+    {
+        m_constantBlend = data.GetFloatArg(0);
     }
 }
 
@@ -90,14 +96,14 @@ void BlurEffect::Render(int value)
     float left, top, right, bottom;
     RedRenderer::pcGetViewportExtents(left, top, right, bottom);
 
-    float fU1 = (right - left) * m_downSizeFactor /
-                (float)(RedRenderer::pcGetBuffer(PC_BUFFER_SKY))->m_uiWidth;
-    float fV1 = (bottom - top) * m_downSizeFactor /
-                (float)(RedRenderer::pcGetBuffer(PC_BUFFER_SKY))->m_uiHeight;
-    float fU0 = (right - left) * m_downSizeFactor /
-                (float)(RedRenderer::pcGetBuffer(PC_BUFFER_TEMP))->m_uiWidth;
-    float fV0 = (bottom - top) * m_downSizeFactor /
-                (float)(RedRenderer::pcGetBuffer(PC_BUFFER_TEMP))->m_uiHeight;
+    const float fSkyWidth = (float)(RedRenderer::pcGetBuffer(PC_BUFFER_SKY))->m_uiWidth;
+    float fU1 = (right - left) * m_downSizeFactor / fSkyWidth;
+    const float fSkyHeight = (float)(RedRenderer::pcGetBuffer(PC_BUFFER_SKY))->m_uiHeight;
+    float fV1 = (bottom - top) * m_downSizeFactor / fSkyHeight;
+    const float fTempWidth = (float)(RedRenderer::pcGetBuffer(PC_BUFFER_TEMP))->m_uiWidth;
+    float fU0 = (right - left) * m_downSizeFactor / fTempWidth;
+    const float fTempHeight = (float)(RedRenderer::pcGetBuffer(PC_BUFFER_TEMP))->m_uiHeight;
+    float fV0 = (bottom - top) * m_downSizeFactor / fTempHeight;
 
     float fX = fU1 * 2.0f - 1.0f;
     float fY = 1.0f - fV1 * 2.0f;

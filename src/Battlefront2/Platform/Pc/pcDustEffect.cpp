@@ -35,13 +35,13 @@ DustEffectRenderData::DustEffectRenderData(const DustEffectClass* pClass)
     m_pPrimitive = 0;
     if (RedRenderer::pcGetGeometryMode() == GEOMETRYMODE_COMPRESSED)
     {
-        m_pShader = (pcParticleShader*)pcRedShader::Create(PblHash("Particle"), 0x9282,
+        m_pShader = (pcParticleShader*)pcRedShader::Create(0x8A8743BF, 0x9282,
                                                             &m_pClass->mTextureHash, 1, 0x10004,
                                                             RedColor::WHITE, RedColor::BLACK, 32.0f);
     }
     else
     {
-        m_pShader = (pcParticleShader*)pcRedShader::Create(PblHash("Particle"), 0x282,
+        m_pShader = (pcParticleShader*)pcRedShader::Create(0x8A8743BF, 0x282,
                                                             &m_pClass->mTextureHash, 1, 0x10004,
                                                             RedColor::WHITE, RedColor::BLACK, 32.0f);
     }
@@ -115,24 +115,23 @@ void DustEffectRenderData::Begin() const
         m_pPrimitive->Release();
     }
 
-    unsigned int uiNumParticles = m_pClass->mNumParticles;
     if (RedRenderer::pcGetGeometryMode() == GEOMETRYMODE_COMPRESSED)
     {
         m_pPrimitive = pcRedPrimitive::Create(D3DPT_TRIANGLELIST, 0x9282, 16,
-                                              uiNumParticles * 4, uiNumParticles * 6, false);
+                                              m_pClass->mNumParticles * 4, m_pClass->mNumParticles * 6, false);
         CompressedPos::SetBoundingBox(sBox);
     }
     else
     {
         m_pPrimitive = pcRedPrimitive::Create(D3DPT_TRIANGLELIST, 0x282, 24,
-                                              uiNumParticles * 4, uiNumParticles * 6, false);
+                                              m_pClass->mNumParticles * 4, m_pClass->mNumParticles * 6, false);
     }
     m_pPrimitive->m_bbox = sBox;
 
     const RedCamera* pCamera = RedRenderer::GetCamera();
     const PblMatrix& mat = pCamera->_Matrix;
-    m_vUp = PblVector3(mat.m[1][0], mat.m[1][1], mat.m[1][2]);
-    m_vRight = PblVector3(mat.m[0][0], mat.m[0][1], mat.m[0][2]);
+    m_vUp = mat.GetYAxis();
+    m_vRight = mat.GetXAxis();
     m_pVertices = m_pPrimitive->BeginVertexData();
 }
 
@@ -146,59 +145,53 @@ void DustEffectRenderData::AddParticle(const PblVector3& vPos, float fSize, cons
 
     if (RedRenderer::pcGetGeometryMode())
     {
-        DustVertexCompressed* v = (DustVertexCompressed*)m_pVertices;
+        DustVertexCompressed*& v = (DustVertexCompressed*&)m_pVertices;
         v->pos.SetPos(pos);
         v->color = color;
         v->uv.SetUV(1.0f, 0.0f);
-        m_pVertices = v + 1;
+        ++v;
 
-        v = (DustVertexCompressed*)m_pVertices;
         v->pos.SetPos(pos + right);
         v->color = color;
         v->uv.SetUV(1.0f, 1.0f);
-        m_pVertices = v + 1;
+        ++v;
 
-        v = (DustVertexCompressed*)m_pVertices;
         v->pos.SetPos((pos + up) + right);
         v->color = color;
         v->uv.SetUV(0.0f, 1.0f);
-        m_pVertices = v + 1;
+        ++v;
 
-        v = (DustVertexCompressed*)m_pVertices;
         v->pos.SetPos(pos + up);
         v->color = color;
         v->uv.SetUV(0.0f, 0.0f);
-        m_pVertices = v + 1;
+        ++v;
     }
     else
     {
-        DustVertex* v = (DustVertex*)m_pVertices;
+        DustVertex*& v = (DustVertex*&)m_pVertices;
         v->pos = pos;
         v->color = color;
         v->u = 1.0f;
         v->v = 0.0f;
-        m_pVertices = v + 1;
+        ++v;
 
-        v = (DustVertex*)m_pVertices;
         v->pos = pos + right;
         v->color = color;
         v->u = 1.0f;
         v->v = 1.0f;
-        m_pVertices = v + 1;
+        ++v;
 
-        v = (DustVertex*)m_pVertices;
         v->pos = (pos + up) + right;
         v->color = color;
         v->u = 0.0f;
         v->v = 1.0f;
-        m_pVertices = v + 1;
+        ++v;
 
-        v = (DustVertex*)m_pVertices;
         v->pos = pos + up;
         v->color = color;
         v->u = 0.0f;
         v->v = 0.0f;
-        m_pVertices = v + 1;
+        ++v;
     }
 }
 
@@ -210,13 +203,12 @@ void DustEffectRenderData::End() const
     for (int i = 0; i < m_pClass->mNumParticles; ++i)
     {
         unsigned short uBase = (unsigned short)(i * 4);
-        pIndices[0] = uBase;
-        pIndices[1] = uBase + 1;
-        pIndices[2] = uBase + 2;
-        pIndices[3] = uBase;
-        pIndices[4] = uBase + 2;
-        pIndices[5] = uBase + 3;
-        pIndices += 6;
+        *pIndices++ = uBase;
+        *pIndices++ = uBase + 1;
+        *pIndices++ = uBase + 2;
+        *pIndices++ = uBase;
+        *pIndices++ = uBase + 2;
+        *pIndices++ = uBase + 3;
     }
     m_pPrimitive->EndIndexData();
     m_pVertices = 0;

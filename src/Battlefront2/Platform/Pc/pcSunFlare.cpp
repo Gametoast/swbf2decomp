@@ -385,18 +385,18 @@ void SunFlareEffect::Render(int value)
 // FUNCTION: SWBF2 0x0042df30
 void SunFlareEffect::RenderSky(unsigned int uiPass) const
 {
-    if (RedRenderer::pcGetGeometryMode() != GEOMETRYMODE_UNCOMPRESSED)
+    if (RedRenderer::pcGetGeometryMode() == GEOMETRYMODE_UNCOMPRESSED)
     {
         for (PblList<SunFlare>::Itor it = _List.Begin(); it != _List.End(); ++it)
         {
-            it->RenderSunAndHalo<FlareCompressedVertex, 37506>(uiPass);
+            it->RenderSunAndHalo<FlareVertex, 642>(uiPass);
         }
     }
     else
     {
         for (PblList<SunFlare>::Itor it = _List.Begin(); it != _List.End(); ++it)
         {
-            it->RenderSunAndHalo<FlareVertex, 642>(uiPass);
+            it->RenderSunAndHalo<FlareCompressedVertex, 37506>(uiPass);
         }
     }
 }
@@ -574,13 +574,14 @@ void SunFlare::_Render() const
     }
 
     float fDistance = GetDistance();
-    PblVector3 vOffset(_vDirection.x * fDistance, _vDirection.y * fDistance,
-                       _vDirection.z * fDistance);
+    const PblVector3 vOffset = _vDirection * fDistance;
     const PblVector3& vCamera = RedRenderer::GetCamera()->GetMatrix().GetTranslation();
-    PblVector3 vPosition(vCamera.x + vOffset.x, vCamera.y + vOffset.y, vCamera.z + vOffset.z);
-    PblVector3 vView;
-    D3DXVec3TransformCoord(reinterpret_cast<D3DXVECTOR3*>(&vView), reinterpret_cast<const D3DXVECTOR3*>(&vPosition), reinterpret_cast<const D3DXMATRIX*>(&RedRenderer::GetCamera()->GetMatrixInverse()));
-    vPosition = vView;
+    PblVector3 vPosition = vCamera + vOffset;
+    {
+        PblVector3 vView;
+        D3DXVec3TransformCoord(reinterpret_cast<D3DXVECTOR3*>(&vView), reinterpret_cast<const D3DXVECTOR3*>(&vPosition), reinterpret_cast<const D3DXMATRIX*>(&RedRenderer::GetCamera()->GetMatrixInverse()));
+        vPosition = vView;
+    }
 
     float fSize = _fSize * fDistance * 0.00833f / RedRenderer::GetCamera()->GetZoom();
     float fFlareOutSize = _fFlareOutSize * fDistance * 0.00833f;

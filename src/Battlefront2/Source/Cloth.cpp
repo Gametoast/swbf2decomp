@@ -114,30 +114,29 @@ void ClothData::_Read(PblFileChunk& chunk)
     while (chunk.HasMoreChildren())
     {
         PblFileChunk child = chunk.ReadNextChild();
-        PblFile* pFile = child._pFile;
         char acString[128];
         switch (child._iId)
         {
         case 0x4D524658:
         {
-            float x = pFile->ReadFloat();
-            float y = pFile->ReadFloat();
-            float z = pFile->ReadFloat();
+            float x = child._pFile->ReadFloat();
+            float y = child._pFile->ReadFloat();
+            float z = child._pFile->ReadFloat();
             m_Transform.SetXAxis(x, y, z, 0.0f);
 
-            x = pFile->ReadFloat();
-            y = pFile->ReadFloat();
-            z = pFile->ReadFloat();
+            x = child._pFile->ReadFloat();
+            y = child._pFile->ReadFloat();
+            z = child._pFile->ReadFloat();
             m_Transform.SetYAxis(x, y, z, 0.0f);
 
-            x = pFile->ReadFloat();
-            y = pFile->ReadFloat();
-            z = pFile->ReadFloat();
+            x = child._pFile->ReadFloat();
+            y = child._pFile->ReadFloat();
+            z = child._pFile->ReadFloat();
             m_Transform.SetZAxis(x, y, z, 0.0f);
 
-            x = pFile->ReadFloat();
-            y = pFile->ReadFloat();
-            z = pFile->ReadFloat();
+            x = child._pFile->ReadFloat();
+            y = child._pFile->ReadFloat();
+            z = child._pFile->ReadFloat();
             m_Transform.SetTranslation(x, y, z, 1.0f);
             break;
         }
@@ -145,28 +144,30 @@ void ClothData::_Read(PblFileChunk& chunk)
         {
             child.ReadString(acString, sizeof(acString));
             m_uiTextureNameHash = PblHash(acString);
-            m_uiNumParticles = pFile->Read32();
+            m_uiNumParticles = child._pFile->Read32();
             m_pPos = (PblVector3*)RedAllocFromHeap(__RedCurrHeap, m_uiNumParticles * sizeof(PblVector3), 0);
             m_pTexCoords = (PblVector3*)RedAllocFromHeap(__RedCurrHeap, m_uiNumParticles * sizeof(PblVector3), 0);
             for (unsigned int i = 0; i < m_uiNumParticles; i++)
             {
-                float fX = pFile->ReadFloat();
-                float fY = pFile->ReadFloat();
-                float fZ = pFile->ReadFloat();
-                m_pPos[i].x = fX;
-                m_pPos[i].y = fY;
-                m_pPos[i].z = fZ;
+                float fX = child._pFile->ReadFloat();
+                float fY = child._pFile->ReadFloat();
+                float fZ = child._pFile->ReadFloat();
+                PblVector3& vPos = m_pPos[i];
+                vPos.x = fX;
+                vPos.y = fY;
+                vPos.z = fZ;
             }
             for (unsigned int i = 0; i < m_uiNumParticles; i++)
             {
-                float fU = pFile->ReadFloat();
-                float fV = pFile->ReadFloat();
-                m_pTexCoords[i].x = fU;
-                m_pTexCoords[i].y = fV;
-                m_pTexCoords[i].z = 0.0f;
+                float fU = child._pFile->ReadFloat();
+                float fV = child._pFile->ReadFloat();
+                PblVector3& vTex = m_pTexCoords[i];
+                vTex.x = fU;
+                vTex.y = fV;
+                vTex.z = 0.0f;
             }
-            m_uiNumFixedPoints = pFile->Read32();
-            if (pFile->Read32())
+            m_uiNumFixedPoints = child._pFile->Read32();
+            if (child._pFile->Read32())
             {
                 m_pFixedPointsBones = (unsigned int*)RedAllocFromHeap(__RedCurrHeap, m_uiNumFixedPoints * sizeof(unsigned int), 0);
                 for (unsigned int i = 0; i < m_uiNumFixedPoints; i++)
@@ -179,34 +180,34 @@ void ClothData::_Read(PblFileChunk& chunk)
             {
                 m_pFixedPointsBones = 0;
             }
-            m_uiNumTriangles = pFile->Read32();
+            m_uiNumTriangles = child._pFile->Read32();
             m_pTriangleIndices = (unsigned short*)RedAllocFromHeap(__RedCurrHeap, m_uiNumTriangles * 3 * sizeof(unsigned short), 0);
             for (unsigned int i = 0; i < m_uiNumTriangles; i++)
             {
-                m_pTriangleIndices[i * 3 + 0] = (unsigned short)pFile->Read32();
-                m_pTriangleIndices[i * 3 + 1] = (unsigned short)pFile->Read32();
-                m_pTriangleIndices[i * 3 + 2] = (unsigned short)pFile->Read32();
+                m_pTriangleIndices[i * 3 + 0] = (unsigned short)child._pFile->Read32();
+                m_pTriangleIndices[i * 3 + 1] = (unsigned short)child._pFile->Read32();
+                m_pTriangleIndices[i * 3 + 2] = (unsigned short)child._pFile->Read32();
             }
-            m_uiNumStretchPairs = pFile->Read32();
+            m_uiNumStretchPairs = child._pFile->Read32();
             m_pStretchPairs = (ClothConstraint*)RedAllocFromHeap(__RedCurrHeap, m_uiNumStretchPairs * sizeof(ClothConstraint), 0);
             for (unsigned int i = 0; i < m_uiNumStretchPairs; i++)
             {
-                m_pStretchPairs[i].i0 = (unsigned short)pFile->Read32();
-                m_pStretchPairs[i].i1 = (unsigned short)pFile->Read32();
+                m_pStretchPairs[i].i0 = (unsigned short)child._pFile->Read32();
+                m_pStretchPairs[i].i1 = (unsigned short)child._pFile->Read32();
             }
-            m_uiNumBendPairs = pFile->Read32();
+            m_uiNumBendPairs = child._pFile->Read32();
             m_pBendPairs = (ClothConstraint*)RedAllocFromHeap(__RedCurrHeap, m_uiNumBendPairs * sizeof(ClothConstraint), 0);
             for (unsigned int i = 0; i < m_uiNumBendPairs; i++)
             {
-                m_pBendPairs[i].i0 = (unsigned short)pFile->Read32();
-                m_pBendPairs[i].i1 = (unsigned short)pFile->Read32();
+                m_pBendPairs[i].i0 = (unsigned short)child._pFile->Read32();
+                m_pBendPairs[i].i1 = (unsigned short)child._pFile->Read32();
             }
-            m_uiNumCrossPairs = pFile->Read32();
+            m_uiNumCrossPairs = child._pFile->Read32();
             m_pCrossPairs = (ClothConstraint*)RedAllocFromHeap(__RedCurrHeap, m_uiNumCrossPairs * sizeof(ClothConstraint), 0);
             for (unsigned int i = 0; i < m_uiNumCrossPairs; i++)
             {
-                m_pCrossPairs[i].i0 = (unsigned short)pFile->Read32();
-                m_pCrossPairs[i].i1 = (unsigned short)pFile->Read32();
+                m_pCrossPairs[i].i0 = (unsigned short)child._pFile->Read32();
+                m_pCrossPairs[i].i1 = (unsigned short)child._pFile->Read32();
             }
             break;
         }
@@ -224,36 +225,35 @@ void ClothData::_Read(PblFileChunk& chunk)
             break;
         case 0x4C4C4F43:
         {
-            m_uiNumCollisionVolumes = pFile->Read32();
+            m_uiNumCollisionVolumes = child._pFile->Read32();
             m_pCollisionVolumes = new ClothCollision[m_uiNumCollisionVolumes];
             for (unsigned int i = 0; i < m_uiNumCollisionVolumes; i++)
             {
                 char acParent[128];
                 child.ReadString(acParent, sizeof(acParent));
-                ClothCollision& coll = m_pCollisionVolumes[i];
-                coll.parent = PblTEMPHash(acParent);
-                coll.type = (ClothCollisionType)pFile->Read32();
-                coll.width = pFile->ReadFloat();
-                coll.height = pFile->ReadFloat();
-                coll.depth = pFile->ReadFloat();
-                float x = pFile->ReadFloat();
-                float y = pFile->ReadFloat();
-                float z = pFile->ReadFloat();
+                m_pCollisionVolumes[i].parent = PblTEMPHash(acParent);
+                m_pCollisionVolumes[i].type = (ClothCollisionType)child._pFile->Read32();
+                m_pCollisionVolumes[i].width = child._pFile->ReadFloat();
+                m_pCollisionVolumes[i].height = child._pFile->ReadFloat();
+                m_pCollisionVolumes[i].depth = child._pFile->ReadFloat();
+                float x = child._pFile->ReadFloat();
+                float y = child._pFile->ReadFloat();
+                float z = child._pFile->ReadFloat();
                 m_pCollisionVolumes[i].localMat.SetXAxis(x, y, z, 0.0f);
 
-                x = pFile->ReadFloat();
-                y = pFile->ReadFloat();
-                z = pFile->ReadFloat();
+                x = child._pFile->ReadFloat();
+                y = child._pFile->ReadFloat();
+                z = child._pFile->ReadFloat();
                 m_pCollisionVolumes[i].localMat.SetYAxis(x, y, z, 0.0f);
 
-                x = pFile->ReadFloat();
-                y = pFile->ReadFloat();
-                z = pFile->ReadFloat();
+                x = child._pFile->ReadFloat();
+                y = child._pFile->ReadFloat();
+                z = child._pFile->ReadFloat();
                 m_pCollisionVolumes[i].localMat.SetZAxis(x, y, z, 0.0f);
 
-                x = pFile->ReadFloat();
-                y = pFile->ReadFloat();
-                z = pFile->ReadFloat();
+                x = child._pFile->ReadFloat();
+                y = child._pFile->ReadFloat();
+                z = child._pFile->ReadFloat();
                 m_pCollisionVolumes[i].localMat.SetTranslation(x, y, z, 1.0f);
             }
             break;
@@ -272,22 +272,20 @@ EntityClothClass::EntityClothClass(unsigned int uHash)
         mNetIndex = -1;
     }
 
-    mModelHash = 0;
-    mWindDirection.x = 1.0f;
-    mWindDirection.y = 0.0f;
-    mWindDirection.z = 0.0f;
+    mWindDirection = gVectorUnitX;
     mWindSpeed = 10.0f;
     mDampening = 0.5f;
     mDrag = -2.0f;
     mParticleMass = 1.0f;
     mMaxAcceleration = 20.0f;
     mMaxVelocity = 10.0f;
-    mPriority = 0.0f;
     m_uiDoCrossConstraints = 1;
     m_uiDoBendConstraints = 1;
     m_uiDoStretchConstraints = 1;
     m_uiHardEdge = 0;
     m_uiTransparent = 0;
+    mModelHash = 0;
+    mPriority = 0.0f;
 }
 
 namespace ClothBE
@@ -393,7 +391,7 @@ bool ClothBank::Remove(EntityCloth* pCloth)
     return cloth_.FindRemove(pCloth);
 }
 
-EntityCloth* ClothBank::GetTop(float fPriority)
+inline EntityCloth* ClothBank::GetTop(float fPriority)
 {
     lowPriority_ = 1000000.0f;
     for (int i = 0; i < cloth_.GetSize(); i++)
@@ -492,8 +490,10 @@ void EntityClothClass::SetProperty(unsigned int uProperty, const char* pszValue)
         float fAngleY = 0.0f;
         sscanf(pszValue, "%f %f", &fAngleZ, &fAngleY);
         fAngleZ *= 0.017453292f;
-        mWindDirection = RotateY(PblVector3(-sinf(fAngleZ), cosf(fAngleZ), 0.0f),
-                                 fAngleY * 0.017453292f);
+        const PblVector3 vWind(-sinf(fAngleZ), cosf(fAngleZ), 0.0f);
+        float fSin, fCos;
+        PblMath::SinCos(&fSin, &fCos, fAngleY * 0.017453292f);
+        mWindDirection = PblVector3(fCos * vWind.x - fSin * vWind.z, vWind.y, fSin * vWind.x + fCos * vWind.z);
         break;
     }
     case 0x4E994B61:
@@ -696,16 +696,16 @@ void ClothData::PlatformBindInit(EntityClothClass* pClass)
 
 // FUNCTION: SWBF2 0x0045a260
 EntityCloth::EntityCloth(EntityClothClass* pClass, const EntityDesc& desc)
-    : bank_(0),
-      m_pPos(0),
-      m_pOldPos(0),
-      m_pNormal(0),
-      m_pAcceleration(0),
-      m_pFixedPos(0),
-      priority_(0.0f),
-      mClass(pClass)
+    : mClass(pClass)
 {
+    m_pFixedPos = 0;
+    m_pAcceleration = 0;
+    m_pNormal = 0;
+    m_pOldPos = 0;
+    m_pPos = 0;
     mDesc = desc;
+    bank_ = 0;
+    priority_ = 0.0f;
     CreateData_();
 }
 
@@ -783,34 +783,31 @@ bool EntityCloth::Update(float fDeltaTime)
 // FUNCTION: SWBF2 0x0045a7c0
 void EntityCloth::SetupFixedPos()
 {
-    EntityCloth* pCloth = (EntityCloth*)this;
-    if (!pCloth->m_pPos)
+    if (!m_pPos)
     {
-        pCloth->DeactivateThread();
+        DeactivateThread();
         return;
     }
 
-    ClothData* pData = pCloth->mData;
-    if (!pData->m_pFixedPointsBones)
+    if (!mData->m_pFixedPointsBones)
     {
         return;
     }
 
-    const RedSkeleton* pSkeleton =
-        RedModel::_HashTable.Find(pCloth->mClass->mModelHash)->GetSkeleton();
-    const PblMatrix* pParent = pSkeleton->GetBoneMatrixByName(pData->m_uiParentHash);
+    const RedSkeleton* pSkeleton = RedModel::_HashTable.Find(mClass->mModelHash)->GetSkeleton();
+    const PblMatrix* pParent = pSkeleton->GetBoneMatrixByName(mData->m_uiParentHash);
 
-    for (unsigned int i = 0; i < pData->m_uiNumFixedPoints; ++i)
+    for (unsigned int i = 0; i < mData->m_uiNumFixedPoints; ++i)
     {
-        unsigned int uiBone = pData->m_pFixedPointsBones ? pData->m_pFixedPointsBones[i] : 0;
-        PblMatrix mBoneInv = *((RedSkeleton*)pSkeleton)->GetInvBoneMatrixByName(uiBone);
+        unsigned int uiBone = mData->m_pFixedPointsBones ? mData->m_pFixedPointsBones[i] : 0;
+        PblMatrix mBoneInv = *pSkeleton->GetInvBoneMatrixByName(uiBone);
         PblMatrix mLocal;
         PblMatrix mFull;
-        mLocal = pData->m_Transform * *pParent;
-        mFull = mLocal * mBoneInv;
+        D3DXMatrixMultiply(reinterpret_cast<D3DXMATRIX*>(&mLocal), reinterpret_cast<const D3DXMATRIX*>(&mData->m_Transform), reinterpret_cast<const D3DXMATRIX*>(pParent));
+        D3DXMatrixMultiply(reinterpret_cast<D3DXMATRIX*>(&mFull), reinterpret_cast<const D3DXMATRIX*>(&mLocal), reinterpret_cast<const D3DXMATRIX*>(&mBoneInv));
         PblVector3 vFixed;
-        D3DXVec3TransformCoord(reinterpret_cast<D3DXVECTOR3*>(&vFixed), reinterpret_cast<const D3DXVECTOR3*>(&pCloth->m_pPos[i]), reinterpret_cast<const D3DXMATRIX*>(&mFull));
-        pCloth->m_pFixedPos[i] = vFixed;
+        D3DXVec3TransformCoord(reinterpret_cast<D3DXVECTOR3*>(&vFixed), reinterpret_cast<const D3DXVECTOR3*>(&m_pPos[i]), reinterpret_cast<const D3DXMATRIX*>(&mFull));
+        m_pFixedPos[i] = vFixed;
     }
 }
 
@@ -825,59 +822,52 @@ void EntityCloth::SetWorldMatrix(const PblMatrix& mWorld, float fDeltaTime)
     pCloth->mOldVelocity = pCloth->mVelocity;
 
     const PblVector3& vPos = pCloth->m_worldMat.GetTranslation();
-    pCloth->mVelocity = PblVector3((vPos.x - pCloth->mOldPosition.x) * fInvDt,
-                                   (vPos.y - pCloth->mOldPosition.y) * fInvDt,
-                                   (vPos.z - pCloth->mOldPosition.z) * fInvDt);
+    pCloth->mVelocity = (vPos - pCloth->mOldPosition) * fInvDt;
     PblVector3& v = pCloth->mVelocity;
     float fLength2 = v.x * v.x + v.y * v.y + v.z * v.z;
     if (fLength2 > pClass->mMaxVelocity * pClass->mMaxVelocity)
     {
         float fScale = 1.0f / sqrtf(fLength2);
-        v = PblVector3(v.x * fScale * pClass->mMaxVelocity, v.y * fScale * pClass->mMaxVelocity,
-                       v.z * fScale * pClass->mMaxVelocity);
+        v = v * fScale * pClass->mMaxVelocity;
     }
     pCloth->mOldPosition = vPos;
 
-    pCloth->mAcceleration = PblVector3((v.x - pCloth->mOldVelocity.x) * fInvDt,
-                                       (v.y - pCloth->mOldVelocity.y) * fInvDt,
-                                       (v.z - pCloth->mOldVelocity.z) * fInvDt);
+    pCloth->mAcceleration = (v - pCloth->mOldVelocity) * fInvDt;
     PblVector3& a = pCloth->mAcceleration;
     fLength2 = a.x * a.x + a.y * a.y + a.z * a.z;
     if (fLength2 > pClass->mMaxAcceleration * pClass->mMaxAcceleration)
     {
         float fScale = 1.0f / sqrtf(fLength2);
-        a = PblVector3(a.x * fScale * pClass->mMaxAcceleration, a.y * fScale * pClass->mMaxAcceleration,
-                       a.z * fScale * pClass->mMaxAcceleration);
+        a = a * fScale * pClass->mMaxAcceleration;
     }
 }
 
 // FUNCTION: SWBF2 0x0045bd50
 void EntityCloth::ComputeNormals()
 {
-    EntityCloth* pCloth = (EntityCloth*)this;
-    ClothData* pData = pCloth->mData;
-    const unsigned short* pIndices = pData->m_pTriangleIndices;
-    memset(pCloth->m_pNormal, 0, pData->m_uiNumParticles * sizeof(PblVector3));
+    const unsigned short* pIndices = mData->m_pTriangleIndices;
+    memset(m_pNormal, 0, mData->m_uiNumParticles * sizeof(PblVector3));
 
+    const ClothData* pData = mData;
+    const PblVector3* pPos = m_pPos;
+    PblVector3* pN = m_pNormal;
     for (unsigned int t = 0; t < pData->m_uiNumTriangles; ++t, pIndices += 3)
     {
-        const PblVector3* pPos = pCloth->m_pPos;
         const unsigned int i0 = pIndices[0];
         const unsigned int i1 = pIndices[1];
         const unsigned int i2 = pIndices[2];
 
-        const float e1x = pPos[i1].x - pPos[i0].x;
         const float e1y = pPos[i1].y - pPos[i0].y;
         const float e1z = pPos[i1].z - pPos[i0].z;
-        const float e2x = pPos[i2].x - pPos[i0].x;
         const float e2y = pPos[i2].y - pPos[i0].y;
         const float e2z = pPos[i2].z - pPos[i0].z;
+        const float e2x = pPos[i2].x - pPos[i0].x;
+        const float e1x = pPos[i1].x - pPos[i0].x;
 
         const float nx = e1y * e2z - e1z * e2y;
         const float ny = e1z * e2x - e2z * e1x;
         const float nz = e2y * e1x - e1y * e2x;
 
-        PblVector3* pN = pCloth->m_pNormal;
         pN[i0].x += nx;
         pN[i0].y += ny;
         pN[i0].z += nz;
@@ -889,11 +879,11 @@ void EntityCloth::ComputeNormals()
         pN[i2].z += nz;
     }
 
-    for (unsigned int i = 0; i < pData->m_uiNumParticles; ++i)
+    for (unsigned int i = 0; i < mData->m_uiNumParticles; ++i)
     {
         PblVector3 vNormal;
-        D3DXVec3Normalize(reinterpret_cast<D3DXVECTOR3*>(&vNormal), reinterpret_cast<const D3DXVECTOR3*>(&pCloth->m_pNormal[i]));
-        pCloth->m_pNormal[i] = vNormal;
+        D3DXVec3Normalize(&vNormal, &m_pNormal[i]);
+        m_pNormal[i] = vNormal;
     }
 }
 
@@ -963,7 +953,7 @@ void EntityCloth::EnforceSphereCollision(const PblMatrix& mMatrix, float fRadius
         float sqDist = SquaredLength(dir);
         if (sqDist < fRadius * fRadius)
         {
-            m_pPos[i] = mMatrix.GetTranslation() + dir * (fRadius / PblMath::Sqrt(sqDist));
+            m_pPos[i] = mMatrix.GetTranslation() + dir * (fRadius / (float)sqrt((double)sqDist));
         }
     }
 }
@@ -971,27 +961,22 @@ void EntityCloth::EnforceSphereCollision(const PblMatrix& mMatrix, float fRadius
 // FUNCTION: SWBF2 0x0045b4e0
 void EntityCloth::EnforceBoxCollision(const PblMatrix& mMatrix, float fWidth, float fHeight, float fDepth)
 {
-    EntityCloth* pCloth = (EntityCloth*)this;
-    ClothData* pData = pCloth->mData;
-    for (unsigned int i = pData->m_uiNumFixedPoints; i < pData->m_uiNumParticles; ++i)
+    for (unsigned int i = mData->m_uiNumFixedPoints; i < mData->m_uiNumParticles; ++i)
     {
-        PblVector3& vPos = pCloth->m_pPos[i];
-        const float dx = vPos.x - mMatrix.m[3][0];
-        const float dy = vPos.y - mMatrix.m[3][1];
-        const float dz = vPos.z - mMatrix.m[3][2];
-        const float d0 = mMatrix.m[0][0] * dx + mMatrix.m[0][1] * dy + mMatrix.m[0][2] * dz;
+        const PblVector3 vDelta = m_pPos[i] - mMatrix.GetTranslation();
+        const float d0 = DotProduct(mMatrix.GetXAxis(), vDelta);
         const float p0 = fWidth - fabsf(d0);
         if (p0 <= 0.0f)
         {
             continue;
         }
-        const float d1 = mMatrix.m[1][0] * dx + mMatrix.m[1][1] * dy + mMatrix.m[1][2] * dz;
+        const float d1 = DotProduct(mMatrix.GetYAxis(), vDelta);
         const float p1 = fHeight - fabsf(d1);
         if (p1 <= 0.0f)
         {
             continue;
         }
-        const float d2 = mMatrix.m[2][0] * dx + mMatrix.m[2][1] * dy + mMatrix.m[2][2] * dz;
+        const float d2 = DotProduct(mMatrix.GetZAxis(), vDelta);
         const float p2 = fDepth - fabsf(d2);
         if (p2 <= 0.0f)
         {
@@ -1001,20 +986,20 @@ void EntityCloth::EnforceBoxCollision(const PblMatrix& mMatrix, float fWidth, fl
         {
             if (p2 > p0)
             {
-                vPos += mMatrix.GetXAxis() * (PblMath::Sign(d0) * p0);
+                m_pPos[i] += mMatrix.GetXAxis() * (PblMath::Sign(d0) * p0);
             }
             else
             {
-                vPos += mMatrix.GetZAxis() * (PblMath::Sign(d2) * p2);
+                m_pPos[i] += mMatrix.GetZAxis() * (PblMath::Sign(d2) * p2);
             }
         }
         else if (p2 > p1)
         {
-            vPos += mMatrix.GetYAxis() * (PblMath::Sign(d1) * p1);
+            m_pPos[i] += mMatrix.GetYAxis() * (PblMath::Sign(d1) * p1);
         }
         else
         {
-            vPos += mMatrix.GetZAxis() * (PblMath::Sign(d2) * p2);
+            m_pPos[i] += mMatrix.GetZAxis() * (PblMath::Sign(d2) * p2);
         }
     }
 }
@@ -1051,20 +1036,17 @@ void EntityCloth::Render(const PblMatrix& mMatrix, const RedPose* pPose, unsigne
         mRenderDt += fStep;
         if (fStep > 0.0f)
         {
+            const PblMatrix& mBase = mData->m_Transform;
             PblMatrix mLocal;
             if (pParent)
             {
-                PblMatrix mTemp;
-                D3DXMatrixMultiply(reinterpret_cast<D3DXMATRIX*>(&mTemp), reinterpret_cast<const D3DXMATRIX*>(&mData->m_Transform), reinterpret_cast<const D3DXMATRIX*>(pParent));
-                mLocal = mTemp;
+                mLocal = mBase * *pParent;
             }
             else
             {
-                mLocal = mData->m_Transform;
+                mLocal = mBase;
             }
-            PblMatrix mWorld;
-            D3DXMatrixMultiply(reinterpret_cast<D3DXMATRIX*>(&mWorld), reinterpret_cast<const D3DXMATRIX*>(&mLocal), reinterpret_cast<const D3DXMATRIX*>(&mMatrix));
-            SetWorldMatrix(mWorld, fStep);
+            SetWorldMatrix(mLocal * mMatrix, fStep);
             InternalUpdate(mLocal, pPose, uArg, fStep);
         }
     }
@@ -1072,10 +1054,9 @@ void EntityCloth::Render(const PblMatrix& mMatrix, const RedPose* pPose, unsigne
     const float fRadius = mData->m_fBoundingRadius;
     const PblSphere& modelSphere = RedModel::_HashTable.Find(mData->m_uiModelHash)->_BoundingSphere;
     PblSphere sphere;
-    sphere.x = modelSphere.x + m_worldMat.m[3][0];
-    sphere.y = modelSphere.y + m_worldMat.m[3][1];
-    sphere.z = modelSphere.z + m_worldMat.m[3][2];
-    sphere.w = fRadius;
+    sphere.SetCenter(PblVector3(modelSphere.x + m_worldMat.m[3][0], modelSphere.y + m_worldMat.m[3][1],
+                                modelSphere.z + m_worldMat.m[3][2]));
+    sphere.SetRadius(fRadius);
 
     const RedLightingState* pLightingState = 0;
     if ((int)uiFlags >= 0)
@@ -1123,9 +1104,7 @@ void EntityCloth::Verlet(float fDeltaTime)
         PblVector3& vOld = m_pOldPos[i];
         const PblVector3& vAccel = m_pAcceleration[i];
         const PblVector3 vTemp = vPos;
-        vPos.x += (vPos.x - vOld.x) + vAccel.x * fDt2;
-        vPos.y += (vPos.y - vOld.y) + vAccel.y * fDt2;
-        vPos.z += (vPos.z - vOld.z) + vAccel.z * fDt2;
+        vPos += (vPos - vOld) + vAccel * fDt2;
         vOld = vTemp;
     }
 }
@@ -1145,9 +1124,7 @@ void EntityCloth::AccumulateForces(float fDeltaTime)
 
     PblVector3 vWind;
     D3DXVec3TransformNormal(reinterpret_cast<D3DXVECTOR3*>(&vWind), reinterpret_cast<const D3DXVECTOR3*>(&mClass->mWindDirection), reinterpret_cast<const D3DXMATRIX*>(&mInverse));
-    const float fDampening = mClass->mDampening;
-    const PblVector3 vWorldGravity(sGravity.x - mAcceleration.x * fDampening, sGravity.y - mAcceleration.y * fDampening,
-                                   sGravity.z - mAcceleration.z * fDampening);
+    const PblVector3 vWorldGravity = sGravity - mAcceleration * mClass->mDampening;
     PblVector3 vGravity;
     D3DXVec3TransformNormal(reinterpret_cast<D3DXVECTOR3*>(&vGravity), reinterpret_cast<const D3DXVECTOR3*>(&vWorldGravity), reinterpret_cast<const D3DXMATRIX*>(&mInverse));
     PblVector3 vVelocity;
@@ -1157,14 +1134,10 @@ void EntityCloth::AccumulateForces(float fDeltaTime)
     const float fInvMass = 1.0f / mClass->mParticleMass;
     for (unsigned int i = mData->m_uiNumFixedPoints; i < mData->m_uiNumParticles; ++i)
     {
-        const float fDragX = (vVelocity.x + (m_pPos[i].x - m_pOldPos[i].x) * fInvDt) * fDrag;
-        const float fDragY = (vVelocity.y + (m_pPos[i].y - m_pOldPos[i].y) * fInvDt) * fDrag;
-        const float fDragZ = (vVelocity.z + (m_pPos[i].z - m_pOldPos[i].z) * fInvDt) * fDrag;
+        const PblVector3 vDragForce = (vVelocity + (m_pPos[i] - m_pOldPos[i]) * fInvDt) * fDrag;
         const PblVector3& vNormal = m_pNormal[i];
-        const float fWindForce = (vNormal.x * vWind.x + vNormal.y * vWind.y + vNormal.z * vWind.z) * fWind;
-        m_pAcceleration[i].x = vGravity.x + (vNormal.x * fWindForce + fDragX) * fInvMass;
-        m_pAcceleration[i].y = vGravity.y + (vNormal.y * fWindForce + fDragY) * fInvMass;
-        m_pAcceleration[i].z = vGravity.z + (vNormal.z * fWindForce + fDragZ) * fInvMass;
+        const float fWindForce = DotProduct(vNormal, vWind) * fWind;
+        m_pAcceleration[i] = vGravity + (vNormal * fWindForce + vDragForce) * fInvMass;
     }
 }
 
@@ -1235,11 +1208,7 @@ void EntityCloth::RestoreFixedPoints(const RedPose* pPose)
         mBone.Reset();
         if (pBone)
         {
-            PblMatrix mTemp;
-            mTemp = *pBone * mParentInverse;
-            PblMatrix mFull;
-            mFull = mTemp * mTransformInverse;
-            mBone = mFull;
+            mBone = *pBone * mParentInverse * mTransformInverse;
         }
         PblVector3 vPos;
         D3DXVec3TransformCoord(reinterpret_cast<D3DXVECTOR3*>(&vPos), reinterpret_cast<const D3DXVECTOR3*>(&m_pFixedPos[i]), reinterpret_cast<const D3DXMATRIX*>(&mBone));
@@ -1372,7 +1341,10 @@ void EntityCloth::EnforceCylinderCollision(const PblMatrix& mMatrix, float fHeig
 // FUNCTION: SWBF2 0x00458df0
 void EntityCloth::ClearSpecialAllocator()
 {
-    delete ClothBE::gMultiAllocator_;
+    if (ClothBE::gMultiAllocator_)
+    {
+        delete ClothBE::gMultiAllocator_;
+    }
     ClothBE::gMultiAllocator_ = 0;
 
     for (ClothBE::ClothDataT::Itor it = ClothBE::clothData_.Begin();
@@ -1433,24 +1405,24 @@ void ClothData::PostReadInit()
 {
     for (unsigned int i = 0; i < m_uiNumStretchPairs; ++i)
     {
-        const PblVector3& v0 = m_pPos[m_pStretchPairs[i].i0];
         const PblVector3& v1 = m_pPos[m_pStretchPairs[i].i1];
+        const PblVector3& v0 = m_pPos[m_pStretchPairs[i].i0];
         PblVector3 vDelta(v0.x - v1.x, v0.y - v1.y, v0.z - v1.z);
-        m_pStretchPairs[i].restLength = sqrtf(vDelta.x * vDelta.x + vDelta.y * vDelta.y + vDelta.z * vDelta.z);
+        m_pStretchPairs[i].restLength = PblMath::Sqrt(vDelta.x * vDelta.x + vDelta.y * vDelta.y + vDelta.z * vDelta.z);
     }
     for (unsigned int i = 0; i < m_uiNumBendPairs; ++i)
     {
-        const PblVector3& v0 = m_pPos[m_pBendPairs[i].i0];
         const PblVector3& v1 = m_pPos[m_pBendPairs[i].i1];
+        const PblVector3& v0 = m_pPos[m_pBendPairs[i].i0];
         PblVector3 vDelta(v0.x - v1.x, v0.y - v1.y, v0.z - v1.z);
-        m_pBendPairs[i].restLength = sqrtf(vDelta.x * vDelta.x + vDelta.y * vDelta.y + vDelta.z * vDelta.z);
+        m_pBendPairs[i].restLength = PblMath::Sqrt(vDelta.x * vDelta.x + vDelta.y * vDelta.y + vDelta.z * vDelta.z);
     }
     for (unsigned int i = 0; i < m_uiNumCrossPairs; ++i)
     {
-        const PblVector3& v0 = m_pPos[m_pCrossPairs[i].i0];
         const PblVector3& v1 = m_pPos[m_pCrossPairs[i].i1];
+        const PblVector3& v0 = m_pPos[m_pCrossPairs[i].i0];
         PblVector3 vDelta(v0.x - v1.x, v0.y - v1.y, v0.z - v1.z);
-        m_pCrossPairs[i].restLength = sqrtf(vDelta.x * vDelta.x + vDelta.y * vDelta.y + vDelta.z * vDelta.z);
+        m_pCrossPairs[i].restLength = PblMath::Sqrt(vDelta.x * vDelta.x + vDelta.y * vDelta.y + vDelta.z * vDelta.z);
     }
 
     PblBox box;
@@ -1459,8 +1431,8 @@ void ClothData::PostReadInit()
         box.AddPoint(m_pPos[i]);
     }
     PblVector3 vDiagonal(box._vMax.x - box._vMin.x, box._vMax.y - box._vMin.y, box._vMax.z - box._vMin.z);
-    float fRadius = sqrtf(vDiagonal.x * vDiagonal.x + vDiagonal.y * vDiagonal.y + vDiagonal.z * vDiagonal.z) * 0.5f;
-    m_fBoundingRadius = 2.0f * fRadius;
+    float fRadius = PblMath::Sqrt(vDiagonal.x * vDiagonal.x + vDiagonal.y * vDiagonal.y + vDiagonal.z * vDiagonal.z) * 0.5f;
+    m_fBoundingRadius = fRadius + fRadius;
 }
 
 // TEMPLATE: SWBF2 0x0045c310

@@ -174,7 +174,7 @@ void LensFlareEffect::PlatformInit()
                                  D3DPOOL_DEFAULT, 0);
     s_intensityTex = new RedTexture(16, 16, D3DFMT_A8R8G8B8, 1, D3DUSAGE_RENDERTARGET,
                                     D3DPOOL_DEFAULT, 0);
-    s_pClearShader = pcRedShader::Create(PblHash("Clear"), 3, 0, 0, 0x80000,
+    s_pClearShader = pcRedShader::Create(0x5c6e1222, 3, 0, 0, 0x80000,
                                          RedColor::WHITE, RedColor::BLACK, 32.0f);
 
     if (RedRenderer::pcGetGeometryMode() == GEOMETRYMODE_UNCOMPRESSED)
@@ -220,12 +220,9 @@ void LensFlareEffect::PlatformInit()
         {
             for (int j = 0; j < 16; j++)
             {
-                v[0] = CompressedPos_Encode((float)i, CompressedPos::s_vMin.x,
-                                            CompressedPos::s_vScaleInv.x);
-                v[1] = CompressedPos_Encode((float)j, CompressedPos::s_vMin.y,
-                                            CompressedPos::s_vScaleInv.y);
-                v[2] = CompressedPos_Encode(0.0f, CompressedPos::s_vMin.z,
-                                            CompressedPos::s_vScaleInv.z);
+                v[0] = (short)(((float)i - CompressedPos::s_vMin.x) * CompressedPos::s_vScaleInv.x - 32767.5f);
+                v[1] = (short)(((float)j - CompressedPos::s_vMin.y) * CompressedPos::s_vScaleInv.y - 32767.5f);
+                v[2] = (short)((0.0f - CompressedPos::s_vMin.z) * CompressedPos::s_vScaleInv.z - 32767.5f);
                 v += 4;
             }
         }
@@ -285,13 +282,13 @@ void LensFlareEffect::Render(int value)
     {
         return;
     }
-    if (RedRenderer::pcGetGeometryMode() != GEOMETRYMODE_UNCOMPRESSED)
+    if (RedRenderer::pcGetGeometryMode() == GEOMETRYMODE_UNCOMPRESSED)
     {
-        _List.Render<FlareCompressedVertex, 37506>();
+        _List.Render<FlareVertex, 642>();
     }
     else
     {
-        _List.Render<FlareVertex, 642>();
+        _List.Render<FlareCompressedVertex, 37506>();
     }
 }
 
@@ -415,8 +412,8 @@ void LensFlare::Emit<FlareCompressedVertex>(FlareCompressedVertex*& pVertices,
     pVertices[13] = pVertices[12];
     pVertices += 14;
 
-    RedColor half(_color, _color.a >> 1);
     RedColor clear(_color, 0);
+    RedColor half(_color, _color.a >> 1);
     EmitRing(pVertices, pos, angle, 0.0f, _fSize, _fSize * 4.0f,
              _color, half, clear, 12, fU, fV);
 }

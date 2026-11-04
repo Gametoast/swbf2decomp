@@ -70,8 +70,12 @@ SkyObjectManager::SkyObjectClass::SkyObjectClass(PblConfig& config)
     mHeightVariance = 30.0f;
     mDistance = 300.0f;
     mInDirectionFactor = 3.0f;
-    mMidPos = PblVector3(0, 0, 0);
-    mAcceleration = PblVector3(0, 0, 0);
+    mMidPos.x = 0.0f;
+    mMidPos.y = 0.0f;
+    mMidPos.z = 0.0f;
+    mAcceleration.x = 0.0f;
+    mAcceleration.y = 0.0f;
+    mAcceleration.z = 0.0f;
     mMaxLifeTime = 1000.0f;
     mModel = 0;
 
@@ -115,14 +119,14 @@ SkyObjectManager::SkyObjectClass::SkyObjectClass(PblConfig& config)
         }
     }
 
-    if (mModel)
-    {
-        mObjects = new SkyObject[mNumObjects];
-    }
-    else
+    if (!mModel)
     {
         mNumObjects = 0;
         mObjects = 0;
+    }
+    else
+    {
+        mObjects = new SkyObject[mNumObjects];
     }
 
     float fMinDist = mDistance + 10.0f;
@@ -148,17 +152,16 @@ bool SkyObjectManager::SkyObjectClass::Update(float fDeltaTime)
 {
     for (int i = 0; i < mNumObjects; i++)
     {
-        SkyObject& obj = mObjects[i];
-        if (obj.mAlpha >= 0.0f)
+        if (mObjects[i].mAlpha >= 0.0f)
         {
-            float fDX = obj.mMatrix.m[3][0] - mMidPos.x;
-            float fDZ = obj.mMatrix.m[3][2] - mMidPos.z;
-            if (fDX * fDX + fDZ * fDZ > mMaxDist * mMaxDist || obj.mLifeTime > mMaxLifeTime)
+            float fDZ = mObjects[i].mMatrix.m[3][2] - mMidPos.z;
+            float fDX = mObjects[i].mMatrix.m[3][0] - mMidPos.x;
+            if (fDX * fDX + fDZ * fDZ > mMaxDist * mMaxDist || mObjects[i].mLifeTime > mMaxLifeTime)
             {
-                obj.mAlpha = -1.0f;
+                mObjects[i].mAlpha = -1.0f;
             }
         }
-        if (!obj.Update(fDeltaTime))
+        if (!mObjects[i].Update(fDeltaTime))
         {
             Spawn(i);
         }
@@ -194,7 +197,7 @@ void SkyObjectManager::SkyObjectClass::Render(int uiFlags)
 bool SkyObjectManager::SkyObjectClass::SkyObject::Update(float fDeltaTime)
 {
     float fOldAlpha = mAlpha;
-    mLifeTime += fDeltaTime;
+    mLifeTime = fDeltaTime + mLifeTime;
     float fAlpha = fDeltaTime * 0.25f + fOldAlpha;
     mAlpha = (fAlpha < 1.0f) ? fAlpha : 1.0f;
     if (mAlpha >= 0.0f && fOldAlpha < 0.0f)
@@ -207,9 +210,7 @@ bool SkyObjectManager::SkyObjectClass::SkyObject::Update(float fDeltaTime)
     float fX = fDeltaTime * mVelocity.x;
     float fY = mVelocity.y * fDeltaTime;
     float fZ = mVelocity.z * fDeltaTime;
-    mMatrix.m[3][0] = mMatrix.m[3][0] + mMatrix.m[0][0] * fX + mMatrix.m[1][0] * fY + mMatrix.m[2][0] * fZ;
-    mMatrix.m[3][1] = mMatrix.m[3][1] + mMatrix.m[0][1] * fX + mMatrix.m[1][1] * fY + mMatrix.m[2][1] * fZ;
-    mMatrix.m[3][2] = mMatrix.m[3][2] + mMatrix.m[0][2] * fX + mMatrix.m[1][2] * fY + mMatrix.m[2][2] * fZ;
+    *(PblVector3*)&mMatrix.m[3][0] = mMatrix.GetTranslation() + mMatrix.GetXAxis() * fX + mMatrix.GetYAxis() * fY + mMatrix.GetZAxis() * fZ;
     mMatrix.m[3][3] = 1.0f;
     return true;
 }
@@ -217,39 +218,39 @@ bool SkyObjectManager::SkyObjectClass::SkyObject::Update(float fDeltaTime)
 // FUNCTION: SWBF2 0x00639440
 void SkyObjectManager::SkyObjectClass::Spawn(int i)
 {
-    PblRandom& rand = PblRandom::_Global;
-    SkyObject& obj = mObjects[i];
-    obj.mAlpha = 0.0f;
+    mObjects[i].mAlpha = 0.0f;
 
     PblVector3 vDir;
+    vDir.y = 0.0f;
     do
     {
-        vDir = PblVector3(rand.GetFloat() - 0.5f, 0.0f, rand.GetFloat() - 0.5f);
+        vDir.z = PblRandom::_Global.GetFloat() - 0.5f;
+        vDir.x = PblRandom::_Global.GetFloat() - 0.5f;
     } while (vDir.x == 0.0f && vDir.z == 0.0f);
-    PblVector3 vNorm;
-    vDir = *reinterpret_cast<PblVector3*>(D3DXVec3Normalize(reinterpret_cast<D3DXVECTOR3*>(&vNorm), reinterpret_cast<const D3DXVECTOR3*>(&vDir)));
+    PblVector3 vNorm = Normalize(vDir);
+    vDir = vNorm;
 
     PblVector3 vHeading(vDir.z - vDir.y * 0.0f, vDir.x * 0.0f - vDir.z * 0.0f, vDir.y * 0.0f - vDir.x);
-    float fHeight = rand.GetFloat() * mHeightVariance + mHeight;
+    float fHeight = PblRandom::_Global.GetFloat() * mHeightVariance + mHeight;
     PblVector3 vPos(mMidPos.x + mDistance * vDir.x, mMidPos.y + fHeight, mMidPos.z + mDistance * vDir.z);
-    if (rand.GetFloat() > 0.5f)
+    if (PblRandom::_Global.GetFloat() > 0.5f)
     {
         vHeading = PblVector3(-vHeading.x, -vHeading.y, -vHeading.z);
     }
     if (mInDirectionFactor > 0.0f)
     {
-        float fIn = rand.GetFloat() * mInDirectionFactor * 0.5f + mInDirectionFactor * 0.5f;
+        float fIn = PblRandom::_Global.GetFloat() * mInDirectionFactor * 0.5f + mInDirectionFactor * 0.5f;
         vHeading.x += -vNorm.x * fIn;
         vHeading.y += -vNorm.y * fIn;
         vHeading.z += -vNorm.z * fIn;
     }
-    PblVector3 vNorm2;
-    vDir = *reinterpret_cast<PblVector3*>(D3DXVec3Normalize(reinterpret_cast<D3DXVECTOR3*>(&vNorm2), reinterpret_cast<const D3DXVECTOR3*>(&vDir)));
+    PblVector3 vNorm2 = Normalize(vDir);
+    vDir = vNorm2;
 
-    obj.mMatrix = DirectionMatrix(vHeading, PblVector3(0.0f, 1.0f, 0.0f), vPos);
-    obj.mVelocity = PblVector3(rand.GetFloat() * mVelocityVarianceX + mVelocityX,
-                               rand.GetFloat() * mVelocityVarianceY + mVelocityY,
-                               rand.GetFloat() * mVelocityVarianceZ + mVelocityZ);
-    obj.mAcceleration = mAcceleration;
-    obj.mLifeTime = (rand.GetFloat() * 0.2f + 0.8f) * mMaxLifeTime;
+    mObjects[i].mMatrix = DirectionMatrix(vHeading, PblVector3(0.0f, 1.0f, 0.0f), vPos);
+    mObjects[i].mVelocity = PblVector3(PblRandom::_Global.GetFloat() * mVelocityVarianceX + mVelocityX,
+                               PblRandom::_Global.GetFloat() * mVelocityVarianceY + mVelocityY,
+                               PblRandom::_Global.GetFloat() * mVelocityVarianceZ + mVelocityZ);
+    mObjects[i].mAcceleration = mAcceleration;
+    mObjects[i].mLifeTime = (PblRandom::_Global.GetFloat() * 0.2f + 0.8f) * mMaxLifeTime;
 }
