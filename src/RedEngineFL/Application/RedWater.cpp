@@ -1178,11 +1178,9 @@ bool RedWater::Update(float fElapsed)
 // FUNCTION: SWBF2 0x006d0ba0
 bool RedWater::WaterExists(int x, int z)
 {
-    unsigned char* pRow = m_waterMap + z * (m_waterMapSize / m_patchesPerCell);
-    unsigned char* pCell = pRow + x / m_patchesPerCell;
     if (x & 1)
     {
-        return (*pCell & 0x0f) != 0;
+        return (m_waterMap[z * (m_waterMapSize / m_patchesPerCell) + x / m_patchesPerCell] & 0x0f) != 0;
     }
-    return (*pCell & 0xf0) != 0;
+    return (m_waterMap[z * (m_waterMapSize / m_patchesPerCell) + x / m_patchesPerCell] & 0xf0) != 0;
 }

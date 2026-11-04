@@ -6167,40 +6167,32 @@ void dx::StateManager_DX::FlushState()
         case 9:
         {
             m_pD3DDev->SetTransform((D3DTRANSFORMSTATETYPE)pState->m_dwValue0,
-                                    (const D3DMATRIX*)m_CurrentState.m_Matrices[pState->m_dwValue0]);
-            const D3DMATRIX matrix = *(const D3DMATRIX*)m_CurrentState.m_Matrices[pState->m_dwValue0];
-            memcpy(m_ChipState.m_Matrices[pState->m_dwValue0], &matrix, sizeof(D3DMATRIX));
+                                    &m_CurrentState.m_Matrices[pState->m_dwValue0]);
+            const D3DMATRIX matrix = m_CurrentState.m_Matrices[pState->m_dwValue0];
+            memcpy(&m_ChipState.m_Matrices[pState->m_dwValue0], &matrix, sizeof(D3DMATRIX));
             break;
         }
         case 10:
             if (!m_bForce)
             {
-                const float* pChip = m_ChipState.m_VertexShaderConstants[pState->m_dwValue0];
-                if (pChip[0] == m_CurrentState.m_VertexShaderConstants[pState->m_dwValue0][0]
-                    && pChip[1] == m_CurrentState.m_VertexShaderConstants[pState->m_dwValue0][1]
-                    && pChip[2] == m_CurrentState.m_VertexShaderConstants[pState->m_dwValue0][2]
-                    && pChip[3] == m_CurrentState.m_VertexShaderConstants[pState->m_dwValue0][3])
+                if (m_ChipState.m_VertexShaderConstants[pState->m_dwValue0] == m_CurrentState.m_VertexShaderConstants[pState->m_dwValue0])
                 {
                     break;
                 }
             }
             m_pD3DDev->SetVertexShaderConstantF(pState->m_dwValue0, m_CurrentState.m_VertexShaderConstants[pState->m_dwValue0], 1);
-            memcpy(m_ChipState.m_VertexShaderConstants[pState->m_dwValue0], m_CurrentState.m_VertexShaderConstants[pState->m_dwValue0], 16);
+            m_ChipState.m_VertexShaderConstants[pState->m_dwValue0] = m_CurrentState.m_VertexShaderConstants[pState->m_dwValue0];
             break;
         case 11:
             if (!m_bForce)
             {
-                const float* pChip = m_ChipState.m_PixelShaderConstants[pState->m_dwValue0];
-                if (pChip[0] == m_CurrentState.m_PixelShaderConstants[pState->m_dwValue0][0]
-                    && pChip[1] == m_CurrentState.m_PixelShaderConstants[pState->m_dwValue0][1]
-                    && pChip[2] == m_CurrentState.m_PixelShaderConstants[pState->m_dwValue0][2]
-                    && pChip[3] == m_CurrentState.m_PixelShaderConstants[pState->m_dwValue0][3])
+                if (m_ChipState.m_PixelShaderConstants[pState->m_dwValue0] == m_CurrentState.m_PixelShaderConstants[pState->m_dwValue0])
                 {
                     break;
                 }
             }
             m_pD3DDev->SetPixelShaderConstantF(pState->m_dwValue0, m_CurrentState.m_PixelShaderConstants[pState->m_dwValue0], 1);
-            memcpy(m_ChipState.m_PixelShaderConstants[pState->m_dwValue0], m_CurrentState.m_PixelShaderConstants[pState->m_dwValue0], 16);
+            m_ChipState.m_PixelShaderConstants[pState->m_dwValue0] = m_CurrentState.m_PixelShaderConstants[pState->m_dwValue0];
             break;
         case 12:
             if (m_bForce

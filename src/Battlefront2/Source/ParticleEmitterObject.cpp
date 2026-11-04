@@ -6,6 +6,7 @@
 #include "Particle.h"
 #include "ParticleSystem.h"
 #include "Battlefront2Lod.h"
+#include "PebbleFL/Common/PblMath.h"
 
 #include <math.h>
 
@@ -305,8 +306,7 @@ bool ParticleEmitterObject::Update(float fDeltaTime)
             mMidSize.y = (float)fabs((double)(mMidPos.y - vMin.y));
             mMidSize.z = (float)fabs((double)(mMidPos.z - vMin.z));
             SetRenderPos(mMidPos);
-            float fRadius = mMidSize.x > mMidSize.y ? mMidSize.x : mMidSize.y;
-            fRadius = fRadius > mMidSize.z ? fRadius : mMidSize.z;
+            float fRadius = Max(Max(mMidSize.x, mMidSize.y), mMidSize.z);
             SetRenderRadius(mEmitterBoundingRadius + fRadius);
         }
     }

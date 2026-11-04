@@ -322,13 +322,13 @@ namespace RedScreenShot
 {
 
 // FUNCTION: SWBF2 0x006f3d40
-void TakeScreenShot()
+bool TakeScreenShot()
 {
     using namespace RedScreenShot;
     char acFileName[52];
     if (!GetScreenShotFileName(acFileName))
     {
-        return;
+        return false;
     }
 
     unsigned int uiWidth, uiHeight;
@@ -342,7 +342,7 @@ void TakeScreenShot()
     if (!GetPoissonDiscSamples(pSamples, samples_per_pixel, start, 0.08f, min, max))
     {
         delete[] pSamples;
-        return;
+        return false;
     }
 
     Accumulator<Pixel>* pAccums = new Accumulator<Pixel>[iNumTiles];
@@ -352,7 +352,7 @@ void TakeScreenShot()
         {
             delete[] pAccums;
             delete[] pSamples;
-            return;
+            return false;
         }
         pAccums[i].Clear(0, 12 * uiWidth * uiHeight);
     }
@@ -408,5 +408,6 @@ void TakeScreenShot()
     }
     delete[] pAccums;
     delete[] pSamples;
+    return true;
 }
 }

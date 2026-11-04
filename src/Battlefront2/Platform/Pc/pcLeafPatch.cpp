@@ -107,7 +107,7 @@ LeafPatchRenderable::~LeafPatchRenderable()
 }
 
 // FUNCTION: SWBF2 0x0041ba90
-void LeafPatchClass::Render(float fAlpha, const PblMatrix& matrix, unsigned int uiFlags,
+void LeafPatchClass::Render(const PblMatrix& matrix, float fAlpha, int, unsigned int uiFlags,
                             const RedColorValue& color) const
 {
     RedColor packed;
@@ -149,7 +149,7 @@ bool LeafPatchClass::RenderMaxDist(const PblMatrix& matrix, float& fDist,
     scaled.m[1][3] = 0.0f;
     PblVector3& vUp = scaled[1];
     vUp = PblVector3(vUp.x * mHeightScale, vUp.y * mHeightScale, vUp.z * mHeightScale);
-    Render(1.0f, scaled, uiFlags, color);
+    Render(scaled, 1.0f, 0, uiFlags, color);
     return true;
 }
 

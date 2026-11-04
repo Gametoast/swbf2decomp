@@ -348,8 +348,8 @@ void pcRedShaderDef::ReadPipeline(PblFileChunk& chunk, unsigned int)
 // FUNCTION: SWBF2 0x006ace30
 void pcRedShaderDef::ReadState(PblFileChunk& chunk)
 {
-    int iState = -1;
-    int iPass = -1;
+    unsigned int iState = -1;
+    unsigned int iPass = -1;
     while (chunk.HasMoreChildren())
     {
         PblFileChunk child = chunk.ReadNextChild();
@@ -363,8 +363,8 @@ void pcRedShaderDef::ReadState(PblFileChunk& chunk)
                 {
                 case 0x5f535650:
                 {
-                    const int iSlot = item._pFile->Read32();
-                    const int iProgram = item._pFile->Read32();
+                    const unsigned int iSlot = item._pFile->Read32();
+                    const unsigned int iProgram = item._pFile->Read32();
                     m_states[iState].pass[iPass].apVertexShaders[iSlot] = m_vertexShaderPool[iProgram];
                     break;
                 }

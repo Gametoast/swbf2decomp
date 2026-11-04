@@ -716,6 +716,8 @@ public:
 #include "RedEngineFL/Util/ext/heap.h"
 
 #include "RedEngineFL/Graphics/RedColor.h"
+#include "RedEngineFL/Graphics/RedMaterial.h"
+#include "PebbleFL/Common/PblVector.h"
 
 struct RenderItem;
 
@@ -897,7 +899,28 @@ struct pcRedVertexShaderConstantRegister
         component[3] = fW;
     }
 
-    float component[4];
+    void SetColor(const RedColorValue& color)
+    {
+        r = color.r;
+        g = color.g;
+        b = color.b;
+        a = color.a;
+    }
+
+    void SetVector(const PblVector4& vector)
+    {
+        x = vector.x;
+        y = vector.y;
+        z = vector.z;
+        w = vector.w;
+    }
+
+    union
+    {
+        float component[4];
+        struct { float x, y, z, w; };
+        struct { float r, g, b, a; };
+    };
 };
  
 

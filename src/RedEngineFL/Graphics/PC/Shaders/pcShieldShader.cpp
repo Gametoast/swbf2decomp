@@ -38,6 +38,7 @@ PblVector3 pcShieldShader::s_vLightDir;
 PblVector3 pcShieldShader::s_vLightX;
 PblVector3 pcShieldShader::s_vLightY;
 
+// GLOBAL: SWBF2 0x00965070
 static D3DMATERIAL9 s_d3dMat;
 
 // SYNTHETIC: SWBF2 0x00407fc0

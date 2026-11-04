@@ -11,6 +11,28 @@
 
 extern PblMatrix gMatrixIdentity;
 
+#pragma pack(push, 1)
+struct PosXYZW
+{
+    void SetPos(float fX, float fY, float fZ, float fW)
+    {
+        x = fX;
+        y = fY;
+        z = fZ;
+        w = fW;
+    }
+
+    float x, y, z, w;
+};
+#pragma pack(pop)
+
+struct MotionBlurVertex
+{
+    PosXYZW pos;
+    TexCoord uv0;
+    TexCoord uv1;
+};
+
 // GLOBAL: SWBF2 0x01f9ae54
 static pcClearShader* s_pClearShader;
 
@@ -50,7 +72,7 @@ void MotionBlurEffect::PlatformRender(unsigned int) const
 
     pcRedPrimitive* pPrimitive =
         pcRedPrimitive::Create(D3DPT_TRIANGLESTRIP, 0x403, 32, 4, 0, false);
-    PblVector4* pVerts = (PblVector4*)pPrimitive->BeginVertexData();
+    MotionBlurVertex* pVerts = (MotionBlurVertex*)pPrimitive->BeginVertexData();
     if (!pVerts)
     {
         return;
@@ -61,14 +83,18 @@ void MotionBlurEffect::PlatformRender(unsigned int) const
     float fMinX, fMinY, fMaxY, fMaxX;
     RedRenderer::pcGetViewportExtents(fMinX, fMinY, fMaxX, fMaxY);
 
-    pVerts[0].Set(fMinX, fMinY, 0.0f, 1.0f);
-    pVerts[1].Set(viewport.fOffsetX, viewport.fOffsetY, 0.0f, 0.0f);
-    pVerts[2].Set(fMinX, fMaxY, 0.0f, 1.0f);
-    pVerts[3].Set(viewport.fOffsetX, viewport.fHeight + viewport.fOffsetY, 0.0f, 1.0f);
-    pVerts[4].Set(fMaxX, fMinY, 0.0f, 1.0f);
-    pVerts[5].Set(viewport.fWidth + viewport.fOffsetX, viewport.fOffsetY, 1.0f, 0.0f);
-    pVerts[6].Set(fMaxX, fMaxY, 0.0f, 1.0f);
-    pVerts[7].Set(viewport.fWidth + viewport.fOffsetX, viewport.fHeight + viewport.fOffsetY, 1.0f, 1.0f);
+    pVerts[0].pos.SetPos(fMinX, fMinY, 0.0f, 1.0f);
+    pVerts[0].uv0.SetUV(viewport.fOffsetX, viewport.fOffsetY);
+    pVerts[0].uv1.SetUV(0.0f, 0.0f);
+    pVerts[1].pos.SetPos(fMinX, fMaxY, 0.0f, 1.0f);
+    pVerts[1].uv0.SetUV(viewport.fOffsetX, viewport.fHeight + viewport.fOffsetY);
+    pVerts[1].uv1.SetUV(0.0f, 1.0f);
+    pVerts[2].pos.SetPos(fMaxX, fMinY, 0.0f, 1.0f);
+    pVerts[2].uv0.SetUV(viewport.fWidth + viewport.fOffsetX, viewport.fOffsetY);
+    pVerts[2].uv1.SetUV(1.0f, 0.0f);
+    pVerts[3].pos.SetPos(fMaxX, fMaxY, 0.0f, 1.0f);
+    pVerts[3].uv0.SetUV(viewport.fWidth + viewport.fOffsetX, viewport.fHeight + viewport.fOffsetY);
+    pVerts[3].uv1.SetUV(1.0f, 1.0f);
     pPrimitive->EndVertexData();
 
     s_pClearShader->m_pTex = FLRenderer::pcGetPreviousFrameTexture();

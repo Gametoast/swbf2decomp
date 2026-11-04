@@ -862,35 +862,16 @@ void EntityCloth::ComputeNormals()
     const unsigned short* pIndices = mData->m_pTriangleIndices;
     memset(m_pNormal, 0, mData->m_uiNumParticles * sizeof(PblVector3));
 
-    const ClothData* pData = mData;
-    const PblVector3* pPos = m_pPos;
-    PblVector3* pN = m_pNormal;
-    for (unsigned int t = 0; t < pData->m_uiNumTriangles; ++t, pIndices += 3)
+    for (unsigned int i = 0; i < mData->m_uiNumTriangles; ++i, pIndices += 3)
     {
         const unsigned int i0 = pIndices[0];
         const unsigned int i1 = pIndices[1];
         const unsigned int i2 = pIndices[2];
-
-        const float e1y = pPos[i1].y - pPos[i0].y;
-        const float e1z = pPos[i1].z - pPos[i0].z;
-        const float e2y = pPos[i2].y - pPos[i0].y;
-        const float e2z = pPos[i2].z - pPos[i0].z;
-        const float e2x = pPos[i2].x - pPos[i0].x;
-        const float e1x = pPos[i1].x - pPos[i0].x;
-
-        const float nx = e1y * e2z - e1z * e2y;
-        const float ny = e1z * e2x - e2z * e1x;
-        const float nz = e2y * e1x - e1y * e2x;
-
-        pN[i0].x += nx;
-        pN[i0].y += ny;
-        pN[i0].z += nz;
-        pN[i1].x += nx;
-        pN[i1].y += ny;
-        pN[i1].z += nz;
-        pN[i2].x += nx;
-        pN[i2].y += ny;
-        pN[i2].z += nz;
+        PblVector3& p0 = m_pPos[i0];
+        PblVector3 n = CrossProduct(m_pPos[i1] - p0, m_pPos[i2] - p0);
+        m_pNormal[i0] += n;
+        m_pNormal[i1] += n;
+        m_pNormal[i2] += n;
     }
 
     for (unsigned int i = 0; i < mData->m_uiNumParticles; ++i)
@@ -1117,7 +1098,8 @@ void EntityCloth::Verlet(float fDeltaTime)
         PblVector3& vPos = m_pPos[i];
         const PblVector3 vTemp = vPos;
         PblVector3& vOld = m_pOldPos[i];
-        vPos += (vPos - vOld) + m_pAcceleration[i] * fDt2;
+        PblVector3& vAcceleration = m_pAcceleration[i];
+        vPos += (vPos - vOld) + fDt2 * vAcceleration;
         vOld = vTemp;
     }
 }
@@ -1236,8 +1218,8 @@ void EntityCloth::EnforceConstraint(ClothConstraint& constraint, float fRestitut
     const unsigned int i1 = constraint.i1;
     PblVector3& v0 = m_pPos[i0];
     PblVector3& v1 = m_pPos[i1];
-    const PblVector3 vDelta = v1 - v0;
-    const float fLength = PblMath::Sqrt(vDelta.x * vDelta.x + vDelta.y * vDelta.y + vDelta.z * vDelta.z);
+    PblVector3 vDelta = v1 - v0;
+    const float fLength = Length(vDelta);
     const float fDiff = (fLength - constraint.restLength) / fLength;
 
     const unsigned int uiNumFixed = mData->m_uiNumFixedPoints;
@@ -1251,9 +1233,9 @@ void EntityCloth::EnforceConstraint(ClothConstraint& constraint, float fRestitut
     }
     else
     {
-        const PblVector3 vHalf = vDelta * 0.5f;
-        v0 += vHalf * fDiff;
-        v1 -= vHalf * fDiff;
+        vDelta = vDelta * 0.5f;
+        v0 += vDelta * fDiff;
+        v1 -= vDelta * fDiff;
     }
 }
 
@@ -1411,21 +1393,21 @@ void ClothData::PostReadInit()
         const PblVector3& v1 = m_pPos[m_pStretchPairs[i].i1];
         const PblVector3& v0 = m_pPos[m_pStretchPairs[i].i0];
         PblVector3 vDelta(v0.x - v1.x, v0.y - v1.y, v0.z - v1.z);
-        m_pStretchPairs[i].restLength = PblMath::Sqrt(vDelta.x * vDelta.x + vDelta.y * vDelta.y + vDelta.z * vDelta.z);
+        m_pStretchPairs[i].restLength = Length(vDelta);
     }
     for (unsigned int i = 0; i < m_uiNumBendPairs; ++i)
     {
         const PblVector3& v1 = m_pPos[m_pBendPairs[i].i1];
         const PblVector3& v0 = m_pPos[m_pBendPairs[i].i0];
         PblVector3 vDelta(v0.x - v1.x, v0.y - v1.y, v0.z - v1.z);
-        m_pBendPairs[i].restLength = PblMath::Sqrt(vDelta.x * vDelta.x + vDelta.y * vDelta.y + vDelta.z * vDelta.z);
+        m_pBendPairs[i].restLength = Length(vDelta);
     }
     for (unsigned int i = 0; i < m_uiNumCrossPairs; ++i)
     {
         const PblVector3& v1 = m_pPos[m_pCrossPairs[i].i1];
         const PblVector3& v0 = m_pPos[m_pCrossPairs[i].i0];
         PblVector3 vDelta(v0.x - v1.x, v0.y - v1.y, v0.z - v1.z);
-        m_pCrossPairs[i].restLength = PblMath::Sqrt(vDelta.x * vDelta.x + vDelta.y * vDelta.y + vDelta.z * vDelta.z);
+        m_pCrossPairs[i].restLength = Length(vDelta);
     }
 
     PblBox box;

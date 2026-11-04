@@ -1840,7 +1840,7 @@ void SetCanSwitchSides(bool bFlag)
 
 namespace RedScreenShot
 {
-    void TakeScreenShot();
+    bool TakeScreenShot();
 }
 
 namespace GameLoop

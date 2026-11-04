@@ -269,8 +269,8 @@ void pcZPrepassShader::_Init(unsigned int uiFlags,
         }
     }
 
-    pcRedShader::m_material = &m_material;
     m_pVertexInputFormat = pcRedVertexFormat::Create(uiFlags, uiState);
+    pcRedShader::m_material = &m_material;
 }
 
 // FUNCTION: SWBF2 0x00702bf0

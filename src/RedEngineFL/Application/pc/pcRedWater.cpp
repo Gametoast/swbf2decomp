@@ -1262,7 +1262,7 @@ void RedWater::pcRenderSplash<WaterSplashVertex, 642>(
         pVert[1].pos.x = vPos.x + fSegCos * fTop;
         pVert[1].pos.y = vPos.y + fTopY;
         pVert[1].pos.z = vPos.z + fSegSin * fTop;
-        pVert[1].uv.v = 0.01f;
+        pVert[1].uv.v = 0.02f;
         pVert[1].uv.u = fU;
         pVert[1].color = topColor;
         pVert += 2;

@@ -330,11 +330,6 @@ bool s_bDetailTextureTransformPrev;
 class PblMatrix;
 extern PblMatrix gMatrixIdentity;
 
-inline void* RedShadingState::operator new(unsigned int uiSize)
-{
-    return sMemoryPool.Allocate(uiSize);
-}
-
 // FUNCTION: SWBF2 0x006fe950
 void RedShadingState::operator delete(void* pBlock)
 {
@@ -1412,6 +1407,7 @@ pcNormalShader pcNormalShader::s_Factory;
 
 // GLOBAL: SWBF2 0x009c934c
 // pcNormalShader::s_shaderDef
+// STRING: SWBF2 0x00784650
 pcRedShaderDef pcNormalShader::s_shaderDef("normal_shader.xml");
 
 // SYNTHETIC: SWBF2 0x00409810

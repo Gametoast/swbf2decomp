@@ -49,10 +49,10 @@ public:
     // FUNCTION: SWBF2 0x00492000
     const RedColor& operator*=(const RedColor& c)
     {
-        r = (unsigned char)(int)(c.r * (r * (1.0f / 255.0f)) + 0.5f);
+        r = (unsigned char)(int)(r * (1.0f / 255.0f) * c.r + 0.5f);
         g = (unsigned char)(int)(g * (1.0f / 255.0f) * c.g + 0.5f);
         b = (unsigned char)(int)(b * (1.0f / 255.0f) * c.b + 0.5f);
-        a = (unsigned char)(int)(c.a * (a * (1.0f / 255.0f)) + 0.5f);
+        a = (unsigned char)(int)(a * (1.0f / 255.0f) * c.a + 0.5f);
         return *this;
     }
 };
