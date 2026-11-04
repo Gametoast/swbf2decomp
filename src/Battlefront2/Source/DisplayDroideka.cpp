@@ -44,7 +44,7 @@ void DroidekaElement::BuildWorldMatrices()
         qRoll._fY = 0.0f;
         qRoll._fZ = 0.0f;
         qRoll._fS = mBallOrientation.GetCos();
-        kSpine.kQuat = kSpine.kQuat * qRoll;
+        kSpine.kQuat *= qRoll;
 
         PblVector3 vCentre(0.0f - kSpine.kTrans.x, mClass->mBallRadius - kSpine.kTrans.y,
                            0.0f - kSpine.kTrans.z);
@@ -64,14 +64,14 @@ void DroidekaElement::BuildWorldMatrices()
         qTurn._fY = mTurnOffset.GetSin();
         qTurn._fZ = 0.0f;
         qTurn._fS = mTurnOffset.GetCos();
-        kRoot.kQuat = kRoot.kQuat * qTurn;
+        kRoot.kQuat *= qTurn;
 
         PblQuaternion qPitch;
         qPitch._fX = mPitchOffset.GetSin();
         qPitch._fY = 0.0f;
         qPitch._fZ = 0.0f;
         qPitch._fS = mPitchOffset.GetCos();
-        kRoot.kQuat = kRoot.kQuat * qPitch;
+        kRoot.kQuat *= qPitch;
 
         PblVector3 vRotated = qPitch.RotateVector(mPivotOffset);
         mTranslationOffset = PblVector3(mPivotOffset.x - vRotated.x, mPivotOffset.y - vRotated.y,
@@ -95,7 +95,7 @@ void DroidekaElement::BuildWorldMatrices()
         qRoll._fY = 0.0f;
         qRoll._fZ = 0.0f;
         qRoll._fS = mBallOrientation.GetCos();
-        kSpine.kQuat = kSpine.kQuat * qRoll.Inverse();
+        kSpine.kQuat *= qRoll.Inverse();
     }
     else
     {
@@ -109,14 +109,14 @@ void DroidekaElement::BuildWorldMatrices()
         qPitch._fY = 0.0f;
         qPitch._fZ = 0.0f;
         qPitch._fS = mPitchOffset.GetCos();
-        kRoot.kQuat = kRoot.kQuat * qPitch.Inverse();
+        kRoot.kQuat *= qPitch.Inverse();
 
         PblQuaternion qTurn;
         qTurn._fX = 0.0f;
         qTurn._fY = mTurnOffset.GetSin();
         qTurn._fZ = 0.0f;
         qTurn._fS = mTurnOffset.GetCos();
-        kRoot.kQuat = kRoot.kQuat * qTurn.Inverse();
+        kRoot.kQuat *= qTurn.Inverse();
     }
 }
 
@@ -135,15 +135,25 @@ void DroidekaElement::RenderUsingContext(const PblMatrix& mContext, const RedCol
     mScreen.m[1][3] = 0.0f;
 
     float fScale = 0.75f / RedRenderer::GetScreenAspectRatio() * mDepth;
-    mScreen.m[3][0] *= fScale;
-    mScreen.m[3][1] *= fScale;
-    mScreen.m[3][2] *= fScale;
     mScreen.m[3][3] = 1.0f;
+    mScreen[3] = mScreen[3] * fScale;
 
-    PblMatrix mWorld(mRotation, mTranslation);
+    PblMatrix mWorld;
+    PblQuaternion qUnit;
+    D3DXMatrixRotationQuaternion((D3DXMATRIX*)&mWorld,
+                                 D3DXQuaternionNormalize((D3DXQUATERNION*)&qUnit,
+                                                         (const D3DXQUATERNION*)&mRotation));
+    mWorld.m[3][0] = mTranslation.x;
+    mWorld.m[3][1] = mTranslation.y;
+    mWorld.m[3][2] = mTranslation.z;
+    mWorld.m[3][3] = 1.0f;
 
-    mWorld.Scale(mScale);
-    mScreen = mWorld * mScreen;
+    PblMatrix mScaling;
+    D3DXMatrixMultiply((D3DXMATRIX*)&mWorld, (const D3DXMATRIX*)&mWorld,
+                       D3DXMatrixScaling((D3DXMATRIX*)&mScaling, mScale, mScale, mScale));
+    D3DXMatrixMultiply((D3DXMATRIX*)&mScaling, (const D3DXMATRIX*)&mWorld,
+                       (const D3DXMATRIX*)&mScreen);
+    mScreen = mScaling;
 
     BuildWorldMatrices();
     mModel->GetRedModel(0)->Render(&mScreen, &mPose, color, 0x4000000, 0);
@@ -247,9 +257,15 @@ void DroidekaElement::UpdateState(bool bRoll)
             SetState(EntityDroideka::IdleToRoll);
         }
     }
-    else if (mState == EntityDroideka::IdleToRoll || mState == EntityDroideka::Rolling)
+    else
     {
-        SetState(EntityDroideka::RollToIdle);
+        switch (mState)
+        {
+        case EntityDroideka::IdleToRoll:
+        case EntityDroideka::Rolling:
+            SetState(EntityDroideka::RollToIdle);
+            break;
+        }
     }
 }
 

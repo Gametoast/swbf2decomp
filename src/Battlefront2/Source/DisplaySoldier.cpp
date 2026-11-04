@@ -55,7 +55,9 @@ SoldierElement::SoldierElement()
     mMatrix.Reset();
     mIsSetup = false;
     mID = reinterpret_cast<EntitySoldier*>(this);
-    mGroundNormal = PblVector3(0.0f, 1.0f, 0.0f);
+    mGroundNormal.x = 0.0f;
+    mGroundNormal.y = 1.0f;
+    mGroundNormal.z = 0.0f;
     memset(mClothPiece, 0, sizeof(mClothPiece));
     mTentacles = 0;
     Reset();
@@ -79,7 +81,7 @@ bool SoldierElement::Setup()
         return false;
     }
 
-    if (mClass->m_numTentacles && !TentacleSimulator::sMemoryPool.IsFull())
+    if (mClass->m_numTentacles > 0 && !TentacleSimulator::sMemoryPool.IsFull())
     {
         if (mTentacles)
         {
@@ -170,9 +172,12 @@ void SoldierElement::SetSelected(bool bSelected)
         mRandomActionTimer -= fDeltaTime;
         if (mRandomActionTimer < 0.0f)
         {
-            bool bRoot4 = mWeaponClass[mWeaponIndex] &&
-                          SoldierAnimationBank::GetWeaponRoot((SoldierAnimationBank::WEAPON)
-                              mWeaponClass[mWeaponIndex]->mSoldierAnimationWeapon) == 4;
+            bool bRoot4 = false;
+            if (mWeaponClass[mWeaponIndex])
+            {
+                bRoot4 = SoldierAnimationBank::GetWeaponRoot((SoldierAnimationBank::WEAPON)
+                             mWeaponClass[mWeaponIndex]->mSoldierAnimationWeapon) == 4;
+            }
             if (!bRoot4 && mSoldierAnimator)
             {
                 mSoldierAnimator->SetWeaponState(4, 0.0f, false, false);
@@ -211,18 +216,14 @@ void SoldierElement::RenderUsingContext(const PblMatrix& mContext, const RedColo
         return;
     }
 
-    mPos = PblVector3(mContext.m[3][0], mContext.m[3][1], mContext.m[3][2]);
+    mPos = mContext.GetTranslation();
 
     PblMatrix mScreen = mContext;
-    mScreen.m[1][0] = mContext.m[1][0] * -1.0f;
-    mScreen.m[1][1] = mContext.m[1][1] * -1.0f;
-    mScreen.m[1][2] = mContext.m[1][2] * -1.0f;
+    mScreen[1] = mContext[1] * -1.0f;
     mScreen.m[1][3] = 0.0f;
 
     float fScale = 0.75f / RedRenderer::GetScreenAspectRatio() * mDepth;
-    mScreen.m[3][0] *= fScale;
-    mScreen.m[3][1] *= fScale;
-    mScreen.m[3][2] *= fScale;
+    mScreen[3] *= fScale;
     mScreen.m[3][3] = 1.0f;
 
     PblMatrix mWorld(mRotation, mTranslation);
@@ -277,10 +278,9 @@ void SoldierElement::RenderUsingContext(const PblMatrix& mContext, const RedColo
     PblMatrix mRender = mScreen;
     if (mState == SoldierState::PRONE)
     {
-        D3DXVECTOR3 vBack(-mScreen.m[2][0], -mScreen.m[2][1], -mScreen.m[2][2]);
-        D3DXVECTOR3 vCross;
-        D3DXVec3Cross(&vCross, &vBack, (const D3DXVECTOR3*)&mGroundNormal);
-        D3DXVec3Normalize((D3DXVECTOR3*)&mRender.m[0][0], &vCross);
+        PblVector3 vBack = -mScreen[2];
+        PblVector3 vCross = CrossProduct(vBack, mGroundNormal);
+        mRender[0] = Normalize(vCross);
         mRender.m[0][3] = 0.0f;
 
         mRender.m[1][0] = mGroundNormal.x;
@@ -288,8 +288,8 @@ void SoldierElement::RenderUsingContext(const PblMatrix& mContext, const RedColo
         mRender.m[1][2] = mGroundNormal.z;
         mRender.m[1][3] = 0.0f;
 
-        D3DXVec3Cross(&vCross, (const D3DXVECTOR3*)&mScreen.m[0][0], (const D3DXVECTOR3*)&mGroundNormal);
-        D3DXVec3Normalize((D3DXVECTOR3*)&mRender.m[2][0], &vCross);
+        vCross = CrossProduct(mScreen[0], mGroundNormal);
+        mRender[2] = Normalize(vCross);
         mRender.m[2][3] = 0.0f;
     }
 
@@ -371,10 +371,7 @@ SoldierElement::~SoldierElement()
     {
         delete mClothPiece[i];
     }
-    for (int i = 0; i < 8; ++i)
-    {
-        mClothPiece[i] = 0;
-    }
+    memset(mClothPiece, 0, sizeof(mClothPiece));
     if (mTentacles)
     {
         delete mTentacles;

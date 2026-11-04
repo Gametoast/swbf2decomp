@@ -553,12 +553,13 @@ void HUD::ElementTarget::Update(const float fDeltaTime)
         for (i = 0; i < 64; ++i)
         {
             const TargetPlayerState eState = TranslatePlayerTargetInfo(pInfos[i]);
+            const bool bStateChanged = eState != mTargetPlayerState[i];
             const bool bLocked = eState == targetPlayerState_LockedOnScreen ||
                                  eState == targetPlayerState_LockedOnScreenBehind;
             bAnyLocked |= bLocked;
             mTargetPlayerAll[eState].Update(fDeltaTime, mTargetPlayer[i], pManager, pTargets[i],
                                             pInfos[i], fWidth, fHeight,
-                                            eState != mTargetPlayerState[i],
+                                            bStateChanged,
                                             mFourSegmentLockOn && bLocked ? mTargetLockOn : 0);
             if (mFourSegmentLockOn && (eState == targetPlayerState_LockedOnScreen ||
                                        eState == targetPlayerState_LockedOnScreenBehind))
@@ -611,17 +612,19 @@ void HUD::ElementTarget::Read(PblConfig& config, Factory::ItemCallback pCallback
         PblConfig::Data data = config.ReadNextData();
         if (config.m_pChunk->PeekNextChildId() == 0x504f4353)
         {
+            bool bHandled = false;
             for (i = 0; i < targetCommonState_MAX; ++i)
             {
                 if (data.GetId() == mTargetCommonAll[i].GetNameHash())
                 {
+                    PblConfig scope(config.ReadNextScope(), true);
+                    mTargetCommonAll[i].Read(scope, 0, 0);
+                    bHandled = true;
                     break;
                 }
             }
-            if (i < targetCommonState_MAX)
+            if (bHandled)
             {
-                PblConfig scope(config.ReadNextScope(), true);
-                mTargetCommonAll[i].Read(scope, 0, 0);
                 continue;
             }
 
@@ -629,13 +632,14 @@ void HUD::ElementTarget::Read(PblConfig& config, Factory::ItemCallback pCallback
             {
                 if (data.GetId() == mTargetPlayerAll[i].GetNameHash())
                 {
+                    PblConfig scope(config.ReadNextScope(), true);
+                    mTargetPlayerAll[i].Read(scope, 0, 0);
+                    bHandled = true;
                     break;
                 }
             }
-            if (i < targetPlayerState_MAX)
+            if (bHandled)
             {
-                PblConfig scope(config.ReadNextScope(), true);
-                mTargetPlayerAll[i].Read(scope, 0, 0);
                 continue;
             }
 
@@ -669,12 +673,11 @@ void HUD::ElementTarget::Read(PblConfig& config, Factory::ItemCallback pCallback
     }
 
     const PblVector3& vPos = RedGroupElement::GetPosition();
-    float fX = vPos.x;
-    if (CameraManager::Instance()->GetNumCameras() <= 1)
-    {
-        fX = ConvertWideScreenX(fX, sViewportWidth, sViewportHeight);
-    }
-    RedGroupElement::SetPosition(fX, vPos.y, vPos.z);
+    RedGroupElement::SetPosition(
+        CameraManager::Instance()->GetNumCameras() <= 1
+            ? ConvertWideScreenX(vPos.x, sViewportWidth, sViewportHeight)
+            : vPos.x,
+        vPos.y, vPos.z);
 
     PostReadSetup();
 }
@@ -738,13 +741,13 @@ void HUD::ElementTarget::WriteData(HUD::File& file, unsigned int uTabs)
 {
     const PblVector3& vPos = RedGroupElement::GetPosition();
     float fX;
-    if (CameraManager::Instance()->GetNumCameras() <= 1)
+    if (CameraManager::Instance()->GetNumCameras() > 1)
     {
-        fX = ConvertXForWideScreen(vPos.x, GetContainerViewWidth(), GetContainerViewHeight());
+        fX = vPos.x;
     }
     else
     {
-        fX = vPos.x;
+        fX = ConvertXForWideScreen(vPos.x, GetContainerViewWidth(), GetContainerViewHeight());
     }
     RedGroupElement::SetPosition(fX, vPos.y, vPos.z);
 
@@ -770,12 +773,12 @@ void HUD::ElementTarget::WriteData(HUD::File& file, unsigned int uTabs)
 // FUNCTION: SWBF2 0x0055ab30
 void HUD::ElementTarget::EventRefreshTargetCommon(const HUD::Event& event, void* const pData)
 {
+    ElementTarget* pTarget = static_cast<ElementTarget*>(pData);
     if (event.GetClass()->GetType() != HUD::EventClass::type_Uint)
     {
         return;
     }
 
-    ElementTarget* pTarget = static_cast<ElementTarget*>(pData);
     const unsigned int slot = event.GetData().uintValue;
     pTarget->mTargetCommonState[slot] = targetCommonState_MAX;
     pTarget->mTargetCommon[slot].RedInterfaceElement::SetColor(TargetManager::gMarkers[slot].color);
@@ -784,12 +787,12 @@ void HUD::ElementTarget::EventRefreshTargetCommon(const HUD::Event& event, void*
 // FUNCTION: SWBF2 0x0055abb0
 void HUD::ElementTarget::EventRefreshTargetPlayer(const HUD::Event& event, void* const pData)
 {
+    ElementTarget* pTarget = (ElementTarget*)pData;
     if (event.GetClass()->GetType() != HUD::EventClass::type_Uint)
     {
         return;
     }
 
-    ElementTarget* pTarget = (ElementTarget*)pData;
     if (pTarget->mPlayerIndex < 0)
     {
         return;

@@ -92,19 +92,17 @@ void NameDisplay::Init()
     for (unsigned int i = 0; i < CameraManager::sInstance->m_iNumCam; ++i)
     {
         unsigned int hView = CameraManager::sInstance->m_hView[i];
-        NameDisplayThread* pThread = sNameDisplayThread[i];
-        pThread->ActivateThread(0, PER_FRAME);
+        sNameDisplayThread[i]->ActivateThread(0, PER_FRAME);
         for (int j = 0; j < 64; ++j)
         {
-            RedScreenGroupElement* pGroup = &sNameDisplayThread[i]->mPlayerNames[j];
-            pGroup->Enable(false);
-            pGroup->AddElement(&sNameDisplayThread[i]->mPlayerNamesText[j]);
-            RedTextElement* pText = &sNameDisplayThread[i]->mPlayerNamesText[j];
-            pText->SetFont(RedFont::GAMEFONT_TINY);
-            pText->SetIntercharacterSpacing(0);
+            sNameDisplayThread[i]->mPlayerNames[j].Enable(false);
+            sNameDisplayThread[i]->mPlayerNames[j].AddElement(&sNameDisplayThread[i]->mPlayerNamesText[j]);
+            sNameDisplayThread[i]->mPlayerNamesText[j].SetFont(RedFont::GAMEFONT_TINY);
+            sNameDisplayThread[i]->mPlayerNamesText[j].SetIntercharacterSpacing(0);
 
-            pText->m_eStyle = RedGlyphCacheElement::TEXT_STYLE_SHADOW;
-            pText->SetTextAlign(RedTextElement::TEXT_HALIGN_CENTER, RedTextElement::TEXT_VALIGN_BOTTOM);
+            sNameDisplayThread[i]->mPlayerNamesText[j].m_eStyle = RedGlyphCacheElement::TEXT_STYLE_SHADOW;
+            sNameDisplayThread[i]->mPlayerNamesText[j].SetTextAlign(RedTextElement::TEXT_HALIGN_CENTER,
+                                                                    RedTextElement::TEXT_VALIGN_BOTTOM);
             FLRenderer::AddInterfaceElement(hView, &sNameDisplayThread[i]->mPlayerNames[j],
                                             RedInterfaceScreen::CENTER, RedInterfaceScreen::CENTER,
                                             false);
@@ -224,16 +222,15 @@ bool NameDisplayThread::Update(float)
                     {
                         continue;
                     }
-                    const PblHandle<const GameObject>& target =
-                        pLocalUnit->mReticuleTarget[pLocalUnit->GetWpnChannel()];
-                    if (!(const GameObject*)target)
+                    if (!(const GameObject*)pLocalUnit->mReticuleTarget[pLocalUnit->GetWpnChannel()])
                     {
                         continue;
                     }
-                    if (target != pObject)
+                    if (pLocalUnit->mReticuleTarget[pLocalUnit->GetWpnChannel()] != pObject)
                     {
                         Controllable* pOnFoot = pCharacter->GetUnit();
-                        if (!pOnFoot || target != pOnFoot->GetGameObject())
+                        if (!pOnFoot ||
+                            pLocalUnit->mReticuleTarget[pLocalUnit->GetWpnChannel()] != pOnFoot->GetGameObject())
                         {
                             continue;
                         }
@@ -282,8 +279,8 @@ bool NameDisplayThread::Update(float)
         vToUnit.z = vPos.z - vEye.z;
         PblVector3 vDir;
         D3DXVec3Normalize(reinterpret_cast<D3DXVECTOR3*>(&vDir), reinterpret_cast<const D3DXVECTOR3*>(&vToUnit));
-        const PblVector3& vAt = mCamera.GetZAxis();
-        if (!(vDir.y * -vAt.y + vDir.x * -vAt.x + vDir.z * -vAt.z > 0.0f))
+        const PblVector3 vBack = -mCamera.GetZAxis();
+        if (vDir.y * vBack.y + vDir.x * vBack.x + vDir.z * vBack.z <= 0.0f)
         {
             continue;
         }
@@ -295,7 +292,11 @@ bool NameDisplayThread::Update(float)
         if (fDistance > fFadeRange)
         {
             int iAlpha = 335 - ((int)fDistance << 2);
-            ucAlpha = iAlpha < 0 ? 0 : (unsigned char)iAlpha;
+            ucAlpha = (unsigned char)iAlpha;
+            if (iAlpha < 0)
+            {
+                ucAlpha = 0;
+            }
             if (!ucAlpha)
             {
                 continue;

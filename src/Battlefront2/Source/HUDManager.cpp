@@ -165,7 +165,7 @@ bool HUD::Manager::ConfigFile::ReadData(PblConfig& config, PblConfig::Data& data
             iNumArgs = 2;
         }
         mNumSupportedSplitModes = 0;
-        for (int i = 0; i < iNumArgs; ++i)
+        for (unsigned int i = 0; i < iNumArgs; ++i)
         {
 
             const char* pName = (const char*)data.m_auiArgs + data.m_auiArgs[i];
@@ -189,7 +189,7 @@ bool HUD::Manager::ConfigFile::ReadData(PblConfig& config, PblConfig::Data& data
             iNumArgs = 4;
         }
         mNumSupportedViewPorts = 0;
-        for (int i = 0; i < iNumArgs; ++i)
+        for (unsigned int i = 0; i < iNumArgs; ++i)
         {
             mSupportedViewPorts[mNumSupportedViewPorts++] = (unsigned int)data.GetFloatArg(i);
         }
@@ -356,10 +356,11 @@ void HUD::Manager::Close()
     unsigned int uNumViews = CameraManager::Instance()->m_iNumCam;
     for (unsigned int i = 0; i < uNumViews; ++i)
     {
-        HUD::gScreenGroup[i + 1].Enable(false);
-        FLRenderer::RemoveInterfaceElement(i, &HUD::gScreenGroup[i + 1]);
-        HUD::gScreenGroupEdit[i + 1].Enable(false);
-        FLRenderer::RemoveInterfaceElement(i, &HUD::gScreenGroupEdit[i + 1]);
+        const unsigned int uGroup = i + 1;
+        HUD::gScreenGroup[uGroup].Enable(false);
+        FLRenderer::RemoveInterfaceElement(i, &HUD::gScreenGroup[uGroup]);
+        HUD::gScreenGroupEdit[uGroup].Enable(false);
+        FLRenderer::RemoveInterfaceElement(i, &HUD::gScreenGroupEdit[uGroup]);
     }
 
     delete[] HUD::gScreenGroup;

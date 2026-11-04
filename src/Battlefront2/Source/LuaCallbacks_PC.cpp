@@ -54,17 +54,18 @@ int ScriptCB_SetMouseMark(lua_State*)
 // FUNCTION: SWBF2 0x0059b1e0
 int ScriptCB_ResetMouseMark(lua_State*)
 {
-    markMouseX = -1;
     markMouseY = -1;
+    markMouseX = -1;
     return 0;
 }
 
 // FUNCTION: SWBF2 0x0059b200
 int ScriptCB_CheckMouseMark(lua_State*)
 {
-    const MouseCoords& coords = FLInputManager::s_instance.GetPlayerGuiInputs(0)->mMouseCoords;
-    lua_pushboolean(LuaHelper::mState,
-                    markMouseX != coords.mPosX || markMouseY != coords.mPosY);
+    GUIInputs* pInputs = FLInputManager::s_instance.GetPlayerGuiInputs(0);
+    bool bMoved = markMouseX != pInputs->mMouseCoords.mPosX ||
+                  markMouseY != pInputs->mMouseCoords.mPosY;
+    lua_pushboolean(LuaHelper::mState, bMoved);
     return 1;
 }
 
@@ -96,18 +97,27 @@ int ScriptCB_SetJoySensitivity(lua_State*)
     {
         RawControllerInputs* pJoystick = FLInputManager::s_instance.GetPlayerJoystick(
             GuiManager::GetJoystickFromViewport(GuiManager::mCurViewport));
-        unsigned char* pValue = 0;
+        bool bChanged = false;
         if (iAxis == 0)
         {
-            pValue = &pProfile->mGameOptions.mJoystickSensitivityX[pJoystick->GetInputMode()];
+            unsigned char& rValue = pProfile->mGameOptions.mJoystickSensitivityX[pJoystick->GetInputMode()];
+            if (rValue != (unsigned char)iSensitivity)
+            {
+                rValue = (unsigned char)iSensitivity;
+                bChanged = true;
+            }
         }
-        if (iAxis == 1)
+        else if (iAxis == 1)
         {
-            pValue = &pProfile->mGameOptions.mJoystickSensitivityY[pJoystick->GetInputMode()];
+            unsigned char& rValue = pProfile->mGameOptions.mJoystickSensitivityY[pJoystick->GetInputMode()];
+            if (rValue != iSensitivity)
+            {
+                rValue = (unsigned char)iSensitivity;
+                bChanged = true;
+            }
         }
-        if (pValue && *pValue != (iAxis == 1 ? iSensitivity : (unsigned char)iSensitivity))
+        if (bChanged)
         {
-            *pValue = (unsigned char)iSensitivity;
             pProfile->UpdateProfCRC();
             pProfile->ApplySettings();
         }
@@ -147,8 +157,12 @@ int ScriptCB_IsJoystickEnabled(lua_State*)
 // FUNCTION: SWBF2 0x00599510
 int ScriptCB_SetJoystickEnabled(lua_State*)
 {
-    LuaHelper::GetTop();
-    bool bEnabled = LuaHelper::IsNumber(1) || LuaHelper::IsString(1);
+    lua_gettop(LuaHelper::mState);
+    bool bEnabled = false;
+    if (lua_isnumber(LuaHelper::mState, 1) || lua_isstring(LuaHelper::mState, 1))
+    {
+        bEnabled = true;
+    }
     PlayerProfile::tProfile* pProfile = PlayerProfile::GetCurProfile();
     if (pProfile && pProfile->mPCOptions.mJoyEnabled != bEnabled)
     {
@@ -228,22 +242,22 @@ int ScriptCB_GetCustomResolution(lua_State*)
 int ScriptCB_IsVideoModeSupported(lua_State*)
 {
     int iArgs = LuaHelper::GetTop();
-    if ((unsigned)(iArgs - 2) > 2 || !LuaHelper::IsNumber(1) ||
-        !LuaHelper::IsNumber(2))
+    if ((unsigned)(iArgs - 2) > 2 || !lua_isnumber(LuaHelper::mState, 1) ||
+        !lua_isnumber(LuaHelper::mState, 2))
     {
         return 0;
     }
-    int iWidth = LuaHelper::GetInt(1);
-    int iHeight = LuaHelper::GetInt(2);
     unsigned long dwMultisampleType = 0;
     unsigned long dwMultisampleQuality = 0;
+    int iWidth = (int)luaL_checknumber(LuaHelper::mState, 1);
+    int iHeight = (int)luaL_checknumber(LuaHelper::mState, 2);
     if (iArgs > 2)
     {
         if (LuaHelper::IsNumber(3))
         {
             dwMultisampleType = LuaHelper::GetInt(3);
         }
-        if (iArgs > 3 && LuaHelper::IsNumber(4))
+        if (iArgs > 3 && lua_isnumber(LuaHelper::mState, 4))
         {
             dwMultisampleQuality = LuaHelper::GetInt(4);
         }
@@ -269,13 +283,13 @@ int ScriptCB_IsMultisamplingModeForcedFromDriver(lua_State*)
 int ScriptCB_IsMultisamplingModeSupported(lua_State*)
 {
     int iArgs = LuaHelper::GetTop();
-    if ((unsigned)(iArgs - 1) > 1 || !LuaHelper::IsNumber(1))
+    if ((unsigned)(iArgs - 1) > 1 || !lua_isnumber(LuaHelper::mState, 1))
     {
         return 0;
     }
-    unsigned long dwMultisampleType = LuaHelper::GetInt(1);
     unsigned long dwMultisampleQuality = 0;
-    if (iArgs > 1 && LuaHelper::IsNumber(2))
+    unsigned long dwMultisampleType = (int)luaL_checknumber(LuaHelper::mState, 1);
+    if (iArgs > 1 && lua_isnumber(LuaHelper::mState, 2))
     {
         dwMultisampleQuality = LuaHelper::GetInt(2);
     }
@@ -288,29 +302,28 @@ int ScriptCB_IsMultisamplingModeSupported(lua_State*)
 // FUNCTION: SWBF2 0x0059ae50
 int ScriptCB_GetMaxScreenSizeForMultisamplingMode(lua_State*)
 {
-    int iArgs = LuaHelper::GetTop();
-    if ((unsigned)(iArgs - 1) > 1 || !LuaHelper::IsNumber(1))
+    int iArgs = lua_gettop(LuaHelper::mState);
+    if ((unsigned)(iArgs - 1) > 1 || !lua_isnumber(LuaHelper::mState, 1))
     {
         return 0;
     }
-    unsigned long dwMultisampleType = LuaHelper::GetInt(1);
-    unsigned long dwMultisampleQuality = 0;
-    if (iArgs > 1 && LuaHelper::IsNumber(2))
+    int iQuality = 0;
+    int iType = (int)luaL_checknumber(LuaHelper::mState, 1);
+    if (iArgs > 1 && lua_isnumber(LuaHelper::mState, 2))
     {
-        dwMultisampleQuality = LuaHelper::GetInt(2);
+        iQuality = LuaHelper::GetInt(2);
     }
     int iWidth = 0, iHeight = 0;
-    bool bIsSupported = RedVideoConfig::VidMode_GetMaxScreenSizeForMultisamplingMode(
-        (D3DMULTISAMPLE_TYPE)dwMultisampleType, dwMultisampleQuality, iWidth, iHeight);
-    if (bIsSupported)
+    if (!RedVideoConfig::VidMode_GetMaxScreenSizeForMultisamplingMode(
+        (D3DMULTISAMPLE_TYPE)iType, iQuality, iWidth, iHeight))
     {
-        LuaHelper::PushInt(iWidth);
-        LuaHelper::PushInt(iHeight);
+        lua_pushnil(LuaHelper::mState);
+        lua_pushnil(LuaHelper::mState);
     }
     else
     {
-        LuaHelper::PushNil();
-        LuaHelper::PushNil();
+        lua_pushnumber(LuaHelper::mState, (float)iWidth);
+        lua_pushnumber(LuaHelper::mState, (float)iHeight);
     }
     return 2;
 }
@@ -329,15 +342,15 @@ int ScriptCB_GetMaxMultisamplingModeForScreenSize(lua_State*)
     D3DMULTISAMPLE_TYPE eType;
     unsigned long ulQuality;
     bool bIsSupported = RedVideoConfig::VidMode_GetMaxMultisamplingModeForScreenSize(iWidth, iHeight, eType, ulQuality);
-    if (bIsSupported)
+    if (!bIsSupported)
     {
-        LuaHelper::PushInt(eType);
-        LuaHelper::PushInt(ulQuality);
+        LuaHelper::PushNil();
+        LuaHelper::PushNil();
     }
     else
     {
-        LuaHelper::PushNil();
-        LuaHelper::PushNil();
+        LuaHelper::PushInt(eType);
+        LuaHelper::PushInt(ulQuality);
     }
     return 2;
 }
@@ -357,13 +370,13 @@ int ScriptCB_GetNumMultisamplingQualityModes(lua_State*)
 int ScriptCB_GetMultisamplingModeDescription(lua_State*)
 {
     int iArgs = LuaHelper::GetTop();
-    if ((unsigned)(iArgs - 1) > 1 || !LuaHelper::IsNumber(1))
+    if ((unsigned)(iArgs - 1) > 1 || !lua_isnumber(LuaHelper::mState, 1))
     {
         return 0;
     }
-    unsigned long dwMultisampleType = LuaHelper::GetInt(1);
     unsigned long dwMultisampleQuality = 0;
-    if (iArgs > 1 && LuaHelper::IsNumber(2))
+    unsigned long dwMultisampleType = (int)luaL_checknumber(LuaHelper::mState, 1);
+    if (iArgs > 1 && lua_isnumber(LuaHelper::mState, 2))
     {
         dwMultisampleQuality = LuaHelper::GetInt(2);
     }
@@ -504,26 +517,26 @@ int ScriptCB_GetMouseSensitivity(lua_State* L)
 // FUNCTION: SWBF2 0x00599200
 int ScriptCB_GetJoySensitivity(lua_State* L)
 {
-    LuaHelper::GetTop();
-    int iAxis = LuaHelper::GetInt(1);
-    float joySens = 0.0f;
+    lua_gettop(LuaHelper::mState);
+    int iAxis = (int)luaL_checknumber(LuaHelper::mState, 1);
+    int iSensitivity = 0;
     PlayerProfile::tProfile* pProfile = PlayerProfile::GetCurProfile();
     if (pProfile)
     {
-        int iJoystick = GuiManager::GetJoystickFromViewport(GuiManager::mCurViewport);
-        RawControllerInputs* pJoystick = FLInputManager::s_instance.GetPlayerJoystick(iJoystick);
+        int iMode = FLInputManager::s_instance.GetPlayerJoystick(
+            GuiManager::GetJoystickFromViewport(GuiManager::mCurViewport))->GetInputMode();
         if (iAxis == 0)
         {
-            joySens = pProfile->mGameOptions.mJoystickSensitivityX[pJoystick->GetInputMode()];
+            iSensitivity = pProfile->mGameOptions.mJoystickSensitivityX[iMode];
         }
         else
         {
-            joySens = pProfile->mGameOptions.mJoystickSensitivityY[pJoystick->GetInputMode()];
+            iSensitivity = pProfile->mGameOptions.mJoystickSensitivityY[iMode];
         }
     }
-    LuaHelper::PushFloat(joySens);
-    LuaHelper::PushFloat(1.0f);
-    LuaHelper::PushFloat(10.0f);
+    lua_pushnumber(LuaHelper::mState, (float)iSensitivity);
+    lua_pushnumber(LuaHelper::mState, 1.0f);
+    lua_pushnumber(LuaHelper::mState, 10.0f);
     return 3;
 }
 
@@ -566,12 +579,13 @@ int ScriptCB_FillResolutionTable(lua_State* L)
     int iMultiSample = lua_isnumber(LuaHelper::mState, 1) ? LuaHelper::GetInt(1) : 0;
     int iMultiSampleQuality = lua_isnumber(LuaHelper::mState, 2) ? LuaHelper::GetInt(2) : 0;
 
+    int iIndex = 1;
     D3DDISPLAYMODE modes[50];
     unsigned int uiNumModes = RedRenderer::pcGetValidDisplayModes(modes, 50, 800, 600);
     PlayerProfile::tProfile* pProfile = PlayerProfile::GetCurProfile();
 
     int iCurSel = 1;
-    int iIndex = 1;
+    int iEntry = 1;
     for (unsigned int i = 0; i < uiNumModes; ++i)
     {
         unsigned short usLabel[256];
@@ -586,13 +600,14 @@ int ScriptCB_FillResolutionTable(lua_State* L)
         }
 
         AddResolution(iIndex, usLabel, modes[i].Width, modes[i].Height);
+        ++iIndex;
         if (pProfile
             && modes[i].Width == pProfile->mPCOptions.mResolutionX
             && modes[i].Height == pProfile->mPCOptions.mResolutionY)
         {
-            iCurSel = iIndex;
+            iCurSel = iEntry;
         }
-        ++iIndex;
+        ++iEntry;
     }
 
     lua_setglobal(LuaHelper::mState, "ifs_opt_pcvideo_reslistbox_contents");
@@ -613,7 +628,7 @@ int ScriptCB_FillMultisampleTable(lua_State* L)
     int aiQuality[17];
     aiType[0] = D3DMULTISAMPLE_NONE;
     aiQuality[0] = 0;
-    int iNumModes = 1;
+    unsigned int iNumModes = 1;
 
     lua_gettop(LuaHelper::mState);
     int iWidth = lua_isnumber(LuaHelper::mState, 1) ? LuaHelper::GetInt(1) : 800;
@@ -647,7 +662,7 @@ int ScriptCB_FillMultisampleTable(lua_State* L)
 
     PlayerProfile::tProfile* pProfile = PlayerProfile::GetCurProfile();
     int iCurSel = 1;
-    for (int i = 0; i < iNumModes; ++i)
+    for (unsigned int i = 0; i < iNumModes; ++i)
     {
         const int iType = aiType[i];
         unsigned short const* pusLabel;
@@ -717,12 +732,12 @@ int ScriptCB_GetPCVideoOptions(lua_State* L)
     int iParticleQuality = 0;
     int iShadowQuality = 0;
     int iSpecularQuality = 0;
-    int iUnknown0028 = 0;
-    int iBumpMapping = 0;
     int iMotionBlur = 0;
     int iDistortion = 0;
     int iWindowed = 0;
+    int iBumpMapping = 0;
     int iVSync = 0;
+    int iUnknown0028 = 0;
 
     PlayerProfile::tProfile* pProfile = PlayerProfile::GetCurProfile();
     if (pProfile)
@@ -742,12 +757,12 @@ int ScriptCB_GetPCVideoOptions(lua_State* L)
         iParticleQuality = rOpts.particleQuality;
         iShadowQuality = rOpts.shadowQuality;
         iSpecularQuality = rOpts.specularQuality;
-        iUnknown0028 = rOpts.mEnableHDR;
         iBumpMapping = rOpts.bumpMapping;
         iMotionBlur = rOpts.motionBlur;
         iDistortion = rOpts.distortion;
         iWindowed = rPC.mWindowed;
         iVSync = rPC.mVSync;
+        iUnknown0028 = rOpts.mEnableHDR;
 
         if (fUnknown0018 < 0.2f)
         {
@@ -836,21 +851,21 @@ int ScriptCB_SetPCVideoOptions(lua_State* L)
     opts.mNearSceneFadeFactor = luaL_checknumber(LuaHelper::mState, 20);
     bool bVSync = (int)luaL_checknumber(LuaHelper::mState, 21) - 1 != 0;
 
-    if (opts.mGammaBrightness < 0.2)
+    if (opts.mGammaBrightness < 0.2f)
     {
-        opts.mGammaBrightness = 0.2;
+        opts.mGammaBrightness = 0.2f;
     }
-    else if (opts.mGammaBrightness > 0.80000001)
+    else if (opts.mGammaBrightness > 0.8f)
     {
-        opts.mGammaBrightness = 0.80000001;
+        opts.mGammaBrightness = 0.8f;
     }
-    if (opts.mGammaContrast < 0.2)
+    if (opts.mGammaContrast < 0.2f)
     {
-        opts.mGammaContrast = 0.2;
+        opts.mGammaContrast = 0.2f;
     }
-    else if (opts.mGammaContrast > 0.80000001)
+    else if (opts.mGammaContrast > 0.8f)
     {
-        opts.mGammaContrast = 0.80000001;
+        opts.mGammaContrast = 0.8f;
     }
     if (opts.mFarSceneRangeFactor < 0.0f)
     {
@@ -877,9 +892,7 @@ int ScriptCB_SetPCVideoOptions(lua_State* L)
         return 0;
     }
 
-    PlayerProfile::tPCOpt& rPC = pProfile->mPCOptions;
-    RenderOptionsT& rOpts = rPC.renderOptions;
-    if (!RedVideoConfig::VidMode_Usable(rPC.mResolutionX, rPC.mResolutionY,
+    if (!RedVideoConfig::VidMode_Usable(pProfile->mPCOptions.mResolutionX, pProfile->mPCOptions.mResolutionY,
                                         eMultiSample, ulMultiSampleQuality))
     {
         ulMultiSampleQuality = 0;
@@ -887,32 +900,32 @@ int ScriptCB_SetPCVideoOptions(lua_State* L)
     }
 
     bool bChanged = false;
-    if (opts.masterQuality != rOpts.masterQuality) { rOpts.masterQuality = opts.masterQuality; bChanged = true; }
-    if (opts.mGraphicsTier != rOpts.mGraphicsTier) { rOpts.mGraphicsTier = opts.mGraphicsTier; bChanged = true; }
-    if (opts.textureDetail != rOpts.textureDetail) { rOpts.textureDetail = opts.textureDetail; bChanged = true; }
-    if (opts.textureQuality != rOpts.textureQuality) { rOpts.textureQuality = opts.textureQuality; bChanged = true; }
-    if (eMultiSample != rPC.mMultiSample) { rPC.mMultiSample = eMultiSample; bChanged = true; }
-    if (ulMultiSampleQuality != rPC.mMultiSampleQuality) { rPC.mMultiSampleQuality = ulMultiSampleQuality; bChanged = true; }
-    if (opts.waterQuality != rOpts.waterQuality) { rOpts.waterQuality = opts.waterQuality; bChanged = true; }
-    if (opts.terrainQuality != rOpts.terrainQuality) { rOpts.terrainQuality = opts.terrainQuality; bChanged = true; }
-    if (opts.particleQuality != rOpts.particleQuality) { rOpts.particleQuality = opts.particleQuality; bChanged = true; }
-    if (opts.shadowQuality != rOpts.shadowQuality) { rOpts.shadowQuality = opts.shadowQuality; bChanged = true; }
-    if (opts.specularQuality != rOpts.specularQuality) { rOpts.specularQuality = opts.specularQuality; bChanged = true; }
-    if (opts.mEnableHDR != rOpts.mEnableHDR) { rOpts.mEnableHDR = opts.mEnableHDR; bChanged = true; }
-    if (opts.bumpMapping != rOpts.bumpMapping) { rOpts.bumpMapping = opts.bumpMapping; bChanged = true; }
-    if (opts.motionBlur != rOpts.motionBlur) { rOpts.motionBlur = opts.motionBlur; bChanged = true; }
-    if (opts.distortion != rOpts.distortion) { rOpts.distortion = opts.distortion; bChanged = true; }
-    if (bWindowed != rPC.mWindowed) { rPC.mWindowed = bWindowed; bChanged = true; }
-    if (bVSync != rPC.mVSync) { rPC.mVSync = bVSync; bChanged = true; }
-    if (opts.mGammaBrightness != rOpts.mGammaBrightness) { rOpts.mGammaBrightness = opts.mGammaBrightness; bChanged = true; }
-    if (opts.mGammaContrast != rOpts.mGammaContrast) { rOpts.mGammaContrast = opts.mGammaContrast; bChanged = true; }
-    if (opts.mFarSceneRangeFactor != rOpts.mFarSceneRangeFactor) { rOpts.mFarSceneRangeFactor = opts.mFarSceneRangeFactor; bChanged = true; }
-    if (opts.mNearSceneFadeFactor != rOpts.mNearSceneFadeFactor) { rOpts.mNearSceneFadeFactor = opts.mNearSceneFadeFactor; bChanged = true; }
+    if (opts.masterQuality != pProfile->mPCOptions.renderOptions.masterQuality) { pProfile->mPCOptions.renderOptions.masterQuality = opts.masterQuality; bChanged = true; }
+    if (opts.mGraphicsTier != pProfile->mPCOptions.renderOptions.mGraphicsTier) { pProfile->mPCOptions.renderOptions.mGraphicsTier = opts.mGraphicsTier; bChanged = true; }
+    if (opts.textureDetail != pProfile->mPCOptions.renderOptions.textureDetail) { pProfile->mPCOptions.renderOptions.textureDetail = opts.textureDetail; bChanged = true; }
+    if (opts.textureQuality != pProfile->mPCOptions.renderOptions.textureQuality) { pProfile->mPCOptions.renderOptions.textureQuality = opts.textureQuality; bChanged = true; }
+    if (eMultiSample != pProfile->mPCOptions.mMultiSample) { pProfile->mPCOptions.mMultiSample = eMultiSample; bChanged = true; }
+    if (ulMultiSampleQuality != pProfile->mPCOptions.mMultiSampleQuality) { pProfile->mPCOptions.mMultiSampleQuality = ulMultiSampleQuality; bChanged = true; }
+    if (opts.waterQuality != pProfile->mPCOptions.renderOptions.waterQuality) { pProfile->mPCOptions.renderOptions.waterQuality = opts.waterQuality; bChanged = true; }
+    if (opts.terrainQuality != pProfile->mPCOptions.renderOptions.terrainQuality) { pProfile->mPCOptions.renderOptions.terrainQuality = opts.terrainQuality; bChanged = true; }
+    if (opts.particleQuality != pProfile->mPCOptions.renderOptions.particleQuality) { pProfile->mPCOptions.renderOptions.particleQuality = opts.particleQuality; bChanged = true; }
+    if (opts.shadowQuality != pProfile->mPCOptions.renderOptions.shadowQuality) { pProfile->mPCOptions.renderOptions.shadowQuality = opts.shadowQuality; bChanged = true; }
+    if (opts.specularQuality != pProfile->mPCOptions.renderOptions.specularQuality) { pProfile->mPCOptions.renderOptions.specularQuality = opts.specularQuality; bChanged = true; }
+    if (opts.mEnableHDR != pProfile->mPCOptions.renderOptions.mEnableHDR) { pProfile->mPCOptions.renderOptions.mEnableHDR = opts.mEnableHDR; bChanged = true; }
+    if (opts.bumpMapping != pProfile->mPCOptions.renderOptions.bumpMapping) { pProfile->mPCOptions.renderOptions.bumpMapping = opts.bumpMapping; bChanged = true; }
+    if (opts.motionBlur != pProfile->mPCOptions.renderOptions.motionBlur) { pProfile->mPCOptions.renderOptions.motionBlur = opts.motionBlur; bChanged = true; }
+    if (opts.distortion != pProfile->mPCOptions.renderOptions.distortion) { pProfile->mPCOptions.renderOptions.distortion = opts.distortion; bChanged = true; }
+    if (bWindowed != pProfile->mPCOptions.mWindowed) { pProfile->mPCOptions.mWindowed = bWindowed; bChanged = true; }
+    if (bVSync != pProfile->mPCOptions.mVSync) { pProfile->mPCOptions.mVSync = bVSync; bChanged = true; }
+    if (opts.mGammaBrightness != pProfile->mPCOptions.renderOptions.mGammaBrightness) { pProfile->mPCOptions.renderOptions.mGammaBrightness = opts.mGammaBrightness; bChanged = true; }
+    if (opts.mGammaContrast != pProfile->mPCOptions.renderOptions.mGammaContrast) { pProfile->mPCOptions.renderOptions.mGammaContrast = opts.mGammaContrast; bChanged = true; }
+    if (opts.mFarSceneRangeFactor != pProfile->mPCOptions.renderOptions.mFarSceneRangeFactor) { pProfile->mPCOptions.renderOptions.mFarSceneRangeFactor = opts.mFarSceneRangeFactor; bChanged = true; }
+    if (opts.mNearSceneFadeFactor != pProfile->mPCOptions.renderOptions.mNearSceneFadeFactor) { pProfile->mPCOptions.renderOptions.mNearSceneFadeFactor = opts.mNearSceneFadeFactor; bChanged = true; }
 
     if (bChanged)
     {
         pProfile->UpdateProfCRC();
-        rPC.ApplyPostLoadSettings();
+        pProfile->mPCOptions.ApplyPostLoadSettings();
     }
     return 0;
 }

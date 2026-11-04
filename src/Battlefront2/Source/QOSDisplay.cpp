@@ -178,7 +178,8 @@ void QOSDisplay::InitClient()
     QosIcon.SetTexture(0x298058FEu);
     msgGroup.AddElement(&QosIcon);
 
-    FLRenderer::AddInterfaceElement(&msgGroup, 1.0f, 1.0f, false);
+    FLRenderer::AddInterfaceElement(&msgGroup, RedInterfaceScreen::RIGHT,
+                                    RedInterfaceScreen::BOTTOM, false);
 }
 
 // FUNCTION: SWBF2 0x0062dd10
