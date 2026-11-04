@@ -119,15 +119,17 @@ void Music::Update(float fDeltaTime)
             {
                 Stop();
             }
-            if (mStream->GetPlayState() != Snd::SourceTransport::playState_stopped)
+            if (mStream->GetPlayState() == Snd::SourceTransport::playState_stopped)
             {
-                mPlaybackTime += fDeltaTime;
-                break;
+                mPlayStateDesired = playState_stopped;
+                mPlayStateCurrent = playState_stopping;
             }
         }
-        mPlayStateDesired = playState_stopped;
-        mPlayStateCurrent = playState_stopping;
-
+        else
+        {
+            mPlayStateDesired = playState_stopped;
+            mPlayStateCurrent = playState_stopping;
+        }
     case playState_stopping:
         mPlaybackTime += fDeltaTime;
         break;
@@ -160,22 +162,26 @@ void Music::Update(float fDeltaTime)
                     mStream = Snd::EngineBase::GetOpenStream(pProps->mStreamID);
                 }
 
-                if (!mStream)
+                if (mStream)
                 {
-                    mPlayStateCurrent = playState_starting;
+                    if (!mStream->GetLocked())
+                    {
+                        mStream->Lock(true);
+                        pProps->SetupStream(mStream, 0);
+                        mStream->SetPitch(pProps->SourceVariation::CalculatePitch(pProps->mPitch));
+                        float fGain = pProps->SourceVariation::CalculateGain(pProps->mGain);
+                        mStream->SetGain(fGain);
+                        mStream->GetBus()->Fade(mFadeInTime, 1.0f, 0.0f);
+                        mStream->Play(false);
+                        mStream->SetPlaybackPosition(mPlaybackPosition);
+                        ++sMusicPlaying;
+                        mPlayStateCurrent = playState_starting;
+                        mPlaybackTime = 0.0f;
+                    }
                 }
-                else if (!mStream->GetLocked())
+                else
                 {
-                    mStream->Lock(true);
-                    pProps->SetupStream(mStream, 0);
-                    mStream->SetPitch(pProps->SourceVariation::CalculatePitch(pProps->mPitch));
-                    mStream->SetGain(pProps->SourceVariation::CalculateGain(pProps->mGain));
-                    mStream->GetBus()->Fade(mFadeInTime, 1.0f, 0.0f);
-                    mStream->Play(false);
-                    mStream->SetPlaybackPosition(mPlaybackPosition);
-                    ++sMusicPlaying;
                     mPlayStateCurrent = playState_starting;
-                    mPlaybackTime = 0.0f;
                 }
             }
             break;
@@ -189,13 +195,16 @@ void Music::Update(float fDeltaTime)
         case playState_playing:
             if (mStream)
             {
-                if (mPlaybackTime < mMinPlaybackTime)
+                if (mPlaybackTime >= mMinPlaybackTime)
                 {
-                    break;
+                    mStream->GetBus()->Fade(mFadeOutTime, 0.0f, -1.0f);
+                    mPlayStateCurrent = playState_stopping;
                 }
-                mStream->GetBus()->Fade(mFadeOutTime, 0.0f, -1.0f);
             }
-            mPlayStateCurrent = playState_stopping;
+            else
+            {
+                mPlayStateCurrent = playState_stopping;
+            }
             break;
 
         case playState_stopping:
@@ -258,11 +267,6 @@ void Music::Update(float fDeltaTime)
             }
             break;
 
-        case playState_stopping:
-        case playState_stopped:
-            mPlayStateDesired = playState_stopped;
-            break;
-
         case playState_pausing:
             if (mStream)
             {
@@ -280,6 +284,11 @@ void Music::Update(float fDeltaTime)
             {
                 mPlayStateCurrent = playState_paused;
             }
+            break;
+
+        case playState_stopping:
+        case playState_stopped:
+            mPlayStateDesired = playState_stopped;
             break;
         }
         break;
@@ -457,8 +466,8 @@ void Music::Load(PblFileChunk& chunk)
             Music::sMemoryPool.Setup(0x20, Music::sMemoryPool.GetSize(), Music::sMemoryPool.GetGrow());
         }
         Music* pMusic = new Music;
-        PblFileChunk data = chunk.ReadNextChild();
-        pMusic->Read(data);
+        child = chunk.ReadNextChild();
+        pMusic->Read(child);
     }
     Music::sMusicInactive.Sort();
 }

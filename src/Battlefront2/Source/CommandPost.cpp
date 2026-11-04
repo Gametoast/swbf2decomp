@@ -69,14 +69,13 @@ PblMatrix NormalMatrix(const PblVector3& vDir, const PblVector3& vNormal, const 
 {
     PblVector3 vUp;
     D3DXVec3Normalize(reinterpret_cast<D3DXVECTOR3*>(&vUp), reinterpret_cast<const D3DXVECTOR3*>(&vNormal));
-    PblVector3 vSide(vUp.y * vDir.z - vUp.z * vDir.y, vUp.z * vDir.x - vUp.x * vDir.z,
-                     vUp.x * vDir.y - vUp.y * vDir.x);
+    PblVector3 vSide = CrossProduct(vUp, vDir);
     PblVector3 vRight;
     D3DXVec3Normalize(reinterpret_cast<D3DXVECTOR3*>(&vRight), reinterpret_cast<const D3DXVECTOR3*>(&vSide));
-    PblVector3 vFront(vRight.y * vUp.z - vRight.z * vUp.y, vRight.z * vUp.x - vRight.x * vUp.z,
-                      vRight.x * vUp.y - vRight.y * vUp.x);
+    PblVector3 vFront = CrossProduct(vRight, vUp);
 
-    return PblMatrix(vRight, vUp, vFront, vPos);
+    PblMatrix mResult(vRight, vUp, vFront, vPos);
+    return mResult;
 }
 
 
@@ -95,20 +94,17 @@ CommandPostClass::CommandPostClass(unsigned int  )
     mSpawnRotation = 0;
     mSpawnPosition = 0;
     mSpawnCount = 0;
-    mBleedValue[0] = 0;
     mBleedValue[1] = 10;
     mBleedValue[2] = 10;
     mBleedValue[3] = 10;
     mBleedValue[4] = 10;
-    mBleedValue[5] = 0;
     mBleedValue[6] = 10;
     mBleedValue[7] = 10;
+    mBleedValue[0] = 0;
+    mBleedValue[5] = 0;
     for (int i = 0; i < 8; i++)
     {
         mStrategicAttackValue[i] = 100;
-    }
-    for (int i = 0; i < 8; i++)
-    {
         mStrategicDefendValue[i] = 100;
     }
     mDisplayHUDIndex = true;
@@ -149,21 +145,15 @@ CommandPostClass::CommandPostClass(CommandPostClass* pBase, unsigned int  )
     mSpawnCount = pBase->mSpawnCount;
     mDisplayHUDIndex = pBase->mDisplayHUDIndex;
     mBleedValue[0] = 0;
+    mBleedValue[5] = 0;
     mBleedValue[1] = 10;
     mBleedValue[2] = 10;
     mBleedValue[3] = 10;
     mBleedValue[4] = 10;
-    mBleedValue[5] = 0;
     mBleedValue[6] = 10;
     mBleedValue[7] = 10;
-    for (int i = 0; i < 8; i++)
-    {
-        mStrategicAttackValue[i] = pBase->mStrategicAttackValue[i];
-    }
-    for (int i = 0; i < 8; i++)
-    {
-        mStrategicDefendValue[i] = pBase->mStrategicDefendValue[i];
-    }
+    memcpy(mStrategicAttackValue, pBase->mStrategicAttackValue, sizeof(mStrategicAttackValue));
+    memcpy(mStrategicDefendValue, pBase->mStrategicDefendValue, sizeof(mStrategicDefendValue));
     mStrategicBan = pBase->mStrategicBan;
 }
 
@@ -194,7 +184,7 @@ void CommandPostClass::SetProperty(unsigned int uProperty, const char* pszValue,
         if (sscanf(pszValue, "%s %s", acGeometry, acTeam) == 2)
         {
             int iSide = Team::TranslateTeamName(acTeam);
-            m_pHoloModel[iSide] = RedModel::_HashTable.Find(PblHash(acGeometry));
+            m_pHoloModel[iSide] = const_cast<RedModel*>(RedModel::Find(PblHash(acGeometry)));
         }
         break;
     }
@@ -267,7 +257,7 @@ void CommandPostClass::SetProperty(unsigned int uProperty, const char* pszValue,
         }
         if (iCount > 0)
         {
-            mSpawnRotation = NewSpawnRotations(iCount);
+            mSpawnRotation = new PblQuaternion[iCount];
             mSpawnPosition = new PblVector3[iCount];
         }
         mSpawnCount = 0;
@@ -288,15 +278,7 @@ void CommandPostClass::SetProperty(unsigned int uProperty, const char* pszValue,
             break;
         }
         mSpawnPosition[mSpawnCount] = PblVector3(fX, fY, fZ);
-        float fSin;
-        float fCos;
-        PblMath::SinCos(&fSin, &fCos, fYaw * 0.017453292f * 0.5f);
-        PblQuaternion qRot;
-        qRot._fX = fSin * gVectorUnitY.x;
-        qRot._fY = fSin * gVectorUnitY.y;
-        qRot._fZ = fSin * gVectorUnitY.z;
-        qRot._fS = fCos;
-        mSpawnRotation[mSpawnCount] = qRot;
+        mSpawnRotation[mSpawnCount] = PblQuaternion(gVectorUnitY, fYaw * 0.017453292f);
         mSpawnCount++;
         break;
     }
@@ -321,7 +303,7 @@ void CommandPostClass::SetProperty(unsigned int uProperty, const char* pszValue,
         {
             break;
         }
-        mSpawnRotation = NewSpawnRotations(iCount);
+        mSpawnRotation = new PblQuaternion[iCount];
         mSpawnPosition = new PblVector3[iCount];
         for (int i = 0; i < iCount;)
         {
@@ -547,9 +529,13 @@ int CommandPost::GetCount()
 CommandPost* CommandPost::GetActive(int iIndex)
 {
     CommandPost* pPost = sPostArray[iIndex];
-    if (!pPost || !pPost->IsThreadActive())
+    if (!pPost)
     {
         return 0;
+    }
+    if (!pPost->IsThreadActive())
+    {
+        pPost = 0;
     }
     return pPost;
 }
@@ -598,14 +584,8 @@ CommandPost::CommandPost(CommandPostClass* pClass, int iIndex)
     {
         mBleedValue[i] = pClass->mBleedValue[i];
     }
-    for (int i = 0; i < 8; i++)
-    {
-        mStrategicAttackValue[i] = pClass->mStrategicAttackValue[i];
-    }
-    for (int i = 0; i < 8; i++)
-    {
-        mStrategicDefendValue[i] = pClass->mStrategicDefendValue[i];
-    }
+    memcpy(mStrategicAttackValue, pClass->mStrategicAttackValue, sizeof(mStrategicAttackValue));
+    memcpy(mStrategicDefendValue, pClass->mStrategicDefendValue, sizeof(mStrategicDefendValue));
     mClass = pClass;
     mStrategicBan = 0;
     mAISpawnWeight = 100.0f;
@@ -652,18 +632,21 @@ CommandPost* CommandPost::BuildPost(GameObject* pObject, CommandPostClass* pClas
 {
     int iIndex = sForcedIndex;
     sForcedIndex = -1;
-    if (iIndex < 0)
+    if (iIndex >= 0)
+    {
+        if (*sPostCount <= iIndex)
+        {
+            *sPostCount = iIndex + 1;
+        }
+    }
+    else
     {
         for (int i = 0; i < *sPostCount; i++)
         {
             if (sPostArray[i] && !sPostArray[i]->mObject && sPostArray[i]->mClass == pClass)
             {
-                const PblMatrix& mMatrix = pObject->GetMatrix();
-                const PblVector3& vPos = sPostArray[i]->mPosition;
-                float fX = vPos.x - mMatrix.m[3][0];
-                float fY = vPos.y - mMatrix.m[3][1];
-                float fZ = vPos.z - mMatrix.m[3][2];
-                if (fX * fX + fY * fY + fZ * fZ < 1.0f)
+                const PblVector3 vDelta = sPostArray[i]->mPosition - pObject->GetMatrix().GetTranslation();
+                if (SquaredLength(vDelta) < 1.0f)
                 {
                     iIndex = i;
                     break;
@@ -675,10 +658,6 @@ CommandPost* CommandPost::BuildPost(GameObject* pObject, CommandPostClass* pClas
             iIndex = *sPostCount;
             *sPostCount = iIndex + 1;
         }
-    }
-    else if (iIndex >= *sPostCount)
-    {
-        *sPostCount = iIndex + 1;
     }
 
     if (!sPostArray[iIndex])
@@ -716,7 +695,8 @@ void CommandPost::Attach(GameObject* pObject)
     {
         EntityDesc desc;
         PblMatrix mBone;
-        if (mObject->GetModel()->_mLod[0]->GetBoneMatrix(0xD1E4CC7A, mBone))
+        const GameModel* pModel = mObject->GetModel();
+        if (pModel->_mLod[0]->GetBoneMatrix(0xD1E4CC7A, mBone))
         {
             PblMatrix mWorld;
             D3DXMatrixMultiply(reinterpret_cast<D3DXMATRIX*>(&mWorld), reinterpret_cast<const D3DXMATRIX*>(&mBone), reinterpret_cast<const D3DXMATRIX*>(&mObject->GetMatrix()));
@@ -755,14 +735,18 @@ void CommandPost::Kill()
         EventManager::CommandPostEvent::mKill.Trigger(*this, mObject->mDamageOwner);
     }
 
-    TurnHologramOff();
+    if (m_pHologram)
+    {
+        m_pHologram->TurnOff();
+    }
 
     if (mKillRegion)
     {
         for (int i = 0; i < 15; i++)
         {
-            PblVector3 vPos = mKillRegion->mMatrix.ApplyTransform(
-                mKillRegion->mSize * PblRandom::GetGlobalVector3());
+            PblVector3 vPos = PblRandom::GetGlobalVector3();
+            vPos = mKillRegion->mSize * vPos;
+            vPos = mKillRegion->mMatrix.ApplyTransform(vPos);
 
             FLEffectClass* pEffectClass;
             switch (PblRandom::GetGlobalInt() % 3)
@@ -1154,7 +1138,11 @@ int CommandPost::GetBleedValue(int iTeam) const
 // FUNCTION: SWBF2 0x0047c550
 bool CommandPost::CanTeamSpawnHere(int iTeam) const
 {
-    if (!mIsAISpawnPoint || !GetGameObject())
+    if (!mIsAISpawnPoint)
+    {
+        return false;
+    }
+    if (!GetGameObject())
     {
         return false;
     }
@@ -1162,7 +1150,7 @@ bool CommandPost::CanTeamSpawnHere(int iTeam) const
     {
         return mSpawnPath || mClass->mSpawnCount > 0;
     }
-    return Team::sTeams[GetGameObject()->mTeam]->GetAffiliation(iTeam) > 0 && mAllyPath;
+    return Team::sTeams[GetGameObject()->mTeam]->GetAffiliation(iTeam) > 0 ? mAllyPath != 0 : false;
 }
 
 // FUNCTION: SWBF2 0x0047c640
@@ -1175,25 +1163,18 @@ PblMatrix CommandPost::GetMatrixOnSpawnPath(bool bAlly) const
         const unsigned int uPoint = PblRandom::GetSim().GetInt() % pPath->GetNumPoints();
         const PblQuaternion qRotation = pPath->GetPointRotation(uPoint).Inverse();
         const PblVector3& vPosition = pPath->GetPointPosition(uPoint);
-        PblQuaternion qUnit;
-        D3DXMatrixRotationQuaternion(reinterpret_cast<D3DXMATRIX*>(&mMatrix), D3DXQuaternionNormalize(reinterpret_cast<D3DXQUATERNION*>(&qUnit), reinterpret_cast<const D3DXQUATERNION*>(&qRotation)));
-        mMatrix.SetTranslation(vPosition);
-        mMatrix.m[0][0] = -mMatrix.m[0][0];
-        mMatrix.m[0][1] = -mMatrix.m[0][1];
-        mMatrix.m[0][2] = -mMatrix.m[0][2];
+        mMatrix = PblMatrix(qRotation, vPosition);
+        mMatrix[0] = -mMatrix[0];
         mMatrix.m[0][3] = 0.0f;
-        mMatrix.m[2][0] = -mMatrix.m[2][0];
-        mMatrix.m[2][1] = -mMatrix.m[2][1];
-        mMatrix.m[2][2] = -mMatrix.m[2][2];
+        mMatrix[2] = -mMatrix[2];
         mMatrix.m[2][3] = 0.0f;
 
         if (AIUtil::IsUberMode() && mSpawnRegion)
         {
-            const PblVector3 vPoint = AIUtil::GetRandomPtInRegion(mSpawnRegion);
-            mMatrix.SetTranslation(vPoint);
+            mMatrix.SetTranslation(AIUtil::GetRandomPtInRegion(mSpawnRegion));
         }
 
-        PblVector3 vStart(mMatrix.m[3][0], mMatrix.m[3][1], mMatrix.m[3][2]);
+        PblVector3 vStart = mMatrix.GetTranslation();
         CollisionObject* pHitObject;
         const float fUp = CollisionManager::RayHit(vStart, gVectorUnitY, 10.0f, pHitObject, 0, 0, 0,
                                                    COLL_STATIC | COLL_TERRAIN, true);
@@ -1203,20 +1184,14 @@ PblMatrix CommandPost::GetMatrixOnSpawnPath(bool bAlly) const
                                                      COLL_STATIC | COLL_TERRAIN, true);
         if (fDown < 1.0f)
         {
-            mMatrix.m[3][0] = vStart.x - fDown * 20.0f * gVectorUnitY.x;
-            mMatrix.m[3][1] = vStart.y - fDown * 20.0f * gVectorUnitY.y;
-            mMatrix.m[3][2] = vStart.z - fDown * 20.0f * gVectorUnitY.z;
-            mMatrix.m[3][3] = 1.0f;
+            mMatrix.SetTranslation(vStart - gVectorUnitY * (fDown * 20.0f));
         }
     }
     else if (!bAlly && mClass->mSpawnCount)
     {
         const unsigned int uPoint = PblRandom::GetSim().GetInt() % mClass->mSpawnCount;
         const PblVector3& vPosition = mClass->mSpawnPosition[uPoint];
-        PblQuaternion qUnit;
-        PblMatrix mSpawn;
-        D3DXMatrixRotationQuaternion(reinterpret_cast<D3DXMATRIX*>(&mSpawn), D3DXQuaternionNormalize(reinterpret_cast<D3DXQUATERNION*>(&qUnit), reinterpret_cast<const D3DXQUATERNION*>(&mClass->mSpawnRotation[uPoint])));
-        mSpawn.SetTranslation(vPosition);
+        const PblMatrix mSpawn(mClass->mSpawnRotation[uPoint], vPosition);
         PblMatrix mWorld;
         mWorld = mSpawn * mMatrix;
         mMatrix = mWorld;
@@ -1224,21 +1199,19 @@ PblMatrix CommandPost::GetMatrixOnSpawnPath(bool bAlly) const
         if (GetGameObject())
         {
             const PblVector3 vCenter = GetGameObject()->GetCollisionObject()->GetCollisionCenter();
-            const PblVector3 vPoint(mMatrix.m[3][0], mMatrix.m[3][1], mMatrix.m[3][2]);
+            const PblVector3 vPoint = mMatrix.GetTranslation();
             const GameObject* pIgnore = GetGameObject();
             CollisionObject* pHitObject;
             const float fHit = CollisionManager::RayHit(vCenter, vPoint, pHitObject, 0, &pIgnore, 1,
                                                         COLL_STATIC | COLL_TERRAIN, true);
             if (fHit < 1.0f)
             {
-                mMatrix.m[3][0] = (vPoint.x - vCenter.x) * fHit + vCenter.x;
-                mMatrix.m[3][1] = (vPoint.y - vCenter.y) * fHit + vCenter.y;
-                mMatrix.m[3][2] = (vPoint.z - vCenter.z) * fHit + vCenter.z;
-                mMatrix.m[3][3] = 1.0f;
+                mMatrix.SetTranslation(vCenter + (vPoint - vCenter) * fHit);
             }
         }
     }
-    return NormalMatrix(mMatrix.GetZAxis(), gVectorUnitY, mMatrix.GetTranslation());
+    mMatrix = NormalMatrix(mMatrix.GetZAxis(), gVectorUnitY, mMatrix.GetTranslation());
+    return mMatrix;
 }
 
 // FUNCTION: SWBF2 0x0047ccd0
@@ -1250,29 +1223,33 @@ void CommandPost::PlayVoiceOver(Team::Side eSide, VoiceOver::Stream eStream, boo
     }
     const Team::Side eListener = Team::sTeams[VoiceOverManager::sInstance->GetPlayerTeamNumber() + 1]->GetSide();
     const bool bPlay = VoiceOverManager::sInstance->mPlay;
-    bPlayMusic = bPlayMusic && bPlay;
+    bPlayMusic &= bPlay;
     if (CommandPost::sEnableVO && bPlay)
     {
         GameSoundStream& rStream = mVoiceOver[eListener].mStream[eSide][eStream];
-        const PblVector3* pPos = 0;
-        if (rStream.GetProperties(false) && rStream.GetProperties(false)->Get3DMode())
-        {
-            pPos = (const PblVector3*)GetMatrix().m[3];
-        }
-        rStream.Play(pPos, 0, false, true);
+        rStream.Play((rStream.GetProperties(false) && rStream.GetProperties(false)->Get3DMode())
+                         ? (const PblVector3*)GetMatrix().m[3]
+                         : 0,
+                     0, false, true);
     }
 
     GameMusic* pMusic = 0;
     switch (eStream)
     {
     case VoiceOver::stream_Capture:
-        mClass->mSoundCaptured.Play((const PblVector3*)GetMatrix().m[3], 0, false, true);
+    {
+        const PblVector3* pPos = (const PblVector3*)GetMatrix().m[3];
+        mClass->mSoundCaptured.Play(pPos, 0, false, true);
         pMusic = &mClass->mMusicCapture[eListener];
         break;
+    }
     case VoiceOver::stream_Lost:
-        mClass->mSoundLost.Play((const PblVector3*)GetMatrix().m[3], 0, false, true);
+    {
+        const PblVector3* pPos = (const PblVector3*)GetMatrix().m[3];
+        mClass->mSoundLost.Play(pPos, 0, false, true);
         pMusic = &mClass->mMusicLost[eListener];
         break;
+    }
     }
     if (bPlayMusic && pMusic && pMusic->ReadyToPlay())
     {
@@ -1295,37 +1272,36 @@ bool CommandPost::Update(float fDeltaTime)
     mSoundAmbience.Update(&mSoundAmbienceProps, (const PblVector3*)GetMatrix().m[3], 0);
     if (!mSoundAmbience.GetPlaying())
     {
-        mSoundAmbience.Play(&mSoundAmbienceProps, (const PblVector3*)GetMatrix().m[3], 0, true);
+        const PblVector3* pPos = (const PblVector3*)GetMatrix().m[3];
+        mSoundAmbience.Play(&mSoundAmbienceProps, pPos, 0, true);
     }
     mSoundTransition.Update(&mSoundTransitionProps, (const PblVector3*)GetMatrix().m[3], 0);
 
     Character* pLongestHolder = 0;
     float fLongestHoldTime = 0.0f;
     GameObject* apObjects[64];
-    int iCount = 0;
+    int iCount;
     if (!NetGame::IsEnabled() || !NetGame::IsClient() || NetGame::IsNearLocalPlayer(GetMatrix().GetTranslation()))
     {
         iCount = GetObjectsInCaptureRegion(apObjects, 64);
         for (int i = 0; i < iCount; ++i)
         {
-            GameObject* pObject = apObjects[i];
-            if (!pObject->IsAlive() || !pObject->GetControllable())
+            if (!apObjects[i]->IsAlive() || !apObjects[i]->GetControllable())
             {
                 continue;
             }
-            if (pObject->mTeam != pObject->mPerceivedTeam)
+            if (apObjects[i]->mTeam != apObjects[i]->mPerceivedTeam)
             {
                 continue;
             }
-            const int iCaptureTeam = Team::sTeams[pObject->mTeam]->mCaptureTeam;
+            const int iCaptureTeam = Team::sTeams[apObjects[i]->mTeam]->mCaptureTeam;
             if (!iCaptureTeam)
             {
                 continue;
             }
 
-            Controllable* pControllable = pObject->GetControllable();
             bool bSpawnProtected = false;
-            const Character* pCharacter = pControllable->mCharacter;
+            const Character* pCharacter = apObjects[i]->GetControllable()->mCharacter;
             if (pCharacter)
             {
                 if (pCharacter->mPlayerId < 0 && !((1 << pCharacter->mTeamNumber) & mAICanCaptureTeamMask))
@@ -1334,11 +1310,14 @@ bool CommandPost::Update(float fDeltaTime)
                 }
                 if (pCharacter->mPlayerId >= 0 && NetGame::IsEnabled())
                 {
-                    bSpawnProtected = (float)gSpawnInvicibility > NetComm::GetTime() - pCharacter->GetSpawnTime();
+                    if (NetComm::GetTime() - pCharacter->GetSpawnTime() < (float)gSpawnInvicibility)
+                    {
+                        bSpawnProtected = true;
+                    }
                 }
             }
 
-            if (pControllable->GetControllableClass()->mCanCapturePosts &&
+            if (apObjects[i]->GetControllable()->GetControllableClass()->mCanCapturePosts &&
                 !(NetGame::IsEnabled() && bSpawnProtected))
             {
                 if (!mHoldTeam)
@@ -1352,13 +1331,13 @@ bool CommandPost::Update(float fDeltaTime)
                 ++mHoldCount[iCaptureTeam];
             }
 
-            const PblList<Controllable>& rControllables = pObject->GetControllableList();
+            const PblList<Controllable>& rControllables = apObjects[i]->GetControllableList();
             for (PblList<Controllable>::Itor it = rControllables.Begin(); (Controllable*)it; ++it)
             {
                 const int iPlayerId = it->GetPlayerId();
                 if (iPlayerId >= 0)
                 {
-                    if (pControllable->GetControllableClass()->mCanCapturePosts &&
+                    if (apObjects[i]->GetControllable()->GetControllableClass()->mCanCapturePosts &&
                         !(NetGame::IsEnabled() && bSpawnProtected))
                     {
                         mHoldPlayerMask |= (unsigned __int64)1 << iPlayerId;
@@ -1369,12 +1348,12 @@ bool CommandPost::Update(float fDeltaTime)
                     }
                 }
 
-                Character* pHolder = it->mCharacter;
-                if (pHolder && pHolder->GetCPHold() != this)
+                if (it->mCharacter && it->mCharacter->GetCPHold() != this)
                 {
-                    pHolder->SetCPHold(this);
-                    pHolder->SetCPHoldTimestamp(GameLoop::GetMissionTime());
+                    it->mCharacter->SetCPHold(this);
+                    it->mCharacter->SetCPHoldTimestamp(GameLoop::GetMissionTime());
                 }
+                Character* pHolder = it->mCharacter;
                 const float fHoldTime = pHolder ? GameLoop::GetMissionTime() - pHolder->GetCPHoldTimestamp() : 0.0f;
                 if (fHoldTime > fLongestHoldTime)
                 {
@@ -1384,11 +1363,18 @@ bool CommandPost::Update(float fDeltaTime)
             }
         }
     }
-
-    unsigned __int64 uMask = mHoldPlayerMask;
-    while (uMask >>= 1)
+    else
     {
-        ++iCapturePlayer;
+        iCount = 0;
+    }
+
+    if (mHoldPlayerMask)
+    {
+        unsigned __int64 uMask = mHoldPlayerMask;
+        while (uMask >>= 1)
+        {
+            ++iCapturePlayer;
+        }
     }
 
     if (NetGame::IsPreGame())
@@ -1409,7 +1395,7 @@ bool CommandPost::Update(float fDeltaTime)
 
             float fRate = 0.0f;
             float fWeight = 1.0f;
-            for (int i = mHoldCount[mHoldTeam]; i > 0; --i)
+            for (int i = 0; i < mHoldCount[mHoldTeam]; ++i)
             {
                 fRate += fWeight;
                 fWeight *= 0.5f;
@@ -1429,12 +1415,13 @@ bool CommandPost::Update(float fDeltaTime)
                 }
             }
 
-            if (mClass->mSoundCharge.GetPropertiesHashID() != mSoundTransitionProps.GetPropertiesHashID() ||
+            if (mSoundTransitionProps.GetPropertiesHashID() != mClass->mSoundCharge.GetPropertiesHashID() ||
                 !mSoundTransition.GetPlaying())
             {
                 mSoundTransition.Stop(true);
                 mSoundTransitionProps = mClass->mSoundCharge;
-                mSoundTransition.Play(&mSoundTransitionProps, (const PblVector3*)GetMatrix().m[3], 0, true);
+                const PblVector3* pPos = (const PblVector3*)GetMatrix().m[3];
+                mSoundTransition.Play(&mSoundTransitionProps, pPos, 0, true);
             }
             if (Snd::VoiceVirtual* pVoice = mSoundTransition.GetVoiceVirtual())
             {
@@ -1488,12 +1475,13 @@ bool CommandPost::Update(float fDeltaTime)
             {
                 EventManager::CommandPostEvent::mAbortCapture.Trigger(*this, mHoldPlayerMask);
             }
-            if (mClass->mSoundDispute.GetPropertiesHashID() != mSoundTransitionProps.GetPropertiesHashID() ||
+            if (mSoundTransitionProps.GetPropertiesHashID() != mClass->mSoundDispute.GetPropertiesHashID() ||
                 !mSoundTransition.GetPlaying())
             {
                 mSoundTransition.Stop(true);
                 mSoundTransitionProps = mClass->mSoundDispute;
-                mSoundTransition.Play(&mSoundTransitionProps, (const PblVector3*)GetMatrix().m[3], 0, true);
+                const PblVector3* pPos = (const PblVector3*)GetMatrix().m[3];
+                mSoundTransition.Play(&mSoundTransitionProps, pPos, 0, true);
             }
         }
         else
@@ -1523,7 +1511,7 @@ bool CommandPost::Update(float fDeltaTime)
             {
                 continue;
             }
-            for (int i = mHoldCount[iTeam]; i > 0; --i)
+            for (int i = 0; i < mHoldCount[iTeam]; ++i)
             {
                 fRate += fWeight;
                 fWeight *= 0.5f;
@@ -1531,12 +1519,13 @@ bool CommandPost::Update(float fDeltaTime)
         }
         mNeutralizeTimer += fRate * fDeltaTime;
 
-        if (mClass->mSoundDischarge.GetPropertiesHashID() != mSoundTransitionProps.GetPropertiesHashID() ||
+        if (mSoundTransitionProps.GetPropertiesHashID() != mClass->mSoundDischarge.GetPropertiesHashID() ||
             !mSoundTransition.GetPlaying())
         {
             mSoundTransition.Stop(true);
             mSoundTransitionProps = mClass->mSoundDischarge;
-            mSoundTransition.Play(&mSoundTransitionProps, (const PblVector3*)GetMatrix().m[3], 0, true);
+            const PblVector3* pPos = (const PblVector3*)GetMatrix().m[3];
+            mSoundTransition.Play(&mSoundTransitionProps, pPos, 0, true);
         }
         if (Snd::VoiceVirtual* pVoice = mSoundTransition.GetVoiceVirtual())
         {
@@ -1584,7 +1573,7 @@ bool CommandPost::Update(float fDeltaTime)
         {
             float fRate = 0.0f;
             float fWeight = 1.0f;
-            for (int i = mHoldCount[GetGameObject()->mTeam]; i > 0; --i)
+            for (int i = 0; i < mHoldCount[GetGameObject()->mTeam]; ++i)
             {
                 fRate += fWeight;
                 fWeight *= 0.5f;
@@ -1598,12 +1587,13 @@ bool CommandPost::Update(float fDeltaTime)
         if (mNeutralizeTimer == 0.0f && mHoldTeam == GetGameObject()->mTeam &&
             mNeutralizeTimer != GetNeutralizeTime())
         {
-            if (mClass->mSoundCharge.GetPropertiesHashID() != mSoundTransitionProps.GetPropertiesHashID() ||
+            if (mSoundTransitionProps.GetPropertiesHashID() != mClass->mSoundCharge.GetPropertiesHashID() ||
                 !mSoundTransition.GetPlaying())
             {
                 mSoundTransition.Stop(true);
                 mSoundTransitionProps = mClass->mSoundCharge;
-                mSoundTransition.Play(&mSoundTransitionProps, (const PblVector3*)GetMatrix().m[3], 0, true);
+                const PblVector3* pPos = (const PblVector3*)GetMatrix().m[3];
+                mSoundTransition.Play(&mSoundTransitionProps, pPos, 0, true);
             }
             Team* pTeam = Team::sTeams[GetGameObject()->mTeam];
             if (!NetGame::IsEnabled() || !NetGame::IsClient())
@@ -1696,7 +1686,8 @@ void CommandPost::SetTeam(int iOldTeam, int iNewTeam)
     if (iNewTeam > 0)
     {
         mSoundAmbienceProps = mClass->mSoundAmbience[Team::sTeams[iNewTeam]->GetSide()];
-        mSoundAmbience.Play(&mSoundAmbienceProps, (const PblVector3*)GetMatrix().m[3], 0, true);
+        const PblVector3* pPosition = (const PblVector3*)GetMatrix().m[3];
+        mSoundAmbience.Play(&mSoundAmbienceProps, pPosition, 0, true);
     }
 }
 

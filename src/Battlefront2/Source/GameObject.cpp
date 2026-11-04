@@ -38,13 +38,13 @@ GameObjectClass::GameObjectClass(unsigned int uHash)
 {
     mAINoRepair = false;
     mHeroFlag = false;
-    mIsNeutralWhenEmpty = true;
     mAvailableForAnyTeam = false;
     mIsNotTargetableByPlayer = false;
     mbHideHealthBar = false;
 
     mHealthType = HEALTH_TYPE_PERSON;
     mHealthTypeForLockOn = NUM_HEALTH_TYPES;
+    mIsNeutralWhenEmpty = true;
     mMaxHealth = FLT_MAX;
     mAddHealth = 0.0f;
     mMaxShield = 0.0f;
@@ -52,11 +52,9 @@ GameObjectClass::GameObjectClass(unsigned int uHash)
     mPilotSkillRepairScale = 0.005f;
     mScanningRange = 0.0f;
     mTransmitRange = 0.0f;
-    mLockOnMinDist = 20.0f;
-    mLockOnMaxDist = 100.0f;
-    mLockOnMaxTrackDist = 200000.0f;
     mAIType = 1;
     mSwitchClassRadius = -1.0f;
+    mHoldForPlayer = false;
 
     memset(mDamageEffectClass, 0, sizeof(mDamageEffectClass));
 
@@ -64,10 +62,12 @@ GameObjectClass::GameObjectClass(unsigned int uHash)
     mVOUnitType = 0;
     mVORadius = 50.0f;
     mAICollisionRadius = 0.0f;
+    mLockOnMinDist = 20.0f;
+    mLockOnMaxDist = 100.0f;
+    mLockOnMaxTrackDist = 200000.0f;
     mPointsToUnlock = 0;
     mDisabledEffect = 0xBB7E863Du;
     mRadiusDamageSizeScale = 1.0f;
-    mHoldForPlayer = false;
 }
 
 // FUNCTION: SWBF2 0x005365a0
@@ -253,8 +253,8 @@ void GameObject::SetProperty(unsigned int uProperty, const char* pszValue)
 // FUNCTION: SWBF2 0x00535830
 void GameObject::SetTeam(int iTeam)
 {
-    bool bInList = GetCollisionObject() && GetCollisionObject()->IsInCollisionList();
-    bool bChanged = mTeam != iTeam && bInList;
+    bool bChanged = GetCollisionObject() && GetCollisionObject()->IsInCollisionList();
+    bChanged &= mTeam != iTeam;
     if (bChanged)
     {
         TeamManager::RemoveObject(this);
@@ -371,8 +371,9 @@ void GameObject::PlayDeathSound()
         mGameObjectAttachedSound.Stop(true);
     }
     const PblMatrix& matrix = GetMatrix();
+    const PblVector3& vVelocity = GetVelocity();
     mGameObjectAttachedSound.Play(&GetGameObjectClass()->mSoundDeath, &matrix.GetTranslation(),
-                                  &GetVelocity(), true);
+                                  &vVelocity, true);
 }
 
 // FUNCTION: SWBF2 0x00535be0
@@ -383,9 +384,17 @@ void GameObject::PlayHurtSound(bool bByCharacter)
         mGameObjectAttachedSound.Stop(true);
     }
     const PblMatrix& matrix = GetMatrix();
-    mGameObjectAttachedSound.Play(bByCharacter ? &GetGameObjectClass()->mSoundHurt
-                                               : &GetGameObjectClass()->mSoundHurtFall,
-                                  &matrix.GetTranslation(), &GetVelocity(), true);
+    const PblVector3& vVelocity = GetVelocity();
+    if (!bByCharacter)
+    {
+        mGameObjectAttachedSound.Play(&GetGameObjectClass()->mSoundHurtFall, &matrix.GetTranslation(),
+                                      &vVelocity, true);
+    }
+    else
+    {
+        mGameObjectAttachedSound.Play(&GetGameObjectClass()->mSoundHurt, &matrix.GetTranslation(),
+                                      &vVelocity, true);
+    }
 }
 
 // FUNCTION: SWBF2 0x00535c50
@@ -398,17 +407,21 @@ void GameObject::PlayDamageRegionSound(unsigned int uRegionId)
     {
         return;
     }
-    DamageRegionSound* pSound = 0;
-    for (PblListSingle::Node* pNode = pFirst;; pNode = pNode->mNext)
+    PblListSingle::Node* pNode = pFirst;
+    DamageRegionSound* pSound;
+    for (;;)
     {
+        pSound = (pNode == &list.mHead)
+                     ? 0
+                     : (DamageRegionSound*)((char*)pNode - offsetof(DamageRegionSound, mNode));
+        if (pSound->mRegionID == uRegionId)
+        {
+            break;
+        }
+        pNode = pNode->mNext;
         if (pNode == &list.mHead)
         {
             pSound = (DamageRegionSound*)((char*)pFirst - offsetof(DamageRegionSound, mNode));
-            break;
-        }
-        pSound = (DamageRegionSound*)((char*)pNode - offsetof(DamageRegionSound, mNode));
-        if (pSound->mRegionID == uRegionId)
-        {
             break;
         }
     }
@@ -419,19 +432,20 @@ void GameObject::PlayDamageRegionSound(unsigned int uRegionId)
 // FUNCTION: SWBF2 0x00535cc0
 FlagItem* GameObject::GetCarriedFlagItem() const
 {
-    if (GetControllable() &&
-        (GetControllable()->IsPilotable() || GetControllable()->GetPilotType() == PILOT_SELF) &&
-        GetControllable()->GetCharacter() && GetControllable()->GetCharacter()->mCarriedFlagPtr)
+    if (GetControllable())
     {
-        return GetControllable()->GetCharacter()->mCarriedFlagPtr;
+        if ((GetControllable()->IsPilotable() || GetControllable()->GetPilotType() == PILOT_SELF) &&
+            GetControllable()->mCharacter && GetControllable()->mCharacter->mCarriedFlagPtr)
+        {
+            return GetControllable()->mCharacter->mCarriedFlagPtr;
+        }
     }
     for (PblList<Controllable>::Itor it(GetControllableList()); (Controllable*)it; ++it)
     {
-        Controllable* pControllable = it;
-        if ((pControllable->IsPilotable() || pControllable->GetPilotType() == PILOT_SELF) &&
-            pControllable->GetCharacter() && pControllable->GetCharacter()->mCarriedFlagPtr)
+        if ((it->IsPilotable() || it->GetPilotType() == PILOT_SELF) && it->mCharacter &&
+            it->mCharacter->mCarriedFlagPtr)
         {
-            return pControllable->GetCharacter()->mCarriedFlagPtr;
+            return it->mCharacter->mCarriedFlagPtr;
         }
     }
     return 0;
@@ -535,7 +549,14 @@ void GameObject::AwardVehicleKillPoints(int iVehicleType, bool bEmpty)
     }
     else if (iKillerType >= 1 && iKillerType <= 3)
     {
-        PlayerStats::PointsProcessTeam(iTeam, iKillerType > iVehicleType ? 9 : 6);
+        if (iKillerType > iVehicleType)
+        {
+            PlayerStats::PointsProcessTeam(iTeam, 9);
+        }
+        else
+        {
+            PlayerStats::PointsProcessTeam(iTeam, 6);
+        }
     }
     else
     {
@@ -767,10 +788,8 @@ extern bool netHeroesEnabled;
 // FUNCTION: SWBF2 0x005350d0
 GameObject::GameObject(GameObjectClass* pClass, const EntityDesc& desc, CollisionObjectType eType,
                        const RedLodData* pLodData)
-    : EntityGeometry(pClass, desc, eType, pLodData)
+    : EntityGeometry(pClass, desc, eType, pLodData), mNetUniqueId(-1), mPrevFoliageObj(0)
 {
-    mNetUniqueId = -1;
-    mPrevFoliageObj = 0;
     mCreatedTime = GameLoop::GetMissionTime();
     mTeam = 0;
     mPerceivedTeam = 0;
@@ -861,10 +880,7 @@ GameObjectClass::GameObjectClass(GameObjectClass* pBase, unsigned int uHash)
     mHoldForPlayer = pBase->mHoldForPlayer;
     mAvailableForAnyTeam = pBase->mAvailableForAnyTeam;
 
-    for (int i = 0; i < 10; ++i)
-    {
-        mDamageEffectClass[i] = pBase->mDamageEffectClass[i];
-    }
+    memcpy(mDamageEffectClass, pBase->mDamageEffectClass, sizeof(mDamageEffectClass));
 
     mVOSoundList = pBase->mVOSoundList;
     mVOUnitType = pBase->mVOUnitType;
@@ -884,6 +900,9 @@ static DamageEffectClass* sCurDamageEffect;
 // FUNCTION: SWBF2 0x005365c0
 void GameObjectClass::SetProperty(unsigned int uProperty, const char* pszValue)
 {
+    char acSound[256];
+    char acRegion[256];
+    char acBuffer[512];
     switch (uProperty)
     {
     case 0x19971f1b:
@@ -1038,8 +1057,6 @@ void GameObjectClass::SetProperty(unsigned int uProperty, const char* pszValue)
 
     case 0x7241c3bb:
     {
-        char acSound[256];
-        char acRegion[256];
         acSound[0] = 0;
         acRegion[0] = 0;
         sscanf(pszValue, "%255s %255s", acSound, acRegion);
@@ -1054,7 +1071,6 @@ void GameObjectClass::SetProperty(unsigned int uProperty, const char* pszValue)
 
     case 0x172645b9:
     {
-        char acBuffer[512];
         strncpy(acBuffer, pszValue, 511);
         acBuffer[511] = 0;
         const char* pszSound = strtok(acBuffer, " ,+-;");
@@ -1085,20 +1101,24 @@ void GameObjectClass::SetProperty(unsigned int uProperty, const char* pszValue)
     case 0x06182385:
     {
         sCurDamageEffect = 0;
-        int i = 0;
-        while (mDamageEffectClass[i])
+        int i;
+        for (i = 0; i < 10; ++i)
         {
-            if (++i >= 10)
+            if (!mDamageEffectClass[i])
             {
-                return;
+                break;
             }
+        }
+        if (i == 10)
+        {
+            return;
         }
         mDamageEffectClass[i] = new DamageEffectClass;
         sCurDamageEffect = mDamageEffectClass[i];
         if (sCurDamageEffect)
         {
-            sCurDamageEffect->mPercentStop = 0.0f;
             sCurDamageEffect->mPercent = (float)atof(pszValue) / 100.0f;
+            sCurDamageEffect->mPercentStop = 0.0f;
         }
         break;
     }
@@ -1207,9 +1227,9 @@ void Event<GameObject, char>::Callback::Trigger(GameObject& item, char& param)
             pChild->AddRef();
             while (pChild)
             {
-                if (!pChild->IsAlive())
+                const bool bAlive = pChild->mAliveFlag;
+                if (!bAlive)
                 {
-                    pChild->Release();
                     break;
                 }
                 Callback* pNext = (Callback*)pChild->mSibling;
@@ -1220,6 +1240,10 @@ void Event<GameObject, char>::Callback::Trigger(GameObject& item, char& param)
                 pChild->Trigger(item, param);
                 pChild->Release();
                 pChild = pNext;
+            }
+            if (pChild)
+            {
+                pChild->Release();
             }
         }
     }
