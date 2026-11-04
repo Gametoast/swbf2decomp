@@ -389,7 +389,7 @@
 // __security_init_cookie
 
 // LIBRARY: SWBF2 0x00753a0d
-// UserMathErrorFunction
+// _matherr
 
 // LIBRARY: SWBF2 0x00753a10
 // _RTC_Initialize

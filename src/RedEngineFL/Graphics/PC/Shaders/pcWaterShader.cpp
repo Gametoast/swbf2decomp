@@ -22,7 +22,7 @@
 void __cdecl PblTraceP(const char* Format, ...);
 
 // TEMPLATE: SWBF2 0x006fe970
-// float RedTextureTransform::operator()(int,int) const (pcWaterShader.obj copy)
+// RedTextureTransform::operator()
 
 class PblMatrix;
 extern PblMatrix gMatrixIdentity;

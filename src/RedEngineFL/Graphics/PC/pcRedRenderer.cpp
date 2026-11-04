@@ -3131,7 +3131,8 @@ template util::TKeyPair_<RenderItem*, unsigned int>* util::TypedArrayAllocator<u
 // TEMPLATE: SWBF2 0x006b0390
 // util::TypedArrayAllocator<RedRenderer::SortHeap,util::NewAllocator>::Allocate_
 template RedRenderer::SortHeap* util::TypedArrayAllocator<RedRenderer::SortHeap>::Allocate_(int&);
-// FUNCTION: SWBF2 0x006afbe0
+// TEMPLATE: SWBF2 0x006afbe0
+// util::Vector<util::TKeyPair_<RenderItem *,unsigned int>,util::BaseArray<util::TKeyPair_<RenderItem *,unsigned int>,util::TNewArrayAlloc<util::TKeyPair_<RenderItem *,unsigned int> > > >::Vector<util::TKeyPair_<RenderItem *,unsigned int>,util::BaseArray<util::TKeyPair_<RenderItem *,unsigned int>,util::TNewArrayAlloc<util::TKeyPair_<RenderItem *,unsigned int> > > >
 template util::Vector<util::TKeyPair_<RenderItem*, unsigned int> >::Vector(util::Vector<util::TKeyPair_<RenderItem*, unsigned int> > const&);
 // TEMPLATE: SWBF2 0x006b2e30
 // util::BaseArray<util::TKeyPair_<RenderItem *,unsigned int>,util::TNewArrayAlloc<util::TKeyPair_<RenderItem *,unsigned int> > >::Reserve_
@@ -3139,7 +3140,6 @@ template bool util::BaseArray<util::TKeyPair_<RenderItem*, unsigned int> >::Rese
 // TEMPLATE: SWBF2 0x006b2f20
 // util::BaseArray<RedRenderer::SortHeap,util::TNewArrayAlloc<RedRenderer::SortHeap> >::Reserve_
 template bool util::BaseArray<RedRenderer::SortHeap>::Reserve_(int, bool);
-
 // TEMPLATE: SWBF2 0x006afe10
 // util::BaseArray<RedRenderer::SortHeap,util::TNewArrayAlloc<RedRenderer::SortHeap> >::~BaseArray<RedRenderer::SortHeap,util::TNewArrayAlloc<RedRenderer::SortHeap> >
 template util::BaseArray<RedRenderer::SortHeap>::~BaseArray();
