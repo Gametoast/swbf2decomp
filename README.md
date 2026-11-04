@@ -3,10 +3,10 @@
 ## Progress
 
 ```
-Implemented:  99.37%  (19255 / 19377)
-Perfect:      14396 / 19377
-Accuracy:     91.99%
-Progress:     91.41%
+Implemented:  99.37%  (19261 / 19383)
+Perfect:      16354 / 19383
+Accuracy:     96.16%
+Progress:     95.55%
 ```
 
 ## Goals
