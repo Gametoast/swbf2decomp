@@ -1257,7 +1257,7 @@ void HUD::GameEvents::UpdateLockOn(unsigned int uIndex, const GameObject* const 
     const float fDeltaX = vTargetPos.x - mPlayer.m[3][0];
     const float fDeltaY = vTargetPos.y - mPlayer.m[3][1];
     const float fDeltaZ = vTargetPos.z - mPlayer.m[3][2];
-    const float fDistance = sqrtf(fDeltaY * fDeltaY + fDeltaX * fDeltaX + fDeltaZ * fDeltaZ);
+    const float fDistance = PblMath::Sqrt(fDeltaY * fDeltaY + fDeltaX * fDeltaX + fDeltaZ * fDeltaZ);
     HUD::Event ev14(events.lockOnDistance, fDistance);
     ev14.Send();
 
@@ -1265,7 +1265,7 @@ void HUD::GameEvents::UpdateLockOn(unsigned int uIndex, const GameObject* const 
     const PblVector3& vUp = mPlayer.GetYAxis();
     const float fDot = vUp.y * (fDeltaY * fInvDistance) + vUp.x * (fDeltaX * fInvDistance) +
                        vUp.z * (fDeltaZ * fInvDistance);
-    const bool bShowDirection = fabs(fDot) > 0.2f;
+    const bool bShowDirection = fabsf(fDot) > 0.2f;
     if (bShowDirection != data.lockedDirectionEnabled)
     {
         if (bShowDirection)
@@ -2277,7 +2277,7 @@ void HUD::GameEvents::UpdateEnergy(const Controllable* const pControllable, Play
     ev4.Send();
     const float fEnergyMax = pBar->m_pClass->m_fEnergyMax;
     const float fFraction = fEnergyMax > 0.0f ? pBar->m_fEnergy / fEnergyMax : 0.0f;
-    HUD::Event ev5(events.energyFraction, (float)fabs((double)fFraction));
+    HUD::Event ev5(events.energyFraction, fabsf(fFraction));
     ev5.Send();
     if (pBar->m_bOverheat)
     {

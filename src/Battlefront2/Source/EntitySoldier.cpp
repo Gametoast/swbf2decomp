@@ -1549,7 +1549,7 @@ void EntitySoldier::Render(unsigned char ucLod, float fFade, unsigned int uiFlag
         bReflected = true;
         uiReflectFlags = (uiFlags & ~0x10000) | 0x10000100;
         PblMatrix mTemp;
-        D3DXMatrixMultiply(reinterpret_cast<D3DXMATRIX*>(&mTemp), reinterpret_cast<const D3DXMATRIX*>(&mWorld), reinterpret_cast<const D3DXMATRIX*>(&mReflection));
+        mTemp = mWorld * mReflection;
         mReflection = mTemp;
     }
 
@@ -1845,7 +1845,7 @@ void EntitySoldier::Render(unsigned char ucLod, float fFade, unsigned int uiFlag
                     PblMatrix mFoot = mWorld;
                     if (const PblMatrix* pRightFoot = pose.Find(0x2f06fa86))
                     {
-                        D3DXMatrixMultiply(reinterpret_cast<D3DXMATRIX*>(&mFoot), reinterpret_cast<const D3DXMATRIX*>(pRightFoot), reinterpret_cast<const D3DXMATRIX*>(&mWorld));
+                        mFoot = *pRightFoot * mWorld;
                     }
                     PblVector3 vRightFoot = mFoot.GetTranslation();
                     const PblMatrix* pLeftFoot = pose.Find(0x1af77461);
@@ -1853,7 +1853,7 @@ void EntitySoldier::Render(unsigned char ucLod, float fFade, unsigned int uiFlag
                     {
                         pLeftFoot = &gMatrixIdentity;
                     }
-                    D3DXMatrixMultiply(reinterpret_cast<D3DXMATRIX*>(&mFoot), reinterpret_cast<const D3DXMATRIX*>(pLeftFoot), reinterpret_cast<const D3DXMATRIX*>(&mWorld));
+                    mFoot = *pLeftFoot * mWorld;
                     PblVector3 vLeftFoot = mFoot.GetTranslation();
                     const PblVector3& vVelocity = GetVelocity();
                     float fSpeed2 = vVelocity.x * vVelocity.x + vVelocity.y * vVelocity.y + vVelocity.z * vVelocity.z;
@@ -2015,7 +2015,7 @@ void EntitySoldier::Render(unsigned char ucLod, float fFade, unsigned int uiFlag
                 PblMatrix mChoke;
                 if (pBone)
                 {
-                    D3DXMatrixMultiply(reinterpret_cast<D3DXMATRIX*>(&mChoke), reinterpret_cast<const D3DXMATRIX*>(pBone), reinterpret_cast<const D3DXMATRIX*>(&mWorld));
+                    mChoke = *pBone * mWorld;
                 }
                 else
                 {
@@ -2143,7 +2143,7 @@ void EntitySoldier::Render(unsigned char ucLod, float fFade, unsigned int uiFlag
         if (mSoldierAnimatorLowRes->GetRootMatrixAnimation(*this, mRoot))
         {
             PblMatrix mTemp;
-            D3DXMatrixMultiply(reinterpret_cast<D3DXMATRIX*>(&mTemp), reinterpret_cast<const D3DXMATRIX*>(&mRoot), reinterpret_cast<const D3DXMATRIX*>(&mWorld));
+            mTemp = mRoot * mWorld;
             if (mState == SoldierState::FLY || mState == SoldierState::TUMBLE)
             {
                 mRoot = mTemp;
@@ -2334,7 +2334,7 @@ void EntitySoldier::Render(unsigned char ucLod, float fFade, unsigned int uiFlag
             if (const PblMatrix* pBone = pPose->Find(pFlag->GetCarriedSoldierBoneHash()))
             {
                 PblMatrix mFlag;
-                D3DXMatrixMultiply(reinterpret_cast<D3DXMATRIX*>(&mFlag), reinterpret_cast<const D3DXMATRIX*>(pBone), reinterpret_cast<const D3DXMATRIX*>(&mWorld));
+                mFlag = *pBone * mWorld;
                 reinterpret_cast<GameObject*>(pFlag)->SetMatrix(mFlag);
                 pFlag->RenderHelper(ucLod, fAlpha, uiModelFlags);
             }
@@ -3280,9 +3280,8 @@ GameObject* EntitySoldier::TryBoard(bool bArg, bool& rIsVehicle)
             const PblVector3 vMin(box._vMin.x - (GetCollisionRadius() + 0.5f),
                                   box._vMin.y - (GetCollisionRadius() + 0.5f),
                                   box._vMin.z - (GetCollisionRadius() + 0.5f));
-            const PblVector3 vMax(box._vMax.x + (GetCollisionRadius() + 0.5f),
-                                  box._vMax.y + (GetCollisionRadius() + 0.5f),
-                                  box._vMax.z + (GetCollisionRadius() + 0.5f));
+            const PblVector3 vMax = box._vMax + PblVector3(GetCollisionRadius() + 0.5f, GetCollisionRadius() + 0.5f,
+                                                           GetCollisionRadius() + 0.5f);
             const PblVector3 vLocal = apObjects[i]->GetMatrix().GetInverseFast().ApplyTransform(GetCollisionCenter());
             if (!(vLocal.x >= vMin.x && vMax.x >= vLocal.x && vLocal.y >= vMin.y && vMax.y >= vLocal.y &&
                   vLocal.z >= vMin.z && vMax.z >= vLocal.z))
@@ -3317,12 +3316,11 @@ GameObject* EntitySoldier::TryBoard(bool bArg, bool& rIsVehicle)
         const CollisionObject* pCollision = apObjects[i]->GetCollisionObject();
         float fPrio = TargetInfo::GetTargetPrio(mEyePoint, mEyeDir, pCollision->GetCollisionCenter(),
                                                 pCollision->GetCollisionRadius(), 1.0f, 5.0f, false);
-        if (fPrio < 0.0f || fBestPrio <= fPrio)
+        if (fPrio >= 0.0f && fBestPrio > fPrio)
         {
-            continue;
+            fBestPrio = fPrio;
+            pBest = pTerminal ? pTerminal : apObjects[i];
         }
-        fBestPrio = fPrio;
-        pBest = pTerminal ? pTerminal : apObjects[i];
     }
     if (!pBest)
     {
@@ -3694,7 +3692,14 @@ void EntitySoldier::SetupCameraTrackMatrix(PblMatrix& rMatrix, float fDeltaTime)
         !mFlyingInFirstPerson)
     {
         rMatrix = DirectionMatrix(-vAimDir, mAim.GetYAxis(), vEye);
-        rMatrix.SetTranslation(rMatrix.GetTranslation() - vAimDir * (mTargetInfo.mIsAiming ? 0.6f : 0.3f));
+        if (mTargetInfo.mIsAiming)
+        {
+            rMatrix.SetTranslation(rMatrix.GetTranslation() - vAimDir * 0.6f);
+        }
+        else
+        {
+            rMatrix.SetTranslation(rMatrix.GetTranslation() - vAimDir * 0.3f);
+        }
         int iFirstPerson = GetFirstPersonIndex();
         if (iFirstPerson >= 0 && !mTargetInfo.mIsAiming)
         {
@@ -3747,9 +3752,9 @@ void EntitySoldier::SetupCameraTrackMatrix(PblMatrix& rMatrix, float fDeltaTime)
               mState == SoldierState::JUMP || mState == SoldierState::FALL))
     {
         const PblVector3& vForward = mMatrix.GetZAxis();
-        float fSpeed = mVelocity.y * vForward.y + mVelocity.x * vForward.x + mVelocity.z * vForward.z;
         float fSprint = mClass->mThrustFactor[SoldierState::SPRINT] * mClass->mMaxSpeed;
         float fFrom = (mClass->mMaxSpeed + fSprint) * 0.5f;
+        float fSpeed = mVelocity.y * vForward.y + mVelocity.x * vForward.x + mVelocity.z * vForward.z;
         if (fSpeed > fFrom)
         {
             MotionBlurEffect::Start(0, (fSpeed - fFrom) / (fSprint - fFrom) * mClass->m_fBlurEffect, iCam);
@@ -3768,7 +3773,14 @@ void EntitySoldier::SetupCameraTrackMatrixHUDTargeting(PblMatrix& rMatrix)
     {
         rMatrix = DirectionMatrix(PblVector3(-mEyeDir.x, -mEyeDir.y, -mEyeDir.z),
                                   GetMatrix().GetYAxis(), mEyePoint);
-        rMatrix.SetTranslation(rMatrix.GetTranslation() - mEyeDir * (mTargetInfo.mIsAiming ? 0.6f : 0.3f));
+        if (mTargetInfo.mIsAiming)
+        {
+            rMatrix.SetTranslation(rMatrix.GetTranslation() - mEyeDir * 0.6f);
+        }
+        else
+        {
+            rMatrix.SetTranslation(rMatrix.GetTranslation() - mEyeDir * 0.3f);
+        }
         return;
     }
     int iCamera = (mState == SoldierState::SPRINT) ? 3 : mStanceIndex;
@@ -5934,9 +5946,9 @@ bool EntitySoldier::Update(float fDeltaTime)
             PblMatrix mObject = mStandingOnObj->mCollisionModel->GetWorldMatrix(
                 mStandingOnBody, mStandingOnObj->GetMatrix(), mStandingOnObj->GetPose());
             PblMatrix mLocal;
-            D3DXMatrixMultiply(reinterpret_cast<D3DXMATRIX*>(&mLocal), reinterpret_cast<const D3DXMATRIX*>(&mMatrix), reinterpret_cast<const D3DXMATRIX*>(&mLastVehicleMatrix));
+            mLocal = mMatrix * mLastVehicleMatrix;
             PblMatrix mNew;
-            D3DXMatrixMultiply(reinterpret_cast<D3DXMATRIX*>(&mNew), reinterpret_cast<const D3DXMATRIX*>(&mLocal), reinterpret_cast<const D3DXMATRIX*>(&mObject));
+            mNew = mLocal * mObject;
             const PblVector3& vUp = mMatrix.GetYAxis();
             const PblVector3& vFront = mNew.GetZAxis();
             if ((float)fabs((double)(vUp.y * vFront.y + vUp.x * vFront.x + vUp.z * vFront.z)) < 0.99f)

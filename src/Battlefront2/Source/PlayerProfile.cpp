@@ -1143,12 +1143,15 @@ void RawControllerInputs::ApplyDeadZone(int iLevel)
     }
 
     float fValue = sDeadZoneScaleByLevel[iLevel];
+    int iRemaining = 10;
     RedJoystick** ppObject = _redJoystick;
-    for (int iRemaining = 10; iRemaining != 0; --iRemaining, ++ppObject)
+    do
     {
         if (*ppObject)
         {
             (*ppObject)->SetDeadZoneScale(fValue);
         }
-    }
+        ++ppObject;
+        --iRemaining;
+    } while (iRemaining != 0);
 }

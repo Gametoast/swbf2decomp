@@ -880,13 +880,13 @@ void GameState::PreStateInit(bool bMission)
     RedSetCurrentHeap(GameMemory::ApplicationHeap);
     OneTimeInit();
 
-    gDrawFlyerShadows = true;
-    PblRandom::SetGlobalSeed(0);
-
     if (!sKioskMode)
     {
         sIgnoreNextTime = true;
     }
+
+    gDrawFlyerShadows = true;
+    PblRandom::SetGlobalSeed(0);
 
     RedMissionLog::Init();
     MissionLog::Init();
@@ -952,7 +952,7 @@ void GameState::PreStateInit(bool bMission)
     RedTexture::Init();
     RedRenderer::Init();
 
-    if (pProfile && !pProfile->mInitialized)
+    if (!pProfile->mInitialized)
     {
         pProfile->mPCOptions.renderOptions = RedAutoSettings::GetRenderOptions();
     }

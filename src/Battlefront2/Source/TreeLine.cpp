@@ -69,7 +69,7 @@ void CreateTreeLineOnPath(unsigned int uPathName, PblFileChunk& chunk)
     for (int iPoint = 1; iPoint < pPath->GetNumPoints(); ++iPoint)
     {
         const PblVector3 vEnd = pPath->GetPointPosition(iPoint);
-        PblVector3 vStep(vEnd.x - vPrevious.x, vEnd.y - vPrevious.y, vEnd.z - vPrevious.z);
+        PblVector3 vStep = vEnd - vPrevious;
         while (SquaredLength(vStep) > fSpacing * fSpacing)
         {
             const float fInvLength = 1.0f / PblMath::Sqrt(vStep.x * vStep.x + vStep.y * vStep.y + vStep.z * vStep.z);
@@ -91,9 +91,7 @@ void CreateTreeLineOnPath(unsigned int uPathName, PblFileChunk& chunk)
             vPrevious.x += vStep.x * fSpacing;
             vPrevious.y += vStep.y * fSpacing;
             vPrevious.z += vStep.z * fSpacing;
-            vStep.x = vEnd.x - vPrevious.x;
-            vStep.y = vEnd.y - vPrevious.y;
-            vStep.z = vEnd.z - vPrevious.z;
+            vStep = vEnd - vPrevious;
         }
     }
 }
