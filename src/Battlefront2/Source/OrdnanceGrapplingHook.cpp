@@ -38,10 +38,7 @@ OrdnanceGrapplingHook::OrdnanceGrapplingHook(OrdnanceGrapplingHookClass* pClass,
     if (desc.mFireWeapon->IsRtti(WeaponGrapplingHook::rttiHashWeaponGrapplingHook))
     {
         mFireWeapon = (WeaponGrapplingHook*)desc.mFireWeapon;
-        PblMatrix inverse = mOwner->GetMatrix().GetInverseFast();
-        PblVector3 vOffset;
-        D3DXVec3TransformCoord(reinterpret_cast<D3DXVECTOR3*>(&vOffset), reinterpret_cast<const D3DXVECTOR3*>(&mFireWeapon->mAimer->mFirePos), reinterpret_cast<const D3DXMATRIX*>(&inverse));
-        mWeaponOffset = vOffset;
+        mWeaponOffset = mOwner->GetMatrix().GetInverseFast().ApplyTransform(mFireWeapon->mAimer->mFirePos);
     }
     else
     {
@@ -180,8 +177,7 @@ bool OrdnanceGrapplingHook::Update(float fDeltaTime)
 
         float fSpeed = PblMath::Sqrt(mVelocity.x * mVelocity.x + mVelocity.y * mVelocity.y +
                              mVelocity.z * mVelocity.z);
-        const PblVector3& vFirePos = mFireWeapon->mAimer->mFirePos;
-        PblVector3 vDelta(mPosition.x - vFirePos.x, mPosition.y - vFirePos.y, mPosition.z - vFirePos.z);
+        PblVector3 vDelta = mPosition - mFireWeapon->mAimer->mFirePos;
         PblVector3 vDir;
         D3DXVec3Normalize(reinterpret_cast<D3DXVECTOR3*>(&vDir), reinterpret_cast<const D3DXVECTOR3*>(&vDelta));
         mVelocity = PblVector3(vDir.x * fSpeed, vDir.y * fSpeed, vDir.z * fSpeed);
@@ -235,7 +231,7 @@ bool OrdnanceGrapplingHook::Update(float fDeltaTime)
         float fDist = PblMath::Sqrt(fDy * fDy + fDx * fDx + fDz * fDz);
         float fStep = PblMath::Sqrt(mVelocity.x * mVelocity.x + mVelocity.y * mVelocity.y +
                             mVelocity.z * mVelocity.z) * fDeltaTime;
-        if (fStep > fDist)
+        if (fDist < fStep)
         {
             return false;
         }

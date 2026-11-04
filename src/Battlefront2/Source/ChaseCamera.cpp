@@ -332,13 +332,11 @@ void ChaseCamera::SetupCamera(RedCamera* pCamera, float fDeltaTime)
         {
             PblQuaternion qNew = PblQuaternion(mMatrix);
 
-            PblQuaternion qRot = Interpolate(qOld, qNew, fRotBlend);
-            mMatrix = PblMatrix(qRot, vPos);
+            mMatrix = PblMatrix(Interpolate(qOld, qNew, fRotBlend), vPos);
 
             vPos += vOldPos;
             vPos *= 0.5f;
-            PblQuaternion qMid = Interpolate(qOld, qNew, 0.5f);
-            PblMatrix mMid(qMid, vPos);
+            PblMatrix mMid(Interpolate(qOld, qNew, 0.5f), vPos);
 
             float fSwing = Length(vDelta) * 0.5f * (1.0f - fBlend);
             mMatrix.SetTranslation(mMid.GetTranslation() + mMid.GetZAxis() * fSwing);
@@ -376,13 +374,11 @@ void ChaseCamera::SetupCamera(RedCamera* pCamera, float fDeltaTime)
     if (mShake > 0.0f && GameLoop::GetMissionTime() > mShakeSuppressUntil)
     {
         PblMatrix mShakeRot = gMatrixIdentity;
-        PblMatrix mAxis;
         mShakeRot.RotateX(BiasedRandom() * mShake * 0.1f);
         mShakeRot.RotateY(BiasedRandom() * mShake * 0.1f);
         mShakeRot.RotateZ(BiasedRandom() * mShake * 0.1f);
         mPreShakeMatrix = mMatrix;
-        D3DXMatrixMultiply(reinterpret_cast<D3DXMATRIX*>(&mAxis), reinterpret_cast<const D3DXMATRIX*>(&mShakeRot), reinterpret_cast<const D3DXMATRIX*>(&mMatrix));
-        mMatrix = mAxis;
+        mMatrix = mShakeRot * mMatrix;
     }
     else if (mDoSwingFlag)
     {

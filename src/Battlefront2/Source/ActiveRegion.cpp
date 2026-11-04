@@ -80,12 +80,7 @@ ActiveRegion* __fastcall Activate(RedRegion* pRegion)
     {
         return pActive;
     }
-    void* pStorage = ActiveRegion::sMemoryPool.Allocate(sizeof(ActiveRegion));
-    if (!pStorage)
-    {
-        return 0;
-    }
-    return ::new (pStorage) ActiveRegion(*pRegion);
+    return ::new (ActiveRegion::sMemoryPool.Allocate(sizeof(ActiveRegion))) ActiveRegion(*pRegion);
 }
 
 // FUNCTION: SWBF2 0x00437bc0
@@ -211,7 +206,8 @@ bool ActiveRegion::Update(float fDeltaTime)
     PblBitVector<600> notOld(~oldPlayers);
     PblBitVector<600> entered(mPlayers);
     entered.And(notOld);
-    PblBitVector<600> left(~mPlayers);
+    PblBitVector<600> left;
+    left = ~mPlayers;
     left.And(oldPlayers);
 
     for (int i = 0; i < Character::sCharacterCount; ++i)

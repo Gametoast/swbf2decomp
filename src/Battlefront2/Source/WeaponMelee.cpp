@@ -175,9 +175,8 @@ void WeaponMelee::Render(const PblMatrix& matrix, const RedPose* pPose,
         }
         if (!bThrown && edge.colorTrail.a && !bNoTrail && bRenderModel)
         {
-            PblMatrix mTrail = *pEdgeMatrix;
-            const_cast<WeaponMelee*>(this)->RenderLightsaberTrail(i, &mTrail,
-                                                                   ((1u << i) & m_uiTrailOnMask) && IsOn(uiWeapon), uiFlags);
+            const_cast<WeaponMelee*>(this)->RenderLightsaberTrail(i, &PblMatrix(*pEdgeMatrix),
+                                                                   (m_uiTrailOnMask & (1u << i)) && IsOn(uiWeapon), uiFlags);
         }
         PblVector3 vPosition, vDirection;
         D3DXVec3TransformCoord(reinterpret_cast<D3DXVECTOR3*>(&vPosition), reinterpret_cast<const D3DXVECTOR3*>(&edge.vOffsetPos), reinterpret_cast<const D3DXMATRIX*>(pEdgeMatrix));
@@ -462,9 +461,9 @@ float WeaponMelee::GetLightSaberLengthFactor(unsigned int uiBlade) const
 void WeaponMelee::RenderLightsaberTrail(unsigned int uiEdge, const PblMatrix* pMatrix, bool bTrailOn,
                                         unsigned int uiFlags)
 {
-    WeaponMelee::TrailData** ppData = &m_pTrailData;
     WeaponMelee::TrailData* pSelected = 0;
-    WeaponMelee::TrailData* pData = *ppData;
+    WeaponMelee::TrailData* pData = m_pTrailData;
+    WeaponMelee::TrailData** ppData = &m_pTrailData;
     while (pData)
     {
         if (pData->m_pTrail->m_uiNumSamples <= 0)
@@ -1094,7 +1093,9 @@ bool WeaponMelee::AlignVectorToThrust(PblVector3& v, bool bInitial) const
     {
         return false;
     }
-    const PblVector3 vOld = v;
+    const PblVector3 vFlat(v.x, 0.0f, v.z);
+    const PblVector3 vSide(v.z, 0.0f, -v.x);
+    const float fY = v.y;
     if (!bInitial)
     {
         fX = -fX;
@@ -1122,8 +1123,8 @@ bool WeaponMelee::AlignVectorToThrust(PblVector3& v, bool bInitial) const
         fCos = fInvLength * fZ;
         fSin = fInvLength * fX;
     }
-    v.x = vOld.x * fCos + vOld.z * fSin;
-    v.z = vOld.z * fCos - vOld.x * fSin;
+    v = vFlat * fCos + vSide * fSin;
+    v.y = fY;
     return true;
 }
 
@@ -2587,19 +2588,19 @@ bool WeaponMelee::OverrideSoldierVelocity(float& fVelocityZ, float& fVelocityX, 
 // FUNCTION: SWBF2 0x00688f10
 bool WeaponMelee::OverrideSoldierEnergyRestore(float& fRestore) const
 {
-    const Combo::State* pState = &m_pCombo->m_aState[m_eComboState];
-    const bool bOverride = pState->m_bEnergyRestoreRateOverride;
-    if (!bOverride && pState->m_iEnergyRestoreRate == 0)
+    const Combo::State& state = m_pCombo->m_aState[m_eComboState];
+    if (!state.m_bEnergyRestoreRateOverride && state.m_iEnergyRestoreRate == 0)
     {
         return false;
     }
-    if (bOverride)
+    const bool bAdditive = !state.m_bEnergyRestoreRateOverride;
+    if (bAdditive)
     {
-        fRestore = (float)pState->m_iEnergyRestoreRate * 0.2f;
+        fRestore = (float)state.m_iEnergyRestoreRate * 0.2f + fRestore;
     }
     else
     {
-        fRestore = (float)pState->m_iEnergyRestoreRate * 0.2f + fRestore;
+        fRestore = (float)state.m_iEnergyRestoreRate * 0.2f;
     }
     return true;
 }
@@ -2941,10 +2942,11 @@ bool WeaponMelee::Update(float fDeltaTime)
         if (pTransition)
         {
             eNextState = (ComboState)pTransition->m_uiTargetState;
+            const float fCost = pTransition->m_uiEnergyCost * 0.1f;
             EnergyBar* pEnergy = mOwner->GetEnergyBar();
             if (pEnergy)
             {
-                pEnergy->SpendEnergy(pTransition->m_uiEnergyCost * 0.1f);
+                pEnergy->SpendEnergy(fCost);
             }
         }
 
@@ -2961,8 +2963,8 @@ bool WeaponMelee::Update(float fDeltaTime)
             else
             {
                 m_eComboStatePrev = eNextState;
-                m_fComboStateDurationPrev = 0.0f;
                 pStatePrev = 0;
+                m_fComboStateDurationPrev = 0.0f;
             }
             WeaponMelee::_ClearInputQueueToTime(m_InputQueue, m_fInputTimer + fMatchTime - fTimer);
             ExitState();

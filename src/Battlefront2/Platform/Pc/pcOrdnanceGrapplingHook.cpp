@@ -129,11 +129,13 @@ pcRedPrimitive* sCreateGrapplingHookCompressedGeometry(const PblBox& box, const 
         CableCompressedVertex& front = pVertices[i * 2];
         CableCompressedVertex& back = pVertices[i * 2 + 1];
         front.pos.SetPos(vFront);
-        front.uv.SetUV(pTexCoords[(i & 1) ? 2 : 0].u, pTexCoords[(i & 1) ? 2 : 0].v);
+        front.uv.SetUV((i & 1) ? pTexCoords[2].u : pTexCoords[0].u,
+                       (i & 1) ? pTexCoords[2].v : pTexCoords[0].v);
         front.color = RedColor(kCableColor, (unsigned char)(int)(fAlpha * 255.0f));
 
         back.pos.SetPos(vFront - vOffset * 0.04f);
-        back.uv.SetUV(pTexCoords[(i & 1) ? 3 : 1].u, pTexCoords[(i & 1) ? 3 : 1].v);
+        back.uv.SetUV((i & 1) ? pTexCoords[3].u : pTexCoords[1].u,
+                      (i & 1) ? pTexCoords[3].v : pTexCoords[1].v);
         back.color = RedColor(kCableColor, (unsigned char)(int)(fAlpha * 255.0f));
     }
     pPrimitive->EndVertexData();
@@ -191,12 +193,39 @@ void OrdnanceGrapplingHook::Render(unsigned char ucViewport, float fDist, unsign
         return;
     }
 
-    const float fMinX = vEnd.x > vStart.x ? vStart.x : vEnd.x;
-    const float fMaxX = vEnd.x > vStart.x ? vEnd.x : vStart.x;
-    const float fMinY = vEnd.y > vStart.y ? vStart.y : vEnd.y;
-    const float fMaxY = vEnd.y > vStart.y ? vEnd.y : vStart.y;
-    const float fMinZ = vEnd.z > vStart.z ? vStart.z : vEnd.z;
-    const float fMaxZ = vEnd.z > vStart.z ? vEnd.z : vStart.z;
+    float fMinX, fMaxX;
+    if (vEnd.x > vStart.x)
+    {
+        fMinX = vStart.x;
+        fMaxX = vEnd.x;
+    }
+    else
+    {
+        fMinX = vEnd.x;
+        fMaxX = vStart.x;
+    }
+    float fMinY, fMaxY;
+    if (vEnd.y > vStart.y)
+    {
+        fMinY = vStart.y;
+        fMaxY = vEnd.y;
+    }
+    else
+    {
+        fMinY = vEnd.y;
+        fMaxY = vStart.y;
+    }
+    float fMinZ, fMaxZ;
+    if (vEnd.z > vStart.z)
+    {
+        fMinZ = vStart.z;
+        fMaxZ = vEnd.z;
+    }
+    else
+    {
+        fMinZ = vEnd.z;
+        fMaxZ = vStart.z;
+    }
     PblBox box;
     box._vMin = PblVector3(fMinX - 1.0f, fMinY - 1.0f, fMinZ - 1.0f);
     box._vMax = PblVector3(fMaxX + 1.0f, fMaxY + 1.0f, fMaxZ + 1.0f);
