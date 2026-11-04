@@ -100,9 +100,9 @@ void GameVoiceChat::Decoder::FreeBuffers()
 }
 
 // FUNCTION: SWBF2 0x0053cfa0
-char GameVoiceChat::Decoder::IsPlaying()
+bool GameVoiceChat::Decoder::IsPlaying()
 {
-    return (char)mPlaying;
+    return mPlaying;
 }
 
 // FUNCTION: SWBF2 0x0053ce10
@@ -230,10 +230,7 @@ bool GameVoiceChat::Decoder::Open(unsigned int playbackDevice, float fPacketMs, 
         ::new (&mProducerPackets[i]) Snd::StreamPacket();
         ::new (&mDecoders[i]) Snd::StreamGSMDecoder();
         ::new (&mDecoderPackets[i]) Snd::StreamPacket();
-        if (&mMixerConnections[i])
-        {
-            memset(&mMixerConnections[i], 0, 24);
-        }
+        ::new (&mMixerConnections[i]) Snd::StreamPacket();
         ::new (&mMixerPacketIO[i]) Snd::StreamPacketIO;
     }
 
@@ -423,6 +420,12 @@ void GameVoiceChat::Decoder::SetGain(float fGain, unsigned int uiOutput)
     mRenderGain[uiOutput] = fGain;
 }
 
+// FUNCTION: SWBF2 0x0053d1a0
+float GameVoiceChat::Decoder::GetGain(unsigned int uiOutput) const
+{
+    return mRenderGain[uiOutput];
+}
+
 // FUNCTION: SWBF2 0x0053d1b0
 unsigned int GameVoiceChat::Decoder::GetNumOutputs() const
 {
@@ -438,7 +441,7 @@ void VoiceChat::Decoder::SetGain(float fGain, unsigned int uiOutput)
 // FUNCTION: SWBF2 0x0053d300
 float VoiceChat::Decoder::GetGain(unsigned int uiOutput) const
 {
-    return static_cast<const GameVoiceChat::Decoder*>(this)->mRenderGain[uiOutput];
+    return static_cast<const GameVoiceChat::Decoder*>(this)->GetGain(uiOutput);
 }
 
 // FUNCTION: SWBF2 0x0053d320

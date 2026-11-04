@@ -72,15 +72,13 @@ void __cdecl MD5Init(MD5_CTX* pState)
 void __cdecl MD5Update(MD5_CTX* pState, const unsigned char* pData, unsigned int uLength)
 {
     unsigned int uIndex = (pState->count[0] >> 3) & 63;
-    unsigned int uBits = uLength << 3;
-    pState->count[0] += uBits;
-    if (pState->count[0] < uBits)
+    if ((pState->count[0] += (uLength << 3)) < (uLength << 3))
     {
         ++pState->count[1];
     }
     pState->count[1] += uLength >> 29;
     unsigned int uPart = 64 - uIndex;
-    unsigned int i = 0;
+    unsigned int i;
     if (uLength >= uPart)
     {
         MD5CopyBytes(pState->buffer + uIndex, pData, uPart);
@@ -90,6 +88,10 @@ void __cdecl MD5Update(MD5_CTX* pState, const unsigned char* pData, unsigned int
             MD5Transform(pState->state, pData + i);
         }
         uIndex = 0;
+    }
+    else
+    {
+        i = 0;
     }
     MD5CopyBytes(pState->buffer + uIndex, pData + i, uLength - i);
 }
@@ -165,14 +167,12 @@ void __cdecl MD5Transform(unsigned int* pState, const unsigned char* pBlock)
 // FUNCTION: SWBF2 0x005a2f40
 void __cdecl MD5EncodeWords(unsigned char* pDest, const unsigned int* pSource, unsigned int uLength)
 {
-    unsigned char* pOut = pDest;
-    const unsigned char* pIn = (const unsigned char*)pSource;
-    for (unsigned int i = 0; i < uLength; i += 4)
+    for (unsigned int i = 0, j = 0; j < uLength; ++i, j += 4)
     {
-        pOut[i] = pIn[i];
-        pOut[i + 1] = pIn[i + 1];
-        pOut[i + 2] = pIn[i + 2];
-        pOut[i + 3] = pIn[i + 3];
+        pDest[j] = (unsigned char)(pSource[i] & 0xff);
+        pDest[j + 1] = (unsigned char)((pSource[i] >> 8) & 0xff);
+        pDest[j + 2] = (unsigned char)((pSource[i] >> 16) & 0xff);
+        pDest[j + 3] = (unsigned char)((pSource[i] >> 24) & 0xff);
     }
 }
 
@@ -324,10 +324,13 @@ void __fastcall SendAdminMessage(char* pcMessage)
             admin.port = 0;
             admin.lastRecvTime = 0.0f;
         }
-        else if ((admin.addr || admin.port) && admin.lastRecvTime >= fNow - 60.0f && admin.admin)
+        else if (((unsigned __int64)admin.addr | ((unsigned __int64)admin.port << 32)) != 0 &&
+                 !(admin.lastRecvTime < fNow - 60.0f) && admin.admin)
         {
-            unsigned int address[2] = { admin.addr, admin.port };
-            int iDest = NetCommP::FindJoinSource((const int*)address);
+            NetSocketPeerRecord address;
+            address.mGalaxyId = galaxy::api::GalaxyID(
+                (unsigned __int64)admin.addr | ((unsigned __int64)admin.port << 32));
+            int iDest = NetCommP::FindJoinSource((const int*)&address);
             NetPktGroup group;
             group.BeginWrite();
             group.WriteBits((char)adminKey[adminKeyCount & 1], 8);
@@ -476,6 +479,7 @@ static void DetectBandwidth()
                 iNeeded += 81920;
             }
         }
+        const unsigned int uStartLostBytes = netLostBytes;
         int iUp, iDown;
         NetComm::GetBandwidth(64, iUp, iDown);
         if (iNeeded > iUp)
@@ -487,7 +491,7 @@ static void DetectBandwidth()
         NetComm::GetBytes(iIn, iOut);
 
         lastOutBytes = iOut;
-        lastLostBytes = uLostBytes;
+        lastLostBytes = uStartLostBytes;
         detectState = 2;
         nextDetect = fNow + 16.0f;
     }
@@ -2399,7 +2403,7 @@ bool NetAdmin::ParseLineLocal(unsigned short* pusLine, bool bConsole)
     isRemote = false;
     isDedicated = bConsole;
 
-    char acToken[32 + 1];
+    char acToken[32];
     GetNextArg(pusLine, acToken, 32);
     while (GetNextArg(pusLine, acToken, 32))
     {
@@ -2593,7 +2597,7 @@ void FormatPlayerStatusLine(char* pcOut, int iNumber, const char* pcName, int iT
     _snprintf(pcOut, 512, "%d", iNumber);
     pcOut[strlen(pcOut)] = ' ';
     _snprintf(pcOut + 3, 17, "\"%s\"", pcName);
-    unsigned int uLength = strlen(pcOut + 3);
+    int uLength = (int)strlen(pcOut + 3);
     if (uLength >= 17)
     {
         pcOut[19] = '"';
@@ -2620,8 +2624,12 @@ void FormatPlayerStatusLine(char* pcOut, int iNumber, const char* pcName, int iT
 // FUNCTION: SWBF2 0x005b1f70
 void __fastcall FormatRefusedAdminLine(int iPlayer, unsigned short* pusLine)
 {
-    const char* pcPlayer = "admin";
-    if (iPlayer != 64)
+    const char* pcPlayer;
+    if (iPlayer == 64)
+    {
+        pcPlayer = "admin";
+    }
+    else
     {
         pcPlayer = NetGame::GetPlayerName(iPlayer);
         if (!pcPlayer)

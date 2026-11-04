@@ -163,6 +163,7 @@ static void ReadPilots(NetPktGroup& group, GameObject* owner);
 bool IsNeverDies(EntityType type);
 void CheckReadAlign(NetPktGroup& group);
 extern int gDebugCount;
+extern PblVector3 gVectorZero;
 
 // FUNCTION: SWBF2 0x005f5860
 void BeginNetLOD()
@@ -582,7 +583,7 @@ void PowerupStation::ReadObject(NetPktGroup& group, NetObjState*)
     group.ReadFixed(health, 0.0f, mMaxHealth, 11);
     SetCurHealth(health, true, 0);
     group.ReadBits(value, 1);
-    mIsAlive = value != 0;
+    mIsAlive = value;
     if (state != mState)
     {
         if (state == STATE_ALIVE)
@@ -651,15 +652,14 @@ void FlagItem::ReadObject(NetPktGroup& group, NetObjState*)
 {
     PblMatrix matrix;
     ReadMatrix(group, matrix);
-    CollisionObject* collision = this;
-    collision->SetMatrix(matrix);
-    memcpy(&collision->mLastPosition, &collision->GetPosition(), sizeof(PblVector3));
+    SetMatrix(matrix);
+    memcpy(&mLastPosition, &GetPosition(), sizeof(PblVector3));
     unsigned int value;
     group.Read(mStationary);
     if (mStationary)
     {
-        mVelocity = PblVector3(0.0f, 0.0f, 0.0f);
-        CollisionManager::DeactivateItem(collision);
+        mVelocity = gVectorZero;
+        CollisionManager::DeactivateItem(this);
     }
     else
     {
@@ -693,9 +693,9 @@ void FlagItem::ReadObject(NetPktGroup& group, NetObjState*)
             {
                 Deactivate();
             }
-            if (collision->IsInCollisionList())
+            if (IsInCollisionList())
             {
-                collision->RemoveFromCollisionManager();
+                RemoveFromCollisionManager();
             }
             if (m_pLight)
             {
@@ -704,10 +704,10 @@ void FlagItem::ReadObject(NetPktGroup& group, NetObjState*)
         }
         else
         {
-            if (!collision->IsInCollisionList())
+            if (!IsInCollisionList())
             {
-                collision->RemoveFromCollisionManager();
-                collision->AddItemToCollisionManager();
+                RemoveFromCollisionManager();
+                AddItemToCollisionManager();
             }
             if (mCarriedModel)
             {
@@ -773,14 +773,15 @@ void EntityBuildingArmed::ReadObject(NetPktGroup& group, NetObjState*)
 {
     unsigned int value;
     group.ReadBits(value, 2);
-    const int state = value;
+    const EntityBuilding::STATE state = static_cast<EntityBuilding::STATE>(value);
     float health;
     group.ReadFixed(health, 0.0f, mMaxHealth, 11);
     SetCurHealth(health, true, 0);
     group.ReadBits(value, 1);
-    mIsAlive = value != 0;
-    group.ReadBits(value, 1);
-    if (value)
+    mIsAlive = value;
+    bool hasHealthType;
+    group.Read(hasHealthType);
+    if (hasHealthType)
     {
         group.ReadBits(value, 3);
         mHealthTypeForLockOn = value;
@@ -789,48 +790,51 @@ void EntityBuildingArmed::ReadObject(NetPktGroup& group, NetObjState*)
     {
         mHealthTypeForLockOn = 8;
     }
-    if (state == EntityBuilding::STATE_UNBUILT)
+    if (state != EntityBuilding::STATE_UNBUILT)
     {
-        if (mState != EntityBuilding::STATE_UNBUILT)
+        ReadPilots(group, this);
+        for (int i = 0; i < mNumTurrets; ++i)
         {
-            static_cast<Damageable*>(this)->Kill();
+            mTurret[i]->Read(group);
         }
-        return;
-    }
-    ReadPilots(group, this);
-    for (int i = 0; i < mNumTurrets; ++i)
-    {
-        mTurret[i]->Read(group);
-    }
-    if (state != mState)
-    {
-        if (state == EntityBuilding::STATE_ALIVE)
+        if (state != mState)
         {
-            static_cast<Damageable*>(this)->Respawn();
+            switch (state)
+            {
+            case EntityBuilding::STATE_ALIVE:
+                static_cast<Damageable*>(this)->Respawn();
+                break;
+            case EntityBuilding::STATE_DEAD:
+            case EntityBuilding::STATE_UNBUILT:
+                static_cast<Damageable*>(this)->Kill();
+                break;
+            }
         }
-        else if (state == EntityBuilding::STATE_DEAD || state == EntityBuilding::STATE_UNBUILT)
+        if (mMaxShield > 0.0f)
         {
-            static_cast<Damageable*>(this)->Kill();
-        }
-    }
-    if (mMaxShield > 0.0f)
-    {
-        group.ReadFixed(mCurShield, 0.0f, mMaxShield, 11);
-        group.ReadBits(value, 1);
-        mIsShielded = value != 0;
-        group.ReadBits(value, 1);
-        if (value)
-        {
+            group.ReadFixed(mCurShield, 0.0f, mMaxShield, 11);
             group.ReadBits(value, 1);
-            if (value)
+            mIsShielded = value;
+            bool shieldChanged;
+            group.Read(shieldChanged);
+            if (shieldChanged)
             {
-                mAddShield = 0.0f;
-            }
-            else
-            {
-                group.ReadFixed(mAddShield, 0.0f, mMaxShield, 11);
+                bool shieldZero;
+                group.Read(shieldZero);
+                if (shieldZero)
+                {
+                    mAddShield = 0.0f;
+                }
+                else
+                {
+                    group.ReadFixed(mAddShield, 0.0f, mMaxShield, 11);
+                }
             }
         }
+    }
+    else if (mState != EntityBuilding::STATE_UNBUILT)
+    {
+        static_cast<Damageable*>(this)->Kill();
     }
 }
 
@@ -856,13 +860,17 @@ void EntityBuildingAnimatedArmed::WriteObject(NetPktGroup& group, NetObjState*)
     for (int i = 0; i < mNumTurrets; ++i)
     {
         MountedTurret* turret = mTurret[i];
-        Character* character = 0;
+        Character* character;
         Controllable* pilot = turret->GetPilot();
         if (pilot)
         {
             GameObject* pilotObject = static_cast<Trackable*>(pilot)->GetGameObject();
             character = pilot->mCharacter;
             AddSendLate(pilotObject, this);
+        }
+        else
+        {
+            character = 0;
         }
         WriteCharacter(group, character);
         turret->Write(group);
@@ -877,9 +885,10 @@ void EntityBuildingAnimatedArmed::ReadObject(NetPktGroup& group, NetObjState*)
     SetCurHealth(health, true, 0);
     unsigned int value;
     group.ReadBits(value, 1);
-    mIsAlive = value != 0;
-    group.ReadBits(value, 1);
-    if (value)
+    mIsAlive = value;
+    bool hasHealthType;
+    group.Read(hasHealthType);
+    if (hasHealthType)
     {
         group.ReadBits(value, 3);
         mHealthTypeForLockOn = value;
@@ -892,7 +901,7 @@ void EntityBuildingAnimatedArmed::ReadObject(NetPktGroup& group, NetObjState*)
     {
         group.ReadFixed(mCurShield, 0.0f, mMaxShield, 11);
         group.ReadBits(value, 1);
-        mIsShielded = value != 0;
+        mIsShielded = value;
     }
     for (int i = 0; i < mNumTurrets; ++i)
     {
@@ -1160,15 +1169,15 @@ void EntityWalker::ReadObject(NetPktGroup& group, NetObjState*)
     SetCurHealth(health, true, 0);
     unsigned int value;
     group.ReadBits(value, 1);
-    mIsAlive = value != 0;
+    mIsAlive = value;
     if (mMaxShield > 0.0f)
     {
         group.ReadFixed(mCurShield, 0.0f, mMaxShield, 11);
         group.ReadBits(value, 1);
-        mIsShielded = value != 0;
+        mIsShielded = value;
     }
-    group.ReadBits(value, 1);
-    const bool dead = value != 0;
+    bool dead;
+    group.Read(dead);
     if (dead != (mIsDead != 0))
     {
         if (mIsDead)
@@ -1197,8 +1206,9 @@ void EntityWalker::ReadObject(NetPktGroup& group, NetObjState*)
     {
         ReadThrust(group, mTurnBuildup);
         group.Read(mTargetInfo.mIsAiming);
-        group.ReadBits(value, 1);
-        SetTargetLockedObj(value ? ReadObjectPtr(group) : 0);
+        bool hasTarget;
+        group.Read(hasTarget);
+        SetTargetLockedObj(hasTarget ? ReadObjectPtr(group) : 0);
         if (NetGame::IsFullState() || NetGame::GetJoystickIndex(mPlayerId) >= 0)
         {
             ReadTrigger(group, &mControlSprint);
@@ -1304,14 +1314,19 @@ void EntityDroid::ReadObject(NetPktGroup& group, NetObjState*)
     ReadVelocity(group, mVelocity, 5120.0f, -1);
     ReadAngle(group, mPitchValue);
     unsigned int value;
-    group.ReadBits(value, 1);
-    if (value && !IsThreadActive())
+    bool packetActive;
+    group.Read(packetActive);
+    const bool active = IsThreadActive();
+    if (!packetActive)
+    {
+        if (active)
+        {
+            DeactivatePhysics();
+        }
+    }
+    else if (!active)
     {
         ActivatePhysics();
-    }
-    else if (!value && IsThreadActive())
-    {
-        DeactivatePhysics();
     }
     group.ReadBits(value, 2);
     SetTeam(value);
@@ -1328,12 +1343,12 @@ void EntityDroid::ReadObject(NetPktGroup& group, NetObjState*)
     SetPitch(fVal);
     group.ReadFixed(mCurHealth, 0.0f, mMaxHealth, 11);
     group.ReadBits(value, 1);
-    mIsAlive = value != 0;
+    mIsAlive = value;
     if (mMaxShield > 0.0f)
     {
         group.ReadFixed(mCurShield, 0.0f, mMaxShield, 11);
         group.ReadBits(value, 1);
-        mIsShielded = value != 0;
+        mIsShielded = value;
     }
     ReadPilots(group, this);
     if (mPlayerId >= 0)
@@ -1357,8 +1372,7 @@ void EntityDroid::ReadObject(NetPktGroup& group, NetObjState*)
         }
     }
     mEnergyBar.Read(group);
-    group.ReadBits(value, 2);
-    mState = (State)value;
+    group.ReadBits(reinterpret_cast<unsigned int&>(mState), 2);
     group.ReadFixed(mKillTimer, 0.0f, 5.0f, 8);
     SetNetLOD(0);
 }
@@ -1483,27 +1497,29 @@ void EntityHover::ReadObject(NetPktGroup& group, NetObjState*)
     if (mClass->mJumpForce > 0.0f)
     {
         group.ReadFixed(mJumpTimer, 0.0f, mClass->mJumpTimeMax, 11);
-        group.ReadBits(value, 1);
-        mJumpMode = value != 0;
+        bool jumpMode;
+        group.Read(jumpMode);
+        mJumpMode = jumpMode;
     }
     float health;
     group.ReadFixed(health, 0.0f, mMaxHealth, 11);
     SetCurHealth(health, true, 0);
     group.ReadBits(value, 1);
-    mIsAlive = value != 0;
+    mIsAlive = value;
     if (mMaxShield > 0.0f)
     {
         group.ReadFixed(mCurShield, 0.0f, mMaxShield, 11);
         group.ReadBits(value, 1);
-        mIsShielded = value != 0;
+        mIsShielded = value;
     }
     ReadPilots(group, this);
     if (mPlayerId >= 0)
     {
         ReadThrust(group, mTurnBuildup);
         group.Read(mTargetInfo.mIsAiming);
-        group.ReadBits(value, 1);
-        SetTargetLockedObj(value ? ReadObjectPtr(group) : 0);
+        bool hasTarget;
+        group.Read(hasTarget);
+        SetTargetLockedObj(hasTarget ? ReadObjectPtr(group) : 0);
         if (NetGame::IsFullState() || NetGame::GetJoystickIndex(mPlayerId) >= 0)
         {
             ReadTrigger(group, &mControlSprint);
@@ -1810,7 +1826,6 @@ void MountedTurret::Read(NetPktGroup& group)
     if (mPlayerId >= 0)
     {
         ReadThrust(group, mTurnBuildup);
-        unsigned int value;
         group.Read(mTargetInfo.mIsAiming);
         if (NetGame::IsFullState() || NetGame::GetJoystickIndex(mPlayerId) >= 0)
         {
@@ -1832,8 +1847,9 @@ void MountedTurret::Read(NetPktGroup& group)
         group.ReadFixed(mTurnAuto, -1.0f, 1.0f, 16);
         group.ReadFixed(mPitchAuto, -1.0f, 1.0f, 16);
         group.Read(mUsingTurnAdjusted);
-        group.ReadBits(value, 1);
-        SetTargetLockedObj(value ? ReadObjectPtr(group) : 0);
+        bool hasTarget;
+        group.Read(hasTarget);
+        SetTargetLockedObj(hasTarget ? ReadObjectPtr(group) : 0);
     }
     if (isLocal)
     {
@@ -2305,7 +2321,7 @@ void PowerupItem::ReadObject(NetPktGroup& group, NetObjState*)
 // FUNCTION: SWBF2 0x005eb1c0
 void EntitySoldier::ResetObject()
 {
-    mVelocity = PblVector3(0.0f, 0.0f, 0.0f);
+    mVelocity.SetAll(0.0f);
     mFlags |= flags_footprintLeft | flags_isGrounded;
     mGroundNormal = PblVector3(0.0f, 1.0f, 0.0f);
     mPitchValue = 0.0f;
@@ -2445,14 +2461,14 @@ GameObject* EntityRemoteTerminal::AddToClient()
         {
             DeactivatePhysics();
             const PblList<Controllable>& list = GetControllableList();
-            for (PblList<Controllable>::Itor it(list); it; ++it)
+            for (PblList<Controllable>::Itor it(&list); it; ++it)
             {
                 Controllable* pControl = it;
                 pControl->ReleaseController();
             }
             NetGame::EnterClient();
             ActivatePhysics();
-            for (PblList<Controllable>::Itor it(list); it; ++it)
+            for (PblList<Controllable>::Itor it(&list); it; ++it)
             {
                 Controllable* pControl = it;
                 pControl->SetupController();
@@ -2618,7 +2634,7 @@ template void ReadFixed<JetFuelConvert>(JetFuelConvert&, NetPktGroup&, float&);
 // FUNCTION: SWBF2 0x005e7fd0
 void EnergyBar::Write(NetPktGroup& group) const
 {
-    group.WriteBits(m_bOverheat, 1);
+    group.Write(m_bOverheat != 0);
     if (m_bOverheat)
     {
         group.WriteFixed(m_fEnergy, m_pClass->m_fEnergyMin, m_pClass->m_fEnergyOverheat, 12);
@@ -2765,13 +2781,13 @@ void Weapon::Write(NetPktGroup& group)
         const WeaponClass* pClass = mClass;
         if (pClass->mZoomMin != pClass->mZoomMax)
         {
-            if (pClass->mZoomRate != 0.0f)
+            if (pClass->mZoomRate == 0.0f)
             {
-                group.WriteFixed(mZoom, pClass->mZoomMin, pClass->mZoomMax, 5);
+                group.Write(mZoom == pClass->mZoomMax);
             }
             else
             {
-                group.Write(mZoom == pClass->mZoomMax);
+                group.WriteFixed(mZoom, pClass->mZoomMin, pClass->mZoomMax, 5);
             }
         }
     }
@@ -2846,12 +2862,7 @@ void Weapon::Read(NetPktGroup& group)
         const WeaponClass* pClass = mClass;
         if (pClass->mZoomMin != pClass->mZoomMax)
         {
-            if (pClass->mZoomRate != 0.0f)
-            {
-                group.ReadFixed(mZoom, pClass->mZoomMin, pClass->mZoomMax, 5);
-                UpdateZoom(0.0f, 0.0f);
-            }
-            else
+            if (pClass->mZoomRate == 0.0f)
             {
                 unsigned int uZoomed;
                 group.ReadBits(uZoomed, 1);
@@ -2865,6 +2876,11 @@ void Weapon::Read(NetPktGroup& group)
                     mZoom = mClass->mZoomMin;
                     mZoomTurnScale = mClass->mZoomTurnDivisorMin;
                 }
+            }
+            else
+            {
+                group.ReadFixed(mZoom, pClass->mZoomMin, pClass->mZoomMax, 5);
+                UpdateZoom(0.0f, 0.0f);
             }
         }
     }
@@ -3141,31 +3157,28 @@ void WeaponGrenade::Read(NetPktGroup& group)
 {
     bool bBusy = IsBusy();
     Weapon::Read(group);
-    unsigned int uValue;
     group.Read(mFired);
-    group.ReadBits(uValue, 1);
-    if (!mFiredFlag && uValue && !bBusy)
+    bool fired;
+    group.Read(fired);
+    if (!mFiredFlag && fired && !bBusy)
     {
         mFiredFlag = 1;
     }
     group.ReadFixed(mStrength, 0.0f, 1.0f, 8);
 
     const WeaponGrenadeClass* pClass = (const WeaponGrenadeClass*)mClass;
-    switch (mState)
+    if (mState == CHARGE)
     {
-    case CHARGE:
         mStateLimit = pClass->mMaxPressedTime;
-        break;
-    case FIRE:
-    case FIRE2:
+    }
+    else if (mState == FIRE || mState == FIRE2)
     {
         int iIndex = (m_iSoldierState == 2) ? 2 : mState - 1;
         mStateLimit = pClass->mInitialSalvoDelay[iIndex] + pClass->mShotDelay;
-        break;
     }
-    case RELOAD:
+    else if (mState == RELOAD)
+    {
         mStateLimit = pClass->mReloadTime;
-        break;
     }
 }
 
@@ -3361,14 +3374,8 @@ bool EntitySoldier::Smooth(float fDeltaTime) const
 
     SmoothInfo& info = NetPredict::GetSmoothInfo(mNetUniqueId);
 
-    if (const_cast<EntitySoldier*>(this)->IsThreadActive())
-    {
-        info.SetMat(mMatrix, 10.0f, 200.0f);
-    }
-    else
-    {
-        info.SetMat(mMatrix, 0.0f, 0.0f);
-    }
+    const bool threadActive = const_cast<EntitySoldier*>(this)->IsThreadActive();
+    info.SetMat(mMatrix, threadActive ? 10.0f : 0.0f, threadActive ? 200.0f : 0.0f);
     return netIsLastLocalTurn;
 }
 
@@ -3388,7 +3395,7 @@ void EntityPathFollower::WriteObject(NetPktGroup& group, NetObjState* pState, fl
     }
     group.WriteFixed(mT, 0.0f, 1.01f, 16);
     group.WriteBits(mSetPoints, 4);
-    for (int i = 0; i < 4; ++i)
+    for (unsigned char i = 0; i < 4; ++i)
     {
         if (mSetPoints & (1 << i))
         {
@@ -3403,8 +3410,9 @@ void EntityPathFollower::WriteObject(NetPktGroup& group, NetObjState* pState, fl
 void EntityPathFollower::ReadObject(NetPktGroup& group, NetObjState* pState, float fMinSpeed, float fMaxSpeed)
 {
     unsigned int uValue;
-    group.ReadBits(uValue, 1);
-    if (uValue)
+    bool hasPath;
+    group.Read(hasPath);
+    if (hasPath)
     {
         uValue = 0;
         group.ReadBits(uValue, 8);
@@ -3427,15 +3435,16 @@ void EntityPathFollower::ReadObject(NetPktGroup& group, NetObjState* pState, flo
     group.ReadFixed(mT, 0.0f, 1.01f, 16);
     group.ReadBits(uValue, 4);
     mSetPoints = (unsigned char)uValue;
-    for (int i = 0; i < 4; ++i)
+    for (unsigned char i = 0; i < 4; ++i)
     {
         if (mSetPoints & (1 << i))
         {
             ReadPositionVector(group, mPathSpline.GetControlPoints()[i]);
         }
     }
-    group.ReadBits(uValue, 1);
-    mDirection = uValue != 0 ? 1 : -1;
+    bool forward;
+    group.Read(forward);
+    mDirection = forward ? 1 : -1;
     group.ReadFixed(mCurSpeed, fMinSpeed, fMaxSpeed, 16);
 }
 
@@ -3805,7 +3814,7 @@ void EntityFlyer::WriteObject(NetPktGroup& group, NetObjState* pState)
                                                                      : mClass->mBoostFlyerSpeed, -1);
         WriteVelocity(group, mOmega,
                    mClass->mMaxCrashRollRate > 5.0f ? mClass->mMaxCrashRollRate : 5.0f, -1);
-        group.WriteFixed(mBankPitchAngle, -6.2831854820251465f, 6.2831854820251465f, 16);
+        group.WriteFixed(mBankPitchAngle, -PblMath::fTwoPi, PblMath::fTwoPi, 16);
         group.WriteFixed(mBankRollAngle, -10.210176467895508f, 10.210176467895508f, 16);
         WriteUnitScalar(group, mFlightRatio);
         mEnergyBar.Write(group);
@@ -3909,12 +3918,12 @@ void EntityFlyer::ReadObject(NetPktGroup& group, NetObjState* pState)
     group.ReadFixed(health, 0.0f, mMaxHealth, 11);
     SetCurHealth(health, true, 0);
     group.ReadBits(value, 1);
-    mIsAlive = value != 0;
+    mIsAlive = value;
     if (mMaxShield > 0.0f)
     {
         group.ReadFixed(mCurShield, 0.0f, mMaxShield, 11);
         group.ReadBits(value, 1);
-        mIsShielded = value != 0;
+        mIsShielded = value;
     }
     ReadPilots(group, this);
     if (mState != LANDED)
@@ -3926,7 +3935,7 @@ void EntityFlyer::ReadObject(NetPktGroup& group, NetObjState* pState)
                                                                      : mClass->mBoostFlyerSpeed, -1);
         ReadVelocity(group, mOmega,
                    mClass->mMaxCrashRollRate > 5.0f ? mClass->mMaxCrashRollRate : 5.0f, -1);
-        group.ReadFixed(mBankPitchAngle, -6.2831854820251465f, 6.2831854820251465f, 16);
+        group.ReadFixed(mBankPitchAngle, -PblMath::fTwoPi, PblMath::fTwoPi, 16);
         group.ReadFixed(mBankRollAngle, -10.210176467895508f, 10.210176467895508f, 16);
         ReadUnitScalar(group, mFlightRatio);
         mEnergyBar.Read(group);
@@ -3942,10 +3951,12 @@ void EntityFlyer::ReadObject(NetPktGroup& group, NetObjState* pState)
         ReadThrust(group, mTurnControllerPrevUpdate);
         group.ReadFixed(mTrick, -1.0f, 1.0f, 9);
         group.ReadBits(*(unsigned int*)&mTrickDoubleclick, 32);
-        group.ReadBits(value, 1);
-        mInRoll = value != 0;
-        group.ReadBits(value, 1);
-        mInFlip = value != 0;
+        bool inRoll;
+        group.Read(inRoll);
+        mInRoll = inRoll;
+        bool inFlip;
+        group.Read(inFlip);
+        mInFlip = inFlip;
         ReadAngle(group, mRoll);
         group.ReadFixed(mRollTarget, -13.35176944732666f, 13.35176944732666f, 16);
         float side;
@@ -3966,8 +3977,9 @@ void EntityFlyer::ReadObject(NetPktGroup& group, NetObjState* pState)
         }
         if (mPlayerId < 0)
         {
-            group.ReadBits(value, 1);
-            mFollowingPath = value != 0;
+            bool followingPath;
+            group.Read(followingPath);
+            mFollowingPath = followingPath;
             group.ReadFixed(mAIEng.ai.mFreeFlyTime, 0.0f, mClass->mFreeFlyTime + 1.0f, 16);
             EntityPathFollower::ReadObject(
                 group, pState, mClass->mMinFlyerSpeed > 0.0f ? 0.0f : mClass->mMinFlyerSpeed,
@@ -4004,8 +4016,9 @@ void EntityFlyer::ReadObject(NetPktGroup& group, NetObjState* pState)
                     mCharacter->Read(group);
                 }
             }
-            group.ReadBits(value, 1);
-            SetTargetLockedObj(value ? ReadObjectPtr(group) : 0);
+            bool hasTarget;
+            group.Read(hasTarget);
+            SetTargetLockedObj(hasTarget ? ReadObjectPtr(group) : 0);
         }
         for (int i = 0; i < mNumTurrets; ++i)
         {
@@ -4036,7 +4049,7 @@ void EntityFlyer::WriteLateState(NetPktGroup& group)
                                                                  : mClass->mBoostFlyerSpeed, -1);
     WriteVelocity(group, mOmega,
                mClass->mMaxCrashRollRate > 5.0f ? mClass->mMaxCrashRollRate : 5.0f, -1);
-    group.WriteFixed(mBankPitchAngle, -6.2831854820251465f, 6.2831854820251465f, 16);
+    group.WriteFixed(mBankPitchAngle, -PblMath::fTwoPi, PblMath::fTwoPi, 16);
     group.WriteFixed(mBankRollAngle, -10.210176467895508f, 10.210176467895508f, 16);
     WriteUnitScalar(group, mFlightRatio);
     mEnergyBar.Write(group);
@@ -4090,12 +4103,12 @@ void EntityFlyer::ReadLateState(NetPktGroup& group)
     group.ReadFixed(health, 0.0f, mMaxHealth, 11);
     SetCurHealth(health, true, 0);
     group.ReadBits(value, 1);
-    mIsAlive = value != 0;
+    mIsAlive = value;
     if (mMaxShield > 0.0f)
     {
         group.ReadFixed(mCurShield, 0.0f, mMaxShield, 11);
         group.ReadBits(value, 1);
-        mIsShielded = value != 0;
+        mIsShielded = value;
     }
     if (mState == LANDED)
     {
@@ -4106,7 +4119,7 @@ void EntityFlyer::ReadLateState(NetPktGroup& group)
                                                                  : mClass->mBoostFlyerSpeed, -1);
     ReadVelocity(group, mOmega,
                mClass->mMaxCrashRollRate > 5.0f ? mClass->mMaxCrashRollRate : 5.0f, -1);
-    group.ReadFixed(mBankPitchAngle, -6.2831854820251465f, 6.2831854820251465f, 16);
+    group.ReadFixed(mBankPitchAngle, -PblMath::fTwoPi, PblMath::fTwoPi, 16);
     group.ReadFixed(mBankRollAngle, -10.210176467895508f, 10.210176467895508f, 16);
     ReadUnitScalar(group, mFlightRatio);
     mEnergyBar.Read(group);
@@ -4122,10 +4135,12 @@ void EntityFlyer::ReadLateState(NetPktGroup& group)
     ReadThrust(group, mTurnControllerPrevUpdate);
     group.ReadFixed(mTrick, -1.0f, 1.0f, 9);
     group.ReadBits(*(unsigned int*)&mTrickDoubleclick, 32);
-    group.ReadBits(value, 1);
-    mInRoll = value != 0;
-    group.ReadBits(value, 1);
-    mInFlip = value != 0;
+    bool inRoll;
+    group.Read(inRoll);
+    mInRoll = inRoll;
+    bool inFlip;
+    group.Read(inFlip);
+    mInFlip = inFlip;
     ReadAngle(group, mRoll);
     group.ReadFixed(mRollTarget, -13.35176944732666f, 13.35176944732666f, 16);
     float side;
@@ -4169,8 +4184,9 @@ void EntityDroideka::ReadObject(NetPktGroup& group, NetObjState*)
         ReadNetLOD(group);
     }
     unsigned int value;
-    group.ReadBits(value, 1);
-    if (!value)
+    bool hasController;
+    group.Read(hasController);
+    if (!hasController)
     {
         if (mCtrl)
         {
@@ -4274,20 +4290,21 @@ void EntityDroideka::ReadObject(NetPktGroup& group, NetObjState*)
     SetPitch(fVal);
     group.ReadFixed(mCurHealth, 0.0f, mMaxHealth, 11);
     group.ReadBits(value, 1);
-    mIsAlive = value != 0;
+    mIsAlive = value;
     if (mMaxShield > 0.0f)
     {
         group.ReadFixed(mCurShield, 0.0f, mMaxShield, 11);
         group.ReadBits(value, 1);
-        mIsShielded = value != 0;
+        mIsShielded = value;
     }
     group.ReadBits(*(unsigned int*)&mPitchValue, 32);
     group.ReadBits(*(unsigned int*)&mBallAngularVelocity, 32);
     ReadCosSin(group, mBallOrientation);
     ReadCosSin(group, mBallLean);
     ReadPilots(group, this);
-    group.ReadBits(value, 1);
-    if (value)
+    bool hasOffense;
+    group.Read(hasOffense);
+    if (hasOffense)
     {
         group.ReadFixed(mBuffOffenseTimer, 0.0f, 350.0f, 16);
         group.ReadFixed(mBuffOffenseMult, 0.0f, 1.0f, 16);
@@ -4296,8 +4313,9 @@ void EntityDroideka::ReadObject(NetPktGroup& group, NetObjState*)
     {
         mBuffOffenseTimer = 0.0f;
     }
-    group.ReadBits(value, 1);
-    if (value)
+    bool hasDefense;
+    group.Read(hasDefense);
+    if (hasDefense)
     {
         group.ReadFixed(mBuffDefenseTimer, 0.0f, 350.0f, 16);
         group.ReadFixed(mBuffDefenseMult, 0.0f, 1.0f, 16);
@@ -4306,8 +4324,9 @@ void EntityDroideka::ReadObject(NetPktGroup& group, NetObjState*)
     {
         mBuffDefenseTimer = 0.0f;
     }
-    group.ReadBits(value, 1);
-    if (value)
+    bool hasHealthBuff;
+    group.Read(hasHealthBuff);
+    if (hasHealthBuff)
     {
         group.ReadFixed(mBuffHealthTimer, 0.0f, 350.0f, 16);
         group.ReadFixed(mBuffHealthRate, 0.0f, 1000.0f, 16);
@@ -4316,8 +4335,9 @@ void EntityDroideka::ReadObject(NetPktGroup& group, NetObjState*)
     {
         mBuffHealthTimer = 0.0f;
     }
-    group.ReadBits(value, 1);
-    if (value)
+    bool hasDamageDebuff;
+    group.Read(hasDamageDebuff);
+    if (hasDamageDebuff)
     {
         group.ReadFixed(mDebuffDamageTimer, 0.0f, 350.0f, 16);
         group.ReadFixed(mDebuffDamageRate, 0.0f, 1000.0f, 16);
@@ -4329,8 +4349,9 @@ void EntityDroideka::ReadObject(NetPktGroup& group, NetObjState*)
     }
     if (mPlayerId >= 0)
     {
-        group.ReadBits(value, 1);
-        mLastCollidedWithNonTerrain = value != 0;
+        bool collidedWithNonTerrain;
+        group.Read(collidedWithNonTerrain);
+        mLastCollidedWithNonTerrain = collidedWithNonTerrain;
         ReadPositionVector(group, mLastPosition);
         ReadUnitVector(group, mGroundNormal);
         float turn;
@@ -4346,14 +4367,16 @@ void EntityDroideka::ReadObject(NetPktGroup& group, NetObjState*)
         group.ReadFixed(mTurnAuto, -1.0f, 1.0f, 16);
         group.ReadFixed(mPitchAuto, -1.0f, 1.0f, 16);
         group.Read(mUsingTurnAdjusted);
-        group.ReadBits(value, 1);
-        SetTargetLockedObj(value ? ReadObjectPtr(group) : 0);
+        bool hasTarget;
+        group.Read(hasTarget);
+        SetTargetLockedObj(hasTarget ? ReadObjectPtr(group) : 0);
         if (NetGame::IsFullState() || NetGame::GetJoystickIndex(mPlayerId) >= 0)
         {
             ReadTrigger(group, &mControlSprint);
             ReadTrigger(group, &mControlThrustFwd);
-            group.ReadBits(value, 1);
-            mFallTimer = value ? 0.1f : 0.0f;
+            bool falling;
+            group.Read(falling);
+            mFallTimer = falling ? 0.1f : 0.0f;
             ReadTrigger(group, &mControlJump);
             ReadTrigger(group, &mControlZoom);
             for (int i = 0; i < 2; ++i)
@@ -4448,7 +4471,8 @@ void EntityDroideka::WriteLateState(NetPktGroup& group)
 void EntityDroideka::ReadLateState(NetPktGroup& group)
 {
     unsigned int value;
-    group.ReadBits(value, 1);
+    bool hasController;
+    group.Read(hasController);
     PblMatrix matrix;
     ReadMatrix(group, matrix);
     Move(matrix);
@@ -4533,8 +4557,9 @@ void EntityDroideka::ReadLateState(NetPktGroup& group)
     group.ReadBits(*(unsigned int*)&mBallAngularVelocity, 32);
     ReadCosSin(group, mBallOrientation);
     ReadCosSin(group, mBallLean);
-    group.ReadBits(value, 1);
-    if (value)
+    bool hasOffense;
+    group.Read(hasOffense);
+    if (hasOffense)
     {
         group.ReadFixed(mBuffOffenseTimer, 0.0f, 350.0f, 16);
         group.ReadFixed(mBuffOffenseMult, 0.0f, 1.0f, 16);
@@ -4543,8 +4568,9 @@ void EntityDroideka::ReadLateState(NetPktGroup& group)
     {
         mBuffOffenseTimer = 0.0f;
     }
-    group.ReadBits(value, 1);
-    if (value)
+    bool hasDefense;
+    group.Read(hasDefense);
+    if (hasDefense)
     {
         group.ReadFixed(mBuffDefenseTimer, 0.0f, 350.0f, 16);
         group.ReadFixed(mBuffDefenseMult, 0.0f, 1.0f, 16);
@@ -4553,8 +4579,9 @@ void EntityDroideka::ReadLateState(NetPktGroup& group)
     {
         mBuffDefenseTimer = 0.0f;
     }
-    group.ReadBits(value, 1);
-    if (value)
+    bool hasHealthBuff;
+    group.Read(hasHealthBuff);
+    if (hasHealthBuff)
     {
         group.ReadFixed(mBuffHealthTimer, 0.0f, 350.0f, 16);
         group.ReadFixed(mBuffHealthRate, 0.0f, 1000.0f, 16);
@@ -4563,8 +4590,9 @@ void EntityDroideka::ReadLateState(NetPktGroup& group)
     {
         mBuffHealthTimer = 0.0f;
     }
-    group.ReadBits(value, 1);
-    if (value)
+    bool hasDamageDebuff;
+    group.Read(hasDamageDebuff);
+    if (hasDamageDebuff)
     {
         group.ReadFixed(mDebuffDamageTimer, 0.0f, 350.0f, 16);
         group.ReadFixed(mDebuffDamageRate, 0.0f, 1000.0f, 16);
@@ -4573,8 +4601,9 @@ void EntityDroideka::ReadLateState(NetPktGroup& group)
     {
         mDebuffDamageTimer = 0.0f;
     }
-    group.ReadBits(value, 1);
-    mLastCollidedWithNonTerrain = value != 0;
+    bool collidedWithNonTerrain;
+    group.Read(collidedWithNonTerrain);
+    mLastCollidedWithNonTerrain = collidedWithNonTerrain;
     ReadPositionVector(group, mLastPosition);
     ReadUnitVector(group, mGroundNormal);
     float turn;
@@ -4738,9 +4767,7 @@ void EntitySoldier::WriteObject(NetPktGroup& group, NetObjState*)
         int precision = ComputeNetLOD(position, mPlayerId);
         if (!precision && gSoldierLodCount < 3)
         {
-            const float dx = gCameraFrontPos.x - position.x;
-            const float dz = gCameraFrontPos.z - position.z;
-            if (dz * dz + dx * dx < 625.0f)
+            if (SquaredLengthXZ(gCameraFrontPos - position) < 625.0f)
             {
                 precision = 1;
                 ++gSoldierLodCount;
@@ -4757,7 +4784,7 @@ void EntitySoldier::WriteObject(NetPktGroup& group, NetObjState*)
     {
         bool bFullMatrix = true;
         PblQuaternion q(matrix);
-        if (fabs(q._fX) < 0.0001f && fabs(q._fZ) < 0.0001f)
+        if ((float)fabs((double)q._fX) < 0.0001f && (float)fabs((double)q._fZ) < 0.0001f)
         {
             bFullMatrix = false;
         }
@@ -4787,12 +4814,12 @@ void EntitySoldier::WriteObject(NetPktGroup& group, NetObjState*)
     int collision = 0;
     if (IsInCollisionList())
     {
-        collision = static_cast<CollisionObject*>(this)->GetObjectData(0) == COLL_SOFT ? 1 : 2;
+        collision = GetCollisionType() == COLL_SOFT ? 1 : 2;
     }
     group.WriteBits(collision, 2);
     group.Write(mTargetInfo.mIsAiming);
-    group.WriteBits(mTeam, 2);
-    group.WriteBits(mPerceivedTeam, 2);
+    group.WriteBits(GetTeam(), 2);
+    group.WriteBits(GetPerceivedTeam(), 2);
     WriteCharacter(group, mCharacter);
     WriteThrust(group, mControlMove);
     WriteThrust(group, mControlStrafe);
@@ -4898,7 +4925,7 @@ void EntitySoldier::WriteObject(NetPktGroup& group, NetObjState*)
         }
         if (NetGame::IsLocalTo(clientId, mPlayerId) || NetGame::IsFullState())
         {
-            group.WriteBits(mCanChangeClass, 1);
+            group.Write(mCanChangeClass != 0);
             WriteTrigger(group, const_cast<Trigger*>(&mControlZoom));
             WriteTrigger(group, const_cast<Trigger*>(&mControlJump));
             WriteTrigger(group, const_cast<Trigger*>(&mControlSprint));
@@ -4915,7 +4942,7 @@ void EntitySoldier::WriteObject(NetPktGroup& group, NetObjState*)
                 WriteTrigger(group, const_cast<Trigger*>(&mControlFire[i]));
             }
         }
-        group.WriteBits(mMarkedForDeath, 1);
+        group.Write(mMarkedForDeath != 0);
         if (bHasController)
         {
             WriteThrust(group, ((PlayerController*)mCtrl)->GetMouseBuildup());
@@ -4957,7 +4984,7 @@ void EntitySoldier::WriteLateState(NetPktGroup& group)
     {
         bool bFullMatrix = true;
         PblQuaternion q(matrix);
-        if (fabs(q._fX) < 0.0001f && fabs(q._fZ) < 0.0001f)
+        if ((float)fabs((double)q._fX) < 0.0001f && (float)fabs((double)q._fZ) < 0.0001f)
         {
             bFullMatrix = false;
         }
@@ -5059,15 +5086,16 @@ void EntitySoldier::ReadObject(NetPktGroup& group, NetObjState*)
         ReadNetLOD(group);
     }
     unsigned int value;
-    group.ReadBits(value, 1);
-    const bool bHasController = value != 0;
-    group.ReadBits(value, 1);
-    const bool bActive = value != 0;
+    bool bHasController;
+    group.Read(bHasController);
+    bool bActive;
+    group.Read(bActive);
     if (bActive)
     {
         PblMatrix matrix;
-        group.ReadBits(value, 1);
-        if (value)
+        bool fullMatrix;
+        group.Read(fullMatrix);
+        if (fullMatrix)
         {
             ReadMatrix(group, matrix);
         }
@@ -5080,7 +5108,7 @@ void EntitySoldier::ReadObject(NetPktGroup& group, NetObjState*)
             ReadFixed(quatConvert, group, s);
             PblVector3 position;
             ReadPositionVector(group, position);
-            q._fX = 0.0f;
+            q.SetX(0.0f);
             q._fY = y;
             q._fZ = 0.0f;
             q._fS = s;
@@ -5107,11 +5135,10 @@ void EntitySoldier::ReadObject(NetPktGroup& group, NetObjState*)
             }
             if (mActiveIndex >= 0)
             {
-                const PblMatrix& m = mMatrix;
                 PblVector3 localVelocity;
-                localVelocity.x = mVelocity.x * m.m[0][0] + mVelocity.y * m.m[0][1] + mVelocity.z * m.m[0][2];
-                localVelocity.y = mVelocity.x * m.m[1][0] + mVelocity.y * m.m[1][1] + mVelocity.z * m.m[1][2];
-                localVelocity.z = mVelocity.x * m.m[2][0] + mVelocity.y * m.m[2][1] + mVelocity.z * m.m[2][2];
+                localVelocity.x = DotProduct(mVelocity, mMatrix.GetXAxis());
+                localVelocity.y = DotProduct(mVelocity, mMatrix.GetYAxis());
+                localVelocity.z = DotProduct(mVelocity, mMatrix.GetZAxis());
                 mWeapon[mActiveIndex]->Select(mActiveChannel, false);
                 mWeapon[mActiveIndex]->NotifySoldierState(mState, mStateTimer, mInputLockTime > 0.0f,
                                                           mTargetInfo.mIsAiming, localVelocity);
@@ -5119,16 +5146,17 @@ void EntitySoldier::ReadObject(NetPktGroup& group, NetObjState*)
         }
     }
     group.ReadBits(value, 4);
-    mNetJustChangedState = (SoldierState::SoldierState)value != mState;
-    mState = (SoldierState::SoldierState)value;
+    const SoldierState::SoldierState oldState = mState;
+    mState = static_cast<SoldierState::SoldierState>(value);
+    mNetJustChangedState = mState != oldState;
     if (value == SoldierState::CHOKE)
     {
         mAnimationHash = 0x144ebf32;
     }
-    unsigned int grounded;
-    group.ReadBits(grounded, 1);
-    group.ReadBits(value, 1);
-    const bool bFallTimer = value != 0;
+    bool grounded;
+    group.Read(grounded);
+    bool bFallTimer;
+    group.Read(bFallTimer);
     group.ReadFixed(mStateTimer, 0.0f, 8.0f, 13);
     group.ReadBits(value, 4);
     mStanceIndex = value;
@@ -5177,19 +5205,20 @@ void EntitySoldier::ReadObject(NetPktGroup& group, NetObjState*)
         if (mCharacter && mCharacter->mRemote)
         {
             mCharacter->mRemote->SetPilot(0);
-            mCharacter->mRemote->mInitialPlayerId = -1;
+            mCharacter->mRemote->SetInitialPlayerId(-1);
             mCharacter->SetRemote(0);
         }
         if (mCharacter && mCharacter->mVehicle)
         {
             mCharacter->mVehicle->SetPilot(0);
-            mCharacter->mVehicle->mInitialPlayerId = -1;
+            mCharacter->mVehicle->SetInitialPlayerId(-1);
             mCharacter->SetVehicle(0);
         }
     }
     RedSceneObject* pScene = static_cast<RedSceneObject*>(this);
-    group.ReadBits(value, 1);
-    if (value)
+    bool sceneActive;
+    group.Read(sceneActive);
+    if (sceneActive)
     {
         if (!_bActive)
         {
@@ -5212,7 +5241,7 @@ void EntitySoldier::ReadObject(NetPktGroup& group, NetObjState*)
     }
     else if (value == 1)
     {
-        if (!bInList || pCollision->GetObjectData(0) != COLL_SOFT)
+        if (!bInList || pCollision->GetCollisionType() != COLL_SOFT)
         {
             if (bInList)
             {
@@ -5221,7 +5250,7 @@ void EntitySoldier::ReadObject(NetPktGroup& group, NetObjState*)
             pCollision->AddSoftToCollisionManager();
         }
     }
-    else if (!bInList || pCollision->GetObjectData(0) != COLL_ATTACHED)
+    else if (!bInList || pCollision->GetCollisionType() != COLL_ATTACHED)
     {
         if (bInList)
         {
@@ -5233,7 +5262,7 @@ void EntitySoldier::ReadObject(NetPktGroup& group, NetObjState*)
     group.ReadBits(value, 2);
     SetTeam(value);
     group.ReadBits(value, 2);
-    mPerceivedTeam = value;
+    SetPerceivedTeam(value);
     Character* pNewCharacter = ReadCharacter(group);
     Character* pOldCharacter = mCharacter;
     Controllable* pSelf = static_cast<Controllable*>(this);
@@ -5315,13 +5344,13 @@ void EntitySoldier::ReadObject(NetPktGroup& group, NetObjState*)
     }
     float fSwitch;
     ReadThrust(group, fSwitch);
-    mControlMove = fSwitch;
+    SetThrust(fSwitch);
     ReadThrust(group, fSwitch);
-    mControlStrafe = fSwitch;
+    SetStrafe(fSwitch);
     ReadThrust(group, fSwitch);
-    mControlTurn = fSwitch;
+    SetTurn(fSwitch);
     ReadThrust(group, fSwitch);
-    mControlPitch = fSwitch;
+    SetPitch(fSwitch);
     mDamageOwner.mCharacter = ReadCharacter(group);
     group.ReadFixed(mCurHealth, 0.0f, mMaxHealth, 11);
     group.ReadBits(value, 1);
@@ -5372,8 +5401,9 @@ void EntitySoldier::ReadObject(NetPktGroup& group, NetObjState*)
     {
         ReadJetFuel(group, mJetFuel);
     }
-    group.ReadBits(value, 1);
-    if (value)
+    bool hasOffense;
+    group.Read(hasOffense);
+    if (hasOffense)
     {
         group.ReadFixed(mBuffOffenseTimer, 0.0f, 350.0f, 16);
         group.ReadFixed(mBuffOffenseMult, 0.0f, 1.0f, 16);
@@ -5382,8 +5412,9 @@ void EntitySoldier::ReadObject(NetPktGroup& group, NetObjState*)
     {
         mBuffOffenseTimer = 0.0f;
     }
-    group.ReadBits(value, 1);
-    if (value)
+    bool hasDefense;
+    group.Read(hasDefense);
+    if (hasDefense)
     {
         group.ReadFixed(mBuffDefenseTimer, 0.0f, 350.0f, 16);
         group.ReadFixed(mBuffDefenseMult, 0.0f, 1.0f, 16);
@@ -5392,8 +5423,9 @@ void EntitySoldier::ReadObject(NetPktGroup& group, NetObjState*)
     {
         mBuffDefenseTimer = 0.0f;
     }
-    group.ReadBits(value, 1);
-    if (value)
+    bool hasHealthBuff;
+    group.Read(hasHealthBuff);
+    if (hasHealthBuff)
     {
         group.ReadFixed(mBuffHealthTimer, 0.0f, 350.0f, 16);
         group.ReadFixed(mBuffHealthRate, 0.0f, 1000.0f, 16);
@@ -5402,8 +5434,9 @@ void EntitySoldier::ReadObject(NetPktGroup& group, NetObjState*)
     {
         mBuffHealthTimer = 0.0f;
     }
-    group.ReadBits(value, 1);
-    if (value)
+    bool hasDamageDebuff;
+    group.Read(hasDamageDebuff);
+    if (hasDamageDebuff)
     {
         group.ReadFixed(mDebuffDamageTimer, 0.0f, 350.0f, 16);
         group.ReadFixed(mDebuffDamageRate, 0.0f, 1000.0f, 16);
@@ -5413,8 +5446,9 @@ void EntitySoldier::ReadObject(NetPktGroup& group, NetObjState*)
     {
         mDebuffDamageTimer = 0.0f;
     }
-    group.ReadBits(value, 1);
-    if (value)
+    bool hasSmolder;
+    group.Read(hasSmolder);
+    if (hasSmolder)
     {
         group.ReadFixed(mSmolderTimer, 0.0f, 350.0f, 16);
         group.ReadFixed(mSmolderDamageRate, 0.0f, 1000.0f, 16);
@@ -5424,12 +5458,13 @@ void EntitySoldier::ReadObject(NetPktGroup& group, NetObjState*)
     {
         mSmolderTimer = 0.0f;
     }
-    if (mPlayerId >= 0)
+    if (IsPlayer())
     {
         if (static_cast<Controllable*>(this)->IsThreadActive())
         {
-            group.ReadBits(value, 1);
-            mLastCollidedWithNonTerrain = value != 0;
+            bool collidedWithNonTerrain;
+            group.Read(collidedWithNonTerrain);
+            mLastCollidedWithNonTerrain = collidedWithNonTerrain;
             ReadPositionVector(group, mLastPosition);
             ReadUnitVector(group, mGroundNormal);
         }
@@ -5439,12 +5474,14 @@ void EntitySoldier::ReadObject(NetPktGroup& group, NetObjState*)
         group.ReadFixed(mTurnAuto, -1.0f, 1.0f, 16);
         group.ReadFixed(mPitchAuto, -1.0f, 1.0f, 16);
         group.Read(mUsingTurnAdjusted);
-        group.ReadBits(value, 1);
-        SetTargetLockedObj(value ? ReadObjectPtr(group) : 0);
+        bool hasTarget;
+        group.Read(hasTarget);
+        SetTargetLockedObj(hasTarget ? ReadObjectPtr(group) : 0);
         if (NetGame::GetJoystickIndex(mPlayerId) >= 0 || NetGame::IsFullState())
         {
-            group.ReadBits(value, 1);
-            mCanChangeClass = value != 0;
+            bool canChangeClass;
+            group.Read(canChangeClass);
+            mCanChangeClass = canChangeClass;
             ReadTrigger(group, &mControlZoom);
             ReadTrigger(group, &mControlJump);
             ReadTrigger(group, &mControlSprint);
@@ -5461,8 +5498,9 @@ void EntitySoldier::ReadObject(NetPktGroup& group, NetObjState*)
                 ReadTrigger(group, &mControlFire[i]);
             }
         }
-        group.ReadBits(value, 1);
-        mMarkedForDeath = value != 0;
+        bool markedForDeath;
+        group.Read(markedForDeath);
+        mMarkedForDeath = markedForDeath;
         if (mMarkedForDeath)
         {
             TrackDeath(mPlayerId, 0);
@@ -5489,8 +5527,9 @@ void EntitySoldier::ReadObject(NetPktGroup& group, NetObjState*)
             }
         }
     }
-    group.ReadBits(value, 1);
-    if (value)
+    bool hasMedals;
+    group.Read(hasMedals);
+    if (hasMedals)
     {
         MedalsMgr* pMedals = mCharacter ? mCharacter->mMedalsMgr : 0;
         if (pMedals)
@@ -5502,7 +5541,7 @@ void EntitySoldier::ReadObject(NetPktGroup& group, NetObjState*)
             group.ReadBits(value, 16);
         }
     }
-    PropagateTeam(mCharacter, mTeam);
+    PropagateTeam(mCharacter, GetTeam());
     SetNetLOD(0);
 }
 
@@ -5510,15 +5549,16 @@ void EntitySoldier::ReadObject(NetPktGroup& group, NetObjState*)
 void EntitySoldier::ReadLateState(NetPktGroup& group)
 {
     unsigned int value;
-    group.ReadBits(value, 1);
-    const bool bHasController = value != 0;
-    group.ReadBits(value, 1);
-    const bool bActive = value != 0;
+    bool bHasController;
+    group.Read(bHasController);
+    bool bActive;
+    group.Read(bActive);
     if (bActive)
     {
         PblMatrix matrix;
-        group.ReadBits(value, 1);
-        if (value)
+        bool fullMatrix;
+        group.Read(fullMatrix);
+        if (fullMatrix)
         {
             ReadMatrix(group, matrix);
         }
@@ -5546,10 +5586,10 @@ void EntitySoldier::ReadLateState(NetPktGroup& group)
     }
     group.ReadBits(value, 4);
     mState = (SoldierState::SoldierState)value;
-    unsigned int grounded;
-    group.ReadBits(grounded, 1);
-    group.ReadBits(value, 1);
-    const bool bFallTimer = value != 0;
+    bool grounded;
+    group.Read(grounded);
+    bool bFallTimer;
+    group.Read(bFallTimer);
     group.ReadFixed(mStateTimer, 0.0f, 8.0f, 13);
     group.ReadBits(value, 4);
     mStanceIndex = value;
@@ -5590,8 +5630,9 @@ void EntitySoldier::ReadLateState(NetPktGroup& group)
     {
         ReadJetFuel(group, mJetFuel);
     }
-    group.ReadBits(grounded, 1);
-    if (grounded)
+    bool hasOffense;
+    group.Read(hasOffense);
+    if (hasOffense)
     {
         group.ReadFixed(mBuffOffenseTimer, 0.0f, 350.0f, 16);
         group.ReadFixed(mBuffOffenseMult, 0.0f, 1.0f, 16);
@@ -5600,8 +5641,9 @@ void EntitySoldier::ReadLateState(NetPktGroup& group)
     {
         mBuffOffenseTimer = 0.0f;
     }
-    group.ReadBits(grounded, 1);
-    if (grounded)
+    bool hasDefense;
+    group.Read(hasDefense);
+    if (hasDefense)
     {
         group.ReadFixed(mBuffDefenseTimer, 0.0f, 350.0f, 16);
         group.ReadFixed(mBuffDefenseMult, 0.0f, 1.0f, 16);
@@ -5610,8 +5652,9 @@ void EntitySoldier::ReadLateState(NetPktGroup& group)
     {
         mBuffDefenseTimer = 0.0f;
     }
-    group.ReadBits(grounded, 1);
-    if (grounded)
+    bool hasHealthBuff;
+    group.Read(hasHealthBuff);
+    if (hasHealthBuff)
     {
         group.ReadFixed(mBuffHealthTimer, 0.0f, 350.0f, 16);
         group.ReadFixed(mBuffHealthRate, 0.0f, 1000.0f, 16);
@@ -5620,8 +5663,9 @@ void EntitySoldier::ReadLateState(NetPktGroup& group)
     {
         mBuffHealthTimer = 0.0f;
     }
-    group.ReadBits(grounded, 1);
-    if (grounded)
+    bool hasDamageDebuff;
+    group.Read(hasDamageDebuff);
+    if (hasDamageDebuff)
     {
         group.ReadFixed(mDebuffDamageTimer, 0.0f, 350.0f, 16);
         group.ReadFixed(mDebuffDamageRate, 0.0f, 1000.0f, 16);
@@ -5630,8 +5674,9 @@ void EntitySoldier::ReadLateState(NetPktGroup& group)
     {
         mDebuffDamageTimer = 0.0f;
     }
-    group.ReadBits(grounded, 1);
-    if (grounded)
+    bool hasSmolder;
+    group.Read(hasSmolder);
+    if (hasSmolder)
     {
         group.ReadFixed(mSmolderTimer, 0.0f, 350.0f, 16);
         group.ReadFixed(mSmolderDamageRate, 0.0f, 1000.0f, 16);
@@ -5642,8 +5687,9 @@ void EntitySoldier::ReadLateState(NetPktGroup& group)
     }
     if (bActive)
     {
-        group.ReadBits(grounded, 1);
-        mLastCollidedWithNonTerrain = grounded != 0;
+        bool collidedWithNonTerrain;
+        group.Read(collidedWithNonTerrain);
+        mLastCollidedWithNonTerrain = collidedWithNonTerrain;
         ReadPositionVector(group, mLastPosition);
         ReadUnitVector(group, mGroundNormal);
     }
@@ -5826,9 +5872,10 @@ void CommandBuilding::ReadObject(NetPktGroup& group, NetObjState*)
         SetCurHealth(health, true, 0);
     }
     group.ReadBits(value, 1);
-    mIsAlive = value != 0;
-    group.ReadBits(value, 1);
-    if (value)
+    mIsAlive = value;
+    bool hasHealthType;
+    group.Read(hasHealthType);
+    if (hasHealthType)
     {
         group.ReadBits(value, 3);
         mHealthTypeForLockOn = value;
@@ -5838,7 +5885,7 @@ void CommandBuilding::ReadObject(NetPktGroup& group, NetObjState*)
         mHealthTypeForLockOn = 8;
     }
     group.ReadBits(value, 1);
-    mIsShielded = value != 0;
+    mIsShielded = value;
     group.ReadBits(value, 2);
     if (value != mState)
     {
@@ -5918,14 +5965,14 @@ GameObject* EntityBuildingArmed::AddToClient()
         {
             DeactivatePhysics();
             const PblList<Controllable>& list = GetControllableList();
-            for (PblList<Controllable>::Itor it(list); it; ++it)
+            for (PblList<Controllable>::Itor it(&list); it; ++it)
             {
                 Controllable* control = it;
                 control->ReleaseController();
             }
             NetGame::EnterClient();
             ActivatePhysics();
-            for (PblList<Controllable>::Itor it(list); it; ++it)
+            for (PblList<Controllable>::Itor it(&list); it; ++it)
             {
                 Controllable* control = it;
                 control->SetupController();
@@ -5974,7 +6021,7 @@ GameObject* CommandBuilding::AddToClient()
     CommandBuilding* client = (CommandBuilding*)GetEntityClass()->Build(desc);
     PAAnimationGroup::ClientGeometryCreated(this, client);
     client->SetTeam(mTeam);
-    client->mPerceivedTeam = mPerceivedTeam;
+    client->SetPerceivedTeam(mPerceivedTeam);
     client->mPost->CopyFrom(mPost);
     client->Init();
     client->BuildEffects();
@@ -6047,7 +6094,7 @@ GameObject* CommandBuildingArmed::AddToClient()
     CommandBuildingArmed* client = (CommandBuildingArmed*)GetEntityClass()->Build(desc);
     PAAnimationGroup::ClientGeometryCreated(this, client);
     client->SetTeam(mTeam);
-    client->mPerceivedTeam = mPerceivedTeam;
+    client->SetPerceivedTeam(mPerceivedTeam);
     client->mPost->CopyFrom(mPost);
     client->Init();
     client->BuildEffects();
@@ -6072,7 +6119,7 @@ GameObject* CommandBuildingAnimatedArmed::AddToClient()
     CommandBuildingAnimatedArmed* client = (CommandBuildingAnimatedArmed*)GetEntityClass()->Build(desc);
     PAAnimationGroup::ClientGeometryCreated(this, client);
     client->SetTeam(mTeam);
-    client->mPerceivedTeam = mPerceivedTeam;
+    client->SetPerceivedTeam(mPerceivedTeam);
     client->mPost->CopyFrom(mPost);
     client->Init();
     client->BuildEffects();

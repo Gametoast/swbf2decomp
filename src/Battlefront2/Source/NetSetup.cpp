@@ -2732,21 +2732,9 @@ extern bool netLeavingLobby;
 extern unsigned __int64 netCreatedLobbyId;
 extern bool gGalaxyInitialized;
 void* GetGalaxyMatchmaking();
-void ResetLanRegistration();
 namespace gf
 {
 bool checkError();
-}
-
-// FUNCTION: SWBF2 0x005d6770
-void ResetLanRegistration()
-{
-    netLobbyState = 0;
-    netLobbyRequestPending = false;
-    netLeavingLobby = false;
-    netCreatedLobbyId = 0;
-    netEnteredLobbyId = 0;
-    NetSocket::OpenBroadcastSockets();
 }
 
 // GLOBAL: SWBF2 0x01faab3c

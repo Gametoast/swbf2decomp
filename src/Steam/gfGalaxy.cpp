@@ -116,9 +116,7 @@ void gf::GalaxyAuthListener::OnAuthSuccess()
 
     void* pUser = GetGalaxyUser();
 
-    galaxy::api::GalaxyID result = ((galaxy::api::IUser*)pUser)->GetGalaxyID();
-    const galaxy::api::GalaxyID* id = &result;
-    NetMatch::SetLocalGSID(id->value);
+    NetMatch::SetLocalGSID(((galaxy::api::IUser*)pUser)->GetGalaxyID().ToUint64());
 
     StatsManager::Init();
     gf::friends::start();

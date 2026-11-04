@@ -88,9 +88,6 @@ bool Space::IsPointInside(const ::PblVector3& rPoint, float fRadius) const
         return false;
     }
 
-    const float fLength2EstAlpha = 0.94805944f;
-    const float fLength2EstBeta = 0.39269909f;
-
     const bool bHasRadius = fRadius > 0.0f;
     float fDistance = 0.0f;
 
@@ -107,15 +104,7 @@ bool Space::IsPointInside(const ::PblVector3& rPoint, float fRadius) const
         {
             vDelta = pRegion->mMatrix.GetTranslation() - rPoint;
 
-            float fA = (float)fabs(vDelta.x);
-            float fB = (float)fabs(vDelta.y);
-            float fEst = fA > fB ? fA * fLength2EstAlpha + fB * fLength2EstBeta
-                                 : fA * fLength2EstBeta + fB * fLength2EstAlpha;
-
-            fA = (float)fabs(fEst);
-            fB = (float)fabs(vDelta.z);
-            fDistance = fA > fB ? fA * fLength2EstAlpha + fB * fLength2EstBeta
-                                : fA * fLength2EstBeta + fB * fLength2EstAlpha;
+            fDistance = LengthEst(vDelta);
 
             if (fRadius >= fDistance)
             {

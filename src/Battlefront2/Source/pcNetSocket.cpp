@@ -71,6 +71,15 @@ void NetSocket::OpenBroadcastSockets()
     ioctlsocket((SOCKET)netBroadcastRecvSocket, FIONBIO, &ulNonBlocking);
 }
 
+// FUNCTION: SWBF2 0x00617d10
+void NetSocket::CloseBroadcastSockets()
+{
+    closesocket((SOCKET)netBroadcastSendSocket);
+    netBroadcastSendSocket = 0;
+    closesocket((SOCKET)netBroadcastRecvSocket);
+    netBroadcastRecvSocket = 0;
+}
+
 // FUNCTION: SWBF2 0x00617d40
 int NetSocket::OpenDirectSocket(bool bHost)
 {
@@ -167,39 +176,9 @@ unsigned char netGalaxyReceiveBuffer[2048];
 // GLOBAL: SWBF2 0x01fab8e0
 unsigned char netLanReceiveBuffer[2048];
 
-static NetPacket* MakeReceivedPacket(const unsigned char* pData, unsigned int size,
-                                      unsigned int prefix, bool classifyByType)
-{
-    if (classifyByType && pData[0] >= 0x1e)
-    {
-        prefix = 0;
-    }
-    if (size > 1012 - prefix)
-    {
-        return 0;
-    }
-    NetPacket* pPacket = NetPacket::Alloc(size <= 116 - prefix);
-    pPacket->BeginWrite();
-    memcpy(pPacket->mData + prefix, pData, size);
-    pPacket->mCommIndex = (char)prefix;
-    pPacket->mMaxIndex = (short)(size + prefix);
-    return pPacket;
-}
-
-static void ProcessReceivedPacket(const unsigned char* pData, unsigned int size,
-                                   unsigned int prefix, bool classifyByType,
-                                   const NetSocketPeerRecord& peer)
-{
-    NetPacket* pPacket = MakeReceivedPacket(pData, size, prefix, classifyByType);
-    if (pPacket)
-    {
-        NetCommP::RecvPacket(pPacket, &peer);
-    }
-}
-
 struct ReceivePacketPrefix
 {
-    unsigned int value;
+    int value;
     ReceivePacketPrefix() : value(3) {}
 };
 
@@ -231,9 +210,34 @@ void NetSocket::RecvSockets()
         }
         JournalBytes(reinterpret_cast<char*>(netLanReceiveBuffer), received);
         JournalBytes(reinterpret_cast<char*>(&from), sizeof(from));
-        NetSocketPeerRecord peer = { galaxy::api::GalaxyID(0) };
+        NetPacket* packet;
+        if (netLanReceiveBuffer[0] < 0x1e)
+        {
+            if (received > 1012 - packetPrefix.value)
+            {
+                continue;
+            }
+            packet = NetPacket::Alloc(received <= 116 - packetPrefix.value);
+            packet->BeginWrite();
+            memcpy(packet->mData + packetPrefix.value, netLanReceiveBuffer, received);
+            packet->mCommIndex = (char)packetPrefix.value;
+            packet->mMaxIndex = (short)(received + packetPrefix.value);
+        }
+        else
+        {
+            if (received > 1012)
+            {
+                continue;
+            }
+            packet = NetPacket::Alloc(received <= 116);
+            packet->BeginWrite();
+            memcpy(packet->mData, netLanReceiveBuffer, received);
+            packet->mMaxIndex = (short)received;
+            packet->mCommIndex = 0;
+        }
+        NetSocketPeerRecord peer;
         peer.mSocketAddress = from;
-        ProcessReceivedPacket(netLanReceiveBuffer, received, packetPrefix.value, true, peer);
+        NetCommP::RecvPacket(packet, &peer);
     }
     while (remaining);
     if (!remaining)
@@ -272,9 +276,14 @@ void NetSocket::RecvSockets()
             }
             JournalBytes(reinterpret_cast<char*>(netLanReceiveBuffer), received);
             JournalBytes(reinterpret_cast<char*>(&from), sizeof(from));
-            NetSocketPeerRecord peer = { galaxy::api::GalaxyID(0) };
+            NetPacket* packet = NetPacket::Alloc(received <= 116 - packetPrefix.value);
+            packet->BeginWrite();
+            memcpy(packet->mData + packetPrefix.value, netLanReceiveBuffer, received);
+            packet->mCommIndex = (char)packetPrefix.value;
+            packet->mMaxIndex = (short)(received + packetPrefix.value);
+            NetSocketPeerRecord peer;
             peer.mSocketAddress = from;
-            ProcessReceivedPacket(netLanReceiveBuffer, received, packetPrefix.value, false, peer);
+            NetCommP::RecvPacket(packet, &peer);
         }
         while (remaining);
         if (!remaining)
@@ -293,23 +302,6 @@ void NetSocket::RecvSockets()
 extern void* GetGalaxyNetworking();
 extern void* GetGalaxyHostNetworking();
 
-static bool PollGalaxy(void* pNetworking, unsigned int& size)
-{
-    return ((galaxy::api::INetworking*)pNetworking)->IsP2PPacketAvailable(&size, 0);
-}
-
-static bool ReadGalaxy(void* pNetworking, unsigned int capacity,
-                       unsigned int& size, NetSocketPeerRecord& peer)
-{
-    return ((galaxy::api::INetworking*)pNetworking)->ReadP2PPacket(
-        netGalaxyReceiveBuffer, capacity, &size, peer.mGalaxyId, 0);
-}
-
-static void DiscardGalaxy(void* pNetworking)
-{
-    ((galaxy::api::INetworking*)pNetworking)->PopP2PPacket(0);
-}
-
 // FUNCTION: SWBF2 0x00618250
 void NetSocket::RecvGalaxySockets()
 {
@@ -321,21 +313,48 @@ void NetSocket::RecvGalaxySockets()
     for (int count = 0; ; )
     {
         void* pNetworking = GetGalaxyNetworking();
-        if (!PollGalaxy(pNetworking, size))
+        if (!((galaxy::api::INetworking*)pNetworking)->IsP2PPacketAvailable(&size, 0))
         {
             break;
         }
         if (++count >= 80 || size > 2048)
         {
-            DiscardGalaxy(GetGalaxyNetworking());
+            ((galaxy::api::INetworking*)GetGalaxyNetworking())->PopP2PPacket(0);
             continue;
         }
-        NetSocketPeerRecord peer = { galaxy::api::GalaxyID(0) };
-        if (ReadGalaxy(GetGalaxyNetworking(), 2048, size, peer))
+        NetSocketPeerRecord peer;
+        if (((galaxy::api::INetworking*)GetGalaxyNetworking())->ReadP2PPacket(
+                netGalaxyReceiveBuffer, 2048, &size, peer.mGalaxyId, 0))
         {
             JournalBytes(reinterpret_cast<char*>(netGalaxyReceiveBuffer), size);
             JournalBytes(reinterpret_cast<char*>(&peer), sizeof(peer));
-            ProcessReceivedPacket(netGalaxyReceiveBuffer, size, packetPrefix.value, true, peer);
+            NetPacket* packet;
+            if (netGalaxyReceiveBuffer[0] < 0x1e)
+            {
+                if (size > 1012 - packetPrefix.value)
+                {
+                    continue;
+                }
+                packet = NetPacket::Alloc(size <= 116 - packetPrefix.value);
+                packet->BeginWrite();
+                const int prefix = packetPrefix.value;
+                memcpy(packet->mData + prefix, netGalaxyReceiveBuffer, size);
+                packet->mCommIndex = (char)prefix;
+                packet->mMaxIndex = (short)(size + prefix);
+            }
+            else
+            {
+                if (size > 1012)
+                {
+                    continue;
+                }
+                packet = NetPacket::Alloc(size <= 116);
+                packet->BeginWrite();
+                memcpy(packet->mData, netGalaxyReceiveBuffer, size);
+                packet->mCommIndex = 0;
+                packet->mMaxIndex = (short)size;
+            }
+            NetCommP::RecvPacket(packet, &peer);
         }
     }
 
@@ -344,22 +363,28 @@ void NetSocket::RecvGalaxySockets()
         for (int count = 0; ; )
         {
             void* pNetworking = GetGalaxyHostNetworking();
-            if (!PollGalaxy(pNetworking, size))
+            if (!((galaxy::api::INetworking*)pNetworking)->IsP2PPacketAvailable(&size, 0))
             {
                 break;
             }
             if (++count >= 64 || size > 2048)
             {
-                DiscardGalaxy(GetGalaxyHostNetworking());
+                ((galaxy::api::INetworking*)GetGalaxyHostNetworking())->PopP2PPacket(0);
                 continue;
             }
-            NetSocketPeerRecord peer = { galaxy::api::GalaxyID(0) };
-            if (ReadGalaxy(GetGalaxyHostNetworking(), 1012 - packetPrefix.value,
-                           size, peer))
+            NetSocketPeerRecord peer;
+            if (((galaxy::api::INetworking*)GetGalaxyHostNetworking())->ReadP2PPacket(
+                    netGalaxyReceiveBuffer, 1012 - packetPrefix.value, &size, peer.mGalaxyId, 0))
             {
                 JournalBytes(reinterpret_cast<char*>(netGalaxyReceiveBuffer), size);
                 JournalBytes(reinterpret_cast<char*>(&peer), sizeof(peer));
-                ProcessReceivedPacket(netGalaxyReceiveBuffer, size, packetPrefix.value, false, peer);
+                NetPacket* packet = NetPacket::Alloc(size <= 116 - packetPrefix.value);
+                packet->BeginWrite();
+                const int prefix = packetPrefix.value;
+                memcpy(packet->mData + prefix, netGalaxyReceiveBuffer, size);
+                packet->mCommIndex = (char)prefix;
+                packet->mMaxIndex = (short)(size + prefix);
+                NetCommP::RecvPacket(packet, &peer);
             }
         }
     }

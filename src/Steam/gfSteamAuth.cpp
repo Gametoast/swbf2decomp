@@ -325,7 +325,8 @@ int gf::SteamAuthProvider::GetEncryptedAppTicket(char* pTicket, int iSize)
     {
         return 0;
     }
-    return (int)gEncryptedAppTicket.copy(pTicket, gEncryptedAppTicket.size());
+    gEncryptedAppTicket.copy(pTicket, gEncryptedAppTicket.size());
+    return (int)gEncryptedAppTicket.size();
 }
 
 // FUNCTION: SWBF2 0x0052ed50

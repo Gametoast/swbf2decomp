@@ -45,7 +45,7 @@ Bus Bus::smRootBus(0, 0x20FD0E45u);
 bool Bus::smBusSolo;
 
 // FUNCTION: SWBF2 0x00731360
-__declspec(noinline) void Bus::Update(float fDeltaTime, bool bForce)
+void Bus::Update(float fDeltaTime, bool bForce)
 {
     const float fOldGain = Fader::mGain;
     Fader::Update(fDeltaTime);
@@ -153,7 +153,7 @@ Bus* Bus::FindSubBusByHashID(unsigned int uiHashID)
 }
 
 // FUNCTION: SWBF2 0x00730e20
-__declspec(noinline) Bus* Bus::FindByHashID(unsigned int uiHashID)
+Bus* Bus::FindByHashID(unsigned int uiHashID)
 {
     return smRootBus.FindSubBusByHashID(uiHashID);
 }

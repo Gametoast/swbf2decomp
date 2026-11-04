@@ -103,7 +103,7 @@ public:
 
     void Remove(NetPacket* pPkt);
 
-    bool IsEnd() const;
+    bool IsEnd();
     void BeginWrite();
     void EndWrite();
     void PushFront(NetPacket* pPkt);
