@@ -281,9 +281,9 @@ void Chunk::SetData(ChunkDescriptor& desc)
     if (mPhysicsType == PHYSICS_COCKPIT)
     {
         const PblMatrix& m = mCollisionMatrix;
-        float fX = m.m[0][1] * mVelocity.y + m.m[0][0] * mVelocity.x + m.m[0][2] * mVelocity.z;
-        float fY = m.m[1][1] * mVelocity.y + m.m[1][0] * mVelocity.x + m.m[1][2] * mVelocity.z;
-        float fZ = m.m[2][1] * mVelocity.y + m.m[2][0] * mVelocity.x + m.m[2][2] * mVelocity.z;
+        float fX = DotProduct(mVelocity, m.GetXAxis());
+        float fY = DotProduct(mVelocity, m.GetYAxis());
+        float fZ = DotProduct(mVelocity, m.GetZAxis());
         if (fX > fY)
         {
             mForwardAxis = (fX > fZ) ? 0 : 2;
@@ -497,7 +497,7 @@ void Chunk::Update(float fDeltaTime)
     vSpin.x *= fDeltaTime;
     vSpin.y *= fDeltaTime;
     vSpin.z *= fDeltaTime;
-    float fAngle = sqrtf(vSpin.x * vSpin.x + vSpin.y * vSpin.y + vSpin.z * vSpin.z);
+    float fAngle = PblMath::Sqrt(vSpin.x * vSpin.x + vSpin.y * vSpin.y + vSpin.z * vSpin.z);
     if (fAngle > EPSILON)
     {
         float fInv = 1.0f / fAngle;
@@ -662,10 +662,10 @@ bool Chunk::DoSimpleRigidCollision(const CollisionResult* pResult, CollisionObje
                 vRadius.x -= vAxis.x * fAlongAxis;
                 vRadius.y -= vAxis.y * fAlongAxis;
                 vRadius.z -= vAxis.z * fAlongAxis;
-                const float fRadius = sqrtf(vRadius.x * vRadius.x + vRadius.y * vRadius.y + vRadius.z * vRadius.z);
+                const float fRadius = PblMath::Sqrt(vRadius.x * vRadius.x + vRadius.y * vRadius.y + vRadius.z * vRadius.z);
                 if (fRadius > 0.0f)
                 {
-                    float fOmega = sqrtf(vVelocity.x * vVelocity.x + vVelocity.y * vVelocity.y +
+                    float fOmega = PblMath::Sqrt(vVelocity.x * vVelocity.x + vVelocity.y * vVelocity.y +
                                           vVelocity.z * vVelocity.z) / fRadius;
                     if (vAxis.z * vVelocity.x - vAxis.x * vVelocity.z > 0.0f)
                     {
@@ -842,7 +842,7 @@ void Chunk::Render(unsigned char ucAlpha, float fDist, unsigned int uiFlags)
         vSpin.y *= fDt;
         vSpin.z *= fDt;
         PblVector3 vPos = mCollisionMatrix.GetTranslation();
-        float fAngle = sqrtf(vSpin.x * vSpin.x + vSpin.y * vSpin.y + vSpin.z * vSpin.z);
+        float fAngle = PblMath::Sqrt(vSpin.x * vSpin.x + vSpin.y * vSpin.y + vSpin.z * vSpin.z);
         if (fAngle > EPSILON)
         {
             float fInv = 1.0f / fAngle;
@@ -1010,11 +1010,10 @@ void ChunkCluster::Render(unsigned char ucViewport, float fDist, unsigned int ui
         RedRenderer::SetStencilShadowLength(fLength);
 
         const PblMatrix& mView = pCamera->GetMatrix();
-        float fDX = mView.m[3][0] - mView.m[2][0] * fNear - _Sphere.x;
-        float fDY = mView.m[3][1] - mView.m[2][1] * fNear - _Sphere.y;
-        float fDZ = mView.m[3][2] - mView.m[2][2] * fNear - _Sphere.z;
+        const PblVector3& vCenter = _Sphere;
+        float fDist2 = SquaredLength(mView.GetTranslation() - mView.GetZAxis() * fNear - vCenter);
         float fReach = _Sphere.w + fLength + fWidth * 1.33f;
-        RedRenderer::SetStencilShadowZFail(fReach * fReach > fDX * fDX + fDY * fDY + fDZ * fDZ);
+        RedRenderer::SetStencilShadowZFail(fReach * fReach > fDist2);
     }
 
     for (int i = 0; i < 10; i++)

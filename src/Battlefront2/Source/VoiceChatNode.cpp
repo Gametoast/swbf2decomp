@@ -350,7 +350,7 @@ void VoiceChat::Node::SetID(unsigned char uChannel)
         mEncoder->Play();
         mDecoder->Play();
 
-        ((VoiceChat::Transport*)VoiceChat::Node::sTransport)->SetLocalNode(uChannel, true, mDecoder->IsEnabled(), mEncoder->IsEnabled() != 0);
+        ((VoiceChat::Transport*)VoiceChat::Node::sTransport)->SetLocalNode(uChannel, true, mDecoder->IsEnabled(), mEncoder->IsEnabled());
         ++sRegisteredNodeCount;
 
         _pObject = this;
@@ -534,7 +534,7 @@ void VoiceChat::Node::Decode(float fDeltaTime)
 
     const bool bWasReceiving = VoiceChat::Node::sTransport->IsConnectedReceive(mNodeID);
     const bool bDecoderEnabled = mDecoder->IsEnabled();
-    VoiceChat::Node::sTransport->SetLocalNode(mNodeID, true, bDecoderEnabled, ((VoiceChat::Encoder*)mEncoder)->IsEnabled() != 0);
+    VoiceChat::Node::sTransport->SetLocalNode(mNodeID, true, bDecoderEnabled, ((VoiceChat::Encoder*)mEncoder)->IsEnabled());
     if (bDecoderEnabled != bWasReceiving)
     {
         AudioPacket packet;
@@ -562,10 +562,9 @@ void VoiceChat::Node::Decode(float fDeltaTime)
             {
                 ReceiveMetrics& metrics = VoiceChat::Node::sReceiveMetrics[i];
                 const float fTime = VoiceChat::Node::sTime;
-                const float fSinceStarve = fTime - metrics.lastStarveTime;
                 ++metrics.starvedCount;
+                metrics.starvedFrequency = (fTime - metrics.lastStarveTime + metrics.starvedFrequency) * 0.5f;
                 metrics.lastStarveTime = fTime;
-                metrics.starvedFrequency = (fSinceStarve + metrics.starvedFrequency) * 0.5f;
                 metrics.receiveLatency = VoiceChat::Node::sReceiveBufferSize;
                 UpdateReceiveStreamLatency(i);
                 if (!stream.activated && CalculateNumPackets(stream) >= stream.numPackets)

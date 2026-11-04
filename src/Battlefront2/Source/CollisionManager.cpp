@@ -215,9 +215,10 @@ bool CollisionManager::I_AddBody(CollisionObject* pObject, PblList<CollisionObje
     list.Add(pNode, pObject);
     if (mTreeGrid)
     {
-        TreeGridObject& rTreeObject = *pObject;
-        mTreeGrid->Add(&rTreeObject, rTreeObject.GetCollisionCenter(), rTreeObject.GetCollisionRadius() * 2.0f,
-                       rTreeObject.m2dRadius * 2.0f);
+        const float f2dRadius = pObject->m2dRadius;
+        const float fRadius = pObject->GetCollisionRadius();
+        const PblVector3& vCenter = pObject->GetCollisionCenter();
+        mTreeGrid->Add(pObject, vCenter, fRadius * 2.0f, f2dRadius * 2.0f);
     }
 
     GameObject* pGameObject = pObject->GetGameObject();
@@ -1352,7 +1353,7 @@ void CollisionManager::UpdateRestricted(PblList<CollisionObject>& aList, int aTy
                                       data.mCenter.z + data.mRadius);
             if (mTreeGrid)
             {
-                mTreeGrid->CallbackOnSphere(data.mCenter, data.mRadius, CollectDataCallback, &data);
+                TreeGridCache::CallbackOnSphere(mTreeGrid, data.mCenter, data.mRadius, CollectDataCallback, &data);
             }
             else
             {

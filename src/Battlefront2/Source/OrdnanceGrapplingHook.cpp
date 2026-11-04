@@ -1,3 +1,4 @@
+#include "PebbleFL/Common/PblMath.h"
 #include <d3dx9math.h>
 #include <math.h>
 
@@ -102,9 +103,8 @@ void OrdnanceGrapplingHook::HookFailure()
 bool OrdnanceGrapplingHook::Collide(CollisionObject* pObject, const PblVector3& vPos,
                                     const PblVector3& vNormal, int iBodyId)
 {
-    PblVector3 vDelta = vPos - mFireWeapon->mAimer->mFirePos;
     PblVector3 vDir;
-    D3DXVec3Normalize(reinterpret_cast<D3DXVECTOR3*>(&vDir), reinterpret_cast<const D3DXVECTOR3*>(&vDelta));
+    D3DXVec3Normalize(reinterpret_cast<D3DXVECTOR3*>(&vDir), reinterpret_cast<const D3DXVECTOR3*>(&(vPos - mFireWeapon->mAimer->mFirePos)));
 
     CollisionObjectType eType = pObject->GetCollisionType();
     if (eType != COLL_STATIC && eType != COLL_RIGID)
@@ -120,9 +120,8 @@ bool OrdnanceGrapplingHook::Collide(CollisionObject* pObject, const PblVector3& 
         CollisionModel* pModel = pObject->mCollisionModel;
         PblMatrix world = pModel->GetWorldMatrix(iBodyId, mHitObject->GetMatrix(), pObject->GetPose());
         mCollBodyID = iBodyId;
-        PblMatrix inverse = world.GetInverseFast();
         PblVector3 vOffset;
-        D3DXVec3TransformCoord(reinterpret_cast<D3DXVECTOR3*>(&vOffset), reinterpret_cast<const D3DXVECTOR3*>(&vPos), reinterpret_cast<const D3DXMATRIX*>(&inverse));
+        D3DXVec3TransformCoord(reinterpret_cast<D3DXVECTOR3*>(&vOffset), reinterpret_cast<const D3DXVECTOR3*>(&vPos), reinterpret_cast<const D3DXMATRIX*>(&world.GetInverseFast()));
         mCollOffset = vOffset;
     }
 
@@ -130,7 +129,7 @@ bool OrdnanceGrapplingHook::Collide(CollisionObject* pObject, const PblVector3& 
     mFinalCollisionOnNextUpdate = false;
     mDecrementLifeTime = false;
     mLifeTime = 20.0f;
-    mVelocity = PblVector3(mVelocity.x * 0.5f, mVelocity.y * 0.5f, mVelocity.z * 0.5f);
+    mVelocity = mVelocity * 0.5f;
 
     if (mOwner->IsRtti(EntitySoldier::rttiHashEntitySoldier))
     {
@@ -176,13 +175,10 @@ bool OrdnanceGrapplingHook::Update(float fDeltaTime)
     mDeltaTime = fDeltaTime;
     if (mCollBodyID >= 0 && mHitObject)
     {
-        PblMatrix world = mHitObject->GetCollisionObject()->mCollisionModel->GetWorldMatrix(
-            mCollBodyID, mHitObject->GetMatrix(), mHitObject->GetCollisionObject()->GetPose());
-        PblVector3 vNewPos;
-        D3DXVec3TransformCoord(reinterpret_cast<D3DXVECTOR3*>(&vNewPos), reinterpret_cast<const D3DXVECTOR3*>(&mCollOffset), reinterpret_cast<const D3DXMATRIX*>(&world));
-        mPosition = vNewPos;
+        mPosition = mHitObject->GetCollisionObject()->mCollisionModel->GetWorldMatrix(
+            mCollBodyID, mHitObject->GetMatrix(), mHitObject->GetCollisionObject()->GetPose()).ApplyTransform(mCollOffset);
 
-        float fSpeed = sqrtf(mVelocity.x * mVelocity.x + mVelocity.y * mVelocity.y +
+        float fSpeed = PblMath::Sqrt(mVelocity.x * mVelocity.x + mVelocity.y * mVelocity.y +
                              mVelocity.z * mVelocity.z);
         const PblVector3& vFirePos = mFireWeapon->mAimer->mFirePos;
         PblVector3 vDelta(mPosition.x - vFirePos.x, mPosition.y - vFirePos.y, mPosition.z - vFirePos.z);
@@ -208,7 +204,8 @@ bool OrdnanceGrapplingHook::Update(float fDeltaTime)
             const PblVector3& vPos = GetPosition();
             float fDx = vCenter.x - vPos.x;
             float fDz = vCenter.z - vPos.z;
-            if (fRadius * 2.0f <= sqrtf(fDz * fDz + fDx * fDx))
+            float fDist = PblMath::Sqrt(fDz * fDz + fDx * fDx);
+            if (!(fDist < fRadius * 2.0f))
             {
                 return true;
             }
@@ -235,8 +232,8 @@ bool OrdnanceGrapplingHook::Update(float fDeltaTime)
         float fDx = vFirePos.x - vPos.x;
         float fDy = vFirePos.y - vPos.y;
         float fDz = vFirePos.z - vPos.z;
-        float fDist = sqrtf(fDy * fDy + fDx * fDx + fDz * fDz);
-        float fStep = sqrtf(mVelocity.x * mVelocity.x + mVelocity.y * mVelocity.y +
+        float fDist = PblMath::Sqrt(fDy * fDy + fDx * fDx + fDz * fDz);
+        float fStep = PblMath::Sqrt(mVelocity.x * mVelocity.x + mVelocity.y * mVelocity.y +
                             mVelocity.z * mVelocity.z) * fDeltaTime;
         if (fStep > fDist)
         {

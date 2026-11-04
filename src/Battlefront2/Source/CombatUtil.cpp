@@ -323,7 +323,7 @@ float CombatUtil::sCalcImpactTime_Missile(const DamageOwner& owner,
     OrdnanceMissileClass* pMissile = const_cast<OrdnanceMissileClass*>(pClass);
     const PblVector3& vTarget = pTarget->GetPosition();
     const PblVector3& vShooter = pShooter->GetPosition();
-    float fDistance = sqrtf(LengthSq(vShooter - vTarget));
+    float fDistance = PblMath::Sqrt(LengthSq(vShooter - vTarget));
     float fAccel = pClass->mAcceleration;
     float fStartSpeed;
     if (fAccel < 9000.0f)
@@ -368,7 +368,7 @@ float CombatUtil::sCalcImpactTime(const DamageOwner& owner, const OrdnanceClass*
     const GameObject* pShooter = owner.mGameObject;
     const PblVector3& vTarget = pTarget->GetPosition();
     const PblVector3& vShooter = pShooter->GetPosition();
-    float fDistance = sqrtf(LengthSq(vShooter - vTarget));
+    float fDistance = PblMath::Sqrt(LengthSq(vShooter - vTarget));
     return fDistance / pOrdnance->GetVelocity();
 }
 
@@ -800,10 +800,10 @@ bool CombatUtil::sSelectBestWeaponType(Controllable* pMe, const GameObject* pTar
     int iBest = -1;
     bool bBestMultiShot = false;
     float fBestDamage = -1.0f;
-    bool bBestInRange = false;
 
     const PblVector3& vEye = pMe->mEyePoint;
     const PblVector3& vPoint = pTarget->GetTargetPoint(vEye, pMe->mEyeDir, -1);
+    bool bBestInRange = false;
     float fDistSq = (vPoint.y - vEye.y) * (vPoint.y - vEye.y) +
                     (vPoint.x - vEye.x) * (vPoint.x - vEye.x) +
                     (vPoint.z - vEye.z) * (vPoint.z - vEye.z);
@@ -894,10 +894,22 @@ bool CombatUtil::sSelectBestWeaponType(Controllable* pMe, const GameObject* pTar
             {
                 continue;
             }
-            if (bBestMultiShot ? (bMultiShot && bBetter) : (bMultiShot || bBetter))
+            bool bUse = false;
+            if (bBestMultiShot)
             {
-                fBestDamage = fDamage;
+                if (bMultiShot && bBetter)
+                {
+                    bUse = true;
+                }
+            }
+            else if (bMultiShot || bBetter)
+            {
+                bUse = true;
+            }
+            if (bUse)
+            {
                 iBest = i;
+                fBestDamage = fDamage;
                 bBestMultiShot = bMultiShot;
             }
         }
@@ -1780,7 +1792,7 @@ bool CombatUtil::CanTurretFaceDisturbance(const Controllable* pMe, const Mounted
     float fYaw = atan2f(vLocal.x, vLocal.z);
     if (fYaw >= pClass->mMinYaw && pClass->mMaxYaw >= fYaw)
     {
-        float fPitch = asinf(vLocal.y / sqrtf(LengthSq(vLocal)));
+        float fPitch = asinf(vLocal.y / PblMath::Sqrt(LengthSq(vLocal)));
         if (fPitch >= pClass->mMinPitch && pClass->mMaxPitch >= fPitch)
         {
             return true;

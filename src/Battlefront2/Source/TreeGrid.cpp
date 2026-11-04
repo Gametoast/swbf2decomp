@@ -1,3 +1,4 @@
+#include "PebbleFL/Common/PblMath.h"
 #include <new>
 #include <d3dx9math.h>
 #include <math.h>
@@ -329,7 +330,7 @@ void TreeGrid::CallbackOnLazyRay(const PblVector3& rFrom, const PblVector3& rTo,
     }
 
     PblVector3 vDir(rTo.x - rFrom.x, rTo.y - rFrom.y, rTo.z - rFrom.z);
-    float fLength = sqrtf(vDir.x * vDir.x + vDir.y * vDir.y + vDir.z * vDir.z);
+    float fLength = PblMath::Sqrt(vDir.x * vDir.x + vDir.y * vDir.y + vDir.z * vDir.z);
     PblVector3 vNormal;
     D3DXVec3Normalize(reinterpret_cast<D3DXVECTOR3*>(&vNormal), reinterpret_cast<const D3DXVECTOR3*>(&vDir));
     vDir = vNormal;
@@ -593,8 +594,8 @@ void TreeGrid::_CallbackOnRay(const PblVector3& rFrom, const PblVector3& rTo, in
     {
         fCellSize = mMaxSize / iGridSize;
         iStepX = 2 * (fEndX > fStartX) - 1;
-        float fDX = fEndX - fStartX;
         iStepZ = 2 * (fEndZ > fStartZ) - 1;
+        float fDX = fEndX - fStartX;
         float fDZ = fEndZ - fStartZ;
         float fLength = sqrtf(fDX * fDX + fDZ * fDZ);
         if (fDist > fCellSize * fLength)
@@ -662,7 +663,7 @@ void TreeGrid::_CallbackOnRay(const PblVector3& rFrom, const PblVector3& rTo, in
             }
             while (x != iEndX || z != iEndZ)
             {
-                if (fDist <= (fNextX - fDeltaX) * fCellSize && fDist <= (fNextZ - fDeltaZ) * fCellSize)
+                if (!(fDist > (fNextX - fDeltaX) * fCellSize || fDist > (fNextZ - fDeltaZ) * fCellSize))
                 {
                     break;
                 }

@@ -1,3 +1,4 @@
+#include "PebbleFL/Common/PblMath.h"
 #include <math.h>
 #include <stdio.h>
 #include <string.h>
@@ -144,8 +145,7 @@ void OrdnanceTowCable::TowCableFailure()
             break;
         }
 
-        PblVector3 vStart(point.mBodyOffset.x + 0.0f, point.mBodyOffset.y + 20.0f,
-                          point.mBodyOffset.z + 0.0f);
+        PblVector3 vStart = point.mBodyOffset + PblVector3(0.0f, 20.0f, 0.0f);
         PblVector3 vDown(0.0f, -1.0f, 0.0f);
         CollisionObject* pHit;
         float fHit = CollisionManager::RayHit(vStart, vDown, 512.0f, pHit, NULL, NULL, 0, 0x90, true);
@@ -328,7 +328,7 @@ void OrdnanceTowCable::RecalculateCenterAndRadius()
     float fX = vOwnerEdge.x - vEndEdge.x;
     float fY = vOwnerEdge.y - vEndEdge.y;
     float fZ = vOwnerEdge.z - vEndEdge.z;
-    SetRenderRadius(sqrtf(fX * fX + fY * fY + fZ * fZ) * 0.5f);
+    SetRenderRadius(PblMath::Sqrt(fX * fX + fY * fY + fZ * fZ) * 0.5f);
     PblVector3 vCenter((vEndEdge.x + vOwnerEdge.x) * 0.5f, (vEndEdge.y + vOwnerEdge.y) * 0.5f,
                        (vEndEdge.z + vOwnerEdge.z) * 0.5f);
     SetRenderPos(vCenter);
@@ -364,7 +364,7 @@ bool OrdnanceTowCable::Update(float fDeltaTime)
         float fX = mLastOwnerFirePos.x - vPos.x;
         float fY = mLastOwnerFirePos.y - vPos.y;
         float fZ = mLastOwnerFirePos.z - vPos.z;
-        float fDist = sqrtf(fY * fY + fX * fX + fZ * fZ);
+        float fDist = PblMath::Sqrt(fY * fY + fX * fX + fZ * fZ);
         if (fDist > ((OrdnanceTowCableClass*)mClass)->mInitialCableLimit)
         {
             return false;
@@ -480,7 +480,7 @@ bool OrdnanceTowCable::Update(float fDeltaTime)
             float fX = vB.x - vA.x;
             float fY = vB.y - vA.y;
             float fZ = vB.z - vA.z;
-            float fLength = sqrtf(fY * fY + fX * fX + fZ * fZ);
+            float fLength = PblMath::Sqrt(fY * fY + fX * fX + fZ * fZ);
             if (fLength > 0.0f)
             {
                 float fInvLength = 1.0f / fLength;
@@ -706,7 +706,7 @@ void TowCableRenderObject::AddAttachPoint(int iBodyID, const PblVector3& vOffset
     point.mSlopeOut = vSlope;
     point.mFinalSlope = vSlope;
     point.mFinalSlope.y = 0.0f;
-    float fLength = sqrtf(point.mFinalSlope.x * point.mFinalSlope.x + point.mFinalSlope.y * point.mFinalSlope.y +
+    float fLength = PblMath::Sqrt(point.mFinalSlope.x * point.mFinalSlope.x + point.mFinalSlope.y * point.mFinalSlope.y +
                           point.mFinalSlope.z * point.mFinalSlope.z);
     if (fLength > 0.0f)
     {
