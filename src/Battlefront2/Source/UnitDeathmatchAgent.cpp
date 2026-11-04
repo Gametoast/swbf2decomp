@@ -58,8 +58,7 @@ int UnitDeathmatchAgent::EventHandler(AI::EventInfo* pInfo)
         {
             mCombatCmd = pInfo->mNextCmd;
             SetNextState(4);
-            pInfo->mNextCmd = UnitCmdInfo(CMD_NONE, PblHandle<GameObject>(),
-                                          PblVector3(0, 0, 0), PblHandle<GameObject>());
+            pInfo->mNextCmd = UnitCmdInfo(CMD_NONE, NULL, PblVector3(0, 0, 0), NULL);
             return 1;
         }
         return 0;
@@ -142,11 +141,12 @@ void UnitDeathmatchAgent::EnterState()
         PblVector3 vDest = pEnemy->GetControllable()->GetGameObject()->GetPosition();
         if (GetMe()->GetGameObject()->GetGameObjectClass()->mAIType == ConnectivityGraph::CGT_FLAG_HUGE)
         {
-            const PblVector3& vMyPos = GetMe()->GetMatrix().GetTranslation();
+            Controllable* pMe = GetMe();
+            const PblVector3& vMyPos = pMe->GetMatrix().GetTranslation();
             const PblVector3 vDelta = vDest - vMyPos;
             PblVector3 vDir;
             D3DXVec3Normalize((D3DXVECTOR3*)&vDir, (const D3DXVECTOR3*)&vDelta);
-            float fRadius = GetMe()->GetGameObject()->GetCollisionObject()->GetCollisionRadius();
+            float fRadius = pMe->GetGameObject()->GetCollisionRadius();
             vDest -= vDir * fRadius;
         }
         else
@@ -191,7 +191,6 @@ void UnitDeathmatchAgent::DoJetJumpStuff()
     }
 
     EntitySoldier* pSoldier = static_cast<EntitySoldier*>(GetMe()->GetEntity());
-    PblVector3 vJumpDir(0.0f, 0.0f, 0.0f);
     if (pSoldier->mClass->mJetFuelRechargeRate > 0.0f)
     {
         if (pSoldier->GetJetFuel() > pSoldier->mClass->GetJetFuelMinBorder())
@@ -204,11 +203,11 @@ void UnitDeathmatchAgent::DoJetJumpStuff()
                     if (PblRandom::GetGlobalInt() & 1)
                     {
                         PblVector3 vStart = GetMe()->GetMatrix().GetTranslation();
-                        PblVector3 vEnd(vStart.x + vJumpDir.x, vStart.y + 40.0f, vStart.z + vJumpDir.z);
+                        PblVector3 vEnd = vStart + PblVector3(0.0f, 40.0f, 0.0f);
                         const GameObject* pIgnore = GetMe()->GetGameObject();
                         if (!CollisionManager::RayTest(vStart, vEnd, &pIgnore, 1, 0x9a))
                         {
-                            mCtrl->GetLowLevel().SetJetJump(vJumpDir);
+                            mCtrl->GetLowLevel().SetJetJump(PblVector3(0.0f, 0.0f, 0.0f));
                         }
                     }
                 }

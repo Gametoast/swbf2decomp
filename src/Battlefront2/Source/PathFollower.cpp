@@ -369,10 +369,11 @@ bool PathFollower::CloseToDest() const
         float fDistSq = dz * dz + dx * dx;
         if ((mItor->mFlags & AIPathNode::AIPN_ROLLIN) && fDistSq > 81.0f && fDistSq < 121.0f)
         {
-            PblVector3 vDelta = mGotoPoint - mCtrl->mOwner->GetMatrix().GetTranslation();
-            vDelta.y = 0.0f;
-            PblVector3 vRoll;
-            D3DXVec3Normalize(reinterpret_cast<D3DXVECTOR3*>(&vRoll), reinterpret_cast<const D3DXVECTOR3*>(&vDelta));
+            PblVector3 vRoll = mGotoPoint - mCtrl->mOwner->GetMatrix().GetTranslation();
+            vRoll.y = 0.0f;
+            PblVector3 vDir;
+            D3DXVec3Normalize(reinterpret_cast<D3DXVECTOR3*>(&vDir), reinterpret_cast<const D3DXVECTOR3*>(&vRoll));
+            vRoll = vDir;
             LowLevel(mCtrl).SetRoll(vRoll);
             mItor->mFlags &= ~AIPathNode::AIPN_ROLLIN;
         }
@@ -541,8 +542,9 @@ void PathFollower::Update(float dt)
                 }
 
                 mWaitState = WS_CROUCH;
-                AI::VOHelper::Play(AI::VOT_PathFollowWait, mCtrl->mOwner->GetGameObject(), 0,
-                                   mCtrl->mOwner->GetGameObject(), 0.0f);
+                Controllable* pOwner = mCtrl->mOwner;
+                AI::VOHelper::Play(AI::VOT_PathFollowWait, pOwner->GetGameObject(), 0,
+                                   pOwner->GetGameObject(), 0.0f);
                 UpdateControllable();
                 return;
             }
@@ -561,26 +563,29 @@ void PathFollower::Update(float dt)
             if (uFlags & (AIPathNode::AIPN_JUMP | AIPathNode::AIPN_JETJUMP))
             {
                 PblVector3 vJump(0.0f, 1.0f, 0.0f);
-                AIPathNode* pNext = mItor._pNode->_pNext->_pObject;
-                if (pNext)
+                PblList<AIPathNode>::Itor itNext = mItor;
+                ++itNext;
+                if (itNext)
                 {
                     const PblMatrix& mMe = mCtrl->mOwner->GetMatrix();
-                    vJump = pNext->mPos - mMe.GetTranslation();
+                    vJump = itNext->mPos - mMe.GetTranslation();
                     vJump.y = 0.0f;
-                    PblVector3 vDir;
-                    D3DXVec3Normalize(reinterpret_cast<D3DXVECTOR3*>(&vDir), reinterpret_cast<const D3DXVECTOR3*>(&vJump));
-                    vJump = PblVector3(vDir.x * 0.70710677f, 0.70710677f, vDir.z * 0.70710677f);
+                    {
+                        PblVector3 vDir;
+                        D3DXVec3Normalize(reinterpret_cast<D3DXVECTOR3*>(&vDir), reinterpret_cast<const D3DXVECTOR3*>(&vJump));
+                        vJump = vDir;
+                    }
+                    vJump.y = 1.0f;
+                    vJump *= 0.70710677f;
                 }
 
-                AILowLevel& ll = LowLevel(mCtrl);
-                ll.mAIJetJumpDir = vJump;
                 if (mItor->mFlags & AIPathNode::AIPN_JUMP)
                 {
-                    ll.mDoJump = true;
+                    LowLevel(mCtrl).SetJump(vJump);
                 }
                 else
                 {
-                    ll.mDoJetJump = true;
+                    LowLevel(mCtrl).SetJetJump(vJump);
                 }
                 GotoNextNode();
                 UpdateControllable();
@@ -590,15 +595,18 @@ void PathFollower::Update(float dt)
             if (uFlags & AIPathNode::AIPN_ROLLOUT)
             {
                 PblVector3 vRoll(0.0f, 1.0f, 0.0f);
-                AIPathNode* pNext = mItor._pNode->_pNext->_pObject;
-                if (pNext)
+                PblList<AIPathNode>::Itor itNext = mItor;
+                ++itNext;
+                if (itNext)
                 {
                     const PblMatrix& mMe = mCtrl->mOwner->GetMatrix();
-                    vRoll = pNext->mPos - mMe.GetTranslation();
+                    vRoll = itNext->mPos - mMe.GetTranslation();
                     vRoll.y = 0.0f;
-                    PblVector3 vDir;
-                    D3DXVec3Normalize(reinterpret_cast<D3DXVECTOR3*>(&vDir), reinterpret_cast<const D3DXVECTOR3*>(&vRoll));
-                    vRoll = vDir;
+                    {
+                        PblVector3 vDir;
+                        D3DXVec3Normalize(reinterpret_cast<D3DXVECTOR3*>(&vDir), reinterpret_cast<const D3DXVECTOR3*>(&vRoll));
+                        vRoll = vDir;
+                    }
                 }
                 LowLevel(mCtrl).SetRoll(vRoll);
             }
@@ -649,8 +657,9 @@ void PathFollower::UpdateControllableMoving()
             fTurn = 5.0f;
         }
 
-        const PblMatrix& mFlyer = EntityGetMatrix(pFlyer);
-        PblVector3 vForward(mFlyer.m[2][0] + 0.0001f, 0.0f, mFlyer.m[2][2]);
+        PblVector3 vForward = EntityGetMatrix(pFlyer).GetZAxis();
+        vForward.y = 0.0f;
+        vForward.x += 0.0001f;
         PblVector3 vDir;
         D3DXVec3Normalize(reinterpret_cast<D3DXVECTOR3*>(&vDir), reinterpret_cast<const D3DXVECTOR3*>(&vForward));
         vForward = vDir;
@@ -700,16 +709,15 @@ void PathFollower::UpdateControllableMoving()
 
             if (cDir == 0)
             {
-                PblVector3 vAway(vPos.x - mGotoPoint.x, vPos.y - mGotoPoint.y, vPos.z - mGotoPoint.z);
+                PblVector3 vAway = vPos - mGotoPoint;
                 PblVector3 vAwayN;
                 D3DXVec3Normalize(reinterpret_cast<D3DXVECTOR3*>(&vAwayN), reinterpret_cast<const D3DXVECTOR3*>(&vAway));
-                float fDot = vAwayN.x * vAlong.x + vAwayN.y * 0.0f + vAwayN.z * vAlong.z;
+                float fDot = vAwayN.x * vAlong.x + vAwayN.y * vAlong.y + vAwayN.z * vAlong.z;
                 cDir = fDot > 0.0f ? -1 : 1;
             }
 
             float fStep = (float)cDir * 5.0f;
-            vSteer = PblVector3(vAlong.x * fStep + vPos.x, fStep * 0.0f + vPos.y,
-                                vPos.z + vAlong.z * fStep);
+            vSteer = vPos + vAlong * fStep;
 
             if (bSoldier)
             {
@@ -797,7 +805,7 @@ void PathFollower::CheckStuck(float dt)
     }
 
     const PblVector3 vToGoal = mGotoPoint - vPos;
-    float fDistSq = vToGoal.y * vToGoal.y + vToGoal.x * vToGoal.x + vToGoal.z * vToGoal.z;
+    float fDistSq = vToGoal.x * vToGoal.x + vToGoal.y * vToGoal.y + vToGoal.z * vToGoal.z;
     if (fDistSq < mMinDistToGoal)
     {
         mMinDistToGoal = fDistSq;

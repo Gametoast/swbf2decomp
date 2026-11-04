@@ -57,11 +57,12 @@ const Combo* Combo::ResolveForWeapon(const WeaponMelee* pWeapon,
                 pResolved->GetState(i)->IsVelocityZFromAnim() ||
                 pResolved->GetState(i)->IsVelocityXFromAnim())
             {
-                if (pResolved->GetState(i)->GetAnimIndex() < 0xa4)
+                const unsigned char uiAnimIndex = pResolved->GetState(i)->GetAnimIndex();
+                if (uiAnimIndex < 0xa4)
                 {
                     SoldierAnimatorClass* pAnimator = SoldierAnimatorClass::Instance();
                     const SoldierAnimation* pAnim = pAnimator->GetUpperBodyAnimation(
-                        (SoldierAnimationBank::MAP)eMap, (unsigned char)pResolved->GetState(i)->GetAnimIndex());
+                        (SoldierAnimationBank::MAP)pResolved->m_eMap, uiAnimIndex);
                     if (pAnim)
                     {
                         fDuration = pAnim->GetAnimationLength();
@@ -89,21 +90,19 @@ const Combo* Combo::ResolveForWeapon(const WeaponMelee* pWeapon,
             for (unsigned int j = 0; j < pResolved->GetState(i)->GetNumAttacks(); ++j)
             {
                 State* pState = pResolved->GetState(i);
-                Attack* pAttack = pState->GetAttack(j);
-                if (pAttack->GetDamageEdge() >=
+                if (pState->GetAttack(j)->GetDamageEdge() >=
                     static_cast<const WeaponMeleeClass*>(pWeapon->mClass)->m_uiNumDamageEdges)
                 {
                     continue;
                 }
                 unsigned int uiAttach;
                 PblVector3 vBegin, vEnd;
-                static_cast<const WeaponMeleeClass*>(pWeapon->mClass)->GetDamageEdgeRay(
-                    pAttack->GetDamageEdge(), uiAttach, vBegin, vEnd);
-                pAttack->_ResolveDamageData(pResolved, pState, uiAttach, vBegin, vEnd);
+                static_cast<const WeaponMeleeClass*>(pWeapon->mClass)->GetDamageEdgeRay(pState->GetAttack(j)->GetDamageEdge(), uiAttach, vBegin, vEnd);
+                pState->GetAttack(j)->_ResolveDamageData(pResolved, pState, uiAttach, vBegin, vEnd);
             }
         }
     }
-    s_ComboTable.Store(uiNameHash, pResolved);
+    s_ComboTable.Store(pResolved->m_uiNameHash, pResolved);
     return pResolved;
 }
 
@@ -226,11 +225,7 @@ bool Combo::Deflect::TestDeflect(const PblMatrix& mSoldier, const PblVector3& vF
     {
         o_uiAnimIndex = uiAnimIndexPrev;
     }
-    else if (matches == 1)
-    {
-        o_uiAnimIndex = m_aDeflectAnim[chosen].uiAnimIndex;
-    }
-    else
+    else if (matches > 1)
     {
         unsigned int pick = static_cast<unsigned int>(PblRandom::_Global.GetFloat() * matches);
         const unsigned int uiNumAnimations = m_uiNumDeflectAnimations;
@@ -245,6 +240,10 @@ bool Combo::Deflect::TestDeflect(const PblMatrix& mSoldier, const PblVector3& vF
                 }
             }
         }
+    }
+    else
+    {
+        o_uiAnimIndex = m_aDeflectAnim[chosen].uiAnimIndex;
     }
     return true;
 }
@@ -1272,12 +1271,15 @@ void Combo::Condition::_ReadConfig(PblConfig& config, const char* pszComboName, 
 // FUNCTION: SWBF2 0x00472000
 void Combo::Transition::_ReadConfig(PblConfig& config, const char* pszComboName, const char* pszStateName)
 {
-    while (!config.IsDone())
+    for (;;)
     {
-        if (config.IsScopeNext())
+        while (!config.IsDone() && config.m_pChunk->PeekNextChildId() == SCOPE_ID)
         {
             PblConfig scope(config.ReadNextScope(), true);
-            continue;
+        }
+        if (config.IsDone())
+        {
+            break;
         }
 
         PblConfig::Data data = config.ReadNextData();
@@ -1285,7 +1287,7 @@ void Combo::Transition::_ReadConfig(PblConfig& config, const char* pszComboName,
         {
         case 0x39386e06:
         case 0x5d342984:
-            if (config.IsScopeNext())
+            if (!config.IsDone() && config.m_pChunk->PeekNextChildId() == SCOPE_ID)
             {
                 PblConfig scope(config.ReadNextScope(), true);
                 Condition* pCondition = AddCondition();
@@ -1531,12 +1533,15 @@ void Combo::Attack::_ReadConfig(PblConfig& config, const char* pszStateName)
 // FUNCTION: SWBF2 0x004732e0
 void Combo::Deflect::_ReadConfig(PblConfig& config, const Combo& combo, const char* pszStateName)
 {
-    while (!config.IsDone())
+    for (;;)
     {
-        if (config.IsScopeNext())
+        while (!config.IsDone() && config.m_pChunk->PeekNextChildId() == SCOPE_ID)
         {
             PblConfig scope(config.ReadNextScope(), true);
-            continue;
+        }
+        if (config.IsDone())
+        {
+            break;
         }
 
         PblConfig::Data data = config.ReadNextData();
@@ -1589,14 +1594,14 @@ void Combo::Deflect::_ReadConfig(PblConfig& config, const Combo& combo, const ch
                 if (pAnimData)
                 {
                     eAnimation = pAnimData->GetComboAnimation();
-                    if (eAnimation == SoldierAnimationBank::INVALID_COMBO_ANIMATION)
-                    {
-                        pAnimData = 0;
-                    }
-                    else
+                    if (eAnimation != SoldierAnimationBank::INVALID_COMBO_ANIMATION)
                     {
                         SoldierAnimationBank::AddComboAnimation((SoldierAnimationBank::COMBO)combo.m_eCombo,
                                                                 eAnimation);
+                    }
+                    else
+                    {
+                        pAnimData = 0;
                     }
                 }
                 else
@@ -1613,11 +1618,7 @@ void Combo::Deflect::_ReadConfig(PblConfig& config, const Combo& combo, const ch
                 {
                     unsigned char uiWeapon = 0;
                     unsigned char uiDirections;
-                    if (data.GetNumArgs() < 2)
-                    {
-                        uiDirections = 0x3f;
-                    }
-                    else
+                    if (data.GetNumArgs() >= 2)
                     {
                         uiDirections = 0;
                         for (unsigned int i = 1; i < data.GetNumArgs(); ++i)
@@ -1652,10 +1653,14 @@ void Combo::Deflect::_ReadConfig(PblConfig& config, const Combo& combo, const ch
                             uiDirections = 0x3f;
                         }
                     }
+                    else
+                    {
+                        uiDirections = 0x3f;
+                    }
                     AddDeflectAnimation(pAnimData->GetAnimIndex(), uiDirections, uiWeapon);
                 }
 
-                if (config.IsScopeNext())
+                if (!config.IsDone() && config.m_pChunk->PeekNextChildId() == SCOPE_ID)
                 {
                     PblConfig scope(config.ReadNextScope(), true);
                     if (pAnimData && eAnimation != SoldierAnimationBank::INVALID_COMBO_ANIMATION)
@@ -1714,12 +1719,15 @@ unsigned int Combo::Deflect::AddDeflectAnimation(unsigned char uiAnimIndex, unsi
 // FUNCTION: SWBF2 0x00473cd0
 void Combo::State::_ReadConfig(PblConfig& config, const Combo& combo, const char* pszComboName)
 {
-    while (!config.IsDone())
+    for (;;)
     {
-        if (config.m_pChunk->PeekNextChildId() == SCOPE_ID)
+        while (!config.IsDone() && config.m_pChunk->PeekNextChildId() == SCOPE_ID)
         {
             PblConfig scope(config.ReadNextScope(), true);
-            continue;
+        }
+        if (config.IsDone())
+        {
+            break;
         }
 
         PblConfig::Data data = config.ReadNextData();
@@ -1812,7 +1820,11 @@ void Combo::State::_ReadConfig(PblConfig& config, const Combo& combo, const char
 
         case 0x2b43d2e9:
         {
-            bool bAnimatedMove = data.GetNumArgs() ? data.GetBoolArg(0) : true;
+            bool bAnimatedMove = true;
+            if (data.GetNumArgs())
+            {
+                bAnimatedMove = data.GetBoolArg(0);
+            }
             SetAnimatedMove(bAnimatedMove);
             if (bAnimatedMove)
             {
@@ -1906,7 +1918,7 @@ void Combo::State::_ReadConfig(PblConfig& config, const Combo& combo, const char
             break;
 
         case 0xe1e901c0:
-            if (!config.IsDone() && IsNextScopeChunk(config))
+            if (!config.IsDone() && config.m_pChunk->PeekNextChildId() == SCOPE_ID)
             {
                 PblConfig scope(config.ReadNextScope(), true);
                 Deflect* pDeflect = AddDeflect();
@@ -2026,17 +2038,14 @@ void Combo::State::_ReadConfig(PblConfig& config, const Combo& combo, const char
                 if (pAnimData)
                 {
                     eAnimation = pAnimData->GetComboAnimation();
-                    if (eAnimation == SoldierAnimationBank::INVALID_COMBO_ANIMATION)
-                    {
-                        if (SoldierAnimType::IsWeaponAnimIndex(pAnimData->GetAnimIndex()))
-                        {
-                            pAnimData = 0;
-                        }
-                    }
-                    else
+                    if (eAnimation != SoldierAnimationBank::INVALID_COMBO_ANIMATION)
                     {
                         SoldierAnimationBank::AddComboAnimation((SoldierAnimationBank::COMBO)combo.m_eCombo,
                                                                 eAnimation);
+                    }
+                    else if (SoldierAnimType::IsWeaponAnimIndex(pAnimData->GetAnimIndex()))
+                    {
+                        pAnimData = 0;
                     }
                 }
                 else
@@ -2048,7 +2057,12 @@ void Combo::State::_ReadConfig(PblConfig& config, const Combo& combo, const char
                         pAnimData = SoldierAnimationData::Find(eAnimation, eScope);
                     }
                 }
-                m_uiAnimIndex = pAnimData ? pAnimData->GetAnimIndex() : 0xff;
+                unsigned char uiAnimIndex = 0xff;
+                if (pAnimData)
+                {
+                    uiAnimIndex = pAnimData->GetAnimIndex();
+                }
+                m_uiAnimIndex = uiAnimIndex;
 
                 if (!config.IsDone() && IsNextScopeChunk(config))
                 {
@@ -2161,12 +2175,15 @@ void Combo::State::_ReadConfig(PblConfig& config, const Combo& combo, const char
 // FUNCTION: SWBF2 0x00474a60
 void Combo::State::_ReadAnimatedMoveScope(PblConfig& config, const char* pszComboName)
 {
-    while (!config.IsDone())
+    for (;;)
     {
-        if (config.IsScopeNext())
+        while (!config.IsDone() && config.m_pChunk->PeekNextChildId() == SCOPE_ID)
         {
             PblConfig scope(config.ReadNextScope(), true);
-            continue;
+        }
+        if (config.IsDone())
+        {
+            break;
         }
 
         PblConfig::Data data = config.ReadNextData();
@@ -2378,19 +2395,22 @@ void Combo::ReadConfig(PblConfig& config)
     }
     pIdle->SetEnergyRestoreRate();
 
-    while (!config.IsDone())
+    for (;;)
     {
-        if (config.IsScopeNext())
+        while (!config.IsDone() && config.m_pChunk->PeekNextChildId() == SCOPE_ID)
         {
             PblConfig scope(config.ReadNextScope(), true);
-            continue;
+        }
+        if (config.IsDone())
+        {
+            break;
         }
 
         PblConfig::Data data = config.ReadNextData();
         switch (data.GetId())
         {
         case 0x783132f6:
-            if (config.IsScopeNext())
+            if (!config.IsDone() && config.m_pChunk->PeekNextChildId() == SCOPE_ID)
             {
                 if (data.GetNumArgs() && data.IsStringArg(0))
                 {
@@ -2498,7 +2518,7 @@ void Combo::ReadConfig(PblConfig& config)
                     }
                 }
 
-                if (config.IsScopeNext())
+                if (!config.IsDone() && config.m_pChunk->PeekNextChildId() == SCOPE_ID)
                 {
                     PblConfig scope(config.ReadNextScope(), true);
                     if (pAnimData && eAnimation != SoldierAnimationBank::INVALID_COMBO_ANIMATION)
@@ -2532,19 +2552,18 @@ void Combo::ReadConfig(PblConfig& config)
     {
         for (unsigned int j = 0; j < m_aState[i].m_uiNumTransitions; ++j)
         {
-            Transition& transition = m_aState[i].m_aTransition[j];
             unsigned int k;
             for (k = 0; k < m_uiNumStates; ++k)
             {
-                if (m_aState[k].m_uiNameHash == transition.m_uiTargetState && k != i)
+                if (m_aState[k].m_uiNameHash == m_aState[i].m_aTransition[j].m_uiTargetState && k != i)
                 {
-                    transition.m_uiTargetState = k;
+                    m_aState[i].m_aTransition[j].m_uiTargetState = k;
                     break;
                 }
             }
             if (k >= m_uiNumStates)
             {
-                transition.m_uiTargetState = 0;
+                m_aState[i].m_aTransition[j].m_uiTargetState = 0;
             }
         }
     }

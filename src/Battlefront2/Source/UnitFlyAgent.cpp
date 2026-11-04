@@ -78,8 +78,9 @@ void UnitFlyAgent::EnterState()
 
     case 2:
     {
-        const PblVector3 vFwd = mCtrl->mOwner->GetMatrix().GetZAxis();
-        PblVector3 vDest(vPos.x + vFwd.x * 200.0f, vPos.y + 0.0f, vPos.z + vFwd.z * 200.0f);
+        PblVector3 vFwd = mCtrl->mOwner->GetMatrix().GetZAxis();
+        vFwd.y = 0.0f;
+        PblVector3 vDest = vPos + vFwd * 200.0f;
         vDest.y += 1.0f;
 
         AIPath* pPath = new AIPath();
@@ -142,8 +143,9 @@ void UnitFlyAgent::EnterState()
             ++iTries;
         } while (!bGood && SquaredLength(vDest - vPos) < 10000.0f && iTries < 10);
 
-        vDest.y += 20.0f;
-        GetLowLevel().SetNavigator_Goto(vDest, 0, false, false);
+        PblVector3 vGoto = vDest;
+        vGoto.y += 20.0f;
+        GetLowLevel().SetNavigator_Goto(vGoto, 0, false, false);
         if (GetFlyer()->GetState() != EntityFlyer::FLYING)
         {
             GetFlyer()->TakeOff();
@@ -338,7 +340,8 @@ bool UnitFlyAgent::IsNearATAT()
             return false;
         }
         pFlyer->mAIEng.ai.mReactionThinkTime = 4.75f;
-        if (pFlyer->mClass->mCircleATATFrequency < PblRandom::GetGlobalFloat())
+        const float fFrequency = pFlyer->mClass->mCircleATATFrequency;
+        if (fFrequency < PblRandom::GetGlobalFloat())
         {
             return false;
         }
@@ -377,7 +380,10 @@ bool UnitFlyAgent::IsNearATAT()
         if (pFlyer->mTowCableWalker)
         {
             const PblVector3 vCircle = pFlyer->mPointToCircle;
-            if (SquaredLength(vCircle - vATAT) > 2500.0f)
+            const float dx = vCircle.x - vATAT.x;
+            const float dy = vCircle.y - vATAT.y;
+            const float dz = vCircle.z - vATAT.z;
+            if (dx * dx + dy * dy + dz * dz > 2500.0f)
             {
                 bFree = false;
             }
@@ -387,8 +393,8 @@ bool UnitFlyAgent::IsNearATAT()
         {
             const PblVector3& vFwd = pATAT->GetMatrix().GetZAxis();
             const bool bWasCircling = pFlyer->mbCirclingPoint;
-            pFlyer->mbCirclingPoint = true;
             vATAT += vFwd * 0.0f;
+            pFlyer->mbCirclingPoint = true;
             pFlyer->mPointToCircle = vATAT;
             if (!bWasCircling)
             {

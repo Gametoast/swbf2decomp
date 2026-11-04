@@ -289,8 +289,7 @@ void EntityBuildingAnimated::Init()
             {
                 fGrow = _Sphere.w;
             }
-            SetRenderPos(PblVector3(vDir.x * fGrow + _Sphere.x, vDir.y * fGrow + _Sphere.y,
-                                    vDir.z * fGrow + _Sphere.z));
+            SetRenderPos(GetRenderPos() + vDir * fGrow);
             SetRenderRadius(_Sphere.w + fGrow);
             SetTestBBox(false);
         }
@@ -440,8 +439,8 @@ void EntityBuildingAnimated::Render(unsigned char uFlags, float fDist, unsigned 
             {
                 if (FLEffectObject* pEffect = pEffectClass->BuildEffect())
                 {
+                    int iBody = PblRandom::GetGlobalInt() % mCollisionModel->GetNumBodies();
                     CollisionModel* pModel = mCollisionModel;
-                    int iBody = PblRandom::GetGlobalInt() % pModel->GetNumBodies();
                     PblMatrix mBody = pModel->GetWorldMatrix(iBody, mMatrix, GetPose());
                     pEffect->AttachEffectToMatrix(&mBody, false);
                 }

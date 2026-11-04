@@ -539,12 +539,12 @@ int UnitAgent::HandleDamagedEvent(AI::EventInfo* pEvent)
             if (GetMaxSpeed(pMe) == 0.0f && !AIUtil::gStayInTurrets && !CombatUtil::CanFaceDisturbance(pMe, vAttackerPos))
             {
                 GetLowLevel().SetExitVehicle(0);
-                pInfo->mNextCmd = UnitCmdInfo(CMD_NONE, PblHandle<GameObject>(), PblVector3(0, 0, 0),
-                                              PblHandle<GameObject>());
+                pInfo->mNextCmd = UnitCmdInfo(CMD_NONE, NULL, PblVector3(0, 0, 0), NULL);
             }
         }
+        Controllable* pOwnerControllable = pInfo->mDamageOwner->GetControllable();
         UnitController* pCtrl = mCtrl;
-        pCtrl->mThreatManager.AddThreat(pInfo->mDamageOwner->GetControllable()->GetGameObject());
+        pCtrl->mThreatManager.AddThreat(pOwnerControllable->GetGameObject());
         return 1;
     }
 
@@ -735,6 +735,14 @@ int UnitAgent::EventHandler(AI::EventInfo* pInfo)
     case AI::EVT_Damaged:
         return HandleDamagedEvent(pInfo);
 
+    case AI::EVT_SC_FollowChr:
+    case AI::EVT_SC_FollowChrLoose:
+        return HandleSquadCommandEvent(pInfo);
+
+    case AI::EVT_SC_GetIntoVehicle:
+    case AI::EVT_SC_GetOutOfVehicle:
+        return HandleSquadCommandEvent(pInfo);
+
     case AI::EVT_Vehicle_WaitForPickUp:
         pInfo->mNextCmd = UnitWaitSecondaryInfo(pInfo->mFloat, false);
         return 1;
@@ -763,7 +771,7 @@ int UnitAgent::EventHandler(AI::EventInfo* pInfo)
         {
             return AI::EVT_Ignored;
         }
-        pInfo->mNextCmd = UnitCmdInfo(CMD_WAIT, PblHandle<GameObject>(), PblVector3(0, 0, 0), PblHandle<GameObject>());
+        pInfo->mNextCmd = UnitCmdInfo(CMD_WAIT, NULL, PblVector3(0, 0, 0), NULL);
         return 1;
 
     case AI::EVT_Nav_NavigatorFinished:
@@ -773,12 +781,6 @@ int UnitAgent::EventHandler(AI::EventInfo* pInfo)
         }
         return 1;
 
-    case AI::EVT_SC_FollowChr:
-    case AI::EVT_SC_FollowChrLoose:
-    case AI::EVT_SC_GetIntoVehicle:
-    case AI::EVT_SC_GetOutOfVehicle:
-        return HandleSquadCommandEvent(pInfo);
-
     case AI::EVQ_GetSkillModifier:
         pInfo->mInt = 0;
         return 0;
@@ -787,6 +789,15 @@ int UnitAgent::EventHandler(AI::EventInfo* pInfo)
         pInfo->mNextCmd = UnitCombatInfo(UnitCombatInfo::TURN,
                                          pInfo->mGameObject->GetPosition(), true);
         return 1;
+
+    case AI::EVT_None:
+    case AI::EVT_Path_NextNode:
+    case AI::EVT_CTF_FlagPickup:
+    case AI::EVT_CTF_FlagDrop:
+    case AI::EVT_CTF_FlagKill:
+    case AI::EVQ_SC_IsFollowingChr:
+    case AI::EVT_SC_StopFollowChr:
+        return 0;
     }
     return 0;
 }

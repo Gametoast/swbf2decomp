@@ -97,34 +97,36 @@ namespace TestSpawn
 // FUNCTION: SWBF2 0x00438750
 PblMatrix GetTestSpawnMatrix(Character* pCharacter)
 {
-    PblMatrix result;
-    result.Reset();
-    float* p = reinterpret_cast<float*>(&result);
     if (pCharacter->mPlayerId < 0 &&
-        pCharacter != AIDebug::TestSpawn::aic[0] &&
-        pCharacter != AIDebug::TestSpawn::aic[1] &&
-        pCharacter != AIDebug::TestSpawn::aic[2] &&
-        pCharacter != AIDebug::TestSpawn::aic[3])
+        AIDebug::TestSpawn::aic[0] != pCharacter &&
+        AIDebug::TestSpawn::aic[1] != pCharacter &&
+        AIDebug::TestSpawn::aic[2] != pCharacter &&
+        AIDebug::TestSpawn::aic[3] != pCharacter)
     {
-        p[12] = (float)(pCharacter - Character::sCharacters) * 3.0f;
-        p[13] = 100.0f;
-        return result;
+        PblMatrix mSpawn(gMatrixIdentity);
+        mSpawn.SetTranslation(PblVector3((float)(pCharacter - Character::sCharacters) * 3.0f, 100.0f, 0.0f));
+        return mSpawn;
     }
 
+    const float kHalfHeight = 25.0f;
+    const PblVector3 kCylinderCenter(-74.0f, 12.0f, 20.0f);
+
     const float fAngle = PblRandom::_Global.GetFloat() * 6.2831855f;
-    float fSin, fCos;
+    float fCos, fSin;
     PblMath::SinCos(&fSin, &fCos, fAngle);
     const float fRadius = PblRandom::_Global.GetFloat() * 32.0f;
-    const PblVector3 vStart(fRadius * fSin - 74.0f, 37.0f, fRadius * fCos + 20.0f);
-    const PblVector3 vDirection(0.0f, -1.0f, 0.0f);
+    const PblVector3 vStart = fRadius * PblVector3(fSin, 0.0f, fCos) + kCylinderCenter + PblVector3(0.0f, kHalfHeight, 0.0f);
+    const PblVector3 vDown = -PblVector3(0.0f, 1.0f, 0.0f);
     CollisionObject* pHitObject = 0;
-    const float fHit = CollisionManager::RayHit(vStart, vDirection, 50.0f,
+    const float fHit = CollisionManager::RayHit(vStart, vDown, kHalfHeight * 2.0f,
                                                  pHitObject, 0, 0, 0, 0, false);
-    p[0] = -fCos; p[1] = 0.0f; p[2] = fSin; p[3] = 0.0f;
-    p[4] = 0.0f; p[5] = 1.0f; p[6] = 0.0f; p[7] = 0.0f;
-    p[8] = -fSin; p[9] = 0.0f; p[10] = -fCos; p[11] = 0.0f;
-    p[12] = vStart.x; p[13] = vStart.y - fHit * 50.0f;
-    p[14] = vStart.z; p[15] = 1.0f;
+    const PblVector3 vPosition = vStart - PblVector3(0.0f, fHit * kHalfHeight * 2.0f, 0.0f);
+
+    PblMatrix result;
+    result.SetXAxis(-fCos, 0.0f, fSin, 0.0f);
+    result.SetYAxis(0.0f, 1.0f, 0.0f, 0.0f);
+    result.SetZAxis(-fSin, 0.0f, -fCos, 0.0f);
+    result.SetTranslation(vPosition);
     return result;
 }
 }
@@ -333,7 +335,7 @@ int GetWeaponChannelByWeaponIndex(Entity* pSoldier, int iIndex)
     return static_cast<EntitySoldier*>(pSoldier)->GetWeaponChannelByWeaponIndex(iIndex);
 }
 
-bool EnterControllable(Entity* pSoldier, Controllable* pControllable)
+inline bool EnterControllable(Entity* pSoldier, Controllable* pControllable)
 {
     return static_cast<EntitySoldier*>(pSoldier)->EnterControllable(pControllable);
 }
@@ -579,7 +581,7 @@ bool Character::Update(float fDeltaTime)
 
     if (mPost)
     {
-        GetPostObject(mPost);
+        mPost->GetGameObject();
     }
 
     if (!mSpawnReady || !mPost)
@@ -619,28 +621,27 @@ bool Character::Update(float fDeltaTime)
     for (int i = 0; i < pTeam->mMemberCount; ++i)
     {
         Character* pMember = pTeam->GetMemberPtr(i);
-        if (!pMember)
+        if (pMember)
         {
-            continue;
-        }
-        if (pMember->mUnit)
-        {
-            if (pMember->mPlayerId >= 0)
+            if (pMember->mUnit)
             {
-                ++iPlayersAlive;
-            }
-            else
-            {
-                ++iAIAlive;
-                if (!pFirstAI)
+                if (pMember->mPlayerId >= 0)
                 {
-                    pFirstAI = pMember;
+                    ++iPlayersAlive;
+                }
+                else
+                {
+                    ++iAIAlive;
+                    if (!pFirstAI)
+                    {
+                        pFirstAI = pMember;
+                    }
                 }
             }
-        }
-        else if (pMember->mPlayerId >= 0)
-        {
-            ++iPlayersDead;
+            else if (pMember->mPlayerId >= 0)
+            {
+                ++iPlayersDead;
+            }
         }
     }
 
@@ -737,7 +738,7 @@ bool Character::Update(float fDeltaTime)
     }
 
     mTakeoverFirstTime = false;
-    Spawn(mPost->GetMatrixOnSpawnPath(mTeamNumber != GetTeam(GetPostObject(mPost))));
+    Spawn(mPost->GetMatrixOnSpawnPath(mTeamNumber != GetTeam(mPost->GetGameObject())));
     return true;
 }
 
@@ -869,14 +870,18 @@ void Character::ChangeClass(int iClassIndex)
             }
 
             AmmoCounter* pAmmo = GetAmmoCounter(pWeapon);
-            if (pAmmo && pAmmo->mMaxClips != FLT_MAX && bAvailable && pAmmo->mMaxClips > 0.0001f)
+            if (pAmmo)
             {
-                float fNumClips = pAmmo->mNumClips;
-                float fCurClip = pAmmo->mCurClip;
-                int iChannel = GetWeaponChannelByWeaponIndex(pEntity, i);
-                float fFraction = (fNumClips + fCurClip) / pAmmo->mMaxClips;
-                int iOld = iAmmoCount[iChannel]++;
-                fAmmo[iChannel] = (fFraction + (float)iOld * fAmmo[iChannel]) / (float)iAmmoCount[iChannel];
+                float fMaxClips = pAmmo->mMaxClips;
+                if (fMaxClips != FLT_MAX && bAvailable && fMaxClips > 0.0001f)
+                {
+                    float fCurClip = pAmmo->mCurClip;
+                    float fNumClips = pAmmo->mNumClips;
+                    int iChannel = GetWeaponChannelByWeaponIndex(pEntity, i);
+                    float fFraction = (fNumClips + fCurClip) / fMaxClips;
+                    int iOld = iAmmoCount[iChannel]++;
+                    fAmmo[iChannel] = (fFraction + (float)iOld * fAmmo[iChannel]) / (float)iAmmoCount[iChannel];
+                }
             }
         }
     }
@@ -913,21 +918,20 @@ void Character::ChangeClass(int iClassIndex)
     for (int i = 0; i < iCount; ++i)
     {
         Weapon* pWeapon = pControllable->GetWeaponPtr(i);
-        const WeaponClass* pWeaponClass = GetWeaponClass(pWeapon);
         bool bAvailable;
         if (pMedals)
         {
-            bAvailable = pWeaponClass->mMedalsTypeToUnlock == -1 ||
-                         pMedals->IsAwardAvailable(pWeaponClass->mMedalsTypeToUnlock);
-            if (bAvailable && pWeaponClass->mMedalsTypeToLock != -1 &&
-                pMedals->IsAwardAvailable(pWeaponClass->mMedalsTypeToLock))
+            bAvailable = GetWeaponClass(pWeapon)->mMedalsTypeToUnlock == -1 ||
+                         pMedals->IsAwardAvailable(GetWeaponClass(pWeapon)->mMedalsTypeToUnlock);
+            if (bAvailable && GetWeaponClass(pWeapon)->mMedalsTypeToLock != -1 &&
+                pMedals->IsAwardAvailable(GetWeaponClass(pWeapon)->mMedalsTypeToLock))
             {
                 bAvailable = false;
             }
         }
         else
         {
-            bAvailable = pWeaponClass->mMedalsTypeToUnlock == -1;
+            bAvailable = GetWeaponClass(pWeapon)->mMedalsTypeToUnlock == -1;
         }
 
         AmmoCounter* pAmmo = GetAmmoCounter(pWeapon);
@@ -935,7 +939,7 @@ void Character::ChangeClass(int iClassIndex)
         {
             int iChannel = GetWeaponChannelByWeaponIndex(pEntity, i);
             float fTotal = fAmmo[iChannel] * pAmmo->mMaxClips;
-            float fClips = (float)floor(fTotal);
+            float fClips = (float)floor((double)fTotal);
             pAmmo->mNumClips = fClips;
             pAmmo->mCurClip = fTotal - fClips;
             pAmmo->LoadClip();
@@ -1312,23 +1316,26 @@ void Character::Died()
                                           GetControllable()->GetMatrix().GetTranslation());
         }
     }
-    if (GetControllable())
+    Controllable* pControllable = GetControllable();
+    if (pControllable)
     {
-        HUD::GameEvents::Die(GetControllable());
+        HUD::GameEvents::Die(pControllable);
     }
 
     int iTeam = mTeamNumber;
     if (netHeroesEnabled && netHeroUnlocked[iTeam] &&
-        (netHeroPlayerID[iTeam] != -1 || netHeroAIID[iTeam] != -1) &&
-        (netHeroPlayerID[iTeam] != -1 ? mPlayerId == netHeroPlayerID[iTeam]
-                                    : this == GetPtr(netHeroAIID[iTeam])) &&
-        mUnit && mHeroFlag)
+        (netHeroPlayerID[iTeam] != -1 || netHeroAIID[iTeam] != -1))
     {
-        if (rOwner.mCharacter && rOwner.mCharacter != this)
+        bool bIsHero = netHeroPlayerID[iTeam] != -1 ? mPlayerId == netHeroPlayerID[iTeam]
+                                                    : this == GetPtr(netHeroAIID[iTeam]);
+        if (bIsHero && mUnit && mHeroFlag)
         {
-            netHeroKillerID[rOwner.mCharacter->mTeamNumber] = rOwner.mCharacter->mPlayerId;
+            if (rOwner.mCharacter && rOwner.mCharacter != this)
+            {
+                netHeroKillerID[rOwner.mCharacter->mTeamNumber] = rOwner.mCharacter->mPlayerId;
+            }
+            NetGame::HeroKilled(iTeam);
         }
-        NetGame::HeroKilled(iTeam);
     }
 
     GameObject* pDeadObject = mUnit->GetGameObject();
@@ -1357,6 +1364,8 @@ void Character::Died()
         pKiller = reinterpret_cast<EntityPortableTurret*>(rOwner.mGameObject->GetEntity())->mOwnerChar;
     }
 
+    NetGame::MessageType eType;
+    bool bMessage;
     if (pKiller)
     {
         int iAffiliation = pKiller->mTeamPtr->GetAffiliation(mTeamNumber);
@@ -1369,12 +1378,11 @@ void Character::Died()
             GetPlayerStats(pKiller).AddAllyKill(this, pDeadObject);
         }
         pKiller->mAdrenaline.AddKill();
-        bool bMessage = bPlayer;
+        bMessage = bPlayer;
         if (!NetGame::IsEnabled() && CameraManager::Instance()->GetNumCameras() == 1)
         {
-            bMessage = bPlayer || pKiller->mPlayerId >= 0 || pKiller->mHeroFlag;
+            bMessage |= pKiller->mPlayerId >= 0 || pKiller->mHeroFlag;
         }
-        NetGame::MessageType eType;
         if (pKiller == this)
         {
             eType = NetGame::MSG_SUICIDE;
@@ -1383,37 +1391,49 @@ void Character::Died()
         {
             eType = pKiller->mTeamNumber != mTeamNumber ? NetGame::MSG_KILLED : NetGame::MSG_KILLED_TEAMMATE;
         }
-        if (bMessage)
-        {
-            NetGame::CreateEvent_Message(eType, this, pKiller, const_cast<EntityClass*>(rOwner.mClass), const_cast<WeaponClass*>(rOwner.mWeapon), pEnemyTeam, 0);
-        }
-        return;
-    }
-
-    int iKillerTeam = rOwner.mTeam;
-    if (!iKillerTeam && rOwner.mGameObject)
-    {
-        iKillerTeam = rOwner.mGameObject->GetTeam();
-    }
-    if (iKillerTeam)
-    {
-        int iAffiliation = Team::GetPtr(iKillerTeam)->GetAffiliation(mTeamNumber);
-        if (iAffiliation < 0)
-        {
-            PlayerStats::PointsProcessTeam(iKillerTeam, IsHero() ? 20 : (mPlayerId >= 0 ? 1 : 0));
-        }
-        else if (iAffiliation > 0)
-        {
-            PlayerStats::PointsProcessTeam(iKillerTeam, 4);
-        }
     }
     else
     {
-        GetPlayerStats(this).PointsProcess(3, 0);
+        int iKillerTeam = rOwner.mTeam;
+        if (!iKillerTeam && rOwner.mGameObject)
+        {
+            iKillerTeam = rOwner.mGameObject->GetTeam();
+        }
+        if (iKillerTeam)
+        {
+            int iAffiliation = Team::GetPtr(iKillerTeam)->GetAffiliation(mTeamNumber);
+            if (iAffiliation < 0)
+            {
+                unsigned char ucPoints;
+                if (IsHero())
+                {
+                    ucPoints = 20;
+                }
+                else if (mPlayerId >= 0)
+                {
+                    ucPoints = 1;
+                }
+                else
+                {
+                    ucPoints = 0;
+                }
+                PlayerStats::PointsProcessTeam(iKillerTeam, ucPoints);
+            }
+            else if (iAffiliation > 0)
+            {
+                PlayerStats::PointsProcessTeam(iKillerTeam, 4);
+            }
+        }
+        else
+        {
+            GetPlayerStats(this).PointsProcess(3, 0);
+        }
+        eType = NetGame::MSG_DIED;
+        bMessage = bPlayer;
     }
-    if (bPlayer)
+    if (bMessage)
     {
-        NetGame::CreateEvent_Message(NetGame::MSG_DIED, this, 0, const_cast<EntityClass*>(rOwner.mClass), const_cast<WeaponClass*>(rOwner.mWeapon), pEnemyTeam, 0);
+        NetGame::CreateEvent_Message(eType, this, pKiller, const_cast<EntityClass*>(rOwner.mClass), const_cast<WeaponClass*>(rOwner.mWeapon), pEnemyTeam, 0);
     }
 }
 
