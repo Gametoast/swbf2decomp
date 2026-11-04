@@ -52,15 +52,10 @@ ConnectivityNode::~ConnectivityNode()
 // FUNCTION: SWBF2 0x00480520
 PblVector3 ConnectivityNode::GetRandomPointInside(float fBuffer) const
 {
-    float fRadius = w - fBuffer;
-    if (fRadius < 0.0f)
-    {
-        fRadius = 0.0f;
-    }
-    const PblVector3 vRandom = PblRandom::GetSim().GetVector3();
-    PblVector3 vDir;
-    D3DXVec3Normalize(reinterpret_cast<D3DXVECTOR3*>(&vDir), reinterpret_cast<const D3DXVECTOR3*>(&vRandom));
-    return PblVector3(x + vDir.x * fRadius, y + vDir.y * fRadius, z + vDir.z * fRadius);
+    float fRadius = Max(0.0f, w - fBuffer);
+    const PblVector3 vDir = Normalize(PblRandom::GetSim().GetVector3());
+    const PblVector3 vOffset(vDir.x * fRadius, vDir.y * fRadius, vDir.z * fRadius);
+    return PblVector3(x + vOffset.x, y + vOffset.y, z + vOffset.z);
 }
 
 // FUNCTION: SWBF2 0x004805b0
@@ -160,7 +155,9 @@ void ConnectivityArc::Read(PblFileChunk& chunk, ConnectivityGraph& graph)
 // FUNCTION: SWBF2 0x00480860
 bool ConnectivityNode::IsPointInside(const PblVector3& v) const
 {
-    return w * w > SquaredLengthXZ(GetCenter() - v);
+    const float fDX = x - v.x;
+    const float fDZ = z - v.z;
+    return w * w > fDX * fDX + fDZ * fDZ;
 }
 
 // FUNCTION: SWBF2 0x004808a0
@@ -170,16 +167,14 @@ bool ConnectivityArc::IsPointInside(const PblVector3& v) const
     {
         return false;
     }
+    PblVector3 M = n2->GetCenter() - n1->GetCenter();
     PblVector3 B = n1->GetCenter();
-    PblVector3 M = n2->GetCenter() - B;
     float t = DotProduct(v - B, M) / DotProduct(M, M);
     if (t < 0.0f || t > 1.0f)
     {
         return false;
     }
-    float d = Length(v - (B + t * M));
-    float w = (1.0f - t) * n1->w + n2->w * t;
-    return w > d;
+    return Length(v - (B + t * M)) < (1.0f - t) * n1->w + n2->w * t;
 }
 
 // FUNCTION: SWBF2 0x00480a10
@@ -317,11 +312,15 @@ const ConnectivityArc* ConnectivityGraph::GetNextArc(const ConnectivityArc* pCur
         for (int i = 0; i < 4; ++i)
         {
             const unsigned char* pTable = from.mBranchingTable[iType][i];
-            if (!pTable || !pTable[iTo])
+            if (!pTable)
             {
                 break;
             }
             const unsigned int uEntry = pTable[iTo];
+            if (!uEntry)
+            {
+                break;
+            }
             if ((uEntry & 7) == uCurSlot)
             {
                 iTotal = 31 - (uEntry >> 3);
@@ -335,31 +334,28 @@ const ConnectivityArc* ConnectivityGraph::GetNextArc(const ConnectivityArc* pCur
     }
 
     unsigned char* const* ppTables = from.mBranchingTable[iType];
-    bool bAny = false;
+    if (!((ppTables[0] && ppTables[0][iTo]) || (ppTables[1] && ppTables[1][iTo])
+          || (ppTables[2] && ppTables[2][iTo]) || (ppTables[3] && ppTables[3][iTo])))
+    {
+        return 0;
+    }
+    int iPick = PblRandom::GetSim().GetInt() % iTotal;
     for (int i = 0; i < 4; ++i)
     {
-        if (ppTables[i] && ppTables[i][iTo])
+        const unsigned char* pTable = ppTables[i];
+        if (!pTable)
         {
-            bAny = true;
             break;
         }
-    }
-    if (bAny)
-    {
-        int iPick = PblRandom::GetSim().GetInt() % iTotal;
-        for (int i = 0; i < 4; ++i)
+        const unsigned int uEntry = pTable[iTo];
+        if (!uEntry)
         {
-            const unsigned char* pTable = ppTables[i];
-            if (!pTable || !pTable[iTo])
-            {
-                break;
-            }
-            const unsigned int uEntry = pTable[iTo];
-            iPick -= uEntry >> 3;
-            if (iPick <= 0 && (uEntry & 7) != uCurSlot)
-            {
-                return &mArcs[from.mArcs[uEntry & 7]];
-            }
+            break;
+        }
+        iPick -= uEntry >> 3;
+        if (iPick <= 0 && (uEntry & 7) != uCurSlot)
+        {
+            return &mArcs[from.mArcs[uEntry & 7]];
         }
     }
     return 0;
@@ -468,11 +464,9 @@ bool ConnectivityGraph::ReadPatch(PblFileChunk& chunk)
     {
         ConnectivityGraphPatch* pPatch = (ConnectivityGraphPatch*)(((unsigned int)pData + 15) & ~15u);
         mPatchList[i] = pPatch;
-        mPatchList[i]->mUncompressedSize = chunk._pFile->Read32();
-        if (mPatchList[i]->mUncompressedSize > mDynamicArcUnzipBufferSize)
-        {
-            mDynamicArcUnzipBufferSize = mPatchList[i]->mUncompressedSize;
-        }
+        const int iUncompressed = chunk._pFile->Read32();
+        mPatchList[i]->mUncompressedSize = iUncompressed;
+        mDynamicArcUnzipBufferSize = Max(mDynamicArcUnzipBufferSize, iUncompressed);
         const int iCompressed = chunk._pFile->Read32();
         mPatchList[i]->mCompressedSize = iCompressed;
         chunk._pFile->ReadData(mPatchList[i]->mCompressedData, iCompressed);
@@ -536,18 +530,18 @@ const ConnectivityArc* ConnectivityGraph::FindClosestArc(const PblVector3& v, un
     float fBest = FLT_MAX;
     for (int i = 0; i < mMaxArcs; ++i)
     {
-        const ConnectivityArc* pArc = &mArcs[i];
-        if ((uFlags & pArc->mAllowTypes) && !(pArc->mFlags & 1))
+        if ((uFlags & mArcs[i].mAllowTypes) && !(mArcs[i].mFlags & 1))
         {
-            const PblVector3& vC = pArc->mBoundingCenter;
+            const PblVector3& vC = mArcs[i].mBoundingCenter;
+            const float fReach = mArcs[i].mBoundingRadius + fBest;
             if (!((vC.x - v.x) * (vC.x - v.x) + (vC.y - v.y) * (vC.y - v.y) + (vC.z - v.z) * (vC.z - v.z)
-                > (pArc->mBoundingRadius + fBest) * (pArc->mBoundingRadius + fBest)))
+                > fReach * fReach))
             {
-                const float fDist = pArc->GetDistFrom(v);
+                const float fDist = mArcs[i].GetDistFrom(v);
                 if (fBest > fDist)
                 {
                     fBest = fDist;
-                    pBest = pArc;
+                    pBest = &mArcs[i];
                 }
             }
         }

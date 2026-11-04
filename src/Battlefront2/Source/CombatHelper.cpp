@@ -216,7 +216,7 @@ void CombatHelper::EnterState()
                           mTargetPos.z - mMe.m[3][2]);
         if (vDelta.x * vDelta.x + vDelta.z * vDelta.z < 100.0f)
         {
-            const PblVector3 vDir = AIUtil::GetSafeNormalXZ(vDelta);
+            const PblVector3& vDir = AIUtil::GetSafeNormalXZ(vDelta);
             mTargetPos = PblVector3(vDir.x * 15.0f + mMe.m[3][0], mMe.m[3][1] + vDir.y * 15.0f,
                                     mMe.m[3][2] + vDir.z * 15.0f);
         }
@@ -263,7 +263,7 @@ void CombatHelper::EnterState()
         const PblMatrix& mMe = GetMe()->GetMatrix();
         PblVector3 vAway(mMe.m[3][0] - mFleeSrc.x, mMe.m[3][1] - mFleeSrc.y,
                          mMe.m[3][2] - mFleeSrc.z);
-        const PblVector3 vDir = AIUtil::GetSafeNormalXZ(vAway);
+        const PblVector3& vDir = AIUtil::GetSafeNormalXZ(vAway);
         PblVector3 vDest(vDir.x * 20.0f + mMe.m[3][0], mMe.m[3][1] + vDir.y * 20.0f,
                          vDir.z * 20.0f + mMe.m[3][2]);
 
@@ -272,9 +272,8 @@ void CombatHelper::EnterState()
         {
 
             const PblMatrix& mNow = GetMe()->GetMatrix();
-            vDest.x = mNow.m[2][0] * 20.0f + mMe.m[3][0];
-            vDest.y = mMe.m[3][1] + mNow.m[2][1] * 20.0f;
-            vDest.z = mNow.m[2][2] * 20.0f + mMe.m[3][2];
+            vDest = PblVector3(mNow.m[2][0] * 20.0f + mMe.m[3][0], mMe.m[3][1] + mNow.m[2][1] * 20.0f,
+                               mNow.m[2][2] * 20.0f + mMe.m[3][2]);
             GetLowLevel().SetNavigator_Goto(vDest, 0, false, false);
             mFleeTime = GameLoop::GetMissionTime() + 5.0f;
             break;
@@ -393,8 +392,7 @@ void CombatHelper::UpdateState(float dt)
     case STATE_Turn:
     {
         Controllable* pMe = GetMe();
-        PblVector3 vToTarget(mTargetPos.x - pMe->mEyePoint.x, mTargetPos.y - pMe->mEyePoint.y,
-                             mTargetPos.z - pMe->mEyePoint.z);
+        PblVector3 vToTarget = mTargetPos - pMe->mEyePoint;
         PblVector3 vFacing = GetMe()->mEyeDir;
         vToTarget.y = 0.0f;
         vFacing.y = 0.0f;
@@ -431,8 +429,7 @@ void CombatHelper::UpdateState(float dt)
             break;
         }
         Controllable* pMe = GetMe();
-        PblVector3 vToTarget(mTargetPos.x - pMe->mEyePoint.x, mTargetPos.y - pMe->mEyePoint.y,
-                             mTargetPos.z - pMe->mEyePoint.z);
+        PblVector3 vToTarget = mTargetPos - pMe->mEyePoint;
         PblVector3 vFacing = GetMe()->mEyeDir;
         vToTarget.y = 0.0f;
         vFacing.y = 0.0f;
@@ -447,13 +444,13 @@ void CombatHelper::UpdateState(float dt)
             }
             else if (GameLoop::GetMissionTime() > mWaitOverTime)
             {
-                if (mLookCount >= 2)
+                if (mLookCount < 2)
                 {
-                    SetNextState(100);
+                    SetRandomHeading();
+                    mWaiting = false;
                     break;
                 }
-                SetRandomHeading();
-                mWaiting = false;
+                SetNextState(100);
                 break;
             }
         }
@@ -544,9 +541,9 @@ void CombatHelper::UpdateState(float dt)
 
         if (GetMe()->GetEntity()->IsRtti(EntityDroideka::rttiHashEntityDroideka))
         {
-            const Damageable* pDamageable = static_cast<const Damageable*>(GetMe()->GetGameObject());
-            if (!pDamageable->mIsShielded &&
-                pDamageable->mCurShield > pDamageable->mMaxShield * 0.5f)
+            const EntityDroideka* pDroideka = static_cast<const EntityDroideka*>(GetMe()->GetGameObject());
+            if (!pDroideka->mIsShielded &&
+                pDroideka->mCurShield > pDroideka->mMaxShield * 0.5f)
             {
                 GetLowLevel().SetNextWeapon(1);
                 GetLowLevel().SetFireRequest(true, false);

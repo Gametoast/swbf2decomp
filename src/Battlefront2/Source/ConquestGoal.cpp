@@ -62,10 +62,11 @@ void AI::ConquestGoal::Update()
             continue;
         }
 
+        const int iTeam = pChr->mTeamNumber;
         const CommandPost* pPost = pChr->GetAssignedCP();
         if (pPost && pPost->GetGameObject() && GameObjectTeam(pPost->GetGameObject()) > 0 &&
             Team::sTeams[GameObjectTeam(pPost->GetGameObject())] &&
-            Team::sTeams[GameObjectTeam(pPost->GetGameObject())]->GetAffiliation(pChr->mTeamNumber) > 0 &&
+            Team::sTeams[GameObjectTeam(pPost->GetGameObject())]->GetAffiliation(iTeam) > 0 &&
             !pPost->GetStrategicDefendValue(pChr->mTeamPtr->GetSide()))
         {
             sAssign(pChr, 0);
@@ -131,10 +132,14 @@ void AI::ConquestGoal::sAssign(Character* pChr, const CommandPost* pPost)
 // FUNCTION: SWBF2 0x00482d10
 void AI::ConquestGoal::sIssueCmd(Character* pChr, const CommandPost* pPost)
 {
-    if (pChr->GetControllable() && pChr->GetControllable()->mCtrl)
+    if (pChr->GetControllable())
     {
-        UnitCaptureCPInfo info(pPost);
-        UnitControllerPtr(pChr->GetControllable()->mCtrl)->ForceCommand(info);
+        Controller* pCtrl = pChr->GetControllable()->mCtrl;
+        if (pCtrl)
+        {
+            UnitCaptureCPInfo info(pPost);
+            UnitControllerPtr(pCtrl)->ForceCommand(info);
+        }
     }
     pChr->SetAssignedCP(pPost);
 }
@@ -142,12 +147,13 @@ void AI::ConquestGoal::sIssueCmd(Character* pChr, const CommandPost* pPost)
 // FUNCTION: SWBF2 0x00482d90
 const CommandPost* AI::ConquestGoal::sGenerateCP(Character* pChr, const CommandPost* pPost, bool bSecondPass)
 {
+    CommandPostItor it = CommandPostManager::Instance()->GetItor();
     bool bValid[16] = {};
     float fTotal = 0.0f;
     const int iTeam = pChr->mTeamNumber;
 
     bool* pValid = bValid;
-    for (CommandPostItor it = CommandPostManager::Instance()->GetItor(); it; ++it, ++pValid)
+    for (; it; ++it, ++pValid)
     {
         CommandPost* pCP = *it;
         if (!bSecondPass && pCP->GetGameObject() &&
@@ -194,7 +200,7 @@ const CommandPost* AI::ConquestGoal::sGenerateCP(Character* pChr, const CommandP
         float fPick = AIUtil::GetRandomFloat(0.0f, fTotal);
         float fSum = 0.0f;
         pValid = bValid;
-        for (CommandPostItor it = CommandPostManager::Instance()->GetItor(); it; ++it, ++pValid)
+        for (it = CommandPostManager::Instance()->GetItor(); it; ++it, ++pValid)
         {
             if (!*pValid)
             {
@@ -216,7 +222,7 @@ const CommandPost* AI::ConquestGoal::sGenerateCP(Character* pChr, const CommandP
 
     CommandPost* pPosts[16];
     int iCount = 0;
-    for (CommandPostItor it = CommandPostManager::Instance()->GetItor(); it; ++it)
+    for (it = CommandPostManager::Instance()->GetItor(); it; ++it)
     {
         pPosts[iCount++] = *it;
     }
@@ -237,14 +243,22 @@ const CommandPost* AI::ConquestGoal::sGenerateCP(Character* pChr, const CommandP
 bool AI::ConquestGoal::sIsPilotingVehicle(Character* pChr)
 {
     const Controllable* pVehicle = pChr->mVehicle;
-    return pVehicle && pVehicle->GetGameObject()->GetControllable() == pVehicle;
+    if (pVehicle)
+    {
+        return pVehicle->GetGameObject()->GetControllable() == pVehicle;
+    }
+    return false;
 }
 
 // FUNCTION: SWBF2 0x004830a0
 bool AI::ConquestGoal::sIsPassenger(Character* pChr)
 {
     const Controllable* pVehicle = pChr->mVehicle;
-    return pVehicle && pVehicle->GetGameObject()->GetControllable() != pVehicle;
+    if (pVehicle)
+    {
+        return pVehicle->GetGameObject()->GetControllable() != pVehicle;
+    }
+    return false;
 }
 
 // FUNCTION: SWBF2 0x004830d0
