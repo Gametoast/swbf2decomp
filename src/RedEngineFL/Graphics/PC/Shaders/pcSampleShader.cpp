@@ -177,14 +177,10 @@ void pcSampleShader::Render_Prog1(const RenderItem* pItem, unsigned int) const
 
     pcRedVertexShaderConstantRegister* pRegs =
         RedRenderer::pcLockVertexShaderConstants(40, 2);
-    pRegs[40].component[2] = m_inputOffsetX;
-    pRegs[40].component[3] = m_inputOffsetY;
-    pRegs[40].component[0] = 1.0f / (float)(uiWidth - 1);
-    pRegs[40].component[1] = 1.0f / (float)(uiHeight - 1);
-    pRegs[41].component[2] = 0.0f;
-    pRegs[41].component[3] = 1.0f;
-    pRegs[41].component[1] = -(m_outputY * fScaleY - 1.0f);
-    pRegs[41].component[0] = m_outputX * fScaleX - 1.0f;
+    pRegs[40].SetFloats(1.0f / (float)(uiWidth - 1), 1.0f / (float)(uiHeight - 1),
+                        m_inputOffsetX, m_inputOffsetY);
+    pRegs[41].SetFloats(m_outputX * fScaleX - 1.0f, -(m_outputY * fScaleY - 1.0f),
+                        0.0f, 1.0f);
     RedRenderer::pcUnlockVertexShaderConstants(pRegs);
 
     RedRenderer::pcGetDevice()->SetPixelShaderConstantF(0, &m_scale.r, 1);
@@ -200,25 +196,23 @@ void pcSampleShader::Render_Fixed(const RenderItem* pItem, unsigned int) const
     RedRenderer::pcGetViewportExtents(fMinX, fMinY, fMaxX, fMaxY);
 
     PblMatrix mTexture;
+    mTexture.m[1][1] = 1.0f / (float)(m_inputTexture->m_uiHeight - 1);
     mTexture.m[0][0] = 1.0f / (float)(m_inputTexture->m_uiWidth - 1);
     mTexture.m[0][1] = 0.0f;
     mTexture.m[0][2] = 0.0f;
     mTexture.m[0][3] = 0.0f;
     mTexture.m[1][0] = 0.0f;
-    mTexture.m[1][1] = 1.0f / (float)(m_inputTexture->m_uiHeight - 1);
     mTexture.m[1][2] = 0.0f;
     mTexture.m[1][3] = 0.0f;
     mTexture.m[2][0] = 0.0f; mTexture.m[2][1] = 0.0f; mTexture.m[2][2] = 1.0f; mTexture.m[2][3] = 0.0f;
     mTexture.m[3][0] = 0.0f; mTexture.m[3][1] = 0.0f; mTexture.m[3][2] = 0.0f; mTexture.m[3][3] = 1.0f;
 
-    const float fOffsetX = 1.0f / (fMaxX - fMinX) * (m_outputX - 0.5f) - 1.0f;
-    const float fOffsetY = -(1.0f / (fMaxY - fMinY) * (m_outputY - 0.5f) - 1.0f);
-
     PblMatrix mProjection;
-    memset(&mProjection, 0, 2 * sizeof(mProjection.m[0]));
+    mProjection.m[0][0] = 0.0f; mProjection.m[0][1] = 0.0f; mProjection.m[0][2] = 0.0f; mProjection.m[0][3] = 0.0f;
+    mProjection.m[1][0] = 0.0f; mProjection.m[1][1] = 0.0f; mProjection.m[1][2] = 0.0f; mProjection.m[1][3] = 0.0f;
     mProjection.m[2][0] = 0.0f; mProjection.m[2][1] = 0.0f; mProjection.m[2][2] = 1.0f; mProjection.m[2][3] = 0.0f;
-    mProjection.m[3][0] = fOffsetX;
-    mProjection.m[3][1] = fOffsetY;
+    mProjection.m[3][0] = 1.0f / (fMaxX - fMinX) * (m_outputX - 0.5f) - 1.0f;
+    mProjection.m[3][1] = -(1.0f / (fMaxY - fMinY) * (m_outputY - 0.5f) - 1.0f);
     mProjection.m[3][2] = 0.0f;
     mProjection.m[3][3] = 1.0f;
     RedRenderer::pcFFSetTextureTransform(0, mTexture);

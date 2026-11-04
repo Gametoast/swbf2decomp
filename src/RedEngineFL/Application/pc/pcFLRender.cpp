@@ -141,11 +141,11 @@ extern RedColor m_colorReflectionFog;
 // FUNCTION: SWBF2 0x006beac0
 void FLRenderer::RenderableList::RenderReflections(unsigned int uiFlags) const
 {
-    for (const Node* pNode = _head._pNext; pNode->_pObject; pNode = pNode->_pNext)
+    for (Itor it(this); it; ++it)
     {
-        if (pNode->_pObject->IsReflected())
+        if (it->IsReflected())
         {
-            pNode->_pObject->Render(uiFlags | 0x200000);
+            it->Render(uiFlags | 0x200000);
         }
     }
 }
@@ -189,25 +189,24 @@ void ReflectionRegion::_UpdateReflectionMatrix()
     const float inverse = 1.0f / ((m_reflectionPlane.GetA() * m_reflectionPlane.GetA() +
                                    m_reflectionPlane.GetB() * m_reflectionPlane.GetB()) +
                                   m_reflectionPlane.GetC() * m_reflectionPlane.GetC());
-    const float twice = inverse * -2.0f;
     m_reflectionMat.m[0][0] = ((m_reflectionPlane.GetB() * m_reflectionPlane.GetB() -
                                 m_reflectionPlane.GetA() * m_reflectionPlane.GetA()) +
                                m_reflectionPlane.GetC() * m_reflectionPlane.GetC()) * inverse;
-    m_reflectionMat.m[0][1] = (twice * m_reflectionPlane.GetA()) * m_reflectionPlane.GetB();
-    m_reflectionMat.m[0][2] = (twice * m_reflectionPlane.GetA()) * m_reflectionPlane.GetC();
-    m_reflectionMat.m[1][0] = (twice * m_reflectionPlane.GetA()) * m_reflectionPlane.GetB();
+    m_reflectionMat.m[0][1] = (inverse * -2.0f * m_reflectionPlane.GetA()) * m_reflectionPlane.GetB();
+    m_reflectionMat.m[0][2] = (inverse * -2.0f * m_reflectionPlane.GetA()) * m_reflectionPlane.GetC();
+    m_reflectionMat.m[1][0] = (inverse * -2.0f * m_reflectionPlane.GetA()) * m_reflectionPlane.GetB();
     m_reflectionMat.m[1][1] = ((m_reflectionPlane.GetA() * m_reflectionPlane.GetA() -
                                 m_reflectionPlane.GetB() * m_reflectionPlane.GetB()) +
                                m_reflectionPlane.GetC() * m_reflectionPlane.GetC()) * inverse;
-    m_reflectionMat.m[1][2] = (twice * m_reflectionPlane.GetB()) * m_reflectionPlane.GetC();
-    m_reflectionMat.m[2][0] = (twice * m_reflectionPlane.GetA()) * m_reflectionPlane.GetC();
-    m_reflectionMat.m[2][1] = (twice * m_reflectionPlane.GetB()) * m_reflectionPlane.GetC();
+    m_reflectionMat.m[1][2] = (inverse * -2.0f * m_reflectionPlane.GetB()) * m_reflectionPlane.GetC();
+    m_reflectionMat.m[2][0] = (inverse * -2.0f * m_reflectionPlane.GetA()) * m_reflectionPlane.GetC();
+    m_reflectionMat.m[2][1] = (inverse * -2.0f * m_reflectionPlane.GetB()) * m_reflectionPlane.GetC();
     m_reflectionMat.m[2][2] = ((m_reflectionPlane.GetA() * m_reflectionPlane.GetA() +
                                 m_reflectionPlane.GetB() * m_reflectionPlane.GetB()) -
                                m_reflectionPlane.GetC() * m_reflectionPlane.GetC()) * inverse;
-    m_reflectionMat.m[3][0] = (twice * m_reflectionPlane.GetA()) * m_reflectionPlane.GetD();
-    m_reflectionMat.m[3][1] = (twice * m_reflectionPlane.GetB()) * m_reflectionPlane.GetD();
-    m_reflectionMat.m[3][2] = (twice * m_reflectionPlane.GetC()) * m_reflectionPlane.GetD();
+    m_reflectionMat.m[3][0] = (inverse * -2.0f * m_reflectionPlane.GetA()) * m_reflectionPlane.GetD();
+    m_reflectionMat.m[3][1] = (inverse * -2.0f * m_reflectionPlane.GetB()) * m_reflectionPlane.GetD();
+    m_reflectionMat.m[3][2] = (inverse * -2.0f * m_reflectionPlane.GetC()) * m_reflectionPlane.GetD();
 }
 
 // GLOBAL: SWBF2 0x008f6da0
@@ -753,13 +752,10 @@ ReflectionRegion::ReflectionRegion(RedRegionDesc& desc) : RedRegion(desc)
     case type_cylinder_yaligned:
     case type_cylinder_zaligned:
     {
-        const float fHalfHeight = mSize.y;
-        const float fX = mMatrix.m[3][0] - mMatrix.m[1][0] * fHalfHeight;
-        const float fY = mMatrix.m[3][1] - mMatrix.m[1][1] * fHalfHeight;
-        const float fZ = mMatrix.m[3][2] - mMatrix.m[1][2] * fHalfHeight;
-        m_reflectionPlane = PblPlane(mMatrix.m[1][0], mMatrix.m[1][1], mMatrix.m[1][2],
-                                    -(mMatrix.m[1][0] * fX + mMatrix.m[1][1] * fY +
-                                      mMatrix.m[1][2] * fZ));
+        const PblVector3 vPoint = mMatrix[3] - mMatrix[1] * mSize.y;
+        const PblVector3 vNormal = mMatrix[1];
+        m_reflectionPlane =
+            PblPlane(vNormal.x, vNormal.y, vNormal.z, -DotProduct(vNormal, vPoint));
         break;
     }
     default:
@@ -793,6 +789,7 @@ void FLRenderer::AddReflectionObject(char reflectionID, const PblBox& box, bool 
     const PblMatrix& mView = RedRenderer::GetCamera()->GetMatrixInverse();
 
     PblVector3 aPoints[32];
+    PblVector3* pPoints = aPoints;
     if (!bVisible)
     {
         return;
@@ -811,7 +808,6 @@ void FLRenderer::AddReflectionObject(char reflectionID, const PblBox& box, bool 
     aPoints[3].z = -aPoints[3].z;
 
     int nPoints = 4;
-    PblVector3* pPoints = aPoints;
     PblVector3* pClipped;
     int nClipped;
 
@@ -1341,10 +1337,7 @@ void FLRenderer::Render()
                     mSaved = pCamera->GetMatrix();
                     PblMatrix mPushed = mSaved;
                     float fPush = GetNearPlane() * (fZoom - 1.0f);
-                    mPushed.m[3][0] = mSaved.m[3][0] + mSaved.m[2][0] * fPush;
-                    mPushed.m[3][1] = mSaved.m[3][1] + mSaved.m[2][1] * fPush;
-                    mPushed.m[3][2] = mSaved.m[3][2] + mSaved.m[2][2] * fPush;
-                    mPushed.m[3][3] = 1.0f;
+                    mPushed.SetTranslation(mSaved.GetTranslation() + mSaved.GetZAxis() * fPush);
                     pCamera->SetMatrix(mPushed);
                     m_pViewCamera[mView]->SetNearFarPlane(GetNearPlane() * fZoom,
                                                           GetNearSceneFadeEnd() * fZoom);

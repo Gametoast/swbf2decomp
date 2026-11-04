@@ -39,14 +39,14 @@ ObjectWeightList::ObjectWeightList()
 bool ObjectWeightList::Read(PblFileChunk& chunk, unsigned int uiPropertyID)
 {
     bool bOK = true;
-    if (uiPropertyID == 0x4D5AF670u)
+    if (uiPropertyID != 0x4D5AF670u)
     {
-        chunk._pFile->Read8();
-        mSelectMode = (unsigned char)((int)Clamp(chunk._pFile->ReadFloat(), 0.0f, 3.0f) + 1);
+        bOK = false;
     }
     else
     {
-        bOK = false;
+        chunk._pFile->Read8();
+        mSelectMode = (unsigned char)((int)Clamp(chunk._pFile->ReadFloat(), 0.0f, 3.0f) + 1);
     }
     return bOK;
 }
@@ -90,6 +90,7 @@ bool ObjectWeightList::ReadObjectWeights(PblFileChunk& chunk, unsigned int uiObj
         pWeight->mPlayIntervalDev = fIntervalDev;
     }
 
+    const float fWeightSum = fTotal;
     unsigned int uiCount = 0;
     for (PblListSingle::Node* pNode = mHead.mNext; pNode != &mHead; pNode = pNode->mNext)
     {
@@ -100,12 +101,13 @@ bool ObjectWeightList::ReadObjectWeights(PblFileChunk& chunk, unsigned int uiObj
         return false;
     }
 
-    float fRemaining = fTotal;
-    for (PblListSingle::Node* pNode = mHead.mNext; pNode != &mHead; pNode = pNode->mNext)
+    PblListSingle::Node* pNode = mHead.mNext;
+    while (pNode != &mHead)
     {
         ObjectWeight* const pWeight = reinterpret_cast<ObjectWeight*>(reinterpret_cast<char*>(pNode) - offsetof(ObjectWeight, mNode));
-        fRemaining -= pWeight->mPlayProbability;
-        pWeight->mPlayProbability = fRemaining / fTotal;
+        fTotal -= pWeight->mPlayProbability;
+        pNode = pNode->mNext;
+        pWeight->mPlayProbability = fTotal / fWeightSum;
     }
     return true;
 }

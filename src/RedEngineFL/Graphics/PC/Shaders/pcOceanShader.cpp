@@ -99,12 +99,43 @@ void pcOceanShader::Begin_Fixed(unsigned int uiState, unsigned int uiPass) const
         RedRenderer::pcSetRenderState(D3DRS_COLORWRITEENABLE,
                                       D3DCOLORWRITEENABLE_RED | D3DCOLORWRITEENABLE_GREEN |
                                           D3DCOLORWRITEENABLE_BLUE);
+        RedRenderer::pcSetTextureStageState(0, D3DTSS_TEXTURETRANSFORMFLAGS, D3DTTFF_COUNT2);
+        RedRenderer::pcSetTextureStageState(1, D3DTSS_TEXTURETRANSFORMFLAGS, D3DTTFF_COUNT2);
+        RedRenderer::pcSetTextureStageState(0, D3DTSS_COLOROP, D3DTOP_SELECTARG1);
+        RedRenderer::pcSetTextureStageState(0, D3DTSS_COLORARG1, D3DTA_DIFFUSE);
+        RedRenderer::pcSetTextureStageState(0, D3DTSS_ALPHAOP, D3DTOP_MODULATE);
+        RedRenderer::pcSetTextureStageState(0, D3DTSS_ALPHAARG1, D3DTA_DIFFUSE);
+        RedRenderer::pcSetTextureStageState(0, D3DTSS_ALPHAARG2, D3DTA_TEXTURE);
+        RedRenderer::pcSetTextureStageState(1, D3DTSS_COLOROP, D3DTOP_MODULATECOLOR_ADDALPHA);
+        RedRenderer::pcSetTextureStageState(1, D3DTSS_COLORARG1, D3DTA_CURRENT);
+        RedRenderer::pcSetTextureStageState(1, D3DTSS_COLORARG2, D3DTA_TEXTURE);
+        RedRenderer::pcSetTextureStageState(1, D3DTSS_ALPHAOP, D3DTOP_SELECTARG1);
+        RedRenderer::pcSetTextureStageState(1, D3DTSS_ALPHAARG1, D3DTA_TEXTURE);
+        RedRenderer::pcSetTextureStageState(2, D3DTSS_COLOROP, D3DTOP_DISABLE);
+        RedRenderer::pcSetTextureStageState(2, D3DTSS_ALPHAOP, D3DTOP_DISABLE);
         break;
 
     case 1:
-        if (uiPass != 0)
+        if (uiPass == 0)
         {
-            RedRenderer::pcSetRenderState(D3DRS_ZWRITEENABLE, FALSE);
+            RedRenderer::pcSetTextureStageState(0, D3DTSS_TEXTURETRANSFORMFLAGS, D3DTTFF_COUNT2);
+            RedRenderer::pcSetTextureStageState(1, D3DTSS_TEXTURETRANSFORMFLAGS, D3DTTFF_COUNT2);
+            RedRenderer::pcSetTextureStageState(0, D3DTSS_COLOROP, D3DTOP_SELECTARG1);
+            RedRenderer::pcSetTextureStageState(0, D3DTSS_COLORARG1, D3DTA_DIFFUSE);
+            RedRenderer::pcSetTextureStageState(0, D3DTSS_ALPHAOP, D3DTOP_MODULATE);
+            RedRenderer::pcSetTextureStageState(0, D3DTSS_ALPHAARG1, D3DTA_DIFFUSE);
+            RedRenderer::pcSetTextureStageState(0, D3DTSS_ALPHAARG2, D3DTA_TEXTURE);
+            RedRenderer::pcSetTextureStageState(1, D3DTSS_COLOROP, D3DTOP_MODULATECOLOR_ADDALPHA);
+            RedRenderer::pcSetTextureStageState(1, D3DTSS_COLORARG1, D3DTA_CURRENT);
+            RedRenderer::pcSetTextureStageState(1, D3DTSS_COLORARG2, D3DTA_TEXTURE);
+            RedRenderer::pcSetTextureStageState(1, D3DTSS_ALPHAOP, D3DTOP_SELECTARG1);
+            RedRenderer::pcSetTextureStageState(1, D3DTSS_ALPHAARG1, D3DTA_TEXTURE);
+            RedRenderer::pcSetTextureStageState(2, D3DTSS_COLOROP, D3DTOP_DISABLE);
+            RedRenderer::pcSetTextureStageState(2, D3DTSS_ALPHAOP, D3DTOP_DISABLE);
+        }
+        else
+        {
+            RedRenderer::pcSetRenderState(D3DRS_FOGENABLE, FALSE);
             RedRenderer::pcSetRenderState(D3DRS_COLORWRITEENABLE, D3DCOLORWRITEENABLE_ALPHA);
             RedRenderer::pcSetTexture(0, RedTexture::Find(kuiLinearRamp));
             RedRenderer::pcSetSamplerState(0, D3DSAMP_ADDRESSU, D3DTADDRESS_CLAMP);
@@ -120,28 +151,9 @@ void pcOceanShader::Begin_Fixed(unsigned int uiState, unsigned int uiPass) const
             RedRenderer::pcSetTextureStageState(0, D3DTSS_ALPHAARG1, D3DTA_TEXTURE);
             RedRenderer::pcSetTextureStageState(1, D3DTSS_COLOROP, D3DTOP_DISABLE);
             RedRenderer::pcSetTextureStageState(1, D3DTSS_ALPHAOP, D3DTOP_DISABLE);
-            return;
         }
         break;
-
-    default:
-        return;
     }
-
-    RedRenderer::pcSetTextureStageState(0, D3DTSS_TEXTURETRANSFORMFLAGS, D3DTTFF_COUNT2);
-    RedRenderer::pcSetTextureStageState(1, D3DTSS_TEXTURETRANSFORMFLAGS, D3DTTFF_COUNT2);
-    RedRenderer::pcSetTextureStageState(0, D3DTSS_COLOROP, D3DTOP_SELECTARG1);
-    RedRenderer::pcSetTextureStageState(0, D3DTSS_COLORARG1, D3DTA_DIFFUSE);
-    RedRenderer::pcSetTextureStageState(0, D3DTSS_ALPHAOP, D3DTOP_MODULATE);
-    RedRenderer::pcSetTextureStageState(0, D3DTSS_ALPHAARG1, D3DTA_DIFFUSE);
-    RedRenderer::pcSetTextureStageState(0, D3DTSS_ALPHAARG2, D3DTA_TEXTURE);
-    RedRenderer::pcSetTextureStageState(1, D3DTSS_COLOROP, D3DTOP_MODULATECOLOR_ADDALPHA);
-    RedRenderer::pcSetTextureStageState(1, D3DTSS_COLORARG1, D3DTA_CURRENT);
-    RedRenderer::pcSetTextureStageState(1, D3DTSS_COLORARG2, D3DTA_TEXTURE);
-    RedRenderer::pcSetTextureStageState(1, D3DTSS_ALPHAOP, D3DTOP_SELECTARG1);
-    RedRenderer::pcSetTextureStageState(1, D3DTSS_ALPHAARG1, D3DTA_TEXTURE);
-    RedRenderer::pcSetTextureStageState(2, D3DTSS_COLOROP, D3DTOP_DISABLE);
-    RedRenderer::pcSetTextureStageState(2, D3DTSS_ALPHAOP, D3DTOP_DISABLE);
 }
 
 // FUNCTION: SWBF2 0x0070c180
@@ -409,18 +421,16 @@ void pcOceanShader::Render_Fixed(const RenderItem* pItem, unsigned int uiPass) c
 {
     if (uiPass == 0)
     {
-        PblMatrix mBase;
-        mBase.SetZAxis(m_textureTransform(2, 0), m_textureTransform(2, 1), 0.0f, 0.0f);
-        mBase.SetYAxis(m_textureTransform(1, 0), m_textureTransform(1, 1), 0.0f, 0.0f);
-        mBase.SetXAxis(m_textureTransform(0, 0), m_textureTransform(0, 1), 0.0f, 0.0f);
-        mBase.SetTranslation(0.0f, 0.0f, 0.0f, 1.0f);
-        PblMatrix mFoam;
-        mFoam.SetZAxis(m_foamMapTransform(2, 0), m_foamMapTransform(2, 1), 0.0f, 0.0f);
-        mFoam.SetYAxis(m_foamMapTransform(1, 0), m_foamMapTransform(1, 1), 0.0f, 0.0f);
-        mFoam.SetXAxis(m_foamMapTransform(0, 0), m_foamMapTransform(0, 1), 0.0f, 0.0f);
-        mFoam.SetTranslation(0.0f, 0.0f, 0.0f, 1.0f);
-        RedRenderer::pcFFSetTextureTransform(0, mFoam);
-        RedRenderer::pcFFSetTextureTransform(1, mBase);
+        const D3DXMATRIXA16 mBase(m_textureTransform(0, 0), m_textureTransform(0, 1), 0.0f, 0.0f,
+                                  m_textureTransform(1, 0), m_textureTransform(1, 1), 0.0f, 0.0f,
+                                  m_textureTransform(2, 0), m_textureTransform(2, 1), 0.0f, 0.0f,
+                                  0.0f, 0.0f, 0.0f, 1.0f);
+        const D3DXMATRIXA16 mFoam(m_foamMapTransform(0, 0), m_foamMapTransform(0, 1), 0.0f, 0.0f,
+                                  m_foamMapTransform(1, 0), m_foamMapTransform(1, 1), 0.0f, 0.0f,
+                                  m_foamMapTransform(2, 0), m_foamMapTransform(2, 1), 0.0f, 0.0f,
+                                  0.0f, 0.0f, 0.0f, 1.0f);
+        RedRenderer::pcFFSetTextureTransform(0, reinterpret_cast<const PblMatrix&>(mFoam));
+        RedRenderer::pcFFSetTextureTransform(1, reinterpret_cast<const PblMatrix&>(mBase));
         RedRenderer::pcSetTexture(0, m_foamMap);
         RedRenderer::pcSetTexture(1, m_baseMap);
     }

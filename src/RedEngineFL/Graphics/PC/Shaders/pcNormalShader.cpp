@@ -598,9 +598,9 @@ void pcNormalShader::RenderZPrepass(const RenderItem* pItem) const
             pRegs[40].component[1] = fYx;
             pRegs[40].component[2] = 0.0f;
             pRegs[40].component[3] = fTx;
-            const float fXy = (*pTransform)(0, 1);
-            const float fYy = (*pTransform)(1, 1);
             const float fTy = (*pTransform)(2, 1);
+            const float fYy = (*pTransform)(1, 1);
+            const float fXy = (*pTransform)(0, 1);
             pRegs[41].component[0] = fXy;
             pRegs[41].component[1] = fYy;
             pRegs[41].component[3] = fTy;
@@ -899,7 +899,7 @@ void pcNormalShader::Render_Fixed(const RenderItem* pItem, unsigned int uiPass) 
     color.g = (unsigned char)(int)(pMaterial->diffuseColor.g * 255.0f);
     color.r = (unsigned char)(int)(pMaterial->diffuseColor.r * 255.0f);
     color.a = (unsigned char)(int)(pMaterial->diffuseColor.a * 255.0f);
-    color = color * pItem->tweakColor;
+    color = pItem->tweakColor * color;
 
     s_d3dMat.Diffuse.r = color.r * kInv255;
     s_d3dMat.Diffuse.g = color.g * kInv255;
@@ -1062,16 +1062,16 @@ void pcNormalShader::Render_Fixed(const RenderItem* pItem, unsigned int uiPass) 
         if (pTransform)
         {
             PblMatrix mTransform = gMatrixIdentity;
-            mTransform.m[0][0] = (*pTransform)(0, 0);
             mTransform.m[0][1] = (*pTransform)(0, 1);
+            mTransform.m[0][0] = (*pTransform)(0, 0);
             mTransform.m[0][2] = 0.0f;
             mTransform.m[0][3] = 0.0f;
-            mTransform.m[1][0] = (*pTransform)(1, 0);
             mTransform.m[1][1] = (*pTransform)(1, 1);
+            mTransform.m[1][0] = (*pTransform)(1, 0);
             mTransform.m[1][2] = 0.0f;
             mTransform.m[1][3] = 0.0f;
-            mTransform.m[2][0] = (*pTransform)(2, 0);
             mTransform.m[2][1] = (*pTransform)(2, 1);
+            mTransform.m[2][0] = (*pTransform)(2, 0);
             mTransform.m[2][2] = 1.0f;
             mTransform.m[2][3] = 0.0f;
             RedRenderer::pcSetTextureStageState(0, D3DTSS_TEXTURETRANSFORMFLAGS, D3DTTFF_COUNT2);
