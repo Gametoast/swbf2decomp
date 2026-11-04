@@ -273,22 +273,14 @@ namespace AIUtil
 {
 
 // FUNCTION: SWBF2 0x00442b30
-bool __fastcall ShouldStayInVehicle(Controllable* pMe)
+bool __fastcall ShouldStayInVehicle(const Controllable* pMe)
 {
-    static_cast<const Controllable*>(pMe)->GetGameObject();
-    if (!AIUtil::IsEndGame(0))
+    pMe->GetGameObject();
+    if (AIUtil::IsEndGame(0) && pMe->IsPilotable() && pMe->GetPilot())
     {
-        return true;
+        return false;
     }
-    if (!pMe->IsPilotable())
-    {
-        return true;
-    }
-    if (pMe->mPilotType == PILOT_VEHICLESELF && pMe->mPilot == pMe)
-    {
-        return true;
-    }
-    return pMe->mPilot == 0;
+    return true;
 }
 }
 
@@ -1054,29 +1046,24 @@ void AIUtil::CalculateFlyerSteerPoint(const PblVector3& vPos, const PblVector3& 
 void AIUtil::CalculateSoldierSteerPoint(const PblVector3& vPrev, const PblVector3& vGoto,
                                         const PblVector3& vPos, float fSpeed, PblVector3& vSteer)
 {
-    PblVector3 vTo;
-    PblVector3 vFrom;
-    vFrom = vPrev;
+    PblVector3 vFrom = vPrev;
     vFrom.y = vPos.y;
-    vTo = vGoto;
+    PblVector3 vTo = vGoto;
     vTo.y = vPos.y;
-    const PblVector3 vLeg(vTo.x - vFrom.x, vTo.y - vFrom.y, vTo.z - vFrom.z);
-    if (0.0001f > vLeg.x * vLeg.x + vLeg.y * vLeg.y + vLeg.z * vLeg.z)
+    if (0.0001f > SquaredLength(vTo - vFrom))
     {
         vSteer = vTo;
         return;
     }
 
     const PblVector3 vDir = Normalize(vTo - vFrom);
-    const PblVector3 vRel(vPos.x - vFrom.x, vPos.y - vFrom.y, vPos.z - vFrom.z);
-    const float fAhead = vDir.y * vRel.y + vRel.x * vDir.x + vDir.z * vRel.z + fSpeed + 0.2f;
-    if (fAhead * fAhead > vLeg.z * vLeg.z + vLeg.x * vLeg.x)
+    const float fAhead = DotProduct(vPos - vFrom, vDir) + fSpeed + 0.2f;
+    if (fAhead * fAhead > SquaredLengthXZ(vTo - vFrom))
     {
         vSteer = vTo;
         return;
     }
-    vSteer = PblVector3(vDir.x * fAhead + vFrom.x, vDir.y * fAhead + vFrom.y,
-                        vDir.z * fAhead + vFrom.z);
+    vSteer = vDir * fAhead + vFrom;
 }
 
 // FUNCTION: SWBF2 0x00440f20
@@ -1325,7 +1312,7 @@ namespace AIUtil
 {
 
 // FUNCTION: SWBF2 0x00441860
-bool __cdecl CanPotentiallySee(Controllable* pMe, const GameObject* pObject, float* pOut)
+bool __cdecl CanPotentiallySee(const Controllable* pMe, const GameObject* pObject, float* pOut)
 {
     // GLOBAL: SWBF2 0x01faa7d0
     static const float sCosHalfFOV = PblMath::Cos(FOV_ANGLE * 0.5f);

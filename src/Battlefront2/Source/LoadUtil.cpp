@@ -537,21 +537,21 @@ bool LoadUtil::ReadDataFileOnHeap(char const* pName, int iHeap,
 }
 
 // FUNCTION: SWBF2 0x00579c30
-bool LoadUtil::ReadDataFile(char const* pName, void* pUnused, unsigned int const* puiHashes,
+bool LoadUtil::ReadDataFile(char const* pName, unsigned int const* puiIds, unsigned int uiIdCount,
+                            unsigned int const* puiHashes,
                             unsigned int uiCount, char const** ppNames)
 {
-    (void)pUnused;
-    return ReadDataFileOnHeap(pName, __RedTempHeap, 0, 0, puiHashes, uiCount, ppNames);
+    return ReadDataFileOnHeap(pName, __RedTempHeap, puiIds, uiIdCount, puiHashes, uiCount, ppNames);
 }
 
 // FUNCTION: SWBF2 0x0057aa60
-bool LoadUtil::ReadDataFile(PblFile& file, void* pUnused, unsigned int const* puiHashes,
+bool LoadUtil::ReadDataFile(PblFile& file, unsigned int const* puiIds, unsigned int uiIdCount,
+                            unsigned int const* puiHashes,
                             unsigned int uiCount, char const** ppNames)
 {
-    (void)pUnused;
     PblFile::SetBlockCallback(FileBlockCallback);
     PblFileChunk chunk(&file);
-    ReadDataFileChunk("Memory File", chunk, 0, 0, puiHashes, uiCount, ppNames);
+    ReadDataFileChunk("Memory File", chunk, puiIds, uiIdCount, puiHashes, uiCount, ppNames);
     PblFile::SetBlockCallback(0);
     return true;
 }

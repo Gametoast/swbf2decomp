@@ -706,7 +706,7 @@ namespace GameLoop
 }
 namespace GameLoop
 {
-    bool CheckToggleDisplay();
+    void CheckToggleDisplay();
 }
 namespace TeamManager
 {
@@ -1864,9 +1864,9 @@ namespace GameLoop
 {
 
 // FUNCTION: SWBF2 0x00533540
-bool CheckToggleDisplay()
+void CheckToggleDisplay()
 {
-    return FLInputManager::Instance()->GetPlayerJoystick(0)->GetKeyboard()->IsKeyDown(0x46);
+    FLInputManager::Instance()->GetPlayerJoystick(0)->GetKeyboard()->IsKeyDown(0x46);
 }
 }
 

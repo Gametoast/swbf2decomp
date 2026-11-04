@@ -183,7 +183,7 @@ void UpdatePhysics(const Controllable* pMe, float fScale, const ControllableDest
 }
 namespace AIUtil
 {
-bool __cdecl CanPotentiallySee(Controllable* pMe, const GameObject* pObject, float* pOut);
+bool __cdecl CanPotentiallySee(const Controllable* pMe, const GameObject* pObject, float* pOut);
 }
 namespace AIUtil
 {
@@ -195,7 +195,7 @@ bool __fastcall IsSpied(Character* pWatcher, Character* pTarget);
 }
 namespace AIUtil
 {
-bool __fastcall ShouldStayInVehicle(Controllable* pMe);
+bool __fastcall ShouldStayInVehicle(const Controllable* pMe);
 }
 namespace AIUtil
 {

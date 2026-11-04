@@ -38,7 +38,7 @@ unsigned int mLastDirtyCRC[1];
 
 namespace PblBuildType
 {
-extern unsigned char gCreateMemoryProfile;
+extern bool gCreateMemoryProfile;
 }
 
 extern bool pcWindowed;

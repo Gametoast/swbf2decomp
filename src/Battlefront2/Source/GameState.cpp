@@ -267,7 +267,7 @@ namespace RedInputManager
 
 namespace SaveGameManager
 {
-    void Init();
+    void Init(bool bForceNoSaveDevice);
 }
 
 namespace StatsManager
@@ -748,26 +748,26 @@ namespace SaveGameManager
 namespace SaveGameManager
 {
     // GLOBAL: SWBF2 0x01eaeff7
-    unsigned char mForceNoSaveDevice;
+    bool mForceNoSaveDevice;
 }
 namespace PblBuildType
 {
     // GLOBAL: SWBF2 0x009cef72
-    unsigned char gCreateMemoryProfile;
+    bool gCreateMemoryProfile;
 }
 
 namespace SaveGameManager
 {
 
 // FUNCTION: SWBF2 0x00632ee0
-void Init()
+void Init(bool bForceNoSaveDevice)
 {
     SaveGameManager::mOnDone = 0;
     SaveGameManager::mReqSaveFile2Data = 0;
     SaveGameManager::mReqSaveFile1Data = 0;
     SaveGameManager::mReqSaveFile2Size = 0;
     SaveGameManager::mReqSaveFile1Size = 0;
-    SaveGameManager::mForceNoSaveDevice = PblBuildType::gCreateMemoryProfile;
+    SaveGameManager::mForceNoSaveDevice = bForceNoSaveDevice;
 }
 }
 
@@ -910,7 +910,7 @@ void GameState::PreStateInit(bool bMission)
     if (bMission)
     {
         unsigned int uiMissionHash = GameLoop::mMissionScriptHash;
-        if (!LoadUtil::ReadDataFile("MISSION.lvl", 0, &uiMissionHash, 1, 0))
+        if (!LoadUtil::ReadDataFile("MISSION.lvl", 0, 0, &uiMissionHash, 1, 0))
         {
             RedTexture::Init();
             RedRenderer::Init();
@@ -926,7 +926,7 @@ void GameState::PreStateInit(bool bMission)
         {
             char acName[256] = { 0 };
             _snprintf(acName, sizeof(acName), "MISSION\\%s.lvl", GameLoop::mMissionScript);
-            if (LoadUtil::ReadDataFile(acName, 0, 0, 0, 0))
+            if (LoadUtil::ReadDataFile(acName, 0, 0, 0, 0, 0))
             {
                 bOpened = LuaHelper::OpenScript(GameLoop::mMissionScript);
             }
@@ -970,7 +970,7 @@ void GameState::PreStateInit(bool bMission)
         GameMovie::Create(GameMemory::RunTimeHeap);
     }
 
-    SaveGameManager::Init();
+    SaveGameManager::Init(PblBuildType::gCreateMemoryProfile);
     RedRenderer::SetFogEnable(true);
     RedRenderer::SetSky(1);
     RedVertexCache::Init();
@@ -1058,7 +1058,7 @@ void GameState::PreStateInit(bool bMission)
         RedLocalizeDB::SetSkipCount(1);
     }
 
-    LoadUtil::ReadDataFile("core.lvl", 0, 0, 0, 0);
+    LoadUtil::ReadDataFile("core.lvl", 0, 0, 0, 0, 0);
 
     if (bMission && DownloadableContent::IsDownloadableContent())
     {
@@ -1068,12 +1068,12 @@ void GameState::PreStateInit(bool bMission)
                                sizeof(acFullName), true);
         if (file.Open(acFullName, false, false, true))
         {
-            LoadUtil::ReadDataFile(file, 0, 0, 0, 0);
+            LoadUtil::ReadDataFile(file, 0, 0, 0, 0, 0);
             file.Close();
         }
     }
 
-    LoadUtil::ReadDataFile("common.lvl", 0, 0, 0, 0);
+    LoadUtil::ReadDataFile("common.lvl", 0, 0, 0, 0, 0);
     RedFont::PostCommonInit();
     GameSoundEngine::InitializeBusGains();
     gSoundEnabled = true;

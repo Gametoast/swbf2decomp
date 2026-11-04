@@ -15,7 +15,13 @@ class ObstacleTest
 public:
     ObstacleTest() {}
 
-    ObstacleTest(const PblVector3& rSrc, const PblVector3& rDest);
+    // FUNCTION: SWBF2 0x005ab340
+    ObstacleTest(const PblVector3& rSrc, const PblVector3& rDest)
+        : mSrc(rSrc), mDest(rDest)
+    {
+        mBoundCenter = ((mSrc + mDest) * 0.5f);
+        mBoundRadius = Length(mBoundCenter - mSrc);
+    }
 
     PblVector3 mSrc;
     PblVector3 mDest;

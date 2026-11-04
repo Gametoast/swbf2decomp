@@ -98,8 +98,10 @@ void UnitHoldAgent::UpdateStatePostVision(float dt)
         return;
     }
 
-    const PblMatrix& mine = GetMe()->GetMatrix();
-    const PblMatrix& theirs = pLeader->GetControllable()->GetMatrix();
+    const Controllable* pMe = GetMe();
+    const Controllable* pLeaderControllable = pLeader->GetControllable();
+    const PblMatrix& mine = pMe->GetMatrix();
+    const PblMatrix& theirs = pLeaderControllable->GetMatrix();
     PblVector3 vDelta = theirs.GetTranslation() - mine.GetTranslation();
     if (SquaredLength(vDelta) > 400.0f)
     {
@@ -111,17 +113,31 @@ void UnitHoldAgent::UpdateStatePostVision(float dt)
         }
     }
 
-    if (mCurState != 2)
+    switch (mCurState)
     {
-        return;
-    }
-
-    if (AIUtil::GetRandomIntPerSecond(1, 9) == 2)
+    case 2:
     {
-        SetNewSearchHeading();
-    }
+        if (AIUtil::GetRandomIntPerSecond(1, 9) == 2)
+        {
+            SetNewSearchHeading();
+        }
 
-    UnitAgent::FaceTargetCommon(HEIGHT_COUNT, true, mSearchPos);
+        if (mAttackHelper.GetVisibleTarget())
+        {
+            GetLowLevel().SetHeading(mAttackHelper.GetVisibleTarget());
+        }
+        else if (mAttackHelper.HasTarget())
+        {
+            const PblVector3& vLastSeen = mAttackHelper.GetLastSeenTargetPos();
+            GetLowLevel().SetHeading(PblVector3(vLastSeen.x + 0.0f, vLastSeen.y + 1.6f, vLastSeen.z + 0.0f), 0.0f);
+        }
+        else
+        {
+            GetLowLevel().SetHeading(mSearchPos, 0.0f);
+        }
+        break;
+    }
+    }
 }
 
 // FUNCTION: SWBF2 0x00669130

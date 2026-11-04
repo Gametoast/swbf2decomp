@@ -88,8 +88,7 @@ void AI::AIGoal::UnAssignAll()
         UnitController* pController = !itor->GetControllable() ? 0 : UnitControllerPtr(itor->GetControllable()->mCtrl);
         if (pController)
         {
-            PblHandle<GameObject> hNone;
-            CmdInfo cmd = UnitCmdInfo(CMD_WAIT, hNone, PblVector3(0.0f, 0.0f, 0.0f), hNone);
+            UnitCmdInfo cmd = UnitCmdInfo(CMD_WAIT, 0, PblVector3(0.0f, 0.0f, 0.0f), 0);
             pController->ForceCommand(cmd);
         }
     }

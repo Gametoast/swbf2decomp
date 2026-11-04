@@ -175,7 +175,7 @@ void WeaponMelee::Render(const PblMatrix& matrix, const RedPose* pPose,
         }
         if (!bThrown && edge.colorTrail.a && !bNoTrail && bRenderModel)
         {
-            const_cast<WeaponMelee*>(this)->RenderLightsaberTrail(i, &PblMatrix(*pEdgeMatrix),
+            RenderLightsaberTrail(i, PblMatrix(*pEdgeMatrix),
                                                                    (m_uiTrailOnMask & (1u << i)) && IsOn(uiWeapon), uiFlags);
         }
         PblVector3 vPosition, vDirection;
@@ -458,8 +458,8 @@ float WeaponMelee::GetLightSaberLengthFactor(unsigned int uiBlade) const
 }
 
 // FUNCTION: SWBF2 0x0068a410
-void WeaponMelee::RenderLightsaberTrail(unsigned int uiEdge, const PblMatrix* pMatrix, bool bTrailOn,
-                                        unsigned int uiFlags)
+void WeaponMelee::RenderLightsaberTrail(unsigned int uiEdge, const PblMatrix& mMatrix, bool bTrailOn,
+                                        unsigned int uiFlags) const
 {
     WeaponMelee::TrailData* pSelected = 0;
     WeaponMelee::TrailData* pData = m_pTrailData;
@@ -489,7 +489,7 @@ void WeaponMelee::RenderLightsaberTrail(unsigned int uiEdge, const PblMatrix* pM
         if (pSelected->m_uiFrameLastUpdated != (unsigned char)RedRenderer::GetFrameNumber())
         {
             pSelected->m_pTrail->m_bTrailOn = bTrailOn;
-            pSelected->m_pTrail->AttachEffectToMatrix(pMatrix, false);
+            pSelected->m_pTrail->AttachEffectToMatrix(&mMatrix, false);
         }
     }
     else
@@ -509,7 +509,7 @@ void WeaponMelee::RenderLightsaberTrail(unsigned int uiEdge, const PblMatrix* pM
         pSelected->pNext = m_pTrailData;
         m_pTrailData = pSelected;
         pSelected->m_pTrail->m_bTrailOn = bTrailOn;
-        pSelected->m_pTrail->AttachEffectToMatrix(pMatrix, false);
+        pSelected->m_pTrail->AttachEffectToMatrix(&mMatrix, false);
     }
     if (pSelected->m_pTrail->m_uiNumSamples)
     {
@@ -986,9 +986,10 @@ bool WeaponMelee::_TestInputQueueForButtonEvent(const WeaponMelee::InputQueue& q
 }
 
 // FUNCTION: SWBF2 0x0068b980
-bool WeaponMelee::TestConditionExceptInputQueue(float fPreviousTime, float fCurrentTime,
-                const Combo::Condition* pCondition)
+bool WeaponMelee::TestConditionExceptInputQueue(const void* pConditionPtr, float fPreviousTime,
+                float fCurrentTime) const
 {
+    const Combo::Condition* pCondition = static_cast<const Combo::Condition*>(pConditionPtr);
     float fStart = pCondition->m_iTimeStart * Combo::Condition::TIME_SCALE;
     if (pCondition->m_bTimeStartFromEnd)
     {
@@ -1031,10 +1032,11 @@ bool WeaponMelee::TestConditionExceptInputQueue(float fPreviousTime, float fCurr
 }
 
 // FUNCTION: SWBF2 0x0068baa0
-bool WeaponMelee::TestCondition(float fPreviousTime, float fCurrentTime,
-                const Combo::Condition* pCondition, float* pfMatchTime)
+bool WeaponMelee::TestCondition(const void* pConditionPtr, float fPreviousTime,
+                float fCurrentTime, float& fMatchTime)
 {
-    if (!TestConditionExceptInputQueue(fPreviousTime, fCurrentTime, pCondition))
+    const Combo::Condition* pCondition = static_cast<const Combo::Condition*>(pConditionPtr);
+    if (!TestConditionExceptInputQueue(pConditionPtr, fPreviousTime, fCurrentTime))
     {
         return false;
     }
@@ -1052,18 +1054,18 @@ bool WeaponMelee::TestCondition(float fPreviousTime, float fCurrentTime,
                                  : pCondition->m_iTimeStart * Combo::Condition::TIME_SCALE;
         if (!WeaponMelee::_TestInputQueueForButtonEvent(m_InputQueue, m_fInputTimer,
                          pCondition->m_uiButton, pCondition->m_uiButtonAction,
-                         fStart + fOffset, fEnd + fOffset, *pfMatchTime))
+                         fStart + fOffset, fEnd + fOffset, fMatchTime))
         {
             return false;
         }
-        *pfMatchTime -= fOffset;
+        fMatchTime -= fOffset;
     }
     else
     {
         const float fStart = pCondition->m_bTimeStartFromEnd
                                  ? pCondition->m_iTimeStart * Combo::Condition::TIME_SCALE + fPreviousTime
                                  : pCondition->m_iTimeStart * Combo::Condition::TIME_SCALE;
-        *pfMatchTime = fStart;
+        fMatchTime = fStart;
     }
     return true;
 }
@@ -2824,7 +2826,7 @@ bool WeaponMelee::Update(float fDeltaTime)
                         {
                             const Combo::Condition* pTest = &transition.m_aCondition[j];
                             float fTime;
-                            if (TestCondition(fDuration, m_fComboStateTimer, pTest, &fTime) &&
+                            if (TestCondition(pTest, fDuration, m_fComboStateTimer, fTime) &&
                                 fMatchTime > fTime)
                             {
                                 pTransition = &transition;
@@ -2878,7 +2880,7 @@ bool WeaponMelee::Update(float fDeltaTime)
                         {
                             const Combo::Condition* pTest = &transition.m_aCondition[j];
                             float fTime;
-                            if (TestCondition(m_fComboStateDurationPrev, fPrevTimer, pTest, &fTime))
+                            if (TestCondition(pTest, m_fComboStateDurationPrev, fPrevTimer, fTime))
                             {
                                 fTime -= m_fComboStateDurationPrev;
                                 if (fMatchTime > fTime)
@@ -2912,7 +2914,7 @@ bool WeaponMelee::Update(float fDeltaTime)
                             float fTime;
                             if ((pTest->IsBreak() || bNoDuration) &&
                                 !(m_fComboStateTimer < pTest->m_uiBreakTime * Combo::Condition::TIME_SCALE) &&
-                                TestCondition(fDuration, m_fComboStateTimer, pTest, &fTime) &&
+                                TestCondition(pTest, fDuration, m_fComboStateTimer, fTime) &&
                                 fMatchTime > fTime)
                             {
                                 pTransition = &transition;
@@ -2931,7 +2933,7 @@ bool WeaponMelee::Update(float fDeltaTime)
                     const Combo::Condition* pTest = &pState->m_aAnimatedMoveCondition[i];
                     float fTime;
                     if (!(m_fComboStateTimer < pTest->m_uiBreakTime * Combo::Condition::TIME_SCALE) &&
-                        TestCondition(fDuration, m_fComboStateTimer, pTest, &fTime))
+                        TestCondition(pTest, fDuration, m_fComboStateTimer, fTime))
                     {
                         m_bAnimatedMove = 0;
                     }

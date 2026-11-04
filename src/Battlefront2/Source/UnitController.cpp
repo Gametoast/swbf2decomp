@@ -86,12 +86,12 @@ int GetUnitsInRange(const PblVector3& vPos, float fRadius, GameObject** const pp
 
 namespace AIUtil
 {
-bool __fastcall ShouldStayInVehicle(Controllable* pMe);
+bool __fastcall ShouldStayInVehicle(const Controllable* pMe);
 }
 
 namespace AIUtil
 {
-bool __cdecl CanPotentiallySee(Controllable* pMe, const GameObject* pObject, float* pOut);
+bool __cdecl CanPotentiallySee(const Controllable* pMe, const GameObject* pObject, float* pOut);
 }
 
 namespace AIDebug

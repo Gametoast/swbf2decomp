@@ -83,14 +83,6 @@ const char Navigator::rttiNameNavigator[] = "Navigator";
 // SYNTHETIC: SWBF2 0x005ab310
 // Navigator::`scalar deleting destructor'
 
-// FUNCTION: SWBF2 0x005ab340
-ObstacleTest::ObstacleTest(const PblVector3& rSrc, const PblVector3& rDest)
-    : mSrc(rSrc), mDest(rDest)
-{
-    mBoundCenter = ((mSrc + mDest) * 0.5f);
-    mBoundRadius = Length(mBoundCenter - mSrc);
-}
-
 // FUNCTION: SWBF2 0x005ab410
 Navigator::Navigator(AILowLevel* pOwner)
     : mOwner(pOwner),

@@ -73,10 +73,7 @@ inline const CollisionObject* GetCollisionObject(const GameObject* pObj)
 
 inline float DistSq(const PblVector3& a, const PblVector3& b)
 {
-    float fX = a.x - b.x;
-    float fY = a.y - b.y;
-    float fZ = a.z - b.z;
-    return fX * fX + fY * fY + fZ * fZ;
+    return SquaredLength(a - b);
 }
 }
 

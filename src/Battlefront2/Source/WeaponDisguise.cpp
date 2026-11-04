@@ -311,7 +311,7 @@ void WeaponDisguise::WhoTwiggedMe()
                 continue;
             }
             float fDistSq = -1.0f;
-            if (!AIUtil::CanPotentiallySee(const_cast<Controllable*>(pWatcher), pMe, &fDistSq))
+            if (!AIUtil::CanPotentiallySee(pWatcher, pMe, &fDistSq))
             {
                 continue;
             }

@@ -176,23 +176,6 @@ inline bool IsJournaling()
            PblJournal::Get(PJT_FULL)->mMode == PJM_WRITING;
 }
 
-static int GetLocalizedTeamNum(unsigned int uiTeamHash)
-{
-    switch (uiTeamHash)
-    {
-    case 0xe40c292c:
-        return 0;
-    case 0xf70c4715:
-        return 1;
-    case 0xe60c2c52:
-        return 2;
-    case 0xec0c35c4:
-        return 3;
-    default:
-        return -1;
-    }
-}
-
 // FUNCTION: SWBF2 0x00575550
 int GetTeamNum(unsigned int uiTeamHash)
 {
@@ -548,8 +531,22 @@ void LoadDisplay::SetLoadState()
 
     unsigned int uiTeam1Hash, uiTeam2Hash;
     MissionPlayList::GetCurrentTeamNames(uiTeam1Hash, uiTeam2Hash);
-    m_team1Num = GetLocalizedTeamNum(uiTeam1Hash);
-    m_team2Num = GetLocalizedTeamNum(uiTeam2Hash);
+    switch (uiTeam1Hash)
+    {
+    case 0xe40c292c: m_team1Num = 0; break;
+    case 0xf70c4715: m_team1Num = 1; break;
+    case 0xe60c2c52: m_team1Num = 2; break;
+    case 0xec0c35c4: m_team1Num = 3; break;
+    default: m_team1Num = -1; break;
+    }
+    switch (uiTeam2Hash)
+    {
+    case 0xe40c292c: m_team2Num = 0; break;
+    case 0xf70c4715: m_team2Num = 1; break;
+    case 0xe60c2c52: m_team2Num = 2; break;
+    case 0xec0c35c4: m_team2Num = 3; break;
+    default: m_team2Num = -1; break;
+    }
 }
 
 // FUNCTION: SWBF2 0x00576660

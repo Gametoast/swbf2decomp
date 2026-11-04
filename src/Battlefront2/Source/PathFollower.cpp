@@ -419,14 +419,14 @@ void PathFollower::GotoNextNode()
         mCtrl->SendEvent(&info);
     }
 
-    PblList<AIPathNode>::Node* pLast = mPath->GetNodeList().GetLast();
+    PblList<AIPathNode>::Itor itorLast(mPath->GetNodeList().GetLast());
     if (!mDone && (mItor->mFlags & AIPathNode::AIPN_END_OF_SEGMENT))
     {
         mItor->mFlags ^= AIPathNode::AIPN_END_OF_SEGMENT;
         PathManager::LowerRequestPriority(mCtrl);
     }
 
-    if ((AIPathNode*)mItor == pLast->_pObject)
+    if ((AIPathNode*)mItor == (AIPathNode*)itorLast)
     {
         mDone = true;
         mDoneReason = PF_PATHDONE;
@@ -442,27 +442,24 @@ void PathFollower::GotoNextNode()
         mPath->TrimBefore(mItor._pNode->_pPrev->_pObject);
     }
 
-    mMinDistToGoalTime = 0.0f;
     mMinDistToGoal = SquaredLength(mGotoPoint - mCtrl->mOwner->GetMatrix().GetTranslation());
+    mMinDistToGoalTime = 0.0f;
 }
 
 // FUNCTION: SWBF2 0x00613160
 bool PathFollower::TestBarriersAhead() const
 {
-    const PblMatrix& mMe = mCtrl->mOwner->GetMatrix();
-    float dx = mGotoPoint.x - mMe.m[3][0];
-    float dy = mGotoPoint.y - mMe.m[3][1];
-    float dz = mGotoPoint.z - mMe.m[3][2];
-    PblVector3 vAhead(dx, dy, dz);
-    if (dx * dx + dz * dz > 25.0f)
+    const PblVector3& vMyPos = mCtrl->mOwner->GetMatrix().GetTranslation();
+    PblVector3 vAhead = mGotoPoint - vMyPos;
+    if (SquaredLengthXZ(vAhead) > 25.0f)
     {
         vAhead = AIUtil::GetSafeNormalXZ(vAhead) * 5.0f;
     }
 
-    PblVector3 vTo = mMe.GetTranslation() + vAhead;
+    PblVector3 vTo = vMyPos + vAhead;
     float fRadius = AIUtil::GetCollisionRadius(mCtrl->mOwner->GetGameObject());
     int eType = AIUtil::GetAIType(mCtrl->mOwner->GetGameObject());
-    return PathFinder::TestTrivialStraightLineHit(mMe.GetTranslation(), vTo, fRadius, eType,
+    return PathFinder::TestTrivialStraightLineHit(vMyPos, vTo, fRadius, eType,
                                                   mIgnore, mIgnoreCnt, true);
 }
 

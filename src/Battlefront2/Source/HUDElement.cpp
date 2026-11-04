@@ -1284,6 +1284,10 @@ HUD::Element* HUD::Element::GetFirst()
 // FUNCTION: SWBF2 0x00549d40
 HUD::Element* HUD::Element::GetLast()
 {
+    if (sList.mTerminator.mNext == &sList.mTerminator)
+    {
+        return 0;
+    }
     PblListDouble::Node* node = sList.mTerminator.mPrev;
     return node == &sList.mTerminator ? 0 : reinterpret_cast<Element*>(reinterpret_cast<char*>(node) - offsetof(Element, mNode));
 }

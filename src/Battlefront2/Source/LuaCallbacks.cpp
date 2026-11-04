@@ -678,14 +678,14 @@ int ScriptCB_usprintf(lua_State*)
         }
 
         const char* pcKey = luaL_checklstring(LuaHelper::mState, 1, 0);
-        const unsigned short* apusArgs[7];
+        const unsigned short* apusArgs[8];
         for (int i = 2; i <= iTop; ++i)
         {
             if (!lua_isstring(LuaHelper::mState, i))
             {
                 return 0;
             }
-            apusArgs[i - 2] = (const unsigned short*)luaL_checklstring(LuaHelper::mState, i, 0);
+            apusArgs[i - 1] = (const unsigned short*)luaL_checklstring(LuaHelper::mState, i, 0);
         }
 
         const unsigned short* pusFormat = RedLocalizeDB::Find(pcKey ? (unsigned int)PblHash(pcKey) : 0, false);
@@ -700,30 +700,30 @@ int ScriptCB_usprintf(lua_State*)
         switch (iTop)
         {
         case 2:
-            iLen = PblUnicode::usnprintf(sTempReturnString16, 255, pusFormat, apusArgs[0]);
+            iLen = PblUnicode::usnprintf(sTempReturnString16, 255, pusFormat, apusArgs[1]);
             break;
         case 3:
-            iLen = PblUnicode::usnprintf(sTempReturnString16, 255, pusFormat, apusArgs[0], apusArgs[1]);
+            iLen = PblUnicode::usnprintf(sTempReturnString16, 255, pusFormat, apusArgs[1], apusArgs[2]);
             break;
         case 4:
-            iLen = PblUnicode::usnprintf(sTempReturnString16, 255, pusFormat, apusArgs[0], apusArgs[1],
-                                         apusArgs[2]);
+            iLen = PblUnicode::usnprintf(sTempReturnString16, 255, pusFormat, apusArgs[1], apusArgs[2],
+                                         apusArgs[3]);
             break;
         case 5:
-            iLen = PblUnicode::usnprintf(sTempReturnString16, 255, pusFormat, apusArgs[0], apusArgs[1],
-                                         apusArgs[2], apusArgs[3]);
+            iLen = PblUnicode::usnprintf(sTempReturnString16, 255, pusFormat, apusArgs[1], apusArgs[2],
+                                         apusArgs[3], apusArgs[4]);
             break;
         case 6:
-            iLen = PblUnicode::usnprintf(sTempReturnString16, 255, pusFormat, apusArgs[0], apusArgs[1],
-                                         apusArgs[2], apusArgs[3], apusArgs[4]);
+            iLen = PblUnicode::usnprintf(sTempReturnString16, 255, pusFormat, apusArgs[1], apusArgs[2],
+                                         apusArgs[3], apusArgs[4], apusArgs[5]);
             break;
         case 7:
-            iLen = PblUnicode::usnprintf(sTempReturnString16, 255, pusFormat, apusArgs[0], apusArgs[1],
-                                         apusArgs[2], apusArgs[3], apusArgs[4], apusArgs[5]);
+            iLen = PblUnicode::usnprintf(sTempReturnString16, 255, pusFormat, apusArgs[1], apusArgs[2],
+                                         apusArgs[3], apusArgs[4], apusArgs[5], apusArgs[6]);
             break;
         case 8:
-            iLen = PblUnicode::usnprintf(sTempReturnString16, 255, pusFormat, apusArgs[0], apusArgs[1],
-                                         apusArgs[2], apusArgs[3], apusArgs[4], apusArgs[5], apusArgs[6]);
+            iLen = PblUnicode::usnprintf(sTempReturnString16, 255, pusFormat, apusArgs[1], apusArgs[2],
+                                         apusArgs[3], apusArgs[4], apusArgs[5], apusArgs[6], apusArgs[7]);
             break;
         default:
             PblUnicode::ustrncpy(sTempReturnString16, pusFormat, 255);

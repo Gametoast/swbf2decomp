@@ -19,6 +19,16 @@ public:
     RedColorValue(const RedColorValue& c) : r(c.r), g(c.g), b(c.b), a(c.a) {}
     RedColorValue(const RedColor& color);
 
+    RedColorValue operator+(const RedColorValue& color) const
+    {
+        return RedColorValue(r + color.r, g + color.g, b + color.b, a + color.a);
+    }
+
+    RedColorValue operator*(float scale) const
+    {
+        return RedColorValue(r * scale, g * scale, b * scale, a * scale);
+    }
+
     operator D3DCOLORVALUE() const
     {
         return *reinterpret_cast<const D3DCOLORVALUE*>(this);

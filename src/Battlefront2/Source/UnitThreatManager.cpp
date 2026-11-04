@@ -90,8 +90,8 @@ unsigned char Threat::GetPriority(float fTime, Controllable* pMe) const
     int iVisual = 100 - (int)((float)VisionManager::GetVisualPriority(pMe, mThreatObject) * 100.0f /
                               (float)60000);
 
-    if (!mThreatObject->mControllableList.GetFirst()->_pObject ||
-        !PlayerControllerPtr(mThreatObject->mControllableList.GetFirst()->_pObject->mCtrl))
+    if (!mThreatObject->GetFirstControllable() ||
+        !PlayerControllerPtr(mThreatObject->GetFirstControllable()->mCtrl))
     {
         iVisual /= 2;
     }
@@ -104,12 +104,12 @@ unsigned char Threat::GetPriority(float fTime, Controllable* pMe) const
         iVisual = (int)((float)iVisual * fScale);
     }
 
-    if (mThreatObject->mControllableList.GetFirst()->_pObject)
+    if (mThreatObject->GetFirstControllable())
     {
         for (PblList<FlagItem>::Itor it(*FlagItem::sList); (FlagItem*)it; ++it)
         {
             const Character* pOwner = reinterpret_cast<EntityItem*>((FlagItem*)it)->mOwner;
-            if (pOwner == mThreatObject->mControllableList.GetFirst()->_pObject->mCharacter)
+            if (pOwner == mThreatObject->GetFirstControllable()->mCharacter)
             {
                 iVisual = 100;
                 break;
