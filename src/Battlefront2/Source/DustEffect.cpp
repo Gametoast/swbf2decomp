@@ -511,17 +511,17 @@ void DustEffectClass::Reset()
     {
         it->DestroyRenderData();
     }
-    sDustEffectClasses.RemoveAll();
-    sDustEffects.RemoveAll();
+    sDustEffectClasses.Clear();
+    sDustEffects.Clear();
 }
 
 // TEMPLATE: SWBF2 0x00490ac0
-// PblList<DustEffectClass>::RemoveAll
-template void PblList<DustEffectClass>::RemoveAll();
+// PblList<DustEffectClass>::Clear
+template void PblList<DustEffectClass>::Clear();
 
 // TEMPLATE: SWBF2 0x00490a70
-// PblList<DustEffect>::RemoveAll
-template void PblList<DustEffect>::RemoveAll();
+// PblList<DustEffect>::Clear
+template void PblList<DustEffect>::Clear();
 
 // FUNCTION: SWBF2 0x00490250
 CloudClusterClass::CloudClusterClass(unsigned int uHash)

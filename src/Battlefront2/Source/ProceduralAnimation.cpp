@@ -195,7 +195,7 @@ PAHierarchy::PAHierarchy()
 // FUNCTION: SWBF2 0x00628340
 void __cdecl PAAnimationGroup::ReadHierarchy(PblFileChunk& chunk)
 {
-    while (chunk.HasMoreChildren())
+    while (!chunk.IsDone())
     {
         PblFileChunk child = chunk.ReadNextChild();
         if (child._iId != 0x4f464e49)
@@ -321,7 +321,7 @@ PAAnimation::~PAAnimation()
 void PAAnimation::Read(PblFileChunk& chunk)
 {
     PAAnimation* pAnim = NULL;
-    while (chunk.HasMoreChildren())
+    while (!chunk.IsDone())
     {
         PblFileChunk child = chunk.ReadNextChild();
         unsigned int uiId = child._iId;
@@ -767,7 +767,7 @@ void PAAnimationGroup::UpdateStartPositions()
 void PAAnimationGroup::Read(PblFileChunk& chunk)
 {
     PAAnimationGroup* pGroup = NULL;
-    while (chunk.HasMoreChildren())
+    while (!chunk.IsDone())
     {
         PblFileChunk child = chunk.ReadNextChild();
         char acName[128];

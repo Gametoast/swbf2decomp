@@ -453,7 +453,7 @@ RedSegment* __cdecl RedSegment::Read(PblFileChunk& chunk, const RedModel* pModel
 
     const bool bForceFlags = pModel && pModel->_uiNameHash == 0x33B99965;
 
-    while (chunk.HasMoreChildren())
+    while (!chunk.IsDone())
     {
         PblFileChunk child = chunk.ReadNextChild();
         switch (child._iId)

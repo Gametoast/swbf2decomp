@@ -4,6 +4,7 @@
 #include <string.h>
 #include "NetPacket.h"
 #include "NetComm.h"
+#include "PebbleFL/Common/PblJournal.h"
 #include "Steam/galaxy_api.h"
 
 extern unsigned int netDirectSocket;
@@ -159,8 +160,6 @@ int NetSocket::SendVoiceSocket(int iDest, char* pData, int iLen, int iChannel)
 
 extern bool netIsHost;
 extern int netHostIndex;
-extern void __cdecl JournalReceiveTraceStub();
-typedef void (__cdecl *ReceiveTraceFn)(const void*, int);
 
 // GLOBAL: SWBF2 0x01fab0d0
 unsigned char netGalaxyReceiveBuffer[2048];
@@ -230,8 +229,8 @@ void NetSocket::RecvSockets()
             }
             break;
         }
-        ((ReceiveTraceFn)JournalReceiveTraceStub)(netLanReceiveBuffer, received);
-        ((ReceiveTraceFn)JournalReceiveTraceStub)(&from, sizeof(from));
+        JournalBytes(reinterpret_cast<char*>(netLanReceiveBuffer), received);
+        JournalBytes(reinterpret_cast<char*>(&from), sizeof(from));
         NetSocketPeerRecord peer = { galaxy::api::GalaxyID(0) };
         peer.mSocketAddress = from;
         ProcessReceivedPacket(netLanReceiveBuffer, received, packetPrefix.value, true, peer);
@@ -246,8 +245,8 @@ void NetSocket::RecvSockets()
                                 sizeof(netLanReceiveBuffer), 0, (sockaddr*)&from, &fromLength);
             if (received != SOCKET_ERROR)
             {
-                ((ReceiveTraceFn)JournalReceiveTraceStub)(netLanReceiveBuffer, 1);
-                ((ReceiveTraceFn)JournalReceiveTraceStub)(&from, sizeof(from));
+                JournalBytes(reinterpret_cast<char*>(netLanReceiveBuffer), 1);
+                JournalBytes(reinterpret_cast<char*>(&from), sizeof(from));
             }
         }
         while (received != SOCKET_ERROR);
@@ -271,8 +270,8 @@ void NetSocket::RecvSockets()
                 }
                 break;
             }
-            ((ReceiveTraceFn)JournalReceiveTraceStub)(netLanReceiveBuffer, received);
-            ((ReceiveTraceFn)JournalReceiveTraceStub)(&from, sizeof(from));
+            JournalBytes(reinterpret_cast<char*>(netLanReceiveBuffer), received);
+            JournalBytes(reinterpret_cast<char*>(&from), sizeof(from));
             NetSocketPeerRecord peer = { galaxy::api::GalaxyID(0) };
             peer.mSocketAddress = from;
             ProcessReceivedPacket(netLanReceiveBuffer, received, packetPrefix.value, false, peer);
@@ -334,8 +333,8 @@ void NetSocket::RecvGalaxySockets()
         NetSocketPeerRecord peer = { galaxy::api::GalaxyID(0) };
         if (ReadGalaxy(GetGalaxyNetworking(), 2048, size, peer))
         {
-            ((ReceiveTraceFn)JournalReceiveTraceStub)(netGalaxyReceiveBuffer, size);
-            ((ReceiveTraceFn)JournalReceiveTraceStub)(&peer, sizeof(peer));
+            JournalBytes(reinterpret_cast<char*>(netGalaxyReceiveBuffer), size);
+            JournalBytes(reinterpret_cast<char*>(&peer), sizeof(peer));
             ProcessReceivedPacket(netGalaxyReceiveBuffer, size, packetPrefix.value, true, peer);
         }
     }
@@ -358,8 +357,8 @@ void NetSocket::RecvGalaxySockets()
             if (ReadGalaxy(GetGalaxyHostNetworking(), 1012 - packetPrefix.value,
                            size, peer))
             {
-                ((ReceiveTraceFn)JournalReceiveTraceStub)(netGalaxyReceiveBuffer, size);
-                ((ReceiveTraceFn)JournalReceiveTraceStub)(&peer, sizeof(peer));
+                JournalBytes(reinterpret_cast<char*>(netGalaxyReceiveBuffer), size);
+                JournalBytes(reinterpret_cast<char*>(&peer), sizeof(peer));
                 ProcessReceivedPacket(netGalaxyReceiveBuffer, size, packetPrefix.value, false, peer);
             }
         }

@@ -410,7 +410,7 @@ void SunFlareEffect::SunFlareList::Cleanup()
     {
         delete (SunFlare*)it;
     }
-    RemoveAll();
+    Clear();
 }
 
 // FUNCTION: SWBF2 0x0042e000

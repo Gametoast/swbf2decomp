@@ -131,7 +131,7 @@ void FileBlockCallback()
 // FUNCTION: SWBF2 0x00579020
 void LoadUtil::ProcessBin(PblFileChunk& chunk)
 {
-    while (chunk.HasMoreChildren())
+    while (!chunk.IsDone())
     {
         PblFileChunk child = chunk.ReadNextChild();
         if (child._iId == 0x454D414E)
@@ -216,7 +216,7 @@ bool LoadUtil::ReadDataFileChunk(char const* pName, PblFileChunk& chunk,
         bAllLvls = true;
     }
 
-    while (chunk.HasMoreChildren())
+    while (!chunk.IsDone())
     {
         FileBlockCallback();
         PblFileChunk child = chunk.ReadNextChild();
@@ -344,7 +344,7 @@ bool LoadUtil::ReadDataFileChunk(char const* pName, PblFileChunk& chunk,
             PropGenerator::Read(child);
             break;
         case 0x5F6C766C:
-            while (child.HasMoreChildren())
+            while (!child.IsDone())
             {
                 PblFileChunk lvl = child.ReadNextChild();
                 bool bRead = bAllLvls;
@@ -559,7 +559,7 @@ bool LoadUtil::ReadDataFile(PblFile& file, unsigned int const* puiIds, unsigned 
 // FUNCTION: SWBF2 0x00579c50
 void LoadUtil::ProcessWorld(PblFileChunk& chunk)
 {
-    while (chunk.HasMoreChildren())
+    while (!chunk.IsDone())
     {
         PblFileChunk child = chunk.ReadNextChild();
         char acName[256];
@@ -608,7 +608,7 @@ Entity* LoadUtil::ProcessEntityInfo(PblFileChunk& chunk)
     EntityClass* pClass = 0;
     char acName[128];
 
-    while (chunk.HasMoreChildren())
+    while (!chunk.IsDone())
     {
         PblFileChunk child = chunk.ReadNextChild();
         switch (child._iId)
@@ -657,7 +657,7 @@ void LoadUtil::ProcessEntity(PblFileChunk& chunk)
     Entity* pEntity = 0;
     char acValue[128];
 
-    while (chunk.HasMoreChildren())
+    while (!chunk.IsDone())
     {
         PblFileChunk child = chunk.ReadNextChild();
         switch (child._iId)
@@ -688,7 +688,7 @@ RedRegion* LoadUtil::ProcessRegionInfo(PblFileChunk& chunk)
     desc.mType = PblRegion::type_invalid;
     char acName[128];
 
-    while (chunk.HasMoreChildren())
+    while (!chunk.IsDone())
     {
         PblFileChunk child = chunk.ReadNextChild();
         switch (child._iId)
@@ -746,7 +746,7 @@ void LoadUtil::ProcessRegion(PblFileChunk& chunk)
     RedRegion* pRegion = 0;
     char acValue[128];
 
-    while (chunk.HasMoreChildren())
+    while (!chunk.IsDone())
     {
         PblFileChunk child = chunk.ReadNextChild();
         switch (child._iId)
@@ -782,7 +782,7 @@ BaseHint* ProcessHintInfo(PblFileChunk& chunk)
     unsigned int uType = 0;
     char acName[128];
 
-    while (chunk.HasMoreChildren())
+    while (!chunk.IsDone())
     {
         PblFileChunk child = chunk.ReadNextChild();
         switch (child._iId)
@@ -854,7 +854,7 @@ void LoadUtil::ProcessHint(PblFileChunk& chunk)
     BaseHint* pHint = 0;
     char acValue[128];
 
-    while (chunk.HasMoreChildren())
+    while (!chunk.IsDone())
     {
         PblFileChunk child = chunk.ReadNextChild();
         switch (child._iId)
@@ -895,7 +895,7 @@ void ProcessBarrierInfo(PblFileChunk& chunk)
     int iFlag = 0;
     char acName[128];
 
-    while (chunk.HasMoreChildren())
+    while (!chunk.IsDone())
     {
         PblFileChunk child = chunk.ReadNextChild();
         switch (child._iId)
@@ -947,7 +947,7 @@ void LoadUtil::ProcessBarrier(PblFileChunk& chunk)
 {
     char acValue[128];
 
-    while (chunk.HasMoreChildren())
+    while (!chunk.IsDone())
     {
         PblFileChunk child = chunk.ReadNextChild();
         switch (child._iId)

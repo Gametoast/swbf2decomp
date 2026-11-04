@@ -381,7 +381,7 @@ void pcInterfaceShader::_InitPipelineFuncArray()
 // FUNCTION: SWBF2 0x00702250
 void pcInterfaceShader::_Read(PblFileChunk& chunk) const
 {
-    while (chunk.HasMoreChildren())
+    while (!chunk.IsDone())
     {
         PblFileChunk child = chunk.ReadNextChild();
         if (child._iId != 0x454d414e)

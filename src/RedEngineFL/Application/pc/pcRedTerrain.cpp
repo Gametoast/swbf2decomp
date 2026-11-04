@@ -731,7 +731,7 @@ void TerrainRenderable::Read(PblFileChunk& chunk)
     unsigned int uiDefaultNumIndices = 0;
     PblBox lowResBox;
 
-    while (chunk.HasMoreChildren())
+    while (!chunk.IsDone())
     {
         PblFileChunk child = chunk.ReadNextChild();
 
@@ -754,7 +754,7 @@ void TerrainRenderable::Read(PblFileChunk& chunk)
             int iHeightShift = 0;
             Patch& patch = m_aPatches[iPatch];
 
-            while (child.HasMoreChildren())
+            while (!child.IsDone())
             {
                 PblFileChunk leaf = child.ReadNextChild();
                 switch (leaf._iId)
@@ -900,7 +900,7 @@ void TerrainRenderable::Read(PblFileChunk& chunk)
         }
         case 0x4E4D4F43:
         {
-            while (child.HasMoreChildren())
+            while (!child.IsDone())
             {
                 PblFileChunk leaf = child.ReadNextChild();
                 if (leaf._iId == 0x46554249)
@@ -913,7 +913,7 @@ void TerrainRenderable::Read(PblFileChunk& chunk)
         }
         case 0x52574F4C:
         {
-            while (child.HasMoreChildren())
+            while (!child.IsDone())
             {
                 PblFileChunk sub = child.ReadNextChild();
                 if (sub._iId == 0x4F464E49)
@@ -938,7 +938,7 @@ void TerrainRenderable::Read(PblFileChunk& chunk)
                     unsigned int uiSharedStartIndex = 0;
                     unsigned int uiSharedNumIndices = 0;
                     LowResPatch* pLowRes = m_aLowResPatches;
-                    while (sub.HasMoreChildren())
+                    while (!sub.IsDone())
                     {
                         PblFileChunk lp = sub.ReadNextChild();
                         if (lp._iId == 0x4354504C)
@@ -950,7 +950,7 @@ void TerrainRenderable::Read(PblFileChunk& chunk)
                             unsigned int uiStartIndex = 0;
                             pcRedVertexBuffer* pVB = 0;
                             unsigned int uiNumIndices = 0;
-                            while (lp.HasMoreChildren())
+                            while (!lp.IsDone())
                             {
                                 PblFileChunk leaf = lp.ReadNextChild();
                                 switch (leaf._iId)
@@ -1024,7 +1024,7 @@ void TerrainRenderable::Read(PblFileChunk& chunk)
                         }
                         else if (lp._iId == 0x4E4D4F43)
                         {
-                            while (lp.HasMoreChildren())
+                            while (!lp.IsDone())
                             {
                                 PblFileChunk leaf = lp.ReadNextChild();
                                 if (leaf._iId == 0x46554249)

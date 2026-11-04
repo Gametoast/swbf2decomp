@@ -176,7 +176,7 @@ bool StreamBase::LoadSegments(PblFileChunk& chunk, Segment* pSegments,
     unsigned int uiOffset = 0;
     unsigned int uiRemaining = uiNumSegments;
 
-    while (chunk.HasMoreChildren())
+    while (!chunk.IsDone())
     {
         if (!uiRemaining)
         {
@@ -195,7 +195,7 @@ bool StreamBase::LoadSegments(PblFileChunk& chunk, Segment* pSegments,
             bool bAlias = false;
             unsigned int uiAliasOffset = 0;
 
-            while (chunk.HasMoreChildren() && bContinue)
+            while (!chunk.IsDone() && bContinue)
             {
                 switch ((unsigned int)chunk._pFile->Read32())
                 {
@@ -269,7 +269,7 @@ bool StreamBase::Open(PblFileChunk& chunk, unsigned int uiHashID, const char* pc
     Info* pInfo = 0;
     bool bNewInfo = true;
 
-    while (chunk.HasMoreChildren())
+    while (!chunk.IsDone())
     {
         PblFileChunk child = chunk.ReadNextChild();
         switch (child._iId)
@@ -294,7 +294,7 @@ bool StreamBase::Open(PblFileChunk& chunk, unsigned int uiHashID, const char* pc
             unsigned int uiFormat = 0;
             bInfo = true;
 
-            while (child.HasMoreChildren() && bContinue)
+            while (!child.IsDone() && bContinue)
             {
                 switch ((unsigned int)child._pFile->Read32())
                 {

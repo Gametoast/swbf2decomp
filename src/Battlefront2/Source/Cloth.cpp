@@ -111,7 +111,7 @@ void ClothData::Init()
 void ClothData::_Read(PblFileChunk& chunk)
 {
     m_uiNumCollisionVolumes = 0;
-    while (chunk.HasMoreChildren())
+    while (!chunk.IsDone())
     {
         PblFileChunk child = chunk.ReadNextChild();
         char acString[128];
@@ -470,12 +470,6 @@ EntityClothClass::~EntityClothClass()
 {
 }
 
-static const PblVector3 RotateY(const PblVector3& v, float fAngle)
-{
-    float fSin, fCos;
-    PblMath::SinCos(&fSin, &fCos, fAngle);
-    return PblVector3(fCos * v.x - fSin * v.z, v.y, fSin * v.x + fCos * v.z);
-}
 
 // FUNCTION: SWBF2 0x00459b90
 void EntityClothClass::SetProperty(unsigned int uProperty, const char* pszValue)

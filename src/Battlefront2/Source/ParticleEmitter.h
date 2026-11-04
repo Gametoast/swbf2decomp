@@ -152,3 +152,10 @@ public:
  
  
  
+
+    // FUNCTION: SWBF2 0x0060b990
+    // ParticleEmitter::ScaleMultiply
+    // FUNCTION: SWBF2 0x0060b9e0
+    // ParticleEmitter::SetInheritVelocityFactor
+    // FUNCTION: SWBF2 0x0060b9c0
+    // ParticleEmitter::ScaleSet

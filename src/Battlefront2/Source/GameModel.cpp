@@ -109,7 +109,7 @@ bool GameModel::_Read(PblFileChunk& chunk)
     char acName[256];
     char acModel[256];
 
-    while (chunk.HasMoreChildren())
+    while (!chunk.IsDone())
     {
         PblFileChunk child = chunk.ReadNextChild();
         switch (child._iId)

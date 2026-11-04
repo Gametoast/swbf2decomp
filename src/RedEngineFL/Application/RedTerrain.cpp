@@ -465,7 +465,7 @@ void RedTerrain::Read(PblFileChunk& chunk)
         _uiLayerTextureRotation[i] = 0;
     }
 
-    while (chunk.HasMoreChildren())
+    while (!chunk.IsDone())
     {
         PblFileChunk child = chunk.ReadNextChild();
         PblFile* pFile = child._pFile;
@@ -675,7 +675,7 @@ void RedTerrain::Read(PblFileChunk& chunk)
             break;
 
         case 0x53545543:
-            while (child.HasMoreChildren())
+            while (!child.IsDone())
             {
                 PblFileChunk cut = child.ReadNextChild();
                 if (cut._iId == 0x4F464E49)
@@ -689,7 +689,7 @@ void RedTerrain::Read(PblFileChunk& chunk)
                     mTerrainBytesUsed += sizeof(Hole);
                     RedSetCurrentHeap(iOldHeap);
 
-                    while (cut.HasMoreChildren())
+                    while (!cut.IsDone())
                     {
                         PblFileChunk part = cut.ReadNextChild();
                         PblFile* pPartFile = part._pFile;
@@ -813,13 +813,13 @@ float RedTerrain::_RayHit(const PblVector3& vStart, const PblVector3& vEnd, floa
 void RedTerrain::Reset()
 {
     _bEnable = false;
-    _HoleList.RemoveAll();
+    _HoleList.Clear();
     mTerrainBytesUsed = 0;
 }
 
 // TEMPLATE: SWBF2 0x006c1650
-// PblList<RedTerrain::Hole>::RemoveAll
-template void PblList<RedTerrain::Hole>::RemoveAll();
+// PblList<RedTerrain::Hole>::Clear
+template void PblList<RedTerrain::Hole>::Clear();
 
 // FUNCTION: SWBF2 0x004108f0
 int RedTerrain::GetHeightUnscaled(int iX, int iZ)

@@ -479,7 +479,7 @@ void CollisionMesh::_Read(PblFileChunk& chunk)
     int iNumLeafs = -1;
     int iNumIndices = -1;
     mPoslCount = 0;
-    while (chunk.HasMoreChildren())
+    while (!chunk.IsDone())
     {
         PblFileChunk child = chunk.ReadNextChild();
         switch (child._iId)

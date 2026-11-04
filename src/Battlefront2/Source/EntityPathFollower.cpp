@@ -140,12 +140,12 @@ PblList<EntityPathFollower> EntityPathFollower::sList;
 // FUNCTION: SWBF2 0x004d78f0
 void EntityPathFollower::ClearList()
 {
-    sList.RemoveAll();
+    sList.Clear();
 }
 
 // TEMPLATE: SWBF2 0x004d7b40
-// PblList<EntityPathFollower>::RemoveAll
-template void PblList<EntityPathFollower>::RemoveAll();
+// PblList<EntityPathFollower>::Clear
+template void PblList<EntityPathFollower>::Clear();
 
 // FUNCTION: SWBF2 0x004d2710
 EntityPathFollower::BranchParams::BranchParams(const EntityPathFollowerClass* pPathClass, PblMatrix& matrix,

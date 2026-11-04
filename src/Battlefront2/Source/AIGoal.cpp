@@ -77,7 +77,7 @@ AI::AIGoal::AIGoal(AIGoalType eType, unsigned char uTeam, float fWeight)
 // FUNCTION: SWBF2 0x00439d50
 AI::AIGoal::~AIGoal()
 {
-    mUnitList.RemoveAll();
+    mUnitList.Clear();
 }
 
 // FUNCTION: SWBF2 0x00439d60
@@ -92,7 +92,7 @@ void AI::AIGoal::UnAssignAll()
             pController->ForceCommand(cmd);
         }
     }
-    mUnitList.RemoveAll();
+    mUnitList.Clear();
 }
 
 // FUNCTION: SWBF2 0x00439e80

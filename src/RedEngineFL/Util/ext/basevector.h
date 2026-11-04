@@ -191,3 +191,6 @@ private:
 };
 
 }
+
+// TEMPLATE: SWBF2 0x0062b810
+// util::Vector<float,util::BaseArray<float,util::TNewArrayAlloc<float> > >::SetSize_

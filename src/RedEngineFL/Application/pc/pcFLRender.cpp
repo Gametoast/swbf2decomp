@@ -506,8 +506,8 @@ inline void pcShadowQuadRenderable::Create()
 
 inline void ReflectionRegion::Init()
 {
-    s_VisibleList.RemoveAll();
-    s_List.RemoveAll();
+    s_VisibleList.Clear();
+    s_List.Clear();
 }
 
 inline void pcShadowQuadRenderable::Destroy()
@@ -519,8 +519,8 @@ inline void pcShadowQuadRenderable::Destroy()
 
 inline void ReflectionRegion::Cleanup()
 {
-    s_VisibleList.RemoveAll();
-    s_List.RemoveAll();
+    s_VisibleList.Clear();
+    s_List.Clear();
 }
 
 // FUNCTION: SWBF2 0x006bbc20
@@ -667,7 +667,7 @@ void FLRenderer::SetTransitionOverlayRect(int iView, float fX0, float fY0, float
 // FUNCTION: SWBF2 0x006bf320
 void ReflectionRegion::UpdateAllVisibility(const RedCamera* pCamera)
 {
-    s_VisibleList.RemoveAll();
+    s_VisibleList.Clear();
     if (!pCamera)
     {
         return;
@@ -902,8 +902,8 @@ void FLRenderer::CaptureFrame(unsigned int uiView)
 }
 
 // TEMPLATE: SWBF2 0x006bbe40
-// PblList<ReflectionRegion>::RemoveAll
-template void PblList<ReflectionRegion>::RemoveAll();
+// PblList<ReflectionRegion>::Clear
+template void PblList<ReflectionRegion>::Clear();
 
 // FUNCTION: SWBF2 0x006bbe80
 bool ClipLoopToFrustumPlanes(PblVector3* pOut, int& nOut, const PblVector3* pIn,

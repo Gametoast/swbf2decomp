@@ -1711,7 +1711,7 @@ void RedWater::PlatformReadConfigData(PblConfig::Data& data)
 // FUNCTION: SWBF2 0x0071fd70
 void* RedWater::PlatformReadCustomPatch(PblFileChunk* pChunk)
 {
-    if (!pChunk->HasMoreChildren())
+    if (pChunk->IsDone())
     {
         return 0;
     }
@@ -1728,7 +1728,7 @@ void* RedWater::PlatformReadCustomPatch(PblFileChunk* pChunk)
         unsigned int uiStartIndex = 0;
         unsigned int uiNumIndices = 0;
 
-        while (patch.HasMoreChildren())
+        while (!patch.IsDone())
         {
             PblFileChunk child = patch.ReadNextChild();
             switch (child._iId)

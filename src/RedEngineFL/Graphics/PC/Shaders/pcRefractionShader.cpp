@@ -906,7 +906,7 @@ void pcRefractionShader::_InitPipelineFuncArray()
 // FUNCTION: SWBF2 0x0070edd0
 void pcRefractionShader::_Read(PblFileChunk& chunk) const
 {
-    while (chunk.HasMoreChildren())
+    while (!chunk.IsDone())
     {
         PblFileChunk child = chunk.ReadNextChild();
         if (child._iId != 0x454d414e)

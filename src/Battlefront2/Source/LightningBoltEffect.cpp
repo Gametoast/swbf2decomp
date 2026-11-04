@@ -222,7 +222,7 @@ LightningBoltEffectClass::LightningBoltEffectClass(PblConfig& config)
 // FUNCTION: SWBF2 0x00571540
 LightningBoltEffectClass::~LightningBoltEffectClass()
 {
-    mObjects.RemoveAll();
+    mObjects.Clear();
     mNode.GetList()->Remove(&mNode);
 }
 
@@ -510,5 +510,5 @@ void LightningBoltEffectObject::SetStrength(float fStrength)
 }
 
 // TEMPLATE: SWBF2 0x005727e0
-// PblList<LightningBoltEffectObject>::RemoveAll
-template void PblList<LightningBoltEffectObject>::RemoveAll();
+// PblList<LightningBoltEffectObject>::Clear
+template void PblList<LightningBoltEffectObject>::Clear();

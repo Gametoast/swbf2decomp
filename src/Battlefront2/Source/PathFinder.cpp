@@ -696,10 +696,10 @@ bool PathFinder::FindClosestObstacleIntersection(const PblVector3& rSrc, const P
                    (rSrc.z < rDest.z ? rSrc.z : rDest.z) - fRadius);
     PblVector3 max((rSrc.x > rDest.x ? rSrc.x : rDest.x) + fRadius, FLT_MAX,
                    (rSrc.z > rDest.z ? rSrc.z : rDest.z) + fRadius);
+    // GLOBAL: SWBF2 0x01faac10
     static ObstacleData data;
     data.mLength = 0;
     sObstacles->CallbackOnRect(min, max, GenerateObstacleListCallback, &data);
-
     ObstacleTest test(rSrc, rDest);
     PblVector3 normal;
 

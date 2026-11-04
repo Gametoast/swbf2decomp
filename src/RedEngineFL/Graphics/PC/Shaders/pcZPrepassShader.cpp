@@ -298,7 +298,7 @@ void pcZPrepassShader::_InitPipelineFuncArray()
 // FUNCTION: SWBF2 0x00702c50
 void pcZPrepassShader::_Read(PblFileChunk& chunk) const
 {
-    while (chunk.HasMoreChildren())
+    while (!chunk.IsDone())
     {
         PblFileChunk child = chunk.ReadNextChild();
         if (child._iId != 0x454d414e)

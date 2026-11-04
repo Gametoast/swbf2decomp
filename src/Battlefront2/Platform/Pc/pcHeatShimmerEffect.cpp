@@ -142,6 +142,7 @@ void HeatShimmerEffect::PlatformRender(unsigned int) const
 
     const RedCamera* pCamera = RedRenderer::GetCamera();
     const PblMatrix& cameraMatrix = pCamera->GetMatrix();
+    // GLOBAL: SWBF2 0x01faa76c
     static const PblVector3 vUp(0.0f, 1.0f, 0.0f);
     float fAngle;
     if (cameraMatrix[0] == vUp)
@@ -152,7 +153,6 @@ void HeatShimmerEffect::PlatformRender(unsigned int) const
     {
         fAngle = PblMath::Atan2(cameraMatrix.m[0][2], cameraMatrix.m[0][0]);
     }
-
     float fNear, fFar, fWidth, fHeight;
     pCamera->GetFrustum(fNear, fFar, fWidth, fHeight);
     PblVector3 vForward(cameraMatrix.m[2][0], 0.0f, cameraMatrix.m[2][2]);

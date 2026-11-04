@@ -438,12 +438,12 @@ void RedWater::Cleanup()
         delete[] m_patchCache;
         m_patchCache = 0;
     }
-    m_CustomPatches.RemoveAll();
+    m_CustomPatches.Clear();
 }
 
 // TEMPLATE: SWBF2 0x006ce840
-// PblList<RedWater::WaterCustomPatch>::RemoveAll
-template void PblList<RedWater::WaterCustomPatch>::RemoveAll();
+// PblList<RedWater::WaterCustomPatch>::Clear
+template void PblList<RedWater::WaterCustomPatch>::Clear();
 
 // FUNCTION: SWBF2 0x006ce880
 void RedWater::GetVisibleExtents(const RedCamera* pCamera, int& iMinX, int& iMinZ, int& iMaxX,
@@ -549,7 +549,7 @@ void RedWater::Init()
     RedWater::m_bSetSpecularDirection = false;
     RedWater::m_oscillationEnable = true;
     RedWater::m_specularEnable = false;
-    m_CustomPatches.RemoveAll();
+    m_CustomPatches.Clear();
     PlatformPreReadInit();
 }
 
@@ -847,7 +847,7 @@ float RedWater::RayHit(const PblVector3& vStart, const PblVector3& vDir, float f
 void RedWater::Read(PblFileChunk& chunk)
 {
     bool bReadLayer = false;
-    while (chunk.HasMoreChildren())
+    while (!chunk.IsDone())
     {
         PblFileChunk child = chunk.ReadNextChild();
         switch (child._iId)

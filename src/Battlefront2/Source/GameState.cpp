@@ -1402,22 +1402,22 @@ void GameState::JournalStartTimes()
 }
 
 // TEMPLATE: SWBF2 0x0053be20
-// PblList<LuaEvent>::RemoveAll
+// PblList<LuaEvent>::Clear
 
 // TEMPLATE: SWBF2 0x0053be60
-// PblList<IFScreen>::RemoveAll
+// PblList<IFScreen>::Clear
 
 // TEMPLATE: SWBF2 0x0053beb0
-// PblList<Factory<Entity,EntityClass,EntityDesc> >::RemoveAll
+// PblList<Factory<Entity,EntityClass,EntityDesc> >::Clear
 
 // TEMPLATE: SWBF2 0x0053bf00
-// PblList<Factory<Ordnance,OrdnanceClass,OrdnanceDesc> >::RemoveAll
+// PblList<Factory<Ordnance,OrdnanceClass,OrdnanceDesc> >::Clear
 
 // TEMPLATE: SWBF2 0x0053bf50
-// PblList<Factory<Weapon,WeaponClass,WeaponDesc> >::RemoveAll
+// PblList<Factory<Weapon,WeaponClass,WeaponDesc> >::Clear
 
 // TEMPLATE: SWBF2 0x0053bfa0
-// PblList<Factory<Ordnance,ExplosionClass,OrdnanceDesc> >::RemoveAll
+// PblList<Factory<Ordnance,ExplosionClass,OrdnanceDesc> >::Clear
 
 // FUNCTION: SWBF2 0x0053b640
 void GameState::PostStateCleanup(bool bMission)

@@ -823,7 +823,7 @@ static int OpenAudioStream(const char* pcName, unsigned int uiSegment)
     if (strlen(acSegment))
     {
         const unsigned int uID = PblHash(acSegment);
-        while (chunk.HasMoreChildren())
+        while (!chunk.IsDone())
         {
             child = chunk.ReadNextChild();
             if (child._iId == uID)

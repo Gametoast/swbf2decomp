@@ -818,12 +818,12 @@ unsigned int LoadDisplay::LoadRandomLVLChunk(const char* pcFileName, IDDatabase&
 
     PblFileChunk chunk(&file);
     const unsigned int uiParent = PblHash(pcFileName);
-    while (chunk.HasMoreChildren())
+    while (!chunk.IsDone())
     {
         PblFileChunk child = chunk.ReadNextChild();
         if (child._iId == 0x5f6c766c)
         {
-            while (child.HasMoreChildren())
+            while (!child.IsDone())
             {
                 PblFileChunk lvl = child.ReadNextChild();
                 database.AddID(uiParent, lvl._iId);
@@ -835,12 +835,12 @@ unsigned int LoadDisplay::LoadRandomLVLChunk(const char* pcFileName, IDDatabase&
     PblFileChunk root(&file);
     const unsigned int uiRandomID = database.GetRandomID();
     unsigned int uiHash = 0;
-    while (root.HasMoreChildren())
+    while (!root.IsDone())
     {
         PblFileChunk child = root.ReadNextChild();
         if (child._iId == 0x5f6c766c)
         {
-            while (child.HasMoreChildren())
+            while (!child.IsDone())
             {
                 PblFileChunk lvl = child.ReadNextChild();
                 if (lvl._iId == uiRandomID)
@@ -874,7 +874,7 @@ void LoadDisplay::LoadDataFile(const char* pcFileName)
 // FUNCTION: SWBF2 0x005776e0
 void LoadDisplay::LoadDataChunk(PblFileChunk& chunk)
 {
-    while (chunk.HasMoreChildren())
+    while (!chunk.IsDone())
     {
         PblFileChunk child = chunk.ReadNextChild();
         switch (child._iId)

@@ -161,7 +161,7 @@ __declspec(noinline) Bus* Bus::FindByHashID(unsigned int uiHashID)
 // FUNCTION: SWBF2 0x00731000
 void Bus::Read(PblFileChunk& chunk)
 {
-    while (chunk.HasMoreChildren())
+    while (!chunk.IsDone())
     {
         PblFileChunk child = chunk.ReadNextChild();
         switch ((unsigned int)child._pFile->Read32())
@@ -226,7 +226,7 @@ void Bus::Read(PblFileChunk& chunk)
 // FUNCTION: SWBF2 0x00730eb0
 void __cdecl Bus::Load(PblFileChunk& chunk, bool bOnce)
 {
-    while (chunk.HasMoreChildren())
+    while (!chunk.IsDone())
     {
         PblFileChunk child = chunk.ReadNextChild();
         if (child._iId != 0x41544144u)

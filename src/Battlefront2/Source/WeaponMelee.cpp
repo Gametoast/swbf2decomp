@@ -1785,15 +1785,7 @@ void WeaponMeleeClass::_InitDeflectMatrices(int eMap)
     }
 
     unsigned int uiCount = pDeflect->m_uiNumDeflectAnimations;
-    unsigned int uiSize = uiCount > 0x03ffffffu ? 0xffffffffu : uiCount * sizeof(PblMatrix);
-    char* pRaw = uiSize > 0xffffffefu ? 0 : new char[uiSize + 16];
-    if (pRaw)
-    {
-        unsigned char uiOffset = 16 - (reinterpret_cast<unsigned int>(pRaw) & 15);
-        pRaw += uiOffset;
-        pRaw[-1] = uiOffset;
-    }
-    m_amDeflectMatrix = reinterpret_cast<PblMatrix*>(pRaw);
+    m_amDeflectMatrix = new PblMatrix[uiCount];
     for (unsigned int i = 0; i < uiCount; ++i)
     {
         const Combo::Deflect::DEFLECT_ANIM& anim = pDeflect->m_aDeflectAnim[i];
@@ -3101,11 +3093,7 @@ WeaponMeleeClass::~WeaponMeleeClass()
 {
     delete[] m_aDamageEdge;
     m_aDamageEdge = 0;
-    if (m_amDeflectMatrix)
-    {
-        unsigned char* pAligned = reinterpret_cast<unsigned char*>(m_amDeflectMatrix);
-        delete[] (pAligned - pAligned[-1]);
-    }
+    delete[] m_amDeflectMatrix;
     m_amDeflectMatrix = 0;
 }
 

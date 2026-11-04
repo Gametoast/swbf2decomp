@@ -463,14 +463,14 @@ bool FlagItem::AddToTeamManager() const
 // FUNCTION: SWBF2 0x00524090
 void FlagItem::Reset()
 {
-    sHostList.RemoveAll();
-    sClientList.RemoveAll();
+    sHostList.Clear();
+    sClientList.Clear();
     sFlagGameplayType = (FlagGameplayType)0;
 }
 
 // TEMPLATE: SWBF2 0x00525bf0
-// PblList<FlagItem>::RemoveAll
-template void PblList<FlagItem>::RemoveAll();
+// PblList<FlagItem>::Clear
+template void PblList<FlagItem>::Clear();
 
 // FUNCTION: SWBF2 0x00524460
 void FlagItem::Create()

@@ -87,14 +87,8 @@ RedSkeleton::~RedSkeleton()
     {
         _HashTable.Remove(m_uiNameHash);
     }
-    if (m_amDefaultPose)
-    {
-        delete[] ((char*)m_amDefaultPose - ((unsigned char*)m_amDefaultPose)[-1]);
-    }
-    if (m_amDefaultPoseInv)
-    {
-        delete[] ((char*)m_amDefaultPoseInv - ((unsigned char*)m_amDefaultPoseInv)[-1]);
-    }
+    delete[] m_amDefaultPose;
+    delete[] m_amDefaultPoseInv;
     delete[] m_aConnections;
     delete[] m_auiNameHash;
 }
@@ -519,7 +513,7 @@ void RedModel::_Read(PblFileChunk& chunk)
     _uiFlags = 0;
     _iNumSegments = 0;
     _pSkeleton = RedSkeleton::s_pCurrentSkeleton;
-    while (chunk.HasMoreChildren())
+    while (!chunk.IsDone())
     {
         PblFileChunk child = chunk.ReadNextChild();
         switch (child._iId)

@@ -793,7 +793,7 @@ void RedStencilShadow::Read(PblFileChunk& chunk)
     unsigned char* puiBoneIndexMap = 0;
     ShadowSegment* pSegment = new ShadowSegment;
     const RenderCapsT& caps = RedRenderer::pcGetRenderCaps();
-    while (chunk.HasMoreChildren())
+    while (!chunk.IsDone())
     {
         PblFileChunk child = chunk.ReadNextChild();
         switch (child._iId)
@@ -851,7 +851,7 @@ void ShadowData::Read(PblFileChunk& chunk)
     PblBox box(FLT_MAX, FLT_MAX, FLT_MAX, -FLT_MAX, -FLT_MAX, -FLT_MAX);
 
     PblTraceP("Model has shadow data\n");
-    while (chunk.HasMoreChildren())
+    while (!chunk.IsDone())
     {
         PblFileChunk child = chunk.ReadNextChild();
         switch (child._iId)
@@ -982,7 +982,7 @@ void RedStencilShadow::ReadCPUShadowData(PblFileChunk& chunk, ShadowSegment* pSe
     unsigned int uiFlags = 0;
     ShadowData* pShadowData = 0;
     int iSkinType = 0;
-    while (chunk.HasMoreChildren())
+    while (!chunk.IsDone())
     {
         PblFileChunk child = chunk.ReadNextChild();
         switch (child._iId)
@@ -1018,7 +1018,7 @@ void RedStencilShadow::ReadGPUShadowData(PblFileChunk& chunk, ShadowSegment* pSe
     pcRedIndexBuffer* pIndexBuffer = 0;
     int iSkinType = 0;
     int iNormalMode = 0;
-    while (chunk.HasMoreChildren())
+    while (!chunk.IsDone())
     {
         PblFileChunk child = chunk.ReadNextChild();
         switch (child._iId)

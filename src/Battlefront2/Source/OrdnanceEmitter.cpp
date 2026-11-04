@@ -366,12 +366,6 @@ OrdnanceClass* OrdnanceEmitterClass::Derive(unsigned int uHash)
     return new OrdnanceEmitterClass(this, uHash);
 }
 
-static inline const PblVector3 RotateY(const PblVector3& v, float fAngle)
-{
-    float fSin, fCos;
-    PblMath::SinCos(&fSin, &fCos, fAngle);
-    return PblVector3(fCos * v.x - fSin * v.z, v.y, fSin * v.x + fCos * v.z);
-}
 
 static inline const PblVector3 RotateZ(const PblVector3& v, float fAngle)
 {

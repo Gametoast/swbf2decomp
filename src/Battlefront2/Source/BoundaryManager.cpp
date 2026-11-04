@@ -91,7 +91,7 @@ BoundaryManager::~BoundaryManager()
 // FUNCTION: SWBF2 0x0044dfc0
 void BoundaryManager::Read(PblFileChunk& chunk)
 {
-    while (chunk.HasMoreChildren())
+    while (!chunk.IsDone())
     {
         PblFileChunk data = chunk.ReadNextChild();
         const unsigned int uHash = data._pFile->Read32();
@@ -100,7 +100,7 @@ void BoundaryManager::Read(PblFileChunk& chunk)
         if (uHash == 0x54eacca7)
         {
             PblFileChunk scope = chunk.ReadNextChild();
-            while (scope.HasMoreChildren())
+            while (!scope.IsDone())
             {
 
                 data = scope.ReadNextChild();

@@ -307,7 +307,7 @@ void Space::ConnectSpace(Space* const pSpace, float fGainFactor)
 // FUNCTION: SWBF2 0x00733a90
 void Space::Read(PblFileChunk& chunk)
 {
-    while (chunk.HasMoreChildren())
+    while (!chunk.IsDone())
     {
         PblFileChunk child = chunk.ReadNextChild();
         const unsigned int uiID = child._pFile->Read32();
@@ -328,7 +328,7 @@ void Space::Read(PblFileChunk& chunk)
         case 0x148F0D58u:
         {
             PblFileChunk list = chunk.ReadNextChild();
-            while (list.HasMoreChildren())
+            while (!list.IsDone())
             {
                 PblFileChunk entry = list.ReadNextChild();
                 if (entry._pFile->Read32() != 0x3553E285u)
@@ -357,7 +357,7 @@ void Space::Read(PblFileChunk& chunk)
 // FUNCTION: SWBF2 0x00733920
 void __cdecl Space::Load(PblFileChunk& chunk, bool bOnce)
 {
-    while (chunk.HasMoreChildren())
+    while (!chunk.IsDone())
     {
         PblFileChunk child = chunk.ReadNextChild();
         if (child._iId != 0x41544144u)

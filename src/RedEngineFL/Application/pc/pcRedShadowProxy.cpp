@@ -189,5 +189,5 @@ void RedShadowProxy::CleanUp()
 // FUNCTION: SWBF2 0x006edd00
 void RedShadowProxy::Reset()
 {
-    _sShadowItemsList.RemoveAll();
+    _sShadowItemsList.Clear();
 }

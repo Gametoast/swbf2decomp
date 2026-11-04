@@ -613,10 +613,10 @@ CollisionManager::CollisionManager(const PblVector3& vMin, const PblVector3& vMa
 
 
 // TEMPLATE: SWBF2 0x00460960
-// PblList<CollisionObject>::RemoveAll
+// PblList<CollisionObject>::Clear
 
 // TEMPLATE: SWBF2 0x004609a0
-// PblList<Ordnance>::RemoveAll
+// PblList<Ordnance>::Clear
 
 // FUNCTION: SWBF2 0x0045e750
 CollisionManager::~CollisionManager()
@@ -624,15 +624,15 @@ CollisionManager::~CollisionManager()
     mOrdnanceUpdate.DeactivateThread();
     DeactivateThread();
     delete mTreeGrid;
-    mOrdnance.RemoveAll();
-    mItemBodies.RemoveAll();
-    mSoftBodies.RemoveAll();
-    mRigidBodies.RemoveAll();
-    mAsteroidBodies.RemoveAll();
-    mStaticBodies.RemoveAll();
-    mAttachedBodies.RemoveAll();
-    mLeafPatchBodies.RemoveAll();
-    mShieldBodies.RemoveAll();
+    mOrdnance.Clear();
+    mItemBodies.Clear();
+    mSoftBodies.Clear();
+    mRigidBodies.Clear();
+    mAsteroidBodies.Clear();
+    mStaticBodies.Clear();
+    mAttachedBodies.Clear();
+    mLeafPatchBodies.Clear();
+    mShieldBodies.Clear();
 }
 
 // FUNCTION: SWBF2 0x0045e830

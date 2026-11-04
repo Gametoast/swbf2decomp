@@ -367,7 +367,7 @@ void WeaponClass::Read(PblFileChunk& chunk)
     WeaponClass* pCharge = 0;
     WeaponClass* pClass = 0;
 
-    while (chunk.HasMoreChildren())
+    while (!chunk.IsDone())
     {
         PblFileChunk child = chunk.ReadNextChild();
         switch (child._iId)
