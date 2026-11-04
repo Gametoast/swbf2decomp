@@ -40,6 +40,8 @@ public:
 
     static void AddAllocPool(int iBytes, int iIndices);
 
+    bool IsLeaf() { return isleaf != 0; }
+
     static char* memblock;
     static unsigned int membytes;
     static unsigned int memtotal;
@@ -93,6 +95,9 @@ public:
     }
 
     void Init(const CollisionAABB& parent, const CompressedAABB& compressed);
+
+    void SetMin(const PblVector3& value) { boxmin = value; }
+    void SetMax(const PblVector3& value) { boxmax = value; }
 
     PblVector3 GetMin() const { return boxmin; }
     PblVector3 GetMax() const { return boxmax; }
@@ -181,7 +186,7 @@ class CollisionMeshCache
 public:
     PblVector3 mInitialPos;
     PblVector3 lastPos;
-    CollisionMesh* mMesh;
+    const CollisionMesh* mMesh;
     float aClosest;
     unsigned char mNumPolys;
     CollisionTreeLeaf* mPolys[70];
@@ -258,3 +263,16 @@ public:
     PblVector3 mVertices[3 * N];
 };
  
+
+
+template <class T, int N>
+struct StackArray
+{
+    int align;
+    char buffer[sizeof(T) * N];
+
+    T* GetPtr()
+    {
+        return reinterpret_cast<T*>(&align);
+    }
+};

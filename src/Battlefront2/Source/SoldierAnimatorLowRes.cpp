@@ -93,13 +93,13 @@ void SoldierAnimatorLowResClass::Create()
 
 namespace
 {
-inline ZephyrAnim* FindBankAnimation(const RedAnimation* pAnimation, unsigned int uiHash)
+inline const ZephyrAnim* FindBankAnimation(const RedAnimation* pAnimation, unsigned int uiHash)
 {
     if (!pAnimation->_pZephyrAnimBank)
     {
         return NULL;
     }
-    return const_cast<ZephyrAnim*>(pAnimation->_pZephyrAnimBank->Find(uiHash));
+    return pAnimation->_pZephyrAnimBank->Find(uiHash);
 }
 
 
@@ -232,9 +232,9 @@ void SoldierAnimatorLowResClass::PostLoad()
         for (int iPool = 0; iPool < NUM_BASE_ANIMPOOLS; ++iPool)
         {
             const AnimPoolClass* pPoolClass = &s_AnimPoolClasses[iPool];
-            ZephyrAnim** apZephyrAnim = new ZephyrAnim*[pPoolClass->m_iNumAnims];
+            const ZephyrAnim** apZephyrAnim = new const ZephyrAnim*[pPoolClass->m_iNumAnims];
 
-            ZephyrAnim** apParentAnim;
+            const ZephyrAnim** apParentAnim;
             if (!pClass->m_pParent)
             {
                 apParentAnim = NULL;
@@ -474,9 +474,9 @@ void SoldierAnimatorLowResClass::PostLoad()
                 kPoseClass.m_iFrame = aHighResPoseClass[j].uiFrame + 1;
                 pPose->eMap = aHighResPoseClass[j].eMap;
                 pPose->uiAnimIndex = aHighResPoseClass[j].uiAnimIndex;
-                pPose->m_pZephyrAnim = const_cast<ZephyrAnim*>(
+                pPose->m_pZephyrAnim =
                     SoldierAnimatorClass::Instance()->GetUpperBodyAnimation(pPose->eMap, pPose->uiAnimIndex)
-                        ->GetAnimation());
+                        ->GetAnimation();
                 pPose->m_pAnimator = new SoldierAnimatorLowRes;
                 pPose->m_pAnimator->Initialize(pHighResSkeleton, kMask, &kPoseClass, pPose,
                                                (POSE)(POSE_HIGHRES + j));
@@ -574,7 +574,7 @@ SoldierAnimatorLowRes* SoldierAnimatorLowResClass::GetAnimator(const EntitySoldi
 SoldierAnimatorLowResClass::SoldierAnimatorLowResClass(const char* pcName,
                                                        const SoldierAnimatorLowResClass* pParent)
     : m_pNext(NULL),
-      m_pParent(const_cast<SoldierAnimatorLowResClass*>(pParent)),
+      m_pParent(pParent),
       m_aPose(NULL),
       m_pHighResAnimPool(NULL),
       m_aHighResPose(NULL),
@@ -989,30 +989,24 @@ bool SoldierAnimatorLowRes::GetRootMatrixAnimation(const EntitySoldier& soldier,
     case SoldierState::TUMBLE:
     {
         const PblVector3& vVelocity = soldier.GetVelocity();
-        const PblMatrix& kSoldier = soldier.GetMatrix();
-        float fFront = DotProduct(vVelocity, kSoldier.GetZAxis());
-        float fRight = DotProduct(vVelocity, kSoldier.GetXAxis());
-
-        float fSpeed = 0.0f;
-        PblVector3 vAxis;
-        const PblVector3 vSpin(fFront, 0.0f, -fRight);
-        float fSpeedSq = fRight * fRight + fFront * fFront;
-        if (fSpeedSq > 0.0001f)
+        const PblMatrix& mOwner = soldier.GetMatrix();
+        float fVelZ = DotProduct(vVelocity, mOwner.GetZAxis());
+        float fVelX = DotProduct(vVelocity, mOwner.GetXAxis());
+        PblVector3 vDir(fVelZ, 0.0f, -fVelX);
+        float fVelSqr = fVelX * fVelX + fVelZ * fVelZ;
+        float fVel;
+        if (fVelSqr > 0.0001f)
         {
-            fSpeed = sqrtf(fSpeedSq);
-            float fInvSpeed = 1.0f / fSpeed;
-            vAxis.x = vSpin.x * fInvSpeed;
-            vAxis.y = vSpin.y * fInvSpeed;
-            vAxis.z = vSpin.z * fInvSpeed;
+            fVel = sqrtf(fVelSqr);
+            vDir /= fVel;
         }
         else
         {
-            vAxis = gVectorUnitX;
+            vDir = gVectorUnitX;
+            fVel = 0.0f;
         }
 
-        float fSpin = Clamp(fSpeed * 2.0f, 2.0f, 6.0f);
-
-        D3DXMatrixRotationAxis(reinterpret_cast<D3DXMATRIX*>(&kMatrix), reinterpret_cast<const D3DXVECTOR3*>(&vAxis), soldier.mStateTimer * fSpin);
+        kMatrix.SetRotateArbitraryAxis(soldier.mStateTimer * Clamp(fVel * 2.0f, 2.0f, 6.0f), vDir);
         kMatrix.m[3][0] = 0.0f;
         kMatrix.m[3][1] = 0.0f;
         kMatrix.m[3][3] = 1.0f;
@@ -1033,18 +1027,14 @@ bool SoldierAnimatorLowRes::GetRootMatrixAnimation(const EntitySoldier& soldier,
         static PblVector3 s_vRollCenter(0.0f, 0.5f, 0.0f);
 
         const PblVector3& vVelocity = soldier.GetVelocity();
-        const PblMatrix& kSoldier = soldier.GetMatrix();
-        const float fRight = DotProduct(vVelocity, kSoldier.GetXAxis());
-        const float fFront = DotProduct(vVelocity, kSoldier.GetZAxis());
-        const float fYaw = atan2f(fRight, fFront);
+        const PblMatrix& mOwner = soldier.GetMatrix();
+        const float fVelX = DotProduct(vVelocity, mOwner.GetXAxis());
+        const float fVelZ = DotProduct(vVelocity, mOwner.GetZAxis());
+        const float fYawAngle = atan2f(fVelX, fVelZ);
 
         kMatrix.SetRotateX(soldier.mStateTimer * 8.0f + 1.0f);
-        PblVector3 vCenter;
-        D3DXVec3TransformNormal(reinterpret_cast<D3DXVECTOR3*>(&vCenter), reinterpret_cast<const D3DXVECTOR3*>(&s_vRollCenter), reinterpret_cast<const D3DXMATRIX*>(&kMatrix));
-        kMatrix[3] = s_vRollCenter - vCenter;
-        kMatrix.m[3][3] = 1.0f;
-
-        kMatrix.RotateY(fYaw);
+        kMatrix.SetTranslation(s_vRollCenter - kMatrix.ApplyRotation(s_vRollCenter));
+        kMatrix.RotateY(fYawAngle);
         return true;
     }
 
