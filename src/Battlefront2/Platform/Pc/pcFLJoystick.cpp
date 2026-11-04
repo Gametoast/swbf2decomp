@@ -955,10 +955,9 @@ void RawControllerInputs::StandardInputProcess()
     {
         for (int j = 0; j < 2; j++)
         {
-            const unsigned short usKey = mCurKeyboardBindings[mMode][iAction].mKey[j];
-            if (usKey > 0xff)
+            if (mCurKeyboardBindings[mMode][iAction].mKey[j] > 0xff)
             {
-                const unsigned char ucRaw = ActionKeyToRawInput(usKey);
+                const unsigned char ucRaw = ActionKeyToRawInput(mCurKeyboardBindings[mMode][iAction].mKey[j]);
                 const int iRaw = ucRaw;
                 unsigned char ucPort;
                 if (iRaw > -1 && ucRaw < 64)
@@ -984,14 +983,9 @@ void RawControllerInputs::StandardInputProcess()
                         bCancelAssist = true;
                     }
                 }
-                else if (ucRaw >= 64 || (iAction != ePROCESSEDINPUT_PITCH_AXIS &&
-                                         iAction != ePROCESSEDINPUT_PITCH_POS &&
-                                         iAction != ePROCESSEDINPUT_PITCH_NEG))
-                {
-                    fValue = mRawInputFloat[ucPort][iRaw];
-                    fLastValue = mLastRawInputFloat[ucPort][iRaw];
-                }
-                else
+                else if (ucRaw < 64 && (iAction == ePROCESSEDINPUT_PITCH_AXIS ||
+                                        iAction == ePROCESSEDINPUT_PITCH_POS ||
+                                        iAction == ePROCESSEDINPUT_PITCH_NEG))
                 {
                     fValue = AdjustValueForSensitivity(mRawInputFloat[ucPort][iRaw], mJoystickSensitivityY[mMode]);
                     fLastValue = AdjustValueForSensitivity(mLastRawInputFloat[ucPort][iRaw], mJoystickSensitivityY[mMode]);
@@ -999,6 +993,11 @@ void RawControllerInputs::StandardInputProcess()
                     {
                         bCancelAssist = true;
                     }
+                }
+                else
+                {
+                    fValue = mRawInputFloat[ucPort][iRaw];
+                    fLastValue = mLastRawInputFloat[ucPort][iRaw];
                 }
 
                 if (mFlip[mMode] && iAction == ePROCESSEDINPUT_PITCH_AXIS)
@@ -1030,7 +1029,7 @@ void RawControllerInputs::StandardInputProcess()
                 mProcessDestination->Set((ePROCESSEDINPUT_TYPE)iAction,
                                          mLockedRawInputBool[ucPort][iRaw], fValue, fLastValue);
             }
-            else if (_redKeyboard->IsKeyDown((unsigned char)usKey))
+            else if (_redKeyboard->IsKeyDown((unsigned char)mCurKeyboardBindings[mMode][iAction].mKey[j]))
             {
                 if (iAction == ePROCESSEDINPUT_TURN_AXIS || iAction == ePROCESSEDINPUT_TURN_POS ||
                     iAction == ePROCESSEDINPUT_TURN_NEG || iAction == ePROCESSEDINPUT_PITCH_AXIS ||
@@ -1090,11 +1089,11 @@ void RawControllerInputs::ChatInputProcess()
             unsigned short ausLine[128] = { 0 };
             PblUnicode::ustrlcpy(ausLine, m_ChatWords, 128);
             PblUnicode::ustrlcat(ausLine, chatCursor, 128);
-            ChatMessageDisplay::sInstance->AddMessage(ausLine, color);
+            ChatMessageDisplay::Instance()->AddMessage(ausLine, color);
         }
         else
         {
-            ChatMessageDisplay::sInstance->AddMessage(m_ChatWords, color);
+            ChatMessageDisplay::Instance()->AddMessage(m_ChatWords, color);
         }
     }
     else

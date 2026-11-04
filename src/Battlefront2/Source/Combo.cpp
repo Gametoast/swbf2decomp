@@ -115,8 +115,9 @@ bool Combo::Deflect::TestDeflect(const PblMatrix& mSoldier, const PblVector3& vF
     const int iMax = m_iDeflectAngleMax;
     if (iMin != iMax)
     {
-        const float fAngle = atan2f(-DotProduct(mSoldier.GetXAxis(), vDir),
-                                   -DotProduct(mSoldier.GetZAxis(), vDir));
+        const float fSide = -DotProduct(mSoldier.GetXAxis(), vDir);
+        const float fFront = -DotProduct(mSoldier.GetZAxis(), vDir);
+        const float fAngle = atan2f(fSide, fFront);
         const float fMin = iMin * 0.017453292f;
         const float fMax = iMax * 0.017453292f;
         if (iMin < iMax)
@@ -133,9 +134,8 @@ bool Combo::Deflect::TestDeflect(const PblMatrix& mSoldier, const PblVector3& vF
     }
     const float fCosAngle = -DotProduct(vFacingDir, vDir);
     const bool bRight = vDir.z * vFacingDir.x - vFacingDir.z * vDir.x < 0.0f;
-    const unsigned int n = m_uiNumDeflectAnimations;
-    unsigned char all = 0;
-    for (unsigned int i = 0; i < n; ++i)
+        unsigned char all = 0;
+    for (unsigned int i = 0; i < m_uiNumDeflectAnimations; ++i)
     {
         all |= m_aDeflectAnim[i].uiDirections;
     }
@@ -213,7 +213,7 @@ bool Combo::Deflect::TestDeflect(const PblMatrix& mSoldier, const PblVector3& vF
     }
     unsigned int matches = 0;
     unsigned int chosen = 0;
-    for (unsigned int i = 0; i < n; ++i)
+    for (unsigned int i = 0; i < m_uiNumDeflectAnimations; ++i)
     {
         if (m_aDeflectAnim[i].uiDirections & mask)
         {
@@ -567,7 +567,7 @@ unsigned char Combo::GetOffhandAnimIndex(int eState) const
 
 // GLOBAL: SWBF2 0x01eb9310
 // Combo::sMemoryPool
-MemoryPool Combo::sMemoryPool("Combo", 0x24);
+MemoryPool Combo::sMemoryPool("Combo", sizeof(Combo));
 // SYNTHETIC: SWBF2 0x00402600
 // `dynamic initializer for 'Combo::Deflect::sMemoryPool''
 // SYNTHETIC: SWBF2 0x00766e70
@@ -575,7 +575,7 @@ MemoryPool Combo::sMemoryPool("Combo", 0x24);
 
 // GLOBAL: SWBF2 0x01eb9360
 // Combo::Deflect::sMemoryPool
-MemoryPool Combo::Deflect::sMemoryPool("Combo::Deflect", 0x24);
+MemoryPool Combo::Deflect::sMemoryPool("Combo::Deflect", sizeof(Combo::Deflect));
 // SYNTHETIC: SWBF2 0x00402580
 // `dynamic initializer for 'Combo::Transition::sMemoryPool''
 // SYNTHETIC: SWBF2 0x00766e30
@@ -583,7 +583,7 @@ MemoryPool Combo::Deflect::sMemoryPool("Combo::Deflect", 0x24);
 
 // GLOBAL: SWBF2 0x01eb93b0
 // Combo::Transition::sMemoryPool
-MemoryPool Combo::Transition::sMemoryPool("Combo::Transition", 0x0c);
+MemoryPool Combo::Transition::sMemoryPool("Combo::Transition", sizeof(Combo::Transition));
 // SYNTHETIC: SWBF2 0x004025a0
 // `dynamic initializer for 'Combo::Condition::sMemoryPool''
 // SYNTHETIC: SWBF2 0x00766e40
@@ -591,7 +591,7 @@ MemoryPool Combo::Transition::sMemoryPool("Combo::Transition", 0x0c);
 
 // GLOBAL: SWBF2 0x01eb9400
 // Combo::Condition::sMemoryPool
-MemoryPool Combo::Condition::sMemoryPool("Combo::Condition", 0x14);
+MemoryPool Combo::Condition::sMemoryPool("Combo::Condition", sizeof(Combo::Condition));
 // SYNTHETIC: SWBF2 0x00402520
 // `dynamic initializer for 'Combo::s_ComboTable''
 
@@ -605,7 +605,7 @@ PblHashTable<const Combo, 32> Combo::s_ComboTable;
 
 // GLOBAL: SWBF2 0x01eb9558
 // Combo::DamageSample::sMemoryPool
-MemoryPool Combo::DamageSample::sMemoryPool("Combo::DamageSample", 0x1c);
+MemoryPool Combo::DamageSample::sMemoryPool("Combo::DamageSample", sizeof(Combo::DamageSample));
 // SYNTHETIC: SWBF2 0x004025c0
 // `dynamic initializer for 'Combo::Attack::sMemoryPool''
 // SYNTHETIC: SWBF2 0x00766e50
@@ -613,7 +613,7 @@ MemoryPool Combo::DamageSample::sMemoryPool("Combo::DamageSample", 0x1c);
 
 // GLOBAL: SWBF2 0x01eb95a8
 // Combo::Attack::sMemoryPool
-MemoryPool Combo::Attack::sMemoryPool("Combo::Attack", 0x10);
+MemoryPool Combo::Attack::sMemoryPool("Combo::Attack", sizeof(Combo::Attack));
 // SYNTHETIC: SWBF2 0x00402560
 // `dynamic initializer for 'Combo::State::sMemoryPool''
 // SYNTHETIC: SWBF2 0x00766e20
@@ -621,7 +621,7 @@ MemoryPool Combo::Attack::sMemoryPool("Combo::Attack", 0x10);
 
 // GLOBAL: SWBF2 0x01eb95f8
 // Combo::State::sMemoryPool
-MemoryPool Combo::State::sMemoryPool("Combo::State", 0x34);
+MemoryPool Combo::State::sMemoryPool("Combo::State", sizeof(Combo::State));
 
 const float Combo::Condition::TIME_SCALE_INV = 100.0f;
 // GLOBAL: SWBF2 0x0078e014
@@ -960,23 +960,34 @@ bool Combo::Condition::TestVelocity(float fX, float fY, float fZ) const
         if (m_bVelocityYSigned)
         {
             fRef = GetVelocityYRef();
+            if (m_bVelocityYLess)
+            {
+                if (fY > fRef)
+                {
+                    return false;
+                }
+            }
+            else if (fRef > fY)
+            {
+                return false;
+            }
         }
         else
         {
             fRef = GetVelocityYRef();
             fY *= fY;
             fRef *= fRef;
-        }
-        if (m_bVelocityYLess)
-        {
-            if (fY > fRef)
+            if (m_bVelocityYLess)
+            {
+                if (fY > fRef)
+                {
+                    return false;
+                }
+            }
+            else if (fRef > fY)
             {
                 return false;
             }
-        }
-        else if (fRef > fY)
-        {
-            return false;
         }
     }
     if (m_uiVelocityXZMagCnd)
@@ -1555,7 +1566,7 @@ void Combo::Deflect::_ReadConfig(PblConfig& config, const Combo& combo, const ch
             break;
 
         case 0xd9ae70ee:
-            if (data.GetNumArgs() && data.IsStringArg(0))
+            if (data.IsStringArg(0))
             {
                 const char* pcName = data.GetStringArg(0);
                 const char* pcScope = strrchr(pcName, '_');
@@ -1665,7 +1676,8 @@ void Combo::Deflect::_ReadConfig(PblConfig& config, const Combo& combo, const ch
                     PblConfig scope(config.ReadNextScope(), true);
                     if (pAnimData && eAnimation != SoldierAnimationBank::INVALID_COMBO_ANIMATION)
                     {
-                        if (!pAnimData->m_bReadFromConfig)
+                        const bool bReadFromConfig = pAnimData->m_bReadFromConfig;
+                        if (!bReadFromConfig)
                         {
                             pAnimData->ReadConfig(scope, pcName);
                         }
@@ -1673,9 +1685,13 @@ void Combo::Deflect::_ReadConfig(PblConfig& config, const Combo& combo, const ch
                         {
                             SoldierAnimationData* pLower =
                                 SoldierAnimationData::Find(eAnimation, SoldierAnimType::LOWER);
-                            if (pLower && !pLower->m_bReadFromConfig)
+                            if (pLower)
                             {
-                                pLower->ConvertScope(*pAnimData);
+                                const bool bLowerReadFromConfig = pLower->m_bReadFromConfig;
+                                if (!bLowerReadFromConfig)
+                                {
+                                    pLower->ConvertScope(*pAnimData);
+                                }
                             }
                         }
                     }
@@ -2523,7 +2539,8 @@ void Combo::ReadConfig(PblConfig& config)
                     PblConfig scope(config.ReadNextScope(), true);
                     if (pAnimData && eAnimation != SoldierAnimationBank::INVALID_COMBO_ANIMATION)
                     {
-                        if (!pAnimData->m_bReadFromConfig)
+                        const bool bReadFromConfig = pAnimData->m_bReadFromConfig;
+                        if (!bReadFromConfig)
                         {
                             pAnimData->ReadConfig(scope, pcName);
                         }
@@ -2531,9 +2548,13 @@ void Combo::ReadConfig(PblConfig& config)
                         {
                             SoldierAnimationData* pLower =
                                 SoldierAnimationData::Find(eAnimation, SoldierAnimType::LOWER);
-                            if (pLower && !pLower->m_bReadFromConfig)
+                            if (pLower)
                             {
-                                pLower->ConvertScope(*pAnimData);
+                                const bool bLowerReadFromConfig = pLower->m_bReadFromConfig;
+                                if (!bLowerReadFromConfig)
+                                {
+                                    pLower->ConvertScope(*pAnimData);
+                                }
                             }
                         }
                     }

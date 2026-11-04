@@ -74,12 +74,13 @@ void SetPropDistanceScale(float fValue)
 void PropCluster::Render(unsigned char ucViewport, float fDist, unsigned int uiFlags)
 {
     const RedCamera* pCamera = RedRenderer::GetCamera();
-    const PblMatrix& mCamera = pCamera->GetMatrix();
 
     int iNumObjects = 0;
+    const PblMatrix& mCamera = pCamera->GetMatrix();
+    const PblVector3 vForward = -mCamera.GetZAxis();
     const PblVector3 vCamPos = mCamera.GetTranslation();
     const PblVector3 vToCluster(_Sphere.x - vCamPos.x, 0.0f, _Sphere.z - vCamPos.z);
-    float fCamDist = DotProduct(vToCluster, -mCamera.GetZAxis());
+    float fCamDist = DotProduct(vToCluster, vForward);
     float fScale = 1.0f;
     if (!(1.0f > sGrassDistanceScale))
     {
@@ -112,8 +113,8 @@ void PropCluster::Render(unsigned char ucViewport, float fDist, unsigned int uiF
 
                 if (mLayers[i].mObjects.GetCount() > 0)
                 {
-                    mWasRenderedFlag |= 1 << CameraManager::sInstance->GetCameraIdForView(
-                                                 FLRenderer::GetCurrentViewport());
+                    CameraManager* pCameraManager = CameraManager::sInstance;
+                    mWasRenderedFlag |= 1 << pCameraManager->GetCameraIdForView(FLRenderer::GetCurrentViewport());
                     for (PblList<PropObject>::Itor it(mLayers[i].mObjects); (PropObject*)it; ++it)
                     {
                         it->Render(pCamera, fCamDist - mSize, uiFlags);
@@ -228,12 +229,9 @@ const PropObject* PropCluster::FindPropObject(const PblVector3& vPos, bool) cons
             {
             case PropModelMesh::PMM_MESH:
             {
-                const PblSphere& sphere = pObject->mModel->mRenderObj.mGeometry->_BoundingSphere;
+                PblSphere sphere = pObject->mModel->mRenderObj.mGeometry->_BoundingSphere;
                 const PblVector3& vTrans = pObject->GetMatrix().GetTranslation();
-                float dx = vPos.x - (vTrans.x + sphere.x);
-                float dy = vPos.y - (vTrans.y + sphere.y);
-                float dz = vPos.z - (vTrans.z + sphere.z);
-                if (sphere.w > PblMath::Sqrt(dx * dx + dy * dy + dz * dz))
+                if (sphere.GetRadius() > Length(vPos - (vTrans + sphere.GetCenter())))
                 {
                     float fVis = pObject->mModel->mAIVisFactorCrouch +
                                  pObject->mModel->mAIVisFactorStand;
@@ -251,18 +249,12 @@ const PropObject* PropCluster::FindPropObject(const PblVector3& vPos, bool) cons
                 const PblVector3& vTrans = pObject->GetMatrix().GetTranslation();
                 GrassPatchClass* pClass = pObject->mModel->mRenderObj.mGrassClass;
                 int iCount = pClass->mNumParticles;
-                float dx = vPos.x - vTrans.x;
-                float dy = vPos.y - vTrans.y;
-                float dz = vPos.z - vTrans.z;
-                if (pClass->mBoundingRadius > PblMath::Sqrt(dx * dx + dy * dy + dz * dz) && iCount)
+                if (pClass->mBoundingRadius > Length(vPos - vTrans) && iCount)
                 {
                     GrassPatchClass::GrassParticle* pParticle = pClass->mParticle;
                     do
                     {
-                        dx = vPos.x - (vTrans.x + pParticle->mPos.x);
-                        dy = vPos.y - (pParticle->mPos.y + vTrans.y);
-                        dz = vPos.z - (pParticle->mPos.z + vTrans.z);
-                        if (pParticle->mSize > PblMath::Sqrt(dx * dx + dy * dy + dz * dz))
+                        if (pParticle->mSize > Length(vPos - (vTrans + pParticle->mPos)))
                         {
                             float fVis = pObject->mModel->mAIVisFactorCrouch +
                                          pObject->mModel->mAIVisFactorStand;
@@ -283,18 +275,12 @@ const PropObject* PropCluster::FindPropObject(const PblVector3& vPos, bool) cons
                 const PblVector3& vTrans = pObject->GetMatrix().GetTranslation();
                 LeafPatchClass* pClass = pObject->mModel->mRenderObj.mLeafClass;
                 int iCount = pClass->mNumParticles;
-                float dx = vPos.x - vTrans.x;
-                float dy = vPos.y - vTrans.y;
-                float dz = vPos.z - vTrans.z;
-                if (pClass->mBoundingRadius > PblMath::Sqrt(dx * dx + dy * dy + dz * dz) && iCount)
+                if (pClass->mBoundingRadius > Length(vPos - vTrans) && iCount)
                 {
                     LeafPatchClass::LeafParticle* pParticle = pClass->mParticle;
                     do
                     {
-                        dx = vPos.x - (pParticle->mPos.x + vTrans.x);
-                        dy = vPos.y - (pParticle->mPos.y + vTrans.y);
-                        dz = vPos.z - (pParticle->mPos.z + vTrans.z);
-                        if (pParticle->mSize > PblMath::Sqrt(dx * dx + dy * dy + dz * dz))
+                        if (pParticle->mSize > Length(vPos - (pParticle->mPos + vTrans)))
                         {
                             float fVis = pObject->mModel->mAIVisFactorCrouch +
                                          pObject->mModel->mAIVisFactorStand;

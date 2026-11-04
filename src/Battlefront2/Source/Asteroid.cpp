@@ -274,7 +274,7 @@ EntityClass* AsteroidClass::Derive(unsigned int uHash)
 
 // GLOBAL: SWBF2 0x01eb0500
 // Asteroid::sMemoryPool
-MemoryPool Asteroid::sMemoryPool("Asteroid", 0x280);
+MemoryPool Asteroid::sMemoryPool("Asteroid", sizeof(Asteroid));
 
 // SYNTHETIC: SWBF2 0x004022c0
 // `dynamic initializer for 'Asteroid::rttiHashAsteroid''
@@ -488,19 +488,21 @@ void Asteroid::Kill()
         for (int i = 0; i < pClass->mNumChildren; ++i)
         {
             EntityClass* pChildClass = EntityClass::Find(pClass->mChildren[i].mClassHash);
-            PblMatrix mBone;
-            if (pChildClass &&
-                mModel->_mLod[0]->GetBoneMatrix(pClass->mChildren[i].mHardPointHash, mBone))
+            if (pChildClass)
             {
-                PblMatrix mChild;
-                mChild = mBone * mMatrix;
-                desc.mMatrix = mChild;
-                Entity* pChild = pChildClass->Build(desc);
-                if (pChild)
+                PblMatrix mBone;
+                if (mModel->_mLod[0]->GetBoneMatrix(pClass->mChildren[i].mHardPointHash, mBone))
                 {
-                    pChild->Init();
-                    const PblVector3 vDir = desc.mMatrix.GetTranslation() - mMatrix.GetTranslation();
-                    static_cast<EntityGeometry*>(pChild)->SetVelocity(Normalize(vDir) * 50.0f);
+                    PblMatrix mChild;
+                    mChild = mBone * mMatrix;
+                    desc.mMatrix = mChild;
+                    Entity* pChild = pChildClass->Build(desc);
+                    if (pChild)
+                    {
+                        pChild->Init();
+                        const PblVector3 vDir = desc.mMatrix.GetTranslation() - mMatrix.GetTranslation();
+                        static_cast<EntityGeometry*>(pChild)->SetVelocity(Normalize(vDir) * 50.0f);
+                    }
                 }
             }
         }

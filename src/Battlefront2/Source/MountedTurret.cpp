@@ -222,7 +222,7 @@ const char MountedTurretClass::rttiNameMountedTurretClass[] = "MountedTurretClas
 
 // GLOBAL: SWBF2 0x01ecb158
 // MountedTurret::sMemoryPool
-MemoryPool MountedTurret::sMemoryPool("MountedTurret", 0x2c0);
+MemoryPool MountedTurret::sMemoryPool("MountedTurret", sizeof(MountedTurret));
 
 
 
@@ -564,6 +564,7 @@ void MountedTurret::GetPilotMatrix(const PblMatrix& mIn, PblMatrix& mOut)
     }
 
     const ControllableClass* pClass = GetControllableClass();
+    PblMatrix mMatrix;
     if (pClass->mPilotAnimation != SoldierAnimationBank::INVALID_ANIMATION)
     {
         PblMatrix mOldRoot;
@@ -603,7 +604,6 @@ void MountedTurret::GetPilotMatrix(const PblMatrix& mIn, PblMatrix& mOut)
             pBone = pPose->Find(pClass->mPilotParentNodeHash);
         }
 
-        PblMatrix mMatrix;
         if (pClass->mAnimatedPilotNodeFlag)
         {
             D3DXMatrixMultiply(reinterpret_cast<D3DXMATRIX*>(&mMatrix), reinterpret_cast<const D3DXMATRIX*>(pBone), reinterpret_cast<const D3DXMATRIX*>(&mIn));
@@ -623,13 +623,12 @@ void MountedTurret::GetPilotMatrix(const PblMatrix& mIn, PblMatrix& mOut)
         {
             mRootMatrix = mOldRoot;
         }
-
-        mOut = mMatrix;
     }
     else
     {
-        mOut = mIn;
+        mMatrix = mIn;
     }
+    mOut = mMatrix;
 }
 
 // FUNCTION: SWBF2 0x005a5f50
@@ -1244,7 +1243,14 @@ void MountedTurret::UpdateSound(int prevAngle, int angle, float fAngle, float fA
 
     if (mPrevPilot != mPilot)
     {
-        (mPilot ? mClass->mTurretActivateSound : mClass->mTurretDeactivateSound).Play(pos, vel, false, true);
+        if (mPilot)
+        {
+            mClass->mTurretActivateSound.Play(pos, vel, false, true);
+        }
+        else
+        {
+            mClass->mTurretDeactivateSound.Play(pos, vel, false, true);
+        }
         mPrevPilot = mPilot;
     }
     if (mPilot)

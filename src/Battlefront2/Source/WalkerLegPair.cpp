@@ -18,7 +18,7 @@
 
 // GLOBAL: SWBF2 0x01f9a7e0
 // WalkerLegPair::sMemoryPool
-MemoryPool WalkerLegPair::sMemoryPool("WalkerLegPair", 0x130);
+MemoryPool WalkerLegPair::sMemoryPool("WalkerLegPair", sizeof(WalkerLegPair));
 
 
 
@@ -276,7 +276,8 @@ void WalkerLegPair::AdjustLeg(eFoot eWhich, const PblQuaternion& kAdjust)
     for (char iParent = mParent->mZephyrSkeleton.m_pShared->m_pJoints[iJoint].m_iParent; iParent;
          iParent = mParent->mZephyrSkeleton.m_pShared->m_pJoints[iParent].m_iParent)
     {
-        kRot = mParent->mZephyrPoseStatic.m_pJoints[(unsigned short)iParent].kQuat * kRot;
+        const PblQuaternion& kParentRot = mParent->mZephyrPoseStatic.m_pJoints[(unsigned short)iParent].kQuat;
+        kRot = kParentRot * kRot;
     }
 
     mLegAdjustments[eWhich] = kRot.Inverse() * kAdjust * kRot;

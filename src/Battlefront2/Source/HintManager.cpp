@@ -29,7 +29,7 @@
 
 // GLOBAL: SWBF2 0x01ec6090
 // BaseHint::sMemoryPool
-MemoryPool BaseHint::sMemoryPool("BaseHint", 0x40);
+MemoryPool BaseHint::sMemoryPool("BaseHint", sizeof(BaseHint));
 
 extern int WORLD_EXTENTS;
 
@@ -482,35 +482,31 @@ int RequestLandHints(const UnitController* pController, const PblVector3& vPos,
 {
     int iCount = RequestHintsCommon(BaseHint::HINT_LAND, pController, vPos, iArg3, iArg4, ppHints);
 
+    int i = 0;
     const int iTeam = pController->GetMe()->GetGameObject()->GetTeam();
 
-    int i = 0;
     if (iCount > 0)
     {
         const BaseHint** ppLast = &ppHints[iCount - 1];
-        do
+        for (; i < iCount;)
         {
             const BaseHint* pHint = ppHints[i];
             const CommandPost* const pPost = pHint->GetCommandPost();
-            bool bKeep = false;
             if (pPost)
             {
                 const bool bOwned = pPost->CanTeamSpawnHere(iTeam);
-                if ((bGotoNonOwnedCP ? !bOwned : bOwned) && pHint->GetCollisionCenter().y <= vPos.y)
+                if ((bGotoNonOwnedCP && !bOwned) || (!bGotoNonOwnedCP && bOwned))
                 {
-                    bKeep = true;
+                    if (!(pHint->GetCollisionCenter().y > vPos.y))
+                    {
+                        ++i;
+                        continue;
+                    }
                 }
             }
-            if (bKeep)
-            {
-                ++i;
-            }
-            else
-            {
-                --iCount;
-                ppHints[i] = *ppLast--;
-            }
-        } while (i < iCount);
+            --iCount;
+            ppHints[i] = *ppLast--;
+        }
     }
     return iCount;
 }

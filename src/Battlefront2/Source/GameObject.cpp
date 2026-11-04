@@ -632,6 +632,12 @@ void GameObjectInterpolator::GetMatrix(int iNetUniqueId, PblMatrix& mMatrix)
     mMatrix = PblMatrix(qBlend, vBlend);
 }
 
+// FUNCTION: SWBF2 0x005373e0
+bool GameObjectClass::AvailableForAnyTeam() const
+{
+    return mAvailableForAnyTeam;
+}
+
 // FUNCTION: SWBF2 0x00537400
 void GameObjectInterpolator::SetNext(int iNetUniqueId, const PblMatrix* pMatrix)
 {
@@ -863,7 +869,7 @@ GameObjectClass::GameObjectClass(GameObjectClass* pBase, unsigned int uHash)
     mSoundHurtFall = pBase->mSoundHurtFall;
     mSoundDeath = pBase->mSoundDeath;
 
-    for (PblListSingle::Itor it(pBase->mSoundDamageRegionList); it.GetNode() != pBase->mSoundDamageRegionList.GetTerminator(); ++it)
+    for (PblListSingle::Itor it(pBase->mSoundDamageRegionList); pBase->mSoundDamageRegionList.GetTerminator() != it.GetNode(); ++it)
     {
         const DamageRegionSound* pSound = (const DamageRegionSound*)it.GetNode()->GetObjectA(
             &pBase->mSoundDamageRegionList, offsetof(DamageRegionSound, mNode));

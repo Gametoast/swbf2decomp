@@ -136,7 +136,7 @@ const char EntitySoldier::rttiNameEntitySoldier[] = "EntitySoldier";
 
 // GLOBAL: SWBF2 0x01ebc100
 // EntitySoldier::sMemoryPool
-MemoryPool EntitySoldier::sMemoryPool("EntitySoldier", 0xfd0);
+MemoryPool EntitySoldier::sMemoryPool("EntitySoldier", sizeof(EntitySoldier));
 
 // SYNTHETIC: SWBF2 0x00402d70
 // `dynamic initializer for 'EntitySoldierClass::rttiHashEntitySoldierClass''
@@ -156,7 +156,7 @@ const char EntitySoldierClass::rttiNameEntitySoldierClass[] = "EntitySoldierClas
 
 // GLOBAL: SWBF2 0x01ebc0a8
 // AcklayData::sMemoryPool
-MemoryPool AcklayData::sMemoryPool("AcklayData", 0x13d0);
+MemoryPool AcklayData::sMemoryPool("AcklayData", sizeof(AcklayData));
 
 // GLOBAL: SWBF2 0x01e51e04
 static int sWeaponSection;
@@ -1155,7 +1155,7 @@ void EntitySoldier::RecalculateAABB()
     else
     {
         float fOffset = sCollisionOffset[mStanceIndex] + 0.1f;
-        SetCollisionCenter(mMatrix.GetTranslation() + mMatrix.GetYAxis() * fOffset);
+        SetCollisionCenter(mMatrix.GetYAxis() * fOffset + mMatrix.GetTranslation());
         SetCollisionRadius(sCollisionRadius2[mStanceIndex]);
         float fRadius = sCollisionRadius[mStanceIndex];
         float fHalfHeight = sCollisionHeight[mStanceIndex] * 0.5f + 0.1f;
@@ -3960,19 +3960,14 @@ void EntitySoldier::ActivatePhysics()
 {
     ActivateThread(0, PER_TURN);
     mPostCollision.ActivateThread(-15, PER_TURN);
-    const char* pIndex = mWeaponIndex;
-    do
+    for (int iChannel = 0; iChannel < 2; ++iChannel)
     {
-        if (*pIndex >= 0)
+        if (mWeaponIndex[iChannel] >= 0 && mWeapon[mWeaponIndex[iChannel]] &&
+            !mWeapon[mWeaponIndex[iChannel]]->IsSelected())
         {
-            Weapon* pWeapon = mWeapon[*pIndex];
-            if (pWeapon && !pWeapon->IsSelected())
-            {
-                pWeapon->Select(pIndex - mWeaponIndex, false);
-            }
+            mWeapon[mWeaponIndex[iChannel]]->Select(iChannel, false);
         }
-        ++pIndex;
-    } while (pIndex - mWeaponIndex < 2);
+    }
 }
 
 // FUNCTION: SWBF2 0x004f34d0
@@ -8126,7 +8121,7 @@ void EntitySoldier::Move(float fDeltaTime, float fForward, float fStrafe, float 
     {
         fAcceleration *= 0.1f;
     }
-    float fMaxChange = fAcceleration * fDeltaTime;
+    fAcceleration *= fDeltaTime;
 
     float fSlopeFront = 0.0f;
     float fSlopeSide = 0.0f;
@@ -8145,22 +8140,22 @@ void EntitySoldier::Move(float fDeltaTime, float fForward, float fStrafe, float 
     }
 
     float fChangeFront = fForward - fFrontSpeed;
-    if (fChangeFront > fSlopeFront + fMaxChange)
+    if (fChangeFront > fSlopeFront + fAcceleration)
     {
-        fChangeFront = fSlopeFront + fMaxChange;
+        fChangeFront = fSlopeFront + fAcceleration;
     }
-    else if (fSlopeFront - fMaxChange > fChangeFront)
+    else if (fSlopeFront - fAcceleration > fChangeFront)
     {
-        fChangeFront = fSlopeFront - fMaxChange;
+        fChangeFront = fSlopeFront - fAcceleration;
     }
     float fChangeSide = fStrafe - fSideSpeed;
-    if (fChangeSide > fSlopeSide + fMaxChange)
+    if (fChangeSide > fSlopeSide + fAcceleration)
     {
-        fChangeSide = fSlopeSide + fMaxChange;
+        fChangeSide = fSlopeSide + fAcceleration;
     }
-    else if (fSlopeSide - fMaxChange > fChangeSide)
+    else if (fSlopeSide - fAcceleration > fChangeSide)
     {
-        fChangeSide = fSlopeSide - fMaxChange;
+        fChangeSide = fSlopeSide - fAcceleration;
     }
 
     mVelocity += vFront * fChangeFront;
@@ -8172,7 +8167,7 @@ void EntitySoldier::Move(float fDeltaTime, float fForward, float fStrafe, float 
     }
     else if (!(mFlags & flags_isGrounded))
     {
-        mVelocity.AddY(fDeltaTime * -GRAVITY_FORCE);
+        mVelocity.AddY(-GRAVITY_FORCE * fDeltaTime);
     }
 
     PblVector3 pos(mMatrix.GetTranslation());
@@ -9068,15 +9063,11 @@ void EntitySoldier::HealthChangeCallback(bool bArg, float fArg)
 void EntitySoldier::Kill()
 {
     mIsAlive = 0;
-    for (const char* pIndex = mWeaponIndex; pIndex - mWeaponIndex < 2; ++pIndex)
+    for (int iChannel = 0; iChannel < 2; ++iChannel)
     {
-        if (*pIndex >= 0)
+        if (mWeaponIndex[iChannel] >= 0 && mWeapon[mWeaponIndex[iChannel]]->IsSelected())
         {
-            Weapon* pWeapon = mWeapon[*pIndex];
-            if (pWeapon->IsSelected())
-            {
-                pWeapon->Deselect(pIndex - mWeaponIndex, false);
-            }
+            mWeapon[mWeaponIndex[iChannel]]->Deselect(iChannel, false);
         }
     }
 
@@ -9122,7 +9113,14 @@ void EntitySoldier::Kill()
         }
         if (!mVanishing)
         {
-            Trackable::TrackDeath(mPlayerId, mClass->GetHeroFlag() ? 0 : mDamageOwner.mCharacter);
+            if (mClass->GetHeroFlag())
+            {
+                Trackable::TrackDeath(mPlayerId, 0);
+            }
+            else
+            {
+                Trackable::TrackDeath(mPlayerId, mDamageOwner.mCharacter);
+            }
         }
     }
 
@@ -9852,14 +9850,21 @@ bool EntitySoldier::EnterControllable(Controllable* pControllable)
                 {
                     mWeaponIndex[0] = (char)i;
                 }
+                if (mWeaponIndex[1] >= 0)
+                {
+                    break;
+                }
             }
-            else if (mWeaponIndex[1] < 0)
+            else
             {
-                mWeaponIndex[1] = (char)i;
-            }
-            if (mWeaponIndex[0] >= 0 && mWeaponIndex[1] >= 0)
-            {
-                break;
+                if (mWeaponIndex[1] < 0)
+                {
+                    mWeaponIndex[1] = (char)i;
+                }
+                if (mWeaponIndex[0] >= 0)
+                {
+                    break;
+                }
             }
         }
         mActiveChannel = 0;

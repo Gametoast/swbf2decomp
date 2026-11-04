@@ -279,9 +279,9 @@ void RedStencilShadow::Render(const PblMatrix* pMatrix,
     }
 
     const PblVector3& direction = RedLight::GetGlobalDirectionalLight(0)->m_vDirection;
-    const PblVector3 vLit = direction * s_fShadowVolumeOffset;
+    const PblVector3 vLit = s_fShadowVolumeOffset * direction;
     const float fLength = RedRenderer::GetStencilShadowLength() + s_fShadowVolumeOffset;
-    ShadowRenderable::s_vProjectionUnlit = direction * fLength;
+    ShadowRenderable::s_vProjectionUnlit = fLength * direction;
     ShadowRenderable::s_vProjectionLit = vLit;
 
     PblMatrix aSkinMatrices[128];
@@ -289,10 +289,11 @@ void RedStencilShadow::Render(const PblMatrix* pMatrix,
     {
         const PblMatrix* pWorld = pMatrix;
         PblMatrix* pSkin = 0;
-        const unsigned int uNumBones = it->m_uiNumBones;
-        if (uNumBones)
+        unsigned int uNumBones = 0;
+        if (it->m_uiNumBones)
         {
-            pSkin = it->m_puiBoneIndexMap ?
+            uNumBones = it->m_uiNumBones;
+            pSkin = it->m_pPrimitive ?
                 RedRenderer::AllocBoneMatricesInCache(uNumBones) : aSkinMatrices;
             if (pPose)
             {
@@ -311,30 +312,27 @@ void RedStencilShadow::Render(const PblMatrix* pMatrix,
                                                          uNumBones);
             }
         }
-        else
+        else if (pPose)
         {
             const unsigned int uBone = it->m_uiBoneIndex;
-            if (pPose)
+            if (ppBoneMatrices)
             {
-                if (ppBoneMatrices)
-                {
-                    if (!ppBoneMatrices[uBone])
-                    {
-                        PblMatrix bone = pPose->_GetBoneMatrix(uBone) * *pMatrix;
-                        ppBoneMatrices[uBone] = RedRenderer::AllocMatrixInCache(bone);
-                    }
-                    pWorld = ppBoneMatrices[uBone];
-                }
-                else
+                if (!ppBoneMatrices[uBone])
                 {
                     PblMatrix bone = pPose->_GetBoneMatrix(uBone) * *pMatrix;
-                    pWorld = RedRenderer::AllocMatrixInCache(bone);
+                    ppBoneMatrices[uBone] = RedRenderer::AllocMatrixInCache(bone);
                 }
-            }
-            else if (ppBoneMatrices)
-            {
                 pWorld = ppBoneMatrices[uBone];
             }
+            else
+            {
+                PblMatrix bone = pPose->_GetBoneMatrix(uBone) * *pMatrix;
+                pWorld = RedRenderer::AllocMatrixInCache(bone);
+            }
+        }
+        else if (ppBoneMatrices)
+        {
+            pWorld = ppBoneMatrices[it->m_uiBoneIndex];
         }
         it->Render(pWorld, pSkin, uNumBones, 4);
     }
@@ -613,9 +611,10 @@ unsigned short ShadowData::GenerateSilhouette(const PblMatrix* pMatrix, const Pb
         return 0;
     }
 
-    const float lx = pMatrix->m[0][0] * vLight.x + pMatrix->m[0][1] * vLight.y + pMatrix->m[0][2] * vLight.z;
-    const float ly = pMatrix->m[1][0] * vLight.x + pMatrix->m[1][1] * vLight.y + pMatrix->m[1][2] * vLight.z;
-    const float lz = pMatrix->m[2][0] * vLight.x + pMatrix->m[2][1] * vLight.y + pMatrix->m[2][2] * vLight.z;
+    const PblMatrix& m = *pMatrix;
+    const float lx = m.m[0][0] * vLight.x + m.m[0][1] * vLight.y + m.m[0][2] * vLight.z;
+    const float ly = m.m[1][0] * vLight.x + m.m[1][1] * vLight.y + m.m[1][2] * vLight.z;
+    const float lz = m.m[2][0] * vLight.x + m.m[2][1] * vLight.y + m.m[2][2] * vLight.z;
 
     for (unsigned short i = 0; i < _faceCount; ++i)
     {
@@ -625,55 +624,58 @@ unsigned short ShadowData::GenerateSilhouette(const PblMatrix* pMatrix, const Pb
         unsigned short e = uiFirst;
         do
         {
-            _edgeList[e].visible = bVisible;
-            _edgeList[e].mark = 0;
-            e = _edgeList[e].next;
+            ShadowEdge& edge = _edgeList[e];
+            edge.visible = bVisible;
+            edge.mark = 0;
+            e = edge.next;
         } while (e != uiFirst);
     }
 
     for (unsigned short j = 0; j < _edgeCount; ++j)
     {
-        if (_edgeList[j].mark)
+        ShadowEdge& edge = _edgeList[j];
+        if (edge.mark)
         {
             continue;
         }
-        unsigned short uiTwin = _edgeList[j].twin;
-        _edgeList[uiTwin].mark = 1;
-        unsigned char bVisible = _edgeList[j].visible;
-        _edgeList[j].mark = 1;
-        if (bVisible == _edgeList[uiTwin].visible)
+        ShadowEdge& twin = _edgeList[edge.twin];
+        twin.mark = 1;
+        const unsigned char bVisible = edge.visible;
+        edge.mark = 1;
+        if (bVisible == twin.visible)
         {
             continue;
         }
 
-        unsigned short e = bVisible ? j : _edgeList[j].twin;
+        unsigned short e = bVisible ? j : edge.twin;
         AddSilhouetteVertex(_edgeList[e].vertex, true);
         for (;;)
         {
-            unsigned short uiEnd = _edgeList[e].twin;
+            const unsigned short uiEnd = _edgeList[e].twin;
             unsigned short k = _edgeList[e].next;
             while (k != uiEnd)
             {
-                unsigned short kt = _edgeList[k].twin;
-                if (!_edgeList[k].mark && _edgeList[k].visible && !_edgeList[kt].visible)
+                ShadowEdge& edgeK = _edgeList[k];
+                ShadowEdge& twinK = _edgeList[edgeK.twin];
+                if (!edgeK.mark && edgeK.visible && !twinK.visible)
                 {
+                    AddSilhouetteVertex(edgeK.vertex, false);
+                    twinK.mark = 1;
+                    edgeK.mark = 1;
                     break;
                 }
-                if (_edgeList[kt].visible == _edgeList[k].visible)
+                if (twinK.visible == edgeK.visible)
                 {
-                    _edgeList[kt].mark = 1;
-                    _edgeList[k].mark = 1;
+                    twinK.mark = 1;
+                    edgeK.mark = 1;
                 }
-                k = _edgeList[kt].next;
+                k = twinK.next;
             }
             if (k == uiEnd)
             {
                 AddSilhouetteVertex(_edgeList[uiEnd].vertex, false);
                 break;
             }
-            AddSilhouetteVertex(_edgeList[k].vertex, false);
-            _edgeList[_edgeList[k].twin].mark = 1;
-            _edgeList[k].mark = 1;
             e = k;
         }
     }
@@ -913,8 +915,8 @@ void ShadowData::Read(PblFileChunk& chunk)
         {
             continue;
         }
-        int iCount = 0;
         unsigned short e = i;
+        int iCount = 0;
         do
         {
             ++iCount;

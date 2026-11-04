@@ -279,9 +279,11 @@ EntityHologram::EntityHologram(EntityHologramClass* pClass, const EntityDesc& de
     m_fCurrentFadeInFactor = 0.0f;
 
     float fRadius = pClass->m_fSize * 0.5f + pClass->m_fHeight * 0.5f;
-    PblVector3 vOffset(0.0f, fRadius, 0.0f);
     PblVector3 vCenter;
-    D3DXVec3TransformCoord(reinterpret_cast<D3DXVECTOR3*>(&vCenter), reinterpret_cast<const D3DXVECTOR3*>(&vOffset), reinterpret_cast<const D3DXMATRIX*>(&m_WorldMatrix));
+    {
+        PblVector3 vOffset(0.0f, fRadius, 0.0f);
+        D3DXVec3TransformCoord(reinterpret_cast<D3DXVECTOR3*>(&vCenter), reinterpret_cast<const D3DXVECTOR3*>(&vOffset), reinterpret_cast<const D3DXMATRIX*>(&m_WorldMatrix));
+    }
 
     PblMatrix mReflection;
     if (FLRenderer::IsReflected(vCenter, fRadius, mReflection, true))
@@ -368,7 +370,7 @@ bool EntityHologram::Update(float fDeltaTime)
         {
             float fTilt = PblRandom::_Global.GetFloat();
             m_fTilt = fTilt * fTilt * 0.017453292f * kfHoloMaxTilt;
-            m_fRotateTimer = PblRandom::_Global.GetFloat() * PblMath::fTwoPi / pClass->m_fRotateRate;
+            m_fRotateTimer = PblRandom::_Global.GetFloat() * 6.2831855f / pClass->m_fRotateRate;
         }
         m_fPopTimer = 0.0f;
     }

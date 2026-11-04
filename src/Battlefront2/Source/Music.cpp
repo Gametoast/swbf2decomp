@@ -17,7 +17,7 @@
 
 // GLOBAL: SWBF2 0x01ecb1a8
 // Music::sMemoryPool
-MemoryPool Music::sMemoryPool("Music", 0x48);
+MemoryPool Music::sMemoryPool("Music", sizeof(Music));
 
 // SYNTHETIC: SWBF2 0x00404370
 // `dynamic initializer for 'Music::sMusicInactive''
@@ -372,12 +372,12 @@ void Music::StopAll()
     for (;;)
     {
         PblListDoubleSorted::Node* pNode = itor.GetNode(&sMusicActive);
-        if (pNode == sMusicActive.GetTerminator())
+        Music* pMusic = (Music*)pNode->GetObjectA(&sMusicActive, offsetof(Music, mNode));
+        if (!pMusic)
         {
             break;
         }
 
-        Music* pMusic = (Music*)((char*)pNode - offsetof(Music, mNode));
         if (pMusic->mStream)
         {
             Snd::SourceTransport* pTransport = pMusic->mStream;
@@ -410,11 +410,10 @@ Music* Music::FindByID(const char* pcID)
 // FUNCTION: SWBF2 0x005a9f40
 Music* Music::FindByHashID(PblListDoubleSorted* pList, unsigned int uHashID)
 {
-    for (PblListDouble::Node* pLink = pList->mTerminator.mNext; pLink != &pList->mTerminator;
-         pLink = pLink->mNext)
+    PblListDoubleSorted::Itor itor(pList);
+    for (;;)
     {
-        PblListDoubleSorted::Node* pNode =
-            (PblListDoubleSorted::Node*)((char*)pLink - offsetof(PblListDoubleSorted::Node, mNode));
+        PblListDoubleSorted::Node* pNode = itor.GetNode(pList);
         if (pNode == pList->GetTerminator())
         {
             break;
@@ -425,6 +424,7 @@ Music* Music::FindByHashID(PblListDoubleSorted* pList, unsigned int uHashID)
         {
             return pMusic;
         }
+        ++itor;
     }
     return 0;
 }

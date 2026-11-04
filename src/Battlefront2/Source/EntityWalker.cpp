@@ -303,7 +303,7 @@ const char EntityWalker::rttiNameEntityWalker[] = "EntityWalker";
 // GLOBAL: SWBF2 0x01ebc260
 // EntityWalker::sMemoryPool
 // STRING: SWBF2 0x0079d7d4
-MemoryPool EntityWalker::sMemoryPool("EntityWalker", 0x2100);
+MemoryPool EntityWalker::sMemoryPool("EntityWalker", sizeof(EntityWalker));
 
 // FUNCTION: SWBF2 0x0047fb50
 const Controllable* EntityWalker::GetControllable() const
@@ -332,12 +332,12 @@ void EntityWalker::RotateY(const PblAngle& rAngle)
     PblMatrix kRot;
     kRot.m[0][0] = fCos;
     kRot.m[0][1] = 0.0f;
-    kRot.m[0][2] = -fSin;
     kRot.m[0][3] = 0.0f;
     kRot.m[1][0] = 0.0f;
     kRot.m[1][1] = 1.0f;
     kRot.m[1][2] = 0.0f;
     kRot.m[1][3] = 0.0f;
+    kRot.m[0][2] = -fSin;
     kRot.m[2][0] = fSin;
     kRot.m[2][1] = 0.0f;
     kRot.m[2][2] = fCos;
@@ -656,6 +656,8 @@ void EntityWalkerClass::SetProperty(unsigned int uProperty, const char* pszValue
             sCurrentSection = 7;
             break;
         case 0xdbaa7975:
+            sCurrentSection = -1;
+            return;
         default:
             sCurrentSection = -1;
             return;
@@ -1228,7 +1230,7 @@ void EntityWalkerClass::SetProperty(unsigned int uProperty, const char* pszValue
             const RedSkeleton* pSkeleton = mModel->GetRedModel(0)->GetSkeleton();
             if (pSkeleton)
             {
-                for (unsigned int i = 0; i < 128; ++i)
+                for (int i = 0; i < 128; ++i)
                 {
                     if (pSkeleton->GetBoneNameHash(i) == mAttachHash)
                     {
@@ -2926,7 +2928,7 @@ void EntityWalker::UpdateOrientation(float fDeltaTime)
         mLegPairs[i]->SetInterpolate(false);
     }
 
-    float fGravity = m_bIsJumping ? -9.8f : -29.4f;
+    float fGravity = m_bIsJumping ? -9.8f : -29.400002f;
     if (mLegPairCount > 1)
     {
         if (sBipedHack)
@@ -3199,10 +3201,10 @@ void EntityWalker::NextState(int iInput)
 // FUNCTION: SWBF2 0x00503d30
 void EntityWalker::ResetRotation()
 {
-    float fCos = mTurnOffset.mSin * 0.1f * mTurnOffset.mSin + mTurnOffset.mCos;
-    float fSin = mTurnOffset.mSin - mTurnOffset.mCos * 0.1f * mTurnOffset.mSin;
-    mTurnOffset.mCos = fCos;
-    mTurnOffset.mSin = fSin;
+    float fSin = mTurnOffset.mSin;
+    float fCos = mTurnOffset.mCos;
+    mTurnOffset.mCos = fSin * 0.1f * fSin + fCos;
+    mTurnOffset.mSin = fSin - fCos * 0.1f * fSin;
     mTurnOffset.Renormalize();
 }
 
@@ -3706,10 +3708,17 @@ void EntityWalker::UpdateState(float fDeltaTime, float fMove, float fStrafe, flo
         if (mBlend->GetReversed() && fDeltaTime > mBlend->GetTimeRemaining())
         {
             fDeltaTime = mBlend->GetTimeRemaining();
+            for (int i = 0; i < mLegPairCount; ++i)
+            {
+                mLegPairs[i]->Update(fDeltaTime);
+            }
         }
-        for (int i = 0; i < mLegPairCount; ++i)
+        else
         {
-            mLegPairs[i]->Update(fDeltaTime);
+            for (int i = 0; i < mLegPairCount; ++i)
+            {
+                mLegPairs[i]->Update(fDeltaTime);
+            }
         }
         mBlend->Update(fDeltaTime);
         if (!m_bIsJumping)
@@ -3722,13 +3731,13 @@ void EntityWalker::UpdateState(float fDeltaTime, float fMove, float fStrafe, flo
         }
         if (mState != Idle && mState < StateCount)
         {
-            if (mState > TurnRight)
+            if (mState <= TurnRight)
             {
-                ResetRotation();
+                mTurnOffset += PblAngle(fDeltaTime * mTotalTurn / mClass->mAnimations[mState]->mTimeTotal);
             }
             else
             {
-                mTurnOffset += PblAngle(fDeltaTime * mTotalTurn / mClass->mAnimations[mState]->mTimeTotal);
+                ResetRotation();
             }
         }
     }

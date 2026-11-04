@@ -2800,10 +2800,6 @@ bool WeaponMelee::Update(float fDeltaTime)
         bool bOvertime = false;
         float fDuration = pState->GetDuration();
         const bool bNoDuration = fDuration <= 0.0f;
-        if (bNoDuration)
-        {
-            fDuration = m_fComboStateTimer;
-        }
 
         if (!bNoDuration && m_fComboStateTimer >= fDuration)
         {
@@ -2863,6 +2859,10 @@ bool WeaponMelee::Update(float fDeltaTime)
         }
         else
         {
+            if (bNoDuration)
+            {
+                fDuration = m_fComboStateTimer;
+            }
 
             if (pStatePrev)
             {
@@ -2911,7 +2911,7 @@ bool WeaponMelee::Update(float fDeltaTime)
                             const Combo::Condition* pTest = &transition.m_aCondition[j];
                             float fTime;
                             if ((pTest->IsBreak() || bNoDuration) &&
-                                pTest->m_uiBreakTime * Combo::Condition::TIME_SCALE <= m_fComboStateTimer &&
+                                !(m_fComboStateTimer < pTest->m_uiBreakTime * Combo::Condition::TIME_SCALE) &&
                                 TestCondition(fDuration, m_fComboStateTimer, pTest, &fTime) &&
                                 fMatchTime > fTime)
                             {
@@ -2930,7 +2930,7 @@ bool WeaponMelee::Update(float fDeltaTime)
                 {
                     const Combo::Condition* pTest = &pState->m_aAnimatedMoveCondition[i];
                     float fTime;
-                    if (pTest->m_uiBreakTime * Combo::Condition::TIME_SCALE <= m_fComboStateTimer &&
+                    if (!(m_fComboStateTimer < pTest->m_uiBreakTime * Combo::Condition::TIME_SCALE) &&
                         TestCondition(fDuration, m_fComboStateTimer, pTest, &fTime))
                     {
                         m_bAnimatedMove = 0;

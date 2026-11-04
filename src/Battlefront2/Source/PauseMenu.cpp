@@ -498,10 +498,7 @@ bool PauseMenu::Update(float fDeltaTime)
         bStart = false;
         bPlayerList = false;
     }
-    if (bGameOver)
-    {
-        iViewport = 0;
-    }
+    iViewport = bGameOver ? 0 : iViewport;
 
     if ((PauseMenu::sPausingViewport == -1 || PauseMenu::sPausingViewport == iViewport) && !gAttractMode && !mVisible &&
         mDebounceTime <= 0.0f && !FLInputManager::s_instance.AnyMissing() && pSpawn->mMode != SpawnDisplay::eFINISHED &&
@@ -534,7 +531,7 @@ bool PauseMenu::Update(float fDeltaTime)
     {
         SpawnDisplay::EnableViewport(iViewport, false);
         EnableDisplays(iViewport, false);
-        for (int i = 0; i < 5; ++i)
+        for (unsigned int i = 0; i < 5; ++i)
         {
             HUD::gScreenGroup[i].Enable(false);
         }
@@ -545,8 +542,14 @@ bool PauseMenu::Update(float fDeltaTime)
         if (GameLoop::sPauseMode)
         {
             GameLoop::Resume();
-            EnableDisplays(mViewport, false);
-            for (int i = 0; i < 5; ++i)
+            StatusDisplay::EnableViewport(mViewport, false);
+            ReticuleDisplay::EnableViewport(mViewport, false);
+            CaptureDisplay::EnableViewport(mViewport, false);
+            MessageDisplay::EnableViewport(mViewport, false);
+            BootDisplay::EnableViewport(mViewport, false);
+            HeroMessageDisplay::EnableViewport(mViewport, false);
+            SpectatorDisplay::EnableViewport(mViewport, false);
+            for (unsigned int i = 0; i < 5; ++i)
             {
                 HUD::gScreenGroup[i].Enable(false);
             }

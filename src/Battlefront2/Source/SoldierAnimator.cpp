@@ -246,12 +246,8 @@ void SoldierAnimator::SetAction(SoldierState::SoldierState eState, const PblMatr
     }
     else
     {
-        const PblVector3& newPos = legMatrix.GetTranslation();
-        const PblVector3& oldPos = mLegMatrix.GetTranslation();
-        mMovement.x = newPos.x - oldPos.x;
-        mMovement.y = newPos.y - oldPos.y;
-        mMovement.z = newPos.z - oldPos.z;
-        if (mMovement.x * mMovement.x + mMovement.y * mMovement.y + mMovement.z * mMovement.z > 100.0f)
+        mMovement = legMatrix.GetTranslation() - mLegMatrix.GetTranslation();
+        if (SquaredLength(mMovement) > 100.0f)
         {
             mMovement.z = 0.0f;
             mMovement.y = 0.0f;
@@ -280,17 +276,22 @@ void SoldierAnimator::SetAction(SoldierState::SoldierState eState, const PblMatr
 
     switch (eState)
     {
+    case SoldierState::HERO_FLEE:
+        mPosture = SoldierAnimType::CROUCH;
+        mAction = SoldierAnimType::DEAD_HERO_STUN;
+        mActionTime = 0.0f;
+        break;
+
     case SoldierState::STAND:
     case SoldierState::CROUCH:
     case SoldierState::PRONE:
     case SoldierState::SPRINT:
     {
-        SoldierAnimType::Posture ePosture =
-            eState == SoldierState::SPRINT ? SoldierAnimType::STAND : (SoldierAnimType::Posture)eState;
         SoldierAnimType::ActionAnimation eAction = mAction;
         if (eAction != SoldierAnimType::MOVE && eAction != SoldierAnimType::SPRINT && !bFirstTime)
         {
-
+            SoldierAnimType::Posture ePosture =
+                eState == SoldierState::SPRINT ? SoldierAnimType::STAND : (SoldierAnimType::Posture)eState;
             mPosture = ePosture;
             if (ePosture == SoldierAnimType::CROUCH)
             {
@@ -333,7 +334,7 @@ void SoldierAnimator::SetAction(SoldierState::SoldierState eState, const PblMatr
         }
         else if (bFirstTime)
         {
-            mPosture = ePosture;
+            mPosture = eState == SoldierState::SPRINT ? SoldierAnimType::STAND : (SoldierAnimType::Posture)eState;
             if (eState == SoldierState::SPRINT)
             {
                 mAction = SoldierAnimType::SPRINT;
@@ -347,6 +348,8 @@ void SoldierAnimator::SetAction(SoldierState::SoldierState eState, const PblMatr
                 break;
             }
             mActionTime = 0.0f;
+            SoldierAnimType::Posture ePosture =
+                eState == SoldierState::SPRINT ? SoldierAnimType::STAND : (SoldierAnimType::Posture)eState;
             switch (eState)
             {
             case SoldierState::STAND:
@@ -405,6 +408,12 @@ void SoldierAnimator::SetAction(SoldierState::SoldierState eState, const PblMatr
         break;
     }
 
+    case SoldierState::ROLL:
+    case SoldierState::TUMBLE_RECOVER:
+        mAction = SoldierAnimType::DIVE;
+        mActionTime = 0.0f;
+        break;
+
     case SoldierState::JUMP:
     {
         mActionTime = 0.0f;
@@ -423,7 +432,7 @@ void SoldierAnimator::SetAction(SoldierState::SoldierState eState, const PblMatr
             fSide = 0.0f;
             fForward = 0.0f;
         }
-        if (m_bUseDirectionalJumps && fSide * fSide + fForward * fForward >= 4.0f)
+        if (m_bUseDirectionalJumps && !(fSide * fSide + fForward * fForward < 4.0f))
         {
             float fAbsSide = (fSide < 0.0f ? -fSide : fSide);
             if (fForward > fAbsSide)
@@ -436,7 +445,7 @@ void SoldierAnimator::SetAction(SoldierState::SoldierState eState, const PblMatr
             }
             else
             {
-                mAction = fSide <= 0.0f ? SoldierAnimType::JUMP_RIGHT : SoldierAnimType::JUMP_LEFT;
+                mAction = fSide > 0.0f ? SoldierAnimType::JUMP_LEFT : SoldierAnimType::JUMP_RIGHT;
             }
         }
         else
@@ -445,12 +454,6 @@ void SoldierAnimator::SetAction(SoldierState::SoldierState eState, const PblMatr
         }
         break;
     }
-
-    case SoldierState::ROLL:
-    case SoldierState::TUMBLE_RECOVER:
-        mAction = SoldierAnimType::DIVE;
-        mActionTime = 0.0f;
-        break;
 
     case SoldierState::JET_JUMP:
     case SoldierState::JET_HOVER:
@@ -518,21 +521,6 @@ void SoldierAnimator::SetAction(SoldierState::SoldierState eState, const PblMatr
         break;
     }
 
-    case SoldierState::FLY_RECOVER:
-        mActionTime = 0.0f;
-        if (mLegMatrix.m[2][1] * mMovement.y + mLegMatrix.m[2][0] * mMovement.x +
-                mLegMatrix.m[2][2] * mMovement.z > 0.0f)
-        {
-            mAction = SoldierAnimType::TUMBLE_FORWARD;
-        }
-        else
-        {
-            mAction = SoldierAnimType::TUMBLE_BACKWARD;
-            mLegAngle -= 3.1415927f;
-        }
-        mLegAngle = UnitCircleNormalize(mLegAngle);
-        break;
-
     case SoldierState::BOUNCE:
     {
         const SoldierAnimation* pAnim =
@@ -546,13 +534,25 @@ void SoldierAnimator::SetAction(SoldierState::SoldierState eState, const PblMatr
                 float fPhase = fCycles - (float)(int)fCycles;
                 if (mAction == SoldierAnimType::TUMBLE_FORWARD)
                 {
-                    mAction = (fPhase > 0.4f && fPhase < 0.9f) ? SoldierAnimType::LAND_BACK
-                                                               : SoldierAnimType::LAND_FRONT;
+                    if (fPhase > 0.4f && fPhase < 0.9f)
+                    {
+                        mAction = SoldierAnimType::LAND_BACK;
+                    }
+                    else
+                    {
+                        mAction = SoldierAnimType::LAND_FRONT;
+                    }
                 }
                 else
                 {
-                    mAction = (fPhase > 0.4f && fPhase < 0.9f) ? SoldierAnimType::LAND_FRONT
-                                                               : SoldierAnimType::LAND_BACK;
+                    if (fPhase > 0.4f && fPhase < 0.9f)
+                    {
+                        mAction = SoldierAnimType::LAND_FRONT;
+                    }
+                    else
+                    {
+                        mAction = SoldierAnimType::LAND_BACK;
+                    }
                 }
             }
             else if (mRotAngle > 3.1415927f)
@@ -572,54 +572,66 @@ void SoldierAnimator::SetAction(SoldierState::SoldierState eState, const PblMatr
         break;
     }
 
+    case SoldierState::FLY_RECOVER:
+        mActionTime = 0.0f;
+        if (mLegMatrix.m[2][1] * mMovement.y + mLegMatrix.m[2][0] * mMovement.x +
+                mLegMatrix.m[2][2] * mMovement.z > 0.0f)
+        {
+            mAction = SoldierAnimType::TUMBLE_FORWARD;
+        }
+        else
+        {
+            mAction = SoldierAnimType::TUMBLE_BACKWARD;
+            mLegAngle -= 3.1415927f;
+        }
+        mLegAngle = UnitCircleNormalize(mLegAngle);
+        break;
+
+    case SoldierState::DEAD:
+        if (m_bUseDirectionalDeaths)
+        {
+            if (mAction == SoldierAnimType::BOUNCE_FRONT || mAction == SoldierAnimType::LAND_FRONT ||
+                mAction == SoldierAnimType::GETUP_FRONT ||
+                (mAction == SoldierAnimType::MOVE && mPosture == SoldierAnimType::PRONE))
+            {
+                mAction = SoldierAnimType::DEAD_BELLY;
+            }
+            else if (mAction == SoldierAnimType::BOUNCE_BACK || mAction == SoldierAnimType::GETUP_BACK ||
+                     mAction == SoldierAnimType::LAND_BACK)
+            {
+                mAction = SoldierAnimType::DEAD_ASS;
+            }
+            else
+            {
+                mOverlayTime = 0.0f;
+                switch (m_eLastHitDir)
+                {
+                case 1:
+                    mAction = SoldierAnimType::DIE_LEFT;
+                    break;
+                case 2:
+                    mAction = SoldierAnimType::DIE_BACKWARD;
+                    break;
+                case 3:
+                    mAction = SoldierAnimType::DIE_RIGHT;
+                    break;
+                default:
+                    mAction = SoldierAnimType::DIE_FORWARD;
+                    break;
+                }
+            }
+        }
+        else
+        {
+            mAction = SoldierAnimType::DIE_BACKWARD;
+        }
+        mActionTime = 0.0f;
+        break;
+
     case SoldierState::CHOKE:
     case SoldierState::PILOT_ANIMATION:
     case SoldierState::ARMED_PASSENGER:
         mAnimationHash = uiAnimationHash;
-        break;
-
-    case SoldierState::DEAD:
-        if (!m_bUseDirectionalDeaths)
-        {
-            mAction = SoldierAnimType::DIE_BACKWARD;
-        }
-        else if (mAction == SoldierAnimType::BOUNCE_FRONT || mAction == SoldierAnimType::LAND_FRONT ||
-                 mAction == SoldierAnimType::GETUP_FRONT ||
-                 (mAction == SoldierAnimType::MOVE && mPosture == SoldierAnimType::PRONE))
-        {
-            mAction = SoldierAnimType::DEAD_BELLY;
-        }
-        else if (mAction == SoldierAnimType::BOUNCE_BACK || mAction == SoldierAnimType::GETUP_BACK ||
-                 mAction == SoldierAnimType::LAND_BACK)
-        {
-            mAction = SoldierAnimType::DEAD_ASS;
-        }
-        else
-        {
-            mOverlayTime = 0.0f;
-            switch (m_eLastHitDir)
-            {
-            case 1:
-                mAction = SoldierAnimType::DIE_LEFT;
-                break;
-            case 2:
-                mAction = SoldierAnimType::DIE_BACKWARD;
-                break;
-            case 3:
-                mAction = SoldierAnimType::DIE_RIGHT;
-                break;
-            default:
-                mAction = SoldierAnimType::DIE_FORWARD;
-                break;
-            }
-        }
-        mActionTime = 0.0f;
-        break;
-
-    case SoldierState::HERO_FLEE:
-        mPosture = SoldierAnimType::CROUCH;
-        mAction = SoldierAnimType::DEAD_HERO_STUN;
-        mActionTime = 0.0f;
         break;
 
     case SoldierState::SLIDE:
@@ -1011,9 +1023,16 @@ void SoldierAnimator::SetupPose(RedPose& pose)
         }
         else
         {
-            Controllable* pControllable = mOwner->mCharacter ? mOwner->mCharacter->GetControllable() : 0;
-            bool bMoving = pControllable &&
-                           (pControllable->mControlMove != 0.0f || pControllable->mControlStrafe != 0.0f);
+            Controllable* pControllable = 0;
+            if (mOwner->mCharacter)
+            {
+                pControllable = mOwner->mCharacter->GetControllable();
+            }
+            bool bMoving = false;
+            if (pControllable && (pControllable->mControlMove != 0.0f || pControllable->mControlStrafe != 0.0f))
+            {
+                bMoving = true;
+            }
             if (fDeltaTime > 0.0f && mActionTime > 0.0f && (m_bAnimControlledMove || bMoving))
             {
                 mAction = SoldierAnimType::MOVE;
@@ -1443,7 +1462,7 @@ bool SoldierAnimator::UpdateActionAnimation(SoldierAnimType::ActionAnimation eAc
         PblVector3 vAxis;
         if (vTravel.x * vTravel.x + vTravel.y * vTravel.y + vTravel.z * vTravel.z > 0.0001f)
         {
-            D3DXVec3Normalize(reinterpret_cast<D3DXVECTOR3*>(&vAxis), reinterpret_cast<const D3DXVECTOR3*>(&vTravel));
+            vAxis = Normalize(vTravel);
         }
         else
         {
@@ -1904,21 +1923,20 @@ SoldierAnimType::MovementAnimation SoldierAnimator::GetMovementAnimation(float f
     }
 
     bool bAlert = m_bAlert;
-    const SoldierAnimatorClass* pClass = SoldierAnimatorClass::Instance();
     const SoldierAnimation* apAnim[SoldierAnimType::NUM_MOVEMENT_ANIMATIONS] = {
         0,
         0,
         0,
         0,
         0,
-        pClass->GetLowerBodyMovementAnimation(SoldierAnimType::WALK_FORWARD, mPosture, mWeaponAnimationMap, bAlert),
-        pClass->GetLowerBodyMovementAnimation(SoldierAnimType::RUN_FORWARD, mPosture, mWeaponAnimationMap, bAlert),
-        pClass->GetLowerBodyMovementAnimation(SoldierAnimType::WALK_BACKWARD, mPosture, mWeaponAnimationMap, bAlert),
-        pClass->GetLowerBodyMovementAnimation(SoldierAnimType::RUN_BACKWARD, mPosture, mWeaponAnimationMap, bAlert),
-        pClass->GetLowerBodyMovementAnimation(SoldierAnimType::WALK_LEFT, mPosture, mWeaponAnimationMap, bAlert),
-        pClass->GetLowerBodyMovementAnimation(SoldierAnimType::RUN_LEFT, mPosture, mWeaponAnimationMap, bAlert),
-        pClass->GetLowerBodyMovementAnimation(SoldierAnimType::WALK_RIGHT, mPosture, mWeaponAnimationMap, bAlert),
-        pClass->GetLowerBodyMovementAnimation(SoldierAnimType::RUN_RIGHT, mPosture, mWeaponAnimationMap, bAlert)
+        SoldierAnimatorClass::Instance()->GetLowerBodyMovementAnimation(SoldierAnimType::WALK_FORWARD, mPosture, mWeaponAnimationMap, bAlert),
+        SoldierAnimatorClass::Instance()->GetLowerBodyMovementAnimation(SoldierAnimType::RUN_FORWARD, mPosture, mWeaponAnimationMap, bAlert),
+        SoldierAnimatorClass::Instance()->GetLowerBodyMovementAnimation(SoldierAnimType::WALK_BACKWARD, mPosture, mWeaponAnimationMap, bAlert),
+        SoldierAnimatorClass::Instance()->GetLowerBodyMovementAnimation(SoldierAnimType::RUN_BACKWARD, mPosture, mWeaponAnimationMap, bAlert),
+        SoldierAnimatorClass::Instance()->GetLowerBodyMovementAnimation(SoldierAnimType::WALK_LEFT, mPosture, mWeaponAnimationMap, bAlert),
+        SoldierAnimatorClass::Instance()->GetLowerBodyMovementAnimation(SoldierAnimType::RUN_LEFT, mPosture, mWeaponAnimationMap, bAlert),
+        SoldierAnimatorClass::Instance()->GetLowerBodyMovementAnimation(SoldierAnimType::WALK_RIGHT, mPosture, mWeaponAnimationMap, bAlert),
+        SoldierAnimatorClass::Instance()->GetLowerBodyMovementAnimation(SoldierAnimType::RUN_RIGHT, mPosture, mWeaponAnimationMap, bAlert)
     };
 
     int eAnim;
@@ -1946,23 +1964,25 @@ SoldierAnimType::MovementAnimation SoldierAnimator::GetMovementAnimation(float f
             fAngle = UnitCircleNormalize(fAngle + PblMath::fPi);
         }
     }
-    else if (mOwner)
-    {
-        eAnim = SoldierAnimType::WALK_FORWARD;
-        fAngle = mOwner->mLegAngle;
-        if (!mOwner->mLegAngleForward)
-        {
-            eAnim = SoldierAnimType::WALK_BACKWARD;
-        }
-    }
     else
     {
-        fAngle = atan2f(fSide, fForward);
         eAnim = SoldierAnimType::WALK_FORWARD;
-        if (fForward <= 0.0f)
+        if (mOwner)
         {
-            eAnim = SoldierAnimType::WALK_BACKWARD;
-            fAngle = UnitCircleNormalize(fAngle + PblMath::fPi);
+            fAngle = mOwner->mLegAngle;
+            if (!mOwner->mLegAngleForward)
+            {
+                eAnim = SoldierAnimType::WALK_BACKWARD;
+            }
+        }
+        else
+        {
+            fAngle = atan2f(fSide, fForward);
+            if (fForward <= 0.0f)
+            {
+                eAnim = SoldierAnimType::WALK_BACKWARD;
+                fAngle = UnitCircleNormalize(fAngle + PblMath::fPi);
+            }
         }
     }
 

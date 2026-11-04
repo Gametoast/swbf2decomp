@@ -1021,12 +1021,11 @@ void HUD::ElementMap::UpdatePlayerIcon()
         fX = fScreenX;
     }
 
+    const PblVector3& vViewScale = mPlayerFOV[mMode].HUD::Element::mMatrix.GetScale();
     const D3DXMATRIXA16 mFlat(1.0f, 0.0f, 0.0f, 0.0f,
                               0.0f, 0.0f, -1.0f, 0.0f,
                               0.0f, 1.0f, 0.0f, 0.0f,
                               0.0f, 0.0f, 0.0f, 1.0f);
-
-    const PblVector3& vViewScale = mPlayerFOV[mMode].HUD::Element::mMatrix.GetScale();
     PblMatrix matrix = mFlat;
     matrix.RotateZ(fViewAngle - PblMath::fPi);
     matrix.Scale(vViewScale.x, vViewScale.y, vViewScale.z);
@@ -1440,15 +1439,7 @@ void HUD::ElementMap::UpdateMarkerIcons()
         }
 
         RedColor color = marker.color;
-        float fTime;
-        if (marker.flashAlpha || marker.pulseSize)
-        {
-            fTime = fmodf(GameLoop::GetMissionTime(), 1.0f);
-        }
-        else
-        {
-            fTime = 0.0f;
-        }
+        const float fTime = (marker.flashAlpha || marker.pulseSize) ? fmodf(GameLoop::GetMissionTime(), 1.0f) : 0.0f;
         if (marker.flashAlpha)
         {
             color.a = (unsigned char)(int)((1.0f - fTime) * 255.0f);
@@ -1484,8 +1475,8 @@ void HUD::ElementMap::UpdateMarkerIcons()
         }
         if (mMode == mode_Small)
         {
-            bitmap.SetMatrixPosRotScale(fX, fY, PblMath::Atan2(-mPlayerDirection.x, mPlayerDirection.z), fScale,
-                                        fScale);
+            const float fAngle = PblMath::Atan2(-mPlayerDirection.x, mPlayerDirection.z);
+            bitmap.SetMatrixPosRotScale(fX, fY, fAngle, fScale, fScale);
         }
         else if (sNorth != 0.0f)
         {

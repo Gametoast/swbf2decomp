@@ -142,8 +142,9 @@ float Controller::_GetTargetBubbleSize() const
     Controllable* pOwner = mOwner;
     const GameObject* pObject = pOwner ? ((const Controllable*)pOwner)->GetGameObject() : 0;
 
+    float fMaxSize;
     float fStance = 1.0f;
-    float fMaxSize = 1.5f;
+    fMaxSize = 1.5f;
     if (pOwner)
     {
         fStance = pOwner->GetTargetBubbleStanceModifier();
@@ -174,8 +175,9 @@ float Controller::_GetTargetBubbleSize() const
         fRadius *= 2.0f;
     }
 
+    float fVisScale = 3.0f - mTotalVisFactor * 2.0f;
     float fSize = mTargetBubbleSize * fSpeedFactor;
-    return (3.0f - mTotalVisFactor * 2.0f) * fRadius * (fSize > fMaxSize ? fMaxSize : fSize);
+    return fVisScale * fRadius * (fSize > fMaxSize ? fMaxSize : fSize);
 }
 
 // FUNCTION: SWBF2 0x00485250
@@ -188,12 +190,8 @@ void Controller::UpdateTargetBubbleSize(float dt)
 
     float fShrink = AIDifficulty::GetTargetBubbleShrinkRate(
                         !AIUtil::IsPlayerTeam(GetTeam(mOwner->GetGameObject()))) * dt;
-    float fIncrease = fShrink;
-    if (mOwner->GetGameObject()->IsRtti(EntityFlyer::rttiHashEntityFlyer))
-    {
-        fIncrease *= 0.5f;
-    }
-    IncreaseTargetBubbleSize(fIncrease);
+    IncreaseTargetBubbleSize(mOwner->GetGameObject()->IsRtti(EntityFlyer::rttiHashEntityFlyer)
+                             ? fShrink * 0.5f : fShrink);
 
     mAvailableBubbleCharge = Clamp(mAvailableBubbleCharge - fShrink * 0.5f, 0.0f, 5.0f);
 

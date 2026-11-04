@@ -360,17 +360,14 @@ void EntityPathFollower::SmoothPath(BranchParams& params, const PblVector3* pTar
         return;
     }
 
-    vPoint.x = m.m[1][2] * vDir.y - m.m[1][1] * vDir.z;
-    vPoint.y = m.m[1][0] * vDir.z - m.m[1][2] * vDir.x;
-    vPoint.z = m.m[1][1] * vDir.x - m.m[1][0] * vDir.y;
+    vPoint = PblVector3(m.m[1][2] * vDir.y - m.m[1][1] * vDir.z, m.m[1][0] * vDir.z - m.m[1][2] * vDir.x,
+                        m.m[1][1] * vDir.x - m.m[1][0] * vDir.y);
     if (m.m[2][0] * vPoint.x + m.m[2][1] * vPoint.y + m.m[2][2] * vPoint.z < 0.0f)
     {
-        vPoint.x = -vPoint.x;
-        vPoint.y = -vPoint.y;
-        vPoint.z = -vPoint.z;
+        vPoint = -vPoint;
     }
 
-    float fDist = sqrtf(vDelta.x * vDelta.x + vDelta.y * vDelta.y + vDelta.z * vDelta.z);
+    float fDist = PblMath::Sqrt(vDelta.x * vDelta.x + vDelta.y * vDelta.y + vDelta.z * vDelta.z);
     float fDistT = fDist / fDistRange;
     float fAngleT = Clamp((1.0f - fDot) * 3.0f, 0.0f, 1.0f);
     fDistT = Clamp(fDistT, 0.0f, 1.0f);
@@ -417,9 +414,9 @@ void EntityPathFollower::SmoothPath(BranchParams& params, const PblVector3* pTar
             vLead.y = vForward.y * fForwardScale * fT * 0.25f;
             vLead.z = vForward.z * fForwardScale * fT * 0.25f;
         }
-        vPoint.x = pTarget->x - mOffset.x + vSide.x * 0.25f + vLead.x;
-        vPoint.y = pTarget->y - mOffset.y + vSide.y * 0.25f + vLead.y;
-        vPoint.z = pTarget->z - mOffset.z + vSide.z * 0.25f + vLead.z;
+        vPoint = PblVector3(pTarget->x - mOffset.x + vSide.x * 0.25f + vLead.x,
+                            pTarget->y - mOffset.y + vSide.y * 0.25f + vLead.y,
+                            pTarget->z - mOffset.z + vSide.z * 0.25f + vLead.z);
         if (!bForce && !RayTestSpline(GetPoint(0), GetPoint(1), vPoint, GetPoint(2), params.mGameObject, 2))
         {
             return;
@@ -953,7 +950,11 @@ bool EntityPathFollower::Branch(BranchParams& params, const PblVector3* const pP
 void EntityPathFollower::EndOfSegment(BranchParams& params, const PblVector3* const pPosition, bool bForceBranch,
                                       bool bSetupNext)
 {
-    bool bBranch = bForceBranch || (!mPath && !GetPointIsSet(2) && !GetPointIsSet(3));
+    bool bBranch = bForceBranch;
+    if (!bBranch)
+    {
+        bBranch |= !mPath && !GetPointIsSet(2) && !GetPointIsSet(3);
+    }
     bBranch |= mPath && (mIndex < 0 || mIndex >= mPath->GetNumPoints());
     if (!bBranch && mPath)
     {
@@ -978,11 +979,7 @@ void EntityPathFollower::EndOfSegment(BranchParams& params, const PblVector3* co
             {
                 PblVector3 vPosition = pPosition ? *pPosition : params.mMatrix.GetTranslation();
                 PblVector3 vTarget = pControllable->GetMatrix().GetTranslation();
-                if ((vTarget.x - vPosition.x) * (vTarget.x - vPosition.x) +
-                            (vTarget.y - vPosition.y) * (vTarget.y - vPosition.y) +
-                            (vTarget.z - vPosition.z) * (vTarget.z - vPosition.z) >
-                        160000.0f &&
-                    HeadTowards(vTarget, 150.0f, params))
+                if (SquaredLength(vTarget - vPosition) > 160000.0f && HeadTowards(vTarget, 150.0f, params))
                 {
                     return;
                 }
@@ -1670,16 +1667,8 @@ float EntityPathFollower::Roll(const EntityPathFollowerClass* const pClass, floa
         return (mSplineRoll - mCurRoll) * mT + mCurRoll;
     }
 
-    float fMaxBank = 1.5707964f;
-    float fBank = mCurSpeed * fTurnRate * pClass->mPathRollValues.mRollSpeedFactor;
-    if (-fMaxBank > fBank)
-    {
-        fBank = -fMaxBank;
-    }
-    else if (fBank > fMaxBank)
-    {
-        fBank = fMaxBank;
-    }
+    float fBank = Clamp(mCurSpeed * fTurnRate * pClass->mPathRollValues.mRollSpeedFactor, -PblMath::fHalfPi,
+                        PblMath::fHalfPi);
 
     float fTime = GameLoop::GetMissionTime() + (float)(((unsigned int)this >> 2) & 0xf);
     float fWeave = 1.0f;
