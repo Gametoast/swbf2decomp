@@ -66,9 +66,10 @@ namespace
 
     inline void UpdateCollisionSphere(EntityHover* pHover)
     {
+        const PblMatrix& matrix = pHover->mMatrix;
         PblVector3 center;
         D3DXVec3TransformCoord(reinterpret_cast<D3DXVECTOR3*>(&center), reinterpret_cast<const D3DXVECTOR3*>(&pHover->mModel->_mModel->_BoundingSphere.GetCenter()),
-                               reinterpret_cast<const D3DXMATRIX*>(&pHover->mMatrix));
+                               reinterpret_cast<const D3DXMATRIX*>(&matrix));
         pHover->SetCollisionCenter(center);
         pHover->RecalculateAABB();
     }
@@ -387,12 +388,8 @@ EntityHover::EntityHover(EntityHoverClass* pClass, const EntityDesc& desc)
     mMatrix.SetTranslation(mMatrix.GetTranslation() + vLift);
     AddToScene();
 
-    mVelocity.x = 0.0f;
-    mVelocity.y = 0.0f;
-    mVelocity.z = 0.0f;
-    mOmega.x = 0.0f;
-    mOmega.y = 0.0f;
-    mOmega.z = 0.0f;
+    mVelocity.SetAll(0.0f);
+    mOmega.SetAll(0.0f);
     mGroundRatio = 1.0f;
     mBankPitchAngle = 0.0f;
     mBankRollAngle = 0.0f;
@@ -504,9 +501,7 @@ EntityHover::EntityHover(EntityHoverClass* pClass, const EntityDesc& desc)
     {
         mColliderBody[i].mOverlap = 0.0f;
         mColliderBody[i].mOldOverlap = 0.0f;
-        mColliderBody[i].mNormal.x = 0.0f;
-        mColliderBody[i].mNormal.y = 0.0f;
-        mColliderBody[i].mNormal.z = 0.0f;
+        mColliderBody[i].mNormal.SetAll(0.0f);
     }
     mJumpMode = false;
     mEjectTimer = 0.0f;
@@ -638,11 +633,12 @@ EntityHoverClass::EntityHoverClass(EntityHoverClass* pBase, unsigned int uHash)
     mPitchMin = pBase->mPitchMin;
     mPitchMax = pBase->mPitchMax;
     mThrustPitchAngle = pBase->mThrustPitchAngle;
-    mStrafeRollAngle = pBase->mStrafeRollAngle;
 
     sCurrentSection = -1;
     sWeaponSection = 0;
     sWheelSection = 0;
+
+    mStrafeRollAngle = pBase->mStrafeRollAngle;
 
     mBankAngle = pBase->mBankAngle;
     mBankFilter = pBase->mBankFilter;
@@ -1139,7 +1135,7 @@ void EntityHoverClass::SetProperty(unsigned int uProperty, const char* pszValue)
             float dx = vCenter.x - x;
             float dy = vCenter.y - y;
             float dz = vCenter.z - z;
-            float fReach = sqrtf(dy * dy + dx * dx + dz * dz) + fRadius;
+            float fReach = PblMath::Sqrt(dy * dy + dx * dx + dz * dz) + fRadius;
             mPotentialCollisionRadius = mPotentialCollisionRadius > fReach ? mPotentialCollisionRadius : fReach;
 
             SetupDefaultColliderBodyFactors(mColliderBodyInfo[mNumColliderBodies],
@@ -1417,10 +1413,9 @@ EntityHover::~EntityHover()
     }
     for (int i = 0; i < 6; ++i)
     {
-        FLEffectObject* pEmitter = mWakeEmitters[i];
-        if (pEmitter)
+        if (mWakeEmitters[i])
         {
-            pEmitter->DeactivateEffect();
+            mWakeEmitters[i]->DeactivateEffect();
         }
     }
 }
@@ -1993,7 +1988,7 @@ void EntityHover::Move(float fDeltaTime, float fThrust, float fStrafe, float fTu
             {
                 PblVector3 vAhead(vDown.x * fLength + mVelocity.x, mVelocity.y + vDown.y * fLength,
                                   mVelocity.z + vDown.z * fLength);
-                float fAheadLength = sqrtf(vAhead.y * vAhead.y + vAhead.x * vAhead.x + vAhead.z * vAhead.z);
+                float fAheadLength = PblMath::Sqrt(vAhead.y * vAhead.y + vAhead.x * vAhead.x + vAhead.z * vAhead.z);
                 float fInv = 1.0f / fAheadLength;
                 PblVector3 vAheadDir(vAhead.x * fInv, vAhead.y * fInv, vAhead.z * fInv);
                 float fAheadHit = CollisionManager::RayHit(vStart, vAheadDir, fAheadLength, pHit, &vNormal, &pIgnore,
@@ -2222,7 +2217,7 @@ void EntityHover::Move(float fDeltaTime, float fThrust, float fStrafe, float fTu
         }
     }
 
-    float fVelocity = sqrtf(mVelocity.x * mVelocity.x + mVelocity.y * mVelocity.y + mVelocity.z * mVelocity.z);
+    float fVelocity = PblMath::Sqrt(mVelocity.x * mVelocity.x + mVelocity.y * mVelocity.y + mVelocity.z * mVelocity.z);
     float fForward = mVelocity.x * mMatrix.m[2][0] + mVelocity.y * mMatrix.m[2][1] + mVelocity.z * mMatrix.m[2][2];
     bool bMouse = false;
     if (mPlayerId >= 0)
@@ -2289,7 +2284,7 @@ void EntityHover::Move(float fDeltaTime, float fThrust, float fStrafe, float fTu
 
     PblQuaternion qOrient(mMatrix);
     PblVector3 vPos = mMatrix.GetTranslation();
-    float fRate = sqrtf(mOmega.x * mOmega.x + mOmega.y * mOmega.y + mOmega.z * mOmega.z);
+    float fRate = PblMath::Sqrt(mOmega.x * mOmega.x + mOmega.y * mOmega.y + mOmega.z * mOmega.z);
     if (fRate > 0.0001f)
     {
         float fInv = 1.0f / fRate;
@@ -2992,9 +2987,8 @@ void EntityHover::ApplyCollisionImpact(float fApproach, const PblVector3& vNorma
         return;
     }
 
-    const float fNormalX = vNormal.x;
-    float fUp = mMatrix.m[1][1] * vNormal.y + fNormalX * mMatrix.m[1][0] + mMatrix.m[1][2] * vNormal.z;
-    float fFront = mMatrix.m[2][1] * vNormal.y + fNormalX * mMatrix.m[2][0] + mMatrix.m[2][2] * vNormal.z;
+    float fUp = DotProduct(mMatrix.GetYAxis(), vNormal);
+    float fFront = DotProduct(mMatrix.GetZAxis(), vNormal);
     if (!(0.0f > fApproach))
     {
         return;
@@ -3129,7 +3123,7 @@ bool EntityHover::CollisionCallback(const CollisionResult* pResult, CollisionObj
                 mVelocity.y -= vNormal.y * fApproach;
                 mVelocity.z -= vNormal.z * fApproach;
                 float fSlide = fBounce * fFriction /
-                               sqrtf(mVelocity.x * mVelocity.x + mVelocity.y * mVelocity.y +
+                               PblMath::Sqrt(mVelocity.x * mVelocity.x + mVelocity.y * mVelocity.y +
                                      mVelocity.z * mVelocity.z);
                 if (!(1.0f > fSlide))
                 {
@@ -3224,7 +3218,7 @@ bool EntityHover::UpdateIndirect(float fDeltaTime)
     if (dest.mHasDest && GetGameObjectClass()->mAIType != ConnectivityGraph::CGT_FLAG_HUGE)
     {
         const PblVector3& vVel = static_cast<GameObject*>(mCtrl->mOwner->GetEntity())->GetVelocity();
-        float fLook = sqrtf(vVel.y * vVel.y + vVel.x * vVel.x + vVel.z * vVel.z) * 1.5f;
+        float fLook = PblMath::Sqrt(vVel.y * vVel.y + vVel.x * vVel.x + vVel.z * vVel.z) * 1.5f;
         if (fLook > 5.0f)
         {
             PblVector3 vHitNormal(0.0f, 0.0f, 1.0f);
@@ -3493,7 +3487,7 @@ void EntityHover::SetupInterpolatedCameraTrackMatrix(PblMatrix& rMatrix)
 {
     if (NetGame::IsEnabled() && mPlayerId >= 0 && mClass->mBlurEffect > 0.0f)
     {
-        const float fSpeed = sqrtf(mVelocity.x * mVelocity.x + mVelocity.y * mVelocity.y +
+        const float fSpeed = PblMath::Sqrt(mVelocity.x * mVelocity.x + mVelocity.y * mVelocity.y +
                                    mVelocity.z * mVelocity.z);
         if (fSpeed > mClass->mBlurStartV * mClass->mForwardSpeed)
         {

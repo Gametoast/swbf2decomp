@@ -1436,7 +1436,7 @@ inline void WalkerLegPair::operator delete(void* pBlock)
     sMemoryPool.Free(pBlock);
 }
 
-void WalkerLegPair::SetInterpolate(bool bInterpolate)
+inline void WalkerLegPair::SetInterpolate(bool bInterpolate)
 {
     mBlend->SetInterpolate(bInterpolate);
 }
@@ -1983,7 +1983,7 @@ void EntityWalker::DoFootImpactEffects()
         return;
     }
     unsigned int uBit = 1;
-    for (int i = 0; i < iNumFeet; ++i)
+    for (int i = 0; i < iNumFeet; ++i, uBit = _rotl(uBit, 1))
     {
         bool bImpact = false;
         float fHalfHeight = mCollisionModel->GetHeightFromMaskID(mClass->mFootPrimitives[i]) * 0.5f;
@@ -1997,26 +1997,27 @@ void EntityWalker::DoFootImpactEffects()
 
         if (!mClass->mStompDetectionType)
         {
-            if (mLastFootHeight[i] > fHeight && mClass->mStompThreshold + mMinFootHeight[i] > fHeight &&
-                mLastFootHeight[i] > mClass->mStompThreshold + mMinFootHeight[i])
+            float fStompHeight = mClass->mStompThreshold + mMinFootHeight[i];
+            if (mLastFootHeight[i] > fHeight && fStompHeight > fHeight && mLastFootHeight[i] > fStompHeight)
             {
                 bImpact = true;
             }
         }
         else
         {
+            unsigned int uState = mFootState;
             unsigned int uLifted = _rotl(uBit, 24);
             float fDrop = mLastFootHeight[i] - fHeight;
-            if (mFootState & uLifted)
+            if (uState & uLifted)
             {
                 if (fDrop > 0.1f)
                 {
-                    mFootState &= ~uLifted;
+                    mFootState = uState & ~uLifted;
                 }
             }
             else if (0.1f > fDrop)
             {
-                mFootState |= uLifted;
+                mFootState = uState | uLifted;
                 bImpact = true;
             }
         }
@@ -2104,7 +2105,6 @@ void EntityWalker::DoFootImpactEffects()
         {
             mFootState &= ~uBit;
         }
-        uBit = (uBit << 1) | (uBit >> 31);
     }
 }
 
@@ -2685,7 +2685,7 @@ bool EntityWalker::CollisionCallback(const CollisionResult* pResult, CollisionOb
             return false;
         }
         float fOverlap = pResult->mOverlap;
-        float fHorizontal = sqrtf((vSeparation.x * fOverlap) * (vSeparation.x * fOverlap) +
+        float fHorizontal = PblMath::Sqrt((vSeparation.x * fOverlap) * (vSeparation.x * fOverlap) +
                                   (vSeparation.z * fOverlap) * (vSeparation.z * fOverlap));
         if (fHorizontal > 0.0f)
         {
@@ -3140,7 +3140,10 @@ void EntityWalker::NextState(int iInput)
 // FUNCTION: SWBF2 0x00503d30
 void EntityWalker::ResetRotation()
 {
-    mTurnOffset -= PblAngle(1.0f, mTurnOffset.mSin * 0.1f);
+    float fCos = mTurnOffset.mSin * 0.1f * mTurnOffset.mSin + mTurnOffset.mCos;
+    float fSin = mTurnOffset.mSin - mTurnOffset.mCos * 0.1f * mTurnOffset.mSin;
+    mTurnOffset.mCos = fCos;
+    mTurnOffset.mSin = fSin;
     mTurnOffset.Renormalize();
 }
 
@@ -4002,7 +4005,7 @@ bool EntityWalker::Update(float fDeltaTime)
     }
     if (fDeltaTime > 0.0f && VehicleEngine::IsOn())
     {
-        float fSpeed = sqrtf(mVelocityNoGrav.x * mVelocityNoGrav.x + mVelocityNoGrav.y * mVelocityNoGrav.y +
+        float fSpeed = PblMath::Sqrt(mVelocityNoGrav.x * mVelocityNoGrav.x + mVelocityNoGrav.y * mVelocityNoGrav.y +
                              mVelocityNoGrav.z * mVelocityNoGrav.z);
         bool bFirstPerson = mTracker && mTracker->IsFirstPersonView();
         bool bLocal = mPlayerId >= 0 &&
@@ -4207,7 +4210,7 @@ bool EntityWalker::PostCollisionUpdate(float fDeltaTime)
         if (iIndex >= 0 && mWeapon[iIndex] && mWeapon[iIndex]->mTarget)
         {
             PblVector3 vTarget = mWeapon[iIndex]->mTarget->GetTargetPoint(mEyePoint, mEyeDir, -1);
-            fDist = sqrtf((vTarget.x - mEyePoint.x) * (vTarget.x - mEyePoint.x) +
+            fDist = PblMath::Sqrt((vTarget.x - mEyePoint.x) * (vTarget.x - mEyePoint.x) +
                           (vTarget.y - mEyePoint.y) * (vTarget.y - mEyePoint.y) +
                           (vTarget.z - mEyePoint.z) * (vTarget.z - mEyePoint.z));
         }

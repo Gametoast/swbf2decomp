@@ -1,3 +1,4 @@
+#include "PebbleFL/Common/PblMath.h"
 #include "VisionManager.h"
 #include "AIUtil.h"
 #include "NetGame.h"
@@ -322,8 +323,7 @@ int GetRelativePriority(const GameObject* pMe, const GameObject* pObj)
             return 3;
         case AIUtil::ENTITY_HOVER:
             return 15;
-        case AIUtil::ENTITY_ITEM:
-        case AIUtil::ENTITY_REMOTE_TERMINAL:
+        default:
             return 0;
         }
         break;
@@ -395,7 +395,7 @@ int GetVisualPriority(const Controllable* pMe, const GameObject* pObj)
     }
 
     PblVector3 vEyePos = pMe->mEyePoint;
-    int iRawDist = (int)sqrtf(SquaredLength(pObj->GetTargetPoint(vEyePos, pMe->mEyeDir, -1) - vEyePos));
+    int iRawDist = (int)PblMath::Sqrt(SquaredLength(pObj->GetTargetPoint(vEyePos, pMe->mEyeDir, -1) - vEyePos));
     int iDist = iRawDist < 1500 ? iRawDist : 1500;
     int iKey = iDist * (21 - iPriority);
 

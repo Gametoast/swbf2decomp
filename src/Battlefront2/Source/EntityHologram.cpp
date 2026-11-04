@@ -152,20 +152,6 @@ void FLEffectObject::UpdatedWorldMatrix()
 
 
 
-// FUNCTION: SWBF2 0x004be070
-void LightBeam::SetInitialWidth(float fWidth)
-{
-    _fHeadSizeX = _fHeadSizeZ = fWidth * 0.5f;
-    _Flare._fSize = fWidth;
-}
-
-// FUNCTION: SWBF2 0x004be0a0
-void LightBeam::SetInitialWidth(float fWidthX, float fWidthZ)
-{
-    _fHeadSizeX = fWidthX * 0.5f;
-    _fHeadSizeZ = fWidthZ * 0.5f;
-    _Flare._fSize = _fHeadSizeX + _fHeadSizeZ;
-}
 
 
 
@@ -298,7 +284,7 @@ EntityHologram::EntityHologram(EntityHologramClass* pClass, const EntityDesc& de
         float fDX = vCenter.x - vReflected.x;
         float fDY = vCenter.y - vReflected.y;
         float fDZ = vCenter.z - vReflected.z;
-        float fDist = sqrtf(fDX * fDX + fDY * fDY + fDZ * fDZ);
+        float fDist = PblMath::Sqrt(fDX * fDX + fDY * fDY + fDZ * fDZ);
         if (fDist > fRadius * 2.0f)
         {
             vCenter = Interpolate(vCenter, vReflected, fRadius / fDist);
@@ -791,7 +777,7 @@ void EntityHologram::SetStoredMatrix(const PblMatrix& mMatrix)
         float fDX = vCenter.x - vReflected.x;
         float fDY = vCenter.y - vReflected.y;
         float fDZ = vCenter.z - vReflected.z;
-        float fDist = sqrtf(fDX * fDX + fDY * fDY + fDZ * fDZ);
+        float fDist = PblMath::Sqrt(fDX * fDX + fDY * fDY + fDZ * fDZ);
         if (fDist > fRadius * 2.0f)
         {
             vCenter = Interpolate(vCenter, vReflected, fRadius / fDist);

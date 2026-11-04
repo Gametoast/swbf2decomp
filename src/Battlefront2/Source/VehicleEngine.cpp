@@ -44,7 +44,7 @@ PblListSingle VehicleEngineClass::Boost::sGlobalList;
 Snd::FreeList VehicleEngineClass::Boost::smFreeList((sizeof(Boost) + 15) & ~15u, 16, true, 8);
 
 // FUNCTION: SWBF2 0x0066cac0
-void VehicleEngineClass::Boost::operator delete(void* p)
+inline void VehicleEngineClass::Boost::operator delete(void* p)
 {
     smFreeList.Free(p);
 }
@@ -106,8 +106,14 @@ void VehicleEngine::Update(const VehicleEngineClass* pClass, float fDeltaTime,
 
     if (bCockpit)
     {
-        (bFirstPerson ? pClass->mCockpit1stPerson : pClass->mCockpit3rdPerson)
-            .Play(&pos, &vel, false, true);
+        if (bFirstPerson)
+        {
+            pClass->mCockpit1stPerson.Play(&pos, &vel, false, true);
+        }
+        else
+        {
+            pClass->mCockpit3rdPerson.Play(&pos, &vel, false, true);
+        }
     }
 
     mAttached.Update(&mAttachedProps, &pos, &vel);

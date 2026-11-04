@@ -98,7 +98,7 @@ void VehicleCoverHelper::EnterState()
         PblVector3 vMe = GetMe()->GetMatrix().GetTranslation();
         const PblVector3& vHint = mHint->GetCollisionCenter();
         PblVector3 vDir(vHint.x - vMe.x, vHint.y - vMe.y, vHint.z - vMe.z);
-        float fDist = sqrtf(vDir.x * vDir.x + vDir.y * vDir.y + vDir.z * vDir.z);
+        float fDist = PblMath::Sqrt(vDir.x * vDir.x + vDir.y * vDir.y + vDir.z * vDir.z);
         PblVector3 vNorm;
         D3DXVec3Normalize(reinterpret_cast<D3DXVECTOR3*>(&vNorm), reinterpret_cast<const D3DXVECTOR3*>(&vDir));
         fDist += 4.0f;
@@ -311,9 +311,7 @@ bool VehicleCoverHelper::HELPERFaceTarget() const
         PblVector3 vMe = GetMe()->GetMatrix().GetTranslation();
         PblVector3 vHint = mHint->GetCollisionCenter();
         float fRadius = GetCollisionObject(GetMe()->GetGameObject())->GetCollisionRadius() + 1.0f;
-        float dz = vHint.z - vMe.z;
-        float dx = vHint.x - vMe.x;
-        return !(dx * dx + dz * dz > fRadius * fRadius);
+        return !(SquaredLengthXZ(vHint - vMe) > fRadius * fRadius);
     }
     return true;
 }
