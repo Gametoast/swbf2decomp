@@ -5003,6 +5003,11 @@ void RedRenderer::SetShadowIntensity(float fIntensity)
     RedRenderer::m_shadowIntensity = fIntensity;
 }
 
+// FUNCTION: SWBF2 0x006b3ca0
+void RedRenderer::SetSky(bool)
+{
+}
+
 // FUNCTION: SWBF2 0x006b3cb0
 void RedRenderer::SetSoftnessEnable(bool bEnable)
 {
