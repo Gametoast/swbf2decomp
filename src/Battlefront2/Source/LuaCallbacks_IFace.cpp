@@ -134,6 +134,8 @@ namespace StatsManager
 extern int m_state;
 }
 
+extern unsigned int sDefaultFont;
+
 namespace Lua_Callbacks
 {
 
@@ -1746,8 +1748,8 @@ int ScriptCB_IFFlashyText_SetBackgroundSize(lua_State* L)
     {
         fExpandY = (float)luaL_checknumber(LuaHelper::mState, iArg);
     }
-    ((FlashyTextElement*)pElement)->SetBackgroundSize((unsigned char)(int)fOffsetX, (unsigned char)(int)fOffsetY,
-                                                      (unsigned char)(int)fExpandX, (unsigned char)(int)fExpandY);
+    ((FlashyTextElement*)pElement)->SetBackgroundSize((unsigned char)fOffsetX, (unsigned char)fOffsetY,
+                                                      (unsigned char)fExpandX, (unsigned char)fExpandY);
     return 0;
 }
 
@@ -2218,7 +2220,7 @@ int ScriptCB_AddIFText(lua_State* L)
         const char* pcName = luaL_checklstring(LuaHelper::mState, 1, 0);
         RedTextElement* pText = new RedTextElement(pcName);
         pText->Enable(true);
-        pText->SetFont(RedFont::GAMEFONT_SMALL);
+        pText->SetFont(::sDefaultFont);
         Util_AddToHierarchy(pText, pcName);
     }
     return 0;
@@ -3549,7 +3551,14 @@ int ScriptCB_IsFileExist(lua_State* L)
         const char* pcName = luaL_checkstring(LuaHelper::mState, 1);
         char acFileName[256];
         LoadUtil::MakeFullName(pcName, LoadUtil::FILE_TYPE_NONE, acFileName, sizeof(acFileName), false);
-        lua_pushnumber(LuaHelper::mState, PblFile::Exists(acFileName) ? 1.0f : 0.0f);
+        if (PblFile::Exists(acFileName))
+        {
+            lua_pushnumber(LuaHelper::mState, 1.0f);
+        }
+        else
+        {
+            lua_pushnumber(LuaHelper::mState, 0.0f);
+        }
     }
     return 1;
 }
@@ -4376,8 +4385,9 @@ int ScriptCB_SetBinding(lua_State* L)
 int ScriptCB_GetActionFromIdx(lua_State* L)
 {
     lua_gettop(LuaHelper::mState);
-    int iIndex = (int)(float)luaL_checknumber(LuaHelper::mState, 1) - 1;
+    int iIndex = (int)(float)luaL_checknumber(LuaHelper::mState, 1);
     int iMode = FLInputManager::s_instance.GetPlayerJoystick(PauseMenu::GetPausingViewport())->GetInputMode();
+    --iIndex;
     for (int i = 0; i <= iIndex; ++i)
     {
         int iAction = sKeyboardCmdsPerMode[iMode][i];

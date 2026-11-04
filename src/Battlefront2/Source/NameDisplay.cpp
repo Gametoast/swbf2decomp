@@ -1,3 +1,4 @@
+#include "PebbleFL/Common/PblMath.h"
 #include <d3dx9math.h>
 #include "NameDisplay.h"
 #include "CameraManager.h"
@@ -63,10 +64,6 @@ Character* CameraManager::GetDeathCameraKiller(int iCam)
 
 // GLOBAL: SWBF2 0x01fa2494
 NameDisplayThread* sNameDisplayThread[1];
-
-NameDisplayThread::NameDisplayThread()
-{
-}
 
 
 
@@ -287,7 +284,7 @@ bool NameDisplayThread::Update(float)
 
         Entity* pEntity = pUnit->GetEntity();
         float fFadeRange = pEntity && pEntity->IsRtti(EntityFlyer::rttiHashEntityFlyer) ? 350.0f : 20.0f;
-        float fDistance = sqrtf(vToUnit.y * vToUnit.y + vToUnit.x * vToUnit.x + vToUnit.z * vToUnit.z);
+        float fDistance = PblMath::Sqrt(vToUnit.y * vToUnit.y + vToUnit.x * vToUnit.x + vToUnit.z * vToUnit.z);
         unsigned char ucAlpha = 0xff;
         if (fDistance > fFadeRange)
         {

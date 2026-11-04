@@ -1,3 +1,4 @@
+#include "PebbleFL/Common/PblMath.h"
 #include "AmmoCounter.h"
 #include <d3dx9math.h>
 #include "LuaCallbacks_Mission.h"
@@ -1948,10 +1949,9 @@ int AddAIGoal(lua_State* L)
         return 0;
     }
 
-    AI::AIGoalType eType = AI::AIGOAL_NONE;
-    AI::GoalTarget target;
-    target.mType = AI::GTT_NONE;
+    AI::GoalTarget target(AI::GTT_NONE);
     const char* pcGoal = LuaHelper::GetString(2);
+    AI::AIGoalType eType = AI::AIGOAL_NONE;
 
     if (lua_type(LuaHelper::mState, 4) == LUA_TLIGHTUSERDATA || lua_isstring(LuaHelper::mState, 4))
     {
@@ -3375,18 +3375,10 @@ int EnterVehicle(lua_State* L)
         return 0;
     }
     Character* pCharacter = Character::GetPtr((int)(float)luaL_checknumber(LuaHelper::mState, 1));
-    Controllable* pSoldier = 0;
     if (pCharacter && pCharacter->mClassPtr && pCharacter->mUnit &&
         pCharacter->mClassPtr->IsRtti(EntitySoldierClass::rttiHashEntitySoldierClass))
     {
-        Entity* pSoldierEntity = pCharacter->mUnit->GetEntity();
-        if (pSoldierEntity)
-        {
-            pSoldier = static_cast<EntitySoldier*>(pSoldierEntity);
-        }
-    }
-    if (pSoldier)
-    {
+        EntitySoldier* pSoldier = static_cast<EntitySoldier*>(pCharacter->mUnit->GetEntity());
         pSoldier->EnterVehicle(pEntity->GetGameObject());
     }
     return 0;
@@ -3418,20 +3410,11 @@ int ForceAIOutOfVehicles(lua_State* L)
     {
         for (int i = 0; i < pTeam->mMemberCount; ++i)
         {
-            Character* pCharacter = pTeam->mMemberArray[i];
-            Controllable* pSoldier = 0;
-            if (pCharacter && pCharacter->mClassPtr && pCharacter->mUnit &&
-                pCharacter->mClassPtr->IsRtti(EntitySoldierClass::rttiHashEntitySoldierClass))
+            Character* pCharacter = pTeam->GetMemberPtr(i);
+            if (pCharacter->mClassPtr->IsRtti(EntitySoldierClass::rttiHashEntitySoldierClass) &&
+                pCharacter->mUnit && pCharacter->mUnit->GetEntity())
             {
-                Entity* pSoldierEntity = pCharacter->mUnit->GetEntity();
-                if (pSoldierEntity)
-                {
-                    pSoldier = static_cast<EntitySoldier*>(pSoldierEntity);
-                }
-            }
-            if (pSoldier)
-            {
-                pSoldier->ExitVehicle(true, true);
+                static_cast<EntitySoldier*>(pCharacter->mUnit->GetEntity())->ExitVehicle(true, true);
             }
         }
     }
@@ -3642,7 +3625,7 @@ void AsteroidClass::FillRegion(const char* pcRegion, int iCount, PblVector3 vMin
         vDir.y = (vMax.y - vMin.y) * PblRandom::GetSim().GetFloat() + vMin.y;
         vDir.z = (vMax.z - vMin.z) * PblRandom::GetSim().GetFloat() + vMin.z;
         const PblVector3& vUp =
-            (float)fabs(vDir.x * gVectorUnitY.x + vDir.y * gVectorUnitY.y + vDir.z * gVectorUnitY.z) < 0.99f
+            (float)fabs((double)(vDir.x * gVectorUnitY.x + vDir.y * gVectorUnitY.y + vDir.z * gVectorUnitY.z)) < 0.99f
                 ? gVectorUnitZ
                 : gVectorUnitY;
         EntityDesc desc;
@@ -3688,7 +3671,7 @@ void AsteroidClass::FillPath(const char* pcPath, float fDensity, int iCount,
             float fDX = vTo.x - vFrom.x;
             float fDY = vTo.y - vFrom.y;
             float fDZ = vTo.z - vFrom.z;
-            fLength += sqrtf(fDX * fDX + fDY * fDY + fDZ * fDZ);
+            fLength += PblMath::Sqrt(fDX * fDX + fDY * fDY + fDZ * fDZ);
             pKey->length = fLength;
             pKey->segmentIndex = i - 1;
             ++pKey;
@@ -3701,13 +3684,13 @@ void AsteroidClass::FillPath(const char* pcPath, float fDensity, int iCount,
         GetPoint(PblRandom::GetSim().GetFloat() * fLength, pKeys, iNumKeys,
                  pSegments, vPosition, vDir);
         const PblVector3& vPathUp =
-            (float)fabs(vDir.x * gVectorUnitY.x + vDir.y * gVectorUnitY.y + vDir.z * gVectorUnitY.z) < 0.99f
+            (float)fabs((double)(vDir.x * gVectorUnitY.x + vDir.y * gVectorUnitY.y + vDir.z * gVectorUnitY.z)) < 0.99f
                 ? gVectorUnitZ
                 : gVectorUnitY;
         PblMatrix mPath = DirectionMatrix(vDir, vPathUp, vPosition);
 
         PblVector3 vUnit = PblRandom::GetSim().GetVector3() * 2.0f - PblVector3(1.0f, 1.0f, 1.0f);
-        float fOffsetLength = sqrtf(vUnit.x * vUnit.x + vUnit.z * vUnit.z);
+        float fOffsetLength = PblMath::Sqrt(vUnit.x * vUnit.x + vUnit.z * vUnit.z);
         float fRadius = PblRandom::GetSim().GetFloat() * fDensity;
         PblVector3 vOffset(vUnit.x / fOffsetLength * fRadius, vUnit.y / fOffsetLength * fRadius, 0.0f);
         vPosition = mPath.ApplyTransform(vOffset);
@@ -3716,7 +3699,7 @@ void AsteroidClass::FillPath(const char* pcPath, float fDensity, int iCount,
         vDir.y = (vMax.y - vMin.y) * PblRandom::GetSim().GetFloat() + vMin.y;
         vDir.z = (vMax.z - vMin.z) * PblRandom::GetSim().GetFloat() + vMin.z;
         const PblVector3& vUp =
-            (float)fabs(vDir.x * gVectorUnitY.x + vDir.y * gVectorUnitY.y + vDir.z * gVectorUnitY.z) < 0.99f
+            (float)fabs((double)(vDir.x * gVectorUnitY.x + vDir.y * gVectorUnitY.y + vDir.z * gVectorUnitY.z)) < 0.99f
                 ? gVectorUnitZ
                 : gVectorUnitY;
         EntityDesc desc;

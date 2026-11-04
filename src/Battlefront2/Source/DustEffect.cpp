@@ -62,12 +62,11 @@ DustEffect::DustEffect(DustEffectClass* pClass, const PblMatrix& matrix)
     mMatrix[2] = Normalize(CrossProduct(mMatrix[0], mMatrix[1]));
     mMatrix.m[2][3] = 0.0f;
 
-    mMatrix[3] = matrix[3];
-    mMatrix.m[3][3] = 1.0f;
+    mMatrix.SetTranslation(matrix.GetTranslation());
 
     SetRenderPos(mMatrix.GetTranslation());
     SetRenderRadius(mClass->mBoundingRadius);
-    Activate();
+    AddToScene();
 
     DustEffectClass::sDustEffects.AddLast(&mEffectNode, this);
 }
@@ -180,8 +179,8 @@ bool DustEffectClass::UpdateParticle(DustParticle& particle, float fDeltaTime,
     }
     else
     {
-        float fFadeOut = particle.mLifeTime * FADE_OUT_PERCENT;
         float fRemaining = particle.mLifeTime - particle.mTime;
+        float fFadeOut = particle.mLifeTime * FADE_OUT_PERCENT;
         if (fRemaining < fFadeOut)
         {
             particle.mColor.a *= fRemaining / fFadeOut;
@@ -452,11 +451,11 @@ void DustEffectClass::CalcBoundingRadius()
         return;
     }
 
-    float fPosMin = sqrtf(mPosMin.x * mPosMin.x + mPosMin.y * mPosMin.y + mPosMin.z * mPosMin.z);
-    float fPosMax = sqrtf(mPosMax.x * mPosMax.x + mPosMax.y * mPosMax.y + mPosMax.z * mPosMax.z);
+    float fPosMin = PblMath::Sqrt(mPosMin.x * mPosMin.x + mPosMin.y * mPosMin.y + mPosMin.z * mPosMin.z);
+    float fPosMax = PblMath::Sqrt(mPosMax.x * mPosMax.x + mPosMax.y * mPosMax.y + mPosMax.z * mPosMax.z);
     float fPos = fPosMax > fPosMin ? fPosMax : fPosMin;
-    float fVelMin = sqrtf(mVelMin.x * mVelMin.x + mVelMin.y * mVelMin.y + mVelMin.z * mVelMin.z);
-    float fVelMax = sqrtf(mVelMax.x * mVelMax.x + mVelMax.y * mVelMax.y + mVelMax.z * mVelMax.z);
+    float fVelMin = PblMath::Sqrt(mVelMin.x * mVelMin.x + mVelMin.y * mVelMin.y + mVelMin.z * mVelMin.z);
+    float fVelMax = PblMath::Sqrt(mVelMax.x * mVelMax.x + mVelMax.y * mVelMax.y + mVelMax.z * mVelMax.z);
     float fVel = fVelMax > fVelMin ? fVelMax : fVelMin;
     mBoundingRadius = mLifeTimeMax * fVel + fPos + fHalfSize;
 }

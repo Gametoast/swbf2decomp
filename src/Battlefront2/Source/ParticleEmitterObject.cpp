@@ -217,25 +217,21 @@ bool ParticleEmitter::Update(float fTime)
             return false;
         }
 
-        if (mSpawnDelay > pInfo->mLifeTime)
+        while (mSpawnDelay > mFirstInfo->mLifeTime)
         {
-            ParticleEmitterInfoData* pNext;
-            do
+            ParticleEmitterInfoData* pNext = mFirstInfo->mNext;
+            if (!pNext)
             {
-                pNext = mFirstInfo->mNext;
-                if (!pNext)
-                {
-                    break;
-                }
-                pNext->mPrev = mFirstInfo->mPrev;
-                if (mFirstInfo->mPrev)
-                {
-                    mFirstInfo->mPrev->mNext = pNext;
-                }
-                mSpawnDelay -= mFirstInfo->mLifeTime;
-                mFirstInfo->Release();
-                mFirstInfo = pNext;
-            } while (mSpawnDelay > pNext->mLifeTime);
+                break;
+            }
+            pNext->mPrev = mFirstInfo->mPrev;
+            if (mFirstInfo->mPrev)
+            {
+                mFirstInfo->mPrev->mNext = pNext;
+            }
+            mSpawnDelay -= mFirstInfo->mLifeTime;
+            mFirstInfo->Release();
+            mFirstInfo = pNext;
         }
         pInfo = mFirstInfo;
     }
@@ -410,20 +406,7 @@ void ParticleEmitterObject::ScaleSet(float fScale)
 {
     if (mEmitter)
     {
-        for (ParticleEmitter* p = mEmitter; p; p = p->mNext)
-        {
-            p->mSize = fScale;
-        }
-    }
-}
-
-// FUNCTION: SWBF2 0x0060ba00
-void ParticleEmitter::SetSpawnerSeed(unsigned int uSeed)
-{
-    mSpawnerSeed = uSeed;
-    if (mNext)
-    {
-        mNext->SetSpawnerSeed(uSeed + 5);
+        mEmitter->ScaleSet(fScale);
     }
 }
 

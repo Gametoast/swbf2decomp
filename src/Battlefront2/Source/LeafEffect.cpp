@@ -263,11 +263,9 @@ bool FallingLeafParticle::Update(float fDeltaTime)
 // FUNCTION: SWBF2 0x0056c470
 void FallingLeafParticle::AddWindVelocity(const PblVector3& vVelocity)
 {
-    float fSpeed = sqrtf(vVelocity.x * vVelocity.x + vVelocity.y * vVelocity.y + vVelocity.z * vVelocity.z);
+    float fSpeed = PblMath::Sqrt(vVelocity.x * vVelocity.x + vVelocity.y * vVelocity.y + vVelocity.z * vVelocity.z);
     mWindVelocity += vVelocity * 0.9f;
-    mWindVelocity.x += 0.0f;
-    mWindVelocity.y += fSpeed * 0.4f;
-    mWindVelocity.z += 0.0f;
+    mWindVelocity += PblVector3(0.0f, fSpeed * 0.4f, 0.0f);
 }
 
 // GLOBAL: SWBF2 0x01e573d0

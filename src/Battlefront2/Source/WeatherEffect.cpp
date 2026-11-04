@@ -1,3 +1,4 @@
+#include "PebbleFL/Common/PblMath.h"
 #include "WeatherEffect.h"
 #include "GameState.h"
 #include "CameraManager.h"
@@ -149,7 +150,7 @@ void WindEffect::Update(float fDeltaTime)
     m_vVelocity = m_vVelocityTarget;
     if (m_fTimer > 1.5f)
     {
-        float fLength = sqrtf(m_vBaseVelocity.x * m_vBaseVelocity.x +
+        float fLength = PblMath::Sqrt(m_vBaseVelocity.x * m_vBaseVelocity.x +
                               m_vBaseVelocity.y * m_vBaseVelocity.y +
                               m_vBaseVelocity.z * m_vBaseVelocity.z);
         if (fLength <= m_fVelocityRange * 0.01f)
@@ -266,47 +267,15 @@ void FogCloudEffect::ReadConfig(PblConfig& config)
         {
             RedColor color;
             float f = data.GetFloatArg(0);
-            if (f < 0.0f)
-            {
-                f = 0.0f;
-            }
-            else if (f > 255.0f)
-            {
-                f = 255.0f;
-            }
-            color.r = (unsigned char)(int)f;
+            color.r = (unsigned char)(int)(f < 0.0f ? 0.0f : (f > 255.0f ? 255.0f : f));
             f = data.GetFloatArg(1);
-            if (f < 0.0f)
-            {
-                f = 0.0f;
-            }
-            else if (f > 255.0f)
-            {
-                f = 255.0f;
-            }
-            color.g = (unsigned char)(int)f;
+            color.g = (unsigned char)(int)(f < 0.0f ? 0.0f : (f > 255.0f ? 255.0f : f));
             f = data.GetFloatArg(2);
-            if (f < 0.0f)
-            {
-                f = 0.0f;
-            }
-            else if (f > 255.0f)
-            {
-                f = 255.0f;
-            }
-            color.b = (unsigned char)(int)f;
+            color.b = (unsigned char)(int)(f < 0.0f ? 0.0f : (f > 255.0f ? 255.0f : f));
             if (data.GetNumArgs() > 3)
             {
                 f = data.GetFloatArg(3);
-                if (f < 0.0f)
-                {
-                    f = 0.0f;
-                }
-                else if (f > 255.0f)
-                {
-                    f = 255.0f;
-                }
-                color.a = (unsigned char)(int)f;
+                color.a = (unsigned char)(int)(f < 0.0f ? 0.0f : (f > 255.0f ? 255.0f : f));
             }
             else
             {
@@ -660,7 +629,7 @@ void PrecipitationEffect::Update(float fDeltaTime)
                 const PblBox& other = aBoxes[uOther];
                 if (vPos.x > other._vMin.x && other._vMax.x > vPos.x && vPos.z > other._vMin.z &&
                     other._vMax.z > vPos.z &&
-                    50.0f > (float)fabs(vPos.y - CameraManager::sInstance->GetCamera(uOther)->GetMatrix().m[3][1]))
+                    50.0f > (float)fabs((double)(vPos.y - CameraManager::sInstance->GetCamera(uOther)->GetMatrix().m[3][1])))
                 {
                     break;
                 }

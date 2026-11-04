@@ -311,9 +311,10 @@ void HUD::GameEvents::Open()
     }
 
     EventClass** ppStatisticDelta = events.statisticDelta;
-    for (unsigned int uStatistic = 0; uStatistic < 5; ++uStatistic, ++ppStatisticDelta)
+    EventClass** ppStatistic = events.statistic;
+    for (unsigned int uStatistic = 0; uStatistic < 5; ++uStatistic, ++ppStatisticDelta, ++ppStatistic)
     {
-        events.statistic[uStatistic] = EventClass::Create(EventClass::type_Int, "player%d.statistic.%s", 1, gStatisticStrings[uStatistic]);
+        *ppStatistic = EventClass::Create(EventClass::type_Int, "player%d.statistic.%s", 1, gStatisticStrings[uStatistic]);
         *ppStatisticDelta = EventClass::Create(EventClass::type_String, "player%d.statistic.%sDelta", 1, gStatisticStrings[uStatistic]);
     }
 
@@ -1130,7 +1131,7 @@ void HUD::GameEvents::GameObjectGetNames(PblHandle<GameObject const>& hObject, c
                                          const unsigned short** const ppClassName)
 {
     const Controllable* pControllable = hObject->GetControllable();
-    const Character* pCharacter = pControllable ? pControllable->mCharacter : 0;
+    const Character* pCharacter = pControllable ? pControllable->GetCharacter() : 0;
     const unsigned short* pName = pCharacter ? pCharacter->GetName() : 0;
     const GameObject* pObject = pControllable ? pControllable->GetGameObject() : hObject->GetGameObject();
     const unsigned short* pLabel = pObject ? pObject->GetEntityClass()->mLabel : 0;
@@ -2213,10 +2214,10 @@ void HUD::GameEvents::UpdateEnergy(const Controllable* const pControllable, Play
     }
 
     const float fEnergy = pBar->m_fEnergy;
-    const Character* pCharacter = pControllable->mCharacter;
-    if (pCharacter && BonusManager::Instance()->IsTeamBonusActive(pCharacter->mTeamNumber, 0x85ad826d))
+    if (pControllable->mCharacter &&
+        BonusManager::Instance()->IsTeamBonusActive(pControllable->mCharacter->mTeamNumber, 0x85ad826d))
     {
-        const int iPlayer = pCharacter->mPlayerId;
+        const int iPlayer = pControllable->mCharacter->mPlayerId;
         if (iPlayer >= 0 && iPlayer < 1)
         {
             EventClass* pPulseRate = gPlayerEvents[iPlayer].energyRegenPulseRate;
@@ -2244,7 +2245,7 @@ void HUD::GameEvents::UpdateEnergy(const Controllable* const pControllable, Play
     {
         fFraction = pBar->m_fEnergy / fEnergyMax;
     }
-    HUD::Event ev5(events.energyFraction, (float)fabs(fFraction));
+    HUD::Event ev5(events.energyFraction, (float)fabs((double)fFraction));
     ev5.Send();
     if (pBar->m_bOverheat)
     {
