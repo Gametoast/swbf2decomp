@@ -952,43 +952,45 @@ void EntityCloth::EnforceBoxCollision(const PblMatrix& mMatrix, float fWidth, fl
 {
     for (unsigned int i = mData->m_uiNumFixedPoints; i < mData->m_uiNumParticles; ++i)
     {
-        const PblVector3 vDelta = m_pPos[i] - mMatrix.GetTranslation();
-        const float d0 = DotProduct(mMatrix.GetXAxis(), vDelta);
-        const float p0 = fWidth - fabsf(d0);
-        if (p0 <= 0.0f)
+        PblVector3 relDir = m_pPos[i] - mMatrix.GetTranslation();
+        PblVector3 proj;
+        PblVector3 diff;
+        proj.x = DotProduct(mMatrix.GetXAxis(), relDir);
+        diff.x = fWidth - fabsf(proj.x);
+        if (diff.x <= 0.0f)
         {
             continue;
         }
-        const float d1 = DotProduct(mMatrix.GetYAxis(), vDelta);
-        const float p1 = fHeight - fabsf(d1);
-        if (p1 <= 0.0f)
+        proj.y = DotProduct(mMatrix.GetYAxis(), relDir);
+        diff.y = fHeight - fabsf(proj.y);
+        if (diff.y <= 0.0f)
         {
             continue;
         }
-        const float d2 = DotProduct(mMatrix.GetZAxis(), vDelta);
-        const float p2 = fDepth - fabsf(d2);
-        if (p2 <= 0.0f)
+        proj.z = DotProduct(mMatrix.GetZAxis(), relDir);
+        diff.z = fDepth - fabsf(proj.z);
+        if (diff.z <= 0.0f)
         {
             continue;
         }
-        if (p1 > p0)
+        if (diff.y > diff.x)
         {
-            if (p2 > p0)
+            if (diff.z > diff.x)
             {
-                m_pPos[i] += mMatrix.GetXAxis() * (PblMath::Sign(d0) * p0);
+                m_pPos[i] += (PblMath::Sign(proj.x) * diff.x) * mMatrix.GetXAxis();
             }
             else
             {
-                m_pPos[i] += mMatrix.GetZAxis() * (PblMath::Sign(d2) * p2);
+                m_pPos[i] += (PblMath::Sign(proj.z) * diff.z) * mMatrix.GetZAxis();
             }
         }
-        else if (p2 > p1)
+        else if (diff.z > diff.y)
         {
-            m_pPos[i] += mMatrix.GetYAxis() * (PblMath::Sign(d1) * p1);
+            m_pPos[i] += (PblMath::Sign(proj.y) * diff.y) * mMatrix.GetYAxis();
         }
         else
         {
-            m_pPos[i] += mMatrix.GetZAxis() * (PblMath::Sign(d2) * p2);
+            m_pPos[i] += (PblMath::Sign(proj.z) * diff.z) * mMatrix.GetZAxis();
         }
     }
 }
@@ -1111,22 +1113,17 @@ void EntityCloth::AccumulateForces(float fDeltaTime)
     const float fDrag = mClass->mDrag;
     const PblMatrix mInverse = m_worldMat.GetInverseFast();
 
-    PblVector3 vWind;
-    D3DXVec3TransformNormal(reinterpret_cast<D3DXVECTOR3*>(&vWind), reinterpret_cast<const D3DXVECTOR3*>(&mClass->mWindDirection), reinterpret_cast<const D3DXMATRIX*>(&mInverse));
-    const PblVector3 vWorldGravity = sGravity - mAcceleration * mClass->mDampening;
-    PblVector3 vGravity;
-    D3DXVec3TransformNormal(reinterpret_cast<D3DXVECTOR3*>(&vGravity), reinterpret_cast<const D3DXVECTOR3*>(&vWorldGravity), reinterpret_cast<const D3DXMATRIX*>(&mInverse));
-    PblVector3 vVelocity;
-    D3DXVec3TransformNormal(reinterpret_cast<D3DXVECTOR3*>(&vVelocity), reinterpret_cast<const D3DXVECTOR3*>(&mVelocity), reinterpret_cast<const D3DXMATRIX*>(&mInverse));
+    PblVector3 vWind = mInverse.ApplyRotation(mClass->mWindDirection);
+    PblVector3 vGravity = mInverse.ApplyRotation(sGravity - mAcceleration * mClass->mDampening);
+    PblVector3 vVelocity = mInverse.ApplyRotation(mVelocity);
 
     const float fInvDt = 1.0f / fDeltaTime;
     const float fInvMass = 1.0f / mClass->mParticleMass;
     for (unsigned int i = mData->m_uiNumFixedPoints; i < mData->m_uiNumParticles; ++i)
     {
         const PblVector3 vDragForce = (vVelocity + (m_pPos[i] - m_pOldPos[i]) * fInvDt) * fDrag;
-        const PblVector3& vNormal = m_pNormal[i];
-        const float fWindForce = DotProduct(vNormal, vWind) * fWind;
-        m_pAcceleration[i] = vGravity + (vNormal * fWindForce + vDragForce) * fInvMass;
+        PblVector3 vWindForce = (DotProduct(m_pNormal[i], vWind) * fWind) * m_pNormal[i];
+        m_pAcceleration[i] = vGravity + (vWindForce + vDragForce) * fInvMass;
     }
 }
 
@@ -1236,42 +1233,37 @@ void EntityCloth::EnforceConstraint(ClothConstraint& constraint, float fRestitut
 // FUNCTION: SWBF2 0x0045ba40
 void EntityCloth::EnforceCollisions(const PblMatrix& mMatrix, const RedPose* pPose)
 {
-    ClothCollision* pCollision = mData->m_pCollisionVolumes;
-    for (unsigned int i = 0; i < mData->m_uiNumCollisionVolumes; ++i, ++pCollision)
+    const ClothCollision* pCollision = mData->m_pCollisionVolumes;
+    for (unsigned int i = 0; i < mData->m_uiNumCollisionVolumes; ++i)
     {
         const PblMatrix* pBone = 0;
         if (pPose)
         {
-            pBone = pPose->Find(pCollision->parent);
+            pBone = pPose->Find(pCollision[i].parent);
         }
 
         PblMatrix mCollision;
         if (pBone)
         {
-            const PblMatrix mTemp = pCollision->localMat * *pBone;
-            const PblMatrix mInverse = mMatrix.GetInverseFast();
-            mCollision = mTemp * mInverse;
+            mCollision = pCollision[i].localMat * *pBone * mMatrix.GetInverseFast();
         }
         else
         {
             PblMatrix mBone = gMatrixIdentity;
-            RedModel::_HashTable.Find(mData->m_uiModelHash)->GetBoneMatrix(pCollision->parent, mBone);
-            const PblMatrix mTemp = pCollision->localMat * mBone;
-            const PblMatrix mInverse = mMatrix.GetInverseFast();
-            mCollision = mTemp * mInverse;
+            RedModel::_HashTable.Find(mData->m_uiModelHash)->GetBoneMatrix(pCollision[i].parent, mBone);
+            mCollision = pCollision[i].localMat * mBone * mMatrix.GetInverseFast();
         }
 
-        const PblMatrix mLocal = mCollision;
-        switch (pCollision->type)
+        switch (pCollision[i].type)
         {
         case CLOTH_COLLISION_SPHERE:
-            EnforceSphereCollision(mLocal, pCollision->width);
+            EnforceSphereCollision(mCollision, pCollision[i].width);
             break;
         case CLOTH_COLLISION_CYLINDER:
-            EnforceCylinderCollision(mLocal, pCollision->height, pCollision->width);
+            EnforceCylinderCollision(mCollision, pCollision[i].height, pCollision[i].width);
             break;
         case CLOTH_COLLISION_BOX:
-            EnforceBoxCollision(mLocal, pCollision->width, pCollision->height, pCollision->depth);
+            EnforceBoxCollision(mCollision, pCollision[i].width, pCollision[i].height, pCollision[i].depth);
             break;
         }
     }
@@ -1280,39 +1272,31 @@ void EntityCloth::EnforceCollisions(const PblMatrix& mMatrix, const RedPose* pPo
 // FUNCTION: SWBF2 0x0045b7c0
 void EntityCloth::EnforceCylinderCollision(const PblMatrix& mMatrix, float fHeight, float fRadius)
 {
-    const float fLength = fHeight * 2.0f;
     for (unsigned int i = mData->m_uiNumFixedPoints; i < mData->m_uiNumParticles; ++i)
     {
-        PblVector3& vPos = m_pPos[i];
-        const float fDX = vPos.x - mMatrix.m[3][0];
-        const float fDY = vPos.y - mMatrix.m[3][1];
-        const float fDZ = vPos.z - mMatrix.m[3][2];
-        const float fDepth =
-            fLength - fabsf(mMatrix.m[1][0] * fDX + mMatrix.m[1][1] * fDY + mMatrix.m[1][2] * fDZ);
-        if (fDepth <= 0.0f)
+        PblVector3 relDir = m_pPos[i] - mMatrix.GetTranslation();
+        float yDiff = fHeight * 2.0f - fabsf(DotProduct(mMatrix.GetYAxis(), relDir));
+        if (yDiff <= 0.0f)
         {
             continue;
         }
-        const PblVector3 vRadial(mMatrix.m[0][0] * fDX + mMatrix.m[0][1] * fDY + mMatrix.m[0][2] * fDZ, 0.0f,
-                                 mMatrix.m[2][0] * fDX + mMatrix.m[2][1] * fDY + mMatrix.m[2][2] * fDZ);
-        const float fDist = PblMath::Sqrt(vRadial.x * vRadial.x + vRadial.y * vRadial.y + vRadial.z * vRadial.z);
-        const float fPenetration = fRadius - fDist;
-        if (fPenetration <= 0.0f)
+        PblVector3 perpendicularDir(DotProduct(mMatrix.GetXAxis(), relDir), 0.0f,
+                                    DotProduct(mMatrix.GetZAxis(), relDir));
+        float length = Length(perpendicularDir);
+        float perpendicularDiff = fRadius - length;
+        if (perpendicularDiff <= 0.0f)
         {
             continue;
         }
-        if (fDepth > fPenetration)
+        if (yDiff > perpendicularDiff)
         {
-            const float fScale = fPenetration / fDist;
-            vPos.x += (mMatrix.m[0][0] * vRadial.x + mMatrix.m[2][0] * vRadial.z) * fScale;
-            vPos.y += (mMatrix.m[0][1] * vRadial.x + mMatrix.m[2][1] * vRadial.z) * fScale;
-            vPos.z += (mMatrix.m[0][2] * vRadial.x + mMatrix.m[2][2] * vRadial.z) * fScale;
+            m_pPos[i] += (perpendicularDiff / length) *
+                         (perpendicularDir.x * mMatrix.GetXAxis() +
+                          perpendicularDir.z * mMatrix.GetZAxis());
         }
         else
         {
-            vPos.x += mMatrix.m[1][0] * fDepth;
-            vPos.y += mMatrix.m[1][1] * fDepth;
-            vPos.z += mMatrix.m[1][2] * fDepth;
+            m_pPos[i] += yDiff * mMatrix.GetYAxis();
         }
     }
 }

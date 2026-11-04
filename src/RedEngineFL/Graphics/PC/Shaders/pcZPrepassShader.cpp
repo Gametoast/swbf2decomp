@@ -201,7 +201,7 @@ void pcZPrepassShader::Render_Fixed(const RenderItem* pItem, unsigned int) const
         PblMatrix mTransform = gMatrixIdentity;
         mTransform.SetXAxis(transform(0, 0), transform(0, 1), 0.0f, 0.0f);
         mTransform.SetYAxis(transform(1, 0), transform(1, 1), 0.0f, 0.0f);
-        mTransform.SetZAxis(transform(2, 0), transform(2, 1), 1.0f, 0.0f);
+        mTransform.SetZAxis(transform(3, 0), transform(3, 1), 1.0f, 0.0f);
         RedRenderer::pcSetTexture(0, pTexture);
         RedRenderer::pcFFSetTextureTransform(0, mTransform);
     }

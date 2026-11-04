@@ -11,21 +11,6 @@
 
 extern PblMatrix gMatrixIdentity;
 
-#pragma pack(push, 1)
-struct PosXYZW
-{
-    void SetPos(float fX, float fY, float fZ, float fW)
-    {
-        x = fX;
-        y = fY;
-        z = fZ;
-        w = fW;
-    }
-
-    float x, y, z, w;
-};
-#pragma pack(pop)
-
 struct MotionBlurVertex
 {
     PosXYZW pos;

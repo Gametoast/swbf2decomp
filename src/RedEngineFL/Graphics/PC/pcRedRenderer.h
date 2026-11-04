@@ -907,12 +907,35 @@ struct pcRedVertexShaderConstantRegister
         a = color.a;
     }
 
+    void SetColorAlpha(const RedColorValue& color, float fAlpha)
+    {
+        r = color.r;
+        g = color.g;
+        b = color.b;
+        a = fAlpha;
+    }
+
     void SetVector(const PblVector4& vector)
     {
         x = vector.x;
         y = vector.y;
         z = vector.z;
         w = vector.w;
+    }
+
+    void SetVectorXYZ(const PblVector3& vector)
+    {
+        x = vector.x;
+        y = vector.y;
+        z = vector.z;
+    }
+
+    void SetVectorW(const PblVector3& vector, float fW)
+    {
+        x = vector.x;
+        y = vector.y;
+        z = vector.z;
+        w = fW;
     }
 
     union
@@ -1057,7 +1080,10 @@ public:
     static const PblVector3 TransformCameraPointToProjectionSpace(const PblVector3& vPoint);
     static const PblVector3 TransformProjectionPointToScreenSpace(const PblVector3& vPoint);
 
-    static const PblVector3 TransformCameraPointToScreenSpace(const PblVector3& vPoint);
+    static const PblVector3 TransformCameraPointToScreenSpace(const PblVector3& vPoint)
+    {
+        return TransformProjectionPointToScreenSpace(TransformCameraPointToProjectionSpace(vPoint));
+    }
     static const PblVector3 TransformWorldPointToProjectionSpace(const PblVector3& vPoint);
 
     static void internalCleanupOcclusionQuery();

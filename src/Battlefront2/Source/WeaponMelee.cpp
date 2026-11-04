@@ -109,7 +109,7 @@ void WeaponMelee::Render(const PblMatrix& matrix, const RedPose* pPose,
     }
 
     const WeaponMeleeClass* pClass = static_cast<const WeaponMeleeClass*>(mRenderClass);
-    RedModel* pModel = bRenderModel && pClass->mHighResModel ?
+    const RedModel* pModel = bRenderModel && pClass->mHighResModel ?
                        pClass->mHighResModel : pClass->mModel;
     const PblMatrix* apMatrix[4] = {};
     PblMatrix aMatrix[4];
@@ -140,7 +140,7 @@ void WeaponMelee::Render(const PblMatrix& matrix, const RedPose* pPose,
 
     for (unsigned int i = 1; i < pClass->m_uiNumWeapons; ++i)
     {
-        RedModel* pWeaponModel = pClass->m_apWeaponModel[i - 1];
+        const RedModel* pWeaponModel = pClass->m_apWeaponModel[i - 1];
         if (!pWeaponModel || !pPose)
         {
             continue;
@@ -200,7 +200,7 @@ void WeaponMeleeClass::Render(float fTurnOn, const PblMatrix& matrix, const RedP
     const unsigned int uiRenderFlags = 0x04000000;
     const PblMatrix* apMatrix[4] = {};
     PblMatrix aMatrix[4];
-    RedModel* pModel = mModel;
+    const RedModel* pModel = mModel;
     if (pModel)
     {
         if (pPose)
@@ -222,7 +222,7 @@ void WeaponMeleeClass::Render(float fTurnOn, const PblMatrix& matrix, const RedP
 
     for (unsigned int i = 1; i < m_uiNumWeapons; ++i)
     {
-        RedModel* pWeaponModel = m_apWeaponModel[i - 1];
+        const RedModel* pWeaponModel = m_apWeaponModel[i - 1];
         if (!pWeaponModel || !pPose)
         {
             continue;
@@ -1737,7 +1737,7 @@ Combo* WeaponMeleeClass::_CreateODFCombo(unsigned int  )
     const unsigned int uiComboId = s_uiODFComboId;
     if (!m_pCombo)
     {
-        m_pCombo = const_cast<Combo*>(Combo::Find(uiComboId));
+        m_pCombo = Combo::Find(uiComboId);
         if (!m_pCombo)
         {
             if (Combo::sMemoryPool.IsFull())
@@ -2507,25 +2507,24 @@ bool WeaponMelee::OverrideSoldierVelocity(float& fVelocityZ, float& fVelocityX, 
 {
     bool bOverride = false;
     const Combo::State* pState = &m_pCombo->m_aState[m_eComboState];
-    if (pState->m_iGravity == Combo::State::GRAVITY_IMPULSE)
+    if (pState->IsVelocityYImpulse())
     {
         if (!m_bGravityDone)
         {
-            fVelocityY = (float)pState->m_iGravityVelocityYTarget * 0.1f;
+            fVelocityY = pState->GetVelocityYTarget();
             const_cast<WeaponMelee*>(this)->m_bGravityDone = 1;
             bOverride = true;
         }
     }
-    else if (pState->m_iGravity != 10)
+    else if (pState->IsGravity())
     {
-        float fGravity = (float)pState->m_iGravity * 0.1f;
-        int iTarget = pState->m_iGravityVelocityYTarget;
-        if (iTarget != -2048)
+        float fGravity = pState->GetGravity();
+        if (pState->IsVelocityYTarget())
         {
-            if (m_bGravityDone || (fGravity > 0.0f) == ((float)iTarget * 0.1f >= fVelocityY))
+            if (m_bGravityDone || (fGravity > 0.0f) == (pState->GetVelocityYTarget() >= fVelocityY))
             {
                 const_cast<WeaponMelee*>(this)->m_bGravityDone = 1;
-                fGravity = 1.0f - (float)(int)pState->m_bGravityZeroAtTarget;
+                fGravity = 1.0f - (float)pState->IsGravityZeroAtTarget();
             }
         }
         if (fGravity != 1.0f)
@@ -2556,26 +2555,27 @@ bool WeaponMelee::OverrideSoldierVelocity(float& fVelocityZ, float& fVelocityX, 
 
     float fStateX = pState->GetVelocityX();
     float fStateZ = pState->GetVelocityZ();
-    float fX;
-    float fZ;
+    PblVector3 vVelXZ(0.0f, 0.0f, 0.0f);
     if (pState->IsAlignedToThrust())
     {
         PblVector3 vThrust(-m_fInputThrustX, 0.0f, m_fInputThrustZ);
         AlignVectorToThrust(vThrust, true);
-        PblVector3 vVelocity(pState->GetVelocityFromStrafe() * vThrust.x + fStateX, 0.0f,
-                             pState->GetVelocityFromThrust() * vThrust.z + fStateZ);
-        AlignVectorToThrust(vVelocity, false);
-        fZ = vVelocity.z;
-        fX = vVelocity.x;
+        vVelXZ.x = pState->GetVelocityFromStrafe() * vThrust.x;
+        vVelXZ.AddX(fStateX);
+        vVelXZ.z = pState->GetVelocityFromThrust() * vThrust.z;
+        vVelXZ.AddZ(fStateZ);
+        AlignVectorToThrust(vVelXZ, false);
     }
     else
     {
-        fX = -(pState->GetVelocityFromStrafe() * m_fInputThrustX) + fStateX;
-        fZ = pState->GetVelocityFromThrust() * m_fInputThrustZ + fStateZ;
+        vVelXZ.x = -(pState->GetVelocityFromStrafe() * m_fInputThrustX);
+        vVelXZ.AddX(fStateX);
+        vVelXZ.z = pState->GetVelocityFromThrust() * m_fInputThrustZ;
+        vVelXZ.AddZ(fStateZ);
     }
     fFactor = fOverride;
-    fVelocityZ = fZ;
-    fVelocityX = fX;
+    fVelocityZ = vVelXZ.z;
+    fVelocityX = vVelXZ.x;
     return true;
 }
 
@@ -3124,7 +3124,7 @@ void WeaponMeleeClass::SetProperty(unsigned int aId, const char* aValue)
     // GLOBAL: SWBF2 0x01faa75c
     static WeaponMeleeClass* s_pThis;
     // GLOBAL: SWBF2 0x01fac3a0
-    static RedModel* s_pAttachToModel;
+    static const RedModel* s_pAttachToModel;
     // GLOBAL: SWBF2 0x01fac39c
     static unsigned int s_uiAttachToHP;
     // GLOBAL: SWBF2 0x01fac3a4
@@ -3283,7 +3283,7 @@ void WeaponMeleeClass::SetProperty(unsigned int aId, const char* aValue)
         if (aId == 0x2D32CE43)
         {
             m_pComboODF = 0;
-            m_pCombo = pcCombo ? (Combo*)Combo::Find(PblHash(pcCombo)) : 0;
+            m_pCombo = pcCombo ? Combo::Find(PblHash(pcCombo)) : 0;
             if (!m_pCombo)
             {
                 mSoldierAnimationWeapon = SoldierAnimationBank::INVALID_WEAPON;
@@ -3528,7 +3528,7 @@ void WeaponMeleeClass::SetProperty(unsigned int aId, const char* aValue)
         {
             break;
         }
-        s_pAttachToModel = (RedModel*)RedModel::Find(PblHash(aValue));
+        s_pAttachToModel = RedModel::Find(PblHash(aValue));
         if (s_pAttachToModel)
         {
             s_uiAttachToHP = 0xB7EC1D31;
@@ -3681,7 +3681,7 @@ int WeaponMeleeClass::_AttachDamageEdge(const RedModel* pAttachToModel, unsigned
                 {
                     return -1;
                 }
-                m_apWeaponModel[uiWeapon - 1] = (RedModel*)pAttachToModel;
+                m_apWeaponModel[uiWeapon - 1] = pAttachToModel;
                 m_auiHardpoint[uiWeapon] = uiAttachModelToHP;
                 ++m_uiNumWeapons;
             }

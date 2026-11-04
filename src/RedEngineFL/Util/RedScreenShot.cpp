@@ -8,6 +8,7 @@
 #include "RedEngineFL/Graphics/PC/pcRedRenderer.h"
 #include "RedEngineFL/Memory/RedMemory.h"
 #include "PebbleFL/Common/PblRandom.h"
+#include "PebbleFL/Common/PblMath.h"
 #include "RedEngineFL/Application/pc/pcFLRender.h"
 
 // FUNCTION: SWBF2 0x006f33a0
@@ -325,7 +326,7 @@ namespace RedScreenShot
 bool TakeScreenShot()
 {
     using namespace RedScreenShot;
-    char acFileName[52];
+    char acFileName[50];
     if (!GetScreenShotFileName(acFileName))
     {
         return false;
@@ -361,16 +362,8 @@ bool TakeScreenShot()
     const float fInverseGamma = 1.0f / gamma_correction;
     for (int i = 0; i < 256; ++i)
     {
-        float fValue = static_cast<float>(pow(static_cast<double>(static_cast<float>(i) / 255.0f),
-                                              static_cast<double>(fInverseGamma)));
-        if (fValue < 0.0f)
-        {
-            fValue = 0.0f;
-        }
-        else if (fValue > 1.0f)
-        {
-            fValue = 1.0f;
-        }
+        float fValue = powf(static_cast<float>(i) / 255.0f, fInverseGamma);
+        fValue = Clamp(fValue, 0.0f, 1.0f);
         const unsigned char ucValue = static_cast<unsigned char>(static_cast<int>(fValue * 255.0f));
         gamma.red[i] = ucValue;
         gamma.green[i] = ucValue;
@@ -400,11 +393,7 @@ bool TakeScreenShot()
 
     for (int i = 0; i < iNumTiles; ++i)
     {
-        if (pAccums[i].m_file.IsOpen())
-        {
-            pAccums[i].m_file.Close();
-        }
-        PblFile::Delete(pAccums[i].m_fileName);
+        pAccums[i].Close();
     }
     delete[] pAccums;
     delete[] pSamples;

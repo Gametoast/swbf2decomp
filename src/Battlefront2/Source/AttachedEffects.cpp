@@ -187,7 +187,7 @@ bool AttachedEffectsClass::SetProperty(unsigned int uiProperty, const char* pszV
             {
                 s_aAttachClassData[s_uiNumAttached].bIsOdf = 0;
                 s_aAttachClassData[s_uiNumAttached].pEffectClass =
-                    FLEffect::s_EffectClasses.Find(PblHash(acEffect));
+                    FLEffect::Get(PblHash(acEffect));
                 if (s_aAttachClassData[s_uiNumAttached].pEffectClass)
                 {
                     s_aAttachClassData[s_uiNumAttached].uiBoneName = PblTEMPHash(acBone);
@@ -223,7 +223,7 @@ bool AttachedEffectsClass::SetProperty(unsigned int uiProperty, const char* pszV
         {
             s_aAttachClassData[s_uiNumAttached].bIsOdf = 0;
             s_aAttachClassData[s_uiNumAttached].pEffectClass =
-                FLEffect::s_EffectClasses.Find(PblHash(pszValue));
+                FLEffect::Get(PblHash(pszValue));
         }
         return true;
     }

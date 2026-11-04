@@ -53,6 +53,8 @@
 #include "RumbleRegion.h"
 #include "SkyObject.h"
 #include "SoldierAnimatorLowRes.h"
+#include "PauseMenu.h"
+#include "SoldierAnimatorClass.h"
 #include "StatusDisplay.h"
 #include "Thread.h"
 #include "RedEngineFL/Graphics/PC/pcRedTexture.h"
@@ -239,7 +241,6 @@ namespace Lua_Callbacks
 void InitMission();
 }
 
-class PauseMenu { public: static void Init(); static void Reset(); };
 namespace PropGenerator
 {
     void Init();
@@ -344,7 +345,6 @@ namespace QOSDisplay
     void Reset();
 }
 
-class SoldierAnimatorClass { public: static void Destroy(); };
 
 namespace RedMissionLog
 {

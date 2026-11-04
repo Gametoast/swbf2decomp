@@ -180,15 +180,14 @@ bool RedModel::GetHierarchicalBoneMatrix(unsigned int uiBone, PblMatrix& mat) co
     {
         for (unsigned int i = 0; i < pSkeleton->m_uiNumBones; ++i)
         {
-            if (pSkeleton->m_auiNameHash[i] == uiBone)
+            if (pSkeleton->GetBoneNameHash(i) == uiBone)
             {
                 int iParent = pSkeleton->GetParentBone(i);
-                const PblMatrix& bone = pSkeleton->m_amDefaultPose[i];
+                const PblMatrix& bone = pSkeleton->GetDefaultPoseMatrix(i);
                 if (iParent >= 0)
                 {
-                    const PblMatrix& parent = pSkeleton->m_amDefaultPose[iParent];
-                    PblMatrix result = bone * parent.GetInverseFast();
-                    mat = result;
+                    const PblMatrix& parent = pSkeleton->GetDefaultPoseMatrix(iParent);
+                    mat = bone * parent.GetInverseFast();
                 }
                 else
                 {

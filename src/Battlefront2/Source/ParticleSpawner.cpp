@@ -138,18 +138,14 @@ void ParticleSpawner::SetupLocalParticle(Particle& particle, PblRandom& rand, in
         NormalizeSafe(vDir);
         break;
     default:
-        vDir.z = 0.0f;
-        vDir.y = 0.0f;
-        vDir.x = 0.0f;
+        vDir.SetAll(0.0f);
         break;
     }
 
     PblVector3 vOffset;
     SetupSpread(vOffset, mOffset, rand);
-    const float fPositionScale = mPositionDirectionScale.GetValue(rand);
-    particle.mPosition = vOffset + vDir * fPositionScale;
-    const float fVelocityScale = mVelocityDirectionScale.GetValue(rand);
-    particle.mVelocity = vDir * fVelocityScale;
+    particle.mPosition = vOffset + vDir * mPositionDirectionScale.GetValue(rand);
+    particle.mVelocity = vDir * mVelocityDirectionScale.GetValue(rand);
     particle.mSize[0] = mSize[0].GetValue(rand);
     particle.mColor[0].r = mRed[0].GetValue(rand);
     particle.mColor[0].g = mGreen[0].GetValue(rand);

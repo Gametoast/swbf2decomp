@@ -330,9 +330,9 @@ void RedWater::BuildPatchCache(const RedCamera* pCamera, bool bFarScene, VISIBIL
             PblVector3 vMin((float)x * m_metersPerPatch - m_worldCenterX,
                             m_waterHeight + m_fWaterHeightOffset + m_minPatchHeight,
                             (float)z * m_metersPerPatch - m_worldCenterZ);
-            PblVector3 vCenter(m_metersPerPatch * 0.5f + vMin.x,
-                               (m_maxPatchHeight - m_minPatchHeight) * 0.5f + vMin.y,
-                               m_metersPerPatch * 0.5f + vMin.z);
+            PblVector3 vCenter = PblVector3(m_metersPerPatch * 0.5f,
+                                           (m_maxPatchHeight - m_minPatchHeight) * 0.5f,
+                                           m_metersPerPatch * 0.5f) + vMin;
             if (pCamera->ClassifyXZBox(vCenter, vExtents) == RedCamera::VISIBILITY_NONE)
             {
                 continue;
@@ -343,10 +343,7 @@ void RedWater::BuildPatchCache(const RedCamera* pCamera, bool bFarScene, VISIBIL
             }
 
             const PblMatrix& mCamera = pCamera->GetMatrix();
-            float dx = vCenter.x - mCamera.m[3][0];
-            float dy = vCenter.y - mCamera.m[3][1];
-            float dz = vCenter.z - mCamera.m[3][2];
-            float fDistanceSq = dx * dx + dy * dy + dz * dz;
+            float fDistanceSq = SquaredLength(vCenter - mCamera[3]);
 
             int iKey = x + z * m_waterMapSize;
             void* pCustomMesh = 0;
@@ -411,10 +408,9 @@ void RedWater::BuildPatchCache(const RedCamera* pCamera, bool bFarScene, VISIBIL
             patch.fDistanceSq = fDistanceSq;
             patch.bClipsNearPlane = false;
             patch.bClipped = false;
-            patch.bbox._vMin = vMin;
-            patch.bbox._vMax = PblVector3(vMin.x + m_metersPerPatch,
-                                          (m_maxPatchHeight - m_minPatchHeight) + vMin.y,
-                                          vMin.z + m_metersPerPatch);
+            patch.bbox.Set(vMin, PblVector3(vMin.x + m_metersPerPatch,
+                                           (m_maxPatchHeight - m_minPatchHeight) + vMin.y,
+                                           vMin.z + m_metersPerPatch));
             patch.uiVisibilityID = uiVisibilityID;
             patch.uiVisibilityFarID = uiVisibilityFarID;
         }
@@ -629,31 +625,28 @@ void RedWater::OceanCreatePatch(PblComplex* pFreq)
             int i = x * m_pointsPerPatchZ + z;
             int iRow = m_divisionsPerPatchZ * ((m_divisionsPerPatchX + x) % m_divisionsPerPatchX);
             int iCol = (m_divisionsPerPatchZ + z) % m_divisionsPerPatchZ;
-            D3DXVECTOR3 vCenter(0.0f, pFreq[iRow + iCol].real, 0.0f);
+            PblVector3 vCenter(0.0f, pFreq[iRow + iCol].real, 0.0f);
             int iColPrev = (m_divisionsPerPatchZ + z - 1) % m_divisionsPerPatchZ;
             float fDX = m_metersPerPatch / (float)m_divisionsPerPatchX;
             float fDZ = m_metersPerPatch / (float)m_divisionsPerPatchZ;
-            D3DXVECTOR3 vA = D3DXVECTOR3(0.0f, pFreq[iRow + iColPrev].real, -fDZ) - vCenter;
+            PblVector3 vA = PblVector3(0.0f, pFreq[iRow + iColPrev].real, -fDZ) - vCenter;
             int iRowNext = m_divisionsPerPatchZ * ((m_divisionsPerPatchX + x + 1) % m_divisionsPerPatchX);
-            D3DXVECTOR3 vB = D3DXVECTOR3(fDX, pFreq[iRowNext + iColPrev].real, -fDZ) - vCenter;
+            PblVector3 vB = PblVector3(fDX, pFreq[iRowNext + iColPrev].real, -fDZ) - vCenter;
             int iRowPrev = m_divisionsPerPatchZ * ((m_divisionsPerPatchX + x - 1) % m_divisionsPerPatchX);
-            D3DXVECTOR3 vD = D3DXVECTOR3(-fDX, pFreq[iRowPrev + iCol].real, 0.0f) - vCenter;
-            D3DXVECTOR3 vC = D3DXVECTOR3(fDX, pFreq[iRowNext + iCol].real, 0.0f) - vCenter;
+            PblVector3 vD = PblVector3(-fDX, pFreq[iRowPrev + iCol].real, 0.0f) - vCenter;
+            PblVector3 vC = PblVector3(fDX, pFreq[iRowNext + iCol].real, 0.0f) - vCenter;
             int iColNext = (m_divisionsPerPatchZ + z + 1) % m_divisionsPerPatchZ;
-            D3DXVECTOR3 vF = D3DXVECTOR3(-fDX, pFreq[iRowPrev + iColNext].real, fDZ) - vCenter;
-            D3DXVECTOR3 vE = D3DXVECTOR3(0.0f, pFreq[iRow + iColNext].real, fDZ) - vCenter;
+            PblVector3 vF = PblVector3(-fDX, pFreq[iRowPrev + iColNext].real, fDZ) - vCenter;
+            PblVector3 vE = PblVector3(0.0f, pFreq[iRow + iColNext].real, fDZ) - vCenter;
 
-            D3DXVECTOR3 vAD, vDF, vFE, vEC, vCB, vBA;
-            D3DXVec3Cross(&vAD, &vA, &vD);
-            D3DXVec3Cross(&vDF, &vD, &vF);
-            D3DXVec3Cross(&vFE, &vF, &vE);
-            D3DXVec3Cross(&vEC, &vE, &vC);
-            D3DXVec3Cross(&vCB, &vC, &vB);
-            D3DXVec3Cross(&vBA, &vB, &vA);
-            D3DXVECTOR3 vNormal = vAD + vDF + vFE + vEC + vCB + vBA;
-            D3DXVECTOR3 vUnit;
-            D3DXVec3Normalize(&vUnit, &vNormal);
-            pNormals[i] = *(PblVector3*)&vUnit;
+            PblVector3 vAD = CrossProduct(vA, vD);
+            PblVector3 vDF = CrossProduct(vD, vF);
+            PblVector3 vFE = CrossProduct(vF, vE);
+            PblVector3 vEC = CrossProduct(vE, vC);
+            PblVector3 vCB = CrossProduct(vC, vB);
+            PblVector3 vBA = CrossProduct(vB, vA);
+            PblVector3 vNormal = vAD + vDF + vFE + vEC + vCB + vBA;
+            pNormals[i] = Normalize(vNormal);
         }
     }
 

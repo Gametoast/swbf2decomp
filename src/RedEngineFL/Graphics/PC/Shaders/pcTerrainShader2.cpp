@@ -654,10 +654,12 @@ void pcTerrainShader2::_InitBumpLuminosityPixelLighting(unsigned int uiHash,
     {
         s_material.bumpMapHash = uiBumpLuminosityTextureHash_;
         s_material.materialFlags |= 0x10000020;
-        s_material.detailTexTransform.SetScale(s_DetailTextureTransform[0][0].x,
-                                               s_DetailTextureTransform[0][1].z);
-        s_material.diffuseTexTransform.SetScale(s_DetailTextureTransform[0][0].x,
-                                                s_DetailTextureTransform[0][1].z);
+        s_material.detailTexTransform.SetScale(0.0f, 0.0f);
+        s_material.diffuseTexTransform.SetScale(0.0f, 0.0f);
+        s_material.detailTexTransform(0, 0) = s_DetailTextureTransform[0][0].x;
+        s_material.detailTexTransform(1, 1) = s_DetailTextureTransform[0][1].z;
+        s_material.diffuseTexTransform(0, 0) = s_DetailTextureTransform[0][0].x;
+        s_material.diffuseTexTransform(1, 1) = s_DetailTextureTransform[0][1].z;
     }
 }
 

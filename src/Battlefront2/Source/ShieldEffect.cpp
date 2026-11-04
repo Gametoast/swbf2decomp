@@ -204,7 +204,7 @@ ShieldEffect::ShieldEffect(const ShieldEffectClass* pClass)
     : RedSceneObject(&fambaaShieldEffectLodData)
 {
     m_uiAttachFlags |= UPDATE_REQUIRED;
-    m_pClass = const_cast<ShieldEffectClass*>(pClass);
+    m_pClass = pClass;
     m_fScrollTimer = 0.0f;
     m_fTurnOnTimer = 0.0f;
     m_fTurnOnFactor = 0.0f;

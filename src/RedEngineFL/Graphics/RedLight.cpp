@@ -1244,11 +1244,7 @@ void RedLight::ReadLight(PblConfig& config, unsigned int uiName)
     bool bCastSpecular = false;
     bool bCastShadow = false;
     bool bOverbright = false;
-    RedColorValue color;
-    color.r = RedColor::BLACK.r * kf1by255;
-    color.g = RedColor::BLACK.g * kf1by255;
-    color.b = RedColor::BLACK.b * kf1by255;
-    color.a = RedColor::BLACK.a * kf1by255;
+    RedColorValue color(RedColor::BLACK);
 
     while (!config.IsDone())
     {
@@ -1318,9 +1314,9 @@ void RedLight::ReadLight(PblConfig& config, unsigned int uiName)
         }
     }
 
-    PblQuaternion qUnit;
+    D3DXQUATERNION tmp;
     PblMatrix mTransform;
-    D3DXMatrixRotationQuaternion(reinterpret_cast<D3DXMATRIX*>(&mTransform), D3DXQuaternionNormalize(reinterpret_cast<D3DXQUATERNION*>(&qUnit), reinterpret_cast<const D3DXQUATERNION*>(&qRotation)));
+    D3DXMatrixRotationQuaternion(reinterpret_cast<D3DXMATRIX*>(&mTransform), D3DXQuaternionNormalize(&tmp, reinterpret_cast<const D3DXQUATERNION*>(&qRotation)));
     mTransform.m[3][0] = vPosition.x;
     mTransform.m[3][1] = vPosition.y;
     mTransform.m[3][2] = vPosition.z;

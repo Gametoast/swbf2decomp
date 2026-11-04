@@ -9,21 +9,6 @@
 #include "RedEngineFL/Graphics/PC/Shaders/pcFilterCopyShader.h"
 #include "RedEngineFL/Application/pc/pcRenderHelpers.h"
 
-#pragma pack(push, 1)
-struct PosXYZW
-{
-    void SetPos(float fX, float fY, float fZ, float fW)
-    {
-        x = fX;
-        y = fY;
-        z = fZ;
-        w = fW;
-    }
-
-    float x, y, z, w;
-};
-#pragma pack(pop)
-
 namespace
 {
 struct BlurVertex

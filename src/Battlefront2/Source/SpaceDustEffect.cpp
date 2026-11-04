@@ -307,9 +307,9 @@ void SpaceDustEffect::Update(float fDeltaTime)
 
         PblVector3 vUp = Normalize(CrossProduct(vRight, vDir));
         PblMatrix mSpawn;
-        mSpawn.SetXAxis(vUp.x, vUp.y, vUp.z, 0.0f);
-        mSpawn.SetYAxis(vRight.x, vRight.y, vRight.z, 0.0f);
-        mSpawn.SetZAxis(vDir.x, vDir.y, vDir.z, 0.0f);
+        mSpawn.SetXAxis(vUp);
+        mSpawn.SetYAxis(vRight);
+        mSpawn.SetZAxis(vDir);
         mSpawn.SetTranslation(mCamera.GetTranslation() + vDir * mSpawnDistance);
 
         for (int i = 0; i < iNumSpawn; i++)

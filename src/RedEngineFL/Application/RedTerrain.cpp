@@ -242,12 +242,7 @@ float RedTerrain::GetInterpolatedLight(float fX, float fZ)
     return (fB - fA) * fFracX + fA;
 }
 
-static PblVector3 TriangleNormal(const PblVector3& p0, const PblVector3& p1, const PblVector3& p2)
-{
-    const PblVector3 a(p1.x - p0.x, p1.y - p0.y, p1.z - p0.z);
-    const PblVector3 b(p2.x - p0.x, p2.y - p0.y, p2.z - p0.z);
-    return CrossProduct(b, a);
-}
+
 
 // FUNCTION: SWBF2 0x006c1b50
 const PblVector3 RedTerrain::GetInterpolatedNormal(float fX, float fZ)
@@ -280,38 +275,37 @@ const PblVector3 RedTerrain::GetInterpolatedNormal(float fX, float fZ)
     const float fFracZ = fGridZ - (float)iZ;
     const float fM = _fMetersPerPoint;
 
-    PblVector3 vNormal;
     if (iZ & 1)
     {
         if (1.0f - fFracZ > fFracX)
         {
-            vNormal = TriangleNormal(PblVector3(0.0f, GetHeight(iX, iZ), 0.0f),
-                                     PblVector3(fM, GetHeight(iX + 1, iZ), 0.0f),
-                                     PblVector3(0.0f, GetHeight(iX, iZ + 1), fM));
+            const PblVector3 p0(0.0f, GetHeight(iX, iZ), 0.0f);
+            const PblVector3 a = PblVector3(fM, GetHeight(iX + 1, iZ), 0.0f) - p0;
+            const PblVector3 b = PblVector3(0.0f, GetHeight(iX, iZ + 1), fM) - p0;
+            return Normalize(CrossProduct(b, a));
         }
         else
         {
-            vNormal = TriangleNormal(PblVector3(fM, GetHeight(iX + 1, iZ + 1), fM),
-                                     PblVector3(0.0f, GetHeight(iX, iZ + 1), fM),
-                                     PblVector3(fM, GetHeight(iX + 1, iZ), 0.0f));
+            const PblVector3 p0(fM, GetHeight(iX + 1, iZ + 1), fM);
+            const PblVector3 a = PblVector3(0.0f, GetHeight(iX, iZ + 1), fM) - p0;
+            const PblVector3 b = PblVector3(fM, GetHeight(iX + 1, iZ), 0.0f) - p0;
+            return Normalize(CrossProduct(b, a));
         }
     }
     else if (fFracZ > fFracX)
     {
-        vNormal = TriangleNormal(PblVector3(0.0f, GetHeight(iX, iZ + 1), fM),
-                                 PblVector3(0.0f, GetHeight(iX, iZ), 0.0f),
-                                 PblVector3(fM, GetHeight(iX + 1, iZ + 1), fM));
+        const PblVector3 p0(0.0f, GetHeight(iX, iZ + 1), fM);
+        const PblVector3 a = PblVector3(0.0f, GetHeight(iX, iZ), 0.0f) - p0;
+        const PblVector3 b = PblVector3(fM, GetHeight(iX + 1, iZ + 1), fM) - p0;
+        return Normalize(CrossProduct(b, a));
     }
     else
     {
-        vNormal = TriangleNormal(PblVector3(fM, GetHeight(iX + 1, iZ), 0.0f),
-                                 PblVector3(fM, GetHeight(iX + 1, iZ + 1), fM),
-                                 PblVector3(0.0f, GetHeight(iX, iZ), 0.0f));
+        const PblVector3 p0(fM, GetHeight(iX + 1, iZ), 0.0f);
+        const PblVector3 a = PblVector3(fM, GetHeight(iX + 1, iZ + 1), fM) - p0;
+        const PblVector3 b = PblVector3(0.0f, GetHeight(iX, iZ), 0.0f) - p0;
+        return Normalize(CrossProduct(b, a));
     }
-
-    PblVector3 vResult;
-    D3DXVec3Normalize(reinterpret_cast<D3DXVECTOR3*>(&vResult), reinterpret_cast<const D3DXVECTOR3*>(&vNormal));
-    return vResult;
 }
 
 // FUNCTION: SWBF2 0x006c1ee0
@@ -334,7 +328,7 @@ bool RedTerrain::PointInHole(const PblVector3& vPos)
     static PblVector3 vLastPos(FLT_MAX, FLT_MAX, FLT_MAX);
     // GLOBAL: SWBF2 0x0093eb90
     static bool bLastInHole;
-    if (vPos.x == vLastPos.x && vPos.y == vLastPos.y && vPos.z == vLastPos.z)
+    if (vPos == vLastPos)
     {
         return bLastInHole;
     }
@@ -749,8 +743,7 @@ float RedTerrain::_RayHit(const PblVector3& vStart, const PblVector3& vEnd, floa
     PblVector3 vTo = vEnd;
     const float fTolerance2 = fTolerance * fTolerance;
 
-    while ((vFrom.y - vTo.y) * (vFrom.y - vTo.y) + (vFrom.x - vTo.x) * (vFrom.x - vTo.x) +
-               (vFrom.z - vTo.z) * (vFrom.z - vTo.z) > fTolerance2)
+    while (SquaredLength(vFrom - vTo) > fTolerance2)
     {
         const PblVector3 vMid = (vTo + vFrom) * 0.5f;
         const float fAbove = GetInterpolatedHeight(vMid.x, vMid.z) - vMid.y;
@@ -775,14 +768,9 @@ float RedTerrain::_RayHit(const PblVector3& vStart, const PblVector3& vEnd, floa
 // FUNCTION: SWBF2 0x006c32f0
 float RedTerrain::_RayHit(const PblVector3& vStart, const PblVector3& vEnd, float fA, float fB, bool& bAbove)
 {
-    const float fDeltaX = vStart.x - vEnd.x;
-    const float fDeltaZ = vStart.z - vEnd.z;
-    if (fDeltaZ * fDeltaZ + fDeltaX * fDeltaX > fB * fB)
+    if (SquaredLengthXZ(vStart - vEnd) > fB * fB)
     {
-        const float fFirst = _RayHit(vStart,
-                                     PblVector3((vEnd.x + vStart.x) * 0.5f, (vStart.y + vEnd.y) * 0.5f,
-                                                (vEnd.z + vStart.z) * 0.5f),
-                                     fA, fB, bAbove);
+        const float fFirst = _RayHit(vStart, (vEnd + vStart) * 0.5f, fA, fB, bAbove);
         if (1.0f > fFirst)
         {
             return fFirst * 0.5f;
