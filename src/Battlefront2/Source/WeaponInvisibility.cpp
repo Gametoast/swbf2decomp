@@ -232,7 +232,7 @@ void WeaponInvisibility::ExitIdle()
 // FUNCTION: SWBF2 0x00685e70
 void WeaponInvisibility::EnterFire()
 {
-    const WeaponInvisibilityClass* pClass = static_cast<const WeaponInvisibilityClass*>(mClass);
+    const WeaponInvisibilityClass* pClass = (const WeaponInvisibilityClass*)mClass;
     mStateTimer = 0.0f;
 
     if (!m_bInvisibilityActive)
@@ -273,7 +273,7 @@ void WeaponInvisibility::EnterFire()
 // FUNCTION: SWBF2 0x00685f50
 bool WeaponInvisibility::UpdateFire(float fDeltaTime)
 {
-    const WeaponInvisibilityClass* pClass = static_cast<const WeaponInvisibilityClass*>(mClass);
+    const WeaponInvisibilityClass* pClass = (const WeaponInvisibilityClass*)mClass;
     mStateTimer += fDeltaTime;
     if (!mSelectedFlag && pClass->m_eInvisibilityTrigger != WeaponInvisibilityClass::TRIGGER_PRESS)
     {
@@ -291,7 +291,7 @@ bool WeaponInvisibility::UpdateFire(float fDeltaTime)
 // FUNCTION: SWBF2 0x00685fd0
 void WeaponInvisibility::ExitFire()
 {
-    const WeaponInvisibilityClass* pClass = static_cast<const WeaponInvisibilityClass*>(mClass);
+    const WeaponInvisibilityClass* pClass = (const WeaponInvisibilityClass*)mClass;
     if (pClass->m_eInvisibilityTrigger == WeaponInvisibilityClass::TRIGGER_HOLD && m_bInvisibilityActive)
     {
         InputInvisibilityOff();
@@ -331,7 +331,7 @@ bool WeaponInvisibility::CheckFire() const
 // FUNCTION: SWBF2 0x00686080
 bool WeaponInvisibility::CheckReload() const
 {
-    const WeaponInvisibilityClass* pClass = static_cast<const WeaponInvisibilityClass*>(mClass);
+    const WeaponInvisibilityClass* pClass = (const WeaponInvisibilityClass*)mClass;
     if (!m_bInvisibilityActive && pClass->mInitialEnergyDrain > 0.0f && mOwner &&
         pClass->mInitialEnergyDrain > mOwner->GetEnergy())
     {
@@ -343,7 +343,7 @@ bool WeaponInvisibility::CheckReload() const
 // FUNCTION: SWBF2 0x006860d0
 bool WeaponInvisibility::UpdateReload(float fDeltaTime)
 {
-    const WeaponInvisibilityClass* pClass = static_cast<const WeaponInvisibilityClass*>(mClass);
+    const WeaponInvisibilityClass* pClass = (const WeaponInvisibilityClass*)mClass;
     mStateTimer = mOwner->GetEnergy() / 100.0f;
     mStateLimit = pClass->mInitialEnergyDrain / 100.0f;
     UpdateInvisibility(fDeltaTime);
@@ -353,7 +353,7 @@ bool WeaponInvisibility::UpdateReload(float fDeltaTime)
 // FUNCTION: SWBF2 0x00686130
 bool WeaponInvisibility::CheckEmpty() const
 {
-    const WeaponInvisibilityClass* pClass = static_cast<const WeaponInvisibilityClass*>(mClass);
+    const WeaponInvisibilityClass* pClass = (const WeaponInvisibilityClass*)mClass;
     float fDrain = pClass->mEnergyDrain;
     EnergyBar* pEnergyBar = mOwner->GetEnergyBar();
     if (pEnergyBar && pEnergyBar->IsOverheating() && !(0.0f >= fDrain))
@@ -375,7 +375,7 @@ bool WeaponInvisibility::FireDone() const
     {
         return false;
     }
-    const WeaponInvisibilityClass* pClass = static_cast<const WeaponInvisibilityClass*>(mClass);
+    const WeaponInvisibilityClass* pClass = (const WeaponInvisibilityClass*)mClass;
     if (pClass->m_eInvisibilityTrigger == WeaponInvisibilityClass::TRIGGER_HOLD && !CheckEmpty())
     {
         return mTrigger->IsRelease();
@@ -386,7 +386,7 @@ bool WeaponInvisibility::FireDone() const
 // FUNCTION: SWBF2 0x00686200
 void WeaponInvisibility::Fire()
 {
-    if (static_cast<const WeaponInvisibilityClass*>(mClass)->m_eInvisibilityTrigger !=
+    if (((const WeaponInvisibilityClass*)mClass)->m_eInvisibilityTrigger !=
         WeaponInvisibilityClass::TRIGGER_PRESS)
     {
         InputInvisibilityOn();
@@ -405,14 +405,14 @@ void WeaponInvisibility::InputInvisibilityOn()
 // FUNCTION: SWBF2 0x00686230
 void WeaponInvisibility::InputInvisibilityOff()
 {
-    m_fInvisibilityPersistTimer = static_cast<const WeaponInvisibilityClass*>(mClass)->m_fInvisibilityPersistTime;
+    m_fInvisibilityPersistTimer = ((const WeaponInvisibilityClass*)mClass)->m_fInvisibilityPersistTime;
     m_bInvisibilityOn = false;
 }
 
 // FUNCTION: SWBF2 0x00686250
 void WeaponInvisibility::StartInvisibility()
 {
-    m_fInvisibilityPersistTimer = static_cast<const WeaponInvisibilityClass*>(mClass)->m_fInvisibilityPersistTime;
+    m_fInvisibilityPersistTimer = ((const WeaponInvisibilityClass*)mClass)->m_fInvisibilityPersistTime;
     m_bInvisibilityOn = true;
     m_bInvisibilityActive = true;
 }
@@ -428,7 +428,7 @@ void WeaponInvisibility::StopInvisibility()
 // FUNCTION: SWBF2 0x00686290
 void WeaponInvisibility::StartFlicker()
 {
-    const WeaponInvisibilityClass* pClass = static_cast<const WeaponInvisibilityClass*>(mClass);
+    const WeaponInvisibilityClass* pClass = (const WeaponInvisibilityClass*)mClass;
     m_fInvisibilityFactor -= pClass->m_fFlickerAmplitude;
     if (m_fInvisibilityFactor < 0.0f)
     {
@@ -457,7 +457,7 @@ void WeaponInvisibility::UpdateInvisibility(float fDeltaTime)
         m_fInvisibilityFactor = 0.0f;
     }
 
-    const WeaponInvisibilityClass* pClass = static_cast<const WeaponInvisibilityClass*>(mClass);
+    const WeaponInvisibilityClass* pClass = (const WeaponInvisibilityClass*)mClass;
     if (m_bInvisibilityActive)
     {
         if (!m_bInvisibilityOn)
@@ -552,7 +552,7 @@ void WeaponInvisibility::UpdateInvisibility(float fDeltaTime)
 
     if (mOwner->GetGameObject()->GetEntityType() == ENT_SOLDIER)
     {
-        static_cast<EntitySoldier*>(mOwner->GetGameObject()->GetEntity())
+        ((EntitySoldier*)mOwner->GetGameObject()->GetEntity())
             ->SetInvisibilityFactor(m_fInvisibilityFactor);
     }
 }

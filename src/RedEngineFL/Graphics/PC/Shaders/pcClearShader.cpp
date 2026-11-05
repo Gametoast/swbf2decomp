@@ -262,13 +262,13 @@ void pcClearShader::_Init(unsigned int uiFlags,
 void pcClearShader::_InitPipelineFuncArray()
 {
     GetStateFuncArray[PIPELINE_FIXED] =
-        static_cast<GetStateFuncT>(&pcClearShader::GetState_Fixed);
+        (GetStateFuncT)(&pcClearShader::GetState_Fixed);
     BeginFuncArray[PIPELINE_FIXED] =
-        static_cast<BeginFuncT>(&pcClearShader::Begin_Fixed);
+        (BeginFuncT)(&pcClearShader::Begin_Fixed);
     EndFuncArray[PIPELINE_FIXED] =
-        static_cast<EndFuncT>(&pcClearShader::End_Fixed);
+        (EndFuncT)(&pcClearShader::End_Fixed);
     RenderFuncArray[PIPELINE_FIXED] =
-        static_cast<RenderFuncT>(&pcClearShader::Render_Fixed);
+        (RenderFuncT)(&pcClearShader::Render_Fixed);
 }
 
 // FUNCTION: SWBF2 0x00706e70

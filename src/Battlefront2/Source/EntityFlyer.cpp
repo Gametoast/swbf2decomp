@@ -71,9 +71,9 @@ EnergyMode EntityFlyer::GetEnergyMode() const
 {
     if (mTrick <= 0.0f)
     {
-        return static_cast<EnergyMode>(0);
+        return (EnergyMode)0;
     }
-    return static_cast<EnergyMode>(mTrickDoubleclick != 0.0f ? 2 : 1);
+    return (EnergyMode)(mTrickDoubleclick != 0.0f ? 2 : 1);
 }
 
 // FUNCTION: SWBF2 0x004ab800
@@ -119,7 +119,7 @@ void EntityFlyer::DeactivatePhysics()
         }
     }
     mPostCollision.DeactivateThread();
-    static_cast<Controllable*>(this)->DeactivateThread();
+    ((Controllable*)this)->DeactivateThread();
 }
 
 // FUNCTION: SWBF2 0x004aaf20
@@ -305,11 +305,11 @@ EntityFlyerClass::EntityFlyerClass(unsigned int uHash)
     mMomentumFilter = 8.0f;
     memset(mWeaponClass, 0, sizeof(mWeaponClass));
     memset(mWeaponAmmo, 0, sizeof(mWeaponAmmo));
-    for (int i = 0; i < 4; ++i)
+    for (int i = 0; i < kMaxWeapons; ++i)
     {
         mWeaponAmmo[i].bFlagAmmoInfinite = 1;
     }
-    for (int i = 0; i < 4; ++i)
+    for (int i = 0; i < kMaxWeapons; ++i)
     {
         mWeaponChannel[i] = i;
     }
@@ -324,7 +324,7 @@ EntityFlyerClass::EntityFlyerClass(unsigned int uHash)
     mExplosionDestruct = 0;
     mLODClass = 1;
 
-    for (int i = 0; i < 8; ++i)
+    for (int i = 0; i < kMaxThrustEffects; ++i)
     {
         mThrustEffectName[i] = 0;
         mThrustEffectHardPoint[i] = 0;
@@ -334,7 +334,7 @@ EntityFlyerClass::EntityFlyerClass(unsigned int uHash)
         mThrustEffectScaleStart[i] = 0.0f;
     }
 
-    for (int i = 0; i < 12; ++i)
+    for (int i = 0; i < kMaxContrailEffects; ++i)
     {
         mContrailEffectName[i] = 0;
         mContrailEffectHardPoint[i] = 0;
@@ -416,13 +416,13 @@ MemoryPool EntityFlyer::sMemoryPool("EntityFlyer", sizeof(EntityFlyer));
 // FUNCTION: SWBF2 0x004ab7c0
 const ControllableClass* EntityFlyer::GetControllableClass() const
 {
-    return mClass ? static_cast<const ControllableClass*>(mClass) : 0;
+    return mClass ? (const ControllableClass*)mClass : 0;
 }
 
 // FUNCTION: SWBF2 0x004ab7e0
 ControllableClass* EntityFlyer::GetControllableClass()
 {
-    return mClass ? static_cast<ControllableClass*>(mClass) : 0;
+    return mClass ? (ControllableClass*)mClass : 0;
 }
 
 // FUNCTION: SWBF2 0x004ab830
@@ -615,7 +615,7 @@ EntityFlyerClass::EntityFlyerClass(EntityFlyerClass* pSrc, unsigned int uHash)
     mBarrierOZ = pSrc->mBarrierOZ;
     mLODClass = 1;
 
-    for (int i = 0; i < 8; ++i)
+    for (int i = 0; i < kMaxThrustEffects; ++i)
     {
         mThrustEffectName[i] = pSrc->mThrustEffectName[i];
         mThrustEffectHardPoint[i] = pSrc->mThrustEffectHardPoint[i];
@@ -625,7 +625,7 @@ EntityFlyerClass::EntityFlyerClass(EntityFlyerClass* pSrc, unsigned int uHash)
         mThrustEffectScaleStart[i] = pSrc->mThrustEffectScaleStart[i];
     }
 
-    for (int i = 0; i < 12; ++i)
+    for (int i = 0; i < kMaxContrailEffects; ++i)
     {
         mContrailEffectName[i] = pSrc->mContrailEffectName[i];
         mContrailEffectHardPoint[i] = pSrc->mContrailEffectHardPoint[i];
@@ -1009,7 +1009,7 @@ void EntityFlyerClass::SetProperty(unsigned int uProperty, const char* pszValue)
 
     case 0x0894d756:
         sCurThrustEffect = -1;
-        for (int i = 0; i < 8; ++i)
+        for (int i = 0; i < kMaxThrustEffects; ++i)
         {
             if (!mThrustEffectName[i])
             {
@@ -1057,7 +1057,7 @@ void EntityFlyerClass::SetProperty(unsigned int uProperty, const char* pszValue)
 
     case 0x050dfa58:
         sCurContrailEffect = -1;
-        for (int i = 0; i < 12; ++i)
+        for (int i = 0; i < kMaxContrailEffects; ++i)
         {
             if (!mContrailEffectName[i])
             {
@@ -1252,10 +1252,7 @@ void EntityFlyerClass::SetProperty(unsigned int uProperty, const char* pszValue)
             CollisionPrimitive primitive;
             PblMatrix matrix = gMatrixIdentity;
             primitive.SetAACylinder((fHalfZ + fHalfX) * 0.5f, fHalfY * 2.0f);
-            matrix.m[3][0] = fCenterX;
-            matrix.m[3][1] = fCenterY;
-            matrix.m[3][2] = fCenterZ;
-            matrix.m[3][3] = 1.0f;
+            matrix.SetTranslation(PblVector3(fCenterX, fCenterY, fCenterZ));
             mCollisionModel.AddBody(new CollisionBodyPrimitive(primitive, "main_body", matrix, 0));
         }
         if (pMesh)
@@ -1513,7 +1510,7 @@ EntityFlyer::EntityFlyer(EntityFlyerClass* pClass, const EntityDesc& desc)
     memset(mContrailEffect, 0, sizeof(mContrailEffect));
 
     mNumTurrets = 0;
-    for (int i = 0; i < 8; ++i)
+    for (int i = 0; i < kMaxTurrets; ++i)
     {
         if (pClass->mTurretClass[i])
         {
@@ -1601,32 +1598,37 @@ EntityFlyer::EntityFlyer(EntityFlyerClass* pClass, const EntityDesc& desc)
         {
             continue;
         }
-        mAimer[i] = new Aimer(&pClass->mAimerClass[i], this, &mMatrix, &mPose, 0);
+        Aimer* pAimer = new Aimer(&pClass->mAimerClass[i], this, &mMatrix, &mPose, 0);
         WeaponDesc weaponDesc;
         weaponDesc.mOwner = this;
-        weaponDesc.mAimer = mAimer[i];
+        weaponDesc.mAimer = pAimer;
+        weaponDesc.mTrigger = 0;
+        weaponDesc.mReload = 0;
+        weaponDesc.mNumClips = 0;
+        weaponDesc.m_pAmmoCounter = 0;
+        weaponDesc.m_pEnergyBar = 0;
         weaponDesc.mTrigger = &mControlFire[mClass->mWeaponChannel[i]];
         weaponDesc.mReload = &mControlReload;
-        const WeaponAmmoDesc& ammo = mClass->mWeaponAmmo[i];
-        if (ammo.bFlagShareAmmo)
+        mAimer[i] = pAimer;
+        if (mClass->mWeaponAmmo[i].bFlagShareAmmo)
         {
-            weaponDesc.m_pAmmoCounter = mWeapon[ammo.uiAmmo]->m_pAmmoCounter;
+            weaponDesc.m_pAmmoCounter = mWeapon[mClass->mWeaponAmmo[i].uiAmmo]->m_pAmmoCounter;
         }
-        else if (ammo.bFlagAmmoInfinite)
+        else if (mClass->mWeaponAmmo[i].bFlagAmmoInfinite)
         {
             weaponDesc.mNumClips = 0x7fffffff;
         }
         else
         {
-            weaponDesc.mNumClips = ammo.uiAmmo;
+            weaponDesc.mNumClips = mClass->mWeaponAmmo[i].uiAmmo;
         }
-        if (ammo.bFlagShareHeat)
+        if (mClass->mWeaponAmmo[i].bFlagShareHeat)
         {
-            weaponDesc.m_pEnergyBar = mWeapon[ammo.uiHeat]->m_pEnergyBar;
+            weaponDesc.m_pEnergyBar = mWeapon[mClass->mWeaponAmmo[i].uiHeat]->m_pEnergyBar;
         }
         mWeapon[i] = mClass->mWeaponClass[i]->Build(weaponDesc);
     }
-    for (int iChannel = 0; iChannel < 2; ++iChannel)
+    for (int iChannel = 0; iChannel < kNumWeaponChannels; ++iChannel)
     {
         mWeaponIndex[iChannel] = -1;
         for (int i = 0; i < mClass->mWeaponCount; ++i)
@@ -1750,7 +1752,7 @@ void EntityFlyer::Init()
     }
     else
     {
-        for (int iChannel = 0; iChannel < 2; ++iChannel)
+        for (int iChannel = 0; iChannel < kNumWeaponChannels; ++iChannel)
         {
             int iIndex = mWeaponIndex[iChannel];
             if (iIndex >= 0 && mWeapon[iIndex])
@@ -1911,8 +1913,7 @@ void EntityFlyer::SetupCameraTrackMatrix(PblMatrix& rMatrix, float fDeltaTime)
         PblMatrix mUnbank;
         mUnbank.SetRotateZ(-mBankRollAngle);
         mUnbank.RotateX(-mBankPitchAngle);
-        PblMatrix mBody;
-        D3DXMatrixMultiply(reinterpret_cast<D3DXMATRIX*>(&mBody), reinterpret_cast<const D3DXMATRIX*>(&mUnbank), reinterpret_cast<const D3DXMATRIX*>(&mTarget));
+        PblMatrix mBody = mUnbank * mTarget;
 
         if (mTowCableWalker != 0)
         {
@@ -2108,9 +2109,9 @@ bool EntityFlyer::UpdateIndirect(float fDeltaTime)
                 fRatio = fFloor;
             }
             float fSpeed = AIUtil::GetThrustForTargetSpeed(fRatio, GetFlyerMinSpeed(), GetFlyerMidSpeed(), GetFlyerMaxSpeed());
+            mControlMove = fSpeed * fThrust;
             mControlStrafe = fSpeed * fStrafe;
             mControlPitch = fPitch;
-            mControlMove = fSpeed * fThrust;
             mControlTurn = fTurn;
         }
     }
@@ -2379,8 +2380,7 @@ void EntityFlyer::Render(unsigned char renderMode, float lod, unsigned int flags
     if (pFlag)
     {
         const FlagItemClass* pFlagClass = static_cast<const FlagItemClass*>(pFlag->mClass);
-        PblVector3 vPos;
-        D3DXVec3TransformCoord(reinterpret_cast<D3DXVECTOR3*>(&vPos), reinterpret_cast<const D3DXVECTOR3*>(&pFlagClass->mCarriedOffset), reinterpret_cast<const D3DXMATRIX*>(&mWorld));
+        PblVector3 vPos = mWorld.ApplyTransform(pFlagClass->mCarriedOffset);
         mWorld.SetTranslation(vPos);
         reinterpret_cast<GameObject*>(pFlag)->SetMatrix(mWorld);
         reinterpret_cast<GameObject*>(pFlag)->SetVelocity(GetVelocity());
@@ -2422,7 +2422,7 @@ void EntityFlyer::PlayDustEffect()
 // FUNCTION: SWBF2 0x004aba50
 void EntityFlyer::TurnOnThrustEffects()
 {
-    for (int i = 0; i < 8; ++i)
+    for (int i = 0; i < kMaxThrustEffects; ++i)
     {
         if (!mClass->mThrustEffectName[i])
         {
@@ -2437,7 +2437,7 @@ void EntityFlyer::TurnOnThrustEffects()
         {
             continue;
         }
-        mThrustEffect[i] = static_cast<ParticleEmitterObject*>(pEffectClass->BuildEffect());
+        mThrustEffect[i] = (ParticleEmitterObject*)pEffectClass->BuildEffect();
         if (!mThrustEffect[i])
         {
             continue;
@@ -2491,7 +2491,7 @@ void EntityFlyer::RecalculateSpeed()
 // FUNCTION: SWBF2 0x004abed0
 void EntityFlyer::TurnOffContrailEffects()
 {
-    for (int i = 0; i < 12; ++i)
+    for (int i = 0; i < EntityFlyerClass::kMaxContrailEffects; ++i)
     {
         if (!mClass->mContrailEffectName[i])
         {
@@ -2522,21 +2522,21 @@ bool EntityFlyer::TurnOnContrailEffect(int iIndex)
     {
         return false;
     }
-    mContrailEffect[iIndex] = static_cast<ParticleEmitterObject*>(pEffectClass->BuildEffect());
+    mContrailEffect[iIndex] = (ParticleEmitterObject*)pEffectClass->BuildEffect();
     if (!mContrailEffect[iIndex])
     {
         return false;
     }
 
-    static_cast<ParticleEmitterObject*>(mContrailEffect[iIndex])->ScaleSet(mClass->mContrailEffectMinScale[iIndex]);
+    ((ParticleEmitterObject*)mContrailEffect[iIndex])->ScaleSet(mClass->mContrailEffectMinScale[iIndex]);
     PblMatrix mOffset = gMatrixIdentity;
     mOffset.SetTranslation(mClass->mContrailEffectAttachOffset[iIndex]);
     if (!mClass->mContrailEffectHardPoint[iIndex])
     {
-        static_cast<ParticleEmitterObject*>(mContrailEffect[iIndex])->AttachEffectToObject(this, mOffset, true);
+        ((ParticleEmitterObject*)mContrailEffect[iIndex])->AttachEffectToObject(this, mOffset, true);
         return false;
     }
-    static_cast<ParticleEmitterObject*>(mContrailEffect[iIndex])->AttachEffectToObject(this, mClass->mContrailEffectHardPoint[iIndex], mOffset, true);
+    ((ParticleEmitterObject*)mContrailEffect[iIndex])->AttachEffectToObject(this, mClass->mContrailEffectHardPoint[iIndex], mOffset, true);
     return true;
 }
 
@@ -2586,7 +2586,7 @@ void EntityFlyer::UpdateContrailEffects()
     }
     mTurbulance = effectScale;
 
-    for (int a = 0; a < 12; ++a)
+    for (int a = 0; a < EntityFlyerClass::kMaxContrailEffects; ++a)
     {
         if (!mClass->mContrailEffectName[a])
         {
@@ -3129,7 +3129,7 @@ bool EntityFlyer::PostCollisionUpdate(float fDeltaTime)
 
     if (mPilot && mPilot->GetGameObject()->IsRtti(EntitySoldier::rttiHashEntitySoldier))
     {
-        EntitySoldier* pSoldier = static_cast<EntitySoldier*>(mPilot->GetGameObject());
+        EntitySoldier* pSoldier = (EntitySoldier*)mPilot->GetGameObject();
         PblMatrix localSoldierMat = pSoldier->GetMatrix() * GetMatrix().GetInverseFast();
         PblMatrix vehSmoothMat = GetSmoothedMatrix();
         PblMatrix smoothedSoldierMat = localSoldierMat * vehSmoothMat;
@@ -3274,11 +3274,15 @@ bool EntityFlyer::Update(float fDeltaTime)
 
     if (mClass->mGuidedMissile && (!mPilot || mEnergyBar.GetEnergy() <= 0.0f || mCrashTimer != 0.0f))
     {
-        ExplosionClass* pExplosion = mClass->mExplosionDestruct;
+        ExplosionClass* pExplosion;
         if (mClass->mBoostFlyerSpeed > 0.0f && mPilot && mClass->mExplosionCritical &&
             mGetSpeedSpeed >= mClass->mGuidedMissileBoostExplosionSpeedThreshold * mClass->mBoostFlyerSpeed)
         {
             pExplosion = mClass->mExplosionCritical;
+        }
+        else
+        {
+            pExplosion = mClass->mExplosionDestruct;
         }
 
         if (!(NetGame::IsEnabled() && NetGame::IsClient()) && !pExplosion && mCrashTimer == 0.0f)
@@ -3302,7 +3306,7 @@ bool EntityFlyer::Update(float fDeltaTime)
             return true;
         }
         mCrashTimer += fDeltaTime;
-        if (!(NetGame::IsEnabled() && NetGame::IsClient()) &&
+        if (!(NetGame::IsEnabled() && (netEnabledNext && netClientActive)) &&
             (mCrashTimer > mClass->mGuidedMissileDeathCamPause || !mPilot))
         {
             Kill();
@@ -3338,18 +3342,19 @@ bool EntityFlyer::Update(float fDeltaTime)
     int iJoystick = GetJoystickIndex();
     bool bTargetHandled = false;
     if (iJoystick >= 0 &&
-        (!NetGame::IsEnabled() || (NetGame::IsClient() && netIsLocalTurn) ||
+        (!NetGame::IsEnabled() || ((netEnabledNext && netClientActive) && netIsLocalTurn) ||
          (NetGame::IsHost() && NetGame::IsOneWorld() && netIsLocalTurn)))
     {
         LockOnManager* pManager = LockOnManager::GetByPlayerIndex(iJoystick);
         int iTypes = 0;
         float fLockDist = 2000.0f;
         float fLoseDist = 2500.0f;
-        for (int i = 0; i < 2; ++i)
+        for (int i = 0; i < kNumWeaponChannels; ++i)
         {
-            if (mWeaponIndex[i] != -1)
+            int iIndex = mWeaponIndex[i];
+            if (iIndex != -1)
             {
-                const WeaponClass* pClass = mWeapon[mWeaponIndex[i]]->mClass;
+                const WeaponClass* pClass = mWeapon[iIndex]->mClass;
                 iTypes = pClass->mTargetTypes;
                 fLockDist = pClass->mTargetLockMaxDistance;
                 fLoseDist = pClass->mTargetLockMaxDistanceLose;
@@ -3378,15 +3383,16 @@ bool EntityFlyer::Update(float fDeltaTime)
             bTargetHandled = true;
         }
     }
-    else if (mPlayerId >= 0 && iJoystick < 0 && NetGame::IsEnabled() && !NetGame::IsClient())
+    else if (mPlayerId >= 0 && iJoystick < 0 && NetGame::IsEnabled() && !(netEnabledNext && netClientActive))
     {
 
         int iTypes = 0;
-        for (int i = 0; i < 2; ++i)
+        for (int i = 0; i < kNumWeaponChannels; ++i)
         {
-            if (mWeaponIndex[i] != -1)
+            int iIndex = mWeaponIndex[i];
+            if (iIndex != -1)
             {
-                iTypes = mWeapon[mWeaponIndex[i]]->mClass->mTargetTypes;
+                iTypes = mWeapon[iIndex]->mClass->mTargetTypes;
                 break;
             }
         }
@@ -3445,29 +3451,19 @@ bool EntityFlyer::Update(float fDeltaTime)
             }
         }
         bool bNeverCrash = mClass && mClass->mNeverCrashWhenUnpiloted;
-        if (mState == CRASHING)
-        {
-            if (IsAlive() && iPilots)
-            {
-                mState = TAKEOFF;
-            }
-        }
-        else if (!bNeverCrash && (!iPilots || (!mPilot && !iPlayerPilots)))
+        if (mState != CRASHING && !bNeverCrash && (!iPilots || (!mPilot && !iPlayerPilots)))
         {
             SetCurHealth(0.0f, true, 0);
             mState = CRASHING;
             mCrashTimer = 0.5f;
         }
-    }
-
-    if (CameraManager::sInstance->IsChaseMode(iJoystick))
-    {
-        if (mPlayerId >= 0 && mGetSpeedSpeed + 0.0001f >= mClass->mMinFlyerSpeed)
+        else if (mState == CRASHING && IsAlive() && iPilots)
         {
-            SpaceDustEffect::Start(iJoystick);
+            mState = TAKEOFF;
         }
     }
-    else
+
+    if (!CameraManager::sInstance->IsChaseMode(iJoystick))
     {
         SpaceDustEffect::Stop(iJoystick);
         if (iJoystick < 0)
@@ -3482,21 +3478,25 @@ bool EntityFlyer::Update(float fDeltaTime)
             }
         }
     }
+    else if (mPlayerId >= 0 && mGetSpeedSpeed + 0.0001f >= mClass->mMinFlyerSpeed)
+    {
+        SpaceDustEffect::Start(iJoystick);
+    }
 
     if (!mInRoll && !mInFlip && mClass->mMaxFlyerSpeed >= mGetSpeedSpeed - 0.0001f)
     {
         float fRestore = mClass->mEnergyAutoRestore;
-        if (fRestore < 0.0f)
-        {
-            mEnergyBar.SpendEnergy(-(fRestore * fDeltaTime));
-        }
-        else
+        if (fRestore >= 0.0f)
         {
             float fMultiplier = mCharacter && mCharacter->mMedalsMgr &&
                                         mCharacter->mMedalsMgr->IsAwardAvailable(MedalsMgr::ENDURANCE)
                                     ? 1.5f
                                     : 1.0f;
             mEnergyBar.AddEnergy(fRestore * fMultiplier * fDeltaTime);
+        }
+        else
+        {
+            mEnergyBar.SpendEnergy(-(fRestore * fDeltaTime));
         }
     }
 
@@ -3543,8 +3543,14 @@ bool EntityFlyer::Update(float fDeltaTime)
     }
     else if (mBoost)
     {
-        mBoost = !mControlSprint.Tapped() && !mControlSprint.HeldAndReleased() && fThrust >= 0.2f &&
-                 mEnergyBar.SpendEnergy(mClass->mEnergyBoostDrain * fDeltaTime);
+        if (mControlSprint.Tapped() || mControlSprint.HeldAndReleased() || 0.2f > fThrust)
+        {
+            mBoost = false;
+        }
+        else
+        {
+            mBoost = mEnergyBar.SpendEnergy(mClass->mEnergyBoostDrain * fDeltaTime);
+        }
     }
     else
     {
@@ -3596,38 +3602,40 @@ bool EntityFlyer::Update(float fDeltaTime)
                                                                        : mClass->mBoostFlyerSpeed;
     float fPitchRate = mClass->mPitchRate;
     float fTurnRate = mClass->mTurnRate;
-    float fMinRate = fPitchRate <= fTurnRate ? fPitchRate : fTurnRate;
-    float fTurnRateNow = fMinRate;
-    if (fAbsTurn >= 0.7f)
+    float fMinRate = fPitchRate > fTurnRate ? fTurnRate : fPitchRate;
+    float fTurnRateNow;
+    if (0.7f > fAbsTurn)
+    {
+        fTurnRateNow = fMinRate;
+    }
+    else
     {
         float fT = (fAbsTurn - 0.7f) / 0.3f;
-        if (fT >= 0.0f)
-        {
-            if (fT > 1.0f)
-            {
-                fT = 1.0f;
-            }
-        }
-        else
+        if (0.0f > fT)
         {
             fT = 0.0f;
+        }
+        else if (fT > 1.0f)
+        {
+            fT = 1.0f;
         }
         fTurnRateNow = (1.0f - fT) * fMinRate + fTurnRate * fT;
     }
-    float fPitchRateNow = fMinRate;
-    if (fAbsPitch >= 0.7f)
+    float fPitchRateNow;
+    if (0.7f > fAbsPitch)
+    {
+        fPitchRateNow = fMinRate;
+    }
+    else
     {
         float fT = (fAbsPitch - 0.7f) / 0.3f;
-        if (fT >= 0.0f)
-        {
-            if (fT > 1.0f)
-            {
-                fT = 1.0f;
-            }
-        }
-        else
+        if (0.0f > fT)
         {
             fT = 0.0f;
+        }
+        else if (fT > 1.0f)
+        {
+            fT = 1.0f;
         }
         fPitchRateNow = (1.0f - fT) * fMinRate + fPitchRate * fT;
     }
@@ -3643,32 +3651,29 @@ bool EntityFlyer::Update(float fDeltaTime)
         fTurnScale = mTurnBuildup > 0.5f ? (mClass->mTurnBuildupMultiplier - 1.0f) * (mTurnBuildup - 0.5f) * 2.0f + 1.0f
                                          : 1.0f;
     }
-    else if (mClass->mBoostFlyerSpeed == 0.0f || mGetSpeedSpeed <= GetFlyerMaxSpeed())
-    {
-        fPitchScale = 1.0f;
-        mPitchBuildup = 0.0f;
-        mTurnBuildup = 0.0f;
-        fTurnScale = 1.0f;
-    }
-    else
+    else if (mClass->mBoostFlyerSpeed != 0.0f && mGetSpeedSpeed > GetFlyerMaxSpeed())
     {
         float fMinScale = IsRtti(CommandFlyer::rttiHashCommandFlyer) ? 0.5f : 0.7f;
         float fT = (mGetSpeedSpeed - GetFlyerMaxSpeed()) / (mClass->mBoostFlyerSpeed - GetFlyerMaxSpeed());
-        if (fT >= 0.0f)
-        {
-            if (fT > 1.0f)
-            {
-                fT = 1.0f;
-            }
-        }
-        else
+        if (0.0f > fT)
         {
             fT = 0.0f;
+        }
+        else if (fT > 1.0f)
+        {
+            fT = 1.0f;
         }
         mPitchBuildup = 0.0f;
         mTurnBuildup = 0.0f;
         fPitchScale = 1.0f - (1.0f - fMinScale) * fT;
         fTurnScale = fPitchScale;
+    }
+    else
+    {
+        fPitchScale = 1.0f;
+        mPitchBuildup = 0.0f;
+        mTurnBuildup = 0.0f;
+        fTurnScale = 1.0f;
     }
 
     if (!mProcedurallyAnimated)
@@ -3702,40 +3707,40 @@ bool EntityFlyer::Update(float fDeltaTime)
 
     if (pControllable && pControllable->mControlFire[0].IsDown())
     {
-        const GameObject* pTarget = 0;
-        if (pControllable->mAIReticuleTarget[0] &&
-            pControllable->mAIReticuleTarget[0]->GetGameObject()->IsRtti(EntityFlyer::rttiHashEntityFlyer))
+        EntityFlyer* pFlyer = 0;
+        PblHandle<const GameObject> aiTarget = pControllable->mAIReticuleTarget[0];
+        if (aiTarget && aiTarget->GetGameObject()->IsRtti(EntityFlyer::rttiHashEntityFlyer))
         {
-            pTarget = pControllable->mAIReticuleTarget[0];
+            pFlyer = (EntityFlyer*)pControllable->mAIReticuleTarget[0]->GetEntity();
         }
-        else if (pControllable->mReticuleTarget[0] &&
-                 pControllable->mReticuleTarget[0]->GetGameObject()->IsRtti(EntityFlyer::rttiHashEntityFlyer))
+        else
         {
-            pTarget = pControllable->mReticuleTarget[0];
+            PblHandle<const GameObject> target = pControllable->mReticuleTarget[0];
+            if (target && target->GetGameObject()->IsRtti(EntityFlyer::rttiHashEntityFlyer))
+            {
+                pFlyer = (EntityFlyer*)pControllable->mReticuleTarget[0]->GetEntity();
+            }
         }
 
-        if (pTarget)
+        if (pFlyer && pFlyer->mPlayerId < 0 &&
+            !(pFlyer->mPilotType == PILOT_SELF ||
+              (pFlyer->mPilotType == PILOT_VEHICLESELF && pFlyer->mPilot == pFlyer)) &&
+            pFlyer->mPilot && pFlyer->mClass->mbFlyerVsFlyer && pFlyer->mFollowingPath && pFlyer->mState == FLYING &&
+            pFlyer->IsAlive() && !pFlyer->mInRoll && !pFlyer->mInFlip &&
+            !pFlyer->mbQueuePoint && !pFlyer->mbGoMinSpeed && !mProcedurallyAnimated)
         {
-            EntityFlyer* pFlyer = (EntityFlyer*)pTarget->GetEntity();
-            if (pFlyer && pFlyer->mPlayerId < 0 &&
-                !(pFlyer->mPilotType == PILOT_SELF ||
-                  (pFlyer->mPilotType == PILOT_VEHICLESELF && pFlyer->mPilot == pFlyer)) &&
-                pFlyer->mPilot && pFlyer->mClass->mbFlyerVsFlyer && pFlyer->GetFollowingPath() &&
-                !pFlyer->mbQueuePoint && !pFlyer->mbGoMinSpeed && !mProcedurallyAnimated)
+            if (0.0001f > mAIEng.ai.mReactionThinkTime)
             {
-                if (0.0001f > mAIEng.ai.mReactionThinkTime)
+                mAIEng.ai.mReactionThinkTime = 2.0f;
+                if (0.0001f > mAIEng.ai.mReactionTime)
                 {
-                    mAIEng.ai.mReactionThinkTime = 2.0f;
-                    if (0.0001f > mAIEng.ai.mReactionTime)
-                    {
-                        mAIEng.ai.mReactionTime = AIDifficulty::GetFlyerReactionTime();
-                    }
+                    mAIEng.ai.mReactionTime = AIDifficulty::GetFlyerReactionTime();
                 }
-                if (!(mAIEng.ai.mReactionTime > 0.0001f))
-                {
-                    pFlyer->TargetReact(pControllable);
-                    mAIEng.ai.mReactionThinkTime = 2.0f;
-                }
+            }
+            if (0.0001f >= mAIEng.ai.mReactionTime)
+            {
+                pFlyer->TargetReact(pControllable);
+                mAIEng.ai.mReactionThinkTime = 2.0f;
             }
         }
     }
@@ -3805,9 +3810,7 @@ bool EntityFlyer::Update(float fDeltaTime)
                             mSideRoll.x = 0.01f;
                         }
                         mSideRoll.y = PblRandom::GetGlobalFloat() - 0.5f;
-                        PblVector3 vSideRoll;
-                        D3DXVec3Normalize(reinterpret_cast<D3DXVECTOR3*>(&vSideRoll), reinterpret_cast<const D3DXVECTOR3*>(&mSideRoll));
-                        mSideRoll = vSideRoll;
+                        mSideRoll = Normalize(mSideRoll);
                     }
                     DoTrick(eTrick);
                 }
@@ -3823,9 +3826,7 @@ bool EntityFlyer::Update(float fDeltaTime)
 
             if (!(NetGame::IsEnabled() && NetGame::IsClient()) && mDamageOwner.mCharacter)
             {
-                Controllable* pPilot =
-                    (mPilotType == PILOT_SELF || (mPilotType == PILOT_VEHICLESELF && mPilot == this)) ? 0 : mPilot;
-                AwardVehicleKillPoints(mClass->GetVehicleType(), pPilot == 0);
+                AwardVehicleKillPoints(mClass->GetVehicleType(), GetPilot() == 0);
             }
             if (!(NetGame::IsEnabled() && NetGame::IsClient()))
             {
@@ -3938,7 +3939,7 @@ bool EntityFlyer::Update(float fDeltaTime)
 
     if (GetControllableList().GetCount() == 1)
     {
-        for (int iChannel = 0; iChannel < 2; ++iChannel)
+        for (int iChannel = 0; iChannel < kNumWeaponChannels; ++iChannel)
         {
             int iIndex = mWeaponIndex[iChannel];
             if (iIndex < 0 || mControlSwitch[iChannel] == 0.0f)
@@ -3949,35 +3950,32 @@ bool EntityFlyer::Update(float fDeltaTime)
             int iNew = iIndex;
             do
             {
-                if (mControlSwitch[iChannel] >= 0.0f)
-                {
-                    if (++iNew > mClass->mWeaponCount - 1)
-                    {
-                        iNew = 0;
-                    }
-                }
-                else
+                if (0.0f > mControlSwitch[iChannel])
                 {
                     if (--iNew < 0)
                     {
                         iNew = mClass->mWeaponCount - 1;
                     }
                 }
+                else
+                {
+                    if (++iNew > mClass->mWeaponCount - 1)
+                    {
+                        iNew = 0;
+                    }
+                }
             } while (iNew != mWeaponIndex[iChannel] && mClass->mWeaponChannel[iNew] != iChannel);
 
-            if (iNew == iIndex)
-            {
-                if (GetJoystickIndex() >= 0)
-                {
-                    WeaponClass::sWeaponChangeUnableSound.Play(&mMatrix.GetTranslation(), 0, false, true);
-                }
-            }
-            else
+            if (iNew != iIndex)
             {
                 mWeapon[iIndex]->Deselect(iChannel, false);
                 mWeaponIndex[iChannel] = iNew;
                 mWeapon[iNew]->Select(iChannel, false);
                 mTargetInfo.mIsAiming = false;
+            }
+            else if (GetJoystickIndex() >= 0)
+            {
+                WeaponClass::sWeaponChangeUnableSound.Play(&mMatrix.GetTranslation(), 0, false, true);
             }
         }
     }
@@ -4136,61 +4134,27 @@ bool EntityFlyer::Update(float fDeltaTime)
             {
                 mSetSpeed = (GetFlyerMaxSpeed() - GetFlyerMidSpeed()) * fThrust + GetFlyerMidSpeed();
             }
+            float fSpeed = mSetSpeed;
             float fMin = GetFlyerMinSpeed();
             float fMax = GetFlyerMaxSpeed();
-            if (fMin > mSetSpeed)
-            {
-                mSetSpeed = fMin;
-            }
-            else if (mSetSpeed > fMax)
-            {
-                mSetSpeed = fMax;
-            }
+            mSetSpeed = Clamp(fSpeed, fMin, fMax);
         }
-        float fDecel = mInLandingRegionFactor == 0.0f ? 1.0f : 3.0f;
+        float fDecel = mInLandingRegionFactor != 0.0f ? 3.0f : 1.0f;
+        float fSetSpeed = mSetSpeed;
         float fLow = mGetSpeedSpeed - fDecel * fAccelStep;
         float fHigh = mGetSpeedSpeed + fAccelStep;
-        if (fLow > mSetSpeed)
-        {
-            mSetSpeed = fLow;
-        }
-        else if (mSetSpeed > fHigh)
-        {
-            mSetSpeed = fHigh;
-        }
+        mSetSpeed = Clamp(fSetSpeed, fLow, fHigh);
 
         float fStepX = mSideRoll.x == 0.0f ? 0.033333335f : 1.0f;
         float fStepY = mSideRoll.y == 0.0f ? 0.033333335f : 1.0f;
         float fStrafe = mClass->mStrafeSpeed * 0.0f + mSideRoll.x * mClass->mTrickSideRollStrafeSpeed;
         fLow = mSetStrafe - mClass->mAcceleration * fStepX;
         fHigh = mClass->mAcceleration * fStepX + mSetStrafe;
-        if (fLow > fStrafe)
-        {
-            mSetStrafe = fLow;
-        }
-        else if (fStrafe > fHigh)
-        {
-            mSetStrafe = fHigh;
-        }
-        else
-        {
-            mSetStrafe = fStrafe;
-        }
+        mSetStrafe = Clamp(fStrafe, fLow, fHigh);
         float fStrafeVertical = mSideRoll.y * mClass->mTrickSideRollStrafeSpeed;
         fLow = mSetStrafeVertical - mClass->mAcceleration * fStepY;
         fHigh = mClass->mAcceleration * fStepX + mSetStrafeVertical;
-        if (fLow > fStrafeVertical)
-        {
-            mSetStrafeVertical = fLow;
-        }
-        else if (fStrafeVertical > fHigh)
-        {
-            mSetStrafeVertical = fHigh;
-        }
-        else
-        {
-            mSetStrafeVertical = fStrafeVertical;
-        }
+        mSetStrafeVertical = Clamp(fStrafeVertical, fLow, fHigh);
     }
 
     const PblVector3& vX = matrix.GetXAxis();
@@ -4208,7 +4172,6 @@ bool EntityFlyer::Update(float fDeltaTime)
         break;
 
     case TAKEOFF:
-    case LANDING:
     {
 
         float fHeight = fGroundDist / mClass->mTakeoffHeight;
@@ -4239,25 +4202,17 @@ bool EntityFlyer::Update(float fDeltaTime)
         mOmega.y = (-(fTurnRateNow * fTurn * fHeight) - mOmega.y) * fTurnFilter + mOmega.y;
         mOmega.z = -((vX.y * vNormal.y + vNormal.x * vX.x + vNormal.z * vX.z) * mClass->mLevelFilterLanding);
 
-        PblVector3 vDrive;
-        vDrive.x = mSetSpeed * vZ.x - mSetStrafe * vX.x - mSetStrafeVertical * vY.x;
-        vDrive.y = vZ.y * mSetSpeed - vX.y * mSetStrafe - vY.y * mSetStrafeVertical;
-        vDrive.z = mSetSpeed * vZ.z - mSetStrafe * vX.z - vY.z * mSetStrafeVertical;
-        float fClimb = (fHeight * 0.875f + 0.125f) *
-                       (mState == TAKEOFF ? mClass->mTakeoffSpeed : -mClass->mLandingSpeed);
+        PblVector3 vDrive = vZ * mSetSpeed - vX * mSetStrafe - vY * mSetStrafeVertical;
+        float fClimb = (fHeight * 0.875f + 0.125f) * mClass->mTakeoffSpeed;
         mVelocity = Interpolate(PblVector3(0.0f, fClimb, 0.0f), vDrive, mFlightRatio);
 
-        PblMatrix mInverse = matrix.GetInverseFast();
-        PblVector3 vLocal;
-        D3DXVec3TransformNormal(reinterpret_cast<D3DXVECTOR3*>(&vLocal), reinterpret_cast<const D3DXVECTOR3*>(&mVelocity), reinterpret_cast<const D3DXMATRIX*>(&mInverse));
+        PblVector3 vLocal = matrix.GetInverseFast().ApplyRotation(mVelocity);
 
-        float fBankScale = mState == TAKEOFF ? 1.0f / (mClass->mTurnRate * fTopSpeed) : 1.0f / fTopSpeed;
-        float fPitchTarget = mClass->mThrustPitchAngle * fThrust * mFlightRatio +
-                             (vLocal.y * mOmega.x - vLocal.x * mOmega.y) * fBankScale * mClass->mBankAngle;
+        PblVector3 vSlip = CrossProduct(mOmega, vLocal) * (1.0f / (mClass->mTurnRate * fTopSpeed));
+        float fPitchTarget = mClass->mThrustPitchAngle * fThrust * mFlightRatio + vSlip.z * mClass->mBankAngle;
         mBankPitchAngle = (fPitchTarget - mBankPitchAngle) * (mClass->mBankFilter * fDeltaTime) + mBankPitchAngle;
         mBankPitchAngleDelta = fPitchTarget - mBankPitchAngle;
-        float fRollTarget = mClass->mStrafeRollAngle * 0.0f * mFlightRatio -
-                            (vLocal.z * mOmega.y - mOmega.z * vLocal.y) * fBankScale * mClass->mBankAngle;
+        float fRollTarget = mClass->mStrafeRollAngle * 0.0f * mFlightRatio - vSlip.x * mClass->mBankAngle;
         mBankRollAngle = (fRollTarget - mBankRollAngle) * (mClass->mBankFilter * fDeltaTime) + mBankRollAngle;
         mBankRollAngleDelta = fRollTarget - mBankRollAngle;
         break;
@@ -4309,26 +4264,26 @@ bool EntityFlyer::Update(float fDeltaTime)
             }
             else if (mTrick > 0.0f)
             {
-                if (mTrickDoubleclick == 0.0f)
+                if (mTrickDoubleclick != 0.0f)
                 {
                     if (fAbsPitch > 0.2f || fAbsTurn > 0.2f)
                     {
-                        mSideRoll.x = fTurn;
-                        mSideRoll.y = -fPitch;
-                        mSideRoll = Normalize(mSideRoll);
-                        DoTrick(SIDE_ROLL);
+                        if (fAbsPitch > fAbsTurn)
+                        {
+                            DoTrick(0.0f > fPitch ? FLIP_DOWN : FLIP_UP);
+                        }
+                        else
+                        {
+                            DoTrick(0.0f > fTurn ? FLIP_UP_LEFT : FLIP_UP_RIGHT);
+                        }
                     }
                 }
                 else if (fAbsPitch > 0.2f || fAbsTurn > 0.2f)
                 {
-                    if (fAbsPitch <= fAbsTurn)
-                    {
-                        DoTrick(fTurn >= 0.0f ? FLIP_UP_RIGHT : FLIP_UP_LEFT);
-                    }
-                    else
-                    {
-                        DoTrick(fPitch < 0.0f ? FLIP_DOWN : FLIP_UP);
-                    }
+                    mSideRoll.x = fTurn;
+                    mSideRoll.y = -fPitch;
+                    mSideRoll = Normalize(mSideRoll);
+                    DoTrick(SIDE_ROLL);
                 }
             }
 
@@ -4358,7 +4313,6 @@ bool EntityFlyer::Update(float fDeltaTime)
             }
             float fT = 1.0f;
             PblVector3 vUp = gVectorUnitY;
-            bool bCorrect = false;
             if (0.0f > mVelocity.y)
             {
                 fT = (fMinY - fY) * 0.5f / mVelocity.y;
@@ -4366,7 +4320,10 @@ bool EntityFlyer::Update(float fDeltaTime)
                 {
                     fT = 0.0f;
                 }
-                bCorrect = fT < 1.0f;
+                else if (fT > 1.0f)
+                {
+                    fT = 1.0f;
+                }
             }
             else if (mVelocity.y > 0.0f)
             {
@@ -4379,17 +4336,14 @@ bool EntityFlyer::Update(float fDeltaTime)
                 {
                     fT = fTime;
                 }
-                vUp.x = -gVectorUnitY.x;
-                vUp.y = -gVectorUnitY.y;
-                vUp.z = -gVectorUnitY.z;
-                bCorrect = fT < 1.0f;
+                vUp = -gVectorUnitY;
             }
-            if (bCorrect)
+            if (1.0f > fT)
             {
-                float fDot = vZ.y * vUp.y + vZ.x * vUp.x + vUp.z * vZ.z;
-                if ((mVelocity.y * vZ.y + vZ.x * mVelocity.x + mVelocity.z * vZ.z) * fDot <= 0.0f)
+                float fDot = DotProduct(vZ, vUp);
+                if (DotProduct(mVelocity, vZ) * fDot <= 0.0f)
                 {
-                    if (vY.y * vUp.y + vY.x * vUp.x + vUp.z * vY.z > 0.0f)
+                    if (DotProduct(vY, vUp) > 0.0f)
                     {
                         fDot = -fDot;
                     }
@@ -4481,10 +4435,7 @@ bool EntityFlyer::Update(float fDeltaTime)
         }
 
         const PblVector3& vForward = mMatrix.GetZAxis();
-        PblVector3 vDrive;
-        vDrive.x = vForward.x * mSetSpeed - vX.x * mSetStrafe - vY.x * mSetStrafeVertical;
-        vDrive.y = vForward.y * mSetSpeed - vX.y * mSetStrafe - vY.y * mSetStrafeVertical;
-        vDrive.z = vForward.z * mSetSpeed - vX.z * mSetStrafe - vY.z * mSetStrafeVertical;
+        PblVector3 vDrive = vForward * mSetSpeed - vX * mSetStrafe - vY * mSetStrafeVertical;
         float fMomentum = mClass->mMomentumFilter * fDeltaTime;
         if (fMomentum >= 0.0f)
         {
@@ -4497,29 +4448,70 @@ bool EntityFlyer::Update(float fDeltaTime)
         {
             fMomentum = 0.0f;
         }
-        mVelocity.x = (1.0f - fMomentum) * mVelocity.x + fMomentum * vDrive.x;
-        mVelocity.y = mVelocity.y * (1.0f - fMomentum) + vDrive.y * fMomentum;
-        mVelocity.z = mVelocity.z * (1.0f - fMomentum) + vDrive.z * fMomentum;
+        mVelocity = mVelocity * (1.0f - fMomentum) + vDrive * fMomentum;
         float fSpeed = mSetSpeed;
         float fForwardSpeed = mVelocity.y * vForward.y + mVelocity.x * vForward.x + mVelocity.z * vForward.z;
         if (fForwardSpeed > fSpeed || (fSpeed > fForwardSpeed && fForwardSpeed > 0.0f))
         {
-            float fScale = fSpeed / fForwardSpeed;
-            mVelocity.x *= fScale;
-            mVelocity.y *= fScale;
-            mVelocity.z *= fScale;
+            mVelocity *= fSpeed / fForwardSpeed;
         }
 
-        PblMatrix mInverse = matrix.GetInverseFast();
-        PblVector3 vLocal;
-        D3DXVec3TransformNormal(reinterpret_cast<D3DXVECTOR3*>(&vLocal), reinterpret_cast<const D3DXVECTOR3*>(&mVelocity), reinterpret_cast<const D3DXMATRIX*>(&mInverse));
-        float fBankScale = 1.0f / fTopSpeed;
-        float fRollSlip = (vLocal.z * mOmega.y - mOmega.z * vLocal.y) * fBankScale;
-        float fPitchTarget = mClass->mThrustPitchAngle * fThrust + mFlip +
-                             (vLocal.y * mOmega.x - vLocal.x * mOmega.y) * fBankScale * mClass->mBankAngle;
+        PblVector3 vLocal = matrix.GetInverseFast().ApplyRotation(mVelocity);
+        PblVector3 vSlip = CrossProduct(mOmega, vLocal) * (1.0f / fTopSpeed);
+        float fPitchTarget = mClass->mThrustPitchAngle * fThrust + mFlip + vSlip.z * mClass->mBankAngle;
         mBankPitchAngle = (fPitchTarget - mBankPitchAngle) * (mClass->mBankFilter * fDeltaTime) + mBankPitchAngle;
         mBankPitchAngleDelta = fPitchTarget - mBankPitchAngle;
-        float fRollTarget = mClass->mStrafeRollAngle * 0.0f + mRoll - mClass->mBankAngle * fRollSlip;
+        float fRollTarget = mClass->mStrafeRollAngle * 0.0f + mRoll - mClass->mBankAngle * vSlip.x;
+        mBankRollAngle = (fRollTarget - mBankRollAngle) * (mClass->mBankFilter * fDeltaTime) + mBankRollAngle;
+        mBankRollAngleDelta = fRollTarget - mBankRollAngle;
+        break;
+    }
+
+    case LANDING:
+    {
+
+        float fHeight = fGroundDist / mClass->mTakeoffHeight;
+        if (fHeight >= 1.0f)
+        {
+            fHeight = 1.0f;
+        }
+        float fLevel = 1.0f - (1.0f - mFlightRatio) * mClass->mLevelFilterLanding * fDeltaTime;
+        if (0.0f > fLevel)
+        {
+            fLevel = 0.0f;
+        }
+        mOmega.x = fLevel * mOmega.x;
+        mOmega.x = (vZ.y * vNormal.y + vNormal.x * vZ.x + vNormal.z * vZ.z) * (mClass->mLevelFilterLanding * 0.5f) *
+                       (1.0f - mFlightRatio) +
+                   mOmega.x;
+        float fPitchFilter = mClass->mPitchFilter * fDeltaTime;
+        if (fPitchFilter > 1.0f)
+        {
+            fPitchFilter = 1.0f;
+        }
+        mOmega.x = (-(fPitchRateNow * fPitch * mFlightRatio) - mOmega.x) * fPitchFilter + mOmega.x;
+        float fTurnFilter = mClass->mTurnFilter * fDeltaTime;
+        if (fTurnFilter > 1.0f)
+        {
+            fTurnFilter = 1.0f;
+        }
+        mOmega.y = (-(fTurnRateNow * fTurn * fHeight) - mOmega.y) * fTurnFilter + mOmega.y;
+        mOmega.z = -((vX.y * vNormal.y + vNormal.x * vX.x + vNormal.z * vX.z) * mClass->mLevelFilterLanding);
+
+        PblVector3 vDrive;
+        vDrive.x = mSetSpeed * vZ.x - mSetStrafe * vX.x - mSetStrafeVertical * vY.x;
+        vDrive.y = vZ.y * mSetSpeed - vX.y * mSetStrafe - vY.y * mSetStrafeVertical;
+        vDrive.z = mSetSpeed * vZ.z - mSetStrafe * vX.z - vY.z * mSetStrafeVertical;
+        float fClimb = -((fHeight * 0.875f + 0.125f) * mClass->mLandingSpeed);
+        mVelocity = Interpolate(PblVector3(0.0f, fClimb, 0.0f), vDrive, mFlightRatio);
+
+        PblVector3 vLocal = matrix.GetInverseFast().ApplyRotation(mVelocity);
+
+        PblVector3 vSlip = CrossProduct(mOmega, vLocal) * (1.0f / fTopSpeed);
+        float fPitchTarget = mClass->mThrustPitchAngle * fThrust * mFlightRatio + vSlip.z * mClass->mBankAngle;
+        mBankPitchAngle = (fPitchTarget - mBankPitchAngle) * (mClass->mBankFilter * fDeltaTime) + mBankPitchAngle;
+        mBankPitchAngleDelta = fPitchTarget - mBankPitchAngle;
+        float fRollTarget = mClass->mStrafeRollAngle * 0.0f * mFlightRatio - vSlip.x * mClass->mBankAngle;
         mBankRollAngle = (fRollTarget - mBankRollAngle) * (mClass->mBankFilter * fDeltaTime) + mBankRollAngle;
         mBankRollAngleDelta = fRollTarget - mBankRollAngle;
         break;
@@ -4528,12 +4520,11 @@ bool EntityFlyer::Update(float fDeltaTime)
     case CRASHING:
     {
 
-        if (mVelocity.x * mVelocity.x + mVelocity.z * mVelocity.z > 1.0f)
+        if (SquaredLengthXZ(mVelocity) > 1.0f)
         {
             PblVector3 vDir;
             D3DXVec3Normalize(reinterpret_cast<D3DXVECTOR3*>(&vDir), reinterpret_cast<const D3DXVECTOR3*>(&mVelocity));
-            mOmega.x = mOmega.x - (vY.y * vDir.y + vY.x * vDir.x + vY.z * vDir.z) * mClass->mLevelFilter *
-                                      (1.0f - mFlightRatio);
+            mOmega.x = -(DotProduct(vY, vDir) * mClass->mLevelFilter * (1.0f - mFlightRatio)) + mOmega.x;
             float fPitchFilter = mClass->mPitchFilter * mFlightRatio * fDeltaTime;
             if (fPitchFilter > 1.0f)
             {
@@ -4556,31 +4547,26 @@ bool EntityFlyer::Update(float fDeltaTime)
         vDrive.x = mSetSpeed * vZ.x - mSetStrafe * vX.x - mSetStrafeVertical * vY.x;
         vDrive.y = vZ.y * mSetSpeed - vX.y * mSetStrafe - mSetStrafeVertical * vY.y;
         vDrive.z = mSetSpeed * vZ.z - mSetStrafe * vX.z - mSetStrafeVertical * vY.z;
-        mVelocity.x = (vDrive.x - mVelocity.x) * fDrift + mVelocity.x;
-        mVelocity.y = (vDrive.y - mVelocity.y) * fDrift + mVelocity.y;
-        mVelocity.z = (vDrive.z - mVelocity.z) * fDrift + mVelocity.z;
+        mVelocity = Interpolate(mVelocity, vDrive, fDrift);
         mVelocity.y = (1.0f - mFlightRatio) * -9.8f * fDeltaTime + mVelocity.y;
 
         float fFree = 1.0f - mFlightRatio;
-        float fOmegaZ = (mVelocity.y * vZ.x - vZ.y * mVelocity.x) * 0.015625f * fFree * fDeltaTime + mOmega.z;
-        float fOmegaX = mOmega.x + fFree * ((vZ.y * mVelocity.z - mVelocity.y * vZ.z) * 0.015625f) * fDeltaTime;
-        mOmega.y = (mVelocity.x * vZ.z - mVelocity.z * vZ.x) * 0.015625f * fFree * fDeltaTime + mOmega.y;
+        PblVector3 vSpin = CrossProduct(vZ, mVelocity) * 0.015625f;
+        float fOmegaZ = vSpin.z * fFree * fDeltaTime + mOmega.z;
+        float fOmegaX = mOmega.x + fFree * vSpin.x * fDeltaTime;
+        mOmega.y = vSpin.y * fFree * fDeltaTime + mOmega.y;
         mOmega.z = fOmegaZ;
         mOmega.x = fOmegaX;
         mOmega.x = (PblRandom::GetSim().GetFloat() - 0.5f) * 0.25f + vZ.y * 0.0625f + 0.0625f + mOmega.x;
         mOmega.y = (PblRandom::GetSim().GetFloat() - 0.5f) * 0.25f + mOmega.y;
         mOmega.z = (PblRandom::GetSim().GetFloat() - 0.5f) * 0.5f + mOmega.z;
 
-        PblMatrix mInverse = matrix.GetInverseFast();
-        PblVector3 vLocal;
-        D3DXVec3TransformNormal(reinterpret_cast<D3DXVECTOR3*>(&vLocal), reinterpret_cast<const D3DXVECTOR3*>(&mVelocity), reinterpret_cast<const D3DXMATRIX*>(&mInverse));
-        float fBankScale = 1.0f / fTopSpeed;
-        float fRollSlip = (vLocal.z * mOmega.y - mOmega.z * vLocal.y) * fBankScale;
-        float fPitchTarget = mClass->mThrustPitchAngle * fThrust * mFlightRatio + mFlip +
-                             (vLocal.y * mOmega.x - vLocal.x * mOmega.y) * fBankScale * mClass->mBankAngle;
+        PblVector3 vLocal = matrix.GetInverseFast().ApplyRotation(mVelocity);
+        PblVector3 vSlip = CrossProduct(mOmega, vLocal) * (1.0f / fTopSpeed);
+        float fPitchTarget = mClass->mThrustPitchAngle * fThrust * mFlightRatio + mFlip + vSlip.z * mClass->mBankAngle;
         mBankPitchAngle = (fPitchTarget - mBankPitchAngle) * (mClass->mBankFilter * fDeltaTime) + mBankPitchAngle;
         mBankPitchAngleDelta = fPitchTarget - mBankPitchAngle;
-        float fRollTarget = mClass->mStrafeRollAngle * 0.0f * mFlightRatio + mRoll - mClass->mBankAngle * fRollSlip;
+        float fRollTarget = mClass->mStrafeRollAngle * 0.0f * mFlightRatio + mRoll - mClass->mBankAngle * vSlip.x;
         mCrashTimer -= fDeltaTime;
         mBankRollAngle = (fRollTarget - mBankRollAngle) * (mClass->mBankFilter * fDeltaTime) + mBankRollAngle;
         mBankRollAngleDelta = fRollTarget - mBankRollAngle;
@@ -4610,17 +4596,10 @@ bool EntityFlyer::Update(float fDeltaTime)
     {
         PblQuaternion qBody(matrix);
         PblVector3 vPos = matrix.GetTranslation();
-        float fSpin = sqrtf(mOmega.x * mOmega.x + mOmega.y * mOmega.y + mOmega.z * mOmega.z);
+        float fSpin = PblMath::Sqrt(SquaredLength(mOmega));
         if (fSpin > 0.0001f)
         {
-            float fInvSpin = 1.0f / fSpin;
-            float fAxisX = mOmega.x * fInvSpin;
-            float fAxisY = mOmega.y * fInvSpin;
-            float fAxisZ = mOmega.z * fInvSpin;
-            float fSin;
-            float fCos;
-            PblMath::SinCos(&fSin, &fCos, fSpin * fDeltaTime * 0.5f);
-            qBody = qBody * PblQuaternion(fCos, fAxisX * fSin, fAxisY * fSin, fAxisZ * fSin);
+            qBody = qBody * PblQuaternion(mOmega / fSpin, fSpin * fDeltaTime);
         }
         vPos.x += mVelocity.x * fDeltaTime;
         vPos.y += mVelocity.y * fDeltaTime;
@@ -4636,19 +4615,17 @@ bool EntityFlyer::Update(float fDeltaTime)
             vPos.y = fMinY - 0.2f;
         }
 
-        PblQuaternion qUnit;
-        PblMatrix mFrame;
-        D3DXMatrixRotationQuaternion(reinterpret_cast<D3DXMATRIX*>(&mFrame), D3DXQuaternionNormalize(reinterpret_cast<D3DXQUATERNION*>(&qUnit), reinterpret_cast<const D3DXQUATERNION*>(&qBody)));
-        mFrame.SetTranslation(vPos);
-        matrix = mFrame;
+        {
+            PblMatrix mFrame(qBody, vPos);
+            matrix = mFrame;
+        }
         PblMatrix mBank;
         mBank.SetRotateX(mBankPitchAngle);
         mBank.RotateZ(mBankRollAngle);
-        mFrame = mBank * matrix;
-        SetMatrix(mFrame);
+        SetMatrix(mBank * matrix);
     }
 
-    for (int i = 0; i < 8; ++i)
+    for (int i = 0; i < kMaxThrustEffects; ++i)
     {
         if (!mClass->mThrustEffectName[i])
         {
@@ -4664,9 +4641,18 @@ bool EntityFlyer::Update(float fDeltaTime)
         {
             fMaxSpeed = 1.0f;
         }
+        float fMinBase = mClass->mMinFlyerSpeed != 0.0f ? mClass->mMinFlyerSpeed : 0.0f;
         float fMinSpeed = mClass->mMinFlyerSpeed;
-        float fStart = (fMaxSpeed - fMinSpeed) * mClass->mThrustEffectScaleStart[i] + fMinSpeed;
-        float fTop = mClass->mBoostFlyerSpeed > fMaxSpeed ? mClass->mBoostFlyerSpeed : fMaxSpeed;
+        if (fMinSpeed == 0.0f)
+        {
+            fMinSpeed = 0.0f;
+        }
+        float fStart = (fMaxSpeed - fMinSpeed) * mClass->mThrustEffectScaleStart[i] + fMinBase;
+        float fTop = fMaxSpeed;
+        if (mClass->mBoostFlyerSpeed > fTop)
+        {
+            fTop = mClass->mBoostFlyerSpeed;
+        }
         float fT = (mGetSpeedSpeed - fStart) / (fTop - fStart);
         if (0.0f > fT)
         {
@@ -4718,16 +4704,14 @@ bool EntityFlyer::Update(float fDeltaTime)
                 PblVector3& vEngineVelocity = *(PblVector3*)mAIEng.eng.velocity;
                 PblVector3& vPrevPos = *reinterpret_cast<PblVector3*>(mAIEng.eng.prevPos.mPosition);
                 float& fPrevPosValid = mAIEng.eng.prevPos.mValid;
-                if (fPrevPosValid == 0.0f)
+                if (fPrevPosValid != 0.0f)
                 {
-                    fPrevPosValid = 1.0f;
-                    bFirstFrame = true;
+                    vEngineVelocity = mMatrix.GetTranslation() - vPrevPos;
                 }
                 else
                 {
-                    vEngineVelocity.x = mMatrix.GetTranslation().x - vPrevPos.x;
-                    vEngineVelocity.y = mMatrix.GetTranslation().y - vPrevPos.y;
-                    vEngineVelocity.z = mMatrix.GetTranslation().z - vPrevPos.z;
+                    fPrevPosValid = 1.0f;
+                    bFirstFrame = true;
                 }
                 PblVector3 vDir = NormalizeEst(vEngineVelocity);
                 float fClimb = mMatrix.m[1][0] * vDir.x + mMatrix.m[1][1] * vDir.y + mMatrix.m[1][2] * vDir.z;
@@ -4735,18 +4719,20 @@ bool EntityFlyer::Update(float fDeltaTime)
                 {
                     if (!IsOn())
                     {
-                        PblVector3 vPos = mMatrix.GetTranslation();
                         PblVector3 vVel = vEngineVelocity;
+                        PblVector3 vPos = mMatrix.GetTranslation();
                         TurnOn(mClass, vPos, vVel, fHealth);
                     }
                 }
                 else if (-0.8f > fClimb && IsOn() && !IsWindingDown())
                 {
-                    PblVector3 vPos = mMatrix.GetTranslation();
                     PblVector3 vVel = vEngineVelocity;
+                    PblVector3 vPos = mMatrix.GetTranslation();
                     WindDown(mClass, vPos, vVel);
                 }
-                vPrevPos = mMatrix.GetTranslation();
+                vPrevPos.x = mMatrix.GetTranslation().x;
+                vPrevPos.y = mMatrix.GetTranslation().y;
+                vPrevPos.z = mMatrix.GetTranslation().z;
                 pVelocity = &vEngineVelocity;
             }
             else
@@ -4776,15 +4762,15 @@ bool EntityFlyer::Update(float fDeltaTime)
                 {
                     if (!bFirstFrame && IsOn() && IsWindingDown())
                     {
-                        PblVector3 vPos = mMatrix.GetTranslation();
                         PblVector3 vVel = *pVelocity;
+                        PblVector3 vPos = mMatrix.GetTranslation();
                         TurnOff(mClass, vPos, vVel);
                     }
                 }
                 else if (IsOn() && !IsWindingUp() && !IsWindingDown() && !IsTurningOff())
                 {
-                    PblVector3 vPos = mMatrix.GetTranslation();
                     PblVector3 vVel = *pVelocity;
+                    PblVector3 vPos = mMatrix.GetTranslation();
                     WindUp(mClass, vPos, vVel);
                 }
             }
@@ -4856,8 +4842,8 @@ bool EntityFlyer::Update(float fDeltaTime)
             {
                 iSide = mPilot->mCharacter->GetTeamPtr()->GetSide();
             }
-            bool bPiloted = mPilot && mPilot->mPlayerId >= 0 && GameLoop::GetNumCameras() == 1;
-            VehicleMusic::Update(mClass, fDeltaTime, bPiloted, fSpeedRatio, iSide);
+            VehicleMusic::Update(mClass, fDeltaTime, mPilot && mPilot->mPlayerId >= 0 && NetGame::GetNumLocalPlayers() == 1,
+                                 fSpeedRatio, iSide);
         }
     }
 
@@ -4963,7 +4949,7 @@ bool EntityFlyer::CollisionCallback(const CollisionResult* pResult, CollisionObj
     if (mState == LANDED && pOther->GetGameObject() &&
         pOther->GetGameObject()->IsRtti(EntityFlyer::rttiHashEntityFlyer))
     {
-        EntityFlyer* pFlyer = static_cast<EntityFlyer*>(pOther->GetGameObject());
+        EntityFlyer* pFlyer = (EntityFlyer*)pOther->GetGameObject();
         if (pFlyer->mState != LANDED)
         {
             Damageable::ApplyDamage(DamageDesc(DamageOwner(0, 0, 0, 0, 0, 1.0f), mMaxHealth * 0.2f), 0xffffffff);
@@ -5181,7 +5167,7 @@ void EntityFlyer::InitAsFlying()
 // FUNCTION: SWBF2 0x004abc20
 void EntityFlyer::TurnOffThrustEffects()
 {
-    for (int i = 0; i < 8; ++i)
+    for (int i = 0; i < kMaxThrustEffects; ++i)
     {
         if (!mClass->mThrustEffectName[i])
         {
@@ -5360,7 +5346,7 @@ void EntityFlyer::TargetReact(Controllable* pAttacker)
             {
                 UnitController* pController = UnitControllerPtr(mCtrl);
                 pController->mThreatManager.AddThreat(
-                           static_cast<Trackable*>(pAttacker)->GetGameObject());
+                           ((Trackable*)pAttacker)->GetGameObject());
             }
             return;
         }

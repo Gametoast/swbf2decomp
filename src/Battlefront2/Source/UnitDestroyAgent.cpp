@@ -34,11 +34,11 @@ namespace
 
     inline const CollisionObject* GetCollisionObject(const GameObject* pObject)
     {
-        return static_cast<const CollisionObject*>(pObject);
+        return (const CollisionObject*)pObject;
     }
     inline const Damageable* GetDamageable(const GameObject* pObject)
     {
-        return static_cast<const Damageable*>(pObject);
+        return (const Damageable*)pObject;
     }
 
     inline const GameObject* ResolveHandle(PblHandle<const GameObject>& handle)

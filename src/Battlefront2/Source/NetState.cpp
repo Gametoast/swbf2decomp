@@ -1738,7 +1738,14 @@ void MountedTurret::Write(NetPktGroup& group)
 {
     const int clientId = NetGame::GetCurDst();
     const int oldPrecision = SetNetLOD(0);
-    SetNetLOD(NetGame::IsLocalTo(clientId, mPlayerId) ? 1 : oldPrecision);
+    if (NetGame::IsLocalTo(clientId, mPlayerId))
+    {
+        SetNetLOD(1);
+    }
+    else
+    {
+        SetNetLOD(oldPrecision);
+    }
     WriteThrust(group, mControlPitch);
     WriteThrust(group, mControlTurn);
     WriteUnitVector(group, mAimMatrix.GetZAxis());
@@ -1794,7 +1801,14 @@ void MountedTurret::Read(NetPktGroup& group)
 {
     const int oldPrecision = SetNetLOD(0);
     const bool isLocal = NetGame::GetJoystickIndex(mPlayerId) >= 0;
-    SetNetLOD(isLocal ? 1 : oldPrecision);
+    if (isLocal)
+    {
+        SetNetLOD(1);
+    }
+    else
+    {
+        SetNetLOD(oldPrecision);
+    }
     float t;
     ReadThrust(group, t);
     SetPitch(t);
@@ -3605,29 +3619,6 @@ bool EntityFlyer::Smooth(float fDeltaTime) const
 
 void PerformSafeRemove(CollisionObject* pObject);
 
-// FUNCTION: SWBF2 0x004608a0
-bool CollisionManager::I_DeactivateItem(CollisionObject* pObject)
-{
-    CollisionManager* pManager = this;
-    PerformSafeRemove(pObject);
-    PblList<CollisionObject>::Node* pNode = &pObject->mCollisionObjectNode;
-    if (!pNode->IsInList())
-    {
-        return false;
-    }
-
-    GameObject* pGameObject = pObject->GetGameObject();
-    if (pGameObject)
-    {
-        TeamManager::RemoveObject(pGameObject);
-    }
-    if (pObject->GetCollisionType() == COLL_ITEM)
-    {
-        pManager->mItemBodies.Remove(pNode);
-    }
-    return true;
-}
-
 // FUNCTION: SWBF2 0x00460920
 bool CollisionManager::DeactivateItem(CollisionObject* pObject)
 {
@@ -4811,7 +4802,7 @@ void EntitySoldier::WriteObject(NetPktGroup& group, NetObjState*)
     group.WriteFixed(mStateTimer, 0.0f, 8.0f, 13);
     group.WriteBits(mStanceIndex, 4);
     group.Write(_bActive);
-    int collision = 0;
+    unsigned int collision = 0;
     if (IsInCollisionList())
     {
         collision = GetCollisionType() == COLL_SOFT ? 1 : 2;
@@ -6090,7 +6081,6 @@ GameObject* CommandBuildingArmed::AddToClient()
     EntityDesc desc;
     desc.mMatrix = GetMatrix();
     desc.mNameId = mId;
-    desc.mPlayerId = -1;
     CommandBuildingArmed* client = (CommandBuildingArmed*)GetEntityClass()->Build(desc);
     PAAnimationGroup::ClientGeometryCreated(this, client);
     client->SetTeam(mTeam);
@@ -6115,7 +6105,6 @@ GameObject* CommandBuildingAnimatedArmed::AddToClient()
     EntityDesc desc;
     desc.mMatrix = GetMatrix();
     desc.mNameId = mId;
-    desc.mPlayerId = -1;
     CommandBuildingAnimatedArmed* client = (CommandBuildingAnimatedArmed*)GetEntityClass()->Build(desc);
     PAAnimationGroup::ClientGeometryCreated(this, client);
     client->SetTeam(mTeam);

@@ -401,7 +401,7 @@ void pcStencilShadowShader::Render_Prog1(const RenderItem* pItem, unsigned int u
     {
         if (uiPass == 0)
         {
-            for (int i = 0; pItem->pLightingState->pDirectionalLights[i] && i < 2;)
+            for (int i = 0; pItem->pLightingState->pDirectionalLights[i] && i < RedLight::kMaxDirectionalLights;)
             {
                 const RedDirectionalLight* pLight = pItem->pLightingState->pDirectionalLights[i++];
                 if (!pLight->IsShadowCaster())
@@ -483,7 +483,7 @@ void pcStencilShadowShader::Render_Prog1(const RenderItem* pItem, unsigned int u
     }
     else
     {
-        for (int i = 0; pItem->pLightingState->pDirectionalLights[i] && i < 2;)
+        for (int i = 0; pItem->pLightingState->pDirectionalLights[i] && i < RedLight::kMaxDirectionalLights;)
         {
             const RedDirectionalLight* pLight = pItem->pLightingState->pDirectionalLights[i++];
             if (!pLight->IsShadowCaster())
@@ -548,22 +548,22 @@ void pcStencilShadowShader::_Init(unsigned int uiFlags,
 void pcStencilShadowShader::_InitPipelineFuncArray()
 {
     GetStateFuncArray[PIPELINE_FIXED] =
-        static_cast<GetStateFuncT>(&pcStencilShadowShader::GetState_Fixed);
+        (GetStateFuncT)(&pcStencilShadowShader::GetState_Fixed);
     BeginFuncArray[PIPELINE_FIXED] =
-        static_cast<BeginFuncT>(&pcStencilShadowShader::Begin_Fixed);
+        (BeginFuncT)(&pcStencilShadowShader::Begin_Fixed);
     EndFuncArray[PIPELINE_FIXED] =
-        static_cast<EndFuncT>(&pcStencilShadowShader::End_Fixed);
+        (EndFuncT)(&pcStencilShadowShader::End_Fixed);
     RenderFuncArray[PIPELINE_FIXED] =
-        static_cast<RenderFuncT>(&pcStencilShadowShader::Render_Fixed);
+        (RenderFuncT)(&pcStencilShadowShader::Render_Fixed);
 
     GetStateFuncArray[PIPELINE_PROG1] =
-        static_cast<GetStateFuncT>(&pcStencilShadowShader::GetState_Prog1);
+        (GetStateFuncT)(&pcStencilShadowShader::GetState_Prog1);
     BeginFuncArray[PIPELINE_PROG1] =
-        static_cast<BeginFuncT>(&pcStencilShadowShader::Begin_Prog1);
+        (BeginFuncT)(&pcStencilShadowShader::Begin_Prog1);
     EndFuncArray[PIPELINE_PROG1] =
-        static_cast<EndFuncT>(&pcStencilShadowShader::End_Prog1);
+        (EndFuncT)(&pcStencilShadowShader::End_Prog1);
     RenderFuncArray[PIPELINE_PROG1] =
-        static_cast<RenderFuncT>(&pcStencilShadowShader::Render_Prog1);
+        (RenderFuncT)(&pcStencilShadowShader::Render_Prog1);
 }
 
 // FUNCTION: SWBF2 0x00707dd0

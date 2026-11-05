@@ -176,11 +176,11 @@ EntityWalkerClass::EntityWalkerClass(unsigned int uHash)
 
     memset(mWeaponClass, 0, sizeof(mWeaponClass));
     memset(mWeaponAmmo, 0, sizeof(mWeaponAmmo));
-    for (int i = 0; i < 4; ++i)
+    for (int i = 0; i < kMaxWeapons; ++i)
     {
         mWeaponAmmo[i].bFlagAmmoInfinite = 1;
     }
-    for (int i = 0; i < 4; ++i)
+    for (int i = 0; i < kMaxWeapons; ++i)
     {
         mWeaponChannel[i] = i;
     }
@@ -209,11 +209,10 @@ EntityWalkerClass::EntityWalkerClass(unsigned int uHash)
 
     memset(mTurretClass, 0, sizeof(mTurretClass));
 
-    const PblVector3 vNoOffset(0.0f, 0.0f, 0.0f);
     mExplosion = 0;
-    mExplosionOffset = vNoOffset;
+    mExplosionOffset = PblVector3(0.0f, 0.0f, 0.0f);
     mFinalExplosion = 0;
-    mFinalExplosionOffset = vNoOffset;
+    mFinalExplosionOffset = PblVector3(0.0f, 0.0f, 0.0f);
     mDeathAnimationExplosionCount = 0;
     mDeathAnimationExplosionTime = 0.4f;
     mDeathDustClassHash = 0;
@@ -249,9 +248,7 @@ EntityWalkerClass::EntityWalkerClass(unsigned int uHash)
     mLegPairCount = 0;
     mLegPairInfo = 0;
     mAttachHash = 0;
-    mAttachOffset.x = 0.0f;
-    mAttachOffset.y = 0.0f;
-    mAttachOffset.z = 0.0f;
+    mAttachOffset.Set(0.0f, 0.0f, 0.0f);
     mWaterDamageInterval = 1.0f;
     mWaterDamageAmount = 0.0f;
     mHydraulicSoundHeight = 1.0f;
@@ -452,7 +449,7 @@ EntityWalkerClass::EntityWalkerClass(EntityWalkerClass* pBase, unsigned int uHas
 
     memcpy(mWeaponClass, pBase->mWeaponClass, sizeof(mWeaponClass));
     memcpy(mWeaponAmmo, pBase->mWeaponAmmo, sizeof(mWeaponAmmo));
-    for (int i = 0; i < 4; ++i)
+    for (int i = 0; i < kMaxWeapons; ++i)
     {
         mWeaponChannel[i] = pBase->mWeaponChannel[i];
     }
@@ -787,12 +784,11 @@ void EntityWalkerClass::SetProperty(unsigned int uProperty, const char* pszValue
     {
         int iAmmo = 0;
         sscanf(pszValue, "%d", &iAmmo);
-        WeaponAmmoDesc& ammo = mWeaponAmmo[sWeaponSection];
-        ammo.bFlagShareAmmo = 0;
-        ammo.bFlagAmmoInfinite = iAmmo <= 0;
-        if (!ammo.bFlagAmmoInfinite)
+        mWeaponAmmo[sWeaponSection].bFlagShareAmmo = 0;
+        mWeaponAmmo[sWeaponSection].bFlagAmmoInfinite = iAmmo <= 0;
+        if (!mWeaponAmmo[sWeaponSection].bFlagAmmoInfinite)
         {
-            ammo.uiAmmo = iAmmo;
+            mWeaponAmmo[sWeaponSection].uiAmmo = iAmmo;
         }
         break;
     }
@@ -810,6 +806,7 @@ void EntityWalkerClass::SetProperty(unsigned int uProperty, const char* pszValue
         else
         {
             ammo.bFlagShareAmmo = 0;
+            ammo.bFlagAmmoInfinite = 0;
             ammo.bFlagAmmoInfinite = 1;
         }
         break;
@@ -1050,8 +1047,8 @@ void EntityWalkerClass::SetProperty(unsigned int uProperty, const char* pszValue
         break;
 
     case 0x7012f6cd:
-        s_bSetZephyrSkeletonShared = true;
         m_pZephyrSkeletonShared = RedAnimation::Find(PblHash(pszValue))->GetZephyrSkeletonShared();
+        s_bSetZephyrSkeletonShared = true;
         break;
     case 0x4cacc3d0:
         sscanf(pszValue, "%f", &mSkeletonRootScale);
@@ -1132,21 +1129,19 @@ void EntityWalkerClass::SetProperty(unsigned int uProperty, const char* pszValue
         break;
     case 0x21322adb:
     {
-        WalkerLegPairInfo& rPair = mLegPairInfo[sCurPair];
-        rPair.mFootCollisionBody[0] = mCollisionModel.GetMaskId(PblHash(pszValue));
-        if (rPair.mFootCollisionBody[0] >= 0)
+        mLegPairInfo[sCurPair].mFootCollisionBody[0] = mCollisionModel.GetMaskId(PblHash(pszValue));
+        if (mLegPairInfo[sCurPair].mFootCollisionBody[0] >= 0)
         {
-            mFootPrimitives[mNumFeet++] = rPair.mFootCollisionBody[0];
+            mFootPrimitives[mNumFeet++] = mLegPairInfo[sCurPair].mFootCollisionBody[0];
         }
         break;
     }
     case 0xb62deb24:
     {
-        WalkerLegPairInfo& rPair = mLegPairInfo[sCurPair];
-        rPair.mFootCollisionBody[1] = mCollisionModel.GetMaskId(PblHash(pszValue));
-        if (rPair.mFootCollisionBody[1] >= 0)
+        mLegPairInfo[sCurPair].mFootCollisionBody[1] = mCollisionModel.GetMaskId(PblHash(pszValue));
+        if (mLegPairInfo[sCurPair].mFootCollisionBody[1] >= 0)
         {
-            mFootPrimitives[mNumFeet++] = rPair.mFootCollisionBody[1];
+            mFootPrimitives[mNumFeet++] = mLegPairInfo[sCurPair].mFootCollisionBody[1];
         }
         break;
     }
@@ -1323,9 +1318,7 @@ void EntityWalkerClass::SetProperty(unsigned int uProperty, const char* pszValue
                 mNumTowCableCollisions = 0;
                 if (mModel)
                 {
-                    mAttachOffset.x = 0.0f;
-                    mAttachOffset.y = mModel->_mModel->_TotalBoundingBox._vMax.y;
-                    mAttachOffset.z = 0.0f;
+                    mAttachOffset = PblVector3(0.0f, mModel->_mModel->_TotalBoundingBox._vMax.y, 0.0f);
                 }
             }
         }
@@ -1552,7 +1545,7 @@ void EntityWalker::DeactivatePhysics()
         }
     }
     mPostCollision.DeactivateThread();
-    static_cast<Controllable*>(this)->DeactivateThread();
+    ((Controllable*)this)->DeactivateThread();
 }
 
 // FUNCTION: SWBF2 0x00507280
@@ -1690,6 +1683,7 @@ EntityWalker::EntityWalker(EntityWalkerClass* pClass, const EntityDesc& desc)
     , VehicleEngine(pClass)
     , mClass(pClass)
     , mBlend(0)
+    , mMainMask(true)
     , mReserveForPlayer(0.0f)
     , mLegPairCount(0)
     , mFootState(0)
@@ -1697,10 +1691,12 @@ EntityWalker::EntityWalker(EntityWalkerClass* pClass, const EntityDesc& desc)
     , mState(Idle)
     , mDirection(None)
     , mEnergyBar(&pClass->mEnergyBarClass)
+    , mTurnOffset(1.0f, 0.0f)
+    , mPitchOffset(1.0f, 0.0f)
+    , mRollOffset(1.0f, 0.0f)
     , mPivotOffset(0.0f, 0.0f, 0.0f)
     , mPostCollision(this)
 {
-    mMainMask.SetAll();
     mBoost = false;
     mSpeedPrev = 0.0f;
     mEjectTimer = 0.0f;
@@ -1715,7 +1711,7 @@ EntityWalker::EntityWalker(EntityWalkerClass* pClass, const EntityDesc& desc)
     mControllableList.AddLast(&this->Controllable::mNode, this);
 
     mNumTurrets = 0;
-    for (int i = 0; i < 8; ++i)
+    for (int i = 0; i < kMaxTurrets; ++i)
     {
         if (mClass->mTurretClass[i])
         {
@@ -1772,7 +1768,7 @@ EntityWalker::EntityWalker(EntityWalkerClass* pClass, const EntityDesc& desc)
         }
         mWeapon[i] = mClass->mWeaponClass[i]->Build(weaponDesc);
     }
-    for (int iChannel = 0; iChannel < 2; ++iChannel)
+    for (int iChannel = 0; iChannel < kNumWeaponChannels; ++iChannel)
     {
         mWeaponIndex[iChannel] = -1;
         for (int i = 0; i < mClass->mWeaponCount; ++i)
@@ -1796,8 +1792,8 @@ EntityWalker::EntityWalker(EntityWalkerClass* pClass, const EntityDesc& desc)
     mLegPairCount = mClass->mLegPairCount;
     for (int i = 0; i < mLegPairCount; ++i)
     {
-        mMainMask.And(~mClass->mLegPairInfo[i].mLegMasks[0]);
-        mMainMask.And(~mClass->mLegPairInfo[i].mLegMasks[1]);
+        mMainMask &= ~mClass->mLegPairInfo[i].mLegMasks[0];
+        mMainMask &= ~mClass->mLegPairInfo[i].mLegMasks[1];
     }
     mBlend->SetJointMask(0, mMainMask);
     mBlend->SetJointMask(1, mMainMask);
@@ -1909,7 +1905,7 @@ void EntityWalker::Init()
     }
     else
     {
-        for (int iChannel = 0; iChannel < 2; ++iChannel)
+        for (int iChannel = 0; iChannel < kNumWeaponChannels; ++iChannel)
         {
             int iIndex = mWeaponIndex[iChannel];
             if (iIndex >= 0 && mWeapon[iIndex])
@@ -2077,7 +2073,7 @@ void EntityWalker::DoFootImpactEffects()
             }
             if (FoleyFX* pFoley = GetFoleyFX())
             {
-                static_cast<FoleyFXWalker*>(pFoley)->mFootstep[i].Play(&vFoot, 0, false, true);
+                ((FoleyFXWalker*)pFoley)->mFootstep[i].Play(&vFoot, 0, false, true);
             }
             mClass->mFootstepSounds[i].Play(&vFoot, 0, false, true);
             mFootState |= uBit;
@@ -2458,9 +2454,11 @@ void EntityWalker::Render(unsigned char ucViewport, float fDist, unsigned int ui
     }
 
     SetupShadow(this, mModel, ucViewport, uiFlags, 0);
-    RedColor color = RedColor::WHITE;
-    color.a = (unsigned char)(int)(fAlpha * 255.0f);
-    mModel->Render(ucViewport, fDist, &mWorld, &mPose, color, uiFlags, 0);
+    {
+        RedColor color = RedColor::WHITE;
+        color.a = (unsigned char)(int)(fAlpha * 255.0f);
+        mModel->Render(ucViewport, fDist, &mWorld, &mPose, color, uiFlags, 0);
+    }
 
     if (!netFrameLock && NetGame::IsEnabled())
     {
@@ -2726,7 +2724,7 @@ void EntityWalker::SetTerrainHeight(int iIndex, float fHeight)
 void EntityWalker::Die()
 {
     mIsDead = true;
-    CollisionManager::RemoveBody(this);
+    RemoveFromCollisionManager();
     AddStaticToCollisionManager();
     for (int i = 0; i < mClass->mWeaponCount; ++i)
     {
@@ -2861,10 +2859,17 @@ void EntityWalker::UpdateOrientation(float fDeltaTime)
     for (int i = 0; i < mLegPairCount; ++i)
     {
         PblVector3 vFeet[2];
-        vFeet[0] = GetCollisionModel()->GetLocalMatrix(mLegPairs[i]->GetFootCollisionBodyId(0), GetPose()).GetTranslation();
-        vFeet[1] = GetCollisionModel()->GetLocalMatrix(mLegPairs[i]->GetFootCollisionBodyId(1), GetPose()).GetTranslation();
+        int iFootBody = mLegPairs[i]->mFootCollisionBody[0];
+        CollisionModel* pCollisionModel = mCollisionModel;
+        vFeet[0] = pCollisionModel->GetLocalMatrix(iFootBody, GetPose()).GetTranslation();
+        pCollisionModel = mCollisionModel;
+        iFootBody = mLegPairs[i]->mFootCollisionBody[1];
+        vFeet[1] = pCollisionModel->GetLocalMatrix(iFootBody, GetPose()).GetTranslation();
         mLegPairs[i]->SetupGroundCollision(mMatrix, mBodyPitch, vFeet);
-        fMaxPush = Max(mLegPairs[i]->GetPushValue(), fMaxPush);
+        if (mLegPairs[i]->mPushValue > fMaxPush)
+        {
+            fMaxPush = mLegPairs[i]->mPushValue;
+        }
         fHeightDifference += mLegPairs[i]->mFootHeightDifference / (float)mLegPairCount;
         mLegPairs[i]->SetInterpolate(false);
     }
@@ -2876,16 +2881,19 @@ void EntityWalker::UpdateOrientation(float fDeltaTime)
         {
             if (fMaxPush > 0.0f)
             {
-                mBodyPitch = Interpolate(mBodyPitch, -0.62f, 0.05f);
-                mPitchOffset = PblAngle(mBodyPitch);
-                SetPosition(mMatrix.GetTranslation() + PblVector3(0.0f, fMaxPush, 0.0f));
+                mBodyPitch = (-0.62f - mBodyPitch) * 0.05f + mBodyPitch;
+                float fCos = cosf(mBodyPitch);
+                float fSin = sinf(mBodyPitch);
+                mPitchOffset.mCos = fCos;
+                mPitchOffset.mSin = fSin;
+                SetPosition(PblVector3(mMatrix.m[3][0] + 0.0f, mMatrix.m[3][1] + fMaxPush, mMatrix.m[3][2] + 0.0f));
                 m_bIsGrounded = true;
                 mVelocityNoGrav.y = 0.0f;
                 mVelocity.y = 0.0f;
             }
             else
             {
-                mVelocity.AddY(fGravity * fDeltaTime);
+                mVelocity.y = fGravity * fDeltaTime + mVelocity.y;
             }
         }
         else
@@ -2895,16 +2903,35 @@ void EntityWalker::UpdateOrientation(float fDeltaTime)
                 float fPushDifference = mLegPairs[1]->mPushValue - mLegPairs[0]->mPushValue;
                 if (fPushDifference != 0.0f)
                 {
-                    float fPitch = Clamp(fPushDifference * 0.01f + mBodyPitch, -0.29552022f, 0.29552022f);
+                    float fPitch = fPushDifference * 0.01f + mBodyPitch;
+                    if (-0.29552022f > fPitch)
+                    {
+                        fPitch = -0.29552022f;
+                    }
+                    else if (fPitch > 0.29552022f)
+                    {
+                        fPitch = 0.29552022f;
+                    }
                     mBodyPitch = fPitch;
-                    mPitchOffset = PblAngle(fPitch);
+                    float fCos = cosf(fPitch);
+                    float fSin = sinf(fPitch);
+                    mPitchOffset.mCos = fCos;
+                    mPitchOffset.mSin = fSin;
                 }
-                float fPush0 = Max(mLegPairs[0]->mPushValue, -0.1f);
-                float fPush1 = Max(mLegPairs[1]->mPushValue, -0.1f);
+                float fPush0 = mLegPairs[0]->mPushValue;
+                if (!(fPush0 > -0.1f))
+                {
+                    fPush0 = -0.1f;
+                }
+                float fPush1 = mLegPairs[1]->mPushValue;
+                if (!(fPush1 > -0.1f))
+                {
+                    fPush1 = -0.1f;
+                }
                 float fLift = (fPush1 + fPush0) * 0.5f;
                 if (fLift != 0.0f)
                 {
-                    SetPosition(mMatrix.GetTranslation() + PblVector3(0.0f, fLift, 0.0f));
+                    SetPosition(PblVector3(mMatrix.m[3][0] + 0.0f, mMatrix.m[3][1] + fLift, mMatrix.m[3][2] + 0.0f));
                 }
                 m_bIsGrounded = true;
                 mVelocity.y = 0.0f;
@@ -2912,15 +2939,16 @@ void EntityWalker::UpdateOrientation(float fDeltaTime)
             }
             else
             {
-                mVelocity.AddY(fGravity * fDeltaTime);
+                mVelocity.y = fGravity * fDeltaTime + mVelocity.y;
             }
 
             if (mClass->mOrientRoll && (fHeightDifference > 0.0001f || -0.0001f > fHeightDifference))
             {
-                float fInvLength = 1.0f / sqrtf(mClass->mWidth * mClass->mWidth +
-                                                  fHeightDifference * fHeightDifference);
-                PblAngle target(mClass->mWidth * fInvLength, fInvLength * fHeightDifference);
-                float fDelta = mRollOffset.mCos * target.mSin - mRollOffset.mSin * target.mCos;
+                float fInvLength = 1.0f / (float)sqrt(mClass->mWidth * mClass->mWidth +
+                                                      fHeightDifference * fHeightDifference);
+                float fTargetCos = mClass->mWidth * fInvLength;
+                float fTargetSin = fInvLength * fHeightDifference;
+                float fDelta = mRollOffset.mCos * fTargetSin - mRollOffset.mSin * fTargetCos;
                 float fSin = fDelta * mRollOffset.mCos * 0.05f + mRollOffset.mSin;
                 float fCos = mRollOffset.mCos - fDelta * mRollOffset.mSin * 0.05f;
                 mRollOffset.mSin = fSin;
@@ -2928,11 +2956,13 @@ void EntityWalker::UpdateOrientation(float fDeltaTime)
                 mRollOffset.Renormalize();
                 if (mRollOffset.mSin > 0.29552022f)
                 {
-                    mRollOffset = PblAngle(0.95533651f, 0.29552022f);
+                    mRollOffset.mCos = 0.95533651f;
+                    mRollOffset.mSin = 0.29552022f;
                 }
                 else if (-0.29552022f > mRollOffset.mSin)
                 {
-                    mRollOffset = PblAngle(0.95533651f, -0.29552022f);
+                    mRollOffset.mCos = 0.95533651f;
+                    mRollOffset.mSin = -0.29552022f;
                 }
             }
         }
@@ -2944,7 +2974,7 @@ void EntityWalker::UpdateOrientation(float fDeltaTime)
             float fLift = fMaxPush - 0.1f;
             if (fLift > 0.0f)
             {
-                SetPosition(mMatrix.GetTranslation() + PblVector3(0.0f, fLift, 0.0f));
+                SetPosition(PblVector3(mMatrix.m[3][0] + 0.0f, mMatrix.m[3][1] + fLift, mMatrix.m[3][2] + 0.0f));
             }
             m_bIsGrounded = true;
             mVelocityNoGrav.y = 0.0f;
@@ -2952,7 +2982,7 @@ void EntityWalker::UpdateOrientation(float fDeltaTime)
         }
         else
         {
-            mVelocity.AddY(fGravity * fDeltaTime);
+            mVelocity.y = fGravity * fDeltaTime + mVelocity.y;
         }
     }
 
@@ -3686,7 +3716,7 @@ bool EntityWalker::Update(float fDeltaTime)
     }
 
     Controllable::Update(fDeltaTime);
-    if (NetGame::IsEnabled() && NetGame::JustEndedPreGame() && !NetGame::IsClient())
+    if (NetGame::IsEnabled() && NetGame::JustEndedPreGame() && !(netEnabledNext && netClientActive))
     {
         return false;
     }
@@ -3694,14 +3724,14 @@ bool EntityWalker::Update(float fDeltaTime)
     int iJoystick = GetJoystickIndex();
     bool bTargetHandled = false;
     if (iJoystick >= 0 &&
-        (!NetGame::IsEnabled() || (NetGame::IsClient() && netIsLocalTurn) ||
+        (!NetGame::IsEnabled() || ((netEnabledNext && netClientActive) && netIsLocalTurn) ||
          (NetGame::IsHost() && NetGame::IsOneWorld() && netIsLocalTurn)))
     {
         LockOnManager* pManager = LockOnManager::GetByPlayerIndex(iJoystick);
         int iTypes = 0;
         float fLockDist = 2000.0f;
         float fLoseDist = 2500.0f;
-        for (int i = 0; i < 2; ++i)
+        for (int i = 0; i < kNumWeaponChannels; ++i)
         {
             int iIndex = mWeaponIndex[i];
             if (iIndex != -1)
@@ -3735,11 +3765,11 @@ bool EntityWalker::Update(float fDeltaTime)
             bTargetHandled = true;
         }
     }
-    else if (mPlayerId >= 0 && iJoystick < 0 && NetGame::IsEnabled() && !NetGame::IsClient())
+    else if (mPlayerId >= 0 && iJoystick < 0 && NetGame::IsEnabled() && !(netEnabledNext && netClientActive))
     {
 
         int iTypes = 0;
-        for (int i = 0; i < 2; ++i)
+        for (int i = 0; i < kNumWeaponChannels; ++i)
         {
             int iIndex = mWeaponIndex[i];
             if (iIndex != -1)
@@ -3751,7 +3781,7 @@ bool EntityWalker::Update(float fDeltaTime)
         mAllowedLockTypes = iTypes;
     }
 
-    if (mPlayerId >= 0 && !(NetGame::IsEnabled() && NetGame::IsClient()) && !bTargetHandled)
+    if (mPlayerId >= 0 && !(NetGame::IsEnabled() && (netEnabledNext && netClientActive)) && !bTargetHandled)
     {
         GameObject* pTarget = GetTargetLockedObj();
         if (pTarget &&
@@ -3796,10 +3826,10 @@ bool EntityWalker::Update(float fDeltaTime)
         }
         else
         {
-            if (!(NetGame::IsEnabled() && NetGame::IsClient()))
+            if (!(NetGame::IsEnabled() && (netEnabledNext && netClientActive)))
             {
                 PblVector3 vPos = mMatrix.GetTranslation();
-                if (-500.0f > vPos.y && !(NetGame::IsEnabled() && NetGame::IsClient()))
+                if (-500.0f > vPos.y && !(NetGame::IsEnabled() && (netEnabledNext && netClientActive)))
                 {
                     Kill();
                     return false;
@@ -3834,7 +3864,7 @@ bool EntityWalker::Update(float fDeltaTime)
 
     if (GetControllableList().GetCount() == 1)
     {
-        for (int iChannel = 0; iChannel < 2; ++iChannel)
+        for (int iChannel = 0; iChannel < kNumWeaponChannels; ++iChannel)
         {
             int iIndex = mWeaponIndex[iChannel];
             if (iIndex < 0 || mControlSwitch[iChannel] == 0.0f)
@@ -3938,7 +3968,7 @@ bool EntityWalker::Update(float fDeltaTime)
 
     if (mIsDead && mIsDead && mState == Dead)
     {
-        if (!(NetGame::IsEnabled() && NetGame::IsClient()) && mDamageOwner.mCharacter)
+        if (!(NetGame::IsEnabled() && (netEnabledNext && netClientActive)) && mDamageOwner.mCharacter)
         {
             AwardVehicleKillPoints(mClass->GetVehicleType(),
                                    this->GetPilot() == 0 && !IsRtti(CommandWalker::rttiHashCommandWalker));
@@ -3953,10 +3983,10 @@ bool EntityWalker::Update(float fDeltaTime)
             mExplodedFinal = true;
             DamageOwner owner(mDamageOwner.mCharacter, mDamageOwner.mGameObject, mDamageOwner.mTeam, mClass, 0, 1.0f);
             PblVector3 vPos;
-            D3DXVec3TransformCoord(reinterpret_cast<D3DXVECTOR3*>(&vPos), reinterpret_cast<const D3DXVECTOR3*>(&mClass->mFinalExplosionOffset), reinterpret_cast<const D3DXMATRIX*>(&mMatrix));
+            vPos = mMatrix.ApplyTransform(mClass->mFinalExplosionOffset);
             pExplosion->CreateExplosion(vPos, owner, false, COLL_UNKNOWN);
         }
-        if (!(NetGame::IsEnabled() && NetGame::IsClient()))
+        if (!(NetGame::IsEnabled() && (netEnabledNext && netClientActive)))
         {
             CreateChunkCluster(1.0f);
             return false;
@@ -4268,12 +4298,10 @@ bool EntityWalker::PostCollisionUpdate(float fDeltaTime)
     if (mPilot && mPilot->GetGameObject()->IsRtti(EntitySoldier::rttiHashEntitySoldier))
     {
         GameObject* pSoldier = mPilot->GetGameObject();
-        PblMatrix mSeat;
-        D3DXMatrixMultiply(reinterpret_cast<D3DXMATRIX*>(&mSeat), reinterpret_cast<const D3DXMATRIX*>(&pSoldier->GetMatrix()), reinterpret_cast<const D3DXMATRIX*>(&GetMatrix().GetInverseFast()));
+        PblMatrix mSeat = pSoldier->GetMatrix() * GetMatrix().GetInverseFast();
         PblMatrix mLocal = mSeat;
         PblMatrix mSmoothed = GetSmoothedMatrix();
-        PblMatrix mRender;
-        D3DXMatrixMultiply(reinterpret_cast<D3DXMATRIX*>(&mRender), reinterpret_cast<const D3DXMATRIX*>(&mLocal), reinterpret_cast<const D3DXMATRIX*>(&mSmoothed));
+        PblMatrix mRender = mLocal * mSmoothed;
         pSoldier->SetRenderPos(mRender.GetTranslation());
     }
     return true;
@@ -4402,7 +4430,7 @@ float EntityWalker::GetSoundRadius() const
         {
             if (FoleyFX* pFoley = GetFoleyFX())
             {
-                fMute = static_cast<FoleyFXWalker*>(pFoley)->mFootstep[i].GetMuteDistance();
+                fMute = ((FoleyFXWalker*)pFoley)->mFootstep[i].GetMuteDistance();
             }
         }
         if (mFootState & (1 << (i + 8)))
@@ -4543,8 +4571,7 @@ void EntityWalker::SetupCameraTrackMatrix(PblMatrix& rMatrix, float fDeltaTime)
     PblMath::SinCos(&fSinPitch, &fCosPitch, mPitchValue);
     PblMath::SinCos(&fSinYaw, &fCosYaw, mYawValue);
     PblVector3 vLocal(fSinYaw * fCosPitch, fSinPitch, fCosYaw * fCosPitch);
-    PblVector3 vAim;
-    D3DXVec3TransformNormal(reinterpret_cast<D3DXVECTOR3*>(&vAim), reinterpret_cast<const D3DXVECTOR3*>(&vLocal), reinterpret_cast<const D3DXMATRIX*>(&matrix));
+    PblVector3 vAim = matrix.ApplyRotation(vLocal);
     PblVector3 vEye = mClass->mCameraSettings.CalcEyePoint(matrix);
 
     const PblMatrix* pJoint = mPose.Find(mClass->mFPPoseHash);

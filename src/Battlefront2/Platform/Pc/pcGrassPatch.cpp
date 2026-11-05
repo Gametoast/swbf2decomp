@@ -268,11 +268,7 @@ void GrassPatchRenderable::RenderInstance(const PblMatrix& matrix, const RedColo
     }
 
     {
-        PblSphere sphere;
-        sphere.w = m_pClass->mBoundingRadius;
-        sphere.x = matrix.m[3][0];
-        sphere.y = matrix.m[3][1];
-        sphere.z = matrix.m[3][2];
+        PblSphere sphere(matrix.GetTranslation(), m_pClass->mBoundingRadius);
         RedRenderer::SetLightingState(*RedLight::GetLightingState(sphere, 4, false, false, false));
     }
 
@@ -471,14 +467,11 @@ void GrassPatchRenderable::AddParticle(const GrassPatchClass::GrassParticle& par
 
         PblVector3 vSide(u.y * vDir.z - u.z * vDir.y, u.z * vDir.x - u.x * vDir.z, u.x * vDir.y - u.y * vDir.x);
         vSide.y = u.y + vSide.y;
-        PblVector3 vNorm;
-        D3DXVec3Normalize(reinterpret_cast<D3DXVECTOR3*>(&vNorm), reinterpret_cast<const D3DXVECTOR3*>(&vSide));
-        vSide = vNorm;
+        D3DXVec3Normalize(reinterpret_cast<D3DXVECTOR3*>(&vSide), reinterpret_cast<const D3DXVECTOR3*>(&vSide));
 
         PblVector3 vCross(vSide.y * vDir.z - vSide.z * vDir.y, vSide.z * vDir.x - vSide.x * vDir.z,
                           vSide.x * vDir.y - vSide.y * vDir.x);
-        D3DXVec3Normalize(reinterpret_cast<D3DXVECTOR3*>(&vNorm), reinterpret_cast<const D3DXVECTOR3*>(&vCross));
-        vCross = vNorm;
+        D3DXVec3Normalize(reinterpret_cast<D3DXVECTOR3*>(&vCross), reinterpret_cast<const D3DXVECTOR3*>(&vCross));
 
         float fSize = particle.mSize * fScale;
         vRight = PblVector3(vSide.x * fSize, vSide.y * fSize, vSide.z * fSize);

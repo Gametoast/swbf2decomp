@@ -95,7 +95,8 @@ void StreamGSMEncoder::Update()
     {
         if (mInputPacket == 0)
         {
-            mInputPacket = ConnectionGetPacket();
+            StreamNodeSource* const pNode = mConnection.mInputNode;
+            mInputPacket = (pNode != 0) ? pNode->GetPacket(mConnection.mInputNodeOutputIndex) : 0;
             if (mInputPacket == 0)
             {
                 return;

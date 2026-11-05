@@ -12,6 +12,7 @@ class ConnectivityGraph;
 class ConnectivityNode : public PblSphere
 {
 public:
+    static const int kMaxArcs = 8;
     ConnectivityNode();
     ~ConnectivityNode();
 
@@ -24,7 +25,7 @@ public:
     bool IsPointInside(const PblVector3& v) const;
 
     unsigned int mAllowTypes;
-    unsigned char mArcs[8];
+    unsigned char mArcs[kMaxArcs];
 
     unsigned char* mBranchingTable[5][4];
 };

@@ -35,7 +35,7 @@
 unsigned int LockOnManager::sNumLockOnManagers;
 
 // GLOBAL: SWBF2 0x01e57400
-LockOnManager* LockOnManager::sLockOnManagers[4];
+LockOnManager* LockOnManager::sLockOnManagers[kMaxManagers];
 
 // SYNTHETIC: SWBF2 0x00404180
 // `dynamic initializer for 'LockOnManager::sTargetLockSound''
@@ -141,7 +141,7 @@ void LockOnManager::SetDisplayIconsOnEverything(bool bEverything)
 {
     if (!bEverything)
     {
-        for (unsigned int i = 0; i < 64; i++)
+        for (unsigned int i = 0; i < kMaxTargets; i++)
         {
             mTargetPlayer[i].SetObj(0, &mTargetPlayerInfo[i]);
             if (mPlayerIndex >= 0)
@@ -170,7 +170,7 @@ void LockOnManager::CreateAll()
     {
         new LockOnManager(i);
     }
-    for (unsigned int i = 0; i < 32; i++)
+    for (unsigned int i = 0; i < kMaxCommonTargets; i++)
     {
         sTargetCommon[i].SetObj(0, 0);
     }
@@ -210,7 +210,7 @@ void LockOnManager::Update(float fDeltaTime)
         }
         if (mNewNumAttackerTargets != mNumAttackerTargets || mNewNumNearestTargets != mNumNearestTargets)
         {
-            for (unsigned int i = 0; i < 64; i++)
+            for (unsigned int i = 0; i < kMaxTargets; i++)
             {
                 mTargetPlayer[i].SetObj(0, &mTargetPlayerInfo[i]);
                 mTargetPlayerInfo[i].Clean();
@@ -237,12 +237,12 @@ void LockOnManager::Update(float fDeltaTime)
     unsigned int uChanged = 0;
     if (mTargetVisibilityUpdate && pCtrl)
     {
-        for (unsigned int i = 0; i < 64; i++)
+        for (unsigned int i = 0; i < kMaxTargets; i++)
         {
             UpdateTargetVisibility(pCtrl, pCamera, vEye, mTargetPlayer[i], mTargetPlayerInfo[i], false, uTeamMask,
                                    bOffFrame, uChanged);
         }
-        for (unsigned int i = 0; i < 32; i++)
+        for (unsigned int i = 0; i < kMaxCommonTargets; i++)
         {
             UpdateTargetVisibility(pCtrl, pCamera, vEye, sTargetCommon[i], mTargetCommonInfo[i], true, uTeamMask,
                                    bOffFrame, uChanged);
@@ -267,7 +267,7 @@ void LockOnManager::ClearPositionValid(LockOnManager::TargetInfo* const pInfo, u
 // FUNCTION: SWBF2 0x0057d9f0
 void LockOnManager::UpdateAll(float fDeltaTime)
 {
-    for (unsigned int i = 0; i < 4; i++)
+    for (unsigned int i = 0; i < kMaxManagers; i++)
     {
         if (sLockOnManagers[i])
         {
@@ -280,7 +280,7 @@ void LockOnManager::UpdateAll(float fDeltaTime)
 LockOnManager::Target* LockOnManager::AddTargetCommon(GameObject* pActor, unsigned int uTeamMask)
 {
     unsigned int i;
-    for (i = 0; i < 32; ++i)
+    for (i = 0; i < kMaxCommonTargets; ++i)
     {
         LockOnManager::Target& target = LockOnManager::sTargetCommon[i];
         GameObject* pObject = target.obj;
@@ -294,7 +294,7 @@ LockOnManager::Target* LockOnManager::AddTargetCommon(GameObject* pActor, unsign
     {
         return 0;
     }
-    for (unsigned int j = 0; j < 4; ++j)
+    for (unsigned int j = 0; j < kMaxManagers; ++j)
     {
         LockOnManager* pManager = LockOnManager::sLockOnManagers[j];
         if (pManager)
@@ -422,24 +422,31 @@ void LockOnManager::UpdateTargetVisibility(Controllable* const pCtrl, RedCamera*
     }
     else if (rInfo.mLocked)
     {
-        vLift.Set(0.0f, 0.0f, 0.0f);
+        vLift.x = 0.0f;
+        vLift.y = 0.0f;
+        vLift.z = 0.0f;
     }
     else
     {
         PblVector3 vUp;
         if (pObject == pCtrl->GetGameObject())
         {
-            vUp.Set(0.0f, 0.3f, pObject->GetCollisionRadius() * -0.2f);
+            vUp.x = 0.0f;
+            vUp.y = 0.3f;
+            vUp.z = pObject->GetCollisionRadius() * -0.2f;
         }
         else
         {
             float fUp = pObject->GetCollisionRadius() * 0.7f;
-            vUp.Set(0.0f, 4.0f > fUp ? fUp : 4.0f, 0.0f);
+            vUp.x = 0.0f;
+            vUp.y = 4.0f > fUp ? fUp : 4.0f;
+            vUp.z = 0.0f;
         }
         vLift = pObject->GetMatrix().ApplyRotation(vUp);
     }
 
-    float fDist = Length(vPos - vEye);
+    float fDist = PblMath::Sqrt((vPos.y - vEye.y) * (vPos.y - vEye.y) + (vPos.x - vEye.x) * (vPos.x - vEye.x) +
+                        (vPos.z - vEye.z) * (vPos.z - vEye.z));
     if (fDist > rTarget.maxDistTrack)
     {
         return;
@@ -461,7 +468,9 @@ void LockOnManager::UpdateTargetVisibility(Controllable* const pCtrl, RedCamera*
     PblVector3 vLag;
     if (!pVehicle || !pVehicle->IsInScene())
     {
-        vLag = PblVector3(0.0f, 0.0f, 0.0f);
+        vLag.x = 0.0f;
+        vLag.y = 0.0f;
+        vLag.z = 0.0f;
     }
     else
     {
@@ -476,19 +485,25 @@ void LockOnManager::UpdateTargetVisibility(Controllable* const pCtrl, RedCamera*
 
     const bool bAimRay = !rInfo.mLocked || (pCtrl->GetEntity() && pCtrl->GetEntity()->IsRtti(EntityFlyer::rttiHashEntityFlyer));
 
-    PblVector3 vPoint = vLag + vPos + vLift;
     float fScreenX;
     float fScreenY;
     bool bOffScreen;
-    CalculateScreenCoordinates(pCtrl, pCamera, vPoint, fScreenX, fScreenY, bOffScreen, bAimRay);
-    ++uArg9;
-    if (!bArg8 && !rInfo.GetVisibilityChecked())
     {
-        rInfo.SetVisible(AIUtil::CanSeePosition(vEye, pCtrl, vPos, pObject));
+        PblVector3 vPoint(vLag.x + vPos.x + vLift.x, vLag.y + vPos.y + vLift.y, vLag.z + vPos.z + vLift.z);
+        CalculateScreenCoordinates(pCtrl, pCamera, vPoint, fScreenX, fScreenY, bOffScreen, bAimRay);
+    }
+    ++uArg9;
+    if (!bArg8 && !rInfo.mVisibilityChecked)
+    {
+        rInfo.mVisible = AIUtil::CanSeePosition(vEye, pCtrl, vPos, pObject);
+        rInfo.mVisibilityChecked = true;
+        rInfo.mPositionValid = true;
         bArg8 = true;
     }
-    rInfo.SetPosition(PblVector3(fScreenX, fScreenY, fDist));
-    rInfo.SetOnScreen(!bOffScreen);
+    rInfo.mPosition.x = fScreenX;
+    rInfo.mPosition.y = fScreenY;
+    rInfo.mPosition.z = fDist;
+    rInfo.mOnScreen = !bOffScreen;
 
     bool bFlagCarrier;
     if (bCommon)
@@ -530,7 +545,7 @@ void LockOnManager::SetLockedTarget(GameObject* const pObject, TargetInfo* const
     if (pObject)
     {
         sTargetLockSound.Play(0, 0, false, true);
-        for (unsigned int i = 0; i < 64; ++i)
+        for (unsigned int i = 0; i < kMaxTargets; ++i)
         {
             mTargetPlayerInfo[i].mLocked = (pInfo == &mTargetPlayerInfo[i]);
         }
@@ -551,7 +566,7 @@ void LockOnManager::RemoveTargetLock()
     }
 
     TargetInfo* pInfo = 0;
-    for (unsigned int i = 0; i < 64; i++)
+    for (unsigned int i = 0; i < kMaxTargets; i++)
     {
         Target& target = mTargetPlayer[i];
         if (target.obj == (GameObject*)mLockedObj)
@@ -597,7 +612,7 @@ bool LockOnManager::IsGameObjectTargetedAll(const GameObject* const pObject)
         {
             return true;
         }
-        for (unsigned int i = 0; i < 4; ++i)
+        for (unsigned int i = 0; i < kMaxManagers; ++i)
         {
             if (sLockOnManagers[i] && sLockOnManagers[i]->IsGameObjectTargeted(pObject))
             {
@@ -654,7 +669,7 @@ bool LockOnManager::IsTargetObjectTypeAllowed(GameObject* gameObject, GameObject
 
     if (gameObject->GetDerivedRtti() == EntitySoldier::rttiHashEntitySoldier)
     {
-        if (static_cast<EntitySoldier*>(gameObject)->GetInvisibilityFactor() > 0.0f &&
+        if (((EntitySoldier*)gameObject)->GetInvisibilityFactor() > 0.0f &&
             me->GetAffiliationToMe(gameObject) < 0)
         {
             return false;
@@ -723,6 +738,12 @@ void LockOnManager::SetupNearestTargets(Controllable* const playerControllable, 
 
     if (mForceNewLockTarget)
     {
+      if (!mForceNewLockTarget)
+      {
+        mForceNewLock = 0;
+      }
+      else
+      {
         GameObject* vehicle = Controllable::GetVehicleIfAttached(mForceNewLockTarget);
         if (vehicle && vehicle != mForceNewLockTarget)
         {
@@ -757,6 +778,7 @@ void LockOnManager::SetupNearestTargets(Controllable* const playerControllable, 
         {
             mForceNewLockTarget = NULL;
         }
+      }
     }
 
     if (!playerObject)
@@ -1217,7 +1239,7 @@ bool LockOnManager::TargetHistory::Check(GameObject* const pObject) const
 void LockOnManager::Target::InitPlayer(GameObject* const initObj, unsigned int initTeamMask,
                                        TargetInfo& targetInfo, bool isFriendly)
 {
-    GameObjectClass* pClass = initObj ? static_cast<GameObjectClass*>(initObj->mEntityClass) : 0;
+    GameObjectClass* pClass = initObj ? (GameObjectClass*)initObj->mEntityClass : 0;
     obj = initObj;
     teamMask = initTeamMask;
     timer = 0.0f;
@@ -1265,7 +1287,7 @@ void LockOnManager::DestroyAll()
 {
     sTargetLockSound.SetID(0u, false, false);
 
-    for (unsigned int i = 0; i < 4; ++i)
+    for (unsigned int i = 0; i < kMaxManagers; ++i)
     {
         if (sLockOnManagers[i])
         {
@@ -1279,7 +1301,7 @@ void LockOnManager::DestroyAll()
 void LockOnManager::RemoveTargetCommon(GameObject* const pActor, unsigned int uTeamMask)
 {
     unsigned int teamMaskLeft = uTeamMask;
-    for (unsigned int i = 0; i < 32; ++i)
+    for (unsigned int i = 0; i < kMaxCommonTargets; ++i)
     {
         LockOnManager::Target& target = LockOnManager::sTargetCommon[i];
         if (!(target.obj == pActor))
@@ -1311,4 +1333,4 @@ void LockOnManager::RemoveTargetCommon(GameObject* const pActor, unsigned int uT
 
 // GLOBAL: SWBF2 0x01ec7d50
 // LockOnManager::sTargetCommon
-LockOnManager::Target LockOnManager::sTargetCommon[32];
+LockOnManager::Target LockOnManager::sTargetCommon[kMaxCommonTargets];

@@ -104,7 +104,7 @@ inline CLASS* Factory<TYPE, CLASS, DESC>::Find(unsigned int uHash)
     {
         if (it->mId == uHash)
         {
-            return static_cast<CLASS*>(&*it);
+            return (CLASS*)(&*it);
         }
     }
     return 0;

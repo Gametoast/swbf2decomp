@@ -60,8 +60,8 @@ public:
 
         int GetCount() const { return m_uiCount; }
         bool IsButtonDown(unsigned char uiButton) const { return (m_uiButtonDown & (1 << uiButton)) != 0; }
-        const Event& GetEvent(int iEvent) const { return m_aEventQueue[(m_uiStart + static_cast<unsigned char>(m_uiCount - iEvent - 1)) & INPUT_QUEUE_MASK]; }
-        const Event& operator[](int iEvent) const { return m_aEventQueue[(m_uiStart + static_cast<unsigned char>(iEvent)) & INPUT_QUEUE_MASK]; }
+        const Event& GetEvent(int iEvent) const { return m_aEventQueue[(m_uiStart + (unsigned char)(m_uiCount - iEvent - 1)) & INPUT_QUEUE_MASK]; }
+        const Event& operator[](int iEvent) const { return m_aEventQueue[(m_uiStart + (unsigned char)iEvent) & INPUT_QUEUE_MASK]; }
         void Update(unsigned char uiButtons, float fTime);
         void Clear() { m_uiCount = 0; m_uiStart = 0; }
         void ClearAll() { m_uiStart = 0; m_uiButtonDown = 0; m_uiCount = 0; }

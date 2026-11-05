@@ -668,13 +668,12 @@ void RawControllerInputs::ReadLatest(float fDeltaTime)
 
     for (int iPort = 0; iPort < 10; iPort++)
     {
-        RedJoystick* pJoystick = _redJoystick[iPort];
-        if (!pJoystick)
+        if (!_redJoystick[iPort])
         {
             continue;
         }
 
-        const unsigned __int64 uiButtons = pJoystick->GetDownButtons();
+        const unsigned __int64 uiButtons = _redJoystick[iPort]->m_uiDownButtons;
         for (unsigned int i = 0; i < 48; i++)
         {
             if (uiButtons & ((unsigned __int64)1 << i))
@@ -687,10 +686,17 @@ void RawControllerInputs::ReadLatest(float fDeltaTime)
         float* pRaw = mRawInputFloat[iPort];
         for (int iAxis = 0; iAxis < 8; iAxis++)
         {
-            float fAxis = _redJoystick[iPort]->GetAxis(iAxis);
+            float fAxis = _redJoystick[iPort]->m_fAxis[iAxis];
             if (fabsf(fAxis) < 1.0f)
             {
-                fAxis = Clamp(fAxis, -1.0f, 1.0f);
+                if (fAxis < -1.0f)
+                {
+                    fAxis = -1.0f;
+                }
+                else if (fAxis > 1.0f)
+                {
+                    fAxis = 1.0f;
+                }
             }
             pRaw[48 + 2 * iAxis] = fAxis;
             pRaw[49 + 2 * iAxis] = -fAxis;
@@ -743,7 +749,7 @@ void RawControllerInputs::ReadLatest(float fDeltaTime)
         dX = dX / (double)fDeltaTime;
         dY = dY / (double)fDeltaTime;
 
-        if (GetMouseAssist() && (mMode == 1 || mMode == 2 || mMode == 4) &&
+        if (mMouseAssist[mMode] && (mMode == 1 || mMode == 2 || mMode == 4) &&
             GameState::GetState() == 0x8FF60339 && !PauseMenu::GetPaused(0))
         {
             const double dThreshold = (mMode == 2) ? 1.0 : 1000.0;
@@ -895,7 +901,11 @@ void RawControllerInputs::ReadLatest(float fDeltaTime)
 
     if (_redMouse)
     {
-        m_pGuiInputs->SetMousePos(_redMouse->m_X, _redMouse->m_Y);
+        const int iMouseY = _redMouse->m_Y;
+        const int iMouseX = _redMouse->m_X;
+        MouseCoords& rCoords = m_pGuiInputs->mMouseCoords;
+        rCoords.mPosX = iMouseX;
+        rCoords.mPosY = iMouseY;
     }
 
     if (bAnyInput)

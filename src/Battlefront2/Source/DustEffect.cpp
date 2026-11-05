@@ -546,7 +546,7 @@ void CloudClusterClass::SetProperty(unsigned int uProperty, const char* pszValue
     case 0xab409a38:
         ++mNumDustEffectsInCluster;
         mDustEffects[mNumDustEffectsInCluster - 1] =
-            static_cast<DustEffectClass*>(EntityClass::Find(PblHash(pszValue)));
+            (DustEffectClass*)EntityClass::Find(PblHash(pszValue));
         break;
 
     case 0x458975f0:

@@ -263,7 +263,7 @@ const PatrolHint* PatrolHelper::SelectHint(int i, const BaseHint** ppHint)
             const BaseHint* pHint = *ppPick;
             if (AIUtil::IsHintAvailable(pMe, pHint) && pHint != mHint)
             {
-                return static_cast<const PatrolHint*>(pHint);
+                return (const PatrolHint*)pHint;
             }
             *ppPick = *ppLast;
             --ppLast;

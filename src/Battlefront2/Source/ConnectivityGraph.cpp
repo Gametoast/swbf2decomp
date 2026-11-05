@@ -65,7 +65,7 @@ const ConnectivityArc* ConnectivityNode::GetRandomArc(const ConnectivityArc* pEx
                                                       unsigned int uFlags) const
 {
     int iCount = 0;
-    for (int i = 0; i < 8; ++i)
+    for (int i = 0; i < kMaxArcs; ++i)
     {
         if (mArcs[i] == 0xFF)
         {
@@ -82,7 +82,7 @@ const ConnectivityArc* ConnectivityNode::GetRandomArc(const ConnectivityArc* pEx
     }
 
     int iPick = PblRandom::GetSim().GetInt() % iCount;
-    for (int i = 0; i < 8; ++i)
+    for (int i = 0; i < kMaxArcs; ++i)
     {
         const ConnectivityArc* pArc = graph.GetArc(mArcs[i]);
         if ((uFlags & pArc->mAllowTypes) && pArc != pExclude && --iPick < 0)
@@ -96,7 +96,7 @@ const ConnectivityArc* ConnectivityNode::GetRandomArc(const ConnectivityArc* pEx
 // FUNCTION: SWBF2 0x00480680
 bool ConnectivityNode::HasClosedDynamicArc(const ConnectivityGraph& graph, unsigned int uFlags)
 {
-    for (int i = 0; i < 8; ++i)
+    for (int i = 0; i < kMaxArcs; ++i)
     {
         if (mArcs[i] == 0xFF)
         {
@@ -306,7 +306,7 @@ const ConnectivityArc* ConnectivityGraph::GetNextArc(const ConnectivityArc* pCur
     if (pCurArc)
     {
         const int iArc = GetIndexFromArc(*pCurArc);
-        for (uCurSlot = 0; uCurSlot < 8; ++uCurSlot)
+        for (uCurSlot = 0; uCurSlot < ConnectivityNode::kMaxArcs; ++uCurSlot)
         {
             if (from.mArcs[uCurSlot] == iArc)
             {
@@ -400,7 +400,7 @@ bool ConnectivityGraph::Read(PblFileChunk& chunk)
     for (int i = 0; i < mMaxNodes; ++i)
     {
         mNodes[i].mAllowTypes = 0;
-        for (int j = 0; j < 8; ++j)
+        for (int j = 0; j < ConnectivityNode::kMaxArcs; ++j)
         {
             if (mNodes[i].mArcs[j] != 0xFF)
             {

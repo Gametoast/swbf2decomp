@@ -367,22 +367,22 @@ void pcPerVertexDiffuseLightingShader::_Init(unsigned int,
 void pcPerVertexDiffuseLightingShader::_InitPipelineFuncArray()
 {
     GetStateFuncArray[PIPELINE_FIXED] =
-        static_cast<GetStateFuncT>(&pcPerVertexDiffuseLightingShader::GetState_Fixed);
+        (GetStateFuncT)(&pcPerVertexDiffuseLightingShader::GetState_Fixed);
     BeginFuncArray[PIPELINE_FIXED] =
-        static_cast<BeginFuncT>(&pcPerVertexDiffuseLightingShader::Begin_Fixed);
+        (BeginFuncT)(&pcPerVertexDiffuseLightingShader::Begin_Fixed);
     EndFuncArray[PIPELINE_FIXED] =
-        static_cast<EndFuncT>(&pcPerVertexDiffuseLightingShader::End_Fixed);
+        (EndFuncT)(&pcPerVertexDiffuseLightingShader::End_Fixed);
     RenderFuncArray[PIPELINE_FIXED] =
-        static_cast<RenderFuncT>(&pcPerVertexDiffuseLightingShader::Render_Fixed);
+        (RenderFuncT)(&pcPerVertexDiffuseLightingShader::Render_Fixed);
 
     GetStateFuncArray[PIPELINE_PROG1] =
-        static_cast<GetStateFuncT>(&pcPerVertexDiffuseLightingShader::GetState_Prog1);
+        (GetStateFuncT)(&pcPerVertexDiffuseLightingShader::GetState_Prog1);
     BeginFuncArray[PIPELINE_PROG1] =
-        static_cast<BeginFuncT>(&pcPerVertexDiffuseLightingShader::Begin_Prog1);
+        (BeginFuncT)(&pcPerVertexDiffuseLightingShader::Begin_Prog1);
     EndFuncArray[PIPELINE_PROG1] =
-        static_cast<EndFuncT>(&pcPerVertexDiffuseLightingShader::End_Prog1);
+        (EndFuncT)(&pcPerVertexDiffuseLightingShader::End_Prog1);
     RenderFuncArray[PIPELINE_PROG1] =
-        static_cast<RenderFuncT>(&pcPerVertexDiffuseLightingShader::Render_Prog1);
+        (RenderFuncT)(&pcPerVertexDiffuseLightingShader::Render_Prog1);
 }
 
 // FUNCTION: SWBF2 0x00711480

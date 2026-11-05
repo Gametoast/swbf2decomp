@@ -220,7 +220,7 @@ void EntityTrap::HealthChangeCallback(bool bArg, float fDelta)
         }
         if (mBuildBox->IsRtti(EntityProp::rttiHashEntityProp))
         {
-            EntityProp* pProp = static_cast<EntityProp*>(mBuildBox);
+            EntityProp* pProp = (EntityProp*)mBuildBox;
             pProp->Deactivate();
             pProp->RemoveFromCollisionManager();
         }
@@ -763,7 +763,7 @@ bool EntityTrap::Update(float fDeltaTime)
         mUnbuiltTime = 0.0f;
         if (mBuildBox->IsRtti(EntityProp::rttiHashEntityProp))
         {
-            EntityProp* pProp = static_cast<EntityProp*>(mBuildBox);
+            EntityProp* pProp = (EntityProp*)mBuildBox;
             pProp->Activate();
             pProp->AddStaticToCollisionManager();
         }
@@ -794,7 +794,7 @@ Entity* EntityTrapClass::Build(const EntityDesc& desc)
             PblMatrix mHologram = kBoxDesc.mMatrix;
             if (pTrap->mBuildBox->IsRtti(EntityProp::rttiHashEntityProp))
             {
-                EntityProp* pProp = static_cast<EntityProp*>(pTrap->mBuildBox);
+                EntityProp* pProp = (EntityProp*)pTrap->mBuildBox;
                 if (pProp->GetModel())
                 {
                     PblMatrix mBone;
@@ -815,7 +815,7 @@ Entity* EntityTrapClass::Build(const EntityDesc& desc)
         PblVector3 vHalfSize(0.75f, 0.75f, 0.75f);
         if (pTrap->mBuildBox->IsRtti(EntityProp::rttiHashEntityProp))
         {
-            EntityProp* pProp = static_cast<EntityProp*>(pTrap->mBuildBox);
+            EntityProp* pProp = (EntityProp*)pTrap->mBuildBox;
             if (pProp->GetModel())
             {
                 PblBox kBox = pProp->GetModel()->_mModel->_TotalBoundingBox;

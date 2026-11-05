@@ -2390,7 +2390,7 @@ int EntityFlyerTakeOff(lua_State* L)
     EntityEx* pEntity = _GetEntity<EntityEx>(L, 1);
     if (pEntity && pEntity->IsRtti(EntityFlyer::rttiHashEntityFlyer))
     {
-        static_cast<EntityFlyer*>(pEntity)->TakeOff();
+        ((EntityFlyer*)pEntity)->TakeOff();
     }
     return 0;
 }
@@ -2401,7 +2401,7 @@ int EntityFlyerLand(lua_State* L)
     EntityEx* pEntity = _GetEntity<EntityEx>(L, 1);
     if (pEntity && pEntity->IsRtti(EntityFlyer::rttiHashEntityFlyer))
     {
-        static_cast<EntityFlyer*>(pEntity)->Land();
+        ((EntityFlyer*)pEntity)->Land();
     }
     return 0;
 }
@@ -2412,7 +2412,7 @@ int EntityFlyerInitAsFlying(lua_State* L)
     EntityEx* pEntity = _GetEntity<EntityEx>(L, 1);
     if (pEntity && pEntity->IsRtti(EntityFlyer::rttiHashEntityFlyer))
     {
-        static_cast<EntityFlyer*>(pEntity)->InitAsFlying();
+        ((EntityFlyer*)pEntity)->InitAsFlying();
     }
     return 0;
 }
@@ -2423,7 +2423,7 @@ int EntityFlyerInitAsLanded(lua_State* L)
     EntityEx* pEntity = _GetEntity<EntityEx>(L, 1);
     if (pEntity && pEntity->IsRtti(EntityFlyer::rttiHashEntityFlyer))
     {
-        static_cast<EntityFlyer*>(pEntity)->InitAsLanded();
+        ((EntityFlyer*)pEntity)->InitAsLanded();
     }
     return 0;
 }
@@ -3326,7 +3326,7 @@ int FillAsteroidRegion(lua_State* L)
     EntityClass* pClass = EntityClass::Find(PblHash(pcClass));
     if (pClass)
     {
-        static_cast<AsteroidClass*>(pClass)->FillRegion(pcRegion, iCount, vMin, vMax);
+        ((AsteroidClass*)pClass)->FillRegion(pcRegion, iCount, vMin, vMax);
     }
     return 0;
 }
@@ -3375,7 +3375,7 @@ int EnterVehicle(lua_State* L)
     if (pCharacter && pCharacter->mClassPtr && pCharacter->mUnit &&
         pCharacter->mClassPtr->IsRtti(EntitySoldierClass::rttiHashEntitySoldierClass))
     {
-        EntitySoldier* pSoldier = static_cast<EntitySoldier*>(pCharacter->mUnit->GetEntity());
+        EntitySoldier* pSoldier = (EntitySoldier*)pCharacter->mUnit->GetEntity();
         pSoldier->EnterVehicle(pEntity->GetGameObject());
     }
     return 0;
@@ -3389,7 +3389,7 @@ int ExitVehicle(lua_State* L)
         pCharacter->mClassPtr->IsRtti(EntitySoldierClass::rttiHashEntitySoldierClass) &&
         pCharacter->mUnit && pCharacter->mUnit->GetEntity())
     {
-        static_cast<EntitySoldier*>(pCharacter->mUnit->GetEntity())->ExitVehicle(true, true);
+        ((EntitySoldier*)pCharacter->mUnit->GetEntity())->ExitVehicle(true, true);
     }
     return 0;
 }
@@ -3411,7 +3411,7 @@ int ForceAIOutOfVehicles(lua_State* L)
             if (pCharacter->mClassPtr->IsRtti(EntitySoldierClass::rttiHashEntitySoldierClass) &&
                 pCharacter->mUnit && pCharacter->mUnit->GetEntity())
             {
-                static_cast<EntitySoldier*>(pCharacter->mUnit->GetEntity())->ExitVehicle(true, true);
+                ((EntitySoldier*)pCharacter->mUnit->GetEntity())->ExitVehicle(true, true);
             }
         }
     }
@@ -3781,7 +3781,7 @@ int FillAsteroidPath(lua_State* L)
     EntityClass* pClass = EntityClass::Find(PblHash(pcClass));
     if (pClass)
     {
-        static_cast<AsteroidClass*>(pClass)->FillPath(pcPath, fDensity, iCount, vMin, vMax);
+        ((AsteroidClass*)pClass)->FillPath(pcPath, fDensity, iCount, vMin, vMax);
     }
     return 0;
 }

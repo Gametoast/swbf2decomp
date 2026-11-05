@@ -13,6 +13,7 @@ class MountedTurretClass;
 class EntityBuildingArmedClass : public EntityBuildingClass
 {
 public:
+    static const int kMaxTurrets = 8;
     EntityBuildingArmedClass(unsigned int uHash);
 
     EntityBuildingArmedClass(EntityBuildingArmedClass* pBase, unsigned int uHash);
@@ -28,7 +29,7 @@ public:
 
     const MountedTurretClass* GetTurretClass(int iIndex) const;
 
-    MountedTurretClass* mTurretClass[8];
+    MountedTurretClass* mTurretClass[kMaxTurrets];
 
     static PblHash rttiHashEntityBuildingArmedClass;
 
@@ -57,6 +58,7 @@ class FLEffectObject;
 class EntityBuildingArmed : public EntityBuilding, public Thread
 {
 public:
+    static const int kMaxTurrets = EntityBuildingArmedClass::kMaxTurrets;
 
     EntityBuildingArmed(EntityBuildingArmedClass* pClass, const EntityDesc& desc);
 
@@ -86,7 +88,7 @@ public:
     virtual bool Update(float fDeltaTime);
 
     RedPose mPose;
-    MountedTurret* mTurret[8];
+    MountedTurret* mTurret[kMaxTurrets];
     int mNumTurrets;
     PblHandle<FLEffectObject> mSmokePlume;
     bool mNoAIBoard : 1;

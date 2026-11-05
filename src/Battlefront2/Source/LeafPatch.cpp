@@ -299,8 +299,13 @@ void LeafPatchClass::Init()
 
     mParticle = new LeafParticle[mNumParticles];
 
+    float fOffsetZ;
+    float fOffsetY;
+    float fOffsetX;
     const float fInvHeightScale = 1.0f / mHeightScale;
-    const PblVector3 vOffset(mOffset.x, mOffset.y * fInvHeightScale, mOffset.z);
+    fOffsetZ = mOffset.z;
+    fOffsetX = mOffset.x;
+    fOffsetY = mOffset.y * fInvHeightScale;
 
     PblRandom rand(mSeed ^ 0xC71C2830u);
     rand.GetInt();
@@ -382,9 +387,9 @@ void LeafPatchClass::Init()
         mParticle[i].mTime = rand.GetFloat() * 100.0f;
         mParticle[i].mTexture = (unsigned char)(i % 4);
         PblVector3& vPos = mParticle[i].mPos;
-        vPos.x += vOffset.x;
-        vPos.y += vOffset.y;
-        vPos.z += vOffset.z;
+        vPos.x += fOffsetX;
+        vPos.y += fOffsetY;
+        vPos.z += fOffsetZ;
 
         const float fHalfSize = mParticle[i].mSize * 0.5f;
         const float fLowX = mParticle[i].mPos.x - fHalfSize;
@@ -473,7 +478,7 @@ LeafPatch::LeafPatch(LeafPatchClass* pClass, const PblMatrix& matrix)
         SetRenderPos(vCenter);
     }
     SetRenderRadius(mClass->mBoundingRadius);
-    static_cast<RedSceneObject*>(this)->Activate();
+    ((RedSceneObject*)this)->Activate();
 
     mLod = 0.0f;
     mNumFallingLeaves = 0;

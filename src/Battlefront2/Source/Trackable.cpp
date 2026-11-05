@@ -212,7 +212,7 @@ bool Trackable::CheckFirstPerson(int iPlayer) const
             }
             if (iPlayer >= 0)
             {
-                if (NetGame::IsEnabled() && !NetGame::IsClient() &&
+                if (NetGame::IsEnabled() && !(netEnabledNext && netClientActive) &&
                     !(NetGame::IsHost() && NetGame::IsOneWorld() && !NetGame::IsDedicated()))
                 {
                     return NetGame::IsCockpitCam(iPlayer);
@@ -338,10 +338,8 @@ PblVector3 CameraTrackSetting::CalcCameraSafePoint(const PblMatrix& rMatrix)
 // FUNCTION: SWBF2 0x00658b80
 PblVector3 CameraTrackSetting::CalcCameraPoint(const PblMatrix& rMatrix, const PblMatrix& rRotation)
 {
-    PblVector3 vOffset;
-    D3DXVec3TransformNormal(reinterpret_cast<D3DXVECTOR3*>(&vOffset), reinterpret_cast<const D3DXVECTOR3*>(&mCameraTrackOffset), reinterpret_cast<const D3DXMATRIX*>(&rRotation));
-    PblVector3 vCenter;
-    D3DXVec3TransformCoord(reinterpret_cast<D3DXVECTOR3*>(&vCenter), reinterpret_cast<const D3DXVECTOR3*>(&mCameraTrackCenter), reinterpret_cast<const D3DXMATRIX*>(&rMatrix));
+    PblVector3 vOffset = rRotation.ApplyRotation(mCameraTrackOffset);
+    PblVector3 vCenter = rMatrix.ApplyTransform(mCameraTrackCenter);
     PblVector3 vPoint;
     vPoint.x = vOffset.x + vCenter.x;
     vPoint.y = vCenter.y + vOffset.y;

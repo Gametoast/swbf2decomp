@@ -91,7 +91,7 @@ bool SubstreamSplitter::IsQueueFull() const
 void __cdecl SubstreamSplitter::PacketCompleteCallback(StreamPacket* const  ,
                                                        void* const pData)
 {
-    static_cast<StreamPacket*>(pData)->Unlock();
+    ((StreamPacket*)pData)->Unlock();
 }
 
 // FUNCTION: SWBF2 0x0074b0d0

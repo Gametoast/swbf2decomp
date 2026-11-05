@@ -216,31 +216,31 @@ float GameVoiceChat::Encoder::GetMaxOutputPacketSizeMs() const
 // FUNCTION: SWBF2 0x0053da70
 bool VoiceChat::Encoder::Open(unsigned int captureDeviceIndex, float minBufferSizeMs, unsigned int minBuffers)
 {
-    return static_cast<GameVoiceChat::Encoder*>(this)->Open(captureDeviceIndex, minBufferSizeMs, minBuffers);
+    return ((GameVoiceChat::Encoder*)this)->Open(captureDeviceIndex, minBufferSizeMs, minBuffers);
 }
 
 // FUNCTION: SWBF2 0x0053daa0
 void VoiceChat::Encoder::Close()
 {
-    static_cast<GameVoiceChat::Encoder*>(this)->Close();
+    ((GameVoiceChat::Encoder*)this)->Close();
 }
 
 // FUNCTION: SWBF2 0x0053dae0
 void VoiceChat::Encoder::Stop()
 {
-    static_cast<GameVoiceChat::Encoder*>(this)->Stop();
+    ((GameVoiceChat::Encoder*)this)->Stop();
 }
 
 // FUNCTION: SWBF2 0x0053db10
 unsigned int VoiceChat::Encoder::GetMaxOutputPacketSizeBytes() const
 {
-    return static_cast<const GameVoiceChat::Encoder*>(this)->GetMaxOutputPacketSizeBytes();
+    return ((const GameVoiceChat::Encoder*)this)->GetMaxOutputPacketSizeBytes();
 }
 
 // FUNCTION: SWBF2 0x0053db20
 float VoiceChat::Encoder::GetMaxOutputPacketSizeMs() const
 {
-    return static_cast<const GameVoiceChat::Encoder*>(this)->GetMaxOutputPacketSizeMs();
+    return ((const GameVoiceChat::Encoder*)this)->GetMaxOutputPacketSizeMs();
 }
 
 namespace Snd
@@ -296,7 +296,7 @@ bool GameVoiceChat::Encoder::IsEnabled()
 // FUNCTION: SWBF2 0x0053daf0
 bool VoiceChat::Encoder::IsEnabled()
 {
-    return static_cast<GameVoiceChat::Encoder*>(this)->IsEnabled();
+    return ((GameVoiceChat::Encoder*)this)->IsEnabled();
 }
 
 // FUNCTION: SWBF2 0x0053d7c0
@@ -343,20 +343,20 @@ void GameVoiceChat::Encoder::Play()
 // FUNCTION: SWBF2 0x0053dab0
 VoiceChat::AudioPacket* VoiceChat::Encoder::GetData()
 {
-    return static_cast<GameVoiceChat::Encoder*>(this)->GetData();
+    return ((GameVoiceChat::Encoder*)this)->GetData();
 }
 
 // FUNCTION: SWBF2 0x0053dad0
 void VoiceChat::Encoder::Play()
 {
-    static_cast<GameVoiceChat::Encoder*>(this)->Play();
+    ((GameVoiceChat::Encoder*)this)->Play();
 }
 
 // FUNCTION: SWBF2 0x0053dac0
-void VoiceChat::Encoder::FreeAudioPacket(VoiceChat::AudioPacket* packet) { static_cast<GameVoiceChat::Encoder*>(this)->FreeAudioPacket(packet); }
+void VoiceChat::Encoder::FreeAudioPacket(VoiceChat::AudioPacket* packet) { ((GameVoiceChat::Encoder*)this)->FreeAudioPacket(packet); }
 
 // FUNCTION: SWBF2 0x0053db00
 void VoiceChat::Encoder::SetGain(float fGain)
 {
-    static_cast<GameVoiceChat::Encoder*>(this)->SetGain(fGain);
+    ((GameVoiceChat::Encoder*)this)->SetGain(fGain);
 }

@@ -60,7 +60,7 @@ namespace
 {
 CollisionObject* FlagCollision(FlagItem* pItem)
 {
-    return static_cast<CollisionObject*>(pItem);
+    return (CollisionObject*)pItem;
 }
 
 }
@@ -76,11 +76,11 @@ GameObject* FlagItem::GetCarrier()
     }
     if (pCarrier->mVehicle)
     {
-        return static_cast<Trackable*>(pCarrier->mVehicle)->GetGameObject();
+        return ((Trackable*)pCarrier->mVehicle)->GetGameObject();
     }
     if (pCarrier->mUnit)
     {
-        return static_cast<Trackable*>(pCarrier->mUnit)->GetGameObject();
+        return ((Trackable*)pCarrier->mUnit)->GetGameObject();
     }
     ResetFlag();
     return 0;
@@ -104,7 +104,7 @@ bool FlagItem::Drop()
         const PblVector3& vPos = pCarrier->mUnit->GetMatrix().GetTranslation();
         PblVector3 vDropPos(vPos.x + 0.0f, vPos.y + 1.0f, vPos.z + 0.0f);
         static_cast<CollisionObject*>(pItem)->SetMatrix(PblMatrix(pItem->mStartRotation, vDropPos));
-        reinterpret_cast<EntityItem*>(pItem)->mVelocity.SetAll(0.0f);
+        reinterpret_cast<EntityItem*>(pItem)->mVelocity.Reset();
     }
 
     pItem->mLastCarrier = reinterpret_cast<EntityItem*>(pItem)->mOwner;
@@ -121,7 +121,7 @@ bool FlagItem::Drop()
     }
     else
     {
-        static_cast<RedSceneObject*>(pItem)->Activate();
+        ((RedSceneObject*)pItem)->Activate();
         pItem->SetupCollisionGeometry();
     }
 
@@ -174,7 +174,7 @@ void FlagItem::ResetFlag()
     }
     else
     {
-        static_cast<RedSceneObject*>(pItem)->Activate();
+        ((RedSceneObject*)pItem)->Activate();
         pItem->SetupCollisionGeometry();
     }
     reinterpret_cast<EntityGeometry*>(pItem)->SetVelocity(gVectorZero);
@@ -372,7 +372,7 @@ FlagItem::FlagGameplayType FlagItem::sFlagGameplayType;
 // FUNCTION: SWBF2 0x005250f0
 void FlagItem::RenderHelper(unsigned char ucLod, float fAlpha, unsigned int uiFlags)
 {
-    if (static_cast<const FlagItemClass*>(mEntityClass)->mTeamColorize[mOwner != 0])
+    if (((const FlagItemClass*)mEntityClass)->mTeamColorize[mOwner != 0])
     {
         int iLocal = NetGame::GetLocalIndex(CameraManager::sInstance->mUpdatedCameraId);
         int iSpectator = NetGame::GetSpectator(iLocal);
@@ -381,8 +381,8 @@ void FlagItem::RenderHelper(unsigned char ucLod, float fAlpha, unsigned int uiFl
             iLocal = iSpectator;
         }
         Team* pTeam;
-        Character* pCharacter = Character::FindPlayer(iLocal);
-        if (pCharacter)
+        Character* pCharacter = Character::GetPtr(iLocal);
+        if (pCharacter && pCharacter->mPlayerId == iLocal)
         {
             pTeam = pCharacter->mTeamPtr;
         }
@@ -394,7 +394,7 @@ void FlagItem::RenderHelper(unsigned char ucLod, float fAlpha, unsigned int uiFl
         RedColor color = pTeam->GetColor(iFlagTeam);
         const float fLife = mLifeTimer;
         const float fFade = fLife + 1.0f > 1.0f ? 1.0f : fLife + 1.0f;
-        color.a = static_cast<unsigned char>(static_cast<int>(color.a * fAlpha * fFade));
+        color.a = (unsigned char)((int)(color.a * fAlpha * fFade));
         const PblMatrix mWorld = mMatrix;
         if (mModel->mClothCount)
         {
@@ -426,7 +426,7 @@ void FlagItem::RenderHelper(unsigned char ucLod, float fAlpha, unsigned int uiFl
                 if (mClothPiece[i])
                 {
                     mClothPiece[i]->Render(mWorld, 0, ucLod,
-                                      RedColor(RedColor::WHITE, static_cast<unsigned char>(static_cast<int>(fClothAlpha * 255.0f))),
+                                      RedColor(RedColor::WHITE, (unsigned char)((int)(fClothAlpha * 255.0f))),
                                       uiFlags, 1);
                 }
             }
@@ -617,7 +617,7 @@ FlagItem::FlagItem(FlagItemClass* pClass, const EntityDesc& desc)
         EntityClass* pClothClass = EntityClass::Find(mModel->mClothList[i]);
         if (pClothClass)
         {
-            mClothPiece[i] = static_cast<EntityCloth*>(pClothClass->Build(desc));
+            mClothPiece[i] = (EntityCloth*)pClothClass->Build(desc);
         }
     }
 
@@ -695,7 +695,7 @@ bool FlagItem::PickUp(GameObject* pObject)
                         }
                         else
                         {
-                            static_cast<RedSceneObject*>(this)->Deactivate();
+                            ((RedSceneObject*)this)->Deactivate();
                         }
                         if (m_pLight)
                         {
@@ -786,7 +786,7 @@ bool FlagItem::Update(float fDeltaTime)
         Controllable* pControllable = mOwner->mVehicle ? mOwner->mVehicle : mOwner->mUnit;
         if (pControllable)
         {
-            GameObject* pCarrier = static_cast<Trackable*>(pControllable)->GetGameObject();
+            GameObject* pCarrier = ((Trackable*)pControllable)->GetGameObject();
             if (pCarrier)
             {
                 if (!pCarrier->IsAlive())
@@ -826,11 +826,11 @@ bool FlagItem::Update(float fDeltaTime)
     const PblVector3& vPos = mMatrix.GetTranslation();
     if (mAmbientSound.GetPlaying())
     {
-        mAmbientSound.Update(&static_cast<FlagItemClass*>(mClass)->mAmbientSound, &vPos, &mVelocity);
+        mAmbientSound.Update(&((FlagItemClass*)mClass)->mAmbientSound, &vPos, &mVelocity);
     }
     else
     {
-        mAmbientSound.Play(&static_cast<FlagItemClass*>(mClass)->mAmbientSound, &vPos, &mVelocity, true);
+        mAmbientSound.Play(&((FlagItemClass*)mClass)->mAmbientSound, &vPos, &mVelocity, true);
     }
 
     if (!EntityItem::Update(fDeltaTime) && !mOwner)
@@ -900,13 +900,13 @@ void FlagItem::SetModel(const GameModel* pModel)
         if (mModel->mClothCount)
         {
             EntityDesc desc;
-            desc.mMatrix = static_cast<CollisionObject*>(this)->GetMatrix();
+            desc.mMatrix = ((CollisionObject*)this)->GetMatrix();
             for (unsigned int i = 0; i < mModel->mClothCount; ++i)
             {
                 EntityClass* pClothClass = EntityClass::Find(mModel->mClothList[i]);
                 if (pClothClass)
                 {
-                    mClothPiece[i] = static_cast<EntityCloth*>(pClothClass->Build(desc));
+                    mClothPiece[i] = (EntityCloth*)pClothClass->Build(desc);
                 }
             }
         }

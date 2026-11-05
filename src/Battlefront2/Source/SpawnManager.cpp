@@ -236,7 +236,7 @@ void SpawnManager::SetupSoldierMemoryPool()
 // FUNCTION: SWBF2 0x005b41d0
 int Team::FindSide(Side eSide)
 {
-    for (int i = 0; i < 8; i++)
+    for (int i = 0; i < Team::kMaxTeams; i++)
     {
         if (sTeams[i]->GetSide() == eSide)
         {
@@ -252,7 +252,7 @@ void SpawnManager::InitialUpdate()
     if (NetGame::IsEnabled() && NetGame::IsClient() && !NetGame::IsOneWorld())
     {
         SpawnManager* pHost = sHostInstance;
-        for (unsigned int i = 0; i < 8; ++i)
+        for (unsigned int i = 0; i < Team::kMaxTeams; ++i)
         {
             mMaxUnitCount[i] = pHost->mMaxUnitCount[i];
             mCycleDelay[i] = pHost->mCycleDelay[i];
@@ -262,7 +262,7 @@ void SpawnManager::InitialUpdate()
 
     Character::CreateAll(GetTotalCharacterCount());
 
-    for (unsigned int i = 0; i < 8; ++i)
+    for (unsigned int i = 0; i < Team::kMaxTeams; ++i)
     {
         mCycleTimer[i] = mCycleDelay[i];
         if (gAttractMode || !NetGame::IsEnabled())
@@ -314,7 +314,7 @@ void SpawnManager::InitialUpdate()
             int iSlot = PlayerPrefs::FindByPlayerId(i);
             if (iSlot >= 0)
             {
-                iTeam = Team::FindSide(static_cast<Team::Side>(GameLoop::GetMetagameSide(iSlot)));
+                iTeam = Team::FindSide((Team::Side)GameLoop::GetMetagameSide(iSlot));
             }
             AddPlayerCharacter(iTeam, i);
         }
@@ -333,7 +333,7 @@ void SpawnManager::InitialUpdate()
         }
     }
 
-    for (int iTeam = 1; iTeam < 8; ++iTeam)
+    for (int iTeam = 1; iTeam < Team::kMaxTeams; ++iTeam)
     {
         for (int i = mCurrentUnitCount[iTeam]; i < mMaxUnitCount[iTeam]; ++i)
         {
@@ -362,7 +362,7 @@ bool SpawnManager::Update(float fDeltaTime)
     mAllyUnitCount = mAllyUnitCount < mMaxUnitCount[3] ? mAllyUnitCount : mMaxUnitCount[3];
 
     bool bPreGame = NetGame::IsPreGame();
-    for (int i = 0; i < 8; ++i)
+    for (int i = 0; i < Team::kMaxTeams; ++i)
     {
         mCycleTimer[i] -= fDeltaTime;
         if (mCycleTimer[i] <= 0.0f)

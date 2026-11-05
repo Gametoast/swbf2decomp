@@ -77,13 +77,6 @@ GameObject* LockOnManager::GetLockedTarget() const
     return mLockedObj;
 }
 
-// FUNCTION: SWBF2 0x00483540
-void LockOnManager::ForceNewTargetLock(GameObject* pObject)
-{
-    mForceNewLock = 5;
-    mForceNewLockTarget = pObject;
-}
-
 // FUNCTION: SWBF2 0x00483580
 unsigned int LockOnManager::GetTargetLockedChangedTurn() const
 {
@@ -124,7 +117,7 @@ void Controllable::ClearControllable()
     mControlStrafe = 0.0f;
     mControlTurn = 0.0f;
     mControlPitch = 0.0f;
-    for (int i = 0; i < 2; ++i)
+    for (int i = 0; i < kNumWeaponChannels; ++i)
     {
         mControlSwitch[i] = 0.0f;
         mTriggerControlSwitch[i].Clear();
@@ -929,7 +922,7 @@ void Controllable::GetPilotMatrix(const PblMatrix& mIn, PblMatrix& mOut)
         const PblMatrix& mPilotMatrix = pPilot->GetMatrix();
         PblMatrix mResult;
         PblMatrix mRelative;
-        D3DXMatrixMultiply(reinterpret_cast<D3DXMATRIX*>(&mResult), reinterpret_cast<const D3DXMATRIX*>(&mPilotMatrix), reinterpret_cast<const D3DXMATRIX*>(&static_cast<EntitySoldier*>(pPilot)->mLastVehicleMatrix.GetInverseFast()));
+        D3DXMatrixMultiply(reinterpret_cast<D3DXMATRIX*>(&mResult), reinterpret_cast<const D3DXMATRIX*>(&mPilotMatrix), reinterpret_cast<const D3DXMATRIX*>(&((EntitySoldier*)pPilot)->mLastVehicleMatrix.GetInverseFast()));
         mRelative = mResult;
         D3DXMatrixMultiply(reinterpret_cast<D3DXMATRIX*>(&mResult), reinterpret_cast<const D3DXMATRIX*>(&mRelative), reinterpret_cast<const D3DXMATRIX*>(&mIn));
         mOut = mResult;

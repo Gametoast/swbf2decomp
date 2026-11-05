@@ -1136,34 +1136,33 @@ void SoldierAnimator::ApplyProceduralAnimationAndBuildWorldMatrices(float fDelta
         fBlend = mAnimationTimerUpper / mBlendDurationRotate;
     }
 
-    unsigned int uiAimState = m_uiAimState;
     float fHeadWeight = 0.0f;
     float fTorsoWeight = 0.0f;
-    if (uiAimState & 1)
+    if (m_uiAimState & 1)
     {
-        if ((uiAimState & 0x30) == 0x30)
+        if ((m_uiAimState & 0x30) == 0x30)
         {
             fHeadWeight = fBlend;
             fTorsoWeight = 1.0f - fBlend;
         }
         else
         {
-            fHeadWeight = (uiAimState & 0x10) ? fBlend : 1.0f;
+            fHeadWeight = (m_uiAimState & 0x10) ? fBlend : 1.0f;
         }
     }
-    else if (uiAimState & 2)
+    else if (m_uiAimState & 2)
     {
-        if ((uiAimState & 0x30) == 0x30)
+        if ((m_uiAimState & 0x30) == 0x30)
         {
             fTorsoWeight = fBlend;
             fHeadWeight = 1.0f - fBlend;
         }
         else
         {
-            fTorsoWeight = (uiAimState & 0x10) ? fBlend : 1.0f;
+            fTorsoWeight = (m_uiAimState & 0x10) ? fBlend : 1.0f;
         }
     }
-    else if (uiAimState & 0x10)
+    else if (m_uiAimState & 0x10)
     {
         fHeadWeight = 1.0f - fBlend;
     }

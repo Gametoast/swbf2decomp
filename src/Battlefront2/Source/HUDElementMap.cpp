@@ -204,7 +204,7 @@ HUD::Item* HUD::ElementMap::Factory::CreateItem(const char* const pName, ItemCal
 // FUNCTION: SWBF2 0x0054ff60
 HUD::ElementMap::ElementMap(const char* const pName, Factory::ItemCallback pCallback,
                             void* const pUserData)
-    : HUD::ElementGroupPlayer(*static_cast<RedGroupElement*>(this), pName, pCallback, pUserData)
+    : HUD::ElementGroupPlayer(*(RedGroupElement*)this, pName, pCallback, pUserData)
 {
     char buffer[256];
     unsigned int i;
@@ -351,14 +351,12 @@ HUD::ElementMap::ElementMap(const char* const pName, Factory::ItemCallback pCall
 
     mPostFlashRate = 10.0f;
     mPostFlashRadius = 3.0f;
-    RedColor flashColor;
-    flashColor.b = 0xd5;
-    flashColor.g = 0x56;
-    flashColor.r = 0x01;
-    flashColor.a = 0xff;
-    mPostFlashColor = flashColor;
+    mPostFlashColor.b = 0xd5;
+    mPostFlashColor.g = 0x56;
+    mPostFlashColor.r = 0x01;
+    mPostFlashColor.a = 0xff;
 
-    for (i = 0; i < 16; ++i)
+    for (i = 0; i < kMaxPosts; ++i)
     {
         mPost[i].CreateHotSpot((sViewportWidth / 640.0f - 1.0f) * 3.0f * sSymbolScale[uScaleIndex]);
     }
@@ -379,7 +377,7 @@ HUD::ElementMap::ElementMap(const char* const pName, Factory::ItemCallback pCall
         ElementGroupBase::AddElement(pPostText);
         pPostText->mWriteEnabled = false;
     }
-    for (i = 0; i < 16; ++i)
+    for (i = 0; i < kMaxPosts; ++i)
     {
         mPostTextAll[mMode].CopyToTextElement(mPostText[i]);
         RedGroupElement::AddElement(&mPostText[i]);
@@ -511,7 +509,7 @@ void HUD::ElementMap::Read(PblConfig& config, Factory::ItemCallback pCallback, v
                 {
                     PblConfig scope(config.ReadNextScope(), true);
                     mPostTextAll[i].Read(scope, 0, 0);
-                    for (unsigned int j = 0; j < 16; ++j)
+                    for (unsigned int j = 0; j < kMaxPosts; ++j)
                     {
                         mPostTextAll[mMode].CopyToTextElement(mPostText[j]);
                     }
@@ -816,7 +814,7 @@ void HUD::ElementMap::Update(const float fElapsed)
                 const PblVector3& vVelocity = pControlled->GetVelocity();
                 const float fSpeed = LengthXZ(vVelocity);
 
-                Controllable* pPilot = 0;
+                const EntityClass* pClass;
                 const PblList<Controllable>& list = pControlled->GetControllableList();
                 if (list.GetCount())
                 {
@@ -824,17 +822,16 @@ void HUD::ElementMap::Update(const float fElapsed)
                     {
                         if (itor->GetPlayerId() >= 0)
                         {
-                            pPilot = itor;
-                            break;
+                            pClass = itor->GetEntity()->GetEntityClass();
+                            goto haveClass;
                         }
                     }
                 }
-                const EntityClass* pClass = pPilot ? pPilot->GetEntity()->GetEntityClass()
-                                                   : pControlled->GetEntityClass();
+                pClass = pControlled->GetEntityClass();
+            haveClass:
                 const EntityClass::MapParams& params = pClass->mMapParams;
 
-                float fFactor = (fSpeed - params.mSpeedMin) / (params.mSpeedMax - params.mSpeedMin);
-                fFactor = fFactor < 0.0f ? 0.0f : (fFactor > 1.0f ? 1.0f : fFactor);
+                const float fFactor = Clamp((fSpeed - params.mSpeedMin) / (params.mSpeedMax - params.mSpeedMin), 0.0f, 1.0f);
                 fRadius = (params.mViewRangeMax - params.mViewRangeMin) * fFactor + params.mViewRangeMin;
             }
 
@@ -1069,10 +1066,12 @@ void HUD::ElementMap::UpdateTargetIcons(const Controllable* pPlayer)
     const bool bEasy = mPlayerIndex >= 0 && GameLoop::mbHistoricalRules &&
                        PlayerProfile::GetProfile(mPlayerIndex)->mGameOptions.mCurDiffLevel <= eDIFFICULTY_MEDIUM;
 
-    for (int i = 0; i < TargetManager::MAX_TARGETS; ++i)
+    RedBitmapElement* pBitmapIt = mTarget;
+    for (TargetManager::Target* pTargetIt = TargetManager::_gTarget;
+         pTargetIt < TargetManager::_gTarget + TargetManager::MAX_TARGETS; ++pTargetIt, ++pBitmapIt)
     {
-        TargetManager::Target& target = TargetManager::_gTarget[i];
-        RedBitmapElement& bitmap = mTarget[i];
+        TargetManager::Target& target = *pTargetIt;
+        RedBitmapElement& bitmap = *pBitmapIt;
 
         GameObject* pObject = target.actor;
         if (!pObject)
@@ -1098,8 +1097,19 @@ void HUD::ElementMap::UpdateTargetIcons(const Controllable* pPlayer)
             GameObject* pTarget = target.actor;
             const PblMatrix& mPlayer = pPlayer->GetMatrix();
             const PblMatrix& mTargetMatrix = pTarget->GetMatrix();
-            vDelta = mTargetMatrix.GetTranslation() - mPlayer.GetTranslation();
-            fDistance = LengthEst(vDelta);
+            vDelta = PblVector3(mTargetMatrix.m[3][0] - mPlayer.m[3][0], mTargetMatrix.m[3][1] - mPlayer.m[3][1],
+                                mTargetMatrix.m[3][2] - mPlayer.m[3][2]);
+
+            const float fLength2EstAlpha = 0.94805944f;
+            const float fLength2EstBeta = 0.39269909f;
+            float fA = fabsf(vDelta.x);
+            float fB = fabsf(vDelta.y);
+            float fEst = fA > fB ? fA * fLength2EstAlpha + fB * fLength2EstBeta
+                                 : fA * fLength2EstBeta + fB * fLength2EstAlpha;
+            fA = fabsf(fEst);
+            fB = fabsf(vDelta.z);
+            fDistance = fA > fB ? fA * fLength2EstAlpha + fB * fLength2EstBeta
+                                : fA * fLength2EstBeta + fB * fLength2EstAlpha;
         }
         else
         {
@@ -1128,73 +1138,86 @@ void HUD::ElementMap::UpdateTargetIcons(const Controllable* pPlayer)
             if ((!pPlayer || (!bSensorArray && !bEasy && !IsInRadarRange(pPlayer, target, vDelta, fDistance))) &&
                 !netIsDedicated && fScale <= 0.0f)
             {
-                bitmap.Enable(false);
-                continue;
+                goto hideTarget;
             }
             GameObject* pTarget = target.actor;
             if (pTarget->IsRtti(EntitySoldier::rttiHashEntitySoldier) &&
                 reinterpret_cast<const EntitySoldier*>((GameObject*)target.actor)->GetInvisibilityFactor() > 0.0f)
             {
-                bitmap.Enable(false);
-                continue;
+                goto hideTarget;
             }
             bitmap.Enable(true);
         }
 
-        const PblMatrix& mTargetMatrix = ((GameObject*)target.actor)->GetMatrix();
-        float fX, fY;
-        if (!CalculateScreenCoordinates(mTargetMatrix.GetTranslation(), fX, fY, false, 0))
         {
-            bitmap.Enable(false);
-            continue;
-        }
-
-        const bool bBuilding = ((GameObject*)target.actor)->IsRtti(EntityBuilding::rttiHashEntityBuilding);
-        if (((GameObject*)target.actor)->IsAlive())
-        {
-            bitmap.SetColorOnly(Interpolate(color, mTargetFireColor, fScale));
-        }
-        else
-        {
-            if (bBuilding && target.actor->mEntityClass->mRemoveFromMapWhenDead)
+            const PblMatrix& mTargetMatrix = ((GameObject*)target.actor)->GetMatrix();
+            float fX, fY;
+            if (!CalculateScreenCoordinates(mTargetMatrix.GetTranslation(), fX, fY, false, 0))
             {
-                bitmap.Enable(false);
+                goto hideTarget;
+            }
+
+            const bool bBuilding = ((GameObject*)target.actor)->IsRtti(EntityBuilding::rttiHashEntityBuilding);
+            if (((GameObject*)target.actor)->IsAlive())
+            {
+                bitmap.SetColorOnly(Interpolate(color, mTargetFireColor, fScale));
+            }
+            else
+            {
+                if (bBuilding && target.actor->mEntityClass->mRemoveFromMapWhenDead)
+                {
+                    goto hideTarget;
+                }
+                bitmap.SetColorOnly(Interpolate(color, RedColor::DKGREY, 0.5f));
+            }
+
+            if (bBuilding && mNextSlowUpdate > 0.0f)
+            {
                 continue;
             }
-            bitmap.SetColorOnly(Interpolate(color, RedColor::DKGREY, 0.5f));
-        }
 
-        if (bBuilding && mNextSlowUpdate > 0.0f)
-        {
+            const float fSize = target.mapParams.mScale;
+            if (fSize == 0.0f)
+            {
+                goto hideTarget;
+            }
+
+            const PblMatrix& mHeading = ((GameObject*)target.actor)->GetMatrix();
+            PblVector3 vDirection(-mHeading.m[2][0], 0.0f, -mHeading.m[2][2]);
+            vDirection = NormalizeEst(vDirection);
+            PblMatrix matrix;
+            matrix.m[0][0] = vDirection.z * fSize;
+            matrix.m[0][1] = -(vDirection.x * fSize);
+            matrix.m[0][2] = 0.0f;
+            matrix.m[0][3] = 0.0f;
+            matrix.m[1][0] = vDirection.x * fSize;
+            matrix.m[1][1] = vDirection.z * fSize;
+            matrix.m[1][2] = 0.0f;
+            matrix.m[1][3] = 0.0f;
+            matrix.m[2][0] = 0.0f;
+            matrix.m[2][1] = 0.0f;
+            matrix.m[2][2] = fSize;
+            matrix.m[2][3] = 0.0f;
+            matrix.m[3][0] = fX;
+            matrix.m[3][1] = fY;
+            matrix.m[3][2] = 0.0f;
+            matrix.m[3][3] = 1.0f;
+            bitmap.SetMatrix(matrix);
             continue;
         }
-
-        const float fSize = target.mapParams.mScale;
-        if (fSize == 0.0f)
-        {
-            bitmap.Enable(false);
-            continue;
-        }
-
-        const PblMatrix& mHeading = ((GameObject*)target.actor)->GetMatrix();
-        PblVector3 vDirection;
-        vDirection = NormalizeEst(PblVector3(-mHeading.m[2][0], 0.0f, -mHeading.m[2][2]));
-        PblMatrix matrix;
-        matrix.m[0][0] = vDirection.z * fSize;
-        matrix.m[0][1] = -(vDirection.x * fSize);
-        matrix.m[0][2] = 0.0f;
-        matrix.m[0][3] = 0.0f;
-        matrix.m[1][0] = vDirection.x * fSize;
-        matrix.m[1][1] = vDirection.z * fSize;
-        matrix.m[1][2] = 0.0f;
-        matrix.m[1][3] = 0.0f;
-        matrix.m[2][0] = 0.0f;
-        matrix.m[2][1] = 0.0f;
-        matrix.m[2][2] = fSize;
-        matrix.m[2][3] = 0.0f;
-        matrix.SetTranslation(fX, fY, 0.0f, 1.0f);
-        bitmap.SetMatrix(matrix);
+    hideTarget:
+        bitmap.Enable(false);
     }
+}
+
+static inline float Length2EstXZ(float fX, float fZ)
+{
+    const float fLength2EstAlpha = 0.94805944f;
+    const float fLength2EstBeta = 0.39269909f;
+    const float fA = (float)fabs((double)fX);
+    const float fB = (float)fabs((double)fZ);
+    return fA > fB ? fA * fLength2EstAlpha + fB * fLength2EstBeta
+                   : fA * fLength2EstBeta + fB * fLength2EstAlpha;
 }
 
 // FUNCTION: SWBF2 0x005538a0
@@ -1410,7 +1433,7 @@ void HUD::ElementMap::UpdateMarkerIcons()
 
         RedColor color = marker.color;
         float fTime;
-        if (marker.flashAlpha || marker.pulseSize)
+        if (marker.pulseSize || marker.flashAlpha)
         {
             fTime = fmodf(GameLoop::GetMissionTime(), 1.0f);
         }
@@ -1648,7 +1671,7 @@ void HUD::ElementMap::EnableModeElements(bool bEnable)
         mPostAll[mMode].CopyToBitmaps(mPost, 16, 0, false);
         mPostSelectAll[mMode].CopyToBitmaps(mPostSelect, 16, 0, false);
         mMarkerAll[mMode].CopyToBitmaps(mMarker, 32, 0, false);
-        for (unsigned int i = 0; i < 16; ++i)
+        for (unsigned int i = 0; i < kMaxPosts; ++i)
         {
             RedTextElement* pText = &mPostText[i];
             pText->Enable(false);

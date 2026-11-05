@@ -457,7 +457,9 @@ void pcRefractionShader::RenderZPrepass(const RenderItem* pItem) const
     RedRenderer::pcSetCullMode((uiMatFlags & 0x10000) ? PCREDCULL_NONE : PCREDCULL_BACK);
 
     const unsigned int uiAlphaTest = (uiMatFlags >> 1) & 1;
-    if (uiAlphaTest == 1)
+    switch (uiAlphaTest)
+    {
+    case 1:
     {
         RedColor color = pItem->tweakColor * pMaterial->diffuseColor;
 
@@ -497,6 +499,8 @@ void pcRefractionShader::RenderZPrepass(const RenderItem* pItem) const
             pRegs[41].SetFloats(0.0f, 1.0f, 0.0f, 0.0f);
         }
         RedRenderer::pcUnlockVertexShaderConstants(pRegs);
+    }
+    break;
     }
 
     RedRenderer::pcLoadFormat(m_pZPrepassVertexInputFormat);
@@ -859,22 +863,22 @@ void pcRefractionShader::_Init(unsigned int uiFlags,
 void pcRefractionShader::_InitPipelineFuncArray()
 {
     GetStateFuncArray[PIPELINE_FIXED] =
-        static_cast<GetStateFuncT>(&pcRefractionShader::GetState_Fixed);
+        (GetStateFuncT)(&pcRefractionShader::GetState_Fixed);
     BeginFuncArray[PIPELINE_FIXED] =
-        static_cast<BeginFuncT>(&pcRefractionShader::Begin_Fixed);
+        (BeginFuncT)(&pcRefractionShader::Begin_Fixed);
     EndFuncArray[PIPELINE_FIXED] =
-        static_cast<EndFuncT>(&pcRefractionShader::End_Fixed);
+        (EndFuncT)(&pcRefractionShader::End_Fixed);
     RenderFuncArray[PIPELINE_FIXED] =
-        static_cast<RenderFuncT>(&pcRefractionShader::Render_Fixed);
+        (RenderFuncT)(&pcRefractionShader::Render_Fixed);
 
     GetStateFuncArray[PIPELINE_PROG1] =
-        static_cast<GetStateFuncT>(&pcRefractionShader::GetState_Prog1);
+        (GetStateFuncT)(&pcRefractionShader::GetState_Prog1);
     BeginFuncArray[PIPELINE_PROG1] =
-        static_cast<BeginFuncT>(&pcRefractionShader::Begin_Prog1);
+        (BeginFuncT)(&pcRefractionShader::Begin_Prog1);
     EndFuncArray[PIPELINE_PROG1] =
-        static_cast<EndFuncT>(&pcRefractionShader::End_Prog1);
+        (EndFuncT)(&pcRefractionShader::End_Prog1);
     RenderFuncArray[PIPELINE_PROG1] =
-        static_cast<RenderFuncT>(&pcRefractionShader::Render_Prog1);
+        (RenderFuncT)(&pcRefractionShader::Render_Prog1);
 }
 
 // FUNCTION: SWBF2 0x0070edd0

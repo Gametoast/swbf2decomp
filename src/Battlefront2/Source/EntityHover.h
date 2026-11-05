@@ -35,6 +35,7 @@ class EntityHoverClass : public GameObjectClass,
                          public VehicleEngineClass
 {
 public:
+    static const int kMaxTurrets = 8;
     virtual ~EntityHoverClass();
 
 
@@ -71,7 +72,7 @@ public:
     // FUNCTION: SWBF2 0x00478e60
     virtual const ControllableClass* GetControllableClass() const
     {
-        return this ? static_cast<const ControllableClass*>(this) : 0;
+        return this ? (const ControllableClass*)this : 0;
     }
     // FUNCTION: SWBF2 0x00478e10
     virtual int GetWeaponCount() const
@@ -127,8 +128,8 @@ public:
     float mCollisionInflict;
     AimerClass mAimerClass[4];
     WeaponClass* mWeaponClass[4];
-    WeaponAmmoDesc mWeaponAmmo[4];
-    int mWeaponChannel[4];
+    WeaponAmmoDesc mWeaponAmmo[kMaxWeapons];
+    int mWeaponChannel[kMaxWeapons];
     int mWeaponCount;
     int mVehicleType;
     RedAnimation* mAnimObj;
@@ -141,7 +142,7 @@ public:
     CameraTrackSetting mCameraSettings;
     PassengerSlotClass* mPassengerSlotClass;
     unsigned char mNumPassengerSlots;
-    MountedTurretClass* mTurretClass[8];
+    MountedTurretClass* mTurretClass[kMaxTurrets];
     ExplosionClass* mExplosion;
     unsigned int mAttachHash;
     PblVector3 mAttachOffset;
@@ -299,6 +300,7 @@ class EntityHover : public GameObject,
                     public VehicleEngine
 {
 public:
+    static const int kMaxTurrets = EntityHoverClass::kMaxTurrets;
 
     // VTABLE: SWBF2 0x0079bc80
     class PostCollision : public Thread
@@ -521,7 +523,7 @@ public:
     EntityHoverClass* mClass;
     PblVector3 mGroundNormal;
     PassengerSlot* mPassengerSlots[4];
-    MountedTurret* mTurret[8];
+    MountedTurret* mTurret[kMaxTurrets];
     char mNumTurrets;
     unsigned char mCloseToGround;
     float mBankPitchAngle;
@@ -531,8 +533,8 @@ public:
     float mYawValue;
     float mPitchValue;
     Aimer* mAimer[4];
-    Weapon* mWeapon[4];
-    int mWeaponIndex[2];
+    Weapon* mWeapon[kMaxWeapons];
+    int mWeaponIndex[kNumWeaponChannels];
     int mStuckState;
     PblVector3 mStuckDir;
     float mStuckTimer;

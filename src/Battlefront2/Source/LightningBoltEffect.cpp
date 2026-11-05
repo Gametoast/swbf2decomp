@@ -47,7 +47,7 @@ inline Controllable* GetControllable(GameObject* pObject)
 inline void ReadColor(const PblConfig::Data& data, RedColor& color)
 {
     color.Set(data.GetUint8Arg(0), data.GetUint8Arg(1), data.GetUint8Arg(2),
-              data.GetNumArgs() > 3 ? data.GetUint8Arg(3) : 0xff);
+              data.GetNumArgs() > 3 ? data.GetUint8Arg(3) : (unsigned char)0xff);
 }
 }
 

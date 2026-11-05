@@ -25,7 +25,7 @@ const EntityClass* PlayerStats::GetFavoriteSoldierClass(int) const
 {
     float bestTime = 0.0f;
     int bestClass = 0, bestTeam = 0;
-    for (int team = 0; team < 2; ++team)
+    for (int team = 0; team < MAX_STAT_TEAMS; ++team)
     {
         for (int slot = 0; slot < MAX_STAT_CLASSES; ++slot)
         {
@@ -44,7 +44,7 @@ const EntityClass* PlayerStats::GetFavoriteSoldierClass(int) const
 float PlayerStats::GetFavoriteSoldierTime(int) const
 {
     float bestTime = 0.0f;
-    for (int team = 0; team < 2; ++team)
+    for (int team = 0; team < MAX_STAT_TEAMS; ++team)
     {
         for (int slot = 0; slot < MAX_STAT_CLASSES; ++slot)
         {
@@ -62,7 +62,7 @@ const WeaponClass* PlayerStats::GetFavoriteWeaponClass(int) const
 {
     float bestTime = 0.0f;
     int bestWeapon = 0, bestTeam = 0;
-    for (int team = 0; team < 2; ++team)
+    for (int team = 0; team < MAX_STAT_TEAMS; ++team)
     {
         for (int slot = 0; slot < MAX_STAT_WEAPONS; ++slot)
         {
@@ -81,7 +81,7 @@ const WeaponClass* PlayerStats::GetFavoriteWeaponClass(int) const
 float PlayerStats::GetFavoriteWeaponTime(int) const
 {
     float bestTime = 0.0f;
-    for (int team = 0; team < 2; ++team)
+    for (int team = 0; team < MAX_STAT_TEAMS; ++team)
     {
         for (int slot = 0; slot < MAX_STAT_WEAPONS; ++slot)
         {
@@ -99,7 +99,7 @@ const EntityClass* PlayerStats::GetFavoriteVehicleClass(int) const
 {
     float bestTime = 0.0f;
     int bestVehicle = 0, bestTeam = 0;
-    for (int team = 0; team < 2; ++team)
+    for (int team = 0; team < MAX_STAT_TEAMS; ++team)
     {
         for (int slot = 0; slot < MAX_STAT_VEHICLES; ++slot)
         {
@@ -118,7 +118,7 @@ const EntityClass* PlayerStats::GetFavoriteVehicleClass(int) const
 float PlayerStats::GetFavoriteVehicleTime(int) const
 {
     float bestTime = 0.0f;
-    for (int team = 0; team < 2; ++team)
+    for (int team = 0; team < MAX_STAT_TEAMS; ++team)
     {
         for (int slot = 0; slot < MAX_STAT_VEHICLES; ++slot)
         {
@@ -142,7 +142,7 @@ Character* PlayerStats::GetBait(int, int iTeamStat) const
 {
     int iBest = 0, iBestIndex = 0;
     const int iOwnTeam = Character::GetPtr(mStatId)->mTeamNumber;
-    for (int iTeam = 0; iTeam < 2; ++iTeam)
+    for (int iTeam = 0; iTeam < MAX_STAT_TEAMS; ++iTeam)
     {
         for (int i = 0; i < Character::sCharacterLimit; ++i)
         {
@@ -162,7 +162,7 @@ int PlayerStats::GetBaitVal(int, int iTeamStat) const
 {
     const int iOwnTeam = Character::GetPtr(mStatId)->mTeamNumber;
     int iBest = 0;
-    for (int iTeam = 0; iTeam < 2; ++iTeam)
+    for (int iTeam = 0; iTeam < MAX_STAT_TEAMS; ++iTeam)
     {
         for (int i = 0; i < Character::sCharacterLimit; ++i)
         {
@@ -183,11 +183,11 @@ Character* PlayerStats::GetNemesis(int, int iTeamStat) const
     const int iStatId = mStatId;
     const int iCharacterLimit = Character::sCharacterLimit;
     const int iOwnTeam = Character::GetPtr(iStatId)->mTeamNumber;
-    for (int iTeam = 0; iTeam < 2; ++iTeam)
+    for (int iTeam = 0; iTeam < MAX_STAT_TEAMS; ++iTeam)
     {
         for (int i = 0; i < iCharacterLimit; ++i)
         {
-            PlayerStats& candidate = Character::GetPtr(i)->GetPlayerStats();
+            PlayerStats& candidate = Character::GetPlayerStats(Character::GetPtr(i));
             int iValue = candidate.mKillsByPlayer[iTeam][iTeamStat][iStatId]._val;
             if (iValue > iBest || (iValue == iBest && iTeam != iOwnTeam))
             {
@@ -205,7 +205,7 @@ int PlayerStats::GetNemesisVal(int, int iTeamStat) const
     int iBest = 0;
     const int iStatId = mStatId;
     const int iOwnTeam = Character::GetPtr(iStatId)->mTeamNumber;
-    for (int iTeam = 0; iTeam < 2; ++iTeam)
+    for (int iTeam = 0; iTeam < MAX_STAT_TEAMS; ++iTeam)
     {
         for (int i = 0; i < Character::sCharacterLimit; ++i)
         {
@@ -338,9 +338,9 @@ PlayerStats::PlayerStats()
     mNarrowEscapeFlag = false;
     mLastKillTime = 0.0f;
     mConsecutiveKillCnt = 0;
-    for (int i = 0; i < 2; ++i)
+    for (int i = 0; i < MAX_STAT_TEAMS; ++i)
     {
-        for (int j = 0; j < 2; ++j)
+        for (int j = 0; j < MAX_STAT_HERO_STATES; ++j)
         {
             mKillsByPlayer[i][j] = 0;
         }
@@ -353,9 +353,9 @@ PlayerStats::PlayerStats()
 // FUNCTION: SWBF2 0x0061ddb0
 PlayerStats::~PlayerStats()
 {
-    for (int i = 0; i < 2; ++i)
+    for (int i = 0; i < MAX_STAT_TEAMS; ++i)
     {
-        for (int j = 0; j < 2; ++j)
+        for (int j = 0; j < MAX_STAT_HERO_STATES; ++j)
         {
             delete[] mKillsByPlayer[i][j];
         }
@@ -370,9 +370,9 @@ void PlayerStats::Init(int iStatId, int iNumPlayers)
 {
     mStatId = (unsigned char)iStatId;
     mKillsByPlayerSize = iNumPlayers;
-    for (int i = 0; i < 2; ++i)
+    for (int i = 0; i < MAX_STAT_TEAMS; ++i)
     {
-        for (int j = 0; j < 2; ++j)
+        for (int j = 0; j < MAX_STAT_HERO_STATES; ++j)
         {
             mKillsByPlayer[i][j] = new CntStat<unsigned char>[iNumPlayers];
             for (int k = 0; k < MAX_STAT_CLASSES; ++k)
@@ -398,9 +398,9 @@ void PlayerStats::Init(int iStatId, int iNumPlayers)
 // FUNCTION: SWBF2 0x0061def0
 void PlayerStats::Reset()
 {
-    for (int i = 0; i < 2; ++i)
+    for (int i = 0; i < MAX_STAT_TEAMS; ++i)
     {
-        for (int j = 0; j < 2; ++j)
+        for (int j = 0; j < MAX_STAT_HERO_STATES; ++j)
         {
             mKills[i][j].Set(0);
             mSameTeamKills[i][j].Set(0);
@@ -688,7 +688,7 @@ void PlayerStats::AddVehicleKill(int iVehicleType)
     if (Controllable* pVehicle = Character::GetPtr(mStatId)->mVehicle)
     {
         GameObject* pObject = pVehicle->GetGameObject();
-        iMyVehicleType = static_cast<GameObjectClass*>(pObject->mEntityClass)->GetVehicleType();
+        iMyVehicleType = ((GameObjectClass*)pObject->mEntityClass)->GetVehicleType();
     }
 
     if (iVehicleType == 8)
@@ -1136,7 +1136,7 @@ void PlayerStats::_GetPlayerAwardMax(AwardStatT eAward, int& iValue,
     iValue = 0;
     iCharacter = 0;
     iTeam = 0;
-    for (int team = 0; team < 2; ++team)
+    for (int team = 0; team < MAX_STAT_TEAMS; ++team)
     {
         for (int character = 0; character < iCharacterLimit; ++character)
         {
@@ -1182,7 +1182,7 @@ int PlayerStats::_GetTeamNumber() const
 // FUNCTION: SWBF2 0x00620a10
 void PlayerStats::ResetStats()
 {
-    for (int i = 0; i < 2; ++i)
+    for (int i = 0; i < MAX_STAT_TEAMS; ++i)
     {
         mClientExperiencePoints[i] = 0;
         mTimePlayedPerTeam[i].Set(0.0f);
@@ -1259,7 +1259,7 @@ bool IsFireTriggerBlocked()
 // FUNCTION: SWBF2 0x0061fc30
 void PlayerStats::AddGameStatsToProfile()
 {
-    for (int side = 0; side < 2; ++side)
+    for (int side = 0; side < MAX_STAT_TEAMS; ++side)
     {
         Team* team = Team::sTeams[side + 1];
         const int count = team->mMemberCount;
@@ -1298,8 +1298,8 @@ void PlayerStats::Read(NetPktGroup& group)
 
     group.ReadBits(uId, 8);
     group.ReadBits(uValue, 8);
-    mKillsByPlayer[0][0][uId].Set(static_cast<unsigned char>(uValue));
-    mKillsByPlayer[0][1][uId].Set(static_cast<unsigned char>(uValue));
+    mKillsByPlayer[0][0][uId].Set((unsigned char)uValue);
+    mKillsByPlayer[0][1][uId].Set((unsigned char)uValue);
 
     group.ReadBits(uId, 8);
     group.ReadBits(uValue, 8);
@@ -1309,75 +1309,75 @@ void PlayerStats::Read(NetPktGroup& group)
         return;
     }
     PlayerStats& other = pOther->GetPlayerStats();
-    other.mKillsByPlayer[0][0][mStatId].Set(static_cast<unsigned char>(uValue));
-    other.mKillsByPlayer[0][1][mStatId].Set(static_cast<unsigned char>(uValue));
+    other.mKillsByPlayer[0][0][mStatId].Set((unsigned char)uValue);
+    other.mKillsByPlayer[0][1][mStatId].Set((unsigned char)uValue);
 
-    for (int iSide = 0; iSide < 2; ++iSide)
+    for (int iSide = 0; iSide < MAX_STAT_TEAMS; ++iSide)
     {
-        for (int iHero = 0; iHero < 2; ++iHero)
+        for (int iHero = 0; iHero < MAX_STAT_HERO_STATES; ++iHero)
         {
             MaxCntStat<unsigned char>& killsPerSpawn = mKillsPerSpawn[iSide][iHero];
             group.ReadBits(uValue, 16);
-            mKills[iSide][iHero].Set(static_cast<unsigned short>(uValue));
+            mKills[iSide][iHero].Set((unsigned short)uValue);
             group.ReadBits(uValue, 8);
-            mSameTeamKills[iSide][iHero].Set(static_cast<unsigned char>(uValue));
+            mSameTeamKills[iSide][iHero].Set((unsigned char)uValue);
             group.ReadBits(uValue, 8);
-            mVehicleKills[iSide][iHero].Set(static_cast<unsigned char>(uValue));
+            mVehicleKills[iSide][iHero].Set((unsigned char)uValue);
             group.ReadBits(uValue, 8);
-            mKillingSpree[iSide][iHero].SetMax(static_cast<unsigned char>(uValue));
+            mKillingSpree[iSide][iHero].SetMax((unsigned char)uValue);
             group.ReadBits(uValue, 8);
-            mKillsUnder25Health[iSide][iHero].Set(static_cast<unsigned char>(uValue));
+            mKillsUnder25Health[iSide][iHero].Set((unsigned char)uValue);
             group.ReadBits(uValue, 8);
-            killsPerSpawn.SetMax(static_cast<unsigned char>(uValue));
+            killsPerSpawn.SetMax((unsigned char)uValue);
             killsPerSpawn.ResetCurrent();
             group.ReadBits(uValue, 8);
-            mFlagCaps[iSide][iHero].Set(static_cast<unsigned char>(uValue));
+            mFlagCaps[iSide][iHero].Set((unsigned char)uValue);
             group.ReadBits(uValue, 16);
-            mShotsFired[iSide][iHero].Set(static_cast<unsigned short>(uValue));
+            mShotsFired[iSide][iHero].Set((unsigned short)uValue);
             group.ReadBits(uValue, 16);
-            mShotsHit[iSide][iHero].Set(static_cast<unsigned short>(uValue));
+            mShotsHit[iSide][iHero].Set((unsigned short)uValue);
             group.ReadBits(uValue, 16);
-            mCriticalShots[iSide][iHero].Set(static_cast<unsigned short>(uValue));
+            mCriticalShots[iSide][iHero].Set((unsigned short)uValue);
             group.ReadBits(uValue, 8);
-            mDeaths[iSide][iHero].Set(static_cast<unsigned char>(uValue));
+            mDeaths[iSide][iHero].Set((unsigned char)uValue);
         }
         group.ReadBits(uValue, 32);
         mMaxAliveTime[iSide].ResetCurrent();
-        mMaxAliveTime[iSide].SetMax(static_cast<float>(uValue));
+        mMaxAliveTime[iSide].SetMax((float)uValue);
         group.ReadBits(uValue, 32);
         mCampingTime[iSide].ResetCurrent();
-        mCampingTime[iSide].SetMax(static_cast<float>(uValue));
+        mCampingTime[iSide].SetMax((float)uValue);
         group.ReadBits(uValue, 32);
-        mTimePlayedPerTeam[iSide].Set(static_cast<float>(uValue));
+        mTimePlayedPerTeam[iSide].Set((float)uValue);
         group.ReadBits(uValue, 16);
-        mCommandPostPoints[iSide].Set(static_cast<unsigned short>(uValue));
+        mCommandPostPoints[iSide].Set((unsigned short)uValue);
         group.ReadBits(uValue, 8);
-        mNarrowEscapes[iSide].Set(static_cast<unsigned char>(uValue));
+        mNarrowEscapes[iSide].Set((unsigned char)uValue);
         group.ReadBits(uValue, 16);
-        mBattlePoints[iSide].Set(static_cast<unsigned short>(uValue));
+        mBattlePoints[iSide].Set((unsigned short)uValue);
         group.ReadBits(uValue, 32);
-        mClientExperiencePoints[iSide] = static_cast<int>(uValue);
+        mClientExperiencePoints[iSide] = (int)uValue;
     }
 
     group.ReadBits(uValue, 32);
     auto pWeaponClass = Factory<Weapon, WeaponClass, WeaponDesc>::Find(uValue);
     group.ReadBits(uValue, 16);
     mTimePlayedPerWeaponList[0][0] = pWeaponClass;
-    mTimePlayedPerWeapon[0][0].Set(static_cast<float>(uValue));
+    mTimePlayedPerWeapon[0][0].Set((float)uValue);
     group.ReadBits(uValue, 32);
     auto pVehicleClass = Factory<Entity, EntityClass, EntityDesc>::Find(uValue);
     group.ReadBits(uValue, 16);
     mTimeInsideVehicleList[0][0] = pVehicleClass;
-    mTimeInsideVehicle[0][0].Set(static_cast<float>(uValue));
+    mTimeInsideVehicle[0][0].Set((float)uValue);
     group.ReadBits(uValue, 32);
     auto pSoldierClass = Factory<Entity, EntityClass, EntityDesc>::Find(uValue);
     group.ReadBits(uValue, 16);
     mTimePlayedPerClassList[0][0] = pSoldierClass;
-    mTimePlayedPerClass[0][0].Set(static_cast<float>(uValue));
+    mTimePlayedPerClass[0][0].Set((float)uValue);
     group.ReadBits(uValue, 16);
-    mPlayerPoints = static_cast<short>(uValue);
+    mPlayerPoints = (short)uValue;
     group.ReadBits(uValue, 16);
-    mHeroPoints = static_cast<short>(uValue);
+    mHeroPoints = (short)uValue;
 }
 
 // FUNCTION: SWBF2 0x00620020
@@ -1456,33 +1456,33 @@ void PlayerStats::Write(NetPktGroup& group)
     if (GetBaitVal(0, 0) > GetBaitVal(0, 1))
     {
         Character* pBait = GetBait(0, 0);
-        group.WriteBits((reinterpret_cast<int>(pBait) - reinterpret_cast<int>(Character::sCharacters)) / static_cast<int>(sizeof(Character)), 8);
+        group.WriteBits((reinterpret_cast<int>(pBait) - reinterpret_cast<int>(Character::sCharacters)) / (int)sizeof(Character), 8);
         group.WriteBits(GetBaitVal(0, 0), 8);
     }
     else
     {
         Character* pBait = GetBait(0, 1);
-        group.WriteBits((reinterpret_cast<int>(pBait) - reinterpret_cast<int>(Character::sCharacters)) / static_cast<int>(sizeof(Character)), 8);
+        group.WriteBits((reinterpret_cast<int>(pBait) - reinterpret_cast<int>(Character::sCharacters)) / (int)sizeof(Character), 8);
         group.WriteBits(GetBaitVal(0, 1), 8);
     }
 
     if (GetNemesisVal(0, 0) > GetNemesisVal(0, 1))
     {
         Character* pNemesis = GetNemesis(0, 0);
-        group.WriteBits((reinterpret_cast<int>(pNemesis) - reinterpret_cast<int>(Character::sCharacters)) / static_cast<int>(sizeof(Character)), 8);
+        group.WriteBits((reinterpret_cast<int>(pNemesis) - reinterpret_cast<int>(Character::sCharacters)) / (int)sizeof(Character), 8);
         group.WriteBits(GetNemesisVal(0, 0), 8);
     }
     else
     {
         Character* pNemesis = GetNemesis(0, 1);
-        group.WriteBits((reinterpret_cast<int>(pNemesis) - reinterpret_cast<int>(Character::sCharacters)) / static_cast<int>(sizeof(Character)), 8);
+        group.WriteBits((reinterpret_cast<int>(pNemesis) - reinterpret_cast<int>(Character::sCharacters)) / (int)sizeof(Character), 8);
         group.WriteBits(GetNemesisVal(0, 1), 8);
     }
 
     const int iExperience = GetExperiencePoints(0, 0);
-    for (int iSide = 0; iSide < 2; ++iSide)
+    for (int iSide = 0; iSide < MAX_STAT_TEAMS; ++iSide)
     {
-        for (int iHero = 0; iHero < 2; ++iHero)
+        for (int iHero = 0; iHero < MAX_STAT_HERO_STATES; ++iHero)
         {
             group.WriteBits(mKills[iSide][iHero]._val, 16);
             group.WriteBits(mSameTeamKills[iSide][iHero]._val, 8);
@@ -1496,9 +1496,9 @@ void PlayerStats::Write(NetPktGroup& group)
             group.WriteBits(mCriticalShots[iSide][iHero]._val, 16);
             group.WriteBits(mDeaths[iSide][iHero]._val, 8);
         }
-        group.WriteBits(static_cast<unsigned int>(mMaxAliveTime[iSide]._max), 32);
-        group.WriteBits(static_cast<unsigned int>(mCampingTime[iSide]._max), 32);
-        group.WriteBits(static_cast<unsigned int>(mTimePlayedPerTeam[iSide]._val), 32);
+        group.WriteBits((unsigned int)mMaxAliveTime[iSide]._max, 32);
+        group.WriteBits((unsigned int)mCampingTime[iSide]._max, 32);
+        group.WriteBits((unsigned int)mTimePlayedPerTeam[iSide]._val, 32);
         group.WriteBits(mCommandPostPoints[iSide]._val, 16);
         group.WriteBits(mNarrowEscapes[iSide]._val, 8);
         group.WriteBits(mBattlePoints[iSide]._val, 16);
@@ -1507,13 +1507,13 @@ void PlayerStats::Write(NetPktGroup& group)
 
     const WeaponClass* pWeapon = GetFavoriteWeaponClass(0);
     group.WriteBits(pWeapon ? pWeapon->mId : 0, 32);
-    group.WriteBits(static_cast<unsigned int>(GetFavoriteWeaponTime(0)), 16);
+    group.WriteBits((unsigned int)GetFavoriteWeaponTime(0), 16);
     const EntityClass* pVehicle = GetFavoriteVehicleClass(0);
     group.WriteBits(pVehicle ? pVehicle->mId : 0, 32);
-    group.WriteBits(static_cast<unsigned int>(GetFavoriteVehicleTime(0)), 16);
+    group.WriteBits((unsigned int)GetFavoriteVehicleTime(0), 16);
     const EntityClass* pClass = GetFavoriteSoldierClass(0);
     group.WriteBits(pClass ? pClass->mId : 0, 32);
-    group.WriteBits(static_cast<unsigned int>(GetFavoriteSoldierTime(0)), 16);
+    group.WriteBits((unsigned int)GetFavoriteSoldierTime(0), 16);
     group.WriteBits(mPlayerPoints, 16);
     group.WriteBits(mHeroPoints, 16);
 }

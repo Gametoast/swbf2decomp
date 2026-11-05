@@ -59,7 +59,7 @@ typedef const PblVector3& (__fastcall *ObjectVelocityFn)(GameObject* pThis, void
 typedef Controllable* (__fastcall *ObjectControllableFn)(GameObject* pThis, void*);
 static CollisionObject* GetObjectCollision(GameObject* pObject)
 {
-    return static_cast<CollisionObject*>(pObject);
+    return (CollisionObject*)pObject;
 }
 
 // SYNTHETIC: SWBF2 0x00402370
@@ -314,6 +314,19 @@ bool CameraManager::Update(float fDeltaTime)
         return true;
     }
 
+    if (!mCurGameCamera)
+    {
+        if (NetGame::IsEnabled() && netIsLocalTurn)
+        {
+            for (mUpdatedCameraId = 0; mUpdatedCameraId < m_iNumCam; mUpdatedCameraId++)
+            {
+                cameraInterpolator[mUpdatedCameraId].SetNext(0, mRedCamera[mUpdatedCameraId]);
+            }
+        }
+        mUpdatedCameraId = 0;
+        return true;
+    }
+
     RumbleRegionManager::Update(fDeltaTime);
 
     for (mUpdatedCameraId = 0; mUpdatedCameraId < m_iNumCam; mUpdatedCameraId++)
@@ -343,7 +356,7 @@ bool CameraManager::Update(float fDeltaTime)
                 if (pObject)
                 {
                     mListener[mUpdatedCameraId]->SetVelocity(&pObject->GetVelocity());
-                    pTargetPos = &GetObjectCollision(pObject)->GetMatrix().GetTranslation();
+                    pTargetPos = &static_cast<CollisionObject*>(pObject)->GetMatrix().GetTranslation();
 
                     Controllable* pCtrl = pObject->GetControllable();
                     if (pCtrl)

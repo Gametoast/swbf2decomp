@@ -75,6 +75,7 @@ class EntitySoldierClass : public GameObjectClass,
                            public PlayableEntitySoundsClass
 {
 public:
+    static const int kMaxWeapons = 8;
     EntitySoldierClass(unsigned int uHash);
     EntitySoldierClass(EntitySoldierClass* pBase, unsigned int uHash);
     virtual ~EntitySoldierClass();
@@ -142,8 +143,8 @@ public:
     float mCollisionScale[3];
     float mCollisionInflict;
     WeaponClass* mWeaponClass[8];
-    WeaponAmmoDesc mWeaponAmmo[8];
-    char mWeaponChannel[8];
+    WeaponAmmoDesc mWeaponAmmo[kMaxWeapons];
+    char mWeaponChannel[kMaxWeapons];
     char mWeaponCount;
     unsigned int mOverrideTextureHash;
     unsigned int mOverrideTextureHash2;
@@ -376,6 +377,8 @@ class EntitySoldier : public GameObject,
                       public PlayableEntitySounds
 {
 public:
+    static const int kMaxWeapons = EntitySoldierClass::kMaxWeapons;
+    static const int kMaxSmolderEffects = 5;
 
     // VTABLE: SWBF2 0x0079d094
     class PostCollision : public Thread
@@ -717,8 +720,8 @@ public:
     float mKickBuild;
     float mTurnAngle;
     Aimer mAimer;
-    Weapon* mWeapon[8];
-    char mWeaponIndex[2];
+    Weapon* mWeapon[kMaxWeapons];
+    char mWeaponIndex[kNumWeaponChannels];
     char mActiveIndex : 4;
     char mActiveChannel : 2;
     unsigned char mStanceIndex : 2;
@@ -779,9 +782,9 @@ public:
     PblHandle<FLEffectObject> mBuffDefenseEffectHandle;
     PblHandle<FLEffectObject> mDebuffEffectHandle;
     PblHandle<FLEffectObject> mInvincibleEffectHandle;
-    PblHandle<FLEffectObject> mSmolderEffectHandle[5];
-    unsigned int mSmolderEffectBone[5];
-    unsigned int mSmolderEffect[5];
+    PblHandle<FLEffectObject> mSmolderEffectHandle[kMaxSmolderEffects];
+    unsigned int mSmolderEffectBone[kMaxSmolderEffects];
+    unsigned int mSmolderEffect[kMaxSmolderEffects];
     unsigned int mLastPilotInfoFrame;
     float mJetFuel;
     PblVector3 m_vPosFootRight;

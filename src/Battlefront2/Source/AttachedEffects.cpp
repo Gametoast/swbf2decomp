@@ -101,7 +101,7 @@ AttachedEffects* AttachedEffectsClass::BuildEffects(const EntityGeometry* pGeome
             Entity* pEntity = m_aAttachClassData[i].pOdfClass->Build(desc);
             if (pEntity->IsRtti(EntityLight::GetRtti()))
             {
-                pEffects->m_aAttachData[i].pEffect = static_cast<EntityLight*>(pEntity);
+                pEffects->m_aAttachData[i].pEffect = (EntityLight*)pEntity;
             }
             pEffects->m_aAttachData[i].fTimer = 0.0f;
             if (pEffects->m_aAttachData[i].pEffect && m_aAttachClassData[i].uiNumParams >= 1)

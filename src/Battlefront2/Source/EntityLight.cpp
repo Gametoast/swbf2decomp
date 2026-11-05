@@ -20,6 +20,7 @@ class PblMatrix;
 extern PblMatrix gMatrixIdentity;
 
 const RedColor Interpolate(const RedColor& a, const RedColor& b, float t);
+RedColor ReadColor(const PblConfig::Data& data);
 
 // GLOBAL: SWBF2 0x01e51de0
 EntityLightFXParser* EntityLightFXParser::s_pInstance;
@@ -72,25 +73,6 @@ EntityLight* EntityLightClass::Build(unsigned int uLightOdfNameHash)
 
 // SYNTHETIC: SWBF2 0x0042d060
 // FLEffect::`scalar deleting destructor'
-
-// FUNCTION: SWBF2 0x0042d250
-RedColor ReadColor(const PblConfig::Data& data)
-{
-    RedColor color;
-    color.r = (unsigned char)(int)Clamp(data.GetFloatArg(0), 0.0f, 255.0f);
-    color.g = (unsigned char)(int)Clamp(data.GetFloatArg(1), 0.0f, 255.0f);
-    color.b = (unsigned char)(int)Clamp(data.GetFloatArg(2), 0.0f, 255.0f);
-    if (data.GetNumArgs() > 3)
-    {
-        color.a = (unsigned char)(int)Clamp(data.GetFloatArg(3), 0.0f, 255.0f);
-    }
-    else
-    {
-        color.a = 0xff;
-    }
-    return color;
-}
-
 
 // FUNCTION: SWBF2 0x004cc320
 void ManagedLightBeam::Render(unsigned char, float, unsigned int uiFlags)
@@ -300,10 +282,10 @@ FLEffectClass* EntityLightFXParser::BuildClass(PblConfig& config) const
             {
                 pClass->_fBeamFadeLength = 0.2f;
             }
-            pClass->_fBeamWidthX = static_cast<float>(fabs(static_cast<double>(data.GetFloatArg(0))));
+            pClass->_fBeamWidthX = (float)fabs((double)data.GetFloatArg(0));
             if (data.GetNumArgs() >= 2)
             {
-                pClass->_fBeamWidthZ = static_cast<float>(fabs(static_cast<double>(data.GetFloatArg(1))));
+                pClass->_fBeamWidthZ = (float)fabs((double)data.GetFloatArg(1));
             }
             else
             {
@@ -320,10 +302,10 @@ FLEffectClass* EntityLightFXParser::BuildClass(PblConfig& config) const
             {
                 pClass->_fBeamFadeLength = 0.2f;
             }
-            pClass->_fBeamInitialWidthX = static_cast<float>(fabs(static_cast<double>(data.GetFloatArg(0))));
+            pClass->_fBeamInitialWidthX = (float)fabs((double)data.GetFloatArg(0));
             if (data.GetNumArgs() >= 2)
             {
-                pClass->_fBeamInitialWidthZ = static_cast<float>(fabs(static_cast<double>(data.GetFloatArg(1))));
+                pClass->_fBeamInitialWidthZ = (float)fabs((double)data.GetFloatArg(1));
             }
             else
             {
@@ -340,7 +322,7 @@ FLEffectClass* EntityLightFXParser::BuildClass(PblConfig& config) const
             {
                 pClass->_fBeamFadeLength = 0.5f;
             }
-            pClass->_fBeamWidthX = pClass->_fBeamWidthZ = static_cast<float>(fabs(static_cast<double>(data.GetFloatArg(0))));
+            pClass->_fBeamWidthX = pClass->_fBeamWidthZ = (float)fabs((double)data.GetFloatArg(0));
             break;
         case 0x857435A7u:
             if (pClass->_fBeamFadeLength < 0.0f)
@@ -608,7 +590,7 @@ EntityLight::EntityLight(const EntityLightClass* pClass, const EntityDesc& desc)
     _fLightFlickerIntensity = 1.0f;
     _lightClass = const_cast<EntityLightClass*>(pClass);
 
-    static_cast<FLEffectObject*>(this)->m_uiAttachFlags |= UPDATE_REQUIRED;
+    ((FLEffectObject*)this)->m_uiAttachFlags |= UPDATE_REQUIRED;
     SetMatrix(desc.mMatrix);
     TurnOn();
 }
@@ -1183,13 +1165,13 @@ void EntityLightClass::SetProperty(unsigned int uProperty, const char* pszValue)
             }
             else
             {
-                _fBeamWidthX = static_cast<float>(fabs(static_cast<double>(_fBeamWidthX)));
-                _fBeamWidthZ = static_cast<float>(fabs(static_cast<double>(_fBeamWidthZ)));
+                _fBeamWidthX = (float)fabs((double)_fBeamWidthX);
+                _fBeamWidthZ = (float)fabs((double)_fBeamWidthZ);
             }
         }
         else if (iCount == 1)
         {
-            _fBeamWidthX = _fBeamWidthZ = static_cast<float>(fabs(static_cast<double>(_fBeamWidthX)));
+            _fBeamWidthX = _fBeamWidthZ = (float)fabs((double)_fBeamWidthX);
         }
         break;
     }
@@ -1209,13 +1191,13 @@ void EntityLightClass::SetProperty(unsigned int uProperty, const char* pszValue)
             }
             else
             {
-                _fBeamInitialWidthX = static_cast<float>(fabs(static_cast<double>(_fBeamInitialWidthX)));
-                _fBeamInitialWidthZ = static_cast<float>(fabs(static_cast<double>(_fBeamInitialWidthZ)));
+                _fBeamInitialWidthX = (float)fabs((double)_fBeamInitialWidthX);
+                _fBeamInitialWidthZ = (float)fabs((double)_fBeamInitialWidthZ);
             }
         }
         else if (iCount == 1)
         {
-            _fBeamInitialWidthX = _fBeamInitialWidthZ = static_cast<float>(fabs(static_cast<double>(_fBeamInitialWidthX)));
+            _fBeamInitialWidthX = _fBeamInitialWidthZ = (float)fabs((double)_fBeamInitialWidthX);
         }
         break;
     }
@@ -1226,7 +1208,7 @@ void EntityLightClass::SetProperty(unsigned int uProperty, const char* pszValue)
         }
         if (sscanf(pszValue, "%f", &_fBeamWidthX) == 1)
         {
-            _fBeamWidthX = _fBeamWidthZ = static_cast<float>(fabs(static_cast<double>(_fBeamWidthX)));
+            _fBeamWidthX = _fBeamWidthZ = (float)fabs((double)_fBeamWidthX);
         }
         break;
     case 0x857435A7u:

@@ -279,7 +279,7 @@ void ParseCommandLine(int iArgc, char** const apcArgv)
             continue;
         }
 
-        if (_stricmp(pcArg + 1, "DecompCONMinutes") == 0)
+        if (_stricmp(apcArgv[i] + 1, "DecompCONMinutes") == 0)
         {
             if (i + 1 < iArgc)
             {
@@ -293,7 +293,7 @@ void ParseCommandLine(int iArgc, char** const apcArgv)
             continue;
         }
 
-        switch (PblHash(pcArg + 1))
+        switch (PblHash(apcArgv[i] + 1))
         {
         case 0x02049853:
             dragEnabled = true;

@@ -266,22 +266,22 @@ void pcHDRShader::_Init(unsigned int uiFlags,
 void pcHDRShader::_InitPipelineFuncArray()
 {
     GetStateFuncArray[PIPELINE_FIXED] =
-        static_cast<GetStateFuncT>(&pcHDRShader::GetState_Fixed);
+        (GetStateFuncT)(&pcHDRShader::GetState_Fixed);
     BeginFuncArray[PIPELINE_FIXED] =
-        static_cast<BeginFuncT>(&pcHDRShader::Begin_Fixed);
+        (BeginFuncT)(&pcHDRShader::Begin_Fixed);
     EndFuncArray[PIPELINE_FIXED] =
-        static_cast<EndFuncT>(&pcHDRShader::End_Fixed);
+        (EndFuncT)(&pcHDRShader::End_Fixed);
     RenderFuncArray[PIPELINE_FIXED] =
-        static_cast<RenderFuncT>(&pcHDRShader::Render_Fixed);
+        (RenderFuncT)(&pcHDRShader::Render_Fixed);
 
     GetStateFuncArray[PIPELINE_PROG1] =
-        static_cast<GetStateFuncT>(&pcHDRShader::GetState_Prog1);
+        (GetStateFuncT)(&pcHDRShader::GetState_Prog1);
     BeginFuncArray[PIPELINE_PROG1] =
-        static_cast<BeginFuncT>(&pcHDRShader::Begin_Prog1);
+        (BeginFuncT)(&pcHDRShader::Begin_Prog1);
     EndFuncArray[PIPELINE_PROG1] =
-        static_cast<EndFuncT>(&pcHDRShader::End_Prog1);
+        (EndFuncT)(&pcHDRShader::End_Prog1);
     RenderFuncArray[PIPELINE_PROG1] =
-        static_cast<RenderFuncT>(&pcHDRShader::Render_Prog1);
+        (RenderFuncT)(&pcHDRShader::Render_Prog1);
 }
 
 // FUNCTION: SWBF2 0x00714130

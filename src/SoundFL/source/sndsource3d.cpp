@@ -322,7 +322,7 @@ void Source3D::DetermineClosestListener()
 {
     if ((mFlags & flags_updateListener) || mClosestListener == 0)
     {
-        mClosestListener = static_cast<Listener*>(
+        mClosestListener = (Listener*)(
             ListenerBase::GetClosestListener(mPos3D, &mDistance,
                                              &mDistanceLength));
     }

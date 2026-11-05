@@ -207,7 +207,7 @@ pvs::Sector::~Sector()
 // FUNCTION: SWBF2 0x006df450
 void pvs::Sector::AddPortal(pvs::IPortal* pPortal)
 {
-    portals_.Add(static_cast<pvs::Portal*>(pPortal));
+    portals_.Add((pvs::Portal*)pPortal);
 }
 
 // FUNCTION: SWBF2 0x006df4b0
@@ -275,8 +275,8 @@ bool pvs::Portal::Clip(const pvs::ICamera& rCam, geo::Box& rBox, const geo::Frus
     pvs::ISector* pRoot = &IManager::GetInstance().GetRootSector();
     if (gSaveCam)
     {
-        camPos = static_cast<Manager&>(IManager::GetInstance()).saveCamPos_;
-        camTrans = static_cast<Manager&>(IManager::GetInstance()).saveCamTrans_;
+        camPos = ((Manager&)IManager::GetInstance()).saveCamPos_;
+        camTrans = ((Manager&)IManager::GetInstance()).saveCamTrans_;
     }
     else
     {
@@ -456,9 +456,8 @@ void pvs::Manager::GetCamFrustum(const pvs::ICamera& rCam, geo::Frustum& rFrustu
         rCam.GetInvViewTrans(camTrans);
     }
 
-    PblVector3 vFwd;
     PblVector3 vBack(0.0f, 0.0f, -1.0f);
-    D3DXVec3TransformNormal(reinterpret_cast<D3DXVECTOR3*>(&vFwd), reinterpret_cast<const D3DXVECTOR3*>(&vBack), reinterpret_cast<const D3DXMATRIX*>(&camTrans));
+    PblVector3 vFwd = camTrans.ApplyRotation(vBack);
     geo::Vector3<float> fwd(vFwd.x, vFwd.y, vFwd.z);
 
     const geo::Vector3<float> yAxis(0.0f, 1.0f, 0.0f);
@@ -813,7 +812,7 @@ void pvs::IManager::SetInstance(IManager& rManager)
 // FUNCTION: SWBF2 0x006e15b0
 void pvs::Portal::SetLeft(pvs::ISector* pLeft)
 {
-    left_ = static_cast<pvs::Sector*>(pLeft);
+    left_ = (pvs::Sector*)pLeft;
 }
 
 // FUNCTION: SWBF2 0x006e15c0
@@ -824,7 +823,7 @@ void util::IAllocator::SetMaxMem(int)
 // FUNCTION: SWBF2 0x006e15d0
 void pvs::Portal::SetRight(pvs::ISector* pRight)
 {
-    right_ = static_cast<pvs::Sector*>(pRight);
+    right_ = (pvs::Sector*)pRight;
 }
 
 template <class T>
@@ -918,7 +917,7 @@ void pvs::Sector::Traverse(const pvs::ICamera& rCam, const geo::Box& rBox, const
     geo::Vector3<float> camPos;
     if (gSaveCam)
     {
-        camPos = static_cast<Manager&>(IManager::GetInstance()).saveCamPos_;
+        camPos = ((Manager&)IManager::GetInstance()).saveCamPos_;
     }
     else
     {
@@ -950,12 +949,12 @@ void pvs::Sector::Traverse(const pvs::ICamera& rCam, const geo::Box& rBox, const
 // FUNCTION: SWBF2 0x006e19f0
 void pvs::Manager::TraversePortals(const pvs::ICamera& rCam, pvs::ITraverser* pTrav)
 {
-    const BaseCamera* pCam = static_cast<const BaseCamera*>(&rCam);
+    const BaseCamera* pCam = (const BaseCamera*)(&rCam);
     const geo::Vector3<float> boxMin(-1.0f, -1.0f, 1.0f);
     const geo::Vector3<float> boxMax(1.0f, 1.0f, 1.0f);
     geo::Box box(boxMin, boxMax);
     geo::Frustum frustum;
-    static_cast<Manager&>(IManager::GetInstance()).GetCamFrustum(*pCam, frustum);
+    ((Manager&)IManager::GetInstance()).GetCamFrustum(*pCam, frustum);
     FindSectors(*pCam, camsectors_, scache_);
     for (int i = 0; i < camsectors_._numElements; ++i)
     {

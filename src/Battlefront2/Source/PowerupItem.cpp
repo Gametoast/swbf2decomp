@@ -283,11 +283,11 @@ bool PowerupItem::Update(float fDeltaTime)
 
     if (mAmbientSound.GetPlaying())
     {
-        mAmbientSound.Update(&static_cast<const PowerupItemClass*>(mClass)->mAmbientSound, pPos, &mVelocity);
+        mAmbientSound.Update(&((const PowerupItemClass*)mClass)->mAmbientSound, pPos, &mVelocity);
     }
     else
     {
-        mAmbientSound.Play(&static_cast<const PowerupItemClass*>(mClass)->mAmbientSound, pPos, &mVelocity, true);
+        mAmbientSound.Play(&((const PowerupItemClass*)mClass)->mAmbientSound, pPos, &mVelocity, true);
     }
     return EntityItem::Update(fDeltaTime);
 }
@@ -301,7 +301,7 @@ bool PowerupItem::CollisionCallback(const CollisionResult* pResult, CollisionObj
         GameObject* pObject = pOther->GetGameObject();
         if (pObject && pObject->IsAlive())
         {
-            const PowerupItemClass* pClass = static_cast<const PowerupItemClass*>(mClass);
+            const PowerupItemClass* pClass = (const PowerupItemClass*)mClass;
             int iHealthType = pObject->mHealthType;
             float fHealth = pClass->mAddHealth[iHealthType];
             float fAmmo = pClass->mAddAmmo[iHealthType];
@@ -318,9 +318,9 @@ bool PowerupItem::CollisionCallback(const CollisionResult* pResult, CollisionObj
             {
                 const PblVector3& vPos = GetPosition();
                 if (pObject->GetEntityType() != ENT_SOLDIER ||
-                    !static_cast<EntitySoldier*>(pObject)->mMarkedForDeath)
+                    !((EntitySoldier*)pObject)->mMarkedForDeath)
                 {
-                    static_cast<const PowerupItemClass*>(mClass)->mPowerupSound.Play(&vPos, 0, false, true);
+                    ((const PowerupItemClass*)mClass)->mPowerupSound.Play(&vPos, 0, false, true);
                 }
                 InstantDeath(DamageOwner(0, 0, 0, 0, 0, 1.0f), false);
                 mIsAlive = false;

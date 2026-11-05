@@ -132,7 +132,6 @@ bool NameDisplayThread::Update(float)
     Character* pLocalCharacter = 0;
     Character* pKiller = 0;
     GameObject* pLocalObject = 0;
-    if (Character::sCharacters)
     {
         pLocalCharacter = Character::FindPlayer(iLocalIndex);
         Controllable* pLocalUnit = 0;

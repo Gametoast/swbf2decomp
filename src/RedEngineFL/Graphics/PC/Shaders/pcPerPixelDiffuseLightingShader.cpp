@@ -246,11 +246,17 @@ void pcPerPixelDiffuseLightingShader::Render_Prog1(const RenderItem* pItem, unsi
         const float fTx = transform(2, 0);
         const float fYx = transform(1, 0);
         const float fXx = transform(0, 0);
-        pRegs[40].SetFloats(fXx, fYx, 0.0f, fTx);
+        pRegs[40].component[0] = fXx;
+        pRegs[40].component[1] = fYx;
+        pRegs[40].component[2] = 0.0f;
+        pRegs[40].component[3] = fTx;
         const float fTy = transform(2, 1);
         const float fYy = transform(1, 1);
         const float fXy = transform(0, 1);
-        pRegs[41].SetFloats(fXy, fYy, 0.0f, fTy);
+        pRegs[41].component[0] = fXy;
+        pRegs[41].component[1] = fYy;
+        pRegs[41].component[2] = 0.0f;
+        pRegs[41].component[3] = fTy;
         RedRenderer::pcUnlockVertexShaderConstants(pRegs);
     }
     else
@@ -288,13 +294,26 @@ void pcPerPixelDiffuseLightingShader::Render_Prog1(const RenderItem* pItem, unsi
         {
             const RedAmbientLight* pAmbient =
                 &pLighting->ambientLight;
-            pRegs[19].SetColorAlpha(pAmbient->m_topColor, 1.0f);
-            pRegs[20].SetColor(pAmbient->m_bottomColor);
+            const RedColorValue& top = pAmbient->m_topColor;
+            pRegs[19].component[0] = top.r;
+            pRegs[19].component[1] = top.g;
+            pRegs[19].component[2] = top.b;
+            pRegs[19].component[3] = 1.0f;
+            pRegs[20].component[0] = pAmbient->m_bottomColor.r;
+            pRegs[20].component[1] = pAmbient->m_bottomColor.g;
+            pRegs[20].component[2] = pAmbient->m_bottomColor.b;
+            pRegs[20].component[3] = pAmbient->m_bottomColor.a;
         }
         else
         {
-            pRegs[19].SetColorAlpha(black, 1.0f);
-            pRegs[20].SetColor(black);
+            pRegs[19].component[0] = black.r;
+            pRegs[19].component[1] = black.g;
+            pRegs[19].component[2] = black.b;
+            pRegs[19].component[3] = 1.0f;
+            pRegs[20].component[0] = black.r;
+            pRegs[20].component[1] = black.g;
+            pRegs[20].component[2] = black.b;
+            pRegs[20].component[3] = black.a;
         }
 
         for (int i = 0; i < pLighting->numDirectionalLights; i++)
@@ -310,8 +329,12 @@ void pcPerPixelDiffuseLightingShader::Render_Prog1(const RenderItem* pItem, unsi
             }
 
             const float fFactor = pLighting->pDirectionalFactor[i];
-            colors[iLight] = pLight->m_color * fFactor;
-            pRegs[21 + 2 * iLight].SetVectorW(pLight->m_vDirection, 0.0f);
+            colors[iLight] = RedColorValue(pLight->m_color.r * fFactor, pLight->m_color.g * fFactor,
+                                           pLight->m_color.b * fFactor, pLight->m_color.a * fFactor);
+            pRegs[21 + 2 * iLight].component[0] = pLight->m_vDirection.x;
+            pRegs[21 + 2 * iLight].component[1] = pLight->m_vDirection.y;
+            pRegs[21 + 2 * iLight].component[2] = pLight->m_vDirection.z;
+            pRegs[21 + 2 * iLight].component[3] = 0.0f;
             pRegs[22 + 2 * iLight].SetFloats(1.0f, 0.0f, 0.0f, 1.0f);
             iLight++;
             RedRenderer::pcSetTexture(iLight, RedTexture::Find(s_uiNormalizationCubeMapHash));
@@ -324,9 +347,12 @@ void pcPerPixelDiffuseLightingShader::Render_Prog1(const RenderItem* pItem, unsi
                 RedRenderer::pcSetRenderState(D3DRS_ALPHABLENDENABLE, TRUE);
                 RedRenderer::pcSetFogForBlendMode(RedRenderer::FOGFORBLEND_ADD);
                 pRegs = RedRenderer::pcLockVertexShaderConstants(19, 8);
+                pRegs[19].component[0] = black.r;
+                pRegs[19].component[1] = black.g;
+                pRegs[19].component[2] = black.b;
+                pRegs[19].component[3] = 0.0f;
                 iLight = 0;
                 iNumPasses++;
-                pRegs[19].SetColorAlpha(black, 0.0f);
             }
         }
 
@@ -343,7 +369,10 @@ void pcPerPixelDiffuseLightingShader::Render_Prog1(const RenderItem* pItem, unsi
             }
 
             colors[iLight] = pLight->m_color;
-            pRegs[21 + 2 * iLight].SetVectorW(pLight->m_pos, 1.0f);
+            pRegs[21 + 2 * iLight].component[0] = pLight->m_pos.x;
+            pRegs[21 + 2 * iLight].component[1] = pLight->m_pos.y;
+            pRegs[21 + 2 * iLight].component[2] = pLight->m_pos.z;
+            pRegs[21 + 2 * iLight].component[3] = 1.0f;
             pRegs[22 + 2 * iLight].SetFloats(pLight->m_fRadiusInv * 0.5f, 0.5f, 0.0f, 1.0f);
             iLight++;
             RedRenderer::pcSetTexture(iLight, RedTexture::Find(s_uiLightVolumeMapHash));
@@ -356,9 +385,12 @@ void pcPerPixelDiffuseLightingShader::Render_Prog1(const RenderItem* pItem, unsi
                 RedRenderer::pcSetRenderState(D3DRS_ALPHABLENDENABLE, TRUE);
                 RedRenderer::pcSetFogForBlendMode(RedRenderer::FOGFORBLEND_ADD);
                 pRegs = RedRenderer::pcLockVertexShaderConstants(19, 8);
+                pRegs[19].component[0] = black.r;
+                pRegs[19].component[1] = black.g;
+                pRegs[19].component[2] = black.b;
+                pRegs[19].component[3] = 0.0f;
                 iLight = 0;
                 iNumPasses++;
-                pRegs[19].SetColorAlpha(black, 0.0f);
             }
         }
 
@@ -390,10 +422,22 @@ void pcPerPixelDiffuseLightingShader::Render_Prog1(const RenderItem* pItem, unsi
         colors[0].a = (float)pLight->m_bBidirectional;
 
         pcRedVertexShaderConstantRegister* pRegs = RedRenderer::pcLockVertexShaderConstants(19, 9);
-        pRegs[19].SetColorAlpha(black, 0.0f);
-        pRegs[21].SetVectorW(pLight->m_vPos, 1.0f);
-        pRegs[22].SetFloats(pLight->m_fRadiusInv * 0.5f, 0.5f, 0.0f, 1.0f);
-        pRegs[23].SetVectorW(pLight->m_vDirection, pLight->m_fRadiusInv * 0.5f);
+        pRegs[19].component[0] = black.r;
+        pRegs[19].component[1] = black.g;
+        pRegs[19].component[2] = black.b;
+        pRegs[19].component[3] = 0.0f;
+        pRegs[21].component[0] = pLight->m_vPos.x;
+        pRegs[21].component[1] = pLight->m_vPos.y;
+        pRegs[21].component[2] = pLight->m_vPos.z;
+        pRegs[21].component[3] = 1.0f;
+        pRegs[22].component[0] = pLight->m_fRadiusInv * 0.5f;
+        pRegs[22].component[1] = 0.5f;
+        pRegs[22].component[2] = 0.0f;
+        pRegs[22].component[3] = 1.0f;
+        pRegs[23].component[0] = pLight->m_vDirection.x;
+        pRegs[23].component[1] = pLight->m_vDirection.y;
+        pRegs[23].component[2] = pLight->m_vDirection.z;
+        pRegs[23].component[3] = pLight->m_fRadiusInv * 0.5f;
         pRegs[24].SetMatrix4x4(pLight->GetProjectionMatrix());
         RedRenderer::pcUnlockVertexShaderConstants(pRegs);
 
@@ -419,14 +463,23 @@ void pcPerPixelDiffuseLightingShader::Render_Prog1(const RenderItem* pItem, unsi
     {
     case RedLight::TYPE_DIRECTIONAL:
     {
-        const RedDirectionalLight* pLight = static_cast<const RedDirectionalLight*>(pProjected);
+        const RedDirectionalLight* pLight = (const RedDirectionalLight*)pProjected;
         colors[0] = pLight->m_color;
         colors[0].a = 1.0f;
 
         pcRedVertexShaderConstantRegister* pRegs = RedRenderer::pcLockVertexShaderConstants(19, 9);
-        pRegs[19].SetColorAlpha(black, 0.0f);
-        pRegs[21].SetVectorW(pLight->m_vDirection, 0.0f);
-        pRegs[22].SetFloats(1.0f, 0.0f, 0.0f, 1.0f);
+        pRegs[19].component[0] = black.r;
+        pRegs[19].component[1] = black.g;
+        pRegs[19].component[2] = black.b;
+        pRegs[19].component[3] = 0.0f;
+        pRegs[21].component[0] = pLight->m_vDirection.x;
+        pRegs[21].component[1] = pLight->m_vDirection.y;
+        pRegs[21].component[2] = pLight->m_vDirection.z;
+        pRegs[21].component[3] = 0.0f;
+        pRegs[22].component[0] = 1.0f;
+        pRegs[22].component[1] = 0.0f;
+        pRegs[22].component[2] = 0.0f;
+        pRegs[22].component[3] = 1.0f;
         pRegs[24].SetMatrix4x4(pLight->GetProjectionMatrix());
         RedRenderer::pcUnlockVertexShaderConstants(pRegs);
 
@@ -438,14 +491,23 @@ void pcPerPixelDiffuseLightingShader::Render_Prog1(const RenderItem* pItem, unsi
 
     case RedLight::TYPE_POINT:
     {
-        const RedOmniLight* pLight = static_cast<const RedOmniLight*>(pProjected);
+        const RedOmniLight* pLight = (const RedOmniLight*)pProjected;
         colors[0] = pLight->m_color;
         colors[0].a = 1.0f;
 
         pcRedVertexShaderConstantRegister* pRegs = RedRenderer::pcLockVertexShaderConstants(19, 9);
-        pRegs[19].SetColorAlpha(black, 0.0f);
-        pRegs[21].SetVectorW(pLight->m_pos, 1.0f);
-        pRegs[22].SetFloats(pLight->m_fRadiusInv * 0.5f, 0.5f, 0.0f, 1.0f);
+        pRegs[19].component[0] = black.r;
+        pRegs[19].component[1] = black.g;
+        pRegs[19].component[2] = black.b;
+        pRegs[19].component[3] = 0.0f;
+        pRegs[21].component[0] = pLight->m_pos.x;
+        pRegs[21].component[1] = pLight->m_pos.y;
+        pRegs[21].component[2] = pLight->m_pos.z;
+        pRegs[21].component[3] = 1.0f;
+        pRegs[22].component[0] = pLight->m_fRadiusInv * 0.5f;
+        pRegs[22].component[1] = 0.5f;
+        pRegs[22].component[2] = 0.0f;
+        pRegs[22].component[3] = 1.0f;
         pRegs[24].SetMatrix4x4(pLight->GetProjectionMatrix());
         RedRenderer::pcUnlockVertexShaderConstants(pRegs);
 
@@ -480,22 +542,22 @@ pcRedShader* pcPerPixelDiffuseLightingShader::_Create(unsigned int uiFlags,
 void pcPerPixelDiffuseLightingShader::_InitPipelineFuncArray()
 {
     GetStateFuncArray[PIPELINE_FIXED] =
-        static_cast<GetStateFuncT>(&pcPerPixelDiffuseLightingShader::GetState_Fixed);
+        (GetStateFuncT)(&pcPerPixelDiffuseLightingShader::GetState_Fixed);
     BeginFuncArray[PIPELINE_FIXED] =
-        static_cast<BeginFuncT>(&pcPerPixelDiffuseLightingShader::Begin_Fixed);
+        (BeginFuncT)(&pcPerPixelDiffuseLightingShader::Begin_Fixed);
     EndFuncArray[PIPELINE_FIXED] =
-        static_cast<EndFuncT>(&pcPerPixelDiffuseLightingShader::End_Fixed);
+        (EndFuncT)(&pcPerPixelDiffuseLightingShader::End_Fixed);
     RenderFuncArray[PIPELINE_FIXED] =
-        static_cast<RenderFuncT>(&pcPerPixelDiffuseLightingShader::Render_Fixed);
+        (RenderFuncT)(&pcPerPixelDiffuseLightingShader::Render_Fixed);
 
     GetStateFuncArray[PIPELINE_PROG1] =
-        static_cast<GetStateFuncT>(&pcPerPixelDiffuseLightingShader::GetState_Prog1);
+        (GetStateFuncT)(&pcPerPixelDiffuseLightingShader::GetState_Prog1);
     BeginFuncArray[PIPELINE_PROG1] =
-        static_cast<BeginFuncT>(&pcPerPixelDiffuseLightingShader::Begin_Prog1);
+        (BeginFuncT)(&pcPerPixelDiffuseLightingShader::Begin_Prog1);
     EndFuncArray[PIPELINE_PROG1] =
-        static_cast<EndFuncT>(&pcPerPixelDiffuseLightingShader::End_Prog1);
+        (EndFuncT)(&pcPerPixelDiffuseLightingShader::End_Prog1);
     RenderFuncArray[PIPELINE_PROG1] =
-        static_cast<RenderFuncT>(&pcPerPixelDiffuseLightingShader::Render_Prog1);
+        (RenderFuncT)(&pcPerPixelDiffuseLightingShader::Render_Prog1);
 }
 
 // FUNCTION: SWBF2 0x007124c0

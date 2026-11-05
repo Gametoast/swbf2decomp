@@ -50,7 +50,7 @@ void SoundDebugDisplay::DisplayVoiceChatInfo()
         char* const pEncoder = (char*)&pNode->GetEncoder();
         VoiceChat::Decoder* const pBaseDecoder = &pNode->GetDecoder();
         GameVoiceChat::Decoder* const pDecoder = pBaseDecoder ?
-            static_cast<GameVoiceChat::Decoder*>(pBaseDecoder) : 0;
+            (GameVoiceChat::Decoder*)pBaseDecoder : 0;
         Printf("Headset %d (player id=%d)\n", uiEnabled, ucNodeID);
 
         unsigned char ucConnections = 0;

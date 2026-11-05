@@ -226,11 +226,11 @@ bool HUD::ElementBarBitmap::SetProperty(const unsigned int uHashID, const void* 
     case kFlashyScale: mFlashyScale = *(const float*)pValue; return true;
     case kScaleTexture:
         mScaleTex = *(const bool*)pValue;
-        static_cast<ElementBar*>(this)->SetValue(mValue);
+        ((ElementBar*)this)->SetValue(mValue);
         return true;
     case kScaleSize:
         mScaleSize = *(const bool*)pValue;
-        static_cast<ElementBar*>(this)->SetValue(mValue);
+        ((ElementBar*)this)->SetValue(mValue);
         return true;
     case 0x1ffad2e0u: mBarU1 = ((const float*)pValue)[2]; break;
     case 0x967ad461u: mBarWidth = *(const float*)pValue; break;

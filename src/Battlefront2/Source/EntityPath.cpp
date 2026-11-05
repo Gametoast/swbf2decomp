@@ -587,7 +587,7 @@ bool EntityPath::IsEnabled()
     EntityEx* pEntity = EntityEx::Find(mEnableObject);
     if (pEntity && pEntity->IsRtti(GameObject::rttiHashGameObject))
     {
-        return static_cast<GameObject*>(pEntity)->mIsAlive;
+        return ((GameObject*)pEntity)->mIsAlive;
     }
     return true;
 }

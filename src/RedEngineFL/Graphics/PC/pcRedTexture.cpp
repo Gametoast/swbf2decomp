@@ -649,7 +649,7 @@ void RedTexture::pcReadLevel(PblFileChunk& chunk, unsigned int uiSkip, int iFace
         {
             if (m_type == PC_REDTEXTURE_TYPE_VOLUME)
             {
-                IDirect3DVolumeTexture9* pVolume = static_cast<IDirect3DVolumeTexture9*>(m_pTexture);
+                IDirect3DVolumeTexture9* pVolume = (IDirect3DVolumeTexture9*)m_pTexture;
                 D3DLOCKED_BOX box;
                 D3DVOLUME_DESC desc;
                 pVolume->LockBox(uiLevel, &box, 0, 0);
@@ -686,7 +686,7 @@ void RedTexture::pcReadLevel(PblFileChunk& chunk, unsigned int uiSkip, int iFace
             }
             else if (m_type == PC_REDTEXTURE_TYPE_CUBEMAP)
             {
-                IDirect3DCubeTexture9* pCube = static_cast<IDirect3DCubeTexture9*>(m_pTexture);
+                IDirect3DCubeTexture9* pCube = (IDirect3DCubeTexture9*)m_pTexture;
                 D3DLOCKED_RECT rect;
                 D3DSURFACE_DESC desc;
                 pCube->LockRect((D3DCUBEMAP_FACES)iFace, uiLevel, &rect, 0, 0);
@@ -716,7 +716,7 @@ void RedTexture::pcReadLevel(PblFileChunk& chunk, unsigned int uiSkip, int iFace
             }
             else if (m_type == PC_REDTEXTURE_TYPE_TEXTURE)
             {
-                IDirect3DTexture9* pTexture = static_cast<IDirect3DTexture9*>(m_pTexture);
+                IDirect3DTexture9* pTexture = (IDirect3DTexture9*)m_pTexture;
                 D3DLOCKED_RECT rect;
                 D3DSURFACE_DESC desc;
                 pTexture->LockRect(uiLevel, &rect, 0, 0);

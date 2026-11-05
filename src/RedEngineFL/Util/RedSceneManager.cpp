@@ -655,8 +655,7 @@ bool RenderObject(RedSceneObject* pObject, unsigned int uiFlags, int iClip)
     {
         fZoom = pCamera->GetZoom();
     }
-    PblVector3 vView;
-    D3DXVec3TransformCoord(reinterpret_cast<D3DXVECTOR3*>(&vView), reinterpret_cast<const D3DXVECTOR3*>(&*(const PblVector3*)&pObject->_Sphere), reinterpret_cast<const D3DXMATRIX*>(&pCamera->GetMatrixInverse()));
+    PblVector3 vView = pCamera->TransformWorldPointToCameraSpace(pObject->_Sphere.GetCenter());
 
     if (pLodData->HasLowRes() && !pLodData->CrossFadeLowRes())
     {
@@ -1093,10 +1092,10 @@ void RedSceneManager::_RenderTransparentObjects(unsigned int uiFlags)
     typedef PblHeap<RedSceneObject*, float> TransparentHeap;
 
     mTransparentPhase = true;
-    while (!static_cast<TransparentHeap*>(mTransparentObjects)->IsEmpty())
+    while (!((TransparentHeap*)mTransparentObjects)->IsEmpty())
     {
-        RedSceneObject* pObject = static_cast<TransparentHeap*>(mTransparentObjects)->Get(0);
-        static_cast<TransparentHeap*>(mTransparentObjects)->Pop();
+        RedSceneObject* pObject = ((TransparentHeap*)mTransparentObjects)->Get(0);
+        ((TransparentHeap*)mTransparentObjects)->Pop();
         pObject->Render(0, 1.0f, pObject->_uiRenderFlags | uiFlags);
     }
     mTransparentPhase = false;

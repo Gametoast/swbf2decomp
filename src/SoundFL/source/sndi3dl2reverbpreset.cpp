@@ -36,7 +36,7 @@ I3DL2ReverbPreset* __cdecl I3DL2ReverbPreset::Find(unsigned int uiHashID)
     for (PblListSingle::Node* pNode = smList.mHead.mNext; pNode != &smList.mHead;
          pNode = pNode->mNext)
     {
-        I3DL2ReverbPreset* const pPreset = static_cast<I3DL2ReverbPreset*>(pNode->GetObjectA(&smList, offsetof(I3DL2ReverbPreset, mNode)));
+        I3DL2ReverbPreset* const pPreset = (I3DL2ReverbPreset*)pNode->GetObjectA(&smList, offsetof(I3DL2ReverbPreset, mNode));
         if (uiHashID == pPreset->mHashID)
         {
             return pPreset;

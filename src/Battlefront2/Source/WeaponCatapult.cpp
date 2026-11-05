@@ -70,7 +70,7 @@ WeaponCatapult::WeaponCatapult(const WeaponCatapultClass* pClass, const WeaponDe
     Entity* pEntity = mOwner->GetGameObject()->GetEntity();
     if (pEntity && pEntity->IsRtti(EntityBuildingArmed::rttiHashEntityBuildingArmed))
     {
-        mCatapultBuilding = static_cast<EntityBuildingArmed*>(pEntity);
+        mCatapultBuilding = (EntityBuildingArmed*)pEntity;
         SetArmAngle(mLastArmAngle);
     }
     mCurrArmAngle = mLastArmAngle;
@@ -142,7 +142,7 @@ void WeaponCatapult::EnterFire()
     Entity* pEntity = mOwner->GetEntity();
     if (pEntity && pEntity->IsRtti(MountedTurret::rttiHashMountedTurret))
     {
-        mNextArmAngle = static_cast<MountedTurret*>(pEntity)->mPitch + 1.5707964f;
+        mNextArmAngle = ((MountedTurret*)pEntity)->mPitch + 1.5707964f;
     }
     mCurrArmAngle = mLastArmAngle;
     mArmSpeed = 0.0f;
@@ -268,7 +268,7 @@ bool WeaponCatapult::Fire()
     desc.mDamageOwner.mTeam = mOwner->GetGameObject()->GetTeam();
     desc.mDamageOwner.mClass = GetEntityClass(mOwner->GetGameObject());
     desc.mDamageOwner.mWeapon = mClass;
-    desc.mTarget = const_cast<GameObject*>(static_cast<const GameObject*>(mTarget));
+    desc.mTarget = const_cast<GameObject*>((const GameObject*)mTarget);
     desc.mBodyID = mTargetBodyID;
 
     if (NetGame::IsEnabled())

@@ -112,7 +112,7 @@ public:
     float GetMaxShield() const { return mMaxShield; }
     void SetMaxShield(float fShield) { mMaxShield = fShield; }
     void SetAddHealth(float fHealth) { mAddHealth = fHealth; }
-    HealthType GetHealthType() const { return static_cast<HealthType>(mHealthType); }
+    HealthType GetHealthType() const { return (HealthType)mHealthType; }
     void SetHealthType(HealthType eType) { mHealthType = eType; }
     void SetAddShield(float fShield) { mAddShield = fShield; }
     bool IsShielded() const { return mIsShielded; }

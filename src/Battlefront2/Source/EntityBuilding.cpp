@@ -149,7 +149,7 @@ Entity* EntityBuildingClass::Build(const EntityDesc& desc)
     EntityBuilding* pBuilding = new EntityBuilding(this, desc);
     if (pBuilding)
     {
-        static_cast<CollisionObject*>(pBuilding)->AddStaticToCollisionManager();
+        ((CollisionObject*)pBuilding)->AddStaticToCollisionManager();
         if (!NetGame::IsEnabled() || !NetGame::IsClient())
         {
             ((EntityGeometry*)pBuilding)->BuildEffects();

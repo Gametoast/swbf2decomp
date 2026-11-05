@@ -753,9 +753,7 @@ ReflectionRegion::ReflectionRegion(RedRegionDesc& desc) : RedRegion(desc)
     case type_cylinder_zaligned:
     {
         const PblVector3 vPoint = mMatrix[3] - mMatrix[1] * mSize.y;
-        const PblVector3 vNormal = mMatrix[1];
-        m_reflectionPlane =
-            PblPlane(vNormal.x, vNormal.y, vNormal.z, -DotProduct(vNormal, vPoint));
+        m_reflectionPlane = PblPlane(mMatrix[1], vPoint);
         break;
     }
     default:
@@ -1723,7 +1721,7 @@ void FLRenderer::RenderReflections()
             mReflect.m[1][2] = plane.GetB() * fScale * plane.GetC();
             mReflect.m[2][0] = plane.GetA() * fScale * plane.GetC();
             mReflect.m[2][1] = plane.GetB() * fScale * plane.GetC();
-            mReflect.m[2][2] = (plane.GetB() * plane.GetB() + plane.GetA() * plane.GetA() - plane.GetC() * plane.GetC()) * fInvLenSq;
+            mReflect.m[2][2] = (plane.GetA() * plane.GetA() + plane.GetB() * plane.GetB() - plane.GetC() * plane.GetC()) * fInvLenSq;
             mReflect.m[3][0] = plane.GetA() * fScale * plane.GetD();
             mReflect.m[3][1] = plane.GetB() * fScale * plane.GetD();
             mReflect.m[3][2] = plane.GetC() * fScale * plane.GetD();
@@ -1828,7 +1826,7 @@ void FLRenderer::RenderReflections()
         bool bFogEnable = RedRenderer::GetFogEnable();
         float fFogStart, fFogEnd;
         RedRenderer::GetFogRange(fFogStart, fFogEnd);
-        float fWorldFogStart, fWorldFogEnd;
+        float fWorldFogEnd, fWorldFogStart;
         RedRenderer::GetWorldFogRange(fWorldFogStart, fWorldFogEnd);
         RedColor fogColor = RedRenderer::GetFogColor();
         if (!bFarScene)

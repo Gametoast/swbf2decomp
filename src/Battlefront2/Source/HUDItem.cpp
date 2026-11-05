@@ -367,7 +367,7 @@ const HUD::Item::Factory::Property* HUD::Item::Factory::PropertyGetFirst() const
     {
         return 0;
     }
-    return static_cast<const Property*>(
+    return (const Property*)(
         mProperties.GetFirst()->GetObjectA(&mProperties, offsetof(Property, mNode)));
 }
 
@@ -392,14 +392,14 @@ const HUD::Item::Factory::Property* HUD::Item::Factory::PropertyGetNext(
     const Property* const pProperty) const
 {
     PblListSingle::Node* const node = pProperty->mNode.GetNext();
-    return static_cast<const Property*>(node->GetObjectA(&mProperties, offsetof(Property, mNode)));
+    return (const Property*)node->GetObjectA(&mProperties, offsetof(Property, mNode));
 }
 
 // FUNCTION: SWBF2 0x00564270
 const HUD::Item::Factory::Property* HUD::Item::Factory::PropertyGetPrevious(
     const Property* const pProperty) const
 {
-    return static_cast<const Property*>(
+    return (const Property*)(
         pProperty->mNode.GetPrevious()->GetObjectA(&mProperties, offsetof(Property, mNode)));
 }
 
@@ -408,7 +408,7 @@ HUD::Item::Factory* HUD::Item::Factory::FindByHashID(unsigned int uHashID)
 {
     for (PblListDouble::Itor itor(sList); itor.GetNode() != sList.GetTerminator(); ++itor)
     {
-        Factory* pFactory = static_cast<Factory*>(
+        Factory* pFactory = (Factory*)(
             itor.GetNode()->GetObjectA(&sList, offsetof(Factory, mNode)));
         if (pFactory->mHashID == uHashID)
         {

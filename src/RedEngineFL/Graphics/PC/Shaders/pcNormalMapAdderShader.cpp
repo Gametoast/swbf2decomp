@@ -239,22 +239,22 @@ void pcNormalMapAdderShader::_Init(unsigned int uiFlags,
 void pcNormalMapAdderShader::_InitPipelineFuncArray()
 {
     GetStateFuncArray[PIPELINE_FIXED] =
-        static_cast<GetStateFuncT>(&pcNormalMapAdderShader::GetState_Fixed);
+        (GetStateFuncT)(&pcNormalMapAdderShader::GetState_Fixed);
     BeginFuncArray[PIPELINE_FIXED] =
-        static_cast<BeginFuncT>(&pcNormalMapAdderShader::Begin_Fixed);
+        (BeginFuncT)(&pcNormalMapAdderShader::Begin_Fixed);
     EndFuncArray[PIPELINE_FIXED] =
-        static_cast<EndFuncT>(&pcNormalMapAdderShader::End_Fixed);
+        (EndFuncT)(&pcNormalMapAdderShader::End_Fixed);
     RenderFuncArray[PIPELINE_FIXED] =
-        static_cast<RenderFuncT>(&pcNormalMapAdderShader::Render_Fixed);
+        (RenderFuncT)(&pcNormalMapAdderShader::Render_Fixed);
 
     GetStateFuncArray[PIPELINE_PROG1] =
-        static_cast<GetStateFuncT>(&pcNormalMapAdderShader::GetState_Prog1);
+        (GetStateFuncT)(&pcNormalMapAdderShader::GetState_Prog1);
     BeginFuncArray[PIPELINE_PROG1] =
-        static_cast<BeginFuncT>(&pcNormalMapAdderShader::Begin_Prog1);
+        (BeginFuncT)(&pcNormalMapAdderShader::Begin_Prog1);
     EndFuncArray[PIPELINE_PROG1] =
-        static_cast<EndFuncT>(&pcNormalMapAdderShader::End_Prog1);
+        (EndFuncT)(&pcNormalMapAdderShader::End_Prog1);
     RenderFuncArray[PIPELINE_PROG1] =
-        static_cast<RenderFuncT>(&pcNormalMapAdderShader::Render_Prog1);
+        (RenderFuncT)(&pcNormalMapAdderShader::Render_Prog1);
 }
 
 // FUNCTION: SWBF2 0x0070bc10

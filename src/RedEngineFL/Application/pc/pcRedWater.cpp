@@ -2194,51 +2194,50 @@ void RedWater::pcRenderWaterSplashes()
     GeometryModeT geometry = RedRenderer::pcGetGeometryMode();
     for (int i = 0; i < m_numWaterEvents; ++i)
     {
-        WaterEvent& event = m_eventCache[i];
-        if (event.type != WATEREVENT_SPLASH)
+        if (m_eventCache[i].type != WATEREVENT_SPLASH)
         {
             continue;
         }
 
-        float fAge = m_waterTimeStamp.GetElapsed() - event.startTime;
-        float fRadius = event.radius * 4.0f + 1.0f;
-        if (SquaredLength(pCamera->GetMatrix().GetTranslation() - event.worldPos) < WATEREVENT_MAX_VISIBLE_DISTANCESQR)
+        float fAge = m_waterTimeStamp.GetElapsed() - m_eventCache[i].startTime;
+        float fRadius = m_eventCache[i].radius * 4.0f + 1.0f;
+        if (SquaredLength(pCamera->GetMatrix().GetTranslation() - m_eventCache[i].worldPos) < WATEREVENT_MAX_VISIBLE_DISTANCESQR)
         {
-            ++event.in_range;
+            ++m_eventCache[i].in_range;
         }
-        if (pCamera->ClassifySphere(event.worldPos, fRadius, -1.0f) == RedCamera::VISIBILITY_NONE)
+        if (pCamera->ClassifySphere(m_eventCache[i].worldPos, fRadius, -1.0f) == RedCamera::VISIBILITY_NONE)
         {
             continue;
         }
 
-        PblVector3 vPos = event.worldPos;
+        PblVector3 vPos = m_eventCache[i].worldPos;
+        unsigned int uiSeed = (unsigned int)(m_eventCache[i].startTime * 4096.0f);
         vPos.y = m_waterHeight + m_fWaterHeightOffset;
-        unsigned int uiSeed = (unsigned int)(event.startTime * 4096.0f);
         if (geometry == GEOMETRYMODE_COMPRESSED)
         {
             pcRenderSplash<CompressedWaterSplashVertex, 37506>(
-                s_pWaterSplashShader, m_worldMin, m_worldMax, vPos, event.radius,
-                WATERSPLASH_OUTER_ANGLE, event.radius * 2.0f + 5.0f, event.worldVelocity, uiSeed,
+                s_pWaterSplashShader, m_worldMin, m_worldMax, vPos, m_eventCache[i].radius,
+                WATERSPLASH_OUTER_ANGLE, m_eventCache[i].radius * 2.0f + 5.0f, m_eventCache[i].worldVelocity, uiSeed,
                 fAge);
-            if (event.radius >= 1.0f)
+            if (m_eventCache[i].radius >= 1.0f)
             {
                 pcRenderSplash<CompressedWaterSplashVertex, 37506>(
-                    s_pWaterSplashShader, m_worldMin, m_worldMax, vPos, event.radius * 0.3f,
-                    WATERSPLASH_INNER_ANGLE, event.radius * 3.0f + 5.0f, event.worldVelocity,
+                    s_pWaterSplashShader, m_worldMin, m_worldMax, vPos, m_eventCache[i].radius * 0.3f,
+                    WATERSPLASH_INNER_ANGLE, m_eventCache[i].radius * 3.0f + 5.0f, m_eventCache[i].worldVelocity,
                     uiSeed + 0x81234567, fAge);
             }
         }
         else
         {
             pcRenderSplash<WaterSplashVertex, 642>(
-                s_pWaterSplashShader, m_worldMin, m_worldMax, vPos, event.radius,
-                WATERSPLASH_OUTER_ANGLE, event.radius * 2.0f + 5.0f, event.worldVelocity, uiSeed,
+                s_pWaterSplashShader, m_worldMin, m_worldMax, vPos, m_eventCache[i].radius,
+                WATERSPLASH_OUTER_ANGLE, m_eventCache[i].radius * 2.0f + 5.0f, m_eventCache[i].worldVelocity, uiSeed,
                 fAge);
-            if (event.radius >= 1.0f)
+            if (m_eventCache[i].radius >= 1.0f)
             {
                 pcRenderSplash<WaterSplashVertex, 642>(
-                    s_pWaterSplashShader, m_worldMin, m_worldMax, vPos, event.radius * 0.3f,
-                    WATERSPLASH_INNER_ANGLE, event.radius * 3.0f + 5.0f, event.worldVelocity,
+                    s_pWaterSplashShader, m_worldMin, m_worldMax, vPos, m_eventCache[i].radius * 0.3f,
+                    WATERSPLASH_INNER_ANGLE, m_eventCache[i].radius * 3.0f + 5.0f, m_eventCache[i].worldVelocity,
                     uiSeed + 0x81234567, fAge);
             }
         }

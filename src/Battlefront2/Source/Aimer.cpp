@@ -46,7 +46,7 @@ namespace
 
     inline const CollisionObject* GetCollisionObject(const GameObject* pObject)
     {
-        return &static_cast<const CollisionObject&>(*pObject);
+        return &(const CollisionObject&)(*pObject);
     }
 
     inline const Controllable* GetControllable(const GameObject* pObject)
@@ -272,17 +272,17 @@ Aimer::Aimer(AimerClass* pClass, const Controllable* pOwner, const PblMatrix* pP
     , mPose(pPose)
 {
     mWithinLimitsFlag = true;
-    mOffsetPos = pClass->mOffsetPos;
+    mOffsetPos = mClass->mOffsetPos;
 
     mYaw = 0.0f;
     mPitch = 0.0f;
-    if (pClass->mYawMin > 0.0f || pClass->mYawMax < 0.0f)
+    if (mClass->mYawMin > 0.0f || mClass->mYawMax < 0.0f)
     {
-        mYaw = (pClass->mYawMax + pClass->mYawMin) * 0.5f;
+        mYaw = (mClass->mYawMax + mClass->mYawMin) * 0.5f;
     }
-    if (pClass->mPitchMin > 0.0f || pClass->mPitchMax < 0.0f)
+    if (mClass->mPitchMin > 0.0f || mClass->mPitchMax < 0.0f)
     {
-        mPitch = (pClass->mPitchMax + pClass->mPitchMin) * 0.5f;
+        mPitch = (mClass->mPitchMax + mClass->mPitchMin) * 0.5f;
     }
     mOmegaPitch = 0.0f;
     mOmegaYaw = 0.0f;

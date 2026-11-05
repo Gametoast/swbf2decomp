@@ -805,7 +805,7 @@ int ScriptCB_GetTeamstats(lua_State* L)
     }
     DoPeriodicLuaGC(true);
 
-    if (NetGame::IsEnabled() && NetGame::IsClient() && !PlayerStats::mGotMPStats)
+    if (NetGame::IsEnabled() && (netEnabledNext && netClientActive) && !PlayerStats::mGotMPStats)
     {
         lua_pushnil(LuaHelper::mState);
         LuaHelper::SetGlobal(pcTable);
@@ -1012,7 +1012,7 @@ int ScriptCB_GetPersonalStats(lua_State* L)
     float fRank = (float)luaL_checknumber(LuaHelper::mState, 2);
     DoPeriodicLuaGC(true);
 
-    if (NetGame::IsEnabled() && NetGame::IsClient() && !PlayerStats::mGotMPStats)
+    if (NetGame::IsEnabled() && (netEnabledNext && netClientActive) && !PlayerStats::mGotMPStats)
     {
         lua_pushnil(LuaHelper::mState);
         LuaHelper::SetGlobal("stats_listbox_contents");

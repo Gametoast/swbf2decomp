@@ -50,10 +50,7 @@ public:
 
         if ((mFlags & flags_updatePlaybackPosition) == 0)
         {
-            mPlaybackPosition = 0;
-            mFlags = (unsigned short)(mFlags
-                                      | (unsigned int)
-                                            flags_updatePlaybackPosition);
+            SetPlaybackPosition(0);
         }
     }
 

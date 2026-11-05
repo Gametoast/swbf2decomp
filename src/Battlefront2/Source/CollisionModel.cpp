@@ -260,7 +260,7 @@ bool CollisionModel::CheckForCollision_SSSC(CollisionObject* pCollider, Collisio
             if (pOther->ReceiveCollision(*pMatrix, ((CollisionBodyPrimitive*)pBody)->mPrimitive, pCollider,
                                          *pOtherMatrix, pReceiver, pRestrictor))
             {
-                for (int k = 0; k < 3; ++k)
+                for (int k = 0; k < CollisionObject::kNumLastCollided; ++k)
                 {
                     if (pCollider->mLastCollidedObjs[k] == pReceiver)
                     {
@@ -330,7 +330,7 @@ bool CollisionModel::CheckForCollision(CollisionObject* pCollider, CollisionObje
                 if (pOtherModel->mBody[j]->ReceiveCollision(*pMatrix, ((CollisionBodyPrimitive*)pBody)->mPrimitive, pCollider,
                                                             otherMatrix, pReceiver, pRestrictor))
                 {
-                    for (int k = 0; k < 3; ++k)
+                    for (int k = 0; k < CollisionObject::kNumLastCollided; ++k)
                     {
                         if (pCollider->mLastCollidedObjs[k] == pReceiver)
                         {
@@ -364,7 +364,7 @@ bool CollisionModel::CheckForCollision(CollisionObject* pCollider, CollisionObje
                 if (pOther->ReceiveCollision(bodyMatrix, ((CollisionBodyPrimitive*)pBody)->mPrimitive, pCollider,
                                              otherMatrix, pReceiver, pRestrictor))
                 {
-                    for (int k = 0; k < 3; ++k)
+                    for (int k = 0; k < CollisionObject::kNumLastCollided; ++k)
                     {
                         if (pCollider->mLastCollidedObjs[k] == pReceiver)
                         {
@@ -569,14 +569,12 @@ PblVector3 CollisionModel::GetTargetPoint(const PblVector3& vPos, const PblVecto
 
         PblMatrix world = mBody[i]->GetWorldMatrix(matrix, pPose);
         PblVector3 vTo(world.m[3][0] - vPos.x, world.m[3][1] - vPos.y, world.m[3][2] - vPos.z);
-        PblVector3 vNorm;
-        D3DXVec3Normalize((D3DXVECTOR3*)&vNorm, (const D3DXVECTOR3*)&vTo);
-        vTo = vNorm;
-        float fDot = vDir.y * vTo.y + vDir.x * vTo.x + vDir.z * vTo.z;
+        vTo = Normalize(vTo);
+        float fDot = DotProduct(vDir, vTo);
         if (fDot > fBest)
         {
-            vPoint = world.GetTranslation();
             fBest = fDot;
+            vPoint = world.GetTranslation();
         }
     }
     return vPoint;

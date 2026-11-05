@@ -83,7 +83,7 @@ const Combo* Combo::ResolveForWeapon(const WeaponMelee* pWeapon,
                     pResolved->GetState(i)->SetVelocityX(pResolved->GetState(i)->GetVelocityX() * fVelocityX, false);
                 }
             }
-            if (!static_cast<const WeaponMeleeClass*>(pWeapon->mClass)->m_uiNumDamageEdges)
+            if (!((const WeaponMeleeClass*)pWeapon->mClass)->m_uiNumDamageEdges)
             {
                 continue;
             }
@@ -91,13 +91,13 @@ const Combo* Combo::ResolveForWeapon(const WeaponMelee* pWeapon,
             {
                 State* pState = pResolved->GetState(i);
                 if (pState->GetAttack(j)->GetDamageEdge() >=
-                    static_cast<const WeaponMeleeClass*>(pWeapon->mClass)->m_uiNumDamageEdges)
+                    ((const WeaponMeleeClass*)pWeapon->mClass)->m_uiNumDamageEdges)
                 {
                     continue;
                 }
                 unsigned int uiAttach;
                 PblVector3 vBegin, vEnd;
-                static_cast<const WeaponMeleeClass*>(pWeapon->mClass)->GetDamageEdgeRay(pState->GetAttack(j)->GetDamageEdge(), uiAttach, vBegin, vEnd);
+                ((const WeaponMeleeClass*)pWeapon->mClass)->GetDamageEdgeRay(pState->GetAttack(j)->GetDamageEdge(), uiAttach, vBegin, vEnd);
                 pState->GetAttack(j)->_ResolveDamageData(pResolved, pState, uiAttach, vBegin, vEnd);
             }
         }
@@ -227,7 +227,7 @@ bool Combo::Deflect::TestDeflect(const PblMatrix& mSoldier, const PblVector3& vF
     }
     else if (matches > 1)
     {
-        unsigned int pick = static_cast<unsigned int>(PblRandom::_Global.GetFloat() * matches);
+        unsigned int pick = (unsigned int)(PblRandom::_Global.GetFloat() * matches);
         for (unsigned int i = 0; i < m_uiNumDeflectAnimations; ++i)
         {
             if (m_aDeflectAnim[i].uiDirections & mask)

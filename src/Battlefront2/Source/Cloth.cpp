@@ -74,6 +74,9 @@
 #include "ShellLoop.h"
 #include "RedEngineFL/Interface/RedShadowBlob.h"
 
+// GLOBAL: SWBF2 0x0078db38
+static PblVector3 WIND_DIRECTION(1.0f, 0.0f, 0.0f);
+
 // SYNTHETIC: SWBF2 0x004023e0
 // `dynamic initializer for 'EntityCloth::sMemoryPool''
 // SYNTHETIC: SWBF2 0x00766df0
@@ -265,6 +268,7 @@ void ClothData::_Read(PblFileChunk& chunk)
     }
 }
 
+
 // FUNCTION: SWBF2 0x00459ab0
 EntityClothClass::EntityClothClass(unsigned int uHash)
     : EntityClass(uHash)
@@ -275,7 +279,7 @@ EntityClothClass::EntityClothClass(unsigned int uHash)
         mNetIndex = -1;
     }
 
-    mWindDirection = gVectorUnitX;
+    mWindDirection = WIND_DIRECTION;
     mWindSpeed = 10.0f;
     mDampening = 0.5f;
     mDrag = -2.0f;
@@ -1095,7 +1099,7 @@ void EntityCloth::Verlet(float fDeltaTime)
         const PblVector3 vTemp = vPos;
         PblVector3& vOld = m_pOldPos[i];
         PblVector3& vAcceleration = m_pAcceleration[i];
-        vPos += (vPos - vOld) + fDt2 * vAcceleration;
+        vPos += (vPos - vOld) + vAcceleration * fDt2;
         vOld = vTemp;
     }
 }

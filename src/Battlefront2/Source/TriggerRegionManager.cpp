@@ -21,12 +21,12 @@ public:
 
 static inline CollisionObject* GetCollisionObject(GameObject* pObject)
 {
-    return &static_cast<CollisionObject&>(*pObject);
+    return &(CollisionObject&)(*pObject);
 }
 
 static inline Damageable* GetDamageable(GameObject* pObject)
 {
-    return &static_cast<Damageable&>(*pObject);
+    return &(Damageable&)(*pObject);
 }
 
 // GLOBAL: SWBF2 0x01eafcf0

@@ -325,33 +325,29 @@ void SkyStars::Render(unsigned int uiFlags) const
     const float fTanHalfWidth = fWidth * 0.5f / fNear;
     const float fTanHalfHeight = fHeight * 0.5f / fNear;
 
-    const PblMatrix* apMatrices[2] = { NULL, NULL };
+    const PblMatrix* apMatrices[2];
     const PblMatrix& mCamera = pCamera->GetMatrix();
 
     if (!m_bRenderBottom)
     {
-        const float fRight = mCamera.m[0][1] * fTanHalfWidth;
-        const float fTopRight = -mCamera.m[2][1] + fRight + mCamera.m[1][1] * fTanHalfHeight;
-        const float fTopLeft = -mCamera.m[2][1] - fRight + mCamera.m[1][1] * fTanHalfHeight;
-        const float fBottomRight = -mCamera.m[2][1] + fRight - mCamera.m[1][1] * fTanHalfHeight;
-        const float fBottomLeft = -mCamera.m[2][1] - fRight - mCamera.m[1][1] * fTanHalfHeight;
-        if (fTopRight < 0.0f && fTopLeft < 0.0f && fBottomRight < 0.0f && fBottomLeft < 0.0f)
+        const float fTopRight = (-mCamera.GetZAxis() + mCamera.GetXAxis() * fTanHalfWidth + mCamera.GetYAxis() * fTanHalfHeight).y;
+        const float fTopLeft = (-mCamera.GetZAxis() - mCamera.GetXAxis() * fTanHalfWidth + mCamera.GetYAxis() * fTanHalfHeight).y;
+        const float fBottomRight = (-mCamera.GetZAxis() + mCamera.GetXAxis() * fTanHalfWidth - mCamera.GetYAxis() * fTanHalfHeight).y;
+        if (fTopRight < 0.0f && fTopLeft < 0.0f && fBottomRight < 0.0f &&
+            (-mCamera.GetZAxis() - mCamera.GetXAxis() * fTanHalfWidth - mCamera.GetYAxis() * fTanHalfHeight).y < 0.0f)
         {
             return;
         }
     }
 
     const float fScale = fNear * 2.0f;
-    PblMatrix mScale;
 
     PblMatrix mTop = gMatrixIdentity;
-    D3DXMatrixScaling((D3DXMATRIX*)&mScale, fScale, fScale, fScale);
-    D3DXMatrixMultiply((D3DXMATRIX*)&mTop, (D3DXMATRIX*)&mTop, (D3DXMATRIX*)&mScale);
+    mTop.Scale(fScale);
     mTop.SetTranslation(mCamera.GetTranslation());
 
     PblMatrix mBottom(PblVector3(1.0f, 0.0f, 0.0f), PblVector3(0.0f, -1.0f, 0.0f), PblVector3(0.0f, 0.0f, 1.0f), PblVector3(0.0f, 0.0f, 0.0f));
-    D3DXMatrixScaling((D3DXMATRIX*)&mScale, fScale, fScale, fScale);
-    D3DXMatrixMultiply((D3DXMATRIX*)&mBottom, (D3DXMATRIX*)&mBottom, (D3DXMATRIX*)&mScale);
+    mBottom.Scale(fScale);
     mBottom.SetTranslation(mCamera.GetTranslation());
 
     PblVector3 aBand1[5], aBand1Bottom[5];
@@ -371,10 +367,7 @@ void SkyStars::Render(unsigned int uiFlags) const
     aBand3Bottom[1] = aBand2Bottom[1];
 
     PblMatrix mView = mCamera;
-    mView.m[3][0] = 0.0f;
-    mView.m[3][1] = 0.0f;
-    mView.m[3][2] = 0.0f;
-    mView.m[3][3] = 1.0f;
+    mView.SetTranslation(0.0f, 0.0f, 0.0f, 1.0f);
 
     RedCamera camera(*pCamera);
     camera.SetNearFarPlane(0.1f, 10.0f);
@@ -460,10 +453,10 @@ void SkyStars::Render(unsigned int uiFlags) const
 
         aBand1[0] = aBand1[2];
         aBand1[1] = aBand1[3];
-        aBand1Bottom[0] = aBand1Bottom[2];
-        aBand1Bottom[1] = aBand1Bottom[3];
         aBand2[0] = aBand2[2];
         aBand2[1] = aBand2[3];
+        aBand1Bottom[0] = aBand1Bottom[2];
+        aBand1Bottom[1] = aBand1Bottom[3];
         aBand2Bottom[0] = aBand2Bottom[2];
         aBand2Bottom[1] = aBand2Bottom[3];
     }

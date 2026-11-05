@@ -109,22 +109,22 @@ void pcSkyFogShader::_Init(unsigned int uiFlags,
 void pcSkyFogShader::_InitPipelineFuncArray()
 {
     GetStateFuncArray[PIPELINE_FIXED] =
-        static_cast<GetStateFuncT>(&pcSkyFogShader::GetState_Fixed);
+        (GetStateFuncT)(&pcSkyFogShader::GetState_Fixed);
     BeginFuncArray[PIPELINE_FIXED] =
-        static_cast<BeginFuncT>(&pcSkyFogShader::Begin_Fixed);
+        (BeginFuncT)(&pcSkyFogShader::Begin_Fixed);
     EndFuncArray[PIPELINE_FIXED] =
-        static_cast<EndFuncT>(&pcSkyFogShader::End_Fixed);
+        (EndFuncT)(&pcSkyFogShader::End_Fixed);
     RenderFuncArray[PIPELINE_FIXED] =
-        static_cast<RenderFuncT>(&pcSkyFogShader::Render_Fixed);
+        (RenderFuncT)(&pcSkyFogShader::Render_Fixed);
 
     GetStateFuncArray[PIPELINE_PROG1] =
-        static_cast<GetStateFuncT>(&pcSkyFogShader::GetState_Prog1);
+        (GetStateFuncT)(&pcSkyFogShader::GetState_Prog1);
     BeginFuncArray[PIPELINE_PROG1] =
-        static_cast<BeginFuncT>(&pcSkyFogShader::Begin_Prog1);
+        (BeginFuncT)(&pcSkyFogShader::Begin_Prog1);
     EndFuncArray[PIPELINE_PROG1] =
-        static_cast<EndFuncT>(&pcSkyFogShader::End_Prog1);
+        (EndFuncT)(&pcSkyFogShader::End_Prog1);
     RenderFuncArray[PIPELINE_PROG1] =
-        static_cast<RenderFuncT>(&pcSkyFogShader::Render_Prog1);
+        (RenderFuncT)(&pcSkyFogShader::Render_Prog1);
 }
 
 // FUNCTION: SWBF2 0x00704390

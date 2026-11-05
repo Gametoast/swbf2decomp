@@ -379,8 +379,8 @@ StatsLeaderboardContainer::StatsLeaderboardContainer()
 
     mBuckets.mFirst = 0;
     mBuckets.mEnd = 0;
-    mBuckets.mLast = 0;
     mMaxLoadFactor = 1.0f;
+    mBuckets.mLast = 0;
 
     void* pHead = mListHead;
     void** ppResult;

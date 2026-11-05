@@ -69,7 +69,7 @@ OrdnanceEmitterClass::OrdnanceEmitterClass(unsigned int uHash)
     mPlayEffectOnOwnerAimer = 0;
     mSmolderEffectTimer = 0.0f;
     mSmolderVanishDeath = false;
-    for (int i = 0; i < 5; ++i)
+    for (int i = 0; i < kMaxSmolderEffects; ++i)
     {
         mSmolderEffectBone[i] = 0;
         mSmolderEffect[i] = 0;
@@ -116,7 +116,7 @@ OrdnanceEmitterClass::OrdnanceEmitterClass(OrdnanceEmitterClass* pBase, unsigned
     mPlayEffectOnOwnerAimer = pBase->mPlayEffectOnOwnerAimer;
     mSmolderEffectTimer = pBase->mSmolderEffectTimer;
     mSmolderVanishDeath = pBase->mSmolderVanishDeath;
-    for (int i = 0; i < 5; ++i)
+    for (int i = 0; i < kMaxSmolderEffects; ++i)
     {
         mSmolderEffectBone[i] = pBase->mSmolderEffectBone[i];
         mSmolderEffect[i] = pBase->mSmolderEffect[i];
@@ -305,7 +305,7 @@ void OrdnanceEmitterClass::SetProperty(unsigned int uProperty, const char* pszVa
     case 0x6CF895FB:
     {
         int i;
-        for (i = 0; i < 5; ++i)
+        for (i = 0; i < kMaxSmolderEffects; ++i)
         {
             if (!mSmolderEffectBone[i])
             {
@@ -318,7 +318,7 @@ void OrdnanceEmitterClass::SetProperty(unsigned int uProperty, const char* pszVa
     case 0x592FB160:
     {
         int i;
-        for (i = 0; i < 5; ++i)
+        for (i = 0; i < kMaxSmolderEffects; ++i)
         {
             if (!mSmolderEffect[i])
             {
@@ -459,10 +459,13 @@ Ordnance* OrdnanceEmitterClass::Build(const OrdnanceDesc& desc)
             }
 
             PblVector3 vTarget = objects[iCount]->GetCollisionCenter();
-            PblVector3 vDelta(vTarget.x - vPos.x, vTarget.y - vPos.y, vTarget.z - vPos.z);
-            float fDistSq = vDelta.x * vDelta.x + vDelta.y * vDelta.y + vDelta.z * vDelta.z;
+            const float fDeltaX = vTarget.x - vPos.x;
+            const float fDeltaY = vTarget.y - vPos.y;
+            const float fDeltaZ = vTarget.z - vPos.z;
+            float fDistSq = fDeltaX * fDeltaX + fDeltaY * fDeltaY + fDeltaZ * fDeltaZ;
             if (fConeLengthSq > fDistSq)
             {
+                PblVector3 vDelta(fDeltaX, fDeltaY, fDeltaZ);
                 PblVector3 vToTarget;
                 D3DXVec3Normalize(reinterpret_cast<D3DXVECTOR3*>(&vToTarget), reinterpret_cast<const D3DXVECTOR3*>(&vDelta));
                 const float fDot = vDir.x * vToTarget.x + vToTarget.y * vDir.y + vToTarget.z * vDir.z;
@@ -508,14 +511,19 @@ Ordnance* OrdnanceEmitterClass::Build(const OrdnanceDesc& desc)
                 continue;
             }
 
-            const PblVector3 vJumpDir = Normalize(vTarget - vSource);
+            PblVector3 vJumpDir;
+            {
+                PblVector3 vJumpDelta(vTarget.x - vSource.x, vTarget.y - vSource.y, vTarget.z - vSource.z);
+                D3DXVec3Normalize(reinterpret_cast<D3DXVECTOR3*>(&vJumpDir),
+                                  reinterpret_cast<const D3DXVECTOR3*>(&vJumpDelta));
+            }
 
             if (pTarget->Deflect(0, vTarget, vJumpDir))
             {
                 if (mLightningEffectClass)
                 {
                     LightningBoltEffectObject* pBolt =
-                        static_cast<LightningBoltEffectObject*>(mLightningEffectClass->BuildEffect());
+                        (LightningBoltEffectObject*)mLightningEffectClass->BuildEffect();
                     if (pBolt)
                     {
                         if (iTargets > 0 || !pBolt->SetOrdnanceOwner(desc.mOwner))
@@ -548,11 +556,11 @@ Ordnance* OrdnanceEmitterClass::Build(const OrdnanceDesc& desc)
                 if (fDamage > 0.0f)
                 {
                     EntitySoldier* pSoldier = pTarget->GetDerivedRtti() == EntitySoldier::rttiHashEntitySoldier
-                                                  ? static_cast<EntitySoldier*>(pTarget)
+                                                  ? (EntitySoldier*)pTarget
                                                   : 0;
                     if (pSoldier && mSmolderEffectTimer > 0.0f)
                     {
-                        for (int i = 0; i < 5; ++i)
+                        for (int i = 0; i < kMaxSmolderEffects; ++i)
                         {
                             pSoldier->SetupSmolderEffect(i, mSmolderEffectBone[i], mSmolderEffect[i]);
                         }
@@ -601,7 +609,7 @@ Ordnance* OrdnanceEmitterClass::Build(const OrdnanceDesc& desc)
                 if (mLightningEffectClass)
                 {
                     LightningBoltEffectObject* pBolt =
-                        static_cast<LightningBoltEffectObject*>(mLightningEffectClass->BuildEffect());
+                        (LightningBoltEffectObject*)mLightningEffectClass->BuildEffect();
                     if (pBolt)
                     {
                         if (iTargets > 0 || !pBolt->SetOrdnanceOwner(desc.mOwner))
@@ -631,24 +639,19 @@ Ordnance* OrdnanceEmitterClass::Build(const OrdnanceDesc& desc)
             for (int i = 0; i < iBolts; ++i)
             {
                 LightningBoltEffectObject* pBolt =
-                    static_cast<LightningBoltEffectObject*>(mLightningEffectClass->BuildEffect());
+                    (LightningBoltEffectObject*)mLightningEffectClass->BuildEffect();
                 if (!pBolt)
                 {
                     continue;
                 }
 
-                PblVector3 vBoltDir;
-                if (mNoTargetLightningEffectRandomSpread == 0.0f)
-                {
-                    vBoltDir = vDir;
-                }
-                else
-                {
-                    vBoltDir = RotateZ(RotateY(vDir, (1.0f - PblRandom::_Global.GetFloat() * 2.0f) *
-                                                         mNoTargetLightningEffectRandomSpread),
-                                       (1.0f - PblRandom::_Global.GetFloat() * 2.0f) *
-                                           mNoTargetLightningEffectRandomSpread);
-                }
+                const PblVector3& vBoltDir =
+                    mNoTargetLightningEffectRandomSpread == 0.0f
+                        ? PblVector3(vDir)
+                        : RotateZ(RotateY(vDir, (1.0f - PblRandom::_Global.GetFloat() * 2.0f) *
+                                                    mNoTargetLightningEffectRandomSpread),
+                                  (1.0f - PblRandom::_Global.GetFloat() * 2.0f) *
+                                      mNoTargetLightningEffectRandomSpread);
 
                 CollisionObject* pHit;
                 float fFraction = CollisionManager::RayHit(vPos, vBoltDir, mConeLength, pHit, 0, 0, 0,
@@ -701,11 +704,11 @@ Ordnance* OrdnanceEmitterClass::Build(const OrdnanceDesc& desc)
             }
 
             EntitySoldier* pSoldier = pTarget->GetDerivedRtti() == EntitySoldier::rttiHashEntitySoldier
-                                          ? static_cast<EntitySoldier*>(pTarget)
+                                          ? (EntitySoldier*)pTarget
                                           : 0;
             if (pSoldier && mSmolderEffectTimer > 0.0f)
             {
-                for (int j = 0; j < 5; ++j)
+                for (int j = 0; j < kMaxSmolderEffects; ++j)
                 {
                     pSoldier->SetupSmolderEffect(j, mSmolderEffectBone[j], mSmolderEffect[j]);
                 }
@@ -747,11 +750,11 @@ Ordnance* OrdnanceEmitterClass::Build(const OrdnanceDesc& desc)
         if (pOwner && pOwner->IsAlive() && mAffectFriends)
         {
             EntitySoldier* pSoldier = pOwner->GetDerivedRtti() == EntitySoldier::rttiHashEntitySoldier
-                                          ? static_cast<EntitySoldier*>(pOwner)
+                                          ? (EntitySoldier*)pOwner
                                           : 0;
             if (pSoldier && mSmolderEffectTimer > 0.0f)
             {
-                for (int i = 0; i < 5; ++i)
+                for (int i = 0; i < kMaxSmolderEffects; ++i)
                 {
                     pSoldier->SetupSmolderEffect(i, mSmolderEffectBone[i], mSmolderEffect[i]);
                 }
@@ -796,7 +799,7 @@ bool OrdnanceEmitterClass::DoBuff(GameObject* pObject, const OrdnanceDesc& desc,
     {
         if (pObject->IsAlive())
         {
-            EntitySoldier* pSoldier = static_cast<EntitySoldier*>(pObject);
+            EntitySoldier* pSoldier = (EntitySoldier*)pObject;
             if (mDebuffDamageTimer > 0.0f)
             {
                 pSoldier->DebuffDamage(mDebuffDamageTimer, mDebuffDamageRate, desc.mDamageOwner);
@@ -829,7 +832,7 @@ bool OrdnanceEmitterClass::DoBuff(GameObject* pObject, const OrdnanceDesc& desc,
     {
         if (pObject->IsAlive())
         {
-            EntityDroideka* pDroideka = static_cast<EntityDroideka*>(pObject);
+            EntityDroideka* pDroideka = (EntityDroideka*)pObject;
             if (mDebuffDamageTimer > 0.0f)
             {
                 pDroideka->DebuffDamage(mDebuffDamageTimer, mDebuffDamageRate, desc.mDamageOwner);

@@ -496,7 +496,7 @@ void AILowLevel::ProcessTriggerSingle(float dt, ControllableHeading* pHeading,
 
         if (pWpn->IsRtti(WeaponMelee::rttiHashWeaponMelee))
         {
-            static_cast<WeaponMelee*>(pWpn)->m_bAI_Deflect = false;
+            ((WeaponMelee*)pWpn)->m_bAI_Deflect = false;
         }
     }
     else

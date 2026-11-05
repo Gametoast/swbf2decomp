@@ -74,6 +74,8 @@ class EntityFlyer : public GameObject, public Controllable, public VehicleMusic,
                     public VehicleEngine, public EntityPathFollower
 {
 public:
+    static const int kMaxTurrets = EntityFlyerClass::kMaxTurrets;
+    static const int kMaxThrustEffects = EntityFlyerClass::kMaxThrustEffects;
     EntityFlyer(EntityFlyerClass* pClass, const EntityDesc& desc);
     virtual ~EntityFlyer();
 
@@ -128,13 +130,13 @@ public:
     // FUNCTION: SWBF2 0x004778f0
     const Controllable* GetControllable() const
     {
-        return this ? static_cast<const Controllable*>(this) : 0;
+        return this ? (const Controllable*)this : 0;
     }
 
     // FUNCTION: SWBF2 0x00477900
     Controllable* GetControllable()
     {
-        return this ? static_cast<Controllable*>(this) : 0;
+        return this ? (Controllable*)this : 0;
     }
 
     // FUNCTION: SWBF2 0x00477980
@@ -379,13 +381,13 @@ public:
     PblVector3 mSlidePos, mSlideBeginPos;
     EntityFlyerClass* mClass;
     PassengerSlot* mPassengerSlots[4];
-    MountedTurret* mTurret[8];
+    MountedTurret* mTurret[kMaxTurrets];
     char mNumTurrets;
     unsigned char _turretPadding[3];
     float mAnimationTime;
     Aimer* mAimer[4];
-    Weapon* mWeapon[4];
-    int mWeaponIndex[2];
+    Weapon* mWeapon[kMaxWeapons];
+    int mWeaponIndex[kNumWeaponChannels];
     float mLastAltitude;
     ZephyrSkeleton<32> mZephyrSkeleton;
     ZephyrPoseDyn<32> mZephyrPoseDyn;
@@ -409,7 +411,7 @@ public:
     float mTrickEngineValue;
     GameSoundControllable mSoundTrick;
     PostCollision mPostCollision;
-    PblHandle<ParticleEmitterObject> mThrustEffect[8];
+    PblHandle<ParticleEmitterObject> mThrustEffect[kMaxThrustEffects];
     PblHandle<ParticleEmitterObject> mContrailEffect[12];
 };
  
@@ -522,7 +524,7 @@ public:
 
     EntityCarrierClass* GetClass() const
     {
-        return static_cast<EntityCarrierClass*>(mClass);
+        return (EntityCarrierClass*)mClass;
     }
 };
  

@@ -36,7 +36,7 @@ namespace
 
     Damageable* AsDamageable(GameObject* pObject)
     {
-        return static_cast<Damageable*>(pObject);
+        return (Damageable*)pObject;
     }
 
     inline unsigned int GameObjectHandleId(const GameObject* pObject)

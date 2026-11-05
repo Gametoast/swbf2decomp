@@ -93,6 +93,6 @@ void HUD::TransformNumberType::EventInputFactor(const HUD::Event& event, void* c
     const EventClass::Type type = event.GetClass()->GetType();
     if (type >= EventClass::type_Int && type <= EventClass::type_Float)
     {
-        static_cast<TransformNumberType*>(pData)->mInputFactor = event.GetDataFloat();
+        ((TransformNumberType*)pData)->mInputFactor = event.GetDataFloat();
     }
 }

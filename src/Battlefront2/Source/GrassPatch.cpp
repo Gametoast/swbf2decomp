@@ -72,15 +72,21 @@ GrassPatch::GrassPatch(GrassPatchClass* pClass, const PblMatrix& matrix)
     mMatrix[0] = Normalize(CrossProduct(-mMatrix[2], mMatrix[1]));
     mMatrix.m[0][3] = 0.0f;
 
-    mMatrix[2] = Normalize(CrossProduct(mMatrix[0], mMatrix[1]));
+    {
+        const PblVector3& a = mMatrix[0];
+        const PblVector3& b = mMatrix[1];
+        mMatrix[2] = Normalize(PblVector3(b.z * a.y - b.y * a.z, b.x * a.z - b.z * a.x, a.x * b.y - a.y * b.x));
+    }
     mMatrix.m[2][3] = 0.0f;
 
     mMatrix[3] = matrix[3];
     mMatrix.m[3][3] = 1.0f;
 
-    PblVector3 vCenter;
-    D3DXVec3TransformCoord(reinterpret_cast<D3DXVECTOR3*>(&vCenter), reinterpret_cast<const D3DXVECTOR3*>(&mClass->mBoundingOffset), reinterpret_cast<const D3DXMATRIX*>(&mMatrix));
-    SetRenderPos(vCenter);
+    {
+        PblVector3 vCenter;
+        D3DXVec3TransformCoord(reinterpret_cast<D3DXVECTOR3*>(&vCenter), reinterpret_cast<const D3DXVECTOR3*>(&mClass->mBoundingOffset), reinterpret_cast<const D3DXMATRIX*>(&mMatrix));
+        SetRenderPos(vCenter);
+    }
     SetRenderRadius(mClass->mBoundingRadius);
     AddToScene();
 
@@ -345,13 +351,18 @@ void GrassPatchClass::Init()
                                     * (1.0f - fFade) + mFlatHeightMin) * mSizeMin;
                 mParticle[i].mFlatType = true;
 
+                float fAbsX;
+                float fAbsZ;
                 do
                 {
                     const float fZ = PblRandom::_Global.GetFloat() - 0.5f;
                     const float fX = PblRandom::_Global.GetFloat() - 0.5f;
                     mParticle[i].mUp = PblVector3(fX, 0.0f, fZ);
-                } while ((mParticle[i].mUp.x < 0.0f ? -mParticle[i].mUp.x : mParticle[i].mUp.x) < 0.01f
-                         && (mParticle[i].mUp.z < 0.0f ? -mParticle[i].mUp.z : mParticle[i].mUp.z) < 0.01f);
+                    fAbsX = mParticle[i].mUp.x;
+                    fAbsX = fAbsX < 0.0f ? -fAbsX : fAbsX;
+                    fAbsZ = mParticle[i].mUp.z;
+                    fAbsZ = fAbsZ < 0.0f ? -fAbsZ : fAbsZ;
+                } while (fAbsX < 0.01f && fAbsZ < 0.01f);
                 mParticle[i].mUp = Normalize(mParticle[i].mUp);
                 mParticle[i].mUp.y = (PblRandom::_Global.GetFloat() - 0.5f) * 0.3f;
                 mParticle[i].mUp = Normalize(mParticle[i].mUp);

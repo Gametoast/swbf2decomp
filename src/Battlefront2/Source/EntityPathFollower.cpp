@@ -459,7 +459,7 @@ unsigned int EntityPathFollower::CreateSquadronForFlyby(BranchParams& params)
     {
         return 0;
     }
-    if (!static_cast<Trackable*>(pPlayerControllable)->GetGameObject()->IsRtti(EntityFlyer::rttiHashEntityFlyer))
+    if (!((Trackable*)pPlayerControllable)->GetGameObject()->IsRtti(EntityFlyer::rttiHashEntityFlyer))
     {
         return 0;
     }
@@ -483,7 +483,7 @@ unsigned int EntityPathFollower::CreateSquadronForFlyby(BranchParams& params)
     {
         return 0;
     }
-    int iPlayerTeam = static_cast<Trackable*>(pPlayerControllable)->GetGameObject()->GetTeam();
+    int iPlayerTeam = ((Trackable*)pPlayerControllable)->GetGameObject()->GetTeam();
     if (GetAllegiance() == (unsigned int)iPlayerTeam && (PblRandom::GetGlobalInt() & 3))
     {
         return 0;
@@ -492,7 +492,7 @@ unsigned int EntityPathFollower::CreateSquadronForFlyby(BranchParams& params)
     unsigned int uCount = 0;
     unsigned int uSquadronSize = (int)PblRandom::GetGlobalFloatRange(4.5f, 3.0f);
     bool bSameDirection = ((PblRandom::GetGlobalInt() >> 1) & 1) != 0;
-    float fRadius = static_cast<CollisionObject*>(params.mGameObject)->GetCollisionRadius() * 6.0f;
+    float fRadius = ((CollisionObject*)params.mGameObject)->GetCollisionRadius() * 6.0f;
     float fSide = bSameDirection ? 4.0f : -3.0f;
 
     const PblMatrix& mUp = pPlayerControllable->GetMatrix();
@@ -512,7 +512,7 @@ unsigned int EntityPathFollower::CreateSquadronForFlyby(BranchParams& params)
     int iTries = 0;
     GameObject* pFound;
     while (CollisionManager::GetObjectsInRange(vStart, fRadius, &pFound, 1,
-                                               static_cast<Trackable*>(pPlayerControllable)->GetGameObject(), 0))
+                                               ((Trackable*)pPlayerControllable)->GetGameObject(), 0))
     {
         ++iTries;
         const PblMatrix& mUp2 = pPlayerControllable->GetMatrix();
@@ -545,10 +545,10 @@ unsigned int EntityPathFollower::CreateSquadronForFlyby(BranchParams& params)
         PblVector3 vPos = vStart + vEntry * fSlotOffset;
         PblMatrix& matrix = params.mMatrix;
         matrix.SetTranslation(vPos);
-        static_cast<CollisionObject*>(params.mGameObject)->mLastPosition = vPos;
+        ((CollisionObject*)params.mGameObject)->mLastPosition = vPos;
         if (params.mGameObject->IsRtti(EntityFlyer::rttiHashEntityFlyer))
         {
-            static_cast<EntityFlyer*>(params.mGameObject)->TurnOffContrailEffects();
+            ((EntityFlyer*)params.mGameObject)->TurnOffContrailEffects();
         }
 
         PblVector3 vDir = bSameDirection ? vForward : -vForward;
@@ -781,7 +781,7 @@ bool EntityPathFollower::Branch(BranchParams& params, const PblVector3* const pP
     PathStart start;
     if (InSquadron())
     {
-        EntityPathFollower* pLeader = static_cast<EntityPathFollower*>(GetSquadronLeader());
+        EntityPathFollower* pLeader = (EntityPathFollower*)GetSquadronLeader();
         if (pLeader && !IsSquadronLeader() && pLeader->mPath == mPath &&
             mIndex * mDirection >= pLeader->mIndex * pLeader->mDirection)
         {
@@ -792,7 +792,7 @@ bool EntityPathFollower::Branch(BranchParams& params, const PblVector3* const pP
     bool bHasFlag = IsCarryingFlagRef(params.mGameObject);
     if (InSquadron() && !IsSquadronLeader())
     {
-        const EntityPathFollower* pLeader = static_cast<const EntityPathFollower*>(GetSquadronLeader());
+        const EntityPathFollower* pLeader = (const EntityPathFollower*)GetSquadronLeader();
         start.mAttrib.mVectorDist.z = 0.0f;
         start.mAttrib.mVectorDist.y = 0.0f;
         start.mAttrib.mVectorDist.x = 0.0f;
@@ -963,7 +963,7 @@ bool EntityPathFollower::GetPointIsSet(unsigned char uIndex) const
 // FUNCTION: SWBF2 0x004d66b0
 void EntityPathFollower::RemoveFromSquadron()
 {
-    mSpeed = static_cast<const EntityPathFollowerClass*>(GetEntitySquadronClass())->mSpeed;
+    mSpeed = ((const EntityPathFollowerClass*)GetEntitySquadronClass())->mSpeed;
     EntitySquadron::RemoveFromSquadron();
 }
 
@@ -978,7 +978,7 @@ namespace
 
     const PblMatrix& GetFlagMatrix(const FlagItem* pFlag)
     {
-        return static_cast<const CollisionObject*>(pFlag)->GetMatrix();
+        return ((const CollisionObject*)pFlag)->GetMatrix();
     }
 }
 
@@ -998,18 +998,17 @@ bool EntityPathFollower::Update(BranchParams& params, float fElapsed, PblVector3
         RemovePathRef(params.mPathClass);
         mSetPoints = 0;
         ResetStateVars();
-        BranchParams leader = static_cast<EntityPathFollower*>(GetSquadronLeader())->GetBranchParams();
-        const PblMatrix& lead = leader.mMatrix;
+        BranchParams leader = ((EntityPathFollower*)GetSquadronLeader())->GetBranchParams();
         float fSlot = (float)GetFormationSlot();
-        PblVector3 vPos = lead.GetTranslation() + lead.GetXAxis() * fSlot * 15.0f;
+        PblVector3 vPos = leader.mMatrix.GetTranslation() + leader.mMatrix.GetXAxis() * fSlot * 15.0f;
         PblMatrix& matrix = params.mMatrix;
         matrix.SetTranslation(vPos);
-        static_cast<CollisionObject&>(*params.mGameObject).mLastPosition = vPos;
-        matrix[2] = lead[2];
+        params.mGameObject->mLastPosition = vPos;
+        matrix[2] = leader.mMatrix[2];
         matrix.m[2][3] = 0.0f;
         if (params.mGameObject->IsRtti(EntityFlyer::rttiHashEntityFlyer))
         {
-            static_cast<EntityFlyer*>(params.mGameObject)->TurnOffContrailEffects();
+            ((EntityFlyer*)params.mGameObject)->TurnOffContrailEffects();
         }
         bForceBranch = true;
         mbTeleportNow = false;
@@ -1047,7 +1046,7 @@ bool EntityPathFollower::Update(BranchParams& params, float fElapsed, PblVector3
     mPathSpline.CalculatePoint(mT, vPoint);
     PblVector3 vTangent;
     mPathSpline.CalculateFirstDerivative(mT, vTangent);
-    float fLength = sqrtf(vTangent.x * vTangent.x + vTangent.y * vTangent.y + vTangent.z * vTangent.z);
+    float fLength = PblMath::Sqrt(vTangent.x * vTangent.x + vTangent.y * vTangent.y + vTangent.z * vTangent.z);
 
     float fSpeed = params.mWorldSpeed;
     if (mbQueuePoint || mbGoMinSpeed)
@@ -1109,7 +1108,7 @@ bool EntityPathFollower::Update(BranchParams& params, float fElapsed, PblVector3
     params.mMatrix.m[2][3] = 0.0f;
 
     PblVector3 vTarget = vPoint;
-    UpdateSquadron(params.mPathClass, *pRotation, fElapsed, vPosition, vTarget);
+    UpdateSquadron(params.mPathClass, PblMatrix(*pRotation), fElapsed, vPosition, vTarget);
     if (mStrafeTimer > 0.0f)
     {
         const PblVector3& vRight = params.mMatrix.GetXAxis();
@@ -1242,7 +1241,7 @@ void EntityPathFollower::UpdateSquadron(const EntityPathFollowerClass* const pCl
         return;
     }
 
-    EntityPathFollower* pLeader = static_cast<EntityPathFollower*>(GetSquadronLeader());
+    EntityPathFollower* pLeader = (EntityPathFollower*)GetSquadronLeader();
     float fFactor;
     if (mPath == pLeader->mPath)
     {
@@ -1581,7 +1580,7 @@ bool EntityPathFollower::SavePoints(const PblVector3* const pPosition, BranchPar
         {
             BranchParams params = GetBranchParams();
             vDirection = params.mGameObject
-                             ? static_cast<CollisionObject*>(params.mGameObject)->GetMatrix().GetZAxis()
+                             ? ((CollisionObject*)params.mGameObject)->GetMatrix().GetZAxis()
                              : params.mMatrix.GetZAxis();
         }
         PblVector3 vZero = CalculateZeroPoint(GetPoint(1), vDirection, GetPoint(2));

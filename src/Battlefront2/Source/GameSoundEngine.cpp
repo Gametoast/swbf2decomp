@@ -277,7 +277,7 @@ void Create()
 
     gSoundHeap = GameMemory::RunTimeHeap;
 
-    for (unsigned int i = 0; i < 4; ++i)
+    for (unsigned int i = 0; i < Snd::EngineBase::kMaxListeners; ++i)
     {
         Snd::EngineBase::smListeners[i].mDopplerFactor = 1.0f;
     }
@@ -478,12 +478,12 @@ void Destroy()
     SoundSpaceRegion::DestroyAll();
     TriggerSoundRegion::DestroyAll();
 
-    for (unsigned int i = 0; i < 4; i++)
+    for (unsigned int i = 0; i < Snd::EngineBase::kMaxListeners; i++)
     {
         Snd::EngineBase::smListeners[i].SetSpace(0);
     }
     Snd::Engine::Update(0.1f);
-    for (unsigned int i = 0; i < 4; i++)
+    for (unsigned int i = 0; i < Snd::EngineBase::kMaxListeners; i++)
     {
         Snd::EngineBase::smListeners[i].Enable(false);
     }

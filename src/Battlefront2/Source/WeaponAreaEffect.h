@@ -135,7 +135,7 @@ protected:
 
     const WeaponAreaEffectClass* _GetClass() const
     {
-        return static_cast<const WeaponAreaEffectClass*>(mClass);
+        return (const WeaponAreaEffectClass*)mClass;
     }
 
     int SetTargets();

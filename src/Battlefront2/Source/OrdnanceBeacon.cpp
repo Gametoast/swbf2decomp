@@ -110,19 +110,19 @@ bool OrdnanceBeacon::Update(float fDeltaTime)
     while (mSalvoCount > 0 && fDeltaTime > mLifeTime)
     {
         PblMatrix aim;
-        aim.SetRotateX(-static_cast<OrdnanceBeaconClass*>(mClass)->mAimElevation);
-        aim.RotateY(static_cast<OrdnanceBeaconClass*>(mClass)->mAimAzimuth);
+        aim.SetRotateX(-((OrdnanceBeaconClass*)mClass)->mAimElevation);
+        aim.RotateY(((OrdnanceBeaconClass*)mClass)->mAimAzimuth);
 
         OrdnanceDesc desc;
         desc.mPosition = mPosition;
-        const float fDist = static_cast<OrdnanceBeaconClass*>(mClass)->mAimDistance;
+        const float fDist = ((OrdnanceBeaconClass*)mClass)->mAimDistance;
         desc.mPosition += aim[2] * fDist;
 
         const float fRight = (PblRandom::GetSim().GetFloat() - PblRandom::GetSim().GetFloat()) *
-                             static_cast<OrdnanceBeaconClass*>(mClass)->mScatterDistance;
+                             ((OrdnanceBeaconClass*)mClass)->mScatterDistance;
         desc.mPosition += aim[0] * fRight;
         const float fUp = (PblRandom::GetSim().GetFloat() - PblRandom::GetSim().GetFloat()) *
-                          static_cast<OrdnanceBeaconClass*>(mClass)->mScatterDistance;
+                          ((OrdnanceBeaconClass*)mClass)->mScatterDistance;
         desc.mPosition += aim[1] * fUp;
 
         desc.mDirection = PblVector3(-aim.m[2][0], -aim.m[2][1], -aim.m[2][2]);
@@ -132,24 +132,24 @@ bool OrdnanceBeacon::Update(float fDeltaTime)
         desc.mTarget = mStickInfo ? ResolveHandle(mStickInfo->mCollHandle) : 0;
         desc.mBodyID = mStickInfo ? mStickInfo->mCollBodyID : -1;
 
-        if (NetGame::IsEnabled() && NetGame::IsClient())
+        if (NetGame::IsEnabled() && (netEnabledNext && netClientActive))
         {
             if (netIsLocalTurn)
             {
-                static_cast<OrdnanceBeaconClass*>(mClass)->mOrdnanceClass->Build(desc);
+                ((OrdnanceBeaconClass*)mClass)->mOrdnanceClass->Build(desc);
             }
         }
         else
         {
             if (NetGame::IsEnabled())
             {
-                NetGame::CreateEvent_CreateOrdnance(static_cast<OrdnanceBeaconClass*>(mClass)->mOrdnanceClass, desc);
+                NetGame::CreateEvent_CreateOrdnance(((OrdnanceBeaconClass*)mClass)->mOrdnanceClass, desc);
             }
-            static_cast<OrdnanceBeaconClass*>(mClass)->mOrdnanceClass->Build(desc);
+            ((OrdnanceBeaconClass*)mClass)->mOrdnanceClass->Build(desc);
         }
 
         --mSalvoCount;
-        mLifeTime += static_cast<OrdnanceBeaconClass*>(mClass)->mSalvoDelay;
+        mLifeTime += ((OrdnanceBeaconClass*)mClass)->mSalvoDelay;
     }
     return OrdnanceSticky::Update(fDeltaTime);
 }

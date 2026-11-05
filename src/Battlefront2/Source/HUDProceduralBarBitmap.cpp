@@ -152,11 +152,11 @@ bool HUD::ProceduralBarBitmap::SetProperty(const unsigned int uHashID, const voi
     {
     case kNoiseFreq:
         mNoiseFreq = *(const float*)pValue;
-        static_cast<ElementBar*>(this)->SetValue(mValue);
+        ((ElementBar*)this)->SetValue(mValue);
         return true;
     case kNoiseRoughness:
         mNoiseRoughness = *(const float*)pValue;
-        static_cast<ElementBar*>(this)->SetValue(mValue);
+        ((ElementBar*)this)->SetValue(mValue);
         return true;
     case kGlowScaleSize: mGlowScaleSize = *(const float*)pValue; return true;
     case kGlowAlphaBase: mGlowAlphaBase = *(const float*)pValue; return true;

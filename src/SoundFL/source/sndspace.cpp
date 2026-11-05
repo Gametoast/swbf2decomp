@@ -63,7 +63,7 @@ Space* __cdecl Space::GetSpace(const ::PblVector3& rPos)
          pNode = pNode->mNext)
     {
 
-        Space* const pSpace = static_cast<Space*>(pNode->GetObjectA(&smSpaceList, offsetof(Space, mNode)));
+        Space* const pSpace = (Space*)pNode->GetObjectA(&smSpaceList, offsetof(Space, mNode));
 
         if (pSpace->mPriority > pBest->mPriority)
         {
@@ -95,7 +95,7 @@ bool Space::IsPointInside(const ::PblVector3& rPoint, float fRadius) const
          pNode != mList.GetTerminator();
          pNode = pNode->GetNext())
     {
-        const PblRegion* const pRegion = static_cast<const Space::Region*>(
+        const PblRegion* const pRegion = (const Space::Region*)(
             pNode->GetObjectA(&mList, offsetof(Space::Region, mSpaceNode)));
 
         ::PblVector3 vDelta;
@@ -256,7 +256,7 @@ Space* __cdecl Space::Find(unsigned int uiHashID)
     for (PblListSingle::Node* pNode = smSpaceList.mHead.mNext;
          pNode != &smSpaceList.mHead; pNode = pNode->mNext)
     {
-        Space* const pSpace = static_cast<Space*>(pNode->GetObjectA(&smSpaceList, offsetof(Space, mNode)));
+        Space* const pSpace = (Space*)pNode->GetObjectA(&smSpaceList, offsetof(Space, mNode));
         if (pSpace->mHashID == uiHashID)
         {
             return pSpace;

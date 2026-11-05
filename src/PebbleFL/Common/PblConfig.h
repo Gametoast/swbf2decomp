@@ -2,6 +2,7 @@
 
 #include "PblChunk.h"
 #include "PblHashTable.h"
+#include "PblMath.h"
 
 class PblConfig
 {
@@ -45,16 +46,7 @@ public:
         // FUNCTION: SWBF2 0x0042cee0
         unsigned char GetUint8Arg(unsigned int i) const
         {
-            float f = GetFloatArg(i);
-            if (f < 0.0f)
-            {
-                f = 0.0f;
-            }
-            else if (f > 255.0f)
-            {
-                f = 255.0f;
-            }
-            return (unsigned char)(int)f;
+            return (unsigned char)(int)Clamp(GetFloatArg(i), 0.0f, 255.0f);
         }
 
         // FUNCTION: SWBF2 0x004708b0

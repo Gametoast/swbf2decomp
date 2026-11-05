@@ -549,9 +549,9 @@ int ScriptCB_PlayAuditionEffect(lua_State*) { return 0; }
 // FUNCTION: SWBF2 0x0059cc70
 int ScriptCB_PlayInGameMusic(lua_State*)
 {
-    static_cast<GameMusic*>(Lua_Callbacks::sGameMusic)->Stop();
-    static_cast<GameMusic*>(Lua_Callbacks::sGameMusic)->SetID(luaL_checklstring(LuaHelper::mState, 1, 0));
-    static_cast<GameMusic*>(Lua_Callbacks::sGameMusic)->Play();
+    ((GameMusic*)Lua_Callbacks::sGameMusic)->Stop();
+    ((GameMusic*)Lua_Callbacks::sGameMusic)->SetID(luaL_checklstring(LuaHelper::mState, 1, 0));
+    ((GameMusic*)Lua_Callbacks::sGameMusic)->Play();
     float& fDelayTime = reinterpret_cast<float&>(Lua_Callbacks::sGameMusicDelayTime);
     float& fCurDelayTime = reinterpret_cast<float&>(Lua_Callbacks::sGameMusicCurDelayTime);
     if (lua_gettop(LuaHelper::mState) >= 2)
@@ -569,7 +569,7 @@ int ScriptCB_PlayInGameMusic(lua_State*)
 // FUNCTION: SWBF2 0x0059cd00
 int ScriptCB_StopInGameMusic(lua_State*)
 {
-    static_cast<GameMusic*>(Lua_Callbacks::sGameMusic)->Stop();
+    ((GameMusic*)Lua_Callbacks::sGameMusic)->Stop();
     return 0;
 }
 
@@ -1323,7 +1323,7 @@ int ScriptCB_SoundDisable(lua_State* L)
 int ScriptCB_SetDopplerFactor(lua_State* L)
 {
     const float fFactor = luaL_checknumber(LuaHelper::mState, 1);
-    for (int i = 0; i < 4; ++i)
+    for (int i = 0; i < Snd::EngineBase::kMaxListeners; ++i)
     {
         Snd::EngineBase::smListeners[i].SetDopplerFactor(fFactor);
     }

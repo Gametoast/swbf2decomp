@@ -179,6 +179,7 @@ public:
 class CollisionObject : public TreeGridObject, public FoleyFXCollider, public FoleyFXCollidee
 {
 public:
+    static const int kNumLastCollided = 3;
 
     virtual ~CollisionObject();
     virtual const PblVector3 & GetPosition() const = 0;
@@ -247,7 +248,7 @@ public:
     bool mProcedurallyAnimated : 1;
     bool mLastCollidedWithNonTerrain : 1;
     PblVector3 mLastPosition;
-    CollisionObject* mLastCollidedObjs[3];
+    CollisionObject* mLastCollidedObjs[kNumLastCollided];
 
     static bool sCollidingWithMesh;
     static bool sCollideTrisWithAllPrimitives;

@@ -551,7 +551,7 @@ bool FLInputManager::Update(float fDeltaTime)
                 GameObject* pObject = pControllable->GetGameObject();
                 if (pObject)
                 {
-                    const Damageable* pDamageable = static_cast<const Damageable*>(pObject);
+                    const Damageable* pDamageable = (const Damageable*)pObject;
                     const int iWidth = pLcd->mWidth;
 
                     if (pDamageable->GetMaxShield() > 0.0f)

@@ -254,9 +254,9 @@ void SoldierElement::RenderUsingContext(const PblMatrix& mContext, const RedColo
     SoldierAnimationBank::MAP eMap = (SoldierAnimationBank::MAP)0;
     if (mWeaponClass[mWeaponIndex])
     {
+        SoldierAnimationBank::BANK eBank = mClass->mAnimationBank;
         eMap = SoldierAnimationBank::FindMap(
-            mClass->mAnimationBank,
-            (SoldierAnimationBank::WEAPON)mWeaponClass[mWeaponIndex]->mSoldierAnimationWeapon);
+            eBank, (SoldierAnimationBank::WEAPON)mWeaponClass[mWeaponIndex]->mSoldierAnimationWeapon);
         if (eMap == SoldierAnimationBank::INVALID_MAP)
         {
             eMap = (SoldierAnimationBank::MAP)0;
@@ -278,12 +278,10 @@ void SoldierElement::RenderUsingContext(const PblMatrix& mContext, const RedColo
         mRender.m[1][3] = 0.0f;
 
         PblVector3 vBack = -mScreen[2];
-        PblVector3 vCross = CrossProduct(vBack, mGroundNormal);
-        mRender[0] = Normalize(vCross);
+        mRender[0] = Normalize(CrossProduct(vBack, mGroundNormal));
         mRender.m[0][3] = 0.0f;
 
-        vCross = CrossProduct(mScreen[0], mGroundNormal);
-        mRender[2] = Normalize(vCross);
+        mRender[2] = Normalize(CrossProduct(mScreen[0], mGroundNormal));
         mRender.m[2][3] = 0.0f;
     }
 
@@ -294,7 +292,7 @@ void SoldierElement::RenderUsingContext(const PblMatrix& mContext, const RedColo
 
     if (mClass->mAddon)
     {
-        mClass->mAddon->Render(mTentacles, gVectorZero, &pose, mRender, color, 0x4000000);
+        mClass->mAddon->Render(mTentacles, gVectorZero, &pose, PblMatrix(mRender), color, 0x4000000);
     }
     else if (mTentacles)
     {

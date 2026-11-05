@@ -97,7 +97,7 @@ namespace
 
     inline const PblMatrix& GetCollisionMatrix(GameObject* pObject)
     {
-        return static_cast<CollisionObject*>(pObject)->GetMatrix();
+        return ((CollisionObject*)pObject)->GetMatrix();
     }
 
     inline const PblVector3& GetVelocity(GameObject* pObject)
@@ -2300,14 +2300,10 @@ void Weapon::Render(const PblMatrix& mat, const RedPose* pPose, const RedColor& 
         return;
     }
 
-    const RedModel* pModel;
-    if (!bArg || (pModel = mRenderClass->mHighResModel) == 0)
+    const RedModel* pModel = (bArg && mRenderClass->mHighResModel) ? mRenderClass->mHighResModel : mRenderClass->mModel;
+    if (!pModel)
     {
-        pModel = mRenderClass->mModel;
-        if (!pModel)
-        {
-            return;
-        }
+        return;
     }
 
     const PblMatrix* pMatrix = &mat;
@@ -2331,8 +2327,7 @@ void Weapon::Render(const PblMatrix& mat, const RedPose* pPose, const RedColor& 
 
     pThis->mFirePointMatrix = *pMatrix;
     {
-        PblVector3 vFirePos;
-        D3DXVec3TransformCoord(reinterpret_cast<D3DXVECTOR3*>(&vFirePos), reinterpret_cast<const D3DXVECTOR3*>(&mRenderClass->mFirePointOffset), reinterpret_cast<const D3DXMATRIX*>(pMatrix));
+        PblVector3 vFirePos = pMatrix->ApplyTransform(mRenderClass->mFirePointOffset);
         pThis->mFirePointMatrix[3] = vFirePos;
     }
     pThis->mFirePointMatrix.m[3][3] = 1.0f;
@@ -2349,28 +2344,29 @@ void Weapon::Render(const PblMatrix& mat, const RedPose* pPose, const RedColor& 
         if (!mChargeUpEmitter)
         {
             ParticleEmitterObject* pEmitter =
-                static_cast<ParticleEmitterObject*>(mRenderClass->mChargeUpEffect->BuildEffect());
-            pThis->mChargeUpEmitter.mObject = pEmitter;
-            pThis->mChargeUpEmitter.mSavedHandleId = pEmitter ? pEmitter->mHandleId : 0;
+                (ParticleEmitterObject*)mRenderClass->mChargeUpEffect->BuildEffect();
+            PblHandle<ParticleEmitterObject>& hEmitter = pThis->mChargeUpEmitter;
+            hEmitter.mObject = pEmitter;
+            hEmitter.mSavedHandleId = pEmitter ? pEmitter->mHandleId : 0;
             if (mChargeUpEmitter)
             {
-                static_cast<ParticleEmitterObject*>(mChargeUpEmitter)->PermaRemoveParticleEffect();
+                ((ParticleEmitterObject*)mChargeUpEmitter)->PermaRemoveParticleEffect();
             }
         }
         if (mChargeUpEmitter)
         {
-            mChargeUpEmitter->AttachEffectToMatrix(&mFirePointMatrix, false);
+            mChargeUpEmitter().AttachEffectToMatrix(&mFirePointMatrix, false);
 
             RedColorValue chargeColor;
             chargeColor.r = chargeColor.g = chargeColor.b = chargeColor.a = mStateTimer / mStateLimit;
-            mChargeUpEmitter->SetEmitterColor(chargeColor);
-            static_cast<ParticleEmitterObject*>(mChargeUpEmitter)->Update(0.0f);
-            static_cast<ParticleEmitterObject*>(mChargeUpEmitter)->Render(1, 1.0f, 0);
+            mChargeUpEmitter().SetEmitterColor(chargeColor);
+            ((ParticleEmitterObject*)mChargeUpEmitter)->Update(0.0f);
+            ((ParticleEmitterObject*)mChargeUpEmitter)->Render(1, 1.0f, 0);
         }
     }
     else if (mChargeUpEmitter)
     {
-        mChargeUpEmitter->StopNow();
+        mChargeUpEmitter().StopNow();
     }
 }
 

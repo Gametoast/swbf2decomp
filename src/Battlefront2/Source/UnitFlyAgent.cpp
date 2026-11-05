@@ -93,7 +93,7 @@ void UnitFlyAgent::EnterState()
             pPath->Release();
         }
 
-        EntityFlyer* pFlyer = static_cast<EntityFlyer*>(mCtrl->mOwner->GetEntity());
+        EntityFlyer* pFlyer = (EntityFlyer*)mCtrl->mOwner->GetEntity();
         if (pFlyer->GetState() != EntityFlyer::FLYING)
         {
             pFlyer->TakeOff();
@@ -215,7 +215,7 @@ const EntityFlyer* UnitFlyAgent::GetFlyer() const
 {
     if (mCtrl->mOwner)
     {
-        return static_cast<const EntityFlyer*>(mCtrl->mOwner);
+        return (const EntityFlyer*)mCtrl->mOwner;
     }
     return 0;
 }
@@ -225,7 +225,7 @@ EntityFlyer* UnitFlyAgent::GetFlyer()
 {
     if (mCtrl->mOwner)
     {
-        return static_cast<EntityFlyer*>(mCtrl->mOwner);
+        return (EntityFlyer*)mCtrl->mOwner;
     }
     return 0;
 }
@@ -371,7 +371,7 @@ bool UnitFlyAgent::IsNearATAT()
             {
                 continue;
             }
-            EntityFlyer* pOther = static_cast<EntityFlyer*>(pObject->GetEntity());
+            EntityFlyer* pOther = (EntityFlyer*)pObject->GetEntity();
             if (pOther != GetFlyer() && pOther->mTowCableWalker &&
                 pOther->GetTowCableWalker()->GetGameObject() == pATAT->GetGameObject())
             {

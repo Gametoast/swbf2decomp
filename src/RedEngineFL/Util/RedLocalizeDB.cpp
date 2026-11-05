@@ -213,11 +213,11 @@ void ForceLanguageID(int iLanguage)
     if (iLanguage == 5)
     {
         RedFont::sJapaneseOnly = true;
-        gForceLang = static_cast<eGAMELANGUAGE>(iLanguage);
+        gForceLang = (eGAMELANGUAGE)iLanguage;
     }
     else if (iLanguage >= -1 && iLanguage < 9)
     {
-        gForceLang = static_cast<eGAMELANGUAGE>(iLanguage);
+        gForceLang = (eGAMELANGUAGE)iLanguage;
     }
 }
 

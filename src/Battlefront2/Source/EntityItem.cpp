@@ -269,7 +269,7 @@ EntityItem::EntityItem(EntityItemClass* pClass, const EntityDesc& desc)
     , mOwner(0)
     , m_pLight(0)
 {
-    static_cast<RedSceneObject&>(*this).Activate();
+    ((RedSceneObject&)(*this)).Activate();
 
     if (!NetGame::IsEnabled() || NetGame::IsClient())
     {
@@ -380,7 +380,7 @@ bool EntityItem::Update(float fDeltaTime)
             mVelocity.y += fHalfDrop;
             SetPosition(mVelocity * fDeltaTime + GetPosition());
             mVelocity.y += fHalfDrop;
-            if (!(NetGame::IsEnabled() && NetGame::IsClient()) && mMatrix.m[3][1] < -1000.0f)
+            if (!(NetGame::IsEnabled() && (netEnabledNext && netClientActive)) && mMatrix.m[3][1] < -1000.0f)
             {
                 Kill();
                 return false;
@@ -391,7 +391,7 @@ bool EntityItem::Update(float fDeltaTime)
         {
             return true;
         }
-        if (!(NetGame::IsClient() && netIsLocalTurn))
+        if (!((netEnabledNext && netClientActive) && netIsLocalTurn))
         {
             if (!NetGame::IsHost() || !NetGame::IsOneWorld() || netIsLateTurn)
             {
@@ -405,7 +405,7 @@ bool EntityItem::Update(float fDeltaTime)
         gameObjectInterpolator.SetNext(mNetUniqueId, mStationary ? 0 : &mMatrix);
         return true;
     }
-    if (NetGame::IsEnabled() && NetGame::IsClient())
+    if (NetGame::IsEnabled() && (netEnabledNext && netClientActive))
     {
         return true;
     }

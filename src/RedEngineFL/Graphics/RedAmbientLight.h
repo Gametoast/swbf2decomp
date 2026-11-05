@@ -59,10 +59,10 @@ struct RedLightingState
     RedLightingState& operator=(const RedLightingState& rOther);
 
     RedAmbientLight ambientLight;
-    RedDirectionalLight* pDirectionalLights[2];
+    RedDirectionalLight* pDirectionalLights[RedLight::kMaxDirectionalLights];
     RedOmniLight* pOmniLights[4];
     RedSpotLight* pSpotLights[1];
-    float pDirectionalFactor[2];
+    float pDirectionalFactor[RedLight::kMaxDirectionalLights];
     RedLight* pProjectedLight;
     RedTexture* pEnvMap;
     float envMapFactor;

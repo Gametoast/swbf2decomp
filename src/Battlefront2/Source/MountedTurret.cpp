@@ -394,7 +394,7 @@ MountedTurret::MountedTurret(GameObject* pParent, MountedTurretClass* pClass, Re
         }
     }
 
-    for (int iChannel = 0; iChannel < 2; ++iChannel)
+    for (int iChannel = 0; iChannel < kNumWeaponChannels; ++iChannel)
     {
         mWeaponIndex[iChannel] = -1;
         for (int i = 0; i < mClass->mWeaponCount; ++i)
@@ -484,7 +484,7 @@ void MountedTurret::DeactivatePhysics()
         }
     }
     mPostCollision.DeactivateThread();
-    static_cast<Controllable*>(this)->DeactivateThread();
+    ((Controllable*)this)->DeactivateThread();
 }
 
 // FUNCTION: SWBF2 0x005a5a20
@@ -581,7 +581,7 @@ void MountedTurret::GetPilotMatrix(const PblMatrix& mIn, PblMatrix& mOut)
                 if (!netFrameLock && NetGame::IsEnabled())
                 {
                     int iIndex = mInterpIndex;
-                    if (netInterpolator.GetIndex(iIndex, 1, static_cast<EntitySoldier*>(pPilot)->mHandleId) &&
+                    if (netInterpolator.GetIndex(iIndex, 1, ((EntitySoldier*)pPilot)->mHandleId) &&
                         iIndex == mInterpIndex)
                     {
                         netInterpolator.GetMat(mInterpIndex, mNewRoot);
@@ -646,7 +646,7 @@ bool MountedTurret::Update(float aDt)
     bool bTargetHandled = false;
 
     if (iJoystick >= 0 &&
-        (!NetGame::IsEnabled() || (NetGame::IsClient() && netIsLocalTurn) ||
+        (!NetGame::IsEnabled() || ((netEnabledNext && netClientActive) && netIsLocalTurn) ||
          (NetGame::IsHost() && NetGame::IsOneWorld() && netIsLocalTurn)))
     {
         LockOnManager* pManager = LockOnManager::GetByPlayerIndex(iJoystick);
@@ -662,7 +662,7 @@ bool MountedTurret::Update(float aDt)
             int iTypes = 0;
             float fLockDist = 2000.0f;
             float fLoseDist = 2500.0f;
-            for (int i = 0; i < 2; ++i)
+            for (int i = 0; i < kNumWeaponChannels; ++i)
             {
                 int iIndex = mWeaponIndex[i];
                 if (iIndex != -1)
@@ -695,11 +695,11 @@ bool MountedTurret::Update(float aDt)
             }
         }
     }
-    else if (mPlayerId >= 0 && iJoystick < 0 && NetGame::IsEnabled() && !NetGame::IsClient())
+    else if (mPlayerId >= 0 && iJoystick < 0 && NetGame::IsEnabled() && !(netEnabledNext && netClientActive))
     {
 
         int iTypes = 0;
-        for (int i = 0; i < 2; ++i)
+        for (int i = 0; i < kNumWeaponChannels; ++i)
         {
             int iIndex = mWeaponIndex[i];
             if (iIndex != -1)
@@ -711,7 +711,7 @@ bool MountedTurret::Update(float aDt)
         mAllowedLockTypes = iTypes;
     }
 
-    if (mPlayerId >= 0 && !(NetGame::IsEnabled() && NetGame::IsClient()) && !bTargetHandled)
+    if (mPlayerId >= 0 && !(NetGame::IsEnabled() && (netEnabledNext && netClientActive)) && !bTargetHandled)
     {
         GameObject* pTarget = GetTargetLockedObj();
         if (pTarget &&
@@ -755,7 +755,7 @@ bool MountedTurret::Update(float aDt)
             SwitchControlView(mPlayerId);
         }
 
-        if (!(NetGame::IsEnabled() && NetGame::IsClient()))
+        if (!(NetGame::IsEnabled() && (netEnabledNext && netClientActive)))
         {
             if (mControlUse.IsPressed() || mParent->IsDisabled() ||
                 mParent->GetTeam() != pPilot->GetGameObject()->GetTeam())
@@ -788,7 +788,7 @@ bool MountedTurret::Update(float aDt)
 
     if (mParent->GetControllableList().GetCount() == 1)
     {
-        for (int iChannel = 0; iChannel < 2; ++iChannel)
+        for (int iChannel = 0; iChannel < kNumWeaponChannels; ++iChannel)
         {
             int iIndex = mWeaponIndex[iChannel];
             if (iIndex < 0 || mControlSwitch[iChannel] == 0.0f)
@@ -1110,24 +1110,18 @@ bool MountedTurret::Update(float aDt)
         else
         {
 
-            PblVector3 vBack(-mEyeDir.x, -mEyeDir.y, -mEyeDir.z);
-            PblQuaternion targetRot(DirectionMatrix(vBack, mAimMatrix.GetYAxis(), gVectorZero));
+            PblMatrix mLook =
+                DirectionMatrix(PblVector3(-mEyeDir.x, -mEyeDir.y, -mEyeDir.z), mAimMatrix.GetYAxis(), gVectorZero);
+            PblQuaternion qLook = PblQuaternion(mLook);
             float fSin;
             float fCos;
             PblMath::SinCos(&fSin, &fCos, -mClass->mCameraSettings.GetCameraTiltValue() * 0.5f);
             PblQuaternion tiltRot;
             tiltRot._fX = fSin * gVectorUnitX.x;
-            tiltRot._fY = fSin * gVectorUnitX.y;
-            tiltRot._fZ = fSin * gVectorUnitX.z;
+            tiltRot._fY = gVectorUnitX.y * fSin;
+            tiltRot._fZ = gVectorUnitX.z * fSin;
             tiltRot._fS = fCos;
-            PblQuaternion qRot = targetRot * tiltRot;
-            D3DXQUATERNION qUnit;
-            PblMatrix mRotation;
-            D3DXMatrixRotationQuaternion(reinterpret_cast<D3DXMATRIX*>(&mRotation), D3DXQuaternionNormalize(&qUnit, reinterpret_cast<const D3DXQUATERNION*>(&qRot)));
-            mRotation.m[3][0] = gVectorZero.x;
-            mRotation.m[3][1] = gVectorZero.y;
-            mRotation.m[3][2] = gVectorZero.z;
-            mRotation.m[3][3] = 1.0f;
+            PblMatrix mRotation(qLook * tiltRot, gVectorZero);
 
             PblVector3& vStart = mTargetInfo.mAimStart;
             vStart = mClass->mCameraSettings.CalcCameraPoint(
@@ -1216,12 +1210,12 @@ void MountedTurret::UpdateSound(int prevAngle, int angle, float fAngle, float fA
             pVoice->SetPitch(minSoundPitch > fPitch ? minSoundPitch : (fPitch > soundPitch ? soundPitch : fPitch));
 
             float fGain = soundGain * t;
-            static_cast<Snd::VoiceVirtualBus*>(pVoice)->SetGain(0.0f > fGain ? 0.0f : (fGain > 1.0f ? 1.0f : fGain));
+            ((Snd::VoiceVirtualBus*)pVoice)->SetGain(0.0f > fGain ? 0.0f : (fGain > 1.0f ? 1.0f : fGain));
         }
     }
     else if (controllable.GetPlaying())
     {
-        Snd::VoiceVirtualBus* pVoice = static_cast<Snd::VoiceVirtualBus*>(controllable.GetVoiceVirtual());
+        Snd::VoiceVirtualBus* pVoice = (Snd::VoiceVirtualBus*)controllable.GetVoiceVirtual();
         if (pVoice)
         {
             Snd::SourceBus* pBus = pVoice;
@@ -1523,11 +1517,11 @@ MountedTurretClass::MountedTurretClass(unsigned int uHash)
     memset(mWeaponClass, 0, sizeof(mWeaponClass));
     sWeaponSection = 0;
     memset(mWeaponAmmo, 0, sizeof(mWeaponAmmo));
-    for (int i = 0; i < 4; ++i)
+    for (int i = 0; i < kMaxWeapons; ++i)
     {
         mWeaponAmmo[i].bFlagAmmoInfinite = 1;
     }
-    for (int i = 0; i < 4; ++i)
+    for (int i = 0; i < kMaxWeapons; ++i)
     {
         mWeaponChannel[i] = i;
     }

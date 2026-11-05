@@ -221,22 +221,22 @@ void pcShadowQuadShader::_Init(unsigned int uiFlags,
 void pcShadowQuadShader::_InitPipelineFuncArray()
 {
     GetStateFuncArray[PIPELINE_FIXED] =
-        static_cast<GetStateFuncT>(&pcShadowQuadShader::GetState_Fixed);
+        (GetStateFuncT)(&pcShadowQuadShader::GetState_Fixed);
     BeginFuncArray[PIPELINE_FIXED] =
-        static_cast<BeginFuncT>(&pcShadowQuadShader::Begin_Fixed);
+        (BeginFuncT)(&pcShadowQuadShader::Begin_Fixed);
     EndFuncArray[PIPELINE_FIXED] =
-        static_cast<EndFuncT>(&pcShadowQuadShader::End_Fixed);
+        (EndFuncT)(&pcShadowQuadShader::End_Fixed);
     RenderFuncArray[PIPELINE_FIXED] =
-        static_cast<RenderFuncT>(&pcShadowQuadShader::Render_Fixed);
+        (RenderFuncT)(&pcShadowQuadShader::Render_Fixed);
 
     GetStateFuncArray[PIPELINE_PROG1] =
-        static_cast<GetStateFuncT>(&pcShadowQuadShader::GetState_Prog1);
+        (GetStateFuncT)(&pcShadowQuadShader::GetState_Prog1);
     BeginFuncArray[PIPELINE_PROG1] =
-        static_cast<BeginFuncT>(&pcShadowQuadShader::Begin_Prog1);
+        (BeginFuncT)(&pcShadowQuadShader::Begin_Prog1);
     EndFuncArray[PIPELINE_PROG1] =
-        static_cast<EndFuncT>(&pcShadowQuadShader::End_Prog1);
+        (EndFuncT)(&pcShadowQuadShader::End_Prog1);
     RenderFuncArray[PIPELINE_PROG1] =
-        static_cast<RenderFuncT>(&pcShadowQuadShader::Render_Prog1);
+        (RenderFuncT)(&pcShadowQuadShader::Render_Prog1);
 }
 
 // FUNCTION: SWBF2 0x007084e0

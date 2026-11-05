@@ -282,7 +282,7 @@ void GameVoiceChat::Update(float fDeltaTime)
             const int iLocal = NetGame::GetJoystickIndex(pNode->GetID());
             if (GameVoiceChat::gPlayerChange && iLocal >= 0 && abNotSelectingTeam[iLocal])
             {
-                static_cast<GameVoiceChat::Node*>(pNode)->Update();
+                ((GameVoiceChat::Node*)pNode)->Update();
             }
         }
     }

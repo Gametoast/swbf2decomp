@@ -508,7 +508,7 @@ void OrdnanceClass::Read(PblFileChunk& chunk)
             {
                 if (it->mId == uType)
                 {
-                    pExisting = static_cast<OrdnanceClass*>(&*it);
+                    pExisting = (OrdnanceClass*)(&*it);
                     break;
                 }
             }
@@ -527,7 +527,7 @@ void OrdnanceClass::Read(PblFileChunk& chunk)
             {
                 if (it->mId == uBase)
                 {
-                    pBase = static_cast<OrdnanceClass*>(&*it);
+                    pBase = (OrdnanceClass*)(&*it);
                     break;
                 }
             }

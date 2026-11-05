@@ -100,8 +100,8 @@ public:
     float mCollisionInflict;
     AimerClass mAimerClass[4];
     WeaponClass* mWeaponClass[4];
-    WeaponAmmoDesc mWeaponAmmo[4];
-    int mWeaponChannel[4];
+    WeaponAmmoDesc mWeaponAmmo[kMaxWeapons];
+    int mWeaponChannel[kMaxWeapons];
     int mWeaponCount;
     unsigned int mStompEffect;
     int mVehicleType;
@@ -488,8 +488,8 @@ public:
     GameModel* mBallLowRes;
     float mPitchValue;
     Aimer* mAimer[4];
-    Weapon* mWeapon[4];
-    int mWeaponIndex[2];
+    Weapon* mWeapon[kMaxWeapons];
+    int mWeaponIndex[kNumWeaponChannels];
     ZephyrSkeleton<32> mZephyrSkeleton;
     ZephyrPoseDyn<32> mZephyrPoseDyn;
     float mTime;

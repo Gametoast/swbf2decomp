@@ -21,7 +21,7 @@ extern bool netFrameLock;
 // FUNCTION: SWBF2 0x00498460
 void EntityDoor::Render(unsigned char ucViewport, float fDist, unsigned int uiFlags)
 {
-    if (!static_cast<const EntityPropClass*>(mEntityClass)->m_bDynamicLighting)
+    if (!((const EntityPropClass*)mEntityClass)->m_bDynamicLighting)
     {
         uiFlags |= 0x80u;
     }
@@ -396,7 +396,7 @@ bool EntityDoor::Update(float fDeltaTime)
 
     if (portal_)
     {
-        static_cast<pvs::IPortal*>(portal_)->SetActive(mZephyrPoseDyn.m_fCurT > 0.0f);
+        ((pvs::IPortal*)portal_)->SetActive(mZephyrPoseDyn.m_fCurT > 0.0f);
     }
 
     if (mIsOpen || fLastTime - mZephyrPoseDyn.m_fCurT > 0.0f)

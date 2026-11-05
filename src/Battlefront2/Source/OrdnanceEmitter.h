@@ -13,6 +13,7 @@ class FLEffectClass;
 class OrdnanceEmitterClass : public OrdnanceClass
 {
 public:
+    static const int kMaxSmolderEffects = 5;
     OrdnanceEmitterClass(unsigned int uHash);
     virtual ~OrdnanceEmitterClass();
 
@@ -63,8 +64,8 @@ public:
     unsigned int mPlayEffectOnOwnerAimer;
     float mSmolderEffectTimer;
     bool mSmolderVanishDeath : 1;
-    unsigned int mSmolderEffectBone[5];
-    unsigned int mSmolderEffect[5];
+    unsigned int mSmolderEffectBone[kMaxSmolderEffects];
+    unsigned int mSmolderEffect[kMaxSmolderEffects];
     float mSmolderDamageRate;
     bool mAffectFriends : 1;
     bool mAffectEnemies : 1;

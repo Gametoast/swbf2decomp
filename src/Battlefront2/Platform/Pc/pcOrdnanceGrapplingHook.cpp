@@ -152,8 +152,7 @@ void OrdnanceGrapplingHook::Render(unsigned char ucViewport, float fDist, unsign
     const PblMatrix& mCamera = RedRenderer::GetCamera()->GetMatrix();
     PblVector3 vCameraRight = mCamera.GetXAxis();
     PblVector3 vStart = GetPosition();
-    PblVector3 vEnd;
-    D3DXVec3TransformCoord(reinterpret_cast<D3DXVECTOR3*>(&vEnd), reinterpret_cast<const D3DXVECTOR3*>(&mWeaponOffset), reinterpret_cast<const D3DXMATRIX*>(&mOwner->GetMatrix()));
+    PblVector3 vEnd = mOwner->GetMatrix().ApplyTransform(mWeaponOffset);
     if (mState == HOOK_LIFTING)
     {
         vEnd = vEnd + mVelocity * mDeltaTime;

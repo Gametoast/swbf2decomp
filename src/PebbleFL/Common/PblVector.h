@@ -60,6 +60,10 @@ public:
     float GetZ() const;
 
     void Set(float fX, float fY, float fZ);
+    void SetX(float fVal);
+    void SetY(float fVal);
+    void SetZ(float fVal);
+    void Reset();
 
     void AddX(float value);
     void AddY(float value);

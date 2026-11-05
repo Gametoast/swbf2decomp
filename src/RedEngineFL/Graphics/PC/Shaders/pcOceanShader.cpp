@@ -282,12 +282,12 @@ void pcOceanShader::Render_Prog1(const RenderItem* pItem, unsigned int) const
     RedRenderer::pcUnlockVertexShaderConstants(pRegs);
 
     const RedDirectionalLight* pSun = RedLight::m_sGlobalDirectionals[0];
-    const PblVector4 lightDir(-pSun->m_vDirection.x, -pSun->m_vDirection.y,
-                                 -pSun->m_vDirection.z, 0.0f);
+    const float dirZ = -pSun->m_vDirection.z;
+    const PblVector4 lightDir(-pSun->m_vDirection.x, -pSun->m_vDirection.y, dirZ, 0.0f);
     const RedColorValue lightColor(pSun->m_color);
     const RedColorValue ambient(RedLight::m_sGlobalAmbient->m_color);
 
-    RedRenderer::pcGetDevice()->SetPixelShaderConstantF(0, &lightDir.x, 1);
+    RedRenderer::pcGetDevice()->SetPixelShaderConstantF(0, &lightDir.r, 1);
     RedRenderer::pcGetDevice()->SetPixelShaderConstantF(1, &lightColor.r, 1);
     RedRenderer::pcGetDevice()->SetPixelShaderConstantF(2, &ambient.r, 1);
 
@@ -333,22 +333,22 @@ void pcOceanShader::_Init(unsigned int uiFlags,
 void pcOceanShader::_InitPipelineFuncArray()
 {
     GetStateFuncArray[PIPELINE_FIXED] =
-        static_cast<GetStateFuncT>(&pcOceanShader::GetState_Fixed);
+        (GetStateFuncT)(&pcOceanShader::GetState_Fixed);
     BeginFuncArray[PIPELINE_FIXED] =
-        static_cast<BeginFuncT>(&pcOceanShader::Begin_Fixed);
+        (BeginFuncT)(&pcOceanShader::Begin_Fixed);
     EndFuncArray[PIPELINE_FIXED] =
-        static_cast<EndFuncT>(&pcOceanShader::End_Fixed);
+        (EndFuncT)(&pcOceanShader::End_Fixed);
     RenderFuncArray[PIPELINE_FIXED] =
-        static_cast<RenderFuncT>(&pcOceanShader::Render_Fixed);
+        (RenderFuncT)(&pcOceanShader::Render_Fixed);
 
     GetStateFuncArray[PIPELINE_PROG1] =
-        static_cast<GetStateFuncT>(&pcOceanShader::GetState_Prog1);
+        (GetStateFuncT)(&pcOceanShader::GetState_Prog1);
     BeginFuncArray[PIPELINE_PROG1] =
-        static_cast<BeginFuncT>(&pcOceanShader::Begin_Prog1);
+        (BeginFuncT)(&pcOceanShader::Begin_Prog1);
     EndFuncArray[PIPELINE_PROG1] =
-        static_cast<EndFuncT>(&pcOceanShader::End_Prog1);
+        (EndFuncT)(&pcOceanShader::End_Prog1);
     RenderFuncArray[PIPELINE_PROG1] =
-        static_cast<RenderFuncT>(&pcOceanShader::Render_Prog1);
+        (RenderFuncT)(&pcOceanShader::Render_Prog1);
 }
 
 // FUNCTION: SWBF2 0x0070c9f0

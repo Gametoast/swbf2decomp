@@ -97,11 +97,11 @@ EntityDroidClass::EntityDroidClass(unsigned int uHash)
 
     memset(mWeaponClass, 0, sizeof(mWeaponClass));
     memset(mWeaponAmmo, 0, sizeof(mWeaponAmmo));
-    for (int i = 0; i < 4; ++i)
+    for (int i = 0; i < kMaxWeapons; ++i)
     {
         mWeaponAmmo[i].bFlagAmmoInfinite = 1;
     }
-    for (int i = 0; i < 4; ++i)
+    for (int i = 0; i < kMaxWeapons; ++i)
     {
         mWeaponChannel[i] = i;
     }
@@ -595,7 +595,7 @@ const WeaponClass* EntityDroidClass::GetWeaponClass(int iIndex) const
 // FUNCTION: SWBF2 0x004995f0
 const ControllableClass* EntityDroidClass::GetControllableClass() const
 {
-    return static_cast<const ControllableClass*>(this);
+    return (const ControllableClass*)this;
 }
 
 // SYNTHETIC: SWBF2 0x00499610
@@ -764,7 +764,7 @@ EntityDroid::EntityDroid(EntityDroidClass* pClass, const EntityDesc& desc)
 
         mWeapon[i] = mClass->mWeaponClass[i]->Build(weaponDesc);
     }
-    for (int iChannel = 0; iChannel < 2; ++iChannel)
+    for (int iChannel = 0; iChannel < kNumWeaponChannels; ++iChannel)
     {
         mWeaponIndex[iChannel] = -1;
         for (int i = 0; i < mClass->mWeaponCount; ++i)
@@ -818,7 +818,7 @@ void EntityDroid::Init()
             mWeapon[i]->Init();
         }
     }
-    for (int iChannel = 0; iChannel < 2; ++iChannel)
+    for (int iChannel = 0; iChannel < kNumWeaponChannels; ++iChannel)
     {
         int iIndex = mWeaponIndex[iChannel];
         if (iIndex >= 0 && mWeapon[iIndex])
@@ -1088,8 +1088,14 @@ bool EntityDroid::Update(float fDeltaTime)
         RemoveFromCollisionManager();
         if (mClass->mExplosion)
         {
-            DamageOwner owner(mDamageOwner.mCharacter, mDamageOwner.mGameObject, mDamageOwner.mTeam, mClass, 0,
-                              1.0f);
+            GameObject* pOwnerObject = mDamageOwner.mGameObject.mObject;
+            if (pOwnerObject && pOwnerObject->mHandleId != mDamageOwner.mGameObject.mSavedHandleId)
+            {
+                mDamageOwner.mGameObject.mObject = 0;
+                mDamageOwner.mGameObject.mSavedHandleId = 0;
+                pOwnerObject = 0;
+            }
+            DamageOwner owner(mDamageOwner.mCharacter, pOwnerObject, mDamageOwner.mTeam, mClass, 0, 1.0f);
             mClass->mExplosion->CreateExplosion(mMatrix.GetTranslation(), owner, false, COLL_UNKNOWN);
         }
         mState = KILLTIMER;
@@ -1191,7 +1197,7 @@ bool EntityDroid::Update(float fDeltaTime)
 
     if (mState != FROZEN)
     {
-        for (int iChannel = 0; iChannel < 2; ++iChannel)
+        for (int iChannel = 0; iChannel < kNumWeaponChannels; ++iChannel)
         {
             int iIndex = mWeaponIndex[iChannel];
             if (iIndex < 0 || mControlSwitch[iChannel] == 0.0f)
@@ -1294,8 +1300,7 @@ bool EntityDroid::Update(float fDeltaTime)
     vLocal.x = 0.0f;
     vLocal.y = fSin;
     vLocal.z = fCos;
-    PblVector3 vEyeDir;
-    D3DXVec3TransformNormal(reinterpret_cast<D3DXVECTOR3*>(&vEyeDir), reinterpret_cast<const D3DXVECTOR3*>(&vLocal), reinterpret_cast<const D3DXMATRIX*>(&mMatrix));
+    PblVector3 vEyeDir = mMatrix.ApplyRotation(vLocal);
     mEyeDir = vEyeDir;
 
     if (mPlayerId >= 0 && mTracker)
@@ -1314,7 +1319,7 @@ bool EntityDroid::Update(float fDeltaTime)
             PblVector3& vAimStart = mTargetInfo.mAimStart;
             vAimStart = mClass->mCameraSettings.CalcCameraPoint(mMatrix, mCamera);
             float fAlong = DotProduct(mEyeDir, mEyePoint - vAimStart);
-            vAimStart += mEyeDir * fAlong;
+            vAimStart = vAimStart + mEyeDir * fAlong;
         }
         const GameObject* pIgnore = this;
         CollisionObject* pHit;
@@ -1719,7 +1724,7 @@ void EntityDroid::SetWeaponIndex(int iIndex, int iChannel)
 void EntityDroid::DeactivatePhysics()
 {
     mPostCollision.DeactivateThread();
-    static_cast<Thread*>(static_cast<Controllable*>(this))->DeactivateThread();
+    ((Thread*)(Controllable*)this)->DeactivateThread();
 }
 
 // FUNCTION: SWBF2 0x0049d000

@@ -64,7 +64,7 @@ HUD::ViewPort::Factory::Factory()
 // FUNCTION: SWBF2 0x00568d10
 HUD::ViewPort::ViewPort(const char* const pName, HUD::Item::Factory::ItemCallback pCallback,
                         void* const pUserData)
-    : HUD::Element(*static_cast<RedGroupElement*>(this), pName, pCallback, pUserData)
+    : HUD::Element(*(RedGroupElement*)this, pName, pCallback, pUserData)
 {
     mEventFilter = 0;
     mCurViewPort = 0;
@@ -321,15 +321,15 @@ void HUD::ViewPort::WriteData(HUD::File& file, unsigned int uTabs)
         unsigned char uViewport = 0;
         if (mItems[i]->GetType() == HUD::Element::Factory::type_Element)
         {
-            uViewport = static_cast<HUD::Element*>(mItems[i])->GetViewport();
-            static_cast<HUD::Element*>(mItems[i])->SetViewport(0);
+            uViewport = ((HUD::Element*)mItems[i])->GetViewport();
+            ((HUD::Element*)mItems[i])->SetViewport(0);
         }
         mItems[i]->mWriteEnabled = true;
         mItems[i]->Write(file, uTabs, 0);
         mItems[i]->mWriteEnabled = false;
         if (mItems[i]->GetType() == HUD::Element::Factory::type_Element)
         {
-            static_cast<HUD::Element*>(mItems[i])->SetViewport(uViewport);
+            ((HUD::Element*)mItems[i])->SetViewport(uViewport);
         }
     }
 }
@@ -340,7 +340,7 @@ void HUD::ViewPort::ItemConstructionCallback(HUD::Item* const pItem, void* const
     switch (pItem->GetType())
     {
     case HUD::Element::Factory::type_Element:
-        static_cast<HUD::Element*>(pItem)->SetViewport(static_cast<ViewPort*>(pUserData)->mCurViewPort);
+        ((HUD::Element*)pItem)->SetViewport(((ViewPort*)pUserData)->mCurViewPort);
         break;
     }
 }

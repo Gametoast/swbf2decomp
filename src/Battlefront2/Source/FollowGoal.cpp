@@ -13,7 +13,7 @@ namespace
 
 inline bool IsAlive(const GameObject* pObject)
 {
-    return static_cast<const Damageable*>(pObject)->mIsAlive;
+    return ((const Damageable*)pObject)->mIsAlive;
 }
 }
 
@@ -48,16 +48,16 @@ void AI::FollowGoal::Update()
 {
     if (mEnabled)
     {
-        if (mTarget.mType == GTT_GAMEOBJECT && static_cast<const GameObject*>(mTarget.mGameObj) &&
-            !static_cast<const GameObject*>(mTarget.mGameObj)->IsAlive())
+        if (mTarget.mType == GTT_GAMEOBJECT && (const GameObject*)mTarget.mGameObj &&
+            !((const GameObject*)mTarget.mGameObj)->IsAlive())
         {
             SetEnabled(false);
             return;
         }
         AIGoal::Update();
     }
-    else if (mTarget.mType == GTT_GAMEOBJECT && static_cast<const GameObject*>(mTarget.mGameObj) &&
-             static_cast<const GameObject*>(mTarget.mGameObj)->IsAlive())
+    else if (mTarget.mType == GTT_GAMEOBJECT && (const GameObject*)mTarget.mGameObj &&
+             ((const GameObject*)mTarget.mGameObj)->IsAlive())
     {
         SetEnabled(true);
     }

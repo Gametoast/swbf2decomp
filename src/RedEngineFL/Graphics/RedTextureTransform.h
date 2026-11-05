@@ -62,12 +62,10 @@ public:
         if (!m_bTransform)
         {
             m_bTransform = 1;
-            m_Transform[2][0] = 0.0f;
-            m_Transform[2][1] = 0.0f;
+            m_Transform[2][0] = m_Transform[2][1] = 0.0f;
         }
         m_Transform[0][0] = fScaleX;
-        m_Transform[0][1] = 0.0f;
-        m_Transform[1][0] = 0.0f;
+        m_Transform[0][1] = m_Transform[1][0] = 0.0f;
         m_Transform[1][1] = fScaleY;
     }
 

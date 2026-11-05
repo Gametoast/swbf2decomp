@@ -74,11 +74,11 @@ void StreamGSMDecoder::Update()
                 break;
             }
 
-            bool bEnd = false;
             short* const pSamples = (short*)pOutput->mBuffer;
             unsigned char* const pInput = (unsigned char*)mInputPacket->mBuffer;
             bool bDiscontinuity = false;
             bool bLast = false;
+            bool bEnd = false;
 
             if (mDecimate)
             {

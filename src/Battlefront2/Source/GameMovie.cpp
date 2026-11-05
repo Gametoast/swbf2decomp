@@ -313,7 +313,7 @@ void UpdatInGameMovie()
             {
                 const unsigned int* pName = g_InGameMovieQueue.IsEmpty()
                     ? 0
-                    : static_cast<const unsigned int*>(g_InGameMovieQueue.QueueBase::Get(
+                    : (const unsigned int*)(g_InGameMovieQueue.QueueBase::Get(
                         sizeof(unsigned int), g_InGameMovieQueue.mElements, 12));
                 const RedMovie::Properties* pProperty = RedMovie::Properties::FindByHashID(*pName);
                 if (pProperty)

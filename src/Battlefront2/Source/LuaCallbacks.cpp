@@ -1719,15 +1719,14 @@ void DrawAllBeamBetween::Render(int)
         const float fMinZ = vPos2.z > vPos1.z ? vPos1.z : vPos2.z;
         const float fMinY = vPos2.y > vPos1.y ? vPos1.y : vPos2.y;
         const float fMinX = vPos2.x > vPos1.x ? vPos1.x : vPos2.x;
+        const float fMaxZ = vPos1.z > vPos2.z ? vPos1.z : vPos2.z;
+        const float fMaxY = vPos1.y > vPos2.y ? vPos1.y : vPos2.y;
+        const float fMaxX = vPos1.x > vPos2.x ? vPos1.x : vPos2.x;
         float fRadius = desc.mWidth * 2.0f;
         PblVector3 vMin;
         vMin.x = fMinX - fRadius;
         vMin.y = fMinY - fRadius;
         vMin.z = fMinZ - fRadius;
-
-        const float fMaxZ = vPos1.z > vPos2.z ? vPos1.z : vPos2.z;
-        const float fMaxY = vPos1.y > vPos2.y ? vPos1.y : vPos2.y;
-        const float fMaxX = vPos1.x > vPos2.x ? vPos1.x : vPos2.x;
         PblVector3 vMax;
         vMax.x = fRadius + fMaxX;
         vMax.y = fRadius + fMaxY;

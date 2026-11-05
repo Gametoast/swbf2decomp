@@ -360,22 +360,22 @@ void pcInterfaceShader::_Init(unsigned int,
 void pcInterfaceShader::_InitPipelineFuncArray()
 {
     GetStateFuncArray[PIPELINE_FIXED] =
-        static_cast<GetStateFuncT>(&pcInterfaceShader::GetState_Fixed);
+        (GetStateFuncT)(&pcInterfaceShader::GetState_Fixed);
     BeginFuncArray[PIPELINE_FIXED] =
-        static_cast<BeginFuncT>(&pcInterfaceShader::Begin_Fixed);
+        (BeginFuncT)(&pcInterfaceShader::Begin_Fixed);
     EndFuncArray[PIPELINE_FIXED] =
-        static_cast<EndFuncT>(&pcInterfaceShader::End_Fixed);
+        (EndFuncT)(&pcInterfaceShader::End_Fixed);
     RenderFuncArray[PIPELINE_FIXED] =
-        static_cast<RenderFuncT>(&pcInterfaceShader::Render_Fixed);
+        (RenderFuncT)(&pcInterfaceShader::Render_Fixed);
 
     GetStateFuncArray[PIPELINE_PROG1] =
-        static_cast<GetStateFuncT>(&pcInterfaceShader::GetState_Prog1);
+        (GetStateFuncT)(&pcInterfaceShader::GetState_Prog1);
     BeginFuncArray[PIPELINE_PROG1] =
-        static_cast<BeginFuncT>(&pcInterfaceShader::Begin_Prog1);
+        (BeginFuncT)(&pcInterfaceShader::Begin_Prog1);
     EndFuncArray[PIPELINE_PROG1] =
-        static_cast<EndFuncT>(&pcInterfaceShader::End_Prog1);
+        (EndFuncT)(&pcInterfaceShader::End_Prog1);
     RenderFuncArray[PIPELINE_PROG1] =
-        static_cast<RenderFuncT>(&pcInterfaceShader::Render_Prog1);
+        (RenderFuncT)(&pcInterfaceShader::Render_Prog1);
 }
 
 // FUNCTION: SWBF2 0x00702250

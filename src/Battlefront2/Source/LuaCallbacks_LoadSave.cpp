@@ -1579,7 +1579,7 @@ static int WriteLuaItem(unsigned char* pOut, int iIndex, int iDepth, bool bArg)
     (void)bArg;
     lua_pushvalue(LuaHelper::mState, iIndex);
     const int iType = lua_type(LuaHelper::mState, -1);
-    *pOut = static_cast<unsigned char>(iType);
+    *pOut = (unsigned char)iType;
     unsigned char* pWrite = pOut + 1;
     switch (iType)
     {
@@ -1595,7 +1595,7 @@ static int WriteLuaItem(unsigned char* pOut, int iIndex, int iDepth, bool bArg)
     }
     case LUA_TNUMBER:
     {
-        float fValue = static_cast<float>(luaL_checknumber(LuaHelper::mState, -1));
+        float fValue = (float)luaL_checknumber(LuaHelper::mState, -1);
         memcpy(pWrite, &fValue, sizeof(fValue));
         pWrite += sizeof(fValue);
         break;
@@ -1639,7 +1639,7 @@ static int WriteLuaItem(unsigned char* pOut, int iIndex, int iDepth, bool bArg)
         break;
     }
     lua_settop(LuaHelper::mState, -2);
-    return static_cast<int>(pWrite - pOut);
+    return (int)(pWrite - pOut);
 }
 }
 
@@ -1710,7 +1710,7 @@ static int ReadLuaItem(unsigned char* pData, int iDepth, bool bArg)
         lua_pushnil(LuaHelper::mState);
         break;
     }
-    return static_cast<int>(pRead - pData);
+    return (int)(pRead - pData);
 }
 }
 
@@ -1791,7 +1791,7 @@ static unsigned int SaveLuaItems(lua_State* L, unsigned char* pBuffer, unsigned 
     {
         return 0;
     }
-    aSerialized[0] = static_cast<unsigned char>(iNumArgs);
+    aSerialized[0] = (unsigned char)iNumArgs;
     int iWritten = 1;
     for (int i = 1; i <= iNumArgs; ++i)
     {

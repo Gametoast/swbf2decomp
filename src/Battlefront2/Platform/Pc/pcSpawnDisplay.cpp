@@ -888,7 +888,6 @@ void SpawnDisplay::UpdateTimer()
     }
 
     float fTime;
-    bool bCountdown = false;
     if (NetGame::IsEnabled() && NetGame::IsClient())
     {
         int iTurnsElapsed = (int)(NetGame::GetTurnNumber() - mBaseTurn);
@@ -918,19 +917,25 @@ void SpawnDisplay::UpdateTimer()
                 }
             }
         }
-    }
-    else
-    {
-        SpawnManager* pManager = SpawnManager::Instance();
-        int iTeam = mOwner->mTeamNumber;
-        float fCycles = (float)(mOwner->GetSpawnCycle() - pManager->GetCycleIndex(iTeam)) - 1.0f;
-        fTime = pManager->GetCycleDelay(iTeam) * fCycles + pManager->GetCycleTimer(iTeam);
-        if (!(fCycles < 0.0f))
+        unsigned int uLiveHumans = mTeamNumber == 1 ? sNumLiveHumansTeam1 : sNumLiveHumansTeam2;
+        int iUnitCount = SpawnManager::Instance()->GetUnitCount(mTeamNumber);
+        if (NetGame::IsEnabled() && fTime < 0.0001f && uLiveHumans >= (unsigned int)iUnitCount)
         {
-            mBaseTurn = NetGame::GetTurnNumber();
-            mBaseCycleTime = fTime;
-            bCountdown = true;
+            unsigned short usText[256];
+            PblUnicode::usnprintf(usText, 255,
+                                  RedLocalizeDB::Find(PblHash("game.spawndisplay.numtospawn"), false),
+                                  NetGame::GetSpawnOrder(NetGame::GetLocalIndex(0)) + 1);
+            mTextSpawnTimer.SetText(usText, true);
         }
+        return;
+    }
+
+    SpawnManager* pManager = SpawnManager::Instance();
+    int iTeam = mOwner->mTeamNumber;
+    float fCycles = (float)(mOwner->GetSpawnCycle() - pManager->GetCycleIndex(iTeam)) - 1.0f;
+    fTime = pManager->GetCycleDelay(iTeam) * fCycles + pManager->GetCycleTimer(iTeam);
+    if (fCycles < 0.0f)
+    {
         if (NetGame::IsEnabled() &&
             (!NetGame::IsOneWorld() || NetGame::IsDedicated() || NetGame::GetLocalIndex(0) < 0))
         {
@@ -940,6 +945,30 @@ void SpawnDisplay::UpdateTimer()
         {
             return;
         }
+
+        unsigned int uLiveHumans = mTeamNumber == 1 ? sNumLiveHumansTeam1 : sNumLiveHumansTeam2;
+        int iUnitCount = SpawnManager::Instance()->GetUnitCount(mTeamNumber);
+        if (NetGame::IsEnabled() && fTime < 0.0001f && uLiveHumans >= (unsigned int)iUnitCount)
+        {
+            unsigned short usText[256];
+            PblUnicode::usnprintf(usText, 255,
+                                  RedLocalizeDB::Find(PblHash("game.spawndisplay.numtospawn"), false),
+                                  NetGame::GetSpawnOrder(NetGame::GetLocalIndex(0)) + 1);
+            mTextSpawnTimer.SetText(usText, true);
+        }
+        return;
+    }
+
+    mBaseTurn = NetGame::GetTurnNumber();
+    mBaseCycleTime = fTime;
+    if (NetGame::IsEnabled() &&
+        (!NetGame::IsOneWorld() || NetGame::IsDedicated() || NetGame::GetLocalIndex(0) < 0))
+    {
+        return;
+    }
+    if (!mTextSpawnTimer.IsEnabled())
+    {
+        return;
     }
 
     unsigned int uLiveHumans = mTeamNumber == 1 ? sNumLiveHumansTeam1 : sNumLiveHumansTeam2;
@@ -952,7 +981,7 @@ void SpawnDisplay::UpdateTimer()
                               NetGame::GetSpawnOrder(NetGame::GetLocalIndex(0)) + 1);
         mTextSpawnTimer.SetText(usText, true);
     }
-    else if (bCountdown)
+    else
     {
         char acText[32];
         _snprintf(acText, 32, "%d", (int)fTime + 1);

@@ -55,12 +55,13 @@ unsigned int VoiceChat::NetPacketAudio::Read(void* pData, unsigned int uiSize)
 void* VoiceChat::NetPacketAudio::Read(unsigned int& length)
 {
     NetPacket* current = (NetPacket*)mAppPacket;
-    unsigned int available = (unsigned int)((int)current->mMaxIndex - (int)current->mCurIndex);
+    int currentIndex = current->mCurIndex;
+    char* data = current->mData + currentIndex;
+    unsigned int available = (unsigned int)((int)current->mMaxIndex - currentIndex);
     if (length > available)
     {
         length = available;
     }
-    char* data = current->mData + current->mCurIndex;
     current->mCurIndex += (short)length;
     return data;
 }
@@ -141,7 +142,7 @@ bool __cdecl SendVoice(NetPacket* packet, unsigned char destination, unsigned in
 void __cdecl VoiceChat::NetPacketAudio::Send(NetPacketAudio* packet, unsigned char destination,
                             unsigned int voiceDataOffset)
 {
-    NetPacket* appPacket = static_cast<NetPacket*>(packet->mAppPacket);
+    NetPacket* appPacket = (NetPacket*)packet->mAppPacket;
     appPacket->EndWrite();
     GameVoiceChat::SendVoice(appPacket, destination, voiceDataOffset);
 }

@@ -555,7 +555,7 @@ Entity* WeaponDispenser::Fire()
         if (mOwner->GetGameObject()->IsRtti(EntitySoldier::rttiHashEntitySoldier))
         {
             float fScale =
-                static_cast<EntitySoldier*>(mOwner->GetGameObject())->mClass->mSkeletonRootScale;
+                ((EntitySoldier*)mOwner->GetGameObject())->mClass->mSkeletonRootScale;
             if (fScale != 1.0f)
             {
                 vPos.x *= fScale;
@@ -658,7 +658,7 @@ Entity* WeaponDispenser::Fire()
 
     if (pObject->IsRtti(EntityItem::rttiHashEntityItem))
     {
-        static_cast<EntityItem*>(pObject)->mOwner = mOwner->mCharacter;
+        ((EntityItem*)pObject)->mOwner = mOwner->mCharacter;
         EventManager::CharacterEvent::mDispensePowerup.Trigger(*mOwner->mCharacter, *pObject);
     }
     else
@@ -680,7 +680,7 @@ Entity* WeaponDispenser::Fire()
                 {
                     pTarget = pOwnerObject;
                 }
-                static_cast<UnitController*>(pController)
+                ((UnitController*)pController)
                     ->ForceCommand(DroidRepairInfo(pTarget, pOwnerObject));
             }
         }

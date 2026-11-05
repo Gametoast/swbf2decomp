@@ -73,7 +73,7 @@ namespace
     template <typename TYPE>
     inline TYPE* ResolveHandle(PblHandle<TYPE>& handle)
     {
-        return static_cast<TYPE*>(handle);
+        return (TYPE*)handle;
     }
 
     GameObject* ResolveHandleAt(void* pHandleAddr)
@@ -97,7 +97,7 @@ namespace
 
     inline const PblVector3* GetTargetPosition(const GameObject* pTarget)
     {
-        return &static_cast<const CollisionObject*>(pTarget)->GetPosition();
+        return &((const CollisionObject*)pTarget)->GetPosition();
     }
 }
 
@@ -237,7 +237,7 @@ bool UnitFollowAgent::IsInLooseRange()
     Controllable* pMe = mCtrl->mOwner;
     const GameObject* pTarget = ResolveHandle(mTarget);
     const PblMatrix& mine = pMe->GetMatrix();
-    const PblVector3& theirs = static_cast<const CollisionObject&>(*pTarget).GetPosition();
+    const PblVector3& theirs = ((const CollisionObject&)(*pTarget)).GetPosition();
     float dx = theirs.x - mine.m[3][0];
     float dz = theirs.z - mine.m[3][2];
     return (dx * dx + dz * dz) < 400.0f;
@@ -267,7 +267,7 @@ void UnitFollowAgent::UpdateStatePostVision(float dt)
             Entity* pOwnerEntity = mCtrl->mOwner->GetEntity();
             if (!pOwnerEntity->IsRtti(EntityDroideka::rttiHashEntityDroideka))
             {
-                GameObject* pDeepGameObject = static_cast<Trackable*>(pDeep)->GetGameObject();
+                GameObject* pDeepGameObject = ((Trackable*)pDeep)->GetGameObject();
                 UnitCmdInfo cmdBoard = UnitBoardInfo(pDeepGameObject, -1);
                 mCtrl->PrependQueueCommand(cmdBoard);
                 SetNextState(100);
@@ -290,7 +290,7 @@ void UnitFollowAgent::UpdateStatePostVision(float dt)
             bool bIsSeatedSoldier;
             GameObject* pSelfObj = mCtrl->mOwner->GetGameObject();
             if (pSelfObj->IsRtti(EntitySoldier::rttiHashEntitySoldier) &&
-                static_cast<EntitySoldier*>(mCtrl->mOwner->GetGameObject())->mState == SoldierState::JET_HOVER)
+                ((EntitySoldier*)mCtrl->mOwner->GetGameObject())->mState == SoldierState::JET_HOVER)
             {
                 bIsSeatedSoldier = true;
             }
@@ -332,7 +332,7 @@ void UnitFollowAgent::UpdateStatePostVision(float dt)
                             const GameObject* pTarget = mTarget.operator->();
                             AI::UnitThreatManager& rThreats = mCtrl->mThreatManager;
                             rThreats.AddThreat(const_cast<GameObject*>(
-                                static_cast<const GameObject*>(pTarget->GetControllable()->mReticuleTarget[0])));
+                                (const GameObject*)pTarget->GetControllable()->mReticuleTarget[0]));
                         }
                     }
                 }

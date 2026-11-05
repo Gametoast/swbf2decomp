@@ -127,7 +127,7 @@ namespace
 
     inline int GetFlyerState(const GameObject* pObj)
     {
-        return static_cast<const EntityFlyer*>(pObj)->GetState();
+        return ((const EntityFlyer*)pObj)->GetState();
     }
 
     PblVector3 GetTargetPoint(const GameObject* pObj, const PblVector3& vFrom,
@@ -509,7 +509,7 @@ static void sCalculateTurnControls(const Controllable* pMe, float fScale, const 
         }
         *pfTurn = fTurn;
 
-        const UnitController* pUnit = UnitControllerPtr(static_cast<const Controller*>(pMe->mCtrl));
+        const UnitController* pUnit = UnitControllerPtr((const Controller*)pMe->mCtrl);
         const float fMax =
             pUnit->mLowLevel.UseFastTurn() ? 2.0f : 1.0f;
         *pfTurn = Clamp(*pfTurn, -fMax, fMax);
@@ -666,7 +666,7 @@ void AIUtil::CalculateHeadingControls(const Controllable* pMe, float fScale,
     {
         vAim = rHeading.mDest;
         fWander = rHeading.mDestWander;
-        pTarget = UnitControllerPtr(static_cast<const Controller*>(pMe->mCtrl))->GetAttackHelperTarget();
+        pTarget = UnitControllerPtr((const Controller*)pMe->mCtrl)->GetAttackHelperTarget();
     }
     else
     {
@@ -742,12 +742,12 @@ namespace
 {
     const Obstacle* HoverGetObstacle(const Entity* pHover)
     {
-        return static_cast<const EntityHover*>(pHover)->mObstacle;
+        return ((const EntityHover*)pHover)->mObstacle;
     }
 
     const Obstacle* FlyerGetObstacle(const Entity* pFlyer)
     {
-        return static_cast<const EntityFlyer*>(pFlyer)->mObstacle;
+        return ((const EntityFlyer*)pFlyer)->mObstacle;
     }
 
     inline const AILowLevel* GetLowLevel(const UnitController* pUnit)
@@ -780,7 +780,7 @@ void UpdatePhysics(const Controllable* pMe, float fScale, const ControllableDest
         const float fDistSq = vToDest.z * vToDest.z + vToDest.x * vToDest.x;
         const bool bInStopDist = fStop * fStop > fDistSq;
         bStopping = bInStopDist &&
-                    !GetLowLevel(UnitControllerPtr(static_cast<const Controller*>(pMe->mCtrl)))->HasPath();
+                    !GetLowLevel(UnitControllerPtr((const Controller*)pMe->mCtrl))->HasPath();
 
         if (bAtDest ||
             (bStopping && (pMe->GetEntity()->IsRtti(EntityWalker::rttiHashEntityWalker) ||
@@ -865,7 +865,7 @@ void UpdatePhysics(const Controllable* pMe, float fScale, const ControllableDest
     if (pMe->GetEntity()->IsRtti(EntityHover::rttiHashEntityHover))
     {
         bUseHeading = (bStopping && bCanStrafe) ||
-                      GetLowLevel(UnitControllerPtr(static_cast<const Controller*>(pMe->mCtrl)))->mAllowHoverStrafe;
+                      GetLowLevel(UnitControllerPtr((const Controller*)pMe->mCtrl))->mAllowHoverStrafe;
     }
     else
     {
@@ -881,7 +881,7 @@ void UpdatePhysics(const Controllable* pMe, float fScale, const ControllableDest
         bool bFromEye = false;
         if (pMe->GetEntity()->IsRtti(EntityDroideka::rttiHashEntityDroideka))
         {
-            if (GetLowLevel(UnitControllerPtr(static_cast<const Controller*>(pMe->mCtrl)))->mFoldStatus ==
+            if (GetLowLevel(UnitControllerPtr((const Controller*)pMe->mCtrl))->mFoldStatus ==
                 FOLD_UNFOLD)
             {
                 bFromEye = true;
@@ -1137,10 +1137,10 @@ float AIUtil::StopDistIntermediate(const Controllable* pControllable)
     switch (GetEntityType(pControllable->GetEntity()))
     {
     case ENTITY_FLYER:
-        return static_cast<const EntityFlyerClass*>(pControllable->GetEntity()->GetEntityClass())
+        return ((const EntityFlyerClass*)pControllable->GetEntity()->GetEntityClass())
                    ->mMaxFlyerSpeed * 0.25f;
     case ENTITY_HOVER:
-        return static_cast<const EntityHoverClass*>(pControllable->GetEntity()->GetEntityClass())
+        return ((const EntityHoverClass*)pControllable->GetEntity()->GetEntityClass())
                    ->mForwardSpeed * 0.5f;
     default:
         return 1.0f;
@@ -1156,7 +1156,7 @@ float AIUtil::StopDist(const Controllable* pControllable)
     case ENTITY_DROID:
         return 0.5f;
     case ENTITY_HOVER:
-        return static_cast<const EntityHoverClass*>(pControllable->GetEntity()->GetEntityClass())
+        return ((const EntityHoverClass*)pControllable->GetEntity()->GetEntityClass())
                    ->mForwardSpeed * 0.5f;
     default:
         return 4.0f;
@@ -1384,7 +1384,7 @@ float AIUtil::GetCollisionRadius(const GameObject* pObj)
     const EntityType eType = GetEntityType(pObj);
     if (eType == ENTITY_HOVER)
     {
-        const EntityHoverClass* pHover = static_cast<const EntityHoverClass*>(pObj->GetEntityClass());
+        const EntityHoverClass* pHover = (const EntityHoverClass*)pObj->GetEntityClass();
         const float fBarrierX = pHover->mBarrierX;
         if (fBarrierX > 0.0f)
         {
@@ -1661,7 +1661,7 @@ bool IsImportant(const GameObject* pObj)
         if (100.0f > vVel.x * vVel.x + vVel.y * vVel.y + vVel.z * vVel.z)
         {
             PblVector3 vPos;
-            vPos = static_cast<const CollisionObject*>(pObj)->GetMatrix().GetTranslation();
+            vPos = ((const CollisionObject*)pObj)->GetMatrix().GetTranslation();
             PblVector3 vCam;
             vCam = CameraManager::Instance()->GetCamera(0)->GetMatrix().GetTranslation();
             if (SquaredLength(vCam - vPos) > 2025.0f &&
@@ -1706,7 +1706,7 @@ PblVector3 AIUtil::DumbDown(const GameObject* pObject, float fDeltaTime, Aimer* 
     if (pUnit && pUnit->mLodState < 3)
     {
         const GameObject* pTarget = pUnit->GetAttackHelperTarget();
-        if (!pTarget || !pTarget->GetControllable() || pTarget->GetControllable()->mPlayerId < 0)
+        if (!pTarget || !pTarget->GetControllable() || !pTarget->GetControllable()->IsPlayer())
         {
             return vDir;
         }
@@ -1731,7 +1731,7 @@ PblVector3 AIUtil::DumbDown(const GameObject* pObject, float fDeltaTime, Aimer* 
     }
 
     PblVector3 vAim = pAimer->mDirection;
-    if (vDir.y * vAim.y + vDir.x * vAim.x + vAim.z * vDir.z < (float)cos(0.523598790f))
+    if (DotProduct(vDir, vAim) < (float)cos(0.523598790f))
     {
         const PblVector3 vUp = CrossProduct(vDir, vAim);
         PblMatrix mAim(CrossProduct(vDir, vUp), vUp, vDir, gVectorZero);
@@ -1954,11 +1954,11 @@ const Obstacle* AIUtil::_GetGameObjectBarrier(const GameObject* pObj)
     }
     if (pObj->GetEntity()->IsRtti(EntityHover::rttiHashEntityHover))
     {
-        return static_cast<const EntityHover*>(pObj->GetEntity())->mObstacle;
+        return ((const EntityHover*)pObj->GetEntity())->mObstacle;
     }
     if (pObj->GetEntity()->IsRtti(EntityFlyer::rttiHashEntityFlyer))
     {
-        return static_cast<const EntityFlyer*>(pObj->GetEntity())->mObstacle;
+        return ((const EntityFlyer*)pObj->GetEntity())->mObstacle;
     }
     return 0;
 }
@@ -1983,7 +1983,7 @@ PblVector3 AIUtil::GetRandomAccessiblePoint(const UnitController* pCtrl)
         return PblVector3(0.0f, 0.0f, 0.0f);
     }
 
-    const GameObject* pObj = static_cast<const Controllable*>(pCtrl->mOwner)->GetGameObject();
+    const GameObject* pObj = ((const Controllable*)pCtrl->mOwner)->GetGameObject();
     const ConnectivityGraph* pGraph = ConnectivityGraphManager::GetWorldGraph((ConnectivityGraph::ProhibitFlag)-1);
     const ConnectivityNode* pNode;
     if (pGraph && (pNode = pGraph->GetRandomAccessibleNode(pCtrl)) != 0)

@@ -218,7 +218,7 @@ bool ScopeDisplay::Update(float fDeltaTime)
     }
 
     bool bChaseMode = CameraManager::sInstance->IsChaseMode(mJoystickIndex);
-    Damageable* pDamageable = static_cast<Damageable*>(pControllable->GetGameObject());
+    Damageable* pDamageable = (Damageable*)pControllable->GetGameObject();
     bool bAiming = pControllable->mTargetInfo.mIsAiming & pDamageable->mIsAlive & bChaseMode;
 
     Weapon* pWeapon = pControllable->GetWeaponPtr(pControllable->GetWeaponIndex(0));

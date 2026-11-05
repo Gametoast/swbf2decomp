@@ -898,42 +898,40 @@ void PAAnimationGroup::UpdateAnimations(float fDeltaTime)
 
     for (int i = mStartAnim; i < mStartAnim + mNumAnims; ++i)
     {
-        PAAnimationData& data = sPAAnims[i];
-        PblMatrix& initial = data.mInitialMatrix;
-        PAAnimation* pAnim = PAAnimation::Find(data.mAnimHash);
-        if (!pAnim || !*data.mGeometry)
+        PAAnimation* pAnim = PAAnimation::_HashTable.Find(sPAAnims[i].mAnimHash);
+        if (!pAnim || !*sPAAnims[i].mGeometry)
         {
             continue;
         }
 
-        if (mStopWhenControlled && (*data.mGeometry)->GetGameObject() &&
-            (*data.mGeometry)->GetGameObject()->GetTeam())
+        if (mStopWhenControlled && (*sPAAnims[i].mGeometry)->GetGameObject() &&
+            (*sPAAnims[i].mGeometry)->GetGameObject()->GetTeam())
         {
-            *data.mTimer = 0.0f;
-            initial = (*data.mGeometry)->GetMatrix();
+            *sPAAnims[i].mTimer = 0.0f;
+            sPAAnims[i].mInitialMatrix = (*sPAAnims[i].mGeometry)->GetMatrix();
         }
         else if (mEndTime > 0.0f)
         {
-            if (*data.mTimer >= mEndTime)
+            if (*sPAAnims[i].mTimer >= mEndTime)
             {
                 *mActive = false;
             }
-            else if (*data.mTimer + fDeltaTime > mEndTime)
+            else if (*sPAAnims[i].mTimer + fDeltaTime > mEndTime)
             {
-                pAnim->Update(mEndTime - *data.mTimer, *data.mTimer, *data.mGeometry, initial);
+                pAnim->Update(mEndTime - *sPAAnims[i].mTimer, *sPAAnims[i].mTimer, *sPAAnims[i].mGeometry, sPAAnims[i].mInitialMatrix);
                 *mActive = false;
             }
             else
             {
-                pAnim->Update(fDeltaTime, *data.mTimer, *data.mGeometry, initial);
+                pAnim->Update(fDeltaTime, *sPAAnims[i].mTimer, *sPAAnims[i].mGeometry, sPAAnims[i].mInitialMatrix);
             }
         }
         else
         {
-            pAnim->Update(fDeltaTime, *data.mTimer, *data.mGeometry, initial);
+            pAnim->Update(fDeltaTime, *sPAAnims[i].mTimer, *sPAAnims[i].mGeometry, sPAAnims[i].mInitialMatrix);
         }
 
-        PblMatrix matrix = (*data.mGeometry)->GetMatrix();
+        PblMatrix matrix = (*sPAAnims[i].mGeometry)->GetMatrix();
         if (mDisableHierarchies)
         {
             continue;
@@ -941,7 +939,7 @@ void PAAnimationGroup::UpdateAnimations(float fDeltaTime)
 
         for (int h = 0; h < mNumHierarchies; ++h)
         {
-            if (mHierarchies[h]->mRoot.mObjHash != data.mObjHash)
+            if (mHierarchies[h]->mRoot.mObjHash != sPAAnims[i].mObjHash)
             {
                 continue;
             }

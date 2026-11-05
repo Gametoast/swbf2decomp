@@ -1121,7 +1121,7 @@ void HUD::Element::SetRuntimeScaleAll(float fScale)
 {
     for (PblListDouble::Itor itor(&sList); itor.GetNode() != sList.GetTerminator(); ++itor)
     {
-        Element* pElement = static_cast<Element*>(itor.GetNode()->GetObjectA(&sList, offsetof(Element, mNode)));
+        Element* pElement = (Element*)itor.GetNode()->GetObjectA(&sList, offsetof(Element, mNode));
         pElement->SetRuntimeScale(fScale);
     }
     sRuntimeScale = fScale;

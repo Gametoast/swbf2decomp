@@ -149,59 +149,59 @@ EntityProp::EntityProp(EntityPropClass* pClass, const EntityDesc& desc)
     mMoving = false;
     mClass = pClass;
 
-    PblVector3 minSize;
-    PblVector3 maxSize;
-    minSize.SetAll(FLT_MAX);
-    maxSize.SetAll(-FLT_MAX);
-    bool wasAnyBodies = false;
-    CollisionModel* model = mCollisionModel;
-    for (int i = 0; i < model->GetNumBodies(); ++i)
+    PblVector3 vMin;
+    PblVector3 vMax;
+    vMin.x = FLT_MAX;
+    vMin.y = FLT_MAX;
+    vMin.z = FLT_MAX;
+    vMax.x = -FLT_MAX;
+    vMax.y = -FLT_MAX;
+    vMax.z = -FLT_MAX;
+    bool bHaveBody = false;
+    CollisionModel* pCollisionModel = mCollisionModel;
+    for (int i = 0; i < pCollisionModel->GetNumBodies(); ++i)
     {
-        CollisionBody* body = model->GetBody(i);
-        if (!body)
+        CollisionBody* pBody = pCollisionModel->GetBody(i);
+        if (!pBody)
         {
             continue;
         }
-        wasAnyBodies = true;
-        if (body->bIsMesh)
+        bHaveBody = true;
+        if (pBody->bIsMesh)
         {
-            CollisionMesh* mesh = static_cast<CollisionBodyMesh*>(body)->mMesh;
-            PblBox box = mesh->GetWorldspaceAABB(body->GetWorldMatrix(mMatrix, 0));
-            PblVector3 bMin = box.GetMin();
-            PblVector3 bMax = box.GetMax();
-            minSize.x = bMin.x > minSize.x ? minSize.x : bMin.x;
-            minSize.y = bMin.y > minSize.y ? minSize.y : bMin.y;
-            minSize.z = bMin.z > minSize.z ? minSize.z : bMin.z;
-            maxSize.x = maxSize.x > bMax.x ? maxSize.x : bMax.x;
-            maxSize.y = maxSize.y > bMax.y ? maxSize.y : bMax.y;
-            maxSize.z = maxSize.z > bMax.z ? maxSize.z : bMax.z;
+            CollisionMesh* pMesh = ((CollisionBodyMesh*)pBody)->mMesh;
+            PblBox bodyBox = pMesh->GetWorldspaceAABB(pBody->GetWorldMatrix(mMatrix, 0));
+            vMin.x = bodyBox._vMin.x > vMin.x ? vMin.x : bodyBox._vMin.x;
+            vMin.y = bodyBox._vMin.y > vMin.y ? vMin.y : bodyBox._vMin.y;
+            vMin.z = bodyBox._vMin.z > vMin.z ? vMin.z : bodyBox._vMin.z;
+            vMax.x = vMax.x > bodyBox._vMax.x ? vMax.x : bodyBox._vMax.x;
+            vMax.y = vMax.y > bodyBox._vMax.y ? vMax.y : bodyBox._vMax.y;
+            vMax.z = vMax.z > bodyBox._vMax.z ? vMax.z : bodyBox._vMax.z;
         }
         else
         {
-            PblMatrix bMat = body->GetWorldMatrix(mMatrix, 0);
-            PblBox box = static_cast<CollisionBodyPrimitive*>(body)->mPrimitive.GetWorldspaceAABB(bMat);
-            PblVector3 bMin = box.GetMin();
-            PblVector3 bMax = box.GetMax();
-            minSize.x = bMin.x > minSize.x ? minSize.x : bMin.x;
-            minSize.y = bMin.y > minSize.y ? minSize.y : bMin.y;
-            minSize.z = bMin.z > minSize.z ? minSize.z : bMin.z;
-            maxSize.x = maxSize.x > bMax.x ? maxSize.x : bMax.x;
-            maxSize.y = maxSize.y > bMax.y ? maxSize.y : bMax.y;
-            maxSize.z = maxSize.z > bMax.z ? maxSize.z : bMax.z;
+            PblBox bodyBox = ((CollisionBodyPrimitive*)pBody)->mPrimitive.GetWorldspaceAABB(
+                pBody->GetWorldMatrix(mMatrix, 0));
+            vMin.x = bodyBox._vMin.x > vMin.x ? vMin.x : bodyBox._vMin.x;
+            vMin.y = bodyBox._vMin.y > vMin.y ? vMin.y : bodyBox._vMin.y;
+            vMin.z = bodyBox._vMin.z > vMin.z ? vMin.z : bodyBox._vMin.z;
+            vMax.x = vMax.x > bodyBox._vMax.x ? vMax.x : bodyBox._vMax.x;
+            vMax.y = vMax.y > bodyBox._vMax.y ? vMax.y : bodyBox._vMax.y;
+            vMax.z = vMax.z > bodyBox._vMax.z ? vMax.z : bodyBox._vMax.z;
         }
     }
-    if (wasAnyBodies)
+    if (bHaveBody)
     {
-        mAABB.SetMin(minSize);
-        mAABB.SetMax(maxSize);
+        mAABB._vMin = vMin;
+        mAABB._vMax = vMax;
     }
 
-    PblVector3 vector2d = (mAABB.GetMax() - mAABB.GetMin()) * 0.5f;
-    vector2d.y = 0.0f;
-    float radius = Length(vector2d);
-    if (GetCollisionRadius() > radius)
+    float fHalfX = (mAABB._vMax.x - mAABB._vMin.x) * 0.5f;
+    float fHalfZ = (mAABB._vMax.z - mAABB._vMin.z) * 0.5f;
+    float f2dRadius = PblMath::Sqrt(fHalfX * fHalfX + 0.0f + fHalfZ * fHalfZ);
+    if (GetCollisionRadius() > f2dRadius)
     {
-        Set2DCollisionRadius(radius);
+        Set2DCollisionRadius(f2dRadius);
     }
     SetTestBBox(GetCollisionRadius() > 1.0f);
     AddToScene();
@@ -240,13 +240,17 @@ EntityProp::EntityProp(EntityPropClass* pClass, const EntityDesc& desc)
         EntityClass* pClothClass = EntityClass::Find(mModel->mClothList[i]);
         if (pClothClass)
         {
-            mClothPiece[i] = static_cast<EntityCloth*>(pClothClass->Build(desc));
+            mClothPiece[i] = (EntityCloth*)pClothClass->Build(desc);
         }
     }
 
     PAAnimationGroup::GeometryCreated(desc.mNameId, this, mMatrix);
 
-    mPrevPos = mMatrix.GetTranslation() + mMatrix.ApplyRotation(mClass->mSoundOffset);
+    PblVector3 vOffset;
+    D3DXVec3TransformNormal((D3DXVECTOR3*)&vOffset, (const D3DXVECTOR3*)&mClass->mSoundOffset,
+                            (const D3DXMATRIX*)&mMatrix);
+    const PblVector3& vPos = mMatrix.GetTranslation();
+    mPrevPos = PblVector3(vOffset.x + vPos.x, vOffset.y + vPos.y, vOffset.z + vPos.z);
 }
 
 // FUNCTION: SWBF2 0x00497ea0
@@ -300,7 +304,7 @@ void EntityProp::RecalculateAABB()
 // FUNCTION: SWBF2 0x004d97d0
 void EntityProp::Render(unsigned char ucViewport, float fDist, unsigned int uiFlags)
 {
-    if (!static_cast<const EntityPropClass*>(mEntityClass)->m_bDynamicLighting)
+    if (!((const EntityPropClass*)mEntityClass)->m_bDynamicLighting)
     {
         uiFlags |= 0x80;
     }
@@ -325,7 +329,7 @@ void EntityProp::Render(unsigned char ucViewport, float fDist, unsigned int uiFl
         }
     }
 
-    if (static_cast<const EntityPropClass*>(mEntityClass)->mReflected && !(uiFlags & 0x200000))
+    if (((const EntityPropClass*)mEntityClass)->mReflected && !(uiFlags & 0x200000))
     {
         PblMatrix mReflection;
         if (FLRenderer::IsReflected(*(const PblVector3*)&_Sphere, _Sphere.w, mReflection, false))
@@ -867,7 +871,7 @@ Entity* EntityPropClass::Build(const EntityDesc& desc)
     EntityProp* pProp = new EntityProp(this, desc);
     if (pProp)
     {
-        static_cast<CollisionObject*>(pProp)->AddStaticToCollisionManager();
+        ((CollisionObject*)pProp)->AddStaticToCollisionManager();
         if (!NetGame::IsEnabled() || !NetGame::IsClient())
         {
             for (int i = 0; i < mNumAttachedOdfs; ++i)

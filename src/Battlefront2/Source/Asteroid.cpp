@@ -690,7 +690,7 @@ void Asteroid::Kill()
                     {
                         pChild->Init();
                         const PblVector3 vDir = desc.mMatrix.GetTranslation() - mMatrix.GetTranslation();
-                        static_cast<EntityGeometry*>(pChild)->SetVelocity(Normalize(vDir) * 50.0f);
+                        ((EntityGeometry*)pChild)->SetVelocity(Normalize(vDir) * 50.0f);
                     }
                 }
             }
@@ -751,19 +751,12 @@ bool Asteroid::Update(float fDeltaTime)
     {
         const float fInv = 1.0f / fOmega;
         const PblVector3 vAxis = mOmega * fInv;
-        float fSin, fCos;
-        PblMath::SinCos(&fSin, &fCos, fOmega * fDeltaTime * 0.5f);
-        const PblQuaternion qStep(fCos, vAxis.x * fSin, vAxis.y * fSin, vAxis.z * fSin);
+        const PblQuaternion qStep(vAxis, fOmega * fDeltaTime);
         qRotation = qRotation * qStep;
     }
     vPos += mVelocity * fDeltaTime;
 
-    D3DXQUATERNION qNormalized;
-    D3DXQuaternionNormalize(&qNormalized, (const D3DXQUATERNION*)&qRotation);
-    PblMatrix mNew;
-    D3DXMatrixRotationQuaternion((D3DXMATRIX*)&mNew, &qNormalized);
-    mNew[3] = vPos;
-    mNew.m[3][3] = 1.0f;
+    PblMatrix mNew(qRotation, vPos);
     mMatrix = mNew;
     SetRenderPos(vPos);
     AsteroidCollisionFollows(this);

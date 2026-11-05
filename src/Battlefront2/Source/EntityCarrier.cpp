@@ -117,8 +117,7 @@ bool EntityCarrier::Update(float fDeltaTime)
         }
 
         PblMatrix matrix = mMatrix;
-        PblVector3 position;
-        D3DXVec3TransformCoord(reinterpret_cast<D3DXVECTOR3*>(&position), reinterpret_cast<const D3DXVECTOR3*>(&mCargoArray[i].mOffset), reinterpret_cast<const D3DXMATRIX*>(&matrix));
+        PblVector3 position = matrix.ApplyTransform(mCargoArray[i].mOffset);
         matrix.SetTranslation(position);
         pObject->SetMatrix(matrix);
         pObject->SetVelocity(mVelocity);
@@ -136,7 +135,7 @@ namespace
         const GameModel* pModel = pFlyer->mModel;
         PblVector3 center;
         D3DXVec3TransformCoord(reinterpret_cast<D3DXVECTOR3*>(&center), reinterpret_cast<const D3DXVECTOR3*>(&pModel->_mModel->_BoundingSphere.GetCenter()), reinterpret_cast<const D3DXMATRIX*>(&matrix));
-        CollisionObject* pCollision = static_cast<CollisionObject*>(pFlyer);
+        CollisionObject* pCollision = (CollisionObject*)pFlyer;
         pCollision->SetCollisionCenter(center);
         pCollision->RecalculateAABB();
     }
@@ -216,7 +215,7 @@ float EntityFlyerClass::GetReboardTime() const
 // FUNCTION: SWBF2 0x00477b60
 const ControllableClass* EntityFlyerClass::GetControllableClass() const
 {
-    return this ? static_cast<const ControllableClass*>(this) : 0;
+    return this ? (const ControllableClass*)this : 0;
 }
 
 // SYNTHETIC: SWBF2 0x00402960
@@ -273,7 +272,7 @@ bool EntityCarrier::AttachCargo(int, GameObject* pGameObject)
     EntityCarrierClass* pClass = GetClass();
     mCargoArray[0].mOffset = pClass->mCargoInfo[0].mOffset - pGameObject->GetAttachOffset();
     mCargoArray[0].mObject = pGameObject;
-    mCargoArray[0].mObject->mParent = static_cast<CollisionObject*>(this);
+    mCargoArray[0].mObject->mParent = (CollisionObject*)this;
 
     UpdateLandedHeight();
 
@@ -448,9 +447,9 @@ Entity* EntityCarrierClass::Build(const EntityDesc& desc)
     EntityCarrier* pCarrier = new EntityCarrier(this, desc);
     if (pCarrier)
     {
-        (static_cast<CollisionObject*>(pCarrier))->AddRigidToCollisionManager();
+        ((CollisionObject*)pCarrier)->AddRigidToCollisionManager();
         pCarrier->ActivatePhysics();
-        static_cast<EntityGeometry*>(pCarrier)->BuildEffects();
+        ((EntityGeometry*)pCarrier)->BuildEffects();
     }
     return (Entity*)pCarrier;
 }

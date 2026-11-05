@@ -1220,7 +1220,7 @@ void HUD::GameEvents::UpdateLockOn(unsigned int uIndex, const GameObject* const 
         if (data.lockedTargetHealth != fShield)
         {
             const float fMaxShield = pTarget->mMaxShield;
-            HUD::Event ev8(events.lockOnHealth, static_cast<unsigned int>((int)fShield));
+            HUD::Event ev8(events.lockOnHealth, (unsigned int)(int)fShield);
             ev8.Send();
             HUD::Event ev9(events.lockOnHealthFraction, fShield / fMaxShield);
             ev9.Send();
@@ -1243,7 +1243,7 @@ void HUD::GameEvents::UpdateLockOn(unsigned int uIndex, const GameObject* const 
             if (fHealth != data.lockedTargetHealth)
             {
                 const float fMaxHealth = pTarget->mMaxHealth;
-                HUD::Event ev12(events.lockOnHealth, static_cast<unsigned int>((int)fHealth));
+                HUD::Event ev12(events.lockOnHealth, (unsigned int)(int)fHealth);
                 ev12.Send();
                 HUD::Event ev13(events.lockOnHealthFraction, fHealth / fMaxHealth);
                 ev13.Send();
@@ -1297,7 +1297,11 @@ void HUD::GameEvents::UpdateWeaponEvents(const RedCamera* const pCamera, const C
     const int iWeaponIndex = pControllable->GetWeaponIndex(uWeapon);
     Weapon* pWeapon = iWeaponIndex >= 0 ? pControllable->GetWeaponPtr(iWeaponIndex) : 0;
     const WeaponClass* pWeaponClass = pWeapon ? pWeapon->mClass : 0;
-    const unsigned int uWeaponHash = pWeapon ? pWeapon->GetNameHash() : 0;
+    unsigned int uWeaponHash = 0;
+    if (pWeapon)
+    {
+        uWeaponHash = pWeapon->GetNameHash();
+    }
 
     if (pWeapon != weaponData.weapon || pWeaponClass != weaponData.weaponClass ||
         uWeaponHash != weaponData.weaponHash)
@@ -1396,12 +1400,12 @@ void HUD::GameEvents::UpdateWeaponEvents(const RedCamera* const pCamera, const C
             }
             if (!data.scopeActive && !data.unknownBool00D8)
             {
-                HUD::Event evTotalBullets(weaponEvents.ammoTotalBullets, static_cast<unsigned int>(iTotalBullets));
+                HUD::Event evTotalBullets(weaponEvents.ammoTotalBullets, (unsigned int)iTotalBullets);
                 evTotalBullets.Send();
                 HUD::Event evTotalFraction(weaponEvents.ammoTotalFraction, fTotalFraction);
                 evTotalFraction.Send();
             }
-            HUD::Event evClipBullets(weaponEvents.ammoClipBullets, static_cast<unsigned int>(iClipBullets));
+            HUD::Event evClipBullets(weaponEvents.ammoClipBullets, (unsigned int)iClipBullets);
             evClipBullets.Send();
             HUD::Event evClipFraction(weaponEvents.ammoClipFraction, fClipFraction);
             evClipFraction.Send();
@@ -1631,7 +1635,7 @@ void HUD::GameEvents::UpdateWeaponEvents(const RedCamera* const pCamera, const C
                     if (fShield != weaponData.targetHealth)
                     {
                         const float fMaxShield = pTargetObject->mMaxShield;
-                        HUD::Event evHealth(weaponEvents.targetHealth, static_cast<unsigned int>((int)fShield));
+                        HUD::Event evHealth(weaponEvents.targetHealth, (unsigned int)(int)fShield);
                         evHealth.Send();
                         HUD::Event evHealthFraction(weaponEvents.targetHealthFraction, fShield / fMaxShield);
                         evHealthFraction.Send();
@@ -1655,7 +1659,7 @@ void HUD::GameEvents::UpdateWeaponEvents(const RedCamera* const pCamera, const C
                         if (fHealth != weaponData.targetHealth)
                         {
                             const float fMaxHealth = pTargetObject->mMaxHealth;
-                            HUD::Event evHealth(weaponEvents.targetHealth, static_cast<unsigned int>((int)fHealth));
+                            HUD::Event evHealth(weaponEvents.targetHealth, (unsigned int)(int)fHealth);
                             evHealth.Send();
                             HUD::Event evHealthFraction(weaponEvents.targetHealthFraction, fHealth / fMaxHealth);
                             evHealthFraction.Send();
@@ -1778,7 +1782,7 @@ void HUD::GameEvents::UpdateHealth(const Character* const pCharacter, const Game
         const int iPlayer = pCharacter->mPlayerId;
         if (iPlayer >= 0)
         {
-            if (iPlayer < 1)
+            if (pCharacter->mPlayerId < 1)
             {
                 HUD::Event pulse(gPlayerEvents[iPlayer].healthRegenPulseRate, fHealth > data.health ? 0.5f : FLT_MAX);
                 pulse.Send();
@@ -1841,7 +1845,7 @@ void HUD::GameEvents::UpdateHealth(const Character* const pCharacter, const Game
             pHealth = events.health;
             pFraction = events.healthFraction;
         }
-        HUD::Event health(pHealth, static_cast<unsigned int>((int)fHealth));
+        HUD::Event health(pHealth, (unsigned int)(int)fHealth);
         health.Send();
         HUD::Event fraction(pFraction, fFraction);
         fraction.Send();
@@ -1858,11 +1862,11 @@ void HUD::GameEvents::UpdateHealth(const Character* const pCharacter, const Game
     const Entity* pEntity = pObject->GetEntity();
     if (pEntity->IsRtti(EntitySoldier::rttiHashEntitySoldier))
     {
-        bCanChangeClass = static_cast<const EntitySoldier*>(pEntity)->CanChangeClass();
+        bCanChangeClass = ((const EntitySoldier*)pEntity)->CanChangeClass();
     }
     else if (pEntity->IsRtti(EntityDroideka::rttiHashEntityDroideka))
     {
-        bCanChangeClass = static_cast<const EntityDroideka*>(pEntity)->mCanChangeClass;
+        bCanChangeClass = ((const EntityDroideka*)pEntity)->mCanChangeClass;
     }
     ToolTipsDisplay* pTips = ToolTipsDisplay::sInstance;
     if (pTips && bCanChangeClass)
@@ -1925,7 +1929,7 @@ void HUD::GameEvents::UpdateVehicleHealth(int iIndex, const Character* const pCh
         {
             const float fMaxHealth = pObject->mMaxHealth;
             const float fFraction = fMaxHealth != 0.0f ? fHealth / fMaxHealth : 0.0f;
-            HUD::Event health(events.vehicleHealth, static_cast<unsigned int>((int)fHealth));
+            HUD::Event health(events.vehicleHealth, (unsigned int)(int)fHealth);
             health.Send();
             HUD::Event fraction(events.vehicleHealthFraction, fFraction);
             fraction.Send();
@@ -1973,7 +1977,7 @@ void HUD::GameEvents::UpdateJetpack(const GameObject* const pObject, const Entit
 
     if (data.hasJetpack)
     {
-        const float fJetFuel = static_cast<const EntitySoldier*>(pObject)->mJetFuel;
+        const float fJetFuel = ((const EntitySoldier*)pObject)->mJetFuel;
         if (fJetFuel != data.jetFuel)
         {
             float fWarning = 0.0f;
@@ -2462,7 +2466,7 @@ void HUD::GameEvents::UpdateMissleLock(const GameObject* const pObject, const Co
     }
     if (bLocked)
     {
-        HUD::Event distance(events.missileLockDistance, static_cast<unsigned int>((int)pControllable->mEnemyLockedOnMeDistance));
+        HUD::Event distance(events.missileLockDistance, (unsigned int)(int)pControllable->mEnemyLockedOnMeDistance);
         distance.Send();
     }
 }

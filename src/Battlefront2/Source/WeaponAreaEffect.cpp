@@ -739,7 +739,7 @@ void WeaponAreaEffect::ApplyEffectsToTarget(GameObject* pTarget, const PblVector
         case WeaponAreaEffectClass::EFFECT_CHOKE:
             if (pTarget->GetEntityType() == ENT_SOLDIER)
             {
-                static_cast<EntitySoldier*>(pTarget->GetEntity())
+                ((EntitySoldier*)pTarget->GetEntity())
                     ->ApplyChoke(vDir, fEffect, (SoldierAnimationBank::ANIMATION)_GetClass()->m_eSoldierAnimation);
             }
             break;

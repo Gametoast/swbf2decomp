@@ -317,7 +317,7 @@ EntityHologram::EntityHologram(EntityHologramClass* pClass, const EntityDesc& de
 // FUNCTION: SWBF2 0x004bea60
 EntityHologram::~EntityHologram()
 {
-    static_cast<RedSceneObject*>(this)->Deactivate();
+    ((RedSceneObject*)this)->Deactivate();
     delete m_apOmniLight[0];
     m_apOmniLight[0] = 0;
     delete m_pLightBeam;
@@ -326,7 +326,7 @@ EntityHologram::~EntityHologram()
 // FUNCTION: SWBF2 0x004beb00
 bool EntityHologram::Update(float fDeltaTime)
 {
-    const EntityHologramClass* pClass = static_cast<const EntityHologramClass*>(mEntityClass);
+    const EntityHologramClass* pClass = (const EntityHologramClass*)mEntityClass;
 
     m_fRotateTimer += fDeltaTime;
     m_fPopTimer += fDeltaTime;
@@ -507,7 +507,7 @@ void EntityHologram::SetTeam(int iTeam)
 void EntityHologram::SetColor(const RedColor& color)
 {
     m_color = color;
-    const EntityHologramClass* pClass = static_cast<const EntityHologramClass*>(mEntityClass);
+    const EntityHologramClass* pClass = (const EntityHologramClass*)mEntityClass;
     if (m_pLightBeam)
     {
         RedColor beamColor = m_color;
@@ -553,7 +553,7 @@ void EntityHologram::SetIntensity(float fIntensity)
     else
     {
         m_fIntensity = fIntensity;
-        const EntityHologramClass* pClass = static_cast<const EntityHologramClass*>(mEntityClass);
+        const EntityHologramClass* pClass = (const EntityHologramClass*)mEntityClass;
         if ((m_bTurnOn || pClass->m_fFadeInTime > m_fFadeInTimer) && !m_bActive)
         {
             if (m_pLightBeam)
@@ -579,7 +579,7 @@ void EntityHologram::TurnOn()
         return;
     }
 
-    const EntityHologramClass* pClass = static_cast<const EntityHologramClass*>(mEntityClass);
+    const EntityHologramClass* pClass = (const EntityHologramClass*)mEntityClass;
     if (pClass->m_fFadeInTime > m_fFadeInTimer)
     {
         m_fFadeInTimer = pClass->m_fFadeInTime - m_fFadeInTimer;
@@ -614,7 +614,7 @@ void EntityHologram::TurnOff()
         return;
     }
 
-    const EntityHologramClass* pClass = static_cast<const EntityHologramClass*>(mEntityClass);
+    const EntityHologramClass* pClass = (const EntityHologramClass*)mEntityClass;
     if (pClass->m_fFadeInTime > m_fFadeInTimer)
     {
         m_fFadeInTimer = pClass->m_fFadeInTime - m_fFadeInTimer;
@@ -630,14 +630,14 @@ void EntityHologram::TurnOff()
 void EntityHologram::TurnOnNow()
 {
     TurnOff();
-    const EntityHologramClass* pClass = static_cast<const EntityHologramClass*>(mEntityClass);
+    const EntityHologramClass* pClass = (const EntityHologramClass*)mEntityClass;
     m_fFadeInTimer = pClass->m_fFadeInTime;
 }
 
 // FUNCTION: SWBF2 0x004bf9a0
 void EntityHologram::Render(unsigned char ucViewport, float fDist, unsigned int uiFlags)
 {
-    const EntityHologramClass* pClass = static_cast<const EntityHologramClass*>(mEntityClass);
+    const EntityHologramClass* pClass = (const EntityHologramClass*)mEntityClass;
     unsigned int uiViewport = FLRenderer::GetCurrentViewport();
     if (m_uiHideInView & (1 << uiViewport))
     {
@@ -791,7 +791,7 @@ void EntityHologram::SetStoredMatrix(const PblMatrix& mMatrix)
         m_apOmniLight[0]->SetPosition(m_WorldMatrix.GetTranslation());
     }
 
-    const EntityHologramClass* pClass = static_cast<const EntityHologramClass*>(mEntityClass);
+    const EntityHologramClass* pClass = (const EntityHologramClass*)mEntityClass;
     float fRadius = pClass->m_fSize * 0.5f + pClass->m_fHeight * 0.5f;
     PblVector3 vCenter;
     {
@@ -900,16 +900,16 @@ EntityHologramClass::EntityHologramClass(EntityHologramClass* pParent, unsigned 
 static RedColor ReadColor(const char* pszValue)
 {
     unsigned int r = 255, g = 255, b = 255, a = 255;
-    if (sscanf(pszValue, "%u %u %u %u", &r, &g, &b, &a) < 3)
+    if (sscanf(pszValue, "%u %u %u %u", &r, &g, &b, &a) >= 3)
     {
-        return RedColor::BLACK;
+        RedColor color;
+        color.b = (unsigned char)b;
+        color.g = (unsigned char)g;
+        color.r = (unsigned char)r;
+        color.a = (unsigned char)a;
+        return color;
     }
-    RedColor color;
-    color.b = (unsigned char)b;
-    color.g = (unsigned char)g;
-    color.r = (unsigned char)r;
-    color.a = (unsigned char)a;
-    return color;
+    return RedColor::BLACK;
 }
 
 // FUNCTION: SWBF2 0x004c0590

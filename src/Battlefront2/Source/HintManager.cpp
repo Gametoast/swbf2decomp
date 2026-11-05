@@ -327,8 +327,8 @@ struct HintList : public TreeGridCallbackData
 // FUNCTION: SWBF2 0x00543ab0
 bool GenerateHintListCallback(const TreeGridObject* pObject, TreeGridCallbackData* pData, float&  )
 {
-    const BaseHint* pHint = static_cast<const BaseHint*>(pObject);
-    HintList* pList = static_cast<HintList*>(pData);
+    const BaseHint* pHint = (const BaseHint*)pObject;
+    HintList* pList = (HintList*)pData;
     if ((pHint->GetType() & pList->mTypes) > 0 &&
         (!pList->mMe || AIUtil::IsHintAvailable(pList->mMe, pHint)))
     {
