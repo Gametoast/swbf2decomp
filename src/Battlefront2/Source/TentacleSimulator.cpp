@@ -38,51 +38,50 @@ MemoryPool TentacleSimulator::sMemoryPool("TentacleSimulator", sizeof(TentacleSi
 // FUNCTION: SWBF2 0x00656e70
 void TentacleSimulator::EnforceBoxCollision(const PblMatrix& matrix, float fX, float fY, float fZ)
 {
-    const float* m = (const float*)&matrix;
     for (int t = 0; t < mNumTentacles; ++t)
     {
         for (int b = 1; b < mBonesPerTentacle + 1; ++b)
         {
             PblVector3& pos = tPos[t][b];
-            const float dx = pos.x - m[12];
-            const float dy = pos.y - m[13];
-            const float dz = pos.z - m[14];
-            const float projX = m[0] * dx + m[1] * dy + m[2] * dz;
-            const float depthX = fX - fabsf(projX);
-            if (depthX <= 0.0f)
+            PblVector3 diff;
+            const PblVector3 relDir = pos - matrix.GetTranslation();
+            PblVector3 proj;
+            proj.x = DotProduct(matrix.GetXAxis(), relDir);
+            diff.SetX(fX - fabsf(proj.x));
+            if (diff.x <= 0.0f)
             {
                 continue;
             }
-            const float projY = m[4] * dx + m[5] * dy + m[6] * dz;
-            const float depthY = fY - fabsf(projY);
-            if (depthY <= 0.0f)
+            proj.y = DotProduct(matrix.GetYAxis(), relDir);
+            diff.y = fY - fabsf(proj.y);
+            if (diff.y <= 0.0f)
             {
                 continue;
             }
-            const float projZ = m[8] * dx + m[9] * dy + m[10] * dz;
-            const float depthZ = fZ - fabsf(projZ);
-            if (depthZ <= 0.0f)
+            proj.z = DotProduct(matrix.GetZAxis(), relDir);
+            diff.z = fZ - fabsf(proj.z);
+            if (diff.z <= 0.0f)
             {
                 continue;
             }
-            if (depthY > depthX)
+            if (diff.y > diff.x)
             {
-                if (depthZ > depthX)
+                if (diff.z > diff.x)
                 {
-                    pos += matrix.GetXAxis() * (PblMath::Sign(projX) * depthX);
+                    pos += (PblMath::Sign(proj.x) * diff.x) * matrix.GetXAxis();
                 }
                 else
                 {
-                    pos += matrix.GetZAxis() * (PblMath::Sign(projZ) * depthZ);
+                    pos += (PblMath::Sign(proj.z) * diff.z) * matrix.GetZAxis();
                 }
             }
-            else if (depthZ > depthY)
+            else if (diff.z > diff.y)
             {
-                pos += matrix.GetYAxis() * (PblMath::Sign(projY) * depthY);
+                pos += (PblMath::Sign(proj.y) * diff.y) * matrix.GetYAxis();
             }
             else
             {
-                pos += matrix.GetZAxis() * (PblMath::Sign(projZ) * depthZ);
+                pos += (PblMath::Sign(proj.z) * diff.z) * matrix.GetZAxis();
             }
         }
     }

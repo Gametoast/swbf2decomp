@@ -130,13 +130,13 @@ void WeaponDetonator::NetAttachItem(Entity* pAttach)
     const float strength = (pClass->mMaxStrength - pClass->mMinStrength) *
                            pWeapon->mStrength + pClass->mMinStrength;
     GameObject* pOwnerObject = pWeapon->mOwner->GetGameObject();
-    const PblVector3& ownerPosition = pOwnerObject->GetPosition();
+    const PblVector3& ownerVelocity = pOwnerObject->GetVelocity();
     const PblVector3& direction = pWeapon->mAimer->GetDirection();
     const float scale = pClass->mVelocity * strength;
-    PblVector3 firePosition(ownerPosition.x + direction.x * scale,
-                            ownerPosition.y + direction.y * scale,
-                            ownerPosition.z + direction.z * scale);
-    pObject->SetPosition(firePosition);
+    PblVector3 launchVelocity(ownerVelocity.x + direction.x * scale,
+                              ownerVelocity.y + direction.y * scale,
+                              ownerVelocity.z + direction.z * scale);
+    pObject->SetVelocity(launchVelocity);
     Character* pCharacter = pWeapon->mOwner->mCharacter;
     const int team = pCharacter->mTeamNumber;
     pObject->SetTeam(team);

@@ -251,6 +251,29 @@ bool CollisionManager::I_RemoveOrdnance(Ordnance* pOrdnance)
     return true;
 }
 
+// FUNCTION: SWBF2 0x004608a0
+bool CollisionManager::I_DeactivateItem(CollisionObject* pObject)
+{
+    CollisionManager* pManager = this;
+    PerformSafeRemove(pObject);
+    PblList<CollisionObject>::Node* pNode = &pObject->mCollisionObjectNode;
+    if (!pNode->IsInList())
+    {
+        return false;
+    }
+
+    GameObject* pGameObject = pObject->GetGameObject();
+    if (pGameObject)
+    {
+        TeamManager::RemoveObject(pGameObject);
+    }
+    if (pObject->GetCollisionType() == COLL_ITEM)
+    {
+        pManager->mItemBodies.Remove(pNode);
+    }
+    return true;
+}
+
 // FUNCTION: SWBF2 0x004606c0
 bool CollisionManager::I_RemoveBody(CollisionObject* pObject)
 {

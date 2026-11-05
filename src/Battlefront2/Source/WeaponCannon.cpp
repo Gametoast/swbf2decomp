@@ -730,8 +730,7 @@ bool WeaponCannon::Fire()
     OrdnanceDesc desc;
     desc.mPosition = mAimer->mFirePos;
     PblVector3 vDir(fSinYaw * fCosPitch, -fSinPitch, fCosYaw * fCosPitch);
-    PblVector3 vWorldDir;
-    D3DXVec3TransformNormal(reinterpret_cast<D3DXVECTOR3*>(&vWorldDir), reinterpret_cast<const D3DXVECTOR3*>(&vDir), reinterpret_cast<const D3DXMATRIX*>(&mFire));
+    PblVector3 vWorldDir = mFire.ApplyRotation(vDir);
     desc.mDirection = vWorldDir;
     desc.mStrength = mStrength;
     desc.mOwner = mOwner->GetGameObject();
@@ -880,17 +879,15 @@ void WeaponCannon::UpdateWarmUpSound(float fDeltaTime)
     {
         if (pClass->mCoolDownTime != 0.0f)
         {
-            float fPitch;
             if (mWarmCoolTimer <= 0.0f)
             {
-                fPitch = pClass->mWarmUpSoundStartPitch;
+                pVoice->SetPitch(pClass->mWarmUpSoundStartPitch);
             }
             else
             {
                 float t = Clamp((pClass->mCoolDownTime - mWarmCoolTimer) / pClass->mCoolDownTime, 0.0f, 1.0f);
-                fPitch = mSoundPropsWarmUp.GetPitch() * (1.0f - t) + pClass->mWarmUpSoundStartPitch * t;
+                pVoice->SetPitch(mSoundPropsWarmUp.GetPitch() * (1.0f - t) + pClass->mWarmUpSoundStartPitch * t);
             }
-            pVoice->SetPitch(fPitch);
         }
 
         float fFadeOut = pClass->mWarmUpSoundFadeOutTime;

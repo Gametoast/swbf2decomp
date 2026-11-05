@@ -1706,7 +1706,7 @@ PblVector3 AIUtil::DumbDown(const GameObject* pObject, float fDeltaTime, Aimer* 
     if (pUnit && pUnit->mLodState < 3)
     {
         const GameObject* pTarget = pUnit->GetAttackHelperTarget();
-        if (!pTarget || !pTarget->GetControllable() || pTarget->GetControllable()->mPlayerId < 0)
+        if (!pTarget || !pTarget->GetControllable() || !pTarget->GetControllable()->IsPlayer())
         {
             return vDir;
         }
@@ -1731,7 +1731,7 @@ PblVector3 AIUtil::DumbDown(const GameObject* pObject, float fDeltaTime, Aimer* 
     }
 
     PblVector3 vAim = pAimer->mDirection;
-    if (vDir.y * vAim.y + vDir.x * vAim.x + vAim.z * vDir.z < (float)cos(0.523598790f))
+    if (DotProduct(vDir, vAim) < (float)cos(0.523598790f))
     {
         const PblVector3 vUp = CrossProduct(vDir, vAim);
         PblMatrix mAim(CrossProduct(vDir, vUp), vUp, vDir, gVectorZero);

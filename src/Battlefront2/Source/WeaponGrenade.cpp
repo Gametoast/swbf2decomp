@@ -444,8 +444,7 @@ bool WeaponGrenade::Fire()
                 vOffset *= fScale;
             }
         }
-        PblVector3 vPos;
-        D3DXVec3TransformCoord(reinterpret_cast<D3DXVECTOR3*>(&vPos), reinterpret_cast<const D3DXVECTOR3*>(&vOffset), reinterpret_cast<const D3DXMATRIX*>(&mOwner->GetMatrix()));
+        PblVector3 vPos = mOwner->GetMatrix().ApplyTransform(vOffset);
         desc.mPosition = vPos;
     }
     else

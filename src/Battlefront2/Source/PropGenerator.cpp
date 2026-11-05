@@ -406,9 +406,9 @@ void PropGenerator::Update()
     for (int i = 0; i < iNumLines; i++)
     {
         afNextDist[i] = 0.0f;
-        avDir[i].y = 0.0f;
-        avStart[i].y = 0.0f;
-        avSide[i].y = 0.0f;
+        avDir[i].SetY(0.0f);
+        avStart[i].SetY(0.0f);
+        avSide[i].SetY(0.0f);
         afDirLength[i] = PblMath::Sqrt(avDir[i].x * avDir[i].x + avDir[i].z * avDir[i].z);
         afSideLength[i] = PblMath::Sqrt(avSide[i].x * avSide[i].x + avSide[i].z * avSide[i].z);
     }

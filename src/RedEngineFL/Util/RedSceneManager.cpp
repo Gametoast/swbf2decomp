@@ -655,8 +655,7 @@ bool RenderObject(RedSceneObject* pObject, unsigned int uiFlags, int iClip)
     {
         fZoom = pCamera->GetZoom();
     }
-    PblVector3 vView;
-    D3DXVec3TransformCoord(reinterpret_cast<D3DXVECTOR3*>(&vView), reinterpret_cast<const D3DXVECTOR3*>(&*(const PblVector3*)&pObject->_Sphere), reinterpret_cast<const D3DXMATRIX*>(&pCamera->GetMatrixInverse()));
+    PblVector3 vView = pCamera->TransformWorldPointToCameraSpace(pObject->_Sphere.GetCenter());
 
     if (pLodData->HasLowRes() && !pLodData->CrossFadeLowRes())
     {

@@ -523,7 +523,8 @@ void CombatHelper::UpdateState(float dt)
             SetNextState(STATE_LookAround);
             break;
         }
-        if (bNewTarget || eState != mAttackPattern)
+        const bool bChanged = bNewTarget ? true : eState != mAttackPattern;
+        if (bChanged)
         {
             SetNextState(STATE_Engage);
             break;

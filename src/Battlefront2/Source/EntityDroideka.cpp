@@ -3057,8 +3057,7 @@ void EntityDroideka::BuildWorldMatrices()
         rSpine = kSpine;
 
         PblVector3 vCentre(0.0f - rSpine.m[3][0], mClass->mBallRadius - rSpine.m[3][1], 0.0f - rSpine.m[3][2]);
-        PblVector3 vRotated;
-        D3DXVec3TransformNormal(reinterpret_cast<D3DXVECTOR3*>(&vRotated), reinterpret_cast<const D3DXVECTOR3*>(&vCentre), reinterpret_cast<const D3DXMATRIX*>(&rSpine));
+        PblVector3 vRotated = rSpine.ApplyRotation(vCentre);
         mTranslationOffset =
             PblVector3(vCentre.x - vRotated.x, vCentre.y - vRotated.y, vCentre.z - vRotated.z);
         rSpine.m[3][0] = rSpine.m[3][0] + mTranslationOffset.x;
@@ -3128,29 +3127,10 @@ void EntityDroideka::BuildWorldMatrices()
         {
             mZephyrSkeleton.BuildWorldMatrices(gMatrixIdentity, mClass->mJointIdx[i], kDirty);
             PblMatrix& rJoint = mZephyrSkeleton.m_pWorldMatrices[mClass->mJointIdx[i]];
-            PblVector3 vZ;
-            PblVector3 vY;
-            PblVector3 vX;
-            D3DXVec3TransformNormal(reinterpret_cast<D3DXVECTOR3*>(&vZ), reinterpret_cast<const D3DXVECTOR3*>(&rJoint.GetZAxis()), reinterpret_cast<const D3DXMATRIX*>(&kLegs));
-            D3DXVec3TransformNormal(reinterpret_cast<D3DXVECTOR3*>(&vY), reinterpret_cast<const D3DXVECTOR3*>(&rJoint.GetYAxis()), reinterpret_cast<const D3DXMATRIX*>(&kLegs));
-            D3DXVec3TransformNormal(reinterpret_cast<D3DXVECTOR3*>(&vX), reinterpret_cast<const D3DXVECTOR3*>(&rJoint.GetXAxis()), reinterpret_cast<const D3DXMATRIX*>(&kLegs));
-            PblMatrix kJoint;
-            kJoint.m[0][0] = vX.x;
-            kJoint.m[0][1] = vX.y;
-            kJoint.m[0][2] = vX.z;
-            kJoint.m[0][3] = 0.0f;
-            kJoint.m[1][0] = vY.x;
-            kJoint.m[1][1] = vY.y;
-            kJoint.m[1][2] = vY.z;
-            kJoint.m[1][3] = 0.0f;
-            kJoint.m[2][0] = vZ.x;
-            kJoint.m[2][1] = vZ.y;
-            kJoint.m[2][2] = vZ.z;
-            kJoint.m[2][3] = 0.0f;
-            kJoint.m[3][0] = rJoint.m[3][0];
-            kJoint.m[3][1] = rJoint.m[3][1];
-            kJoint.m[3][2] = rJoint.m[3][2];
-            kJoint.m[3][3] = 1.0f;
+            PblVector3 vZ = kLegs.ApplyRotation(rJoint.GetZAxis());
+            PblVector3 vY = kLegs.ApplyRotation(rJoint.GetYAxis());
+            PblVector3 vX = kLegs.ApplyRotation(rJoint.GetXAxis());
+            PblMatrix kJoint(vX, vY, vZ, rJoint.GetTranslation());
             rJoint = kJoint;
         }
 
@@ -3161,29 +3141,10 @@ void EntityDroideka::BuildWorldMatrices()
         {
             mZephyrSkeleton.BuildWorldMatrices(gMatrixIdentity, mClass->mArmJointIdx[i], kDirty);
             PblMatrix& rJoint = mZephyrSkeleton.m_pWorldMatrices[mClass->mArmJointIdx[i]];
-            PblVector3 vZ;
-            PblVector3 vY;
-            PblVector3 vX;
-            D3DXVec3TransformNormal(reinterpret_cast<D3DXVECTOR3*>(&vZ), reinterpret_cast<const D3DXVECTOR3*>(&rJoint.GetZAxis()), reinterpret_cast<const D3DXMATRIX*>(&kArms));
-            D3DXVec3TransformNormal(reinterpret_cast<D3DXVECTOR3*>(&vY), reinterpret_cast<const D3DXVECTOR3*>(&rJoint.GetYAxis()), reinterpret_cast<const D3DXMATRIX*>(&kArms));
-            D3DXVec3TransformNormal(reinterpret_cast<D3DXVECTOR3*>(&vX), reinterpret_cast<const D3DXVECTOR3*>(&rJoint.GetXAxis()), reinterpret_cast<const D3DXMATRIX*>(&kArms));
-            PblMatrix kJoint;
-            kJoint.m[0][0] = vX.x;
-            kJoint.m[0][1] = vX.y;
-            kJoint.m[0][2] = vX.z;
-            kJoint.m[0][3] = 0.0f;
-            kJoint.m[1][0] = vY.x;
-            kJoint.m[1][1] = vY.y;
-            kJoint.m[1][2] = vY.z;
-            kJoint.m[1][3] = 0.0f;
-            kJoint.m[2][0] = vZ.x;
-            kJoint.m[2][1] = vZ.y;
-            kJoint.m[2][2] = vZ.z;
-            kJoint.m[2][3] = 0.0f;
-            kJoint.m[3][0] = rJoint.m[3][0];
-            kJoint.m[3][1] = rJoint.m[3][1];
-            kJoint.m[3][2] = rJoint.m[3][2];
-            kJoint.m[3][3] = 1.0f;
+            PblVector3 vZ = kArms.ApplyRotation(rJoint.GetZAxis());
+            PblVector3 vY = kArms.ApplyRotation(rJoint.GetYAxis());
+            PblVector3 vX = kArms.ApplyRotation(rJoint.GetXAxis());
+            PblMatrix kJoint(vX, vY, vZ, rJoint.GetTranslation());
             rJoint = kJoint;
         }
     }
@@ -3878,7 +3839,7 @@ bool EntityDroideka::ApplyDamage(const DamageDesc& damage, const PblVector3& vDi
 void EntityDroideka::Die()
 {
     mIsDead = true;
-    CollisionManager::RemoveBody(this);
+    RemoveFromCollisionManager();
     AddStaticToCollisionManager();
     for (int i = 0; i < mClass->mWeaponCount; ++i)
     {

@@ -344,13 +344,14 @@ void RedWarning::LogMessage(char const* pcFormat, ...)
         switch (i)
         {
         case RED_LOG_DESTINATION_INDEX_CONSOLE:
-            if (RedConsole::sInstance)
+            if (RedConsole* pConsole = RedConsole::sInstance)
             {
                 if (g_eSeverity >= g_aeSeverityToDestination[RED_LOG_DESTINATION_INDEX_OPEN_CONSOLE])
                 {
-                    RedConsole::sInstance->SetMode(1);
+                    pConsole->SetMode(1);
+                    pConsole = RedConsole::sInstance;
                 }
-                RedConsole::sInstance->PrintMsg(pcText);
+                pConsole->PrintMsg(pcText);
             }
             break;
 

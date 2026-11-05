@@ -1166,10 +1166,8 @@ PblMatrix CommandPost::GetMatrixOnSpawnPath(bool bAlly) const
         const PblQuaternion qRotation = pPath->GetPointRotation(uPoint).Inverse();
         const PblVector3& vPosition = pPath->GetPointPosition(uPoint);
         mMatrix = PblMatrix(qRotation, vPosition);
-        mMatrix[0] = -mMatrix[0];
-        mMatrix.m[0][3] = 0.0f;
-        mMatrix[2] = -mMatrix[2];
-        mMatrix.m[2][3] = 0.0f;
+        mMatrix.SetXAxis(-mMatrix[0]);
+        mMatrix.SetZAxis(-mMatrix[2]);
 
         if (AIUtil::IsUberMode() && mSpawnRegion)
         {
@@ -1180,7 +1178,7 @@ PblMatrix CommandPost::GetMatrixOnSpawnPath(bool bAlly) const
         CollisionObject* pHitObject;
         const float fUp = CollisionManager::RayHit(vStart, gVectorUnitY, 10.0f, pHitObject, 0, 0, 0,
                                                    COLL_STATIC | COLL_TERRAIN, true);
-        vStart.y += fUp * 10.0f - 0.1f;
+        vStart.AddY(fUp * 10.0f - 0.1f);
         const PblVector3 vDown(-gVectorUnitY.x, -gVectorUnitY.y, -gVectorUnitY.z);
         const float fDown = CollisionManager::RayHit(vStart, vDown, 20.0f, pHitObject, 0, 0, 0,
                                                      COLL_STATIC | COLL_TERRAIN, true);
@@ -1208,7 +1206,7 @@ PblMatrix CommandPost::GetMatrixOnSpawnPath(bool bAlly) const
                                                         COLL_STATIC | COLL_TERRAIN, true);
             if (fHit < 1.0f)
             {
-                mMatrix.SetTranslation(vCenter + (vPoint - vCenter) * fHit);
+                mMatrix.SetTranslation(Interpolate(vCenter, vPoint, fHit));
             }
         }
     }

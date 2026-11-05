@@ -120,10 +120,8 @@ void FreeCamera::Update(float fDeltaTime)
         gSetTetherPosition = false;
         if (sFollowedObject)
         {
-            const PblMatrix& mat = GetMatrix();
-            const PblVector3& vPos = sFollowedObject->GetPosition();
+            sTetherOffset = sFollowedObject->GetPosition() - GetMatrix().GetTranslation();
             gFollowingTethered = true;
-            sTetherOffset = vPos - mat.GetTranslation();
         }
     }
 
@@ -132,8 +130,8 @@ void FreeCamera::Update(float fDeltaTime)
         gSetTargetObj = false;
         PblMatrix mat = GetMatrix();
         const PblVector3& vPos = mat.GetTranslation();
-        PblVector3 vDir(-mat.m[2][0], -mat.m[2][1], -mat.m[2][2]);
         PblVector3 vHit(0.0f, 1.0f, 0.0f);
+        PblVector3 vDir(-mat.m[2][0], -mat.m[2][1], -mat.m[2][2]);
         CollisionObject* pObject;
         CollisionManager::RayHit(vPos, vDir, 500.0f, pObject, &vHit, NULL, 0, 0, false);
         if (pObject)
@@ -153,18 +151,12 @@ void FreeCamera::Update(float fDeltaTime)
 
         PblMatrix mat = GetMatrix();
         PblVector3 vAt = sFollowedObject->GetPosition() + PblVector3(0.0f, sFollowedObject->GetCollisionRadius() * 0.5f, 0.0f);
-        PblVector3 vZ = Normalize(mat.GetTranslation() - vAt);
-        mat[2] = vZ;
-        mat.m[2][3] = 0.0f;
+        mat.SetZAxis(Normalize(mat.GetTranslation() - vAt));
 
         PblVector3 vUp(0.0f, 1.0f, 0.0f);
-        PblVector3 vX = Normalize(CrossProduct(vUp, vZ));
-        mat[0] = vX;
-        mat.m[0][3] = 0.0f;
+        mat.SetXAxis(Normalize(CrossProduct(vUp, mat[2])));
 
-        PblVector3 vY = Normalize(CrossProduct(mat[2], vX));
-        mat[1] = vY;
-        mat.m[1][3] = 0.0f;
+        mat.SetYAxis(Normalize(CrossProduct(mat[2], mat[0])));
 
         SetMatrix(mat);
         return;
@@ -272,11 +264,9 @@ void FreeCamera::UpdateOrientation(const ProcessedInputs& rInputs, float fDeltaT
     mRot.SetRotateX(mPitch);
     mRot.RotateY(mYaw);
 
-    for (int i = 0; i < 3; i++)
-    {
-        mMatrix[i] = mRot[i];
-        mMatrix.m[i][3] = 0.0f;
-    }
+    mMatrix.SetXAxis(mRot[0]);
+    mMatrix.SetYAxis(mRot[1]);
+    mMatrix.SetZAxis(mRot[2]);
 }
 
 // FUNCTION: SWBF2 0x0052dfa0
@@ -291,26 +281,23 @@ void FreeCamera::UpdateTranslation(const ProcessedInputs& rInputs, float fDeltaT
                      -rInputs.GetMoveAxis() * sMoveScale);
 
     PblMatrix mRotY;
-    const D3DXMATRIX* pMatrix;
+    const PblMatrix* pMatrix;
     if (sQuakeControl)
     {
-        pMatrix = (const D3DXMATRIX*)&mMatrix;
+        pMatrix = &mMatrix;
     }
     else
     {
         mRotY.SetRotateY(mYaw);
-        pMatrix = reinterpret_cast<const D3DXMATRIX*>(&mRotY);
+        pMatrix = &mRotY;
     }
 
-    PblVector3 vOut;
-    D3DXVec3TransformNormal(reinterpret_cast<D3DXVECTOR3*>(&vOut),
-                            reinterpret_cast<const D3DXVECTOR3*>(&vMove), pMatrix);
+    PblVector3 vOut = pMatrix->ApplyRotation(vMove);
     vMove = vOut;
 
     float fScale = mMultiplier * fDeltaTime;
     vMove *= fScale;
-    mMatrix[3] = mMatrix[3] + vMove;
-    mMatrix.m[3][3] = 1.0f;
+    mMatrix.SetTranslation(mMatrix[3] + vMove);
 }
 
 // FUNCTION: SWBF2 0x0052e0e0

@@ -198,7 +198,11 @@ void WeaponMeleeClass::Render(float fTurnOn, const PblMatrix& matrix, const RedP
                               const RedColor& color, unsigned int  , bool  ) const
 {
     const unsigned int uiRenderFlags = 0x04000000;
-    const PblMatrix* apMatrix[4] = {};
+    const PblMatrix* apMatrix[4];
+    for (int k = 0; k < 4; ++k)
+    {
+        apMatrix[k] = 0;
+    }
     PblMatrix aMatrix[4];
     const RedModel* pModel = mModel;
     if (pModel)
@@ -3025,9 +3029,9 @@ WeaponMeleeClass::WeaponMeleeClass(unsigned int uHash)
     : WeaponClass(uHash),
       mDamage(DamageOwner(0, 0, 0, 0, 0, 1.0f), 0.0f)
 {
-    m_uiNumHitEffects = 0;
     m_pComboODF = 0;
     m_pCombo = 0;
+    m_uiNumHitEffects = 0;
     for (int i = 0; i < 5; ++i)
     {
         m_uiHitEffects[i] = 0;

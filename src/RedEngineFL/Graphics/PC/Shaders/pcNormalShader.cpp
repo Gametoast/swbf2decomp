@@ -756,9 +756,7 @@ void pcNormalShader::Begin_Fixed(unsigned int uiState, unsigned int uiPass) cons
             const PblVector4& vW = RedShadowMap::_vShadowMapTransformW;
             PblMatrix mShadow(PblVector3(vU.x, vV.x, vW.x), PblVector3(vU.y, vV.y, vW.y),
                               PblVector3(vU.z, vV.z, vW.z), PblVector3(vU.w, vV.w, vW.w));
-            PblMatrix mTexture;
-            mTexture = mCamera * mShadow;
-            RedRenderer::pcFFSetTextureTransform(1, mTexture);
+            RedRenderer::pcFFSetTextureTransform(1, mCamera * mShadow);
 
             RedRenderer::pcSetTextureStageState(0, D3DTSS_COLOROP, D3DTOP_MODULATE);
             RedRenderer::pcSetTextureStageState(0, D3DTSS_COLORARG1, D3DTA_DIFFUSE);

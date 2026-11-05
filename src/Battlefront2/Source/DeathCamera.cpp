@@ -129,8 +129,7 @@ void DeathCamera::Update(float fDeltaTime)
     }
 
     PblVector3 vDelta = vTarget - vEye;
-    PblVector3 vDir;
-    D3DXVec3Normalize(reinterpret_cast<D3DXVECTOR3*>(&vDir), reinterpret_cast<const D3DXVECTOR3*>(&vDelta));
+    PblVector3 vDir = Normalize(vDelta);
 
     CollisionObject* pHitObject;
     PblVector3 vUpper = vEye + PblVector3(0.0f, 0.75f, 0.0f);
@@ -147,14 +146,7 @@ void DeathCamera::Update(float fDeltaTime)
     vPos = (vPos - vOldPos) * fBlend + vOldPos;
     PblQuaternion qRot = Interpolate(qOld, qNew, fBlend);
 
-    PblQuaternion qUnit;
-    PblMatrix mNew;
-    D3DXQuaternionNormalize(reinterpret_cast<D3DXQUATERNION*>(&qUnit), reinterpret_cast<const D3DXQUATERNION*>(&qRot));
-    D3DXMatrixRotationQuaternion(reinterpret_cast<D3DXMATRIX*>(&mNew), reinterpret_cast<const D3DXQUATERNION*>(&qUnit));
-    mNew.m[3][0] = vPos.x;
-    mNew.m[3][1] = vPos.y;
-    mNew.m[3][2] = vPos.z;
-    mNew.m[3][3] = 1.0f;
+    PblMatrix mNew(qRot, vPos);
     mMatrix = mNew;
 }
 
@@ -175,12 +167,10 @@ void DeathCamera::SetupIconVisibility(int iView)
 // FUNCTION: SWBF2 0x0043cd40
 PblMatrix DirectionMatrix(const PblVector3& vDir, const PblVector3& vUp, const PblVector3& vPos)
 {
-    PblVector3 vFront;
-    D3DXVec3Normalize(reinterpret_cast<D3DXVECTOR3*>(&vFront), reinterpret_cast<const D3DXVECTOR3*>(&vDir));
+    PblVector3 vFront = Normalize(vDir);
 
     PblVector3 vCross = CrossProduct(vUp, vDir);
-    PblVector3 vRight;
-    D3DXVec3Normalize(reinterpret_cast<D3DXVECTOR3*>(&vRight), reinterpret_cast<const D3DXVECTOR3*>(&vCross));
+    PblVector3 vRight = Normalize(vCross);
 
     return PblMatrix(vRight, CrossProduct(vFront, vRight), vFront, vPos);
 }

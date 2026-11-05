@@ -1121,13 +1121,7 @@ bool MountedTurret::Update(float aDt)
             tiltRot._fZ = fSin * gVectorUnitX.z;
             tiltRot._fS = fCos;
             PblQuaternion qRot = targetRot * tiltRot;
-            D3DXQUATERNION qUnit;
-            PblMatrix mRotation;
-            D3DXMatrixRotationQuaternion(reinterpret_cast<D3DXMATRIX*>(&mRotation), D3DXQuaternionNormalize(&qUnit, reinterpret_cast<const D3DXQUATERNION*>(&qRot)));
-            mRotation.m[3][0] = gVectorZero.x;
-            mRotation.m[3][1] = gVectorZero.y;
-            mRotation.m[3][2] = gVectorZero.z;
-            mRotation.m[3][3] = 1.0f;
+            PblMatrix mRotation(qRot, gVectorZero);
 
             PblVector3& vStart = mTargetInfo.mAimStart;
             vStart = mClass->mCameraSettings.CalcCameraPoint(

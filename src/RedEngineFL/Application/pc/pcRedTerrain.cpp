@@ -85,13 +85,22 @@ void TerrainRenderable::_RenderLowRes(unsigned int uiFlags) const
             {
                 continue;
             }
-            void* pShader = pcTerrainShader2::IsEnabled() ? (void*)m_pFarShader2
-                                                           : (void*)m_pFarShader;
-            RedRenderer::pcRenderPrimitive(patch.pPrim,
-                                           (pcRedShader*)pShader,
-                                           gMatrixIdentity,
-                                           RedColor::WHITE,
-                                           uiFlags | 0x1000000, 0, 0, 0);
+            if (pcTerrainShader2::IsEnabled())
+            {
+                RedRenderer::pcRenderPrimitive(patch.pPrim,
+                                               m_pFarShader2,
+                                               gMatrixIdentity,
+                                               RedColor::WHITE,
+                                               uiFlags | 0x1000000, 0, 0, 0);
+            }
+            else
+            {
+                RedRenderer::pcRenderPrimitive(patch.pPrim,
+                                               m_pFarShader,
+                                               gMatrixIdentity,
+                                               RedColor::WHITE,
+                                               uiFlags | 0x1000000, 0, 0, 0);
+            }
         }
     }
 }

@@ -227,7 +227,16 @@ bool netInGame;
 // FUNCTION: SWBF2 0x005e7210
 unsigned int NetSetup::CalcPassword(char const* password)
 {
-    return password ? CalcCRC(password, strlen(password), 0) : 0;
+    if (!password)
+    {
+        return 0;
+    }
+    else
+    {
+        unsigned int l = strlen(password);
+        unsigned int NewPass = CalcCRC(password, l, 0);
+        return NewPass;
+    }
 }
 
 // FUNCTION: SWBF2 0x005e7270
@@ -1145,7 +1154,8 @@ bool CNetHostGame::IsCancelled()
 // FUNCTION: SWBF2 0x005dc4d0
 bool BanIP(int iPlayer, NetPacket* pPacket)
 {
-    return false;
+    bool ret = false;
+    return ret;
 }
 
 // FUNCTION: SWBF2 0x005e75f0
@@ -1640,13 +1650,15 @@ bool HasEnteredLobby()
 // FUNCTION: SWBF2 0x005e7430
 bool SelectNextHostMode(int)
 {
-    return false;
+    bool changed = false;
+    return changed;
 }
 
 // FUNCTION: SWBF2 0x005e7440
 bool SelectNextHost(int)
 {
-    return false;
+    bool changed = false;
+    return changed;
 }
 
 // FUNCTION: SWBF2 0x005dd170

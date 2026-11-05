@@ -185,7 +185,14 @@ public:
     static bool IsNearLocalPlayer(const PblVector3& vPos);
 
     // FUNCTION: SWBF2 0x004292b0
-    static bool IsClient() { return netEnabledNext && netClientActive; }
+    static bool IsClient()
+    {
+        if (!netEnabledNext)
+        {
+            return false;
+        }
+        return netClientActive;
+    }
 
     static bool OnClient() { return netEnabledNext && netClientActive; }
 

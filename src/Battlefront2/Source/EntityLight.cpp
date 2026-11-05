@@ -20,6 +20,7 @@ class PblMatrix;
 extern PblMatrix gMatrixIdentity;
 
 const RedColor Interpolate(const RedColor& a, const RedColor& b, float t);
+RedColor ReadColor(const PblConfig::Data& data);
 
 // GLOBAL: SWBF2 0x01e51de0
 EntityLightFXParser* EntityLightFXParser::s_pInstance;
@@ -72,25 +73,6 @@ EntityLight* EntityLightClass::Build(unsigned int uLightOdfNameHash)
 
 // SYNTHETIC: SWBF2 0x0042d060
 // FLEffect::`scalar deleting destructor'
-
-// FUNCTION: SWBF2 0x0042d250
-RedColor ReadColor(const PblConfig::Data& data)
-{
-    RedColor color;
-    color.r = (unsigned char)(int)Clamp(data.GetFloatArg(0), 0.0f, 255.0f);
-    color.g = (unsigned char)(int)Clamp(data.GetFloatArg(1), 0.0f, 255.0f);
-    color.b = (unsigned char)(int)Clamp(data.GetFloatArg(2), 0.0f, 255.0f);
-    if (data.GetNumArgs() > 3)
-    {
-        color.a = (unsigned char)(int)Clamp(data.GetFloatArg(3), 0.0f, 255.0f);
-    }
-    else
-    {
-        color.a = 0xff;
-    }
-    return color;
-}
-
 
 // FUNCTION: SWBF2 0x004cc320
 void ManagedLightBeam::Render(unsigned char, float, unsigned int uiFlags)

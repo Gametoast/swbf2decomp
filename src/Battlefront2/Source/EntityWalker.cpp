@@ -249,9 +249,7 @@ EntityWalkerClass::EntityWalkerClass(unsigned int uHash)
     mLegPairCount = 0;
     mLegPairInfo = 0;
     mAttachHash = 0;
-    mAttachOffset.x = 0.0f;
-    mAttachOffset.y = 0.0f;
-    mAttachOffset.z = 0.0f;
+    mAttachOffset.Set(0.0f, 0.0f, 0.0f);
     mWaterDamageInterval = 1.0f;
     mWaterDamageAmount = 0.0f;
     mHydraulicSoundHeight = 1.0f;
@@ -1690,6 +1688,7 @@ EntityWalker::EntityWalker(EntityWalkerClass* pClass, const EntityDesc& desc)
     , VehicleEngine(pClass)
     , mClass(pClass)
     , mBlend(0)
+    , mMainMask(true)
     , mReserveForPlayer(0.0f)
     , mLegPairCount(0)
     , mFootState(0)
@@ -1697,10 +1696,12 @@ EntityWalker::EntityWalker(EntityWalkerClass* pClass, const EntityDesc& desc)
     , mState(Idle)
     , mDirection(None)
     , mEnergyBar(&pClass->mEnergyBarClass)
+    , mTurnOffset(1.0f, 0.0f)
+    , mPitchOffset(1.0f, 0.0f)
+    , mRollOffset(1.0f, 0.0f)
     , mPivotOffset(0.0f, 0.0f, 0.0f)
     , mPostCollision(this)
 {
-    mMainMask.SetAll();
     mBoost = false;
     mSpeedPrev = 0.0f;
     mEjectTimer = 0.0f;
@@ -1796,8 +1797,8 @@ EntityWalker::EntityWalker(EntityWalkerClass* pClass, const EntityDesc& desc)
     mLegPairCount = mClass->mLegPairCount;
     for (int i = 0; i < mLegPairCount; ++i)
     {
-        mMainMask.And(~mClass->mLegPairInfo[i].mLegMasks[0]);
-        mMainMask.And(~mClass->mLegPairInfo[i].mLegMasks[1]);
+        mMainMask &= ~mClass->mLegPairInfo[i].mLegMasks[0];
+        mMainMask &= ~mClass->mLegPairInfo[i].mLegMasks[1];
     }
     mBlend->SetJointMask(0, mMainMask);
     mBlend->SetJointMask(1, mMainMask);
@@ -2726,7 +2727,7 @@ void EntityWalker::SetTerrainHeight(int iIndex, float fHeight)
 void EntityWalker::Die()
 {
     mIsDead = true;
-    CollisionManager::RemoveBody(this);
+    RemoveFromCollisionManager();
     AddStaticToCollisionManager();
     for (int i = 0; i < mClass->mWeaponCount; ++i)
     {
@@ -3953,7 +3954,7 @@ bool EntityWalker::Update(float fDeltaTime)
             mExplodedFinal = true;
             DamageOwner owner(mDamageOwner.mCharacter, mDamageOwner.mGameObject, mDamageOwner.mTeam, mClass, 0, 1.0f);
             PblVector3 vPos;
-            D3DXVec3TransformCoord(reinterpret_cast<D3DXVECTOR3*>(&vPos), reinterpret_cast<const D3DXVECTOR3*>(&mClass->mFinalExplosionOffset), reinterpret_cast<const D3DXMATRIX*>(&mMatrix));
+            vPos = mMatrix.ApplyTransform(mClass->mFinalExplosionOffset);
             pExplosion->CreateExplosion(vPos, owner, false, COLL_UNKNOWN);
         }
         if (!(NetGame::IsEnabled() && NetGame::IsClient()))
@@ -4268,12 +4269,10 @@ bool EntityWalker::PostCollisionUpdate(float fDeltaTime)
     if (mPilot && mPilot->GetGameObject()->IsRtti(EntitySoldier::rttiHashEntitySoldier))
     {
         GameObject* pSoldier = mPilot->GetGameObject();
-        PblMatrix mSeat;
-        D3DXMatrixMultiply(reinterpret_cast<D3DXMATRIX*>(&mSeat), reinterpret_cast<const D3DXMATRIX*>(&pSoldier->GetMatrix()), reinterpret_cast<const D3DXMATRIX*>(&GetMatrix().GetInverseFast()));
+        PblMatrix mSeat = pSoldier->GetMatrix() * GetMatrix().GetInverseFast();
         PblMatrix mLocal = mSeat;
         PblMatrix mSmoothed = GetSmoothedMatrix();
-        PblMatrix mRender;
-        D3DXMatrixMultiply(reinterpret_cast<D3DXMATRIX*>(&mRender), reinterpret_cast<const D3DXMATRIX*>(&mLocal), reinterpret_cast<const D3DXMATRIX*>(&mSmoothed));
+        PblMatrix mRender = mLocal * mSmoothed;
         pSoldier->SetRenderPos(mRender.GetTranslation());
     }
     return true;
@@ -4543,8 +4542,7 @@ void EntityWalker::SetupCameraTrackMatrix(PblMatrix& rMatrix, float fDeltaTime)
     PblMath::SinCos(&fSinPitch, &fCosPitch, mPitchValue);
     PblMath::SinCos(&fSinYaw, &fCosYaw, mYawValue);
     PblVector3 vLocal(fSinYaw * fCosPitch, fSinPitch, fCosYaw * fCosPitch);
-    PblVector3 vAim;
-    D3DXVec3TransformNormal(reinterpret_cast<D3DXVECTOR3*>(&vAim), reinterpret_cast<const D3DXVECTOR3*>(&vLocal), reinterpret_cast<const D3DXMATRIX*>(&matrix));
+    PblVector3 vAim = matrix.ApplyRotation(vLocal);
     PblVector3 vEye = mClass->mCameraSettings.CalcEyePoint(matrix);
 
     const PblMatrix* pJoint = mPose.Find(mClass->mFPPoseHash);

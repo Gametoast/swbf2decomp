@@ -736,21 +736,6 @@ void EntityHoverClass::SetupDefaultColliderBodyFactors(ColliderBodyInfo& info, i
     info.mOmegaZSpringFactor = vOffset.x > 0.1f ? 1.0f : (vOffset.x < -0.1f ? -1.0f : 0.0f);
 }
 
-namespace
-{
-
-inline void ReadSuspensionNode(const GameModel* pModel, unsigned int uNodeHash, PblVector3& rPos)
-{
-    RedPose pose;
-    pModel->GetRedModel(0)->SetupPose(pose);
-    const PblMatrix* pNode = pose.Find(uNodeHash);
-    if (pNode)
-    {
-        rPos = pNode->GetTranslation();
-    }
-}
-}
-
 // FUNCTION: SWBF2 0x004c8e60
 void EntityHoverClass::SetProperty(unsigned int uProperty, const char* pszValue)
 {
@@ -1030,15 +1015,39 @@ void EntityHoverClass::SetProperty(unsigned int uProperty, const char* pszValue)
         break;
     case 0xe534c2cb:
         mSuspensionCenterHash = PblTEMPHash(pszValue);
-        ReadSuspensionNode(mModel, mSuspensionCenterHash, mBaseSuspensionPos);
+        {
+            RedPose pose;
+            mModel->GetRedModel(0)->SetupPose(pose);
+            const PblMatrix* pNode = pose.Find(mSuspensionCenterHash);
+            if (pNode)
+            {
+                mBaseSuspensionPos = pNode->GetTranslation();
+            }
+        }
         break;
     case 0xabb24116:
         mSuspensionLeftArmHash = PblTEMPHash(pszValue);
-        ReadSuspensionNode(mModel, mSuspensionLeftArmHash, mLeftSuspensionPos);
+        {
+            RedPose pose;
+            mModel->GetRedModel(0)->SetupPose(pose);
+            const PblMatrix* pNode = pose.Find(mSuspensionLeftArmHash);
+            if (pNode)
+            {
+                mLeftSuspensionPos = pNode->GetTranslation();
+            }
+        }
         break;
     case 0x580b459f:
         mSuspensionRightArmHash = PblTEMPHash(pszValue);
-        ReadSuspensionNode(mModel, mSuspensionRightArmHash, mRightSuspensionPos);
+        {
+            RedPose pose;
+            mModel->GetRedModel(0)->SetupPose(pose);
+            const PblMatrix* pNode = pose.Find(mSuspensionRightArmHash);
+            if (pNode)
+            {
+                mRightSuspensionPos = pNode->GetTranslation();
+            }
+        }
         break;
 
     case 0x6363d774:
@@ -2282,7 +2291,7 @@ void EntityHover::Move(float fDeltaTime, float fThrust, float fStrafe, float fTu
         }
     }
 
-    if (!(mClass->mSetAltitude > 0.0f))
+    if (mClass->mSetAltitude <= 0.0f)
     {
         mGroundRatio = 0.0f;
     }

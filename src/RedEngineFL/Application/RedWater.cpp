@@ -1094,19 +1094,11 @@ void RedWater::RenderUnderWaterView(unsigned int uiView)
         PblVector3(-1.0f, -1.0f, 0.0f), PblVector3(-1.0f, 1.0f, 0.0f),
         PblVector3(1.0f, 1.0f, 0.0f), PblVector3(1.0f, -1.0f, 0.0f)};
 
-    PblVector3 vWorldCorners[4];
-    D3DXVec3TransformCoord((D3DXVECTOR3*)&vWorldCorners[0],
-                           (const D3DXVECTOR3*)&PblVector3(-fHalfWidth, -fHalfHeight, -fNear),
-                           (const D3DXMATRIX*)&mCamera);
-    D3DXVec3TransformCoord((D3DXVECTOR3*)&vWorldCorners[1],
-                           (const D3DXVECTOR3*)&PblVector3(-fHalfWidth, fHalfHeight, -fNear),
-                           (const D3DXMATRIX*)&mCamera);
-    D3DXVec3TransformCoord((D3DXVECTOR3*)&vWorldCorners[2],
-                           (const D3DXVECTOR3*)&PblVector3(fHalfWidth, fHalfHeight, -fNear),
-                           (const D3DXMATRIX*)&mCamera);
-    D3DXVec3TransformCoord((D3DXVECTOR3*)&vWorldCorners[3],
-                           (const D3DXVECTOR3*)&PblVector3(fHalfWidth, -fHalfHeight, -fNear),
-                           (const D3DXMATRIX*)&mCamera);
+    PblVector3 vWorldCorners[4] = {
+        mCamera.ApplyTransform(PblVector3(-fHalfWidth, -fHalfHeight, -fNear)),
+        mCamera.ApplyTransform(PblVector3(-fHalfWidth, fHalfHeight, -fNear)),
+        mCamera.ApplyTransform(PblVector3(fHalfWidth, fHalfHeight, -fNear)),
+        mCamera.ApplyTransform(PblVector3(fHalfWidth, -fHalfHeight, -fNear))};
 
     PblVector3 vVerts[5];
     int iNumVerts = 0;

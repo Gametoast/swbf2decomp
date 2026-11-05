@@ -333,7 +333,7 @@ void ParticleGeometry::Render(Particle& particle, bool bLast) const
             break;
         case 4:
             vRight.x = fSin;
-            vRight.z = fCos;
+            vRight.SetZ(fCos);
             vUp.x = fCos;
             vUp.z = -fSin;
             break;

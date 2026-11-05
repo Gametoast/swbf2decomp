@@ -188,9 +188,7 @@ bool OrdnanceTowCable::Collide(CollisionObject* pObject, const PblVector3& vPos,
 
                 CollisionObject* pWalkerCollision = mHitWalker->GetCollisionObject();
                 PblMatrix mBody = pModel->GetWorldMatrix(iBodyId, mHitWalker->GetMatrix(), pWalkerCollision->GetPose());
-                PblVector3 vLocal;
-                D3DXVec3TransformCoord((D3DXVECTOR3*)&vLocal, (const D3DXVECTOR3*)&vPos,
-                                       (const D3DXMATRIX*)&mBody.GetInverseFast());
+                PblVector3 vLocal = mBody.GetInverseFast().ApplyTransform(vPos);
                 mTowCable.AddAttachPoint(iBodyId, vLocal, gVectorZero);
                 CollisionManager::RemoveOrdnance(this);
 
@@ -231,10 +229,9 @@ void OrdnanceTowCable::Render(unsigned char ucViewport, float fDist, unsigned in
             PblMatrix mOwnerMatrix = mOwner->GetMatrix();
             PblMatrix mSmoothed = mOwner->GetSmoothedMatrix();
             PblVector3 v;
-            D3DXVec3TransformCoord((D3DXVECTOR3*)&v, (const D3DXVECTOR3*)&vFirePos,
-                                   (const D3DXMATRIX*)&mOwnerMatrix.GetInverseFast());
+            v = mOwnerMatrix.GetInverseFast().ApplyTransform(vFirePos);
             vFirePos = v;
-            D3DXVec3TransformCoord((D3DXVECTOR3*)&v, (const D3DXVECTOR3*)&vFirePos, (const D3DXMATRIX*)&mSmoothed);
+            v = mSmoothed.ApplyTransform(vFirePos);
             vFirePos = v;
         }
 
@@ -258,9 +255,8 @@ void OrdnanceTowCable::Render(unsigned char ucViewport, float fDist, unsigned in
             CollisionModel* pModel = mHitWalker->GetCollisionObject()->mCollisionModel;
             CollisionObject* pWalkerCollision = mHitWalker->GetCollisionObject();
             TowCableAttachPointData& point = mTowCable.mAttachPoints[i - 1];
-            D3DXVec3TransformCoord((D3DXVECTOR3*)&vEndPos, (const D3DXVECTOR3*)&point.mBodyOffset,
-                                   (const D3DXMATRIX*)&pModel->GetWorldMatrix(point.mBodyID, mHitWalker->GetMatrix(),
-                                                                              pWalkerCollision->GetPose()));
+            vEndPos = pModel->GetWorldMatrix(point.mBodyID, mHitWalker->GetMatrix(), pWalkerCollision->GetPose())
+                          .ApplyTransform(point.mBodyOffset);
             pEndSlope = &point.mSlopeOut;
         }
         else

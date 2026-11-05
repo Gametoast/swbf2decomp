@@ -4,6 +4,7 @@
 
 #include "PebbleFL/Common/PblHandle.h"
 #include "PebbleFL/Common/PblVector.h"
+#include "GameObject.h"
 
 class Character;
 class Controllable;
@@ -130,7 +131,12 @@ public:
     LockOnManager(int iPlayerIndex);
 
     GameObject* GetLockedTarget() const;
-    void ForceNewTargetLock(GameObject* pObject);
+    // FUNCTION: SWBF2 0x00483540
+    void ForceNewTargetLock(GameObject* pObject)
+    {
+        mForceNewLock = 5;
+        mForceNewLockTarget = pObject;
+    }
     unsigned int GetTargetLockedChangedTurn() const;
     // FUNCTION: SWBF2 0x00483590
     static LockOnManager* GetByPlayerIndex(unsigned int uIndex) { return sLockOnManagers[uIndex]; }

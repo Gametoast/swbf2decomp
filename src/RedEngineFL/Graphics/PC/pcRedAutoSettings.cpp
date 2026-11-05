@@ -1037,16 +1037,16 @@ void VidMode_Init(IDirect3D9* pD3D)
                     }
                 }
 
-                IDirect3DTexture9* pMultiSampleTexture = 0;
+                IDirect3DTexture9* pAATex[1] = { 0 };
 
                 if (iMultiSampleType != 0)
                 {
                     if (pDevice->CreateTexture(uiTexWidth, uiTexHeight, 1,
                                                D3DUSAGE_RENDERTARGET, D3DFMT_A8R8G8B8,
-                                               D3DPOOL_DEFAULT, &pMultiSampleTexture, 0) != D3D_OK)
+                                               D3DPOOL_DEFAULT, &pAATex[0], 0) != D3D_OK)
                     {
 
-                        pMultiSampleTexture = 0;
+                        pAATex[0] = 0;
                         bAllSurfaces = false;
                     }
                 }
@@ -1077,9 +1077,9 @@ void VidMode_Init(IDirect3D9* pD3D)
                         apDepthStencil[j]->Release();
                     }
                 }
-                if (pMultiSampleTexture)
+                if (pAATex[0])
                 {
-                    pMultiSampleTexture->Release();
+                    pAATex[0]->Release();
                 }
                 pDevice->Release();
             }
@@ -1314,13 +1314,11 @@ void _LoadVendorDeviceOverrides()
     D3DADAPTER_IDENTIFIER9 identifier = RedRenderer::pcGetAdaptorIdentifier();
 
     char szToken[256];
-    bool bDeviceMatched;
-    bool bVendorMatched;
-    bool bDone;
-    bDone = bVendorMatched = bDeviceMatched = false;
-
+    bool bDeviceMatched = false;
     unsigned int uiLen = 0;
+    bool bVendorMatched = false;
     int iKey = 0;
+    bool bDone = false;
 
     PblFile file;
 

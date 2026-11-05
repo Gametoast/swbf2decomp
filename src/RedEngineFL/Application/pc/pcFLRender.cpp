@@ -753,9 +753,7 @@ ReflectionRegion::ReflectionRegion(RedRegionDesc& desc) : RedRegion(desc)
     case type_cylinder_zaligned:
     {
         const PblVector3 vPoint = mMatrix[3] - mMatrix[1] * mSize.y;
-        const PblVector3 vNormal = mMatrix[1];
-        m_reflectionPlane =
-            PblPlane(vNormal.x, vNormal.y, vNormal.z, -DotProduct(vNormal, vPoint));
+        m_reflectionPlane = PblPlane(mMatrix[1], vPoint);
         break;
     }
     default:

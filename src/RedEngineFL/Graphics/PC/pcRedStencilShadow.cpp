@@ -701,9 +701,7 @@ void ShadowData::GenerateSkin(const PblMatrix* pBoneMatrices, int iNumBoneMatric
     for (int i = 0; i < _iNumVertices; ++i)
     {
         const PblMatrix& mSkin = _GetSkinMatrix(uiMaxBones, puiWeights, puiIndices, pBoneMatrices);
-        D3DXVECTOR3 v;
-        D3DXVec3TransformCoord(&v, (const D3DXVECTOR3*)&_pVertices[i], (const D3DXMATRIX*)&mSkin);
-        _pSkinnedVertices[i] = *(const PblVector3*)&v;
+        _pSkinnedVertices[i] = mSkin.ApplyTransform(_pVertices[i]);
         puiWeights += iStride;
         puiIndices += iStride;
     }

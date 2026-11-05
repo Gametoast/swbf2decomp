@@ -42,15 +42,14 @@ SkyDome::SkyDome()
     mNumDomeModels = 0;
     for (int i = 0; i < 10; ++i)
     {
-        DomeModel& model = mDomeModels[i];
-        model.mModel = 0;
-        model.mType = TRACK_CAMERA;
-        model.mOffset = 0.0f;
-        model.mMovementScale = 1.0f;
-        model.mReflectionFlag = false;
-        model.mRotationSpeed = 0.0f;
-        model.mRotationAxis = PblVector3(0.0f, 1.0f, 0.0f);
-        model.mNumEffectData = 0;
+        mDomeModels[i].mModel = 0;
+        mDomeModels[i].mType = TRACK_CAMERA;
+        mDomeModels[i].mOffset = 0.0f;
+        mDomeModels[i].mMovementScale = 1.0f;
+        mDomeModels[i].mReflectionFlag = false;
+        mDomeModels[i].mRotationAxis = PblVector3(0.0f, 1.0f, 0.0f);
+        mDomeModels[i].mRotationSpeed = 0.0f;
+        mDomeModels[i].mNumEffectData = 0;
     }
 
     mTerrainTextureHash = 0;

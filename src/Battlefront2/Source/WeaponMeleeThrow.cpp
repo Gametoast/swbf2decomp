@@ -62,7 +62,7 @@ WeaponMeleeThrow::WeaponMeleeThrow(const WeaponMeleeThrowClass* pClass, const We
         static_cast<const WeaponMeleeClass*>(m_pPrimaryWeapon->mClass);
 
     const unsigned char uiThrowAnim = static_cast<unsigned char>(pPrimaryClass->m_pCombo->m_uiThrowAnimIndex);
-    SoldierAnimatorClass::sInstance->GetAnimationBoneMatrix(
+    SoldierAnimatorClass::Instance()->GetAnimationBoneMatrix(
         static_cast<SoldierAnimationBank::MAP>(m_pPrimaryWeapon->mSoldierAnimationMap),
         uiThrowAnim, 0x2B960099,
         static_cast<const WeaponMeleeThrowClass*>(mClass)->m_fInitialSalvoDelay, m_mThrow0Local);

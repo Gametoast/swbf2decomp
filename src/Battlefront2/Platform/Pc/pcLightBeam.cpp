@@ -188,9 +188,7 @@ void LightBeamEffect::RenderLightBeam(const LightBeam* pBeam, unsigned int uiFla
         return;
     }
 
-    PblVector3 vHead;
-    D3DXVec3TransformCoord((D3DXVECTOR3*)&vHead, (const D3DXVECTOR3*)&pBeam->_vHeadPosition,
-                           (const D3DXMATRIX*)&pBeam->m_mWorldMatrix);
+    PblVector3 vHead = pBeam->m_mWorldMatrix.ApplyTransform(pBeam->_vHeadPosition);
     const float fDistSq = (vHead.x - vEye.x) * (vHead.x - vEye.x)
                         + (vHead.y - vEye.y) * (vHead.y - vEye.y)
                         + (vHead.z - vEye.z) * (vHead.z - vEye.z);
@@ -199,9 +197,7 @@ void LightBeamEffect::RenderLightBeam(const LightBeam* pBeam, unsigned int uiFla
         return;
     }
 
-    PblVector3 vView;
-    D3DXVec3TransformCoord((D3DXVECTOR3*)&vView, (const D3DXVECTOR3*)&vHead,
-                           (const D3DXMATRIX*)&mCameraInverse);
+    PblVector3 vView = mCameraInverse.ApplyTransform(vHead);
 
     float fRadius;
     if (pBeam->_fLength > 0.0f)
@@ -253,9 +249,7 @@ void LightBeamEffect::RenderLightBeam(const LightBeam* pBeam, unsigned int uiFla
     {
 
         __declspec(align(16)) PblMatrix mBeam;
-        PblVector3 vDir;
-        D3DXVec3TransformNormal((D3DXVECTOR3*)&vDir, (const D3DXVECTOR3*)&pBeam->_vDirection,
-                                (const D3DXMATRIX*)&pBeam->m_mWorldMatrix);
+        PblVector3 vDir = pBeam->m_mWorldMatrix.ApplyRotation(pBeam->_vDirection);
         mBeam.m[1][0] = vDir.x;
         mBeam.m[1][1] = vDir.y;
         mBeam.m[1][2] = vDir.z;
@@ -307,7 +301,7 @@ void LightBeamEffect::RenderLightBeam(const LightBeam* pBeam, unsigned int uiFla
         const float fCos = fDist > fHeadSize ? fAlong / fDist : fAlong / fHeadSize;
 
         float fWidthAtEye;
-        if (fAlong > 0.0f && fHeadSize <= fTailSize)
+        if (!(fAlong <= 0.0f) && !(fHeadSize > fTailSize))
         {
             fWidthAtEye = (fTailSize - fHeadSize) * fAlongT + fHeadSize;
         }
@@ -319,7 +313,7 @@ void LightBeamEffect::RenderLightBeam(const LightBeam* pBeam, unsigned int uiFla
         RedColor flareColor = pBeam->_color;
         float fFlareSize = fHeadSize * 0.5f;
         flareColor.a = 0;
-        if (fCos > 0.0f && pBeam->_fFlareIntensity > 0.0f)
+        if (!(fCos <= 0.0f) && !(pBeam->_fFlareIntensity <= 0.0f))
         {
             float fConeCos = pBeam->_fFlareCosAngle;
             const float fConeStart = fConeCos > 0.5f ? fConeCos * 0.5f : 0.0f;
@@ -327,7 +321,7 @@ void LightBeamEffect::RenderLightBeam(const LightBeam* pBeam, unsigned int uiFla
             {
                 fConeCos = 0.1f;
             }
-            if (fConeStart < fCos)
+            if (!(fConeStart >= fCos))
             {
                 float fFlare;
                 if (fConeCos >= fCos)

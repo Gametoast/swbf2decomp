@@ -1028,7 +1028,7 @@ EntitySoldier::EntitySoldier(EntitySoldierClass* pClass, const EntityDesc& desc)
     {
         for (unsigned int i = 0; i < mModelLowRes->mClothCount; ++i)
         {
-            EntityClass* pClothClass = EntityClass::Find(mModelLowRes->mClothList[i]);
+            EntityClass* pClothClass = EntityClass::Find(mModelLowRes->GetClothHash(i));
             mClothPiece[mModel->mClothCount + i] = pClothClass ? (EntityCloth*)pClothClass->Build(desc) : 0;
         }
     }
@@ -2349,7 +2349,7 @@ bool EntitySoldier::CollisionCallback(const CollisionResult* pResult, CollisionO
             }
             vRelVel -= pOther->GetGameObject()->GetVelocity();
         }
-        PblVector3 vSeparation = pResult->mSeparationNormal;
+        const PblVector3& vSeparation = pResult->mSeparationNormal;
         float fApproach = DotProduct(vSeparation, vRelVel);
 
         FoleyFXCollider::CollisionCallback(pOther->GetCollisionType(), pOther, &GetPosition());
@@ -6542,7 +6542,7 @@ bool EntitySoldier::Update(float fDeltaTime)
         pWeapon->OverrideSoldierEnergyRestore(fEnergyRestore);
     }
     EnergyBar* pEnergyBar = &mEnergyBar;
-    if (fEnergyRestore < 0.0f)
+    if (!(fEnergyRestore >= 0.0f))
     {
         pEnergyBar->SpendEnergy(-(fEnergyRestore * fDeltaTime));
     }

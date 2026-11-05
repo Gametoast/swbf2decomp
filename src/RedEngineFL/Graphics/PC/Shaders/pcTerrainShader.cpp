@@ -554,29 +554,44 @@ void pcTerrainShader::Begin_Prog1(unsigned int uiState, unsigned int uiPass) con
                 RedRenderer::pcSetSamplerState(3, D3DSAMP_MAGFILTER, D3DTEXF_LINEAR);
                 RedRenderer::pcSetSamplerState(3, D3DSAMP_MINFILTER, D3DTEXF_LINEAR);
                 RedRenderer::pcSetSamplerState(3, D3DSAMP_MIPFILTER, D3DTEXF_LINEAR);
-            }
+                pcRedVertexShaderConstantRegister* pRegs;
+                if (bDetail)
+                {
+                    pRegs = RedRenderer::pcLockVertexShaderConstants(39, 8);
+                    pRegs[39].SetColor(RedColorValue(RedColor::WHITE));
+                    pRegs[40].SetFloats(-2.0f / s_fDetailFadeDistance, 2.0f, s_fLightningValue, kInv255);
+                    pRegs[45].SetVector(s_DetailTextureTransform[0]);
+                    pRegs[46].SetVector(s_DetailTextureTransform[1]);
+                }
+                else
+                {
+                    pRegs = RedRenderer::pcLockVertexShaderConstants(39, 2);
+                    pRegs[39].SetColor(RedColorValue(RedColor::WHITE));
+                    pRegs[40].SetFloats(0.0f, 0.0f, s_fLightningValue, kInv255);
+                }
+                RedRenderer::pcUnlockVertexShaderConstants(pRegs);
 
-            pcRedVertexShaderConstantRegister* pRegs;
-            if (bDetail)
-            {
-                pRegs = RedRenderer::pcLockVertexShaderConstants(39, 8);
-                pRegs[39].SetColor(RedColorValue(RedColor::WHITE));
-                pRegs[40].SetFloats(-2.0f / s_fDetailFadeDistance, 2.0f, s_fLightningValue, kInv255);
-                pRegs[45].SetVector(s_DetailTextureTransform[0]);
-                pRegs[46].SetVector(s_DetailTextureTransform[1]);
+                RedColorValue ambient = RedLight::GetGlobalAmbientLight()->m_color;
+                RedRenderer::pcGetDevice()->SetPixelShaderConstantF(0, &ambient.r, 1);
             }
             else
             {
-                pRegs = RedRenderer::pcLockVertexShaderConstants(39, 2);
-                pRegs[39].SetColor(RedColorValue(RedColor::WHITE));
-                pRegs[40].SetFloats(0.0f, 0.0f, s_fLightningValue, kInv255);
-            }
-            RedRenderer::pcUnlockVertexShaderConstants(pRegs);
-
-            if (bShadow)
-            {
-                RedColorValue ambient = RedLight::GetGlobalAmbientLight()->m_color;
-                RedRenderer::pcGetDevice()->SetPixelShaderConstantF(0, &ambient.r, 1);
+                pcRedVertexShaderConstantRegister* pRegs;
+                if (bDetail)
+                {
+                    pRegs = RedRenderer::pcLockVertexShaderConstants(39, 8);
+                    pRegs[39].SetColor(RedColorValue(RedColor::WHITE));
+                    pRegs[40].SetFloats(-2.0f / s_fDetailFadeDistance, 2.0f, s_fLightningValue, kInv255);
+                    pRegs[45].SetVector(s_DetailTextureTransform[0]);
+                    pRegs[46].SetVector(s_DetailTextureTransform[1]);
+                }
+                else
+                {
+                    pRegs = RedRenderer::pcLockVertexShaderConstants(39, 2);
+                    pRegs[39].SetColor(RedColorValue(RedColor::WHITE));
+                    pRegs[40].SetFloats(0.0f, 0.0f, s_fLightningValue, kInv255);
+                }
+                RedRenderer::pcUnlockVertexShaderConstants(pRegs);
             }
             RedRenderer::pcLoadFormat(s_pVertexInputFormat);
         }

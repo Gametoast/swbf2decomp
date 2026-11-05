@@ -322,7 +322,7 @@ void VehicleSpawn::UpdateLive(float fDeltaTime, VehicleTracker& tracker)
     {
         const DamageDesc damage(DamageOwner(0, 0, 0, 0, 0, 1.0f),
                                 static_cast<GameObject*>(tracker.mVehicle)->mMaxHealth / mDecayTime);
-        static_cast<Damageable*>(static_cast<GameObject*>(tracker.mVehicle))->ApplyDamage(damage, (unsigned int)-1);
+        tracker.mVehicle->ApplyDamage(damage, (unsigned int)-1);
     }
 }
 
@@ -334,9 +334,7 @@ void VehicleSpawn::UpdateSpawn(float fDeltaTime)
     const PblVector3 vCenter = (box._vMax + box._vMin) * 0.5f;
     const PblVector3 vExtents = (box._vMax - box._vMin) * 0.5f;
     mSpawnRegion.mMatrix = mMatrix;
-    PblVector3 vPos;
-    D3DXVec3TransformCoord(reinterpret_cast<D3DXVECTOR3*>(&vPos), reinterpret_cast<const D3DXVECTOR3*>(&vCenter), reinterpret_cast<const D3DXMATRIX*>(&mMatrix));
-    mSpawnRegion.mMatrix.SetTranslation(vPos);
+    mSpawnRegion.mMatrix.SetTranslation(mMatrix.ApplyTransform(vCenter));
 
     mSpawnRegion.mSize.x = vExtents.x;
     mSpawnRegion.mSize.y = vExtents.y;

@@ -226,7 +226,8 @@ DecalClass::DecalClass(PblConfig& config)
                            : 0;
     if (bUseShader)
     {
-        DecalManager::s_pInstance->AddClass(this);
+        DecalManager* pManager = DecalManager::s_pInstance;
+        pManager->AddClass(this);
     }
 }
 

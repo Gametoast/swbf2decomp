@@ -245,8 +245,7 @@ bool RedPath::NodeArray::ReadScope(PblConfig& config, PblConfig::Data& data,
 
     AllocNodes(data.GetUint32Arg(0) + sAllocExtraPathNodes);
 
-    PblConfig scopeData = config.ReadNextScope();
-    PblConfig scope(scopeData, true);
+    PblConfig scope(config.ReadNextScope(), true);
     unsigned int i = 0;
     while (!scope.IsDone())
     {

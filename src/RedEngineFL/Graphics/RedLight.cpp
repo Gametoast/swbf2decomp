@@ -1157,14 +1157,9 @@ void RedLight::ReadGlobals(PblConfig& config)
         }
     }
 
-    RedLight::m_sGlobalAmbient->m_topColor = topColor;
-    RedLight::m_sGlobalAmbient->m_bottomColor = bottomColor;
-    RedColorValue mean;
-    mean.r = (topColor.r + bottomColor.r) * 0.5f;
-    mean.g = (topColor.g + bottomColor.g) * 0.5f;
-    mean.b = (topColor.b + bottomColor.b) * 0.5f;
-    mean.a = (topColor.a + bottomColor.a) * 0.5f;
-    RedLight::m_sGlobalAmbient->m_color = mean;
+    RedLight::m_sGlobalAmbient->SetTopColor(topColor);
+    RedLight::m_sGlobalAmbient->SetBottomColor(bottomColor);
+    RedLight::m_sGlobalAmbient->SetColor((topColor + bottomColor) * 0.5f);
 
     RedLight::m_sGlobalEnvMapHash = uiEnvMap;
     RedLight::m_sGlobalDirectionalFactor[0] = 0.0f;

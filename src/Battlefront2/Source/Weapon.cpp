@@ -2300,14 +2300,10 @@ void Weapon::Render(const PblMatrix& mat, const RedPose* pPose, const RedColor& 
         return;
     }
 
-    const RedModel* pModel;
-    if (!bArg || (pModel = mRenderClass->mHighResModel) == 0)
+    const RedModel* pModel = (bArg && mRenderClass->mHighResModel) ? mRenderClass->mHighResModel : mRenderClass->mModel;
+    if (!pModel)
     {
-        pModel = mRenderClass->mModel;
-        if (!pModel)
-        {
-            return;
-        }
+        return;
     }
 
     const PblMatrix* pMatrix = &mat;
@@ -2331,8 +2327,7 @@ void Weapon::Render(const PblMatrix& mat, const RedPose* pPose, const RedColor& 
 
     pThis->mFirePointMatrix = *pMatrix;
     {
-        PblVector3 vFirePos;
-        D3DXVec3TransformCoord(reinterpret_cast<D3DXVECTOR3*>(&vFirePos), reinterpret_cast<const D3DXVECTOR3*>(&mRenderClass->mFirePointOffset), reinterpret_cast<const D3DXMATRIX*>(pMatrix));
+        PblVector3 vFirePos = pMatrix->ApplyTransform(mRenderClass->mFirePointOffset);
         pThis->mFirePointMatrix[3] = vFirePos;
     }
     pThis->mFirePointMatrix.m[3][3] = 1.0f;

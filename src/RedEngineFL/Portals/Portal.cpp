@@ -456,9 +456,8 @@ void pvs::Manager::GetCamFrustum(const pvs::ICamera& rCam, geo::Frustum& rFrustu
         rCam.GetInvViewTrans(camTrans);
     }
 
-    PblVector3 vFwd;
     PblVector3 vBack(0.0f, 0.0f, -1.0f);
-    D3DXVec3TransformNormal(reinterpret_cast<D3DXVECTOR3*>(&vFwd), reinterpret_cast<const D3DXVECTOR3*>(&vBack), reinterpret_cast<const D3DXMATRIX*>(&camTrans));
+    PblVector3 vFwd = camTrans.ApplyRotation(vBack);
     geo::Vector3<float> fwd(vFwd.x, vFwd.y, vFwd.z);
 
     const geo::Vector3<float> yAxis(0.0f, 1.0f, 0.0f);

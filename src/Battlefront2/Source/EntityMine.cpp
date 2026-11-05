@@ -282,13 +282,7 @@ bool EntityMine::Update(float fDeltaTime)
         }
         else
         {
-            D3DXQUATERNION qRot;
-            PblMatrix mStick;
-            D3DXMatrixRotationQuaternion(reinterpret_cast<D3DXMATRIX*>(&mStick), D3DXQuaternionNormalize(&qRot, reinterpret_cast<const D3DXQUATERNION*>(&pStick->mLocalRotation)));
-            mStick.m[3][0] = pStick->mLocalPosition.x;
-            mStick.m[3][1] = pStick->mLocalPosition.y;
-            mStick.m[3][2] = pStick->mLocalPosition.z;
-            mStick.m[3][3] = 1.0f;
+            PblMatrix mStick(pStick->mLocalRotation, pStick->mLocalPosition);
             CollisionObject* pObject = mStickInfo->mCollObject;
             CollisionModel* pModel = pObject->mCollisionModel;
             if (pModel)

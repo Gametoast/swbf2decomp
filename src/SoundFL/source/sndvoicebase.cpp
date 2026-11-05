@@ -78,7 +78,7 @@ void VoiceBase::SetSample(const Sample* pSample)
     if (pSample != mSample)
     {
         mFlags |= flags_updateSample;
-        mSample = const_cast<Sample*>(pSample);
+        mSample = pSample;
     }
 }
 

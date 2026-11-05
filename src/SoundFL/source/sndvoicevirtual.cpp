@@ -146,7 +146,7 @@ void VoiceVirtual::Update3DMode()
     if ((p2DManager == mVoiceManager || p3DManager == mVoiceManager)
         && pManager != mVoiceManager)
     {
-        Sample* pSample = mSample;
+        const Sample* pSample = mSample;
         RemoveAll();
         mVoiceManager = pManager;
         pManager->mInactiveList.Add(&mNode);
@@ -301,10 +301,10 @@ namespace Snd
 {
 
 // FUNCTION: SWBF2 0x00737e10
-void VoiceVirtual::SetInactiveCallback(void (__cdecl* pfnCallback)(const VoiceVirtual* const, void* const),
+void VoiceVirtual::SetInactiveCallback(InactiveCallback pfnCallback,
                                        void* const pData)
 {
-    mInactiveCallback = (void (*)())pfnCallback;
+    mInactiveCallback = pfnCallback;
     mInactiveCallbackData = pData;
 }
 }

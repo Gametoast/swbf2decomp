@@ -664,7 +664,7 @@ bool PowerupStation::Update(float fDeltaTime)
             PblQuaternion q = PblQuaternion(*pMatrix);
             if ((float)fabs((double)fAngle) > 0.0001f)
             {
-                q = q * PblQuaternion(gVectorUnitX, fAngle);
+                q *= PblQuaternion(gVectorUnitX, fAngle);
             }
             *pMatrix = PblMatrix(q, vNodePos);
         }
@@ -709,7 +709,7 @@ bool PowerupStation::Update(float fDeltaTime)
         PblQuaternion q = PblQuaternion(*pMatrix);
         if ((float)fabs((double)fAngle) > 0.0001f)
         {
-            q = q * PblQuaternion(gVectorUnitZ, fAngle);
+            q *= PblQuaternion(gVectorUnitZ, fAngle);
         }
         *pMatrix = PblMatrix(q, vNodePos);
         return true;
@@ -730,7 +730,7 @@ bool PowerupStation::Update(float fDeltaTime)
         float fAngle = (float)mRotateDir * mClass->mIdleRotateSpeed * fDeltaTime;
         if ((float)fabs((double)fAngle) > 0.0001f)
         {
-            q = q * PblQuaternion(gVectorUnitY, fAngle);
+            q *= PblQuaternion(gVectorUnitY, fAngle);
         }
         mRenderMatrix = PblMatrix(q, vPos);
 
@@ -744,7 +744,7 @@ bool PowerupStation::Update(float fDeltaTime)
                 q = PblQuaternion(*pWobbleMatrix);
                 if ((float)fabs((double)fWobble) > 0.0001f)
                 {
-                    q = q * PblQuaternion(gVectorUnitZ, fWobble);
+                    q *= PblQuaternion(gVectorUnitZ, fWobble);
                 }
                 *pWobbleMatrix = PblMatrix(q, vPos);
             }

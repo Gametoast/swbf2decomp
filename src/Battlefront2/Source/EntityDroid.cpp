@@ -1294,8 +1294,7 @@ bool EntityDroid::Update(float fDeltaTime)
     vLocal.x = 0.0f;
     vLocal.y = fSin;
     vLocal.z = fCos;
-    PblVector3 vEyeDir;
-    D3DXVec3TransformNormal(reinterpret_cast<D3DXVECTOR3*>(&vEyeDir), reinterpret_cast<const D3DXVECTOR3*>(&vLocal), reinterpret_cast<const D3DXMATRIX*>(&mMatrix));
+    PblVector3 vEyeDir = mMatrix.ApplyRotation(vLocal);
     mEyeDir = vEyeDir;
 
     if (mPlayerId >= 0 && mTracker)

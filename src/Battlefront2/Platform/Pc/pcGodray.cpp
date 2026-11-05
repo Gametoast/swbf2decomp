@@ -108,7 +108,7 @@ void GodrayManager::PlatformRender(unsigned int uiRenderFlags) const
     unsigned int i;
     for (i = 0; i < m_uiNumVisibleGodrays; i++)
     {
-        if (m_aVisibleGodrays[i].fAlpha > 0.0f)
+        if (!(m_aVisibleGodrays[i].fAlpha <= 0.0f))
         {
             uiNumVertices += 12 * m_aVisibleGodrays[i].uiNumRays;
             uiNumIndices += 22 * m_aVisibleGodrays[i].uiNumRays;
@@ -152,7 +152,7 @@ void GodrayManager::PlatformRender(unsigned int uiRenderFlags) const
     for (i = 0; i < m_uiNumVisibleGodrays; i++)
     {
         const VisibleGodray* pVisible = &m_aVisibleGodrays[i];
-        if (!(pVisible->fAlpha > 0.0f))
+        if (pVisible->fAlpha <= 0.0f)
         {
             continue;
         }

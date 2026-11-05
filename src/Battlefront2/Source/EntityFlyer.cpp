@@ -1252,10 +1252,7 @@ void EntityFlyerClass::SetProperty(unsigned int uProperty, const char* pszValue)
             CollisionPrimitive primitive;
             PblMatrix matrix = gMatrixIdentity;
             primitive.SetAACylinder((fHalfZ + fHalfX) * 0.5f, fHalfY * 2.0f);
-            matrix.m[3][0] = fCenterX;
-            matrix.m[3][1] = fCenterY;
-            matrix.m[3][2] = fCenterZ;
-            matrix.m[3][3] = 1.0f;
+            matrix.SetTranslation(PblVector3(fCenterX, fCenterY, fCenterZ));
             mCollisionModel.AddBody(new CollisionBodyPrimitive(primitive, "main_body", matrix, 0));
         }
         if (pMesh)
@@ -1911,8 +1908,7 @@ void EntityFlyer::SetupCameraTrackMatrix(PblMatrix& rMatrix, float fDeltaTime)
         PblMatrix mUnbank;
         mUnbank.SetRotateZ(-mBankRollAngle);
         mUnbank.RotateX(-mBankPitchAngle);
-        PblMatrix mBody;
-        D3DXMatrixMultiply(reinterpret_cast<D3DXMATRIX*>(&mBody), reinterpret_cast<const D3DXMATRIX*>(&mUnbank), reinterpret_cast<const D3DXMATRIX*>(&mTarget));
+        PblMatrix mBody = mUnbank * mTarget;
 
         if (mTowCableWalker != 0)
         {
@@ -2379,8 +2375,7 @@ void EntityFlyer::Render(unsigned char renderMode, float lod, unsigned int flags
     if (pFlag)
     {
         const FlagItemClass* pFlagClass = static_cast<const FlagItemClass*>(pFlag->mClass);
-        PblVector3 vPos;
-        D3DXVec3TransformCoord(reinterpret_cast<D3DXVECTOR3*>(&vPos), reinterpret_cast<const D3DXVECTOR3*>(&pFlagClass->mCarriedOffset), reinterpret_cast<const D3DXMATRIX*>(&mWorld));
+        PblVector3 vPos = mWorld.ApplyTransform(pFlagClass->mCarriedOffset);
         mWorld.SetTranslation(vPos);
         reinterpret_cast<GameObject*>(pFlag)->SetMatrix(mWorld);
         reinterpret_cast<GameObject*>(pFlag)->SetVelocity(GetVelocity());
@@ -3486,17 +3481,17 @@ bool EntityFlyer::Update(float fDeltaTime)
     if (!mInRoll && !mInFlip && mClass->mMaxFlyerSpeed >= mGetSpeedSpeed - 0.0001f)
     {
         float fRestore = mClass->mEnergyAutoRestore;
-        if (fRestore < 0.0f)
-        {
-            mEnergyBar.SpendEnergy(-(fRestore * fDeltaTime));
-        }
-        else
+        if (fRestore >= 0.0f)
         {
             float fMultiplier = mCharacter && mCharacter->mMedalsMgr &&
                                         mCharacter->mMedalsMgr->IsAwardAvailable(MedalsMgr::ENDURANCE)
                                     ? 1.5f
                                     : 1.0f;
             mEnergyBar.AddEnergy(fRestore * fMultiplier * fDeltaTime);
+        }
+        else
+        {
+            mEnergyBar.SpendEnergy(-(fRestore * fDeltaTime));
         }
     }
 
@@ -3596,7 +3591,7 @@ bool EntityFlyer::Update(float fDeltaTime)
                                                                        : mClass->mBoostFlyerSpeed;
     float fPitchRate = mClass->mPitchRate;
     float fTurnRate = mClass->mTurnRate;
-    float fMinRate = fPitchRate <= fTurnRate ? fPitchRate : fTurnRate;
+    float fMinRate = fPitchRate > fTurnRate ? fTurnRate : fPitchRate;
     float fTurnRateNow = fMinRate;
     if (fAbsTurn >= 0.7f)
     {
@@ -4243,13 +4238,12 @@ bool EntityFlyer::Update(float fDeltaTime)
         vDrive.x = mSetSpeed * vZ.x - mSetStrafe * vX.x - mSetStrafeVertical * vY.x;
         vDrive.y = vZ.y * mSetSpeed - vX.y * mSetStrafe - vY.y * mSetStrafeVertical;
         vDrive.z = mSetSpeed * vZ.z - mSetStrafe * vX.z - vY.z * mSetStrafeVertical;
-        float fClimb = (fHeight * 0.875f + 0.125f) *
-                       (mState == TAKEOFF ? mClass->mTakeoffSpeed : -mClass->mLandingSpeed);
+        float fClimb = mState == TAKEOFF ? (fHeight * 0.875f + 0.125f) * mClass->mTakeoffSpeed :
+                       -((fHeight * 0.875f + 0.125f) * mClass->mLandingSpeed);
         mVelocity = Interpolate(PblVector3(0.0f, fClimb, 0.0f), vDrive, mFlightRatio);
 
         PblMatrix mInverse = matrix.GetInverseFast();
-        PblVector3 vLocal;
-        D3DXVec3TransformNormal(reinterpret_cast<D3DXVECTOR3*>(&vLocal), reinterpret_cast<const D3DXVECTOR3*>(&mVelocity), reinterpret_cast<const D3DXMATRIX*>(&mInverse));
+        PblVector3 vLocal = mInverse.ApplyRotation(mVelocity);
 
         float fBankScale = mState == TAKEOFF ? 1.0f / (mClass->mTurnRate * fTopSpeed) : 1.0f / fTopSpeed;
         float fPitchTarget = mClass->mThrustPitchAngle * fThrust * mFlightRatio +
@@ -4511,8 +4505,7 @@ bool EntityFlyer::Update(float fDeltaTime)
         }
 
         PblMatrix mInverse = matrix.GetInverseFast();
-        PblVector3 vLocal;
-        D3DXVec3TransformNormal(reinterpret_cast<D3DXVECTOR3*>(&vLocal), reinterpret_cast<const D3DXVECTOR3*>(&mVelocity), reinterpret_cast<const D3DXMATRIX*>(&mInverse));
+        PblVector3 vLocal = mInverse.ApplyRotation(mVelocity);
         float fBankScale = 1.0f / fTopSpeed;
         float fRollSlip = (vLocal.z * mOmega.y - mOmega.z * vLocal.y) * fBankScale;
         float fPitchTarget = mClass->mThrustPitchAngle * fThrust + mFlip +
@@ -4572,8 +4565,7 @@ bool EntityFlyer::Update(float fDeltaTime)
         mOmega.z = (PblRandom::GetSim().GetFloat() - 0.5f) * 0.5f + mOmega.z;
 
         PblMatrix mInverse = matrix.GetInverseFast();
-        PblVector3 vLocal;
-        D3DXVec3TransformNormal(reinterpret_cast<D3DXVECTOR3*>(&vLocal), reinterpret_cast<const D3DXVECTOR3*>(&mVelocity), reinterpret_cast<const D3DXMATRIX*>(&mInverse));
+        PblVector3 vLocal = mInverse.ApplyRotation(mVelocity);
         float fBankScale = 1.0f / fTopSpeed;
         float fRollSlip = (vLocal.z * mOmega.y - mOmega.z * vLocal.y) * fBankScale;
         float fPitchTarget = mClass->mThrustPitchAngle * fThrust * mFlightRatio + mFlip +
@@ -4636,10 +4628,7 @@ bool EntityFlyer::Update(float fDeltaTime)
             vPos.y = fMinY - 0.2f;
         }
 
-        PblQuaternion qUnit;
-        PblMatrix mFrame;
-        D3DXMatrixRotationQuaternion(reinterpret_cast<D3DXMATRIX*>(&mFrame), D3DXQuaternionNormalize(reinterpret_cast<D3DXQUATERNION*>(&qUnit), reinterpret_cast<const D3DXQUATERNION*>(&qBody)));
-        mFrame.SetTranslation(vPos);
+        PblMatrix mFrame(qBody, vPos);
         matrix = mFrame;
         PblMatrix mBank;
         mBank.SetRotateX(mBankPitchAngle);

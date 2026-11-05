@@ -187,7 +187,7 @@ Character* PlayerStats::GetNemesis(int, int iTeamStat) const
     {
         for (int i = 0; i < iCharacterLimit; ++i)
         {
-            PlayerStats& candidate = Character::GetPtr(i)->GetPlayerStats();
+            PlayerStats& candidate = Character::GetPlayerStats(Character::GetPtr(i));
             int iValue = candidate.mKillsByPlayer[iTeam][iTeamStat][iStatId]._val;
             if (iValue > iBest || (iValue == iBest && iTeam != iOwnTeam))
             {

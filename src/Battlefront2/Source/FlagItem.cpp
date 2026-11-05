@@ -104,7 +104,7 @@ bool FlagItem::Drop()
         const PblVector3& vPos = pCarrier->mUnit->GetMatrix().GetTranslation();
         PblVector3 vDropPos(vPos.x + 0.0f, vPos.y + 1.0f, vPos.z + 0.0f);
         static_cast<CollisionObject*>(pItem)->SetMatrix(PblMatrix(pItem->mStartRotation, vDropPos));
-        reinterpret_cast<EntityItem*>(pItem)->mVelocity.SetAll(0.0f);
+        reinterpret_cast<EntityItem*>(pItem)->mVelocity.Reset();
     }
 
     pItem->mLastCarrier = reinterpret_cast<EntityItem*>(pItem)->mOwner;

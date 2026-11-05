@@ -117,8 +117,7 @@ bool EntityCarrier::Update(float fDeltaTime)
         }
 
         PblMatrix matrix = mMatrix;
-        PblVector3 position;
-        D3DXVec3TransformCoord(reinterpret_cast<D3DXVECTOR3*>(&position), reinterpret_cast<const D3DXVECTOR3*>(&mCargoArray[i].mOffset), reinterpret_cast<const D3DXMATRIX*>(&matrix));
+        PblVector3 position = matrix.ApplyTransform(mCargoArray[i].mOffset);
         matrix.SetTranslation(position);
         pObject->SetMatrix(matrix);
         pObject->SetVelocity(mVelocity);

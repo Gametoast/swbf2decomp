@@ -310,7 +310,7 @@ static bool IsFlareVisible(const LensFlare* pFlare, unsigned int uiView, const P
         return false;
     }
 
-    D3DXVec3TransformCoord(reinterpret_cast<D3DXVECTOR3*>(&vPosition), reinterpret_cast<const D3DXVECTOR3*>(&pFlare->m_mWorldMatrix.GetTranslation()), reinterpret_cast<const D3DXMATRIX*>(&mView));
+    vPosition = mView.ApplyTransform(pFlare->m_mWorldMatrix.GetTranslation());
     fSize = pFlare->GetSize();
 
     if (fNear > -vPosition.z || -vPosition.z > fFar)

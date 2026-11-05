@@ -282,8 +282,8 @@ void pcOceanShader::Render_Prog1(const RenderItem* pItem, unsigned int) const
     RedRenderer::pcUnlockVertexShaderConstants(pRegs);
 
     const RedDirectionalLight* pSun = RedLight::m_sGlobalDirectionals[0];
-    const PblVector4 lightDir(-pSun->m_vDirection.x, -pSun->m_vDirection.y,
-                                 -pSun->m_vDirection.z, 0.0f);
+    const float dirZ = -pSun->m_vDirection.z;
+    const PblVector4 lightDir(-pSun->m_vDirection.x, -pSun->m_vDirection.y, dirZ, 0.0f);
     const RedColorValue lightColor(pSun->m_color);
     const RedColorValue ambient(RedLight::m_sGlobalAmbient->m_color);
 

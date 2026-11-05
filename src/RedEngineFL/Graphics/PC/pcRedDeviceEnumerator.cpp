@@ -517,13 +517,10 @@ void BuildVertexProcessingTypeList(D3DDeviceInfo* pDeviceInfo, D3DDeviceCombo* p
 // FUNCTION: SWBF2 0x00716f20
 void EnumerateDeviceCombos(D3DDeviceInfo* pDeviceInfo, PblList<D3DFormat>* pAdapterFormatList)
 {
-    D3DFORMAT afmtBackBufferFormats[6];
-    afmtBackBufferFormats[0] = D3DFMT_A8R8G8B8;
-    afmtBackBufferFormats[1] = D3DFMT_X8R8G8B8;
-    afmtBackBufferFormats[2] = D3DFMT_A2R10G10B10;
-    afmtBackBufferFormats[3] = D3DFMT_R5G6B5;
-    afmtBackBufferFormats[4] = D3DFMT_A1R5G5B5;
-    afmtBackBufferFormats[5] = D3DFMT_X1R5G5B5;
+    const D3DFORMAT afmtBackBufferFormats[6] = {
+        D3DFMT_A8R8G8B8, D3DFMT_X8R8G8B8, D3DFMT_A2R10G10B10,
+        D3DFMT_R5G6B5, D3DFMT_A1R5G5B5, D3DFMT_X1R5G5B5
+    };
 
     bool abWindowed[2];
     abWindowed[0] = false;

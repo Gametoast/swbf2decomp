@@ -900,16 +900,16 @@ EntityHologramClass::EntityHologramClass(EntityHologramClass* pParent, unsigned 
 static RedColor ReadColor(const char* pszValue)
 {
     unsigned int r = 255, g = 255, b = 255, a = 255;
-    if (sscanf(pszValue, "%u %u %u %u", &r, &g, &b, &a) < 3)
+    if (sscanf(pszValue, "%u %u %u %u", &r, &g, &b, &a) >= 3)
     {
-        return RedColor::BLACK;
+        RedColor color;
+        color.b = (unsigned char)b;
+        color.g = (unsigned char)g;
+        color.r = (unsigned char)r;
+        color.a = (unsigned char)a;
+        return color;
     }
-    RedColor color;
-    color.b = (unsigned char)b;
-    color.g = (unsigned char)g;
-    color.r = (unsigned char)r;
-    color.a = (unsigned char)a;
-    return color;
+    return RedColor::BLACK;
 }
 
 // FUNCTION: SWBF2 0x004c0590

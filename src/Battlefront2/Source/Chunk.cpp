@@ -486,9 +486,7 @@ void Chunk::Update(float fDeltaTime)
     }
 
     PblQuaternion q = PblQuaternion(mCollisionMatrix);
-    PblVector3 vSpin;
-    D3DXVec3TransformNormal((D3DXVECTOR3*)&vSpin, (const D3DXVECTOR3*)&mOmega,
-                            (const D3DXMATRIX*)&mCollisionMatrix.GetInverseFast());
+    PblVector3 vSpin = mCollisionMatrix.GetInverseFast().ApplyRotation(mOmega);
     vSpin.x *= fDeltaTime;
     vSpin.y *= fDeltaTime;
     vSpin.z *= fDeltaTime;
@@ -496,7 +494,7 @@ void Chunk::Update(float fDeltaTime)
     if (fAngle > EPSILON)
     {
         float fInv = 1.0f / fAngle;
-        q = q * PblQuaternion(vSpin * fInv, fAngle);
+        q *= PblQuaternion(vSpin * fInv, fAngle);
     }
 
     mVelocity += mOneOverMass * vForce * fDeltaTime;
@@ -801,16 +799,13 @@ void Chunk::Render(unsigned char ucAlpha, float fDist, unsigned int uiFlags)
 
         PblQuaternion q = PblQuaternion(mCollisionMatrix);
         PblVector3 vBack(-mOmega.x, -mOmega.y, -mOmega.z);
-        PblVector3 vSpin;
-        D3DXVec3TransformNormal((D3DXVECTOR3*)&vSpin, (const D3DXVECTOR3*)&vBack,
-                                (const D3DXMATRIX*)&mCollisionMatrix.GetInverseFast());
-        const PblVector3 vRotation = vSpin * fDt;
+        PblVector3 vSpin = mCollisionMatrix.GetInverseFast().ApplyRotation(vBack);
+        const PblVector3 vRotation = fDt * vSpin;
         PblVector3 vPos = mCollisionMatrix.GetTranslation();
-        float fAngle = PblMath::Sqrt(vRotation.x * vRotation.x + vRotation.y * vRotation.y + vRotation.z * vRotation.z);
+        float fAngle = Length(vRotation);
         if (fAngle > EPSILON)
         {
-            float fInv = 1.0f / fAngle;
-            q = q * PblQuaternion(vRotation * fInv, fAngle);
+            q *= PblQuaternion(vRotation / fAngle, fAngle);
         }
         vPos -= mVelocity * fDt;
         mRender = mPrimitiveMatrix * PblMatrix(q, vPos);

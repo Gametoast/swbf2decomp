@@ -23,13 +23,31 @@ inline void PblVector3::Set(float fX, float fY, float fZ)
     z = fZ;
 }
 
+inline void PblVector3::SetX(float fVal)
+{
+    x = fVal;
+}
+
+inline void PblVector3::SetY(float fVal)
+{
+    y = fVal;
+}
+
+inline void PblVector3::SetZ(float fVal)
+{
+    z = fVal;
+}
+
+inline void PblVector3::Reset()
+{
+    x = y = z = 0.0f;
+}
+
 // FUNCTION: SWBF2 0x0040ca30
 inline const PblVector3 operator+(const PblVector3& lhs, const PblVector3& rhs)
 {
     PblVector3 Temp;
-    Temp.x = lhs.x + rhs.x;
-    Temp.y = lhs.y + rhs.y;
-    Temp.z = lhs.z + rhs.z;
+    D3DXVec3Add(&Temp, &lhs, &rhs);
     return Temp;
 }
 
@@ -185,11 +203,7 @@ inline float PblVector3::operator()(int i) const
 
 inline const PblVector3 operator*(float lhs, const PblVector3& rhs)
 {
-    PblVector3 Temp;
-    Temp.x = lhs * rhs.x;
-    Temp.y = lhs * rhs.y;
-    Temp.z = lhs * rhs.z;
-    return Temp;
+    return rhs * lhs;
 }
 
 inline const PblVector3 operator*(const PblVector3& lhs, const PblVector3& rhs)

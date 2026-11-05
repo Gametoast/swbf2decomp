@@ -29,8 +29,6 @@ float GetNearSceneFadeStart();
 float GetFarSceneRange();
 }
 
-RedColor ReadColor(const PblConfig::Data& data);
-
 // GLOBAL: SWBF2 0x01e2fd4c
 SunFlareEffect* SunFlareEffect::s_pInstance;
 
@@ -211,6 +209,17 @@ void SunSkyRenderable::Render(int value)
     {
         SunFlareEffect::s_pInstance->RenderSky(value);
     }
+}
+
+// FUNCTION: SWBF2 0x0042d250
+inline RedColor ReadColor(const PblConfig::Data& data)
+{
+    RedColor color;
+    color.r = data.GetUint8Arg(0);
+    color.g = data.GetUint8Arg(1);
+    color.b = data.GetUint8Arg(2);
+    color.a = data.GetNumArgs() > 3 ? data.GetUint8Arg(3) : (unsigned char)0xff;
+    return color;
 }
 
 // FUNCTION: SWBF2 0x0042d2f0
@@ -931,7 +940,7 @@ void EmitRing(VERTEX*& pVertices, const PblVector3& vPosition, float fAngle,
     float fSin, fCos;
     PblMath::SinCos(&fSin, &fCos, fAngle);
     PblVector3 tempPos = vPosition + PblVector3(fCos * fInnerRadius, fSin * fInnerRadius, 0.0f);
-    pVertices->pos.SetPos(tempPos);
+    pVertices->pos.SetPos(tempPos.x, tempPos.y, tempPos.z);
     ++pVertices;
     for (int i = 0; i <= iSegments; ++i)
     {
@@ -941,22 +950,22 @@ void EmitRing(VERTEX*& pVertices, const PblVector3& vPosition, float fAngle,
             vPosition + PblVector3(fCos * fMiddleRadius, fSin * fMiddleRadius, 0.0f),
             vPosition + PblVector3(fCos * fOuterRadius, fSin * fOuterRadius, 0.0f)
         };
-        pVertices[0].pos.SetPos(vSegPos[0]);
+        pVertices[0].pos.SetPos(vSegPos[0].x, vSegPos[0].y, vSegPos[0].z);
         pVertices[0].uv.SetUV(fU, fV);
         pVertices[0].color = innerColor;
-        pVertices[1].pos.SetPos(vSegPos[1]);
+        pVertices[1].pos.SetPos(vSegPos[1].x, vSegPos[1].y, vSegPos[1].z);
         pVertices[1].uv.SetUV(fU, fV);
         pVertices[1].color = middleColor;
         if (i == 0)
         {
-            pVertices[2 * iSegments + 2].pos.SetPos(vSegPos[1]);
+            pVertices[2 * iSegments + 2].pos.SetPos(vSegPos[1].x, vSegPos[1].y, vSegPos[1].z);
             pVertices[2 * iSegments + 2].uv.SetUV(fU, fV);
             pVertices[2 * iSegments + 2].color = middleColor;
         }
-        pVertices[2 * iSegments + 3].pos.SetPos(vSegPos[1]);
+        pVertices[2 * iSegments + 3].pos.SetPos(vSegPos[1].x, vSegPos[1].y, vSegPos[1].z);
         pVertices[2 * iSegments + 3].uv.SetUV(fU, fV);
         pVertices[2 * iSegments + 3].color = middleColor;
-        pVertices[2 * iSegments + 4].pos.SetPos(vSegPos[2]);
+        pVertices[2 * iSegments + 4].pos.SetPos(vSegPos[2].x, vSegPos[2].y, vSegPos[2].z);
         pVertices[2 * iSegments + 4].uv.SetUV(fU, fV);
         pVertices[2 * iSegments + 4].color = outerColor;
         pVertices += 2;
@@ -964,7 +973,7 @@ void EmitRing(VERTEX*& pVertices, const PblVector3& vPosition, float fAngle,
     pVertices += 2 * iSegments + 3;
     PblMath::SinCos(&fSin, &fCos, fAngle);
     tempPos = vPosition + PblVector3(fCos * fOuterRadius, fSin * fOuterRadius, 0.0f);
-    pVertices->pos.SetPos(tempPos);
+    pVertices->pos.SetPos(tempPos.x, tempPos.y, tempPos.z);
     ++pVertices;
 }
 

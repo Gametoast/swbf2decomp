@@ -77,13 +77,6 @@ GameObject* LockOnManager::GetLockedTarget() const
     return mLockedObj;
 }
 
-// FUNCTION: SWBF2 0x00483540
-void LockOnManager::ForceNewTargetLock(GameObject* pObject)
-{
-    mForceNewLock = 5;
-    mForceNewLockTarget = pObject;
-}
-
 // FUNCTION: SWBF2 0x00483580
 unsigned int LockOnManager::GetTargetLockedChangedTurn() const
 {

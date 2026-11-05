@@ -290,11 +290,8 @@ void RedDebug::DrawOBB(const PblBox& box, const PblMatrix& matrix, RedColor colo
     PblVector3 aCorners[8];
     for (int i = 0; i < 8; i++)
     {
-        PblVector3 vCorner((i & 4) ? box._vMax.x : box._vMin.x,
-                           (i & 2) ? box._vMax.y : box._vMin.y,
-                           (i & 1) ? box._vMax.z : box._vMin.z);
-        PblVector3 vOut;
-        D3DXVec3TransformCoord(reinterpret_cast<D3DXVECTOR3*>(&vOut), reinterpret_cast<const D3DXVECTOR3*>(&vCorner), reinterpret_cast<const D3DXMATRIX*>(&matrix));
+        PblVector3 vCorner = box.GetBoxCorner(i);
+        PblVector3 vOut = matrix.ApplyTransform(vCorner);
         aCorners[i] = vOut;
     }
 
@@ -512,17 +509,18 @@ void RedDebug::RedDebugRenderable::Render(int)
 {
     if (_n3DLines >= 2)
     {
-        PblBox box;
-        box._vMin = _a3DLineVectors[0];
-        box._vMax = _a3DLineVectors[0];
+        PblBox bounds;
+        bounds._vMin = _a3DLineVectors[0];
+        bounds._vMax = _a3DLineVectors[0];
         for (unsigned int i = 1; i < _n3DLines; i++)
         {
-            box.AddPoint(_a3DLineVectors[i]);
+            bounds.AddPoint(_a3DLineVectors[i]);
         }
 
         unsigned int uiNumLines = _n3DLines / 2;
         const PblVector3 vOne(1.0f, 1.0f, 1.0f);
-        const PblBox bounds(box._vMin - vOne, box._vMax + vOne);
+        bounds._vMax = bounds._vMax + vOne;
+        bounds._vMin = bounds._vMin - vOne;
 
         pcRedPrimitive* pPrimitive =
             pcRedPrimitive::Create(D3DPT_LINELIST, 0x1082, 12, uiNumLines * 2, 0, false);

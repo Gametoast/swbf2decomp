@@ -408,14 +408,11 @@ void PrecipitationEffect::Render(int value)
                 vCameraVelocity = CameraManager::Instance()->GetCameraVelocity(i);
                 if (CAMERA_CROSSVELOCITY_SCALE != 1.0f || CAMERA_AXIALVELOCITY_SCALE != 1.0f)
                 {
-                    PblVector3 vLocal;
-                    D3DXVec3TransformNormal(reinterpret_cast<D3DXVECTOR3*>(&vLocal), reinterpret_cast<const D3DXVECTOR3*>(&vCameraVelocity),
-                                            reinterpret_cast<const D3DXMATRIX*>(&RedRenderer::GetCamera()->GetMatrixInverse()));
+                    PblVector3 vLocal = RedRenderer::GetCamera()->GetMatrixInverse().ApplyRotation(vCameraVelocity);
                     vCameraVelocity.x = vLocal.x * CAMERA_CROSSVELOCITY_SCALE;
                     vCameraVelocity.y = vLocal.y * CAMERA_CROSSVELOCITY_SCALE;
                     vCameraVelocity.z = CAMERA_AXIALVELOCITY_SCALE * vLocal.z;
-                    PblVector3 vWorld;
-                    D3DXVec3TransformNormal(reinterpret_cast<D3DXVECTOR3*>(&vWorld), reinterpret_cast<const D3DXVECTOR3*>(&vCameraVelocity), reinterpret_cast<const D3DXMATRIX*>(&mCamera));
+                    PblVector3 vWorld = mCamera.ApplyRotation(vCameraVelocity);
                     vCameraVelocity = vWorld;
                 }
                 break;
@@ -708,10 +705,10 @@ void PrecipitationEffect::Render(int value)
                     mWorld.m[3][3] = 1.0f;
                     float fDepth = -(mWorld.m[3][1] * mCamera.m[2][1] + mCamera.m[2][0] * mWorld.m[3][0]
                                      + mCamera.m[2][2] * mWorld.m[3][2]) - fCameraDepth;
-                    if (fDepth < fCullDistance
+                    if (!(fDepth >= fCullDistance)
                         && camera.ClassifyAABox(vCellCenter, vExtents) != RedCamera::VISIBILITY_NONE)
                     {
-                        if (fFadeStart < fDepth)
+                        if (!(fDepth <= fFadeStart))
                         {
                             color.a = (unsigned char)(int)((fRenderDistance - fDepth) * (float)COLOR.a * fFadeScale);
                         }
@@ -814,7 +811,7 @@ void PrecipitationEffect::Render(int value)
                             }
                             if (it == itVisibleEnd)
                             {
-                                if (fFadeStart < fCell)
+                                if (!(fCell <= fFadeStart))
                                 {
                                     color.a = (unsigned char)(int)((fRenderDistance - fCell) * (float)COLOR.a * fFadeScale);
                                 }

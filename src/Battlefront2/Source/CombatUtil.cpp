@@ -589,12 +589,11 @@ float CombatUtil::CalcDamagePerSecond(Controllable* pMe, const WeaponClass* pCla
     {
         pTop = pTop->mNextCharge;
     }
-    float fResult = fDamagePerSecond;
     if (pTop != pBot)
     {
-        fResult = (sCalcDamagePerSecond(pMe, pTop, pTarget) + fDamagePerSecond) * 0.5f;
+        fDamagePerSecond = (sCalcDamagePerSecond(pMe, pTop, pTarget) + fDamagePerSecond) * 0.5f;
     }
-    return fResult;
+    return fDamagePerSecond;
 }
 
 // FUNCTION: SWBF2 0x0046e7c0

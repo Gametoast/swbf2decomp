@@ -567,13 +567,7 @@ void ExplosionClass::CreateExplosion(const PblVector3& aPos, const DamageOwner& 
                 q._fY = fSinHalf * vAxis.y;
                 q._fZ = fSinHalf * vAxis.z;
                 q._fS = fCosHalf;
-                D3DXQUATERNION qNorm;
-                PblMatrix mRot;
-                D3DXMatrixRotationQuaternion(reinterpret_cast<D3DXMATRIX*>(&mRot), D3DXQuaternionNormalize(&qNorm, reinterpret_cast<const D3DXQUATERNION*>(&q)));
-                mRot.m[3][0] = aPos.x;
-                mRot.m[3][1] = aPos.y;
-                mRot.m[3][2] = aPos.z;
-                mRot.m[3][3] = 1.0f;
+                PblMatrix mRot(q, aPos);
                 mChunkDescriptor.mMatrix = mRot;
 
                 if (aFlying)

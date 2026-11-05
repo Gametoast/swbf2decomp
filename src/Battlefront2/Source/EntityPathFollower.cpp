@@ -1109,7 +1109,7 @@ bool EntityPathFollower::Update(BranchParams& params, float fElapsed, PblVector3
     params.mMatrix.m[2][3] = 0.0f;
 
     PblVector3 vTarget = vPoint;
-    UpdateSquadron(params.mPathClass, *pRotation, fElapsed, vPosition, vTarget);
+    UpdateSquadron(params.mPathClass, PblMatrix(*pRotation), fElapsed, vPosition, vTarget);
     if (mStrafeTimer > 0.0f)
     {
         const PblVector3& vRight = params.mMatrix.GetXAxis();
