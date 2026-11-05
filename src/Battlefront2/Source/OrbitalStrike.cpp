@@ -89,19 +89,23 @@ bool OrbitalStrike::Update(float fDeltaTime)
             desc.mBodyID = -1;
             desc.mFireWeapon = 0;
 
-            if (NetGame::IsEnabled() && NetGame::IsClient())
+            if (NetGame::IsEnabled())
             {
-                if (netIsLocalTurn)
+                if (netEnabledNext && netClientActive)
                 {
+                    if (netIsLocalTurn)
+                    {
+                        mClass->mStrikeClass->Build(desc);
+                    }
+                }
+                else
+                {
+                    NetGame::CreateEvent_CreateOrdnance(mClass->mStrikeClass, desc);
                     mClass->mStrikeClass->Build(desc);
                 }
             }
             else
             {
-                if (NetGame::IsEnabled())
-                {
-                    NetGame::CreateEvent_CreateOrdnance(mClass->mStrikeClass, desc);
-                }
                 mClass->mStrikeClass->Build(desc);
             }
 

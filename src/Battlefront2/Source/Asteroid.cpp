@@ -690,7 +690,7 @@ void Asteroid::Kill()
                     {
                         pChild->Init();
                         const PblVector3 vDir = desc.mMatrix.GetTranslation() - mMatrix.GetTranslation();
-                        static_cast<EntityGeometry*>(pChild)->SetVelocity(Normalize(vDir) * 50.0f);
+                        ((EntityGeometry*)pChild)->SetVelocity(Normalize(vDir) * 50.0f);
                     }
                 }
             }

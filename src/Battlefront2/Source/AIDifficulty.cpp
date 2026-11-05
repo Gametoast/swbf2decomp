@@ -401,7 +401,7 @@ namespace
 
 inline const CollisionObject* GetCollisionObject(const GameObject* pObject)
 {
-    return static_cast<const CollisionObject*>(pObject);
+    return (const CollisionObject*)pObject;
 }
 
 }

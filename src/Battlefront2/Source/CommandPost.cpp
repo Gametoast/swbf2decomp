@@ -1272,7 +1272,7 @@ bool CommandPost::Update(float fDeltaTime)
     mSoundAmbience.Update(&mSoundAmbienceProps, (const PblVector3*)GetMatrix().m[3], 0);
     if (!mSoundAmbience.GetPlaying())
     {
-        const PblVector3* pPos = (const PblVector3*)GetMatrix().m[3];
+        const PblVector3* pPos = &GetMatrix().GetTranslation();
         mSoundAmbience.Play(&mSoundAmbienceProps, pPos, 0, true);
     }
     mSoundTransition.Update(&mSoundTransitionProps, (const PblVector3*)GetMatrix().m[3], 0);
@@ -1419,7 +1419,7 @@ bool CommandPost::Update(float fDeltaTime)
             {
                 mSoundTransition.Stop(true);
                 mSoundTransitionProps = mClass->mSoundCharge;
-                const PblVector3* pPos = (const PblVector3*)GetMatrix().m[3];
+                const PblVector3* pPos = &GetMatrix().GetTranslation();
                 mSoundTransition.Play(&mSoundTransitionProps, pPos, 0, true);
             }
             if (Snd::VoiceVirtual* pVoice = mSoundTransition.GetVoiceVirtual())
@@ -1440,7 +1440,11 @@ bool CommandPost::Update(float fDeltaTime)
                 mSoundTransition.Stop(true);
 
                 Team* pTeam = Team::sTeams[GetGameObject()->mTeam];
-                const Character* pCapturer = iCapturePlayer ? Character::FindPlayer(iCapturePlayer - 1) : 0;
+                const Character* pCapturer = 0;
+                if (iCapturePlayer)
+                {
+                    pCapturer = Character::FindPlayer(iCapturePlayer - 1);
+                }
                 if (!NetGame::IsEnabled() || !NetGame::IsClient())
                 {
                     NetGame::CreateEvent_Message(NetGame::MSG_CAPTURED, pCapturer, 0, 0, 0, pTeam, this);
@@ -1479,7 +1483,7 @@ bool CommandPost::Update(float fDeltaTime)
             {
                 mSoundTransition.Stop(true);
                 mSoundTransitionProps = mClass->mSoundDispute;
-                const PblVector3* pPos = (const PblVector3*)GetMatrix().m[3];
+                const PblVector3* pPos = &GetMatrix().GetTranslation();
                 mSoundTransition.Play(&mSoundTransitionProps, pPos, 0, true);
             }
         }
@@ -1492,7 +1496,8 @@ bool CommandPost::Update(float fDeltaTime)
             mSoundTransition.Stop(true);
         }
     }
-    else if (mHoldTeam && mHoldTeam != GetGameObject()->mTeam)
+    else if (mHoldTeam && mHoldTeam != GetGameObject()->mTeam &&
+             (mHoldTeam == -1 || mHoldTeam != GetGameObject()->mTeam))
     {
 
         const float fNeutralizeTime = GetNeutralizeTime();
@@ -1523,7 +1528,8 @@ bool CommandPost::Update(float fDeltaTime)
         {
             mSoundTransition.Stop(true);
             mSoundTransitionProps = mClass->mSoundDischarge;
-            const PblVector3* pPos = (const PblVector3*)GetMatrix().m[3];
+            const PblMatrix& rMatrix = !(GameObject*)mObject ? gMatrixIdentity : ((GameObject*)mObject)->GetMatrix();
+            const PblVector3* pPos = &rMatrix.GetTranslation();
             mSoundTransition.Play(&mSoundTransitionProps, pPos, 0, true);
         }
         if (Snd::VoiceVirtual* pVoice = mSoundTransition.GetVoiceVirtual())
@@ -1592,7 +1598,7 @@ bool CommandPost::Update(float fDeltaTime)
             {
                 mSoundTransition.Stop(true);
                 mSoundTransitionProps = mClass->mSoundCharge;
-                const PblVector3* pPos = (const PblVector3*)GetMatrix().m[3];
+                const PblVector3* pPos = &GetMatrix().GetTranslation();
                 mSoundTransition.Play(&mSoundTransitionProps, pPos, 0, true);
             }
             Team* pTeam = Team::sTeams[GetGameObject()->mTeam];

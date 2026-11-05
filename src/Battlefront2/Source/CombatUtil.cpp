@@ -121,7 +121,7 @@ namespace
 
     inline const PblVector3& GetPosition(const GameObject* pObj)
     {
-        return static_cast<const CollisionObject*>(pObj)->GetPosition();
+        return ((const CollisionObject*)pObj)->GetPosition();
     }
 
     inline int GetHealthType(const GameObject* pObj)
@@ -167,7 +167,7 @@ namespace
 
     inline const Damageable* GetDamageable(const GameObject* pObj)
     {
-        return static_cast<const Damageable*>(pObj);
+        return (const Damageable*)pObj;
     }
 
     bool IsTargetable(const GameObject* pObj)
@@ -177,7 +177,7 @@ namespace
 
     inline int GetFlyerState(const GameObject* pObj)
     {
-        return static_cast<const EntityFlyer*>(pObj)->mState;
+        return ((const EntityFlyer*)pObj)->mState;
     }
 
     inline bool EntityIsRtti(const GameObject* pObj, unsigned int uRtti)
@@ -1788,7 +1788,7 @@ bool CombatUtil::CanTurretFaceDisturbance(const Controllable* pMe, const Mounted
     vDelta.x = vPos.x - vTurret.x;
     vDelta.y = vPos.y - vTurret.y;
     vDelta.z = vPos.z - vTurret.z;
-    PblVector3 vLocal = AIUtil::UnrotateVector(static_cast<const EntityGeometry&>(*pObj).GetMatrix(), vDelta);
+    PblVector3 vLocal = AIUtil::UnrotateVector(((const EntityGeometry&)(*pObj)).GetMatrix(), vDelta);
     float fYaw = atan2f(vLocal.x, vLocal.z);
     if (fYaw >= pClass->mMinYaw && pClass->mMaxYaw >= fYaw)
     {
@@ -1813,9 +1813,9 @@ bool CombatUtil::CanFaceDisturbance(const GameObject* pObj, const PblVector3& vP
         return false;
     }
 
-    const EntityBuildingArmed* pBuilding = static_cast<const EntityBuildingArmed*>(pObj);
+    const EntityBuildingArmed* pBuilding = (const EntityBuildingArmed*)pObj;
     const EntityBuildingArmedClass* pClass =
-        static_cast<const EntityBuildingArmedClass*>(pBuilding->GetEntityClass());
+        (const EntityBuildingArmedClass*)pBuilding->GetEntityClass();
     for (int i = 0; i < 8; ++i)
     {
         const MountedTurretClass* pTurretClass = pClass->GetTurretClass(i);
@@ -1863,7 +1863,7 @@ void SendDamageEvent(const Controllable* pOwner, const GameObject* pTarget, cons
         {
             pRider = pRider->mCharacter->GetControllable();
         }
-        UnitController* pCtrl = static_cast<UnitController*>(pRider->mCtrl);
+        UnitController* pCtrl = (UnitController*)pRider->mCtrl;
         if (pCtrl && pRider->mPlayerId < 0)
         {
             AI::EventInfo_Damaged info(pOwner->mCharacter, true, pOwner->GetMatrix().GetTranslation(), 0.0f, false);

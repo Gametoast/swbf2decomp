@@ -131,7 +131,7 @@ TeamAssist::TeamAssist(TeamAssist* pNext, int type, Character* pRequestor, float
     }
     if (pControllable)
     {
-        mRequestor = static_cast<Trackable*>(pControllable)->GetGameObject();
+        mRequestor = ((Trackable*)pControllable)->GetGameObject();
         mTeamMask = 1 << pRequestor->mTeamNumber;
         TargetManager::AddMarker(mRequestor, 0, sMarkerTexture[type], 5.0f, mTeamMask, sColorHash, false, true, true, 0.0f);
         AI::VOHelper::Play((AI::VOType)(AI::VOT_TA_First + type), mRequestor, 0,

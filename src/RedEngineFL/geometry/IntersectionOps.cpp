@@ -409,7 +409,7 @@ bool geo::Overlap3D::Op(const geo::Frustum& rFrustum, const geo::SphereBoundedPo
     {
         return false;
     }
-    return geo::Overlap3D::Op(rFrustum, static_cast<const geo::BasePoly3D&>(rPoly));
+    return geo::Overlap3D::Op(rFrustum, (const geo::BasePoly3D&)rPoly);
 }
 
 namespace geo

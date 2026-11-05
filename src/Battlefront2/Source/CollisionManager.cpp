@@ -1267,9 +1267,9 @@ void CollisionManager::UpdateRestricted(PblList<CollisionObject>& aList, int aTy
     data.mLength = 0;
     Restrictor restrictor(10);
 
-    int numCams = CameraManager::Instance()->GetNumCameras();
     int numStoredMatrices = 0;
     int numStoredObjects = 0;
+    int numCams = CameraManager::Instance()->GetNumCameras();
     for (int i = 0; i < numCams; ++i)
     {
         camPos[i] = CameraManager::Instance()->GetCamera(i)->GetMatrix().GetTranslation();
@@ -1349,7 +1349,7 @@ void CollisionManager::UpdateRestricted(PblList<CollisionObject>& aList, int aTy
                                       &data);
             }
 
-            for (int i = 0; i < 3; ++i)
+            for (int i = 0; i < CollisionObject::kNumLastCollided; ++i)
             {
                 if (i >= data.mLength)
                 {

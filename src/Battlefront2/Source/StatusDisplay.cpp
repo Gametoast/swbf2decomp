@@ -28,7 +28,7 @@ RedInterfaceScreen* GetInterfaceView(int iView);
 
 static inline bool IsFlyerAutoCorrecting(const Controllable* pControllable)
 {
-    return static_cast<const EntityFlyer*>(pControllable)->mFlyerAutoCorrectingToStayInBattlefield;
+    return ((const EntityFlyer*)pControllable)->mFlyerAutoCorrectingToStayInBattlefield;
 }
 
 namespace GameVoiceChat

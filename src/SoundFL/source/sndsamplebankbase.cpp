@@ -332,7 +332,7 @@ SampleBankBase* __cdecl SampleBankBase::LoadBank(PblFileChunk& chunk, char const
         {
         case 0x5E262256u:
         case 0x9A644D15u:
-            pBank = static_cast<SampleBank*>(LoadBank(child, pcName, bFirstOnly, uiBaseHashID));
+            pBank = (SampleBank*)LoadBank(child, pcName, bFirstOnly, uiBaseHashID);
             if (bFirstOnly)
             {
                 return pBank;

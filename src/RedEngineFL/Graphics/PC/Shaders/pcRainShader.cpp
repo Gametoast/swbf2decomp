@@ -267,22 +267,22 @@ void pcRainShader::_Init(unsigned int uiFlags,
 void pcRainShader::_InitPipelineFuncArray()
 {
     GetStateFuncArray[PIPELINE_FIXED] =
-        static_cast<GetStateFuncT>(&pcRainShader::GetState_Fixed);
+        (GetStateFuncT)(&pcRainShader::GetState_Fixed);
     BeginFuncArray[PIPELINE_FIXED] =
-        static_cast<BeginFuncT>(&pcRainShader::Begin_Fixed);
+        (BeginFuncT)(&pcRainShader::Begin_Fixed);
     EndFuncArray[PIPELINE_FIXED] =
-        static_cast<EndFuncT>(&pcRainShader::End_Fixed);
+        (EndFuncT)(&pcRainShader::End_Fixed);
     RenderFuncArray[PIPELINE_FIXED] =
-        static_cast<RenderFuncT>(&pcRainShader::Render_Fixed);
+        (RenderFuncT)(&pcRainShader::Render_Fixed);
 
     GetStateFuncArray[PIPELINE_PROG1] =
-        static_cast<GetStateFuncT>(&pcRainShader::GetState_Prog1);
+        (GetStateFuncT)(&pcRainShader::GetState_Prog1);
     BeginFuncArray[PIPELINE_PROG1] =
-        static_cast<BeginFuncT>(&pcRainShader::Begin_Prog1);
+        (BeginFuncT)(&pcRainShader::Begin_Prog1);
     EndFuncArray[PIPELINE_PROG1] =
-        static_cast<EndFuncT>(&pcRainShader::End_Prog1);
+        (EndFuncT)(&pcRainShader::End_Prog1);
     RenderFuncArray[PIPELINE_PROG1] =
-        static_cast<RenderFuncT>(&pcRainShader::Render_Prog1);
+        (RenderFuncT)(&pcRainShader::Render_Prog1);
 }
 
 // FUNCTION: SWBF2 0x00705420

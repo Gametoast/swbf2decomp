@@ -309,7 +309,7 @@ void __cdecl Sound::FireForget::InactiveCallback(const VoiceVirtual* const pVoic
 // FUNCTION: SWBF2 0x0073af80
 void __cdecl Sound::VoiceVirtualRelease(VoiceVirtual* pVoice)
 {
-    FireForget* pThis = static_cast<FireForget*>(pVoice);
+    FireForget* pThis = (FireForget*)pVoice;
     pThis->SetStolenCallback(0, 0);
     pVoice->SetInactiveCallback(&FireForget::InactiveCallback, pVoice);
 }
@@ -670,7 +670,7 @@ void __cdecl Sound::ParamSetTrigger(Sound* pSound, float fValue)
     }
     else if (pSound->SourceTransport::GetPlayState() == SourceTransport::playState_playing)
     {
-        pSound->SourceBus::Stop(static_cast<SourceTransport*>(pSound));
+        pSound->SourceBus::Stop((SourceTransport*)pSound);
         pSound->VoiceVirtual::Stop();
     }
 }

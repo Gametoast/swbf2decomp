@@ -28,7 +28,7 @@ namespace
 
     inline const PblMatrix& GameObjectGetMatrix(const GameObject* pObj)
     {
-        return static_cast<const CollisionObject&>(*pObj).GetMatrix();
+        return ((const CollisionObject&)(*pObj)).GetMatrix();
     }
 
     inline const PblVector3& GameObjectGetVelocity(const GameObject* pObj)

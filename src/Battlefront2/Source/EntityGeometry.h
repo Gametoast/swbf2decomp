@@ -85,6 +85,7 @@ class EntityGeometryClass : public EntityClass,
                             public FoleyFXColliderClass
 {
 public:
+    static const int kMaxChunks = 10;
 
     struct HitLocationData
     {
@@ -126,15 +127,15 @@ public:
     static PblHash rttiHashEntityGeometryClass;
     static const char rttiNameEntityGeometryClass[];
 
-    ChunkDescriptor* mChunkDescriptors[10];
-    CollisionModel* mFullChunkCollisions[10];
-    float mInitialChunkSpeed[10];
-    float mChunkVelocityFactor[10];
-    float mChunkUpFactor[10];
+    ChunkDescriptor* mChunkDescriptors[kMaxChunks];
+    CollisionModel* mFullChunkCollisions[kMaxChunks];
+    float mInitialChunkSpeed[kMaxChunks];
+    float mChunkVelocityFactor[kMaxChunks];
+    float mChunkUpFactor[kMaxChunks];
     bool m_bDynamicLighting;
     float mMaxShadowLength;
     float _fPriorityMod;
-    unsigned int mChunkAttachPoints[10];
+    unsigned int mChunkAttachPoints[kMaxChunks];
     GameModel* mModel;
     int mLODClass;
     CollisionModel mCollisionModel;

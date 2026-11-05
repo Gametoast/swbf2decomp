@@ -661,31 +661,31 @@ void pcWaterShader::_Init(unsigned int uiFlags,
 void pcWaterShader::_InitPipelineFuncArray()
 {
     GetStateFuncArray[PIPELINE_FIXED] =
-        static_cast<GetStateFuncT>(&pcWaterShader::GetState_Fixed);
+        (GetStateFuncT)(&pcWaterShader::GetState_Fixed);
     BeginFuncArray[PIPELINE_FIXED] =
-        static_cast<BeginFuncT>(&pcWaterShader::Begin_Fixed);
+        (BeginFuncT)(&pcWaterShader::Begin_Fixed);
     EndFuncArray[PIPELINE_FIXED] =
-        static_cast<EndFuncT>(&pcWaterShader::End_Fixed);
+        (EndFuncT)(&pcWaterShader::End_Fixed);
     RenderFuncArray[PIPELINE_FIXED] =
-        static_cast<RenderFuncT>(&pcWaterShader::Render_Fixed);
+        (RenderFuncT)(&pcWaterShader::Render_Fixed);
 
     GetStateFuncArray[PIPELINE_PROG1] =
-        static_cast<GetStateFuncT>(&pcWaterShader::GetState_Prog1);
+        (GetStateFuncT)(&pcWaterShader::GetState_Prog1);
     BeginFuncArray[PIPELINE_PROG1] =
-        static_cast<BeginFuncT>(&pcWaterShader::Begin_Prog1);
+        (BeginFuncT)(&pcWaterShader::Begin_Prog1);
     EndFuncArray[PIPELINE_PROG1] =
-        static_cast<EndFuncT>(&pcWaterShader::End_Prog1);
+        (EndFuncT)(&pcWaterShader::End_Prog1);
     RenderFuncArray[PIPELINE_PROG1] =
-        static_cast<RenderFuncT>(&pcWaterShader::Render_Prog1);
+        (RenderFuncT)(&pcWaterShader::Render_Prog1);
 
     GetStateFuncArray[PIPELINE_PROG2] =
-        static_cast<GetStateFuncT>(&pcWaterShader::GetState_Prog2);
+        (GetStateFuncT)(&pcWaterShader::GetState_Prog2);
     BeginFuncArray[PIPELINE_PROG2] =
-        static_cast<BeginFuncT>(&pcWaterShader::Begin_Prog2);
+        (BeginFuncT)(&pcWaterShader::Begin_Prog2);
     EndFuncArray[PIPELINE_PROG2] =
-        static_cast<EndFuncT>(&pcWaterShader::End_Prog2);
+        (EndFuncT)(&pcWaterShader::End_Prog2);
     RenderFuncArray[PIPELINE_PROG2] =
-        static_cast<RenderFuncT>(&pcWaterShader::Render_Prog2);
+        (RenderFuncT)(&pcWaterShader::Render_Prog2);
 }
 
 // FUNCTION: SWBF2 0x0070ae40

@@ -199,7 +199,7 @@ public:
 // FUNCTION: SWBF2 0x005f7240
 inline GameObject* Ordnance::GetOwner() const
 {
-    return static_cast<GameObject*>(mOwner);
+    return (GameObject*)mOwner;
 }
 
 // FUNCTION: SWBF2 0x005f71a0

@@ -38,8 +38,8 @@ public:
 
     AimerClass mAimerClass[4];
     WeaponClass* mWeaponClass[4];
-    WeaponAmmoDesc mWeaponAmmo[4];
-    int mWeaponChannel[4];
+    WeaponAmmoDesc mWeaponAmmo[kMaxWeapons];
+    int mWeaponChannel[kMaxWeapons];
     int mWeaponCount;
     CameraTrackSetting mCameraSettings;
     PblVector3 mMountPos;
@@ -185,8 +185,8 @@ public:
     PblMatrix mAimMatrix;
     PblMatrix mRootMatrix;
     Aimer* mAimer[4];
-    Weapon* mWeapon[4];
-    int mWeaponIndex[2];
+    Weapon* mWeapon[kMaxWeapons];
+    int mWeaponIndex[kNumWeaponChannels];
     float mPitch;
     float mOmegaPitch;
     float mYaw;

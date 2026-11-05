@@ -151,7 +151,7 @@ public:
 // FUNCTION: SWBF2 0x00543f40
 inline HUD::ElementGroup::ElementGroup(const char* const pName, Factory::ItemCallback pCallback,
                                 void* const pUserData)
-    : HUD::ElementGroupBase(*static_cast<RedGroupElement*>(this), pName, pCallback, pUserData)
+    : HUD::ElementGroupBase(*(RedGroupElement*)this, pName, pCallback, pUserData)
 {
     RedGroupElement::Enable(false);
 }

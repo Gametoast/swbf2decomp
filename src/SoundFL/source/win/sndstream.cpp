@@ -183,7 +183,7 @@ void Stream::Update(float fDeltaTime)
         if (Source2D3D::Get3DMode())
         {
             rRenderer.Source3D::CopyParameters(*this);
-            rRenderer.Source2D3D::Set3DMode(Get3DMode());
+            mRenderer[i].Source2D3D::Set3DMode(Get3DMode());
         }
     }
 

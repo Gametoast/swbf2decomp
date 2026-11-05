@@ -212,7 +212,7 @@ bool Trackable::CheckFirstPerson(int iPlayer) const
             }
             if (iPlayer >= 0)
             {
-                if (NetGame::IsEnabled() && !NetGame::IsClient() &&
+                if (NetGame::IsEnabled() && !(netEnabledNext && netClientActive) &&
                     !(NetGame::IsHost() && NetGame::IsOneWorld() && !NetGame::IsDedicated()))
                 {
                     return NetGame::IsCockpitCam(iPlayer);

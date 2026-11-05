@@ -209,7 +209,7 @@ void SoundStream::Properties::Read(PblFileChunk& chunk)
             for (PblListSingle::Node* pNode = smPropertyList.mHead.mNext;
                  pNode != &smPropertyList.mHead; pNode = pNode->mNext)
             {
-                Properties* const pParent = static_cast<Properties*>(pNode->GetObjectA(
+                Properties* const pParent = (Properties*)(pNode->GetObjectA(
                     &smPropertyList, offsetof(Properties, mNode)));
                 if (pParent->mHashID != uiParentID)
                 {
@@ -275,7 +275,7 @@ SoundStream::FireForget* __cdecl SoundStream::GetFireForget(const unsigned int s
     {
         return 0;
     }
-    FireForget* const ff = static_cast<FireForget*>(list.GetFirst()->GetObjectA(
+    FireForget* const ff = (FireForget*)(list.GetFirst()->GetObjectA(
         &list, offsetof(FireForget, mNode)));
     FreeFireForget(streamIndex, ff);
     return ff;
@@ -394,7 +394,7 @@ SoundStream::FireForget* __cdecl SoundStream::AllocFireForget(const unsigned int
                                                               const float priority, const bool is3D)
 {
     PblListDoubleSorted& list = smQueue[streamIndex];
-    FireForget* ff = static_cast<FireForget*>(smFree.GetFirst()->GetObjectA(
+    FireForget* ff = (FireForget*)(smFree.GetFirst()->GetObjectA(
         &smFree, offsetof(FireForget, mNode)));
 
     PblListDoubleSorted::Itor itor(list);
@@ -405,7 +405,7 @@ SoundStream::FireForget* __cdecl SoundStream::AllocFireForget(const unsigned int
         {
             break;
         }
-        FireForget* const queued = static_cast<FireForget*>(node->GetObjectA(
+        FireForget* const queued = (FireForget*)(node->GetObjectA(
             &list, offsetof(FireForget, mNode)));
         queued->mNode.mSortValue = queued->mProperties->CalculatePriority(&queued->mPos,
                                                                        &queued->mVel);
@@ -433,7 +433,7 @@ SoundStream::FireForget* __cdecl SoundStream::AllocFireForget(const unsigned int
                 node = node->GetPrevious(&list);
             }
         }
-        FireForget* const drop = static_cast<FireForget*>(node->GetObjectA(
+        FireForget* const drop = (FireForget*)(node->GetObjectA(
             &list, offsetof(FireForget, mNode)));
         FreeFireForget(streamIndex, drop);
     }

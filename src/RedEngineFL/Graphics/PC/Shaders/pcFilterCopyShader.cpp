@@ -401,22 +401,22 @@ void pcFilterCopyShader::_Init(unsigned int uiFlags,
 void pcFilterCopyShader::_InitPipelineFuncArray()
 {
     GetStateFuncArray[PIPELINE_FIXED] =
-        static_cast<GetStateFuncT>(&pcFilterCopyShader::GetState_Fixed);
+        (GetStateFuncT)(&pcFilterCopyShader::GetState_Fixed);
     BeginFuncArray[PIPELINE_FIXED] =
-        static_cast<BeginFuncT>(&pcFilterCopyShader::Begin_Fixed);
+        (BeginFuncT)(&pcFilterCopyShader::Begin_Fixed);
     EndFuncArray[PIPELINE_FIXED] =
-        static_cast<EndFuncT>(&pcFilterCopyShader::End_Fixed);
+        (EndFuncT)(&pcFilterCopyShader::End_Fixed);
     RenderFuncArray[PIPELINE_FIXED] =
-        static_cast<RenderFuncT>(&pcFilterCopyShader::Render_Fixed);
+        (RenderFuncT)(&pcFilterCopyShader::Render_Fixed);
 
     GetStateFuncArray[PIPELINE_PROG1] =
-        static_cast<GetStateFuncT>(&pcFilterCopyShader::GetState_Prog1);
+        (GetStateFuncT)(&pcFilterCopyShader::GetState_Prog1);
     BeginFuncArray[PIPELINE_PROG1] =
-        static_cast<BeginFuncT>(&pcFilterCopyShader::Begin_Prog1);
+        (BeginFuncT)(&pcFilterCopyShader::Begin_Prog1);
     EndFuncArray[PIPELINE_PROG1] =
-        static_cast<EndFuncT>(&pcFilterCopyShader::End_Prog1);
+        (EndFuncT)(&pcFilterCopyShader::End_Prog1);
     RenderFuncArray[PIPELINE_PROG1] =
-        static_cast<RenderFuncT>(&pcFilterCopyShader::Render_Prog1);
+        (RenderFuncT)(&pcFilterCopyShader::Render_Prog1);
 }
 
 // FUNCTION: SWBF2 0x00710420

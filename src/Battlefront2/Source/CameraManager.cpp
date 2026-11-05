@@ -59,7 +59,7 @@ typedef const PblVector3& (__fastcall *ObjectVelocityFn)(GameObject* pThis, void
 typedef Controllable* (__fastcall *ObjectControllableFn)(GameObject* pThis, void*);
 static CollisionObject* GetObjectCollision(GameObject* pObject)
 {
-    return static_cast<CollisionObject*>(pObject);
+    return (CollisionObject*)pObject;
 }
 
 // SYNTHETIC: SWBF2 0x00402370
@@ -311,6 +311,19 @@ bool CameraManager::Update(float fDeltaTime)
 {
     if (netIsLateTurn)
     {
+        return true;
+    }
+
+    if (!mCurGameCamera)
+    {
+        if (NetGame::IsEnabled() && netIsLocalTurn)
+        {
+            for (mUpdatedCameraId = 0; mUpdatedCameraId < m_iNumCam; mUpdatedCameraId++)
+            {
+                cameraInterpolator[mUpdatedCameraId].SetNext(0, mRedCamera[mUpdatedCameraId]);
+            }
+        }
+        mUpdatedCameraId = 0;
         return true;
     }
 

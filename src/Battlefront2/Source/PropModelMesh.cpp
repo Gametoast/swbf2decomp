@@ -694,14 +694,14 @@ PropObject* PropModelMesh::CreateObject(float x, float z, float rotation)
     {
         if (mType == PMM_GRASS)
         {
-            mRenderObj.mGrassClass = static_cast<GrassPatchClass*>(EntityClass::Find(mHash));
+            mRenderObj.mGrassClass = (GrassPatchClass*)EntityClass::Find(mHash);
             mRenderObj.mGrassClass->Init();
             mMaxDist = mRenderObj.mGrassClass->mBoundingRadius * mScale + mGeometryMaxDist * 1.45f;
             mYOffset = 0.0f;
         }
         else if (mType == PMM_LEAF)
         {
-            mRenderObj.mLeafClass = static_cast<LeafPatchClass*>(EntityClass::Find(mHash));
+            mRenderObj.mLeafClass = (LeafPatchClass*)EntityClass::Find(mHash);
             mRenderObj.mLeafClass->Init();
             mMaxDist = mRenderObj.mLeafClass->mBoundingRadius * mScale + mGeometryMaxDist * 1.45f;
             mYOffset = 0.0f;
@@ -722,7 +722,8 @@ PropObject* PropModelMesh::CreateObject(float x, float z, float rotation)
 // FUNCTION: SWBF2 0x0062d330
 void PropModelMesh::SetupMatrix(PblMatrix& matrix, float rotation)
 {
-    const PblVector3 vOrigin = matrix.GetTranslation();
+    const PblVector3 vTrans = matrix.GetTranslation();
+    const PblVector3 vOrigin = vTrans;
     const float x = vOrigin.x;
     const float z = vOrigin.z;
     PblVector3 vNormal(0.0f, 1.0f, 0.0f);

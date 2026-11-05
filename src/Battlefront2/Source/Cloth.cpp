@@ -268,6 +268,7 @@ void ClothData::_Read(PblFileChunk& chunk)
     }
 }
 
+
 // FUNCTION: SWBF2 0x00459ab0
 EntityClothClass::EntityClothClass(unsigned int uHash)
     : EntityClass(uHash)

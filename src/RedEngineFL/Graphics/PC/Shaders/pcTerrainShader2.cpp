@@ -786,21 +786,21 @@ void pcTerrainShader2::_InitNoiseMap(int iIndex, unsigned int uiHash,
 void pcTerrainShader2::_InitPipelineFuncArray()
 {
     GetStateFuncArray[PIPELINE_FIXED] =
-        static_cast<GetStateFuncT>(&pcTerrainShader2::GetState_Fixed);
+        (GetStateFuncT)(&pcTerrainShader2::GetState_Fixed);
     BeginFuncArray[PIPELINE_FIXED] =
-        static_cast<BeginFuncT>(&pcTerrainShader2::Begin_Fixed);
+        (BeginFuncT)(&pcTerrainShader2::Begin_Fixed);
     EndFuncArray[PIPELINE_FIXED] =
-        static_cast<EndFuncT>(&pcTerrainShader2::End_Fixed);
+        (EndFuncT)(&pcTerrainShader2::End_Fixed);
     RenderFuncArray[PIPELINE_FIXED] =
-        static_cast<RenderFuncT>(&pcTerrainShader2::Render_Fixed);
+        (RenderFuncT)(&pcTerrainShader2::Render_Fixed);
     GetStateFuncArray[PIPELINE_PROG1] =
-        static_cast<GetStateFuncT>(&pcTerrainShader2::GetState_Prog1);
+        (GetStateFuncT)(&pcTerrainShader2::GetState_Prog1);
     BeginFuncArray[PIPELINE_PROG1] =
-        static_cast<BeginFuncT>(&pcTerrainShader2::Begin_Prog1);
+        (BeginFuncT)(&pcTerrainShader2::Begin_Prog1);
     EndFuncArray[PIPELINE_PROG1] =
-        static_cast<EndFuncT>(&pcTerrainShader2::End_Prog1);
+        (EndFuncT)(&pcTerrainShader2::End_Prog1);
     RenderFuncArray[PIPELINE_PROG1] =
-        static_cast<RenderFuncT>(&pcTerrainShader2::Render_Prog1);
+        (RenderFuncT)(&pcTerrainShader2::Render_Prog1);
 }
 
 // FUNCTION: SWBF2 0x006fe2d0

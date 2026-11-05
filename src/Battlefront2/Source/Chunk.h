@@ -123,6 +123,7 @@ public:
 class ChunkCluster : public RedSceneObject
 {
 public:
+    static const int kMaxChunks = 10;
     ChunkCluster();
     virtual ~ChunkCluster();
     virtual void Render(unsigned char ucViewport, float fDist, unsigned int uiFlags);
@@ -135,7 +136,7 @@ public:
     bool Update(float fDeltaTime);
 
     int mID;
-    Chunk mChunks[10];
+    Chunk mChunks[kMaxChunks];
     EntityGeometryClass* mParentClass;
 };
  
@@ -147,6 +148,7 @@ public:
 class ChunkClusterManager : public Thread
 {
 public:
+    static const int kMaxClusters = 8;
     ChunkClusterManager();
     virtual ~ChunkClusterManager();
     virtual bool Update(float fDeltaTime);
@@ -161,7 +163,7 @@ public:
     static ChunkCluster* GetClusterByID(unsigned char ucID, bool bArg);
 
     unsigned char mOldestChunkCluster;
-    ChunkCluster mChunkClusters[8];
+    ChunkCluster mChunkClusters[kMaxClusters];
 
     static ChunkClusterManager* sInstance;
     static ChunkClusterManager* sHostInstance;

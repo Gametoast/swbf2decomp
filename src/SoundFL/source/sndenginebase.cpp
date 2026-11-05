@@ -66,7 +66,7 @@ MemoryBitmap EngineBase::smSoundRAMAllocator;
 
 // GLOBAL: SWBF2 0x01e296a8
 // EngineBase::smListeners
-Listener EngineBase::smListeners[4];
+Listener EngineBase::smListeners[kMaxListeners];
 
 // FUNCTION: SWBF2 0x00733ea0
 template <>
@@ -114,7 +114,7 @@ void Allocator<VoiceBase>::operator delete(void* p, unsigned int uiSize)
 // FUNCTION: SWBF2 0x00734050
 Listener* EngineBase::GetFreeListener()
 {
-    for (unsigned int i = 0; i < 4; i++)
+    for (unsigned int i = 0; i < kMaxListeners; i++)
     {
         if (!smListeners[i].Enabled())
         {
@@ -211,7 +211,7 @@ void EngineBase::Update(float fDeltaTime, bool b)
         smTimeElapsed += fDeltaTime;
         if (b)
         {
-            for (unsigned int i = 0; i < 4; i++)
+            for (unsigned int i = 0; i < kMaxListeners; i++)
             {
                 if (smListeners[i].Enabled())
                 {

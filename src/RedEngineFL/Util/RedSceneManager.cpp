@@ -1092,10 +1092,10 @@ void RedSceneManager::_RenderTransparentObjects(unsigned int uiFlags)
     typedef PblHeap<RedSceneObject*, float> TransparentHeap;
 
     mTransparentPhase = true;
-    while (!static_cast<TransparentHeap*>(mTransparentObjects)->IsEmpty())
+    while (!((TransparentHeap*)mTransparentObjects)->IsEmpty())
     {
-        RedSceneObject* pObject = static_cast<TransparentHeap*>(mTransparentObjects)->Get(0);
-        static_cast<TransparentHeap*>(mTransparentObjects)->Pop();
+        RedSceneObject* pObject = ((TransparentHeap*)mTransparentObjects)->Get(0);
+        ((TransparentHeap*)mTransparentObjects)->Pop();
         pObject->Render(0, 1.0f, pObject->_uiRenderFlags | uiFlags);
     }
     mTransparentPhase = false;

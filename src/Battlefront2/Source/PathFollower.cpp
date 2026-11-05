@@ -58,34 +58,34 @@ namespace
 
     inline const PblMatrix& EntityGetMatrix(Entity* pEntity)
     {
-        return static_cast<CollisionObject&>(static_cast<GameObject&>(*pEntity)).GetMatrix();
+        return ((CollisionObject&)((GameObject&)(*pEntity))).GetMatrix();
     }
 
     inline const PblVector3& EntityGetVelocity(Entity* pEntity)
     {
-        return static_cast<GameObject*>(pEntity)->GetVelocity();
+        return ((GameObject*)pEntity)->GetVelocity();
     }
 
-    inline float EntityFlyerGetRoll(Entity* pFlyer) { return static_cast<EntityFlyer*>(pFlyer)->mGetSpeedSpeed; }
+    inline float EntityFlyerGetRoll(Entity* pFlyer) { return ((EntityFlyer*)pFlyer)->mGetSpeedSpeed; }
 
-    inline PblVector3& EntitySoldierAiGetLastCollisionNormal(Entity* p) { return static_cast<EntitySoldier*>(p)->mAILastCollisionNormal; }
+    inline PblVector3& EntitySoldierAiGetLastCollisionNormal(Entity* p) { return ((EntitySoldier*)p)->mAILastCollisionNormal; }
     inline char EntitySoldierAiGetLastCollisionDirection(Entity* p)
     {
-        return static_cast<EntitySoldier*>(p)->mAILastCollisionDirection;
+        return ((EntitySoldier*)p)->mAILastCollisionDirection;
     }
     inline void EntitySoldierAiSetLastCollisionDirection(Entity* p, char cDir)
     {
-        static_cast<EntitySoldier*>(p)->mAILastCollisionDirection = cDir;
+        ((EntitySoldier*)p)->mAILastCollisionDirection = cDir;
     }
 
-    inline PblVector3& EntityDroidekaAiGetLastCollisionNormal(Entity* p) { return static_cast<EntityDroideka*>(p)->mAILastCollisionNormal; }
+    inline PblVector3& EntityDroidekaAiGetLastCollisionNormal(Entity* p) { return ((EntityDroideka*)p)->mAILastCollisionNormal; }
     inline char EntityDroidekaAiGetLastCollisionDirection(Entity* p)
     {
-        return static_cast<EntityDroideka*>(p)->mAILastCollisionDirection;
+        return ((EntityDroideka*)p)->mAILastCollisionDirection;
     }
     inline void EntityDroidekaAiSetLastCollisionDirection(Entity* p, char cDir)
     {
-        static_cast<EntityDroideka*>(p)->mAILastCollisionDirection = cDir;
+        ((EntityDroideka*)p)->mAILastCollisionDirection = cDir;
     }
 
     inline bool GameObjectIsRtti(GameObject* pObj, unsigned int uRtti)
@@ -119,7 +119,7 @@ bool FindBarrierCallback(const TreeGridObject* pObject, TreeGridCallbackData*, f
 // FUNCTION: SWBF2 0x00612510
 bool PathFinder::FindBarrierCallback(const TreeGridObject* pObject, TreeGridCallbackData*, float&)
 {
-    const Obstacle* pObstacle = static_cast<const Obstacle*>(pObject);
+    const Obstacle* pObstacle = (const Obstacle*)pObject;
     if (pObstacle->mNameHash == PathFinder::_FindBarrierNameHash)
     {
         PathFinder::_FindBarrierRet = const_cast<Obstacle*>(pObstacle);
@@ -647,7 +647,7 @@ void PathFollower::UpdateControllableMoving()
     if (mCtrl->mOwner->GetEntity()->IsRtti(EntityFlyer::rttiHashEntityFlyer))
     {
         Entity* pFlyer = mCtrl->mOwner->GetEntity();
-        const EntityFlyerClass* pClass = static_cast<const EntityFlyerClass*>(pFlyer->GetEntityClass());
+        const EntityFlyerClass* pClass = (const EntityFlyerClass*)pFlyer->GetEntityClass();
         float fTurn = fabsf(EntityFlyerGetRoll(pFlyer)) / pClass->GetTurnRate() * 2.0f;
         if (fTurn < 5.0f)
         {

@@ -70,7 +70,7 @@ int sTeamIndex = 1;
 
 static inline CollisionObject* GetCollisionObject(GameObject* pObject)
 {
-    return static_cast<CollisionObject*>(pObject);
+    return (CollisionObject*)pObject;
 }
 
 

@@ -277,22 +277,22 @@ void pcZPrepassShader::_Init(unsigned int uiFlags,
 void pcZPrepassShader::_InitPipelineFuncArray()
 {
     GetStateFuncArray[PIPELINE_FIXED] =
-        static_cast<GetStateFuncT>(&pcZPrepassShader::GetState_Fixed);
+        (GetStateFuncT)(&pcZPrepassShader::GetState_Fixed);
     BeginFuncArray[PIPELINE_FIXED] =
-        static_cast<BeginFuncT>(&pcZPrepassShader::Begin_Fixed);
+        (BeginFuncT)(&pcZPrepassShader::Begin_Fixed);
     EndFuncArray[PIPELINE_FIXED] =
-        static_cast<EndFuncT>(&pcZPrepassShader::End_Fixed);
+        (EndFuncT)(&pcZPrepassShader::End_Fixed);
     RenderFuncArray[PIPELINE_FIXED] =
-        static_cast<RenderFuncT>(&pcZPrepassShader::Render_Fixed);
+        (RenderFuncT)(&pcZPrepassShader::Render_Fixed);
 
     GetStateFuncArray[PIPELINE_PROG1] =
-        static_cast<GetStateFuncT>(&pcZPrepassShader::GetState_Prog1);
+        (GetStateFuncT)(&pcZPrepassShader::GetState_Prog1);
     BeginFuncArray[PIPELINE_PROG1] =
-        static_cast<BeginFuncT>(&pcZPrepassShader::Begin_Prog1);
+        (BeginFuncT)(&pcZPrepassShader::Begin_Prog1);
     EndFuncArray[PIPELINE_PROG1] =
-        static_cast<EndFuncT>(&pcZPrepassShader::End_Prog1);
+        (EndFuncT)(&pcZPrepassShader::End_Prog1);
     RenderFuncArray[PIPELINE_PROG1] =
-        static_cast<RenderFuncT>(&pcZPrepassShader::Render_Prog1);
+        (RenderFuncT)(&pcZPrepassShader::Render_Prog1);
 }
 
 // FUNCTION: SWBF2 0x00702c50

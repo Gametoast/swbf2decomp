@@ -481,7 +481,7 @@ void Chunk::Update(float fDeltaTime)
     else if (mPhysicsType != PHYSICS_SIMPLE_RIGID)
     {
         float fDamping = -mAngularDamping;
-        mAngularMomentum += mAngularMomentum * fDamping * fDeltaTime;
+        mAngularMomentum += fDamping * mAngularMomentum * fDeltaTime;
         mOmega = TransformCoord(mAngularMomentum, mInverseWorldInertiaTensor);
     }
 
@@ -497,7 +497,7 @@ void Chunk::Update(float fDeltaTime)
         q *= PblQuaternion(vSpin * fInv, fAngle);
     }
 
-    mVelocity += mOneOverMass * vForce * fDeltaTime;
+    mVelocity = mVelocity + mOneOverMass * vForce * fDeltaTime;
     if (mForceZeroYAxisVelocity)
     {
         const PblVector3& vUp = mMatrix.GetYAxis();
@@ -520,9 +520,9 @@ void Chunk::Update(float fDeltaTime)
     mInverseWorldInertiaTensor = rotationInverse * mInverseBodyInertiaTensor * rotation;
 
     CollisionObject* pHit = NULL;
-    PblVector3 vNormal;
     if (mNumTerrainCollisions > mMaxTerrainCollisions)
     {
+        PblVector3 vNormal;
         float fDist = CollisionManager::RayHit(vPos, PblVector3(0.0f, -1.0f, 0.0f), GetCollisionRadius() * 1.001f,
                                                pHit, &vNormal, NULL, 0, 0x90, false);
         if ((pHit && fDist < (mPhysicsType == PHYSICS_COCKPIT ? 0.3f : 0.75f)) || mPhysicsType == PHYSICS_STATIC ||
@@ -530,7 +530,7 @@ void Chunk::Update(float fDeltaTime)
         {
             RemoveFromCollisionManager();
             EntityGeometryClass* pClass = mParentCluster->mParentClass;
-            if (pClass && NetGame::IsEnabled() && !NetGame::IsClient())
+            if (pClass && NetGame::IsEnabled() && !(netEnabledNext && netClientActive))
             {
                 NetGame::CreateEvent_CorrectChunkCluster(mParentCluster, pClass, mID, (unsigned __int64)-1);
             }
@@ -551,6 +551,7 @@ void Chunk::Update(float fDeltaTime)
         float fHeight = RedTerrain::GetHoleHeight(vPos.x, vPos.z);
         if (fHeight > vPos.y + GetCollisionRadius())
         {
+            PblVector3 vNormal;
             pHit = NULL;
             CollisionManager::RayHit(vPos, PblVector3(0.0f, -1.0f, 0.0f), 256.0f, pHit, &vNormal, NULL, 0, 0x10,
                                      false);
@@ -605,7 +606,7 @@ bool Chunk::DoSimpleRigidCollision(const CollisionResult* pResult, CollisionObje
         if (fImpactSpeed > 0.0f)
         {
             FoleyFXCollider::CollisionCallback(pOther->GetCollisionType(),
-                                               static_cast<FoleyFXCollidee*>(pOther), &GetPosition());
+                                               (FoleyFXCollidee*)pOther, &GetPosition());
             PlayImpactEffects(&mMatrix.GetTranslation(), &vVelocity);
 
             if ((pOther->GetCollisionType() & (COLL_SOFT | COLL_RIGID)) && mMinDeathCollisionSpeed > 0.0f &&
@@ -830,7 +831,7 @@ ChunkCluster::ChunkCluster()
 // FUNCTION: SWBF2 0x00457b00
 ChunkCluster::~ChunkCluster()
 {
-    for (int i = 0; i < 10; i++)
+    for (int i = 0; i < kMaxChunks; i++)
     {
         if (mChunks[i].IsValid())
         {
@@ -845,7 +846,7 @@ void ChunkCluster::RecalculateCenterAndRadius()
     PblVector3 vCenter(0.0f, 0.0f, 0.0f);
     float fRadius = 0.0f;
     int iCount = 0;
-    for (int i = 0; i < 10; i++)
+    for (int i = 0; i < kMaxChunks; i++)
     {
         if (mChunks[i].IsValid())
         {
@@ -864,7 +865,7 @@ void ChunkCluster::RecalculateCenterAndRadius()
     float fInv = 1.0f / iCount;
     vCenter = fInv * vCenter;
 
-    for (int i = 0; i < 10; i++)
+    for (int i = 0; i < kMaxChunks; i++)
     {
         if (mChunks[i].IsValid())
         {
@@ -886,7 +887,7 @@ void ChunkCluster::RecalculateCenterAndRadius()
 // FUNCTION: SWBF2 0x00457ff0
 void ChunkCluster::AddChunk(ChunkDescriptor& desc)
 {
-    for (int i = 0; i < 10; i++)
+    for (int i = 0; i < kMaxChunks; i++)
     {
         if (!mChunks[i].IsValid())
         {
@@ -901,7 +902,7 @@ void ChunkCluster::AddChunk(ChunkDescriptor& desc)
 bool ChunkCluster::Update(float fDeltaTime)
 {
     bool bMoved = false;
-    for (int i = 0; i < 10; i++)
+    for (int i = 0; i < kMaxChunks; i++)
     {
         const bool bChunkMoving = mChunks[i].IsMoving();
         mChunks[i].Update(fDeltaTime);
@@ -973,7 +974,7 @@ void ChunkCluster::Render(unsigned char ucViewport, float fDist, unsigned int ui
         RedRenderer::SetStencilShadowZFail(fReach * fReach > fDist2);
     }
 
-    for (int i = 0; i < 10; i++)
+    for (int i = 0; i < kMaxChunks; i++)
     {
         if (mChunks[i].IsValid())
         {
@@ -986,7 +987,7 @@ void ChunkCluster::Render(unsigned char ucViewport, float fDist, unsigned int ui
 bool ChunkCluster::IsValid()
 {
     bool bValid = false;
-    for (int i = 0; i < 10; i++)
+    for (int i = 0; i < kMaxChunks; i++)
     {
         bValid |= mChunks[i].IsValid();
     }
@@ -997,7 +998,7 @@ bool ChunkCluster::IsValid()
 bool ChunkCluster::HasStaticChunks()
 {
     bool bStatic = false;
-    for (int i = 0; i < 10; ++i)
+    for (int i = 0; i < kMaxChunks; ++i)
     {
         if (mChunks[i].mIsValid)
         {
@@ -1011,7 +1012,7 @@ bool ChunkCluster::HasStaticChunks()
 void ChunkCluster::ClearChunks()
 {
     RemoveFromScene();
-    for (int i = 0; i < 10; ++i)
+    for (int i = 0; i < kMaxChunks; ++i)
     {
         mChunks[i].ClearAll();
     }
@@ -1078,10 +1079,10 @@ ChunkClusterManager::ChunkClusterManager()
     : mOldestChunkCluster(0)
 {
     ActivateThread(-10, PER_LOCAL_TURN);
-    for (int i = 0; i < 8; i++)
+    for (int i = 0; i < kMaxClusters; i++)
     {
         mChunkClusters[i].mID = -1;
-        for (unsigned char j = 0; j < 10; j++)
+        for (unsigned char j = 0; j < ChunkCluster::kMaxChunks; j++)
         {
             mChunkClusters[i].mChunks[j].mParentCluster = &mChunkClusters[i];
             mChunkClusters[i].mChunks[j].mID = j;
@@ -1125,7 +1126,7 @@ bool ChunkClusterManager::Destroy()
 // FUNCTION: SWBF2 0x00458800
 ChunkCluster* ChunkClusterManager::GetFreeCluster(bool bArg)
 {
-    for (int i = 0; i < 8; i++)
+    for (int i = 0; i < kMaxClusters; i++)
     {
         if (!sInstance->mChunkClusters[i].IsValid())
         {
@@ -1145,7 +1146,7 @@ ChunkCluster* ChunkClusterManager::GetFreeCluster(bool bArg)
 
     int iOldest = sInstance->mOldestChunkCluster;
     int i;
-    for (i = iOldest; i < 8; i++)
+    for (i = iOldest; i < kMaxClusters; i++)
     {
         if (!sInstance->mChunkClusters[i].HasStaticChunks())
         {
@@ -1185,7 +1186,7 @@ ChunkCluster* ChunkClusterManager::GetClusterByID(unsigned char ucID, bool bArg)
 {
     if (ucID < 8)
     {
-        for (int i = 0; i < 8; ++i)
+        for (int i = 0; i < kMaxClusters; ++i)
         {
             if (sInstance->mChunkClusters[i].mID == ucID)
             {
@@ -1208,7 +1209,7 @@ ChunkCluster* ChunkClusterManager::GetClusterByID(unsigned char ucID, bool bArg)
 // FUNCTION: SWBF2 0x00458920
 bool ChunkClusterManager::Update(float fDeltaTime)
 {
-    for (int i = 0; i < 8; i++)
+    for (int i = 0; i < kMaxClusters; i++)
     {
         PblValues::Record((char)i, PVT_MOVES_HIGH);
         mChunkClusters[i].Update(fDeltaTime);

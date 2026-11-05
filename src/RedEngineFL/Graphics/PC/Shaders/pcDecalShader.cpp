@@ -257,22 +257,22 @@ void pcDecalShader::_Init(unsigned int uiFlags,
 void pcDecalShader::_InitPipelineFuncArray()
 {
     GetStateFuncArray[PIPELINE_FIXED] =
-        static_cast<GetStateFuncT>(&pcDecalShader::GetState_Fixed);
+        (GetStateFuncT)(&pcDecalShader::GetState_Fixed);
     BeginFuncArray[PIPELINE_FIXED] =
-        static_cast<BeginFuncT>(&pcDecalShader::Begin_Fixed);
+        (BeginFuncT)(&pcDecalShader::Begin_Fixed);
     EndFuncArray[PIPELINE_FIXED] =
-        static_cast<EndFuncT>(&pcDecalShader::End_Fixed);
+        (EndFuncT)(&pcDecalShader::End_Fixed);
     RenderFuncArray[PIPELINE_FIXED] =
-        static_cast<RenderFuncT>(&pcDecalShader::Render_Fixed);
+        (RenderFuncT)(&pcDecalShader::Render_Fixed);
 
     GetStateFuncArray[PIPELINE_PROG1] =
-        static_cast<GetStateFuncT>(&pcDecalShader::GetState_Prog1);
+        (GetStateFuncT)(&pcDecalShader::GetState_Prog1);
     BeginFuncArray[PIPELINE_PROG1] =
-        static_cast<BeginFuncT>(&pcDecalShader::Begin_Prog1);
+        (BeginFuncT)(&pcDecalShader::Begin_Prog1);
     EndFuncArray[PIPELINE_PROG1] =
-        static_cast<EndFuncT>(&pcDecalShader::End_Prog1);
+        (EndFuncT)(&pcDecalShader::End_Prog1);
     RenderFuncArray[PIPELINE_PROG1] =
-        static_cast<RenderFuncT>(&pcDecalShader::Render_Prog1);
+        (RenderFuncT)(&pcDecalShader::Render_Prog1);
 }
 
 // FUNCTION: SWBF2 0x0070f720

@@ -46,9 +46,10 @@ void TerrainRenderable::_RenderLowRes(unsigned int uiFlags) const
     float fNear, fFar, fWidth, fHeight;
     pCurrent->GetFrustum(fNear, fFar, fWidth, fHeight);
     camera.SetZoom(fZoom);
-    camera.SetNearFarPlane((uiFlags & 0x200000 ? FLRenderer::GetNearPlane()
-                                               : FLRenderer::GetNearSceneFadeStart()) * fZoom,
-                           m_fFarTerrainMaxDistance);
+    float fFarPlane = m_fFarTerrainMaxDistance;
+    camera.SetNearFarPlane(fZoom * (uiFlags & 0x200000 ? FLRenderer::GetNearPlane()
+                                                       : FLRenderer::GetNearSceneFadeStart()),
+                           fFarPlane);
 
     int xStart = 0;
     int xEnd = m_iLowResPatchesPerDimension;

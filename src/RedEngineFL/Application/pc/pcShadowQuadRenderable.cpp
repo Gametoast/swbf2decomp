@@ -215,6 +215,7 @@ void pcShadowQuadRenderable::Render(int value)
     IDirect3DSurface9* pSavedDepth = RedRenderer::pcGetDepthTarget();
 
     RedTexture* target = (RedTexture*)m_pShadowTex;
+
     if (!target)
     {
         target = RedRenderer::pcGetBuffer(PC_BUFFER_SKY);
@@ -273,7 +274,7 @@ void pcShadowQuadRenderable::Render(int value)
                                    0, 0);
     RedDropShadowManager::Render(value | 0x200);
 
-    if (m_pShadowTex)
+    if (target == (RedTexture*)m_pShadowTex)
     {
         RECT source = { (int)left, (int)top, (int)right, (int)bottom };
         RECT dest = { 0, 0, (int)target->m_uiWidth, (int)target->m_uiHeight };

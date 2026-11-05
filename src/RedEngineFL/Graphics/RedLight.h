@@ -23,6 +23,7 @@ struct RedLightingState;
 class RedLight
 {
 public:
+    static const int kMaxDirectionalLights = 2;
 
     static void UpdateAllVisibility(const RedCamera* pCamera, unsigned int uiView);
 
@@ -173,10 +174,10 @@ public:
     static PblList<RedLight> s_VisibleSpotLightList;
     static PblList<RedLight> s_VisibleDirectionalLightList;
     static RedShadowRegionFactory* s_pShadowRegionFactory;
-    static RedDirectionalLight* m_sGlobalDirectionals[2];
+    static RedDirectionalLight* m_sGlobalDirectionals[kMaxDirectionalLights];
     static RedAmbientLight* m_sGlobalAmbient;
     static unsigned int m_sGlobalEnvMapHash;
-    static float m_sGlobalDirectionalFactor[2];
+    static float m_sGlobalDirectionalFactor[kMaxDirectionalLights];
 };
  
  

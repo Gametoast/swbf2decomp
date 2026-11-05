@@ -208,7 +208,7 @@ VOModifier GetModifiers(const GameObject* pTarget, const GameObject* pOther)
     {
     case AIUtil::ENTITY_SOLDIER:
     {
-        EntitySoldier* pSoldier = static_cast<EntitySoldier*>(const_cast<Entity*>(pTarget->GetEntity()));
+        EntitySoldier* pSoldier = (EntitySoldier*)(const_cast<Entity*>(pTarget->GetEntity()));
         if (pSoldier->GetTargetInfo()->mIsAiming)
         {
             modifiers.mMeInfo = VO_ME_IsZoomed;
@@ -610,7 +610,7 @@ AI::VOType AI::VOHelper::TypeStrToEnum(const char* pszType)
     {
         if (hash == VOTypeNames[i])
         {
-            return static_cast<VOType>(i);
+            return (VOType)i;
         }
     }
     return VOT_NONE;

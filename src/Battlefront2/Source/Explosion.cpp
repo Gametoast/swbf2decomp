@@ -534,7 +534,7 @@ void ExplosionClass::CreateExplosion(const PblVector3& aPos, const DamageOwner& 
         FLEffectClass* pEffectClass = mEffects[iEffect];
         if (pEffectClass && pEffectClass->mType == 1)
         {
-            static_cast<const ParticleEmitterClass*>(pEffectClass)->mAmbientSound.Play(&aPos, 0, false, true);
+            ((const ParticleEmitterClass*)pEffectClass)->mAmbientSound.Play(&aPos, 0, false, true);
         }
     }
 

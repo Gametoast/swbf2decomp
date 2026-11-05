@@ -195,18 +195,18 @@ Controllable* CommandFlyer::GetPassengerSlot(int)
             {
                 continue;
             }
-            Controllable* pThis = static_cast<Controllable*>(this);
+            Controllable* pThis = (Controllable*)this;
             Controllable* pCurrent = (pThis->mPilotType == PILOT_SELF ||
                                      (pThis->mPilotType == PILOT_VEHICLESELF && pThis->mPilot == pThis))
                                         ? 0 : pThis->mPilot;
-            if (pCurrent == static_cast<Controllable*>(pCraft) || pCraft->mPlayerId >= 0)
+            if (pCurrent == (Controllable*)pCraft || pCraft->mPlayerId >= 0)
             {
                 continue;
             }
-            pLast = static_cast<Controllable*>(pCraft);
-            if (!static_cast<Trackable*>(pCraft)->GetControllable())
+            pLast = (Controllable*)pCraft;
+            if (!((Trackable*)pCraft)->GetControllable())
             {
-                return static_cast<Controllable*>(pCraft);
+                return (Controllable*)pCraft;
             }
         }
         return pLast;
@@ -287,7 +287,7 @@ GameObject* GetPostObject(CommandPost* pPost)
 
 inline Damageable* GetDamageable(GameObject* pObject)
 {
-    return static_cast<Damageable*>(pObject);
+    return (Damageable*)pObject;
 }
 
 const GameObjectClass* GetGameObjectClass(GameObject* pObject)
@@ -297,7 +297,7 @@ const GameObjectClass* GetGameObjectClass(GameObject* pObject)
 
 inline const PblVector3& GetPosition(GameObject* pObject)
 {
-    return static_cast<CollisionObject*>(pObject)->GetPosition();
+    return ((CollisionObject*)pObject)->GetPosition();
 }
 
 inline int GetTeam(const GameObject* pObject)
@@ -307,7 +307,7 @@ inline int GetTeam(const GameObject* pObject)
 
 EntityFlyer* GetFlyer(Controllable* pControllable)
 {
-    return pControllable ? static_cast<EntityFlyer*>(pControllable) : 0;
+    return pControllable ? (EntityFlyer*)pControllable : 0;
 }
 
 bool GetFlyerAutoCorrectingToStayInBattlefield(const EntityFlyer* pFlyer)
@@ -322,22 +322,22 @@ const EntityFlyerClass* GetFlyerClass(const EntityFlyer* pFlyer)
 
 inline Controllable* GetSoldierControllable(Entity* pSoldier)
 {
-    return static_cast<Controllable*>(static_cast<EntitySoldier*>(pSoldier));
+    return (Controllable*)(EntitySoldier*)pSoldier;
 }
 
 inline const GameObjectClass* GetSoldierClass(Entity* pSoldier)
 {
-    return static_cast<EntitySoldier*>(pSoldier)->mClass;
+    return ((EntitySoldier*)pSoldier)->mClass;
 }
 
 int GetWeaponChannelByWeaponIndex(Entity* pSoldier, int iIndex)
 {
-    return static_cast<EntitySoldier*>(pSoldier)->GetWeaponChannelByWeaponIndex(iIndex);
+    return ((EntitySoldier*)pSoldier)->GetWeaponChannelByWeaponIndex(iIndex);
 }
 
 inline bool EnterControllable(Entity* pSoldier, Controllable* pControllable)
 {
-    return static_cast<EntitySoldier*>(pSoldier)->EnterControllable(pControllable);
+    return ((EntitySoldier*)pSoldier)->EnterControllable(pControllable);
 }
 
 inline const WeaponClass* GetWeaponClass(Weapon* pWeapon)
@@ -1000,7 +1000,7 @@ void Character::Spawn(const PblMatrix& mMatrix)
     if (iPlayerId >= 0 && NetGame::IsEnabled())
     {
         NetGame::SetSpawning(iPlayerId, false);
-        if (!NetGame::IsClient())
+        if (!(netEnabledNext && netClientActive))
         {
             NetGame::SetSpectator(iPlayerId, -1);
         }
@@ -1088,7 +1088,7 @@ void Character::Spawn(const PblMatrix& mMatrix)
             NetGame::DeclineHero(mTeamNumber, mPlayerId);
         }
     }
-    else if (!(NetGame::IsEnabled() && NetGame::IsClient()))
+    else if (!(NetGame::IsEnabled() && (netEnabledNext && netClientActive)))
     {
         if (mPlayerId != -1)
         {
@@ -1140,7 +1140,7 @@ void Character::Spawn(const PblMatrix& mMatrix)
 
     EventManager::CharacterEvent::mSpawn.Trigger(*this, sEventParam);
 
-    if (mPlayerId >= 0 && NetGame::IsEnabled() && !NetGame::IsClient())
+    if (mPlayerId >= 0 && NetGame::IsEnabled() && !(netEnabledNext && netClientActive))
     {
         mSpawnTime = NetComm::GetTime();
         NetGame::CreateEvent_UpdateInvincibility(this);
@@ -1517,7 +1517,7 @@ void Character::CheckOutOfBounds(float fDeltaTime)
         }
 
         EntityFlyer* pFlyer = pUnit->GetEntity()->IsRtti(EntityFlyer::rttiHashEntityFlyer)
-                            ? static_cast<EntityFlyer*>(pUnit) : 0;
+                            ? (EntityFlyer*)pUnit : 0;
         if (pFlyer && pFlyer->mClass->mGuidedMissile)
         {
             bGuidedMissile = true;
@@ -1767,7 +1767,7 @@ void Character::MakePlayer(int iTeam, const unsigned short* pName, int iPlayerId
     SelectClass(0);
     SelectPost(0);
     mDelayTimer = 0.0f;
-    GetPlayerStats().Reset();
+    GetPlayerStats(this).Reset();
     Respawn();
 }
 

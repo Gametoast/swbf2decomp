@@ -590,7 +590,7 @@ bool CollisionPrimitive::InitMeshCollision(const PblMatrix& matrix, const Collis
         EntitySoldier* pSoldier = NULL;
         if (pObject->GetEntity() && pObject->GetEntity()->IsRtti(EntitySoldier::rttiHashEntitySoldier))
         {
-            pSoldier = static_cast<EntitySoldier*>(pObject->GetEntity());
+            pSoldier = (EntitySoldier*)pObject->GetEntity();
         }
 
         float fRadius = pObject->GetCollisionRadius();

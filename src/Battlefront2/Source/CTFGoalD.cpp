@@ -21,7 +21,7 @@ inline int GameObjectTeam(const GameObject* pObject)
 
 inline const RedRegion* FlagHomeRegion(const GameObject* pFlag)
 {
-    return static_cast<const FlagItem*>(pFlag)->mHomeRegion;
+    return ((const FlagItem*)pFlag)->mHomeRegion;
 }
 
 inline const PblVector3& RegionPosition(const RedRegion* pRegion)
@@ -65,12 +65,12 @@ AI::GoalTarget::GoalTarget(const GameObject* pObject)
 AI::CTFGoalD::CTFGoalD(unsigned char uTeam, float fWeight, const GoalTarget& target)
     : AIGoal(AIGOAL_CTFDEFENSE, uTeam, fWeight)
 {
-    mFlag = static_cast<const GameObject*>(target.mGameObj);
-    if (!static_cast<const GameObject*>(mFlag))
+    mFlag = (const GameObject*)target.mGameObj;
+    if (!(const GameObject*)mFlag)
     {
         for (PblList<FlagItem>::Itor it(*FlagItem::sList); it; ++it)
         {
-            const GameObject* pFlag = reinterpret_cast<const GameObject*>(static_cast<FlagItem*>(it));
+            const GameObject* pFlag = reinterpret_cast<const GameObject*>((FlagItem*)it);
             if (GameObjectTeam(pFlag) == uTeam)
             {
                 mFlag = pFlag;

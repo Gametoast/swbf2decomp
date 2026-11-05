@@ -273,6 +273,7 @@ void RedStencilShadow::Render(const PblMatrix* pMatrix,
                               const PblMatrix** ppBoneMatrices,
                               const RedPose* pPose, bool bFlag) const
 {
+    PblMatrix aSkinMatrices[128];
     if (!GetShadowEnable())
     {
         return;
@@ -284,7 +285,6 @@ void RedStencilShadow::Render(const PblMatrix* pMatrix,
     ShadowRenderable::s_vProjectionUnlit = fLength * direction;
     ShadowRenderable::s_vProjectionLit = vLit;
 
-    PblMatrix aSkinMatrices[128];
     for (PblList<ShadowSegment>::Itor it(m_segmentList); it != m_segmentList.End(); ++it)
     {
         const PblMatrix* pWorld = pMatrix;

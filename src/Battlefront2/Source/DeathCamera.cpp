@@ -81,7 +81,7 @@ PblQuaternion Interpolate(const PblQuaternion& q0, const PblQuaternion& q1, floa
 
 static inline CollisionObject* GetCollisionObject(GameObject* pObject)
 {
-    return static_cast<CollisionObject*>(pObject);
+    return (CollisionObject*)pObject;
 }
 
 static const PblVector3& GetEyePoint(const Controllable* pUnit)

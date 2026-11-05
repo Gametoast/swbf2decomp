@@ -38,12 +38,12 @@ extern bool netHeroFirstUnlocked[3];
 
 static Trackable* GetTrackable(Controllable* pControllable)
 {
-    return static_cast<Trackable*>(pControllable);
+    return (Trackable*)pControllable;
 }
 
 static inline Damageable* GetDamageable(GameObject* pObject)
 {
-    return static_cast<Damageable*>(pObject);
+    return (Damageable*)pObject;
 }
 
 static float& CurHealth(Damageable* pDamageable)
@@ -486,7 +486,7 @@ EntityDefenseGridTurret* BonusManager::MakeNewAutoturret(const PblMatrix& matrix
     Entity* pEntity = pClass->Build(desc);
     if (pEntity)
     {
-        GameObject* pObject = static_cast<EntityDefenseGridTurret*>(pEntity);
+        GameObject* pObject = (EntityDefenseGridTurret*)pEntity;
         pObject->SetTeam(iTeam);
         pObject->SetPerceivedTeam(iTeam);
         pEntity->Init();

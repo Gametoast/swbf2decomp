@@ -164,7 +164,7 @@ void PassengerSlot::SetupCameraFOV(float& rFOV)
 
 // FUNCTION: SWBF2 0x0060f560
 PassengerSlot::PassengerSlot(GameObject* pParent, PassengerSlotClass* pClass, RedPose*)
-    : EntityEx(0, pClass), Controllable(pClass ? static_cast<ControllableClass*>(pClass) : 0, -1),
+    : EntityEx(0, pClass), Controllable(pClass ? (ControllableClass*)pClass : 0, -1),
       mPowerupTimer(0.0f), mParent(pParent), mClass(pClass)
 {
     mAimMatrix = mClass->mMountMatrix * mParent->GetMatrix();
@@ -229,13 +229,13 @@ void PassengerSlot::Init() {}
 // FUNCTION: SWBF2 0x0060f780
 ControllableClass* PassengerSlot::GetControllableClass()
 {
-    return mClass ? static_cast<ControllableClass*>(mClass) : 0;
+    return mClass ? (ControllableClass*)mClass : 0;
 }
 
 // FUNCTION: SWBF2 0x0060f760
 const ControllableClass* PassengerSlot::GetControllableClass() const
 {
-    return mClass ? static_cast<const ControllableClass*>(mClass) : 0;
+    return mClass ? (const ControllableClass*)mClass : 0;
 }
 
 // FUNCTION: SWBF2 0x0060f710

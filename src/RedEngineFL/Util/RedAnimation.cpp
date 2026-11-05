@@ -49,13 +49,13 @@ void RedAnimation::_ReadEvents(PblMemChunk& chunk)
     }
 
     _pEventBank = new ZephyrEventBank;
-    _pEventBank->Init(static_cast<short>(iNumAnims));
+    _pEventBank->Init((short)iNumAnims);
     char name[100];
     for (int i = 0; i < iNumAnims; ++i)
     {
         chunk.ReadString(name, sizeof(name));
         unsigned int uiAnimHash = PblHash(name);
-        short iNumEvents = static_cast<short>(chunk.Read32());
+        short iNumEvents = (short)chunk.Read32();
         const ZephyrAnim* pAnim = _pZephyrAnimBank->Find(uiAnimHash);
         int iNumFrames = pAnim->GetNumFrames();
         ZephyrEventList* pEvents = _pEventBank->New(uiAnimHash);
@@ -64,8 +64,8 @@ void RedAnimation::_ReadEvents(PblMemChunk& chunk)
         {
             int iFrame = chunk.Read32();
             chunk.ReadString(name, sizeof(name));
-            pEvents->AddEvent(static_cast<float>(iFrame) /
-                                  static_cast<float>(iNumFrames), PblHash(name));
+            pEvents->AddEvent((float)iFrame /
+                                  (float)iNumFrames, PblHash(name));
         }
     }
 }

@@ -40,12 +40,12 @@ namespace
 
     inline const PblVector3& GameObjectPosition(const GameObject* pObject)
     {
-        return static_cast<const CollisionObject&>(*pObject).GetPosition();
+        return ((const CollisionObject&)(*pObject)).GetPosition();
     }
 
     const PblMatrix& GameObjectMatrix(const GameObject* pObject)
     {
-        return static_cast<const CollisionObject&>(*pObject).GetMatrix();
+        return ((const CollisionObject&)(*pObject)).GetMatrix();
     }
 
 }
@@ -338,16 +338,14 @@ void NavigatorFollowTarget::UpdateFollowCrumbs()
     {
         if (pHim->mState == SoldierState::JET_HOVER)
         {
-            const bool bHover = pMe->mClass->mJetTypeHover;
-            if (bHover)
+            if ((bool)(pMe->mClass->mJetTypeHover))
             {
                 mOwner->SetJetJump(PblVector3(0.0f, 0.0f, 0.0f));
             }
         }
         if (pHim->mState == SoldierState::JET_JUMP)
         {
-            const bool bHover = pMe->mClass->mJetTypeHover;
-            if (!bHover)
+            if (!(bool)(pMe->mClass->mJetTypeHover))
             {
                 mOwner->SetJetJump(PblVector3(0.0f, 0.0f, 0.0f));
             }

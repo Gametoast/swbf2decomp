@@ -144,7 +144,7 @@ public:
 
     Layer* FindLayerByIndex(unsigned int uIndex) const
     {
-        return static_cast<Layer*>(mLayerList.FindByIndex(uIndex)->GetObjectA(
+        return (Layer*)(mLayerList.FindByIndex(uIndex)->GetObjectA(
             &mLayerList, offsetof(Layer, mNode)));
     }
 
@@ -226,7 +226,7 @@ public:
 
 inline Sound* SoundLayered::GetLayerByIndex(unsigned int uIndex)
 {
-    return static_cast<SoundLayer*>(mSoundList.FindByIndex(uIndex)->GetObjectA(
+    return (SoundLayer*)(mSoundList.FindByIndex(uIndex)->GetObjectA(
         &mSoundList, offsetof(SoundLayer, mLayerNode)));
 }
 

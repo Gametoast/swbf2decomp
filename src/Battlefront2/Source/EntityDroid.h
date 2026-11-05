@@ -61,8 +61,8 @@ public:
     float mCollisionInflict;
     AimerClass mAimerClass[4];
     WeaponClass* mWeaponClass[4];
-    WeaponAmmoDesc mWeaponAmmo[4];
-    int mWeaponChannel[4];
+    WeaponAmmoDesc mWeaponAmmo[kMaxWeapons];
+    int mWeaponChannel[kMaxWeapons];
     int mWeaponCount;
     float mNoiseFactor;
     CameraTrackSetting mCameraSettings;
@@ -242,8 +242,8 @@ public:
     float mPitchValue;
     float mGroundRatio;
     Aimer* mAimer[4];
-    Weapon* mWeapon[4];
-    int mWeaponIndex[2];
+    Weapon* mWeapon[kMaxWeapons];
+    int mWeaponIndex[kNumWeaponChannels];
     GameSoundControllable mAmbientSound;
     GameSoundControllable mAmbient2Sound;
     EnergyBar mEnergyBar;

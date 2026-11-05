@@ -402,7 +402,7 @@ const CoverHint* CoverHelper::SelectHint(int iCount, const BaseHint** ppHints) c
     while (iCount > 0)
     {
         int i = AIUtil::GetRandomInt(0, iCount - 1);
-        const CoverHint* pHint = static_cast<const CoverHint*>(ppHints[i]);
+        const CoverHint* pHint = (const CoverHint*)ppHints[i];
         if (AIUtil::IsHintAvailable(pMe, pHint))
         {
             float fScore = IsHintSuitable(pHint);

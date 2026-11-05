@@ -116,7 +116,7 @@ public:
 
     Node* GetFirst() const
     {
-        return static_cast<Node*>(PblListSingle::GetFirst()->GetObjectA(this, offsetof(Node, mNode)));
+        return (Node*)PblListSingle::GetFirst()->GetObjectA(this, offsetof(Node, mNode));
     }
     Node* FindByIndex(unsigned int uiIndex) const
     {
@@ -125,7 +125,7 @@ public:
         {
             ++itor;
         }
-        return static_cast<Node*>(itor.GetNode()->mNode.GetObjectA(this, offsetof(Node, mNode)));
+        return (Node*)itor.GetNode()->mNode.GetObjectA(this, offsetof(Node, mNode));
     }
     unsigned int GetCount() const;
 };

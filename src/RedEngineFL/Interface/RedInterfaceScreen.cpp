@@ -276,12 +276,12 @@ void RedInterfaceScreen::Render() const
     PblMatrix mScreen;
     PblMatrix mPerspective;
 
+    mPerspective.m[1][1] = gRedInterfaceScaleY * fUnitY;
     mPerspective.m[0][0] = gRedInterfaceScaleX * fUnitX;
     mPerspective.m[0][1] = 0.0f;
     mPerspective.m[0][2] = 0.0f;
     mPerspective.m[0][3] = 0.0f;
     mPerspective.m[1][0] = 0.0f;
-    mPerspective.m[1][1] = gRedInterfaceScaleY * fUnitY;
     mPerspective.m[1][2] = 0.0f;
     mPerspective.m[1][3] = 0.0f;
     mPerspective.m[2][0] = 0.0f;

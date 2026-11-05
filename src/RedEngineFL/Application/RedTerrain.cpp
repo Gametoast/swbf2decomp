@@ -686,15 +686,14 @@ void RedTerrain::Read(PblFileChunk& chunk)
                     while (!cut.IsDone())
                     {
                         PblFileChunk part = cut.ReadNextChild();
-                        PblFile* pPartFile = part._pFile;
-                        if (part._iId == 0x4F464E49)
+                                                if (part._iId == 0x4F464E49)
                         {
-                            pHole->iNumPlanes = pPartFile->Read32();
-                            const float fRadius = pPartFile->ReadFloat();
+                            pHole->iNumPlanes = part._pFile->Read32();
+                            const float fRadius = part._pFile->ReadFloat();
                             PblVector3 vCenter;
-                            vCenter.x = pPartFile->ReadFloat();
-                            vCenter.y = pPartFile->ReadFloat();
-                            vCenter.z = pPartFile->ReadFloat();
+                            vCenter.x = part._pFile->ReadFloat();
+                            vCenter.y = part._pFile->ReadFloat();
+                            vCenter.z = part._pFile->ReadFloat();
                             pHole->SetCollisionCenter(vCenter);
                             pHole->SetCollisionRadius(fRadius);
 
@@ -707,10 +706,10 @@ void RedTerrain::Read(PblFileChunk& chunk)
                         {
                             for (int i = 0; i < pHole->iNumPlanes; ++i)
                             {
-                                pHole->aPlanes[i].x = pPartFile->ReadFloat();
-                                pHole->aPlanes[i].y = pPartFile->ReadFloat();
-                                pHole->aPlanes[i].z = pPartFile->ReadFloat();
-                                pHole->aPlanes[i].w = pPartFile->ReadFloat();
+                                pHole->aPlanes[i].x = part._pFile->ReadFloat();
+                                pHole->aPlanes[i].y = part._pFile->ReadFloat();
+                                pHole->aPlanes[i].z = part._pFile->ReadFloat();
+                                pHole->aPlanes[i].w = part._pFile->ReadFloat();
                             }
                         }
                     }
@@ -828,8 +827,8 @@ int RedTerrain::GetHeightUnscaled(int iX, int iZ)
 // FUNCTION: SWBF2 0x006c21b0
 bool RedTerrain::PointInHoleCallback(const TreeGridObject* pObject, TreeGridCallbackData* pData, float& fDist)
 {
-    const RedTerrain::Hole* pHole = static_cast<const RedTerrain::Hole*>(pObject);
-    HoleCallbackData* pHoleData = static_cast<HoleCallbackData*>(pData);
+    const RedTerrain::Hole* pHole = (const RedTerrain::Hole*)pObject;
+    HoleCallbackData* pHoleData = (HoleCallbackData*)pData;
     if (PointInVolume(pHoleData->vPoint, pHole->aPlanes, pHole->iNumPlanes))
     {
         *pHoleData->pbInHole = true;

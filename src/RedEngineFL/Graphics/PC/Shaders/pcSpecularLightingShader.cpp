@@ -107,22 +107,22 @@ pcRedShader* pcSpecularLightingShader::_Create(unsigned int uiFlags,
 void pcSpecularLightingShader::_InitPipelineFuncArray()
 {
     GetStateFuncArray[PIPELINE_FIXED] =
-        static_cast<GetStateFuncT>(&pcSpecularLightingShader::GetState_Fixed);
+        (GetStateFuncT)(&pcSpecularLightingShader::GetState_Fixed);
     BeginFuncArray[PIPELINE_FIXED] =
-        static_cast<BeginFuncT>(&pcSpecularLightingShader::Begin_Fixed);
+        (BeginFuncT)(&pcSpecularLightingShader::Begin_Fixed);
     EndFuncArray[PIPELINE_FIXED] =
-        static_cast<EndFuncT>(&pcSpecularLightingShader::End_Fixed);
+        (EndFuncT)(&pcSpecularLightingShader::End_Fixed);
     RenderFuncArray[PIPELINE_FIXED] =
-        static_cast<RenderFuncT>(&pcSpecularLightingShader::Render_Fixed);
+        (RenderFuncT)(&pcSpecularLightingShader::Render_Fixed);
 
     GetStateFuncArray[PIPELINE_PROG1] =
-        static_cast<GetStateFuncT>(&pcSpecularLightingShader::GetState_Prog1);
+        (GetStateFuncT)(&pcSpecularLightingShader::GetState_Prog1);
     BeginFuncArray[PIPELINE_PROG1] =
-        static_cast<BeginFuncT>(&pcSpecularLightingShader::Begin_Prog1);
+        (BeginFuncT)(&pcSpecularLightingShader::Begin_Prog1);
     EndFuncArray[PIPELINE_PROG1] =
-        static_cast<EndFuncT>(&pcSpecularLightingShader::End_Prog1);
+        (EndFuncT)(&pcSpecularLightingShader::End_Prog1);
     RenderFuncArray[PIPELINE_PROG1] =
-        static_cast<RenderFuncT>(&pcSpecularLightingShader::Render_Prog1);
+        (RenderFuncT)(&pcSpecularLightingShader::Render_Prog1);
 }
 
 // FUNCTION: SWBF2 0x007137d0

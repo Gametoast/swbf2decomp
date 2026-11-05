@@ -875,7 +875,7 @@ STDMETHODIMP FakeD3DDevice::Present(CONST RECT*, CONST RECT*, HWND,
     {
         if (g_fFixedRate > 0.0f)
         {
-            Sleep(static_cast<int>(1000.0f / g_fFixedRate));
+            Sleep((int)(1000.0f / g_fFixedRate));
         }
         else
         {
@@ -2067,15 +2067,13 @@ void RedRenderer::pcRenderPrimitive(pcRedPrimitive* pPrim, pcRedShader* pShader,
         uiFlags |= 0x10;
     }
 
-    unsigned int count = m_curRenderItemOffset;
-    if (count >= 0x128c)
+    if (m_curRenderItemOffset >= 0x128c)
     {
         return;
     }
 
     unsigned int uiRVF = pPrim->m_vertexFormat->m_uiVertexBufferRVF;
-    RenderItem* pItem = &m_renderItemPool[count++];
-    m_curRenderItemOffset = count;
+    RenderItem* pItem = &m_renderItemPool[m_curRenderItemOffset++];
 
     pItem->pVisibilityQuery = 0;
     pItem->pRootShader = pShader;
@@ -2255,10 +2253,9 @@ void RedRenderer::pcRenderPrimitive(pcRedPrimitive* pPrim, pcRedShader* pShader,
             }
         }
 
-        unsigned char low =
-            (unsigned char)internalGetTransformAndLightingID(uiRVF, uiEnvState, uiPassCaps);
         key.opaque.material =
-            ((GetShaderID_(pCurShader, pItem, uiState) & 0xff) << 8) | low;
+            ((GetShaderID_(pCurShader, pItem, uiState) & 0xff) << 8) |
+            (unsigned char)internalGetTransformAndLightingID(uiRVF, uiEnvState, uiPassCaps);
 
         if (phase != 4 && m_iImmediateMode == 0 &&
             &mWorld != &gMatrixIdentity)
@@ -2290,10 +2287,9 @@ void RedRenderer::pcRenderPrimitive(pcRedPrimitive* pPrim, pcRedShader* pShader,
     }
     else
     {
-        unsigned char low =
-            (unsigned char)internalGetTransformAndLightingID(uiRVF, uiEnvState, uiPassCaps);
         key.translucent.material =
-            ((pCurShader->GetID(uiState) & 0xff) << 8) | low;
+            ((pCurShader->GetID(uiState) & 0xff) << 8) |
+            (unsigned char)internalGetTransformAndLightingID(uiRVF, uiEnvState, uiPassCaps);
         key.translucent.translucent = 1;
 
         unsigned int hidden = uiFlags & 0x10000000;

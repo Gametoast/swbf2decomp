@@ -260,7 +260,7 @@ bool CollisionModel::CheckForCollision_SSSC(CollisionObject* pCollider, Collisio
             if (pOther->ReceiveCollision(*pMatrix, ((CollisionBodyPrimitive*)pBody)->mPrimitive, pCollider,
                                          *pOtherMatrix, pReceiver, pRestrictor))
             {
-                for (int k = 0; k < 3; ++k)
+                for (int k = 0; k < CollisionObject::kNumLastCollided; ++k)
                 {
                     if (pCollider->mLastCollidedObjs[k] == pReceiver)
                     {
@@ -330,7 +330,7 @@ bool CollisionModel::CheckForCollision(CollisionObject* pCollider, CollisionObje
                 if (pOtherModel->mBody[j]->ReceiveCollision(*pMatrix, ((CollisionBodyPrimitive*)pBody)->mPrimitive, pCollider,
                                                             otherMatrix, pReceiver, pRestrictor))
                 {
-                    for (int k = 0; k < 3; ++k)
+                    for (int k = 0; k < CollisionObject::kNumLastCollided; ++k)
                     {
                         if (pCollider->mLastCollidedObjs[k] == pReceiver)
                         {
@@ -364,7 +364,7 @@ bool CollisionModel::CheckForCollision(CollisionObject* pCollider, CollisionObje
                 if (pOther->ReceiveCollision(bodyMatrix, ((CollisionBodyPrimitive*)pBody)->mPrimitive, pCollider,
                                              otherMatrix, pReceiver, pRestrictor))
                 {
-                    for (int k = 0; k < 3; ++k)
+                    for (int k = 0; k < CollisionObject::kNumLastCollided; ++k)
                     {
                         if (pCollider->mLastCollidedObjs[k] == pReceiver)
                         {

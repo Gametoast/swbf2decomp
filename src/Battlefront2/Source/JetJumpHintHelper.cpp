@@ -144,7 +144,7 @@ const JetJumpHint* JetJumpHintHelper::SelectHint(int iCount, const BaseHint** pp
     {
         --iCount;
         const int i = AIUtil::GetRandomInt(0, iCount);
-        const JetJumpHint* pHint = static_cast<const JetJumpHint*>(ppHints[i]);
+        const JetJumpHint* pHint = (const JetJumpHint*)ppHints[i];
         const float fRating = IsHintSuitable(pHint);
         if (fRating < fBest)
         {

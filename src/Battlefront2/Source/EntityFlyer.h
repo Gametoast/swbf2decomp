@@ -30,6 +30,9 @@ class EntityFlyerClass : public GameObjectClass,
                         public EntityPathFollowerClass
 {
 public:
+    static const int kMaxTurrets = 8;
+    static const int kMaxContrailEffects = 12;
+    static const int kMaxThrustEffects = 8;
     EntityFlyerClass(unsigned int uHash);
     // SYNTHETIC: SWBF2 0x004b6f10
     // EntityFlyerClass::`scalar deleting destructor'
@@ -109,8 +112,8 @@ public:
     float mMaxCrashRollRate;
     AimerClass mAimerClass[4];
     WeaponClass* mWeaponClass[4];
-    WeaponAmmoDesc mWeaponAmmo[4];
-    int mWeaponChannel[4];
+    WeaponAmmoDesc mWeaponAmmo[kMaxWeapons];
+    int mWeaponChannel[kMaxWeapons];
     int mWeaponCount;
     int mVehicleType;
     float mBlurEffect;
@@ -138,21 +141,21 @@ public:
     CameraTrackSetting mCameraSettings;
     PassengerSlotClass* mPassengerSlotClass;
     unsigned char mNumPassengerSlots;
-    MountedTurretClass* mTurretClass[8];
+    MountedTurretClass* mTurretClass[kMaxTurrets];
     ExplosionClass* mExplosionCritical;
     ExplosionClass* mExplosionDestruct;
-    unsigned int mThrustEffectName[8];
-    unsigned int mThrustEffectHardPoint[8];
-    PblVector3 mThrustEffectAttachOffset[8];
-    float mThrustEffectMinScale[8];
-    float mThrustEffectMaxScale[8];
-    float mThrustEffectScaleStart[8];
-    unsigned int mContrailEffectName[12];
-    unsigned int mContrailEffectHardPoint[12];
-    PblVector3 mContrailEffectAttachOffset[12];
-    float mContrailEffectMinScale[12];
-    float mContrailEffectMaxScale[12];
-    float mContrailEffectMinSpeed[12];
+    unsigned int mThrustEffectName[kMaxThrustEffects];
+    unsigned int mThrustEffectHardPoint[kMaxThrustEffects];
+    PblVector3 mThrustEffectAttachOffset[kMaxThrustEffects];
+    float mThrustEffectMinScale[kMaxThrustEffects];
+    float mThrustEffectMaxScale[kMaxThrustEffects];
+    float mThrustEffectScaleStart[kMaxThrustEffects];
+    unsigned int mContrailEffectName[kMaxContrailEffects];
+    unsigned int mContrailEffectHardPoint[kMaxContrailEffects];
+    PblVector3 mContrailEffectAttachOffset[kMaxContrailEffects];
+    float mContrailEffectMinScale[kMaxContrailEffects];
+    float mContrailEffectMaxScale[kMaxContrailEffects];
+    float mContrailEffectMinSpeed[kMaxContrailEffects];
     float mContrailEffectMaxSpeed[12];
     int mCockpitModelHandle;
     float mFreeFlyTime;

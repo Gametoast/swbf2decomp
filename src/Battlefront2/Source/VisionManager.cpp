@@ -179,7 +179,7 @@ void UpdatePotentiallyVisible(UnitController* pController)
         pMe->GetEntity()->GetEntityClass()->IsRtti(MountedTurretClass::rttiHashMountedTurretClass))
     {
         const MountedTurretClass* pTurretClass =
-            static_cast<const MountedTurretClass*>(pMe->GetEntity()->GetEntityClass());
+            (const MountedTurretClass*)pMe->GetEntity()->GetEntityClass();
         bTargetPlayer = CombatUtil::CanTurretFaceDisturbance(pMe, pTurretClass, pMeObj,
                                                              pPlayerTarget->GetMatrix().GetTranslation());
     }

@@ -28,7 +28,7 @@ void PortalReader::FindRegisterStatics(ISector& sector)
         EntityEx* pEntity = EntityEx::Find(*it);
         if (pEntity && pEntity->IsRtti(EntityProp::rttiHashEntityProp))
         {
-            IDisplayable& displayable = *static_cast<EntityProp*>(pEntity);
+            IDisplayable& displayable = *(EntityProp*)pEntity;
             displayable.SetPortalActive(true);
             sector.RegisterStatic(displayable);
         }
@@ -286,7 +286,7 @@ void PortalReader::Read(IManager& manager, PblConfig& config)
         EntityEx* pEntity = it;
         if (pEntity && pEntity->IsRtti(EntityProp::rttiHashEntityProp))
         {
-            IDisplayable& displayable = *static_cast<EntityProp*>(pEntity);
+            IDisplayable& displayable = *(EntityProp*)pEntity;
             if (!displayable.GetSector())
             {
                 displayable.SetPortalActive(true);

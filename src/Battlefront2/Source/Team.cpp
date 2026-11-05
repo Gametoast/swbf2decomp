@@ -646,7 +646,7 @@ bool Team::AddClass(GameObjectClass* pClass, int iMinUnits, int iMaxUnits)
 // FUNCTION: SWBF2 0x00653ea0
 bool Team::AddClass(const char* pcName, int iMinUnits, int iMaxUnits)
 {
-    GameObjectClass* pClass = static_cast<GameObjectClass*>(EntityClass::Find(PblHash(pcName)));
+    GameObjectClass* pClass = (GameObjectClass*)EntityClass::Find(PblHash(pcName));
     if (pClass)
     {
         return AddClass(pClass, iMinUnits, iMaxUnits);
@@ -672,7 +672,7 @@ bool Team::AddSpecialClass(GameObjectClass* pClass)
 // FUNCTION: SWBF2 0x00653f50
 bool Team::AddSpecialClass(unsigned int uHash)
 {
-    GameObjectClass* pClass = static_cast<GameObjectClass*>(EntityClass::Find(uHash));
+    GameObjectClass* pClass = (GameObjectClass*)EntityClass::Find(uHash);
     if (pClass)
     {
         return AddSpecialClass(pClass);
@@ -683,7 +683,7 @@ bool Team::AddSpecialClass(unsigned int uHash)
 // FUNCTION: SWBF2 0x00653f90
 GameObjectClass* Team::FindClass(const char* pcName)
 {
-    return FindClass(static_cast<GameObjectClass*>(EntityClass::Find(PblHash(pcName))));
+    return FindClass((GameObjectClass*)EntityClass::Find(PblHash(pcName)));
 }
 
 // FUNCTION: SWBF2 0x00653fe0
@@ -729,7 +729,7 @@ bool Team::SetClassUnitCounts(GameObjectClass* pClass, int iMinUnits, int iMaxUn
 // FUNCTION: SWBF2 0x00654090
 void Team::SetCarrier(const char* pcName)
 {
-    SetCarrier(static_cast<GameObjectClass*>(EntityClass::Find(PblHash(pcName))));
+    SetCarrier((GameObjectClass*)EntityClass::Find(PblHash(pcName)));
 }
 
 // FUNCTION: SWBF2 0x006540e0
