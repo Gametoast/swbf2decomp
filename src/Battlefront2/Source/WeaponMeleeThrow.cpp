@@ -61,9 +61,9 @@ WeaponMeleeThrow::WeaponMeleeThrow(const WeaponMeleeThrowClass* pClass, const We
     const WeaponMeleeClass* pPrimaryClass =
         (const WeaponMeleeClass*)m_pPrimaryWeapon->mClass;
 
-    const unsigned char uiThrowAnim = static_cast<unsigned char>(pPrimaryClass->m_pCombo->m_uiThrowAnimIndex);
+    const unsigned char uiThrowAnim = (unsigned char)pPrimaryClass->m_pCombo->m_uiThrowAnimIndex;
     SoldierAnimatorClass::Instance()->GetAnimationBoneMatrix(
-        static_cast<SoldierAnimationBank::MAP>(m_pPrimaryWeapon->mSoldierAnimationMap),
+        (SoldierAnimationBank::MAP)m_pPrimaryWeapon->mSoldierAnimationMap,
         uiThrowAnim, 0x2B960099 /* "hp_weapons" */,
         ((const WeaponMeleeThrowClass*)mClass)->m_fInitialSalvoDelay, m_mThrow0Local);
 }

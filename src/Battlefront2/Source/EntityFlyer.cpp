@@ -1252,7 +1252,10 @@ void EntityFlyerClass::SetProperty(unsigned int uProperty, const char* pszValue)
             CollisionPrimitive primitive;
             PblMatrix matrix = gMatrixIdentity;
             primitive.SetAACylinder((fHalfZ + fHalfX) * 0.5f, fHalfY * 2.0f);
-            matrix.SetTranslation(PblVector3(fCenterX, fCenterY, fCenterZ));
+            matrix.m[3][0] = fCenterX;
+            matrix.m[3][1] = fCenterY;
+            matrix.m[3][2] = fCenterZ;
+            matrix.m[3][3] = 1.0f;
             mCollisionModel.AddBody(new CollisionBodyPrimitive(primitive, "main_body", matrix, 0));
         }
         if (pMesh)
@@ -2379,7 +2382,7 @@ void EntityFlyer::Render(unsigned char renderMode, float lod, unsigned int flags
     FlagItem* pFlag = GetGameObject()->GetCarriedFlagItem();
     if (pFlag)
     {
-        const FlagItemClass* pFlagClass = static_cast<const FlagItemClass*>(pFlag->mClass);
+        const FlagItemClass* pFlagClass = (const FlagItemClass*)pFlag->mClass;
         PblVector3 vPos = mWorld.ApplyTransform(pFlagClass->mCarriedOffset);
         mWorld.SetTranslation(vPos);
         reinterpret_cast<GameObject*>(pFlag)->SetMatrix(mWorld);
@@ -4184,10 +4187,9 @@ bool EntityFlyer::Update(float fDeltaTime)
         {
             fLevel = 0.0f;
         }
-        mOmega.x = fLevel * mOmega.x;
-        mOmega.x = (vZ.y * vNormal.y + vNormal.x * vZ.x + vNormal.z * vZ.z) * (mClass->mLevelFilterLanding * 0.5f) *
-                       (1.0f - mFlightRatio) +
-                   mOmega.x;
+        mOmega.MulX(fLevel);
+        mOmega.AddX((vZ.y * vNormal.y + vNormal.x * vZ.x + vNormal.z * vZ.z) * (mClass->mLevelFilterLanding * 0.5f) *
+                    (1.0f - mFlightRatio));
         float fPitchFilter = mClass->mPitchFilter * fDeltaTime;
         if (fPitchFilter > 1.0f)
         {
@@ -4480,10 +4482,9 @@ bool EntityFlyer::Update(float fDeltaTime)
         {
             fLevel = 0.0f;
         }
-        mOmega.x = fLevel * mOmega.x;
-        mOmega.x = (vZ.y * vNormal.y + vNormal.x * vZ.x + vNormal.z * vZ.z) * (mClass->mLevelFilterLanding * 0.5f) *
-                       (1.0f - mFlightRatio) +
-                   mOmega.x;
+        mOmega.MulX(fLevel);
+        mOmega.AddX((vZ.y * vNormal.y + vNormal.x * vZ.x + vNormal.z * vZ.z) * (mClass->mLevelFilterLanding * 0.5f) *
+                    (1.0f - mFlightRatio));
         float fPitchFilter = mClass->mPitchFilter * fDeltaTime;
         if (fPitchFilter > 1.0f)
         {
@@ -4524,7 +4525,7 @@ bool EntityFlyer::Update(float fDeltaTime)
         {
             PblVector3 vDir;
             D3DXVec3Normalize(reinterpret_cast<D3DXVECTOR3*>(&vDir), reinterpret_cast<const D3DXVECTOR3*>(&mVelocity));
-            mOmega.x = -(DotProduct(vY, vDir) * mClass->mLevelFilter * (1.0f - mFlightRatio)) + mOmega.x;
+            mOmega.AddX(-(DotProduct(vY, vDir) * mClass->mLevelFilter * (1.0f - mFlightRatio)));
             float fPitchFilter = mClass->mPitchFilter * mFlightRatio * fDeltaTime;
             if (fPitchFilter > 1.0f)
             {
@@ -4548,7 +4549,7 @@ bool EntityFlyer::Update(float fDeltaTime)
         vDrive.y = vZ.y * mSetSpeed - vX.y * mSetStrafe - mSetStrafeVertical * vY.y;
         vDrive.z = mSetSpeed * vZ.z - mSetStrafe * vX.z - mSetStrafeVertical * vY.z;
         mVelocity = Interpolate(mVelocity, vDrive, fDrift);
-        mVelocity.y = (1.0f - mFlightRatio) * -9.8f * fDeltaTime + mVelocity.y;
+        mVelocity.AddY((1.0f - mFlightRatio) * -9.8f * fDeltaTime);
 
         mOmega += CrossProduct(vZ, mVelocity) * 0.015625f * (1.0f - mFlightRatio) * fDeltaTime;
         mOmega.x = (PblRandom::GetSim().GetFloat() - 0.5f) * 0.25f + vZ.y * 0.0625f + 0.0625f + mOmega.x;
@@ -4561,8 +4562,8 @@ bool EntityFlyer::Update(float fDeltaTime)
         mBankPitchAngle = (fPitchTarget - mBankPitchAngle) * (mClass->mBankFilter * fDeltaTime) + mBankPitchAngle;
         mBankPitchAngleDelta = fPitchTarget - mBankPitchAngle;
         float fRollTarget = mClass->mStrafeRollAngle * 0.0f * mFlightRatio + mRoll - mClass->mBankAngle * vSlip.x;
-        mCrashTimer -= fDeltaTime;
         mBankRollAngle = (fRollTarget - mBankRollAngle) * (mClass->mBankFilter * fDeltaTime) + mBankRollAngle;
+        mCrashTimer -= fDeltaTime;
         mBankRollAngleDelta = fRollTarget - mBankRollAngle;
         if (0.0f > mCrashTimer)
         {
@@ -4635,6 +4636,7 @@ bool EntityFlyer::Update(float fDeltaTime)
         {
             fMaxSpeed = 1.0f;
         }
+        // a minimum speed of -0.0 counts as 0.0 here, as in the game's code
         float fMinBase = mClass->mMinFlyerSpeed != 0.0f ? mClass->mMinFlyerSpeed : 0.0f;
         float fMinSpeed = mClass->mMinFlyerSpeed;
         if (fMinSpeed == 0.0f)
@@ -4824,7 +4826,7 @@ bool EntityFlyer::Update(float fDeltaTime)
 
             bool bFirstPerson = mTracker && mTracker->IsFirstPersonView();
             bool bCockpit = mPlayerId >= 0 &&
-                            (NetGame::GetLocalPlayer(0) == mCharacter || NetGame::GetLocalPlayer(1) == mCharacter);
+                            (GetCharacter() == NetGame::GetLocalPlayer(0) || GetCharacter() == NetGame::GetLocalPlayer(1));
             float fBoost = mInRoll || mInFlip ? 0.0f : mTurbulance;
             VehicleEngine::Update(mClass, fDeltaTime, mMatrix.GetTranslation(), *pVelocity, fSpeedRatio, fAccelRatio,
                                   fHealth, fBoost, 0.0f, 0.0f, mTrickEngineValue, bCockpit, bFirstPerson,

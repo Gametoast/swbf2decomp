@@ -229,9 +229,10 @@ void OrdnanceTowCable::Render(unsigned char ucViewport, float fDist, unsigned in
             PblMatrix mOwnerMatrix = mOwner->GetMatrix();
             PblMatrix mSmoothed = mOwner->GetSmoothedMatrix();
             PblVector3 v;
-            v = mOwnerMatrix.GetInverseFast().ApplyTransform(vFirePos);
+            D3DXVec3TransformCoord((D3DXVECTOR3*)&v, (const D3DXVECTOR3*)&vFirePos,
+                                   (const D3DXMATRIX*)&mOwnerMatrix.GetInverseFast());
             vFirePos = v;
-            v = mSmoothed.ApplyTransform(vFirePos);
+            D3DXVec3TransformCoord((D3DXVECTOR3*)&v, (const D3DXVECTOR3*)&vFirePos, (const D3DXMATRIX*)&mSmoothed);
             vFirePos = v;
         }
 
@@ -255,8 +256,9 @@ void OrdnanceTowCable::Render(unsigned char ucViewport, float fDist, unsigned in
             CollisionModel* pModel = mHitWalker->GetCollisionObject()->mCollisionModel;
             CollisionObject* pWalkerCollision = mHitWalker->GetCollisionObject();
             TowCableAttachPointData& point = mTowCable.mAttachPoints[i - 1];
-            vEndPos = pModel->GetWorldMatrix(point.mBodyID, mHitWalker->GetMatrix(), pWalkerCollision->GetPose())
-                          .ApplyTransform(point.mBodyOffset);
+            D3DXVec3TransformCoord((D3DXVECTOR3*)&vEndPos, (const D3DXVECTOR3*)&point.mBodyOffset,
+                                   (const D3DXMATRIX*)&pModel->GetWorldMatrix(point.mBodyID, mHitWalker->GetMatrix(),
+                                                                              pWalkerCollision->GetPose()));
             pEndSlope = &point.mSlopeOut;
         }
         else

@@ -227,7 +227,7 @@ void LightningEffect::Update(float fDeltaTime)
         --m_iNumSubFlashesRemaining;
         if (m_iNumSubFlashesRemaining > 0)
         {
-            m_fBrightness = (1.0f - m_fBrightnessMin) * PblRandom::GetGlobalFloat() + m_fBrightnessMin;
+            m_fBrightness = (1.0f - m_fBrightnessMin) * PblRandom::_Global.GetFloat() + m_fBrightnessMin;
             m_fTimeNextFlash = (m_fTimeBetweenSubFlashesMax - m_fTimeBetweenSubFlashesMin) *
                                    PblRandom::_Global.GetFloat() +
                                m_fTimeBetweenSubFlashesMin;
@@ -235,7 +235,7 @@ void LightningEffect::Update(float fDeltaTime)
         }
         else
         {
-            m_fBrightness = (1.0f - m_fBrightnessMin) * PblRandom::GetGlobalFloat() + m_fBrightnessMin;
+            m_fBrightness = (1.0f - m_fBrightnessMin) * PblRandom::_Global.GetFloat() + m_fBrightnessMin;
             m_fTimeNextFlash = (m_fTimeBetweenFlashesMax - m_fTimeBetweenFlashesMin) *
                                    PblRandom::_Global.GetFloat() +
                                m_fTimeBetweenFlashesMin;

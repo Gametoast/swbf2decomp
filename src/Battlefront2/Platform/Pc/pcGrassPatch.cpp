@@ -268,7 +268,12 @@ void GrassPatchRenderable::RenderInstance(const PblMatrix& matrix, const RedColo
     }
 
     {
-        PblSphere sphere(matrix.GetTranslation(), m_pClass->mBoundingRadius);
+        PblSphere sphere;
+        const float fRadius = m_pClass->mBoundingRadius;
+        sphere.x = matrix.m[3][0];
+        sphere.y = matrix.m[3][1];
+        sphere.z = matrix.m[3][2];
+        sphere.w = fRadius;
         RedRenderer::SetLightingState(*RedLight::GetLightingState(sphere, 4, false, false, false));
     }
 

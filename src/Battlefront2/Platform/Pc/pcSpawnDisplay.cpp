@@ -195,7 +195,7 @@ namespace
 
 inline const Damageable* GetDamageable(const GameObject* pObject)
 {
-    return static_cast<const Damageable*>(pObject);
+    return (const Damageable*)pObject;
 }
 
 }
@@ -221,9 +221,9 @@ inline RedTextElement* AsText(RedInterfaceElement* pElement)
 {
     if (pElement->IsFlashyText())
     {
-        return static_cast<RedTextElement*>(pElement);
+        return (RedTextElement*)pElement;
     }
-    return pElement->IsText() ? static_cast<RedTextElement*>(pElement) : 0;
+    return pElement->IsText() ? (RedTextElement*)pElement : 0;
 }
 
 }
@@ -1132,7 +1132,7 @@ void SpawnDisplay::ChangeMode(Mode)
             m_pEntityElement->GetGroup()->RemoveElement(m_pEntityElement);
         }
         sprintf(acBuffer, "ifs_pc_SpawnSelect.Info");
-        static_cast<RedGroupElement*>(RedInterfaceElement::Find(acBuffer))->AddElement(m_pEntityElement);
+        ((RedGroupElement*)RedInterfaceElement::Find(acBuffer))->AddElement(m_pEntityElement);
         m_pEntityElement->Enable(true);
         m_pEntityElement->Visible(true);
         mTextSpawnTimer.Enable(false);
@@ -1209,7 +1209,7 @@ void SpawnDisplay::ChangeMode(Mode)
         {
             pGroup->RemoveElement(m_pEntityElement);
         }
-        static_cast<RedGroupElement*>(RedInterfaceElement::Find(acBuffer))->AddElement(m_pEntityElement);
+        ((RedGroupElement*)RedInterfaceElement::Find(acBuffer))->AddElement(m_pEntityElement);
         m_pEntityElement->Enable(true);
         m_pEntityElement->Visible(true);
         HUD::Event evMapDisable(HUD::GameEvents::gPlayerEvents[mPlayerIdx].mapDisable, true);
@@ -1271,7 +1271,7 @@ void SpawnDisplay::Initialize()
         m_pPopUpTitle = AsText(pElement);
     }
     sprintf(acBuffer, "ifs_pc_SpawnSelect.Info.PopupWindow");
-    m_pPopUpBorder = static_cast<RedGroupElement*>(RedInterfaceElement::Find(acBuffer));
+    m_pPopUpBorder = (RedGroupElement*)RedInterfaceElement::Find(acBuffer);
 
     Character* pPlayer = Character::FindPlayer(0);
     Team* pTeam = pPlayer ? pPlayer->mTeamPtr : Team::sTeams[1];
@@ -1284,12 +1284,12 @@ void SpawnDisplay::Initialize()
     {
         Team* pSide = Team::sTeams[i + 1];
         sprintf(acBuffer, "ifs_pc_SpawnSelect.Info.SideIcon%i", i);
-        m_pSideBG[i] = static_cast<RedGroupElement*>(RedInterfaceElement::Find(acBuffer));
+        m_pSideBG[i] = (RedGroupElement*)RedInterfaceElement::Find(acBuffer);
         sprintf(acBuffer, "ifs_pc_SpawnSelect.Info.SideIcon%i.skin", i);
-        m_pSideIcon[i] = static_cast<RedBitmapElement*>(RedInterfaceElement::Find(acBuffer));
+        m_pSideIcon[i] = (RedBitmapElement*)RedInterfaceElement::Find(acBuffer);
         m_pSideIcon[i]->CreateHotSpot(38.4f);
         sprintf(acBuffer, "ifs_pc_SpawnSelect.Info.SideModel%i", i);
-        m_pSideModel[i] = static_cast<Red3DModelElement*>(RedInterfaceElement::Find(acBuffer));
+        m_pSideModel[i] = (Red3DModelElement*)RedInterfaceElement::Find(acBuffer);
         unsigned int uModel = 0;
         switch (pSide->GetSide())
         {
@@ -1317,9 +1317,9 @@ void SpawnDisplay::Initialize()
     }
 
     sprintf(acBuffer, "ifs_pc_SpawnSelect.Info.UnitCount");
-    m_pUnitCountText = static_cast<RedTextElement*>(RedInterfaceElement::Find(acBuffer));
+    m_pUnitCountText = (RedTextElement*)RedInterfaceElement::Find(acBuffer);
     sprintf(acBuffer, "ifs_pc_SpawnSelect.Info.Ok.label");
-    m_AcceptBox = static_cast<RedBitmapElement*>(RedInterfaceElement::Find(acBuffer));
+    m_AcceptBox = (RedBitmapElement*)RedInterfaceElement::Find(acBuffer);
     sprintf(acBuffer, "ifs_readyselect1.Helptext_Back.label");
     m_pBackButton = RedInterfaceElement::Find(acBuffer);
     sprintf(acBuffer, "ifs_pc_spawnselect.Helptext_Back.label");
@@ -1342,7 +1342,7 @@ void SpawnDisplay::Initialize()
             m_pInfoBoxText[i] = AsText(pElement);
         }
         sprintf(acBuffer, "ifs_pc_SpawnSelect.Info.SlotWindow%i", i);
-        m_pSlotBorder[i] = static_cast<RedGroupElement*>(RedInterfaceElement::Find(acBuffer));
+        m_pSlotBorder[i] = (RedGroupElement*)RedInterfaceElement::Find(acBuffer);
     }
 
     mTextReady.SetFont(RedFont::GAMEFONT_MEDIUM);
@@ -1370,7 +1370,7 @@ void SpawnDisplay::Initialize()
     float fScale = 1.0f - fScreenScale * 0.05f;
     m_pEntityElement->SetScale(fScale);
     sprintf(acBuffer, "ifs_pc_SpawnSelect.Info");
-    static_cast<RedGroupElement*>(RedInterfaceElement::Find(acBuffer))->AddElement(m_pEntityElement);
+    ((RedGroupElement*)RedInterfaceElement::Find(acBuffer))->AddElement(m_pEntityElement);
 
     m_DroidekaElement.SetDepth(fDepth * 1.2f);
     m_DroidekaElement.SetPosition((fRight - fLeft) * 0.5f, (fBottom - fTop) * 0.85f);
@@ -1405,7 +1405,7 @@ void SpawnDisplay::SetSlotInfo(EntityClass* pClass, int iSlot)
     }
     if (m_pUnitNameText[iSlot]->IsFlashyText())
     {
-        FlashyTextElement* pFlashy = static_cast<FlashyTextElement*>(m_pUnitNameText[iSlot]);
+        FlashyTextElement* pFlashy = (FlashyTextElement*)m_pUnitNameText[iSlot];
         pFlashy->mTimeDelay = (float)iSlot * 0.05f;
         pFlashy->StartFlashiness();
     }
@@ -1476,12 +1476,12 @@ void SpawnDisplay::SetEntityElement(EntityClass* pClass)
     if (pClass->IsRtti(EntitySoldierClass::rttiHashEntitySoldierClass))
     {
         m_SoldierElement.SetAim(PblVector3(0.0f, 10.0f, 4000.0f));
-        m_SoldierElement.SetClass(static_cast<EntitySoldierClass*>(pClass));
+        m_SoldierElement.SetClass((EntitySoldierClass*)pClass);
         m_pEntityElement = &m_SoldierElement;
     }
     else if (pClass->IsRtti(EntityDroidekaClass::GetRtti()))
     {
-        m_DroidekaElement.SetClass(static_cast<EntityDroidekaClass*>(pClass));
+        m_DroidekaElement.SetClass((EntityDroidekaClass*)pClass);
         m_pEntityElement = &m_DroidekaElement;
     }
 
@@ -1490,7 +1490,7 @@ void SpawnDisplay::SetEntityElement(EntityClass* pClass)
         if (pClass->IsRtti(GameObjectClass::GetRtti()))
         {
             m_pEntityElement->SetModel(
-                const_cast<GameModel*>(static_cast<GameObjectClass*>(pClass)->GetModel()));
+                const_cast<GameModel*>(((GameObjectClass*)pClass)->GetModel()));
         }
         m_pEntityElement->Setup();
         m_pEntityElement->SetZOrder(0xbe);

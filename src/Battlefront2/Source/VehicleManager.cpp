@@ -331,7 +331,7 @@ int VehicleManager::RequestVehiclesInRange(const PblVector3& vPos, float fRadius
     int iCount = 0;
     for (int i = 0; i < VehicleManager::sVehicles->GetLength(); ++i)
     {
-        GameObject* pObj = static_cast<GameObject*>((*VehicleManager::sVehicles)[i]);
+        GameObject* pObj = (GameObject*)((*VehicleManager::sVehicles)[i]);
         const CollisionObject* pCollisionObject = pObj;
         const PblMatrix& m = pCollisionObject->GetMatrix();
         const float dx = m.m[3][0] - vPos.x;
