@@ -118,7 +118,7 @@ void PortalReader::Read(IPortal& portal, PblConfig& config, IManager& manager, c
 {
     geo::Vector3<float> lower;
     geo::Vector3<float> upper;
-    PblVector3 position(0.0f, 0.0f, 0.0f);
+    geo::Vector3<float> position;
     PblQuaternion rotation;
     rotation._fX = 0.0f;
     rotation._fY = 0.0f;
@@ -148,7 +148,7 @@ void PortalReader::Read(IPortal& portal, PblConfig& config, IManager& manager, c
         static PblConfigSR positionNode(data, "Position");
         if (positionNode.GetNode(data))
         {
-            position = PblVector3(data.GetFloatArg(0), data.GetFloatArg(1), data.GetFloatArg(2));
+            position = geo::Vector3<float>(data.GetFloatArg(0), data.GetFloatArg(1), data.GetFloatArg(2));
             continue;
         }
         static PblConfigSR rotationNode(data, "Rotation");
@@ -225,7 +225,13 @@ void PortalReader::Read(IPortal& portal, PblConfig& config, IManager& manager, c
         };
         position.z = -position.z;
 
-        PblMatrix transform(rotation, position);
+        PblQuaternion unit;
+        PblMatrix transform;
+        D3DXMatrixRotationQuaternion(reinterpret_cast<D3DXMATRIX*>(&transform), D3DXQuaternionNormalize(reinterpret_cast<D3DXQUATERNION*>(&unit), reinterpret_cast<const D3DXQUATERNION*>(&rotation)));
+        transform.m[3][0] = position.x;
+        transform.m[3][1] = position.y;
+        transform.m[3][2] = position.z;
+        transform.m[3][3] = 1.0f;
 
         portal.GetPoly().points_.SetSize(4);
         const geo::Vector3<float>* pCorner = corners;

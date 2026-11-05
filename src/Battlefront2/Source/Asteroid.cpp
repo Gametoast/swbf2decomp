@@ -727,12 +727,19 @@ bool Asteroid::Update(float fDeltaTime)
     {
         const float fInv = 1.0f / fOmega;
         const PblVector3 vAxis = mOmega * fInv;
-        const PblQuaternion qStep(vAxis, fOmega * fDeltaTime);
+        float fSin, fCos;
+        PblMath::SinCos(&fSin, &fCos, fOmega * fDeltaTime * 0.5f);
+        const PblQuaternion qStep(fCos, vAxis.x * fSin, vAxis.y * fSin, vAxis.z * fSin);
         qRotation = qRotation * qStep;
     }
     vPos += mVelocity * fDeltaTime;
 
-    PblMatrix mNew(qRotation, vPos);
+    D3DXQUATERNION qNormalized;
+    D3DXQuaternionNormalize(&qNormalized, (const D3DXQUATERNION*)&qRotation);
+    PblMatrix mNew;
+    D3DXMatrixRotationQuaternion((D3DXMATRIX*)&mNew, &qNormalized);
+    mNew[3] = vPos;
+    mNew.m[3][3] = 1.0f;
     mMatrix = mNew;
     SetRenderPos(vPos);
     AsteroidCollisionFollows(this);

@@ -184,7 +184,13 @@ void Stream::Update(float fDeltaTime)
     {
         StreamRenderer& rRenderer = mRenderer[i];
         const bool b3D = Source2D3D::Get3DMode();
-        rRenderer.Set3DMode(b3D);
+        if (rRenderer.mFormat != SampleInfo::format_Unknown
+            && (rRenderer.Get3DMode()) != b3D
+            && rRenderer.mNumChannels == 1)
+        {
+            rRenderer.SetFormat(rRenderer.mFormat, rRenderer.mNumChannels,
+                                rRenderer.mFrequency, b3D, rRenderer.mChannelMask, 200.0f);
+        }
         if (Source2D3D::Get3DMode())
         {
             rRenderer.Source3D::CopyParameters(*this);

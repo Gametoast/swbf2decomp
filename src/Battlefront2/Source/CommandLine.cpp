@@ -464,7 +464,7 @@ void ParseCommandLine(int iArgc, char** const apcArgv)
             break;
         }
         case 0x70EA3B55: /* "lang" */
-            RedLocalizeDB::ForceLanguageID(static_cast<eGAMELANGUAGE>(atoi(apcArgv[++i])));
+            RedLocalizeDB::ForceLanguageID((eGAMELANGUAGE)atoi(apcArgv[++i]));
             break;
         case 0x718E7AD4: /* "nodrag" */
             dragEnabled = false;

@@ -340,7 +340,7 @@ bool CameraManager::Update(float fDeltaTime)
                 if (pObject)
                 {
                     mListener[mUpdatedCameraId]->SetVelocity(&pObject->GetVelocity());
-                    pTargetPos = &static_cast<CollisionObject*>(pObject)->GetMatrix().GetTranslation();
+                    pTargetPos = &((CollisionObject*)pObject)->GetMatrix().GetTranslation();
 
                     Controllable* pCtrl = pObject->GetControllable();
                     if (pCtrl)

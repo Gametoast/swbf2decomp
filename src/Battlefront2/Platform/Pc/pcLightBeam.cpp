@@ -195,7 +195,9 @@ void LightBeamEffect::RenderLightBeam(const LightBeam* pBeam, unsigned int uiFla
         return;
     }
 
-    PblVector3 vView = mCameraInverse.ApplyTransform(vHead);
+    PblVector3 vView;
+    D3DXVec3TransformCoord((D3DXVECTOR3*)&vView, (const D3DXVECTOR3*)&vHead,
+                           (const D3DXMATRIX*)&mCameraInverse);
 
     float fRadius;
     if (pBeam->_fLength > 0.0f)
@@ -251,11 +253,12 @@ void LightBeamEffect::RenderLightBeam(const LightBeam* pBeam, unsigned int uiFla
     {
 
         __declspec(align(16)) PblMatrix mBeam;
-        mBeam[1] = pBeam->m_mWorldMatrix.ApplyRotation(pBeam->_vDirection);
+        PblVector3 vSide = pBeam->m_mWorldMatrix.ApplyRotation(pBeam->_vDirection);
+        mBeam[1] = vSide;
         mBeam.m[1][3] = 0.0f;
 
         const PblVector3& vCamPos = mCamera.GetTranslation();
-        PblVector3 vSide = vHead - vCamPos;
+        vSide = vHead - vCamPos;
         D3DXVec3Normalize((D3DXVECTOR3*)&vSide, (const D3DXVECTOR3*)&CrossProduct(vSide, mBeam.GetYAxis()));
         mBeam[0] = vSide;
         mBeam.m[0][3] = 0.0f;

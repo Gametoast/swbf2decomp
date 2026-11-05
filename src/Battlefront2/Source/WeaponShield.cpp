@@ -317,8 +317,12 @@ bool WeaponShield::Update(float fDeltaTime)
 
         if (((const WeaponShieldClass*)mClass)->m_vShieldSize.x > 0.0f)
         {
-            PblVector3 vCenter = GetMatrix().ApplyTransform(
-                static_cast<const WeaponShieldClass*>(mClass)->mCollisionBody->mMatrix.GetTranslation());
+            PblVector3 vCenter;
+            CollisionBodyPrimitive* pBody = ((const WeaponShieldClass*)mClass)->mCollisionBody;
+            const PblMatrix& rMatrix = GetMatrix();
+            D3DXVec3TransformCoord((D3DXVECTOR3*)&vCenter,
+                                   (const D3DXVECTOR3*)&pBody->mMatrix.GetTranslation(),
+                                   (const D3DXMATRIX*)&rMatrix);
             SetCollisionCenter(vCenter);
             RecalculateAABB();
             if (!IsInCollisionList())
