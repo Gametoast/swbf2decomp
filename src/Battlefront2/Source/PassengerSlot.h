@@ -106,8 +106,7 @@ inline bool PassengerSlot::IsRtti(unsigned int uRtti) const
     {
         return true;
     }
-    return EntityEx::rttiHashEntityEx == uRtti ||
-           Entity::rttiHashEntity == uRtti;
+    return EntityEx::IsRtti(uRtti);
 }
 
 

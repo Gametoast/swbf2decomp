@@ -241,6 +241,8 @@ public:
     AttachedEffects* m_pAttachedEffects;
 
     static PblHash rttiHashEntityGeometry;
+
+    static unsigned int GetRtti() { return rttiHashEntityGeometry; }
     static const char rttiNameEntityGeometry[];
 };
  
