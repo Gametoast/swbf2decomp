@@ -1344,7 +1344,7 @@ void Update(float fDeltaTime, float fSystemDeltaTime)
         }
         FLRenderer::Render();
         PauseMenu::DoUpdate(fSystemDeltaTime);
-        static_cast<Thread&>(sFlashyTextManagerInstance).Update(fSystemDeltaTime);
+        ((Thread&)sFlashyTextManagerInstance).Update(fSystemDeltaTime);
     }
     else
     {
@@ -1388,8 +1388,9 @@ void Update(float fDeltaTime, float fSystemDeltaTime)
         }
         else if (NetGame::IsDedicated())
         {
+            const float fStep = netSecondsPerTurn;
             int iTurns = 0;
-            while (clientInputAcc >= netSecondsPerTurn)
+            while (clientInputAcc >= fStep)
             {
                 clientInputAcc -= netSecondsPerTurn;
                 ++iTurns;
@@ -1510,7 +1511,7 @@ void Update(float fDeltaTime, float fSystemDeltaTime)
         if (NetGame::IsDedicated())
         {
             PauseMenu::DoUpdate(fSystemDeltaTime);
-            static_cast<Thread&>(sFlashyTextManagerInstance).Update(fSystemDeltaTime);
+            ((Thread&)sFlashyTextManagerInstance).Update(fSystemDeltaTime);
         }
     }
 
@@ -1967,7 +1968,7 @@ void GameLoop::UpdateStats(float fDeltaTime, float fSystemDeltaTime)
     FLRenderer::SetSceneEnable(0, false);
     FLRenderer::Render();
     PauseMenu::DoUpdate(fSystemDeltaTime);
-    static_cast<Thread&>(sFlashyTextManagerInstance).Update(fSystemDeltaTime);
+    ((Thread&)sFlashyTextManagerInstance).Update(fSystemDeltaTime);
     GameSoundEngine::Update(fSystemDeltaTime);
     GuiManager::UpdateAll(fSystemDeltaTime);
     ScreenTransition::sInstance->ScreenTransition::Update(fSystemDeltaTime);

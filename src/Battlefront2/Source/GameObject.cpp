@@ -459,7 +459,7 @@ bool GameObject::FoliageCollision()
 {
     bool bPlayed = false;
     const PblVector3& vPos = GetMatrix().GetTranslation();
-    const PropObjectMesh* pFoliage = static_cast<const PropObjectMesh*>(
+    const PropObjectMesh* pFoliage = (const PropObjectMesh*)(
         PropGenerator::FindPropObject(vPos, false));
     float fCrouch = 0.8f;
     float fStand = 1.0f;

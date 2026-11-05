@@ -214,7 +214,7 @@ bool OrdnanceGrapplingHook::Update(float fDeltaTime)
         }
         pSoldier->AddSoftToCollisionManager();
         pSoldier->SetVelocity(gVectorZero);
-        static_cast<Controllable*>(pSoldier)->Stand();
+        ((Controllable*)pSoldier)->Stand();
         return false;
     }
 

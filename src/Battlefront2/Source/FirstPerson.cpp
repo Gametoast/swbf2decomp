@@ -944,7 +944,7 @@ void FirstPersonRenderable::RenderSoldier(unsigned int uFlags) const
             GameObject* pObject = mOwner->GetGameObject();
             if (pObject && pObject->IsRtti(EntitySoldier::rttiHashEntitySoldier))
             {
-                unsigned char ucInvisibility = static_cast<EntitySoldier*>(pObject)->GetInvisibilityAlpha();
+                unsigned char ucInvisibility = ((EntitySoldier*)pObject)->GetInvisibilityAlpha();
                 if (ucInvisibility)
                 {
                     unsigned char ucCloak = 0xff;
@@ -1220,14 +1220,20 @@ void FirstPersonCameraManager::Update(PblMatrix& rMatrix)
     mCurrCamTime -= GameLoop::GetDeltaTime();
     if (mCurrCamPt != -1)
     {
-        float fT = Min(1.0f, 1.0f - mCurrCamTime / mCamTime[mCurrCamPt]);
+        float fT = 1.0f - mCurrCamTime / mCamTime[mCurrCamPt];
+        if (fT > 1.0f)
+        {
+            fT = 1.0f;
+        }
         if (mIsReturning)
         {
-            rMatrix.SetTranslation(rMatrix.GetTranslation() + rMatrix.ApplyRotation(mLinVec * (1.0f - fT)));
+            PblVector3 vLin(mLinVec.x * (1.0f - fT), mLinVec.y * (1.0f - fT), mLinVec.z * (1.0f - fT));
+            rMatrix.SetTranslation(rMatrix.GetTranslation() + rMatrix.ApplyRotation(vLin));
         }
         else
         {
-            rMatrix.SetTranslation(rMatrix.GetTranslation() + rMatrix.ApplyRotation(mHermPos[mCurrCamPt].getValue(fT)));
+            const PblHermiteVector3& rHerm = mHermPos[mCurrCamPt];
+            rMatrix.SetTranslation(rMatrix.GetTranslation() + rMatrix.ApplyRotation(fT * (fT * (rHerm._b + fT * rHerm._a) + rHerm._c) + rHerm._d));
             mCurRotVec = mHermRot[mCurrCamPt].getValue(fT);
             mCameraPos = rMatrix.GetTranslation();
 

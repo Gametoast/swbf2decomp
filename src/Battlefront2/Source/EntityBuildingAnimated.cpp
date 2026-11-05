@@ -190,7 +190,7 @@ Entity* EntityBuildingAnimatedClass::Build(const EntityDesc& desc)
     EntityBuildingAnimated* pBuilding = new EntityBuildingAnimated(this, desc);
     if (pBuilding)
     {
-        static_cast<CollisionObject*>(pBuilding)->AddStaticToCollisionManager();
+        ((CollisionObject*)pBuilding)->AddStaticToCollisionManager();
         pBuilding->ActivatePhysics();
     }
     return (Entity*)pBuilding;

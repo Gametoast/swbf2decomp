@@ -263,7 +263,7 @@ Entity* PowerupStationClass::Build(const EntityDesc& desc)
     PowerupStation* pStation = new PowerupStation(this, desc);
     if (pStation)
     {
-        static_cast<CollisionObject*>(pStation)->AddStaticToCollisionManager();
+        ((CollisionObject*)pStation)->AddStaticToCollisionManager();
         if (!NetGame::IsEnabled() || !NetGame::IsClient())
         {
             ((EntityGeometry*)pStation)->BuildEffects();
@@ -673,6 +673,7 @@ bool PowerupStation::Update(float fDeltaTime)
         {
             return true;
         }
+        {
         const PblMatrix* pNode = mPose.Find(mClass->mActiveSpinHash);
         if (!pNode || iNumProcedural >= 5)
         {
@@ -712,6 +713,7 @@ bool PowerupStation::Update(float fDeltaTime)
             q *= PblQuaternion(gVectorUnitZ, fAngle);
         }
         *pMatrix = PblMatrix(q, vNodePos);
+        }
         return true;
     }
 

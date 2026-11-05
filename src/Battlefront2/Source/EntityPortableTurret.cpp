@@ -80,7 +80,8 @@ EntityPortableTurret::EntityPortableTurret(EntityPortableTurretClass* pClass, co
     PblVector3& vFront = mMatrix[2];
     vUp = gVectorUnitY;
     mMatrix.m[1][3] = 0.0f;
-    vRight = Normalize(CrossProduct(vUp, vFront));
+    PblVector3 vCross = CrossProduct(vUp, vFront);
+    vRight = Normalize(vCross);
     mMatrix.m[0][3] = 0.0f;
     vFront = Normalize(CrossProduct(vRight, vUp));
     mMatrix.m[2][3] = 0.0f;
@@ -98,12 +99,12 @@ EntityPortableTurret::EntityPortableTurret(EntityPortableTurretClass* pClass, co
         PblBox bodyBox;
         if (pBody->bIsMesh)
         {
-            bodyBox = static_cast<CollisionBodyMesh*>(pBody)->mMesh->GetWorldspaceAABB(
+            bodyBox = ((CollisionBodyMesh*)pBody)->mMesh->GetWorldspaceAABB(
                 pBody->GetWorldMatrix(mMatrix, &mPose));
         }
         else
         {
-            bodyBox = static_cast<CollisionBodyPrimitive*>(pBody)->mPrimitive.GetWorldspaceAABB(
+            bodyBox = ((CollisionBodyPrimitive*)pBody)->mPrimitive.GetWorldspaceAABB(
                 pBody->GetWorldMatrix(mMatrix, &mPose));
         }
         box._vMin.x = bodyBox._vMin.x > box._vMin.x ? box._vMin.x : bodyBox._vMin.x;

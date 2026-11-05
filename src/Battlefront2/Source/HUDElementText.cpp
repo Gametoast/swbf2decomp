@@ -83,7 +83,7 @@ HUD::Item* HUD::ElementText::Factory::CreateItem(const char* const pName, ItemCa
 // FUNCTION: SWBF2 0x0055b1c0
 HUD::ElementText::ElementText(const char* const pName, Factory::ItemCallback pCallback,
                               void* const pUserData)
-    : HUD::Element(*static_cast<RedTextElement*>(this), pName, pCallback, pUserData),
+    : HUD::Element(*(RedTextElement*)this, pName, pCallback, pUserData),
       mIntegerFormat(0),
       mFloatFormat(0),
       mNumberToTime(0),
@@ -172,7 +172,7 @@ void HUD::ElementText::CopyToTextElement(RedTextElement& textElement)
 {
     textElement.m_color = RedColor(mColorDefault);
     textElement.SetZOrder((unsigned char)RedTextElement::m_zorder);
-    textElement.SetBlendMode(static_cast<RedTextElement&>(*this).GetBlendMode());
+    textElement.SetBlendMode(((RedTextElement&)(*this)).GetBlendMode());
     textElement.SetMatrix(m_mLocal);
     textElement.SetFont(m_pFont);
     textElement.SetIntercharacterSpacing(m_iSpacing);
@@ -359,14 +359,14 @@ void HUD::ElementText::EventText(const HUD::Event& event, void* const pData)
     case EventClass::type_Uint:
     {
         const unsigned short* pText = RedLocalizeDB::Find(event.GetData().uintValue, false);
-        RedTextElement& textElement = static_cast<RedTextElement&>(((ElementText*)pData)->GetRedInterfaceElement());
+        RedTextElement& textElement = (RedTextElement&)(((ElementText*)pData)->GetRedInterfaceElement());
         textElement.SetText(pText, true);
         break;
     }
     case EventClass::type_String:
     {
         const unsigned short* pString = event.GetData().string;
-        RedTextElement& textElement = static_cast<RedTextElement&>(((ElementText*)pData)->GetRedInterfaceElement());
+        RedTextElement& textElement = (RedTextElement&)(((ElementText*)pData)->GetRedInterfaceElement());
         if (pString)
         {
             textElement.SetText(pString, true);
@@ -526,7 +526,7 @@ void HUD::ElementText::EventNumber(const HUD::Event& event, void* const pData)
         }
     }
 
-    static_cast<RedTextElement*>(pText)->SetText(text, true);
+    ((RedTextElement*)pText)->SetText(text, true);
     EventChanged(event, pData);
 }
 

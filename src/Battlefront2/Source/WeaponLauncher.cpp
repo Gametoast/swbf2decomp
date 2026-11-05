@@ -117,7 +117,7 @@ WeaponLauncher::WeaponLauncher(const WeaponLauncherClass* pClass, const WeaponDe
 {
     mCurTarget = 0;
     mCurTargetBodyID = -1;
-    mLocked = !static_cast<const WeaponLauncherClass*>(mClass)->mHasTrackingAmmo;
+    mLocked = !((const WeaponLauncherClass*)mClass)->mHasTrackingAmmo;
 }
 
 
@@ -196,7 +196,7 @@ void WeaponLauncher::SetupTarget(const GameObject** ppTarget, int* pBodyId) cons
 // FUNCTION: SWBF2 0x00687920
 bool WeaponLauncher::CheckCharge() const
 {
-    if (static_cast<const WeaponLauncherClass*>(mClass)->mHasTrackingAmmo)
+    if (((const WeaponLauncherClass*)mClass)->mHasTrackingAmmo)
     {
         const GameObject* pTarget;
         SetupTarget(&pTarget, 0);
@@ -204,7 +204,7 @@ bool WeaponLauncher::CheckCharge() const
         {
             return false;
         }
-        if (static_cast<const WeaponLauncherClass*>(mClass)->mLockTime > 0.0f)
+        if (((const WeaponLauncherClass*)mClass)->mLockTime > 0.0f)
         {
             return true;
         }
@@ -230,7 +230,7 @@ WeaponLauncher::~WeaponLauncher()
 void WeaponLauncher::EnterIdle()
 {
     mStateTimer = 0.0f;
-    mLocked = !static_cast<const WeaponLauncherClass*>(mClass)->mHasTrackingAmmo;
+    mLocked = !((const WeaponLauncherClass*)mClass)->mHasTrackingAmmo;
     mCurTarget = 0;
     mCurTargetBodyID = -1;
     Weapon::EnterIdle();
@@ -239,7 +239,7 @@ void WeaponLauncher::EnterIdle()
 // FUNCTION: SWBF2 0x00687480
 void WeaponLauncher::ExitFire()
 {
-    const WeaponLauncherClass* pClass = static_cast<const WeaponLauncherClass*>(mClass);
+    const WeaponLauncherClass* pClass = (const WeaponLauncherClass*)mClass;
     if (pClass->mHasTrackingAmmo && pClass->mClearLockOnFire)
     {
         mLocked = false;
@@ -250,7 +250,7 @@ void WeaponLauncher::ExitFire()
 // FUNCTION: SWBF2 0x00687630
 void WeaponLauncher::EnterCharge()
 {
-    if (!static_cast<const WeaponLauncherClass*>(mClass)->mHasTrackingAmmo)
+    if (!((const WeaponLauncherClass*)mClass)->mHasTrackingAmmo)
     {
         WeaponCannon::EnterCharge();
         return;
@@ -261,7 +261,7 @@ void WeaponLauncher::EnterCharge()
     int iBodyId;
     SetupTarget(&pTarget, &iBodyId);
 
-    const WeaponLauncherClass* pClass = static_cast<const WeaponLauncherClass*>(mClass);
+    const WeaponLauncherClass* pClass = (const WeaponLauncherClass*)mClass;
     mStateLimit = pClass->mLockTime > 0.0f ? pClass->mLockTime : pClass->mMaxPressedTime;
     if (!pClass->mClearLockOnFire && pTarget && mCurTarget == pTarget && mCurTargetBodyID == mTargetBodyID)
     {
@@ -280,7 +280,7 @@ void WeaponLauncher::EnterCharge()
 // FUNCTION: SWBF2 0x00687740
 bool WeaponLauncher::UpdateCharge(float fDeltaTime)
 {
-    if (!static_cast<const WeaponLauncherClass*>(mClass)->mHasTrackingAmmo)
+    if (!((const WeaponLauncherClass*)mClass)->mHasTrackingAmmo)
     {
         return WeaponCannon::UpdateCharge(fDeltaTime);
     }
@@ -308,7 +308,7 @@ bool WeaponLauncher::UpdateCharge(float fDeltaTime)
 // FUNCTION: SWBF2 0x00687840
 void WeaponLauncher::ExitCharge()
 {
-    if (!static_cast<const WeaponLauncherClass*>(mClass)->mHasTrackingAmmo)
+    if (!((const WeaponLauncherClass*)mClass)->mHasTrackingAmmo)
     {
         WeaponCannon::ExitCharge();
         return;
@@ -331,6 +331,6 @@ void WeaponLauncher::ExitCharge()
 void WeaponLauncher::EnterEmpty()
 {
     WeaponCannon::EnterEmpty();
-    const WeaponCannonClass* pClass = static_cast<const WeaponCannonClass*>(mClass);
+    const WeaponCannonClass* pClass = (const WeaponCannonClass*)mClass;
     mStateLimit = AIUtil::GetRandomFloat(pClass->mShotDelayMin, pClass->mShotDelayMax);
 }

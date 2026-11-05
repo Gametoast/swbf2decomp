@@ -97,7 +97,7 @@ namespace
 
     inline const PblMatrix& GetCollisionMatrix(GameObject* pObject)
     {
-        return static_cast<CollisionObject*>(pObject)->GetMatrix();
+        return ((CollisionObject*)pObject)->GetMatrix();
     }
 
     inline const PblVector3& GetVelocity(GameObject* pObject)
@@ -2344,28 +2344,29 @@ void Weapon::Render(const PblMatrix& mat, const RedPose* pPose, const RedColor& 
         if (!mChargeUpEmitter)
         {
             ParticleEmitterObject* pEmitter =
-                static_cast<ParticleEmitterObject*>(mRenderClass->mChargeUpEffect->BuildEffect());
-            pThis->mChargeUpEmitter.mObject = pEmitter;
-            pThis->mChargeUpEmitter.mSavedHandleId = pEmitter ? pEmitter->mHandleId : 0;
+                (ParticleEmitterObject*)mRenderClass->mChargeUpEffect->BuildEffect();
+            PblHandle<ParticleEmitterObject>& hEmitter = pThis->mChargeUpEmitter;
+            hEmitter.mObject = pEmitter;
+            hEmitter.mSavedHandleId = pEmitter ? pEmitter->mHandleId : 0;
             if (mChargeUpEmitter)
             {
-                static_cast<ParticleEmitterObject*>(mChargeUpEmitter)->PermaRemoveParticleEffect();
+                ((ParticleEmitterObject*)mChargeUpEmitter)->PermaRemoveParticleEffect();
             }
         }
         if (mChargeUpEmitter)
         {
-            mChargeUpEmitter->AttachEffectToMatrix(&mFirePointMatrix, false);
+            mChargeUpEmitter().AttachEffectToMatrix(&mFirePointMatrix, false);
 
             RedColorValue chargeColor;
             chargeColor.r = chargeColor.g = chargeColor.b = chargeColor.a = mStateTimer / mStateLimit;
-            mChargeUpEmitter->SetEmitterColor(chargeColor);
-            static_cast<ParticleEmitterObject*>(mChargeUpEmitter)->Update(0.0f);
-            static_cast<ParticleEmitterObject*>(mChargeUpEmitter)->Render(1, 1.0f, 0);
+            mChargeUpEmitter().SetEmitterColor(chargeColor);
+            ((ParticleEmitterObject*)mChargeUpEmitter)->Update(0.0f);
+            ((ParticleEmitterObject*)mChargeUpEmitter)->Render(1, 1.0f, 0);
         }
     }
     else if (mChargeUpEmitter)
     {
-        mChargeUpEmitter->StopNow();
+        mChargeUpEmitter().StopNow();
     }
 }
 

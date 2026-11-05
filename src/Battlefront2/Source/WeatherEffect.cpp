@@ -157,25 +157,20 @@ void WindEffect::Update(float fDeltaTime)
         {
             float fRandX = PblRandom::GetGlobalFloat() * 2.0f - 1.0f;
             float fRandZ = PblRandom::GetGlobalFloat() * 2.0f - 1.0f;
-            m_vVelocityTarget = m_vBaseVelocity + PblVector3(fRandX, 0.0f, fRandZ) * m_fVelocityRange;
+            PblVector3 vOffset = PblVector3(fRandX, 0.0f, fRandZ) * m_fVelocityRange;
+            m_vVelocityTarget = m_vBaseVelocity + vOffset;
         }
         else
         {
             float fScale = m_fVelocityRange / fLength;
             PblVector3 vAlong = m_vBaseVelocity * fScale;
             float fSide = m_fVelocityRange * m_fVelocityRange / (m_fVelocityRange + fLength) / fLength;
-            float fSideX = m_vBaseVelocity.z * fSide;
-            float fSideY = fSide * 0.0f;
-            float fSideZ = -m_vBaseVelocity.x * fSide;
+            PblVector3 vSide = PblVector3(m_vBaseVelocity.z, 0.0f, -m_vBaseVelocity.x) * fSide;
 
             float fRandSide = PblRandom::GetGlobalFloat() * 2.0f - 1.0f;
-            fSideX *= fRandSide;
-            fSideY *= fRandSide;
-            fSideZ *= fRandSide;
+            vSide *= fRandSide;
             float fRandAlong = PblRandom::GetGlobalFloat() * 2.0f - 1.0f;
-            m_vVelocityTarget = PblVector3(m_vBaseVelocity.x + vAlong.x * fRandAlong + fSideX,
-                                           m_vBaseVelocity.y + vAlong.y * fRandAlong + fSideY,
-                                           m_vBaseVelocity.z + vAlong.z * fRandAlong + fSideZ);
+            m_vVelocityTarget = m_vBaseVelocity + vAlong * fRandAlong + vSide;
         }
         m_fTimer = 0.0f;
     }

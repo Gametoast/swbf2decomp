@@ -398,7 +398,7 @@ bool HeroMessageDisplay::Update(float fDeltaTime)
                 if (pClass && pClass->mHeroFlag &&
                     pClass->IsRtti(EntitySoldierClass::rttiHashEntitySoldierClass))
                 {
-                    EntitySoldierClass* pSoldier = static_cast<EntitySoldierClass*>(pClass);
+                    EntitySoldierClass* pSoldier = (EntitySoldierClass*)pClass;
                     mHeroSelectable[iTeam]->SetID(pSoldier->GetSndHeroSelectable(), false, false);
                     mHeroSpawned[iTeam]->SetID(pSoldier->GetSndHeroSpawned(), false, false);
                     mHeroDefeated[iTeam]->SetID(pSoldier->GetSndHeroDefeated(), false, false);
@@ -413,7 +413,11 @@ bool HeroMessageDisplay::Update(float fDeltaTime)
     HUD::Event disableEvent(HUD::GameEvents::gPlayerEvents[mViewport].heroSelectDisable, true);
     disableEvent.Send();
 
-    Character* pCharacter = Character::FindPlayer(NetGame::GetLocalIndex(mJoystickIndex));
+    int iLocalIndex = NetGame::GetLocalIndex(mJoystickIndex);
+    Character* pCharacter = (Character::sCharacters && iLocalIndex >= 0 && iLocalIndex < Character::sCharacterLimit &&
+                             Character::sCharacters[iLocalIndex].mPlayerId == iLocalIndex)
+                                ? &Character::sCharacters[iLocalIndex]
+                                : 0;
     if (!pCharacter)
     {
         Hide();

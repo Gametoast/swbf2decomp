@@ -37,11 +37,11 @@ void EntityCloth::PlatformRender(unsigned char ucViewport, RedColor color, unsig
         RedRenderer::SetLightingState(*pLightingState);
     }
 
-    const unsigned int uiNumVertices = mData->m_uiNumParticles * 2;
+    const unsigned int uiNumParticles = mData->m_uiNumParticles;
     const unsigned int uiNumIndices = mData->m_uiNumTriangles * 3 * 2;
     pcRedPrimitive* pPrimitive =
         pcRedPrimitive::Create(D3DPT_TRIANGLELIST, 0x222, sizeof(ClothVertex),
-                               (unsigned short)uiNumVertices,
+                               (unsigned short)(uiNumParticles * 2),
                                (unsigned short)uiNumIndices, false);
 
     ClothVertex* pVertices = (ClothVertex*)pPrimitive->BeginVertexData();

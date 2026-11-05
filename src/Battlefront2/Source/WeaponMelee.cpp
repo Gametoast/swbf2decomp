@@ -108,7 +108,7 @@ void WeaponMelee::Render(const PblMatrix& matrix, const RedPose* pPose,
         }
     }
 
-    const WeaponMeleeClass* pClass = static_cast<const WeaponMeleeClass*>(mRenderClass);
+    const WeaponMeleeClass* pClass = (const WeaponMeleeClass*)mRenderClass;
     const RedModel* pModel = bRenderModel && pClass->mHighResModel ?
                        pClass->mHighResModel : pClass->mModel;
     const PblMatrix* apMatrix[4] = {};
@@ -330,7 +330,7 @@ void WeaponMelee::TurnOn(float fDuration)
 {
     if (fDuration < 0.0f)
     {
-        fDuration = static_cast<const WeaponMeleeClass*>(mClass)->m_fTurnOnDuration;
+        fDuration = ((const WeaponMeleeClass*)mClass)->m_fTurnOnDuration;
     }
 
     if (!m_bLightsaberOn)
@@ -363,7 +363,7 @@ void WeaponMelee::TurnOff(float fDuration)
 
     if (fDuration < 0.0f)
     {
-        fDuration = static_cast<const WeaponMeleeClass*>(mClass)->m_fTurnOnDuration;
+        fDuration = ((const WeaponMeleeClass*)mClass)->m_fTurnOnDuration;
     }
 
     if (m_bLightsaberOn)
@@ -407,7 +407,7 @@ float WeaponMelee::GetLightSaberLengthFactor() const
 // FUNCTION: SWBF2 0x00689f00
 bool WeaponMelee::IsOn(unsigned int uiBlade) const
 {
-    if (uiBlade >= static_cast<const WeaponMeleeClass*>(mClass)->m_uiNumWeapons)
+    if (uiBlade >= ((const WeaponMeleeClass*)mClass)->m_uiNumWeapons)
     {
         return false;
     }
@@ -430,7 +430,7 @@ bool WeaponMelee::IsOn(unsigned int uiBlade) const
 // FUNCTION: SWBF2 0x00689f80
 float WeaponMelee::GetLightSaberLengthFactor(unsigned int uiBlade) const
 {
-    if (uiBlade >= static_cast<const WeaponMeleeClass*>(mClass)->m_uiNumWeapons)
+    if (uiBlade >= ((const WeaponMeleeClass*)mClass)->m_uiNumWeapons)
     {
         return 0.0f;
     }
@@ -486,7 +486,7 @@ void WeaponMelee::RenderLightsaberTrail(unsigned int uiEdge, const PblMatrix& mM
         pData = *ppData;
     }
 
-    const WeaponMeleeClass* pClass = static_cast<const WeaponMeleeClass*>(mClass);
+    const WeaponMeleeClass* pClass = (const WeaponMeleeClass*)mClass;
     const WeaponMeleeClass::DamageEdge& edge = pClass->m_aDamageEdge[uiEdge];
     if (pSelected)
     {
@@ -569,7 +569,7 @@ bool WeaponMelee::Deflect(const Ordnance* pOrdnance, const PblVector3& pos, cons
     }
     m_uiAnimIndex = uiAnim;
 
-    const WeaponMeleeClass* pClass = static_cast<const WeaponMeleeClass*>(mClass);
+    const WeaponMeleeClass* pClass = (const WeaponMeleeClass*)mClass;
     PblVector3 vHitPos = pos;
     if (pClass->m_amDeflectMatrix)
     {
@@ -703,10 +703,10 @@ bool WeaponMelee::Deflect(const Ordnance* pOrdnance, const PblVector3& pos, cons
 
     TurnOn(0.1f);
     GameObject* pObject = mOwner->GetGameObject();
-    static_cast<const WeaponMeleeClass*>(mClass)->m_DeflectSound.Play(&mOwner->GetGameObject()->GetPosition(),
+    ((const WeaponMeleeClass*)mClass)->m_DeflectSound.Play(&mOwner->GetGameObject()->GetPosition(),
                                                                       &pObject->GetVelocity(), false, true);
     FLEffectClass* pEffectClass =
-        FLEffect::s_EffectClasses.Find(static_cast<const WeaponMeleeClass*>(mClass)->m_uiDeflectEffect);
+        FLEffect::s_EffectClasses.Find(((const WeaponMeleeClass*)mClass)->m_uiDeflectEffect);
     if (pEffectClass)
     {
         FLEffectObject* pEffect = pEffectClass->BuildEffect();
@@ -893,7 +893,7 @@ bool WeaponMelee::_TestInputQueueForButtonEvent(const WeaponMelee::InputQueue& q
             fMatch = fBegin;
             return true;
         }
-        if (fBegin <= fTime && fTime <= fEnd && queue.IsButtonDown(static_cast<unsigned char>(iButton)))
+        if (fBegin <= fTime && fTime <= fEnd && queue.IsButtonDown((unsigned char)iButton))
         {
             fMatch = fBegin;
             return true;
@@ -937,7 +937,7 @@ bool WeaponMelee::_TestInputQueueForButtonEvent(const WeaponMelee::InputQueue& q
             fMatch = fBegin;
             return true;
         }
-        if (fBegin <= fTime && fTime <= fEnd && !queue.IsButtonDown(static_cast<unsigned char>(iButton)))
+        if (fBegin <= fTime && fTime <= fEnd && !queue.IsButtonDown((unsigned char)iButton))
         {
             fMatch = fBegin;
             return true;
@@ -993,7 +993,7 @@ bool WeaponMelee::_TestInputQueueForButtonEvent(const WeaponMelee::InputQueue& q
 bool WeaponMelee::TestConditionExceptInputQueue(const void* pConditionPtr, float fPreviousTime,
                 float fCurrentTime) const
 {
-    const Combo::Condition* pCondition = static_cast<const Combo::Condition*>(pConditionPtr);
+    const Combo::Condition* pCondition = (const Combo::Condition*)pConditionPtr;
     float fStart = pCondition->m_iTimeStart * Combo::Condition::TIME_SCALE;
     if (pCondition->m_bTimeStartFromEnd)
     {
@@ -1039,7 +1039,7 @@ bool WeaponMelee::TestConditionExceptInputQueue(const void* pConditionPtr, float
 bool WeaponMelee::TestCondition(const void* pConditionPtr, float fPreviousTime,
                 float fCurrentTime, float& fMatchTime)
 {
-    const Combo::Condition* pCondition = static_cast<const Combo::Condition*>(pConditionPtr);
+    const Combo::Condition* pCondition = (const Combo::Condition*)pConditionPtr;
     if (!TestConditionExceptInputQueue(pConditionPtr, fPreviousTime, fCurrentTime))
     {
         return false;
@@ -1125,7 +1125,7 @@ bool WeaponMelee::AlignVectorToThrust(PblVector3& v, bool bInitial) const
     }
     else
     {
-        float fInvLength = 1.0f / static_cast<float>(sqrt(static_cast<double>(fLengthSquared)));
+        float fInvLength = 1.0f / (float)sqrt((double)fLengthSquared);
         fCos = fInvLength * fZ;
         fSin = fInvLength * fX;
     }
@@ -1228,7 +1228,7 @@ void WeaponMelee::EnterState(ComboState eState)
     m_uiLightsaberWasOnMask = m_uiLightsaberOnMask;
     m_bUnreachableState_WeaponUpdate = 0;
     m_bUnreachableState_SoldierUpdate = 0;
-    const WeaponMeleeClass* pClass = static_cast<const WeaponMeleeClass*>(mClass);
+    const WeaponMeleeClass* pClass = (const WeaponMeleeClass*)mClass;
     const unsigned int uiBladeMask = (1u << pClass->m_uiNumWeapons) - 1;
     m_uiLightsaberOnMask = (state.m_uiLightsaberOffMask ^ uiBladeMask) & uiBladeMask;
     m_bRestartAnimation = state.m_bRestartAnimation;
@@ -1402,7 +1402,7 @@ bool WeaponMelee::UpdateFire(float fDeltaTime)
     {
         return true;
     }
-    const unsigned int uiNumEdges = static_cast<const WeaponMeleeClass*>(mClass)->m_uiNumDamageEdges;
+    const unsigned int uiNumEdges = ((const WeaponMeleeClass*)mClass)->m_uiNumDamageEdges;
     if (!uiNumEdges)
     {
         return true;
@@ -1466,7 +1466,7 @@ bool WeaponMelee::UpdateFire(float fDeltaTime)
         DamageData* pData;
         for (pData = m_pDamageData; pData; pData = pData->pNext)
         {
-            const Combo::Attack* pOther = static_cast<const Combo::Attack*>(pData->pAttack);
+            const Combo::Attack* pOther = (const Combo::Attack*)pData->pAttack;
             if (pOther == &attack)
             {
                 break;
@@ -1490,7 +1490,7 @@ bool WeaponMelee::UpdateFire(float fDeltaTime)
             m_pDamageData = pData;
         }
 
-        const WeaponMeleeClass::DamageEdge& edge = static_cast<const WeaponMeleeClass*>(mClass)->m_aDamageEdge[uiEdge];
+        const WeaponMeleeClass::DamageEdge& edge = ((const WeaponMeleeClass*)mClass)->m_aDamageEdge[uiEdge];
         float fLength = attack.GetDamageLength();
         float fWidth = attack.GetDamageWidth();
         if (attack.IsDamageLengthFromEdge())
@@ -1614,24 +1614,24 @@ bool WeaponMelee::UpdateFire(float fDeltaTime)
             {
                 continue;
             }
-            static_cast<Damageable*>(pObject)->ApplyDamage(damage, vSwing, vHit, -1, 0xffffffff);
+            ((Damageable*)pObject)->ApplyDamage(damage, vSwing, vHit, -1, 0xffffffff);
             if (fPush > 0.0f)
             {
                 pObject->ApplyPush(vSwing, fPush, false);
             }
 
-            if (static_cast<const WeaponMeleeClass*>(mClass)->m_uiNumHitEffects && !pHitEffectClass)
+            if (((const WeaponMeleeClass*)mClass)->m_uiNumHitEffects && !pHitEffectClass)
             {
                 unsigned int uiEffect;
                 if (gAltMeleeHitEffects && !(netInShell ? netEnabled : netEnabledNext) &&
-                    static_cast<const WeaponMeleeClass*>(mClass)->m_uiNumHitEffects != 1)
+                    ((const WeaponMeleeClass*)mClass)->m_uiNumHitEffects != 1)
                 {
-                    uiEffect = static_cast<const WeaponMeleeClass*>(mClass)->m_uiHitEffects[
-                        1 + PblRandom::GetGlobalInt() % (static_cast<const WeaponMeleeClass*>(mClass)->m_uiNumHitEffects - 1)];
+                    uiEffect = ((const WeaponMeleeClass*)mClass)->m_uiHitEffects[
+                        1 + PblRandom::GetGlobalInt() % (((const WeaponMeleeClass*)mClass)->m_uiNumHitEffects - 1)];
                 }
                 else
                 {
-                    uiEffect = static_cast<const WeaponMeleeClass*>(mClass)->m_uiHitEffects[0];
+                    uiEffect = ((const WeaponMeleeClass*)mClass)->m_uiHitEffects[0];
                 }
                 if (uiEffect)
                 {
@@ -1653,7 +1653,7 @@ bool WeaponMelee::UpdateFire(float fDeltaTime)
     if (bHit)
     {
         GameObject* pObject = mOwner->GetGameObject();
-        static_cast<const WeaponMeleeClass*>(mClass)->m_HitSound.Play(&mOwner->GetGameObject()->GetPosition(),
+        ((const WeaponMeleeClass*)mClass)->m_HitSound.Play(&mOwner->GetGameObject()->GetPosition(),
                                                                       &pObject->GetVelocity(), false, true);
     }
     return true;
@@ -1666,7 +1666,7 @@ void WeaponMelee::EnterFire()
     mStateTimer = 0.0f;
     const Combo::State& state = m_pCombo->m_aState[m_eComboState];
     SignalFire();
-    float fDuration = static_cast<const WeaponMeleeClass*>(mClass)->m_fTurnOnDuration;
+    float fDuration = ((const WeaponMeleeClass*)mClass)->m_fTurnOnDuration;
     if (state.m_uiNumAttacks)
     {
         float fStart = state.m_aAttack[0].m_uiDamageTimeStart * 0.01f;
@@ -1800,7 +1800,7 @@ void WeaponMeleeClass::_InitDeflectMatrices(int eMap)
             uiHardpoint = m_auiHardpoint[uiWeapon];
         }
         SoldierAnimatorClass::sInstance->GetAnimationBoneMatrix(
-            static_cast<SoldierAnimationBank::MAP>(eMap), anim.uiAnimIndex,
+            (SoldierAnimationBank::MAP)eMap, anim.uiAnimIndex,
             uiHardpoint, 0.1f, m_amDeflectMatrix[i]);
     }
 }
@@ -2640,7 +2640,7 @@ void WeaponMelee::UpdateEffects(float fDeltaTime, const PblVector3& vPos, const 
             {
                 if (!pSound)
                 {
-                    pSound = &static_cast<const WeaponMeleeClass*>(mClass)->m_OnSound;
+                    pSound = &((const WeaponMeleeClass*)mClass)->m_OnSound;
                 }
                 mSoundProps = *pSound;
                 mSoundControl.Play(&mSoundProps, &vPos, &vVel, true);
@@ -2656,7 +2656,7 @@ void WeaponMelee::UpdateEffects(float fDeltaTime, const PblVector3& vPos, const 
     {
         if (!pSound)
         {
-            pSound = &static_cast<const WeaponMeleeClass*>(mClass)->m_OnSound;
+            pSound = &((const WeaponMeleeClass*)mClass)->m_OnSound;
         }
         if (mSoundProps.GetProperties() != pSound->GetProperties())
         {
@@ -2672,13 +2672,13 @@ void WeaponMelee::UpdateEffects(float fDeltaTime, const PblVector3& vPos, const 
         if (uiMask & ~(unsigned int)m_uiLightsaberSoundOnMask)
         {
             m_OnOffSound.Stop(true);
-            m_OnOffSoundProps = static_cast<const WeaponMeleeClass*>(mClass)->m_TurnOnSound;
+            m_OnOffSoundProps = ((const WeaponMeleeClass*)mClass)->m_TurnOnSound;
             m_OnOffSound.Play(&m_OnOffSoundProps, &vPos, &vVel, true);
         }
         if (~uiMask & m_uiLightsaberSoundOnMask)
         {
             m_OnOffSound.Stop(true);
-            m_OnOffSoundProps = static_cast<const WeaponMeleeClass*>(mClass)->m_TurnOffSound;
+            m_OnOffSoundProps = ((const WeaponMeleeClass*)mClass)->m_TurnOffSound;
             m_OnOffSound.Play(&m_OnOffSoundProps, &vPos, &vVel, true);
         }
         m_uiLightsaberSoundOnMask = uiMask;

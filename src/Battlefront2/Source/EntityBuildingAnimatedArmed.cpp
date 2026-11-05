@@ -68,11 +68,11 @@ Entity* EntityBuildingAnimatedArmedClass::Build(const EntityDesc& desc)
     EntityBuildingAnimatedArmed* pBuilding = new EntityBuildingAnimatedArmed(this, desc);
     if (pBuilding)
     {
-        static_cast<CollisionObject*>(pBuilding)->AddStaticToCollisionManager();
+        ((CollisionObject*)pBuilding)->AddStaticToCollisionManager();
         pBuilding->ActivatePhysics();
         if (!NetGame::IsEnabled() || !NetGame::IsClient())
         {
-            static_cast<EntityGeometry*>(pBuilding)->BuildEffects();
+            ((EntityGeometry*)pBuilding)->BuildEffects();
         }
     }
     return pBuilding;
@@ -118,12 +118,12 @@ EntityBuildingAnimatedArmed::EntityBuildingAnimatedArmed(
     EntityBuildingAnimatedArmedClass* pClass, const EntityDesc& desc)
     : EntityBuildingAnimated(pClass, desc), mNumTurrets(0)
 {
-    for (int i = 0; i < 8; ++i)
+    for (int i = 0; i < kMaxTurrets; ++i)
     {
         if (pClass->mTurretClass[i])
         {
             mTurret[mNumTurrets] = new MountedTurret(this, pClass->mTurretClass[i], &mPose);
-            mControllableList.AddLast(&mTurret[mNumTurrets]->mNode, static_cast<Controllable*>(mTurret[mNumTurrets]));
+            mControllableList.AddLast(&mTurret[mNumTurrets]->mNode, (Controllable*)mTurret[mNumTurrets]);
             ++mNumTurrets;
         }
     }
@@ -203,7 +203,7 @@ void EntityBuildingAnimatedArmed::DeactivatePhysics()
             }
         }
     }
-    static_cast<Thread*>(this)->DeactivateThread();
+    ((Thread*)this)->DeactivateThread();
 }
 
 // FUNCTION: SWBF2 0x00495380
@@ -280,7 +280,7 @@ void EntityBuildingAnimatedArmed::Render(unsigned char uFlags, float fDist, unsi
 
 static inline Controllable* TurretControllable(MountedTurret* pTurret)
 {
-    return static_cast<Controllable*>(pTurret);
+    return (Controllable*)pTurret;
 }
 
 // SYNTHETIC: SWBF2 0x004028c0

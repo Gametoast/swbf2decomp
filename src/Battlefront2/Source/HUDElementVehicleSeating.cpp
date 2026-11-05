@@ -89,7 +89,7 @@ HUD::Item* HUD::ElementVehicleSeating::Factory::CreateItem(const char* const pNa
 // FUNCTION: SWBF2 0x0055ca90
 HUD::ElementVehicleSeating::ElementVehicleSeating(const char* const pName, Factory::ItemCallback pCallback,
                                                   void* const pUserData)
-    : HUD::ElementGroupPlayer(*static_cast<RedGroupElement*>(this), pName, pCallback, pUserData)
+    : HUD::ElementGroupPlayer(*(RedGroupElement*)this, pName, pCallback, pUserData)
 {
     mChanged = false;
 
@@ -103,26 +103,32 @@ HUD::ElementVehicleSeating::ElementVehicleSeating(const char* const pName, Facto
         mMarkerTemplates[i].SetDynamicallyAllocated(false);
         mMarkerTemplates[i].SetWriteEnabled(false);
         mMarkerTemplates[i].mSeatingDisplay = this;
-        mMarkerTemplates[i].SetFactory(pMarkerFactory);
+        SeatingMarker* pMarker = &mMarkerTemplates[i];
+        if (pMarker)
+            ((HUD::Item*)pMarker)->SetFactory(pMarkerFactory);
 
         mMarkerTextTemplate[i].HUD::Item::SetName(sMarkerTextNames[i]);
         mMarkerTextTemplate[i].SetDynamicallyAllocated(false);
         mMarkerTextTemplate[i].SetWriteEnabled(false);
         mMarkerTextTemplate[i].mSeatingDisplay = this;
-        mMarkerTextTemplate[i].SetFactory(pTextFactory);
+        SeatingText* pText = &mMarkerTextTemplate[i];
+        if (pText)
+            ((HUD::Item*)pText)->SetFactory(pTextFactory);
     }
 
     for (i = 0; i < 10; ++i)
     {
-        mSeatingMarkers[i].SetDynamicallyAllocated(false);
-        mSeatingMarkers[i].SetWriteEnabled(false);
-        mSeatingMarkers[i].SetFactory(pMarkerFactory);
-        RedGroupElement::AddElement(&mSeatingMarkers[i]);
+        SeatingMarker* pMarker = &mSeatingMarkers[i];
+        pMarker->SetDynamicallyAllocated(false);
+        pMarker->SetWriteEnabled(false);
+        pMarker->SetFactory(pMarkerFactory);
+        RedGroupElement::AddElement(pMarker);
 
-        mSeatingText[i].SetDynamicallyAllocated(false);
-        mSeatingText[i].SetWriteEnabled(false);
-        mSeatingText[i].SetFactory(pTextFactory);
-        RedGroupElement::AddElement(&mSeatingText[i]);
+        SeatingText* pText = &mSeatingText[i];
+        pText->SetDynamicallyAllocated(false);
+        pText->SetWriteEnabled(false);
+        pText->SetFactory(pTextFactory);
+        RedGroupElement::AddElement(pText);
 
         mSeatingState[i] = seatingState_None;
     }
@@ -225,7 +231,10 @@ void HUD::ElementVehicleSeating::UpdateSeatingState(unsigned int uSeat, SeatingS
     }
 
     const bool bEnable = eState != seatingState_None;
-    PblVector3 vOffset(0.0f, 0.0f, 0.0f);
+    PblVector3 vOffset;
+    vOffset.x = 0.0f;
+    vOffset.y = 0.0f;
+    vOffset.z = 0.0f;
     float fTextOffset = 0.0f;
     SeatingMarker& rMarker = mSeatingMarkers[uSeat];
     SeatingText& rText = mSeatingText[uSeat];
@@ -247,10 +256,9 @@ void HUD::ElementVehicleSeating::UpdateSeatingState(unsigned int uSeat, SeatingS
             {
                 float fDepth = mBackdrop.GetDepth();
                 fDepth *= Red3DModelElementLite::GetDepthMultiplier(true);
-                const float fInvDepth = 1.0f / (float)fDepth;
                 vOffset = mHardpoint.GetTranslation();
-                vOffset.x = fInvDepth * vOffset.x;
-                vOffset.y = -(fInvDepth * vOffset.y);
+                vOffset.x = (1.0f / fDepth) * vOffset.x;
+                vOffset.y = -((1.0f / fDepth) * vOffset.y);
             }
         }
         else
@@ -393,7 +401,7 @@ HUD::ElementVehicleSeating* HUD::ElementVehicleSeating::FindByPlayerIndex(const 
 {
     for (PblListSingle::Itor itor(sSeatingDisplays); itor.GetNode() != sSeatingDisplays.GetTerminator(); ++itor)
     {
-        ElementVehicleSeating* pDisplay = static_cast<ElementVehicleSeating*>(
+        ElementVehicleSeating* pDisplay = (ElementVehicleSeating*)(
             itor.GetNode()->GetObjectA(&sSeatingDisplays, offsetof(ElementVehicleSeating, mNode)));
         if (pDisplay->mPlayerIndex == playerIndex)
         {

@@ -694,12 +694,12 @@ void BirdParticle::RespawnGroundBird(const PblVector3& vPos, const BirdParticleT
     mState = BIRD_WALK_CIRCLE;
     mTimeOffCamera = 0.0f;
     mTotalLifetime = 0.0f;
-    mFlapTime = PblRandom::_Global.GetFloat() * PblMath::fTwoPi;
+    mFlapTime = PblRandom::_Global.GetFloat() * 6.2831855f;
     mVelocity = PblVector3(0.0f, 0.0f, 0.0f);
 
     PblQuaternion q = PblQuaternion(gMatrixIdentity);
     {
-        PblVector3 initomega = PblVector3(0.0f, PblRandom::_Global.GetFloat() * PblMath::fTwoPi, 0.0f);
+        PblVector3 initomega = PblVector3(0.0f, PblRandom::_Global.GetFloat() * 6.2831855f, 0.0f);
         float initAngle = Length(initomega);
         if (initAngle > EPSILON)
         {
@@ -722,9 +722,9 @@ void BirdParticle::RespawnGroundBird(const PblVector3& vPos, const BirdParticleT
 
     PblVector3 vNewPos = mCircleCenter;
     float fSin, fCos;
-    PblMath::SinCos(&fSin, &fCos, mCircleTime / mTotalCircleTime * PblMath::fTwoPi);
-    vNewPos.x += mCircleRadius * fSin;
+    PblMath::SinCos(&fSin, &fCos, mCircleTime / mTotalCircleTime * 6.2831855f);
     vNewPos.z += mCircleRadius * fCos;
+    vNewPos.x += mCircleRadius * fSin;
     vNewPos.y = RedTerrain::GetHoleHeight(vNewPos) + type.mSize * 0.125f;
 
     mMatrix = PblMatrix(q, vNewPos);
@@ -1027,10 +1027,13 @@ bool BirdParticleManager::Update(float fDeltaTime)
             const D3DXVECTOR3 vUp(0.0f, 1.0f, 0.0f);
 
             PblVector3 vSide;
-            PblVector3 vForward;
             {
                 D3DXVECTOR3 vTemp;
                 D3DXVec3Normalize((D3DXVECTOR3*)&vSide, D3DXVec3Cross(&vTemp, &vUp, &vDir));
+            }
+            PblVector3 vForward;
+            {
+                D3DXVECTOR3 vTemp;
                 D3DXVec3Normalize((D3DXVECTOR3*)&vForward, D3DXVec3Cross(&vTemp, &vUp, (const D3DXVECTOR3*)&vSide));
             }
 

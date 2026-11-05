@@ -225,7 +225,7 @@ bool OrdnanceBeam::Update(float fDeltaTime)
                 pHit = 0;
             }
 
-            if (!NetGame::IsEnabled() || (NetGame::IsClient() && netIsLocalTurn))
+            if (!NetGame::IsEnabled() || ((netEnabledNext && netClientActive) && netIsLocalTurn))
             {
                 if (((OrdnanceBeamClass*)mClass)->mImpactEffect)
                 {

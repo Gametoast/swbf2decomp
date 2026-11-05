@@ -37,7 +37,7 @@ namespace
 
     Damageable* AsDamageable(GameObject* pObject)
     {
-        return static_cast<Damageable*>(pObject);
+        return (Damageable*)pObject;
     }
 }
 

@@ -772,7 +772,7 @@ void FLEffectObject::_UpdateWorldMatrix()
                 PblVector3 vWorld;
                 D3DXVec3TransformNormal((D3DXVECTOR3*)&vWorld, (const D3DXVECTOR3*)&vOffset,
                                         (const D3DXMATRIX*)&mWorld);
-                mWorld[3] += vWorld;
+                D3DXVec3Add((D3DXVECTOR3*)&mWorld[3], (const D3DXVECTOR3*)&mWorld[3], (const D3DXVECTOR3*)&vWorld);
                 UpdatedWorldMatrix();
             }
             return;

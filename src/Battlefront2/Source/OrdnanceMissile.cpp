@@ -166,7 +166,7 @@ bool OrdnanceMissile::Update(float fDeltaTime)
             {
                 if (it->GetEnemyLockedOnMeState() < 2.0f || it->GetEnemyLockedOnMeState() > 0.2f)
                 {
-                    it->SetEnemyLockedOnMeState(2.0f, this, Distance(static_cast<const CollisionObject*>(pTarget)->GetCollisionCenter(), mPosition));
+                    it->SetEnemyLockedOnMeState(2.0f, this, Distance(((const CollisionObject*)pTarget)->GetCollisionCenter(), mPosition));
                 }
             }
         }

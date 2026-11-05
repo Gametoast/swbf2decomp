@@ -300,7 +300,7 @@ void SoundSpaceRegion::DestroyAll()
         while (pSpace->GetRegionCount())
         {
             SoundSpaceRegion* pRegion =
-                static_cast<SoundSpaceRegion*>(pSpace->FindRegionByIndex(0));
+                (SoundSpaceRegion*)pSpace->FindRegionByIndex(0);
             delete pRegion;
         }
     }

@@ -88,7 +88,7 @@ void HUD::EventClass::Send(const Event& event) const
     for (PblListDouble::Itor itor(mHandlerList);
          itor.GetNode() != mHandlerList.GetTerminator(); ++itor)
     {
-        const EventHandler* pHandler = static_cast<EventHandler*>(
+        const EventHandler* pHandler = (EventHandler*)(
             itor.GetNode()->GetObjectA(&mHandlerList, offsetof(EventHandler, mNode)));
         pHandler->HandleEvent(event);
     }
@@ -245,7 +245,7 @@ HUD::EventClass* HUD::EventClass::GetNext(EventClass* pEvent)
 // FUNCTION: SWBF2 0x0055df80
 HUD::EventClass* HUD::EventClass::GetPrevious(EventClass* pEvent)
 {
-    return static_cast<EventClass*>(pEvent->mNode.GetPrevious()->GetObjectA(
+    return (EventClass*)(pEvent->mNode.GetPrevious()->GetObjectA(
         &sList, offsetof(EventClass, mNode)));
 }
 
@@ -307,7 +307,7 @@ HUD::EventClass* HUD::EventClass::FindByHashID(unsigned int uHashID)
     for (PblListSingle::Itor itor(sList);
          itor.GetNode() != sList.GetTerminator(); ++itor)
     {
-        EventClass* pEvent = static_cast<EventClass*>(
+        EventClass* pEvent = (EventClass*)(
             itor.GetNode()->GetObjectA(&sList, offsetof(EventClass, mNode)));
         if (pEvent->mHashID == uHashID)
         {

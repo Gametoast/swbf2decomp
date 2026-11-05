@@ -146,7 +146,7 @@ void EntityGeometry::SetProperty(unsigned int uProperty, const char* pszValue)
                                    (const D3DXMATRIX*)&mMatrix);
             SetCollisionCenter(vCenter);
             float fRadius = mModel->_mModel->_BoundingSphere.GetRadius();
-            EntityGeometryClass* pClass = static_cast<EntityGeometryClass*>(mEntityClass);
+            EntityGeometryClass* pClass = (EntityGeometryClass*)mEntityClass;
             if (!(fRadius > pClass->mPotentialCollisionRadius))
             {
                 fRadius = pClass->mPotentialCollisionRadius;
@@ -202,7 +202,7 @@ void EntityGeometry::SetProperty(unsigned int uProperty, const char* pszValue)
 // FUNCTION: SWBF2 0x004ba660
 void EntityGeometry::BuildEffects()
 {
-    EntityGeometryClass* pClass = static_cast<EntityGeometryClass*>(mEntityClass);
+    EntityGeometryClass* pClass = (EntityGeometryClass*)mEntityClass;
     delete m_pAttachedEffects;
     m_pAttachedEffects = 0;
     if (pClass->m_pAttachedEffectsClass)
@@ -250,7 +250,7 @@ PblVector3 EntityGeometry::GetTargetPoint(const PblVector3& vPos, const PblVecto
     PblVector3 vOffset;
     D3DXVec3TransformNormal(
         (D3DXVECTOR3*)&vOffset,
-        (const D3DXVECTOR3*)&static_cast<EntityGeometryClass*>(mEntityClass)->GetTargetPointOffset(),
+        (const D3DXVECTOR3*)&((EntityGeometryClass*)mEntityClass)->GetTargetPointOffset(),
         (const D3DXMATRIX*)&GetMatrix());
     return GetCollisionCenter() + vOffset;
 }
@@ -373,7 +373,7 @@ EntityGeometryClass::EntityGeometryClass(unsigned int uHash)
     memset(mChunkDescriptors, 0, sizeof(mChunkDescriptors));
     memset(mFullChunkCollisions, 0, sizeof(mFullChunkCollisions));
 
-    for (int i = 0; i < 10; ++i)
+    for (int i = 0; i < kMaxChunks; ++i)
     {
         mInitialChunkSpeed[i] = -1.0f;
         mChunkVelocityFactor[i] = 1.0f;
@@ -489,7 +489,7 @@ EntityGeometryClass::EntityGeometryClass(EntityGeometryClass* pBase, unsigned in
 // FUNCTION: SWBF2 0x004bbc30
 EntityGeometryClass::~EntityGeometryClass()
 {
-    for (int i = 0; i < 10; ++i)
+    for (int i = 0; i < kMaxChunks; ++i)
     {
         if (mChunkDescriptors[i])
         {
@@ -544,7 +544,7 @@ void EntityGeometryClass::SetProperty(unsigned int uProperty, const char* pszVal
             char acName[128];
             _snprintf(acName, 127, "%s%d", pszValue, i);
             acName[127] = 0;
-            pPrimitive = CollisionBodyPrimitive::_HashTable.Find(PblHash(acName));
+            pPrimitive = CollisionBodyPrimitive::Find(PblHash(acName));
             if (pPrimitive)
             {
                 mCollisionModel.AddBody(pPrimitive);
@@ -668,7 +668,7 @@ void EntityGeometryClass::SetProperty(unsigned int uProperty, const char* pszVal
         {
             _snprintf(acName, 127, "%s%d", pszValue, i);
             acName[127] = 0;
-            pPrimitive = CollisionBodyPrimitive::Find(PblHash(acName));
+            pPrimitive = CollisionBodyPrimitive::_HashTable.Find(PblHash(acName));
             if (pPrimitive)
             {
                 mFullChunkCollisions[sCurrentChunk]->AddBody(pPrimitive);
@@ -963,7 +963,7 @@ void EntityGeometryClass::PostReadSetup()
 int EntityGeometryClass::GetNumChunks()
 {
     int iNum = 0;
-    for (int i = 0; i < 10; ++i)
+    for (int i = 0; i < kMaxChunks; ++i)
     {
         if (mChunkDescriptors[i])
         {
@@ -1151,7 +1151,7 @@ void EntityGeometry::CreateChunkCluster(float fScale)
         pPose = &kPose;
     }
 
-    EntityGeometryClass* pClass = static_cast<EntityGeometryClass*>(mEntityClass);
+    EntityGeometryClass* pClass = (EntityGeometryClass*)mEntityClass;
     if (!pClass)
     {
         return;
@@ -1159,7 +1159,7 @@ void EntityGeometry::CreateChunkCluster(float fScale)
 
     int iNumChunks = 0;
     PblVector3 vCenter(0.0f, 0.0f, 0.0f);
-    for (int i = 0; i < 10; ++i)
+    for (int i = 0; i < EntityGeometryClass::kMaxChunks; ++i)
     {
         if (!pClass->mChunkDescriptors[i])
         {
@@ -1193,7 +1193,7 @@ void EntityGeometry::CreateChunkCluster(float fScale)
     GetGameObject();
     vCenter.y = GetPosition().y;
 
-    for (int i = 0; i < 10; ++i)
+    for (int i = 0; i < EntityGeometryClass::kMaxChunks; ++i)
     {
         if (!pClass->mChunkDescriptors[i])
         {
@@ -1263,7 +1263,7 @@ void EntityGeometry::CreateChunkCluster(float fScale)
     if (NetGame::IsEnabled())
     {
         NetGame::CreateEvent_CreateChunkCluster(pCluster, pClass, (unsigned __int64)-1);
-        for (unsigned int i = 0; i < 10; ++i)
+        for (unsigned int i = 0; i < ChunkCluster::kMaxChunks; ++i)
         {
             if (!pCluster->mChunks[i].IsMoving())
             {

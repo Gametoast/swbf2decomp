@@ -187,7 +187,7 @@ Entity* WeaponRemote::Fire()
             {
                 mItem = pObject;
             }
-            if (static_cast<const WeaponRemoteClass*>(mClass)->mSwitchImmediately && mItem)
+            if (((const WeaponRemoteClass*)mClass)->mSwitchImmediately && mItem)
             {
                 if (Controllable* pPilot = mOwner->mPilot)
                 {

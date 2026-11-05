@@ -152,19 +152,12 @@ void HUD::ElementTarget::Target::Update(float fDeltaTime, HUD::ElementBitmap& bi
                 }
                 else
                 {
-                    color = m_color;
+                    color = RedColor(m_color);
                 }
             }
             else
             {
-                if (bEnabled)
-                {
-                    color = bitmap.m_color;
-                }
-                else
-                {
-                    color = m_color;
-                }
+                color = bEnabled ? RedColor(bitmap.m_color) : RedColor(m_color);
             }
             bitmap = *this;
             bitmap.SetColorOnly(color);
@@ -192,11 +185,11 @@ void HUD::ElementTarget::Target::Update(float fDeltaTime, HUD::ElementBitmap& bi
     bool bVehicleView;
     float fVehicleScale;
     if (info.mOnScreen && pCharacter && pCharacter->mVehicle &&
-        static_cast<const Controllable*>(pCharacter->mVehicle)->GetGameObject() &&
-        (static_cast<const Controllable*>(pCharacter->mVehicle)
+        ((const Controllable*)pCharacter->mVehicle)->GetGameObject() &&
+        (((const Controllable*)pCharacter->mVehicle)
              ->GetGameObject()
              ->IsRtti(EntityFlyer::rttiHashEntityFlyer) ||
-         static_cast<const Controllable*>(pCharacter->mVehicle)
+         ((const Controllable*)pCharacter->mVehicle)
              ->GetGameObject()
              ->IsRtti(EntityRemoteTerminal::rttiHashEntityRemoteTerminal)))
     {
@@ -498,7 +491,7 @@ HUD::ElementTarget::Factory::Factory()
 // FUNCTION: SWBF2 0x00559ec0
 HUD::ElementTarget::ElementTarget(const char* const pName, Factory::ItemCallback pCallback,
                                   void* const pUserData)
-    : HUD::ElementGroupPlayer(*static_cast<RedGroupElement*>(this), pName, pCallback, pUserData)
+    : HUD::ElementGroupPlayer(*(RedGroupElement*)this, pName, pCallback, pUserData)
 {
     mFourSegmentLockOn = false;
 
@@ -527,7 +520,7 @@ HUD::ElementTarget::ElementTarget(const char* const pName, Factory::ItemCallback
         mTargetCommon[i].HUD::Element::Enable(false);
         mTargetCommonState[i] = targetCommonState_OnScreen;
     }
-    for (i = 0; i < 64; ++i)
+    for (i = 0; i < LockOnManager::kMaxTargets; ++i)
     {
         ElementGroupBase::AddElement(&mTargetPlayer[i]);
         mTargetPlayer[i].mDynamicAlloc = false;
@@ -576,7 +569,7 @@ void HUD::ElementTarget::Update(const float fDeltaTime)
         const LockOnManager::TargetInfo* pInfos = pManager->GetPlayerTargetInfos();
         bool bAnyLocked = false;
         unsigned int i;
-        for (i = 0; i < 64; ++i)
+        for (i = 0; i < LockOnManager::kMaxTargets; ++i)
         {
             const TargetPlayerState eState = TranslatePlayerTargetInfo(pInfos[i]);
             const bool bStateChanged = eState != mTargetPlayerState[i];
@@ -800,7 +793,7 @@ void HUD::ElementTarget::WriteData(HUD::File& file, unsigned int uTabs)
 // FUNCTION: SWBF2 0x0055ab30
 void HUD::ElementTarget::EventRefreshTargetCommon(const HUD::Event& event, void* const pData)
 {
-    ElementTarget* pTarget = static_cast<ElementTarget*>(pData);
+    ElementTarget* pTarget = (ElementTarget*)pData;
     if (event.GetClass()->GetType() != HUD::EventClass::type_Uint)
     {
         return;

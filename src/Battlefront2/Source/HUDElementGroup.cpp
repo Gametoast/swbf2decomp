@@ -49,7 +49,7 @@ static const unsigned int kEventRotation = 0x36f7de41;
 
 static inline RedGroupElement* GetGroupElement(const HUD::Element* pElement)
 {
-    return static_cast<RedGroupElement*>(pElement->mElement);
+    return (RedGroupElement*)pElement->mElement;
 }
 
 // FUNCTION: SWBF2 0x0054e3b0
@@ -252,7 +252,7 @@ void HUD::ElementGroupBase::RemoveAllElements()
     RedGroupElement* pGroup = GetGroupElement(this);
     for (PblList<RedInterfaceElement>::Itor it = pGroup->GetChildrenList().Begin(); it;)
     {
-        HUD::Element* pElement = static_cast<HUD::Element*>(it->GetParent());
+        HUD::Element* pElement = (HUD::Element*)it->GetParent();
         ++it;
         if (pElement)
         {
@@ -276,7 +276,7 @@ bool HUD::ElementGroupBase::ReadChild(PblConfig& config, PblConfig::Data& data,
             PblConfig scope(config.ReadNextScope(), true);
             if (pFactory->GetType() == Item::Factory::type_Element)
             {
-                HUD::Element* pElement = static_cast<HUD::Element*>(pItem);
+                HUD::Element* pElement = (HUD::Element*)pItem;
                 AddElement(pElement);
                 mElementList.AddLast(&pElement->mGroupNode);
                 pElement->SetViewport(GetViewport());

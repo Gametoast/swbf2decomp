@@ -75,7 +75,7 @@ namespace
 
 inline Damageable* GameObjectDamageable(GameObject* pObject)
 {
-    return static_cast<Damageable*>(pObject);
+    return (Damageable*)pObject;
 }
 inline unsigned int GameObjectHandleId(GameObject* pObject)
 {
@@ -94,23 +94,23 @@ inline GameObject* HandleObject(PblHandle<GameObject>& handle)
 
 inline Controllable* AsControllable(EntityRemoteTerminal* pTerminal)
 {
-    return static_cast<Controllable*>(pTerminal);
+    return (Controllable*)pTerminal;
 }
 
 
 inline const Controllable* SoldierControllable(const EntitySoldier* pSoldier)
 {
-    return static_cast<const Controllable*>(pSoldier);
+    return (const Controllable*)pSoldier;
 }
 
 inline Controllable* SoldierControllable(EntitySoldier* pSoldier)
 {
-    return static_cast<Controllable*>(pSoldier);
+    return (Controllable*)pSoldier;
 }
 
 inline EntitySoldier* PilotSoldier(Controllable* pPilot)
 {
-    return pPilot ? static_cast<EntitySoldier*>(pPilot) : 0;
+    return pPilot ? (EntitySoldier*)pPilot : 0;
 }
 
 }
@@ -122,7 +122,7 @@ EntityRemoteTerminal::EntityRemoteTerminal(EntityRemoteTerminalClass* pClass, co
 {
     mControllableList.AddLast(&this->Controllable::mNode, this);
     mClass = pClass;
-    static_cast<RedSceneObject*>(this)->Activate();
+    ((RedSceneObject*)this)->Activate();
     TargetManager::AddTarget(this, true);
     ClearControllable();
     VehicleManager::Add(this);
@@ -278,7 +278,7 @@ void EntityRemoteTerminal::SetMatrix(const PblMatrix& matrix)
 // FUNCTION: SWBF2 0x004dcab0
 Trackable* EntityRemoteTerminal::GetTrackable()
 {
-    return static_cast<Trackable*>(this);
+    return (Trackable*)this;
 }
 
 // SYNTHETIC: SWBF2 0x004dde99

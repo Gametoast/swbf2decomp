@@ -325,17 +325,16 @@ void SkyStars::Render(unsigned int uiFlags) const
     const float fTanHalfWidth = fWidth * 0.5f / fNear;
     const float fTanHalfHeight = fHeight * 0.5f / fNear;
 
-    const PblMatrix* apMatrices[2] = { NULL, NULL };
+    const PblMatrix* apMatrices[2];
     const PblMatrix& mCamera = pCamera->GetMatrix();
 
     if (!m_bRenderBottom)
     {
-        const float fRight = mCamera.m[0][1] * fTanHalfWidth;
-        const float fTopRight = -mCamera.m[2][1] + fRight + mCamera.m[1][1] * fTanHalfHeight;
-        const float fTopLeft = -mCamera.m[2][1] - fRight + mCamera.m[1][1] * fTanHalfHeight;
-        const float fBottomRight = -mCamera.m[2][1] + fRight - mCamera.m[1][1] * fTanHalfHeight;
-        const float fBottomLeft = -mCamera.m[2][1] - fRight - mCamera.m[1][1] * fTanHalfHeight;
-        if (fTopRight < 0.0f && fTopLeft < 0.0f && fBottomRight < 0.0f && fBottomLeft < 0.0f)
+        const float fTopRight = (-mCamera.GetZAxis() + mCamera.GetXAxis() * fTanHalfWidth + mCamera.GetYAxis() * fTanHalfHeight).y;
+        const float fTopLeft = (-mCamera.GetZAxis() - mCamera.GetXAxis() * fTanHalfWidth + mCamera.GetYAxis() * fTanHalfHeight).y;
+        const float fBottomRight = (-mCamera.GetZAxis() + mCamera.GetXAxis() * fTanHalfWidth - mCamera.GetYAxis() * fTanHalfHeight).y;
+        if (fTopRight < 0.0f && fTopLeft < 0.0f && fBottomRight < 0.0f &&
+            (-mCamera.GetZAxis() - mCamera.GetXAxis() * fTanHalfWidth - mCamera.GetYAxis() * fTanHalfHeight).y < 0.0f)
         {
             return;
         }
@@ -454,10 +453,10 @@ void SkyStars::Render(unsigned int uiFlags) const
 
         aBand1[0] = aBand1[2];
         aBand1[1] = aBand1[3];
-        aBand1Bottom[0] = aBand1Bottom[2];
-        aBand1Bottom[1] = aBand1Bottom[3];
         aBand2[0] = aBand2[2];
         aBand2[1] = aBand2[3];
+        aBand1Bottom[0] = aBand1Bottom[2];
+        aBand1Bottom[1] = aBand1Bottom[3];
         aBand2Bottom[0] = aBand2Bottom[2];
         aBand2Bottom[1] = aBand2Bottom[3];
     }

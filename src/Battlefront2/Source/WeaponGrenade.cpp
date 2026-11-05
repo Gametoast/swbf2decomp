@@ -438,7 +438,7 @@ bool WeaponGrenade::Fire()
         PblVector3 vOffset = ((const WeaponGrenadeClass*)mClass)->m_avFireOffset[m_iFirePos];
         if (mOwner->GetGameObject()->IsRtti(EntitySoldier::rttiHashEntitySoldier))
         {
-            float fScale = static_cast<EntitySoldier*>(mOwner->GetGameObject())->mClass->mSkeletonRootScale;
+            float fScale = ((EntitySoldier*)mOwner->GetGameObject())->mClass->mSkeletonRootScale;
             if (fScale != 1.0f)
             {
                 vOffset *= fScale;
@@ -469,7 +469,7 @@ bool WeaponGrenade::Fire()
     desc.mDamageOwner.mClass = mOwner->GetGameObject()->GetEntityClass();
     desc.mDamageOwner.mWeapon = mClass;
     desc.mFireWeapon = this;
-    desc.mTarget = const_cast<GameObject*>(static_cast<const GameObject*>(mTarget));
+    desc.mTarget = const_cast<GameObject*>((const GameObject*)mTarget);
     desc.mBodyID = mTargetBodyID;
 
     bool bFlash = true;

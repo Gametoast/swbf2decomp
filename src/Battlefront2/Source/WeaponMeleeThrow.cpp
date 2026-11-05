@@ -45,12 +45,12 @@ WeaponMeleeThrow::WeaponMeleeThrow(const WeaponMeleeThrowClass* pClass, const We
     m_pPrimaryWeapon = 0;
 
     int iMeleeIndex = pClass->m_iPrimaryWeaponIndex;
-    EntitySoldier& soldier = *static_cast<EntitySoldier*>(mOwner->GetGameObject());
+    EntitySoldier& soldier = *(EntitySoldier*)mOwner->GetGameObject();
     for (int i = 0; i < soldier.GetWeaponCount(); ++i)
     {
         if (soldier.GetWeaponPtr(i) && soldier.GetWeaponPtr(i)->IsMelee())
         {
-            m_pPrimaryWeapon = static_cast<WeaponMelee*>(soldier.GetWeaponPtr(i));
+            m_pPrimaryWeapon = (WeaponMelee*)soldier.GetWeaponPtr(i);
             if (iMeleeIndex-- == 0)
             {
                 break;
@@ -59,13 +59,13 @@ WeaponMeleeThrow::WeaponMeleeThrow(const WeaponMeleeThrowClass* pClass, const We
     }
 
     const WeaponMeleeClass* pPrimaryClass =
-        static_cast<const WeaponMeleeClass*>(m_pPrimaryWeapon->mClass);
+        (const WeaponMeleeClass*)m_pPrimaryWeapon->mClass;
 
     const unsigned char uiThrowAnim = static_cast<unsigned char>(pPrimaryClass->m_pCombo->m_uiThrowAnimIndex);
     SoldierAnimatorClass::Instance()->GetAnimationBoneMatrix(
         static_cast<SoldierAnimationBank::MAP>(m_pPrimaryWeapon->mSoldierAnimationMap),
         uiThrowAnim, 0x2B960099,
-        static_cast<const WeaponMeleeThrowClass*>(mClass)->m_fInitialSalvoDelay, m_mThrow0Local);
+        ((const WeaponMeleeThrowClass*)mClass)->m_fInitialSalvoDelay, m_mThrow0Local);
 }
 
 
@@ -223,7 +223,7 @@ bool WeaponMeleeThrow::UpdateFire(float fDeltaTime)
     mStateTimer += fDeltaTime;
     if (!m_bFired)
     {
-        if (static_cast<const WeaponMeleeThrowClass*>(mClass)->m_fInitialSalvoDelay > mStateTimer)
+        if (((const WeaponMeleeThrowClass*)mClass)->m_fInitialSalvoDelay > mStateTimer)
         {
             return true;
         }
@@ -252,7 +252,7 @@ void WeaponMeleeThrow::Fire()
     desc.mDamageOwner.mTeam = mOwner->GetGameObject()->GetTeam();
     desc.mDamageOwner.mClass = mOwner->GetGameObject()->GetEntityClass();
     desc.mDamageOwner.mWeapon = mClass;
-    desc.mTarget = IsLocked() ? const_cast<GameObject*>(static_cast<const GameObject*>(mTarget)) : 0;
+    desc.mTarget = IsLocked() ? const_cast<GameObject*>((const GameObject*)mTarget) : 0;
     desc.mBodyID = IsLocked() ? mTargetBodyID : -1;
     desc.mFireWeapon = this;
 

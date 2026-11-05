@@ -158,7 +158,7 @@ void EntityBuildingArmedClass::SetProperty(unsigned int uProperty, const char* p
 
 static inline Controllable* TurretControllable(MountedTurret* pTurret)
 {
-    return static_cast<Controllable*>(pTurret);
+    return (Controllable*)pTurret;
 }
 
 // FUNCTION: SWBF2 0x00495a40
@@ -166,7 +166,7 @@ EntityBuildingArmed::EntityBuildingArmed(EntityBuildingArmedClass* pClass, const
     : EntityBuilding(pClass, desc)
 {
     mNumTurrets = 0;
-    for (int i = 0; i < 8; ++i)
+    for (int i = 0; i < kMaxTurrets; ++i)
     {
         if (pClass->mTurretClass[i])
         {
@@ -439,8 +439,10 @@ void EntityBuildingArmed::Render(unsigned char uFlags, float fDist, unsigned int
         {
             if (GetTurretPtr(i))
             {
+                const Controllable* pTurret;
                 Trackable* pTrackable = GetTrackable();
-                if (!pTrackable->RenderTrackable(GetTurretPtr(i)->mPlayerId))
+                pTurret = GetTurretPtr(i);
+                if (!pTrackable->RenderTrackable(pTurret->mPlayerId))
                 {
                     return;
                 }
@@ -505,7 +507,7 @@ void EntityBuildingArmed::Render(unsigned char uFlags, float fDist, unsigned int
 
         // GLOBAL: SWBF2 0x01faa900
         static float fMaxShadowLength =
-            static_cast<const EntityGeometryClass*>(mEntityClass)->mMaxShadowLength;
+            ((const EntityGeometryClass*)mEntityClass)->mMaxShadowLength;
         float fShadowLength = fMaxShadowLength;
         if (!(fShadowLength > 0.0f) || fShadowLength > fLength)
         {

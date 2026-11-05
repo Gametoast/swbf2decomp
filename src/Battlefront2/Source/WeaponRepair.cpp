@@ -306,15 +306,15 @@ WeaponRepair::~WeaponRepair()
 // FUNCTION: SWBF2 0x006906f0
 bool WeaponRepair::IsLocked() const
 {
-    GameObject* pTarget = const_cast<GameObject*>(static_cast<const GameObject*>(mTarget));
+    GameObject* pTarget = const_cast<GameObject*>((const GameObject*)mTarget);
     if (!pTarget)
     {
         pTarget = mOwner->GetGameObject();
     }
     if (pTarget)
     {
-        float fHealth = static_cast<const WeaponRepairClass*>(mClass)->mAddHealth[pTarget->mHealthType];
-        float fAmmo = static_cast<const WeaponRepairClass*>(mClass)->mAddAmmo[pTarget->mHealthType];
+        float fHealth = ((const WeaponRepairClass*)mClass)->mAddHealth[pTarget->mHealthType];
+        float fAmmo = ((const WeaponRepairClass*)mClass)->mAddAmmo[pTarget->mHealthType];
         int iPilotType;
         int bHack = pTarget->GetControllable() &&
                     ((iPilotType = pTarget->GetControllable()->mPilotType) == PILOT_VEHICLE ||
@@ -337,7 +337,7 @@ void WeaponRepair::EnterFire()
 {
     Weapon::EnterFire();
     mStateTimer = 0.0f;
-    mStateLimit = static_cast<const WeaponRepairClass*>(mClass)->mShotDelay;
+    mStateLimit = ((const WeaponRepairClass*)mClass)->mShotDelay;
     mFired = false;
     if (mClass->mTriggerSingle)
     {
@@ -435,7 +435,7 @@ bool WeaponRepair::FireDone() const
 // FUNCTION: SWBF2 0x00690b50
 bool WeaponRepair::Fire(float fDeltaTime)
 {
-    GameObject* pTarget = const_cast<GameObject*>(static_cast<const GameObject*>(mTarget));
+    GameObject* pTarget = const_cast<GameObject*>((const GameObject*)mTarget);
     if (!pTarget)
     {
         pTarget = mOwner->GetGameObject();
@@ -448,8 +448,8 @@ bool WeaponRepair::Fire(float fDeltaTime)
         return false;
     }
 
-    float fHealth = static_cast<const WeaponRepairClass*>(mClass)->mAddHealth[pTarget->mHealthType] * fDeltaTime;
-    float fAmmo = static_cast<const WeaponRepairClass*>(mClass)->mAddAmmo[pTarget->mHealthType] * fDeltaTime;
+    float fHealth = ((const WeaponRepairClass*)mClass)->mAddHealth[pTarget->mHealthType] * fDeltaTime;
+    float fAmmo = ((const WeaponRepairClass*)mClass)->mAddAmmo[pTarget->mHealthType] * fDeltaTime;
 
     DamageOwner owner(0, 0, 0, 0, 0, 1.0f);
     owner.mCharacter = mOwner->mCharacter;
@@ -481,7 +481,7 @@ bool WeaponRepair::Fire(float fDeltaTime)
             if (iSoldiers && pTarget->GetGameObjectClass()->GetTimeRequiredToEject() > 0.0f)
             {
                 const float fEjectTimer = pTarget->GetEjectTimer();
-                pTarget->SetEjectTimer(static_cast<const WeaponRepairClass*>(mClass)->mShotDelay + fEjectTimer);
+                pTarget->SetEjectTimer(((const WeaponRepairClass*)mClass)->mShotDelay + fEjectTimer);
                 pTarget->ResetTimeSinceLastHack();
                 if (pTarget->GetEjectTimer() > pTarget->GetGameObjectClass()->GetTimeRequiredToEject())
                 {
@@ -492,7 +492,7 @@ bool WeaponRepair::Fire(float fDeltaTime)
                         if (it->GetPilot() && it->GetPilot()->GetGameObject() &&
                             it->GetPilot()->GetGameObject()->IsRtti(EntitySoldier::rttiHashEntitySoldier))
                         {
-                            EntitySoldier* pSoldier = static_cast<EntitySoldier*>(it->GetPilot());
+                            EntitySoldier* pSoldier = (EntitySoldier*)it->GetPilot();
                             Character* pCharacter = pSoldier->mCharacter;
                             if (pCharacter)
                             {
@@ -524,7 +524,7 @@ bool WeaponRepair::Fire(float fDeltaTime)
     }
     else if (pTarget->IsRtti(EntityMine::rttiHashEntityMine))
     {
-        EntityItem* pMine = static_cast<EntityItem*>(pTarget);
+        EntityItem* pMine = (EntityItem*)pTarget;
         if (pMine->GetLifeTimer() > 0.0f)
         {
             pMine->mLifeTimer += fHealth;

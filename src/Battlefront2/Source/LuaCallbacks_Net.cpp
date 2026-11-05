@@ -3055,7 +3055,7 @@ int ScriptCB_BeginJoin(lua_State*)
     NetSetup::SetPassword(password);
     if (!NetComm::IsLAN() && password)
     {
-        const unsigned char* remoteHash = (const unsigned char*)static_cast<CNetFindGame*>(findGame)->GetDescriptorExtension();
+        const unsigned char* remoteHash = (const unsigned char*)((CNetFindGame*)findGame)->GetDescriptorExtension();
         unsigned char localHash[64] = {0};
         Sha512Hash((const unsigned char*)password, strlen(password), localHash, 0);
         if (memcmp(remoteHash, localHash, sizeof(localHash)) != 0)
@@ -3287,12 +3287,12 @@ int ScriptCB_SetVoiceSendPreset(lua_State*)
 {
     if (GameVoiceChat::IsOpen())
     {
-        const GameVoiceChat::Transport::Mask preset = static_cast<GameVoiceChat::Transport::Mask>(LuaHelper::GetInt(1));
+        const GameVoiceChat::Transport::Mask preset = (GameVoiceChat::Transport::Mask)LuaHelper::GetInt(1);
         GameVoiceChat::Node* node = GameVoiceChat::FindNodeByDeviceID(PauseMenu::GetPausingJoystick());
         if (node)
         {
             ((GameVoiceChat::Node*)node)->SetSendMask(preset, true, false);
-            static_cast<GameVoiceChat::Node*>(node)->Update();
+            ((GameVoiceChat::Node*)node)->Update();
         }
     }
     return 0;
@@ -3322,12 +3322,12 @@ int ScriptCB_SetVoiceReceivePreset(lua_State*)
 {
     if (GameVoiceChat::IsOpen())
     {
-        const GameVoiceChat::Transport::Mask preset = static_cast<GameVoiceChat::Transport::Mask>(LuaHelper::GetInt(1));
+        const GameVoiceChat::Transport::Mask preset = (GameVoiceChat::Transport::Mask)LuaHelper::GetInt(1);
         GameVoiceChat::Node* node = GameVoiceChat::FindNodeByDeviceID(PauseMenu::GetPausingJoystick());
         if (node)
         {
             ((GameVoiceChat::Node*)node)->SetReceiveMask(preset, true, false);
-            static_cast<GameVoiceChat::Node*>(node)->Update();
+            ((GameVoiceChat::Node*)node)->Update();
         }
     }
     return 0;

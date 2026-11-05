@@ -41,7 +41,7 @@ const char WeaponDetonator::rttiNameWeaponDetonator[] = "WeaponDetonator";
 // FUNCTION: SWBF2 0x00682600
 unsigned int WeaponDetonator::GetNameHash() const
 {
-    const WeaponDetonatorClass* pClass = static_cast<const WeaponDetonatorClass*>(mClass);
+    const WeaponDetonatorClass* pClass = (const WeaponDetonatorClass*)mClass;
     if (pClass && HasItemsDispensed() && pClass->mPlantedHash)
     {
         return pClass->mPlantedHash;
@@ -115,7 +115,7 @@ WeaponDetonator::WeaponDetonator(const WeaponDetonatorClass* pClass, const Weapo
 void WeaponDetonator::NetAttachItem(Entity* pAttach)
 {
     WeaponDetonator* pWeapon = this;
-    EntityItem* pItem = static_cast<EntityItem*>(pAttach);
+    EntityItem* pItem = (EntityItem*)pAttach;
     WeaponDispenserClass* pClass = (WeaponDispenserClass*)pWeapon->mClass;
     if (!pClass->mDispenseClass || !pWeapon->mItemArray || !pWeapon->mItemCount || !pItem)
     {
@@ -144,7 +144,7 @@ void WeaponDetonator::NetAttachItem(Entity* pAttach)
     Entity* pEntity = pObject->GetEntity();
     if (pEntity->IsRtti(EntityPortableTurret::rttiHashEntityPortableTurret))
     {
-        static_cast<EntityPortableTurret*>(pObject)->mOwnerChar = pCharacter;
+        ((EntityPortableTurret*)pObject)->mOwnerChar = pCharacter;
     }
     pObject->Init();
 
@@ -171,7 +171,7 @@ void WeaponDetonator::NetAttachItem(Entity* pAttach)
                 PblHandle<const GameObject> who(pTarget);
                 PblHandle<const GameObject> owner(pOwnerObject);
                 DroidRepairInfo info(who, owner);
-                CommandFsm* pFsm = static_cast<UnitController*>(pController);
+                CommandFsm* pFsm = (UnitController*)pController;
                 pFsm->ForceCommand(info);
             }
         }

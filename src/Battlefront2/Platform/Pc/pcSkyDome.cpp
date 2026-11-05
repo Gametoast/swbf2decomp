@@ -50,7 +50,7 @@ void SkyFogRenderable::Init()
 {
     m_pShader = pcRedShader::Create(0x890EFA1E, 0x202, 0, 0, 0,
                                     RedColor::WHITE, RedColor::BLACK, 32.0f);
-    static_cast<pcSkyFogShader*>(m_pShader)->SetTexture(
+    ((pcSkyFogShader*)m_pShader)->SetTexture(
         RedRenderer::pcGetBuffer(PC_BUFFER_SKY));
 
     m_pPrimitive = pcRedPrimitive::Create(D3DPT_TRIANGLESTRIP, 0x202, 0x14, 4,

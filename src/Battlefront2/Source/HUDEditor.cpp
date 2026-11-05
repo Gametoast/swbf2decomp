@@ -577,8 +577,24 @@ void HUD::Editor::Update(RawControllerInputs* const pInputs, float fDelta)
             }
             if (GetControlValue(pInputs, control_LRight, true))
             {
-                mValue.modelValue = (RedModel*)(mValue.modelValue ? RedModel::GetNext(mValue.modelValue)
-                                                                  : RedModel::GetFirst());
+                if (mValue.modelValue)
+                {
+                    mValue.modelValue = (RedModel*)RedModel::GetNext(mValue.modelValue);
+                }
+                else
+                {
+                    const unsigned int* pTable = (const unsigned int*)&RedModel::_HashTable + 1;
+                    unsigned int uiPos = 0;
+                    do
+                    {
+                        if (pTable[uiPos])
+                        {
+                            break;
+                        }
+                        ++uiPos;
+                    } while (uiPos < 1024);
+                    mValue.modelValue = (RedModel*)pTable[1024 + uiPos];
+                }
                 bChanged = mValue.modelValue != 0;
             }
             break;
@@ -593,9 +609,24 @@ void HUD::Editor::Update(RawControllerInputs* const pInputs, float fDelta)
             }
             if (GetControlValue(pInputs, control_LRight, true))
             {
-                mValue.textureValue =
-                    (RedTexture*)(mValue.textureValue ? RedTexture::GetNext(mValue.textureValue)
-                                                      : RedTexture::GetFirst());
+                if (mValue.textureValue)
+                {
+                    mValue.textureValue = (RedTexture*)RedTexture::GetNext(mValue.textureValue);
+                }
+                else
+                {
+                    const unsigned int* pTable = (const unsigned int*)&RedTexture::s_textureHashTable + 1;
+                    unsigned int uiPos = 0;
+                    do
+                    {
+                        if (pTable[uiPos])
+                        {
+                            break;
+                        }
+                        ++uiPos;
+                    } while (uiPos < 4096);
+                    mValue.textureValue = (RedTexture*)pTable[4096 + uiPos];
+                }
                 bChanged = mValue.textureValue != 0;
             }
             break;

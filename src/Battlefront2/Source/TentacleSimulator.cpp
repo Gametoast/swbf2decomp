@@ -359,8 +359,8 @@ void TentacleSimulator::UpdatePositions(float fDeltaTime, const PblVector3& vVel
 {
     float fInvDeltaTime = 1.0f / fDeltaTime;
 
+    float fLengthSq = SquaredLength(vVelocity);
     PblVector3 vVel = vVelocity;
-    float fLengthSq = vVel.x * vVel.x + vVel.y * vVel.y + vVel.z * vVel.z;
     if (fLengthSq > 100.0f)
     {
         float fInvLength = 1.0f / (float)sqrt((double)fLengthSq);
@@ -384,7 +384,8 @@ void TentacleSimulator::UpdatePositions(float fDeltaTime, const PblVector3& vVel
     oldVelocity = vVel;
 
     static const PblVector3 vGravity(0.0f, -9.8f, 0.0f);
-    static float fDragScale = 1.0f;
+    const float kDragScale = 1.0f;
+    static float fDragScale = kDragScale;
 
     const PblMatrix mInverse = mParent.GetInverseFast();
     const PblVector3 vForce = vGravity - vAccel * 0.5f;

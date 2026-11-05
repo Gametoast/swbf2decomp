@@ -371,7 +371,7 @@ const VehicleCoverHint* VehicleCoverHelper::SelectHint(int iCount, const BaseHin
         {
             --iCount;
             int i = AIUtil::GetRandomInt(0, iCount);
-            const VehicleCoverHint* pHint = static_cast<const VehicleCoverHint*>(ppHints[i]);
+            const VehicleCoverHint* pHint = (const VehicleCoverHint*)ppHints[i];
             if (AIUtil::IsHintAvailable(pMe, pHint))
             {
                 float fScore = IsHintSuitable(pHint);

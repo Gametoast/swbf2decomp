@@ -31,7 +31,7 @@ namespace
 
     inline const PblVector3& GameObjectPosition(const GameObject* pObject)
     {
-        return static_cast<const CollisionObject*>(pObject)->GetPosition();
+        return ((const CollisionObject*)pObject)->GetPosition();
     }
 }
 
@@ -225,12 +225,12 @@ void VehicleManager::Update()
 
         GameObject* pObject = (*sVehicles)[i];
         if (pObject->IsRtti(EntityBuildingArmed::rttiHashEntityBuildingArmed) &&
-            static_cast<EntityBuildingArmed*>(pObject)->mNoAIBoard)
+            ((EntityBuildingArmed*)pObject)->mNoAIBoard)
         {
             continue;
         }
         if (pObject->IsRtti(CommandFlyer::rttiHashCommandFlyer) &&
-            static_cast<CommandFlyer*>(pObject)->mbHasTakenOffBefore)
+            ((CommandFlyer*)pObject)->mbHasTakenOffBefore)
         {
             continue;
         }
@@ -317,7 +317,7 @@ void VehicleManager::Update()
                 if (!AIUtil::IsEndGame(0) && pController->IsRtti(UnitController::rttiHashUnitController))
                 {
                     AI::EventInfo info(AI::EVT_EmptyVehicle, pObject);
-                    static_cast<UnitController*>(pController)->SendEvent(&info);
+                    ((UnitController*)pController)->SendEvent(&info);
                 }
             }
         }

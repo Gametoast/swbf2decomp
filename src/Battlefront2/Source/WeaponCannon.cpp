@@ -47,7 +47,7 @@ namespace
 
     inline const PblMatrix& GetCollisionMatrix(const GameObject* pObject)
     {
-        return static_cast<const CollisionObject*>(pObject)->GetMatrix();
+        return ((const CollisionObject*)pObject)->GetMatrix();
     }
 
     bool IsAlive(const GameObject* pObject)
@@ -230,7 +230,7 @@ bool WeaponCannon::Update(float fDeltaTime)
 
     if (mWarmCoolTimer <= 0.0f)
     {
-        const WeaponCannonClass* pClass = static_cast<const WeaponCannonClass*>(mClass);
+        const WeaponCannonClass* pClass = (const WeaponCannonClass*)mClass;
         mKickSpread -= pClass->mSpreadRecoverRate * fDeltaTime;
         if (mOwner->mPlayerId >= 0)
         {
@@ -284,7 +284,7 @@ void WeaponCannon::NotifySoldierState(int iState, float fTime, bool b0, bool b1,
     {
         iStance = iState;
     }
-    const WeaponCannonClass* pClass = static_cast<const WeaponCannonClass*>(mClass);
+    const WeaponCannonClass* pClass = (const WeaponCannonClass*)mClass;
     int iColumn = b1 ? 2 : 0;
     const float fRest = pClass->mStanceSpread[iStance][iColumn];
     mStanceSpread = (pClass->mStanceSpread[iStance][1] - fRest) * fBlend + fRest;
@@ -295,7 +295,7 @@ void WeaponCannon::NotifySoldierState(int iState, float fTime, bool b0, bool b1,
 // FUNCTION: SWBF2 0x0067e880
 float WeaponCannon::GetYawSpread() const
 {
-    const WeaponCannonClass* pClass = static_cast<const WeaponCannonClass*>(mClass);
+    const WeaponCannonClass* pClass = (const WeaponCannonClass*)mClass;
 
     float fYaw = pClass->mYawSpread;
     if (fYaw == 0.0f && mOwner->mPlayerId < 0 && pClass->mTriggerSingle && pClass->mZoomMax >= 6.0f &&
@@ -347,7 +347,7 @@ float WeaponCannon::GetYawSpread() const
 float WeaponCannon::GetPitchSpread() const
 {
     float fKick = mKickSpread > 0.0f ? mKickSpread : 0.0f;
-    return mStanceSpread + fKick + static_cast<const WeaponCannonClass*>(mClass)->mPitchSpread;
+    return mStanceSpread + fKick + ((const WeaponCannonClass*)mClass)->mPitchSpread;
 }
 
 // FUNCTION: SWBF2 0x0067eaa0
@@ -371,7 +371,7 @@ void WeaponCannon::EnterFire()
     }
 
     mWarmUp = true;
-    mWarmCoolTimer = static_cast<const WeaponCannonClass*>(mClass)->mWarmUpTime;
+    mWarmCoolTimer = ((const WeaponCannonClass*)mClass)->mWarmUpTime;
     if (mWarmCoolTimer <= 0.0f)
     {
         Weapon::EnterFire();
@@ -381,7 +381,7 @@ void WeaponCannon::EnterFire()
         PlayWarmUpSound();
     }
 
-    const WeaponCannonClass* pClass = static_cast<const WeaponCannonClass*>(mClass);
+    const WeaponCannonClass* pClass = (const WeaponCannonClass*)mClass;
     if (pClass->mMaxPressedTime > 0.0f)
     {
         mStrength = mStateTimer / pClass->mMaxPressedTime;
@@ -392,7 +392,7 @@ void WeaponCannon::EnterFire()
     }
     mStateTimer = 0.0f;
     mStateLimit = AIUtil::GetRandomFloat(pClass->mShotDelayMin, pClass->mShotDelayMax);
-    pClass = static_cast<const WeaponCannonClass*>(mClass);
+    pClass = (const WeaponCannonClass*)mClass;
     mSalvoCount = pClass->mSalvoCount;
     mSalvoDelay = pClass->mInitialSalvoDelay;
     if (pClass->mInstantPlayFireAnim)
@@ -420,7 +420,7 @@ bool WeaponCannon::UpdateFire(float fDeltaTime)
         UpdateBarrelSound(fRemaining);
         UpdateCoolDownSound(fRemaining);
 
-        const WeaponCannonClass* pClass = static_cast<const WeaponCannonClass*>(mClass);
+        const WeaponCannonClass* pClass = (const WeaponCannonClass*)mClass;
         if (!mWarmUp && pClass->mCoolDownTime > 0.0f)
         {
             PlayCoolDownSound();
@@ -434,7 +434,7 @@ bool WeaponCannon::UpdateFire(float fDeltaTime)
                 mWarmCoolTimer = 0.0f;
             }
 
-            pClass = static_cast<const WeaponCannonClass*>(mClass);
+            pClass = (const WeaponCannonClass*)mClass;
             if (!mWarmUp)
             {
                 mSalvoCount = 0;
@@ -449,7 +449,7 @@ bool WeaponCannon::UpdateFire(float fDeltaTime)
             break;
         }
 
-        if (mWarmUp && static_cast<const WeaponCannonClass*>(mClass)->mWarmUpTime > 0.0f)
+        if (mWarmUp && ((const WeaponCannonClass*)mClass)->mWarmUpTime > 0.0f)
         {
             PlayBarrelSound();
         }
@@ -463,7 +463,7 @@ bool WeaponCannon::UpdateFire(float fDeltaTime)
             }
             fRemaining -= fStep;
             mStateTimer += fStep;
-            if (!(mStateTimer >= mStateLimit) || static_cast<const WeaponCannonClass*>(mClass)->mTriggerSingle ||
+            if (!(mStateTimer >= mStateLimit) || ((const WeaponCannonClass*)mClass)->mTriggerSingle ||
                 !CheckFire() || CheckReload() || CheckEmpty())
             {
                 break;
@@ -472,7 +472,7 @@ bool WeaponCannon::UpdateFire(float fDeltaTime)
             mStateTimer -= mStateLimit;
             Weapon::ExitFire();
             Weapon::EnterFire();
-            pClass = static_cast<const WeaponCannonClass*>(mClass);
+            pClass = (const WeaponCannonClass*)mClass;
             mSalvoCount = pClass->mSalvoCount;
             mSalvoDelay = pClass->mInitialSalvoDelay;
         }
@@ -480,11 +480,11 @@ bool WeaponCannon::UpdateFire(float fDeltaTime)
         {
             while (mSalvoCount > 0 && mSalvoDelay <= 0.0f)
             {
-                pClass = static_cast<const WeaponCannonClass*>(mClass);
+                pClass = (const WeaponCannonClass*)mClass;
                 bool bFirstShot = mSalvoCount == pClass->mSalvoCount;
                 for (int iShots = pClass->mShotsPerSalvo; iShots > 0; --iShots)
                 {
-                    const WeaponCannonClass* pShotClass = static_cast<const WeaponCannonClass*>(mClass);
+                    const WeaponCannonClass* pShotClass = (const WeaponCannonClass*)mClass;
                     if (!m_pAmmoCounter->CanExpendRounds(pShotClass->mRoundsPerShot) ||
                         (m_pEnergyBar->IsOverheating() && !(pShotClass->mHeatPerShot <= 0.0f)))
                     {
@@ -500,7 +500,7 @@ bool WeaponCannon::UpdateFire(float fDeltaTime)
                         {
                             ++gDebugCount;
                         }
-                        if (!bFirstShot && static_cast<const WeaponCannonClass*>(mClass)->mSalvoDelayMin > 0.0f)
+                        if (!bFirstShot && ((const WeaponCannonClass*)mClass)->mSalvoDelayMin > 0.0f)
                         {
                             PlayFireSound(false);
                         }
@@ -515,7 +515,7 @@ bool WeaponCannon::UpdateFire(float fDeltaTime)
                     mAimer->UpdateFire(mAimer, bFired);
                 }
 
-                pClass = static_cast<const WeaponCannonClass*>(mClass);
+                pClass = (const WeaponCannonClass*)mClass;
                 mKickSpread += pClass->mSpreadPerShot * mKickSpreadFactor;
                 if (mKickSpread > pClass->mSpreadLimit)
                 {
@@ -547,7 +547,7 @@ void WeaponCannon::ExitFire()
 void WeaponCannon::EnterCharge()
 {
     mStateTimer = 0.0f;
-    mStateLimit = static_cast<const WeaponCannonClass*>(mClass)->mMaxPressedTime;
+    mStateLimit = ((const WeaponCannonClass*)mClass)->mMaxPressedTime;
     Weapon::EnterCharge();
 }
 
@@ -573,7 +573,7 @@ void WeaponCannon::ExitCharge()
 void WeaponCannon::EnterEmpty()
 {
     Weapon::EnterEmpty();
-    const WeaponCannonClass* pClass = static_cast<const WeaponCannonClass*>(mClass);
+    const WeaponCannonClass* pClass = (const WeaponCannonClass*)mClass;
     mStateLimit = AIUtil::GetRandomFloat(pClass->mShotDelayMin, pClass->mShotDelayMax);
 }
 
@@ -584,7 +584,7 @@ bool WeaponCannon::CheckCharge() const
     {
         return false;
     }
-    if (static_cast<const WeaponCannonClass*>(mClass)->mMaxPressedTime <= 0.0f)
+    if (((const WeaponCannonClass*)mClass)->mMaxPressedTime <= 0.0f)
     {
         return false;
     }
@@ -610,7 +610,7 @@ bool WeaponCannon::CheckFire() const
         return false;
     }
 
-    if (static_cast<const WeaponCannonClass*>(mClass)->mMaxPressedTime > 0.0f)
+    if (((const WeaponCannonClass*)mClass)->mMaxPressedTime > 0.0f)
     {
         return mTrigger->IsRelease();
     }
@@ -621,7 +621,7 @@ bool WeaponCannon::CheckFire() const
 bool WeaponCannon::FireDone() const
 {
     WeaponCannon* pThis = const_cast<WeaponCannon*>(this);
-    const WeaponCannonClass* pClass = static_cast<const WeaponCannonClass*>(mClass);
+    const WeaponCannonClass* pClass = (const WeaponCannonClass*)mClass;
 
     if (mWarmCoolTimer > 0.0f)
     {
@@ -701,7 +701,7 @@ bool WeaponCannon::Fire()
 
     PblMatrix mFire = mAimer->GetMatrix();
 
-    const WeaponCannonClass* pClass = static_cast<const WeaponCannonClass*>(mClass);
+    const WeaponCannonClass* pClass = (const WeaponCannonClass*)mClass;
     float fPitch = 0.0f;
     float fYaw = 0.0f;
     if (pClass->mPatternCount > 0)
@@ -744,7 +744,7 @@ bool WeaponCannon::Fire()
     desc.mBodyID = IsLocked() ? GetLockedTargetBodyId() : -1;
     desc.mFireWeapon = this;
 
-    pClass = static_cast<const WeaponCannonClass*>(mClass);
+    pClass = (const WeaponCannonClass*)mClass;
     bool bSecondary;
     if (pClass->mSecondaryOrdnancePeriod && pClass->mSecondaryOrdnanceClass)
     {
@@ -772,7 +772,7 @@ bool WeaponCannon::Fire()
             if (bSecondary)
             {
                 NetGame::CreateEvent_CreateOrdnance(
-                    static_cast<const WeaponCannonClass*>(mClass)->mSecondaryOrdnanceClass, desc);
+                    ((const WeaponCannonClass*)mClass)->mSecondaryOrdnanceClass, desc);
             }
         }
     }
@@ -789,10 +789,10 @@ bool WeaponCannon::Fire()
     SetOrdnance(pOrdnance);
     if (bSecondary)
     {
-        static_cast<const WeaponCannonClass*>(mClass)->mSecondaryOrdnanceClass->Build(desc);
+        ((const WeaponCannonClass*)mClass)->mSecondaryOrdnanceClass->Build(desc);
     }
 
-    pClass = static_cast<const WeaponCannonClass*>(mClass);
+    pClass = (const WeaponCannonClass*)mClass;
     if (pClass->mKickStrength != 0.0f)
     {
         mOwner->ApplyWeaponKick(pClass->mKickStrength,
@@ -813,7 +813,7 @@ bool WeaponCannon::Fire()
 // FUNCTION: SWBF2 0x0067f920
 void WeaponCannon::PlayWarmUpSound()
 {
-    const WeaponCannonClass* pClass = static_cast<const WeaponCannonClass*>(mClass);
+    const WeaponCannonClass* pClass = (const WeaponCannonClass*)mClass;
     if (!pClass->mWarmUpSound.GetProperties() || mSoundControlWarmUp.GetPlaying())
     {
         return;
@@ -826,7 +826,7 @@ void WeaponCannon::PlayWarmUpSound()
     mSoundControlWarmUp.Play(&mSoundPropsWarmUp, &mMatrix.GetTranslation(), &vVel, true);
     if (Snd::VoiceVirtual* pVoice = mSoundControlWarmUp.GetVoiceVirtual())
     {
-        static_cast<Snd::VoiceVirtualBus*>(pVoice)->SetGain(0.0f);
+        ((Snd::VoiceVirtualBus*)pVoice)->SetGain(0.0f);
         pVoice->SetPitch(pClass->mWarmUpSoundStartPitch);
     }
 }
@@ -849,9 +849,9 @@ void WeaponCannon::UpdateWarmUpSound(float fDeltaTime)
     {
         return;
     }
-    Snd::VoiceVirtualBus* pBus = static_cast<Snd::VoiceVirtualBus*>(pVoice);
+    Snd::VoiceVirtualBus* pBus = (Snd::VoiceVirtualBus*)pVoice;
 
-    const WeaponCannonClass* pClass = static_cast<const WeaponCannonClass*>(mClass);
+    const WeaponCannonClass* pClass = (const WeaponCannonClass*)mClass;
     float fGain = pBus->GetGain();
     if (mWarmUp)
     {
@@ -915,7 +915,7 @@ void WeaponCannon::UpdateWarmUpSound(float fDeltaTime)
 // FUNCTION: SWBF2 0x0067fc10
 void WeaponCannon::PlayBarrelSound()
 {
-    const WeaponCannonClass* pClass = static_cast<const WeaponCannonClass*>(mClass);
+    const WeaponCannonClass* pClass = (const WeaponCannonClass*)mClass;
     if (!pClass->mBarrelSound.GetProperties() || mSoundControlBarrel.GetPlaying())
     {
         return;
@@ -928,7 +928,7 @@ void WeaponCannon::PlayBarrelSound()
     mSoundControlBarrel.Play(&mSoundPropsBarrel, &mMatrix.GetTranslation(), &vVel, true);
     if (Snd::VoiceVirtual* pVoice = mSoundControlBarrel.GetVoiceVirtual())
     {
-        static_cast<Snd::VoiceVirtualBus*>(pVoice)->SetGain(0.0f);
+        ((Snd::VoiceVirtualBus*)pVoice)->SetGain(0.0f);
     }
 }
 
@@ -950,9 +950,9 @@ void WeaponCannon::UpdateBarrelSound(float fDeltaTime)
     {
         return;
     }
-    Snd::VoiceVirtualBus* pBus = static_cast<Snd::VoiceVirtualBus*>(pVoice);
+    Snd::VoiceVirtualBus* pBus = (Snd::VoiceVirtualBus*)pVoice;
 
-    const WeaponCannonClass* pClass = static_cast<const WeaponCannonClass*>(mClass);
+    const WeaponCannonClass* pClass = (const WeaponCannonClass*)mClass;
     float fGain = pBus->GetGain();
     if (mWarmUp)
     {
@@ -989,7 +989,7 @@ void WeaponCannon::UpdateBarrelSound(float fDeltaTime)
 // FUNCTION: SWBF2 0x0067fde0
 void WeaponCannon::PlayCoolDownSound()
 {
-    const WeaponCannonClass* pClass = static_cast<const WeaponCannonClass*>(mClass);
+    const WeaponCannonClass* pClass = (const WeaponCannonClass*)mClass;
     if (!pClass->mCoolDownSound.GetProperties() || mSoundControlCoolDown.GetPlaying())
     {
         return;
@@ -1002,7 +1002,7 @@ void WeaponCannon::PlayCoolDownSound()
     mSoundControlCoolDown.Play(&mSoundPropsCoolDown, &mMatrix.GetTranslation(), &vVel, true);
     if (Snd::VoiceVirtual* pVoice = mSoundControlCoolDown.GetVoiceVirtual())
     {
-        static_cast<Snd::VoiceVirtualBus*>(pVoice)->SetGain(0.0f);
+        ((Snd::VoiceVirtualBus*)pVoice)->SetGain(0.0f);
     }
 }
 
@@ -1024,9 +1024,9 @@ void WeaponCannon::UpdateCoolDownSound(float fDeltaTime)
     {
         return;
     }
-    Snd::VoiceVirtualBus* pBus = static_cast<Snd::VoiceVirtualBus*>(pVoice);
+    Snd::VoiceVirtualBus* pBus = (Snd::VoiceVirtualBus*)pVoice;
 
-    const WeaponCannonClass* pClass = static_cast<const WeaponCannonClass*>(mClass);
+    const WeaponCannonClass* pClass = (const WeaponCannonClass*)mClass;
     if (!(pClass->mCoolDownTime > 0.0f))
     {
         return;

@@ -142,7 +142,7 @@ bool __cdecl SendVoice(NetPacket* packet, unsigned char destination, unsigned in
 void __cdecl VoiceChat::NetPacketAudio::Send(NetPacketAudio* packet, unsigned char destination,
                             unsigned int voiceDataOffset)
 {
-    NetPacket* appPacket = static_cast<NetPacket*>(packet->mAppPacket);
+    NetPacket* appPacket = (NetPacket*)packet->mAppPacket;
     appPacket->EndWrite();
     GameVoiceChat::SendVoice(appPacket, destination, voiceDataOffset);
 }

@@ -408,8 +408,7 @@ OrdnanceBullet::OrdnanceBullet(OrdnanceBulletClass* pClass, const OrdnanceDesc& 
                     vFront = gVectorUnitZ - desc.mDirection * desc.mDirection.z;
                     fLength2 = vFront.x * vFront.x + vFront.y * vFront.y + vFront.z * vFront.z;
                 }
-                const float fInv = 1.0f / (float)sqrt((double)fLength2);
-                vFront = vFront * fInv;
+                vFront *= 1.0f / (float)sqrt((double)fLength2);
                 matrix[0] = CrossProduct(desc.mDirection, vFront);
                 matrix.m[0][3] = 0.0f;
                 matrix[2] = vFront;
@@ -464,7 +463,7 @@ bool OrdnanceBullet::Update(float fDeltaTime)
         const float fSpeed = Length(mVelocity);
         const float fInv = 1.0f / fSpeed;
         const PblVector3 vDir(mVelocity.x * fInv, mVelocity.y * fInv, mVelocity.z * fInv);
-        const GameObject* pOwner = static_cast<GameObject*>(mOwner);
+        const GameObject* pOwner = (GameObject*)mOwner;
         CollisionObject* pHitObject;
         const float fHit = CollisionManager::RayHit(mPosition, vDir, mLifeTime * fSpeed, pHitObject,
                                                     &mFinalCollisionNormal, pOwner ? &pOwner : 0,
@@ -524,7 +523,7 @@ bool OrdnanceBullet::Update(float fDeltaTime)
         return false;
     }
 
-    if (!netFrameLock && NetGame::IsEnabled() && NetGame::IsClient() &&
+    if (!netFrameLock && NetGame::IsEnabled() && (netEnabledNext && netClientActive) &&
         netInterpolator.GetIndex(mInterpIndex, 0, PblHandled::mHandleId))
     {
         netInterpolator.SetNext(mInterpIndex, &mPosition);

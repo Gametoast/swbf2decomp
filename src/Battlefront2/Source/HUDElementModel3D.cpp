@@ -162,11 +162,11 @@ HUD::ElementModel3D::Factory::Factory()
 // FUNCTION: SWBF2 0x00556130
 HUD::ElementModel3D::ElementModel3D(const char* const pName, Factory::ItemCallback pCallback,
                                     void* const pUserData)
-    : HUD::Element(*static_cast<Red3DModelElementLite*>(this), pName, pCallback, pUserData),
+    : HUD::Element(*(Red3DModelElementLite*)this, pName, pCallback, pUserData),
       mMeshInfo(0), mNumMeshInfo(0), mInheritedMeshInfo(false), mInheritedMeshInfoName(0),
       mMeshName(0), mHardpointName(0)
 {
-    Red3DModelElementLite* pElement = static_cast<Red3DModelElementLite*>(mElement);
+    Red3DModelElementLite* pElement = (Red3DModelElementLite*)mElement;
     pElement->EnableLighting(true);
     pElement->SetDepth(0.01f);
     Red3DModelElementLite::Enable(false);
@@ -240,7 +240,7 @@ void HUD::ElementModel3D::GetSize(float& fWidth, float& fHeight)
 // FUNCTION: SWBF2 0x00556680
 bool HUD::ElementModel3D::SetProperty(const unsigned int uHashID, const void* const pValue)
 {
-    Red3DModelElementLite* pElement = static_cast<Red3DModelElementLite*>(mElement);
+    Red3DModelElementLite* pElement = (Red3DModelElementLite*)mElement;
     const RedModel* pModel = pElement->GetModel();
     MeshInfo* pMeshInfo = FindMeshInfoByHashID(pModel ? pModel->GetName() : 0);
     if (pMeshInfo)
@@ -335,7 +335,7 @@ bool HUD::ElementModel3D::SetProperty(const unsigned int uHashID, const void* co
 // FUNCTION: SWBF2 0x005568c0
 bool HUD::ElementModel3D::GetProperty(const unsigned int uHashID, void* const pValue)
 {
-    Red3DModelElementLite* pElement = static_cast<Red3DModelElementLite*>(mElement);
+    Red3DModelElementLite* pElement = (Red3DModelElementLite*)mElement;
     const RedModel* pModel = pElement->GetModel();
     MeshInfo* pMeshInfo = FindMeshInfoByHashID(pModel ? pModel->GetName() : 0);
     if (pMeshInfo)
@@ -429,7 +429,7 @@ void HUD::ElementModel3D::SetMesh(const RedModel* const pModel)
         if (pMeshInfo)
         {
             pElement->SetMatrix(pMeshInfo->GetMatrix());
-            static_cast<Red3DModelElementLite*>(pElement)->SetDepth(pMeshInfo->GetDepth());
+            ((Red3DModelElementLite*)pElement)->SetDepth(pMeshInfo->GetDepth());
         }
     }
 }
@@ -444,7 +444,7 @@ void HUD::ElementModel3D::SetMeshName(const char* const pName)
 // FUNCTION: SWBF2 0x00556c10
 bool HUD::ElementModel3D::ReadData(PblConfig& config, PblConfig::Data& data)
 {
-    Red3DModelElementLite* pElement = static_cast<Red3DModelElementLite*>(mElement);
+    Red3DModelElementLite* pElement = (Red3DModelElementLite*)mElement;
     switch (data.GetId())
     {
     case kLightingHash:
@@ -500,7 +500,7 @@ void HUD::ElementModel3D::PostReadSetup()
 // FUNCTION: SWBF2 0x00556e30
 void HUD::ElementModel3D::WriteData(HUD::File& file, unsigned int uTabs)
 {
-    Red3DModelElementLite* pElement = static_cast<Red3DModelElementLite*>(mElement);
+    Red3DModelElementLite* pElement = (Red3DModelElementLite*)mElement;
     pElement->SetMatrix(mDefault.GetMatrix());
     file.WriteProperty("Mesh", uTabs, mMeshName, "");
     file.WriteProperty("Lighting", uTabs, (int)pElement->IsLightningEnabled(), 1);

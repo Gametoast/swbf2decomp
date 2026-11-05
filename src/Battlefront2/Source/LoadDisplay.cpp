@@ -682,7 +682,9 @@ void LoadDisplay::Update()
 
     if (m_firstUpdate)
     {
-        load_update_qpc_stamp = PblTime::GetTickCount();
+        LARGE_INTEGER liFirst;
+        QueryPerformanceCounter(&liFirst);
+        load_update_qpc_stamp = liFirst.QuadPart;
         m_firstUpdate = false;
     }
     unsigned __int64 uiNow = PblTime::GetTickCount();
@@ -709,8 +711,9 @@ void LoadDisplay::Update()
 
     ScreenTransition::sInstance->ScreenTransition::Update(fDelta);
 
+    float fScale = (float)(m_loadingColorPalleteSize - 1);
     float fBlink = PblMath::Sin(m_loadingTextBlinkRate * 6.2831855f * m_totalTime);
-    float fIndex = (fBlink * 0.5f + 0.5f) * (float)(m_loadingColorPalleteSize - 1);
+    float fIndex = (fBlink * 0.5f + 0.5f) * fScale;
     int iIndex = (int)fIndex;
     RedColor color = Interpolate(m_loadingColorPallete[iIndex],
                                  m_loadingColorPallete[PblMath::Ceiling(fIndex)],
@@ -1274,10 +1277,11 @@ void LoadDisplay::ProgressIndicator::Update(float fDelta, GameSound* const pSoun
         else if (m_mode == LED_MODE_TIMER)
         {
             m_pIntensity[m_curOnLED] = 1.0f;
-            RedColor color((unsigned char)(m_pColor[m_curOnLED].r * m_pIntensity[m_curOnLED]),
-                           (unsigned char)(m_pColor[m_curOnLED].g * m_pIntensity[m_curOnLED]),
-                           (unsigned char)(m_pColor[m_curOnLED].b * m_pIntensity[m_curOnLED]),
-                           m_pColor[m_curOnLED].a);
+            RedColor color;
+            color.r = (unsigned char)(m_pColor[m_curOnLED].r * m_pIntensity[m_curOnLED]);
+            color.g = (unsigned char)(m_pColor[m_curOnLED].g * m_pIntensity[m_curOnLED]);
+            color.b = (unsigned char)(m_pColor[m_curOnLED].b * m_pIntensity[m_curOnLED]);
+            color.a = m_pColor[m_curOnLED].a;
             m_pLED[m_curOnLED].SetColor(color);
             ++m_curOnLED;
             if (m_curOnLED >= m_numLEDs)
@@ -1307,14 +1311,15 @@ void LoadDisplay::ProgressIndicator::Update(float fDelta, GameSound* const pSoun
         const float fOff = LED_OFF_INTENSITY;
         for (int i = 0; i < m_numLEDs; ++i)
         {
-            m_pIntensity[i] = Interpolate(fOff, m_pIntensity[i], 0.95f);
-            RedColor color((unsigned char)(m_pColor[i].r * m_pIntensity[i]),
-                           (unsigned char)(m_pColor[i].g * m_pIntensity[i]),
-                           (unsigned char)(m_pColor[i].b * m_pIntensity[i]),
-                           m_pColor[i].a);
+            m_pIntensity[i] = (m_pIntensity[i] - fOff) * 0.95f + fOff;
+            RedColor color;
+            color.r = (unsigned char)(m_pColor[i].r * m_pIntensity[i]);
+            color.g = (unsigned char)(m_pColor[i].g * m_pIntensity[i]);
+            color.b = (unsigned char)(m_pColor[i].b * m_pIntensity[i]);
+            color.a = m_pColor[i].a;
             m_pLED[i].SetColor(color);
         }
-        m_pIntensity[m_curOnLED] = Interpolate(fOff, 1.0f, m_OnLEDFraction);
+        m_pIntensity[m_curOnLED] = (1.0f - fOff) * m_OnLEDFraction + fOff;
     }
     else
     {
@@ -1322,13 +1327,14 @@ void LoadDisplay::ProgressIndicator::Update(float fDelta, GameSound* const pSoun
         {
             return;
         }
-        m_pIntensity[m_curOnLED] = Interpolate(LED_OFF_INTENSITY, 1.0f, m_OnLEDFraction);
+        m_pIntensity[m_curOnLED] = (1.0f - LED_OFF_INTENSITY) * m_OnLEDFraction + LED_OFF_INTENSITY;
     }
-    RedColor color((unsigned char)(m_pColor[m_curOnLED].r * m_pIntensity[m_curOnLED]),
-                   (unsigned char)(m_pColor[m_curOnLED].g * m_pIntensity[m_curOnLED]),
-                   (unsigned char)(m_pColor[m_curOnLED].b * m_pIntensity[m_curOnLED]),
-                   m_pColor[m_curOnLED].a);
-    m_pLED[m_curOnLED].SetColor(color);
+    RedColor color;
+            color.r = (unsigned char)(m_pColor[m_curOnLED].r * m_pIntensity[m_curOnLED]);
+            color.g = (unsigned char)(m_pColor[m_curOnLED].g * m_pIntensity[m_curOnLED]);
+            color.b = (unsigned char)(m_pColor[m_curOnLED].b * m_pIntensity[m_curOnLED]);
+            color.a = m_pColor[m_curOnLED].a;
+            m_pLED[m_curOnLED].SetColor(color);
 }
 
 // FUNCTION: SWBF2 0x00578d50

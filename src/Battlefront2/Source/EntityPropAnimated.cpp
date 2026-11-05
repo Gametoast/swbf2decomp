@@ -105,7 +105,7 @@ EntityPropAnimated::~EntityPropAnimated()
 // FUNCTION: SWBF2 0x004db670
 void EntityPropAnimated::Render(unsigned char ucLod, float fAlpha, unsigned int uFlags)
 {
-    if (!static_cast<EntityPropAnimatedClass*>(mEntityClass)->m_bDynamicLighting)
+    if (!((EntityPropAnimatedClass*)mEntityClass)->m_bDynamicLighting)
     {
         uFlags |= 0x80u;
     }
@@ -494,7 +494,7 @@ bool EntityPropAnimated::Update(float fDeltaTime)
                 continue;
             }
 
-            EntitySoldier* pSoldier = static_cast<EntitySoldier*>(pFound);
+            EntitySoldier* pSoldier = (EntitySoldier*)pFound;
             mAttachedSoldier = pFound;
             mAttachEvent = mAnimatedClass->mAttachTriggers[i].mPostAttachEvent;
             mAttachedSoldierAnimation = mAnimatedClass->mAttachTriggers[i].mSoldierAnimation;
@@ -565,7 +565,7 @@ bool EntityPropAnimated::Update(float fDeltaTime)
         {
             mWorld = pRoot->GetInverseFast() * mWorld;
         }
-        static_cast<EntitySoldier*>((GameObject*)mAttachedSoldier)
+        ((EntitySoldier*)(GameObject*)mAttachedSoldier)
             ->SetPilotInfo(mWorld, PblVector3(0.0f, 0.0f, 0.0f),
                            (SoldierAnimationBank::ANIMATION)mAttachedSoldierAnimation, true, -1.0f, -1.0f, -1.0f,
                            fDeltaTime);

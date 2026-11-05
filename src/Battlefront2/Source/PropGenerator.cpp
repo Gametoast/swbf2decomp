@@ -774,7 +774,7 @@ const PropObject* PropGenerator::FindPropObject(const PblVector3& vPos, bool bPa
         if (SquaredLength(vPos - pCluster->GetRenderPos()) < 900.0f)
         {
             const PropObjectMesh* pObject =
-                static_cast<const PropObjectMesh*>(pCluster->FindPropObject(vPos, bParam));
+                (const PropObjectMesh*)pCluster->FindPropObject(vPos, bParam);
             if (pObject)
             {
                 float fVis = pObject->mModel->mAIVisFactorStand + pObject->mModel->mAIVisFactorCrouch;

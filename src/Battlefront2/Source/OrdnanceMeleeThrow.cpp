@@ -19,7 +19,7 @@
 // FUNCTION: SWBF2 0x00602b40
 OrdnanceMeleeThrow::~OrdnanceMeleeThrow()
 {
-    static_cast<RedSceneObject*>(this)->Deactivate();
+    ((RedSceneObject*)this)->Deactivate();
     delete m_pLight;
     if (m_pDamageData)
     {
@@ -62,7 +62,7 @@ bool OrdnanceMeleeThrow::Collide(CollisionObject* pObject, const PblVector3& vPo
     if (m_pLight)
     {
         PblVector3 vMid = vPos + vNormal * 0.5f;
-        static_cast<FLEffectObject*>(m_pLight)->SetPosition(vMid);
+        ((FLEffectObject*)m_pLight)->SetPosition(vMid);
     }
 
     if (pObject->GetCollisionType() == COLL_SHIELD)
@@ -430,7 +430,7 @@ bool OrdnanceMeleeThrow::Update(float fDeltaTime)
     SetRenderPos(mPosition);
     if (m_pLight)
     {
-        static_cast<FLEffectObject*>(m_pLight)->SetPosition((mPosition + mOldPosition) * 0.5f);
+        ((FLEffectObject*)m_pLight)->SetPosition((mPosition + mOldPosition) * 0.5f);
     }
     if (mLifeTime <= 0.0f)
     {
