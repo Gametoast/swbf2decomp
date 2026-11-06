@@ -205,11 +205,11 @@ protected:
     static void _InitDamageDataPool();
     static void _InitTrailDataPool();
 
-    static void PostLoad() { WeaponMeleeClass::PostLoad(); }
     static TrailData* _AllocTrailData();
     static void _FreeTrailData(TrailData* pData);
 
 public:
+    static void PostLoad() { WeaponMeleeClass::PostLoad(); }   // GameLoop::Init
     static PblHash rttiHashWeaponMelee;
 
     static int _ClearInputQueueToTime(InputQueue& queue, float fTime);

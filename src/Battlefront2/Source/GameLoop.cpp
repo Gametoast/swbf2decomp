@@ -46,8 +46,37 @@
 #include "MessageDisplay.h"
 #include "NameDisplay.h"
 #include "NetGame.h"
+#include "OrdnanceBeacon.h"
+#include "OrdnanceBullet.h"
+#include "OrdnanceFatRay.h"
 #include "OrdnanceGrapplingHook.h"
+#include "OrdnanceGrenade.h"
+#include "OrdnanceHaywire.h"
+#include "OrdnanceLaser.h"
+#include "OrdnanceMeleeThrow.h"
+#include "OrdnanceMissile.h"
+#include "OrdnanceShell.h"
+#include "OrdnanceSticky.h"
 #include "OrdnanceTowCable.h"
+#include "WeaponAreaEffect.h"
+#include "WeaponBinoculars.h"
+#include "WeaponCannon.h"
+#include "WeaponDestruct.h"
+#include "WeaponDetonator.h"
+#include "WeaponDisguise.h"
+#include "WeaponDispenser.h"
+#include "WeaponGrapplingHook.h"
+#include "WeaponGrenade.h"
+#include "WeaponInvisibility.h"
+#include "WeaponLaser.h"
+#include "WeaponLauncher.h"
+#include "WeaponMelee.h"
+#include "WeaponMeleeThrow.h"
+#include "WeaponRemote.h"
+#include "WeaponRepair.h"
+#include "WeaponShield.h"
+#include "WeaponTowCable.h"
+#include "WeaponMeleeInstance.h"
 #include "PauseMenu.h"
 #include "NetSetup.h"
 #include "PlayerProfile.h"
@@ -109,9 +138,6 @@
 
 class VideoEffect { public: static void Init(); };
 class LetterboxEffect { public: static void Init(); };
-
-class WeaponMeleeClass { public: static void PostLoad(); };
-class WeaponMelee { public: static void PostLoad() { WeaponMeleeClass::PostLoad(); } };
 
 class TeamAssistManager { public: static void Create(); static void Destroy(); };
 namespace MissionTimer
@@ -177,20 +203,6 @@ class EntityPortableTurret
 {
 public:
     static void SetupMemoryPool(unsigned int uCount, unsigned int uSize, unsigned int uGrow) { sMemoryPool.Setup(uCount, uSize, uGrow); }
-    static MemoryPool sMemoryPool;
-};
-
-class Weapon
-{
-public:
-    static void SetupMemoryPool(unsigned int uCount, unsigned int uSize, unsigned int uGrow) { sMemoryPool.Setup(uCount, uSize, uGrow); }
-    static void UpdateMemoryPoolSize(unsigned int uSize)
-    {
-        if (sMemoryPool.GetSize() < uSize)
-        {
-            sMemoryPool.SetSize(uSize);
-        }
-    }
     static MemoryPool sMemoryPool;
 };
 
@@ -846,39 +858,42 @@ int GameLoop::Init()
     AmmoCounter::SetupMemoryPool(2400, AmmoCounter::sMemoryPool.GetSize(), AmmoCounter::sMemoryPool.GetGrow());
     EnergyBar::SetupMemoryPool(2400, EnergyBar::sMemoryPool.GetSize(), EnergyBar::sMemoryPool.GetGrow());
 
-    Weapon::UpdateMemoryPoolSize(0x150);
-    Weapon::UpdateMemoryPoolSize(0x110);
-    Weapon::UpdateMemoryPoolSize(0x160);
-    Weapon::UpdateMemoryPoolSize(0x120);
-    Weapon::UpdateMemoryPoolSize(0x120);
-    Weapon::UpdateMemoryPoolSize(0x120);
-    Weapon::UpdateMemoryPoolSize(0x120);
-    Weapon::UpdateMemoryPoolSize(0x170);
-    Weapon::UpdateMemoryPoolSize(0x120);
-    Weapon::UpdateMemoryPoolSize(0x130);
-    Weapon::UpdateMemoryPoolSize(0x120);
-    Weapon::UpdateMemoryPoolSize(0x180);
-    Weapon::UpdateMemoryPoolSize(0x1c0);
-    Weapon::UpdateMemoryPoolSize(0x160);
-    Weapon::UpdateMemoryPoolSize(0x130);
-    Weapon::UpdateMemoryPoolSize(0x120);
-    Weapon::UpdateMemoryPoolSize(0x1a0);
-    Weapon::UpdateMemoryPoolSize(0x170);
+    // the Weapon pool serves every weapon class: its item size is the largest of them (WeaponCatapult is
+    // not listed; it is smaller than WeaponMelee)
+    Weapon::UpdateMemoryPoolSize(sizeof(WeaponAreaEffect));
+    Weapon::UpdateMemoryPoolSize(sizeof(WeaponBinoculars));
+    Weapon::UpdateMemoryPoolSize(sizeof(WeaponCannon));
+    Weapon::UpdateMemoryPoolSize(sizeof(WeaponDestruct));
+    Weapon::UpdateMemoryPoolSize(sizeof(WeaponDetonator));
+    Weapon::UpdateMemoryPoolSize(sizeof(WeaponDisguise));
+    Weapon::UpdateMemoryPoolSize(sizeof(WeaponDispenser));
+    Weapon::UpdateMemoryPoolSize(sizeof(WeaponGrapplingHook));
+    Weapon::UpdateMemoryPoolSize(sizeof(WeaponGrenade));
+    Weapon::UpdateMemoryPoolSize(sizeof(WeaponInvisibility));
+    Weapon::UpdateMemoryPoolSize(sizeof(WeaponLaser));
+    Weapon::UpdateMemoryPoolSize(sizeof(WeaponLauncher));
+    Weapon::UpdateMemoryPoolSize(sizeof(WeaponMelee));
+    Weapon::UpdateMemoryPoolSize(sizeof(WeaponMeleeThrow));
+    Weapon::UpdateMemoryPoolSize(sizeof(WeaponRemote));
+    Weapon::UpdateMemoryPoolSize(sizeof(WeaponRepair));
+    Weapon::UpdateMemoryPoolSize(sizeof(WeaponShield));
+    Weapon::UpdateMemoryPoolSize(sizeof(WeaponTowCable));
 
     StickInfo::SetupMemoryPool(60, StickInfo::sMemoryPool.GetSize(), StickInfo::sMemoryPool.GetGrow());
     Ordnance::SetupMemoryPool(120, Ordnance::sMemoryPool.GetSize(), Ordnance::sMemoryPool.GetGrow());
 
-    Ordnance::UpdateMemoryPoolSize(324);
-    Ordnance::UpdateMemoryPoolSize(300);
-    Ordnance::UpdateMemoryPoolSize(308);
-    Ordnance::UpdateMemoryPoolSize(356);
-    Ordnance::UpdateMemoryPoolSize(316);
-    Ordnance::UpdateMemoryPoolSize(320);
-    Ordnance::UpdateMemoryPoolSize(328);
-    Ordnance::UpdateMemoryPoolSize(384);
-    Ordnance::UpdateMemoryPoolSize(360);
-    Ordnance::UpdateMemoryPoolSize(304);
-    Ordnance::UpdateMemoryPoolSize(320);
+    // likewise for the ordnance classes (OrdnanceBeam is not listed; OrdnanceTowCable has a pool of its own)
+    Ordnance::UpdateMemoryPoolSize(sizeof(OrdnanceBeacon));
+    Ordnance::UpdateMemoryPoolSize(sizeof(OrdnanceBullet));
+    Ordnance::UpdateMemoryPoolSize(sizeof(OrdnanceFatRay));
+    Ordnance::UpdateMemoryPoolSize(sizeof(OrdnanceGrapplingHook));
+    Ordnance::UpdateMemoryPoolSize(sizeof(OrdnanceGrenade));
+    Ordnance::UpdateMemoryPoolSize(sizeof(OrdnanceHaywire));
+    Ordnance::UpdateMemoryPoolSize(sizeof(OrdnanceLaser));
+    Ordnance::UpdateMemoryPoolSize(sizeof(OrdnanceMeleeThrow));
+    Ordnance::UpdateMemoryPoolSize(sizeof(OrdnanceMissile));
+    Ordnance::UpdateMemoryPoolSize(sizeof(OrdnanceShell));
+    Ordnance::UpdateMemoryPoolSize(sizeof(OrdnanceSticky));
 
     LightFlash::SetupMemoryPool(16, LightFlash::sMemoryPool.GetSize(), LightFlash::sMemoryPool.GetGrow());
     EntityLight::SetupMemoryPool(100, EntityLight::sMemoryPool.GetSize(), EntityLight::sMemoryPool.GetGrow());

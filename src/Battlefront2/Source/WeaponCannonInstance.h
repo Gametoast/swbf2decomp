@@ -146,6 +146,17 @@ public:
     static void operator delete(void* p);
 
     static void* operator new(size_t uSize);
+    static void SetupMemoryPool(unsigned int uCount, unsigned int uSize, unsigned int uGrow)
+    {
+        sMemoryPool.Setup(uCount, uSize, uGrow);
+    }
+    static void UpdateMemoryPoolSize(unsigned int uSize)
+    {
+        if (sMemoryPool.GetSize() < uSize)
+        {
+            sMemoryPool.SetSize(uSize);
+        }
+    }
     static MemoryPool sMemoryPool;
 
     PblMatrix mFirePointMatrix;
