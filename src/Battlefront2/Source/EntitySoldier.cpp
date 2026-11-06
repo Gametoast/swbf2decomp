@@ -1919,7 +1919,6 @@ void EntitySoldier::Render(unsigned char ucLod, float fFade, unsigned int uiFlag
 
                     PblMatrix mLeftFoot;
                     mLeftFoot = *pose.Find(0x1af77461) * mWorld;
-                    bSlide = false;
                     if (!(mFlags & flags_leftFootInWater) && (mFlags & flags_isGrounded) &&
                         SquaredLength(m_vPosFootLeft) > 0.0f)
                     {

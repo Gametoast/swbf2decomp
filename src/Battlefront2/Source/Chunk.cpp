@@ -486,10 +486,7 @@ void Chunk::Update(float fDeltaTime)
     }
 
     PblQuaternion q = PblQuaternion(mCollisionMatrix);
-    PblVector3 vSpin = mCollisionMatrix.GetInverseFast().ApplyRotation(mOmega);
-    vSpin.x *= fDeltaTime;
-    vSpin.y *= fDeltaTime;
-    vSpin.z *= fDeltaTime;
+    PblVector3 vSpin = mCollisionMatrix.GetInverseFast().ApplyRotation(mOmega) * fDeltaTime;
     float fAngle = PblMath::Sqrt(vSpin.x * vSpin.x + vSpin.y * vSpin.y + vSpin.z * vSpin.z);
     if (fAngle > EPSILON)
     {

@@ -4208,7 +4208,7 @@ bool EntityFlyer::Update(float fDeltaTime)
 
         PblVector3 vLocal = matrix.GetInverseFast().ApplyRotation(mVelocity);
 
-        PblVector3 vSlip = CrossProduct(mOmega, vLocal) * (1.0f / (mClass->mTurnRate * fTopSpeed));
+        PblVector3 vSlip = CrossProduct(mOmega, vLocal) / (mClass->mTurnRate * fTopSpeed);
         float fPitchTarget = mClass->mThrustPitchAngle * fThrust * mFlightRatio + vSlip.z * mClass->mBankAngle;
         mBankPitchAngle = (fPitchTarget - mBankPitchAngle) * (mClass->mBankFilter * fDeltaTime) + mBankPitchAngle;
         mBankPitchAngleDelta = fPitchTarget - mBankPitchAngle;
@@ -4457,7 +4457,7 @@ bool EntityFlyer::Update(float fDeltaTime)
         }
 
         PblVector3 vLocal = matrix.GetInverseFast().ApplyRotation(mVelocity);
-        PblVector3 vSlip = CrossProduct(mOmega, vLocal) * (1.0f / fTopSpeed);
+        PblVector3 vSlip = CrossProduct(mOmega, vLocal) / fTopSpeed;
         float fPitchTarget = mClass->mThrustPitchAngle * fThrust + mFlip + vSlip.z * mClass->mBankAngle;
         mBankPitchAngle = (fPitchTarget - mBankPitchAngle) * (mClass->mBankFilter * fDeltaTime) + mBankPitchAngle;
         mBankPitchAngleDelta = fPitchTarget - mBankPitchAngle;
@@ -4507,7 +4507,7 @@ bool EntityFlyer::Update(float fDeltaTime)
 
         PblVector3 vLocal = matrix.GetInverseFast().ApplyRotation(mVelocity);
 
-        PblVector3 vSlip = CrossProduct(mOmega, vLocal) * (1.0f / fTopSpeed);
+        PblVector3 vSlip = CrossProduct(mOmega, vLocal) / fTopSpeed;
         float fPitchTarget = mClass->mThrustPitchAngle * fThrust * mFlightRatio + vSlip.z * mClass->mBankAngle;
         mBankPitchAngle = (fPitchTarget - mBankPitchAngle) * (mClass->mBankFilter * fDeltaTime) + mBankPitchAngle;
         mBankPitchAngleDelta = fPitchTarget - mBankPitchAngle;
@@ -4550,19 +4550,13 @@ bool EntityFlyer::Update(float fDeltaTime)
         mVelocity = Interpolate(mVelocity, vDrive, fDrift);
         mVelocity.y = (1.0f - mFlightRatio) * -9.8f * fDeltaTime + mVelocity.y;
 
-        float fFree = 1.0f - mFlightRatio;
-        PblVector3 vSpin = CrossProduct(vZ, mVelocity) * 0.015625f;
-        float fOmegaZ = vSpin.z * fFree * fDeltaTime + mOmega.z;
-        float fOmegaX = mOmega.x + fFree * vSpin.x * fDeltaTime;
-        mOmega.y = vSpin.y * fFree * fDeltaTime + mOmega.y;
-        mOmega.z = fOmegaZ;
-        mOmega.x = fOmegaX;
+        mOmega += CrossProduct(vZ, mVelocity) * 0.015625f * (1.0f - mFlightRatio) * fDeltaTime;
         mOmega.x = (PblRandom::GetSim().GetFloat() - 0.5f) * 0.25f + vZ.y * 0.0625f + 0.0625f + mOmega.x;
         mOmega.y = (PblRandom::GetSim().GetFloat() - 0.5f) * 0.25f + mOmega.y;
         mOmega.z = (PblRandom::GetSim().GetFloat() - 0.5f) * 0.5f + mOmega.z;
 
         PblVector3 vLocal = matrix.GetInverseFast().ApplyRotation(mVelocity);
-        PblVector3 vSlip = CrossProduct(mOmega, vLocal) * (1.0f / fTopSpeed);
+        PblVector3 vSlip = CrossProduct(mOmega, vLocal) / fTopSpeed;
         float fPitchTarget = mClass->mThrustPitchAngle * fThrust * mFlightRatio + mFlip + vSlip.z * mClass->mBankAngle;
         mBankPitchAngle = (fPitchTarget - mBankPitchAngle) * (mClass->mBankFilter * fDeltaTime) + mBankPitchAngle;
         mBankPitchAngleDelta = fPitchTarget - mBankPitchAngle;
