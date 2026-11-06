@@ -160,7 +160,11 @@ bool HUD::ProceduralBarBitmap::SetProperty(const unsigned int uHashID, const voi
         return true;
     case kGlowScaleSize: mGlowScaleSize = *(const float*)pValue; return true;
     case kGlowAlphaBase: mGlowAlphaBase = *(const float*)pValue; return true;
-    case kGlowAlphaScale: mGlowAlphaScale = *(const float*)pValue; return true;
+    }
+    if (uHashID == kGlowAlphaScale)
+    {
+        mGlowAlphaScale = *(const float*)pValue;
+        return true;
     }
     return ElementBarBitmap::SetProperty(uHashID, pValue);
 }
@@ -177,7 +181,11 @@ bool HUD::ProceduralBarBitmap::GetProperty(const unsigned int uHashID, void* con
     case kNoiseRoughness: *value = mNoiseRoughness; return true;
     case kGlowScaleSize: *value = mGlowScaleSize; return true;
     case kGlowAlphaBase: *value = mGlowAlphaBase; return true;
-    case kGlowAlphaScale: *value = mGlowAlphaScale; return true;
+    }
+    if (uHashID == kGlowAlphaScale)
+    {
+        *value = mGlowAlphaScale;
+        return true;
     }
     return ElementBarBitmap::GetProperty(uHashID, pValue);
 }

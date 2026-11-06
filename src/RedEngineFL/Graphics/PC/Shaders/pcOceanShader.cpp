@@ -287,7 +287,7 @@ void pcOceanShader::Render_Prog1(const RenderItem* pItem, unsigned int) const
     const RedColorValue lightColor(pSun->m_color);
     const RedColorValue ambient(RedLight::m_sGlobalAmbient->m_color);
 
-    RedRenderer::pcGetDevice()->SetPixelShaderConstantF(0, &lightDir.r, 1);
+    RedRenderer::pcGetDevice()->SetPixelShaderConstantF(0, &lightDir.x, 1);
     RedRenderer::pcGetDevice()->SetPixelShaderConstantF(1, &lightColor.r, 1);
     RedRenderer::pcGetDevice()->SetPixelShaderConstantF(2, &ambient.r, 1);
 

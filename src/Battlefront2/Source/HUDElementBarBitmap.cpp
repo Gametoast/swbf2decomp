@@ -253,7 +253,11 @@ bool HUD::ElementBarBitmap::GetProperty(const unsigned int uHashID, void* const 
     case kFlashyDecFadeOutTime: *(float*)pValue = mFlashyDecFadeOutTime; return true;
     case kFlashyScale: mFlashyScale = *(const float*)pValue; return true;
     case kScaleTexture: *(bool*)pValue = mScaleTex; return true;
-    case kScaleSize: *(bool*)pValue = mScaleSize; return true;
+    }
+    if (uHashID == kScaleSize)
+    {
+        *(bool*)pValue = mScaleSize;
+        return true;
     }
     if (!ElementBitmapBase::GetProperty(uHashID, pValue) && !ElementBar::GetProperty(uHashID, pValue))
     {

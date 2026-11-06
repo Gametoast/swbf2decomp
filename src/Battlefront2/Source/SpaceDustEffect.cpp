@@ -240,7 +240,7 @@ void SpaceDustEffect::Update(float fDeltaTime)
                 particle.mLifeLeft = -1.0f;
             }
         }
-        if (particle.mLifeLeft >= 0.0f)
+        if (!(particle.mLifeLeft < 0.0f))
         {
             ++iNumAlive;
             particle.mCoord += mCamera.GetZAxis() * (mDustParticleSpeed * fDeltaTime);

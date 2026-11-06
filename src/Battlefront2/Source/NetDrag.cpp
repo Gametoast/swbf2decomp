@@ -108,16 +108,17 @@ void CreateAll()
 // FUNCTION: SWBF2 0x005b3940
 bool DoDrag(int iDest)
 {
-    if (dragEnabled)
+    if (!dragEnabled)
     {
-        if (dragEnabledHost || !netIsHost)
-        {
-            return true;
-        }
-        if (iDest != 64 && iDest != NetComm::GetLocalIndex(0))
-        {
-            return true;
-        }
+        return false;
+    }
+    if (dragEnabledHost || !netIsHost)
+    {
+        return true;
+    }
+    if (iDest != 64 && iDest != NetComm::GetLocalIndex(0))
+    {
+        return true;
     }
     return false;
 }
@@ -152,13 +153,13 @@ float __fastcall GetBandwidth(int iDest)
 // FUNCTION: SWBF2 0x005b3b20
 void NetDrag::Send(NetPacket* pPacket, int iDest)
 {
-    if (DoDrag(iDest))
+    if (!DoDrag(iDest))
     {
-        AddToBandwidth(pPacket, iDest);
+        Deliver(pPacket, iDest);
     }
     else
     {
-        Deliver(pPacket, iDest);
+        AddToBandwidth(pPacket, iDest);
     }
 }
 

@@ -3758,8 +3758,9 @@ int ScriptCB_IFModel_SetAnimationBanks(lua_State* L)
     int iNumArgs = lua_gettop(LuaHelper::mState);
     if (iArg < iNumArgs + 1)
     {
+        int i = 0;
         unsigned int* pHash = sAnimationBankHashes;
-        for (int i = 0; iArg < iNumArgs + 1; ++iArg, ++i)
+        for (; iArg < iNumArgs + 1; ++iArg, ++i)
         {
             if (i >= 5)
             {
@@ -4259,7 +4260,7 @@ int ScriptCB_SetBinding(lua_State* L)
             case 48: case 49: case 50: case 51: case 52: case 53: case 54: case 55:
             case 56: case 57: case 58: case 59: case 60: case 61: case 62: case 63:
 
-                if (pJoystick->mRawInputFloat[ucDevice][iInput] <= 0.4f || pJoystick->mRawInputFloat[ucDevice][iInput] - pJoystick->mLastRawInputFloat[ucDevice][iInput] <= 0.03f)
+                if (!(pJoystick->mRawInputFloat[ucDevice][iInput] > 0.4f && pJoystick->mRawInputFloat[ucDevice][iInput] - pJoystick->mLastRawInputFloat[ucDevice][iInput] > 0.03f))
                 {
                     continue;
                 }
@@ -4277,13 +4278,13 @@ int ScriptCB_SetBinding(lua_State* L)
                 break;
             case 64:
             case 65:
-                if ((pJoystick->mRawInputFloat[ucDevice][iInput] < 0.0f ? -pJoystick->mRawInputFloat[ucDevice][iInput] : pJoystick->mRawInputFloat[ucDevice][iInput]) <= 0.5f)
+                if (!((pJoystick->mRawInputFloat[ucDevice][iInput] < 0.0f ? -pJoystick->mRawInputFloat[ucDevice][iInput] : pJoystick->mRawInputFloat[ucDevice][iInput]) > 0.5f))
                 {
                     continue;
                 }
                 break;
             default:
-                if (pJoystick->mRawInputFloat[ucDevice][iInput] <= 0.4f || pJoystick->mRawInputFloat[ucDevice][iInput] - pJoystick->mLastRawInputFloat[ucDevice][iInput] <= 0.03f)
+                if (!(pJoystick->mRawInputFloat[ucDevice][iInput] > 0.4f && pJoystick->mRawInputFloat[ucDevice][iInput] - pJoystick->mLastRawInputFloat[ucDevice][iInput] > 0.03f))
                 {
                     continue;
                 }
