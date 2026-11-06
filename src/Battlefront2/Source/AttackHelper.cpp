@@ -63,7 +63,7 @@ namespace
 {
     inline unsigned int GameObjectHandleId(const GameObject* pObject)
     {
-        return pObject->mHandleId;
+        return pObject->GetHandleId();
     }
 
     inline AILowLevel& LowLevelOf(Controller* pCtrl)
@@ -95,8 +95,7 @@ void AttackHelper::Reset()
 // FUNCTION: SWBF2 0x00447af0
 void AttackHelper::SetTarget(GameObject const* pTarget)
 {
-    mTargetHandle.mObject = pTarget;
-    mTargetHandle.mSavedHandleId = pTarget ? GameObjectHandleId(pTarget) : 0;
+    mTargetHandle = pTarget;
     if (pTarget)
     {
         AI::VOHelper::Play(AI::VOT_AcquiredTarget, GetMe()->GetGameObject(), 0, pTarget, 0.0f);
@@ -280,8 +279,7 @@ GameObject const* AttackHelper::GetTarget() const
 void AttackHelper::SetVisibleTarget(GameObject const* pTarget)
 {
     Reset();
-    mTargetHandle.mObject = pTarget;
-    mTargetHandle.mSavedHandleId = pTarget ? GameObjectHandleId(pTarget) : 0;
+    mTargetHandle = pTarget;
     PblVector3 vPos = AIUtil::GetHisVisionTargetPos(GetMe(), pTarget);
     SetTargetInfo(pTarget, vPos);
 }

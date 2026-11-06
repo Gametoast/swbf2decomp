@@ -120,7 +120,7 @@ TeamAssist::TeamAssist(TeamAssist* pNext, int type, Character* pRequestor, float
     mType = type;
     mRequestor = 0;
     mTimer = fTimer;
-    Controllable* pControllable = pRequestor->mRemote;
+    Controllable* pControllable = pRequestor->GetRemote();
     if (!pControllable)
     {
         pControllable = pRequestor->mVehicle;

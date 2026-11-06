@@ -11,6 +11,7 @@
 #include "Character.h"
 #include "Controllable.h"
 #include "EntitySoldier.h"
+#include "EntityBuilding.h"
 #include "FLInputManager.h"
 #include "FLJoystick.h"
 #include "GameLoop.h"
@@ -103,11 +104,11 @@ void HUD::GameEvents::ShowTeamPoints(int iTeam, bool bShow)
         const int iMyTeam = NetGame::IsEnabled() ? NetGame::GetStartTeam(NetGame::GetLocalIndex(i))
                                                  : pCharacter->mTeamNumber;
         const int iOtherTeam = iMyTeam == 1 ? 2 : 1;
-        if (iTeam == Team::sTeams[iMyTeam]->mTeamNumber)
+        if (iTeam == Team::sTeams[iMyTeam]->GetNumber())
         {
             gPlayerData[i].teamData[0].showPoints = bShow;
         }
-        if (iTeam == Team::sTeams[iOtherTeam]->mTeamNumber)
+        if (iTeam == Team::sTeams[iOtherTeam]->GetNumber())
         {
             gPlayerData[i].teamData[1].showPoints = bShow;
         }
@@ -1055,7 +1056,7 @@ void HUD::GameEvents::Update(float fDeltaTime)
 // FUNCTION: SWBF2 0x00563660
 void HUD::GameEvents::Die(const Controllable* const pControllable)
 {
-    const int iIndex = NetGame::GetJoystickIndex(pControllable->mInitialPlayerId);
+    const int iIndex = NetGame::GetJoystickIndex(pControllable->GetInitialPlayerId());
     if (iIndex < 0)
     {
         return;
@@ -1067,7 +1068,6 @@ void HUD::GameEvents::Die(const Controllable* const pControllable)
 class EntityFlyer { public: static PblHash rttiHashEntityFlyer; };
 class MountedTurret { public: static PblHash rttiHashMountedTurret; };
 class EntityBuildingArmed { public: static PblHash rttiHashEntityBuildingArmed; };
-class EntityBuildingClass { public: static PblHash rttiHashEntityBuildingClass; };
 class WeaponRepair { public: static PblHash rttiHashWeaponRepair; };
 
 namespace Lua_Callbacks
@@ -1521,7 +1521,7 @@ void HUD::GameEvents::UpdateWeaponEvents(const RedCamera* const pCamera, const C
             bool bBuilding = false;
             if (pEntityClass)
             {
-                bBuilding = pEntityClass->IsRtti(EntityBuildingClass::rttiHashEntityBuildingClass);
+                bBuilding = pEntityClass->IsRtti(EntityBuildingClass::GetRtti());
             }
             if ((pClass && pClass->mbHideHealthBar) || (!bBuilding && !hTarget->IsAlive()))
             {

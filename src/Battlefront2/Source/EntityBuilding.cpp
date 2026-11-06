@@ -478,7 +478,7 @@ const RedPose* EntityBuilding::GetRenderPose() const
 static inline GameObject* GetHandleObject(PblHandle<GameObject>& handle)
 {
     if (handle.mObject &&
-        handle.mObject->mHandleId !=
+        handle.mObject->GetHandleId() !=
             handle.mSavedHandleId)
     {
         handle.mObject = 0;

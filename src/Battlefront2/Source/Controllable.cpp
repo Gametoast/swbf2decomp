@@ -62,7 +62,7 @@ GameObject* GetAlivePtr(PblHandle<GameObject> const& hObj, bool bIncludeBuilding
 
 static inline unsigned int GameObjectHandleId(const GameObject* pObject)
 {
-    return pObject->mHandleId;
+    return pObject->GetHandleId();
 }
 
 // FUNCTION: SWBF2 0x004833b0
@@ -185,9 +185,9 @@ Controllable* Controllable::GetEnteredRemoteOrVehicleIfNotMe()
     {
         return 0;
     }
-    if (mCharacter->mRemote)
+    if (mCharacter->GetRemote())
     {
-        return mCharacter->mRemote != this ? mCharacter->mRemote : 0;
+        return mCharacter->GetRemote() != this ? mCharacter->GetRemote() : 0;
     }
     if (mCharacter->mVehicle)
     {
@@ -386,7 +386,7 @@ void Controllable::SetWeaponIndex(int iChannel, int iIndex)
 void Controllable::SetCharacter(Character* pCharacter)
 {
     mCharacter = pCharacter;
-    mPlayerId = pCharacter ? pCharacter->mPlayerId : -1;
+    mPlayerId = pCharacter ? pCharacter->GetPlayerId() : -1;
     if (pCharacter)
     {
         mInitialPlayerId = mPlayerId;

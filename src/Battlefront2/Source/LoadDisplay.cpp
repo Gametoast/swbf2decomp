@@ -491,7 +491,7 @@ void LoadDisplay::SetLoadState()
         return;
     }
 
-    strlcpy(m_missionFileName, GameLoop::mMissionScript, sizeof(m_missionFileName));
+    strlcpy(m_missionFileName, GameLoop::GetNextMission(), sizeof(m_missionFileName));
     strlcpy(m_entireMissionFileName, GameLoop::mMissionScript, sizeof(m_entireMissionFileName));
     m_entireMissionHash = PblHash(m_missionFileName);
 
@@ -762,7 +762,7 @@ void LoadDisplay::Render()
     SetAmbientColors(savedTop, savedBottom);
     light.SetDirection(savedDirection);
     light.SetColor(savedColor);
-    CameraManager::Instance()->SetNumCameras(GameLoop::mNumCameras);
+    CameraManager::Instance()->SetNumCameras(GameLoop::GetNumCameras());
 }
 
 // FUNCTION: SWBF2 0x00577280

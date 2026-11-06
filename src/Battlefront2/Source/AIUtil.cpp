@@ -1074,7 +1074,7 @@ bool AIUtil::IsATAT(const Controllable* pControllable)
 // FUNCTION: SWBF2 0x00440f40
 AIUtil::EntityType AIUtil::GetEntityType(const Entity* pEntity)
 {
-    if (pEntity->IsRtti(EntitySoldier::rttiHashEntitySoldier))
+    if (pEntity->IsRtti(EntitySoldier::GetRtti()))
     {
         return ENTITY_SOLDIER;
     }
@@ -1090,7 +1090,7 @@ AIUtil::EntityType AIUtil::GetEntityType(const Entity* pEntity)
     {
         return ENTITY_DROIDEKA;
     }
-    if (pEntity->IsRtti(EntityFlyer::rttiHashEntityFlyer))
+    if (pEntity->IsRtti(EntityFlyer::GetRtti()))
     {
         return ENTITY_FLYER;
     }
@@ -1102,7 +1102,7 @@ AIUtil::EntityType AIUtil::GetEntityType(const Entity* pEntity)
     {
         return ENTITY_TURRET;
     }
-    if (pEntity->IsRtti(EntityBuildingArmed::rttiHashEntityBuildingArmed))
+    if (pEntity->IsRtti(EntityBuildingArmed::GetRtti()))
     {
         return ENTITY_BUILDING_ARMED;
     }
@@ -1118,7 +1118,7 @@ AIUtil::EntityType AIUtil::GetEntityType(const Entity* pEntity)
     {
         return ENTITY_TURRET;
     }
-    if (pEntity->IsRtti(EntityRemoteTerminal::rttiHashEntityRemoteTerminal))
+    if (pEntity->IsRtti(EntityRemoteTerminal::GetRtti()))
     {
         return ENTITY_REMOTE_TERMINAL;
     }
@@ -1858,7 +1858,7 @@ void AIUtil::GrenadeAlert(const PblVector3& vPos, const GameObject* pObject, flo
                 {
                     continue;
                 }
-                if (!bSoldierAlerted && pTarget->GetEntity()->IsRtti(EntitySoldier::rttiHashEntitySoldier))
+                if (!bSoldierAlerted && pTarget->GetEntity()->IsRtti(EntitySoldier::GetRtti()))
                 {
                     bSoldierAlerted = true;
                     pTarget->Flee();
@@ -1956,7 +1956,7 @@ const Obstacle* AIUtil::_GetGameObjectBarrier(const GameObject* pObj)
     {
         return ((const EntityHover*)pObj->GetEntity())->mObstacle;
     }
-    if (pObj->GetEntity()->IsRtti(EntityFlyer::rttiHashEntityFlyer))
+    if (pObj->GetEntity()->IsRtti(EntityFlyer::GetRtti()))
     {
         return ((const EntityFlyer*)pObj->GetEntity())->mObstacle;
     }

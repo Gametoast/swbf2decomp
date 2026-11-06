@@ -661,7 +661,7 @@ bool WeaponMelee::Deflect(const Ordnance* pOrdnance, const PblVector3& pos, cons
         {
 
             PblRandom rand(((unsigned int)pOrdnance ^ (unsigned int)pOrdnance->GetOwner() ^
-                          pOrdnance->PblHandled::mHandleId) ^ 0xC71C2830u);
+                          pOrdnance->PblHandled::GetHandleId()) ^ 0xC71C2830u);
             const float fPhase = rand.GetFloat();
             const float fScatter = rand.GetFloat();
             float fSin = 0.0f;

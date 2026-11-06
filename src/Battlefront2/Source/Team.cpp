@@ -992,7 +992,7 @@ void Team::_ClampClassCounts(int iIndex)
         return;
     }
     GameObjectClass* pClass = GetClassPtr(iIndex);
-    if (!pClass || !pClass->IsRtti(EntityDroidekaClass::rttiHashEntityDroidekaClass))
+    if (!pClass || !pClass->IsRtti(EntityDroidekaClass::GetRtti()))
     {
         return;
     }

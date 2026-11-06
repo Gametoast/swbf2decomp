@@ -41,7 +41,7 @@ namespace
 
     inline unsigned int GameObjectHandleId(const GameObject* pObject)
     {
-        return pObject->mHandleId;
+        return pObject->GetHandleId();
     }
 }
 
@@ -355,7 +355,7 @@ void OrdnanceSticky::Render(unsigned char ucViewport, float fDist, unsigned int 
     {
         PblVector3 vPos = mPosition;
         if (!netFrameLock && NetGame::IsEnabled() &&
-            netInterpolator.GetIndex(mInterpIndex, 0, PblHandled::mHandleId))
+            netInterpolator.GetIndex(mInterpIndex, 0, PblHandled::GetHandleId()))
         {
             netInterpolator.GetVec(mInterpIndex, vPos);
         }

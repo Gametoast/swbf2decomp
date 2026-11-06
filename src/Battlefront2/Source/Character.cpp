@@ -276,7 +276,7 @@ GameObject* GetPostObject(CommandPost* pPost)
 {
     PblHandle<GameObject>& handle = pPost->mObject;
     if (handle.mObject &&
-        handle.mObject->mHandleId !=
+        handle.mObject->GetHandleId() !=
             handle.mSavedHandleId)
     {
         handle.mObject = 0;

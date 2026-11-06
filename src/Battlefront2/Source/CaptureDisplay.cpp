@@ -196,7 +196,7 @@ bool CaptureDisplay::Update(float fDeltaTime)
     for (CommandPostItor itor = CommandPostManager::Instance()->GetItor(); itor; ++itor)
     {
         CommandPost* pPost = *itor;
-        if (!(pPost->mHoldPlayerMask & (1 << pChr->mPlayerId)))
+        if (!(pPost->GetHoldPlayerMask() & (1 << pChr->mPlayerId)))
         {
             continue;
         }
@@ -205,19 +205,19 @@ bool CaptureDisplay::Update(float fDeltaTime)
         ToolTipType eTip = (iPostTeam == pChr->mTeamNumber) ? TTT_ApproachSelfCP : TTT_ApproachEnemyCP;
         if (iPostTeam == 0)
         {
-            int iBiasTeam = pPost->mBiasTeam;
+            int iBiasTeam = pPost->GetBiasTeam();
             int iOtherTeam = 0;
-            if (pPost->mHoldTeam < 0)
+            if (pPost->GetHoldTeam() < 0)
             {
                 for (iOtherTeam = 1; iOtherTeam < 8; ++iOtherTeam)
                 {
-                    if (iOtherTeam != iBiasTeam && pPost->mHoldCount[iOtherTeam] > 0)
+                    if (iOtherTeam != iBiasTeam && pPost->GetHoldCount(iOtherTeam) > 0)
                     {
                         break;
                     }
                 }
             }
-            UpdateCapture(pPost->mBiasTeam, iOtherTeam, pPost->GetCaptureRatio());
+            UpdateCapture(pPost->GetBiasTeam(), iOtherTeam, pPost->GetCaptureRatio());
         }
         else if (iPostTeam != pChr->mTeamNumber)
         {

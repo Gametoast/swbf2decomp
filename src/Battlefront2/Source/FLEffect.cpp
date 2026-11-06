@@ -406,7 +406,7 @@ void FLEffectObject::AttachEffectToObject(const EntityGeometry* pObject, const P
     }
 
     m_uiAttachFlags &= ~(ATTACHED_DYNAMIC | ATTACHED_TO_GAMEOBJECT | ATTACHED_TO_VECTOR);
-    if (pObject->GetGameObject() && pObject->GetGameObject()->mHandleId)
+    if (pObject->GetGameObject() && pObject->GetGameObject()->GetHandleId())
     {
         m_hobjAttachedToObject = PblHandle<GameObject const>(pObject->GetGameObject());
         m_uiAttachFlags |= ATTACHED_TO_GAMEOBJECT;
@@ -434,7 +434,7 @@ void FLEffectObject::AttachEffectToObject(const EntityGeometry* pObject, const P
     }
 
     m_uiAttachFlags &= ~(ATTACHED_DYNAMIC | ATTACHED_TO_GAMEOBJECT | ATTACHED_TO_VECTOR);
-    if (pObject->GetGameObject() && pObject->GetGameObject()->mHandleId)
+    if (pObject->GetGameObject() && pObject->GetGameObject()->GetHandleId())
     {
         m_hobjAttachedToObject = PblHandle<GameObject const>(pObject->GetGameObject());
         m_uiAttachFlags |= ATTACHED_TO_GAMEOBJECT;
@@ -462,7 +462,7 @@ void FLEffectObject::AttachEffectToObject(const EntityGeometry* pObject, unsigne
     }
 
     m_uiAttachFlags &= ~(ATTACHED_DYNAMIC | ATTACHED_TO_GAMEOBJECT | ATTACHED_TO_VECTOR);
-    if (pObject->GetGameObject() && pObject->GetGameObject()->mHandleId)
+    if (pObject->GetGameObject() && pObject->GetGameObject()->GetHandleId())
     {
         m_hobjAttachedToObject = PblHandle<GameObject const>(pObject->GetGameObject());
         m_uiAttachFlags |= ATTACHED_TO_GAMEOBJECT;
@@ -507,7 +507,7 @@ void FLEffectObject::AttachEffectToObject(const EntityGeometry* pObject, unsigne
     }
 
     m_uiAttachFlags &= ~(ATTACHED_DYNAMIC | ATTACHED_TO_GAMEOBJECT | ATTACHED_TO_VECTOR);
-    if (pObject->GetGameObject() && pObject->GetGameObject()->mHandleId)
+    if (pObject->GetGameObject() && pObject->GetGameObject()->GetHandleId())
     {
         m_hobjAttachedToObject = PblHandle<GameObject const>(pObject->GetGameObject());
         m_uiAttachFlags |= ATTACHED_TO_GAMEOBJECT;
@@ -552,7 +552,7 @@ void FLEffectObject::AttachEffectToObject(const EntityGeometry* pObject, const P
     }
 
     m_uiAttachFlags &= ~(ATTACHED_DYNAMIC | ATTACHED_TO_GAMEOBJECT | ATTACHED_TO_VECTOR);
-    if (pObject->GetGameObject() && pObject->GetGameObject()->mHandleId)
+    if (pObject->GetGameObject() && pObject->GetGameObject()->GetHandleId())
     {
         m_hobjAttachedToObject = PblHandle<GameObject const>(pObject->GetGameObject());
         m_uiAttachFlags |= ATTACHED_TO_GAMEOBJECT;
@@ -579,7 +579,7 @@ void FLEffectObject::AttachEffectToObject(const EntityGeometry* pObject, bool bD
     }
 
     m_uiAttachFlags &= ~(ATTACHED_DYNAMIC | ATTACHED_TO_GAMEOBJECT | ATTACHED_TO_VECTOR);
-    if (pObject->GetGameObject() && pObject->GetGameObject()->mHandleId)
+    if (pObject->GetGameObject() && pObject->GetGameObject()->GetHandleId())
     {
         m_hobjAttachedToObject = PblHandle<GameObject const>(pObject->GetGameObject());
         m_uiAttachFlags |= ATTACHED_TO_GAMEOBJECT;

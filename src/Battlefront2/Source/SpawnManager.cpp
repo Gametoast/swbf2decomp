@@ -395,7 +395,7 @@ bool SpawnManager::Update(float fDeltaTime)
 // FUNCTION: SWBF2 0x0064eba0
 CommandPost* SpawnManager::RequestSpawnPoint(CommandPost* pPost, Character* pChr)
 {
-    if (pChr->mPlayerId >= 0)
+    if (pChr->GetPlayerId() >= 0)
     {
         return Request(pPost, pChr->mTeamNumber);
     }

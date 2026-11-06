@@ -30,7 +30,7 @@ namespace
 
     inline unsigned int GameObjectHandleId(const GameObject* pObject)
     {
-        return pObject->mHandleId;
+        return pObject->GetHandleId();
     }
 
     inline Controllable* GetControllable(GameObject* pObject)

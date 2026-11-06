@@ -539,7 +539,7 @@ bool MountedTurret::PostCollisionUpdate(float)
             (NetGame::IsClient() || (NetGame::IsHost() && NetGame::IsOneWorld())) &&
             netIsLocalTurn)
         {
-            if (netInterpolator.GetIndex(mInterpIndex, 1, pSoldier->mHandleId))
+            if (netInterpolator.GetIndex(mInterpIndex, 1, pSoldier->GetHandleId()))
             {
                 netInterpolator.SetNext(mInterpIndex, &mRootMatrix);
                 netInterpolator.Prev(mInterpIndex);
@@ -581,7 +581,7 @@ void MountedTurret::GetPilotMatrix(const PblMatrix& mIn, PblMatrix& mOut)
                 if (!netFrameLock && NetGame::IsEnabled())
                 {
                     int iIndex = mInterpIndex;
-                    if (netInterpolator.GetIndex(iIndex, 1, ((EntitySoldier*)pPilot)->mHandleId) &&
+                    if (netInterpolator.GetIndex(iIndex, 1, ((EntitySoldier*)pPilot)->GetHandleId()) &&
                         iIndex == mInterpIndex)
                     {
                         netInterpolator.GetMat(mInterpIndex, mNewRoot);
@@ -1386,7 +1386,7 @@ void MountedTurret::Render(const PblMatrix& aRootMatrix, const PblMatrix& aInvRo
             {
                 EntitySoldier* pSoldier = (EntitySoldier*)mPilot->GetEntity();
                 int idx = mInterpIndex;
-                if (netInterpolator.GetIndex(idx, 1, pSoldier->mHandleId) &&
+                if (netInterpolator.GetIndex(idx, 1, pSoldier->GetHandleId()) &&
                     idx == mInterpIndex)
                 {
                     netInterpolator.GetMat(mInterpIndex, smoothedMat);
@@ -1416,7 +1416,7 @@ void MountedTurret::Render(const PblMatrix& aRootMatrix, const PblMatrix& aInvRo
         {
             EntitySoldier* pSoldier = (EntitySoldier*)mPilot->GetEntity();
             int idx = mInterpIndex;
-            if (netInterpolator.GetIndex(idx, 1, pSoldier->mHandleId) &&
+            if (netInterpolator.GetIndex(idx, 1, pSoldier->GetHandleId()) &&
                 idx == mInterpIndex)
             {
                 bSmoothed = true;

@@ -10,10 +10,15 @@ public:
     // FUNCTION: SWBF2 0x0042cf20
     virtual ~PblHandled() { mHandleId = 0; }
 
-    unsigned int GetHandleId() const;
+    // FUNCTION: SWBF2 0x00423e90
+    unsigned int GetHandleId() const
+    {
+        return mHandleId;
+    }
 
     static unsigned int SetNextHandleId(unsigned int uId);
 
+private:
     unsigned int mHandleId;
 };
 
@@ -30,7 +35,7 @@ public:
 
     // TEMPLATE: SWBF2 0x00439a80
     // PblHandle<GameObject>::PblHandle<GameObject>
-    PblHandle(TYPE* pObject) : mObject(pObject), mSavedHandleId(pObject ? pObject->mHandleId : 0) {}
+    PblHandle(TYPE* pObject) : mObject(pObject), mSavedHandleId(pObject ? pObject->GetHandleId() : 0) {}
     // TEMPLATE: SWBF2 0x0042e950
     // PblHandle<GameObject const >::PblHandle<GameObject const >
     PblHandle() : mObject(0), mSavedHandleId(0) {}
@@ -110,7 +115,7 @@ public:
     void operator=(TYPE* pObject)
     {
         mObject = pObject;
-        mSavedHandleId = pObject ? pObject->mHandleId : 0;
+        mSavedHandleId = pObject ? pObject->GetHandleId() : 0;
     }
 
 private:
@@ -120,7 +125,7 @@ private:
     {
         if (mObject)
         {
-            if (mObject->mHandleId == mSavedHandleId)
+            if (mObject->GetHandleId() == mSavedHandleId)
             {
                 return mObject;
             }

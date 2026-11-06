@@ -2346,8 +2346,7 @@ void Weapon::Render(const PblMatrix& mat, const RedPose* pPose, const RedColor& 
             ParticleEmitterObject* pEmitter =
                 (ParticleEmitterObject*)mRenderClass->mChargeUpEffect->BuildEffect();
             PblHandle<ParticleEmitterObject>& hEmitter = pThis->mChargeUpEmitter;
-            hEmitter.mObject = pEmitter;
-            hEmitter.mSavedHandleId = pEmitter ? pEmitter->mHandleId : 0;
+            hEmitter = pEmitter;
             if (mChargeUpEmitter)
             {
                 ((ParticleEmitterObject*)mChargeUpEmitter)->PermaRemoveParticleEffect();

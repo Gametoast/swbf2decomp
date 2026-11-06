@@ -75,7 +75,7 @@ namespace
     {
         PblHandle<const GameObject>& h = const_cast<PblHandle<const GameObject>&>(handle);
         if (h.mObject &&
-            h.mObject->mHandleId != h.mSavedHandleId)
+            h.mObject->GetHandleId() != h.mSavedHandleId)
         {
             h.mObject = 0;
             h.mSavedHandleId = 0;
@@ -799,13 +799,7 @@ bool WeaponCannon::Fire()
                                 (1.0f / pClass->mKickBuildup + 2.0f) * pClass->mShotDelayMin);
     }
 
-    const GameObject* pTarget = mTarget.mObject;
-    if (pTarget && pTarget->mHandleId != mTarget.mSavedHandleId)
-    {
-        mTarget.mObject = 0;
-        mTarget.mSavedHandleId = 0;
-        pTarget = 0;
-    }
+    const GameObject* pTarget = mTarget;
     CombatUtil::SendDamageEvent(mOwner, pTarget, mTrigger);
     return true;
 }

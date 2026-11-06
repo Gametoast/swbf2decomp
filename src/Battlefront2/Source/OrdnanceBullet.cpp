@@ -42,7 +42,7 @@ namespace
 
     inline unsigned int GameObjectHandleId(const GameObject* pObject)
     {
-        return pObject->mHandleId;
+        return pObject->GetHandleId();
     }
 
     int GameObjectTeam(const GameObject* pObject)
@@ -349,7 +349,7 @@ void OrdnanceBullet::Render(unsigned char, float, unsigned int uiFlags)
 
     PblVector3 vPos = mPosition;
     if (!netFrameLock && NetGame::IsEnabled() &&
-        netInterpolator.GetIndex(mInterpIndex, 0, PblHandled::mHandleId))
+        netInterpolator.GetIndex(mInterpIndex, 0, PblHandled::GetHandleId()))
     {
         netInterpolator.GetVec(mInterpIndex, vPos);
     }
@@ -451,7 +451,7 @@ bool OrdnanceBullet::Update(float fDeltaTime)
     {
         if (mFinalCollision &&
             !(mFinalCollisionHandle.mObject &&
-              mFinalCollisionHandle.mObject->mHandleId != mFinalCollisionHandle.mSavedHandleId))
+              mFinalCollisionHandle.mObject->GetHandleId() != mFinalCollisionHandle.mSavedHandleId))
         {
             Collide(mFinalCollision, mPosition, mFinalCollisionNormal, 0);
         }
@@ -524,7 +524,7 @@ bool OrdnanceBullet::Update(float fDeltaTime)
     }
 
     if (!netFrameLock && NetGame::IsEnabled() && (netEnabledNext && netClientActive) &&
-        netInterpolator.GetIndex(mInterpIndex, 0, PblHandled::mHandleId))
+        netInterpolator.GetIndex(mInterpIndex, 0, PblHandled::GetHandleId()))
     {
         netInterpolator.SetNext(mInterpIndex, &mPosition);
     }

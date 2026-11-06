@@ -273,7 +273,7 @@ bool EntityMine::Update(float fDeltaTime)
     if (pStick)
     {
         GameObject* pStuckTo = pStick->mCollHandle.mObject;
-        if (pStuckTo && pStuckTo->mHandleId != pStick->mCollHandle.mSavedHandleId)
+        if (pStuckTo && pStuckTo->GetHandleId() != pStick->mCollHandle.mSavedHandleId)
         {
             mParent = 0;
             delete pStick;
@@ -364,7 +364,7 @@ bool EntityMine::Update(float fDeltaTime)
         {
             if (IsMyEnemy(apObjects[i]) && apObjects[i]->IsAlive())
             {
-                if (apObjects[i]->GetEntityClass()->IsRtti(EntitySoldierClass::rttiHashEntitySoldierClass) &&
+                if (apObjects[i]->GetEntityClass()->IsRtti(EntitySoldierClass::GetRtti()) &&
                     ((EntitySoldierClass*)(
                         (GameObjectClass*)apObjects[i]->GetEntityClass()))->mImmuneToMines)
                 {
@@ -452,7 +452,7 @@ bool EntityMine::CollisionCallback(const CollisionResult* pResult, CollisionObje
                 FoleyFXCollider::CollisionCallback(pOther->GetCollisionType(), pOther, &GetPosition());
                 PlayImpactEffects((const PblVector3*)mMatrix.m[3], &mVelocity);
                 if (IsMyEnemy(pObject) &&
-                    !(pObject->GetEntityClass()->IsRtti(EntitySoldierClass::rttiHashEntitySoldierClass) &&
+                    !(pObject->GetEntityClass()->IsRtti(EntitySoldierClass::GetRtti()) &&
                       ((EntitySoldierClass*)(
                           (GameObjectClass*)pObject->GetEntityClass()))->mImmuneToMines))
                 {

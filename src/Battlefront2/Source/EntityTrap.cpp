@@ -218,7 +218,7 @@ void EntityTrap::HealthChangeCallback(bool bArg, float fDelta)
         {
             m_pHologram->TurnOnNow();
         }
-        if (mBuildBox->IsRtti(EntityProp::rttiHashEntityProp))
+        if (mBuildBox->IsRtti(EntityProp::GetRtti()))
         {
             EntityProp* pProp = (EntityProp*)mBuildBox;
             pProp->Deactivate();
@@ -761,7 +761,7 @@ bool EntityTrap::Update(float fDeltaTime)
             m_pHologram->TurnOn();
         }
         mUnbuiltTime = 0.0f;
-        if (mBuildBox->IsRtti(EntityProp::rttiHashEntityProp))
+        if (mBuildBox->IsRtti(EntityProp::GetRtti()))
         {
             EntityProp* pProp = (EntityProp*)mBuildBox;
             pProp->Activate();

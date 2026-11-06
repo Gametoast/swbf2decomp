@@ -126,7 +126,7 @@ namespace
         GameObject* pObject = h.mObject;
         if (pObject)
         {
-        if (pObject->mHandleId == h.mSavedHandleId)
+        if (pObject->GetHandleId() == h.mSavedHandleId)
         {
                 return pObject;
         }
@@ -842,7 +842,7 @@ void UnitController::UseAutoTurrets()
         if (pClass->IsRtti(WeaponDispenserClass::rttiHashWeaponDispenserClass))
         {
             EntityClass* pDispense = ((const WeaponDispenserClass*)pClass)->mDispenseClass;
-            if (pDispense && pDispense->IsRtti(EntityBuildingArmedClass::rttiHashEntityBuildingArmedClass) &&
+            if (pDispense && pDispense->IsRtti(EntityBuildingArmedClass::GetRtti()) &&
                 (pClass->mAITargetTypes & 1))
             {
                 AILowLevel* pLowLevel = &mLowLevel;

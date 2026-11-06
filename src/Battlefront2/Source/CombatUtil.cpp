@@ -111,7 +111,7 @@ namespace
     inline const GameObject* HandleObject(const PblHandle<GameObject>& handle)
     {
         PblHandle<GameObject>& h = const_cast<PblHandle<GameObject>&>(handle);
-        if (h.mObject && h.mObject->mHandleId != h.mSavedHandleId)
+        if (h.mObject && h.mObject->GetHandleId() != h.mSavedHandleId)
         {
             h.mObject = 0;
             h.mSavedHandleId = 0;
@@ -527,7 +527,7 @@ float CombatUtil::sCalcDamagePerSecond(Controllable* pMe, const WeaponClass* pCl
     {
         return sCalcDamagePerSecond_Grenade(owner, (const WeaponGrenadeClass*)pClass, pTarget);
     }
-    if (pWeapon->IsRtti(WeaponMeleeThrowClass::rttiHashWeaponMeleeThrowClass))
+    if (pWeapon->IsRtti(WeaponMeleeThrowClass::GetRtti()))
     {
         return sCalcDamagePerSecond_MeleeThrow(owner, (const WeaponMeleeThrowClass*)pClass, pTarget);
     }
@@ -1804,11 +1804,11 @@ bool CombatUtil::CanTurretFaceDisturbance(const Controllable* pMe, const Mounted
 // FUNCTION: SWBF2 0x00470680
 bool CombatUtil::CanFaceDisturbance(const GameObject* pObj, const PblVector3& vPos)
 {
-    if (pObj->IsRtti(EntityRemoteTerminal::rttiHashEntityRemoteTerminal))
+    if (pObj->IsRtti(EntityRemoteTerminal::GetRtti()))
     {
         pObj = reinterpret_cast<EntityRemoteTerminal*>(const_cast<GameObject*>(pObj))->GetRemoteGameObject();
     }
-    if (!pObj->IsRtti(EntityBuildingArmed::rttiHashEntityBuildingArmed))
+    if (!pObj->IsRtti(EntityBuildingArmed::GetRtti()))
     {
         return false;
     }

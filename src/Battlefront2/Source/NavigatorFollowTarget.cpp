@@ -25,7 +25,7 @@ namespace
 {
     inline unsigned int GameObjectHandleId(const GameObject* pObject)
     {
-        return pObject->mHandleId;
+        return pObject->GetHandleId();
     }
 
     inline const GameObject* HandleObject(PblHandle<const GameObject>& handle)

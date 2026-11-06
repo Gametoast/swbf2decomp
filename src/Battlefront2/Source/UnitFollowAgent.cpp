@@ -85,7 +85,7 @@ namespace
     {
         PblHandle<GameObject> h;
         h.mObject = pObject;
-        h.mSavedHandleId = pObject ? pObject->mHandleId : 0;
+        h.mSavedHandleId = pObject ? pObject->GetHandleId() : 0;
         return h;
     }
 

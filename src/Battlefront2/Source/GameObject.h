@@ -68,6 +68,8 @@ public:
 
     virtual ~GameObjectClass();
 
+    static unsigned int GetRtti() { return rttiHashGameObjectClass; }
+
     virtual int GetSoldierType() const;
     virtual int GetVehicleType() const;
     virtual const class ControllableClass* GetControllableClass() const;

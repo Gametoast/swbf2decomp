@@ -1089,7 +1089,7 @@ bool EntityDroid::Update(float fDeltaTime)
         if (mClass->mExplosion)
         {
             GameObject* pOwnerObject = mDamageOwner.mGameObject.mObject;
-            if (pOwnerObject && pOwnerObject->mHandleId != mDamageOwner.mGameObject.mSavedHandleId)
+            if (pOwnerObject && pOwnerObject->GetHandleId() != mDamageOwner.mGameObject.mSavedHandleId)
             {
                 mDamageOwner.mGameObject.mObject = 0;
                 mDamageOwner.mGameObject.mSavedHandleId = 0;
