@@ -259,7 +259,11 @@ void ReadNetLOD(NetPktGroup& group)
 void NetTrigger::Write(NetPktGroup& group)
 {
     group.WriteBits(_ActionStateToNetworkState(m_uiActionState), 4);
-    if (m_uiActionState == ACTIONSTATE_CLEAR && !m_uiTimerNet)
+    if (m_uiActionState == ACTIONSTATE_CLEAR_UNTIL_PRESS)
+    {
+        group.WriteBits(m_uiTimerNet, 5);
+    }
+    else if (m_uiActionState == ACTIONSTATE_CLEAR && !m_uiTimerNet)
     {
         group.WriteBits(1, 5);
     }
@@ -3180,18 +3184,20 @@ void WeaponGrenade::Read(NetPktGroup& group)
     }
     group.ReadFixed(mStrength, 0.0f, 1.0f, 8);
 
-    const WeaponGrenadeClass* pClass = (const WeaponGrenadeClass*)mClass;
     if (mState == CHARGE)
     {
+        const WeaponGrenadeClass* pClass = (const WeaponGrenadeClass*)mClass;
         mStateLimit = pClass->mMaxPressedTime;
     }
     else if (mState == FIRE || mState == FIRE2)
     {
         int iIndex = (m_iSoldierState == 2) ? 2 : mState - 1;
+        const WeaponGrenadeClass* pClass = (const WeaponGrenadeClass*)mClass;
         mStateLimit = pClass->mInitialSalvoDelay[iIndex] + pClass->mShotDelay;
     }
     else if (mState == RELOAD)
     {
+        const WeaponGrenadeClass* pClass = (const WeaponGrenadeClass*)mClass;
         mStateLimit = pClass->mReloadTime;
     }
 }
@@ -4205,26 +4211,7 @@ void EntityDroideka::ReadObject(NetPktGroup& group, NetObjState*)
         UnitControllerPtr(mCtrl)->mLowLevel.mFoldStatus = (FoldStatus)value;
     }
     group.ReadBits(value, 4);
-    if ((int)value == mState)
-    {
-        ZephyrAnim* pAnim = mClass->mAnimations[mState == Dead ? Dying : mState];
-        group.ReadFixed(mTime, 0.0f, 10.0f, 24);
-        mZephyrPoseDyn.SetLoop(0);
-        mZephyrPoseDyn.SetAnimation(pAnim, 30.0f);
-        if (mDirection == Backward)
-        {
-            mZephyrPoseDyn.PlayAnimBackward();
-            mZephyrPoseDyn.SetCurTime(1.0f);
-            mZephyrPoseDyn.Update(mClass->mTimeTotals[mState] - mTime);
-        }
-        else
-        {
-            mZephyrPoseDyn.PlayAnimForward();
-            mZephyrPoseDyn.SetCurTime(0.0f);
-            mZephyrPoseDyn.Update(mTime);
-        }
-    }
-    else
+    if ((int)value != mState)
     {
         if (value == Rolling)
         {
@@ -4235,7 +4222,19 @@ void EntityDroideka::ReadObject(NetPktGroup& group, NetObjState*)
             SetCollisionModel(&mClass->mCollisionModel);
         }
         mState = value;
-        if (value != Dead)
+        if (value == Dead)
+        {
+            float fTime;
+            group.ReadFixed(fTime, 0.0f, 10.0f, 24);
+            ZephyrAnim* pAnim = mClass->mAnimations[Dying];
+            mTime = mClass->mTimeTotals[Dying];
+            mZephyrPoseDyn.SetLoop(0);
+            mZephyrPoseDyn.PlayAnimForward();
+            mZephyrPoseDyn.SetAnimation(pAnim, 30.0f);
+            mZephyrPoseDyn.SetCurTime(0.0f);
+            mZephyrPoseDyn.Update(mTime);
+        }
+        else
         {
             ZephyrAnim* pAnim = mClass->mAnimations[value];
             group.ReadFixed(mTime, 0.0f, 10.0f, 24);
@@ -4254,15 +4253,22 @@ void EntityDroideka::ReadObject(NetPktGroup& group, NetObjState*)
                 mZephyrPoseDyn.Update(mTime);
             }
         }
+    }
+    else
+    {
+        ZephyrAnim* pAnim = mClass->mAnimations[mState == Dead ? Dying : mState];
+        group.ReadFixed(mTime, 0.0f, 10.0f, 24);
+        mZephyrPoseDyn.SetLoop(0);
+        mZephyrPoseDyn.SetAnimation(pAnim, 30.0f);
+        if (mDirection == Backward)
+        {
+            mZephyrPoseDyn.PlayAnimBackward();
+            mZephyrPoseDyn.SetCurTime(1.0f);
+            mZephyrPoseDyn.Update(mClass->mTimeTotals[mState] - mTime);
+        }
         else
         {
-            float fTime;
-            group.ReadFixed(fTime, 0.0f, 10.0f, 24);
-            ZephyrAnim* pAnim = mClass->mAnimations[Dying];
-            mTime = mClass->mTimeTotals[Dying];
-            mZephyrPoseDyn.SetLoop(0);
             mZephyrPoseDyn.PlayAnimForward();
-            mZephyrPoseDyn.SetAnimation(pAnim, 30.0f);
             mZephyrPoseDyn.SetCurTime(0.0f);
             mZephyrPoseDyn.Update(mTime);
         }
@@ -4367,7 +4373,14 @@ void EntityDroideka::ReadObject(NetPktGroup& group, NetObjState*)
             ReadTrigger(group, &mControlThrustFwd);
             bool falling;
             group.Read(falling);
-            mFallTimer = falling ? 0.1f : 0.0f;
+            if (falling)
+            {
+                mFallTimer = 0.1f;
+            }
+            else
+            {
+                mFallTimer = 0.0f;
+            }
             ReadTrigger(group, &mControlJump);
             ReadTrigger(group, &mControlZoom);
             for (int i = 0; i < 2; ++i)
@@ -4478,29 +4491,22 @@ void EntityDroideka::ReadLateState(NetPktGroup& group)
         UnitControllerPtr(mCtrl)->mLowLevel.mFoldStatus = (FoldStatus)value;
     }
     group.ReadBits(value, 4);
-    if ((int)value == mState)
+    if ((int)value != mState)
     {
-        ZephyrAnim* pAnim = mClass->mAnimations[mState == Dead ? Dying : mState];
-        group.ReadFixed(mTime, 0.0f, 10.0f, 24);
-        mZephyrPoseDyn.SetLoop(0);
-        mZephyrPoseDyn.SetAnimation(pAnim, 30.0f);
-        if (mDirection == Backward)
+        mState = value;
+        if (value == Dead)
         {
-            mZephyrPoseDyn.PlayAnimBackward();
-            mZephyrPoseDyn.SetCurTime(1.0f);
-            mZephyrPoseDyn.Update(mClass->mTimeTotals[mState] - mTime);
-        }
-        else
-        {
+            float fTime;
+            group.ReadFixed(fTime, 0.0f, 10.0f, 24);
+            ZephyrAnim* pAnim = mClass->mAnimations[Dying];
+            mTime = mClass->mTimeTotals[Dying];
+            mZephyrPoseDyn.SetLoop(0);
             mZephyrPoseDyn.PlayAnimForward();
+            mZephyrPoseDyn.SetAnimation(pAnim, 30.0f);
             mZephyrPoseDyn.SetCurTime(0.0f);
             mZephyrPoseDyn.Update(mTime);
         }
-    }
-    else
-    {
-        mState = value;
-        if (value != Dead)
+        else
         {
             ZephyrAnim* pAnim = mClass->mAnimations[value];
             group.ReadFixed(mTime, 0.0f, 10.0f, 24);
@@ -4519,15 +4525,22 @@ void EntityDroideka::ReadLateState(NetPktGroup& group)
                 mZephyrPoseDyn.Update(mTime);
             }
         }
+    }
+    else
+    {
+        ZephyrAnim* pAnim = mClass->mAnimations[mState == Dead ? Dying : mState];
+        group.ReadFixed(mTime, 0.0f, 10.0f, 24);
+        mZephyrPoseDyn.SetLoop(0);
+        mZephyrPoseDyn.SetAnimation(pAnim, 30.0f);
+        if (mDirection == Backward)
+        {
+            mZephyrPoseDyn.PlayAnimBackward();
+            mZephyrPoseDyn.SetCurTime(1.0f);
+            mZephyrPoseDyn.Update(mClass->mTimeTotals[mState] - mTime);
+        }
         else
         {
-            float fTime;
-            group.ReadFixed(fTime, 0.0f, 10.0f, 24);
-            ZephyrAnim* pAnim = mClass->mAnimations[Dying];
-            mTime = mClass->mTimeTotals[Dying];
-            mZephyrPoseDyn.SetLoop(0);
             mZephyrPoseDyn.PlayAnimForward();
-            mZephyrPoseDyn.SetAnimation(pAnim, 30.0f);
             mZephyrPoseDyn.SetCurTime(0.0f);
             mZephyrPoseDyn.Update(mTime);
         }

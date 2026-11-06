@@ -144,9 +144,10 @@ void DSBufferRenderer::UpdateBufferParameters(IDirectSoundBuffer* const pBuffer,
 
         UpdateGain(true, fGain);
 
+        const float pitch = Source::mPitch;
+        const float pitch3D = Source3D::CalculatePitch() * pitch;
         DSBuffer::SetFrequency(
-            (unsigned int)((float)(unsigned int)mFrequency
-                           * (Source3D::CalculatePitch() * Source::mPitch)));
+            (unsigned int)((float)(unsigned int)mFrequency * pitch3D));
     }
     else
     {
