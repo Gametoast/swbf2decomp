@@ -465,7 +465,7 @@ void RedTerrain::Read(PblFileChunk& chunk)
         PblFile* pFile = child._pFile;
         switch (child._iId)
         {
-        case 0x4F464E49:
+        case CHUNK_ID('I', 'N', 'F', 'O'):
         {
             _bEnable = true;
             _fMetersPerPoint = pFile->ReadFloat();
@@ -544,7 +544,7 @@ void RedTerrain::Read(PblFileChunk& chunk)
             break;
         }
 
-        case 0x50584548:
+        case CHUNK_ID('H', 'E', 'X', 'P'):
             for (int i = 0; i < _iNumHeightPatches; ++i)
             {
                 pHeightExpand[i].uiShift = pFile->Read8();
@@ -555,7 +555,7 @@ void RedTerrain::Read(PblFileChunk& chunk)
             }
             break;
 
-        case 0x38544748:
+        case CHUNK_ID('H', 'G', 'T', '8'):
         {
             unsigned char* p = pHeight;
             unsigned char* const pEnd = pHeight + _iNumPoints;
@@ -579,7 +579,7 @@ void RedTerrain::Read(PblFileChunk& chunk)
             break;
         }
 
-        case 0x494D554C:
+        case CHUNK_ID('L', 'U', 'M', 'I'):
         {
             const int iSize = child._iSize;
             const int iOldHeap = RedSetCurrentHeap(iHeap);
@@ -591,7 +591,7 @@ void RedTerrain::Read(PblFileChunk& chunk)
             break;
         }
 
-        case 0x474C4F46:
+        case CHUNK_ID('F', 'O', 'L', 'G'):
         {
             const int iSize = pFile->Read32();
             const int iOldHeap = RedSetCurrentHeap(iHeap);
@@ -602,7 +602,7 @@ void RedTerrain::Read(PblFileChunk& chunk)
             break;
         }
 
-        case 0x4C414344:
+        case CHUNK_ID('D', 'C', 'A', 'L'):
             for (int i = 0; i < _iNumDecalTiles; ++i)
             {
                 DecalTile& tile = pDecalTile[i];
@@ -625,18 +625,18 @@ void RedTerrain::Read(PblFileChunk& chunk)
             }
             break;
 
-        case 0x4C414353:
+        case CHUNK_ID('S', 'C', 'A', 'L'):
             for (int i = 0; i < _iNumLayers; ++i)
             {
                 _fLayerMetersPerTexture[i] = pFile->ReadFloat();
             }
             break;
 
-        case 0x52544157:
+        case CHUNK_ID('W', 'A', 'T', 'R'):
             RedWater::Read(child);
             break;
 
-        case 0x5845544C:
+        case CHUNK_ID('L', 'T', 'E', 'X'):
             for (int i = 0; i < _iNumLayers; ++i)
             {
                 child.ReadString(acName, sizeof(acName));
@@ -644,7 +644,7 @@ void RedTerrain::Read(PblFileChunk& chunk)
             }
             break;
 
-        case 0x58455444:
+        case CHUNK_ID('D', 'T', 'E', 'X'):
             for (int i = 0; i < _iNumLayers; ++i)
             {
                 child.ReadString(acName, sizeof(acName));
@@ -652,31 +652,31 @@ void RedTerrain::Read(PblFileChunk& chunk)
             }
             break;
 
-        case 0x584C5444:
+        case CHUNK_ID('D', 'T', 'L', 'X'):
             child.ReadString(acName, sizeof(acName));
             _uiDetailTextureHash = PblHash(acName);
             break;
 
-        case 0x53484350:
+        case CHUNK_ID('P', 'C', 'H', 'S'):
             _ReadPatchInfo(child);
             break;
 
-        case 0x53495841:
+        case CHUNK_ID('A', 'X', 'I', 'S'):
             for (int i = 0; i < _iNumLayers; ++i)
             {
                 _uiLayerTextureOrientation[i] = pFile->Read8();
             }
             break;
 
-        case 0x53545543:
+        case CHUNK_ID('C', 'U', 'T', 'S'):
             while (!child.IsDone())
             {
                 PblFileChunk cut = child.ReadNextChild();
-                if (cut._iId == 0x4F464E49)
+                if (cut._iId == CHUNK_ID('I', 'N', 'F', 'O'))
                 {
                     _bTreeHoles = cut._pFile->Read32() > 10;
                 }
-                else if (cut._iId == 0x52545543)
+                else if (cut._iId == CHUNK_ID('C', 'U', 'T', 'R'))
                 {
                     int iOldHeap = RedSetCurrentHeap(iHeap);
                     Hole* pHole = new Hole;
@@ -686,7 +686,7 @@ void RedTerrain::Read(PblFileChunk& chunk)
                     while (!cut.IsDone())
                     {
                         PblFileChunk part = cut.ReadNextChild();
-                                                if (part._iId == 0x4F464E49)
+                                                if (part._iId == CHUNK_ID('I', 'N', 'F', 'O'))
                         {
                             pHole->iNumPlanes = part._pFile->Read32();
                             const float fRadius = part._pFile->ReadFloat();
@@ -702,7 +702,7 @@ void RedTerrain::Read(PblFileChunk& chunk)
                             mTerrainBytesUsed += pHole->iNumPlanes * sizeof(PblVector4);
                             RedSetCurrentHeap(iOldHeap);
                         }
-                        else if (part._iId == 0x534E4C50)
+                        else if (part._iId == CHUNK_ID('P', 'L', 'N', 'S'))
                         {
                             for (int i = 0; i < pHole->iNumPlanes; ++i)
                             {

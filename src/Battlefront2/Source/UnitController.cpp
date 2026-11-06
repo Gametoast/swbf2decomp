@@ -474,11 +474,11 @@ void UnitController::UpdateLowLevel(float dt)
 
     switch (mLodState)
     {
-    case 0:
-    case 1:
+    case AILOD_WICKED_LOW:
+    case AILOD_LOWER:
         mLowLevelUpdateSkips = 4;
         break;
-    case 2:
+    case AILOD_LOW:
         mLowLevelUpdateSkips = 2;
         break;
     default:

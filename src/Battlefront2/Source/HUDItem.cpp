@@ -629,12 +629,12 @@ void HUD::Item::Read(PblConfig& config, Factory::ItemCallback pCallback,
 {
     while (!config.IsDone())
     {
-        if (config.m_pChunk->PeekNextChildId() == 0x41544144)
+        if (config.m_pChunk->PeekNextChildId() == CHUNK_ID('D', 'A', 'T', 'A'))
         {
             PblConfig::Data data = config.ReadNextData();
             ReadData(config, data);
         }
-        else if (config.m_pChunk->PeekNextChildId() == 0x504f4353)
+        else if (config.m_pChunk->PeekNextChildId() == CHUNK_ID('S', 'C', 'O', 'P'))
         {
             PblConfig scope(config.ReadNextScope(), true);
             Read(scope, pCallback, pUserData);

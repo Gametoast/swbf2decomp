@@ -99,7 +99,7 @@ void RedAnimation::ReadZaa(PblMemChunk& kChunk)
         PblMemChunk kChild = kChunk.ReadNextChild();
         switch (kChild.GetId())
         {
-        case 0x454D414E:
+        case CHUNK_ID('N', 'A', 'M', 'E'):
         {
             char szName[48];
             kChild.ReadString(szName, 48);
@@ -113,10 +113,10 @@ void RedAnimation::ReadZaa(PblMemChunk& kChunk)
             }
             break;
         }
-        case 0x544E5645:
+        case CHUNK_ID('E', 'V', 'N', 'T'):
             pAnim->_ReadEvents(kChild);
             break;
-        case 0x5F4E4942:
+        case CHUNK_ID('B', 'I', 'N', '_'):
             pAnim->_ReadZaa(kChild);
             break;
         }
@@ -132,7 +132,7 @@ void RedAnimation::ReadZaf(PblMemChunk& kChunk)
         PblMemChunk kChild = kChunk.ReadNextChild();
         switch (kChild.GetId())
         {
-        case 0x454D414E:
+        case CHUNK_ID('N', 'A', 'M', 'E'):
         {
             char szName[48];
             kChild.ReadString(szName, 48);
@@ -146,7 +146,7 @@ void RedAnimation::ReadZaf(PblMemChunk& kChunk)
             }
             break;
         }
-        case 0x5F4E4942:
+        case CHUNK_ID('B', 'I', 'N', '_'):
             pAnim->_ReadZaf(kChild);
             break;
         }

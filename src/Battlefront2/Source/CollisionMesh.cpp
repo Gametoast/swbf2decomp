@@ -434,7 +434,7 @@ CollisionTreeNode* ReadTree(PblFileChunk& chunk)
     PblFileChunk child = chunk.ReadNextChild();
     switch (child._iId)
     {
-    case 0x45444F4E:
+    case CHUNK_ID('N', 'O', 'D', 'E'):
     {
         CollisionTreeBranch* pBranch = new CollisionTreeBranch;
         child._pFile->ReadData(&pBranch->aabb, 6);
@@ -442,7 +442,7 @@ CollisionTreeNode* ReadTree(PblFileChunk& chunk)
         pBranch->SetGChild(ReadTree(chunk));
         return pBranch;
     }
-    case 0x4641454C:
+    case CHUNK_ID('L', 'E', 'A', 'F'):
     {
         unsigned char uNumVerts = child._pFile->Read8();
         CollisionTreeLeaf* pLeaf = new CollisionTreeLeaf(uNumVerts);
@@ -478,7 +478,7 @@ void CollisionMesh::_Read(PblFileChunk& chunk)
         PblFileChunk child = chunk.ReadNextChild();
         switch (child._iId)
         {
-        case 0x454D414E:
+        case CHUNK_ID('N', 'A', 'M', 'E'):
         {
             char acName[128];
             child.ReadString(acName, 128);
@@ -490,7 +490,7 @@ void CollisionMesh::_Read(PblFileChunk& chunk)
             }
             break;
         }
-        case 0x45455254:
+        case CHUNK_ID('T', 'R', 'E', 'E'):
         {
             int iBytes = 2 * (iNumIndices + 6 * (iNumNodes + iNumLeafs));
             if (iBytes > mTopCollision[0].mSize)
@@ -503,13 +503,13 @@ void CollisionMesh::_Read(PblFileChunk& chunk)
             mRoot = ReadTree(child);
             break;
         }
-        case 0x45444F4E:
+        case CHUNK_ID('N', 'O', 'D', 'E'):
         {
             char acName[128];
             child.ReadString(acName, 128);
             break;
         }
-        case 0x49534F50:
+        case CHUNK_ID('P', 'O', 'S', 'I'):
             mPoslList = new PblVector3[mPoslCount];
             for (unsigned int i = 0; i < mPoslCount; ++i)
             {
@@ -521,10 +521,10 @@ void CollisionMesh::_Read(PblFileChunk& chunk)
                 mPoslList[i].z = z;
             }
             break;
-        case 0x4B53414D:
+        case CHUNK_ID('M', 'A', 'S', 'K'):
             mMask = child._pFile->Read8();
             break;
-        case 0x4F464E49:
+        case CHUNK_ID('I', 'N', 'F', 'O'):
         {
             mPoslCount = child._pFile->Read32();
             iNumNodes = child._pFile->Read32();

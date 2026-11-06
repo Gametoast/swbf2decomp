@@ -743,7 +743,7 @@ void TerrainRenderable::Read(PblFileChunk& chunk)
 
         switch (child._iId)
         {
-        case 0x48435450:
+        case CHUNK_ID('P', 'T', 'C', 'H'):
         {
             unsigned int auiLayer[4] = { 0, 0, 0, 0 };
             unsigned int auiFormat[3] = { 0, 0, 0 };
@@ -765,7 +765,7 @@ void TerrainRenderable::Read(PblFileChunk& chunk)
                 PblFileChunk leaf = child.ReadNextChild();
                 switch (leaf._iId)
                 {
-                case 0x4F464E49:
+                case CHUNK_ID('I', 'N', 'F', 'O'):
                 {
                     uiNumLayers = leaf._pFile->Read8();
                     for (unsigned char j = 0; j < uiNumLayers; ++j)
@@ -795,7 +795,7 @@ void TerrainRenderable::Read(PblFileChunk& chunk)
                     iHeightShift = leaf._pFile->Read16();
                     break;
                 }
-                case 0x46554256:
+                case CHUNK_ID('V', 'B', 'U', 'F'):
                 {
                     unsigned int uiNumVertices = leaf._pFile->Read32();
                     unsigned int uiVertexSize = leaf._pFile->Read32();
@@ -821,7 +821,7 @@ void TerrainRenderable::Read(PblFileChunk& chunk)
                     }
                     break;
                 }
-                case 0x46554249:
+                case CHUNK_ID('I', 'B', 'U', 'F'):
                 {
                     if (iNumVB == iNumUncompressedVB)
                     {
@@ -904,12 +904,12 @@ void TerrainRenderable::Read(PblFileChunk& chunk)
             ++iPatch;
             break;
         }
-        case 0x4E4D4F43:
+        case CHUNK_ID('C', 'O', 'M', 'N'):
         {
             while (!child.IsDone())
             {
                 PblFileChunk leaf = child.ReadNextChild();
-                if (leaf._iId == 0x46554249)
+                if (leaf._iId == CHUNK_ID('I', 'B', 'U', 'F'))
                 {
                     uiDefaultNumIndices = leaf._pFile->Read32();
                     m_pIBDefault = ReadIndexBuffer(leaf, uiDefaultNumIndices, uiDefaultStartIndex);
@@ -917,12 +917,12 @@ void TerrainRenderable::Read(PblFileChunk& chunk)
             }
             break;
         }
-        case 0x52574F4C:
+        case CHUNK_ID('L', 'O', 'W', 'R'):
         {
             while (!child.IsDone())
             {
                 PblFileChunk sub = child.ReadNextChild();
-                if (sub._iId == 0x4F464E49)
+                if (sub._iId == CHUNK_ID('I', 'N', 'F', 'O'))
                 {
                     m_iLowResPatchesPerDimension = sub._pFile->Read32();
                     m_iLowResPatchSize = sub._pFile->Read32();
@@ -938,7 +938,7 @@ void TerrainRenderable::Read(PblFileChunk& chunk)
                     RedTerrain::mTerrainBytesUsed +=
                         m_iLowResPatchesPerDimension * m_iLowResPatchesPerDimension * sizeof(LowResPatch);
                 }
-                else if (sub._iId == 0x53484350)
+                else if (sub._iId == CHUNK_ID('P', 'C', 'H', 'S'))
                 {
                     pcRedIndexBuffer* pSharedIB = 0;
                     unsigned int uiSharedStartIndex = 0;
@@ -947,7 +947,7 @@ void TerrainRenderable::Read(PblFileChunk& chunk)
                     while (!sub.IsDone())
                     {
                         PblFileChunk lp = sub.ReadNextChild();
-                        if (lp._iId == 0x4354504C)
+                        if (lp._iId == CHUNK_ID('L', 'P', 'T', 'C'))
                         {
                             unsigned int uiFormat = 0;
                             pcRedIndexBuffer* pIB = 0;
@@ -961,7 +961,7 @@ void TerrainRenderable::Read(PblFileChunk& chunk)
                                 PblFileChunk leaf = lp.ReadNextChild();
                                 switch (leaf._iId)
                                 {
-                                case 0x46554249:
+                                case CHUNK_ID('I', 'B', 'U', 'F'):
                                 {
                                     uiNumIndices = leaf._pFile->Read32();
                                     if (uiNumIndices)
@@ -970,7 +970,7 @@ void TerrainRenderable::Read(PblFileChunk& chunk)
                                     }
                                     break;
                                 }
-                                case 0x46554256:
+                                case CHUNK_ID('V', 'B', 'U', 'F'):
                                 {
                                     unsigned int uiCount = leaf._pFile->Read32();
                                     unsigned int uiVertexSize = leaf._pFile->Read32();
@@ -994,7 +994,7 @@ void TerrainRenderable::Read(PblFileChunk& chunk)
                                     }
                                     break;
                                 }
-                                case 0x4F464E49:
+                                case CHUNK_ID('I', 'N', 'F', 'O'):
                                 {
                                     PblBox& bbox = pLowRes->bbox;
                                     bbox._vMin.x = leaf._pFile->ReadFloat();
@@ -1028,12 +1028,12 @@ void TerrainRenderable::Read(PblFileChunk& chunk)
                             }
                             ++pLowRes;
                         }
-                        else if (lp._iId == 0x4E4D4F43)
+                        else if (lp._iId == CHUNK_ID('C', 'O', 'M', 'N'))
                         {
                             while (!lp.IsDone())
                             {
                                 PblFileChunk leaf = lp.ReadNextChild();
-                                if (leaf._iId == 0x46554249)
+                                if (leaf._iId == CHUNK_ID('I', 'B', 'U', 'F'))
                                 {
                                     uiSharedNumIndices = leaf._pFile->Read32();
                                     pSharedIB = ReadIndexBuffer(leaf, uiSharedNumIndices, uiSharedStartIndex);

@@ -192,14 +192,14 @@ void CollisionBodyPrimitive::Read(PblFileChunk& chunk)
         PblFileChunk child = chunk.ReadNextChild();
         switch (child._iId)
         {
-        case 0x4F464E49:
+        case CHUNK_ID('I', 'N', 'F', 'O'):
             child.ReadString(acBaseName, 128);
             iNumPrims = child._pFile->Read32();
             break;
-        case 0x544E5250:
+        case CHUNK_ID('P', 'R', 'N', 'T'):
             child.ReadString(acParentName, 128);
             break;
-        case 0x4D524658:
+        case CHUNK_ID('X', 'F', 'R', 'M'):
             matrix.m[0][0] = child._pFile->ReadFloat();
             matrix.m[0][1] = child._pFile->ReadFloat();
             matrix.m[0][2] = child._pFile->ReadFloat();
@@ -217,7 +217,7 @@ void CollisionBodyPrimitive::Read(PblFileChunk& chunk)
             matrix.m[3][2] = child._pFile->ReadFloat();
             matrix.m[3][3] = 1.0f;
             break;
-        case 0x41544144:
+        case CHUNK_ID('D', 'A', 'T', 'A'):
         {
             int iType = child._pFile->Read32();
             float f0 = child._pFile->ReadFloat();
@@ -256,10 +256,10 @@ void CollisionBodyPrimitive::Read(PblFileChunk& chunk)
             ++iPrim;
             break;
         }
-        case 0x454D414E:
+        case CHUNK_ID('N', 'A', 'M', 'E'):
             child.ReadString(acName, 128);
             break;
-        case 0x4B53414D:
+        case CHUNK_ID('M', 'A', 'S', 'K'):
             ucMask = child._pFile->Read8();
             break;
         }

@@ -2859,7 +2859,7 @@ void RedRenderer::OpenDynamic()
 // FUNCTION: SWBF2 0x006b2970
 void RedRenderer::Read(PblFileChunk& chunk)
 {
-    if (!g_bNoRender && chunk._iId == 0x52444853)
+    if (!g_bNoRender && chunk._iId == CHUNK_ID('S', 'H', 'D', 'R'))
     {
         pcRedShader::Read(chunk);
     }

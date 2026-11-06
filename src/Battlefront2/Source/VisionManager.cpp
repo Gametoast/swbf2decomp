@@ -208,7 +208,7 @@ void UpdatePotentiallyVisible(UnitController* pController)
         }
 
         float fDistSq = -1.0f;
-        if (!(pController->mLodState == 4 && pObj == pPlayerTarget) && !AIUtil::CanPotentiallySee(pMe, pObj, &fDistSq))
+        if (!(pController->mLodState == AILOD_HIGH && pObj == pPlayerTarget) && !AIUtil::CanPotentiallySee(pMe, pObj, &fDistSq))
         {
             continue;
         }

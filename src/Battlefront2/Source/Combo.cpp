@@ -662,7 +662,7 @@ const float Combo::Deflect::ENERGY_SCALE_INV = 10.0f;
 
 static const float ANIM_FRAME_SPEED = 1.0f / 30.0f;
 
-static const unsigned int SCOPE_ID = 0x504f4353;
+static const unsigned int SCOPE_ID = CHUNK_ID('S', 'C', 'O', 'P');
 
 // FUNCTION: SWBF2 0x00470910
 bool IsNextScopeChunk(const PblConfig& config)

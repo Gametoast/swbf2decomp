@@ -371,7 +371,7 @@ void WeaponClass::Read(PblFileChunk& chunk)
         PblFileChunk child = chunk.ReadNextChild();
         switch (child._iId)
         {
-        case 0x45505954:
+        case CHUNK_ID('T', 'Y', 'P', 'E'):
         {
             memset(acType, 0, sizeof(acType));
             const char* pcType = child.ReadString(acType, sizeof(acType));
@@ -399,10 +399,10 @@ void WeaponClass::Read(PblFileChunk& chunk)
             pCharge->mLabel = RedLocalizeDB::Find(PblHash(acBuffer), true);
             break;
         }
-        case 0x45534142:
+        case CHUNK_ID('B', 'A', 'S', 'E'):
             pClass = Find(PblHash(child.ReadString(acBuffer, sizeof(acBuffer))));
             break;
-        case 0x504F5250:
+        case CHUNK_ID('P', 'R', 'O', 'P'):
         {
             const unsigned int uProperty = child._pFile->Read32();
             pCharge->SetProperty(uProperty, child.ReadString(acBuffer, sizeof(acBuffer)));

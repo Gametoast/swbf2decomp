@@ -500,7 +500,7 @@ void OrdnanceClass::Read(PblFileChunk& chunk)
         PblFileChunk child = chunk.ReadNextChild();
         switch (child._iId)
         {
-        case 0x45505954:
+        case CHUNK_ID('T', 'Y', 'P', 'E'):
         {
             const unsigned int uType = PblHash(child.ReadString(acBuffer, sizeof(acBuffer)));
             OrdnanceClass* pExisting = 0;
@@ -519,7 +519,7 @@ void OrdnanceClass::Read(PblFileChunk& chunk)
             pClass = pClass->Derive(uType);
             break;
         }
-        case 0x45534142:
+        case CHUNK_ID('B', 'A', 'S', 'E'):
         {
             const unsigned int uBase = PblHash(child.ReadString(acBuffer, sizeof(acBuffer)));
             OrdnanceClass* pBase = 0;
@@ -534,7 +534,7 @@ void OrdnanceClass::Read(PblFileChunk& chunk)
             pClass = pBase;
             break;
         }
-        case 0x504F5250:
+        case CHUNK_ID('P', 'R', 'O', 'P'):
         {
             const unsigned int uProperty = child._pFile->Read32();
             pClass->SetProperty(uProperty, child.ReadString(acBuffer, sizeof(acBuffer)));

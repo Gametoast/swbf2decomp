@@ -225,7 +225,7 @@ void __cdecl pcRedShader::Read(PblFileChunk& chunk)
     while (!chunk.IsDone())
     {
         PblFileChunk child = chunk.ReadNextChild();
-        if (child._iId != 0x50595452)
+        if (child._iId != CHUNK_ID('R', 'T', 'Y', 'P'))
         {
             continue;
         }
@@ -259,10 +259,10 @@ void pcRedShaderDef::Read(PblFileChunk& chunk)
         PblFileChunk child = chunk.ReadNextChild();
         switch (child._iId)
         {
-        case 0x45504950:
+        case CHUNK_ID('P', 'I', 'P', 'E'):
             ReadPipeline(child, uiNumPipelines);
             break;
-        case 0x4f464e49:
+        case CHUNK_ID('I', 'N', 'F', 'O'):
             uiNumPipelines = (unsigned int)child._pFile->Read32();
             m_uiVertexFormatSupport = child._pFile->Read8();
             break;
@@ -290,7 +290,7 @@ void pcRedShaderDef::ReadPipeline(PblFileChunk& chunk, unsigned int)
         PblFileChunk child = chunk.ReadNextChild();
         switch (child._iId)
         {
-        case 0x4f464e49:
+        case CHUNK_ID('I', 'N', 'F', 'O'):
         {
             const unsigned int uiPipeline = (unsigned int)child._pFile->Read32();
             const PipelineT eCaps = RedRenderer::pcGetRenderCaps().pipeline;
@@ -308,16 +308,16 @@ void pcRedShaderDef::ReadPipeline(PblFileChunk& chunk, unsigned int)
             m_vertexShaderPool = new pcRedVertexShader*[m_uiVertexShaderPoolSize];
             break;
         }
-        case 0x54415453:
+        case CHUNK_ID('S', 'T', 'A', 'T'):
             ReadState(child);
             break;
-        case 0x5f505350:
+        case CHUNK_ID('P', 'S', 'P', '_'):
         {
             int i = 0;
             while (!child.IsDone())
             {
                 PblFileChunk program = child.ReadNextChild();
-                if (program._iId == 0x5f5f5350)
+                if (program._iId == CHUNK_ID('P', 'S', '_', '_'))
                 {
                     m_pixelShaderPool[i] = new pcRedPixelShader;
                     m_pixelShaderPool[i]->Read(program);
@@ -326,13 +326,13 @@ void pcRedShaderDef::ReadPipeline(PblFileChunk& chunk, unsigned int)
             }
             break;
         }
-        case 0x5f505356:
+        case CHUNK_ID('V', 'S', 'P', '_'):
         {
             int i = 0;
             while (!child.IsDone())
             {
                 PblFileChunk program = child.ReadNextChild();
-                if (program._iId == 0x5f5f5356)
+                if (program._iId == CHUNK_ID('V', 'S', '_', '_'))
                 {
                     m_vertexShaderPool[i] = new pcRedVertexShader;
                     m_vertexShaderPool[i]->Read(program);
@@ -355,13 +355,13 @@ void pcRedShaderDef::ReadState(PblFileChunk& chunk)
         PblFileChunk child = chunk.ReadNextChild();
         switch (child._iId)
         {
-        case 0x53534150:
+        case CHUNK_ID('P', 'A', 'S', 'S'):
             while (!child.IsDone())
             {
                 PblFileChunk item = child.ReadNextChild();
                 switch (item._iId)
                 {
-                case 0x5f535650:
+                case CHUNK_ID('P', 'V', 'S', '_'):
                 {
                     const unsigned int iSlot = item._pFile->Read32();
                     const unsigned int iProgram = item._pFile->Read32();
@@ -369,12 +369,12 @@ void pcRedShaderDef::ReadState(PblFileChunk& chunk)
                     break;
                 }
 
-                case 0x5f535050:
+                case CHUNK_ID('P', 'P', 'S', '_'):
                     m_states[iState].pass[iPass].pPixelShader =
                         m_pixelShaderPool[item._pFile->Read32()];
                     break;
 
-                case 0x4f464e49:
+                case CHUNK_ID('I', 'N', 'F', 'O'):
                 {
                     ++iPass;
                     m_states[iState].pass[iPass] = PassT();
@@ -387,7 +387,7 @@ void pcRedShaderDef::ReadState(PblFileChunk& chunk)
             }
             break;
 
-        case 0x4f464e49:
+        case CHUNK_ID('I', 'N', 'F', 'O'):
         {
             iState = child._pFile->Read32();
             const unsigned int uiNumPasses = (unsigned int)child._pFile->Read32();

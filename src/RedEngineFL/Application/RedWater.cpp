@@ -845,7 +845,7 @@ void RedWater::Read(PblFileChunk& chunk)
         PblFileChunk child = chunk.ReadNextChild();
         switch (child._iId)
         {
-        case 0x4F464E49:
+        case CHUNK_ID('I', 'N', 'F', 'O'):
             m_waterMapSize = child._pFile->Read32();
             m_patchesPerCell = child._pFile->Read32();
             m_metersPerPatch = child._pFile->ReadFloat();
@@ -856,12 +856,12 @@ void RedWater::Read(PblFileChunk& chunk)
             m_cellsPerPatch = 1.0f / (float)m_patchesPerCell;
             break;
 
-        case 0x50414D57:
+        case CHUNK_ID('W', 'M', 'A', 'P'):
             m_waterMap = new unsigned char[m_waterMapSize * m_waterMapSize / m_patchesPerCell];
             child._pFile->ReadData(m_waterMap, m_waterMapSize * m_waterMapSize / m_patchesPerCell);
             break;
 
-        case 0x5259414C:
+        case CHUNK_ID('L', 'A', 'Y', 'R'):
             if (!bReadLayer)
             {
                 char acName[256];
@@ -880,7 +880,7 @@ void RedWater::Read(PblFileChunk& chunk)
             }
             break;
 
-        case 0x54415043:
+        case CHUNK_ID('C', 'P', 'A', 'T'):
             for (unsigned int z = 0; z < m_waterMapSize; ++z)
             {
                 for (unsigned int x = 0; x < m_waterMapSize; ++x)

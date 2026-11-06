@@ -21,7 +21,7 @@
 // FUNCTION: SWBF2 0x00643550
 void SoldierAnimator::PlayIdleAnimation(SoldierAnimType::MovementAnimation eAnimation)
 {
-    if (eAnimation <= 2 && mAction == 39 && mMoveAnimation <= 2)
+    if (eAnimation <= 2 && mAction == SoldierAnimType::MOVE && mMoveAnimation <= 2)
     {
         mMoveAnimation = eAnimation;
     }

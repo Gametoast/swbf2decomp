@@ -408,7 +408,7 @@ void EntityPathFollower::DelayPath(BranchParams& params, float fDistance)
 // FUNCTION: SWBF2 0x004d3390
 bool EntityPathFollower::IsFlyerPlayerCentric(BranchParams& params)
 {
-    if (FlagItem::sFlagGameplayType == 2 || FlagItem::sFlagGameplayType == 3)
+    if (FlagItem::sFlagGameplayType == FlagItem::FLAG_GAMEPLAY_1FLAG || FlagItem::sFlagGameplayType == FlagItem::FLAG_GAMEPLAY_2FLAG)
     {
         return false;
     }

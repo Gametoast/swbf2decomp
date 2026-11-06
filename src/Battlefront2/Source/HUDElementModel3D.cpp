@@ -60,7 +60,7 @@ bool HUD::ElementModel3D::MeshInfo::Read(PblConfig& config, const bool bInScreen
 {
     while (!config.IsDone())
     {
-        if (config.m_pChunk->PeekNextChildId() == 0x41544144)
+        if (config.m_pChunk->PeekNextChildId() == CHUNK_ID('D', 'A', 'T', 'A'))
         {
             PblConfig::Data data = config.ReadNextData();
             bool bRead = mMatrixInfo.ReadScale(data, 0);
@@ -71,7 +71,7 @@ bool HUD::ElementModel3D::MeshInfo::Read(PblConfig& config, const bool bInScreen
                 mDepth = data.GetFloatArg(0);
             }
         }
-        else if (config.m_pChunk->PeekNextChildId() == 0x504f4353)
+        else if (config.m_pChunk->PeekNextChildId() == CHUNK_ID('S', 'C', 'O', 'P'))
         {
             PblConfig scope(config.ReadNextScope(), true);
             Read(scope, bInScreenGroup);
@@ -201,7 +201,7 @@ void HUD::ElementModel3D::Read(PblConfig& config, Factory::ItemCallback, void* c
     while (!config.IsDone())
     {
         PblConfig::Data data = config.ReadNextData();
-        if (config.m_pChunk->PeekNextChildId() == 0x504f4353)
+        if (config.m_pChunk->PeekNextChildId() == CHUNK_ID('S', 'C', 'O', 'P'))
         {
             if (data.GetId() == kMeshInfoHash)
             {

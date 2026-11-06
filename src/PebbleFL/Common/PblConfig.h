@@ -66,7 +66,7 @@ public:
 
     bool IsScopeNext() const
     {
-        return !m_pChunk->IsDone() && m_pChunk->PeekNextChildId() == 0x504f4353;
+        return !m_pChunk->IsDone() && m_pChunk->PeekNextChildId() == CHUNK_ID('S', 'C', 'O', 'P');
     }
 
     Data ReadNextData();

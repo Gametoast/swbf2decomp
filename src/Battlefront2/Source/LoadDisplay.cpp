@@ -823,7 +823,7 @@ unsigned int LoadDisplay::LoadRandomLVLChunk(const char* pcFileName, IDDatabase&
     while (!chunk.IsDone())
     {
         PblFileChunk child = chunk.ReadNextChild();
-        if (child._iId == 0x5f6c766c)
+        if (child._iId == CHUNK_ID('l', 'v', 'l', '_'))
         {
             while (!child.IsDone())
             {
@@ -840,7 +840,7 @@ unsigned int LoadDisplay::LoadRandomLVLChunk(const char* pcFileName, IDDatabase&
     while (!root.IsDone())
     {
         PblFileChunk child = root.ReadNextChild();
-        if (child._iId == 0x5f6c766c)
+        if (child._iId == CHUNK_ID('l', 'v', 'l', '_'))
         {
             while (!child.IsDone())
             {
@@ -881,10 +881,10 @@ void LoadDisplay::LoadDataChunk(PblFileChunk& chunk)
         PblFileChunk child = chunk.ReadNextChild();
         switch (child._iId)
         {
-        case 0x6c646f6d:
+        case CHUNK_ID('m', 'o', 'd', 'l'):
             m_models[m_numModels++] = RedModel::Read(child);
             break;
-        case 0x5f786574:
+        case CHUNK_ID('t', 'e', 'x', '_'):
         {
             RedTexture* pTexture = RedTexture::Read(child);
             bool bKnown = false;
@@ -902,10 +902,10 @@ void LoadDisplay::LoadDataChunk(PblFileChunk& chunk)
             }
             break;
         }
-        case 0x64616f6c:
+        case CHUNK_ID('l', 'o', 'a', 'd'):
             LoadConfig(child);
             break;
-        case 0x6c656b73:
+        case CHUNK_ID('s', 'k', 'e', 'l'):
             m_skeletons[m_numSkeletons++] = RedSkeleton::Read(child);
             break;
         }

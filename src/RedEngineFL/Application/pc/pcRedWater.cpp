@@ -1689,7 +1689,7 @@ void* RedWater::PlatformReadCustomPatch(PblFileChunk* pChunk)
     }
 
     PblFileChunk patch = pChunk->ReadNextChild();
-    if (patch._iId == 0x4354504C)
+    if (patch._iId == CHUNK_ID('L', 'P', 'T', 'C'))
     {
         PblBox bbox(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
         pcRedVertexBuffer* pVertexBuffer = 0;
@@ -1705,7 +1705,7 @@ void* RedWater::PlatformReadCustomPatch(PblFileChunk* pChunk)
             PblFileChunk child = patch.ReadNextChild();
             switch (child._iId)
             {
-            case 0x46554249:
+            case CHUNK_ID('I', 'B', 'U', 'F'):
                 uiNumIndices = child._pFile->Read32();
                 if (uiNumIndices)
                 {
@@ -1715,7 +1715,7 @@ void* RedWater::PlatformReadCustomPatch(PblFileChunk* pChunk)
                     pIndexBuffer->Unlock();
                 }
                 break;
-            case 0x46554256:
+            case CHUNK_ID('V', 'B', 'U', 'F'):
             {
                 unsigned int uiCount = child._pFile->Read32();
                 unsigned int uiStride = child._pFile->Read32();
@@ -1736,7 +1736,7 @@ void* RedWater::PlatformReadCustomPatch(PblFileChunk* pChunk)
                 }
                 break;
             }
-            case 0x4F464E49:
+            case CHUNK_ID('I', 'N', 'F', 'O'):
             {
                 float fMinX = child._pFile->ReadFloat();
                 float fMaxX = child._pFile->ReadFloat();

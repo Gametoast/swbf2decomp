@@ -199,7 +199,7 @@ void HUD::ViewPort::Read(PblConfig& config, HUD::Item::Factory::ItemCallback pCa
         while (!configPass.IsDone())
         {
             PblConfig::Data data = configPass.ReadNextData();
-            if (configPass.m_pChunk->PeekNextChildId() == 0x504f4353)
+            if (configPass.m_pChunk->PeekNextChildId() == CHUNK_ID('S', 'C', 'O', 'P'))
             {
                 Item::Factory* pFactory = Item::Factory::FindByHashID(data.GetId());
                 if (pFactory)

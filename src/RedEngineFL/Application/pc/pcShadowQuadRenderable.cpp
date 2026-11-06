@@ -198,7 +198,7 @@ void pcShadowQuadRenderable::Render(int value)
         return;
     }
 
-    if (RedRenderer::pcGetRenderCaps().pipeline == 0)
+    if (RedRenderer::pcGetRenderCaps().pipeline == PIPELINE_FIXED)
     {
         RedRenderer::pcRenderPrimitive(m_pPrimitive,
                                        m_pShadowShader,

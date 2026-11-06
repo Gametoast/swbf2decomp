@@ -149,7 +149,7 @@ void HUD::ElementVehicleSeating::Read(PblConfig& config, Factory::ItemCallback p
     while (!config.IsDone())
     {
         PblConfig::Data data = config.ReadNextData();
-        if (config.m_pChunk->PeekNextChildId() == 0x504f4353)
+        if (config.m_pChunk->PeekNextChildId() == CHUNK_ID('S', 'C', 'O', 'P'))
         {
             bool bFound = false;
             for (unsigned int i = 0; i < 4; ++i)

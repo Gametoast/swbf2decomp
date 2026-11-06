@@ -508,7 +508,7 @@ void RedTexture::pcReadFormat(PblFileChunk& chunk, _D3DFORMAT format)
         PblFileChunk child = chunk.ReadNextChild();
         switch (child._iId)
         {
-        case 0x4F464E49:
+        case CHUNK_ID('I', 'N', 'F', 'O'):
         {
             const _D3DFORMAT fileFormat = (_D3DFORMAT)child._pFile->Read32();
             if (fileFormat != format)
@@ -607,12 +607,12 @@ void RedTexture::pcReadFormat(PblFileChunk& chunk, _D3DFORMAT format)
             break;
         }
 
-        case 0x45434146:
+        case CHUNK_ID('F', 'A', 'C', 'E'):
             ++iFace;
             while (!child.IsDone())
             {
                 PblFileChunk level = child.ReadNextChild();
-                if (level._iId == 0x5F4C564C)
+                if (level._iId == CHUNK_ID('L', 'V', 'L', '_'))
                 {
                     pcReadLevel(level, uiSkip, iFace);
                 }
@@ -633,7 +633,7 @@ void RedTexture::pcReadLevel(PblFileChunk& chunk, unsigned int uiSkip, int iFace
         PblFileChunk child = chunk.ReadNextChild();
         switch (child._iId)
         {
-        case 0x4F464E49:
+        case CHUNK_ID('I', 'N', 'F', 'O'):
         {
             const unsigned int uiFileLevel = child._pFile->Read32();
             iSize = child._pFile->Read32();
@@ -645,7 +645,7 @@ void RedTexture::pcReadLevel(PblFileChunk& chunk, unsigned int uiSkip, int iFace
             break;
         }
 
-        case 0x59444F42:
+        case CHUNK_ID('B', 'O', 'D', 'Y'):
         {
             if (m_type == PC_REDTEXTURE_TYPE_VOLUME)
             {

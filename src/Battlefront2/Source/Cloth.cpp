@@ -120,7 +120,7 @@ void ClothData::_Read(PblFileChunk& chunk)
         char acString[128];
         switch (child._iId)
         {
-        case 0x4D524658:
+        case CHUNK_ID('X', 'F', 'R', 'M'):
         {
             float x = child._pFile->ReadFloat();
             float y = child._pFile->ReadFloat();
@@ -143,7 +143,7 @@ void ClothData::_Read(PblFileChunk& chunk)
             m_Transform.SetTranslation(x, y, z, 1.0f);
             break;
         }
-        case 0x41544144:
+        case CHUNK_ID('D', 'A', 'T', 'A'):
         {
             child.ReadString(acString, sizeof(acString));
             m_uiTextureNameHash = PblHash(acString);
@@ -214,19 +214,19 @@ void ClothData::_Read(PblFileChunk& chunk)
             }
             break;
         }
-        case 0x454D414E:
+        case CHUNK_ID('N', 'A', 'M', 'E'):
             child.ReadString(acString, sizeof(acString));
             m_uiNameHash = PblHash(acString);
             break;
-        case 0x544E5250:
+        case CHUNK_ID('P', 'R', 'N', 'T'):
             child.ReadString(acString, sizeof(acString));
             m_uiParentHash = PblTEMPHash(acString);
             break;
-        case 0x4F464E49:
+        case CHUNK_ID('I', 'N', 'F', 'O'):
             child.ReadString(acString, sizeof(acString));
             m_uiModelHash = PblHash(acString);
             break;
-        case 0x4C4C4F43:
+        case CHUNK_ID('C', 'O', 'L', 'L'):
         {
             m_uiNumCollisionVolumes = child._pFile->Read32();
             m_pCollisionVolumes = new ClothCollision[m_uiNumCollisionVolumes];

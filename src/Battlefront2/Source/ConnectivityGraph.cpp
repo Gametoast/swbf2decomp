@@ -378,20 +378,20 @@ bool ConnectivityGraph::Read(PblFileChunk& chunk)
         PblFileChunk child = chunk.ReadNextChild();
         switch (child._iId)
         {
-        case 0x4F464E49:
+        case CHUNK_ID('I', 'N', 'F', 'O'):
             mMaxNodes = child._pFile->Read16();
             mMaxArcs = child._pFile->Read16();
             child._pFile->Read16();
             mNodes = new ConnectivityNode[mMaxNodes];
             mArcs = new ConnectivityArc[mMaxArcs];
             break;
-        case 0x45444F4E:
+        case CHUNK_ID('N', 'O', 'D', 'E'):
             for (int i = 0; i < mMaxNodes; ++i)
             {
                 mNodes[i].Read(child, mMaxNodes);
             }
             break;
-        case 0x53435241:
+        case CHUNK_ID('A', 'R', 'C', 'S'):
             for (int i = 0; i < mMaxArcs; ++i)
             {
                 mArcs[i].Read(child, *this);

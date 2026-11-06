@@ -160,7 +160,7 @@ void EntityClass::Read(PblFileChunk& chunk)
         PblFileChunk child = chunk.ReadNextChild();
         switch (child._iId)
         {
-        case 0x45505954:
+        case CHUNK_ID('T', 'Y', 'P', 'E'):
         {
             memset(acType, 0, sizeof(acType));
             const unsigned int uType = PblHash(child.ReadString(acType, sizeof(acType)));
@@ -183,10 +183,10 @@ void EntityClass::Read(PblFileChunk& chunk)
             }
             break;
         }
-        case 0x45534142:
+        case CHUNK_ID('B', 'A', 'S', 'E'):
             pClass = Find(PblHash(child.ReadString(acBuffer, sizeof(acBuffer))));
             break;
-        case 0x504F5250:
+        case CHUNK_ID('P', 'R', 'O', 'P'):
         {
             const unsigned int uProperty = child._pFile->Read32();
             const char* pcValue = child.ReadString(acBuffer, sizeof(acBuffer));

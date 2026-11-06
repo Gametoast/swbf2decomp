@@ -339,7 +339,7 @@ void PlayerProfile::tSoundOpt::ResetToDefault()
     mu8MusicVol = 7;
     mu8SFXVol = 7;
     mu8SpeechVol = 9;
-    mPlaybackMode = (unsigned char)(GameSoundEngine::gDefaultSpeakerConfig == 0
+    mPlaybackMode = (unsigned char)(GameSoundEngine::gDefaultSpeakerConfig == Snd::EngineBase::speakerConfig_Invalid
                         ? Snd::EngineBase::speakerConfig_Stereo
                         : GameSoundEngine::gDefaultSpeakerConfig);
     mMixerMode = 1;

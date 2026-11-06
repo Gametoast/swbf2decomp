@@ -451,7 +451,7 @@ RedSegment* __cdecl RedSegment::Read(PblFileChunk& chunk, const RedModel* pModel
         PblFileChunk child = chunk.ReadNextChild();
         switch (child._iId)
         {
-        case 0x4C52544D:
+        case CHUNK_ID('M', 'T', 'R', 'L'):
         {
             uiMaterialFlags = child._pFile->Read32();
             if (bForceFlags && (uiMaterialFlags & 4))
@@ -475,11 +475,11 @@ RedSegment* __cdecl RedSegment::Read(PblFileChunk& chunk, const RedModel* pModel
             shaderData.attachedLightName = PblHash(acName);
             break;
         }
-        case 0x50595452:
+        case CHUNK_ID('R', 'T', 'Y', 'P'):
             child.ReadString(acRenderType, 256);
             uiRenderType = PblHash(acRenderType);
             break;
-        case 0x4D414E54:
+        case CHUNK_ID('T', 'N', 'A', 'M'):
         {
             unsigned int uiIndex = child._pFile->Read32();
             child.ReadString(acName, 256);
@@ -493,7 +493,7 @@ RedSegment* __cdecl RedSegment::Read(PblFileChunk& chunk, const RedModel* pModel
             }
             break;
         }
-        case 0x54414456:
+        case CHUNK_ID('V', 'D', 'A', 'T'):
         {
             unsigned int uiCount = child._pFile->Read32();
             unsigned int uiSize = child._pFile->Read32();
@@ -511,7 +511,7 @@ RedSegment* __cdecl RedSegment::Read(PblFileChunk& chunk, const RedModel* pModel
             }
             break;
         }
-        case 0x46554256:
+        case CHUNK_ID('V', 'B', 'U', 'F'):
         {
             unsigned int uiCount = child._pFile->Read32();
             unsigned int uiSize = child._pFile->Read32();
@@ -553,7 +553,7 @@ RedSegment* __cdecl RedSegment::Read(PblFileChunk& chunk, const RedModel* pModel
             }
             break;
         }
-        case 0x46554249:
+        case CHUNK_ID('I', 'B', 'U', 'F'):
         {
             uiNumIndices = child._pFile->Read32();
             pIndexBuffer = pcRedIndexBuffer::Create(
@@ -563,12 +563,12 @@ RedSegment* __cdecl RedSegment::Read(PblFileChunk& chunk, const RedModel* pModel
             pIndexBuffer->Unlock();
             break;
         }
-        case 0x4F464E49:
+        case CHUNK_ID('I', 'N', 'F', 'O'):
             uiPrimType = child._pFile->Read32();
             uiNumVertices = child._pFile->Read32();
             uiPrimCount = child._pFile->Read32();
             break;
-        case 0x4E494B53:
+        case CHUNK_ID('S', 'K', 'I', 'N'):
         {
             unsigned int uiCount = child._pFile->Read32();
             uiSkinNumBones = child._pFile->Read32();
@@ -580,7 +580,7 @@ RedSegment* __cdecl RedSegment::Read(PblFileChunk& chunk, const RedModel* pModel
             }
             break;
         }
-        case 0x50414D42:
+        case CHUNK_ID('B', 'M', 'A', 'P'):
             uiNumBones = child._pFile->Read32();
             if (uiNumBones)
             {
@@ -588,15 +588,15 @@ RedSegment* __cdecl RedSegment::Read(PblFileChunk& chunk, const RedModel* pModel
                 child._pFile->ReadData(puiBoneIndexMap, uiNumBones);
             }
             break;
-        case 0x4D414E42:
+        case CHUNK_ID('B', 'N', 'A', 'M'):
             child.ReadString(acName, 256);
             uiBoneIndex = pModel->GetBoneIndex(acName);
             break;
-        case 0x4D414E4D:
+        case CHUNK_ID('M', 'N', 'A', 'M'):
             child.ReadString(acName, 256);
             uiMaterialName = PblHash(acName);
             break;
-        case 0x584F4242:
+        case CHUNK_ID('B', 'B', 'O', 'X'):
         {
             const float fMinX = child._pFile->ReadFloat();
             const float fMinY = child._pFile->ReadFloat();

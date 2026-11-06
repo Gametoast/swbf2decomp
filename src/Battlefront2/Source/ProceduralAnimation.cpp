@@ -193,7 +193,7 @@ void __cdecl PAAnimationGroup::ReadHierarchy(PblFileChunk& chunk)
     while (!chunk.IsDone())
     {
         PblFileChunk child = chunk.ReadNextChild();
-        if (child._iId != 0x4f464e49)
+        if (child._iId != CHUNK_ID('I', 'N', 'F', 'O'))
         {
             continue;
         }
@@ -320,7 +320,7 @@ void PAAnimation::Read(PblFileChunk& chunk)
     {
         PblFileChunk child = chunk.ReadNextChild();
         unsigned int uiId = child._iId;
-        if (uiId == 0x4B534F50 || uiId == 0x4B544F52)
+        if (uiId == CHUNK_ID('P', 'O', 'S', 'K') || uiId == CHUNK_ID('R', 'O', 'T', 'K'))
         {
             if (!pAnim)
             {
@@ -349,7 +349,7 @@ void PAAnimation::Read(PblFileChunk& chunk)
             key.mSlope1.x = child._pFile->ReadFloat();
             key.mSlope1.y = child._pFile->ReadFloat();
             key.mSlope1.z = child._pFile->ReadFloat();
-            if (uiId == 0x4B544F52)
+            if (uiId == CHUNK_ID('R', 'O', 'T', 'K'))
             {
                 pAnim->AddRotationKey(key);
             }
@@ -358,7 +358,7 @@ void PAAnimation::Read(PblFileChunk& chunk)
                 pAnim->AddPositionKey(key);
             }
         }
-        else if (uiId == 0x4F464E49)
+        else if (uiId == CHUNK_ID('I', 'N', 'F', 'O'))
         {
             char acName[128];
             char* pcName = child.ReadString(acName, 128);
@@ -769,10 +769,10 @@ void PAAnimationGroup::Read(PblFileChunk& chunk)
         char acName[128];
         switch (child._iId)
         {
-        case 0x49484F4E:
+        case CHUNK_ID('N', 'O', 'H', 'I'):
             pGroup->mDisableHierarchies = true;
             break;
-        case 0x4D494E41:
+        case CHUNK_ID('A', 'N', 'I', 'M'):
         {
             if (!pGroup)
             {
@@ -783,7 +783,7 @@ void PAAnimationGroup::Read(PblFileChunk& chunk)
             pGroup->AddAnimation(uiAnimHash, uiObjHash);
             break;
         }
-        case 0x4F464E49:
+        case CHUNK_ID('I', 'N', 'F', 'O'):
         {
             char* pcName = child.ReadString(acName, 128);
             pGroup = new PAAnimationGroup;

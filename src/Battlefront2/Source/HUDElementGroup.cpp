@@ -87,7 +87,7 @@ void HUD::ElementGroupBase::Read(PblConfig& config, Factory::ItemCallback pCallb
     while (!config.IsDone())
     {
         PblConfig::Data data = config.ReadNextData();
-        if (config.m_pChunk->PeekNextChildId() == 0x504f4353)
+        if (config.m_pChunk->PeekNextChildId() == CHUNK_ID('S', 'C', 'O', 'P'))
         {
             ReadChild(config, data, pCallback, pUserData);
         }
