@@ -89,12 +89,22 @@ public:
         return m_aOrdCollTable[eMap];
     }
 
-    static const int NUM_ACTION_ANIMATIONS_TOTAL = 76;
-    static const int NUM_MOVEMENT_ANIMATIONS_TOTAL = 156;
-    static const int NUM_WEAPON_ANIMATIONS_TOTAL = 36;
-    static const int NUM_WEAPON_MELEE_ANIMATIONS_TOTAL = 60;
-    static const int NUM_SOLDIER_ANIMATIONS_TOTAL = 292;
-    static const int ANIMATION_MAP_SIZE = 302;
+    // A map's animations as one flat array (AnimationMap): each animation once per scope (upper and lower body), in
+    // ranges: the actions, the movement animations of every posture, then the weapon animations of the standard
+    // postures, whose storage the melee (combo) animations share. The custom animations follow the array.
+    static const int NUM_ACTION_ANIMATIONS_TOTAL = SoldierAnimType::NUM_ACTION_ANIMATIONS * SoldierAnimType::NUM_SCOPES;
+    static const int NUM_MOVEMENT_ANIMATIONS_TOTAL =
+        SoldierAnimType::NUM_POSTURES * SoldierAnimType::NUM_MOVEMENT_ANIMATIONS * SoldierAnimType::NUM_SCOPES;
+    static const int NUM_WEAPON_ANIMATIONS_TOTAL =
+        SoldierAnimType::NUM_STANDARD_POSTURES * SoldierAnimType::NUM_WEAPON_ANIMATIONS * SoldierAnimType::NUM_SCOPES;
+    static const int NUM_WEAPON_MELEE_ANIMATIONS_TOTAL =
+        SoldierAnimationBank::MAX_COMBO_ANIMATIONS * SoldierAnimType::NUM_SCOPES;
+    // where the ranges start in the array (the weapon and the melee ranges start at the same place)
+    static const int MOVEMENT_ANIMATIONS_BEGIN = NUM_ACTION_ANIMATIONS_TOTAL;
+    static const int WEAPON_ANIMATIONS_BEGIN = MOVEMENT_ANIMATIONS_BEGIN + NUM_MOVEMENT_ANIMATIONS_TOTAL;
+    static const int WEAPON_ANIMATIONS_END = WEAPON_ANIMATIONS_BEGIN + NUM_WEAPON_ANIMATIONS_TOTAL;
+    static const int NUM_SOLDIER_ANIMATIONS_TOTAL = WEAPON_ANIMATIONS_BEGIN + NUM_WEAPON_MELEE_ANIMATIONS_TOTAL;
+    static const int ANIMATION_MAP_SIZE = NUM_SOLDIER_ANIMATIONS_TOTAL + SoldierAnimationBank::MAX_ANIMATIONS;
     static const int MAX_ANIMATION_BANK_FILES = 18;
 
     struct AnimationMap
@@ -104,19 +114,29 @@ public:
             SoldierAnimation* mAnimation[NUM_SOLDIER_ANIMATIONS_TOTAL];
             struct
             {
-                SoldierAnimation* mActionAnimation[SoldierAnimType::NUM_ACTION_ANIMATIONS][2];
+                SoldierAnimation* mActionAnimation[SoldierAnimType::NUM_ACTION_ANIMATIONS][SoldierAnimType::NUM_SCOPES];
                 SoldierAnimation* mMovementAnimation[SoldierAnimType::NUM_POSTURES]
-                                                    [SoldierAnimType::NUM_MOVEMENT_ANIMATIONS][2];
+                                                    [SoldierAnimType::NUM_MOVEMENT_ANIMATIONS]
+                                                    [SoldierAnimType::NUM_SCOPES];
                 union
                 {
                     SoldierAnimation* mWeaponAnimation[SoldierAnimType::NUM_STANDARD_POSTURES]
-                                                      [SoldierAnimType::NUM_WEAPON_ANIMATIONS][2];
-                    SoldierAnimation* mWeaponMeleeAnimation[30][2];
+                                                      [SoldierAnimType::NUM_WEAPON_ANIMATIONS]
+                                                      [SoldierAnimType::NUM_SCOPES];
+                    SoldierAnimation* mWeaponMeleeAnimation[SoldierAnimationBank::MAX_COMBO_ANIMATIONS]
+                                                           [SoldierAnimType::NUM_SCOPES];
                 };
             };
         };
-        unsigned int mCustomAnimation[10];
+        unsigned int mCustomAnimation[SoldierAnimationBank::MAX_ANIMATIONS];
     };
+
+    // the sizes the game's code uses
+    static_assert(NUM_ACTION_ANIMATIONS_TOTAL == 76 && NUM_MOVEMENT_ANIMATIONS_TOTAL == 156 &&
+                      NUM_WEAPON_ANIMATIONS_TOTAL == 36 && NUM_WEAPON_MELEE_ANIMATIONS_TOTAL == 60 &&
+                      NUM_SOLDIER_ANIMATIONS_TOTAL == 292 && ANIMATION_MAP_SIZE == 302,
+                  "soldier animation map ranges");
+    static_assert(sizeof(AnimationMap) == ANIMATION_MAP_SIZE * 4, "AnimationMap size");
 
 private:
     SoldierAnimatorClass();

@@ -172,10 +172,11 @@ const SoldierAnimation* SoldierAnimatorClass::GetUpperBodyAnimation(SoldierAnima
                                                                     unsigned char uiAnimIndex) const
 {
     int i = uiAnimIndex * SoldierAnimType::NUM_SCOPES + SoldierAnimType::UPPER;
-    if (i < NUM_ACTION_ANIMATIONS_TOTAL + NUM_MOVEMENT_ANIMATIONS_TOTAL + NUM_WEAPON_ANIMATIONS_TOTAL)
+    if (i < WEAPON_ANIMATIONS_END)
     {
         return mMap[eMap].mAnimation[i];
     }
+    // a melee animation: its index counts on after the weapon range, its storage is the weapon range's
     return mMap[eMap].mAnimation[i - NUM_WEAPON_ANIMATIONS_TOTAL];
 }
 
@@ -184,10 +185,11 @@ const SoldierAnimation* SoldierAnimatorClass::GetLowerBodyAnimation(SoldierAnima
                                                                     unsigned char uiAnimIndex) const
 {
     int i = uiAnimIndex * SoldierAnimType::NUM_SCOPES + SoldierAnimType::LOWER;
-    if (i < NUM_ACTION_ANIMATIONS_TOTAL + NUM_MOVEMENT_ANIMATIONS_TOTAL + NUM_WEAPON_ANIMATIONS_TOTAL)
+    if (i < WEAPON_ANIMATIONS_END)
     {
         return mMap[eMap].mAnimation[i];
     }
+    // a melee animation: its index counts on after the weapon range, its storage is the weapon range's
     return mMap[eMap].mAnimation[i - NUM_WEAPON_ANIMATIONS_TOTAL];
 }
 
@@ -626,7 +628,7 @@ static int _GetAnimationIndex(SoldierAnimType::ActionAnimation eAnim, SoldierAni
 static int _GetAnimationIndex(SoldierAnimType::Posture ePosture, SoldierAnimType::MovementAnimation eAnim,
                               SoldierAnimType::Scope eScope)
 {
-    return SoldierAnimatorClass::NUM_ACTION_ANIMATIONS_TOTAL +
+    return SoldierAnimatorClass::MOVEMENT_ANIMATIONS_BEGIN +
            (ePosture * SoldierAnimType::NUM_MOVEMENT_ANIMATIONS + eAnim) * SoldierAnimType::NUM_SCOPES + eScope;
 }
 
@@ -634,15 +636,14 @@ static int _GetAnimationIndex(SoldierAnimType::Posture ePosture, SoldierAnimType
 static int _GetAnimationIndex(SoldierAnimType::Posture ePosture, SoldierAnimType::WeaponAnimation eAnim,
                               SoldierAnimType::Scope eScope)
 {
-    return SoldierAnimatorClass::NUM_ACTION_ANIMATIONS_TOTAL + SoldierAnimatorClass::NUM_MOVEMENT_ANIMATIONS_TOTAL +
+    return SoldierAnimatorClass::WEAPON_ANIMATIONS_BEGIN +
            (ePosture * SoldierAnimType::NUM_WEAPON_ANIMATIONS + eAnim) * SoldierAnimType::NUM_SCOPES + eScope;
 }
 
 // FUNCTION: SWBF2 0x00644710
 static int _GetAnimationIndex(SoldierAnimationBank::COMBO_ANIMATION eAnim, SoldierAnimType::Scope eScope)
 {
-    return SoldierAnimatorClass::NUM_ACTION_ANIMATIONS_TOTAL + SoldierAnimatorClass::NUM_MOVEMENT_ANIMATIONS_TOTAL +
-           eAnim * SoldierAnimType::NUM_SCOPES + eScope;
+    return SoldierAnimatorClass::WEAPON_ANIMATIONS_BEGIN + eAnim * SoldierAnimType::NUM_SCOPES + eScope;
 }
 
 // FUNCTION: SWBF2 0x00644720
@@ -654,15 +655,15 @@ static bool _IsActionAnimationIndex(int i)
 // FUNCTION: SWBF2 0x00644730
 static bool _IsMovementAnimationIndex(int i)
 {
-    return i >= SoldierAnimatorClass::NUM_ACTION_ANIMATIONS_TOTAL &&
-           i - SoldierAnimatorClass::NUM_ACTION_ANIMATIONS_TOTAL < SoldierAnimatorClass::NUM_MOVEMENT_ANIMATIONS_TOTAL;
+    return i >= SoldierAnimatorClass::MOVEMENT_ANIMATIONS_BEGIN &&
+           i - SoldierAnimatorClass::MOVEMENT_ANIMATIONS_BEGIN < SoldierAnimatorClass::NUM_MOVEMENT_ANIMATIONS_TOTAL;
 }
 
 // FUNCTION: SWBF2 0x00644750
 static bool _IsWeaponMeleeAnimationIndex(int i)
 {
-    const int iBase = SoldierAnimatorClass::NUM_ACTION_ANIMATIONS_TOTAL + SoldierAnimatorClass::NUM_MOVEMENT_ANIMATIONS_TOTAL;
-    return i >= iBase && i - iBase < SoldierAnimatorClass::NUM_WEAPON_MELEE_ANIMATIONS_TOTAL;
+    return i >= SoldierAnimatorClass::WEAPON_ANIMATIONS_BEGIN &&
+           i - SoldierAnimatorClass::WEAPON_ANIMATIONS_BEGIN < SoldierAnimatorClass::NUM_WEAPON_MELEE_ANIMATIONS_TOTAL;
 }
 
 // FUNCTION: SWBF2 0x00644770
@@ -696,8 +697,7 @@ static void SetupVelocity(SoldierAnimation* pAnim, ZephyrPoseDyn<32>& tempPose)
 // FUNCTION: SWBF2 0x00644900
 static void SetupVelocity(SoldierAnimation* pAnim, int iAnim, ZephyrPoseDyn<32>& tempPose)
 {
-    if (iAnim >= SoldierAnimatorClass::NUM_ACTION_ANIMATIONS_TOTAL + SoldierAnimatorClass::NUM_MOVEMENT_ANIMATIONS_TOTAL +
-                    SoldierAnimatorClass::NUM_WEAPON_ANIMATIONS_TOTAL ||
+    if (iAnim >= SoldierAnimatorClass::WEAPON_ANIMATIONS_END ||
         !pAnim || !pAnim->HasLowerBody())
     {
         return;
