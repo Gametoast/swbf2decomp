@@ -1819,11 +1819,11 @@ bool NetGame::GetForceHumansToTeam1()
 // FUNCTION: SWBF2 0x005b4f80
 bool NetGame::DoesHostKnowILoaded()
 {
-    if (IsHost() || !loadGame)
+	if (!IsHost() && loadGame)
     {
-        return true;
+		return loadGame->HostKnowsILoaded();
     }
-    return loadGame->HostKnowsILoaded();
+	return true;
 }
 
 // FUNCTION: SWBF2 0x005b4fc0
@@ -2939,7 +2939,7 @@ Character* NetGame::GetLocalPlayer(unsigned int uLocal)
     {
         return 0;
     }
-    return Character::FindPlayer(GetLocalIndex(uLocal));
+    return Character::FindPlayer(NetComm::GetLocalIndex(uLocal));
 }
 
 // FUNCTION: SWBF2 0x005b75b0
@@ -3274,23 +3274,37 @@ void NetGame::ApplyLateMoves()
 // FUNCTION: SWBF2 0x005ba530
 void NetGame::AddLateFence(int iPlayer)
 {
-    if (netEnabledNext && iPlayer >= 0 && !netClientActive)
+    if (!netEnabledNext)
     {
-        netPlayers[iPlayer].lateFenceTurn = hostTurnNumber;
+		return;
     }
+	if (iPlayer < 0)
+	{
+		return;
+	}
+	if (netClientActive)
+	{
+		return;
+	}
+	netPlayers[iPlayer].lateFenceTurn = hostTurnNumber;
 }
 
 // FUNCTION: SWBF2 0x005bad20
 void NetGame::Created(GameObject* pObject)
 {
-    if (netEnabledNext && !IsClient())
+    if (!netEnabledNext)
     {
-        NetEntity& entity = netEntities->Add();
-        entity.obj = pObject;
-        entity.type = pObject->GetEntityType();
-        entity.pos = pObject->GetMatrix().GetTranslation();
-        entity.updateTurn = hostTurnNumber;
+		return;
     }
+	if (IsClient())
+	{
+		return;
+	}
+	NetEntity& entity = netEntities->Add();
+	entity.obj = pObject;
+	entity.type = pObject->GetEntityType();
+	entity.pos = pObject->GetMatrix().GetTranslation();
+	entity.updateTurn = hostTurnNumber;
 }
 
 // FUNCTION: SWBF2 0x005badb0
@@ -5544,7 +5558,8 @@ CommandPost* NetGame::ConvertCP(CommandPost* pPost)
     {
         return pPost;
     }
-    return CommandPost::FindPostByIndex(pPost->GetIndex());
+    pPost = CommandPost::FindPostByIndex(pPost->GetIndex());
+	return pPost;
 }
 
 // FUNCTION: SWBF2 0x005c3cc0
@@ -5583,29 +5598,19 @@ int NetGame::GetStartTeam(int iPlayer)
 // FUNCTION: SWBF2 0x005c3f60
 void NetGame::UpdatePreGame()
 {
-    if (!NetGame::IsEnabled())
+	if (NetGame::IsEnabled() && !NetGame::IsClient() && NetGame::IsPreGame())
     {
-        return;
-    }
-    if (NetGame::IsClient())
-    {
-        return;
-    }
-    if (!NetGame::IsPreGame())
-    {
-        return;
-    }
-
-    int iElapsed = (int)(NetComm::GetTime() - netPreGameStartTime);
-    if (iElapsed > netPreGameTimeMax)
-    {
-        NetGame::VanishAllPlayer();
-        NetGame::SetPreGame(false);
-        sJustEndedPreGameTurn = hostTurnNumber;
-    }
-    else
-    {
-        netPreGameTime = netPreGameTimeMax - iElapsed;
+		int iElapsed = (int)(NetComm::GetTime() - netPreGameStartTime);
+		if (iElapsed > netPreGameTimeMax)
+		{
+			NetGame::VanishAllPlayer();
+			NetGame::SetPreGame(false);
+			sJustEndedPreGameTurn = hostTurnNumber;
+		}
+		else
+		{
+			netPreGameTime = netPreGameTimeMax - iElapsed;
+		}
     }
 }
 
@@ -11753,15 +11758,13 @@ extern int gSpawnInvicibility;
 // FUNCTION: SWBF2 0x005c2440
 void NetGame::CreateEvent_UpdateInvincibility(Character* character)
 {
-    if (!character)
+    if (character)
     {
-        return;
+		ReliableNetEvent& event = GetNextReliableEvent();
+		event.mEvType = REL_UPDATEINVINCIBILITY;
+		event.u.updateInvincibility.mCharacter = character;
+		event.u.updateInvincibility.mIsInvincible = NetComm::GetTime() - character->GetSpawnTime() < (float)gSpawnInvicibility;
     }
-    ReliableNetEvent& event = GetNextReliableEvent();
-    event.mEvType = REL_UPDATEINVINCIBILITY;
-    event.u.updateInvincibility.mCharacter = character;
-    event.u.updateInvincibility.mIsInvincible =
-        (float)gSpawnInvicibility > NetComm::GetTime() - character->GetSpawnTime();
 }
 
 extern float spHeroSelectedTime[3];
@@ -15371,7 +15374,10 @@ void NetGame::SendChatMessageToServer(NetPktGroup& group)
             group.WriteBytes((const char*)&lengthMask, sizeof(lengthMask));
         }
         netGameChatMsgClient.Remove(pNode);
-        delete pMessage;
+		if (pMessage)
+		{
+			delete pMessage;
+		}
     }
     else
     {
@@ -15407,7 +15413,10 @@ void NetGame::SendChatMessageToClient(NetPktGroup& group)
             if ((pMessage->mask & hostPlayingMask) == hostPlayingMask)
             {
                 netGameChatMsgServer.Remove(pNode);
-                delete pMessage;
+				if (pMessage)
+				{
+					delete pMessage;
+				}
             }
         }
         else
