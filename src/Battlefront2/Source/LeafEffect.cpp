@@ -32,7 +32,7 @@ FallingLeafParticle::FallingLeafParticle()
     : RedSceneObject(&noloddata)
 {
     mIsValid = false;
-    mTextureHash = 0x2648CD55u;
+    mTextureHash = 0x2648CD55u /* "LEAF" */;
     PlatformInit();
 }
 

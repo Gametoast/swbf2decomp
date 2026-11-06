@@ -70,7 +70,7 @@ void LightningEffect::Destroy()
 
 // FUNCTION: SWBF2 0x005728e0
 LightningEffect::LightningEffect()
-    : FLEffect(0xE812F405u, 3)
+    : FLEffect(0xE812F405u /* "Lightning" */, 3)
 {
     Enable(false);
     m_colorLightning = RedColorValue(0.937254965f, 0.972549081f, 1.0f, 1.0f);
@@ -111,10 +111,10 @@ void LightningEffect::ReadConfig(PblConfig& config)
         PblConfig::Data data = config.ReadNextData();
         switch (data.GetId())
         {
-        case 0xAF8BB8CEu:
+        case 0xAF8BB8CEu: /* "Enable" */
             Enable(data.GetUint32Arg(0) != 0);
             break;
-        case 0x3D7E6258u:
+        case 0x3D7E6258u: /* "Color" */
         {
             RedColor color;
             color.r = ClampColorComponent(data.GetFloatArg(0));
@@ -124,38 +124,38 @@ void LightningEffect::ReadConfig(PblConfig& config)
             m_colorLightning = RedColorValue(color);
             break;
         }
-        case 0x15F3DEB6u:
+        case 0x15F3DEB6u: /* "SunlightFadeFactor" */
             m_fSunlightFadeMax = data.GetFloatArg(0);
             break;
-        case 0x034AEBFDu:
+        case 0x034AEBFDu: /* "SkyDomeDarkenFactor" */
             m_fSkyDomeDarken = data.GetFloatArg(0);
             break;
-        case 0xDB50529Eu:
+        case 0xDB50529Eu: /* "BrightnessMin" */
             m_fBrightnessMin = data.GetFloatArg(0);
             break;
-        case 0xA40F930Au:
+        case 0xA40F930Au: /* "FadeTime" */
             m_fTimeToFade = data.GetFloatArg(0);
             break;
-        case 0x260E9234u:
+        case 0x260E9234u: /* "TimeBetweenFlashesMinMax" */
             m_fTimeBetweenFlashesMin = data.GetFloatArg(0);
             m_fTimeBetweenFlashesMax = data.GetFloatArg(1);
             break;
-        case 0xD71D3C32u:
+        case 0xD71D3C32u: /* "TimeBetweenSubFlashesMinMax" */
             m_fTimeBetweenSubFlashesMin = data.GetFloatArg(0);
             m_fTimeBetweenSubFlashesMax = data.GetFloatArg(1);
             break;
-        case 0x67F9208Du:
+        case 0x67F9208Du: /* "NumSubFlashesMinMax" */
             m_iNumSubFlashesMin = data.GetUint32Arg(0);
             m_iNumSubFlashesMax = data.GetUint32Arg(1);
             break;
-        case 0xFC6B14B1u:
+        case 0xFC6B14B1u: /* "HorizonAngleMinMax" */
             m_fHorizonAngleMin = data.GetFloatArg(0) * 0.017453292f;
             m_fHorizonAngleMax = data.GetFloatArg(1) * 0.017453292f;
             break;
-        case 0xE46BF7A2u:
+        case 0xE46BF7A2u: /* "SoundCrack" */
             m_soundCrack.SetID(data.GetStringArg(0), false, false);
             break;
-        case 0x882E50B8u:
+        case 0x882E50B8u: /* "SoundSubCrack" */
             m_soundSubCrack.SetID(data.GetStringArg(0), false, false);
             break;
         }
@@ -334,7 +334,7 @@ void LightningEffect::Update(float fDeltaTime)
     mBoltTimer -= fDeltaTime;
     if (mBoltTimer < 0.0f)
     {
-        FLEffectClass* pClass = FLEffect::Get(0x559A2771u);
+        FLEffectClass* pClass = FLEffect::Get(0x559A2771u /* "skybolt" */);
         if (pClass)
         {
             FLEffectObject* pEffect = pClass->BuildEffect();

@@ -99,12 +99,12 @@ void FogCloudEffect::PlatformInit()
     {
         if (RedRenderer::pcGetGeometryMode())
         {
-            m_pShader = pcRedShader::Create(0x8A8743BF, 0x9282, &TEXTURE_HASH, 1, 0x10004,
+            m_pShader = pcRedShader::Create(0x8A8743BF /* "PARTICLE" */, 0x9282, &TEXTURE_HASH, 1, 0x10004,
                                             RedColor::WHITE, RedColor::BLACK, 32.0f);
         }
         else
         {
-            m_pShader = pcRedShader::Create(0x8A8743BF, 0x282, &TEXTURE_HASH, 1, 0x10004,
+            m_pShader = pcRedShader::Create(0x8A8743BF /* "PARTICLE" */, 0x282, &TEXTURE_HASH, 1, 0x10004,
                                             RedColor::WHITE, RedColor::BLACK, 32.0f);
         }
     }
@@ -862,12 +862,12 @@ void PrecipitationEffect::PlatformInit()
     {
         if (RedRenderer::pcGetGeometryMode())
         {
-            m_pShader = pcRedShader::Create(0x89A3B5D3, 0x1082,
+            m_pShader = pcRedShader::Create(0x89A3B5D3 /* "Rain" */, 0x1082,
                                             0, 0, 0x10004, RedColor::WHITE, RedColor::BLACK, 32.0f);
         }
         else
         {
-            m_pShader = pcRedShader::Create(0x89A3B5D3, 0x82,
+            m_pShader = pcRedShader::Create(0x89A3B5D3 /* "Rain" */, 0x82,
                                             0, 0, 0x10004, RedColor::WHITE, RedColor::BLACK, 32.0f);
         }
         ((pcRainShader*)m_pShader)->SetLineWidth(PARTICLE_SIZE);
@@ -877,12 +877,12 @@ void PrecipitationEffect::PlatformInit()
     {
         if (RedRenderer::pcGetGeometryMode())
         {
-            m_pShader = pcRedShader::Create(0x8A8743BF, 0x9282,
+            m_pShader = pcRedShader::Create(0x8A8743BF /* "PARTICLE" */, 0x9282,
                                             &TEXTURE_HASH, 1, 0x10004, RedColor::WHITE, RedColor::BLACK, 32.0f);
         }
         else
         {
-            m_pShader = pcRedShader::Create(0x8A8743BF, 0x282,
+            m_pShader = pcRedShader::Create(0x8A8743BF /* "PARTICLE" */, 0x282,
                                             &TEXTURE_HASH, 1, 0x10004, RedColor::WHITE, RedColor::BLACK, 32.0f);
         }
     }

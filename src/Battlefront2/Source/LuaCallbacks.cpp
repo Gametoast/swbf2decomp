@@ -93,13 +93,13 @@ int __fastcall GetScreenTransitionType(const char* pcName, void*)
     {
         switch ((unsigned int)PblHash(pcName))
         {
-        case 0x6bfbd198u: return 1;
-        case 0xf16d8413u: return 2;
-        case 0x02ba7498u: return 3;
-        case 0xec70b044u: return 4;
-        case 0x027fdd70u: return 5;
-        case 0xf497cc4cu: return 6;
-        case 0xca020c79u: return 7;
+        case 0x6bfbd198u: /* "BLUR" */ return 1;
+        case 0xf16d8413u: /* "FADE" */ return 2;
+        case 0x02ba7498u: /* "SWIPE_LR" */ return 3;
+        case 0xec70b044u: /* "SWIPE_RL" */ return 4;
+        case 0x027fdd70u: /* "SWIPE_TB" */ return 5;
+        case 0xf497cc4cu: /* "SWIPE_BT" */ return 6;
+        case 0xca020c79u: /* "SWIPE_RAND" */ return 7;
         }
     }
     return 2;
@@ -291,8 +291,8 @@ static const CallbackEntryT sCallbacks[91] =
     { "BeginScreenTransition", BeginScreenTransition },
 };
 
-static const unsigned int SHELL_STATE = 0x11e1fc01;
-static const unsigned int MISSION_STATE = 0x8ff60339;
+static const unsigned int SHELL_STATE = 0x11e1fc01 /* "shell" */;
+static const unsigned int MISSION_STATE = 0x8ff60339 /* "mission" */;
 
 // GLOBAL: SWBF2 0x01e57610
 char sTempReturnString[256];

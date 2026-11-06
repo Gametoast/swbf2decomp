@@ -199,7 +199,7 @@ FLEffectClass* EntityLightFXParser::BuildClass(PblConfig& config) const
         PblConfig::Data data = config.ReadNextData();
         switch (data.GetId())
         {
-        case 0x09E7F535u:
+        case 0x09E7F535u: /* "ShadowCaster" */
             if (data.GetBoolArg(0))
             {
                 pClass->_uiFlags |= EntityLightClass::ENTITY_LIGHT_FLAG_SHADOWCASTER;
@@ -209,7 +209,7 @@ FLEffectClass* EntityLightFXParser::BuildClass(PblConfig& config) const
                 pClass->_uiFlags &= ~EntityLightClass::ENTITY_LIGHT_FLAG_SHADOWCASTER;
             }
             break;
-        case 0x044C2100u:
+        case 0x044C2100u: /* "Bidirectional" */
             if (data.GetBoolArg(0))
             {
                 pClass->_uiFlags |= EntityLightClass::ENTITY_LIGHT_FLAG_BIDIRECTIONAL;
@@ -219,7 +219,7 @@ FLEffectClass* EntityLightFXParser::BuildClass(PblConfig& config) const
                 pClass->_uiFlags &= ~EntityLightClass::ENTITY_LIGHT_FLAG_BIDIRECTIONAL;
             }
             break;
-        case 0xF946B484u:
+        case 0xF946B484u: /* "SpecularCaster" */
             if (data.GetBoolArg(0))
             {
                 pClass->_uiFlags |= EntityLightClass::ENTITY_LIGHT_FLAG_SPECULARCASTER;
@@ -229,7 +229,7 @@ FLEffectClass* EntityLightFXParser::BuildClass(PblConfig& config) const
                 pClass->_uiFlags &= ~EntityLightClass::ENTITY_LIGHT_FLAG_SPECULARCASTER;
             }
             break;
-        case 0xD290C23Bu:
+        case 0xD290C23Bu: /* "STATIC" */
             if (data.GetBoolArg(0))
             {
                 pClass->_uiFlags |= EntityLightClass::ENTITY_LIGHT_FLAG_STATIC;
@@ -239,7 +239,7 @@ FLEffectClass* EntityLightFXParser::BuildClass(PblConfig& config) const
                 pClass->_uiFlags &= ~EntityLightClass::ENTITY_LIGHT_FLAG_STATIC;
             }
             break;
-        case 0x7E276E3Du:
+        case 0x7E276E3Du: /* "Synchronize" */
             if (data.GetBoolArg(0))
             {
                 pClass->_uiFlags |= EntityLightClass::ENTITY_LIGHT_FLAG_SYNCHRONIZE;
@@ -249,8 +249,8 @@ FLEffectClass* EntityLightFXParser::BuildClass(PblConfig& config) const
                 pClass->_uiFlags &= ~EntityLightClass::ENTITY_LIGHT_FLAG_SYNCHRONIZE;
             }
             break;
-        case 0x5127F14Du:
-            if (PblHash(data.GetStringArg(0)) != 0x2305F67Du)
+        case 0x5127F14Du: /* "Type" */
+            if (PblHash(data.GetStringArg(0)) != 0x2305F67Du /* "Spot" */)
             {
                 pClass->_uiFlags |= EntityLightClass::ENTITY_LIGHT_FLAG_TYPE_OMNI;
             }
@@ -259,14 +259,14 @@ FLEffectClass* EntityLightFXParser::BuildClass(PblConfig& config) const
                 pClass->_uiFlags |= EntityLightClass::ENTITY_LIGHT_FLAG_TYPE_SPOT;
             }
             break;
-        case 0x8D39BDE6u:
+        case 0x8D39BDE6u: /* "name" */
             pClass->_uiName = PblHash(data.GetStringArg(0));
             break;
-        case 0x3D7E6258u:
+        case 0x3D7E6258u: /* "Color" */
             pClass->_color = ReadColor(data);
             break;
 
-        case 0x9342844Eu:
+        case 0x9342844Eu: /* "ConeLength" */
             if (pClass->_fBeamFadeLength < 0.0f)
             {
                 pClass->_fBeamFadeLength = 0.2f;
@@ -277,7 +277,7 @@ FLEffectClass* EntityLightFXParser::BuildClass(PblConfig& config) const
                 pClass->_fBeamLength = 0.0f;
             }
             break;
-        case 0x6F7F1016u:
+        case 0x6F7F1016u: /* "ConeWidth" */
             if (pClass->_fBeamFadeLength < 0.0f)
             {
                 pClass->_fBeamFadeLength = 0.2f;
@@ -297,7 +297,7 @@ FLEffectClass* EntityLightFXParser::BuildClass(PblConfig& config) const
                 pClass->_fBeamWidthX = 0.0f;
             }
             break;
-        case 0x9CBB54E2u:
+        case 0x9CBB54E2u: /* "ConeInitialWidth" */
             if (pClass->_fBeamFadeLength < 0.0f)
             {
                 pClass->_fBeamFadeLength = 0.2f;
@@ -317,14 +317,14 @@ FLEffectClass* EntityLightFXParser::BuildClass(PblConfig& config) const
                 pClass->_fBeamInitialWidthX = 0.0f;
             }
             break;
-        case 0x663A891Du:
+        case 0x663A891Du: /* "HaloRadius" */
             if (pClass->_fBeamFadeLength < 0.0f)
             {
                 pClass->_fBeamFadeLength = 0.5f;
             }
             pClass->_fBeamWidthX = pClass->_fBeamWidthZ = (float)fabs((double)data.GetFloatArg(0));
             break;
-        case 0x857435A7u:
+        case 0x857435A7u: /* "ConeFadeFactor" */
             if (pClass->_fBeamFadeLength < 0.0f)
             {
                 pClass->_fBeamFadeLength = 0.2f;
@@ -339,7 +339,7 @@ FLEffectClass* EntityLightFXParser::BuildClass(PblConfig& config) const
                 pClass->_fBeamFadeFactor = 1.0f;
             }
             break;
-        case 0x8807A05Au:
+        case 0x8807A05Au: /* "HaloFadeFactor" */
             if (pClass->_fBeamFadeLength < 0.0f)
             {
                 pClass->_fBeamFadeLength = 0.5f;
@@ -354,7 +354,7 @@ FLEffectClass* EntityLightFXParser::BuildClass(PblConfig& config) const
                 pClass->_fBeamFadeFactor = 1.0f;
             }
             break;
-        case 0x2C52F680u:
+        case 0x2C52F680u: /* "ConeFadeLength" */
             if (pClass->_fBeamFadeLength < 0.0f)
             {
                 pClass->_fBeamFadeLength = 0.2f;
@@ -369,7 +369,7 @@ FLEffectClass* EntityLightFXParser::BuildClass(PblConfig& config) const
                 pClass->_fBeamFadeLength = 1.0f;
             }
             break;
-        case 0xC35D99B9u:
+        case 0xC35D99B9u: /* "HaloFadeLength" */
             if (pClass->_fBeamFadeLength < 0.0f)
             {
                 pClass->_fBeamFadeLength = 0.5f;
@@ -384,10 +384,10 @@ FLEffectClass* EntityLightFXParser::BuildClass(PblConfig& config) const
                 pClass->_fBeamFadeLength = 1.0f;
             }
             break;
-        case 0x1612C34Cu:
+        case 0x1612C34Cu: /* "DrawDistance" */
             pClass->_fBeamDrawDistance = data.GetFloatArg(0);
             break;
-        case 0x633ED9D4u:
+        case 0x633ED9D4u: /* "FlareIntensity" */
             pClass->_fFlareIntensity = data.GetFloatArg(0);
             if (pClass->_fFlareIntensity < 0.0f)
             {
@@ -398,7 +398,7 @@ FLEffectClass* EntityLightFXParser::BuildClass(PblConfig& config) const
                 pClass->_fFlareIntensity = 1.0f;
             }
             break;
-        case 0x75096FABu:
+        case 0x75096FABu: /* "BeamIntensity" */
             pClass->_fBeamIntensity = data.GetFloatArg(0);
             if (pClass->_fBeamIntensity < 0.0f)
             {
@@ -410,26 +410,26 @@ FLEffectClass* EntityLightFXParser::BuildClass(PblConfig& config) const
             }
             break;
 
-        case 0x3685BB77u:
+        case 0x3685BB77u: /* "FlickerType" */
             if (data.GetNumArgs() >= 1)
             {
                 if (data.IsStringArg(0))
                 {
                     switch (PblHash(data.GetStringArg(0)))
                     {
-                    case 0xC33D6F68u:
+                    case 0xC33D6F68u: /* "Strobe" */
                         pClass->_eLightFlickerType = EntityLight::LightFlickerType_Strobe;
                         break;
-                    case 0xF56C83DFu:
+                    case 0xF56C83DFu: /* "StrobeRandom" */
                         pClass->_eLightFlickerType = EntityLight::LightFlickerType_StrobeRandom;
                         break;
-                    case 0x135752DEu:
+                    case 0x135752DEu: /* "StrobeFade" */
                         pClass->_eLightFlickerType = EntityLight::LightFlickerType_StrobeFade;
                         break;
-                    case 0x550BFE9Eu:
+                    case 0x550BFE9Eu: /* "Pulse" */
                         pClass->_eLightFlickerType = EntityLight::LightFlickerType_Pulse;
                         break;
-                    case 0x0D7C428Fu:
+                    case 0x0D7C428Fu: /* "Flicker" */
                         pClass->_eLightFlickerType = EntityLight::LightFlickerType_Flicker;
                         break;
                     default:
@@ -446,24 +446,24 @@ FLEffectClass* EntityLightFXParser::BuildClass(PblConfig& config) const
                 }
             }
             break;
-        case 0xD92EA25Eu:
+        case 0xD92EA25Eu: /* "FlickerPeriod" */
             pClass->_fLightFlickerPeriodOn = data.GetFloatArg(0);
             pClass->_fLightFlickerPeriodOff = data.GetNumArgs() > 1 ? data.GetFloatArg(1) : data.GetFloatArg(0);
             break;
-        case 0x65D177CAu:
+        case 0x65D177CAu: /* "FadePeriod" */
             pClass->_fLightFadePeriod = data.GetFloatArg(0);
             break;
-        case 0xC2C1813Au:
+        case 0xC2C1813Au: /* "OmniRadius" */
             pClass->_fOmniRadius = data.GetFloatArg(0);
             break;
-        case 0xC967096Bu:
+        case 0xC967096Bu: /* "SpotInnerConeAngle" */
             pClass->_fSpotInnerConeAngle = data.GetFloatArg(0) * 3.1415927f / 180.0f;
             break;
-        case 0xB22D429Eu:
+        case 0xB22D429Eu: /* "SpotOuterConeAngle" */
             pClass->_fSpotOuterConeAngle = data.GetFloatArg(0) * 3.1415927f / 180.0f;
             break;
 
-        case 0x99E6DBFEu:
+        case 0x99E6DBFEu: /* "ProjectedTexture" */
             if (data.GetNumArgs() < 2)
             {
                 pClass->_uiNumFrames = 1;
@@ -483,7 +483,7 @@ FLEffectClass* EntityLightFXParser::BuildClass(PblConfig& config) const
                 }
             }
             break;
-        case 0x9B111AE4u:
+        case 0x9B111AE4u: /* "framerate" */
             pClass->_fFrameRate = data.GetFloatArg(0);
             if (pClass->_fFrameRate < 0.0f)
             {
@@ -1034,7 +1034,7 @@ void EntityLightClass::SetProperty(unsigned int uProperty, const char* pszValue)
 {
     switch (uProperty)
     {
-    case 0x09E7F535u:
+    case 0x09E7F535u: /* "ShadowCaster" */
     {
         int iValue;
             if (sscanf(pszValue, "%d", &iValue) == 1 && iValue)
@@ -1047,7 +1047,7 @@ void EntityLightClass::SetProperty(unsigned int uProperty, const char* pszValue)
             }
             break;
     }
-    case 0x044C2100u:
+    case 0x044C2100u: /* "Bidirectional" */
     {
         int iValue;
             if (sscanf(pszValue, "%d", &iValue) == 1 && iValue)
@@ -1060,7 +1060,7 @@ void EntityLightClass::SetProperty(unsigned int uProperty, const char* pszValue)
             }
             break;
     }
-    case 0xF946B484u:
+    case 0xF946B484u: /* "SpecularCaster" */
     {
         int iValue;
             if (sscanf(pszValue, "%d", &iValue) == 1 && iValue)
@@ -1073,7 +1073,7 @@ void EntityLightClass::SetProperty(unsigned int uProperty, const char* pszValue)
             }
             break;
     }
-    case 0xD290C23Bu:
+    case 0xD290C23Bu: /* "STATIC" */
     {
         int iValue;
             if (sscanf(pszValue, "%d", &iValue) == 1 && iValue)
@@ -1086,7 +1086,7 @@ void EntityLightClass::SetProperty(unsigned int uProperty, const char* pszValue)
             }
             break;
     }
-    case 0x7E276E3Du:
+    case 0x7E276E3Du: /* "Synchronize" */
     {
         int iValue;
             if (sscanf(pszValue, "%d", &iValue) == 1 && iValue)
@@ -1099,8 +1099,8 @@ void EntityLightClass::SetProperty(unsigned int uProperty, const char* pszValue)
             }
             break;
     }
-    case 0x5127F14Du:
-        if (PblHash(pszValue) != 0x2305F67Du)
+    case 0x5127F14Du: /* "Type" */
+        if (PblHash(pszValue) != 0x2305F67Du /* "Spot" */)
         {
             _uiFlags |= ENTITY_LIGHT_FLAG_TYPE_OMNI;
         }
@@ -1109,11 +1109,11 @@ void EntityLightClass::SetProperty(unsigned int uProperty, const char* pszValue)
             _uiFlags |= ENTITY_LIGHT_FLAG_TYPE_SPOT;
         }
         break;
-    case 0x8D39BDE6u:
+    case 0x8D39BDE6u: /* "name" */
         _uiName = PblHash(pszValue);
         break;
 
-    case 0x3D7E6258u:
+    case 0x3D7E6258u: /* "Color" */
     {
         unsigned int r = 255, g = 255, b = 255, a = 255;
         int iCount = sscanf(pszValue, "%u %u %u %u", &r, &g, &b, &a);
@@ -1138,7 +1138,7 @@ void EntityLightClass::SetProperty(unsigned int uProperty, const char* pszValue)
         break;
     }
 
-    case 0x9342844Eu:
+    case 0x9342844Eu: /* "ConeLength" */
         if (_fBeamFadeLength < 0.0f)
         {
             _fBeamFadeLength = 0.2f;
@@ -1149,7 +1149,7 @@ void EntityLightClass::SetProperty(unsigned int uProperty, const char* pszValue)
             _fBeamLength = 0.0f;
         }
         break;
-    case 0x6F7F1016u:
+    case 0x6F7F1016u: /* "ConeWidth" */
     {
         if (_fBeamFadeLength < 0.0f)
         {
@@ -1175,7 +1175,7 @@ void EntityLightClass::SetProperty(unsigned int uProperty, const char* pszValue)
         }
         break;
     }
-    case 0x9CBB54E2u:
+    case 0x9CBB54E2u: /* "ConeInitialWidth" */
     {
         if (_fBeamFadeLength < 0.0f)
         {
@@ -1201,7 +1201,7 @@ void EntityLightClass::SetProperty(unsigned int uProperty, const char* pszValue)
         }
         break;
     }
-    case 0x663A891Du:
+    case 0x663A891Du: /* "HaloRadius" */
         if (_fBeamFadeLength < 0.0f)
         {
             _fBeamFadeLength = 0.5f;
@@ -1211,7 +1211,7 @@ void EntityLightClass::SetProperty(unsigned int uProperty, const char* pszValue)
             _fBeamWidthX = _fBeamWidthZ = (float)fabs((double)_fBeamWidthX);
         }
         break;
-    case 0x857435A7u:
+    case 0x857435A7u: /* "ConeFadeFactor" */
         if (_fBeamFadeLength < 0.0f)
         {
             _fBeamFadeLength = 0.2f;
@@ -1226,7 +1226,7 @@ void EntityLightClass::SetProperty(unsigned int uProperty, const char* pszValue)
             _fBeamFadeFactor = 1.0f;
         }
         break;
-    case 0x8807A05Au:
+    case 0x8807A05Au: /* "HaloFadeFactor" */
         if (_fBeamFadeLength < 0.0f)
         {
             _fBeamFadeLength = 0.5f;
@@ -1241,7 +1241,7 @@ void EntityLightClass::SetProperty(unsigned int uProperty, const char* pszValue)
             _fBeamFadeFactor = 1.0f;
         }
         break;
-    case 0x2C52F680u:
+    case 0x2C52F680u: /* "ConeFadeLength" */
         if (_fBeamFadeLength < 0.0f)
         {
             _fBeamFadeLength = 0.2f;
@@ -1256,7 +1256,7 @@ void EntityLightClass::SetProperty(unsigned int uProperty, const char* pszValue)
             _fBeamFadeLength = 1.0f;
         }
         break;
-    case 0xC35D99B9u:
+    case 0xC35D99B9u: /* "HaloFadeLength" */
         if (_fBeamFadeLength < 0.0f)
         {
             _fBeamFadeLength = 0.5f;
@@ -1271,7 +1271,7 @@ void EntityLightClass::SetProperty(unsigned int uProperty, const char* pszValue)
             _fBeamFadeLength = 1.0f;
         }
         break;
-    case 0x633ED9D4u:
+    case 0x633ED9D4u: /* "FlareIntensity" */
         sscanf(pszValue, "%f", &_fFlareIntensity);
         if (_fFlareIntensity < 0.0f)
         {
@@ -1282,7 +1282,7 @@ void EntityLightClass::SetProperty(unsigned int uProperty, const char* pszValue)
             _fFlareIntensity = 1.0f;
         }
         break;
-    case 0x75096FABu:
+    case 0x75096FABu: /* "BeamIntensity" */
         sscanf(pszValue, "%f", &_fBeamIntensity);
         if (_fBeamIntensity < 0.0f)
         {
@@ -1294,7 +1294,7 @@ void EntityLightClass::SetProperty(unsigned int uProperty, const char* pszValue)
         }
         break;
 
-    case 0x3685BB77u:
+    case 0x3685BB77u: /* "FlickerType" */
         if (pszValue[0] >= '0' && pszValue[0] <= '9')
         {
             unsigned int uType;
@@ -1307,19 +1307,19 @@ void EntityLightClass::SetProperty(unsigned int uProperty, const char* pszValue)
         {
             switch (PblHash(pszValue))
             {
-            case 0xC33D6F68u:
+            case 0xC33D6F68u: /* "Strobe" */
                 _eLightFlickerType = EntityLight::LightFlickerType_Strobe;
                 break;
-            case 0xF56C83DFu:
+            case 0xF56C83DFu: /* "StrobeRandom" */
                 _eLightFlickerType = EntityLight::LightFlickerType_StrobeRandom;
                 break;
-            case 0x135752DEu:
+            case 0x135752DEu: /* "StrobeFade" */
                 _eLightFlickerType = EntityLight::LightFlickerType_StrobeFade;
                 break;
-            case 0x550BFE9Eu:
+            case 0x550BFE9Eu: /* "Pulse" */
                 _eLightFlickerType = EntityLight::LightFlickerType_Pulse;
                 break;
-            case 0x0D7C428Fu:
+            case 0x0D7C428Fu: /* "Flicker" */
                 _eLightFlickerType = EntityLight::LightFlickerType_Flicker;
                 break;
             default:
@@ -1328,28 +1328,28 @@ void EntityLightClass::SetProperty(unsigned int uProperty, const char* pszValue)
             }
         }
         break;
-    case 0xD92EA25Eu:
+    case 0xD92EA25Eu: /* "FlickerPeriod" */
         sscanf(pszValue, "%f %f", &_fLightFlickerPeriodOn, &_fLightFlickerPeriodOff);
         break;
-    case 0x65D177CAu:
+    case 0x65D177CAu: /* "FadePeriod" */
         sscanf(pszValue, "%f", &_fLightFadePeriod);
         break;
-    case 0xC2C1813Au:
+    case 0xC2C1813Au: /* "OmniRadius" */
         sscanf(pszValue, "%f", &_fOmniRadius);
         break;
-    case 0x1612C34Cu:
+    case 0x1612C34Cu: /* "DrawDistance" */
         sscanf(pszValue, "%f", &_fBeamDrawDistance);
         break;
-    case 0xC967096Bu:
+    case 0xC967096Bu: /* "SpotInnerConeAngle" */
         sscanf(pszValue, "%f", &_fSpotInnerConeAngle);
         _fSpotInnerConeAngle = _fSpotInnerConeAngle * 3.1415927f / 180.0f;
         break;
-    case 0xB22D429Eu:
+    case 0xB22D429Eu: /* "SpotOuterConeAngle" */
         sscanf(pszValue, "%f", &_fSpotOuterConeAngle);
         _fSpotOuterConeAngle = _fSpotOuterConeAngle * 3.1415927f / 180.0f;
         break;
 
-    case 0x99E6DBFEu:
+    case 0x99E6DBFEu: /* "ProjectedTexture" */
     {
         char szName[128];
         char szFrame[128];
@@ -1372,7 +1372,7 @@ void EntityLightClass::SetProperty(unsigned int uProperty, const char* pszValue)
         }
         break;
     }
-    case 0x9B111AE4u:
+    case 0x9B111AE4u: /* "framerate" */
         sscanf(pszValue, "%f", &_fFrameRate);
         if (_fFrameRate < 0.0f)
         {

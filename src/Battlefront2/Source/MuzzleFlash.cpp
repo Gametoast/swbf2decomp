@@ -70,7 +70,7 @@ void MuzzleFlashRenderer::Render(int)
     }
 
     const PblMatrix mCamera = RedRenderer::GetCamera()->GetMatrix();
-    RedParticleRenderer::SubmitTexture(0x504865B4u, BLEND_ADDITIVE, 0);
+    RedParticleRenderer::SubmitTexture(0x504865B4u /* "muzzleflashstreak" */, BLEND_ADDITIVE, 0);
 
     for (int i = 0; i < mNumMuzzleFlashes; i++)
     {
@@ -99,7 +99,7 @@ void MuzzleFlashRenderer::Render(int)
         }
     }
 
-    RedParticleRenderer::SubmitTexture(0xCFCCCBCEu, BLEND_ADDITIVE, 0);
+    RedParticleRenderer::SubmitTexture(0xCFCCCBCEu /* "MuzzleFlash" */, BLEND_ADDITIVE, 0);
 
     for (int i = 0; i < mNumMuzzleFlashes; i++)
     {

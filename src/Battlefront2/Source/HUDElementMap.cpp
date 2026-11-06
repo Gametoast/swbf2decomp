@@ -44,29 +44,29 @@
 // GLOBAL: SWBF2 0x007b2670
 // __xmm@00000000bf8000000000000000000000
 
-static const unsigned int kEventToggleMapModeHash = 0x233d39ec;
-static const unsigned int kEventChangeMapModeHash = 0x0d533bd4;
-static const unsigned int kEventPostHideHash = 0x6d95d5e9;
-static const unsigned int kEventRefreshTargetHash = 0xa9304f43;
-static const unsigned int kEventRefreshPostHash = 0x837b4104;
-static const unsigned int kEventRefreshMarkerHash = 0x6ffd58b8;
-static const unsigned int kTargetFireColorHash = 0x8b5b4c23;
-static const unsigned int kPostFlashRateHash = 0xa34f782d;
-static const unsigned int kPostFlashRadiusHash = 0xc1419eb5;
-static const unsigned int kPostFlashColorHash = 0x4f20a696;
-static const unsigned int kPositionSmallHash = 0x706c4359;
-static const unsigned int kPositionLargeHash = 0x438ca9f5;
-static const unsigned int kPositionSpawnHash = 0x5cda7691;
-static const unsigned int kBackgroundMaskShapeSmallHash = 0x55951ec1;
-static const unsigned int kBackgroundMaskShapeLargeHash = 0xce9d2fdd;
-static const unsigned int kBackgroundMaskShapeSpawnHash = 0xb5faa499;
-static const unsigned int kAllowMiniMapHash = 0xb3a94169;
-static const unsigned int kPostNumbersHash = 0x5f18ecef;
-static const unsigned int kPositionHash = 0x934f4e0a;
-static const unsigned int kBitmapFactoryHash = 0x46544626;
-static const unsigned int kBitmapMaskedFactoryHash = 0xd23cb4f7;
-static const unsigned int kModel3DFactoryHash = 0x1eccdefd;
-static const unsigned int kTextFactoryHash = 0xbde64e3e;
+static const unsigned int kEventToggleMapModeHash = 0x233d39ec /* "EventToggleMapMode" */;
+static const unsigned int kEventChangeMapModeHash = 0x0d533bd4 /* "EventChangeMapMode" */;
+static const unsigned int kEventPostHideHash = 0x6d95d5e9 /* "EventPostHide" */;
+static const unsigned int kEventRefreshTargetHash = 0xa9304f43 /* "EventRefreshTarget" */;
+static const unsigned int kEventRefreshPostHash = 0x837b4104 /* "EventRefreshPost" */;
+static const unsigned int kEventRefreshMarkerHash = 0x6ffd58b8 /* "EventRefreshMarker" */;
+static const unsigned int kTargetFireColorHash = 0x8b5b4c23 /* "TargetFireColor" */;
+static const unsigned int kPostFlashRateHash = 0xa34f782d /* "PostFlashRate" */;
+static const unsigned int kPostFlashRadiusHash = 0xc1419eb5 /* "PostFlashRadius" */;
+static const unsigned int kPostFlashColorHash = 0x4f20a696 /* "PostFlashColor" */;
+static const unsigned int kPositionSmallHash = 0x706c4359 /* "PositionSmall" */;
+static const unsigned int kPositionLargeHash = 0x438ca9f5 /* "PositionLarge" */;
+static const unsigned int kPositionSpawnHash = 0x5cda7691 /* "PositionSpawn" */;
+static const unsigned int kBackgroundMaskShapeSmallHash = 0x55951ec1 /* "BackgroundMaskShapeSmall" */;
+static const unsigned int kBackgroundMaskShapeLargeHash = 0xce9d2fdd /* "BackgroundMaskShapeLarge" */;
+static const unsigned int kBackgroundMaskShapeSpawnHash = 0xb5faa499 /* "BackgroundMaskShapeSpawn" */;
+static const unsigned int kAllowMiniMapHash = 0xb3a94169 /* "AllowMiniMap" */;
+static const unsigned int kPostNumbersHash = 0x5f18ecef /* "PostNumbers" */;
+static const unsigned int kPositionHash = 0x934f4e0a /* "Position" */;
+static const unsigned int kBitmapFactoryHash = 0x46544626 /* "Bitmap" */;
+static const unsigned int kBitmapMaskedFactoryHash = 0xd23cb4f7 /* "BitmapMasked" */;
+static const unsigned int kModel3DFactoryHash = 0x1eccdefd /* "Model3D" */;
+static const unsigned int kTextFactoryHash = 0xbde64e3e /* "Text" */;
 
 struct BackdropDefaults
 {
@@ -105,7 +105,7 @@ bool HUD::ElementMap::sFlipNorth;
 
 // FUNCTION: SWBF2 0x0054fab0
 HUD::ElementMap::Factory::Factory()
-    : HUD::ElementGroupPlayer::Factory(0xDFA2EFB1u)
+    : HUD::ElementGroupPlayer::Factory(0xDFA2EFB1u /* "map" */)
 {
     mName = "Map";
 
@@ -372,7 +372,7 @@ HUD::ElementMap::ElementMap(const char* const pName, Factory::ItemCallback pCall
         }
         pPostText->SetZOrder(127);
         pPostText->mDynamicAlloc = false;
-        pPostText->RedGlyphCacheElement::SetFont(0x8f4b7122u);
+        pPostText->RedGlyphCacheElement::SetFont(0x8f4b7122u /* "gamefont_small" */);
         pPostText->SetTextAlign(RedTextElement::TEXT_HALIGN_CENTER, RedTextElement::TEXT_VALIGN_BOTTOM);
         ElementGroupBase::AddElement(pPostText);
         pPostText->mWriteEnabled = false;
@@ -1061,7 +1061,7 @@ void HUD::ElementMap::UpdateTargetIcons(const Controllable* pPlayer)
     }
 
     const bool bSensorArray =
-        pPlayer && BonusManager::Instance()->IsTeamBonusActive(pPlayer->GetGameObject()->GetTeam(), 0x56e2ce71);
+        pPlayer && BonusManager::Instance()->IsTeamBonusActive(pPlayer->GetGameObject()->GetTeam(), 0x56e2ce71 /* "team_bonus_sensor_array" */);
     const bool bEasy = mPlayerIndex >= 0 && GameLoop::mbHistoricalRules &&
                        PlayerProfile::GetProfile(mPlayerIndex)->mGameOptions.mCurDiffLevel <= eDIFFICULTY_MEDIUM;
 
@@ -1496,7 +1496,7 @@ void HUD::ElementMap::Init()
     float fMaxZ = -FLT_MAX;
     float fRadius;
 
-    const PblRegion* pBounds = PblRegion::Find(0x866e09f4);
+    const PblRegion* pBounds = PblRegion::Find(0x866e09f4 /* "mapbounds" */);
     if (pBounds && (pBounds->mType == PblRegion::type_box || pBounds->mType == PblRegion::type_box_aligned))
     {
         const float fHalfX = pBounds->mMatrix.m[0][0] * pBounds->mSize.x;
@@ -1759,9 +1759,9 @@ bool HUD::ElementMap::GetProperty(const unsigned int uHashID, void* pValue)
     case kPositionSmallHash: *(PblVector3*)pValue = mPosition[mode_Small]; return true;
     case kPositionLargeHash: *(PblVector3*)pValue = mPosition[mode_Large]; return true;
     case kPositionSpawnHash: *(PblVector3*)pValue = mPosition[mode_Spawn]; return true;
-    case 0x2ebfaf89u: *(unsigned int*)pValue = mMatrix[mode_Small].GetRelativeMode(); return true;
-    case 0x5dec0ec1u: *(unsigned int*)pValue = mMatrix[mode_Spawn].GetRelativeMode(); return true;
-    case 0x69e17625u: *(unsigned int*)pValue = mMatrix[mode_Large].GetRelativeMode(); return true;
+    case 0x2ebfaf89u: /* "PositionRelativeSmall" */ *(unsigned int*)pValue = mMatrix[mode_Small].GetRelativeMode(); return true;
+    case 0x5dec0ec1u: /* "PositionRelativeSpawn" */ *(unsigned int*)pValue = mMatrix[mode_Spawn].GetRelativeMode(); return true;
+    case 0x69e17625u: /* "PositionRelativeLarge" */ *(unsigned int*)pValue = mMatrix[mode_Large].GetRelativeMode(); return true;
     case kBackgroundMaskShapeSmallHash: *(unsigned int*)pValue = mDim[mode_Small].shape; return true;
     case kBackgroundMaskShapeLargeHash: *(unsigned int*)pValue = mDim[mode_Large].shape; return true;
     case kTargetFireColorHash: *(RedColor*)pValue = mTargetFireColor; return true;
@@ -1770,7 +1770,7 @@ bool HUD::ElementMap::GetProperty(const unsigned int uHashID, void* pValue)
     case kPostFlashColorHash: *(RedColor*)pValue = mPostFlashColor; return true;
     case kAllowMiniMapHash: *(bool*)pValue = mAllowMiniMap; return true;
     case kPostNumbersHash: *(bool*)pValue = mPostNumbers; return true;
-    case 0xdaef9304u: *(float*)pValue = sNorth; return true;
+    case 0xdaef9304u: /* "North" */ *(float*)pValue = sNorth; return true;
     default: return ElementGroupPlayer::GetProperty(uHashID, pValue);
     }
 }
@@ -1803,13 +1803,13 @@ bool HUD::ElementMap::SetProperty(const unsigned int uHashID, const void* pValue
     case kEventRefreshMarkerHash:
         Item::SetEvent(*(const char* const*)pValue, mEventRefreshMarker);
         break;
-    case 0x2ebfaf89u:
+    case 0x2ebfaf89u: /* "PositionRelativeSmall" */
         mMatrix[mode_Small].SetRelativeMode(*(const RelativeMode*)pValue);
         break;
-    case 0x69e17625u:
+    case 0x69e17625u: /* "PositionRelativeLarge" */
         mMatrix[mode_Large].SetRelativeMode(*(const RelativeMode*)pValue);
         break;
-    case 0x5dec0ec1u:
+    case 0x5dec0ec1u: /* "PositionRelativeSpawn" */
         mMatrix[mode_Spawn].SetRelativeMode(*(const RelativeMode*)pValue);
         break;
     case kPositionSmallHash:
@@ -1862,7 +1862,7 @@ bool HUD::ElementMap::SetProperty(const unsigned int uHashID, const void* pValue
     case kPostNumbersHash:
         mPostNumbers = *(const bool*)pValue;
         break;
-    case 0xdaef9304u:
+    case 0xdaef9304u: /* "North" */
         sNorth = *(const float*)pValue;
         break;
     case kPositionHash:
@@ -1941,9 +1941,9 @@ const char* HUD::ElementMap::PropertyTranslateEnum(const unsigned int uHashID,
 {
     switch (uHashID)
     {
-    case 0x2ebfaf89u:
-    case 0x5dec0ec1u:
-    case 0x69e17625u: return gRelativeModeStrings[uValue];
+    case 0x2ebfaf89u: /* "PositionRelativeSmall" */
+    case 0x5dec0ec1u: /* "PositionRelativeSpawn" */
+    case 0x69e17625u: /* "PositionRelativeLarge" */ return gRelativeModeStrings[uValue];
     case kBackgroundMaskShapeSmallHash:
     case kBackgroundMaskShapeLargeHash:
         return sMaskShapeStrings[uValue];

@@ -102,7 +102,7 @@ void DamageArrowGroup::Init()
     for (int i = 0; i < 4; ++i)
     {
         Arrow& arrow = mArrows[i];
-        arrow.mBitmap.SetTexture(0x3e7f6167u);
+        arrow.mBitmap.SetTexture(0x3e7f6167u /* "ambush_icon" */);
     }
 }
 
@@ -318,7 +318,7 @@ void OutOfBoundsGroup::Init()
     mText.Enable(true);
     mText.Visible(true);
     mText.SetColor(RedColor::RED);
-    if (const unsigned short* pText = RedLocalizeDB::Find(0x3a1fed50u, false))
+    if (const unsigned short* pText = RedLocalizeDB::Find(0x3a1fed50u /* "game.tooltips.leaving_battlefield" */, false))
     {
         mText.SetText(pText, true);
     }
@@ -407,7 +407,7 @@ void VoiceChatGroup::Init()
 // FUNCTION: SWBF2 0x006514f0
 void VoiceChatGroup::Bind(unsigned int hView)
 {
-    RedFont* pFont = RedFont::Find(0x46f060d5);
+    RedFont* pFont = RedFont::Find(0x46f060d5 /* "gamefont_tiny" */);
     RedInterfaceScreen* pScreen = FLRenderer::GetInterfaceView(hView);
     float fWidth, fHeight, fOffsetX, fOffsetY;
     pScreen->GetSafeZone(fWidth, fHeight, fOffsetX, fOffsetY);

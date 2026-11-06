@@ -74,7 +74,7 @@ Entity* PassengerSlotClass::Build(const EntityDesc& desc)
 // FUNCTION: SWBF2 0x0060fe30
 bool PassengerSlotClass::SetProperty(unsigned int uProperty, const char* pszValue, const RedModel* pModel)
 {
-    if (uProperty != 0xBFBBAB62)
+    if (uProperty != 0xBFBBAB62 /* "PassengerEyePoint" */)
     {
         if (!mCameraSettings.SetProperty(uProperty, pszValue))
         {

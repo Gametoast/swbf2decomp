@@ -274,7 +274,7 @@ bool ScopeDisplay::Update(float fDeltaTime)
 
         unsigned int uTexture = RedTexture::Find(pWeapon->mClass->mScopeTexture)
                                     ? pWeapon->mClass->mScopeTexture
-                                    : 0xF6BCFA8E;
+                                    : 0xF6BCFA8E /* "weapon_scope" */;
         if (mScopeTexture != uTexture)
         {
             mScopeTexture = uTexture;

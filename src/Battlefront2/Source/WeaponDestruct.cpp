@@ -84,13 +84,13 @@ void WeaponDestructClass::SetProperty(unsigned int uProperty, const char* pszVal
 {
     switch (uProperty)
     {
-    case 0x2819FFA0:
+    case 0x2819FFA0: /* "MaxPressedTime" */
         sscanf(pszValue, "%f", &mMaxPressedTime);
         break;
-    case 0x4C5AA5AA:
+    case 0x4C5AA5AA: /* "SelfDestructSoundPitch" */
         sscanf(pszValue, "%f", &mChargeSoundPitch);
         break;
-    case 0xCA0C1378:
+    case 0xCA0C1378: /* "ExplosionClass" */
         mExplosionClass = ExplosionClass::Find(PblHash(pszValue));
         break;
     default:

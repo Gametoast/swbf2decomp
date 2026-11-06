@@ -99,25 +99,25 @@ void OrdnanceStickyClass::SetProperty(unsigned int uProperty, const char* pszVal
 {
     switch (uProperty)
     {
-    case 0x2297E47D:
+    case 0x2297E47D: /* "CollisionWaterSound" */
         mSoundCollisionWater.SetID(pszValue, false, false);
         break;
-    case 0xB8C524F1:
+    case 0xB8C524F1: /* "CollisionFoliageSound" */
         mSoundCollisionLeaf.SetID(pszValue, false, false);
         break;
-    case 0xEDC6251A:
+    case 0xEDC6251A: /* "CollisionOtherSound" */
         mSoundCollisionOther.SetID(pszValue, false, false);
         break;
-    case 0x0D0CDE2B:
+    case 0x0D0CDE2B: /* "StartTimerOnContact" */
         mStartTimerOnContact = atoi(pszValue) != 0;
         break;
-    case 0xDB873344:
+    case 0xDB873344: /* "AlignVertical" */
         mAlignVertical = atoi(pszValue) != 0;
         break;
-    case 0xD3913CC2:
+    case 0xD3913CC2: /* "StickAll" */
         mStickTypes = atoi(pszValue) ? -1 : 0;
         break;
-    case 0x01E9CAEA:
+    case 0x01E9CAEA: /* "StickPerson" */
         if (atoi(pszValue))
         {
             mStickTypes |= 0x1;
@@ -127,7 +127,7 @@ void OrdnanceStickyClass::SetProperty(unsigned int uProperty, const char* pszVal
             mStickTypes &= ~0x1;
         }
         break;
-    case 0xD1B49B73:
+    case 0xD1B49B73: /* "StickAnimal" */
         if (atoi(pszValue))
         {
             mStickTypes |= 0x2;
@@ -137,7 +137,7 @@ void OrdnanceStickyClass::SetProperty(unsigned int uProperty, const char* pszVal
             mStickTypes &= ~0x2;
         }
         break;
-    case 0x3B3F45B7:
+    case 0x3B3F45B7: /* "StickDroid" */
         if (atoi(pszValue))
         {
             mStickTypes |= 0x4;
@@ -147,7 +147,7 @@ void OrdnanceStickyClass::SetProperty(unsigned int uProperty, const char* pszVal
             mStickTypes &= ~0x4;
         }
         break;
-    case 0x9B4AF9ED:
+    case 0x9B4AF9ED: /* "StickVehicle" */
         if (atoi(pszValue))
         {
             mStickTypes |= 0x8;
@@ -157,7 +157,7 @@ void OrdnanceStickyClass::SetProperty(unsigned int uProperty, const char* pszVal
             mStickTypes &= ~0x8;
         }
         break;
-    case 0x7449C0B3:
+    case 0x7449C0B3: /* "StickBuilding" */
         if (atoi(pszValue))
         {
             mStickTypes |= 0x10;
@@ -167,7 +167,7 @@ void OrdnanceStickyClass::SetProperty(unsigned int uProperty, const char* pszVal
             mStickTypes &= ~0x10;
         }
         break;
-    case 0xAD9C5FA5:
+    case 0xAD9C5FA5: /* "StickBuildingDead" */
         if (atoi(pszValue))
         {
             mStickTypes |= 0x20;
@@ -177,7 +177,7 @@ void OrdnanceStickyClass::SetProperty(unsigned int uProperty, const char* pszVal
             mStickTypes &= ~0x20;
         }
         break;
-    case 0xA8A2AFF4:
+    case 0xA8A2AFF4: /* "StickBuildingUnbuilt" */
         if (atoi(pszValue))
         {
             mStickTypes |= 0x40;
@@ -187,7 +187,7 @@ void OrdnanceStickyClass::SetProperty(unsigned int uProperty, const char* pszVal
             mStickTypes &= ~0x40;
         }
         break;
-    case 0x95706D30:
+    case 0x95706D30: /* "StickTerrain" */
         if (atoi(pszValue))
         {
             mStickTypes |= 0x80000000;

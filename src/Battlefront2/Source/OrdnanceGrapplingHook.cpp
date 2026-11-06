@@ -297,7 +297,7 @@ OrdnanceGrapplingHookClass::OrdnanceGrapplingHookClass(OrdnanceGrapplingHookClas
 // FUNCTION: SWBF2 0x005fffe0
 void OrdnanceGrapplingHookClass::SetProperty(unsigned int uProperty, const char* pszValue)
 {
-    if (uProperty != 0x5F0CE10D)
+    if (uProperty != 0x5F0CE10D /* "SoldierAnimation" */)
     {
         OrdnanceBulletClass::SetProperty(uProperty, pszValue);
     }

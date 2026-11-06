@@ -280,7 +280,7 @@ EntityProp::~EntityProp()
 // FUNCTION: SWBF2 0x004d9710
 void EntityProp::SetProperty(unsigned int uProperty, const char* pszValue)
 {
-    if (uProperty != 0xb2e7fe34)
+    if (uProperty != 0xb2e7fe34 /* "GeometryColor" */)
     {
         reinterpret_cast<EntityGeometry*>(this)->EntityGeometry::SetProperty(uProperty, pszValue);
         return;
@@ -481,22 +481,22 @@ void EntityPropClass::SetProperty(unsigned int uProperty, const char* pszValue)
 {
     switch (uProperty)
     {
-    case 0x0df468ca:
+    case 0x0df468ca: /* "LowResModel" */
         mLowResModel = const_cast<RedModel*>(RedModel::Find(PblHash(pszValue)));
         mModel->_mLod[3] = mLowResModel;
         break;
 
-    case 0x1b2cc185:
+    case 0x1b2cc185: /* "StartMovementSound" */
         mStartMovementSound.SetID(pszValue, false, false);
         break;
-    case 0x2f78e0b7:
+    case 0x2f78e0b7: /* "StopMovementSound" */
         mStopMovementSound.SetID(pszValue, false, false);
         break;
-    case 0xf350b4e5:
+    case 0xf350b4e5: /* "SoundProperty" */
         mAttachedSound.SetID(pszValue, false, false);
         break;
 
-    case 0x35b1cfc2:
+    case 0x35b1cfc2: /* "GeometryColorMax" */
     {
         int r, g, b, a;
         sscanf(pszValue, "%i %i %i %i", &r, &g, &b, &a);
@@ -506,7 +506,7 @@ void EntityPropClass::SetProperty(unsigned int uProperty, const char* pszValue)
         mGeometryColorMax.a = (unsigned char)a;
         break;
     }
-    case 0x3f9cc4c8:
+    case 0x3f9cc4c8: /* "GeometryColorMin" */
     {
         int r, g, b, a;
         sscanf(pszValue, "%i %i %i %i", &r, &g, &b, &a);
@@ -517,7 +517,7 @@ void EntityPropClass::SetProperty(unsigned int uProperty, const char* pszValue)
         break;
     }
 
-    case 0x3be7b80a:
+    case 0x3be7b80a: /* "AttachToHardPoint" */
         if (!sPendingAttachedOdfClass)
         {
             EntityGeometryClass::SetProperty(uProperty, pszValue);
@@ -540,7 +540,7 @@ void EntityPropClass::SetProperty(unsigned int uProperty, const char* pszValue)
         }
         break;
 
-    case 0x47c86b4a:
+    case 0x47c86b4a: /* "GeometryName" */
     {
         mModel = const_cast<GameModel*>(GameModel::Find(PblHash(pszValue)));
         if (mModel && mModel->_mModel->_BoundingSphere.w > 10.0f)
@@ -578,7 +578,7 @@ void EntityPropClass::SetProperty(unsigned int uProperty, const char* pszValue)
         break;
     }
 
-    case 0x5dc6e917:
+    case 0x5dc6e917: /* "DestroyedGeometryName" */
         mDestroyedModel = const_cast<RedModel*>(RedModel::Find(PblHash(pszValue)));
         if (mModel && mModel->_mModel->_BoundingSphere.w > 10.0f)
         {
@@ -586,10 +586,10 @@ void EntityPropClass::SetProperty(unsigned int uProperty, const char* pszValue)
         }
         break;
 
-    case 0x5dfdc07f:
+    case 0x5dfdc07f: /* "SoldierCollision" */
     {
         unsigned int uName = PblHash(pszValue);
-        if (uName == 0xada7afdb || uName == 0x5c6e1222)
+        if (uName == 0xada7afdb /* "none" */ || uName == 0x5c6e1222 /* "clear" */)
         {
             sSoftCollisionMask = 0;
             mCollisionModel.SetCollisionMask(COLL_SOFT, CollisionMask(0));
@@ -606,20 +606,20 @@ void EntityPropClass::SetProperty(unsigned int uProperty, const char* pszValue)
         break;
     }
 
-    case 0x6a6c7e0d:
+    case 0x6a6c7e0d: /* "AttachEffect" */
         sPendingAttachedOdfClass = 0;
         EntityGeometryClass::SetProperty(uProperty, pszValue);
         break;
 
-    case 0x6d8fe606:
+    case 0x6d8fe606: /* "DenyFlyerLand" */
         mCollisionModel.mDenyFlyerLand = atoi(pszValue) != 0;
         break;
 
-    case 0x8123a629:
+    case 0x8123a629: /* "UseHSV" */
         mUseHSVFlag = true;
         break;
 
-    case 0x827eb1c9:
+    case 0x827eb1c9: /* "Lighting" */
     {
         size_t uLength = strlen(pszValue);
         if (uLength)
@@ -636,14 +636,14 @@ void EntityPropClass::SetProperty(unsigned int uProperty, const char* pszValue)
         break;
     }
 
-    case 0x862be6b4:
+    case 0x862be6b4: /* "SwingSpeed" */
         sscanf(pszValue, "%f", &mSwingSpeed);
         break;
-    case 0xbebced85:
+    case 0xbebced85: /* "SwingAmount" */
         sscanf(pszValue, "%f", &mSwingAmount);
         break;
 
-    case 0x9828f43f:
+    case 0x9828f43f: /* "BuildingCollision" */
     {
         int iMaskId = mCollisionModel.GetMaskId(PblHash(pszValue));
         if (iMaskId >= 0)
@@ -654,7 +654,7 @@ void EntityPropClass::SetProperty(unsigned int uProperty, const char* pszValue)
         break;
     }
 
-    case 0xa9d0d48b:
+    case 0xa9d0d48b: /* "AttachOdf" */
     {
         sPendingAttachedOdfClass = 0;
         EntityClass* pClass = EntityClass::Find(PblHash(pszValue));
@@ -672,7 +672,7 @@ void EntityPropClass::SetProperty(unsigned int uProperty, const char* pszValue)
         break;
     }
 
-    case 0xafe693ce:
+    case 0xafe693ce: /* "TerrainCollision" */
     {
         int iMaskId = mCollisionModel.GetMaskId(PblHash(pszValue));
         if (iMaskId >= 0)
@@ -683,11 +683,11 @@ void EntityPropClass::SetProperty(unsigned int uProperty, const char* pszValue)
         break;
     }
 
-    case 0xba67f8d2:
+    case 0xba67f8d2: /* "SoundWhenMoving" */
         mAttachedSoundOnlyMoving = atol(pszValue) != 0;
         break;
 
-    case 0xc3f25cbb:
+    case 0xc3f25cbb: /* "VehicleCollisionOnly" */
     {
         int iMaskId = mCollisionModel.GetMaskId(PblHash(pszValue));
         if (iMaskId >= 0)
@@ -704,7 +704,7 @@ void EntityPropClass::SetProperty(unsigned int uProperty, const char* pszValue)
         break;
     }
 
-    case 0xcb00fa3b:
+    case 0xcb00fa3b: /* "Reflected" */
     {
         int iReflected = 0;
         sscanf(pszValue, "%i", &iReflected);
@@ -712,7 +712,7 @@ void EntityPropClass::SetProperty(unsigned int uProperty, const char* pszValue)
         break;
     }
 
-    case 0xd23dbaf8:
+    case 0xd23dbaf8: /* "TargetableCollision" */
     {
         int iMaskId = mCollisionModel.GetMaskId(PblHash(pszValue));
         if (iMaskId >= 0)
@@ -723,14 +723,14 @@ void EntityPropClass::SetProperty(unsigned int uProperty, const char* pszValue)
         break;
     }
 
-    case 0xd9d02e03:
+    case 0xd9d02e03: /* "DeathOnFlyerLand" */
         mCollisionModel.mDeathOnFlyerLand = atoi(pszValue) != 0;
         break;
 
-    case 0xde5365a1:
+    case 0xde5365a1: /* "VehicleCollision" */
     {
         unsigned int uName = PblHash(pszValue);
-        if (uName == 0xada7afdb || uName == 0x5c6e1222)
+        if (uName == 0xada7afdb /* "none" */ || uName == 0x5c6e1222 /* "clear" */)
         {
             sRigidCollisionMask = 0;
             mCollisionModel.SetCollisionMask(COLL_RIGID, CollisionMask(0));
@@ -747,7 +747,7 @@ void EntityPropClass::SetProperty(unsigned int uProperty, const char* pszValue)
         break;
     }
 
-    case 0xe6dedb8f:
+    case 0xe6dedb8f: /* "SoundOffset" */
     {
         float x = 0.0f, y = 0.0f, z = 0.0f;
         sscanf(pszValue, "%f %f %f", &x, &y, &z);
@@ -757,14 +757,14 @@ void EntityPropClass::SetProperty(unsigned int uProperty, const char* pszValue)
         break;
     }
 
-    case 0xf31d1478:
+    case 0xf31d1478: /* "UseVCollForFlyers" */
         mCollisionModel.mUseVehicleCollisionAgainstFlyers = true;
         break;
 
-    case 0xfb2bdf07:
+    case 0xfb2bdf07: /* "OrdnanceCollision" */
     {
         unsigned int uName = PblHash(pszValue);
-        if (uName == 0xada7afdb || uName == 0x5c6e1222)
+        if (uName == 0xada7afdb /* "none" */ || uName == 0x5c6e1222 /* "clear" */)
         {
             sOrdnanceCollisionMask = 0;
             mCollisionModel.SetCollisionMask(COLL_ORDNANCE, CollisionMask(0));
@@ -781,11 +781,11 @@ void EntityPropClass::SetProperty(unsigned int uProperty, const char* pszValue)
         break;
     }
 
-    case 0x07d00083:
-    case 0x330acaab:
-    case 0x7cdccf2a:
-    case 0x8cf29543:
-    case 0xfec8cea9:
+    case 0x07d00083: /* "SoldierCollisionPrim" */
+    case 0x330acaab: /* "OrdnanceCollisionPrim" */
+    case 0x7cdccf2a: /* "TerrainCollisionPrim" */
+    case 0x8cf29543: /* "BuildingCollisionPrim" */
+    case 0xfec8cea9: /* "VehicleCollisionPrim" */
     {
         char acName[32];
         char acType[32];
@@ -802,13 +802,13 @@ void EntityPropClass::SetProperty(unsigned int uProperty, const char* pszValue)
         CollisionPrimitive primitive;
         switch (PblTEMPHash(acType))
         {
-        case 0x1ccafdcc:
+        case 0x1ccafdcc: /* "box" */
             primitive.SetBox(a, b, c, -1.0f);
             break;
-        case 0x4a182b8f:
+        case 0x4a182b8f: /* "cylinder" */
             primitive.SetCylinder(a, b);
             break;
-        case 0x73f51491:
+        case 0x73f51491: /* "aacylinder" */
             primitive.SetAACylinder(a, b);
             break;
         default:
@@ -829,11 +829,11 @@ void EntityPropClass::SetProperty(unsigned int uProperty, const char* pszValue)
         {
             switch (uProperty)
             {
-            case 0x7cdccf2a: terrainMask.SetId(iMaskId); break;
-            case 0x07d00083: softMask.SetId(iMaskId); break;
-            case 0x330acaab: ordnanceMask.SetId(iMaskId); break;
-            case 0x8cf29543: staticMask.SetId(iMaskId); break;
-            case 0xfec8cea9: rigidMask.SetId(iMaskId); break;
+            case 0x7cdccf2a: /* "TerrainCollisionPrim" */ terrainMask.SetId(iMaskId); break;
+            case 0x07d00083: /* "SoldierCollisionPrim" */ softMask.SetId(iMaskId); break;
+            case 0x330acaab: /* "OrdnanceCollisionPrim" */ ordnanceMask.SetId(iMaskId); break;
+            case 0x8cf29543: /* "BuildingCollisionPrim" */ staticMask.SetId(iMaskId); break;
+            case 0xfec8cea9: /* "VehicleCollisionPrim" */ rigidMask.SetId(iMaskId); break;
             }
             mCollisionModel.SetCollisionMask(COLL_TERRAIN, terrainMask);
             mCollisionModel.SetCollisionMask(COLL_STATIC, staticMask);
@@ -886,7 +886,7 @@ Entity* EntityPropClass::Build(const EntityDesc& desc)
                     char acDistance[20];
                     _snprintf(acDistance, 19, "%f", mAttachedOdfs[i].mDistance);
                     acDistance[19] = 0;
-                    pEntity->SetProperty(0xe6915cf6, acDistance);
+                    pEntity->SetProperty(0xe6915cf6 /* "MaxDistance" */, acDistance);
                 }
             }
             ((EntityGeometry*)pProp)->BuildEffects();

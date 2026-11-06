@@ -198,8 +198,8 @@ void GuiManager::UpdateAll(float fElapsed)
     else
     {
         unsigned int uiState = GameState::GetState();
-        bool bSplitScreen = uiState == 0x8ff60339 && GameLoop::sShowStats && GameLoop::GetNumCameras() > 1;
-        bool bShell = uiState == 0x11e1fc01;
+        bool bSplitScreen = uiState == 0x8ff60339 /* "mission" */ && GameLoop::sShowStats && GameLoop::GetNumCameras() > 1;
+        bool bShell = uiState == 0x11e1fc01 /* "shell" */;
         FLInputManager* pInput = FLInputManager::Instance();
         bool bReadAll = pInput->mReadAllControllers;
         bool bBindMultiple = pInput->mAllowBindMultiple;

@@ -129,35 +129,35 @@ bool OrbitalStrikeClass::SetProperty(unsigned int uProperty, const char* pszValu
 {
     switch (uProperty)
     {
-    case 0x3186FBFE:
+    case 0x3186FBFE: /* "AimAzimuth" */
         if (sscanf(pszValue, "%f", &mAimAzimuth))
         {
             mAimAzimuth *= 0.017453292f;
         }
         return true;
-    case 0x8339FB35:
+    case 0x8339FB35: /* "AimElevation" */
         if (sscanf(pszValue, "%f", &mAimElevation))
         {
             mAimElevation *= 0.017453292f;
         }
         return true;
-    case 0xECDB9D1D:
+    case 0xECDB9D1D: /* "AimDistance" */
         sscanf(pszValue, "%f", &mAimDistance);
         return true;
-    case 0x9260EA63:
+    case 0x9260EA63: /* "SalvoCount" */
         sscanf(pszValue, "%i", &mSalvoCount);
         return true;
-    case 0xD76F37DB:
+    case 0xD76F37DB: /* "SalvoDelay" */
         sscanf(pszValue, "%f", &mSalvoDelay);
         return true;
-    case 0xC8388D9D:
+    case 0xC8388D9D: /* "InitialSalvoDelay" */
         sscanf(pszValue, "%f", &mInitialSalvoDelay);
         return true;
-    case 0xEBD81A5E:
+    case 0xEBD81A5E: /* "ScatterDistance" */
         sscanf(pszValue, "%f", &mScatterDistance);
         return true;
-    case 0x6FD92BE8:
-    case 0x0E52B6A3:
+    case 0x6FD92BE8: /* "StrikeOrdnanceName" */
+    case 0x0E52B6A3: /* "StrikeOrdnance" */
         mStrikeClass = Factory<Ordnance, OrdnanceClass, OrdnanceDesc>::Find(PblHash(pszValue));
         return true;
     }

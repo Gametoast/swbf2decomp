@@ -604,7 +604,7 @@ void SoundLayered::Properties::Read(PblFileChunk& chunk)
         const unsigned int uiID = child._pFile->Read32();
         switch (uiID)
         {
-        case 0x07A640F6u:
+        case 0x07A640F6u: /* "Layer" */
         {
             const char cVersion = child._pFile->Read8();
             const unsigned int uiHashID = child._pFile->Read32();
@@ -621,7 +621,7 @@ void SoundLayered::Properties::Read(PblFileChunk& chunk)
             }
             break;
         }
-        case 0x8D39BDE6u:
+        case 0x8D39BDE6u: /* "name" */
         {
             child._pFile->Read8();
             mHashID = child._pFile->Read32();

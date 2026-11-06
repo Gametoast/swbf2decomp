@@ -327,15 +327,15 @@ void SoldierElement::RenderUsingContext(const PblMatrix& mContext, const RedColo
 
         RedShadingPose shadingPose;
         shadingPose.BindToModel((RedModel*)mModel->GetRedModel(0));
-        if (RedShadingState* pState = shadingPose.CreateShadingState(0xdc5803e9))
+        if (RedShadingState* pState = shadingPose.CreateShadingState(0xdc5803e9 /* "override_texture" */))
         {
-            pState->GetIntParam(0x891891e9) = mClass->mOverrideTextureHash;
+            pState->GetIntParam(0x891891e9 /* "diffuse_texture" */) = mClass->mOverrideTextureHash;
         }
         if (mClass->mOverrideTextureHash2)
         {
-            if (RedShadingState* pState = shadingPose.CreateShadingState(0xb98e11c1))
+            if (RedShadingState* pState = shadingPose.CreateShadingState(0xb98e11c1 /* "override_texture2" */))
             {
-                pState->GetIntParam(0x891891e9) = mClass->mOverrideTextureHash2;
+                pState->GetIntParam(0x891891e9 /* "diffuse_texture" */) = mClass->mOverrideTextureHash2;
             }
         }
         ((RedModel*)mModel->GetRedModel(0))->Render(&mRender, &pose, color, 0x4000000, &shadingPose);

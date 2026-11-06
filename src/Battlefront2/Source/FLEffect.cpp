@@ -195,7 +195,7 @@ void FLEffect::Read(PblFileChunk& chunk)
     {
         PblConfig::Data data = config.ReadNextData();
         unsigned int uiId = data.GetId();
-        if (uiId == 0x6E6E8D54)
+        if (uiId == 0x6E6E8D54 /* "Effect" */)
         {
             FLEffect* pEffect = s_EffectFactories.Find(PblHash(data.GetStringArg(0)));
             PblConfig scope(config.ReadNextScope(), true);
@@ -214,7 +214,7 @@ void FLEffect::Read(PblFileChunk& chunk)
                 if (pClass)
                 {
                     unsigned int uiName = uiDefaultName;
-                    if (uiId != 0xCEBB215F && data.GetNumArgs() == 1 &&
+                    if (uiId != 0xCEBB215F /* "ParticleEmitter" */ && data.GetNumArgs() == 1 &&
                         PblHash(data.GetStringArg(0)))
                     {
                         uiName = PblHash(data.GetStringArg(0));

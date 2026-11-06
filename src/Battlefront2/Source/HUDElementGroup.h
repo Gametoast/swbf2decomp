@@ -157,7 +157,7 @@ inline HUD::ElementGroup::ElementGroup(const char* const pName, Factory::ItemCal
 }
 
 inline HUD::ElementGroup::Factory::Factory()
-    : HUD::ElementGroupBase::Factory(0x5FB91E8Cu)
+    : HUD::ElementGroupBase::Factory(0x5FB91E8Cu /* "Group" */)
 {
     mName = "Group";
 }

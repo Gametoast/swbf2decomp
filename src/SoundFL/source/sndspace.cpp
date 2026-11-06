@@ -48,7 +48,7 @@ FreeList Space::smFreeList(sizeof(Space), 1, true, 8);
 // FUNCTION: SWBF2 0x00733a70
 bool Space::Open()
 {
-    smDefaultSpace.mHashID = 0x933B5BDEu;
+    smDefaultSpace.mHashID = 0x933B5BDEu /* "Default" */;
     smDefaultSpace.mPriority = -1.0f;
     return true;
 }
@@ -302,25 +302,25 @@ void Space::Read(PblFileChunk& chunk)
         const unsigned int uiID = child._pFile->Read32();
         switch (uiID)
         {
-        case 0x94E4E309u:
+        case 0x94E4E309u: /* "priority" */
             child._pFile->Read8();
             mPriority = child._pFile->ReadFloat();
             break;
-        case 0x8D39BDE6u:
+        case 0x8D39BDE6u: /* "name" */
             child._pFile->Read8();
             mHashID = child._pFile->Read32();
             break;
-        case 0xABD36816u:
+        case 0xABD36816u: /* "I3DL2ReverbPreset" */
             child._pFile->Read8();
             SetReverbPreset(I3DL2ReverbPreset::Find(child._pFile->Read32()));
             break;
-        case 0x148F0D58u:
+        case 0x148F0D58u: /* "ConnectedList" */
         {
             PblFileChunk list = chunk.ReadNextChild();
             while (!list.IsDone())
             {
                 PblFileChunk entry = list.ReadNextChild();
-                if (entry._pFile->Read32() != 0x3553E285u)
+                if (entry._pFile->Read32() != 0x3553E285u /* "Space" */)
                 {
                     continue;
                 }

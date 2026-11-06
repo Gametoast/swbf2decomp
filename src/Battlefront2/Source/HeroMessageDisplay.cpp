@@ -114,7 +114,7 @@ void HeroMessageDisplay::PlayHeroSoundSpawn(int iTeam)
         mHeroSpawned[iTeam]->Play(pPos, 0, false, true);
     }
 
-    const unsigned short* pFormat = RedLocalizeDB::Find(0x0F669681, false);
+    const unsigned short* pFormat = RedLocalizeDB::Find(0x0F669681 /* "game.heromsg.spawn" */, false);
     Team* pTeam = Team::sTeams[iTeam];
     if (!pTeam)
     {
@@ -330,7 +330,7 @@ void HeroMessageDisplay::UpdateHeroSelect(float fDeltaTime, int iTeam, float& fT
         return;
     }
 
-    const unsigned short* pFormat = RedLocalizeDB::Find(0xADD5467C, false);
+    const unsigned short* pFormat = RedLocalizeDB::Find(0xADD5467C /* "game.heromsg.selection" */, false);
 
     int iTeamNumber = 1;
     if (netHeroNextPlayerID[iTeam] >= 0)

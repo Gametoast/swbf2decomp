@@ -290,7 +290,7 @@ bool EngineBase::LoadConfiguration(PblFileChunk& chunk, char const* pcName, bool
             break;
 
         case 0x5E262256u:
-        case 0x9A644D15u:
+        case 0x9A644D15u: /* "SampleBank" */
             if (bLoadBanks)
             {
                 SampleBankBase::LoadBank(child, pcName, true, 0);
@@ -326,30 +326,30 @@ bool EngineBase::LoadConfiguration(PblFileChunk& chunk, char const* pcName, bool
 
             switch (uiType)
             {
-            case 0x5FD56DF9u:
+            case 0x5FD56DF9u: /* "bus" */
                 Bus::Load(parent, true);
                 break;
-            case 0x3553E285u:
+            case 0x3553E285u: /* "Space" */
                 Space::Load(parent, true);
                 break;
-            case 0x2E93EF4Cu:
-            case 0x4CA38B31u:
+            case 0x2E93EF4Cu: /* "SoundStream" */
+            case 0x4CA38B31u: /* "SoundStreamProperties" */
                 SoundStream::Properties::Load(parent, true);
                 break;
-            case 0x0E0D9594u:
-            case 0xEE65C519u:
+            case 0x0E0D9594u: /* "Sound" */
+            case 0xEE65C519u: /* "SoundProperties" */
                 Sound::Properties::Load(parent, true);
                 break;
-            case 0x12EBD555u:
+            case 0x12EBD555u: /* "soundparameterized" */
                 SoundParameterized::Properties::Load(parent, true);
                 break;
-            case 0xA54A2138u:
+            case 0xA54A2138u: /* "soundlayered" */
                 SoundLayered::Properties::Load(parent, true);
                 break;
-            case 0xE657A914u:
+            case 0xE657A914u: /* "ParameterGraph" */
                 ParameterGraph::Load(parent, true);
                 break;
-            case 0xABD36816u:
+            case 0xABD36816u: /* "I3DL2ReverbPreset" */
                 I3DL2ReverbPreset::Load(parent, true);
                 break;
             default:

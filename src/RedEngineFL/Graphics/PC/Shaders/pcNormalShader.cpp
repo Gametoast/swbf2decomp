@@ -351,7 +351,7 @@ void pcNormalShader::Bind()
 RedShadingState* pcNormalShader::CreateShadingState() const
 {
     RedShadingState* pState = new RedShadingState(GetRenderTypeHash());
-    pState->AddIntParam(0x891891e9) = m_material.diffuseMapHash;
+    pState->AddIntParam(0x891891e9 /* "diffuse_texture" */) = m_material.diffuseMapHash;
     pState->AddTextureTransformParam(0x3f0d728a).m_bTransform = 0;
     return pState;
 }
@@ -494,7 +494,7 @@ int pcNormalShader::GetDiffuseMapHash(int iItem, int)
     const RedMaterial* pMaterial = pItem->pRootShader->m_material;
     if (pItem->pShadingState)
     {
-        return pItem->pShadingState->GetIntParam(0x891891e9);
+        return pItem->pShadingState->GetIntParam(0x891891e9 /* "diffuse_texture" */);
     }
     return pMaterial->diffuseMapHash;
 }
@@ -536,7 +536,7 @@ void pcNormalShader::RenderZPrepass(const RenderItem* pItem) const
         RedRenderer::pcSetCullMode((pMaterial->materialFlags & 0x10000) ? PCREDCULL_NONE : PCREDCULL_BACK);
 
         const unsigned int uiDiffuseMap = pItem->pShadingState
-                                              ? pItem->pShadingState->GetIntParam(0x891891e9)
+                                              ? pItem->pShadingState->GetIntParam(0x891891e9 /* "diffuse_texture" */)
                                               : pMaterial->diffuseMapHash;
         const RedTexture* pTexture;
         if (uiDiffuseMap)
@@ -1007,7 +1007,7 @@ void pcNormalShader::Render_Fixed(const RenderItem* pItem, unsigned int uiPass) 
         const RedTextureTransform* pTransform = 0;
         if (pItem->pShadingState)
         {
-            uiDiffuseMap = pItem->pShadingState->GetIntParam(0x891891e9);
+            uiDiffuseMap = pItem->pShadingState->GetIntParam(0x891891e9 /* "diffuse_texture" */);
             pTransform = &pItem->pShadingState->GetTextureTransformParam(0x3f0d728a);
             if (!pTransform->m_bTransform)
             {
@@ -1114,7 +1114,7 @@ void pcNormalShader::Render_Prog1(const RenderItem* pItem, unsigned int) const
     const RedTextureTransform* pTransform = &pMaterial->diffuseTexTransform;
     if (pItem->pShadingState)
     {
-        uiDiffuseMap = pItem->pShadingState->GetIntParam(0x891891e9);
+        uiDiffuseMap = pItem->pShadingState->GetIntParam(0x891891e9 /* "diffuse_texture" */);
         pTransform = &pItem->pShadingState->GetTextureTransformParam(0x3f0d728a);
     }
     else

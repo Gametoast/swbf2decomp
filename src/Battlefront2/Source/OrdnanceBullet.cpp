@@ -88,10 +88,10 @@ OrdnanceBulletClass::OrdnanceBulletClass(unsigned int uHash)
     mImpactEffectSoft = 0;
     mImpactEffectRigid = 0;
     mImpactEffectStatic = 0;
-    mImpactEffectTerrain = 0x72968E25u;
-    mImpactEffectWater = 0x4955BD1Bu;
-    mImpactEffectShieldSmall = 0xB3503FC5u;
-    mImpactEffectShieldLarge = 0xD4391A69u;
+    mImpactEffectTerrain = 0x72968E25u /* "dirtspray" */;
+    mImpactEffectWater = 0x4955BD1Bu /* "watersplash_ord" */;
+    mImpactEffectShieldSmall = 0xB3503FC5u /* "com_sfx_shieldimpact_sm" */;
+    mImpactEffectShieldLarge = 0xD4391A69u /* "com_sfx_shieldimpact_xl" */;
     mImpactDecalTerrain = 0;
     mImpactDecalStatic = 0;
     m_uiLightOdfNameHash = 0;
@@ -135,7 +135,7 @@ void OrdnanceBulletClass::SetProperty(unsigned int uProperty, const char* pszVal
 {
     switch (uProperty)
     {
-    case 0x746CE73E:
+    case 0x746CE73E: /* "LightColor" */
     {
         int r, g, b, a;
         int iCount = sscanf(pszValue, "%d %d %d %d", &r, &g, &b, &a);
@@ -160,7 +160,7 @@ void OrdnanceBulletClass::SetProperty(unsigned int uProperty, const char* pszVal
         m_colorLight = color;
         break;
     }
-    case 0x96E0CCB1:
+    case 0x96E0CCB1: /* "EndLightColor" */
     {
         int r, g, b, a;
         int iCount = sscanf(pszValue, "%d %d %d %d", &r, &g, &b, &a);
@@ -185,21 +185,21 @@ void OrdnanceBulletClass::SetProperty(unsigned int uProperty, const char* pszVal
         m_endColorLight = color;
         break;
     }
-    case 0x32741C32:
+    case 0x32741C32: /* "Velocity" */
         sscanf(pszValue, "%f", &mVelocity);
         break;
-    case 0x2776564D:
+    case 0x2776564D: /* "LightRadius" */
         sscanf(pszValue, "%f", &m_fRadiusLight);
         break;
-    case 0x087EA2F0:
+    case 0x087EA2F0: /* "ImpactEffectStatic" */
         mImpactEffectStatic = PblHash(pszValue);
         break;
-    case 0x2BBD32B1:
+    case 0x2BBD32B1: /* "ImpactDecalTerrain" */
         mImpactDecalTerrain = PblHash(pszValue);
         break;
-    case 0x3F30370C:
+    case 0x3F30370C: /* "OrdnanceEffect" */
         break;
-    case 0x47C86B4A:
+    case 0x47C86B4A: /* "GeometryName" */
         if (*pszValue)
         {
             mModel = RedModel::Find(PblHash(pszValue));
@@ -210,35 +210,35 @@ void OrdnanceBulletClass::SetProperty(unsigned int uProperty, const char* pszVal
             mModel = 0;
         }
         break;
-    case 0x5A554273:
+    case 0x5A554273: /* "ImpactEffectTerrain" */
         mImpactEffectTerrain = PblHash(pszValue);
         break;
-    case 0x7A140FC6:
+    case 0x7A140FC6: /* "ImpactDecalStatic" */
         mImpactDecalStatic = PblHash(pszValue);
         break;
-    case 0x8FC79EBE:
+    case 0x8FC79EBE: /* "ImpactEffectShieldSmall" */
         mImpactEffectShieldSmall = PblHash(pszValue);
         break;
-    case 0xA3091269:
+    case 0xA3091269: /* "ImpactEffectRigid" */
         mImpactEffectRigid = PblHash(pszValue);
         break;
-    case 0xA58ACBD0:
+    case 0xA58ACBD0: /* "FadeLightColor" */
     {
         int iValue;
         sscanf(pszValue, "%d", &iValue);
         mFadeColorLight = iValue != 0;
         break;
     }
-    case 0xD6220FE6:
+    case 0xD6220FE6: /* "ImpactEffectSoft" */
         mImpactEffectSoft = PblHash(pszValue);
         break;
-    case 0xE369687E:
+    case 0xE369687E: /* "LightOdf" */
         m_uiLightOdfNameHash = PblHash(pszValue);
         break;
-    case 0xECAAA59D:
+    case 0xECAAA59D: /* "ImpactEffectWater" */
         mImpactEffectWater = PblHash(pszValue);
         break;
-    case 0xF73EC52A:
+    case 0xF73EC52A: /* "ImpactEffectShieldLarge" */
         mImpactEffectShieldSmall = PblHash(pszValue);
         break;
     default:

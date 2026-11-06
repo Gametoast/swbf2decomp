@@ -166,16 +166,16 @@ void CommandPostClass::SetProperty(unsigned int uProperty, const char* pszValue,
 {
     switch (uProperty)
     {
-    case 0xF1A8F31B:
+    case 0xF1A8F31B: /* "NeutralizeTime" */
         sscanf(pszValue, "%f", &mNeutralizeTime);
         break;
-    case 0xEB1BCBF8:
+    case 0xEB1BCBF8: /* "CaptureTime" */
         sscanf(pszValue, "%f", &mCaptureTime);
         break;
-    case 0x6A83ED9C:
+    case 0x6A83ED9C: /* "HoloOdf" */
         m_pHologramClass = EntityHologramClass::Find(PblHash(pszValue));
         break;
-    case 0xB64210D2:
+    case 0xB64210D2: /* "HoloImageGeometry" */
     {
         char acGeometry[80];
         char acTeam[80];
@@ -186,10 +186,10 @@ void CommandPostClass::SetProperty(unsigned int uProperty, const char* pszValue,
         }
         break;
     }
-    case 0x630C0E9E:
+    case 0x630C0E9E: /* "HoloTurnOnTime" */
         sscanf(pszValue, "%f", &m_fHoloTurnOnTime);
         break;
-    case 0x65A920BA:
+    case 0x65A920BA: /* "AmbientSound" */
     {
         char acTeam[80];
         char acSound[80];
@@ -201,25 +201,25 @@ void CommandPostClass::SetProperty(unsigned int uProperty, const char* pszValue,
         }
         break;
     }
-    case 0x16E4A90E:
+    case 0x16E4A90E: /* "DischargeSound" */
         mSoundDischarge.SetID(pszValue, false, false);
         break;
-    case 0x4EE58508:
+    case 0x4EE58508: /* "ChargeSound" */
         mSoundCharge.SetID(pszValue, false, false);
         break;
-    case 0xF17A02E6:
+    case 0xF17A02E6: /* "CapturedSound" */
         mSoundCaptured.SetID(pszValue, false, false);
         break;
-    case 0x8E39006A:
+    case 0x8E39006A: /* "LostSound" */
         mSoundLost.SetID(pszValue, false, false);
         break;
-    case 0x12CAACAA:
+    case 0x12CAACAA: /* "DisputeSound" */
         mSoundDispute.SetID(pszValue, false, false);
         break;
-    case 0xA33D3401:
+    case 0xA33D3401: /* "SoundPitchDev" */
         sscanf(pszValue, "%f", &mSoundPitchDev);
         break;
-    case 0x6B9B4728:
+    case 0x6B9B4728: /* "CaptureMusic" */
     {
         char acTeam[80];
         char acMusic[80];
@@ -230,7 +230,7 @@ void CommandPostClass::SetProperty(unsigned int uProperty, const char* pszValue,
         }
         break;
     }
-    case 0x42CB8C86:
+    case 0x42CB8C86: /* "LostMusic" */
     {
         char acTeam[80];
         char acMusic[80];
@@ -241,7 +241,7 @@ void CommandPostClass::SetProperty(unsigned int uProperty, const char* pszValue,
         }
         break;
     }
-    case 0x32579F4D:
+    case 0x32579F4D: /* "SpawnPointCount" */
     {
         int iCount = 0;
         sscanf(pszValue, "%i", &iCount);
@@ -261,7 +261,7 @@ void CommandPostClass::SetProperty(unsigned int uProperty, const char* pszValue,
         mSpawnCount = 0;
         break;
     }
-    case 0xA067D145:
+    case 0xA067D145: /* "SpawnPointLocation" */
     {
         if (!mSpawnRotation || !mSpawnPosition)
         {
@@ -280,7 +280,7 @@ void CommandPostClass::SetProperty(unsigned int uProperty, const char* pszValue,
         mSpawnCount++;
         break;
     }
-    case 0xC5190CBA:
+    case 0xC5190CBA: /* "SpawnPointNames" */
     {
         char acFormat[32] = "";
         int iCount = 1;
@@ -317,56 +317,56 @@ void CommandPostClass::SetProperty(unsigned int uProperty, const char* pszValue,
         }
         break;
     }
-    case 0xC069B070:
+    case 0xC069B070: /* "HUDIndexDisplay" */
         mDisplayHUDIndex = atol(pszValue) != 0;
         break;
 
-    case 0xEB13C1FE:
+    case 0xEB13C1FE: /* "ValueBleed_Neutral" */
         sscanf(pszValue, "%d", &mBleedValue[Team::side_Neutral]);
         break;
-    case 0xFDE7C9D2:
+    case 0xFDE7C9D2: /* "ValueBleed_Alliance" */
         sscanf(pszValue, "%d", &mBleedValue[Team::side_Alliance]);
         break;
-    case 0x5A7EB7DB:
+    case 0x5A7EB7DB: /* "ValueBleed_Empire" */
         sscanf(pszValue, "%d", &mBleedValue[Team::side_Empire]);
         break;
-    case 0xDC392F3F:
+    case 0xDC392F3F: /* "ValueBleed_Republic" */
         sscanf(pszValue, "%d", &mBleedValue[Team::side_Republic]);
         break;
-    case 0x2450A89C:
+    case 0x2450A89C: /* "ValueBleed_CIS" */
         sscanf(pszValue, "%d", &mBleedValue[Team::side_CIS]);
         break;
-    case 0xD97FC017:
+    case 0xD97FC017: /* "ValueBleed_Locals" */
         sscanf(pszValue, "%d", &mBleedValue[Team::side_Locals]);
         break;
-    case 0xA340D6B5:
+    case 0xA340D6B5: /* "Value_ATK_Alliance" */
         sscanf(pszValue, "%d", &mStrategicAttackValue[Team::side_Alliance]);
         break;
-    case 0x4DB44670:
+    case 0x4DB44670: /* "Value_ATK_Empire" */
         sscanf(pszValue, "%d", &mStrategicAttackValue[Team::side_Empire]);
         break;
-    case 0x9E78B410:
+    case 0x9E78B410: /* "Value_ATK_Republic" */
         sscanf(pszValue, "%d", &mStrategicAttackValue[Team::side_Republic]);
         break;
-    case 0x00E73245:
+    case 0x00E73245: /* "Value_ATK_CIS" */
         sscanf(pszValue, "%d", &mStrategicAttackValue[Team::side_CIS]);
         break;
-    case 0x573C98A4:
+    case 0x573C98A4: /* "Value_ATK_Locals" */
         sscanf(pszValue, "%d", &mStrategicAttackValue[Team::side_Locals]);
         break;
-    case 0x44A2C4A6:
+    case 0x44A2C4A6: /* "Value_DEF_Alliance" */
         sscanf(pszValue, "%d", &mStrategicDefendValue[Team::side_Alliance]);
         break;
-    case 0xA8679457:
+    case 0xA8679457: /* "Value_DEF_Empire" */
         sscanf(pszValue, "%d", &mStrategicDefendValue[Team::side_Empire]);
         break;
-    case 0x8F5540CB:
+    case 0x8F5540CB: /* "Value_DEF_Republic" */
         sscanf(pszValue, "%d", &mStrategicDefendValue[Team::side_Republic]);
         break;
-    case 0x5BF85AE8:
+    case 0x5BF85AE8: /* "Value_DEF_CIS" */
         sscanf(pszValue, "%d", &mStrategicDefendValue[Team::side_CIS]);
         break;
-    case 0xE689EF93:
+    case 0xE689EF93: /* "Value_DEF_Locals" */
         sscanf(pszValue, "%d", &mStrategicDefendValue[Team::side_Locals]);
         break;
     }
@@ -694,7 +694,7 @@ void CommandPost::Attach(GameObject* pObject)
         EntityDesc desc;
         PblMatrix mBone;
         const GameModel* pModel = mObject->GetModel();
-        if (pModel->_mLod[0]->GetBoneMatrix(0xD1E4CC7A, mBone))
+        if (pModel->_mLod[0]->GetBoneMatrix(0xD1E4CC7A /* "hp_hologram" */, mBone))
         {
             PblMatrix mWorld;
             D3DXMatrixMultiply(reinterpret_cast<D3DXMATRIX*>(&mWorld), reinterpret_cast<const D3DXMATRIX*>(&mBone), reinterpret_cast<const D3DXMATRIX*>(&mObject->GetMatrix()));
@@ -750,13 +750,13 @@ void CommandPost::Kill()
             switch (PblRandom::GetGlobalInt() % 3)
             {
             case 0:
-                pEffectClass = FLEffect::Get(0x02BB1FE0);
+                pEffectClass = FLEffect::Get(0x02BB1FE0 /* "Explosion" */);
                 break;
             case 1:
-                pEffectClass = FLEffect::Get(0xE07F39B5);
+                pEffectClass = FLEffect::Get(0xE07F39B5 /* "med_explosion" */);
                 break;
             case 2:
-                pEffectClass = FLEffect::Get(0x9DB69EE4);
+                pEffectClass = FLEffect::Get(0x9DB69EE4 /* "small_explosion" */);
                 break;
             default:
                 continue;
@@ -803,19 +803,19 @@ void CommandPost::SetProperty(unsigned int uProperty, const char* pszValue)
 {
     switch (uProperty)
     {
-    case 0xC6C161F9:
+    case 0xC6C161F9: /* "CaptureRegion" */
         mCaptureRegion = RedRegion::Find(PblHash(pszValue));
         break;
-    case 0x805C1F8A:
+    case 0x805C1F8A: /* "ControlRegion" */
         mControlRegion = RedRegion::Find(PblHash(pszValue));
         break;
-    case 0x76ED2F81:
+    case 0x76ED2F81: /* "KillRegion" */
         mKillRegion = RedRegion::Find(PblHash(pszValue));
         break;
-    case 0x9B4AAD0C:
+    case 0x9B4AAD0C: /* "SpawnRegion" */
         mSpawnRegion = RedRegion::Find(PblHash(pszValue));
         break;
-    case 0x0DBA4CB3:
+    case 0x0DBA4CB3: /* "Radius" */
     {
         float fRadius = 0.0f;
         sscanf(pszValue, "%f", &fRadius);
@@ -826,7 +826,7 @@ void CommandPost::SetProperty(unsigned int uProperty, const char* pszValue)
             desc.mMatrix = GetMatrix();
             desc.mSize.w = fRadius;
             desc.mNameId = GetGameObject()->mId;
-            desc.mTypeId = 0xAFD98518;
+            desc.mTypeId = 0xAFD98518 /* "Sphere" */;
             if (!mCaptureRegion)
             {
                 mCaptureRegion = new RedRegion(desc);
@@ -838,7 +838,7 @@ void CommandPost::SetProperty(unsigned int uProperty, const char* pszValue)
         }
         break;
     }
-    case 0xDDE0B14F:
+    case 0xDDE0B14F: /* "SpawnPath" */
         if (!strncmp("", pszValue, 1))
         {
             mSpawnPath = 0;
@@ -848,16 +848,16 @@ void CommandPost::SetProperty(unsigned int uProperty, const char* pszValue)
             mSpawnPath = const_cast<RedPath*>(RedPath::Find(PblHash(pszValue)));
         }
         break;
-    case 0xDAD215B0:
+    case 0xDAD215B0: /* "AllyPath" */
         mAllyPath = const_cast<RedPath*>(RedPath::Find(PblHash(pszValue)));
         break;
-    case 0x73466220:
+    case 0x73466220: /* "TurretPath" */
         mTurretPath = const_cast<RedPath*>(RedPath::Find(PblHash(pszValue)));
         break;
-    case 0x7136FD3E:
+    case 0x7136FD3E: /* "AllyCount" */
         sscanf(pszValue, "%i", &mAllyCount);
         break;
-    case 0xF69717FD:
+    case 0xF69717FD: /* "Label" */
     {
         mLabel = const_cast<char*>(StringDB::Store(PblHash(pszValue), pszValue));
         char acKey[256];
@@ -870,223 +870,223 @@ void CommandPost::SetProperty(unsigned int uProperty, const char* pszValue)
         }
         break;
     }
-    case 0x66BCDAEA:
+    case 0x66BCDAEA: /* "HUDIndex" */
         mHUDPostIndex = atol(pszValue);
         break;
-    case 0xC069B070:
+    case 0xC069B070: /* "HUDIndexDisplay" */
         mDisplayHUDIndex = atol(pszValue) != 0;
         break;
-    case 0xE07282C2:
+    case 0xE07282C2: /* "AISpawnWeight" */
     {
         float fWeight = (float)atof(pszValue);
         mAISpawnWeight = fWeight > 0.0f ? fWeight : 0.0f;
         break;
     }
 
-    case 0xEB13C1FE:
+    case 0xEB13C1FE: /* "ValueBleed_Neutral" */
         sscanf(pszValue, "%d", &mBleedValue[Team::side_Neutral]);
         break;
-    case 0xFDE7C9D2:
+    case 0xFDE7C9D2: /* "ValueBleed_Alliance" */
         sscanf(pszValue, "%d", &mBleedValue[Team::side_Alliance]);
         break;
-    case 0x5A7EB7DB:
+    case 0x5A7EB7DB: /* "ValueBleed_Empire" */
         sscanf(pszValue, "%d", &mBleedValue[Team::side_Empire]);
         break;
-    case 0xDC392F3F:
+    case 0xDC392F3F: /* "ValueBleed_Republic" */
         sscanf(pszValue, "%d", &mBleedValue[Team::side_Republic]);
         break;
-    case 0x2450A89C:
+    case 0x2450A89C: /* "ValueBleed_CIS" */
         sscanf(pszValue, "%d", &mBleedValue[Team::side_CIS]);
         break;
-    case 0xD97FC017:
+    case 0xD97FC017: /* "ValueBleed_Locals" */
         sscanf(pszValue, "%d", &mBleedValue[Team::side_Locals]);
         break;
-    case 0xA340D6B5:
+    case 0xA340D6B5: /* "Value_ATK_Alliance" */
         sscanf(pszValue, "%d", &mStrategicAttackValue[Team::side_Alliance]);
         break;
-    case 0x4DB44670:
+    case 0x4DB44670: /* "Value_ATK_Empire" */
         sscanf(pszValue, "%d", &mStrategicAttackValue[Team::side_Empire]);
         break;
-    case 0x9E78B410:
+    case 0x9E78B410: /* "Value_ATK_Republic" */
         sscanf(pszValue, "%d", &mStrategicAttackValue[Team::side_Republic]);
         break;
-    case 0x00E73245:
+    case 0x00E73245: /* "Value_ATK_CIS" */
         sscanf(pszValue, "%d", &mStrategicAttackValue[Team::side_CIS]);
         break;
-    case 0x573C98A4:
+    case 0x573C98A4: /* "Value_ATK_Locals" */
         sscanf(pszValue, "%d", &mStrategicAttackValue[Team::side_Locals]);
         break;
-    case 0x44A2C4A6:
+    case 0x44A2C4A6: /* "Value_DEF_Alliance" */
         sscanf(pszValue, "%d", &mStrategicDefendValue[Team::side_Alliance]);
         break;
-    case 0xA8679457:
+    case 0xA8679457: /* "Value_DEF_Empire" */
         sscanf(pszValue, "%d", &mStrategicDefendValue[Team::side_Empire]);
         break;
-    case 0x8F5540CB:
+    case 0x8F5540CB: /* "Value_DEF_Republic" */
         sscanf(pszValue, "%d", &mStrategicDefendValue[Team::side_Republic]);
         break;
-    case 0x5BF85AE8:
+    case 0x5BF85AE8: /* "Value_DEF_CIS" */
         sscanf(pszValue, "%d", &mStrategicDefendValue[Team::side_CIS]);
         break;
-    case 0xE689EF93:
+    case 0xE689EF93: /* "Value_DEF_Locals" */
         sscanf(pszValue, "%d", &mStrategicDefendValue[Team::side_Locals]);
         break;
 
-    case 0x3994A056:
+    case 0x3994A056: /* "SoldierBan" */
         if (atoi(pszValue) > 0)
         {
             mStrategicBan |= 0x01;
         }
         break;
-    case 0x58FC17EE:
+    case 0x58FC17EE: /* "HoverBan" */
         if (atoi(pszValue) > 0)
         {
             mStrategicBan |= 0x02;
         }
         break;
-    case 0x6D1CA06D:
+    case 0x6D1CA06D: /* "SmallBan" */
         if (atoi(pszValue) > 0)
         {
             mStrategicBan |= 0x04;
         }
         break;
-    case 0xC8F3C76B:
+    case 0xC8F3C76B: /* "MediumBan" */
         if (atoi(pszValue) > 0)
         {
             mStrategicBan |= 0x08;
         }
         break;
-    case 0xB08090E7:
+    case 0xB08090E7: /* "HugeBan" */
         if (atoi(pszValue) > 0)
         {
             mStrategicBan |= 0x10;
         }
         break;
-    case 0x1CD984F6:
+    case 0x1CD984F6: /* "FlyerBan" */
         if (atoi(pszValue) > 0)
         {
             mStrategicBan |= 0x20;
         }
         break;
 
-    case 0x13AD1EA0:
+    case 0x13AD1EA0: /* "VO_All_AllCapture" */
         mVoiceOver[Team::side_Alliance].mStream[Team::side_Alliance][VoiceOver::stream_Capture].SetID(pszValue, false, false);
         break;
-    case 0x9E71F320:
+    case 0x9E71F320: /* "VO_All_AllLost" */
         mVoiceOver[Team::side_Alliance].mStream[Team::side_Alliance][VoiceOver::stream_Lost].SetID(pszValue, false, false);
         break;
-    case 0x22BD3453:
+    case 0x22BD3453: /* "VO_All_AllInDispute" */
         mVoiceOver[Team::side_Alliance].mStream[Team::side_Alliance][VoiceOver::stream_Dispute].SetID(pszValue, false, false);
         break;
-    case 0xFD4B3AA1:
+    case 0xFD4B3AA1: /* "VO_All_AllSaved" */
         mVoiceOver[Team::side_Alliance].mStream[Team::side_Alliance][VoiceOver::stream_Saved].SetID(pszValue, false, false);
         break;
-    case 0xBA31CB0A:
+    case 0xBA31CB0A: /* "VO_All_AllInfo" */
         mVoiceOver[Team::side_Alliance].mStream[Team::side_Alliance][VoiceOver::stream_Info].SetID(pszValue, false, false);
         break;
-    case 0x64340317:
+    case 0x64340317: /* "VO_All_ImpCapture" */
         mVoiceOver[Team::side_Alliance].mStream[Team::side_Empire][VoiceOver::stream_Capture].SetID(pszValue, false, false);
         break;
-    case 0xC0FC4645:
+    case 0xC0FC4645: /* "VO_All_ImpLost" */
         mVoiceOver[Team::side_Alliance].mStream[Team::side_Empire][VoiceOver::stream_Lost].SetID(pszValue, false, false);
         break;
-    case 0xE018B5A4:
+    case 0xE018B5A4: /* "VO_All_ImpInDispute" */
         mVoiceOver[Team::side_Alliance].mStream[Team::side_Empire][VoiceOver::stream_Dispute].SetID(pszValue, false, false);
         break;
-    case 0x1ADDABEA:
+    case 0x1ADDABEA: /* "VO_All_ImpSaved" */
         mVoiceOver[Team::side_Alliance].mStream[Team::side_Empire][VoiceOver::stream_Saved].SetID(pszValue, false, false);
         break;
-    case 0xF7C6ECCB:
+    case 0xF7C6ECCB: /* "VO_All_ImpInfo" */
         mVoiceOver[Team::side_Alliance].mStream[Team::side_Empire][VoiceOver::stream_Info].SetID(pszValue, false, false);
         break;
-    case 0xD74A7FCB:
+    case 0xD74A7FCB: /* "VO_Imp_AllCapture" */
         mVoiceOver[Team::side_Empire].mStream[Team::side_Alliance][VoiceOver::stream_Capture].SetID(pszValue, false, false);
         break;
-    case 0x2446D141:
+    case 0x2446D141: /* "VO_Imp_AllLost" */
         mVoiceOver[Team::side_Empire].mStream[Team::side_Alliance][VoiceOver::stream_Lost].SetID(pszValue, false, false);
         break;
-    case 0x87834218:
+    case 0x87834218: /* "VO_Imp_AllInDispute" */
         mVoiceOver[Team::side_Empire].mStream[Team::side_Alliance][VoiceOver::stream_Dispute].SetID(pszValue, false, false);
         break;
-    case 0x23121DDE:
+    case 0x23121DDE: /* "VO_Imp_AllSaved" */
         mVoiceOver[Team::side_Empire].mStream[Team::side_Alliance][VoiceOver::stream_Saved].SetID(pszValue, false, false);
         break;
-    case 0x05F2BEC7:
+    case 0x05F2BEC7: /* "VO_Imp_AllInfo" */
         mVoiceOver[Team::side_Empire].mStream[Team::side_Alliance][VoiceOver::stream_Info].SetID(pszValue, false, false);
         break;
-    case 0xBD2190B4:
+    case 0xBD2190B4: /* "VO_Imp_ImpCapture" */
         mVoiceOver[Team::side_Empire].mStream[Team::side_Empire][VoiceOver::stream_Capture].SetID(pszValue, false, false);
         break;
-    case 0x1816200C:
+    case 0x1816200C: /* "VO_Imp_ImpLost" */
         mVoiceOver[Team::side_Empire].mStream[Team::side_Empire][VoiceOver::stream_Lost].SetID(pszValue, false, false);
         break;
-    case 0xDED807E7:
+    case 0xDED807E7: /* "VO_Imp_ImpInDispute" */
         mVoiceOver[Team::side_Empire].mStream[Team::side_Empire][VoiceOver::stream_Dispute].SetID(pszValue, false, false);
         break;
-    case 0xC2871425:
+    case 0xC2871425: /* "VO_Imp_ImpSaved" */
         mVoiceOver[Team::side_Empire].mStream[Team::side_Empire][VoiceOver::stream_Saved].SetID(pszValue, false, false);
         break;
-    case 0x6F900A76:
+    case 0x6F900A76: /* "VO_Imp_ImpInfo" */
         mVoiceOver[Team::side_Empire].mStream[Team::side_Empire][VoiceOver::stream_Info].SetID(pszValue, false, false);
         break;
-    case 0x951D8F40:
+    case 0x951D8F40: /* "VO_Rep_RepCapture" */
         mVoiceOver[Team::side_Republic].mStream[Team::side_Republic][VoiceOver::stream_Capture].SetID(pszValue, false, false);
         break;
-    case 0xA4E3CE40:
+    case 0xA4E3CE40: /* "VO_Rep_RepLost" */
         mVoiceOver[Team::side_Republic].mStream[Team::side_Republic][VoiceOver::stream_Lost].SetID(pszValue, false, false);
         break;
-    case 0xF8D18CF3:
+    case 0xF8D18CF3: /* "VO_Rep_RepInDispute" */
         mVoiceOver[Team::side_Republic].mStream[Team::side_Republic][VoiceOver::stream_Dispute].SetID(pszValue, false, false);
         break;
-    case 0x1BD37E41:
+    case 0x1BD37E41: /* "VO_Rep_RepSaved" */
         mVoiceOver[Team::side_Republic].mStream[Team::side_Republic][VoiceOver::stream_Saved].SetID(pszValue, false, false);
         break;
-    case 0xBE2AD02A:
+    case 0xBE2AD02A: /* "VO_Rep_RepInfo" */
         mVoiceOver[Team::side_Republic].mStream[Team::side_Republic][VoiceOver::stream_Info].SetID(pszValue, false, false);
         break;
-    case 0x7B21958E:
+    case 0x7B21958E: /* "VO_Rep_CISCapture" */
         mVoiceOver[Team::side_Republic].mStream[Team::side_CIS][VoiceOver::stream_Capture].SetID(pszValue, false, false);
         break;
-    case 0xB2BA322A:
+    case 0xB2BA322A: /* "VO_Rep_CISLost" */
         mVoiceOver[Team::side_Republic].mStream[Team::side_CIS][VoiceOver::stream_Lost].SetID(pszValue, false, false);
         break;
-    case 0x8653E871:
+    case 0x8653E871: /* "VO_Rep_CISInDispute" */
         mVoiceOver[Team::side_Republic].mStream[Team::side_CIS][VoiceOver::stream_Dispute].SetID(pszValue, false, false);
         break;
-    case 0x6D015027:
+    case 0x6D015027: /* "VO_Rep_CISSaved" */
         mVoiceOver[Team::side_Republic].mStream[Team::side_CIS][VoiceOver::stream_Saved].SetID(pszValue, false, false);
         break;
-    case 0x1F5E25A0:
+    case 0x1F5E25A0: /* "VO_Rep_CISInfo" */
         mVoiceOver[Team::side_Republic].mStream[Team::side_CIS][VoiceOver::stream_Info].SetID(pszValue, false, false);
         break;
-    case 0x1934685E:
+    case 0x1934685E: /* "VO_CIS_RepCapture" */
         mVoiceOver[Team::side_CIS].mStream[Team::side_Republic][VoiceOver::stream_Capture].SetID(pszValue, false, false);
         break;
-    case 0x9F6648DA:
+    case 0x9F6648DA: /* "VO_CIS_RepLost" */
         mVoiceOver[Team::side_CIS].mStream[Team::side_Republic][VoiceOver::stream_Lost].SetID(pszValue, false, false);
         break;
-    case 0x0D03A541:
+    case 0x0D03A541: /* "VO_CIS_RepInDispute" */
         mVoiceOver[Team::side_CIS].mStream[Team::side_Republic][VoiceOver::stream_Dispute].SetID(pszValue, false, false);
         break;
-    case 0x6EB55FF7:
+    case 0x6EB55FF7: /* "VO_CIS_RepSaved" */
         mVoiceOver[Team::side_CIS].mStream[Team::side_Republic][VoiceOver::stream_Saved].SetID(pszValue, false, false);
         break;
-    case 0x66A3FA90:
+    case 0x66A3FA90: /* "VO_CIS_RepInfo" */
         mVoiceOver[Team::side_CIS].mStream[Team::side_Republic][VoiceOver::stream_Info].SetID(pszValue, false, false);
         break;
-    case 0x8F270798:
+    case 0x8F270798: /* "VO_CIS_CISCapture" */
         mVoiceOver[Team::side_CIS].mStream[Team::side_CIS][VoiceOver::stream_Capture].SetID(pszValue, false, false);
         break;
-    case 0xD4D671E8:
+    case 0xD4D671E8: /* "VO_CIS_CISLost" */
         mVoiceOver[Team::side_CIS].mStream[Team::side_CIS][VoiceOver::stream_Lost].SetID(pszValue, false, false);
         break;
-    case 0x5BA686BB:
+    case 0x5BA686BB: /* "VO_CIS_CISInDispute" */
         mVoiceOver[Team::side_CIS].mStream[Team::side_CIS][VoiceOver::stream_Dispute].SetID(pszValue, false, false);
         break;
-    case 0x3EE46599:
+    case 0x3EE46599: /* "VO_CIS_CISSaved" */
         mVoiceOver[Team::side_CIS].mStream[Team::side_CIS][VoiceOver::stream_Saved].SetID(pszValue, false, false);
         break;
-    case 0xB708CE82:
+    case 0xB708CE82: /* "VO_CIS_CISInfo" */
         mVoiceOver[Team::side_CIS].mStream[Team::side_CIS][VoiceOver::stream_Info].SetID(pszValue, false, false);
         break;
     }

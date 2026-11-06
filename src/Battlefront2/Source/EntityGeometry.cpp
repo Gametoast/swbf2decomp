@@ -134,7 +134,7 @@ void EntityGeometry::SetProperty(unsigned int uProperty, const char* pszValue)
 {
     switch (uProperty)
     {
-    case 0x47c86b4a:
+    case 0x47c86b4a: /* "GeometryName" */
     {
         const GameModel* pModel = GameModel::Find(PblHash(pszValue));
         if (pModel)
@@ -158,10 +158,10 @@ void EntityGeometry::SetProperty(unsigned int uProperty, const char* pszValue)
         }
         break;
     }
-    case 0x235baa54:
+    case 0x235baa54: /* "LODPriorityMod" */
         _fPriorityMod = (float)atof(pszValue);
         break;
-    case 0x6ca8a6d1:
+    case 0x6ca8a6d1: /* "IsVisible" */
         if (atoi(pszValue))
         {
             if (!_bActive)
@@ -174,7 +174,7 @@ void EntityGeometry::SetProperty(unsigned int uProperty, const char* pszValue)
             Deactivate();
         }
         break;
-    case 0xbc85e3be:
+    case 0xbc85e3be: /* "IsCollidable" */
         if (atoi(pszValue))
         {
             if (!IsInCollisionList())
@@ -511,29 +511,29 @@ EntityGeometryClass::~EntityGeometryClass()
 // FUNCTION: SWBF2 0x004bbce0
 void EntityGeometryClass::SetProperty(unsigned int uProperty, const char* pszValue)
 {
-    if (uProperty == 0xda1de03d)
+    if (uProperty == 0xda1de03d /* "CHUNKSECTION" */)
     {
         switch (PblHash(pszValue))
         {
-        case 0x80bf3dc2:
-        case 0xa00e8589:
+        case 0x80bf3dc2: /* "CHUNK" */
+        case 0xa00e8589: /* "CHUNK1" */
             sCurrentChunk = 0;
             break;
-        case 0x9d0e80d0: sCurrentChunk = 1; break;
-        case 0x9e0e8263: sCurrentChunk = 2; break;
-        case 0xa30e8a42: sCurrentChunk = 3; break;
-        case 0xa40e8bd5: sCurrentChunk = 4; break;
-        case 0xa10e871c: sCurrentChunk = 5; break;
-        case 0xa20e88af: sCurrentChunk = 6; break;
-        case 0xa70e908e: sCurrentChunk = 7; break;
-        case 0xa80e9221: sCurrentChunk = 8; break;
+        case 0x9d0e80d0: /* "CHUNK2" */ sCurrentChunk = 1; break;
+        case 0x9e0e8263: /* "CHUNK3" */ sCurrentChunk = 2; break;
+        case 0xa30e8a42: /* "CHUNK4" */ sCurrentChunk = 3; break;
+        case 0xa40e8bd5: /* "CHUNK5" */ sCurrentChunk = 4; break;
+        case 0xa10e871c: /* "CHUNK6" */ sCurrentChunk = 5; break;
+        case 0xa20e88af: /* "CHUNK7" */ sCurrentChunk = 6; break;
+        case 0xa70e908e: /* "CHUNK8" */ sCurrentChunk = 7; break;
+        case 0xa80e9221: /* "CHUNK9" */ sCurrentChunk = 8; break;
         default: sCurrentChunk = -1; break;
         }
     }
 
     switch (uProperty)
     {
-    case 0x47c86b4a:
+    case 0x47c86b4a: /* "GeometryName" */
     {
         mModel = const_cast<GameModel*>(GameModel::Find(PblHash(pszValue)));
 
@@ -561,14 +561,14 @@ void EntityGeometryClass::SetProperty(unsigned int uProperty, const char* pszVal
         break;
     }
 
-    case 0x235baa54:
+    case 0x235baa54: /* "LODPriorityMod" */
         _fPriorityMod = (float)atof(pszValue);
         break;
-    case 0x2c88f5bd:
+    case 0x2c88f5bd: /* "MaxShadowLength" */
         sscanf(pszValue, "%f", &mMaxShadowLength);
         break;
 
-    case 0x827eb1c9:
+    case 0x827eb1c9: /* "Lighting" */
     {
         size_t uLength = strlen(pszValue);
         if (uLength)
@@ -585,7 +585,7 @@ void EntityGeometryClass::SetProperty(unsigned int uProperty, const char* pszVal
         break;
     }
 
-    case 0xe3019fc9:
+    case 0xe3019fc9: /* "TargetPointOffset" */
     {
         float x, y, z;
         sscanf(pszValue, "%f %f %f", &x, &y, &z);
@@ -595,7 +595,7 @@ void EntityGeometryClass::SetProperty(unsigned int uProperty, const char* pszVal
         break;
     }
 
-    case 0xced77479:
+    case 0xced77479: /* "HitLocation" */
     {
         float fMultiplier = 1.0f;
         char acName[64];
@@ -617,33 +617,33 @@ void EntityGeometryClass::SetProperty(unsigned int uProperty, const char* pszVal
         break;
     }
 
-    case 0x6d8fe606:
+    case 0x6d8fe606: /* "DenyFlyerLand" */
         mCollisionModel.mDenyFlyerLand = atoi(pszValue) != 0;
         break;
-    case 0xd9d02e03:
+    case 0xd9d02e03: /* "DeathOnFlyerLand" */
         mCollisionModel.mDeathOnFlyerLand = atoi(pszValue) != 0;
         break;
 
-    case 0x9828f43f:
+    case 0x9828f43f: /* "BuildingCollision" */
         AddBuildingCollision(pszValue);
         break;
-    case 0xde5365a1:
+    case 0xde5365a1: /* "VehicleCollision" */
         AddVehicleCollision(pszValue);
         break;
-    case 0xafe693ce:
+    case 0xafe693ce: /* "TerrainCollision" */
         AddTerrainCollision(pszValue);
         break;
-    case 0xfb2bdf07:
+    case 0xfb2bdf07: /* "OrdnanceCollision" */
         AddOrdnanceCollision(pszValue);
         break;
-    case 0x5dfdc07f:
+    case 0x5dfdc07f: /* "SoldierCollision" */
         AddSoldierCollision(pszValue);
         break;
-    case 0xd23dbaf8:
+    case 0xd23dbaf8: /* "TargetableCollision" */
         AddTargetableCollision(pszValue);
         break;
 
-    case 0xda328455:
+    case 0xda328455: /* "ChunkGeometryName" */
     {
         if ((unsigned int)sCurrentChunk > 9)
         {
@@ -708,12 +708,12 @@ void EntityGeometryClass::SetProperty(unsigned int uProperty, const char* pszVal
         break;
     }
 
-    case 0x74e63ee8:
-    case 0x07d00083:
-    case 0x330acaab:
-    case 0x8cf29543:
-    case 0x7cdccf2a:
-    case 0xfec8cea9:
+    case 0x74e63ee8: /* "TargetableCollisionPrim" */
+    case 0x07d00083: /* "SoldierCollisionPrim" */
+    case 0x330acaab: /* "OrdnanceCollisionPrim" */
+    case 0x8cf29543: /* "BuildingCollisionPrim" */
+    case 0x7cdccf2a: /* "TerrainCollisionPrim" */
+    case 0xfec8cea9: /* "VehicleCollisionPrim" */
     {
         PblVector3 vCenter = mModel->_mModel->_BoundingSphere.GetCenter();
 
@@ -738,15 +738,15 @@ void EntityGeometryClass::SetProperty(unsigned int uProperty, const char* pszVal
         float fRadius;
         switch (PblTEMPHash(acType))
         {
-        case 0x1ccafdcc:
+        case 0x1ccafdcc: /* "box" */
             primitive.SetBox(a, b, c, -1.0f);
             fRadius = (float)sqrt((double)(a * a + b * b + c * c)) + Length(vCenter - vPos);
             break;
-        case 0x4a182b8f:
+        case 0x4a182b8f: /* "cylinder" */
             primitive.SetCylinder(a, b);
             fRadius = (float)sqrt((double)(a * 2.0f * a + b * 0.25f * b)) + Length(vCenter - vPos);
             break;
-        case 0x73f51491:
+        case 0x73f51491: /* "aacylinder" */
             primitive.SetAACylinder(a, b);
             fRadius = (float)sqrt((double)(a * 2.0f * a + b * 0.25f * b)) + Length(vCenter - vPos);
             break;
@@ -771,12 +771,12 @@ void EntityGeometryClass::SetProperty(unsigned int uProperty, const char* pszVal
         {
             switch (uProperty)
             {
-            case 0x74e63ee8: targetableMask.SetId(iMaskId); break;
-            case 0x330acaab: ordnanceMask.SetId(iMaskId); break;
-            case 0x07d00083: softMask.SetId(iMaskId); break;
-            case 0x7cdccf2a: terrainMask.SetId(iMaskId); break;
-            case 0x8cf29543: staticMask.SetId(iMaskId); break;
-            case 0xfec8cea9: rigidMask.SetId(iMaskId); break;
+            case 0x74e63ee8: /* "TargetableCollisionPrim" */ targetableMask.SetId(iMaskId); break;
+            case 0x330acaab: /* "OrdnanceCollisionPrim" */ ordnanceMask.SetId(iMaskId); break;
+            case 0x07d00083: /* "SoldierCollisionPrim" */ softMask.SetId(iMaskId); break;
+            case 0x7cdccf2a: /* "TerrainCollisionPrim" */ terrainMask.SetId(iMaskId); break;
+            case 0x8cf29543: /* "BuildingCollisionPrim" */ staticMask.SetId(iMaskId); break;
+            case 0xfec8cea9: /* "VehicleCollisionPrim" */ rigidMask.SetId(iMaskId); break;
             }
             mCollisionModel.SetCollisionMask(COLL_TERRAIN, terrainMask);
             mCollisionModel.SetCollisionMask(COLL_STATIC, staticMask);
@@ -788,7 +788,7 @@ void EntityGeometryClass::SetProperty(unsigned int uProperty, const char* pszVal
         break;
     }
 
-    case 0x0a157be2:
+    case 0x0a157be2: /* "ChunkTerrainCollisions" */
         if ((unsigned int)sCurrentChunk <= 9)
         {
             unsigned short usCount;
@@ -796,26 +796,26 @@ void EntityGeometryClass::SetProperty(unsigned int uProperty, const char* pszVal
             mChunkDescriptors[sCurrentChunk]->mMaxTerrainCollisions = (unsigned char)usCount;
         }
         break;
-    case 0x048f1226:
+    case 0x048f1226: /* "ChunkTerrainEffect" */
         if ((unsigned int)sCurrentChunk <= 9)
         {
             mChunkDescriptors[sCurrentChunk]->mTerrainImpactEffect = PblHash(pszValue);
         }
         break;
-    case 0xc8e32dc3:
+    case 0xc8e32dc3: /* "ChunkPhysics" */
         if ((unsigned int)sCurrentChunk <= 9)
         {
             switch (PblHash(pszValue))
             {
-            case 0xff79b33c: mChunkDescriptors[sCurrentChunk]->mPhysicsType = 0; break;
-            case 0xd290c23b: mChunkDescriptors[sCurrentChunk]->mPhysicsType = 2; break;
-            case 0x2648cd55: mChunkDescriptors[sCurrentChunk]->mPhysicsType = 3; break;
-            case 0x493ea232: mChunkDescriptors[sCurrentChunk]->mPhysicsType = 4; break;
+            case 0xff79b33c: /* "FULL" */ mChunkDescriptors[sCurrentChunk]->mPhysicsType = 0; break;
+            case 0xd290c23b: /* "STATIC" */ mChunkDescriptors[sCurrentChunk]->mPhysicsType = 2; break;
+            case 0x2648cd55: /* "LEAF" */ mChunkDescriptors[sCurrentChunk]->mPhysicsType = 3; break;
+            case 0x493ea232: /* "COCKPIT" */ mChunkDescriptors[sCurrentChunk]->mPhysicsType = 4; break;
             default: mChunkDescriptors[sCurrentChunk]->mPhysicsType = 1; break;
             }
         }
         break;
-    case 0x166f6939:
+    case 0x166f6939: /* "ChunkOmega" */
         if ((unsigned int)sCurrentChunk <= 9)
         {
             float x, y, z;
@@ -826,7 +826,7 @@ void EntityGeometryClass::SetProperty(unsigned int uProperty, const char* pszVal
             pDescriptor->mOmega.z = z;
         }
         break;
-    case 0xd0259d88:
+    case 0xd0259d88: /* "ChunkGravity" */
         if ((unsigned int)sCurrentChunk <= 9)
         {
             float x, y, z;
@@ -837,84 +837,84 @@ void EntityGeometryClass::SetProperty(unsigned int uProperty, const char* pszVal
             pDescriptor->mGravity.z = z;
         }
         break;
-    case 0xc2f5ffd5:
+    case 0xc2f5ffd5: /* "ChunkBounciness" */
         if ((unsigned int)sCurrentChunk <= 9)
         {
             sscanf(pszValue, "%f", &mChunkDescriptors[sCurrentChunk]->mCoefficientOfRestitution);
         }
         break;
-    case 0xb94ae34e:
+    case 0xb94ae34e: /* "ChunkStickiness" */
         if ((unsigned int)sCurrentChunk <= 9)
         {
             sscanf(pszValue, "%f", &mChunkDescriptors[sCurrentChunk]->mCoefficientOfFriction);
         }
         break;
-    case 0x1cdaebc2:
+    case 0x1cdaebc2: /* "ChunkSimpleFriction" */
         if ((unsigned int)sCurrentChunk <= 9)
         {
             sscanf(pszValue, "%f", &mChunkDescriptors[sCurrentChunk]->mSimpleFrictionConstant);
         }
         break;
-    case 0xed35b79b:
+    case 0xed35b79b: /* "ChunkDeathSpeed" */
         if ((unsigned int)sCurrentChunk <= 9)
         {
             sscanf(pszValue, "%f", &mChunkDescriptors[sCurrentChunk]->mMinDeathCollisionSpeed);
         }
         break;
-    case 0x4f17fc11:
+    case 0x4f17fc11: /* "ChunkLifetime" */
         if ((unsigned int)sCurrentChunk <= 9)
         {
             sscanf(pszValue, "%f", &mChunkDescriptors[sCurrentChunk]->mMaxStaticLifetime);
         }
         break;
-    case 0xfeb5ed07:
+    case 0xfeb5ed07: /* "ChunkLinearDamping" */
         if ((unsigned int)sCurrentChunk <= 9)
         {
             sscanf(pszValue, "%f", &mChunkDescriptors[sCurrentChunk]->mLinearDamping);
         }
         break;
-    case 0x0e3bec8e:
+    case 0x0e3bec8e: /* "ChunkAngularDamping" */
         if ((unsigned int)sCurrentChunk <= 9)
         {
             sscanf(pszValue, "%f", &mChunkDescriptors[sCurrentChunk]->mAngularDamping);
         }
         break;
-    case 0xc74f3df1:
+    case 0xc74f3df1: /* "ChunkKeepSoldierCollision" */
         mChunkDescriptors[sCurrentChunk]->mKeepSoldierCollisions = atoi(pszValue) != 0;
         break;
-    case 0x945d1d15:
+    case 0x945d1d15: /* "ChunkSpeed" */
         if ((unsigned int)sCurrentChunk <= 9)
         {
             sscanf(pszValue, "%f", &mInitialChunkSpeed[sCurrentChunk]);
         }
         break;
-    case 0xb3574d92:
+    case 0xb3574d92: /* "ChunkVelocityFactor" */
         if ((unsigned int)sCurrentChunk <= 9)
         {
             sscanf(pszValue, "%f", &mChunkVelocityFactor[sCurrentChunk]);
         }
         break;
-    case 0xc316ae10:
+    case 0xc316ae10: /* "ChunkUpFactor" */
         if ((unsigned int)sCurrentChunk <= 9)
         {
             sscanf(pszValue, "%f", &mChunkUpFactor[sCurrentChunk]);
         }
         break;
-    case 0xebf014fd:
+    case 0xebf014fd: /* "ChunkNodeName" */
         if ((unsigned int)sCurrentChunk <= 9)
         {
             mChunkAttachPoints[sCurrentChunk] = PblTEMPHash(pszValue);
         }
         break;
 
-    case 0x94f0544b:
+    case 0x94f0544b: /* "ChunkTrailEffect" */
         if ((unsigned int)sCurrentChunk <= 9 && (unsigned int)sCurrentTrail <= 2)
         {
             mChunkDescriptors[sCurrentChunk]->mTrailEffect[sCurrentTrail] = PblHash(pszValue);
             ++sCurrentTrail;
         }
         break;
-    case 0xa8fb54e9:
+    case 0xa8fb54e9: /* "ChunkTrailNodeName" */
         if ((unsigned int)sCurrentChunk <= 9)
         {
             unsigned int uTrail = sCurrentTrail - 1;
@@ -924,14 +924,14 @@ void EntityGeometryClass::SetProperty(unsigned int uProperty, const char* pszVal
             }
         }
         break;
-    case 0xd350c3de:
+    case 0xd350c3de: /* "ChunkSmokeEffect" */
         if ((unsigned int)sCurrentChunk <= 9 && (unsigned int)sCurrentSmoke <= 2)
         {
             mChunkDescriptors[sCurrentChunk]->mSmokeEffect[sCurrentSmoke] = PblHash(pszValue);
             ++sCurrentSmoke;
         }
         break;
-    case 0x472e0410:
+    case 0x472e0410: /* "ChunkSmokeNodeName" */
         if ((unsigned int)sCurrentChunk <= 9)
         {
             unsigned int uSmoke = sCurrentSmoke - 1;
@@ -977,7 +977,7 @@ int EntityGeometryClass::GetNumChunks()
 bool EntityGeometryClass::AddBuildingCollision(const char* pszValue)
 {
     unsigned int uName = PblHash(pszValue);
-    if (uName != 0xada7afdb && uName != 0x5c6e1222)
+    if (uName != 0xada7afdb /* "none" */ && uName != 0x5c6e1222 /* "clear" */)
     {
         int iMaskId = mCollisionModel.GetMaskId(uName);
         if (iMaskId < 0)
@@ -999,7 +999,7 @@ bool EntityGeometryClass::AddBuildingCollision(const char* pszValue)
 bool EntityGeometryClass::AddVehicleCollision(const char* pszValue)
 {
     unsigned int uName = PblHash(pszValue);
-    if (uName != 0xada7afdb && uName != 0x5c6e1222)
+    if (uName != 0xada7afdb /* "none" */ && uName != 0x5c6e1222 /* "clear" */)
     {
         int iMaskId = mCollisionModel.GetMaskId(uName);
         if (iMaskId < 0)
@@ -1021,7 +1021,7 @@ bool EntityGeometryClass::AddVehicleCollision(const char* pszValue)
 bool EntityGeometryClass::AddTerrainCollision(const char* pszValue)
 {
     unsigned int uName = PblHash(pszValue);
-    if (uName != 0xada7afdb && uName != 0x5c6e1222)
+    if (uName != 0xada7afdb /* "none" */ && uName != 0x5c6e1222 /* "clear" */)
     {
         int iMaskId = mCollisionModel.GetMaskId(uName);
         if (iMaskId < 0)
@@ -1043,7 +1043,7 @@ bool EntityGeometryClass::AddTerrainCollision(const char* pszValue)
 bool EntityGeometryClass::AddOrdnanceCollision(const char* pszValue)
 {
     unsigned int uName = PblHash(pszValue);
-    if (uName != 0xada7afdb && uName != 0x5c6e1222)
+    if (uName != 0xada7afdb /* "none" */ && uName != 0x5c6e1222 /* "clear" */)
     {
         int iMaskId = mCollisionModel.GetMaskId(uName);
         if (iMaskId < 0)
@@ -1065,7 +1065,7 @@ bool EntityGeometryClass::AddOrdnanceCollision(const char* pszValue)
 bool EntityGeometryClass::AddSoldierCollision(const char* pszValue)
 {
     unsigned int uName = PblHash(pszValue);
-    if (uName != 0xada7afdb && uName != 0x5c6e1222)
+    if (uName != 0xada7afdb /* "none" */ && uName != 0x5c6e1222 /* "clear" */)
     {
         int iMaskId = mCollisionModel.GetMaskId(uName);
         if (iMaskId < 0)
@@ -1087,7 +1087,7 @@ bool EntityGeometryClass::AddSoldierCollision(const char* pszValue)
 bool EntityGeometryClass::AddTargetableCollision(const char* pszValue)
 {
     unsigned int uName = PblHash(pszValue);
-    if (uName != 0xada7afdb && uName != 0x5c6e1222)
+    if (uName != 0xada7afdb /* "none" */ && uName != 0x5c6e1222 /* "clear" */)
     {
         int iMaskId = mCollisionModel.GetMaskId(uName);
         if (iMaskId < 0)

@@ -325,8 +325,8 @@ FlagItemClass::FlagItemClass(unsigned int uHash)
     mDroppedInLandingZoneModel = 0;
     mCarriedOffset = gVectorZero;
     memset(mTeamColorize, 0, sizeof(mTeamColorize));
-    mCarriedSoldierBoneHash = 0xE5B51072u;
-    mCarriedDroidekaBoneHash = 0x698AED8Au;
+    mCarriedSoldierBoneHash = 0xE5B51072u /* "bone_ribcage" */;
+    mCarriedDroidekaBoneHash = 0x698AED8Au /* "bone_spine3" */;
 }
 
 // SYNTHETIC: SWBF2 0x00403850
@@ -538,13 +538,13 @@ void FlagItemClass::SetProperty(unsigned int uProperty, const char* pszValue)
 {
     switch (uProperty)
     {
-    case 0x05CEA8DE:
+    case 0x05CEA8DE: /* "CarriedGeometryName" */
         mCarriedModel = const_cast<GameModel*>(GameModel::Find(PblHash(pszValue)));
         break;
-    case 0x0E0C4B60:
+    case 0x0E0C4B60: /* "DroppedInLandingZoneGeometryName" */
         mDroppedInLandingZoneModel = const_cast<GameModel*>(GameModel::Find(PblHash(pszValue)));
         break;
-    case 0x58A48A9E:
+    case 0x58A48A9E: /* "CarriedOffset" */
     {
         float x, y, z;
         sscanf(pszValue, "%f %f %f", &x, &y, &z);
@@ -553,25 +553,25 @@ void FlagItemClass::SetProperty(unsigned int uProperty, const char* pszValue)
         mCarriedOffset.z = z;
         break;
     }
-    case 0xDA070BBA:
+    case 0xDA070BBA: /* "DroppedColorize" */
         mTeamColorize[0] = atoi(pszValue) != 0;
         break;
-    case 0xCC229F56:
+    case 0xCC229F56: /* "CarriedColorize" */
         mTeamColorize[1] = atoi(pszValue) != 0;
         break;
-    case 0x759C8F54:
+    case 0x759C8F54: /* "PickupSound" */
         mPickupSound.SetID(pszValue, false, false);
         break;
-    case 0x5B2F29F3:
+    case 0x5B2F29F3: /* "DropSound" */
         mDropSound.SetID(pszValue, false, false);
         break;
-    case 0x65A920BA:
+    case 0x65A920BA: /* "AmbientSound" */
         mAmbientSound.SetID(pszValue, false, false);
         break;
-    case 0x826BFFDA:
+    case 0x826BFFDA: /* "SoldierAttachBone" */
         mCarriedSoldierBoneHash = PblTEMPHash(pszValue);
         break;
-    case 0x4B80027B:
+    case 0x4B80027B: /* "DroidekaAttachBone" */
         mCarriedDroidekaBoneHash = PblTEMPHash(pszValue);
         break;
     default:
@@ -802,7 +802,7 @@ bool FlagItem::Update(float fDeltaTime)
                         if (mCarriedTimer < 0.0f)
                         {
                             mCarriedTimer = FLT_MAX;
-                            pItem->BroadcastMessage(0x8dbebf7f);
+                            pItem->BroadcastMessage(0x8dbebf7f /* "game.flag.carriedtoolong" */);
                             pItem->ResetFlag();
                         }
                     }
@@ -813,7 +813,7 @@ bool FlagItem::Update(float fDeltaTime)
                     if (sFlagGameplayType == FLAG_GAMEPLAY_1FLAG ||
                         sFlagGameplayType == FLAG_GAMEPLAY_2FLAG)
                     {
-                        pItem->BroadcastMessage(0x7e6537bc);
+                        pItem->BroadcastMessage(0x7e6537bc /* "game.flag.reset" */);
                     }
                 }
             }
@@ -839,7 +839,7 @@ bool FlagItem::Update(float fDeltaTime)
         pItem->ResetFlag();
         if (sFlagGameplayType == FLAG_GAMEPLAY_1FLAG || sFlagGameplayType == FLAG_GAMEPLAY_2FLAG)
         {
-            pItem->BroadcastMessage(0x7e6537bc);
+            pItem->BroadcastMessage(0x7e6537bc /* "game.flag.reset" */);
         }
     }
     pItem->CheckFloatingInSpace();
@@ -920,33 +920,33 @@ void FlagItem::SetProperty(unsigned int uProperty, const char* pszValue)
 {
     switch (uProperty)
     {
-    case 0x0D83E25A:
+    case 0x0D83E25A: /* "homeRegion" */
         mHomeRegionId = PblHash(pszValue);
         mHomeRegion = RedRegion::Find(mHomeRegionId);
         break;
-    case 0x05CEA8DE:
+    case 0x05CEA8DE: /* "CarriedGeometryName" */
         mCarriedModel = const_cast<GameModel*>(GameModel::Find(PblHash(pszValue)));
         SetupCollisionGeometry();
         break;
-    case 0x0E0C4B60:
+    case 0x0E0C4B60: /* "DroppedInLandingZoneGeometryName" */
         mDroppedInLandingZoneModel = const_cast<GameModel*>(GameModel::Find(PblHash(pszValue)));
         SetupCollisionGeometry();
         break;
-    case 0x47C86B4A:
+    case 0x47C86B4A: /* "GeometryName" */
         GameObject::SetProperty(uProperty, pszValue);
         mDroppedModel = mModel;
         SetupCollisionGeometry();
         break;
-    case 0x4B80027B:
+    case 0x4B80027B: /* "DroidekaAttachBone" */
         mCarriedDroidekaBoneHash = PblTEMPHash(pszValue);
         break;
-    case 0x826BFFDA:
+    case 0x826BFFDA: /* "SoldierAttachBone" */
         mCarriedSoldierBoneHash = PblTEMPHash(pszValue);
         break;
-    case 0xDFDB1D8B:
+    case 0xDFDB1D8B: /* "AllowTeamPickup" */
         mAllowTeamPickup = atoi(pszValue) != 0;
         break;
-    case 0xF412DC9C:
+    case 0xF412DC9C: /* "AllowAIPickup" */
         mAllowAIPickup = atoi(pszValue) != 0;
         break;
     default:

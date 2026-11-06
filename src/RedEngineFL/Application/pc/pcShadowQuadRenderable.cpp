@@ -128,7 +128,7 @@ void pcShadowQuadRenderable::Cleanup()
 // FUNCTION: SWBF2 0x006fc0a0
 void pcShadowQuadRenderable::Init()
 {
-    m_pShadowShader = pcRedShader::Create(0x9296fc1a, 2, 0, 0, 0,
+    m_pShadowShader = pcRedShader::Create(0x9296fc1a /* "ShadowQuad" */, 2, 0, 0, 0,
                                           RedColor::WHITE, RedColor::BLACK, 32.0f);
     m_pFilterShader = (pcFilterCopyShader*)pcRedShader::Create(
         kuiFilterShader, 0x202, 0, 0, 0, RedColor::WHITE, RedColor::BLACK, 32.0f);

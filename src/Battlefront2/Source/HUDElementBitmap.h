@@ -197,7 +197,7 @@ inline HUD::ElementBitmapMasked::ElementBitmapMasked(const char* const pName,
 }
 
 inline HUD::ElementBitmap::Factory::Factory()
-    : HUD::ElementBitmapBase::Factory(0x46544626u)
+    : HUD::ElementBitmapBase::Factory(0x46544626u /* "Bitmap" */)
 {
     mName = "Bitmap";
 }

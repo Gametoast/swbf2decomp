@@ -37,20 +37,20 @@ void FoleyFXGroup::Read(PblFileChunk& chunk)
         PblFileChunk child = chunk.ReadNextChild();
         switch (child._pFile->Read32())
         {
-        case 0x8d39bde6:
+        case 0x8d39bde6: /* "name" */
             child._pFile->Read8();
             mID = child._pFile->Read32();
             switch (mID)
             {
-            case 0x26c04c0e:
+            case 0x26c04c0e: /* "terrain_foley" */
                 smTerrain = this;
                 break;
-            case 0x425aa124:
+            case 0x425aa124: /* "water_foley" */
                 smWater = this;
                 break;
             }
             break;
-        case 0xe64c1c32:
+        case 0xe64c1c32: /* "FoleyFX" */
         {
             child._pFile->Read8();
             FoleyFX* pFX = FoleyFX::FindByID(child._pFile->Read32());

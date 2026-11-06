@@ -78,10 +78,10 @@ void WeaponTowCableClass::SetProperty(unsigned int uProperty, const char* pszVal
 {
     switch (uProperty)
     {
-    case 0x5EDE4703:
+    case 0x5EDE4703: /* "DetatchSound" */
         mDetatch.SetID(pszValue, false, false);
         return;
-    case 0x96A1687E:
+    case 0x96A1687E: /* "WindSound" */
         mWhir.SetID(pszValue, false, false);
         return;
     default:

@@ -36,7 +36,7 @@ GrassPatchClass::GrassPatchClass(unsigned int uHash)
     mSizeMax = 15.0f;
     mAlpha = 0.5f;
     mRenderData = 0;
-    mTextureHash = 0xB26FAC7Du;
+    mTextureHash = 0xB26FAC7Du /* "Grass" */;
     mRadiusFadeMin = -1.0f;
     mRadiusFadeMax = -1.0f;
     mMaxDistance = 100.0f;
@@ -162,73 +162,73 @@ void GrassPatchClass::SetProperty(unsigned int uProperty, const char* pszValue)
 {
     switch (uProperty)
     {
-    case 0xD133F7DA:
+    case 0xD133F7DA: /* "NumParticles" */
         if (sscanf(pszValue, "%i", &mNumParticles))
         {
             mNumParticles /= CameraManager::Instance()->GetNumCameras();
         }
         break;
-    case 0xEAEBCF6E:
+    case 0xEAEBCF6E: /* "MinSize" */
         sscanf(pszValue, "%f", &mSizeMin);
         break;
-    case 0x80BA1308:
+    case 0x80BA1308: /* "MaxSize" */
         sscanf(pszValue, "%f", &mSizeMax);
         break;
-    case 0x3D5D0AEF:
+    case 0x3D5D0AEF: /* "YOffset" */
         sscanf(pszValue, "%f", &mYOffset);
         break;
-    case 0x5D8B6DAB:
+    case 0x5D8B6DAB: /* "Alpha" */
         sscanf(pszValue, "%f", &mAlpha);
         break;
-    case 0xE6915CF6:
+    case 0xE6915CF6: /* "MaxDistance" */
         sscanf(pszValue, "%f", &mMaxDistance);
         break;
-    case 0x3C6468F4:
+    case 0x3C6468F4: /* "Texture" */
         mTextureHash = PblHash(pszValue);
         break;
-    case 0x80887A6F:
+    case 0x80887A6F: /* "RadiusFadeMin" */
         sscanf(pszValue, "%f", &mRadiusFadeMin);
         break;
-    case 0x6E74D661:
+    case 0x6E74D661: /* "RadiusFadeMax" */
         sscanf(pszValue, "%f", &mRadiusFadeMax);
         break;
-    case 0x13FAC25E:
+    case 0x13FAC25E: /* "DarknessMin" */
         sscanf(pszValue, "%f", &mDarknessMin);
         break;
-    case 0x25E5C3FC:
+    case 0x25E5C3FC: /* "DarknessMax" */
         sscanf(pszValue, "%f", &mDarknessMax);
         break;
-    case 0x5AC02207:
+    case 0x5AC02207: /* "NumParts" */
         sscanf(pszValue, "%i", &mNumParts);
         break;
-    case 0x35A4393B:
+    case 0x35A4393B: /* "BoxSize" */
         sscanf(pszValue, "%f %f", &mBoxX, &mBoxZ);
         break;
-    case 0x231FCC79:
+    case 0x231FCC79: /* "FlatHeight" */
         sscanf(pszValue, "%f %f", &mFlatHeightMin, &mFlatHeightMax);
         break;
-    case 0xA9B14958:
+    case 0xA9B14958: /* "FlatSizeMultiplier" */
         sscanf(pszValue, "%f", &mFlatSizeMultiplier);
         break;
-    case 0xF6582B9C:
+    case 0xF6582B9C: /* "FlatFaceFactor" */
         sscanf(pszValue, "%f", &mFlatFaceFactor);
         break;
-    case 0xC75263E1:
+    case 0xC75263E1: /* "FlatShadowHeight" */
         sscanf(pszValue, "%f", &mFlatShadowHeight);
         break;
-    case 0x97133EEB:
+    case 0x97133EEB: /* "MaxSkew" */
         sscanf(pszValue, "%f", &mMaxSkew);
         break;
-    case 0x4B6D5171:
+    case 0x4B6D5171: /* "FlatCount" */
         sscanf(pszValue, "%i", &mFlatCount);
         break;
-    case 0xFF7BB39A:
+    case 0xFF7BB39A: /* "SkinnyFactor" */
         sscanf(pszValue, "%f", &mSkinnyFactor);
         break;
-    case 0x604DB82E:
+    case 0x604DB82E: /* "FlatGrassSwing" */
         mFlatGrassSwingFlag = true;
         break;
-    case 0x9C3F7A19:
+    case 0x9C3F7A19: /* "TransparentType" */
         mTransparentFlag = true;
         break;
     default:

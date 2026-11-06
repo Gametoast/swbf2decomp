@@ -160,7 +160,7 @@ void AsteroidClass::SetProperty(unsigned int uProperty, const char* pszValue)
 {
     switch (uProperty)
     {
-    case 0x47c86b4a:
+    case 0x47c86b4a: /* "GeometryName" */
     {
         EntityGeometryClass::SetProperty(uProperty, pszValue);
         sSoftCollisionMask = 0;
@@ -170,7 +170,7 @@ void AsteroidClass::SetProperty(unsigned int uProperty, const char* pszValue)
         if (pMesh)
         {
             mCollisionModel.AddBody(new CollisionBodyMesh(pMesh, "CollisionMesh", gMatrixIdentity, 0));
-            int iMaskId = mCollisionModel.GetMaskId(0x29173102);
+            int iMaskId = mCollisionModel.GetMaskId(0x29173102 /* "CollisionMesh" */);
             if (iMaskId >= 0)
             {
                 sSoftCollisionMask |= 1 << iMaskId;
@@ -198,23 +198,23 @@ void AsteroidClass::SetProperty(unsigned int uProperty, const char* pszValue)
         break;
     }
 
-    case 0xfbe2eb62:
+    case 0xfbe2eb62: /* "MinSpeed" */
         sscanf(pszValue, "%f", &mMinSpeed);
         break;
-    case 0x86df0364:
+    case 0x86df0364: /* "MaxSpeed" */
         sscanf(pszValue, "%f", &mMaxSpeed);
         break;
-    case 0x8ec2719e:
+    case 0x8ec2719e: /* "MinOmega" */
         sscanf(pszValue, "%f", &mMinOmega);
         break;
-    case 0x38970514:
+    case 0x38970514: /* "MaxOmega" */
         sscanf(pszValue, "%f", &mMaxOmega);
         break;
-    case 0x74e9dbae:
+    case 0x74e9dbae: /* "Collidable" */
         sscanf(pszValue, "%d", &mCollidable);
         break;
 
-    case 0xa20a3388:
+    case 0xa20a3388: /* "ChildAsteroid" */
         if (mNumChildren < 10)
         {
             char acClass[256];
@@ -226,16 +226,16 @@ void AsteroidClass::SetProperty(unsigned int uProperty, const char* pszValue)
         }
         break;
 
-    case 0x0e15a87f:
+    case 0x0e15a87f: /* "ExplosionBreak" */
         mExplosionBreak = ExplosionClass::Find(PblHash(pszValue));
         break;
-    case 0x02bb1fe0:
-    case 0x8a323f32:
-    case 0x9b30e763:
+    case 0x02bb1fe0: /* "Explosion" */
+    case 0x8a323f32: /* "ExplosionDestruct" */
+    case 0x9b30e763: /* "ExplosionName" */
         mExplosionDestruct = ExplosionClass::Find(PblHash(pszValue));
         break;
 
-    case 0x5dfdc07f:
+    case 0x5dfdc07f: /* "SoldierCollision" */
     {
         int iMaskId = mCollisionModel.GetMaskId(PblHash(pszValue));
         if (iMaskId >= 0)
@@ -245,7 +245,7 @@ void AsteroidClass::SetProperty(unsigned int uProperty, const char* pszValue)
         }
         break;
     }
-    case 0xfb2bdf07:
+    case 0xfb2bdf07: /* "OrdnanceCollision" */
     {
         int iMaskId = mCollisionModel.GetMaskId(PblHash(pszValue));
         if (iMaskId >= 0)

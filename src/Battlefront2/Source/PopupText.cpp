@@ -102,7 +102,7 @@ void __fastcall PopupText::ShowPopup(int iType, unsigned int uTextId)
     }
     else
     {
-        Snd::Bus* pBus = Snd::Bus::FindByHashID(0xB38617C5);
+        Snd::Bus* pBus = Snd::Bus::FindByHashID(0xB38617C5 /* "mainmain" */);
         if (pBus)
         {
             pBus->Fade(0.5f, 0.0f, -1.0f);

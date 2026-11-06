@@ -57,7 +57,7 @@ class LightningBoltEffect : public FLEffect
 public:
 
     LightningBoltEffect()
-        : FLEffect(0x1F678786u, 6)
+        : FLEffect(0x1F678786u /* "LightningBolt" */, 6)
     {
     }
 

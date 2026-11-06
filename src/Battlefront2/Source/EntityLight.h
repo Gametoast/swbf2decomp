@@ -104,7 +104,7 @@ class EntityLightFXParser : public FLEffect
 public:
 
     EntityLightFXParser()
-        : FLEffect(0xB71E2FBEu, 3)
+        : FLEffect(0xB71E2FBEu /* "EntityLight" */, 3)
     {
     }
 

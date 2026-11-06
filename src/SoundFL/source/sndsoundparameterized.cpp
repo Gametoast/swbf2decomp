@@ -212,10 +212,10 @@ void SoundParameterized::Layer::Properties::Read(PblFileChunk& chunk)
         child._pFile->Read8();
         switch (uiID)
         {
-        case 0x8D39BDE6u:
+        case 0x8D39BDE6u: /* "name" */
             mHashID = child._pFile->Read32();
             break;
-        case 0xE657A914u:
+        case 0xE657A914u: /* "ParameterGraph" */
         {
             Controller::Properties* const pController = new Controller::Properties;
             pController->mInputParameterID = child._pFile->Read32();
@@ -238,7 +238,7 @@ void SoundParameterized::Properties::Read(PblFileChunk& chunk)
         child._pFile->Read8();
         switch (uiID)
         {
-        case 0x07A640F6u:
+        case 0x07A640F6u: /* "Layer" */
         {
             Layer::Properties* const pLayer = new Layer::Properties;
             mLayerList.AddLast(&pLayer->mNode);
@@ -246,10 +246,10 @@ void SoundParameterized::Properties::Read(PblFileChunk& chunk)
             pLayer->Read(child);
             break;
         }
-        case 0x8D39BDE6u:
+        case 0x8D39BDE6u: /* "name" */
             mHashID = child._pFile->Read32();
             break;
-        case 0xA54A2138u:
+        case 0xA54A2138u: /* "soundlayered" */
             mSoundLayeredProps = SoundLayered::Properties::FindByHashID(child._pFile->Read32());
             break;
         }
@@ -355,7 +355,7 @@ void SoundParameterized::SetProperties(const Properties* pProps)
         if (SoundLayered::mProperties)
         {
             mProperties = pProps;
-            mUpdateTime = pProps->QueryParameter(0x5D3C9BE4u);
+            mUpdateTime = pProps->QueryParameter(0x5D3C9BE4u /* "Time" */);
         }
     }
 }
@@ -382,7 +382,7 @@ void SoundParameterized::Update(float fDeltaTime)
 
     if (mUpdateTime)
     {
-        SetParameter(0x5D3C9BE4u, mTimeElapsed, false);
+        SetParameter(0x5D3C9BE4u /* "Time" */, mTimeElapsed, false);
     }
 
     const PblListSingle& layerList = mProperties->mLayerList;

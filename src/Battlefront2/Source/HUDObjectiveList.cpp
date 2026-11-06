@@ -13,7 +13,7 @@ void AddObjectiveList(HUD::ObjectiveList* pList);
 
 // FUNCTION: SWBF2 0x00565e90
 HUD::ObjectiveList::Factory::Factory()
-    : HUD::ElementGroupBase::Factory(0x6FA0D380u)
+    : HUD::ElementGroupBase::Factory(0x6FA0D380u /* "ObjectiveList" */)
 {
     mName = "ObjectiveList";
 }
@@ -70,16 +70,16 @@ HUD::ObjectiveList::ObjectiveList(const char* const pName, Factory::ItemCallback
     _lastHeight = 0.0f;
     switch ((unsigned int)PblHash(pName))
     {
-    case 0xebe40f77u:
+    case 0xebe40f77u: /* "player1objectives" */
         _viewportId = 0;
         break;
-    case 0xa19881deu:
+    case 0xa19881deu: /* "player2objectives" */
         _viewportId = 1;
         break;
-    case 0x127bd03du:
+    case 0x127bd03du: /* "player3objectives" */
         _viewportId = 2;
         break;
-    case 0xf03a3654u:
+    case 0xf03a3654u: /* "player4objectives" */
         _viewportId = 3;
         break;
     }

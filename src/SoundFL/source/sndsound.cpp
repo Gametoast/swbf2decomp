@@ -145,17 +145,17 @@ void Sound::Properties::Read(PblFileChunk& chunk)
         const unsigned int uiID = child._pFile->Read32();
         switch (uiID)
         {
-        case 0x4143ACAFu:
+        case 0x4143ACAFu: /* "SampleList" */
         {
             child = chunk.ReadNextChild();
-            if (mObjectWeightList.ReadObjectWeights(child, 0x96E382A7u,
+            if (mObjectWeightList.ReadObjectWeights(child, 0x96E382A7u /* "Sample" */,
                                                     &SampleFindByHashID))
             {
                 mSelObjectWeightList = &mObjectWeightList;
             }
             break;
         }
-        case 0xCA04EFE0u:
+        case 0xCA04EFE0u: /* "Inherit" */
         {
             child._pFile->Read8();
             const unsigned int uiParentID = child._pFile->Read32();
@@ -559,17 +559,17 @@ void Sound::Play(bool bRestart)
 
 // GLOBAL: SWBF2 0x007e3700
 Sound::ParameterID Sound::smParameterFunctions[11] = {
-    Sound::ParameterID(&Sound::ParamSetGain, 0x1B5426FEu),
-    Sound::ParameterID(&Sound::ParamSetPitch, 0xBD324AB1u),
-    Sound::ParameterID(&Sound::ParamSetReverbGain, 0x6C408CFEu),
-    Sound::ParameterID(&Sound::ParamSetPan, 0x4F55EEECu),
-    Sound::ParameterID(&Sound::ParamSetMinDistance, 0xB835CF50u),
-    Sound::ParameterID(&Sound::ParamSetMuteDistance, 0xE4B12EDFu),
-    Sound::ParameterID(&Sound::ParamSetMaxDistance, 0xE6915CF6u),
-    Sound::ParameterID(&Sound::ParamSetRollOff, 0xAB59D4BBu),
-    Sound::ParameterID(&Sound::ParamSetTrigger, 0x75413203u),
-    Sound::ParameterID(&Sound::ParamSetRollIn, 0x1CE8C2E1u),
-    Sound::ParameterID(&Sound::ParamSetRollInDistance, 0x80A163FEu),
+    Sound::ParameterID(&Sound::ParamSetGain, 0x1B5426FEu /* "Gain" */),
+    Sound::ParameterID(&Sound::ParamSetPitch, 0xBD324AB1u /* "Pitch" */),
+    Sound::ParameterID(&Sound::ParamSetReverbGain, 0x6C408CFEu /* "ReverbGain" */),
+    Sound::ParameterID(&Sound::ParamSetPan, 0x4F55EEECu /* "Pan" */),
+    Sound::ParameterID(&Sound::ParamSetMinDistance, 0xB835CF50u /* "MinDistance" */),
+    Sound::ParameterID(&Sound::ParamSetMuteDistance, 0xE4B12EDFu /* "MuteDistance" */),
+    Sound::ParameterID(&Sound::ParamSetMaxDistance, 0xE6915CF6u /* "MaxDistance" */),
+    Sound::ParameterID(&Sound::ParamSetRollOff, 0xAB59D4BBu /* "RollOff" */),
+    Sound::ParameterID(&Sound::ParamSetTrigger, 0x75413203u /* "Trigger" */),
+    Sound::ParameterID(&Sound::ParamSetRollIn, 0x1CE8C2E1u /* "RollIn" */),
+    Sound::ParameterID(&Sound::ParamSetRollInDistance, 0x80A163FEu /* "RollInDistance" */),
 };
 
 namespace

@@ -299,7 +299,7 @@ void Damageable::ApplyNetClientDamage(const DamageDesc& damage, unsigned int uFl
                         ScreenFilterEffect::Instance()->TimedFilter(
                             iViewport, fAmount * 0.15f + 0.15f, 0.0f, fAmount * 0.15f + 0.15f,
                             RedColor(RedColor::RED, (unsigned char)(int)(fAmount * 96.0f + 32.0f)),
-                            0xDE020766);
+                            0xDE020766 /* "white" */);
                     }
                 }
             }
@@ -472,7 +472,7 @@ void Damageable::ApplyDamageCommon(const DamageDesc& damage, unsigned int uFlags
                         ScreenFilterEffect::Instance()->TimedFilter(
                             iViewport, fAmount * 0.15f + 0.15f, 0.0f, fAmount * 0.15f + 0.15f,
                             RedColor(RedColor::RED, (unsigned char)(int)(fAmount * 96.0f + 32.0f)),
-                            0xDE020766);
+                            0xDE020766 /* "white" */);
                     }
                 }
             }
@@ -537,7 +537,7 @@ bool Damageable::ApplyDamage(const DamageDesc& damage, const PblVector3& vDir,
         {
             Character::GetPlayerStats(damage.mDamageOwner.mCharacter).AddCriticalShot();
         }
-        FLEffectClass* pClass = FLEffect::s_EffectClasses.Find(0xD7A77563);
+        FLEffectClass* pClass = FLEffect::s_EffectClasses.Find(0xD7A77563 /* "headshot" */);
         if (pClass)
         {
             FLEffectObject* pEffect = pClass->BuildEffect();

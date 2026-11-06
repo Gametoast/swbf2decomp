@@ -163,7 +163,7 @@ void EntityBuildingClass::SetProperty(unsigned int uProperty, const char* pszVal
 {
     switch (uProperty)
     {
-    case 0x47c86b4a:
+    case 0x47c86b4a: /* "GeometryName" */
     {
         GameObjectClass::SetProperty(uProperty, pszValue);
         const CollisionMesh* pMesh = CollisionMesh::_HashTable.Find(PblHash(pszValue));
@@ -185,7 +185,7 @@ void EntityBuildingClass::SetProperty(unsigned int uProperty, const char* pszVal
         break;
     }
 
-    case 0x5dc6e917:
+    case 0x5dc6e917: /* "DestroyedGeometryName" */
     {
         mDestroyedModel = (GameModel*)GameModel::Find(PblHash(pszValue));
         const CollisionMesh* pMesh = CollisionMesh::Find(PblHash(pszValue));
@@ -210,7 +210,7 @@ void EntityBuildingClass::SetProperty(unsigned int uProperty, const char* pszVal
         break;
     }
 
-    case 0x97c931c5:
+    case 0x97c931c5: /* "UnbuiltGeometryName" */
     {
         mUnbuiltModel = GameModel::_HashTable.Find(PblHash(pszValue));
         const CollisionMesh* pMesh = CollisionMesh::_HashTable.Find(PblHash(pszValue));
@@ -221,12 +221,12 @@ void EntityBuildingClass::SetProperty(unsigned int uProperty, const char* pszVal
         break;
     }
 
-    case 0x48542041:
+    case 0x48542041: /* "UnbuiltHoloOdf" */
         m_pHologramClass = EntityHologramClass::Find(PblHash(pszValue));
         break;
 
-    case 0x02bb1fe0:
-    case 0x9b30e763:
+    case 0x02bb1fe0: /* "Explosion" */
+    case 0x9b30e763: /* "ExplosionName" */
         if (*pszValue)
         {
             mExplosion = ExplosionClass::Find(PblHash(pszValue));
@@ -237,7 +237,7 @@ void EntityBuildingClass::SetProperty(unsigned int uProperty, const char* pszVal
         }
         break;
 
-    case 0xc5637083:
+    case 0xc5637083: /* "ExplosionOffset" */
         if (*pszValue)
         {
             float x = 0.0f, y = 0.0f, z = 0.0f;
@@ -248,27 +248,27 @@ void EntityBuildingClass::SetProperty(unsigned int uProperty, const char* pszVal
         }
         break;
 
-    case 0xbd94b44e:
+    case 0xbd94b44e: /* "RespawnTime" */
         sscanf(pszValue, "%f", &mRespawnTime);
         break;
 
-    case 0x66aab312:
+    case 0x66aab312: /* "BuiltSound" */
         mBuiltSound.SetID(pszValue, false, false);
         break;
 
-    case 0xeba16fe4:
+    case 0xeba16fe4: /* "BuildingSound" */
         mAmbientBuildingSound.SetID(pszValue, false, false);
         break;
 
-    case 0xc1f062c6:
+    case 0xc1f062c6: /* "AutoBarrierEnable" */
         mAutoCreateBarrier = atoi(pszValue) != 0;
         break;
 
-    case 0x43de19e2:
+    case 0x43de19e2: /* "AutoBarrierRemoveOnDeath" */
         mDisableBarrierWhenDead = atoi(pszValue) != 0;
         break;
 
-    case 0x22f50f8a:
+    case 0x22f50f8a: /* "ColorizeByTeam" */
     {
         int iValue = 0;
         sscanf(pszValue, "%i", &iValue);
@@ -276,7 +276,7 @@ void EntityBuildingClass::SetProperty(unsigned int uProperty, const char* pszVal
         break;
     }
 
-    case 0xf52eced4:
+    case 0xf52eced4: /* "AutoBarrierSize" */
         if (*pszValue)
         {
             sscanf(pszValue, "%f %f", &mBarrierX, &mBarrierZ);
@@ -334,7 +334,7 @@ EntityBuilding::EntityBuilding(EntityBuildingClass* pClass, const EntityDesc& de
         {
             EntityDesc hologramDesc;
             PblMatrix mBone;
-            if (mClass->mUnbuiltModel->_mLod[0]->GetBoneMatrix(0xD1E4CC7A, mBone))
+            if (mClass->mUnbuiltModel->_mLod[0]->GetBoneMatrix(0xD1E4CC7A /* "hp_hologram" */, mBone))
             {
                 hologramDesc.mMatrix = mBone * GetCollisionObject()->GetMatrix();
             }

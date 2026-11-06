@@ -343,11 +343,11 @@ void SaveFsm::Enter_PreOp_Format()
     {
         if (iResult == -2)
         {
-            SafeLocalizeSPrintf(mMsgStr1, 400, "ifs.loadsave_pc.save04", RedLocalizeDB::Find(0x7CF9A572u, false));
+            SafeLocalizeSPrintf(mMsgStr1, 400, "ifs.loadsave_pc.save04", RedLocalizeDB::Find(0x7CF9A572u /* "ifs.loadsave_ps2.errPrefixFormat" */, false));
         }
         else
         {
-            SafeLocalizeSPrintf(mMsgStr1, 400, "ifs.loadsave_pc.save13", RedLocalizeDB::Find(0x7CF9A572u, false));
+            SafeLocalizeSPrintf(mMsgStr1, 400, "ifs.loadsave_pc.save13", RedLocalizeDB::Find(0x7CF9A572u /* "ifs.loadsave_ps2.errPrefixFormat" */, false));
         }
         SafeLocalizeStrcpy(mBtnB, "common.ok", 100);
     }
@@ -362,7 +362,7 @@ void SaveFsm::Enter_PreOp_Format()
         {
             return;
         }
-        SafeLocalizeSPrintf(mMsgStr1, 400, "ifs.loadsave_pc.save13", RedLocalizeDB::Find(0x7CF9A572u, false));
+        SafeLocalizeSPrintf(mMsgStr1, 400, "ifs.loadsave_pc.save13", RedLocalizeDB::Find(0x7CF9A572u /* "ifs.loadsave_ps2.errPrefixFormat" */, false));
         SafeLocalizeStrcpy(mBtnB, "common.ok", 100);
     }
     mBtns = 2;
@@ -911,7 +911,7 @@ void SaveFsm::Update_PreOp_Format()
     if (iResult)
     {
 
-        const unsigned short* pJoy = RedLocalizeDB::Find(0x7CF9A572u, false);
+        const unsigned short* pJoy = RedLocalizeDB::Find(0x7CF9A572u /* "ifs.loadsave_ps2.errPrefixFormat" */, false);
         SafeLocalizeSPrintf(mMsgStr1, 400, "ifs.loadsave_pc.save13", pJoy);
         SafeLocalizeStrcpy(mBtnB, "common.ok", 100);
         mBtns = 2;
@@ -1220,10 +1220,10 @@ void SaveFsm::Update_Delete_Error()
 void SaveFsm::ShowLoadSavePopup(bool bSetup)
 {
 
-    RedInterfaceElement* pTitle = RedInterfaceElement::Find(0x9E227C3Fu);
-    RedInterfaceElement* pBtnA = RedInterfaceElement::Find(0x4DB5F949u);
-    RedInterfaceElement* pBtnB = RedInterfaceElement::Find(0x597FBABCu);
-    RedInterfaceElement* pBtnC = RedInterfaceElement::Find(0x3C76CD7Bu);
+    RedInterfaceElement* pTitle = RedInterfaceElement::Find(0x9E227C3Fu /* "Popup_LoadSave2.title" */);
+    RedInterfaceElement* pBtnA = RedInterfaceElement::Find(0x4DB5F949u /* "Popup_LoadSave2.buttons.A.label" */);
+    RedInterfaceElement* pBtnB = RedInterfaceElement::Find(0x597FBABCu /* "Popup_LoadSave2.buttons.B.label" */);
+    RedInterfaceElement* pBtnC = RedInterfaceElement::Find(0x3C76CD7Bu /* "Popup_LoadSave2.buttons.C.label" */);
 
     if (bSetup)
     {
@@ -1238,7 +1238,7 @@ void SaveFsm::ShowLoadSavePopup(bool bSetup)
 
     LuaHelper::CallGlobalProc("Popup_LoadSave2_ResizeButtons");
     LuaHelper::CallGlobalProc("Popup_LoadSave2_SelectButton", (float)mBtnDefault);
-    RedInterfaceElement* pPopup = RedInterfaceElement::Find(0xE65C8183u);
+    RedInterfaceElement* pPopup = RedInterfaceElement::Find(0xE65C8183u /* "Popup_LoadSave2" */);
     pPopup->Enable(bSetup);
     LuaHelper::CallGlobalProc("gPopup_Loadsave2_fnSetTitleStr", mMsgStr1);
 }

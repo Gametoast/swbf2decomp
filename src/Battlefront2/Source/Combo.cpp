@@ -1045,7 +1045,7 @@ void Combo::Condition::_ReadConfig(PblConfig& config, const char* pszComboName, 
         PblConfig::Data data = config.ReadNextData();
         switch (data.GetId())
         {
-        case 0x3e693899:
+        case 0x3e693899: /* "TimeEnd" */
             if (data.GetNumArgs())
             {
                 float fTime = data.GetFloatArg(0);
@@ -1059,13 +1059,13 @@ void Combo::Condition::_ReadConfig(PblConfig& config, const char* pszComboName, 
                     }
                     switch (PblHash(data.GetStringArg(i)))
                     {
-                    case 0x3a7dcd06:
+                    case 0x3a7dcd06: /* "SyncIfOvertime" */
                         bSyncIfOvertime = true;
                         break;
-                    case 0x7b71324f:
+                    case 0x7b71324f: /* "Frames" */
                         fTime *= ANIM_FRAME_SPEED;
                         break;
-                    case 0xfa9122ba:
+                    case 0xfa9122ba: /* "FromEnd" */
                         bFromEnd = true;
                         break;
                     }
@@ -1074,57 +1074,57 @@ void Combo::Condition::_ReadConfig(PblConfig& config, const char* pszComboName, 
             }
             break;
 
-        case 0x2be29e1f:
+        case 0x2be29e1f: /* "VelocityYAbs" */
             if (data.GetNumArgs() >= 2 && data.IsStringArg(0) && data.IsFloatArg(1))
             {
                 SetVelocityY(data.GetFloatArg(1), false, data.GetStringArg(0)[0] == '<');
             }
             break;
 
-        case 0x29cc5095:
+        case 0x29cc5095: /* "Energy" */
             if (data.GetNumArgs() >= 2 && data.IsStringArg(0) && data.IsFloatArg(1))
             {
                 SetEnergy(data.GetFloatArg(1), data.GetStringArg(0)[0] == '<');
             }
             break;
 
-        case 0x43b27471:
+        case 0x43b27471: /* "Button" */
             if (data.GetNumArgs() && data.IsStringArg(0))
             {
                 unsigned int eButton = 0;
                 unsigned int eAction = 0;
                 switch (PblHash(data.GetStringArg(0)))
                 {
-                case 0x8eab16d9: eButton = 1; break;
-                case 0xa70c98dd: eButton = 2; break;
-                case 0xa73f5c0d: eButton = 3; break;
-                case 0x76f15155: eButton = 4; break;
-                case 0x4e4fa58b: eButton = 5; break;
-                case 0xed7cdd8c: eButton = 6; break;
-                case 0x986b9eb6: eButton = 7; break;
+                case 0x8eab16d9: /* "Fire" */ eButton = 1; break;
+                case 0xa70c98dd: /* "FireSecondary" */ eButton = 2; break;
+                case 0xa73f5c0d: /* "Jump" */ eButton = 3; break;
+                case 0x76f15155: /* "Sprint" */ eButton = 4; break;
+                case 0x4e4fa58b: /* "Crouch" */ eButton = 5; break;
+                case 0xed7cdd8c: /* "Reload" */ eButton = 6; break;
+                case 0x986b9eb6: /* "FireBoth" */ eButton = 7; break;
                 }
                 if (data.GetNumArgs() > 1 && data.IsStringArg(1))
                 {
                     switch (PblHash(data.GetStringArg(1)))
                     {
-                    case 0xaaf74aa2: eAction = 1; break;
-                    case 0xadc649b8: eAction = 2; break;
-                    case 0x389c8f75: eAction = 3; break;
-                    case 0x46d056a1: eAction = 4; break;
-                    case 0x486aebad: eAction = 5; break;
-                    case 0x0c1f28db: eAction = 6; break;
-                    case 0x25bef6e8: eAction = 7; break;
-                    case 0x43430b20: eAction = 8; break;
-                    case 0x1036ae7e: eAction = 9; break;
-                    case 0x3db9b915: eAction = 10; break;
+                    case 0xaaf74aa2: /* "Tap" */ eAction = 1; break;
+                    case 0xadc649b8: /* "Hold" */ eAction = 2; break;
+                    case 0x389c8f75: /* "HoldRelease" */ eAction = 3; break;
+                    case 0x46d056a1: /* "TapPress" */ eAction = 4; break;
+                    case 0x486aebad: /* "DoubleTap" */ eAction = 5; break;
+                    case 0x0c1f28db: /* "TapHold" */ eAction = 6; break;
+                    case 0x25bef6e8: /* "TapHoldRelease" */ eAction = 7; break;
+                    case 0x43430b20: /* "Up" */ eAction = 8; break;
+                    case 0x1036ae7e: /* "Release" */ eAction = 9; break;
+                    case 0x3db9b915: /* "Down" */ eAction = 10; break;
                     }
                 }
                 SetButton(eButton, eAction);
             }
             break;
 
-        case 0xbfd3c98c:
-        case 0x802b3931:
+        case 0xbfd3c98c: /* "ButtonsPressed" */
+        case 0x802b3931: /* "ButtonsReleased" */
             if (data.GetNumArgs() && data.IsStringArg(0))
             {
                 unsigned int uiButtons = 0;
@@ -1132,23 +1132,23 @@ void Combo::Condition::_ReadConfig(PblConfig& config, const char* pszComboName, 
                 {
                     switch (PblHash(data.GetStringArg(0)))
                     {
-                    case 0x8eab16d9: uiButtons |= 0x02; break;
-                    case 0x19d9d4a0: uiButtons &= ~0x02; break;
-                    case 0xa70c98dd: uiButtons |= 0x04; break;
-                    case 0x01850be2: uiButtons &= ~0x04; break;
-                    case 0xa73f5c0d: uiButtons |= 0x08; break;
-                    case 0x2739df58: uiButtons &= ~0x08; break;
-                    case 0x76f15155: uiButtons |= 0x10; break;
-                    case 0x6e55a4e0: uiButtons &= ~0x10; break;
-                    case 0x4e4fa58b: uiButtons |= 0x20; break;
-                    case 0x4f92add2: uiButtons &= ~0x20; break;
-                    case 0xed7cdd8c: uiButtons |= 0x40; break;
-                    case 0x53a68851: uiButtons &= ~0x40; break;
-                    case 0x2c29f04d:
-                    case 0x13254bc4: uiButtons |= 0x3f; break;
+                    case 0x8eab16d9: /* "Fire" */ uiButtons |= 0x02; break;
+                    case 0x19d9d4a0: /* "!Fire" */ uiButtons &= ~0x02; break;
+                    case 0xa70c98dd: /* "FireSecondary" */ uiButtons |= 0x04; break;
+                    case 0x01850be2: /* "!FireSecondary" */ uiButtons &= ~0x04; break;
+                    case 0xa73f5c0d: /* "Jump" */ uiButtons |= 0x08; break;
+                    case 0x2739df58: /* "!Jump" */ uiButtons &= ~0x08; break;
+                    case 0x76f15155: /* "Sprint" */ uiButtons |= 0x10; break;
+                    case 0x6e55a4e0: /* "!Sprint" */ uiButtons &= ~0x10; break;
+                    case 0x4e4fa58b: /* "Crouch" */ uiButtons |= 0x20; break;
+                    case 0x4f92add2: /* "!Crouch" */ uiButtons &= ~0x20; break;
+                    case 0xed7cdd8c: /* "Reload" */ uiButtons |= 0x40; break;
+                    case 0x53a68851: /* "!Reload" */ uiButtons &= ~0x40; break;
+                    case 0x2c29f04d: /* "Any" */
+                    case 0x13254bc4: /* "All" */ uiButtons |= 0x3f; break;
                     }
                 }
-                if (data.GetId() == 0xbfd3c98c)
+                if (data.GetId() == 0xbfd3c98c /* "ButtonsPressed" */)
                 {
                     SetInputButtonsPressed(uiButtons);
                 }
@@ -1159,26 +1159,26 @@ void Combo::Condition::_ReadConfig(PblConfig& config, const char* pszComboName, 
             }
             break;
 
-        case 0x70a3cdf2:
+        case 0x70a3cdf2: /* "ThrustAngle" */
             if (data.GetNumArgs() >= 2 && data.IsFloatArg(0) && data.IsFloatArg(1))
             {
                 SetInputDir(data.GetFloatArg(0), data.GetFloatArg(1));
             }
             break;
 
-        case 0x82a306b7:
+        case 0x82a306b7: /* "VelocityXZAngle" */
             if (data.GetNumArgs() >= 2 && data.IsFloatArg(0) && data.IsFloatArg(1))
             {
                 SetVelocityXZDir(data.GetFloatArg(0), data.GetFloatArg(1));
             }
             break;
 
-        case 0x8f04cb51:
+        case 0x8f04cb51: /* "TimeInPosture" */
             if (data.GetNumArgs() >= 2 && data.IsStringArg(0) && data.IsFloatArg(1))
             {
                 float fTime = data.GetFloatArg(1);
                 if (data.GetNumArgs() >= 3 && data.IsStringArg(2) &&
-                    PblHash(data.GetStringArg(2)) == 0x7b71324f)
+                    PblHash(data.GetStringArg(2)) == 0x7b71324f /* "Frames" */)
                 {
                     fTime *= ANIM_FRAME_SPEED;
                 }
@@ -1186,14 +1186,14 @@ void Combo::Condition::_ReadConfig(PblConfig& config, const char* pszComboName, 
             }
             break;
 
-        case 0xb7c88a11:
+        case 0xb7c88a11: /* "VelocityY" */
             if (data.GetNumArgs() >= 2 && data.IsStringArg(0) && data.IsFloatArg(1))
             {
                 SetVelocityY(data.GetFloatArg(1), true, data.GetStringArg(0)[0] == '<');
             }
             break;
 
-        case 0xc44b98e8:
+        case 0xc44b98e8: /* "TimeStart" */
             if (data.GetNumArgs())
             {
                 float fTime = data.GetFloatArg(0);
@@ -1206,10 +1206,10 @@ void Combo::Condition::_ReadConfig(PblConfig& config, const char* pszComboName, 
                     }
                     switch (PblHash(data.GetStringArg(i)))
                     {
-                    case 0x7b71324f:
+                    case 0x7b71324f: /* "Frames" */
                         fTime *= ANIM_FRAME_SPEED;
                         break;
-                    case 0xfa9122ba:
+                    case 0xfa9122ba: /* "FromEnd" */
                         bFromEnd = true;
                         break;
                     }
@@ -1218,18 +1218,18 @@ void Combo::Condition::_ReadConfig(PblConfig& config, const char* pszComboName, 
             }
             break;
 
-        case 0xc1ae1e4c:
+        case 0xc1ae1e4c: /* "VelocityXZ" */
             if (data.GetNumArgs() >= 2 && data.IsStringArg(0) && data.IsFloatArg(1))
             {
                 SetVelocityXZMag(data.GetFloatArg(1), data.GetStringArg(0)[0] == '<');
             }
             break;
 
-        case 0xc9648178:
+        case 0xc9648178: /* "Break" */
         {
             float fTime = data.GetNumArgs() ? data.GetFloatArg(0) : 0.0f;
             if (data.GetNumArgs() >= 2 && data.IsStringArg(1) &&
-                PblHash(data.GetStringArg(1)) == 0x7b71324f)
+                PblHash(data.GetStringArg(1)) == 0x7b71324f /* "Frames" */)
             {
                 fTime *= ANIM_FRAME_SPEED;
             }
@@ -1237,14 +1237,14 @@ void Combo::Condition::_ReadConfig(PblConfig& config, const char* pszComboName, 
             break;
         }
 
-        case 0xd0624e33:
+        case 0xd0624e33: /* "Thrust" */
             if (data.GetNumArgs() >= 2 && data.IsStringArg(0) && data.IsFloatArg(1))
             {
                 SetInputMag(data.GetFloatArg(1), data.GetStringArg(0)[0] == '<');
             }
             break;
 
-        case 0xf0f686cb:
+        case 0xf0f686cb: /* "Posture" */
             if (data.GetNumArgs() && data.IsStringArg(0))
             {
                 unsigned int uiStates = 0;
@@ -1256,20 +1256,20 @@ void Combo::Condition::_ReadConfig(PblConfig& config, const char* pszComboName, 
                     }
                     switch (PblHash(data.GetStringArg(i)))
                     {
-                    case 0x75493323: uiStates |= 0x01; break;
-                    case 0xb837312c: uiStates &= ~0x01; break;
-                    case 0x4e4fa58b: uiStates |= 0x02; break;
-                    case 0x4f92add2: uiStates &= ~0x02; break;
-                    case 0x76f15155: uiStates |= 0x08; break;
-                    case 0x6e55a4e0: uiStates &= ~0x08; break;
-                    case 0xa73f5c0d: uiStates |= 0x10; break;
-                    case 0x2739df58: uiStates &= ~0x10; break;
-                    case 0x16ff3d1e: uiStates |= 0x20; break;
-                    case 0xa8bfb92f: uiStates &= ~0x20; break;
-                    case 0xd7e330f4: uiStates |= 0x40; break;
-                    case 0x7a24b7d3: uiStates &= ~0x40; break;
-                    case 0x2c29f04d:
-                    case 0x13254bc4: uiStates |= 0x7f; break;
+                    case 0x75493323: /* "Stand" */ uiStates |= 0x01; break;
+                    case 0xb837312c: /* "!Stand" */ uiStates &= ~0x01; break;
+                    case 0x4e4fa58b: /* "Crouch" */ uiStates |= 0x02; break;
+                    case 0x4f92add2: /* "!Crouch" */ uiStates &= ~0x02; break;
+                    case 0x76f15155: /* "Sprint" */ uiStates |= 0x08; break;
+                    case 0x6e55a4e0: /* "!Sprint" */ uiStates &= ~0x08; break;
+                    case 0xa73f5c0d: /* "Jump" */ uiStates |= 0x10; break;
+                    case 0x2739df58: /* "!Jump" */ uiStates &= ~0x10; break;
+                    case 0x16ff3d1e: /* "Roll" */ uiStates |= 0x20; break;
+                    case 0xa8bfb92f: /* "!Roll" */ uiStates &= ~0x20; break;
+                    case 0xd7e330f4: /* "Jet" */ uiStates |= 0x40; break;
+                    case 0x7a24b7d3: /* "!Jet" */ uiStates &= ~0x40; break;
+                    case 0x2c29f04d: /* "Any" */
+                    case 0x13254bc4: /* "All" */ uiStates |= 0x7f; break;
                     }
                 }
                 SetSoldierStates(uiStates);
@@ -1296,8 +1296,8 @@ void Combo::Transition::_ReadConfig(PblConfig& config, const char* pszComboName,
         PblConfig::Data data = config.ReadNextData();
         switch (data.GetId())
         {
-        case 0x39386e06:
-        case 0x5d342984:
+        case 0x39386e06: /* "If" */
+        case 0x5d342984: /* "Or" */
             if (!config.IsDone() && config.m_pChunk->PeekNextChildId() == SCOPE_ID)
             {
                 PblConfig scope(config.ReadNextScope(), true);
@@ -1309,7 +1309,7 @@ void Combo::Transition::_ReadConfig(PblConfig& config, const char* pszComboName,
             }
             break;
 
-        case 0x495b1788:
+        case 0x495b1788: /* "EnergyCost" */
             if (data.GetNumArgs())
             {
                 SetEnergyCost(data.GetFloatArg(0));
@@ -1367,14 +1367,14 @@ void Combo::Attack::_ReadConfig(PblConfig& config, const char* pszStateName)
         PblConfig::Data data = config.ReadNextData();
         switch (data.GetId())
         {
-        case 0x56f6d83c:
+        case 0x56f6d83c: /* "Edge" */
             if (data.GetNumArgs())
             {
                 SetDamageEdge(data.GetUint32Arg(0));
             }
             break;
 
-        case 0x13fb99f9:
+        case 0x13fb99f9: /* "DamageTime" */
             if (data.GetNumArgs() >= 2 && data.IsFloatArg(0) && data.IsFloatArg(1))
             {
                 float fStart = data.GetFloatArg(0);
@@ -1385,7 +1385,7 @@ void Combo::Attack::_ReadConfig(PblConfig& config, const char* pszStateName)
                     {
                         switch (PblHash(data.GetStringArg(2)))
                         {
-                        case 0x65db4ec0:
+                        case 0x65db4ec0: /* "FromAnim" */
                             if (fStart > 0.0f)
                             {
                                 fStart = -fStart;
@@ -1403,7 +1403,7 @@ void Combo::Attack::_ReadConfig(PblConfig& config, const char* pszStateName)
                                 fEnd = -1.0f;
                             }
                             break;
-                        case 0x66b6cdea:
+                        case 0x66b6cdea: /* "Seconds" */
                             if (fStart < 0.0f)
                             {
                                 fStart = 0.0f;
@@ -1413,7 +1413,7 @@ void Combo::Attack::_ReadConfig(PblConfig& config, const char* pszStateName)
                                 fEnd = 0.0f;
                             }
                             break;
-                        case 0x7b71324f:
+                        case 0x7b71324f: /* "Frames" */
                             if (fStart < 0.0f)
                             {
                                 fStart = 0.0f;
@@ -1458,14 +1458,14 @@ void Combo::Attack::_ReadConfig(PblConfig& config, const char* pszStateName)
             }
             break;
 
-        case 0x59e94c40:
+        case 0x59e94c40: /* "Damage" */
             if (!data.GetNumArgs())
             {
                 SetDamage();
             }
             else if (data.IsStringArg(0))
             {
-                if (PblHash(data.GetStringArg(0)) == 0x933b5bde)
+                if (PblHash(data.GetStringArg(0)) == 0x933b5bde /* "Default" */)
                 {
                     SetDamage();
                 }
@@ -1485,21 +1485,21 @@ void Combo::Attack::_ReadConfig(PblConfig& config, const char* pszStateName)
             }
             break;
 
-        case 0x876fffdd:
+        case 0x876fffdd: /* "Push" */
             if (data.GetNumArgs())
             {
                 SetPushStrength(data.GetFloatArg(0));
             }
             break;
 
-        case 0xc3b311dc:
-        case 0xf081f01b:
+        case 0xc3b311dc: /* "DamageLength" */
+        case 0xf081f01b: /* "DamageDistance" */
             if (data.GetNumArgs())
             {
                 float fLength = data.GetFloatArg(0);
                 bool bFromEdge = false;
                 if (data.GetNumArgs() >= 2 && data.IsStringArg(1) &&
-                    PblHash(data.GetStringArg(1)) == 0xdda74cac)
+                    PblHash(data.GetStringArg(1)) == 0xdda74cac /* "FromEdge" */)
                 {
                     bFromEdge = true;
                 }
@@ -1512,13 +1512,13 @@ void Combo::Attack::_ReadConfig(PblConfig& config, const char* pszStateName)
             }
             break;
 
-        case 0xe4b667ac:
+        case 0xe4b667ac: /* "DamageWidth" */
             if (data.GetNumArgs())
             {
                 float fWidth = data.GetFloatArg(0);
                 bool bFromEdge = false;
                 if (data.GetNumArgs() >= 2 && data.IsStringArg(1) &&
-                    PblHash(data.GetStringArg(1)) == 0xdda74cac)
+                    PblHash(data.GetStringArg(1)) == 0xdda74cac /* "FromEdge" */)
                 {
                     bFromEdge = true;
                 }
@@ -1531,7 +1531,7 @@ void Combo::Attack::_ReadConfig(PblConfig& config, const char* pszStateName)
             }
             break;
 
-        case 0xe9869f48:
+        case 0xe9869f48: /* "AttackId" */
             if (data.GetNumArgs() && data.IsStringArg(0))
             {
                 SetAttackId(PblHash(data.GetStringArg(0)));
@@ -1558,14 +1558,14 @@ void Combo::Deflect::_ReadConfig(PblConfig& config, const Combo& combo, const ch
         PblConfig::Data data = config.ReadNextData();
         switch (data.GetId())
         {
-        case 0x495b1788:
+        case 0x495b1788: /* "EnergyCost" */
             if (data.GetNumArgs())
             {
                 SetEnergyCost(data.GetFloatArg(0));
             }
             break;
 
-        case 0xd9ae70ee:
+        case 0xd9ae70ee: /* "DeflectAnimation" */
             if (data.IsStringArg(0))
             {
                 const char* pcName = data.GetStringArg(0);
@@ -1640,23 +1640,23 @@ void Combo::Deflect::_ReadConfig(PblConfig& config, const Combo& combo, const ch
                             }
                             switch (PblHash(data.GetStringArg(i)))
                             {
-                            case 0xb45fa81a: uiDirections |= 0x01; break;
-                            case 0x936e62b1: uiDirections &= ~0x01; break;
-                            case 0x78e32de5: uiDirections |= 0x02; break;
-                            case 0xee304d76: uiDirections &= ~0x02; break;
-                            case 0x1c73b020: uiDirections |= 0x04; break;
-                            case 0xf6d88fc3: uiDirections &= ~0x04; break;
-                            case 0x124aec70: uiDirections |= 0x08; break;
-                            case 0x4daf96fd: uiDirections &= ~0x08; break;
-                            case 0xdf68e22f: uiDirections |= 0x10; break;
-                            case 0x679544ee: uiDirections &= ~0x10; break;
-                            case 0x5bb421a2: uiDirections |= 0x20; break;
-                            case 0xd191b387: uiDirections &= ~0x20; break;
-                            case 0x2c29f04d:
-                            case 0x13254bc4: uiDirections |= 0x3f; break;
-                            case 0x18fa636f: uiWeapon = 1; break;
-                            case 0xaf2a6b67: uiWeapon = 2; break;
-                            case 0xae2a69d4: uiWeapon = 3; break;
+                            case 0xb45fa81a: /* "Forward" */ uiDirections |= 0x01; break;
+                            case 0x936e62b1: /* "!Forward" */ uiDirections &= ~0x01; break;
+                            case 0x78e32de5: /* "Right" */ uiDirections |= 0x02; break;
+                            case 0xee304d76: /* "!Right" */ uiDirections &= ~0x02; break;
+                            case 0x1c73b020: /* "BackRight" */ uiDirections |= 0x04; break;
+                            case 0xf6d88fc3: /* "!BackRight" */ uiDirections &= ~0x04; break;
+                            case 0x124aec70: /* "Left" */ uiDirections |= 0x08; break;
+                            case 0x4daf96fd: /* "!Left" */ uiDirections &= ~0x08; break;
+                            case 0xdf68e22f: /* "BackLeft" */ uiDirections |= 0x10; break;
+                            case 0x679544ee: /* "!BackLeft" */ uiDirections &= ~0x10; break;
+                            case 0x5bb421a2: /* "Back" */ uiDirections |= 0x20; break;
+                            case 0xd191b387: /* "!Back" */ uiDirections &= ~0x20; break;
+                            case 0x2c29f04d: /* "Any" */
+                            case 0x13254bc4: /* "All" */ uiDirections |= 0x3f; break;
+                            case 0x18fa636f: /* "Offhand" */ uiWeapon = 1; break;
+                            case 0xaf2a6b67: /* "Offhand2" */ uiWeapon = 2; break;
+                            case 0xae2a69d4: /* "Offhand3" */ uiWeapon = 3; break;
                             }
                         }
                         if (!uiDirections)
@@ -1703,7 +1703,7 @@ void Combo::Deflect::_ReadConfig(PblConfig& config, const Combo& combo, const ch
             }
             break;
 
-        case 0xe46f6ff3:
+        case 0xe46f6ff3: /* "DeflectAngle" */
             if (data.GetNumArgs() >= 2 && data.IsFloatArg(0) && data.IsFloatArg(1))
             {
                 SetDeflectAngle(data.GetFloatArg(0), data.GetFloatArg(1));
@@ -1749,7 +1749,7 @@ void Combo::State::_ReadConfig(PblConfig& config, const Combo& combo, const char
         PblConfig::Data data = config.ReadNextData();
         switch (data.GetId())
         {
-        case 0x0e0d9594:
+        case 0x0e0d9594: /* "Sound" */
             if (data.GetNumArgs() && data.IsStringArg(0))
             {
                 float fTime = 0.0f;
@@ -1757,7 +1757,7 @@ void Combo::State::_ReadConfig(PblConfig& config, const Combo& combo, const char
                 {
                     fTime = data.GetFloatArg(1);
                     if (data.GetNumArgs() >= 3 && data.IsStringArg(2) &&
-                        PblHash(data.GetStringArg(2)) == 0x7b71324f)
+                        PblHash(data.GetStringArg(2)) == 0x7b71324f /* "Frames" */)
                     {
                         fTime *= ANIM_FRAME_SPEED;
                     }
@@ -1766,35 +1766,35 @@ void Combo::State::_ReadConfig(PblConfig& config, const Combo& combo, const char
             }
             break;
 
-        case 0x024630ca:
+        case 0x024630ca: /* "PitchFactor" */
             if (data.GetNumArgs())
             {
                 SetPitchFactor(data.GetFloatArg(0));
             }
             break;
 
-        case 0x0ec601dc:
+        case 0x0ec601dc: /* "ThrustFactor" */
             if (data.GetNumArgs())
             {
                 SetThrustFactor(data.GetFloatArg(0));
             }
             break;
 
-        case 0xadd895e9:
+        case 0xadd895e9: /* "StrafeFactor" */
             if (data.GetNumArgs())
             {
                 SetStrafeFactor(data.GetFloatArg(0));
             }
             break;
 
-        case 0x6307b6ad:
+        case 0x6307b6ad: /* "TurnFactor" */
             if (data.GetNumArgs())
             {
                 SetTurnFactor(data.GetFloatArg(0));
             }
             break;
 
-        case 0x11b79e53:
+        case 0x11b79e53: /* "EnergyRestoreRate" */
             if (!data.GetNumArgs())
             {
                 SetEnergyRestoreRate();
@@ -1804,7 +1804,7 @@ void Combo::State::_ReadConfig(PblConfig& config, const Combo& combo, const char
                 float fRate = data.GetFloatArg(0);
                 bool bFromSoldier = false;
                 if (data.GetNumArgs() >= 2 && data.IsStringArg(1) &&
-                    PblHash(data.GetStringArg(1)) == 0xa3d53205)
+                    PblHash(data.GetStringArg(1)) == 0xa3d53205 /* "FromSoldier" */)
                 {
                     bFromSoldier = true;
                 }
@@ -1812,7 +1812,7 @@ void Combo::State::_ReadConfig(PblConfig& config, const Combo& combo, const char
             }
             break;
 
-        case 0x1baf6514:
+        case 0x1baf6514: /* "AlignedToThrust" */
         {
             bool bAligned = true;
             bool bInitial = false;
@@ -1820,7 +1820,7 @@ void Combo::State::_ReadConfig(PblConfig& config, const Combo& combo, const char
             {
                 if (data.IsStringArg(0))
                 {
-                    if (PblHash(data.GetStringArg(0)) == 0x2b251de3)
+                    if (PblHash(data.GetStringArg(0)) == 0x2b251de3 /* "Initial" */)
                     {
                         bInitial = true;
                     }
@@ -1834,7 +1834,7 @@ void Combo::State::_ReadConfig(PblConfig& config, const Combo& combo, const char
             break;
         }
 
-        case 0x2b43d2e9:
+        case 0x2b43d2e9: /* "AnimatedMove" */
         {
             bool bAnimatedMove = true;
             if (data.GetNumArgs())
@@ -1860,7 +1860,7 @@ void Combo::State::_ReadConfig(PblConfig& config, const Combo& combo, const char
             break;
         }
 
-        case 0x2fa0fd0d:
+        case 0x2fa0fd0d: /* "Duration" */
             if (data.GetNumArgs())
             {
                 float fDuration = data.GetFloatArg(0);
@@ -1870,16 +1870,16 @@ void Combo::State::_ReadConfig(PblConfig& config, const Combo& combo, const char
                     {
                         switch (PblHash(data.GetStringArg(1)))
                         {
-                        case 0x65db4ec0:
+                        case 0x65db4ec0: /* "FromAnim" */
                             fDuration = -1.0f;
                             break;
-                        case 0x66b6cdea:
+                        case 0x66b6cdea: /* "Seconds" */
                             if (fDuration < 0.0f)
                             {
                                 fDuration = 0.0f;
                             }
                             break;
-                        case 0x7b71324f:
+                        case 0x7b71324f: /* "Frames" */
                             if (fDuration < 0.0f)
                             {
                                 fDuration = 0.0f;
@@ -1900,7 +1900,7 @@ void Combo::State::_ReadConfig(PblConfig& config, const Combo& combo, const char
             }
             break;
 
-        case 0x4595b8fd:
+        case 0x4595b8fd: /* "Attack" */
         {
             Attack* pAttack = AddAttack();
             if (!config.IsDone() && IsNextScopeChunk(config))
@@ -1914,7 +1914,7 @@ void Combo::State::_ReadConfig(PblConfig& config, const Combo& combo, const char
             break;
         }
 
-        case 0xa62782e2:
+        case 0xa62782e2: /* "Transition" */
             if (data.GetNumArgs() && data.IsStringArg(0))
             {
                 Transition* pTransition = AddTransition(PblHash(data.GetStringArg(0)));
@@ -1933,7 +1933,7 @@ void Combo::State::_ReadConfig(PblConfig& config, const Combo& combo, const char
             }
             break;
 
-        case 0xe1e901c0:
+        case 0xe1e901c0: /* "Deflect" */
             if (!config.IsDone() && config.m_pChunk->PeekNextChildId() == SCOPE_ID)
             {
                 PblConfig scope(config.ReadNextScope(), true);
@@ -1945,7 +1945,7 @@ void Combo::State::_ReadConfig(PblConfig& config, const Combo& combo, const char
             }
             break;
 
-        case 0x66a4c1b6:
+        case 0x66a4c1b6: /* "TurnOffLightsaber" */
             if (!data.GetNumArgs())
             {
                 SetLightsaberOff(true);
@@ -1962,26 +1962,26 @@ void Combo::State::_ReadConfig(PblConfig& config, const Combo& combo, const char
             }
             break;
 
-        case 0xa23a54ca:
+        case 0xa23a54ca: /* "RestartAnimation" */
             SetRestartAnimationOnEnter(true);
             break;
 
-        case 0xd45f29ea:
+        case 0xd45f29ea: /* "PlayExplosion" */
             SetPlayExplosionOnEnter(true);
             break;
 
-        case 0xd59694f0:
+        case 0xd59694f0: /* "MustShowOneFrame" */
             SetMustShowOneFrame(true);
             break;
 
-        case 0xd209ff45:
+        case 0xd209ff45: /* "Gravity" */
             if (data.GetNumArgs())
             {
                 SetGravity(data.GetFloatArg(0));
             }
             break;
 
-        case 0xae8dc6b3:
+        case 0xae8dc6b3: /* "GravityVelocityTarget" */
             if (data.GetNumArgs())
             {
                 float fVelocity = data.GetFloatArg(0);
@@ -1995,10 +1995,10 @@ void Combo::State::_ReadConfig(PblConfig& config, const Combo& combo, const char
                     }
                     switch (PblHash(data.GetStringArg(1)))
                     {
-                    case 0x4cbb5054:
+                    case 0x4cbb5054: /* "Impulse" */
                         bImpulse = true;
                         break;
-                    case 0xf79d3b9b:
+                    case 0xf79d3b9b: /* "ZeroGravity" */
                         bZeroGravity = true;
                         break;
                     }
@@ -2014,7 +2014,7 @@ void Combo::State::_ReadConfig(PblConfig& config, const Combo& combo, const char
             }
             break;
 
-        case 0xe145ee5d:
+        case 0xe145ee5d: /* "Animation" */
             if (data.GetNumArgs() && data.IsStringArg(0))
             {
                 const char* pcName = data.GetStringArg(0);
@@ -2107,7 +2107,7 @@ void Combo::State::_ReadConfig(PblConfig& config, const Combo& combo, const char
             }
             break;
 
-        case 0xf0f686cb:
+        case 0xf0f686cb: /* "Posture" */
             if (data.GetNumArgs() && data.IsStringArg(0))
             {
                 unsigned int uiStates = 0;
@@ -2119,27 +2119,27 @@ void Combo::State::_ReadConfig(PblConfig& config, const Combo& combo, const char
                     }
                     switch (PblHash(data.GetStringArg(i)))
                     {
-                    case 0x75493323: uiStates |= 0x01; break;
-                    case 0xb837312c: uiStates &= ~0x01; break;
-                    case 0x4e4fa58b: uiStates |= 0x02; break;
-                    case 0x4f92add2: uiStates &= ~0x02; break;
-                    case 0x76f15155: uiStates |= 0x08; break;
-                    case 0x6e55a4e0: uiStates &= ~0x08; break;
-                    case 0xa73f5c0d: uiStates |= 0x10; break;
-                    case 0x2739df58: uiStates &= ~0x10; break;
-                    case 0x16ff3d1e: uiStates |= 0x20; break;
-                    case 0xa8bfb92f: uiStates &= ~0x20; break;
-                    case 0xd7e330f4: uiStates |= 0x40; break;
-                    case 0x7a24b7d3: uiStates &= ~0x40; break;
-                    case 0x2c29f04d:
-                    case 0x13254bc4: uiStates |= 0x7f; break;
+                    case 0x75493323: /* "Stand" */ uiStates |= 0x01; break;
+                    case 0xb837312c: /* "!Stand" */ uiStates &= ~0x01; break;
+                    case 0x4e4fa58b: /* "Crouch" */ uiStates |= 0x02; break;
+                    case 0x4f92add2: /* "!Crouch" */ uiStates &= ~0x02; break;
+                    case 0x76f15155: /* "Sprint" */ uiStates |= 0x08; break;
+                    case 0x6e55a4e0: /* "!Sprint" */ uiStates &= ~0x08; break;
+                    case 0xa73f5c0d: /* "Jump" */ uiStates |= 0x10; break;
+                    case 0x2739df58: /* "!Jump" */ uiStates &= ~0x10; break;
+                    case 0x16ff3d1e: /* "Roll" */ uiStates |= 0x20; break;
+                    case 0xa8bfb92f: /* "!Roll" */ uiStates &= ~0x20; break;
+                    case 0xd7e330f4: /* "Jet" */ uiStates |= 0x40; break;
+                    case 0x7a24b7d3: /* "!Jet" */ uiStates &= ~0x40; break;
+                    case 0x2c29f04d: /* "Any" */
+                    case 0x13254bc4: /* "All" */ uiStates |= 0x7f; break;
                     }
                 }
                 SetSoldierStates(uiStates);
             }
             break;
 
-        case 0xf94f0054:
+        case 0xf94f0054: /* "InputLock" */
         {
 
             unsigned int uiInputLock = 0x7f;
@@ -2161,23 +2161,23 @@ void Combo::State::_ReadConfig(PblConfig& config, const Combo& combo, const char
                     }
                     switch (PblHash(data.GetStringArg(i)))
                     {
-                    case 0x7b71324f: fDuration *= ANIM_FRAME_SPEED; break;
-                    case 0xd0624e33: uiInputLock |= 0x01; break;
-                    case 0xa37fa49e: uiInputLock &= ~0x01; break;
-                    case 0x8eab16d9: uiInputLock |= 0x02; break;
-                    case 0x19d9d4a0: uiInputLock &= ~0x02; break;
-                    case 0xa70c98dd: uiInputLock |= 0x04; break;
-                    case 0x01850be2: uiInputLock &= ~0x04; break;
-                    case 0xa73f5c0d: uiInputLock |= 0x08; break;
-                    case 0x2739df58: uiInputLock &= ~0x08; break;
-                    case 0x76f15155: uiInputLock |= 0x10; break;
-                    case 0x6e55a4e0: uiInputLock &= ~0x10; break;
-                    case 0x4e4fa58b: uiInputLock |= 0x20; break;
-                    case 0x4f92add2: uiInputLock &= ~0x20; break;
-                    case 0xed7cdd8c: uiInputLock |= 0x40; break;
-                    case 0x53a68851: uiInputLock &= ~0x40; break;
-                    case 0x2c29f04d:
-                    case 0x13254bc4: uiInputLock |= 0x7f; break;
+                    case 0x7b71324f: /* "Frames" */ fDuration *= ANIM_FRAME_SPEED; break;
+                    case 0xd0624e33: /* "Thrust" */ uiInputLock |= 0x01; break;
+                    case 0xa37fa49e: /* "!Thrust" */ uiInputLock &= ~0x01; break;
+                    case 0x8eab16d9: /* "Fire" */ uiInputLock |= 0x02; break;
+                    case 0x19d9d4a0: /* "!Fire" */ uiInputLock &= ~0x02; break;
+                    case 0xa70c98dd: /* "FireSecondary" */ uiInputLock |= 0x04; break;
+                    case 0x01850be2: /* "!FireSecondary" */ uiInputLock &= ~0x04; break;
+                    case 0xa73f5c0d: /* "Jump" */ uiInputLock |= 0x08; break;
+                    case 0x2739df58: /* "!Jump" */ uiInputLock &= ~0x08; break;
+                    case 0x76f15155: /* "Sprint" */ uiInputLock |= 0x10; break;
+                    case 0x6e55a4e0: /* "!Sprint" */ uiInputLock &= ~0x10; break;
+                    case 0x4e4fa58b: /* "Crouch" */ uiInputLock |= 0x20; break;
+                    case 0x4f92add2: /* "!Crouch" */ uiInputLock &= ~0x20; break;
+                    case 0xed7cdd8c: /* "Reload" */ uiInputLock |= 0x40; break;
+                    case 0x53a68851: /* "!Reload" */ uiInputLock &= ~0x40; break;
+                    case 0x2c29f04d: /* "Any" */
+                    case 0x13254bc4: /* "All" */ uiInputLock |= 0x7f; break;
                     }
                 }
             }
@@ -2205,27 +2205,27 @@ void Combo::State::_ReadAnimatedMoveScope(PblConfig& config, const char* pszComb
         PblConfig::Data data = config.ReadNextData();
         switch (data.GetId())
         {
-        case 0x1aa5cb38:
+        case 0x1aa5cb38: /* "VelocityFromThrust" */
             if (data.GetNumArgs())
             {
                 SetVelocityFromThrust(data.GetFloatArg(0));
             }
             break;
 
-        case 0x8a5c043d:
+        case 0x8a5c043d: /* "VelocityFromStrafe" */
             if (data.GetNumArgs())
             {
                 SetVelocityFromStrafe(data.GetFloatArg(0));
             }
             break;
 
-        case 0xb4c88558:
+        case 0xb4c88558: /* "VelocityZ" */
             if (data.GetNumArgs())
             {
                 float fVelocity = data.GetFloatArg(0);
                 bool bFromAnim = false;
                 if (data.GetNumArgs() >= 2 && data.IsStringArg(1) &&
-                    PblHash(data.GetStringArg(1)) == 0x65db4ec0)
+                    PblHash(data.GetStringArg(1)) == 0x65db4ec0 /* "FromAnim" */)
                 {
                     bFromAnim = true;
                 }
@@ -2233,13 +2233,13 @@ void Combo::State::_ReadAnimatedMoveScope(PblConfig& config, const char* pszComb
             }
             break;
 
-        case 0xb6c8887e:
+        case 0xb6c8887e: /* "VelocityX" */
             if (data.GetNumArgs())
             {
                 float fVelocity = data.GetFloatArg(0);
                 bool bFromAnim = false;
                 if (data.GetNumArgs() >= 2 && data.IsStringArg(1) &&
-                    PblHash(data.GetStringArg(1)) == 0x65db4ec0)
+                    PblHash(data.GetStringArg(1)) == 0x65db4ec0 /* "FromAnim" */)
                 {
                     bFromAnim = true;
                 }
@@ -2247,9 +2247,9 @@ void Combo::State::_ReadAnimatedMoveScope(PblConfig& config, const char* pszComb
             }
             break;
 
-        case 0x39386e06:
-        case 0x5d342984:
-        case 0xbab5214f:
+        case 0x39386e06: /* "If" */
+        case 0x5d342984: /* "Or" */
+        case 0xbab5214f: /* "Until" */
             if (!config.IsDone() && config.m_pChunk->PeekNextChildId() == SCOPE_ID)
             {
                 PblConfig scope(config.ReadNextScope(), true);
@@ -2404,7 +2404,7 @@ void Combo::ReadConfig(PblConfig& config)
     m_eMap = -1;
     m_pSkeleton = 0;
 
-    State* pIdle = AddState(0xc301cf93);
+    State* pIdle = AddState(0xc301cf93 /* "IDLE" */);
     if (!pIdle)
     {
         return;
@@ -2425,7 +2425,7 @@ void Combo::ReadConfig(PblConfig& config)
         PblConfig::Data data = config.ReadNextData();
         switch (data.GetId())
         {
-        case 0x783132f6:
+        case 0x783132f6: /* "State" */
             if (!config.IsDone() && config.m_pChunk->PeekNextChildId() == SCOPE_ID)
             {
                 if (data.GetNumArgs() && data.IsStringArg(0))
@@ -2445,12 +2445,12 @@ void Combo::ReadConfig(PblConfig& config)
             }
             break;
 
-        case 0xe145ee5d:
-        case 0x27d0b9e7:
-        case 0x5dcbeca7:
+        case 0xe145ee5d: /* "Animation" */
+        case 0x27d0b9e7: /* "OffhandAnimation" */
+        case 0x5dcbeca7: /* "ThrowAnimation" */
         {
-            bool bOffhand = data.GetId() == 0x27d0b9e7;
-            bool bThrow = data.GetId() == 0x5dcbeca7;
+            bool bOffhand = data.GetId() == 0x27d0b9e7 /* "OffhandAnimation" */;
+            bool bThrow = data.GetId() == 0x5dcbeca7 /* "ThrowAnimation" */;
             if (data.GetNumArgs() && data.IsStringArg(0))
             {
                 const char* pcName = data.GetStringArg(0);
@@ -2521,9 +2521,9 @@ void Combo::ReadConfig(PblConfig& config)
                         {
                             switch (PblHash(data.GetStringArg(1)))
                             {
-                            case 0x825513f1: eState = 2; break;
-                            case 0xc0ca2371: eState = 3; break;
-                            case 0xed7cdd8c: eState = 4; break;
+                            case 0x825513f1: /* "FIRE2" */ eState = 2; break;
+                            case 0xc0ca2371: /* "CHARGE" */ eState = 3; break;
+                            case 0xed7cdd8c: /* "Reload" */ eState = 4; break;
                             }
                         }
                         SetOffhandAnimIndex(eState, pAnimData->GetAnimIndex());
@@ -2672,7 +2672,7 @@ Combo::State* Combo::AddState(unsigned int uiNameHash)
         return 0;
     }
     pState->_Init(uiNameHash);
-    if (uiNameHash == 0x8718d358)
+    if (uiNameHash == 0x8718d358 /* "CATCH_SABRE" */)
     {
         m_pCatchState = pState;
     }

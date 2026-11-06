@@ -67,16 +67,16 @@ void WeaponLauncherClass::SetProperty(unsigned int uProperty, const char* pszVal
 {
     switch (uProperty)
     {
-    case 0x448FBCE3:
+    case 0x448FBCE3: /* "LockTime" */
         sscanf(pszValue, "%f", &mLockTime);
         break;
-    case 0xC61C7CCC:
+    case 0xC61C7CCC: /* "ClearLockOnFire" */
         mClearLockOnFire = atoi(pszValue) != 0;
         break;
-    case 0xE8345A43:
+    case 0xE8345A43: /* "TrackingSound" */
         break;
-    case 0x399BF05D:
-    case 0xF8899C5E:
+    case 0x399BF05D: /* "Ordnance" */
+    case 0xF8899C5E: /* "OrdnanceName" */
         WeaponCannonClass::SetProperty(uProperty, pszValue);
         mHasTrackingAmmo = mOrdnanceClass &&
                            mOrdnanceClass->IsRtti(OrdnanceMissileClass::rttiHashOrdnanceMissileClass);

@@ -1070,7 +1070,7 @@ void Character::Spawn(const PblMatrix& mMatrix)
     mUnit->SetCharacter(this);
     pEntity->Init();
     mHeroFlag = pObject->GetGameObjectClass()->mHeroFlag;
-    if (BonusManager::Instance()->IsTeamBonusActive(mTeamNumber, 0xDDB212E1))
+    if (BonusManager::Instance()->IsTeamBonusActive(mTeamNumber, 0xDDB212E1 /* "team_bonus_combat_shielding" */))
     {
         pObject->SetCurHealth(pObject->mCurHealth + pObject->mMaxHealth * 0.25f, true, 0);
     }

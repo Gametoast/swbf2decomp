@@ -35,13 +35,13 @@ DustEffectRenderData::DustEffectRenderData(const DustEffectClass* pClass)
     m_pPrimitive = 0;
     if (RedRenderer::pcGetGeometryMode() == GEOMETRYMODE_COMPRESSED)
     {
-        m_pShader = (pcParticleShader*)pcRedShader::Create(0x8A8743BF, 0x9282,
+        m_pShader = (pcParticleShader*)pcRedShader::Create(0x8A8743BF /* "PARTICLE" */, 0x9282,
                                                             &m_pClass->mTextureHash, 1, 0x10004,
                                                             RedColor::WHITE, RedColor::BLACK, 32.0f);
     }
     else
     {
-        m_pShader = (pcParticleShader*)pcRedShader::Create(0x8A8743BF, 0x282,
+        m_pShader = (pcParticleShader*)pcRedShader::Create(0x8A8743BF /* "PARTICLE" */, 0x282,
                                                             &m_pClass->mTextureHash, 1, 0x10004,
                                                             RedColor::WHITE, RedColor::BLACK, 32.0f);
     }

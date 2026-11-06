@@ -218,7 +218,7 @@ long __stdcall WindowProc(HWND__* hWnd, unsigned int Msg, unsigned int wParam, l
         CloseJournal();
         GameLoop::Cleanup();
 
-        GameState::PostStateCleanup(GameState::GetState() != 0x11E1FC01);
+        GameState::PostStateCleanup(GameState::GetState() != 0x11E1FC01 /* "shell" */);
         GameState::OneTimeCleanup();
         {
 
@@ -249,7 +249,7 @@ long __stdcall WindowProc(HWND__* hWnd, unsigned int Msg, unsigned int wParam, l
         if (!g_bNoRender)
         {
             RedRenderer::SetCursorImage(
-                RedTexture::s_textureHashTable.Find(0xA2BB0616), 0, 0);
+                RedTexture::s_textureHashTable.Find(0xA2BB0616 /* "mousecursor" */), 0, 0);
         }
         return 1;
 
@@ -318,7 +318,7 @@ void ActivateFrontline(bool bActivate)
         return;
     }
 
-    if (GameState::GetState() != 0x11E1FC01 && PauseMenu::IsPauseAllowed())
+    if (GameState::GetState() != 0x11E1FC01 /* "shell" */ && PauseMenu::IsPauseAllowed())
     {
         LoadDisplay* pLoadDisplay = LoadDisplay::sInstance;
 
@@ -407,11 +407,11 @@ int __stdcall GameWinMain(HINSTANCE hInstance, HINSTANCE, char* lpCmdLine, int)
 
     if (GameLoop::mMissionScript[0])
     {
-        GameState::SetState(0x8FF60339);
+        GameState::SetState(0x8FF60339 /* "mission" */);
     }
     else
     {
-        GameState::SetState(0x11E1FC01);
+        GameState::SetState(0x11E1FC01 /* "shell" */);
     }
 
     if (g_bNoRender || bDedicated)

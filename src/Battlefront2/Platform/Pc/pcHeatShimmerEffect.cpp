@@ -125,7 +125,7 @@ void HeatShimmerEffect::PlatformPostReadInit()
 // FUNCTION: SWBF2 0x00419eb0
 void HeatShimmerEffect::PlatformReadConfigData(PblConfig::Data& data)
 {
-    if (data.GetId() != 0xa9acf4e1u)
+    if (data.GetId() != 0xa9acf4e1u /* "BumpMap" */)
     {
         return;
     }

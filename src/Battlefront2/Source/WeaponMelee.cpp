@@ -3146,12 +3146,12 @@ void WeaponMeleeClass::SetProperty(unsigned int aId, const char* aValue)
 
     switch (aId)
     {
-    case 0x02BB1FE0:
-    case 0x9B30E763:
+    case 0x02BB1FE0: /* "Explosion" */
+    case 0x9B30E763: /* "ExplosionName" */
         mImpactExplosion = ExplosionClass::Find(PblHash(aValue));
         break;
 
-    case 0x03B58AB8:
+    case 0x03B58AB8: /* "NumDamageEdges" */
     {
         int iNum = atoi(aValue);
         if (iNum < 1)
@@ -3166,23 +3166,23 @@ void WeaponMeleeClass::SetProperty(unsigned int aId, const char* aValue)
         break;
     }
 
-    case 0x042DABAE:
+    case 0x042DABAE: /* "TurnOffSound" */
         m_TurnOffSound.SetID(aValue, false, false);
         break;
-    case 0xC5BDD741:
+    case 0xC5BDD741: /* "HitSound" */
         m_HitSound.SetID(aValue, false, false);
         break;
-    case 0xC20DFE6F:
+    case 0xC20DFE6F: /* "DeflectSound" */
         m_DeflectSound.SetID(aValue, false, false);
         break;
-    case 0xDE71B19F:
+    case 0xDE71B19F: /* "OnSound" */
         m_OnSound.SetID(aValue, false, false);
         break;
-    case 0xEA603E52:
+    case 0xEA603E52: /* "TurnOnSound" */
         m_TurnOnSound.SetID(aValue, false, false);
         break;
 
-    case 0x15A6D28C:
+    case 0x15A6D28C: /* "LightSaberGlowTexture" */
     {
         int iEdge = _AttachDamageEdge(s_pAttachToModel, s_uiAttachToHP, s_uiEdgeHP);
         if (iEdge >= 0)
@@ -3191,8 +3191,8 @@ void WeaponMeleeClass::SetProperty(unsigned int aId, const char* aValue)
         }
         break;
     }
-    case 0x3C6468F4:
-    case 0xFF773107:
+    case 0x3C6468F4: /* "Texture" */
+    case 0xFF773107: /* "LightSaberTexture" */
     {
         int iEdge = _AttachDamageEdge(s_pAttachToModel, s_uiAttachToHP, s_uiEdgeHP);
         if (iEdge >= 0)
@@ -3201,8 +3201,8 @@ void WeaponMeleeClass::SetProperty(unsigned int aId, const char* aValue)
         }
         break;
     }
-    case 0x643005E0:
-    case 0xE2AF0205:
+    case 0x643005E0: /* "LightSaberLength" */
+    case 0xE2AF0205: /* "DamageEdgeLength" */
     {
         int iEdge = _AttachDamageEdge(s_pAttachToModel, s_uiAttachToHP, s_uiEdgeHP);
         if (iEdge >= 0)
@@ -3213,8 +3213,8 @@ void WeaponMeleeClass::SetProperty(unsigned int aId, const char* aValue)
         }
         break;
     }
-    case 0x1F56AD0F:
-    case 0xC9CBCCD8:
+    case 0x1F56AD0F: /* "DamageEdgeWidth" */
+    case 0xC9CBCCD8: /* "LightSaberWidth" */
     {
         int iEdge = _AttachDamageEdge(s_pAttachToModel, s_uiAttachToHP, s_uiEdgeHP);
         if (iEdge >= 0)
@@ -3225,7 +3225,7 @@ void WeaponMeleeClass::SetProperty(unsigned int aId, const char* aValue)
         }
         break;
     }
-    case 0xFB0C9787:
+    case 0xFB0C9787: /* "LightSaberTrailColor" */
     {
         int iEdge = _AttachDamageEdge(s_pAttachToModel, s_uiAttachToHP, s_uiEdgeHP);
         if (iEdge >= 0)
@@ -3235,21 +3235,21 @@ void WeaponMeleeClass::SetProperty(unsigned int aId, const char* aValue)
         break;
     }
 
-    case 0x18BDF340:
+    case 0x18BDF340: /* "AddHitEffect" */
         if (m_uiNumHitEffects < 5)
         {
             m_uiHitEffects[m_uiNumHitEffects++] = PblHash(aValue);
         }
         break;
-    case 0xC0929477:
+    case 0xC0929477: /* "HitEffect" */
         m_uiHitEffects[0] = PblHash(aValue);
         m_uiNumHitEffects = 1;
         break;
-    case 0xF1820751:
+    case 0xF1820751: /* "DeflectEffect" */
         m_uiDeflectEffect = PblHash(aValue);
         break;
 
-    case 0xA7DDE527:
+    case 0xA7DDE527: /* "TurnOnDuration" */
         if (sscanf(aValue, "%f", &m_fTurnOnDuration) != 1)
         {
             m_fTurnOnDuration = MELEE_DEFAULT_TURNONDURATION;
@@ -3260,8 +3260,8 @@ void WeaponMeleeClass::SetProperty(unsigned int aId, const char* aValue)
         }
         break;
 
-    case 0x2D32CE43:
-    case 0xA7C25382:
+    case 0x2D32CE43: /* "ComboAnimationBank" */
+    case 0xA7C25382: /* "CustomAnimationBank" */
     {
 
         char acBuf[257];
@@ -3285,7 +3285,7 @@ void WeaponMeleeClass::SetProperty(unsigned int aId, const char* aValue)
                 while (pcCombo && !*pcCombo);
             }
         }
-        if (aId == 0x2D32CE43)
+        if (aId == 0x2D32CE43 /* "ComboAnimationBank" */)
         {
             m_pComboODF = 0;
             m_pCombo = pcCombo ? Combo::Find(PblHash(pcCombo)) : 0;
@@ -3312,14 +3312,14 @@ void WeaponMeleeClass::SetProperty(unsigned int aId, const char* aValue)
         break;
     }
 
-    case 0xC1A67869:
+    case 0xC1A67869: /* "NewAttack" */
         if (_CreateODFCombo(s_uiODFComboId) && m_pComboODF->m_uiNumStates < 7)
         {
             m_pComboODF->AddDefaultAttackState();
         }
         break;
 
-    case 0x7C9C8AE0:
+    case 0x7C9C8AE0: /* "SwingTime" */
         if (_CreateODFCombo(s_uiODFComboId) && m_pComboODF->m_uiNumStates < 7)
         {
             unsigned int uiState = m_pComboODF->m_uiNumStates;
@@ -3346,14 +3346,14 @@ void WeaponMeleeClass::SetProperty(unsigned int aId, const char* aValue)
         }
         break;
 
-    case 0xB0D14CE0:
+    case 0xB0D14CE0: /* "CanDeflect" */
         if (atoi(aValue) && m_pComboODF && m_pComboODF->m_uiNumStates > 0)
         {
             m_pComboODF->AddDefaultDeflect();
         }
         break;
 
-    case 0x45C02D38:
+    case 0x45C02D38: /* "ComboTime" */
         if (m_pComboODF && m_pComboODF->m_uiNumStates > 2)
         {
             float fComboContinueTime = 0.0f;
@@ -3368,14 +3368,14 @@ void WeaponMeleeClass::SetProperty(unsigned int aId, const char* aValue)
         }
         break;
 
-    case 0xD0537A7C:
+    case 0xD0537A7C: /* "AttackSound" */
         if (m_pComboODF && m_pComboODF->m_uiNumStates >= 2)
         {
             m_pComboODF->m_aState[m_pComboODF->m_uiNumStates - 2].m_sound.SetID(aValue, false, false);
         }
         break;
 
-    case 0x49021F55:
+    case 0x49021F55: /* "AttackDuration" */
         if (m_pComboODF && m_pComboODF->m_uiNumStates >= 2)
         {
             unsigned int uiState = m_pComboODF->m_uiNumStates - 2;
@@ -3388,7 +3388,7 @@ void WeaponMeleeClass::SetProperty(unsigned int aId, const char* aValue)
         }
         break;
 
-    case 0x1E111A47:
+    case 0x1E111A47: /* "AttackRecoverDuration" */
         if (m_pComboODF && m_pComboODF->m_uiNumStates >= 2)
         {
             unsigned int uiState = m_pComboODF->m_uiNumStates - 1;
@@ -3401,7 +3401,7 @@ void WeaponMeleeClass::SetProperty(unsigned int aId, const char* aValue)
         }
         break;
 
-    case 0x91F410CB:
+    case 0x91F410CB: /* "AttackRecoverBreakOutTime" */
         if (m_pComboODF && m_pComboODF->m_uiNumStates >= 2)
         {
             unsigned int uiState = m_pComboODF->m_uiNumStates - 1;
@@ -3434,7 +3434,7 @@ void WeaponMeleeClass::SetProperty(unsigned int aId, const char* aValue)
         }
         break;
 
-    case 0x308AD121:
+    case 0x308AD121: /* "AttackDamageTime" */
         if (m_pComboODF && m_pComboODF->m_uiNumStates >= 2)
         {
             unsigned int uiState = m_pComboODF->m_uiNumStates - 2;
@@ -3456,7 +3456,7 @@ void WeaponMeleeClass::SetProperty(unsigned int aId, const char* aValue)
         }
         break;
 
-    case 0x49F8B243:
+    case 0x49F8B243: /* "AttackDamageDistance" */
         if (m_pComboODF && m_pComboODF->m_uiNumStates >= 2)
         {
             unsigned int uiState = m_pComboODF->m_uiNumStates - 2;
@@ -3473,7 +3473,7 @@ void WeaponMeleeClass::SetProperty(unsigned int aId, const char* aValue)
         }
         break;
 
-    case 0xF34ADD68:
+    case 0xF34ADD68: /* "AttackDamage" */
         if (m_pComboODF && m_pComboODF->m_uiNumStates >= 2)
         {
             unsigned int uiState = m_pComboODF->m_uiNumStates - 2;
@@ -3490,13 +3490,13 @@ void WeaponMeleeClass::SetProperty(unsigned int aId, const char* aValue)
         }
         break;
 
-    case 0x47C86B4A:
+    case 0x47C86B4A: /* "GeometryName" */
         WeaponClass::SetProperty(aId, aValue);
         s_pAttachToModel = mModel;
         if (s_pAttachToModel)
         {
-            s_uiAttachToHP = 0x2B960099;
-            s_uiEdgeHP = 0xB3EA0EE8;
+            s_uiAttachToHP = 0x2B960099 /* "hp_weapons" */;
+            s_uiEdgeHP = 0xB3EA0EE8 /* "hp_fire" */;
             if (!s_pAttachToModel->GetParentBone(s_uiEdgeHP))
             {
                 s_uiEdgeHP = 0;
@@ -3509,12 +3509,12 @@ void WeaponMeleeClass::SetProperty(unsigned int aId, const char* aValue)
         }
         break;
 
-    case 0x4274FC96:
+    case 0x4274FC96: /* "FirePointName" */
         WeaponClass::SetProperty(aId, aValue);
         s_pAttachToModel = mModel;
         if (s_pAttachToModel)
         {
-            s_uiAttachToHP = 0x2B960099;
+            s_uiAttachToHP = 0x2B960099 /* "hp_weapons" */;
             s_uiEdgeHP = PblTEMPHash(aValue);
             if (!s_pAttachToModel->GetParentBone(s_uiEdgeHP))
             {
@@ -3528,7 +3528,7 @@ void WeaponMeleeClass::SetProperty(unsigned int aId, const char* aValue)
         }
         break;
 
-    case 0xCA67EAC4:
+    case 0xCA67EAC4: /* "OffhandGeometryName" */
         if (m_uiNumWeapons >= 4)
         {
             break;
@@ -3536,8 +3536,8 @@ void WeaponMeleeClass::SetProperty(unsigned int aId, const char* aValue)
         s_pAttachToModel = RedModel::Find(PblHash(aValue));
         if (s_pAttachToModel)
         {
-            s_uiAttachToHP = 0xB7EC1D31;
-            s_uiEdgeHP = 0xB3EA0EE8;
+            s_uiAttachToHP = 0xB7EC1D31 /* "bone_l_hand" */;
+            s_uiEdgeHP = 0xB3EA0EE8 /* "hp_fire" */;
             if (!s_pAttachToModel->GetParentBone(s_uiEdgeHP))
             {
                 s_uiEdgeHP = 0;
@@ -3550,7 +3550,7 @@ void WeaponMeleeClass::SetProperty(unsigned int aId, const char* aValue)
         }
         break;
 
-    case 0x9E10B228:
+    case 0x9E10B228: /* "OffhandFirePointName" */
     {
         char acEdgeHP[64];
         char acAttachToHP[64];
@@ -3561,7 +3561,7 @@ void WeaponMeleeClass::SetProperty(unsigned int aId, const char* aValue)
         }
         if (s_pAttachToModel)
         {
-            s_uiAttachToHP = iCount >= 2 ? PblTEMPHash(acAttachToHP) : 0xB7EC1D31;
+            s_uiAttachToHP = iCount >= 2 ? PblTEMPHash(acAttachToHP) : 0xB7EC1D31 /* "bone_l_hand" */;
             s_uiEdgeHP = PblTEMPHash(acEdgeHP);
             if (!s_pAttachToModel->GetParentBone(s_uiEdgeHP))
             {
@@ -3576,7 +3576,7 @@ void WeaponMeleeClass::SetProperty(unsigned int aId, const char* aValue)
         break;
     }
 
-    case 0x94F22065:
+    case 0x94F22065: /* "AttachedFirePoint" */
     {
         char acAttachToHP[64];
         float fX = 0.0f, fY = 0.0f, fZ = 0.0f;
@@ -3790,7 +3790,7 @@ int WeaponMeleeClass::_AttachDamageEdge(const RedModel* pAttachToModel, unsigned
     m_aDamageEdge[iEdge].fLength = LIGHTSABER_DEFAULT_LENGTH;
     m_aDamageEdge[iEdge].fWidth = LIGHTSABER_DEFAULT_WIDTH;
     m_aDamageEdge[iEdge].uiTextureHash = 0;
-    m_aDamageEdge[iEdge].uiGlowTextureHash = 0x79B932AB;
+    m_aDamageEdge[iEdge].uiGlowTextureHash = 0x79B932AB /* "lightsabreglow" */;
     m_aDamageEdge[iEdge].colorTrail = LIGHTSABER_DEFAULT_TRAIL_COLOR;
     return iEdge;
 }

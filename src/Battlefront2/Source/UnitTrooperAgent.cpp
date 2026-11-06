@@ -285,7 +285,7 @@ void UnitTrooperAgent::UpdateStatePostVision(float dt)
     case STATE_Patrol:
     {
         if (mCtrl->mOwner->GetEntity()->IsRtti(EntityWalker::rttiHashEntityWalker)
-            && mCtrl->mOwner->GetEntity()->GetEntityClass()->mId == 0x6fbcdecc)
+            && mCtrl->mOwner->GetEntity()->GetEntityClass()->mId == 0x6fbcdecc /* "imp_walk_atat" */)
         {
             GetLowLevel().SetNavigator_Stationary();
             break;

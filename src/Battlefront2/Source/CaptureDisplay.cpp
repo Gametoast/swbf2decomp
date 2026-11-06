@@ -103,9 +103,9 @@ CaptureDisplay::~CaptureDisplay()
 // FUNCTION: SWBF2 0x0044fbb0
 void CaptureDisplay::Init()
 {
-    mFlagTop.SetTexture(0x621cb6df);
-    mFlagBottom.SetTexture(0x621cb6df);
-    mFlagLocked.SetTexture(0x7f0688e4);
+    mFlagTop.SetTexture(0x621cb6df /* "hud_flag_timer" */);
+    mFlagBottom.SetTexture(0x621cb6df /* "hud_flag_timer" */);
+    mFlagLocked.SetTexture(0x7f0688e4 /* "hud_notallowed" */);
     mVisible = false;
 }
 

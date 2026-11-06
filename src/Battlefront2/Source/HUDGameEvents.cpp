@@ -1226,7 +1226,7 @@ void HUD::GameEvents::UpdateLockOn(unsigned int uIndex, const GameObject* const 
             ev9.Send();
             data.lockedTargetHealth = fShield;
         }
-        HUD::Event ev10(events.lockOnShieldName, (const wchar_t*)RedLocalizeDB::Find(0x66049aa8, false));
+        HUD::Event ev10(events.lockOnShieldName, (const wchar_t*)RedLocalizeDB::Find(0x66049aa8 /* "entity.com.shield" */, false));
         ev10.Send();
     }
     else
@@ -1315,7 +1315,7 @@ void HUD::GameEvents::UpdateWeaponEvents(const RedCamera* const pCamera, const C
         HUD::Event evShieldNameDisable(weaponEvents.targetDisableShieldName, true);
         evShieldNameDisable.Send();
         UpdateHackWeapon(0, events.vehicleHackingTime, events.vehicleHackingTimeFraction,
-                         events.vehicleHackingTimeDisable, 0x6d2f8d98, data.vehicleHacking);
+                         events.vehicleHackingTimeDisable, 0x6d2f8d98 /* "entity.com.hacking" */, data.vehicleHacking);
         if (pWeapon && !data.scopeActive && !data.unknownBool00D8)
         {
             HUD::Event evChange(weaponEvents.change, uWeaponHash);
@@ -1559,7 +1559,7 @@ void HUD::GameEvents::UpdateWeaponEvents(const RedCamera* const pCamera, const C
                 HUD::Event evTeamColorBright(weaponEvents.targetTeamColorBright, &gLocalColor);
                 evTeamColorBright.Send();
                 UpdateHackWeapon(0, events.vehicleHackingTime, events.vehicleHackingTimeFraction,
-                                 events.vehicleHackingTimeDisable, 0x6d2f8d98, data.vehicleHacking);
+                                 events.vehicleHackingTimeDisable, 0x6d2f8d98 /* "entity.com.hacking" */, data.vehicleHacking);
             }
             weaponData.target = hTarget;
         }
@@ -1642,7 +1642,7 @@ void HUD::GameEvents::UpdateWeaponEvents(const RedCamera* const pCamera, const C
                         weaponData.targetHealth = fShield;
                     }
                     HUD::Event evShieldName(weaponEvents.targetShieldName,
-                                            (const wchar_t*)RedLocalizeDB::Find(0x66049aa8, false));
+                                            (const wchar_t*)RedLocalizeDB::Find(0x66049aa8 /* "entity.com.shield" */, false));
                     evShieldName.Send();
                 }
                 else
@@ -1677,7 +1677,7 @@ void HUD::GameEvents::UpdateWeaponEvents(const RedCamera* const pCamera, const C
                     pTargetObject = 0;
                 }
                 UpdateHackWeapon(pTargetObject, events.vehicleHackingTime, events.vehicleHackingTimeFraction,
-                                 events.vehicleHackingTimeDisable, 0x6d2f8d98, data.vehicleHacking);
+                                 events.vehicleHackingTimeDisable, 0x6d2f8d98 /* "entity.com.hacking" */, data.vehicleHacking);
             }
         }
 
@@ -1777,7 +1777,7 @@ void HUD::GameEvents::UpdateHealth(const Character* const pCharacter, const Game
         data.isHero = bHero;
     }
 
-    if (BonusManager::Instance()->IsTeamBonusActive(pCharacter->mTeamNumber, 0xc10b9cdc))
+    if (BonusManager::Instance()->IsTeamBonusActive(pCharacter->mTeamNumber, 0xc10b9cdc /* "team_bonus_bacta_tanks" */))
     {
         const int iPlayer = pCharacter->mPlayerId;
         if (iPlayer >= 0)
@@ -1951,7 +1951,7 @@ void HUD::GameEvents::UpdateVehicleHealth(int iIndex, const Character* const pCh
     }
 
     UpdateHackWeapon(pObject, events.vehicleHackedTime, events.vehicleHackedTimeFraction,
-                     events.vehicleHackedTimeDisable, 0x67fdfe71, data.vehicleBeingHacked);
+                     events.vehicleHackedTimeDisable, 0x67fdfe71 /* "entity.com.hacked" */, data.vehicleBeingHacked);
 }
 
 // FUNCTION: SWBF2 0x00561f60
@@ -2248,7 +2248,7 @@ void HUD::GameEvents::UpdateEnergy(const Controllable* const pControllable, Play
 
     const float fEnergy = pBar->GetEnergy();
     if (pControllable->mCharacter &&
-        BonusManager::Instance()->IsTeamBonusActive(pControllable->mCharacter->mTeamNumber, 0x85ad826d))
+        BonusManager::Instance()->IsTeamBonusActive(pControllable->mCharacter->mTeamNumber, 0x85ad826d /* "team_bonus_energy_boost" */))
     {
         const int iPlayer = pControllable->mCharacter->mPlayerId;
         if (iPlayer >= 0 && iPlayer < 1)

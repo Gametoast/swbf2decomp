@@ -595,15 +595,15 @@ void EntityRemoteTerminal::SetProperty(unsigned int uProperty, const char* pszVa
 {
     switch (uProperty)
     {
-    case 0x5B36F215u:
+    case 0x5B36F215u: /* "PrevLinkedTerminal" */
         mPrevLinkedTerminalHash = PblHash(pszValue);
         GetPrevLinkedTerminal();
         break;
-    case 0xB7BC02ADu:
+    case 0xB7BC02ADu: /* "NextLinkedTerminal" */
         mNextLinkedTerminalHash = PblHash(pszValue);
         GetNextLinkedTerminal();
         break;
-    case 0xD50DB89Eu:
+    case 0xD50DB89Eu: /* "RemoteGameObject" */
         mRemoteGameObjectHash = PblHash(pszValue);
         GetRemoteGameObject();
         break;
@@ -623,9 +623,9 @@ void EntityRemoteTerminalClass::SetProperty(unsigned int uProperty, const char* 
 {
     switch (uProperty)
     {
-    case 0x47c86b4a:
+    case 0x47c86b4a: /* "GeometryName" */
     {
-        GameObjectClass::SetProperty(0x47c86b4a, pszValue);
+        GameObjectClass::SetProperty(0x47c86b4a /* "GeometryName" */, pszValue);
         sSoftCollisionMask = 0;
         sOrdnanceCollisionMask = 0;
         int iNumBodies = mCollisionModel.GetNumBodies();
@@ -633,7 +633,7 @@ void EntityRemoteTerminalClass::SetProperty(unsigned int uProperty, const char* 
         if (pMesh)
         {
             mCollisionModel.AddBody(new CollisionBodyMesh(pMesh, "CollisionMesh", gMatrixIdentity, 0));
-            int iMaskId = mCollisionModel.GetMaskId(0x29173102);
+            int iMaskId = mCollisionModel.GetMaskId(0x29173102 /* "CollisionMesh" */);
             if (iMaskId >= 0)
             {
                 sSoftCollisionMask |= 1 << iMaskId;
@@ -659,7 +659,7 @@ void EntityRemoteTerminalClass::SetProperty(unsigned int uProperty, const char* 
         mCollisionModel.mIsFlyerFlag = true;
         break;
     }
-    case 0x5233b817:
+    case 0x5233b817: /* "VehicleType" */
         mVehicleType = GameObjectClass::FindVehicleType(pszValue);
         break;
     default:

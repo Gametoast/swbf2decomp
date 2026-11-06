@@ -1,8 +1,8 @@
 #include "HUDTransformNumberColor.h"
 
-static const unsigned int kInputFactorHash = 0xf73d9a74;
-static const unsigned int kEventInputFactorHash = 0x9d63ddbe;
-static const unsigned int kWrapInputHash = 0x4b4864db;
+static const unsigned int kInputFactorHash = 0xf73d9a74 /* "InputFactor" */;
+static const unsigned int kEventInputFactorHash = 0x9d63ddbe /* "EventInputFactor" */;
+static const unsigned int kWrapInputHash = 0x4b4864db /* "WrapInput" */;
 
  
  

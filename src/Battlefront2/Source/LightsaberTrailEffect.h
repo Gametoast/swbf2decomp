@@ -13,7 +13,7 @@ class LightsaberTrailEffect : public FLEffect
 public:
 
     LightsaberTrailEffect()
-        : FLEffect(0xFBAB1AF0u, 3)
+        : FLEffect(0xFBAB1AF0u /* "LightsaberTrail" */, 3)
     {
         m_pShader = 0;
     }

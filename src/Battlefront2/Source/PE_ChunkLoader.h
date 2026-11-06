@@ -37,7 +37,7 @@ class ParticleEmitterEffect : public FLEffect
 public:
 
     ParticleEmitterEffect()
-        : FLEffect(0xCEBB215Fu, 3)
+        : FLEffect(0xCEBB215Fu /* "ParticleEmitter" */, 3)
     {
     }
 

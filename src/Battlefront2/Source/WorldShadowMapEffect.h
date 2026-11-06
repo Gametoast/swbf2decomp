@@ -12,7 +12,7 @@ class WorldShadowMapEffect : public FLEffect
 public:
 
     WorldShadowMapEffect()
-        : FLEffect(0xC39291D3u, 3)
+        : FLEffect(0xC39291D3u /* "WorldShadowMap" */, 3)
     {
         Enable(false);
     }

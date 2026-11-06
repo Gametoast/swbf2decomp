@@ -590,12 +590,12 @@ void TerrainRenderable::_InitPixelLighting(bool bEnable)
         float fScale = m_fBumpLuminosityScale * RedTerrain::_fPointsPerMeter;
         PblVector4 vScale1 = { 0.0f, 0.0f, fScale, 0.0f };
         PblVector4 vScale0 = { fScale, 0.0f, 0.0f, 0.0f };
-        pcTerrainShader2::_InitBumpLuminosityPixelLighting(0x785887DA, m_uiBumpLuminosityTextureHash,
+        pcTerrainShader2::_InitBumpLuminosityPixelLighting(0x785887DA /* "attenuation_volume" */, m_uiBumpLuminosityTextureHash,
                                                            vScale0, vScale1, m_fStaticBumpFactor);
     }
     else
     {
-        pcTerrainShader2::_InitPixelLighting(0x785887DA, 0x63DD533C);
+        pcTerrainShader2::_InitPixelLighting(0x785887DA /* "attenuation_volume" */, 0x63DD533C /* "cube_normalizationmap" */);
     }
 
     if (!pcTerrainShader2::IsEnabled())
@@ -616,7 +616,7 @@ void TerrainRenderable::_InitPixelLighting(bool bEnable)
         m_pPrePixelLightingShader2 = (pcTerrainShader2*)pcRedShader::Create(
             PblHash("Terrain2"), uiFlags, 0, 0, 0, RedColor::WHITE, RedColor::BLACK, 32.0f);
         m_pPrePixelLightingShader = (pcTerrainShader*)pcRedShader::Create(
-            0x74DBC80E, uiFlags, 0, 0, 0, RedColor::WHITE, RedColor::BLACK, 32.0f);
+            0x74DBC80E /* "Terrain" */, uiFlags, 0, 0, 0, RedColor::WHITE, RedColor::BLACK, 32.0f);
     }
     m_pPrePixelLightingShader->m_uiOptions |= 4;
     m_pPrePixelLightingShader->m_uiOptions |= 1;
@@ -882,7 +882,7 @@ void TerrainRenderable::Read(PblFileChunk& chunk)
                         PblHash("Terrain2"), auiFormat[uiPass], &auiLayer[uiPass + 1], 1, 0, RedColor::WHITE,
                         RedColor::BLACK, 32.0f);
                     patch.apShader[uiPass] = (pcTerrainShader*)pcRedShader::Create(
-                        0x74DBC80E, auiFormat[uiPass], &auiLayer[uiPass + 1], 1, 0, RedColor::WHITE,
+                        0x74DBC80E /* "Terrain" */, auiFormat[uiPass], &auiLayer[uiPass + 1], 1, 0, RedColor::WHITE,
                         RedColor::BLACK, 32.0f);
                     pcTerrainShader* pShader = patch.apShader[uiPass];
                     pShader->m_uiOptions = (unsigned char)((pShader->m_uiOptions & 0xCF) | (uiPass == 1 ? 0x10 : 0x20));
@@ -898,7 +898,7 @@ void TerrainRenderable::Read(PblFileChunk& chunk)
                 unsigned int uiNumParams =
                     (RedRenderer::pcGetRenderCaps().pipeline == PIPELINE_FIXED && uiNumLayers >= 2) ? 2 : uiNumLayers;
                 patch.apShader[0] = (pcTerrainShader*)pcRedShader::Create(
-                    0x74DBC80E, auiFormat[0], auiLayer, uiNumParams, 0, RedColor::WHITE, RedColor::BLACK,
+                    0x74DBC80E /* "Terrain" */, auiFormat[0], auiLayer, uiNumParams, 0, RedColor::WHITE, RedColor::BLACK,
                     32.0f);
             }
             ++iPatch;
@@ -1052,7 +1052,7 @@ void TerrainRenderable::Read(PblFileChunk& chunk)
     m_pFarShader2 = (pcTerrainShader2*)pcRedShader::Create(PblHash("Terrain2"), uiFarFlags2, 0, 0, 0,
                                                            RedColor::WHITE, RedColor::BLACK, 32.0f);
     unsigned int uiFarFlags = RedRenderer::pcGetGeometryMode() == GEOMETRYMODE_COMPRESSED ? 0x1002 : 0x2;
-    m_pFarShader = (pcTerrainShader*)pcRedShader::Create(0x74DBC80E, uiFarFlags, 0, 0, 0, RedColor::WHITE,
+    m_pFarShader = (pcTerrainShader*)pcRedShader::Create(0x74DBC80E /* "Terrain" */, uiFarFlags, 0, 0, 0, RedColor::WHITE,
                                                          RedColor::BLACK, 32.0f);
     if (m_pFarShader)
     {

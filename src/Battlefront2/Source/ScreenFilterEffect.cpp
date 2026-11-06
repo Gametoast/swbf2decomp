@@ -76,7 +76,7 @@ void ScreenFilterEffect::ReadConfig(PblConfig& config)
     while (!config.IsDone())
     {
         PblConfig::Data data = config.ReadNextData();
-        if (data.GetId() == 0xAF8BB8CEu)
+        if (data.GetId() == 0xAF8BB8CEu /* "Enable" */)
         {
             Enable(data.GetUint32Arg(0) != 0);
         }

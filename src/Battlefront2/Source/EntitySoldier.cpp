@@ -464,7 +464,7 @@ void AcklayData::SetupBasePose(const ZephyrSkeletonShared* pSkeleton)
 // FUNCTION: SWBF2 0x004e7bf0
 FoleyFX* EntitySoldier::GetFoleyFX() const
 {
-    return CollisionObject::GetFoleyFX(0xd098618c);
+    return CollisionObject::GetFoleyFX(0xd098618c /* "FoleyFXSoldier" */);
 }
 
 // FUNCTION: SWBF2 0x004e7c00
@@ -659,9 +659,9 @@ void EntitySoldier::UpdateFoleyFX(const RedPose& pose, const PblMatrix& mWorld)
         return;
     }
 
-    const float fLeftFoot = pose.Find(0x1af77461)->m[3][1];
-    const float fRightFoot = pose.Find(0x2f06fa86)->m[3][1];
-    PblMatrix mRoot = *pose.Find(0x16e27226) * mWorld;
+    const float fLeftFoot = pose.Find(0x1af77461 /* "bone_l_foot" */)->m[3][1];
+    const float fRightFoot = pose.Find(0x2f06fa86 /* "bone_r_foot" */)->m[3][1];
+    PblMatrix mRoot = *pose.Find(0x16e27226 /* "bone_root" */) * mWorld;
     const PblVector3 vRoot = mRoot.GetTranslation();
 
     float fWaterHeight = -FLT_MAX;
@@ -700,7 +700,7 @@ void EntitySoldier::UpdateFoleyFX(const RedPose& pose, const PblMatrix& mWorld)
             {
                 if (RedTerrain::_bEnable)
                 {
-                    PblMatrix mFoot = *pose.Find(0x1af77461) * mWorld;
+                    PblMatrix mFoot = *pose.Find(0x1af77461 /* "bone_l_foot" */) * mWorld;
                     RedTerrain::GetInterpolatedHeight(mFoot.m[3][0], mFoot.m[3][2]);
                 }
                 if (bInWater)
@@ -735,7 +735,7 @@ void EntitySoldier::UpdateFoleyFX(const RedPose& pose, const PblMatrix& mWorld)
             {
                 if (RedTerrain::_bEnable)
                 {
-                    PblMatrix mFoot = *pose.Find(0x2f06fa86) * mWorld;
+                    PblMatrix mFoot = *pose.Find(0x2f06fa86 /* "bone_r_foot" */) * mWorld;
                     RedTerrain::GetInterpolatedHeight(mFoot.m[3][0], mFoot.m[3][2]);
                 }
                 if (bInWater)
@@ -1507,12 +1507,12 @@ void EntitySoldier::Render(unsigned char ucLod, float fFade, unsigned int uiFlag
         }
         pShadingPose = &shadingPose;
         shadingPose.BindToModel(pModel->GetRedModel(0));
-        if (RedShadingState* pState = shadingPose.CreateDefaultShadingState(0x4cc5882a))
+        if (RedShadingState* pState = shadingPose.CreateDefaultShadingState(0x4cc5882a /* "refraction" */))
         {
             RedColor color = RedColor::WHITE;
             color.a = ucCloak;
-            pState->GetColorParam(0xbc6f8a5e) = color;
-            pState->GetIntParam(0x7802a19a) = 1;
+            pState->GetColorParam(0xbc6f8a5e /* "refraction_color" */) = color;
+            pState->GetIntParam(0x7802a19a /* "REFRACTIVE" */) = 1;
         }
     }
 
@@ -1720,7 +1720,7 @@ void EntitySoldier::Render(unsigned char ucLod, float fFade, unsigned int uiFlag
                 mClass->mSpecialSkeleton != SoldierAnimatorClass::sInstance->GetDefaultSkeleton() &&
                 mClass->mSkeletonRootScale != 1.0f)
             {
-                int iRoot = mClass->mSpecialSkeleton->GetJointIdxByCrc(0x16e27226);
+                int iRoot = mClass->mSpecialSkeleton->GetJointIdxByCrc(0x16e27226 /* "bone_root" */);
                 mClass->mSpecialSkeleton->SetJointScale(iRoot, 1.0f);
                 mSoldierAnimator->SetupPose(pose);
                 mClass->mSpecialSkeleton->SetJointScale(iRoot, mClass->mSkeletonRootScale);
@@ -1762,7 +1762,7 @@ void EntitySoldier::Render(unsigned char ucLod, float fFade, unsigned int uiFlag
                 if (mCharacter && mCharacter->mVehicle && !mCharacter->mRemote &&
                     GetCollisionType() == COLL_ATTACHED && IsAlive())
                 {
-                    if (const PblMatrix* pHead = pose.Find(0x8afdf5e4))
+                    if (const PblMatrix* pHead = pose.Find(0x8afdf5e4 /* "bone_head" */))
                     {
                         PblVector3 vDir = mCharacter->mVehicle->mEyeDir;
                         PblVector3 vLocal;
@@ -1787,8 +1787,8 @@ void EntitySoldier::Render(unsigned char ucLod, float fFade, unsigned int uiFlag
                             mHeadLook.m[1][3] = 0.0f;
                             mHeadLook[2] = vX;
                             mHeadLook.m[2][3] = 0.0f;
-                            pose.Remove(0x8afdf5e4);
-                            pose.Store(0x8afdf5e4, &mHeadLook);
+                            pose.Remove(0x8afdf5e4 /* "bone_head" */);
+                            pose.Store(0x8afdf5e4 /* "bone_head" */, &mHeadLook);
                         }
                     }
                 }
@@ -1801,21 +1801,21 @@ void EntitySoldier::Render(unsigned char ucLod, float fFade, unsigned int uiFlag
                          (mState == SoldierState::CROUCH &&
                           (pLowLevel->GetHeadLookState() == AI::HEAD_LOOK_RIGHT ||
                            pLowLevel->GetHeadLookState() == AI::HEAD_LOOK_LEFT))) &&
-                        pLowLevel->CalcHeadLookMatrix(pose.Find(0x8afdf5e4), &mHeadLook))
+                        pLowLevel->CalcHeadLookMatrix(pose.Find(0x8afdf5e4 /* "bone_head" */), &mHeadLook))
                     {
-                        pose.Remove(0x8afdf5e4);
-                        pose.Store(0x8afdf5e4, &mHeadLook);
+                        pose.Remove(0x8afdf5e4 /* "bone_head" */);
+                        pose.Store(0x8afdf5e4 /* "bone_head" */, &mHeadLook);
                     }
                 }
 
                 if (mJetEffectHandle)
                 {
-                    PblMatrix mOffset(reinterpret_cast<const _D3DXMATRIXA16*>(pose.Find(0xe5b51072)));
+                    PblMatrix mOffset(reinterpret_cast<const _D3DXMATRIXA16*>(pose.Find(0xe5b51072 /* "bone_ribcage" */)));
                     mJetEffectHandle->SetLocalOffsetMatrix(mOffset);
                 }
                 if (mJetIdleEffectHandle)
                 {
-                    PblMatrix mOffset(reinterpret_cast<const _D3DXMATRIXA16*>(pose.Find(0xe5b51072)));
+                    PblMatrix mOffset(reinterpret_cast<const _D3DXMATRIXA16*>(pose.Find(0xe5b51072 /* "bone_ribcage" */)));
                     mJetIdleEffectHandle->SetLocalOffsetMatrix(mOffset);
                 }
                 for (int i = 0; i < kMaxSmolderEffects; ++i)
@@ -1832,14 +1832,14 @@ void EntitySoldier::Render(unsigned char ucLod, float fFade, unsigned int uiFlag
                 float fWaterHeight;
                 if (RedWater::GetWaterHeight(GetPosition(), fWaterHeight))
                 {
-                    const PblMatrix* pRightFoot = pose.Find(0x2f06fa86);
+                    const PblMatrix* pRightFoot = pose.Find(0x2f06fa86 /* "bone_r_foot" */);
                     PblMatrix mFoot = mWorld;
                     if (pRightFoot)
                     {
                         mFoot = *pRightFoot * mWorld;
                     }
                     PblVector3 vRightFoot = mFoot.GetTranslation();
-                    const PblMatrix* pLeftFoot = pose.Find(0x1af77461);
+                    const PblMatrix* pLeftFoot = pose.Find(0x1af77461 /* "bone_l_foot" */);
                     if (!pLeftFoot)
                     {
                         pLeftFoot = &gMatrixIdentity;
@@ -1888,7 +1888,7 @@ void EntitySoldier::Render(unsigned char ucLod, float fFade, unsigned int uiFlag
                 if (mClass->mFootSlideEffect && fDeltaTime > 0.0f)
                 {
                     PblMatrix mRightFoot;
-                    mRightFoot = *pose.Find(0x2f06fa86) * mWorld;
+                    mRightFoot = *pose.Find(0x2f06fa86 /* "bone_r_foot" */) * mWorld;
                     bool bSlide = false;
                     if (!(mFlags & flags_rightFootInWater) && (mFlags & flags_isGrounded) &&
                         SquaredLength(m_vPosFootRight) > 0.0f)
@@ -1918,7 +1918,7 @@ void EntitySoldier::Render(unsigned char ucLod, float fFade, unsigned int uiFlag
                     }
 
                     PblMatrix mLeftFoot;
-                    mLeftFoot = *pose.Find(0x1af77461) * mWorld;
+                    mLeftFoot = *pose.Find(0x1af77461 /* "bone_l_foot" */) * mWorld;
                     if (!(mFlags & flags_leftFootInWater) && (mFlags & flags_isGrounded) &&
                         SquaredLength(m_vPosFootLeft) > 0.0f)
                     {
@@ -1990,10 +1990,10 @@ void EntitySoldier::Render(unsigned char ucLod, float fFade, unsigned int uiFlag
                 const PblMatrix* pBone = 0;
                 if (pPose)
                 {
-                    pBone = pPose->Find(0xd2afb28a);
+                    pBone = pPose->Find(0xd2afb28a /* "bone_neck" */);
                     if (!pBone)
                     {
-                        pBone = pPose->Find(0x8afdf5e4);
+                        pBone = pPose->Find(0x8afdf5e4 /* "bone_head" */);
                     }
                 }
                 const PblMatrix& mChoke = pBone ? *pBone * mWorld : mWorld;
@@ -2136,7 +2136,7 @@ void EntitySoldier::Render(unsigned char ucLod, float fFade, unsigned int uiFlag
         }
         if (mJetIdleEffectHandle && pPose)
         {
-            PblMatrix mOffset(reinterpret_cast<const _D3DXMATRIXA16*>(pPose->Find(0xe5b51072)));
+            PblMatrix mOffset(reinterpret_cast<const _D3DXMATRIXA16*>(pPose->Find(0xe5b51072 /* "bone_ribcage" */)));
             mJetIdleEffectHandle->SetLocalOffsetMatrix(mOffset);
         }
         if (const RedPose* pLowResPose = mSoldierAnimatorLowRes->GetPose())
@@ -2162,15 +2162,15 @@ void EntitySoldier::Render(unsigned char ucLod, float fFade, unsigned int uiFlag
             pShadingPose = &shadingPose;
         }
         pShadingPose->BindToModel(pModel->GetRedModel(0));
-        if (RedShadingState* pState = pShadingPose->CreateShadingState(0xdc5803e9))
+        if (RedShadingState* pState = pShadingPose->CreateShadingState(0xdc5803e9 /* "override_texture" */))
         {
-            pState->GetIntParam(0x891891e9) = mClass->mOverrideTextureHash;
+            pState->GetIntParam(0x891891e9 /* "diffuse_texture" */) = mClass->mOverrideTextureHash;
         }
         if (mClass->mOverrideTextureHash2)
         {
-            if (RedShadingState* pState = pShadingPose->CreateShadingState(0xb98e11c1))
+            if (RedShadingState* pState = pShadingPose->CreateShadingState(0xb98e11c1 /* "override_texture2" */))
             {
-                pState->GetIntParam(0x891891e9) = mClass->mOverrideTextureHash2;
+                pState->GetIntParam(0x891891e9 /* "diffuse_texture" */) = mClass->mOverrideTextureHash2;
             }
         }
     }
@@ -2257,7 +2257,7 @@ void EntitySoldier::Render(unsigned char ucLod, float fFade, unsigned int uiFlag
         if (!(uiModelFlags & 0x220000) && fAttachAlpha > 0.0f && pPose)
         {
             pPose->BindToSkeleton(GetModel()->GetRedModel(0)->_pSkeleton);
-            if (const PblMatrix* pHead = pPose->Find(0x8afdf5e4))
+            if (const PblMatrix* pHead = pPose->Find(0x8afdf5e4 /* "bone_head" */))
             {
                 float fHeight = pHead->m[3][1];
                 if (fHeight > 0.3f)
@@ -4138,20 +4138,20 @@ EntitySoldierClass::EntitySoldierClass(unsigned int uHash)
     mJetAcceleration = 20.0f;
     mJetPackEffect = 0;
     mJetPackIdleEffect = 0;
-    mHealthGainEffect = 0x9D26C2F2u;
-    mAmmoGainEffect = 0x2A72AE31u;
-    mEnergyGainEffect = 0x9796A1C5u;
-    mBuffHealthEffect = 0xBB3E84E9u;
-    mBuffOffenseEffect = 0xC17AB11Au;
-    mBuffDefenseEffect = 0x28B9F3ACu;
-    mDebuffEffect = 0xCAA14018u;
-    mInvincibleEffect = 0x9796A1C5u;
+    mHealthGainEffect = 0x9D26C2F2u /* "com_sfx_powerup_blue" */;
+    mAmmoGainEffect = 0x2A72AE31u /* "com_sfx_powerup_red" */;
+    mEnergyGainEffect = 0x9796A1C5u /* "com_sfx_powerup_green" */;
+    mBuffHealthEffect = 0xBB3E84E9u /* "com_sfx_buffed_regen" */;
+    mBuffOffenseEffect = 0xC17AB11Au /* "com_sfx_buffed_offense" */;
+    mBuffDefenseEffect = 0x28B9F3ACu /* "com_sfx_buffed_defense" */;
+    mDebuffEffect = 0xCAA14018u /* "com_sfx_buffed_poison" */;
+    mInvincibleEffect = 0x9796A1C5u /* "com_sfx_powerup_green" */;
     mFootSlideEffect = 0;
     mChokeEffect = 0;
     m_fBlurEffect = 0.0f;
-    mWaterSplashEffect = 0xA40BAAA7u;
-    mFootWaterSplashEffect = 0xA40BAAA7u;
-    mWakeWaterSplashEffect = 0xA40BAAA7u;
+    mWaterSplashEffect = 0xA40BAAA7u /* "com_sfx_watersplash_xs" */;
+    mFootWaterSplashEffect = 0xA40BAAA7u /* "com_sfx_watersplash_xs" */;
+    mWakeWaterSplashEffect = 0xA40BAAA7u /* "com_sfx_watersplash_xs" */;
     mFirstPersonModelHandle = -1;
     mSkeletonRootScale = 1.0f;
     mCollisionRootScale = 1.0f;
@@ -4350,7 +4350,7 @@ void EntitySoldierClass::PostReadSetup()
         mSkeletonRootScale = 0.6f;
         if (mSpecialSkeleton && mSpecialSkeleton != SoldierAnimatorClass::Instance()->GetDefaultSkeleton())
         {
-            int iJoint = (int)mSpecialSkeleton->m_kHashCRC2Joint.Find(0x16e27226) - 1;
+            int iJoint = (int)mSpecialSkeleton->m_kHashCRC2Joint.Find(0x16e27226 /* "bone_root" */) - 1;
             mSpecialSkeleton->SetJointScale(iJoint, mSkeletonRootScale);
         }
 
@@ -4574,8 +4574,8 @@ void EntitySoldierClass::PostReadSetup()
         for (int i = 0; i < 3; ++i)
         {
             CollisionModel& model = mCollisionModels[i];
-            mLowerBodyId[i] = model.GetMaskId(0x9458FB2E);
-            mUpperBodyId[i] = model.GetMaskId(0x2C31EC5B);
+            mLowerBodyId[i] = model.GetMaskId(0x9458FB2E /* "coll_body_lower" */);
+            mUpperBodyId[i] = model.GetMaskId(0x2C31EC5B /* "coll_body_upper" */);
 
             unsigned int uLegs = 0;
             if (mLowerBodyId[i] >= 0)
@@ -4586,12 +4586,12 @@ void EntitySoldierClass::PostReadSetup()
             {
                 uLegs |= 1 << mUpperBodyId[i];
             }
-            int iId = model.GetMaskId(0x0DB3CAEA);
+            int iId = model.GetMaskId(0x0DB3CAEA /* "coll_body_medium" */);
             if (iId >= 0)
             {
                 uLegs |= 1 << iId;
             }
-            iId = model.GetMaskId(0x6A085208);
+            iId = model.GetMaskId(0x6A085208 /* "coll_body_medium2" */);
             if (iId >= 0)
             {
                 uLegs |= 1 << iId;
@@ -4600,11 +4600,11 @@ void EntitySoldierClass::PostReadSetup()
             model.SetCollisionMask(COLL_STATIC, CollisionMask(uLegs));
             model.SetCollisionMask(COLL_RIGID, CollisionMask(uLegs));
 
-            model.SetCollisionMask(COLL_SOFT, CollisionMask(1 << model.GetMaskId(0xFE858165)));
+            model.SetCollisionMask(COLL_SOFT, CollisionMask(1 << model.GetMaskId(0xFE858165 /* "main_body" */)));
 
-            unsigned int uHit = 1 << model.GetMaskId(0xCA25B9F3);
-            uHit |= 1 << model.GetMaskId(0xE8B9E01A);
-            uHit |= 1 << model.GetMaskId(0x34FCD074);
+            unsigned int uHit = 1 << model.GetMaskId(0xCA25B9F3 /* "coll_torso" */);
+            uHit |= 1 << model.GetMaskId(0xE8B9E01A /* "coll_head" */);
+            uHit |= 1 << model.GetMaskId(0x34FCD074 /* "coll_body" */);
             model.SetCollisionMask(COLL_ORDNANCE, CollisionMask(uHit));
         }
     }
@@ -4651,8 +4651,8 @@ void EntitySoldierClass::PostReadSetup()
     matrix.m[3][3] = 1.0f;
     mDeadCollision.AddBody(new CollisionBodyPrimitive(primitive, "coll_body_medium2", matrix, 0));
 
-    int iLower = mDeadCollision.GetMaskId(0x9458FB2E);
-    int iUpper = mDeadCollision.GetMaskId(0x2C31EC5B);
+    int iLower = mDeadCollision.GetMaskId(0x9458FB2E /* "coll_body_lower" */);
+    int iUpper = mDeadCollision.GetMaskId(0x2C31EC5B /* "coll_body_upper" */);
     unsigned int uDead = 0;
     if (iLower >= 0)
     {
@@ -4662,12 +4662,12 @@ void EntitySoldierClass::PostReadSetup()
     {
         uDead |= 1 << iUpper;
     }
-    int iId = mDeadCollision.GetMaskId(0x0DB3CAEA);
+    int iId = mDeadCollision.GetMaskId(0x0DB3CAEA /* "coll_body_medium" */);
     if (iId >= 0)
     {
         uDead |= 1 << iId;
     }
-    iId = mDeadCollision.GetMaskId(0x6A085208);
+    iId = mDeadCollision.GetMaskId(0x6A085208 /* "coll_body_medium2" */);
     if (iId >= 0)
     {
         uDead |= 1 << iId;
@@ -4689,90 +4689,90 @@ void EntitySoldierClass::SetProperty(unsigned int uProperty, const char* pszValu
 {
     switch (uProperty)
     {
-    case 0x2FA0BA9D:
-    case 0x9F8A0040:
+    case 0x2FA0BA9D: /* "Acceleration" */
+    case 0x9F8A0040: /* "Acceleraton" */
         sscanf(pszValue, "%f", &mAcceleration);
         break;
-    case 0x86DF0364:
+    case 0x86DF0364: /* "MaxSpeed" */
         sscanf(pszValue, "%f", &mMaxSpeed);
         break;
-    case 0x3437A33D:
+    case 0x3437A33D: /* "MaxStrafeSpeed" */
         sscanf(pszValue, "%f", &mMaxStrafeSpeed);
         break;
-    case 0x5433F589:
+    case 0x5433F589: /* "MaxTurnSpeed" */
         sscanf(pszValue, "%f", &mMaxTurnSpeed);
         break;
-    case 0xB5534BE0:
+    case 0xB5534BE0: /* "MaxPitchSpeed" */
         sscanf(pszValue, "%f", &mMaxPitchSpeed);
         break;
-    case 0x3403B139:
+    case 0x3403B139: /* "PitchLimits" */
         sscanf(pszValue, "%f %f", &mMinPitch, &mMaxPitch);
         mMinPitch *= 0.017453292f;
         mMaxPitch *= 0.017453292f;
         break;
-    case 0xC415D23A:
+    case 0xC415D23A: /* "JumpHeight" */
     {
         float fHeight = 0.0f;
         sscanf(pszValue, "%f", &fHeight);
         mJumpVerticalSpeed = (float)sqrt(fHeight * 2.0f * 18.0f);
         break;
     }
-    case 0x8EF41EF6:
+    case 0x8EF41EF6: /* "JumpForwardSpeedFactor" */
         sscanf(pszValue, "%f", &mJumpForwardSpeedFactor);
         break;
-    case 0x32505412:
+    case 0x32505412: /* "JumpStrafeSpeedFactor" */
         sscanf(pszValue, "%f", &mJumpStrafeSpeedFactor);
         break;
-    case 0x07FF90DA:
+    case 0x07FF90DA: /* "RollSpeedFactor" */
         sscanf(pszValue, "%f", &mRollSpeedFactor);
         break;
-    case 0x56389879:
+    case 0x56389879: /* "SprintAccelerateTime" */
         sscanf(pszValue, "%f", &mSprintAccelerateTime);
         break;
 
-    case 0x50208DC0:
+    case 0x50208DC0: /* "RecoverFromTumble" */
         m_bRecoverFromTumble = atoi(pszValue) != 0;
         break;
-    case 0x3AF4F6FD:
+    case 0x3AF4F6FD: /* "UseDirectionalJumps" */
         m_bUseDirectionalJumps = atoi(pszValue) != 0;
         break;
-    case 0xAFC3ABEE:
+    case 0xAFC3ABEE: /* "JetShowHud" */
         mJetShowHud = atoi(pszValue) != 0;
         break;
-    case 0x91FABB5C:
-        if (PblHash(pszValue) == 0x70CEAB2D)
+    case 0x91FABB5C: /* "JetType" */
+        if (PblHash(pszValue) == 0x70CEAB2D /* "hover" */)
         {
             mJetTypeHover = 1;
         }
         break;
-    case 0x268DAC2D:
+    case 0x268DAC2D: /* "FleeLikeAHero" */
         mFleeLikeAHero = atoi(pszValue);
         break;
-    case 0xC372B928:
+    case 0xC372B928: /* "IsAcklay" */
     {
         int iAcklay = 0;
         sscanf(pszValue, "%d", &iAcklay);
         m_bIsAcklay = iAcklay != 0;
         break;
     }
-    case 0x523E0533:
+    case 0x523E0533: /* "UseDirectionalDeaths" */
         m_bUseDirectionalDeaths = atoi(pszValue) != 0;
         break;
-    case 0xE0359276:
+    case 0xE0359276: /* "NumTentacles" */
     {
         int iNum;
         sscanf(pszValue, "%d", &iNum);
         m_numTentacles = iNum;
         break;
     }
-    case 0x087A4DC9:
+    case 0x087A4DC9: /* "BonesPerTentacle" */
     {
         int iNum;
         sscanf(pszValue, "%d", &iNum);
         m_bonesPerTentacle = iNum;
         break;
     }
-    case 0xF7AB24F5:
+    case 0xF7AB24F5: /* "TentacleCollType" */
     {
         int iType;
         sscanf(pszValue, "%d", &iType);
@@ -4780,7 +4780,7 @@ void EntitySoldierClass::SetProperty(unsigned int uProperty, const char* pszValu
         break;
     }
 
-    case 0x47BF39C1:
+    case 0x47BF39C1: /* "ControlSpeed" */
     {
         char acState[257];
         float fThrust = 1.0f;
@@ -4794,14 +4794,14 @@ void EntitySoldierClass::SetProperty(unsigned int uProperty, const char* pszValu
         int iState;
         switch (PblHash(acState))
         {
-        case 0x75493323: iState = 0; break;
-        case 0x4E4FA58B: iState = 1; break;
-        case 0x6DD99A25: iState = 2; break;
-        case 0x76F15155: iState = 3; break;
-        case 0xA73F5C0D: iState = 4; break;
-        case 0x16FF3D1E: iState = 5; break;
-        case 0xD7E330F4: iState = 6; break;
-        case 0x4C009BC2: iState = 7; break;
+        case 0x75493323: /* "Stand" */ iState = 0; break;
+        case 0x4E4FA58B: /* "Crouch" */ iState = 1; break;
+        case 0x6DD99A25: /* "Prone" */ iState = 2; break;
+        case 0x76F15155: /* "Sprint" */ iState = 3; break;
+        case 0xA73F5C0D: /* "Jump" */ iState = 4; break;
+        case 0x16FF3D1E: /* "Roll" */ iState = 5; break;
+        case 0xD7E330F4: /* "Jet" */ iState = 6; break;
+        case 0x4C009BC2: /* "tumble" */ iState = 7; break;
         default:
             return;
         }
@@ -4817,24 +4817,24 @@ void EntitySoldierClass::SetProperty(unsigned int uProperty, const char* pszValu
         break;
     }
 
-    case 0x2CDB588A:
+    case 0x2CDB588A: /* "CollisionThreshold" */
         sscanf(pszValue, "%f %f %f", &mCollisionThreshold[0], &mCollisionThreshold[1], &mCollisionThreshold[2]);
         break;
-    case 0x1A87BACF:
+    case 0x1A87BACF: /* "CollisionScale" */
         sscanf(pszValue, "%f %f %f", &mCollisionScale[0], &mCollisionScale[1], &mCollisionScale[2]);
         break;
-    case 0x2EF03732:
+    case 0x2EF03732: /* "CollisionInflict" */
         sscanf(pszValue, "%f", &mCollisionInflict);
         break;
-    case 0x28ADDA49:
+    case 0x28ADDA49: /* "NoCombatInterrupt" */
         mCombatInterrupts = atoi(pszValue) == 0;
         break;
 
-    case 0xD0329E80:
+    case 0xD0329E80: /* "WeaponSection" */
         sWeaponSection = atoi(pszValue) - 1;
         break;
-    case 0x6F332041:
-    case 0xFBF47DBA:
+    case 0x6F332041: /* "Weapon" */
+    case 0xFBF47DBA: /* "WeaponName" */
     {
         mWeaponClass[sWeaponSection] = WeaponClass::Find(PblHash(pszValue));
         int iCount = sWeaponSection + 1;
@@ -4845,38 +4845,38 @@ void EntitySoldierClass::SetProperty(unsigned int uProperty, const char* pszValu
         mWeaponCount = iCount;
         break;
     }
-    case 0xDC697015:
-    case 0x2CE1A1D1:
+    case 0xDC697015: /* "PrimaryWeapon" */
+    case 0x2CE1A1D1: /* "WeaponName1" */
         mWeaponClass[0] = WeaponClass::Find(PblHash(pszValue));
         mWeaponCount = mWeaponCount > 1 ? mWeaponCount : 1;
         break;
-    case 0x4ADC9ACD:
-    case 0x29E19D18:
+    case 0x4ADC9ACD: /* "SecondaryWeapon" */
+    case 0x29E19D18: /* "WeaponName2" */
         mWeaponClass[1] = WeaponClass::Find(PblHash(pszValue));
         mWeaponCount = mWeaponCount > 2 ? mWeaponCount : 2;
         break;
-    case 0x2AE19EAB:
+    case 0x2AE19EAB: /* "WeaponName3" */
         mWeaponClass[2] = WeaponClass::Find(PblHash(pszValue));
         mWeaponCount = mWeaponCount > 3 ? mWeaponCount : 3;
         break;
-    case 0x2FE1A68A:
+    case 0x2FE1A68A: /* "WeaponName4" */
         mWeaponClass[3] = WeaponClass::Find(PblHash(pszValue));
         mWeaponCount = mWeaponCount > 4 ? mWeaponCount : 4;
         break;
 
-    case 0xDC19BD13:
-    case 0x9E84BC86:
-    case 0x9D84BAF3:
-    case 0x9C84B960:
-    case 0xA384C465:
+    case 0xDC19BD13: /* "WeaponAmmo" */
+    case 0x9E84BC86: /* "WeaponAmmo1" */
+    case 0x9D84BAF3: /* "WeaponAmmo2" */
+    case 0x9C84B960: /* "WeaponAmmo3" */
+    case 0xA384C465: /* "WeaponAmmo4" */
     {
         int iWeapon = sWeaponSection;
         switch (uProperty)
         {
-        case 0x9E84BC86: iWeapon = 0; break;
-        case 0x9D84BAF3: iWeapon = 1; break;
-        case 0x9C84B960: iWeapon = 2; break;
-        case 0xA384C465: iWeapon = 3; break;
+        case 0x9E84BC86: /* "WeaponAmmo1" */ iWeapon = 0; break;
+        case 0x9D84BAF3: /* "WeaponAmmo2" */ iWeapon = 1; break;
+        case 0x9C84B960: /* "WeaponAmmo3" */ iWeapon = 2; break;
+        case 0xA384C465: /* "WeaponAmmo4" */ iWeapon = 3; break;
         }
         int iAmmo = 0;
         sscanf(pszValue, "%d", &iAmmo);
@@ -4889,19 +4889,19 @@ void EntitySoldierClass::SetProperty(unsigned int uProperty, const char* pszValu
         }
         break;
     }
-    case 0x8585BB8A:
-    case 0xEC868761:
-    case 0xE98682A8:
-    case 0xEA86843B:
-    case 0xEF868C1A:
+    case 0x8585BB8A: /* "WeaponShareAmmo" */
+    case 0xEC868761: /* "WeaponShareAmmo1" */
+    case 0xE98682A8: /* "WeaponShareAmmo2" */
+    case 0xEA86843B: /* "WeaponShareAmmo3" */
+    case 0xEF868C1A: /* "WeaponShareAmmo4" */
     {
         int iWeapon = sWeaponSection;
         switch (uProperty)
         {
-        case 0xEC868761: iWeapon = 0; break;
-        case 0xE98682A8: iWeapon = 1; break;
-        case 0xEA86843B: iWeapon = 2; break;
-        case 0xEF868C1A: iWeapon = 3; break;
+        case 0xEC868761: /* "WeaponShareAmmo1" */ iWeapon = 0; break;
+        case 0xE98682A8: /* "WeaponShareAmmo2" */ iWeapon = 1; break;
+        case 0xEA86843B: /* "WeaponShareAmmo3" */ iWeapon = 2; break;
+        case 0xEF868C1A: /* "WeaponShareAmmo4" */ iWeapon = 3; break;
         }
         int iShare = 0;
         sscanf(pszValue, "%d", &iShare);
@@ -4919,19 +4919,19 @@ void EntitySoldierClass::SetProperty(unsigned int uProperty, const char* pszValu
         }
         break;
     }
-    case 0x9455A446:
-    case 0xF9D1E755:
-    case 0xF6D1E29C:
-    case 0xF7D1E42F:
-    case 0xF4D1DF76:
+    case 0x9455A446: /* "WeaponShareHeat" */
+    case 0xF9D1E755: /* "WeaponShareHeat1" */
+    case 0xF6D1E29C: /* "WeaponShareHeat2" */
+    case 0xF7D1E42F: /* "WeaponShareHeat3" */
+    case 0xF4D1DF76: /* "WeaponShareHeat4" */
     {
         int iWeapon = sWeaponSection;
         switch (uProperty)
         {
-        case 0xF9D1E755: iWeapon = 0; break;
-        case 0xF6D1E29C: iWeapon = 1; break;
-        case 0xF7D1E42F: iWeapon = 2; break;
-        case 0xF4D1DF76: iWeapon = 3; break;
+        case 0xF9D1E755: /* "WeaponShareHeat1" */ iWeapon = 0; break;
+        case 0xF6D1E29C: /* "WeaponShareHeat2" */ iWeapon = 1; break;
+        case 0xF7D1E42F: /* "WeaponShareHeat3" */ iWeapon = 2; break;
+        case 0xF4D1DF76: /* "WeaponShareHeat4" */ iWeapon = 3; break;
         }
         int iShare = 0;
         sscanf(pszValue, "%d", &iShare);
@@ -4947,35 +4947,35 @@ void EntitySoldierClass::SetProperty(unsigned int uProperty, const char* pszValu
         }
         break;
     }
-    case 0x16472328:
+    case 0x16472328: /* "WeaponChannel" */
     {
         int iChannel;
         sscanf(pszValue, "%d", &iChannel);
         mWeaponChannel[sWeaponSection] = (unsigned int)iChannel <= 1 ? (char)iChannel : 0;
         break;
     }
-    case 0x2AFC405B:
+    case 0x2AFC405B: /* "WeaponChannel1" */
     {
         int iChannel;
         sscanf(pszValue, "%d", &iChannel);
         mWeaponChannel[0] = (unsigned int)iChannel <= 1 ? (char)iChannel : 0;
         break;
     }
-    case 0x2BFC41EE:
+    case 0x2BFC41EE: /* "WeaponChannel2" */
     {
         int iChannel;
         sscanf(pszValue, "%d", &iChannel);
         mWeaponChannel[1] = (unsigned int)iChannel <= 1 ? (char)iChannel : 0;
         break;
     }
-    case 0x2CFC4381:
+    case 0x2CFC4381: /* "WeaponChannel3" */
     {
         int iChannel;
         sscanf(pszValue, "%d", &iChannel);
         mWeaponChannel[2] = (unsigned int)iChannel <= 1 ? (char)iChannel : 0;
         break;
     }
-    case 0x2DFC4514:
+    case 0x2DFC4514: /* "WeaponChannel4" */
     {
         int iChannel;
         sscanf(pszValue, "%d", &iChannel);
@@ -4983,14 +4983,14 @@ void EntitySoldierClass::SetProperty(unsigned int uProperty, const char* pszValu
         break;
     }
 
-    case 0x09DB74AC:
+    case 0x09DB74AC: /* "OverrideTexture" */
         mOverrideTextureHash = PblHash(pszValue);
         break;
-    case 0x227894BA:
+    case 0x227894BA: /* "OverrideTexture2" */
         mOverrideTextureHash2 = PblHash(pszValue);
         break;
 
-    case 0x942ED301:
+    case 0x942ED301: /* "EnergyRestore" */
         sscanf(pszValue, "%f", &mEnergyRestore);
         if (mEnergyRestore < 0.0f)
         {
@@ -5001,35 +5001,35 @@ void EntitySoldierClass::SetProperty(unsigned int uProperty, const char* pszValu
             mEnergyRestoreIdle = mEnergyRestore;
         }
         break;
-    case 0x082EAF37:
+    case 0x082EAF37: /* "EnergyRestoreIdle" */
         sscanf(pszValue, "%f", &mEnergyRestoreIdle);
         if (mEnergyRestore > mEnergyRestoreIdle)
         {
             mEnergyRestoreIdle = mEnergyRestore;
         }
         break;
-    case 0x134361B9:
+    case 0x134361B9: /* "EnergyDrainSprint" */
         sscanf(pszValue, "%f", &mEnergyDrainSprint);
         if (mEnergyDrainSprint < 0.0f)
         {
             mEnergyDrainSprint = 0.0f;
         }
         break;
-    case 0x0B4A7FD4:
+    case 0x0B4A7FD4: /* "EnergyCostJump" */
         sscanf(pszValue, "%f", &mEnergyCostJump);
         if (mEnergyCostJump < 0.0f)
         {
             mEnergyCostJump = 0.0f;
         }
         break;
-    case 0xA44B8F28:
+    case 0xA44B8F28: /* "EnergyCostJumpSprint" */
         sscanf(pszValue, "%f", &mEnergyCostJumpSprint);
         if (mEnergyCostJumpSprint < 0.0f)
         {
             mEnergyCostJumpSprint = 0.0f;
         }
         break;
-    case 0xCA24CD33:
+    case 0xCA24CD33: /* "EnergyCostRoll" */
         sscanf(pszValue, "%f", &mEnergyCostRoll);
         if (mEnergyCostRoll < 0.0f)
         {
@@ -5037,130 +5037,130 @@ void EntitySoldierClass::SetProperty(unsigned int uProperty, const char* pszValu
         }
         break;
 
-    case 0xC4B2CB20:
+    case 0xC4B2CB20: /* "JetJump" */
         sscanf(pszValue, "%f", &mJetJump);
         break;
-    case 0xF0B75E90:
+    case 0xF0B75E90: /* "JetPush" */
         sscanf(pszValue, "%f", &mJetPush);
         break;
-    case 0x8AAC2908:
+    case 0x8AAC2908: /* "JetAcceleration" */
         sscanf(pszValue, "%f", &mJetAcceleration);
         break;
-    case 0x0825C1BF:
+    case 0x0825C1BF: /* "JetFuelRechargeRate" */
         sscanf(pszValue, "%f", &mJetFuelRechargeRate);
         break;
-    case 0x36D9DE4D:
+    case 0x36D9DE4D: /* "JetFuelCost" */
         sscanf(pszValue, "%f", &mJetFuelCost);
         break;
-    case 0x1EBB5841:
+    case 0x1EBB5841: /* "JetFuelInitialCost" */
         sscanf(pszValue, "%f", &mJetFuelInitialCost);
         break;
-    case 0xF8A37C8A:
+    case 0xF8A37C8A: /* "JetFuelMinBorder" */
         sscanf(pszValue, "%f", &mJetFuelMinBorder);
         break;
-    case 0x0C2425EA:
+    case 0x0C2425EA: /* "JetEnergyDrain" */
         sscanf(pszValue, "%f", &mJetEnergyDrain);
         break;
-    case 0x69C4D0DD:
+    case 0x69C4D0DD: /* "JetEffect" */
         mJetPackEffect = FLEffect::Get(PblHash(pszValue));
         break;
-    case 0xBC5EDAD3:
+    case 0xBC5EDAD3: /* "JetIdleEffect" */
         mJetPackIdleEffect = FLEffect::Get(PblHash(pszValue));
         break;
 
-    case 0x68C9C2D9:
+    case 0x68C9C2D9: /* "HealthGainEffect" */
         mHealthGainEffect = PblHash(pszValue);
         break;
-    case 0x8D8743F9:
+    case 0x8D8743F9: /* "AmmoGainEffect" */
         mAmmoGainEffect = PblHash(pszValue);
         break;
-    case 0x80A20AE3:
+    case 0x80A20AE3: /* "EnergyGainEffect" */
         mEnergyGainEffect = PblHash(pszValue);
         break;
-    case 0x32839537:
+    case 0x32839537: /* "BuffHealthEffect" */
         mBuffHealthEffect = PblHash(pszValue);
         break;
-    case 0x5B84DF23:
+    case 0x5B84DF23: /* "BuffOffenseEffect" */
         mBuffOffenseEffect = PblHash(pszValue);
         break;
-    case 0x8B003201:
+    case 0x8B003201: /* "BuffDefenseEffect" */
         mBuffDefenseEffect = PblHash(pszValue);
         break;
-    case 0x1F3FEA32:
+    case 0x1F3FEA32: /* "DebuffEffect" */
         mDebuffEffect = PblHash(pszValue);
         break;
-    case 0x9B485275:
+    case 0x9B485275: /* "InvincibleEffect" */
         mInvincibleEffect = PblHash(pszValue);
         break;
-    case 0xB8F82137:
+    case 0xB8F82137: /* "FootSlideEffect" */
         mFootSlideEffect = PblHash(pszValue);
         break;
-    case 0xAD9245D2:
+    case 0xAD9245D2: /* "ChokeEffect" */
         mChokeEffect = PblHash(pszValue);
         break;
-    case 0xB9282909:
+    case 0xB9282909: /* "BlurEffect" */
         sscanf(pszValue, "%f", &m_fBlurEffect);
         break;
-    case 0xDEA64CFA:
+    case 0xDEA64CFA: /* "WaterSplashEffect" */
         mWaterSplashEffect = PblHash(pszValue);
         break;
-    case 0x057266EE:
+    case 0x057266EE: /* "FootWaterSplashEffect" */
         mFootWaterSplashEffect = PblHash(pszValue);
         break;
-    case 0xF44FEE52:
+    case 0xF44FEE52: /* "WakeWaterSplashEffect" */
         mWakeWaterSplashEffect = PblHash(pszValue);
         break;
 
-    case 0x54A7AEDF:
+    case 0x54A7AEDF: /* "UnitType" */
         mSoldierType = FindSoldierType(pszValue);
         break;
-    case 0x62A8F10F:
+    case 0x62A8F10F: /* "ImmuneToMines" */
         mImmuneToMines = atoi(pszValue) != 0;
         break;
 
-    case 0xBACA6BF1:
+    case 0xBACA6BF1: /* "CAMERASECTION" */
         switch (PblHash(pszValue))
         {
-        case 0x75493323:
+        case 0x75493323: /* "Stand" */
             sCurrentCameraSplit = 0; sCurrentCameraStance = 0; sCurrentCameraZoomed = 0;
             break;
-        case 0x94D7CDEC:
+        case 0x94D7CDEC: /* "STANDZOOM" */
             sCurrentCameraSplit = 0; sCurrentCameraStance = 0; sCurrentCameraZoomed = 1;
             break;
-        case 0x4E4FA58B:
+        case 0x4E4FA58B: /* "Crouch" */
             sCurrentCameraSplit = 0; sCurrentCameraStance = 1; sCurrentCameraZoomed = 0;
             break;
-        case 0xF648B5F4:
+        case 0xF648B5F4: /* "CROUCHZOOM" */
             sCurrentCameraSplit = 0; sCurrentCameraStance = 1; sCurrentCameraZoomed = 1;
             break;
-        case 0x6DD99A25:
+        case 0x6DD99A25: /* "Prone" */
             sCurrentCameraSplit = 0; sCurrentCameraStance = 2; sCurrentCameraZoomed = 0;
             break;
-        case 0x0016DA92:
+        case 0x0016DA92: /* "PRONEZOOM" */
             sCurrentCameraSplit = 0; sCurrentCameraStance = 2; sCurrentCameraZoomed = 1;
             break;
-        case 0x76F15155:
+        case 0x76F15155: /* "Sprint" */
             sCurrentCameraSplit = 0; sCurrentCameraStance = 3; sCurrentCameraZoomed = 0;
             break;
-        case 0xD8AECCCD:
+        case 0xD8AECCCD: /* "SPLITSTAND" */
             sCurrentCameraSplit = 1; sCurrentCameraStance = 0; sCurrentCameraZoomed = 0;
             break;
-        case 0x1643517A:
+        case 0x1643517A: /* "SPLITSTANDZOOM" */
             sCurrentCameraSplit = 1; sCurrentCameraStance = 0; sCurrentCameraZoomed = 1;
             break;
-        case 0xCA780CF9:
+        case 0xCA780CF9: /* "SPLITCROUCH" */
             sCurrentCameraSplit = 1; sCurrentCameraStance = 1; sCurrentCameraZoomed = 0;
             break;
-        case 0x37E029EE:
+        case 0x37E029EE: /* "SPLITCROUCHZOOM" */
             sCurrentCameraSplit = 1; sCurrentCameraStance = 1; sCurrentCameraZoomed = 1;
             break;
-        case 0xF6D39CCB:
+        case 0xF6D39CCB: /* "SPLITPRONE" */
             sCurrentCameraSplit = 1; sCurrentCameraStance = 2; sCurrentCameraZoomed = 0;
             break;
-        case 0xFE5CFC34:
+        case 0xFE5CFC34: /* "SPLITPRONEZOOM" */
             sCurrentCameraSplit = 1; sCurrentCameraStance = 2; sCurrentCameraZoomed = 1;
             break;
-        case 0x4ABADB57:
+        case 0x4ABADB57: /* "SPLITSPRINT" */
             sCurrentCameraSplit = 1; sCurrentCameraStance = 3; sCurrentCameraZoomed = 0;
             break;
         default:
@@ -5168,7 +5168,7 @@ void EntitySoldierClass::SetProperty(unsigned int uProperty, const char* pszValu
             break;
         }
         break;
-    case 0xC3E3DCFC:
+    case 0xC3E3DCFC: /* "CameraBlendTime" */
         if (sCurrentCameraStance > 0 && !sCurrentCameraZoomed &&
             !(sCurrentCameraSplit && CameraManager::sInstance->m_iNumCam <= 1))
         {
@@ -5176,7 +5176,7 @@ void EntitySoldierClass::SetProperty(unsigned int uProperty, const char* pszValu
         }
         break;
 
-    case 0x47C86B4A:
+    case 0x47C86B4A: /* "GeometryName" */
     {
         GameObjectClass::SetProperty(uProperty, pszValue);
         mLodData = SoldierLodData(mModel ? mModel->GetRedModel(0) : 0, 0);
@@ -5187,16 +5187,16 @@ void EntitySoldierClass::SetProperty(unsigned int uProperty, const char* pszValu
         mLowerBodyAnimMask = pAnimatorClass->GetDefaultLowerBodyAnimMask();
         break;
     }
-    case 0xA490EBA1:
+    case 0xA490EBA1: /* "GeometryLowRes" */
         mModelLowRes = const_cast<GameModel*>(GameModel::Find(PblHash(pszValue)));
         mLodData = SoldierLodData(mModel ? mModel->GetRedModel(0) : 0, mModelLowRes->GetRedModel(0));
         break;
-    case 0x6363D774:
+    case 0x6363D774: /* "firstperson" */
         mFirstPersonModelHandle = FirstPerson::AddGeometry(pszValue);
         break;
 
-    case 0x7012F6CD:
-    case 0x98557A5E:
+    case 0x7012F6CD: /* "SkeletonName" */
+    case 0x98557A5E: /* "AnimationName" */
     {
         char acBuffer[257];
         strlcpy(acBuffer, pszValue, sizeof(acBuffer));
@@ -5224,8 +5224,8 @@ void EntitySoldierClass::SetProperty(unsigned int uProperty, const char* pszValu
         }
         break;
     }
-    case 0x55F297D2:
-    case 0x1ECC7E0D:
+    case 0x55F297D2: /* "SkeletonLowRes" */
+    case 0x1ECC7E0D: /* "AnimationLowRes" */
         if (!gMidgetTime)
         {
             char acBuffer[257];
@@ -5251,16 +5251,16 @@ void EntitySoldierClass::SetProperty(unsigned int uProperty, const char* pszValu
             }
         }
         break;
-    case 0xE8888B42:
+    case 0xE8888B42: /* "AnimatedAddon" */
         mAddon = new AnimatedAddon(*mSpecialSkeleton);
         break;
-    case 0x94272331:
-    case 0xA423E008:
-    case 0xDDDCDE45:
+    case 0x94272331: /* "GeometryAddon" */
+    case 0xA423E008: /* "AddonAttachJoint" */
+    case 0xDDDCDE45: /* "AnimationAddon" */
         mAddon->SetProperty(uProperty, pszValue);
         break;
 
-    case 0x33AB42BA:
+    case 0x33AB42BA: /* "CollisionHeadOffset" */
     {
         float x = 0.0f, y = 0.0f, z = 0.0f;
         sscanf(pszValue, "%f %f %f", &x, &y, &z);
@@ -5269,7 +5269,7 @@ void EntitySoldierClass::SetProperty(unsigned int uProperty, const char* pszValu
         m_vCollisionHeadOffset.z = z;
         break;
     }
-    case 0x463A5C7D:
+    case 0x463A5C7D: /* "CollisionTorsoOffset" */
     {
         float x = 0.0f, y = 0.0f, z = 0.0f;
         sscanf(pszValue, "%f %f %f", &x, &y, &z);
@@ -5278,72 +5278,72 @@ void EntitySoldierClass::SetProperty(unsigned int uProperty, const char* pszValu
         m_vCollisionTorsoOffset.z = z;
         break;
     }
-    case 0x4F90C3A1:
+    case 0x4F90C3A1: /* "CollisionHeadScale" */
         sscanf(pszValue, "%f", &m_fCollisionHeadScale);
         break;
-    case 0xB199E320:
+    case 0xB199E320: /* "CollisionTorsoScale" */
         sscanf(pszValue, "%f", &m_fCollisionTorsoScale);
         break;
-    case 0xD641F0D6:
+    case 0xD641F0D6: /* "FootstepStride" */
         sscanf(pszValue, "%f", &mFootstepStride);
         break;
-    case 0x44C8744D:
+    case 0x44C8744D: /* "RunSpeed" */
         sscanf(pszValue, "%f", &mRunSpeed);
         break;
 
-    case 0x399EE477:
+    case 0x399EE477: /* "AcquiredTargetSound" */
         mAcquiredTargetSound.SetID(pszValue, false, false);
         break;
-    case 0xC007B675:
+    case 0xC007B675: /* "HidingSound" */
         mHidingSound.SetID(pszValue, false, false);
         break;
-    case 0xEB6089A1:
+    case 0xEB6089A1: /* "ApproachingTargetSound" */
         mApproachingTargetSound.SetID(pszValue, false, false);
         break;
-    case 0x94353BF8:
+    case 0x94353BF8: /* "FleeSound" */
         mFleeSound.SetID(pszValue, false, false);
         break;
-    case 0x130971AE:
+    case 0x130971AE: /* "PreparingForDamageSound" */
         mPreparingForDamageSound.SetID(pszValue, false, false);
         break;
-    case 0xD3C54780:
+    case 0xD3C54780: /* "HeardEnemySound" */
         mHeardEnemySound.SetID(pszValue, false, false);
         break;
-    case 0x4EE58508:
+    case 0x4EE58508: /* "ChargeSound" */
         mChargeSound.SetID(pszValue, false, false);
         break;
-    case 0x65A920BA:
+    case 0x65A920BA: /* "AmbientSound" */
         mAmbientSound.SetID(pszValue, false, false);
         break;
-    case 0x20CD1D00:
+    case 0x20CD1D00: /* "ShockFadeOutTime" */
         sscanf(pszValue, "%f", &mShockFadeOutTime);
         break;
-    case 0x716ADADD:
+    case 0x716ADADD: /* "ShockFadeInTime" */
         sscanf(pszValue, "%f", &mShockFadeInTime);
         break;
-    case 0xECF4A152:
+    case 0xECF4A152: /* "ShockFadeOutGain" */
         sscanf(pszValue, "%f", &mShockFadeOutGain);
         break;
-    case 0xF66784C8:
+    case 0xF66784C8: /* "ShockSound" */
         mShockSound.SetID(pszValue, false, false);
         break;
-    case 0x5625FC0B:
+    case 0x5625FC0B: /* "ClothingRustleSound" */
         mClothingRustleSound.SetID(pszValue, false, false);
         break;
-    case 0xF8D3E5D2:
+    case 0xF8D3E5D2: /* "LowHealthSound" */
         mLowHealthSound.SetID(pszValue, false, false);
         break;
-    case 0xC865523E:
+    case 0xC865523E: /* "LowHealthThreshold" */
         sscanf(pszValue, "%f", &mLowHealthThreshold);
         break;
-    case 0xDF0FB8AE:
+    case 0xDF0FB8AE: /* "ChokeSound" */
         mChokeSound.SetID(pszValue, false, false);
         break;
 
-    case 0x5EA04066:
+    case 0x5EA04066: /* "NextDropItem" */
         ++sCurDropItem;
         break;
-    case 0x406D2B75:
+    case 0x406D2B75: /* "DropItemClass" */
     {
         mDropItemClass[sCurDropItem] = EntityClass::Find(PblHash(pszValue));
         int iCount = sCurDropItem + 1;
@@ -5354,7 +5354,7 @@ void EntitySoldierClass::SetProperty(unsigned int uProperty, const char* pszValu
         mDropItemCount = iCount;
         break;
     }
-    case 0x26996DAE:
+    case 0x26996DAE: /* "DropItemProbability" */
     {
         sscanf(pszValue, "%f", &mDropItemProbability[sCurDropItem]);
         int iCount = sCurDropItem + 1;
@@ -5366,61 +5366,61 @@ void EntitySoldierClass::SetProperty(unsigned int uProperty, const char* pszValu
         break;
     }
 
-    case 0x43B50014:
+    case 0x43B50014: /* "ChunkFrequency" */
         sscanf(pszValue, "%f", &mChunkFrequency);
         break;
-    case 0x4CACC3D0:
+    case 0x4CACC3D0: /* "SkeletonRootScale" */
         sscanf(pszValue, "%f", &mSkeletonRootScale);
         if (mSpecialSkeleton && mSpecialSkeleton != SoldierAnimatorClass::Instance()->GetDefaultSkeleton() &&
             mSkeletonRootScale != 1.0f)
         {
-            int iJoint = (int)mSpecialSkeleton->m_kHashCRC2Joint.Find(0x16E27226) - 1;
+            int iJoint = (int)mSpecialSkeleton->m_kHashCRC2Joint.Find(0x16E27226 /* "bone_root" */) - 1;
             mSpecialSkeleton->SetJointScale(iJoint, mSkeletonRootScale);
         }
         break;
-    case 0xC64A53AB:
+    case 0xC64A53AB: /* "CollisionRootScale" */
         sscanf(pszValue, "%f", &mCollisionRootScale);
         break;
-    case 0x26239CD4:
+    case 0x26239CD4: /* "SkeletonRootScaleLowRes" */
         sscanf(pszValue, "%f", &mSkeletonRootScaleLowRes);
         if (mSpecialSkeletonLowRes && mSpecialSkeletonLowRes != SoldierAnimatorLowResClass::GetDefaultSkeleton() &&
             mSkeletonRootScaleLowRes != 1.0f)
         {
-            int iJoint = (int)mSpecialSkeletonLowRes->m_kHashCRC2Joint.Find(0xE6E47876) - 1;
+            int iJoint = (int)mSpecialSkeletonLowRes->m_kHashCRC2Joint.Find(0xE6E47876 /* "bone_pelvis" */) - 1;
             mSpecialSkeletonLowRes->SetJointScale(iJoint, mSkeletonRootScaleLowRes);
         }
         break;
-    case 0x91415FA0:
+    case 0x91415FA0: /* "MinFootHeight" */
         sscanf(pszValue, "%f", &mMinFootHeight);
         break;
-    case 0x02BB1FE0:
-    case 0x9B30E763:
+    case 0x02BB1FE0: /* "Explosion" */
+    case 0x9B30E763: /* "ExplosionName" */
         mExplosion = ExplosionClass::Find(PblHash(pszValue));
         break;
 
-    case 0x4AC2B220:
+    case 0x4AC2B220: /* "SndHeroSelectable" */
         mSndHeroSelectable = PblHash(pszValue);
         break;
-    case 0xE4DEE4EE:
+    case 0xE4DEE4EE: /* "SndHeroSpawned" */
         mSndHeroSpawned = PblHash(pszValue);
         break;
-    case 0xD3A93472:
+    case 0xD3A93472: /* "SndHeroDefeated" */
         mSndHeroDefeated = PblHash(pszValue);
         break;
-    case 0xEF9E29F7:
+    case 0xEF9E29F7: /* "SndHeroKiller" */
         mSndForHeroKiller = PblHash(pszValue);
         break;
-    case 0xF5B46BE4:
+    case 0xF5B46BE4: /* "SoldierMusic" */
         mSoldierMusic.SetID(pszValue);
         break;
-    case 0x3BEC98DA:
+    case 0x3BEC98DA: /* "AISoldierMusic" */
         mAISoldierMusic.SetID(pszValue);
         break;
-    case 0x99257468:
+    case 0x99257468: /* "SoldierAnnoucement" */
         mSoldierAnnouncement.SetID(pszValue, false, false);
         break;
 
-    case 0x71735CF7:
+    case 0x71735CF7: /* "TargetPointOffsetStand" */
     {
         float x = 0.0f, y = 0.0f, z = 0.0f;
         sscanf(pszValue, "%f %f %f", &x, &y, &z);
@@ -5429,7 +5429,7 @@ void EntitySoldierClass::SetProperty(unsigned int uProperty, const char* pszValu
         mTargetPointOffset[0].z = z;
         break;
     }
-    case 0x0355B70F:
+    case 0x0355B70F: /* "TargetPointOffsetCrouch" */
     {
         float x = 0.0f, y = 0.0f, z = 0.0f;
         sscanf(pszValue, "%f %f %f", &x, &y, &z);
@@ -5462,18 +5462,18 @@ int EntitySoldierClass::FindSoldierType(const char* pszName)
 {
     switch (PblHash(pszName))
     {
-    case 0xC322AD05:
+    case 0xC322AD05: /* "Scout" */
         return 0;
-    case 0xB0143BE7:
-    case 0x66557E0C:
+    case 0xB0143BE7: /* "Anti-Armor" */
+    case 0x66557E0C: /* "Assault" */
         return 1;
-    case 0x3B3E18E8:
-    case 0x29520BB4:
-    case 0xD940D530:
+    case 0x3B3E18E8: /* "Support" */
+    case 0x29520BB4: /* "Repair" */
+    case 0xD940D530: /* "Special" */
         return 2;
-    case 0x10066AE1:
+    case 0x10066AE1: /* "Pilot" */
         return 3;
-    case 0xDF625F90:
+    case 0xDF625F90: /* "Trooper" */
         return 4;
     }
     return 5;
@@ -6490,7 +6490,7 @@ bool EntitySoldier::Update(float fDeltaTime)
                                     mCharacter->mMedalsMgr->IsAwardAvailable(MedalsMgr::ENDURANCE)
                                 ? 1.5f
                                 : 1.0f;
-        if (BonusManager::Instance()->IsTeamBonusActive(GetTeam(), 0x85ad826d))
+        if (BonusManager::Instance()->IsTeamBonusActive(GetTeam(), 0x85ad826d /* "team_bonus_energy_boost" */))
         {
             pEnergyBar->AddEnergy(fEnergyRestore * fMultiplier * fDeltaTime * 3.0f);
         }
@@ -7350,7 +7350,7 @@ bool EntitySoldier::Update(float fDeltaTime)
                                            fDelay + GameLoop::GetMissionTime());
                         AI::EventType eCommand = AI::EVT_Vehicle_WaitForPickUp;
                         EventManager::CharacterEvent::mIssueAICommand.Trigger(*mCharacter, eCommand);
-                        const unsigned short* pText = RedLocalizeDB::Find(0xa0590ed7, false);
+                        const unsigned short* pText = RedLocalizeDB::Find(0xa0590ed7 /* "game.squadcommand.hold" */, false);
                         for (unsigned int i = 0; i < NetGame::GetNumLocalPlayers(); ++i)
                         {
                             if (GetCharacter() == NetGame::GetLocalPlayer(i))
@@ -7380,7 +7380,7 @@ bool EntitySoldier::Update(float fDeltaTime)
                         AI::VOHelper::Play(AI::VOT_SC_Follow, this, 0, pTarget, 0.0f);
                         AI::EventType eCommand = AI::EVT_SC_FollowChr;
                         EventManager::CharacterEvent::mIssueAICommand.Trigger(*mCharacter, eCommand);
-                        const unsigned short* pText = RedLocalizeDB::Find(0x731fd493, false);
+                        const unsigned short* pText = RedLocalizeDB::Find(0x731fd493 /* "game.squadcommand.follow" */, false);
                         for (unsigned int i = 0; i < NetGame::GetNumLocalPlayers(); ++i)
                         {
                             if (GetCharacter() == NetGame::GetLocalPlayer(i))
@@ -7397,7 +7397,7 @@ bool EntitySoldier::Update(float fDeltaTime)
                         AI::VOHelper::Play(AI::VOT_SC_StopFollow, this, 0, pTarget, 0.0f);
                         AI::EventType eCommand = AI::EVT_SC_StopFollowChr;
                         EventManager::CharacterEvent::mIssueAICommand.Trigger(*mCharacter, eCommand);
-                        const unsigned short* pText = RedLocalizeDB::Find(0x0e0280e5, false);
+                        const unsigned short* pText = RedLocalizeDB::Find(0x0e0280e5 /* "game.squadcommand.moveout" */, false);
                         for (unsigned int i = 0; i < NetGame::GetNumLocalPlayers(); ++i)
                         {
                             if (GetCharacter() == NetGame::GetLocalPlayer(i))
@@ -7426,7 +7426,7 @@ bool EntitySoldier::Update(float fDeltaTime)
                     AI::VOHelper::Play(AI::VOT_SC_StopFollow, this, 0, 0, 0.0f);
                     AI::EventType eCommand = AI::EVT_SC_StopFollowChr;
                     EventManager::CharacterEvent::mIssueAICommand.Trigger(*mCharacter, eCommand);
-                    const unsigned short* pText = RedLocalizeDB::Find(0x0e0280e5, false);
+                    const unsigned short* pText = RedLocalizeDB::Find(0x0e0280e5 /* "game.squadcommand.moveout" */, false);
                     for (unsigned int i = 0; i < NetGame::GetNumLocalPlayers(); ++i)
                     {
                         if (GetCharacter() == NetGame::GetLocalPlayer(i))
@@ -10264,8 +10264,8 @@ void EntitySoldier::UpdateAcklayFoleyFX(const RedPose& pose, const PblMatrix& mW
 
     // GLOBAL: SWBF2 0x0079d070
     static const unsigned int kFootBone[6] = {
-        0xc08d2ca3u, 0xcdce0a7au, 0xc90f17cdu,
-        0x730bf271u, 0x7e48d4a8u, 0x7a89c91fu
+        0xc08d2ca3u /* "bone_l_finger1" */, 0xcdce0a7au /* "bone_l_finger2" */, 0xc90f17cdu /* "bone_l_finger3" */,
+        0x730bf271u /* "bone_r_finger1" */, 0x7e48d4a8u /* "bone_r_finger2" */, 0x7a89c91fu /* "bone_r_finger3" */
     };
     const PblMatrix* pBones[6];
     for (int i = 0; i < 6; ++i)
@@ -10494,7 +10494,7 @@ void EntitySoldier::ApplyChoke(const PblVector3& vDir, float, SoldierAnimationBa
         }
         else
         {
-            mAnimationHash = 0x144ebf32;
+            mAnimationHash = 0x144ebf32 /* "human_choking" */;
         }
         mInputLockTime = 0.5f;
         m_uiInputLockMask = 7;

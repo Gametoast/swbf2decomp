@@ -318,7 +318,7 @@ int ShellLoop::Update(float fDeltaTime)
                 iTimer = mbNetCableErrorTimer;
             }
         }
-        if (uiScreen == 0xDE500916)
+        if (uiScreen == 0xDE500916 /* "ifs_movietrans" */)
         {
             iTimer = 0;
         }
@@ -333,7 +333,7 @@ void ShellLoop::SetNetCableErrorOnEnter(int severity, const char* message)
     mbNetCableErrorOnEnter = true;
     mbNetCableErrorTimer = 0;
     sIngameErrorSeverity = severity;
-    mpNoCableMessageHash = message ? (unsigned int)PblHash(message) : 0x7d77adfe;
+    mpNoCableMessageHash = message ? (unsigned int)PblHash(message) : 0x7d77adfe /* "common.mp.errors.nocable" */;
     NetSetup::mNoticeNoCable = false;
     if (severity >= 8)
     {

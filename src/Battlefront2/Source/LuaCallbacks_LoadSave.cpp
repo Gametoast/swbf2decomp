@@ -150,7 +150,7 @@ int ScriptCB_GetLoginList(lua_State* L)
     {
         PlayerProfile::SetNumMemoryProfiles(1);
         unsigned short ausName[64];
-        const unsigned short* pusTemplate = RedLocalizeDB::Find(0x3802F15B, false);
+        const unsigned short* pusTemplate = RedLocalizeDB::Find(0x3802F15B /* "ifs.Profile.nametemplate" */, false);
         PblUnicode::usnprintf(ausName, 64, pusTemplate, 1);
         PlayerProfile::GetProfile(0)->InitProfile(ausName);
     }
@@ -188,7 +188,7 @@ int ScriptCB_GetLoginList(lua_State* L)
             bool bClash;
             do
             {
-                pProfile->SetTrueProfileName(RedLocalizeDB::Find(0x3802F15B, false));
+                pProfile->SetTrueProfileName(RedLocalizeDB::Find(0x3802F15B /* "ifs.Profile.nametemplate" */, false));
                 iUnique = SaveGameManager::GetUniqueFilename(pusName, 1, iUnique + 1, 16);
                 bClash = false;
                 for (int i = 0; i < 1; ++i)
@@ -984,7 +984,7 @@ int ScriptCB_TrimLoginName(lua_State* L)
 int ScriptCB_GetUniqueLoginName(lua_State* L)
 {
     lua_gettop(LuaHelper::mState);
-    const unsigned short* pusBase = RedLocalizeDB::Find(0x3802F15B, false);
+    const unsigned short* pusBase = RedLocalizeDB::Find(0x3802F15B /* "ifs.Profile.nametemplate" */, false);
     if (!pusBase)
     {
         lua_pushstring(LuaHelper::mState, "");

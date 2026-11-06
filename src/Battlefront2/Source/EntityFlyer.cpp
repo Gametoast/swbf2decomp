@@ -667,36 +667,36 @@ EntityFlyerClass::EntityFlyerClass(EntityFlyerClass* pSrc, unsigned int uHash)
 // FUNCTION: SWBF2 0x004b7a60
 void EntityFlyerClass::SetProperty(unsigned int uProperty, const char* pszValue)
 {
-    if (uProperty == 0x4cbe283c)
+    if (uProperty == 0x4cbe283c /* "FLYERSECTION" */)
     {
         switch (PblHash(pszValue))
         {
-        case 0xfb2aa4b7:
-        case 0xea20fef2:
+        case 0xfb2aa4b7: /* "TURRET" */
+        case 0xea20fef2: /* "TURRET1" */
             sCurrentSection = 0;
             break;
-        case 0xe920fd5f:
+        case 0xe920fd5f: /* "TURRET2" */
             sCurrentSection = 1;
             break;
-        case 0xe820fbcc:
+        case 0xe820fbcc: /* "TURRET3" */
             sCurrentSection = 2;
             break;
-        case 0xe720fa39:
+        case 0xe720fa39: /* "TURRET4" */
             sCurrentSection = 3;
             break;
-        case 0xe620f8a6:
+        case 0xe620f8a6: /* "TURRET5" */
             sCurrentSection = 4;
             break;
-        case 0xe520f713:
+        case 0xe520f713: /* "TURRET6" */
             sCurrentSection = 5;
             break;
-        case 0xe420f580:
+        case 0xe420f580: /* "TURRET7" */
             sCurrentSection = 6;
             break;
-        case 0xf3210d1d:
+        case 0xf3210d1d: /* "TURRET8" */
             sCurrentSection = 7;
             break;
-        case 0xdbaa7975:
+        case 0xdbaa7975: /* "BODY" */
             sCurrentSection = -1;
             return;
         default:
@@ -719,120 +719,120 @@ void EntityFlyerClass::SetProperty(unsigned int uProperty, const char* pszValue)
 
     switch (uProperty)
     {
-    case 0x2fa0ba9d:
-    case 0x9f8a0040:
+    case 0x2fa0ba9d: /* "Acceleration" */
+    case 0x9f8a0040: /* "Acceleraton" */
         sscanf(pszValue, "%f", &mAcceleration);
         break;
-    case 0x7b001920:
+    case 0x7b001920: /* "BoostAcceleration" */
         sscanf(pszValue, "%f", &mBoostAcceleration);
         break;
-    case 0xfbe2eb62:
+    case 0xfbe2eb62: /* "MinSpeed" */
         sscanf(pszValue, "%f", &mMinFlyerSpeed);
         break;
-    case 0x838bda20:
+    case 0x838bda20: /* "MidSpeed" */
         sscanf(pszValue, "%f", &mMidFlyerSpeed);
         break;
-    case 0x86df0364:
+    case 0x86df0364: /* "MaxSpeed" */
         sscanf(pszValue, "%f", &mMaxFlyerSpeed);
         break;
-    case 0xa5900707:
+    case 0xa5900707: /* "BoostSpeed" */
         sscanf(pszValue, "%f", &mBoostFlyerSpeed);
         break;
-    case 0xfe1ce511:
+    case 0xfe1ce511: /* "StrafeSpeed" */
         sscanf(pszValue, "%f", &mStrafeSpeed);
         break;
-    case 0xb9b8abc3:
+    case 0xb9b8abc3: /* "PitchRate" */
         sscanf(pszValue, "%f", &mPitchRate);
         break;
-    case 0x0f77c4e8:
+    case 0x0f77c4e8: /* "TurnRate" */
         sscanf(pszValue, "%f", &mTurnRate);
         break;
-    case 0x9b0ca8c3:
+    case 0x9b0ca8c3: /* "PitchFilter" */
         sscanf(pszValue, "%f", &mPitchFilter);
         break;
-    case 0x53d5cdc8:
+    case 0x53d5cdc8: /* "PitchFilterDecel" */
         sscanf(pszValue, "%f", &mPitchFilterDecel);
         break;
-    case 0xde721cb4:
+    case 0xde721cb4: /* "TurnFilter" */
         sscanf(pszValue, "%f", &mTurnFilter);
         break;
-    case 0x1795170d:
+    case 0x1795170d: /* "TurnFilterDecel" */
         sscanf(pszValue, "%f", &mTurnFilterDecel);
         break;
-    case 0x4d32015d:
+    case 0x4d32015d: /* "PitchBuildupMultiplier" */
         sscanf(pszValue, "%f", &mPitchBuildupMultiplier);
         if (mPitchBuildupMultiplier < 1.0f)
         {
             mPitchBuildupMultiplier = 1.0f;
         }
         break;
-    case 0x482c5704:
+    case 0x482c5704: /* "TurnBuildupMultiplier" */
         sscanf(pszValue, "%f", &mTurnBuildupMultiplier);
         if (mTurnBuildupMultiplier < 1.0f)
         {
             mTurnBuildupMultiplier = 1.0f;
         }
         break;
-    case 0x4c5b08a6:
+    case 0x4c5b08a6: /* "ThrustPitchAngle" */
         sscanf(pszValue, "%f", &mThrustPitchAngle);
         break;
-    case 0xf1a4896c:
+    case 0xf1a4896c: /* "StrafeRollAngle" */
         sscanf(pszValue, "%f", &mStrafeRollAngle);
         break;
-    case 0x6d7c9f7e:
+    case 0x6d7c9f7e: /* "BankAngle" */
         sscanf(pszValue, "%f", &mBankAngle);
         break;
-    case 0x35de28f1:
+    case 0x35de28f1: /* "BankFilter" */
         sscanf(pszValue, "%f", &mBankFilter);
         break;
-    case 0xf4f5f38f:
+    case 0xf4f5f38f: /* "LevelFilter" */
         sscanf(pszValue, "%f", &mLevelFilter);
         break;
-    case 0xbe55a77e:
+    case 0xbe55a77e: /* "LevelFilterLanding" */
         sscanf(pszValue, "%f", &mLevelFilterLanding);
         break;
-    case 0x24eaf25c:
+    case 0x24eaf25c: /* "RollRate" */
         sscanf(pszValue, "%f", &mRollRate);
         break;
-    case 0x61151c4c:
+    case 0x61151c4c: /* "RollRateAccel" */
         sscanf(pszValue, "%f", &mRollRateAccel);
         break;
-    case 0x5107fafc:
+    case 0x5107fafc: /* "TakeoffHeight" */
         sscanf(pszValue, "%f", &mTakeoffHeight);
         break;
-    case 0x61195c0a:
+    case 0x61195c0a: /* "TakeoffTime" */
         sscanf(pszValue, "%f", &mTakeoffTime);
         break;
-    case 0x8255424e:
+    case 0x8255424e: /* "TakeoffSpeed" */
         sscanf(pszValue, "%f", &mTakeoffSpeed);
         break;
-    case 0x1283209d:
+    case 0x1283209d: /* "LandingTime" */
         sscanf(pszValue, "%f", &mLandingTime);
         break;
-    case 0x6ae3a957:
+    case 0x6ae3a957: /* "LandingSpeed" */
         sscanf(pszValue, "%f", &mLandingSpeed);
         break;
-    case 0x7642977a:
+    case 0x7642977a: /* "LandedHeight" */
         sscanf(pszValue, "%f", &mLandedHeight);
         break;
-    case 0x2cdb588a:
+    case 0x2cdb588a: /* "CollisionThreshold" */
         sscanf(pszValue, "%f %f %f", &mCollisionThreshold[0], &mCollisionThreshold[1], &mCollisionThreshold[2]);
         break;
-    case 0x1a87bacf:
+    case 0x1a87bacf: /* "CollisionScale" */
         sscanf(pszValue, "%f %f %f", &mCollisionScale[0], &mCollisionScale[1], &mCollisionScale[2]);
         break;
-    case 0x2ef03732:
+    case 0x2ef03732: /* "CollisionInflict" */
         sscanf(pszValue, "%f", &mCollisionInflict);
         break;
-    case 0x28adda49:
+    case 0x28adda49: /* "NoCombatInterrupt" */
         mCombatInterrupts = atoi(pszValue) == 0;
         break;
 
-    case 0xd0329e80:
+    case 0xd0329e80: /* "WeaponSection" */
         sWeaponSection = atoi(pszValue) - 1;
         break;
-    case 0x6f332041:
-    case 0xfbf47dba:
+    case 0x6f332041: /* "Weapon" */
+    case 0xfbf47dba: /* "WeaponName" */
     {
         mWeaponClass[sWeaponSection] = WeaponClass::Find(PblHash(pszValue));
         int iCount = sWeaponSection + 1;
@@ -843,10 +843,10 @@ void EntityFlyerClass::SetProperty(unsigned int uProperty, const char* pszValue)
         mWeaponCount = iCount;
         break;
     }
-    case 0x16472328:
+    case 0x16472328: /* "WeaponChannel" */
         sscanf(pszValue, "%d", &mWeaponChannel[sWeaponSection]);
         break;
-    case 0xdc19bd13:
+    case 0xdc19bd13: /* "WeaponAmmo" */
     {
         int iAmmo = 0;
         sscanf(pszValue, "%d", &iAmmo);
@@ -859,7 +859,7 @@ void EntityFlyerClass::SetProperty(unsigned int uProperty, const char* pszValue)
         }
         break;
     }
-    case 0x8585bb8a:
+    case 0x8585bb8a: /* "WeaponShareAmmo" */
     {
         int iWeapon = 0;
         sscanf(pszValue, "%d", &iWeapon);
@@ -877,7 +877,7 @@ void EntityFlyerClass::SetProperty(unsigned int uProperty, const char* pszValue)
         }
         break;
     }
-    case 0x9455a446:
+    case 0x9455a446: /* "WeaponShareHeat" */
     {
         int iWeapon = 0;
         sscanf(pszValue, "%d", &iWeapon);
@@ -893,21 +893,21 @@ void EntityFlyerClass::SetProperty(unsigned int uProperty, const char* pszValue)
         }
         break;
     }
-    case 0x5233b817:
+    case 0x5233b817: /* "VehicleType" */
         mVehicleType = FindVehicleType(pszValue);
         break;
 
-    case 0xb9282909:
+    case 0xb9282909: /* "BlurEffect" */
         sscanf(pszValue, "%f", &mBlurEffect);
         break;
-    case 0x04afc6a4:
+    case 0x04afc6a4: /* "BlurStart" */
         sscanf(pszValue, "%f", &mBlurStartV);
         break;
-    case 0xaaa6d95c:
+    case 0xaaa6d95c: /* "FOVEffect3rd" */
         sscanf(pszValue, "%f", &mFOVEffect3rd);
         mFOVEffect3rd *= 0.017453292f;
         break;
-    case 0x5dbcabb0:
+    case 0x5dbcabb0: /* "FOVEFFectMinCamOffset3rd" */
     {
         float x, y, z;
         sscanf(pszValue, "%f %f %f", &x, &y, &z);
@@ -916,7 +916,7 @@ void EntityFlyerClass::SetProperty(unsigned int uProperty, const char* pszValue)
         mFOVEFFectMinCamOffset3rd.z = z;
         break;
     }
-    case 0x8d0cfc36:
+    case 0x8d0cfc36: /* "FOVEFFectMaxCamOffset3rd" */
     {
         float x, y, z;
         sscanf(pszValue, "%f %f %f", &x, &y, &z);
@@ -925,60 +925,60 @@ void EntityFlyerClass::SetProperty(unsigned int uProperty, const char* pszValue)
         mFOVEFFectMaxCamOffset3rd.z = z;
         break;
     }
-    case 0xd158caab:
+    case 0xd158caab: /* "FOVEffect1st" */
         sscanf(pszValue, "%f", &mFOVEffect1st);
         mFOVEffect1st *= 0.017453292f;
         break;
 
-    case 0x4f9d8bb4:
+    case 0x4f9d8bb4: /* "EnergyAutoRestore" */
         sscanf(pszValue, "%f", &mEnergyAutoRestore);
         break;
-    case 0x645f56f6:
+    case 0x645f56f6: /* "EnergyBoostDrain" */
         sscanf(pszValue, "%f", &mEnergyBoostDrain);
         break;
-    case 0x4cd7e18f:
+    case 0x4cd7e18f: /* "EnergyTrickDrainSingleTap" */
         sscanf(pszValue, "%f", &mEnergyTrickDrainSingleTap);
         mEnergyBarClass.SetPropertyEnergyCost(mEnergyTrickDrainSingleTap);
         break;
-    case 0x89c72ee4:
+    case 0x89c72ee4: /* "EnergyTrickDrainDoubleTap" */
         sscanf(pszValue, "%f", &mEnergyTrickDrainDoubleTap);
         mEnergyBarClass.SetPropertyEnergyCost(mEnergyTrickDrainDoubleTap);
         break;
-    case 0xa69ed102:
+    case 0xa69ed102: /* "TrickRollSpeed" */
         sscanf(pszValue, "%f", &mTrickRollSpeed);
         break;
-    case 0xb9ab019a:
+    case 0xb9ab019a: /* "TrickFlipSpeed" */
         sscanf(pszValue, "%f", &mTrickFlipSpeed);
         break;
-    case 0x77eb7aa7:
+    case 0x77eb7aa7: /* "TrickFlipCameraDetach" */
         sscanf(pszValue, "%f", &mTrickFlipCameraDetach);
         break;
-    case 0xc4ae94d0:
+    case 0xc4ae94d0: /* "TrickSideRollCameraDetach" */
         sscanf(pszValue, "%f", &mTrickSideRollCameraDetach);
         break;
-    case 0x3dfbe65e:
+    case 0x3dfbe65e: /* "TrickSideRollStrafeSpeed" */
         sscanf(pszValue, "%f", &mTrickSideRollStrafeSpeed);
         break;
-    case 0xd937dce9:
+    case 0xd937dce9: /* "MomentumFilter" */
         sscanf(pszValue, "%f", &mMomentumFilter);
         break;
-    case 0x7e6b2efb:
+    case 0x7e6b2efb: /* "TrickSound" */
         mSoundTrick.SetID(pszValue, true, false);
         break;
-    case 0x3da7ba35:
+    case 0x3da7ba35: /* "FlipSound" */
         mSoundFlip.SetID(pszValue, true, false);
         break;
 
-    case 0x02bb1fe0:
-    case 0x9b30e763:
-    case 0x8a323f32:
+    case 0x02bb1fe0: /* "Explosion" */
+    case 0x9b30e763: /* "ExplosionName" */
+    case 0x8a323f32: /* "ExplosionDestruct" */
         mExplosionDestruct = ExplosionClass::Find(PblHash(pszValue));
         break;
-    case 0xe04f08c1:
+    case 0xe04f08c1: /* "ExplosionCritical" */
         mExplosionCritical = ExplosionClass::Find(PblHash(pszValue));
         break;
 
-    case 0x64c511a4:
+    case 0x64c511a4: /* "PassengerSlots" */
     {
         mPassengerSlotClass = new PassengerSlotClass(mId);
         int iNumSlots = atoi(pszValue);
@@ -994,20 +994,20 @@ void EntityFlyerClass::SetProperty(unsigned int uProperty, const char* pszValue)
         mNumPassengerSlots = (unsigned char)iNumSlots;
         break;
     }
-    case 0x6363d774:
+    case 0x6363d774: /* "firstperson" */
         mCockpitModelHandle = FirstPerson::AddGeometry(pszValue);
         break;
-    case 0x98557a5e:
+    case 0x98557a5e: /* "AnimationName" */
         InitAnimations(pszValue);
         break;
-    case 0xef563a98:
+    case 0xef563a98: /* "FinAnimation" */
         if (mAnimObj)
         {
             mAnimFins = const_cast<ZephyrAnim*>(mAnimObj->FindAnimation(pszValue));
         }
         break;
 
-    case 0x0894d756:
+    case 0x0894d756: /* "ThrustEffect" */
         sCurThrustEffect = -1;
         for (int i = 0; i < kMaxThrustEffects; ++i)
         {
@@ -1022,13 +1022,13 @@ void EntityFlyerClass::SetProperty(unsigned int uProperty, const char* pszValue)
             mThrustEffectName[sCurThrustEffect] = PblHash(pszValue);
         }
         break;
-    case 0x2e0557f0:
+    case 0x2e0557f0: /* "ThrustAttachPoint" */
         if (sCurThrustEffect != -1)
         {
             mThrustEffectHardPoint[sCurThrustEffect] = PblTEMPHash(pszValue);
         }
         break;
-    case 0x34775769:
+    case 0x34775769: /* "ThrustAttachOffset" */
         if (sCurThrustEffect != -1)
         {
             float x, y, z;
@@ -1036,26 +1036,26 @@ void EntityFlyerClass::SetProperty(unsigned int uProperty, const char* pszValue)
             mThrustEffectAttachOffset[sCurThrustEffect] = PblVector3(x, y, z);
         }
         break;
-    case 0xf174a3f8:
+    case 0xf174a3f8: /* "ThrustEffectMinScale" */
         if (sCurThrustEffect != -1)
         {
             mThrustEffectMinScale[sCurThrustEffect] = (float)atof(pszValue);
         }
         break;
-    case 0xc3fd784a:
+    case 0xc3fd784a: /* "ThrustEffectMaxScale" */
         if (sCurThrustEffect != -1)
         {
             mThrustEffectMaxScale[sCurThrustEffect] = (float)atof(pszValue);
         }
         break;
-    case 0xe97041b8:
+    case 0xe97041b8: /* "ThrustEffectScaleStart" */
         if (sCurThrustEffect != -1)
         {
             mThrustEffectScaleStart[sCurThrustEffect] = (float)atof(pszValue);
         }
         break;
 
-    case 0x050dfa58:
+    case 0x050dfa58: /* "ContrailEffect" */
         sCurContrailEffect = -1;
         for (int i = 0; i < kMaxContrailEffects; ++i)
         {
@@ -1070,13 +1070,13 @@ void EntityFlyerClass::SetProperty(unsigned int uProperty, const char* pszValue)
             mContrailEffectName[sCurContrailEffect] = PblHash(pszValue);
         }
         break;
-    case 0x58b81b76:
+    case 0x58b81b76: /* "ContrailAttachPoint" */
         if (sCurContrailEffect != -1)
         {
             mContrailEffectHardPoint[sCurContrailEffect] = PblTEMPHash(pszValue);
         }
         break;
-    case 0x84c7e963:
+    case 0x84c7e963: /* "ContrailAttachOffset" */
         if (sCurContrailEffect != -1)
         {
             float x, y, z;
@@ -1084,77 +1084,77 @@ void EntityFlyerClass::SetProperty(unsigned int uProperty, const char* pszValue)
             mContrailEffectAttachOffset[sCurContrailEffect] = PblVector3(x, y, z);
         }
         break;
-    case 0x86caf00e:
+    case 0x86caf00e: /* "ContrailEffectMinScale" */
         if (sCurContrailEffect != -1)
         {
             mContrailEffectMinScale[sCurContrailEffect] = (float)atof(pszValue);
         }
         break;
-    case 0x72a09574:
+    case 0x72a09574: /* "ContrailEffectMaxScale" */
         if (sCurContrailEffect != -1)
         {
             mContrailEffectMaxScale[sCurContrailEffect] = (float)atof(pszValue);
         }
         break;
-    case 0x75ee599f:
+    case 0x75ee599f: /* "ContrailEffectMinSpeed" */
         if (sCurContrailEffect != -1)
         {
             mContrailEffectMinSpeed[sCurContrailEffect] = (float)atof(pszValue);
         }
         break;
-    case 0x64e60f49:
+    case 0x64e60f49: /* "ContrailEffectMaxSpeed" */
         if (sCurContrailEffect != -1)
         {
             mContrailEffectMaxSpeed[sCurContrailEffect] = (float)atof(pszValue);
         }
         break;
 
-    case 0xc80a91f1:
+    case 0xc80a91f1: /* "FreeFlyTime" */
         sscanf(pszValue, "%f", &mFreeFlyTime);
         break;
-    case 0xc4605e25:
+    case 0xc4605e25: /* "TrickTimeMid" */
         sscanf(pszValue, "%f", &mTrickTimeMid);
         break;
-    case 0x2dc13b12:
+    case 0x2dc13b12: /* "TrickTimeRange" */
         sscanf(pszValue, "%f", &mTrickTimeRange);
         break;
-    case 0x0490b19d:
+    case 0x0490b19d: /* "CircleATATFrequency" */
         sscanf(pszValue, "%f", &mCircleATATFrequency);
         break;
-    case 0x459ce661:
+    case 0x459ce661: /* "SquadronMaxAngle" */
         sscanf(pszValue, "%f", &mSquadronMaxAngle);
         mSquadronMaxAngle = PblMath::Cos(mSquadronMaxAngle * 0.017453292f);
         break;
-    case 0x14989eaf:
+    case 0x14989eaf: /* "SquadronDistance" */
         sscanf(pszValue, "%f", &mSquadronSquaredDist);
         mSquadronSquaredDist *= mSquadronSquaredDist;
         break;
-    case 0xbb9297d5:
+    case 0xbb9297d5: /* "TimeRequiredToEject" */
         sscanf(pszValue, "%f", &mTimeRequiredToEject);
         break;
-    case 0xa6aa3d07:
+    case 0xa6aa3d07: /* "EjectResistance" */
         sscanf(pszValue, "%f", &mEjectResist);
         break;
-    case 0x165e67e0:
+    case 0x165e67e0: /* "TimeTilReboard" */
         sscanf(pszValue, "%f", &mTimeTilReboard);
         break;
-    case 0xdf92a1d2:
+    case 0xdf92a1d2: /* "NeverCrashWhenUnpiloted" */
         mNeverCrashWhenUnpiloted = atoi(pszValue) != 0;
         break;
-    case 0xc6e9c80b:
+    case 0xc6e9c80b: /* "GuidedMissile" */
         mGuidedMissile = atoi(pszValue) != 0;
         if (mGuidedMissile)
         {
             mPilotType = PILOT_REMOTE;
         }
         break;
-    case 0x376b238a:
+    case 0x376b238a: /* "GuidedMissileDamage" */
         sscanf(pszValue, "%f", &mGuidedMissileDamage);
         break;
-    case 0x487b2329:
+    case 0x487b2329: /* "GuidedMissileDamageBoost" */
         sscanf(pszValue, "%f", &mGuidedMissileDamageBoost);
         break;
-    case 0xc37970cf:
+    case 0xc37970cf: /* "HealthScale" */
     {
         float fScale;
         sscanf(pszValue, "%f", &fScale);
@@ -1164,19 +1164,19 @@ void EntityFlyerClass::SetProperty(unsigned int uProperty, const char* pszValue)
         }
         break;
     }
-    case 0x0bb94602:
+    case 0x0bb94602: /* "PersonScale" */
         sscanf(pszValue, "%f", &mGuidedMissileHealthScale[0]);
         break;
-    case 0x9aa17a49:
+    case 0x9aa17a49: /* "AnimalScale" */
         sscanf(pszValue, "%f", &mGuidedMissileHealthScale[1]);
         break;
-    case 0x338a07cd:
+    case 0x338a07cd: /* "DroidScale" */
         sscanf(pszValue, "%f", &mGuidedMissileHealthScale[2]);
         break;
-    case 0x6ccdc5ef:
+    case 0x6ccdc5ef: /* "VehicleScale" */
         sscanf(pszValue, "%f", &mGuidedMissileHealthScale[3]);
         break;
-    case 0xa0bb60ce:
+    case 0xa0bb60ce: /* "ArmorScale" */
     {
         float fScale;
         sscanf(pszValue, "%f", &fScale);
@@ -1186,7 +1186,7 @@ void EntityFlyerClass::SetProperty(unsigned int uProperty, const char* pszValue)
         }
         break;
     }
-    case 0x02168f61:
+    case 0x02168f61: /* "BuildingScale" */
     {
         float fScale;
         sscanf(pszValue, "%f", &fScale);
@@ -1196,23 +1196,23 @@ void EntityFlyerClass::SetProperty(unsigned int uProperty, const char* pszValue)
         }
         break;
     }
-    case 0xd0545c72:
+    case 0xd0545c72: /* "ShieldScale" */
         sscanf(pszValue, "%f", &mGuidedMissileShieldScale);
         break;
-    case 0x9bdfa490:
+    case 0x9bdfa490: /* "GuidedMissileDeathCamPause" */
         sscanf(pszValue, "%f", &mGuidedMissileDeathCamPause);
         break;
-    case 0x962e0745:
+    case 0x962e0745: /* "GuidedMissileDeathCamPullbackSpeed" */
         sscanf(pszValue, "%f", &mGuidedMissileDeathCamPullbackSpeed);
         break;
-    case 0x325bf479:
+    case 0x325bf479: /* "GuidedMissileDeathCamMinDistance" */
         sscanf(pszValue, "%f", &mGuidedMissileDeathCamMinDistance);
         break;
-    case 0xbb3082af:
+    case 0xbb3082af: /* "GuidedMissileBoostExplosionSpeedThreshold" */
         sscanf(pszValue, "%f", &mGuidedMissileBoostExplosionSpeedThreshold);
         break;
 
-    case 0x47c86b4a:
+    case 0x47c86b4a: /* "GeometryName" */
     {
         GameObjectClass::SetProperty(uProperty, pszValue);
         sSoftCollisionMask = 0;
@@ -1222,7 +1222,7 @@ void EntityFlyerClass::SetProperty(unsigned int uProperty, const char* pszValue)
         if (pMesh)
         {
             mCollisionModel.AddBody(new CollisionBodyMesh(pMesh, "CollisionMesh", gMatrixIdentity, 0));
-            int iMaskId = mCollisionModel.GetMaskId(0x29173102);
+            int iMaskId = mCollisionModel.GetMaskId(0x29173102 /* "CollisionMesh" */);
             if (iMaskId >= 0)
             {
                 sSoftCollisionMask |= 1 << iMaskId;
@@ -1280,7 +1280,7 @@ void EntityFlyerClass::SetProperty(unsigned int uProperty, const char* pszValue)
         mCollisionModel.mIsFlyerFlag = true;
         break;
     }
-    case 0x5dfdc07f:
+    case 0x5dfdc07f: /* "SoldierCollision" */
     {
         int iMaskId = mCollisionModel.GetMaskId(PblHash(pszValue));
         if (iMaskId >= 0)
@@ -1290,7 +1290,7 @@ void EntityFlyerClass::SetProperty(unsigned int uProperty, const char* pszValue)
         }
         break;
     }
-    case 0xfb2bdf07:
+    case 0xfb2bdf07: /* "OrdnanceCollision" */
     {
         int iMaskId = mCollisionModel.GetMaskId(PblHash(pszValue));
         if (iMaskId >= 0)
@@ -2405,7 +2405,7 @@ void EntityFlyer::PlayDustEffect()
     {
         return;
     }
-    FLEffectClass* pEffectClass = FLEffect::Get(0xd63ee91a);
+    FLEffectClass* pEffectClass = FLEffect::Get(0xd63ee91a /* "flyerspray" */);
     if (!pEffectClass)
     {
         return;

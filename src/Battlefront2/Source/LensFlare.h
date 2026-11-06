@@ -28,7 +28,7 @@ public:
     };
 
     LensFlareEffect()
-        : FLEffect(0xAEC1B09Fu, 6)
+        : FLEffect(0xAEC1B09Fu /* "LensFlare" */, 6)
     {
     }
 

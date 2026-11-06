@@ -97,7 +97,7 @@ void BoundaryManager::Read(PblFileChunk& chunk)
         const unsigned int uHash = data._pFile->Read32();
         data._pFile->Read8();
 
-        if (uHash == 0x54eacca7)
+        if (uHash == 0x54eacca7 /* "Boundary" */)
         {
             PblFileChunk scope = chunk.ReadNextChild();
             while (!scope.IsDone())
@@ -107,7 +107,7 @@ void BoundaryManager::Read(PblFileChunk& chunk)
                 const unsigned int uItemHash = data._pFile->Read32();
                 data._pFile->Read8();
 
-                if (uItemHash == 0x84874d36)
+                if (uItemHash == 0x84874d36 /* "Path" */)
                 {
                     AddPath(data._pFile->Read32());
                 }

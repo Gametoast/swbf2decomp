@@ -715,7 +715,7 @@ bool CameraTrackSetting::SetProperty(unsigned int uProperty, const char* pszValu
     float* pB;
     switch (uProperty)
     {
-    case 0x41568C97:
+    case 0x41568C97: /* "EyePointOffset" */
     {
         float fX, fY, fZ;
         sscanf(pszValue, "%f %f %f", &fX, &fY, &fZ);
@@ -727,7 +727,7 @@ bool CameraTrackSetting::SetProperty(unsigned int uProperty, const char* pszValu
         mCameraTrackCenter.z = fZ;
         return true;
     }
-    case 0xE85D5895:
+    case 0xE85D5895: /* "TrackCenter" */
     {
         float fX, fY, fZ;
         sscanf(pszValue, "%f %f %f", &fX, &fY, &fZ);
@@ -736,7 +736,7 @@ bool CameraTrackSetting::SetProperty(unsigned int uProperty, const char* pszValu
         mCameraTrackCenter.z = fZ;
         return true;
     }
-    case 0xFD3D9507:
+    case 0xFD3D9507: /* "TrackOffset" */
     {
         float fX, fY, fZ;
         sscanf(pszValue, "%f %f %f", &fX, &fY, &fZ);
@@ -745,7 +745,7 @@ bool CameraTrackSetting::SetProperty(unsigned int uProperty, const char* pszValu
         mCameraTrackOffset.z = fZ;
         return true;
     }
-    case 0x21050BF6:
+    case 0x21050BF6: /* "MoveTension" */
     {
         float fX;
         if (sscanf(pszValue, "%f", &fX))
@@ -759,22 +759,22 @@ bool CameraTrackSetting::SetProperty(unsigned int uProperty, const char* pszValu
         }
         return true;
     }
-    case 0x88F1308A:
+    case 0x88F1308A: /* "MoveTensionX" */
         pB = &mCameraMoveTensionR;
         pA = &mCameraMoveTensionL;
         break;
-    case 0x89F1321D:
+    case 0x89F1321D: /* "MoveTensionY" */
         pB = &mCameraMoveTensionD;
         pA = &mCameraMoveTensionU;
         break;
-    case 0x86F12D64:
+    case 0x86F12D64: /* "MoveTensionZ" */
         pB = &mCameraMoveTensionB;
         pA = &mCameraMoveTensionF;
         break;
-    case 0x5E3171CC:
+    case 0x5E3171CC: /* "AimTension" */
         sscanf(pszValue, "%f", &mCameraAimTension);
         return true;
-    case 0x359D5227:
+    case 0x359D5227: /* "TiltValue" */
         sscanf(pszValue, "%f", &mCameraTiltValue);
         mCameraTiltValue *= 0.017453292f;
         return true;

@@ -238,7 +238,7 @@ Ordnance::Ordnance(OrdnanceClass* pClass, const OrdnanceDesc& desc)
     {
         Character* pCharacter = GetControllable(GetOwner())->mCharacter;
         if (pCharacter &&
-            BonusManager::sInstance.IsTeamBonusActive(pCharacter->mTeamNumber, 0xBB03442E))
+            BonusManager::sInstance.IsTeamBonusActive(pCharacter->mTeamNumber, 0xBB03442E /* "team_bonus_advanced_blasters" */))
         {
             mRenderColor = mClass->mBonusColor;
         }
@@ -481,7 +481,7 @@ DamageDesc OrdnanceClass::GetDamage(const DamageOwner& owner, float fUnused, flo
         damage.mBaseValue = (fFinal - damage.mBaseValue) * fT + damage.mBaseValue;
     }
 
-    if (BonusManager::sInstance.IsTeamBonusActive(owner.mTeam, 0xBB03442E))
+    if (BonusManager::sInstance.IsTeamBonusActive(owner.mTeam, 0xBB03442E /* "team_bonus_advanced_blasters" */))
     {
         damage.mBaseValue = mBonusAmplification * damage.mBaseValue + damage.mBaseValue;
     }
@@ -553,20 +553,20 @@ void OrdnanceClass::SetProperty(unsigned int uProperty, const char* pszValue)
 {
     switch (uProperty)
     {
-    case 0x8316F444:
+    case 0x8316F444: /* "NextCharge" */
         mNextCharge = Derive(mId);
         if (mNextCharge)
         {
             sscanf(pszValue, "%f", &mNextCharge->mStrengthLimit);
         }
         break;
-    case 0x7C7C544B:
+    case 0x7C7C544B: /* "LifeSpan" */
         sscanf(pszValue, "%f", &mLifeSpan);
         break;
-    case 0x338A07CD:
+    case 0x338A07CD: /* "DroidScale" */
         sscanf(pszValue, "%f", &mDamage.mHealthScale[2]);
         break;
-    case 0x21DE3FAB:
+    case 0x21DE3FAB: /* "BonusColor" */
     {
         int r, g, b, a;
         sscanf(pszValue, "%i %i %i %i", &r, &g, &b, &a);
@@ -578,7 +578,7 @@ void OrdnanceClass::SetProperty(unsigned int uProperty, const char* pszValue)
         mBonusColor = color;
         break;
     }
-    case 0x02168F61:
+    case 0x02168F61: /* "BuildingScale" */
     {
         float fScale;
         sscanf(pszValue, "%f", &fScale);
@@ -587,12 +587,12 @@ void OrdnanceClass::SetProperty(unsigned int uProperty, const char* pszValue)
         mDamage.mHealthScale[6] = fScale;
         break;
     }
-    case 0x0BB94602:
+    case 0x0BB94602: /* "PersonScale" */
         sscanf(pszValue, "%f", &mDamage.mHealthScale[0]);
         break;
-    case 0x02BB1FE0:
-    case 0x61A8BB12:
-    case 0x9B30E763:
+    case 0x02BB1FE0: /* "Explosion" */
+    case 0x61A8BB12: /* "ExplosionImpact" */
+    case 0x9B30E763: /* "ExplosionName" */
         if (*pszValue)
         {
             mExplosionImpact = ExplosionClass::Find(PblHash(pszValue));
@@ -602,10 +602,10 @@ void OrdnanceClass::SetProperty(unsigned int uProperty, const char* pszValue)
             mExplosionImpact = 0;
         }
         break;
-    case 0x2297E47D:
+    case 0x2297E47D: /* "CollisionWaterSound" */
         mSoundCollisionWater.SetID(pszValue, false, false);
         break;
-    case 0x2E51081F:
+    case 0x2E51081F: /* "ExplosionExpire" */
         if (*pszValue)
         {
             mExplosionExpire = ExplosionClass::Find(PblHash(pszValue));
@@ -615,23 +615,23 @@ void OrdnanceClass::SetProperty(unsigned int uProperty, const char* pszValue)
             mExplosionExpire = 0;
         }
         break;
-    case 0x6CCDC5EF:
+    case 0x6CCDC5EF: /* "VehicleScale" */
         sscanf(pszValue, "%f", &mDamage.mHealthScale[3]);
         break;
-    case 0x756BCB2D:
+    case 0x756BCB2D: /* "CollisionShieldSound" */
         mSoundCollisionShield.SetID(pszValue, false, false);
         break;
-    case 0x47D0E794:
-    case 0x59E94C40:
+    case 0x47D0E794: /* "MaxDamage" */
+    case 0x59E94C40: /* "Damage" */
         sscanf(pszValue, "%f", &mDamage.mBaseValue);
         break;
-    case 0xD0545C72:
+    case 0xD0545C72: /* "ShieldScale" */
         sscanf(pszValue, "%f", &mDamage.mShieldScale);
         break;
-    case 0xC28F0C96:
+    case 0xC28F0C96: /* "CollisionSound" */
         mSoundCollision.SetID(pszValue, false, false);
         break;
-    case 0xC37970CF:
+    case 0xC37970CF: /* "HealthScale" */
     {
         float fScale;
         sscanf(pszValue, "%f", &fScale);
@@ -640,10 +640,10 @@ void OrdnanceClass::SetProperty(unsigned int uProperty, const char* pszValue)
         mDamage.mHealthScale[2] = fScale;
         break;
     }
-    case 0xCCF9BE5C:
+    case 0xCCF9BE5C: /* "OrdnanceSound" */
         mSoundOrdnance.SetID(pszValue, false, false);
         break;
-    case 0xD4E84271:
+    case 0xD4E84271: /* "ExplosionEffect" */
         if (*pszValue)
         {
             mImpactExplosionEffect = FLEffect::Get(PblHash(pszValue));
@@ -653,16 +653,16 @@ void OrdnanceClass::SetProperty(unsigned int uProperty, const char* pszValue)
             mImpactExplosionEffect = 0;
         }
         break;
-    case 0xEE08D1BA:
+    case 0xEE08D1BA: /* "DamageTransitionPeriod" */
         sscanf(pszValue, "%f", &mDamageTransitionPeriod);
         break;
-    case 0xA74561B2:
+    case 0xA74561B2: /* "DamageTransitionDelay" */
         sscanf(pszValue, "%f", &mDamageTransitionDelay);
         break;
-    case 0x9AA17A49:
+    case 0x9AA17A49: /* "AnimalScale" */
         sscanf(pszValue, "%f", &mDamage.mHealthScale[1]);
         break;
-    case 0xA0BB60CE:
+    case 0xA0BB60CE: /* "ArmorScale" */
     {
         float fScale;
         sscanf(pszValue, "%f", &fScale);
@@ -672,10 +672,10 @@ void OrdnanceClass::SetProperty(unsigned int uProperty, const char* pszValue)
         mDamage.mHealthScale[6] = fScale;
         break;
     }
-    case 0x97481656:
+    case 0x97481656: /* "BonusAmplification" */
         sscanf(pszValue, "%f", &mBonusAmplification);
         break;
-    case 0x7E71E2C6:
+    case 0x7E71E2C6: /* "TrailEffect" */
         if (*pszValue)
         {
             mTrailEffect = FLEffect::Get(PblHash(pszValue));
@@ -685,7 +685,7 @@ void OrdnanceClass::SetProperty(unsigned int uProperty, const char* pszValue)
             mTrailEffect = 0;
         }
         break;
-    case 0x955F71E9:
+    case 0x955F71E9: /* "DamageFinalDamage" */
         sscanf(pszValue, "%f", &mDamageFinalDamage);
         break;
     default:

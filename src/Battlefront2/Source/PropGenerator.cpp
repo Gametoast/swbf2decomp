@@ -594,7 +594,7 @@ void PropGenerator::Read(PblFileChunk& chunk)
 
         switch (uiHash)
         {
-        case 0x07a640f6:
+        case 0x07a640f6: /* "Layer" */
         {
             const int iLayer = (int)child._pFile->ReadFloat();
             mPropLayers[iLayer].Clear();
@@ -603,7 +603,7 @@ void PropGenerator::Read(PblFileChunk& chunk)
             mLoaded = true;
             break;
         }
-        case 0x40b06ff7:
+        case 0x40b06ff7: /* "TreeLine" */
         {
             PblFileChunk treeLineChunk = chunk.ReadNextChild();
             TreeLine::CreateTreeLine(treeLineChunk);

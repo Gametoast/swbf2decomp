@@ -1625,32 +1625,32 @@ void RedWater::PlatformReadConfigData(PblConfig::Data& data)
     char buffer[256];
     switch (data.GetId())
     {
-    case 0x8A81DE8B:
+    case 0x8A81DE8B: /* "ReflectionColor" */
         m_reflectionColor = ReadColor(data);
         break;
-    case 0x5AA5A3BD:
-    case 0x72E43B50:
+    case 0x5AA5A3BD: /* "RefractionColor" */
+    case 0x72E43B50: /* "DiffuseColor" */
         m_refractionColor = ReadColor(data);
         break;
-    case 0x362C5FFF:
+    case 0x362C5FFF: /* "UnderwaterColor" */
         m_underwaterColor = ReadColor(data);
         break;
-    case 0x8F7CFA82:
+    case 0x8F7CFA82: /* "FresnelMinMax" */
         m_fresnelMin = data.GetFloatArg(0);
         m_fresnelMax = data.GetFloatArg(1);
         break;
-    case 0x01192B7B:
+    case 0x01192B7B: /* "FarSceneRange" */
         m_farSceneRange = data.GetFloatArg(0);
         break;
-    case 0xE938342C:
+    case 0xE938342C: /* "SpecularMaskTile" */
         m_fSpecularMaskTileU = data.GetFloatArg(0);
         m_fSpecularMaskTileV = data.GetFloatArg(1);
         break;
-    case 0xDD976C44:
+    case 0xDD976C44: /* "SpecularMaskScrollSpeed" */
         m_fSpecularMaskScrollU = data.GetFloatArg(0);
         m_fSpecularMaskScrollV = data.GetFloatArg(1);
         break;
-    case 0xC0311180:
+    case 0xC0311180: /* "SpecularMaskTextures" */
         m_uiNumSpecularMaskTextures = (int)data.GetFloatArg(1);
         for (unsigned int i = 0; i < m_uiNumSpecularMaskTextures; ++i)
         {
@@ -1659,7 +1659,7 @@ void RedWater::PlatformReadConfigData(PblConfig::Data& data)
         }
         m_fSpecularMaskTexturesFrameRate = data.GetFloatArg(2);
         break;
-    case 0x11D65039:
+    case 0x11D65039: /* "BumpMapTextures" */
         m_uiNumBumpMapTextures = (int)data.GetFloatArg(1);
         for (unsigned int i = 0; i < m_uiNumBumpMapTextures; ++i)
         {
@@ -1668,7 +1668,7 @@ void RedWater::PlatformReadConfigData(PblConfig::Data& data)
         }
         m_fBumpMapTexturesFrameRate = data.GetFloatArg(2);
         break;
-    case 0xEAC587AC:
+    case 0xEAC587AC: /* "NormalMapTextures" */
         m_uiNumNormalMapTextures = (int)data.GetFloatArg(1);
         for (unsigned int i = 0; i < m_uiNumNormalMapTextures; ++i)
         {

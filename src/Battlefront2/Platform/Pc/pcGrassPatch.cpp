@@ -67,20 +67,20 @@ GrassPatchRenderable::GrassPatchRenderable(const GrassPatchClass* pClass)
     m_pVertices = 0;
     if (RedRenderer::pcGetGeometryMode() == GEOMETRYMODE_UNCOMPRESSED)
     {
-        m_pShader = pcRedShader::Create(0xe68b9c52, 0x2a2, &m_pClass->mTextureHash,
+        m_pShader = pcRedShader::Create(0xe68b9c52 /* "normal" */, 0x2a2, &m_pClass->mTextureHash,
                                         1, 0x10006, RedColor::WHITE, RedColor::BLACK, 32.0f);
-        m_pShaderFar = pcRedShader::Create(0xe68b9c52, 0x2a2, &m_pClass->mTextureHash,
+        m_pShaderFar = pcRedShader::Create(0xe68b9c52 /* "normal" */, 0x2a2, &m_pClass->mTextureHash,
                                            1, 0x10002, RedColor::WHITE, RedColor::BLACK, 32.0f);
-        m_pShaderTransparent = pcRedShader::Create(0xe68b9c52, 0x2a2, &m_pClass->mTextureHash,
+        m_pShaderTransparent = pcRedShader::Create(0xe68b9c52 /* "normal" */, 0x2a2, &m_pClass->mTextureHash,
                                                     1, 0x10004, RedColor::WHITE, RedColor::BLACK, 32.0f);
     }
     else
     {
-        m_pShader = pcRedShader::Create(0xe68b9c52, 0xd2a2, &m_pClass->mTextureHash,
+        m_pShader = pcRedShader::Create(0xe68b9c52 /* "normal" */, 0xd2a2, &m_pClass->mTextureHash,
                                         1, 0x10006, RedColor::WHITE, RedColor::BLACK, 32.0f);
-        m_pShaderFar = pcRedShader::Create(0xe68b9c52, 0xd2a2, &m_pClass->mTextureHash,
+        m_pShaderFar = pcRedShader::Create(0xe68b9c52 /* "normal" */, 0xd2a2, &m_pClass->mTextureHash,
                                            1, 0x10002, RedColor::WHITE, RedColor::BLACK, 32.0f);
-        m_pShaderTransparent = pcRedShader::Create(0xe68b9c52, 0xd2a2, &m_pClass->mTextureHash,
+        m_pShaderTransparent = pcRedShader::Create(0xe68b9c52 /* "normal" */, 0xd2a2, &m_pClass->mTextureHash,
                                                     1, 0x10004, RedColor::WHITE, RedColor::BLACK, 32.0f);
     }
     m_bReflection = false;

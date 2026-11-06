@@ -297,27 +297,27 @@ Team::Side Team::TranslateTeamName(const char* pcName)
 {
     switch ((unsigned int)PblHash(pcName))
     {
-    case 0x13254BC4:
-    case 0x1D083CC0:
+    case 0x13254BC4: /* "All" */
+    case 0x1D083CC0: /* "alliance" */
         return side_Alliance;
-    case 0x93E73CA1:
-    case 0x2C5F5065:
+    case 0x93E73CA1: /* "imp" */
+    case 0x2C5F5065: /* "empire" */
         return side_Empire;
-    case 0x2CF46160:
-    case 0xC7836FE1:
+    case 0x2CF46160: /* "rep" */
+    case 0xC7836FE1: /* "republic" */
         return side_Republic;
-    case 0xF387C5D6:
+    case 0xF387C5D6: /* "cis" */
         return side_CIS;
-    case 0x269992EB:
-    case 0x8C4B1AD8:
+    case 0x269992EB: /* "neu" */
+    case 0x8C4B1AD8: /* "neutral" */
         return side_Neutral;
-    case 0xF4B48D8C:
-    case 0x1B3B5C59:
-    case 0xA8C4C105:
+    case 0xF4B48D8C: /* "her" */
+    case 0x1B3B5C59: /* "hero" */
+    case 0xA8C4C105: /* "heroes" */
         return side_HEROES;
-    case 0x74123D64:
-    case 0x500090A8:
-    case 0xCBE408C1:
+    case 0x74123D64: /* "vil" */
+    case 0x500090A8: /* "villain" */
+    case 0xCBE408C1: /* "villains" */
         return side_VILLAINS;
     default:
         return side_Locals;
@@ -416,45 +416,45 @@ void Team::InitialUpdate()
     switch (mSide)
     {
     case side_Alliance:
-        mName = (unsigned short*)RedLocalizeDB::Find(0x9A2AD740u, true);
+        mName = (unsigned short*)RedLocalizeDB::Find(0x9A2AD740u /* "common.sides.all.name" */, true);
         if (!mName)
         {
-            mName = (unsigned short*)RedLocalizeDB::Find(0x9A2AD740u, false);
+            mName = (unsigned short*)RedLocalizeDB::Find(0x9A2AD740u /* "common.sides.all.name" */, false);
         }
         break;
     case side_Empire:
-        mName = (unsigned short*)RedLocalizeDB::Find(0xB08A43AFu, true);
+        mName = (unsigned short*)RedLocalizeDB::Find(0xB08A43AFu /* "common.sides.imp.name" */, true);
         if (!mName)
         {
-            mName = (unsigned short*)RedLocalizeDB::Find(0xB08A43AFu, false);
+            mName = (unsigned short*)RedLocalizeDB::Find(0xB08A43AFu /* "common.sides.imp.name" */, false);
         }
         break;
     case side_Republic:
-        mName = (unsigned short*)RedLocalizeDB::Find(0x373D9190u, true);
+        mName = (unsigned short*)RedLocalizeDB::Find(0x373D9190u /* "common.sides.rep.name" */, true);
         if (!mName)
         {
-            mName = (unsigned short*)RedLocalizeDB::Find(0x373D9190u, false);
+            mName = (unsigned short*)RedLocalizeDB::Find(0x373D9190u /* "common.sides.rep.name" */, false);
         }
         break;
     case side_CIS:
-        mName = (unsigned short*)RedLocalizeDB::Find(0xEEEC5DE2u, true);
+        mName = (unsigned short*)RedLocalizeDB::Find(0xEEEC5DE2u /* "common.sides.cis.name" */, true);
         if (!mName)
         {
-            mName = (unsigned short*)RedLocalizeDB::Find(0xEEEC5DE2u, false);
+            mName = (unsigned short*)RedLocalizeDB::Find(0xEEEC5DE2u /* "common.sides.cis.name" */, false);
         }
         break;
     case side_HEROES:
-        mName = (unsigned short*)RedLocalizeDB::Find(0xA7217A49u, true);
+        mName = (unsigned short*)RedLocalizeDB::Find(0xA7217A49u /* "common.sides.heroes.name" */, true);
         if (!mName)
         {
-            mName = (unsigned short*)RedLocalizeDB::Find(0xA7217A49u, false);
+            mName = (unsigned short*)RedLocalizeDB::Find(0xA7217A49u /* "common.sides.heroes.name" */, false);
         }
         break;
     case side_VILLAINS:
-        mName = (unsigned short*)RedLocalizeDB::Find(0x81FD9981u, true);
+        mName = (unsigned short*)RedLocalizeDB::Find(0x81FD9981u /* "common.sides.villains.name" */, true);
         if (!mName)
         {
-            mName = (unsigned short*)RedLocalizeDB::Find(0x81FD9981u, false);
+            mName = (unsigned short*)RedLocalizeDB::Find(0x81FD9981u /* "common.sides.villains.name" */, false);
         }
         break;
     case side_Locals:

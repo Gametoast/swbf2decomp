@@ -1933,9 +1933,9 @@ void RenderViewTransition(int iView)
         pPrimitive->EndVertexData();
 
         pcClearShader* pShader = (pcClearShader*)pcRedShader::Create(
-            0x5C6E1222, 0x203, 0, 0, 0, RedColor::WHITE, RedColor::BLACK, 32.0f);
-        pShader->m_pTex = RedTexture::Find(0xEA24E62E);
-        pShader->m_pAlphaMaskTex = RedTexture::Find(0xEA24E62E);
+            0x5C6E1222 /* "clear" */, 0x203, 0, 0, 0, RedColor::WHITE, RedColor::BLACK, 32.0f);
+        pShader->m_pTex = RedTexture::Find(0xEA24E62E /* "whitecircle" */);
+        pShader->m_pAlphaMaskTex = RedTexture::Find(0xEA24E62E /* "whitecircle" */);
         pShader->m_blendMode = pcClearShader::BLENDMODE_BLEND;
         RedRenderer::pcRenderPrimitive(pPrimitive, pShader, gMatrixIdentity,
                                        sViewTransitions[iView].overlayColor, 0x200, 0, 0, 0);
@@ -1990,9 +1990,9 @@ void RenderViewTransition(int iView)
         pPrimitive->EndVertexData();
 
         pcClearShader* pShader = (pcClearShader*)pcRedShader::Create(
-            0x5C6E1222, 0x403, 0, 0, 0, RedColor::WHITE, RedColor::BLACK, 32.0f);
+            0x5C6E1222 /* "clear" */, 0x403, 0, 0, 0, RedColor::WHITE, RedColor::BLACK, 32.0f);
         pShader->m_pTex = FLRenderer::pcGetPreviousFrameTexture();
-        pShader->m_pAlphaMaskTex = RedTexture::Find(0xEA24E62E);
+        pShader->m_pAlphaMaskTex = RedTexture::Find(0xEA24E62E /* "whitecircle" */);
         pShader->m_blendMode = pcClearShader::BLENDMODE_BLEND;
         RedRenderer::pcRenderPrimitive(pPrimitive, pShader, gMatrixIdentity,
                                        sViewTransitions[iView].blurColor, 0x200, 0, 0, 0);

@@ -200,7 +200,7 @@ void pcHDRShader::Render_Prog1(const RenderItem* pItem, unsigned int) const
 
     if (m_state == HDR_MODE_SCALEANDBLOOM)
     {
-        RedRenderer::pcSetTexture(0, RedTexture::Find(0xde020766));
+        RedRenderer::pcSetTexture(0, RedTexture::Find(0xde020766 /* "white" */));
         RedRenderer::pcSetRenderState(D3DRS_ALPHABLENDENABLE, TRUE);
         RedRenderer::pcSetRenderState(D3DRS_SRCBLEND, D3DBLEND_DESTCOLOR);
         RedRenderer::pcSetRenderState(D3DRS_DESTBLEND, D3DBLEND_SRCCOLOR);

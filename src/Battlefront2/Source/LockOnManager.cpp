@@ -164,7 +164,7 @@ void LockOnManager::SetDisplayIconsOnEverything(bool bEverything)
 // FUNCTION: SWBF2 0x0057d8f0
 void LockOnManager::CreateAll()
 {
-    sTargetLockSound.SetID(0x6a942216u, false, false);
+    sTargetLockSound.SetID(0x6a942216u /* "shell_menu_accept" */, false, false);
     const unsigned int uNumCameras = CameraManager::Instance()->GetNumCameras();
     for (unsigned int i = 0; i < uNumCameras; i++)
     {
@@ -401,7 +401,7 @@ void LockOnManager::UpdateTargetVisibility(Controllable* const pCtrl, RedCamera*
     }
     if (const RedPose* pPose = pObject->GetPose())
     {
-        if (const PblMatrix* pBone = pPose->Find(0x3483A489u))
+        if (const PblMatrix* pBone = pPose->Find(0x3483A489u /* "hp_hud_target" */))
         {
             vPos = pObject->GetMatrix().ApplyTransform(pBone->GetTranslation());
         }
@@ -409,7 +409,7 @@ void LockOnManager::UpdateTargetVisibility(Controllable* const pCtrl, RedCamera*
     else if (const GameModel* pModel = pObject->GetModel())
     {
         PblMatrix mBone;
-        if (pModel->GetRedModel(0) && pModel->GetRedModel(0)->GetBoneMatrix(0x3483A489u, mBone))
+        if (pModel->GetRedModel(0) && pModel->GetRedModel(0)->GetBoneMatrix(0x3483A489u /* "hp_hud_target" */, mBone))
         {
             vPos = pObject->GetMatrix().ApplyTransform(mBone.GetTranslation());
         }

@@ -750,7 +750,7 @@ void RawControllerInputs::ReadLatest(float fDeltaTime)
         dY = dY / (double)fDeltaTime;
 
         if (mMouseAssist[mMode] && (mMode == 1 || mMode == 2 || mMode == 4) &&
-            GameState::GetState() == 0x8FF60339 && !PauseMenu::GetPaused(0))
+            GameState::GetState() == 0x8FF60339 /* "mission" */ && !PauseMenu::GetPaused(0))
         {
             const double dThreshold = (mMode == 2) ? 1.0 : 1000.0;
 
@@ -1141,8 +1141,8 @@ void RawControllerInputs::TeamOrderInputProcess()
 {
 
     const unsigned int auiOrders[8] = {
-        0x0e6cfcde, 0x0f6cfe71, 0x0c6cf9b8, 0x0d6cfb4b,
-        0x126d032a, 0x136d04bd, 0x106d0004, 0x116d0197
+        0x0e6cfcde /* "common.chat.0" */, 0x0f6cfe71 /* "common.chat.1" */, 0x0c6cf9b8 /* "common.chat.2" */, 0x0d6cfb4b /* "common.chat.3" */,
+        0x126d032a /* "common.chat.4" */, 0x136d04bd /* "common.chat.5" */, 0x106d0004 /* "common.chat.6" */, 0x116d0197 /* "common.chat.7" */
     };
 
     for (int i = 0; i < 8; i++)

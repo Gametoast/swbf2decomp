@@ -420,13 +420,13 @@ EntityDroidekaClass::EntityDroidekaClass(unsigned int uHash)
     mFirstPersonModelHandle = -1;
     mUprightWaterDamageHeight = 1.5f;
     mBallWaterDamageHeight = 1.5f;
-    mHealthGainEffect = 0x9D26C2F2u;
-    mAmmoGainEffect = 0x2A72AE31u;
-    mEnergyGainEffect = 0x9796A1C5u;
-    mBuffHealthEffect = 0xBB3E84E9u;
-    mBuffOffenseEffect = 0xC17AB11Au;
-    mBuffDefenseEffect = 0x28B9F3ACu;
-    mDebuffEffect = 0x9796A1C5u;
+    mHealthGainEffect = 0x9D26C2F2u /* "com_sfx_powerup_blue" */;
+    mAmmoGainEffect = 0x2A72AE31u /* "com_sfx_powerup_red" */;
+    mEnergyGainEffect = 0x9796A1C5u /* "com_sfx_powerup_green" */;
+    mBuffHealthEffect = 0xBB3E84E9u /* "com_sfx_buffed_regen" */;
+    mBuffOffenseEffect = 0xC17AB11Au /* "com_sfx_buffed_offense" */;
+    mBuffDefenseEffect = 0x28B9F3ACu /* "com_sfx_buffed_defense" */;
+    mDebuffEffect = 0x9796A1C5u /* "com_sfx_powerup_green" */;
 
     mLockOnMinDist = 0.0f;
     mLockOnMaxDist = 15.0f;
@@ -1097,64 +1097,64 @@ void EntityDroidekaClass::SetProperty(unsigned int uProperty, const char* pszVal
 {
     switch (uProperty)
     {
-    case 0x2FA0BA9D:
-    case 0x9F8A0040:
+    case 0x2FA0BA9D: /* "Acceleration" */
+    case 0x9F8A0040: /* "Acceleraton" */
         sscanf(pszValue, "%f", &mAcceleration);
         break;
-    case 0x86DF0364:
+    case 0x86DF0364: /* "MaxSpeed" */
         sscanf(pszValue, "%f", &mMaxSpeed);
         break;
-    case 0x5433F589:
+    case 0x5433F589: /* "MaxTurnSpeed" */
         sscanf(pszValue, "%f", &mMaxTurnSpeed);
         break;
-    case 0x7335AA87:
+    case 0x7335AA87: /* "MaxYawSpeed" */
         sscanf(pszValue, "%f", &mMaxYawSpeed);
         if (mMaxTurnSpeed > mMaxYawSpeed)
         {
             mMaxYawSpeed = mMaxTurnSpeed;
         }
         break;
-    case 0xB5534BE0:
+    case 0xB5534BE0: /* "MaxPitchSpeed" */
         sscanf(pszValue, "%f", &mMaxPitchSpeed);
         break;
-    case 0x3209ADD4:
+    case 0x3209ADD4: /* "UnrollTime" */
         sscanf(pszValue, "%f", &mUnrollTime);
         break;
-    case 0xC817A0F7:
+    case 0xC817A0F7: /* "RollTime" */
         sscanf(pszValue, "%f", &mRollTime);
         break;
-    case 0x48616A7B:
+    case 0x48616A7B: /* "MouseTurnDecay" */
         sscanf(pszValue, "%f", &mMouseTurnDecay);
         break;
-    case 0x2C3E8078:
+    case 0x2C3E8078: /* "YawLimits" */
         sscanf(pszValue, "%f %f", &mMinYaw, &mMaxYaw);
         mMinYaw *= 0.017453292f;
         mMaxYaw *= 0.017453292f;
         break;
-    case 0x3403B139:
+    case 0x3403B139: /* "PitchLimits" */
         sscanf(pszValue, "%f %f", &mMinPitch, &mMaxPitch);
         mMinPitch *= 0.017453292f;
         mMaxPitch *= 0.017453292f;
         break;
-    case 0x2CDB588A:
+    case 0x2CDB588A: /* "CollisionThreshold" */
         sscanf(pszValue, "%f %f %f", &mCollisionThreshold[0], &mCollisionThreshold[1],
                &mCollisionThreshold[2]);
         break;
-    case 0x1A87BACF:
+    case 0x1A87BACF: /* "CollisionScale" */
         sscanf(pszValue, "%f %f %f", &mCollisionScale[0], &mCollisionScale[1], &mCollisionScale[2]);
         break;
-    case 0x2EF03732:
+    case 0x2EF03732: /* "CollisionInflict" */
         sscanf(pszValue, "%f", &mCollisionInflict);
         break;
-    case 0x28ADDA49:
+    case 0x28ADDA49: /* "NoCombatInterrupt" */
         mCombatInterrupts = atoi(pszValue) == 0;
         break;
 
-    case 0xD0329E80:
+    case 0xD0329E80: /* "WeaponSection" */
         sWeaponSection = atoi(pszValue) - 1;
         break;
-    case 0x6F332041:
-    case 0xFBF47DBA:
+    case 0x6F332041: /* "Weapon" */
+    case 0xFBF47DBA: /* "WeaponName" */
     {
         mWeaponClass[sWeaponSection] = WeaponClass::Find(PblHash(pszValue));
         int iCount = sWeaponSection + 1;
@@ -1165,10 +1165,10 @@ void EntityDroidekaClass::SetProperty(unsigned int uProperty, const char* pszVal
         mWeaponCount = iCount;
         break;
     }
-    case 0x16472328:
+    case 0x16472328: /* "WeaponChannel" */
         sscanf(pszValue, "%d", &mWeaponChannel[sWeaponSection]);
         break;
-    case 0xDC19BD13:
+    case 0xDC19BD13: /* "WeaponAmmo" */
     {
         int iAmmo = 0;
         sscanf(pszValue, "%d", &iAmmo);
@@ -1180,7 +1180,7 @@ void EntityDroidekaClass::SetProperty(unsigned int uProperty, const char* pszVal
         }
         break;
     }
-    case 0x8585BB8A:
+    case 0x8585BB8A: /* "WeaponShareAmmo" */
     {
         int iWeapon = 0;
         sscanf(pszValue, "%d", &iWeapon);
@@ -1199,7 +1199,7 @@ void EntityDroidekaClass::SetProperty(unsigned int uProperty, const char* pszVal
         }
         break;
     }
-    case 0x9455A446:
+    case 0x9455A446: /* "WeaponShareHeat" */
     {
         int iWeapon = 0;
         sscanf(pszValue, "%d", &iWeapon);
@@ -1216,22 +1216,22 @@ void EntityDroidekaClass::SetProperty(unsigned int uProperty, const char* pszVal
         break;
     }
 
-    case 0xBACA6BF1:
+    case 0xBACA6BF1: /* "CAMERASECTION" */
         switch (PblHash(pszValue))
         {
-        case 0x94D7CDEC:
+        case 0x94D7CDEC: /* "STANDZOOM" */
             sCurrentCameraSplit = 0; sCurrentCameraStance = 1;
             break;
-        case 0x4E4FA58B:
+        case 0x4E4FA58B: /* "Crouch" */
             sCurrentCameraSplit = 0; sCurrentCameraStance = 2;
             break;
-        case 0xD8AECCCD:
+        case 0xD8AECCCD: /* "SPLITSTAND" */
             sCurrentCameraSplit = 1; sCurrentCameraStance = 0;
             break;
-        case 0x1643517A:
+        case 0x1643517A: /* "SPLITSTANDZOOM" */
             sCurrentCameraSplit = 1; sCurrentCameraStance = 1;
             break;
-        case 0xCA780CF9:
+        case 0xCA780CF9: /* "SPLITCROUCH" */
             sCurrentCameraSplit = 1; sCurrentCameraStance = 2;
             break;
         default:
@@ -1240,41 +1240,41 @@ void EntityDroidekaClass::SetProperty(unsigned int uProperty, const char* pszVal
         }
         break;
 
-    case 0x07FF5A07:
+    case 0x07FF5A07: /* "StompEffect" */
         mStompEffect = PblHash(pszValue);
         break;
-    case 0x5233B817:
+    case 0x5233B817: /* "VehicleType" */
         mVehicleType = FindVehicleType(pszValue);
         break;
-    case 0x46BBA6D5:
+    case 0x46BBA6D5: /* "TurnThreshold" */
         sscanf(pszValue, "%f", &mTurnThreshold);
         mTurnThreshold *= 0.017453292f;
         break;
-    case 0x47A95951:
+    case 0x47A95951: /* "MaxTerrainAngle" */
         sscanf(pszValue, "%f", &mMaxTerrainAngle);
         mMaxTerrainAngle = (float)cos(mMaxTerrainAngle * 0.017453292f);
         break;
 
-    case 0x02BB1FE0:
-    case 0x9B30E763:
+    case 0x02BB1FE0: /* "Explosion" */
+    case 0x9B30E763: /* "ExplosionName" */
         mExplosion = ExplosionClass::Find(PblHash(pszValue));
         break;
-    case 0x16181B74:
+    case 0x16181B74: /* "NoDeathExplosions" */
         if (*pszValue)
         {
             sscanf(pszValue, "%d", &mNoDeathExplosions);
         }
         break;
-    case 0x7C8816FC:
+    case 0x7C8816FC: /* "DeathDustEffect" */
         if (*pszValue)
         {
             mDeathDustClassHash = PblHash(pszValue);
         }
         break;
-    case 0xAE640110:
+    case 0xAE640110: /* "DeathDustDelay" */
         sscanf(pszValue, "%f", &mDeathDustDelay);
         break;
-    case 0x060C07E2:
+    case 0x060C07E2: /* "DeathDustOffset" */
         if (*pszValue)
         {
             float x = 0.0f;
@@ -1286,42 +1286,42 @@ void EntityDroidekaClass::SetProperty(unsigned int uProperty, const char* pszVal
             mDeathDustOffset.z = z;
         }
         break;
-    case 0x0C13FC70:
+    case 0x0C13FC70: /* "DeathShakeDelay" */
         sscanf(pszValue, "%f", &mDeathShakeDelay);
         break;
-    case 0x94B9538C:
+    case 0x94B9538C: /* "DeathShakeForce" */
         sscanf(pszValue, "%f", &mDeathShakeForce);
         break;
-    case 0xBB80D985:
+    case 0xBB80D985: /* "DeathShakeDuration" */
         sscanf(pszValue, "%f", &mDeathShakeDuration);
         break;
-    case 0xB3AF758B:
+    case 0xB3AF758B: /* "DeathShakeRadius" */
         sscanf(pszValue, "%f", &mDeathShakeRadius);
         break;
 
-    case 0x21F56ED0:
+    case 0x21F56ED0: /* "Footstep0Sound" */
         mFootstepSounds[0].SetID(pszValue, true, false);
         break;
-    case 0x937CEAA5:
+    case 0x937CEAA5: /* "Footstep1Sound" */
         mFootstepSounds[1].SetID(pszValue, true, false);
         break;
-    case 0x12B23362:
+    case 0x12B23362: /* "Footstep2Sound" */
         mFootstepSounds[2].SetID(pszValue, true, false);
         break;
-    case 0x069134E5:
+    case 0x069134E5: /* "HydraulicSound" */
         mHydraulicSound.SetID(pszValue, true, false);
         break;
-    case 0x8AE91462:
+    case 0x8AE91462: /* "HydraulicSoundHeight" */
         sscanf(pszValue, "%f", &mHydraulicSoundHeight);
         break;
-    case 0x580DC4EC:
+    case 0x580DC4EC: /* "JumpSound" */
         mSoundJump.SetID(pszValue, true, false);
         break;
-    case 0xAD3E89E3:
+    case 0xAD3E89E3: /* "LandSound" */
         mSoundLand.SetID(pszValue, true, false);
         break;
 
-    case 0x18BE5123:
+    case 0x18BE5123: /* "AttachNodeName" */
     {
 
         unsigned int uHash = PblTEMPHash(pszValue);
@@ -1344,65 +1344,65 @@ void EntityDroidekaClass::SetProperty(unsigned int uProperty, const char* pszVal
         }
         break;
     }
-    case 0x5B491ACC:
+    case 0x5B491ACC: /* "WaterDamageInterval" */
         sscanf(pszValue, "%f", &mWaterDamageInterval);
         break;
-    case 0x829299AD:
+    case 0x829299AD: /* "WaterDamageAmount" */
         sscanf(pszValue, "%f", &mWaterDamageAmount);
         break;
-    case 0x9895BB7A:
+    case 0x9895BB7A: /* "BallRadius" */
         sscanf(pszValue, "%f", &mBallRadius);
         break;
-    case 0xACACDB0C:
+    case 0xACACDB0C: /* "BallMoveSpeed" */
         sscanf(pszValue, "%f", &mBallMoveSpeed);
         break;
-    case 0x12A7E73D:
+    case 0x12A7E73D: /* "BallStoppedTurnSpeed" */
         sscanf(pszValue, "%f", &mBallStoppedTurnSpeed);
         break;
-    case 0x578F6AE6:
+    case 0x578F6AE6: /* "BallTurnSpeed" */
         sscanf(pszValue, "%f", &mBallTurnSpeed);
         break;
-    case 0x8A5E79C2:
+    case 0x8A5E79C2: /* "BallSprintTurnSpeed" */
         sscanf(pszValue, "%f", &mBallSprintTurnSpeed);
         break;
-    case 0xDC524DD9:
+    case 0xDC524DD9: /* "BallSlippage" */
         sscanf(pszValue, "%f", &mBallSlippage);
         break;
-    case 0xD2DA8F5E:
+    case 0xD2DA8F5E: /* "BallMaxLean" */
         sscanf(pszValue, "%f", &mBallMaxLean);
         mBallMaxLean *= 0.017453292f;
         break;
-    case 0xDE6B8538:
+    case 0xDE6B8538: /* "BallAcceleration" */
         sscanf(pszValue, "%f", &mBallAcceleration);
         break;
-    case 0x6560DE67:
+    case 0x6560DE67: /* "BallRollingFriction" */
         sscanf(pszValue, "%f", &mBallRollingFriction);
         break;
-    case 0xE6F7BEFB:
+    case 0xE6F7BEFB: /* "MaxBallAngle" */
         sscanf(pszValue, "%f", &mMaxBallAngle);
         mMaxBallAngle = (float)cos(mMaxBallAngle * 0.017453292f);
         break;
-    case 0x81D52461:
+    case 0x81D52461: /* "SprintTimeForBowling" */
         sscanf(pszValue, "%f", &mSprintTimeForBowling);
         break;
-    case 0x4A6AC53F:
+    case 0x4A6AC53F: /* "BowlingPush" */
         sscanf(pszValue, "%f", &mBowlingPush);
         break;
-    case 0xBEBB6ED6:
+    case 0xBEBB6ED6: /* "BallSprintSpeedBoost" */
         sscanf(pszValue, "%f", &mBallSprintSpeedFactor);
         break;
-    case 0x2DAA5A0B:
+    case 0x2DAA5A0B: /* "BallJumpHeight" */
     {
         float fHeight = 0.0f;
         sscanf(pszValue, "%f", &fHeight);
         mBallJumpVerticalSpeed = (float)sqrt(fHeight * 2.0f * 9.8f);
         break;
     }
-    case 0x388D3934:
+    case 0x388D3934: /* "BallJumpForwardBoost" */
         sscanf(pszValue, "%f", &mBallJumpForwardSpeedFactor);
         break;
 
-    case 0x942ED301:
+    case 0x942ED301: /* "EnergyRestore" */
         sscanf(pszValue, "%f", &mEnergyRestore);
         if (mEnergyRestore < 0.0f)
         {
@@ -1413,73 +1413,73 @@ void EntityDroidekaClass::SetProperty(unsigned int uProperty, const char* pszVal
             mEnergyRestoreIdle = mEnergyRestore;
         }
         break;
-    case 0x082EAF37:
+    case 0x082EAF37: /* "EnergyRestoreIdle" */
         sscanf(pszValue, "%f", &mEnergyRestoreIdle);
         if (mEnergyRestore > mEnergyRestoreIdle)
         {
             mEnergyRestoreIdle = mEnergyRestore;
         }
         break;
-    case 0x134361B9:
+    case 0x134361B9: /* "EnergyDrainSprint" */
         sscanf(pszValue, "%f", &mEnergyDrainSprint);
         if (mEnergyDrainSprint < 0.0f)
         {
             mEnergyDrainSprint = 0.0f;
         }
         break;
-    case 0x0B4A7FD4:
+    case 0x0B4A7FD4: /* "EnergyCostJump" */
         sscanf(pszValue, "%f", &mEnergyCostJump);
         break;
-    case 0x2431E118:
+    case 0x2431E118: /* "EnergyCostBowling" */
         sscanf(pszValue, "%f", &mEnergyCostBowling);
         break;
 
-    case 0x26D7A21C:
+    case 0x26D7A21C: /* "WakeEffect" */
         mWakeEffect = PblHash(pszValue);
         break;
-    case 0x6363D774:
+    case 0x6363D774: /* "firstperson" */
         mFirstPersonModelHandle = FirstPerson::AddGeometry(pszValue);
         break;
-    case 0xF01D5583:
+    case 0xF01D5583: /* "UprightWaterDamageHeight" */
         sscanf(pszValue, "%f", &mUprightWaterDamageHeight);
         break;
-    case 0xAC229931:
+    case 0xAC229931: /* "BallWaterDamageHeight" */
         sscanf(pszValue, "%f", &mBallWaterDamageHeight);
         break;
-    case 0x68C9C2D9:
+    case 0x68C9C2D9: /* "HealthGainEffect" */
         mHealthGainEffect = PblHash(pszValue);
         break;
-    case 0x8D8743F9:
+    case 0x8D8743F9: /* "AmmoGainEffect" */
         mAmmoGainEffect = PblHash(pszValue);
         break;
-    case 0x80A20AE3:
+    case 0x80A20AE3: /* "EnergyGainEffect" */
         mEnergyGainEffect = PblHash(pszValue);
         break;
-    case 0x32839537:
+    case 0x32839537: /* "BuffHealthEffect" */
         mBuffHealthEffect = PblHash(pszValue);
         break;
-    case 0x5B84DF23:
+    case 0x5B84DF23: /* "BuffOffenseEffect" */
         mBuffOffenseEffect = PblHash(pszValue);
         break;
-    case 0x8B003201:
+    case 0x8B003201: /* "BuffDefenseEffect" */
         mBuffDefenseEffect = PblHash(pszValue);
         break;
-    case 0x1F3FEA32:
+    case 0x1F3FEA32: /* "DebuffEffect" */
         mDebuffEffect = PblHash(pszValue);
         break;
 
-    case 0x98557A5E:
+    case 0x98557A5E: /* "AnimationName" */
         InitAnimations(pszValue);
         break;
-    case 0x47C86B4A:
-        GameObjectClass::SetProperty(0x47C86B4A, pszValue);
+    case 0x47C86B4A: /* "GeometryName" */
+        GameObjectClass::SetProperty(0x47C86B4A /* "GeometryName" */, pszValue);
         mLodData = SoldierLodData(mModel ? mModel->GetRedModel(0) : 0, 0);
         break;
-    case 0xF1F9F3E3:
+    case 0xF1F9F3E3: /* "UprightLowResModel" */
         mUprightLowRes = const_cast<GameModel*>(GameModel::Find(PblHash(pszValue)));
         mLodData = SoldierLodData(mModel ? mModel->GetRedModel(0) : 0, mUprightLowRes->GetRedModel(0));
         break;
-    case 0x19D9AB85:
+    case 0x19D9AB85: /* "BallLowResModel" */
         mBallLowRes = const_cast<GameModel*>(GameModel::Find(PblHash(pszValue)));
         break;
 
@@ -1496,14 +1496,14 @@ void EntityDroidekaClass::SetProperty(unsigned int uProperty, const char* pszVal
             !ControllableClass::SetProperty(uProperty, pszValue, pModel))
         {
             GameObjectClass::SetProperty(uProperty, pszValue);
-            if (uProperty == 0x47C86B4A)
+            if (uProperty == 0x47C86B4A /* "GeometryName" */)
             {
                 if (mModel)
                 {
                     mAttachOffset = PblVector3(0.0f, mModel->_mModel->_TotalBoundingBox._vMax.y, 0.0f);
                 }
             }
-            else if (uProperty == 0xAFE693CE)
+            else if (uProperty == 0xAFE693CE /* "TerrainCollision" */)
             {
                 int iMask = mCollisionModel.GetMaskId(PblHash(pszValue));
                 if (iMask >= 0)
@@ -1629,12 +1629,12 @@ bool EntityDroidekaClass::InitAnimations(const char* pszBank)
         -0.52359879f / (mTimeTotals[EntityDroideka::TurnRight] * 6.0f);
 
     const ZephyrSkeletonShared* pSkel = mAnimObj->_pSkeletonShared;
-    mSpineIdx = (int)pSkel->m_kHashCRC2Joint.Find(0x48FAD19F) - 1;
-    mJointIdx[0] = (int)pSkel->m_kHashCRC2Joint.Find(0x6008D6E4) - 1;
-    mJointIdx[1] = (int)pSkel->m_kHashCRC2Joint.Find(0x6D4BF03D) - 1;
-    mJointIdx[2] = (int)pSkel->m_kHashCRC2Joint.Find(0x698AED8A) - 1;
-    mArmJointIdx[0] = (int)pSkel->m_kHashCRC2Joint.Find(0xA5C0332D) - 1;
-    mArmJointIdx[1] = (int)pSkel->m_kHashCRC2Joint.Find(0x9031BDCA) - 1;
+    mSpineIdx = (int)pSkel->m_kHashCRC2Joint.Find(0x48FAD19F /* "center_box" */) - 1;
+    mJointIdx[0] = (int)pSkel->m_kHashCRC2Joint.Find(0x6008D6E4 /* "bone_spine1" */) - 1;
+    mJointIdx[1] = (int)pSkel->m_kHashCRC2Joint.Find(0x6D4BF03D /* "bone_spine2" */) - 1;
+    mJointIdx[2] = (int)pSkel->m_kHashCRC2Joint.Find(0x698AED8A /* "bone_spine3" */) - 1;
+    mArmJointIdx[0] = (int)pSkel->m_kHashCRC2Joint.Find(0xA5C0332D /* "bone_r_arm1" */) - 1;
+    mArmJointIdx[1] = (int)pSkel->m_kHashCRC2Joint.Find(0x9031BDCA /* "bone_l_arm1" */) - 1;
     return true;
 }
 
@@ -2508,9 +2508,9 @@ void EntityDroideka::DoFootImpactEffects()
         return;
     }
 
-    const PblMatrix* pFoot0 = mPose.Find(0xF63B8713);
-    const PblMatrix* pFoot1 = mPose.Find(0xC3CA09F4);
-    const PblMatrix* pFoot2 = mPose.Find(0x758BC3C3);
+    const PblMatrix* pFoot0 = mPose.Find(0xF63B8713 /* "bone_l_leg2" */);
+    const PblMatrix* pFoot1 = mPose.Find(0xC3CA09F4 /* "bone_r_leg2" */);
+    const PblMatrix* pFoot2 = mPose.Find(0x758BC3C3 /* "bone_b_leg2" */);
     float fHeight[3];
     fHeight[0] = pFoot0 ? pFoot0->m[3][1] : 0.0f;
     fHeight[1] = pFoot1 ? pFoot1->m[3][1] : 0.0f;
@@ -3841,7 +3841,7 @@ EntityDroideka::~EntityDroideka()
 // FUNCTION: SWBF2 0x0049ffa0
 FoleyFX* EntityDroideka::GetFoleyFX() const
 {
-    return FoleyFXCollider::GetFoleyFX(0x5e9b9948);
+    return FoleyFXCollider::GetFoleyFX(0x5e9b9948 /* "FoleyFXWalker" */);
 }
 
 // FUNCTION: SWBF2 0x004a01d0
@@ -4286,13 +4286,13 @@ void EntityDroideka::Render(unsigned char aLod, float aFadeVal, unsigned int uiR
             switch (PblRandom::GetGlobalInt() % 3)
             {
             case 0:
-                effect = FLEffect::s_EffectClasses.Find(0x02BB1FE0);
+                effect = FLEffect::s_EffectClasses.Find(0x02BB1FE0 /* "Explosion" */);
                 break;
             case 1:
-                effect = FLEffect::s_EffectClasses.Find(0xE07F39B5);
+                effect = FLEffect::s_EffectClasses.Find(0xE07F39B5 /* "med_explosion" */);
                 break;
             case 2:
-                effect = FLEffect::s_EffectClasses.Find(0x9DB69EE4);
+                effect = FLEffect::s_EffectClasses.Find(0x9DB69EE4 /* "small_explosion" */);
                 break;
             }
             if (effect)

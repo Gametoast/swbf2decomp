@@ -480,10 +480,10 @@ void EntityClothClass::SetProperty(unsigned int uProperty, const char* pszValue)
 {
     switch (uProperty)
     {
-    case 0x13901A72:
+    case 0x13901A72: /* "windspeed" */
         sscanf(pszValue, "%f", &mWindSpeed);
         break;
-    case 0x415E2B30:
+    case 0x415E2B30: /* "winddirection" */
     {
         float fAngleZ = 0.0f;
         float fAngleY = 0.0f;
@@ -495,57 +495,57 @@ void EntityClothClass::SetProperty(unsigned int uProperty, const char* pszValue)
         mWindDirection = PblVector3(fCos * vWind.x - fSin * vWind.z, vWind.y, fSin * vWind.x + fCos * vWind.z);
         break;
     }
-    case 0x4E994B61:
+    case 0x4E994B61: /* "maxacceleration" */
         sscanf(pszValue, "%f", &mMaxAcceleration);
         break;
-    case 0x5CAF15E1:
+    case 0x5CAF15E1: /* "hardedge" */
     {
         int iValue;
         sscanf(pszValue, "%d", &iValue);
         m_uiHardEdge = iValue > 1 ? 1 : iValue;
         break;
     }
-    case 0x6EB957F3:
+    case 0x6EB957F3: /* "particlemass" */
         sscanf(pszValue, "%f", &mParticleMass);
         break;
-    case 0x8311CD99:
+    case 0x8311CD99: /* "stretchconstraint" */
     {
         int iValue;
         sscanf(pszValue, "%d", &iValue);
         m_uiDoStretchConstraints = iValue > 1 ? 1 : iValue;
         break;
     }
-    case 0x94DD79B9:
+    case 0x94DD79B9: /* "bendconstraint" */
     {
         int iValue;
         sscanf(pszValue, "%d", &iValue);
         m_uiDoBendConstraints = iValue > 1 ? 1 : iValue;
         break;
     }
-    case 0x94E4E309:
+    case 0x94E4E309: /* "priority" */
         sscanf(pszValue, "%f", &mPriority);
         break;
-    case 0xAFE34731:
+    case 0xAFE34731: /* "transparent" */
     {
         int iValue;
         sscanf(pszValue, "%d", &iValue);
         m_uiTransparent = iValue > 1 ? 1 : iValue;
         break;
     }
-    case 0xB88C0D43:
+    case 0xB88C0D43: /* "drag" */
         sscanf(pszValue, "%f", &mDrag);
         break;
-    case 0xC1133964:
+    case 0xC1133964: /* "dampening" */
         sscanf(pszValue, "%f", &mDampening);
         break;
-    case 0xDE112858:
+    case 0xDE112858: /* "crossconstraint" */
     {
         int iValue;
         sscanf(pszValue, "%d", &iValue);
         m_uiDoCrossConstraints = (iValue > 1 ? 1 : iValue) != 0;
         break;
     }
-    case 0xE90ECACC:
+    case 0xE90ECACC: /* "attachedmesh" */
         mModelHash = PblHash(pszValue);
         break;
     }

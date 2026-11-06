@@ -534,7 +534,7 @@ void SoldierAnimatorLowResClass::AddBank(const char* pcName, const char* pcParen
     }
 
     SoldierAnimatorLowResClass* pParent = NULL;
-    if (uiParentHash != 0x20fd0e45)
+    if (uiParentHash != 0x20fd0e45 /* "Root" */)
     {
         for (SoldierAnimatorLowResClass* pClass = s_pHead; pClass; pClass = pClass->m_pNext)
         {
@@ -851,14 +851,14 @@ SoldierAnimatorLowRes* SoldierAnimatorLowResClass::GetAnimatorLocal(const Entity
 }
 
 // GLOBAL: SWBF2 0x007ae908
-static const unsigned int s_auiNoRootJoints[2] = { 0xe6e47876, 0x2b960099 };
+static const unsigned int s_auiNoRootJoints[2] = { 0xe6e47876 /* "bone_pelvis" */, 0x2b960099 /* "hp_weapons" */ };
 // GLOBAL: SWBF2 0x007ae910
-static const unsigned int s_auiRootJoints[2] = { 0x16e27226, 0 };
+static const unsigned int s_auiRootJoints[2] = { 0x16e27226 /* "bone_root" */, 0 };
 
 // FUNCTION: SWBF2 0x00649380
 void SoldierAnimatorLowResClass::SetupJointTransformAnimationFlag(ZephyrSkeletonShared* pSkeleton)
 {
-    int idx = pSkeleton->GetJointIdxByCrc(0x7a89c91f);
+    int idx = pSkeleton->GetJointIdxByCrc(0x7a89c91f /* "bone_r_finger3" */);
     if (idx < 0)
     {
         for (idx = 1; idx < (int)pSkeleton->m_uNumJoints; ++idx)

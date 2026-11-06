@@ -1068,7 +1068,7 @@ void AIUtil::CalculateSoldierSteerPoint(const PblVector3& vPrev, const PblVector
 // FUNCTION: SWBF2 0x00440f20
 bool AIUtil::IsATAT(const Controllable* pControllable)
 {
-    return pControllable->GetEntity()->GetEntityClass()->mId == 0x6fbcdecc;
+    return pControllable->GetEntity()->GetEntityClass()->mId == 0x6fbcdecc /* "imp_walk_atat" */;
 }
 
 // FUNCTION: SWBF2 0x00440f40

@@ -21,7 +21,7 @@ public:
     };
 
     WaterEffect()
-        : FLEffect(0x49C69A10u, 3)
+        : FLEffect(0x49C69A10u /* "Water" */, 3)
     {
     }
 

@@ -190,10 +190,10 @@ const unsigned short* Find(unsigned int uiHash, bool bNullIfMissing)
 {
     switch (uiHash)
     {
-    case 0xb0a4d342:
+    case 0xb0a4d342: /* "ifs.mp.joinerrors.doesnotexist" */
         // STRING: SWBF2 0x00772c08
         return (const unsigned short*)L"Cannot join: does not exist";
-    case 0xe6407c4d:
+    case 0xe6407c4d: /* "ifs.mp.joinerrors.cantconnect" */
         // STRING: SWBF2 0x00772c40
         return (const unsigned short*)L"Cannot join: unable to connect";
     }

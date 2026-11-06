@@ -362,7 +362,7 @@ void SoundDebugDisplay::DisplayChaseInfo(float fDeltaTime)
         }
         mSpeedPrev = fSpeed;
 
-        if (pObject->IsRtti(0x8b3e2650))
+        if (pObject->IsRtti(0x8b3e2650 /* "EntityWalker" */))
         {
             EntityWalker* pWalker = (EntityWalker*)pObject;
             const unsigned int uiFeet = 2 * pWalker->mLegPairCount;
@@ -374,7 +374,7 @@ void SoundDebugDisplay::DisplayChaseInfo(float fDeltaTime)
                        pWalker->mLastFootHeight[i]);
             }
         }
-        else if (pObject->IsRtti(0x3639fed7))
+        else if (pObject->IsRtti(0x3639fed7 /* "EntityDroideka" */))
         {
             EntityDroideka* pDroideka = (EntityDroideka*)pObject;
             const unsigned int uiFeet = pDroideka->mClass->mNumFeet;
@@ -386,7 +386,7 @@ void SoundDebugDisplay::DisplayChaseInfo(float fDeltaTime)
                        pDroideka->mLastFootHeight[i]);
             }
         }
-        else if (pObject->IsRtti(0x26395ec0))
+        else if (pObject->IsRtti(0x26395ec0 /* "EntityFlyer" */))
         {
             EntityFlyer* pFlyer = (EntityFlyer*)pObject;
             Printf("Speed %03.03f", pFlyer->mSpeedPrev);
@@ -397,7 +397,7 @@ void SoundDebugDisplay::DisplayChaseInfo(float fDeltaTime)
             }
             Printf("Acceleration %03.03f", fAccel / fClassAccel);
         }
-        else if (pObject->IsRtti(0xc6cd61cc))
+        else if (pObject->IsRtti(0xc6cd61cc /* "EntityHover" */))
         {
             EntityHover* pHover = (EntityHover*)pObject;
             Printf("Speed %03.03f", pHover->mSpeedPrev);

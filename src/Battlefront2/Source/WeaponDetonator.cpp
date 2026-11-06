@@ -54,7 +54,7 @@ unsigned int WeaponDetonator::GetNameHash() const
 WeaponDetonatorClass::WeaponDetonatorClass(unsigned int uHash)
     : WeaponDispenserClass(uHash)
 {
-    mPlantedHash = 0x2E4D0225u;
+    mPlantedHash = 0x2E4D0225u /* "hud_detpack_plunger" */;
     mMaxItems = 1;
 }
 
@@ -77,7 +77,7 @@ WeaponDetonatorClass::WeaponDetonatorClass(WeaponDetonatorClass* pBase, unsigned
 // FUNCTION: SWBF2 0x00682b40
 void WeaponDetonatorClass::SetProperty(unsigned int uProperty, const char* pszValue)
 {
-    if (uProperty != 0x83CF5063)
+    if (uProperty != 0x83CF5063 /* "PlantedHash" */)
     {
         WeaponDispenserClass::SetProperty(uProperty, pszValue);
         return;

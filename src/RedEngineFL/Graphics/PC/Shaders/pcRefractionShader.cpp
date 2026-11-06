@@ -318,9 +318,9 @@ void pcRefractionShader::Bind()
 RedShadingState* pcRefractionShader::CreateShadingState() const
 {
     RedShadingState* pState = new RedShadingState(GetRenderTypeHash());
-    pState->AddColorParam(0xbc6f8a5e) = m_colorRefraction;
-    pState->AddIntParam(0x7802a19a) = m_material.materialFlags & 0x44;
-    pState->AddIntParam(0x891891e9) = m_material.diffuseMapHash;
+    pState->AddColorParam(0xbc6f8a5e /* "refraction_color" */) = m_colorRefraction;
+    pState->AddIntParam(0x7802a19a /* "REFRACTIVE" */) = m_material.materialFlags & 0x44;
+    pState->AddIntParam(0x891891e9 /* "diffuse_texture" */) = m_material.diffuseMapHash;
     RedTextureTransform& transform = pState->AddTextureTransformParam(0x3f0d728a);
     transform.m_bTransform = m_material.diffuseTexTransform.m_bTransform;
     if (transform.m_bTransform)
@@ -370,7 +370,7 @@ unsigned short pcRefractionShader::GetShaderChain(pcRedShader** const ppOut,
     bool bRefract = (m_material.materialFlags & 0x44) != 0;
     if (pItem->pShadingState)
     {
-        bRefract = pItem->pShadingState->GetIntParam(0x7802a19a) != 0;
+        bRefract = pItem->pShadingState->GetIntParam(0x7802a19a /* "REFRACTIVE" */) != 0;
     }
 
     if (bRefract && !(pItem->flags & 0x10220000))
@@ -469,7 +469,7 @@ void pcRefractionShader::RenderZPrepass(const RenderItem* pItem) const
         const RedTextureTransform* pTransform = 0;
         if (pItem->pShadingState)
         {
-            uiDiffuseMap = pItem->pShadingState->GetIntParam(0x891891e9);
+            uiDiffuseMap = pItem->pShadingState->GetIntParam(0x891891e9 /* "diffuse_texture" */);
             pTransform = &pItem->pShadingState->GetTextureTransformParam(0x3f0d728a);
             if (!pTransform->m_bTransform)
             {
@@ -602,7 +602,7 @@ void pcRefractionShader::Render_Prog1(const RenderItem* pItem, unsigned int) con
     RedColor refraction = m_colorRefraction;
     if (pItem->pShadingState)
     {
-        refraction = pItem->pShadingState->GetColorParam(0xbc6f8a5e);
+        refraction = pItem->pShadingState->GetColorParam(0xbc6f8a5e /* "refraction_color" */);
     }
     const float fAlpha = refraction.a * (1.0f / 255.0f);
 

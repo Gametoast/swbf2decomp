@@ -367,12 +367,12 @@ void SpawnDisplay::UpdateUnitCountText()
         switch (eReason)
         {
         case PlayerStats::TOO_MANY_UNITS:
-            PblUnicode::ustrlcat(text, RedLocalizeDB::Find(0xD3CD201E, false), 256);
+            PblUnicode::ustrlcat(text, RedLocalizeDB::Find(0xD3CD201E /* "game.spawndisplay.toomanyunits" */, false), 256);
             break;
         case PlayerStats::NOT_ENOUGH_POINTS:
         {
             int iPointsToUnlock = pClass->mPointsToUnlock;
-            PblUnicode::usnprintf(text, 255, RedLocalizeDB::Find(0x155AB074, false),
+            PblUnicode::usnprintf(text, 255, RedLocalizeDB::Find(0x155AB074 /* "game.spawndisplay.needmorepoints" */, false),
                                   iPointsToUnlock - Character::GetPlayerStats(mOwner).GetPoints(true));
             break;
         }
@@ -384,11 +384,11 @@ void SpawnDisplay::UpdateUnitCountText()
     int iMaxUnits = pTeam->GetClassMaxUnits(iIndex);
     if (iMaxUnits > Character::sCharacterLimit || pClass->mPointsToUnlock <= 0)
     {
-        PblUnicode::usnprintf(countText, 127, RedLocalizeDB::Find(0xECF8496F, false), iCurUnits);
+        PblUnicode::usnprintf(countText, 127, RedLocalizeDB::Find(0xECF8496F /* "game.spawndisplay.unitcount" */, false), iCurUnits);
     }
     else
     {
-        PblUnicode::usnprintf(countText, 127, RedLocalizeDB::Find(0xCB22A09F, false), iCurUnits,
+        PblUnicode::usnprintf(countText, 127, RedLocalizeDB::Find(0xCB22A09F /* "game.spawndisplay.unitcountwithmax" */, false), iCurUnits,
                               iMaxUnits);
     }
     PblUnicode::ustrlcat(text, countText, 256);
@@ -464,7 +464,7 @@ void SpawnDisplay::Show(Character* pCharacter)
     {
         if (CameraManager::sInstance->m_iNumCam == 1)
         {
-            if (Snd::Bus* pBus = Snd::Bus::FindByHashID(0xFA930D1C))
+            if (Snd::Bus* pBus = Snd::Bus::FindByHashID(0xFA930D1C /* "ingame_spawnducked" */))
             {
                 pBus->Fade(sInGameBusFadeTime, sInGameBusGain, -1.0f);
             }
@@ -624,7 +624,7 @@ void SpawnDisplay::Hide(Character* pCharacter)
     {
         if (CameraManager::sInstance->m_iNumCam == 1)
         {
-            if (Snd::Bus* pBus = Snd::Bus::FindByHashID(0xFA930D1C))
+            if (Snd::Bus* pBus = Snd::Bus::FindByHashID(0xFA930D1C /* "ingame_spawnducked" */))
             {
                 pBus->Fade(sInGameBusFadeTime, 1.0f, -1.0f);
             }
@@ -1295,17 +1295,17 @@ void SpawnDisplay::Initialize()
         {
         case Team::side_Alliance:
         case Team::side_HEROES:
-            uModel = 0x1BE6F06A;
+            uModel = 0x1BE6F06A /* "com_icon_alliance" */;
             break;
         case Team::side_CIS:
-            uModel = 0x073E0A94;
+            uModel = 0x073E0A94 /* "com_icon_CIS" */;
             break;
         case Team::side_Empire:
         case Team::side_VILLAINS:
-            uModel = 0xF5198C5A;
+            uModel = 0xF5198C5A /* "com_icon_imperial" */;
             break;
         case Team::side_Republic:
-            uModel = 0x86B9BD17;
+            uModel = 0x86B9BD17 /* "com_icon_republic" */;
             break;
         }
         m_pSideModel[i]->SetModel(uModel);
@@ -1346,7 +1346,7 @@ void SpawnDisplay::Initialize()
     }
 
     mTextReady.SetFont(RedFont::GAMEFONT_MEDIUM);
-    if (const unsigned short* pText = RedLocalizeDB::Find(0xE67D2442, false))
+    if (const unsigned short* pText = RedLocalizeDB::Find(0xE67D2442 /* "game.spawndisplay.launchin" */, false))
     {
         mTextReady.SetText(pText, true);
     }
@@ -1379,7 +1379,7 @@ void SpawnDisplay::Initialize()
     m_DroidekaElement.SetZOrder(0);
     m_DroidekaElement.SetScale(fScale);
 
-    mBackdropModel.SetModel(0x6472A227);
+    mBackdropModel.SetModel(0x6472A227 /* "shell_cube" */);
     mBackdropModel.SetDepth(0.009f);
     mBackdropModel.SetModelScale((float)RedInterfaceScreen::GetScreenWidth() / 800.0f * 1.25f);
     mBackdropModel.Enable(false);

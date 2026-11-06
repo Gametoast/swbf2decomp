@@ -681,22 +681,22 @@ void OrdnanceMeleeThrowClass::SetProperty(unsigned int uProperty, const char* ps
 {
     switch (uProperty)
     {
-    case 0x32741C32:
+    case 0x32741C32: /* "Velocity" */
     {
         sscanf(pszValue, "%f", &mVelocity);
             break;
     }
-    case 0x2776564D:
+    case 0x2776564D: /* "LightRadius" */
     {
         sscanf(pszValue, "%f", &m_fRadiusLight);
             break;
     }
-    case 0x0DDA9B5B:
+    case 0x0DDA9B5B: /* "ReturnDuration" */
     {
         sscanf(pszValue, "%f", &m_fReturnDuration);
             break;
     }
-    case 0x746CE73E:
+    case 0x746CE73E: /* "LightColor" */
     {
         int r, g, b, a;
         int iCount = sscanf(pszValue, "%d %d %d %d", &r, &g, &b, &a);
@@ -719,12 +719,12 @@ void OrdnanceMeleeThrowClass::SetProperty(unsigned int uProperty, const char* ps
         }
             break;
     }
-    case 0xDE71B19F:
+    case 0xDE71B19F: /* "OnSound" */
     {
         m_OnSound.SetID(pszValue, false, false);
             break;
     }
-    case 0xC3B311DC:
+    case 0xC3B311DC: /* "DamageLength" */
     {
         char acEdge[256];
         m_bDamageLengthFromEdge = 0;
@@ -734,19 +734,19 @@ void OrdnanceMeleeThrowClass::SetProperty(unsigned int uProperty, const char* ps
         }
             break;
     }
-    case 0xE369687E:
+    case 0xE369687E: /* "LightOdf" */
     {
         m_uiLightOdfNameHash = PblHash(pszValue);
             break;
     }
-    case 0xE6989765:
+    case 0xE6989765: /* "RotationRate" */
     {
         float fRate;
         sscanf(pszValue, "%f", &fRate);
         m_fOmega = PblMath::fTwoPi * fRate;
             break;
     }
-    case 0xE4B667AC:
+    case 0xE4B667AC: /* "DamageWidth" */
     {
         char acEdge[256];
         m_bDamageWidthFromEdge = 0;

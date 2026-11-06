@@ -23,13 +23,13 @@ void GodrayManager::PlatformInit()
     if (RedRenderer::pcGetGeometryMode())
     {
         m_pShader = pcRedShader::Create(
-            0x8a8743bf, 0x9282,
+            0x8a8743bf /* "PARTICLE" */, 0x9282,
             &m_uiTextureHash, 1, 0x10044, RedColor::WHITE, RedColor::BLACK, 32.0f);
     }
     else
     {
         m_pShader = pcRedShader::Create(
-            0x8a8743bf, 0x282,
+            0x8a8743bf /* "PARTICLE" */, 0x282,
             &m_uiTextureHash, 1, 0x10044, RedColor::WHITE, RedColor::BLACK, 32.0f);
     }
 }

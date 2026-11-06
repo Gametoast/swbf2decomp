@@ -152,7 +152,7 @@ void RedShadowRegionFactory::ReadParameter(const char* pcRegionName, const char*
 
     switch (uiParameter)
     {
-    case 0x10f7c207:
+    case 0x10f7c207: /* "directional" */
     {
         float f = 0.0f;
         if (sscanf(pcValue, "%f", &f) == 1)
@@ -161,7 +161,7 @@ void RedShadowRegionFactory::ReadParameter(const char* pcRegionName, const char*
         }
         break;
     }
-    case 0xec06bb02:
+    case 0xec06bb02: /* "directional1" */
     {
         float f = 0.0f;
         if (sscanf(pcValue, "%f", &f) == 1)
@@ -170,7 +170,7 @@ void RedShadowRegionFactory::ReadParameter(const char* pcRegionName, const char*
         }
         break;
     }
-    case 0x97f5abd3:
+    case 0x97f5abd3: /* "colortop" */
     {
         int r, g, b;
         if (sscanf(pcValue, "%d,%d,%d", &r, &g, &b) == 3)
@@ -184,7 +184,7 @@ void RedShadowRegionFactory::ReadParameter(const char* pcRegionName, const char*
         }
         break;
     }
-    case 0x7b5ec2ab:
+    case 0x7b5ec2ab: /* "colorbottom" */
     {
         int r, g, b;
         if (sscanf(pcValue, "%d,%d,%d", &r, &g, &b) == 3)
@@ -195,7 +195,7 @@ void RedShadowRegionFactory::ReadParameter(const char* pcRegionName, const char*
         }
         break;
     }
-    case 0xbb6dd0da:
+    case 0xbb6dd0da: /* "envmap" */
     {
         char acName[256];
         if (sscanf(pcValue, "%s", acName) == 1)

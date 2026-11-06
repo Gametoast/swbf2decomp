@@ -339,23 +339,23 @@ void EntityPortableTurretClass::SetProperty(unsigned int uProperty, const char* 
 {
     switch (uProperty)
     {
-    case 0x5212ABEEu:
+    case 0x5212ABEEu: /* "LifeTime" */
         sscanf(pszValue, "%f", &mLifeTime);
         break;
-    case 0xD209FF45u:
+    case 0xD209FF45u: /* "Gravity" */
         sscanf(pszValue, "%f", &mGravity);
         break;
-    case 0x678DE338u:
+    case 0x678DE338u: /* "Rebound" */
         sscanf(pszValue, "%f", &mRebound);
         break;
-    case 0xA51BE2BBu:
+    case 0xA51BE2BBu: /* "Friction" */
         sscanf(pszValue, "%f", &mFriction);
         break;
-    case 0xC28F0C96u:
-    case 0xEDC6251Au:
+    case 0xC28F0C96u: /* "CollisionSound" */
+    case 0xEDC6251Au: /* "CollisionOtherSound" */
         mCollisionSound.SetID(pszValue, false, false);
         break;
-    case 0x2297E47Du:
+    case 0x2297E47Du: /* "CollisionWaterSound" */
         mCollisionWaterSound.SetID(pszValue, false, false);
         break;
     default:

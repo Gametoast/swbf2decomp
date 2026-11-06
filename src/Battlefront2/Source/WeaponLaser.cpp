@@ -274,11 +274,11 @@ void WeaponLaserClass::SetProperty(unsigned int uProperty, const char* pszValue)
 {
     switch (uProperty)
     {
-    case 0x4225631D:
+    case 0x4225631D: /* "SalvoTime" */
         sscanf(pszValue, "%f", &mSalvoTime);
         break;
 
-    case 0xD9356908:
+    case 0xD9356908: /* "ShotDelay" */
         sscanf(pszValue, "%f", &mShotDelay);
         break;
 

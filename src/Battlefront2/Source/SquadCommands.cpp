@@ -119,7 +119,7 @@ void SquadCommands::VehicleGetOut(GameObject* pObject, Character* pCharacter)
         Controllable* pVehicle = pObject->GetControllable();
         EventManager::CharacterEvent::mIssueAICommand.Trigger(*pVehicle->mCharacter, eType);
 
-        const unsigned short* pText = RedLocalizeDB::Find(0x7e3c4096u, false);
+        const unsigned short* pText = RedLocalizeDB::Find(0x7e3c4096u /* "game.squadcommand.getout" */, false);
         for (unsigned int i = 0; i < NetGame::GetNumLocalPlayers(); ++i)
         {
             if (NetGame::GetLocalPlayer(i) == pCharacter)
@@ -221,7 +221,7 @@ void SquadCommands::VehicleGetIn(GameObject* pObject, Character* pCharacter)
     Controllable* pVehicle = pObject->GetControllable();
     EventManager::CharacterEvent::mIssueAICommand.Trigger(*pVehicle->GetCharacter(), eType);
 
-    const unsigned short* pText = RedLocalizeDB::Find(0xf00699adu, false);
+    const unsigned short* pText = RedLocalizeDB::Find(0xf00699adu /* "game.squadcommand.getin" */, false);
     for (unsigned int i = 0; i < NetGame::GetNumLocalPlayers(); ++i)
     {
         if (NetGame::GetLocalPlayer(i) == pCharacter)

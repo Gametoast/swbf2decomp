@@ -91,45 +91,45 @@ void WeaponDispenserClass::SetProperty(unsigned int uProperty, const char* pszVa
 {
     switch (uProperty)
     {
-    case 0x399BF05D:
-    case 0xF8899C5E:
+    case 0x399BF05D: /* "Ordnance" */
+    case 0xF8899C5E: /* "OrdnanceName" */
         mDispenseClass = EntityClass::Find(PblHash(pszValue));
         break;
-    case 0x32741C32:
+    case 0x32741C32: /* "Velocity" */
         sscanf(pszValue, "%f", &mVelocity);
         break;
-    case 0xD9356908:
+    case 0xD9356908: /* "ShotDelay" */
         sscanf(pszValue, "%f", &mShotDelay);
         if (mShotDelay < 0.01f)
         {
             mShotDelay = 0.01f;
         }
         break;
-    case 0xC8388D9D:
+    case 0xC8388D9D: /* "InitialSalvoDelay" */
         sscanf(pszValue, "%f", &mInitialSalvoDelay[0]);
         break;
-    case 0x36F0BFCD:
+    case 0x36F0BFCD: /* "InitialSalvoDelayProne" */
         sscanf(pszValue, "%f", &mInitialSalvoDelay[1]);
         break;
-    case 0x2819FFA0:
+    case 0x2819FFA0: /* "MaxPressedTime" */
         sscanf(pszValue, "%f", &mMaxPressedTime);
         break;
-    case 0x4D832102:
+    case 0x4D832102: /* "MinStrength" */
         sscanf(pszValue, "%f", &mMinStrength);
         break;
-    case 0x40BD9B1C:
+    case 0x40BD9B1C: /* "MaxStrength" */
         sscanf(pszValue, "%f", &mMaxStrength);
         break;
-    case 0x54C3C993:
+    case 0x54C3C993: /* "MaxItems" */
         sscanf(pszValue, "%d", &mMaxItems);
         break;
-    case 0x5578D44C:
+    case 0x5578D44C: /* "HideOnFire" */
         mHideOnFire = atoi(pszValue) != 0;
         break;
-    case 0xDD65D239:
+    case 0xDD65D239: /* "HideOnEmpty" */
         mHideOnEmpty = atoi(pszValue) != 0;
         break;
-    case 0x389C8E46:
+    case 0x389C8E46: /* "FirePointExtraOffset" */
     {
         float x, y, z;
         sscanf(pszValue, "%f %f %f", &x, &y, &z);
@@ -186,13 +186,13 @@ bool WeaponDispenserClass::PostLoadInit()
     {
         if (SoldierAnimatorClass::Instance()->GetAnimationBoneMatrix(
                 SoldierAnimationBank::HUMAN_RIFLE, SoldierAnimType::STAND, SoldierAnimType::SHOOT_SECONDARY,
-                0xB7EC1D31, mInitialSalvoDelay[0], mBone))
+                0xB7EC1D31 /* "bone_l_hand" */, mInitialSalvoDelay[0], mBone))
         {
             m_avFireOffset[0] = mBone.GetTranslation();
         }
         if (SoldierAnimatorClass::Instance()->GetAnimationBoneMatrix(
                 SoldierAnimationBank::HUMAN_RIFLE, SoldierAnimType::STAND, SoldierAnimType::SHOOT_SECONDARY2,
-                0xB7EC1D31, mInitialSalvoDelay[1], mBone))
+                0xB7EC1D31 /* "bone_l_hand" */, mInitialSalvoDelay[1], mBone))
         {
             m_avFireOffset[1] = mBone.GetTranslation();
         }
@@ -202,14 +202,14 @@ bool WeaponDispenserClass::PostLoadInit()
         PblVector3 vPos;
         if (SoldierAnimatorClass::Instance()->GetAnimationBoneMatrix(
                 SoldierAnimationBank::HUMAN_RIFLE, SoldierAnimType::STAND, SoldierAnimType::SHOOT_SECONDARY,
-                0x2B960099, mInitialSalvoDelay[0], mBone))
+                0x2B960099 /* "hp_weapons" */, mInitialSalvoDelay[0], mBone))
         {
             D3DXVec3TransformCoord(reinterpret_cast<D3DXVECTOR3*>(&vPos), reinterpret_cast<const D3DXVECTOR3*>(&mFirePointOffset), reinterpret_cast<const D3DXMATRIX*>(&mBone));
             m_avFireOffset[0] = vPos;
         }
         if (SoldierAnimatorClass::Instance()->GetAnimationBoneMatrix(
                 SoldierAnimationBank::HUMAN_RIFLE, SoldierAnimType::STAND, SoldierAnimType::SHOOT_SECONDARY2,
-                0x2B960099, mInitialSalvoDelay[1], mBone))
+                0x2B960099 /* "hp_weapons" */, mInitialSalvoDelay[1], mBone))
         {
             D3DXVec3TransformCoord(reinterpret_cast<D3DXVECTOR3*>(&vPos), reinterpret_cast<const D3DXVECTOR3*>(&mFirePointOffset), reinterpret_cast<const D3DXMATRIX*>(&mBone));
             m_avFireOffset[1] = vPos;

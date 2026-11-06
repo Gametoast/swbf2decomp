@@ -147,7 +147,7 @@ bool HUD::Manager::ConfigFile::ReadData(PblConfig& config, PblConfig::Data& data
 {
     switch (data.GetId())
     {
-    case 0x70e37eec:
+    case 0x70e37eec: /* "SplitMode" */
     {
         int iNumArgs = data.GetNumArgs();
         if (iNumArgs < 0)
@@ -171,7 +171,7 @@ bool HUD::Manager::ConfigFile::ReadData(PblConfig& config, PblConfig::Data& data
         }
         return true;
     }
-    case 0xaa56e310:
+    case 0xaa56e310: /* "Viewports" */
     {
         int iNumArgs = data.GetNumArgs();
         if (iNumArgs < 0)
@@ -189,7 +189,7 @@ bool HUD::Manager::ConfigFile::ReadData(PblConfig& config, PblConfig::Data& data
         }
         return true;
     }
-    case 0xf5dc47f6:
+    case 0xf5dc47f6: /* "Widescreen" */
         mWidescreen = data.GetFloatArg(0) != 0.0f;
         mWidescreenSet = true;
         return true;
@@ -477,7 +477,7 @@ void HUD::Manager::Load(PblFileChunk& chunk)
             pItem->Read(scope, 0, 0);
         }
 
-        if (uId == 0xD4E0C797)
+        if (uId == 0xD4E0C797 /* "FileInfo" */)
         {
             HUD::Manager::ConfigFile* pFile = (HUD::Manager::ConfigFile*)pItem;
             if (!pFile->SplitSupported() || !pFile->ViewportsSupported() || !pFile->Widescreen())

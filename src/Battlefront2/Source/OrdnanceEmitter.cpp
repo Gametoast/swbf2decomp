@@ -145,164 +145,164 @@ void OrdnanceEmitterClass::SetProperty(unsigned int uProperty, const char* pszVa
 {
     switch (uProperty)
     {
-    case 0x6E6E8D54:
+    case 0x6E6E8D54: /* "Effect" */
     {
         mFireEffect = FLEffect::Get(PblHash(pszValue));
             break;
     }
-    case 0x6DD5A894:
+    case 0x6DD5A894: /* "LightningEffect" */
     {
         mLightningEffectClass = FLEffect::Get(PblHash(pszValue));
             break;
     }
-    case 0x38FFE98E:
+    case 0x38FFE98E: /* "LightningEffectScale" */
     {
         sscanf(pszValue, "%f", &mLightningEffectScale);
             break;
     }
-    case 0x63384B21:
+    case 0x63384B21: /* "NoTargetLightningEffectCount" */
     {
         sscanf(pszValue, "%i", &mNoTargetLightningEffectCount);
             break;
     }
-    case 0xDD09F94E:
+    case 0xDD09F94E: /* "NoTargetLightningEffectRandomSpread" */
     {
         sscanf(pszValue, "%f", &mNoTargetLightningEffectRandomSpread);
             break;
     }
-    case 0x6F2732A9:
+    case 0x6F2732A9: /* "StunAnimation" */
     {
         mStunAnimation = PblTEMPHash(pszValue);
             break;
     }
-    case 0x8DF1E8C9:
+    case 0x8DF1E8C9: /* "mStunTime" */
     {
         sscanf(pszValue, "%f", &mStunTime);
             break;
     }
-    case 0x59E94C40:
+    case 0x59E94C40: /* "Damage" */
     {
         sscanf(pszValue, "%f", &mMinDamage);
             break;
     }
-    case 0x47D0E794:
+    case 0x47D0E794: /* "MaxDamage" */
     {
         sscanf(pszValue, "%f", &mMaxDamage);
         mDamage.mBaseValue = mMaxDamage;
             break;
     }
-    case 0xCCA74473:
+    case 0xCCA74473: /* "DamageThreshold" */
     {
         sscanf(pszValue, "%f", &mDamageThreshold);
             break;
     }
-    case 0xAD37744E:
+    case 0xAD37744E: /* "MaxJumpDistance" */
     {
         sscanf(pszValue, "%f", &mMaxJumpDistance);
             break;
     }
-    case 0xFC0D5E74:
+    case 0xFC0D5E74: /* "JumpDeduction" */
     {
         sscanf(pszValue, "%f", &mJumpDeduction);
             break;
     }
-    case 0x876FFFDD:
+    case 0x876FFFDD: /* "Push" */
     {
         sscanf(pszValue, "%f", &mPush);
             break;
     }
-    case 0x9342844E:
+    case 0x9342844E: /* "ConeLength" */
     {
         sscanf(pszValue, "%f", &mConeLength);
             break;
     }
-    case 0xA3F03B49:
+    case 0xA3F03B49: /* "ConeAngle" */
     {
         sscanf(pszValue, "%f", &mConeWidth);
         mConeWidth = (float)cos(mConeWidth * 0.5f * 0.017453292f);
             break;
     }
-    case 0x9CC82B1F:
+    case 0x9CC82B1F: /* "FirstRadius" */
     {
         sscanf(pszValue, "%f", &mFirstRadius);
             break;
     }
-    case 0xA00A48CD:
+    case 0xA00A48CD: /* "MaxTargets" */
     {
         sscanf(pszValue, "%i", &mMaxTargets);
             break;
     }
-    case 0x4C387CA1:
+    case 0x4C387CA1: /* "NoChaining" */
     {
         mNoChaining = atoi(pszValue) != 0;
             break;
     }
-    case 0x0DBA4CB3:
+    case 0x0DBA4CB3: /* "Radius" */
     {
         sscanf(pszValue, "%f", &mRadius);
             break;
     }
-    case 0x70B204AF:
+    case 0x70B204AF: /* "BuffOffenseTimer" */
     {
         sscanf(pszValue, "%f", &mBuffOffenseTimer);
             break;
     }
-    case 0xCE532E64:
+    case 0xCE532E64: /* "BuffOffenseMult" */
     {
         sscanf(pszValue, "%f", &mBuffOffenseMult);
             break;
     }
-    case 0x7705FCC1:
+    case 0x7705FCC1: /* "BuffDefenseTimer" */
     {
         sscanf(pszValue, "%f", &mBuffDefenseTimer);
             break;
     }
-    case 0xB25FB62E:
+    case 0xB25FB62E: /* "BuffDefenseMult" */
     {
         sscanf(pszValue, "%f", &mBuffDefenseMult);
             break;
     }
-    case 0x460B143B:
+    case 0x460B143B: /* "BuffHealthTimer" */
     {
         sscanf(pszValue, "%f", &mBuffHealthTimer);
             break;
     }
-    case 0xB6639618:
+    case 0xB6639618: /* "BuffHealthRate" */
     {
         sscanf(pszValue, "%f", &mBuffHealthRate);
             break;
     }
-    case 0x805B51E7:
+    case 0x805B51E7: /* "DebuffDamageTimer" */
     {
         sscanf(pszValue, "%f", &mDebuffDamageTimer);
             break;
     }
-    case 0x9834A7B4:
+    case 0x9834A7B4: /* "DebuffDamageRate" */
     {
         sscanf(pszValue, "%f", &mDebuffDamageRate);
             break;
     }
-    case 0x76F3BEEA:
+    case 0x76F3BEEA: /* "PlayEffectOnOwner" */
     {
         mPlayEffectOnOwner = PblHash(pszValue);
             break;
     }
-    case 0xC0E20834:
+    case 0xC0E20834: /* "PlayEffectOnOwnerAimer" */
     {
         mPlayEffectOnOwnerAimer = PblHash(pszValue);
             break;
     }
-    case 0x6824F471:
+    case 0x6824F471: /* "SmolderEffectTimer" */
     {
         sscanf(pszValue, "%f", &mSmolderEffectTimer);
             break;
     }
-    case 0x348506DC:
+    case 0x348506DC: /* "SmolderVanishDeath" */
     {
         mSmolderVanishDeath = atoi(pszValue) != 0;
             break;
     }
-    case 0x6CF895FB:
+    case 0x6CF895FB: /* "SmolderBone" */
     {
         int i;
         for (i = 0; i < kMaxSmolderEffects; ++i)
@@ -315,7 +315,7 @@ void OrdnanceEmitterClass::SetProperty(unsigned int uProperty, const char* pszVa
         mSmolderEffectBone[i] = PblTEMPHash(pszValue);
             break;
     }
-    case 0x592FB160:
+    case 0x592FB160: /* "SmolderEffect" */
     {
         int i;
         for (i = 0; i < kMaxSmolderEffects; ++i)
@@ -328,27 +328,27 @@ void OrdnanceEmitterClass::SetProperty(unsigned int uProperty, const char* pszVa
         mSmolderEffect[i] = PblHash(pszValue);
             break;
     }
-    case 0x1076DFD6:
+    case 0x1076DFD6: /* "SmolderDamageRate" */
     {
         sscanf(pszValue, "%f", &mSmolderDamageRate);
             break;
     }
-    case 0xAB1376D9:
+    case 0xAB1376D9: /* "AffectFriends" */
     {
         mAffectFriends = atoi(pszValue) != 0;
             break;
     }
-    case 0xD41EC7E0:
+    case 0xD41EC7E0: /* "AffectEnemies" */
     {
         mAffectEnemies = atoi(pszValue) != 0;
             break;
     }
-    case 0x02BB1FE0:
+    case 0x02BB1FE0: /* "Explosion" */
     {
         mExplosion = ExplosionClass::Find(PblHash(pszValue));
             break;
     }
-    case 0x39B3648C:
+    case 0x39B3648C: /* "ApplyOnOwnerIfOnOthers" */
     {
         mApplyOnOwnerIfOnOthers = atoi(pszValue) != 0;
     }

@@ -99,22 +99,22 @@ void TriggerSoundRegion::Group::Read(PblFileChunk& chunk)
 
         switch (uHash)
         {
-        case 0x8d39bde6:
+        case 0x8d39bde6: /* "name" */
             mID = data._pFile->Read32();
             break;
-        case 0x581a579b:
+        case 0x581a579b: /* "Reinforcements" */
             mReinforcementCount = data._pFile->ReadFloat();
             break;
-        case 0x1d083cc0:
+        case 0x1d083cc0: /* "alliance" */
             mSound[Team::side_Alliance].SetID(data._pFile->Read32(), false, false);
             break;
-        case 0x2c5f5065:
+        case 0x2c5f5065: /* "empire" */
             mSound[Team::side_Empire].SetID(data._pFile->Read32(), false, false);
             break;
-        case 0xc7836fe1:
+        case 0xc7836fe1: /* "republic" */
             mSound[Team::side_Republic].SetID(data._pFile->Read32(), false, false);
             break;
-        case 0xf387c5d6:
+        case 0xf387c5d6: /* "cis" */
             mSound[Team::side_CIS].SetID(data._pFile->Read32(), false, false);
             break;
         }
@@ -191,10 +191,10 @@ void TriggerSoundRegion::Properties::Read(PblFileChunk& chunk)
 
         switch (uHash)
         {
-        case 0x8d39bde6:
+        case 0x8d39bde6: /* "name" */
             mID = data._pFile->Read32();
             break;
-        case 0x5fb91e8c:
+        case 0x5fb91e8c: /* "Group" */
         {
             Group* const pGroup = Group::FindByID(data._pFile->Read32());
             if (!pGroup)
@@ -237,14 +237,14 @@ void TriggerSoundRegion::Properties::Load(PblFileChunk& chunk)
         child._pFile->Read8();
         switch (uHash)
         {
-        case 0x5fb91e8c:
+        case 0x5fb91e8c: /* "Group" */
         {
             Group* pGroup = new Group;
             child = chunk.ReadNextChild();
             pGroup->Read(child);
             break;
         }
-        case 0x031afe7d:
+        case 0x031afe7d: /* "Region" */
         {
             Properties* pProperties = new Properties;
             child = chunk.ReadNextChild();

@@ -64,7 +64,7 @@ WeaponMeleeThrow::WeaponMeleeThrow(const WeaponMeleeThrowClass* pClass, const We
     const unsigned char uiThrowAnim = static_cast<unsigned char>(pPrimaryClass->m_pCombo->m_uiThrowAnimIndex);
     SoldierAnimatorClass::Instance()->GetAnimationBoneMatrix(
         static_cast<SoldierAnimationBank::MAP>(m_pPrimaryWeapon->mSoldierAnimationMap),
-        uiThrowAnim, 0x2B960099,
+        uiThrowAnim, 0x2B960099 /* "hp_weapons" */,
         ((const WeaponMeleeThrowClass*)mClass)->m_fInitialSalvoDelay, m_mThrow0Local);
 }
 
@@ -147,13 +147,13 @@ void WeaponMeleeThrow::Render(const PblMatrix& matrix, const RedPose* pPose,
     uiFlags |= 1;
     if (m_bThrow && pPose)
     {
-        const PblMatrix* pThrowMatrix = pPose->Find(0x2B960099);
+        const PblMatrix* pThrowMatrix = pPose->Find(0x2B960099 /* "hp_weapons" */);
         if (pThrowMatrix)
         {
             RedPose* pMutablePose = const_cast<RedPose*>(pPose);
-            pMutablePose->Remove(0x2B960099);
+            pMutablePose->Remove(0x2B960099 /* "hp_weapons" */);
             m_pPrimaryWeapon->Render(matrix, pPose, color, uiFlags, bRenderModel);
-            pMutablePose->Store(0x2B960099, pThrowMatrix);
+            pMutablePose->Store(0x2B960099 /* "hp_weapons" */, pThrowMatrix);
             return;
         }
     }
@@ -336,10 +336,10 @@ void WeaponMeleeThrowClass::SetProperty(unsigned int uProperty, const char* pszV
 {
     switch (uProperty)
     {
-    case 0xC8388D9D:
+    case 0xC8388D9D: /* "InitialSalvoDelay" */
         sscanf(pszValue, "%f", &m_fInitialSalvoDelay);
         break;
-    case 0xF83F717B:
+    case 0xF83F717B: /* "PrimaryWeaponIndex" */
         m_iPrimaryWeaponIndex = atoi(pszValue);
         break;
     default:

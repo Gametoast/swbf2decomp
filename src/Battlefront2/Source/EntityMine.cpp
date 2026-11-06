@@ -108,44 +108,44 @@ void EntityMineClass::SetProperty(unsigned int uProperty, const char* pszValue)
 {
     switch (uProperty)
     {
-    case 0x02BB1FE0:
-    case 0x6A5E371C:
-    case 0x9B30E763:
+    case 0x02BB1FE0: /* "Explosion" */
+    case 0x6A5E371C: /* "ExplosionTrigger" */
+    case 0x9B30E763: /* "ExplosionName" */
     {
         mExplosionTrigger = ExplosionClass::Find(PblHash(pszValue));
             break;
     }
-    case 0x2E51081F:
+    case 0x2E51081F: /* "ExplosionExpire" */
     {
         mExplosionExpire = ExplosionClass::Find(PblHash(pszValue));
             break;
     }
-    case 0xA2723442:
+    case 0xA2723442: /* "ExplosionDeath" */
     {
         mExplosionDeath = ExplosionClass::Find(PblHash(pszValue));
             break;
     }
-    case 0xACFE0D9B:
+    case 0xACFE0D9B: /* "TickSound" */
     {
         mTick.SetID(pszValue, false, false);
             break;
     }
-    case 0x18953967:
+    case 0x18953967: /* "TickSoundPitch" */
     {
         sscanf("%f", pszValue, &mTickPitch);
             break;
     }
-    case 0xBFB22E35:
+    case 0xBFB22E35: /* "TriggerContact" */
     {
         mTriggerContact = atoi(pszValue) != 0;
             break;
     }
-    case 0xC461D811:
+    case 0xC461D811: /* "TriggerRadius" */
     {
         sscanf(pszValue, "%f", &mTriggerRadius);
             break;
     }
-    case 0xCE754894:
+    case 0xCE754894: /* "SuppressRadius" */
     {
         sscanf(pszValue, "%f", &mSuppressRadius);
             break;

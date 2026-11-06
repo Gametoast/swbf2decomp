@@ -83,13 +83,13 @@ Entity* VehicleSpawnClass::Build(const EntityDesc& desc)
 
 // GLOBAL: SWBF2 0x0078bc40
 static const unsigned int sSideLabel[Team::side_MAX + 1][3] = {
-    { 0x8cdb433e, 0x8cdb433e, 0x8cdb433e },
-    { 0x6a183212, 0xdd29eddc, 0x2a456b61 },
-    { 0x7e58741b, 0x54d2fc8b, 0x07b77f06 },
-    { 0x494a707f, 0x24f75004, 0x61c30279 },
-    { 0x477791dc, 0xa2c909c6, 0x9e973303 },
-    { 0xd118d857, 0xd92c6ca7, 0xcaa92a12 },
-    { 0xfcc25b7b, 0xe2c47a79, 0x9836edac },
+    { 0x8cdb433e /* "ClassNeutral" */, 0x8cdb433e /* "ClassNeutral" */, 0x8cdb433e /* "ClassNeutral" */ },
+    { 0x6a183212, 0xdd29eddc /* "ClassAllATK" */, 0x2a456b61 /* "ClassAllDEF" */ },
+    { 0x7e58741b, 0x54d2fc8b /* "ClassImpATK" */, 0x07b77f06 /* "ClassImpDEF" */ },
+    { 0x494a707f, 0x24f75004 /* "ClassRepATK" */, 0x61c30279 /* "ClassRepDEF" */ },
+    { 0x477791dc, 0xa2c909c6 /* "ClassCISATK" */, 0x9e973303 /* "ClassCISDEF" */ },
+    { 0xd118d857 /* "ClassLocals" */, 0xd92c6ca7 /* "ClassLocATK" */, 0xcaa92a12 /* "ClassLocDEF" */ },
+    { 0xfcc25b7b, 0xe2c47a79 /* "ClassHisATK" */, 0x9836edac /* "ClassHisDEF" */ },
     { 0, 0, 0 },
     { 0, 0, 0 },
 };
@@ -142,25 +142,25 @@ void VehicleSpawn::SetProperty(unsigned int uProperty, const char* pszValue)
 {
     switch (uProperty)
     {
-    case 0x4e99b371:
+    case 0x4e99b371: /* "SpawnTime" */
         sscanf(pszValue, "%f", &mSpawnTime);
         return;
-    case 0x1c098b3c:
+    case 0x1c098b3c: /* "DecayTime" */
         sscanf(pszValue, "%f", &mDecayTime);
         return;
-    case 0x447c6db0:
+    case 0x447c6db0: /* "ControlZone" */
         mCommandPost = CommandPostManager::Instance()->FindPost(pszValue);
         if (mCommandPost)
         {
             mSpawnTeam = GetTeam(mCommandPost->GetGameObject());
         }
         return;
-    case 0x88923ff7:
+    case 0x88923ff7: /* "SpawnCount" */
         VehicleTracker::AddMemoryPoolCount(-mSpawnCount);
         mSpawnCount = atoi(pszValue);
         VehicleTracker::AddMemoryPoolCount(mSpawnCount);
         return;
-    case 0xa2fd7d0c:
+    case 0xa2fd7d0c: /* "team" */
         mSpawnTeam = atoi(pszValue);
         return;
     }
@@ -495,7 +495,7 @@ void VehicleSpawn::UpdateSpawn(float fDeltaTime)
                 {
                     continue;
                 }
-                if (!BonusManager::Instance()->IsTeamBonusActive(iTeam, 0xd265e905))
+                if (!BonusManager::Instance()->IsTeamBonusActive(iTeam, 0xd265e905 /* "team_bonus_sabotage" */))
                 {
                     continue;
                 }

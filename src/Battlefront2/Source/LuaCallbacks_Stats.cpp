@@ -60,10 +60,10 @@ static const char* GetSideIcon(int iSide)
         return sideIcons[iSide];
     }
     const char* pIcon = "com_icon_republic";
-    if (GameLoop::mMissionScriptHash != 0x2b6c2d0d &&
-        GameLoop::mMissionScriptHash != 0x41c2e16a)
+    if (GameLoop::mMissionScriptHash != 0x2b6c2d0d /* "nab1c_h" */ &&
+        GameLoop::mMissionScriptHash != 0x41c2e16a /* "nab2c_h" */)
     {
-        if (GameLoop::mMissionScriptHash != 0xcdb830bd)
+        if (GameLoop::mMissionScriptHash != 0xcdb830bd /* "kas1c_h" */)
         {
             pIcon = 0;
         }
@@ -357,7 +357,7 @@ int ScriptCB_GetCareerPersonalStats(lua_State*)
         switch (i)
         {
         case 0:
-            Stats_AddItem(RedLocalizeDB::Find(0xc38cd05fu, false),
+            Stats_AddItem(RedLocalizeDB::Find(0xc38cd05fu /* "ifs.Stats.points" */, false),
                           pProfile ? (int)pProfile->mAccumPoints.mTotalPoints : pStats->GetPoints());
             break;
         case 1:
@@ -368,12 +368,12 @@ int ScriptCB_GetCareerPersonalStats(lua_State*)
             break;
         }
         case 2:
-            Stats_AddItem(RedLocalizeDB::Find(0x26adb709u, false),
+            Stats_AddItem(RedLocalizeDB::Find(0x26adb709u /* "ifs.Stats.kills" */, false),
                           pProfile ? (int)pProfile->mAccumPoints.mTotalKills
                                    : pStats->GetKills(-1, 1) + pStats->GetKills(-1, 0));
             break;
         case 3:
-            Stats_AddItem(RedLocalizeDB::Find(0x39ef9b83u, false),
+            Stats_AddItem(RedLocalizeDB::Find(0x39ef9b83u /* "ifs.Stats.deaths" */, false),
                           pProfile ? (int)pProfile->mAccumPoints.mTotalDeaths
                                    : pStats->GetDeaths(-1, 1) + pStats->GetDeaths(-1, 0));
             break;
@@ -396,12 +396,12 @@ int ScriptCB_GetCareerPersonalStats(lua_State*)
             unsigned int uRankName = 0;
             switch (iRank)
             {
-            case 0: uRankName = 0x4191047cu; break;
-            case 1: uRankName = 0xf0532ad2u; break;
-            case 2: uRankName = 0x9937379bu; break;
-            case 3: uRankName = 0xa03313bbu; break;
+            case 0: uRankName = 0x4191047cu /* "ifs.Stats.playertitle.private" */; break;
+            case 1: uRankName = 0xf0532ad2u /* "ifs.Stats.playertitle.sergeant" */; break;
+            case 2: uRankName = 0x9937379bu /* "ifs.Stats.playertitle.captain" */; break;
+            case 3: uRankName = 0xa03313bbu /* "ifs.Stats.playertitle.General" */; break;
             }
-            Stats_AddItem(RedLocalizeDB::Find(0x7d54045eu, false), RedLocalizeDB::Find(uRankName, false));
+            Stats_AddItem(RedLocalizeDB::Find(0x7d54045eu /* "ifs.Stats.rank" */, false), RedLocalizeDB::Find(uRankName, false));
             break;
         }
         case 5:
@@ -424,7 +424,7 @@ int ScriptCB_GetCareerPersonalStats(lua_State*)
                 iKills = pStats->GetKills(-1, 1) + pStats->GetKills(-1, 0);
                 iDeaths = pStats->GetDeaths(-1, 1) + pStats->GetDeaths(-1, 0);
             }
-            LuaHelper::TableWriteVal("labelustr", RedLocalizeDB::Find(0xfa323a81u, false));
+            LuaHelper::TableWriteVal("labelustr", RedLocalizeDB::Find(0xfa323a81u /* "ifs.Stats.killDeathRatio" */, false));
             if (iDeaths)
             {
                 char acRatio[8];
@@ -450,7 +450,7 @@ int ScriptCB_GetCareerPersonalStats(lua_State*)
                 iPoints = pStats->GetPoints();
                 iLives = pStats->GetDeaths(-1, 1) + pStats->GetDeaths(-1, 0) + 1;
             }
-            Stats_AddItem(RedLocalizeDB::Find(0xca14cb66u, false), iPoints / iLives);
+            Stats_AddItem(RedLocalizeDB::Find(0xca14cb66u /* "ifs.Stats.ptsperlife" */, false), iPoints / iLives);
             break;
         }
         }
@@ -528,47 +528,47 @@ int ScriptCB_GetCareerMedals(lua_State*)
             switch (i)
             {
             case 0:
-                CareerMedals_AddItem(RedLocalizeDB::Find(0xcafcdffeu, false),
+                CareerMedals_AddItem(RedLocalizeDB::Find(0xcafcdffeu /* "game.awards.medal.Gunslinger" */, false),
                                      pMedals ? pMedals->GetMedals(0) : psGathered[0],
                                      pMedals ? pMedals->GetLevel(0) : MedalsMgr::GetMedalLevel(psGathered[0]));
                 break;
             case 1:
-                CareerMedals_AddItem(RedLocalizeDB::Find(0x4c112ebcu, false),
+                CareerMedals_AddItem(RedLocalizeDB::Find(0x4c112ebcu /* "game.awards.medal.demolition" */, false),
                                      pMedals ? pMedals->GetMedals(2) : psGathered[2],
                                      pMedals ? pMedals->GetLevel(2) : MedalsMgr::GetMedalLevel(psGathered[2]));
                 break;
             case 2:
-                CareerMedals_AddItem(RedLocalizeDB::Find(0x21c98eadu, false),
+                CareerMedals_AddItem(RedLocalizeDB::Find(0x21c98eadu /* "game.awards.medal.regulator" */, false),
                                      pMedals ? pMedals->GetMedals(5) : psGathered[5],
                                      pMedals ? pMedals->GetLevel(5) : MedalsMgr::GetMedalLevel(psGathered[5]));
                 break;
             case 3:
-                CareerMedals_AddItem(RedLocalizeDB::Find(0xe4035095u, false),
+                CareerMedals_AddItem(RedLocalizeDB::Find(0xe4035095u /* "game.awards.medal.guardian" */, false),
                                      pMedals ? pMedals->GetMedals(7) : psGathered[7],
                                      pMedals ? pMedals->GetLevel(7) : MedalsMgr::GetMedalLevel(psGathered[7]));
                 break;
             case 4:
-                CareerMedals_AddItem(RedLocalizeDB::Find(0xea62b23cu, false),
+                CareerMedals_AddItem(RedLocalizeDB::Find(0xea62b23cu /* "game.awards.medal.frenzy" */, false),
                                      pMedals ? pMedals->GetMedals(1) : psGathered[1],
                                      pMedals ? pMedals->GetLevel(1) : MedalsMgr::GetMedalLevel(psGathered[1]));
                 break;
             case 5:
-                CareerMedals_AddItem(RedLocalizeDB::Find(0xed854facu, false),
+                CareerMedals_AddItem(RedLocalizeDB::Find(0xed854facu /* "game.awards.medal.technician" */, false),
                                      pMedals ? pMedals->GetMedals(3) : psGathered[3],
                                      pMedals ? pMedals->GetLevel(3) : MedalsMgr::GetMedalLevel(psGathered[3]));
                 break;
             case 6:
-                CareerMedals_AddItem(RedLocalizeDB::Find(0xd7a03b48u, false),
+                CareerMedals_AddItem(RedLocalizeDB::Find(0xd7a03b48u /* "game.awards.medal.marksman" */, false),
                                      pMedals ? pMedals->GetMedals(4) : psGathered[4],
                                      pMedals ? pMedals->GetLevel(4) : MedalsMgr::GetMedalLevel(psGathered[4]));
                 break;
             case 7:
-                CareerMedals_AddItem(RedLocalizeDB::Find(0x4e47ef5bu, false),
+                CareerMedals_AddItem(RedLocalizeDB::Find(0x4e47ef5bu /* "game.awards.medal.endurance" */, false),
                                      pMedals ? pMedals->GetMedals(6) : psGathered[6],
                                      pMedals ? pMedals->GetLevel(6) : MedalsMgr::GetMedalLevel(psGathered[6]));
                 break;
             case 8:
-                CareerMedals_AddItem(RedLocalizeDB::Find(0xfd7404ccu, false),
+                CareerMedals_AddItem(RedLocalizeDB::Find(0xfd7404ccu /* "game.awards.medal.warhero" */, false),
                                      pMedals ? pMedals->GetMedals(8) : psGathered[8],
                                      pMedals ? pMedals->GetLevel(8) : MedalsMgr::GetMedalLevel(psGathered[8]));
                 break;
@@ -941,7 +941,7 @@ int ScriptCB_TeamStatsSetTitles(lua_State* L)
     }
     ustrncnv(usBuf, acBuf, 100);
     ustrlcat(usTitle, usBuf, 100);
-    ((RedTextElement*)RedInterfaceElement::Find(0x964e1d4bu))->SetText(usTitle, true);
+    ((RedTextElement*)RedInterfaceElement::Find(0x964e1d4bu /* "ifs_teamstats.LeftList.Title" */))->SetText(usTitle, true);
 
     ustrlcpy(usTitle, pTeam2->mName, 100);
     if (pTeam2->mCurReinforcements > 1000000 && !bShowCount)
@@ -954,14 +954,14 @@ int ScriptCB_TeamStatsSetTitles(lua_State* L)
     }
     ustrncnv(usBuf, acBuf, 100);
     ustrlcat(usTitle, usBuf, 100);
-    ((RedTextElement*)RedInterfaceElement::Find(0x0a25d764u))->SetText(usTitle, true);
+    ((RedTextElement*)RedInterfaceElement::Find(0x0a25d764u /* "ifs_teamstats.RightList.Title" */))->SetText(usTitle, true);
 
     if (GetSideIcon(pTeam1->GetSide()) && GetSideIcon(pTeam2->GetSide()))
     {
-        Red3DModelElementLite* pIcon = (Red3DModelElementLite*)RedInterfaceElement::Find(0xb0fcda7cu);
+        Red3DModelElementLite* pIcon = (Red3DModelElementLite*)RedInterfaceElement::Find(0xb0fcda7cu /* "ifs_teamstats.LeftModel" */);
         pIcon->SetModel(GetSideIcon(pTeam1->GetSide()));
         pIcon->SetColor(pTeam1->GetColor((int)fSlot));
-        pIcon = (Red3DModelElementLite*)RedInterfaceElement::Find(0x14bdc17du);
+        pIcon = (Red3DModelElementLite*)RedInterfaceElement::Find(0x14bdc17du /* "ifs_teamstats.RightModel" */);
         pIcon->SetModel(GetSideIcon(pTeam2->GetSide()));
         pIcon->SetColor(pTeam2->GetColor((int)fSlot));
     }
@@ -976,7 +976,7 @@ int ScriptCB_PersonalStatsSetTitles(lua_State* L)
     if (GetSideIcon(Team::sTeams[1]->GetSide()) && GetSideIcon(Team::sTeams[2]->GetSide()))
     {
         Team* pTeam = Team::sTeams[iTeam];
-        Red3DModelElementLite* pIcon = (Red3DModelElementLite*)RedInterfaceElement::Find(0x262d6743u);
+        Red3DModelElementLite* pIcon = (Red3DModelElementLite*)RedInterfaceElement::Find(0x262d6743u /* "ifs_personalstats.IconModel" */);
         pIcon->SetModel(GetSideIcon(pTeam->GetSide()));
         pIcon->SetColor(pTeam->mColor[iSlot]);
     }
@@ -1062,17 +1062,17 @@ int ScriptCB_GetPersonalStats(lua_State* L)
         switch (i)
         {
         case 0:
-            Stats_AddItem(RedLocalizeDB::Find(0xc38cd05fu, false), pStats->GetPoints(true));
+            Stats_AddItem(RedLocalizeDB::Find(0xc38cd05fu /* "ifs.Stats.points" */, false), pStats->GetPoints(true));
             break;
         case 1:
-            Stats_AddItem(RedLocalizeDB::Find(0xa63ee31eu, false), pStats->GetPoints(false));
+            Stats_AddItem(RedLocalizeDB::Find(0xa63ee31eu /* "ifs.Stats.hero_points" */, false), pStats->GetPoints(false));
             break;
         case 2:
-            Stats_AddItem(RedLocalizeDB::Find(0x26adb709u, false),
+            Stats_AddItem(RedLocalizeDB::Find(0x26adb709u /* "ifs.Stats.kills" */, false),
                           pStats->GetKills(-1, 1) + pStats->GetKills(-1, 0));
             break;
         case 3:
-            Stats_AddItem(RedLocalizeDB::Find(0x39ef9b83u, false),
+            Stats_AddItem(RedLocalizeDB::Find(0x39ef9b83u /* "ifs.Stats.deaths" */, false),
                           pStats->GetDeaths(-1, 1) + pStats->GetDeaths(-1, 0));
             break;
         case 4:
@@ -1085,42 +1085,42 @@ int ScriptCB_GetPersonalStats(lua_State* L)
         case 5:
         {
             const EntityClass* pClass = pStats->GetFavoriteSoldierClass(-1);
-            Stats_AddLabelNameTime(RedLocalizeDB::Find(0x766b2b87u, false), pClass ? pClass->mLabel : 0,
+            Stats_AddLabelNameTime(RedLocalizeDB::Find(0x766b2b87u /* "ifs.Stats.favclass" */, false), pClass ? pClass->mLabel : 0,
                                    (int)pStats->GetFavoriteSoldierTime(-1));
             break;
         }
         case 6:
         {
             const WeaponClass* pWeapon = pStats->GetFavoriteWeaponClass(-1);
-            Stats_AddLabelNameTime(RedLocalizeDB::Find(0xe5a23889u, false), pWeapon ? pWeapon->mLabel : 0,
+            Stats_AddLabelNameTime(RedLocalizeDB::Find(0xe5a23889u /* "ifs.Stats.favweapon" */, false), pWeapon ? pWeapon->mLabel : 0,
                                    (int)pStats->GetFavoriteWeaponTime(-1));
             break;
         }
         case 7:
-            Stats_AddItem(RedLocalizeDB::Find(0x1821d4fbu, false),
+            Stats_AddItem(RedLocalizeDB::Find(0x1821d4fbu /* "ifs.Stats.headshots" */, false),
                           pStats->GetCriticalShots(-1, 1) + pStats->GetCriticalShots(-1, 0));
             break;
         case 8:
             if (pStats->GetNemesisVal(-1, 0) > pStats->GetNemesisVal(-1, 1))
             {
-                Stats_AddPlayerAward(RedLocalizeDB::Find(0xa39860dcu, false), pStats->GetNemesis(-1, 0),
+                Stats_AddPlayerAward(RedLocalizeDB::Find(0xa39860dcu /* "ifs.Stats.nemesis" */, false), pStats->GetNemesis(-1, 0),
                                      pStats->GetNemesisVal(-1, 0));
             }
             else
             {
-                Stats_AddPlayerAward(RedLocalizeDB::Find(0xa39860dcu, false), pStats->GetNemesis(-1, 1),
+                Stats_AddPlayerAward(RedLocalizeDB::Find(0xa39860dcu /* "ifs.Stats.nemesis" */, false), pStats->GetNemesis(-1, 1),
                                      pStats->GetNemesisVal(-1, 1));
             }
             break;
         case 9:
             if (pStats->GetBaitVal(-1, 0) > pStats->GetBaitVal(-1, 1))
             {
-                Stats_AddPlayerAward(RedLocalizeDB::Find(0x1e7c34f0u, false), pStats->GetBait(-1, 0),
+                Stats_AddPlayerAward(RedLocalizeDB::Find(0x1e7c34f0u /* "ifs.Stats.bait" */, false), pStats->GetBait(-1, 0),
                                      pStats->GetBaitVal(-1, 0));
             }
             else
             {
-                Stats_AddPlayerAward(RedLocalizeDB::Find(0x1e7c34f0u, false), pStats->GetBait(-1, 1),
+                Stats_AddPlayerAward(RedLocalizeDB::Find(0x1e7c34f0u /* "ifs.Stats.bait" */, false), pStats->GetBait(-1, 1),
                                      pStats->GetBaitVal(-1, 1));
             }
             break;
@@ -1197,12 +1197,12 @@ int ScriptCB_GetAwardStats(lua_State* L)
         case 2:
             pCharacter = PlayerStats::GetAwardChr(AWARDSTAT_TANK_BUSTER);
             iValue = PlayerStats::GetAwardVal(AWARDSTAT_TANK_BUSTER);
-            Stats_AddPlayerAward(RedLocalizeDB::Find(0x2f6a1ed9u, false), pCharacter, iValue);
+            Stats_AddPlayerAward(RedLocalizeDB::Find(0x2f6a1ed9u /* "ifs.Stats.tankbuster" */, false), pCharacter, iValue);
             break;
         case 3:
             pCharacter = PlayerStats::GetAwardChr(AWARDSTAT_KILLING_SPREE);
             iValue = PlayerStats::GetAwardVal(AWARDSTAT_KILLING_SPREE);
-            Stats_AddPlayerAward(RedLocalizeDB::Find(0xd0ad7735u, false), pCharacter, iValue);
+            Stats_AddPlayerAward(RedLocalizeDB::Find(0xd0ad7735u /* "ifs.Stats.killingspree" */, false), pCharacter, iValue);
             break;
         case 4:
         {
@@ -1222,33 +1222,33 @@ int ScriptCB_GetAwardStats(lua_State* L)
             {
                 ustrncnv(usText, "", 64);
             }
-            Stats_AddItem(RedLocalizeDB::Find(0x4b56af4eu, false), usText);
+            Stats_AddItem(RedLocalizeDB::Find(0x4b56af4eu /* "ifs.Stats.camper" */, false), usText);
             break;
         }
         case 5:
             pCharacter = PlayerStats::GetAwardChr(AWARDSTAT_SURVIVALIST);
             iValue = PlayerStats::GetAwardVal(AWARDSTAT_SURVIVALIST);
-            Stats_AddPlayerAward(RedLocalizeDB::Find(0x1c47f24au, false), pCharacter, iValue);
+            Stats_AddPlayerAward(RedLocalizeDB::Find(0x1c47f24au /* "ifs.Stats.Survivalist" */, false), pCharacter, iValue);
             break;
         case 6:
             pCharacter = PlayerStats::GetAwardChr(AWARDSTAT_TRAITOR);
             iValue = PlayerStats::GetAwardVal(AWARDSTAT_TRAITOR);
-            Stats_AddPlayerAward(RedLocalizeDB::Find(0x5c23c469u, false), pCharacter, iValue);
+            Stats_AddPlayerAward(RedLocalizeDB::Find(0x5c23c469u /* "ifs.Stats.traitor" */, false), pCharacter, iValue);
             break;
         case 7:
             pCharacter = PlayerStats::GetAwardChr(AWARDSTAT_PUBLIC_ENEMY);
             iValue = PlayerStats::GetAwardVal(AWARDSTAT_PUBLIC_ENEMY);
-            Stats_AddPlayerAward(RedLocalizeDB::Find(0x5d21ecafu, false), pCharacter, iValue);
+            Stats_AddPlayerAward(RedLocalizeDB::Find(0x5d21ecafu /* "ifs.Stats.publicenemy" */, false), pCharacter, iValue);
             break;
         case 8:
             pCharacter = PlayerStats::GetAwardChr(AWARDSTAT_MEAT);
             iValue = PlayerStats::GetAwardVal(AWARDSTAT_MEAT);
-            Stats_AddPlayerAward(RedLocalizeDB::Find(0x1f913713u, false), pCharacter, iValue);
+            Stats_AddPlayerAward(RedLocalizeDB::Find(0x1f913713u /* "ifs.Stats.meat" */, false), pCharacter, iValue);
             break;
         case 9:
             pCharacter = PlayerStats::GetAwardChr(AWARDSTAT_DEADEYE);
             iValue = PlayerStats::GetAwardVal(AWARDSTAT_DEADEYE);
-            Stats_AddPlayerAward(RedLocalizeDB::Find(0x7d3440e7u, false), pCharacter, iValue);
+            Stats_AddPlayerAward(RedLocalizeDB::Find(0x7d3440e7u /* "ifs.Stats.deadeye" */, false), pCharacter, iValue);
             break;
         }
 

@@ -21,14 +21,14 @@ public:
     static PblHash rttiHashEntityFlyer;
 };
 
-static const unsigned int kMinScaleHash = 0x4d3600d7;
-static const unsigned int kMaxScaleHash = 0xb43f812d;
-static const unsigned int kColorInterpHash = 0x937114c6;
-static const unsigned int kColorFriendlyHash = 0x70141317;
-static const unsigned int kFourSegmentLockOnHash = 0x6703febc;
-static const unsigned int kEventResetTargetCommonHash = 0x92c1cee6;
-static const unsigned int kEventResetTargetPlayerHash = 0x9d34215e;
-static const unsigned int kBitmapHash = 0x46544626;
+static const unsigned int kMinScaleHash = 0x4d3600d7 /* "MinScale" */;
+static const unsigned int kMaxScaleHash = 0xb43f812d /* "MaxScale" */;
+static const unsigned int kColorInterpHash = 0x937114c6 /* "ColorInterp" */;
+static const unsigned int kColorFriendlyHash = 0x70141317 /* "ColorFriendly" */;
+static const unsigned int kFourSegmentLockOnHash = 0x6703febc /* "FourSegmentLockOn" */;
+static const unsigned int kEventResetTargetCommonHash = 0x92c1cee6 /* "EventResetTargetCommon" */;
+static const unsigned int kEventResetTargetPlayerHash = 0x9d34215e /* "EventResetTargetPlayer" */;
+static const unsigned int kBitmapHash = 0x46544626 /* "Bitmap" */;
 
 // GLOBAL: SWBF2 0x00789b10
 
@@ -90,7 +90,7 @@ void* HUD::ElementTarget::GetParent()
 
 // FUNCTION: SWBF2 0x00558c90
 HUD::ElementTarget::Target::Factory::Factory()
-    : HUD::ElementBitmapBase::Factory(0xCCD2D3D9u)
+    : HUD::ElementBitmapBase::Factory(0xCCD2D3D9u /* "TargetIcon" */)
 {
     mName = "TargetIcon";
 
@@ -479,7 +479,7 @@ void HUD::ElementTarget::Target::WriteData(HUD::File& file, unsigned int uTabs)
 
 // FUNCTION: SWBF2 0x00559db0
 HUD::ElementTarget::Factory::Factory()
-    : HUD::ElementGroupPlayer::Factory(0x32608848u)
+    : HUD::ElementGroupPlayer::Factory(0x32608848u /* "target" */)
 {
     mName = "Target";
 

@@ -357,14 +357,14 @@ void WeaponCatapultClass::SetProperty(unsigned int uProperty, const char* pszVal
 {
     switch (uProperty)
     {
-    case 0x64A37D77:
+    case 0x64A37D77: /* "CockedAngle" */
 
         mCockedAngle = (float)atof(pszValue) * 3.1415927f / 180.0f;
         break;
-    case 0x90491ED6:
+    case 0x90491ED6: /* "ArmName" */
         mArmHash = PblTEMPHash(pszValue);
         break;
-    case 0xA6032172:
+    case 0xA6032172: /* "OrdnanceGeometryName" */
         mOrdnanceModel = RedModel::_HashTable.Find(PblHash(pszValue));
         break;
     default:

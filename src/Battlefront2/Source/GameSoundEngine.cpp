@@ -496,7 +496,7 @@ void Destroy()
 // FUNCTION: SWBF2 0x00538bb0
 bool ChangeMixConfig(unsigned int uiFlags, bool bEnable)
 {
-    if (GameState::GetState() == 0x11E1FC01)
+    if (GameState::GetState() == 0x11E1FC01 /* "shell" */)
     {
         if (uiFlags != 2 ||
             ((GameSoundEngine::sHwMixingSupported || GameSoundEngine::UseKmixer()) &&
@@ -550,27 +550,27 @@ void UpdateBusGains(float fSFX, float fMusic, float fVoiceOver, float fBattleVO,
     gBusGainsUser.mMaster = fMaster;
 
     Snd::Bus* pBus;
-    if ((pBus = Snd::Bus::FindByHashID(0x3b13aa4b)) != 0)
+    if ((pBus = Snd::Bus::FindByHashID(0x3b13aa4b /* "voiceover" */)) != 0)
     {
         pBus->SetGain(gBusGainsDefault.mVoiceOver * gBusGainsUser.mVoiceOver, false);
     }
-    if ((pBus = Snd::Bus::FindByHashID(0x74d771fc)) != 0)
+    if ((pBus = Snd::Bus::FindByHashID(0x74d771fc /* "battlechatter" */)) != 0)
     {
         pBus->SetGain(gBusGainsDefault.mBattleVO * gBusGainsUser.mBattleVO, false);
     }
-    if ((pBus = Snd::Bus::FindByHashID(0xeceb308a)) != 0)
+    if ((pBus = Snd::Bus::FindByHashID(0xeceb308a /* "soundfx" */)) != 0)
     {
         pBus->SetGain(gBusGainsDefault.mSFX * gBusGainsUser.mSFX, false);
     }
-    if ((pBus = Snd::Bus::FindByHashID(0x9f9c4fd4)) != 0)
+    if ((pBus = Snd::Bus::FindByHashID(0x9f9c4fd4 /* "Music" */)) != 0)
     {
         pBus->SetGain(gBusGainsDefault.mMusic * gBusGainsUser.mMusic, false);
     }
-    if ((pBus = Snd::Bus::FindByHashID(0xaebbad4d)) != 0)
+    if ((pBus = Snd::Bus::FindByHashID(0xaebbad4d /* "ambience" */)) != 0)
     {
         pBus->SetGain(gBusGainsDefault.mAmbience * gBusGainsUser.mSFX, false);
     }
-    if ((pBus = Snd::Bus::FindByHashID(0x82c7f467)) != 0)
+    if ((pBus = Snd::Bus::FindByHashID(0x82c7f467 /* "shellfx" */)) != 0)
     {
         pBus->SetGain(gBusGainsDefault.mShellFX * gBusGainsUser.mSFX, false);
     }
@@ -581,27 +581,27 @@ void UpdateBusGains(float fSFX, float fMusic, float fVoiceOver, float fBattleVO,
 void InitializeBusGains()
 {
     Snd::Bus* pBus;
-    if ((pBus = Snd::Bus::FindByHashID(0x3b13aa4b)) != 0)
+    if ((pBus = Snd::Bus::FindByHashID(0x3b13aa4b /* "voiceover" */)) != 0)
     {
         gBusGainsDefault.mVoiceOver = pBus->mGain;
     }
-    if ((pBus = Snd::Bus::FindByHashID(0x74d771fc)) != 0)
+    if ((pBus = Snd::Bus::FindByHashID(0x74d771fc /* "battlechatter" */)) != 0)
     {
         gBusGainsDefault.mBattleVO = pBus->mGain;
     }
-    if ((pBus = Snd::Bus::FindByHashID(0xeceb308a)) != 0)
+    if ((pBus = Snd::Bus::FindByHashID(0xeceb308a /* "soundfx" */)) != 0)
     {
         gBusGainsDefault.mSFX = pBus->mGain;
     }
-    if ((pBus = Snd::Bus::FindByHashID(0x9f9c4fd4)) != 0)
+    if ((pBus = Snd::Bus::FindByHashID(0x9f9c4fd4 /* "Music" */)) != 0)
     {
         gBusGainsDefault.mMusic = pBus->mGain;
     }
-    if ((pBus = Snd::Bus::FindByHashID(0xaebbad4d)) != 0)
+    if ((pBus = Snd::Bus::FindByHashID(0xaebbad4d /* "ambience" */)) != 0)
     {
         gBusGainsDefault.mAmbience = pBus->mGain;
     }
-    if ((pBus = Snd::Bus::FindByHashID(0x82c7f467)) != 0)
+    if ((pBus = Snd::Bus::FindByHashID(0x82c7f467 /* "shellfx" */)) != 0)
     {
         gBusGainsDefault.mShellFX = pBus->mGain;
     }
@@ -650,7 +650,7 @@ void GameSoundEngine::Update(float fDeltaTime)
     {
         return;
     }
-    if (GameState::GetState() == 0x8ff60339 && GameLoop::IsGameOver())
+    if (GameState::GetState() == 0x8ff60339 /* "mission" */ && GameLoop::IsGameOver())
     {
         return;
     }

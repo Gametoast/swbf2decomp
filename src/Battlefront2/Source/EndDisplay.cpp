@@ -87,7 +87,7 @@ void EndDisplay::Init()
 {
     RedBitmapElement* pText = mEndText;
     pText->Enable(false);
-    pText->SetTexture(0x0623b25a);
+    pText->SetTexture(0x0623b25a /* "ig_victory_defeat" */);
     pText->SetRect(256.0f, 64.0f, RedBitmapElement::BITMAP_HALIGN_CENTER,
                    RedBitmapElement::BITMAP_VALIGN_CENTER);
 }
@@ -137,7 +137,7 @@ void EndDisplay::Show(unsigned int uiWinners, float fMinDisplayTime)
     }
     if (bFirstShow)
     {
-        Snd::Bus* pBus = Snd::Bus::FindByHashID(0xeceb308a);
+        Snd::Bus* pBus = Snd::Bus::FindByHashID(0xeceb308a /* "soundfx" */);
         if (pBus)
         {
             pBus->SetGain(0.0f, true);
@@ -166,7 +166,7 @@ void EndDisplay::Hide()
         }
     }
     mMinDisplayTime = 0.0f;
-    Snd::Bus* pBus = Snd::Bus::FindByHashID(0x985c8f54);
+    Snd::Bus* pBus = Snd::Bus::FindByHashID(0x985c8f54 /* "ingame" */);
     if (pBus)
     {
         pBus->SetGain(0.0f, true);
@@ -295,7 +295,7 @@ bool EndDisplay::IsFinished()
 // FUNCTION: SWBF2 0x00491360
 bool EndDisplay::IsMusicFinished() const
 {
-    Snd::Bus* bus = Snd::Bus::FindByHashID(0x9f9c4fd4);
+    Snd::Bus* bus = Snd::Bus::FindByHashID(0x9f9c4fd4 /* "Music" */);
     if (bus && bus->mFinalGain == 0.0f)
     {
         return true;

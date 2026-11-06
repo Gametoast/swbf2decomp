@@ -110,32 +110,32 @@ void EntityItemClass::SetProperty(unsigned int uProperty, const char* pszValue)
 {
     switch (uProperty)
     {
-    case 0x7C7C544B:
+    case 0x7C7C544B: /* "LifeSpan" */
     {
         sscanf(pszValue, "%f", &mLifeSpan);
             break;
     }
-    case 0x039975BE:
+    case 0x039975BE: /* "NoLifeSpanDisplay" */
     {
         mNoLifeSpanDisplay = atoi(pszValue) != 0;
             break;
     }
-    case 0xC28F0C96:
+    case 0xC28F0C96: /* "CollisionSound" */
     {
         mCollisionSound.SetID(pszValue, false, false);
             break;
     }
-    case 0xEDC6251A:
+    case 0xEDC6251A: /* "CollisionOtherSound" */
     {
         mCollisionSound.SetID(pszValue, false, false);
             break;
     }
-    case 0x2297E47D:
+    case 0x2297E47D: /* "CollisionWaterSound" */
     {
         mCollisionWaterSound.SetID(pszValue, false, false);
             break;
     }
-    case 0x7E71E2C6:
+    case 0x7E71E2C6: /* "TrailEffect" */
     {
         if (*pszValue)
         {
@@ -147,27 +147,27 @@ void EntityItemClass::SetProperty(unsigned int uProperty, const char* pszValue)
         }
             break;
     }
-    case 0xD209FF45:
+    case 0xD209FF45: /* "Gravity" */
     {
         sscanf(pszValue, "%f", &mGravity);
             break;
     }
-    case 0x678DE338:
+    case 0x678DE338: /* "Rebound" */
     {
         sscanf(pszValue, "%f", &mRebound);
             break;
     }
-    case 0xA51BE2BB:
+    case 0xA51BE2BB: /* "Friction" */
     {
         sscanf(pszValue, "%f", &mFriction);
             break;
     }
-    case 0xE369687E:
+    case 0xE369687E: /* "LightOdf" */
     {
         m_uiLightOdfNameHash = PblHash(pszValue);
             break;
     }
-    case 0x746CE73E:
+    case 0x746CE73E: /* "LightColor" */
     {
         int r, g, b, a;
         int iCount = sscanf(pszValue, "%d %d %d %d", &r, &g, &b, &a);
@@ -192,14 +192,14 @@ void EntityItemClass::SetProperty(unsigned int uProperty, const char* pszValue)
         m_colorLight = color;
             break;
     }
-    case 0x2776564D:
+    case 0x2776564D: /* "LightRadius" */
     {
         sscanf(pszValue, "%f", &m_fRadiusLight);
             break;
     }
-    case 0x47C86B4A:
+    case 0x47C86B4A: /* "GeometryName" */
     {
-        GameObjectClass::SetProperty(0x47C86B4A, pszValue);
+        GameObjectClass::SetProperty(0x47C86B4A /* "GeometryName" */, pszValue);
         if (mCollisionModel.GetNumBodies() == 0 && mModel)
         {
             const PblBox& box = mModel->_mModel->_TotalBoundingBox;

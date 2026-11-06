@@ -6,15 +6,15 @@
 #include "HUDManager.h"
 #include "RedEngineFL/Interface/RedInterfaceScreen.h"
 
-static const unsigned int kViewport0Position = 0x0fbfc95e;
-static const unsigned int kViewport1Position = 0x870b1061;
-static const unsigned int kViewport2Position = 0xe123e230;
-static const unsigned int kViewport3Position = 0x2e5f5873;
-static const unsigned int kViewport0UseSafezone = 0xd7c3efff;
-static const unsigned int kViewport1UseSafezone = 0xa97176e2;
-static const unsigned int kViewport2UseSafezone = 0x5d23bd7d;
-static const unsigned int kViewport3UseSafezone = 0x04abb610;
-static const unsigned int kEventNameFilter = 0x4ee68dbe;
+static const unsigned int kViewport0Position = 0x0fbfc95e /* "Viewport0Position" */;
+static const unsigned int kViewport1Position = 0x870b1061 /* "Viewport1Position" */;
+static const unsigned int kViewport2Position = 0xe123e230 /* "Viewport2Position" */;
+static const unsigned int kViewport3Position = 0x2e5f5873 /* "Viewport3Position" */;
+static const unsigned int kViewport0UseSafezone = 0xd7c3efff /* "Viewport0UseSafezone" */;
+static const unsigned int kViewport1UseSafezone = 0xa97176e2 /* "Viewport1UseSafezone" */;
+static const unsigned int kViewport2UseSafezone = 0x5d23bd7d /* "Viewport2UseSafezone" */;
+static const unsigned int kViewport3UseSafezone = 0x04abb610 /* "Viewport3UseSafezone" */;
+static const unsigned int kEventNameFilter = 0x4ee68dbe /* "EventNameFilter" */;
 
 // FUNCTION: SWBF2 0x00568a50
 HUD::Item* HUD::ViewPort::Factory::CreateItem(const char* const pName, ItemCallback pCallback,
@@ -44,7 +44,7 @@ const char* HUD::ViewPort::PropertyTranslateEnum(const unsigned int uHashID,
 
 // FUNCTION: SWBF2 0x00568b00
 HUD::ViewPort::Factory::Factory()
-    : HUD::Element::Factory(0xE4ABBAC3u)
+    : HUD::Element::Factory(0xE4ABBAC3u /* "Viewport" */)
 {
     mName = "ViewPort";
 

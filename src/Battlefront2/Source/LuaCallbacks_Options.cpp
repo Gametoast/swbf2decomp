@@ -598,7 +598,7 @@ int ScriptCB_IsHorizontalSplitScreen(lua_State* L)
 // FUNCTION: SWBF2 0x00597fa0
 int ScriptCB_SetHorizontalSplitScreen(lua_State* L)
 {
-    if (GameState::GetState() != 0x8ff60339 && lua_gettop(LuaHelper::mState) == 1)
+    if (GameState::GetState() != 0x8ff60339 /* "mission" */ && lua_gettop(LuaHelper::mState) == 1)
     {
         lua_toboolean(LuaHelper::mState, 1);
     }

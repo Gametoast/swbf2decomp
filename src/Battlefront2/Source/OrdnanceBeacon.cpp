@@ -199,32 +199,32 @@ void OrdnanceBeaconClass::SetProperty(unsigned int uProperty, const char* pszVal
 {
     switch (uProperty)
     {
-    case 0x3186FBFE:
+    case 0x3186FBFE: /* "AimAzimuth" */
         if (sscanf(pszValue, "%f", &mAimAzimuth))
         {
             mAimAzimuth *= 0.017453292f;
         }
         break;
-    case 0x8339FB35:
+    case 0x8339FB35: /* "AimElevation" */
         if (sscanf(pszValue, "%f", &mAimElevation))
         {
             mAimElevation *= 0.017453292f;
         }
         break;
-    case 0xECDB9D1D:
+    case 0xECDB9D1D: /* "AimDistance" */
         sscanf(pszValue, "%f", &mAimDistance);
         break;
-    case 0x9260EA63:
+    case 0x9260EA63: /* "SalvoCount" */
         sscanf(pszValue, "%i", &mSalvoCount);
         break;
-    case 0xD76F37DB:
+    case 0xD76F37DB: /* "SalvoDelay" */
         sscanf(pszValue, "%f", &mSalvoDelay);
         break;
-    case 0xEBD81A5E:
+    case 0xEBD81A5E: /* "ScatterDistance" */
         sscanf(pszValue, "%f", &mScatterDistance);
         break;
-    case 0x399BF05D:
-    case 0xF8899C5E:
+    case 0x399BF05D: /* "Ordnance" */
+    case 0xF8899C5E: /* "OrdnanceName" */
         mOrdnanceClass = Factory<Ordnance, OrdnanceClass, OrdnanceDesc>::Find(PblHash(pszValue));
         break;
     default:

@@ -629,13 +629,13 @@ void GameState::SetState(unsigned int uiState)
     _bDoChangeState = true;
     switch (uiState)
     {
-    case 0x8FF60339:
+    case 0x8FF60339: /* "mission" */
         _pNextState = &_MissionState;
-        mNextStateHash = 0x8FF60339;
+        mNextStateHash = 0x8FF60339 /* "mission" */;
         break;
-    case 0x11E1FC01:
+    case 0x11E1FC01: /* "shell" */
         _pNextState = &_ShellState;
-        mNextStateHash = 0x11E1FC01;
+        mNextStateHash = 0x11E1FC01 /* "shell" */;
         break;
     case 0:
         _pNextState = 0;
@@ -837,7 +837,7 @@ void GameState::CreateBaseEntityClasses()
     new CloudClusterClass(PblHash("cloudcluster"));
     new GrassPatchClass(PblHash("grasspatch"));
     new LeafPatchClass(PblHash("leafpatch"));
-    new GodrayClass(0xBA5B0537u);
+    new GodrayClass(0xBA5B0537u /* "Godray" */);
     new EntityLightClass(PblHash("light"));
     new EntityHologramClass(PblHash("hologram"));
     new RumbleEffectClass(PblHash("rumbleeffect"));
@@ -1158,7 +1158,7 @@ void GameState::MissionState::SetState(unsigned int uiState)
     case 0:
         _SetState(0);
         break;
-    case 0xc2cbd863:
+    case 0xc2cbd863: /* "play" */
         _SetState(&_PlayState);
         break;
     }
@@ -1247,7 +1247,7 @@ void GameState::ShellState::Enter()
     ShellLoop::Init();
     GameSound::SetupDeferred();
 
-    Snd::Bus* pBus = Snd::Bus::FindByHashID(0x985C8F54);
+    Snd::Bus* pBus = Snd::Bus::FindByHashID(0x985C8F54 /* "ingame" */);
     if (pBus)
     {
         pBus->Fade(0.0f, 1.0f, -1.0f);
@@ -1321,7 +1321,7 @@ void GameState::MissionState::Enter()
 
     RedProfile::DisplayCountersByGroup();
     CameraManager::sInstance->EnableScene(true);
-    MissionState::SetState(0xC2CBD863);
+    MissionState::SetState(0xC2CBD863 /* "play" */);
 
     int iFree = RedGetHeapFree(GameMemory::RunTimeHeap) - 0x20800;
     if (iFree > 0x8000)
@@ -1336,7 +1336,7 @@ void GameState::MissionState::Enter()
         EntityCloth::SetEnable(false);
     }
 
-    Snd::Bus* pBus = Snd::Bus::FindByHashID(0x985C8F54);
+    Snd::Bus* pBus = Snd::Bus::FindByHashID(0x985C8F54 /* "ingame" */);
     if (pBus)
     {
         pBus->Fade(2.0f, 1.0f, -1.0f);

@@ -193,16 +193,16 @@ void SoundStream::Properties::Read(PblFileChunk& chunk)
         const unsigned int uiID = child._pFile->Read32();
         switch (uiID)
         {
-        case 0x0A8325F2u:
+        case 0x0A8325F2u: /* "SegmentList" */
             child = chunk.ReadNextChild();
             mSelObjectWeightList = &mObjectWeightList;
-            mObjectWeightList.ReadObjectWeights(child, 0xF3C342E6u, 0);
+            mObjectWeightList.ReadObjectWeights(child, 0xF3C342E6u /* "Segment" */, 0);
             break;
-        case 0x5F6F6D65u:
+        case 0x5F6F6D65u: /* "Stream" */
             child._pFile->Read8();
             mStreamID = child._pFile->Read32();
             break;
-        case 0xCA04EFE0u:
+        case 0xCA04EFE0u: /* "Inherit" */
         {
             child._pFile->Read8();
             const unsigned int uiParentID = child._pFile->Read32();

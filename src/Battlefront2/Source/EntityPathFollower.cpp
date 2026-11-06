@@ -53,29 +53,29 @@ EntityPathFollowerClass::EntityPathFollowerClass()
 
 // GLOBAL: SWBF2 0x00789380
 const ODFPropertySet::ODFProperty EntityPathFollowerClass::sPropertySet[15] = {
-    { 0x91032dcb, ODFPropertySet::type_Float, offsetof(EntityPathFollowerClass, mSpeed) },
-    { 0x1a2fabca, ODFPropertySet::type_Float, offsetof(EntityPathFollowerClass, mTurnSpeed) },
-    { 0xab9db3f4, ODFPropertySet::type_Float, offsetof(EntityPathFollowerClass, mAcceleration) },
-    { 0x2d976c37, ODFPropertySet::type_Float,
+    { 0x91032dcb /* "PathFollowerSpeed" */, ODFPropertySet::type_Float, offsetof(EntityPathFollowerClass, mSpeed) },
+    { 0x1a2fabca /* "PathFollowerTurnSpeed" */, ODFPropertySet::type_Float, offsetof(EntityPathFollowerClass, mTurnSpeed) },
+    { 0xab9db3f4 /* "PathFollowerAcceleration" */, ODFPropertySet::type_Float, offsetof(EntityPathFollowerClass, mAcceleration) },
+    { 0x2d976c37 /* "PathFollowerRollAcceleration" */, ODFPropertySet::type_Float,
       offsetof(EntityPathFollowerClass, mPathRollValues) + 0x00 },
-    { 0x732ff7d1, ODFPropertySet::type_Float,
+    { 0x732ff7d1 /* "PathFollowerRollLookAhead" */, ODFPropertySet::type_Float,
       offsetof(EntityPathFollowerClass, mPathRollValues) + 0x04 },
-    { 0x93425352, ODFPropertySet::type_Float,
+    { 0x93425352 /* "PathFollowerRollTolerance" */, ODFPropertySet::type_Float,
       offsetof(EntityPathFollowerClass, mPathRollValues) + 0x08 },
-    { 0xb1354466, ODFPropertySet::type_Float,
+    { 0xb1354466 /* "PathFollowerRollSpeed" */, ODFPropertySet::type_Float,
       offsetof(EntityPathFollowerClass, mPathRollValues) + 0x0c },
-    { 0x60900c05, ODFPropertySet::type_Float,
+    { 0x60900c05 /* "PathFollowerRollAccelerationLag" */, ODFPropertySet::type_Float,
       offsetof(EntityPathFollowerClass, mPathRollValues) + 0x10 },
-    { 0xacf747f3, ODFPropertySet::type_Float,
+    { 0xacf747f3 /* "PathFollowerRollTurnFactor" */, ODFPropertySet::type_Float,
       offsetof(EntityPathFollowerClass, mPathRollValues) + 0x14 },
-    { 0xe217bc71, ODFPropertySet::type_Float,
+    { 0xe217bc71 /* "PathFollowerRollSpeedFactor" */, ODFPropertySet::type_Float,
       offsetof(EntityPathFollowerClass, mPathRollValues) + 0x18 },
-    { 0x4453dc0a, ODFPropertySet::type_Float,
+    { 0x4453dc0a /* "PathFollowerRollDampening" */, ODFPropertySet::type_Float,
       offsetof(EntityPathFollowerClass, mPathRollValues) + 0x1c },
-    { 0x9f528aec, ODFPropertySet::type_UInt32, offsetof(EntityPathFollowerClass, mBranchPaths) },
-    { 0x9eececc5, ODFPropertySet::type_Float, offsetof(EntityPathFollowerClass, mBranchRange) },
-    { 0x886f9fe5, ODFPropertySet::type_Float, offsetof(EntityPathFollowerClass, mCosMaxAngle) },
-    { 0xe103ce94, ODFPropertySet::type_Float, offsetof(EntityPathFollowerClass, mMinBranchDist) },
+    { 0x9f528aec /* "PathFollowerBranchPaths" */, ODFPropertySet::type_UInt32, offsetof(EntityPathFollowerClass, mBranchPaths) },
+    { 0x9eececc5 /* "PathFollowerBranchRange" */, ODFPropertySet::type_Float, offsetof(EntityPathFollowerClass, mBranchRange) },
+    { 0x886f9fe5 /* "PathFollowerBranchMaxAngle" */, ODFPropertySet::type_Float, offsetof(EntityPathFollowerClass, mCosMaxAngle) },
+    { 0xe103ce94 /* "PathFollowerMinBranchDist" */, ODFPropertySet::type_Float, offsetof(EntityPathFollowerClass, mMinBranchDist) },
 };
 
 // FUNCTION: SWBF2 0x004d7990
@@ -83,17 +83,17 @@ bool EntityPathFollowerClass::SetProperty(unsigned int uProperty, const char* ps
 {
     switch (uProperty)
     {
-    case 0x995f7d3c:
+    case 0x995f7d3c: /* "PathFollowerClass_CTF" */
         mEntityClassID_CTF = PblHash(pszValue);
         return true;
-    case 0xc5cf2a8d:
+    case 0xc5cf2a8d: /* "PathFollowerFlyerVsFlyer" */
     {
         int iValue;
         sscanf(pszValue, "%d", &iValue);
         mbFlyerVsFlyer = iValue != 0;
         return true;
     }
-    case 0xff158b18:
+    case 0xff158b18: /* "PathFollowerClass" */
         mEntityClassID = PblHash(pszValue);
         return true;
     }
@@ -103,19 +103,19 @@ bool EntityPathFollowerClass::SetProperty(unsigned int uProperty, const char* ps
     {
         switch (uProperty)
         {
-        case 0x2d976c37:
+        case 0x2d976c37: /* "PathFollowerRollAcceleration" */
             mPathRollValues.mRollAcceleration *= 0.017453292f;
             return true;
-        case 0x93425352:
+        case 0x93425352: /* "PathFollowerRollTolerance" */
             mPathRollValues.mRollTolerance *= 0.017453292f;
             return true;
-        case 0x60900c05:
+        case 0x60900c05: /* "PathFollowerRollAccelerationLag" */
             mPathRollValues.mRollAccelResp = 1.0f / mPathRollValues.mRollAccelResp;
             return true;
-        case 0x886f9fe5:
+        case 0x886f9fe5: /* "PathFollowerBranchMaxAngle" */
             mCosMaxAngle = PblMath::Cos(mCosMaxAngle * 0.017453292f);
             return true;
-        case 0xab9db3f4:
+        case 0xab9db3f4: /* "PathFollowerAcceleration" */
             mAcceleration = mAcceleration != 0.0f ? 1.0f / mAcceleration : 0.0001f;
             return true;
         }

@@ -18,10 +18,10 @@ int sDrawCollisionShapes;
 // GLOBAL: SWBF2 0x0078b630
 static const unsigned int TENTACLE_NAMES[20] =
 {
-    0x24cb9e5e, 0x2988b887, 0x2d49a530, 0x330ef535, 0x37cfe882,
-    0x3a8cce5b, 0x3e4dd3ec, 0x06026e51, 0x02c373e6, 0x257cb3e7,
-    0x21bdae50, 0x2cfe8889, 0x283f953e, 0x3678c53b, 0x32b9d88c,
-    0x3ffafe55, 0x3b3be3e2, 0x03745e5f, 0x07b543e8, 0x5797ec34,
+    0x24cb9e5e /* "bone_string_1" */, 0x2988b887 /* "bone_string_2" */, 0x2d49a530 /* "bone_string_3" */, 0x330ef535 /* "bone_string_4" */, 0x37cfe882 /* "bone_string_5" */,
+    0x3a8cce5b /* "bone_string_6" */, 0x3e4dd3ec /* "bone_string_7" */, 0x06026e51 /* "bone_string_8" */, 0x02c373e6 /* "bone_string_9" */, 0x257cb3e7 /* "bone_string_10" */,
+    0x21bdae50 /* "bone_string_11" */, 0x2cfe8889 /* "bone_string_12" */, 0x283f953e /* "bone_string_13" */, 0x3678c53b /* "bone_string_14" */, 0x32b9d88c /* "bone_string_15" */,
+    0x3ffafe55 /* "bone_string_16" */, 0x3b3be3e2 /* "bone_string_17" */, 0x03745e5f /* "bone_string_18" */, 0x07b543e8 /* "bone_string_19" */, 0x5797ec34 /* "bone_string_20" */,
 };
 
 static const float gTentacleAngle = 0.52359879f;
@@ -460,7 +460,7 @@ void TentacleSimulator::UpdatePositions(float fDeltaTime, const PblVector3& vVel
 // FUNCTION: SWBF2 0x006569c0
 void TentacleSimulator::EnforceCollisions(const RedPose* pPose, const PblMatrix& mParent)
 {
-    const PblMatrix* pBone = pPose->Find(0xe5b51072);
+    const PblMatrix* pBone = pPose->Find(0xe5b51072 /* "bone_ribcage" */);
     if (!pBone)
     {
         return;

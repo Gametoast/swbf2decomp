@@ -16,7 +16,7 @@ class LightBeamEffect : public FLEffect
 public:
 
     LightBeamEffect()
-        : FLEffect(0xE8651328u, 3)
+        : FLEffect(0xE8651328u /* "LightBeam" */, 3)
     {
         m_pShader = 0;
     }

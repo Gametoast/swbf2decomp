@@ -75,94 +75,94 @@ void PowerupItemClass::SetProperty(unsigned int uProperty, const char* pszValue)
     float f;
     switch (uProperty)
     {
-    case 0xf33b41df:
+    case 0xf33b41df: /* "SoldierHealth" */
         sscanf(pszValue, "%f", &f);
         mAddHealth[HEALTH_TYPE_PERSON] = f;
         mAddHealth[HEALTH_TYPE_DROID] = f;
         break;
-    case 0xf51ad206:
+    case 0xf51ad206: /* "PersonHealth" */
         sscanf(pszValue, "%f", &mAddHealth[HEALTH_TYPE_PERSON]);
         break;
-    case 0x60d746d7:
+    case 0x60d746d7: /* "AnimalHealth" */
         sscanf(pszValue, "%f", &mAddHealth[HEALTH_TYPE_ANIMAL]);
         break;
-    case 0x9622c73b:
+    case 0x9622c73b: /* "DroidHealth" */
         sscanf(pszValue, "%f", &mAddHealth[HEALTH_TYPE_DROID]);
         break;
-    case 0x14e381c9:
+    case 0x14e381c9: /* "VehicleHealth" */
         sscanf(pszValue, "%f", &mAddHealth[HEALTH_TYPE_VEHICLE]);
         break;
-    case 0xa6c59e9f:
+    case 0xa6c59e9f: /* "BuildingHealth" */
         sscanf(pszValue, "%f", &mAddHealth[HEALTH_TYPE_BUILDING]);
         break;
-    case 0xc3da529f:
+    case 0xc3da529f: /* "SoldierAmmo" */
         sscanf(pszValue, "%f", &f);
         mAddAmmo[HEALTH_TYPE_PERSON] = f;
         mAddAmmo[HEALTH_TYPE_DROID] = f;
         break;
-    case 0x738f412e:
+    case 0x738f412e: /* "PersonAmmo" */
         sscanf(pszValue, "%f", &mAddAmmo[HEALTH_TYPE_PERSON]);
         break;
-    case 0xbfe8e397:
+    case 0xbfe8e397: /* "AnimalAmmo" */
         sscanf(pszValue, "%f", &mAddAmmo[HEALTH_TYPE_ANIMAL]);
         break;
-    case 0x0fda4dbb:
+    case 0x0fda4dbb: /* "DroidAmmo" */
         sscanf(pszValue, "%f", &mAddAmmo[HEALTH_TYPE_DROID]);
         break;
-    case 0xe728d955:
+    case 0xe728d955: /* "VehicleAmmo" */
         sscanf(pszValue, "%f", &mAddAmmo[HEALTH_TYPE_VEHICLE]);
         break;
-    case 0xa25f865f:
+    case 0xa25f865f: /* "BuildingAmmo" */
         sscanf(pszValue, "%f", &mAddAmmo[HEALTH_TYPE_BUILDING]);
         break;
-    case 0x0adc5145:
+    case 0x0adc5145: /* "SoldierEnergy" */
         sscanf(pszValue, "%f", &f);
         mAddEnergy[HEALTH_TYPE_PERSON] = f;
         mAddEnergy[HEALTH_TYPE_DROID] = f;
         break;
-    case 0x84622134:
+    case 0x84622134: /* "PersonEnergy" */
         sscanf(pszValue, "%f", &mAddEnergy[HEALTH_TYPE_PERSON]);
         break;
-    case 0xfb0507ad:
+    case 0xfb0507ad: /* "AnimalEnergy" */
         sscanf(pszValue, "%f", &mAddEnergy[HEALTH_TYPE_ANIMAL]);
         break;
-    case 0x3fe43479:
+    case 0x3fe43479: /* "DroidEnergy" */
         sscanf(pszValue, "%f", &mAddEnergy[HEALTH_TYPE_DROID]);
         break;
-    case 0x56238a9b:
+    case 0x56238a9b: /* "VehicleEnergy" */
         sscanf(pszValue, "%f", &mAddEnergy[HEALTH_TYPE_VEHICLE]);
         break;
-    case 0xda2c3905:
+    case 0xda2c3905: /* "BuildingEnergy" */
         sscanf(pszValue, "%f", &mAddEnergy[HEALTH_TYPE_BUILDING]);
         break;
-    case 0x70b204af:
+    case 0x70b204af: /* "BuffOffenseTimer" */
         sscanf(pszValue, "%f", &mBuffOffenseTimer);
         break;
-    case 0xce532e64:
+    case 0xce532e64: /* "BuffOffenseMult" */
         sscanf(pszValue, "%f", &mBuffOffenseMult);
         break;
-    case 0x7705fcc1:
+    case 0x7705fcc1: /* "BuffDefenseTimer" */
         sscanf(pszValue, "%f", &mBuffDefenseTimer);
         break;
-    case 0xb25fb62e:
+    case 0xb25fb62e: /* "BuffDefenseMult" */
         sscanf(pszValue, "%f", &mBuffDefenseMult);
         break;
-    case 0x460b143b:
+    case 0x460b143b: /* "BuffHealthTimer" */
         sscanf(pszValue, "%f", &mBuffHealthTimer);
         break;
-    case 0xb6639618:
+    case 0xb6639618: /* "BuffHealthRate" */
         sscanf(pszValue, "%f", &mBuffHealthRate);
         break;
-    case 0x805b51e7:
+    case 0x805b51e7: /* "DebuffDamageTimer" */
         sscanf(pszValue, "%f", &mDebuffDamageTimer);
         break;
-    case 0x9834a7b4:
+    case 0x9834a7b4: /* "DebuffDamageRate" */
         sscanf(pszValue, "%f", &mDebuffDamageRate);
         break;
-    case 0xa2a034ea:
+    case 0xa2a034ea: /* "PowerupSound" */
         mPowerupSound.SetID(pszValue, false, false);
         break;
-    case 0x65a920ba:
+    case 0x65a920ba: /* "AmbientSound" */
         mAmbientSound.SetID(pszValue, false, false);
         break;
     default:

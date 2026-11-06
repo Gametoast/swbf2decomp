@@ -99,57 +99,57 @@ void WeaponInvisibilityClass::SetProperty(unsigned int uProperty, const char* ps
 {
     switch (uProperty)
     {
-    case 0x2f19df96:
+    case 0x2f19df96: /* "InvisibilityTrigger" */
         switch (PblHash(pszValue))
         {
-        case 0x01fcf9b4:
-        case 0x350ca8af:
+        case 0x01fcf9b4: /* "Press" */
+        case 0x350ca8af: /* "0" */
             m_eInvisibilityTrigger = TRIGGER_PRESS;
             break;
-        case 0x40296205:
-        case 0x340ca71c:
+        case 0x40296205: /* "Toggle" */
+        case 0x340ca71c: /* "1" */
             m_eInvisibilityTrigger = TRIGGER_TOGGLE;
             break;
-        case 0xadc649b8:
-        case 0x370cabd5:
+        case 0xadc649b8: /* "Hold" */
+        case 0x370cabd5: /* "2" */
             m_eInvisibilityTrigger = TRIGGER_HOLD;
             break;
         }
         break;
-    case 0xfb2e6bba:
+    case 0xfb2e6bba: /* "InvisibilityMin" */
         sscanf(pszValue, "%f", &m_fInvisibilityMin);
         break;
-    case 0xe54363d0:
+    case 0xe54363d0: /* "InvisibilityMax" */
         sscanf(pszValue, "%f", &m_fInvisibilityMax);
         break;
-    case 0xe0716444:
+    case 0xe0716444: /* "SpeedForInvisibilityMin" */
         sscanf(pszValue, "%f", &m_fSpeedForInvisibilityMin);
         break;
-    case 0xee850206:
+    case 0xee850206: /* "SpeedForInvisibilityMax" */
         sscanf(pszValue, "%f", &m_fSpeedForInvisibilityMax);
         break;
-    case 0xb6243814:
+    case 0xb6243814: /* "InvisibilityIncRate" */
         sscanf(pszValue, "%f", &m_fInvisibilityIncRate);
         break;
-    case 0x5d77dec4:
+    case 0x5d77dec4: /* "InvisibilityDecRate" */
         sscanf(pszValue, "%f", &m_fInvisibilityDecRate);
         break;
-    case 0xa591fd27:
+    case 0xa591fd27: /* "InvisibilityPersistTime" */
         sscanf(pszValue, "%f", &m_fInvisibilityPersistTime);
         break;
-    case 0xe91ab0b8:
+    case 0xe91ab0b8: /* "FlickerAmplitude" */
         sscanf(pszValue, "%f", &m_fFlickerAmplitude);
         break;
-    case 0xc2298dea:
+    case 0xc2298dea: /* "FlickerTimeMin" */
         sscanf(pszValue, "%f", &m_fFlickerTimeMin);
         break;
-    case 0xcc3d2560:
+    case 0xcc3d2560: /* "FlickerTimeMax" */
         sscanf(pszValue, "%f", &m_fFlickerTimeMax);
         break;
-    case 0xc8388d9d:
+    case 0xc8388d9d: /* "InitialSalvoDelay" */
         sscanf(pszValue, "%f", &mInitialSalvoDelay);
         break;
-    case 0xb4932ba7:
+    case 0xb4932ba7: /* "InitialEnergyDrain" */
         sscanf(pszValue, "%f", &mInitialEnergyDrain);
         break;
     default:

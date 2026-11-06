@@ -550,7 +550,7 @@ void PropModelMesh::Read(PblFileChunk& chunk)
 
         switch (uiHash)
         {
-        case 0x6a6fb399:
+        case 0x6a6fb399: /* "LeafPatch" */
         {
             mHash = child._pFile->Read32();
             const float fDist = (iVersion > 1) ? child._pFile->ReadFloat() : 1000.0f;
@@ -563,7 +563,7 @@ void PropModelMesh::Read(PblFileChunk& chunk)
             break;
         }
 
-        case 0x156b70a1:
+        case 0x156b70a1: /* "GrassPatch" */
         {
             mHash = child._pFile->Read32();
             const float fDist = (iVersion > 1) ? child._pFile->ReadFloat() : 1000.0f;
@@ -576,7 +576,7 @@ void PropModelMesh::Read(PblFileChunk& chunk)
             break;
         }
 
-        case 0xaaea5743:
+        case 0xaaea5743: /* "File" */
             uiFileHash = child._pFile->Read32();
             if (mHash)
             {
@@ -596,7 +596,7 @@ void PropModelMesh::Read(PblFileChunk& chunk)
             }
             break;
 
-        case 0x0e0d9594:
+        case 0x0e0d9594: /* "Sound" */
             mSound.SetID(child._pFile->Read32(), false, false);
             if (iVersion == 3)
             {
@@ -610,24 +610,24 @@ void PropModelMesh::Read(PblFileChunk& chunk)
             }
             break;
 
-        case 0xc28f0c96:
+        case 0xc28f0c96: /* "CollisionSound" */
             mSoundCollision.SetID(child._pFile->Read32(), false, false);
             break;
 
-        case 0x08be1de3:
+        case 0x08be1de3: /* "FadeDist" */
             mGeometryMinDist = child._pFile->ReadFloat();
             break;
 
-        case 0x13fc0734:
+        case 0x13fc0734: /* "AIVisibilityFactor" */
             mAIVisFactorCrouch = child._pFile->ReadFloat();
             mAIVisFactorStand = child._pFile->ReadFloat();
             break;
 
-        case 0x26edc40c:
+        case 0x26edc40c: /* "UseCollision" */
             bUseCollision = true;
             break;
 
-        case 0x827eb1c9:
+        case 0x827eb1c9: /* "Lighting" */
         {
             char acLighting[256] = { 0 };
             child.ReadString(acLighting, 256);
@@ -646,11 +646,11 @@ void PropModelMesh::Read(PblFileChunk& chunk)
             break;
         }
 
-        case 0x82971c71:
+        case 0x82971c71: /* "Scale" */
             mScale = child._pFile->ReadFloat();
             break;
 
-        case 0xbbce475d:
+        case 0xbbce475d: /* "ColorVariation" */
             mColorVariation = child._pFile->ReadFloat();
             break;
 

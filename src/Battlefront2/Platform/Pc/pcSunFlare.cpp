@@ -123,7 +123,7 @@ void SunFlareEffect::Init()
     s_intensityTex = new RedTexture(2, 2, D3DFMT_A8R8G8B8, 1, D3DUSAGE_RENDERTARGET,
                                     D3DPOOL_DEFAULT, 0);
     s_pClearShader = (pcClearShader*)pcRedShader::Create(
-        0x5c6e1222, 0x203, 0, 0, 0x80000, RedColor::WHITE, RedColor::BLACK, 32.0f);
+        0x5c6e1222 /* "clear" */, 0x203, 0, 0, 0x80000, RedColor::WHITE, RedColor::BLACK, 32.0f);
 
     if (RedRenderer::pcGetGeometryMode() == GEOMETRYMODE_UNCOMPRESSED)
     {
@@ -231,16 +231,16 @@ FLEffectClass* SunFlareEffect::BuildClass(PblConfig& config) const
         PblConfig::Data data = config.ReadNextData();
         switch (data.GetId())
         {
-        case 0x3D7E6258u:
+        case 0x3D7E6258u: /* "Color" */
             pFlare->SetColor(ReadColor(data));
             break;
-        case 0x23A0D95Cu:
+        case 0x23A0D95Cu: /* "Size" */
             pFlare->SetSize(data.GetFloatArg(0));
             break;
-        case 0x4D609778u:
+        case 0x4D609778u: /* "FlareOutSize" */
             pFlare->SetFlareOutSize(data.GetFloatArg(0));
             break;
-        case 0x9EBE759Fu:
+        case 0x9EBE759Fu: /* "HaloInnerRing" */
         {
             RedColor color;
             color.r = data.GetUint8Arg(1);
@@ -250,7 +250,7 @@ FLEffectClass* SunFlareEffect::BuildClass(PblConfig& config) const
             pFlare->SetHaloInnerRing(data.GetFloatArg(0), color);
             break;
         }
-        case 0x5671AC28u:
+        case 0x5671AC28u: /* "HaloMiddleRing" */
         {
             RedColor color;
             color.r = data.GetUint8Arg(1);
@@ -260,7 +260,7 @@ FLEffectClass* SunFlareEffect::BuildClass(PblConfig& config) const
             pFlare->SetHaloMiddleRing(data.GetFloatArg(0), color);
             break;
         }
-        case 0x59B407CEu:
+        case 0x59B407CEu: /* "HaloOutterRing" */
         {
             RedColor color;
             color.r = data.GetUint8Arg(1);
@@ -270,7 +270,7 @@ FLEffectClass* SunFlareEffect::BuildClass(PblConfig& config) const
             pFlare->SetHaloOutterRing(data.GetFloatArg(0), color);
             break;
         }
-        case 0xB9BAA468u:
+        case 0xB9BAA468u: /* "SpikeColor" */
         {
             RedColor color;
             color.r = data.GetUint8Arg(0);
@@ -280,10 +280,10 @@ FLEffectClass* SunFlareEffect::BuildClass(PblConfig& config) const
             pFlare->SetSpikeColor(color);
             break;
         }
-        case 0xACAAECACu:
+        case 0xACAAECACu: /* "SpikeSize" */
             pFlare->SetSpikeSize(data.GetFloatArg(0));
             break;
-        case 0xAD544418u:
+        case 0xAD544418u: /* "Angle" */
         {
             float fPitch = data.GetFloatArg(0) * 0.017453292f;
             float fYaw = data.GetNumArgs() > 1 ? data.GetFloatArg(1) * 0.017453292f : 0.0f;
@@ -298,10 +298,10 @@ FLEffectClass* SunFlareEffect::BuildClass(PblConfig& config) const
             }
             break;
         }
-        case 0xE3C8D91Eu:
+        case 0xE3C8D91Eu: /* "EnableFlare" */
             pFlare->SetFlareEnable(data.GetInt32Arg(0) != 0);
             break;
-        case 0xE453BE48u:
+        case 0xE453BE48u: /* "NumFlareOuts" */
             pFlare->SetNumFlareOuts(data.GetInt32Arg(0));
             break;
         }

@@ -598,7 +598,7 @@ void pcSpecularLightingShader::Render_Prog1(const RenderItem* pItem, unsigned in
     else
     {
         const unsigned int uiDiffuseMap = pItem->pShadingState
-                                              ? pItem->pShadingState->GetIntParam(0x891891e9)
+                                              ? pItem->pShadingState->GetIntParam(0x891891e9 /* "diffuse_texture" */)
                                               : pMaterial->diffuseMapHash;
         RedRenderer::pcSetTexture(0, RedTexture::Find(uiDiffuseMap));
         const RedTextureTransform& transform = pMaterial->diffuseTexTransform;

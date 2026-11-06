@@ -67,8 +67,8 @@ void WaterEffect::ReadConfig(PblConfig& config)
         desc.mType = (PblRegion::Type)0;
         desc.mMatrix = DirectionMatrix(PblVector3(0.0f, 1.0f, 0.0f), PblVector3(1.0f, 0.0f, 0.0f),
                                        PblVector3(0.0f, fHeight, 0.0f));
-        desc.mNameId = 0x6EBDE457u;
-        desc.mTypeId = 0xCCCB0055u;
+        desc.mNameId = 0x6EBDE457u /* "water_sink_region" */;
+        desc.mTypeId = 0xCCCB0055u /* "Plane" */;
         new RedRegion(desc);
         TriggerRegionManager::sInstance->AddSinkRegion("water_sink_region");
     }

@@ -48,7 +48,7 @@ SkyFogRenderable::~SkyFogRenderable()
 // FUNCTION: SWBF2 0x00428690
 void SkyFogRenderable::Init()
 {
-    m_pShader = pcRedShader::Create(0x890EFA1E, 0x202, 0, 0, 0,
+    m_pShader = pcRedShader::Create(0x890EFA1E /* "SkyFog" */, 0x202, 0, 0, 0,
                                     RedColor::WHITE, RedColor::BLACK, 32.0f);
     ((pcSkyFogShader*)m_pShader)->SetTexture(
         RedRenderer::pcGetBuffer(PC_BUFFER_SKY));

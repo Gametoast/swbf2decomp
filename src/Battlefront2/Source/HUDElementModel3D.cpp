@@ -1,18 +1,18 @@
 #include "HUDElementModel3D.h"
 #include "RedEngineFL/Graphics/RedModel.h"
 
-static const unsigned int kPositionHash         = 0x934f4e0a;
-static const unsigned int kRotationHash         = 0x21ac415f;
-static const unsigned int kScaleHash            = 0x82971c71;
-static const unsigned int kScaleUniformHash     = 0x745450bf;
-static const unsigned int kPositionRelativeHash = 0xf9f41ffa;
-static const unsigned int kDepthHash            = 0xfe759eea;
-static const unsigned int kEventMeshHash        = 0xf845adf2;
-static const unsigned int kLightingHash         = 0x827eb1c9;
-static const unsigned int kMeshHash             = 0xa100bebc;
-static const unsigned int kHardpointHash        = 0x4e2c2692;
-static const unsigned int kInheritMeshInfoHash  = 0x36ea8575;
-static const unsigned int kMeshInfoHash         = 0x4b426ca0;
+static const unsigned int kPositionHash         = 0x934f4e0a /* "Position" */;
+static const unsigned int kRotationHash         = 0x21ac415f /* "Rotation" */;
+static const unsigned int kScaleHash            = 0x82971c71 /* "Scale" */;
+static const unsigned int kScaleUniformHash     = 0x745450bf /* "ScaleUniform" */;
+static const unsigned int kPositionRelativeHash = 0xf9f41ffa /* "PositionRelative" */;
+static const unsigned int kDepthHash            = 0xfe759eea /* "Depth" */;
+static const unsigned int kEventMeshHash        = 0xf845adf2 /* "EventMesh" */;
+static const unsigned int kLightingHash         = 0x827eb1c9 /* "Lighting" */;
+static const unsigned int kMeshHash             = 0xa100bebc /* "Mesh" */;
+static const unsigned int kHardpointHash        = 0x4e2c2692 /* "Hardpoint" */;
+static const unsigned int kInheritMeshInfoHash  = 0x36ea8575 /* "InheritMeshInfo" */;
+static const unsigned int kMeshInfoHash         = 0x4b426ca0 /* "MeshInfo" */;
 
 // SYNTHETIC: SWBF2 0x00403fd0
 // `dynamic initializer for 'HUD::ElementModel3D::sModelList''
@@ -149,7 +149,7 @@ void HUD::ElementModel3D::MeshInfo::ApplyRelativePosition(float fFrameWidth, flo
 
 // FUNCTION: SWBF2 0x00555ff0
 HUD::ElementModel3D::Factory::Factory()
-    : HUD::Element::Factory(0x1ECCDEFDu)
+    : HUD::Element::Factory(0x1ECCDEFDu /* "Model3D" */)
 {
     mName = "Model3D";
 

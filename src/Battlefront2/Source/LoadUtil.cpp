@@ -224,7 +224,7 @@ bool LoadUtil::ReadDataFileChunk(char const* pName, PblFileChunk& chunk,
 
         Snd::EngineBase::CallbackOverride aSoundOverrides[2] = {
             { 0x5E262256, LoadSoundBank, 0 },
-            { 0x9A644D15, LoadSoundBank, 0 },
+            { 0x9A644D15 /* "SampleBank" */, LoadSoundBank, 0 },
         };
 
         if (puiIds)
@@ -817,13 +817,13 @@ BaseHint* ProcessHintInfo(PblFileChunk& chunk)
     BaseHint* pHint = 0;
     switch (uType)
     {
-    case 0x350CA8AF:
+    case 0x350CA8AF: /* "0" */
         pHint = new SnipeHint(desc);
         break;
-    case 0x340CA71C:
+    case 0x340CA71C: /* "1" */
         pHint = new PatrolHint(desc);
         break;
-    case 0x370CABD5:
+    case 0x370CABD5: /* "2" */
         pHint = new CoverHint(desc);
         break;
     case 0x310CA263:
@@ -832,13 +832,13 @@ BaseHint* ProcessHintInfo(PblFileChunk& chunk)
     case 0x300CA0D0:
         pHint = new MinefieldHint(desc);
         break;
-    case 0x330CA589:
+    case 0x330CA589: /* "6" */
         pHint = new LandHint(desc);
         break;
-    case 0x320CA3F6:
+    case 0x320CA3F6: /* "7" */
         pHint = new FortificationHint(desc);
         break;
-    case 0x3D0CB547:
+    case 0x3D0CB547: /* "8" */
         pHint = new VehicleCoverHint(desc);
         break;
     }

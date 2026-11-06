@@ -309,7 +309,7 @@ bool CollisionObject::IsInCollisionList()
 // FUNCTION: SWBF2 0x00464470
 void CollisionObject::PlayImpactEffects(const PblVector3* pPos, const PblVector3* pVel) const
 {
-    FoleyFXImpact* pFoleyFX = (FoleyFXImpact*)GetFoleyFX(0x7c13cb48);
+    FoleyFXImpact* pFoleyFX = (FoleyFXImpact*)GetFoleyFX(0x7c13cb48 /* "FoleyFXImpact" */);
     if (pFoleyFX)
     {
         pFoleyFX->mImpact.Play(pPos, pVel, false, true);

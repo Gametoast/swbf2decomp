@@ -26,7 +26,7 @@ public:
     };
 
     SunFlareEffect()
-        : FLEffect(0xBDF357B3u, 6)
+        : FLEffect(0xBDF357B3u /* "SunFlare" */, 6)
     {
     }
 

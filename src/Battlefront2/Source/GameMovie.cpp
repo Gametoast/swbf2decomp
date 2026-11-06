@@ -71,10 +71,10 @@ void GameMovie::Create(const int defaultHeap)
 
         RedSetCurrentHeap(iOldHeap);
 
-        if (GameState::GetState() != 0x11E1FC01)
+        if (GameState::GetState() != 0x11E1FC01 /* "shell" */)
         {
 
-            Snd::Bus* pBus = Snd::Bus::FindByHashID(0xF4EB2B40);
+            Snd::Bus* pBus = Snd::Bus::FindByHashID(0xF4EB2B40 /* "shellmovies" */);
             if (!pBus)
             {
                 pBus = &Snd::Bus::smRootBus;

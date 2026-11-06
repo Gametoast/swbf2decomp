@@ -1575,27 +1575,27 @@ bool MountedTurretClass::SetProperty(unsigned int uHash, const char* pcValue, co
 {
     switch (uHash)
     {
-    case 0x0F77C4E8:
-    case 0x5433F589:
+    case 0x0F77C4E8: /* "TurnRate" */
+    case 0x5433F589: /* "MaxTurnSpeed" */
         sscanf(pcValue, "%f", &mTurnRate);
         break;
-    case 0xDE721CB4:
+    case 0xDE721CB4: /* "TurnFilter" */
         sscanf(pcValue, "%f", &mTurnFilter);
         break;
-    case 0xB9B8ABC3:
-    case 0xB5534BE0:
+    case 0xB9B8ABC3: /* "PitchRate" */
+    case 0xB5534BE0: /* "MaxPitchSpeed" */
         sscanf(pcValue, "%f", &mPitchRate);
         break;
-    case 0x9B0CA8C3:
+    case 0x9B0CA8C3: /* "PitchFilter" */
         sscanf(pcValue, "%f", &mPitchFilter);
         break;
-    case 0x0EBB87C8:
+    case 0x0EBB87C8: /* "YawTurnFactor" */
         sscanf(pcValue, "%f", &mYawTurnFactor);
         break;
-    case 0x0B2FC2F9:
+    case 0x0B2FC2F9: /* "PitchTurnFactor" */
         sscanf(pcValue, "%f", &mPitchTurnFactor);
         break;
-    case 0x2C3E8078:
+    case 0x2C3E8078: /* "YawLimits" */
         sscanf(pcValue, "%f %f", &mMinYaw, &mMaxYaw);
         mMinYaw *= 0.017453292f;
         mMaxYaw *= 0.017453292f;
@@ -1603,12 +1603,12 @@ bool MountedTurretClass::SetProperty(unsigned int uHash, const char* pcValue, co
         mShiftYaw = mMinYaw > 0.0f && mMinYaw <= 3.1415927f &&
                     mMaxYaw >= 3.1415927f && mMaxYaw < 6.2831855f;
         break;
-    case 0x3403B139:
+    case 0x3403B139: /* "PitchLimits" */
         sscanf(pcValue, "%f %f", &mMinPitch, &mMaxPitch);
         mMinPitch *= 0.017453292f;
         mMaxPitch *= 0.017453292f;
         break;
-    case 0xF2AA4A90:
+    case 0xF2AA4A90: /* "MountPos" */
     {
         float x, y, z;
         sscanf(pcValue, "%f %f %f", &x, &y, &z);
@@ -1617,7 +1617,7 @@ bool MountedTurretClass::SetProperty(unsigned int uHash, const char* pcValue, co
         mMountPos.z = z;
         break;
     }
-    case 0xB69A7CB4:
+    case 0xB69A7CB4: /* "TurretNodeName" */
         mMountHash = PblTEMPHash(pcValue);
         if (pModel)
         {
@@ -1634,60 +1634,60 @@ bool MountedTurretClass::SetProperty(unsigned int uHash, const char* pcValue, co
             }
         }
         break;
-    case 0xB371FC9A:
+    case 0xB371FC9A: /* "Controllable" */
         mIsControllable = atoi(pcValue) != 0;
         break;
-    case 0x9D39F68A:
+    case 0x9D39F68A: /* "AutoFire" */
         mIsAutoFire[sWeaponSection] = atoi(pcValue) != 0;
         break;
-    case 0x5D967EBC:
+    case 0x5D967EBC: /* "Virtual" */
         mIsVirtual = atoi(pcValue) != 0;
         break;
-    case 0xD6C12C3B:
+    case 0xD6C12C3B: /* "TrackUseRoot" */
         mTrackUseRoot = atoi(pcValue) != 0;
         break;
-    case 0x865061FC:
+    case 0x865061FC: /* "ForceLockAimerToParentAimer" */
         mForceLockAimerToParentAimer = atoi(pcValue) != 0;
         break;
-    case 0x1FA43B99:
+    case 0x1FA43B99: /* "TurretYawSound" */
         mTurretYawSound.SetID(pcValue, true, false);
         break;
-    case 0x1503F425:
+    case 0x1503F425: /* "TurretYawSoundPitch" */
         sscanf(pcValue, "%f", &mTurretYawSoundPitch);
         break;
-    case 0x28F016D2:
+    case 0x28F016D2: /* "TurretPitchSound" */
         mTurretPitchSound.SetID(pcValue, true, false);
         break;
-    case 0x4ED7A4D0:
+    case 0x4ED7A4D0: /* "TurretPitchSoundPitch" */
         sscanf(pcValue, "%f", &mTurretPitchSoundPitch);
         break;
-    case 0x4C39154D:
+    case 0x4C39154D: /* "TurretMoveSound" */
         mTurretYawSound.SetID(pcValue, true, false);
         mTurretPitchSound.SetID(pcValue, true, false);
         break;
-    case 0xE9D0FB69:
+    case 0xE9D0FB69: /* "TurretActivateSound" */
         mTurretActivateSound.SetID(pcValue, true, false);
         break;
-    case 0x8E5DA6E8:
+    case 0x8E5DA6E8: /* "TurretAmbientSound" */
         mTurretAmbientSound.SetID(pcValue, true, false);
         break;
-    case 0xF84AA204:
+    case 0xF84AA204: /* "TurretDeactivateSound" */
         mTurretDeactivateSound.SetID(pcValue, true, false);
         break;
-    case 0x8822CB3C:
+    case 0x8822CB3C: /* "TurretStartSound" */
         mTurretStart.SetID(pcValue, true, false);
         break;
-    case 0xC13068B6:
+    case 0xC13068B6: /* "TurretStopSound" */
         mTurretStop.SetID(pcValue, true, false);
         break;
-    case 0x6363D774:
+    case 0x6363D774: /* "firstperson" */
         mFirstPersonModelHandle = FirstPerson::AddGeometry(pcValue);
         break;
-    case 0xD0329E80:
+    case 0xD0329E80: /* "WeaponSection" */
         sWeaponSection = atoi(pcValue) - 1;
         break;
-    case 0x6F332041:
-    case 0xFBF47DBA:
+    case 0x6F332041: /* "Weapon" */
+    case 0xFBF47DBA: /* "WeaponName" */
     {
         mWeaponClass[sWeaponSection] = WeaponClass::Find(PblHash(pcValue));
         int iCount = sWeaponSection + 1;
@@ -1698,10 +1698,10 @@ bool MountedTurretClass::SetProperty(unsigned int uHash, const char* pcValue, co
         mWeaponCount = iCount;
         break;
     }
-    case 0x16472328:
+    case 0x16472328: /* "WeaponChannel" */
         sscanf(pcValue, "%d", &mWeaponChannel[sWeaponSection]);
         break;
-    case 0xDC19BD13:
+    case 0xDC19BD13: /* "WeaponAmmo" */
     {
         int iAmmo = 0;
         sscanf(pcValue, "%d", &iAmmo);
@@ -1713,7 +1713,7 @@ bool MountedTurretClass::SetProperty(unsigned int uHash, const char* pcValue, co
         }
         break;
     }
-    case 0x8585BB8A:
+    case 0x8585BB8A: /* "WeaponShareAmmo" */
     {
         int iWeapon = 0;
         sscanf(pcValue, "%d", &iWeapon);
@@ -1731,7 +1731,7 @@ bool MountedTurretClass::SetProperty(unsigned int uHash, const char* pcValue, co
         }
         break;
     }
-    case 0x9455A446:
+    case 0x9455A446: /* "WeaponShareHeat" */
     {
         int iWeapon = 0;
         sscanf(pcValue, "%d", &iWeapon);

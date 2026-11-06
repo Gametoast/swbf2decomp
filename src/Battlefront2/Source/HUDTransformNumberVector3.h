@@ -55,7 +55,7 @@ public:
  
 
 inline HUD::TransformNumberVector3::Factory::Factory()
-    : HUD::Item::Factory(0x2ef8f006u)
+    : HUD::Item::Factory(0x2ef8f006u /* "TransformNumberVector3" */)
 {
     mName = "TransformNumberVector3";
 }

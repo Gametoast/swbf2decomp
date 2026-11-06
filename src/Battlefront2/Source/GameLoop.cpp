@@ -901,7 +901,7 @@ int GameLoop::Init()
     SoldierAnimationBank::Reset();
     EntityDoor::ResetDoorList();
 
-    if (Snd::Bus* pBus = Snd::Bus::FindByHashID(0x985c8f54))
+    if (Snd::Bus* pBus = Snd::Bus::FindByHashID(0x985c8f54 /* "ingame" */))
     {
         pBus->Fade(0.0f, 0.0f, -1.0f);
     }
@@ -1082,7 +1082,7 @@ int GameLoop::PostLoad()
         mAttractInfoText.SetFont(RedFont::GAMEFONT_LARGE);
         mAttractInfoText.SetTextAlign(RedTextElement::TEXT_HALIGN_CENTER, RedTextElement::TEXT_VALIGN_CENTER);
         mAttractInfoText.SetTextStyle(RedGlyphCacheElement::TEXT_STYLE_SHADOW);
-        if (const unsigned short* pText = RedLocalizeDB::Find(0x74eca16f, false))
+        if (const unsigned short* pText = RedLocalizeDB::Find(0x74eca16f /* "game.attractmode.title" */, false))
         {
             mAttractInfoText.SetText(pText, true);
         }
@@ -1116,7 +1116,7 @@ int GameLoop::PostLoad()
         mDedicatedTitleText.SetText("", true);
         mDedicatedTeam1Text.SetText("", true);
         mDedicatedTeam2Text.SetText("", true);
-        if (const unsigned short* pTitle = RedLocalizeDB::Find(0xd67ed788, false))
+        if (const unsigned short* pTitle = RedLocalizeDB::Find(0xd67ed788 /* "game.dedicatedserver.msg" */, false))
         {
             mDedicatedTitleText.SetText(pTitle, true);
             unsigned int uiTeam1Hash;
@@ -1254,7 +1254,7 @@ void GameLoop::Update(float fDeltaTime, float fSystemDeltaTime)
                 {
                     mWaitTextElement.SetFont(RedFont::GAMEFONT_SMALL);
                 }
-                mWaitTextElement.SetText(RedLocalizeDB::Find(0xcf273b03, false), true);
+                mWaitTextElement.SetText(RedLocalizeDB::Find(0xcf273b03 /* "common.wait" */, false), true);
                 mWaitTextElement.Enable(!PauseMenu::GetPaused(PauseMenu::GetPausingViewport()));
                 PauseMenu::UpdateAllInstances(fSystemDeltaTime);
             }
@@ -1293,7 +1293,7 @@ void GameLoop::Update(float fDeltaTime, float fSystemDeltaTime)
             GameSoundEngine::StopAll();
             ShellLoop::SetDemoOver(true);
             sGameOver = true;
-            GameState::SetState(0x11e1fc01);
+            GameState::SetState(0x11e1fc01 /* "shell" */);
         }
     }
 
@@ -1520,7 +1520,7 @@ void GameLoop::Update(float fDeltaTime, float fSystemDeltaTime)
         {
             postLoadJoinGame->Cancel();
         }
-        GameState::SetState(0x11e1fc01);
+        GameState::SetState(0x11e1fc01 /* "shell" */);
     }
 
     if (GameLoop::sQuitRequested && NetGame::CanQuit())
@@ -1533,7 +1533,7 @@ void GameLoop::Update(float fDeltaTime, float fSystemDeltaTime)
         {
             postLoadJoinGame->Cancel();
         }
-        GameState::SetState(0x11e1fc01);
+        GameState::SetState(0x11e1fc01 /* "shell" */);
 
         const Character* pPlayer = Character::FindPlayer(PlayerPrefs::FindByViewport(PauseMenu::GetPausingViewport()));
         if (pPlayer && AreMetagameRulesOn() && GetLastGameWinner() < 0)
@@ -1620,7 +1620,7 @@ void GameLoop::Update(float fDeltaTime, float fSystemDeltaTime)
             sGameOver = true;
             if (gAttractMode)
             {
-                GameState::SetState(0x11e1fc01);
+                GameState::SetState(0x11e1fc01 /* "shell" */);
             }
             endTimer.Update(fSystemDeltaTime);
             if (!NetGame::IsEnabled() || NetGame::IsGameOver())
@@ -1912,7 +1912,7 @@ void GameLoop::UpdateStats(float fDeltaTime, float fSystemDeltaTime)
         }
         if (MissionPlayList::SelectNextEntry())
         {
-            GameState::SetState(0x8ff60339);
+            GameState::SetState(0x8ff60339 /* "mission" */);
         }
         else
         {
@@ -1924,7 +1924,7 @@ void GameLoop::UpdateStats(float fDeltaTime, float fSystemDeltaTime)
             {
                 postLoadJoinGame->Cancel();
             }
-            GameState::SetState(0x11e1fc01);
+            GameState::SetState(0x11e1fc01 /* "shell" */);
         }
         return;
     }

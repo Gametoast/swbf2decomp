@@ -1120,11 +1120,11 @@ void WeaponCannonClass::SetProperty(unsigned int uProperty, const char* pszValue
 
     switch (uProperty)
     {
-    case 0x2819ffa0:
+    case 0x2819ffa0: /* "MaxPressedTime" */
         sscanf(pszValue, "%f", &mMaxPressedTime);
         return;
 
-    case 0xd9356908:
+    case 0xd9356908: /* "ShotDelay" */
         mShotDelayMin = 0.0f;
         mShotDelayMax = 0.0f;
         if (sscanf(pszValue, "%f %f", &mShotDelayMin, &mShotDelayMax) == 1)
@@ -1141,7 +1141,7 @@ void WeaponCannonClass::SetProperty(unsigned int uProperty, const char* pszValue
         }
         return;
 
-    case 0xaedcbd12:
+    case 0xaedcbd12: /* "MaxSpread" */
     {
         float fSpread;
         if (sscanf(pszValue, "%f", &fSpread))
@@ -1152,73 +1152,73 @@ void WeaponCannonClass::SetProperty(unsigned int uProperty, const char* pszValue
         return;
     }
 
-    case 0x8d0cb6ca:
+    case 0x8d0cb6ca: /* "PitchSpread" */
         pAngle = &mPitchSpread;
         break;
-    case 0xebefdcd7:
+    case 0xebefdcd7: /* "YawSpread" */
         pAngle = &mYawSpread;
         break;
-    case 0x4c081d30:
+    case 0x4c081d30: /* "StandStillSpread" */
         pAngle = &mStanceSpread[0][0];
         break;
-    case 0xf7561531:
+    case 0xf7561531: /* "StandMoveSpread" */
         pAngle = &mStanceSpread[0][1];
         break;
-    case 0x5bc0137f:
+    case 0x5bc0137f: /* "StandAimSpread" */
         pAngle = &mStanceSpread[0][2];
         break;
-    case 0x81fec758:
+    case 0x81fec758: /* "CrouchStillSpread" */
         pAngle = &mStanceSpread[1][0];
         break;
-    case 0xfbde8e79:
+    case 0xfbde8e79: /* "CrouchMoveSpread" */
         pAngle = &mStanceSpread[1][1];
         break;
-    case 0x67bfc1d7:
+    case 0x67bfc1d7: /* "CrouchAimSpread" */
         pAngle = &mStanceSpread[1][2];
         break;
-    case 0x4a29a3ca:
+    case 0x4a29a3ca: /* "ProneStillSpread" */
         pAngle = &mStanceSpread[2][0];
         break;
-    case 0x73608c73:
+    case 0x73608c73: /* "ProneMoveSpread" */
         pAngle = &mStanceSpread[2][1];
         break;
-    case 0x7d9da8bd:
+    case 0x7d9da8bd: /* "ProneAimSpread" */
         pAngle = &mStanceSpread[2][2];
         break;
-    case 0xef4935b0:
-    case 0x43ab2c7d:
+    case 0xef4935b0: /* "KickSpread" */
+    case 0x43ab2c7d: /* "SpreadPerShot" */
         pAngle = &mSpreadPerShot;
         break;
-    case 0xccedb638:
+    case 0xccedb638: /* "SpreadRecoverRate" */
         pAngle = &mSpreadRecoverRate;
         break;
-    case 0x2613b9b9:
+    case 0x2613b9b9: /* "SpreadThreshold" */
         pAngle = &mSpreadThreshold;
         break;
-    case 0x85a6b6fd:
+    case 0x85a6b6fd: /* "SpreadLimit" */
         pAngle = &mSpreadLimit;
         break;
-    case 0x16e4db4a:
+    case 0x16e4db4a: /* "KickStrength" */
         pAngle = &mKickStrength;
         break;
 
-    case 0x33841a8a:
+    case 0x33841a8a: /* "SpreadRecover" */
         sscanf(pszValue, "%f", &mSpreadRecoverRate);
         mSpreadRecoverRate = mSpreadPerShot * mSpreadRecoverRate;
         mSpreadLimit = mSpreadRecoverRate / mShotDelayMin;
         return;
 
-    case 0x069ad4d0:
+    case 0x069ad4d0: /* "KickBuildup" */
         sscanf(pszValue, "%f", &mKickBuildup);
         return;
-    case 0x9260ea63:
+    case 0x9260ea63: /* "SalvoCount" */
         sscanf(pszValue, "%i", &mSalvoCount);
         return;
-    case 0x03b38558:
+    case 0x03b38558: /* "ShotsPerSalvo" */
         sscanf(pszValue, "%i", &mShotsPerSalvo);
         return;
 
-    case 0xd76f37db:
+    case 0xd76f37db: /* "SalvoDelay" */
         mSalvoDelayMax = 0.0f;
         mSalvoDelayMin = 0.0f;
         if (sscanf(pszValue, "%f %f", &mSalvoDelayMin, &mSalvoDelayMax) == 1)
@@ -1231,11 +1231,11 @@ void WeaponCannonClass::SetProperty(unsigned int uProperty, const char* pszValue
         }
         return;
 
-    case 0xc8388d9d:
+    case 0xc8388d9d: /* "InitialSalvoDelay" */
         sscanf(pszValue, "%f", &mInitialSalvoDelay);
         return;
 
-    case 0xa4dfafc0:
+    case 0xa4dfafc0: /* "ShotPatternCount" */
     {
         int iCount = 0;
         sscanf(pszValue, "%i", &iCount);
@@ -1249,7 +1249,7 @@ void WeaponCannonClass::SetProperty(unsigned int uProperty, const char* pszValue
         return;
     }
 
-    case 0xa4120aa8:
+    case 0xa4120aa8: /* "ShotPatternPitchYaw" */
         if (sscanf(pszValue, "%f %f", &mPatternArray[mPatternCount].mPitch, &mPatternArray[mPatternCount].mYaw))
         {
             mPatternArray[mPatternCount].mPitch *= DEG2RAD;
@@ -1258,54 +1258,54 @@ void WeaponCannonClass::SetProperty(unsigned int uProperty, const char* pszValue
         }
         return;
 
-    case 0x44edeee4:
+    case 0x44edeee4: /* "WarmUpTime" */
         sscanf(pszValue, "%f", &mWarmUpTime);
         return;
-    case 0x9ecac3a1:
+    case 0x9ecac3a1: /* "CoolDownTime" */
         sscanf(pszValue, "%f", &mCoolDownTime);
         return;
 
-    case 0xca333e94:
+    case 0xca333e94: /* "WarmUpSound" */
         mWarmUpSound.SetID(pszValue, false, false);
         return;
-    case 0x1a2034be:
+    case 0x1a2034be: /* "WarmUpSoundStartPitch" */
         sscanf(pszValue, "%f", &mWarmUpSoundStartPitch);
         return;
-    case 0x22e5153c:
+    case 0x22e5153c: /* "WarmUpSoundFadeInTime" */
         sscanf(pszValue, "%f", &mWarmUpSoundFadeInTime);
         return;
-    case 0x25820dbf:
+    case 0x25820dbf: /* "WarmUpSoundFadeOutTime" */
         sscanf(pszValue, "%f", &mWarmUpSoundFadeOutTime);
         return;
 
-    case 0x2298cae8:
+    case 0x2298cae8: /* "BarrelSound" */
         mBarrelSound.SetID(pszValue, false, false);
         return;
-    case 0x674fc158:
+    case 0x674fc158: /* "BarrelSoundFadeInTime" */
         sscanf(pszValue, "%f", &mBarrelSoundFadeInTime);
         return;
-    case 0x0f1ca143:
+    case 0x0f1ca143: /* "BarrelSoundFadeOutTime" */
         sscanf(pszValue, "%f", &mBarrelSoundFadeOutTime);
         return;
 
-    case 0x940f9407:
+    case 0x940f9407: /* "CoolDownSound" */
         mCoolDownSound.SetID(pszValue, false, false);
         return;
-    case 0x3a3d88da:
+    case 0x3a3d88da: /* "CoolDownSoundEndPitch" */
         sscanf(pszValue, "%f", &mCoolDownSoundEndPitch);
         return;
-    case 0x7236488b:
+    case 0x7236488b: /* "CoolDownSoundFadeInTime" */
         sscanf(pszValue, "%f", &mCoolDownSoundFadeInTime);
         return;
-    case 0x4e159f7a:
+    case 0x4e159f7a: /* "CoolDownSoundFadeOutTime" */
         sscanf(pszValue, "%f", &mCoolDownSoundFadeOutTime);
         return;
 
-    case 0x6e364fc1:
-    case 0xdddb253a:
+    case 0x6e364fc1: /* "SecondaryOrdnance" */
+    case 0xdddb253a: /* "SecondaryOrdnanceName" */
         mSecondaryOrdnanceClass = Factory<Ordnance, OrdnanceClass, OrdnanceDesc>::Find(PblHash(pszValue));
         return;
-    case 0x82e86218:
+    case 0x82e86218: /* "SecondaryOrdnancePeriod" */
         mSecondaryOrdnancePeriod = atoi(pszValue);
         return;
 

@@ -647,10 +647,10 @@ void OrdnanceTowCableClass::SetProperty(unsigned int uProperty, const char* pszV
 {
     switch (uProperty)
     {
-    case 0xE4C659B4:
+    case 0xE4C659B4: /* "InitialCableLength" */
         sscanf(pszValue, "%f", &mInitialCableLimit);
         break;
-    case 0xD9B746B2:
+    case 0xD9B746B2: /* "CableLength" */
         sscanf(pszValue, "%f", &mCableLimit);
         break;
     default:

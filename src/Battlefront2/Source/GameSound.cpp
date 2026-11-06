@@ -135,7 +135,7 @@ bool GameSound::CanPlay() const
     {
         return false;
     }
-    if (GameState::GetState() != 0x11E1FC01)
+    if (GameState::GetState() != 0x11E1FC01 /* "shell" */)
     {
         if (GameLoop::IsGameOver() && mType == type_soundStream)
         {
@@ -239,7 +239,7 @@ void GameSound::SetID(const char* pName, bool, bool bDeferred)
     }
 
     unsigned int uID = PblHash(buffer);
-    if ((strlen(pModifier) && PblHash(pModifier) == 0x1A01FB3B) || bDeferred)
+    if ((strlen(pModifier) && PblHash(pModifier) == 0x1A01FB3B /* "defer" */) || bDeferred)
     {
         mType = type_ID;
         mProps = (const void*)uID;

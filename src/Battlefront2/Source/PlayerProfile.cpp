@@ -485,7 +485,7 @@ void PlayerProfile::tPCOpt::ApplyPreLoadSettings()
 {
     RedRenderer::pcSetRenderOptions(renderOptions);
 
-    const bool bIsShell = (GameState::GetState() == 0x11E1FC01);
+    const bool bIsShell = (GameState::GetState() == 0x11E1FC01 /* "shell" */);
 
     unsigned int uiWidth = 0;
     unsigned int uiHeight = 0;
@@ -708,11 +708,11 @@ void PlayerProfile::tOnlineOpt::ApplySettings()
     }
 
     unsigned int uiState = GameState::GetState();
-    bool bShellOrNet = uiState == 0x11E1FC01 || NetGame::IsEnabled();
+    bool bShellOrNet = uiState == 0x11E1FC01 /* "shell" */ || NetGame::IsEnabled();
 
     VoiceChat::Node* pNode = (VoiceChat::Node*)GameVoiceChat::FindNodeByDeviceID(iIndex);
     int iPlayer = FLInputManager::s_instance.GetPlayerFromHWPort(iIndex);
-    if (uiState != 0x11E1FC01)
+    if (uiState != 0x11E1FC01 /* "shell" */)
     {
         iIndex = iPlayer >= 0 ? NetGame::GetLocalIndex(iPlayer) : -1;
     }

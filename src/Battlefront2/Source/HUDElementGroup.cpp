@@ -37,15 +37,15 @@ HUD::ElementGroupBase::Factory::Factory(unsigned int uHashID)
 
 
 
-static const unsigned int kRect = 0xeae44d07;
-static const unsigned int kRelativeSize = 0x07c10754;
-static const unsigned int kHAlign = 0x4a28cb3c;
-static const unsigned int kVAlign = 0x5a9dcfe2;
-static const unsigned int kPropagateAlpha = 0x09b602b0;
-static const unsigned int kEventPosition = 0x7eb5b01c;
-static const unsigned int kEventScale = 0x37f1161f;
-static const unsigned int kEventAlpha = 0x41b355c1;
-static const unsigned int kEventRotation = 0x36f7de41;
+static const unsigned int kRect = 0xeae44d07 /* "Rect" */;
+static const unsigned int kRelativeSize = 0x07c10754 /* "RelativeSize" */;
+static const unsigned int kHAlign = 0x4a28cb3c /* "HAlign" */;
+static const unsigned int kVAlign = 0x5a9dcfe2 /* "VAlign" */;
+static const unsigned int kPropagateAlpha = 0x09b602b0 /* "PropagateAlpha" */;
+static const unsigned int kEventPosition = 0x7eb5b01c /* "EventPosition" */;
+static const unsigned int kEventScale = 0x37f1161f /* "EventScale" */;
+static const unsigned int kEventAlpha = 0x41b355c1 /* "EventAlpha" */;
+static const unsigned int kEventRotation = 0x36f7de41 /* "EventRotation" */;
 
 static inline RedGroupElement* GetGroupElement(const HUD::Element* pElement)
 {

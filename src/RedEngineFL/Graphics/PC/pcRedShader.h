@@ -9,11 +9,11 @@
 
 #include "pcRedAutoSettings.h"
 
-const unsigned int kuiNormalShader = 0xe68b9c52;
-const unsigned int kuiFlareShader = 0x96834737;
-const unsigned int kuiHDRShader = 0xfeb6dbe1;
-const unsigned int kuiSampleShader = 0x96e382a7;
-const unsigned int kuiShimmerShader = 0x4cc5882a;
+const unsigned int kuiNormalShader = 0xe68b9c52 /* "normal" */;
+const unsigned int kuiFlareShader = 0x96834737 /* "Flare" */;
+const unsigned int kuiHDRShader = 0xfeb6dbe1 /* "HDR" */;
+const unsigned int kuiSampleShader = 0x96e382a7 /* "Sample" */;
+const unsigned int kuiShimmerShader = 0x4cc5882a /* "refraction" */;
 
 class PblFileChunk;
 class RedShadingState;

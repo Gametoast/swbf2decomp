@@ -87,22 +87,22 @@ void SkyStars::Read(PblConfig& config)
         PblConfig::Data data = config.ReadNextData();
         switch (data.GetId())
         {
-        case 0x836BDE54u:
+        case 0x836BDE54u: /* "NumStars" */
             m_uiNumStars = data.GetUint32Arg(0);
             break;
-        case 0x69BF5463u:
+        case 0x69BF5463u: /* "RandomSeed" */
             m_uiRandomSeed = data.GetUint32Arg(0);
             break;
-        case 0x736837DEu:
+        case 0x736837DEu: /* "BrightStarPercent" */
             m_fBrightStarRatio = data.GetFloatArg(0) / 100.0f;
             break;
-        case 0x7DE4197Du:
+        case 0x7DE4197Du: /* "AlphaMin" */
             m_fMinBrightness = data.GetFloatArg(0) / 255.0f;
             break;
-        case 0x0D7EC5C0u:
+        case 0x0D7EC5C0u: /* "ColorSaturation" */
             m_fColorSaturation = data.GetFloatArg(0);
             break;
-        case 0x3D7E6258u:
+        case 0x3D7E6258u: /* "Color" */
             if (data.GetNumArgs() >= 3)
             {
                 m_color.r = ClampColorComponent(data.GetFloatArg(0));
@@ -114,19 +114,19 @@ void SkyStars::Read(PblConfig& config)
                 }
             }
             break;
-        case 0xA435AAA4u:
+        case 0xA435AAA4u: /* "TwinkleFactor" */
             m_fTwinkleFactor = data.GetFloatArg(0);
             break;
-        case 0xA9EEE423u:
+        case 0xA9EEE423u: /* "TwinkleFrequency" */
             m_fTwinkleFrequency = data.GetFloatArg(0);
             break;
-        case 0x1EE51ED4u:
+        case 0x1EE51ED4u: /* "AngleMin" */
             m_fSinAngleMin = PblMath::Sin(data.GetFloatArg(0) * 0.017453292f);
             break;
-        case 0xF947A04Eu:
+        case 0xF947A04Eu: /* "AngleFade" */
             m_fSinAngleFade = PblMath::Sin(data.GetFloatArg(0) * 0.017453292f);
             break;
-        case 0x02FF3675u:
+        case 0x02FF3675u: /* "EnableBottom" */
             m_bRenderBottom = (int)data.GetFloatArg(0) != 0;
             break;
         }

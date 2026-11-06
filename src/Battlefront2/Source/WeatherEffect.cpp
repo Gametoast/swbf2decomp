@@ -88,7 +88,7 @@ void WindEffect::Destroy()
 
 // FUNCTION: SWBF2 0x00692d50
 WindEffect::WindEffect()
-    : FLEffect(0x1414F107u, 3)
+    : FLEffect(0x1414F107u /* "Wind" */, 3)
 {
     Enable(false);
     const PblVector3 vZero(0, 0, 0);
@@ -117,16 +117,16 @@ void WindEffect::ReadConfig(PblConfig& config)
         PblConfig::Data data = config.ReadNextData();
         switch (data.GetId())
         {
-        case 0x32741C32u:
+        case 0x32741C32u: /* "Velocity" */
             m_vBaseVelocity = PblVector3(data.GetFloatArg(0), 0.0f, data.GetFloatArg(1));
             break;
-        case 0x5469303Fu:
+        case 0x5469303Fu: /* "VelocityRange" */
             m_fVelocityRange = data.GetFloatArg(0);
             break;
-        case 0xECEC52A4u:
+        case 0xECEC52A4u: /* "VelocityChangeRate" */
             m_fVelocityChangeRate = data.GetFloatArg(0);
             break;
-        case 0xAF8BB8CEu:
+        case 0xAF8BB8CEu: /* "Enable" */
             Enable(data.GetUint32Arg(0) != 0);
             break;
         }
@@ -194,12 +194,12 @@ void FogCloudEffect::Destroy()
 
 // FUNCTION: SWBF2 0x006932d0
 FogCloudEffect::FogCloudEffect()
-    : FLEffect(0xC211031Cu, 3)
+    : FLEffect(0xC211031Cu /* "FogCloud" */, 3)
 {
     Enable(false);
     VELOCITY = PblVector3(0, 0, 0);
     COLOR = RedColor(0xC0, 0xC0, 0xC0, 0xA0);
-    TEXTURE_HASH = 0xA7C73459u;
+    TEXTURE_HASH = 0xA7C73459u /* "fluffy" */;
     ROTATION_RATE = 0.1f;
     BOX_SIZE = 256.0f;
     BOX_SIZEINV = 1.0f / 256.0f;
@@ -239,28 +239,28 @@ void FogCloudEffect::ReadConfig(PblConfig& config)
         PblConfig::Data data = config.ReadNextData();
         switch (data.GetId())
         {
-        case 0x3C6468F4u:
+        case 0x3C6468F4u: /* "Texture" */
             SetTexture(PblHash(data.GetStringArg(0)));
             break;
-        case 0x21AC415Fu:
+        case 0x21AC415Fu: /* "Rotation" */
             SetRotationRate(data.GetFloatArg(0));
             break;
-        case 0x32741C32u:
+        case 0x32741C32u: /* "Velocity" */
             SetVelocity(PblVector3(data.GetFloatArg(0), 0.0f, data.GetFloatArg(1)));
             break;
-        case 0xC393FFF1u:
+        case 0xC393FFF1u: /* "ParticleDensity" */
             SetParticleDensity(data.GetUint32Arg(0));
             break;
-        case 0x55E41B16u:
+        case 0x55E41B16u: /* "ParticleSize" */
             SetParticleSize(data.GetFloatArg(0));
             break;
-        case 0xD5BDBB42u:
+        case 0xD5BDBB42u: /* "Height" */
             SetParticleHeight(data.GetFloatArg(0));
             break;
-        case 0xFADC0CD2u:
+        case 0xFADC0CD2u: /* "Range" */
             SetRange(data.GetFloatArg(0), data.GetFloatArg(1));
             break;
-        case 0x3D7E6258u:
+        case 0x3D7E6258u: /* "Color" */
         {
             RedColor color;
             float f = data.GetFloatArg(0);
@@ -281,7 +281,7 @@ void FogCloudEffect::ReadConfig(PblConfig& config)
             SetColor(color);
             break;
         }
-        case 0xAF8BB8CEu:
+        case 0xAF8BB8CEu: /* "Enable" */
             Enable(data.GetUint32Arg(0) != 0);
             break;
         }
@@ -300,7 +300,7 @@ void PrecipitationEffect::Create()
 
 // FUNCTION: SWBF2 0x00693720
 PrecipitationEffect::PrecipitationEffect()
-    : FLEffect(0x3F5E4CD0u, 3)
+    : FLEffect(0x3F5E4CD0u /* "Precipitation" */, 3)
     , RedRegionFactory("rainshadow")
 {
     Enable(false);
@@ -357,65 +357,65 @@ void PrecipitationEffect::ReadConfig(PblConfig& config)
         PblConfig::Data data = config.ReadNextData();
         switch (data.GetId())
         {
-        case 0x3C6468F4u:
+        case 0x3C6468F4u: /* "Texture" */
             TEXTURE_HASH = PblHash(data.GetStringArg(0));
             break;
-        case 0x5127F14Du:
-            PARTICLE_TYPE = (PblHash(data.GetStringArg(0)) == 0x4A59A280u)
+        case 0x5127F14Du: /* "Type" */
+            PARTICLE_TYPE = (PblHash(data.GetStringArg(0)) == 0x4A59A280u /* "Streaks" */)
                                 ? PRECIPITATION_STREAKS
                                 : PRECIPITATION_QUADS;
             break;
-        case 0x55E41B16u:
+        case 0x55E41B16u: /* "ParticleSize" */
             PARTICLE_SIZE = data.GetFloatArg(0);
             break;
-        case 0xFADC0CD2u:
+        case 0xFADC0CD2u: /* "Range" */
             RENDER_DISTANCE = data.GetFloatArg(0);
             break;
-        case 0x3D7E6258u:
+        case 0x3D7E6258u: /* "Color" */
             COLOR = ReadColor(data);
             break;
-        case 0x220C0C21u:
+        case 0x220C0C21u: /* "AlphaMinMax" */
             ALPHA_MIN = data.GetFloatArg(0);
             ALPHA_MAX = data.GetNumArgs() > 1 ? data.GetFloatArg(1) : data.GetFloatArg(0);
             break;
-        case 0xC393FFF1u:
+        case 0xC393FFF1u: /* "ParticleDensity" */
             PARTICLES_PER_BOX = data.GetFloatArg(0);
             break;
-        case 0x2214EF7Eu:
+        case 0x2214EF7Eu: /* "ParticleDensityRange" */
             PARTICLES_PER_BOX_RANGE = data.GetFloatArg(0);
             break;
-        case 0x32741C32u:
+        case 0x32741C32u: /* "Velocity" */
             VELOCITY = data.GetFloatArg(0);
             break;
-        case 0x5469303Fu:
+        case 0x5469303Fu: /* "VelocityRange" */
             VELOCITY_RANGE = data.GetFloatArg(0);
             break;
-        case 0xB16A1ADBu:
+        case 0xB16A1ADBu: /* "StreakLength" */
             STREAK_TIME = data.GetFloatArg(0) * (1.0f / 30.0f);
             break;
-        case 0x8F369C79u:
+        case 0x8F369C79u: /* "CameraCrossVelocityScale" */
             CAMERA_CROSSVELOCITY_SCALE = data.GetFloatArg(0);
             break;
-        case 0x1C4564CAu:
+        case 0x1C4564CAu: /* "CameraAxialVelocityScale" */
             CAMERA_AXIALVELOCITY_SCALE = data.GetFloatArg(0);
             break;
-        case 0x21AC415Fu:
+        case 0x21AC415Fu: /* "Rotation" */
             ROTATION_RATE_MEAN = data.GetFloatArg(0);
             break;
-        case 0xF2617B74u:
+        case 0xF2617B74u: /* "RotationRange" */
             ROTATION_RATE_RANGE = data.GetFloatArg(0);
             break;
-        case 0x51689473u:
+        case 0x51689473u: /* "GroundEffect" */
             mGroundEffect = FLEffect::s_EffectClasses.Find(PblHash(data.GetStringArg(0)));
             break;
-        case 0x885AC868u:
+        case 0x885AC868u: /* "GroundEffectsPerSec" */
             mNumGroundEffectsPerSec =
                 data.GetFloatArg(0) / (float)CameraManager::Instance()->GetNumCameras();
             break;
-        case 0xD23D97A4u:
+        case 0xD23D97A4u: /* "GroundEffectSpread" */
             mGroundEffectSpread = data.GetFloatArg(0);
             break;
-        case 0xAF8BB8CEu:
+        case 0xAF8BB8CEu: /* "Enable" */
             Enable(data.GetUint32Arg(0) != 0);
             break;
         }

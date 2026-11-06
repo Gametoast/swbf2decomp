@@ -5,11 +5,11 @@
 #include "HUDObjectiveList.h"
 #include "NetGame.h"
 
-static const unsigned int kNoiseFreq = 0x86b8caa3;
-static const unsigned int kNoiseRoughness = 0x37425e11;
-static const unsigned int kGlowScaleSize = 0x84e84d97;
-static const unsigned int kGlowAlphaBase = 0xba3e10e5;
-static const unsigned int kGlowAlphaScale = 0xdd5384a2;
+static const unsigned int kNoiseFreq = 0x86b8caa3 /* "NoiseFreq" */;
+static const unsigned int kNoiseRoughness = 0x37425e11 /* "NoiseRoughness" */;
+static const unsigned int kGlowScaleSize = 0x84e84d97 /* "GlowScaleSize" */;
+static const unsigned int kGlowAlphaBase = 0xba3e10e5 /* "GlowAlphaBase" */;
+static const unsigned int kGlowAlphaScale = 0xdd5384a2 /* "GlowAlphaScale" */;
 
 // FUNCTION: SWBF2 0x00566360
 void HUD::ObjectiveList::SetState(unsigned int uiTextHashID, Objective::ObjectiveState state)
@@ -54,7 +54,7 @@ HUD::Objective* HUD::ObjectiveList::FindObjective(unsigned int uiTextHashID)
 // FUNCTION: SWBF2 0x005667d0
 HUD::ProceduralBarBitmap::Factory::Factory()
 {
-    mHashID = 0x86E6EF58u;
+    mHashID = 0x86E6EF58u /* "ProceduralBarBitmap" */;
     mName = "ProceduralBarBitmap";
 
     mNoiseFreq.Init("NoiseFreq", mProperties, 0.0f, FLT_MAX, 0.01f);

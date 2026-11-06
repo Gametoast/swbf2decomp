@@ -115,15 +115,15 @@ void EntitySound::SetProperty(unsigned int uProperty, const char* pcValue)
     float fValue;
     switch (uProperty)
     {
-    case 0x0E0D9594:
-    case 0x2E93EF4C:
+    case 0x0E0D9594: /* "Sound" */
+    case 0x2E93EF4C: /* "SoundStream" */
         mSoundId = PblHash(pcValue);
         break;
-    case 0xB835CF50:
+    case 0xB835CF50: /* "MinDistance" */
         sscanf(pcValue, "%f", &fValue);
         SetMinDistance(fValue);
         break;
-    case 0xE6915CF6:
+    case 0xE6915CF6: /* "MaxDistance" */
         sscanf(pcValue, "%f", &fValue);
         SetMuteDistance(fValue);
         SetMaxDistance(fValue);
@@ -178,15 +178,15 @@ void EntitySoundClass::SetProperty(unsigned int uProperty, const char* pcValue)
     float fValue;
     switch (uProperty)
     {
-    case 0x0E0D9594:
-    case 0x2E93EF4C:
+    case 0x0E0D9594: /* "Sound" */
+    case 0x2E93EF4C: /* "SoundStream" */
         mSoundId = PblHash(pcValue);
         break;
-    case 0xB835CF50:
+    case 0xB835CF50: /* "MinDistance" */
         sscanf(pcValue, "%f", &fValue);
         SetMinDistance(fValue);
         break;
-    case 0xE6915CF6:
+    case 0xE6915CF6: /* "MaxDistance" */
         sscanf(pcValue, "%f", &fValue);
         SetMuteDistance(fValue);
         SetMaxDistance(fValue);

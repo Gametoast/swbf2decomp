@@ -102,16 +102,16 @@ void WeaponShieldClass::SetProperty(unsigned int uProperty, const char* pszValue
 {
     switch (uProperty)
     {
-    case 0xda3491bc:
+    case 0xda3491bc: /* "MaxShield" */
         sscanf(pszValue, "%f", &mMaxShield);
         break;
-    case 0xbad94c15:
+    case 0xbad94c15: /* "AddShield" */
         sscanf(pszValue, "%f", &mAddShield);
         break;
-    case 0x729dfa7a:
+    case 0x729dfa7a: /* "AddShieldOff" */
         sscanf(pszValue, "%f", &mAddShieldOff);
         break;
-    case 0x1d726313:
+    case 0x1d726313: /* "ShieldOffset" */
     {
         float x = 0.0f, y = 0.0f, z = 0.0f;
         sscanf(pszValue, "%f %f %f", &x, &y, &z);
@@ -120,7 +120,7 @@ void WeaponShieldClass::SetProperty(unsigned int uProperty, const char* pszValue
         m_vShieldOffset.z = z;
         break;
     }
-    case 0x5a9201b6:
+    case 0x5a9201b6: /* "ShieldRadius" */
     {
         float x = 0.0f, y = 0.0f, z = 0.0f;
         int iCount = sscanf(pszValue, "%f %f %f", &x, &y, &z);
@@ -137,13 +137,13 @@ void WeaponShieldClass::SetProperty(unsigned int uProperty, const char* pszValue
         m_vShieldSize.z = z;
         break;
     }
-    case 0xddb924a1:
+    case 0xddb924a1: /* "ShieldEffect" */
         mShieldEffect = FLEffect::s_EffectClasses.Find(PblHash(pszValue));
         break;
-    case 0xd85503ff:
+    case 0xd85503ff: /* "ShieldSound" */
         mSoundShield.SetID(pszValue, false, false);
         break;
-    case 0x5df6c1a4:
+    case 0x5df6c1a4: /* "ShieldOffSound" */
         mSoundShieldOff.SetID(pszValue, false, false);
         break;
     default:

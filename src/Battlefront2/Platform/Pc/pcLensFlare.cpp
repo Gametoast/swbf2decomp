@@ -174,7 +174,7 @@ void LensFlareEffect::PlatformInit()
                                  D3DPOOL_DEFAULT, 0);
     s_intensityTex = new RedTexture(16, 16, D3DFMT_A8R8G8B8, 1, D3DUSAGE_RENDERTARGET,
                                     D3DPOOL_DEFAULT, 0);
-    s_pClearShader = pcRedShader::Create(0x5c6e1222, 3, 0, 0, 0x80000,
+    s_pClearShader = pcRedShader::Create(0x5c6e1222 /* "clear" */, 3, 0, 0, 0x80000,
                                          RedColor::WHITE, RedColor::BLACK, 32.0f);
 
     if (RedRenderer::pcGetGeometryMode() == GEOMETRYMODE_UNCOMPRESSED)

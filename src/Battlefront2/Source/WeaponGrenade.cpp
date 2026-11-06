@@ -88,7 +88,7 @@ void WeaponGrenadeClass::SetProperty(unsigned int uProperty, const char* pszValu
 {
     switch (uProperty)
     {
-    case 0xD9356908:
+    case 0xD9356908: /* "ShotDelay" */
     {
         sscanf(pszValue, "%f", &mShotDelay);
         if (mShotDelay < 0.01f)
@@ -97,39 +97,39 @@ void WeaponGrenadeClass::SetProperty(unsigned int uProperty, const char* pszValu
         }
             break;
     }
-    case 0xC8388D9D:
+    case 0xC8388D9D: /* "InitialSalvoDelay" */
     {
         sscanf(pszValue, "%f", &mInitialSalvoDelay[1]);
         mInitialSalvoDelay[0] = mInitialSalvoDelay[1];
         mInitialSalvoDelay[2] = mInitialSalvoDelay[1];
             break;
     }
-    case 0x2A708F20:
+    case 0x2A708F20: /* "InitialSalvoDelayUnderhand" */
     {
         sscanf(pszValue, "%f", &mInitialSalvoDelay[0]);
             break;
     }
-    case 0x36F0BFCD:
+    case 0x36F0BFCD: /* "InitialSalvoDelayProne" */
     {
         sscanf(pszValue, "%f", &mInitialSalvoDelay[2]);
             break;
     }
-    case 0xAE3DB60D:
+    case 0xAE3DB60D: /* "ShotElevate" */
     {
         sscanf(pszValue, "%f", &mShotElevate);
             break;
     }
-    case 0x2819FFA0:
+    case 0x2819FFA0: /* "MaxPressedTime" */
     {
         sscanf(pszValue, "%f", &mMaxPressedTime);
             break;
     }
-    case 0x5578D44C:
+    case 0x5578D44C: /* "HideOnFire" */
     {
         mHideOnFire = atoi(pszValue) != 0;
             break;
     }
-    case 0x079C1D86:
+    case 0x079C1D86: /* "ForceFireAnimation" */
     {
         mForcedFireAnim = (char)atoi(pszValue);
         if (mForcedFireAnim < 0 || mForcedFireAnim > 1)
@@ -172,14 +172,14 @@ bool WeaponGrenadeClass::PostLoadInit()
     {
         if (SoldierAnimatorClass::Instance()->GetAnimationBoneMatrix(
                 SoldierAnimationBank::HUMAN_RIFLE, SoldierAnimType::STAND, SoldierAnimType::SHOOT_SECONDARY,
-                0xb7ec1d31, mInitialSalvoDelay[0], matrix))
+                0xb7ec1d31 /* "bone_l_hand" */, mInitialSalvoDelay[0], matrix))
         {
             m_avFireOffset[0] = matrix.GetTranslation();
             m_avFireOffset[0].x = 0.0f;
         }
         if (SoldierAnimatorClass::Instance()->GetAnimationBoneMatrix(
                 SoldierAnimationBank::HUMAN_RIFLE, SoldierAnimType::STAND, SoldierAnimType::SHOOT_SECONDARY2,
-                0xb7ec1d31, mInitialSalvoDelay[1], matrix))
+                0xb7ec1d31 /* "bone_l_hand" */, mInitialSalvoDelay[1], matrix))
         {
             m_avFireOffset[1] = matrix.GetTranslation();
             m_avFireOffset[1].x = 0.0f;
@@ -190,14 +190,14 @@ bool WeaponGrenadeClass::PostLoadInit()
         PblVector3 v;
         if (SoldierAnimatorClass::Instance()->GetAnimationBoneMatrix(
                 SoldierAnimationBank::HUMAN_RIFLE, SoldierAnimType::STAND, SoldierAnimType::SHOOT_SECONDARY,
-                0x2b960099, mInitialSalvoDelay[0], matrix))
+                0x2b960099 /* "hp_weapons" */, mInitialSalvoDelay[0], matrix))
         {
             D3DXVec3TransformCoord(reinterpret_cast<D3DXVECTOR3*>(&v), reinterpret_cast<const D3DXVECTOR3*>(&mFirePointOffset), reinterpret_cast<const D3DXMATRIX*>(&matrix));
             m_avFireOffset[0] = v;
         }
         if (SoldierAnimatorClass::Instance()->GetAnimationBoneMatrix(
                 SoldierAnimationBank::HUMAN_RIFLE, SoldierAnimType::STAND, SoldierAnimType::SHOOT_SECONDARY2,
-                0x2b960099, mInitialSalvoDelay[1], matrix))
+                0x2b960099 /* "hp_weapons" */, mInitialSalvoDelay[1], matrix))
         {
             D3DXVec3TransformCoord(reinterpret_cast<D3DXVECTOR3*>(&v), reinterpret_cast<const D3DXVECTOR3*>(&mFirePointOffset), reinterpret_cast<const D3DXMATRIX*>(&matrix));
             m_avFireOffset[1] = v;

@@ -105,36 +105,36 @@ EntityType EntityBuildingArmed::GetEntityType() const
 // FUNCTION: SWBF2 0x004967a0
 void EntityBuildingArmedClass::SetProperty(unsigned int uProperty, const char* pszValue)
 {
-    if (uProperty == 0xd89b1a5cu)
+    if (uProperty == 0xd89b1a5cu /* "BUILDINGSECTION" */)
     {
         switch (PblHash(pszValue))
         {
-        case 0xfb2aa4b7:
-        case 0xea20fef2:
+        case 0xfb2aa4b7: /* "TURRET" */
+        case 0xea20fef2: /* "TURRET1" */
             sCurrentSection = 0;
             break;
-        case 0xe920fd5f:
+        case 0xe920fd5f: /* "TURRET2" */
             sCurrentSection = 1;
             break;
-        case 0xe820fbcc:
+        case 0xe820fbcc: /* "TURRET3" */
             sCurrentSection = 2;
             break;
-        case 0xe720fa39:
+        case 0xe720fa39: /* "TURRET4" */
             sCurrentSection = 3;
             break;
-        case 0xe620f8a6:
+        case 0xe620f8a6: /* "TURRET5" */
             sCurrentSection = 4;
             break;
-        case 0xe520f713:
+        case 0xe520f713: /* "TURRET6" */
             sCurrentSection = 5;
             break;
-        case 0xe420f580:
+        case 0xe420f580: /* "TURRET7" */
             sCurrentSection = 6;
             break;
-        case 0xf3210d1d:
+        case 0xf3210d1d: /* "TURRET8" */
             sCurrentSection = 7;
             break;
-        case 0xdbaa7975:
+        case 0xdbaa7975: /* "BODY" */
             sCurrentSection = -1;
             return;
         default:
@@ -354,7 +354,7 @@ void EntityBuildingArmed::Respawn()
 // FUNCTION: SWBF2 0x00495d50
 void EntityBuildingArmed::SetProperty(unsigned int uProperty, const char* pszValue)
 {
-    if (uProperty != 0x966F4238u)
+    if (uProperty != 0x966F4238u /* "NoAIBoard" */)
     {
         reinterpret_cast<GameObject*>(this)->GameObject::SetProperty(uProperty, pszValue);
         return;

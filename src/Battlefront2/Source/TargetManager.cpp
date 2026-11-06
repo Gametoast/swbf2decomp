@@ -55,18 +55,18 @@ Target _gTarget[MAX_TARGETS];
 Color gColorTable[MAX_COLORS] =
 {
     { 0x00000000, { 0, 0, 0, 0 } },
-    { 0xde020766, RedColor::WHITE },
-    { 0x7ea5f49e, RedColor::LTGREY },
-    { 0xe41b46af, RedColor::MDGREY },
-    { 0x3657edc3, RedColor::DKGREY },
-    { 0x568f4ba4, RedColor::BLACK },
-    { 0x40f480dc, RedColor::RED },
-    { 0x011decbc, RedColor::GREEN },
-    { 0x82fbf5cd, RedColor::BLUE },
-    { 0x4961533a, RedColor::CYAN },
-    { 0x63e629e8, RedColor::MAGENTA },
-    { 0x05bf6449, RedColor::YELLOW },
-    { 0x45b473eb, Interpolate(RedColor::YELLOW, RedColor::RED, 0.5f) },
+    { 0xde020766 /* "white" */, RedColor::WHITE },
+    { 0x7ea5f49e /* "LTGREY" */, RedColor::LTGREY },
+    { 0xe41b46af /* "MDGREY" */, RedColor::MDGREY },
+    { 0x3657edc3 /* "DKGREY" */, RedColor::DKGREY },
+    { 0x568f4ba4 /* "black" */, RedColor::BLACK },
+    { 0x40f480dc /* "Red" */, RedColor::RED },
+    { 0x011decbc /* "Green" */, RedColor::GREEN },
+    { 0x82fbf5cd /* "Blue" */, RedColor::BLUE },
+    { 0x4961533a /* "cyan" */, RedColor::CYAN },
+    { 0x63e629e8 /* "MAGENTA" */, RedColor::MAGENTA },
+    { 0x05bf6449 /* "YELLOW" */, RedColor::YELLOW },
+    { 0x45b473eb /* "orange" */, Interpolate(RedColor::YELLOW, RedColor::RED, 0.5f) },
 };
 
 // FUNCTION: SWBF2 0x006521f0

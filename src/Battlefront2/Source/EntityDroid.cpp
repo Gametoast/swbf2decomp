@@ -139,7 +139,7 @@ EntityDroidClass::EntityDroidClass(unsigned int uHash)
     mCameraDestructTrackOffset.y = 0.0f;
     mCameraDestructTrackOffset.z = 0.0f;
     mCameraDestructTiltValue = 0.0f;
-    mDestructChargeEffect = 0x23081C56u;
+    mDestructChargeEffect = 0x23081C56u /* "com_sfx_chargeup" */;
 }
 
 
@@ -196,71 +196,71 @@ void EntityDroidClass::SetProperty(unsigned int uProperty, const char* pszValue)
 {
     switch (uProperty)
     {
-    case 0x4F358485:
+    case 0x4F358485: /* "SetAltitude" */
         sscanf(pszValue, "%f", &mSetAltitude);
         break;
-    case 0x97F2E0F1:
+    case 0x97F2E0F1: /* "GravityScale" */
         sscanf(pszValue, "%f", &mGravityScale);
         break;
-    case 0x1B5071F9:
+    case 0x1B5071F9: /* "LiftSpring" */
         sscanf(pszValue, "%f", &mLiftSpring);
         break;
-    case 0xA37B2EC6:
+    case 0xA37B2EC6: /* "LiftDamp" */
         sscanf(pszValue, "%f", &mLiftDamp);
         break;
-    case 0x2FA0BA9D:
-    case 0x9F8A0040:
+    case 0x2FA0BA9D: /* "Acceleration" */
+    case 0x9F8A0040: /* "Acceleraton" */
         sscanf(pszValue, "%f", &mAcceleration);
         break;
-    case 0x86DF0364:
+    case 0x86DF0364: /* "MaxSpeed" */
         sscanf(pszValue, "%f", &mMaxSpeed);
         break;
-    case 0x3437A33D:
+    case 0x3437A33D: /* "MaxStrafeSpeed" */
         sscanf(pszValue, "%f", &mMaxStrafeSpeed);
         break;
-    case 0x5433F589:
+    case 0x5433F589: /* "MaxTurnSpeed" */
         sscanf(pszValue, "%f", &mMaxTurnSpeed);
         break;
-    case 0xB5534BE0:
+    case 0xB5534BE0: /* "MaxPitchSpeed" */
         sscanf(pszValue, "%f", &mMaxPitchSpeed);
         break;
-    case 0x3403B139:
+    case 0x3403B139: /* "PitchLimits" */
         sscanf(pszValue, "%f %f", &mMinPitch, &mMaxPitch);
         mMinPitch *= 0.017453292f;
         mMaxPitch *= 0.017453292f;
         break;
-    case 0x02E46404:
+    case 0x02E46404: /* "LevelSpring" */
         sscanf(pszValue, "%f", &mLevelSpring);
         break;
-    case 0x252DFAAB:
+    case 0x252DFAAB: /* "LevelDamp" */
         sscanf(pszValue, "%f", &mLevelDamp);
         break;
-    case 0x2CDB588A:
+    case 0x2CDB588A: /* "CollisionThreshold" */
         sscanf(pszValue, "%f %f %f", &mCollisionThreshold[0], &mCollisionThreshold[1], &mCollisionThreshold[2]);
         break;
-    case 0x1A87BACF:
+    case 0x1A87BACF: /* "CollisionScale" */
         sscanf(pszValue, "%f %f %f", &mCollisionScale[0], &mCollisionScale[1], &mCollisionScale[2]);
         break;
-    case 0x2EF03732:
+    case 0x2EF03732: /* "CollisionInflict" */
         sscanf(pszValue, "%f", &mCollisionInflict);
         break;
-    case 0x28ADDA49:
+    case 0x28ADDA49: /* "NoCombatInterrupt" */
         mCombatInterrupts = atoi(pszValue) == 0;
         break;
-    case 0x4F9D8BB4:
+    case 0x4F9D8BB4: /* "EnergyAutoRestore" */
         sscanf(pszValue, "%f", &mEnergyAutoRestore);
         break;
-    case 0x65A920BA:
+    case 0x65A920BA: /* "AmbientSound" */
         mAmbientSound.SetID(pszValue, true, false);
         break;
-    case 0x9A108B4A:
+    case 0x9A108B4A: /* "Ambient2Sound" */
         mAmbient2Sound.SetID(pszValue, true, false);
         break;
-    case 0x02BB1FE0:
-    case 0x9B30E763:
+    case 0x02BB1FE0: /* "Explosion" */
+    case 0x9B30E763: /* "ExplosionName" */
         mExplosion = ExplosionClass::Find(PblHash(pszValue));
         break;
-    case 0x83E12771:
+    case 0x83E12771: /* "DestructTrackOffset" */
     {
         float x, y, z;
         sscanf(pszValue, "%f %f %f", &x, &y, &z);
@@ -269,18 +269,18 @@ void EntityDroidClass::SetProperty(unsigned int uProperty, const char* pszValue)
         mCameraDestructTrackOffset.z = z;
         break;
     }
-    case 0xE11CE401:
+    case 0xE11CE401: /* "DestructTiltValue" */
         sscanf(pszValue, "%f", &mCameraDestructTiltValue);
         mCameraDestructTiltValue *= 0.017453292f;
         break;
-    case 0xF9765272:
+    case 0xF9765272: /* "DestructChargeEffect" */
         mDestructChargeEffect = PblHash(pszValue);
         break;
-    case 0xD0329E80:
+    case 0xD0329E80: /* "WeaponSection" */
         sWeaponSection = atoi(pszValue) - 1;
         break;
-    case 0x6F332041:
-    case 0xFBF47DBA:
+    case 0x6F332041: /* "Weapon" */
+    case 0xFBF47DBA: /* "WeaponName" */
     {
         mWeaponClass[sWeaponSection] = WeaponClass::Find(PblHash(pszValue));
         int iCount = sWeaponSection + 1;
@@ -291,10 +291,10 @@ void EntityDroidClass::SetProperty(unsigned int uProperty, const char* pszValue)
         mWeaponCount = iCount;
         break;
     }
-    case 0x16472328:
+    case 0x16472328: /* "WeaponChannel" */
         sscanf(pszValue, "%d", &mWeaponChannel[sWeaponSection]);
         break;
-    case 0xDC19BD13:
+    case 0xDC19BD13: /* "WeaponAmmo" */
     {
         int iAmmo = 0;
         sscanf(pszValue, "%d", &iAmmo);
@@ -306,7 +306,7 @@ void EntityDroidClass::SetProperty(unsigned int uProperty, const char* pszValue)
         }
         break;
     }
-    case 0x8585BB8A:
+    case 0x8585BB8A: /* "WeaponShareAmmo" */
     {
         int iWeapon = 0;
         sscanf(pszValue, "%d", &iWeapon);
@@ -323,7 +323,7 @@ void EntityDroidClass::SetProperty(unsigned int uProperty, const char* pszValue)
         }
         break;
     }
-    case 0x9455A446:
+    case 0x9455A446: /* "WeaponShareHeat" */
     {
         int iWeapon = 0;
         sscanf(pszValue, "%d", &iWeapon);
@@ -339,8 +339,8 @@ void EntityDroidClass::SetProperty(unsigned int uProperty, const char* pszValue)
         }
         break;
     }
-    case 0x47C86B4A:
-        GameObjectClass::SetProperty(0x47C86B4A, pszValue);
+    case 0x47C86B4A: /* "GeometryName" */
+        GameObjectClass::SetProperty(0x47C86B4A /* "GeometryName" */, pszValue);
         if (mCollisionModel.GetNumBodies() == 0 && mModel)
         {
             const PblSphere& sphere = mModel->_mModel->_BoundingSphere;

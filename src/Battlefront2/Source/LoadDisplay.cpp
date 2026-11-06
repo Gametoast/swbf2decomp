@@ -101,7 +101,7 @@ RedColorValue ToColorValue(const RedColor& c)
 }
 }
 
-static const unsigned int MISSION_SHELL = 0x11e1fc01;
+static const unsigned int MISSION_SHELL = 0x11e1fc01 /* "shell" */;
 static const unsigned int MISSION_GAL_CAM = 0x906d4f8b;
 static const unsigned int MISSION_GAL_CAM_SHELL = 0x20550dee;
 static const unsigned int MISSION_GAL_CON = 0x91554c38;
@@ -180,13 +180,13 @@ int GetTeamNum(unsigned int uiTeamHash)
 {
     switch (uiTeamHash)
     {
-    case 0x13254bc4:
+    case 0x13254bc4: /* "All" */
         return 0;
-    case 0x2cf46160:
+    case 0x2cf46160: /* "rep" */
         return 1;
-    case 0xf387c5d6:
+    case 0xf387c5d6: /* "cis" */
         return 2;
-    case 0x93e73ca1:
+    case 0x93e73ca1: /* "imp" */
         return 3;
     default:
         return -1;
@@ -532,18 +532,18 @@ void LoadDisplay::SetLoadState()
     MissionPlayList::GetCurrentTeamNames(uiTeam1Hash, uiTeam2Hash);
     switch (uiTeam1Hash)
     {
-    case 0xe40c292c: m_team1Num = 0; break;
-    case 0xf70c4715: m_team1Num = 1; break;
-    case 0xe60c2c52: m_team1Num = 2; break;
-    case 0xec0c35c4: m_team1Num = 3; break;
+    case 0xe40c292c: /* "A" */ m_team1Num = 0; break;
+    case 0xf70c4715: /* "R" */ m_team1Num = 1; break;
+    case 0xe60c2c52: /* "C" */ m_team1Num = 2; break;
+    case 0xec0c35c4: /* "I" */ m_team1Num = 3; break;
     default: m_team1Num = -1; break;
     }
     switch (uiTeam2Hash)
     {
-    case 0xe40c292c: m_team2Num = 0; break;
-    case 0xf70c4715: m_team2Num = 1; break;
-    case 0xe60c2c52: m_team2Num = 2; break;
-    case 0xec0c35c4: m_team2Num = 3; break;
+    case 0xe40c292c: /* "A" */ m_team2Num = 0; break;
+    case 0xf70c4715: /* "R" */ m_team2Num = 1; break;
+    case 0xe60c2c52: /* "C" */ m_team2Num = 2; break;
+    case 0xec0c35c4: /* "I" */ m_team2Num = 3; break;
     default: m_team2Num = -1; break;
     }
 }
@@ -916,33 +916,33 @@ namespace
 {
 enum ConfigKeyT
 {
-    CFG_LOADDISPLAY = 0x8689c861,
-    CFG_WORLD = 0x37a3e893,
-    CFG_MAP = 0xdfa2efb1,
-    CFG_BACKDROP = 0x93c0f4f7,
-    CFG_RANDOMBACKDROP = 0x97d04fa8,
-    CFG_SUNCOLOR = 0x664a1f44,
-    CFG_SUNDIRECTION = 0xe1907cf6,
-    CFG_AMBIENTCOLOR = 0x627ebb4a,
-    CFG_TEAMMODEL = 0xd6c2b5f9,
-    CFG_TEAMMODELROTATIONSPEED = 0x26455a06,
-    CFG_TIPSTIME = 0x55c13372,
-    CFG_TIPSBOXTEXTURE = 0x6c30ed87,
-    CFG_TIPSCOLOR = 0xd1eb1b5a,
-    CFG_TIPS = 0xc5ad880f,
-    CFG_PROGRESSBARTOTALTIME = 0x31a6bc76,
-    CFG_PROGRESSBARNUMLEDS = 0xee4ccfc3,
-    CFG_PROGRESSBARLEDCOLOR = 0x533f1e37,
-    CFG_PROGRESSBARLEDTEXTURE = 0x0925227b,
-    CFG_PROGRESSBARLEDWIDTH = 0xc53b850c,
-    CFG_PROGRESSBARLEDHEIGHT = 0x836ca5fb,
-    CFG_PROGRESSBARLEDSPACING = 0x4d649461,
-    CFG_LEDOFFINTENSITY = 0x904a07ed,
-    CFG_LOADINGTEXTBLINKRATE = 0xdfe9346c,
-    CFG_LOADINGTEXTCOLORPALLETE = 0xa6fb2870,
-    CFG_COLOR = 0x3d7e6258,
-    CFG_CAMPAIGNLAYOUT = 0x001de6b9,
-    CFG_CAMPAIGNNAME = 0xd169eaf8
+    CFG_LOADDISPLAY = 0x8689c861 /* "LoadDisplay" */,
+    CFG_WORLD = 0x37a3e893 /* "world" */,
+    CFG_MAP = 0xdfa2efb1 /* "map" */,
+    CFG_BACKDROP = 0x93c0f4f7 /* "Backdrop" */,
+    CFG_RANDOMBACKDROP = 0x97d04fa8 /* "RandomBackdrop" */,
+    CFG_SUNCOLOR = 0x664a1f44 /* "SunColor" */,
+    CFG_SUNDIRECTION = 0xe1907cf6 /* "SunDirection" */,
+    CFG_AMBIENTCOLOR = 0x627ebb4a /* "AmbientColor" */,
+    CFG_TEAMMODEL = 0xd6c2b5f9 /* "TeamModel" */,
+    CFG_TEAMMODELROTATIONSPEED = 0x26455a06 /* "TeamModelRotationSpeed" */,
+    CFG_TIPSTIME = 0x55c13372 /* "TipsTime" */,
+    CFG_TIPSBOXTEXTURE = 0x6c30ed87 /* "TipsBoxTexture" */,
+    CFG_TIPSCOLOR = 0xd1eb1b5a /* "TipsColor" */,
+    CFG_TIPS = 0xc5ad880f /* "TipsPrefix" */,
+    CFG_PROGRESSBARTOTALTIME = 0x31a6bc76 /* "ProgressBarTotalTime" */,
+    CFG_PROGRESSBARNUMLEDS = 0xee4ccfc3 /* "ProgressBarNumLEDs" */,
+    CFG_PROGRESSBARLEDCOLOR = 0x533f1e37 /* "ProgressBarLEDColor" */,
+    CFG_PROGRESSBARLEDTEXTURE = 0x0925227b /* "ProgressBarLEDTexture" */,
+    CFG_PROGRESSBARLEDWIDTH = 0xc53b850c /* "ProgressBarLEDWidth" */,
+    CFG_PROGRESSBARLEDHEIGHT = 0x836ca5fb /* "ProgressBarLEDHeight" */,
+    CFG_PROGRESSBARLEDSPACING = 0x4d649461 /* "ProgressBarLEDSpacing" */,
+    CFG_LEDOFFINTENSITY = 0x904a07ed /* "ProgressBarLEDMinIntensity" */,
+    CFG_LOADINGTEXTBLINKRATE = 0xdfe9346c /* "LoadingTextBlinkRate" */,
+    CFG_LOADINGTEXTCOLORPALLETE = 0xa6fb2870 /* "LoadingTextColorPallete" */,
+    CFG_COLOR = 0x3d7e6258 /* "Color" */,
+    CFG_CAMPAIGNLAYOUT = 0x001de6b9 /* "CampaignLayout" */,
+    CFG_CAMPAIGNNAME = 0xd169eaf8 /* "CampaignName" */
 };
 
 RedColor ConfigColor(const PblConfig::Data& data)

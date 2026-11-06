@@ -277,7 +277,7 @@ void FirstPersonRenderable::UpdateSoldierAimer(const PblMatrix& mMatrix)
     mZephyrSkeleton.BuildWorldMatrices(gMatrixIdentity);
     RedPose kPose;
     kPose.ConvertFromZephyrPose(mZephyrPoseStatic);
-    const PblMatrix* pBone = kPose.Find(0x8629b159);
+    const PblMatrix* pBone = kPose.Find(0x8629b159 /* "hp_camera" */);
 
     PblMatrix mOffset = gMatrixIdentity;
     mOffset.RotateY(3.0f);
@@ -334,7 +334,7 @@ void FirstPersonRenderable::UpdateDroidekaAimer(const PblMatrix& mMatrix)
     mZephyrSkeleton.BuildWorldMatrices(gMatrixIdentity);
     RedPose kPose;
     kPose.ConvertFromZephyrPose(mZephyrPoseStatic);
-    const PblMatrix* pBone = kPose.Find(0x8629b159);
+    const PblMatrix* pBone = kPose.Find(0x8629b159 /* "hp_camera" */);
 
     PblMatrix mOffset = gMatrixIdentity;
     mOffset.RotateY(3.2f);
@@ -355,7 +355,7 @@ void FirstPersonRenderable::UpdateDroidekaAimer(const PblMatrix& mMatrix)
     PblMatrix mBone = *pBone;
     mModelMatrix = (mOffset * mBone) * mRotation;
 
-    const PblMatrix* pWeaponBone = kPose.Find(0x2b960099);
+    const PblMatrix* pWeaponBone = kPose.Find(0x2b960099 /* "hp_weapons" */);
     Weapon* pWeapon = mOwner->GetWeaponPtr(mOwner->GetActiveWeaponChannel());
     if (pWeaponBone && pWeapon)
     {
@@ -421,7 +421,7 @@ void FirstPersonRenderable::UpdateCockpitAimer(const PblMatrix& mMatrix)
     if (mOwner->GetEntity()->GetGameObject()->GetEntityType() == ENT_WALKER)
     {
         const RedPose* pPose = mOwner->GetEntity()->GetGameObject()->GetPose();
-        const PblMatrix* pBone = pPose->Find(0x16E27226);
+        const PblMatrix* pBone = pPose->Find(0x16E27226 /* "bone_root" */);
         if (mCockpitTrans.x == -66.6f && mCockpitTrans.y == 66.6f && mCockpitTrans.z == -66.6f)
         {
             mCockpitTrans = pBone->GetTranslation();
@@ -956,12 +956,12 @@ void FirstPersonRenderable::RenderSoldier(unsigned int uFlags) const
                     }
                     pShadingPose = &shadingPose;
                     shadingPose.BindToModel(mObjectModel);
-                    if (RedShadingState* pState = shadingPose.CreateDefaultShadingState(0x4cc5882a))
+                    if (RedShadingState* pState = shadingPose.CreateDefaultShadingState(0x4cc5882a /* "refraction" */))
                     {
                         RedColor color = RedColor::WHITE;
                         color.a = ucCloak;
-                        pState->GetColorParam(0xbc6f8a5e) = color;
-                        pState->GetIntParam(0x7802a19a) = 1;
+                        pState->GetColorParam(0xbc6f8a5e /* "refraction_color" */) = color;
+                        pState->GetIntParam(0x7802a19a /* "REFRACTIVE" */) = 1;
                     }
                 }
             }

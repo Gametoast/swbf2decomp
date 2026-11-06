@@ -266,7 +266,7 @@ void PauseMenu::_SetPauseAudio(bool bPause)
         return;
     }
 
-    Snd::Bus* pBus = Snd::Bus::FindByHashID(0xFA930D1C);
+    Snd::Bus* pBus = Snd::Bus::FindByHashID(0xFA930D1C /* "ingame_spawnducked" */);
     if (bPause)
     {
         if (pBus)
@@ -607,7 +607,7 @@ void PopupText::DisablePopup()
     }
 
     const unsigned int uNumCameras = GameLoop::mNumCameras;
-    Snd::Bus* pBus = Snd::Bus::FindByHashID(0xB38617C5);
+    Snd::Bus* pBus = Snd::Bus::FindByHashID(0xB38617C5 /* "mainmain" */);
     if (pBus)
     {
         pBus->Fade(0.5f, 1.0f, -1.0f);

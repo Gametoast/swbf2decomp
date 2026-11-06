@@ -301,28 +301,28 @@ void OrdnanceMissileClass::SetProperty(unsigned int uProperty, const char* pszVa
 {
     switch (uProperty)
     {
-    case 0x73E5A988:
+    case 0x73E5A988: /* "ScaleTime" */
         if (sscanf(pszValue, "%f", &mScaleRate))
         {
             mScaleRate = 1.0f / mScaleRate;
         }
         return;
-    case 0x0F77C4E8:
+    case 0x0F77C4E8: /* "TurnRate" */
         sscanf(pszValue, "%f", &mTurnRate);
         return;
-    case 0x6D4A8840:
+    case 0x6D4A8840: /* "WaverRate" */
         sscanf(pszValue, "%f", &mWaverRate);
         return;
-    case 0x129F08C1:
+    case 0x129F08C1: /* "WaverTurn" */
         sscanf(pszValue, "%f", &mWaverTurn);
         return;
-    case 0x9371AECD:
+    case 0x9371AECD: /* "LockedOnSound" */
         mLockedOnSound.SetID(pszValue, false, false);
         return;
-    case 0xFBE2EB62:
+    case 0xFBE2EB62: /* "MinSpeed" */
         sscanf(pszValue, "%f", &mMinSpeed);
 
-    case 0x2FA0BA9D:
+    case 0x2FA0BA9D: /* "Acceleration" */
         sscanf(pszValue, "%f", &mAcceleration);
 
     default:

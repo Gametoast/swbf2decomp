@@ -444,7 +444,7 @@ RedSegment* __cdecl RedSegment::Read(PblFileChunk& chunk, const RedModel* pModel
     char acRenderType[256];
     char acName[256];
 
-    const bool bForceFlags = pModel && pModel->_uiNameHash == 0x33B99965;
+    const bool bForceFlags = pModel && pModel->_uiNameHash == 0x33B99965 /* "REP_LA_AT_Gunship" */;
 
     while (!chunk.IsDone())
     {
@@ -632,7 +632,7 @@ RedSegment* __cdecl RedSegment::Read(PblFileChunk& chunk, const RedModel* pModel
                             uiMaterialFlags, diffuse, specular, 32.0f);
     if (!pShader)
     {
-        pShader = pcRedShader::Create(0xE68B9C52, uiVertexFormat, auiTextures, 4,
+        pShader = pcRedShader::Create(0xE68B9C52 /* "normal" */, uiVertexFormat, auiTextures, 4,
                                       uiMaterialFlags, RedColor::WHITE,
                                       RedColor::BLACK, 32.0f);
     }

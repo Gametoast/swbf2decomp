@@ -94,10 +94,10 @@ void WeaponRepairClass::SetProperty(unsigned int uProperty, const char* pszValue
 
     switch (uProperty)
     {
-    case 0xd9356908:
+    case 0xd9356908: /* "ShotDelay" */
         sscanf(pszValue, "%f", &mShotDelay);
         return;
-    case 0xf51ad206:
+    case 0xf51ad206: /* "PersonHealth" */
         sscanf(pszValue, "%f", &fValue);
         mAddHealth[0] = fValue;
         if (fValue != 0.0f)
@@ -106,7 +106,7 @@ void WeaponRepairClass::SetProperty(unsigned int uProperty, const char* pszValue
             mAITargetTypes |= 1;
         }
         return;
-    case 0x60d746d7:
+    case 0x60d746d7: /* "AnimalHealth" */
         sscanf(pszValue, "%f", &fValue);
         mAddHealth[1] = fValue;
         if (fValue != 0.0f)
@@ -115,7 +115,7 @@ void WeaponRepairClass::SetProperty(unsigned int uProperty, const char* pszValue
             mAITargetTypes |= 2;
         }
         return;
-    case 0x9622c73b:
+    case 0x9622c73b: /* "DroidHealth" */
         sscanf(pszValue, "%f", &fValue);
         mAddHealth[2] = fValue;
         if (fValue != 0.0f)
@@ -124,7 +124,7 @@ void WeaponRepairClass::SetProperty(unsigned int uProperty, const char* pszValue
             mAITargetTypes |= 4;
         }
         return;
-    case 0xf33b41df:
+    case 0xf33b41df: /* "SoldierHealth" */
         sscanf(pszValue, "%f", &fValue);
         mAddHealth[0] = fValue;
         mAddHealth[2] = fValue;
@@ -134,7 +134,7 @@ void WeaponRepairClass::SetProperty(unsigned int uProperty, const char* pszValue
             mAITargetTypes |= 5;
         }
         return;
-    case 0x14e381c9:
+    case 0x14e381c9: /* "VehicleHealth" */
         sscanf(pszValue, "%f", &fValue);
         mAddHealth[3] = fValue;
         if (fValue != 0.0f)
@@ -143,7 +143,7 @@ void WeaponRepairClass::SetProperty(unsigned int uProperty, const char* pszValue
             mAITargetTypes |= 8;
         }
         return;
-    case 0xa6c59e9f:
+    case 0xa6c59e9f: /* "BuildingHealth" */
         sscanf(pszValue, "%f", &fValue);
         mAddHealth[4] = fValue;
         if (fValue != 0.0f)
@@ -152,7 +152,7 @@ void WeaponRepairClass::SetProperty(unsigned int uProperty, const char* pszValue
             mAITargetTypes |= 0x10;
         }
         return;
-    case 0x03ec6220:
+    case 0x03ec6220: /* "BuildingRebuild" */
         sscanf(pszValue, "%f", &fValue);
         mAddHealth[5] = fValue;
         if (fValue != 0.0f)
@@ -161,7 +161,7 @@ void WeaponRepairClass::SetProperty(unsigned int uProperty, const char* pszValue
             mAITargetTypes |= 0x20;
         }
         return;
-    case 0x09cc7f53:
+    case 0x09cc7f53: /* "BuildingBuild" */
         sscanf(pszValue, "%f", &fValue);
         mAddHealth[6] = fValue;
         if (fValue != 0.0f)
@@ -170,7 +170,7 @@ void WeaponRepairClass::SetProperty(unsigned int uProperty, const char* pszValue
             mAITargetTypes |= 0x40;
         }
         return;
-    case 0xf5ed2064:
+    case 0xf5ed2064: /* "MineHealth" */
         sscanf(pszValue, "%f", &fValue);
         mAddHealth[7] = fValue;
         if (fValue != 0.0f)
@@ -179,7 +179,7 @@ void WeaponRepairClass::SetProperty(unsigned int uProperty, const char* pszValue
             mAITargetTypes |= 0x80;
         }
         return;
-    case 0x738f412e:
+    case 0x738f412e: /* "PersonAmmo" */
         sscanf(pszValue, "%f", &fValue);
         mAddAmmo[0] = fValue;
         if (fValue != 0.0f)
@@ -188,7 +188,7 @@ void WeaponRepairClass::SetProperty(unsigned int uProperty, const char* pszValue
             mAITargetTypes |= 1;
         }
         return;
-    case 0xbfe8e397:
+    case 0xbfe8e397: /* "AnimalAmmo" */
         sscanf(pszValue, "%f", &fValue);
         mAddAmmo[1] = fValue;
         if (fValue != 0.0f)
@@ -197,7 +197,7 @@ void WeaponRepairClass::SetProperty(unsigned int uProperty, const char* pszValue
             mAITargetTypes |= 2;
         }
         return;
-    case 0x0fda4dbb:
+    case 0x0fda4dbb: /* "DroidAmmo" */
         sscanf(pszValue, "%f", &fValue);
         mAddAmmo[2] = fValue;
         if (fValue != 0.0f)
@@ -206,7 +206,7 @@ void WeaponRepairClass::SetProperty(unsigned int uProperty, const char* pszValue
             mAITargetTypes |= 4;
         }
         return;
-    case 0xc3da529f:
+    case 0xc3da529f: /* "SoldierAmmo" */
         sscanf(pszValue, "%f", &fValue);
         mAddAmmo[0] = fValue;
         mAddAmmo[2] = fValue;
@@ -216,7 +216,7 @@ void WeaponRepairClass::SetProperty(unsigned int uProperty, const char* pszValue
             mAITargetTypes |= 5;
         }
         return;
-    case 0xe728d955:
+    case 0xe728d955: /* "VehicleAmmo" */
         sscanf(pszValue, "%f", &fValue);
         mAddAmmo[3] = fValue;
         if (fValue != 0.0f)
@@ -225,7 +225,7 @@ void WeaponRepairClass::SetProperty(unsigned int uProperty, const char* pszValue
             mAITargetTypes |= 8;
         }
         return;
-    case 0xa25f865f:
+    case 0xa25f865f: /* "BuildingAmmo" */
         sscanf(pszValue, "%f", &fValue);
         mAddAmmo[4] = fValue;
         if (fValue != 0.0f)

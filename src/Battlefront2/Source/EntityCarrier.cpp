@@ -377,11 +377,11 @@ void EntityCarrierClass::SetProperty(unsigned int uProperty, const char* pszValu
 {
     switch (uProperty)
     {
-    case 0x759C8F54u:
+    case 0x759C8F54u: /* "PickupSound" */
         mSoundCargoPickup.SetID(pszValue, true, false);
         break;
 
-    case 0x3E2C4DA4u:
+    case 0x3E2C4DA4u: /* "CargoNodeName" */
         mCargoInfo[mCargoCount].mHash = PblTEMPHash(pszValue);
 
         if (mModel)
@@ -404,7 +404,7 @@ void EntityCarrierClass::SetProperty(unsigned int uProperty, const char* pszValu
         }
         break;
 
-    case 0x8897DB28u:
+    case 0x8897DB28u: /* "DropoffSound" */
         mSoundCargoDropoff.SetID(pszValue, true, false);
         break;
 
@@ -412,7 +412,7 @@ void EntityCarrierClass::SetProperty(unsigned int uProperty, const char* pszValu
         EntityFlyerClass::SetProperty(uProperty, pszValue);
         break;
 
-    case 0x910A89FCu:
+    case 0x910A89FCu: /* "CargoNodeOffset" */
     {
         float x, y, z;
         sscanf(pszValue, "%f %f %f", &x, &y, &z);

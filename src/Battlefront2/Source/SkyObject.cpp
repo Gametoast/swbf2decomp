@@ -84,36 +84,36 @@ SkyObjectManager::SkyObjectClass::SkyObjectClass(PblConfig& config)
         PblConfig::Data data = config.ReadNextData();
         switch (data.GetId())
         {
-        case 0xB6C8887Eu:
+        case 0xB6C8887Eu: /* "VelocityX" */
             ReadVarianceData(data, mVelocityX, mVelocityVarianceX);
             break;
-        case 0xB7C88A11u:
+        case 0xB7C88A11u: /* "VelocityY" */
             ReadVarianceData(data, mVelocityY, mVelocityVarianceY);
             break;
-        case 0xB4C88558u:
+        case 0xB4C88558u: /* "VelocityZ" */
             ReadVarianceData(data, mVelocityZ, mVelocityVarianceZ);
             break;
-        case 0xD5BDBB42u:
+        case 0xD5BDBB42u: /* "Height" */
             ReadVarianceData(data, mHeight, mHeightVariance);
             break;
-        case 0xC91C0E2Cu:
+        case 0xC91C0E2Cu: /* "InDirectionFactor" */
             mInDirectionFactor = data.GetFloatArg(0);
             break;
-        case 0x2EB31462u:
+        case 0x2EB31462u: /* "Distance" */
             mDistance = data.GetFloatArg(0);
             break;
-        case 0x2A6D8591u:
+        case 0x2A6D8591u: /* "Geometry" */
             mModel = RedModel::_HashTable.Find(PblHash(data.GetStringArg(0)));
             break;
-        case 0x2FA0BA9Du:
+        case 0x2FA0BA9Du: /* "Acceleration" */
             mAcceleration.x = data.GetFloatArg(0);
             mAcceleration.y = data.GetFloatArg(1);
             mAcceleration.z = data.GetFloatArg(2);
             break;
-        case 0x307926C1u:
+        case 0x307926C1u: /* "NumObjects" */
             mNumObjects = (int)data.GetFloatArg(0);
             break;
-        case 0x5212ABEEu:
+        case 0x5212ABEEu: /* "LifeTime" */
             mMaxLifeTime = data.GetFloatArg(0);
             break;
         }

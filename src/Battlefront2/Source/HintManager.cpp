@@ -278,10 +278,10 @@ void BaseHint::SetProperty(unsigned int uProperty, const char* pszValue)
 {
     switch (uProperty)
     {
-    case 0x844CCDB4:
+    case 0x844CCDB4: /* "CommandPost" */
         SetCommandPost(CommandPostManager::Instance()->FindPost(pszValue));
         break;
-    case 0xBF0F1CD1:
+    case 0xBF0F1CD1: /* "PrimaryStance" */
     {
         int iValue;
         sscanf(pszValue, "%d", &iValue);
@@ -292,7 +292,7 @@ void BaseHint::SetProperty(unsigned int uProperty, const char* pszValue)
         }
         break;
     }
-    case 0x92C05A59:
+    case 0x92C05A59: /* "SecondaryStance" */
     {
         int iValue;
         sscanf(pszValue, "%d", &iValue);
