@@ -55,14 +55,13 @@ unsigned int VoiceChat::NetPacketAudio::Read(void* pData, unsigned int uiSize)
 void* VoiceChat::NetPacketAudio::Read(unsigned int& length)
 {
     NetPacket* current = (NetPacket*)mAppPacket;
-    int currentIndex = current->mCurIndex;
-    char* data = current->mData + currentIndex;
-    unsigned int available = (unsigned int)((int)current->mMaxIndex - currentIndex);
+    unsigned int available = (unsigned int)((int)current->mMaxIndex - (int)current->mCurIndex);
     if (length > available)
     {
         length = available;
     }
-    current->mCurIndex = (short)(currentIndex + (short)length);
+    char* data = current->mData + current->mCurIndex;
+    current->mCurIndex += (short)length;
     return data;
 }
 
