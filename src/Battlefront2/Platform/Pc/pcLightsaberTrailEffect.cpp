@@ -96,18 +96,17 @@ void LightsaberTrailEffect::RenderLightsaberTrail(const LightsaberTrail* pTrail,
     RedColor colorEdge = colorTrail;
     colorEdge.a = 0;
     RedColor color = colorTrail;
-    void* pData = pPrim->BeginVertexData();
     float fTime;
     PblVector3 vPos;
     PblVector3 vPosEnd;
     PblVector3 vCap;
     if (iGeometryMode == GEOMETRYMODE_COMPRESSED)
     {
-        if (!pData)
+        VertexC* pFront = (VertexC*)pPrim->BeginVertexData();
+        if (!pFront)
         {
             return;
         }
-        VertexC* pFront = (VertexC*)pData;
         VertexC* pBack = pFront + 4 * uiNumSteps - 2;
         VertexC* pThird = pBack + 1;
         color.a = 0;
@@ -336,11 +335,11 @@ void LightsaberTrailEffect::RenderLightsaberTrail(const LightsaberTrail* pTrail,
     }
     else
     {
-        if (!pData)
+        VertexU* pFront = (VertexU*)pPrim->BeginVertexData();
+        if (!pFront)
         {
             return;
         }
-        VertexU* pFront = (VertexU*)pData;
         VertexU* pBack = pFront + 4 * uiNumSteps - 2;
         VertexU* pThird = pBack + 1;
         color.a = 0;
@@ -469,11 +468,12 @@ void LightsaberTrailEffect::RenderLightsaberTrail(const LightsaberTrail* pTrail,
                     pBack->SetPos(vPosNext);
                     pBack->SetColor(colorTrail);
                     --pBack;
-                    pThird[0].SetPos(vPosEndNext);
-                    pThird[0].SetColor(colorTrail);
-                    pThird[1].SetPos(vPosEndNext + vCap * fWidth);
-                    pThird[1].SetColor(colorEdge);
-                    pThird += 2;
+                    pThird->SetPos(vPosEndNext);
+                    pThird->SetColor(colorTrail);
+                    ++pThird;
+                    pThird->SetPos(vPosEndNext + vCap * fWidth);
+                    pThird->SetColor(colorEdge);
+                    ++pThird;
 
                     if (i == pTrail->GetNumSamples() - 1 && j == iNumSteps - 1)
                     {
@@ -497,11 +497,12 @@ void LightsaberTrailEffect::RenderLightsaberTrail(const LightsaberTrail* pTrail,
                     pFront->SetPos(vPos);
                     pFront->SetColor(color);
                     ++pFront;
-                    pBack[0].SetPos(vPosEnd);
-                    pBack[0].SetColor(color);
-                    pBack[-1].SetPos(vPos);
-                    pBack[-1].SetColor(color);
-                    pBack -= 2;
+                    pBack->SetPos(vPosEnd);
+                    pBack->SetColor(color);
+                    --pBack;
+                    pBack->SetPos(vPos);
+                    pBack->SetColor(color);
+                    --pBack;
                     pThird->SetPos(vPosEnd);
                     pThird->SetColor(color);
                     ++pThird;
