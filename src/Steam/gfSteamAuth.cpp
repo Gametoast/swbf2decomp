@@ -332,15 +332,16 @@ int gf::SteamAuthProvider::GetEncryptedAppTicket(char* pTicket, int iSize)
 // FUNCTION: SWBF2 0x0052ed50
 const char* gf::SteamAuthProvider::GetPersonaName()
 {
-    if (SteamUser_BLoggedOn())
+    if (!SteamUser_BLoggedOn())
     {
-        if (SteamFriends())
-        {
-            ISteamFriends* pFriends = SteamFriends();
-            return pFriends->GetPersonaName();
-        }
+        return 0;
     }
-    return 0;
+    if (!SteamFriends())
+    {
+        return 0;
+    }
+    ISteamFriends* pFriends = SteamFriends();
+    return pFriends->GetPersonaName();
 }
 
 // FUNCTION: SWBF2 0x0052e9e0

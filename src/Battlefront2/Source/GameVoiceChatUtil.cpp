@@ -62,7 +62,7 @@ void* VoiceChat::NetPacketAudio::Read(unsigned int& length)
     {
         length = available;
     }
-    current->mCurIndex += (short)length;
+    current->mCurIndex = (short)(currentIndex + (short)length);
     return data;
 }
 

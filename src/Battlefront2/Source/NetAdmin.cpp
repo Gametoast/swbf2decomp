@@ -341,7 +341,10 @@ void NetAdmin::Create(bool  )
     }
 
     JournalString(Destination, sizeof(Destination));
-    memset(admins, 0, sizeof(admins));
+    for (int i = 0; i < 64; ++i)
+    {
+        admins[i] = false;
+    }
     if (NetGame::GetLocalIndex(0) >= 0)
     {
         admins[0] = true;
@@ -470,12 +473,9 @@ void __fastcall SendAdminMessage(char* pcMessage);
 void NetAdmin::RemovePlayer(int iPlayer)
 {
     admins[iPlayer] = false;
-    if (GameLoop::sQuitRequested)
+    if (GameLoop::IsQuitRequested())
     {
-        if (!NetGame::GetTurnNumber() || NetGame::GetTurnNumber() >= GameLoop::sQuitTurn)
-        {
-            return;
-        }
+        return;
     }
 
     char acBuffer[64];

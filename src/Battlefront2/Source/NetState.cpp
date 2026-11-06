@@ -2197,7 +2197,11 @@ void WriteVelocity(NetPktGroup& group, const PblVector3& value, float fMaxSpeed,
                 int forceBits)
 {
     const float length = Length(value);
-    const bool present = length > 0.0001f;
+    bool present = false;
+    if (length > 0.0001f)
+    {
+        present = true;
+    }
     group.Write(present);
     if (!present)
     {
