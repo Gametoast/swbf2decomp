@@ -3,6 +3,7 @@
 #include "CameraManager.h"
 #include "Character.h"
 #include "CollisionObject.h"
+#include "CollisionManager.h"
 #include "Controllable.h"
 #include "GameObject.h"
 #include "Trackable.h"
@@ -65,14 +66,6 @@ void DeathCamera::SetInfo(Trackable* pOwner, Character* pKiller, const PblMatrix
         mKiller = pKiller;
     }
 }
-
-class CollisionManager
-{
-public:
-    static float RayHit(const PblVector3& vStart, const PblVector3& vDir, float fLength,
-                        CollisionObject*& pObject, PblVector3* pvPoint,
-                        const GameObject** const ppIgnore, int iNumIgnore, int iMask, bool bFlag);
-};
 
 PblMatrix DirectionMatrix(const PblVector3& vDir, const PblVector3& vUp, const PblVector3& vPos);
 

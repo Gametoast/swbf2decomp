@@ -33,7 +33,7 @@ HUD::Objective::ObjectiveState HUD::ObjectiveList::GetState(unsigned int uiTextH
     Objective* pObjective = FindObjective(uiTextHashID);
     if (pObjective)
     {
-        return pObjective->_state;
+        return pObjective->GetState();
     }
     return Objective::INACTIVE;
 }

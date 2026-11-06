@@ -138,7 +138,7 @@ bool LeafPatchClass::RenderMaxDist(const PblMatrix& matrix, float& fDist,
     }
     if (mMaxScatterBirds && !(uiFlags & 0x200000))
     {
-        BirdParticleManager::SetPotentialScatterPoint(&vPos, mMaxScatterBirds);
+        BirdParticleManager::SetPotentialScatterPoint(vPos, mMaxScatterBirds);
     }
     PblMatrix scaled = matrix;
     scaled.SetYAxis(scaled.GetYAxis() * mHeightScale);

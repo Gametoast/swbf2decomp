@@ -103,7 +103,7 @@ namespace EventManager
 template <>
 bool LuaPushItem<Team>(Team& team)
 {
-    lua_pushnumber(LuaHelper::mState, (lua_Number)team.mTeamNumber);
+    lua_pushnumber(LuaHelper::mState, (lua_Number)team.GetNumber());
     return true;
 }
 

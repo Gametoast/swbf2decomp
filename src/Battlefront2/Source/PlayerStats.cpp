@@ -234,8 +234,8 @@ char PlayerStatsPoints[35];
 // FUNCTION: SWBF2 0x0061d900
 void PlayerStats::PointsProcessTeam(int iTeam, unsigned char ucType)
 {
-    SpaceAssault* pSpaceAssault = SpaceAssault::mInstance;
-    if (pSpaceAssault && pSpaceAssault->mbEnabled)
+    SpaceAssault* pSpaceAssault = SpaceAssault::Instance();
+    if (pSpaceAssault && pSpaceAssault->IsEnabled())
     {
         short pointVal = PlayerStatsPoints[ucType];
         if (pointVal > 0)
@@ -256,8 +256,8 @@ int PlayerStats::PointsProcess(unsigned char ucType, unsigned int uParam)
     Character* pCharacter = Character::GetPtr(mStatId);
     mPointsDelta = PlayerStatsPoints[ucType];
 
-    SpaceAssault* pSpaceAssault = SpaceAssault::mInstance;
-    if (pSpaceAssault && pSpaceAssault->mbEnabled)
+    SpaceAssault* pSpaceAssault = SpaceAssault::Instance();
+    if (pSpaceAssault && pSpaceAssault->IsEnabled())
     {
         if (ucType == 32)
         {

@@ -503,6 +503,8 @@ int NetSetup::GetAutoNetPlayerCount()
 // FUNCTION: SWBF2 0x005db370
 static char* GetFactionName(char faction, int team)
 {
+    // GLOBAL: SWBF2 0x007ec518
+    // factions
     static struct
     {
         char faction;
@@ -516,9 +518,9 @@ static char* GetFactionName(char faction, int team)
     };
 
     char side = faction;
+    unsigned int i;
     if (team != 1)
     {
-        unsigned int i;
         for (i = 0; i < 4; i++)
         {
             if (factions[i].faction == faction)
@@ -533,7 +535,7 @@ static char* GetFactionName(char faction, int team)
         }
     }
 
-    for (unsigned int i = 0; i < 4; i++)
+    for (i = 0; i < 4; i++)
     {
         if (factions[i].faction == side)
         {
@@ -576,6 +578,7 @@ void JRR_to_Errorbox(JoinRejectReason eReason)
 
     switch (eReason)
     {
+    case JRR_BAN: pcError = "ifs.mp.joinerrors.banned"; break;
     case JRR_FULL: pcError = "ifs.mp.joinerrors.full"; break;
     case JRR_PASSWORD: pcError = "ifs.mp.joinerrors.password"; break;
     case JRR_GAME: pcError = "ifs.mp.joinerrors.game"; break;
@@ -587,7 +590,6 @@ void JRR_to_Errorbox(JoinRejectReason eReason)
         iSeverity = 12;
         break;
     case JRR_BAD_CDKEY: pcError = "ifs.mp.joinerrors.cdkey"; break;
-    case JRR_BAN: pcError = "ifs.mp.joinerrors.banned"; break;
     case 11: pcError = "ifs.mp.joinerrors.doesnotexist"; break;
     case 12: pcError = "ifs.mp.joinerrors.cantconnect"; break;
     default: break;
@@ -2783,11 +2785,11 @@ NetGameDesc::NetGameDesc(const NetAddr& addr)
 // FUNCTION: SWBF2 0x005dd6b0
 bool NetGameDesc::operator==(const NetGameDesc& rOther)
 {
-    if (mAddr == rOther.mAddr)
+    if (!(mAddr == rOther.mAddr))
     {
-        return true;
+        return false;
     }
-    return false;
+    return true;
 }
 
 // GLOBAL: SWBF2 0x01ee7d48
@@ -6411,7 +6413,7 @@ const char* GetNextMissionForLobby()
 // std::basic_string<char,std::char_traits<char>,std::allocator<char> >::insert
 
 // LIBRARY: SWBF2 0x005d8a40
-// std::back_insert_iterator<std::string>::operator=(const char&)
+// std::back_insert_iterator<std::basic_string<char,std::char_traits<char>,std::allocator<char> > >::operator=(char &&)
 
 // FUNCTION: SWBF2 0x005e73d0
 void RemoveFoundGameByAddress(const NetAddr* address)

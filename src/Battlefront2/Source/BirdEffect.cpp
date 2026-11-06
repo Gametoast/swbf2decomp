@@ -439,7 +439,7 @@ bool BirdParticle::UpdateStandingBird(float fDeltaTime)
 }
 
 // FUNCTION: SWBF2 0x0044b080
-void __fastcall BirdParticleManager::SetPotentialScatterPoint(const PblVector3* pPosition, unsigned char ucNumBirds)
+void BirdParticleManager::SetPotentialScatterPoint(const PblVector3& vPosition, unsigned char ucNumBirds)
 {
     if (!sInstance)
     {
@@ -464,9 +464,9 @@ void __fastcall BirdParticleManager::SetPotentialScatterPoint(const PblVector3* 
         const PblVector3& rPoint = sInstance->mPotentialScatterPoints[i];
         if (sInstance->mNumScatterBirds[i])
         {
-            const float dx = pPosition->x - rPoint.x;
-            const float dy = pPosition->y - rPoint.y;
-            const float dz = pPosition->z - rPoint.z;
+            const float dx = vPosition.x - rPoint.x;
+            const float dy = vPosition.y - rPoint.y;
+            const float dz = vPosition.z - rPoint.z;
             if (fabsf(dx * dx + dy * dy + dz * dz) < 0.001f)
             {
                 return;
@@ -487,9 +487,9 @@ void __fastcall BirdParticleManager::SetPotentialScatterPoint(const PblVector3* 
                 fPointDistance = fDistance;
                 iClosestCameraToPoint = j;
             }
-            const float nx = pPosition->x - rCamera.m[3][0];
-            const float ny = pPosition->y - rCamera.m[3][1];
-            const float nz = pPosition->z - rCamera.m[3][2];
+            const float nx = vPosition.x - rCamera.m[3][0];
+            const float ny = vPosition.y - rCamera.m[3][1];
+            const float nz = vPosition.z - rCamera.m[3][2];
             const float fDistanceNew = nx * nx + ny * ny + nz * nz;
             if (fDistanceNew < fNewDistance)
             {
@@ -505,9 +505,9 @@ void __fastcall BirdParticleManager::SetPotentialScatterPoint(const PblVector3* 
     }
 
     const PblMatrix& newCamera = cameraMatrix[iClosestCameraToNew];
-    PblVector3 vNew(pPosition->x - newCamera.m[3][0],
-                    pPosition->y - newCamera.m[3][1],
-                    pPosition->z - newCamera.m[3][2]);
+    PblVector3 vNew(vPosition.x - newCamera.m[3][0],
+                    vPosition.y - newCamera.m[3][1],
+                    vPosition.z - newCamera.m[3][2]);
     const float fNewDistance = vNew.x * vNew.x + vNew.y * vNew.y + vNew.z * vNew.z;
     PblVector3 vNewDir;
     D3DXVec3Normalize(reinterpret_cast<D3DXVECTOR3*>(&vNewDir), reinterpret_cast<const D3DXVECTOR3*>(&vNew));
@@ -522,7 +522,7 @@ void __fastcall BirdParticleManager::SetPotentialScatterPoint(const PblVector3* 
         (newCamera.m[2][0] * vNewDir.x + newCamera.m[2][1] * vNewDir.y + newCamera.m[2][2] * vNewDir.z <= -0.2f &&
          vOld.x * vOld.x + vOld.y * vOld.y + vOld.z * vOld.z > fNewDistance))
     {
-        sInstance->mPotentialScatterPoints[iFarthestPoint] = *pPosition;
+        sInstance->mPotentialScatterPoints[iFarthestPoint] = vPosition;
         sInstance->mNumScatterBirds[iFarthestPoint] = ucNumBirds;
     }
 }

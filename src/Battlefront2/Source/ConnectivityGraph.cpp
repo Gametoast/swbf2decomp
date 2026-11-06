@@ -158,7 +158,11 @@ bool ConnectivityNode::IsPointInside(const PblVector3& v) const
 {
     const float fDX = x - v.x;
     const float fDZ = z - v.z;
-    return w * w > fDX * fDX + fDZ * fDZ;
+    if (w * w > fDX * fDX + fDZ * fDZ)
+    {
+        return true;
+    }
+    return false;
 }
 
 // FUNCTION: SWBF2 0x004808a0
