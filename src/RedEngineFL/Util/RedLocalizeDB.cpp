@@ -208,16 +208,16 @@ const unsigned short* Find(unsigned int uiHash, bool bNullIfMissing)
 }
 
 // FUNCTION: SWBF2 0x006c5b80
-void ForceLanguageID(int iLanguage)
+void ForceLanguageID(eGAMELANGUAGE eLanguage)
 {
-    if (iLanguage == 5)
+    if (eLanguage == eLANG_JAPANESE)
     {
         RedFont::sJapaneseOnly = true;
-        gForceLang = (eGAMELANGUAGE)iLanguage;
+        gForceLang = eLanguage;
     }
-    else if (iLanguage >= -1 && iLanguage < 9)
+    else if (eLanguage >= eLANG_AUTODETERMINE && eLanguage < eLANG_MAX)
     {
-        gForceLang = (eGAMELANGUAGE)iLanguage;
+        gForceLang = eLanguage;
     }
 }
 

@@ -891,6 +891,10 @@
       <BufferSecurityCheck>false</BufferSecurityCheck>
       <WholeProgramOptimization Condition="'$(Configuration)'=='Release'">true</WholeProgramOptimization>
     </ClCompile>
+    <ClCompile Include="src\Battlefront2\Source\FL_TTY.cpp">
+      <BufferSecurityCheck>false</BufferSecurityCheck>
+      <WholeProgramOptimization Condition="'$(Configuration)'=='Release'">true</WholeProgramOptimization>
+    </ClCompile>
     <ClCompile Include="src\Battlefront2\Source\GameState.cpp">
       <BufferSecurityCheck>false</BufferSecurityCheck>
       <WholeProgramOptimization Condition="'$(Configuration)'=='Release'">true</WholeProgramOptimization>
@@ -2942,6 +2946,7 @@
     <ClInclude Include="src\Battlefront2\Source\EntityTrap.h" />
     <ClInclude Include="src\Battlefront2\Source\EntityWalker.h" />
     <ClInclude Include="src\Battlefront2\Source\EntityWater.h" />
+    <ClInclude Include="src\Battlefront2\Source\FL_TTY.h" />
     <ClInclude Include="src\Battlefront2\Source\EventInfo.h" />
     <ClInclude Include="src\Battlefront2\Source\EventManager.h" />
     <ClInclude Include="src\Battlefront2\Source\EventManager_Character.h" />

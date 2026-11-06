@@ -12,6 +12,7 @@
 #include <time.h>
 
 #include "GameState.h"
+#include "FL_TTY.h"
 #include "GameLoop.h"
 #include "BonusManager.h"
 #include "CollisionManager.h"
@@ -480,32 +481,6 @@ namespace GameState
 // GLOBAL: SWBF2 0x1f9c2d8
 LARGE_INTEGER Frequency;
 
-// GLOBAL: SWBF2 0x01f9c2a0
-char* sTTYGrid;
-
-// GLOBAL: SWBF2 0x01f9c2a4
-int sTTYInvalidIndex;
-
-// GLOBAL: SWBF2 0x01f9c2a8
-int sTTYRows;
-
-// GLOBAL: SWBF2 0x01f9c2ac
-int sTTYColumns;
-
-// FUNCTION: SWBF2 0x0052bfe0
-void TTYInit()
-{
-    sTTYRows = 0x50;
-    sTTYColumns = 0x50;
-    sTTYInvalidIndex = -1;
-    sTTYGrid = (char*)RedAllocFromHeap(__RedCurrHeap, 0xC800, 0);
-
-    for (unsigned int i = 0; i < (unsigned int)sTTYColumns; ++i)
-    {
-        sTTYGrid[i * (sTTYRows << 3)] = 0x0A;
-    }
-}
-
 // FUNCTION: SWBF2 0x0053a9e0
 void GameState::OneTimeInit()
 {
@@ -536,7 +511,7 @@ void GameState::OneTimeInit()
         _exit(0);
     }
 
-    TTYInit();
+    TTYInit(80, 80);
 
     QueryPerformanceFrequency(&Frequency);
     maxAdvanceTicks = Frequency.QuadPart;

@@ -29,6 +29,8 @@ public:
     EntityBuildingClass(EntityBuildingClass* pBase, unsigned int uHash);
     virtual ~EntityBuildingClass();
 
+    static unsigned int GetRtti() { return rttiHashEntityBuildingClass; }
+
     virtual EntityClass* Derive(unsigned int uHash);
     virtual Entity* Build(const EntityDesc& desc);
     virtual bool IsRtti(unsigned int uRtti) const;

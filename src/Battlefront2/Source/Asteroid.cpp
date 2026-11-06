@@ -6,6 +6,7 @@
 #include "CollisionMesh.h"
 #include "CollisionModel.h"
 #include "CollisionObject.h"
+#include "CollisionManager.h"
 #include "CollisionPrimitive.h"
 #include "Explosion.h"
 #include "GameModel.h"
@@ -287,12 +288,6 @@ MemoryPool Asteroid::sMemoryPool("Asteroid", sizeof(Asteroid));
 // Asteroid::rttiHashAsteroid
 PblHash Asteroid::rttiHashAsteroid("Asteroid");
 const char Asteroid::rttiNameAsteroid[] = "Asteroid";
-
-class CollisionManager
-{
-public:
-    static bool AddAsteroidBody(CollisionObject* pObject);
-};
 
 // FUNCTION: SWBF2 0x00445ba0
 Entity* AsteroidClass::Build(const EntityDesc& desc)

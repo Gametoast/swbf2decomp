@@ -407,18 +407,6 @@ const ControllableClass* EntitySoldierClass::GetControllableClass() const
     return (const ControllableClass*)this;
 }
 
-// FUNCTION: SWBF2 0x004de4e0
-AI::EventInfo::EventInfo(EventType eType, float fFloat, int iInt)
-    : mNextCmd(CMD_NONE, 0, PblVector3(0, 0, 0), 0),
-      mType(eType),
-      mGameObject(0),
-      mPos(0, 0, 0),
-      mFloat(fFloat),
-      mInt(iInt),
-      mVoidPtr(0)
-{
-}
-
 // FUNCTION: SWBF2 0x004de570
 void SoldierAnimator::ModifyLegMatrixByVehicle(const PblMatrix& lastVehicleMatrix, const PblMatrix& vehicleMatrix)
 {

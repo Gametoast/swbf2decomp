@@ -4,6 +4,7 @@
 #include <string.h>
 
 #include "CollisionObject.h"
+#include "CollisionManager.h"
 #include "Damageable.h"
 #include "Entity.h"
 #include "EntityCarrier.h"
@@ -12,12 +13,7 @@
 #include "PebbleFL/Common/PblHashTable.h"
 #include "RedEngineFL/Util/RedRegion.h"
 
-class CollisionManager
-{
-public:
-    static int GetObjectsInRegion(const RedRegion& region, GameObject** const ppObjects, int iMaxObjects,
-                                  const GameObject* pIgnore, int iMask);
-};
+
 
 static inline CollisionObject* GetCollisionObject(GameObject* pObject)
 {

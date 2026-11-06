@@ -47,16 +47,6 @@ private:
     int mIndex;
 };
 
-inline GameObject* PostObject(CommandPost& post)
-{
-    PblHandle<GameObject>& h = post.mObject;
-    if (h.mObject && h.mObject->mHandleId != h.mSavedHandleId)
-    {
-        h.mObject = 0;
-        h.mSavedHandleId = 0;
-    }
-    return h.mObject;
-}
 
 template <class PARAM>
 class PostMatchesTeam
@@ -69,11 +59,11 @@ public:
 
     bool operator()(CommandPost& post, PARAM&) const
     {
-        if (!PostObject(post))
+        if (!post.mObject)
         {
             return false;
         }
-        return (*(const int*)((const char*)PostObject(post) + 0x234) << 28 >> 28) == mTeam;
+        return post.mObject->GetTeam() == mTeam;
     }
 
     bool operator==(const PostMatchesTeam& other) const

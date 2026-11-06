@@ -8,6 +8,7 @@
 #include "EntityItem.h"
 #include "Character.h"
 #include "CollisionBody.h"
+#include "CollisionManager.h"
 #include "CollisionModel.h"
 #include "CollisionPrimitive.h"
 #include "FLEffect.h"
@@ -239,12 +240,7 @@ PblHash EntityItem::rttiHashEntityItem("EntityItem");
 // EntityItem::rttiNameEntityItem
 const char EntityItem::rttiNameEntityItem[] = "EntityItem";
 
-class CollisionManager
-{
-public:
-    static bool AddItemBody(CollisionObject* pObject);
-    static bool DeactivateItem(CollisionObject* pObject);
-};
+
 
 // FUNCTION: SWBF2 0x004cc260
 Entity* EntityItemClass::Build(const EntityDesc& desc)

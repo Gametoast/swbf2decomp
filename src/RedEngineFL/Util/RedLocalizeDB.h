@@ -23,6 +23,8 @@ namespace RedLocalizeDB
 
 eGAMELANGUAGE GetLanguageID();
 
+void ForceLanguageID(eGAMELANGUAGE eLanguage);
+
 void PickLanguage();
 
 char const* GetLanguageStr();

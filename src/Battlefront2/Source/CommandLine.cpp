@@ -155,10 +155,7 @@ namespace PlayerProfile
     void SetSafeMode();
 }
 void SetNetAwardsEnabled(int);
-namespace RedLocalizeDB
-{
-    void ForceLanguageID(int iLanguage);
-}
+
 
 
 
@@ -478,7 +475,7 @@ void ParseCommandLine(int iArgc, char** const apcArgv)
             break;
         }
         case 0x70EA3B55:
-            RedLocalizeDB::ForceLanguageID(atoi(apcArgv[++i]));
+            RedLocalizeDB::ForceLanguageID(static_cast<eGAMELANGUAGE>(atoi(apcArgv[++i])));
             break;
         case 0x718E7AD4:
             dragEnabled = false;

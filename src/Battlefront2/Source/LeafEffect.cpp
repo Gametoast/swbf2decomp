@@ -3,6 +3,7 @@
 #include <d3dx9math.h>
 
 #include "LeafEffect.h"
+#include "CollisionManager.h"
 #include "Battlefront2Lod.h"
 #include "NetGame.h"
 #include "CameraManager.h"
@@ -22,12 +23,7 @@ extern PblMatrix gMatrixIdentity;
 static const float EPSILON = 0.0001f;
 
 class GameObject;
-class CollisionManager
-{
-public:
-    static int GetObjectsInRect(const PblVector3& vMin, const PblVector3& vMax, GameObject** const ppObjects,
-                                int iMaxObjects, const GameObject* pIgnore, int iMask);
-};
+
 
 
 

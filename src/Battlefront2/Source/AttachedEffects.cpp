@@ -9,16 +9,10 @@
 #include "EntityGeometry.h"
 #include "EntityLight.h"
 #include "FLEffect.h"
+#include "GameObject.h"
 #include "PebbleFL/Common/PblHashTable.h"
 #include "PebbleFL/Common/PblRandom.h"
 
-class GameObject
-{
-public:
-
-    char mInheritedObjectStorage[0x204];
-    unsigned int mHandleId;
-};
 
 
 

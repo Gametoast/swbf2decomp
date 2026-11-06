@@ -247,7 +247,7 @@ unsigned int HUD::ObjectiveList::GetCurrentPopupText()
 {
     for (PblList<Objective>::Itor it(_objectives); it != _objectives.End(); ++it)
     {
-        if (it->_state == Objective::ACTIVE && it->_popupTextID)
+        if (it->GetState() == Objective::ACTIVE && it->_popupTextID)
         {
             return it->_popupTextID;
         }
