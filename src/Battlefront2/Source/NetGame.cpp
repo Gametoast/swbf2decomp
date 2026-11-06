@@ -3148,10 +3148,9 @@ void NetGame::LeaveClient()
 
 void BeginNetLOD();
 int SetNetLOD(int precision);
-namespace GameLoop
-{
-extern float sDeltaTime;
-}
+
+
+
 
 // GLOBAL: SWBF2 0x01e63220
 NetPktGroupOffset lateStateOffset[8][64];
@@ -5351,10 +5350,9 @@ void PredictTurn();
 extern bool journalNeedsClose;
 extern int debugPredictClientTurn;
 extern int debugPredictStepCount;
-namespace GameLoop
-{
-extern float sDeltaTime;
-}
+
+
+
 
 
 

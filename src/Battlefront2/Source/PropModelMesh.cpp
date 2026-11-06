@@ -28,11 +28,11 @@
 class PblMatrix;
 extern PblMatrix gMatrixIdentity;
 
-namespace GameLoop
-{
-    // GLOBAL: SWBF2 0x01e56054
-    extern float sDeltaTime;
-}
+#include "GameLoop.h"
+
+
+    
+
 
 namespace FLRenderer
 {
@@ -443,7 +443,7 @@ void PropObjectMesh::Render(const RedCamera* pCamera, float fDist, unsigned int 
     }
     else
     {
-        mElapsedTime += GameLoop::sDeltaTime;
+        mElapsedTime += GameLoop::GetDeltaTime();
     }
 }
 

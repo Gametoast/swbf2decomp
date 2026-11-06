@@ -36,10 +36,11 @@ PblMatrix DirectionMatrix(const PblVector3& vDir, const PblVector3& vUp, const P
 
 
 
-namespace GameLoop
-{
-extern float sClientDeltaTime;
-}
+#include "GameLoop.h"
+
+
+
+
 
 // SYNTHETIC: SWBF2 0x00407150
 // `dynamic initializer for 'WeaponDispenserClass::rttiHashWeaponDispenserClass''

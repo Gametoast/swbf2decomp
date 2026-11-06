@@ -141,10 +141,9 @@ void HUD::GameEvents::DisableAllForObjectiveDisplay(int iPlayer, bool bFlag)
     timerDisable.Send();
 }
 
-namespace GameLoop
-{
-    bool GetCanSwitchSides();
-}
+
+    
+
 
 extern bool gAttractMode;
 
@@ -1430,7 +1429,7 @@ void SpawnDisplay::SetupSlots()
     for (int i = 0; i < iCount; ++i)
     {
         GameObjectClass* pClass = pTeam->GetClassPtr(i);
-        if (pClass->IsRtti(GameObjectClass::rttiHashGameObjectClass))
+        if (pClass->IsRtti(GameObjectClass::GetRtti()))
         {
             UpdateObjectText(pClass, i);
             SetSlotInfo(pClass, i);
@@ -1480,7 +1479,7 @@ void SpawnDisplay::SetEntityElement(EntityClass* pClass)
         m_SoldierElement.SetClass(static_cast<EntitySoldierClass*>(pClass));
         m_pEntityElement = &m_SoldierElement;
     }
-    else if (pClass->IsRtti(EntityDroidekaClass::rttiHashEntityDroidekaClass))
+    else if (pClass->IsRtti(EntityDroidekaClass::GetRtti()))
     {
         m_DroidekaElement.SetClass(static_cast<EntityDroidekaClass*>(pClass));
         m_pEntityElement = &m_DroidekaElement;
@@ -1488,7 +1487,7 @@ void SpawnDisplay::SetEntityElement(EntityClass* pClass)
 
     if (m_pEntityElement)
     {
-        if (pClass->IsRtti(GameObjectClass::rttiHashGameObjectClass))
+        if (pClass->IsRtti(GameObjectClass::GetRtti()))
         {
             m_pEntityElement->SetModel(
                 const_cast<GameModel*>(static_cast<GameObjectClass*>(pClass)->GetModel()));

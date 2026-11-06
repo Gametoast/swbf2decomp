@@ -27,10 +27,9 @@ static const char* const HUMAN_LOWRES_BANK = "humanlz";
 
 
 
-namespace GameLoop
-{
-extern float sClientDeltaTime;
-}
+
+
+
 
 extern PblVector3 gVectorZero;
 

@@ -107,10 +107,9 @@ int __fastcall GetScreenTransitionType(const char* pcName, void*)
 extern bool gDemoMode;
 extern bool gAttractMode;
 
-namespace GameLoop
-{
-    extern bool sShowStats;
-}
+
+    
+
 extern bool gDrawFlyerShadows;
 extern HWND hGlobalWnd;
 
@@ -343,14 +342,13 @@ DrawAllBeamBetween* sDrawAllBeamBetween;
 // GLOBAL: SWBF2 0x01f9c2e8
 DrawAllParticleAt* sDrawAllParticleAt;
 
-namespace GameLoop
-{
+
 // GLOBAL: SWBF2 0x007e6688
-int mLastGameWinner = -1;
+int GameLoop::mLastGameWinner = -1;
 
 // GLOBAL: SWBF2 0x01e56014
-int mMetagameSide[4];
-}
+int GameLoop::mMetagameSide[4];
+
 
 namespace Lua_Callbacks
 {

@@ -29,10 +29,9 @@ void AddInterfaceElement(unsigned int hView, RedScreenGroupElement* pElement, fl
                          bool bUseSafeZone);
 }
 
-namespace GameLoop
-{
-    extern bool mbHistoricalRules;
-}
+
+    
+
 
 // GLOBAL: SWBF2 0x01e3094c
 EndDisplay* EndDisplay::sInstance;

@@ -738,10 +738,9 @@ bool __fastcall IsFriendBuddy(int iLocalIndex, int iPlayerId);
 const RedColor Interpolate(const RedColor& a, const RedColor& b, float t);
 
 extern RedColor gHudHighlightColor;
-namespace GameLoop
-{
-extern bool mbHistoricalRules;
-}
+
+
+
 extern bool netFrameLock;
 extern PblVector3 gVectorZero;
 
@@ -1315,7 +1314,7 @@ void HUD::ElementMap::UpdatePostIcons(float fElapsed, float fRotation)
                 const int iTeam = post.actor->GetGameObject()->GetTeam();
                 bitmap.SetColorOnly(pTeam->GetColor(iTeam));
 
-                const int iHoldTeam = post.actor->mHoldTeam;
+                const int iHoldTeam = post.actor->GetHoldTeam();
                 if (iHoldTeam != 0 && iHoldTeam != iTeam)
                 {
                     const float fTime = fmodf(GameLoop::GetMissionTime(), 1.0f);

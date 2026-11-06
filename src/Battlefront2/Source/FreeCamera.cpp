@@ -5,6 +5,7 @@
 
 #include "CameraManager.h"
 #include "CollisionObject.h"
+#include "CollisionManager.h"
 #include "FLInputManager.h"
 #include "FLJoystick.h"
 #include "GameLoop.h"
@@ -14,14 +15,6 @@
 #include "RedEngineFL/Graphics/RedOmniLight.h"
 
 class GameObject;
-
-class CollisionManager
-{
-public:
-    static float RayHit(const PblVector3& vStart, const PblVector3& vDir, float fLength,
-                        CollisionObject*& pObject, PblVector3* pvPoint,
-                        const GameObject** const ppIgnore, int iNumIgnore, int iMask, bool bFlag);
-};
 
 // GLOBAL: SWBF2 0x01e55f6a
 bool FreeCamera::sQuakeControl;

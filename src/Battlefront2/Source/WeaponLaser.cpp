@@ -13,10 +13,11 @@
 #include <new>
 
 extern bool netIsLocalTurn;
-namespace GameLoop
-{
-extern float sClientDeltaTime;
-}
+#include "GameLoop.h"
+
+
+
+
 
 namespace CombatUtil
 {

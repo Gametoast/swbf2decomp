@@ -87,10 +87,9 @@ extern bool netIsLateTurn;
 
 
 
-namespace GameLoop
-{
-extern bool gUnlimitedAmmo;
-}
+
+
+
 
 namespace
 {

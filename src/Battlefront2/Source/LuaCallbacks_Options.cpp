@@ -31,10 +31,9 @@ int gNumBots[4] = { -1, -1, 16, 16 };
 
 }
 
-namespace GameLoop
-{
-    extern bool mbHistoricalRules;
-}
+
+    
+
 
 extern bool netTeamDamage;
 extern bool netAutoAssignTeams;
@@ -136,11 +135,10 @@ static const int sLuaFunctionToEnum[5][21] = {
 // FUNCTION: SWBF2 0x0052b500
 int RawControllerInputs::GetFunctionForAnalog(int, int) { return 0; }
 
-namespace GameLoop
-{
+
 
 // FUNCTION: SWBF2 0x00533630
-void SetFunctionIdForButtonId(int iButton, int iFunction)
+void GameLoop::SetFunctionIdForButtonId(int iButton, int iFunction)
 {
     RawControllerInputs* pInputs = FLInputManager::s_instance.GetPlayerJoystick(PauseMenu::GetPausingViewport());
     if (pInputs)
@@ -148,13 +146,12 @@ void SetFunctionIdForButtonId(int iButton, int iFunction)
         pInputs->mCurBindings[pInputs->GetInputMode()][iButton].mDest = iFunction;
     }
 }
-}
 
-namespace GameLoop
-{
+
+
 
 // FUNCTION: SWBF2 0x00533660
-int GetFunctionIdForButtonId(int iButton)
+int GameLoop::GetFunctionIdForButtonId(int iButton)
 {
     RawControllerInputs* pInputs = FLInputManager::s_instance.GetPlayerJoystick(PauseMenu::GetPausingViewport());
     if (pInputs)
@@ -163,21 +160,20 @@ int GetFunctionIdForButtonId(int iButton)
     }
     return -1;
 }
-}
 
-namespace GameLoop
-{
+
+
 
 // FUNCTION: SWBF2 0x00533690
-int GetFunctionIdForAnalog()
+int GameLoop::GetFunctionIdForAnalog(int analogStick, int mode)
 {
     if (RawControllerInputs* pInputs = FLInputManager::s_instance.GetPlayerJoystick(PauseMenu::GetPausingViewport()))
     {
-        return pInputs->GetFunctionForAnalog(0, 0);
+        return pInputs->GetFunctionForAnalog(analogStick, mode);
     }
     return 0;
 }
-}
+
 
 // FUNCTION: SWBF2 0x00597250
 int LuaButtonIndexToEnum(int iButton) { return iButton; }
@@ -1392,9 +1388,9 @@ int ScriptCB_GetFunctionIdForAnalogId(lua_State*)
     {
         return 0;
     }
-    luaL_checknumber(LuaHelper::mState, 1);
-    luaL_checknumber(LuaHelper::mState, 2);
-    lua_pushnumber(LuaHelper::mState, (float)GameLoop::GetFunctionIdForAnalog());
+    int analogStick = (int)luaL_checknumber(LuaHelper::mState, 1);
+    int controlMode = (int)luaL_checknumber(LuaHelper::mState, 2);
+    lua_pushnumber(LuaHelper::mState, (float)GameLoop::GetFunctionIdForAnalog(analogStick, controlMode));
     return 1;
 }
 
@@ -1668,7 +1664,7 @@ void _SetGameRules(eGAME_RULES eRules)
         break;
     case eGAMERULES_METAGAME:
         GameLoop::mbHistoricalRules = false;
-        GameLoop::mbMetagameRules = true;
+        GameLoop::SetMetagameRulesOn(true);
         GameLoop::SetCanSwitchSides(false);
         break;
     }

@@ -18,10 +18,11 @@
 #include "StatusDisplay.h"
 #include "Trigger.h"
 
-namespace GameLoop
-{
-extern float sClientDeltaTime;
-}
+#include "GameLoop.h"
+
+
+
+
 
 
 class EntityWalker { public: static PblHash rttiHashEntityWalker; };
@@ -300,7 +301,7 @@ bool WeaponRepair::Update(float fDeltaTime)
 // FUNCTION: SWBF2 0x00690690
 WeaponRepair::~WeaponRepair()
 {
-    StatusDisplay::Instance(NetGame::GetJoystickIndex(mOwner->mInitialPlayerId))->SetRepairWeapon(0);
+    StatusDisplay::Instance(NetGame::GetJoystickIndex(mOwner->GetInitialPlayerId()))->SetRepairWeapon(0);
 }
 
 // FUNCTION: SWBF2 0x006906f0

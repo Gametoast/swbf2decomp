@@ -19,10 +19,11 @@ extern bool netIsLocalTurn;
 
 
 
-namespace GameLoop
-{
-extern float sClientDeltaTime;
-}
+#include "GameLoop.h"
+
+
+
+
 
 // SYNTHETIC: SWBF2 0x00407190
 // `dynamic initializer for 'WeaponGrenadeClass::rttiHashWeaponGrenadeClass''

@@ -32,17 +32,15 @@
 #include "SoundFL/source/win/sndengine.h"
 #include "Trigger.h"
 #include "PlayerController.h"
-namespace GameLoop
-{
+
 
 // GLOBAL: SWBF2 0x01e5600b
-bool sFreeMode;
-}
+bool GameLoop::sFreeMode;
 
-namespace GameLoop
-{
-void SetFreeMode(bool bFreeCamera);
-}
+
+
+
+
 
 // FUNCTION: SWBF2 0x00533600
 void GameLoop::SetFreeMode(bool bFreeCamera)
@@ -68,10 +66,9 @@ public:
     static void EnableViewport(unsigned int uiViewport, bool bEnable);
 };
 
-namespace GameLoop
-{
-void SetFreeMode(bool bFreeCamera);
-}
+
+
+
 namespace PopupText
 {
 void DisablePopup();

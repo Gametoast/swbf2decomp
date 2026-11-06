@@ -1234,10 +1234,9 @@ static PblVector3 sEyePointRelativeWeaponOffset[3] = {
 bool gPlayerSoldierCollisionOccurred;
 
 extern bool gShowSoldierPolyCount;
-namespace GameLoop
-{
-extern float sClientDeltaTime;
-}
+
+
+
 
 bool IsNeverDies(EntityType eType);
 

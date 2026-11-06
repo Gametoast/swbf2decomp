@@ -90,10 +90,9 @@ namespace PopupText
     void __fastcall ShowPopup(int iType, unsigned int uTextId);
 }
 
-namespace GameLoop
-{
-    extern bool mbHistoricalRules;
-}
+
+    
+
 extern float sNotifyRadius;
 extern int WORLD_EXTENTS;
 namespace ParticleSystem
@@ -1770,7 +1769,7 @@ int MissionVictory(lua_State* L)
             }
         }
     }
-    Team::sWinningTeams = uWinningTeams;
+    Team::SetWinningTeams(uWinningTeams);
     return 0;
 }
 
@@ -1796,7 +1795,7 @@ int MissionDefeat(lua_State* L)
             }
         }
     }
-    Team::sWinningTeams = ~uLosingTeams;
+    Team::SetWinningTeams(~uLosingTeams);
     return 0;
 }
 

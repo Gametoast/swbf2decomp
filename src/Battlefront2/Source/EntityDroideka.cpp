@@ -434,10 +434,9 @@ EntityDroidekaClass::EntityDroidekaClass(unsigned int uHash)
 }
 
 
-namespace GameLoop
-{
-extern float sClientDeltaTime;
-}
+
+
+
 
 namespace
 {

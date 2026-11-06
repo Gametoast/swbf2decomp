@@ -268,10 +268,11 @@ void WeaponMeleeClass::Render(float fTurnOn, const PblMatrix& matrix, const RedP
     }
 }
 
-namespace GameLoop
-{
-    extern float sClientDeltaTime;
-}
+#include "GameLoop.h"
+
+
+    
+
 
 // GLOBAL: SWBF2 0x01fac398
 static unsigned int s_uiODFComboId;

@@ -51,10 +51,11 @@ void Event<FlagItem, char>::Callback::Trigger(FlagItem& item, char& param);
 }
 
 extern int gSpawnInvicibility;
-namespace GameLoop
-{
-extern bool mbHistoricalRules;
-}
+#include "GameLoop.h"
+
+
+
+
 
 namespace
 {

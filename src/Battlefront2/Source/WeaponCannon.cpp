@@ -30,10 +30,11 @@ namespace CombatUtil
 {
 void SendDamageEvent(const Controllable* pOwner, const GameObject* pTarget, const Trigger* pTrigger);
 }
-namespace GameLoop
-{
-extern float sClientDeltaTime;
-}
+#include "GameLoop.h"
+
+
+
+
 
 
 

@@ -184,8 +184,8 @@ void LockOnManager::Update(float fDeltaTime)
         return;
     }
 
-    if (FlagItem::sFlagGameplayType != FlagItem::FLAG_GAMEPLAY_1FLAG &&
-        FlagItem::sFlagGameplayType != FlagItem::FLAG_GAMEPLAY_2FLAG)
+    if (FlagItem::GetGameplayType() != FlagItem::FLAG_GAMEPLAY_1FLAG &&
+        FlagItem::GetGameplayType() != FlagItem::FLAG_GAMEPLAY_2FLAG)
     {
         if (mNewNumNearestTargets > 1 && mNewNumNearestTargets <= 3)
         {
@@ -309,10 +309,11 @@ LockOnManager::Target* LockOnManager::AddTargetCommon(GameObject* pActor, unsign
 }
 
 extern bool netFrameLock;
-namespace GameLoop
-{
-extern bool mbHistoricalRules;
-}
+#include "GameLoop.h"
+
+
+
+
 
 // FUNCTION: SWBF2 0x0057b430
 void LockOnManager::CalculateScreenCoordinates(Controllable* const pCtrl, RedCamera* const pCamera, const PblVector3& pPos, float& pScreenX, float& pScreenY, bool& pOffScreen, bool bAimRay) const
@@ -641,8 +642,8 @@ bool LockOnManager::IsTargetObjectTypeAllowed(GameObject* gameObject, GameObject
 
     if (noLockon)
     {
-        if ((FlagItem::sFlagGameplayType == FlagItem::FLAG_GAMEPLAY_1FLAG ||
-             FlagItem::sFlagGameplayType == FlagItem::FLAG_GAMEPLAY_2FLAG) &&
+        if ((FlagItem::GetGameplayType() == FlagItem::FLAG_GAMEPLAY_1FLAG ||
+             FlagItem::GetGameplayType() == FlagItem::FLAG_GAMEPLAY_2FLAG) &&
             gameObject->GetCarriedFlagItem())
         {
             if (gameObject != me)

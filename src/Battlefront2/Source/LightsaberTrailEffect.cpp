@@ -57,12 +57,13 @@ void LightsaberTrailEffect::Destroy()
     s_pInstance = 0;
 }
 
-namespace GameLoop
-{
+#include "GameLoop.h"
+
+
 
 // GLOBAL: SWBF2 0x01e56058
-float sClientDeltaTime;
-}
+float GameLoop::sClientDeltaTime;
+
 
 // FUNCTION: SWBF2 0x00573f60
 LightsaberTrail::LightsaberTrail(const LightsaberTrailClass* pClass)

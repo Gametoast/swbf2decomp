@@ -61,10 +61,9 @@ namespace PblProfile
 void SetPaused(bool bValue);
 }
 
-namespace GameLoop
-{
-extern bool mbHistoricalRules;
-}
+
+
+
 
 
 const RedColor Interpolate(const RedColor& a, const RedColor& b, float t);

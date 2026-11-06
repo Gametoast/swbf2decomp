@@ -468,14 +468,12 @@ char netGameType[32];
 
 extern char netGameName[64];
 
-namespace GameLoop
-{
-extern bool sQuitRequested;
-}
-namespace GameLoop
-{
-extern unsigned int sQuitTurn;
-}
+
+
+
+
+
+
 extern int netCurMaxPlayers;
 
 // FUNCTION: SWBF2 0x005db330

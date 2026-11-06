@@ -17,10 +17,11 @@
 #include "Trigger.h"
 #include "SoundFL/source/sndvoicevirtual.h"
 
-namespace GameLoop
-{
-extern float sClientDeltaTime;
-}
+#include "GameLoop.h"
+
+
+
+
 
 
 

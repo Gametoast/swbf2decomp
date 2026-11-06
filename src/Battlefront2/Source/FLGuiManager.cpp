@@ -20,10 +20,9 @@ namespace FLRenderer
 void EnableCursor(bool bEnable);
 }
 
-namespace GameLoop
-{
-    extern bool sShowStats;
-}
+
+    
+
 
 static const float kINITIAL_REPEAT_DELAY = 0.65f;
 static const float kEXTRA_REPEAT_DELAY = 0.15f;
@@ -199,7 +198,7 @@ void GuiManager::UpdateAll(float fElapsed)
     else
     {
         unsigned int uiState = GameState::GetState();
-        bool bSplitScreen = uiState == 0x8ff60339 && GameLoop::sShowStats && GameLoop::mNumCameras > 1;
+        bool bSplitScreen = uiState == 0x8ff60339 && GameLoop::sShowStats && GameLoop::GetNumCameras() > 1;
         bool bShell = uiState == 0x11e1fc01;
         FLInputManager* pInput = FLInputManager::Instance();
         bool bReadAll = pInput->mReadAllControllers;

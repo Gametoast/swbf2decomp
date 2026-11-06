@@ -459,14 +459,12 @@ bool GetCommand(char* pcToken, AdminCommand& cmd, bool& bNo)
 }
 
 void __fastcall SendAdminMessage(char* pcMessage);
-namespace GameLoop
-{
-extern bool sQuitRequested;
-}
-namespace GameLoop
-{
-extern unsigned int sQuitTurn;
-}
+
+
+
+
+
+
 
 // FUNCTION: SWBF2 0x005aedb0
 void NetAdmin::RemovePlayer(int iPlayer)

@@ -246,10 +246,9 @@ extern bool netHeroesEnabled;
 extern int netHeroLastPlayerID[3];
 extern bool gDoTakeoverSpawns;
 extern bool gNoAIRespawn;
-namespace GameLoop
-{
-extern bool mbHistoricalRules;
-}
+
+
+
 extern int netNumBots;
 
 // GLOBAL: SWBF2 0x01e2fde6

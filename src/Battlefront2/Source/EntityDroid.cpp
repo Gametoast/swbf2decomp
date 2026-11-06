@@ -1088,13 +1088,7 @@ bool EntityDroid::Update(float fDeltaTime)
         RemoveFromCollisionManager();
         if (mClass->mExplosion)
         {
-            GameObject* pOwnerObject = mDamageOwner.mGameObject.mObject;
-            if (pOwnerObject && pOwnerObject->GetHandleId() != mDamageOwner.mGameObject.mSavedHandleId)
-            {
-                mDamageOwner.mGameObject.mObject = 0;
-                mDamageOwner.mGameObject.mSavedHandleId = 0;
-                pOwnerObject = 0;
-            }
+            GameObject* pOwnerObject = mDamageOwner.mGameObject;
             DamageOwner owner(mDamageOwner.mCharacter, pOwnerObject, mDamageOwner.mTeam, mClass, 0, 1.0f);
             mClass->mExplosion->CreateExplosion(mMatrix.GetTranslation(), owner, false, COLL_UNKNOWN);
         }
@@ -1240,7 +1234,7 @@ bool EntityDroid::Update(float fDeltaTime)
 
     if (mPlayerId >= 0)
     {
-        if (GameLoop::_bFirstPersonEnabled && netIsLocalTurn && mControlView.IsPressed() && !IsForcedThirdPerson() &&
+        if (GameLoop::FirstPersonEnabled() && netIsLocalTurn && mControlView.IsPressed() && !IsForcedThirdPerson() &&
             !IsForcedFirstPerson() && mClass->mForceMode != 1 && mClass->mForceMode != 2 && mTracker)
         {
             SwitchControlView(mPlayerId);

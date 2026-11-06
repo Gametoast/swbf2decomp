@@ -59,12 +59,16 @@ static const char* GetSideIcon(int iSide)
     {
         return sideIcons[iSide];
     }
-    if (GameLoop::mMissionScriptHash == 0x2b6c2d0d || GameLoop::mMissionScriptHash == 0x41c2e16a ||
-        GameLoop::mMissionScriptHash == 0xcdb830bd)
+    const char* pIcon = "com_icon_republic";
+    if (GameLoop::mMissionScriptHash != 0x2b6c2d0d &&
+        GameLoop::mMissionScriptHash != 0x41c2e16a)
     {
-        return "com_icon_republic";
+        if (GameLoop::mMissionScriptHash != 0xcdb830bd)
+        {
+            pIcon = 0;
+        }
     }
-    return 0;
+    return pIcon;
 }
 
 // FUNCTION: SWBF2 0x005a3180

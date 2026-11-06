@@ -77,11 +77,12 @@ void ProcessHint(PblFileChunk& chunk);
 void ProcessBarrier(PblFileChunk& chunk);
 }
 
-namespace GameLoop
-{
-void SetWorldFilename(char const* pcName);
-void SetTerrainFilename(char const* pcName);
-}
+#include "GameLoop.h"
+
+
+
+
+
 
 // GLOBAL: SWBF2 0x01faaa78
 

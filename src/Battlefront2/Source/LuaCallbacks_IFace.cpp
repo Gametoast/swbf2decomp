@@ -249,10 +249,9 @@ bool GetServicePlayerID(const char* pcName, unsigned __int64* puId)
 }
 }
 
-namespace GameLoop
-{
-extern bool gUnlimitedAmmo;
-}
+
+
+
 extern bool gLowResModelsEnabled;
 
 // FUNCTION: SWBF2 0x00617070
@@ -4430,7 +4429,7 @@ int ScriptCB_GetEntityWeaponMesh(lua_State* L)
 {
     lua_gettop(LuaHelper::mState);
     EntityClass* pClass = EntityClass::Find(PblHash(luaL_checklstring(LuaHelper::mState, 1, 0)));
-    if (pClass && pClass->IsRtti(GameObjectClass::rttiHashGameObjectClass))
+    if (pClass && pClass->IsRtti(GameObjectClass::GetRtti()))
     {
         GameObjectClass* pObjectClass = (GameObjectClass*)pClass;
         if (pObjectClass->GetWeaponCount() > 0)

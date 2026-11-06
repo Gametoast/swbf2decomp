@@ -97,10 +97,9 @@ namespace PblBuildType
     bool gDemoAutoAssign = true;
 }
 
-namespace GameLoop
-{
-    extern bool mbHistoricalRules;
-}
+
+    
+
 extern bool gAttractMode;
 extern bool gDemoMode;
 
@@ -122,7 +121,7 @@ int ShellLoop::Init()
     NetGame::ClearAllCDKeyInfo();
     EntityEx::InitFind();
     FLInputManager::s_instance.SetHotController(-1);
-    GameLoop::mbMetagameRules = false;
+    GameLoop::SetMetagameRulesOn(false);
     if (FLInputManager::Instance()->GetSecondaryPort() < 0)
     {
         GameLoop::mNumCameras = 1;
@@ -201,7 +200,7 @@ int ShellLoop::Init()
     NetGame::CreateClient();
     NetGame::EnterClient();
 
-    sMissionTime.Mark(&GameState::_SystemTimeBase);
+    sMissionTime.Mark(GameState::GetSystemTimeBase());
     sDeltaTime = 0.0f;
     ShellLoop::sSystemDeltaTime = 0;
     ShellLoop::clientInputAcc = 0.0f;

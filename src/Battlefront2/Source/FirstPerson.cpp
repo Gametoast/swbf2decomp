@@ -78,14 +78,12 @@ unsigned int GetViewportCount();
 unsigned int GetCurrentViewport();
 }
 
-namespace GameLoop
-{
-    extern float sDeltaTime;
-}
-namespace GameLoop
-{
-    extern float sClientDeltaTime;
-}
+
+    
+
+
+    
+
 
 
 
@@ -696,7 +694,7 @@ void FirstPersonRenderable::UpdateSoldier(const RedModel* pModel, Controllable* 
     else if (bTransition && fTransitionTimerMax > fTransitionTimer)
     {
         eAnim = mTransitionAnim;
-        fTransitionTimer += GameLoop::sDeltaTime;
+        fTransitionTimer += GameLoop::GetDeltaTime();
     }
 
     if (mBlendHandsDown && bReadyToRender)

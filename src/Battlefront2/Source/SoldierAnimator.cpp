@@ -38,10 +38,9 @@ static const float OVERLAY_FADEOUT_RATE = 8.0f;
 
 
 
-namespace GameLoop
-{
-extern float sClientDeltaTime;
-}
+
+
+
 
 const float UnitCircleNormalize(float fAngle);
 
