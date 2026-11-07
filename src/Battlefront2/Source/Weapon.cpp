@@ -1263,24 +1263,6 @@ inline void* Weapon::operator new(size_t uSize)
 
 
 
-// FUNCTION: SWBF2 0x00677660
-bool Weapon::IsLocked() const
-{
-    return mTarget != 0;
-}
-
-// FUNCTION: SWBF2 0x006776a0
-const GameObject* Weapon::GetLocked() const
-{
-    return &mTarget();
-}
-
-// FUNCTION: SWBF2 0x006776d0
-int Weapon::GetLockedTargetBodyId() const
-{
-    return mTargetBodyID;
-}
-
 // FUNCTION: SWBF2 0x006776e0
 void Weapon::SetKickSpreadFactor(float)
 {
@@ -1303,12 +1285,6 @@ float Weapon::GetPitchSpread() const
     return 0.0f;
 }
 
-// FUNCTION: SWBF2 0x00677720
-bool Weapon::Deflect(const Ordnance*, const PblVector3&, const PblVector3&)
-{
-    return false;
-}
-
 // FUNCTION: SWBF2 0x00677730
 bool Weapon::ShouldShowReticule() const
 {
@@ -1323,18 +1299,6 @@ bool Weapon::IsMelee() const
 
 // FUNCTION: SWBF2 0x00677750
 bool Weapon::IsMeleeThrow() const
-{
-    return false;
-}
-
-// FUNCTION: SWBF2 0x00677760
-bool Weapon::OverrideSoldierVelocity(float&, float&, float&, float&) const
-{
-    return false;
-}
-
-// FUNCTION: SWBF2 0x00677770
-bool Weapon::OverrideSoldierEnergyRestore(float&) const
 {
     return false;
 }

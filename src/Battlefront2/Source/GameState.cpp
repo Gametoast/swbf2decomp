@@ -1078,20 +1078,6 @@ GamePath* EntityPathFactory::CreatePath() const
     return new EntityPath();
 }
 
-// FUNCTION: SWBF2 0x00539330
-void* SoundStaticRegionFactory::CreateRegion(RedRegionDesc& desc, const char* pcName) const
-{
-    EntitySoundStaticClass soundClass(0xEDE52A96);
-    return EntitySoundClass::CreateSoundFromRegion(desc, pcName, GetPrefix(), soundClass);
-}
-
-// FUNCTION: SWBF2 0x005393d0
-void* SoundStreamRegionFactory::CreateRegion(RedRegionDesc& desc, const char* pcName) const
-{
-    EntitySoundStreamClass soundClass(0x93D6C380);
-    return EntitySoundClass::CreateSoundFromRegion(desc, pcName, GetPrefix(), soundClass);
-}
-
 // FUNCTION: SWBF2 0x00539470
 bool IsNetObjectFeatureEnabled()
 {

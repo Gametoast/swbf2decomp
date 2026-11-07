@@ -567,8 +567,8 @@ void NetComm::GetBandwidth(int iDest, int& iUp, int& iDown)
 
 void DoSends();
 void DoRecvs();
-void __fastcall SendLow(NetPacket* pPacket);
-bool __fastcall RecvGroup(NetPktGroup& group, NetPacket* pPacket);
+void SendLow(NetPacket* pPacket);
+bool RecvGroup(NetPktGroup& group, NetPacket* pPacket);
 void __fastcall HandleCommPacketOut(NetPacket* pPacket);
 namespace gf
 {
@@ -631,7 +631,7 @@ bool NetComm::Recv(NetPktGroup& group, PktType eType)
 }
 
 // FUNCTION: SWBF2 0x005b2aa0
-void __fastcall ClearGroup(NetPktGroup& group, int iDest)
+void ClearGroup(NetPktGroup& group, int iDest)
 {
     for (NetPacket* pPacket = group.GetFront(); pPacket; )
     {
@@ -700,7 +700,7 @@ void NetCommP::FreePackets()
 
 
 // FUNCTION: SWBF2 0x005b2e30
-void __fastcall SendLow(NetPacket* pPacket)
+void SendLow(NetPacket* pPacket)
 {
     const unsigned int iDest = GetSrc(pPacket);
     HandleCommPacketOut(pPacket);
@@ -712,7 +712,7 @@ void __fastcall SendLow(NetPacket* pPacket)
     }
 }
 
-void __fastcall PackHeader(NetPacket* pPacket);
+void PackHeader(NetPacket* pPacket);
 
 // FUNCTION: SWBF2 0x005b2e90
 void __fastcall HandleCommPacketOut(NetPacket* pPacket)
@@ -721,7 +721,7 @@ void __fastcall HandleCommPacketOut(NetPacket* pPacket)
 }
 
 // FUNCTION: SWBF2 0x005b2eb0
-void __fastcall PackHeader(NetPacket* pPacket)
+void PackHeader(NetPacket* pPacket)
 {
     pPacket->mCommIndex = pPacket->mDataIndex - 5;
     pPacket->mCurIndex = (signed char)pPacket->mCommIndex;
@@ -733,7 +733,7 @@ void __fastcall PackHeader(NetPacket* pPacket)
 }
 
 // FUNCTION: SWBF2 0x005b3130
-void __fastcall CleanGroups(int iDest, int iSequence)
+void CleanGroups(int iDest, int iSequence)
 {
     int iRecent = iSequence - 16;
     int iOld = iRecent - 256;
@@ -769,7 +769,7 @@ void __fastcall CleanGroups(int iDest, int iSequence)
 }
 
 // FUNCTION: SWBF2 0x005b2f90
-bool __fastcall RecvGroup(NetPktGroup& complete, NetPacket* pPacket)
+bool RecvGroup(NetPktGroup& complete, NetPacket* pPacket)
 {
     CleanGroups(NetComm::Header(pPacket).src, NetComm::Header(pPacket).group);
     if (NetComm::Header(pPacket).count == 1 && NetComm::Header(pPacket).idx == 0)
@@ -1057,7 +1057,7 @@ void DoSends()
     }
 }
 
-void __fastcall UnpackHeader(NetPacket* pPacket);
+void UnpackHeader(NetPacket* pPacket);
 
 // FUNCTION: SWBF2 0x005b2ea0
 void __fastcall HandleCommPacketIn(NetPacket* pPacket)
@@ -1066,7 +1066,7 @@ void __fastcall HandleCommPacketIn(NetPacket* pPacket)
 }
 
 // FUNCTION: SWBF2 0x005b2f10
-void __fastcall UnpackHeader(NetPacket* pPacket)
+void UnpackHeader(NetPacket* pPacket)
 {
     pPacket->mCurIndex = (signed char)pPacket->mCommIndex;
     NetComm::PktHeader header;

@@ -25,7 +25,11 @@ public:
     virtual unsigned int GetDerivedRtti() const;
     virtual const char* GetDerivedRttiName() const;
     virtual void SetProperty(unsigned int uProperty, const char* pszValue);
-    virtual float GetRange();
+    // FUNCTION: SWBF2 0x005fc400
+    virtual float GetRange() const
+    {
+        return mConeLength;
+    }
     virtual DamageDesc GetDamage(const DamageOwner& owner, float fUnused, float fRatio,
                                  float fElapsed) const;
 

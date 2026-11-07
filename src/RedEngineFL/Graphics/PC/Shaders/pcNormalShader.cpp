@@ -81,12 +81,6 @@ pcNormalShader::pcNormalShader(unsigned int uiFlags,
           color0, color1, fSpecularPower);
 }
 
-// FUNCTION: SWBF2 0x006ff7c0
-pcRedShaderDef* pcNormalShader::GetShaderDef() const
-{
-    return &s_shaderDef;
-}
-
 // FUNCTION: SWBF2 0x006ff990
 void pcNormalShader::InitFixedFunctionShaderDef() const
 {
@@ -341,12 +335,6 @@ void RedShadingState::operator delete(void* pBlock)
 // SYNTHETIC: SWBF2 0x006fe9b0
 // RedShadingState::`scalar deleting destructor'
 
-// FUNCTION: SWBF2 0x006ff540
-void pcNormalShader::Bind()
-{
-    _BindPipeline(GetStateFuncArray, BeginFuncArray, EndFuncArray, RenderFuncArray);
-}
-
 // FUNCTION: SWBF2 0x006ff560
 RedShadingState* pcNormalShader::CreateShadingState() const
 {
@@ -366,12 +354,6 @@ void pcNormalShader::End_Prog1(unsigned int, unsigned int) const
 {
 }
 
-// FUNCTION: SWBF2 0x006ff650
-unsigned int pcNormalShader::GetID(unsigned int uiPass) const
-{
-    return s_shaderDef.m_states[uiPass].uiID;
-}
-
 // FUNCTION: SWBF2 0x006ff670
 RenderPhaseT pcNormalShader::GetRenderPhase(const RenderItem* pItem, unsigned int) const
 {
@@ -380,12 +362,6 @@ RenderPhaseT pcNormalShader::GetRenderPhase(const RenderItem* pItem, unsigned in
         return RENDERPHASE_TRANSPARENT;
     }
     return RENDERPHASE_OPAQUE;
-}
-
-// FUNCTION: SWBF2 0x006ff6a0
-unsigned int pcNormalShader::GetRenderTypeHash() const
-{
-    return s_uiRenderTypeHash;
 }
 
 // FUNCTION: SWBF2 0x006ff6b0

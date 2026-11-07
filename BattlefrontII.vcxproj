@@ -2159,6 +2159,10 @@
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <OmitDefaultLibName>true</OmitDefaultLibName>
     </ClCompile>
+    <ClCompile Include="src\PebbleFL\Common\PblPerformance.cpp">
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <OmitDefaultLibName>true</OmitDefaultLibName>
+    </ClCompile>
     <ClCompile Include="src\PebbleFL\Common\PblProfile.cpp">
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <OmitDefaultLibName>true</OmitDefaultLibName>
@@ -2210,45 +2214,6 @@
     <ClCompile Include="src\PebbleFL\Common\PblPrintfWrapper.cpp">
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <OmitDefaultLibName>true</OmitDefaultLibName>
-    </ClCompile>
-    <ClCompile Include="src\Zephyr\Source\ZephyrAnim.cpp">
-      <InlineFunctionExpansion Condition="'$(Configuration)'=='Release'">AnySuitable</InlineFunctionExpansion>
-    </ClCompile>
-    <ClCompile Include="src\Zephyr\Source\ZephyrAnimBank.cpp">
-      <InlineFunctionExpansion Condition="'$(Configuration)'=='Release'">AnySuitable</InlineFunctionExpansion>
-    </ClCompile>
-    <ClCompile Include="src\Zephyr\Source\ZephyrAnimBankReader.cpp">
-      <InlineFunctionExpansion Condition="'$(Configuration)'=='Release'">AnySuitable</InlineFunctionExpansion>
-    </ClCompile>
-    <ClCompile Include="src\Zephyr\Source\ZephyrAnimInst.cpp">
-      <InlineFunctionExpansion Condition="'$(Configuration)'=='Release'">AnySuitable</InlineFunctionExpansion>
-    </ClCompile>
-    <ClCompile Include="src\Zephyr\Source\ZephyrAnimJoint.cpp">
-      <InlineFunctionExpansion Condition="'$(Configuration)'=='Release'">AnySuitable</InlineFunctionExpansion>
-    </ClCompile>
-    <ClCompile Include="src\Zephyr\Source\ZephyrEvent.cpp">
-      <InlineFunctionExpansion Condition="'$(Configuration)'=='Release'">AnySuitable</InlineFunctionExpansion>
-    </ClCompile>
-    <ClCompile Include="src\Zephyr\Source\ZephyrFile.cpp">
-      <InlineFunctionExpansion Condition="'$(Configuration)'=='Release'">AnySuitable</InlineFunctionExpansion>
-    </ClCompile>
-    <ClCompile Include="src\Zephyr\Source\ZephyrPoseDyn.cpp">
-      <InlineFunctionExpansion Condition="'$(Configuration)'=='Release'">AnySuitable</InlineFunctionExpansion>
-    </ClCompile>
-    <ClCompile Include="src\Zephyr\Source\ZephyrPoseStatic.cpp">
-      <InlineFunctionExpansion Condition="'$(Configuration)'=='Release'">AnySuitable</InlineFunctionExpansion>
-    </ClCompile>
-    <ClCompile Include="src\Zephyr\Source\ZephyrSkeleton.cpp">
-      <InlineFunctionExpansion Condition="'$(Configuration)'=='Release'">AnySuitable</InlineFunctionExpansion>
-    </ClCompile>
-    <ClCompile Include="src\Zephyr\Source\ZephyrSkeletonShared.cpp">
-      <InlineFunctionExpansion Condition="'$(Configuration)'=='Release'">AnySuitable</InlineFunctionExpansion>
-    </ClCompile>
-    <ClCompile Include="src\Zephyr\Source\ZephyrSkinReader.cpp">
-      <InlineFunctionExpansion Condition="'$(Configuration)'=='Release'">AnySuitable</InlineFunctionExpansion>
-    </ClCompile>
-    <ClCompile Include="src\Zephyr\Source\ZephyrSkinShared.cpp">
-      <InlineFunctionExpansion Condition="'$(Configuration)'=='Release'">AnySuitable</InlineFunctionExpansion>
     </ClCompile>
     <ClCompile Include="src\ZlibFL\adler32.c">
       <InlineFunctionExpansion Condition="'$(Configuration)'=='Release'">AnySuitable</InlineFunctionExpansion>
@@ -2756,6 +2721,7 @@
     <ClInclude Include="src\PebbleFL\Common\PblMath.h" />
     <ClInclude Include="src\PebbleFL\Common\PblMatrix.h" />
     <ClInclude Include="src\PebbleFL\Common\PblPlane.h" />
+    <ClInclude Include="src\PebbleFL\Common\PblPerformance.h" />
     <ClInclude Include="src\PebbleFL\Common\PblQuaternion.h" />
     <ClInclude Include="src\PebbleFL\Common\PblRandom.h" />
     <ClInclude Include="src\PebbleFL\Common\PblRef.h" />
@@ -2858,20 +2824,6 @@
     <ClInclude Include="src\Steam\gfSteamAuth.h" />
     <ClInclude Include="src\Steam\steamworks.h" />
     <ClInclude Include="src\Steam\utf8.h" />
-    <ClInclude Include="src\Zephyr\Source\ZephyrAnim.h" />
-    <ClInclude Include="src\Zephyr\Source\ZephyrAnimBank.h" />
-    <ClInclude Include="src\Zephyr\Source\ZephyrAnimBankReader.h" />
-    <ClInclude Include="src\Zephyr\Source\ZephyrAnimInst.h" />
-    <ClInclude Include="src\Zephyr\Source\ZephyrAnimJoint.h" />
-    <ClInclude Include="src\Zephyr\Source\ZephyrCommon.h" />
-    <ClInclude Include="src\Zephyr\Source\ZephyrEvent.h" />
-    <ClInclude Include="src\Zephyr\Source\ZephyrFile.h" />
-    <ClInclude Include="src\Zephyr\Source\ZephyrPoseDyn.h" />
-    <ClInclude Include="src\Zephyr\Source\ZephyrPoseStatic.h" />
-    <ClInclude Include="src\Zephyr\Source\ZephyrSkeleton.h" />
-    <ClInclude Include="src\Zephyr\Source\ZephyrSkeletonShared.h" />
-    <ClInclude Include="src\Zephyr\Source\ZephyrSkinReader.h" />
-    <ClInclude Include="src\Zephyr\Source\ZephyrSkinShared.h" />
     <ClInclude Include="src\ZlibFL\crc32.h" />
     <ClInclude Include="src\ZlibFL\deflate.h" />
     <ClInclude Include="src\ZlibFL\inffast.h" />
@@ -2887,6 +2839,11 @@
   <ItemGroup>
     <ProjectReference Include="src\RedEngineFL\RedEngineFL.vcxproj">
       <Project>{C3E30B7D-A395-5FA0-9B64-F5CA244C6B92}</Project>
+      <LinkLibraryDependencies>true</LinkLibraryDependencies>
+      <UseLibraryDependencyInputs>false</UseLibraryDependencyInputs>
+    </ProjectReference>
+    <ProjectReference Include="src\Zephyr\ZephyrFL.vcxproj">
+      <Project>{4F910B28-63C7-4E59-BA94-035643220A73}</Project>
       <LinkLibraryDependencies>true</LinkLibraryDependencies>
       <UseLibraryDependencyInputs>false</UseLibraryDependencyInputs>
     </ProjectReference>

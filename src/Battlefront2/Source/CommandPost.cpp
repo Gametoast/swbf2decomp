@@ -8,6 +8,7 @@
 #include "Character.h"
 #include "CommandFlyer.h"
 #include "CommandHover.h"
+#include "CommandWalker.h"
 #include "CollisionObject.h"
 #include "Entity.h"
 #include "EntityHologram.h"
@@ -375,11 +376,6 @@ void CommandPostClass::SetProperty(unsigned int uProperty, const char* pszValue,
 
 extern PblVector3 gVectorZero;
 
-class CommandWalker
-{
-public:
-    static PblHash rttiHashCommandWalker;
-};
 
 
 // GLOBAL: SWBF2 0x01e308e0
@@ -722,7 +718,7 @@ void CommandPost::Kill()
         NetGame::CreateEvent_Message(NetGame::MSG_LOST, 0, 0, 0, 0, Team::sTeams[mObject->mTeam], this);
         if (!mObject->IsRtti(CommandFlyer::rttiHashCommandFlyer) &&
             !mObject->IsRtti(CommandHover::rttiHashCommandHover) &&
-            !mObject->IsRtti(CommandWalker::rttiHashCommandWalker))
+            !mObject->IsRtti(CommandWalker::GetRtti()))
         {
             Character* pKiller = GetGameObject()->mDamageOwner.mCharacter;
             if (pKiller && pKiller->mTeamPtr->GetAffiliation(GetGameObject()->mTeam) <= 0)

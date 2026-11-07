@@ -6,6 +6,7 @@
 #include "Ordnance.h"
 #include "BonusManager.h"
 #include "Character.h"
+#include "PlayerStats.h"
 #include "CollisionManager.h"
 #include "Controllable.h"
 #include "Explosion.h"
@@ -19,11 +20,6 @@
 #include "PebbleFL/Common/PblFile.h"
 #include "RedEngineFL/Application/RedWater.h"
 
-class PlayerStats
-{
-public:
-    void AddShot();
-};
 
 namespace
 {
@@ -145,24 +141,6 @@ void Ordnance::CreateRicochet(const PblVector3& vPos, const PblVector3& vNormal,
 
 
 
-
-// FUNCTION: SWBF2 0x005f72e0
-float OrdnanceClass::GetVelocity()
-{
-    return 0.0f;
-}
-
-// FUNCTION: SWBF2 0x005f72f0
-float OrdnanceClass::GetGravity()
-{
-    return 0.0f;
-}
-
-// FUNCTION: SWBF2 0x005f7300
-float OrdnanceClass::GetRange()
-{
-    return 0.0f;
-}
 
 // FUNCTION: SWBF2 0x005f7310
 DamageDesc OrdnanceClass::GetDamage() const

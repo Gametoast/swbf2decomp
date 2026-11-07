@@ -670,133 +670,6 @@ bool IsNextScopeChunk(const PblConfig& config)
     return config.m_pChunk->PeekNextChildId() == SCOPE_ID;
 }
 
-// FUNCTION: SWBF2 0x00470960
-void Combo::Condition::SetBreak(float fTime)
-{
-    int iTime = (int)(fTime * TIME_SCALE_INV);
-    if (iTime < 0)
-    {
-        iTime = 0;
-    }
-    else if (iTime > 511)
-    {
-        iTime = 511;
-    }
-    m_uiBreakTime = iTime;
-    m_bBreak = 1;
-}
-
-// FUNCTION: SWBF2 0x004709a0
-void Combo::Condition::SetTimeStart(float fTime, bool bFromEnd)
-{
-    int iTime = (int)(fTime * TIME_SCALE_INV);
-    if (iTime < -512)
-    {
-        iTime = -512;
-    }
-    else if (iTime > 511)
-    {
-        iTime = 511;
-    }
-    m_iTimeStart = iTime;
-    m_bTimeStartFromEnd = bFromEnd;
-}
-
-// FUNCTION: SWBF2 0x00470a00
-void Combo::Condition::SetTimeEnd(float fTime, bool bFromEnd, bool bSyncIfOvertime)
-{
-    int iTime = (int)(fTime * TIME_SCALE_INV);
-    if (iTime < -512)
-    {
-        iTime = -512;
-    }
-    else if (iTime > 511)
-    {
-        iTime = 511;
-    }
-    m_iTimeEnd = iTime;
-    m_bTimeEndFromEnd = bFromEnd;
-    m_bSyncIfOvertime = bSyncIfOvertime;
-}
-
-// FUNCTION: SWBF2 0x00470a70
-void Combo::Condition::SetSoldierStateTime(float fTime, bool bLess)
-{
-    int iTime = (int)(fTime * TIME_SCALE_INV);
-    if (iTime < 0)
-    {
-        iTime = 0;
-    }
-    else if (iTime > 2047)
-    {
-        iTime = 2047;
-    }
-    m_uiSoldierStateTimeRef = iTime;
-    m_bSoldierStateTimeLess = bLess;
-}
-
-// FUNCTION: SWBF2 0x00470ac0
-void Combo::Condition::SetEnergy(float fEnergy, bool bLess)
-{
-    int iEnergy = (int)(fEnergy * ENERGY_SCALE_INV);
-    if (iEnergy < 0)
-    {
-        iEnergy = 0;
-    }
-    else if (iEnergy > 1023)
-    {
-        iEnergy = 1023;
-    }
-    m_uiEnergyRef = iEnergy;
-    m_bEnergyLess = bLess;
-}
-
-// FUNCTION: SWBF2 0x00470b10
-void Combo::Condition::SetInputMag(float fMag, bool bLess)
-{
-    int iMag = (int)(fMag * INPUT_MAG_SCALE_INV);
-    if (iMag < 0)
-    {
-        iMag = 0;
-    }
-    else if (iMag > 100)
-    {
-        iMag = 100;
-    }
-    m_uiInputMagRef = iMag;
-    m_bInputMagLess = bLess;
-}
-
-// FUNCTION: SWBF2 0x00470b60
-void Combo::Condition::SetInputDir(float fMin, float fMax)
-{
-    m_iInputDirMin = (((int)fMin + 179) % 360 + 360) % 360 - 179;
-    m_iInputDirMax = (((int)fMax + 179) % 360 + 360) % 360 - 179;
-}
-
-
-// FUNCTION: SWBF2 0x00470c50
-void Combo::Condition::SetVelocityXZMag(float fMag, bool bLess)
-{
-    int iMag = (int)(fMag * VELOCITYXZ_MAG_SCALE_INV);
-    if (iMag < 0)
-    {
-        iMag = 0;
-    }
-    else if (iMag > 2047)
-    {
-        iMag = 2047;
-    }
-    m_uiVelocityXZMagRef = iMag;
-    m_bVelocityXZMagLess = bLess;
-}
-
-// FUNCTION: SWBF2 0x00470ca0
-void Combo::Condition::SetVelocityXZDir(float fMin, float fMax)
-{
-    m_iVelocityXZDirMin = (((int)fMin + 179) % 360 + 360) % 360 - 179;
-    m_iVelocityXZDirMax = (((int)fMax + 179) % 360 + 360) % 360 - 179;
-}
 
 
 
@@ -1091,32 +964,32 @@ void Combo::Condition::_ReadConfig(PblConfig& config, const char* pszComboName, 
         case 0x43b27471: /* "Button" */
             if (data.GetNumArgs() && data.IsStringArg(0))
             {
-                unsigned int eButton = 0;
-                unsigned int eAction = 0;
+                BUTTON eButton = BUTTON_NONE;
+                BUTTON_ACTION eAction = ACTION_PRESS;
                 switch (PblHash(data.GetStringArg(0)))
                 {
-                case 0x8eab16d9: /* "Fire" */ eButton = 1; break;
-                case 0xa70c98dd: /* "FireSecondary" */ eButton = 2; break;
-                case 0xa73f5c0d: /* "Jump" */ eButton = 3; break;
-                case 0x76f15155: /* "Sprint" */ eButton = 4; break;
-                case 0x4e4fa58b: /* "Crouch" */ eButton = 5; break;
-                case 0xed7cdd8c: /* "Reload" */ eButton = 6; break;
-                case 0x986b9eb6: /* "FireBoth" */ eButton = 7; break;
+                case 0x8eab16d9: /* "Fire" */ eButton = BUTTON_FIRE; break;
+                case 0xa70c98dd: /* "FireSecondary" */ eButton = BUTTON_FIRE_SECONDARY; break;
+                case 0xa73f5c0d: /* "Jump" */ eButton = BUTTON_JUMP; break;
+                case 0x76f15155: /* "Sprint" */ eButton = BUTTON_SPRINT; break;
+                case 0x4e4fa58b: /* "Crouch" */ eButton = BUTTON_CROUCH; break;
+                case 0xed7cdd8c: /* "Reload" */ eButton = BUTTON_RELOAD; break;
+                case 0x986b9eb6: /* "FireBoth" */ eButton = BUTTON_FIRE_BOTH; break;
                 }
                 if (data.GetNumArgs() > 1 && data.IsStringArg(1))
                 {
                     switch (PblHash(data.GetStringArg(1)))
                     {
-                    case 0xaaf74aa2: /* "Tap" */ eAction = 1; break;
-                    case 0xadc649b8: /* "Hold" */ eAction = 2; break;
-                    case 0x389c8f75: /* "HoldRelease" */ eAction = 3; break;
-                    case 0x46d056a1: /* "TapPress" */ eAction = 4; break;
-                    case 0x486aebad: /* "DoubleTap" */ eAction = 5; break;
-                    case 0x0c1f28db: /* "TapHold" */ eAction = 6; break;
-                    case 0x25bef6e8: /* "TapHoldRelease" */ eAction = 7; break;
-                    case 0x43430b20: /* "Up" */ eAction = 8; break;
-                    case 0x1036ae7e: /* "Release" */ eAction = 9; break;
-                    case 0x3db9b915: /* "Down" */ eAction = 10; break;
+                    case 0xaaf74aa2: /* "Tap" */ eAction = ACTION_TAP; break;
+                    case 0xadc649b8: /* "Hold" */ eAction = ACTION_HOLD; break;
+                    case 0x389c8f75: /* "HoldRelease" */ eAction = ACTION_HOLD_RELEASE; break;
+                    case 0x46d056a1: /* "TapPress" */ eAction = ACTION_TAP_PRESS; break;
+                    case 0x486aebad: /* "DoubleTap" */ eAction = ACTION_DOUBLETAP; break;
+                    case 0x0c1f28db: /* "TapHold" */ eAction = ACTION_TAP_HOLD; break;
+                    case 0x25bef6e8: /* "TapHoldRelease" */ eAction = ACTION_TAP_HOLD_RELEASE; break;
+                    case 0x43430b20: /* "Up" */ eAction = ACTION_UP; break;
+                    case 0x1036ae7e: /* "Release" */ eAction = ACTION_RELEASE; break;
+                    case 0x3db9b915: /* "Down" */ eAction = ACTION_DOWN; break;
                     }
                 }
                 SetButton(eButton, eAction);

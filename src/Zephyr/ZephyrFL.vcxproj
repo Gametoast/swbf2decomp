@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="12.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32"><Configuration>Debug</Configuration><Platform>Win32</Platform></ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32"><Configuration>Release</Configuration><Platform>Win32</Platform></ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{4F910B28-63C7-4E59-BA94-035643220A73}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <RootNamespace>ZephyrFL</RootNamespace>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v120_xp</PlatformToolset>
+    <WholeProgramOptimization>false</WholeProgramOptimization>
+    <CharacterSet>NotSet</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <PropertyGroup>
+    <TargetName>ZephyrFL</TargetName>
+    <IncludePath>$(VC_IncludePath);$(WindowsSdk_71A_IncludePath);$(DXSDK_DIR)Include</IncludePath>
+    <LibraryPath>$(VC_LibraryPath_x86);$(WindowsSdk_71A_LibraryPath_x86);$(DXSDK_DIR)Lib\x86</LibraryPath>
+    <OutDir>..\..\bin\$(Platform)\$(Configuration)\</OutDir>
+    <IntDir>..\..\obj\ZephyrFL\$(Platform)\$(Configuration)\</IntDir>
+  </PropertyGroup>
+  <ItemDefinitionGroup>
+    <ClCompile>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <Optimization>MaxSpeed</Optimization>
+      <OmitFramePointers>false</OmitFramePointers>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <WarningLevel>Level3</WarningLevel>
+      <ExceptionHandling>Sync</ExceptionHandling>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <AdditionalIncludeDirectories>$(ProjectDir)..;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <SDLCheck>false</SDLCheck>
+      <IntrinsicFunctions>false</IntrinsicFunctions>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <ObjectFileName>$(IntDir)</ObjectFileName>
+    </ClCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)'=='Debug'">
+    <ClCompile>
+      <Optimization>Disabled</Optimization>
+      <InlineFunctionExpansion>Disabled</InlineFunctionExpansion>
+    </ClCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)'=='Release'">
+    <ClCompile>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
+      <EnableEnhancedInstructionSet>StreamingSIMDExtensions2</EnableEnhancedInstructionSet>
+      <StringPooling>true</StringPooling>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <FloatingPointModel>Precise</FloatingPointModel>
+    </ClCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup><Lib><TargetMachine>MachineX86</TargetMachine></Lib></ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="Source\ZephyrAnim.cpp" />
+    <ClCompile Include="Source\ZephyrAnimBank.cpp" />
+    <ClCompile Include="Source\ZephyrAnimBankReader.cpp" />
+    <ClCompile Include="Source\ZephyrAnimInst.cpp" />
+    <ClCompile Include="Source\ZephyrAnimJoint.cpp" />
+    <ClCompile Include="Source\ZephyrEvent.cpp" />
+    <ClCompile Include="Source\ZephyrFile.cpp" />
+    <ClCompile Include="Source\ZephyrPoseDyn.cpp" />
+    <ClCompile Include="Source\ZephyrPoseStatic.cpp" />
+    <ClCompile Include="Source\ZephyrSkeleton.cpp" />
+    <ClCompile Include="Source\ZephyrSkeletonShared.cpp" />
+    <ClCompile Include="Source\ZephyrSkinReader.cpp" />
+    <ClCompile Include="Source\ZephyrSkinShared.cpp" />
+    <ClInclude Include="Source\ZephyrAnim.h" />
+    <ClInclude Include="Source\ZephyrAnimBank.h" />
+    <ClInclude Include="Source\ZephyrAnimBankReader.h" />
+    <ClInclude Include="Source\ZephyrAnimInst.h" />
+    <ClInclude Include="Source\ZephyrAnimJoint.h" />
+    <ClInclude Include="Source\ZephyrEvent.h" />
+    <ClInclude Include="Source\ZephyrFile.h" />
+    <ClInclude Include="Source\ZephyrPoseDyn.h" />
+    <ClInclude Include="Source\ZephyrPoseStatic.h" />
+    <ClInclude Include="Source\ZephyrSkeleton.h" />
+    <ClInclude Include="Source\ZephyrSkeletonShared.h" />
+    <ClInclude Include="Source\ZephyrSkinReader.h" />
+    <ClInclude Include="Source\ZephyrSkinShared.h" />
+    <ClInclude Include="Source\ZephyrCommon.h" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+</Project>

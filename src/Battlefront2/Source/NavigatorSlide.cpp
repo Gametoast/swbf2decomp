@@ -93,7 +93,7 @@ NavigatorSlide::NavigatorSlide(AILowLevel* pOwner, const PblVector3& globalDest,
     Entity* pEntity = pOwner->mOwner->mOwner->GetEntity();
     if (pEntity->IsRtti(EntitySoldier::rttiHashEntitySoldier) ||
         pEntity->IsRtti(EntityDroideka::rttiHashEntityDroideka) ||
-        pEntity->IsRtti(EntityDroid::rttiHashEntityDroid))
+        pEntity->IsRtti(EntityDroid::GetRtti()))
     {
         mNextState = STATE_InfantryToPosition;
     }

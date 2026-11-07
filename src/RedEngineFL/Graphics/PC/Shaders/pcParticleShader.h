@@ -26,27 +26,24 @@ public:
     // SYNTHETIC: SWBF2 0x00702e80
     // pcParticleShader::`scalar deleting destructor'
 
+    // FUNCTION: SWBF2 0x00703480
+    // pcParticleShader::GetID
+    // FUNCTION: SWBF2 0x007034c0
+    // pcParticleShader::GetRenderTypeHash
+    // FUNCTION: SWBF2 0x00703440
+    // pcParticleShader::Bind
+    // FUNCTION: SWBF2 0x007034d0
+    // pcParticleShader::GetShaderDef
+    DECLARE_PC_RED_SHADER_METHODS()
+
     virtual RenderPhaseT GetRenderPhase(const RenderItem*, unsigned int) const;
-    virtual unsigned int GetID(unsigned int uiPass) const;
-    virtual unsigned int GetRenderTypeHash() const;
-    virtual void Bind();
 
 private:
-    virtual void _Read(PblFileChunk& chunk) const;
 
     virtual void _StaticInit() const;
 
-    virtual void InitFixedFunctionShaderDef() const;
 
-    virtual pcRedShader* _Create(unsigned int uiFlags,
-                                 const unsigned int* pParams,
-                                 unsigned int uiNumParams,
-                                 unsigned int uiMaterialFlags,
-                                 const RedColor& color0,
-                                 const RedColor& color1,
-                                 float fArg7) const;
 
-    virtual pcRedShaderDef* GetShaderDef() const;
 
 public:
 
@@ -111,7 +108,6 @@ private:
                const RedColor& color1,
                float fArg7);
 
-    void _InitPipelineFuncArray();
 };
  
  

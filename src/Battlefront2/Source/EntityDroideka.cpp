@@ -304,7 +304,7 @@ EntityDroidekaClass::EntityDroidekaClass(unsigned int uHash)
 
     mWeaponCount = 0;
     mStompEffect = 0;
-    mVehicleType = 9;
+    mVehicleType = VEHICLE_UNKNOWN;
     mNoiseFactor = 5.0f;
     mAnimRateMove = 1.0f;
     mAnimRateTurn = 1.0f;
@@ -473,74 +473,6 @@ MemoryPool EntityDroideka::sMemoryPool("EntityDroideka", sizeof(EntityDroideka))
 
 
 
-// FUNCTION: SWBF2 0x0049e3e0
-void EntityDroideka::MoveForward(float fDistance)
-{
-    PblVector3 vPos = mMatrix.GetTranslation();
-    if (mTurnOffset.mCos < 1.0f)
-    {
-        float fCos = mTurnOffset.mCos * mTurnOffset.mCos - mTurnOffset.mSin * mTurnOffset.mSin;
-        float fSin = mTurnOffset.mCos * 2.0f * mTurnOffset.mSin;
-        if (mState != Rolling)
-        {
-            float f4Cos2 = fCos * fCos * 4.0f;
-            fCos = fCos * (f4Cos2 - 3.0f);
-            fSin = (f4Cos2 - 1.0f) * fSin;
-        }
-
-        PblMatrix kTurn(PblVector3(fCos, 0.0f, -fSin), PblVector3(0.0f, 1.0f, 0.0f),
-                        PblVector3(fSin, 0.0f, fCos), PblVector3(0.0f, 0.0f, 0.0f));
-        kTurn *= mMatrix;
-
-        PblVector3 vMove(kTurn.m[2][0] * fDistance, kTurn.m[2][1] * fDistance,
-                         kTurn.m[2][2] * fDistance);
-        vPos.x += vMove.x;
-        vPos.y += vMove.y;
-        vPos.z += vMove.z;
-    }
-    else
-    {
-        PblVector3 vMove(mMatrix.m[2][0] * fDistance, mMatrix.m[2][1] * fDistance,
-                         mMatrix.m[2][2] * fDistance);
-        vPos.x += vMove.x;
-        vPos.y += vMove.y;
-        vPos.z += vMove.z;
-    }
-    SetPosition(vPos);
-}
-
-// FUNCTION: SWBF2 0x0049e5d0
-void EntityDroideka::RotateY(const PblAngle& rAngle)
-{
-    PblMatrix kRot;
-    kRot.m[1][0] = 0.0f;
-    kRot.m[1][1] = 1.0f;
-    kRot.m[1][2] = 0.0f;
-    kRot.m[1][3] = 0.0f;
-    kRot.m[0][0] = rAngle.mCos;
-    kRot.m[0][1] = 0.0f;
-    kRot.m[0][2] = -rAngle.mSin;
-    kRot.m[0][3] = 0.0f;
-    kRot.m[2][0] = rAngle.mSin;
-    kRot.m[2][1] = 0.0f;
-    kRot.m[2][2] = rAngle.mCos;
-    kRot.m[2][3] = 0.0f;
-    kRot.m[3][0] = 0.0f;
-    kRot.m[3][1] = 0.0f;
-    kRot.m[3][2] = 0.0f;
-    kRot.m[3][3] = 1.0f;
-
-    PblMatrix kOut;
-    kOut = kRot * mMatrix;
-    mMatrix = kOut;
-}
-
-// FUNCTION: SWBF2 0x0049e690
-const RedPose* EntityDroideka::GetPose() const
-{
-    return &mPose;
-}
-
 // FUNCTION: SWBF2 0x0049e6a0
 GameObject* EntityDroideka::GetGameObject()
 {
@@ -569,18 +501,6 @@ const Entity* EntityDroideka::GetEntity() const
 const PblMatrix& EntityDroideka::GetMatrix() const
 {
     return mMatrix;
-}
-
-// FUNCTION: SWBF2 0x0049e6f0
-const PblVector3& EntityDroideka::GetVelocity() const
-{
-    return mVelocity;
-}
-
-// FUNCTION: SWBF2 0x0049e700
-void EntityDroideka::SetVelocity(const PblVector3& vVelocity)
-{
-    mVelocity = vVelocity;
 }
 
 // FUNCTION: SWBF2 0x0049e720
@@ -619,12 +539,6 @@ PlayableEntitySounds* EntityDroideka::GetPlayableEntitySounds()
     return this;
 }
 
-// FUNCTION: SWBF2 0x0049e790
-int EntityDroideka::GetWeaponIndex(int iChannel) const
-{
-    return mWeaponIndex[iChannel];
-}
-
 // FUNCTION: SWBF2 0x004a0d60
 float EntityDroideka::GetAimTurnRate() const
 {
@@ -655,28 +569,6 @@ const PblVector3& EntityDroideka::GetAttachOffset() const
     return mClass->mAttachOffset;
 }
 
-// FUNCTION: SWBF2 0x0049e7b0
-Weapon* EntityDroideka::GetWeaponPtr(int iIndex) const
-{
-    return mWeapon[iIndex];
-}
-
-// FUNCTION: SWBF2 0x0049e7d0
-const Aimer* EntityDroideka::GetAimer(int iIndex) const
-{
-    if (mState == IdleToRoll || mState == Rolling || mState == RollToIdle)
-    {
-        return 0;
-    }
-    return mAimer[iIndex];
-}
-
-// FUNCTION: SWBF2 0x0049e800
-GameObjectType EntityDroideka::GetGameObjectType()
-{
-    return (GameObjectType)(GO_VEHICLE | GO_WALKER);
-}
-
 // FUNCTION: SWBF2 0x0049e810
 EntityType EntityDroideka::GetEntityType() const
 {
@@ -687,12 +579,6 @@ EntityType EntityDroideka::GetEntityType() const
 bool EntityDroideka::IsFirstPersonAvailablePS2() const
 {
     return true;
-}
-
-// FUNCTION: SWBF2 0x0049e990
-EnergyBar* EntityDroideka::GetEnergyBar()
-{
-    return &mEnergyBar;
 }
 
 // FUNCTION: SWBF2 0x0049e9a0
@@ -722,28 +608,6 @@ const char EntityDroidekaClass::rttiNameEntityDroidekaClass[] = "EntityDroidekaC
 
 
 
-
-// FUNCTION: SWBF2 0x0049ea60
-int EntityDroidekaClass::GetVehicleType() const
-{
-    return mVehicleType;
-}
-
-// FUNCTION: SWBF2 0x0049ea70
-int EntityDroidekaClass::GetWeaponCount() const
-{
-    if (!mWeaponClass[0])
-    {
-        return 0;
-    }
-    return mWeaponClass[1] ? 2 : 1;
-}
-
-// FUNCTION: SWBF2 0x0049ea90
-const WeaponClass* EntityDroidekaClass::GetWeaponClass(int iIndex) const
-{
-    return mWeaponClass[iIndex];
-}
 
 // FUNCTION: SWBF2 0x0049eab0
 const ControllableClass* EntityDroidekaClass::GetControllableClass() const

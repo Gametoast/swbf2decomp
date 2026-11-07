@@ -98,6 +98,7 @@ public:
 class MountedTurret : public EntityEx, public Controllable
 {
 public:
+    static void SetupMemoryPool(unsigned int uCount, unsigned int uSize, unsigned int uGrow) { sMemoryPool.Setup(uCount, uSize, uGrow); }
 
     // VTABLE: SWBF2 0x007aa600
     class PostCollision : public Thread

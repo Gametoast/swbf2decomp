@@ -18,6 +18,7 @@ class EntityLightClass;
 class EntityLight : public Entity, public FLEffectObject
 {
 public:
+    static void SetupMemoryPool(unsigned int uCount, unsigned int uSize, unsigned int uGrow) { sMemoryPool.Setup(uCount, uSize, uGrow); }
 
     enum LightFlickerType
     {

@@ -113,12 +113,6 @@ void pcZPrepassShader::Begin_Prog1(unsigned int uiState, unsigned int) const
     }
 }
 
-// FUNCTION: SWBF2 0x00702720
-void pcZPrepassShader::Bind()
-{
-    _BindPipeline(GetStateFuncArray, BeginFuncArray, EndFuncArray, RenderFuncArray);
-}
-
 // FUNCTION: SWBF2 0x00702740
 void pcZPrepassShader::End_Fixed(unsigned int, unsigned int) const
 {
@@ -129,28 +123,10 @@ void pcZPrepassShader::End_Prog1(unsigned int, unsigned int) const
 {
 }
 
-// FUNCTION: SWBF2 0x00702760
-unsigned int pcZPrepassShader::GetID(unsigned int uiPass) const
-{
-    return s_shaderDef.m_states[uiPass].uiID;
-}
-
 // FUNCTION: SWBF2 0x00702780
 RenderPhaseT pcZPrepassShader::GetRenderPhase(const RenderItem*, unsigned int) const
 {
     return RENDERPHASE_OPAQUE;
-}
-
-// FUNCTION: SWBF2 0x00702790
-unsigned int pcZPrepassShader::GetRenderTypeHash() const
-{
-    return s_uiRenderTypeHash;
-}
-
-// FUNCTION: SWBF2 0x007027a0
-pcRedShaderDef* pcZPrepassShader::GetShaderDef() const
-{
-    return &s_shaderDef;
 }
 
 // FUNCTION: SWBF2 0x007027b0

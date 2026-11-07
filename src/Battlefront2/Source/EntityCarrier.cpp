@@ -169,55 +169,6 @@ Trackable* EntityFlyer::GetTrackable()
     return this;
 }
 
-// FUNCTION: SWBF2 0x004779a0
-unsigned int EntityFlyer::GetAllegiance()
-{
-    const Character* pCharacter = mCharacter;
-    return pCharacter ? pCharacter->mTeamNumber : 0;
-}
-
-// FUNCTION: SWBF2 0x004779c0
-bool EntityFlyer::CanJoinSquadron() const
-{
-    return !EntitySquadron::InSquadron() && GetFollowingPath();
-}
-
-// FUNCTION: SWBF2 0x00477b00
-int EntityFlyerClass::GetVehicleType() const
-{
-    return mVehicleType;
-}
-
-// FUNCTION: SWBF2 0x00477b10
-int EntityFlyerClass::GetWeaponCount() const
-{
-    return mWeaponCount;
-}
-
-// FUNCTION: SWBF2 0x00477b20
-const WeaponClass* EntityFlyerClass::GetWeaponClass(int iIndex) const
-{
-    return mWeaponClass[iIndex];
-}
-
-// FUNCTION: SWBF2 0x00477b40
-float EntityFlyerClass::GetTimeRequiredToEject() const
-{
-    return mTimeRequiredToEject;
-}
-
-// FUNCTION: SWBF2 0x00477b50
-float EntityFlyerClass::GetReboardTime() const
-{
-    return mTimeTilReboard;
-}
-
-// FUNCTION: SWBF2 0x00477b60
-const ControllableClass* EntityFlyerClass::GetControllableClass() const
-{
-    return this ? (const ControllableClass*)this : 0;
-}
-
 // SYNTHETIC: SWBF2 0x00402960
 // `dynamic initializer for 'EntityCarrier::rttiHashEntityCarrier''
 // EntityCarrier::rttiHashEntityCarrier

@@ -398,12 +398,6 @@ Ordnance* OrdnanceBeamClass::Build(const OrdnanceDesc& desc)
     return pBeam;
 }
 
-// FUNCTION: SWBF2 0x005f9690
-float OrdnanceBeamClass::GetRange()
-{
-    return mRange;
-}
-
 // FUNCTION: SWBF2 0x005fa2e0
 void OrdnanceBeamClass::SetProperty(unsigned int uProperty, const char* pszValue)
 {

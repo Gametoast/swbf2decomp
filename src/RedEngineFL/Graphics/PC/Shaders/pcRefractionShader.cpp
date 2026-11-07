@@ -308,12 +308,6 @@ void pcRefractionShader::Begin_Prog1(unsigned int uiState, unsigned int) const
     }
 }
 
-// FUNCTION: SWBF2 0x0070d750
-void pcRefractionShader::Bind()
-{
-    _BindPipeline(GetStateFuncArray, BeginFuncArray, EndFuncArray, RenderFuncArray);
-}
-
 // FUNCTION: SWBF2 0x0070d770
 RedShadingState* pcRefractionShader::CreateShadingState() const
 {
@@ -344,22 +338,10 @@ void pcRefractionShader::End_Prog1(unsigned int, unsigned int) const
     RedRenderer::pcSetTexture(2, 0);
 }
 
-// FUNCTION: SWBF2 0x0070d8c0
-unsigned int pcRefractionShader::GetID(unsigned int uiPass) const
-{
-    return s_shaderDef.m_states[uiPass].uiID;
-}
-
 // FUNCTION: SWBF2 0x0070d8e0
 RenderPhaseT pcRefractionShader::GetRenderPhase(const RenderItem*, unsigned int) const
 {
     return RENDERPHASE_TRANSPARENT;
-}
-
-// FUNCTION: SWBF2 0x0070d8f0
-unsigned int pcRefractionShader::GetRenderTypeHash() const
-{
-    return s_uiRenderTypeHash;
 }
 
 // FUNCTION: SWBF2 0x0070d900
@@ -380,12 +362,6 @@ unsigned short pcRefractionShader::GetShaderChain(pcRedShader** const ppOut,
     }
     *ppOut = RedRenderer::pcGetSystemShader(SYSTEM_SHADER_NORMAL);
     return 1;
-}
-
-// FUNCTION: SWBF2 0x0070d960
-pcRedShaderDef* pcRefractionShader::GetShaderDef() const
-{
-    return &s_shaderDef;
 }
 
 // FUNCTION: SWBF2 0x0070d970

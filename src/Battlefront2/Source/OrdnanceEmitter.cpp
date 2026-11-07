@@ -134,12 +134,6 @@ OrdnanceEmitterClass::OrdnanceEmitterClass(OrdnanceEmitterClass* pBase, unsigned
 
 
 
-// FUNCTION: SWBF2 0x005fc400
-float OrdnanceEmitterClass::GetRange()
-{
-    return mConeLength;
-}
-
 // FUNCTION: SWBF2 0x005fc8a0
 void OrdnanceEmitterClass::SetProperty(unsigned int uProperty, const char* pszValue)
 {

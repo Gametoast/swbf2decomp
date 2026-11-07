@@ -28,10 +28,17 @@ public:
     // SYNTHETIC: SWBF2 0x007087b0
     // pcWaterShader::`scalar deleting destructor'
 
+    // FUNCTION: SWBF2 0x00709670
+    // pcWaterShader::GetID
+    // FUNCTION: SWBF2 0x007096a0
+    // pcWaterShader::GetRenderTypeHash
+    // FUNCTION: SWBF2 0x00709600
+    // pcWaterShader::Bind
+    // FUNCTION: SWBF2 0x007096b0
+    // pcWaterShader::GetShaderDef
+    DECLARE_PC_RED_SHADER_METHODS()
+
     virtual RenderPhaseT GetRenderPhase(const RenderItem*, unsigned int) const;
-    virtual unsigned int GetID(unsigned int uiPass) const;
-    virtual unsigned int GetRenderTypeHash() const;
-    virtual void Bind();
 
     void SetBumpMap(RedTexture* pTex1, RedTextureTransform* pTransform1,
                     RedTexture* pTex2, RedTextureTransform* pTransform2, float fBlend);
@@ -43,17 +50,7 @@ public:
                          RedTexture* pTex2, RedTextureTransform* pTransform2, float fBlend);
 
 private:
-    virtual void _Read(PblFileChunk& chunk) const;
     virtual void _StaticInit() const;
-    virtual void InitFixedFunctionShaderDef() const;
-    virtual pcRedShader* _Create(unsigned int uiFlags,
-                                 const unsigned int* pParams,
-                                 unsigned int uiNumParams,
-                                 unsigned int uiMaterialFlags,
-                                 const RedColor& color0,
-                                 const RedColor& color1,
-                                 float fArg7) const;
-    virtual pcRedShaderDef* GetShaderDef() const;
 
 public:
     unsigned int GetState_Fixed(const RenderItem*) const;
@@ -148,7 +145,6 @@ private:
                const RedColor& color0,
                const RedColor& color1,
                float fArg7);
-    void _InitPipelineFuncArray();
 };
  
  

@@ -144,7 +144,7 @@ bool GameObject::Deflect(const Ordnance* pOrdnance, const PblVector3& vPos, cons
 
 namespace AIUtil
 {
-bool __fastcall IsSpied(Character* pCharacter, Character* pOther);
+bool IsSpied(Character* pCharacter, Character* pOther);
 }
 
 

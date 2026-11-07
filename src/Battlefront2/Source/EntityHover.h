@@ -65,7 +65,7 @@ public:
     virtual const char* GetDerivedRttiName() const;
     virtual void SetProperty(unsigned int uProperty, const char* pszValue);
     // FUNCTION: SWBF2 0x00478e00
-    virtual int GetVehicleType() const
+    virtual GameObjectClass::VehicleType GetVehicleType() const
     {
         return mVehicleType;
     }
@@ -131,7 +131,7 @@ public:
     WeaponAmmoDesc mWeaponAmmo[kMaxWeapons];
     int mWeaponChannel[kMaxWeapons];
     int mWeaponCount;
-    int mVehicleType;
+    GameObjectClass::VehicleType mVehicleType;
     RedAnimation* mAnimObj;
     ZephyrAnim* mAnimFins;
     float mNoiseFactor;
@@ -332,6 +332,7 @@ public:
     static void operator delete(void* pBlock);
 
     virtual bool IsRtti(unsigned int uRtti) const;
+    static unsigned int GetRtti() { return rttiHashEntityHover; }
     virtual unsigned int GetDerivedRtti() const;
     virtual const char* GetDerivedRttiName() const;
     virtual void Init();

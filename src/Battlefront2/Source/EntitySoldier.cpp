@@ -69,6 +69,7 @@
 #include "WeaponMelee.h"
 #include "Cloth.h"
 #include "FlagItem.h"
+#include "PowerupItem.h"
 #include "WaterEffect.h"
 #include "RedEngineFL/Application/RedTerrain.h"
 #include "RedEngineFL/Application/RedWater.h"
@@ -186,12 +187,6 @@ ZephyrSkeletonShared* SoldierAnimatorLowResClass::GetDefaultSkeleton()
 
 
 
-// FUNCTION: SWBF2 0x004de080
-const RedPose* EntitySoldier::GetPose() const
-{
-    return mAcklayData ? mAcklayData->GetPose() : 0;
-}
-
 // FUNCTION: SWBF2 0x004de0a0
 bool EntitySoldier::CollideTrisWithAllPrimitives() const
 {
@@ -234,29 +229,6 @@ const PblMatrix& EntitySoldier::GetMatrix() const
     return mMatrix;
 }
 
-// FUNCTION: SWBF2 0x004de100
-const PblVector3& EntitySoldier::GetVelocity() const
-{
-    return mVelocity;
-}
-
-// FUNCTION: SWBF2 0x004de110
-void EntitySoldier::SetVelocity(const PblVector3& vVelocity)
-{
-    mVelocity = vVelocity;
-}
-
-// FUNCTION: SWBF2 0x004de130
-void EntitySoldier::SetPosition(const PblVector3& vPosition)
-{
-    mMatrix.SetTranslation(vPosition);
-
-    PblVector3 center;
-    D3DXVec3TransformCoord(reinterpret_cast<D3DXVECTOR3*>(&center), reinterpret_cast<const D3DXVECTOR3*>(&mModel->_mModel->_BoundingSphere.GetCenter()), reinterpret_cast<const D3DXMATRIX*>(&mMatrix));
-    SetCollisionCenter(center);
-    RecalculateAABB();
-}
-
 // FUNCTION: SWBF2 0x004de1d0
 void EntitySoldier::SetMatrix(const PblMatrix& matrix)
 {
@@ -266,18 +238,6 @@ void EntitySoldier::SetMatrix(const PblMatrix& matrix)
     D3DXVec3TransformCoord(reinterpret_cast<D3DXVECTOR3*>(&center), reinterpret_cast<const D3DXVECTOR3*>(&mModel->_mModel->_BoundingSphere.GetCenter()), reinterpret_cast<const D3DXMATRIX*>(&mMatrix));
     SetCollisionCenter(center);
     RecalculateAABB();
-}
-
-// FUNCTION: SWBF2 0x004de280
-TargetInfo* EntitySoldier::GetTargetInfo()
-{
-    return &mTargetInfo;
-}
-
-// FUNCTION: SWBF2 0x004de290
-Trackable* EntitySoldier::GetTrackable()
-{
-    return this;
 }
 
 // FUNCTION: SWBF2 0x004de2b0
@@ -304,42 +264,6 @@ PlayableEntitySounds* EntitySoldier::GetPlayableEntitySounds()
     return this;
 }
 
-// FUNCTION: SWBF2 0x004de2f0
-int EntitySoldier::GetWeaponIndex(int iChannel) const
-{
-    return mWeaponIndex[iChannel];
-}
-
-// FUNCTION: SWBF2 0x004de310
-int EntitySoldier::GetActiveWeaponChannel()
-{
-    return mActiveChannel;
-}
-
-// FUNCTION: SWBF2 0x004de320
-Weapon* EntitySoldier::GetWeaponPtr(int iIndex) const
-{
-    return mWeapon[iIndex];
-}
-
-// FUNCTION: SWBF2 0x004de340
-EnergyBar* EntitySoldier::GetEnergyBar()
-{
-    return &mEnergyBar;
-}
-
-// FUNCTION: SWBF2 0x004de350
-const Aimer* EntitySoldier::GetAimer(int iIndex) const
-{
-    return &mAimer;
-}
-
-// FUNCTION: SWBF2 0x004de360
-GameObjectType EntitySoldier::GetGameObjectType()
-{
-    return GO_SOLDIER;
-}
-
 // FUNCTION: SWBF2 0x004de370
 EntityType EntitySoldier::GetEntityType() const
 {
@@ -350,20 +274,6 @@ EntityType EntitySoldier::GetEntityType() const
 bool EntitySoldier::IsFirstPersonAvailablePS2() const
 {
     return true;
-}
-
-// FUNCTION: SWBF2 0x004de390
-bool EntitySoldier::IsForcedThirdPerson() const
-{
-    for (int i = 0; i < kNumWeaponChannels; ++i)
-    {
-        int iIndex = mWeaponIndex[i];
-        if (iIndex >= 0 && mWeapon[iIndex]->IsMelee())
-        {
-            return true;
-        }
-    }
-    return false;
 }
 
 // FUNCTION: SWBF2 0x004de3d0
@@ -382,24 +292,6 @@ bool EntitySoldier::PostCollision::Update(float fDeltaTime)
 
 
 
-
-// FUNCTION: SWBF2 0x004de490
-int EntitySoldierClass::GetWeaponCount() const
-{
-    return mWeaponCount;
-}
-
-// FUNCTION: SWBF2 0x004de4a0
-const WeaponClass* EntitySoldierClass::GetWeaponClass(int iIndex) const
-{
-    return mWeaponClass[iIndex];
-}
-
-// FUNCTION: SWBF2 0x004de4c0
-int EntitySoldierClass::GetSoldierType() const
-{
-    return mSoldierType;
-}
 
 // FUNCTION: SWBF2 0x004de4d0
 const ControllableClass* EntitySoldierClass::GetControllableClass() const
@@ -1216,7 +1108,7 @@ extern bool gThreadIsEven;
 
 namespace VisionManager
 {
-void __fastcall AddFakeRayhitResult(UnitController* pUnit, const GameObject* pObject);
+void AddFakeRayhitResult(UnitController* pUnit, const GameObject* pObject);
 }
 
 PblMatrix DirectionMatrix(const PblVector3& vDir, const PblVector3& vUp, const PblVector3& vPos);
@@ -4112,7 +4004,7 @@ EntitySoldierClass::EntitySoldierClass(unsigned int uHash)
     memset(mDropItemClass, 0, sizeof(mDropItemClass));
     memset(mDropItemProbability, 0, sizeof(mDropItemProbability));
     mNoiseFactor = 5.0f;
-    mSoldierType = 5;
+    mSoldierType = SOLDIER_UNKNOWN;
     mImmuneToMines = false;
     mAddon = 0;
     mFootstepStride = 1.75f;
@@ -5458,25 +5350,25 @@ void EntitySoldierClass::SetProperty(unsigned int uProperty, const char* pszValu
 }
 
 // FUNCTION: SWBF2 0x004fa880
-int EntitySoldierClass::FindSoldierType(const char* pszName)
+GameObjectClass::SoldierType EntitySoldierClass::FindSoldierType(const char* pszName)
 {
     switch (PblHash(pszName))
     {
     case 0xC322AD05: /* "Scout" */
-        return 0;
+        return SOLDIER_SCOUT;
     case 0xB0143BE7: /* "Anti-Armor" */
     case 0x66557E0C: /* "Assault" */
-        return 1;
+        return SOLDIER_ROCKET;
     case 0x3B3E18E8: /* "Support" */
     case 0x29520BB4: /* "Repair" */
     case 0xD940D530: /* "Special" */
-        return 2;
+        return SOLDIER_REPAIR;
     case 0x10066AE1: /* "Pilot" */
-        return 3;
+        return SOLDIER_PILOT;
     case 0xDF625F90: /* "Trooper" */
-        return 4;
+        return SOLDIER_TROOPER;
     }
-    return 5;
+    return SOLDIER_UNKNOWN;
 }
 
 // FUNCTION: SWBF2 0x004fa900
@@ -8573,11 +8465,6 @@ void EntitySoldier::UpdateOrdnanceCollision(float fDeltaTime)
 // SYNTHETIC: SWBF2 0x004fac1e
 // ?GetMatrix@EntitySoldier@@WCDE@BEABVPblMatrix@@XZ
 
-class PowerupItem
-{
-public:
-    static MemoryPool sMemoryPool;
-};
 
 namespace AIDebug
 {

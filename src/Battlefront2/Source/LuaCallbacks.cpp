@@ -67,25 +67,6 @@ namespace PblUnicode
 }
 unsigned int __cdecl ConvertUnicodeSkippingWide(char* pDest, const unsigned short* pSrc, unsigned int uiCount);
 
-// FUNCTION: SWBF2 0x0052a9b0
-int FLInputManager::CountControllers() const
-{
-    int iConnected = 0;
-    for (unsigned char i = 0; i < RedInputManager::GetNumJoystickPorts(); ++i)
-    {
-        if (RedInputManager::GetJoystick(i)->m_connected)
-        {
-            ++iConnected;
-        }
-    }
-    if (iConnected < 1)
-    {
-        return 1;
-    }
-    return iConnected;
-}
-
-
 // FUNCTION: SWBF2 0x005805e0
 int __fastcall GetScreenTransitionType(const char* pcName, void*)
 {

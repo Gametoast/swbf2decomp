@@ -267,18 +267,6 @@ bool EntityPortableTurret::CollisionCallback(const CollisionResult* pResult, Col
 
 
 
-// FUNCTION: SWBF2 0x004d7c20
-const PblVector3& EntityPortableTurret::GetVelocity() const
-{
-    return mVelocity;
-}
-
-// FUNCTION: SWBF2 0x004d7c30
-void EntityPortableTurret::SetVelocity(const PblVector3& vVelocity)
-{
-    mVelocity = vVelocity;
-}
-
 // FUNCTION: SWBF2 0x004d8220
 void EntityPortableTurret::RecalculateAABB()
 {

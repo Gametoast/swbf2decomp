@@ -219,12 +219,6 @@ void pcWaterShader::Begin_Fixed(unsigned int uiState, unsigned int uiPass) const
     }
 }
 
-// FUNCTION: SWBF2 0x00709600
-void pcWaterShader::Bind()
-{
-    _BindPipeline(GetStateFuncArray, BeginFuncArray, EndFuncArray, RenderFuncArray);
-}
-
 // FUNCTION: SWBF2 0x00709620
 void pcWaterShader::End_Fixed(unsigned int, unsigned int) const
 {
@@ -244,28 +238,10 @@ void pcWaterShader::End_Prog2(unsigned int, unsigned int) const
 {
 }
 
-// FUNCTION: SWBF2 0x00709670
-unsigned int pcWaterShader::GetID(unsigned int uiPass) const
-{
-    return s_shaderDef.m_states[uiPass].uiID;
-}
-
 // FUNCTION: SWBF2 0x00709690
 RenderPhaseT pcWaterShader::GetRenderPhase(const RenderItem*, unsigned int) const
 {
     return RENDERPHASE_POSTSHADOW;
-}
-
-// FUNCTION: SWBF2 0x007096a0
-unsigned int pcWaterShader::GetRenderTypeHash() const
-{
-    return s_uiRenderTypeHash;
-}
-
-// FUNCTION: SWBF2 0x007096b0
-pcRedShaderDef* pcWaterShader::GetShaderDef() const
-{
-    return &s_shaderDef;
 }
 
 // FUNCTION: SWBF2 0x007096c0

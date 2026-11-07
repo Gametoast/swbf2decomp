@@ -112,12 +112,24 @@
 #include "ParticleEmitterInfo.h"
 #include "ParticleEmitterObject.h"
 #include "ParticleTransformer.h"
+#include "Battlefront2/Platform/Pc/pcLetterboxEffect.h"
+#include "Battlefront2/Platform/Pc/pcVideoEffect.h"
+#include "EntityDroid.h"
+#include "EntityLight.h"
+#include "EntityMine.h"
+#include "EntityPortableTurret.h"
+#include "EntitySoldier.h"
+#include "EntitySoundStatic.h"
+#include "EntitySoundStream.h"
+#include "LightFlash.h"
+#include "LightningBoltEffect.h"
+#include "MountedTurret.h"
+#include "PassengerSlot.h"
+#include "PlayerController.h"
+#include "PowerupItem.h"
+#include "StickInfo.h"
+#include "TeamAssist.h"
 
-class VideoEffect { public: static void Init(); };
-class LetterboxEffect { public: static void Init(); };
-
-
-class TeamAssistManager { public: static void Create(); static void Destroy(); };
 namespace MissionTimer
 {
     void Init();
@@ -140,110 +152,6 @@ namespace RedMissionLog
     bool Enabled();
 }
 
-
-class EntitySoldier
-{
-public:
-    static void SetupMemoryPool(unsigned int uCount, unsigned int uSize, unsigned int uGrow) { sMemoryPool.Setup(uCount, uSize, uGrow); }
-    static MemoryPool sMemoryPool;
-};
-class EntityDroid
-{
-public:
-    static void SetupMemoryPool(unsigned int uCount, unsigned int uSize, unsigned int uGrow) { sMemoryPool.Setup(uCount, uSize, uGrow); }
-    static MemoryPool sMemoryPool;
-};
-class MountedTurret
-{
-public:
-    static void SetupMemoryPool(unsigned int uCount, unsigned int uSize, unsigned int uGrow) { sMemoryPool.Setup(uCount, uSize, uGrow); }
-    static MemoryPool sMemoryPool;
-};
-class PassengerSlot
-{
-public:
-    static void SetupMemoryPool(unsigned int uCount, unsigned int uSize, unsigned int uGrow) { sMemoryPool.Setup(uCount, uSize, uGrow); }
-    static MemoryPool sMemoryPool;
-};
-class PowerupItem
-{
-public:
-    static void SetupMemoryPool(unsigned int uCount, unsigned int uSize, unsigned int uGrow) { sMemoryPool.Setup(uCount, uSize, uGrow); }
-    static MemoryPool sMemoryPool;
-};
-class EntityMine
-{
-public:
-    static void SetupMemoryPool(unsigned int uCount, unsigned int uSize, unsigned int uGrow) { sMemoryPool.Setup(uCount, uSize, uGrow); }
-    static MemoryPool sMemoryPool;
-};
-class EntityPortableTurret
-{
-public:
-    static void SetupMemoryPool(unsigned int uCount, unsigned int uSize, unsigned int uGrow) { sMemoryPool.Setup(uCount, uSize, uGrow); }
-    static MemoryPool sMemoryPool;
-};
-
-class StickInfo
-{
-public:
-    static void SetupMemoryPool(unsigned int uCount, unsigned int uSize, unsigned int uGrow) { sMemoryPool.Setup(uCount, uSize, uGrow); }
-    static MemoryPool sMemoryPool;
-};
-
-class LightFlash
-{
-public:
-    static void SetupMemoryPool(unsigned int uCount, unsigned int uSize, unsigned int uGrow) { sMemoryPool.Setup(uCount, uSize, uGrow); }
-    static MemoryPool sMemoryPool;
-};
-class EntityLight
-{
-public:
-    static void SetupMemoryPool(unsigned int uCount, unsigned int uSize, unsigned int uGrow) { sMemoryPool.Setup(uCount, uSize, uGrow); }
-    static MemoryPool sMemoryPool;
-};
-class LightningBoltEffectObject
-{
-public:
-    static void SetupMemoryPool(unsigned int uCount, unsigned int uSize, unsigned int uGrow) { sMemoryPool.Setup(uCount, uSize, uGrow); }
-    static MemoryPool sMemoryPool;
-};
-
-
-
-
-class EntitySoundStatic
-{
-public:
-    static void SetupMemoryPool(unsigned int uCount, unsigned int uSize, unsigned int uGrow) { sMemoryPool.Setup(uCount, uSize, uGrow); }
-    static MemoryPool sMemoryPool;
-};
-class EntitySoundStream
-{
-public:
-    static void SetupMemoryPool(unsigned int uCount, unsigned int uSize, unsigned int uGrow) { sMemoryPool.Setup(uCount, uSize, uGrow); }
-    static MemoryPool sMemoryPool;
-};
-class SoundSpaceRegion
-{
-public:
-    static void SetupMemoryPool(unsigned int uCount, unsigned int uSize, unsigned int uGrow) { sMemoryPool.Setup(uCount, uSize, uGrow); }
-    static MemoryPool sMemoryPool;
-};
-class PlayerController
-{
-public:
-    static void SetupMemoryPool(unsigned int uCount, unsigned int uSize, unsigned int uGrow) { sMemoryPool.Setup(uCount, uSize, uGrow); }
-    static MemoryPool sMemoryPool;
-    static int sEnabled;
-};
-class TeamAssist
-{
-public:
-    static void SetupMemoryPool(unsigned int uCount, unsigned int uSize, unsigned int uGrow) { sMemoryPool.Setup(uCount, uSize, uGrow); }
-    static MemoryPool sMemoryPool;
-};
 
 namespace AIDebug
 {
@@ -558,11 +466,6 @@ float gPrevFrameTime;
 
     
 
-
-inline void TreeGridStack::SetupMemoryPool(unsigned int uCount, unsigned int uSize, unsigned int uGrow)
-{
-    sMemoryPool.Setup(uCount, uSize, uGrow);
-}
 
 inline void SoldierAnimatorClass::PostLoad()
 {

@@ -140,7 +140,7 @@ EntityWalkerClass::EntityWalkerClass(unsigned int uHash)
 
     memset(m_aAttackAnims, 0, sizeof(m_aAttackAnims));
 
-    mVehicleType = 9;
+    mVehicleType = VEHICLE_UNKNOWN;
     mAcceleration = 5.0f;
     mMaxSpeed = 20.0f;
     mBoostSpeed = 0.0f;

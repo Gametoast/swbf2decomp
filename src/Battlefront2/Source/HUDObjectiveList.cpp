@@ -165,6 +165,59 @@ void HUD::ObjectiveList::AddObjective(unsigned int uiTextHashID, unsigned int ui
     }
 }
 
+// FUNCTION: SWBF2 0x00566360
+void HUD::ObjectiveList::SetState(unsigned int uiTextHashID, Objective::ObjectiveState state)
+{
+    Objective* pObjective = FindObjective(uiTextHashID);
+    if (!pObjective)
+    {
+        return;
+    }
+    pObjective->SetState(state);
+    SetupText();
+    if (NetGame::IsEnabled() && !NetGame::IsClient())
+    {
+        NetGame::CreateEvent_UpdateObjective(pObjective, ~0ui64);
+    }
+}
+
+// FUNCTION: SWBF2 0x005663d0
+HUD::Objective::ObjectiveState HUD::ObjectiveList::GetState(unsigned int uiTextHashID)
+{
+    Objective* pObjective = FindObjective(uiTextHashID);
+    if (pObjective)
+    {
+        return pObjective->GetState();
+    }
+    return Objective::INACTIVE;
+}
+
+// FUNCTION: SWBF2 0x005663f0
+unsigned int HUD::ObjectiveList::GetCurrentPopupText()
+{
+    for (PblList<Objective>::Itor it(_objectives); it != _objectives.End(); ++it)
+    {
+        if (it->GetState() == Objective::ACTIVE && it->_popupTextID)
+        {
+            return it->_popupTextID;
+        }
+    }
+    return 0;
+}
+
+// FUNCTION: SWBF2 0x00566430
+HUD::Objective* HUD::ObjectiveList::FindObjective(unsigned int uiTextHashID)
+{
+    for (PblList<Objective>::Itor it(_objectives); it != _objectives.End(); ++it)
+    {
+        if (it->_textHashID == uiTextHashID)
+        {
+            return it;
+        }
+    }
+    return 0;
+}
+
 // FUNCTION: SWBF2 0x00566480
 void HUD::ObjectiveList::SetupText()
 {
@@ -240,19 +293,6 @@ void HUD::ObjectiveList::SetupText()
             fY += fBottom - fTop + 2.0f;
         }
     }
-}
-
-// FUNCTION: SWBF2 0x005663f0
-unsigned int HUD::ObjectiveList::GetCurrentPopupText()
-{
-    for (PblList<Objective>::Itor it(_objectives); it != _objectives.End(); ++it)
-    {
-        if (it->GetState() == Objective::ACTIVE && it->_popupTextID)
-        {
-            return it->_popupTextID;
-        }
-    }
-    return 0;
 }
 
 // FUNCTION: SWBF2 0x005666e0

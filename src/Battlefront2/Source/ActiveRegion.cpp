@@ -93,7 +93,7 @@ void __fastcall Deactivate(RedRegion* pRegion)
 }
 
 // FUNCTION: SWBF2 0x00437bf0
-RedRegion* __fastcall Find(lua_State*, int iIndex)
+RedRegion* Find(lua_State*, int iIndex)
 {
     if (lua_type(LuaHelper::mState, iIndex) == LUA_TLIGHTUSERDATA)
     {

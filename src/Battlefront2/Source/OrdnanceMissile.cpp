@@ -290,12 +290,6 @@ OrdnanceMissileClass::OrdnanceMissileClass(OrdnanceMissileClass* pBase, unsigned
 
 
 
-// FUNCTION: SWBF2 0x006049a0
-float OrdnanceMissileClass::GetVelocity()
-{
-    return 3.0e8f;
-}
-
 // FUNCTION: SWBF2 0x00605910
 void OrdnanceMissileClass::SetProperty(unsigned int uProperty, const char* pszValue)
 {

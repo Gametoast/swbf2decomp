@@ -1,6 +1,7 @@
 #pragma once
 
 #include "PebbleFL/Common/PblVector.h"
+#include "RedEngineFL/Memory/RedMemoryPool.h"
 
 class MemoryPool;
 class TreeGridObject;
@@ -16,7 +17,10 @@ public:
     TreeGridStack* AddObject(TreeGridObject* pObj, const PblVector3& rPos, float fSize);
     TreeGridStack* RemoveObject(TreeGridObject* pObj);
 
-    static void SetupMemoryPool(unsigned int uCount, unsigned int uSize, unsigned int uGrow);
+    static void SetupMemoryPool(unsigned int uCount, unsigned int uSize, unsigned int uGrow)
+    {
+        sMemoryPool.Setup(uCount, uSize, uGrow);
+    }
 
     int mStackSize;
     int mData[1][15];

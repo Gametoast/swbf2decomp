@@ -37,6 +37,15 @@ pcRedShader::RenderFuncT pcTerrainShader2::RenderFuncArray[MAX_PIPELINES];
 // pcTerrainShader2::s_uiRenderTypeHash
 unsigned int pcTerrainShader2::s_uiRenderTypeHash = PblHash("Terrain2");
 
+// SYNTHETIC: SWBF2 0x00409560
+// `dynamic initializer for 'pcTerrainShader2::s_Factory''
+// SYNTHETIC: SWBF2 0x00769c00
+// `dynamic atexit destructor for 'pcTerrainShader2::s_Factory''
+
+// GLOBAL: SWBF2 0x009c8fcc
+// pcTerrainShader2::s_Factory
+pcTerrainShader2 pcTerrainShader2::s_Factory;
+
 // SYNTHETIC: SWBF2 0x004095c0
 // PblMath::`dynamic initializer for 'fOneOverHalfPi''
 
@@ -92,37 +101,31 @@ static bool sForceSimpleLighting;
 // GLOBAL: SWBF2 0x009c8a8a
 static bool sDrawNormals;
 
-// SYNTHETIC: SWBF2 0x004096e0
-// `dynamic initializer for 's_ShadowMapTextureTransform''
+// SYNTHETIC: SWBF2 0x00409700
+// `dynamic initializer for 's_TextureTransform''
 
-// GLOBAL: SWBF2 0x009c8a90
-// s_ShadowMapTextureTransform
-static PblVector4 s_ShadowMapTextureTransform[3];
-// SYNTHETIC: SWBF2 0x00409680
-// `dynamic initializer for 's_DiffuseTexTransform''
+// GLOBAL: SWBF2 0x009c8d80
+// s_TextureTransform
+static PblVector4 s_TextureTransform[16][2];
+// SYNTHETIC: SWBF2 0x00409660
+// `dynamic initializer for 's_DetailTextureTransform''
 
-// GLOBAL: SWBF2 0x009c8ac0
-// s_DiffuseTexTransform
-static PblVector4 s_DiffuseTexTransform[16];
-// SYNTHETIC: SWBF2 0x00409640
-// `dynamic initializer for 's_BumpTexTransform''
-
-// GLOBAL: SWBF2 0x009c8bc0
-// s_BumpTexTransform
-static PblVector4 s_BumpTexTransform[16];
-// SYNTHETIC: SWBF2 0x00409600
-// `dynamic initializer for 's_BumpLuminosityTextureTransform''
-
-// GLOBAL: SWBF2 0x009c8cd0
-// s_BumpLuminosityTextureTransform
-static PblVector4 s_BumpLuminosityTextureTransform[2];
-
+// GLOBAL: SWBF2 0x009c8d00
+// s_DetailTextureTransform
+static PblVector4 s_DetailTextureTransform[4][2];
 // SYNTHETIC: SWBF2 0x00409620
 // `dynamic initializer for 's_BumpSpecularTextureTransform''
 
 // GLOBAL: SWBF2 0x009c8fac
 // s_BumpSpecularTextureTransform
 PblVector4 s_BumpSpecularTextureTransform[2];
+
+// SYNTHETIC: SWBF2 0x00409600
+// `dynamic initializer for 's_BumpLuminosityTextureTransform''
+
+// GLOBAL: SWBF2 0x009c8cd0
+// s_BumpLuminosityTextureTransform
+static PblVector4 s_BumpLuminosityTextureTransform[2];
 
 // SYNTHETIC: SWBF2 0x004096b0
 // `dynamic initializer for 's_UnreferencedTextureTransformA''
@@ -137,24 +140,30 @@ PblVector4 s_UnreferencedTextureTransformA;
 // s_UnreferencedTextureTransformB
 PblVector4 s_UnreferencedTextureTransformB;
 
-// SYNTHETIC: SWBF2 0x00409660
-// `dynamic initializer for 's_DetailTextureTransform''
-
-// GLOBAL: SWBF2 0x009c8d00
-// s_DetailTextureTransform
-static PblVector4 s_DetailTextureTransform[4][2];
-// SYNTHETIC: SWBF2 0x00409700
-// `dynamic initializer for 's_TextureTransform''
-
-// GLOBAL: SWBF2 0x009c8d80
-// s_TextureTransform
-static PblVector4 s_TextureTransform[16][2];
 // SYNTHETIC: SWBF2 0x004096c0
 // `dynamic initializer for 's_NoiseTexTransform''
 
 // GLOBAL: SWBF2 0x009c8ff0
 // s_NoiseTexTransform
 static PblVector4 s_NoiseTexTransform[16];
+// SYNTHETIC: SWBF2 0x00409680
+// `dynamic initializer for 's_DiffuseTexTransform''
+
+// GLOBAL: SWBF2 0x009c8ac0
+// s_DiffuseTexTransform
+static PblVector4 s_DiffuseTexTransform[16];
+// SYNTHETIC: SWBF2 0x00409640
+// `dynamic initializer for 's_BumpTexTransform''
+
+// GLOBAL: SWBF2 0x009c8bc0
+// s_BumpTexTransform
+static PblVector4 s_BumpTexTransform[16];
+// SYNTHETIC: SWBF2 0x004096e0
+// `dynamic initializer for 's_ShadowMapTextureTransform''
+
+// GLOBAL: SWBF2 0x009c8a90
+// s_ShadowMapTextureTransform
+static PblVector4 s_ShadowMapTextureTransform[3];
 // GLOBAL: SWBF2 0x009c90f8
 static RedMaterial s_material;
 // GLOBAL: SWBF2 0x009c91c4
@@ -293,12 +302,6 @@ void pcTerrainShader2::Begin_Prog1(unsigned int, unsigned int uiPass) const
     RedRenderer::pcSetRenderState(D3DRS_DESTBLEND, D3DBLEND_ZERO);
 }
 
-// FUNCTION: SWBF2 0x006fd010
-void pcTerrainShader2::Bind()
-{
-    _BindPipeline(GetStateFuncArray, BeginFuncArray, EndFuncArray, RenderFuncArray);
-}
-
 // FUNCTION: SWBF2 0x006fd030
 RedShadingState* pcTerrainShader2::CreateShadingState() const
 {
@@ -315,22 +318,10 @@ void pcTerrainShader2::End_Prog1(unsigned int, unsigned int) const
 {
 }
 
-// FUNCTION: SWBF2 0x006fd060
-unsigned int pcTerrainShader2::GetID(unsigned int uiPass) const
-{
-    return s_shaderDef.m_states[uiPass].uiID;
-}
-
 // FUNCTION: SWBF2 0x006fd080
 RenderPhaseT pcTerrainShader2::GetRenderPhase(const RenderItem*, unsigned int) const
 {
     return RENDERPHASE_OPAQUE;
-}
-
-// FUNCTION: SWBF2 0x006fd090
-unsigned int pcTerrainShader2::GetRenderTypeHash() const
-{
-    return s_uiRenderTypeHash;
 }
 
 // FUNCTION: SWBF2 0x006fd0a0
@@ -358,12 +349,6 @@ unsigned short pcTerrainShader2::GetShaderChain(pcRedShader** const ppOut,
     }
     ppOut[0] = this;
     return 1;
-}
-
-// FUNCTION: SWBF2 0x006fd150
-pcRedShaderDef* pcTerrainShader2::GetShaderDef() const
-{
-    return &s_shaderDef;
 }
 
 // FUNCTION: SWBF2 0x006fd160
@@ -893,15 +878,6 @@ void pcTerrainShader2::_StaticInit() const
     s_material.detailTexTransform.m_bTransform = 0;
     s_material.animationData = 0;
 }
-
-// SYNTHETIC: SWBF2 0x00409560
-// `dynamic initializer for 'pcTerrainShader2::s_Factory''
-// SYNTHETIC: SWBF2 0x00769c00
-// `dynamic atexit destructor for 'pcTerrainShader2::s_Factory''
-
-// GLOBAL: SWBF2 0x009c8fcc
-// pcTerrainShader2::s_Factory
-pcTerrainShader2 pcTerrainShader2::s_Factory;
 
 // GLOBAL: SWBF2 0x009c89a8
 unsigned int g_pcTerrainShader2;

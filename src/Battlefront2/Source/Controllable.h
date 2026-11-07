@@ -2,6 +2,7 @@
 
 #include <stddef.h>
 
+#include "FirstPerson.h"
 #include "SoldierAnimationBank.h"
 #include "Thread.h"
 #include "Trackable.h"
@@ -51,15 +52,6 @@ enum PilotType
     PILOT_VEHICLESELF = 4
 };
 
-struct CamPathInfo
-{
-    PblVector3 Vec[6];
-    PblVector3 Slope[6];
-    PblVector3 Ore[6];
-    PblVector3 RSlope[6];
-    float Time[6];
-    unsigned int numPoints;
-};
  
  
 

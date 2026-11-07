@@ -129,10 +129,22 @@ public:
     virtual void UnregisterDynamic(pvs::IDisplayable &);
     virtual void RegisterStatic(pvs::IDisplayable &);
     virtual void UnregisterStatic(pvs::IDisplayable &);
-    virtual util::Vector<unsigned int> & GetStaticNames();
+    // FUNCTION: SWBF2 0x006e0a80
+    virtual util::Vector<unsigned int>& GetStaticNames()
+    {
+        return staticNames_;
+    }
     virtual void AddPortal(pvs::IPortal *);
-    virtual void SetBound(const geo::ExtrudedPoly3D &);
-    virtual geo::ExtrudedPoly3D & GetBound();
+    // FUNCTION: SWBF2 0x006e14e0
+    virtual void SetBound(const geo::ExtrudedPoly3D& rBound)
+    {
+        bound_ = rBound;
+    }
+    // FUNCTION: SWBF2 0x006e0660
+    virtual geo::ExtrudedPoly3D& GetBound()
+    {
+        return bound_;
+    }
 
     bool Contains(const geo::Vector3<float> &);
     bool Overlap(const geo::Sphere &);
@@ -275,15 +287,41 @@ public:
     // pvs::Portal::`scalar deleting destructor'
     virtual ~Portal() {}
 
-    virtual void SetActive(bool);
-    virtual bool IsActive();
-    virtual pvs::ISector * GetLeft();
-    virtual pvs::ISector * GetRight();
-    virtual void SetLeft(pvs::ISector *);
+    // FUNCTION: SWBF2 0x006e14c0
+    virtual void SetActive(bool bActive)
+    {
+        active_ = bActive;
+    }
+    // FUNCTION: SWBF2 0x006e0be0
+    virtual bool IsActive()
+    {
+        return active_;
+    }
+    // FUNCTION: SWBF2 0x006e0990
+    virtual pvs::ISector* GetLeft()
+    {
+        return left_;
+    }
+    // FUNCTION: SWBF2 0x006e09e0
+    virtual pvs::ISector* GetRight()
+    {
+        return right_;
+    }
+    // FUNCTION: SWBF2 0x006e15b0
+    virtual void SetLeft(pvs::ISector* pLeft)
+    {
+        left_ = (pvs::Sector*)pLeft;
+    }
     virtual void SetRight(pvs::ISector *);
     virtual geo::Poly3D & GetPoly();
     virtual const geo::Poly3D & GetPoly() const;
-    virtual void Init(pvs::Sector *, pvs::Sector *);
+    // FUNCTION: SWBF2 0x006e0aa0
+    virtual void Init(pvs::Sector* pLeft, pvs::Sector* pRight)
+    {
+        left_ = pLeft;
+        active_ = true;
+        right_ = pRight;
+    }
     virtual void InitBound();
 
     void FindNormal();

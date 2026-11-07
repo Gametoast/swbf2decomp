@@ -86,9 +86,19 @@ public:
 
     virtual ~CollisionObject();
     virtual const PblVector3 & GetPosition() const = 0;
-    virtual void SetPosition(const PblVector3 &);
-    virtual void SetMatrix(const PblMatrix &);
-    virtual bool CanProcedurallyAnimate();
+    // FUNCTION: SWBF2 0x00463a70
+    virtual void SetPosition(const PblVector3 &)
+    {
+    }
+    // FUNCTION: SWBF2 0x00454dd0
+    virtual void SetMatrix(const PblMatrix &)
+    {
+    }
+    // FUNCTION: SWBF2 0x00443fc0
+    virtual bool CanProcedurallyAnimate()
+    {
+        return true;
+    }
     virtual float GetSmallestCollisionDim() const;
     virtual bool CollisionCallback(const CollisionResult *, CollisionObject *, Restrictor *);
     virtual float RayHit(const PblVector3 &, const PblVector3 &, float, PblVector3 *, int *, bool, float);
@@ -99,10 +109,18 @@ public:
     virtual const Entity * GetEntity() const;
     virtual GameObject * GetGameObject();
     virtual const GameObject * GetGameObject() const;
-    virtual bool CollideTrisWithAllPrimitives() const;
+    // FUNCTION: SWBF2 0x00443fe0
+    virtual bool CollideTrisWithAllPrimitives() const
+    {
+        return true;
+    }
     virtual const PblMatrix & GetMatrix() const = 0;
     virtual const RedPose * GetPose() const;
-    virtual bool IsAChunk() const;
+    // FUNCTION: SWBF2 0x00443ff0
+    virtual bool IsAChunk() const
+    {
+        return false;
+    }
 
     virtual void RecalculateAABB();
 

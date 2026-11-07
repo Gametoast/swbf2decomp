@@ -678,7 +678,7 @@ void EntityRemoteTerminalClass::SetProperty(unsigned int uProperty, const char* 
 
 
 // FUNCTION: SWBF2 0x004dcc80
-int EntityRemoteTerminalClass::GetVehicleType() const
+GameObjectClass::VehicleType EntityRemoteTerminalClass::GetVehicleType() const
 {
     return mVehicleType;
 }
@@ -687,7 +687,7 @@ int EntityRemoteTerminalClass::GetVehicleType() const
 EntityRemoteTerminalClass::EntityRemoteTerminalClass(EntityRemoteTerminalClass* pBase, unsigned int uHash)
     : GameObjectClass(pBase, uHash), ControllableClass(pBase)
 {
-    mVehicleType = 9;
+    mVehicleType = VEHICLE_UNKNOWN;
     mLODClass = 1;
 }
 

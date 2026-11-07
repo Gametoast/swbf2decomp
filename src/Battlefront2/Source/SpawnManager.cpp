@@ -4,6 +4,7 @@
 
 #include "AIGoalManager.h"
 #include "Character.h"
+#include "EntitySoldier.h"
 #include "CommandPost.h"
 #include "CommandPostManager.h"
 #include "Controllable.h"
@@ -18,7 +19,6 @@
 #include "PebbleFL/Common/PblUnicode.h"
 #include "RedEngineFL/Memory/RedMemoryPool.h"
 
-class EntitySoldier { public: static MemoryPool sMemoryPool; };
 
 // GLOBAL: SWBF2 0x01eafb34
 SpawnManager* SpawnManager::sInstance;

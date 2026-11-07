@@ -4,6 +4,8 @@
 #include "AILowLevel.h"
 #include "AIUtil.h"
 #include "Character.h"
+#include "EntitySoldier.h"
+#include "EntityDroid.h"
 #include "Entity.h"
 #include "GameLoop.h"
 #include "GameObject.h"
@@ -13,17 +15,7 @@
 #include "UnitController.h"
 #include "PebbleFL/Common/PblRandom.h"
 
-class EntitySoldier
-{
-public:
-    static PblHash rttiHashEntitySoldier;
-};
 
-class EntityDroid
-{
-public:
-    static PblHash rttiHashEntityDroid;
-};
 
 extern PblVector3 gVectorZero;
 
@@ -101,7 +93,7 @@ void PatrolHelper::EnterState()
         }
 
         bool bTryHint = AIUtil::GetRandomInt(1, 4) != 1;
-        bool bSoldier = GetMe()->GetEntity()->IsRtti(EntitySoldier::rttiHashEntitySoldier);
+        bool bSoldier = GetMe()->GetEntity()->IsRtti(EntitySoldier::GetRtti());
         if (bTryHint & bSoldier)
         {
             const BaseHint* hints[10];
@@ -135,8 +127,8 @@ void PatrolHelper::EnterState()
     case STATE_GOTO_BASE:
     {
         mNextPatrolTime = AIUtil::GetRandomInt(20, 30) + GameLoop::GetMissionTime();
-        if (!GetMe()->GetEntity()->IsRtti(EntitySoldier::rttiHashEntitySoldier) &&
-            !GetMe()->GetEntity()->IsRtti(EntityDroid::rttiHashEntityDroid) &&
+        if (!GetMe()->GetEntity()->IsRtti(EntitySoldier::GetRtti()) &&
+            !GetMe()->GetEntity()->IsRtti(EntityDroid::GetRtti()) &&
             AIUtil::IsNearPost(GetMe(), pPost, gVectorZero))
         {
             LowLevel(GetCtrl()).SetNavigator_Stationary();

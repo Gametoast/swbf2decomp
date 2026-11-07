@@ -92,12 +92,6 @@ void pcInterfaceShader::Begin_Prog1(unsigned int, unsigned int) const
     RedRenderer::pcSetSamplerState(1, D3DSAMP_MIPFILTER, D3DTEXF_LINEAR);
 }
 
-// FUNCTION: SWBF2 0x00701a60
-void pcInterfaceShader::Bind()
-{
-    _BindPipeline(GetStateFuncArray, BeginFuncArray, EndFuncArray, RenderFuncArray);
-}
-
 // FUNCTION: SWBF2 0x00701a80
 void pcInterfaceShader::End_Fixed(unsigned int, unsigned int) const
 {
@@ -108,28 +102,10 @@ void pcInterfaceShader::End_Prog1(unsigned int, unsigned int) const
 {
 }
 
-// FUNCTION: SWBF2 0x00701aa0
-unsigned int pcInterfaceShader::GetID(unsigned int uiPass) const
-{
-    return s_shaderDef.m_states[uiPass].uiID;
-}
-
 // FUNCTION: SWBF2 0x00701ac0
 RenderPhaseT pcInterfaceShader::GetRenderPhase(const RenderItem*, unsigned int) const
 {
     return RENDERPHASE_TRANSPARENT;
-}
-
-// FUNCTION: SWBF2 0x00701ad0
-unsigned int pcInterfaceShader::GetRenderTypeHash() const
-{
-    return s_uiRenderTypeHash;
-}
-
-// FUNCTION: SWBF2 0x00701ae0
-pcRedShaderDef* pcInterfaceShader::GetShaderDef() const
-{
-    return &s_shaderDef;
 }
 
 // FUNCTION: SWBF2 0x00701af0

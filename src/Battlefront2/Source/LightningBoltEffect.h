@@ -83,6 +83,7 @@ public:
 class LightningBoltEffectObject : public FLEffectObject, public RedSceneObject
 {
 public:
+    static void SetupMemoryPool(unsigned int uCount, unsigned int uSize, unsigned int uGrow) { sMemoryPool.Setup(uCount, uSize, uGrow); }
     LightningBoltEffectObject(const LightningBoltEffectClass* pClass);
     virtual ~LightningBoltEffectObject();
 

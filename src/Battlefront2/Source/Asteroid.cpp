@@ -100,15 +100,15 @@ const GameModel* EntityGeometryClass::GetModel()
 }
 
 // FUNCTION: SWBF2 0x00444430
-int GameObjectClass::GetSoldierType() const
+GameObjectClass::SoldierType GameObjectClass::GetSoldierType() const
 {
-    return 5;
+    return SOLDIER_UNKNOWN;
 }
 
 // FUNCTION: SWBF2 0x00444440
-int GameObjectClass::GetVehicleType() const
+GameObjectClass::VehicleType GameObjectClass::GetVehicleType() const
 {
-    return 9;
+    return VEHICLE_UNKNOWN;
 }
 
 // FUNCTION: SWBF2 0x00444450

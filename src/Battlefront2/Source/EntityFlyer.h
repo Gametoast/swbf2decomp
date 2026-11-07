@@ -5,6 +5,7 @@
 #include <stddef.h>
 
 #include "Aimer.h"
+#include "Character.h"
 #include "CollisionModel.h"
 #include "Controllable.h"
 #include "EnergyBar.h"
@@ -67,12 +68,36 @@ public:
     virtual unsigned int GetDerivedRtti() const;
     virtual const char* GetDerivedRttiName() const;
     virtual void SetProperty(unsigned int uProperty, const char* pszValue);
-    virtual int GetVehicleType() const;
-    virtual const ControllableClass* GetControllableClass() const;
-    virtual int GetWeaponCount() const;
-    virtual const WeaponClass* GetWeaponClass(int iIndex) const;
-    virtual float GetTimeRequiredToEject() const;
-    virtual float GetReboardTime() const;
+    // FUNCTION: SWBF2 0x00477b00
+    virtual GameObjectClass::VehicleType GetVehicleType() const
+    {
+        return mVehicleType;
+    }
+    // FUNCTION: SWBF2 0x00477b60
+    virtual const ControllableClass* GetControllableClass() const
+    {
+        return this ? (const ControllableClass*)this : 0;
+    }
+    // FUNCTION: SWBF2 0x00477b10
+    virtual int GetWeaponCount() const
+    {
+        return mWeaponCount;
+    }
+    // FUNCTION: SWBF2 0x00477b20
+    virtual const WeaponClass* GetWeaponClass(int iIndex) const
+    {
+        return mWeaponClass[iIndex];
+    }
+    // FUNCTION: SWBF2 0x00477b40
+    virtual float GetTimeRequiredToEject() const
+    {
+        return mTimeRequiredToEject;
+    }
+    // FUNCTION: SWBF2 0x00477b50
+    virtual float GetReboardTime() const
+    {
+        return mTimeTilReboard;
+    }
 
     static PblHash rttiHashEntityFlyerClass;
     static const char rttiNameEntityFlyerClass[];
@@ -124,7 +149,7 @@ public:
     WeaponAmmoDesc mWeaponAmmo[kMaxWeapons];
     int mWeaponChannel[kMaxWeapons];
     int mWeaponCount;
-    int mVehicleType;
+    GameObjectClass::VehicleType mVehicleType;
     float mBlurEffect;
     float mBlurStartV;
     float mFOVEffect3rd;
@@ -493,8 +518,17 @@ public:
                mAIEng.ai.mFreeFlyTime <= 0.0f && !mInRoll && !mInFlip;
     }
     Trackable* GetTrackable();
-    unsigned int GetAllegiance();
-    bool CanJoinSquadron() const;
+    // FUNCTION: SWBF2 0x004779a0
+    unsigned int GetAllegiance()
+    {
+        const Character* pCharacter = mCharacter;
+        return pCharacter ? pCharacter->mTeamNumber : 0;
+    }
+    // FUNCTION: SWBF2 0x004779c0
+    bool CanJoinSquadron() const
+    {
+        return !EntitySquadron::InSquadron() && GetFollowingPath();
+    }
 
     virtual float GetMaxStrafe() const;
     virtual ExplosionClass* GetExplosionClass();

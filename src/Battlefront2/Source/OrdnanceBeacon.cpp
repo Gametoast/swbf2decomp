@@ -64,24 +64,6 @@ const PblVector3& OrdnanceBullet::GetVelocity() const
     return mVelocity;
 }
 
-// FUNCTION: SWBF2 0x005f8b60
-float OrdnanceBulletClass::GetVelocity()
-{
-    return mVelocity;
-}
-
-// FUNCTION: SWBF2 0x005f8b70
-float OrdnanceBulletClass::GetRange()
-{
-    return mVelocity * mLifeSpan;
-}
-
-// FUNCTION: SWBF2 0x005f8be0
-float OrdnanceShellClass::GetGravity()
-{
-    return mGravity;
-}
-
 
 
 

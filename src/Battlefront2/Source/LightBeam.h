@@ -185,6 +185,26 @@ public:
  
  
 
+// FUNCTION: SWBF2 0x004cc5d0
+inline void ManagedLightBeam::SetInitialWidth(float fWidth)
+{
+    LightBeam::SetInitialWidth(fWidth);
+    if (_bActive)
+    {
+        _UpdateBoundingSphere();
+    }
+}
+
+// FUNCTION: SWBF2 0x004cc660
+inline void ManagedLightBeam::SetInitialWidth(float fWidthX, float fWidthZ)
+{
+    LightBeam::SetInitialWidth(fWidthX, fWidthZ);
+    if (_bActive)
+    {
+        _UpdateBoundingSphere();
+    }
+}
+
 // FUNCTION: SWBF2 0x004cc4c0
 inline void ManagedLightBeam::SetHeadTailPosition(const PblVector3& vHead, const PblVector3& vTail)
 {

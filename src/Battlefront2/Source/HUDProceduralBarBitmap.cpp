@@ -11,46 +11,6 @@ static const unsigned int kGlowScaleSize = 0x84e84d97 /* "GlowScaleSize" */;
 static const unsigned int kGlowAlphaBase = 0xba3e10e5 /* "GlowAlphaBase" */;
 static const unsigned int kGlowAlphaScale = 0xdd5384a2 /* "GlowAlphaScale" */;
 
-// FUNCTION: SWBF2 0x00566360
-void HUD::ObjectiveList::SetState(unsigned int uiTextHashID, Objective::ObjectiveState state)
-{
-    Objective* pObjective = FindObjective(uiTextHashID);
-    if (!pObjective)
-    {
-        return;
-    }
-    pObjective->SetState(state);
-    SetupText();
-    if (NetGame::IsEnabled() && !NetGame::IsClient())
-    {
-        NetGame::CreateEvent_UpdateObjective(pObjective, ~0ui64);
-    }
-}
-
-// FUNCTION: SWBF2 0x005663d0
-HUD::Objective::ObjectiveState HUD::ObjectiveList::GetState(unsigned int uiTextHashID)
-{
-    Objective* pObjective = FindObjective(uiTextHashID);
-    if (pObjective)
-    {
-        return pObjective->GetState();
-    }
-    return Objective::INACTIVE;
-}
-
-// FUNCTION: SWBF2 0x00566430
-HUD::Objective* HUD::ObjectiveList::FindObjective(unsigned int uiTextHashID)
-{
-    for (PblList<Objective>::Itor it(_objectives); it != _objectives.End(); ++it)
-    {
-        if (it->_textHashID == uiTextHashID)
-        {
-            return it;
-        }
-    }
-    return 0;
-}
-
 // FUNCTION: SWBF2 0x005667d0
 HUD::ProceduralBarBitmap::Factory::Factory()
 {

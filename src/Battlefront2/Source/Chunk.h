@@ -99,14 +99,41 @@ class Chunk : public CollisionObject
 {
 public:
     Chunk();
-    virtual const PblVector3& GetPosition() const;
-    virtual void SetPosition(const PblVector3& vPos);
+    // FUNCTION: SWBF2 0x00454e30
+    virtual void SetPosition(const PblVector3& vPos)
+    {
+        mMatrix.SetTranslation(vPos);
+        mCollisionMatrix = mPrimitiveMatrix.GetInverseFast() * mMatrix;
+        SetCollisionCenter(mCollisionMatrix.GetTranslation());
+    }
+
+    // FUNCTION: SWBF2 0x00454f10
+    virtual const PblVector3& GetPosition() const
+    {
+        return mMatrix.GetTranslation();
+    }
+
+    // FUNCTION: SWBF2 0x00454f20
+    virtual const PblMatrix& GetMatrix() const
+    {
+        return mMatrix;
+    }
+
+    // FUNCTION: SWBF2 0x00454f30
+    virtual const PblVector3& GetVelocity() const
+    {
+        return mVelocity;
+    }
+
+    // FUNCTION: SWBF2 0x00454f40
+    virtual const PblVector3& GetOmega() const
+    {
+        return mOmega;
+    }
+
     virtual bool CollisionCallback(const CollisionResult* pResult, CollisionObject* pOther,
                                    Restrictor* pRestrictor);
-    virtual const PblMatrix& GetMatrix() const;
     virtual bool IsAChunk() const;
-    virtual const PblVector3& GetVelocity() const;
-    virtual const PblVector3& GetOmega() const;
 
     bool IsValid() const { return mIsValid; }
     bool IsMoving() const { return mIsMoving; }

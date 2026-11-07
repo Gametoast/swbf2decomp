@@ -106,26 +106,6 @@ bool ManagedLightBeam::IsHiddenInView(unsigned int uiView)
 
 
 
-// FUNCTION: SWBF2 0x004cc660
-void ManagedLightBeam::SetInitialWidth(float fWidthX, float fWidthZ)
-{
-    LightBeam::SetInitialWidth(fWidthX, fWidthZ);
-    if (_bActive)
-    {
-        _UpdateBoundingSphere();
-    }
-}
-
-// FUNCTION: SWBF2 0x004cc5d0
-void ManagedLightBeam::SetInitialWidth(float fWidth)
-{
-    LightBeam::SetInitialWidth(fWidth);
-    if (_bActive)
-    {
-        _UpdateBoundingSphere();
-    }
-}
-
 // FUNCTION: SWBF2 0x004cc6f0
 void ManagedLightBeam::SetFinalWidth(float fWidth)
 {

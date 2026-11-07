@@ -35,38 +35,6 @@ static inline const PblVector3 TransformCoord(const PblVector3& v, const PblMatr
     return result;
 }
 
-// FUNCTION: SWBF2 0x00454e30
-void Chunk::SetPosition(const PblVector3& vPos)
-{
-    mMatrix.SetTranslation(vPos);
-    mCollisionMatrix = mPrimitiveMatrix.GetInverseFast() * mMatrix;
-    SetCollisionCenter(mCollisionMatrix.GetTranslation());
-}
-
-// FUNCTION: SWBF2 0x00454f10
-const PblVector3& Chunk::GetPosition() const
-{
-    return mMatrix.GetTranslation();
-}
-
-// FUNCTION: SWBF2 0x00454f20
-const PblMatrix& Chunk::GetMatrix() const
-{
-    return mMatrix;
-}
-
-// FUNCTION: SWBF2 0x00454f30
-const PblVector3& Chunk::GetVelocity() const
-{
-    return mVelocity;
-}
-
-// FUNCTION: SWBF2 0x00454f40
-const PblVector3& Chunk::GetOmega() const
-{
-    return mOmega;
-}
-
 // FUNCTION: SWBF2 0x00454f50
 bool Chunk::IsAChunk() const
 {

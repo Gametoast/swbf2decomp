@@ -134,12 +134,6 @@ void pcPerPixelDiffuseLightingShader::Begin_Prog1(unsigned int uiState, unsigned
     RedRenderer::pcSetSamplerState(3, D3DSAMP_MIPFILTER, D3DTEXF_LINEAR);
 }
 
-// FUNCTION: SWBF2 0x00711860
-void pcPerPixelDiffuseLightingShader::Bind()
-{
-    _BindPipeline(GetStateFuncArray, BeginFuncArray, EndFuncArray, RenderFuncArray);
-}
-
 // FUNCTION: SWBF2 0x00711880
 void pcPerPixelDiffuseLightingShader::End_Fixed(unsigned int, unsigned int) const
 {
@@ -150,22 +144,10 @@ void pcPerPixelDiffuseLightingShader::End_Prog1(unsigned int, unsigned int) cons
 {
 }
 
-// FUNCTION: SWBF2 0x007118a0
-unsigned int pcPerPixelDiffuseLightingShader::GetID(unsigned int uiPass) const
-{
-    return s_shaderDef.m_states[uiPass].uiID;
-}
-
 // FUNCTION: SWBF2 0x007118c0
 RenderPhaseT pcPerPixelDiffuseLightingShader::GetRenderPhase(const RenderItem*, unsigned int) const
 {
     return RENDERPHASE_OPAQUE;
-}
-
-// FUNCTION: SWBF2 0x007118d0
-unsigned int pcPerPixelDiffuseLightingShader::GetRenderTypeHash() const
-{
-    return s_uiRenderTypeHash;
 }
 
 // FUNCTION: SWBF2 0x007118f0
@@ -204,12 +186,6 @@ unsigned int pcPerPixelDiffuseLightingShader::GetState_Prog1(const RenderItem* p
         iState += 3;
     }
     return iState;
-}
-
-// FUNCTION: SWBF2 0x007118e0
-pcRedShaderDef* pcPerPixelDiffuseLightingShader::GetShaderDef() const
-{
-    return &s_shaderDef;
 }
 
 // FUNCTION: SWBF2 0x00711970

@@ -174,18 +174,6 @@ const PblVector3& OrdnanceMeleeThrow::GetVelocity() const
 
 
 
-// FUNCTION: SWBF2 0x00602270
-float OrdnanceMeleeThrowClass::GetVelocity()
-{
-    return mVelocity;
-}
-
-// FUNCTION: SWBF2 0x00602280
-float OrdnanceMeleeThrowClass::GetRange()
-{
-    return mVelocity * mLifeSpan;
-}
-
 // FUNCTION: SWBF2 0x006034e0
 void OrdnanceMeleeThrow::Render(unsigned char, float, unsigned int uiFlags)
 {

@@ -178,7 +178,7 @@ void WeaponDestruct::EnterCharge()
 // FUNCTION: SWBF2 0x00681c00
 bool WeaponDestruct::UpdateCharge(float fDeltaTime)
 {
-    if (mOwner->GetGameObject()->IsRtti(EntityDroid::rttiHashEntityDroid))
+    if (mOwner->GetGameObject()->IsRtti(EntityDroid::GetRtti()))
     {
         ((EntityDroid*)mOwner->GetGameObject())->FreezeMovement();
     }
@@ -259,7 +259,7 @@ void WeaponDestruct::ExitFire()
         ((WeaponDestructClass*)mClass)->mExplosionClass->CreateExplosion(
             mOwner->GetGameObject()->GetCollisionObject()->GetCollisionCenter(), owner, false, COLL_UNKNOWN);
     }
-    if (mOwner->GetGameObject()->IsRtti(EntityDroid::rttiHashEntityDroid))
+    if (mOwner->GetGameObject()->IsRtti(EntityDroid::GetRtti()))
     {
         ((EntityDroid*)mOwner->GetGameObject())->KillDelay(1.0f);
     }

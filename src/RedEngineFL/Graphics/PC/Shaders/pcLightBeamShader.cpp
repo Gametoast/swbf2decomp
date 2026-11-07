@@ -54,12 +54,6 @@ void pcLightBeamShader::Begin_Prog1(unsigned int, unsigned int) const
     RedRenderer::pcSetTexture(0, 0);
 }
 
-// FUNCTION: SWBF2 0x00704850
-void pcLightBeamShader::Bind()
-{
-    _BindPipeline(GetStateFuncArray, BeginFuncArray, EndFuncArray, RenderFuncArray);
-}
-
 // FUNCTION: SWBF2 0x00704870
 void pcLightBeamShader::End_Fixed(unsigned int, unsigned int) const
 {
@@ -70,28 +64,10 @@ void pcLightBeamShader::End_Prog1(unsigned int, unsigned int) const
 {
 }
 
-// FUNCTION: SWBF2 0x00704890
-unsigned int pcLightBeamShader::GetID(unsigned int uiPass) const
-{
-    return s_shaderDef.m_states[uiPass].uiID;
-}
-
 // FUNCTION: SWBF2 0x007048b0
 RenderPhaseT pcLightBeamShader::GetRenderPhase(const RenderItem*, unsigned int) const
 {
     return RENDERPHASE_TRANSPARENT;
-}
-
-// FUNCTION: SWBF2 0x007048c0
-unsigned int pcLightBeamShader::GetRenderTypeHash() const
-{
-    return s_uiRenderTypeHash;
-}
-
-// FUNCTION: SWBF2 0x007048d0
-pcRedShaderDef* pcLightBeamShader::GetShaderDef() const
-{
-    return &s_shaderDef;
 }
 
 // FUNCTION: SWBF2 0x00704900

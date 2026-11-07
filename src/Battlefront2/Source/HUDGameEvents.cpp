@@ -780,6 +780,38 @@ void HUD::GameEvents::Die(HUD::GameEvents::PlayerEvents& events, HUD::GameEvents
     event.Send();
 }
 
+namespace HUD
+{
+namespace GameEvents
+{
+void DisableAllForObjectiveDisplay(int iPlayer, bool bFlag);
+}
+}
+
+// FUNCTION: SWBF2 0x005636b0
+void HUD::GameEvents::DisableAllForObjectiveDisplay(int iPlayer, bool bFlag)
+{
+    if (iPlayer < 0)
+    {
+        return;
+    }
+
+    HUD::GameEvents::PlayerEvents& events = HUD::GameEvents::gPlayerEvents[iPlayer];
+    HUD::GameEvents::PlayerData& data = HUD::GameEvents::gPlayerData[iPlayer];
+    HUD::GameEvents::DisablePlayerElements(events, data);
+    if (bFlag)
+    {
+        HUD::GameEvents::DisableTeamElements(events, data);
+    }
+    HUD::Event mapDisable(events.mapDisable, true);
+    mapDisable.Send();
+    data.mapMode = (HUD::ElementMap::Mode)3;
+    HUD::Event toolTipsDisable(events.disableToolTips, true);
+    toolTipsDisable.Send();
+    HUD::Event timerDisable(HUD::GameEvents::gObjectiveEvents.timerDisable, true);
+    timerDisable.Send();
+}
+
 class EntitySoldierClass;
 namespace HUD
 {

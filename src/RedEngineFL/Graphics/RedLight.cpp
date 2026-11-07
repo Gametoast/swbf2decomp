@@ -1390,25 +1390,6 @@ void RedLight::SetGlobalDirectionalLightColor(RedColorValue& color, int i)
     m_sGlobalDirectionals[i]->SetColor(color);
 }
 
-// FUNCTION: SWBF2 0x00719be0
-void RedShadowRegion::UpdateAllVisibility(const RedCamera* pCamera)
-{
-    RedShadowRegion::s_VisibleList.Clear();
-    if (!pCamera)
-    {
-        return;
-    }
-
-    for (PblList<RedShadowRegion>::Itor it(RedShadowRegion::s_List); it != RedShadowRegion::s_List.End();
-         ++it)
-    {
-        if (it->IsVisible(pCamera, 25.0f))
-        {
-            RedShadowRegion::s_VisibleList.Add(&it->m_VisibleNode, it);
-        }
-    }
-}
-
 // FUNCTION: SWBF2 0x006c98f0
 void RedLight::UpdateAllVisibility(const RedCamera* pCamera, unsigned int uiView)
 {

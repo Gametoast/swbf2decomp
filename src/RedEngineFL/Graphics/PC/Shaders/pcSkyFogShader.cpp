@@ -61,12 +61,6 @@ pcSkyFogShader::pcSkyFogShader(unsigned int uiFlags,
     _Init(uiFlags, pParams, uiNumParams, uiMaterialFlags, color0, color1, fArg7);
 }
 
-// FUNCTION: SWBF2 0x007040c0
-pcRedShaderDef* pcSkyFogShader::GetShaderDef() const
-{
-    return &s_shaderDef;
-}
-
 // FUNCTION: SWBF2 0x007040f0
 void pcSkyFogShader::InitFixedFunctionShaderDef() const
 {
@@ -161,28 +155,10 @@ RenderPhaseT pcSkyFogShader::GetRenderPhase(const RenderItem*, unsigned int) con
     return RENDERPHASE_TRANSPARENT;
 }
 
-// FUNCTION: SWBF2 0x00704080
-unsigned int pcSkyFogShader::GetID(unsigned int uiPass) const
-{
-    return s_shaderDef.m_states[uiPass].uiID;
-}
-
-// FUNCTION: SWBF2 0x007040b0
-unsigned int pcSkyFogShader::GetRenderTypeHash() const
-{
-    return s_uiRenderTypeHash;
-}
-
 // FUNCTION: SWBF2 0x00704050
 RedShadingState* pcSkyFogShader::CreateShadingState() const
 {
     return 0;
-}
-
-// FUNCTION: SWBF2 0x00704030
-void pcSkyFogShader::Bind()
-{
-    _BindPipeline(GetStateFuncArray, BeginFuncArray, EndFuncArray, RenderFuncArray);
 }
 
 // FUNCTION: SWBF2 0x007040d0

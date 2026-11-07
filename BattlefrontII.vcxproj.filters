@@ -1593,6 +1593,9 @@
     <ClCompile Include="src\PebbleFL\Common\PblMath.cpp">
       <Filter>src\PebbleFL\Common</Filter>
     </ClCompile>
+    <ClCompile Include="src\PebbleFL\Common\PblPerformance.cpp">
+      <Filter>src\PebbleFL\Common</Filter>
+    </ClCompile>
     <ClCompile Include="src\PebbleFL\Common\PblProfile.cpp">
       <Filter>src\PebbleFL\Common</Filter>
     </ClCompile>
@@ -1634,45 +1637,6 @@
     </ClCompile>
     <ClCompile Include="src\PebbleFL\Common\PblPrintfWrapper.cpp">
       <Filter>src\PebbleFL\Common</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Zephyr\Source\ZephyrAnim.cpp">
-      <Filter>src\Zephyr\Source</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Zephyr\Source\ZephyrAnimBank.cpp">
-      <Filter>src\Zephyr\Source</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Zephyr\Source\ZephyrAnimBankReader.cpp">
-      <Filter>src\Zephyr\Source</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Zephyr\Source\ZephyrAnimInst.cpp">
-      <Filter>src\Zephyr\Source</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Zephyr\Source\ZephyrAnimJoint.cpp">
-      <Filter>src\Zephyr\Source</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Zephyr\Source\ZephyrEvent.cpp">
-      <Filter>src\Zephyr\Source</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Zephyr\Source\ZephyrFile.cpp">
-      <Filter>src\Zephyr\Source</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Zephyr\Source\ZephyrPoseDyn.cpp">
-      <Filter>src\Zephyr\Source</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Zephyr\Source\ZephyrPoseStatic.cpp">
-      <Filter>src\Zephyr\Source</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Zephyr\Source\ZephyrSkeleton.cpp">
-      <Filter>src\Zephyr\Source</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Zephyr\Source\ZephyrSkeletonShared.cpp">
-      <Filter>src\Zephyr\Source</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Zephyr\Source\ZephyrSkinReader.cpp">
-      <Filter>src\Zephyr\Source</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Zephyr\Source\ZephyrSkinShared.cpp">
-      <Filter>src\Zephyr\Source</Filter>
     </ClCompile>
     <ClCompile Include="src\ZlibFL\adler32.c">
       <Filter>src\ZlibFL</Filter>
@@ -3116,6 +3080,9 @@
     <ClInclude Include="src\PebbleFL\Common\PblPlane.h">
       <Filter>src\PebbleFL\Common</Filter>
     </ClInclude>
+    <ClInclude Include="src\PebbleFL\Common\PblPerformance.h">
+      <Filter>src\PebbleFL\Common</Filter>
+    </ClInclude>
     <ClInclude Include="src\PebbleFL\Common\PblQuaternion.h">
       <Filter>src\PebbleFL\Common</Filter>
     </ClInclude>
@@ -3418,48 +3385,6 @@
     </ClInclude>
     <ClInclude Include="src\Steam\utf8.h">
       <Filter>src\Steam</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Zephyr\Source\ZephyrAnim.h">
-      <Filter>src\Zephyr\Source</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Zephyr\Source\ZephyrAnimBank.h">
-      <Filter>src\Zephyr\Source</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Zephyr\Source\ZephyrAnimBankReader.h">
-      <Filter>src\Zephyr\Source</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Zephyr\Source\ZephyrAnimInst.h">
-      <Filter>src\Zephyr\Source</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Zephyr\Source\ZephyrAnimJoint.h">
-      <Filter>src\Zephyr\Source</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Zephyr\Source\ZephyrCommon.h">
-      <Filter>src\Zephyr\Source</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Zephyr\Source\ZephyrEvent.h">
-      <Filter>src\Zephyr\Source</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Zephyr\Source\ZephyrFile.h">
-      <Filter>src\Zephyr\Source</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Zephyr\Source\ZephyrPoseDyn.h">
-      <Filter>src\Zephyr\Source</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Zephyr\Source\ZephyrPoseStatic.h">
-      <Filter>src\Zephyr\Source</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Zephyr\Source\ZephyrSkeleton.h">
-      <Filter>src\Zephyr\Source</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Zephyr\Source\ZephyrSkeletonShared.h">
-      <Filter>src\Zephyr\Source</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Zephyr\Source\ZephyrSkinReader.h">
-      <Filter>src\Zephyr\Source</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Zephyr\Source\ZephyrSkinShared.h">
-      <Filter>src\Zephyr\Source</Filter>
     </ClInclude>
     <ClInclude Include="src\ZlibFL\crc32.h">
       <Filter>src\ZlibFL</Filter>

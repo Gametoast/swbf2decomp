@@ -45,6 +45,46 @@ float pcTerrainShader::s_fStaticBumpFactor;
 unsigned int pcTerrainShader::s_uiOptions;
 float pcTerrainShader::s_fLightningValue;
 
+// SYNTHETIC: SWBF2 0x004093e0
+// `dynamic initializer for 'pcTerrainShader::s_uiRenderTypeHash''
+
+// GLOBAL: SWBF2 0x009c88d0
+// pcTerrainShader::s_uiRenderTypeHash
+unsigned int pcTerrainShader::s_uiRenderTypeHash = PblHash("Terrain");
+
+// SYNTHETIC: SWBF2 0x00409350
+// `dynamic initializer for 'pcTerrainShader::s_Factory''
+// SYNTHETIC: SWBF2 0x00769bd0
+// `dynamic atexit destructor for 'pcTerrainShader::s_Factory''
+
+// GLOBAL: SWBF2 0x009c8620
+// pcTerrainShader::s_Factory
+pcTerrainShader pcTerrainShader::s_Factory;
+
+// SYNTHETIC: SWBF2 0x004093c0
+// `dynamic initializer for 'pcTerrainShader::s_shaderDef''
+// SYNTHETIC: SWBF2 0x00769bf0
+// `dynamic atexit destructor for 'pcTerrainShader::s_shaderDef''
+pcRedShaderDef pcTerrainShader::s_shaderDef("terrain_shader.xml");
+
+// SYNTHETIC: SWBF2 0x00409440
+// `dynamic initializer for 'kuiLinearRamp''
+
+// GLOBAL: SWBF2 0x009c8674
+// kuiLinearRamp
+static unsigned int kuiLinearRamp = PblHash("linear_ramp");
+
+
+
+// SYNTHETIC: SWBF2 0x00409390
+// `dynamic initializer for 'pcTerrainShader::s_TextureTransform''
+
+PblVector4 pcTerrainShader::s_TextureTransform[16][2];
+
+// SYNTHETIC: SWBF2 0x00409330
+// `dynamic initializer for 'pcTerrainShader::s_DetailTextureTransform''
+
+PblVector4 pcTerrainShader::s_DetailTextureTransform[2];
 // SYNTHETIC: SWBF2 0x00409310
 // `dynamic initializer for 'pcTerrainShader::s_BumpSpecularTextureTransform''
 
@@ -60,11 +100,6 @@ PblVector4 pcTerrainShader::s_BumpLuminosityTextureTransform[2];
 
 PblVector4 pcTerrainShader::s_FarTextureTransform;
 
-// SYNTHETIC: SWBF2 0x00409390
-// `dynamic initializer for 'pcTerrainShader::s_TextureTransform''
-
-PblVector4 pcTerrainShader::s_TextureTransform[16][2];
-
 // SYNTHETIC: SWBF2 0x00409370
 // `dynamic initializer for 'pcTerrainShader::s_FarDetailTextureTransform''
 
@@ -75,17 +110,6 @@ PblVector4 pcTerrainShader::s_FarDetailTextureTransform;
 
 PblMatrix pcTerrainShader::s_mProjectionRestore;
 
-// SYNTHETIC: SWBF2 0x004093e0
-// `dynamic initializer for 'pcTerrainShader::s_uiRenderTypeHash''
-
-// GLOBAL: SWBF2 0x009c88d0
-// pcTerrainShader::s_uiRenderTypeHash
-unsigned int pcTerrainShader::s_uiRenderTypeHash = PblHash("Terrain");
-
-// SYNTHETIC: SWBF2 0x00409330
-// `dynamic initializer for 'pcTerrainShader::s_DetailTextureTransform''
-
-PblVector4 pcTerrainShader::s_DetailTextureTransform[2];
 unsigned int pcTerrainShader::s_uiShadowMapWrapMode = 1;
 
 // GLOBAL: SWBF2 0x007e1790
@@ -193,15 +217,6 @@ pcTerrainShader::pcTerrainShader(unsigned int uiFlags,
     _BindPipeline(GetStateFuncArray, BeginFuncArray, EndFuncArray, RenderFuncArray);
     _Init(uiFlags, pParams, uiNumParams, uiMaterialFlags, color0, color1, fSpecularPower);
 }
-
-// SYNTHETIC: SWBF2 0x00409440
-// `dynamic initializer for 'kuiLinearRamp''
-
-// GLOBAL: SWBF2 0x009c8674
-// kuiLinearRamp
-static unsigned int kuiLinearRamp = PblHash("linear_ramp");
-
-
 
 static PblMatrix CameraToWorld()
 {
@@ -765,12 +780,6 @@ void pcTerrainShader::Begin_Prog1(unsigned int uiState, unsigned int uiPass) con
     RedRenderer::pcLoadFormat(s_pVertexInputFormat);
 }
 
-// FUNCTION: SWBF2 0x006fac20
-void pcTerrainShader::Bind()
-{
-    _BindPipeline(GetStateFuncArray, BeginFuncArray, EndFuncArray, RenderFuncArray);
-}
-
 // FUNCTION: SWBF2 0x006fac40
 RedShadingState* pcTerrainShader::CreateShadingState() const
 {
@@ -792,12 +801,6 @@ void pcTerrainShader::End_Prog1(unsigned int, unsigned int) const
 {
 }
 
-// FUNCTION: SWBF2 0x006fac90
-unsigned int pcTerrainShader::GetID(unsigned int uiPass) const
-{
-    return s_shaderDef.m_states[uiPass].uiID;
-}
-
 // FUNCTION: SWBF2 0x006facb0
 RenderPhaseT pcTerrainShader::GetRenderPhase(const RenderItem*, unsigned int) const
 {
@@ -808,12 +811,6 @@ RenderPhaseT pcTerrainShader::GetRenderPhase(const RenderItem*, unsigned int) co
     return RENDERPHASE_OPAQUE;
 }
 
-// FUNCTION: SWBF2 0x006face0
-unsigned int pcTerrainShader::GetRenderTypeHash() const
-{
-    return s_uiRenderTypeHash;
-}
-
 // FUNCTION: SWBF2 0x006facf0
 unsigned short pcTerrainShader::GetShaderChain(pcRedShader** const ppOut,
                                                unsigned short,
@@ -822,12 +819,6 @@ unsigned short pcTerrainShader::GetShaderChain(pcRedShader** const ppOut,
     ppOut[0] = this;
     m_lightingInSeparatePass = false;
     return 1;
-}
-
-// FUNCTION: SWBF2 0x006fad10
-pcRedShaderDef* pcTerrainShader::GetShaderDef() const
-{
-    return &s_shaderDef;
 }
 
 // FUNCTION: SWBF2 0x006fad20
@@ -1347,21 +1338,6 @@ void pcTerrainShader::_StaticInit() const
     s_FarDetailTextureTransform = vZero;
     memset(&s_d3dMat, 0, sizeof(s_d3dMat));
 }
-
-// SYNTHETIC: SWBF2 0x00409350
-// `dynamic initializer for 'pcTerrainShader::s_Factory''
-// SYNTHETIC: SWBF2 0x00769bd0
-// `dynamic atexit destructor for 'pcTerrainShader::s_Factory''
-
-// GLOBAL: SWBF2 0x009c8620
-// pcTerrainShader::s_Factory
-pcTerrainShader pcTerrainShader::s_Factory;
-
-// SYNTHETIC: SWBF2 0x004093c0
-// `dynamic initializer for 'pcTerrainShader::s_shaderDef''
-// SYNTHETIC: SWBF2 0x00769bf0
-// `dynamic atexit destructor for 'pcTerrainShader::s_shaderDef''
-pcRedShaderDef pcTerrainShader::s_shaderDef("terrain_shader.xml");
 
 // SYNTHETIC: SWBF2 0x00409420
 // PblMath::`dynamic initializer for 'fOneOverTwoPi''

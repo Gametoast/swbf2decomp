@@ -126,6 +126,7 @@ public:
     static void operator delete(void* pBlock) { sMemoryPool.Free(pBlock); }
 
     virtual bool IsRtti(unsigned int uRtti) const;
+    static unsigned int GetRtti() { return rttiHashEntityWalker; }
     virtual unsigned int GetDerivedRtti() const;
     virtual const char* GetDerivedRttiName() const;
     virtual void Init();
@@ -485,7 +486,7 @@ public:
     virtual void SetProperty(unsigned int uProperty, const char* pszValue);
     virtual void PostReadSetup();
     // FUNCTION: SWBF2 0x0047fcc0
-    virtual int GetVehicleType() const
+    virtual GameObjectClass::VehicleType GetVehicleType() const
     {
         return mVehicleType;
     }
@@ -547,7 +548,7 @@ public:
     bool m_bAnimationBlending;
     unsigned char m_uiNumAttackAnims;
     WalkerAttackAnim m_aAttackAnims[4];
-    int mVehicleType;
+    GameObjectClass::VehicleType mVehicleType;
     float mAcceleration;
     float mMaxSpeed;
     float mBoostSpeed;

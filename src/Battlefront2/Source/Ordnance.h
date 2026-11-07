@@ -69,9 +69,21 @@ public:
     virtual unsigned int GetDerivedRtti() const;
     virtual const char* GetDerivedRttiName() const;
     virtual void SetProperty(unsigned int uProperty, const char* pszValue);
-    virtual float GetVelocity();
-    virtual float GetGravity();
-    virtual float GetRange();
+    // FUNCTION: SWBF2 0x005f72e0
+    virtual float GetVelocity() const
+    {
+        return 0.0f;
+    }
+    // FUNCTION: SWBF2 0x005f72f0
+    virtual float GetGravity() const
+    {
+        return 0.0f;
+    }
+    // FUNCTION: SWBF2 0x005f7300
+    virtual float GetRange() const
+    {
+        return 0.0f;
+    }
 
     virtual DamageDesc GetDamage(const DamageOwner& owner, float fUnused, float fRatio,
                                  float fElapsed) const;

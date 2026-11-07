@@ -6,9 +6,13 @@
 #include "Aimer.h"
 #include "Character.h"
 #include "CommandFlyer.h"
+#include "CommandWalker.h"
 #include "Controllable.h"
 #include "EnergyBar.h"
 #include "EntityItem.h"
+#include "EntityHover.h"
+#include "EntityMine.h"
+#include "EntityWalker.h"
 #include "EntitySoldier.h"
 #include "EventManager_Object.h"
 #include "GameObject.h"
@@ -25,10 +29,6 @@
 
 
 
-class EntityWalker { public: static PblHash rttiHashEntityWalker; };
-class EntityHover { public: static PblHash rttiHashEntityHover; };
-class EntityMine { public: static PblHash rttiHashEntityMine; };
-class CommandWalker { public: static PblHash rttiHashCommandWalker; };
 
 namespace EventManager
 {
@@ -459,14 +459,14 @@ bool WeaponRepair::Fire(float fDeltaTime)
     owner.mClass = mOwner->GetGameObject()->GetEntityClass();
     owner.mWeapon = mClass;
 
-    if (pTarget->IsRtti(EntityWalker::rttiHashEntityWalker) ||
-        pTarget->IsRtti(EntityHover::rttiHashEntityHover) ||
+    if (pTarget->IsRtti(EntityWalker::GetRtti()) ||
+        pTarget->IsRtti(EntityHover::GetRtti()) ||
         pTarget->IsRtti(EntityFlyer::rttiHashEntityFlyer))
     {
         if (mOwner->GetGameObject()->IsMyEnemy(pTarget) &&
             pTarget->GetEntityType() != ENT_TAUNTAUN &&
             !pTarget->IsRtti(CommandFlyer::rttiHashCommandFlyer) &&
-            !pTarget->IsRtti(CommandWalker::rttiHashCommandWalker))
+            !pTarget->IsRtti(CommandWalker::GetRtti()))
         {
             int iSoldiers = 0;
             const PblList<Controllable>& list = pTarget->GetControllableList();
@@ -523,7 +523,7 @@ bool WeaponRepair::Fire(float fDeltaTime)
             }
         }
     }
-    else if (pTarget->IsRtti(EntityMine::rttiHashEntityMine))
+    else if (pTarget->IsRtti(EntityMine::GetRtti()))
     {
         EntityItem* pMine = (EntityItem*)pTarget;
         if (pMine->GetLifeTimer() > 0.0f)

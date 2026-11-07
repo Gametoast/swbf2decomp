@@ -434,12 +434,6 @@ bool pvs::Sector::GetActiveTravMark()
     return atmark_;
 }
 
-// FUNCTION: SWBF2 0x006e0660
-geo::ExtrudedPoly3D& pvs::Sector::GetBound()
-{
-    return bound_;
-}
-
 // FUNCTION: SWBF2 0x006e0670
 void pvs::Manager::GetCamFrustum(const pvs::ICamera& rCam, geo::Frustum& rFrustum)
 {
@@ -477,12 +471,6 @@ pvs::IManager& pvs::IManager::GetInstance()
     return *_man;
 }
 
-// FUNCTION: SWBF2 0x006e0990
-pvs::ISector* pvs::Portal::GetLeft()
-{
-    return left_;
-}
-
 // FUNCTION: SWBF2 0x006e09a0
 unsigned int util::IAllocator::GetMemHash()
 {
@@ -505,12 +493,6 @@ const geo::Poly3D& pvs::Portal::GetPoly() const
 pvs::IPortal* pvs::Manager::GetPortal(int iIndex)
 {
     return portals_[iIndex];
-}
-
-// FUNCTION: SWBF2 0x006e09e0
-pvs::ISector* pvs::Portal::GetRight()
-{
-    return right_;
 }
 
 // FUNCTION: SWBF2 0x006e09f0
@@ -543,24 +525,10 @@ geo::Sphere& pvs::Sector::GetSphereBound()
     return sbound_;
 }
 
-// FUNCTION: SWBF2 0x006e0a80
-util::Vector<unsigned int>& pvs::Sector::GetStaticNames()
-{
-    return staticNames_;
-}
-
 // FUNCTION: SWBF2 0x006e0a90
 bool pvs::Sector::GetTravMark()
 {
     return tmark_;
-}
-
-// FUNCTION: SWBF2 0x006e0aa0
-void pvs::Portal::Init(pvs::Sector* pLeft, pvs::Sector* pRight)
-{
-    left_ = pLeft;
-    active_ = true;
-    right_ = pRight;
 }
 
 // FUNCTION: SWBF2 0x006e0ac0
@@ -582,12 +550,6 @@ template bool util::Vector<void*>::Add(void* const&);
 bool pvs::Manager::IsActive()
 {
     return gEnable;
-}
-
-// FUNCTION: SWBF2 0x006e0be0
-bool pvs::Portal::IsActive()
-{
-    return active_;
 }
 
 // FUNCTION: SWBF2 0x006e0bf0
@@ -785,34 +747,16 @@ void pvs::Manager::SetActive(bool bActive)
     gEnable = bActive;
 }
 
-// FUNCTION: SWBF2 0x006e14c0
-void pvs::Portal::SetActive(bool bActive)
-{
-    active_ = bActive;
-}
-
 // FUNCTION: SWBF2 0x006e14d0
 void pvs::Sector::SetActiveTravMark(bool bMark)
 {
     atmark_ = bMark;
 }
 
-// FUNCTION: SWBF2 0x006e14e0
-void pvs::Sector::SetBound(const geo::ExtrudedPoly3D& rBound)
-{
-    bound_ = rBound;
-}
-
 // FUNCTION: SWBF2 0x006e15a0
 void pvs::IManager::SetInstance(IManager& rManager)
 {
     _man = &rManager;
-}
-
-// FUNCTION: SWBF2 0x006e15b0
-void pvs::Portal::SetLeft(pvs::ISector* pLeft)
-{
-    left_ = (pvs::Sector*)pLeft;
 }
 
 // FUNCTION: SWBF2 0x006e15c0

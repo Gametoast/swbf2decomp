@@ -219,12 +219,6 @@ void pcStencilShadowShader::Begin_Prog1(unsigned int, unsigned int uiPass) const
     RedRenderer::pcSetRenderState(D3DRS_COLORWRITEENABLE, 0);
 }
 
-// FUNCTION: SWBF2 0x00707310
-void pcStencilShadowShader::Bind()
-{
-    _BindPipeline(GetStateFuncArray, BeginFuncArray, EndFuncArray, RenderFuncArray);
-}
-
 // FUNCTION: SWBF2 0x00707330
 void pcStencilShadowShader::End_Fixed(unsigned int, unsigned int) const
 {
@@ -235,28 +229,10 @@ void pcStencilShadowShader::End_Prog1(unsigned int, unsigned int) const
 {
 }
 
-// FUNCTION: SWBF2 0x00707350
-unsigned int pcStencilShadowShader::GetID(unsigned int uiPass) const
-{
-    return s_shaderDef.m_states[uiPass].uiID;
-}
-
 // FUNCTION: SWBF2 0x00707370
 RenderPhaseT pcStencilShadowShader::GetRenderPhase(const RenderItem*, unsigned int) const
 {
     return s_bDebugShadowVolumes ? RENDERPHASE_TRANSPARENT : RENDERPHASE_SHADOW;
-}
-
-// FUNCTION: SWBF2 0x00707390
-unsigned int pcStencilShadowShader::GetRenderTypeHash() const
-{
-    return s_uiRenderTypeHash;
-}
-
-// FUNCTION: SWBF2 0x007073a0
-pcRedShaderDef* pcStencilShadowShader::GetShaderDef() const
-{
-    return &s_shaderDef;
 }
 
 // FUNCTION: SWBF2 0x007073b0

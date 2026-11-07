@@ -102,12 +102,6 @@ void pcShadowQuadShader::Begin_Prog1(unsigned int, unsigned int) const
     RedRenderer::pcSetCullMode(PCREDCULL_NONE);
 }
 
-// FUNCTION: SWBF2 0x00708200
-void pcShadowQuadShader::Bind()
-{
-    _BindPipeline(GetStateFuncArray, BeginFuncArray, EndFuncArray, RenderFuncArray);
-}
-
 // FUNCTION: SWBF2 0x00708220
 RedShadingState* pcShadowQuadShader::CreateShadingState() const
 {
@@ -124,28 +118,10 @@ void pcShadowQuadShader::End_Prog1(unsigned int, unsigned int) const
 {
 }
 
-// FUNCTION: SWBF2 0x00708250
-unsigned int pcShadowQuadShader::GetID(unsigned int uiPass) const
-{
-    return s_shaderDef.m_states[uiPass].uiID;
-}
-
 // FUNCTION: SWBF2 0x00708270
 RenderPhaseT pcShadowQuadShader::GetRenderPhase(const RenderItem*, unsigned int) const
 {
     return RENDERPHASE_TRANSPARENT;
-}
-
-// FUNCTION: SWBF2 0x00708280
-unsigned int pcShadowQuadShader::GetRenderTypeHash() const
-{
-    return s_uiRenderTypeHash;
-}
-
-// FUNCTION: SWBF2 0x00708290
-pcRedShaderDef* pcShadowQuadShader::GetShaderDef() const
-{
-    return &s_shaderDef;
 }
 
 // FUNCTION: SWBF2 0x007082a0

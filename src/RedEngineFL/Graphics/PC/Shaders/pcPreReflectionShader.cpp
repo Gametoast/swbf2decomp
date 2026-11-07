@@ -70,12 +70,6 @@ void pcPreReflectionShader::Begin_Prog1(unsigned int, unsigned int) const
     RedRenderer::pcSetRenderState(D3DRS_COLORWRITEENABLE, 0);
 }
 
-// FUNCTION: SWBF2 0x0070b1c0
-void pcPreReflectionShader::Bind()
-{
-    _BindPipeline(GetStateFuncArray, BeginFuncArray, EndFuncArray, RenderFuncArray);
-}
-
 // FUNCTION: SWBF2 0x0070b1e0
 void pcPreReflectionShader::End_Fixed(unsigned int, unsigned int) const
 {
@@ -86,28 +80,10 @@ void pcPreReflectionShader::End_Prog1(unsigned int, unsigned int) const
 {
 }
 
-// FUNCTION: SWBF2 0x0070b200
-unsigned int pcPreReflectionShader::GetID(unsigned int uiPass) const
-{
-    return s_shaderDef.m_states[uiPass].uiID;
-}
-
 // FUNCTION: SWBF2 0x0070b220
 RenderPhaseT pcPreReflectionShader::GetRenderPhase(const RenderItem*, unsigned int) const
 {
     return RENDERPHASE_OPAQUE;
-}
-
-// FUNCTION: SWBF2 0x0070b230
-unsigned int pcPreReflectionShader::GetRenderTypeHash() const
-{
-    return s_uiRenderTypeHash;
-}
-
-// FUNCTION: SWBF2 0x0070b240
-pcRedShaderDef* pcPreReflectionShader::GetShaderDef() const
-{
-    return &s_shaderDef;
 }
 
 // FUNCTION: SWBF2 0x0070b250

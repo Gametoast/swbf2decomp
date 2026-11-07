@@ -250,7 +250,7 @@ float CombatUtil::sGetWpnMaxRange(const Controllable* pMe, const WeaponClass* pC
     {
         if (!pMe->GetEntity()->IsRtti(EntitySoldier::rttiHashEntitySoldier) &&
             !pMe->GetEntity()->IsRtti(EntityDroideka::rttiHashEntityDroideka) &&
-            !pMe->GetEntity()->IsRtti(EntityDroid::rttiHashEntityDroid))
+            !pMe->GetEntity()->IsRtti(EntityDroid::GetRtti()))
         {
             fRange *= 2.0f;
         }

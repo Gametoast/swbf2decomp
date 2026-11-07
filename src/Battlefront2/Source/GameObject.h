@@ -36,6 +36,20 @@ public:
         SOLDIER_UNKNOWN = 5
     };
 
+    enum VehicleType
+    {
+        VEHICLE_SCOUT = 0,
+        VEHICLE_LIGHT = 1,
+        VEHICLE_MEDIUM = 2,
+        VEHICLE_HEAVY = 3,
+        VEHICLE_FIGHTER = 4,
+        VEHICLE_TRANSPORT = 5,
+        VEHICLE_CAPITOL = 6,
+        VEHICLE_REMOTE_TERMINAL = 7,
+        VEHICLE_ATAT = 8,
+        VEHICLE_UNKNOWN = 9
+    };
+
     GameObjectClass(unsigned int uHash);
 
     GameObjectClass(GameObjectClass* pBase, unsigned int uHash);
@@ -50,8 +64,8 @@ public:
 
     static unsigned int GetRtti() { return rttiHashGameObjectClass; }
 
-    virtual int GetSoldierType() const;
-    virtual int GetVehicleType() const;
+    virtual SoldierType GetSoldierType() const;
+    virtual VehicleType GetVehicleType() const;
     virtual const class ControllableClass* GetControllableClass() const;
     virtual int GetWeaponCount() const;
     virtual const class WeaponClass* GetWeaponClass(int iIndex) const;
@@ -59,20 +73,6 @@ public:
     virtual const DamageEffectClass* GetDamageEffectClass(int iIndex) const;
     virtual float GetTimeRequiredToEject() const;
     virtual float GetReboardTime() const;
-
-    enum VehicleType
-    {
-        VEHICLE_SCOUT = 0,
-        VEHICLE_LIGHT = 1,
-        VEHICLE_MEDIUM = 2,
-        VEHICLE_HEAVY = 3,
-        VEHICLE_FIGHTER = 4,
-        VEHICLE_TRANSPORT = 5,
-        VEHICLE_CAPITOL = 6,
-        VEHICLE_REMOTE_TERMINAL = 7,
-        VEHICLE_ATAT = 8,
-        VEHICLE_UNKNOWN = 9
-    };
 
     void SetHeroFlag() { mHeroFlag = true; }
 

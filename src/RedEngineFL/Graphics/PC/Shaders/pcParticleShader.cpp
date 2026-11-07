@@ -238,12 +238,6 @@ void pcParticleShader::Render_Fixed(const RenderItem* pItem, unsigned int) const
     pItem->pPrim->Draw();
 }
 
-// FUNCTION: SWBF2 0x00703440
-void pcParticleShader::Bind()
-{
-    _BindPipeline(GetStateFuncArray, BeginFuncArray, EndFuncArray, RenderFuncArray);
-}
-
 // FUNCTION: SWBF2 0x00703460
 void pcParticleShader::End_Fixed(unsigned int, unsigned int) const
 {
@@ -252,12 +246,6 @@ void pcParticleShader::End_Fixed(unsigned int, unsigned int) const
 // FUNCTION: SWBF2 0x00703470
 void pcParticleShader::End_Prog1(unsigned int, unsigned int) const
 {
-}
-
-// FUNCTION: SWBF2 0x00703480
-unsigned int pcParticleShader::GetID(unsigned int uiPass) const
-{
-    return s_shaderDef.m_states[uiPass].uiID;
 }
 
 // FUNCTION: SWBF2 0x007034a0
@@ -273,18 +261,6 @@ RenderPhaseT pcParticleShader::GetRenderPhase(const RenderItem* pItem, unsigned 
         phase = RENDERPHASE_OPAQUE;
     }
     return phase;
-}
-
-// FUNCTION: SWBF2 0x007034c0
-unsigned int pcParticleShader::GetRenderTypeHash() const
-{
-    return s_uiRenderTypeHash;
-}
-
-// FUNCTION: SWBF2 0x007034d0
-pcRedShaderDef* pcParticleShader::GetShaderDef() const
-{
-    return &s_shaderDef;
 }
 
 // FUNCTION: SWBF2 0x007034e0

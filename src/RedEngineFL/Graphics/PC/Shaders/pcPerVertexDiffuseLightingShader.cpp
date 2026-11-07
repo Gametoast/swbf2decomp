@@ -98,12 +98,6 @@ void pcPerVertexDiffuseLightingShader::Begin_Prog1(unsigned int, unsigned int) c
     m_pLightingStatePrev = 0;
 }
 
-// FUNCTION: SWBF2 0x00710880
-void pcPerVertexDiffuseLightingShader::Bind()
-{
-    _BindPipeline(GetStateFuncArray, BeginFuncArray, EndFuncArray, RenderFuncArray);
-}
-
 // FUNCTION: SWBF2 0x007108a0
 void pcPerVertexDiffuseLightingShader::End_Fixed(unsigned int, unsigned int) const
 {
@@ -114,28 +108,10 @@ void pcPerVertexDiffuseLightingShader::End_Prog1(unsigned int, unsigned int) con
 {
 }
 
-// FUNCTION: SWBF2 0x007108c0
-unsigned int pcPerVertexDiffuseLightingShader::GetID(unsigned int uiPass) const
-{
-    return s_shaderDef.m_states[uiPass].uiID;
-}
-
 // FUNCTION: SWBF2 0x007108e0
 RenderPhaseT pcPerVertexDiffuseLightingShader::GetRenderPhase(const RenderItem*, unsigned int) const
 {
     return RENDERPHASE_OPAQUE;
-}
-
-// FUNCTION: SWBF2 0x007108f0
-unsigned int pcPerVertexDiffuseLightingShader::GetRenderTypeHash() const
-{
-    return s_uiRenderTypeHash;
-}
-
-// FUNCTION: SWBF2 0x00710900
-pcRedShaderDef* pcPerVertexDiffuseLightingShader::GetShaderDef() const
-{
-    return &s_shaderDef;
 }
 
 // FUNCTION: SWBF2 0x00710910

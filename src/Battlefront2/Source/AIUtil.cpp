@@ -263,7 +263,7 @@ namespace AIUtil
 {
 
 // FUNCTION: SWBF2 0x00441800
-bool __fastcall IsSpied(Character* aSpy, Character* aSpotter)
+bool IsSpied(Character* aSpy, Character* aSpotter)
 {
     return (sSpied[Character::GetIndex(aSpy)] & (1 << Character::GetIndex(aSpotter))) != 0;
 }
@@ -1078,7 +1078,7 @@ AIUtil::EntityType AIUtil::GetEntityType(const Entity* pEntity)
     {
         return ENTITY_SOLDIER;
     }
-    if (pEntity->IsRtti(EntityDroid::rttiHashEntityDroid))
+    if (pEntity->IsRtti(EntityDroid::GetRtti()))
     {
         return ENTITY_DROID;
     }

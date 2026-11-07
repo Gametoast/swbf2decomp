@@ -11,6 +11,16 @@
 #include "PebbleFL/Common/PblQuaternion.h"
 #include "PebbleFL/Common/PblVector.h"
 
+struct CamPathInfo
+{
+    PblVector3 Vec[6];
+    PblVector3 Slope[6];
+    PblVector3 Ore[6];
+    PblVector3 RSlope[6];
+    float Time[6];
+    unsigned int numPoints;
+};
+
 class Aimer;
 class Controllable;
 class RedModel;

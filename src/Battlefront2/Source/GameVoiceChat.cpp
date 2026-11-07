@@ -1,3 +1,5 @@
+#include <new>
+#include "GameMemory.h"
 #include "GameVoiceChat.h"
 #include "GameVoiceChatTransport.h"
 #include "GameVoiceChatNode.h"
@@ -99,6 +101,96 @@ void* VoiceChat::Alloc(unsigned int uiSize)
 void VoiceChat::Free(void* pBlock)
 {
     RedFreeToHeap(sVoiceChatHeap, pBlock, 0);
+}
+
+extern int netVoiceMode;
+
+namespace GameVoiceChat
+{
+
+// FUNCTION: SWBF2 0x0053c040
+bool Open(float fSeconds, bool bSoundWorking)
+{
+    sVoiceChatHeap = GameMemory::ApplicationHeap;
+    int iOldHeap = RedSetCurrentHeap(GameMemory::ApplicationHeap);
+
+    if (GameVoiceChat::gTransport.Open(0x32, 1))
+    {
+        if (VoiceChat::Node::OpenStatic(&GameVoiceChat::gTransport, fSeconds, 1000.0f, 1000.0f))
+        {
+            unsigned int uiNodes = (unsigned int)GameVoiceChat::GetNumNodes();
+            bool bAllOpen = true;
+
+            for (unsigned int i = 0; i < uiNodes; ++i)
+            {
+                GameVoiceChat::gEncoders[i] = new ((GameVoiceChat::Encoder*)GameVoiceChat::gEncoderStorage + i) GameVoiceChat::Encoder;
+                GameVoiceChat::gDecoders[i] = new ((GameVoiceChat::Decoder*)GameVoiceChat::gDecoderStorage + i) GameVoiceChat::Decoder;
+                GameVoiceChat::gNodes[i] = new ((GameVoiceChat::Node*)GameVoiceChat::gNodeStorage + i)
+                    GameVoiceChat::Node(GameVoiceChat::gEncoders[i],
+                                        GameVoiceChat::gDecoders[i]);
+            }
+
+            GameVoiceChat::gPlayerChange = true;
+
+            VoiceChat::Transport::Method cMethod(
+                (VoiceChat::Transport::Method::Type)(netVoiceMode ? netVoiceMode : 2), 0x32);
+            cMethod.SetNumRelayNodes(cMethod.CalculateOptimalRelayNodes(0x32));
+            GameVoiceChat::gTransport.SetMethod(cMethod, true);
+
+            if (!bSoundWorking)
+            {
+                RedSetCurrentHeap(iOldHeap);
+                return true;
+            }
+
+            unsigned int i;
+
+            for (i = 0; i < uiNodes; ++i)
+            {
+                if (!bAllOpen)
+                {
+                    break;
+                }
+                bAllOpen &= GameVoiceChat::gNodes[i]->Open(0xFF, 0xFF, 0x0C);
+            }
+
+            if (bAllOpen)
+            {
+                for (i = 0; i < uiNodes; ++i)
+                {
+                    GameVoiceChat::gNodes[i]->SetSendMask(GameVoiceChat::Transport::mask_TeamFriend, true, false);
+                    GameVoiceChat::gNodes[i]->SetReceiveMask(GameVoiceChat::Transport::mask_Everyone, true, false);
+                }
+                RedSetCurrentHeap(iOldHeap);
+                return true;
+            }
+
+            for (i = 0; i < uiNodes; ++i)
+            {
+                if (GameVoiceChat::gNodes[i]->IsOpen())
+                {
+                    GameVoiceChat::gNodes[i]->Close();
+                }
+            }
+
+            for (i = 0; i < uiNodes; ++i)
+            {
+                (GameVoiceChat::gEncoders[i])->~Encoder();
+
+                (GameVoiceChat::gDecoders[i])->~Decoder();
+
+                GameVoiceChat::gEncoders[i] = 0;
+                GameVoiceChat::gDecoders[i] = 0;
+                GameVoiceChat::gNodes[i] = 0;
+            }
+
+            VoiceChat::Node::CloseStatic();
+        }
+        GameVoiceChat::gTransport.Close();
+    }
+    RedSetCurrentHeap(iOldHeap);
+    return false;
+}
 }
 
 // FUNCTION: SWBF2 0x0053c370

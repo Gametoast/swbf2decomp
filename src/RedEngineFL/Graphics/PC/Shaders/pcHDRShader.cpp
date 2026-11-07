@@ -90,12 +90,6 @@ void pcHDRShader::Begin_Prog1(unsigned int, unsigned int) const
     RedRenderer::pcSetSamplerState(3, D3DSAMP_MIPFILTER, D3DTEXF_POINT);
 }
 
-// FUNCTION: SWBF2 0x00713b80
-void pcHDRShader::Bind()
-{
-    _BindPipeline(GetStateFuncArray, BeginFuncArray, EndFuncArray, RenderFuncArray);
-}
-
 // FUNCTION: SWBF2 0x00713ba0
 void pcHDRShader::End_Fixed(unsigned int, unsigned int) const
 {
@@ -110,28 +104,10 @@ void pcHDRShader::End_Prog1(unsigned int, unsigned int) const
     RedRenderer::pcSetTexture(3, 0);
 }
 
-// FUNCTION: SWBF2 0x00713be0
-unsigned int pcHDRShader::GetID(unsigned int uiPass) const
-{
-    return s_shaderDef.m_states[uiPass].uiID;
-}
-
 // FUNCTION: SWBF2 0x00713c00
 RenderPhaseT pcHDRShader::GetRenderPhase(const RenderItem*, unsigned int) const
 {
     return RENDERPHASE_OPAQUE;
-}
-
-// FUNCTION: SWBF2 0x00713c10
-unsigned int pcHDRShader::GetRenderTypeHash() const
-{
-    return s_uiRenderTypeHash;
-}
-
-// FUNCTION: SWBF2 0x00713c20
-pcRedShaderDef* pcHDRShader::GetShaderDef() const
-{
-    return &s_shaderDef;
 }
 
 // FUNCTION: SWBF2 0x00713c30

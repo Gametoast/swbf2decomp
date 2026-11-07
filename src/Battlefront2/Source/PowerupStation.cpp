@@ -2,6 +2,8 @@
 #include <d3dx9math.h>
 #include "PowerupStation.h"
 #include "EntityFlyer.h"
+#include "EntityHover.h"
+#include "EntityWalker.h"
 
 #include <math.h>
 #include <stdio.h>
@@ -427,16 +429,6 @@ static PblMatrix PblMatrix_FromQuaternion(const PblQuaternion& q, const PblVecto
     return m;
 }
 
-class EntityHover
-{
-public:
-    static PblHash rttiHashEntityHover;
-};
-class EntityWalker
-{
-public:
-    static PblHash rttiHashEntityWalker;
-};
 
 // FUNCTION: SWBF2 0x006249a0
 bool PowerupStation::Update(float fDeltaTime)
@@ -500,8 +492,8 @@ bool PowerupStation::Update(float fDeltaTime)
                 if (pCharacter && pObject->GetControllable() &&
                     pObject->GetControllable()->mCharacter == pCharacter)
                 {
-                    if (pObject->IsRtti(EntityHover::rttiHashEntityHover) ||
-                        pObject->IsRtti(EntityWalker::rttiHashEntityWalker) ||
+                    if (pObject->IsRtti(EntityHover::GetRtti()) ||
+                        pObject->IsRtti(EntityWalker::GetRtti()) ||
                         pObject->IsRtti(EntityFlyer::rttiHashEntityFlyer))
                     {
                         ToolTipsDisplay::sInstance->ShowTip(TTT_ApproachVehicleGonk, 0);

@@ -77,39 +77,15 @@ void pcClearShader::Begin_Fixed(unsigned int, unsigned int) const
     }
 }
 
-// FUNCTION: SWBF2 0x00706aa0
-void pcClearShader::Bind()
-{
-    _BindPipeline(GetStateFuncArray, BeginFuncArray, EndFuncArray, RenderFuncArray);
-}
-
 // FUNCTION: SWBF2 0x00706ac0
 void pcClearShader::End_Fixed(unsigned int, unsigned int) const
 {
-}
-
-// FUNCTION: SWBF2 0x00706ad0
-unsigned int pcClearShader::GetID(unsigned int uiPass) const
-{
-    return s_shaderDef.m_states[uiPass].uiID;
 }
 
 // FUNCTION: SWBF2 0x00706af0
 RenderPhaseT pcClearShader::GetRenderPhase(const RenderItem*, unsigned int) const
 {
     return RENDERPHASE_OPAQUE;
-}
-
-// FUNCTION: SWBF2 0x00706b00
-unsigned int pcClearShader::GetRenderTypeHash() const
-{
-    return s_uiRenderTypeHash;
-}
-
-// FUNCTION: SWBF2 0x00706b10
-pcRedShaderDef* pcClearShader::GetShaderDef() const
-{
-    return &s_shaderDef;
 }
 
 // FUNCTION: SWBF2 0x00706b20

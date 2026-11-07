@@ -96,12 +96,6 @@ Entity* EntityBuildingArmedClass::Build(const EntityDesc& desc)
 
 
 
-// FUNCTION: SWBF2 0x004959e0
-EntityType EntityBuildingArmed::GetEntityType() const
-{
-    return ENT_ARMED;
-}
-
 // FUNCTION: SWBF2 0x004967a0
 void EntityBuildingArmedClass::SetProperty(unsigned int uProperty, const char* pszValue)
 {
@@ -154,11 +148,6 @@ void EntityBuildingArmedClass::SetProperty(unsigned int uProperty, const char* p
         return;
     }
     EntityBuildingClass::SetProperty(uProperty, pszValue);
-}
-
-static inline Controllable* TurretControllable(MountedTurret* pTurret)
-{
-    return (Controllable*)pTurret;
 }
 
 // FUNCTION: SWBF2 0x00495a40
@@ -384,12 +373,6 @@ const Controllable* EntityBuildingArmed::GetControllable() const
     return 0;
 }
 
-// FUNCTION: SWBF2 0x00476e70
-GameObjectType EntityBuildingArmed::GetGameObjectType()
-{
-    return (GameObjectType)(GO_BUILDING | GO_ARMEDBUILDING);
-}
-
 // FUNCTION: SWBF2 0x00496610
 Trackable* EntityBuildingArmed::GetTrackable()
 {
@@ -411,24 +394,6 @@ Trackable* EntityBuildingArmed::GetTrackable()
 
 
 
-
-// FUNCTION: SWBF2 0x00476e00
-int EntityBuildingArmed::GetTurretCount() const
-{
-    return mNumTurrets;
-}
-
-// FUNCTION: SWBF2 0x00476e10
-const Controllable* EntityBuildingArmed::GetTurretPtr(int iIndex) const
-{
-    return TurretControllable(mTurret[iIndex]);
-}
-
-// FUNCTION: SWBF2 0x00476e80
-const RedPose* EntityBuildingArmed::GetPose() const
-{
-    return &mPose;
-}
 
 // FUNCTION: SWBF2 0x00496040
 void EntityBuildingArmed::Render(unsigned char uFlags, float fDist, unsigned int uMask)

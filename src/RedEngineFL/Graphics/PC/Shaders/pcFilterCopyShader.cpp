@@ -161,12 +161,6 @@ void pcFilterCopyShader::Begin_Prog1(unsigned int, unsigned int) const
     RedRenderer::pcSetSamplerState(3, D3DSAMP_MIPFILTER, D3DTEXF_POINT);
 }
 
-// FUNCTION: SWBF2 0x0070fd00
-void pcFilterCopyShader::Bind()
-{
-    _BindPipeline(GetStateFuncArray, BeginFuncArray, EndFuncArray, RenderFuncArray);
-}
-
 // FUNCTION: SWBF2 0x0070fd20
 void pcFilterCopyShader::End_Fixed(unsigned int, unsigned int) const
 {
@@ -177,28 +171,10 @@ void pcFilterCopyShader::End_Prog1(unsigned int, unsigned int) const
 {
 }
 
-// FUNCTION: SWBF2 0x0070fd40
-unsigned int pcFilterCopyShader::GetID(unsigned int uiPass) const
-{
-    return s_shaderDef.m_states[uiPass].uiID;
-}
-
 // FUNCTION: SWBF2 0x0070fd60
 RenderPhaseT pcFilterCopyShader::GetRenderPhase(const RenderItem*, unsigned int) const
 {
     return RENDERPHASE_TRANSPARENT;
-}
-
-// FUNCTION: SWBF2 0x0070fd70
-unsigned int pcFilterCopyShader::GetRenderTypeHash() const
-{
-    return s_uiRenderTypeHash;
-}
-
-// FUNCTION: SWBF2 0x0070fd80
-pcRedShaderDef* pcFilterCopyShader::GetShaderDef() const
-{
-    return &s_shaderDef;
 }
 
 // FUNCTION: SWBF2 0x0070fd90

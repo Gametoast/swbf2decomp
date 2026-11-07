@@ -17,28 +17,25 @@ public:
     // SYNTHETIC: SWBF2 0x00711690
     // pcPerPixelDiffuseLightingShader::`scalar deleting destructor'
 
+    // FUNCTION: SWBF2 0x007118a0
+    // pcPerPixelDiffuseLightingShader::GetID
+    // FUNCTION: SWBF2 0x007118d0
+    // pcPerPixelDiffuseLightingShader::GetRenderTypeHash
+    // FUNCTION: SWBF2 0x00711860
+    // pcPerPixelDiffuseLightingShader::Bind
+    // FUNCTION: SWBF2 0x007118e0
+    // pcPerPixelDiffuseLightingShader::GetShaderDef
+    DECLARE_PC_RED_SHADER_METHODS()
+
     virtual RenderPhaseT GetRenderPhase(const RenderItem*, unsigned int) const;
-    virtual unsigned int GetID(unsigned int uiPass) const;
-    virtual unsigned int GetRenderTypeHash() const;
-    virtual void Bind();
 
 private:
 
     // FUNCTION: SWBF2 0x007123d0
-    virtual pcRedShader* _Create(unsigned int uiFlags,
-                                 const unsigned int* pParams,
-                                 unsigned int uiNumParams,
-                                 unsigned int uiMaterialFlags,
-                                 const RedColor& color0,
-                                 const RedColor& color1,
-                                 float fSpecularPower) const;
-    virtual void _Read(PblFileChunk&) const;
 
     // FUNCTION: SWBF2 0x007118e0
-    virtual pcRedShaderDef* GetShaderDef() const;
 
 
-    virtual void InitFixedFunctionShaderDef() const;
 
 public:
 
@@ -93,6 +90,5 @@ private:
     pcPerPixelDiffuseLightingShader();
 
     // FUNCTION: SWBF2 0x00712460
-    void _InitPipelineFuncArray();
 };
  

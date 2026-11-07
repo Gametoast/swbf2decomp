@@ -479,18 +479,6 @@ const PblMatrix& EntityDroid::GetMatrix() const
     return mMatrix;
 }
 
-// FUNCTION: SWBF2 0x004993f0
-const PblVector3& EntityDroid::GetVelocity() const
-{
-    return mVelocity;
-}
-
-// FUNCTION: SWBF2 0x00499400
-void EntityDroid::SetVelocity(const PblVector3& vVelocity)
-{
-    mVelocity = vVelocity;
-}
-
 // FUNCTION: SWBF2 0x00499420
 TargetInfo* EntityDroid::GetTargetInfo()
 {
@@ -515,48 +503,6 @@ Controllable* EntityDroid::GetControllable()
     return this;
 }
 
-// FUNCTION: SWBF2 0x00499470
-int EntityDroid::GetWeaponIndex(int iChannel) const
-{
-    return mWeaponIndex[iChannel];
-}
-
-// FUNCTION: SWBF2 0x00499490
-Weapon* EntityDroid::GetWeaponPtr(int iIndex) const
-{
-    return mWeapon[iIndex];
-}
-
-// FUNCTION: SWBF2 0x004994b0
-const Aimer* EntityDroid::GetAimer(int iIndex) const
-{
-    return mAimer[iIndex];
-}
-
-// FUNCTION: SWBF2 0x004994d0
-EnergyBar* EntityDroid::GetEnergyBar()
-{
-    return &mEnergyBar;
-}
-
-// FUNCTION: SWBF2 0x004994e0
-EntityType EntityDroid::GetEntityType() const
-{
-    return ENT_DROID;
-}
-
-// FUNCTION: SWBF2 0x004994f0
-float EntityDroid::GetSmallestCollisionDim() const
-{
-    return 0.3f;
-}
-
-// FUNCTION: SWBF2 0x00499500
-bool EntityDroid::PostCollision::Update(float fDeltaTime)
-{
-    return mOwner->PostCollisionUpdate(fDeltaTime);
-}
-
 // SYNTHETIC: SWBF2 0x00499520
 // EntityDroid::PostCollision::`scalar deleting destructor'
 
@@ -579,18 +525,6 @@ const char EntityDroidClass::rttiNameEntityDroidClass[] = "EntityDroidClass";
 
 
 
-
-// FUNCTION: SWBF2 0x004995c0
-int EntityDroidClass::GetWeaponCount() const
-{
-    return mWeaponCount;
-}
-
-// FUNCTION: SWBF2 0x004995d0
-const WeaponClass* EntityDroidClass::GetWeaponClass(int iIndex) const
-{
-    return mWeaponClass[iIndex];
-}
 
 // FUNCTION: SWBF2 0x004995f0
 const ControllableClass* EntityDroidClass::GetControllableClass() const

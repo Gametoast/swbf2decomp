@@ -86,12 +86,6 @@ void pcRainShader::Begin_Prog1(unsigned int, unsigned int) const
     RedRenderer::pcSetTexture(0, 0);
 }
 
-// FUNCTION: SWBF2 0x00704f00
-void pcRainShader::Bind()
-{
-    _BindPipeline(GetStateFuncArray, BeginFuncArray, EndFuncArray, RenderFuncArray);
-}
-
 // FUNCTION: SWBF2 0x00704f20
 void pcRainShader::End_Fixed(unsigned int, unsigned int) const
 {
@@ -102,28 +96,10 @@ void pcRainShader::End_Prog1(unsigned int, unsigned int) const
 {
 }
 
-// FUNCTION: SWBF2 0x00704f40
-unsigned int pcRainShader::GetID(unsigned int uiPass) const
-{
-    return s_shaderDef.m_states[uiPass].uiID;
-}
-
 // FUNCTION: SWBF2 0x00704f60
 RenderPhaseT pcRainShader::GetRenderPhase(const RenderItem*, unsigned int) const
 {
     return RENDERPHASE_TRANSPARENT;
-}
-
-// FUNCTION: SWBF2 0x00704f70
-unsigned int pcRainShader::GetRenderTypeHash() const
-{
-    return s_uiRenderTypeHash;
-}
-
-// FUNCTION: SWBF2 0x00704f80
-pcRedShaderDef* pcRainShader::GetShaderDef() const
-{
-    return &s_shaderDef;
 }
 
 // FUNCTION: SWBF2 0x00704f90

@@ -74,6 +74,19 @@
 #include "FlagItem.h"
 #include "Controllable.h"
 #include "EntitySoldier.h"
+#include "EntityDroid.h"
+#include "MountedTurret.h"
+#include "EntityBuildingArmedDynamic.h"
+#include "WalkerLegPair.h"
+#include "OrdnanceTowCable.h"
+#include "LeafEffect.h"
+#include "BirdEffect.h"
+#include "FishEffect.h"
+#include "LightningBoltEffect.h"
+#include "CollisionManager.h"
+#include "ProceduralAnimation.h"
+#include "SpawnManager.h"
+#include "TriggerRegionManager.h"
 #include "NetPredict.h"
 #include "TreeGridCache.h"
 #include "FLInputManager.h"
@@ -1511,22 +1524,7 @@ Transport* GetTransport();
 extern PblVector3 gVectorZero;
 
 class TreeGrid;
-class CollisionManager { public: static void EnterClient(); static void LeaveClient();
-    static bool CreateClient(); static bool DestroyClient();
-    static int GetObjectsInRange(const PblVector3& vCenter, float fRadius,
-                                 GameObject** const pObjects, int iMaxCount,
-                                 const GameObject* pIgnore, int iFilter);
-    static TreeGrid* GetTreeGrid();
-    static void BeginList(PblList<CollisionObject>::Itor& itor);
-    static void ListObjects(PblList<CollisionObject>::Itor& itor, CollisionObject** const pObjects,
-                            int& iCount); };
 
-class PAManager { public: static void EnterClient(); static void LeaveClient();
-    static void CreateClient(); static void DestroyClient(); static void ReadObjects(NetPktGroup& group);
-    static void WriteObjects(NetPktGroup& group); };
-class SpawnManager { public: static SpawnManager* sInstance; static SpawnManager* Instance() { return sInstance; }   static void EnterClient(); static void LeaveClient();
-    static void CreateClient(); static void DestroyClient();
-    CommandPost* GetRandomSpawnPoint(int iTeam); };
 namespace MissionTimer
 {
 void EnterClient(); void LeaveClient();
@@ -1552,26 +1550,15 @@ namespace VehicleManager
 void EnterClient(); void LeaveClient();
 }
 
-class EntityDroid { public: static MemoryPool sMemoryPool; };
-class MountedTurret { public: static MemoryPool sMemoryPool; };
-class EntityBuildingArmedDynamic { public: static MemoryPool sMemoryPool; };
-class WalkerLegPair { public: static MemoryPool sMemoryPool; };
 
 
-class OrdnanceTowCable { public: static MemoryPool sMemoryPool; };
 
-class TriggerRegionManager { public: static void CreateClient(); static void DestroyClient(); };
 
 class DustEffectClass { public: static void CreateClient(); };
-class LeafParticleManager { public: static bool CreateClient(); };
-class BirdParticleManager { public: static bool CreateClient(); };
-class FishParticleManager { public: static bool CreateClient(); };
-class LightningBoltEffect { public: static void CreateClient(); };
 class LeafPatchClass { public: static void CreateClient(); };
 class GrassPatchClass { public: static void CreateClient(); };
 class RedShadowProxy { public: static void AddToScene2(); static void RemoveFromScene2(); };
 
-class PAAnimationGroup { public: static void ClientGeometryCreated(CollisionObject* pHost, CollisionObject* pClient); };
 
 void CreateClientCollision(bool bNetCollision);
 bool SentStats();

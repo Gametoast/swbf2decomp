@@ -9,6 +9,7 @@ class PblFileChunk;
 #include "AmmoCounter.h"
 #include "EnergyBar.h"
 #include "Factory.h"
+#include "GameObject.h"
 #include "GameSound.h"
 #include "Thread.h"
 #include "PebbleFL/Common/PblHashTable.h"
@@ -94,15 +95,31 @@ public:
     virtual void Init();
     virtual float GetOrdnanceVelocity() const;
     virtual float GetOrdnanceGravity() const;
-    virtual bool IsLocked() const;
-    virtual const GameObject* GetLocked() const;
-    virtual int GetLockedTargetBodyId() const;
+    // FUNCTION: SWBF2 0x00677660
+    virtual bool IsLocked() const
+    {
+        return mTarget != 0;
+    }
+    // FUNCTION: SWBF2 0x006776a0
+    virtual const GameObject* GetLocked() const
+    {
+        return &mTarget();
+    }
+    // FUNCTION: SWBF2 0x006776d0
+    virtual int GetLockedTargetBodyId() const
+    {
+        return mTargetBodyID;
+    }
     virtual void SetKickSpreadFactor(float fFactor);
     virtual void SetYawSpreadFactor(float fFactor);
     virtual float GetYawSpread() const;
     virtual float GetPitchSpread() const;
+    // FUNCTION: SWBF2 0x00677720
     virtual bool Deflect(const Ordnance* pOrdnance, const PblVector3& pos,
-                         const PblVector3& dir);
+                         const PblVector3& dir)
+    {
+        return false;
+    }
     virtual void SignalFire();
     virtual bool ShouldShowReticule() const;
     virtual bool IsMelee() const;
@@ -110,10 +127,18 @@ public:
     virtual void NotifySoldierState(int iState, float fTime, bool b0, bool b1,
                                     const PblVector3& vec);
     virtual bool SoldierCanOperate() const;
+    // FUNCTION: SWBF2 0x00677760
     virtual bool OverrideSoldierVelocity(float& f0, float& f1, float& f2,
-                                         float& f3) const;
+                                         float& f3) const
+    {
+        return false;
+    }
     virtual bool OverrideSoldierControls();
-    virtual bool OverrideSoldierEnergyRestore(float& fRestore) const;
+    // FUNCTION: SWBF2 0x00677770
+    virtual bool OverrideSoldierEnergyRestore(float& fRestore) const
+    {
+        return false;
+    }
     virtual bool OverrideAimer();
     virtual void Select(unsigned int uFlags, bool bOffhand);
     virtual void Deselect(unsigned int uFlags, bool bOffhand);

@@ -194,7 +194,7 @@ void __fastcall AddSpied(Character* pWatcher, Character* pTarget);
 }
 namespace AIUtil
 {
-bool __fastcall IsSpied(Character* pWatcher, Character* pTarget);
+bool IsSpied(Character* pWatcher, Character* pTarget);
 }
 namespace AIUtil
 {

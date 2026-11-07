@@ -26,11 +26,18 @@ public:
     // SYNTHETIC: SWBF2 0x006cce30
     // pcShieldShader::`scalar deleting destructor'
 
+    // FUNCTION: SWBF2 0x006cd4b0
+    // pcShieldShader::GetID
+    // FUNCTION: SWBF2 0x006cd4e0
+    // pcShieldShader::GetRenderTypeHash
+    // FUNCTION: SWBF2 0x006cd460
+    // pcShieldShader::Bind
+    // FUNCTION: SWBF2 0x006cd4f0
+    // pcShieldShader::GetShaderDef
+    DECLARE_PC_RED_SHADER_METHODS()
+
     virtual RenderPhaseT GetRenderPhase(const RenderItem*, unsigned int) const;
-    virtual unsigned int GetID(unsigned int uiPass) const;
-    virtual unsigned int GetRenderTypeHash() const;
     virtual RedShadingState* CreateShadingState() const;
-    virtual void Bind();
 
     void SetSpecularPower(float fPower);
 
@@ -55,16 +62,6 @@ public:
 private:
 
     static PblMatrix _GetNearSceneFadeTextureTransform();
-    virtual void _Read(PblFileChunk& chunk) const;
-    virtual void InitFixedFunctionShaderDef() const;
-    virtual pcRedShader* _Create(unsigned int uiFlags,
-                                 const unsigned int* pParams,
-                                 unsigned int uiNumParams,
-                                 unsigned int uiMaterialFlags,
-                                 const RedColor& color0,
-                                 const RedColor& color1,
-                                 float fArg7) const;
-    virtual pcRedShaderDef* GetShaderDef() const;
 
 public:
     unsigned int GetState_Fixed(const RenderItem* pItem) const;
@@ -130,7 +127,6 @@ private:
 
     pcShieldShader();
 
-    void _InitPipelineFuncArray();
 
     void _Init(unsigned int uiFlags,
                const unsigned int* pParams,

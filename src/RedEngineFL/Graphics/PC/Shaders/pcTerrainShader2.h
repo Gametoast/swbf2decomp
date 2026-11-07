@@ -26,11 +26,18 @@ public:
     // SYNTHETIC: SWBF2 0x006fccb0
     // pcTerrainShader2::`scalar deleting destructor'
 
+    // FUNCTION: SWBF2 0x006fd060
+    // pcTerrainShader2::GetID
+    // FUNCTION: SWBF2 0x006fd090
+    // pcTerrainShader2::GetRenderTypeHash
+    // FUNCTION: SWBF2 0x006fd010
+    // pcTerrainShader2::Bind
+    // FUNCTION: SWBF2 0x006fd150
+    // pcTerrainShader2::GetShaderDef
+    DECLARE_PC_RED_SHADER_METHODS()
+
     virtual RenderPhaseT GetRenderPhase(const RenderItem*, unsigned int) const;
-    virtual unsigned int GetID(unsigned int uiPass) const;
-    virtual unsigned int GetRenderTypeHash() const;
     virtual RedShadingState* CreateShadingState() const;
-    virtual void Bind();
     virtual unsigned int GetZPrepassState() const;
     virtual void RenderZPrepass(const RenderItem* pItem) const;
     virtual unsigned short GetShaderChain(pcRedShader** const ppOut,
@@ -93,17 +100,7 @@ private:
 
     pcTerrainShader2();
 
-    virtual pcRedShader* _Create(unsigned int uiFlags,
-                                 const unsigned int* pParams,
-                                 unsigned int uiNumParams,
-                                 unsigned int uiMaterialFlags,
-                                 const RedColor& color0,
-                                 const RedColor& color1,
-                                 float fSpecularPower) const;
-    virtual void _Read(PblFileChunk& chunk) const;
     virtual void _StaticInit() const;
-    virtual pcRedShaderDef* GetShaderDef() const;
-    virtual void InitFixedFunctionShaderDef() const;
 
     void _Init(unsigned int uiFlags,
                const unsigned int* pParams,
@@ -112,7 +109,6 @@ private:
                const RedColor& color0,
                const RedColor& color1,
                float fSpecularPower);
-    void _InitPipelineFuncArray();
 };
  
  

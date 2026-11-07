@@ -31,31 +31,28 @@ public:
     // SYNTHETIC: SWBF2 0x007018d0
     // pcInterfaceShader::`scalar deleting destructor'
 
+    // FUNCTION: SWBF2 0x00701aa0
+    // pcInterfaceShader::GetID
+    // FUNCTION: SWBF2 0x00701ad0
+    // pcInterfaceShader::GetRenderTypeHash
+    // FUNCTION: SWBF2 0x00701a60
+    // pcInterfaceShader::Bind
+    // FUNCTION: SWBF2 0x00701ae0
+    // pcInterfaceShader::GetShaderDef
+    DECLARE_PC_RED_SHADER_METHODS()
+
     virtual RenderPhaseT GetRenderPhase(const RenderItem*, unsigned int) const;
-    virtual unsigned int GetID(unsigned int uiPass) const;
-    virtual unsigned int GetRenderTypeHash() const;
-    virtual void Bind();
 
 private:
-    virtual void _Read(PblFileChunk& chunk) const;
 
     // FUNCTION: SWBF2 0x00702330
     virtual void _StaticInit() const;
 
     // FUNCTION: SWBF2 0x00701b30
-    virtual void InitFixedFunctionShaderDef() const;
 
     // FUNCTION: SWBF2 0x00702120
-    virtual pcRedShader* _Create(unsigned int uiFlags,
-                                 const unsigned int* pParams,
-                                 unsigned int uiNumParams,
-                                 unsigned int uiMaterialFlags,
-                                 const RedColor& color0,
-                                 const RedColor& color1,
-                                 float fArg7) const;
 
     // FUNCTION: SWBF2 0x00701ae0
-    virtual pcRedShaderDef* GetShaderDef() const;
 
 public:
 
@@ -132,7 +129,6 @@ private:
                float fArg7);
 
     // FUNCTION: SWBF2 0x007021f0
-    void _InitPipelineFuncArray();
 };
  
  

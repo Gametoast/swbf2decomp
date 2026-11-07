@@ -685,29 +685,6 @@ void EntityCloth::ClearData()
 }
 
 
-// FUNCTION: SWBF2 0x0040fe10
-void ClothData::PlatformBindInit(EntityClothClass* pClass)
-{
-    ClothData* pData = (ClothData*)this;
-    if (pData->m_pShader)
-    {
-        pData->m_pShader->Release();
-    }
-
-    unsigned int uiMode = 1;
-    if (pClass->m_uiHardEdge)
-    {
-        uiMode = 3;
-    }
-    else if (pClass->m_uiTransparent)
-    {
-        uiMode = 5;
-    }
-
-    pData->m_pShader = pcRedShader::Create(kuiNormalShader, 0x222, &pData->m_uiTextureNameHash, 1, uiMode,
-                                           RedColor::WHITE, RedColor::BLACK, 32.0f);
-}
-
 // FUNCTION: SWBF2 0x0045a260
 EntityCloth::EntityCloth(EntityClothClass* pClass, const EntityDesc& desc)
     : mClass(pClass)

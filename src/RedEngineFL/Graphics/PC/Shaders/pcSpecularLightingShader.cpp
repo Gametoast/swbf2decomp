@@ -71,12 +71,6 @@ pcSpecularLightingShader::pcSpecularLightingShader(unsigned int uiFlags,
     _BindPipeline(GetStateFuncArray, BeginFuncArray, EndFuncArray, RenderFuncArray);
 }
 
-// FUNCTION: SWBF2 0x007129b0
-pcRedShaderDef* pcSpecularLightingShader::GetShaderDef() const
-{
-    return &s_shaderDef;
-}
-
 // FUNCTION: SWBF2 0x00712b80
 void pcSpecularLightingShader::InitFixedFunctionShaderDef() const
 {
@@ -153,28 +147,10 @@ void pcSpecularLightingShader::_Read(PblFileChunk& chunk) const
     }
 }
 
-// FUNCTION: SWBF2 0x00712930
-void pcSpecularLightingShader::Bind()
-{
-    _BindPipeline(GetStateFuncArray, BeginFuncArray, EndFuncArray, RenderFuncArray);
-}
-
-// FUNCTION: SWBF2 0x00712970
-unsigned int pcSpecularLightingShader::GetID(unsigned int uiPass) const
-{
-    return s_shaderDef.m_states[uiPass].uiID;
-}
-
 // FUNCTION: SWBF2 0x00712990
 RenderPhaseT pcSpecularLightingShader::GetRenderPhase(const RenderItem*, unsigned int) const
 {
     return RENDERPHASE_OPAQUE;
-}
-
-// FUNCTION: SWBF2 0x007129a0
-unsigned int pcSpecularLightingShader::GetRenderTypeHash() const
-{
-    return s_uiRenderTypeHash;
 }
 
 // FUNCTION: SWBF2 0x00712a80

@@ -527,7 +527,7 @@ template void PblHeap<PblHandle<GameObject>, int>::Pop();
 template void PblHeap<VisionManager::RayRequest*, int>::Pop();
 
 // FUNCTION: SWBF2 0x00671130
-void __fastcall VisionManager::AddFakeRayhitResult(UnitController* pUnit, const GameObject* pObject)
+void VisionManager::AddFakeRayhitResult(UnitController* pUnit, const GameObject* pObject)
 {
     if (!pUnit || !pObject || !pUnit->mOwner)
     {

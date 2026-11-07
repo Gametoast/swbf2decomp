@@ -28,9 +28,9 @@ public:
     virtual unsigned int GetDerivedRtti() const;
     virtual const char* GetDerivedRttiName() const;
     virtual void SetProperty(unsigned int uProperty, const char* pszValue);
-    virtual int GetVehicleType() const;
+    virtual GameObjectClass::VehicleType GetVehicleType() const;
 
-    int mVehicleType;
+    GameObjectClass::VehicleType mVehicleType;
 
     static PblHash rttiHashEntityRemoteTerminalClass;
     static const char rttiNameEntityRemoteTerminalClass[];

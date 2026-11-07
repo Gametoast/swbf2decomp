@@ -6,24 +6,7 @@
 #include "RedEngineFL/Memory/RedMemoryPool.h"
 #include "SoundFL/source/sndspace.h"
 
-class SoundSpaceRegion : public Snd::Space::Region
-{
-public:
 
-    SoundSpaceRegion(const RedRegion& rRegion) : Region(rRegion) {}
-
-    static void* operator new(unsigned int uSize) { return sMemoryPool.Allocate(uSize); }
-
-    ~SoundSpaceRegion() {}
-
-    // SYNTHETIC: SWBF2 0x004fad10
-    // SoundSpaceRegion::operator delete
-    static void operator delete(void* p) { sMemoryPool.Free(p); }
-
-    static void DestroyAll();
-
-    static MemoryPool sMemoryPool;
-};
  
 
 // SYNTHETIC: SWBF2 0x00402dd0

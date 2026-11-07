@@ -9,6 +9,7 @@
 #include "GameSpyFL/md5.h"
 
 #include "Character.h"
+#include "PlayerStats.h"
 #include "CommandLine.h"
 #include "Controllable.h"
 #include "GameLoop.h"
@@ -92,7 +93,7 @@ void __fastcall HeartBeat(const unsigned __int64* pPeer)
 }
 
 // FUNCTION: SWBF2 0x005b1630
-int __fastcall FindAdminSource(int iDest)
+int FindAdminSource(int iDest)
 {
     const unsigned __int64 peer = *NetCommP::GetAddr(iDest);
     for (int i = 0; i < 3; ++i)
@@ -133,7 +134,7 @@ extern int adminBandwidth;
 void WriteString(NetPktGroup& pGroup, const char* pText, unsigned int uCapacity);
 
 // FUNCTION: SWBF2 0x005b1920
-void __fastcall SendAdminMessage(char* pcMessage)
+void SendAdminMessage(char* pcMessage)
 {
     const float fNow = NetComm::GetTime();
     for (int i = 0; i < 3; ++i)
@@ -461,7 +462,7 @@ bool GetCommand(char* pcToken, AdminCommand& cmd, bool& bNo)
     return false;
 }
 
-void __fastcall SendAdminMessage(char* pcMessage);
+void SendAdminMessage(char* pcMessage);
 
 
 
@@ -688,13 +689,6 @@ bool GetNetAwardsEnabled();
 void SetNetAwardsEnabled(int);
 void AddAutoNetMission(char const* pcArg, int iA, int iB);
 
-class PlayerStats
-{
-public:
-    int GetPoints() const;
-    int GetKills(int iTeam, int iStat) const;
-    int GetDeaths(int iTeam, int iStat) const;
-};
 
 // FUNCTION: SWBF2 0x005b12a0
 static bool IsMatch(char* pcMatch, unsigned short* pusLine)

@@ -93,12 +93,6 @@ void pcNormalMapAdderShader::Begin_Prog1(unsigned int uiBlend, unsigned int) con
     RedRenderer::pcSetTextureStageState(3, D3DTSS_TEXTURETRANSFORMFLAGS, D3DTTFF_PROJECTED);
 }
 
-// FUNCTION: SWBF2 0x0070b770
-void pcNormalMapAdderShader::Bind()
-{
-    _BindPipeline(GetStateFuncArray, BeginFuncArray, EndFuncArray, RenderFuncArray);
-}
-
 // FUNCTION: SWBF2 0x0070b790
 void pcNormalMapAdderShader::End_Fixed(unsigned int, unsigned int) const
 {
@@ -109,28 +103,10 @@ void pcNormalMapAdderShader::End_Prog1(unsigned int, unsigned int) const
 {
 }
 
-// FUNCTION: SWBF2 0x0070b7b0
-unsigned int pcNormalMapAdderShader::GetID(unsigned int uiPass) const
-{
-    return s_shaderDef.m_states[uiPass].uiID;
-}
-
 // FUNCTION: SWBF2 0x0070b7d0
 RenderPhaseT pcNormalMapAdderShader::GetRenderPhase(const RenderItem*, unsigned int) const
 {
     return RENDERPHASE_OPAQUE;
-}
-
-// FUNCTION: SWBF2 0x0070b7e0
-unsigned int pcNormalMapAdderShader::GetRenderTypeHash() const
-{
-    return s_uiRenderTypeHash;
-}
-
-// FUNCTION: SWBF2 0x0070b7f0
-pcRedShaderDef* pcNormalMapAdderShader::GetShaderDef() const
-{
-    return &s_shaderDef;
 }
 
 // FUNCTION: SWBF2 0x0070b800
