@@ -1,6 +1,7 @@
 #pragma once
 
 #include "PebbleFL/Common/PblHashTable.h"
+#include "PebbleFL/Common/PblRtti.h"
 
 #include <stddef.h>
 
@@ -34,9 +35,13 @@ public:
     void EnforceSphereCollision(const PblMatrix& mMatrix, float fRadius);
     void EnforceBoxCollision(const PblMatrix& mMatrix, float fWidth, float fHeight, float fDepth);
     void ComputeNormals();
-    virtual bool IsRtti(unsigned int uRtti) const;
-    virtual unsigned int GetDerivedRtti() const;
-    virtual const char* GetDerivedRttiName() const;
+    // FUNCTION: SWBF2 0x00458ae0
+    // EntityCloth::IsRtti
+    // FUNCTION: SWBF2 0x00458b10
+    // EntityCloth::GetDerivedRtti
+    // FUNCTION: SWBF2 0x00458b20
+    // EntityCloth::GetDerivedRttiName
+    PBL_DECLARE_DERIVED_RTTI(EntityCloth, Entity)
     virtual ~EntityCloth();
     virtual EntityClass* GetEntityClass();
     virtual const EntityClass* GetEntityClass() const;
@@ -86,9 +91,6 @@ public:
     float mUpdateDt;
     float mRenderDt;
 
-    static PblHash rttiHashEntityCloth;
-    static const char rttiNameEntityCloth[];
-
     static MemoryPool sMemoryPool;
 
 private:
@@ -106,14 +108,6 @@ private:
     void PlatformRender(unsigned char ucViewport, RedColor color, unsigned int uiFlags,
                         const RedLightingState* pLightingState, const PblSphere& sphere);
 };
- 
- 
- 
- 
- 
- 
- 
- 
 
 class ClothBank
 {
@@ -130,8 +124,6 @@ public:
     unsigned int hashID_;
     float lowPriority_;
 };
- 
- 
 
 enum ClothCollisionType
 {
@@ -150,8 +142,6 @@ struct ClothCollision
     float height;
     float depth;
 };
- 
- 
 
 struct ClothConstraint
 {
@@ -159,7 +149,6 @@ struct ClothConstraint
     unsigned short i1;
     float restLength;
 };
- 
 
 class pcRedShader;
 
@@ -216,17 +205,6 @@ public:
     ClothCollision* m_pCollisionVolumes;
     pcRedShader* m_pShader;
 };
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
 
 // VTABLE: SWBF2 0x00797290
 class EntityClothClass : public EntityClass
@@ -237,9 +215,13 @@ public:
 
     virtual EntityClass* Derive(unsigned int uHash);
     virtual Entity* Build(const EntityDesc& desc);
-    virtual bool IsRtti(unsigned int uRtti) const;
-    virtual unsigned int GetDerivedRtti() const;
-    virtual const char* GetDerivedRttiName() const;
+    // FUNCTION: SWBF2 0x00458b60
+    // EntityClothClass::IsRtti
+    // FUNCTION: SWBF2 0x00458b90
+    // EntityClothClass::GetDerivedRtti
+    // FUNCTION: SWBF2 0x00458ba0
+    // EntityClothClass::GetDerivedRttiName
+    PBL_DECLARE_DERIVED_RTTI(EntityClothClass, EntityClass)
     virtual void SetProperty(unsigned int uProperty, const char* pszValue);
 
     unsigned int mModelHash;
@@ -257,62 +239,6 @@ public:
     unsigned int m_uiHardEdge : 1;
     unsigned int m_uiTransparent : 1;
 
-    static PblHash rttiHashEntityClothClass;
-    static const char rttiNameEntityClothClass[];
 };
-  
- 
- 
- 
- 
- 
- 
- 
- 
- 
-
-// FUNCTION: SWBF2 0x00458ae0
-inline bool EntityCloth::IsRtti(unsigned int uRtti) const
-{
-    if (rttiHashEntityCloth == uRtti)
-    {
-        return true;
-    }
-    return Entity::IsRtti(uRtti);
-}
-
-// FUNCTION: SWBF2 0x00458b10
-inline unsigned int EntityCloth::GetDerivedRtti() const
-{
-    return rttiHashEntityCloth;
-}
-
-// FUNCTION: SWBF2 0x00458b20
-inline const char* EntityCloth::GetDerivedRttiName() const
-{
-    return rttiNameEntityCloth;
-}
-
-// FUNCTION: SWBF2 0x00458b60
-inline bool EntityClothClass::IsRtti(unsigned int uRtti) const
-{
-    if (rttiHashEntityClothClass == uRtti)
-    {
-        return true;
-    }
-    return EntityClass::IsRtti(uRtti);
-}
-
-// FUNCTION: SWBF2 0x00458b90
-inline unsigned int EntityClothClass::GetDerivedRtti() const
-{
-    return rttiHashEntityClothClass;
-}
-
-// FUNCTION: SWBF2 0x00458ba0
-inline const char* EntityClothClass::GetDerivedRttiName() const
-{
-    return rttiNameEntityClothClass;
-}
 
 

@@ -1,6 +1,7 @@
 #pragma once
 
 #include "PebbleFL/Common/PblHashTable.h"
+#include "PebbleFL/Common/PblRtti.h"
 
 #include <stddef.h>
 
@@ -17,8 +18,6 @@ class EventInfo;
 class UnitCombatAgent : public UnitAgent
 {
 public:
-    static PblHash rttiHashUnitCombatAgent;
-    static const char rttiNameUnitCombatAgent[];
 
     enum
     {
@@ -32,9 +31,13 @@ public:
     int EventHandler(AI::EventInfo* pInfo);
 
     virtual void Kill();
-    virtual bool IsRtti(unsigned int uRtti) const;
-    virtual unsigned int GetDerivedRtti() const;
-    virtual const char* GetDerivedRttiName() const;
+    // FUNCTION: SWBF2 0x00662e10
+    // UnitCombatAgent::IsRtti
+    // FUNCTION: SWBF2 0x00662e40
+    // UnitCombatAgent::GetDerivedRtti
+    // FUNCTION: SWBF2 0x00662e50
+    // UnitCombatAgent::GetDerivedRttiName
+    PBL_DECLARE_DERIVED_RTTI(UnitCombatAgent, UnitAgent)
     virtual bool ShouldQueueCurCmd(const UnitCmdInfo& cmd) const;
     virtual float GetUpdateRate() const;
 
@@ -52,24 +55,3 @@ public:
  
  
 
-// FUNCTION: SWBF2 0x00662e10
-inline bool UnitCombatAgent::IsRtti(unsigned int uRtti) const
-{
-    if (rttiHashUnitCombatAgent == uRtti)
-    {
-        return true;
-    }
-    return UnitAgent::IsRtti(uRtti);
-}
-
-// FUNCTION: SWBF2 0x00662e40
-inline unsigned int UnitCombatAgent::GetDerivedRtti() const
-{
-    return rttiHashUnitCombatAgent;
-}
-
-// FUNCTION: SWBF2 0x00662e50
-inline const char* UnitCombatAgent::GetDerivedRttiName() const
-{
-    return rttiNameUnitCombatAgent;
-}

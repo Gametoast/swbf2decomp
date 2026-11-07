@@ -7,10 +7,9 @@
 
 // GLOBAL: SWBF2 0x01ebc1a4
 // EntitySoundStaticClass::rttiHashEntitySoundStaticClass
-PblHash EntitySoundStaticClass::rttiHashEntitySoundStaticClass("EntitySoundStaticClass");
 // GLOBAL: SWBF2 0x00789604
 // EntitySoundStaticClass::rttiNameEntitySoundStaticClass
-const char EntitySoundStaticClass::rttiNameEntitySoundStaticClass[] = "EntitySoundStaticClass";
+PBL_IMPLEMENT_RTTI(EntitySoundStaticClass)
 
 // FUNCTION: SWBF2 0x004fb6b0
 EntitySoundStaticClass::EntitySoundStaticClass(unsigned int uHash)
@@ -74,10 +73,9 @@ MemoryPool EntitySoundStatic::sMemoryPool("EntitySoundStatic", sizeof(EntitySoun
 
 // GLOBAL: SWBF2 0x01ebc1f8
 // EntitySoundStatic::rttiHashEntitySoundStatic
-PblHash EntitySoundStatic::rttiHashEntitySoundStatic("EntitySoundStatic");
 // GLOBAL: SWBF2 0x00789620
 // EntitySoundStatic::rttiNameEntitySoundStatic
-const char EntitySoundStatic::rttiNameEntitySoundStatic[] = "EntitySoundStatic";
+PBL_IMPLEMENT_RTTI(EntitySoundStatic)
 
 
 

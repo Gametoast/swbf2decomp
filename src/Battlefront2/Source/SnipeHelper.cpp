@@ -87,7 +87,7 @@ SnipeHelper::SnipeHelper(UnitAgent* pOwner)
 // FUNCTION: SWBF2 0x0063b6e0
 bool SnipeHelper::LookForSnipeHintAndInit()
 {
-    if (mCurState == 0 || mCurState == STATE_START || mCurState == 100)
+    if (mCurState == STATE_NONE || mCurState == STATE_START || mCurState == STATE_GLOBDONE)
     {
         if (AIUtil::IsSniperGuy(GetMe()->GetGameObject()))
         {
@@ -154,7 +154,7 @@ void SnipeHelper::UpdateState(float dt)
         }
         else
         {
-            SetNextState(100);
+            SetNextState(STATE_GLOBDONE);
         }
         break;
 
@@ -162,7 +162,7 @@ void SnipeHelper::UpdateState(float dt)
     {
         if (GameLoop::GetMissionTime() > mSnipeTimer)
         {
-            SetNextState(100);
+            SetNextState(STATE_GLOBDONE);
             return;
         }
 
@@ -179,7 +179,7 @@ void SnipeHelper::UpdateState(float dt)
                 }
                 else
                 {
-                    SetNextState(100);
+                    SetNextState(STATE_GLOBDONE);
                 }
                 break;
             }
@@ -407,6 +407,6 @@ template void PblHeap<const BaseHint*, float>::Pop();
 void SnipeHelper::HELPERClean()
 {
     ExitState();
-    mCurState = 100;
-    mNextState = 100;
+    mCurState = STATE_GLOBDONE;
+    mNextState = STATE_GLOBDONE;
 }

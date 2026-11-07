@@ -68,14 +68,14 @@ DustEffectRenderData::DustEffectRenderData(const DustEffectClass* pClass)
     m_pPrimitive = 0;
     if (RedRenderer::pcGetGeometryMode() == GEOMETRYMODE_COMPRESSED)
     {
-        m_pShader = (pcParticleShader*)pcRedShader::Create(0x8A8743BF /* "PARTICLE" */, 0x9282,
-                                                            &m_pClass->mTextureHash, 1, 0x10004,
+        m_pShader = (pcParticleShader*)pcRedShader::Create(0x8A8743BF /* "PARTICLE" */, RVF_POSITION_XYZ | RVF_COLOR | RVF_TEXCOORDS_1 | RVF_COMPRESSED_POSITION | RVF_COMPRESSED_TEXCOORDS,
+                                                            &m_pClass->mTextureHash, 1, MATERIAL_FLAG_ALPHAMAP_OPACITY | MATERIAL_FLAG_CULL_NONE,
                                                             RedColor::WHITE, RedColor::BLACK, 32.0f);
     }
     else
     {
-        m_pShader = (pcParticleShader*)pcRedShader::Create(0x8A8743BF /* "PARTICLE" */, 0x282,
-                                                            &m_pClass->mTextureHash, 1, 0x10004,
+        m_pShader = (pcParticleShader*)pcRedShader::Create(0x8A8743BF /* "PARTICLE" */, RVF_POSITION_XYZ | RVF_COLOR | RVF_TEXCOORDS_1,
+                                                            &m_pClass->mTextureHash, 1, MATERIAL_FLAG_ALPHAMAP_OPACITY | MATERIAL_FLAG_CULL_NONE,
                                                             RedColor::WHITE, RedColor::BLACK, 32.0f);
     }
     m_pShader->NearFadeEnable(true);

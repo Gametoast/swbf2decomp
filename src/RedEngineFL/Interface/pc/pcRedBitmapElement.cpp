@@ -56,7 +56,7 @@ const RedTexture* RedBitmapElement::GetTexture() const
 void RedBitmapElement::Init()
 {
     m_pInterfaceBitmapShader = (pcInterfaceShader*)pcRedShader::Create(
-        PblHash("interface"), 0x202, 0, 0, 0, RedColor::WHITE, RedColor::BLACK,
+        PblHash("interface"), RVF_POSITION_XYZ | RVF_TEXCOORDS_1, 0, 0, 0, RedColor::WHITE, RedColor::BLACK,
         32.0f);
 
     m_pInterfaceBitmapShader->m_mode = pcInterfaceShader::INTERFACE_MODE_BITMAP;
@@ -88,17 +88,17 @@ void RedBitmapElement::RenderUsingContext(const PblMatrix& mContext,
 
     if (m_eBlendMode == BLEND_ADDITIVE)
     {
-        m_pInterfaceBitmapShader->m_materialFlags |= 0x40;
+        m_pInterfaceBitmapShader->m_materialFlags |= MATERIAL_FLAG_ALPHABLEND_ADDITIVE;
     }
     else
     {
-        m_pInterfaceBitmapShader->m_materialFlags &= ~0x40u;
+        m_pInterfaceBitmapShader->m_materialFlags &= ~MATERIAL_FLAG_ALPHABLEND_ADDITIVE;
     }
 
     m_pInterfaceBitmapShader->m_shadowEnable = (m_eStyle == BITMAP_STYLE_SHADOW);
 
     RedRenderer::pcRenderPrimitive(pPrimitive, m_pInterfaceBitmapShader,
-                                   mContext, color, 0x200, 0, 0, 0);
+                                   mContext, color, PC_RENDERFLAG_IMMEDIATE, 0, 0, 0);
 
     pPrimitive->Release();
 }

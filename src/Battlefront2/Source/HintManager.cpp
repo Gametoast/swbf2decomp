@@ -1,4 +1,5 @@
 #include <d3dx9math.h>
+#include "PebbleFL/Common/PblBits.h"
 #include "HintManager.h"
 
 #include <float.h>
@@ -21,6 +22,7 @@
 #include "PebbleFL/Common/PblHeap.h"
 #include "NetGame.h"
 #include "TeamManager.h"
+
 
 // SYNTHETIC: SWBF2 0x00403f20
 // `dynamic initializer for 'BaseHint::sMemoryPool''
@@ -160,7 +162,7 @@ ControllableHeight BaseHint::GetRandomStance(char cStanceMask) const
     int iStance;
     do
         iStance = AIUtil::GetRandomInt(0, 2);
-    while (!((1 << iStance) & cStanceMask));
+    while (!(Bit(iStance) & cStanceMask));
     return (ControllableHeight)iStance;
 }
 
@@ -192,7 +194,7 @@ BaseHint::Sidestep BaseHint::GetRandomSidestep() const
     int iStep;
     do
         iStep = AIUtil::GetRandomInt(0, 1);
-    while (!((1 << iStep) & mSidestep));
+    while (!(Bit(iStep) & mSidestep));
     return (Sidestep)iStep;
 }
 

@@ -5,6 +5,7 @@
 #include "PebbleFL/Common/PblHashTable.h"
 #include "PebbleFL/Common/PblMatrix.h"
 #include "PebbleFL/Common/PblVector.h"
+#include "RedEngineFL/Graphics/RedRenderFlags.h"
 
 class PblFileChunk;
 class PblVector3;

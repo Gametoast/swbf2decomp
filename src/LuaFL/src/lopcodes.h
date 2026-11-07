@@ -18,16 +18,16 @@ enum OpMode {iABC, iABx, iAsBx};
 #define POS_A		(POS_B + SIZE_B)
 
 #if SIZE_Bx < BITS_INT-1
-#define MAXARG_Bx        ((1<<SIZE_Bx)-1)
+#define MAXARG_Bx        LUA_LOWBITS(SIZE_Bx)
 #define MAXARG_sBx        (MAXARG_Bx>>1)
 #else
 #define MAXARG_Bx        MAX_INT
 #define MAXARG_sBx        MAX_INT
 #endif
 
-#define MAXARG_A        ((1<<SIZE_A)-1)
-#define MAXARG_B        ((1<<SIZE_B)-1)
-#define MAXARG_C        ((1<<SIZE_C)-1)
+#define MAXARG_A        LUA_LOWBITS(SIZE_A)
+#define MAXARG_B        LUA_LOWBITS(SIZE_B)
+#define MAXARG_C        LUA_LOWBITS(SIZE_C)
 
 #define MASK1(n,p)	((~((~(Instruction)0)<<n))<<p)
 
@@ -134,7 +134,7 @@ enum OpModeMask {
 extern const lu_byte luaP_opmodes[NUM_OPCODES];
 
 #define getOpMode(m)            (cast(enum OpMode, luaP_opmodes[m] & 3))
-#define testOpMode(m, b)        (luaP_opmodes[m] & (1 << (b)))
+#define testOpMode(m, b)        (luaP_opmodes[m] & LUA_BIT(b))
 
 #ifdef LUA_OPNAMES
 extern const char *const luaP_opnames[];

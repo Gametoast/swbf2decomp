@@ -17,7 +17,7 @@ void FlashyTextElement::PlatformConstructor()
 void FlashyTextElement::Init()
 {
     m_pInterfaceBitmapShader = (pcInterfaceShader*)pcRedShader::Create(
-        0x84ea5130 /* "interface" */, 0x202, 0, 0, 0, RedColor::WHITE, RedColor::BLACK, 32.0f);
+        0x84ea5130 /* "interface" */, RVF_POSITION_XYZ | RVF_TEXCOORDS_1, 0, 0, 0, RedColor::WHITE, RedColor::BLACK, 32.0f);
 
     m_pInterfaceBitmapShader->m_mode = pcInterfaceShader::INTERFACE_MODE_BITMAP;
 }
@@ -54,7 +54,7 @@ void FlashyTextElement::RenderBitmap(const PblMatrix& mContext, const RedColor& 
     vertices[2].y = fY0;
     vertices[3].x = fX1;
     vertices[3].y = fY1;
-    m_pInterfaceBitmapShader->m_materialFlags &= ~0x40u;
+    m_pInterfaceBitmapShader->m_materialFlags &= ~MATERIAL_FLAG_ALPHABLEND_ADDITIVE;
 
     pcRedPrimitive* pPrimitive = pcRedPrimitive::Create(
         D3DPT_TRIANGLESTRIP, 0x202, sizeof(FlashyVertexT), 4, 0, false);
@@ -70,7 +70,7 @@ void FlashyTextElement::RenderBitmap(const PblMatrix& mContext, const RedColor& 
     pPrimitive->EndVertexData();
 
     RedRenderer::pcRenderPrimitive(pPrimitive, m_pInterfaceBitmapShader,
-                                   mContext, color, 0x200, 0, 0, 0);
+                                   mContext, color, PC_RENDERFLAG_IMMEDIATE, 0, 0, 0);
 
     pPrimitive->Release();
 }

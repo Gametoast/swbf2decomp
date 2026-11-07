@@ -1,6 +1,7 @@
 #pragma once
 
 #include "PebbleFL/Common/PblHashTable.h"
+#include "PebbleFL/Common/PblRtti.h"
 
 #include <stddef.h>
 
@@ -25,9 +26,13 @@ public:
 
     virtual EntityClass* Derive(unsigned int uHash);
     virtual Entity* Build(const EntityDesc& desc);
-    virtual bool IsRtti(unsigned int uRtti) const;
-    virtual unsigned int GetDerivedRtti() const;
-    virtual const char* GetDerivedRttiName() const;
+    // FUNCTION: SWBF2 0x004cf580
+    // EntityMineClass::IsRtti
+    // FUNCTION: SWBF2 0x004cf5c0
+    // EntityMineClass::GetDerivedRtti
+    // FUNCTION: SWBF2 0x004cf5d0
+    // EntityMineClass::GetDerivedRttiName
+    PBL_DECLARE_DERIVED_RTTI(EntityMineClass, EntityItemClass)
     virtual void SetProperty(unsigned int uProperty, const char* pszValue);
 
     GameSound mTick;
@@ -39,18 +44,7 @@ public:
     float mTriggerRadius;
     float mSuppressRadius;
 
-    static PblHash rttiHashEntityMineClass;
-    static const char rttiNameEntityMineClass[];
 };
-  
- 
- 
- 
- 
- 
- 
- 
- 
 
 // VTABLE: SWBF2 0x0079c274 EntityEx
 // VTABLE: SWBF2 0x0079c1b8 CollisionObject
@@ -94,36 +88,6 @@ public:
     int mHitSurface;
     bool mTrigger;
 };
- 
- 
- 
- 
- 
- 
- 
- 
-
-// FUNCTION: SWBF2 0x004cf580
-inline bool EntityMineClass::IsRtti(unsigned int uRtti) const
-{
-    if (rttiHashEntityMineClass == uRtti)
-    {
-        return true;
-    }
-    return EntityItemClass::IsRtti(uRtti);
-}
-
-// FUNCTION: SWBF2 0x004cf5c0
-inline unsigned int EntityMineClass::GetDerivedRtti() const
-{
-    return rttiHashEntityMineClass;
-}
-
-// FUNCTION: SWBF2 0x004cf5d0
-inline const char* EntityMineClass::GetDerivedRttiName() const
-{
-    return rttiNameEntityMineClass;
-}
 
 // FUNCTION: SWBF2 0x004cf4c0
 inline bool EntityMine::IsRtti(unsigned int uRtti) const

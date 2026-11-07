@@ -1,6 +1,7 @@
 #pragma once
 
 #include "PebbleFL/Common/PblHashTable.h"
+#include "PebbleFL/Common/PblRtti.h"
 
 #include <stddef.h>
 
@@ -185,71 +186,6 @@ public:
     unsigned int mBuffDefenseEffect;
     unsigned int mDebuffEffect;
 };
-  
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
-
- 
- 
- 
 
 class CameraTrackSetting;
 class CollisionResult;
@@ -327,9 +263,13 @@ public:
     // EntityDroideka::operator delete
     static void operator delete(void* pBlock) { sMemoryPool.Free(pBlock); }
 
-    virtual bool IsRtti(unsigned int uRtti) const;
-    virtual unsigned int GetDerivedRtti() const;
-    virtual const char* GetDerivedRttiName() const;
+    // FUNCTION: SWBF2 0x0049e370
+    // EntityDroideka::IsRtti
+    // FUNCTION: SWBF2 0x0049e3b0
+    // EntityDroideka::GetDerivedRtti
+    // FUNCTION: SWBF2 0x0049e3c0
+    // EntityDroideka::GetDerivedRttiName
+    PBL_DECLARE_DERIVED_RTTI(EntityDroideka, GameObject)
     virtual void Init();
     virtual const Entity* GetEntity() const;
     virtual Entity* GetEntity();
@@ -585,9 +525,7 @@ public:
     void UpdateWalkingGroundNormal();
     int GetFirstPersonIndex();
 
-    static PblHash rttiHashEntityDroideka;
     static MemoryPool sMemoryPool;
-    static const char rttiNameEntityDroideka[];
     static StateTableEntry sStateTable[];
 
     bool mCallUpdateWalkingGroundNormal;
@@ -653,80 +591,6 @@ public:
     PblHandle<FLEffectObject> mBuffDefenseEffectHandle;
     PblHandle<FLEffectObject> mDebuffEffectHandle;
 };
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
-
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
-
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
-
-// FUNCTION: SWBF2 0x0049e370
-inline bool EntityDroideka::IsRtti(unsigned int uRtti) const
-{
-    if (rttiHashEntityDroideka == uRtti)
-    {
-        return true;
-    }
-    return GameObject::IsRtti(uRtti);
-}
-
-// FUNCTION: SWBF2 0x0049e3b0
-inline unsigned int EntityDroideka::GetDerivedRtti() const
-{
-    return rttiHashEntityDroideka;
-}
-
-// FUNCTION: SWBF2 0x0049e3c0
-inline const char* EntityDroideka::GetDerivedRttiName() const
-{
-    return rttiNameEntityDroideka;
-}
 
 // FUNCTION: SWBF2 0x0049ea00
 inline bool EntityDroidekaClass::IsRtti(unsigned int uRtti) const

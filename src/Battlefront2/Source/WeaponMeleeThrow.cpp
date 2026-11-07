@@ -32,10 +32,9 @@ namespace
 
 // GLOBAL: SWBF2 0x01f9a8fc
 // WeaponMeleeThrow::rttiHashWeaponMeleeThrow
-PblHash WeaponMeleeThrow::rttiHashWeaponMeleeThrow("WeaponMeleeThrow");
 // GLOBAL: SWBF2 0x0078c1cc
 // WeaponMeleeThrow::rttiNameWeaponMeleeThrow
-const char WeaponMeleeThrow::rttiNameWeaponMeleeThrow[] = "WeaponMeleeThrow";
+PBL_IMPLEMENT_RTTI(WeaponMeleeThrow)
 
 // FUNCTION: SWBF2 0x0068f610
 WeaponMeleeThrow::WeaponMeleeThrow(const WeaponMeleeThrowClass* pClass, const WeaponDesc& desc)
@@ -144,7 +143,7 @@ WeaponMeleeThrow::~WeaponMeleeThrow()
 void WeaponMeleeThrow::Render(const PblMatrix& matrix, const RedPose* pPose,
     const RedColor& color, unsigned int uiFlags, bool bRenderModel) const
 {
-    uiFlags |= 1;
+    uiFlags |= RENDERFLAG_CLIPPED;
     if (m_bThrow && pPose)
     {
         const PblMatrix* pThrowMatrix = pPose->Find(0x2B960099 /* "hp_weapons" */);
@@ -296,10 +295,9 @@ Ordnance* WeaponMeleeThrow::CreateOrdnance(OrdnanceDesc& desc)
 
 // GLOBAL: SWBF2 0x01f9a900
 // WeaponMeleeThrowClass::rttiHashWeaponMeleeThrowClass
-PblHash WeaponMeleeThrowClass::rttiHashWeaponMeleeThrowClass("WeaponMeleeThrowClass");
 // GLOBAL: SWBF2 0x0078c1e4
 // WeaponMeleeThrowClass::rttiNameWeaponMeleeThrowClass
-const char WeaponMeleeThrowClass::rttiNameWeaponMeleeThrowClass[] = "WeaponMeleeThrowClass";
+PBL_IMPLEMENT_RTTI(WeaponMeleeThrowClass)
 
 // FUNCTION: SWBF2 0x0068fcd0
 WeaponMeleeThrowClass::WeaponMeleeThrowClass(unsigned int uHash)

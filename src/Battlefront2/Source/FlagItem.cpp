@@ -308,10 +308,9 @@ FlagItemClass::FlagItemClass(unsigned int uHash)
 
 // GLOBAL: SWBF2 0x01ebc2b8
 // FlagItem::rttiHashFlagItem
-PblHash FlagItem::rttiHashFlagItem("FlagItem");
 // GLOBAL: SWBF2 0x00789858
 // FlagItem::rttiNameFlagItem
-const char FlagItem::rttiNameFlagItem[] = "FlagItem";
+PBL_IMPLEMENT_RTTI(FlagItem)
 
 // SYNTHETIC: SWBF2 0x00403860
 // `dynamic initializer for 'FlagItemClass::rttiHashFlagItemClass''
@@ -319,10 +318,9 @@ const char FlagItem::rttiNameFlagItem[] = "FlagItem";
 
 // GLOBAL: SWBF2 0x01ebc2b4
 // FlagItemClass::rttiHashFlagItemClass
-PblHash FlagItemClass::rttiHashFlagItemClass("FlagItemClass");
 // GLOBAL: SWBF2 0x00789848
 // FlagItemClass::rttiNameFlagItemClass
-const char FlagItemClass::rttiNameFlagItemClass[] = "FlagItemClass";
+PBL_IMPLEMENT_RTTI(FlagItemClass)
 
 // SYNTHETIC: SWBF2 0x00403830
 // `dynamic initializer for 'FlagItem::sMemoryPool''

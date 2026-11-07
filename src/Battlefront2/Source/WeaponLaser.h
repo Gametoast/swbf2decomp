@@ -16,14 +16,15 @@ public:
     WeaponLaserClass(WeaponLaserClass* pBase, unsigned int uHash);
     virtual ~WeaponLaserClass();
 
-    static PblHash rttiHashWeaponLaserClass;
-    static const char rttiNameWeaponLaserClass[];
-
     virtual WeaponClass* Derive(unsigned int uHash);
     virtual Weapon* Build(const WeaponDesc& desc);
-    virtual bool IsRtti(unsigned int uRtti) const;
-    virtual unsigned int GetDerivedRtti() const;
-    virtual const char* GetDerivedRttiName() const;
+    // FUNCTION: SWBF2 0x00686a90
+    // WeaponLaserClass::IsRtti
+    // FUNCTION: SWBF2 0x00686ac0
+    // WeaponLaserClass::GetDerivedRtti
+    // FUNCTION: SWBF2 0x00686ad0
+    // WeaponLaserClass::GetDerivedRttiName
+    PBL_DECLARE_DERIVED_RTTI(WeaponLaserClass, WeaponClass)
     virtual void SetProperty(unsigned int uProperty, const char* pszValue);
 
     float mShotDelay;
@@ -70,24 +71,3 @@ public:
   
  
 
-// FUNCTION: SWBF2 0x00686a90
-inline bool WeaponLaserClass::IsRtti(unsigned int uRtti) const
-{
-    if (rttiHashWeaponLaserClass == uRtti)
-    {
-        return true;
-    }
-    return WeaponClass::IsRtti(uRtti);
-}
-
-// FUNCTION: SWBF2 0x00686ac0
-inline unsigned int WeaponLaserClass::GetDerivedRtti() const
-{
-    return rttiHashWeaponLaserClass;
-}
-
-// FUNCTION: SWBF2 0x00686ad0
-inline const char* WeaponLaserClass::GetDerivedRttiName() const
-{
-    return rttiNameWeaponLaserClass;
-}

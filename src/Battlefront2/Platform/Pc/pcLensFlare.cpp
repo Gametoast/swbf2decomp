@@ -152,7 +152,7 @@ void LensFlareEffect::PlatformInit()
                                  D3DPOOL_DEFAULT, 0);
     s_intensityTex = new RedTexture(16, 16, D3DFMT_A8R8G8B8, 1, D3DUSAGE_RENDERTARGET,
                                     D3DPOOL_DEFAULT, 0);
-    s_pClearShader = pcRedShader::Create(0x5c6e1222 /* "clear" */, 3, 0, 0, 0x80000,
+    s_pClearShader = pcRedShader::Create(0x5c6e1222 /* "clear" */, RVF_POSITION_XYZRHW, 0, 0, MATERIAL_FLAG_COLORMASK_ALPHA,
                                          RedColor::WHITE, RedColor::BLACK, 32.0f);
 
     if (RedRenderer::pcGetGeometryMode() == GEOMETRYMODE_UNCOMPRESSED)
@@ -176,12 +176,12 @@ void LensFlareEffect::PlatformInit()
         s_samplePoints->EndVertexData();
 
         s_pFlareShader = (pcFlareShader*)pcRedShader::Create(
-            kuiFlareShader, 0x282, 0, 0, 0x130040, RedColor::WHITE, RedColor::BLACK, 32.0f);
+            kuiFlareShader, RVF_POSITION_XYZ | RVF_COLOR | RVF_TEXCOORDS_1, 0, 0, MATERIAL_FLAG_ALPHABLEND_ADDITIVE | MATERIAL_FLAG_CULL_NONE | MATERIAL_FLAG_ZENABLE_FALSE | MATERIAL_FLAG_TEXSAMPLE_POINT, RedColor::WHITE, RedColor::BLACK, 32.0f);
         s_pFlareShader->SetTexture(s_intensityTex);
         s_pFillShader = (pcFlareShader*)pcRedShader::Create(
-            kuiFlareShader, 0x82, 0, 0, 0x10040, RedColor::WHITE, RedColor::BLACK, 32.0f);
+            kuiFlareShader, RVF_POSITION_XYZ | RVF_COLOR, 0, 0, MATERIAL_FLAG_ALPHABLEND_ADDITIVE | MATERIAL_FLAG_CULL_NONE, RedColor::WHITE, RedColor::BLACK, 32.0f);
         s_pSampleShader = (pcSampleShader*)pcRedShader::Create(
-            kuiSampleShader, 2, 0, 0, 0, RedColor::WHITE, RedColor::BLACK, 32.0f);
+            kuiSampleShader, RVF_POSITION_XYZ, 0, 0, 0, RedColor::WHITE, RedColor::BLACK, 32.0f);
         s_pSampleShader->SetInputTexture(s_sampleTex);
         s_pSampleShader->SetScale(1.0f / 255.0f);
         s_pSampleShader->SetOutputPosition(0.0f, 0.0f);
@@ -209,12 +209,12 @@ void LensFlareEffect::PlatformInit()
         s_samplePoints->EndVertexData();
 
         s_pFlareShader = (pcFlareShader*)pcRedShader::Create(
-            kuiFlareShader, 0x9282, 0, 0, 0x130040, RedColor::WHITE, RedColor::BLACK, 32.0f);
+            kuiFlareShader, RVF_POSITION_XYZ | RVF_COLOR | RVF_TEXCOORDS_1 | RVF_COMPRESSED_POSITION | RVF_COMPRESSED_TEXCOORDS, 0, 0, MATERIAL_FLAG_ALPHABLEND_ADDITIVE | MATERIAL_FLAG_CULL_NONE | MATERIAL_FLAG_ZENABLE_FALSE | MATERIAL_FLAG_TEXSAMPLE_POINT, RedColor::WHITE, RedColor::BLACK, 32.0f);
         s_pFlareShader->SetTexture(s_intensityTex);
         s_pFillShader = (pcFlareShader*)pcRedShader::Create(
-            kuiFlareShader, 0x1082, 0, 0, 0x10040, RedColor::WHITE, RedColor::BLACK, 32.0f);
+            kuiFlareShader, RVF_POSITION_XYZ | RVF_COLOR | RVF_COMPRESSED_POSITION, 0, 0, MATERIAL_FLAG_ALPHABLEND_ADDITIVE | MATERIAL_FLAG_CULL_NONE, RedColor::WHITE, RedColor::BLACK, 32.0f);
         s_pSampleShader = (pcSampleShader*)pcRedShader::Create(
-            kuiSampleShader, 0x1002, 0, 0, 0, RedColor::WHITE, RedColor::BLACK, 32.0f);
+            kuiSampleShader, RVF_POSITION_XYZ | RVF_COMPRESSED_POSITION, 0, 0, 0, RedColor::WHITE, RedColor::BLACK, 32.0f);
         s_pSampleShader->SetInputTexture(s_sampleTex);
         s_pSampleShader->SetScale(1.0f / 255.0f);
         s_pSampleShader->SetOutputPosition(0.0f, 0.0f);
@@ -642,10 +642,10 @@ void LensFlareEffect::LensFlareList::Render<FlareVertex, 642>() const
 
         RedColor clearColor = { 0, 0, 0, 0 };
         RedRenderer::pcRenderPrimitive(pClearPrimitive, s_pClearShader, gMatrixIdentity,
-                                       clearColor, 0x200, 0, 0, 0);
+                                       clearColor, PC_RENDERFLAG_IMMEDIATE, 0, 0, 0);
         RedColor fillColor(RedColor::BLACK, 255);
         RedRenderer::pcRenderPrimitive(pFillPrimitive, s_pFillShader,
-                                       RedRenderer::GetCamera()->GetMatrix(), fillColor, 0x200, 0, 0, 0);
+                                       RedRenderer::GetCamera()->GetMatrix(), fillColor, PC_RENDERFLAG_IMMEDIATE, 0, 0, 0);
 
         IDirect3DSurface9* pBackBuffer;
         RedRenderer::pcGetDevice()->GetBackBuffer(0, 0, D3DBACKBUFFER_TYPE_MONO, &pBackBuffer);
@@ -677,7 +677,7 @@ void LensFlareEffect::LensFlareList::Render<FlareVertex, 642>() const
             s_pSampleShader->SetOutputPosition(fOutputX, fOutputY);
             s_pSampleShader->SetInputOffset(fInputX, fInputY);
             RedRenderer::pcRenderPrimitive(s_samplePoints, s_pSampleShader,
-                                           gMatrixIdentity, RedColor::WHITE, 0x200, 0, 0, 0);
+                                           gMatrixIdentity, RedColor::WHITE, PC_RENDERFLAG_IMMEDIATE, 0, 0, 0);
             fOutputX += 1.0f;
             if (fOutputX >= 16.0f)
             {
@@ -695,7 +695,7 @@ void LensFlareEffect::LensFlareList::Render<FlareVertex, 642>() const
         RedRenderer::pcSetRenderTarget(pRenderTarget, pDepthTarget);
         RedRenderer::pcSetViewport(viewport);
         RedRenderer::pcRenderPrimitive(pFlarePrimitive, s_pFlareShader,
-                                       RedRenderer::GetCamera()->GetMatrix(), RedColor::WHITE, 0x200, 0, 0, 0);
+                                       RedRenderer::GetCamera()->GetMatrix(), RedColor::WHITE, PC_RENDERFLAG_IMMEDIATE, 0, 0, 0);
 
         pFlarePrimitive->Release();
         pFillPrimitive->Release();
@@ -877,10 +877,10 @@ void LensFlareEffect::LensFlareList::Render<FlareCompressedVertex, 37506>() cons
 
         RedColor clearColor = { 0, 0, 0, 0 };
         RedRenderer::pcRenderPrimitive(pClearPrimitive, s_pClearShader, gMatrixIdentity,
-                                       clearColor, 0x200, 0, 0, 0);
+                                       clearColor, PC_RENDERFLAG_IMMEDIATE, 0, 0, 0);
         RedColor fillColor(RedColor::BLACK, 255);
         RedRenderer::pcRenderPrimitive(pFillPrimitive, s_pFillShader,
-                                       RedRenderer::GetCamera()->GetMatrix(), fillColor, 0x200, 0, 0, 0);
+                                       RedRenderer::GetCamera()->GetMatrix(), fillColor, PC_RENDERFLAG_IMMEDIATE, 0, 0, 0);
 
         IDirect3DSurface9* pBackBuffer;
         RedRenderer::pcGetDevice()->GetBackBuffer(0, 0, D3DBACKBUFFER_TYPE_MONO, &pBackBuffer);
@@ -912,7 +912,7 @@ void LensFlareEffect::LensFlareList::Render<FlareCompressedVertex, 37506>() cons
             s_pSampleShader->SetOutputPosition(fOutputX, fOutputY);
             s_pSampleShader->SetInputOffset(fInputX, fInputY);
             RedRenderer::pcRenderPrimitive(s_samplePoints, s_pSampleShader,
-                                           gMatrixIdentity, RedColor::WHITE, 0x200, 0, 0, 0);
+                                           gMatrixIdentity, RedColor::WHITE, PC_RENDERFLAG_IMMEDIATE, 0, 0, 0);
             fOutputX += 1.0f;
             if (fOutputX >= 16.0f)
             {
@@ -930,7 +930,7 @@ void LensFlareEffect::LensFlareList::Render<FlareCompressedVertex, 37506>() cons
         RedRenderer::pcSetRenderTarget(pRenderTarget, pDepthTarget);
         RedRenderer::pcSetViewport(viewport);
         RedRenderer::pcRenderPrimitive(pFlarePrimitive, s_pFlareShader,
-                                       RedRenderer::GetCamera()->GetMatrix(), RedColor::WHITE, 0x200, 0, 0, 0);
+                                       RedRenderer::GetCamera()->GetMatrix(), RedColor::WHITE, PC_RENDERFLAG_IMMEDIATE, 0, 0, 0);
 
         pFlarePrimitive->Release();
         pFillPrimitive->Release();

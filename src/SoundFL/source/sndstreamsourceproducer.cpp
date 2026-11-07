@@ -172,7 +172,7 @@ StreamPacket* StreamSourceProducer::GetReadPacket()
 void StreamSourceProducer::PacketComplete(StreamPacket* const pPacket,
                                           unsigned int uiBufferUsed,
                                           unsigned int uiUnused,
-                                          bool bFlagBit0, bool bFlagBit1,
+                                          bool bLastPacket, bool bDiscontinuity,
                                           unsigned int uiPos)
 {
     (void)uiUnused;
@@ -180,8 +180,8 @@ void StreamSourceProducer::PacketComplete(StreamPacket* const pPacket,
     pPacket->SetUsed(uiBufferUsed);
     pPacket->SetPosition(uiPos);
 
-    pPacket->SetLast(bFlagBit0);
-    pPacket->SetDiscontinuity(bFlagBit1);
+    pPacket->SetLast(bLastPacket);
+    pPacket->SetDiscontinuity(bDiscontinuity);
 
     ++mReadPacketIndex;
     if (mReadPacketIndex == mNumPackets)
@@ -209,10 +209,10 @@ namespace Snd
 // FUNCTION: SWBF2 0x0073ca30
 void StreamSourceNProducer::PacketComplete(StreamPacket* const pPacket,
                                    unsigned int uiBufferUsed, unsigned int uiUnused,
-                                   bool bFlagBit0, bool bFlagBit1, unsigned int uiPos,
+                                   bool bLastPacket, bool bDiscontinuity, unsigned int uiPos,
                                    unsigned int uiOutput)
 {
     GetProducer(uiOutput)->PacketComplete(pPacket, uiBufferUsed, uiUnused,
-                                         bFlagBit0, bFlagBit1, uiPos);
+                                         bLastPacket, bDiscontinuity, uiPos);
 }
 }

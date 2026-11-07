@@ -127,11 +127,11 @@ namespace
         {
             if (pAddHealth[i] > 0.0f)
             {
-                *pHealth |= 1 << i;
+                *pHealth |= Bit(i);
             }
             if (pAddAmmo[i] > 0.0f)
             {
-                *pAmmo |= 1 << i;
+                *pAmmo |= Bit(i);
             }
         }
     }
@@ -336,69 +336,69 @@ void RepairHelper::CalcMyAidTypes(unsigned int* pHealth, unsigned int* pAmmo)
             if (pWeapon->IsRtti(WeaponRepair::rttiHashWeaponRepair))
             {
                 const WeaponRepairClass* pClass = (const WeaponRepairClass*)pWeapon->mClass;
-                if (pClass->mAddHealth[0] > 0.0f)
+                if (pClass->mAddHealth[HEALTH_TYPE_PERSON] > 0.0f)
                 {
-                    *pHealth |= 1;
+                    *pHealth |= TargetInfo::TYPE_PERSON;
                 }
-                if (pClass->mAddAmmo[0] > 0.0f)
+                if (pClass->mAddAmmo[HEALTH_TYPE_PERSON] > 0.0f)
                 {
-                    *pAmmo |= 1;
+                    *pAmmo |= TargetInfo::TYPE_PERSON;
                 }
-                if (pClass->mAddHealth[1] > 0.0f)
+                if (pClass->mAddHealth[HEALTH_TYPE_ANIMAL] > 0.0f)
                 {
-                    *pHealth |= 2;
+                    *pHealth |= TargetInfo::TYPE_ANIMAL;
                 }
-                if (pClass->mAddAmmo[1] > 0.0f)
+                if (pClass->mAddAmmo[HEALTH_TYPE_ANIMAL] > 0.0f)
                 {
-                    *pAmmo |= 2;
+                    *pAmmo |= TargetInfo::TYPE_ANIMAL;
                 }
-                if (pClass->mAddHealth[2] > 0.0f)
+                if (pClass->mAddHealth[HEALTH_TYPE_DROID] > 0.0f)
                 {
-                    *pHealth |= 4;
+                    *pHealth |= TargetInfo::TYPE_DROID;
                 }
-                if (pClass->mAddAmmo[2] > 0.0f)
+                if (pClass->mAddAmmo[HEALTH_TYPE_DROID] > 0.0f)
                 {
-                    *pAmmo |= 4;
+                    *pAmmo |= TargetInfo::TYPE_DROID;
                 }
-                if (pClass->mAddHealth[3] > 0.0f)
+                if (pClass->mAddHealth[HEALTH_TYPE_VEHICLE] > 0.0f)
                 {
-                    *pHealth |= 8;
+                    *pHealth |= TargetInfo::TYPE_VEHICLE;
                 }
-                if (pClass->mAddAmmo[3] > 0.0f)
+                if (pClass->mAddAmmo[HEALTH_TYPE_VEHICLE] > 0.0f)
                 {
-                    *pAmmo |= 8;
+                    *pAmmo |= TargetInfo::TYPE_VEHICLE;
                 }
-                if (pClass->mAddHealth[4] > 0.0f)
+                if (pClass->mAddHealth[HEALTH_TYPE_BUILDING] > 0.0f)
                 {
-                    *pHealth |= 16;
+                    *pHealth |= TargetInfo::TYPE_BUILDING;
                 }
-                if (pClass->mAddAmmo[4] > 0.0f)
+                if (pClass->mAddAmmo[HEALTH_TYPE_BUILDING] > 0.0f)
                 {
-                    *pAmmo |= 16;
+                    *pAmmo |= TargetInfo::TYPE_BUILDING;
                 }
-                if (pClass->mAddHealth[5] > 0.0f)
+                if (pClass->mAddHealth[HEALTH_TYPE_BUILDING_DEAD] > 0.0f)
                 {
-                    *pHealth |= 32;
+                    *pHealth |= TargetInfo::TYPE_BUILDING_DEAD;
                 }
-                if (pClass->mAddAmmo[5] > 0.0f)
+                if (pClass->mAddAmmo[HEALTH_TYPE_BUILDING_DEAD] > 0.0f)
                 {
-                    *pAmmo |= 32;
+                    *pAmmo |= TargetInfo::TYPE_BUILDING_DEAD;
                 }
-                if (pClass->mAddHealth[6] > 0.0f)
+                if (pClass->mAddHealth[HEALTH_TYPE_BUILDING_UNBUILT] > 0.0f)
                 {
-                    *pHealth |= 64;
+                    *pHealth |= TargetInfo::TYPE_BUILDING_UNBUILT;
                 }
-                if (pClass->mAddAmmo[6] > 0.0f)
+                if (pClass->mAddAmmo[HEALTH_TYPE_BUILDING_UNBUILT] > 0.0f)
                 {
-                    *pAmmo |= 64;
+                    *pAmmo |= TargetInfo::TYPE_BUILDING_UNBUILT;
                 }
-                if (pClass->mAddHealth[7] > 0.0f)
+                if (pClass->mAddHealth[HEALTH_TYPE_MINE] > 0.0f)
                 {
-                    *pHealth |= 128;
+                    *pHealth |= TargetInfo::TYPE_MINE;
                 }
-                if (pClass->mAddAmmo[7] > 0.0f)
+                if (pClass->mAddAmmo[HEALTH_TYPE_MINE] > 0.0f)
                 {
-                    *pAmmo |= 128;
+                    *pAmmo |= TargetInfo::TYPE_MINE;
                 }
             }
             else if (pWeapon->IsRtti(WeaponDispenser::rttiHashWeaponDispenser))
@@ -407,69 +407,69 @@ void RepairHelper::CalcMyAidTypes(unsigned int* pHealth, unsigned int* pAmmo)
                 if (pDispense && pDispense->IsRtti(PowerupItemClass::rttiHashPowerupItemClass))
                 {
                     PowerupItemClass* pPowerup = (PowerupItemClass*)pDispense;
-                    if (pPowerup->mAddHealth[0] > 0.0f)
+                    if (pPowerup->mAddHealth[HEALTH_TYPE_PERSON] > 0.0f)
                     {
-                        *pHealth |= 1;
+                        *pHealth |= TargetInfo::TYPE_PERSON;
                     }
-                    if (pPowerup->mAddAmmo[0] > 0.0f)
+                    if (pPowerup->mAddAmmo[HEALTH_TYPE_PERSON] > 0.0f)
                     {
-                        *pAmmo |= 1;
+                        *pAmmo |= TargetInfo::TYPE_PERSON;
                     }
-                    if (pPowerup->mAddHealth[1] > 0.0f)
+                    if (pPowerup->mAddHealth[HEALTH_TYPE_ANIMAL] > 0.0f)
                     {
-                        *pHealth |= 2;
+                        *pHealth |= TargetInfo::TYPE_ANIMAL;
                     }
-                    if (pPowerup->mAddAmmo[1] > 0.0f)
+                    if (pPowerup->mAddAmmo[HEALTH_TYPE_ANIMAL] > 0.0f)
                     {
-                        *pAmmo |= 2;
+                        *pAmmo |= TargetInfo::TYPE_ANIMAL;
                     }
-                    if (pPowerup->mAddHealth[2] > 0.0f)
+                    if (pPowerup->mAddHealth[HEALTH_TYPE_DROID] > 0.0f)
                     {
-                        *pHealth |= 4;
+                        *pHealth |= TargetInfo::TYPE_DROID;
                     }
-                    if (pPowerup->mAddAmmo[2] > 0.0f)
+                    if (pPowerup->mAddAmmo[HEALTH_TYPE_DROID] > 0.0f)
                     {
-                        *pAmmo |= 4;
+                        *pAmmo |= TargetInfo::TYPE_DROID;
                     }
-                    if (pPowerup->mAddHealth[3] > 0.0f)
+                    if (pPowerup->mAddHealth[HEALTH_TYPE_VEHICLE] > 0.0f)
                     {
-                        *pHealth |= 8;
+                        *pHealth |= TargetInfo::TYPE_VEHICLE;
                     }
-                    if (pPowerup->mAddAmmo[3] > 0.0f)
+                    if (pPowerup->mAddAmmo[HEALTH_TYPE_VEHICLE] > 0.0f)
                     {
-                        *pAmmo |= 8;
+                        *pAmmo |= TargetInfo::TYPE_VEHICLE;
                     }
-                    if (pPowerup->mAddHealth[4] > 0.0f)
+                    if (pPowerup->mAddHealth[HEALTH_TYPE_BUILDING] > 0.0f)
                     {
-                        *pHealth |= 16;
+                        *pHealth |= TargetInfo::TYPE_BUILDING;
                     }
-                    if (pPowerup->mAddAmmo[4] > 0.0f)
+                    if (pPowerup->mAddAmmo[HEALTH_TYPE_BUILDING] > 0.0f)
                     {
-                        *pAmmo |= 16;
+                        *pAmmo |= TargetInfo::TYPE_BUILDING;
                     }
-                    if (pPowerup->mAddHealth[5] > 0.0f)
+                    if (pPowerup->mAddHealth[HEALTH_TYPE_BUILDING_DEAD] > 0.0f)
                     {
-                        *pHealth |= 32;
+                        *pHealth |= TargetInfo::TYPE_BUILDING_DEAD;
                     }
-                    if (pPowerup->mAddAmmo[5] > 0.0f)
+                    if (pPowerup->mAddAmmo[HEALTH_TYPE_BUILDING_DEAD] > 0.0f)
                     {
-                        *pAmmo |= 32;
+                        *pAmmo |= TargetInfo::TYPE_BUILDING_DEAD;
                     }
-                    if (pPowerup->mAddHealth[6] > 0.0f)
+                    if (pPowerup->mAddHealth[HEALTH_TYPE_BUILDING_UNBUILT] > 0.0f)
                     {
-                        *pHealth |= 64;
+                        *pHealth |= TargetInfo::TYPE_BUILDING_UNBUILT;
                     }
-                    if (pPowerup->mAddAmmo[6] > 0.0f)
+                    if (pPowerup->mAddAmmo[HEALTH_TYPE_BUILDING_UNBUILT] > 0.0f)
                     {
-                        *pAmmo |= 64;
+                        *pAmmo |= TargetInfo::TYPE_BUILDING_UNBUILT;
                     }
-                    if (pPowerup->mAddHealth[7] > 0.0f)
+                    if (pPowerup->mAddHealth[HEALTH_TYPE_MINE] > 0.0f)
                     {
-                        *pHealth |= 128;
+                        *pHealth |= TargetInfo::TYPE_MINE;
                     }
-                    if (pPowerup->mAddAmmo[7] > 0.0f)
+                    if (pPowerup->mAddAmmo[HEALTH_TYPE_MINE] > 0.0f)
                     {
-                        *pAmmo |= 128;
+                        *pAmmo |= TargetInfo::TYPE_MINE;
                     }
                 }
             }
@@ -499,11 +499,11 @@ void RepairHelper::FindPowerupsNearby(const GameObject* pObj, unsigned int* pHea
         {
             if (pClass->mAddHealth[iType] > 0.0f)
             {
-                *pHealth |= 1 << iType;
+                *pHealth |= Bit(iType);
             }
             if (pClass->mAddAmmo[iType] > 0.0f)
             {
-                *pAmmo |= 1 << iType;
+                *pAmmo |= Bit(iType);
             }
         }
     }

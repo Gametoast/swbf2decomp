@@ -142,7 +142,7 @@ void CoverHelper::EnterState()
 
         if (mCoverType == COVERTYPE_Idle && AIUtil::GetRandomInt(0, 100) > 75)
         {
-            SetNextState(100);
+            SetNextState(STATE_GLOBDONE);
             break;
         }
         mTimer = (float)AIUtil::GetRandomInt(2, 4) + GameLoop::GetMissionTime();
@@ -197,7 +197,7 @@ void CoverHelper::EnterState()
 // FUNCTION: SWBF2 0x00486ff0
 void CoverHelper::UpdateState(float dt)
 {
-    if (mCurState == 100)
+    if (mCurState == STATE_GLOBDONE)
     {
         return;
     }
@@ -216,7 +216,7 @@ void CoverHelper::UpdateState(float dt)
             }
             else
             {
-                SetNextState(100);
+                SetNextState(STATE_GLOBDONE);
             }
             return;
         }

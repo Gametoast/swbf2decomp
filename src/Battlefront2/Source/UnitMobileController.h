@@ -1,6 +1,7 @@
 #pragma once
 
 #include "PebbleFL/Common/PblHashTable.h"
+#include "PebbleFL/Common/PblRtti.h"
 
 #include "UnitController.h"
 
@@ -13,36 +14,16 @@ public:
 
     UnitMobileController(Controllable* pOwner);
 
-    virtual bool IsRtti(unsigned int uRtti) const;
-    virtual unsigned int GetDerivedRtti() const;
-    virtual const char* GetDerivedRttiName() const;
-
-    static PblHash rttiHashUnitMobileController;
-    static const char rttiNameUnitMobileController[];
+    // FUNCTION: SWBF2 0x00669180
+    // UnitMobileController::IsRtti
+    // FUNCTION: SWBF2 0x006691b0
+    // UnitMobileController::GetDerivedRtti
+    // FUNCTION: SWBF2 0x006691c0
+    // UnitMobileController::GetDerivedRttiName
+    PBL_DECLARE_DERIVED_RTTI(UnitMobileController, UnitController)
 
 protected:
 
     virtual void ApplyNextState();
 };
 
-// FUNCTION: SWBF2 0x006691b0
-inline unsigned int UnitMobileController::GetDerivedRtti() const
-{
-    return rttiHashUnitMobileController;
-}
-
-// FUNCTION: SWBF2 0x006691c0
-inline const char* UnitMobileController::GetDerivedRttiName() const
-{
-    return rttiNameUnitMobileController;
-}
-
-// FUNCTION: SWBF2 0x00669180
-inline bool UnitMobileController::IsRtti(unsigned int uRtti) const
-{
-    if (rttiHashUnitMobileController == uRtti)
-    {
-        return true;
-    }
-    return UnitController::IsRtti(uRtti);
-}

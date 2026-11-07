@@ -2562,6 +2562,7 @@
     <ClInclude Include="src\LuaFL\src\lzio.h" />
     <ClInclude Include="src\PebbleFL\Common\PblAngle.h" />
     <ClInclude Include="src\PebbleFL\Common\PblBitVector.h" />
+    <ClInclude Include="src\PebbleFL\Common\PblBits.h" />
     <ClInclude Include="src\PebbleFL\Common\PblBuildType.h" />
     <ClInclude Include="src\PebbleFL\Common\PblCatmullRom.h" />
     <ClInclude Include="src\PebbleFL\Common\PblChunk.h" />

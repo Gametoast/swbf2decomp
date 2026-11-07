@@ -235,8 +235,8 @@ void pcNormalMapAdderShader::_Init(unsigned int uiFlags,
                                    const RedColor&,
                                    float)
 {
-    m_pVertexFormat[0] = pcRedVertexFormat::Create(uiFlags, 0x202);
-    m_pVertexFormat[1] = pcRedVertexFormat::Create(uiFlags, 0x2e2);
+    m_pVertexFormat[0] = pcRedVertexFormat::Create(uiFlags, RVF_POSITION_XYZ | RVF_TEXCOORDS_1);
+    m_pVertexFormat[1] = pcRedVertexFormat::Create(uiFlags, RVF_POSITION_XYZ | RVF_NORMAL | RVF_TANGENTS | RVF_COLOR | RVF_TEXCOORDS_1);
     m_normalMap1 = 0;
     m_normalMap2 = 0;
     m_textureTransform1.m_bTransform = 0;

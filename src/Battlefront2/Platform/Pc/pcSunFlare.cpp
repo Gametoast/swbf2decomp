@@ -142,7 +142,7 @@ void SunFlareEffect::Init()
     s_intensityTex = new RedTexture(2, 2, D3DFMT_A8R8G8B8, 1, D3DUSAGE_RENDERTARGET,
                                     D3DPOOL_DEFAULT, 0);
     s_pClearShader = (pcClearShader*)pcRedShader::Create(
-        0x5c6e1222 /* "clear" */, 0x203, 0, 0, 0x80000, RedColor::WHITE, RedColor::BLACK, 32.0f);
+        0x5c6e1222 /* "clear" */, RVF_POSITION_XYZRHW | RVF_TEXCOORDS_1, 0, 0, MATERIAL_FLAG_COLORMASK_ALPHA, RedColor::WHITE, RedColor::BLACK, 32.0f);
 
     if (RedRenderer::pcGetGeometryMode() == GEOMETRYMODE_UNCOMPRESSED)
     {
@@ -165,17 +165,17 @@ void SunFlareEffect::Init()
         s_samplePoints->EndVertexData();
 
         s_pFlareOutShader = (pcFlareShader*)pcRedShader::Create(
-            kuiFlareShader, 0x282, 0, 0, 0x30000, RedColor::WHITE, RedColor::BLACK, 32.0f);
+            kuiFlareShader, RVF_POSITION_XYZ | RVF_COLOR | RVF_TEXCOORDS_1, 0, 0, MATERIAL_FLAG_CULL_NONE | MATERIAL_FLAG_ZENABLE_FALSE, RedColor::WHITE, RedColor::BLACK, 32.0f);
         s_pSampleShader = (pcSampleShader*)pcRedShader::Create(
-            kuiSampleShader, 2, 0, 0, 0, RedColor::WHITE, RedColor::BLACK, 32.0f);
+            kuiSampleShader, RVF_POSITION_XYZ, 0, 0, 0, RedColor::WHITE, RedColor::BLACK, 32.0f);
         s_pSampleShader->SetInputTexture(s_sampleTex);
         s_pSampleShader->SetScale(1.0f / 120.0f);
         s_pSampleShader->SetOutputPosition(0.0f, 0.0f);
         s_pRingShader = (pcFlareShader*)pcRedShader::Create(
-            kuiFlareShader, 0x282, 0, 0, 0x130040, RedColor::WHITE, RedColor::BLACK, 32.0f);
+            kuiFlareShader, RVF_POSITION_XYZ | RVF_COLOR | RVF_TEXCOORDS_1, 0, 0, MATERIAL_FLAG_ALPHABLEND_ADDITIVE | MATERIAL_FLAG_CULL_NONE | MATERIAL_FLAG_ZENABLE_FALSE | MATERIAL_FLAG_TEXSAMPLE_POINT, RedColor::WHITE, RedColor::BLACK, 32.0f);
         s_pRingShader->SetTexture(s_intensityTex);
         s_pSunAndHaloShader = (pcFlareShader*)pcRedShader::Create(
-            kuiFlareShader, 0x82, 0, 0, 0x10040, RedColor::WHITE, RedColor::BLACK, 32.0f);
+            kuiFlareShader, RVF_POSITION_XYZ | RVF_COLOR, 0, 0, MATERIAL_FLAG_ALPHABLEND_ADDITIVE | MATERIAL_FLAG_CULL_NONE, RedColor::WHITE, RedColor::BLACK, 32.0f);
     }
     else
     {
@@ -198,17 +198,17 @@ void SunFlareEffect::Init()
         s_samplePoints->EndVertexData();
 
         s_pFlareOutShader = (pcFlareShader*)pcRedShader::Create(
-            kuiFlareShader, 0x9282, 0, 0, 0x30000, RedColor::WHITE, RedColor::BLACK, 32.0f);
+            kuiFlareShader, RVF_POSITION_XYZ | RVF_COLOR | RVF_TEXCOORDS_1 | RVF_COMPRESSED_POSITION | RVF_COMPRESSED_TEXCOORDS, 0, 0, MATERIAL_FLAG_CULL_NONE | MATERIAL_FLAG_ZENABLE_FALSE, RedColor::WHITE, RedColor::BLACK, 32.0f);
         s_pSampleShader = (pcSampleShader*)pcRedShader::Create(
-            kuiSampleShader, 0x1002, 0, 0, 0, RedColor::WHITE, RedColor::BLACK, 32.0f);
+            kuiSampleShader, RVF_POSITION_XYZ | RVF_COMPRESSED_POSITION, 0, 0, 0, RedColor::WHITE, RedColor::BLACK, 32.0f);
         s_pSampleShader->SetInputTexture(s_sampleTex);
         s_pSampleShader->SetScale(1.0f / 120.0f);
         s_pSampleShader->SetOutputPosition(0.0f, 0.0f);
         s_pRingShader = (pcFlareShader*)pcRedShader::Create(
-            kuiFlareShader, 0x9282, 0, 0, 0x130040, RedColor::WHITE, RedColor::BLACK, 32.0f);
+            kuiFlareShader, RVF_POSITION_XYZ | RVF_COLOR | RVF_TEXCOORDS_1 | RVF_COMPRESSED_POSITION | RVF_COMPRESSED_TEXCOORDS, 0, 0, MATERIAL_FLAG_ALPHABLEND_ADDITIVE | MATERIAL_FLAG_CULL_NONE | MATERIAL_FLAG_ZENABLE_FALSE | MATERIAL_FLAG_TEXSAMPLE_POINT, RedColor::WHITE, RedColor::BLACK, 32.0f);
         s_pRingShader->SetTexture(s_intensityTex);
         s_pSunAndHaloShader = (pcFlareShader*)pcRedShader::Create(
-            kuiFlareShader, 0x1082, 0, 0, 0x10040, RedColor::WHITE, RedColor::BLACK, 32.0f);
+            kuiFlareShader, RVF_POSITION_XYZ | RVF_COLOR | RVF_COMPRESSED_POSITION, 0, 0, MATERIAL_FLAG_ALPHABLEND_ADDITIVE | MATERIAL_FLAG_CULL_NONE, RedColor::WHITE, RedColor::BLACK, 32.0f);
     }
 
     s_SunSkyRenderable.Activate(0);
@@ -649,7 +649,7 @@ void SunFlare::RenderSunAndHalo(unsigned int uiPass) const
                                                         iNumVertices, uiStart, pBuffer, 0, 0);
     pPrimitive->m_bbox = s_boundingBox;
     RedRenderer::pcRenderPrimitive(pPrimitive, s_pSunAndHaloShader,
-                                   RedRenderer::GetCamera()->GetMatrix(), RedColor::WHITE, 0x200, 0, 0, 0);
+                                   RedRenderer::GetCamera()->GetMatrix(), RedColor::WHITE, PC_RENDERFLAG_IMMEDIATE, 0, 0, 0);
     pBuffer->Release();
     pPrimitive->Release();
 }
@@ -771,7 +771,7 @@ bool CreateTextures(RedTexture* pTexture, const PblVector3& vPosition, float fSi
     }
     pDisc->EndVertexData();
     RedRenderer::pcRenderPrimitive(pDisc, s_pSunAndHaloShader,
-                                   RedRenderer::GetCamera()->GetMatrix(), RedColor(RedColor::BLACK, 255), 0x200, 0, 0, 0);
+                                   RedRenderer::GetCamera()->GetMatrix(), RedColor(RedColor::BLACK, 255), PC_RENDERFLAG_IMMEDIATE, 0, 0, 0);
     pDisc->Release();
 
     if (!bSunAndHalo && FLRenderer::GetFarSceneRange() > FLRenderer::GetNearSceneFadeStart())
@@ -794,7 +794,7 @@ bool CreateTextures(RedTexture* pTexture, const PblVector3& vPosition, float fSi
         s_pClearShader->SetBlendMode(pcClearShader::BLENDMODE_MODULATE);
         s_pClearShader->m_pTex = pTexture;
         RedRenderer::pcRenderPrimitive(pFade, s_pClearShader,
-                                       gMatrixIdentity, RedColor::WHITE, 0x200, 0, 0, 0);
+                                       gMatrixIdentity, RedColor::WHITE, PC_RENDERFLAG_IMMEDIATE, 0, 0, 0);
         pFade->Release();
         s_pClearShader->SetBlendMode(pcClearShader::BLENDMODE_NONE);
         s_pClearShader->m_pTex = 0;
@@ -837,7 +837,7 @@ bool CreateTextures(RedTexture* pTexture, const PblVector3& vPosition, float fSi
         RedColor clearColor(RedColor::BLACK, 0);
         RedRenderer::pcClear(1, clearColor, 1.0f, 0);
         RedRenderer::pcRenderPrimitive(s_samplePoints, s_pSampleShader,
-                                       gMatrixIdentity, RedColor::WHITE, 0x200, 0, 0, 0);
+                                       gMatrixIdentity, RedColor::WHITE, PC_RENDERFLAG_IMMEDIATE, 0, 0, 0);
         RedRenderer::pcSetRenderTarget(pOld, pDepth);
         RedRenderer::pcSetViewport(viewport);
     }
@@ -904,7 +904,7 @@ void RenderFlareOuts(RedTexture* pTexture, const PblVector3& vPosition, float fS
     pPrimitive->m_bbox = s_boundingBox;
     s_pFlareOutShader->SetTexture(pTexture);
     RedRenderer::pcRenderPrimitive(pPrimitive, s_pFlareOutShader,
-                                   RedRenderer::GetCamera()->GetMatrix(), RedColor::WHITE, 0x200, 0, 0, 0);
+                                   RedRenderer::GetCamera()->GetMatrix(), RedColor::WHITE, PC_RENDERFLAG_IMMEDIATE, 0, 0, 0);
     pBuffer->Release();
     pPrimitive->Release();
 }
@@ -935,7 +935,7 @@ void SunFlare::RenderSunRings(const PblVector3& vPosition, float fSize, float fT
         iNumVertices - 2, RVF, iNumVertices, uiStart, pBuffer, 0, 0);
     pPrimitive->m_bbox = s_boundingBox;
     RedRenderer::pcRenderPrimitive(pPrimitive, s_pRingShader,
-                                   RedRenderer::GetCamera()->GetMatrix(), RedColor::WHITE, 0x200, 0, 0, 0);
+                                   RedRenderer::GetCamera()->GetMatrix(), RedColor::WHITE, PC_RENDERFLAG_IMMEDIATE, 0, 0, 0);
     pBuffer->Release();
     pPrimitive->Release();
 }

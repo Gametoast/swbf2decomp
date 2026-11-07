@@ -1,6 +1,7 @@
 #pragma once
 
 #include "PebbleFL/Common/PblHashTable.h"
+#include "PebbleFL/Common/PblRtti.h"
 
 #include <stddef.h>
 
@@ -13,11 +14,24 @@ class GameObject;
 class UnitWaitSecondaryAgent : public UnitAgent
 {
 public:
+
+    // the modtools build's state names: START Wait
+    enum State
+    {
+        STATE_START = 1,
+        STATE_Wait = 2,
+        STATE_FINAL = 3
+    };
+
     UnitWaitSecondaryAgent(UnitController* pCtrl, float fWaitTime, bool bArg);
 
-    virtual bool IsRtti(unsigned int uRtti) const;
-    virtual unsigned int GetDerivedRtti() const;
-    virtual const char* GetDerivedRttiName() const;
+    // FUNCTION: SWBF2 0x0066b670
+    // UnitWaitSecondaryAgent::IsRtti
+    // FUNCTION: SWBF2 0x0066b6a0
+    // UnitWaitSecondaryAgent::GetDerivedRtti
+    // FUNCTION: SWBF2 0x0066b6b0
+    // UnitWaitSecondaryAgent::GetDerivedRttiName
+    PBL_DECLARE_DERIVED_RTTI(UnitWaitSecondaryAgent, UnitAgent)
     virtual bool ShouldQueueCurCmd(const UnitCmdInfo& cmd) const;
     virtual int EventHandler(AI::EventInfo* pInfo);
     virtual const char* NFINAL_GetStateString(int iState) const;
@@ -36,31 +50,8 @@ public:
     float mPlayerWaitTimeout;
     float mImpatientSoundTime;
 
-    static PblHash rttiHashUnitWaitSecondaryAgent;
-    static const char rttiNameUnitWaitSecondaryAgent[];
 };
  
  
  
 
-// FUNCTION: SWBF2 0x0066b670
-inline bool UnitWaitSecondaryAgent::IsRtti(unsigned int uRtti) const
-{
-    if (rttiHashUnitWaitSecondaryAgent == uRtti)
-    {
-        return true;
-    }
-    return UnitAgent::IsRtti(uRtti);
-}
-
-// FUNCTION: SWBF2 0x0066b6a0
-inline unsigned int UnitWaitSecondaryAgent::GetDerivedRtti() const
-{
-    return rttiHashUnitWaitSecondaryAgent;
-}
-
-// FUNCTION: SWBF2 0x0066b6b0
-inline const char* UnitWaitSecondaryAgent::GetDerivedRttiName() const
-{
-    return rttiNameUnitWaitSecondaryAgent;
-}

@@ -68,7 +68,7 @@ void DecalManager::PlatformRender(unsigned int uFlags) const
         RedRenderer::pcRenderPrimitive(pPrimitive,
                                        itClass->m_pShader,
                                        gMatrixIdentity,
-                                       RedColor::WHITE, 0x210, 0, 0, 0);
+                                       RedColor::WHITE, RENDERFLAG_NO_LIGHTING | PC_RENDERFLAG_IMMEDIATE, 0, 0, 0);
         pPrimitive->Release();
     }
 }

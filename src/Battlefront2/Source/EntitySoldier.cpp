@@ -1,4 +1,5 @@
 #include <d3dx9math.h>
+#include "PebbleFL/Common/PblRtti.h"
 #include "RedEngineFL/Util/RedCommandConsole.h"
 
 #include <float.h>
@@ -135,10 +136,9 @@ MemoryPool EntitySoldier::sMemoryPool("EntitySoldier", sizeof(EntitySoldier));
 
 // GLOBAL: SWBF2 0x01ebc054
 // EntitySoldier::rttiHashEntitySoldier
-PblHash EntitySoldier::rttiHashEntitySoldier("EntitySoldier");
 // GLOBAL: SWBF2 0x00789540
 // EntitySoldier::rttiNameEntitySoldier
-const char EntitySoldier::rttiNameEntitySoldier[] = "EntitySoldier";
+PBL_IMPLEMENT_RTTI(EntitySoldier)
 
 // SYNTHETIC: SWBF2 0x00402d70
 // `dynamic initializer for 'EntitySoldierClass::rttiHashEntitySoldierClass''
@@ -146,10 +146,9 @@ const char EntitySoldier::rttiNameEntitySoldier[] = "EntitySoldier";
 
 // GLOBAL: SWBF2 0x01ebc0f8
 // EntitySoldierClass::rttiHashEntitySoldierClass
-PblHash EntitySoldierClass::rttiHashEntitySoldierClass("EntitySoldierClass");
 // GLOBAL: SWBF2 0x007895c8
 // EntitySoldierClass::rttiNameEntitySoldierClass
-const char EntitySoldierClass::rttiNameEntitySoldierClass[] = "EntitySoldierClass";
+PBL_IMPLEMENT_RTTI(EntitySoldierClass)
 
 extern bool gShowSoldierPolyCount;
 
@@ -450,11 +449,11 @@ void EntitySoldier::UpdateFoleyFX(float fDeltaTime)
         return;
     }
 
-    if (mSoundState & 0x10)
+    if (mSoundState & soundState_bigBlast)
     {
         if (0.0f == Snd::Bus::GetRootBus().GetFinalGain())
         {
-            mSoundState &= ~0x10;
+            mSoundState &= ~soundState_bigBlast;
         }
         mClass->mShockSound.Play(pPos, 0, false, true);
     }
@@ -472,7 +471,7 @@ void EntitySoldier::UpdateFoleyFX(float fDeltaTime)
     const float fSpeed = sqrtf(mVelocity.x * mVelocity.x + mVelocity.y * mVelocity.y +
                                mVelocity.z * mVelocity.z);
     const bool bStopped = fSpeed < 0.0001f;
-    mSoundState &= ~0xc;
+    mSoundState &= ~(soundState_leftStomp | soundState_rightStomp);
     if (fSpeed > 0.0001f)
     {
         mDistanceMoved += fSpeed * fDeltaTime;
@@ -482,19 +481,19 @@ void EntitySoldier::UpdateFoleyFX(float fDeltaTime)
         mDistanceMoved += (float)fabs((double)mControlTurn) * fDeltaTime * 0.0005f;
     }
 
-    if (!(mSoundState & 3))
+    if (!(mSoundState & (soundState_leftDown | soundState_rightDown)))
     {
         if (mDistanceMoved > mClass->mFootstepStride * 0.5f)
         {
             mClass->mClothingRustleSound.Play(pPos, &mVelocity, false, true);
             if (mFlags & flags_leftStep)
             {
-                mSoundState |= 1;
+                mSoundState |= soundState_leftDown;
                 mFlags &= ~flags_leftStep;
             }
             else
             {
-                mSoundState |= 2;
+                mSoundState |= soundState_rightDown;
                 mFlags |= flags_leftStep;
             }
         }
@@ -517,25 +516,25 @@ void EntitySoldier::UpdateFoleyFX(float fDeltaTime)
         mDistanceMoved = 0.0f;
         if (mFlags & flags_leftStep)
         {
-            mSoundState |= 1;
+            mSoundState |= soundState_leftDown;
             mFlags &= ~flags_leftStep;
         }
         else
         {
-            mSoundState |= 2;
+            mSoundState |= soundState_rightDown;
             mFlags |= flags_leftStep;
         }
     }
 
     bool bRightFoot;
-    if (mSoundState & 1)
+    if (mSoundState & soundState_leftDown)
     {
-        mSoundState = (mSoundState & ~1) | 4;
+        mSoundState = (mSoundState & ~soundState_leftDown) | soundState_leftStomp;
         bRightFoot = false;
     }
     else
     {
-        mSoundState = (mSoundState & ~2) | 8;
+        mSoundState = (mSoundState & ~soundState_rightDown) | soundState_rightStomp;
         bRightFoot = true;
     }
     PlayFootstep(fSpeed, bRightFoot, pPos, &mVelocity);
@@ -573,23 +572,23 @@ void EntitySoldier::UpdateFoleyFX(const RedPose& pose, const PblMatrix& mWorld)
         }
     }
 
-    mSoundState &= ~0xc;
+    mSoundState &= ~(soundState_leftStomp | soundState_rightStomp);
 
     if (mLeftFootElevation - fLeftFoot > 0.01f)
     {
-        if (!(mSoundState & 1))
+        if (!(mSoundState & soundState_leftDown))
         {
-            mSoundState |= 1;
+            mSoundState |= soundState_leftDown;
             mClass->mClothingRustleSound.Play(&mWorld.GetTranslation(), &mVelocity, false, true);
         }
     }
-    else if ((mSoundState & 1) && fLeftFoot - mLeftFootElevation > 0.01f)
+    else if ((mSoundState & soundState_leftDown) && fLeftFoot - mLeftFootElevation > 0.01f)
     {
-        mSoundState &= ~1;
+        mSoundState &= ~soundState_leftDown;
         if (mClass->mMinFootHeight > mLeftFootElevation)
         {
             PlayFootstep(0.0f, false, &mWorld.GetTranslation(), &mVelocity);
-            mSoundState |= 4;
+            mSoundState |= soundState_leftStomp;
             if (!NetGame::IsEnabled() || ((netEnabledNext && netClientActive) && netIsLocalTurn))
             {
                 if (RedTerrain::_bEnable)
@@ -612,19 +611,19 @@ void EntitySoldier::UpdateFoleyFX(const RedPose& pose, const PblMatrix& mWorld)
 
     if (mRightFootElevation - fRightFoot > 0.01f)
     {
-        if (!(mSoundState & 2))
+        if (!(mSoundState & soundState_rightDown))
         {
-            mSoundState |= 2;
+            mSoundState |= soundState_rightDown;
             mClass->mClothingRustleSound.Play(&mWorld.GetTranslation(), &mVelocity, false, true);
         }
     }
-    else if ((mSoundState & 2) && fRightFoot - mRightFootElevation > 0.01f)
+    else if ((mSoundState & soundState_rightDown) && fRightFoot - mRightFootElevation > 0.01f)
     {
-        mSoundState &= ~2;
+        mSoundState &= ~soundState_rightDown;
         if (mClass->mMinFootHeight > mRightFootElevation)
         {
             PlayFootstep(0.0f, true, &mWorld.GetTranslation(), &mVelocity);
-            mSoundState |= 8;
+            mSoundState |= soundState_rightStomp;
             if (!NetGame::IsEnabled() || ((netEnabledNext && netClientActive) && netIsLocalTurn))
             {
                 if (RedTerrain::_bEnable)
@@ -838,7 +837,7 @@ EntitySoldier::EntitySoldier(EntitySoldierClass* pClass, const EntityDesc& desc)
     m_uiInputLockMask = 0;
     m_bSlide = 0;
     mInputLockTime = 0.0f;
-    _uiRenderFlags &= 3;
+    _uiRenderFlags &= (RENDERFLAG_CLIPPED | RENDERFLAG_TEST_BBOX);
     NetGame::Created(this);
 
     m_uiLastDamageDir = BACKWARD;
@@ -1208,11 +1207,11 @@ void EntitySoldier::Render(unsigned char ucLod, float fFade, unsigned int uiFlag
 
     if (!mClass->m_bDynamicLighting)
     {
-        uiFlags |= 0x80;
+        uiFlags |= RENDERFLAG_STATIC;
     }
     else
     {
-        uiFlags &= ~0x80;
+        uiFlags &= ~RENDERFLAG_STATIC;
     }
 
     if (mState == SoldierState::HERO_FLEE)
@@ -1423,11 +1422,11 @@ void EntitySoldier::Render(unsigned char ucLod, float fFade, unsigned int uiFlag
     unsigned int uiReflectFlags = uiFlags;
     PblMatrix mReflection;
     PblMatrix mHeadLook;
-    if (!ucLod && !(uiReflectFlags & 0x200000) &&
+    if (!ucLod && !(uiReflectFlags & RENDERFLAG_RENDER_REFLECTION) &&
         FLRenderer::IsReflected(*(const PblVector3*)&_Sphere, _Sphere.w, mReflection, false))
     {
         bReflected = true;
-        uiReflectFlags = (uiReflectFlags & ~0x10000) | 0x10000100;
+        uiReflectFlags = (uiReflectFlags & ~RENDERFLAG_RENDER_SHADOWVOLUMES) | RENDERFLAG_REFLECTION | RENDERFLAG_PSEUDO_REFLECTED;
         PblMatrix mTemp;
         mTemp = mWorld * mReflection;
         mReflection = mTemp;
@@ -1632,7 +1631,7 @@ void EntitySoldier::Render(unsigned char ucLod, float fFade, unsigned int uiFlag
             {
                 PblMatrix aTentacleMatrices[20];
                 float fDeltaTime = -1.0f;
-                if ((uiFlags & 0x200000) > 0)
+                if ((uiFlags & RENDERFLAG_RENDER_REFLECTION) > 0)
                 {
                     fDeltaTime = 0.0f;
                 }
@@ -1857,7 +1856,7 @@ void EntitySoldier::Render(unsigned char ucLod, float fFade, unsigned int uiFlag
         AnimatedAddon* pAddon = mClass->mAddon;
         if (pAddon && mState != SoldierState::JET_HOVER && mState != SoldierState::JET_JUMP)
         {
-            unsigned int uiAddonFlags = bStencilShadow ? (uiFlags | 0x10000) : (uiFlags & ~0x10000);
+            unsigned int uiAddonFlags = bStencilShadow ? (uiFlags | RENDERFLAG_RENDER_SHADOWVOLUMES) : (uiFlags & ~RENDERFLAG_RENDER_SHADOWVOLUMES);
             pAddon->Render(mTentacles, GetVelocity(), pPose, &mWorld, colorAttach, uiAddonFlags);
             if (bReflected && pPose)
             {
@@ -1913,7 +1912,7 @@ void EntitySoldier::Render(unsigned char ucLod, float fFade, unsigned int uiFlag
             float fLength;
             if (pLight)
             {
-                uiModelFlags = uiFlags | 0x10000;
+                uiModelFlags = uiFlags | RENDERFLAG_RENDER_SHADOWVOLUMES;
                 const PblVector3& vDir = pLight->m_vDirection;
                 float fMinLength = _Sphere.w * -2.0f / vDir.y;
                 PblVector3 vStart = _Sphere;
@@ -1939,9 +1938,9 @@ void EntitySoldier::Render(unsigned char ucLod, float fFade, unsigned int uiFlag
         }
         else
         {
-            uiModelFlags = uiFlags & ~0x10000;
+            uiModelFlags = uiFlags & ~RENDERFLAG_RENDER_SHADOWVOLUMES;
         }
-        uiPoseFlags = 0x40000000;
+        uiPoseFlags = RENDERFLAG_USE_Z_WHEN_FADE;
     }
     else
     {
@@ -2108,7 +2107,7 @@ void EntitySoldier::Render(unsigned char ucLod, float fFade, unsigned int uiFlag
     {
         if (pActive && pActive->IsMelee())
         {
-            pActive->Render(mWorld, pPose, colorModel, uiRenderFlags | 1, false);
+            pActive->Render(mWorld, pPose, colorModel, uiRenderFlags | RENDERFLAG_CLIPPED, false);
         }
     }
     else if (!(mState == SoldierState::PILOT_ANIMATION && !mHook) && mActiveIndex >= 0 &&
@@ -2124,19 +2123,19 @@ void EntitySoldier::Render(unsigned char ucLod, float fFade, unsigned int uiFlag
         }
         if (pPrimary)
         {
-            pPrimary->Render(mWorld, pPose, colorModel, uiRenderFlags | 1, pPrimary->IsMelee());
+            pPrimary->Render(mWorld, pPose, colorModel, uiRenderFlags | RENDERFLAG_CLIPPED, pPrimary->IsMelee());
             if (bReflected)
             {
-                pPrimary->Render(mReflection, pPose, colorModel, uiReflectFlags | uiPoseFlags | 1,
+                pPrimary->Render(mReflection, pPose, colorModel, uiReflectFlags | uiPoseFlags | RENDERFLAG_CLIPPED,
                                  pPrimary->IsMelee());
             }
         }
         if (pOffhand)
         {
-            pOffhand->Render(mWorld, pPose, colorModel, uiRenderFlags | 1, false);
+            pOffhand->Render(mWorld, pPose, colorModel, uiRenderFlags | RENDERFLAG_CLIPPED, false);
             if (bReflected)
             {
-                pOffhand->Render(mReflection, pPose, colorModel, uiReflectFlags | uiPoseFlags | 1, false);
+                pOffhand->Render(mReflection, pPose, colorModel, uiReflectFlags | uiPoseFlags | RENDERFLAG_CLIPPED, false);
             }
         }
     }
@@ -2146,7 +2145,7 @@ void EntitySoldier::Render(unsigned char ucLod, float fFade, unsigned int uiFlag
         // GLOBAL: SWBF2 0x01faa960
         // sPlayerShadow
         static PblHash sPlayerShadow("player_shadow");
-        if (!(uiModelFlags & 0x220000) && fAttachAlpha > 0.0f && pPose)
+        if (!(uiModelFlags & (RENDERFLAG_RENDER_TO_SKY | RENDERFLAG_RENDER_REFLECTION)) && fAttachAlpha > 0.0f && pPose)
         {
             pPose->BindToSkeleton(GetModel()->GetRedModel(0)->_pSkeleton);
             if (const PblMatrix* pHead = pPose->Find(0x8afdf5e4 /* "bone_head" */))
@@ -2854,7 +2853,7 @@ bool EntitySoldier::UpdateBoardVsChangeClass()
         for (CommandPostItor itor = CommandPostManager::Instance()->GetItor(); itor; ++itor)
         {
             CommandPost* pPost = *itor;
-            if (!(pPost->mHoldPlayerMask & (1 << mCharacter->mPlayerId)))
+            if (!(pPost->mHoldPlayerMask & CommandPost::LowPlayerBit(mCharacter->mPlayerId)))
             {
                 continue;
             }
@@ -2953,7 +2952,7 @@ bool EntitySoldier::UpdateBoardVsChangeClass()
         for (CommandPostItor itor = CommandPostManager::Instance()->GetItor(); itor; ++itor)
         {
             CommandPost* pPost = *itor;
-            if (!(pPost->mHoldPlayerMask & (1 << mCharacter->mPlayerId)))
+            if (!(pPost->mHoldPlayerMask & CommandPost::LowPlayerBit(mCharacter->mPlayerId)))
             {
                 continue;
             }
@@ -4220,6 +4219,9 @@ EntitySoldierClass::EntitySoldierClass(EntitySoldierClass* pBase, unsigned int u
     mMinFootHeight = pBase->mMinFootHeight;
 }
 
+// Bit() as a macro, for this function only: the inline helper changes this function's register choices
+#define SOLDIER_BODY_BIT(iId) (1 << (iId))
+
 // FUNCTION: SWBF2 0x004f67c0
 void EntitySoldierClass::PostReadSetup()
 {
@@ -4472,31 +4474,31 @@ void EntitySoldierClass::PostReadSetup()
             unsigned int uLegs = 0;
             if (mLowerBodyId[i] >= 0)
             {
-                uLegs = 1 << mLowerBodyId[i];
+                uLegs = SOLDIER_BODY_BIT(mLowerBodyId[i]);
             }
             if (mUpperBodyId[i] >= 0)
             {
-                uLegs |= 1 << mUpperBodyId[i];
+                uLegs |= SOLDIER_BODY_BIT(mUpperBodyId[i]);
             }
             int iId = model.GetMaskId(0x0DB3CAEA /* "coll_body_medium" */);
             if (iId >= 0)
             {
-                uLegs |= 1 << iId;
+                uLegs |= SOLDIER_BODY_BIT(iId);
             }
             iId = model.GetMaskId(0x6A085208 /* "coll_body_medium2" */);
             if (iId >= 0)
             {
-                uLegs |= 1 << iId;
+                uLegs |= SOLDIER_BODY_BIT(iId);
             }
             model.SetCollisionMask(COLL_TERRAIN, CollisionMask(uLegs));
             model.SetCollisionMask(COLL_STATIC, CollisionMask(uLegs));
             model.SetCollisionMask(COLL_RIGID, CollisionMask(uLegs));
 
-            model.SetCollisionMask(COLL_SOFT, CollisionMask(1 << model.GetMaskId(0xFE858165 /* "main_body" */)));
+            model.SetCollisionMask(COLL_SOFT, CollisionMask(SOLDIER_BODY_BIT(model.GetMaskId(0xFE858165 /* "main_body" */))));
 
-            unsigned int uHit = 1 << model.GetMaskId(0xCA25B9F3 /* "coll_torso" */);
-            uHit |= 1 << model.GetMaskId(0xE8B9E01A /* "coll_head" */);
-            uHit |= 1 << model.GetMaskId(0x34FCD074 /* "coll_body" */);
+            unsigned int uHit = SOLDIER_BODY_BIT(model.GetMaskId(0xCA25B9F3 /* "coll_torso" */));
+            uHit |= SOLDIER_BODY_BIT(model.GetMaskId(0xE8B9E01A /* "coll_head" */));
+            uHit |= SOLDIER_BODY_BIT(model.GetMaskId(0x34FCD074 /* "coll_body" */));
             model.SetCollisionMask(COLL_ORDNANCE, CollisionMask(uHit));
         }
     }
@@ -4548,21 +4550,21 @@ void EntitySoldierClass::PostReadSetup()
     unsigned int uDead = 0;
     if (iLower >= 0)
     {
-        uDead = 1 << iLower;
+        uDead = SOLDIER_BODY_BIT(iLower);
     }
     if (iUpper >= 0)
     {
-        uDead |= 1 << iUpper;
+        uDead |= SOLDIER_BODY_BIT(iUpper);
     }
     int iId = mDeadCollision.GetMaskId(0x0DB3CAEA /* "coll_body_medium" */);
     if (iId >= 0)
     {
-        uDead |= 1 << iId;
+        uDead |= SOLDIER_BODY_BIT(iId);
     }
     iId = mDeadCollision.GetMaskId(0x6A085208 /* "coll_body_medium2" */);
     if (iId >= 0)
     {
-        uDead |= 1 << iId;
+        uDead |= SOLDIER_BODY_BIT(iId);
     }
     mDeadCollision.SetCollisionMask(COLL_TERRAIN, CollisionMask(uDead));
     mDeadCollision.SetCollisionMask(COLL_STATIC, CollisionMask(uDead));
@@ -5783,7 +5785,7 @@ bool EntitySoldier::Update(float fDeltaTime)
         mSoldierAnimator = 0;
     }
 
-    mSoundState &= 0xff1f;
+    mSoundState &= soundState_resetMask;
     if (mInputLockTime > 0.0f)
     {
         if (m_uiInputLockMask & INPUTLOCK_ACTION)
@@ -7357,7 +7359,7 @@ bool EntitySoldier::Stand()
         {
             pWeapon->PlayFoleyFX(5);
         }
-        mSoundState |= 0x20;
+        mSoundState |= soundState_land;
         break;
     case SoldierState::ROLL:
     case SoldierState::TUMBLE_RECOVER:
@@ -7477,7 +7479,7 @@ bool EntitySoldier::Jump()
     {
         mWeapon[mActiveIndex]->PlayFoleyFX(4);
     }
-    mSoundState |= 0x40;
+    mSoundState |= soundState_jump;
     if (mCtrl)
     {
         mCtrl->IncreaseTargetBubbleSize(AI::TBI_JUMP);
@@ -8893,7 +8895,7 @@ void EntitySoldier::ApplyPush(const PblVector3& vPush, float fArg, bool bArg)
         {
             if (NetGame::GetNumLocalPlayers() == 1 && mPlayerId >= 0)
             {
-                mSoundState |= 0x10;
+                mSoundState |= soundState_bigBlast;
             }
             Fly();
         }
@@ -8912,7 +8914,7 @@ void EntitySoldier::ApplyPush(const PblVector3& vPush, float fArg, bool bArg)
         {
             if (NetGame::GetNumLocalPlayers() == 1 && mPlayerId >= 0)
             {
-                mSoundState |= 0x10;
+                mSoundState |= soundState_bigBlast;
             }
             Fly();
         }
@@ -8929,7 +8931,7 @@ void EntitySoldier::ApplyPush(const PblVector3& vPush, float fArg, bool bArg)
     {
         if (NetGame::GetNumLocalPlayers() == 1 && mPlayerId >= 0)
         {
-            mSoundState |= 0x10;
+            mSoundState |= soundState_bigBlast;
         }
         Fly();
         return;
@@ -9103,7 +9105,7 @@ bool EntitySoldier::Roll()
     {
         mWeapon[mActiveIndex]->PlayFoleyFX(6);
     }
-    mSoundState |= 0x80;
+    mSoundState |= soundState_roll;
 
     int iFirstPerson = GetFirstPersonIndex();
     if (iFirstPerson >= 0)
@@ -10194,7 +10196,7 @@ void EntitySoldier::UpdateAcklayFoleyFX(const RedPose& pose, const PblMatrix& mW
             }
         }
 
-        const unsigned short uFootBit = (unsigned short)(0x100u << i);
+        const unsigned short uFootBit = (unsigned short)((unsigned int)soundState_acklay1 << i);
         if (fElevation - *pElevation > 0.01f && fElevation > 0.1f)
         {
             if (!(mSoundState & uFootBit))

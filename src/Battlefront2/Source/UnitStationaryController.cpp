@@ -18,10 +18,9 @@ namespace
 
 // GLOBAL: SWBF2 0x01f9a24c
 // UnitStationaryController::rttiHashUnitStationaryController
-PblHash UnitStationaryController::rttiHashUnitStationaryController("UnitStationaryController");
 // GLOBAL: SWBF2 0x0078b930
 // UnitStationaryController::rttiNameUnitStationaryController
-const char UnitStationaryController::rttiNameUnitStationaryController[] = "UnitStationaryController";
+PBL_IMPLEMENT_RTTI(UnitStationaryController)
 
 
 

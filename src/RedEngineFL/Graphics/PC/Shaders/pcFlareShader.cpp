@@ -149,7 +149,7 @@ void pcFlareShader::Render_Fixed(const RenderItem* pItem, unsigned int) const
     color.b = (unsigned char)(int)(c.b * (1.0f / 255.0f) * m_colorDiffuse.b + 0.5f);
     color.a = (unsigned char)(int)(c.a * (1.0f / 255.0f) * m_colorDiffuse.a + 0.5f);
 
-    if (m_uiMaterialFlags & 0x20000)
+    if (m_uiMaterialFlags & MATERIAL_FLAG_ZENABLE_FALSE)
     {
         RedRenderer::pcSetRenderState(D3DRS_ZENABLE, FALSE);
     }
@@ -158,7 +158,7 @@ void pcFlareShader::Render_Fixed(const RenderItem* pItem, unsigned int) const
         RedRenderer::pcSetRenderState(D3DRS_ZENABLE, TRUE);
     }
 
-    if (m_uiMaterialFlags & 0x100000)
+    if (m_uiMaterialFlags & MATERIAL_FLAG_TEXSAMPLE_POINT)
     {
         RedRenderer::pcSetSamplerState(0, D3DSAMP_MAGFILTER, D3DTEXF_POINT);
         RedRenderer::pcSetSamplerState(0, D3DSAMP_MINFILTER, D3DTEXF_POINT);
@@ -171,7 +171,7 @@ void pcFlareShader::Render_Fixed(const RenderItem* pItem, unsigned int) const
         RedRenderer::pcSetSamplerState(0, D3DSAMP_MIPFILTER, D3DTEXF_LINEAR);
     }
 
-    if (m_uiMaterialFlags & 0x40)
+    if (m_uiMaterialFlags & MATERIAL_FLAG_ALPHABLEND_ADDITIVE)
     {
         RedRenderer::pcSetRenderState(D3DRS_DESTBLEND, D3DBLEND_ONE);
     }
@@ -201,7 +201,7 @@ void pcFlareShader::Render_Prog1(const RenderItem* pItem, unsigned int) const
 {
     RedColor colorDiffuse = pItem->tweakColor * m_colorDiffuse;
 
-    if (m_uiMaterialFlags & 0x20000)
+    if (m_uiMaterialFlags & MATERIAL_FLAG_ZENABLE_FALSE)
     {
         RedRenderer::pcSetRenderState(D3DRS_ZENABLE, FALSE);
     }
@@ -210,7 +210,7 @@ void pcFlareShader::Render_Prog1(const RenderItem* pItem, unsigned int) const
         RedRenderer::pcSetRenderState(D3DRS_ZENABLE, TRUE);
     }
 
-    if (m_uiMaterialFlags & 0x100000)
+    if (m_uiMaterialFlags & MATERIAL_FLAG_TEXSAMPLE_POINT)
     {
         RedRenderer::pcSetSamplerState(0, D3DSAMP_MAGFILTER, D3DTEXF_POINT);
         RedRenderer::pcSetSamplerState(0, D3DSAMP_MINFILTER, D3DTEXF_POINT);
@@ -223,7 +223,7 @@ void pcFlareShader::Render_Prog1(const RenderItem* pItem, unsigned int) const
         RedRenderer::pcSetSamplerState(0, D3DSAMP_MIPFILTER, D3DTEXF_LINEAR);
     }
 
-    if (m_uiMaterialFlags & 0x40)
+    if (m_uiMaterialFlags & MATERIAL_FLAG_ALPHABLEND_ADDITIVE)
     {
         RedRenderer::pcSetRenderState(D3DRS_DESTBLEND, D3DBLEND_ONE);
     }

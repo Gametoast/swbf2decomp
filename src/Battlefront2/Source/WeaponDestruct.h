@@ -21,24 +21,20 @@ public:
     WeaponDestructClass(WeaponDestructClass* pBase, unsigned int uHash);
     virtual ~WeaponDestructClass();
 
-    static PblHash rttiHashWeaponDestructClass;
-    static const char rttiNameWeaponDestructClass[];
-
     virtual WeaponClass* Derive(unsigned int uHash);
     virtual Weapon* Build(const WeaponDesc& desc);
-    virtual bool IsRtti(unsigned int uRtti) const;
-    virtual unsigned int GetDerivedRtti() const;
-    virtual const char* GetDerivedRttiName() const;
+    // FUNCTION: SWBF2 0x00681a60
+    // WeaponDestructClass::IsRtti
+    // FUNCTION: SWBF2 0x00681a90
+    // WeaponDestructClass::GetDerivedRtti
+    // FUNCTION: SWBF2 0x00681aa0
+    // WeaponDestructClass::GetDerivedRttiName
+    PBL_DECLARE_DERIVED_RTTI(WeaponDestructClass, WeaponClass)
     virtual void SetProperty(unsigned int uProperty, const char* pszValue);
 
     float mMaxPressedTime;
     ExplosionClass* mExplosionClass;
 };
-  
- 
- 
- 
- 
 
 // VTABLE: SWBF2 0x007b0854
 class WeaponDestruct : public Weapon
@@ -72,24 +68,3 @@ public:
  
  
 
-// FUNCTION: SWBF2 0x00681a60
-inline bool WeaponDestructClass::IsRtti(unsigned int uRtti) const
-{
-    if (rttiHashWeaponDestructClass == uRtti)
-    {
-        return true;
-    }
-    return WeaponClass::IsRtti(uRtti);
-}
-
-// FUNCTION: SWBF2 0x00681a90
-inline unsigned int WeaponDestructClass::GetDerivedRtti() const
-{
-    return rttiHashWeaponDestructClass;
-}
-
-// FUNCTION: SWBF2 0x00681aa0
-inline const char* WeaponDestructClass::GetDerivedRttiName() const
-{
-    return rttiNameWeaponDestructClass;
-}

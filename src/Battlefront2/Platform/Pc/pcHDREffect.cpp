@@ -15,7 +15,7 @@ RedTexture* s_glowTextures[2];
 void HDREffect::PlatformInit()
 {
     m_pHDRShader = (pcHDRShader*)pcRedShader::Create(
-        kuiHDRShader, 0x201, 0, 0, 0, RedColor::WHITE, RedColor::BLACK, 32.0f);
+        kuiHDRShader, RVF_POSITION_XY | RVF_TEXCOORDS_1, 0, 0, 0, RedColor::WHITE, RedColor::BLACK, 32.0f);
     m_downSizeFactor = 0.25f;
     m_numBloomPasses = 5;
     m_maxTotalWeight = 1.2f;
@@ -114,7 +114,7 @@ void HDREffect::Render(unsigned int value) const
     m_pHDRShader->SetGlowThreshold(m_glowThreshold);
     m_pHDRShader->SetMode(pcHDRShader::HDR_MODE_CREATEGLOWMASK);
     RedRenderer::pcRenderPrimitive(pPrimitive, m_pHDRShader, gMatrixIdentity,
-                                   RedColor::WHITE, 0x200, 0, 0, 0);
+                                   RedColor::WHITE, PC_RENDERFLAG_IMMEDIATE, 0, 0, 0);
     pPrimitive->Release();
 
     pOldTarget = RedRenderer::pcGetRenderTarget();
@@ -162,7 +162,7 @@ void HDREffect::Render(unsigned int value) const
             (float)i + 0.5f,
             (m_maxTotalWeight - 1.0f) * (float)i / (float)m_numBloomPasses + 0.25f);
         RedRenderer::pcRenderPrimitive(pBloom, m_pHDRShader, gMatrixIdentity,
-                                       RedColor::WHITE, 0x200, 0, 0, 0);
+                                       RedColor::WHITE, PC_RENDERFLAG_IMMEDIATE, 0, 0, 0);
         if (i < m_numBloomPasses - 1)
         {
             RedTexture* pTemp = pSource;
@@ -200,7 +200,7 @@ void HDREffect::Render(unsigned int value) const
     m_pHDRShader->SetMode(pcHDRShader::HDR_MODE_SCALEANDBLOOM);
     m_pHDRShader->SetGlowFactor(m_glowFactor);
     RedRenderer::pcRenderPrimitive(pPrimitive, m_pHDRShader, gMatrixIdentity,
-                                   RedColor::WHITE, 0x200, 0, 0, 0);
+                                   RedColor::WHITE, PC_RENDERFLAG_IMMEDIATE, 0, 0, 0);
     pPrimitive->Release();
 }
 

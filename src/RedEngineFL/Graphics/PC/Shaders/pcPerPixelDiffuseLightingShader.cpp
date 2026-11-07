@@ -209,7 +209,7 @@ unsigned int pcPerPixelDiffuseLightingShader::GetState_Prog1(const RenderItem* p
         iState = 0;
     }
 
-    if (pMaterial->materialFlags & 0x10000000)
+    if (pMaterial->materialFlags & MATERIAL_FLAG_HEIGHTFIELD)
     {
         iState += 12;
     }
@@ -251,7 +251,7 @@ void pcPerPixelDiffuseLightingShader::Render_Prog1(const RenderItem* pItem, unsi
     if (pMaterial->bumpMapHash)
     {
         RedRenderer::pcSetTexture(0, RedTexture::Find(pMaterial->bumpMapHash));
-        const RedTextureTransform& transform = (pMaterial->materialFlags & 0x800)
+        const RedTextureTransform& transform = (pMaterial->materialFlags & MATERIAL_FLAG_BUMPDETAIL)
                                                    ? pMaterial->detailTexTransform
                                                    : pMaterial->diffuseTexTransform;
         pcRedVertexShaderConstantRegister* pRegs = RedRenderer::pcLockVertexShaderConstants(40, 2);
@@ -276,7 +276,7 @@ void pcPerPixelDiffuseLightingShader::Render_Prog1(const RenderItem* pItem, unsi
         RedRenderer::pcSetTexture(0, RedTexture::Find(s_uiNormalizationCubeMapHash));
     }
 
-    if (pMaterial->materialFlags & 2)
+    if (pMaterial->materialFlags & MATERIAL_FLAG_ALPHAMAP_MASK)
     {
         RedRenderer::pcSetRenderState(D3DRS_ALPHATESTENABLE, TRUE);
     }
@@ -284,14 +284,14 @@ void pcPerPixelDiffuseLightingShader::Render_Prog1(const RenderItem* pItem, unsi
     {
         RedRenderer::pcSetRenderState(D3DRS_ALPHATESTENABLE, FALSE);
     }
-    RedRenderer::pcSetCullMode((pMaterial->materialFlags & 0x10000) ? PCREDCULL_NONE : PCREDCULL_BACK);
+    RedRenderer::pcSetCullMode((pMaterial->materialFlags & MATERIAL_FLAG_CULL_NONE) ? PCREDCULL_NONE : PCREDCULL_BACK);
 
     const RedLightingState* pLighting = pItem->pLightingState;
     int iLight = 0;
     int iNumPasses = 0;
-    const bool bVertexLit = (pItem->pPrim->m_vertexFormat->m_uiVertexBufferRVF & 0x100) != 0;
+    const bool bVertexLit = (pItem->pPrim->m_vertexFormat->m_uiVertexBufferRVF & RVF_LIGHTING) != 0;
     const int iMaxLights = MAX_LIGHTS_PER_STATE[pItem->uiShaderState];
-    RedRenderer::pcSetRenderState(D3DRS_ZWRITEENABLE, (pItem->flags & 0x20) == 0);
+    RedRenderer::pcSetRenderState(D3DRS_ZWRITEENABLE, (pItem->flags & RENDERFLAG_NO_Z) == 0);
 
     RedColorValue colors[3];
     const RedColorValue& black = RedColorValue::BLACK;

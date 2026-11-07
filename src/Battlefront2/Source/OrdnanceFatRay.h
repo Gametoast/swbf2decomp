@@ -1,6 +1,7 @@
 #pragma once
 
 #include "PebbleFL/Common/PblHashTable.h"
+#include "PebbleFL/Common/PblRtti.h"
 
 #include <stddef.h>
 
@@ -16,9 +17,13 @@ public:
 
     virtual OrdnanceClass* Derive(unsigned int uHash);
     virtual Ordnance* Build(const OrdnanceDesc& desc);
-    virtual bool IsRtti(unsigned int uRtti) const;
-    virtual unsigned int GetDerivedRtti() const;
-    virtual const char* GetDerivedRttiName() const;
+    // FUNCTION: SWBF2 0x005fe7b0
+    // OrdnanceFatRayClass::IsRtti
+    // FUNCTION: SWBF2 0x005fe7e0
+    // OrdnanceFatRayClass::GetDerivedRtti
+    // FUNCTION: SWBF2 0x005fe7f0
+    // OrdnanceFatRayClass::GetDerivedRttiName
+    PBL_DECLARE_DERIVED_RTTI(OrdnanceFatRayClass, OrdnanceBulletClass)
     virtual void SetProperty(unsigned int uProperty, const char* pszValue);
 
     float mMaxDamage;
@@ -29,17 +34,7 @@ public:
     float mPushDeduction;
     float mRayRadius;
 
-    static PblHash rttiHashOrdnanceFatRayClass;
-    static const char rttiNameOrdnanceFatRayClass[];
 };
-  
- 
- 
- 
- 
- 
- 
- 
 
 // VTABLE: SWBF2 0x007ac82c
 // VTABLE: SWBF2 0x007ac894 Thread
@@ -50,62 +45,18 @@ public:
     OrdnanceFatRay(OrdnanceFatRayClass* pClass, const OrdnanceDesc& desc);
     virtual ~OrdnanceFatRay();
 
-    virtual bool IsRtti(unsigned int uRtti) const;
-    virtual unsigned int GetDerivedRtti() const;
-    virtual const char* GetDerivedRttiName() const;
+    // FUNCTION: SWBF2 0x005fe730
+    // OrdnanceFatRay::IsRtti
+    // FUNCTION: SWBF2 0x005fe760
+    // OrdnanceFatRay::GetDerivedRtti
+    // FUNCTION: SWBF2 0x005fe770
+    // OrdnanceFatRay::GetDerivedRttiName
+    PBL_DECLARE_DERIVED_RTTI(OrdnanceFatRay, OrdnanceBullet)
 
     virtual bool CheckCollision();
 
     float mDamage;
     float mPush;
 
-    static PblHash rttiHashOrdnanceFatRay;
-    static const char rttiNameOrdnanceFatRay[];
 };
- 
- 
- 
 
-// FUNCTION: SWBF2 0x005fe730
-inline bool OrdnanceFatRay::IsRtti(unsigned int uRtti) const
-{
-    if (rttiHashOrdnanceFatRay == uRtti)
-    {
-        return true;
-    }
-    return OrdnanceBullet::IsRtti(uRtti);
-}
-
-// FUNCTION: SWBF2 0x005fe760
-inline unsigned int OrdnanceFatRay::GetDerivedRtti() const
-{
-    return rttiHashOrdnanceFatRay;
-}
-
-// FUNCTION: SWBF2 0x005fe770
-inline const char* OrdnanceFatRay::GetDerivedRttiName() const
-{
-    return rttiNameOrdnanceFatRay;
-}
-
-// FUNCTION: SWBF2 0x005fe7b0
-inline bool OrdnanceFatRayClass::IsRtti(unsigned int uRtti) const
-{
-    if (rttiHashOrdnanceFatRayClass == uRtti)
-    {
-        return true;
-    }
-    return OrdnanceBulletClass::IsRtti(uRtti);
-}
-
-// FUNCTION: SWBF2 0x005fe7e0
-inline unsigned int OrdnanceFatRayClass::GetDerivedRtti() const
-{
-    return rttiHashOrdnanceFatRayClass;
-}
-
-// FUNCTION: SWBF2 0x005fe7f0
-inline const char* OrdnanceFatRayClass::GetDerivedRttiName() const
-{
-    return rttiNameOrdnanceFatRayClass;
-}

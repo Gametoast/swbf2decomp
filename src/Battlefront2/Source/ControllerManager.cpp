@@ -499,7 +499,7 @@ int ControllerManager::GetPlayersInRange(const PblVector3& vPos, float fRadius, 
             continue;
         }
         int iAffil = pTeam ? pTeam->GetAffiliation(pObject->GetPerceivedTeam()) : 0;
-        if (!(eAffil & (1 << (iAffil + 1))))
+        if (!(eAffil & TargetInfo::SideBit(iAffil)))
         {
             continue;
         }
@@ -540,7 +540,7 @@ int ControllerManager::GetAIInRange(const PblVector3& vPos, float fRadius, GameO
             continue;
         }
         int iAffil = pTeam ? pTeam->GetAffiliation(pObject->GetPerceivedTeam()) : 0;
-        if (!(eAffil & (1 << (iAffil + 1))))
+        if (!(eAffil & TargetInfo::SideBit(iAffil)))
         {
             continue;
         }
@@ -584,7 +584,7 @@ void ControllerManager::BroadcastEvent(AI::EventInfo* pInfo, const PblVector3& v
             continue;
         }
         GameObject* pObject = pCtrl->mOwner->GetGameObject();
-        if (pTeam && !(eAffil & (1 << (pTeam->GetAffiliation(pObject->GetTeam()) + 1))))
+        if (pTeam && !(eAffil & TargetInfo::SideBit(pTeam->GetAffiliation(pObject->GetTeam()))))
         {
             continue;
         }

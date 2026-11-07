@@ -1,6 +1,7 @@
 #pragma once
 
 #include "PebbleFL/Common/PblHashTable.h"
+#include "PebbleFL/Common/PblRtti.h"
 
 #include <stddef.h>
 
@@ -16,14 +17,15 @@ public:
     WeaponDisguiseClass(WeaponDisguiseClass* pBase, unsigned int uHash);
     virtual ~WeaponDisguiseClass();
 
-    static PblHash rttiHashWeaponDisguiseClass;
-    static const char rttiNameWeaponDisguiseClass[];
-
     virtual WeaponClass* Derive(unsigned int uHash);
     virtual Weapon* Build(const WeaponDesc& desc);
-    virtual bool IsRtti(unsigned int uRtti) const;
-    virtual unsigned int GetDerivedRtti() const;
-    virtual const char* GetDerivedRttiName() const;
+    // FUNCTION: SWBF2 0x00682cb0
+    // WeaponDisguiseClass::IsRtti
+    // FUNCTION: SWBF2 0x00682ce0
+    // WeaponDisguiseClass::GetDerivedRtti
+    // FUNCTION: SWBF2 0x00682cf0
+    // WeaponDisguiseClass::GetDerivedRttiName
+    PBL_DECLARE_DERIVED_RTTI(WeaponDisguiseClass, WeaponClass)
     virtual void SetProperty(unsigned int uProperty, const char* pszValue);
 
     float m_fChangeRate;
@@ -51,9 +53,13 @@ public:
     WeaponDisguise(const WeaponDisguiseClass* pClass, const WeaponDesc& desc);
     virtual ~WeaponDisguise();
 
-    virtual bool IsRtti(unsigned int uRtti) const;
-    virtual unsigned int GetDerivedRtti() const;
-    virtual const char* GetDerivedRttiName() const;
+    // FUNCTION: SWBF2 0x00682c60
+    // WeaponDisguise::IsRtti
+    // FUNCTION: SWBF2 0x00682c90
+    // WeaponDisguise::GetDerivedRtti
+    // FUNCTION: SWBF2 0x00682ca0
+    // WeaponDisguise::GetDerivedRttiName
+    PBL_DECLARE_DERIVED_RTTI(WeaponDisguise, Weapon)
     virtual void Select(unsigned int uFlags, bool bOffhand);
     virtual void Deselect(unsigned int uFlags, bool bOffhand);
     virtual void Write(NetPktGroup& group);
@@ -81,60 +87,8 @@ public:
     void StartDroppingDisguise();
     void FinishDroppingDisguise();
 
-    static PblHash rttiHashWeaponDisguise;
-    static const char rttiNameWeaponDisguise[];
-
     const GameModel* mSavedOwnerModel;
     Team* mOtherTeam;
     DISGUISE_STATE m_eState;
 };
-  
- 
- 
- 
- 
- 
 
-// FUNCTION: SWBF2 0x00682cb0
-inline bool WeaponDisguiseClass::IsRtti(unsigned int uRtti) const
-{
-    if (rttiHashWeaponDisguiseClass == uRtti)
-    {
-        return true;
-    }
-    return WeaponClass::IsRtti(uRtti);
-}
-
-// FUNCTION: SWBF2 0x00682ce0
-inline unsigned int WeaponDisguiseClass::GetDerivedRtti() const
-{
-    return rttiHashWeaponDisguiseClass;
-}
-
-// FUNCTION: SWBF2 0x00682cf0
-inline const char* WeaponDisguiseClass::GetDerivedRttiName() const
-{
-    return rttiNameWeaponDisguiseClass;
-}
-
-// FUNCTION: SWBF2 0x00682c60
-inline bool WeaponDisguise::IsRtti(unsigned int uRtti) const
-{
-    if (rttiHashWeaponDisguise == uRtti)
-    {
-        return true;
-    }
-    return Weapon::IsRtti(uRtti);
-}
-
-// FUNCTION: SWBF2 0x00682c90
-inline unsigned int WeaponDisguise::GetDerivedRtti() const
-{
-    return rttiHashWeaponDisguise;
-}
-
-// FUNCTION: SWBF2 0x00682ca0
-inline const char* WeaponDisguise::GetDerivedRttiName() const
-{
-    return rttiNameWeaponDisguise;
-}

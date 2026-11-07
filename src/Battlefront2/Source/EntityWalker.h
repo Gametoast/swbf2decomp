@@ -1,6 +1,7 @@
 #pragma once
 
 #include "PebbleFL/Common/PblHashTable.h"
+#include "PebbleFL/Common/PblRtti.h"
 
 #include <stddef.h>
 #include "WalkerAnimation.h"
@@ -415,51 +416,6 @@ public:
     float mTimeSinceLastHack;
     float mAttackControlTimer;
 };
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
 
 // VTABLE: SWBF2 0x0079dc94
 class EntityWalkerClass : public GameObjectClass,
@@ -470,7 +426,6 @@ class EntityWalkerClass : public GameObjectClass,
 public:
     static const int kMaxTurrets = EntityWalker::kMaxTurrets;
     virtual ~EntityWalkerClass();
-
 
     struct WalkerAttackAnim
     {
@@ -489,9 +444,13 @@ public:
 
     virtual EntityClass* Derive(unsigned int uHash);
     virtual Entity* Build(const EntityDesc& desc);
-    virtual bool IsRtti(unsigned int uRtti) const;
-    virtual unsigned int GetDerivedRtti() const;
-    virtual const char* GetDerivedRttiName() const;
+    // FUNCTION: SWBF2 0x0047fc80
+    // EntityWalkerClass::IsRtti
+    // FUNCTION: SWBF2 0x004ff660
+    // EntityWalkerClass::GetDerivedRtti
+    // FUNCTION: SWBF2 0x004ff670
+    // EntityWalkerClass::GetDerivedRttiName
+    PBL_DECLARE_DERIVED_RTTI(EntityWalkerClass, GameObjectClass)
     virtual void SetProperty(unsigned int uProperty, const char* pszValue);
     virtual void PostReadSetup();
     // FUNCTION: SWBF2 0x0047fcc0
@@ -544,9 +503,6 @@ protected:
     const PblVector3& GetTowCableCollisionOffset(int iBodyID);
 
 public:
-
-    static PblHash rttiHashEntityWalkerClass;
-    static const char rttiNameEntityWalkerClass[];
 
     RedAnimation* mAnimObj[3];
     int mNumAnimObjs;
@@ -660,93 +616,6 @@ public:
     float mEjectResist;
     float mTimeTilReboard;
 };
-  
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
-
- 
- 
- 
-
-// FUNCTION: SWBF2 0x0047fc80
-inline bool EntityWalkerClass::IsRtti(unsigned int uRtti) const
-{
-    if (rttiHashEntityWalkerClass == uRtti)
-    {
-        return true;
-    }
-    return GameObjectClass::IsRtti(uRtti);
-}
 
 // FUNCTION: SWBF2 0x004ff4e0
 inline unsigned int EntityWalker::GetDerivedRtti() const
@@ -758,18 +627,6 @@ inline unsigned int EntityWalker::GetDerivedRtti() const
 inline const char* EntityWalker::GetDerivedRttiName() const
 {
     return rttiNameEntityWalker;
-}
-
-// FUNCTION: SWBF2 0x004ff660
-inline unsigned int EntityWalkerClass::GetDerivedRtti() const
-{
-    return rttiHashEntityWalkerClass;
-}
-
-// FUNCTION: SWBF2 0x004ff670
-inline const char* EntityWalkerClass::GetDerivedRttiName() const
-{
-    return rttiNameEntityWalkerClass;
 }
 
 // FUNCTION: SWBF2 0x0047f900

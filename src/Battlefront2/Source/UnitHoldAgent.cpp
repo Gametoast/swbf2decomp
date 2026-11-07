@@ -18,10 +18,9 @@
 
 // GLOBAL: SWBF2 0x01f993ec
 // UnitHoldAgent::rttiHashUnitHoldAgent
-PblHash UnitHoldAgent::rttiHashUnitHoldAgent("UnitHoldAgent");
 // GLOBAL: SWBF2 0x0078b8c8
 // UnitHoldAgent::rttiNameUnitHoldAgent
-const char UnitHoldAgent::rttiNameUnitHoldAgent[] = "UnitHoldAgent";
+PBL_IMPLEMENT_RTTI(UnitHoldAgent)
 
 
 
@@ -33,9 +32,9 @@ const char UnitHoldAgent::rttiNameUnitHoldAgent[] = "UnitHoldAgent";
 UnitHoldAgent::UnitHoldAgent(UnitController* pCtrl)
     : UnitAgent(pCtrl)
 {
-    mCurState = 1;
+    mCurState = STATE_START;
     mInsubValue = 1.0f;
-    mNextState = 2;
+    mNextState = STATE_Wait;
 }
 
 // FUNCTION: SWBF2 0x00668e00
@@ -43,7 +42,7 @@ void UnitHoldAgent::EnterState()
 {
     switch (mCurState)
     {
-    case 2:
+    case STATE_Wait:
         SetNewSearchHeading();
         break;
     }
@@ -76,7 +75,7 @@ void UnitHoldAgent::SetNewSearchHeading()
 // FUNCTION: SWBF2 0x00668f70
 void UnitHoldAgent::UpdateStatePostVision(float dt)
 {
-    if (mCurState == 100)
+    if (mCurState == STATE_GLOBDONE)
     {
         return;
     }
@@ -86,7 +85,7 @@ void UnitHoldAgent::UpdateStatePostVision(float dt)
     const Character* pLeader = mCtrl->GetLastSquadCommand().mWhoGaveIt;
     if (!pLeader || !pLeader->GetControllable())
     {
-        SetNextState(100);
+        SetNextState(STATE_GLOBDONE);
         return;
     }
 
@@ -100,14 +99,14 @@ void UnitHoldAgent::UpdateStatePostVision(float dt)
         mInsubValue -= 0.05f;
         if (mInsubValue <= 0.0f)
         {
-            SetNextState(100);
+            SetNextState(STATE_GLOBDONE);
             return;
         }
     }
 
     switch (mCurState)
     {
-    case 2:
+    case STATE_Wait:
     {
         if (AIUtil::GetRandomIntPerSecond(1, 9) == 2)
         {

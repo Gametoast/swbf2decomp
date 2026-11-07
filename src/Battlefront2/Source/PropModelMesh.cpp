@@ -323,22 +323,22 @@ void PropObjectMesh::Render(const RedCamera* pCamera, float fDist, unsigned int 
                 unsigned int uiRenderFlags = uiFlags;
                 if (eVis == RedCamera::VISIBILITY_PARTIAL)
                 {
-                    uiRenderFlags |= 1;
+                    uiRenderFlags |= RENDERFLAG_CLIPPED;
                 }
                 else
                 {
-                    uiRenderFlags &= ~1u;
+                    uiRenderFlags &= ~RENDERFLAG_CLIPPED;
                 }
                 if (!mModel->m_bDynamicLighting)
                 {
-                    uiRenderFlags |= 0x80;
+                    uiRenderFlags |= RENDERFLAG_STATIC;
                 }
                 else
                 {
-                    uiRenderFlags &= ~0x80u;
+                    uiRenderFlags &= ~RENDERFLAG_STATIC;
                 }
 
-                mModel->mRenderObj.mGeometry->Render(&mMatrix, 0, mColor, uiRenderFlags | 0x1000000, 0);
+                mModel->mRenderObj.mGeometry->Render(&mMatrix, 0, mColor, uiRenderFlags | RENDERFLAG_RENDER_CACHED, 0);
                 break;
             }
 
@@ -364,11 +364,11 @@ void PropObjectMesh::Render(const RedCamera* pCamera, float fDist, unsigned int 
                 unsigned int uiRenderFlags = uiFlags;
                 if (eVis == RedCamera::VISIBILITY_PARTIAL)
                 {
-                    uiRenderFlags |= 1;
+                    uiRenderFlags |= RENDERFLAG_CLIPPED;
                 }
                 else
                 {
-                    uiRenderFlags &= ~1u;
+                    uiRenderFlags &= ~RENDERFLAG_CLIPPED;
                 }
 
                 const RedColorValue color(mColor);
@@ -402,11 +402,11 @@ void PropObjectMesh::Render(const RedCamera* pCamera, float fDist, unsigned int 
                 unsigned int uiRenderFlags = uiFlags;
                 if (eVis == RedCamera::VISIBILITY_PARTIAL)
                 {
-                    uiRenderFlags |= 1;
+                    uiRenderFlags |= RENDERFLAG_CLIPPED;
                 }
                 else
                 {
-                    uiRenderFlags &= ~1u;
+                    uiRenderFlags &= ~RENDERFLAG_CLIPPED;
                 }
 
                 const RedColorValue color(mColor);

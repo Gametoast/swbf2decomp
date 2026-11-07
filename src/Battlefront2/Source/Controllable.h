@@ -1,6 +1,7 @@
 #pragma once
 
 #include <stddef.h>
+#include "PebbleFL/Common/PblBits.h"
 
 #include "FirstPerson.h"
 #include "SoldierAnimationBank.h"
@@ -120,6 +121,29 @@ float __cdecl GetDefaultFOV();
 class TargetInfo
 {
 public:
+    // what a weapon may target: one bit per HealthType, see TypeBit
+    enum TargetTypes
+    {
+        TYPE_PERSON = 1,
+        TYPE_ANIMAL = 2,
+        TYPE_DROID = 4,
+        TYPE_VEHICLE = 8,
+        TYPE_BUILDING = 16,
+        TYPE_BUILDING_DEAD = 32,
+        TYPE_BUILDING_UNBUILT = 64,
+        TYPE_MINE = 128
+    };
+    // and whom: one bit per affiliation, see SideBit
+    enum TargetSides
+    {
+        SIDE_ENEMY = 1,
+        SIDE_NEUTRAL = 2,
+        SIDE_FRIENDLY = 4
+    };
+
+    // an affiliation (below 0 enemy, 0 neutral, above 0 friendly) as its TargetSides bit
+    static int SideBit(int iAffiliation) { return Bit(iAffiliation + 1); }
+
     TargetInfo();
 
     void SetAimPoint(const PblVector3& aimPoint);

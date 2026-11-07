@@ -11,10 +11,9 @@
 
 // GLOBAL: SWBF2 0x01eb980c
 // AI::DestroyGoal::rttiHashDestroyGoal
-PblHash AI::DestroyGoal::rttiHashDestroyGoal("DestroyGoal");
 // GLOBAL: SWBF2 0x00788ea4
 // AI::DestroyGoal::rttiNameDestroyGoal
-const char AI::DestroyGoal::rttiNameDestroyGoal[] = "DestroyGoal";
+PBL_IMPLEMENT_RTTI_IN(AI, DestroyGoal)
 
 
 

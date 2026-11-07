@@ -382,7 +382,7 @@ void RedDebug::RedDebugRenderable::Init()
 
     SetPrintfData(RedColor::WHITE, RedGlyphCacheElement::TEXT_STYLE_NORMAL);
 
-    s_debugShader = pcRedShader::Create(PblHash("lightbeam"), 0x1082, 0, 0, 0x200,
+    s_debugShader = pcRedShader::Create(PblHash("lightbeam"), RVF_POSITION_XYZ | RVF_COLOR | RVF_COMPRESSED_POSITION, 0, 0, MATERIAL_FLAG_VERTEXCOLOR_LIGHTING,
                                         RedColor::WHITE, RedColor::BLACK, 32.0f);
 }
 
@@ -523,7 +523,7 @@ void RedDebug::RedDebugRenderable::Render(unsigned int) const
 
         pPrimitive->EndVertexData();
         RedRenderer::pcRenderPrimitive(pPrimitive, s_debugShader, gMatrixIdentity,
-                                       RedColor::WHITE, 0x200, 0, 0, 0);
+                                       RedColor::WHITE, PC_RENDERFLAG_IMMEDIATE, 0, 0, 0);
         pPrimitive->Release();
     }
 

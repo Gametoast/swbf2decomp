@@ -64,10 +64,9 @@ namespace
 
 // GLOBAL: SWBF2 0x01f9a250
 // UnitTrooperAgent::rttiHashUnitTrooperAgent
-PblHash UnitTrooperAgent::rttiHashUnitTrooperAgent("UnitTrooperAgent");
 // GLOBAL: SWBF2 0x0078b968
 // UnitTrooperAgent::rttiNameUnitTrooperAgent
-const char UnitTrooperAgent::rttiNameUnitTrooperAgent[] = "UnitTrooperAgent";
+PBL_IMPLEMENT_RTTI(UnitTrooperAgent)
 
 
 
@@ -87,8 +86,8 @@ UnitTrooperAgent::UnitTrooperAgent(UnitController* pCtrl, const CommandPost* pPo
     , mRepairHelper(this)
     , mMineHelper(this)
 {
-    mCurState = 1;
-    mNextState = 1;
+    mCurState = STATE_START;
+    mNextState = STATE_START;
 }
 
 // FUNCTION: SWBF2 0x0066a500
@@ -111,9 +110,9 @@ void UnitTrooperAgent::EnterState()
 {
     if (!(const CommandPost*)mPost)
     {
-        if (mCurState != 100)
+        if (mCurState != STATE_GLOBDONE)
         {
-            SetNextState(100);
+            SetNextState(STATE_GLOBDONE);
         }
         return;
     }
@@ -257,9 +256,9 @@ void UnitTrooperAgent::UpdateStatePostVision(float dt)
 {
     if (!(const CommandPost*)mPost)
     {
-        if (mCurState != 100)
+        if (mCurState != STATE_GLOBDONE)
         {
-            SetNextState(100);
+            SetNextState(STATE_GLOBDONE);
         }
         return;
     }
@@ -298,7 +297,7 @@ void UnitTrooperAgent::UpdateStatePostVision(float dt)
         mPatrolHelper.FSMUpdate(dt, false);
         if (mPatrolHelper.IsDone())
         {
-            SetNextState(100);
+            SetNextState(STATE_GLOBDONE);
             break;
         }
         ControllableHeight eHeight = mPatrolHelper.HELPERGetHeight();
@@ -331,7 +330,7 @@ void UnitTrooperAgent::UpdateStatePostVision(float dt)
         }
         if (GetLowLevel().IsAtDest() && GetLowLevel().IsNavigatorFailedPath())
         {
-            SetNextState(100);
+            SetNextState(STATE_GLOBDONE);
             break;
         }
         auto pOwner = mCtrl->mOwner;

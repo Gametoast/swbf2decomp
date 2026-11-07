@@ -1,6 +1,7 @@
 #pragma once
 
 #include "PebbleFL/Common/PblHashTable.h"
+#include "PebbleFL/Common/PblRtti.h"
 
 #include <stddef.h>
 
@@ -63,9 +64,13 @@ public:
 
     virtual EntityClass* Derive(unsigned int uHash);
     virtual Entity* Build(const EntityDesc& desc);
-    virtual bool IsRtti(unsigned int uRtti) const;
-    virtual unsigned int GetDerivedRtti() const;
-    virtual const char* GetDerivedRttiName() const;
+    // FUNCTION: SWBF2 0x00477ac0
+    // EntityFlyerClass::IsRtti
+    // FUNCTION: SWBF2 0x004a9d90
+    // EntityFlyerClass::GetDerivedRtti
+    // FUNCTION: SWBF2 0x004a9da0
+    // EntityFlyerClass::GetDerivedRttiName
+    PBL_DECLARE_DERIVED_RTTI(EntityFlyerClass, GameObjectClass)
     virtual void SetProperty(unsigned int uProperty, const char* pszValue);
     // FUNCTION: SWBF2 0x00477b00
     virtual GameObjectClass::VehicleType GetVehicleType() const
@@ -97,9 +102,6 @@ public:
     {
         return mTimeTilReboard;
     }
-
-    static PblHash rttiHashEntityFlyerClass;
-    static const char rttiNameEntityFlyerClass[];
 
     CollisionModel mFlyingCollisionModel;
     bool mFlyingCollisionInited;
@@ -215,107 +217,6 @@ public:
     GameSound mSoundTrick;
     GameSound mSoundFlip;
 };
-  
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
-
- 
- 
- 
- 
-
-// FUNCTION: SWBF2 0x00477ac0
-inline bool EntityFlyerClass::IsRtti(unsigned int uRtti) const
-{
-    if (rttiHashEntityFlyerClass == uRtti)
-    {
-        return true;
-    }
-    return GameObjectClass::IsRtti(uRtti);
-}
-
-// FUNCTION: SWBF2 0x004a9d90
-inline unsigned int EntityFlyerClass::GetDerivedRtti() const
-{
-    return rttiHashEntityFlyerClass;
-}
-
-// FUNCTION: SWBF2 0x004a9da0
-inline const char* EntityFlyerClass::GetDerivedRttiName() const
-{
-    return rttiNameEntityFlyerClass;
-}
 
 // VTABLE: SWBF2 0x0079b20c CollisionObject
 // VTABLE: SWBF2 0x0079b2c4 PblHandled

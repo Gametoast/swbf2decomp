@@ -293,7 +293,7 @@ void SoldierElement::RenderUsingContext(const PblMatrix& mContext, const RedColo
 
     if (mClass->mAddon)
     {
-        mClass->mAddon->Render(mTentacles, gVectorZero, &pose, PblMatrix(mRender), color, 0x4000000);
+        mClass->mAddon->Render(mTentacles, gVectorZero, &pose, PblMatrix(mRender), color, RENDERFLAG_RENDER_TO_INTERFACE);
     }
     else if (mTentacles)
     {
@@ -314,11 +314,11 @@ void SoldierElement::RenderUsingContext(const PblMatrix& mContext, const RedColo
             {
                 fTurnOn = 1.0f - fTurnOn;
             }
-            pMelee->Render(fTurnOn, mRender, &pose, color, 0x4000000, false);
+            pMelee->Render(fTurnOn, mRender, &pose, color, RENDERFLAG_RENDER_TO_INTERFACE, false);
         }
         else
         {
-            mWeaponClass[mWeaponIndex]->Render(mRender, &pose, color, 0x4000000, false);
+            mWeaponClass[mWeaponIndex]->Render(mRender, &pose, color, RENDERFLAG_RENDER_TO_INTERFACE, false);
         }
     }
 
@@ -338,18 +338,18 @@ void SoldierElement::RenderUsingContext(const PblMatrix& mContext, const RedColo
                 pState->GetIntParam(0x891891e9 /* "diffuse_texture" */) = mClass->mOverrideTextureHash2;
             }
         }
-        ((RedModel*)mModel->GetRedModel(0))->Render(&mRender, &pose, color, 0x4000000, &shadingPose);
+        ((RedModel*)mModel->GetRedModel(0))->Render(&mRender, &pose, color, RENDERFLAG_RENDER_TO_INTERFACE, &shadingPose);
     }
     else
     {
-        ((RedModel*)mModel->GetRedModel(0))->Render(&mRender, &pose, color, 0x4000000, 0);
+        ((RedModel*)mModel->GetRedModel(0))->Render(&mRender, &pose, color, RENDERFLAG_RENDER_TO_INTERFACE, 0);
     }
 
     for (unsigned int i = 0; i < mModel->mClothCount; ++i)
     {
         if (mClothPiece[i])
         {
-            mClothPiece[i]->Render(mRender, &pose, 0, color, 0x4000000, 1);
+            mClothPiece[i]->Render(mRender, &pose, 0, color, RENDERFLAG_RENDER_TO_INTERFACE, 1);
         }
     }
 }

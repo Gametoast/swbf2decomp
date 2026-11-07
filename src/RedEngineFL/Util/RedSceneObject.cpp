@@ -102,7 +102,7 @@ void RedSceneObject::Deactivate()
 // FUNCTION: SWBF2 0x006e20d0
 bool RedSceneObject::IsClipped() const
 {
-    return (_uiRenderFlags & 1) != 0;
+    return (_uiRenderFlags & RENDERFLAG_CLIPPED) != 0;
 }
 
 // FUNCTION: SWBF2 0x006e20e0

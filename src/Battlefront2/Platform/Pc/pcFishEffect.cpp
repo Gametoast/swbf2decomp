@@ -82,7 +82,7 @@ void FishParticle::Render(unsigned char, float, unsigned int)
                                    mType.m_pShader,
                                    mMatrix,
                                    RedColor::WHITE,
-                                   0x01000010, 0, 0, 0);
+                                   RENDERFLAG_NO_LIGHTING | RENDERFLAG_RENDER_CACHED, 0, 0, 0);
     pPrimitive->Release();
 }
 
@@ -94,7 +94,7 @@ void FishParticleManager::PlatformInit()
     for (int i = 0; i < sNumFishTypes; i++)
     {
         sFishTypes[i].m_pShader = pcRedShader::Create(kuiNormalShader, uiFormat, &sFishTypes[i].mTexture, 1,
-                                                 0x50002, RedColor::WHITE, RedColor::BLACK, 32.0f);
+                                                 MATERIAL_FLAG_ALPHAMAP_MASK | MATERIAL_FLAG_CULL_NONE | MATERIAL_FLAG_ZWRITEENABLE_TRUE, RedColor::WHITE, RedColor::BLACK, 32.0f);
     }
 }
 

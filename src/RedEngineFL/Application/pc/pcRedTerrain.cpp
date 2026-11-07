@@ -1,5 +1,6 @@
 #include "RedEngineFL/Application/Renderable.h"
 #include "PebbleFL/Common/PblVector.h"
+#include "PebbleFL/Common/PblBits.h"
 #include "RedEngineFL/Graphics/PC/pcRedAutoSettings.h"
 
 #include "RedEngineFL/Graphics/PC/pcRedRenderer.h"
@@ -133,7 +134,7 @@ void TerrainRenderable::_RenderLowRes(unsigned int uiFlags) const
     pCurrent->GetFrustum(fNear, fFar, fWidth, fHeight);
     camera.SetZoom(fZoom);
     float fFarPlane = m_fFarTerrainMaxDistance;
-    camera.SetNearFarPlane(fZoom * (uiFlags & 0x200000 ? FLRenderer::GetNearPlane()
+    camera.SetNearFarPlane(fZoom * (uiFlags & RENDERFLAG_RENDER_REFLECTION ? FLRenderer::GetNearPlane()
                                                        : FLRenderer::GetNearSceneFadeStart()),
                            fFarPlane);
 
@@ -178,7 +179,7 @@ void TerrainRenderable::_RenderLowRes(unsigned int uiFlags) const
                                                m_pFarShader2,
                                                gMatrixIdentity,
                                                RedColor::WHITE,
-                                               uiFlags | 0x1000000, 0, 0, 0);
+                                               uiFlags | RENDERFLAG_RENDER_CACHED, 0, 0, 0);
             }
             else
             {
@@ -186,7 +187,7 @@ void TerrainRenderable::_RenderLowRes(unsigned int uiFlags) const
                                                m_pFarShader,
                                                gMatrixIdentity,
                                                RedColor::WHITE,
-                                               uiFlags | 0x1000000, 0, 0, 0);
+                                               uiFlags | RENDERFLAG_RENDER_CACHED, 0, 0, 0);
             }
         }
     }
@@ -390,7 +391,7 @@ void TerrainRenderable::Render(unsigned int value) const
 
     const_cast<TerrainRenderable*>(this)->_SetQuality();
     const RedCamera* pCamera = RedRenderer::GetCamera();
-    if (!RedRenderer::pcIsNearScene() || (uiFlags & 0x20000))
+    if (!RedRenderer::pcIsNearScene() || (uiFlags & RENDERFLAG_RENDER_TO_SKY))
     {
         if (!bForceFullDetail && !pcTerrainShader2::IsEnabled())
         {
@@ -400,7 +401,7 @@ void TerrainRenderable::Render(unsigned int value) const
         RedCamera farCamera(*pCamera);
         float fZoom = pCamera->GetZoom();
         float fFarDistance = m_fFarTerrainMaxDistance;
-        farCamera.SetNearFarPlane(((uiFlags & 0x200000) ? FLRenderer::GetNearPlane() : FLRenderer::GetNearSceneFadeStart()) * fZoom,
+        farCamera.SetNearFarPlane(((uiFlags & RENDERFLAG_RENDER_REFLECTION) ? FLRenderer::GetNearPlane() : FLRenderer::GetNearSceneFadeStart()) * fZoom,
                                   fFarDistance);
     }
 
@@ -485,11 +486,11 @@ void TerrainRenderable::Render(unsigned int value) const
     }
     iMaxZ += iStepZ;
 
-    if (RedShadowMap::IsShadowMapEnabled() && !(uiFlags & 0x10))
+    if (RedShadowMap::IsShadowMapEnabled() && !(uiFlags & RENDERFLAG_NO_LIGHTING))
     {
         if (!pcTerrainShader2::IsEnabled())
         {
-            pcTerrainShader::s_uiOptions |= 0x10000;
+            pcTerrainShader::s_uiOptions |= pcTerrainShader::TERRAIN_SHADOWMAP;
         }
         pcTerrainShader2::_InitShadowMap(RedShadowMap::GetShadowMapTexture(),
                                          RedShadowMap::GetShadowMapWrapMode(),
@@ -499,12 +500,12 @@ void TerrainRenderable::Render(unsigned int value) const
     }
     else if (!pcTerrainShader2::IsEnabled())
     {
-        pcTerrainShader::s_uiOptions &= ~0x10000;
+        pcTerrainShader::s_uiOptions &= ~pcTerrainShader::TERRAIN_SHADOWMAP;
     }
 
     if (RedRenderer::pcGetRenderCaps().pipeline == PIPELINE_FIXED)
     {
-        uiFlags |= 0x800;
+        uiFlags |= PC_RENDERFLAG_FF_HALF_LIGHTING;
     }
     if (!m_bEnablePixelLighting)
     {
@@ -589,13 +590,13 @@ void TerrainRenderable::Render(unsigned int value) const
                                                    m_pPrePixelLightingShader,
                                                    gMatrixIdentity,
                                                    RedColor::WHITE,
-                                                   uiFlags | 0x1000000, 0, 0, 0);
+                                                   uiFlags | RENDERFLAG_RENDER_CACHED, 0, 0, 0);
                 }
                 RedRenderer::pcRenderPrimitive(patch.apPrim[0],
                                                patch.apShader[0],
                                                gMatrixIdentity,
                                                RedColor::WHITE,
-                                               uiFlags | 0x1000000, 0, 0, 0);
+                                               uiFlags | RENDERFLAG_RENDER_CACHED, 0, 0, 0);
             }
             else
             {
@@ -603,7 +604,7 @@ void TerrainRenderable::Render(unsigned int value) const
                                                patch.apShader2[0],
                                                gMatrixIdentity,
                                                RedColor::WHITE,
-                                               uiFlags | 0x1000000, 0, 0, 0);
+                                               uiFlags | RENDERFLAG_RENDER_CACHED, 0, 0, 0);
             }
         }
     }
@@ -680,17 +681,17 @@ void TerrainRenderable::_InitPixelLighting(bool bEnable)
     {
         if (bEnable)
         {
-            pcTerrainShader::s_uiOptions |= 0x20000;
+            pcTerrainShader::s_uiOptions |= pcTerrainShader::TERRAIN_PIXELLIGHTING;
         }
         else
         {
-            pcTerrainShader::s_uiOptions &= ~0x20000;
+            pcTerrainShader::s_uiOptions &= ~pcTerrainShader::TERRAIN_PIXELLIGHTING;
         }
     }
 
     if (!m_pPrePixelLightingShader)
     {
-        unsigned int uiFlags = RedRenderer::pcGetGeometryMode() == GEOMETRYMODE_COMPRESSED ? 0x5122 : 0x122;
+        unsigned int uiFlags = RedRenderer::pcGetGeometryMode() == GEOMETRYMODE_COMPRESSED ? (RVF_POSITION_XYZ | RVF_NORMAL | RVF_LIGHTING | RVF_COMPRESSED_POSITION | RVF_COMPRESSED_NORMALS) : (RVF_POSITION_XYZ | RVF_NORMAL | RVF_LIGHTING);
         m_pPrePixelLightingShader2 = (pcTerrainShader2*)pcRedShader::Create(
             PblHash("Terrain2"), uiFlags, 0, 0, 0, RedColor::WHITE, RedColor::BLACK, 32.0f);
         m_pPrePixelLightingShader = (pcTerrainShader*)pcRedShader::Create(
@@ -930,7 +931,7 @@ void TerrainRenderable::Read(PblFileChunk& chunk)
             float fHeightMin = (float)patch.iHeightMin;
             PblVector3 vMin(fX, fHeightMin * RedTerrain::_fHeightScale, fZ);
             PblVector3 vMax(vMin.x + fSize,
-                            (65535.0f / (float)(1 << iHeightShift) + fHeightMin) * RedTerrain::_fHeightScale,
+                            (65535.0f / (float)PowerOf2(iHeightShift) + fHeightMin) * RedTerrain::_fHeightScale,
                             vMin.z + fSize);
             PblBox box(vMin, vMax);
 
@@ -1126,10 +1127,10 @@ void TerrainRenderable::Read(PblFileChunk& chunk)
         }
     }
 
-    unsigned int uiFarFlags2 = RedRenderer::pcGetGeometryMode() == GEOMETRYMODE_COMPRESSED ? 0x5122 : 0x122;
+    unsigned int uiFarFlags2 = RedRenderer::pcGetGeometryMode() == GEOMETRYMODE_COMPRESSED ? (RVF_POSITION_XYZ | RVF_NORMAL | RVF_LIGHTING | RVF_COMPRESSED_POSITION | RVF_COMPRESSED_NORMALS) : (RVF_POSITION_XYZ | RVF_NORMAL | RVF_LIGHTING);
     m_pFarShader2 = (pcTerrainShader2*)pcRedShader::Create(PblHash("Terrain2"), uiFarFlags2, 0, 0, 0,
                                                            RedColor::WHITE, RedColor::BLACK, 32.0f);
-    unsigned int uiFarFlags = RedRenderer::pcGetGeometryMode() == GEOMETRYMODE_COMPRESSED ? 0x1002 : 0x2;
+    unsigned int uiFarFlags = RedRenderer::pcGetGeometryMode() == GEOMETRYMODE_COMPRESSED ? (RVF_POSITION_XYZ | RVF_COMPRESSED_POSITION) : RVF_POSITION_XYZ;
     m_pFarShader = (pcTerrainShader*)pcRedShader::Create(0x74DBC80E /* "Terrain" */, uiFarFlags, 0, 0, 0, RedColor::WHITE,
                                                          RedColor::BLACK, 32.0f);
     if (m_pFarShader)

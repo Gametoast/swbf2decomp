@@ -35,10 +35,9 @@ inline const PblVector3& RegionPosition(const RedRegion* pRegion)
 
 // GLOBAL: SWBF2 0x01eb97b0
 // AI::CTFGoalD::rttiHashCTFGoalD
-PblHash AI::CTFGoalD::rttiHashCTFGoalD("CTFGoalD");
 // GLOBAL: SWBF2 0x00788dfc
 // AI::CTFGoalD::rttiNameCTFGoalD
-const char AI::CTFGoalD::rttiNameCTFGoalD[] = "CTFGoalD";
+PBL_IMPLEMENT_RTTI_IN(AI, CTFGoalD)
 
 
 

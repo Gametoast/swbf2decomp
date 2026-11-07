@@ -1,6 +1,7 @@
 #pragma once
 
 #include "PebbleFL/Common/PblHashTable.h"
+#include "PebbleFL/Common/PblRtti.h"
 
 #include "UnitController.h"
 
@@ -15,12 +16,13 @@ public:
     // SYNTHETIC: SWBF2 0x00667d40
     // UnitFlyController::`scalar deleting destructor'
 
-    virtual bool IsRtti(unsigned int uRtti) const;
-    virtual unsigned int GetDerivedRtti() const;
-    virtual const char* GetDerivedRttiName() const;
-
-    static PblHash rttiHashUnitFlyController;
-    static const char rttiNameUnitFlyController[];
+    // FUNCTION: SWBF2 0x00667cf0
+    // UnitFlyController::IsRtti
+    // FUNCTION: SWBF2 0x00667d20
+    // UnitFlyController::GetDerivedRtti
+    // FUNCTION: SWBF2 0x00667d30
+    // UnitFlyController::GetDerivedRttiName
+    PBL_DECLARE_DERIVED_RTTI(UnitFlyController, UnitController)
 
 protected:
     virtual void ApplyNextState();
@@ -31,24 +33,3 @@ protected:
 
  
 
-// FUNCTION: SWBF2 0x00667cf0
-inline bool UnitFlyController::IsRtti(unsigned int uRtti) const
-{
-    if (rttiHashUnitFlyController == uRtti)
-    {
-        return true;
-    }
-    return UnitController::IsRtti(uRtti);
-}
-
-// FUNCTION: SWBF2 0x00667d20
-inline unsigned int UnitFlyController::GetDerivedRtti() const
-{
-    return rttiHashUnitFlyController;
-}
-
-// FUNCTION: SWBF2 0x00667d30
-inline const char* UnitFlyController::GetDerivedRttiName() const
-{
-    return rttiNameUnitFlyController;
-}

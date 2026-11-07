@@ -71,7 +71,7 @@ void JetJumpHintHelper::EnterState()
 // FUNCTION: SWBF2 0x0056b150
 void JetJumpHintHelper::UpdateState(float dt)
 {
-    if (mCurState == 100)
+    if (mCurState == STATE_GLOBDONE)
     {
         return;
     }
@@ -88,7 +88,7 @@ void JetJumpHintHelper::UpdateState(float dt)
         if (GameLoop::GetMissionTime() > mJumpTime + 1.0f &&
             !GetCtrl()->mLowLevel.mJetJumping)
         {
-            SetNextState(100);
+            SetNextState(STATE_GLOBDONE);
         }
         break;
     }

@@ -99,12 +99,12 @@ void FogCloudEffect::PlatformInit()
     {
         if (RedRenderer::pcGetGeometryMode())
         {
-            m_pShader = pcRedShader::Create(0x8A8743BF /* "PARTICLE" */, 0x9282, &TEXTURE_HASH, 1, 0x10004,
+            m_pShader = pcRedShader::Create(0x8A8743BF /* "PARTICLE" */, RVF_POSITION_XYZ | RVF_COLOR | RVF_TEXCOORDS_1 | RVF_COMPRESSED_POSITION | RVF_COMPRESSED_TEXCOORDS, &TEXTURE_HASH, 1, MATERIAL_FLAG_ALPHAMAP_OPACITY | MATERIAL_FLAG_CULL_NONE,
                                             RedColor::WHITE, RedColor::BLACK, 32.0f);
         }
         else
         {
-            m_pShader = pcRedShader::Create(0x8A8743BF /* "PARTICLE" */, 0x282, &TEXTURE_HASH, 1, 0x10004,
+            m_pShader = pcRedShader::Create(0x8A8743BF /* "PARTICLE" */, RVF_POSITION_XYZ | RVF_COLOR | RVF_TEXCOORDS_1, &TEXTURE_HASH, 1, MATERIAL_FLAG_ALPHAMAP_OPACITY | MATERIAL_FLAG_CULL_NONE,
                                             RedColor::WHITE, RedColor::BLACK, 32.0f);
         }
     }
@@ -361,7 +361,7 @@ void FogCloudEffect::Render(unsigned int value) const
                                        m_pShader,
                                        gMatrixIdentity,
                                        RedColor::WHITE,
-                                       0x01000000, 0, 0, 0);
+                                       RENDERFLAG_RENDER_CACHED, 0, 0, 0);
         pPrimitive->Release();
     }
     pVertexBuffer->Release();
@@ -862,13 +862,13 @@ void PrecipitationEffect::PlatformInit()
     {
         if (RedRenderer::pcGetGeometryMode())
         {
-            m_pShader = pcRedShader::Create(0x89A3B5D3 /* "Rain" */, 0x1082,
-                                            0, 0, 0x10004, RedColor::WHITE, RedColor::BLACK, 32.0f);
+            m_pShader = pcRedShader::Create(0x89A3B5D3 /* "Rain" */, RVF_POSITION_XYZ | RVF_COLOR | RVF_COMPRESSED_POSITION,
+                                            0, 0, MATERIAL_FLAG_ALPHAMAP_OPACITY | MATERIAL_FLAG_CULL_NONE, RedColor::WHITE, RedColor::BLACK, 32.0f);
         }
         else
         {
-            m_pShader = pcRedShader::Create(0x89A3B5D3 /* "Rain" */, 0x82,
-                                            0, 0, 0x10004, RedColor::WHITE, RedColor::BLACK, 32.0f);
+            m_pShader = pcRedShader::Create(0x89A3B5D3 /* "Rain" */, RVF_POSITION_XYZ | RVF_COLOR,
+                                            0, 0, MATERIAL_FLAG_ALPHAMAP_OPACITY | MATERIAL_FLAG_CULL_NONE, RedColor::WHITE, RedColor::BLACK, 32.0f);
         }
         ((pcRainShader*)m_pShader)->SetLineWidth(PARTICLE_SIZE);
         ((pcRainShader*)m_pShader)->SetMaxPixelWidth(1.0f);
@@ -877,13 +877,13 @@ void PrecipitationEffect::PlatformInit()
     {
         if (RedRenderer::pcGetGeometryMode())
         {
-            m_pShader = pcRedShader::Create(0x8A8743BF /* "PARTICLE" */, 0x9282,
-                                            &TEXTURE_HASH, 1, 0x10004, RedColor::WHITE, RedColor::BLACK, 32.0f);
+            m_pShader = pcRedShader::Create(0x8A8743BF /* "PARTICLE" */, RVF_POSITION_XYZ | RVF_COLOR | RVF_TEXCOORDS_1 | RVF_COMPRESSED_POSITION | RVF_COMPRESSED_TEXCOORDS,
+                                            &TEXTURE_HASH, 1, MATERIAL_FLAG_ALPHAMAP_OPACITY | MATERIAL_FLAG_CULL_NONE, RedColor::WHITE, RedColor::BLACK, 32.0f);
         }
         else
         {
-            m_pShader = pcRedShader::Create(0x8A8743BF /* "PARTICLE" */, 0x282,
-                                            &TEXTURE_HASH, 1, 0x10004, RedColor::WHITE, RedColor::BLACK, 32.0f);
+            m_pShader = pcRedShader::Create(0x8A8743BF /* "PARTICLE" */, RVF_POSITION_XYZ | RVF_COLOR | RVF_TEXCOORDS_1,
+                                            &TEXTURE_HASH, 1, MATERIAL_FLAG_ALPHAMAP_OPACITY | MATERIAL_FLAG_CULL_NONE, RedColor::WHITE, RedColor::BLACK, 32.0f);
         }
     }
 }

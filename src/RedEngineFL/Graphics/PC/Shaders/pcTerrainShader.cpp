@@ -818,7 +818,7 @@ void pcTerrainShader::End_Prog1(unsigned int, unsigned int) const
 // FUNCTION: SWBF2 0x006facb0
 RenderPhaseT pcTerrainShader::GetRenderPhase(const RenderItem*, unsigned int) const
 {
-    if ((s_uiOptions & 0x20000) && (m_uiOptions & 0xd) == 1)
+    if ((s_uiOptions & TERRAIN_PIXELLIGHTING) && (m_uiOptions & (TERRAIN_DETAIL | TERRAIN_PREPIXELPASS | TERRAIN_FAR)) == TERRAIN_DETAIL)
     {
         return RENDERPHASE_POSTSHADOW;
     }
@@ -838,19 +838,19 @@ unsigned short pcTerrainShader::GetShaderChain(pcRedShader** const ppOut,
 // FUNCTION: SWBF2 0x006fad20
 unsigned int pcTerrainShader::GetState_Fixed(const RenderItem* pItem) const
 {
-    if (!RedRenderer::pcIsNearScene() || (pItem->flags & 0x20000))
+    if (!RedRenderer::pcIsNearScene() || (pItem->flags & RENDERFLAG_RENDER_TO_SKY))
     {
-        return m_uiOptions & 1;
+        return m_uiOptions & TERRAIN_DETAIL;
     }
-    if (m_uiOptions & 0x30)
+    if (m_uiOptions & TERRAIN_MULTILAYER_MASK)
     {
-        return ((m_uiOptions >> 4) & 3) + 5;
+        return ((m_uiOptions & TERRAIN_MULTILAYER_MASK) >> TERRAIN_MULTILAYER_SHIFT) + 5;
     }
-    if (m_uiOptions & 1)
+    if (m_uiOptions & TERRAIN_DETAIL)
     {
-        return (s_uiOptions & 0x10000) ? 5 : 3;
+        return (s_uiOptions & TERRAIN_SHADOWMAP) ? 5 : 3;
     }
-    return (s_uiOptions & 0x10000) ? 4 : 2;
+    return (s_uiOptions & TERRAIN_SHADOWMAP) ? 4 : 2;
 }
 
 // FUNCTION: SWBF2 0x006fad90
@@ -859,18 +859,18 @@ unsigned int pcTerrainShader::GetState_Prog1(const RenderItem* pItem) const
     const unsigned int uiEnvState = pItem->uiEnvState;
     if (!RedRenderer::pcIsNearScene())
     {
-        return m_uiOptions & 1;
+        return m_uiOptions & TERRAIN_DETAIL;
     }
 
-    if ((s_uiOptions & 0x20000) && (m_uiOptions & 1))
+    if ((s_uiOptions & TERRAIN_PIXELLIGHTING) && (m_uiOptions & TERRAIN_DETAIL))
     {
-        if (m_uiOptions & 4)
+        if (m_uiOptions & TERRAIN_PREPIXELPASS)
         {
-            if (s_uiOptions & 0x40000)
+            if (s_uiOptions & TERRAIN_DETAIL_BUMPLUMINOSITY)
             {
-                return (s_uiOptions & 0x10000) ? 15 : 12;
+                return (s_uiOptions & TERRAIN_SHADOWMAP) ? 15 : 12;
             }
-            return (s_uiOptions & 0x10000) ? 14 : 11;
+            return (s_uiOptions & TERRAIN_SHADOWMAP) ? 14 : 11;
         }
 
         unsigned int uiNumLights = uiEnvState & 3;
@@ -880,7 +880,7 @@ unsigned int pcTerrainShader::GetState_Prog1(const RenderItem* pItem) const
             {
                 uiNumLights = 4;
             }
-            if (s_uiOptions & 0x40000)
+            if (s_uiOptions & TERRAIN_DETAIL_BUMPLUMINOSITY)
             {
                 return (m_uiLayerIndex[2] >= 16) + 4 * uiNumLights + 16;
             }
@@ -889,11 +889,11 @@ unsigned int pcTerrainShader::GetState_Prog1(const RenderItem* pItem) const
         return (m_uiLayerIndex[2] >= 16) + 16;
     }
 
-    if (m_uiOptions & 1)
+    if (m_uiOptions & TERRAIN_DETAIL)
     {
-        return ((s_uiOptions & 0x10000) ? 4 : 0) + 4 + (m_uiLayerIndex[2] >= 16);
+        return ((s_uiOptions & TERRAIN_SHADOWMAP) ? 4 : 0) + 4 + (m_uiLayerIndex[2] >= 16);
     }
-    return ((s_uiOptions & 0x10000) ? 4 : 0) + 2 + (m_uiLayerIndex[2] >= 16);
+    return ((s_uiOptions & TERRAIN_SHADOWMAP) ? 4 : 0) + 2 + (m_uiLayerIndex[2] >= 16);
 }
 
 // FUNCTION: SWBF2 0x006faea0
@@ -952,7 +952,7 @@ void pcTerrainShader::Render_Fixed(const RenderItem* pItem, unsigned int uiPass)
         s_d3dMat.Emissive.b = 0.0f;
         s_d3dMat.Emissive.a = 0.0f;
         RedRenderer::pcGetDevice()->SetMaterial(&s_d3dMat);
-        RedRenderer::pcSetRenderState(D3DRS_ZWRITEENABLE, !((pItem->flags >> 5) & 1));
+        RedRenderer::pcSetRenderState(D3DRS_ZWRITEENABLE, !(pItem->flags & RENDERFLAG_NO_Z));
     }
     else if (uiState >= 6)
     {
@@ -970,7 +970,7 @@ void pcTerrainShader::Render_Fixed(const RenderItem* pItem, unsigned int uiPass)
     }
     else if (uiPass == 0)
     {
-        RedRenderer::pcSetRenderState(D3DRS_ZWRITEENABLE, !((pItem->flags >> 5) & 1));
+        RedRenderer::pcSetRenderState(D3DRS_ZWRITEENABLE, !(pItem->flags & RENDERFLAG_NO_Z));
         PblMatrix mCamera;
         mCamera = RedRenderer::GetCamera()->GetMatrix();
         mCamera.SetZAxis(-mCamera[2]);
@@ -1023,13 +1023,13 @@ void pcTerrainShader::Render_Prog1(const RenderItem* pItem, unsigned int uiPass)
 
     if (uiState <= 1)
     {
-        RedRenderer::pcSetRenderState(D3DRS_ZWRITEENABLE, (pItem->flags & 0x20) == 0);
+        RedRenderer::pcSetRenderState(D3DRS_ZWRITEENABLE, (pItem->flags & RENDERFLAG_NO_Z) == 0);
     }
     else if (uiState <= 9)
     {
         if (uiPass == 0)
         {
-            RedRenderer::pcSetRenderState(D3DRS_ZWRITEENABLE, (pItem->flags & 0x20) == 0);
+            RedRenderer::pcSetRenderState(D3DRS_ZWRITEENABLE, (pItem->flags & RENDERFLAG_NO_Z) == 0);
             unsigned int uiNumLayers;
             if (uiState & 1)
             {
@@ -1065,7 +1065,7 @@ void pcTerrainShader::Render_Prog1(const RenderItem* pItem, unsigned int uiPass)
     }
     else if (uiState <= 15)
     {
-        RedRenderer::pcSetRenderState(D3DRS_ZWRITEENABLE, (pItem->flags & 0x20) == 0);
+        RedRenderer::pcSetRenderState(D3DRS_ZWRITEENABLE, (pItem->flags & RENDERFLAG_NO_Z) == 0);
     }
     else if (uiState >= 18 && uiPass < GetShaderDef()->m_states[uiState].uiNumPasses - 1)
     {
@@ -1153,34 +1153,34 @@ void pcTerrainShader::_Init(unsigned int uiFlags,
                             float)
 {
     m_uiOptions = 0;
-    switch (uiFlags & 0xffff0fff)
+    switch (uiFlags & ~RVF_COMPRESSED_MASK)
     {
-    case 2:
+    case RVF_POSITION_XYZ:
         if (s_pFarVertexInputFormat == 0)
         {
-            s_pFarVertexInputFormat = pcRedVertexFormat::Create(uiFlags, 2);
+            s_pFarVertexInputFormat = pcRedVertexFormat::Create(uiFlags, RVF_POSITION_XYZ);
         }
         break;
-    case 0x82:
-        if (!(uiFlags & 0xf000))
+    case RVF_POSITION_XYZ | RVF_COLOR:
+        if (!(uiFlags & RVF_COMPRESSED_MASK))
         {
-            m_uiOptions = 0x10;
+            m_uiOptions = TERRAIN_MULTILAYER1;
             if (s_pFFLayerNVertexInputFormat == 0)
             {
-                s_pFFLayerNVertexInputFormat = pcRedVertexFormat::Create(0x82, 0x82);
+                s_pFFLayerNVertexInputFormat = pcRedVertexFormat::Create(RVF_POSITION_XYZ | RVF_COLOR, RVF_POSITION_XYZ | RVF_COLOR);
             }
         }
         break;
-    case 0x122:
+    case RVF_POSITION_XYZ | RVF_NORMAL | RVF_LIGHTING:
         if (s_pVertexInputFormat == 0)
         {
-            s_pVertexInputFormat = pcRedVertexFormat::Create(uiFlags, 0x122);
-            s_pPosVertexInputFormat = pcRedVertexFormat::Create(uiFlags, 2);
-            s_pPosNormalVertexInputFormat = pcRedVertexFormat::Create(uiFlags, 0x22);
+            s_pVertexInputFormat = pcRedVertexFormat::Create(uiFlags, RVF_POSITION_XYZ | RVF_NORMAL | RVF_LIGHTING);
+            s_pPosVertexInputFormat = pcRedVertexFormat::Create(uiFlags, RVF_POSITION_XYZ);
+            s_pPosNormalVertexInputFormat = pcRedVertexFormat::Create(uiFlags, RVF_POSITION_XYZ | RVF_NORMAL);
         }
-        if (!(uiFlags & 0xf000) && s_pFFLayer0VertexInputFormat == 0)
+        if (!(uiFlags & RVF_COMPRESSED_MASK) && s_pFFLayer0VertexInputFormat == 0)
         {
-            s_pFFLayer0VertexInputFormat = pcRedVertexFormat::Create(0x122, 0x102);
+            s_pFFLayer0VertexInputFormat = pcRedVertexFormat::Create(RVF_POSITION_XYZ | RVF_NORMAL | RVF_LIGHTING, RVF_POSITION_XYZ | RVF_LIGHTING);
         }
         break;
     }
@@ -1208,7 +1208,7 @@ void pcTerrainShader::_InitBumpLuminosityPixelLighting(unsigned int uiHash,
         s_pBumpLuminosityTexture = RedTexture::s_textureHashTable.Find(uiBumpLuminosityHash);
         s_BumpLuminosityTextureTransform[0] = vScale0;
         s_BumpLuminosityTextureTransform[1] = vScale1;
-        s_uiOptions |= 0x40000;
+        s_uiOptions |= TERRAIN_DETAIL_BUMPLUMINOSITY;
         s_fStaticBumpFactor = fStaticBumpFactor;
     }
 }
@@ -1283,7 +1283,7 @@ void pcTerrainShader::_InitPixelLighting(unsigned int uiLightVolumeHash,
     {
         s_pLightVolumeMap = RedTexture::s_textureHashTable.Find(uiLightVolumeHash);
         s_pNormalizationCubeMap = RedTexture::s_textureHashTable.Find(uiNormalizationCubeHash);
-        s_uiOptions &= ~0x40000;
+        s_uiOptions &= ~TERRAIN_DETAIL_BUMPLUMINOSITY;
     }
 }
 

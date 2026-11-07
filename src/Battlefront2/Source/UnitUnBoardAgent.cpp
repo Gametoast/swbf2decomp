@@ -8,10 +8,9 @@
 
 // GLOBAL: SWBF2 0x01f9a254
 // UnitUnBoardAgent::rttiHashUnitUnBoardAgent
-PblHash UnitUnBoardAgent::rttiHashUnitUnBoardAgent("UnitUnBoardAgent");
 // GLOBAL: SWBF2 0x0078b998
 // UnitUnBoardAgent::rttiNameUnitUnBoardAgent
-const char UnitUnBoardAgent::rttiNameUnitUnBoardAgent[] = "UnitUnBoardAgent";
+PBL_IMPLEMENT_RTTI(UnitUnBoardAgent)
 
 
 
@@ -29,8 +28,8 @@ bool UnitUnBoardAgent::ShouldQueueCurCmd(const UnitCmdInfo& cmd) const
 UnitUnBoardAgent::UnitUnBoardAgent(UnitController* pCtrl)
     : UnitAgent(pCtrl)
 {
-    mCurState = 1;
-    mNextState = 1;
+    mCurState = STATE_START;
+    mNextState = STATE_START;
 }
 
 // FUNCTION: SWBF2 0x0066b270
@@ -38,7 +37,7 @@ void UnitUnBoardAgent::EnterState()
 {
     switch (mCurState)
     {
-    case 1:
+    case STATE_START:
         GetLowLevel().SetExitVehicle(0);
         break;
     }
@@ -52,7 +51,7 @@ void UnitUnBoardAgent::ExitState()
 // FUNCTION: SWBF2 0x0066b2a0
 void UnitUnBoardAgent::UpdateStatePostVision(float dt)
 {
-    if (mCurState != 100)
+    if (mCurState != STATE_GLOBDONE)
     {
         mAttackHelper.Update();
     }

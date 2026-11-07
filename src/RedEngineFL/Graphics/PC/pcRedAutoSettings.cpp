@@ -1,6 +1,7 @@
 #pragma init_seg(lib)
 
 #include <windows.h>
+#include "PebbleFL/Common/PblBits.h"
 #include <mmsystem.h>
 
 #include <ctype.h>
@@ -942,7 +943,7 @@ void VidMode_Init(IDirect3D9* pD3D)
                     unsigned int uiShift = 31;
                     for (;;)
                     {
-                        uiTexWidth = 1u << uiShift;
+                        uiTexWidth = PowerOf2U(uiShift);
                         if (uiTexWidth <= mode.Width && uiTexWidth <= deviceCaps.MaxTextureWidth)
                         {
                             break;
@@ -953,7 +954,7 @@ void VidMode_Init(IDirect3D9* pD3D)
                     uiShift = 31;
                     for (;;)
                     {
-                        uiTexHeight = 1u << uiShift;
+                        uiTexHeight = PowerOf2U(uiShift);
                         if (uiTexHeight <= mode.Height && uiTexHeight <= deviceCaps.MaxTextureHeight)
                         {
                             break;

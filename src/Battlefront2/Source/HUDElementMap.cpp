@@ -1434,7 +1434,7 @@ void HUD::ElementMap::UpdatePostIcons(float fElapsed, float fRotation)
 // FUNCTION: SWBF2 0x00554330
 void HUD::ElementMap::UpdateMarkerIcons()
 {
-    const unsigned int uTeamMask = 1 << (mPlayerCharacter ? mPlayerCharacter->mTeamNumber : 0);
+    const unsigned int uTeamMask = BitU(mPlayerCharacter ? mPlayerCharacter->mTeamNumber : 0);
     const Team* pTeam = GetPlayerTeam();
 
     for (unsigned int i = 0; i < TargetManager::MAX_MARKERS; ++i)

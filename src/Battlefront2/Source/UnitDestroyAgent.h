@@ -1,6 +1,7 @@
 #pragma once
 
 #include "PebbleFL/Common/PblHashTable.h"
+#include "PebbleFL/Common/PblRtti.h"
 
 #include <stddef.h>
 
@@ -12,9 +13,13 @@ class UnitDestroyAgent : public UnitAgent
 {
 public:
     UnitDestroyAgent(UnitController* pCtrl, const AI::GoalTarget& target);
-    virtual bool IsRtti(unsigned int uRtti) const;
-    virtual unsigned int GetDerivedRtti() const;
-    virtual const char* GetDerivedRttiName() const;
+    // FUNCTION: SWBF2 0x00666000
+    // UnitDestroyAgent::IsRtti
+    // FUNCTION: SWBF2 0x00666030
+    // UnitDestroyAgent::GetDerivedRtti
+    // FUNCTION: SWBF2 0x00666040
+    // UnitDestroyAgent::GetDerivedRttiName
+    PBL_DECLARE_DERIVED_RTTI(UnitDestroyAgent, UnitAgent)
     virtual const char* NFINAL_GetStateString(int iState) const;
     virtual int EventHandler(AI::EventInfo* pInfo);
 
@@ -38,32 +43,9 @@ public:
     AI::GoalTarget mTarget;
     PblVector3 mLastSeekPos;
 
-    static PblHash rttiHashUnitDestroyAgent;
-    static const char rttiNameUnitDestroyAgent[];
 };
 
  
  
  
 
-// FUNCTION: SWBF2 0x00666000
-inline bool UnitDestroyAgent::IsRtti(unsigned int uRtti) const
-{
-    if (rttiHashUnitDestroyAgent == uRtti)
-    {
-        return true;
-    }
-    return UnitAgent::IsRtti(uRtti);
-}
-
-// FUNCTION: SWBF2 0x00666030
-inline unsigned int UnitDestroyAgent::GetDerivedRtti() const
-{
-    return rttiHashUnitDestroyAgent;
-}
-
-// FUNCTION: SWBF2 0x00666040
-inline const char* UnitDestroyAgent::GetDerivedRttiName() const
-{
-    return rttiNameUnitDestroyAgent;
-}

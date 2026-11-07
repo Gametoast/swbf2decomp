@@ -109,7 +109,7 @@ unsigned int pcLightBeamShader::GetState_Prog1(const RenderItem*) const
 // FUNCTION: SWBF2 0x00704920
 void pcLightBeamShader::Render_Fixed(const RenderItem* pItem, unsigned int) const
 {
-    if (m_uiMaterialFlags & 0x40)
+    if (m_uiMaterialFlags & MATERIAL_FLAG_ALPHABLEND_ADDITIVE)
     {
         RedRenderer::pcSetRenderState(D3DRS_DESTBLEND, D3DBLEND_ONE);
         RedRenderer::pcSetFogForBlendMode(RedRenderer::FOGFORBLEND_ADD);
@@ -128,7 +128,7 @@ void pcLightBeamShader::Render_Fixed(const RenderItem* pItem, unsigned int) cons
 // FUNCTION: SWBF2 0x00704990
 void pcLightBeamShader::Render_Prog1(const RenderItem* pItem, unsigned int) const
 {
-    if (m_uiMaterialFlags & 0x40)
+    if (m_uiMaterialFlags & MATERIAL_FLAG_ALPHABLEND_ADDITIVE)
     {
         RedRenderer::pcSetRenderState(D3DRS_DESTBLEND, D3DBLEND_ONE);
         RedRenderer::pcSetFogForBlendMode(RedRenderer::FOGFORBLEND_ADD);
@@ -167,7 +167,7 @@ void pcLightBeamShader::_Init(unsigned int uiFlags,
                               const RedColor&,
                               float)
 {
-    m_pVertexFormat = pcRedVertexFormat::Create(uiFlags, (uiFlags & 0x180) | 2);
+    m_pVertexFormat = pcRedVertexFormat::Create(uiFlags, (uiFlags & (RVF_COLOR | RVF_LIGHTING)) | RVF_POSITION_XYZ);
     m_uiMaterialFlags = uiMaterialFlags;
 }
 

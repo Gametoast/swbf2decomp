@@ -27,6 +27,7 @@
 
 
 
+
 static const float ANIM_FRAME_SPEED = 1.0f / 30.0f;
 
 // GLOBAL: SWBF2 0x01eafb1c
@@ -455,16 +456,15 @@ void SoldierAnimatorClass::SetupBodyMasks(const ZephyrSkeletonShared* pSkel, Pbl
     int iForearmJoint = (int)kJoints.Find(0xb70e2184 /* "bone_r_forarm3" */) - 1;
     upperBodyMask.SetAll();
     lowerBodyMask.ClearAll();
-    upperBodyMask.m_auiData[0] &= ~1u;
+    upperBodyMask.ClearBit(0);
 
     if (iForearmJoint >= 0)
     {
         for (int i = 0; i < (int)(sizeof(s_auiLowerBodyJoints_b70e2184) / sizeof(unsigned int)); ++i)
         {
             int iJoint = (int)kJoints.Find(s_auiLowerBodyJoints_b70e2184[i]) - 1;
-            unsigned int uiBit = 1 << iJoint;
-            upperBodyMask.m_auiData[0] &= ~uiBit;
-            lowerBodyMask.m_auiData[0] |= uiBit;
+            upperBodyMask.ClearBit(iJoint);
+            lowerBodyMask.SetBit(iJoint);
         }
     }
     else
@@ -472,9 +472,8 @@ void SoldierAnimatorClass::SetupBodyMasks(const ZephyrSkeletonShared* pSkel, Pbl
         for (int i = 0; i < (int)(sizeof(s_auiLowerBodyJoints) / sizeof(unsigned int)); ++i)
         {
             int iJoint = (int)kJoints.Find(s_auiLowerBodyJoints[i]) - 1;
-            unsigned int uiBit = 1 << iJoint;
-            upperBodyMask.m_auiData[0] &= ~uiBit;
-            lowerBodyMask.m_auiData[0] |= uiBit;
+            upperBodyMask.ClearBit(iJoint);
+            lowerBodyMask.SetBit(iJoint);
         }
     }
 }

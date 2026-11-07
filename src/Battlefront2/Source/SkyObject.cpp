@@ -162,7 +162,7 @@ bool SkyObjectManager::SkyObjectClass::Update(float fDeltaTime)
 // FUNCTION: SWBF2 0x00639220
 void SkyObjectManager::SkyObjectClass::Render(unsigned int uiFlags) const
 {
-    uiFlags |= 0x200;
+    uiFlags |= PC_RENDERFLAG_IMMEDIATE;
     RedRenderer::pcFlush(0);
     bool bFogEnable = RedRenderer::GetFogEnable();
     RedRenderer::SetFogEnable(false);
@@ -176,7 +176,7 @@ void SkyObjectManager::SkyObjectClass::Render(unsigned int uiFlags) const
         color.a = (unsigned char)(int)((float)fabs((double)obj.mAlpha) * 255.0f);
         if (mModel)
         {
-            mModel->Render(&obj.mMatrix, 0, color, uiFlags | 0x20001, 0);
+            mModel->Render(&obj.mMatrix, 0, color, uiFlags | RENDERFLAG_CLIPPED | RENDERFLAG_RENDER_TO_SKY, 0);
         }
     }
     RedRenderer::pcFlush(0);

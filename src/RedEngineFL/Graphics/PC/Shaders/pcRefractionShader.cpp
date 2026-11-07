@@ -33,6 +33,15 @@ static unsigned int PIPELINE1_STATE_MAP[16];
 // GLOBAL: SWBF2 0x009ca5b0
 static unsigned int PIPELINE1_INV_STATE_MAP[16];
 
+// The features GetState_Prog1 combines (this shader's own PIPELINE1 maps, as in pcNormalShader)
+enum
+{
+    REFRACTION_NEAR = 0x1,
+    REFRACTION_DISTORTION = 0x2,   // the distortion render option
+    REFRACTION_DIFFUSE = 0x4,      // the material has a diffuse map
+    REFRACTION_BUMP = 0x8          // projected bump
+};
+
 // SYNTHETIC: SWBF2 0x0040a390
 // `dynamic initializer for 's_bumpMat''
 
@@ -271,7 +280,7 @@ void pcRefractionShader::Begin_Prog1(unsigned int uiState, unsigned int) const
     RedRenderer::pcSetSamplerState(2, D3DSAMP_MINFILTER, D3DTEXF_LINEAR);
     RedRenderer::pcSetSamplerState(2, D3DSAMP_MIPFILTER, D3DTEXF_LINEAR);
 
-    if (uiFlags & 8)
+    if (uiFlags & REFRACTION_BUMP)
     {
         const PblVector3 vZ = RedRenderer::GetCamera()->GetMatrix().GetZAxis();
 
@@ -294,7 +303,7 @@ void pcRefractionShader::Begin_Prog1(unsigned int uiState, unsigned int) const
         RedRenderer::pcSetTextureStageState(1, D3DTSS_BUMPENVMAT11, FloatBits_(s_bumpMat.m[1][1]));
     }
 
-    if (uiFlags & 2)
+    if (uiFlags & REFRACTION_DISTORTION)
     {
         // GLOBAL: SWBF2 0x009ca5f0
         // rescaleMat
@@ -317,7 +326,7 @@ RedShadingState* pcRefractionShader::CreateShadingState() const
 {
     RedShadingState* pState = new RedShadingState(GetRenderTypeHash());
     pState->AddColorParam(0xbc6f8a5e /* "refraction_color" */) = m_colorRefraction;
-    pState->AddIntParam(0x7802a19a /* "REFRACTIVE" */) = m_material.materialFlags & 0x44;
+    pState->AddIntParam(0x7802a19a /* "REFRACTIVE" */) = m_material.materialFlags & (MATERIAL_FLAG_ALPHAMAP_OPACITY | MATERIAL_FLAG_ALPHABLEND_ADDITIVE);
     pState->AddIntParam(0x891891e9 /* "diffuse_texture" */) = m_material.diffuseMapHash;
     RedTextureTransform& transform = pState->AddTextureTransformParam(0x3f0d728a);
     transform.m_bTransform = m_material.diffuseTexTransform.m_bTransform;
@@ -353,13 +362,13 @@ unsigned short pcRefractionShader::GetShaderChain(pcRedShader** const ppOut,
                                                   unsigned short,
                                                   const RenderItem* pItem)
 {
-    bool bRefract = (m_material.materialFlags & 0x44) != 0;
+    bool bRefract = (m_material.materialFlags & (MATERIAL_FLAG_ALPHAMAP_OPACITY | MATERIAL_FLAG_ALPHABLEND_ADDITIVE)) != 0;
     if (pItem->pShadingState)
     {
         bRefract = pItem->pShadingState->GetIntParam(0x7802a19a /* "REFRACTIVE" */) != 0;
     }
 
-    if (bRefract && !(pItem->flags & 0x10220000))
+    if (bRefract && !(pItem->flags & (RENDERFLAG_RENDER_TO_SKY | RENDERFLAG_RENDER_REFLECTION | RENDERFLAG_PSEUDO_REFLECTED)))
     {
         *ppOut = this;
         return 1;
@@ -394,10 +403,10 @@ unsigned int pcRefractionShader::GetState_Prog1(const RenderItem*) const
         return 1;
     }
 
-    unsigned int uiState = (s_projectedBump && s_bumpEnable && m_material.bumpMapHash) ? 11 : 3;
+    unsigned int uiState = (s_projectedBump && s_bumpEnable && m_material.bumpMapHash) ? (REFRACTION_NEAR | REFRACTION_DISTORTION | REFRACTION_BUMP) : (REFRACTION_NEAR | REFRACTION_DISTORTION);
     if (m_material.diffuseMapHash)
     {
-        uiState |= 4;
+        uiState |= REFRACTION_DIFFUSE;
     }
     return PIPELINE1_STATE_MAP[uiState];
 }
@@ -405,7 +414,7 @@ unsigned int pcRefractionShader::GetState_Prog1(const RenderItem*) const
 // FUNCTION: SWBF2 0x0070da20
 unsigned int pcRefractionShader::GetZPrepassState() const
 {
-    return ((unsigned char)m_material.materialFlags >> 1) & 1;
+    return ((unsigned char)m_material.materialFlags & MATERIAL_FLAG_ALPHAMAP_MASK) != 0;
 }
 
 // FUNCTION: SWBF2 0x0070da30
@@ -434,16 +443,16 @@ void pcRefractionShader::RenderZPrepass(const RenderItem* pItem) const
 {
     const RedMaterial* pMaterial = pItem->pRootShader->m_material;
     const unsigned int uiMatFlags = pMaterial->materialFlags;
-    RedRenderer::pcSetCullMode((uiMatFlags & 0x10000) ? PCREDCULL_NONE : PCREDCULL_BACK);
+    RedRenderer::pcSetCullMode((uiMatFlags & MATERIAL_FLAG_CULL_NONE) ? PCREDCULL_NONE : PCREDCULL_BACK);
 
-    const unsigned int uiAlphaTest = (uiMatFlags >> 1) & 1;
+    const unsigned int uiAlphaTest = (uiMatFlags & MATERIAL_FLAG_ALPHAMAP_MASK) != 0;
     switch (uiAlphaTest)
     {
     case 1:
     {
         RedColor color = pItem->tweakColor * pMaterial->diffuseColor;
 
-        RedRenderer::pcSetCullMode((pMaterial->materialFlags & 0x10000) ? PCREDCULL_NONE : PCREDCULL_BACK);
+        RedRenderer::pcSetCullMode((pMaterial->materialFlags & MATERIAL_FLAG_CULL_NONE) ? PCREDCULL_NONE : PCREDCULL_BACK);
 
         unsigned int uiDiffuseMap;
         const RedTextureTransform* pTransform = 0;
@@ -506,14 +515,14 @@ void pcRefractionShader::Render_Fixed(const RenderItem* pItem, unsigned int uiPa
     RedRenderer::pcGetDevice()->SetMaterial(&s_d3dMat);
 
     const unsigned int uiRVF = pItem->pPrim->m_vertexFormat->m_uiVertexBufferRVF;
-    if (uiRVF & 0x100)
+    if (uiRVF & RVF_LIGHTING)
     {
         RedRenderer::pcSetRenderState(D3DRS_COLORVERTEX, TRUE);
         RedRenderer::pcSetRenderState(D3DRS_EMISSIVEMATERIALSOURCE, D3DMCS_COLOR1);
         RedRenderer::pcSetRenderState(D3DRS_DIFFUSEMATERIALSOURCE, D3DMCS_MATERIAL);
         RedRenderer::pcSetRenderState(D3DRS_AMBIENTMATERIALSOURCE, D3DMCS_MATERIAL);
     }
-    else if (uiRVF & 0x80)
+    else if (uiRVF & RVF_COLOR)
     {
         RedRenderer::pcSetRenderState(D3DRS_COLORVERTEX, TRUE);
         RedRenderer::pcSetRenderState(D3DRS_EMISSIVEMATERIALSOURCE, D3DMCS_MATERIAL);
@@ -525,7 +534,7 @@ void pcRefractionShader::Render_Fixed(const RenderItem* pItem, unsigned int uiPa
         RedRenderer::pcSetRenderState(D3DRS_COLORVERTEX, FALSE);
     }
 
-    RedRenderer::pcSetCullMode((m_material.materialFlags & 0x10000) ? PCREDCULL_NONE : PCREDCULL_BACK);
+    RedRenderer::pcSetCullMode((m_material.materialFlags & MATERIAL_FLAG_CULL_NONE) ? PCREDCULL_NONE : PCREDCULL_BACK);
 
     const RedTextureTransform& diffuse = m_material.diffuseTexTransform;
     const D3DXMATRIXA16 mDiffuseTransform(diffuse(0, 0), diffuse(0, 1), 0.0f, 0.0f,
@@ -586,10 +595,10 @@ void pcRefractionShader::Render_Prog1(const RenderItem* pItem, unsigned int) con
     }
     const float fAlpha = refraction.a * (1.0f / 255.0f);
 
-    RedRenderer::pcSetCullMode((m_material.materialFlags & 0x10000) ? PCREDCULL_NONE
+    RedRenderer::pcSetCullMode((m_material.materialFlags & MATERIAL_FLAG_CULL_NONE) ? PCREDCULL_NONE
                                                                      : PCREDCULL_BACK);
 
-    if (!(uiFlags & 2))
+    if (!(uiFlags & REFRACTION_DISTORTION))
     {
         const unsigned char ucAlpha = (unsigned char)(int)(color.a * fAlpha);
         RedRenderer::pcSetRenderState(D3DRS_ALPHABLENDENABLE, ucAlpha < 0xff);
@@ -629,7 +638,7 @@ void pcRefractionShader::Render_Prog1(const RenderItem* pItem, unsigned int) con
             RedRenderer::pcSetRenderState(D3DRS_ALPHABLENDENABLE, FALSE);
         }
 
-        if (uiFlags & 8)
+        if (uiFlags & REFRACTION_BUMP)
         {
             RedRenderer::pcSetTexture(0, RedTexture::Find(m_material.bumpMapHash));
         }
@@ -647,7 +656,7 @@ void pcRefractionShader::Render_Prog1(const RenderItem* pItem, unsigned int) con
             RedRenderer::pcSetTexture(1, RedRenderer::pcGetBuffer(PC_BUFFER_REFRACTION));
         }
 
-        if (uiFlags & 4)
+        if (uiFlags & REFRACTION_DIFFUSE)
         {
             RedRenderer::pcSetTexture(2, RedTexture::Find(m_material.diffuseMapHash));
         }
@@ -747,18 +756,18 @@ void pcRefractionShader::_Init(unsigned int uiFlags,
                                const RedColor& color1,
                                float fSpecularPower)
 {
-    unsigned int uiState = 2;
-    if (uiFlags & 0x20)
+    unsigned int uiState = RVF_POSITION_XYZ;
+    if (uiFlags & RVF_NORMAL)
     {
-        uiState = 0x22;
+        uiState = RVF_POSITION_XYZ | RVF_NORMAL;
     }
-    if (uiFlags & 0x1c)
+    if (uiFlags & RVF_WEIGHTS_MASK)
     {
-        uiState |= (uiFlags & 0x1c);
+        uiState |= (uiFlags & RVF_WEIGHTS_MASK);
     }
-    if (uiFlags & 0x200)
+    if (uiFlags & RVF_TEXCOORDS_1)
     {
-        uiState |= 0x200;
+        uiState |= RVF_TEXCOORDS_1;
     }
 
     memset(&m_material, 0, sizeof(m_material));
@@ -798,29 +807,29 @@ void pcRefractionShader::_Init(unsigned int uiFlags,
         m_material.envMapHash = pParams[3];
     }
 
-    if (uiFlags & 0x100)
+    if (uiFlags & RVF_LIGHTING)
     {
-        uiState |= 0x100;
+        uiState |= RVF_LIGHTING;
     }
-    else if (uiFlags & 0x80)
+    else if (uiFlags & RVF_COLOR)
     {
-        uiState |= 0x80;
+        uiState |= RVF_COLOR;
     }
 
     if (uiFlags != 0)
     {
         m_pVertexInputFormat = pcRedVertexFormat::Create(uiFlags, uiState);
-        if (m_material.materialFlags & 0x44)
+        if (m_material.materialFlags & (MATERIAL_FLAG_ALPHAMAP_OPACITY | MATERIAL_FLAG_ALPHABLEND_ADDITIVE))
         {
             m_pZPrepassVertexInputFormat = 0;
         }
-        else if (m_material.materialFlags & 2)
+        else if (m_material.materialFlags & MATERIAL_FLAG_ALPHAMAP_MASK)
         {
-            m_pZPrepassVertexInputFormat = pcRedVertexFormat::Create(uiFlags, uiState & 0x39e);
+            m_pZPrepassVertexInputFormat = pcRedVertexFormat::Create(uiFlags, uiState & (RVF_POSITION_XYZ | RVF_WEIGHTS_MASK | RVF_COLOR | RVF_LIGHTING | RVF_TEXCOORDS_1));
         }
         else
         {
-            m_pZPrepassVertexInputFormat = pcRedVertexFormat::Create(uiFlags, uiState & 0x1e);
+            m_pZPrepassVertexInputFormat = pcRedVertexFormat::Create(uiFlags, uiState & (RVF_POSITION_XYZ | RVF_WEIGHTS_MASK));
         }
     }
     else
@@ -896,19 +905,19 @@ void pcRefractionShader::_StaticInit() const
 
     memset(PIPELINE1_STATE_MAP, 0, sizeof(PIPELINE1_STATE_MAP));
     PIPELINE1_STATE_MAP[0] = 0;
-    PIPELINE1_STATE_MAP[1] = 1;
-    PIPELINE1_STATE_MAP[3] = 2;
-    PIPELINE1_STATE_MAP[11] = 3;
-    PIPELINE1_STATE_MAP[7] = 4;
-    PIPELINE1_STATE_MAP[15] = 5;
+    PIPELINE1_STATE_MAP[REFRACTION_NEAR] = 1;
+    PIPELINE1_STATE_MAP[REFRACTION_NEAR | REFRACTION_DISTORTION] = 2;
+    PIPELINE1_STATE_MAP[REFRACTION_NEAR | REFRACTION_DISTORTION | REFRACTION_BUMP] = 3;
+    PIPELINE1_STATE_MAP[REFRACTION_NEAR | REFRACTION_DISTORTION | REFRACTION_DIFFUSE] = 4;
+    PIPELINE1_STATE_MAP[REFRACTION_NEAR | REFRACTION_DISTORTION | REFRACTION_DIFFUSE | REFRACTION_BUMP] = 5;
 
     memset(PIPELINE1_INV_STATE_MAP, 0, sizeof(PIPELINE1_INV_STATE_MAP));
     PIPELINE1_INV_STATE_MAP[0] = 0;
-    PIPELINE1_INV_STATE_MAP[1] = 1;
-    PIPELINE1_INV_STATE_MAP[2] = 3;
-    PIPELINE1_INV_STATE_MAP[3] = 11;
-    PIPELINE1_INV_STATE_MAP[4] = 7;
-    PIPELINE1_INV_STATE_MAP[5] = 15;
+    PIPELINE1_INV_STATE_MAP[1] = REFRACTION_NEAR;
+    PIPELINE1_INV_STATE_MAP[2] = REFRACTION_NEAR | REFRACTION_DISTORTION;
+    PIPELINE1_INV_STATE_MAP[3] = REFRACTION_NEAR | REFRACTION_DISTORTION | REFRACTION_BUMP;
+    PIPELINE1_INV_STATE_MAP[4] = REFRACTION_NEAR | REFRACTION_DISTORTION | REFRACTION_DIFFUSE;
+    PIPELINE1_INV_STATE_MAP[5] = REFRACTION_NEAR | REFRACTION_DISTORTION | REFRACTION_DIFFUSE | REFRACTION_BUMP;
 
     s_projectedBump =
         (RedRenderer::pcGetDeviceCaps().TextureCaps & D3DPTEXTURECAPS_NOPROJECTEDBUMPENV) == 0;

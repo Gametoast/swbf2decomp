@@ -103,7 +103,7 @@ void DefendHelper::EnterState()
         {
             if (mTarget.mType == AI::GTT_GAMEOBJECT)
             {
-                SetNextState(100);
+                SetNextState(STATE_GLOBDONE);
             }
             else if (mTarget.mType == AI::GTT_CHARACTER)
             {
@@ -111,7 +111,7 @@ void DefendHelper::EnterState()
             }
             else
             {
-                SetNextState(100);
+                SetNextState(STATE_GLOBDONE);
             }
             return;
         }
@@ -348,7 +348,7 @@ bool DefendHelper::CheckExitFortification(const PblVector3& vPos)
 // FUNCTION: SWBF2 0x0048c1b0
 void DefendHelper::UpdateState(float dt)
 {
-    if (mCurState == 100)
+    if (mCurState == STATE_GLOBDONE)
     {
         return;
     }
@@ -362,7 +362,7 @@ void DefendHelper::UpdateState(float dt)
         }
         else
         {
-            SetNextState(100);
+            SetNextState(STATE_GLOBDONE);
         }
         return;
     }

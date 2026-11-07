@@ -1,6 +1,7 @@
 #pragma once
 
 #include "PebbleFL/Common/PblHashTable.h"
+#include "PebbleFL/Common/PblRtti.h"
 
 #include <stddef.h>
 
@@ -17,18 +18,18 @@ public:
 
     virtual OrdnanceClass* Derive(unsigned int uHash);
     virtual Ordnance* Build(const OrdnanceDesc& desc);
-    virtual bool IsRtti(unsigned int uRtti) const;
-    virtual unsigned int GetDerivedRtti() const;
-    virtual const char* GetDerivedRttiName() const;
+    // FUNCTION: SWBF2 0x005ff110
+    // OrdnanceGrapplingHookClass::IsRtti
+    // FUNCTION: SWBF2 0x005ff140
+    // OrdnanceGrapplingHookClass::GetDerivedRtti
+    // FUNCTION: SWBF2 0x005ff150
+    // OrdnanceGrapplingHookClass::GetDerivedRttiName
+    PBL_DECLARE_DERIVED_RTTI(OrdnanceGrapplingHookClass, OrdnanceBulletClass)
     virtual void SetProperty(unsigned int uProperty, const char* pszValue);
 
     SoldierAnimationBank::ANIMATION mAttachSoldierAnimation;
 
-    static PblHash rttiHashOrdnanceGrapplingHookClass;
-    static const char rttiNameOrdnanceGrapplingHookClass[];
 };
-  
- 
 
 class EntitySoldier;
 class WeaponGrapplingHook;
@@ -51,9 +52,13 @@ public:
     OrdnanceGrapplingHook(OrdnanceGrapplingHookClass* pClass, const OrdnanceDesc& desc);
     virtual ~OrdnanceGrapplingHook();
 
-    virtual bool IsRtti(unsigned int uRtti) const;
-    virtual unsigned int GetDerivedRtti() const;
-    virtual const char* GetDerivedRttiName() const;
+    // FUNCTION: SWBF2 0x005ff090
+    // OrdnanceGrapplingHook::IsRtti
+    // FUNCTION: SWBF2 0x005ff0c0
+    // OrdnanceGrapplingHook::GetDerivedRtti
+    // FUNCTION: SWBF2 0x005ff0d0
+    // OrdnanceGrapplingHook::GetDerivedRttiName
+    PBL_DECLARE_DERIVED_RTTI(OrdnanceGrapplingHook, OrdnanceBullet)
     virtual bool Collide(CollisionObject* pObject, const PblVector3& vPos,
                          const PblVector3& vNormal, int iBodyId);
     virtual void Render(unsigned char ucViewport, float fDist, unsigned int uiFlags);
@@ -76,9 +81,6 @@ public:
     float mWaitTime;
     float mDeltaTime;
 
-    static PblHash rttiHashOrdnanceGrapplingHook;
-    static const char rttiNameOrdnanceGrapplingHook[];
-
     static void PlatformInit();
 
     static void PlatformCleanup();
@@ -86,52 +88,4 @@ public:
 
     static unsigned int sTextureHash;
 };
- 
- 
- 
- 
- 
 
-// FUNCTION: SWBF2 0x005ff090
-inline bool OrdnanceGrapplingHook::IsRtti(unsigned int uRtti) const
-{
-    if (rttiHashOrdnanceGrapplingHook == uRtti)
-    {
-        return true;
-    }
-    return OrdnanceBullet::IsRtti(uRtti);
-}
-
-// FUNCTION: SWBF2 0x005ff0c0
-inline unsigned int OrdnanceGrapplingHook::GetDerivedRtti() const
-{
-    return rttiHashOrdnanceGrapplingHook;
-}
-
-// FUNCTION: SWBF2 0x005ff0d0
-inline const char* OrdnanceGrapplingHook::GetDerivedRttiName() const
-{
-    return rttiNameOrdnanceGrapplingHook;
-}
-
-// FUNCTION: SWBF2 0x005ff110
-inline bool OrdnanceGrapplingHookClass::IsRtti(unsigned int uRtti) const
-{
-    if (rttiHashOrdnanceGrapplingHookClass == uRtti)
-    {
-        return true;
-    }
-    return OrdnanceBulletClass::IsRtti(uRtti);
-}
-
-// FUNCTION: SWBF2 0x005ff140
-inline unsigned int OrdnanceGrapplingHookClass::GetDerivedRtti() const
-{
-    return rttiHashOrdnanceGrapplingHookClass;
-}
-
-// FUNCTION: SWBF2 0x005ff150
-inline const char* OrdnanceGrapplingHookClass::GetDerivedRttiName() const
-{
-    return rttiNameOrdnanceGrapplingHookClass;
-}

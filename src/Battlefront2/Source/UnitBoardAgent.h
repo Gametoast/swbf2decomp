@@ -1,6 +1,7 @@
 #pragma once
 
 #include "PebbleFL/Common/PblHashTable.h"
+#include "PebbleFL/Common/PblRtti.h"
 
 #include <stddef.h>
 
@@ -14,11 +15,25 @@ class GameObject;
 class UnitBoardAgent : public UnitAgent
 {
 public:
+
+    // the modtools build's state names: START Goto Board
+    enum State
+    {
+        STATE_START = 1,
+        STATE_Goto = 2,
+        STATE_Board = 3,
+        STATE_FINAL = 4
+    };
+
     UnitBoardAgent(UnitController* pCtrl, GameObject* pVehicle, int iVOResponseHandle);
 
-    virtual bool IsRtti(unsigned int uRtti) const;
-    virtual unsigned int GetDerivedRtti() const;
-    virtual const char* GetDerivedRttiName() const;
+    // FUNCTION: SWBF2 0x00661f80
+    // UnitBoardAgent::IsRtti
+    // FUNCTION: SWBF2 0x00661fb0
+    // UnitBoardAgent::GetDerivedRtti
+    // FUNCTION: SWBF2 0x00661fc0
+    // UnitBoardAgent::GetDerivedRttiName
+    PBL_DECLARE_DERIVED_RTTI(UnitBoardAgent, UnitAgent)
     virtual bool ShouldQueueCurCmd(const UnitCmdInfo& cmd) const;
     virtual const char* NFINAL_GetStateString(int iState) const;
     virtual int EventHandler(AI::EventInfo* pInfo);
@@ -33,32 +48,9 @@ public:
     int mVOResponseHandle;
     float mStateEnterTime;
 
-    static PblHash rttiHashUnitBoardAgent;
-    static const char rttiNameUnitBoardAgent[];
 };
  
  
  
  
 
-// FUNCTION: SWBF2 0x00661f80
-inline bool UnitBoardAgent::IsRtti(unsigned int uRtti) const
-{
-    if (rttiHashUnitBoardAgent == uRtti)
-    {
-        return true;
-    }
-    return UnitAgent::IsRtti(uRtti);
-}
-
-// FUNCTION: SWBF2 0x00661fb0
-inline unsigned int UnitBoardAgent::GetDerivedRtti() const
-{
-    return rttiHashUnitBoardAgent;
-}
-
-// FUNCTION: SWBF2 0x00661fc0
-inline const char* UnitBoardAgent::GetDerivedRttiName() const
-{
-    return rttiNameUnitBoardAgent;
-}

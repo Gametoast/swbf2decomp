@@ -63,30 +63,30 @@ public:
     {
         if (bLast)
         {
-            mFlags |= 1;
+            mFlags |= flags_lastPacket;
         }
         else
         {
-            mFlags &= 0xFFFE;
+            mFlags &= ~flags_lastPacket;
         }
     }
 
-    bool GetLast() const { return (mFlags & 1) != 0; }
+    bool GetLast() const { return (mFlags & flags_lastPacket) != 0; }
 
     // FUNCTION: SWBF2 0x0073caf0
     void SetDiscontinuity(bool bDiscontinuity)
     {
         if (bDiscontinuity)
         {
-            mFlags |= 2;
+            mFlags |= flags_discontinuity;
         }
         else
         {
-            mFlags &= 0xFFFD;
+            mFlags &= ~flags_discontinuity;
         }
     }
 
-    bool GetDiscontinuity() const { return ((mFlags >> 1) & 1) != 0; }
+    bool GetDiscontinuity() const { return (mFlags & flags_discontinuity) != 0; }
 
     void SetCallback(CompleteCallback pCallback, void* pCallbackData)
     {

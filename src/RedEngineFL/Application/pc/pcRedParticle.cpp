@@ -665,21 +665,21 @@ void RedParticleRenderer::RenderAll()
         pcParticleShader* pShader;
         if (cache.m_blendMode == BLEND_BLUR)
         {
-            pShader = (pcParticleShader*)pcRedShader::Create(kuiParticleShader, 0x2a2, &cache.m_texHash, 1, 4,
+            pShader = (pcParticleShader*)pcRedShader::Create(kuiParticleShader, RVF_POSITION_XYZ | RVF_NORMAL | RVF_COLOR | RVF_TEXCOORDS_1, &cache.m_texHash, 1, MATERIAL_FLAG_ALPHAMAP_OPACITY,
                                                              RedColor::WHITE, RedColor::BLACK, 32.0f);
             pShader->m_blurEnable = true;
             pShader->m_blurBuffer = RedRenderer::pcGetBuffer(PC_BUFFER_REFRACTION);
         }
         else
         {
-            pShader = (pcParticleShader*)pcRedShader::Create(kuiParticleShader, 0x282, &cache.m_texHash, 1,
-                                                             cache.m_blendMode == BLEND_NORMAL ? 4 : 0x44,
+            pShader = (pcParticleShader*)pcRedShader::Create(kuiParticleShader, RVF_POSITION_XYZ | RVF_COLOR | RVF_TEXCOORDS_1, &cache.m_texHash, 1,
+                                                             cache.m_blendMode == BLEND_NORMAL ? MATERIAL_FLAG_ALPHAMAP_OPACITY : MATERIAL_FLAG_ALPHAMAP_OPACITY | MATERIAL_FLAG_ALPHABLEND_ADDITIVE,
                                                              RedColor::WHITE, RedColor::BLACK, 32.0f);
         }
 
         RedRenderer::pcRenderPrimitive(pPrimitive, pShader,
                                        gMatrixIdentity, RedColor::WHITE,
-                                       cache.m_uiRenderFlags | 0x10, 0, 0, 0);
+                                       cache.m_uiRenderFlags | RENDERFLAG_NO_LIGHTING, 0, 0, 0);
         pShader->Release();
         pPrimitive->Release();
     }

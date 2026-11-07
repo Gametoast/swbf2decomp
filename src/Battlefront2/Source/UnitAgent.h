@@ -1,6 +1,7 @@
 #pragma once
 
 #include "PebbleFL/Common/PblHashTable.h"
+#include "PebbleFL/Common/PblRtti.h"
 
 #include <stddef.h>
 
@@ -37,9 +38,13 @@ public:
     UnitAgent(UnitController* pCtrl);
     virtual ~UnitAgent();
     virtual void Kill();
-    virtual bool IsRtti(unsigned int uRtti) const;
-    virtual unsigned int GetDerivedRtti() const;
-    virtual const char* GetDerivedRttiName() const;
+    // FUNCTION: SWBF2 0x0065dce0
+    // UnitAgent::IsRtti
+    // FUNCTION: SWBF2 0x0065dd10
+    // UnitAgent::GetDerivedRtti
+    // FUNCTION: SWBF2 0x0065dd20
+    // UnitAgent::GetDerivedRttiName
+    PBL_DECLARE_DERIVED_RTTI(UnitAgent, Agent)
 protected:
     virtual void UpdateState(float dt);
 public:
@@ -55,9 +60,6 @@ public:
     virtual float GetUpdateRate() const;
     virtual const char* NFINAL_GetStateString(int iState) const = 0;
     virtual int EventHandler(AI::EventInfo* pInfo);
-
-    static PblHash rttiHashUnitAgent;
-    static const char rttiNameUnitAgent[];
 
     const Controllable* GetMe() const
     {
@@ -96,27 +98,5 @@ public:
 };
 
  
-
-// FUNCTION: SWBF2 0x0065dce0
-inline bool UnitAgent::IsRtti(unsigned int uRtti) const
-{
-    if (rttiHashUnitAgent == uRtti)
-    {
-        return true;
-    }
-    return Agent::IsRtti(uRtti);
-}
-
-// FUNCTION: SWBF2 0x0065dd10
-inline unsigned int UnitAgent::GetDerivedRtti() const
-{
-    return rttiHashUnitAgent;
-}
-
-// FUNCTION: SWBF2 0x0065dd20
-inline const char* UnitAgent::GetDerivedRttiName() const
-{
-    return rttiNameUnitAgent;
-}
 
 

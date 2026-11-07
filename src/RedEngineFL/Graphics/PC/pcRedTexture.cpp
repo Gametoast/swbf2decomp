@@ -523,7 +523,7 @@ void RedTexture::pcReadFormat(PblFileChunk& chunk, _D3DFORMAT format)
             const int iNumMipMaps = child._pFile->Read16();
             const unsigned int uiFlags = child._pFile->Read32();
             m_type = (pcRedTextureTypeT)(uiFlags & 0xff);
-            const unsigned int uiBias = (uiFlags >> 8) & 0xff;
+            const unsigned int uiDetailBias = (uiFlags >> 8) & 0xff;   // the texture munger's -detailbias option
 
             const QualityT textureDetail = RedRenderer::pcGetRenderOptions().textureDetail;
             if (iNumMipMaps == 1 || textureDetail == QUALITY_HIGH)
@@ -543,7 +543,7 @@ void RedTexture::pcReadFormat(PblFileChunk& chunk, _D3DFORMAT format)
                 }
 
                 const unsigned int uiLimit = (textureDetail == QUALITY_LOW) ? 0x40000 : 0x80000;
-                for (uiSize >>= uiBias; uiSize > uiLimit; uiSize >>= 2)
+                for (uiSize >>= uiDetailBias; uiSize > uiLimit; uiSize >>= 2)
                 {
                     uiSkip++;
                 }

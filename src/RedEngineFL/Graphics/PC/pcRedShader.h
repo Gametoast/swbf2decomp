@@ -6,8 +6,10 @@
 #include "PebbleFL/Common/PblHashTable.h"
 #include "PebbleFL/Common/PblRef.h"
 #include "RedEngineFL/Graphics/RedColor.h"
+#include "RedEngineFL/Graphics/RedRenderFlags.h"
 
 #include "pcRedAutoSettings.h"
+#include "pcRedVertexFormat.h"
 
 const unsigned int kuiNormalShader = 0xe68b9c52 /* "normal" */;
 const unsigned int kuiFlareShader = 0x96834737 /* "Flare" */;
@@ -279,13 +281,13 @@ public:
 
     // FUNCTION: SWBF2 0x006ac7d0
     static pcRedShader* __cdecl Create(unsigned int uiNameHash,
-                                       unsigned int uiFlags,
+                                       unsigned int uiVertexFormat,
                                        const unsigned int* pParams,
-                                       unsigned int uiArg3,
-                                       unsigned int uiArg4,
+                                       unsigned int uiNumParams,
+                                       unsigned int uiMaterialFlags,
                                        const RedColor& color0,
                                        const RedColor& color1,
-                                       float fArg7);
+                                       float fSpecularPower);
 
 enum
 {

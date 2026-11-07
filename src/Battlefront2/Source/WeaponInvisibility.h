@@ -1,6 +1,7 @@
 #pragma once
 
 #include "PebbleFL/Common/PblHashTable.h"
+#include "PebbleFL/Common/PblRtti.h"
 
 #include <stddef.h>
 
@@ -16,9 +17,6 @@ public:
     WeaponInvisibilityClass(WeaponInvisibilityClass* pBase, unsigned int uHash);
     virtual ~WeaponInvisibilityClass();
 
-    static PblHash rttiHashWeaponInvisibilityClass;
-    static const char rttiNameWeaponInvisibilityClass[];
-
     enum TRIGGER_TYPE
     {
         TRIGGER_PRESS = 0,
@@ -28,9 +26,13 @@ public:
 
     virtual WeaponClass* Derive(unsigned int uHash);
     virtual Weapon* Build(const WeaponDesc& desc);
-    virtual bool IsRtti(unsigned int uRtti) const;
-    virtual unsigned int GetDerivedRtti() const;
-    virtual const char* GetDerivedRttiName() const;
+    // FUNCTION: SWBF2 0x00685d10
+    // WeaponInvisibilityClass::IsRtti
+    // FUNCTION: SWBF2 0x00685d40
+    // WeaponInvisibilityClass::GetDerivedRtti
+    // FUNCTION: SWBF2 0x00685d50
+    // WeaponInvisibilityClass::GetDerivedRttiName
+    PBL_DECLARE_DERIVED_RTTI(WeaponInvisibilityClass, WeaponClass)
     virtual void SetProperty(unsigned int uProperty, const char* pszValue);
 
     TRIGGER_TYPE m_eInvisibilityTrigger;
@@ -47,20 +49,6 @@ public:
     float mInitialSalvoDelay;
     float mInitialEnergyDrain;
 };
-  
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
 
 // VTABLE: SWBF2 0x007b1048
 class WeaponInvisibility : public Weapon
@@ -69,9 +57,13 @@ public:
     WeaponInvisibility(const WeaponInvisibilityClass* pClass, const WeaponDesc& desc);
     virtual ~WeaponInvisibility();
 
-    virtual bool IsRtti(unsigned int uRtti) const;
-    virtual unsigned int GetDerivedRtti() const;
-    virtual const char* GetDerivedRttiName() const;
+    // FUNCTION: SWBF2 0x00685cc0
+    // WeaponInvisibility::IsRtti
+    // FUNCTION: SWBF2 0x00685cf0
+    // WeaponInvisibility::GetDerivedRtti
+    // FUNCTION: SWBF2 0x00685d00
+    // WeaponInvisibility::GetDerivedRttiName
+    PBL_DECLARE_DERIVED_RTTI(WeaponInvisibility, Weapon)
     virtual void Select(unsigned int uFlags, bool bOffhand);
     virtual void Deselect(unsigned int uFlags, bool bOffhand);
     virtual void Write(NetPktGroup& group);
@@ -104,9 +96,6 @@ public:
 
     void StartFlicker();
 
-    static PblHash rttiHashWeaponInvisibility;
-    static const char rttiNameWeaponInvisibility[];
-
     float m_fInvisibilityFactor;
     float m_fInvisibilityPersistTimer;
     float m_fInvisibilityFlickerTimer;
@@ -115,52 +104,4 @@ public:
     bool mFired;
     float mOwnerHealth;
 };
-  
- 
- 
- 
- 
 
-// FUNCTION: SWBF2 0x00685cc0
-inline bool WeaponInvisibility::IsRtti(unsigned int uRtti) const
-{
-    if (rttiHashWeaponInvisibility == uRtti)
-    {
-        return true;
-    }
-    return Weapon::IsRtti(uRtti);
-}
-
-// FUNCTION: SWBF2 0x00685cf0
-inline unsigned int WeaponInvisibility::GetDerivedRtti() const
-{
-    return rttiHashWeaponInvisibility;
-}
-
-// FUNCTION: SWBF2 0x00685d00
-inline const char* WeaponInvisibility::GetDerivedRttiName() const
-{
-    return rttiNameWeaponInvisibility;
-}
-
-// FUNCTION: SWBF2 0x00685d10
-inline bool WeaponInvisibilityClass::IsRtti(unsigned int uRtti) const
-{
-    if (rttiHashWeaponInvisibilityClass == uRtti)
-    {
-        return true;
-    }
-    return WeaponClass::IsRtti(uRtti);
-}
-
-// FUNCTION: SWBF2 0x00685d40
-inline unsigned int WeaponInvisibilityClass::GetDerivedRtti() const
-{
-    return rttiHashWeaponInvisibilityClass;
-}
-
-// FUNCTION: SWBF2 0x00685d50
-inline const char* WeaponInvisibilityClass::GetDerivedRttiName() const
-{
-    return rttiNameWeaponInvisibilityClass;
-}

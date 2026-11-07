@@ -3,8 +3,8 @@
 // FUNCTION: SWBF2 0x0052e210
 Fsm::Fsm()
 {
-    mCurState = 0;
-    mNextState = 0;
+    mCurState = STATE_NONE;
+    mNextState = STATE_NONE;
 }
 
 // FUNCTION: SWBF2 0x0052e260
@@ -19,13 +19,13 @@ Fsm::~Fsm()
 void Fsm::Kill()
 {
     ExitState();
-    mCurState = 100;
+    mCurState = STATE_GLOBDONE;
 }
 
 // FUNCTION: SWBF2 0x0052e290
 bool Fsm::IsDone() const
 {
-    return mCurState == 100;
+    return mCurState == STATE_GLOBDONE;
 }
 
 // FUNCTION: SWBF2 0x0052e2a0
@@ -33,7 +33,7 @@ void Fsm::FSMUpdate(float dt, bool b)
 {
     if (b)
     {
-        if (mCurState != 0 && mCurState != 100)
+        if (mCurState != STATE_NONE && mCurState != STATE_GLOBDONE)
         {
             UpdateState(dt);
         }
@@ -43,11 +43,11 @@ void Fsm::FSMUpdate(float dt, bool b)
     int iCount = 0;
     do
     {
-        while (mNextState != 0)
+        while (mNextState != STATE_NONE)
         {
             ExitState();
             mCurState = mNextState;
-            mNextState = 0;
+            mNextState = STATE_NONE;
             EnterState();
             if (++iCount > 40)
             {
@@ -60,12 +60,12 @@ void Fsm::FSMUpdate(float dt, bool b)
             break;
         }
 
-        if (mCurState != 0 && mCurState != 100)
+        if (mCurState != STATE_NONE && mCurState != STATE_GLOBDONE)
         {
             UpdateState(dt);
             dt = 0.000001f;
         }
-    } while (mNextState != 0);
+    } while (mNextState != STATE_NONE);
 }
 
 // FUNCTION: SWBF2 0x00478620
@@ -93,11 +93,11 @@ void HelperFsm::SetNextState(int state)
 // FUNCTION: SWBF2 0x0052e380
 void HelperFsm::FSMChangeState()
 {
-    while (mNextState != 0)
+    while (mNextState != STATE_NONE)
     {
         ExitState();
         mCurState = mNextState;
-        mNextState = 0;
+        mNextState = STATE_NONE;
         EnterState();
     }
 }

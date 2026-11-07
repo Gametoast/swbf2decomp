@@ -1,6 +1,7 @@
 #pragma once
 
 #include <stddef.h>
+#include "PebbleFL/Common/PblBits.h"
 #include <math.h>
 #include "FLEffect.h"
 #include "Battlefront2Lod.h"
@@ -314,7 +315,7 @@ inline void ManagedLightBeam::UpdatedWorldMatrix()
 // FUNCTION: SWBF2 0x004cc870
 inline void ManagedLightBeam::HideInView(unsigned int uiView, bool bHide)
 {
-    const unsigned int mask = 1u << uiView;
+    const unsigned int mask = Bit(uiView);
     if (bHide)
     {
         _uiHideInView |= mask;
@@ -400,18 +401,18 @@ inline void LightBeam::HideInView(unsigned int uiView, bool bHide)
 {
     if (bHide)
     {
-        _Flare._uiHideInView |= 1 << uiView;
+        _Flare._uiHideInView |= Bit(uiView);
     }
     else
     {
-        _Flare._uiHideInView &= ~(1 << uiView);
+        _Flare._uiHideInView &= ~Bit(uiView);
     }
 }
 
 // FUNCTION: SWBF2 0x004be140
 inline bool LightBeam::IsHiddenInView(unsigned int uiView)
 {
-    return (_Flare._uiHideInView & (1 << uiView)) != 0;
+    return (_Flare._uiHideInView & Bit(uiView)) != 0;
 }
 
 inline ManagedLightBeam::ManagedLightBeam()

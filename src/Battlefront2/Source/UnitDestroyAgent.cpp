@@ -79,7 +79,7 @@ static float GetOptimalBuildingKillingRange(const Controllable* pMe)
     for (int i = 0; i < pMe->GetWeaponCount(); ++i)
     {
         const WeaponClass* pClass = GetWeaponClass(pMe->GetWeaponPtr(i));
-        if ((pClass->mAITargetTypes & 0x10) && !(fRange > pClass->mOptimalRange))
+        if ((pClass->mAITargetTypes & TargetInfo::TYPE_BUILDING) && !(fRange > pClass->mOptimalRange))
         {
             fRange = pClass->mOptimalRange;
         }
@@ -93,10 +93,9 @@ static float GetOptimalBuildingKillingRange(const Controllable* pMe)
 
 // GLOBAL: SWBF2 0x01f993b8
 // UnitDestroyAgent::rttiHashUnitDestroyAgent
-PblHash UnitDestroyAgent::rttiHashUnitDestroyAgent("UnitDestroyAgent");
 // GLOBAL: SWBF2 0x0078b82c
 // UnitDestroyAgent::rttiNameUnitDestroyAgent
-const char UnitDestroyAgent::rttiNameUnitDestroyAgent[] = "UnitDestroyAgent";
+PBL_IMPLEMENT_RTTI(UnitDestroyAgent)
 
 
 
@@ -113,8 +112,8 @@ UnitDestroyAgent::UnitDestroyAgent(UnitController* pCtrl, const AI::GoalTarget& 
       mTarget(AI::GTT_NONE)
 {
     mTarget = target;
-    mCurState = 1;
-    mNextState = 2;
+    mCurState = STATE_START;
+    mNextState = STATE_Goto;
 }
 
 // FUNCTION: SWBF2 0x006660f0
@@ -129,7 +128,7 @@ void UnitDestroyAgent::EnterState()
         {
             if (mTarget.mType == AI::GTT_GAMEOBJECT)
             {
-                SetNextState(100);
+                SetNextState(STATE_GLOBDONE);
                 return;
             }
             if (mTarget.mType == AI::GTT_CHARACTER)
@@ -180,7 +179,7 @@ void UnitDestroyAgent::CheckTargetPosition(const PblVector3& vPos)
     fDistSq += dz * dz;
     if (fDistSq > 15.0f * 15.0f)
     {
-        SetNextState(2);
+        SetNextState(STATE_Goto);
     }
 }
 
@@ -198,7 +197,7 @@ void UnitDestroyAgent::UpdateStatePostVision(float dt)
         {
             if (mTarget.mType == AI::GTT_GAMEOBJECT)
             {
-                SetNextState(100);
+                SetNextState(STATE_GLOBDONE);
             }
             else if (mTarget.mType == AI::GTT_CHARACTER)
             {

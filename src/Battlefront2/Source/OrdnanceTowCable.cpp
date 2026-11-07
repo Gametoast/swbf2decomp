@@ -34,10 +34,9 @@ extern PblVector3 gVectorZero;
 
 // GLOBAL: SWBF2 0x01ef26c0
 // OrdnanceTowCable::rttiHashOrdnanceTowCable
-PblHash OrdnanceTowCable::rttiHashOrdnanceTowCable("OrdnanceTowCable");
 // GLOBAL: SWBF2 0x0078aa68
 // OrdnanceTowCable::rttiNameOrdnanceTowCable
-const char OrdnanceTowCable::rttiNameOrdnanceTowCable[] = "OrdnanceTowCable";
+PBL_IMPLEMENT_RTTI(OrdnanceTowCable)
 
 // SYNTHETIC: SWBF2 0x00405bd0
 // `dynamic initializer for 'OrdnanceTowCableClass::rttiHashOrdnanceTowCableClass''
@@ -45,10 +44,9 @@ const char OrdnanceTowCable::rttiNameOrdnanceTowCable[] = "OrdnanceTowCable";
 
 // GLOBAL: SWBF2 0x01ef26c4
 // OrdnanceTowCableClass::rttiHashOrdnanceTowCableClass
-PblHash OrdnanceTowCableClass::rttiHashOrdnanceTowCableClass("OrdnanceTowCableClass");
 // GLOBAL: SWBF2 0x0078aa3c
 // OrdnanceTowCableClass::rttiNameOrdnanceTowCableClass
-const char OrdnanceTowCableClass::rttiNameOrdnanceTowCableClass[] = "OrdnanceTowCableClass";
+PBL_IMPLEMENT_RTTI(OrdnanceTowCableClass)
 
 // SYNTHETIC: SWBF2 0x00405ba0
 // `dynamic initializer for 'OrdnanceTowCable::sMemoryPool''

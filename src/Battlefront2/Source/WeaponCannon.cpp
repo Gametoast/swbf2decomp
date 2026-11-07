@@ -133,10 +133,9 @@ WeaponCannonClass::WeaponCannonClass(unsigned int uHash)
 
 // GLOBAL: SWBF2 0x01f9a894
 // WeaponCannon::rttiHashWeaponCannon
-PblHash WeaponCannon::rttiHashWeaponCannon("WeaponCannon");
 // GLOBAL: SWBF2 0x0078be8c
 // WeaponCannon::rttiNameWeaponCannon
-const char WeaponCannon::rttiNameWeaponCannon[] = "WeaponCannon";
+PBL_IMPLEMENT_RTTI(WeaponCannon)
 
 // SYNTHETIC: SWBF2 0x004070b0
 // `dynamic initializer for 'WeaponCannonClass::rttiHashWeaponCannonClass''
@@ -144,10 +143,9 @@ const char WeaponCannon::rttiNameWeaponCannon[] = "WeaponCannon";
 
 // GLOBAL: SWBF2 0x01f9a898
 // WeaponCannonClass::rttiHashWeaponCannonClass
-PblHash WeaponCannonClass::rttiHashWeaponCannonClass("WeaponCannonClass");
 // GLOBAL: SWBF2 0x0078be70
 // WeaponCannonClass::rttiNameWeaponCannonClass
-const char WeaponCannonClass::rttiNameWeaponCannonClass[] = "WeaponCannonClass";
+PBL_IMPLEMENT_RTTI(WeaponCannonClass)
 
 
 

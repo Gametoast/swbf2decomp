@@ -1,6 +1,8 @@
 #pragma once
 
 #include "PebbleFL/Common/PblHashTable.h"
+#include "PebbleFL/Common/PblRtti.h"
+#include "Combo.h"
 
 #include <stddef.h>
 
@@ -64,7 +66,7 @@ public:
         InputQueue() : m_uiCount(0), m_uiStart(0), m_uiButtonDown(0) {}
 
         int GetCount() const { return m_uiCount; }
-        bool IsButtonDown(unsigned char uiButton) const { return (m_uiButtonDown & (1 << uiButton)) != 0; }
+        bool IsButtonDown(unsigned char uiButton) const { return (m_uiButtonDown & Bit(uiButton)) != 0; }
         const Event& GetEvent(int iEvent) const { return m_aEventQueue[(m_uiStart + (unsigned char)(m_uiCount - iEvent - 1)) & INPUT_QUEUE_MASK]; }
         const Event& operator[](int iEvent) const { return m_aEventQueue[(m_uiStart + (unsigned char)iEvent) & INPUT_QUEUE_MASK]; }
         void Update(unsigned char uiButtons, float fTime);
@@ -99,8 +101,7 @@ public:
         }
 
     private:
-        static const int INPUT_QUEUE_LENGTH_LOG2 = 3;
-        static const int INPUT_QUEUE_LENGTH = 1 << INPUT_QUEUE_LENGTH_LOG2;
+        static const int INPUT_QUEUE_LENGTH = 8;
         static const unsigned char INPUT_QUEUE_MASK = INPUT_QUEUE_LENGTH - 1;
         Event m_aEventQueue[INPUT_QUEUE_LENGTH];
         unsigned char m_uiCount;
@@ -115,9 +116,13 @@ public:
     virtual ~WeaponMelee();
     virtual bool Update(float fDeltaTime);
 
-    virtual bool IsRtti(unsigned int uRtti) const;
-    virtual unsigned int GetDerivedRtti() const;
-    virtual const char* GetDerivedRttiName() const;
+    // FUNCTION: SWBF2 0x00687bf0
+    // WeaponMelee::IsRtti
+    // FUNCTION: SWBF2 0x00687c20
+    // WeaponMelee::GetDerivedRtti
+    // FUNCTION: SWBF2 0x00687c30
+    // WeaponMelee::GetDerivedRttiName
+    PBL_DECLARE_DERIVED_RTTI(WeaponMelee, Weapon)
     virtual bool Deflect(const Ordnance* pOrdnance, const PblVector3& pos,
                          const PblVector3& dir);
     virtual bool ShouldShowReticule() const;
@@ -203,12 +208,10 @@ protected:
 
 public:
     static void PostLoad();
-    static PblHash rttiHashWeaponMelee;
 
     static int _ClearInputQueueToTime(InputQueue& queue, float fTime);
     static bool _TestInputQueueForButtonEvent(const InputQueue& queue, float fTime,
                 unsigned int iButton, unsigned int iAction, float fBegin, float fEnd, float& fMatch);
-    static const char rttiNameWeaponMelee[];
 
     static TrailData* s_aTrailDataPool;
     static TrailData* s_pTrailDataFreeList;
@@ -255,28 +258,6 @@ public:
     GameSound m_OnOffSoundProps;
 };
 
-// FUNCTION: SWBF2 0x00687bf0
-inline bool WeaponMelee::IsRtti(unsigned int uRtti) const
-{
-    if (rttiHashWeaponMelee == uRtti)
-    {
-        return true;
-    }
-    return Weapon::IsRtti(uRtti);
-}
-
-// FUNCTION: SWBF2 0x00687c20
-inline unsigned int WeaponMelee::GetDerivedRtti() const
-{
-    return rttiHashWeaponMelee;
-}
-
-// FUNCTION: SWBF2 0x00687c30
-inline const char* WeaponMelee::GetDerivedRttiName() const
-{
-    return rttiNameWeaponMelee;
-}
-
 // VTABLE: SWBF2 0x007b1534
 class WeaponMeleeClass : public WeaponClass
 {
@@ -310,9 +291,13 @@ public:
 
     virtual WeaponClass* Derive(unsigned int uHash);
     virtual Weapon* Build(const WeaponDesc& desc);
-    virtual bool IsRtti(unsigned int uRtti) const;
-    virtual unsigned int GetDerivedRtti() const;
-    virtual const char* GetDerivedRttiName() const;
+    // FUNCTION: SWBF2 0x00687c90
+    // WeaponMeleeClass::IsRtti
+    // FUNCTION: SWBF2 0x00687cc0
+    // WeaponMeleeClass::GetDerivedRtti
+    // FUNCTION: SWBF2 0x00687cd0
+    // WeaponMeleeClass::GetDerivedRttiName
+    PBL_DECLARE_DERIVED_RTTI(WeaponMeleeClass, WeaponClass)
     virtual void SetProperty(unsigned int uProperty, const char* pszValue);
 
     bool IsLightSaber() const;
@@ -321,9 +306,6 @@ public:
 
     void Render(float fTurnOn, const PblMatrix& mMatrix, const class RedPose* pPose, const RedColor& color,
                 unsigned int uiFlags, bool bArg) const;
-
-    static PblHash rttiHashWeaponMeleeClass;
-    static const char rttiNameWeaponMeleeClass[];
 
     Combo* m_pComboODF;
     const Combo* m_pCombo;
@@ -357,50 +339,6 @@ protected:
     Combo* _CreateODFCombo(unsigned int uiComboId);
     void _InitDeflectMatrices(int eMap);
 };
- 
-  
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
-
-// FUNCTION: SWBF2 0x00687c90
-inline bool WeaponMeleeClass::IsRtti(unsigned int uRtti) const
-{
-    if (rttiHashWeaponMeleeClass == uRtti)
-    {
-        return true;
-    }
-    return WeaponClass::IsRtti(uRtti);
-}
-
-// FUNCTION: SWBF2 0x00687cc0
-inline unsigned int WeaponMeleeClass::GetDerivedRtti() const
-{
-    return rttiHashWeaponMeleeClass;
-}
-
-// FUNCTION: SWBF2 0x00687cd0
-inline const char* WeaponMeleeClass::GetDerivedRttiName() const
-{
-    return rttiNameWeaponMeleeClass;
-}
 
 inline void WeaponMelee::PostLoad()
 {

@@ -285,7 +285,7 @@ void pcStencilShadowShader::RenderVolume(const RenderItem* pItem, unsigned int) 
 {
     if (s_bDebugShadowVolumes)
     {
-        if (pItem->flags & 0x400)
+        if (pItem->flags & PC_RENDERFLAG_SHADOWVOLUME_ZFAIL)
         {
             if (!s_DrawFlaggedDebugVolumes)
             {
@@ -520,7 +520,7 @@ void pcStencilShadowShader::_Init(unsigned int uiFlags,
                                   const RedColor&,
                                   float)
 {
-    if (uiFlags & 0x800)
+    if (uiFlags & RVF_CUSTOM_DECLARATION)
     {
         m_pVertexFormat = s_pSkinnedInputFormat[0];
         m_mode = MODE_GPU_EXTRUSION_FACENORMAL_SKINNEDHARD;
@@ -586,13 +586,13 @@ void pcStencilShadowShader::_Read(PblFileChunk& chunk) const
 void pcStencilShadowShader::_StaticInit() const
 {
     s_pSkinnedInputFormat[0] =
-        pcRedVertexFormat::Create(0x5800, s_hardskinned_facenormal_ShadowFormat);
+        pcRedVertexFormat::Create(RVF_CUSTOM_DECLARATION | RVF_COMPRESSED_POSITION | RVF_COMPRESSED_NORMALS, s_hardskinned_facenormal_ShadowFormat);
     s_pSkinnedInputFormat[1] =
-        pcRedVertexFormat::Create(0x5800, s_hardskinned_generatenormal_ShadowFormat);
+        pcRedVertexFormat::Create(RVF_CUSTOM_DECLARATION | RVF_COMPRESSED_POSITION | RVF_COMPRESSED_NORMALS, s_hardskinned_generatenormal_ShadowFormat);
     s_pSkinnedInputFormat[2] =
-        pcRedVertexFormat::Create(0x5800, s_softskinned_facenormal_ShadowFormat);
+        pcRedVertexFormat::Create(RVF_CUSTOM_DECLARATION | RVF_COMPRESSED_POSITION | RVF_COMPRESSED_NORMALS, s_softskinned_facenormal_ShadowFormat);
     s_pSkinnedInputFormat[3] =
-        pcRedVertexFormat::Create(0x5800, s_softskinned_generatenormal_ShadowFormat);
+        pcRedVertexFormat::Create(RVF_CUSTOM_DECLARATION | RVF_COMPRESSED_POSITION | RVF_COMPRESSED_NORMALS, s_softskinned_generatenormal_ShadowFormat);
     s_bTwoSidedStencilTest =
         (RedRenderer::pcGetDeviceCaps().StencilCaps & D3DSTENCILCAPS_TWOSIDED) != 0;
 }

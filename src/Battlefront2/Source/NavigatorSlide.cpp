@@ -55,10 +55,9 @@ int gClearVehicleSlideCount = 1;
 
 // GLOBAL: SWBF2 0x01ecb258
 // NavigatorSlide::rttiHashNavigatorSlide
-PblHash NavigatorSlide::rttiHashNavigatorSlide("NavigatorSlide");
 // GLOBAL: SWBF2 0x0078a678
 // NavigatorSlide::rttiNameNavigatorSlide
-const char NavigatorSlide::rttiNameNavigatorSlide[] = "NavigatorSlide";
+PBL_IMPLEMENT_RTTI(NavigatorSlide)
 
 
 
@@ -124,7 +123,7 @@ NavigatorSlide::~NavigatorSlide()
 // FUNCTION: SWBF2 0x005ae020
 bool NavigatorSlide::IsEqual(AILowLevel* pOwner, const PblVector3& globalDest)
 {
-    return mOwner == pOwner && !(mGlobalDest != globalDest) && mCurState != 100;
+    return mOwner == pOwner && !(mGlobalDest != globalDest) && mCurState != STATE_GLOBDONE;
 }
 
 // FUNCTION: SWBF2 0x005ae070
@@ -132,7 +131,7 @@ bool NavigatorSlide::IsEqual(AILowLevel* pOwner, const GameObject* pSlideObj, fl
                              bool bUseAttackHelper)
 {
     return mOwner == pOwner && mSlideObj == pSlideObj && mOffset == fOffset &&
-           mUseAttackHelper == bUseAttackHelper && mCurState != 100;
+           mUseAttackHelper == bUseAttackHelper && mCurState != STATE_GLOBDONE;
 }
 
 // FUNCTION: SWBF2 0x005ae0d0
@@ -207,12 +206,12 @@ void NavigatorSlide::UpdateInfantrySlidePos()
     {
         if (mPathFollower->mFinalPoint == mGlobalDest)
         {
-            SetNextState(100);
+            SetNextState(STATE_GLOBDONE);
             return;
         }
         if (++mBounceCount >= 6)
         {
-            SetNextState(100);
+            SetNextState(STATE_GLOBDONE);
             return;
         }
         PblVector3 localDest;
@@ -286,7 +285,7 @@ void NavigatorSlide::UpdateInfantrySlideObject()
     PblVector3 slidePos;
     if (!GetObjectSlideToPosition(&slidePos))
     {
-        SetNextState(100);
+        SetNextState(STATE_GLOBDONE);
         return;
     }
 
@@ -430,7 +429,7 @@ void NavigatorSlide::UpdateVehicleSlidePos()
     {
         if (!(mPathFollower->mFinalPoint != mGlobalDest))
         {
-            SetNextState(100);
+            SetNextState(STATE_GLOBDONE);
             return;
         }
         mSlidePos = mGlobalDest;

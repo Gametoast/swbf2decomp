@@ -48,10 +48,9 @@ EntityBuildingAnimatedClass::~EntityBuildingAnimatedClass()
 
 // GLOBAL: SWBF2 0x01ebb87c
 // EntityBuildingAnimatedClass::rttiHashEntityBuildingAnimatedClass
-PblHash EntityBuildingAnimatedClass::rttiHashEntityBuildingAnimatedClass("EntityBuildingAnimatedClass");
 // GLOBAL: SWBF2 0x00788f84
 // EntityBuildingAnimatedClass::rttiNameEntityBuildingAnimatedClass
-const char EntityBuildingAnimatedClass::rttiNameEntityBuildingAnimatedClass[] = "EntityBuildingAnimatedClass";
+PBL_IMPLEMENT_RTTI(EntityBuildingAnimatedClass)
 
 // SYNTHETIC: SWBF2 0x004028a0
 // `dynamic initializer for 'EntityBuildingAnimated::rttiHashEntityBuildingAnimated''
@@ -59,10 +58,9 @@ const char EntityBuildingAnimatedClass::rttiNameEntityBuildingAnimatedClass[] = 
 
 // GLOBAL: SWBF2 0x01ebb878
 // EntityBuildingAnimated::rttiHashEntityBuildingAnimated
-PblHash EntityBuildingAnimated::rttiHashEntityBuildingAnimated("EntityBuildingAnimated");
 // GLOBAL: SWBF2 0x00788fa0
 // EntityBuildingAnimated::rttiNameEntityBuildingAnimated
-const char EntityBuildingAnimated::rttiNameEntityBuildingAnimated[] = "EntityBuildingAnimated";
+PBL_IMPLEMENT_RTTI(EntityBuildingAnimated)
 
 
 

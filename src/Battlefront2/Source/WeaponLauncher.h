@@ -1,6 +1,7 @@
 #pragma once
 
 #include "PebbleFL/Common/PblHashTable.h"
+#include "PebbleFL/Common/PblRtti.h"
 
 #include <stddef.h>
 
@@ -20,9 +21,13 @@ public:
     WeaponLauncher(const WeaponLauncherClass* pClass, const WeaponDesc& desc);
 
     virtual ~WeaponLauncher();
-    bool IsRtti(unsigned int uRtti) const;
-    unsigned int GetDerivedRtti() const;
-    const char* GetDerivedRttiName() const;
+    // FUNCTION: SWBF2 0x006872a0
+    // WeaponLauncher::IsRtti
+    // FUNCTION: SWBF2 0x006872d0
+    // WeaponLauncher::GetDerivedRtti
+    // FUNCTION: SWBF2 0x006872e0
+    // WeaponLauncher::GetDerivedRttiName
+    PBL_DECLARE_DERIVED_RTTI(WeaponLauncher, Weapon)
     // FUNCTION: SWBF2 0x006872f0
     bool IsLocked() const { return mLocked; }
     // FUNCTION: SWBF2 0x00687300
@@ -46,9 +51,6 @@ protected:
 
 public:
 
-    static PblHash rttiHashWeaponLauncher;
-    static const char rttiNameWeaponLauncher[];
-
     PblHandle<const GameObject> mCurTarget;
     int mCurTargetBodyID;
     bool mLocked;
@@ -57,11 +59,6 @@ public:
 
     char mUnmodeledTail[8];
 };
- 
- 
- 
- 
- 
 
 // VTABLE: SWBF2 0x007b139c
 class WeaponLauncherClass : public WeaponCannonClass
@@ -71,66 +68,20 @@ public:
     WeaponLauncherClass(WeaponLauncherClass* pBase, unsigned int uHash);
     virtual ~WeaponLauncherClass();
 
-    static PblHash rttiHashWeaponLauncherClass;
-    static const char rttiNameWeaponLauncherClass[];
-
     virtual WeaponClass* Derive(unsigned int uHash);
 
     virtual WeaponLauncher* Build(const WeaponDesc& desc);
-    virtual bool IsRtti(unsigned int uRtti) const;
-    virtual unsigned int GetDerivedRtti() const;
-    virtual const char* GetDerivedRttiName() const;
+    // FUNCTION: SWBF2 0x00687340
+    // WeaponLauncherClass::IsRtti
+    // FUNCTION: SWBF2 0x00687370
+    // WeaponLauncherClass::GetDerivedRtti
+    // FUNCTION: SWBF2 0x00687380
+    // WeaponLauncherClass::GetDerivedRttiName
+    PBL_DECLARE_DERIVED_RTTI(WeaponLauncherClass, WeaponCannonClass)
     virtual void SetProperty(unsigned int uProperty, const char* pszValue);
 
     float mLockTime;
     bool mClearLockOnFire;
     bool mHasTrackingAmmo;
 };
-  
- 
- 
- 
 
-// FUNCTION: SWBF2 0x00687340
-inline bool WeaponLauncherClass::IsRtti(unsigned int uRtti) const
-{
-    if (rttiHashWeaponLauncherClass == uRtti)
-    {
-        return true;
-    }
-    return WeaponCannonClass::IsRtti(uRtti);
-}
-
-// FUNCTION: SWBF2 0x00687370
-inline unsigned int WeaponLauncherClass::GetDerivedRtti() const
-{
-    return rttiHashWeaponLauncherClass;
-}
-
-// FUNCTION: SWBF2 0x00687380
-inline const char* WeaponLauncherClass::GetDerivedRttiName() const
-{
-    return rttiNameWeaponLauncherClass;
-}
-
-// FUNCTION: SWBF2 0x006872a0
-inline bool WeaponLauncher::IsRtti(unsigned int uRtti) const
-{
-    if (rttiHashWeaponLauncher == uRtti)
-    {
-        return true;
-    }
-    return reinterpret_cast<const Weapon*>(this)->Weapon::IsRtti(uRtti);
-}
-
-// FUNCTION: SWBF2 0x006872d0
-inline unsigned int WeaponLauncher::GetDerivedRtti() const
-{
-    return rttiHashWeaponLauncher;
-}
-
-// FUNCTION: SWBF2 0x006872e0
-inline const char* WeaponLauncher::GetDerivedRttiName() const
-{
-    return rttiNameWeaponLauncher;
-}

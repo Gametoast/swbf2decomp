@@ -43,10 +43,9 @@ namespace
 
 // GLOBAL: SWBF2 0x01ef263c
 // OrdnanceGrenade::rttiHashOrdnanceGrenade
-PblHash OrdnanceGrenade::rttiHashOrdnanceGrenade("OrdnanceGrenade");
 // GLOBAL: SWBF2 0x0078a8d4
 // OrdnanceGrenade::rttiNameOrdnanceGrenade
-const char OrdnanceGrenade::rttiNameOrdnanceGrenade[] = "OrdnanceGrenade";
+PBL_IMPLEMENT_RTTI(OrdnanceGrenade)
 
 // SYNTHETIC: SWBF2 0x00405ad0
 // `dynamic initializer for 'OrdnanceGrenadeClass::rttiHashOrdnanceGrenadeClass''
@@ -54,10 +53,9 @@ const char OrdnanceGrenade::rttiNameOrdnanceGrenade[] = "OrdnanceGrenade";
 
 // GLOBAL: SWBF2 0x01ef2638
 // OrdnanceGrenadeClass::rttiHashOrdnanceGrenadeClass
-PblHash OrdnanceGrenadeClass::rttiHashOrdnanceGrenadeClass("OrdnanceGrenadeClass");
 // GLOBAL: SWBF2 0x0078a8b0
 // OrdnanceGrenadeClass::rttiNameOrdnanceGrenadeClass
-const char OrdnanceGrenadeClass::rttiNameOrdnanceGrenadeClass[] = "OrdnanceGrenadeClass";
+PBL_IMPLEMENT_RTTI(OrdnanceGrenadeClass)
 
 // FUNCTION: SWBF2 0x006009c0
 OrdnanceGrenadeClass::OrdnanceGrenadeClass(unsigned int uHash)

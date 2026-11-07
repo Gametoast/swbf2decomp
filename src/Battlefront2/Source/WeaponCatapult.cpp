@@ -41,10 +41,9 @@ namespace
 
 // GLOBAL: SWBF2 0x01f9a89c
 // WeaponCatapult::rttiHashWeaponCatapult
-PblHash WeaponCatapult::rttiHashWeaponCatapult("WeaponCatapult");
 // GLOBAL: SWBF2 0x0078beb0
 // WeaponCatapult::rttiNameWeaponCatapult
-const char WeaponCatapult::rttiNameWeaponCatapult[] = "WeaponCatapult";
+PBL_IMPLEMENT_RTTI(WeaponCatapult)
 
 
 
@@ -315,10 +314,9 @@ void WeaponCatapult::Render(const PblMatrix& matrix, const RedPose* pPose, const
 
 // GLOBAL: SWBF2 0x01f9a8a0
 // WeaponCatapultClass::rttiHashWeaponCatapultClass
-PblHash WeaponCatapultClass::rttiHashWeaponCatapultClass("WeaponCatapultClass");
 // GLOBAL: SWBF2 0x0078bec0
 // WeaponCatapultClass::rttiNameWeaponCatapultClass
-const char WeaponCatapultClass::rttiNameWeaponCatapultClass[] = "WeaponCatapultClass";
+PBL_IMPLEMENT_RTTI(WeaponCatapultClass)
 
 // FUNCTION: SWBF2 0x006817d0
 WeaponCatapultClass::WeaponCatapultClass(unsigned int uHash)

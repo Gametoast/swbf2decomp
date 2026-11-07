@@ -1,6 +1,7 @@
 #pragma once
 
 #include "PebbleFL/Common/PblHashTable.h"
+#include "PebbleFL/Common/PblRtti.h"
 
 #include <stddef.h>
 
@@ -31,16 +32,17 @@ public:
 
     virtual EntityClass* Derive(unsigned int uHash);
     virtual Entity* Build(const EntityDesc& desc);
-    virtual bool IsRtti(unsigned int uRtti) const;
-    virtual unsigned int GetDerivedRtti() const;
-    virtual const char* GetDerivedRttiName() const;
+    // FUNCTION: SWBF2 0x004fcd30
+    // EntityTrapClass::IsRtti
+    // FUNCTION: SWBF2 0x004fcd70
+    // EntityTrapClass::GetDerivedRtti
+    // FUNCTION: SWBF2 0x004fcd80
+    // EntityTrapClass::GetDerivedRttiName
+    PBL_DECLARE_DERIVED_RTTI(EntityTrapClass, EntityBuildingClass)
     virtual void SetProperty(unsigned int uProperty, const char* pszValue);
 
     bool InitAnimations(const char* pszName);
     bool SetupAnimation(ZephyrPoseDyn<64>& kPose, const ZephyrAnim* pAnim, float fTime);
-
-    static PblHash rttiHashEntityTrapClass;
-    static const char rttiNameEntityTrapClass[];
 
     ZephyrAnim* mAnimBuildTrap;
     PblMatrix mBuildOffset;
@@ -66,30 +68,6 @@ public:
     float mRayTriggerMinSpeed;
     bool mHideUnbuiltModel;
 };
-  
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
 
 // VTABLE: SWBF2 0x0079d5a8 PblHandled
 // VTABLE: SWBF2 0x0079d5b0 EntityEx
@@ -105,9 +83,13 @@ public:
 
     virtual ~EntityTrap();
 
-    bool IsRtti(unsigned int uRtti) const;
-    unsigned int GetDerivedRtti() const;
-    const char* GetDerivedRttiName() const;
+    // FUNCTION: SWBF2 0x004fcc70
+    // EntityTrap::IsRtti
+    // FUNCTION: SWBF2 0x004fccc0
+    // EntityTrap::GetDerivedRtti
+    // FUNCTION: SWBF2 0x004fccd0
+    // EntityTrap::GetDerivedRttiName
+    PBL_DECLARE_DERIVED_RTTI(EntityTrap, EntityBuilding)
     const RedPose* GetPose() const;
     EntityType GetEntityType() const;
     bool IsVisibleToMe(const GameObject* pObject) const;
@@ -125,9 +107,6 @@ public:
     virtual void ReadObject(NetPktGroup& group, NetObjState* pState);
     virtual GameObject* AddToClient();
 
-    static PblHash rttiHashEntityTrap;
-    static const char rttiNameEntityTrap[];
-
     float mAnimationTime;
     EntityTrapClass* mTrapClass;
     RedAnimation* mAnimObj;
@@ -142,62 +121,4 @@ public:
     PblSphere mBuildBoxCollisionSphere;
     Entity* mBuildBox;
 };
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
 
-// FUNCTION: SWBF2 0x004fcc70
-inline bool EntityTrap::IsRtti(unsigned int uRtti) const
-{
-    if (rttiHashEntityTrap == uRtti)
-    {
-        return true;
-    }
-    return EntityBuilding::IsRtti(uRtti);
-}
-
-// FUNCTION: SWBF2 0x004fccc0
-inline unsigned int EntityTrap::GetDerivedRtti() const
-{
-    return rttiHashEntityTrap;
-}
-
-// FUNCTION: SWBF2 0x004fccd0
-inline const char* EntityTrap::GetDerivedRttiName() const
-{
-    return rttiNameEntityTrap;
-}
-
-// FUNCTION: SWBF2 0x004fcd30
-inline bool EntityTrapClass::IsRtti(unsigned int uRtti) const
-{
-    if (rttiHashEntityTrapClass == uRtti)
-    {
-        return true;
-    }
-    return EntityBuildingClass::IsRtti(uRtti);
-}
-
-// FUNCTION: SWBF2 0x004fcd70
-inline unsigned int EntityTrapClass::GetDerivedRtti() const
-{
-    return rttiHashEntityTrapClass;
-}
-
-// FUNCTION: SWBF2 0x004fcd80
-inline const char* EntityTrapClass::GetDerivedRttiName() const
-{
-    return rttiNameEntityTrapClass;
-}

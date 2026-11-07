@@ -1,4 +1,5 @@
 #include "AmmoCounter.h"
+#include "PebbleFL/Common/PblRtti.h"
 #include "WeaponInvisibility.h"
 #include "UnitController.h"
 #include "PebbleFL/Common/PblVector.h"
@@ -139,10 +140,9 @@ namespace
 
 // GLOBAL: SWBF2 0x01f99384
 // UnitController::rttiHashUnitController
-PblHash UnitController::rttiHashUnitController("UnitController");
 // GLOBAL: SWBF2 0x0078b7a8
 // UnitController::rttiNameUnitController
-const char UnitController::rttiNameUnitController[] = "UnitController";
+PBL_IMPLEMENT_RTTI(UnitController)
 
 // SYNTHETIC: SWBF2 0x00406c60
 // `dynamic initializer for 'UnitController::sMemoryPool''
@@ -783,7 +783,7 @@ void UnitController::UseBuffs()
         }
         if (pClass->mOrdnanceClass &&
             pClass->mOrdnanceClass->IsRtti(OrdnanceEmitterClass::rttiHashOrdnanceEmitterClass) &&
-            (pClass->mTargetSides & 4) && (pClass->mAITargetTypes & 1))
+            (pClass->mTargetSides & TargetInfo::SIDE_FRIENDLY) && (pClass->mAITargetTypes & TargetInfo::TYPE_PERSON))
         {
             GameObject* apUnits[3];
             Controllable* pOwner = mOwner;
@@ -837,7 +837,7 @@ void UnitController::UseAutoTurrets()
         {
             EntityClass* pDispense = ((const WeaponDispenserClass*)pClass)->mDispenseClass;
             if (pDispense && pDispense->IsRtti(EntityBuildingArmedClass::GetRtti()) &&
-                (pClass->mAITargetTypes & 1))
+                (pClass->mAITargetTypes & TargetInfo::TYPE_PERSON))
             {
                 AILowLevel* pLowLevel = &mLowLevel;
                 pLowLevel->SetNextWeapon(i);

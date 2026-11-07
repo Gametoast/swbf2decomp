@@ -1,6 +1,7 @@
 #pragma once
 
 #include <stddef.h>
+#include "PebbleFL/Common/PblBits.h"
 
 #include "GameMusic.h"
 #include "GameObject.h"
@@ -118,6 +119,9 @@ class RedRegion;
 class CommandPost : public Thread
 {
 public:
+    // a player's bit in mHoldPlayerMask and mSkippedPlayerMask (Bit64) as the game tests it from a soldier or a display: a 32-bit shift, which sign-extends at player 31 and wraps from 32
+    static int LowPlayerBit(int iPlayerId) { return Bit(iPlayerId); }
+
 
     class VoiceOver
     {

@@ -1,6 +1,7 @@
 #pragma once
 
 #include "PebbleFL/Common/PblHashTable.h"
+#include "PebbleFL/Common/PblRtti.h"
 
 #include <stddef.h>
 
@@ -18,11 +19,27 @@ class UnitFollowAgent : public UnitAgent
 {
 public:
 
+    // the modtools build's state names: START FlwTight LoosePasve LooseCombat LooseSeek FwdCover
+    enum State
+    {
+        STATE_START = 1,
+        STATE_FollowTight = 2,
+        STATE_LoosePassive = 3,
+        STATE_LooseCombat = 4,
+        STATE_LooseSeek = 5,
+        STATE_ForwardCover = 6,
+        STATE_FINAL = 7
+    };
+
     UnitFollowAgent(UnitController* pCtrl, PblHandle<GameObject const> hTarget, bool bTightFollow);
 
-    virtual bool IsRtti(unsigned int uRtti) const;
-    virtual unsigned int GetDerivedRtti() const;
-    virtual const char* GetDerivedRttiName() const;
+    // FUNCTION: SWBF2 0x00667f00
+    // UnitFollowAgent::IsRtti
+    // FUNCTION: SWBF2 0x00667f30
+    // UnitFollowAgent::GetDerivedRtti
+    // FUNCTION: SWBF2 0x00667f40
+    // UnitFollowAgent::GetDerivedRttiName
+    PBL_DECLARE_DERIVED_RTTI(UnitFollowAgent, UnitAgent)
     virtual void Kill();
     virtual bool ShouldQueueCurCmd(const UnitCmdInfo& cmd) const;
     virtual float GetUpdateRate() const;
@@ -44,8 +61,6 @@ public:
     PblHandle<GameObject const> mTarget;
     bool mTightFollowMode;
 
-    static PblHash rttiHashUnitFollowAgent;
-    static const char rttiNameUnitFollowAgent[];
 };
 
  
@@ -55,24 +70,3 @@ public:
  
  
 
-// FUNCTION: SWBF2 0x00667f00
-inline bool UnitFollowAgent::IsRtti(unsigned int uRtti) const
-{
-    if (rttiHashUnitFollowAgent == uRtti)
-    {
-        return true;
-    }
-    return UnitAgent::IsRtti(uRtti);
-}
-
-// FUNCTION: SWBF2 0x00667f30
-inline unsigned int UnitFollowAgent::GetDerivedRtti() const
-{
-    return rttiHashUnitFollowAgent;
-}
-
-// FUNCTION: SWBF2 0x00667f40
-inline const char* UnitFollowAgent::GetDerivedRttiName() const
-{
-    return rttiNameUnitFollowAgent;
-}

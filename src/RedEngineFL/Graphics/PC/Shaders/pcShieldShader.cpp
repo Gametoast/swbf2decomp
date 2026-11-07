@@ -295,7 +295,7 @@ RenderPhaseT pcShieldShader::GetRenderPhase(const RenderItem*, unsigned int) con
 // FUNCTION: SWBF2 0x006cd500
 unsigned int pcShieldShader::GetState_Fixed(const RenderItem* pItem) const
 {
-    return (pItem->pPrim->m_vertexFormat->m_uiVertexBufferRVF >> 9) & 1;
+    return (pItem->pPrim->m_vertexFormat->m_uiVertexBufferRVF & RVF_TEXCOORDS_1) != 0;
 }
 
 // FUNCTION: SWBF2 0x006cd520
@@ -357,7 +357,7 @@ void pcShieldShader::Render_Prog1(const RenderItem* pItem, unsigned int) const
         const float fInvRange = 1.0f / (fFadeEnd - fFadeStart);
         pRegs[44].component[2] = 0.0f;
         pRegs[44].component[3] = 0.0f;
-        if (pItem->flags & 0x20000)
+        if (pItem->flags & RENDERFLAG_RENDER_TO_SKY)
         {
             pRegs[44].component[0] = fInvRange;
             pRegs[44].component[1] = -(fFadeStart * fInvRange);
@@ -407,14 +407,14 @@ void pcShieldShader::_Init(unsigned int uiFlags,
                            const RedColor& color1,
                            float)
 {
-    unsigned int uiInputRVF = 0x22;
-    if (uiFlags & 0x80)
+    unsigned int uiInputRVF = RVF_POSITION_XYZ | RVF_NORMAL;
+    if (uiFlags & RVF_COLOR)
     {
-        uiInputRVF = 0xa2;
+        uiInputRVF = RVF_POSITION_XYZ | RVF_NORMAL | RVF_COLOR;
     }
-    else if (uiFlags & 0x200)
+    else if (uiFlags & RVF_TEXCOORDS_1)
     {
-        uiInputRVF = 0x222;
+        uiInputRVF = RVF_POSITION_XYZ | RVF_NORMAL | RVF_TEXCOORDS_1;
     }
 
     if (uiNumParams > 0 && pParams[0])
@@ -426,7 +426,7 @@ void pcShieldShader::_Init(unsigned int uiFlags,
         m_uiTextureHash = 0;
     }
 
-    m_uiMaterialFlags = 0x10044;
+    m_uiMaterialFlags = MATERIAL_FLAG_ALPHAMAP_OPACITY | MATERIAL_FLAG_ALPHABLEND_ADDITIVE | MATERIAL_FLAG_CULL_NONE;
     m_colorDiffuse = color0;
     m_colorSpecular = color1;
     SetSpecularPower(32.0f);

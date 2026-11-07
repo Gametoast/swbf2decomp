@@ -1,6 +1,7 @@
 #pragma once
 
 #include <stddef.h>
+#include "PebbleFL/Common/PblBits.h"
 #include <string.h>
 
 #include "ActionKey.h"
@@ -67,6 +68,7 @@ enum ePROCESSEDINPUT_TYPE
 class ProcessedInputs
 {
 public:
+
     ProcessedInputs();
 
     // FUNCTION: SWBF2 0x00529ad0

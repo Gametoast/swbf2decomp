@@ -42,9 +42,9 @@ void BlurEffect::PlatformInit()
     m_constantBlend = 0.25f;
     m_downSizeFactor = 0.25f;
     m_pFilterShader = (pcFilterCopyShader*)pcRedShader::Create(
-        0xfb9eb106 /* "FilterCopy" */, 0x202, 0, 0, 0, RedColor::WHITE, RedColor::BLACK, 32.0f);
+        0xfb9eb106 /* "FilterCopy" */, RVF_POSITION_XYZ | RVF_TEXCOORDS_1, 0, 0, 0, RedColor::WHITE, RedColor::BLACK, 32.0f);
     m_pClearShader = (pcClearShader*)pcRedShader::Create(
-        0x5c6e1222 /* "clear" */, 0x203, 0, 0, 4, RedColor::WHITE, RedColor::BLACK, 32.0f);
+        0x5c6e1222 /* "clear" */, RVF_POSITION_XYZRHW | RVF_TEXCOORDS_1, 0, 0, MATERIAL_FLAG_ALPHAMAP_OPACITY, RedColor::WHITE, RedColor::BLACK, 32.0f);
 }
 
 // FUNCTION: SWBF2 0x0040f810
@@ -138,7 +138,7 @@ void BlurEffect::Render(unsigned int value) const
                                  RedRenderer::pcGetBuffer(PC_BUFFER_SKY));
     m_pFilterShader->SetSamples(8, BoxFilter);
     RedRenderer::pcRenderPrimitive(pPrimitive, m_pFilterShader, gMatrixIdentity,
-                                   RedColor::WHITE, 0x200, 0, 0, 0);
+                                   RedColor::WHITE, PC_RENDERFLAG_IMMEDIATE, 0, 0, 0);
     pPrimitive->Release();
 
     m_pClearShader->m_pTex = RedRenderer::pcGetBuffer(PC_BUFFER_SKY);
@@ -166,7 +166,7 @@ void BlurEffect::Render(unsigned int value) const
     pPrimitive->EndVertexData();
 
     RedRenderer::pcRenderPrimitive(pPrimitive, m_pClearShader, gMatrixIdentity,
-                                   color, 0x200, 0, 0, 0);
+                                   color, PC_RENDERFLAG_IMMEDIATE, 0, 0, 0);
     pPrimitive->Release();
 }
 

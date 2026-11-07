@@ -1,6 +1,7 @@
 #pragma once
 
 #include <stddef.h>
+#include "PebbleFL/Common/PblBits.h"
 
 #include "PebbleFL/Common/PblRandom.h"
 #include "RedEngineFL/Graphics/RedColor.h"
@@ -13,6 +14,7 @@ class GameObjectClass;
 class Team
 {
 public:
+
 
     enum Side
     {

@@ -1,6 +1,7 @@
 #pragma once
 
 #include "PebbleFL/Common/PblHashTable.h"
+#include "PebbleFL/Common/PblRtti.h"
 
 #include <stddef.h>
 
@@ -34,15 +35,20 @@ public:
         STATE_Patrol = 4,
         STATE_MineLaying = 5,
         STATE_Aid = 6,
-        STATE_Snipe = 7
+        STATE_Snipe = 7,
+        STATE_FINAL = 8
     };
 
     UnitTrooperAgent(UnitController* pCtrl, const CommandPost* pPost);
 
     virtual void Kill();
-    virtual bool IsRtti(unsigned int uRtti) const;
-    virtual unsigned int GetDerivedRtti() const;
-    virtual const char* GetDerivedRttiName() const;
+    // FUNCTION: SWBF2 0x0066a3f0
+    // UnitTrooperAgent::IsRtti
+    // FUNCTION: SWBF2 0x0066a420
+    // UnitTrooperAgent::GetDerivedRtti
+    // FUNCTION: SWBF2 0x0066a430
+    // UnitTrooperAgent::GetDerivedRttiName
+    PBL_DECLARE_DERIVED_RTTI(UnitTrooperAgent, UnitAgent)
     virtual float GetUpdateRate() const;
 
     virtual const char* NFINAL_GetStateString(int iState) const;
@@ -69,8 +75,6 @@ public:
     MineHelper mMineHelper;
     PblHandle<GameObject> mConvoyParent;
 
-    static PblHash rttiHashUnitTrooperAgent;
-    static const char rttiNameUnitTrooperAgent[];
 };
 
  
@@ -81,24 +85,3 @@ public:
  
  
 
-// FUNCTION: SWBF2 0x0066a3f0
-inline bool UnitTrooperAgent::IsRtti(unsigned int uRtti) const
-{
-    if (rttiHashUnitTrooperAgent == uRtti)
-    {
-        return true;
-    }
-    return UnitAgent::IsRtti(uRtti);
-}
-
-// FUNCTION: SWBF2 0x0066a420
-inline unsigned int UnitTrooperAgent::GetDerivedRtti() const
-{
-    return rttiHashUnitTrooperAgent;
-}
-
-// FUNCTION: SWBF2 0x0066a430
-inline const char* UnitTrooperAgent::GetDerivedRttiName() const
-{
-    return rttiNameUnitTrooperAgent;
-}

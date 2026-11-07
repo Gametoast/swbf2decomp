@@ -45,10 +45,9 @@ EntityRemoteTerminalClass::~EntityRemoteTerminalClass() {}
 
 // GLOBAL: SWBF2 0x01ebc050
 // EntityRemoteTerminalClass::rttiHashEntityRemoteTerminalClass
-PblHash EntityRemoteTerminalClass::rttiHashEntityRemoteTerminalClass("EntityRemoteTerminalClass");
 // GLOBAL: SWBF2 0x00789510
 // EntityRemoteTerminalClass::rttiNameEntityRemoteTerminalClass
-const char EntityRemoteTerminalClass::rttiNameEntityRemoteTerminalClass[] = "EntityRemoteTerminalClass";
+PBL_IMPLEMENT_RTTI(EntityRemoteTerminalClass)
 
 // SYNTHETIC: SWBF2 0x00402d20
 // `dynamic initializer for 'EntityRemoteTerminal::rttiHashEntityRemoteTerminal''
@@ -56,10 +55,9 @@ const char EntityRemoteTerminalClass::rttiNameEntityRemoteTerminalClass[] = "Ent
 
 // GLOBAL: SWBF2 0x01ebc04c
 // EntityRemoteTerminal::rttiHashEntityRemoteTerminal
-PblHash EntityRemoteTerminal::rttiHashEntityRemoteTerminal("EntityRemoteTerminal");
 // GLOBAL: SWBF2 0x007894ec
 // EntityRemoteTerminal::rttiNameEntityRemoteTerminal
-const char EntityRemoteTerminal::rttiNameEntityRemoteTerminal[] = "EntityRemoteTerminal";
+PBL_IMPLEMENT_RTTI(EntityRemoteTerminal)
 
 // SYNTHETIC: SWBF2 0x00402d00
 // `dynamic initializer for 'EntityRemoteTerminal::sMemoryPool''
@@ -166,11 +164,11 @@ void EntityRemoteTerminal::Render(unsigned char ucViewport, float fDist, unsigne
 {
     if (!mClass->m_bDynamicLighting)
     {
-        uiFlags |= 0x80;
+        uiFlags |= RENDERFLAG_STATIC;
     }
     else
     {
-        uiFlags &= ~0x80;
+        uiFlags &= ~RENDERFLAG_STATIC;
     }
     SetupShadow(this, mModel, ucViewport, uiFlags, 0);
 
@@ -183,16 +181,16 @@ void EntityRemoteTerminal::Render(unsigned char ucViewport, float fDist, unsigne
     {
         return;
     }
-    mModel->Render(ucViewport, fDist, GetRenderMatrix(), GetRenderPose(), color, uiFlags | 0x1000000, 0);
+    mModel->Render(ucViewport, fDist, GetRenderMatrix(), GetRenderPose(), color, uiFlags | RENDERFLAG_RENDER_CACHED, 0);
 
     PblMatrix mWorld;
-    if ((uiFlags & 0x200000) ||
+    if ((uiFlags & RENDERFLAG_RENDER_REFLECTION) ||
         !FLRenderer::IsReflected(*(const PblVector3*)&_Sphere, _Sphere.w, mWorld, false))
     {
         return;
     }
     mWorld = *GetRenderMatrix() * mWorld;
-    uiFlags = (uiFlags & ~0x10000) | 0x10000100;
+    uiFlags = (uiFlags & ~RENDERFLAG_RENDER_SHADOWVOLUMES) | RENDERFLAG_REFLECTION | RENDERFLAG_PSEUDO_REFLECTED;
     mModel->Render(ucViewport, fDist, &mWorld, GetRenderPose(), color, uiFlags, 0);
 }
 
@@ -622,8 +620,8 @@ void EntityRemoteTerminalClass::SetProperty(unsigned int uProperty, const char* 
             int iMaskId = mCollisionModel.GetMaskId(0x29173102 /* "CollisionMesh" */);
             if (iMaskId >= 0)
             {
-                sSoftCollisionMask |= 1 << iMaskId;
-                sOrdnanceCollisionMask |= 1 << iMaskId;
+                sSoftCollisionMask |= Bit(iMaskId);
+                sOrdnanceCollisionMask |= Bit(iMaskId);
             }
         }
         if (iNumBodies == 0 && mModel)

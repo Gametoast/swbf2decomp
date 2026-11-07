@@ -1,6 +1,7 @@
 #pragma once
 
 #include "PebbleFL/Common/PblHashTable.h"
+#include "PebbleFL/Common/PblRtti.h"
 
 #include <stddef.h>
 
@@ -12,11 +13,24 @@
 class UnitWaitAgent : public UnitAgent
 {
 public:
+
+    // the modtools build's state names: START Wait
+    enum State
+    {
+        STATE_START = 1,
+        STATE_Wait = 2,
+        STATE_FINAL = 3
+    };
+
     UnitWaitAgent(UnitController* pCtrl);
 
-    virtual bool IsRtti(unsigned int uRtti) const;
-    virtual unsigned int GetDerivedRtti() const;
-    virtual const char* GetDerivedRttiName() const;
+    // FUNCTION: SWBF2 0x0066b330
+    // UnitWaitAgent::IsRtti
+    // FUNCTION: SWBF2 0x0066b360
+    // UnitWaitAgent::GetDerivedRtti
+    // FUNCTION: SWBF2 0x0066b370
+    // UnitWaitAgent::GetDerivedRttiName
+    PBL_DECLARE_DERIVED_RTTI(UnitWaitAgent, UnitAgent)
     virtual const char* NFINAL_GetStateString(int iState) const;
 
 protected:
@@ -30,31 +44,8 @@ public:
     PblVector3 mSearchPos;
     float mTargetTimer;
 
-    static PblHash rttiHashUnitWaitAgent;
-    static const char rttiNameUnitWaitAgent[];
 };
  
  
  
 
-// FUNCTION: SWBF2 0x0066b330
-inline bool UnitWaitAgent::IsRtti(unsigned int uRtti) const
-{
-    if (rttiHashUnitWaitAgent == uRtti)
-    {
-        return true;
-    }
-    return UnitAgent::IsRtti(uRtti);
-}
-
-// FUNCTION: SWBF2 0x0066b360
-inline unsigned int UnitWaitAgent::GetDerivedRtti() const
-{
-    return rttiHashUnitWaitAgent;
-}
-
-// FUNCTION: SWBF2 0x0066b370
-inline const char* UnitWaitAgent::GetDerivedRttiName() const
-{
-    return rttiNameUnitWaitAgent;
-}

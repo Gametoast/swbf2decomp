@@ -46,7 +46,7 @@ pcRedVertexFormat* pcRedVertexFormat::Create(unsigned int uiVertexBufferRVF,
         return 0;
     }
 
-    const unsigned int uiInput = uiVertexInputRVF & 0x7FF;
+    const unsigned int uiInput = uiVertexInputRVF & RVF_STREAMS_MASK;
 
     PblList<pcRedVertexFormat>::Node* pNode = s_vertexFormatList.GetFirst();
     while (pNode->_pObject != s_vertexFormatList._head._pObject)
@@ -90,7 +90,7 @@ pcRedVertexFormat* pcRedVertexFormat::Create(unsigned int uiVertexBufferRVF,
     pcRedVertexFormat* pFormat = new pcRedVertexFormat;
 
     pFormat->m_uiVertexBufferRVF = uiVertexBufferRVF;
-    pFormat->m_uiVertexInputRVF = 0x800;
+    pFormat->m_uiVertexInputRVF = RVF_CUSTOM_DECLARATION;
 
     IDirect3DVertexDeclaration9* pVertexDeclaration;
     RedRenderer::pcGetDevice()->CreateVertexDeclaration(pDeclaration, &pVertexDeclaration);
@@ -121,14 +121,14 @@ IDirect3DVertexDeclaration9* pcRedVertexFormat::CreateVertexDeclaration(
     unsigned short usOffset = 0;
     int uiCount = 0;
 
-    if (uiVertexBufferRVF & 3)
+    if (uiVertexBufferRVF & RVF_POSITION_MASK)
     {
         const unsigned short usBufComponents =
-            (unsigned short)((uiVertexBufferRVF & 3) + 1);
+            (unsigned short)((uiVertexBufferRVF & RVF_POSITION_MASK) + 1);
         const unsigned short usInComponents =
-            (unsigned short)((uiVertexInputRVF & 3) + 1);
+            (unsigned short)((uiVertexInputRVF & RVF_POSITION_MASK) + 1);
 
-        if (uiVertexBufferRVF & 0x1000)
+        if (uiVertexBufferRVF & RVF_COMPRESSED_POSITION)
         {
             if (usInComponents > 2)
             {
@@ -166,10 +166,10 @@ IDirect3DVertexDeclaration9* pcRedVertexFormat::CreateVertexDeclaration(
         }
     }
 
-    if (uiVertexBufferRVF & 0x1C)
+    if (uiVertexBufferRVF & RVF_WEIGHTS_MASK)
     {
-        const unsigned short usBufWeights = (unsigned short)((uiVertexBufferRVF >> 2) & 7);
-        unsigned short usInWeights = (unsigned short)((uiVertexInputRVF >> 2) & 7);
+        const unsigned short usBufWeights = (unsigned short)((uiVertexBufferRVF & RVF_WEIGHTS_MASK) >> RVF_WEIGHTS_SHIFT);
+        unsigned short usInWeights = (unsigned short)((uiVertexInputRVF & RVF_WEIGHTS_MASK) >> RVF_WEIGHTS_SHIFT);
         if (usInWeights > usBufWeights)
         {
             usInWeights = usBufWeights;
@@ -177,7 +177,7 @@ IDirect3DVertexDeclaration9* pcRedVertexFormat::CreateVertexDeclaration(
 
         if (usBufWeights > 1)
         {
-            if (uiVertexBufferRVF & 0x2000)
+            if (uiVertexBufferRVF & RVF_COMPRESSED_WEIGHTS)
             {
                 if (usInWeights > 1)
                 {
@@ -215,11 +215,11 @@ IDirect3DVertexDeclaration9* pcRedVertexFormat::CreateVertexDeclaration(
         usOffset = (unsigned short)(usOffset + 4);
     }
 
-    if (uiVertexBufferRVF & 0x20)
+    if (uiVertexBufferRVF & RVF_NORMAL)
     {
-        if (uiVertexBufferRVF & 0x4000)
+        if (uiVertexBufferRVF & RVF_COMPRESSED_NORMALS)
         {
-            if (uiVertexInputRVF & 0x20)
+            if (uiVertexInputRVF & RVF_NORMAL)
             {
                 aElements[uiCount].Type = D3DDECLTYPE_D3DCOLOR;
                 aElements[uiCount].Offset = usOffset;
@@ -231,7 +231,7 @@ IDirect3DVertexDeclaration9* pcRedVertexFormat::CreateVertexDeclaration(
         }
         else
         {
-            if (uiVertexInputRVF & 0x20)
+            if (uiVertexInputRVF & RVF_NORMAL)
             {
                 aElements[uiCount].Type = D3DDECLTYPE_FLOAT3;
                 aElements[uiCount].Offset = usOffset;
@@ -243,11 +243,11 @@ IDirect3DVertexDeclaration9* pcRedVertexFormat::CreateVertexDeclaration(
         }
     }
 
-    if (uiVertexBufferRVF & 0x40)
+    if (uiVertexBufferRVF & RVF_TANGENTS)
     {
-        if (uiVertexBufferRVF & 0x4000)
+        if (uiVertexBufferRVF & RVF_COMPRESSED_NORMALS)
         {
-            if (uiVertexInputRVF & 0x40)
+            if (uiVertexInputRVF & RVF_TANGENTS)
             {
                 D3DVERTEXELEMENT9& tangent = aElements[uiCount];
                 D3DVERTEXELEMENT9& binormal = aElements[uiCount + 1];
@@ -265,7 +265,7 @@ IDirect3DVertexDeclaration9* pcRedVertexFormat::CreateVertexDeclaration(
         }
         else
         {
-            if (uiVertexInputRVF & 0x40)
+            if (uiVertexInputRVF & RVF_TANGENTS)
             {
                 D3DVERTEXELEMENT9& tangent = aElements[uiCount];
                 D3DVERTEXELEMENT9& binormal = aElements[uiCount + 1];
@@ -284,9 +284,9 @@ IDirect3DVertexDeclaration9* pcRedVertexFormat::CreateVertexDeclaration(
     }
 
     unsigned char ucColourIndex = 0;
-    if (uiVertexBufferRVF & 0x80)
+    if (uiVertexBufferRVF & RVF_COLOR)
     {
-        if (uiVertexInputRVF & 0x80)
+        if (uiVertexInputRVF & RVF_COLOR)
         {
             aElements[uiCount].Type = D3DDECLTYPE_D3DCOLOR;
             ucColourIndex = 1;
@@ -297,9 +297,9 @@ IDirect3DVertexDeclaration9* pcRedVertexFormat::CreateVertexDeclaration(
         }
         usOffset = (unsigned short)(usOffset + 4);
     }
-    if (uiVertexBufferRVF & 0x100)
+    if (uiVertexBufferRVF & RVF_LIGHTING)
     {
-        if (uiVertexInputRVF & 0x100)
+        if (uiVertexInputRVF & RVF_LIGHTING)
         {
             aElements[uiCount].Type = D3DDECLTYPE_D3DCOLOR;
             aElements[uiCount].Offset = usOffset;
@@ -310,13 +310,13 @@ IDirect3DVertexDeclaration9* pcRedVertexFormat::CreateVertexDeclaration(
         usOffset = (unsigned short)(usOffset + 4);
     }
 
-    if (uiVertexBufferRVF & 0x600)
+    if (uiVertexBufferRVF & RVF_TEXCOORDS_MASK)
     {
-        const unsigned char ucIn = (unsigned char)((uiVertexInputRVF >> 9) & 3);
-        const unsigned char ucBuf = (unsigned char)((uiVertexBufferRVF >> 9) & 3);
+        const unsigned char ucIn = (unsigned char)((uiVertexInputRVF & RVF_TEXCOORDS_MASK) >> RVF_TEXCOORDS_SHIFT);
+        const unsigned char ucBuf = (unsigned char)((uiVertexBufferRVF & RVF_TEXCOORDS_MASK) >> RVF_TEXCOORDS_SHIFT);
         const unsigned char ucNum = (ucIn > ucBuf) ? ucBuf : ucIn;
 
-        if (uiVertexBufferRVF & 0x8000)
+        if (uiVertexBufferRVF & RVF_COMPRESSED_TEXCOORDS)
         {
             for (unsigned char uc = 0; uc < ucNum; uc++)
             {
@@ -355,72 +355,72 @@ unsigned int pcRedVertexFormat::RVFtoFVF(unsigned int uiRVF)
 {
     unsigned int uiFVF = 0;
 
-    if (uiRVF & 0x800)
+    if (uiRVF & RVF_CUSTOM_DECLARATION)
     {
         return 0;
     }
-    if (uiRVF & 0x40)
+    if (uiRVF & RVF_TANGENTS)
     {
         return 0;
     }
-    if (uiRVF & 0xF000)
+    if (uiRVF & RVF_COMPRESSED_MASK)
     {
         return 0;
     }
 
-    const unsigned int uiPosition = uiRVF & 3;
-    if (uiPosition == 1)
+    const unsigned int uiPosition = uiRVF & RVF_POSITION_MASK;
+    if (uiPosition == RVF_POSITION_XY)
     {
         return 0;
     }
-    if (uiPosition == 2)
+    if (uiPosition == RVF_POSITION_XYZ)
     {
         uiFVF = D3DFVF_XYZ;
     }
-    else if (uiPosition == 3)
+    else if (uiPosition == RVF_POSITION_XYZRHW)
     {
         uiFVF = D3DFVF_XYZRHW;
     }
 
-    if (uiRVF & 4)
+    if (uiRVF & RVF_WEIGHTS_1)
     {
         uiFVF |= D3DFVF_XYZB1;
     }
-    else if (uiRVF & 8)
+    else if (uiRVF & RVF_WEIGHTS_2)
     {
         uiFVF |= D3DFVF_XYZB2;
     }
-    else if (uiRVF & 0x0C)
+    else if (uiRVF & RVF_WEIGHTS_3)
     {
         uiFVF |= D3DFVF_XYZB3;
     }
-    else if (uiRVF & 0x10)
+    else if (uiRVF & RVF_WEIGHTS_4)
     {
         uiFVF |= D3DFVF_XYZB4;
     }
 
-    if (uiRVF & 0x1C)
+    if (uiRVF & RVF_WEIGHTS_MASK)
     {
         uiFVF |= D3DFVF_LASTBETA_UBYTE4;
     }
-    if (uiRVF & 0x20)
+    if (uiRVF & RVF_NORMAL)
     {
         uiFVF |= D3DFVF_NORMAL;
     }
-    if (uiRVF & 0x180)
+    if (uiRVF & (RVF_COLOR | RVF_LIGHTING))
     {
         uiFVF |= D3DFVF_DIFFUSE;
     }
-    if ((uiRVF & 0x80) && (uiRVF & 0x100))
+    if ((uiRVF & RVF_COLOR) && (uiRVF & RVF_LIGHTING))
     {
         uiFVF |= D3DFVF_SPECULAR;
     }
 
-    if (uiRVF & 0x200)
+    if (uiRVF & RVF_TEXCOORDS_1)
     {
         return uiFVF | D3DFVF_TEX1;
     }
-    if (uiRVF & 0x400)
+    if (uiRVF & RVF_TEXCOORDS_2)
     {
         uiFVF |= D3DFVF_TEX2;
     }

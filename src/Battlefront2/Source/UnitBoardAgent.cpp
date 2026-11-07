@@ -83,10 +83,9 @@ inline float DistSq(const PblVector3& a, const PblVector3& b)
 
 // GLOBAL: SWBF2 0x01f99354
 // UnitBoardAgent::rttiHashUnitBoardAgent
-PblHash UnitBoardAgent::rttiHashUnitBoardAgent("UnitBoardAgent");
 // GLOBAL: SWBF2 0x0078b728
 // UnitBoardAgent::rttiNameUnitBoardAgent
-const char UnitBoardAgent::rttiNameUnitBoardAgent[] = "UnitBoardAgent";
+PBL_IMPLEMENT_RTTI(UnitBoardAgent)
 
 
 
@@ -109,8 +108,8 @@ UnitBoardAgent::UnitBoardAgent(UnitController* pCtrl, GameObject* pVehicle, int 
 {
     mVehicle = pVehicle;
     mVOResponseHandle = iVOResponseHandle;
-    mCurState = 1;
-    mNextState = 2;
+    mCurState = STATE_START;
+    mNextState = STATE_Goto;
 }
 
 // FUNCTION: SWBF2 0x006624d0
@@ -166,7 +165,7 @@ void UnitBoardAgent::EnterState()
     mStateEnterTime = GameLoop::GetMissionTime();
     switch (mCurState)
     {
-    case 2:
+    case STATE_Goto:
     {
         GameObject* pVehicle = AIUtil::GetAlivePtr(mVehicle, false);
         if (pVehicle)
@@ -175,7 +174,7 @@ void UnitBoardAgent::EnterState()
             {
                 if (ReserveManager::GetOpenReservableSlots(pVehicle, GetMe()->GetGameObject()->mTeam, RT_BOARD) <= 0)
                 {
-                    SetNextState(100);
+                    SetNextState(STATE_GLOBDONE);
                     return;
                 }
                 ReserveManager::Reserve(pVehicle, GetMe()->GetGameObject(), RT_BOARD);
@@ -193,10 +192,10 @@ void UnitBoardAgent::EnterState()
             }
             return;
         }
-        SetNextState(100);
+        SetNextState(STATE_GLOBDONE);
         break;
     }
-    case 3:
+    case STATE_Board:
     {
         GameObject* pVehicle = AIUtil::GetAlivePtr(mVehicle, false);
         if (pVehicle)
@@ -220,8 +219,8 @@ void UnitBoardAgent::ExitState()
 {
     switch (mCurState)
     {
-    case 2:
-    case 3:
+    case STATE_Goto:
+    case STATE_Board:
         ReserveManager::UnreserveReserver(GetMe()->GetGameObject(), RT_BOARD);
         break;
     }
@@ -230,14 +229,14 @@ void UnitBoardAgent::ExitState()
 // FUNCTION: SWBF2 0x00662290
 void UnitBoardAgent::UpdateStatePostVision(float dt)
 {
-    if (mCurState == 100)
+    if (mCurState == STATE_GLOBDONE)
     {
         return;
     }
-    if ((mCurState == 2 && GameLoop::GetMissionTime() > mStateEnterTime + 30.0f) ||
-        (mCurState == 3 && GameLoop::GetMissionTime() > mStateEnterTime + 10.0f))
+    if ((mCurState == STATE_Goto && GameLoop::GetMissionTime() > mStateEnterTime + 30.0f) ||
+        (mCurState == STATE_Board && GameLoop::GetMissionTime() > mStateEnterTime + 10.0f))
     {
-        SetNextState(100);
+        SetNextState(STATE_GLOBDONE);
         return;
     }
 
@@ -252,11 +251,11 @@ void UnitBoardAgent::UpdateStatePostVision(float dt)
         ReserveManager::Reserve(pVehicle, GetMe()->GetGameObject(), RT_BOARD);
         switch (mCurState)
         {
-        case 2:
+        case STATE_Goto:
         {
             if (!GetLowLevel().IsNavigatorInProgress())
             {
-                SetNextState(2);
+                SetNextState(STATE_Goto);
                 return;
             }
             const CollisionObject* pMe = GetMe()->GetGameObject()->GetCollisionObject();
@@ -264,12 +263,12 @@ void UnitBoardAgent::UpdateStatePostVision(float dt)
             float fRange = pMe->GetCollisionRadius() + pVehicleCol->GetCollisionRadius() + 1.5f;
             if (SquaredLength(pMe->GetCollisionCenter() - pVehicleCol->GetCollisionCenter()) < fRange * fRange)
             {
-                SetNextState(3);
+                SetNextState(STATE_Board);
             }
             GetLowLevel().SetHeading(pVehicle);
             break;
         }
-        case 3:
+        case STATE_Board:
             GetLowLevel().SetBoardVehicle(mVehicle);
             GetLowLevel().SetHeading(pVehicle);
             break;
@@ -278,5 +277,5 @@ void UnitBoardAgent::UpdateStatePostVision(float dt)
     }
 
     ReserveManager::UnreserveReserver(GetMe()->GetGameObject(), RT_BOARD);
-    SetNextState(100);
+    SetNextState(STATE_GLOBDONE);
 }

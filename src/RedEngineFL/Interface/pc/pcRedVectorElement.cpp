@@ -85,17 +85,17 @@ void RedVectorElement::RenderUsingContext(const PblMatrix& mContext,
 
     if (m_eBlendMode == BLEND_ADDITIVE)
     {
-        m_pInterfaceShader->m_materialFlags |= 0x40;
+        m_pInterfaceShader->m_materialFlags |= MATERIAL_FLAG_ALPHABLEND_ADDITIVE;
     }
     else
     {
-        m_pInterfaceShader->m_materialFlags &= ~0x40u;
+        m_pInterfaceShader->m_materialFlags &= ~MATERIAL_FLAG_ALPHABLEND_ADDITIVE;
     }
 
     m_pInterfaceShader->m_shadowEnable = (m_eStyle == VECTOR_STYLE_SHADOW);
 
     RedRenderer::pcRenderPrimitive(pPrimitive, m_pInterfaceShader, mContext,
-                                   color, 0x200, 0, 0, 0);
+                                   color, PC_RENDERFLAG_IMMEDIATE, 0, 0, 0);
 
     pPrimitive->Release();
 }
@@ -135,7 +135,7 @@ void RedVectorElement::End()
 void RedVectorElement::Init()
 {
     m_pInterfaceShader = (pcInterfaceShader*)pcRedShader::Create(
-        PblHash("Interface"), 0x82, 0, 0, 0, RedColor::WHITE, RedColor::BLACK,
+        PblHash("Interface"), RVF_POSITION_XYZ | RVF_COLOR, 0, 0, 0, RedColor::WHITE, RedColor::BLACK,
         32.0f);
 
     m_pInterfaceShader->m_mode = pcInterfaceShader::INTERFACE_MODE_VECTOR;

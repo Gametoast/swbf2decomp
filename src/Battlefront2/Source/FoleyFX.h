@@ -1,6 +1,7 @@
 #pragma once
 
 #include "PebbleFL/Common/PblHashTable.h"
+#include "PebbleFL/Common/PblRtti.h"
 
 #include <stddef.h>
 
@@ -16,9 +17,13 @@ class FoleyFX
 public:
     FoleyFX();
 
-    virtual bool IsRtti(unsigned int uRtti) const;
-    virtual unsigned int GetDerivedRtti() const;
-    virtual const char* GetDerivedRttiName() const;
+    // FUNCTION: SWBF2 0x0052c040
+    // FoleyFX::IsRtti
+    // FUNCTION: SWBF2 0x0052c060
+    // FoleyFX::GetDerivedRtti
+    // FUNCTION: SWBF2 0x0052c070
+    // FoleyFX::GetDerivedRttiName
+    PBL_DECLARE_ROOT_RTTI(FoleyFX)
     virtual ~FoleyFX();
     virtual bool Read(PblFileChunk& chunk, unsigned int uChunkID);
 
@@ -33,11 +38,8 @@ public:
     unsigned int mClass;
     PblListSingle::Node mNode;
 
-    static PblHash rttiHashFoleyFX;
-    static const char rttiNameFoleyFX[];
     static PblListSingle smList;
 };
- 
 
 class FoleyFXGroup
 {
@@ -63,7 +65,6 @@ public:
     static FoleyFXGroup* smWater;
     static FoleyFXGroup* smTerrain;
 };
- 
 
 class FoleyFXCollideeClass
 {
@@ -78,8 +79,6 @@ public:
 
     FoleyFXGroup* mGroup;
 };
- 
- 
 
 class FoleyFXColliderClass
 {
@@ -94,20 +93,3 @@ public:
  
  
 
-// FUNCTION: SWBF2 0x0052c040
-inline bool FoleyFX::IsRtti(unsigned int uRtti) const
-{
-    return rttiHashFoleyFX == uRtti;
-}
-
-// FUNCTION: SWBF2 0x0052c060
-inline unsigned int FoleyFX::GetDerivedRtti() const
-{
-    return rttiHashFoleyFX;
-}
-
-// FUNCTION: SWBF2 0x0052c070
-inline const char* FoleyFX::GetDerivedRttiName() const
-{
-    return rttiNameFoleyFX;
-}

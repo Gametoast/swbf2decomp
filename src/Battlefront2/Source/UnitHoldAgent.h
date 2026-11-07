@@ -1,6 +1,7 @@
 #pragma once
 
 #include "PebbleFL/Common/PblHashTable.h"
+#include "PebbleFL/Common/PblRtti.h"
 
 #include <stddef.h>
 
@@ -12,11 +13,24 @@
 class UnitHoldAgent : public UnitAgent
 {
 public:
+
+    // the modtools build's state names: START Wait
+    enum State
+    {
+        STATE_START = 1,
+        STATE_Wait = 2,
+        STATE_FINAL = 3
+    };
+
     UnitHoldAgent(UnitController* pCtrl);
 
-    virtual bool IsRtti(unsigned int uRtti) const;
-    virtual unsigned int GetDerivedRtti() const;
-    virtual const char* GetDerivedRttiName() const;
+    // FUNCTION: SWBF2 0x00668d50
+    // UnitHoldAgent::IsRtti
+    // FUNCTION: SWBF2 0x00668d80
+    // UnitHoldAgent::GetDerivedRtti
+    // FUNCTION: SWBF2 0x00668d90
+    // UnitHoldAgent::GetDerivedRttiName
+    PBL_DECLARE_DERIVED_RTTI(UnitHoldAgent, UnitAgent)
     virtual bool ShouldQueueCurCmd(const UnitCmdInfo& cmd) const;
     virtual const char* NFINAL_GetStateString(int iState) const;
     virtual int EventHandler(AI::EventInfo* pInfo);
@@ -32,31 +46,8 @@ public:
     float mInsubValue;
     PblVector3 mSearchPos;
 
-    static PblHash rttiHashUnitHoldAgent;
-    static const char rttiNameUnitHoldAgent[];
 };
  
  
  
 
-// FUNCTION: SWBF2 0x00668d50
-inline bool UnitHoldAgent::IsRtti(unsigned int uRtti) const
-{
-    if (rttiHashUnitHoldAgent == uRtti)
-    {
-        return true;
-    }
-    return UnitAgent::IsRtti(uRtti);
-}
-
-// FUNCTION: SWBF2 0x00668d80
-inline unsigned int UnitHoldAgent::GetDerivedRtti() const
-{
-    return rttiHashUnitHoldAgent;
-}
-
-// FUNCTION: SWBF2 0x00668d90
-inline const char* UnitHoldAgent::GetDerivedRttiName() const
-{
-    return rttiNameUnitHoldAgent;
-}

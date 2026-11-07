@@ -32,15 +32,17 @@ public:
 
     virtual EntityClass* Derive(unsigned int uHash);
     virtual Entity* Build(const EntityDesc& desc);
-    virtual bool IsRtti(unsigned int uRtti) const;
-    virtual unsigned int GetDerivedRtti() const;
-    virtual const char* GetDerivedRttiName() const;
+    // FUNCTION: SWBF2 0x004be220
+    // EntityHologramClass::IsRtti
+    // FUNCTION: SWBF2 0x004be250
+    // EntityHologramClass::GetDerivedRtti
+    // FUNCTION: SWBF2 0x004be260
+    // EntityHologramClass::GetDerivedRttiName
+    PBL_DECLARE_DERIVED_RTTI(EntityHologramClass, EntityClass)
     virtual void SetProperty(unsigned int uProperty, const char* pszValue);
 
     static EntityHologramClass* Find(unsigned int uHash);
 
-    static PblHash rttiHashEntityHologramClass;
-    static const char rttiNameEntityHologramClass[];
     static void Reset();
     static PblHashTable<EntityHologramClass, 32> sHologramClassTable;
 
@@ -64,26 +66,6 @@ public:
     float m_fTurnOnDistance;
     int m_eType;
 };
-  
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
 
 // VTABLE: SWBF2 0x0079b820 EntityEx
 // VTABLE: SWBF2 0x0079b878 RedSceneObject
@@ -97,7 +79,6 @@ public:
     // FUNCTION: SWBF2 0x004be1f0
     // EntityHologram::GetDerivedRttiName
     PBL_DECLARE_DERIVED_RTTI(EntityHologram, EntityEx)
-
 
     // VTABLE: SWBF2 0x0079b7d8
     class MyThread : public Thread
@@ -174,24 +155,3 @@ public:
  
  
 
-// FUNCTION: SWBF2 0x004be220
-inline bool EntityHologramClass::IsRtti(unsigned int uRtti) const
-{
-    if (rttiHashEntityHologramClass == uRtti)
-    {
-        return true;
-    }
-    return EntityClass::IsRtti(uRtti);
-}
-
-// FUNCTION: SWBF2 0x004be250
-inline unsigned int EntityHologramClass::GetDerivedRtti() const
-{
-    return rttiHashEntityHologramClass;
-}
-
-// FUNCTION: SWBF2 0x004be260
-inline const char* EntityHologramClass::GetDerivedRttiName() const
-{
-    return rttiNameEntityHologramClass;
-}

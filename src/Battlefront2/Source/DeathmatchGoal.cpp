@@ -9,10 +9,9 @@
 
 // GLOBAL: SWBF2 0x01eb97b4
 // AI::DeathmatchGoal::rttiHashDeathmatchGoal
-PblHash AI::DeathmatchGoal::rttiHashDeathmatchGoal("DeathmatchGoal");
 // GLOBAL: SWBF2 0x00788e54
 // AI::DeathmatchGoal::rttiNameDeathmatchGoal
-const char AI::DeathmatchGoal::rttiNameDeathmatchGoal[] = "DeathmatchGoal";
+PBL_IMPLEMENT_RTTI_IN(AI, DeathmatchGoal)
 
 
 

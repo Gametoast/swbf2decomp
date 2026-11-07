@@ -13,7 +13,7 @@
 #define luaS_newliteral(L, s)	(luaS_newlstr(L, "" s, \
                                  (sizeof(s)/sizeof(char))-1))
 
-#define luaS_fix(s)	((s)->tsv.marked |= (1<<4))
+#define luaS_fix(s)	((s)->tsv.marked |= LUA_BIT(4))
 
 void luaS_resize (lua_State *L, int newsize);
 Udata *luaS_newudata (lua_State *L, size_t s);

@@ -18,10 +18,9 @@
 
 // GLOBAL: SWBF2 0x01f9a8ac
 // WeaponDetonatorClass::rttiHashWeaponDetonatorClass
-PblHash WeaponDetonatorClass::rttiHashWeaponDetonatorClass("WeaponDetonatorClass");
 // GLOBAL: SWBF2 0x0078bf14
 // WeaponDetonatorClass::rttiNameWeaponDetonatorClass
-const char WeaponDetonatorClass::rttiNameWeaponDetonatorClass[] = "WeaponDetonatorClass";
+PBL_IMPLEMENT_RTTI(WeaponDetonatorClass)
 
 // SYNTHETIC: SWBF2 0x00407100
 // `dynamic initializer for 'WeaponDetonator::rttiHashWeaponDetonator''
@@ -29,10 +28,9 @@ const char WeaponDetonatorClass::rttiNameWeaponDetonatorClass[] = "WeaponDetonat
 
 // GLOBAL: SWBF2 0x01f9a8b0
 // WeaponDetonator::rttiHashWeaponDetonator
-PblHash WeaponDetonator::rttiHashWeaponDetonator("WeaponDetonator");
 // GLOBAL: SWBF2 0x0078bf30
 // WeaponDetonator::rttiNameWeaponDetonator
-const char WeaponDetonator::rttiNameWeaponDetonator[] = "WeaponDetonator";
+PBL_IMPLEMENT_RTTI(WeaponDetonator)
 
 
 

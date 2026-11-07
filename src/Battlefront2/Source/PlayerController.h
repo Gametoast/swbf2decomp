@@ -1,6 +1,7 @@
 #pragma once
 
 #include "PebbleFL/Common/PblHashTable.h"
+#include "PebbleFL/Common/PblRtti.h"
 
 #include <stddef.h>
 
@@ -20,9 +21,13 @@ public:
 
     void LogVODeath(int iVictimTeam, int iKillerTeam);
 
-    virtual bool IsRtti(unsigned int uRtti) const;
-    virtual unsigned int GetDerivedRtti() const;
-    virtual const char* GetDerivedRttiName() const;
+    // FUNCTION: SWBF2 0x0061a060
+    // PlayerController::IsRtti
+    // FUNCTION: SWBF2 0x0061a090
+    // PlayerController::GetDerivedRtti
+    // FUNCTION: SWBF2 0x0061a0a0
+    // PlayerController::GetDerivedRttiName
+    PBL_DECLARE_DERIVED_RTTI(PlayerController, Controller)
     virtual void Update(float dt);
 
     float GetMouseBuildup();
@@ -35,9 +40,6 @@ public:
 
     static void* operator new(unsigned int uSize) { return sMemoryPool.Allocate(uSize); }
     static MemoryPool sMemoryPool;
-
-    static PblHash rttiHashPlayerController;
-    static const char rttiNamePlayerController[];
 
 protected:
     void DeployCargo();
@@ -76,27 +78,5 @@ const PlayerController* PlayerControllerPtr(const Controllable* pControllable);
  
  
  
-
-// FUNCTION: SWBF2 0x0061a060
-inline bool PlayerController::IsRtti(unsigned int uRtti) const
-{
-    if (rttiHashPlayerController == uRtti)
-    {
-        return true;
-    }
-    return Controller::IsRtti(uRtti);
-}
-
-// FUNCTION: SWBF2 0x0061a090
-inline unsigned int PlayerController::GetDerivedRtti() const
-{
-    return rttiHashPlayerController;
-}
-
-// FUNCTION: SWBF2 0x0061a0a0
-inline const char* PlayerController::GetDerivedRttiName() const
-{
-    return rttiNamePlayerController;
-}
 
 

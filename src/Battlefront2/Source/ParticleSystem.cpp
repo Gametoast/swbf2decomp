@@ -110,7 +110,7 @@ bool PrepareForRender(ParticleEmitter* pEmitter, const PblVector3& vPos, int iUn
         fAlpha = (1.0f - (fDist - fMaxDist * 0.8f) / (fMaxDist * 0.2f)) * fAlpha;
     }
 
-    if (!(uiFlags & 0x20000))
+    if (!(uiFlags & RENDERFLAG_RENDER_TO_SKY))
     {
         const float fFadeStart = FLRenderer::GetNearSceneFadeStart() * fZoom - fRadius;
         const float fFadeEnd = FLRenderer::GetNearSceneFadeEnd() * fZoom + fRadius;

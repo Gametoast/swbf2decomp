@@ -132,7 +132,7 @@ void pcRainShader::InitFixedFunctionShaderDef() const
 // FUNCTION: SWBF2 0x00704fd0
 void pcRainShader::Render_Fixed(const RenderItem* pItem, unsigned int) const
 {
-    if (m_uiMaterialFlags & 0x40)
+    if (m_uiMaterialFlags & MATERIAL_FLAG_ALPHABLEND_ADDITIVE)
     {
         RedRenderer::pcSetRenderState(D3DRS_DESTBLEND, D3DBLEND_ONE);
     }
@@ -174,7 +174,7 @@ void pcRainShader::Render_Fixed(const RenderItem* pItem, unsigned int) const
 // FUNCTION: SWBF2 0x00705130
 void pcRainShader::Render_Prog1(const RenderItem* pItem, unsigned int) const
 {
-    if (m_uiMaterialFlags & 0x40)
+    if (m_uiMaterialFlags & MATERIAL_FLAG_ALPHABLEND_ADDITIVE)
     {
         RedRenderer::pcSetRenderState(D3DRS_DESTBLEND, D3DBLEND_ONE);
     }
@@ -236,7 +236,7 @@ void pcRainShader::_Init(unsigned int uiFlags,
                          const RedColor&,
                          float)
 {
-    m_pVertexFormat = pcRedVertexFormat::Create(uiFlags, (uiFlags & 0x180) | 2);
+    m_pVertexFormat = pcRedVertexFormat::Create(uiFlags, (uiFlags & (RVF_COLOR | RVF_LIGHTING)) | RVF_POSITION_XYZ);
     m_uiMaterialFlags = uiMaterialFlags;
     m_fLineWidth = 0.02f;
     m_fMaxPixelWidth = 2.0f;

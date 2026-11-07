@@ -1,4 +1,5 @@
 #include <d3dx9math.h>
+#include "PebbleFL/Common/PblBits.h"
 #include "AIUtil.h"
 
 #include <math.h>
@@ -68,6 +69,7 @@
 #include "PebbleFL/Common/PblHeap.h"
 #include "TeamManager.h"
 #include "MemoryPoolCounts.h"
+
 
 
 extern PblVector3 gVectorZero;
@@ -1318,7 +1320,7 @@ namespace AIUtil
 // FUNCTION: SWBF2 0x00441780
 void AddSpied(Character* aSpy, Character* aSpotter)
 {
-    sSpied[Character::GetIndex(aSpy)] |= 1 << Character::GetIndex(aSpotter);
+    sSpied[Character::GetIndex(aSpy)] |= Bit(Character::GetIndex(aSpotter));
 }
 }
 
@@ -1334,7 +1336,7 @@ namespace AIUtil
 // FUNCTION: SWBF2 0x00441800
 bool IsSpied(Character* aSpy, Character* aSpotter)
 {
-    return (sSpied[Character::GetIndex(aSpy)] & (1 << Character::GetIndex(aSpotter))) != 0;
+    return (sSpied[Character::GetIndex(aSpy)] & Bit(Character::GetIndex(aSpotter))) != 0;
 }
 }
 

@@ -1,6 +1,7 @@
 #pragma once
 
 #include "PebbleFL/Common/PblHashTable.h"
+#include "PebbleFL/Common/PblRtti.h"
 
 #include <stddef.h>
 
@@ -14,11 +15,28 @@ class EntityFlyer;
 class UnitFlyAgent : public UnitAgent
 {
 public:
+
+    // the modtools build's state names: START EXITHANGAR PICKUP FLY LAND DROPOFF
+    enum State
+    {
+        STATE_START = 1,
+        STATE_ExitHangar = 2,
+        STATE_Pickup = 3,
+        STATE_Fly = 4,
+        STATE_Land = 5,
+        STATE_DropOff = 6,
+        STATE_FINAL = 7
+    };
+
     UnitFlyAgent(UnitController* pCtrl);
 
-    virtual bool IsRtti(unsigned int uRtti) const;
-    virtual unsigned int GetDerivedRtti() const;
-    virtual const char* GetDerivedRttiName() const;
+    // FUNCTION: SWBF2 0x006666f0
+    // UnitFlyAgent::IsRtti
+    // FUNCTION: SWBF2 0x00666720
+    // UnitFlyAgent::GetDerivedRtti
+    // FUNCTION: SWBF2 0x00666730
+    // UnitFlyAgent::GetDerivedRttiName
+    PBL_DECLARE_DERIVED_RTTI(UnitFlyAgent, UnitAgent)
     virtual const char* NFINAL_GetStateString(int iState) const;
     virtual float GetUpdateRate() const;
     virtual int EventHandler(AI::EventInfo* pInfo);
@@ -42,31 +60,8 @@ public:
     bool mGotoNonOwnedCP;
     float mWaitTime;
 
-    static PblHash rttiHashUnitFlyAgent;
-    static const char rttiNameUnitFlyAgent[];
 };
  
  
  
 
-// FUNCTION: SWBF2 0x006666f0
-inline bool UnitFlyAgent::IsRtti(unsigned int uRtti) const
-{
-    if (rttiHashUnitFlyAgent == uRtti)
-    {
-        return true;
-    }
-    return UnitAgent::IsRtti(uRtti);
-}
-
-// FUNCTION: SWBF2 0x00666720
-inline unsigned int UnitFlyAgent::GetDerivedRtti() const
-{
-    return rttiHashUnitFlyAgent;
-}
-
-// FUNCTION: SWBF2 0x00666730
-inline const char* UnitFlyAgent::GetDerivedRttiName() const
-{
-    return rttiNameUnitFlyAgent;
-}

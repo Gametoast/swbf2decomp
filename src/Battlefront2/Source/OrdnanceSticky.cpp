@@ -1,6 +1,7 @@
 #include "PebbleFL/Common/PblMath.h"
 #include <d3dx9math.h>
 #include "OrdnanceSticky.h"
+#include "Controllable.h"
 
 #include <float.h>
 #include <math.h>
@@ -47,10 +48,9 @@ namespace
 
 // GLOBAL: SWBF2 0x01ef2668
 // OrdnanceSticky::rttiHashOrdnanceSticky
-PblHash OrdnanceSticky::rttiHashOrdnanceSticky("OrdnanceSticky");
 // GLOBAL: SWBF2 0x0078aa00
 // OrdnanceSticky::rttiNameOrdnanceSticky
-const char OrdnanceSticky::rttiNameOrdnanceSticky[] = "OrdnanceSticky";
+PBL_IMPLEMENT_RTTI(OrdnanceSticky)
 
 // SYNTHETIC: SWBF2 0x00405b90
 // `dynamic initializer for 'OrdnanceStickyClass::rttiHashOrdnanceStickyClass''
@@ -58,10 +58,9 @@ const char OrdnanceSticky::rttiNameOrdnanceSticky[] = "OrdnanceSticky";
 
 // GLOBAL: SWBF2 0x01ef266c
 // OrdnanceStickyClass::rttiHashOrdnanceStickyClass
-PblHash OrdnanceStickyClass::rttiHashOrdnanceStickyClass("OrdnanceStickyClass");
 // GLOBAL: SWBF2 0x0078aa20
 // OrdnanceStickyClass::rttiNameOrdnanceStickyClass
-const char OrdnanceStickyClass::rttiNameOrdnanceStickyClass[] = "OrdnanceStickyClass";
+PBL_IMPLEMENT_RTTI(OrdnanceStickyClass)
 
 // FUNCTION: SWBF2 0x00606d80
 OrdnanceStickyClass::OrdnanceStickyClass(unsigned int uHash)
@@ -116,81 +115,81 @@ void OrdnanceStickyClass::SetProperty(unsigned int uProperty, const char* pszVal
     case 0x01E9CAEA: /* "StickPerson" */
         if (atoi(pszValue))
         {
-            mStickTypes |= 0x1;
+            mStickTypes |= TargetInfo::TYPE_PERSON;
         }
         else
         {
-            mStickTypes &= ~0x1;
+            mStickTypes &= ~TargetInfo::TYPE_PERSON;
         }
         break;
     case 0xD1B49B73: /* "StickAnimal" */
         if (atoi(pszValue))
         {
-            mStickTypes |= 0x2;
+            mStickTypes |= TargetInfo::TYPE_ANIMAL;
         }
         else
         {
-            mStickTypes &= ~0x2;
+            mStickTypes &= ~TargetInfo::TYPE_ANIMAL;
         }
         break;
     case 0x3B3F45B7: /* "StickDroid" */
         if (atoi(pszValue))
         {
-            mStickTypes |= 0x4;
+            mStickTypes |= TargetInfo::TYPE_DROID;
         }
         else
         {
-            mStickTypes &= ~0x4;
+            mStickTypes &= ~TargetInfo::TYPE_DROID;
         }
         break;
     case 0x9B4AF9ED: /* "StickVehicle" */
         if (atoi(pszValue))
         {
-            mStickTypes |= 0x8;
+            mStickTypes |= TargetInfo::TYPE_VEHICLE;
         }
         else
         {
-            mStickTypes &= ~0x8;
+            mStickTypes &= ~TargetInfo::TYPE_VEHICLE;
         }
         break;
     case 0x7449C0B3: /* "StickBuilding" */
         if (atoi(pszValue))
         {
-            mStickTypes |= 0x10;
+            mStickTypes |= TargetInfo::TYPE_BUILDING;
         }
         else
         {
-            mStickTypes &= ~0x10;
+            mStickTypes &= ~TargetInfo::TYPE_BUILDING;
         }
         break;
     case 0xAD9C5FA5: /* "StickBuildingDead" */
         if (atoi(pszValue))
         {
-            mStickTypes |= 0x20;
+            mStickTypes |= TargetInfo::TYPE_BUILDING_DEAD;
         }
         else
         {
-            mStickTypes &= ~0x20;
+            mStickTypes &= ~TargetInfo::TYPE_BUILDING_DEAD;
         }
         break;
     case 0xA8A2AFF4: /* "StickBuildingUnbuilt" */
         if (atoi(pszValue))
         {
-            mStickTypes |= 0x40;
+            mStickTypes |= TargetInfo::TYPE_BUILDING_UNBUILT;
         }
         else
         {
-            mStickTypes &= ~0x40;
+            mStickTypes &= ~TargetInfo::TYPE_BUILDING_UNBUILT;
         }
         break;
     case 0x95706D30: /* "StickTerrain" */
         if (atoi(pszValue))
         {
-            mStickTypes |= 0x80000000;
+            mStickTypes |= kStickTerrain;
         }
         else
         {
-            mStickTypes &= ~0x80000000;
+            mStickTypes &= ~kStickTerrain;
         }
         break;
     default:
@@ -419,7 +418,7 @@ bool OrdnanceSticky::Collide(CollisionObject* pObject, const PblVector3& vPos,
     bool bStick = false;
     if (pObject->GetCollisionType() == COLL_TERRAIN)
     {
-        bStick = (((OrdnanceStickyClass*)mClass)->mStickTypes & 0x80000000) != 0;
+        bStick = (((OrdnanceStickyClass*)mClass)->mStickTypes & OrdnanceStickyClass::kStickTerrain) != 0;
     }
     else
     {
@@ -427,7 +426,7 @@ bool OrdnanceSticky::Collide(CollisionObject* pObject, const PblVector3& vPos,
         if (pVictim)
         {
             bStick = (((OrdnanceStickyClass*)mClass)->mStickTypes &
-                      (1 << pVictim->mHealthType)) != 0;
+                      Bit(pVictim->mHealthType)) != 0;
             PblVector3 vDir;
             D3DXVec3Normalize(reinterpret_cast<D3DXVECTOR3*>(&vDir), reinterpret_cast<const D3DXVECTOR3*>(&mVelocity));
             pVictim->ApplyDamage(GetDamage(), vDir, vPos, iBodyId, 0xFFFFFFFF);

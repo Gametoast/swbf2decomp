@@ -11,10 +11,9 @@
 
 // GLOBAL: SWBF2 0x01ebb990
 // EntityDefenseGridTurretClass::rttiHashEntityDefenseGridTurretClass
-PblHash EntityDefenseGridTurretClass::rttiHashEntityDefenseGridTurretClass("EntityDefenseGridTurretClass");
 // GLOBAL: SWBF2 0x007890cc
 // EntityDefenseGridTurretClass::rttiNameEntityDefenseGridTurretClass
-const char EntityDefenseGridTurretClass::rttiNameEntityDefenseGridTurretClass[] = "EntityDefenseGridTurretClass";
+PBL_IMPLEMENT_RTTI(EntityDefenseGridTurretClass)
 
 // SYNTHETIC: SWBF2 0x004029a0
 // `dynamic initializer for 'EntityDefenseGridTurret::rttiHashEntityDefenseGridTurret''
@@ -22,10 +21,9 @@ const char EntityDefenseGridTurretClass::rttiNameEntityDefenseGridTurretClass[] 
 
 // GLOBAL: SWBF2 0x01ebb994
 // EntityDefenseGridTurret::rttiHashEntityDefenseGridTurret
-PblHash EntityDefenseGridTurret::rttiHashEntityDefenseGridTurret("EntityDefenseGridTurret");
 // GLOBAL: SWBF2 0x007890f8
 // EntityDefenseGridTurret::rttiNameEntityDefenseGridTurret
-const char EntityDefenseGridTurret::rttiNameEntityDefenseGridTurret[] = "EntityDefenseGridTurret";
+PBL_IMPLEMENT_RTTI(EntityDefenseGridTurret)
 
 // SYNTHETIC: SWBF2 0x00402980
 // `dynamic initializer for 'EntityDefenseGridTurret::sMemoryPool''

@@ -1,6 +1,7 @@
 #pragma once
 
 #include "PebbleFL/Common/PblHashTable.h"
+#include "PebbleFL/Common/PblRtti.h"
 
 #include <stddef.h>
 
@@ -45,22 +46,12 @@ public:
 
     static PblHash rttiHashOrdnanceBeamClass;
 };
-  
- 
- 
- 
- 
- 
- 
- 
- 
 
 class BeamLodData : public RedLodData
 {
 public:
-    BeamLodData() { mLowRezFlags = 5; }
+    BeamLodData() { mLowRezFlags = RedLodData::HAS_LOWREZ | RedLodData::HAS_TRANSPARENT; }
 };
- 
 
 // VTABLE: SWBF2 0x007ac5dc
 // VTABLE: SWBF2 0x007ac644 Thread
@@ -72,9 +63,13 @@ public:
     virtual ~OrdnanceBeam();
 
     virtual bool Update(float fDeltaTime);
-    virtual bool IsRtti(unsigned int uRtti) const;
-    virtual unsigned int GetDerivedRtti() const;
-    virtual const char* GetDerivedRttiName() const;
+    // FUNCTION: SWBF2 0x005f95f0
+    // OrdnanceBeam::IsRtti
+    // FUNCTION: SWBF2 0x005f9620
+    // OrdnanceBeam::GetDerivedRtti
+    // FUNCTION: SWBF2 0x005f9630
+    // OrdnanceBeam::GetDerivedRttiName
+    PBL_DECLARE_DERIVED_RTTI(OrdnanceBeam, Ordnance)
     virtual void CreateRicochet(const PblVector3& vPos, const PblVector3& vNormal,
                                 GameObject* pObject) const;
     virtual void Render(unsigned char ucViewport, float fDist, unsigned int uiFlags);
@@ -87,15 +82,7 @@ public:
     OrdnanceBeam* m_pRicochet;
     bool mDeadFlag;
 
-    static PblHash rttiHashOrdnanceBeam;
-    static const char rttiNameOrdnanceBeam[];
 };
- 
- 
- 
- 
- 
- 
 
 // FUNCTION: SWBF2 0x005f9640
 inline bool OrdnanceBeamClass::IsRtti(unsigned int uRtti) const
@@ -107,24 +94,3 @@ inline bool OrdnanceBeamClass::IsRtti(unsigned int uRtti) const
     return OrdnanceClass::IsRtti(uRtti);
 }
 
-// FUNCTION: SWBF2 0x005f95f0
-inline bool OrdnanceBeam::IsRtti(unsigned int uRtti) const
-{
-    if (rttiHashOrdnanceBeam == uRtti)
-    {
-        return true;
-    }
-    return Ordnance::IsRtti(uRtti);
-}
-
-// FUNCTION: SWBF2 0x005f9620
-inline unsigned int OrdnanceBeam::GetDerivedRtti() const
-{
-    return rttiHashOrdnanceBeam;
-}
-
-// FUNCTION: SWBF2 0x005f9630
-inline const char* OrdnanceBeam::GetDerivedRttiName() const
-{
-    return rttiNameOrdnanceBeam;
-}

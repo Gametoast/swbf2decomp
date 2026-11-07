@@ -423,17 +423,17 @@ void ShieldEffect::PlatformInit()
     pcShieldShader* pShader;
     if (RedRenderer::pcGetRenderCaps().pipeline == PIPELINE_FIXED && m_pClass->m_type == 0)
     {
-        pShader = (pcShieldShader*)pcRedShader::Create(0x337519B0 /* "shield" */, 0xA2, &m_pClass->m_uiTextureHash, 1, 0x100C0,
+        pShader = (pcShieldShader*)pcRedShader::Create(0x337519B0 /* "shield" */, RVF_POSITION_XYZ | RVF_NORMAL | RVF_COLOR, &m_pClass->m_uiTextureHash, 1, MATERIAL_FLAG_ALPHABLEND_ADDITIVE | MATERIAL_FLAG_SPECULAR | MATERIAL_FLAG_CULL_NONE,
                                       m_pClass->m_color, m_pClass->m_colorSpecular, 32.0f);
     }
     else if (RedRenderer::pcGetGeometryMode())
     {
-        pShader = (pcShieldShader*)pcRedShader::Create(0x337519B0 /* "shield" */, 0xD222, &m_pClass->m_uiTextureHash, 1, 0x100C4,
+        pShader = (pcShieldShader*)pcRedShader::Create(0x337519B0 /* "shield" */, RVF_POSITION_XYZ | RVF_NORMAL | RVF_TEXCOORDS_1 | RVF_COMPRESSED_POSITION | RVF_COMPRESSED_NORMALS | RVF_COMPRESSED_TEXCOORDS, &m_pClass->m_uiTextureHash, 1, MATERIAL_FLAG_ALPHAMAP_OPACITY | MATERIAL_FLAG_ALPHABLEND_ADDITIVE | MATERIAL_FLAG_SPECULAR | MATERIAL_FLAG_CULL_NONE,
                                       m_pClass->m_color, m_pClass->m_colorSpecular, 32.0f);
     }
     else
     {
-        pShader = (pcShieldShader*)pcRedShader::Create(0x337519B0 /* "shield" */, 0x222, &m_pClass->m_uiTextureHash, 1, 0x100C4,
+        pShader = (pcShieldShader*)pcRedShader::Create(0x337519B0 /* "shield" */, RVF_POSITION_XYZ | RVF_NORMAL | RVF_TEXCOORDS_1, &m_pClass->m_uiTextureHash, 1, MATERIAL_FLAG_ALPHAMAP_OPACITY | MATERIAL_FLAG_ALPHABLEND_ADDITIVE | MATERIAL_FLAG_SPECULAR | MATERIAL_FLAG_CULL_NONE,
                                       m_pClass->m_color, m_pClass->m_colorSpecular, 32.0f);
     }
 

@@ -36,10 +36,9 @@
 
 // GLOBAL: SWBF2 0x01ebbcbc
 // EntityGeometryClass::rttiHashEntityGeometryClass
-PblHash EntityGeometryClass::rttiHashEntityGeometryClass("EntityGeometryClass");
 // GLOBAL: SWBF2 0x0078924c
 // EntityGeometryClass::rttiNameEntityGeometryClass
-const char EntityGeometryClass::rttiNameEntityGeometryClass[] = "EntityGeometryClass";
+PBL_IMPLEMENT_RTTI(EntityGeometryClass)
 
 // SYNTHETIC: SWBF2 0x00402b20
 // `dynamic initializer for 'EntityGeometry::rttiHashEntityGeometry''
@@ -47,10 +46,9 @@ const char EntityGeometryClass::rttiNameEntityGeometryClass[] = "EntityGeometryC
 
 // GLOBAL: SWBF2 0x01ebbcc0
 // EntityGeometry::rttiHashEntityGeometry
-PblHash EntityGeometry::rttiHashEntityGeometry("EntityGeometry");
 // GLOBAL: SWBF2 0x0078923c
 // EntityGeometry::rttiNameEntityGeometry
-const char EntityGeometry::rttiNameEntityGeometry[] = "EntityGeometry";
+PBL_IMPLEMENT_RTTI(EntityGeometry)
 
 
 
@@ -943,7 +941,7 @@ bool EntityGeometryClass::AddBuildingCollision(const char* pszValue)
         {
             return false;
         }
-        sStaticCollisionMask |= 1 << iMaskId;
+        sStaticCollisionMask |= Bit(iMaskId);
         mCollisionModel.SetCollisionMask(COLL_STATIC, CollisionMask(sStaticCollisionMask));
     }
     else
@@ -965,7 +963,7 @@ bool EntityGeometryClass::AddVehicleCollision(const char* pszValue)
         {
             return false;
         }
-        sRigidCollisionMask |= 1 << iMaskId;
+        sRigidCollisionMask |= Bit(iMaskId);
         mCollisionModel.SetCollisionMask(COLL_RIGID, CollisionMask(sRigidCollisionMask));
     }
     else
@@ -987,7 +985,7 @@ bool EntityGeometryClass::AddTerrainCollision(const char* pszValue)
         {
             return false;
         }
-        sTerrainCollisionMask |= 1 << iMaskId;
+        sTerrainCollisionMask |= Bit(iMaskId);
         mCollisionModel.SetCollisionMask(COLL_TERRAIN, CollisionMask(sTerrainCollisionMask));
     }
     else
@@ -1009,7 +1007,7 @@ bool EntityGeometryClass::AddOrdnanceCollision(const char* pszValue)
         {
             return false;
         }
-        sOrdnanceCollisionMask |= 1 << iMaskId;
+        sOrdnanceCollisionMask |= Bit(iMaskId);
         mCollisionModel.SetCollisionMask(COLL_ORDNANCE, CollisionMask(sOrdnanceCollisionMask));
     }
     else
@@ -1031,7 +1029,7 @@ bool EntityGeometryClass::AddSoldierCollision(const char* pszValue)
         {
             return false;
         }
-        sSoftCollisionMask |= 1 << iMaskId;
+        sSoftCollisionMask |= Bit(iMaskId);
         mCollisionModel.SetCollisionMask(COLL_SOFT, CollisionMask(sSoftCollisionMask));
     }
     else
@@ -1053,7 +1051,7 @@ bool EntityGeometryClass::AddTargetableCollision(const char* pszValue)
         {
             return false;
         }
-        sTargetableCollisionMask |= 1 << iMaskId;
+        sTargetableCollisionMask |= Bit(iMaskId);
         mCollisionModel.SetCollisionMask(COLL_TARGETABLE, CollisionMask(sTargetableCollisionMask));
     }
     else

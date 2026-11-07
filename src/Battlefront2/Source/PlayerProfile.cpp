@@ -1,4 +1,5 @@
 #include <string.h>
+#include "PebbleFL/Common/PblBits.h"
 #include "RedEngineFL/Application/pc/pcRedParticle.h"
 
 #include "PlayerProfile.h"
@@ -30,6 +31,7 @@
 #include "GameVoiceChatNode.h"
 #include "NetMatch.h"
 #include "RedEngineFL/input/RedJoystick.h"
+
 
 BOOL CALLBACK EnumObjectsCallback(DIDEVICEOBJECTINSTANCEA const* pObject, void* pvRef);
 
@@ -69,13 +71,13 @@ PlayerProfile::tProfile mDefaultProfile;
 // FUNCTION: SWBF2 0x0061c870
 bool PlayerProfile::tProfile::GetUnlockableState(int iIndex)
 {
-    return (mGameOptions.mUnlockableState & (1u << iIndex)) != 0;
+    return (mGameOptions.mUnlockableState & BitU(iIndex)) != 0;
 }
 
 // FUNCTION: SWBF2 0x0061c890
 void PlayerProfile::tProfile::SetUnlockableState(int iIndex, bool)
 {
-    unsigned int bit = 1u << iIndex;
+    unsigned int bit = BitU(iIndex);
     if ((mGameOptions.mUnlockableState & bit) <= 0)
     {
         mGameOptions.mUnlockableState |= bit;

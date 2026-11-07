@@ -246,7 +246,7 @@ void CombatHelper::EnterState()
                     break;
                 }
             }
-            SetNextState(100);
+            SetNextState(STATE_GLOBDONE);
             break;
         }
 
@@ -293,7 +293,7 @@ void CombatHelper::EnterState()
     }
     else
     {
-        SetNextState(100);
+        SetNextState(STATE_GLOBDONE);
     }
 }
 
@@ -443,7 +443,7 @@ void CombatHelper::UpdateState(float dt)
                     mWaiting = false;
                     break;
                 }
-                SetNextState(100);
+                SetNextState(STATE_GLOBDONE);
                 break;
             }
         }
@@ -511,7 +511,7 @@ void CombatHelper::UpdateState(float dt)
         const float fRange = CombatUtil::GetCombatRange(GetMe()) + 10.0f;
         if (fDZ * fDZ + fDX * fDX > fRange * fRange)
         {
-            SetNextState(100);
+            SetNextState(STATE_GLOBDONE);
         }
 
         AttackPatterns::State eState;

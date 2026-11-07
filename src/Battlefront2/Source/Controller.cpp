@@ -30,10 +30,9 @@ void Controller::SetRegionVisFactor(float fCrouch, float fStand)
 
 // GLOBAL: SWBF2 0x01eb97a8
 // Controller::rttiHashController
-PblHash Controller::rttiHashController("Controller");
 // GLOBAL: SWBF2 0x00788d90
 // Controller::rttiNameController
-const char Controller::rttiNameController[] = "Controller";
+PBL_IMPLEMENT_RTTI(Controller)
 
 static Trackable* GetTrackable(Controllable* pControllable)
 {

@@ -1,6 +1,7 @@
 #pragma once
 
 #include <stddef.h>
+#include "PebbleFL/Common/PblBits.h"
 
 #include "PebbleFL/Common/PblVector.h"
 #include "CollisionObject.h"
@@ -13,6 +14,7 @@ class Restrictor;
 class CollisionMask
 {
 public:
+
 
 
 
@@ -39,11 +41,11 @@ public:
     {
         if (id > 31)
         {
-            mMask[1] |= 1u << (id - 32);
+            mMask[1] |= Bit(id - 32);
         }
         else
         {
-            mMask[0] |= 1u << id;
+            mMask[0] |= Bit(id);
         }
     }
 
@@ -52,11 +54,11 @@ public:
     {
         if (id > 31)
         {
-            mMask[1] &= ~(1u << (id - 32));
+            mMask[1] &= ~Bit(id - 32);
         }
         else
         {
-            mMask[0] &= ~(1u << id);
+            mMask[0] &= ~Bit(id);
         }
     }
 
@@ -65,9 +67,9 @@ public:
     {
         if (id > 31)
         {
-            return (mMask[1] & (1u << (id - 32))) != 0;
+            return (mMask[1] & Bit(id - 32)) != 0;
         }
-        return (mMask[0] & (1u << id)) != 0;
+        return (mMask[0] & Bit(id)) != 0;
     }
 
     bool IsEmpty() const { return mMask[0] == 0 && mMask[1] == 0; }

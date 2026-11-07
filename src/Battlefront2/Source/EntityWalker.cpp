@@ -1,4 +1,5 @@
 #include <d3dx9math.h>
+#include "PebbleFL/Common/PblBits.h"
 #include "RedEngineFL/Util/RedCommandConsole.h"
 
 #include <float.h>
@@ -63,6 +64,10 @@
 #include "UnitController.h"
 #include "PebbleFL/Common/PblQuaternion.h"
 #include "RedEngineFL/Application/pc/pcFLRender.h"
+
+// mFootState: BitU(foot) while a foot is on the ground, and its two hydraulic sounds playing
+static inline unsigned int HydraulicBit(unsigned int uiFoot) { return BitU(uiFoot + 8); }
+static inline unsigned int HydraulicLowerBit(unsigned int uiFoot) { return BitU(uiFoot + 16); }
 
 // FUNCTION: SWBF2 0x00501a80
 float EntityWalker::GetAimTurnRate() const
@@ -285,10 +290,9 @@ MemoryPool EntityWalker::sMemoryPool("EntityWalker", sizeof(EntityWalker));
 
 // GLOBAL: SWBF2 0x01ebc2b0
 // EntityWalker::rttiHashEntityWalker
-PblHash EntityWalker::rttiHashEntityWalker("EntityWalker");
 // GLOBAL: SWBF2 0x007896ac
 // EntityWalker::rttiNameEntityWalker
-const char EntityWalker::rttiNameEntityWalker[] = "EntityWalker";
+PBL_IMPLEMENT_RTTI(EntityWalker)
 
 // SYNTHETIC: SWBF2 0x00402ef0
 // `dynamic initializer for 'EntityWalkerClass::rttiHashEntityWalkerClass''
@@ -296,10 +300,9 @@ const char EntityWalker::rttiNameEntityWalker[] = "EntityWalker";
 
 // GLOBAL: SWBF2 0x01ebc25c
 // EntityWalkerClass::rttiHashEntityWalkerClass
-PblHash EntityWalkerClass::rttiHashEntityWalkerClass("EntityWalkerClass");
 // GLOBAL: SWBF2 0x007896cc
 // EntityWalkerClass::rttiNameEntityWalkerClass
-const char EntityWalkerClass::rttiNameEntityWalkerClass[] = "EntityWalkerClass";
+PBL_IMPLEMENT_RTTI(EntityWalkerClass)
 
 // FUNCTION: SWBF2 0x0047fb50
 const Controllable* EntityWalker::GetControllable() const
@@ -690,7 +693,7 @@ void EntityWalkerClass::SetProperty(unsigned int uProperty, const char* pszValue
         int iMaskId = mCollisionModel.GetMaskId(PblHash(pszValue));
         if (iMaskId >= 0)
         {
-            mIgnorableCollisions |= 1 << iMaskId;
+            mIgnorableCollisions |= Bit(iMaskId);
         }
     }
 
@@ -1218,7 +1221,7 @@ void EntityWalkerClass::SetProperty(unsigned int uProperty, const char* pszValue
         int iMaskId = mCollisionModel.GetMaskId(PblHash(szBody));
         if (iMaskId >= 0)
         {
-            sTowCableCollisionMask |= 1 << iMaskId;
+            sTowCableCollisionMask |= Bit(iMaskId);
             mCollisionModel.SetCollisionMask(COLL_TOWCABLE, CollisionMask(sTowCableCollisionMask));
             for (int i = 0; i < 12; ++i)
             {
@@ -1776,7 +1779,7 @@ EntityWalker::EntityWalker(EntityWalkerClass* pClass, const EntityDesc& desc)
     mPitchValue = 0.0f;
     mEyeDir = mMatrix.GetZAxis();
     mEyePoint = mClass->mCameraSettings.CalcEyePoint(mMatrix);
-    _uiRenderFlags &= 3;
+    _uiRenderFlags &= (RENDERFLAG_CLIPPED | RENDERFLAG_TEST_BBOX);
     mDoneDustCloud = false;
     mDeathExplosionTime = 0.0f;
     mDeathTime = 0.0f;
@@ -2232,11 +2235,11 @@ void EntityWalker::Render(unsigned char ucViewport, float fDist, unsigned int ui
 
     if (!mClass->m_bDynamicLighting)
     {
-        uiFlags |= 0x80;
+        uiFlags |= RENDERFLAG_STATIC;
     }
     else
     {
-        uiFlags &= ~0x80;
+        uiFlags &= ~RENDERFLAG_STATIC;
     }
 
     if (!ucViewport)
@@ -2441,7 +2444,7 @@ void EntityWalker::Render(unsigned char ucViewport, float fDist, unsigned int ui
         }
     }
 
-    if (!(uiFlags & 0x230000) && mClass->mDropShadowSize > 0.0f)
+    if (!(uiFlags & (RENDERFLAG_RENDER_SHADOWVOLUMES | RENDERFLAG_RENDER_TO_SKY | RENDERFLAG_RENDER_REFLECTION)) && mClass->mDropShadowSize > 0.0f)
     {
         RedDirectionalLight* pLight = RedLight::GetGlobalDirectionalLight(0);
         if (!pLight->IsShadowCaster() && RedLight::GetGlobalDirectionalLight(1)->IsShadowCaster())
@@ -2505,7 +2508,7 @@ bool EntityWalker::CollisionCallback(const CollisionResult* pResult, CollisionOb
     {
         return true;
     }
-    if ((1 << pResult->mColliderId) & mClass->mIgnorableCollisions)
+    if (Bit(pResult->mColliderId) & mClass->mIgnorableCollisions)
     {
         return true;
     }
@@ -4385,18 +4388,18 @@ float EntityWalker::GetSoundRadius() const
     float fMute = 0.0f;
     for (unsigned int i = 0; i < mClass->mNumFeet; ++i)
     {
-        if (mFootState & (1 << i))
+        if (mFootState & BitU(i))
         {
             if (FoleyFX* pFoley = GetFoleyFX())
             {
                 fMute = ((FoleyFXWalker*)pFoley)->mFootstep[i].GetMuteDistance();
             }
         }
-        if (mFootState & (1 << (i + 8)))
+        if (mFootState & HydraulicBit(i))
         {
             fMute = mClass->mHydraulicSound.GetMuteDistance();
         }
-        if (mFootState & (1 << (i + 16)))
+        if (mFootState & HydraulicLowerBit(i))
         {
             fMute = mClass->mHydraulicLowerSound.GetMuteDistance();
         }

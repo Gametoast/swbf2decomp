@@ -23,10 +23,9 @@ inline int GameObjectTeam(const GameObject* pObject)
 
 // GLOBAL: SWBF2 0x01eb97a0
 // AI::ConquestGoal::rttiHashConquestGoal
-PblHash AI::ConquestGoal::rttiHashConquestGoal("ConquestGoal");
 // GLOBAL: SWBF2 0x00788d4c
 // AI::ConquestGoal::rttiNameConquestGoal
-const char AI::ConquestGoal::rttiNameConquestGoal[] = "ConquestGoal";
+PBL_IMPLEMENT_RTTI_IN(AI, ConquestGoal)
 
 
 

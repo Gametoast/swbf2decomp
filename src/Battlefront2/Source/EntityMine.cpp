@@ -44,10 +44,9 @@ EntityMineClass::EntityMineClass(unsigned int uHash)
 
 // GLOBAL: SWBF2 0x01ebbf90
 // EntityMineClass::rttiHashEntityMineClass
-PblHash EntityMineClass::rttiHashEntityMineClass("EntityMineClass");
 // GLOBAL: SWBF2 0x0078935c
 // EntityMineClass::rttiNameEntityMineClass
-const char EntityMineClass::rttiNameEntityMineClass[] = "EntityMineClass";
+PBL_IMPLEMENT_RTTI(EntityMineClass)
 
 
 
@@ -164,10 +163,9 @@ void EntityMineClass::SetProperty(unsigned int uProperty, const char* pszValue)
 
 // GLOBAL: SWBF2 0x01ebbf8c
 // EntityMine::rttiHashEntityMine
-PblHash EntityMine::rttiHashEntityMine("EntityMine");
 // GLOBAL: SWBF2 0x00789340
 // EntityMine::rttiNameEntityMine
-const char EntityMine::rttiNameEntityMine[] = "EntityMine";
+PBL_IMPLEMENT_RTTI(EntityMine)
 
 // SYNTHETIC: SWBF2 0x00402c40
 // `dynamic initializer for 'EntityMine::sMemoryPool''

@@ -165,7 +165,7 @@ void pcInterfaceShader::Render_Fixed(const RenderItem* pItem, unsigned int) cons
 
     RedRenderer::pcSetTexture(0, m_textureHash ? RedTexture::Find(m_textureHash) : 0);
     RedRenderer::pcSetTexture(1, m_bitmapMaskHash ? RedTexture::Find(m_bitmapMaskHash) : 0);
-    if (m_materialFlags & 0x40)
+    if (m_materialFlags & MATERIAL_FLAG_ALPHABLEND_ADDITIVE)
     {
         RedRenderer::pcSetRenderState(D3DRS_DESTBLEND, D3DBLEND_ONE);
     }
@@ -255,7 +255,7 @@ void pcInterfaceShader::Render_Prog1(const RenderItem* pItem, unsigned int) cons
     float fMinX, fMinY, fMaxX, fMaxY;
     RedRenderer::pcGetViewportExtents(fMinX, fMinY, fMaxX, fMaxY);
 
-    if (m_materialFlags & 0x40)
+    if (m_materialFlags & MATERIAL_FLAG_ALPHABLEND_ADDITIVE)
     {
         RedRenderer::pcSetRenderState(D3DRS_DESTBLEND, D3DBLEND_ONE);
     }
@@ -397,10 +397,10 @@ void pcInterfaceShader::_Read(PblFileChunk& chunk) const
 // FUNCTION: SWBF2 0x00702330
 void pcInterfaceShader::_StaticInit() const
 {
-    s_pBitmapTexVertexFormat = pcRedVertexFormat::Create(0x202, 0x202);
-    s_pBitmapPosVertexFormat = pcRedVertexFormat::Create(0x202, 2);
-    s_pMaskedVertexFormat = pcRedVertexFormat::Create(0x402, 0x402);
-    s_pVectorVertexFormat = pcRedVertexFormat::Create(0x82, 0x82);
+    s_pBitmapTexVertexFormat = pcRedVertexFormat::Create(RVF_POSITION_XYZ | RVF_TEXCOORDS_1, RVF_POSITION_XYZ | RVF_TEXCOORDS_1);
+    s_pBitmapPosVertexFormat = pcRedVertexFormat::Create(RVF_POSITION_XYZ | RVF_TEXCOORDS_1, RVF_POSITION_XYZ);
+    s_pMaskedVertexFormat = pcRedVertexFormat::Create(RVF_POSITION_XYZ | RVF_TEXCOORDS_2, RVF_POSITION_XYZ | RVF_TEXCOORDS_2);
+    s_pVectorVertexFormat = pcRedVertexFormat::Create(RVF_POSITION_XYZ | RVF_COLOR, RVF_POSITION_XYZ | RVF_COLOR);
 }
 
 // SYNTHETIC: SWBF2 0x004098b0

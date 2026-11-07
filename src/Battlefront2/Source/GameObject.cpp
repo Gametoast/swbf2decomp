@@ -85,10 +85,9 @@ GameObjectClass::~GameObjectClass()
 
 // GLOBAL: SWBF2 0x01ec3234
 // GameObjectClass::rttiHashGameObjectClass
-PblHash GameObjectClass::rttiHashGameObjectClass("GameObjectClass");
 // GLOBAL: SWBF2 0x00789998
 // GameObjectClass::rttiNameGameObjectClass
-const char GameObjectClass::rttiNameGameObjectClass[] = "GameObjectClass";
+PBL_IMPLEMENT_RTTI(GameObjectClass)
 
 
 
@@ -102,10 +101,9 @@ const char GameObjectClass::rttiNameGameObjectClass[] = "GameObjectClass";
 
 // GLOBAL: SWBF2 0x01ec0c7c
 // GameObject::rttiHashGameObject
-PblHash GameObject::rttiHashGameObject("GameObject");
 // GLOBAL: SWBF2 0x007899ac
 // GameObject::rttiNameGameObject
-const char GameObject::rttiNameGameObject[] = "GameObject";
+PBL_IMPLEMENT_RTTI(GameObject)
 
 
 

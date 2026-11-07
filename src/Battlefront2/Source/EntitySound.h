@@ -1,6 +1,7 @@
 #pragma once
 
 #include "PebbleFL/Common/PblHashTable.h"
+#include "PebbleFL/Common/PblRtti.h"
 
 #include <stddef.h>
 #include "Entity.h"
@@ -40,7 +41,6 @@ public:
 
     virtual void* CreateRegion(RedRegionDesc& desc, const char* pcName) const;
 };
-  
 
 class EntitySoundOverrides
 {
@@ -75,7 +75,6 @@ public:
     float mMuteDistance;
     unsigned char mFlags;
 };
- 
 
 // VTABLE: SWBF2 0x0079d368
 class EntitySoundClass : public EntityClass, public EntitySoundOverrides
@@ -85,26 +84,21 @@ public:
 
     EntitySoundClass(EntitySoundClass* pBase, unsigned int uHash);
 
-    virtual bool IsRtti(unsigned int uRtti) const;
-    virtual unsigned int GetDerivedRtti() const;
-    virtual const char* GetDerivedRttiName() const;
+    // FUNCTION: SWBF2 0x004facc0
+    // EntitySoundClass::IsRtti
+    // FUNCTION: SWBF2 0x004facf0
+    // EntitySoundClass::GetDerivedRtti
+    // FUNCTION: SWBF2 0x004fad00
+    // EntitySoundClass::GetDerivedRttiName
+    PBL_DECLARE_DERIVED_RTTI(EntitySoundClass, EntityClass)
     virtual ~EntitySoundClass();
     virtual void SetProperty(unsigned int uProperty, const char* pcValue);
-
-    static PblHash rttiHashEntitySoundClass;
-    static const char rttiNameEntitySoundClass[];
 
     static class EntitySound* CreateSoundFromRegion(RedRegionDesc& desc, const char* pcName,
                                                     const char* pcPrefix, EntitySoundClass& soundClass);
 
     unsigned int mSoundId;
 };
- 
- 
- 
- 
- 
- 
 
 // VTABLE: SWBF2 0x0079d330
 class EntitySound : public Entity, public EntitySoundOverrides
@@ -112,9 +106,13 @@ class EntitySound : public Entity, public EntitySoundOverrides
 public:
     EntitySound(EntitySoundClass* pClass, const EntityDesc& desc);
 
-    virtual bool IsRtti(unsigned int uRtti) const;
-    virtual unsigned int GetDerivedRtti() const;
-    virtual const char* GetDerivedRttiName() const;
+    // FUNCTION: SWBF2 0x004fac70
+    // EntitySound::IsRtti
+    // FUNCTION: SWBF2 0x004faca0
+    // EntitySound::GetDerivedRtti
+    // FUNCTION: SWBF2 0x004facb0
+    // EntitySound::GetDerivedRttiName
+    PBL_DECLARE_DERIVED_RTTI(EntitySound, Entity)
     virtual ~EntitySound();
     virtual void SetProperty(unsigned int uProperty, const char* pcValue);
     virtual void Play() = 0;
@@ -124,60 +122,10 @@ public:
     static void PlayAll();
     static void DestroyAll();
 
-    static PblHash rttiHashEntitySound;
-    static const char rttiNameEntitySound[];
     static PblListSingle sEntitySoundList;
 
     PblVector3 mPosition;
     unsigned int mSoundId;
     PblListSingle::Node mNode;
 };
- 
- 
- 
- 
- 
 
-// FUNCTION: SWBF2 0x004fac70
-inline bool EntitySound::IsRtti(unsigned int uRtti) const
-{
-    if (rttiHashEntitySound == uRtti)
-    {
-        return true;
-    }
-    return Entity::IsRtti(uRtti);
-}
-
-// FUNCTION: SWBF2 0x004faca0
-inline unsigned int EntitySound::GetDerivedRtti() const
-{
-    return rttiHashEntitySound;
-}
-
-// FUNCTION: SWBF2 0x004facb0
-inline const char* EntitySound::GetDerivedRttiName() const
-{
-    return rttiNameEntitySound;
-}
-
-// FUNCTION: SWBF2 0x004facc0
-inline bool EntitySoundClass::IsRtti(unsigned int uRtti) const
-{
-    if (rttiHashEntitySoundClass == uRtti)
-    {
-        return true;
-    }
-    return EntityClass::IsRtti(uRtti);
-}
-
-// FUNCTION: SWBF2 0x004facf0
-inline unsigned int EntitySoundClass::GetDerivedRtti() const
-{
-    return rttiHashEntitySoundClass;
-}
-
-// FUNCTION: SWBF2 0x004fad00
-inline const char* EntitySoundClass::GetDerivedRttiName() const
-{
-    return rttiNameEntitySoundClass;
-}

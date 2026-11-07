@@ -250,7 +250,7 @@ int RedSceneCamera::ClassifyAABB(unsigned int uiFlags, const PblVector3& vPos,
         }
         if (fMin > mNearPlane)
         {
-            if (!(uiFlags & 0x40000))
+            if (!(uiFlags & RENDERFLAG_RENDER_FAR_LODS))
             {
                 iMask |= 1;
             }
@@ -429,11 +429,11 @@ void RedSceneAABox::Render(unsigned int uiFlags, int iClip)
     {
         if (!bPvs || !pObject->PortalActive() || pObject->IsActive(pvs::GetCurrentFrame_()))
         {
-            if ((uiFlags & 0x260000) || !pObject->IsOccluded())
+            if ((uiFlags & (RENDERFLAG_RENDER_TO_SKY | RENDERFLAG_RENDER_FAR_LODS | RENDERFLAG_RENDER_REFLECTION)) || !pObject->IsOccluded())
             {
                 RenderObject(pObject, uiFlags, iClip);
             }
-            if (!(uiFlags & 0x260000))
+            if (!(uiFlags & (RENDERFLAG_RENDER_TO_SKY | RENDERFLAG_RENDER_FAR_LODS | RENDERFLAG_RENDER_REFLECTION)))
             {
                 pObject->UpdateOcclusionQuery(iClip);
             }
@@ -456,7 +456,7 @@ void RedSceneAABox::Render(unsigned int uiFlags, int iClip)
                 iBoxClip = sRedSceneCamera.ClassifyAABB(uiFlags, pBox->mMidPos, pBox->mSize, iClip);
                 ++gCullingCount;
             }
-            if (sDrawFullyVisibleBoxes && iClip != 63 && !(uiFlags & 0x200000) && iBoxClip == 63)
+            if (sDrawFullyVisibleBoxes && iClip != 63 && !(uiFlags & RENDERFLAG_RENDER_REFLECTION) && iBoxClip == 63)
             {
                 pBox->RenderBox(0, false);
             }
@@ -544,7 +544,7 @@ void RenderFarObjects()
             {
                 continue;
             }
-            if (p->_pLodData->mLowRezFlags & 2)
+            if (p->_pLodData->mLowRezFlags & RedLodData::CROSSFADE_LOWREZ)
             {
                 if (!(fFadeStart > fDist))
                 {
@@ -552,12 +552,12 @@ void RenderFarObjects()
                     {
                         continue;
                     }
-                    p->Render(3, 1.0f, p->_uiRenderFlags | 0x20000);
+                    p->Render(3, 1.0f, p->_uiRenderFlags | RENDERFLAG_RENDER_TO_SKY);
                 }
             }
             else if (!(fFadeStart >= fDist))
             {
-                p->Render(3, 1.0f, p->_uiRenderFlags | 0x20000);
+                p->Render(3, 1.0f, p->_uiRenderFlags | RENDERFLAG_RENDER_TO_SKY);
             }
         }
         objects[i] = 0;
@@ -578,7 +578,7 @@ void RenderFarObjects()
         {
             fAlpha = (fLimit - fDist) * fAlpha / 20.0f;
         }
-        p->Render(3, fAlpha, p->_uiRenderFlags | 0x20000);
+        p->Render(3, fAlpha, p->_uiRenderFlags | RENDERFLAG_RENDER_TO_SKY);
     }
 }
 
@@ -609,12 +609,12 @@ bool RenderObject(RedSceneObject* pObject, unsigned int uiFlags, int iClip)
         pObject->SetClipped(false);
     }
 
-    if ((uiFlags & 0x200000) && !pObject->IsReflected())
+    if ((uiFlags & RENDERFLAG_RENDER_REFLECTION) && !pObject->IsReflected())
     {
         return false;
     }
 
-    if (uiFlags & 0x40000)
+    if (uiFlags & RENDERFLAG_RENDER_FAR_LODS)
     {
         if (sFarSceneObjects->IsFull() || !pObject->_pLodData->HasLowRes())
         {
@@ -748,7 +748,7 @@ bool RedSceneAABox::SetupBox()
     {
         PblVector3 vPos = *(const PblVector3*)&pObject->_Sphere;
         PblBox box;
-        if (pObject->_uiRenderFlags & 2)
+        if (pObject->_uiRenderFlags & RENDERFLAG_TEST_BBOX)
         {
             const PblBox& bbox = pObject->GetBBox();
             PblVector3 vHalf((bbox._vMax.x - bbox._vMin.x) * 0.5f,
@@ -1024,7 +1024,7 @@ void RedSceneManager::_Render(unsigned int uiFlags, const RedCamera* pCamera)
     }
     else
     {
-        if (uiFlags & 0x40000)
+        if (uiFlags & RENDERFLAG_RENDER_FAR_LODS)
         {
             if (!sFarSceneObjects)
             {
@@ -1052,7 +1052,7 @@ void RedSceneManager::_Render(unsigned int uiFlags, const RedCamera* pCamera)
         sRedSceneCamera.Setup(RedRenderer::GetCamera(), fNear, fFar);
     }
 
-    const unsigned int uiFarFlag = uiFlags & 0x40000;
+    const unsigned int uiFarFlag = uiFlags & RENDERFLAG_RENDER_FAR_LODS;
     mState = uiFarFlag ? 2 : 1;
     gRenderCount = 0;
     gClippedCount = 0;

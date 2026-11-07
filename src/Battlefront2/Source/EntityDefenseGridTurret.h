@@ -1,6 +1,7 @@
 #pragma once
 
 #include "PebbleFL/Common/PblHashTable.h"
+#include "PebbleFL/Common/PblRtti.h"
 
 #include <stddef.h>
 
@@ -30,8 +31,6 @@ public:
     static unsigned int GetRtti() { return rttiHashEntityDefenseGridTurretClass; }
     static const char rttiNameEntityDefenseGridTurretClass[];
 };
-  
- 
 
 class MemoryPool;
 
@@ -48,46 +47,23 @@ public:
     EntityDefenseGridTurret(EntityDefenseGridTurretClass* pClass, const EntityDesc& desc);
     // SYNTHETIC: SWBF2 0x00497a30
     // EntityDefenseGridTurret::`scalar deleting destructor'
-    virtual bool IsRtti(unsigned int uRtti) const;
-    virtual unsigned int GetDerivedRtti() const;
-    virtual const char* GetDerivedRttiName() const;
+    // FUNCTION: SWBF2 0x004979a0
+    // EntityDefenseGridTurret::IsRtti
+    // FUNCTION: SWBF2 0x00497a00
+    // EntityDefenseGridTurret::GetDerivedRtti
+    // FUNCTION: SWBF2 0x00497a10
+    // EntityDefenseGridTurret::GetDerivedRttiName
+    PBL_DECLARE_DERIVED_RTTI(EntityDefenseGridTurret, EntityBuildingArmedDynamic)
     virtual bool Update(float fDeltaTime);
 
     static void* operator new(unsigned int uSize);
     static void operator delete(void* pBlock);
 
     static MemoryPool sMemoryPool;
-    static PblHash rttiHashEntityDefenseGridTurret;
-    static const char rttiNameEntityDefenseGridTurret[];
 
     EntityDefenseGridTurretClass* mClass;
     float mRespawnTimer;
 };
- 
- 
- 
-
-// FUNCTION: SWBF2 0x004979a0
-inline bool EntityDefenseGridTurret::IsRtti(unsigned int uRtti) const
-{
-    if (rttiHashEntityDefenseGridTurret == uRtti)
-    {
-        return true;
-    }
-    return EntityBuildingArmedDynamic::IsRtti(uRtti);
-}
-
-// FUNCTION: SWBF2 0x00497a00
-inline unsigned int EntityDefenseGridTurret::GetDerivedRtti() const
-{
-    return rttiHashEntityDefenseGridTurret;
-}
-
-// FUNCTION: SWBF2 0x00497a10
-inline const char* EntityDefenseGridTurret::GetDerivedRttiName() const
-{
-    return rttiNameEntityDefenseGridTurret;
-}
 
 // FUNCTION: SWBF2 0x00497a60
 inline bool EntityDefenseGridTurretClass::IsRtti(unsigned int uRtti) const

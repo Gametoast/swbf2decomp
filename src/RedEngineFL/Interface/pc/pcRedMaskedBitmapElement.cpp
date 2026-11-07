@@ -66,7 +66,7 @@ void RedMaskedBitmapElement::Init()
 {
     RedBitmapElement::Init();
     m_pInterfaceMaskedBitmapShader = (pcInterfaceShader*)pcRedShader::Create(
-        PblHash("interface"), 0x402, 0, 0, 0, RedColor::WHITE, RedColor::BLACK,
+        PblHash("interface"), RVF_POSITION_XYZ | RVF_TEXCOORDS_2, 0, 0, 0, RedColor::WHITE, RedColor::BLACK,
         32.0f);
 
     m_pInterfaceMaskedBitmapShader->m_mode = pcInterfaceShader::INTERFACE_MODE_MASKEDBITMAP;
@@ -98,17 +98,17 @@ void RedMaskedBitmapElement::RenderUsingContext(const PblMatrix& mContext,
 
     if (m_eBlendMode == BLEND_ADDITIVE)
     {
-        m_pInterfaceMaskedBitmapShader->m_materialFlags |= 0x40;
+        m_pInterfaceMaskedBitmapShader->m_materialFlags |= MATERIAL_FLAG_ALPHABLEND_ADDITIVE;
     }
     else
     {
-        m_pInterfaceMaskedBitmapShader->m_materialFlags &= ~0x40u;
+        m_pInterfaceMaskedBitmapShader->m_materialFlags &= ~MATERIAL_FLAG_ALPHABLEND_ADDITIVE;
     }
 
     m_pInterfaceMaskedBitmapShader->m_shadowEnable = (m_eStyle == BITMAP_STYLE_SHADOW);
 
     RedRenderer::pcRenderPrimitive(pPrimitive, m_pInterfaceMaskedBitmapShader,
-                                   mContext, color, 0x200, 0, 0, 0);
+                                   mContext, color, PC_RENDERFLAG_IMMEDIATE, 0, 0, 0);
 
     pPrimitive->Release();
 }

@@ -33,9 +33,13 @@ public:
     // MountedTurretClass::`scalar deleting destructor'
     virtual EntityClass* Derive(unsigned int uHash);
     virtual Entity* Build(const EntityDesc& desc);
-    virtual bool IsRtti(unsigned int uRtti) const;
-    virtual unsigned int GetDerivedRtti() const;
-    virtual const char* GetDerivedRttiName() const;
+    // FUNCTION: SWBF2 0x005a52f0
+    // MountedTurretClass::IsRtti
+    // FUNCTION: SWBF2 0x005a5320
+    // MountedTurretClass::GetDerivedRtti
+    // FUNCTION: SWBF2 0x005a5330
+    // MountedTurretClass::GetDerivedRttiName
+    PBL_DECLARE_DERIVED_RTTI(MountedTurretClass, EntityClass)
 
     AimerClass mAimerClass[4];
     WeaponClass* mWeaponClass[4];
@@ -75,23 +79,7 @@ public:
     GameSound mTurretStop;
     int mFirstPersonModelHandle;
 
-    static PblHash rttiHashMountedTurretClass;
-    static const char rttiNameMountedTurretClass[];
 };
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
 
 // VTABLE: SWBF2 0x007aa618
 // VTABLE: SWBF2 0x007aa5b8 Trackable
@@ -230,27 +218,5 @@ public:
  
  
  
-
-// FUNCTION: SWBF2 0x005a52f0
-inline bool MountedTurretClass::IsRtti(unsigned int uRtti) const
-{
-    if (rttiHashMountedTurretClass == uRtti)
-    {
-        return true;
-    }
-    return EntityClass::IsRtti(uRtti);
-}
-
-// FUNCTION: SWBF2 0x005a5320
-inline unsigned int MountedTurretClass::GetDerivedRtti() const
-{
-    return rttiHashMountedTurretClass;
-}
-
-// FUNCTION: SWBF2 0x005a5330
-inline const char* MountedTurretClass::GetDerivedRttiName() const
-{
-    return rttiNameMountedTurretClass;
-}
 
 

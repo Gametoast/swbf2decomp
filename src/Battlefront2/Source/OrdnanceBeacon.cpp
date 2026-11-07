@@ -18,10 +18,9 @@ extern bool netIsLocalTurn;
 
 // GLOBAL: SWBF2 0x01ef2610
 // OrdnanceBeacon::rttiHashOrdnanceBeacon
-PblHash OrdnanceBeacon::rttiHashOrdnanceBeacon("OrdnanceBeacon");
 // GLOBAL: SWBF2 0x0078a78c
 // OrdnanceBeacon::rttiNameOrdnanceBeacon
-const char OrdnanceBeacon::rttiNameOrdnanceBeacon[] = "OrdnanceBeacon";
+PBL_IMPLEMENT_RTTI(OrdnanceBeacon)
 
 // SYNTHETIC: SWBF2 0x00405a20
 // `dynamic initializer for 'OrdnanceBeaconClass::rttiHashOrdnanceBeaconClass''
@@ -29,10 +28,9 @@ const char OrdnanceBeacon::rttiNameOrdnanceBeacon[] = "OrdnanceBeacon";
 
 // GLOBAL: SWBF2 0x01ef257c
 // OrdnanceBeaconClass::rttiHashOrdnanceBeaconClass
-PblHash OrdnanceBeaconClass::rttiHashOrdnanceBeaconClass("OrdnanceBeaconClass");
 // GLOBAL: SWBF2 0x0078a768
 // OrdnanceBeaconClass::rttiNameOrdnanceBeaconClass
-const char OrdnanceBeaconClass::rttiNameOrdnanceBeaconClass[] = "OrdnanceBeaconClass";
+PBL_IMPLEMENT_RTTI(OrdnanceBeaconClass)
 
 // FUNCTION: SWBF2 0x005f8b10
 const PblVector3& OrdnanceBullet::GetOldPosition() const

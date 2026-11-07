@@ -9,10 +9,9 @@
 
 // GLOBAL: SWBF2 0x01eb9808
 // AI::DefendGoal::rttiHashDefendGoal
-PblHash AI::DefendGoal::rttiHashDefendGoal("DefendGoal");
 // GLOBAL: SWBF2 0x00788e78
 // AI::DefendGoal::rttiNameDefendGoal
-const char AI::DefendGoal::rttiNameDefendGoal[] = "DefendGoal";
+PBL_IMPLEMENT_RTTI_IN(AI, DefendGoal)
 
 
 

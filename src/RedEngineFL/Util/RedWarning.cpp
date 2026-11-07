@@ -1,6 +1,7 @@
 #define _CRT_SECURE_NO_WARNINGS
 
 #include <windows.h>
+#include "PebbleFL/Common/PblBits.h"
 
 #include <stdarg.h>
 #include <stdio.h>
@@ -12,6 +13,7 @@
 #include "RedMissionLog.h"
 
 #include "PebbleFL/Common/PblFile.h"
+
 
 // GLOBAL: SWBF2 0x007e15cc
 static char* kapcSEVERITYSHORT[6] = { "*", "?", "#", "$", "%", "!" };
@@ -412,7 +414,7 @@ void RedWarning::SetSeverityToDestination(unsigned int uiDestinationMask, RED_ER
 
     for (int i = 0; i < RED_LOG_NUM_DESTINATIONS; ++i)
     {
-        if (uiDestinationMask & (1u << i))
+        if (uiDestinationMask & BitU(i))
         {
             SetSeverityToDestination((RED_LOG_DESTINATION_INDEX)i, eSeverity);
         }

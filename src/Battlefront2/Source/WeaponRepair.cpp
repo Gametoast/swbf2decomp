@@ -45,17 +45,16 @@ extern Event<GameObject, DamageOwner> mHack;
 
 // GLOBAL: SWBF2 0x01f9a90c
 // WeaponRepairClass::rttiHashWeaponRepairClass
-PblHash WeaponRepairClass::rttiHashWeaponRepairClass("WeaponRepairClass");
 // GLOBAL: SWBF2 0x0078c254
 // WeaponRepairClass::rttiNameWeaponRepairClass
-const char WeaponRepairClass::rttiNameWeaponRepairClass[] = "WeaponRepairClass";
+PBL_IMPLEMENT_RTTI(WeaponRepairClass)
 
 // FUNCTION: SWBF2 0x006910c0
 WeaponRepairClass::WeaponRepairClass(unsigned int uHash)
     : WeaponClass(uHash)
 {
     mTriggerSingle = false;
-    mTargetSides = 6;
+    mTargetSides = TargetInfo::SIDE_NEUTRAL | TargetInfo::SIDE_FRIENDLY;
     mTargetTypes = 0;
     mAITargetTypes = 0;
 
@@ -99,139 +98,139 @@ void WeaponRepairClass::SetProperty(unsigned int uProperty, const char* pszValue
         return;
     case 0xf51ad206: /* "PersonHealth" */
         sscanf(pszValue, "%f", &fValue);
-        mAddHealth[0] = fValue;
+        mAddHealth[HEALTH_TYPE_PERSON] = fValue;
         if (fValue != 0.0f)
         {
-            mTargetTypes |= 1;
-            mAITargetTypes |= 1;
+            mTargetTypes |= TargetInfo::TYPE_PERSON;
+            mAITargetTypes |= TargetInfo::TYPE_PERSON;
         }
         return;
     case 0x60d746d7: /* "AnimalHealth" */
         sscanf(pszValue, "%f", &fValue);
-        mAddHealth[1] = fValue;
+        mAddHealth[HEALTH_TYPE_ANIMAL] = fValue;
         if (fValue != 0.0f)
         {
-            mTargetTypes |= 2;
-            mAITargetTypes |= 2;
+            mTargetTypes |= TargetInfo::TYPE_ANIMAL;
+            mAITargetTypes |= TargetInfo::TYPE_ANIMAL;
         }
         return;
     case 0x9622c73b: /* "DroidHealth" */
         sscanf(pszValue, "%f", &fValue);
-        mAddHealth[2] = fValue;
+        mAddHealth[HEALTH_TYPE_DROID] = fValue;
         if (fValue != 0.0f)
         {
-            mTargetTypes |= 4;
-            mAITargetTypes |= 4;
+            mTargetTypes |= TargetInfo::TYPE_DROID;
+            mAITargetTypes |= TargetInfo::TYPE_DROID;
         }
         return;
     case 0xf33b41df: /* "SoldierHealth" */
         sscanf(pszValue, "%f", &fValue);
-        mAddHealth[0] = fValue;
-        mAddHealth[2] = fValue;
+        mAddHealth[HEALTH_TYPE_PERSON] = fValue;
+        mAddHealth[HEALTH_TYPE_DROID] = fValue;
         if (fValue != 0.0f)
         {
-            mTargetTypes |= 5;
-            mAITargetTypes |= 5;
+            mTargetTypes |= TargetInfo::TYPE_PERSON | TargetInfo::TYPE_DROID;
+            mAITargetTypes |= TargetInfo::TYPE_PERSON | TargetInfo::TYPE_DROID;
         }
         return;
     case 0x14e381c9: /* "VehicleHealth" */
         sscanf(pszValue, "%f", &fValue);
-        mAddHealth[3] = fValue;
+        mAddHealth[HEALTH_TYPE_VEHICLE] = fValue;
         if (fValue != 0.0f)
         {
-            mTargetTypes |= 8;
-            mAITargetTypes |= 8;
+            mTargetTypes |= TargetInfo::TYPE_VEHICLE;
+            mAITargetTypes |= TargetInfo::TYPE_VEHICLE;
         }
         return;
     case 0xa6c59e9f: /* "BuildingHealth" */
         sscanf(pszValue, "%f", &fValue);
-        mAddHealth[4] = fValue;
+        mAddHealth[HEALTH_TYPE_BUILDING] = fValue;
         if (fValue != 0.0f)
         {
-            mTargetTypes |= 0x10;
-            mAITargetTypes |= 0x10;
+            mTargetTypes |= TargetInfo::TYPE_BUILDING;
+            mAITargetTypes |= TargetInfo::TYPE_BUILDING;
         }
         return;
     case 0x03ec6220: /* "BuildingRebuild" */
         sscanf(pszValue, "%f", &fValue);
-        mAddHealth[5] = fValue;
+        mAddHealth[HEALTH_TYPE_BUILDING_DEAD] = fValue;
         if (fValue != 0.0f)
         {
-            mTargetTypes |= 0x20;
-            mAITargetTypes |= 0x20;
+            mTargetTypes |= TargetInfo::TYPE_BUILDING_DEAD;
+            mAITargetTypes |= TargetInfo::TYPE_BUILDING_DEAD;
         }
         return;
     case 0x09cc7f53: /* "BuildingBuild" */
         sscanf(pszValue, "%f", &fValue);
-        mAddHealth[6] = fValue;
+        mAddHealth[HEALTH_TYPE_BUILDING_UNBUILT] = fValue;
         if (fValue != 0.0f)
         {
-            mTargetTypes |= 0x40;
-            mAITargetTypes |= 0x40;
+            mTargetTypes |= TargetInfo::TYPE_BUILDING_UNBUILT;
+            mAITargetTypes |= TargetInfo::TYPE_BUILDING_UNBUILT;
         }
         return;
     case 0xf5ed2064: /* "MineHealth" */
         sscanf(pszValue, "%f", &fValue);
-        mAddHealth[7] = fValue;
+        mAddHealth[HEALTH_TYPE_MINE] = fValue;
         if (fValue != 0.0f)
         {
-            mTargetTypes |= 0x80;
-            mAITargetTypes |= 0x80;
+            mTargetTypes |= TargetInfo::TYPE_MINE;
+            mAITargetTypes |= TargetInfo::TYPE_MINE;
         }
         return;
     case 0x738f412e: /* "PersonAmmo" */
         sscanf(pszValue, "%f", &fValue);
-        mAddAmmo[0] = fValue;
+        mAddAmmo[HEALTH_TYPE_PERSON] = fValue;
         if (fValue != 0.0f)
         {
-            mTargetTypes |= 1;
-            mAITargetTypes |= 1;
+            mTargetTypes |= TargetInfo::TYPE_PERSON;
+            mAITargetTypes |= TargetInfo::TYPE_PERSON;
         }
         return;
     case 0xbfe8e397: /* "AnimalAmmo" */
         sscanf(pszValue, "%f", &fValue);
-        mAddAmmo[1] = fValue;
+        mAddAmmo[HEALTH_TYPE_ANIMAL] = fValue;
         if (fValue != 0.0f)
         {
-            mTargetTypes |= 2;
-            mAITargetTypes |= 2;
+            mTargetTypes |= TargetInfo::TYPE_ANIMAL;
+            mAITargetTypes |= TargetInfo::TYPE_ANIMAL;
         }
         return;
     case 0x0fda4dbb: /* "DroidAmmo" */
         sscanf(pszValue, "%f", &fValue);
-        mAddAmmo[2] = fValue;
+        mAddAmmo[HEALTH_TYPE_DROID] = fValue;
         if (fValue != 0.0f)
         {
-            mTargetTypes |= 4;
-            mAITargetTypes |= 4;
+            mTargetTypes |= TargetInfo::TYPE_DROID;
+            mAITargetTypes |= TargetInfo::TYPE_DROID;
         }
         return;
     case 0xc3da529f: /* "SoldierAmmo" */
         sscanf(pszValue, "%f", &fValue);
-        mAddAmmo[0] = fValue;
-        mAddAmmo[2] = fValue;
+        mAddAmmo[HEALTH_TYPE_PERSON] = fValue;
+        mAddAmmo[HEALTH_TYPE_DROID] = fValue;
         if (fValue != 0.0f)
         {
-            mTargetTypes |= 5;
-            mAITargetTypes |= 5;
+            mTargetTypes |= TargetInfo::TYPE_PERSON | TargetInfo::TYPE_DROID;
+            mAITargetTypes |= TargetInfo::TYPE_PERSON | TargetInfo::TYPE_DROID;
         }
         return;
     case 0xe728d955: /* "VehicleAmmo" */
         sscanf(pszValue, "%f", &fValue);
-        mAddAmmo[3] = fValue;
+        mAddAmmo[HEALTH_TYPE_VEHICLE] = fValue;
         if (fValue != 0.0f)
         {
-            mTargetTypes |= 8;
-            mAITargetTypes |= 8;
+            mTargetTypes |= TargetInfo::TYPE_VEHICLE;
+            mAITargetTypes |= TargetInfo::TYPE_VEHICLE;
         }
         return;
     case 0xa25f865f: /* "BuildingAmmo" */
         sscanf(pszValue, "%f", &fValue);
-        mAddAmmo[4] = fValue;
+        mAddAmmo[HEALTH_TYPE_BUILDING] = fValue;
         if (fValue != 0.0f)
         {
-            mTargetTypes |= 0x10;
-            mAITargetTypes |= 0x10;
+            mTargetTypes |= TargetInfo::TYPE_BUILDING;
+            mAITargetTypes |= TargetInfo::TYPE_BUILDING;
         }
         return;
     default:
@@ -265,10 +264,9 @@ WeaponRepair::WeaponRepair(const WeaponRepairClass* pClass, const WeaponDesc& de
 
 // GLOBAL: SWBF2 0x01f9a910
 // WeaponRepair::rttiHashWeaponRepair
-PblHash WeaponRepair::rttiHashWeaponRepair("WeaponRepair");
 // GLOBAL: SWBF2 0x0078c23c
 // WeaponRepair::rttiNameWeaponRepair
-const char WeaponRepair::rttiNameWeaponRepair[] = "WeaponRepair";
+PBL_IMPLEMENT_RTTI(WeaponRepair)
 
 
 

@@ -87,7 +87,7 @@ TString *luaS_newlstr (lua_State *L, const char *str, size_t l) {
 Udata *luaS_newudata (lua_State *L, size_t s) {
   Udata *u;
   u = cast(Udata *, luaM_malloc(L, sizeudata(s)));
-  u->uv.marked = (1<<1);
+  u->uv.marked = LUA_BIT(1);
   u->uv.tt = LUA_TUSERDATA;
   u->uv.len = s;
   u->uv.metatable = hvalue(defaultmeta(L));

@@ -167,7 +167,7 @@ void VehicleCoverHelper::ExitState()
 // FUNCTION: SWBF2 0x0066c290
 void VehicleCoverHelper::UpdateState(float dt)
 {
-    if (mCurState == 100)
+    if (mCurState == STATE_GLOBDONE)
     {
         return;
     }
@@ -186,7 +186,7 @@ void VehicleCoverHelper::UpdateState(float dt)
             }
             else
             {
-                SetNextState(100);
+                SetNextState(STATE_GLOBDONE);
             }
             return;
         }

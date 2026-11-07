@@ -76,13 +76,13 @@ void PatrolHelper::EnterState()
                     AI::GoalTarget target(AIUtil::GetCommandPostPos(pPost));
                     UnitGoalAgentInfo cmd(CMD_DEFEND, &target);
                     GetCtrl()->ForceCommand(cmd);
-                    SetNextState(100);
+                    SetNextState(STATE_GLOBDONE);
                     return;
                 }
             }
             LowLevel(GetCtrl()).SetExitVehicle(NULL);
             GetMe()->mCharacter->SetVehicleBlockTime(GameLoop::GetMissionTime() + 5.0f);
-            SetNextState(100);
+            SetNextState(STATE_GLOBDONE);
             return;
         }
 
@@ -170,7 +170,7 @@ void PatrolHelper::EnterState()
 // FUNCTION: SWBF2 0x006153c0
 void PatrolHelper::UpdateState(float dt)
 {
-    if (mCurState == 100)
+    if (mCurState == STATE_GLOBDONE)
     {
         return;
     }
@@ -182,7 +182,7 @@ void PatrolHelper::UpdateState(float dt)
         mBeginTime = 1.0e8f;
         if (!pPost->mCaptureRegion || pPost->CanTeamSpawnHere(GetMe()->mCharacter->mTeamNumber))
         {
-            SetNextState(100);
+            SetNextState(STATE_GLOBDONE);
             return;
         }
     }

@@ -762,10 +762,9 @@ void WeaponAreaEffect::Fire()
 
 // GLOBAL: SWBF2 0x01f9a888
 // WeaponAreaEffectClass::rttiHashWeaponAreaEffectClass
-PblHash WeaponAreaEffectClass::rttiHashWeaponAreaEffectClass("WeaponAreaEffectClass");
 // GLOBAL: SWBF2 0x0078be18
 // WeaponAreaEffectClass::rttiNameWeaponAreaEffectClass
-const char WeaponAreaEffectClass::rttiNameWeaponAreaEffectClass[] = "WeaponAreaEffectClass";
+PBL_IMPLEMENT_RTTI(WeaponAreaEffectClass)
 
 // FUNCTION: SWBF2 0x0067db70
 WeaponAreaEffectClass::WeaponAreaEffectClass(unsigned int uHash)

@@ -27,10 +27,9 @@ inline Character* ItemOwner(const GameObject* pItem)
 
 // GLOBAL: SWBF2 0x01eb97ac
 // AI::CTFGoal::rttiHashCTFGoal
-PblHash AI::CTFGoal::rttiHashCTFGoal("CTFGoal");
 // GLOBAL: SWBF2 0x00788de4
 // AI::CTFGoal::rttiNameCTFGoal
-const char AI::CTFGoal::rttiNameCTFGoal[] = "CTFGoal";
+PBL_IMPLEMENT_RTTI_IN(AI, CTFGoal)
 
 
 

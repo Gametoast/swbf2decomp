@@ -408,10 +408,9 @@ PblHash EntityFlyer::rttiHashEntityFlyer("EntityFlyer");
 
 // GLOBAL: SWBF2 0x01ebbcb8
 // EntityFlyerClass::rttiHashEntityFlyerClass
-PblHash EntityFlyerClass::rttiHashEntityFlyerClass("EntityFlyerClass");
 // GLOBAL: SWBF2 0x007891ec
 // EntityFlyerClass::rttiNameEntityFlyerClass
-const char EntityFlyerClass::rttiNameEntityFlyerClass[] = "EntityFlyerClass";
+PBL_IMPLEMENT_RTTI(EntityFlyerClass)
 
 // FUNCTION: SWBF2 0x004ab7c0
 const ControllableClass* EntityFlyer::GetControllableClass() const
@@ -1220,8 +1219,8 @@ void EntityFlyerClass::SetProperty(unsigned int uProperty, const char* pszValue)
             int iMaskId = mCollisionModel.GetMaskId(0x29173102 /* "CollisionMesh" */);
             if (iMaskId >= 0)
             {
-                sSoftCollisionMask |= 1 << iMaskId;
-                sOrdnanceCollisionMask |= 1 << iMaskId;
+                sSoftCollisionMask |= Bit(iMaskId);
+                sOrdnanceCollisionMask |= Bit(iMaskId);
             }
             PblBox box = pMesh->GetWorldspaceAABB(gMatrixIdentity);
             mBarrierX = box._vMax.x - box._vMin.x;
@@ -1259,11 +1258,11 @@ void EntityFlyerClass::SetProperty(unsigned int uProperty, const char* pszValue)
             CollisionMask ordnanceMask = mCollisionModel.GetCollisionMask(COLL_ORDNANCE);
             for (int i = 0; i < 32; ++i)
             {
-                if (sSoftCollisionMask & (1u << i))
+                if (sSoftCollisionMask & Bit(i))
                 {
                     softMask.SetId(i);
                 }
-                if (sOrdnanceCollisionMask & (1u << i))
+                if (sOrdnanceCollisionMask & Bit(i))
                 {
                     ordnanceMask.SetId(i);
                 }
@@ -1283,7 +1282,7 @@ void EntityFlyerClass::SetProperty(unsigned int uProperty, const char* pszValue)
         int iMaskId = mCollisionModel.GetMaskId(PblHash(pszValue));
         if (iMaskId >= 0)
         {
-            sSoftCollisionMask |= 1 << iMaskId;
+            sSoftCollisionMask |= Bit(iMaskId);
             mCollisionModel.SetCollisionMask(COLL_SOFT, CollisionMask(sSoftCollisionMask));
         }
         break;
@@ -1293,7 +1292,7 @@ void EntityFlyerClass::SetProperty(unsigned int uProperty, const char* pszValue)
         int iMaskId = mCollisionModel.GetMaskId(PblHash(pszValue));
         if (iMaskId >= 0)
         {
-            sOrdnanceCollisionMask |= 1 << iMaskId;
+            sOrdnanceCollisionMask |= Bit(iMaskId);
             mCollisionModel.SetCollisionMask(COLL_ORDNANCE, CollisionMask(sOrdnanceCollisionMask));
         }
         break;
@@ -2247,11 +2246,11 @@ void EntityFlyer::Render(unsigned char renderMode, float lod, unsigned int flags
 
     if (!mClass->m_bDynamicLighting)
     {
-        flags |= 0x80;
+        flags |= RENDERFLAG_STATIC;
     }
     else
     {
-        flags &= ~0x80;
+        flags &= ~RENDERFLAG_STATIC;
     }
 
     if (NetGame::IsEnabled() && !netFrameLock)
@@ -2360,13 +2359,13 @@ void EntityFlyer::Render(unsigned char renderMode, float lod, unsigned int flags
     SetupShadow(this, mModel, renderMode, flags, 0);
     mModel->Render(renderMode, lod, &mWorld, &mPose, RedColor::WHITE, flags, 0);
     PblMatrix mReflection;
-    if (!(flags & 0x200000) && FLRenderer::IsReflected(GetRenderPos(), _Sphere.w, mReflection, false))
+    if (!(flags & RENDERFLAG_RENDER_REFLECTION) && FLRenderer::IsReflected(GetRenderPos(), _Sphere.w, mReflection, false))
     {
         PblMatrix mat;
         mat = mWorld * mReflection;
         mReflection = mat;
         mModel->Render(renderMode, lod, &mReflection, &mPose, RedColor::WHITE,
-                       (flags & ~0x10000) | 0x10000100, 0);
+                       (flags & ~RENDERFLAG_RENDER_SHADOWVOLUMES) | RENDERFLAG_REFLECTION | RENDERFLAG_PSEUDO_REFLECTED, 0);
     }
 
     for (int i = 0; i < mNumTurrets; ++i)

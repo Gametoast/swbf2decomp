@@ -15,10 +15,9 @@
 
 // GLOBAL: SWBF2 0x01eb9864
 // Entity::rttiHashEntity
-PblHash Entity::rttiHashEntity("Entity");
 // GLOBAL: SWBF2 0x00788f2c
 // Entity::rttiNameEntity
-const char Entity::rttiNameEntity[] = "Entity";
+PBL_IMPLEMENT_RTTI(Entity)
 
 // SYNTHETIC: SWBF2 0x00402840
 // `dynamic initializer for 'EntityEx::rttiHashEntityEx''
@@ -26,10 +25,9 @@ const char Entity::rttiNameEntity[] = "Entity";
 
 // GLOBAL: SWBF2 0x01eb9868
 // EntityEx::rttiHashEntityEx
-PblHash EntityEx::rttiHashEntityEx("EntityEx");
 // GLOBAL: SWBF2 0x00788f44
 // EntityEx::rttiNameEntityEx
-const char EntityEx::rttiNameEntityEx[] = "EntityEx";
+PBL_IMPLEMENT_RTTI(EntityEx)
 
 // SYNTHETIC: SWBF2 0x00402850
 // `dynamic initializer for 'EntityClass::rttiHashEntityClass''
@@ -37,10 +35,9 @@ const char EntityEx::rttiNameEntityEx[] = "EntityEx";
 
 // GLOBAL: SWBF2 0x01eb9860
 // EntityClass::rttiHashEntityClass
-PblHash EntityClass::rttiHashEntityClass("EntityClass");
 // GLOBAL: SWBF2 0x00788f34
 // EntityClass::rttiNameEntityClass
-const char EntityClass::rttiNameEntityClass[] = "EntityClass";
+PBL_IMPLEMENT_RTTI(EntityClass)
 // SYNTHETIC: SWBF2 0x00402860
 // `dynamic initializer for 'EntityEx::mIdMap''
 

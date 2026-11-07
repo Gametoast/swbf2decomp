@@ -162,8 +162,8 @@ void AsteroidClass::SetProperty(unsigned int uProperty, const char* pszValue)
             int iMaskId = mCollisionModel.GetMaskId(0x29173102 /* "CollisionMesh" */);
             if (iMaskId >= 0)
             {
-                sSoftCollisionMask |= 1 << iMaskId;
-                sOrdnanceCollisionMask |= 1 << iMaskId;
+                sSoftCollisionMask |= Bit(iMaskId);
+                sOrdnanceCollisionMask |= Bit(iMaskId);
             }
         }
         if (iNumBodies == 0 && mModel)
@@ -229,7 +229,7 @@ void AsteroidClass::SetProperty(unsigned int uProperty, const char* pszValue)
         int iMaskId = mCollisionModel.GetMaskId(PblHash(pszValue));
         if (iMaskId >= 0)
         {
-            sSoftCollisionMask |= 1 << iMaskId;
+            sSoftCollisionMask |= Bit(iMaskId);
             mCollisionModel.SetCollisionMask(COLL_SOFT, CollisionMask(sSoftCollisionMask));
         }
         break;
@@ -239,7 +239,7 @@ void AsteroidClass::SetProperty(unsigned int uProperty, const char* pszValue)
         int iMaskId = mCollisionModel.GetMaskId(PblHash(pszValue));
         if (iMaskId >= 0)
         {
-            sOrdnanceCollisionMask |= 1 << iMaskId;
+            sOrdnanceCollisionMask |= Bit(iMaskId);
             mCollisionModel.SetCollisionMask(COLL_ORDNANCE, CollisionMask(sOrdnanceCollisionMask));
         }
         break;
@@ -284,10 +284,9 @@ const char Asteroid::rttiNameAsteroid[] = "Asteroid";
 
 // GLOBAL: SWBF2 0x01eb024c
 // AsteroidClass::rttiHashAsteroidClass
-PblHash AsteroidClass::rttiHashAsteroidClass("AsteroidClass");
 // GLOBAL: SWBF2 0x00788840
 // AsteroidClass::rttiNameAsteroidClass
-const char AsteroidClass::rttiNameAsteroidClass[] = "AsteroidClass";
+PBL_IMPLEMENT_RTTI(AsteroidClass)
 
 // FUNCTION: SWBF2 0x00445ba0
 Entity* AsteroidClass::Build(const EntityDesc& desc)

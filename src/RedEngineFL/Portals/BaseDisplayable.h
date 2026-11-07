@@ -98,6 +98,14 @@ template <class T>
 class BaseDisplayable : public T
 {
 public:
+    // flags_ bits, named after the accessors that read and set them
+    enum
+    {
+        FLAG_PORTAL_ACTIVE = 2,
+        FLAG_PORTAL_CLIP = 4,
+        FLAG_DYNAMIC = 8
+    };
+
     BaseDisplayable() : sector_(0), flags_(0), aframe_(0), pframe_(0) {}
 
     virtual ~BaseDisplayable() {}
@@ -135,7 +143,7 @@ public:
     // pvs::BaseDisplayable<pvs::IDisplayable>::PortalClip
     virtual bool PortalClip() const
     {
-        return (flags_ >> 2) & 1;
+        return (flags_ & FLAG_PORTAL_CLIP) != 0;
     }
     // TEMPLATE: SWBF2 0x00446ce0
     // pvs::BaseDisplayable<pvs::IDisplayable>::SetPortalClip
@@ -143,18 +151,18 @@ public:
     {
         if (bClip)
         {
-            flags_ |= 4;
+            flags_ |= FLAG_PORTAL_CLIP;
         }
         else
         {
-            flags_ &= ~4u;
+            flags_ &= ~FLAG_PORTAL_CLIP;
         }
     }
     // TEMPLATE: SWBF2 0x00446ca0
     // pvs::BaseDisplayable<pvs::IDisplayable>::PortalActive
     virtual bool PortalActive() const
     {
-        return (flags_ >> 1) & 1;
+        return (flags_ & FLAG_PORTAL_ACTIVE) != 0;
     }
     // TEMPLATE: SWBF2 0x00446cb0
     // pvs::BaseDisplayable<pvs::IDisplayable>::SetPortalActive
@@ -162,18 +170,18 @@ public:
     {
         if (bActive)
         {
-            flags_ |= 2;
+            flags_ |= FLAG_PORTAL_ACTIVE;
         }
         else
         {
-            flags_ &= ~2u;
+            flags_ &= ~FLAG_PORTAL_ACTIVE;
         }
     }
     // TEMPLATE: SWBF2 0x00446d00
     // pvs::BaseDisplayable<pvs::IDisplayable>::Dynamic
     virtual bool Dynamic() const
     {
-        return (flags_ >> 3) & 1;
+        return (flags_ & FLAG_DYNAMIC) != 0;
     }
     // TEMPLATE: SWBF2 0x00446d10
     // pvs::BaseDisplayable<pvs::IDisplayable>::SetDynamic
@@ -181,11 +189,11 @@ public:
     {
         if (bDynamic)
         {
-            flags_ |= 8;
+            flags_ |= FLAG_DYNAMIC;
         }
         else
         {
-            flags_ &= ~8u;
+            flags_ &= ~FLAG_DYNAMIC;
         }
     }
     // TEMPLATE: SWBF2 0x00446d30

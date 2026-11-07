@@ -28,10 +28,9 @@
 
 // GLOBAL: SWBF2 0x01f993bc
 // UnitFlyAgent::rttiHashUnitFlyAgent
-PblHash UnitFlyAgent::rttiHashUnitFlyAgent("UnitFlyAgent");
 // GLOBAL: SWBF2 0x0078b844
 // UnitFlyAgent::rttiNameUnitFlyAgent
-const char UnitFlyAgent::rttiNameUnitFlyAgent[] = "UnitFlyAgent";
+PBL_IMPLEMENT_RTTI(UnitFlyAgent)
 
 namespace VehicleManager
 {
@@ -44,8 +43,8 @@ UnitFlyAgent::UnitFlyAgent(UnitController* pCtrl)
 {
     mHint = 0;
     mNextHintCheckTime = -100.0f;
-    mCurState = 1;
-    mNextState = 1;
+    mCurState = STATE_START;
+    mNextState = STATE_START;
 }
 
 // SYNTHETIC: SWBF2 0x00666740
@@ -64,11 +63,11 @@ void UnitFlyAgent::EnterState()
 
     switch (mCurState)
     {
-    case 1:
+    case STATE_START:
         mGotoNonOwnedCP = true;
         if (GetFlyer()->GetState() != EntityFlyer::LANDED)
         {
-            SetNextState(4);
+            SetNextState(STATE_Fly);
         }
         else
         {
@@ -76,7 +75,7 @@ void UnitFlyAgent::EnterState()
         }
         break;
 
-    case 2:
+    case STATE_ExitHangar:
     {
         PblVector3 vFwd = mCtrl->mOwner->GetMatrix().GetZAxis();
         vFwd.y = 0.0f;
@@ -101,7 +100,7 @@ void UnitFlyAgent::EnterState()
         break;
     }
 
-    case 3:
+    case STATE_Pickup:
         if (IsTransport() && mGotoNonOwnedCP)
         {
             mWaitTime = GameLoop::GetMissionTime() + 10.0f;
@@ -114,7 +113,7 @@ void UnitFlyAgent::EnterState()
         }
         break;
 
-    case 4:
+    case STATE_Fly:
     {
         int iTries = 0;
         const int iTeam = mCtrl->mOwner->GetGameObject()->GetTeam();
@@ -156,7 +155,7 @@ void UnitFlyAgent::EnterState()
         break;
     }
 
-    case 5:
+    case STATE_Land:
     {
         mHint->Reserve(mCtrl->mOwner->GetGameObject());
         PblMatrix mLand = mHint->BuildMatrix();
@@ -181,7 +180,7 @@ void UnitFlyAgent::EnterState()
         break;
     }
 
-    case 6:
+    case STATE_DropOff:
         if (mGotoNonOwnedCP)
         {
             AIUtil::DeployCargo(mCtrl->mOwner->GetGameObject(), 0);
@@ -194,7 +193,7 @@ void UnitFlyAgent::EnterState()
             }
         }
         mGotoNonOwnedCP = !mGotoNonOwnedCP;
-        SetNextState(3);
+        SetNextState(STATE_Pickup);
         break;
     }
 }
@@ -281,47 +280,47 @@ void UnitFlyAgent::UpdateStatePostVision(float dt)
 
     switch (mCurState)
     {
-    case 1:
-        SetNextState(3);
+    case STATE_START:
+        SetNextState(STATE_Pickup);
         break;
-    case 2:
+    case STATE_ExitHangar:
         if (!IsRoofOverhead())
         {
-            SetNextState(4);
+            SetNextState(STATE_Fly);
         }
         break;
-    case 3:
+    case STATE_Pickup:
         if (GameLoop::GetMissionTime() > mWaitTime)
         {
             if (IsRoofOverhead())
             {
-                SetNextState(2);
+                SetNextState(STATE_ExitHangar);
             }
             else
             {
-                SetNextState(4);
+                SetNextState(STATE_Fly);
             }
         }
         break;
-    case 4:
+    case STATE_Fly:
         if (IsNearLandingPt())
         {
-            SetNextState(5);
+            SetNextState(STATE_Land);
         }
         else if (GetLowLevel().IsAtDest())
         {
-            SetNextState(4);
+            SetNextState(STATE_Fly);
         }
         else if (!IsNearATAT())
         {
             GetFlyer()->mbCirclingPoint = false;
         }
         break;
-    case 5:
+    case STATE_Land:
         mHint->Reserve(mCtrl->mOwner->GetGameObject());
         if (GetFlyer()->mState == 0)
         {
-            SetNextState(6);
+            SetNextState(STATE_DropOff);
         }
         break;
     }
@@ -456,7 +455,7 @@ int UnitFlyAgent::EventHandler(AI::EventInfo* pInfo)
         PlayDamageEventVO(pInfo);
         return 0;
     case AI::EVT_Vision_CanSeeEnemy:
-        if (mCurState == 5 || mCurState == 2 || IsTransport())
+        if (mCurState == STATE_Land || mCurState == STATE_ExitHangar || IsTransport())
         {
             return 0;
         }

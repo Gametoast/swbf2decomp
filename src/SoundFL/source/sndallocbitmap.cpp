@@ -1,4 +1,5 @@
 #include <string.h>
+#include "PebbleFL/Common/PblBits.h"
 
 #include "sndallocbitmap.h"
 
@@ -37,7 +38,7 @@ bool AllocBitmap::Alloc(unsigned int uiNumEntries, Handle& handle)
         {
             for (unsigned int b = 0; b < 8; b++)
             {
-                if (!(mBitmap[uiByte] & (1 << b)))
+                if (!(mBitmap[uiByte] & Bit(b)))
                 {
                     if (uiRun == 0)
                     {
@@ -136,7 +137,7 @@ unsigned int AllocBitmap::GetFreeEntries() const
         {
             for (unsigned char b = 0; b < 8; b++)
             {
-                if (!(mBitmap[i] & (1 << b)))
+                if (!(mBitmap[i] & Bit(b)))
                 {
                     uiFree++;
                 }
@@ -212,7 +213,7 @@ void AllocBitmap::Reserve(unsigned int uiStartEntry, unsigned int uiNumEntries, 
 
         for (unsigned int b = ucFrom; b < ucTo; b++)
         {
-            mBitmap[i] &= (unsigned char)~(1 << b);
+            mBitmap[i] &= (unsigned char)~Bit(b);
             mBitmap[i] |= (unsigned char)(ucValue << b);
         }
     }

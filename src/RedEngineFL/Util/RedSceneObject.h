@@ -1,7 +1,9 @@
 #pragma once
 
 #include "RedEngineFL/Portals/Portal.h"
+#include "PebbleFL/Common/PblBits.h"
 #include "PebbleFL/Common/PblVector.h"
+#include "RedEngineFL/Graphics/RedRenderFlags.h"
 
 class PblBox;
 class PblMatrix;
@@ -59,11 +61,11 @@ public:
     {
         if (bClipped)
         {
-            _uiRenderFlags |= 1;
+            _uiRenderFlags |= RENDERFLAG_CLIPPED;
         }
         else
         {
-            _uiRenderFlags &= ~1u;
+            _uiRenderFlags &= ~RENDERFLAG_CLIPPED;
         }
     }
 
@@ -91,11 +93,11 @@ protected:
     {
         if (bTest)
         {
-            _uiRenderFlags |= 2;
+            _uiRenderFlags |= RENDERFLAG_TEST_BBOX;
         }
         else
         {
-            _uiRenderFlags &= ~2u;
+            _uiRenderFlags &= ~RENDERFLAG_TEST_BBOX;
         }
     }
     virtual void SetRenderPos(const PblVector3& vPos);
@@ -129,6 +131,13 @@ class RedLodData
 {
 public:
 
+    enum LowResFlags
+    {
+        HAS_LOWREZ = 1,
+        CROSSFADE_LOWREZ = 2,
+        HAS_TRANSPARENT = 4
+    };
+
     RedLodData()
     {
         _LodBitmask = 0;
@@ -137,14 +146,14 @@ public:
     }
 
     int GetCost(int iLod) const { return _LodCost[iLod]; }
-    bool HasLod(int iLod) const { return (_LodBitmask & (1 << iLod)) != 0; }
+    bool HasLod(int iLod) const { return (_LodBitmask & Bit(iLod)) != 0; }
 
     int GetLodClass() const { return _LodClass; }
     float GetMaxDist() const { return mMaxDist; }
     void SetMaxDist(float fMaxDist) { mMaxDist = fMaxDist; }
-    int HasLowRes() const { return mLowRezFlags & 1; }
-    int CrossFadeLowRes() const { return mLowRezFlags & 2; }
-    int HasTransparentSegment() const { return mLowRezFlags & 4; }
+    int HasLowRes() const { return mLowRezFlags & HAS_LOWREZ; }
+    int CrossFadeLowRes() const { return mLowRezFlags & CROSSFADE_LOWREZ; }
+    int HasTransparentSegment() const { return mLowRezFlags & HAS_TRANSPARENT; }
 
     int _LodCost[4];
     int _LodBitmask;

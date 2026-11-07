@@ -1,6 +1,7 @@
 #pragma once
 
 #include "PebbleFL/Common/PblHashTable.h"
+#include "PebbleFL/Common/PblRtti.h"
 
 #include <stddef.h>
 
@@ -32,9 +33,13 @@ public:
 
     virtual EntityClass* Derive(unsigned int uHash);
     virtual Entity* Build(const EntityDesc& desc);
-    virtual bool IsRtti(unsigned int uRtti) const;
-    virtual unsigned int GetDerivedRtti() const;
-    virtual const char* GetDerivedRttiName() const;
+    // FUNCTION: SWBF2 0x00499560
+    // EntityDroidClass::IsRtti
+    // FUNCTION: SWBF2 0x004995a0
+    // EntityDroidClass::GetDerivedRtti
+    // FUNCTION: SWBF2 0x004995b0
+    // EntityDroidClass::GetDerivedRttiName
+    PBL_DECLARE_DERIVED_RTTI(EntityDroidClass, GameObjectClass)
     virtual void SetProperty(unsigned int uProperty, const char* pszValue);
     virtual const ControllableClass* GetControllableClass() const;
     // FUNCTION: SWBF2 0x004995c0
@@ -47,9 +52,6 @@ public:
     {
         return mWeaponClass[iIndex];
     }
-
-    static PblHash rttiHashEntityDroidClass;
-    static const char rttiNameEntityDroidClass[];
 
     float mSetAltitude;
     float mGravityScale;
@@ -83,40 +85,6 @@ public:
     GameSound mAmbientSound;
     GameSound mAmbient2Sound;
 };
-  
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
-
- 
 
 class CollisionResult;
 class Restrictor;
@@ -303,23 +271,6 @@ inline bool EntityDroid::PostCollision::Update(float fDeltaTime)
     return mOwner->PostCollisionUpdate(fDeltaTime);
 }
 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
-
 // FUNCTION: SWBF2 0x00499370
 inline unsigned int EntityDroid::GetDerivedRtti() const
 {
@@ -330,28 +281,6 @@ inline unsigned int EntityDroid::GetDerivedRtti() const
 inline const char* EntityDroid::GetDerivedRttiName() const
 {
     return rttiNameEntityDroid;
-}
-
-// FUNCTION: SWBF2 0x00499560
-inline bool EntityDroidClass::IsRtti(unsigned int uRtti) const
-{
-    if (rttiHashEntityDroidClass == uRtti)
-    {
-        return true;
-    }
-    return GameObjectClass::IsRtti(uRtti);
-}
-
-// FUNCTION: SWBF2 0x004995a0
-inline unsigned int EntityDroidClass::GetDerivedRtti() const
-{
-    return rttiHashEntityDroidClass;
-}
-
-// FUNCTION: SWBF2 0x004995b0
-inline const char* EntityDroidClass::GetDerivedRttiName() const
-{
-    return rttiNameEntityDroidClass;
 }
 
 // FUNCTION: SWBF2 0x00499330

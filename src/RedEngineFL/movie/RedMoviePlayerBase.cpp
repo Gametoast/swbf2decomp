@@ -474,7 +474,7 @@ void RedMoviePlayerBase::Notify(NotifyType eType)
 // FUNCTION: SWBF2 0x00725b90
 bool RedMoviePlayerBase::GetReadBufferFull() const
 {
-    return (mFlags >> 2) & 1;
+    return (mFlags & flags_BufferFull) != 0;
 }
 
 // FUNCTION: SWBF2 0x00725bc0
@@ -486,13 +486,13 @@ RedTexture* RedMoviePlayerBase::GetTexture()
 // FUNCTION: SWBF2 0x00725bf0
 bool RedMoviePlayerBase::IsDiscontinuity() const
 {
-    return (mFlags >> 4) & 1;
+    return (mFlags & flags_Discontinuity) != 0;
 }
 
 // FUNCTION: SWBF2 0x00725c00
 bool RedMoviePlayerBase::IsEnd() const
 {
-    return (mFlags >> 3) & 1;
+    return (mFlags & flags_End) != 0;
 }
 
 // FUNCTION: SWBF2 0x00725ee0
@@ -624,7 +624,7 @@ void RedMoviePlayerBase::Update()
     {
         if (state == playState_stopped)
         {
-            mFlags = (mFlags & 0xdb) | flags_ResetSegment;
+            mFlags = (mFlags & ~(flags_BufferFull | flags_ResetSegment)) | flags_ResetSegment;
             if ((mFlags & flags_Reading) && mFile.FileOperationComplete())
             {
                 mFlags &= ~flags_Reading;

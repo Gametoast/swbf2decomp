@@ -25,7 +25,7 @@ static pcClearShader* s_pClearShader;
 void MotionBlurEffect::PlatformInit()
 {
     s_pClearShader = (pcClearShader*)pcRedShader::Create(
-        0x5c6e1222 /* "clear" */, 0x403, 0, 0, 4, RedColor::WHITE, RedColor::BLACK, 32.0f);
+        0x5c6e1222 /* "clear" */, RVF_POSITION_XYZRHW | RVF_TEXCOORDS_2, 0, 0, MATERIAL_FLAG_ALPHAMAP_OPACITY, RedColor::WHITE, RedColor::BLACK, 32.0f);
 }
 
 // FUNCTION: SWBF2 0x00423c00
@@ -91,6 +91,6 @@ void MotionBlurEffect::PlatformRender(unsigned int) const
     color.r = RedColor::WHITE.r;
     color.a = (unsigned char)(m_curBlurAmount[uiView] * 255.0f);
     RedRenderer::pcRenderPrimitive(pPrimitive, s_pClearShader, gMatrixIdentity,
-                                   color, 0x200, 0, 0, 0);
+                                   color, PC_RENDERFLAG_IMMEDIATE, 0, 0, 0);
     pPrimitive->Release();
 }

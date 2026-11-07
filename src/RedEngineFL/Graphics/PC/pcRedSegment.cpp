@@ -56,7 +56,7 @@ unsigned int pcShaderSegment::GetRenderTypeHash() const
 // FUNCTION: SWBF2 0x00717cd0
 bool pcShaderSegment::IsLit() const
 {
-    return (m_uiSegmentRenderFlags & 0x10) == 0;
+    return (m_uiSegmentRenderFlags & RENDERFLAG_NO_LIGHTING) == 0;
 }
 
 // FUNCTION: SWBF2 0x00717d00
@@ -73,7 +73,7 @@ bool pcShaderSegment::IsTransparent() const
 bool pcShaderSegment::IsVertexLit() const
 {
     if (m_pPrimitive &&
-        (m_pPrimitive->m_vertexFormat->m_uiVertexBufferRVF & 0x100))
+        (m_pPrimitive->m_vertexFormat->m_uiVertexBufferRVF & RVF_LIGHTING))
     {
         return true;
     }
@@ -149,7 +149,7 @@ unsigned int pcSoftwareSkinnedShaderSegment::GetRenderTypeHash() const
 // FUNCTION: SWBF2 0x00717ce0
 bool pcSoftwareSkinnedShaderSegment::IsLit() const
 {
-    return (m_uiSegmentRenderFlags & 0x10) == 0;
+    return (m_uiSegmentRenderFlags & RENDERFLAG_NO_LIGHTING) == 0;
 }
 
 // FUNCTION: SWBF2 0x00717d20
@@ -165,7 +165,7 @@ bool pcSoftwareSkinnedShaderSegment::IsTransparent() const
 // FUNCTION: SWBF2 0x00717d70
 bool pcSoftwareSkinnedShaderSegment::IsVertexLit() const
 {
-    return (m_uiVertexFormat & 0x100) != 0;
+    return (m_uiVertexFormat & RVF_LIGHTING) != 0;
 }
 
 // FUNCTION: SWBF2 0x007188d0
@@ -199,7 +199,7 @@ pcSoftwareSkinnedShaderSegment::_CreateSkinnedPrimitive(
     int binormalOffset = 0;
 
     int offset;
-    if (m_uiVertexFormat & 0x1000)
+    if (m_uiVertexFormat & RVF_COMPRESSED_POSITION)
     {
         CompressedPos::s_vMin = m_bbox._vMin;
         PblVector3 extent =
@@ -217,10 +217,10 @@ pcSoftwareSkinnedShaderSegment::_CreateSkinnedPrimitive(
         offset = 3;
     }
 
-    if (m_uiVertexFormat & 0x20)
+    if (m_uiVertexFormat & RVF_NORMAL)
     {
         normalOffset = offset;
-        if (m_uiVertexFormat & 0x4000)
+        if (m_uiVertexFormat & RVF_COMPRESSED_NORMALS)
         {
             offset += 1;
         }
@@ -229,10 +229,10 @@ pcSoftwareSkinnedShaderSegment::_CreateSkinnedPrimitive(
             offset += 3;
         }
     }
-    if (m_uiVertexFormat & 0x40)
+    if (m_uiVertexFormat & RVF_TANGENTS)
     {
         tangentOffset = offset;
-        if (m_uiVertexFormat & 0x4000)
+        if (m_uiVertexFormat & RVF_COMPRESSED_NORMALS)
         {
             offset += 1;
         }
@@ -252,7 +252,7 @@ pcSoftwareSkinnedShaderSegment::_CreateSkinnedPrimitive(
     const unsigned char* bones = m_puiSkinData;
     const unsigned char* weights = bones + count - 1;
 
-    switch (m_uiVertexFormat & 0x5060)
+    switch (m_uiVertexFormat & (RVF_NORMAL | RVF_TANGENTS | RVF_COMPRESSED_POSITION | RVF_COMPRESSED_NORMALS))
     {
     case 0:
         for (unsigned int i = 0; i < m_uiNumVertices; ++i)
@@ -267,7 +267,7 @@ pcSoftwareSkinnedShaderSegment::_CreateSkinnedPrimitive(
         }
         break;
 
-    case 0x20:
+    case RVF_NORMAL:
         for (unsigned int i = 0; i < m_uiNumVertices; ++i)
         {
             const PblMatrix& matrix = _GetSkinMatrix(
@@ -283,7 +283,7 @@ pcSoftwareSkinnedShaderSegment::_CreateSkinnedPrimitive(
         }
         break;
 
-    case 0x60:
+    case RVF_NORMAL | RVF_TANGENTS:
         for (unsigned int i = 0; i < m_uiNumVertices; ++i)
         {
             const PblMatrix& matrix = _GetSkinMatrix(
@@ -410,9 +410,9 @@ RedSegment* __cdecl RedSegment::Read(PblFileChunk& chunk, const RedModel* pModel
         case CHUNK_ID('M', 'T', 'R', 'L'):
         {
             uiMaterialFlags = child._pFile->Read32();
-            if (bForceFlags && (uiMaterialFlags & 4))
+            if (bForceFlags && (uiMaterialFlags & MATERIAL_FLAG_ALPHAMAP_OPACITY))
             {
-                uiMaterialFlags |= 0xC000;
+                uiMaterialFlags |= MATERIAL_FLAG_PARTIAL_ZWRITE | MATERIAL_FLAG_BACK_THEN_FRONT;
             }
             unsigned int uiColor = child._pFile->Read32();
             diffuse.a = (unsigned char)(uiColor >> 24);
@@ -568,17 +568,17 @@ RedSegment* __cdecl RedSegment::Read(PblFileChunk& chunk, const RedModel* pModel
     }
 
     unsigned int uiRenderFlags = 0;
-    if (uiMaterialFlags & 0x1000)
+    if (uiMaterialFlags & MATERIAL_FLAG_PSEUDO_REFLECTIVE)
     {
-        uiRenderFlags = 0x8000000;
+        uiRenderFlags = RENDERFLAG_PSEUDO_REFLECTIVE;
     }
-    else if (uiMaterialFlags & 0x2000)
+    else if (uiMaterialFlags & MATERIAL_FLAG_PSEUDO_REFLECTED)
     {
-        uiRenderFlags = 0x10000000;
+        uiRenderFlags = RENDERFLAG_PSEUDO_REFLECTED;
     }
-    if (!(uiMaterialFlags & 1))
+    if (!(uiMaterialFlags & MATERIAL_FLAG_LIGHTING))
     {
-        uiRenderFlags |= 0x10;
+        uiRenderFlags |= RENDERFLAG_NO_LIGHTING;
     }
 
     pcRedShader::Create(uiRenderType, uiVertexFormat, auiTextures, 4,

@@ -16,10 +16,9 @@
 
 // GLOBAL: SWBF2 0x01eb01f4
 // AI::AIGoal::rttiHashAIGoal
-PblHash AI::AIGoal::rttiHashAIGoal("AIGoal");
 // GLOBAL: SWBF2 0x007887b8
 // AI::AIGoal::rttiNameAIGoal
-const char AI::AIGoal::rttiNameAIGoal[] = "AIGoal";
+PBL_IMPLEMENT_RTTI_IN(AI, AIGoal)
 
 // SYNTHETIC: SWBF2 0x004021f0
 // `dynamic initializer for 'AI::AIGoal::sMemoryPool''

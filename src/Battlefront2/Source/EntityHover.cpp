@@ -68,10 +68,9 @@
 
 // GLOBAL: SWBF2 0x01ebbdd0
 // EntityHover::rttiHashEntityHover
-PblHash EntityHover::rttiHashEntityHover("EntityHover");
 // GLOBAL: SWBF2 0x007892dc
 // EntityHover::rttiNameEntityHover
-const char EntityHover::rttiNameEntityHover[] = "EntityHover";
+PBL_IMPLEMENT_RTTI(EntityHover)
 
 // SYNTHETIC: SWBF2 0x00402b80
 // `dynamic initializer for 'EntityHover::sMemoryPool''
@@ -88,10 +87,9 @@ MemoryPool EntityHover::sMemoryPool("EntityHover", sizeof(EntityHover));
 
 // GLOBAL: SWBF2 0x01ebbdd4
 // EntityHoverClass::rttiHashEntityHoverClass
-PblHash EntityHoverClass::rttiHashEntityHoverClass("EntityHoverClass");
 // GLOBAL: SWBF2 0x007892b4
 // EntityHoverClass::rttiNameEntityHoverClass
-const char EntityHoverClass::rttiNameEntityHoverClass[] = "EntityHoverClass";
+PBL_IMPLEMENT_RTTI(EntityHoverClass)
 
 
 
@@ -421,7 +419,7 @@ EntityHover::EntityHover(EntityHoverClass* pClass, const EntityDesc& desc)
     VehicleManager::Add(this);
     mEyeDir = mMatrix.GetZAxis();
     mEyePoint = mClass->mCameraSettings.CalcEyePoint(mMatrix);
-    _uiRenderFlags &= 3;
+    _uiRenderFlags &= (RENDERFLAG_CLIPPED | RENDERFLAG_TEST_BBOX);
     memset(mWheelTextureU, 0, sizeof(mWheelTextureU));
     memset(mWheelTextureV, 0, sizeof(mWheelTextureV));
     memset(mWakeEmitters, 0, sizeof(mWakeEmitters));
@@ -1248,8 +1246,8 @@ void EntityHoverClass::SetProperty(unsigned int uProperty, const char* pszValue)
             int iMaskId = mCollisionModel.GetMaskId(0x29173102 /* "CollisionMesh" */);
             if (iMaskId >= 0)
             {
-                sSoftCollisionMask |= 1 << iMaskId;
-                sOrdnanceCollisionMask |= 1 << iMaskId;
+                sSoftCollisionMask |= Bit(iMaskId);
+                sOrdnanceCollisionMask |= Bit(iMaskId);
             }
             PblBox box = pMesh->GetWorldspaceAABB(gMatrixIdentity);
             mBarrierX = box._vMax.x - box._vMin.x;
@@ -1290,11 +1288,11 @@ void EntityHoverClass::SetProperty(unsigned int uProperty, const char* pszValue)
             CollisionMask ordnanceMask = mCollisionModel.GetCollisionMask(COLL_ORDNANCE);
             for (int i = 0; i < 32; ++i)
             {
-                if (sSoftCollisionMask & (1u << i))
+                if (sSoftCollisionMask & Bit(i))
                 {
                     softMask.SetId(i);
                 }
-                if (sOrdnanceCollisionMask & (1u << i))
+                if (sOrdnanceCollisionMask & Bit(i))
                 {
                     ordnanceMask.SetId(i);
                 }
@@ -1309,7 +1307,7 @@ void EntityHoverClass::SetProperty(unsigned int uProperty, const char* pszValue)
         int iMaskId = mCollisionModel.GetMaskId(PblHash(pszValue));
         if (iMaskId >= 0)
         {
-            sSoftCollisionMask |= 1 << iMaskId;
+            sSoftCollisionMask |= Bit(iMaskId);
             mCollisionModel.SetCollisionMask(COLL_SOFT, CollisionMask(sSoftCollisionMask));
         }
         break;
@@ -1319,7 +1317,7 @@ void EntityHoverClass::SetProperty(unsigned int uProperty, const char* pszValue)
         int iMaskId = mCollisionModel.GetMaskId(PblHash(pszValue));
         if (iMaskId >= 0)
         {
-            sOrdnanceCollisionMask |= 1 << iMaskId;
+            sOrdnanceCollisionMask |= Bit(iMaskId);
             mCollisionModel.SetCollisionMask(COLL_ORDNANCE, CollisionMask(sOrdnanceCollisionMask));
         }
         break;
@@ -2342,11 +2340,11 @@ void EntityHover::Render(unsigned char ucViewport, float fDist, unsigned int uiF
 
     if (!mClass->m_bDynamicLighting)
     {
-        uiFlags |= 0x80;
+        uiFlags |= RENDERFLAG_STATIC;
     }
     else
     {
-        uiFlags &= ~0x80;
+        uiFlags &= ~RENDERFLAG_STATIC;
     }
 
     if (mClass->mSuspensionCenterHash)

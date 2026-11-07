@@ -42,10 +42,9 @@ PblMatrix DirectionMatrix(const PblVector3& vDir, const PblVector3& vUp, const P
 
 // GLOBAL: SWBF2 0x01f9a8c0
 // WeaponDispenserClass::rttiHashWeaponDispenserClass
-PblHash WeaponDispenserClass::rttiHashWeaponDispenserClass("WeaponDispenserClass");
 // GLOBAL: SWBF2 0x0078bf94
 // WeaponDispenserClass::rttiNameWeaponDispenserClass
-const char WeaponDispenserClass::rttiNameWeaponDispenserClass[] = "WeaponDispenserClass";
+PBL_IMPLEMENT_RTTI(WeaponDispenserClass)
 
 
 
@@ -245,10 +244,9 @@ WeaponDispenserClass::WeaponDispenserClass(unsigned int uHash)
 
 // GLOBAL: SWBF2 0x01f9a8bc
 // WeaponDispenser::rttiHashWeaponDispenser
-PblHash WeaponDispenser::rttiHashWeaponDispenser("WeaponDispenser");
 // GLOBAL: SWBF2 0x0078bf80
 // WeaponDispenser::rttiNameWeaponDispenser
-const char WeaponDispenser::rttiNameWeaponDispenser[] = "WeaponDispenser";
+PBL_IMPLEMENT_RTTI(WeaponDispenser)
 
 
 

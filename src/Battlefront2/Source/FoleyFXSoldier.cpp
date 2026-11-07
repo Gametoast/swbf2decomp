@@ -9,10 +9,9 @@
 
 // GLOBAL: SWBF2 0x01ebd13c
 // FoleyFXSoldier::rttiHashFoleyFXSoldier
-PblHash FoleyFXSoldier::rttiHashFoleyFXSoldier("FoleyFXSoldier");
 // GLOBAL: SWBF2 0x007898d4
 // FoleyFXSoldier::rttiNameFoleyFXSoldier
-const char FoleyFXSoldier::rttiNameFoleyFXSoldier[] = "FoleyFXSoldier";
+PBL_IMPLEMENT_RTTI(FoleyFXSoldier)
 
 // SYNTHETIC: SWBF2 0x00403af0
 // `dynamic initializer for 'FoleyFXSoldier::smFreeList''

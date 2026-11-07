@@ -175,10 +175,9 @@ Trackable* EntityFlyer::GetTrackable()
 
 // GLOBAL: SWBF2 0x01ebb8ec
 // EntityCarrier::rttiHashEntityCarrier
-PblHash EntityCarrier::rttiHashEntityCarrier("EntityCarrier");
 // GLOBAL: SWBF2 0x007890b4
 // EntityCarrier::rttiNameEntityCarrier
-const char EntityCarrier::rttiNameEntityCarrier[] = "EntityCarrier";
+PBL_IMPLEMENT_RTTI(EntityCarrier)
 
 // SYNTHETIC: SWBF2 0x00402940
 // `dynamic initializer for 'EntityCarrier::sMemoryPool''
@@ -201,10 +200,9 @@ MemoryPool EntityCarrier::sMemoryPool("EntityCarrier", sizeof(EntityCarrier));
 
 // GLOBAL: SWBF2 0x01ebb8e8
 // EntityCarrierClass::rttiHashEntityCarrierClass
-PblHash EntityCarrierClass::rttiHashEntityCarrierClass("EntityCarrierClass");
 // GLOBAL: SWBF2 0x007890a0
 // EntityCarrierClass::rttiNameEntityCarrierClass
-const char EntityCarrierClass::rttiNameEntityCarrierClass[] = "EntityCarrierClass";
+PBL_IMPLEMENT_RTTI(EntityCarrierClass)
 
 
 

@@ -1,4 +1,5 @@
 #include <float.h>
+#include "PebbleFL/Common/PblRtti.h"
 
 #include "CommandWalker.h"
 #include "CollisionManager.h"
@@ -29,10 +30,9 @@ PblHash CommandWalker::rttiHashCommandWalker("CommandWalker");
 
 // GLOBAL: SWBF2 0x01eb96fc
 // CommandWalkerClass::rttiHashCommandWalkerClass
-PblHash CommandWalkerClass::rttiHashCommandWalkerClass("CommandWalkerClass");
 // GLOBAL: SWBF2 0x00788cfc
 // CommandWalkerClass::rttiNameCommandWalkerClass
-const char CommandWalkerClass::rttiNameCommandWalkerClass[] = "CommandWalkerClass";
+PBL_IMPLEMENT_RTTI(CommandWalkerClass)
 
 // FUNCTION: SWBF2 0x00480080
 CommandWalkerClass::CommandWalkerClass(unsigned int uHash)

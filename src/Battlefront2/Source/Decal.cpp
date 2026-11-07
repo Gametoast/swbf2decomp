@@ -222,7 +222,7 @@ DecalClass::DecalClass(PblConfig& config)
     auTextures[0] = m_textureHash;
     auTextures[1] = IsBumped() ? m_bumpTextureHash : 0;
     const bool bUseShader = !(IsBumped() && RedRenderer::pcGetRenderCaps().pipeline == PIPELINE_FIXED);
-    m_pShader = bUseShader ? pcRedShader::Create(0xDE15F6AEu /* "Decal" */, 0x282, auTextures, 2, 0x10004,
+    m_pShader = bUseShader ? pcRedShader::Create(0xDE15F6AEu /* "Decal" */, RVF_POSITION_XYZ | RVF_COLOR | RVF_TEXCOORDS_1, auTextures, 2, MATERIAL_FLAG_ALPHAMAP_OPACITY | MATERIAL_FLAG_CULL_NONE,
                                                  RedColor::WHITE, RedColor::BLACK, 32.0f)
                            : 0;
     if (bUseShader)

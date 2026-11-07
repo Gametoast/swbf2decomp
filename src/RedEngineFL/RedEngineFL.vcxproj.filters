@@ -602,6 +602,9 @@
     <ClInclude Include="Graphics\RedPose.h">
       <Filter>Graphics</Filter>
     </ClInclude>
+    <ClInclude Include="Graphics\RedRenderFlags.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
     <ClInclude Include="Graphics\RedSegment.h">
       <Filter>Graphics</Filter>
     </ClInclude>

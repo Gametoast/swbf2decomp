@@ -15,10 +15,9 @@
 
 // GLOBAL: SWBF2 0x01ebc1a0
 // EntitySound::rttiHashEntitySound
-PblHash EntitySound::rttiHashEntitySound("EntitySound");
 // GLOBAL: SWBF2 0x007895e4
 // EntitySound::rttiNameEntitySound
-const char EntitySound::rttiNameEntitySound[] = "EntitySound";
+PBL_IMPLEMENT_RTTI(EntitySound)
 
 // SYNTHETIC: SWBF2 0x00402de0
 // `dynamic initializer for 'EntitySound::sEntitySoundList''
@@ -35,10 +34,9 @@ PblListSingle EntitySound::sEntitySoundList;
 
 // GLOBAL: SWBF2 0x01ebc0fc
 // EntitySoundClass::rttiHashEntitySoundClass
-PblHash EntitySoundClass::rttiHashEntitySoundClass("EntitySoundClass");
 // GLOBAL: SWBF2 0x007895f0
 // EntitySoundClass::rttiNameEntitySoundClass
-const char EntitySoundClass::rttiNameEntitySoundClass[] = "EntitySoundClass";
+PBL_IMPLEMENT_RTTI(EntitySoundClass)
 
 // SYNTHETIC: SWBF2 0x00402e00
 // `dynamic initializer for 'SoundSpaceRegion::sMemoryPool''

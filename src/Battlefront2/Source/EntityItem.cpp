@@ -44,10 +44,9 @@ PblMatrix NormalMatrix(const PblVector3& vDir, const PblVector3& vNormal, const 
 
 // GLOBAL: SWBF2 0x01ebbe2c
 // EntityItemClass::rttiHashEntityItemClass
-PblHash EntityItemClass::rttiHashEntityItemClass("EntityItemClass");
 // GLOBAL: SWBF2 0x007892fc
 // EntityItemClass::rttiNameEntityItemClass
-const char EntityItemClass::rttiNameEntityItemClass[] = "EntityItemClass";
+PBL_IMPLEMENT_RTTI(EntityItemClass)
 
 
 
@@ -235,10 +234,9 @@ EntityClass* EntityItemClass::Derive(unsigned int uHash)
 
 // GLOBAL: SWBF2 0x01ebbe28
 // EntityItem::rttiHashEntityItem
-PblHash EntityItem::rttiHashEntityItem("EntityItem");
 // GLOBAL: SWBF2 0x007892f0
 // EntityItem::rttiNameEntityItem
-const char EntityItem::rttiNameEntityItem[] = "EntityItem";
+PBL_IMPLEMENT_RTTI(EntityItem)
 
 
 
@@ -427,11 +425,11 @@ void EntityItem::Render(unsigned char ucLod, float fAlpha, unsigned int uiFlags)
 
     if (!mClass->m_bDynamicLighting)
     {
-        uiFlags |= 0x80;
+        uiFlags |= RENDERFLAG_STATIC;
     }
     else
     {
-        uiFlags &= ~0x80;
+        uiFlags &= ~RENDERFLAG_STATIC;
     }
     // GLOBAL: SWBF2 0x01faa924
     // sPlayerShadow
@@ -447,7 +445,7 @@ void EntityItem::Render(unsigned char ucLod, float fAlpha, unsigned int uiFlags)
         pMatrix = &mInterpolated;
     }
     mModel->Render(ucLod, fAlpha, pMatrix, 0, color, uiFlags, 0);
-    if (uiFlags & 0x200000)
+    if (uiFlags & RENDERFLAG_RENDER_REFLECTION)
     {
         return;
     }
@@ -459,7 +457,7 @@ void EntityItem::Render(unsigned char ucLod, float fAlpha, unsigned int uiFlags)
         PblMatrix mWorld;
         mWorld = mBase * mReflection;
         mReflection = mWorld;
-        mModel->Render(ucLod, fAlpha, &mReflection, 0, color, (uiFlags & ~0x10000) | 0x10000100, 0);
+        mModel->Render(ucLod, fAlpha, &mReflection, 0, color, (uiFlags & ~RENDERFLAG_RENDER_SHADOWVOLUMES) | RENDERFLAG_REFLECTION | RENDERFLAG_PSEUDO_REFLECTED, 0);
     }
 }
 

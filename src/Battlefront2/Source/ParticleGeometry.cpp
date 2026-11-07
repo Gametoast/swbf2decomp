@@ -1,4 +1,5 @@
 #include <d3dx9math.h>
+#include "PebbleFL/Common/PblBits.h"
 #include "ParticleGeometry.h"
 
 #include "RedEngineFL/Graphics/RedModel.h"
@@ -223,10 +224,10 @@ void ParticleGeometry::Render(Particle& particle, bool bLast) const
             const int iFrameSizeLog = (int)mFrameSizeLog;
             const int iUBits = mTextureWidthLog - iFrameSizeLog;
             const int iVBits = mTextureHeightLog - iFrameSizeLog;
-            texCoords.u0 = (iFrame & ((1 << iUBits) - 1)) << (8 - iUBits);
-            texCoords.v0 = (iFrame & (((1 << iVBits) - 1) << iUBits)) << (8 - iVBits - iUBits);
-            texCoords.u1 = texCoords.u0 + (1 << (8 - iUBits)) - 1;
-            texCoords.v1 = texCoords.v0 + (1 << (8 - iVBits)) - 1;
+            texCoords.u0 = (iFrame & LowBitsMask(iUBits)) << (8 - iUBits);
+            texCoords.v0 = (iFrame & (LowBitsMask(iVBits) << iUBits)) << (8 - iVBits - iUBits);
+            texCoords.u1 = texCoords.u0 + PowerOf2(8 - iUBits) - 1;
+            texCoords.v1 = texCoords.v0 + PowerOf2(8 - iVBits) - 1;
         }
         const unsigned char ucB = (unsigned char)(int)(color.b * 255.0f);
         const unsigned char ucG = (unsigned char)(int)(color.g * 255.0f);
@@ -283,9 +284,9 @@ void ParticleGeometry::Render(Particle& particle, bool bLast) const
         {
             const int iFrameSizeLog = (int)mFrameSizeLog;
             const int iUBits = mTextureWidthLog - iFrameSizeLog;
-            const int iU0 = (iFrame & ((1 << iUBits) - 1)) << (8 - iUBits);
+            const int iU0 = (iFrame & LowBitsMask(iUBits)) << (8 - iUBits);
             const int iVBits = mTextureHeightLog - iFrameSizeLog;
-            const int iV0 = (iFrame & (((1 << iVBits) - 1) << iUBits)) << (8 - iVBits - iUBits);
+            const int iV0 = (iFrame & (LowBitsMask(iVBits) << iUBits)) << (8 - iVBits - iUBits);
             RedParticleRenderer::TexCoords texCoords;
             texCoords.u0 = iU0;
             texCoords.v0 = iV0;
@@ -294,8 +295,8 @@ void ParticleGeometry::Render(Particle& particle, bool bLast) const
             redColor.g = (unsigned char)(int)(color.g * 255.0f);
             redColor.r = (unsigned char)(int)(color.r * 255.0f);
             redColor.a = (unsigned char)(int)(color.a * 255.0f);
-            texCoords.u1 = iU0 + (1 << (8 - iUBits)) - 1;
-            texCoords.v1 = iV0 + (1 << (8 - iVBits)) - 1;
+            texCoords.u1 = iU0 + PowerOf2(8 - iUBits) - 1;
+            texCoords.v1 = iV0 + PowerOf2(8 - iVBits) - 1;
             RedParticleRenderer::SubmitParticle(eInfo, vPos, redColor, ParticleSystem::GetSizeMultiplier() * particle.mSize[0],
                                                 particle.mRotation[0], texCoords, gVectorUnitX, gVectorUnitY);
         }

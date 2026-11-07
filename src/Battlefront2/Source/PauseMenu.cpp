@@ -451,7 +451,7 @@ bool PauseMenu::Update(float fDeltaTime)
     mDebounceTime -= fDeltaTime;
 
     ProcessedInputs* pInputs = FLInputManager::s_instance.GetPlayerInputs(iViewport);
-    bool bPlayerList = ((pInputs->bits.mBoolInputs >> 17) & 1) != 0;
+    bool bPlayerList = (pInputs->bits.mBoolInputs & Bit(ePROCESSEDINPUT_playerList)) != 0;
     bool bStart = pGuiInputs->IsStartPressed();
 
     SpawnDisplay* pSpawn = SpawnDisplay::Instance(iViewport);

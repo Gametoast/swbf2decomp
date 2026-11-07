@@ -171,7 +171,7 @@ void FLRenderer::RenderableList::RenderReflections(unsigned int uiFlags) const
     {
         if (it->IsReflected())
         {
-            it->Render(uiFlags | 0x200000);
+            it->Render(uiFlags | RENDERFLAG_RENDER_REFLECTION);
         }
     }
 }
@@ -537,7 +537,7 @@ void FLRenderer::Cleanup()
     RedLodManager::Cleanup();
     RedLight::DeinitSys();
 
-    for (unsigned int i = 0; i < 10; i++)
+    for (unsigned int i = 0; i < NUM_RENDERABLE_PHASES; i++)
     {
         _RenderableLists[i].Clear();
     }
@@ -1570,7 +1570,7 @@ void FLRenderer::RenderFarScene(unsigned int uiView)
     RedRenderer::Flush();
     if (m_bFarSceneEnable[0] && sFarSceneRangeEnabled[uiView])
     {
-        RedSceneManager::Render(0x60000, 0);
+        RedSceneManager::Render(RENDERFLAG_RENDER_TO_SKY | RENDERFLAG_RENDER_FAR_LODS, 0);
     }
     RedRenderer::Flush();
     _RenderableLists[RENDERABLE_SKY_POSTWORLD].Render();
@@ -1659,7 +1659,7 @@ void FLRenderer::RenderReflections()
     RedRenderer::BeginScene();
     for (unsigned int i = 0; i < FLRenderer::m_numPotentialReflections; ++i)
     {
-        FLRenderer::m_potentialReflections[i]->Render(0x100000);
+        FLRenderer::m_potentialReflections[i]->Render(RENDERFLAG_REGISTER_REFLECTION_PLANE);
     }
     RedRenderer::EndScene();
     RedRenderer::pcSetImmediateMode(0);
@@ -1839,17 +1839,17 @@ void FLRenderer::RenderReflections()
         RedRenderer::pcSetImmediateMode(REFLECTION_SCENE_IMMEDIATE_MODE);
         RedRenderer::BeginScene();
         _RenderableLists[RENDERABLE_SKY].RenderReflections(r.renderFlags);
-        if (!(r.renderFlags & 0x400000))
+        if (!(r.renderFlags & RENDERFLAG_RENDER_REFLECTION_SKYDOMEONLY))
         {
             RedRenderer::pcSetNearScene(true);
             if (bFarScene)
             {
-                RedSceneManager::Render(0x20200000, pSceneCamera);
+                RedSceneManager::Render(RENDERFLAG_RENDER_REFLECTION | RENDERFLAG_ZBUFFER_ALPHA_FADE, pSceneCamera);
             }
             else
             {
-                RedTerrain::Render(0x200000);
-                RedSceneManager::Render(0x200000, pSceneCamera);
+                RedTerrain::Render(RENDERFLAG_RENDER_REFLECTION);
+                RedSceneManager::Render(RENDERFLAG_RENDER_REFLECTION, pSceneCamera);
             }
             _RenderableLists[RENDERABLE_POSTWORLD].RenderReflections(0);
         }
@@ -1932,12 +1932,12 @@ void RenderViewTransition(int iView)
         pPrimitive->EndVertexData();
 
         pcClearShader* pShader = (pcClearShader*)pcRedShader::Create(
-            0x5C6E1222 /* "clear" */, 0x203, 0, 0, 0, RedColor::WHITE, RedColor::BLACK, 32.0f);
+            0x5C6E1222 /* "clear" */, RVF_POSITION_XYZRHW | RVF_TEXCOORDS_1, 0, 0, 0, RedColor::WHITE, RedColor::BLACK, 32.0f);
         pShader->m_pTex = RedTexture::Find(0xEA24E62E /* "whitecircle" */);
         pShader->m_pAlphaMaskTex = RedTexture::Find(0xEA24E62E /* "whitecircle" */);
         pShader->m_blendMode = pcClearShader::BLENDMODE_BLEND;
         RedRenderer::pcRenderPrimitive(pPrimitive, pShader, gMatrixIdentity,
-                                       sViewTransitions[iView].overlayColor, 0x200, 0, 0, 0);
+                                       sViewTransitions[iView].overlayColor, PC_RENDERFLAG_IMMEDIATE, 0, 0, 0);
         pPrimitive->Release();
         pShader->Release();
     }
@@ -1989,12 +1989,12 @@ void RenderViewTransition(int iView)
         pPrimitive->EndVertexData();
 
         pcClearShader* pShader = (pcClearShader*)pcRedShader::Create(
-            0x5C6E1222 /* "clear" */, 0x403, 0, 0, 0, RedColor::WHITE, RedColor::BLACK, 32.0f);
+            0x5C6E1222 /* "clear" */, RVF_POSITION_XYZRHW | RVF_TEXCOORDS_2, 0, 0, 0, RedColor::WHITE, RedColor::BLACK, 32.0f);
         pShader->m_pTex = FLRenderer::pcGetPreviousFrameTexture();
         pShader->m_pAlphaMaskTex = RedTexture::Find(0xEA24E62E /* "whitecircle" */);
         pShader->m_blendMode = pcClearShader::BLENDMODE_BLEND;
         RedRenderer::pcRenderPrimitive(pPrimitive, pShader, gMatrixIdentity,
-                                       sViewTransitions[iView].blurColor, 0x200, 0, 0, 0);
+                                       sViewTransitions[iView].blurColor, PC_RENDERFLAG_IMMEDIATE, 0, 0, 0);
         pPrimitive->Release();
         pShader->Release();
     }

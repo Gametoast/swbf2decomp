@@ -1,6 +1,7 @@
 #pragma once
 
 #include "PebbleFL/Common/PblHashTable.h"
+#include "PebbleFL/Common/PblRtti.h"
 
 #include <stddef.h>
 
@@ -20,9 +21,13 @@ public:
 
     virtual WeaponClass* Derive(unsigned int uHash);
     virtual Weapon* Build(const WeaponDesc& desc);
-    virtual bool IsRtti(unsigned int uRtti) const;
-    virtual unsigned int GetDerivedRtti() const;
-    virtual const char* GetDerivedRttiName() const;
+    // FUNCTION: SWBF2 0x00684f90
+    // WeaponGrenadeClass::IsRtti
+    // FUNCTION: SWBF2 0x00684fc0
+    // WeaponGrenadeClass::GetDerivedRtti
+    // FUNCTION: SWBF2 0x00684fd0
+    // WeaponGrenadeClass::GetDerivedRttiName
+    PBL_DECLARE_DERIVED_RTTI(WeaponGrenadeClass, WeaponClass)
     virtual void SetProperty(unsigned int uProperty, const char* pszValue);
     virtual bool PostLoadInit();
 
@@ -34,17 +39,7 @@ public:
     char mForcedFireAnim;
     PblVector3 m_avFireOffset[3];
 
-    static PblHash rttiHashWeaponGrenadeClass;
-    static const char rttiNameWeaponGrenadeClass[];
 };
-  
- 
- 
- 
- 
- 
- 
- 
 
 // VTABLE: SWBF2 0x007b0ef4
 class WeaponGrenade : public Weapon
@@ -53,9 +48,13 @@ public:
     WeaponGrenade(const WeaponGrenadeClass* pClass, const WeaponDesc& desc);
 
     virtual ~WeaponGrenade();
-    bool IsRtti(unsigned int uRtti) const;
-    unsigned int GetDerivedRtti() const;
-    const char* GetDerivedRttiName() const;
+    // FUNCTION: SWBF2 0x00684f40
+    // WeaponGrenade::IsRtti
+    // FUNCTION: SWBF2 0x00684f70
+    // WeaponGrenade::GetDerivedRtti
+    // FUNCTION: SWBF2 0x00684f80
+    // WeaponGrenade::GetDerivedRttiName
+    PBL_DECLARE_DERIVED_RTTI(WeaponGrenade, Weapon)
     void SignalFire();
     bool IsBusy() const;
     void Write(NetPktGroup& group);
@@ -78,9 +77,6 @@ protected:
 
 public:
 
-    static PblHash rttiHashWeaponGrenade;
-    static const char rttiNameWeaponGrenade[];
-
     bool mNetFiredFlag;
     bool mFired;
     char m_iFirePos;
@@ -88,57 +84,4 @@ public:
 
     char mUnmodeledTail[0x120 - 0x118];
 };
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
 
-// FUNCTION: SWBF2 0x00684f90
-inline bool WeaponGrenadeClass::IsRtti(unsigned int uRtti) const
-{
-    if (rttiHashWeaponGrenadeClass == uRtti)
-    {
-        return true;
-    }
-    return WeaponClass::IsRtti(uRtti);
-}
-
-// FUNCTION: SWBF2 0x00684fc0
-inline unsigned int WeaponGrenadeClass::GetDerivedRtti() const
-{
-    return rttiHashWeaponGrenadeClass;
-}
-
-// FUNCTION: SWBF2 0x00684fd0
-inline const char* WeaponGrenadeClass::GetDerivedRttiName() const
-{
-    return rttiNameWeaponGrenadeClass;
-}
-
-// FUNCTION: SWBF2 0x00684f40
-inline bool WeaponGrenade::IsRtti(unsigned int uRtti) const
-{
-    if (rttiHashWeaponGrenade == uRtti)
-    {
-        return true;
-    }
-    return reinterpret_cast<const Weapon*>(this)->Weapon::IsRtti(uRtti);
-}
-
-// FUNCTION: SWBF2 0x00684f70
-inline unsigned int WeaponGrenade::GetDerivedRtti() const
-{
-    return rttiHashWeaponGrenade;
-}
-
-// FUNCTION: SWBF2 0x00684f80
-inline const char* WeaponGrenade::GetDerivedRttiName() const
-{
-    return rttiNameWeaponGrenade;
-}

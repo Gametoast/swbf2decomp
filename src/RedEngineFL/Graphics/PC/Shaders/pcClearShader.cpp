@@ -177,7 +177,7 @@ void pcClearShader::Render_Fixed(const RenderItem* pItem, unsigned int) const
         break;
     }
 
-    if (m_uiMaterialFlags & 0x200000)
+    if (m_uiMaterialFlags & MATERIAL_FLAG_TEX_CLAMP)
     {
         RedRenderer::pcSetSamplerState(0, D3DSAMP_ADDRESSU, D3DTADDRESS_CLAMP);
         RedRenderer::pcSetSamplerState(0, D3DSAMP_ADDRESSV, D3DTADDRESS_CLAMP);
@@ -189,7 +189,7 @@ void pcClearShader::Render_Fixed(const RenderItem* pItem, unsigned int) const
     }
 
     RedRenderer::pcLoadFormat(m_pVertexFormat);
-    if (m_uiMaterialFlags & 0x80000)
+    if (m_uiMaterialFlags & MATERIAL_FLAG_COLORMASK_ALPHA)
     {
         RedRenderer::pcSetRenderState(D3DRS_COLORWRITEENABLE, D3DCOLORWRITEENABLE_ALPHA);
     }
@@ -228,7 +228,7 @@ void pcClearShader::_Init(unsigned int uiFlags,
     m_pVertexFormat = pcRedVertexFormat::Create(uiFlags, uiFlags);
     m_pTex = 0;
     m_pAlphaMaskTex = 0;
-    if (m_uiMaterialFlags & 4)
+    if (m_uiMaterialFlags & MATERIAL_FLAG_ALPHAMAP_OPACITY)
     {
         m_blendMode = BLENDMODE_BLEND;
     }

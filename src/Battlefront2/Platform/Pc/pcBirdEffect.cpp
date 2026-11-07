@@ -27,7 +27,7 @@ void BirdParticle::Render(unsigned char, float, unsigned int)
                                    mType.m_pShader,
                                    mMatrix,
                                    RedColor::WHITE,
-                                   0x01000010, 0, 0, 0);
+                                   RENDERFLAG_NO_LIGHTING | RENDERFLAG_RENDER_CACHED, 0, 0, 0);
     pPrimitive->Release();
 }
 
@@ -41,7 +41,7 @@ void BirdParticleManager::PlatformInit()
     for (int i = 0; i < sNumBirdTypes; i++)
     {
         sBirdTypes[i].m_pShader = pcRedShader::Create(kuiNormalShader, uiFormat, &sBirdTypes[i].mTexture, 1,
-                                                 0x10004, RedColor::WHITE, RedColor::BLACK, 32.0f);
+                                                 MATERIAL_FLAG_ALPHAMAP_OPACITY | MATERIAL_FLAG_CULL_NONE, RedColor::WHITE, RedColor::BLACK, 32.0f);
     }
 }
 

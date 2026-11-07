@@ -225,7 +225,7 @@ void pcParticleShader::Begin_Fixed(unsigned int uiState, unsigned int) const
 // FUNCTION: SWBF2 0x00703520
 void pcParticleShader::Render_Fixed(const RenderItem* pItem, unsigned int) const
 {
-    if (m_uiMaterialFlags & 0x40)
+    if (m_uiMaterialFlags & MATERIAL_FLAG_ALPHABLEND_ADDITIVE)
     {
         RedRenderer::pcSetRenderState(D3DRS_DESTBLEND, D3DBLEND_ONE);
         RedRenderer::pcSetFogForBlendMode(RedRenderer::FOGFORBLEND_ADD);
@@ -235,7 +235,7 @@ void pcParticleShader::Render_Fixed(const RenderItem* pItem, unsigned int) const
         RedRenderer::pcSetRenderState(D3DRS_DESTBLEND, D3DBLEND_INVSRCALPHA);
         RedRenderer::pcSetFogForBlendMode(RedRenderer::FOGFORBLEND_NORMAL);
     }
-    if (m_uiMaterialFlags & 2)
+    if (m_uiMaterialFlags & MATERIAL_FLAG_ALPHAMAP_MASK)
     {
         RedRenderer::pcSetRenderState(D3DRS_ALPHAREF, 0x7f);
     }
@@ -243,7 +243,7 @@ void pcParticleShader::Render_Fixed(const RenderItem* pItem, unsigned int) const
     {
         RedRenderer::pcSetRenderState(D3DRS_ALPHAREF, 1);
     }
-    if (m_uiMaterialFlags & 0x40000)
+    if (m_uiMaterialFlags & MATERIAL_FLAG_ZWRITEENABLE_TRUE)
     {
         RedRenderer::pcSetRenderState(D3DRS_ZWRITEENABLE, TRUE);
     }
@@ -289,7 +289,7 @@ void pcParticleShader::End_Prog1(unsigned int, unsigned int) const
 RenderPhaseT pcParticleShader::GetRenderPhase(const RenderItem* pItem, unsigned int) const
 {
     RenderPhaseT phase;
-    if ((m_uiMaterialFlags & 0x44) || pItem->tweakColor.a < 0xff)
+    if ((m_uiMaterialFlags & (MATERIAL_FLAG_ALPHAMAP_OPACITY | MATERIAL_FLAG_ALPHABLEND_ADDITIVE)) || pItem->tweakColor.a < 0xff)
     {
         phase = RENDERPHASE_TRANSPARENT;
     }
@@ -340,7 +340,7 @@ void pcParticleShader::Render_Prog1(const RenderItem* pItem, unsigned int) const
                                                               D3DCOLORWRITEENABLE_GREEN |
                                                               D3DCOLORWRITEENABLE_BLUE);
         RedRenderer::pcSetRenderState(D3DRS_SRCBLEND, D3DBLEND_SRCALPHA);
-        if (m_uiMaterialFlags & 0x40)
+        if (m_uiMaterialFlags & MATERIAL_FLAG_ALPHABLEND_ADDITIVE)
         {
             RedRenderer::pcSetRenderState(D3DRS_DESTBLEND, D3DBLEND_ONE);
             RedRenderer::pcSetFogForBlendMode(RedRenderer::FOGFORBLEND_ADD);
@@ -351,7 +351,7 @@ void pcParticleShader::Render_Prog1(const RenderItem* pItem, unsigned int) const
             RedRenderer::pcSetFogForBlendMode(RedRenderer::FOGFORBLEND_NORMAL);
         }
     }
-    if (m_uiMaterialFlags & 2)
+    if (m_uiMaterialFlags & MATERIAL_FLAG_ALPHAMAP_MASK)
     {
         RedRenderer::pcSetRenderState(D3DRS_ALPHATESTENABLE, TRUE);
     }
@@ -359,7 +359,7 @@ void pcParticleShader::Render_Prog1(const RenderItem* pItem, unsigned int) const
     {
         RedRenderer::pcSetRenderState(D3DRS_ALPHATESTENABLE, FALSE);
     }
-    if (m_uiMaterialFlags & 0x40000)
+    if (m_uiMaterialFlags & MATERIAL_FLAG_ZWRITEENABLE_TRUE)
     {
         RedRenderer::pcSetRenderState(D3DRS_ZWRITEENABLE, TRUE);
     }

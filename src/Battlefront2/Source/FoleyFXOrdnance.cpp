@@ -8,10 +8,9 @@
 
 // GLOBAL: SWBF2 0x01ebd01c
 // FoleyFXImpact::rttiHashFoleyFXImpact
-PblHash FoleyFXImpact::rttiHashFoleyFXImpact("FoleyFXImpact");
 // GLOBAL: SWBF2 0x007898b8
 // FoleyFXImpact::rttiNameFoleyFXImpact
-const char FoleyFXImpact::rttiNameFoleyFXImpact[] = "FoleyFXImpact";
+PBL_IMPLEMENT_RTTI(FoleyFXImpact)
 
 // SYNTHETIC: SWBF2 0x00403ab0
 // `dynamic initializer for 'FoleyFXImpact::smFreeList''

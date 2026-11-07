@@ -1,6 +1,7 @@
 #pragma once
 
 #include "PebbleFL/Common/PblHashTable.h"
+#include "PebbleFL/Common/PblRtti.h"
 
 #include <stddef.h>
 
@@ -20,13 +21,14 @@ public:
 
     virtual EntityClass* Derive(unsigned int uHash);
     virtual Entity* Build(const EntityDesc& desc);
-    virtual bool IsRtti(unsigned int uRtti) const;
-    virtual unsigned int GetDerivedRtti() const;
-    virtual const char* GetDerivedRttiName() const;
+    // FUNCTION: SWBF2 0x006245a0
+    // PowerupStationClass::IsRtti
+    // FUNCTION: SWBF2 0x006245e0
+    // PowerupStationClass::GetDerivedRtti
+    // FUNCTION: SWBF2 0x006245f0
+    // PowerupStationClass::GetDerivedRttiName
+    PBL_DECLARE_DERIVED_RTTI(PowerupStationClass, EntityBuildingClass)
     virtual void SetProperty(unsigned int uProperty, const char* pszValue);
-
-    static PblHash rttiHashPowerupStationClass;
-    static const char rttiNamePowerupStationClass[];
 
     float mPowerupDelay;
     float mAddHealth[8];
@@ -52,30 +54,6 @@ public:
     GameSound mPowerupSound;
     GameSound mAmbientSound;
 };
-  
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
 
 class RedRegion;
 
@@ -101,9 +79,13 @@ public:
     virtual void SetProperty(unsigned int uProperty, const char* pszValue);
     virtual bool Update(float fDeltaTime);
 
-    bool IsRtti(unsigned int uRtti) const;
-    unsigned int GetDerivedRtti() const;
-    const char* GetDerivedRttiName() const;
+    // FUNCTION: SWBF2 0x006244f0
+    // PowerupStation::IsRtti
+    // FUNCTION: SWBF2 0x00624540
+    // PowerupStation::GetDerivedRtti
+    // FUNCTION: SWBF2 0x00624550
+    // PowerupStation::GetDerivedRttiName
+    PBL_DECLARE_DERIVED_RTTI(PowerupStation, EntityBuilding)
     EntityType GetEntityType() const;
     bool AddToTeamManager() const;
     virtual void WriteObject(NetPktGroup& group, NetObjState* pState);
@@ -114,9 +96,6 @@ public:
 
     int GetObjectsInRegion(RedRegion* pRegion, GameObject** const ppObjects, int iMaxObjects) const;
     bool IsInsideRegion(RedRegion* pRegion, const GameObject* pObject) const;
-
-    static PblHash rttiHashPowerupStation;
-    static const char rttiNamePowerupStation[];
 
     PowerupStationClass* mClass;
     RedRegion* mEffectRegion;
@@ -130,55 +109,4 @@ public:
     PblMatrix mProceduralMatrix[5];
     GameSoundControllable mAmbientSound;
 };
- 
- 
- 
- 
- 
- 
- 
- 
 
-// FUNCTION: SWBF2 0x006245a0
-inline bool PowerupStationClass::IsRtti(unsigned int uRtti) const
-{
-    if (rttiHashPowerupStationClass == uRtti)
-    {
-        return true;
-    }
-    return EntityBuildingClass::IsRtti(uRtti);
-}
-
-// FUNCTION: SWBF2 0x006245e0
-inline unsigned int PowerupStationClass::GetDerivedRtti() const
-{
-    return rttiHashPowerupStationClass;
-}
-
-// FUNCTION: SWBF2 0x006245f0
-inline const char* PowerupStationClass::GetDerivedRttiName() const
-{
-    return rttiNamePowerupStationClass;
-}
-
-// FUNCTION: SWBF2 0x006244f0
-inline bool PowerupStation::IsRtti(unsigned int uRtti) const
-{
-    if (rttiHashPowerupStation == uRtti)
-    {
-        return true;
-    }
-    return EntityBuilding::IsRtti(uRtti);
-}
-
-// FUNCTION: SWBF2 0x00624540
-inline unsigned int PowerupStation::GetDerivedRtti() const
-{
-    return rttiHashPowerupStation;
-}
-
-// FUNCTION: SWBF2 0x00624550
-inline const char* PowerupStation::GetDerivedRttiName() const
-{
-    return rttiNamePowerupStation;
-}

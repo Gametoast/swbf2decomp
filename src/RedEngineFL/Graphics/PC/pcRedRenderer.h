@@ -858,6 +858,7 @@ struct RenderOptionsT
 #include "RedEngineFL/Graphics/RedColor.h"
 #include "RedEngineFL/Graphics/RedLight.h"
 #include "RedEngineFL/Graphics/RedMaterial.h"
+#include "RedEngineFL/Graphics/RedRenderFlags.h"
 #include "PebbleFL/Common/PblVector.h"
 
 struct RenderItem;

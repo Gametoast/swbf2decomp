@@ -14,10 +14,9 @@ CommandBuildingAnimatedArmedClass::CommandBuildingAnimatedArmedClass(unsigned in
 
 // GLOBAL: SWBF2 0x01eb83c8
 // CommandBuildingAnimatedArmed::rttiHashCommandBuildingAnimatedArmed
-PblHash CommandBuildingAnimatedArmed::rttiHashCommandBuildingAnimatedArmed("CommandBuildingAnimatedArmed");
 // GLOBAL: SWBF2 0x00788bcc
 // CommandBuildingAnimatedArmed::rttiNameCommandBuildingAnimatedArmed
-const char CommandBuildingAnimatedArmed::rttiNameCommandBuildingAnimatedArmed[] = "CommandBuildingAnimatedArmed";
+PBL_IMPLEMENT_RTTI(CommandBuildingAnimatedArmed)
 
 
 
@@ -31,10 +30,9 @@ const char CommandBuildingAnimatedArmed::rttiNameCommandBuildingAnimatedArmed[] 
 
 // GLOBAL: SWBF2 0x01eb83cc
 // CommandBuildingAnimatedArmedClass::rttiHashCommandBuildingAnimatedArmedClass
-PblHash CommandBuildingAnimatedArmedClass::rttiHashCommandBuildingAnimatedArmedClass("CommandBuildingAnimatedArmedClass");
 // GLOBAL: SWBF2 0x00788bf4
 // CommandBuildingAnimatedArmedClass::rttiNameCommandBuildingAnimatedArmedClass
-const char CommandBuildingAnimatedArmedClass::rttiNameCommandBuildingAnimatedArmedClass[] = "CommandBuildingAnimatedArmedClass";
+PBL_IMPLEMENT_RTTI(CommandBuildingAnimatedArmedClass)
 
 
 

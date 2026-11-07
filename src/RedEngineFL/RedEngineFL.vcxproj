@@ -254,6 +254,7 @@
     <ClInclude Include="Graphics\RedModel.h" />
     <ClInclude Include="Graphics\RedOmniLight.h" />
     <ClInclude Include="Graphics\RedPose.h" />
+    <ClInclude Include="Graphics\RedRenderFlags.h" />
     <ClInclude Include="Graphics\RedSegment.h" />
     <ClInclude Include="Graphics\RedShadingState.h" />
     <ClInclude Include="Graphics\RedShadowRegion.h" />

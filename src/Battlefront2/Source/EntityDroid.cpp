@@ -424,10 +424,9 @@ ControllableClass* Controllable::GetControllableClass()
 
 // GLOBAL: SWBF2 0x01ebbbb4
 // EntityDroid::rttiHashEntityDroid
-PblHash EntityDroid::rttiHashEntityDroid("EntityDroid");
 // GLOBAL: SWBF2 0x00789144
 // EntityDroid::rttiNameEntityDroid
-const char EntityDroid::rttiNameEntityDroid[] = "EntityDroid";
+PBL_IMPLEMENT_RTTI(EntityDroid)
 
 // FUNCTION: SWBF2 0x00499300
 void GameObject::SetNetUniqueId(int iNetUniqueId)
@@ -515,10 +514,9 @@ Controllable* EntityDroid::GetControllable()
 
 // GLOBAL: SWBF2 0x01ebbaa4
 // EntityDroidClass::rttiHashEntityDroidClass
-PblHash EntityDroidClass::rttiHashEntityDroidClass("EntityDroidClass");
 // GLOBAL: SWBF2 0x00789164
 // EntityDroidClass::rttiNameEntityDroidClass
-const char EntityDroidClass::rttiNameEntityDroidClass[] = "EntityDroidClass";
+PBL_IMPLEMENT_RTTI(EntityDroidClass)
 
 
 
@@ -831,17 +829,17 @@ void EntityDroid::Render(unsigned char ucViewport, float fDist, unsigned int uiF
     color.a = (unsigned char)(int)(fDist * 255.0f);
     if (!mClass->m_bDynamicLighting)
     {
-        uiFlags |= 0x80;
+        uiFlags |= RENDERFLAG_STATIC;
     }
     else
     {
-        uiFlags &= ~0x80;
+        uiFlags &= ~RENDERFLAG_STATIC;
     }
 
     PblMatrix mReflection;
-    bool bReflected = !(uiFlags & 0x200000) &&
+    bool bReflected = !(uiFlags & RENDERFLAG_RENDER_REFLECTION) &&
                       FLRenderer::IsReflected(*(const PblVector3*)&_Sphere, _Sphere.w, mReflection, false);
-    unsigned int uiReflectFlags = (uiFlags & ~0x10000) | 0x10000100;
+    unsigned int uiReflectFlags = (uiFlags & ~RENDERFLAG_RENDER_SHADOWVOLUMES) | RENDERFLAG_REFLECTION | RENDERFLAG_PSEUDO_REFLECTED;
     if (bReflected)
     {
         PblMatrix mTemp;
@@ -862,7 +860,7 @@ void EntityDroid::Render(unsigned char ucViewport, float fDist, unsigned int uiF
     mModel->Render(ucViewport, fDist, &mWorld, 0, color, uiFlags, 0);
     if (bReflected)
     {
-        mModel->Render(ucViewport, fDist, &mReflection, 0, color, uiReflectFlags | 0x40000000, 0);
+        mModel->Render(ucViewport, fDist, &mReflection, 0, color, uiReflectFlags | RENDERFLAG_USE_Z_WHEN_FADE, 0);
     }
 }
 

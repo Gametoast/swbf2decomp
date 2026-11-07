@@ -8,10 +8,9 @@
 
 // GLOBAL: SWBF2 0x01eb928c
 // CommandBuildingArmed::rttiHashCommandBuildingArmed
-PblHash CommandBuildingArmed::rttiHashCommandBuildingArmed("CommandBuildingArmed");
 // GLOBAL: SWBF2 0x00788c44
 // CommandBuildingArmed::rttiNameCommandBuildingArmed
-const char CommandBuildingArmed::rttiNameCommandBuildingArmed[] = "CommandBuildingArmed";
+PBL_IMPLEMENT_RTTI(CommandBuildingArmed)
 
 
 
@@ -118,10 +117,9 @@ CommandBuildingArmedClass::~CommandBuildingArmedClass()
 
 // GLOBAL: SWBF2 0x01eb9554
 // CommandBuildingArmedClass::rttiHashCommandBuildingArmedClass
-PblHash CommandBuildingArmedClass::rttiHashCommandBuildingArmedClass("CommandBuildingArmedClass");
 // GLOBAL: SWBF2 0x00788c20
 // CommandBuildingArmedClass::rttiNameCommandBuildingArmedClass
-const char CommandBuildingArmedClass::rttiNameCommandBuildingArmedClass[] = "CommandBuildingArmedClass";
+PBL_IMPLEMENT_RTTI(CommandBuildingArmedClass)
 
 
 

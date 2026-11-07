@@ -16,10 +16,9 @@
 
 // GLOBAL: SWBF2 0x01f9a8d4
 // WeaponInvisibility::rttiHashWeaponInvisibility
-PblHash WeaponInvisibility::rttiHashWeaponInvisibility("WeaponInvisibility");
 // GLOBAL: SWBF2 0x0078c04c
 // WeaponInvisibility::rttiNameWeaponInvisibility
-const char WeaponInvisibility::rttiNameWeaponInvisibility[] = "WeaponInvisibility";
+PBL_IMPLEMENT_RTTI(WeaponInvisibility)
 
 
 
@@ -33,10 +32,9 @@ const char WeaponInvisibility::rttiNameWeaponInvisibility[] = "WeaponInvisibilit
 
 // GLOBAL: SWBF2 0x01f9a8d8
 // WeaponInvisibilityClass::rttiHashWeaponInvisibilityClass
-PblHash WeaponInvisibilityClass::rttiHashWeaponInvisibilityClass("WeaponInvisibilityClass");
 // GLOBAL: SWBF2 0x0078c028
 // WeaponInvisibilityClass::rttiNameWeaponInvisibilityClass
-const char WeaponInvisibilityClass::rttiNameWeaponInvisibilityClass[] = "WeaponInvisibilityClass";
+PBL_IMPLEMENT_RTTI(WeaponInvisibilityClass)
 
 // FUNCTION: SWBF2 0x006865f0
 WeaponInvisibilityClass::WeaponInvisibilityClass(unsigned int uHash)

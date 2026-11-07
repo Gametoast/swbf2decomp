@@ -68,10 +68,9 @@ EntityBuildingClass::EntityBuildingClass(unsigned int uHash)
 
 // GLOBAL: SWBF2 0x01eb986c
 // EntityBuildingClass::rttiHashEntityBuildingClass
-PblHash EntityBuildingClass::rttiHashEntityBuildingClass("EntityBuildingClass");
 // GLOBAL: SWBF2 0x00788f50
 // EntityBuildingClass::rttiNameEntityBuildingClass
-const char EntityBuildingClass::rttiNameEntityBuildingClass[] = "EntityBuildingClass";
+PBL_IMPLEMENT_RTTI(EntityBuildingClass)
 
 // SYNTHETIC: SWBF2 0x00402880
 // `dynamic initializer for 'EntityBuilding::rttiHashEntityBuilding''
@@ -79,10 +78,9 @@ const char EntityBuildingClass::rttiNameEntityBuildingClass[] = "EntityBuildingC
 
 // GLOBAL: SWBF2 0x01ebb874
 // EntityBuilding::rttiHashEntityBuilding
-PblHash EntityBuilding::rttiHashEntityBuilding("EntityBuilding");
 // GLOBAL: SWBF2 0x00788f70
 // EntityBuilding::rttiNameEntityBuilding
-const char EntityBuilding::rttiNameEntityBuilding[] = "EntityBuilding";
+PBL_IMPLEMENT_RTTI(EntityBuilding)
 
 
 

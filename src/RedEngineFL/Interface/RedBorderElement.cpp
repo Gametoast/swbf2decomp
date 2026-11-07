@@ -96,7 +96,7 @@ const RedTexture* RedBorderElement::GetTexture() const
 void RedBorderElement::Init()
 {
     m_pInterfaceShader = (pcInterfaceShader*)pcRedShader::Create(
-        PblHash("interface"), 0x202, 0, 0, 0, RedColor::WHITE, RedColor::BLACK, 32.0f);
+        PblHash("interface"), RVF_POSITION_XYZ | RVF_TEXCOORDS_1, 0, 0, 0, RedColor::WHITE, RedColor::BLACK, 32.0f);
     m_pInterfaceShader->m_mode = pcInterfaceShader::INTERFACE_MODE_BITMAP;
 }
 
@@ -252,16 +252,16 @@ void RedBorderElement::RenderUsingContext(const PblMatrix& mContext, const RedCo
 
     if (m_eBlendMode == BLEND_ADDITIVE)
     {
-        m_pInterfaceShader->m_materialFlags |= 0x40;
+        m_pInterfaceShader->m_materialFlags |= MATERIAL_FLAG_ALPHABLEND_ADDITIVE;
     }
     else
     {
-        m_pInterfaceShader->m_materialFlags &= ~0x40u;
+        m_pInterfaceShader->m_materialFlags &= ~MATERIAL_FLAG_ALPHABLEND_ADDITIVE;
     }
 
     m_pInterfaceShader->m_shadowEnable = (mShadowMode == 1);
 
-    RedRenderer::pcRenderPrimitive(pPrimitive, m_pInterfaceShader, mContext, color, 0x200, 0, 0, 0);
+    RedRenderer::pcRenderPrimitive(pPrimitive, m_pInterfaceShader, mContext, color, PC_RENDERFLAG_IMMEDIATE, 0, 0, 0);
 
     pPrimitive->Release();
 }

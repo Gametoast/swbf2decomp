@@ -31,10 +31,9 @@ CommandBuildingClass::~CommandBuildingClass()
 
 // GLOBAL: SWBF2 0x01eb83c4
 // CommandBuildingClass::rttiHashCommandBuildingClass
-PblHash CommandBuildingClass::rttiHashCommandBuildingClass("CommandBuildingClass");
 // GLOBAL: SWBF2 0x00788bb4
 // CommandBuildingClass::rttiNameCommandBuildingClass
-const char CommandBuildingClass::rttiNameCommandBuildingClass[] = "CommandBuildingClass";
+PBL_IMPLEMENT_RTTI(CommandBuildingClass)
 
 
 
@@ -48,10 +47,9 @@ const char CommandBuildingClass::rttiNameCommandBuildingClass[] = "CommandBuildi
 
 // GLOBAL: SWBF2 0x01eb667c
 // CommandBuilding::rttiHashCommandBuilding
-PblHash CommandBuilding::rttiHashCommandBuilding("CommandBuilding");
 // GLOBAL: SWBF2 0x00788ba4
 // CommandBuilding::rttiNameCommandBuilding
-const char CommandBuilding::rttiNameCommandBuilding[] = "CommandBuilding";
+PBL_IMPLEMENT_RTTI(CommandBuilding)
 
 // SYNTHETIC: SWBF2 0x00476070
 // CommandBuilding::`scalar deleting destructor'

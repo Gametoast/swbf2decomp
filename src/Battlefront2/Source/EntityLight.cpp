@@ -1,4 +1,6 @@
 #include <d3dx9math.h>
+#include "PebbleFL/Common/PblRtti.h"
+#include "PebbleFL/Common/PblBits.h"
 #include <math.h>
 #include <stdio.h>
 #include <string.h>
@@ -40,20 +42,18 @@ MemoryPool EntityLight::sMemoryPool("EntityLight", sizeof(EntityLight));
 
 // GLOBAL: SWBF2 0x01ebbe30
 // EntityLight::rttiHashEntityLight
-PblHash EntityLight::rttiHashEntityLight("EntityLight");
 // GLOBAL: SWBF2 0x00789334
 // EntityLight::rttiNameEntityLight
-const char EntityLight::rttiNameEntityLight[] = "EntityLight";
+PBL_IMPLEMENT_RTTI(EntityLight)
 // SYNTHETIC: SWBF2 0x00402c10
 // `dynamic initializer for 'EntityLightClass::rttiHashEntityLightClass''
 // EntityLightClass::rttiHashEntityLightClass
 
 // GLOBAL: SWBF2 0x01ebbe34
 // EntityLightClass::rttiHashEntityLightClass
-PblHash EntityLightClass::rttiHashEntityLightClass("EntityLightClass");
 // GLOBAL: SWBF2 0x0078930c
 // EntityLightClass::rttiNameEntityLightClass
-const char EntityLightClass::rttiNameEntityLightClass[] = "EntityLightClass";
+PBL_IMPLEMENT_RTTI(EntityLightClass)
 // SYNTHETIC: SWBF2 0x00402c20
 // `dynamic initializer for 'EntityLightClass::sLightClassTable''
 
@@ -93,7 +93,7 @@ void ManagedLightBeam::Unhide()
 // FUNCTION: SWBF2 0x004cc8c0
 bool ManagedLightBeam::IsHiddenInView(unsigned int uiView)
 {
-    return (_uiHideInView & (1u << uiView)) != 0;
+    return (_uiHideInView & Bit(uiView)) != 0;
 }
 
 
@@ -783,7 +783,7 @@ void EntityLight::UpdateColor()
     else if (_LightBeam.IsEffectActive())
     {
         _LightBeam.DeactivateEffect();
-        bool bActive = ((_light->m_uiFlags >> 2) & 1) != 0;
+        bool bActive = (_light->m_uiFlags & RedLight::LIGHT_FLAG_ACTIVE) != 0;
         if (bActive)
         {
             _light->Deactivate();

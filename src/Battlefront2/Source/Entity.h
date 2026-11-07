@@ -33,7 +33,6 @@ mNameId(0), mPlayerId(-1), mPriority(0.001f)
     int mPlayerId;
     float mPriority;
 };
- 
 
 // VTABLE: SWBF2 0x00797300
 class Entity
@@ -69,7 +68,6 @@ public:
 
 
 };
- 
 
 // SYNTHETIC: SWBF2 0x00458ab0
 // Entity::`scalar deleting destructor'
@@ -99,7 +97,6 @@ public:
     unsigned int mId;
     EntityClass* mEntityClass;
 
-
     static PblHashTable<EntityEx, 1024> mIdMap;
 
     static PblHashTable<EntityEx, 1024>& GetEntityMap() { return mIdMap; }
@@ -113,9 +110,6 @@ private:
     static void Store(unsigned int uId, EntityEx* pEntity);
     static void Remove(unsigned int uId);
 };
- 
- 
- 
 
 // VTABLE: SWBF2 0x00799328
 class EntityClass : public Factory<Entity, EntityClass, EntityDesc>
@@ -147,14 +141,15 @@ public:
     EntityClass(EntityClass* pParent, unsigned int uHash);
 
     virtual ~EntityClass();
-    virtual bool IsRtti(unsigned int uRtti) const;
-    virtual unsigned int GetDerivedRtti() const;
-    virtual const char* GetDerivedRttiName() const;
+    // FUNCTION: SWBF2 0x00443f60
+    // EntityClass::IsRtti
+    // FUNCTION: SWBF2 0x0048ec00
+    // EntityClass::GetDerivedRtti
+    // FUNCTION: SWBF2 0x0048ec10
+    // EntityClass::GetDerivedRttiName
+    PBL_DECLARE_ROOT_RTTI(EntityClass)
     virtual void SetProperty(unsigned int uProperty, const char* pszValue);
     virtual void PostReadSetup();
-
-    static PblHash rttiHashEntityClass;
-    static const char rttiNameEntityClass[];
 
     unsigned short* mLabel;
     unsigned int mIconTexture;
@@ -163,43 +158,6 @@ public:
     MapParams mMapParams;
     bool mRemoveFromMapWhenDead;
 };
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
-
-// FUNCTION: SWBF2 0x00443f60
-inline bool EntityClass::IsRtti(unsigned int uRtti) const
-{
-    return rttiHashEntityClass == uRtti;
-}
-
-// FUNCTION: SWBF2 0x0048ec00
-inline unsigned int EntityClass::GetDerivedRtti() const
-{
-    return rttiHashEntityClass;
-}
-
-// FUNCTION: SWBF2 0x0048ec10
-inline const char* EntityClass::GetDerivedRttiName() const
-{
-    return rttiNameEntityClass;
-}
 
 inline EntityClass::MapParams::MapParams(float scale, float speedMin, float speedMax,
                                          float viewRangeMin, float viewRangeMax)

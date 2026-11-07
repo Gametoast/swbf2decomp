@@ -1,6 +1,7 @@
 #pragma once
 
 #include "PebbleFL/Common/PblHashTable.h"
+#include "PebbleFL/Common/PblRtti.h"
 
 #include <stddef.h>
 
@@ -42,9 +43,13 @@ public:
 
     virtual EntityClass* Derive(unsigned int uHash);
     virtual Entity* Build(const EntityDesc& desc);
-    virtual bool IsRtti(unsigned int uRtti) const;
-    virtual unsigned int GetDerivedRtti() const;
-    virtual const char* GetDerivedRttiName() const;
+    // FUNCTION: SWBF2 0x00496f00
+    // EntityCarrierClass::IsRtti
+    // FUNCTION: SWBF2 0x00496f40
+    // EntityCarrierClass::GetDerivedRtti
+    // FUNCTION: SWBF2 0x00496f50
+    // EntityCarrierClass::GetDerivedRttiName
+    PBL_DECLARE_DERIVED_RTTI(EntityCarrierClass, EntityFlyerClass)
     virtual void SetProperty(unsigned int uProperty, const char* pszValue);
 
     CargoInfo mCargoInfo[4];
@@ -52,8 +57,6 @@ public:
     GameSound mSoundCargoPickup;
     GameSound mSoundCargoDropoff;
 
-    static PblHash rttiHashEntityCarrierClass;
-    static const char rttiNameEntityCarrierClass[];
 };
 
 struct EntityFlyerRuntimeLayout
@@ -82,18 +85,6 @@ struct EntityFlyerRuntimeLayout
     unsigned char _toPose[0x1230];
     unsigned char mPoseAndTail[0x530];
 };
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
 
 // VTABLE: SWBF2 0x0079a168 CollisionObject
 // VTABLE: SWBF2 0x0079a1bc Thread
@@ -123,9 +114,6 @@ public:
 
     char _tailPad[0xc];
 
-    static PblHash rttiHashEntityCarrier;
-    static const char rttiNameEntityCarrier[];
-
     static MemoryPool sMemoryPool;
 
     EntityCarrier(EntityCarrierClass* pClass, const EntityDesc& desc);
@@ -137,9 +125,13 @@ public:
     // FUNCTION: SWBF2 0x00496e90
     static void operator delete(void* pBlock) { sMemoryPool.Free(pBlock); }
 
-    bool IsRtti(unsigned int uRtti) const;
-    unsigned int GetDerivedRtti() const;
-    const char* GetDerivedRttiName() const;
+    // FUNCTION: SWBF2 0x00496e20
+    // EntityCarrier::IsRtti
+    // FUNCTION: SWBF2 0x00496e70
+    // EntityCarrier::GetDerivedRtti
+    // FUNCTION: SWBF2 0x00496e80
+    // EntityCarrier::GetDerivedRttiName
+    PBL_DECLARE_DERIVED_RTTI(EntityCarrier, EntityFlyer)
 
     bool AttachCargo(int, GameObject* pGameObject);
     bool DetachCargo(int iSlot);
@@ -151,10 +143,6 @@ public:
         return (EntityCarrierClass*)mClass;
     }
 };
- 
- 
- 
- 
 
 struct EntityCarrierRuntimeLayout
 {
@@ -168,53 +156,6 @@ struct EntityCarrierRuntimeLayout
     int mCargoCount;
     unsigned char _tail[0x0c];
 };
- 
- 
- 
-
-// FUNCTION: SWBF2 0x00496e20
-inline bool EntityCarrier::IsRtti(unsigned int uRtti) const
-{
-    if (rttiHashEntityCarrier == uRtti)
-    {
-        return true;
-    }
-    return EntityFlyer::IsRtti(uRtti);
-}
-
-// FUNCTION: SWBF2 0x00496e70
-inline unsigned int EntityCarrier::GetDerivedRtti() const
-{
-    return rttiHashEntityCarrier;
-}
-
-// FUNCTION: SWBF2 0x00496e80
-inline const char* EntityCarrier::GetDerivedRttiName() const
-{
-    return rttiNameEntityCarrier;
-}
-
-// FUNCTION: SWBF2 0x00496f00
-inline bool EntityCarrierClass::IsRtti(unsigned int uRtti) const
-{
-    if (rttiHashEntityCarrierClass == uRtti)
-    {
-        return true;
-    }
-    return EntityFlyerClass::IsRtti(uRtti);
-}
-
-// FUNCTION: SWBF2 0x00496f40
-inline unsigned int EntityCarrierClass::GetDerivedRtti() const
-{
-    return rttiHashEntityCarrierClass;
-}
-
-// FUNCTION: SWBF2 0x00496f50
-inline const char* EntityCarrierClass::GetDerivedRttiName() const
-{
-    return rttiNameEntityCarrierClass;
-}
 
 // FUNCTION: SWBF2 0x004a9cd0
 inline unsigned int EntityFlyer::GetDerivedRtti() const

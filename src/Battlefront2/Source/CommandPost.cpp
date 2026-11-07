@@ -1,4 +1,5 @@
 #include <d3dx9math.h>
+#include "Team.h"
 #include "CommandPost.h"
 
 #include <stdio.h>
@@ -457,7 +458,7 @@ void CommandPost::SetAICanCapture(unsigned int iTeam, bool bCanCapture)
 {
     if (iTeam <= 7)
     {
-        unsigned int mask = 1u << iTeam;
+        unsigned int mask = BitU(iTeam);
         if (bCanCapture)
         {
             mAICanCaptureTeamMask |= mask;
@@ -1287,7 +1288,7 @@ bool CommandPost::Update(float fDeltaTime)
             const Character* pCharacter = apObjects[i]->GetControllable()->mCharacter;
             if (pCharacter)
             {
-                if (pCharacter->mPlayerId < 0 && !((1 << pCharacter->mTeamNumber) & mAICanCaptureTeamMask))
+                if (pCharacter->mPlayerId < 0 && !(BitU(pCharacter->mTeamNumber) & mAICanCaptureTeamMask))
                 {
                     continue;
                 }
@@ -1323,11 +1324,11 @@ bool CommandPost::Update(float fDeltaTime)
                     if (apObjects[i]->GetControllable()->GetControllableClass()->mCanCapturePosts &&
                         !(NetGame::IsEnabled() && bSpawnProtected))
                     {
-                        mHoldPlayerMask |= (unsigned __int64)1 << iPlayerId;
+                        mHoldPlayerMask |= Bit64(iPlayerId);
                     }
                     else
                     {
-                        mSkippedPlayerMask |= (unsigned __int64)1 << iPlayerId;
+                        mSkippedPlayerMask |= Bit64(iPlayerId);
                     }
                 }
 

@@ -780,7 +780,7 @@ void Chunk::Render(unsigned char ucAlpha, float fDist, unsigned int uiFlags)
         mRender = mPrimitiveMatrix * PblMatrix(q, vPos);
     }
 
-    mModel->GetRedModel(0)->Render(&mRender, &pose, color, uiFlags | 8, NULL);
+    mModel->GetRedModel(0)->Render(&mRender, &pose, color, uiFlags | RENDERFLAG_POSTSHADOW, NULL);
 }
 
 extern NoLodData noloddata;
@@ -918,7 +918,7 @@ void ChunkCluster::Render(unsigned char ucViewport, float fDist, unsigned int ui
         if (pLight)
         {
             float fMinLength = _Sphere.w * -2.0f / pLight->m_vDirection.y;
-            uiFlags |= 0x10000;
+            uiFlags |= RENDERFLAG_RENDER_SHADOWVOLUMES;
             PblVector3 vStart = _Sphere;
             vStart.y = _Sphere.w + vStart.y;
             const GameObject* pIgnore = NULL;

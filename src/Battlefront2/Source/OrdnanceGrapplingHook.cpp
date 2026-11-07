@@ -19,10 +19,9 @@ extern PblVector3 gVectorZero;
 
 // GLOBAL: SWBF2 0x01ef2630
 // OrdnanceGrapplingHook::rttiHashOrdnanceGrapplingHook
-PblHash OrdnanceGrapplingHook::rttiHashOrdnanceGrapplingHook("OrdnanceGrapplingHook");
 // GLOBAL: SWBF2 0x0078a88c
 // OrdnanceGrapplingHook::rttiNameOrdnanceGrapplingHook
-const char OrdnanceGrapplingHook::rttiNameOrdnanceGrapplingHook[] = "OrdnanceGrapplingHook";
+PBL_IMPLEMENT_RTTI(OrdnanceGrapplingHook)
 
 
 
@@ -269,10 +268,9 @@ bool OrdnanceGrapplingHook::Update(float fDeltaTime)
 
 // GLOBAL: SWBF2 0x01ef2634
 // OrdnanceGrapplingHookClass::rttiHashOrdnanceGrapplingHookClass
-PblHash OrdnanceGrapplingHookClass::rttiHashOrdnanceGrapplingHookClass("OrdnanceGrapplingHookClass");
 // GLOBAL: SWBF2 0x0078a870
 // OrdnanceGrapplingHookClass::rttiNameOrdnanceGrapplingHookClass
-const char OrdnanceGrapplingHookClass::rttiNameOrdnanceGrapplingHookClass[] = "OrdnanceGrapplingHookClass";
+PBL_IMPLEMENT_RTTI(OrdnanceGrapplingHookClass)
 
 // FUNCTION: SWBF2 0x005ffe30
 OrdnanceGrapplingHookClass::OrdnanceGrapplingHookClass(unsigned int uHash)

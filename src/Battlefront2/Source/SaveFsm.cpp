@@ -67,8 +67,8 @@ static void JournalSaveFile(SaveFile*& saveFile)
 // FUNCTION: SWBF2 0x00631650
 SaveFsm::SaveFsm()
 {
-    mCurState = 1;
-    mNextState = 2;
+    mCurState = STATE_START;
+    mNextState = STATE_Idle;
     mCurSaveFile = 0;
     mLoadQueueCnt = 0;
     mXBOXTotalFreeNeeded = -1;
@@ -82,7 +82,7 @@ SaveFsm::SaveFsm()
 bool SaveFsm::IsDone() const
 {
     int iState = mCurState;
-    return iState == 1 || iState == 100 || iState == 2 || iState == 3 || iState == 4;
+    return iState == STATE_START || iState == STATE_GLOBDONE || iState == STATE_Idle || iState == STATE_Success || iState == STATE_Failure;
 }
 
 // FUNCTION: SWBF2 0x00631760
@@ -104,7 +104,7 @@ void SaveFsm::StartPreOp(bool bAllowFormat, unsigned int uiCheckFreeBytes,
     m_preop_UseIMCMsg = bUseIMCMsg;
     m_preop_bIsPreLoad = bIsPreLoad;
     PblUnicode::ustrlcpy((unsigned short*)mFailOpStr, pusFailOpStr, 64);
-    SetNextState(8);
+    SetNextState(STATE_PreOp);
 }
 
 // FUNCTION: SWBF2 0x00631820
@@ -131,7 +131,7 @@ void SaveFsm::QueueFile(unsigned short const* pusFilename, void* pDest, unsigned
 // FUNCTION: SWBF2 0x006318a0
 void SaveFsm::ProcessQueuedFiles()
 {
-    SetNextState(31);
+    SetNextState(STATE_ProcessLastQueuedFile);
 }
 
 // FUNCTION: SWBF2 0x006318b0
@@ -189,32 +189,32 @@ void SaveFsm::EnterState()
 {
     switch (mCurState)
     {
-    case 5: Enter_InitialMemcardCheck(); return;
-    case 6: Enter_InitialMemcardCheck_CheckProfile(); return;
-    case 7: Enter_InitialMemcardCheck_Error(); return;
-    case 8: Enter_PreOp(); return;
-    case 9: Enter_PreOp_Error(); return;
-    case 10: Enter_PreOp_ConfirmDashboard(); return;
-    case 12: Enter_PreOp_Format_Prompt(); return;
-    case 13: Enter_PreOp_Format(); return;
-    case 14: Enter_Save_CheckExist(); return;
-    case 15: Enter_Save_Overwrite(); return;
-    case 16: Enter_Save_Create(); return;
-    case 17: Enter_Save_Open(); return;
-    case 18: Enter_Save_WriteChecksum(); return;
-    case 19: Enter_Save_WriteData(); return;
-    case 20: Enter_Save_Close(); return;
-    case 21: Enter_Save_Error(); return;
-    case 22: Enter_Save_TooManyFiles(); return;
-    case 23: Enter_Load_Start(); return;
-    case 24: Enter_Load_Open(); return;
-    case 25: Enter_Load_ReadChecksum(); return;
-    case 26: Enter_Load_ReadData(); return;
-    case 27: Enter_Load_Close(); return;
-    case 28: Enter_Load_Error(); return;
-    case 29: Enter_Delete(); return;
-    case 30: Enter_Delete_Error(); return;
-    case 31: Enter_ProcessLastQueuedFile(); return;
+    case STATE_InitialMemcardCheck: Enter_InitialMemcardCheck(); return;
+    case STATE_InitialMemcardCheck_CheckProfile: Enter_InitialMemcardCheck_CheckProfile(); return;
+    case STATE_InitialMemcardCheck_Error: Enter_InitialMemcardCheck_Error(); return;
+    case STATE_PreOp: Enter_PreOp(); return;
+    case STATE_PreOp_Error: Enter_PreOp_Error(); return;
+    case STATE_PreOp_ConfirmDashboard: Enter_PreOp_ConfirmDashboard(); return;
+    case STATE_PreOp_Format_Prompt: Enter_PreOp_Format_Prompt(); return;
+    case STATE_PreOp_Format: Enter_PreOp_Format(); return;
+    case STATE_Save_CheckExist: Enter_Save_CheckExist(); return;
+    case STATE_Save_Overwrite: Enter_Save_Overwrite(); return;
+    case STATE_Save_Create: Enter_Save_Create(); return;
+    case STATE_Save_Open: Enter_Save_Open(); return;
+    case STATE_Save_WriteChecksum: Enter_Save_WriteChecksum(); return;
+    case STATE_Save_WriteData: Enter_Save_WriteData(); return;
+    case STATE_Save_Close: Enter_Save_Close(); return;
+    case STATE_Save_Error: Enter_Save_Error(); return;
+    case STATE_Save_TooManyFiles: Enter_Save_TooManyFiles(); return;
+    case STATE_Load_Start: Enter_Load_Start(); return;
+    case STATE_Load_Open: Enter_Load_Open(); return;
+    case STATE_Load_ReadChecksum: Enter_Load_ReadChecksum(); return;
+    case STATE_Load_ReadData: Enter_Load_ReadData(); return;
+    case STATE_Load_Close: Enter_Load_Close(); return;
+    case STATE_Load_Error: Enter_Load_Error(); return;
+    case STATE_Delete: Enter_Delete(); return;
+    case STATE_Delete_Error: Enter_Delete_Error(); return;
+    case STATE_ProcessLastQueuedFile: Enter_ProcessLastQueuedFile(); return;
     default: return;
     }
 }
@@ -229,29 +229,29 @@ void SaveFsm::UpdateState(float fDeltaTime)
 {
     switch (mCurState)
     {
-    case 5:    break;
-    case 6:    Update_InitialMemcardCheck_CheckProfile(); break;
-    case 7:    Update_InitialMemcardCheck_Error();        break;
-    case 9:    Update_PreOp_Error();                      break;
-    case 0xA:  Update_PreOp_ConfirmDashboard();           break;
-    case 0xB:  Update_PreOp_Filelist();                   break;
-    case 0xC:  Update_PreOp_Format_Prompt();              break;
-    case 0xD:  Update_PreOp_Format();                     break;
-    case 0xF:  Update_Save_Overwrite();                   break;
-    case 0x10: Update_Save_Create();                      break;
-    case 0x11: Update_Save_Open();                        break;
-    case 0x12: Update_Save_WriteChecksum();                break;
-    case 0x13: Update_Save_WriteData();                    break;
-    case 0x14: Update_Save_Close();                        break;
-    case 0x15: Update_Save_Error();                        break;
-    case 0x16: Update_Save_TooManyFiles();                 break;
-    case 0x18: Update_Load_Open();                          break;
-    case 0x19: Update_Load_ReadChecksum();                  break;
-    case 0x1A: Update_Load_ReadData();                      break;
-    case 0x1B: Update_Load_Close();                        break;
-    case 0x1C: Update_Load_Error();                         break;
-    case 0x1D: Update_Delete();                             break;
-    case 0x1E: Update_Delete_Error();                       break;
+    case STATE_InitialMemcardCheck:    break;
+    case STATE_InitialMemcardCheck_CheckProfile:    Update_InitialMemcardCheck_CheckProfile(); break;
+    case STATE_InitialMemcardCheck_Error:    Update_InitialMemcardCheck_Error();        break;
+    case STATE_PreOp_Error:    Update_PreOp_Error();                      break;
+    case STATE_PreOp_ConfirmDashboard:  Update_PreOp_ConfirmDashboard();           break;
+    case STATE_PreOp_Filelist:  Update_PreOp_Filelist();                   break;
+    case STATE_PreOp_Format_Prompt:  Update_PreOp_Format_Prompt();              break;
+    case STATE_PreOp_Format:  Update_PreOp_Format();                     break;
+    case STATE_Save_Overwrite:  Update_Save_Overwrite();                   break;
+    case STATE_Save_Create: Update_Save_Create();                      break;
+    case STATE_Save_Open: Update_Save_Open();                        break;
+    case STATE_Save_WriteChecksum: Update_Save_WriteChecksum();                break;
+    case STATE_Save_WriteData: Update_Save_WriteData();                    break;
+    case STATE_Save_Close: Update_Save_Close();                        break;
+    case STATE_Save_Error: Update_Save_Error();                        break;
+    case STATE_Save_TooManyFiles: Update_Save_TooManyFiles();                 break;
+    case STATE_Load_Open: Update_Load_Open();                          break;
+    case STATE_Load_ReadChecksum: Update_Load_ReadChecksum();                  break;
+    case STATE_Load_ReadData: Update_Load_ReadData();                      break;
+    case STATE_Load_Close: Update_Load_Close();                        break;
+    case STATE_Load_Error: Update_Load_Error();                         break;
+    case STATE_Delete: Update_Delete();                             break;
+    case STATE_Delete_Error: Update_Delete_Error();                       break;
     default:   return;
     }
 }
@@ -263,12 +263,12 @@ void SaveFsm::Enter_InitialMemcardCheck()
     int iResult = mSaveDevice.GetStatus();
     if (iResult == -2)
     {
-        SetNextState(3);
+        SetNextState(STATE_Success);
         return;
     }
     if (iResult == -4)
     {
-        SetNextState(3);
+        SetNextState(STATE_Success);
         return;
     }
     int iNeeded = (int)SaveDevice::BytesToBlocks(0x1800);
@@ -282,10 +282,10 @@ void SaveFsm::Enter_InitialMemcardCheck()
     {
         mXBOXAdditionalFreeNeeded = uiNeeded - uiFree;
         mXBOXTotalFreeNeeded = uiNeeded >> 10;
-        SetNextState(6);
+        SetNextState(STATE_InitialMemcardCheck_CheckProfile);
         return;
     }
-    SetNextState(3);
+    SetNextState(STATE_Success);
 }
 
 // FUNCTION: SWBF2 0x00631b90
@@ -297,7 +297,7 @@ void SaveFsm::Enter_InitialMemcardCheck_CheckProfile()
         SafeLocalizeStrcpy(mBtnB, "common.ok", 100);
         mBtns = 2;
         mBtnDefault = 2;
-        SetNextState(7);
+        SetNextState(STATE_InitialMemcardCheck_Error);
     }
     else
     {
@@ -319,7 +319,7 @@ void SaveFsm::Enter_PreOp_Error()
 {
     if (m_preop_SilentFail)
     {
-        SetNextState(4);
+        SetNextState(STATE_Failure);
     }
     else
     {
@@ -382,7 +382,7 @@ void SaveFsm::Enter_PreOp_Format()
     }
     mBtns = 2;
     mBtnDefault = 2;
-    SetNextState(9);
+    SetNextState(STATE_PreOp_Error);
 }
 
 // FUNCTION: SWBF2 0x00632380
@@ -433,7 +433,7 @@ void SaveFsm::Update_Save_Overwrite()
     }
     else
     {
-        SetNextState(4);
+        SetNextState(STATE_Failure);
         mLoadQueueCnt = 0;
     }
 }
@@ -450,11 +450,11 @@ void SaveFsm::Enter_Save_Create()
     {
         if (iResult == -6)
         {
-            SetNextState(22);
+            SetNextState(STATE_Save_TooManyFiles);
         }
         else
         {
-            SetNextState(21);
+            SetNextState(STATE_Save_Error);
         }
     }
 }
@@ -471,11 +471,11 @@ void SaveFsm::Update_Save_Create()
     {
         if (iResult == -6)
         {
-            SetNextState(22);
+            SetNextState(STATE_Save_TooManyFiles);
         }
         else
         {
-            SetNextState(21);
+            SetNextState(STATE_Save_Error);
         }
     }
     else
@@ -500,7 +500,7 @@ void SaveFsm::Enter_Save_Open()
             return;
         }
     }
-    SetNextState(21);
+    SetNextState(STATE_Save_Error);
 }
 
 // FUNCTION: SWBF2 0x006325c0
@@ -595,7 +595,7 @@ void SaveFsm::Enter_Save_Close()
     int iResult = mSaveDevice.StartCloseFile(*mCurSaveFile, false);
     if (iResult != 0 && iResult != 1)
     {
-        SetNextState(21);
+        SetNextState(STATE_Save_Error);
     }
 }
 
@@ -609,11 +609,11 @@ void SaveFsm::Update_Save_Close()
     }
     if (iResult)
     {
-        SetNextState(21);
+        SetNextState(STATE_Save_Error);
     }
     else if (mSaveErrorAfterClose == true)
     {
-        SetNextState(21);
+        SetNextState(STATE_Save_Error);
     }
     else
     {
@@ -650,7 +650,7 @@ void SaveFsm::Update_Save_Error()
     }
     else
     {
-        SetNextState(4);
+        SetNextState(STATE_Failure);
         mLoadQueueCnt = 0;
     }
 }
@@ -676,11 +676,11 @@ void SaveFsm::Update_Save_TooManyFiles()
     ShowLoadSavePopup(false);
     if (mLoadSavePopupAnswer == 1)
     {
-        SetNextState(4);
+        SetNextState(STATE_Failure);
     }
     else
     {
-        SetNextState(4);
+        SetNextState(STATE_Failure);
         mLoadQueueCnt = 0;
     }
 }
@@ -696,11 +696,11 @@ void SaveFsm::Enter_Load_Start()
     JournalSaveFile(mCurSaveFile);
     if (mCurSaveFile)
     {
-        SetNextState(24);
+        SetNextState(STATE_Load_Open);
     }
     else
     {
-        SetNextState(28);
+        SetNextState(STATE_Load_Error);
     }
 }
 
@@ -710,7 +710,7 @@ void SaveFsm::Enter_Load_Open()
     int iResult = mSaveDevice.StartOpenFile(*mCurSaveFile, false);
     if (iResult != 0 && iResult != 1)
     {
-        SetNextState(28);
+        SetNextState(STATE_Load_Error);
     }
 }
 
@@ -723,7 +723,7 @@ void SaveFsm::Enter_Load_ReadChecksum()
         return;
     }
     mLoadErrorAfterClose = true;
-    SetNextState(27);
+    SetNextState(STATE_Load_Close);
 }
 
 // FUNCTION: SWBF2 0x006329f0
@@ -736,7 +736,7 @@ void SaveFsm::Enter_Load_ReadData()
         return;
     }
     mLoadErrorAfterClose = true;
-    SetNextState(27);
+    SetNextState(STATE_Load_Close);
 }
 
 // FUNCTION: SWBF2 0x00632a90
@@ -745,7 +745,7 @@ void SaveFsm::Enter_Load_Close()
     int iResult = mSaveDevice.StartCloseFile(*mCurSaveFile, false);
     if (iResult != 0 && iResult != 1)
     {
-        SetNextState(28);
+        SetNextState(STATE_Load_Error);
     }
 }
 
@@ -784,7 +784,7 @@ void SaveFsm::Enter_Delete()
             return;
         }
     }
-    SetNextState(30);
+    SetNextState(STATE_Delete_Error);
 }
 
 // FUNCTION: SWBF2 0x00632ce0
@@ -804,15 +804,15 @@ bool SaveFsm::Enter_ProcessLastQueuedFile()
     int iCnt = mLoadQueueCnt;
     if (!iCnt)
     {
-        SetNextState(3);
+        SetNextState(STATE_Success);
         return true;
     }
     switch (mLoadOp[iCnt - 1])
     {
-    case 0: SetNextState(23); break;
-    case 1: SetNextState(14); break;
+    case 0: SetNextState(STATE_Load_Start); break;
+    case 1: SetNextState(STATE_Save_CheckExist); break;
     case 2:
-    case 3: SetNextState(29); break;
+    case 3: SetNextState(STATE_Delete); break;
     default: break;
     }
     return true;
@@ -832,7 +832,7 @@ void SaveFsm::Enter_PreOp()
         SafeLocalizeStrcpy(mBtnB, "common.ok", 100);
         mBtns = 2;
         mBtnDefault = 2;
-        SetNextState(9);
+        SetNextState(STATE_PreOp_Error);
         return;
     }
     if (iResult == -4)
@@ -847,7 +847,7 @@ void SaveFsm::Enter_PreOp()
             SafeLocalizeStrcpy(mBtnB, "common.ok", 100);
             mBtns = 2;
             mBtnDefault = 2;
-            SetNextState(9);
+            SetNextState(STATE_PreOp_Error);
         }
         return;
     }
@@ -881,14 +881,14 @@ void SaveFsm::Enter_PreOp()
                 mBtns = 3;
                 mBtnDefault = 2;
             }
-            SetNextState(9);
+            SetNextState(STATE_PreOp_Error);
             return;
         }
     }
 
     if (m_preop_NoFileList)
     {
-        SetNextState(3);
+        SetNextState(STATE_Success);
     }
     else if (mSaveDevice.StartRefreshFileList())
     {
@@ -896,7 +896,7 @@ void SaveFsm::Enter_PreOp()
         SafeLocalizeStrcpy(mBtnB, "common.ok", 100);
         mBtns = 2;
         mBtnDefault = 2;
-        SetNextState(9);
+        SetNextState(STATE_PreOp_Error);
     }
     else
     {
@@ -918,7 +918,7 @@ void SaveFsm::Update_InitialMemcardCheck_CheckProfile()
         SafeLocalizeStrcpy(mBtnB, "common.ok", 100);
         mBtns = 2;
         mBtnDefault = 2;
-        SetNextState(7);
+        SetNextState(STATE_InitialMemcardCheck_Error);
         return;
     }
 
@@ -944,7 +944,7 @@ void SaveFsm::Update_InitialMemcardCheck_CheckProfile()
 
     if (bFlag1 && bFlag2 && bFlag3)
     {
-        SetNextState(3);
+        SetNextState(STATE_Success);
     }
     else
     {
@@ -954,7 +954,7 @@ void SaveFsm::Update_InitialMemcardCheck_CheckProfile()
         mBtns = 3;
         mBtnDefault = 1;
         mErrorSuccess = true;
-        SetNextState(7);
+        SetNextState(STATE_InitialMemcardCheck_Error);
     }
 }
 
@@ -968,15 +968,15 @@ void SaveFsm::Update_InitialMemcardCheck_Error()
     ShowLoadSavePopup(false);
     if (mLoadSavePopupAnswer == 1)
     {
-        SetNextState(5);
+        SetNextState(STATE_InitialMemcardCheck);
     }
     else if (mErrorSuccess)
     {
-        SetNextState(3);
+        SetNextState(STATE_Success);
     }
     else
     {
-        SetNextState(4);
+        SetNextState(STATE_Failure);
     }
 }
 
@@ -990,11 +990,11 @@ void SaveFsm::Update_PreOp_Error()
     ShowLoadSavePopup(false);
     if (mLoadSavePopupAnswer == 1)
     {
-        SetNextState(8);
+        SetNextState(STATE_PreOp);
     }
     else
     {
-        SetNextState(4);
+        SetNextState(STATE_Failure);
     }
 }
 
@@ -1019,7 +1019,7 @@ void SaveFsm::Update_PreOp_ConfirmDashboard()
     SafeLocalizeStrcpy(mBtnA, "ifs.loadsave_pc.freemoreblocks", 100);
     mBtns = 3;
     mBtnDefault = 2;
-    SetNextState(9);
+    SetNextState(STATE_PreOp_Error);
 }
 
 // FUNCTION: SWBF2 0x006320f0
@@ -1036,7 +1036,7 @@ void SaveFsm::Update_PreOp_Filelist()
         SafeLocalizeStrcpy(mBtnB, "common.ok", 100);
         mBtns = 2;
         mBtnDefault = 2;
-        SetNextState(9);
+        SetNextState(STATE_PreOp_Error);
         return;
     }
 
@@ -1049,11 +1049,11 @@ void SaveFsm::Update_PreOp_Filelist()
         SafeLocalizeStrcpy(mBtnB, "common.ok", 100);
         mBtns = 2;
         mBtnDefault = 2;
-        SetNextState(9);
+        SetNextState(STATE_PreOp_Error);
         return;
     }
 
-    SetNextState(3);
+    SetNextState(STATE_Success);
 }
 
 // FUNCTION: SWBF2 0x006321e0
@@ -1066,11 +1066,11 @@ void SaveFsm::Update_PreOp_Format_Prompt()
     ShowLoadSavePopup(false);
     if (mLoadSavePopupAnswer == 1)
     {
-        SetNextState(8);
+        SetNextState(STATE_PreOp);
     }
     else if (mLoadSavePopupAnswer == 2)
     {
-        SetNextState(4);
+        SetNextState(STATE_Failure);
     }
     else
     {
@@ -1094,11 +1094,11 @@ void SaveFsm::Update_PreOp_Format()
         SafeLocalizeStrcpy(mBtnB, "common.ok", 100);
         mBtns = 2;
         mBtnDefault = 2;
-        SetNextState(9);
+        SetNextState(STATE_PreOp_Error);
     }
     else
     {
-        SetNextState(8);
+        SetNextState(STATE_PreOp);
     }
 }
 
@@ -1112,11 +1112,11 @@ void SaveFsm::Update_Load_Open()
     }
     if (iResult)
     {
-        SetNextState(28);
+        SetNextState(STATE_Load_Error);
     }
     else
     {
-        SetNextState(25);
+        SetNextState(STATE_Load_ReadChecksum);
     }
 }
 
@@ -1131,11 +1131,11 @@ void SaveFsm::Update_Load_ReadChecksum()
     if (iResult)
     {
         mLoadErrorAfterClose = true;
-        SetNextState(27);
+        SetNextState(STATE_Load_Close);
     }
     else
     {
-        SetNextState(26);
+        SetNextState(STATE_Load_ReadData);
     }
 }
 
@@ -1150,12 +1150,12 @@ void SaveFsm::Update_Load_ReadData()
     if (iResult)
     {
         mLoadErrorAfterClose = true;
-        SetNextState(27);
+        SetNextState(STATE_Load_Close);
     }
     else
     {
         PblJournal::Get((PblJournalType)0)->RecordLow(mLoadDest[mLoadQueueCnt - 1], (int)mLoadSize[mLoadQueueCnt - 1]);
-        SetNextState(27);
+        SetNextState(STATE_Load_Close);
     }
 }
 
@@ -1169,11 +1169,11 @@ void SaveFsm::Update_Load_Close()
     }
     if (iResult)
     {
-        SetNextState(28);
+        SetNextState(STATE_Load_Error);
     }
     else if (mLoadErrorAfterClose == true)
     {
-        SetNextState(28);
+        SetNextState(STATE_Load_Error);
     }
     else
     {
@@ -1193,7 +1193,7 @@ void SaveFsm::Update_Load_Error()
         return;
     }
     ShowLoadSavePopup(false);
-    SetNextState(4);
+    SetNextState(STATE_Failure);
     mLoadQueueCnt = 0;
 }
 
@@ -1207,7 +1207,7 @@ void SaveFsm::Update_Delete()
     }
     if (iResult)
     {
-        SetNextState(30);
+        SetNextState(STATE_Delete_Error);
     }
     else
     {
@@ -1227,7 +1227,7 @@ void SaveFsm::Update_Delete_Error()
         return;
     }
     ShowLoadSavePopup(false);
-    SetNextState(4);
+    SetNextState(STATE_Failure);
     mLoadQueueCnt = 0;
 }
 
@@ -1274,6 +1274,6 @@ unsigned short* SafeLocalizeStrcpy(unsigned short* pusDest, const char* pcSrc, u
 // FUNCTION: SWBF2 0x00631750
 bool SaveFsm::GetSuccess() const
 {
-    return mCurState == 3;
+    return mCurState == STATE_Success;
 }
 

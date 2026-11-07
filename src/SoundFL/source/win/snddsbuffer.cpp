@@ -229,7 +229,7 @@ DSBuffer::~DSBuffer()
 bool DSBuffer::AcquireResources()
 {
     DWORD dwFlags;
-    if (((unsigned char)(mFlags >> 4) & 1) != 0
+    if (((unsigned char)(mFlags >> 4) & 1) != 0   // DSBCAPS_CTRL3D (0x10), tested as the game's code does
         && (IDirectSound*)Engine::smDirectSound == mDirectSound
         && Engine::GetMixConfig() == Engine::mixConfig_DirectSoundHardware)
     {
@@ -540,7 +540,7 @@ bool DSBuffer::Play(bool bLooping, unsigned int uiPriority, bool bImmediate,
                     bool bRewind) const
 {
     DWORD dwFlags;
-    if (((unsigned char)(mFlags >> 4) & 1) != 0
+    if (((unsigned char)(mFlags >> 4) & 1) != 0   // DSBCAPS_CTRL3D (0x10), tested as the game's code does
         && mDirectSound == (IDirectSound*)Engine::smDirectSound
         && Engine::GetMixConfig() == Engine::mixConfig_DirectSoundHardware)
     {

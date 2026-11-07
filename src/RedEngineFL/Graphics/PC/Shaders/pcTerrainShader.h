@@ -11,6 +11,21 @@ class RedTexture;
 class pcTerrainShader : public pcRedShader
 {
 public:
+    // m_uiOptions (the low byte) and s_uiOptions; names and values from the modtools build's type information
+    enum TERRAIN_SHADER_OPTIONS
+    {
+        TERRAIN_DETAIL = 0x1,
+        TERRAIN_PREPIXELPASS = 0x4,
+        TERRAIN_FAR = 0x8,
+        TERRAIN_MULTILAYER1 = 0x10,
+        TERRAIN_MULTILAYER2 = 0x20,
+        TERRAIN_MULTILAYER_MASK = 0x30,
+        TERRAIN_MULTILAYER_SHIFT = 4,
+        TERRAIN_SHADOWMAP = 0x10000,
+        TERRAIN_PIXELLIGHTING = 0x20000,
+        TERRAIN_DETAIL_BUMPLUMINOSITY = 0x40000
+    };
+
     pcTerrainShader(unsigned int uiFlags,
                     const unsigned int* pParams,
                     unsigned int uiNumParams,
@@ -48,11 +63,11 @@ public:
     {
         if (bEnable)
         {
-            m_uiOptions |= 1;
+            m_uiOptions |= TERRAIN_DETAIL;
         }
         else
         {
-            m_uiOptions &= ~1;
+            m_uiOptions &= ~TERRAIN_DETAIL;
         }
     }
 
@@ -60,20 +75,20 @@ public:
     {
         if (bEnable)
         {
-            m_uiOptions |= 8;
+            m_uiOptions |= TERRAIN_FAR;
         }
         else
         {
-            m_uiOptions &= ~8;
+            m_uiOptions &= ~TERRAIN_FAR;
         }
 
         if (bFarDetail)
         {
-            m_uiOptions |= 1;
+            m_uiOptions |= TERRAIN_DETAIL;
         }
         else
         {
-            m_uiOptions &= ~1;
+            m_uiOptions &= ~TERRAIN_DETAIL;
         }
     }
 
@@ -81,15 +96,15 @@ public:
     {
         if (bEnable)
         {
-            m_uiOptions |= 4;
+            m_uiOptions |= TERRAIN_PREPIXELPASS;
         }
         else
         {
-            m_uiOptions &= ~4;
+            m_uiOptions &= ~TERRAIN_PREPIXELPASS;
         }
     }
 
-    void SetMultiLayer(int iLayer) { m_uiOptions = (m_uiOptions & ~0x30) | ((iLayer & 3) << 4); }
+    void SetMultiLayer(int iLayer) { m_uiOptions = (m_uiOptions & ~TERRAIN_MULTILAYER_MASK) | ((iLayer & 3) << TERRAIN_MULTILAYER_SHIFT); }
 
     unsigned int GetState_Fixed(const RenderItem* pItem) const;
     unsigned int GetState_Prog1(const RenderItem* pItem) const;

@@ -23,11 +23,11 @@ void EntityDoor::Render(unsigned char ucViewport, float fDist, unsigned int uiFl
 {
     if (!((const EntityPropClass*)mEntityClass)->m_bDynamicLighting)
     {
-        uiFlags |= 0x80u;
+        uiFlags |= RENDERFLAG_STATIC;
     }
     else
     {
-        uiFlags &= ~0x80u;
+        uiFlags &= ~RENDERFLAG_STATIC;
     }
     SetupShadow(0, mModel, ucViewport, uiFlags, 0);
 
@@ -58,15 +58,15 @@ void EntityDoor::Render(unsigned char ucViewport, float fDist, unsigned int uiFl
     }
 
     GetModel()->Render(ucViewport, fDist, &mMatrix, &mPose, RedColor(255, 255, 255, 255),
-                       uiFlags | 0x01000000u, 0);
-    if (!(uiFlags & 0x00200000u))
+                       uiFlags | RENDERFLAG_RENDER_CACHED, 0);
+    if (!(uiFlags & RENDERFLAG_RENDER_REFLECTION))
     {
         PblMatrix reflection;
         if (FLRenderer::IsReflected(GetCollisionCenter(), GetCollisionRadius(), reflection, false))
         {
             reflection = mMatrix * reflection;
             GetModel()->Render(ucViewport, fDist, &reflection, &mPose, RedColor::WHITE,
-                               (uiFlags & 0xeffefeffu) | 0x10000100u, 0);
+                               (uiFlags & ~(RENDERFLAG_REFLECTION | RENDERFLAG_RENDER_SHADOWVOLUMES | RENDERFLAG_PSEUDO_REFLECTED)) | RENDERFLAG_REFLECTION | RENDERFLAG_PSEUDO_REFLECTED, 0);
         }
     }
 
@@ -127,10 +127,9 @@ int GetUnitsInRange(const PblVector3& vPos, float fRadius, GameObject** const pp
 
 // GLOBAL: SWBF2 0x01ebb998
 // EntityDoor::rttiHashEntityDoor
-PblHash EntityDoor::rttiHashEntityDoor("EntityDoor");
 // GLOBAL: SWBF2 0x00789130
 // EntityDoor::rttiNameEntityDoor
-const char EntityDoor::rttiNameEntityDoor[] = "EntityDoor";
+PBL_IMPLEMENT_RTTI(EntityDoor)
 
 // SYNTHETIC: SWBF2 0x004029d0
 // `dynamic initializer for 'EntityDoorClass::rttiHashEntityDoorClass''
@@ -138,10 +137,9 @@ const char EntityDoor::rttiNameEntityDoor[] = "EntityDoor";
 
 // GLOBAL: SWBF2 0x01ebb99c
 // EntityDoorClass::rttiHashEntityDoorClass
-PblHash EntityDoorClass::rttiHashEntityDoorClass("EntityDoorClass");
 // GLOBAL: SWBF2 0x00789118
 // EntityDoorClass::rttiNameEntityDoorClass
-const char EntityDoorClass::rttiNameEntityDoorClass[] = "EntityDoorClass";
+PBL_IMPLEMENT_RTTI(EntityDoorClass)
 // SYNTHETIC: SWBF2 0x004029e0
 // `dynamic initializer for 'EntityDoor::msHostDoors''
 

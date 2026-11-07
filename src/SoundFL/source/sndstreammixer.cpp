@@ -1,4 +1,5 @@
 #include <string.h>
+#include "PebbleFL/Common/PblBits.h"
 
 #include "sndstreamsourceproducer.h"
 
@@ -184,7 +185,7 @@ void StreamMixer::Discontinuity(unsigned int uiInput, bool bFlush)
     {
         FlushInput(uiInput);
     }
-    mActive[uiInput >> 3] &= ~(1 << (uiInput & 7));
+    mActive[uiInput >> 3] &= ~Bit(uiInput & 7);
 }
 
 // FUNCTION: SWBF2 0x0073f950
@@ -748,5 +749,5 @@ void Snd::StreamMixer::SetOutputGain(float fGain)
 // FUNCTION: SWBF2 0x0073faf0
 bool Snd::StreamMixer::IsMixed(unsigned int uiInput) const
 {
-    return (mMixedPacket[uiInput >> 3] & (1u << (uiInput & 7))) != 0;
+    return (mMixedPacket[uiInput >> 3] & Bit(uiInput & 7)) != 0;
 }

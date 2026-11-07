@@ -35,10 +35,9 @@ int GetObjectsInRange(const PblVector3& vPos, float fRange, GameObject** const p
 
 // GLOBAL: SWBF2 0x01f9a8b8
 // WeaponDisguiseClass::rttiHashWeaponDisguiseClass
-PblHash WeaponDisguiseClass::rttiHashWeaponDisguiseClass("WeaponDisguiseClass");
 // GLOBAL: SWBF2 0x0078bf48
 // WeaponDisguiseClass::rttiNameWeaponDisguiseClass
-const char WeaponDisguiseClass::rttiNameWeaponDisguiseClass[] = "WeaponDisguiseClass";
+PBL_IMPLEMENT_RTTI(WeaponDisguiseClass)
 
 // FUNCTION: SWBF2 0x00683390
 WeaponDisguiseClass::WeaponDisguiseClass(unsigned int uHash)
@@ -91,10 +90,9 @@ WeaponClass* WeaponDisguiseClass::Derive(unsigned int uHash)
 
 // GLOBAL: SWBF2 0x01f9a8b4
 // WeaponDisguise::rttiHashWeaponDisguise
-PblHash WeaponDisguise::rttiHashWeaponDisguise("WeaponDisguise");
 // GLOBAL: SWBF2 0x0078bf64
 // WeaponDisguise::rttiNameWeaponDisguise
-const char WeaponDisguise::rttiNameWeaponDisguise[] = "WeaponDisguise";
+PBL_IMPLEMENT_RTTI(WeaponDisguise)
 
 
 

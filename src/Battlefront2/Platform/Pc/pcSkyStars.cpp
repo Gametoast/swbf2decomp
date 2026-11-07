@@ -13,7 +13,7 @@
 // FUNCTION: SWBF2 0x00428ef0
 void SkyStars::_PlatformInit()
 {
-    m_pShader = pcRedShader::Create(0xe8651328u /* "LightBeam" */, 0x102, 0, 0, 0x40,
+    m_pShader = pcRedShader::Create(0xe8651328u /* "LightBeam" */, RVF_POSITION_XYZ | RVF_LIGHTING, 0, 0, MATERIAL_FLAG_ALPHABLEND_ADDITIVE,
                                     RedColor::WHITE, RedColor::BLACK, 32.0f);
 }
 
@@ -80,7 +80,7 @@ void SkyStars::_PlatformRenderField(const StarField& field, unsigned int,
                                        m_pShader,
                                        *ppMatrices[i],
                                        m_color,
-                                       0x20211u, 0, 0, 0);
+                                       RENDERFLAG_CLIPPED | RENDERFLAG_NO_LIGHTING | PC_RENDERFLAG_IMMEDIATE | RENDERFLAG_RENDER_TO_SKY, 0, 0, 0);
     }
     pPrimitive->Release();
 }

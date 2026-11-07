@@ -59,6 +59,17 @@ unsigned int PIPELINE1_STATE_MAP[32];
 // GLOBAL: SWBF2 0x009c9410
 unsigned int PIPELINE1_INV_STATE_MAP[32];
 
+// The features GetState_Prog1 combines; PIPELINE1_STATE_MAP turns a combination into a state index and PIPELINE1_INV_STATE_MAP
+// turns it back (HARDEDGE, TRANSPARENT and SHADOW are the words of the modtools build's state names).
+enum
+{
+    PIPELINE1_HARDEDGE = 0x1,      // alpha-tested (MATERIAL_FLAG_ALPHAMAP_MASK)
+    PIPELINE1_TRANSPARENT = 0x2,
+    PIPELINE1_PROJECTED = 0x4,     // a projected light in the same pass
+    PIPELINE1_SHADOW = 0x8,
+    PIPELINE1_UNLIT = 0x10         // RENDERFLAG_NO_LIGHTING
+};
+
 // GLOBAL: SWBF2 0x009c9490
 
 RedTexture* s_pNullDetailMap;
@@ -133,18 +144,18 @@ void pcNormalShader::_Init(unsigned int uiFlags,
 {
     s_pNullDetailMap = RedTexture::s_textureHashTable.Find(PblHash("null_detailmap"));
 
-    unsigned int uiState = 2;
-    if (uiFlags & 0x20)
+    unsigned int uiState = RVF_POSITION_XYZ;
+    if (uiFlags & RVF_NORMAL)
     {
-        uiState = 0x22;
+        uiState = RVF_POSITION_XYZ | RVF_NORMAL;
     }
-    if (uiFlags & 0x1c)
+    if (uiFlags & RVF_WEIGHTS_MASK)
     {
-        uiState |= (uiFlags & 0x1c);
+        uiState |= (uiFlags & RVF_WEIGHTS_MASK);
     }
-    if (uiFlags & 0x200)
+    if (uiFlags & RVF_TEXCOORDS_1)
     {
-        uiState |= 0x200;
+        uiState |= RVF_TEXCOORDS_1;
     }
 
     memset(&m_material, 0, sizeof(m_material));
@@ -183,25 +194,25 @@ void pcNormalShader::_Init(unsigned int uiFlags,
         m_material.envMapHash = pParams[3];
     }
 
-    if (uiFlags & 0x100)
+    if (uiFlags & RVF_LIGHTING)
     {
-        uiState |= 0x100;
+        uiState |= RVF_LIGHTING;
     }
-    else if (uiFlags & 0x80)
+    else if (uiFlags & RVF_COLOR)
     {
-        uiState |= 0x80;
+        uiState |= RVF_COLOR;
     }
 
     if (uiFlags != 0)
     {
         m_pVertexInputFormat = pcRedVertexFormat::Create(uiFlags, uiState);
-        if (m_material.materialFlags & 2)
+        if (m_material.materialFlags & MATERIAL_FLAG_ALPHAMAP_MASK)
         {
-            m_pZPrepassVertexInputFormat = pcRedVertexFormat::Create(uiFlags, uiState & 0x39e);
+            m_pZPrepassVertexInputFormat = pcRedVertexFormat::Create(uiFlags, uiState & (RVF_POSITION_XYZ | RVF_WEIGHTS_MASK | RVF_COLOR | RVF_LIGHTING | RVF_TEXCOORDS_1));
         }
         else
         {
-            m_pZPrepassVertexInputFormat = pcRedVertexFormat::Create(uiFlags, uiState & 0x1e);
+            m_pZPrepassVertexInputFormat = pcRedVertexFormat::Create(uiFlags, uiState & (RVF_POSITION_XYZ | RVF_WEIGHTS_MASK));
         }
     }
     else
@@ -276,47 +287,47 @@ void pcNormalShader::_StaticInit() const
 
     memset(PIPELINE1_STATE_MAP, 0, sizeof(PIPELINE1_STATE_MAP));
     PIPELINE1_STATE_MAP[0] = 4;
-    PIPELINE1_STATE_MAP[1] = 5;
-    PIPELINE1_STATE_MAP[2] = 6;
-    PIPELINE1_STATE_MAP[3] = 7;
-    PIPELINE1_STATE_MAP[4] = 8;
-    PIPELINE1_STATE_MAP[5] = 9;
-    PIPELINE1_STATE_MAP[6] = 10;
-    PIPELINE1_STATE_MAP[7] = 11;
-    PIPELINE1_STATE_MAP[8] = 12;
-    PIPELINE1_STATE_MAP[9] = 13;
-    PIPELINE1_STATE_MAP[12] = 14;
-    PIPELINE1_STATE_MAP[13] = 15;
-    PIPELINE1_STATE_MAP[10] = 16;
-    PIPELINE1_STATE_MAP[11] = 17;
-    PIPELINE1_STATE_MAP[14] = 18;
-    PIPELINE1_STATE_MAP[15] = 19;
-    PIPELINE1_STATE_MAP[16] = 0;
-    PIPELINE1_STATE_MAP[17] = 1;
-    PIPELINE1_STATE_MAP[18] = 2;
-    PIPELINE1_STATE_MAP[19] = 3;
+    PIPELINE1_STATE_MAP[PIPELINE1_HARDEDGE] = 5;
+    PIPELINE1_STATE_MAP[PIPELINE1_TRANSPARENT] = 6;
+    PIPELINE1_STATE_MAP[PIPELINE1_HARDEDGE | PIPELINE1_TRANSPARENT] = 7;
+    PIPELINE1_STATE_MAP[PIPELINE1_PROJECTED] = 8;
+    PIPELINE1_STATE_MAP[PIPELINE1_HARDEDGE | PIPELINE1_PROJECTED] = 9;
+    PIPELINE1_STATE_MAP[PIPELINE1_TRANSPARENT | PIPELINE1_PROJECTED] = 10;
+    PIPELINE1_STATE_MAP[PIPELINE1_HARDEDGE | PIPELINE1_TRANSPARENT | PIPELINE1_PROJECTED] = 11;
+    PIPELINE1_STATE_MAP[PIPELINE1_SHADOW] = 12;
+    PIPELINE1_STATE_MAP[PIPELINE1_HARDEDGE | PIPELINE1_SHADOW] = 13;
+    PIPELINE1_STATE_MAP[PIPELINE1_PROJECTED | PIPELINE1_SHADOW] = 14;
+    PIPELINE1_STATE_MAP[PIPELINE1_HARDEDGE | PIPELINE1_PROJECTED | PIPELINE1_SHADOW] = 15;
+    PIPELINE1_STATE_MAP[PIPELINE1_TRANSPARENT | PIPELINE1_SHADOW] = 16;
+    PIPELINE1_STATE_MAP[PIPELINE1_HARDEDGE | PIPELINE1_TRANSPARENT | PIPELINE1_SHADOW] = 17;
+    PIPELINE1_STATE_MAP[PIPELINE1_TRANSPARENT | PIPELINE1_PROJECTED | PIPELINE1_SHADOW] = 18;
+    PIPELINE1_STATE_MAP[PIPELINE1_HARDEDGE | PIPELINE1_TRANSPARENT | PIPELINE1_PROJECTED | PIPELINE1_SHADOW] = 19;
+    PIPELINE1_STATE_MAP[PIPELINE1_UNLIT] = 0;
+    PIPELINE1_STATE_MAP[PIPELINE1_HARDEDGE | PIPELINE1_UNLIT] = 1;
+    PIPELINE1_STATE_MAP[PIPELINE1_TRANSPARENT | PIPELINE1_UNLIT] = 2;
+    PIPELINE1_STATE_MAP[PIPELINE1_HARDEDGE | PIPELINE1_TRANSPARENT | PIPELINE1_UNLIT] = 3;
 
     memset(PIPELINE1_INV_STATE_MAP, 0, sizeof(PIPELINE1_INV_STATE_MAP));
     PIPELINE1_INV_STATE_MAP[4] = 0;
-    PIPELINE1_INV_STATE_MAP[5] = 1;
-    PIPELINE1_INV_STATE_MAP[6] = 2;
-    PIPELINE1_INV_STATE_MAP[7] = 3;
-    PIPELINE1_INV_STATE_MAP[8] = 4;
-    PIPELINE1_INV_STATE_MAP[9] = 5;
-    PIPELINE1_INV_STATE_MAP[10] = 6;
-    PIPELINE1_INV_STATE_MAP[11] = 7;
-    PIPELINE1_INV_STATE_MAP[12] = 8;
-    PIPELINE1_INV_STATE_MAP[13] = 9;
-    PIPELINE1_INV_STATE_MAP[14] = 12;
-    PIPELINE1_INV_STATE_MAP[15] = 13;
-    PIPELINE1_INV_STATE_MAP[16] = 10;
-    PIPELINE1_INV_STATE_MAP[17] = 11;
-    PIPELINE1_INV_STATE_MAP[18] = 14;
-    PIPELINE1_INV_STATE_MAP[19] = 15;
-    PIPELINE1_INV_STATE_MAP[0] = 16;
-    PIPELINE1_INV_STATE_MAP[1] = 17;
-    PIPELINE1_INV_STATE_MAP[2] = 18;
-    PIPELINE1_INV_STATE_MAP[3] = 19;
+    PIPELINE1_INV_STATE_MAP[5] = PIPELINE1_HARDEDGE;
+    PIPELINE1_INV_STATE_MAP[6] = PIPELINE1_TRANSPARENT;
+    PIPELINE1_INV_STATE_MAP[7] = PIPELINE1_HARDEDGE | PIPELINE1_TRANSPARENT;
+    PIPELINE1_INV_STATE_MAP[8] = PIPELINE1_PROJECTED;
+    PIPELINE1_INV_STATE_MAP[9] = PIPELINE1_HARDEDGE | PIPELINE1_PROJECTED;
+    PIPELINE1_INV_STATE_MAP[10] = PIPELINE1_TRANSPARENT | PIPELINE1_PROJECTED;
+    PIPELINE1_INV_STATE_MAP[11] = PIPELINE1_HARDEDGE | PIPELINE1_TRANSPARENT | PIPELINE1_PROJECTED;
+    PIPELINE1_INV_STATE_MAP[12] = PIPELINE1_SHADOW;
+    PIPELINE1_INV_STATE_MAP[13] = PIPELINE1_HARDEDGE | PIPELINE1_SHADOW;
+    PIPELINE1_INV_STATE_MAP[14] = PIPELINE1_PROJECTED | PIPELINE1_SHADOW;
+    PIPELINE1_INV_STATE_MAP[15] = PIPELINE1_HARDEDGE | PIPELINE1_PROJECTED | PIPELINE1_SHADOW;
+    PIPELINE1_INV_STATE_MAP[16] = PIPELINE1_TRANSPARENT | PIPELINE1_SHADOW;
+    PIPELINE1_INV_STATE_MAP[17] = PIPELINE1_HARDEDGE | PIPELINE1_TRANSPARENT | PIPELINE1_SHADOW;
+    PIPELINE1_INV_STATE_MAP[18] = PIPELINE1_TRANSPARENT | PIPELINE1_PROJECTED | PIPELINE1_SHADOW;
+    PIPELINE1_INV_STATE_MAP[19] = PIPELINE1_HARDEDGE | PIPELINE1_TRANSPARENT | PIPELINE1_PROJECTED | PIPELINE1_SHADOW;
+    PIPELINE1_INV_STATE_MAP[0] = PIPELINE1_UNLIT;
+    PIPELINE1_INV_STATE_MAP[1] = PIPELINE1_HARDEDGE | PIPELINE1_UNLIT;
+    PIPELINE1_INV_STATE_MAP[2] = PIPELINE1_TRANSPARENT | PIPELINE1_UNLIT;
+    PIPELINE1_INV_STATE_MAP[3] = PIPELINE1_HARDEDGE | PIPELINE1_TRANSPARENT | PIPELINE1_UNLIT;
 }
 
 static const float kInv255 = 1.0f / 255.0f;
@@ -363,7 +374,7 @@ void pcNormalShader::End_Prog1(unsigned int, unsigned int) const
 // FUNCTION: SWBF2 0x006ff670
 RenderPhaseT pcNormalShader::GetRenderPhase(const RenderItem* pItem, unsigned int) const
 {
-    if ((pItem->pRootShader->m_material->materialFlags & 0x44) || pItem->tweakColor.a < 0xff)
+    if ((pItem->pRootShader->m_material->materialFlags & (MATERIAL_FLAG_ALPHAMAP_OPACITY | MATERIAL_FLAG_ALPHABLEND_ADDITIVE)) || pItem->tweakColor.a < 0xff)
     {
         return RENDERPHASE_TRANSPARENT;
     }
@@ -383,15 +394,15 @@ unsigned short pcNormalShader::GetShaderChain(pcRedShader** const ppOut, unsigne
     }
 
     if (RedRenderer::pcGetRenderCaps().pipeline == PIPELINE_FIXED || !RedRenderer::pcIsNearScene() ||
-        (pItem->flags & 0x10220010))
+        (pItem->flags & (RENDERFLAG_NO_LIGHTING | RENDERFLAG_RENDER_TO_SKY | RENDERFLAG_RENDER_REFLECTION | RENDERFLAG_PSEUDO_REFLECTED)))
     {
         ppOut[0] = this;
         return 1;
     }
 
-    if (!(pMaterial->materialFlags & 0x44) && pItem->tweakColor.a >= 0xff &&
-        !(pMaterial->diffuseColor.a < 1.0f) && !(pItem->flags & 0x20000000) &&
-        (pMaterial->materialFlags & 0x20) && RedRenderer::pcGetRenderOptions().bumpMapping)
+    if (!(pMaterial->materialFlags & (MATERIAL_FLAG_ALPHAMAP_OPACITY | MATERIAL_FLAG_ALPHABLEND_ADDITIVE)) && pItem->tweakColor.a >= 0xff &&
+        !(pMaterial->diffuseColor.a < 1.0f) && !(pItem->flags & RENDERFLAG_ZBUFFER_ALPHA_FADE) &&
+        (pMaterial->materialFlags & MATERIAL_FLAG_PERPIXELLIGHTING) && RedRenderer::pcGetRenderOptions().bumpMapping)
     {
         ppOut[0] = RedRenderer::pcGetSystemShader(SYSTEM_SHADER_PERPIXELDIFFUSELIGHTING);
         uiCount = 1;
@@ -401,8 +412,8 @@ unsigned short pcNormalShader::GetShaderChain(pcRedShader** const ppOut, unsigne
 
     if (RedRenderer::pcGetRenderOptions().specularQuality)
     {
-        if (((pMaterial->materialFlags & 0x80) && pItem->pLightingState->numSpecularLights > 0) ||
-            (pMaterial->materialFlags & 0x100))
+        if (((pMaterial->materialFlags & MATERIAL_FLAG_SPECULAR) && pItem->pLightingState->numSpecularLights > 0) ||
+            (pMaterial->materialFlags & MATERIAL_FLAG_ENVMAP))
         {
             ppOut[uiCount++] = RedRenderer::pcGetSystemShader(SYSTEM_SHADER_SPECULARLIGHTING);
         }
@@ -419,9 +430,9 @@ unsigned int pcNormalShader::GetState_Fixed(const RenderItem* pItem) const
     }
 
     const RedMaterial* pMaterial = pItem->pRootShader->m_material;
-    const bool bShadowed = RedShadowMap::IsShadowMapEnabled() && !(pItem->flags & 0x18000018);
-    const bool bTransparent = (pMaterial->materialFlags & 0x44) || pItem->tweakColor.a < 0xff ||
-                              pMaterial->diffuseColor.a < 1.0f || (pItem->flags & 0x20000000);
+    const bool bShadowed = RedShadowMap::IsShadowMapEnabled() && !(pItem->flags & (RENDERFLAG_POSTSHADOW | RENDERFLAG_NO_LIGHTING | RENDERFLAG_PSEUDO_REFLECTIVE | RENDERFLAG_PSEUDO_REFLECTED));
+    const bool bTransparent = (pMaterial->materialFlags & (MATERIAL_FLAG_ALPHAMAP_OPACITY | MATERIAL_FLAG_ALPHABLEND_ADDITIVE)) || pItem->tweakColor.a < 0xff ||
+                              pMaterial->diffuseColor.a < 1.0f || (pItem->flags & RENDERFLAG_ZBUFFER_ALPHA_FADE);
     if (bShadowed)
     {
         return bTransparent ? 3 : 4;
@@ -430,37 +441,37 @@ unsigned int pcNormalShader::GetState_Fixed(const RenderItem* pItem) const
     {
         return 3;
     }
-    return (pMaterial->materialFlags & 2) ? 2 : 1;
+    return (pMaterial->materialFlags & MATERIAL_FLAG_ALPHAMAP_MASK) ? 2 : 1;
 }
 
 // FUNCTION: SWBF2 0x006ff870
 unsigned int pcNormalShader::GetState_Prog1(const RenderItem* pItem) const
 {
     const RedMaterial* pMaterial = pItem->pRootShader->m_material;
-    const bool bTransparent = (pMaterial->materialFlags & 0x44) || pItem->tweakColor.a < 0xff ||
-                              pMaterial->diffuseColor.a < 1.0f || (pItem->flags & 0x20000000);
-    const bool bShadowed = (!bTransparent || (pItem->flags & 0x8000000)) &&
-                           RedShadowMap::IsShadowMapEnabled() && !(pItem->flags & 0x10020018);
-    const bool bSeparate = m_lightingInSeparatePass && !(pItem->flags & 0x10000000);
+    const bool bTransparent = (pMaterial->materialFlags & (MATERIAL_FLAG_ALPHAMAP_OPACITY | MATERIAL_FLAG_ALPHABLEND_ADDITIVE)) || pItem->tweakColor.a < 0xff ||
+                              pMaterial->diffuseColor.a < 1.0f || (pItem->flags & RENDERFLAG_ZBUFFER_ALPHA_FADE);
+    const bool bShadowed = (!bTransparent || (pItem->flags & RENDERFLAG_PSEUDO_REFLECTIVE)) &&
+                           RedShadowMap::IsShadowMapEnabled() && !(pItem->flags & (RENDERFLAG_POSTSHADOW | RENDERFLAG_NO_LIGHTING | RENDERFLAG_RENDER_TO_SKY | RENDERFLAG_PSEUDO_REFLECTED));
+    const bool bSeparate = m_lightingInSeparatePass && !(pItem->flags & RENDERFLAG_PSEUDO_REFLECTED);
     const bool bProjected = pItem->pLightingState->pProjectedLight && !bSeparate &&
-                            !(pItem->flags & 0x18020010);
+                            !(pItem->flags & (RENDERFLAG_NO_LIGHTING | RENDERFLAG_RENDER_TO_SKY | RENDERFLAG_PSEUDO_REFLECTIVE | RENDERFLAG_PSEUDO_REFLECTED));
 
-    unsigned int uiState = bTransparent ? 2 : 0;
-    if (pMaterial->materialFlags & 2)
+    unsigned int uiState = bTransparent ? PIPELINE1_TRANSPARENT : 0;
+    if (pMaterial->materialFlags & MATERIAL_FLAG_ALPHAMAP_MASK)
     {
-        uiState |= 1;
+        uiState |= PIPELINE1_HARDEDGE;
     }
     if (bProjected)
     {
-        uiState |= 4;
+        uiState |= PIPELINE1_PROJECTED;
     }
     if (bShadowed)
     {
-        uiState |= 8;
+        uiState |= PIPELINE1_SHADOW;
     }
-    if (pItem->flags & 0x10)
+    if (pItem->flags & RENDERFLAG_NO_LIGHTING)
     {
-        uiState |= 0x10;
+        uiState |= PIPELINE1_UNLIT;
     }
     return PIPELINE1_STATE_MAP[uiState];
 }
@@ -484,27 +495,27 @@ int pcNormalShader::GetDiffuseMapHash(int iItem, int)
 // FUNCTION: SWBF2 0x006ff980
 unsigned int pcNormalShader::GetZPrepassState() const
 {
-    return ((unsigned char)m_material.materialFlags >> 1) & 1;
+    return ((unsigned char)m_material.materialFlags & MATERIAL_FLAG_ALPHAMAP_MASK) != 0;
 }
 
 // FUNCTION: SWBF2 0x006ff9b0
 bool pcNormalShader::IsTransparent() const
 {
-    return (m_material.materialFlags & 0x44) != 0;
+    return (m_material.materialFlags & (MATERIAL_FLAG_ALPHAMAP_OPACITY | MATERIAL_FLAG_ALPHABLEND_ADDITIVE)) != 0;
 }
 
 // FUNCTION: SWBF2 0x00700e20
 bool pcNormalShader::SortAsZWritingTransparent() const
 {
-    return (m_material.materialFlags & 0x46) == 0;
+    return (m_material.materialFlags & (MATERIAL_FLAG_ALPHAMAP_MASK | MATERIAL_FLAG_ALPHAMAP_OPACITY | MATERIAL_FLAG_ALPHABLEND_ADDITIVE)) == 0;
 }
 
 // FUNCTION: SWBF2 0x006ff9c0
 void pcNormalShader::RenderZPrepass(const RenderItem* pItem) const
 {
     const RedMaterial* pMaterial = pItem->pRootShader->m_material;
-    RedRenderer::pcSetCullMode((pMaterial->materialFlags & 0x10000) ? PCREDCULL_NONE : PCREDCULL_BACK);
-    if (pItem->flags & 0x20)
+    RedRenderer::pcSetCullMode((pMaterial->materialFlags & MATERIAL_FLAG_CULL_NONE) ? PCREDCULL_NONE : PCREDCULL_BACK);
+    if (pItem->flags & RENDERFLAG_NO_Z)
     {
         RedRenderer::pcSetRenderState(D3DRS_ZWRITEENABLE, FALSE);
     }
@@ -515,7 +526,7 @@ void pcNormalShader::RenderZPrepass(const RenderItem* pItem) const
 
     if (GetZPrepassState() == 1)
     {
-        RedRenderer::pcSetCullMode((pMaterial->materialFlags & 0x10000) ? PCREDCULL_NONE : PCREDCULL_BACK);
+        RedRenderer::pcSetCullMode((pMaterial->materialFlags & MATERIAL_FLAG_CULL_NONE) ? PCREDCULL_NONE : PCREDCULL_BACK);
 
         const unsigned int uiDiffuseMap = pItem->pShadingState
                                               ? pItem->pShadingState->GetIntParam(0x891891e9 /* "diffuse_texture" */)
@@ -812,7 +823,7 @@ void pcNormalShader::Begin_Prog1(unsigned int uiState, unsigned int) const
 {
     const unsigned int uiFlags = PIPELINE1_INV_STATE_MAP[uiState];
     RedRenderer::pcSetRenderState(D3DRS_COLORWRITEENABLE,
-                                  (RedRenderer::pcIsNearScene() && !(uiFlags & 2)) ? 0xf : 7);
+                                  (RedRenderer::pcIsNearScene() && !(uiFlags & PIPELINE1_TRANSPARENT)) ? 0xf : 7);
     RedRenderer::pcSetRenderState(D3DRS_ALPHAFUNC, D3DCMP_GREATER);
 
     RedRenderer::pcSetSamplerState(0, D3DSAMP_ADDRESSU, D3DTADDRESS_WRAP);
@@ -826,7 +837,7 @@ void pcNormalShader::Begin_Prog1(unsigned int uiState, unsigned int) const
     RedRenderer::pcSetSamplerState(1, D3DSAMP_MINFILTER, D3DTEXF_LINEAR);
     RedRenderer::pcSetSamplerState(1, D3DSAMP_MIPFILTER, D3DTEXF_LINEAR);
 
-    if (uiFlags & 4)
+    if (uiFlags & PIPELINE1_PROJECTED)
     {
         RedRenderer::pcSetTextureStageState(2, D3DTSS_TEXTURETRANSFORMFLAGS, D3DTTFF_PROJECTED);
         RedRenderer::pcSetSamplerState(2, D3DSAMP_MAGFILTER, D3DTEXF_LINEAR);
@@ -834,7 +845,7 @@ void pcNormalShader::Begin_Prog1(unsigned int uiState, unsigned int) const
         RedRenderer::pcSetSamplerState(2, D3DSAMP_MIPFILTER, D3DTEXF_LINEAR);
     }
 
-    if (uiFlags & 8)
+    if (uiFlags & PIPELINE1_SHADOW)
     {
         RedRenderer::pcSetTexture(3, RedShadowMap::GetShadowMapTexture());
         RedRenderer::pcSetSamplerState(3, D3DSAMP_ADDRESSU, RedShadowMap::GetShadowMapWrapMode());
@@ -875,14 +886,14 @@ void pcNormalShader::Render_Fixed(const RenderItem* pItem, unsigned int uiPass) 
     RedRenderer::pcGetDevice()->SetMaterial(&s_d3dMat);
 
     const unsigned int uiRVF = pItem->pPrim->m_vertexFormat->m_uiVertexBufferRVF;
-    if (uiRVF & 0x100)
+    if (uiRVF & RVF_LIGHTING)
     {
         RedRenderer::pcSetRenderState(D3DRS_COLORVERTEX, TRUE);
         RedRenderer::pcSetRenderState(D3DRS_EMISSIVEMATERIALSOURCE, D3DMCS_COLOR1);
         RedRenderer::pcSetRenderState(D3DRS_DIFFUSEMATERIALSOURCE, D3DMCS_MATERIAL);
         RedRenderer::pcSetRenderState(D3DRS_AMBIENTMATERIALSOURCE, D3DMCS_MATERIAL);
     }
-    else if (uiRVF & 0x80)
+    else if (uiRVF & RVF_COLOR)
     {
         RedRenderer::pcSetRenderState(D3DRS_COLORVERTEX, TRUE);
         RedRenderer::pcSetRenderState(D3DRS_EMISSIVEMATERIALSOURCE, D3DMCS_MATERIAL);
@@ -899,7 +910,7 @@ void pcNormalShader::Render_Fixed(const RenderItem* pItem, unsigned int uiPass) 
         RedRenderer::pcSetRenderState(D3DRS_COLORVERTEX, FALSE);
     }
 
-    RedRenderer::pcSetCullMode((pMaterial->materialFlags & 0x10000) ? PCREDCULL_NONE : PCREDCULL_BACK);
+    RedRenderer::pcSetCullMode((pMaterial->materialFlags & MATERIAL_FLAG_CULL_NONE) ? PCREDCULL_NONE : PCREDCULL_BACK);
 
     bool bTexture = true;
     switch (pItem->uiShaderState)
@@ -907,16 +918,16 @@ void pcNormalShader::Render_Fixed(const RenderItem* pItem, unsigned int uiPass) 
     case 0:
     {
         const unsigned int uiMatFlags = pMaterial->materialFlags;
-        const bool bBlend = (uiMatFlags & 0x44) || color.a < 0xff || (pItem->flags & 0x20000000);
-        const bool bAlphaTest = ((uiMatFlags >> 1) & 1) != 0;
-        const bool bTransparent = (uiMatFlags & 0x46) != 0;
+        const bool bBlend = (uiMatFlags & (MATERIAL_FLAG_ALPHAMAP_OPACITY | MATERIAL_FLAG_ALPHABLEND_ADDITIVE)) || color.a < 0xff || (pItem->flags & RENDERFLAG_ZBUFFER_ALPHA_FADE);
+        const bool bAlphaTest = (uiMatFlags & MATERIAL_FLAG_ALPHAMAP_MASK) != 0;
+        const bool bTransparent = (uiMatFlags & (MATERIAL_FLAG_ALPHAMAP_MASK | MATERIAL_FLAG_ALPHAMAP_OPACITY | MATERIAL_FLAG_ALPHABLEND_ADDITIVE)) != 0;
         if (bBlend)
         {
-            const bool bZWrite = !bTransparent && !(pItem->flags & 0x20);
+            const bool bZWrite = !bTransparent && !(pItem->flags & RENDERFLAG_NO_Z);
             RedRenderer::pcSetRenderState(D3DRS_ZWRITEENABLE, bZWrite ? TRUE : FALSE);
             RedRenderer::pcSetRenderState(D3DRS_ALPHABLENDENABLE, TRUE);
             RedRenderer::pcSetRenderState(D3DRS_SRCBLEND, D3DBLEND_SRCALPHA);
-            if (pMaterial->materialFlags & 0x40)
+            if (pMaterial->materialFlags & MATERIAL_FLAG_ALPHABLEND_ADDITIVE)
             {
                 RedRenderer::pcSetRenderState(D3DRS_DESTBLEND, D3DBLEND_ONE);
                 RedRenderer::pcSetFogForBlendMode(RedRenderer::FOGFORBLEND_ADD);
@@ -929,7 +940,7 @@ void pcNormalShader::Render_Fixed(const RenderItem* pItem, unsigned int uiPass) 
         }
         else
         {
-            RedRenderer::pcSetRenderState(D3DRS_ZWRITEENABLE, (pItem->flags & 0x20) ? FALSE : TRUE);
+            RedRenderer::pcSetRenderState(D3DRS_ZWRITEENABLE, (pItem->flags & RENDERFLAG_NO_Z) ? FALSE : TRUE);
             RedRenderer::pcSetRenderState(D3DRS_ALPHABLENDENABLE, FALSE);
         }
         if (bTransparent)
@@ -952,16 +963,16 @@ void pcNormalShader::Render_Fixed(const RenderItem* pItem, unsigned int uiPass) 
         }
 
     case 1:
-        RedRenderer::pcSetRenderState(D3DRS_ZWRITEENABLE, (pItem->flags & 0x20) ? FALSE : TRUE);
+        RedRenderer::pcSetRenderState(D3DRS_ZWRITEENABLE, (pItem->flags & RENDERFLAG_NO_Z) ? FALSE : TRUE);
         break;
 
     case 3:
     {
-        const bool bAlphaTest = ((pMaterial->materialFlags >> 1) & 1) != 0;
-        const bool bTransparent = (pMaterial->materialFlags & 0x46) != 0;
-        const bool bZWrite = !bTransparent && !(pItem->flags & 0x20);
+        const bool bAlphaTest = (pMaterial->materialFlags & MATERIAL_FLAG_ALPHAMAP_MASK) != 0;
+        const bool bTransparent = (pMaterial->materialFlags & (MATERIAL_FLAG_ALPHAMAP_MASK | MATERIAL_FLAG_ALPHAMAP_OPACITY | MATERIAL_FLAG_ALPHABLEND_ADDITIVE)) != 0;
+        const bool bZWrite = !bTransparent && !(pItem->flags & RENDERFLAG_NO_Z);
         RedRenderer::pcSetRenderState(D3DRS_ZWRITEENABLE, bZWrite ? TRUE : FALSE);
-        if (pMaterial->materialFlags & 0x40)
+        if (pMaterial->materialFlags & MATERIAL_FLAG_ALPHABLEND_ADDITIVE)
         {
             RedRenderer::pcSetRenderState(D3DRS_DESTBLEND, D3DBLEND_ONE);
             RedRenderer::pcSetFogForBlendMode(RedRenderer::FOGFORBLEND_ADD);
@@ -990,7 +1001,7 @@ void pcNormalShader::Render_Fixed(const RenderItem* pItem, unsigned int uiPass) 
             bTexture = false;
             break;
         }
-        const bool bAlphaTest = ((pMaterial->materialFlags >> 1) & 1) != 0;
+        const bool bAlphaTest = (pMaterial->materialFlags & MATERIAL_FLAG_ALPHAMAP_MASK) != 0;
         if (bAlphaTest)
         {
             RedRenderer::pcSetRenderState(D3DRS_ALPHATESTENABLE, TRUE);
@@ -1000,7 +1011,7 @@ void pcNormalShader::Render_Fixed(const RenderItem* pItem, unsigned int uiPass) 
         {
             RedRenderer::pcSetRenderState(D3DRS_ALPHATESTENABLE, FALSE);
         }
-        RedRenderer::pcSetRenderState(D3DRS_ZWRITEENABLE, (pItem->flags & 0x20) ? FALSE : TRUE);
+        RedRenderer::pcSetRenderState(D3DRS_ZWRITEENABLE, (pItem->flags & RENDERFLAG_NO_Z) ? FALSE : TRUE);
         break;
     }
 
@@ -1054,25 +1065,25 @@ void pcNormalShader::Render_Prog1(const RenderItem* pItem, unsigned int) const
     RedRenderer::pcLoadFormat(m_pVertexInputFormat ? m_pVertexInputFormat : pItem->pPrim->m_vertexFormat);
 
     const RedMaterial* pMaterial = pItem->pRootShader->m_material;
-    const bool bBlend = ((uiFlags >> 1) & 1) != 0;
+    const bool bBlend = (uiFlags & PIPELINE1_TRANSPARENT) != 0;
     const unsigned int uiMatFlags = pMaterial->materialFlags;
-    const bool bAlphaTest = ((uiMatFlags >> 1) & 1) != 0;
-    const bool bTransparent = (uiMatFlags & 0x46) != 0;
-    const bool bFlag10 = ((uiMatFlags >> 4) & 1) != 0;
+    const bool bAlphaTest = (uiMatFlags & MATERIAL_FLAG_ALPHAMAP_MASK) != 0;
+    const bool bTransparent = (uiMatFlags & (MATERIAL_FLAG_ALPHAMAP_MASK | MATERIAL_FLAG_ALPHAMAP_OPACITY | MATERIAL_FLAG_ALPHABLEND_ADDITIVE)) != 0;
+    const bool bGlow = (uiMatFlags & MATERIAL_FLAG_GLOW) != 0;
 
     RedColor materialColor = pMaterial->diffuseColor;
     const RedColor color = pItem->tweakColor * materialColor;
 
-    const bool bSeparate = m_lightingInSeparatePass && !(pItem->flags & 0x10000000);
-    RedRenderer::pcSetCullMode((uiMatFlags & 0x10000) ? PCREDCULL_NONE : PCREDCULL_BACK);
+    const bool bSeparate = m_lightingInSeparatePass && !(pItem->flags & RENDERFLAG_PSEUDO_REFLECTED);
+    RedRenderer::pcSetCullMode((uiMatFlags & MATERIAL_FLAG_CULL_NONE) ? PCREDCULL_NONE : PCREDCULL_BACK);
 
     if (bBlend)
     {
-        const bool bZWrite = !bTransparent && !(pItem->flags & 0x20);
+        const bool bZWrite = !bTransparent && !(pItem->flags & RENDERFLAG_NO_Z);
         RedRenderer::pcSetRenderState(D3DRS_ZWRITEENABLE, bZWrite);
         RedRenderer::pcSetRenderState(D3DRS_ALPHABLENDENABLE, TRUE);
         RedRenderer::pcSetRenderState(D3DRS_SRCBLEND, D3DBLEND_SRCALPHA);
-        if (pMaterial->materialFlags & 0x40)
+        if (pMaterial->materialFlags & MATERIAL_FLAG_ALPHABLEND_ADDITIVE)
         {
             RedRenderer::pcSetRenderState(D3DRS_DESTBLEND, D3DBLEND_ONE);
             RedRenderer::pcSetFogForBlendMode(RedRenderer::FOGFORBLEND_ADD);
@@ -1084,29 +1095,29 @@ void pcNormalShader::Render_Prog1(const RenderItem* pItem, unsigned int) const
         }
         RedColorValue pixelShaderConstant;
         pixelShaderConstant.b = bTransparent ? 1.0f : 0.0f;
-        pixelShaderConstant.a = bFlag10 ? 1.0f : 0.0f;
+        pixelShaderConstant.a = bGlow ? 1.0f : 0.0f;
         RedRenderer::pcGetDevice()->SetPixelShaderConstantF(0, &pixelShaderConstant.r, 1);
     }
     else if (bSeparate)
     {
-        RedRenderer::pcSetRenderState(D3DRS_ZWRITEENABLE, (pItem->flags & 0x20) ? FALSE : TRUE);
+        RedRenderer::pcSetRenderState(D3DRS_ZWRITEENABLE, (pItem->flags & RENDERFLAG_NO_Z) ? FALSE : TRUE);
         RedRenderer::pcSetRenderState(D3DRS_ALPHABLENDENABLE, TRUE);
         RedRenderer::pcSetRenderState(D3DRS_SRCBLEND, D3DBLEND_DESTCOLOR);
         RedRenderer::pcSetRenderState(D3DRS_DESTBLEND, D3DBLEND_ZERO);
         RedRenderer::pcSetFogForBlendMode(RedRenderer::FOGFORBLEND_NORMAL);
         RedColorValue pixelShaderConstant;
         pixelShaderConstant.b = bTransparent ? 1.0f : 0.0f;
-        pixelShaderConstant.a = bFlag10 ? 1.0f : 0.0f;
+        pixelShaderConstant.a = bGlow ? 1.0f : 0.0f;
         RedRenderer::pcGetDevice()->SetPixelShaderConstantF(0, &pixelShaderConstant.r, 1);
     }
     else
     {
         RedColorValue pixelShaderConstant;
         pixelShaderConstant.b = 0.0f;
-        pixelShaderConstant.a = bFlag10 ? 1.0f : 0.0f;
+        pixelShaderConstant.a = bGlow ? 1.0f : 0.0f;
         RedRenderer::pcGetDevice()->SetPixelShaderConstantF(0, &pixelShaderConstant.r, 1);
         RedRenderer::pcSetRenderState(D3DRS_ALPHABLENDENABLE, FALSE);
-        RedRenderer::pcSetRenderState(D3DRS_ZWRITEENABLE, (pItem->flags & 0x20) ? FALSE : TRUE);
+        RedRenderer::pcSetRenderState(D3DRS_ZWRITEENABLE, (pItem->flags & RENDERFLAG_NO_Z) ? FALSE : TRUE);
         RedRenderer::pcSetFogForBlendMode(RedRenderer::FOGFORBLEND_NORMAL);
     }
 
@@ -1179,7 +1190,7 @@ void pcNormalShader::Render_Prog1(const RenderItem* pItem, unsigned int) const
     }
     RedRenderer::pcUnlockVertexShaderConstants(pRegs);
 
-    if (uiFlags & 4)
+    if (uiFlags & PIPELINE1_PROJECTED)
     {
         RedRenderer::pcSetSamplerState(2, D3DSAMP_ADDRESSU, pItem->pLightingState->pProjectedLight->GetProjectionTextureWrapMode());
         RedRenderer::pcSetSamplerState(2, D3DSAMP_ADDRESSV, pItem->pLightingState->pProjectedLight->GetProjectionTextureWrapMode());
@@ -1194,9 +1205,9 @@ void pcNormalShader::Render_Prog1(const RenderItem* pItem, unsigned int) const
         RedRenderer::pcSetTexture(2, RedTexture::Find(PblHash("white")));
     }
 
-    if (pItem->flags & 4)
+    if (pItem->flags & RENDERFLAG_RENDER_DETAIL)
     {
-        if (bTransparent && color.a == 0xff && (pMaterial->materialFlags & 0x4000))
+        if (bTransparent && color.a == 0xff && (pMaterial->materialFlags & MATERIAL_FLAG_PARTIAL_ZWRITE))
         {
             RedRenderer::pcSetRenderState(D3DRS_ALPHAREF, 0xfc);
             RedRenderer::pcSetRenderState(D3DRS_ZWRITEENABLE, TRUE);
@@ -1204,7 +1215,7 @@ void pcNormalShader::Render_Prog1(const RenderItem* pItem, unsigned int) const
             RedRenderer::pcSetRenderState(D3DRS_ALPHAREF, 1);
             RedRenderer::pcSetRenderState(D3DRS_ZWRITEENABLE, FALSE);
         }
-        if ((pMaterial->materialFlags & 0x18000) == 0x18000)
+        if ((pMaterial->materialFlags & (MATERIAL_FLAG_BACK_THEN_FRONT | MATERIAL_FLAG_CULL_NONE)) == (MATERIAL_FLAG_BACK_THEN_FRONT | MATERIAL_FLAG_CULL_NONE))
         {
             RedRenderer::pcSetCullMode(PCREDCULL_FRONT);
             pItem->pPrim->Draw();
@@ -1217,7 +1228,7 @@ void pcNormalShader::Render_Prog1(const RenderItem* pItem, unsigned int) const
 // FUNCTION: SWBF2 0x00700c40
 void pcNormalShader::SetData(const RedShaderData& data)
 {
-    if (m_material.materialFlags & 0xf000000)
+    if (m_material.materialFlags & (MATERIAL_FLAG_ANIMATIONSCROLL | MATERIAL_FLAG_ANIMATIONBLINK | MATERIAL_FLAG_ANIMATIONTEXTURE | MATERIAL_FLAG_ANIMATIONLIGHT))
     {
         m_material.animationData = new RedMaterialAnimationData;
         memset(m_material.animationData, 0, sizeof(RedMaterialAnimationData));
@@ -1232,24 +1243,24 @@ void pcNormalShader::SetData(const RedShaderData& data)
         m_material.animationData->attachedLightName = 0;
         m_material.animationData->attachedLight = 0;
 
-        if (m_material.materialFlags & 0x1000000)
+        if (m_material.materialFlags & MATERIAL_FLAG_ANIMATIONSCROLL)
         {
             m_material.animationData->scrollRateU = data.uiData0;
             m_material.animationData->scrollRateV = data.uiData1;
         }
-        else if (m_material.materialFlags & 0x4000000)
+        else if (m_material.materialFlags & MATERIAL_FLAG_ANIMATIONTEXTURE)
         {
             m_material.animationData->numRows = (unsigned char)(int)sqrt((float)data.uiData0);
             m_material.animationData->numCols = m_material.animationData->numRows;
             m_material.animationData->frameRate = data.uiData1;
         }
-        else if (m_material.materialFlags & 0x2000000)
+        else if (m_material.materialFlags & MATERIAL_FLAG_ANIMATIONBLINK)
         {
             m_material.animationData->minIntensity = data.uiData0;
             m_material.animationData->blinkRate = data.uiData1;
         }
 
-        if (m_material.materialFlags & 0x8000000)
+        if (m_material.materialFlags & MATERIAL_FLAG_ANIMATIONLIGHT)
         {
             m_material.animationData->attachedLightName = data.attachedLightName;
         }
@@ -1281,12 +1292,12 @@ void pcNormalShader::UpdateAnimation()
     float fScrollU = 0.0f;
     float fScrollV = 0.0f;
 
-    if (m_material.materialFlags & 0x1000000)
+    if (m_material.materialFlags & MATERIAL_FLAG_ANIMATIONSCROLL)
     {
         fScrollU -= pAnim->scrollRateU * kInv255 * fTime;
         fScrollV -= pAnim->scrollRateV * kInv255 * fTime;
     }
-    else if (m_material.materialFlags & 0x4000000)
+    else if (m_material.materialFlags & MATERIAL_FLAG_ANIMATIONTEXTURE)
     {
         const int iFrame = (int)(pAnim->frameRate * fTime) % (pAnim->numRows * pAnim->numCols);
         const int iRow = iFrame / pAnim->numCols;
@@ -1294,7 +1305,7 @@ void pcNormalShader::UpdateAnimation()
         fScrollU += (float)iCol / (float)pAnim->numCols;
         fScrollV += (float)iRow / (float)pAnim->numRows;
     }
-    else if (m_material.materialFlags & 0x2000000)
+    else if (m_material.materialFlags & MATERIAL_FLAG_ANIMATIONBLINK)
     {
         // GLOBAL: SWBF2 0x009c94dc
         static float s_fBlinkScale = PblMath::fTwoPi * 10.0f * kInv255;
@@ -1305,7 +1316,7 @@ void pcNormalShader::UpdateAnimation()
         m_material.diffuseColor.b = pAnim->diffuseColor.b * fIntensity;
     }
 
-    if (m_material.materialFlags & 0x8000000)
+    if (m_material.materialFlags & MATERIAL_FLAG_ANIMATIONLIGHT)
     {
         // GLOBAL: SWBF2 0x009c94e4
         static RedColorValue s_minColor(0.2f, 0.2f, 0.2f, 1.0f);

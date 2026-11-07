@@ -28,10 +28,9 @@ EntityPortableTurretClass::EntityPortableTurretClass(unsigned int uHash)
 
 // GLOBAL: SWBF2 0x01ebbf94
 // EntityPortableTurretClass::rttiHashEntityPortableTurretClass
-PblHash EntityPortableTurretClass::rttiHashEntityPortableTurretClass("EntityPortableTurretClass");
 // GLOBAL: SWBF2 0x00789464
 // EntityPortableTurretClass::rttiNameEntityPortableTurretClass
-const char EntityPortableTurretClass::rttiNameEntityPortableTurretClass[] = "EntityPortableTurretClass";
+PBL_IMPLEMENT_RTTI(EntityPortableTurretClass)
 
 // SYNTHETIC: SWBF2 0x00402ca0
 // `dynamic initializer for 'EntityPortableTurret::rttiHashEntityPortableTurret''
@@ -39,10 +38,9 @@ const char EntityPortableTurretClass::rttiNameEntityPortableTurretClass[] = "Ent
 
 // GLOBAL: SWBF2 0x01ebbfe8
 // EntityPortableTurret::rttiHashEntityPortableTurret
-PblHash EntityPortableTurret::rttiHashEntityPortableTurret("EntityPortableTurret");
 // GLOBAL: SWBF2 0x00789448
 // EntityPortableTurret::rttiNameEntityPortableTurret
-const char EntityPortableTurret::rttiNameEntityPortableTurret[] = "EntityPortableTurret";
+PBL_IMPLEMENT_RTTI(EntityPortableTurret)
 
 // SYNTHETIC: SWBF2 0x00402c80
 // `dynamic initializer for 'EntityPortableTurret::sMemoryPool''

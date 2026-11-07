@@ -43,10 +43,9 @@ namespace
 
 // GLOBAL: SWBF2 0x01ef2578
 // Ordnance::rttiHashOrdnance
-PblHash Ordnance::rttiHashOrdnance("Ordnance");
 // GLOBAL: SWBF2 0x0078a750
 // Ordnance::rttiNameOrdnance
-const char Ordnance::rttiNameOrdnance[] = "Ordnance";
+PBL_IMPLEMENT_RTTI(Ordnance)
 
 // SYNTHETIC: SWBF2 0x00405a00
 // `dynamic initializer for 'OrdnanceClass::rttiHashOrdnanceClass''
@@ -54,10 +53,9 @@ const char Ordnance::rttiNameOrdnance[] = "Ordnance";
 
 // GLOBAL: SWBF2 0x01ef2574
 // OrdnanceClass::rttiHashOrdnanceClass
-PblHash OrdnanceClass::rttiHashOrdnanceClass("OrdnanceClass");
 // GLOBAL: SWBF2 0x0078a740
 // OrdnanceClass::rttiNameOrdnanceClass
-const char OrdnanceClass::rttiNameOrdnanceClass[] = "OrdnanceClass";
+PBL_IMPLEMENT_RTTI(OrdnanceClass)
 
 // SYNTHETIC: SWBF2 0x004059d0
 // `dynamic initializer for 'Ordnance::sMemoryPool''

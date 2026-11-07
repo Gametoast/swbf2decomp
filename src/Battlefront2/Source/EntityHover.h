@@ -1,6 +1,7 @@
 #pragma once
 
 #include "PebbleFL/Common/PblHashTable.h"
+#include "PebbleFL/Common/PblRtti.h"
 
 #include <stddef.h>
 
@@ -38,7 +39,6 @@ public:
     static const int kMaxTurrets = 8;
     virtual ~EntityHoverClass();
 
-
     struct ColliderBodyInfo
     {
         unsigned int mCollisionBodyId;
@@ -60,9 +60,13 @@ public:
 
     virtual EntityClass* Derive(unsigned int uHash);
     virtual Entity* Build(const EntityDesc& desc);
-    virtual bool IsRtti(unsigned int uRtti) const;
-    virtual unsigned int GetDerivedRtti() const;
-    virtual const char* GetDerivedRttiName() const;
+    // FUNCTION: SWBF2 0x00478dc0
+    // EntityHoverClass::IsRtti
+    // FUNCTION: SWBF2 0x004c09f0
+    // EntityHoverClass::GetDerivedRtti
+    // FUNCTION: SWBF2 0x004c0a00
+    // EntityHoverClass::GetDerivedRttiName
+    PBL_DECLARE_DERIVED_RTTI(EntityHoverClass, GameObjectClass)
     virtual void SetProperty(unsigned int uProperty, const char* pszValue);
     // FUNCTION: SWBF2 0x00478e00
     virtual GameObjectClass::VehicleType GetVehicleType() const
@@ -94,9 +98,6 @@ public:
     {
         return mTimeTilReboard;
     }
-
-    static PblHash rttiHashEntityHoverClass;
-    static const char rttiNameEntityHoverClass[];
 
     float mSetAltitude;
     float mGravityScale;
@@ -198,78 +199,6 @@ public:
     float mWheelOmegaToU[4];
     float mWheelOmegaToV[4];
 };
-  
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
-
- 
- 
- 
 
 class Aimer;
 class CameraTrackSetting;
@@ -572,52 +501,6 @@ public:
     bool mIsDead : 1;
     bool mJumpMode : 1;
 };
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
 
 // FUNCTION: SWBF2 0x00478a50
 inline bool EntityHover::IsRtti(unsigned int uRtti) const
@@ -627,16 +510,6 @@ inline bool EntityHover::IsRtti(unsigned int uRtti) const
         return true;
     }
     return GameObject::IsRtti(uRtti);
-}
-
-// FUNCTION: SWBF2 0x00478dc0
-inline bool EntityHoverClass::IsRtti(unsigned int uRtti) const
-{
-    if (rttiHashEntityHoverClass == uRtti)
-    {
-        return true;
-    }
-    return GameObjectClass::IsRtti(uRtti);
 }
 
 // FUNCTION: SWBF2 0x004c0920
@@ -651,14 +524,3 @@ inline const char* EntityHover::GetDerivedRttiName() const
     return rttiNameEntityHover;
 }
 
-// FUNCTION: SWBF2 0x004c09f0
-inline unsigned int EntityHoverClass::GetDerivedRtti() const
-{
-    return rttiHashEntityHoverClass;
-}
-
-// FUNCTION: SWBF2 0x004c0a00
-inline const char* EntityHoverClass::GetDerivedRttiName() const
-{
-    return rttiNameEntityHoverClass;
-}

@@ -11,10 +11,9 @@
 
 // GLOBAL: SWBF2 0x01ebdc4c
 // FoleyFXWalker::rttiHashFoleyFXWalker
-PblHash FoleyFXWalker::rttiHashFoleyFXWalker("FoleyFXWalker");
 // GLOBAL: SWBF2 0x007898e8
 // FoleyFXWalker::rttiNameFoleyFXWalker
-const char FoleyFXWalker::rttiNameFoleyFXWalker[] = "FoleyFXWalker";
+PBL_IMPLEMENT_RTTI(FoleyFXWalker)
 
 // SYNTHETIC: SWBF2 0x00403b20
 // `dynamic initializer for 'FoleyFXWalker::smFreeList''

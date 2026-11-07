@@ -4,6 +4,8 @@
 
 #include "Battlefront2/Source/Thread.h"
 
+// The render pass a Renderable is drawn in (FLRenderer keeps one list per phase); names from the modtools build's type
+// information.
 enum RENDERABLE_PHASE
 {
     RENDERABLE_SKY,

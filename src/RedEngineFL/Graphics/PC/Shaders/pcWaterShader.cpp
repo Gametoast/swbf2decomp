@@ -637,7 +637,7 @@ void pcWaterShader::_Init(unsigned int uiFlags,
     m_diffuseMapTransform2.m_bTransform = 0;
     m_reflectionMap = 0;
     m_projectedNormalMap = 0;
-    m_pVertexFormat = pcRedVertexFormat::Create(uiFlags, 0x222);
+    m_pVertexFormat = pcRedVertexFormat::Create(uiFlags, RVF_POSITION_XYZ | RVF_NORMAL | RVF_TEXCOORDS_1);
 }
 
 // FUNCTION: SWBF2 0x0070adc0

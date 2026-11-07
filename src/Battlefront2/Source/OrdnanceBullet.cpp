@@ -53,10 +53,9 @@ namespace
 
 // GLOBAL: SWBF2 0x01ef2620
 // OrdnanceBulletClass::rttiHashOrdnanceBulletClass
-PblHash OrdnanceBulletClass::rttiHashOrdnanceBulletClass("OrdnanceBulletClass");
 // GLOBAL: SWBF2 0x0078a7d4
 // OrdnanceBulletClass::rttiNameOrdnanceBulletClass
-const char OrdnanceBulletClass::rttiNameOrdnanceBulletClass[] = "OrdnanceBulletClass";
+PBL_IMPLEMENT_RTTI(OrdnanceBulletClass)
 
 static const RedColor kColorZero = { 0, 0, 0, 0 };
 
@@ -259,10 +258,9 @@ Ordnance* OrdnanceBulletClass::Build(const OrdnanceDesc& desc)
 
 // GLOBAL: SWBF2 0x01ef261c
 // OrdnanceBullet::rttiHashOrdnanceBullet
-PblHash OrdnanceBullet::rttiHashOrdnanceBullet("OrdnanceBullet");
 // GLOBAL: SWBF2 0x0078a7f8
 // OrdnanceBullet::rttiNameOrdnanceBullet
-const char OrdnanceBullet::rttiNameOrdnanceBullet[] = "OrdnanceBullet";
+PBL_IMPLEMENT_RTTI(OrdnanceBullet)
 
 // SYNTHETIC: SWBF2 0x005fc2c6
 // ??_EOrdnanceBullet@@WJI@AEPAXI@Z

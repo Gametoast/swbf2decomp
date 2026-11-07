@@ -31,7 +31,7 @@ public:
 
     StreamPacket* GetReadPacket();
     void PacketComplete(StreamPacket* const pPacket, unsigned int uiBufferUsed,
-                        unsigned int uiUnused, bool bFlagBit0, bool bFlagBit1,
+                        unsigned int uiUnused, bool bLastPacket, bool bDiscontinuity,
                         unsigned int uiPos);
 
     unsigned int GetNumQueuedPackets() const;
@@ -72,7 +72,7 @@ public:
     }
 
     void PacketComplete(StreamPacket* const pPacket, unsigned int uiBufferUsed,
-                                       unsigned int uiUnused, bool bFlagBit0, bool bFlagBit1,
+                                       unsigned int uiUnused, bool bLastPacket, bool bDiscontinuity,
                                        unsigned int uiPos, unsigned int uiOutput);
 
     StreamSourceProducer* mProducers;

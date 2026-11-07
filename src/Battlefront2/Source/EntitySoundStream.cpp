@@ -9,10 +9,9 @@
 
 // GLOBAL: SWBF2 0x01ebc1fc
 // EntitySoundStreamClass::rttiHashEntitySoundStreamClass
-PblHash EntitySoundStreamClass::rttiHashEntitySoundStreamClass("EntitySoundStreamClass");
 // GLOBAL: SWBF2 0x00789638
 // EntitySoundStreamClass::rttiNameEntitySoundStreamClass
-const char EntitySoundStreamClass::rttiNameEntitySoundStreamClass[] = "EntitySoundStreamClass";
+PBL_IMPLEMENT_RTTI(EntitySoundStreamClass)
 
 // FUNCTION: SWBF2 0x004fbc80
 EntitySoundStreamClass::EntitySoundStreamClass(unsigned int uHash)
@@ -69,10 +68,9 @@ Entity* EntitySoundStreamClass::Build(const EntityDesc& desc)
 
 // GLOBAL: SWBF2 0x01ebc250
 // EntitySoundStream::rttiHashEntitySoundStream
-PblHash EntitySoundStream::rttiHashEntitySoundStream("EntitySoundStream");
 // GLOBAL: SWBF2 0x00789650
 // EntitySoundStream::rttiNameEntitySoundStream
-const char EntitySoundStream::rttiNameEntitySoundStream[] = "EntitySoundStream";
+PBL_IMPLEMENT_RTTI(EntitySoundStream)
 
 // SYNTHETIC: SWBF2 0x00402e60
 // `dynamic initializer for 'EntitySoundStream::sMemoryPool''

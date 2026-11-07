@@ -128,12 +128,12 @@ void pcShadowQuadRenderable::Cleanup()
 // FUNCTION: SWBF2 0x006fc0a0
 void pcShadowQuadRenderable::Init()
 {
-    m_pShadowShader = pcRedShader::Create(0x9296fc1a /* "ShadowQuad" */, 2, 0, 0, 0,
+    m_pShadowShader = pcRedShader::Create(0x9296fc1a /* "ShadowQuad" */, RVF_POSITION_XYZ, 0, 0, 0,
                                           RedColor::WHITE, RedColor::BLACK, 32.0f);
     m_pFilterShader = (pcFilterCopyShader*)pcRedShader::Create(
-        kuiFilterShader, 0x202, 0, 0, 0, RedColor::WHITE, RedColor::BLACK, 32.0f);
+        kuiFilterShader, RVF_POSITION_XYZ | RVF_TEXCOORDS_1, 0, 0, 0, RedColor::WHITE, RedColor::BLACK, 32.0f);
     m_pScreenShader = (pcClearShader*)pcRedShader::Create(
-        kuiClearShader, 3, 0, 0, 0x80000, RedColor::WHITE, RedColor::BLACK, 32.0f);
+        kuiClearShader, RVF_POSITION_XYZRHW, 0, 0, MATERIAL_FLAG_COLORMASK_ALPHA, RedColor::WHITE, RedColor::BLACK, 32.0f);
 
     m_pPrimitive = pcRedPrimitive::Create(D3DPT_TRIANGLESTRIP, 2, 0xc, 4, 0, true);
     PblVector3* pVerts = (PblVector3*)m_pPrimitive->BeginVertexData();
@@ -203,7 +203,7 @@ void pcShadowQuadRenderable::Render(unsigned int value) const
         RedRenderer::pcRenderPrimitive(m_pPrimitive,
                                        m_pShadowShader,
                                        gMatrixIdentity,
-                                       RedColor(RedColor::BLACK, 0x80), 0x200,
+                                       RedColor(RedColor::BLACK, 0x80), PC_RENDERFLAG_IMMEDIATE,
                                        0, 0, 0);
         RedDropShadowManager::Render(value | 0x200);
         return;
@@ -263,14 +263,14 @@ void pcShadowQuadRenderable::Render(unsigned int value) const
 
     RedRenderer::pcRenderPrimitive(mesh, m_pScreenShader,
                                    gMatrixIdentity,
-                                   RedColor(0, 0, 0, 0xff), 0x200, 0,
+                                   RedColor(0, 0, 0, 0xff), PC_RENDERFLAG_IMMEDIATE, 0,
                                    0, 0);
 
     float alpha = RedRenderer::GetShadowIntensity() * 255.0f;
     RedRenderer::pcRenderPrimitive(m_pPrimitive,
                                    m_pShadowShader,
                                    gMatrixIdentity,
-                                   RedColor(RedColor::BLACK, (unsigned char)(int)alpha), 0x200, 0,
+                                   RedColor(RedColor::BLACK, (unsigned char)(int)alpha), PC_RENDERFLAG_IMMEDIATE, 0,
                                    0, 0);
     RedDropShadowManager::Render(value | 0x200);
 
@@ -290,7 +290,7 @@ void pcShadowQuadRenderable::Render(unsigned int value) const
         RedRenderer::pcRenderPrimitive(mesh,
                                        m_pScreenShader,
                                        gMatrixIdentity,
-                                       RedColor(0, 0, 0, 0), 0x200,
+                                       RedColor(0, 0, 0, 0), PC_RENDERFLAG_IMMEDIATE,
                                        0, 0, 0);
     }
 

@@ -1,6 +1,7 @@
 #pragma once
 
 #include "PebbleFL/Common/PblHashTable.h"
+#include "PebbleFL/Common/PblRtti.h"
 
 #include <stddef.h>
 
@@ -16,9 +17,13 @@ public:
 
     virtual OrdnanceClass* Derive(unsigned int uHash);
     virtual Ordnance* Build(const OrdnanceDesc& desc);
-    virtual bool IsRtti(unsigned int uRtti) const;
-    virtual unsigned int GetDerivedRtti() const;
-    virtual const char* GetDerivedRttiName() const;
+    // FUNCTION: SWBF2 0x006000c0
+    // OrdnanceGrenadeClass::IsRtti
+    // FUNCTION: SWBF2 0x00600100
+    // OrdnanceGrenadeClass::GetDerivedRtti
+    // FUNCTION: SWBF2 0x00600110
+    // OrdnanceGrenadeClass::GetDerivedRttiName
+    PBL_DECLARE_DERIVED_RTTI(OrdnanceGrenadeClass, OrdnanceShellClass)
     virtual void SetProperty(unsigned int uProperty, const char* pszValue);
 
     float mRebound;
@@ -29,17 +34,7 @@ public:
     bool mStartTimerOnContact;
     bool mAlignVertical;
 
-    static PblHash rttiHashOrdnanceGrenadeClass;
-    static const char rttiNameOrdnanceGrenadeClass[];
 };
-  
- 
- 
- 
- 
- 
- 
- 
 
 // VTABLE: SWBF2 0x007aca78 PblHandled
 // VTABLE: SWBF2 0x007aca80
@@ -51,9 +46,13 @@ public:
     virtual ~OrdnanceGrenade();
 
     virtual bool Update(float fDeltaTime);
-    virtual bool IsRtti(unsigned int uRtti) const;
-    virtual unsigned int GetDerivedRtti() const;
-    virtual const char* GetDerivedRttiName() const;
+    // FUNCTION: SWBF2 0x00600030
+    // OrdnanceGrenade::IsRtti
+    // FUNCTION: SWBF2 0x00600070
+    // OrdnanceGrenade::GetDerivedRtti
+    // FUNCTION: SWBF2 0x00600080
+    // OrdnanceGrenade::GetDerivedRttiName
+    PBL_DECLARE_DERIVED_RTTI(OrdnanceGrenade, OrdnanceShell)
     virtual bool CheckCollision();
     virtual bool Collide(CollisionObject* pObject, const PblVector3& vPos,
                          const PblVector3& vNormal, int iBodyId);
@@ -64,54 +63,5 @@ public:
     float mBeginTime;
     float mLastEventTime;
 
-    static PblHash rttiHashOrdnanceGrenade;
-    static const char rttiNameOrdnanceGrenade[];
 };
- 
- 
- 
- 
 
-// FUNCTION: SWBF2 0x006000c0
-inline bool OrdnanceGrenadeClass::IsRtti(unsigned int uRtti) const
-{
-    if (rttiHashOrdnanceGrenadeClass == uRtti)
-    {
-        return true;
-    }
-    return OrdnanceShellClass::IsRtti(uRtti);
-}
-
-// FUNCTION: SWBF2 0x00600100
-inline unsigned int OrdnanceGrenadeClass::GetDerivedRtti() const
-{
-    return rttiHashOrdnanceGrenadeClass;
-}
-
-// FUNCTION: SWBF2 0x00600110
-inline const char* OrdnanceGrenadeClass::GetDerivedRttiName() const
-{
-    return rttiNameOrdnanceGrenadeClass;
-}
-
-// FUNCTION: SWBF2 0x00600030
-inline bool OrdnanceGrenade::IsRtti(unsigned int uRtti) const
-{
-    if (rttiHashOrdnanceGrenade == uRtti)
-    {
-        return true;
-    }
-    return OrdnanceShell::IsRtti(uRtti);
-}
-
-// FUNCTION: SWBF2 0x00600070
-inline unsigned int OrdnanceGrenade::GetDerivedRtti() const
-{
-    return rttiHashOrdnanceGrenade;
-}
-
-// FUNCTION: SWBF2 0x00600080
-inline const char* OrdnanceGrenade::GetDerivedRttiName() const
-{
-    return rttiNameOrdnanceGrenade;
-}

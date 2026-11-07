@@ -74,7 +74,7 @@ SkyFogRenderable::~SkyFogRenderable()
 // FUNCTION: SWBF2 0x00428690
 void SkyFogRenderable::Init()
 {
-    m_pShader = pcRedShader::Create(0x890EFA1E /* "SkyFog" */, 0x202, 0, 0, 0,
+    m_pShader = pcRedShader::Create(0x890EFA1E /* "SkyFog" */, RVF_POSITION_XYZ | RVF_TEXCOORDS_1, 0, 0, 0,
                                     RedColor::WHITE, RedColor::BLACK, 32.0f);
     ((pcSkyFogShader*)m_pShader)->SetTexture(
         RedRenderer::pcGetBuffer(PC_BUFFER_SKY));
@@ -128,7 +128,7 @@ void SkyFogRenderable::Render(unsigned int) const
 {
     RedRenderer::pcRenderPrimitive(m_pPrimitive, m_pShader,
                                    gMatrixIdentity,
-                                   RedColor::WHITE, 0x200, 0, 0, 0);
+                                   RedColor::WHITE, PC_RENDERFLAG_IMMEDIATE, 0, 0, 0);
 }
 
 
@@ -212,12 +212,12 @@ void SkyDome::Render(unsigned int value) const
             if (i == 0)
             {
                 RedColor color = m_colorSkyDome;
-                rDome.mModel->Render(&mat, 0, color, 0x20211, 0);
+                rDome.mModel->Render(&mat, 0, color, RENDERFLAG_CLIPPED | RENDERFLAG_NO_LIGHTING | PC_RENDERFLAG_IMMEDIATE | RENDERFLAG_RENDER_TO_SKY, 0);
                 if (m_pStars)
                 {
                     m_pStars->Render(uiFlags);
                 }
-                if (uiFlags & 0x400000)
+                if (uiFlags & RENDERFLAG_RENDER_REFLECTION_SKYDOMEONLY)
                 {
                     RedRenderer::pcSetUserNearClipPlaneEnable(bNearClip);
                     RedRenderer::Flush();
@@ -228,7 +228,7 @@ void SkyDome::Render(unsigned int value) const
             }
             else
             {
-                rDome.mModel->Render(&mat, 0, RedColor::WHITE, 0x20211, 0);
+                rDome.mModel->Render(&mat, 0, RedColor::WHITE, RENDERFLAG_CLIPPED | RENDERFLAG_NO_LIGHTING | PC_RENDERFLAG_IMMEDIATE | RENDERFLAG_RENDER_TO_SKY, 0);
             }
         }
 
@@ -251,11 +251,11 @@ void SkyDome::Render(unsigned int value) const
     float fFarSceneRange = FLRenderer::GetFarSceneRange();
     if (!(FLRenderer::GetNearSceneFadeStart() >= fFarSceneRange))
     {
-        RedTerrain::Render(uiFlags | 0x20000);
+        RedTerrain::Render(uiFlags | RENDERFLAG_RENDER_TO_SKY);
         RedRenderer::pcFlush(RENDERPHASE_OPAQUE);
-        if (!(uiFlags & 0x200000))
+        if (!(uiFlags & RENDERFLAG_RENDER_REFLECTION))
         {
-            RedWater::Render(uiFlags | 0x20000);
+            RedWater::Render(uiFlags | RENDERFLAG_RENDER_TO_SKY);
         }
     }
 }

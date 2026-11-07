@@ -1,4 +1,5 @@
 #include <d3dx9math.h>
+#include "PebbleFL/Common/PblBits.h"
 #include <float.h>
 #include "PebbleFL/Common/PblVector.h"
 
@@ -59,6 +60,9 @@
 #include "GameObject.h"
 #include "PebbleFL/Common/PblHandle.h"
 #include "PebbleFL/Common/PblMatrix.h"
+
+// mFootState: BitU(foot) while a foot is on the ground, and its hydraulic sound playing
+static inline unsigned int HydraulicBit(unsigned int uiFoot) { return BitU(uiFoot + 8); }
 
 // GLOBAL: SWBF2 0x007b2630
 // __xmm@00000000000000003f80000000000000
@@ -447,10 +451,9 @@ namespace
 
 // GLOBAL: SWBF2 0x01ebbc58
 // EntityDroideka::rttiHashEntityDroideka
-PblHash EntityDroideka::rttiHashEntityDroideka("EntityDroideka");
 // GLOBAL: SWBF2 0x0078917c
 // EntityDroideka::rttiNameEntityDroideka
-const char EntityDroideka::rttiNameEntityDroideka[] = "EntityDroideka";
+PBL_IMPLEMENT_RTTI(EntityDroideka)
 
 // SYNTHETIC: SWBF2 0x00402a60
 // `dynamic initializer for 'EntityDroideka::sMemoryPool''
@@ -592,10 +595,9 @@ bool EntityDroideka::PostCollision::Update(float fDeltaTime)
 
 // GLOBAL: SWBF2 0x01ebbc5c
 // EntityDroidekaClass::rttiHashEntityDroidekaClass
-PblHash EntityDroidekaClass::rttiHashEntityDroidekaClass("EntityDroidekaClass");
 // GLOBAL: SWBF2 0x007891a8
 // EntityDroidekaClass::rttiNameEntityDroidekaClass
-const char EntityDroidekaClass::rttiNameEntityDroidekaClass[] = "EntityDroidekaClass";
+PBL_IMPLEMENT_RTTI(EntityDroidekaClass)
 
 
 
@@ -1598,7 +1600,7 @@ EntityDroideka::EntityDroideka(EntityDroidekaClass* pClass, const EntityDesc& de
     mAILastCollisionNormal = gVectorZero;
     mEyeDir = mMatrix.GetZAxis();
     mEyePoint = GetCameraTrackSettings()->CalcEyePoint(mMatrix);
-    _uiRenderFlags &= 3;
+    _uiRenderFlags &= (RENDERFLAG_CLIPPED | RENDERFLAG_TEST_BBOX);
     NetGame::Created(this);
     mDoneDustCloud = false;
     mDeathExplosionTime = 0.0f;
@@ -2108,7 +2110,7 @@ float EntityDroideka::GetSoundRadius() const
     unsigned int uNumFeet = mClass->mNumFeet;
     for (unsigned int i = 0; i < uNumFeet; ++i)
     {
-        if (mFootState & (1 << i))
+        if (mFootState & BitU(i))
         {
             float fMute = mClass->mFootstepSounds[i].GetMuteDistance();
             if (fMute > fFeetRadius)
@@ -2378,7 +2380,7 @@ void EntityDroideka::DoFootImpactEffects()
     {
         float fFoot = fHeight[i];
         bool bLanded = fFoot < 0.48f && mLastFootHeight[i] > 0.48f;
-        unsigned int uHydraulicBit = 1 << (i + 8);
+        unsigned int uHydraulicBit = HydraulicBit(i);
         if (fFoot > mLastFootHeight[i])
         {
             if (fFoot > mClass->mHydraulicSoundHeight && !(mFootState & uHydraulicBit))
@@ -2399,11 +2401,11 @@ void EntityDroideka::DoFootImpactEffects()
                 ((FoleyFXWalker*)pFoley)->mFootstep[i].Play(&mMatrix.GetTranslation(), 0, false, true);
             }
             mClass->mFootstepSounds[i].Play(&mMatrix.GetTranslation(), 0, false, true);
-            mFootState |= 1 << i;
+            mFootState |= BitU(i);
         }
         else
         {
-            mFootState &= ~(1 << i);
+            mFootState &= ~BitU(i);
         }
     }
 }
@@ -3361,7 +3363,7 @@ bool EntityDroideka::Update(float fDeltaTime)
             for (CommandPostItor itor = CommandPostManager::Instance()->GetItor(); itor; ++itor)
             {
                 CommandPost* pPost = *itor;
-                if (!(pPost->GetHoldPlayerMask() & (1 << mCharacter->mPlayerId)))
+                if (!(pPost->GetHoldPlayerMask() & CommandPost::LowPlayerBit(mCharacter->mPlayerId)))
                 {
                     continue;
                 }
@@ -3945,11 +3947,11 @@ void EntityDroideka::Render(unsigned char aLod, float aFadeVal, unsigned int uiR
 
     if (!mClass->m_bDynamicLighting)
     {
-        uiRenderFlags |= 0x80;
+        uiRenderFlags |= RENDERFLAG_STATIC;
     }
     else
     {
-        uiRenderFlags &= ~0x80;
+        uiRenderFlags &= ~RENDERFLAG_STATIC;
     }
 
     PblMatrix smoothedMat = GetSmoothedMatrix();
@@ -4023,14 +4025,14 @@ void EntityDroideka::Render(unsigned char aLod, float aFadeVal, unsigned int uiR
         SetupShadow(this, mModel, 0, uiRenderFlags, 0);
         mModel->Render(0, aFadeVal, &smoothedMat, &mPose, RedColor::WHITE, uiRenderFlags, 0);
         PblMatrix reflectionRenderMat;
-        if (!(uiRenderFlags & 0x200000) &&
+        if (!(uiRenderFlags & RENDERFLAG_RENDER_REFLECTION) &&
             FLRenderer::IsReflected(GetRenderPos(), _Sphere.w, reflectionRenderMat, false))
         {
             PblMatrix mat;
             D3DXMatrixMultiply(reinterpret_cast<D3DXMATRIX*>(&mat), reinterpret_cast<const D3DXMATRIX*>(&smoothedMat), reinterpret_cast<const D3DXMATRIX*>(&reflectionRenderMat));
             reflectionRenderMat = mat;
             mModel->Render(0, aFadeVal, &reflectionRenderMat, &mPose, RedColor::WHITE,
-                           (uiRenderFlags & ~0x10000) | 0x10000100, 0);
+                           (uiRenderFlags & ~RENDERFLAG_RENDER_SHADOWVOLUMES) | RENDERFLAG_REFLECTION | RENDERFLAG_PSEUDO_REFLECTED, 0);
         }
 
         FlagItem* flag = GetCarriedFlagItem();
@@ -4094,7 +4096,7 @@ void EntityDroideka::Render(unsigned char aLod, float aFadeVal, unsigned int uiR
             mat.SetTranslation(offset);
             mat *= mMatrix;
 
-            mBallLowRes->Render(aLod, aFadeVal, &mat, &mPose, RedColor::WHITE, uiRenderFlags | 0x1000000, 0);
+            mBallLowRes->Render(aLod, aFadeVal, &mat, &mPose, RedColor::WHITE, uiRenderFlags | RENDERFLAG_RENDER_CACHED, 0);
             FlagItem* flag = GetCarriedFlagItem();
             if (flag)
             {
@@ -4111,7 +4113,7 @@ void EntityDroideka::Render(unsigned char aLod, float aFadeVal, unsigned int uiR
         }
         else
         {
-            mUprightLowRes->Render(aLod, aFadeVal, &mMatrix, &mPose, RedColor::WHITE, uiRenderFlags | 0x1000000,
+            mUprightLowRes->Render(aLod, aFadeVal, &mMatrix, &mPose, RedColor::WHITE, uiRenderFlags | RENDERFLAG_RENDER_CACHED,
                                    0);
             FlagItem* flag = GetCarriedFlagItem();
             if (flag)

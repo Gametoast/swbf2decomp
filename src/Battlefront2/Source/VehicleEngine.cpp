@@ -1,4 +1,5 @@
 #include "VehicleEngine.h"
+#include "PebbleFL/Common/PblBits.h"
 
 #include <float.h>
 #include <stdio.h>
@@ -7,6 +8,7 @@
 #include "GameSoundEngine.h"
 #include "NetGame.h"
 #include "SoundFL/source/sndfreelist.h"
+
 
 extern bool netIsLocalTurn;
 
@@ -76,7 +78,7 @@ VehicleEngine::VehicleEngine(VehicleEngineClass* pClass)
         int iHeap = GameSoundEngine::GetHeap();
         for (unsigned int i = 0; i < 12; ++i)
         {
-            mParams |= pProps->QueryParameter(sParamIDs[i]) ? (1 << i) : 0;
+            mParams |= pProps->QueryParameter(sParamIDs[i]) ? Bit(i) : 0;
         }
         GameSoundEngine::SetHeap(GameMemory::RunTimeHeap);
         mEngine.SetProperties(pProps);

@@ -1,6 +1,7 @@
 #pragma once
 
 #include "PebbleFL/Common/PblHashTable.h"
+#include "PebbleFL/Common/PblRtti.h"
 
 #include <stddef.h>
 
@@ -16,18 +17,19 @@ public:
 
     virtual OrdnanceClass* Derive(unsigned int uHash);
     virtual Ordnance* Build(const OrdnanceDesc& desc);
-    virtual bool IsRtti(unsigned int uRtti) const;
-    virtual unsigned int GetDerivedRtti() const;
-    virtual const char* GetDerivedRttiName() const;
+    // FUNCTION: SWBF2 0x00604950
+    // OrdnanceMissileClass::IsRtti
+    // FUNCTION: SWBF2 0x00604980
+    // OrdnanceMissileClass::GetDerivedRtti
+    // FUNCTION: SWBF2 0x00604990
+    // OrdnanceMissileClass::GetDerivedRttiName
+    PBL_DECLARE_DERIVED_RTTI(OrdnanceMissileClass, OrdnanceBulletClass)
     virtual void SetProperty(unsigned int uProperty, const char* pszValue);
     // FUNCTION: SWBF2 0x006049a0
     virtual float GetVelocity() const
     {
         return 3.0e8f;
     }
-
-    static PblHash rttiHashOrdnanceMissileClass;
-    static const char rttiNameOrdnanceMissileClass[];
 
     float mScaleRate;
     float mTurnRate;
@@ -37,14 +39,6 @@ public:
     float mMinSpeed;
     float mAcceleration;
 };
-  
- 
- 
- 
- 
- 
- 
- 
 
 class GameObject;
 
@@ -57,9 +51,13 @@ public:
     OrdnanceMissile(OrdnanceMissileClass* pClass, const OrdnanceDesc& desc);
     virtual ~OrdnanceMissile();
 
-    virtual bool IsRtti(unsigned int uRtti) const;
-    virtual unsigned int GetDerivedRtti() const;
-    virtual const char* GetDerivedRttiName() const;
+    // FUNCTION: SWBF2 0x006048d0
+    // OrdnanceMissile::IsRtti
+    // FUNCTION: SWBF2 0x00604900
+    // OrdnanceMissile::GetDerivedRtti
+    // FUNCTION: SWBF2 0x00604910
+    // OrdnanceMissile::GetDerivedRttiName
+    PBL_DECLARE_DERIVED_RTTI(OrdnanceMissile, OrdnanceBullet)
 
 protected:
     virtual bool Update(float fDeltaTime);
@@ -76,55 +74,5 @@ public:
     float mGoalSpeed;
     float mSpeed;
 
-    static PblHash rttiHashOrdnanceMissile;
-    static const char rttiNameOrdnanceMissile[];
 };
- 
- 
- 
- 
- 
 
-// FUNCTION: SWBF2 0x006048d0
-inline bool OrdnanceMissile::IsRtti(unsigned int uRtti) const
-{
-    if (rttiHashOrdnanceMissile == uRtti)
-    {
-        return true;
-    }
-    return OrdnanceBullet::IsRtti(uRtti);
-}
-
-// FUNCTION: SWBF2 0x00604900
-inline unsigned int OrdnanceMissile::GetDerivedRtti() const
-{
-    return rttiHashOrdnanceMissile;
-}
-
-// FUNCTION: SWBF2 0x00604910
-inline const char* OrdnanceMissile::GetDerivedRttiName() const
-{
-    return rttiNameOrdnanceMissile;
-}
-
-// FUNCTION: SWBF2 0x00604950
-inline bool OrdnanceMissileClass::IsRtti(unsigned int uRtti) const
-{
-    if (rttiHashOrdnanceMissileClass == uRtti)
-    {
-        return true;
-    }
-    return OrdnanceBulletClass::IsRtti(uRtti);
-}
-
-// FUNCTION: SWBF2 0x00604980
-inline unsigned int OrdnanceMissileClass::GetDerivedRtti() const
-{
-    return rttiHashOrdnanceMissileClass;
-}
-
-// FUNCTION: SWBF2 0x00604990
-inline const char* OrdnanceMissileClass::GetDerivedRttiName() const
-{
-    return rttiNameOrdnanceMissileClass;
-}

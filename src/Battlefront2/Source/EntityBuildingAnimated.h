@@ -1,6 +1,7 @@
 #pragma once
 
 #include "PebbleFL/Common/PblHashTable.h"
+#include "PebbleFL/Common/PblRtti.h"
 
 #include <stddef.h>
 
@@ -25,16 +26,17 @@ public:
 
     virtual EntityClass* Derive(unsigned int uHash);
     virtual Entity* Build(const EntityDesc& desc);
-    virtual bool IsRtti(unsigned int uRtti) const;
-    virtual unsigned int GetDerivedRtti() const;
-    virtual const char* GetDerivedRttiName() const;
+    // FUNCTION: SWBF2 0x00475fb0
+    // EntityBuildingAnimatedClass::IsRtti
+    // FUNCTION: SWBF2 0x00494140
+    // EntityBuildingAnimatedClass::GetDerivedRtti
+    // FUNCTION: SWBF2 0x00494150
+    // EntityBuildingAnimatedClass::GetDerivedRttiName
+    PBL_DECLARE_DERIVED_RTTI(EntityBuildingAnimatedClass, EntityBuildingClass)
     virtual void SetProperty(unsigned int uProperty, const char* pszValue);
 
     bool InitAnimations(const char* pszName);
     bool SetupAnimation(ZephyrPoseDyn<32>& kPose, int iAnim, float fTime, bool bLoop);
-
-    static PblHash rttiHashEntityBuildingAnimatedClass;
-    static const char rttiNameEntityBuildingAnimatedClass[];
 
     ZephyrAnim* mAnimations[2];
     RedAnimation* mAnimObj;
@@ -42,12 +44,6 @@ public:
     unsigned int mDeathEffectHash[5];
     unsigned int mDeathEffectNodeHash[5];
 };
-  
- 
- 
- 
- 
- 
 
 class EntityBuildingAnimatedClass;
 struct EntityDesc;
@@ -64,9 +60,13 @@ public:
 
     EntityBuildingAnimated(EntityBuildingAnimatedClass* pClass, const EntityDesc& desc);
 
-    virtual bool IsRtti(unsigned int uRtti) const;
-    virtual unsigned int GetDerivedRtti() const;
-    virtual const char* GetDerivedRttiName() const;
+    // FUNCTION: SWBF2 0x00475f30
+    // EntityBuildingAnimated::IsRtti
+    // FUNCTION: SWBF2 0x004940f0
+    // EntityBuildingAnimated::GetDerivedRtti
+    // FUNCTION: SWBF2 0x00494100
+    // EntityBuildingAnimated::GetDerivedRttiName
+    PBL_DECLARE_DERIVED_RTTI(EntityBuildingAnimated, EntityBuilding)
     virtual ~EntityBuildingAnimated();
     virtual void Init();
     virtual EntityClass* GetEntityClass();
@@ -81,9 +81,6 @@ public:
 
     void SetAnimation(unsigned int uAnimationId, bool bLoop);
 
-    static PblHash rttiHashEntityBuildingAnimated;
-    static const char rttiNameEntityBuildingAnimated[];
-
     EntityBuildingAnimatedClass* mAnimatedClass;
     float mAnimationTime;
     float mDeathExplosionTime;
@@ -93,55 +90,4 @@ public:
     ZephyrPoseDyn<32> mZephyrPoseDyn;
     RedPose mPose;
 };
- 
- 
- 
- 
- 
- 
- 
- 
 
-// FUNCTION: SWBF2 0x00475fb0
-inline bool EntityBuildingAnimatedClass::IsRtti(unsigned int uRtti) const
-{
-    if (rttiHashEntityBuildingAnimatedClass == uRtti)
-    {
-        return true;
-    }
-    return EntityBuildingClass::IsRtti(uRtti);
-}
-
-// FUNCTION: SWBF2 0x00494140
-inline unsigned int EntityBuildingAnimatedClass::GetDerivedRtti() const
-{
-    return rttiHashEntityBuildingAnimatedClass;
-}
-
-// FUNCTION: SWBF2 0x00494150
-inline const char* EntityBuildingAnimatedClass::GetDerivedRttiName() const
-{
-    return rttiNameEntityBuildingAnimatedClass;
-}
-
-// FUNCTION: SWBF2 0x00475f30
-inline bool EntityBuildingAnimated::IsRtti(unsigned int uRtti) const
-{
-    if (rttiHashEntityBuildingAnimated == uRtti)
-    {
-        return true;
-    }
-    return EntityBuilding::IsRtti(uRtti);
-}
-
-// FUNCTION: SWBF2 0x004940f0
-inline unsigned int EntityBuildingAnimated::GetDerivedRtti() const
-{
-    return rttiHashEntityBuildingAnimated;
-}
-
-// FUNCTION: SWBF2 0x00494100
-inline const char* EntityBuildingAnimated::GetDerivedRttiName() const
-{
-    return rttiNameEntityBuildingAnimated;
-}

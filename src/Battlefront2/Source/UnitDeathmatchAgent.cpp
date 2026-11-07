@@ -26,10 +26,9 @@
 
 // GLOBAL: SWBF2 0x01f9938c
 // UnitDeathmatchAgent::rttiHashUnitDeathmatchAgent
-PblHash UnitDeathmatchAgent::rttiHashUnitDeathmatchAgent("UnitDeathmatchAgent");
 // GLOBAL: SWBF2 0x0078b7ec
 // UnitDeathmatchAgent::rttiNameUnitDeathmatchAgent
-const char UnitDeathmatchAgent::rttiNameUnitDeathmatchAgent[] = "UnitDeathmatchAgent";
+PBL_IMPLEMENT_RTTI(UnitDeathmatchAgent)
 
 
 
@@ -53,11 +52,11 @@ int UnitDeathmatchAgent::EventHandler(AI::EventInfo* pInfo)
     case AI::EVT_Vision_CanSeeEnemy:
     case AI::EVT_Audible_CanHearEnemy:
     case AI::EVT_EndInvisibility:
-        if (mCurState != 4 && UnitAgent::EventHandler(pInfo) == 1 &&
+        if (mCurState != STATE_Combat && UnitAgent::EventHandler(pInfo) == 1 &&
             pInfo->mNextCmd.GetCmdType() == CMD_COMBAT)
         {
             mCombatCmd = pInfo->mNextCmd;
-            SetNextState(4);
+            SetNextState(STATE_Combat);
             pInfo->mNextCmd = UnitCmdInfo(CMD_NONE, NULL, PblVector3(0, 0, 0), NULL);
             return 1;
         }

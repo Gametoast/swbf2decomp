@@ -44,10 +44,9 @@ int Play(VOType eType, const GameObject* pSpeaker, const GameObject* pTarget,
 
 // GLOBAL: SWBF2 0x01f9a25c
 // UnitWaitSecondaryAgent::rttiHashUnitWaitSecondaryAgent
-PblHash UnitWaitSecondaryAgent::rttiHashUnitWaitSecondaryAgent("UnitWaitSecondaryAgent");
 // GLOBAL: SWBF2 0x0078b9e0
 // UnitWaitSecondaryAgent::rttiNameUnitWaitSecondaryAgent
-const char UnitWaitSecondaryAgent::rttiNameUnitWaitSecondaryAgent[] = "UnitWaitSecondaryAgent";
+PBL_IMPLEMENT_RTTI(UnitWaitSecondaryAgent)
 
 
 
@@ -68,11 +67,11 @@ bool UnitWaitSecondaryAgent::ShouldQueueCurCmd(const UnitCmdInfo& cmd) const
 UnitWaitSecondaryAgent::UnitWaitSecondaryAgent(UnitController* pCtrl, float fWaitTime, bool bArg)
     : UnitAgent(pCtrl)
 {
-    mCurState = 1;
+    mCurState = STATE_START;
     mWaitUntilMissionTime = GameLoop::GetMissionTime() + fWaitTime;
     mPlayerWaitTimeout = GameLoop::GetMissionTime() + 15.0f;
     mImpatientSoundTime = GameLoop::GetMissionTime() + AIUtil::GetRandomFloat(7.0f, 10.0f);
-    mNextState = 2;
+    mNextState = STATE_Wait;
 }
 
 // FUNCTION: SWBF2 0x0066b780
@@ -80,7 +79,7 @@ void UnitWaitSecondaryAgent::EnterState()
 {
     switch (mCurState)
     {
-    case 2:
+    case STATE_Wait:
         mCtrl->mLowLevel.SetNavigator_Stationary();
         break;
     }
@@ -190,18 +189,18 @@ void UnitWaitSecondaryAgent::UpdateStatePostVision(float dt)
     mAttackHelper.Update();
     switch (mCurState)
     {
-    case 2:
+    case STATE_Wait:
     {
         Character* pCharacter = mCtrl->mOwner->mCharacter;
         if (!pCharacter)
         {
-            SetNextState(100);
+            SetNextState(STATE_GLOBDONE);
             return;
         }
         Controllable* pVehicle = pCharacter->mVehicle;
         if (!pVehicle)
         {
-            SetNextState(100);
+            SetNextState(STATE_GLOBDONE);
             return;
         }
 
@@ -224,7 +223,7 @@ void UnitWaitSecondaryAgent::UpdateStatePostVision(float dt)
             (GameLoop::GetMissionTime() > mWaitUntilMissionTime &&
              !ReserveManager::GetReservationCountForObject(pVehicleObj, mCtrl->mOwner->mCharacter->mTeamNumber, RT_BOARD)))
         {
-            SetNextState(100);
+            SetNextState(STATE_GLOBDONE);
         }
         break;
     }

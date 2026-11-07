@@ -170,10 +170,10 @@ void pcZPrepassShader::InitFixedFunctionShaderDef() const
 void pcZPrepassShader::Render_Fixed(const RenderItem* pItem, unsigned int) const
 {
     const unsigned int uiRVF = pItem->pPrim->m_vertexFormat->m_uiVertexBufferRVF;
-    RedRenderer::pcSetCullMode((pcRedCullT)(~(m_material.materialFlags >> 15) & 2));
+    RedRenderer::pcSetCullMode((m_material.materialFlags & MATERIAL_FLAG_CULL_NONE) ? PCREDCULL_NONE : PCREDCULL_BACK);
     if (pItem->uiShaderState == 1)
     {
-        if (uiRVF & 0x80)
+        if (uiRVF & RVF_COLOR)
         {
             RedRenderer::pcSetRenderState(D3DRS_COLORVERTEX, TRUE);
             RedRenderer::pcSetRenderState(D3DRS_EMISSIVEMATERIALSOURCE, D3DMCS_MATERIAL);
@@ -240,20 +240,20 @@ void pcZPrepassShader::_Init(unsigned int uiFlags,
     m_material.animationData = 0;
     m_material.specularPower = fSpecularPower;
 
-    unsigned int uiState = 2;
-    if (uiFlags & 0x1c)
+    unsigned int uiState = RVF_POSITION_XYZ;
+    if (uiFlags & RVF_WEIGHTS_MASK)
     {
-        uiState = (uiFlags & 0x1c) | 2;
+        uiState = (uiFlags & RVF_WEIGHTS_MASK) | RVF_POSITION_XYZ;
     }
 
-    if (uiNumParams > 0 && pParams[0] != 0 && (uiMaterialFlags & 2))
+    if (uiNumParams > 0 && pParams[0] != 0 && (uiMaterialFlags & MATERIAL_FLAG_ALPHAMAP_MASK))
     {
-        uiState |= 0x200;
+        uiState |= RVF_TEXCOORDS_1;
         m_material.diffuseMapHash = pParams[0];
 
-        if (!(uiMaterialFlags & 0x200) && (uiFlags & 0x80))
+        if (!(uiMaterialFlags & MATERIAL_FLAG_VERTEXCOLOR_LIGHTING) && (uiFlags & RVF_COLOR))
         {
-            uiState |= 0x80;
+            uiState |= RVF_COLOR;
         }
     }
 

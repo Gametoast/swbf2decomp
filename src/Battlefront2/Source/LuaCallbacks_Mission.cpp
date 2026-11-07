@@ -903,7 +903,7 @@ int SetReinforcementCount(lua_State* L)
     {
         iCount = 0x7fffffff;
     }
-    else if (!(Lua_Callbacks::gTeamSetReinforcementMult & (1u << iTeam)))
+    else if (!(Lua_Callbacks::gTeamSetReinforcementMult & BitU(iTeam)))
     {
         const char* pcMode = strrchr(GameLoop::mMissionScript, '_');
         if (pcMode)
@@ -917,7 +917,7 @@ int SetReinforcementCount(lua_State* L)
                 iCount = iCount * gDMReinforcementMult[gCurRules] / 100;
             }
         }
-        Lua_Callbacks::gTeamSetReinforcementMult |= 1u << iTeam;
+        Lua_Callbacks::gTeamSetReinforcementMult |= BitU(iTeam);
     }
     Team::sTeams[iTeam]->mMaxReinforcements = iCount;
     Team::sTeams[iTeam]->SetCurReinforcements(iCount);
@@ -1677,7 +1677,7 @@ int MissionVictory(lua_State* L)
     if (lua_isnumber(LuaHelper::mState, 1))
     {
         float fTeam = (float)luaL_checknumber(LuaHelper::mState, 1);
-        uWinningTeams = 1u << (int)fTeam;
+        uWinningTeams = BitU((int)fTeam);
     }
     else if (lua_type(LuaHelper::mState, 1) == LUA_TTABLE)
     {
@@ -1688,7 +1688,7 @@ int MissionVictory(lua_State* L)
             if (lua_isnumber(LuaHelper::mState, -1))
             {
                 float fTeam = (float)luaL_checknumber(LuaHelper::mState, -1);
-                uWinningTeams |= 1u << (int)fTeam;
+                uWinningTeams |= BitU((int)fTeam);
             }
         }
     }
@@ -1703,7 +1703,7 @@ int MissionDefeat(lua_State* L)
     if (lua_isnumber(LuaHelper::mState, 1))
     {
         float fTeam = (float)luaL_checknumber(LuaHelper::mState, 1);
-        uLosingTeams = 1u << (int)fTeam;
+        uLosingTeams = BitU((int)fTeam);
     }
     else if (lua_type(LuaHelper::mState, 1) == LUA_TTABLE)
     {
@@ -1714,7 +1714,7 @@ int MissionDefeat(lua_State* L)
             if (lua_isnumber(LuaHelper::mState, -1))
             {
                 float fTeam = (float)luaL_checknumber(LuaHelper::mState, -1);
-                uLosingTeams |= 1u << (int)fTeam;
+                uLosingTeams |= BitU((int)fTeam);
             }
         }
     }
@@ -2832,7 +2832,7 @@ int BroadcastVoiceOver(lua_State* L)
     }
     else
     {
-        iTeamMask = 1 << (int)(float)luaL_checknumber(LuaHelper::mState, 2);
+        iTeamMask = BitU((int)(float)luaL_checknumber(LuaHelper::mState, 2));
     }
     NetGame::CreateEvent_PlayVoiceOver(uVoiceHash, iTeamMask);
     return 0;
@@ -3022,7 +3022,7 @@ int ShowMessageText(lua_State* L)
     }
     else
     {
-        uTeamMask = 1u << (int)(float)luaL_checknumber(LuaHelper::mState, 2);
+        uTeamMask = BitU((int)(float)luaL_checknumber(LuaHelper::mState, 2));
     }
     if (NetGame::IsEnabled())
     {
@@ -3052,7 +3052,7 @@ int MapAddRegionMarker(lua_State* L)
         if (!(fScale <= 0.0f))
         {
             int iTeam = (int)(float)luaL_checknumber(LuaHelper::mState, 4);
-            unsigned int uTeamMask = iTeam ? 1u << iTeam : ~0u;
+            unsigned int uTeamMask = iTeam ? BitU(iTeam) : ~0u;
             const char* pcColor = luaL_optlstring(LuaHelper::mState, 5, 0, 0);
             bool bShowHud = lua_gettop(LuaHelper::mState) > 5 ? lua_toboolean(LuaHelper::mState, 6) != 0 : true;
             bool bFlash = lua_gettop(LuaHelper::mState) > 6 ? lua_toboolean(LuaHelper::mState, 7) != 0 : true;
@@ -3071,7 +3071,7 @@ int MapRemoveRegionMarker(lua_State* L)
     if (pRegion)
     {
         unsigned int uTeamMask = lua_type(LuaHelper::mState, 2) <= LUA_TNIL ?
-            ~0u : 1u << (int)(float)luaL_checknumber(LuaHelper::mState, 2);
+            ~0u : BitU((int)(float)luaL_checknumber(LuaHelper::mState, 2));
         TargetManager::RemoveMarker(0, pRegion, uTeamMask);
     }
     return 0;
@@ -3090,7 +3090,7 @@ int MapAddEntityMarker(lua_State* L)
             return 0;
         }
         int iTeam = (int)(float)luaL_checknumber(LuaHelper::mState, 4);
-        unsigned int uTeamMask = iTeam ? 1u << iTeam : ~0u;
+        unsigned int uTeamMask = iTeam ? BitU(iTeam) : ~0u;
         const char* pcColor = luaL_optlstring(LuaHelper::mState, 5, 0, 0);
         bool bShowHud = lua_gettop(LuaHelper::mState) > 5 ? lua_toboolean(LuaHelper::mState, 6) != 0 : true;
         bool bFlash = lua_gettop(LuaHelper::mState) > 6 ? lua_toboolean(LuaHelper::mState, 7) != 0 : true;
@@ -3108,7 +3108,7 @@ int MapRemoveEntityMarker(lua_State* L)
     if (pObject)
     {
         unsigned int uTeamMask = lua_type(LuaHelper::mState, 2) <= LUA_TNIL ?
-            ~0u : 1u << (int)(float)luaL_checknumber(LuaHelper::mState, 2);
+            ~0u : BitU((int)(float)luaL_checknumber(LuaHelper::mState, 2));
         TargetManager::RemoveMarker(pObject, 0, uTeamMask);
     }
     return 0;
@@ -3129,7 +3129,7 @@ int MapAddClassMarker(lua_State* L)
         return 0;
     }
     int iTeam = (int)(float)luaL_checknumber(LuaHelper::mState, 4);
-    unsigned int uTeamMask = iTeam ? 1u << iTeam : ~0u;
+    unsigned int uTeamMask = iTeam ? BitU(iTeam) : ~0u;
     const char* pcColor = luaL_optlstring(LuaHelper::mState, 5, 0, 0);
     bool bShowHud = lua_gettop(LuaHelper::mState) > 5 ? lua_toboolean(LuaHelper::mState, 6) != 0 : true;
     bool bFlash = lua_gettop(LuaHelper::mState) > 6 ? lua_toboolean(LuaHelper::mState, 7) != 0 : true;
@@ -3145,7 +3145,7 @@ int MapRemoveClassMarker(lua_State* L)
 {
     const char* pcClass = luaL_checklstring(LuaHelper::mState, 1, 0);
     unsigned int uTeamMask = lua_type(LuaHelper::mState, 2) <= LUA_TNIL ?
-        ~0u : 1u << (int)(float)luaL_checknumber(LuaHelper::mState, 2);
+        ~0u : BitU((int)(float)luaL_checknumber(LuaHelper::mState, 2));
     TargetManager::RemoveClassMarker(PblHash(pcClass), uTeamMask);
     return 0;
 }

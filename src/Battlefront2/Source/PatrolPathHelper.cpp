@@ -119,7 +119,7 @@ void PatrolPathHelper::EnterState()
 // FUNCTION: SWBF2 0x006160e0
 void PatrolPathHelper::UpdateState(float dt)
 {
-    if (mCurState == 100)
+    if (mCurState == STATE_GLOBDONE)
     {
         return;
     }
@@ -140,7 +140,7 @@ void PatrolPathHelper::UpdateState(float dt)
             }
             else
             {
-                SetNextState(100);
+                SetNextState(STATE_GLOBDONE);
             }
         }
         break;
@@ -151,7 +151,7 @@ void PatrolPathHelper::UpdateState(float dt)
         LowLevel(GetCtrl()).SetHeight(HEIGHT_WALK);
         if (!LowLevel(GetCtrl()).IsNavigatorInProgress())
         {
-            SetNextState(100);
+            SetNextState(STATE_GLOBDONE);
         }
         break;
     }

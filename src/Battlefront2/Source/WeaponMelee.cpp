@@ -1,4 +1,5 @@
 #include <d3dx9math.h>
+#include "PebbleFL/Common/PblBits.h"
 #include "PebbleFL/Common/PblHashTable.h"
 
 #include <new>
@@ -93,7 +94,7 @@ void _RenderLightSabre(const PblVector3& vPosition, const PblVector3& vDirection
 void WeaponMelee::Render(const PblMatrix& matrix, const RedPose* pPose,
                          const RedColor& color, unsigned int uiFlags, bool bRenderModel) const
 {
-    uiFlags |= 1;
+    uiFlags |= RENDERFLAG_CLIPPED;
     bool bThrown = false;
     if (m_pMeleeThrow)
     {
@@ -158,7 +159,7 @@ void WeaponMelee::Render(const PblMatrix& matrix, const RedPose* pPose,
         }
     }
 
-    const bool bNoTrail = (uiFlags & 0x100) != 0;
+    const bool bNoTrail = (uiFlags & RENDERFLAG_REFLECTION) != 0;
     bool bRenderedBlade = false;
     for (unsigned int i = bThrown ? 1 : 0; i < pClass->m_uiNumDamageEdges; ++i)
     {
@@ -176,7 +177,7 @@ void WeaponMelee::Render(const PblMatrix& matrix, const RedPose* pPose,
         if (!bThrown && edge.colorTrail.a && !bNoTrail && bRenderModel)
         {
             RenderLightsaberTrail(i, PblMatrix(*pEdgeMatrix),
-                                                                   (m_uiTrailOnMask & (1u << i)) && IsOn(uiWeapon), uiFlags);
+                                                                   (m_uiTrailOnMask & BitU(i)) && IsOn(uiWeapon), uiFlags);
         }
         PblVector3 vPosition, vDirection;
         D3DXVec3TransformCoord(reinterpret_cast<D3DXVECTOR3*>(&vPosition), reinterpret_cast<const D3DXVECTOR3*>(&edge.vOffsetPos), reinterpret_cast<const D3DXMATRIX*>(pEdgeMatrix));
@@ -186,7 +187,7 @@ void WeaponMelee::Render(const PblMatrix& matrix, const RedPose* pPose,
                            GetLightSaberLengthFactor(uiWeapon) * edge.fLength, edge.fWidth, uiFlags);
         bRenderedBlade = true;
     }
-    if (bRenderedBlade && (uiFlags & 0x4000000))
+    if (bRenderedBlade && (uiFlags & RENDERFLAG_RENDER_TO_INTERFACE))
     {
         ParticleSystem::FlushParticleCache();
         RedParticleRenderer::RenderAll();
@@ -197,7 +198,7 @@ void WeaponMelee::Render(const PblMatrix& matrix, const RedPose* pPose,
 void WeaponMeleeClass::Render(float fTurnOn, const PblMatrix& matrix, const RedPose* pPose,
                               const RedColor& color, unsigned int  , bool  ) const
 {
-    const unsigned int uiRenderFlags = 0x04000000;
+    const unsigned int uiRenderFlags = RENDERFLAG_RENDER_TO_INTERFACE;
     const PblMatrix* apMatrix[4];
     for (int k = 0; k < 4; ++k)
     {
@@ -444,7 +445,7 @@ bool WeaponMelee::IsOn(unsigned int uiBlade) const
     {
         return false;
     }
-    unsigned int uiMask = 1u << uiBlade;
+    unsigned int uiMask = BitU(uiBlade);
     if (m_uiLightsaberOnMask & uiMask)
     {
         return true;
@@ -468,7 +469,7 @@ float WeaponMelee::GetLightSaberLengthFactor(unsigned int uiBlade) const
     {
         return 0.0f;
     }
-    unsigned int uiMask = 1u << uiBlade;
+    unsigned int uiMask = BitU(uiBlade);
     bool bOn = (m_uiLightsaberOnMask & uiMask) != 0;
     bool bWasOn = (uiMask & m_uiLightsaberWasOnMask) != 0;
     if (bOn == bWasOn)
@@ -750,7 +751,7 @@ bool WeaponMelee::TestInputQueueForButtons(unsigned int iPressedMask, unsigned i
     }
     for (int i = 0; i < m_InputQueue.GetCount(); ++i)
     {
-        int iButton = 1 << m_InputQueue[i].uiButton;
+        int iButton = Bit(m_InputQueue[i].uiButton);
         if ((iButton & iPressedMask) && !(m_InputQueue[i].uiButtonAction & 3))
         {
             return true;
@@ -768,7 +769,7 @@ void WeaponMelee::InputQueue::Update(unsigned char uiButtons, float fTime)
 {
     for (unsigned char uiButton = 1; uiButton < 8; ++uiButton)
     {
-        unsigned char uiMask = 1 << uiButton;
+        unsigned char uiMask = Bit(uiButton);
         unsigned char uiAction = 0xff;
         if (uiButtons & uiMask)
         {
@@ -1175,7 +1176,7 @@ void WeaponMelee::ReadButtons()
     }
     for (unsigned char uiButton = 1; uiButton < 8; ++uiButton)
     {
-        unsigned char uiMask = 1 << uiButton;
+        unsigned char uiMask = Bit(uiButton);
         bool bDown;
         if (m_bAI_Deflect && uiButton == m_pCombo->m_uiDeflectButton)
         {
@@ -1235,7 +1236,7 @@ void WeaponMelee::EnterState(ComboState eState)
     m_bUnreachableState_WeaponUpdate = 0;
     m_bUnreachableState_SoldierUpdate = 0;
     const WeaponMeleeClass* pClass = (const WeaponMeleeClass*)mClass;
-    const unsigned int uiBladeMask = (1u << pClass->m_uiNumWeapons) - 1;
+    const unsigned int uiBladeMask = LowBitsMaskU(pClass->m_uiNumWeapons);
     m_uiLightsaberOnMask = (state.m_uiLightsaberOffMask ^ uiBladeMask) & uiBladeMask;
     m_bRestartAnimation = state.m_bRestartAnimation;
 
@@ -1460,7 +1461,7 @@ bool WeaponMelee::UpdateFire(float fDeltaTime)
             }
             if (m_fComboStateTimer >= fStart && fEnd >= m_fComboStateTimer)
             {
-                m_uiTrailOnMask |= 1 << uiEdge;
+                m_uiTrailOnMask |= BitU(uiEdge);
                 break;
             }
         }
@@ -1829,10 +1830,9 @@ DefaultCombo::DeflectAnimation aDeflectAnimation[DefaultCombo::NUM_DEFLECT_ANIMA
 
 // GLOBAL: SWBF2 0x01f9a8ec
 // WeaponMelee::rttiHashWeaponMelee
-PblHash WeaponMelee::rttiHashWeaponMelee("WeaponMelee");
 // GLOBAL: SWBF2 0x0078c198
 // WeaponMelee::rttiNameWeaponMelee
-const char WeaponMelee::rttiNameWeaponMelee[] = "WeaponMelee";
+PBL_IMPLEMENT_RTTI(WeaponMelee)
 
 // SYNTHETIC: SWBF2 0x00407210
 // `dynamic initializer for 'WeaponMeleeClass::rttiHashWeaponMeleeClass''
@@ -1840,10 +1840,9 @@ const char WeaponMelee::rttiNameWeaponMelee[] = "WeaponMelee";
 
 // GLOBAL: SWBF2 0x01f9a8f4
 // WeaponMeleeClass::rttiHashWeaponMeleeClass
-PblHash WeaponMeleeClass::rttiHashWeaponMeleeClass("WeaponMeleeClass");
 // GLOBAL: SWBF2 0x0078c0e0
 // WeaponMeleeClass::rttiNameWeaponMeleeClass
-const char WeaponMeleeClass::rttiNameWeaponMeleeClass[] = "WeaponMeleeClass";
+PBL_IMPLEMENT_RTTI(WeaponMeleeClass)
 
 // GLOBAL: SWBF2 0x01eafd70
 WeaponMelee::TrailData* WeaponMelee::s_aTrailDataPool;
@@ -2326,7 +2325,7 @@ bool WeaponMelee::OverrideSoldierControls()
             }
             for (unsigned char uiButton = 1; uiButton < 7; ++uiButton)
             {
-                if (pState->m_uiInputLock & (1 << uiButton))
+                if (pState->m_uiInputLock & Bit(uiButton))
                 {
                     GetButton(uiButton)->Clear();
                 }
@@ -2347,7 +2346,7 @@ bool WeaponMelee::OverrideSoldierControls()
         if (m_iSoldierState <= SoldierState::JUMP || m_iSoldierState == SoldierState::JET_JUMP)
         {
             m_bUnreachableState_SoldierUpdate = 0;
-            while (!(uiSoldierStates & (1 << m_iSoldierState)) && !m_bUnreachableState_SoldierUpdate)
+            while (!(uiSoldierStates & Bit(m_iSoldierState)) && !m_bUnreachableState_SoldierUpdate)
             {
                 int iPrev = m_iSoldierState;
                 switch (m_iSoldierState)
@@ -2991,7 +2990,7 @@ bool WeaponMelee::Update(float fDeltaTime)
         if (uiSoldierStates)
         {
             const int iSoldierState = m_iSoldierState;
-            if (!((1 << iSoldierState) & uiSoldierStates))
+            if (!(Bit(iSoldierState) & uiSoldierStates))
             {
                 m_bUnreachableState_WeaponUpdate = 1;
                 if (iSoldierState > SoldierState::JET_JUMP)
@@ -3002,7 +3001,7 @@ bool WeaponMelee::Update(float fDeltaTime)
                 {
                     m_bUnreachableState_SoldierUpdate =
                         ((unsigned char)pState->m_uiSoldierStates &
-                         ((1 << SoldierState::JUMP) | (1 << SoldierState::JET_JUMP))) == 0;
+                         (Bit(SoldierState::JUMP) | Bit(SoldierState::JET_JUMP))) == 0;
                 }
                 else if (iSoldierState > SoldierState::SPRINT)
                 {

@@ -1,6 +1,7 @@
 #pragma once
 
 #include "PebbleFL/Common/PblHashTable.h"
+#include "PebbleFL/Common/PblRtti.h"
 
 #include <stddef.h>
 
@@ -21,17 +22,16 @@ public:
 
     virtual EntityClass* Derive(unsigned int uHash);
     virtual Entity* Build(const EntityDesc& desc);
-    virtual bool IsRtti(unsigned int uRtti) const;
-    virtual unsigned int GetDerivedRtti() const;
-    virtual const char* GetDerivedRttiName() const;
+    // FUNCTION: SWBF2 0x00476f90
+    // CommandBuildingArmedClass::IsRtti
+    // FUNCTION: SWBF2 0x00476fe0
+    // CommandBuildingArmedClass::GetDerivedRtti
+    // FUNCTION: SWBF2 0x00476ff0
+    // CommandBuildingArmedClass::GetDerivedRttiName
+    PBL_DECLARE_DERIVED_RTTI(CommandBuildingArmedClass, EntityBuildingArmedClass)
     virtual void SetProperty(unsigned int uProperty, const char* pszValue);
 
-    static PblHash rttiHashCommandBuildingArmedClass;
-    static const char rttiNameCommandBuildingArmedClass[];
 };
-
-   
- 
 
 // VTABLE: SWBF2 0x00797b50 Damageable
 // VTABLE: SWBF2 0x00797b7c
@@ -45,9 +45,13 @@ public:
 
     CommandBuildingArmed(CommandBuildingArmedClass* pClass, const EntityDesc& desc);
 
-    virtual bool IsRtti(unsigned int uRtti) const;
-    virtual unsigned int GetDerivedRtti() const;
-    virtual const char* GetDerivedRttiName() const;
+    // FUNCTION: SWBF2 0x00476ee0
+    // CommandBuildingArmed::IsRtti
+    // FUNCTION: SWBF2 0x00476f30
+    // CommandBuildingArmed::GetDerivedRtti
+    // FUNCTION: SWBF2 0x00476f40
+    // CommandBuildingArmed::GetDerivedRttiName
+    PBL_DECLARE_DERIVED_RTTI(CommandBuildingArmed, EntityBuildingArmed)
     virtual ~CommandBuildingArmed();
     virtual void SetProperty(unsigned int uProperty, const char* pszValue);
     virtual void Init();
@@ -59,56 +63,7 @@ public:
     virtual void ReadObject(NetPktGroup& group, NetObjState* pState);
     virtual GameObject* AddToClient();
 
-    static PblHash rttiHashCommandBuildingArmed;
-    static const char rttiNameCommandBuildingArmed[];
-
     CommandBuildingArmedClass* mClass;
     CommandPost* mPost;
 };
- 
- 
- 
 
-// FUNCTION: SWBF2 0x00476ee0
-inline bool CommandBuildingArmed::IsRtti(unsigned int uRtti) const
-{
-    if (rttiHashCommandBuildingArmed == uRtti)
-    {
-        return true;
-    }
-    return EntityBuildingArmed::IsRtti(uRtti);
-}
-
-// FUNCTION: SWBF2 0x00476f30
-inline unsigned int CommandBuildingArmed::GetDerivedRtti() const
-{
-    return rttiHashCommandBuildingArmed;
-}
-
-// FUNCTION: SWBF2 0x00476f40
-inline const char* CommandBuildingArmed::GetDerivedRttiName() const
-{
-    return rttiNameCommandBuildingArmed;
-}
-
-// FUNCTION: SWBF2 0x00476f90
-inline bool CommandBuildingArmedClass::IsRtti(unsigned int uRtti) const
-{
-    if (rttiHashCommandBuildingArmedClass == uRtti)
-    {
-        return true;
-    }
-    return EntityBuildingArmedClass::IsRtti(uRtti);
-}
-
-// FUNCTION: SWBF2 0x00476fe0
-inline unsigned int CommandBuildingArmedClass::GetDerivedRtti() const
-{
-    return rttiHashCommandBuildingArmedClass;
-}
-
-// FUNCTION: SWBF2 0x00476ff0
-inline const char* CommandBuildingArmedClass::GetDerivedRttiName() const
-{
-    return rttiNameCommandBuildingArmedClass;
-}

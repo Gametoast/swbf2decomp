@@ -16,14 +16,14 @@ void LightsaberTrailEffect::_PlatformInit()
     if (RedRenderer::pcGetGeometryMode() == GEOMETRYMODE_COMPRESSED)
     {
         m_pShader = pcRedShader::Create(
-            0xE8651328u /* "LightBeam" */, 0x1082,
-            0, 0, 0x10040, RedColor::WHITE, RedColor::BLACK, 32.0f);
+            0xE8651328u /* "LightBeam" */, RVF_POSITION_XYZ | RVF_COLOR | RVF_COMPRESSED_POSITION,
+            0, 0, MATERIAL_FLAG_ALPHABLEND_ADDITIVE | MATERIAL_FLAG_CULL_NONE, RedColor::WHITE, RedColor::BLACK, 32.0f);
     }
     else
     {
         m_pShader = pcRedShader::Create(
-            0xE8651328u /* "LightBeam" */, 0x82,
-            0, 0, 0x10040, RedColor::WHITE, RedColor::BLACK, 32.0f);
+            0xE8651328u /* "LightBeam" */, RVF_POSITION_XYZ | RVF_COLOR,
+            0, 0, MATERIAL_FLAG_ALPHABLEND_ADDITIVE | MATERIAL_FLAG_CULL_NONE, RedColor::WHITE, RedColor::BLACK, 32.0f);
     }
 }
 

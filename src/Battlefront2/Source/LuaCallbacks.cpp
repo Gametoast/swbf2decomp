@@ -1508,7 +1508,7 @@ int ScriptCB_ResetSkipToPlayerList(lua_State*)
 int ScriptCB_CheckPlayerListDone(lua_State*)
 {
     int iJoystick = PauseMenu::GetPausingJoystick();
-    bool bPressed = ((FLInputManager::s_instance.GetPlayerInputs(iJoystick)->bits.mBoolInputs >> 17) & 1) != 0;
+    bool bPressed = ((FLInputManager::s_instance.GetPlayerInputs(iJoystick)->bits.mBoolInputs & Bit(ePROCESSEDINPUT_playerList)) != 0);
     bool bDone = false;
     if (GameLoop::GetMissionTime() < gSkipToPlayerListTime + 0.5f)
     {

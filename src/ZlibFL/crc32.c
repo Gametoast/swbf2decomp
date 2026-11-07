@@ -64,7 +64,7 @@ local void make_crc_table()
 
         poly = 0UL;
         for (n = 0; n < sizeof(p)/sizeof(unsigned char); n++)
-            poly |= 1UL << (31 - p[n]);
+            poly |= ZBITUL(31 - p[n]);
 
         for (n = 0; n < 256; n++) {
             c = (unsigned long)n;

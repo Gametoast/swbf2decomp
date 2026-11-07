@@ -349,7 +349,7 @@ unsigned short pcTerrainShader2::GetShaderChain(pcRedShader** const ppOut,
     }
 
     m_lightingInSeparatePass = false;
-    const bool bSpecial = (pItem->flags & 0x10220010) != 0;
+    const bool bSpecial = (pItem->flags & (RENDERFLAG_NO_LIGHTING | RENDERFLAG_RENDER_TO_SKY | RENDERFLAG_RENDER_REFLECTION | RENDERFLAG_PSEUDO_REFLECTED)) != 0;
     sForceSimpleLighting = RedRenderer::pcGetRenderOptions().mGraphicsTier < 1;
     sUseHighTierLighting = RedRenderer::pcGetRenderOptions().mGraphicsTier > 1;
     if (sUseHighTierLighting && !sForceSimpleLighting && !bSpecial)
@@ -372,10 +372,10 @@ unsigned int pcTerrainShader2::GetState_Fixed(const RenderItem*) const
 // FUNCTION: SWBF2 0x006fd170
 unsigned int pcTerrainShader2::GetState_Prog1(const RenderItem* pItem) const
 {
-    const bool bShadow = RedShadowMap::IsShadowMapEnabled() && !(pItem->flags & 0x18020018);
+    const bool bShadow = RedShadowMap::IsShadowMapEnabled() && !(pItem->flags & (RENDERFLAG_POSTSHADOW | RENDERFLAG_NO_LIGHTING | RENDERFLAG_RENDER_TO_SKY | RENDERFLAG_PSEUDO_REFLECTIVE | RENDERFLAG_PSEUDO_REFLECTED));
     const bool bProjected = pItem->pLightingState->pProjectedLight != 0
                             && !m_lightingInSeparatePass
-                            && !(pItem->flags & 0x18020010);
+                            && !(pItem->flags & (RENDERFLAG_NO_LIGHTING | RENDERFLAG_RENDER_TO_SKY | RENDERFLAG_PSEUDO_REFLECTIVE | RENDERFLAG_PSEUDO_REFLECTED));
     if (sDrawNormals)
     {
         return 2;
@@ -386,7 +386,7 @@ unsigned int pcTerrainShader2::GetState_Prog1(const RenderItem* pItem) const
         {
             return 1;
         }
-        if (bShadow || bProjected || (~(pItem->flags >> 17) & 1))
+        if (bShadow || bProjected || (~(pItem->flags >> 17) & 1))   // not RENDERFLAG_RENDER_TO_SKY, as the game's code tests it
         {
             return 1;
         }
@@ -524,7 +524,7 @@ void pcTerrainShader2::Render_Prog1(const RenderItem* pItem, unsigned int uiPass
                 pItem->pLightingState->pProjectedLight->m_uiProjTexHash));
 
             RedColorValue color = pItem->pLightingState->pProjectedLight->m_color;
-            const bool bShadowCaster = (pItem->pLightingState->pProjectedLight->m_uiFlags >> 1) & 1;
+            const bool bShadowCaster = (pItem->pLightingState->pProjectedLight->m_uiFlags & RedLight::LIGHT_FLAG_SHADOWCASTER) != 0;
             color.a = (float)bShadowCaster;
             RedRenderer::pcGetDevice()->SetPixelShaderConstantF(1, &color.r, 1);
         }
@@ -572,30 +572,30 @@ void pcTerrainShader2::_Init(unsigned int uiFlags,
                              float fSpecularPower)
 {
     m_uiOptions = 0;
-    switch (uiFlags & 0xffff0fff)
+    switch (uiFlags & ~RVF_COMPRESSED_MASK)
     {
-    case 0x122:
+    case RVF_POSITION_XYZ | RVF_NORMAL | RVF_LIGHTING:
         if (s_pVertexInputFormat == 0)
         {
-            s_pVertexInputFormat = pcRedVertexFormat::Create(uiFlags, 0x122);
-            s_pPosVertexInputFormat = pcRedVertexFormat::Create(uiFlags, 2);
-            s_pPosNormalVertexInputFormat = pcRedVertexFormat::Create(uiFlags, 0x22);
+            s_pVertexInputFormat = pcRedVertexFormat::Create(uiFlags, RVF_POSITION_XYZ | RVF_NORMAL | RVF_LIGHTING);
+            s_pPosVertexInputFormat = pcRedVertexFormat::Create(uiFlags, RVF_POSITION_XYZ);
+            s_pPosNormalVertexInputFormat = pcRedVertexFormat::Create(uiFlags, RVF_POSITION_XYZ | RVF_NORMAL);
         }
-        if (!(uiFlags & 0xf000) && s_pFFLayer0VertexInputFormat == 0)
+        if (!(uiFlags & RVF_COMPRESSED_MASK) && s_pFFLayer0VertexInputFormat == 0)
         {
-            s_pFFLayer0VertexInputFormat = pcRedVertexFormat::Create(0x122, 0x102);
+            s_pFFLayer0VertexInputFormat = pcRedVertexFormat::Create(RVF_POSITION_XYZ | RVF_NORMAL | RVF_LIGHTING, RVF_POSITION_XYZ | RVF_LIGHTING);
         }
         break;
-    case 0x82:
-        if (!(uiFlags & 0xf000) && s_pFFLayerNVertexInputFormat == 0)
+    case RVF_POSITION_XYZ | RVF_COLOR:
+        if (!(uiFlags & RVF_COMPRESSED_MASK) && s_pFFLayerNVertexInputFormat == 0)
         {
-            s_pFFLayerNVertexInputFormat = pcRedVertexFormat::Create(0x82, 0x82);
+            s_pFFLayerNVertexInputFormat = pcRedVertexFormat::Create(RVF_POSITION_XYZ | RVF_COLOR, RVF_POSITION_XYZ | RVF_COLOR);
         }
         break;
-    case 2:
+    case RVF_POSITION_XYZ:
         if (s_pFarVertexInputFormat == 0)
         {
-            s_pFarVertexInputFormat = pcRedVertexFormat::Create(uiFlags, 2);
+            s_pFarVertexInputFormat = pcRedVertexFormat::Create(uiFlags, RVF_POSITION_XYZ);
         }
         break;
     }
@@ -645,12 +645,12 @@ void pcTerrainShader2::_InitBumpLuminosityPixelLighting(unsigned int uiHash,
     s_BumpLuminosityTextureTransform[0] = vScale0;
     s_BumpLuminosityTextureTransform[1] = vScale1;
     s_fStaticBumpFactor = fStaticBumpFactor;
-    s_material.materialFlags |= 0x10000020;
+    s_material.materialFlags |= MATERIAL_FLAG_PERPIXELLIGHTING | MATERIAL_FLAG_HEIGHTFIELD;
 
     if (uiBumpLuminosityTextureHash_)
     {
         s_material.bumpMapHash = uiBumpLuminosityTextureHash_;
-        s_material.materialFlags |= 0x10000020;
+        s_material.materialFlags |= MATERIAL_FLAG_PERPIXELLIGHTING | MATERIAL_FLAG_HEIGHTFIELD;
         s_material.detailTexTransform.SetScale(0.0f, 0.0f);
         s_material.diffuseTexTransform.SetScale(0.0f, 0.0f);
         s_material.detailTexTransform(0, 0) = s_DetailTextureTransform[0][0].x;
@@ -810,7 +810,7 @@ void pcTerrainShader2::_InitPixelLighting(unsigned int uiHashA, unsigned int uiH
     }
     if (RedRenderer::pcGetRenderCaps().cubemaps && RedRenderer::pcGetRenderCaps().volumemaps)
     {
-        s_material.materialFlags |= 0x10000020;
+        s_material.materialFlags |= MATERIAL_FLAG_PERPIXELLIGHTING | MATERIAL_FLAG_HEIGHTFIELD;
         s_pLightVolumeMap = RedTexture::s_textureHashTable.Find(uiHashA);
         s_pNormalizationCubeMap = RedTexture::s_textureHashTable.Find(uiHashB);
     }

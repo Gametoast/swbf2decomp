@@ -1,6 +1,7 @@
 #pragma once
 
 #include "PebbleFL/Common/PblHashTable.h"
+#include "PebbleFL/Common/PblRtti.h"
 
 #include <stddef.h>
 
@@ -33,13 +34,14 @@ public:
     virtual ~EntityPropClass();
     virtual EntityClass* Derive(unsigned int uHash);
     virtual Entity* Build(const EntityDesc& desc);
-    virtual bool IsRtti(unsigned int uRtti) const;
-    virtual unsigned int GetDerivedRtti() const;
-    virtual const char* GetDerivedRttiName() const;
+    // FUNCTION: SWBF2 0x00497ef0
+    // EntityPropClass::IsRtti
+    // FUNCTION: SWBF2 0x004d8da0
+    // EntityPropClass::GetDerivedRtti
+    // FUNCTION: SWBF2 0x004d8db0
+    // EntityPropClass::GetDerivedRttiName
+    PBL_DECLARE_DERIVED_RTTI(EntityPropClass, EntityClass)
     virtual void SetProperty(unsigned int uProperty, const char* pszValue);
-
-    static PblHash rttiHashEntityPropClass;
-    static const char rttiNameEntityPropClass[];
 
     bool m_bDynamicLighting;
     RedModel* mDestroyedModel;
@@ -58,21 +60,6 @@ public:
     bool mReflected : 1;
     bool mAttachedSoundOnlyMoving : 1;
 };
-  
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
 
 void ConvertHSVtoRGB(float* pR, float* pG, float* pB, float fH, float fS, float fV);
 
@@ -116,16 +103,6 @@ public:
     EntityPropClass* mClass;
     bool mMoving : 1;
 };
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
 
 // FUNCTION: SWBF2 0x00497e50
 inline bool EntityProp::IsRtti(unsigned int uRtti) const
@@ -135,16 +112,6 @@ inline bool EntityProp::IsRtti(unsigned int uRtti) const
         return true;
     }
     return reinterpret_cast<const EntityGeometry*>(this)->EntityGeometry::IsRtti(uRtti);
-}
-
-// FUNCTION: SWBF2 0x00497ef0
-inline bool EntityPropClass::IsRtti(unsigned int uRtti) const
-{
-    if (rttiHashEntityPropClass == uRtti)
-    {
-        return true;
-    }
-    return EntityClass::IsRtti(uRtti);
 }
 
 // FUNCTION: SWBF2 0x004d8d50
@@ -159,14 +126,3 @@ inline const char* EntityProp::GetDerivedRttiName() const
     return rttiNameEntityProp;
 }
 
-// FUNCTION: SWBF2 0x004d8da0
-inline unsigned int EntityPropClass::GetDerivedRtti() const
-{
-    return rttiHashEntityPropClass;
-}
-
-// FUNCTION: SWBF2 0x004d8db0
-inline const char* EntityPropClass::GetDerivedRttiName() const
-{
-    return rttiNameEntityPropClass;
-}

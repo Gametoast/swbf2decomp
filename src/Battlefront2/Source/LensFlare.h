@@ -1,6 +1,7 @@
 #pragma once
 
 #include <stddef.h>
+#include "PebbleFL/Common/PblBits.h"
 #include "FLEffect.h"
 #include "PebbleFL/Common/PblList.h"
 #include "PebbleFL/Common/PblMath.h"
@@ -97,7 +98,7 @@ public:
 
     const RedColor GetColor() const { return _color; }
     float GetSquaredDrawDistance() const { return _fSquaredDrawDistance; }
-    bool IsHiddenInView(unsigned int uiView) const { return (_uiHideInView & (1 << uiView)) != 0; }
+    bool IsHiddenInView(unsigned int uiView) const { return (_uiHideInView & Bit(uiView)) != 0; }
     virtual bool IsEffectActive() const;
     virtual void ActivateEffect();
     virtual void DeactivateEffect();

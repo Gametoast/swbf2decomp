@@ -1,6 +1,7 @@
 #pragma once
 
 #include "PebbleFL/Common/PblHashTable.h"
+#include "PebbleFL/Common/PblRtti.h"
 
 #include <stddef.h>
 
@@ -19,9 +20,13 @@ public:
     virtual ~WeaponCannon();
     virtual bool Update(float fDeltaTime);
 
-    virtual bool IsRtti(unsigned int uRtti) const;
-    virtual unsigned int GetDerivedRtti() const;
-    virtual const char* GetDerivedRttiName() const;
+    // FUNCTION: SWBF2 0x0067e3c0
+    // WeaponCannon::IsRtti
+    // FUNCTION: SWBF2 0x0067e3f0
+    // WeaponCannon::GetDerivedRtti
+    // FUNCTION: SWBF2 0x0067e400
+    // WeaponCannon::GetDerivedRttiName
+    PBL_DECLARE_DERIVED_RTTI(WeaponCannon, Weapon)
     virtual void SetKickSpreadFactor(float fFactor);
     virtual void SetYawSpreadFactor(float fFactor);
     virtual float GetYawSpread() const;
@@ -57,9 +62,6 @@ public:
     void StopCoolDownSound();
     void UpdateCoolDownSound(float fDeltaTime);
 
-    static PblHash rttiHashWeaponCannon;
-    static const char rttiNameWeaponCannon[];
-
     float mStrength;
     int mSalvoCount;
     float mSalvoDelay;
@@ -79,28 +81,6 @@ public:
     int mOrdCounter;
 };
 
-// FUNCTION: SWBF2 0x0067e3c0
-inline bool WeaponCannon::IsRtti(unsigned int uRtti) const
-{
-    if (rttiHashWeaponCannon == uRtti)
-    {
-        return true;
-    }
-    return Weapon::IsRtti(uRtti);
-}
-
-// FUNCTION: SWBF2 0x0067e3f0
-inline unsigned int WeaponCannon::GetDerivedRtti() const
-{
-    return rttiHashWeaponCannon;
-}
-
-// FUNCTION: SWBF2 0x0067e400
-inline const char* WeaponCannon::GetDerivedRttiName() const
-{
-    return rttiNameWeaponCannon;
-}
-
 // VTABLE: SWBF2 0x007b0674
 class WeaponCannonClass : public WeaponClass
 {
@@ -118,17 +98,18 @@ public:
 
     virtual WeaponClass* Derive(unsigned int uHash);
     virtual Weapon* Build(const WeaponDesc& desc);
-    virtual bool IsRtti(unsigned int uRtti) const;
-    virtual unsigned int GetDerivedRtti() const;
-    virtual const char* GetDerivedRttiName() const;
+    // FUNCTION: SWBF2 0x0067e440
+    // WeaponCannonClass::IsRtti
+    // FUNCTION: SWBF2 0x0067e470
+    // WeaponCannonClass::GetDerivedRtti
+    // FUNCTION: SWBF2 0x0067e480
+    // WeaponCannonClass::GetDerivedRttiName
+    PBL_DECLARE_DERIVED_RTTI(WeaponCannonClass, WeaponClass)
     virtual void SetProperty(unsigned int uProperty, const char* pszValue);
     virtual float GetHeatPerSalvo() const;
     virtual float GetShotsPerSalvo() const;
     virtual int GetBarrageMin() const;
     virtual int GetBarrageMax() const;
-
-    static PblHash rttiHashWeaponCannonClass;
-    static const char rttiNameWeaponCannonClass[];
 
     float mMaxPressedTime;
     float mShotDelayMin;
@@ -165,60 +146,4 @@ public:
     OrdnanceClass* mSecondaryOrdnanceClass;
     int mSecondaryOrdnancePeriod;
 };
-  
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
 
-// FUNCTION: SWBF2 0x0067e440
-inline bool WeaponCannonClass::IsRtti(unsigned int uRtti) const
-{
-    if (rttiHashWeaponCannonClass == uRtti)
-    {
-        return true;
-    }
-    return WeaponClass::IsRtti(uRtti);
-}
-
-// FUNCTION: SWBF2 0x0067e470
-inline unsigned int WeaponCannonClass::GetDerivedRtti() const
-{
-    return rttiHashWeaponCannonClass;
-}
-
-// FUNCTION: SWBF2 0x0067e480
-inline const char* WeaponCannonClass::GetDerivedRttiName() const
-{
-    return rttiNameWeaponCannonClass;
-}

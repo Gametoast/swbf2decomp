@@ -1,4 +1,5 @@
 #include <string.h>
+#include "PebbleFL/Common/PblRtti.h"
 #include "Red3DModelAnimator.h"
 #include "PebbleFL/Common/PblVector.h"
 
@@ -14,10 +15,9 @@
 
 // GLOBAL: SWBF2 0x009c8500
 // Red3DModelAnimator::rttiHashRed3DModelAnimator
-PblHash Red3DModelAnimator::rttiHashRed3DModelAnimator("Red3DModelAnimator");
 // GLOBAL: SWBF2 0x00784258
 // Red3DModelAnimator::rttiNameRed3DModelAnimator
-const char Red3DModelAnimator::rttiNameRed3DModelAnimator[] = "Red3DModelAnimator";
+PBL_IMPLEMENT_RTTI(Red3DModelAnimator)
 
 // FUNCTION: SWBF2 0x006f8190
 Red3DModelAnimator::Red3DModelAnimator()

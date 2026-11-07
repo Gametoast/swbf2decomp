@@ -184,7 +184,7 @@ void RedMouse::Update(float fDeltaTime)
     {
         if (pc_state.rgbButtons[i] & 0x80)
         {
-            m_uiDownButtons |= 1 << i;
+            m_uiDownButtons |= Bit(i);
         }
     }
     m_uiPressedButtons = m_uiDownButtons & (m_uiDownButtons ^ uiPrevDown);

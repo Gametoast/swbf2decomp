@@ -24,16 +24,16 @@ float UnitCTFOffenseAgent::GetUpdateRate() const
 {
     switch (mCurState)
     {
-    case 3:
-    case 8:
+    case STATE_ReturnFlag:
+    case STATE_Combat:
         return 0.8f;
-    case 4:
+    case STATE_DefendCarrier:
         return 1.0f;
-    case 2:
-    case 5:
+    case STATE_PickupFlag:
+    case STATE_AttackFlag:
         return 2.0f;
-    case 6:
-    case 7:
+    case STATE_DefendDropped:
+    case STATE_CampFlag:
         return mDefendHelper.GetUpdateRate();
     default:
         return UnitAgent::GetUpdateRate();
@@ -46,17 +46,16 @@ float UnitCTFOffenseAgent::GetUpdateRate() const
 
 // GLOBAL: SWBF2 0x01f99388
 // UnitCTFOffenseAgent::rttiHashUnitCTFOffenseAgent
-PblHash UnitCTFOffenseAgent::rttiHashUnitCTFOffenseAgent("UnitCTFOffenseAgent");
 // GLOBAL: SWBF2 0x0078b7c4
 // UnitCTFOffenseAgent::rttiNameUnitCTFOffenseAgent
-const char UnitCTFOffenseAgent::rttiNameUnitCTFOffenseAgent[] = "UnitCTFOffenseAgent";
+PBL_IMPLEMENT_RTTI(UnitCTFOffenseAgent)
 
 // FUNCTION: SWBF2 0x00664730
 UnitCTFOffenseAgent::UnitCTFOffenseAgent(UnitController* pCtrl, const FlagItem* pFlag, const PblVector3& vPos)
     : UnitAgent(pCtrl), mCombatHelper(this), mDefendHelper(this)
 {
-    mCurState = 1;
-    mNextState = 1;
+    mCurState = STATE_START;
+    mNextState = STATE_START;
     mFlag = pFlag;
     mCapturePos = vPos;
 
@@ -148,17 +147,17 @@ int UnitCTFOffenseAgent::EventHandler(AI::EventInfo* pInfo)
     case AI::EVT_EndInvisibility:
         if (const GameObject* pFlag = mFlag)
         {
-            if (mCurState == 3)
+            if (mCurState == STATE_ReturnFlag)
             {
                 DamagedEventPlayerCentricness(pInfo);
                 return AI::EVT_NotHandled;
             }
-            if (mCurState == 8)
+            if (mCurState == STATE_Combat)
             {
                 DamagedEventPlayerCentricness(pInfo);
                 return AI::EVT_NotHandled;
             }
-            if (mCurState == 2)
+            if (mCurState == STATE_PickupFlag)
             {
                 const GameObject* pFlagObject = mFlag.operator->();
                 const Controllable* pMe = mCtrl->mOwner;
@@ -171,7 +170,7 @@ int UnitCTFOffenseAgent::EventHandler(AI::EventInfo* pInfo)
                     return AI::EVT_NotHandled;
                 }
             }
-            if (mCurState == 4)
+            if (mCurState == STATE_DefendCarrier)
             {
                 DamagedEventPlayerCentricness(pInfo);
                 return AI::EVT_NotHandled;
@@ -182,16 +181,16 @@ int UnitCTFOffenseAgent::EventHandler(AI::EventInfo* pInfo)
             return AI::EVT_NotHandled;
         }
         mCombatCmd = pInfo->mNextCmd;
-        SetNextState(8);
+        SetNextState(STATE_Combat);
         pInfo->mNextCmd = UnitCmdInfo(CMD_NONE, NULL, PblVector3(0, 0, 0), NULL);
         return AI::EVT_Handled;
 
     case AI::EVT_CTF_FlagKill:
-        if (mCurState != 3 && mCurState != 4 && mCurState != 6 && mCurState != 7)
+        if (mCurState != STATE_ReturnFlag && mCurState != STATE_DefendCarrier && mCurState != STATE_DefendDropped && mCurState != STATE_CampFlag)
         {
             return AI::EVT_NotHandled;
         }
-        SetNextState(1);
+        SetNextState(STATE_START);
         ControllerManager::RequestControllerUpdateASAP(mCtrl);
         return AI::EVT_Handled;
 
@@ -226,17 +225,17 @@ void UnitCTFOffenseAgent::ExitState()
 {
     switch (mCurState)
     {
-    case 3:
+    case STATE_ReturnFlag:
         ReserveManager::UnreserveObject(mCtrl->mOwner->GetGameObject(), RT_FORMATION);
         break;
-    case 4:
+    case STATE_DefendCarrier:
         ReserveManager::UnreserveReserver(mCtrl->mOwner->GetGameObject(), RT_FORMATION);
         break;
-    case 6:
-    case 7:
+    case STATE_DefendDropped:
+    case STATE_CampFlag:
         mDefendHelper.Clean();
         break;
-    case 8:
+    case STATE_Combat:
         mCombatHelper.Clean();
         break;
     }
@@ -325,30 +324,30 @@ void UnitCTFOffenseAgent::EnterState()
     const GameObject* pFlag = mFlag;
     if (!pFlag)
     {
-        if (mCurState != 100)
+        if (mCurState != STATE_GLOBDONE)
         {
-            SetNextState(100);
+            SetNextState(STATE_GLOBDONE);
         }
         return;
     }
 
     switch (mCurState)
     {
-    case 1:
+    case STATE_START:
         if (IsFlagNeutral())
         {
             if (reinterpret_cast<const FlagItem*>(pFlag)->GetAllowAIPickup())
             {
-                SetNextState(2);
+                SetNextState(STATE_PickupFlag);
             }
             else
             {
-                SetNextState(6);
+                SetNextState(STATE_DefendDropped);
             }
         }
         else if (IsFlagInMyHands())
         {
-            SetNextState(3);
+            SetNextState(STATE_ReturnFlag);
         }
         else if (IsFlagInAlliedHandsButNotMine())
         {
@@ -366,43 +365,43 @@ void UnitCTFOffenseAgent::EnterState()
                     if (dx * dx + dy * dy + dz * dz < 2500.0f &&
                         ReserveManager::GetOpenReservableSlots(pCarrierObj, pCarrierObj->GetTeam(), RT_FORMATION) > 0)
                     {
-                        SetNextState(4);
+                        SetNextState(STATE_DefendCarrier);
                         return;
                     }
                 }
-                SetNextState(7);
+                SetNextState(STATE_CampFlag);
                 return;
             }
-            SetNextState(7);
+            SetNextState(STATE_CampFlag);
         }
         else
         {
-            SetNextState(5);
+            SetNextState(STATE_AttackFlag);
         }
         break;
 
-    case 2:
+    case STATE_PickupFlag:
         mCtrl->GetLowLevel().SetNavigator_Goto(mFlag->GetMatrix().GetTranslation(), 0, false, false);
         break;
 
-    case 3:
+    case STATE_ReturnFlag:
         mCtrl->GetLowLevel().SetNavigator_Goto(mCapturePos, 0, false, false);
         break;
 
-    case 4:
-    case 5:
+    case STATE_DefendCarrier:
+    case STATE_AttackFlag:
         mPathing = false;
         mPathTime = -100.0f;
         break;
 
-    case 6:
+    case STATE_DefendDropped:
     {
         AI::GoalTarget target(pFlag);
         mDefendHelper.Init(target);
         break;
     }
 
-    case 7:
+    case STATE_CampFlag:
     {
         const RedRegion* pHome = reinterpret_cast<const FlagItem*>(pFlag)->GetHomeRegion();
         PblVector3 vPos;
@@ -419,7 +418,7 @@ void UnitCTFOffenseAgent::EnterState()
         break;
     }
 
-    case 8:
+    case STATE_Combat:
         if (mCombatCmd.GetCmdType() == CMD_NONE)
         {
             mCombatCmd = UnitCombatInfo(UnitCombatInfo::ENGAGE);
@@ -435,24 +434,24 @@ void UnitCTFOffenseAgent::UpdateStatePostVision(float dt)
     const GameObject* pFlag = mFlag;
     if (!pFlag)
     {
-        if (mCurState != 100)
+        if (mCurState != STATE_GLOBDONE)
         {
-            SetNextState(100);
+            SetNextState(STATE_GLOBDONE);
         }
         return;
     }
 
-    if (mCurState != 8)
+    if (mCurState != STATE_Combat)
     {
         mAttackHelper.Update();
     }
 
     switch (mCurState)
     {
-    case 2:
+    case STATE_PickupFlag:
         if (!IsFlagNeutral())
         {
-            SetNextState(1);
+            SetNextState(STATE_START);
             return;
         }
         if (mCtrl->GetLowLevel().IsNavigatorInProgress())
@@ -460,23 +459,23 @@ void UnitCTFOffenseAgent::UpdateStatePostVision(float dt)
             FaceTargetIfClose(HEIGHT_STAND);
             break;
         }
-        SetNextState(1);
+        SetNextState(STATE_START);
         return;
 
-    case 3:
+    case STATE_ReturnFlag:
         if (!IsFlagInMyHands())
         {
-            SetNextState(1);
+            SetNextState(STATE_START);
             return;
         }
         FaceTargetIfClose(HEIGHT_STAND);
         break;
 
-    case 4:
+    case STATE_DefendCarrier:
     {
         if (!IsFlagInAlliedHandsButNotMine())
         {
-            SetNextState(1);
+            SetNextState(STATE_START);
             return;
         }
         Character* pCarrier = ((const EntityItem*)pFlag)->GetOwner();
@@ -492,11 +491,11 @@ void UnitCTFOffenseAgent::UpdateStatePostVision(float dt)
         break;
     }
 
-    case 5:
+    case STATE_AttackFlag:
     {
         if (!IsFlagInEnemyHands())
         {
-            SetNextState(1);
+            SetNextState(STATE_START);
             return;
         }
         GameObject* pCarrierObj = ((const EntityItem*)pFlag)->GetOwner()->GetControllable()->GetGameObject();
@@ -505,44 +504,44 @@ void UnitCTFOffenseAgent::UpdateStatePostVision(float dt)
         break;
     }
 
-    case 6:
+    case STATE_DefendDropped:
         if (IsFlagInAlliedHandsButNotMine())
         {
-            SetNextState(1);
+            SetNextState(STATE_START);
             return;
         }
         FaceTargetIfClose(HEIGHT_STAND);
         mDefendHelper.FSMUpdate(dt, false);
         if (mDefendHelper.IsDone())
         {
-            SetNextState(1);
+            SetNextState(STATE_START);
         }
         break;
 
-    case 7:
+    case STATE_CampFlag:
         if (IsFlagInMyHands() || IsFlagNeutral())
         {
-            SetNextState(1);
+            SetNextState(STATE_START);
             return;
         }
         FaceTargetIfClose(HEIGHT_STAND);
         mDefendHelper.FSMUpdate(dt, false);
         if (mDefendHelper.IsDone())
         {
-            SetNextState(1);
+            SetNextState(STATE_START);
         }
         break;
 
-    case 8:
+    case STATE_Combat:
         if (IsFlagInMyHands() || IsFlagNeutral())
         {
-            SetNextState(1);
+            SetNextState(STATE_START);
             return;
         }
         mCombatHelper.FSMUpdate(dt, false);
         if (mCombatHelper.IsDone())
         {
-            SetNextState(1);
+            SetNextState(STATE_START);
         }
         break;
     }

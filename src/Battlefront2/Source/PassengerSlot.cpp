@@ -32,10 +32,9 @@ MemoryPool PassengerSlot::sMemoryPool("PassengerSlot", sizeof(PassengerSlot));
 
 // GLOBAL: SWBF2 0x01ef7c90
 // PassengerSlot::rttiHashPassengerSlot
-PblHash PassengerSlot::rttiHashPassengerSlot("PassengerSlot");
 // GLOBAL: SWBF2 0x0078aabc
 // PassengerSlot::rttiNamePassengerSlot
-const char PassengerSlot::rttiNamePassengerSlot[] = "PassengerSlot";
+PBL_IMPLEMENT_RTTI(PassengerSlot)
 
 
 

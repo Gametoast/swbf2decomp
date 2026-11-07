@@ -4,6 +4,14 @@
 class Fsm
 {
 public:
+    // States every state machine shares: none yet, and finished (Kill, IsDone). The modtools build's state-name tables
+    // call them "NONE" and "GLOBDONE"; each machine numbers its own states from 1 (STATE_START).
+    enum
+    {
+        STATE_NONE = 0,
+        STATE_GLOBDONE = 100
+    };
+
     Fsm();
 
 protected:

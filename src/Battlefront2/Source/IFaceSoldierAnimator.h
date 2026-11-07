@@ -1,6 +1,7 @@
 #pragma once
 
 #include "PebbleFL/Common/PblHashTable.h"
+#include "PebbleFL/Common/PblRtti.h"
 
 #include <stddef.h>
 #include "PebbleFL/Common/PblBitVector.h"
@@ -15,9 +16,13 @@ public:
 
     IFaceSoldierAnimator(const Red3DModelAnimator* pAnimator);
 
-    virtual bool IsRtti(unsigned int uRtti) const;
-    virtual unsigned int GetDerivedRtti() const;
-    virtual const char* GetDerivedRttiName() const;
+    // FUNCTION: SWBF2 0x0056a130
+    // IFaceSoldierAnimator::IsRtti
+    // FUNCTION: SWBF2 0x0056a160
+    // IFaceSoldierAnimator::GetDerivedRtti
+    // FUNCTION: SWBF2 0x0056a170
+    // IFaceSoldierAnimator::GetDerivedRttiName
+    PBL_DECLARE_DERIVED_RTTI(IFaceSoldierAnimator, Red3DModelAnimator)
     virtual ~IFaceSoldierAnimator() {}
     // SYNTHETIC: SWBF2 0x0056a1d0
     // IFaceSoldierAnimator::`scalar deleting destructor'
@@ -41,9 +46,6 @@ public:
     }
     void QueueUpperLowerAnimations(unsigned int uUpperAnimHash, unsigned int uLowerAnimHash);
 
-    static PblHash rttiHashIFaceSoldierAnimator;
-    static const char rttiNameIFaceSoldierAnimator[];
-
     unsigned int mLowerAnimHash;
     unsigned int mQueuedLowerAnim;
     ZephyrAnim* mZephyrAnimationLower;
@@ -59,24 +61,3 @@ public:
  
  
 
-// FUNCTION: SWBF2 0x0056a130
-inline bool IFaceSoldierAnimator::IsRtti(unsigned int uRtti) const
-{
-    if (rttiHashIFaceSoldierAnimator == uRtti)
-    {
-        return true;
-    }
-    return Red3DModelAnimator::IsRtti(uRtti);
-}
-
-// FUNCTION: SWBF2 0x0056a160
-inline unsigned int IFaceSoldierAnimator::GetDerivedRtti() const
-{
-    return rttiHashIFaceSoldierAnimator;
-}
-
-// FUNCTION: SWBF2 0x0056a170
-inline const char* IFaceSoldierAnimator::GetDerivedRttiName() const
-{
-    return rttiNameIFaceSoldierAnimator;
-}

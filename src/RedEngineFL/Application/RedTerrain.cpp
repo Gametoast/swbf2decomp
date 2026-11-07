@@ -1,4 +1,5 @@
 #include <d3dx9math.h>
+#include "PebbleFL/Common/PblBits.h"
 #include "RedTerrain.h"
 #include <new>
 #include <math.h>
@@ -15,6 +16,7 @@
 #include "RedWater.h"
 
 #include <float.h>
+
 
 bool PointInSphere(const PblVector3& vPoint, const PblVector3& vCenter, float fRadius);
 
@@ -322,7 +324,7 @@ bool RedTerrain::PointInHole(const PblVector3& vPos)
     }
     const int iQuadrant = ((iX >> (_iHeightPatchPointsPerDimensionLog2 - 1)) & 1) |
                           ((iZ >> (_iHeightPatchPointsPerDimensionLog2 - 2)) & 2);
-    if (!(uiHoles & (1 << iQuadrant)))
+    if (!(uiHoles & Bit(iQuadrant)))
     {
         return false;
     }

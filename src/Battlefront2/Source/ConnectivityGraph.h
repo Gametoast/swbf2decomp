@@ -55,6 +55,14 @@ inline ConnectivityNode::~ConnectivityNode()
  
  
 
+// ConnectivityArc::mFlags
+enum ArcFlags
+{
+    AF_OneWay = 1,
+    AF_Jump = 2,
+    AF_JetJump = 4
+};
+
 class ConnectivityArc
 {
 public:

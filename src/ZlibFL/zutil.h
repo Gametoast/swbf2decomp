@@ -1,6 +1,14 @@
 #ifndef ZUTIL_H
 #define ZUTIL_H
 
+/* shifts with a name */
+#define ZPOW2(n)      (1 << (n))
+#define ZPOW2U(n)     (1U << (n))
+#define ZLOWBITS(n)   ((1 << (n)) - 1)
+#define ZLOWBITSU(n)  ((1U << (n)) - 1)
+#define ZBITUL(n)     (1UL << (n))
+#define ZFLAGBIT(n)   (1 << (n))   /* a bit of zlibCompileFlags */
+
 #define ZLIB_INTERNAL
 #include "zlib.h"
 

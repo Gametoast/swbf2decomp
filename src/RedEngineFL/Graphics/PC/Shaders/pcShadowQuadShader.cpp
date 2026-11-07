@@ -193,7 +193,7 @@ void pcShadowQuadShader::_Init(unsigned int uiFlags,
                                const RedColor&,
                                float)
 {
-    m_pVertexInputFormat = pcRedVertexFormat::Create(uiFlags, 2);
+    m_pVertexInputFormat = pcRedVertexFormat::Create(uiFlags, RVF_POSITION_XYZ);
 }
 
 // FUNCTION: SWBF2 0x00708480

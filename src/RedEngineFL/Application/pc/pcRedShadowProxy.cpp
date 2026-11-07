@@ -122,7 +122,7 @@ void RedShadowProxy::BuildData(const RedModel* pModel, const PblMatrix* pMatrix,
     }
     SetRenderRadius(m_fShadowLength * 0.5f + m_fCasterRadius);
 
-    _uiRenderFlags &= ~2u;
+    _uiRenderFlags &= ~RENDERFLAG_TEST_BBOX;
     Activate();
 
     mModel = const_cast<RedModel*>(pModel);
@@ -151,7 +151,7 @@ void RedShadowProxy::RemoveFromScene2()
 // FUNCTION: SWBF2 0x006edc50
 void RedShadowProxy::Render(unsigned char ucViewport, float fDist, unsigned int uiFlags)
 {
-    if (RedStencilShadow::GetShadowEnable() && !(uiFlags & 0x200000) &&
+    if (RedStencilShadow::GetShadowEnable() && !(uiFlags & RENDERFLAG_RENDER_REFLECTION) &&
         mModel && mModel->_pStencilShadow)
     {
         RedStencilShadow::VisibilityTestT test = RedStencilShadow::ShadowVolumeVisibilityTest(

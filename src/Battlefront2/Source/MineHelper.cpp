@@ -111,7 +111,7 @@ void MineHelper::UpdateState(float)
         bool bSwitching;
         if (!SetMineWpn(&bSwitching))
         {
-            SetNextState(100);
+            SetNextState(STATE_GLOBDONE);
         }
         else if (!bSwitching)
         {
@@ -126,7 +126,7 @@ void MineHelper::UpdateState(float)
             {
                 if (!CheckForHintsAndInit())
                 {
-                    SetNextState(100);
+                    SetNextState(STATE_GLOBDONE);
                 }
             }
         }

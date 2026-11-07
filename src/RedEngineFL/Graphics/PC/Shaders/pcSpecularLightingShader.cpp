@@ -274,17 +274,17 @@ unsigned int pcSpecularLightingShader::GetState_Prog1(const RenderItem* pItem) c
     const RedLightingState* pLighting = pItem->pLightingState;
     const RedMaterial* pMaterial = pItem->pRootShader->m_material;
 
-    const bool bEnvMap = (pMaterial->materialFlags & 0x100) &&
+    const bool bEnvMap = (pMaterial->materialFlags & MATERIAL_FLAG_ENVMAP) &&
                          (pMaterial->envMapHash || pLighting->pEnvMap);
     int iNumLights = pLighting->numSpecularLights;
-    if (!(pMaterial->materialFlags & 0x80))
+    if (!(pMaterial->materialFlags & MATERIAL_FLAG_SPECULAR))
     {
         iNumLights = 0;
     }
 
     if (pMaterial->bumpMapHash && RedRenderer::pcGetRenderOptions().bumpMapping)
     {
-        if (pMaterial->materialFlags & 0x10000000)
+        if (pMaterial->materialFlags & MATERIAL_FLAG_HEIGHTFIELD)
         {
             if (iNumLights)
             {
@@ -392,7 +392,7 @@ void pcSpecularLightingShader::PerPixelLighting(const RenderItem* pItem, unsigne
     const RedColorValue& specular = pMaterial->specularColor;
     lightConstants[0] = RedColorValue(specular.r * fScale, specular.g * fScale, specular.b * fScale,
                               specular.a * fScale);
-    lightConstants[0].a = (pMaterial->materialFlags & 8) ? 1.0f : 0.0f;
+    lightConstants[0].a = (pMaterial->materialFlags & MATERIAL_FLAG_ALPHAMAP_GLOSS) ? 1.0f : 0.0f;
 
     if (uiPass || pItem->uiShaderState == 5 || pItem->uiShaderState == 8)
     {
@@ -481,12 +481,12 @@ void pcSpecularLightingShader::PerVertexLighting(const RenderItem* pItem, unsign
     RedColorValue lightConstants[6];
     const float fScale = RedRenderer::GetLightingScale() * (pItem->tweakColor.a * kInv255);
     lightConstants[0] = pMaterial->specularColor * fScale;
-    lightConstants[0].a = (pMaterial->materialFlags & 8) ? 1.0f : 0.0f;
+    lightConstants[0].a = (pMaterial->materialFlags & MATERIAL_FLAG_ALPHAMAP_GLOSS) ? 1.0f : 0.0f;
 
     pcRedVertexShaderConstantRegister* pRegs = RedRenderer::pcLockVertexShaderConstants(42, 4);
     pRegs[42].SetFloats(0.0f, 0.0f, 0.0f, sqrtf(pMaterial->specularPower) * kfSpecularSizeInv);
 
-    if (pMaterial->materialFlags & 0x80)
+    if (pMaterial->materialFlags & MATERIAL_FLAG_SPECULAR)
     {
         for (int i = 0; i < pLighting->numDirectionalLights; i++)
         {
@@ -563,7 +563,7 @@ void pcSpecularLightingShader::PerVertexLighting(const RenderItem* pItem, unsign
     }
 
     unsigned int uiSpotStage = 0;
-    if (pMaterial->materialFlags & 0x100)
+    if (pMaterial->materialFlags & MATERIAL_FLAG_ENVMAP)
     {
         if (pMaterial->envMapHash)
         {
@@ -606,12 +606,12 @@ void pcSpecularLightingShader::Render_Prog1(const RenderItem* pItem, unsigned in
     RedRenderer::pcLoadFormat(pItem->pPrim->m_vertexFormat);
 
     const RedMaterial* pMaterial = pItem->pRootShader->m_material;
-    RedRenderer::pcSetCullMode((pMaterial->materialFlags & 0x10000) ? PCREDCULL_NONE : PCREDCULL_BACK);
+    RedRenderer::pcSetCullMode((pMaterial->materialFlags & MATERIAL_FLAG_CULL_NONE) ? PCREDCULL_NONE : PCREDCULL_BACK);
 
     if (pMaterial->bumpMapHash && RedRenderer::pcGetRenderOptions().bumpMapping)
     {
         RedRenderer::pcSetTexture(0, RedTexture::Find(pMaterial->bumpMapHash));
-        const RedTextureTransform& transform = (pMaterial->materialFlags & 0x800)
+        const RedTextureTransform& transform = (pMaterial->materialFlags & MATERIAL_FLAG_BUMPDETAIL)
                                                    ? pMaterial->detailTexTransform
                                                    : pMaterial->diffuseTexTransform;
         pcRedVertexShaderConstantRegister* pRegs = RedRenderer::pcLockVertexShaderConstants(40, 2);

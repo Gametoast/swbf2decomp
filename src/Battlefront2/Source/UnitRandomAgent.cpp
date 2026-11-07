@@ -41,10 +41,9 @@ namespace
 
 // GLOBAL: SWBF2 0x01f9a248
 // UnitRandomAgent::rttiHashUnitRandomAgent
-PblHash UnitRandomAgent::rttiHashUnitRandomAgent("UnitRandomAgent");
 // GLOBAL: SWBF2 0x0078b914
 // UnitRandomAgent::rttiNameUnitRandomAgent
-const char UnitRandomAgent::rttiNameUnitRandomAgent[] = "UnitRandomAgent";
+PBL_IMPLEMENT_RTTI(UnitRandomAgent)
 
 
 
@@ -66,8 +65,8 @@ UnitRandomAgent::UnitRandomAgent(UnitController* pCtrl)
     : UnitAgent(pCtrl)
 {
     mStartPos = pCtrl->mOwner->GetMatrix().GetTranslation();
-    mCurState = 1;
-    mNextState = 2;
+    mCurState = STATE_START;
+    mNextState = STATE_RandomGoto;
 }
 
 // FUNCTION: SWBF2 0x00669420
@@ -93,7 +92,7 @@ void UnitRandomAgent::EnterState()
 {
     switch (mCurState)
     {
-    case 2:
+    case STATE_RandomGoto:
         PickRandomDest();
         break;
     }
@@ -111,7 +110,7 @@ void UnitRandomAgent::UpdateStatePostVision(float dt)
     mAttackHelper.Update();
     switch (mCurState)
     {
-    case 2:
+    case STATE_RandomGoto:
     {
         float fRange = 6.0f;
         GetLowLevel().mFoldStatus = FOLD_UNFOLD;
@@ -126,7 +125,7 @@ void UnitRandomAgent::UpdateStatePostVision(float dt)
         float fZ = vPos.z - mStartPos.z;
         if (fY * fY + fX * fX + fZ * fZ > fRange * fRange && IsPointValid(vPos))
         {
-            SetNextState(100);
+            SetNextState(STATE_GLOBDONE);
             FaceTarget(HEIGHT_STAND);
             return;
         }

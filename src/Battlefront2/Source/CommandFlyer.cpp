@@ -1,4 +1,5 @@
 #include "CommandFlyer.h"
+#include "PebbleFL/Common/PblRtti.h"
 #include "CollisionManager.h"
 #include "GameModel.h"
 #include "NetGame.h"
@@ -74,10 +75,9 @@ CommandFlyerClass::CommandFlyerClass(unsigned int uHash)
 
 // GLOBAL: SWBF2 0x01eb969c
 // CommandFlyerClass::rttiHashCommandFlyerClass
-PblHash CommandFlyerClass::rttiHashCommandFlyerClass("CommandFlyerClass");
 // GLOBAL: SWBF2 0x00788c78
 // CommandFlyerClass::rttiNameCommandFlyerClass
-const char CommandFlyerClass::rttiNameCommandFlyerClass[] = "CommandFlyerClass";
+PBL_IMPLEMENT_RTTI(CommandFlyerClass)
 
 
 

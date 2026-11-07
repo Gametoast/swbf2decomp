@@ -31,10 +31,9 @@ PowerupItemClass::PowerupItemClass(unsigned int uHash)
 
 // GLOBAL: SWBF2 0x01efa1d0
 // PowerupItemClass::rttiHashPowerupItemClass
-PblHash PowerupItemClass::rttiHashPowerupItemClass("PowerupItemClass");
 // GLOBAL: SWBF2 0x0078abe0
 // PowerupItemClass::rttiNamePowerupItemClass
-const char PowerupItemClass::rttiNamePowerupItemClass[] = "PowerupItemClass";
+PBL_IMPLEMENT_RTTI(PowerupItemClass)
 
 
 
@@ -206,10 +205,9 @@ MemoryPool PowerupItem::sMemoryPool("PowerupItem", sizeof(PowerupItem));
 
 // GLOBAL: SWBF2 0x01efa1d4
 // PowerupItem::rttiHashPowerupItem
-PblHash PowerupItem::rttiHashPowerupItem("PowerupItem");
 // GLOBAL: SWBF2 0x0078ac00
 // PowerupItem::rttiNamePowerupItem
-const char PowerupItem::rttiNamePowerupItem[] = "PowerupItem";
+PBL_IMPLEMENT_RTTI(PowerupItem)
 
 class CollisionManager
 {

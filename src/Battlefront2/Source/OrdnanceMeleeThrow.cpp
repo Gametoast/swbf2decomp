@@ -134,10 +134,9 @@ class RedPose;
 
 // GLOBAL: SWBF2 0x01ef2654
 // OrdnanceMeleeThrow::rttiHashOrdnanceMeleeThrow
-PblHash OrdnanceMeleeThrow::rttiHashOrdnanceMeleeThrow("OrdnanceMeleeThrow");
 // GLOBAL: SWBF2 0x0078a94c
 // OrdnanceMeleeThrow::rttiNameOrdnanceMeleeThrow
-const char OrdnanceMeleeThrow::rttiNameOrdnanceMeleeThrow[] = "OrdnanceMeleeThrow";
+PBL_IMPLEMENT_RTTI(OrdnanceMeleeThrow)
 
 // SYNTHETIC: SWBF2 0x00405b30
 // `dynamic initializer for 'OrdnanceMeleeThrowClass::rttiHashOrdnanceMeleeThrowClass''
@@ -145,10 +144,9 @@ const char OrdnanceMeleeThrow::rttiNameOrdnanceMeleeThrow[] = "OrdnanceMeleeThro
 
 // GLOBAL: SWBF2 0x01ef2650
 // OrdnanceMeleeThrowClass::rttiHashOrdnanceMeleeThrowClass
-PblHash OrdnanceMeleeThrowClass::rttiHashOrdnanceMeleeThrowClass("OrdnanceMeleeThrowClass");
 // GLOBAL: SWBF2 0x0078a96c
 // OrdnanceMeleeThrowClass::rttiNameOrdnanceMeleeThrowClass
-const char OrdnanceMeleeThrowClass::rttiNameOrdnanceMeleeThrowClass[] = "OrdnanceMeleeThrowClass";
+PBL_IMPLEMENT_RTTI(OrdnanceMeleeThrowClass)
 
 
 
@@ -188,7 +186,7 @@ void OrdnanceMeleeThrow::Render(unsigned char, float, unsigned int uiFlags)
 
     mOffscreenTime = 0.0f;
     PblMatrix mat = m_mMatrix;
-    m_pWeapon->m_pPrimaryWeapon->Render(mat, 0, RedColor::WHITE, uiFlags | 1, true);
+    m_pWeapon->m_pPrimaryWeapon->Render(mat, 0, RedColor::WHITE, uiFlags | RENDERFLAG_CLIPPED, true);
 }
 
 // FUNCTION: SWBF2 0x00603550

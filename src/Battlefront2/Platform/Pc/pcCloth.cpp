@@ -37,7 +37,7 @@ void ClothData::PlatformBindInit(const EntityClothClass* pClass)
         uiMode = 5;
     }
 
-    pData->m_pShader = pcRedShader::Create(kuiNormalShader, 0x222, &pData->m_uiTextureNameHash, 1, uiMode,
+    pData->m_pShader = pcRedShader::Create(kuiNormalShader, RVF_POSITION_XYZ | RVF_NORMAL | RVF_TEXCOORDS_1, &pData->m_uiTextureNameHash, 1, uiMode,
                                            RedColor::WHITE, RedColor::BLACK, 32.0f);
 }
 
@@ -105,13 +105,13 @@ void EntityCloth::PlatformRender(unsigned char ucViewport, RedColor color, unsig
                                    0, 0);
 
     PblMatrix mReflection;
-    if (!(uiFlags & 0x200000)
+    if (!(uiFlags & RENDERFLAG_RENDER_REFLECTION)
         && FLRenderer::IsReflected(sphere.GetCenter(), sphere.GetRadius(), mReflection, false))
     {
         PblMatrix mReflected = m_worldMat * mReflection;
         RedRenderer::pcRenderPrimitive(pPrimitive, mData->GetShader(),
                                        mReflected, color,
-                                       uiFlags | 0x10000100, 0, 0, 0);
+                                       uiFlags | RENDERFLAG_REFLECTION | RENDERFLAG_PSEUDO_REFLECTED, 0, 0, 0);
     }
 
     pPrimitive->Release();

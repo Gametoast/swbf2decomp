@@ -1,6 +1,7 @@
 #pragma once
 
 #include "PebbleFL/Common/PblHashTable.h"
+#include "PebbleFL/Common/PblRtti.h"
 
 #include <stddef.h>
 
@@ -17,18 +18,18 @@ public:
 
     virtual WeaponClass* Derive(unsigned int uHash);
     virtual WeaponDispenser* Build(const WeaponDesc& desc);
-    virtual bool IsRtti(unsigned int uRtti) const;
-    virtual unsigned int GetDerivedRtti() const;
-    virtual const char* GetDerivedRttiName() const;
+    // FUNCTION: SWBF2 0x006824b0
+    // WeaponDetonatorClass::IsRtti
+    // FUNCTION: SWBF2 0x006824e0
+    // WeaponDetonatorClass::GetDerivedRtti
+    // FUNCTION: SWBF2 0x006824f0
+    // WeaponDetonatorClass::GetDerivedRttiName
+    PBL_DECLARE_DERIVED_RTTI(WeaponDetonatorClass, WeaponDispenserClass)
     virtual void SetProperty(unsigned int uProperty, const char* pszValue);
 
     unsigned int mPlantedHash;
 
-    static PblHash rttiHashWeaponDetonatorClass;
-    static const char rttiNameWeaponDetonatorClass[];
 };
-  
- 
 
 // VTABLE: SWBF2 0x007b096c
 class WeaponDetonator : public WeaponDispenser
@@ -59,7 +60,6 @@ public:
     static PblHash rttiHashWeaponDetonator;
     static const char rttiNameWeaponDetonator[];
 };
- 
 
 // FUNCTION: SWBF2 0x00682490
 inline unsigned int WeaponDetonator::GetDerivedRtti() const
@@ -71,28 +71,6 @@ inline unsigned int WeaponDetonator::GetDerivedRtti() const
 inline const char* WeaponDetonator::GetDerivedRttiName() const
 {
     return rttiNameWeaponDetonator;
-}
-
-// FUNCTION: SWBF2 0x006824b0
-inline bool WeaponDetonatorClass::IsRtti(unsigned int uRtti) const
-{
-    if (rttiHashWeaponDetonatorClass == uRtti)
-    {
-        return true;
-    }
-    return WeaponDispenserClass::IsRtti(uRtti);
-}
-
-// FUNCTION: SWBF2 0x006824e0
-inline unsigned int WeaponDetonatorClass::GetDerivedRtti() const
-{
-    return rttiHashWeaponDetonatorClass;
-}
-
-// FUNCTION: SWBF2 0x006824f0
-inline const char* WeaponDetonatorClass::GetDerivedRttiName() const
-{
-    return rttiNameWeaponDetonatorClass;
 }
 
 // FUNCTION: SWBF2 0x00682460

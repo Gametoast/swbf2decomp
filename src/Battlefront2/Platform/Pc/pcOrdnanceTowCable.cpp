@@ -23,7 +23,7 @@ void OrdnanceTowCable::PlatformInit()
     unsigned int uiFormat =
         RedRenderer::pcGetGeometryMode() != GEOMETRYMODE_UNCOMPRESSED ? 0x9282 : 0x282;
     sShader = pcRedShader::Create(0x8a8743bf /* "PARTICLE" */, uiFormat,
-                                  &sTextureHash, 1, 0x10004, RedColor::WHITE, RedColor::BLACK,
+                                  &sTextureHash, 1, MATERIAL_FLAG_ALPHAMAP_OPACITY | MATERIAL_FLAG_CULL_NONE, RedColor::WHITE, RedColor::BLACK,
                                   32.0f);
 }
 
@@ -186,7 +186,7 @@ void sRenderHermiteSegment(PblHermiteVector3& segment, unsigned char ucViewport,
     RedRenderer::pcRenderPrimitive(pPrimitive,
                                    OrdnanceTowCable::sShader,
                                    gMatrixIdentity, RedColor::WHITE,
-                                   0x1000010, 0, 0, 0);
+                                   RENDERFLAG_NO_LIGHTING | RENDERFLAG_RENDER_CACHED, 0, 0, 0);
     pPrimitive->Release();
 }
 

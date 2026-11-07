@@ -1,4 +1,5 @@
 #include <string.h>
+#include "PebbleFL/Common/PblRtti.h"
 #include <stdlib.h>
 
 #include "EntityBuildingArmed.h"
@@ -41,10 +42,9 @@ EntityBuildingArmedClass::~EntityBuildingArmedClass()
 
 // GLOBAL: SWBF2 0x01ebb888
 // EntityBuildingArmed::rttiHashEntityBuildingArmed
-PblHash EntityBuildingArmed::rttiHashEntityBuildingArmed("EntityBuildingArmed");
 // GLOBAL: SWBF2 0x0078902c
 // EntityBuildingArmed::rttiNameEntityBuildingArmed
-const char EntityBuildingArmed::rttiNameEntityBuildingArmed[] = "EntityBuildingArmed";
+PBL_IMPLEMENT_RTTI(EntityBuildingArmed)
 
 // SYNTHETIC: SWBF2 0x004028f0
 // `dynamic initializer for 'EntityBuildingArmedClass::rttiHashEntityBuildingArmedClass''
@@ -52,10 +52,9 @@ const char EntityBuildingArmed::rttiNameEntityBuildingArmed[] = "EntityBuildingA
 
 // GLOBAL: SWBF2 0x01ebb88c
 // EntityBuildingArmedClass::rttiHashEntityBuildingArmedClass
-PblHash EntityBuildingArmedClass::rttiHashEntityBuildingArmedClass("EntityBuildingArmedClass");
 // GLOBAL: SWBF2 0x00789008
 // EntityBuildingArmedClass::rttiNameEntityBuildingArmedClass
-const char EntityBuildingArmedClass::rttiNameEntityBuildingArmedClass[] = "EntityBuildingArmedClass";
+PBL_IMPLEMENT_RTTI(EntityBuildingArmedClass)
 
 // SYNTHETIC: SWBF2 0x00496710
 // EntityBuildingArmedClass::`scalar deleting destructor'

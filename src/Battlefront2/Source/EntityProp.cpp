@@ -49,10 +49,9 @@ static EntityClass* sPendingAttachedOdfClass;
 
 // GLOBAL: SWBF2 0x01ebbfec
 // EntityProp::rttiHashEntityProp
-PblHash EntityProp::rttiHashEntityProp("EntityProp");
 // GLOBAL: SWBF2 0x00789484
 // EntityProp::rttiNameEntityProp
-const char EntityProp::rttiNameEntityProp[] = "EntityProp";
+PBL_IMPLEMENT_RTTI(EntityProp)
 
 // SYNTHETIC: SWBF2 0x00402cd0
 // `dynamic initializer for 'EntityPropClass::rttiHashEntityPropClass''
@@ -60,10 +59,9 @@ const char EntityProp::rttiNameEntityProp[] = "EntityProp";
 
 // GLOBAL: SWBF2 0x01ebc040
 // EntityPropClass::rttiHashEntityPropClass
-PblHash EntityPropClass::rttiHashEntityPropClass("EntityPropClass");
 // GLOBAL: SWBF2 0x00789490
 // EntityPropClass::rttiNameEntityPropClass
-const char EntityPropClass::rttiNameEntityPropClass[] = "EntityPropClass";
+PBL_IMPLEMENT_RTTI(EntityPropClass)
 
 
 
@@ -306,18 +304,18 @@ void EntityProp::Render(unsigned char ucViewport, float fDist, unsigned int uiFl
 {
     if (!((const EntityPropClass*)mEntityClass)->m_bDynamicLighting)
     {
-        uiFlags |= 0x80;
+        uiFlags |= RENDERFLAG_STATIC;
     }
     else
     {
-        uiFlags &= ~0x80;
+        uiFlags &= ~RENDERFLAG_STATIC;
     }
     if (mShadowProxy && mShadowProxy->IsInScene())
     {
-        uiFlags &= ~0x10000;
+        uiFlags &= ~RENDERFLAG_RENDER_SHADOWVOLUMES;
     }
 
-    mModel->Render(ucViewport, fDist, &mMatrix, NULL, mGeometryColor, uiFlags | 0x1000000, NULL);
+    mModel->Render(ucViewport, fDist, &mMatrix, NULL, mGeometryColor, uiFlags | RENDERFLAG_RENDER_CACHED, NULL);
 
     for (unsigned int i = 0; i < mModel->mClothCount; ++i)
     {
@@ -329,7 +327,7 @@ void EntityProp::Render(unsigned char ucViewport, float fDist, unsigned int uiFl
         }
     }
 
-    if (((const EntityPropClass*)mEntityClass)->mReflected && !(uiFlags & 0x200000))
+    if (((const EntityPropClass*)mEntityClass)->mReflected && !(uiFlags & RENDERFLAG_RENDER_REFLECTION))
     {
         PblMatrix mReflection;
         if (FLRenderer::IsReflected(*(const PblVector3*)&_Sphere, _Sphere.w, mReflection, false))
@@ -338,7 +336,7 @@ void EntityProp::Render(unsigned char ucViewport, float fDist, unsigned int uiFl
             mWorld = mMatrix * mReflection;
             mReflection = mWorld;
             mModel->Render(ucViewport, fDist, &mReflection, NULL, mGeometryColor,
-                           (uiFlags & ~0x10000) | 0x10000100, NULL);
+                           (uiFlags & ~RENDERFLAG_RENDER_SHADOWVOLUMES) | RENDERFLAG_REFLECTION | RENDERFLAG_PSEUDO_REFLECTED, NULL);
         }
     }
 
@@ -599,7 +597,7 @@ void EntityPropClass::SetProperty(unsigned int uProperty, const char* pszValue)
             int iMaskId = mCollisionModel.GetMaskId(uName);
             if (iMaskId >= 0)
             {
-                sSoftCollisionMask |= 1 << iMaskId;
+                sSoftCollisionMask |= Bit(iMaskId);
                 mCollisionModel.SetCollisionMask(COLL_SOFT, CollisionMask(sSoftCollisionMask));
             }
         }
@@ -648,7 +646,7 @@ void EntityPropClass::SetProperty(unsigned int uProperty, const char* pszValue)
         int iMaskId = mCollisionModel.GetMaskId(PblHash(pszValue));
         if (iMaskId >= 0)
         {
-            sStaticCollisionMask |= 1 << iMaskId;
+            sStaticCollisionMask |= Bit(iMaskId);
             mCollisionModel.SetCollisionMask(COLL_STATIC, CollisionMask(sStaticCollisionMask));
         }
         break;
@@ -677,7 +675,7 @@ void EntityPropClass::SetProperty(unsigned int uProperty, const char* pszValue)
         int iMaskId = mCollisionModel.GetMaskId(PblHash(pszValue));
         if (iMaskId >= 0)
         {
-            sTerrainCollisionMask |= 1 << iMaskId;
+            sTerrainCollisionMask |= Bit(iMaskId);
             mCollisionModel.SetCollisionMask(COLL_TERRAIN, CollisionMask(sTerrainCollisionMask));
         }
         break;
@@ -692,7 +690,7 @@ void EntityPropClass::SetProperty(unsigned int uProperty, const char* pszValue)
         int iMaskId = mCollisionModel.GetMaskId(PblHash(pszValue));
         if (iMaskId >= 0)
         {
-            sRigidCollisionMask |= 1 << iMaskId;
+            sRigidCollisionMask |= Bit(iMaskId);
             mCollisionModel.SetCollisionMask(COLL_RIGID, CollisionMask(sRigidCollisionMask));
             CollisionMask softMask = mCollisionModel.GetCollisionMask(COLL_SOFT);
             CollisionMask ordnanceMask = mCollisionModel.GetCollisionMask(COLL_ORDNANCE);
@@ -717,7 +715,7 @@ void EntityPropClass::SetProperty(unsigned int uProperty, const char* pszValue)
         int iMaskId = mCollisionModel.GetMaskId(PblHash(pszValue));
         if (iMaskId >= 0)
         {
-            sTargetableCollisionMask |= 1 << iMaskId;
+            sTargetableCollisionMask |= Bit(iMaskId);
             mCollisionModel.SetCollisionMask(COLL_TARGETABLE, CollisionMask(sTargetableCollisionMask));
         }
         break;
@@ -740,7 +738,7 @@ void EntityPropClass::SetProperty(unsigned int uProperty, const char* pszValue)
             int iMaskId = mCollisionModel.GetMaskId(uName);
             if (iMaskId >= 0)
             {
-                sRigidCollisionMask |= 1 << iMaskId;
+                sRigidCollisionMask |= Bit(iMaskId);
                 mCollisionModel.SetCollisionMask(COLL_RIGID, CollisionMask(sRigidCollisionMask));
             }
         }
@@ -774,7 +772,7 @@ void EntityPropClass::SetProperty(unsigned int uProperty, const char* pszValue)
             int iMaskId = mCollisionModel.GetMaskId(uName);
             if (iMaskId >= 0)
             {
-                sOrdnanceCollisionMask |= 1 << iMaskId;
+                sOrdnanceCollisionMask |= Bit(iMaskId);
                 mCollisionModel.SetCollisionMask(COLL_ORDNANCE, CollisionMask(sOrdnanceCollisionMask));
             }
         }

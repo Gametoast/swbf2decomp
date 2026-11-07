@@ -7,10 +7,9 @@
 
 // GLOBAL: SWBF2 0x01f99414
 // UnitMobileController::rttiHashUnitMobileController
-PblHash UnitMobileController::rttiHashUnitMobileController("UnitMobileController");
 // GLOBAL: SWBF2 0x0078b8ec
 // UnitMobileController::rttiNameUnitMobileController
-const char UnitMobileController::rttiNameUnitMobileController[] = "UnitMobileController";
+PBL_IMPLEMENT_RTTI(UnitMobileController)
 
 
 

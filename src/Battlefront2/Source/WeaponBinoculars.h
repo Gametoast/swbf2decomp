@@ -14,14 +14,15 @@ public:
     WeaponBinocularsClass(WeaponBinocularsClass* pBase, unsigned int uHash);
     virtual ~WeaponBinocularsClass();
 
-    static PblHash rttiHashWeaponBinocularsClass;
-    static const char rttiNameWeaponBinocularsClass[];
-
     virtual WeaponClass* Derive(unsigned int uHash);
     virtual Weapon* Build(const WeaponDesc& desc);
-    virtual bool IsRtti(unsigned int uRtti) const;
-    virtual unsigned int GetDerivedRtti() const;
-    virtual const char* GetDerivedRttiName() const;
+    // FUNCTION: SWBF2 0x0067e170
+    // WeaponBinocularsClass::IsRtti
+    // FUNCTION: SWBF2 0x0067e1a0
+    // WeaponBinocularsClass::GetDerivedRtti
+    // FUNCTION: SWBF2 0x0067e1b0
+    // WeaponBinocularsClass::GetDerivedRttiName
+    PBL_DECLARE_DERIVED_RTTI(WeaponBinocularsClass, WeaponClass)
     virtual void SetProperty(unsigned int uProperty, const char* pszValue);
 };
   
@@ -45,24 +46,3 @@ public:
 };
   
 
-// FUNCTION: SWBF2 0x0067e170
-inline bool WeaponBinocularsClass::IsRtti(unsigned int uRtti) const
-{
-    if (rttiHashWeaponBinocularsClass == uRtti)
-    {
-        return true;
-    }
-    return WeaponClass::IsRtti(uRtti);
-}
-
-// FUNCTION: SWBF2 0x0067e1a0
-inline unsigned int WeaponBinocularsClass::GetDerivedRtti() const
-{
-    return rttiHashWeaponBinocularsClass;
-}
-
-// FUNCTION: SWBF2 0x0067e1b0
-inline const char* WeaponBinocularsClass::GetDerivedRttiName() const
-{
-    return rttiNameWeaponBinocularsClass;
-}

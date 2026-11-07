@@ -4,12 +4,16 @@
 #define DIRECTINPUT_VERSION 0x0800
 #endif
 #include <dinput.h>
+#include "PebbleFL/Common/PblBits.h"
 #include <stddef.h>
 
 // VTABLE: SWBF2 0x00772b94
 class RedJoystick
 {
 public:
+    // a button's bit in m_uiDownButtons (Bit64; 32 and up are the POV hats) as the game sets the plain buttons: a 32-bit shift, so button 31 also sets all the POV bits
+    static int LowButtonBit(int iButton) { return Bit(iButton); }
+
 
     RedJoystick();
 

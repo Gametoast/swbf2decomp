@@ -81,7 +81,7 @@ DustEffect::~DustEffect()
 // FUNCTION: SWBF2 0x0048ef20
 void DustEffect::Render(unsigned char ucViewport, float fDist, unsigned int uiFlags)
 {
-    if (uiFlags & 0x200000)
+    if (uiFlags & RENDERFLAG_RENDER_REFLECTION)
     {
         return;
     }
@@ -668,7 +668,7 @@ CloudClusterObject::~CloudClusterObject()
 // FUNCTION: SWBF2 0x00490a30
 void CloudClusterObject::Render(unsigned char ucViewport, float fDist, unsigned int uiFlags)
 {
-    if (uiFlags & 0x200000)
+    if (uiFlags & RENDERFLAG_RENDER_REFLECTION)
     {
         return;
     }

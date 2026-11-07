@@ -1,6 +1,7 @@
 #pragma once
 
 #include "PebbleFL/Common/PblHashTable.h"
+#include "PebbleFL/Common/PblRtti.h"
 
 #include <stddef.h>
 
@@ -16,9 +17,13 @@ public:
 
     virtual OrdnanceClass* Derive(unsigned int uHash);
     virtual Ordnance* Build(const OrdnanceDesc& desc);
-    virtual bool IsRtti(unsigned int uRtti) const;
-    virtual unsigned int GetDerivedRtti() const;
-    virtual const char* GetDerivedRttiName() const;
+    // FUNCTION: SWBF2 0x005f8c30
+    // OrdnanceStickyClass::IsRtti
+    // FUNCTION: SWBF2 0x00605fb0
+    // OrdnanceStickyClass::GetDerivedRtti
+    // FUNCTION: SWBF2 0x00605fc0
+    // OrdnanceStickyClass::GetDerivedRttiName
+    PBL_DECLARE_DERIVED_RTTI(OrdnanceStickyClass, OrdnanceShellClass)
     virtual void SetProperty(unsigned int uProperty, const char* pszValue);
 
     GameSound mSoundCollisionWater;
@@ -26,18 +31,10 @@ public:
     GameSound mSoundCollisionOther;
     bool mStartTimerOnContact;
     bool mAlignVertical;
+    static const unsigned int kStickTerrain = 0x80000000;   // beside TargetInfo's types, one bit per HealthType
     int mStickTypes;
 
-    static PblHash rttiHashOrdnanceStickyClass;
-    static const char rttiNameOrdnanceStickyClass[];
 };
-  
- 
- 
- 
- 
- 
- 
 
 class StickInfo;
 
@@ -50,9 +47,13 @@ public:
     OrdnanceSticky(OrdnanceStickyClass* pClass, const OrdnanceDesc& desc);
     virtual ~OrdnanceSticky();
 
-    virtual bool IsRtti(unsigned int uRtti) const;
-    virtual unsigned int GetDerivedRtti() const;
-    virtual const char* GetDerivedRttiName() const;
+    // FUNCTION: SWBF2 0x005f8bf0
+    // OrdnanceSticky::IsRtti
+    // FUNCTION: SWBF2 0x00605f60
+    // OrdnanceSticky::GetDerivedRtti
+    // FUNCTION: SWBF2 0x00605f70
+    // OrdnanceSticky::GetDerivedRttiName
+    PBL_DECLARE_DERIVED_RTTI(OrdnanceSticky, OrdnanceShell)
     virtual bool CheckCollision();
     virtual bool Collide(CollisionObject* pObject, const PblVector3& vPos,
                          const PblVector3& vNormal, int iBodyId);
@@ -68,55 +69,5 @@ public:
     float mLastEventTime;
     float mBeginTime;
 
-    static PblHash rttiHashOrdnanceSticky;
-    static const char rttiNameOrdnanceSticky[];
 };
- 
- 
- 
- 
- 
 
-// FUNCTION: SWBF2 0x005f8c30
-inline bool OrdnanceStickyClass::IsRtti(unsigned int uRtti) const
-{
-    if (rttiHashOrdnanceStickyClass == uRtti)
-    {
-        return true;
-    }
-    return OrdnanceShellClass::IsRtti(uRtti);
-}
-
-// FUNCTION: SWBF2 0x00605fb0
-inline unsigned int OrdnanceStickyClass::GetDerivedRtti() const
-{
-    return rttiHashOrdnanceStickyClass;
-}
-
-// FUNCTION: SWBF2 0x00605fc0
-inline const char* OrdnanceStickyClass::GetDerivedRttiName() const
-{
-    return rttiNameOrdnanceStickyClass;
-}
-
-// FUNCTION: SWBF2 0x005f8bf0
-inline bool OrdnanceSticky::IsRtti(unsigned int uRtti) const
-{
-    if (rttiHashOrdnanceSticky == uRtti)
-    {
-        return true;
-    }
-    return OrdnanceShell::IsRtti(uRtti);
-}
-
-// FUNCTION: SWBF2 0x00605f60
-inline unsigned int OrdnanceSticky::GetDerivedRtti() const
-{
-    return rttiHashOrdnanceSticky;
-}
-
-// FUNCTION: SWBF2 0x00605f70
-inline const char* OrdnanceSticky::GetDerivedRttiName() const
-{
-    return rttiNameOrdnanceSticky;
-}

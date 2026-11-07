@@ -15,10 +15,9 @@
 
 // GLOBAL: SWBF2 0x01f9a258
 // UnitWaitAgent::rttiHashUnitWaitAgent
-PblHash UnitWaitAgent::rttiHashUnitWaitAgent("UnitWaitAgent");
 // GLOBAL: SWBF2 0x0078b9b8
 // UnitWaitAgent::rttiNameUnitWaitAgent
-const char UnitWaitAgent::rttiNameUnitWaitAgent[] = "UnitWaitAgent";
+PBL_IMPLEMENT_RTTI(UnitWaitAgent)
 
 
 
@@ -30,8 +29,8 @@ const char UnitWaitAgent::rttiNameUnitWaitAgent[] = "UnitWaitAgent";
 UnitWaitAgent::UnitWaitAgent(UnitController* pCtrl)
     : UnitAgent(pCtrl)
 {
-    mCurState = 1;
-    mNextState = 2;
+    mCurState = STATE_START;
+    mNextState = STATE_Wait;
 }
 
 // FUNCTION: SWBF2 0x0066b3e0
@@ -39,7 +38,7 @@ void UnitWaitAgent::EnterState()
 {
     switch (mCurState)
     {
-    case 2:
+    case STATE_Wait:
         mTargetTimer = GameLoop::GetMissionTime();
         SetNewSearchHeading();
         break;
@@ -73,7 +72,7 @@ void UnitWaitAgent::UpdateStatePostVision(float dt)
     attack.Update();
     switch (mCurState)
     {
-    case 2:
+    case STATE_Wait:
     {
         if (AIUtil::GetRandomIntPerSecond(1, 9) == 2)
         {

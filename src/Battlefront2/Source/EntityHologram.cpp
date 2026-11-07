@@ -1,4 +1,5 @@
 #include <d3dx9math.h>
+#include "PebbleFL/Common/PblBits.h"
 #include <math.h>
 #include <stdio.h>
 #include <string.h>
@@ -86,10 +87,9 @@ inline RedColorValue ToColorValue(const RedColor& c)
 
 // GLOBAL: SWBF2 0x01ebbcc4
 // EntityHologram::rttiHashEntityHologram
-PblHash EntityHologram::rttiHashEntityHologram("EntityHologram");
 // GLOBAL: SWBF2 0x00789280
 // EntityHologram::rttiNameEntityHologram
-const char EntityHologram::rttiNameEntityHologram[] = "EntityHologram";
+PBL_IMPLEMENT_RTTI(EntityHologram)
 
 // SYNTHETIC: SWBF2 0x00402b50
 // `dynamic initializer for 'EntityHologramClass::rttiHashEntityHologramClass''
@@ -97,10 +97,9 @@ const char EntityHologram::rttiNameEntityHologram[] = "EntityHologram";
 
 // GLOBAL: SWBF2 0x01ebbdcc
 // EntityHologramClass::rttiHashEntityHologramClass
-PblHash EntityHologramClass::rttiHashEntityHologramClass("EntityHologramClass");
 // GLOBAL: SWBF2 0x00789264
 // EntityHologramClass::rttiNameEntityHologramClass
-const char EntityHologramClass::rttiNameEntityHologramClass[] = "EntityHologramClass";
+PBL_IMPLEMENT_RTTI(EntityHologramClass)
 
 // SYNTHETIC: SWBF2 0x0042cf30
 // PblHandled::`scalar deleting destructor'
@@ -220,7 +219,7 @@ EntityHologram::EntityHologram(EntityHologramClass* pClass, const EntityDesc& de
             m_apOmniLight[0]->SetColor(ToColorValue(RedColor::BLACK));
             for (unsigned int i = 1; i < CameraManager::Instance()->GetNumCameras(); ++i)
             {
-                m_apOmniLight[0]->m_uiHideInView |= 1 << i;
+                m_apOmniLight[0]->m_uiHideInView |= Bit(i);
                 m_apOmniLight[i] = new RedOmniLight(m_WorldMatrix.GetTranslation(),
                                                     pClass->m_fLightRadius,
                                                     ToColorValue(RedColor::BLACK));
@@ -228,7 +227,7 @@ EntityHologram::EntityHologram(EntityHologramClass* pClass, const EntityDesc& de
                 {
                     if (j != i)
                     {
-                        m_apOmniLight[i]->m_uiHideInView |= 1 << j;
+                        m_apOmniLight[i]->m_uiHideInView |= Bit(j);
                     }
                 }
             }
@@ -398,7 +397,7 @@ bool EntityHologram::Update(float fDeltaTime)
         unsigned int uView = pCameraManager->m_hView[0];
         if (uView < 1)
         {
-            unsigned char ucBit = (unsigned char)(1 << uView);
+            unsigned char ucBit = (unsigned char)Bit(uView);
             if (!(pCameraManager->m_uiVisibleIconMask[0] & 1))
             {
                 m_uiHideInView |= ucBit;
@@ -619,14 +618,14 @@ void EntityHologram::Render(unsigned char ucViewport, float fDist, unsigned int 
 {
     const EntityHologramClass* pClass = (const EntityHologramClass*)mEntityClass;
     unsigned int uiViewport = FLRenderer::GetCurrentViewport();
-    if (m_uiHideInView & (1 << uiViewport))
+    if (m_uiHideInView & Bit(uiViewport))
     {
         return;
     }
 
     PblMatrix mReflection;
 
-    bool bReflected = !(uiFlags & 0x200000) &&
+    bool bReflected = !(uiFlags & RENDERFLAG_RENDER_REFLECTION) &&
                       FLRenderer::IsReflected(*reinterpret_cast<const PblVector3*>(&_Sphere), _Sphere.w,
                                               mReflection, false);
 
@@ -660,7 +659,7 @@ void EntityHologram::Render(unsigned char ucViewport, float fDist, unsigned int 
             PblMatrix mSaved(m_WorldMatrix);
             m_WorldMatrix *= mReflection;
             m_pLightBeam->AttachEffectToMatrix(&m_WorldMatrix, false);
-            m_pLightBeam->Render(uiFlags | 0x10000100);
+            m_pLightBeam->Render(uiFlags | RENDERFLAG_REFLECTION | RENDERFLAG_PSEUDO_REFLECTED);
             m_WorldMatrix = mSaved;
             m_pLightBeam->AttachEffectToMatrix(&m_WorldMatrix, false);
         }
@@ -718,12 +717,12 @@ void EntityHologram::Render(unsigned char ucViewport, float fDist, unsigned int 
                     fFade *= fDepth / fSize;
                 }
                 color.a = (unsigned char)(int)(color.a * m_fCurrentIntensity * pClass->m_fImageIntensity * fFade);
-                m_pHoloModel->Render(&mModel, 0, color, uiFlags | 0x10, 0);
+                m_pHoloModel->Render(&mModel, 0, color, uiFlags | RENDERFLAG_NO_LIGHTING, 0);
                 if (bReflected)
                 {
                     D3DXMatrixMultiply(reinterpret_cast<D3DXMATRIX*>(&mTemp), reinterpret_cast<const D3DXMATRIX*>(&mModel), reinterpret_cast<const D3DXMATRIX*>(&mReflection));
                     mReflection = mTemp;
-                    m_pHoloModel->Render(&mReflection, 0, color, (uiFlags & ~0x10000u) | 0x10000110, 0);
+                    m_pHoloModel->Render(&mReflection, 0, color, (uiFlags & ~RENDERFLAG_RENDER_SHADOWVOLUMES) | RENDERFLAG_NO_LIGHTING | RENDERFLAG_REFLECTION | RENDERFLAG_PSEUDO_REFLECTED, 0);
                 }
             }
         }

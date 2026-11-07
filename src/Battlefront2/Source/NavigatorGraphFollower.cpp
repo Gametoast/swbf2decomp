@@ -26,10 +26,9 @@ namespace
 
 // GLOBAL: SWBF2 0x01ecb250
 // NavigatorGraphFollower::rttiHashNavigatorGraphFollower
-PblHash NavigatorGraphFollower::rttiHashNavigatorGraphFollower("NavigatorGraphFollower");
 // GLOBAL: SWBF2 0x0078a620
 // NavigatorGraphFollower::rttiNameNavigatorGraphFollower
-const char NavigatorGraphFollower::rttiNameNavigatorGraphFollower[] = "NavigatorGraphFollower";
+PBL_IMPLEMENT_RTTI(NavigatorGraphFollower)
 
 
 
@@ -85,7 +84,7 @@ void NavigatorGraphFollower::UpdateState(float dt)
         {
             delete mPathFollower;
             mPathFollower = 0;
-            SetNextState(100);
+            SetNextState(STATE_GLOBDONE);
 
             AI::EventInfo info(AI::EVT_Nav_NavigatorFinished);
             mOwner->mOwner->SendEvent(&info);
@@ -142,11 +141,11 @@ void NavigatorGraphFollower::EnterState()
             if (uArcFlags)
             {
                 unsigned int uFlags = 0;
-                if (uArcFlags & 2)
+                if (uArcFlags & AF_Jump)
                 {
                     uFlags = AIPathNode::AIPN_JUMP;
                 }
-                if (uArcFlags & 4)
+                if (uArcFlags & AF_JetJump)
                 {
                     uFlags |= AIPathNode::AIPN_JETJUMP;
                 }
@@ -237,11 +236,11 @@ void NavigatorGraphFollower::ReceivePathResult(AIPath* pPath)
     if (uArcFlags)
     {
         unsigned int uFlags = 0;
-        if (uArcFlags & 2)
+        if (uArcFlags & AF_Jump)
         {
             uFlags = AIPathNode::AIPN_JUMP;
         }
-        if (uArcFlags & 4)
+        if (uArcFlags & AF_JetJump)
         {
             uFlags |= AIPathNode::AIPN_JETJUMP;
         }

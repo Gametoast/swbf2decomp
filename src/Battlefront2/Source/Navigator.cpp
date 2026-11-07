@@ -62,10 +62,9 @@ MemoryPool Navigator::sMemoryPool("Navigator", sizeof(Navigator));
 
 // GLOBAL: SWBF2 0x01ecb1f8
 // Navigator::rttiHashNavigator
-PblHash Navigator::rttiHashNavigator("Navigator");
 // GLOBAL: SWBF2 0x0078a5dc
 // Navigator::rttiNameNavigator
-const char Navigator::rttiNameNavigator[] = "Navigator";
+PBL_IMPLEMENT_RTTI(Navigator)
 
 
 

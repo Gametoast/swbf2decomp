@@ -23,10 +23,9 @@ extern bool netIsLocalTurn;
 
 // GLOBAL: SWBF2 0x01f9a8a4
 // WeaponDestruct::rttiHashWeaponDestruct
-PblHash WeaponDestruct::rttiHashWeaponDestruct("WeaponDestruct");
 // GLOBAL: SWBF2 0x0078bee4
 // WeaponDestruct::rttiNameWeaponDestruct
-const char WeaponDestruct::rttiNameWeaponDestruct[] = "WeaponDestruct";
+PBL_IMPLEMENT_RTTI(WeaponDestruct)
 
 
 
@@ -40,10 +39,9 @@ const char WeaponDestruct::rttiNameWeaponDestruct[] = "WeaponDestruct";
 
 // GLOBAL: SWBF2 0x01f9a8a8
 // WeaponDestructClass::rttiHashWeaponDestructClass
-PblHash WeaponDestructClass::rttiHashWeaponDestructClass("WeaponDestructClass");
 // GLOBAL: SWBF2 0x0078befc
 // WeaponDestructClass::rttiNameWeaponDestructClass
-const char WeaponDestructClass::rttiNameWeaponDestructClass[] = "WeaponDestructClass";
+PBL_IMPLEMENT_RTTI(WeaponDestructClass)
 
 // FUNCTION: SWBF2 0x00682190
 WeaponDestructClass::WeaponDestructClass(unsigned int uHash)

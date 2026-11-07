@@ -1,4 +1,5 @@
 #include "PebbleFL/Common/PblMath.h"
+#include "PebbleFL/Common/PblBits.h"
 #include "PropCluster.h"
 
 #include <float.h>
@@ -114,7 +115,7 @@ void PropCluster::Render(unsigned char ucViewport, float fDist, unsigned int uiF
                 if (mLayers[i].mObjects.GetCount() > 0)
                 {
                     CameraManager* pCameraManager = CameraManager::sInstance;
-                    mWasRenderedFlag |= 1 << pCameraManager->GetCameraIdForView(FLRenderer::GetCurrentViewport());
+                    mWasRenderedFlag |= Bit(pCameraManager->GetCameraIdForView(FLRenderer::GetCurrentViewport()));
                     for (PblList<PropObject>::Itor it(mLayers[i].mObjects); (PropObject*)it; ++it)
                     {
                         it->Render(pCamera, fCamDist - mSize, uiFlags);

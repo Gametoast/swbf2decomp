@@ -1,6 +1,7 @@
 #pragma once
 
 #include "PebbleFL/Common/PblHashTable.h"
+#include "PebbleFL/Common/PblRtti.h"
 
 #include <stddef.h>
 
@@ -19,9 +20,13 @@ public:
 
     virtual OrdnanceClass* Derive(unsigned int uHash);
     virtual Ordnance* Build(const OrdnanceDesc& desc);
-    virtual bool IsRtti(unsigned int uRtti) const;
-    virtual unsigned int GetDerivedRtti() const;
-    virtual const char* GetDerivedRttiName() const;
+    // FUNCTION: SWBF2 0x00602220
+    // OrdnanceMeleeThrowClass::IsRtti
+    // FUNCTION: SWBF2 0x00602250
+    // OrdnanceMeleeThrowClass::GetDerivedRtti
+    // FUNCTION: SWBF2 0x00602260
+    // OrdnanceMeleeThrowClass::GetDerivedRttiName
+    PBL_DECLARE_DERIVED_RTTI(OrdnanceMeleeThrowClass, OrdnanceClass)
     virtual void SetProperty(unsigned int uProperty, const char* pszValue);
     // FUNCTION: SWBF2 0x00602270
     virtual float GetVelocity() const
@@ -48,20 +53,7 @@ public:
     float m_fRadiusLight;
     GameSound m_OnSound;
 
-    static PblHash rttiHashOrdnanceMeleeThrowClass;
-    static const char rttiNameOrdnanceMeleeThrowClass[];
 };
-  
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
 
 class EntityLight;
 class WeaponMeleeThrow;
@@ -79,9 +71,13 @@ protected:
     virtual bool Update(float fDeltaTime);
 
 public:
-    virtual bool IsRtti(unsigned int uRtti) const;
-    virtual unsigned int GetDerivedRtti() const;
-    virtual const char* GetDerivedRttiName() const;
+    // FUNCTION: SWBF2 0x00602180
+    // OrdnanceMeleeThrow::IsRtti
+    // FUNCTION: SWBF2 0x006021b0
+    // OrdnanceMeleeThrow::GetDerivedRtti
+    // FUNCTION: SWBF2 0x006021c0
+    // OrdnanceMeleeThrow::GetDerivedRttiName
+    PBL_DECLARE_DERIVED_RTTI(OrdnanceMeleeThrow, Ordnance)
     virtual const PblVector3& GetOldPosition() const;
     virtual const PblVector3& GetVelocity() const;
     virtual bool Collide(CollisionObject* pObject, const PblVector3& vPos,
@@ -105,62 +101,5 @@ public:
     float mOffscreenTime;
     float m_fReturnTime;
 
-    static PblHash rttiHashOrdnanceMeleeThrow;
-    static const char rttiNameOrdnanceMeleeThrow[];
 };
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
 
-// FUNCTION: SWBF2 0x00602180
-inline bool OrdnanceMeleeThrow::IsRtti(unsigned int uRtti) const
-{
-    if (rttiHashOrdnanceMeleeThrow == uRtti)
-    {
-        return true;
-    }
-    return Ordnance::IsRtti(uRtti);
-}
-
-// FUNCTION: SWBF2 0x006021b0
-inline unsigned int OrdnanceMeleeThrow::GetDerivedRtti() const
-{
-    return rttiHashOrdnanceMeleeThrow;
-}
-
-// FUNCTION: SWBF2 0x006021c0
-inline const char* OrdnanceMeleeThrow::GetDerivedRttiName() const
-{
-    return rttiNameOrdnanceMeleeThrow;
-}
-
-// FUNCTION: SWBF2 0x00602220
-inline bool OrdnanceMeleeThrowClass::IsRtti(unsigned int uRtti) const
-{
-    if (rttiHashOrdnanceMeleeThrowClass == uRtti)
-    {
-        return true;
-    }
-    return OrdnanceClass::IsRtti(uRtti);
-}
-
-// FUNCTION: SWBF2 0x00602250
-inline unsigned int OrdnanceMeleeThrowClass::GetDerivedRtti() const
-{
-    return rttiHashOrdnanceMeleeThrowClass;
-}
-
-// FUNCTION: SWBF2 0x00602260
-inline const char* OrdnanceMeleeThrowClass::GetDerivedRttiName() const
-{
-    return rttiNameOrdnanceMeleeThrowClass;
-}

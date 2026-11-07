@@ -197,10 +197,9 @@ namespace
 
 // GLOBAL: SWBF2 0x01f7d0dc
 // UnitAgent::rttiHashUnitAgent
-PblHash UnitAgent::rttiHashUnitAgent("UnitAgent");
 // GLOBAL: SWBF2 0x0078b6e8
 // UnitAgent::rttiNameUnitAgent
-const char UnitAgent::rttiNameUnitAgent[] = "UnitAgent";
+PBL_IMPLEMENT_RTTI(UnitAgent)
 
 // SYNTHETIC: SWBF2 0x00406c00
 // `dynamic initializer for 'UnitAgent::sMemoryPool''

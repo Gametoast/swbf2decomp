@@ -117,21 +117,21 @@ GrassPatchRenderable::GrassPatchRenderable(const GrassPatchClass* pClass)
     m_pVertices = 0;
     if (RedRenderer::pcGetGeometryMode() == GEOMETRYMODE_UNCOMPRESSED)
     {
-        m_pShader = pcRedShader::Create(0xe68b9c52 /* "normal" */, 0x2a2, &m_pClass->mTextureHash,
-                                        1, 0x10006, RedColor::WHITE, RedColor::BLACK, 32.0f);
-        m_pShaderFar = pcRedShader::Create(0xe68b9c52 /* "normal" */, 0x2a2, &m_pClass->mTextureHash,
-                                           1, 0x10002, RedColor::WHITE, RedColor::BLACK, 32.0f);
-        m_pShaderTransparent = pcRedShader::Create(0xe68b9c52 /* "normal" */, 0x2a2, &m_pClass->mTextureHash,
-                                                    1, 0x10004, RedColor::WHITE, RedColor::BLACK, 32.0f);
+        m_pShader = pcRedShader::Create(0xe68b9c52 /* "normal" */, RVF_POSITION_XYZ | RVF_NORMAL | RVF_COLOR | RVF_TEXCOORDS_1, &m_pClass->mTextureHash,
+                                        1, MATERIAL_FLAG_ALPHAMAP_MASK | MATERIAL_FLAG_ALPHAMAP_OPACITY | MATERIAL_FLAG_CULL_NONE, RedColor::WHITE, RedColor::BLACK, 32.0f);
+        m_pShaderFar = pcRedShader::Create(0xe68b9c52 /* "normal" */, RVF_POSITION_XYZ | RVF_NORMAL | RVF_COLOR | RVF_TEXCOORDS_1, &m_pClass->mTextureHash,
+                                           1, MATERIAL_FLAG_ALPHAMAP_MASK | MATERIAL_FLAG_CULL_NONE, RedColor::WHITE, RedColor::BLACK, 32.0f);
+        m_pShaderTransparent = pcRedShader::Create(0xe68b9c52 /* "normal" */, RVF_POSITION_XYZ | RVF_NORMAL | RVF_COLOR | RVF_TEXCOORDS_1, &m_pClass->mTextureHash,
+                                                    1, MATERIAL_FLAG_ALPHAMAP_OPACITY | MATERIAL_FLAG_CULL_NONE, RedColor::WHITE, RedColor::BLACK, 32.0f);
     }
     else
     {
-        m_pShader = pcRedShader::Create(0xe68b9c52 /* "normal" */, 0xd2a2, &m_pClass->mTextureHash,
-                                        1, 0x10006, RedColor::WHITE, RedColor::BLACK, 32.0f);
-        m_pShaderFar = pcRedShader::Create(0xe68b9c52 /* "normal" */, 0xd2a2, &m_pClass->mTextureHash,
-                                           1, 0x10002, RedColor::WHITE, RedColor::BLACK, 32.0f);
-        m_pShaderTransparent = pcRedShader::Create(0xe68b9c52 /* "normal" */, 0xd2a2, &m_pClass->mTextureHash,
-                                                    1, 0x10004, RedColor::WHITE, RedColor::BLACK, 32.0f);
+        m_pShader = pcRedShader::Create(0xe68b9c52 /* "normal" */, RVF_POSITION_XYZ | RVF_NORMAL | RVF_COLOR | RVF_TEXCOORDS_1 | RVF_COMPRESSED_POSITION | RVF_COMPRESSED_NORMALS | RVF_COMPRESSED_TEXCOORDS, &m_pClass->mTextureHash,
+                                        1, MATERIAL_FLAG_ALPHAMAP_MASK | MATERIAL_FLAG_ALPHAMAP_OPACITY | MATERIAL_FLAG_CULL_NONE, RedColor::WHITE, RedColor::BLACK, 32.0f);
+        m_pShaderFar = pcRedShader::Create(0xe68b9c52 /* "normal" */, RVF_POSITION_XYZ | RVF_NORMAL | RVF_COLOR | RVF_TEXCOORDS_1 | RVF_COMPRESSED_POSITION | RVF_COMPRESSED_NORMALS | RVF_COMPRESSED_TEXCOORDS, &m_pClass->mTextureHash,
+                                           1, MATERIAL_FLAG_ALPHAMAP_MASK | MATERIAL_FLAG_CULL_NONE, RedColor::WHITE, RedColor::BLACK, 32.0f);
+        m_pShaderTransparent = pcRedShader::Create(0xe68b9c52 /* "normal" */, RVF_POSITION_XYZ | RVF_NORMAL | RVF_COLOR | RVF_TEXCOORDS_1 | RVF_COMPRESSED_POSITION | RVF_COMPRESSED_NORMALS | RVF_COMPRESSED_TEXCOORDS, &m_pClass->mTextureHash,
+                                                    1, MATERIAL_FLAG_ALPHAMAP_OPACITY | MATERIAL_FLAG_CULL_NONE, RedColor::WHITE, RedColor::BLACK, 32.0f);
     }
     m_bReflection = false;
     m_pVB = 0;
@@ -255,7 +255,7 @@ void GrassPatchClass::RenderMaxDist(const PblMatrix& matrix, float fMaxDist,
     float alpha = 1.0f;
     // GLOBAL: SWBF2 0x01faa764
     static float FADE = fFadeDistance;
-    if (uiFlags & 0x20000000)
+    if (uiFlags & RENDERFLAG_ZBUFFER_ALPHA_FADE)
     {
         float end = RedRenderer::pcGetNearSceneEnd();
         float start = RedRenderer::pcGetNearSceneStart();
@@ -312,7 +312,7 @@ void GrassPatchRenderable::Render(unsigned int value) const
 void GrassPatchRenderable::RenderInstance(const PblMatrix& matrix, const RedColor& color,
                                           unsigned int uiFlags) const
 {
-    if (!GrassPatch::IsEnabled() || m_bReflection != ((uiFlags & 0x200000) != 0))
+    if (!GrassPatch::IsEnabled() || m_bReflection != ((uiFlags & RENDERFLAG_RENDER_REFLECTION) != 0))
     {
         return;
     }
@@ -351,7 +351,7 @@ void GrassPatchRenderable::RenderInstance(const PblMatrix& matrix, const RedColo
         if (m_pPrimitive)
         {
             RedRenderer::pcRenderPrimitive(m_pPrimitive, m_pShaderTransparent, matrix, color,
-                                           uiFlags | 8, 0, 0, 0);
+                                           uiFlags | RENDERFLAG_POSTSHADOW, 0, 0, 0);
         }
     }
     else if (fDist >= m_fDistanceFarShader)
@@ -433,13 +433,13 @@ void GrassPatchRenderable::Begin()
     if (RedRenderer::pcGetGeometryMode() == GEOMETRYMODE_UNCOMPRESSED)
     {
         fScale = 1.0f;
-        uiVertexFormat = 0x2A2;
+        uiVertexFormat = RVF_POSITION_XYZ | RVF_NORMAL | RVF_COLOR | RVF_TEXCOORDS_1;
         uiVertexStride = 36;
     }
     else
     {
         fScale = 327.67499f;
-        uiVertexFormat = 0xD2A2;
+        uiVertexFormat = RVF_POSITION_XYZ | RVF_NORMAL | RVF_COLOR | RVF_TEXCOORDS_1 | RVF_COMPRESSED_POSITION | RVF_COMPRESSED_NORMALS | RVF_COMPRESSED_TEXCOORDS;
         uiVertexStride = 20;
     }
 

@@ -135,8 +135,7 @@ unsigned int pcPerVertexDiffuseLightingShader::GetState_Fixed(const RenderItem*)
 // FUNCTION: SWBF2 0x00710920
 unsigned int pcPerVertexDiffuseLightingShader::GetState_Prog1(const RenderItem* pItem) const
 {
-    const unsigned char uiInverted = ~pItem->flags;
-    return (uiInverted >> 2) & 4;
+    return ((unsigned char)~pItem->flags & RENDERFLAG_NO_LIGHTING) ? 4 : 0;
 }
 
 // FUNCTION: SWBF2 0x00710940
@@ -169,7 +168,7 @@ void pcPerVertexDiffuseLightingShader::Render_Prog1(const RenderItem* pItem, uns
     }
 
     const RedLightingState* pLighting = pItem->pLightingState;
-    const bool bVertexLit = (pItem->pPrim->m_vertexFormat->m_uiVertexBufferRVF & 0x100) != 0;
+    const bool bVertexLit = (pItem->pPrim->m_vertexFormat->m_uiVertexBufferRVF & RVF_LIGHTING) != 0;
     if (pLighting != m_pLightingStatePrev)
     {
         m_pLightingStatePrev = (void*)pLighting;

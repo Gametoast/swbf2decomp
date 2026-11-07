@@ -1,6 +1,7 @@
 #pragma once
 
 #include "PebbleFL/Common/PblHashTable.h"
+#include "PebbleFL/Common/PblRtti.h"
 
 #include <stddef.h>
 
@@ -18,20 +19,19 @@ public:
 
     virtual OrdnanceClass* Derive(unsigned int uHash);
     virtual Ordnance* Build(const OrdnanceDesc& desc);
-    virtual bool IsRtti(unsigned int uRtti) const;
-    virtual unsigned int GetDerivedRtti() const;
-    virtual const char* GetDerivedRttiName() const;
+    // FUNCTION: SWBF2 0x00607330
+    // OrdnanceTowCableClass::IsRtti
+    // FUNCTION: SWBF2 0x00607360
+    // OrdnanceTowCableClass::GetDerivedRtti
+    // FUNCTION: SWBF2 0x00607370
+    // OrdnanceTowCableClass::GetDerivedRttiName
+    PBL_DECLARE_DERIVED_RTTI(OrdnanceTowCableClass, OrdnanceBulletClass)
     virtual void SetProperty(unsigned int uProperty, const char* pszValue);
 
     float mInitialCableLimit;
     float mCableLimit;
 
-    static PblHash rttiHashOrdnanceTowCableClass;
-    static const char rttiNameOrdnanceTowCableClass[];
 };
-  
- 
- 
 
 class WeaponTowCable;
 
@@ -59,8 +59,6 @@ struct TowCableAttachPointData
     PblVector3 mSlopeIn;
     PblVector3 mSlopeOut;
 };
- 
- 
 
 class TowCableRenderObject
 {
@@ -77,7 +75,6 @@ public:
     TowCableState mTowState;
     TowCableAttachPointData mAttachPoints[kNumAttachPoints];
 };
- 
 
 // VTABLE: SWBF2 0x007ad1cc Thread
 // VTABLE: SWBF2 0x007ad20c
@@ -88,9 +85,13 @@ public:
     OrdnanceTowCable(OrdnanceTowCableClass* pClass, const OrdnanceDesc& desc);
     virtual ~OrdnanceTowCable();
 
-    virtual bool IsRtti(unsigned int uRtti) const;
-    virtual unsigned int GetDerivedRtti() const;
-    virtual const char* GetDerivedRttiName() const;
+    // FUNCTION: SWBF2 0x006072a0
+    // OrdnanceTowCable::IsRtti
+    // FUNCTION: SWBF2 0x006072d0
+    // OrdnanceTowCable::GetDerivedRtti
+    // FUNCTION: SWBF2 0x006072e0
+    // OrdnanceTowCable::GetDerivedRttiName
+    PBL_DECLARE_DERIVED_RTTI(OrdnanceTowCable, OrdnanceBullet)
     virtual bool Collide(CollisionObject* pObject, const PblVector3& vPos,
                          const PblVector3& vNormal, int iBodyId);
     virtual void Render(unsigned char ucViewport, float fDist, unsigned int uiFlags);
@@ -121,8 +122,6 @@ public:
     bool mFakeCable;
     bool mDeleteNextUpdate;
 
-    static PblHash rttiHashOrdnanceTowCable;
-    static const char rttiNameOrdnanceTowCable[];
     static MemoryPool sMemoryPool;
 
     static void PlatformInit();
@@ -131,57 +130,5 @@ public:
     static unsigned int sTextureHash;
     static float sCableThickness;
 };
- 
- 
- 
- 
- 
- 
- 
- 
-
-// FUNCTION: SWBF2 0x006072a0
-inline bool OrdnanceTowCable::IsRtti(unsigned int uRtti) const
-{
-    if (rttiHashOrdnanceTowCable == uRtti)
-    {
-        return true;
-    }
-    return OrdnanceBullet::IsRtti(uRtti);
-}
-
-// FUNCTION: SWBF2 0x006072d0
-inline unsigned int OrdnanceTowCable::GetDerivedRtti() const
-{
-    return rttiHashOrdnanceTowCable;
-}
-
-// FUNCTION: SWBF2 0x006072e0
-inline const char* OrdnanceTowCable::GetDerivedRttiName() const
-{
-    return rttiNameOrdnanceTowCable;
-}
-
-// FUNCTION: SWBF2 0x00607330
-inline bool OrdnanceTowCableClass::IsRtti(unsigned int uRtti) const
-{
-    if (rttiHashOrdnanceTowCableClass == uRtti)
-    {
-        return true;
-    }
-    return OrdnanceBulletClass::IsRtti(uRtti);
-}
-
-// FUNCTION: SWBF2 0x00607360
-inline unsigned int OrdnanceTowCableClass::GetDerivedRtti() const
-{
-    return rttiHashOrdnanceTowCableClass;
-}
-
-// FUNCTION: SWBF2 0x00607370
-inline const char* OrdnanceTowCableClass::GetDerivedRttiName() const
-{
-    return rttiNameOrdnanceTowCableClass;
-}
 
 

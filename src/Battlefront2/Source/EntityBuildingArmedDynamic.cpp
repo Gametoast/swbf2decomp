@@ -7,10 +7,9 @@
 
 // GLOBAL: SWBF2 0x01ebb894
 // EntityBuildingArmedDynamicClass::rttiHashEntityBuildingArmedDynamicClass
-PblHash EntityBuildingArmedDynamicClass::rttiHashEntityBuildingArmedDynamicClass("EntityBuildingArmedDynamicClass");
 // GLOBAL: SWBF2 0x00789070
 // EntityBuildingArmedDynamicClass::rttiNameEntityBuildingArmedDynamicClass
-const char EntityBuildingArmedDynamicClass::rttiNameEntityBuildingArmedDynamicClass[] = "EntityBuildingArmedDynamicClass";
+PBL_IMPLEMENT_RTTI(EntityBuildingArmedDynamicClass)
 
 // FUNCTION: SWBF2 0x00496c50
 EntityBuildingArmedDynamicClass::EntityBuildingArmedDynamicClass(unsigned int uHash)
@@ -69,10 +68,9 @@ Entity* EntityBuildingArmedDynamicClass::Build(const EntityDesc& desc)
 
 // GLOBAL: SWBF2 0x01ebb890
 // EntityBuildingArmedDynamic::rttiHashEntityBuildingArmedDynamic
-PblHash EntityBuildingArmedDynamic::rttiHashEntityBuildingArmedDynamic("EntityBuildingArmedDynamic");
 // GLOBAL: SWBF2 0x00789050
 // EntityBuildingArmedDynamic::rttiNameEntityBuildingArmedDynamic
-const char EntityBuildingArmedDynamic::rttiNameEntityBuildingArmedDynamic[] = "EntityBuildingArmedDynamic";
+PBL_IMPLEMENT_RTTI(EntityBuildingArmedDynamic)
 
 // SYNTHETIC: SWBF2 0x00402900
 // `dynamic initializer for 'EntityBuildingArmedDynamic::sMemoryPool''

@@ -82,10 +82,9 @@ static PblVector3 WIND_DIRECTION(1.0f, 0.0f, 0.0f);
 
 // GLOBAL: SWBF2 0x01eb0fcc
 // EntityCloth::rttiHashEntityCloth
-PblHash EntityCloth::rttiHashEntityCloth("EntityCloth");
 // GLOBAL: SWBF2 0x00788a70
 // EntityCloth::rttiNameEntityCloth
-const char EntityCloth::rttiNameEntityCloth[] = "EntityCloth";
+PBL_IMPLEMENT_RTTI(EntityCloth)
 
 // SYNTHETIC: SWBF2 0x004023b0
 // `dynamic initializer for 'EntityClothClass::rttiHashEntityClothClass''
@@ -93,10 +92,9 @@ const char EntityCloth::rttiNameEntityCloth[] = "EntityCloth";
 
 // GLOBAL: SWBF2 0x01eb062c
 // EntityClothClass::rttiHashEntityClothClass
-PblHash EntityClothClass::rttiHashEntityClothClass("EntityClothClass");
 // GLOBAL: SWBF2 0x00788a48
 // EntityClothClass::rttiNameEntityClothClass
-const char EntityClothClass::rttiNameEntityClothClass[] = "EntityClothClass";
+PBL_IMPLEMENT_RTTI(EntityClothClass)
 
 // SYNTHETIC: SWBF2 0x004023c0
 // `dynamic initializer for 'ClothData::sMemoryPool''
@@ -1032,7 +1030,7 @@ void EntityCloth::Render(const PblMatrix& mMatrix, const RedPose* pPose, unsigne
     const RedLightingState* pLightingState = 0;
     if ((int)uiFlags >= 0)
     {
-        if (uiFlags & 0x4000000)
+        if (uiFlags & RENDERFLAG_RENDER_TO_INTERFACE)
         {
             pLightingState = &RedInterfaceScreen::s_lightingState;
         }

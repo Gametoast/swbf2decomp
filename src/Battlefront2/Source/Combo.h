@@ -1,6 +1,7 @@
 #pragma once
 
 #include <math.h>
+#include "PebbleFL/Common/PblBits.h"
 #include <stddef.h>
 #include <string.h>
 
@@ -9,6 +10,7 @@
 #include "RedEngineFL/Memory/RedMemoryPool.h"
 #include "GameSound.h"
 #include "SoldierAnimationBank.h"
+
 
 class PblConfig;
 class PblMatrix;
@@ -820,11 +822,11 @@ public:
             {
                 if (bOff)
                 {
-                    m_uiLightsaberOffMask |= 1 << uiBlade;
+                    m_uiLightsaberOffMask |= BitU(uiBlade);
                 }
                 else
                 {
-                    m_uiLightsaberOffMask &= ~(1 << uiBlade);
+                    m_uiLightsaberOffMask &= ~BitU(uiBlade);
                 }
             }
         }

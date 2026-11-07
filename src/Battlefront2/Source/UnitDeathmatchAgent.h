@@ -1,6 +1,7 @@
 #pragma once
 
 #include "PebbleFL/Common/PblHashTable.h"
+#include "PebbleFL/Common/PblRtti.h"
 
 #include <stddef.h>
 
@@ -24,15 +25,16 @@ public:
         STATE_FINAL = 6
     };
 
-    static PblHash rttiHashUnitDeathmatchAgent;
-    static const char rttiNameUnitDeathmatchAgent[];
-
     UnitDeathmatchAgent(UnitController* pCtrl);
 
     virtual void Kill();
-    virtual bool IsRtti(unsigned int uRtti) const;
-    virtual unsigned int GetDerivedRtti() const;
-    virtual const char* GetDerivedRttiName() const;
+    // FUNCTION: SWBF2 0x006653a0
+    // UnitDeathmatchAgent::IsRtti
+    // FUNCTION: SWBF2 0x006653d0
+    // UnitDeathmatchAgent::GetDerivedRtti
+    // FUNCTION: SWBF2 0x006653e0
+    // UnitDeathmatchAgent::GetDerivedRttiName
+    PBL_DECLARE_DERIVED_RTTI(UnitDeathmatchAgent, UnitAgent)
 
     int EventHandler(AI::EventInfo* pInfo);
 
@@ -54,24 +56,3 @@ public:
  
  
 
-// FUNCTION: SWBF2 0x006653a0
-inline bool UnitDeathmatchAgent::IsRtti(unsigned int uRtti) const
-{
-    if (rttiHashUnitDeathmatchAgent == uRtti)
-    {
-        return true;
-    }
-    return UnitAgent::IsRtti(uRtti);
-}
-
-// FUNCTION: SWBF2 0x006653d0
-inline unsigned int UnitDeathmatchAgent::GetDerivedRtti() const
-{
-    return rttiHashUnitDeathmatchAgent;
-}
-
-// FUNCTION: SWBF2 0x006653e0
-inline const char* UnitDeathmatchAgent::GetDerivedRttiName() const
-{
-    return rttiNameUnitDeathmatchAgent;
-}

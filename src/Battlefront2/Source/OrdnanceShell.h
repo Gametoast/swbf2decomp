@@ -1,6 +1,7 @@
 #pragma once
 
 #include "PebbleFL/Common/PblHashTable.h"
+#include "PebbleFL/Common/PblRtti.h"
 
 #include <stddef.h>
 
@@ -17,9 +18,13 @@ public:
 
     virtual OrdnanceClass* Derive(unsigned int uHash);
     virtual Ordnance* Build(const OrdnanceDesc& desc);
-    virtual bool IsRtti(unsigned int uRtti) const;
-    virtual unsigned int GetDerivedRtti() const;
-    virtual const char* GetDerivedRttiName() const;
+    // FUNCTION: SWBF2 0x005f8bb0
+    // OrdnanceShellClass::IsRtti
+    // FUNCTION: SWBF2 0x00605b90
+    // OrdnanceShellClass::GetDerivedRtti
+    // FUNCTION: SWBF2 0x00605ba0
+    // OrdnanceShellClass::GetDerivedRttiName
+    PBL_DECLARE_DERIVED_RTTI(OrdnanceShellClass, OrdnanceBulletClass)
     virtual void SetProperty(unsigned int uProperty, const char* pszValue);
     // FUNCTION: SWBF2 0x005f8be0
     virtual float GetGravity() const
@@ -29,11 +34,7 @@ public:
 
     float mGravity;
 
-    static PblHash rttiHashOrdnanceShellClass;
-    static const char rttiNameOrdnanceShellClass[];
 };
-  
- 
 
 // VTABLE: SWBF2 0x007acfb8 PblHandled
 // VTABLE: SWBF2 0x007acfc0
@@ -44,9 +45,13 @@ public:
     OrdnanceShell(OrdnanceShellClass* pClass, const OrdnanceDesc& desc);
     virtual ~OrdnanceShell();
 
-    virtual bool IsRtti(unsigned int uRtti) const;
-    virtual unsigned int GetDerivedRtti() const;
-    virtual const char* GetDerivedRttiName() const;
+    // FUNCTION: SWBF2 0x005f8b80
+    // OrdnanceShell::IsRtti
+    // FUNCTION: SWBF2 0x00605b40
+    // OrdnanceShell::GetDerivedRtti
+    // FUNCTION: SWBF2 0x00605b50
+    // OrdnanceShell::GetDerivedRttiName
+    PBL_DECLARE_DERIVED_RTTI(OrdnanceShell, OrdnanceBullet)
 
 protected:
     virtual bool Update(float fDeltaTime);
@@ -54,52 +59,5 @@ protected:
 public:
     float mGravity;
 
-    static PblHash rttiHashOrdnanceShell;
-    static const char rttiNameOrdnanceShell[];
 };
- 
- 
 
-// FUNCTION: SWBF2 0x005f8bb0
-inline bool OrdnanceShellClass::IsRtti(unsigned int uRtti) const
-{
-    if (rttiHashOrdnanceShellClass == uRtti)
-    {
-        return true;
-    }
-    return OrdnanceBulletClass::IsRtti(uRtti);
-}
-
-// FUNCTION: SWBF2 0x00605b90
-inline unsigned int OrdnanceShellClass::GetDerivedRtti() const
-{
-    return rttiHashOrdnanceShellClass;
-}
-
-// FUNCTION: SWBF2 0x00605ba0
-inline const char* OrdnanceShellClass::GetDerivedRttiName() const
-{
-    return rttiNameOrdnanceShellClass;
-}
-
-// FUNCTION: SWBF2 0x005f8b80
-inline bool OrdnanceShell::IsRtti(unsigned int uRtti) const
-{
-    if (rttiHashOrdnanceShell == uRtti)
-    {
-        return true;
-    }
-    return OrdnanceBullet::IsRtti(uRtti);
-}
-
-// FUNCTION: SWBF2 0x00605b40
-inline unsigned int OrdnanceShell::GetDerivedRtti() const
-{
-    return rttiHashOrdnanceShell;
-}
-
-// FUNCTION: SWBF2 0x00605b50
-inline const char* OrdnanceShell::GetDerivedRttiName() const
-{
-    return rttiNameOrdnanceShell;
-}

@@ -22,10 +22,9 @@ namespace AIUtil
 
 // GLOBAL: SWBF2 0x01f9a8e8
 // WeaponLauncherClass::rttiHashWeaponLauncherClass
-PblHash WeaponLauncherClass::rttiHashWeaponLauncherClass("WeaponLauncherClass");
 // GLOBAL: SWBF2 0x0078c0a4
 // WeaponLauncherClass::rttiNameWeaponLauncherClass
-const char WeaponLauncherClass::rttiNameWeaponLauncherClass[] = "WeaponLauncherClass";
+PBL_IMPLEMENT_RTTI(WeaponLauncherClass)
 
 // FUNCTION: SWBF2 0x00687990
 WeaponLauncherClass::WeaponLauncherClass(unsigned int uHash)
@@ -106,10 +105,9 @@ WeaponLauncher* WeaponLauncherClass::Build(const WeaponDesc& desc)
 
 // GLOBAL: SWBF2 0x01f9a8e4
 // WeaponLauncher::rttiHashWeaponLauncher
-PblHash WeaponLauncher::rttiHashWeaponLauncher("WeaponLauncher");
 // GLOBAL: SWBF2 0x0078c094
 // WeaponLauncher::rttiNameWeaponLauncher
-const char WeaponLauncher::rttiNameWeaponLauncher[] = "WeaponLauncher";
+PBL_IMPLEMENT_RTTI(WeaponLauncher)
 
 // FUNCTION: SWBF2 0x00687390
 WeaponLauncher::WeaponLauncher(const WeaponLauncherClass* pClass, const WeaponDesc& desc)
@@ -140,7 +138,7 @@ void WeaponLauncher::SetupTarget(const GameObject** ppTarget, int* pBodyId) cons
             *ppTarget = pTarget;
             if (pTarget)
             {
-                if (!(mClass->mTargetTypes & (1 << pTarget->mHealthType)))
+                if (!(mClass->mTargetTypes & Bit(pTarget->mHealthType)))
                 {
                     *ppTarget = 0;
                 }

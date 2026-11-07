@@ -90,7 +90,7 @@ void AnimatedAddon::Render(TentacleSimulator* pTentacles, const PblVector3& vVel
     if (pTentacles)
     {
         float fParam = -1.0f;
-        if ((uiFlags & 0x10000000) > 0 || (uiFlags & 0x200000) > 0)
+        if ((uiFlags & RENDERFLAG_PSEUDO_REFLECTED) > 0 || (uiFlags & RENDERFLAG_RENDER_REFLECTION) > 0)
         {
             fParam = 0.0f;
         }

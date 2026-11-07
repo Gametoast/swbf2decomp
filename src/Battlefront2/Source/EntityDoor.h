@@ -1,6 +1,7 @@
 #pragma once
 
 #include "PebbleFL/Common/PblHashTable.h"
+#include "PebbleFL/Common/PblRtti.h"
 
 #include <stddef.h>
 
@@ -30,15 +31,16 @@ public:
     virtual ~EntityDoorClass();
     virtual EntityClass* Derive(unsigned int uHash);
     virtual Entity* Build(const EntityDesc& desc);
-    virtual bool IsRtti(unsigned int uRtti) const;
-    virtual unsigned int GetDerivedRtti() const;
-    virtual const char* GetDerivedRttiName() const;
+    // FUNCTION: SWBF2 0x00497ff0
+    // EntityDoorClass::IsRtti
+    // FUNCTION: SWBF2 0x00498020
+    // EntityDoorClass::GetDerivedRtti
+    // FUNCTION: SWBF2 0x00498030
+    // EntityDoorClass::GetDerivedRttiName
+    PBL_DECLARE_DERIVED_RTTI(EntityDoorClass, EntityPropClass)
     virtual void SetProperty(unsigned int uProperty, const char* pszValue);
 
     bool InitAnimations(const char* pszName);
-
-    static PblHash rttiHashEntityDoorClass;
-    static const char rttiNameEntityDoorClass[];
 
     const ZephyrAnim* mAnimation;
     RedAnimation* mAnimObj;
@@ -47,14 +49,6 @@ public:
     GameSound mCloseSound;
     GameSound mLockedSound;
 };
-  
- 
- 
- 
- 
- 
- 
- 
 
 class EntityDoorClass;
 class EntityClass;
@@ -119,16 +113,6 @@ public:
     unsigned char mTriggerSkipCnt : 2;
     float mTimeSinceLastTriggered;
 };
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
 
 // FUNCTION: SWBF2 0x00497f70
 inline unsigned int EntityDoor::GetDerivedRtti() const
@@ -152,24 +136,3 @@ inline bool EntityDoor::IsRtti(unsigned int uRtti) const
     return reinterpret_cast<const EntityProp*>(this)->EntityProp::IsRtti(uRtti);
 }
 
-// FUNCTION: SWBF2 0x00497ff0
-inline bool EntityDoorClass::IsRtti(unsigned int uRtti) const
-{
-    if (rttiHashEntityDoorClass == uRtti)
-    {
-        return true;
-    }
-    return EntityPropClass::IsRtti(uRtti);
-}
-
-// FUNCTION: SWBF2 0x00498020
-inline unsigned int EntityDoorClass::GetDerivedRtti() const
-{
-    return rttiHashEntityDoorClass;
-}
-
-// FUNCTION: SWBF2 0x00498030
-inline const char* EntityDoorClass::GetDerivedRttiName() const
-{
-    return rttiNameEntityDoorClass;
-}

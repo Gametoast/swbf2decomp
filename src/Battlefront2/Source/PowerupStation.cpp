@@ -61,10 +61,9 @@ PowerupStationClass::PowerupStationClass(unsigned int uHash)
 
 // GLOBAL: SWBF2 0x01efa228
 // PowerupStationClass::rttiHashPowerupStationClass
-PblHash PowerupStationClass::rttiHashPowerupStationClass("PowerupStationClass");
 // GLOBAL: SWBF2 0x0078ac30
 // PowerupStationClass::rttiNamePowerupStationClass
-const char PowerupStationClass::rttiNamePowerupStationClass[] = "PowerupStationClass";
+PBL_IMPLEMENT_RTTI(PowerupStationClass)
 
 // FUNCTION: SWBF2 0x00625e80
 PowerupStationClass::PowerupStationClass(PowerupStationClass* pBase, unsigned int uHash)
@@ -281,10 +280,9 @@ Entity* PowerupStationClass::Build(const EntityDesc& desc)
 
 // GLOBAL: SWBF2 0x01efa22c
 // PowerupStation::rttiHashPowerupStation
-PblHash PowerupStation::rttiHashPowerupStation("PowerupStation");
 // GLOBAL: SWBF2 0x0078ac1c
 // PowerupStation::rttiNamePowerupStation
-const char PowerupStation::rttiNamePowerupStation[] = "PowerupStation";
+PBL_IMPLEMENT_RTTI(PowerupStation)
 
 
 

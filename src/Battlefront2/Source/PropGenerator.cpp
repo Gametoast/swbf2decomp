@@ -1,4 +1,5 @@
 #include "PebbleFL/Common/PblMath.h"
+#include "PebbleFL/Common/PblBits.h"
 #include "PropGenerator.h"
 #include "PebbleFL/Common/PblVector.h"
 
@@ -241,7 +242,7 @@ void PropGenerator::SortClusters()
         afScore[i] = FLT_MAX;
         for (int iCam = 0; iCam < iNumCameras; iCam++)
         {
-            if (!(pCluster->mWasRenderedFlag & (1 << iCam)))
+            if (!(pCluster->mWasRenderedFlag & Bit(iCam)))
             {
                 continue;
             }
@@ -280,7 +281,7 @@ float PropGenerator::CalcDistScore_(const PropCluster* pCluster, const PblVector
     int iNumCameras = CameraManager::Instance()->GetNumCameras();
     for (int iCam = 0; iCam < iNumCameras; iCam++)
     {
-        if (!bAllCameras && !(pCluster->mWasRenderedFlag & (1 << iCam)))
+        if (!bAllCameras && !(pCluster->mWasRenderedFlag & Bit(iCam)))
         {
             continue;
         }
@@ -319,7 +320,7 @@ void PropGenerator::Update()
         {
             for (int i = 0; i < mNumClusterObjects; i++)
             {
-                mClusterObjectArray[i]->mWasRenderedFlag &= ~(1 << iCam);
+                mClusterObjectArray[i]->mWasRenderedFlag &= ~Bit(iCam);
                 PropCluster* pCluster = mClusterObjectArray[i];
                 if (!pCluster->mWasRenderedFlag && pCluster->mMapIndex != -1)
                 {

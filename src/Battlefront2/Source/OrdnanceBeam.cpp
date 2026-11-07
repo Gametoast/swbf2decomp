@@ -22,10 +22,9 @@ extern bool netIsLateTurn;
 
 // GLOBAL: SWBF2 0x01ef2614
 // OrdnanceBeam::rttiHashOrdnanceBeam
-PblHash OrdnanceBeam::rttiHashOrdnanceBeam("OrdnanceBeam");
 // GLOBAL: SWBF2 0x0078a7b8
 // OrdnanceBeam::rttiNameOrdnanceBeam
-const char OrdnanceBeam::rttiNameOrdnanceBeam[] = "OrdnanceBeam";
+PBL_IMPLEMENT_RTTI(OrdnanceBeam)
 
 // FUNCTION: SWBF2 0x005f9670
 unsigned int OrdnanceBeamClass::GetDerivedRtti() const { return rttiHashOrdnanceBeamClass; }
@@ -39,10 +38,9 @@ const char* OrdnanceBeamClass::GetDerivedRttiName() const { return rttiNameOrdna
 
 // GLOBAL: SWBF2 0x01ef2618
 // OrdnanceBeamClass::rttiHashOrdnanceBeamClass
-PblHash OrdnanceBeamClass::rttiHashOrdnanceBeamClass("OrdnanceBeamClass");
 // GLOBAL: SWBF2 0x0078a79c
 // OrdnanceBeamClass::rttiNameOrdnanceBeamClass
-const char OrdnanceBeamClass::rttiNameOrdnanceBeamClass[] = "OrdnanceBeamClass";
+PBL_IMPLEMENT_RTTI(OrdnanceBeamClass)
 
 // FUNCTION: SWBF2 0x005fa180
 OrdnanceBeamClass::OrdnanceBeamClass(unsigned int uHash)

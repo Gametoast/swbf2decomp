@@ -1,4 +1,5 @@
 #include "pcRedRenderer.h"
+#include "PebbleFL/Common/PblBits.h"
 
 #include "RedEngineFL/Memory/engineAlloc.h"
 #include "RedEngineFL/Application/pc/pcRenderHelpers.h"
@@ -2086,7 +2087,7 @@ void RedRenderer::pcRenderPrimitive(pcRedPrimitive* pPrim, pcRedShader* pShader,
 
     if (!sLightingEnable)
     {
-        uiFlags |= 0x10;
+        uiFlags |= RENDERFLAG_NO_LIGHTING;
     }
 
     if (m_curRenderItemOffset >= 0x128c)
@@ -2105,7 +2106,7 @@ void RedRenderer::pcRenderPrimitive(pcRedPrimitive* pPrim, pcRedShader* pShader,
     pItem->pPrim->AddRef();
 
     int iSavedMatrixOffset = m_uiCurMatrixPoolOffset;
-    if (!(uiFlags & 0x1000000) &&
+    if (!(uiFlags & RENDERFLAG_RENDER_CACHED) &&
         (&mWorld < &m_amMatrixPool[0] || &mWorld >= &m_amMatrixPool[3062]))
     {
 
@@ -2125,22 +2126,22 @@ void RedRenderer::pcRenderPrimitive(pcRedPrimitive* pPrim, pcRedShader* pShader,
     pItem->flags = uiFlags;
     if (m_bStencilShadowZFail)
     {
-        pItem->flags = uiFlags | 0x400;
+        pItem->flags = uiFlags | PC_RENDERFLAG_SHADOWVOLUME_ZFAIL;
     }
     pItem->pBoneMatrices = (PblMatrix*)pBoneMatrices;
     pItem->numBoneMatrices = (unsigned short)uiNumBoneMatrices;
 
     unsigned int uiEnvState = 0;
-    if (uiFlags & 0x10)
+    if (uiFlags & RENDERFLAG_NO_LIGHTING)
     {
-        pItem->pLightingState = (uiRVF & 0x100) ? &m_aLightingStatePool[2048]
+        pItem->pLightingState = (uiRVF & RVF_LIGHTING) ? &m_aLightingStatePool[2048]
                                                 : &m_aLightingStatePool[2049];
     }
     else
     {
         RedLightingState* pLightingState = m_pLightingState;
         pItem->pLightingState = pLightingState;
-        if (uiRVF & 0x20)
+        if (uiRVF & RVF_NORMAL)
         {
             uiEnvState = 0x10;
             if (pLightingState->pSpotLights[0])
@@ -2185,7 +2186,7 @@ void RedRenderer::pcRenderPrimitive(pcRedPrimitive* pPrim, pcRedShader* pShader,
 
     unsigned int uiState = (pCurShader->*(pCurShader->GetStateFunc))(pItem);
     pItem->uiShaderState = uiState;
-    if (uiFlags & 0x200)
+    if (uiFlags & PC_RENDERFLAG_IMMEDIATE)
     {
         internalRenderImmediate(pItem);
         --m_curRenderItemOffset;
@@ -2251,14 +2252,14 @@ void RedRenderer::pcRenderPrimitive(pcRedPrimitive* pPrim, pcRedShader* pShader,
                         {
                             return;
                         }
-                        pItem->flags |= 0x1000;
+                        pItem->flags |= PC_RENDERFLAG_ZPREPASS;
                         bucket->Push(pItem, ~key.id);
                         if (m_iImmediateMode && bucket->_numElements >= m_iImmediateMode)
                         {
                             pcFlush(0x80000001);
                         }
                     }
-                    pItem->flags |= 0x20;
+                    pItem->flags |= RENDERFLAG_NO_Z;
                     phase = 8;
                 }
             }
@@ -2314,13 +2315,13 @@ void RedRenderer::pcRenderPrimitive(pcRedPrimitive* pPrim, pcRedShader* pShader,
             (unsigned char)internalGetTransformAndLightingID(uiRVF, uiEnvState, uiPassCaps);
         key.translucent.translucent = 1;
 
-        unsigned int hidden = uiFlags & 0x10000000;
+        unsigned int hidden = uiFlags & RENDERFLAG_PSEUDO_REFLECTED;
         if (hidden)
         {
             phase = 2;
         }
 
-        if (uiFlags & 0x8000000)
+        if (uiFlags & RENDERFLAG_PSEUDO_REFLECTIVE)
         {
             key.translucent.depth = 0x7ff;
             key.translucent.pass = 2;
@@ -2344,7 +2345,7 @@ void RedRenderer::pcRenderPrimitive(pcRedPrimitive* pPrim, pcRedShader* pShader,
             pCopy->uiShaderChainSize = 1;
             pCopy->uiCurrentShader = 0;
             pCopy->uiShaderState = uiZState;
-            pCopy->flags |= 0x10;
+            pCopy->flags |= RENDERFLAG_NO_LIGHTING;
             pCopy->pLightingState = &m_aLightingStatePool[2049];
 
             unsigned char copyLow =
@@ -2363,7 +2364,7 @@ void RedRenderer::pcRenderPrimitive(pcRedPrimitive* pPrim, pcRedShader* pShader,
 
             m_preShadowTransparentItems.Push(pCopy, ~copyKey.id);
         }
-        else if ((uiFlags & 0x20000000) &&
+        else if ((uiFlags & RENDERFLAG_ZBUFFER_ALPHA_FADE) &&
                  pItem->pRootShader->SortAsZWritingTransparent())
         {
             if (hidden)
@@ -2615,7 +2616,7 @@ void RedRenderer::Init()
     int iShift = 31;
     for (;;)
     {
-        uiPow2Width = 1u << iShift;
+        uiPow2Width = PowerOf2U(iShift);
         if (uiPow2Width <= m_d3dpp.BackBufferWidth &&
             uiPow2Width <= caps.MaxTextureWidth)
         {
@@ -2628,7 +2629,7 @@ void RedRenderer::Init()
     iShift = 31;
     for (;;)
     {
-        uiPow2Height = 1u << iShift;
+        uiPow2Height = PowerOf2U(iShift);
         if (uiPow2Height <= m_d3dpp.BackBufferHeight &&
             uiPow2Height <= caps.MaxTextureHeight)
         {
@@ -2704,7 +2705,7 @@ void RedRenderer::Init()
 
     m_systemShaders[0] = 0;
 
-    m_systemShaders[SYSTEM_SHADER_ZPREPASS] = pcRedShader::Create(PblHash("zprepass"), 0x1002, 0, 0, 0,
+    m_systemShaders[SYSTEM_SHADER_ZPREPASS] = pcRedShader::Create(PblHash("zprepass"), RVF_POSITION_XYZ | RVF_COMPRESSED_POSITION, 0, 0, 0,
                                              RedColor::WHITE, RedColor::BLACK,
                                              32.0f);
     m_systemShaders[2] = pcRedShader::Create(PblHash("pervertexdiffuselighting"),
@@ -2897,8 +2898,8 @@ void RedRenderer::internalSetupCaps()
     }
 
     m_renderCaps.textureCaps = TEXTURE_CAPS_COMPRESSED;
-    m_renderCaps.cubemaps = ((m_deviceCaps.TextureCaps >> 11) & 1) != 0;
-    m_renderCaps.volumemaps = ((m_deviceCaps.TextureCaps >> 13) & 1) != 0;
+    m_renderCaps.cubemaps = (m_deviceCaps.TextureCaps & D3DPTEXTURECAPS_CUBEMAP) != 0;
+    m_renderCaps.volumemaps = (m_deviceCaps.TextureCaps & D3DPTEXTURECAPS_VOLUMEMAP) != 0;
 
     if (!(m_deviceCaps.TextureCaps & D3DPTEXTURECAPS_POW2))
     {
@@ -2907,7 +2908,7 @@ void RedRenderer::internalSetupCaps()
     else
     {
         m_renderCaps.nonpow2textures =
-            (TextureNonPow2SupportT)((m_deviceCaps.TextureCaps >> 8) & 1);
+            (m_deviceCaps.TextureCaps & D3DPTEXTURECAPS_NONPOW2CONDITIONAL) ? TEXTURE_NONPOW2_CONDITIONAL : TEXTURE_NONPOW2_NEVER;
     }
 
     RedVideoConfig::VidMode_ApplyRenderCapOverrides(m_renderCaps);
@@ -3942,7 +3943,7 @@ void RedRenderer::internalShaderBeginEnd()
 {
     if (RedRenderer::m_pPrevShader)
     {
-        (RedRenderer::m_pPrevShader->*RedRenderer::m_pPrevShader->EndFunc)(RedRenderer::m_uiPrevShaderState, ((unsigned int)RedRenderer::m_PrevSortID >> 16) & 3);
+        (RedRenderer::m_pPrevShader->*RedRenderer::m_pPrevShader->EndFunc)(RedRenderer::m_uiPrevShaderState, ((const SortIdT&)RedRenderer::m_PrevSortID).t_pass);
         internalStateStackPop();
         RedRenderer::m_pPrevShader->Release();
     }
@@ -4604,7 +4605,7 @@ void RedRenderer::FlushOcclusionQueries()
     pItem->uiShaderChainSize = 1;
     pItem->uiCurrentShader = 0;
     pItem->uiShaderState = 0;
-    pItem->flags = 48;
+    pItem->flags = RENDERFLAG_NO_LIGHTING | RENDERFLAG_NO_Z;
     pItem->pLightingState = &RedRenderer::m_aLightingStatePool[2049];
     pItem->uiEnvState = 0;
     pItem->pVisibilityQuery = 0;
@@ -5043,7 +5044,7 @@ bool sFlushVertexConstantsOnShaderChange = true;
 
 // GLOBAL: SWBF2 0x007fa027
 
-bool sCurrentFormatHasNormals;
+bool sCurrentFormatIsVertexLit;
 
 // GLOBAL: SWBF2 0x007fbebc
 
@@ -5060,7 +5061,7 @@ unsigned int RedRenderer::internalGetTransformAndLightingID(unsigned int uiRVF,
         return uiID;
     }
 
-    unsigned int uiWeights = (uiRVF >> 2) & 7;
+    unsigned int uiWeights = (uiRVF & RVF_WEIGHTS_MASK) >> RVF_WEIGHTS_SHIFT;
     if (uiWeights > 1)
     {
         uiID = 0x40;
@@ -5070,7 +5071,7 @@ unsigned int RedRenderer::internalGetTransformAndLightingID(unsigned int uiRVF,
         uiID = 0x40;
     }
 
-    if ((uiPassCaps & 0x100) && (uiRVF & 0x180))
+    if ((uiPassCaps & 0x100) && (uiRVF & (RVF_COLOR | RVF_LIGHTING)))
     {
         uiID |= 0x80;
     }
@@ -5156,8 +5157,8 @@ inline RedColorValue ScaledColor_(const RedLight* pLight, float fFactor)
     return c;
 }
 
-inline bool LightFlag0_(const RedLight* pLight) { return (pLight->m_uiFlags & 1) != 0; }
-inline float LightFlag1_(const RedLight* pLight) { return (float)(int)((pLight->m_uiFlags >> 1) & 1); }
+inline bool IsLightStatic_(const RedLight* pLight) { return (pLight->m_uiFlags & RedLight::LIGHT_FLAG_STATIC) != 0; }
+inline float LightShadowCaster_(const RedLight* pLight) { return (pLight->m_uiFlags & RedLight::LIGHT_FLAG_SHADOWCASTER) ? 1.0f : 0.0f; }
 }
 
 
@@ -5199,12 +5200,12 @@ void __cdecl RedRenderer::internalRenderFixed(RenderItem* pItem, unsigned int ui
     }
     pcSetRenderState(D3DRS_LIGHTING, TRUE);
 
-    if ((uiTnl & 0x1f) && !(pItem->flags & 0x10) && (uiPassCaps & 6))
+    if ((uiTnl & 0x1f) && !(pItem->flags & RENDERFLAG_NO_LIGHTING) && (uiPassCaps & 6))
     {
         const RedLightingState* pLS = pItem->pLightingState;
-        const unsigned int uiNormals = uiRVF & 0x100;
-        const bool bAmbient = !uiNormals && (uiPassCaps & 2);
-        const bool bDirectional = pLS->pDirectionalLights[0] && (!uiNormals || (uiPassCaps & 4));
+        const unsigned int uiVertexLit = uiRVF & RVF_LIGHTING;
+        const bool bAmbient = !uiVertexLit && (uiPassCaps & 2);
+        const bool bDirectional = pLS->pDirectionalLights[0] && (!uiVertexLit || (uiPassCaps & 4));
         if (bDirectional || pLS->pOmniLights[0])
         {
             const PblMatrix mWorldInverse = pItem->pmObjWorld->GetInverseFast();
@@ -5218,7 +5219,7 @@ void __cdecl RedRenderer::internalRenderFixed(RenderItem* pItem, unsigned int ui
         {
             D3DLIGHT9 sun = pLS->pDirectionalLights[0]->m_d3dLight;
             float fFactor = pLS->pDirectionalFactor[0];
-            if (pItem->flags & 0x800)
+            if (pItem->flags & PC_RENDERFLAG_FF_HALF_LIGHTING)
             {
                 fFactor *= 0.5f;
             }
@@ -5236,7 +5237,7 @@ void __cdecl RedRenderer::internalRenderFixed(RenderItem* pItem, unsigned int ui
 
         if (pLS->pOmniLights[0])
         {
-            if (pItem->flags & 0x800)
+            if (pItem->flags & PC_RENDERFLAG_FF_HALF_LIGHTING)
             {
                 D3DLIGHT9 d3dLight = pLS->pOmniLights[0]->m_d3dLight;
                 RedColorValue color;
@@ -5325,7 +5326,7 @@ void __cdecl RedRenderer::internalRenderFixed(RenderItem* pItem, unsigned int ui
     }
 
     pcRedShader* pShader;
-    if (pItem->flags & 0x100)
+    if (pItem->flags & RENDERFLAG_REFLECTION)
     {
         pcRedFrontT eFront = m_FrontFace;
         if (eFront == PCREDFRONT_CCW)
@@ -5377,7 +5378,7 @@ void __cdecl RedRenderer::internalRenderProg1(RenderItem* pItem, unsigned int ui
     {
         RedRenderer::m_pPrimPrev = pItem->pPrim;
         pRegs = m_VSConstants.GetRegisters(12, 4);
-        if (uiRVF & 0x4000)
+        if (uiRVF & RVF_COMPRESSED_NORMALS)
         {
             pRegs[12].component[0] = 2.0f;
             pRegs[12].component[1] = -1.0f;
@@ -5388,13 +5389,13 @@ void __cdecl RedRenderer::internalRenderProg1(RenderItem* pItem, unsigned int ui
             pRegs[12].component[1] = 0.0f;
         }
         pRegs[12].component[2] = 1.0f / 2048.0f;
-        if (!(uiRVF & 0x8000))
+        if (!(uiRVF & RVF_COMPRESSED_TEXCOORDS))
         {
             pRegs[12].component[2] = 1.0f;
         }
         pRegs[12].component[3] = 1.0f;
 
-        if (uiRVF & 0x1000)
+        if (uiRVF & RVF_COMPRESSED_POSITION)
         {
             const PblBox& box = pItem->pPrim->m_bbox;
             const PblVector3 vSize = (box._vMax - box._vMin) * (1.0f / 65534.0f);
@@ -5408,7 +5409,7 @@ void __cdecl RedRenderer::internalRenderProg1(RenderItem* pItem, unsigned int ui
             pRegs[14].SetFloats(0.0f, 0.0f, 0.0f, 1.0f);
         }
 
-        if (uiRVF & 0x80)
+        if (uiRVF & RVF_COLOR)
         {
             pRegs[15].SetFloats(0.0f, 1.0f, 0.0f, 1.0f);
         }
@@ -5426,19 +5427,19 @@ void __cdecl RedRenderer::internalRenderProg1(RenderItem* pItem, unsigned int ui
         pRegs[16].SetMatrix4x3(mWorld);
     }
 
-    bool bNormals = ((uiRVF >> 8) & 1) != 0;
+    bool bVertexLit = (uiRVF & RVF_LIGHTING) != 0;
     unsigned int uiLights = uiTnl & 0x1f;
-    if (uiLights && !(pItem->flags & 0x10))
+    if (uiLights && !(pItem->flags & RENDERFLAG_NO_LIGHTING))
     {
         const RedLightingState* pLS = pItem->pLightingState;
         sAccumulatedLightingBits |= uiLights;
         pRegs = m_VSConstants.GetRegisters(19, 6);
         RedRenderer::m_pLightingStatePrev = pLS;
-        sCurrentFormatHasNormals = bNormals;
+        sCurrentFormatIsVertexLit = bVertexLit;
         PblVector4 lightProjSelector(0.0f, 0.0f, 0.0f, 0.0f);
         const RedColorValue black = RedColorValue::BLACK;
 
-        if (!bNormals)
+        if (!bVertexLit)
         {
             const RedAmbientLight& rAmbient = pLS->ambientLight;
             SetColor_(pRegs[19], rAmbient.m_topColor);
@@ -5477,7 +5478,7 @@ void __cdecl RedRenderer::internalRenderProg1(RenderItem* pItem, unsigned int ui
             if (pLS->pDirectionalLights[0])
             {
                 RedColorValue color =
-                    LightFlag0_(pLS->pDirectionalLights[0])
+                    IsLightStatic_(pLS->pDirectionalLights[0])
                         ? black
                         : ScaledColor_(pLS->pDirectionalLights[0], pLS->pDirectionalFactor[0]);
                 SetRGBW_(pRegs[21], color,
@@ -5489,7 +5490,7 @@ void __cdecl RedRenderer::internalRenderProg1(RenderItem* pItem, unsigned int ui
                                  pItem->pLightingState->pProjectedLight);
                 if (pLS->pDirectionalLights[1])
                 {
-                    color = LightFlag0_(pLS->pDirectionalLights[0])
+                    color = IsLightStatic_(pLS->pDirectionalLights[0])
                                 ? black
                                 : ScaledColor_(pLS->pDirectionalLights[1],
                                                pLS->pDirectionalFactor[1]);
@@ -5629,7 +5630,7 @@ void __cdecl RedRenderer::internalRenderProg1(RenderItem* pItem, unsigned int ui
     else
     {
         const RedLightingState* pDefault =
-            bNormals ? &RedRenderer::m_aLightingStatePool[2048]
+            bVertexLit ? &RedRenderer::m_aLightingStatePool[2048]
                      : &RedRenderer::m_aLightingStatePool[2049];
         if (pDefault != RedRenderer::m_pLightingStatePrev)
         {
@@ -5639,7 +5640,7 @@ void __cdecl RedRenderer::internalRenderProg1(RenderItem* pItem, unsigned int ui
             SetColor_(pRegs[19], rAmbient.m_topColor);
             SetColor_(pRegs[20], rAmbient.m_bottomColor);
         }
-        sCurrentFormatHasNormals = bNormals;
+        sCurrentFormatIsVertexLit = bVertexLit;
     }
 
     if (sFlushVertexConstantsOnShaderChange)
@@ -5648,7 +5649,7 @@ void __cdecl RedRenderer::internalRenderProg1(RenderItem* pItem, unsigned int ui
     }
 
     pcRedShader* pShader;
-    if (pItem->flags & 0x100)
+    if (pItem->flags & RENDERFLAG_REFLECTION)
     {
         pcRedFrontT eFront = m_FrontFace;
         if (eFront == PCREDFRONT_CCW)
@@ -5701,7 +5702,7 @@ void RedRenderer::internalRenderZPrepassProg1(RenderItem* pItem, unsigned int ui
     {
         RedRenderer::m_pPrimPrev = pItem->pPrim;
         pRegs = m_VSConstants.GetRegisters(12, 4);
-        if (uiRVF & 0x4000)
+        if (uiRVF & RVF_COMPRESSED_NORMALS)
         {
             pRegs[12].component[0] = 2.0f;
             pRegs[12].component[1] = -1.0f;
@@ -5712,13 +5713,13 @@ void RedRenderer::internalRenderZPrepassProg1(RenderItem* pItem, unsigned int ui
             pRegs[12].component[1] = 0.0f;
         }
         pRegs[12].component[2] = 1.0f / 2048.0f;
-        if (!(uiRVF & 0x8000))
+        if (!(uiRVF & RVF_COMPRESSED_TEXCOORDS))
         {
             pRegs[12].component[2] = 1.0f;
         }
         pRegs[12].component[3] = 1.0f;
 
-        if (uiRVF & 0x1000)
+        if (uiRVF & RVF_COMPRESSED_POSITION)
         {
             const PblBox& box = pItem->pPrim->m_bbox;
             const PblVector3 vSize = (box._vMax - box._vMin) * (1.0f / 65534.0f);
@@ -5731,7 +5732,7 @@ void RedRenderer::internalRenderZPrepassProg1(RenderItem* pItem, unsigned int ui
             pRegs[13].SetFloats(1.0f, 1.0f, 1.0f, 0.0f);
             pRegs[14].SetFloats(0.0f, 0.0f, 0.0f, 1.0f);
         }
-        if (uiRVF & 0x80)
+        if (uiRVF & RVF_COLOR)
         {
             pRegs[15].SetFloats(0.0f, 1.0f, 0.0f, 1.0f);
         }
@@ -5767,7 +5768,7 @@ void RedRenderer::internalShaderBeginEnd(RenderItem* pItem, unsigned int uiShade
     prevId.id = (unsigned int)RedRenderer::m_PrevSortID;
     bool bNewID = prevId.id != sortId.id;
     bool bNewShader;
-    unsigned int uiPrevPass = ((unsigned int)RedRenderer::m_PrevSortID >> 16) & 3;
+    unsigned int uiPrevPass = ((const SortIdT&)RedRenderer::m_PrevSortID).t_pass;
     if (uiPrevPass == sortId.t_pass && (unsigned char)prevId.t_customID == (unsigned char)sortId.t_customID)
     {
         bNewShader = false;
@@ -6095,11 +6096,11 @@ void RedRenderer::internalRenderFromHeap(HEAP& heap)
         }
     }
 
-    if (pItem->flags & 0x1000)
+    if (pItem->flags & PC_RENDERFLAG_ZPREPASS)
     {
         pItem->pVisibilityQuery = internalGetD3DVisibilityQuery();
         unsigned int uiFlags = pItem->flags;
-        pItem->flags = uiFlags & ~0x20;
+        pItem->flags = uiFlags & ~RENDERFLAG_NO_Z;
         if (!pItem->pVisibilityQuery)
         {
             internalRenderZPrepassProg1(pItem, sortId.o_shaderID);
@@ -6110,7 +6111,7 @@ void RedRenderer::internalRenderFromHeap(HEAP& heap)
             internalRenderZPrepassProg1(pItem, sortId.o_shaderID);
             pItem->pVisibilityQuery->Issue(D3DISSUE_END);
         }
-        pItem->flags = uiFlags & ~0x1000;
+        pItem->flags = uiFlags & ~PC_RENDERFLAG_ZPREPASS;
         return;
     }
 

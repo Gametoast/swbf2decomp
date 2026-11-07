@@ -71,10 +71,9 @@ PblVector3 GetSineRandomOffsetXZ(const GameObject* pObj, const int i)
 
 // GLOBAL: SWBF2 0x01ecb1fc
 // NavigatorFollowTarget::rttiHashNavigatorFollowTarget
-PblHash NavigatorFollowTarget::rttiHashNavigatorFollowTarget("NavigatorFollowTarget");
 // GLOBAL: SWBF2 0x0078a608
 // NavigatorFollowTarget::rttiNameNavigatorFollowTarget
-const char NavigatorFollowTarget::rttiNameNavigatorFollowTarget[] = "NavigatorFollowTarget";
+PBL_IMPLEMENT_RTTI(NavigatorFollowTarget)
 
 
 
@@ -119,20 +118,20 @@ bool NavigatorFollowTarget::IsEqual(AILowLevel* pOwner, const GameObject* pTarge
                                     const PblVector3& followOffset)
 {
     return mOwner == pOwner && mFollowTarget == pTarget &&
-           !(mFollowOffset != followOffset) && mCurState != 100;
+           !(mFollowOffset != followOffset) && mCurState != STATE_GLOBDONE;
 }
 
 // FUNCTION: SWBF2 0x005ac6c0
 void NavigatorFollowTarget::EnterState()
 {
-    if (mCurState == 100)
+    if (mCurState == STATE_GLOBDONE)
     {
         return;
     }
 
     if (!mFollowTarget)
     {
-        SetNextState(100);
+        SetNextState(STATE_GLOBDONE);
         return;
     }
 
@@ -197,14 +196,14 @@ void NavigatorFollowTarget::ExitState()
 // FUNCTION: SWBF2 0x005ad160
 void NavigatorFollowTarget::UpdateState(float dt)
 {
-    if (mCurState == 100)
+    if (mCurState == STATE_GLOBDONE)
     {
         return;
     }
 
     if (!HandleObject(mFollowTarget))
     {
-        SetNextState(100);
+        SetNextState(STATE_GLOBDONE);
         return;
     }
 
@@ -226,7 +225,7 @@ void NavigatorFollowTarget::UpdateState(float dt)
         mPathFollower->Update(dt);
         if (mPathFollower->mDone && mPathFollower->mDoneReason == PF_PATHBLOCKED)
         {
-            SetNextState(100);
+            SetNextState(STATE_GLOBDONE);
         }
     }
 }
@@ -236,7 +235,7 @@ void NavigatorFollowTarget::UpdateTarget()
 {
     if (!mFollowTarget)
     {
-        SetNextState(100);
+        SetNextState(STATE_GLOBDONE);
         return;
     }
 
@@ -398,7 +397,7 @@ void NavigatorFollowTarget::ReceivePathResult(AIPath* pPath)
         else
         {
             mFailedPathSearch = true;
-            SetNextState(100);
+            SetNextState(STATE_GLOBDONE);
         }
     }
 }

@@ -11,10 +11,9 @@
 
 // GLOBAL: SWBF2 0x01f993b4
 // UnitDefendAgent::rttiHashUnitDefendAgent
-PblHash UnitDefendAgent::rttiHashUnitDefendAgent("UnitDefendAgent");
 // GLOBAL: SWBF2 0x0078b800
 // UnitDefendAgent::rttiNameUnitDefendAgent
-const char UnitDefendAgent::rttiNameUnitDefendAgent[] = "UnitDefendAgent";
+PBL_IMPLEMENT_RTTI(UnitDefendAgent)
 
 
 
@@ -33,8 +32,8 @@ UnitDefendAgent::UnitDefendAgent(UnitController* pCtrl, const AI::GoalTarget& ta
       mMaintainVisualContact(true)
 {
     mTarget = target;
-    mCurState = 1;
-    mNextState = 2;
+    mCurState = STATE_START;
+    mNextState = STATE_Defend;
 }
 
 // FUNCTION: SWBF2 0x00665d20
@@ -50,9 +49,9 @@ float UnitDefendAgent::GetUpdateRate() const
 {
     switch (mCurState)
     {
-    case 2:
+    case STATE_Defend:
         return mDefendHelper.GetUpdateRate();
-    case 3:
+    case STATE_Combat:
         return 0.8f;
     default:
         return 1.5f;
@@ -64,10 +63,10 @@ void UnitDefendAgent::EnterState()
 {
     switch (mCurState)
     {
-    case 2:
+    case STATE_Defend:
         mDefendHelper.Init(mTarget);
         break;
-    case 3:
+    case STATE_Combat:
         if (mCombatCmd.GetCmdType() == CMD_NONE)
         {
             mCombatCmd = UnitCombatInfo(UnitCombatInfo::ENGAGE);
@@ -82,10 +81,10 @@ void UnitDefendAgent::ExitState()
 {
     switch (mCurState)
     {
-    case 2:
+    case STATE_Defend:
         mDefendHelper.Clean();
         break;
-    case 3:
+    case STATE_Combat:
         mCombatHelper.Clean();
         break;
     }
@@ -94,7 +93,7 @@ void UnitDefendAgent::ExitState()
 // FUNCTION: SWBF2 0x00665e10
 void UnitDefendAgent::UpdateStatePostVision(float dt)
 {
-    if (mCurState != 3)
+    if (mCurState != STATE_Combat)
     {
         mAttackHelper.Update();
     }
@@ -102,18 +101,18 @@ void UnitDefendAgent::UpdateStatePostVision(float dt)
 
     switch (mCurState)
     {
-    case 2:
+    case STATE_Defend:
         mDefendHelper.FSMUpdate(dt, false);
         if (mDefendHelper.IsDone())
         {
-            SetNextState(100);
+            SetNextState(STATE_GLOBDONE);
         }
         break;
-    case 3:
+    case STATE_Combat:
         mCombatHelper.FSMUpdate(dt, false);
         if (mCombatHelper.IsDone())
         {
-            SetNextState(2);
+            SetNextState(STATE_Defend);
         }
         break;
     }
@@ -125,14 +124,14 @@ int UnitDefendAgent::EventHandler(AI::EventInfo* pInfo)
     int iResult;
     switch (mCurState)
     {
-    case 2:
+    case STATE_Defend:
         iResult = mDefendHelper.EventHandler(pInfo);
         if (iResult != AI::EVT_NotHandled)
         {
             return iResult;
         }
         break;
-    case 3:
+    case STATE_Combat:
         iResult = mCombatHelper.EventHandler(pInfo);
         if (iResult != AI::EVT_NotHandled)
         {
@@ -151,10 +150,10 @@ int UnitDefendAgent::EventHandler(AI::EventInfo* pInfo)
         if (UnitAgent::EventHandler(pInfo) == AI::EVT_Handled)
         {
             pInfo->mNextCmd = UnitCmdInfo(CMD_NONE, NULL, PblVector3(0, 0, 0), NULL);
-            if (mCurState != 3)
+            if (mCurState != STATE_Combat)
             {
                 mCombatCmd = pInfo->mNextCmd;
-                SetNextState(3);
+                SetNextState(STATE_Combat);
                 return AI::EVT_Handled;
             }
         }

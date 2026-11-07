@@ -41,10 +41,9 @@ namespace
 
 // GLOBAL: SWBF2 0x01f9a8e0
 // WeaponLaser::rttiHashWeaponLaser
-PblHash WeaponLaser::rttiHashWeaponLaser("WeaponLaser");
 // GLOBAL: SWBF2 0x0078c06c
 // WeaponLaser::rttiNameWeaponLaser
-const char WeaponLaser::rttiNameWeaponLaser[] = "WeaponLaser";
+PBL_IMPLEMENT_RTTI(WeaponLaser)
 
 
 
@@ -234,10 +233,9 @@ void WeaponLaser::EnterEmpty()
 
 // GLOBAL: SWBF2 0x01f9a8dc
 // WeaponLaserClass::rttiHashWeaponLaserClass
-PblHash WeaponLaserClass::rttiHashWeaponLaserClass("WeaponLaserClass");
 // GLOBAL: SWBF2 0x0078c07c
 // WeaponLaserClass::rttiNameWeaponLaserClass
-const char WeaponLaserClass::rttiNameWeaponLaserClass[] = "WeaponLaserClass";
+PBL_IMPLEMENT_RTTI(WeaponLaserClass)
 
 // FUNCTION: SWBF2 0x006870c0
 WeaponLaserClass::WeaponLaserClass(unsigned int uHash)

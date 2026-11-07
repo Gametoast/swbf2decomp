@@ -206,12 +206,12 @@ void DropShadowRenderable::AddShadow(unsigned int uiTexture, const PblVector3& v
         {
             if (RedRenderer::pcGetGeometryMode())
             {
-                m_pShader = pcRedShader::Create(kuiShader, 0x8282, &m_uiTexture, 1, 0x10004,
+                m_pShader = pcRedShader::Create(kuiShader, RVF_POSITION_XYZ | RVF_COLOR | RVF_TEXCOORDS_1 | RVF_COMPRESSED_TEXCOORDS, &m_uiTexture, 1, MATERIAL_FLAG_ALPHAMAP_OPACITY | MATERIAL_FLAG_CULL_NONE,
                                                 RedColor::WHITE, RedColor::BLACK, 32.0f);
             }
             else
             {
-                m_pShader = pcRedShader::Create(kuiShader, 0x282, &m_uiTexture, 1, 0x10004,
+                m_pShader = pcRedShader::Create(kuiShader, RVF_POSITION_XYZ | RVF_COLOR | RVF_TEXCOORDS_1, &m_uiTexture, 1, MATERIAL_FLAG_ALPHAMAP_OPACITY | MATERIAL_FLAG_CULL_NONE,
                                                 RedColor::WHITE, RedColor::BLACK, 32.0f);
             }
         }

@@ -335,8 +335,8 @@ void pcOceanShader::_Init(unsigned int uiFlags,
     m_reflectionMap = 0;
     m_textureTransform.m_bTransform = 0;
     m_foamMapTransform.m_bTransform = 0;
-    m_pVertexFormat = pcRedVertexFormat::Create(uiFlags, 0x2a2);
-    m_pZPrepassVertexInputFormat = pcRedVertexFormat::Create(uiFlags, 2);
+    m_pVertexFormat = pcRedVertexFormat::Create(uiFlags, RVF_POSITION_XYZ | RVF_NORMAL | RVF_COLOR | RVF_TEXCOORDS_1);
+    m_pZPrepassVertexInputFormat = pcRedVertexFormat::Create(uiFlags, RVF_POSITION_XYZ);
 }
 
 // FUNCTION: SWBF2 0x0070c990

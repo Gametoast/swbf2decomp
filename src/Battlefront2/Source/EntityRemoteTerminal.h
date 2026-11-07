@@ -1,6 +1,7 @@
 #pragma once
 
 #include "PebbleFL/Common/PblHashTable.h"
+#include "PebbleFL/Common/PblRtti.h"
 
 #include <stddef.h>
 
@@ -24,20 +25,19 @@ public:
 
     virtual EntityClass* Derive(unsigned int uHash);
     virtual Entity* Build(const EntityDesc& desc);
-    virtual bool IsRtti(unsigned int uRtti) const;
-    virtual unsigned int GetDerivedRtti() const;
-    virtual const char* GetDerivedRttiName() const;
+    // FUNCTION: SWBF2 0x004dcc20
+    // EntityRemoteTerminalClass::IsRtti
+    // FUNCTION: SWBF2 0x004dcc60
+    // EntityRemoteTerminalClass::GetDerivedRtti
+    // FUNCTION: SWBF2 0x004dcc70
+    // EntityRemoteTerminalClass::GetDerivedRttiName
+    PBL_DECLARE_DERIVED_RTTI(EntityRemoteTerminalClass, GameObjectClass)
     virtual void SetProperty(unsigned int uProperty, const char* pszValue);
     virtual GameObjectClass::VehicleType GetVehicleType() const;
 
     GameObjectClass::VehicleType mVehicleType;
 
-    static PblHash rttiHashEntityRemoteTerminalClass;
-    static const char rttiNameEntityRemoteTerminalClass[];
 };
-  
- 
- 
 
 // VTABLE: SWBF2 0x0079ca9c EntityEx
 // VTABLE: SWBF2 0x0079cbc4 Trackable
@@ -157,18 +157,6 @@ public:
     EntityRemoteTerminal* mNextLinkedTerminal;
     EntityRemoteTerminal* mPrevLinkedTerminal;
 };
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
 
 // FUNCTION: SWBF2 0x004dc920
 inline bool EntityRemoteTerminal::IsRtti(unsigned int uRtti) const
@@ -190,28 +178,6 @@ inline unsigned int EntityRemoteTerminal::GetDerivedRtti() const
 inline const char* EntityRemoteTerminal::GetDerivedRttiName() const
 {
     return rttiNameEntityRemoteTerminal;
-}
-
-// FUNCTION: SWBF2 0x004dcc20
-inline bool EntityRemoteTerminalClass::IsRtti(unsigned int uRtti) const
-{
-    if (rttiHashEntityRemoteTerminalClass == uRtti)
-    {
-        return true;
-    }
-    return GameObjectClass::IsRtti(uRtti);
-}
-
-// FUNCTION: SWBF2 0x004dcc60
-inline unsigned int EntityRemoteTerminalClass::GetDerivedRtti() const
-{
-    return rttiHashEntityRemoteTerminalClass;
-}
-
-// FUNCTION: SWBF2 0x004dcc70
-inline const char* EntityRemoteTerminalClass::GetDerivedRttiName() const
-{
-    return rttiNameEntityRemoteTerminalClass;
 }
 
 

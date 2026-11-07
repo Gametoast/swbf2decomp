@@ -239,7 +239,7 @@ void RedGlyphCacheElement::ReallocateCache()
             uiTextureHash = pTexture->m_uiNameHash;
         }
         m_ppInterfaceShader[i] = (pcInterfaceShader*)pcRedShader::Create(
-            PblHash("interface"), 0x202, &uiTextureHash, 1, 0,
+            PblHash("interface"), RVF_POSITION_XYZ | RVF_TEXCOORDS_1, &uiTextureHash, 1, 0,
             RedColor::WHITE, RedColor::BLACK, 32.0f);
         m_ppInterfaceShader[i]->m_mode = pcInterfaceShader::INTERFACE_MODE_BITMAP;
     }
@@ -284,17 +284,17 @@ void RedGlyphCacheElement::RenderUsingContext(const PblMatrix& mContext,
 
         if (m_eBlendMode == BLEND_ADDITIVE)
         {
-            m_ppInterfaceShader[i]->m_materialFlags |= 0x40;
+            m_ppInterfaceShader[i]->m_materialFlags |= MATERIAL_FLAG_ALPHABLEND_ADDITIVE;
         }
         else
         {
-            m_ppInterfaceShader[i]->m_materialFlags &= ~0x40u;
+            m_ppInterfaceShader[i]->m_materialFlags &= ~MATERIAL_FLAG_ALPHABLEND_ADDITIVE;
         }
 
         m_ppInterfaceShader[i]->m_shadowEnable = (m_eStyle == TEXT_STYLE_SHADOW);
 
         RedRenderer::pcRenderPrimitive(pPrimitive, m_ppInterfaceShader[i],
-                                       mContext, color, 0x200, 0, 0, 0);
+                                       mContext, color, PC_RENDERFLAG_IMMEDIATE, 0, 0, 0);
 
         pPrimitive->Release();
     }

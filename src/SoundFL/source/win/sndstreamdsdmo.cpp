@@ -166,7 +166,7 @@ void StreamDSDMO::Update()
         if (pInPacket == 0)
         {
 
-            if ((mFlags & 8) != 0)
+            if ((mFlags & flags_scheduleDiscontinuity) != 0)
             {
 
                 const unsigned int uiOffset = mBuffer.GetOffset();
@@ -183,7 +183,7 @@ void StreamDSDMO::Update()
                     }
                 }
 
-                mFlags = (unsigned char)((mFlags & ~8u) | 2u);
+                mFlags = (unsigned char)((mFlags & ~flags_scheduleDiscontinuity) | flags_discontinuity);
             }
         }
         else
@@ -244,11 +244,11 @@ void StreamDSDMO::Update()
 
             if (bLastPacket)
             {
-                mFlags = (unsigned char)(mFlags | 1u);
+                mFlags = (unsigned char)(mFlags | flags_lastPacket);
             }
             if (bDiscontinuity)
             {
-                mFlags = (unsigned char)(mFlags | 2u);
+                mFlags = (unsigned char)(mFlags | flags_discontinuity);
             }
         }
 
@@ -258,9 +258,9 @@ void StreamDSDMO::Update()
 
             mDMO.DeliverInputData(pDeliver, uiDeliverSize);
 
-            if ((mFlags & 3) != 0)
+            if ((mFlags & (flags_lastPacket | flags_discontinuity)) != 0)
             {
-                mFlags = (unsigned char)(mFlags | 4u);
+                mFlags = (unsigned char)(mFlags | flags_lastBufferSubmitted);
             }
         }
 
@@ -276,10 +276,10 @@ void StreamDSDMO::Update()
             pOutputIO->UpdateOffset(uiPacketSize, uiProduced);
             bProduced = true;
 
-            if (mDMO.IsInputDataComplete() && (mFlags & 4) != 0)
+            if (mDMO.IsInputDataComplete() && (mFlags & flags_lastBufferSubmitted) != 0)
             {
 
-                bMarkerDelivered = ((mFlags >> 2) & 1) != 0;
+                bMarkerDelivered = (mFlags & flags_lastBufferSubmitted) != 0;
 
                 if (pOutputIO->GetOffset() == 0)
                 {
@@ -313,23 +313,23 @@ void StreamDSDMO::Update()
 
             const unsigned int uiFrames = uiBytes / mAudioFrameSize;
 
-            bool bFlagBit0;
-            bool bFlagBit1;
+            bool bLastPacket;
+            bool bDiscontinuity;
             if (bMarkerDelivered)
             {
 
                 const unsigned char ucFlags = mFlags;
                 mFlags = 0;
-                bFlagBit0 = (ucFlags & 1) != 0;
-                bFlagBit1 = ((ucFlags >> 1) & 1) != 0;
+                bLastPacket = (ucFlags & flags_lastPacket) != 0;
+                bDiscontinuity = (ucFlags & flags_discontinuity) != 0;
             }
             else
             {
-                bFlagBit0 = false;
-                bFlagBit1 = false;
+                bLastPacket = false;
+                bDiscontinuity = false;
             }
 
-            PacketComplete(pOutPacket, uiBytes, uiFrames, bFlagBit0, bFlagBit1,
+            PacketComplete(pOutPacket, uiBytes, uiFrames, bLastPacket, bDiscontinuity,
                            uiPos);
 
             StreamNode::mPlaybackPosition = uiFrames + uiPos;

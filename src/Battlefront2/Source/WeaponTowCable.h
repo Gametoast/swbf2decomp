@@ -1,6 +1,7 @@
 #pragma once
 
 #include "PebbleFL/Common/PblHashTable.h"
+#include "PebbleFL/Common/PblRtti.h"
 
 #include <stddef.h>
 
@@ -18,9 +19,13 @@ public:
     WeaponTowCable(const WeaponTowCableClass* pClass, const WeaponDesc& desc);
     virtual ~WeaponTowCable();
 
-    virtual bool IsRtti(unsigned int uRtti) const;
-    virtual unsigned int GetDerivedRtti() const;
-    virtual const char* GetDerivedRttiName() const;
+    // FUNCTION: SWBF2 0x00692730
+    // WeaponTowCable::IsRtti
+    // FUNCTION: SWBF2 0x00692760
+    // WeaponTowCable::GetDerivedRtti
+    // FUNCTION: SWBF2 0x00692770
+    // WeaponTowCable::GetDerivedRttiName
+    PBL_DECLARE_DERIVED_RTTI(WeaponTowCable, WeaponCannon)
     virtual void Write(NetPktGroup& group);
     virtual void Read(NetPktGroup& group);
 
@@ -34,15 +39,9 @@ public:
     bool HasOrdnance() const;
     void KillMyCable();
 
-    static PblHash rttiHashWeaponTowCable;
-    static const char rttiNameWeaponTowCable[];
-
     Ordnance* mMyCable;
     bool mCableOut;
 };
-  
- 
- 
 
 // VTABLE: SWBF2 0x007b1c20
 class WeaponTowCableClass : public WeaponCannonClass
@@ -70,9 +69,6 @@ public:
     GameSound mWhir;
     GameSound mDetatch;
 };
-  
- 
- 
 
 // FUNCTION: SWBF2 0x006927b0
 inline bool WeaponTowCableClass::IsRtti(unsigned int uRtti) const
@@ -96,24 +92,3 @@ inline const char* WeaponTowCableClass::GetDerivedRttiName() const
     return rttiNameWeaponTowCableClass;
 }
 
-// FUNCTION: SWBF2 0x00692730
-inline bool WeaponTowCable::IsRtti(unsigned int uRtti) const
-{
-    if (rttiHashWeaponTowCable == uRtti)
-    {
-        return true;
-    }
-    return WeaponCannon::IsRtti(uRtti);
-}
-
-// FUNCTION: SWBF2 0x00692760
-inline unsigned int WeaponTowCable::GetDerivedRtti() const
-{
-    return rttiHashWeaponTowCable;
-}
-
-// FUNCTION: SWBF2 0x00692770
-inline const char* WeaponTowCable::GetDerivedRttiName() const
-{
-    return rttiNameWeaponTowCable;
-}

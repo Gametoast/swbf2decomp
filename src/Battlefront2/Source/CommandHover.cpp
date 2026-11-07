@@ -19,10 +19,9 @@ MemoryPool CommandHover::sMemoryPool("CommandHover", sizeof(CommandHover));
 
 // GLOBAL: SWBF2 0x01eb96a4
 // CommandHover::rttiHashCommandHover
-PblHash CommandHover::rttiHashCommandHover("CommandHover");
 // GLOBAL: SWBF2 0x00788ca4
 // CommandHover::rttiNameCommandHover
-const char CommandHover::rttiNameCommandHover[] = "CommandHover";
+PBL_IMPLEMENT_RTTI(CommandHover)
 
 
 
@@ -105,10 +104,9 @@ CommandHoverClass::CommandHoverClass(unsigned int uHash)
 
 // GLOBAL: SWBF2 0x01eb96a0
 // CommandHoverClass::rttiHashCommandHoverClass
-PblHash CommandHoverClass::rttiHashCommandHoverClass("CommandHoverClass");
 // GLOBAL: SWBF2 0x00788cb8
 // CommandHoverClass::rttiNameCommandHoverClass
-const char CommandHoverClass::rttiNameCommandHoverClass[] = "CommandHoverClass";
+PBL_IMPLEMENT_RTTI(CommandHoverClass)
 
 
 

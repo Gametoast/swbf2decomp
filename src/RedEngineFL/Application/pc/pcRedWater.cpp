@@ -560,7 +560,7 @@ void RedWater::pcRenderDistortionRing(pcRedShader* pShader, const PblVector3& vW
     pPrim->EndVertexData();
     RedRenderer::pcRenderPrimitive(pPrim, pShader,
                                    gMatrixIdentity,
-                                   RedColor::WHITE, 0x200, 0, 0, 0);
+                                   RedColor::WHITE, PC_RENDERFLAG_IMMEDIATE, 0, 0, 0);
     pPrim->Release();
 }
 
@@ -794,7 +794,7 @@ void RedWater::pcRenderDistortionWakeRing(pcRedShader* pShader, const PblVector3
     pPrim->EndVertexData();
     RedRenderer::pcRenderPrimitive(pPrim, pShader,
                                    gMatrixIdentity,
-                                   RedColor::WHITE, 0x200, 0, 0, 0);
+                                   RedColor::WHITE, PC_RENDERFLAG_IMMEDIATE, 0, 0, 0);
     pPrim->Release();
 }
 
@@ -1011,7 +1011,7 @@ void RedWater::pcRenderWakeRing(pcRedShader* pShader, const PblVector3& vWorldMi
     pPrim->EndVertexData();
     RedRenderer::pcRenderPrimitive(pPrim, pShader,
                                    gMatrixIdentity,
-                                   RedColor::WHITE, 0x200, 0, 0, 0);
+                                   RedColor::WHITE, PC_RENDERFLAG_IMMEDIATE, 0, 0, 0);
     pPrim->Release();
 }
 
@@ -1335,16 +1335,16 @@ void RedWater::PlatformPostReadInit()
         }
 
         s_pUnderWaterShader = (pcClearShader*)pcRedShader::Create(
-            kuiUnderWaterShader, 3, 0, 0, 4, RedColor::WHITE, RedColor::BLACK, 32.0f);
+            kuiUnderWaterShader, RVF_POSITION_XYZRHW, 0, 0, MATERIAL_FLAG_ALPHAMAP_OPACITY, RedColor::WHITE, RedColor::BLACK, 32.0f);
         s_pPreReflectionShader = (pcPreReflectionShader*)pcRedShader::Create(
             kuiPreReflectionShader, uiPatchFormat, 0, 0, 0, RedColor::WHITE, RedColor::BLACK, 32.0f);
         s_pNormalMapAdderShader = (pcNormalMapAdderShader*)pcRedShader::Create(
             kuiNormalMapAdderShader, uiPatchFormat, 0, 0, 0, RedColor::WHITE, RedColor::BLACK, 32.0f);
         s_pWaterSplashShader = pcRedShader::Create(kuiWaterSplashShader, uiRingFormat,
-                                                   &kuiWaterSplashTextureHash, 1, 0x50004,
+                                                   &kuiWaterSplashTextureHash, 1, MATERIAL_FLAG_ALPHAMAP_OPACITY | MATERIAL_FLAG_CULL_NONE | MATERIAL_FLAG_ZWRITEENABLE_TRUE,
                                                    RedColor::WHITE, RedColor::BLACK, 32.0f);
         s_pWaterRingShader = pcRedShader::Create(kuiWaterSplashShader, uiRingFormat,
-                                                 &kuiWaterRingTextureHash, 1, 0x10004,
+                                                 &kuiWaterRingTextureHash, 1, MATERIAL_FLAG_ALPHAMAP_OPACITY | MATERIAL_FLAG_CULL_NONE,
                                                  RedColor::WHITE, RedColor::BLACK, 32.0f);
         s_pWaterDistortionRingShader = (pcNormalMapAdderShader*)pcRedShader::Create(
             kuiNormalMapAdderShader, uiDistortionRingFormat, 0, 0, 0, RedColor::WHITE,
@@ -1369,8 +1369,8 @@ void RedWater::PlatformPostReadInit()
     else
     {
         s_pOceanWaterShader = (pcOceanShader*)pcRedShader::Create(
-            kuiOceanShader, geometry == GEOMETRYMODE_COMPRESSED ? 0xD2A2 : 0x2A2,
-            &m_uiTextureHash, 1, 0x10000, RedColor::WHITE, RedColor::BLACK, 32.0f);
+            kuiOceanShader, geometry == GEOMETRYMODE_COMPRESSED ? RVF_POSITION_XYZ | RVF_NORMAL | RVF_COLOR | RVF_TEXCOORDS_1 | RVF_COMPRESSED_POSITION | RVF_COMPRESSED_NORMALS | RVF_COMPRESSED_TEXCOORDS : RVF_POSITION_XYZ | RVF_NORMAL | RVF_COLOR | RVF_TEXCOORDS_1,
+            &m_uiTextureHash, 1, MATERIAL_FLAG_CULL_NONE, RedColor::WHITE, RedColor::BLACK, 32.0f);
         s_pPreReflectionShader = 0;
         s_pNormalMapAdderShader = 0;
         s_pWaterSplashShader = 0;
@@ -1616,7 +1616,7 @@ void* RedWater::PlatformReadCustomPatch(PblFileChunk* pChunk)
             }
         }
 
-        if (pVertexBuffer && pIndexBuffer && (uiVertexFormat & 0xFFFF0FFF) == 0x222)
+        if (pVertexBuffer && pIndexBuffer && (uiVertexFormat & ~RVF_COMPRESSED_MASK) == (RVF_POSITION_XYZ | RVF_NORMAL | RVF_TEXCOORDS_1))
         {
             pcRedPrimitive* pPrimitive = pcRedPrimitive::Create(
                 D3DPT_TRIANGLESTRIP, uiNumIndices - 2, uiVertexFormat, uiNumVertices,
@@ -1652,15 +1652,15 @@ void RedWater::PlatformRender(unsigned int uiFlags)
         }
         pcWaterShader::SetSpecularEnable(RedWater::m_specularEnable);
 
-        if (uiFlags & 0x20000)
+        if (uiFlags & RENDERFLAG_RENDER_TO_SKY)
         {
-            if (!(uiFlags & 0x100000))
+            if (!(uiFlags & RENDERFLAG_REGISTER_REFLECTION_PLANE))
             {
                 pcRenderFarWaterPatches();
             }
             return;
         }
-        if (uiFlags & 0x100000)
+        if (uiFlags & RENDERFLAG_REGISTER_REFLECTION_PLANE)
         {
             pcRegisterReflection();
             return;
@@ -1696,7 +1696,7 @@ void RedWater::PlatformRender(unsigned int uiFlags)
     }
     else
     {
-        if (uiFlags & 0x20000)
+        if (uiFlags & RENDERFLAG_RENDER_TO_SKY)
         {
             pcRenderFarOceanWaterPatches();
         }
@@ -1737,7 +1737,7 @@ void RedWater::PlatformRenderUnderWaterView(PblVector3* pVerts, int iNumVerts)
 
     RedColor color = RedColorValue(m_underwaterColor) * RedRenderer::GetLightingScale();
     RedRenderer::pcRenderPrimitive(pPrimitive, s_pUnderWaterShader, gMatrixIdentity,
-                                   RedColor(color, m_underwaterColor.a), 0x200, 0, 0, 0);
+                                   RedColor(color, m_underwaterColor.a), PC_RENDERFLAG_IMMEDIATE, 0, 0, 0);
     pPrimitive->Release();
 }
 
@@ -1874,13 +1874,13 @@ void RedWater::pcAccumulateNormalMap()
         if (patch.pCustomMesh)
         {
             RedRenderer::pcRenderPrimitive((pcRedPrimitive*)patch.pCustomMesh, s_pNormalMapAdderShader,
-                                           mCustomPatch, RedColor::WHITE, 0x200, 0, 0, 0);
+                                           mCustomPatch, RedColor::WHITE, PC_RENDERFLAG_IMMEDIATE, 0, 0, 0);
         }
         else
         {
             mPatch.SetTranslation(patch.bbox._vMin);
             RedRenderer::pcRenderPrimitive(m_pLowResPrim, s_pNormalMapAdderShader, mPatch,
-                                           RedColor::WHITE, 0x200, 0, 0, 0);
+                                           RedColor::WHITE, PC_RENDERFLAG_IMMEDIATE, 0, 0, 0);
         }
     }
 
@@ -2229,7 +2229,7 @@ void RedWater::pcRenderWaterPatches()
                                            s_pNormalWaterShader,
                                            mWorld,
                                            RedColor::WHITE,
-                                           0x200, 0, 0, 0);
+                                           PC_RENDERFLAG_IMMEDIATE, 0, 0, 0);
         }
         else
         {
@@ -2238,7 +2238,7 @@ void RedWater::pcRenderWaterPatches()
                                            s_pNormalWaterShader,
                                            mPatch,
                                            RedColor::WHITE,
-                                           0x200, 0, 0, 0);
+                                           PC_RENDERFLAG_IMMEDIATE, 0, 0, 0);
         }
     }
     if (uiLastVisibilityID)
@@ -2379,7 +2379,7 @@ void RedWater::pcRenderRing(pcRedShader* pShader, const PblVector3& vWorldMin,
     }
     pPrim->EndVertexData();
     RedRenderer::pcRenderPrimitive(pPrim, pShader, gMatrixIdentity,
-                                   RedColor::WHITE, 0x200, 0, 0, 0);
+                                   RedColor::WHITE, PC_RENDERFLAG_IMMEDIATE, 0, 0, 0);
     pPrim->Release();
 }
 
@@ -2433,7 +2433,7 @@ void RedWater::pcRenderFarWaterPatches()
                                                s_pNormalWaterShader,
                                                mWorld,
                                                RedColor::WHITE,
-                                               0x200, 0, 0, 0);
+                                               PC_RENDERFLAG_IMMEDIATE, 0, 0, 0);
             }
             else
             {
@@ -2442,7 +2442,7 @@ void RedWater::pcRenderFarWaterPatches()
                                                s_pNormalWaterShader,
                                                mPatch,
                                                RedColor::WHITE,
-                                               0x200, 0, 0, 0);
+                                               PC_RENDERFLAG_IMMEDIATE, 0, 0, 0);
             }
         }
         if (uiLastVisibilityID)
@@ -2503,7 +2503,7 @@ void RedWater::pcRenderOceanWaterPatches()
                                            s_pOceanWaterShader,
                                            mPatch,
                                            RedColor::WHITE,
-                                           0x200, 0, 0, 0);
+                                           PC_RENDERFLAG_IMMEDIATE, 0, 0, 0);
         }
     }
 }

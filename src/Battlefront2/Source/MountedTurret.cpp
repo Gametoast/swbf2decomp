@@ -189,10 +189,9 @@ MemoryPool MountedTurret::sMemoryPool("MountedTurret", sizeof(MountedTurret));
 
 // GLOBAL: SWBF2 0x01ecb154
 // MountedTurretClass::rttiHashMountedTurretClass
-PblHash MountedTurretClass::rttiHashMountedTurretClass("MountedTurretClass");
 // GLOBAL: SWBF2 0x0078a5a0
 // MountedTurretClass::rttiNameMountedTurretClass
-const char MountedTurretClass::rttiNameMountedTurretClass[] = "MountedTurretClass";
+PBL_IMPLEMENT_RTTI(MountedTurretClass)
 
 // SYNTHETIC: SWBF2 0x00404340
 // `dynamic initializer for 'MountedTurret::rttiHashMountedTurret''
@@ -200,10 +199,9 @@ const char MountedTurretClass::rttiNameMountedTurretClass[] = "MountedTurretClas
 
 // GLOBAL: SWBF2 0x01ecb150
 // MountedTurret::rttiHashMountedTurret
-PblHash MountedTurret::rttiHashMountedTurret("MountedTurret");
 // GLOBAL: SWBF2 0x0078a57c
 // MountedTurret::rttiNameMountedTurret
-const char MountedTurret::rttiNameMountedTurret[] = "MountedTurret";
+PBL_IMPLEMENT_RTTI(MountedTurret)
 
 
 

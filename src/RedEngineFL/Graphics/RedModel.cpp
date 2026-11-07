@@ -285,7 +285,7 @@ void RedModel::Render(const PblMatrix* pMatrix, const RedPose* pPose, const RedC
     {
         abCulled[i] = false;
         const RedSegment* pSegment = _apSegments[i];
-        if (!pPose && pSegment->m_uiNumBones <= 0 && !(uiFlags & 0x4000000))
+        if (!pPose && pSegment->m_uiNumBones <= 0 && !(uiFlags & RENDERFLAG_RENDER_TO_INTERFACE))
         {
             const PblBox& box = pSegment->mBox;
             PblVector3 vHalf;
@@ -299,7 +299,7 @@ void RedModel::Render(const PblMatrix* pMatrix, const RedPose* pPose, const RedC
             vCenter.z = box._vMin.z + vHalf.z;
             vCenter = pMatrix->ApplyTransform(vCenter);
             float fFar = -1.0f;
-            if (fFarSceneRange != 0.0f && (uiFlags & 0x20000))
+            if (fFarSceneRange != 0.0f && (uiFlags & RENDERFLAG_RENDER_TO_SKY))
             {
                 fFar = fFarSceneRange;
             }
@@ -318,14 +318,14 @@ void RedModel::Render(const PblMatrix* pMatrix, const RedPose* pPose, const RedC
 
     if (!RedRenderer::GetLightingEnable())
     {
-        uiFlags |= 0x10;
+        uiFlags |= RENDERFLAG_NO_LIGHTING;
     }
-    if (!(uiFlags & 0x80000010))
+    if (!(uiFlags & (RENDERFLAG_NO_LIGHTING | RENDERFLAG_NO_LIGHTCOLLECTION)))
     {
-        if (uiFlags & 0x4000000)
+        if (uiFlags & RENDERFLAG_RENDER_TO_INTERFACE)
         {
             RedRenderer::SetLightingState(RedInterfaceScreen::s_lightingState);
-            uiFlags |= 0x200;
+            uiFlags |= PC_RENDERFLAG_IMMEDIATE;
         }
         else
         {
@@ -334,7 +334,7 @@ void RedModel::Render(const PblMatrix* pMatrix, const RedPose* pPose, const RedC
             sphere.SetCenter(pMatrix->ApplyTransform(_BoundingSphere.GetCenter()));
             sphere.SetRadius(fSphereRadius);
             RedRenderer::SetLightingState(*RedLight::GetLightingState(
-                sphere, 4, (uiFlags & 0x80) != 0, (_uiFlags & 1) != 0, _bNoProjTexture));
+                sphere, 4, (uiFlags & RENDERFLAG_STATIC) != 0, (_uiFlags & 1) != 0, _bNoProjTexture));
         }
     }
 
@@ -350,7 +350,7 @@ void RedModel::Render(const PblMatrix* pMatrix, const RedPose* pPose, const RedC
     float fRadius = _BoundingSphere.w;
 
     const PblMatrix* pWorld;
-    if (uiFlags & 0x1000000)
+    if (uiFlags & RENDERFLAG_RENDER_CACHED)
     {
         pWorld = pMatrix;
     }
@@ -424,7 +424,7 @@ void RedModel::Render(const PblMatrix* pMatrix, const RedPose* pPose, const RedC
                 }
                 const RedColor* pColor =
                     (_apSegments[i]->IsTransparent() || color.a < 0xff) ? &colorCopy : &color;
-                _apSegments[i]->Render(apBoneMatrices[uiBone], 0, 0, uiFlags & ~0x1000000, *pColor,
+                _apSegments[i]->Render(apBoneMatrices[uiBone], 0, 0, uiFlags & ~RENDERFLAG_RENDER_CACHED, *pColor,
                                        pState);
             }
             else
@@ -436,7 +436,7 @@ void RedModel::Render(const PblMatrix* pMatrix, const RedPose* pPose, const RedC
         }
     }
 
-    if (_pStencilShadow && (uiFlags & 0x10000) && !(uiFlags & 0x220000))
+    if (_pStencilShadow && (uiFlags & RENDERFLAG_RENDER_SHADOWVOLUMES) && !(uiFlags & (RENDERFLAG_RENDER_TO_SKY | RENDERFLAG_RENDER_REFLECTION)))
     {
         float fShadowRadius = fRadius + 0.5f;
         bool bZFail;

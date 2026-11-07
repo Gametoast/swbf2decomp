@@ -150,7 +150,7 @@ void pcPreReflectionShader::_Init(unsigned int uiFlags,
                                   float)
 {
     m_uiMaterialFlags = uiMaterialFlags;
-    m_pVertexFormat = pcRedVertexFormat::Create(uiFlags, 2);
+    m_pVertexFormat = pcRedVertexFormat::Create(uiFlags, RVF_POSITION_XYZ);
 }
 
 // FUNCTION: SWBF2 0x0070b390

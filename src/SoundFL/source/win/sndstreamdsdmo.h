@@ -20,6 +20,15 @@ class StreamFormat;
 class StreamDSDMO : public StreamNode, public StreamSourceProducer, public StreamNodeSink
 {
 public:
+    // mFlags; names and values from the modtools build's type information
+    enum Flags
+    {
+        flags_lastPacket = 1,
+        flags_discontinuity = 2,
+        flags_lastBufferSubmitted = 4,
+        flags_scheduleDiscontinuity = 8
+    };
+
     StreamDSDMO();
     virtual ~StreamDSDMO();
 

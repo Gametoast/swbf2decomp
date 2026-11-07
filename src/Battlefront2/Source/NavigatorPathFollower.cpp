@@ -12,10 +12,9 @@
 
 // GLOBAL: SWBF2 0x01ecb254
 // NavigatorPathFollower::rttiHashNavigatorPathFollower
-PblHash NavigatorPathFollower::rttiHashNavigatorPathFollower("NavigatorPathFollower");
 // GLOBAL: SWBF2 0x0078a650
 // NavigatorPathFollower::rttiNameNavigatorPathFollower
-const char NavigatorPathFollower::rttiNameNavigatorPathFollower[] = "NavigatorPathFollower";
+PBL_IMPLEMENT_RTTI(NavigatorPathFollower)
 
 
 
@@ -80,7 +79,7 @@ void NavigatorPathFollower::UpdateState(float dt)
         {
             delete mPathFollower;
             mPathFollower = 0;
-            SetNextState(100);
+            SetNextState(STATE_GLOBDONE);
 
             AI::EventInfo info(AI::EVT_Nav_NavigatorFinished);
             mOwner->mOwner->SendEvent(&info);
@@ -94,7 +93,7 @@ void NavigatorPathFollower::ReceivePathResult(AIPath* pPath)
     if (!pPath)
     {
         mFailedPathSearch = true;
-        SetNextState(100);
+        SetNextState(STATE_GLOBDONE);
         return;
     }
 

@@ -1,6 +1,8 @@
 #include <string.h>
+#include "PebbleFL/Common/PblBits.h"
 
 #include "MedalsMgr.h"
+#include "Controllable.h"
 #include "NetPacket.h"
 #include "GameLoop.h"
 #include "MessageDisplay.h"
@@ -11,6 +13,7 @@
 #include "PebbleFL/Common/PblUnicode.h"
 #include "RedEngineFL/Graphics/RedColor.h"
 #include "RedEngineFL/Util/RedLocalizeDB.h"
+
 
 // FUNCTION: SWBF2 0x005a3480
 int MedalsMgr::GetRank() const
@@ -199,7 +202,7 @@ void MedalsMgr::AddMedalPoints(int iType, bool bKill, bool bCritHit, HealthType 
     {
         return;
     }
-    if (eHealthType < NUM_HEALTH_TYPES && !((1 << eHealthType) & sMedalPoints_condition[iType].healthType))
+    if (eHealthType < NUM_HEALTH_TYPES && !(Bit(eHealthType) & sMedalPoints_condition[iType].healthType))
     {
         return;
     }
@@ -256,7 +259,7 @@ bool MedalsMgr::IsAwardAvailableInternal(int iType) const
 // FUNCTION: SWBF2 0x005a33d0
 bool MedalsMgr::IsAwardAvailable(int iType) const
 {
-    return (mAwardAvailable & (1 << iType)) != 0;
+    return (mAwardAvailable & Bit(iType)) != 0;
 }
 
 // FUNCTION: SWBF2 0x005a3510
@@ -274,12 +277,12 @@ void MedalsMgr::Update(float fDeltaTime)
             if (bAvailable)
             {
                 mAwardTime[i] = GameLoop::GetMissionTime();
-                mAwardAvailable |= 1 << i;
+                mAwardAvailable |= Bit(i);
                 HudIndication(i, "game.awards.bonus.", sAwardHudColor, true);
             }
             else
             {
-                mAwardAvailable &= ~(1 << i);
+                mAwardAvailable &= ~Bit(i);
             }
         }
     }
@@ -351,7 +354,7 @@ void MedalsMgr::ClearAllMedalPoints()
         }
         else
         {
-            mAwardAvailable |= 1 << i;
+            mAwardAvailable |= Bit(i);
         }
     }
 }

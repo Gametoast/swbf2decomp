@@ -1,6 +1,7 @@
 #pragma once
 
 #include "PebbleFL/Common/PblHashTable.h"
+#include "PebbleFL/Common/PblRtti.h"
 
 #include <stddef.h>
 
@@ -21,15 +22,15 @@ public:
 
     virtual EntityClass* Derive(unsigned int uHash);
     virtual Entity* Build(const EntityDesc& desc);
-    virtual bool IsRtti(unsigned int uRtti) const;
-    virtual unsigned int GetDerivedRtti() const;
-    virtual const char* GetDerivedRttiName() const;
+    // FUNCTION: SWBF2 0x00496b90
+    // EntityBuildingArmedDynamicClass::IsRtti
+    // FUNCTION: SWBF2 0x00496be0
+    // EntityBuildingArmedDynamicClass::GetDerivedRtti
+    // FUNCTION: SWBF2 0x00496bf0
+    // EntityBuildingArmedDynamicClass::GetDerivedRttiName
+    PBL_DECLARE_DERIVED_RTTI(EntityBuildingArmedDynamicClass, EntityBuildingArmedClass)
 
-    static PblHash rttiHashEntityBuildingArmedDynamicClass;
-    static const char rttiNameEntityBuildingArmedDynamicClass[];
 };
-  
- 
 
 // VTABLE: SWBF2 0x00799ebc
 // VTABLE: SWBF2 0x00799ed4 EntityEx
@@ -43,9 +44,13 @@ public:
 
     EntityBuildingArmedDynamic(EntityBuildingArmedDynamicClass* pClass, const EntityDesc& desc);
 
-    virtual bool IsRtti(unsigned int uRtti) const;
-    virtual unsigned int GetDerivedRtti() const;
-    virtual const char* GetDerivedRttiName() const;
+    // FUNCTION: SWBF2 0x00496ac0
+    // EntityBuildingArmedDynamic::IsRtti
+    // FUNCTION: SWBF2 0x00496b10
+    // EntityBuildingArmedDynamic::GetDerivedRtti
+    // FUNCTION: SWBF2 0x00496b20
+    // EntityBuildingArmedDynamic::GetDerivedRttiName
+    PBL_DECLARE_DERIVED_RTTI(EntityBuildingArmedDynamic, EntityBuildingArmed)
 
     virtual EntityType GetEntityType() const;
     virtual void AddSends(void (*pfnSend)(GameObject*, int), int iArg);
@@ -55,52 +60,6 @@ public:
     static void* operator new(unsigned int uSize);
     static void operator delete(void* pBlock);
 
-    static PblHash rttiHashEntityBuildingArmedDynamic;
     static MemoryPool sMemoryPool;
-    static const char rttiNameEntityBuildingArmedDynamic[];
 };
- 
 
-// FUNCTION: SWBF2 0x00496b90
-inline bool EntityBuildingArmedDynamicClass::IsRtti(unsigned int uRtti) const
-{
-    if (rttiHashEntityBuildingArmedDynamicClass == uRtti)
-    {
-        return true;
-    }
-    return EntityBuildingArmedClass::IsRtti(uRtti);
-}
-
-// FUNCTION: SWBF2 0x00496be0
-inline unsigned int EntityBuildingArmedDynamicClass::GetDerivedRtti() const
-{
-    return rttiHashEntityBuildingArmedDynamicClass;
-}
-
-// FUNCTION: SWBF2 0x00496bf0
-inline const char* EntityBuildingArmedDynamicClass::GetDerivedRttiName() const
-{
-    return rttiNameEntityBuildingArmedDynamicClass;
-}
-
-// FUNCTION: SWBF2 0x00496b10
-inline unsigned int EntityBuildingArmedDynamic::GetDerivedRtti() const
-{
-    return rttiHashEntityBuildingArmedDynamic;
-}
-
-// FUNCTION: SWBF2 0x00496b20
-inline const char* EntityBuildingArmedDynamic::GetDerivedRttiName() const
-{
-    return rttiNameEntityBuildingArmedDynamic;
-}
-
-// FUNCTION: SWBF2 0x00496ac0
-inline bool EntityBuildingArmedDynamic::IsRtti(unsigned int uRtti) const
-{
-    if (rttiHashEntityBuildingArmedDynamic == uRtti)
-    {
-        return true;
-    }
-    return EntityBuildingArmed::IsRtti(uRtti);
-}

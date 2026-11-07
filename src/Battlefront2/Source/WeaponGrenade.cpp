@@ -31,10 +31,9 @@ extern bool netIsLocalTurn;
 
 // GLOBAL: SWBF2 0x01f9a8cc
 // WeaponGrenadeClass::rttiHashWeaponGrenadeClass
-PblHash WeaponGrenadeClass::rttiHashWeaponGrenadeClass("WeaponGrenadeClass");
 // GLOBAL: SWBF2 0x0078bff4
 // WeaponGrenadeClass::rttiNameWeaponGrenadeClass
-const char WeaponGrenadeClass::rttiNameWeaponGrenadeClass[] = "WeaponGrenadeClass";
+PBL_IMPLEMENT_RTTI(WeaponGrenadeClass)
 
 // FUNCTION: SWBF2 0x00685770
 WeaponGrenadeClass::WeaponGrenadeClass(unsigned int uHash)
@@ -222,10 +221,9 @@ WeaponGrenade::WeaponGrenade(const WeaponGrenadeClass* pClass, const WeaponDesc&
 
 // GLOBAL: SWBF2 0x01f9a8d0
 // WeaponGrenade::rttiHashWeaponGrenade
-PblHash WeaponGrenade::rttiHashWeaponGrenade("WeaponGrenade");
 // GLOBAL: SWBF2 0x0078c018
 // WeaponGrenade::rttiNameWeaponGrenade
-const char WeaponGrenade::rttiNameWeaponGrenade[] = "WeaponGrenade";
+PBL_IMPLEMENT_RTTI(WeaponGrenade)
 
 
 

@@ -1,6 +1,7 @@
 #pragma once
 
 #include "PebbleFL/Common/PblHashTable.h"
+#include "PebbleFL/Common/PblRtti.h"
 
 #include <stddef.h>
 
@@ -14,9 +15,6 @@ public:
     WeaponAreaEffectClass(unsigned int uHash);
     WeaponAreaEffectClass(WeaponAreaEffectClass* pBase, unsigned int uHash);
     virtual ~WeaponAreaEffectClass();
-
-    static PblHash rttiHashWeaponAreaEffectClass;
-    static const char rttiNameWeaponAreaEffectClass[];
 
     enum FIRE_TYPE
     {
@@ -42,9 +40,13 @@ public:
 
     virtual WeaponClass* Derive(unsigned int uHash);
     virtual Weapon* Build(const WeaponDesc& desc);
-    virtual bool IsRtti(unsigned int uRtti) const;
-    virtual unsigned int GetDerivedRtti() const;
-    virtual const char* GetDerivedRttiName() const;
+    // FUNCTION: SWBF2 0x0067c210
+    // WeaponAreaEffectClass::IsRtti
+    // FUNCTION: SWBF2 0x0067c240
+    // WeaponAreaEffectClass::GetDerivedRtti
+    // FUNCTION: SWBF2 0x0067c250
+    // WeaponAreaEffectClass::GetDerivedRttiName
+    PBL_DECLARE_DERIVED_RTTI(WeaponAreaEffectClass, WeaponClass)
     virtual void SetProperty(unsigned int uProperty, const char* pszValue);
 
     FIRE_TYPE m_eFireType;
@@ -156,12 +158,6 @@ public:
     float m_fStrength;
     bool m_bFired;
 };
-  
- 
- 
- 
- 
- 
 
 // FUNCTION: SWBF2 0x0067c170
 inline bool WeaponAreaEffect::IsRtti(unsigned int uRtti) const
@@ -185,24 +181,3 @@ inline const char* WeaponAreaEffect::GetDerivedRttiName() const
     return "WeaponAreaEffect";
 }
 
-// FUNCTION: SWBF2 0x0067c210
-inline bool WeaponAreaEffectClass::IsRtti(unsigned int uRtti) const
-{
-    if (rttiHashWeaponAreaEffectClass == uRtti)
-    {
-        return true;
-    }
-    return WeaponClass::IsRtti(uRtti);
-}
-
-// FUNCTION: SWBF2 0x0067c240
-inline unsigned int WeaponAreaEffectClass::GetDerivedRtti() const
-{
-    return rttiHashWeaponAreaEffectClass;
-}
-
-// FUNCTION: SWBF2 0x0067c250
-inline const char* WeaponAreaEffectClass::GetDerivedRttiName() const
-{
-    return rttiNameWeaponAreaEffectClass;
-}

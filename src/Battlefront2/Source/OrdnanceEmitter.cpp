@@ -29,10 +29,9 @@ extern PblVector3 gVectorZero;
 
 // GLOBAL: SWBF2 0x01ef2624
 // OrdnanceEmitterClass::rttiHashOrdnanceEmitterClass
-PblHash OrdnanceEmitterClass::rttiHashOrdnanceEmitterClass("OrdnanceEmitterClass");
 // GLOBAL: SWBF2 0x0078a810
 // OrdnanceEmitterClass::rttiNameOrdnanceEmitterClass
-const char OrdnanceEmitterClass::rttiNameOrdnanceEmitterClass[] = "OrdnanceEmitterClass";
+PBL_IMPLEMENT_RTTI(OrdnanceEmitterClass)
 
 // FUNCTION: SWBF2 0x005fc410
 OrdnanceEmitterClass::OrdnanceEmitterClass(unsigned int uHash)

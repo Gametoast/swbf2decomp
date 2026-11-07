@@ -62,10 +62,9 @@ EntityTrapClass::EntityTrapClass(unsigned int uHash)
 
 // GLOBAL: SWBF2 0x01ebc254
 // EntityTrapClass::rttiHashEntityTrapClass
-PblHash EntityTrapClass::rttiHashEntityTrapClass("EntityTrapClass");
 // GLOBAL: SWBF2 0x00789684
 // EntityTrapClass::rttiNameEntityTrapClass
-const char EntityTrapClass::rttiNameEntityTrapClass[] = "EntityTrapClass";
+PBL_IMPLEMENT_RTTI(EntityTrapClass)
 
 // SYNTHETIC: SWBF2 0x00402ea0
 // `dynamic initializer for 'EntityTrap::rttiHashEntityTrap''
@@ -73,10 +72,9 @@ const char EntityTrapClass::rttiNameEntityTrapClass[] = "EntityTrapClass";
 
 // GLOBAL: SWBF2 0x01ebc258
 // EntityTrap::rttiHashEntityTrap
-PblHash EntityTrap::rttiHashEntityTrap("EntityTrap");
 // GLOBAL: SWBF2 0x00789678
 // EntityTrap::rttiNameEntityTrap
-const char EntityTrap::rttiNameEntityTrap[] = "EntityTrap";
+PBL_IMPLEMENT_RTTI(EntityTrap)
 
 
 

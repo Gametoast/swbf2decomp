@@ -1,6 +1,7 @@
 #pragma once
 
 #include "PebbleFL/Common/PblHashTable.h"
+#include "PebbleFL/Common/PblRtti.h"
 
 #include <stddef.h>
 
@@ -17,8 +18,20 @@ int GetFormationType(const UnitController* pCtrl);
 class UnitCTFOffenseAgent : public UnitAgent
 {
 public:
-    static PblHash rttiHashUnitCTFOffenseAgent;
-    static const char rttiNameUnitCTFOffenseAgent[];
+
+    // the modtools build's state names: START PickupFl RtrnFlag DfndCary AttkFlag DfndDrop CampFlag Combat
+    enum State
+    {
+        STATE_START = 1,
+        STATE_PickupFlag = 2,
+        STATE_ReturnFlag = 3,
+        STATE_DefendCarrier = 4,
+        STATE_AttackFlag = 5,
+        STATE_DefendDropped = 6,
+        STATE_CampFlag = 7,
+        STATE_Combat = 8,
+        STATE_FINAL = 9
+    };
 
     UnitCTFOffenseAgent(UnitController* pCtrl, const FlagItem* pFlag, const PblVector3& vPos);
     // SYNTHETIC: SWBF2 0x00664630
@@ -27,9 +40,13 @@ public:
     // UnitCTFOffenseAgent::~UnitCTFOffenseAgent
     virtual void Kill();
 
-    virtual bool IsRtti(unsigned int uRtti) const;
-    virtual unsigned int GetDerivedRtti() const;
-    virtual const char* GetDerivedRttiName() const;
+    // FUNCTION: SWBF2 0x006645e0
+    // UnitCTFOffenseAgent::IsRtti
+    // FUNCTION: SWBF2 0x00664610
+    // UnitCTFOffenseAgent::GetDerivedRtti
+    // FUNCTION: SWBF2 0x00664620
+    // UnitCTFOffenseAgent::GetDerivedRttiName
+    PBL_DECLARE_DERIVED_RTTI(UnitCTFOffenseAgent, UnitAgent)
     virtual float GetUpdateRate() const;
 
     virtual const char* NFINAL_GetStateString(int iState) const;
@@ -61,24 +78,3 @@ public:
  
  
 
-// FUNCTION: SWBF2 0x006645e0
-inline bool UnitCTFOffenseAgent::IsRtti(unsigned int uRtti) const
-{
-    if (rttiHashUnitCTFOffenseAgent == uRtti)
-    {
-        return true;
-    }
-    return UnitAgent::IsRtti(uRtti);
-}
-
-// FUNCTION: SWBF2 0x00664610
-inline unsigned int UnitCTFOffenseAgent::GetDerivedRtti() const
-{
-    return rttiHashUnitCTFOffenseAgent;
-}
-
-// FUNCTION: SWBF2 0x00664620
-inline const char* UnitCTFOffenseAgent::GetDerivedRttiName() const
-{
-    return rttiNameUnitCTFOffenseAgent;
-}

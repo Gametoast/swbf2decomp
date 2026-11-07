@@ -1,6 +1,7 @@
 #pragma once
 
 #include "PebbleFL/Common/PblHashTable.h"
+#include "PebbleFL/Common/PblRtti.h"
 
 #include <stddef.h>
 
@@ -18,39 +19,20 @@ public:
 
     FoleyFXImpact();
 
-    virtual bool IsRtti(unsigned int uRtti) const;
-    virtual unsigned int GetDerivedRtti() const;
-    virtual const char* GetDerivedRttiName() const;
+    // FUNCTION: SWBF2 0x0052c9e0
+    // FoleyFXImpact::IsRtti
+    // FUNCTION: SWBF2 0x0052ca10
+    // FoleyFXImpact::GetDerivedRtti
+    // FUNCTION: SWBF2 0x0052ca20
+    // FoleyFXImpact::GetDerivedRttiName
+    PBL_DECLARE_DERIVED_RTTI(FoleyFXImpact, FoleyFX)
     virtual ~FoleyFXImpact();
     virtual bool Read(PblFileChunk& chunk, unsigned int uChunkID);
 
     GameSound mImpact;
 
-    static PblHash rttiHashFoleyFXImpact;
-    static const char rttiNameFoleyFXImpact[];
     static Snd::FreeList smFreeList;
 };
  
  
 
-// FUNCTION: SWBF2 0x0052c9e0
-inline bool FoleyFXImpact::IsRtti(unsigned int uRtti) const
-{
-    if (rttiHashFoleyFXImpact == uRtti)
-    {
-        return true;
-    }
-    return FoleyFX::IsRtti(uRtti);
-}
-
-// FUNCTION: SWBF2 0x0052ca10
-inline unsigned int FoleyFXImpact::GetDerivedRtti() const
-{
-    return rttiHashFoleyFXImpact;
-}
-
-// FUNCTION: SWBF2 0x0052ca20
-inline const char* FoleyFXImpact::GetDerivedRttiName() const
-{
-    return rttiNameFoleyFXImpact;
-}

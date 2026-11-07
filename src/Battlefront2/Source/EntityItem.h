@@ -1,6 +1,7 @@
 #pragma once
 
 #include "PebbleFL/Common/PblHashTable.h"
+#include "PebbleFL/Common/PblRtti.h"
 
 #include <stddef.h>
 
@@ -20,13 +21,14 @@ public:
     virtual EntityClass* Derive(unsigned int uHash);
 
     virtual Entity* Build(const EntityDesc& desc);
-    virtual bool IsRtti(unsigned int uRtti) const;
-    virtual unsigned int GetDerivedRtti() const;
-    virtual const char* GetDerivedRttiName() const;
+    // FUNCTION: SWBF2 0x004cabd0
+    // EntityItemClass::IsRtti
+    // FUNCTION: SWBF2 0x004cac10
+    // EntityItemClass::GetDerivedRtti
+    // FUNCTION: SWBF2 0x004cac20
+    // EntityItemClass::GetDerivedRttiName
+    PBL_DECLARE_DERIVED_RTTI(EntityItemClass, GameObjectClass)
     virtual void SetProperty(unsigned int uProperty, const char* pszValue);
-
-    static PblHash rttiHashEntityItemClass;
-    static const char rttiNameEntityItemClass[];
 
     float mLifeSpan;
     bool mNoLifeSpanDisplay : 1;
@@ -75,9 +77,13 @@ public:
     EntityItem(EntityItemClass* pClass, const EntityDesc& desc);
     virtual ~EntityItem();
 
-    virtual bool IsRtti(unsigned int uRtti) const;
-    virtual unsigned int GetDerivedRtti() const;
-    virtual const char* GetDerivedRttiName() const;
+    // FUNCTION: SWBF2 0x004caae0
+    // EntityItem::IsRtti
+    // FUNCTION: SWBF2 0x004cab20
+    // EntityItem::GetDerivedRtti
+    // FUNCTION: SWBF2 0x004cab30
+    // EntityItem::GetDerivedRttiName
+    PBL_DECLARE_DERIVED_RTTI(EntityItem, GameObject)
     virtual const PblVector3& GetVelocity() const;
     virtual void SetVelocity(const PblVector3& vVelocity);
     virtual float GetMaxSpeed() const;
@@ -110,58 +116,5 @@ public:
     EntityLight* m_pLight;
     PblHandle<FLEffectObject> mTrailEmitterObj;
 
-    static PblHash rttiHashEntityItem;
-    static const char rttiNameEntityItem[];
 };
- 
- 
- 
- 
- 
- 
- 
- 
 
-// FUNCTION: SWBF2 0x004cabd0
-inline bool EntityItemClass::IsRtti(unsigned int uRtti) const
-{
-    if (rttiHashEntityItemClass == uRtti)
-    {
-        return true;
-    }
-    return GameObjectClass::IsRtti(uRtti);
-}
-
-// FUNCTION: SWBF2 0x004cac10
-inline unsigned int EntityItemClass::GetDerivedRtti() const
-{
-    return rttiHashEntityItemClass;
-}
-
-// FUNCTION: SWBF2 0x004cac20
-inline const char* EntityItemClass::GetDerivedRttiName() const
-{
-    return rttiNameEntityItemClass;
-}
-
-// FUNCTION: SWBF2 0x004caae0
-inline bool EntityItem::IsRtti(unsigned int uRtti) const
-{
-    if (rttiHashEntityItem == uRtti)
-    {
-        return true;
-    }
-    return GameObject::IsRtti(uRtti);
-}
-
-// FUNCTION: SWBF2 0x004cab20
-inline unsigned int EntityItem::GetDerivedRtti() const
-{
-    return rttiHashEntityItem;
-}
-
-// FUNCTION: SWBF2 0x004cab30
-inline const char* EntityItem::GetDerivedRttiName() const
-{
-    return rttiNameEntityItem;
-}

@@ -15,10 +15,9 @@ Weapon* WeaponBinocularsClass::Build(const WeaponDesc& desc)
 
 // GLOBAL: SWBF2 0x01f9a88c
 // WeaponBinoculars::rttiHashWeaponBinoculars
-PblHash WeaponBinoculars::rttiHashWeaponBinoculars("WeaponBinoculars");
 // GLOBAL: SWBF2 0x0078be34
 // WeaponBinoculars::rttiNameWeaponBinoculars
-const char WeaponBinoculars::rttiNameWeaponBinoculars[] = "WeaponBinoculars";
+PBL_IMPLEMENT_RTTI(WeaponBinoculars)
 
 
 
@@ -46,10 +45,9 @@ WeaponBinoculars::~WeaponBinoculars()
 
 // GLOBAL: SWBF2 0x01f9a890
 // WeaponBinocularsClass::rttiHashWeaponBinocularsClass
-PblHash WeaponBinocularsClass::rttiHashWeaponBinocularsClass("WeaponBinocularsClass");
 // GLOBAL: SWBF2 0x0078be54
 // WeaponBinocularsClass::rttiNameWeaponBinocularsClass
-const char WeaponBinocularsClass::rttiNameWeaponBinocularsClass[] = "WeaponBinocularsClass";
+PBL_IMPLEMENT_RTTI(WeaponBinocularsClass)
 
 // FUNCTION: SWBF2 0x0067e220
 WeaponBinocularsClass::WeaponBinocularsClass(unsigned int uHash)

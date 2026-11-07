@@ -153,7 +153,7 @@ void makefixed()
     puts("       subject to change. Applications should only use zlib.h.");
     puts("     */");
     puts("");
-    size = 1U << 9;
+    size = ZPOW2U(9);
     printf("    static const code lenfix[%u] = {", size);
     low = 0;
     for (;;) {
@@ -164,7 +164,7 @@ void makefixed()
         putchar(',');
     }
     puts("\n    };");
-    size = 1U << 5;
+    size = ZPOW2U(5);
     printf("\n    static const code distfix[%u] = {", size);
     low = 0;
     for (;;) {
@@ -191,13 +191,13 @@ unsigned out;
 
     if (state->window == Z_NULL) {
         state->window = (unsigned char FAR *)
-                        ZALLOC(strm, 1U << state->wbits,
+                        ZALLOC(strm, ZPOW2U(state->wbits),
                                sizeof(unsigned char));
         if (state->window == Z_NULL) return 1;
     }
 
     if (state->wsize == 0) {
-        state->wsize = 1U << state->wbits;
+        state->wsize = ZPOW2U(state->wbits);
         state->write = 0;
         state->whave = 0;
     }
@@ -293,7 +293,7 @@ unsigned out;
     } while (0)
 
 #define BITS(n) \
-    ((unsigned)hold & ((1U << (n)) - 1))
+    ((unsigned)hold & ZLOWBITSU(n))
 
 #define DROPBITS(n) \
     do { \
@@ -1001,7 +1001,7 @@ z_streamp source;
     window = Z_NULL;
     if (state->window != Z_NULL) {
         window = (unsigned char FAR *)
-                 ZALLOC(source, 1U << state->wbits, sizeof(unsigned char));
+                 ZALLOC(source, ZPOW2U(state->wbits), sizeof(unsigned char));
         if (window == Z_NULL) {
             ZFREE(source, copy);
             return Z_MEM_ERROR;
@@ -1014,7 +1014,7 @@ z_streamp source;
     copy->distcode = copy->codes + (state->distcode - state->codes);
     copy->next = copy->codes + (state->next - state->codes);
     if (window != Z_NULL)
-        zmemcpy(window, state->window, 1U << state->wbits);
+        zmemcpy(window, state->window, ZPOW2U(state->wbits));
     copy->window = window;
     dest->state = (voidpf)copy;
     return Z_OK;

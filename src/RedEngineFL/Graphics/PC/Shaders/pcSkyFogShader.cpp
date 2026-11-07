@@ -98,7 +98,7 @@ void pcSkyFogShader::_Init(unsigned int uiFlags,
                            const RedColor&,
                            float)
 {
-    m_pVertexInputFormat = pcRedVertexFormat::Create(uiFlags, 0x202);
+    m_pVertexInputFormat = pcRedVertexFormat::Create(uiFlags, RVF_POSITION_XYZ | RVF_TEXCOORDS_1);
     m_pSkyTexture = 0;
 }
 

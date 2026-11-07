@@ -1,4 +1,5 @@
 #include <d3dx9math.h>
+#include "PebbleFL/Common/PblBits.h"
 #include <float.h>
 #include <math.h>
 #include <stddef.h>
@@ -1404,7 +1405,7 @@ void RedLight::UpdateAllVisibility(const RedCamera* pCamera, unsigned int uiView
 
     for (PblList<RedLight>::Itor it(s_GlobalList); it != s_GlobalList.End(); ++it)
     {
-        if ((it->m_uiHideInView & (1 << uiView)) || !it->IsVisible(pCamera))
+        if ((it->m_uiHideInView & Bit(uiView)) || !it->IsVisible(pCamera))
         {
             continue;
         }

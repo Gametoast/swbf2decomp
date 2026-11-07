@@ -1,6 +1,7 @@
 #pragma once
 
 #include "PebbleFL/Common/PblHashTable.h"
+#include "PebbleFL/Common/PblRtti.h"
 
 #include <stddef.h>
 
@@ -16,9 +17,13 @@ public:
 
     virtual EntityClass* Derive(unsigned int uHash);
     virtual Entity* Build(const EntityDesc& desc);
-    virtual bool IsRtti(unsigned int uRtti) const;
-    virtual unsigned int GetDerivedRtti() const;
-    virtual const char* GetDerivedRttiName() const;
+    // FUNCTION: SWBF2 0x00623890
+    // PowerupItemClass::IsRtti
+    // FUNCTION: SWBF2 0x006238d0
+    // PowerupItemClass::GetDerivedRtti
+    // FUNCTION: SWBF2 0x006238e0
+    // PowerupItemClass::GetDerivedRttiName
+    PBL_DECLARE_DERIVED_RTTI(PowerupItemClass, EntityItemClass)
     virtual void SetProperty(unsigned int uProperty, const char* pszValue);
 
     float mAddHealth[8];
@@ -35,8 +40,6 @@ public:
     GameSound mPowerupSound;
     GameSound mAmbientSound;
 
-    static PblHash rttiHashPowerupItemClass;
-    static const char rttiNamePowerupItemClass[];
 };
   
  
@@ -95,30 +98,6 @@ public:
     static PblHash rttiHashPowerupItem;
     static const char rttiNamePowerupItem[];
 };
- 
- 
-
-// FUNCTION: SWBF2 0x00623890
-inline bool PowerupItemClass::IsRtti(unsigned int uRtti) const
-{
-    if (rttiHashPowerupItemClass == uRtti)
-    {
-        return true;
-    }
-    return EntityItemClass::IsRtti(uRtti);
-}
-
-// FUNCTION: SWBF2 0x006238d0
-inline unsigned int PowerupItemClass::GetDerivedRtti() const
-{
-    return rttiHashPowerupItemClass;
-}
-
-// FUNCTION: SWBF2 0x006238e0
-inline const char* PowerupItemClass::GetDerivedRttiName() const
-{
-    return rttiNamePowerupItemClass;
-}
 
 // FUNCTION: SWBF2 0x006237f0
 inline bool PowerupItem::IsRtti(unsigned int uRtti) const

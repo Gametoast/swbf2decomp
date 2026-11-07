@@ -1,6 +1,7 @@
 #pragma once
 
 #include "PebbleFL/Common/PblHashTable.h"
+#include "PebbleFL/Common/PblRtti.h"
 
 #include <stddef.h>
 
@@ -35,9 +36,6 @@ public:
     static const char rttiNameCommandHoverClass[];
 };
 
-   
- 
-
 // VTABLE: SWBF2 0x00798214 Thread
 // VTABLE: SWBF2 0x007982e4 RedSceneObject
 // VTABLE: SWBF2 0x0079834c CollisionObject
@@ -58,9 +56,13 @@ public:
     // CommandHover::operator delete
     static void operator delete(void* pBlock) { sMemoryPool.Free(pBlock); }
 
-    virtual bool IsRtti(unsigned int uRtti) const;
-    virtual unsigned int GetDerivedRtti() const;
-    virtual const char* GetDerivedRttiName() const;
+    // FUNCTION: SWBF2 0x00478e70
+    // CommandHover::IsRtti
+    // FUNCTION: SWBF2 0x00478ec0
+    // CommandHover::GetDerivedRtti
+    // FUNCTION: SWBF2 0x00478ed0
+    // CommandHover::GetDerivedRttiName
+    PBL_DECLARE_DERIVED_RTTI(CommandHover, EntityHover)
     virtual void SetProperty(unsigned int uProperty, const char* pszValue);
     virtual void Init();
     virtual void SetTeam(int iTeam);
@@ -79,34 +81,7 @@ public:
     char _tailPad[0x8];
 
     static MemoryPool sMemoryPool;
-    static PblHash rttiHashCommandHover;
-    static const char rttiNameCommandHover[];
 };
- 
- 
- 
-
-// FUNCTION: SWBF2 0x00478e70
-inline bool CommandHover::IsRtti(unsigned int uRtti) const
-{
-    if (rttiHashCommandHover == uRtti)
-    {
-        return true;
-    }
-    return EntityHover::IsRtti(uRtti);
-}
-
-// FUNCTION: SWBF2 0x00478ec0
-inline unsigned int CommandHover::GetDerivedRtti() const
-{
-    return rttiHashCommandHover;
-}
-
-// FUNCTION: SWBF2 0x00478ed0
-inline const char* CommandHover::GetDerivedRttiName() const
-{
-    return rttiNameCommandHover;
-}
 
 // FUNCTION: SWBF2 0x00478f30
 inline bool CommandHoverClass::IsRtti(unsigned int uRtti) const

@@ -1,4 +1,5 @@
 #include "PebbleFL/Common/PblMath.h"
+#include "PebbleFL/Common/PblBits.h"
 #include "PopupText.h"
 #include <d3dx9math.h>
 #include "PlayerController.h"
@@ -39,6 +40,7 @@
 
 #include <float.h>
 #include <math.h>
+
 
  
  
@@ -82,10 +84,9 @@ static float GetInvisibility(const GameObject* pObject)
 
 // GLOBAL: SWBF2 0x01ef7f4c
 // PlayerController::rttiHashPlayerController
-PblHash PlayerController::rttiHashPlayerController("PlayerController");
 // GLOBAL: SWBF2 0x0078ab84
 // PlayerController::rttiNamePlayerController
-const char PlayerController::rttiNamePlayerController[] = "PlayerController";
+PBL_IMPLEMENT_RTTI(PlayerController)
 
 // SYNTHETIC: SWBF2 0x00405f10
 // `dynamic initializer for 'PlayerController::sMemoryPool''
@@ -227,7 +228,7 @@ void PlayerController::Update(float dt)
                 ToolTipsDisplay::sInstance->SetControllerDefault(pRawInputs->IsDefaultBindings(iInputMode));
             }
         }
-        if (((1 << iJoystick) & PlayerController::sEnabled) == 0)
+        if ((Bit(iJoystick) & PlayerController::sEnabled) == 0)
         {
             mOwner->ClearControllable();
             return;
@@ -584,8 +585,8 @@ void PlayerController::Update(float dt)
                     if (!CollisionManager::RayTest(vStart, vPoint, apIgnore, 2, 0x90))
                     {
                         bKeep = true;
-                        bLocked = ((1 << (pMe->GetAffiliationToMe(pTarget) + 1)) & iTargetSides) != 0 &&
-                                  ((1 << pTarget->GetHealthType()) & iTargetTypes) != 0 &&
+                        bLocked = (TargetInfo::SideBit(pMe->GetAffiliationToMe(pTarget)) & iTargetSides) != 0 &&
+                                  (Bit(pTarget->GetHealthType()) & iTargetTypes) != 0 &&
                                   fRadius + fLockOnRange >= Length(vCenter - vStart);
                         if (bHoldLock)
                         {
@@ -638,8 +639,8 @@ void PlayerController::Update(float dt)
                         continue;
                     }
 
-                    bool bLockable = ((1 << (pMe->GetAffiliationToMe(pObject) + 1)) & iTargetSides) != 0 &&
-                                     ((1 << pObject->GetHealthType()) & iTargetTypes) != 0;
+                    bool bLockable = (TargetInfo::SideBit(pMe->GetAffiliationToMe(pObject)) & iTargetSides) != 0 &&
+                                     (Bit(pObject->GetHealthType()) & iTargetTypes) != 0;
                     if (bLocked && !bLockable)
                     {
                         continue;

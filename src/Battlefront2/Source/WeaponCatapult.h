@@ -18,14 +18,15 @@ public:
 
     virtual ~WeaponCatapultClass();
 
-    static PblHash rttiHashWeaponCatapultClass;
-    static const char rttiNameWeaponCatapultClass[];
-
     virtual WeaponClass* Derive(unsigned int uHash);
     virtual Weapon* Build(const WeaponDesc& desc);
-    virtual bool IsRtti(unsigned int uRtti) const;
-    virtual unsigned int GetDerivedRtti() const;
-    virtual const char* GetDerivedRttiName() const;
+    // FUNCTION: SWBF2 0x00680c30
+    // WeaponCatapultClass::IsRtti
+    // FUNCTION: SWBF2 0x00680c60
+    // WeaponCatapultClass::GetDerivedRtti
+    // FUNCTION: SWBF2 0x00680c70
+    // WeaponCatapultClass::GetDerivedRttiName
+    PBL_DECLARE_DERIVED_RTTI(WeaponCatapultClass, WeaponClass)
     virtual void SetProperty(unsigned int uProperty, const char* pszValue);
 
     const RedModel* mOrdnanceModel;
@@ -96,24 +97,3 @@ public:
  
  
 
-// FUNCTION: SWBF2 0x00680c30
-inline bool WeaponCatapultClass::IsRtti(unsigned int uRtti) const
-{
-    if (rttiHashWeaponCatapultClass == uRtti)
-    {
-        return true;
-    }
-    return WeaponClass::IsRtti(uRtti);
-}
-
-// FUNCTION: SWBF2 0x00680c60
-inline unsigned int WeaponCatapultClass::GetDerivedRtti() const
-{
-    return rttiHashWeaponCatapultClass;
-}
-
-// FUNCTION: SWBF2 0x00680c70
-inline const char* WeaponCatapultClass::GetDerivedRttiName() const
-{
-    return rttiNameWeaponCatapultClass;
-}

@@ -11,10 +11,9 @@
 
 // GLOBAL: SWBF2 0x01ebc2bc
 // FoleyFX::rttiHashFoleyFX
-PblHash FoleyFX::rttiHashFoleyFX("FoleyFX");
 // GLOBAL: SWBF2 0x007898a4
 // FoleyFX::rttiNameFoleyFX
-const char FoleyFX::rttiNameFoleyFX[] = "FoleyFX";
+PBL_IMPLEMENT_RTTI(FoleyFX)
 
 // SYNTHETIC: SWBF2 0x00403a80
 // `dynamic initializer for 'FoleyFX::smList''

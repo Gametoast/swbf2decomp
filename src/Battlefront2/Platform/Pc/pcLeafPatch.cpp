@@ -73,17 +73,17 @@ LeafPatchRenderable::LeafPatchRenderable(const LeafPatchClass* pClass)
     m_pVertices = 0;
     if (RedRenderer::pcGetGeometryMode() == GEOMETRYMODE_UNCOMPRESSED)
     {
-        m_pShader = pcRedShader::Create(0xe68b9c52 /* "normal" */, 0x2a2, &m_pClass->mTextureHash,
-                                        1, 0x10002, RedColor::WHITE, RedColor::BLACK, 32.0f);
-        m_pShaderFar = pcRedShader::Create(0xe68b9c52 /* "normal" */, 0x2a2, &m_pClass->mTextureHash,
-                                           1, 0x10002, RedColor::WHITE, RedColor::BLACK, 32.0f);
+        m_pShader = pcRedShader::Create(0xe68b9c52 /* "normal" */, RVF_POSITION_XYZ | RVF_NORMAL | RVF_COLOR | RVF_TEXCOORDS_1, &m_pClass->mTextureHash,
+                                        1, MATERIAL_FLAG_ALPHAMAP_MASK | MATERIAL_FLAG_CULL_NONE, RedColor::WHITE, RedColor::BLACK, 32.0f);
+        m_pShaderFar = pcRedShader::Create(0xe68b9c52 /* "normal" */, RVF_POSITION_XYZ | RVF_NORMAL | RVF_COLOR | RVF_TEXCOORDS_1, &m_pClass->mTextureHash,
+                                           1, MATERIAL_FLAG_ALPHAMAP_MASK | MATERIAL_FLAG_CULL_NONE, RedColor::WHITE, RedColor::BLACK, 32.0f);
     }
     else
     {
-        m_pShader = pcRedShader::Create(0xe68b9c52 /* "normal" */, 0xd2a2, &m_pClass->mTextureHash,
-                                        1, 0x10002, RedColor::WHITE, RedColor::BLACK, 32.0f);
-        m_pShaderFar = pcRedShader::Create(0xe68b9c52 /* "normal" */, 0xd2a2, &m_pClass->mTextureHash,
-                                           1, 0x10002, RedColor::WHITE, RedColor::BLACK, 32.0f);
+        m_pShader = pcRedShader::Create(0xe68b9c52 /* "normal" */, RVF_POSITION_XYZ | RVF_NORMAL | RVF_COLOR | RVF_TEXCOORDS_1 | RVF_COMPRESSED_POSITION | RVF_COMPRESSED_NORMALS | RVF_COMPRESSED_TEXCOORDS, &m_pClass->mTextureHash,
+                                        1, MATERIAL_FLAG_ALPHAMAP_MASK | MATERIAL_FLAG_CULL_NONE, RedColor::WHITE, RedColor::BLACK, 32.0f);
+        m_pShaderFar = pcRedShader::Create(0xe68b9c52 /* "normal" */, RVF_POSITION_XYZ | RVF_NORMAL | RVF_COLOR | RVF_TEXCOORDS_1 | RVF_COMPRESSED_POSITION | RVF_COMPRESSED_NORMALS | RVF_COMPRESSED_TEXCOORDS, &m_pClass->mTextureHash,
+                                           1, MATERIAL_FLAG_ALPHAMAP_MASK | MATERIAL_FLAG_CULL_NONE, RedColor::WHITE, RedColor::BLACK, 32.0f);
     }
     m_bReflection = false;
     const int count = m_pClass->mNumParticles;
@@ -187,7 +187,7 @@ bool LeafPatchClass::RenderMaxDist(const PblMatrix& matrix, float& fDist,
     {
         return false;
     }
-    if (mMaxScatterBirds && !(uiFlags & 0x200000))
+    if (mMaxScatterBirds && !(uiFlags & RENDERFLAG_RENDER_REFLECTION))
     {
         BirdParticleManager::SetPotentialScatterPoint(vPos, mMaxScatterBirds);
     }
@@ -232,7 +232,7 @@ void LeafPatchRenderable::Render(unsigned int value) const
 void LeafPatchRenderable::RenderInstance(const PblMatrix& matrix, const RedColor& color,
                                          unsigned int uiFlags) const
 {
-    if (m_bReflection != ((uiFlags & 0x200000) != 0))
+    if (m_bReflection != ((uiFlags & RENDERFLAG_RENDER_REFLECTION) != 0))
     {
         return;
     }
@@ -310,13 +310,13 @@ void LeafPatchRenderable::Begin()
     float fScale;
     if (RedRenderer::pcGetGeometryMode() == GEOMETRYMODE_UNCOMPRESSED)
     {
-        uiVertexFormat = 0x2A2;
+        uiVertexFormat = RVF_POSITION_XYZ | RVF_NORMAL | RVF_COLOR | RVF_TEXCOORDS_1;
         uiVertexStride = 36;
         fScale = 1.0f;
     }
     else
     {
-        uiVertexFormat = 0xD2A2;
+        uiVertexFormat = RVF_POSITION_XYZ | RVF_NORMAL | RVF_COLOR | RVF_TEXCOORDS_1 | RVF_COMPRESSED_POSITION | RVF_COMPRESSED_NORMALS | RVF_COMPRESSED_TEXCOORDS;
         uiVertexStride = 20;
         fScale = 655.34998f;
     }

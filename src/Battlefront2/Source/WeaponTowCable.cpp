@@ -29,10 +29,9 @@ namespace
 
 // GLOBAL: SWBF2 0x01f9a91c
 // WeaponTowCable::rttiHashWeaponTowCable
-PblHash WeaponTowCable::rttiHashWeaponTowCable("WeaponTowCable");
 // GLOBAL: SWBF2 0x0078c2b0
 // WeaponTowCable::rttiNameWeaponTowCable
-const char WeaponTowCable::rttiNameWeaponTowCable[] = "WeaponTowCable";
+PBL_IMPLEMENT_RTTI(WeaponTowCable)
 
 // SYNTHETIC: SWBF2 0x004072d0
 // `dynamic initializer for 'WeaponTowCableClass::rttiHashWeaponTowCableClass''
@@ -40,10 +39,9 @@ const char WeaponTowCable::rttiNameWeaponTowCable[] = "WeaponTowCable";
 
 // GLOBAL: SWBF2 0x01f9a920
 // WeaponTowCableClass::rttiHashWeaponTowCableClass
-PblHash WeaponTowCableClass::rttiHashWeaponTowCableClass("WeaponTowCableClass");
 // GLOBAL: SWBF2 0x0078c2c4
 // WeaponTowCableClass::rttiNameWeaponTowCableClass
-const char WeaponTowCableClass::rttiNameWeaponTowCableClass[] = "WeaponTowCableClass";
+PBL_IMPLEMENT_RTTI(WeaponTowCableClass)
 
 // FUNCTION: SWBF2 0x00692a30
 WeaponTowCableClass::WeaponTowCableClass(unsigned int uHash)

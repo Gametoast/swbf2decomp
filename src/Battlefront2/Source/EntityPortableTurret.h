@@ -1,6 +1,7 @@
 #pragma once
 
 #include "PebbleFL/Common/PblHashTable.h"
+#include "PebbleFL/Common/PblRtti.h"
 
 #include <stddef.h>
 
@@ -22,9 +23,13 @@ public:
 
     virtual EntityClass* Derive(unsigned int uHash);
     virtual Entity* Build(const EntityDesc& desc);
-    virtual bool IsRtti(unsigned int uRtti) const;
-    virtual unsigned int GetDerivedRtti() const;
-    virtual const char* GetDerivedRttiName() const;
+    // FUNCTION: SWBF2 0x004d7c80
+    // EntityPortableTurretClass::IsRtti
+    // FUNCTION: SWBF2 0x004d7cd0
+    // EntityPortableTurretClass::GetDerivedRtti
+    // FUNCTION: SWBF2 0x004d7ce0
+    // EntityPortableTurretClass::GetDerivedRttiName
+    PBL_DECLARE_DERIVED_RTTI(EntityPortableTurretClass, EntityBuildingArmedDynamicClass)
     virtual void SetProperty(unsigned int uProperty, const char* pszValue);
 
     GameSound mCollisionSound;
@@ -35,17 +40,7 @@ public:
     float mRebound;
     float mFriction;
 
-    static PblHash rttiHashEntityPortableTurretClass;
-    static const char rttiNameEntityPortableTurretClass[];
 };
-  
- 
- 
- 
- 
- 
- 
- 
 
 class CollisionResult;
 class Restrictor;
@@ -63,9 +58,13 @@ public:
 
     EntityPortableTurret(EntityPortableTurretClass* pClass, const EntityDesc& desc);
 
-    virtual bool IsRtti(unsigned int uRtti) const;
-    virtual unsigned int GetDerivedRtti() const;
-    virtual const char* GetDerivedRttiName() const;
+    // FUNCTION: SWBF2 0x004d7b90
+    // EntityPortableTurret::IsRtti
+    // FUNCTION: SWBF2 0x004d7bf0
+    // EntityPortableTurret::GetDerivedRtti
+    // FUNCTION: SWBF2 0x004d7c00
+    // EntityPortableTurret::GetDerivedRttiName
+    PBL_DECLARE_DERIVED_RTTI(EntityPortableTurret, EntityBuildingArmedDynamic)
     // FUNCTION: SWBF2 0x004d7c20
     virtual const PblVector3& GetVelocity() const
     {
@@ -86,8 +85,6 @@ public:
     // EntityPortableTurret::operator delete
     static void operator delete(void* pBlock) { sMemoryPool.Free(pBlock); }
 
-    static PblHash rttiHashEntityPortableTurret;
-    static const char rttiNameEntityPortableTurret[];
     static MemoryPool sMemoryPool;
 
     EntityPortableTurretClass* mClass;
@@ -99,57 +96,5 @@ public:
 
     char _tailPad[6];
 };
-
- 
- 
- 
- 
- 
- 
- 
-
-// FUNCTION: SWBF2 0x004d7b90
-inline bool EntityPortableTurret::IsRtti(unsigned int uRtti) const
-{
-    if (rttiHashEntityPortableTurret == uRtti)
-    {
-        return true;
-    }
-    return EntityBuildingArmedDynamic::IsRtti(uRtti);
-}
-
-// FUNCTION: SWBF2 0x004d7bf0
-inline unsigned int EntityPortableTurret::GetDerivedRtti() const
-{
-    return rttiHashEntityPortableTurret;
-}
-
-// FUNCTION: SWBF2 0x004d7c00
-inline const char* EntityPortableTurret::GetDerivedRttiName() const
-{
-    return rttiNameEntityPortableTurret;
-}
-
-// FUNCTION: SWBF2 0x004d7c80
-inline bool EntityPortableTurretClass::IsRtti(unsigned int uRtti) const
-{
-    if (rttiHashEntityPortableTurretClass == uRtti)
-    {
-        return true;
-    }
-    return EntityBuildingArmedDynamicClass::IsRtti(uRtti);
-}
-
-// FUNCTION: SWBF2 0x004d7cd0
-inline unsigned int EntityPortableTurretClass::GetDerivedRtti() const
-{
-    return rttiHashEntityPortableTurretClass;
-}
-
-// FUNCTION: SWBF2 0x004d7ce0
-inline const char* EntityPortableTurretClass::GetDerivedRttiName() const
-{
-    return rttiNameEntityPortableTurretClass;
-}
 
 

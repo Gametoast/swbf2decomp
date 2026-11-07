@@ -126,7 +126,7 @@ void DroidekaElement::RenderUsingContext(const PblMatrix& mContext, const RedCol
     mScreen = mScaling;
 
     BuildWorldMatrices();
-    mModel->GetRedModel(0)->Render(&mScreen, &mPose, color, 0x4000000, 0);
+    mModel->GetRedModel(0)->Render(&mScreen, &mPose, color, RENDERFLAG_RENDER_TO_INTERFACE, 0);
 }
 
 // FUNCTION: SWBF2 0x0048d1f0

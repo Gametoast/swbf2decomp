@@ -33,7 +33,7 @@ pcRefractionShader* HeatShimmerEffect::s_pShimmerShader;
 void HeatShimmerEffect::PlatformPreReadInit()
 {
     s_pShimmerShader = (pcRefractionShader*)pcRedShader::Create(
-        kuiShimmerShader, 0x282, 0, 0, 4, RedColor::WHITE, RedColor::BLACK, 32.0f);
+        kuiShimmerShader, RVF_POSITION_XYZ | RVF_COLOR | RVF_TEXCOORDS_1, 0, 0, MATERIAL_FLAG_ALPHAMAP_OPACITY, RedColor::WHITE, RedColor::BLACK, 32.0f);
     s_pPrimitive = 0;
     s_tileU = 1.0f;
     s_tileV = 1.0f;
@@ -178,5 +178,5 @@ void HeatShimmerEffect::PlatformRender(unsigned int) const
     RedRenderer::pcRenderPrimitive(s_pPrimitive,
                                    s_pShimmerShader,
                                    world,
-                                   color, 0x210, 0, 0, 0);
+                                   color, RENDERFLAG_NO_LIGHTING | PC_RENDERFLAG_IMMEDIATE, 0, 0, 0);
 }

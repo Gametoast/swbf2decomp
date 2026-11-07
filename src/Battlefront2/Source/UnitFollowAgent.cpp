@@ -87,10 +87,9 @@ namespace
 
 // GLOBAL: SWBF2 0x01f993e8
 // UnitFollowAgent::rttiHashUnitFollowAgent
-PblHash UnitFollowAgent::rttiHashUnitFollowAgent("UnitFollowAgent");
 // GLOBAL: SWBF2 0x0078b8a0
 // UnitFollowAgent::rttiNameUnitFollowAgent
-const char UnitFollowAgent::rttiNameUnitFollowAgent[] = "UnitFollowAgent";
+PBL_IMPLEMENT_RTTI(UnitFollowAgent)
 
 
 
@@ -109,7 +108,7 @@ UnitFollowAgent::UnitFollowAgent(UnitController* pCtrl, PblHandle<GameObject con
 {
     mTightFollowMode = bTightFollow;
     mTarget = hTarget;
-    mCurState = 1;
+    mCurState = STATE_START;
     mNextState = mTightFollowMode ? 2 : 5;
 }
 
@@ -124,7 +123,7 @@ void UnitFollowAgent::Kill()
 // FUNCTION: SWBF2 0x006680a0
 float UnitFollowAgent::GetUpdateRate() const
 {
-    if (mCurState == 4)
+    if (mCurState == STATE_LooseCombat)
     {
         return mCombatHelper.GetUpdateRate();
     }
@@ -136,15 +135,15 @@ void UnitFollowAgent::EnterState()
 {
     switch (mCurState)
     {
-    case 2:
+    case STATE_FollowTight:
         if (!mTarget)
         {
-            SetNextState(100);
+            SetNextState(STATE_GLOBDONE);
             return;
         }
         return;
 
-    case 4:
+    case STATE_LooseCombat:
         if (mCombatCmd.mWhat == 0)
         {
             mCombatCmd = UnitCombatInfo(UnitCombatInfo::ENGAGE);
@@ -152,11 +151,11 @@ void UnitFollowAgent::EnterState()
         mCombatHelper.Init(reinterpret_cast<const UnitCombatInfo&>(mCombatCmd));
         return;
 
-    case 5:
+    case STATE_LooseSeek:
     {
         if (!mTarget)
         {
-            SetNextState(100);
+            SetNextState(STATE_GLOBDONE);
             return;
         }
 
@@ -176,12 +175,12 @@ void UnitFollowAgent::EnterState()
             GetLowLevel().SetNavigator_Goto(seekPos, 0, false, false);
             return;
         }
-        SetNextState(100);
+        SetNextState(STATE_GLOBDONE);
         return;
     }
 
-    case 1:
-    case 100:
+    case STATE_START:
+    case STATE_GLOBDONE:
         ReserveManager::UnreserveReserver(mCtrl->mOwner->GetGameObject(), RT_FORMATION);
         return;
 
@@ -193,7 +192,7 @@ void UnitFollowAgent::EnterState()
 // FUNCTION: SWBF2 0x006683d0
 void UnitFollowAgent::ExitState()
 {
-    if (mCurState == 6)
+    if (mCurState == STATE_ForwardCover)
     {
         mCoverHelper.HELPERClean();
     }
@@ -220,7 +219,7 @@ bool UnitFollowAgent::IsInLooseRange()
 // FUNCTION: SWBF2 0x00668500
 void UnitFollowAgent::UpdateStatePostVision(float dt)
 {
-    if (mCurState == 100)
+    if (mCurState == STATE_GLOBDONE)
     {
         return;
     }
@@ -229,7 +228,7 @@ void UnitFollowAgent::UpdateStatePostVision(float dt)
 
     if (!mTarget)
     {
-        SetNextState(100);
+        SetNextState(STATE_GLOBDONE);
         return;
     }
 
@@ -244,20 +243,20 @@ void UnitFollowAgent::UpdateStatePostVision(float dt)
                 GameObject* pDeepGameObject = ((Trackable*)pDeep)->GetGameObject();
                 UnitCmdInfo cmdBoard = UnitBoardInfo(pDeepGameObject, -1);
                 mCtrl->PrependQueueCommand(cmdBoard);
-                SetNextState(100);
+                SetNextState(STATE_GLOBDONE);
                 return;
             }
-            SetNextState(100);
+            SetNextState(STATE_GLOBDONE);
             return;
         }
     }
 
     switch (mCurState)
     {
-    case 2:
+    case STATE_FollowTight:
         if (!mTightFollowMode)
         {
-            SetNextState(5);
+            SetNextState(STATE_LooseSeek);
             break;
         }
         {
@@ -274,7 +273,7 @@ void UnitFollowAgent::UpdateStatePostVision(float dt)
                 float fDistSq = SquaredLength(mTarget->GetPosition() - GetMe()->GetMatrix().GetTranslation());
                 if (fDistSq < 100.0f && CheckForForwardHintNodes())
                 {
-                    SetNextState(6);
+                    SetNextState(STATE_ForwardCover);
                     break;
                 }
             }
@@ -314,49 +313,49 @@ void UnitFollowAgent::UpdateStatePostVision(float dt)
             FaceTarget();
         }
         break;
-    case 3:
+    case STATE_LoosePassive:
         if (mTightFollowMode == true)
         {
-            SetNextState(2);
+            SetNextState(STATE_FollowTight);
         }
         else if (!IsInLooseRange())
         {
-            SetNextState(5);
+            SetNextState(STATE_LooseSeek);
         }
         else if (CheckForForwardHintNodes())
         {
-            SetNextState(6);
+            SetNextState(STATE_ForwardCover);
         }
         else
         {
             mCtrl->mLowLevel.SetNavigator_Stationary();
         }
         break;
-    case 4:
+    case STATE_LooseCombat:
         if (!IsInLooseRange())
         {
-            SetNextState(5);
+            SetNextState(STATE_LooseSeek);
         }
         else if (CheckForForwardHintNodes())
         {
-            SetNextState(6);
+            SetNextState(STATE_ForwardCover);
         }
         break;
-    case 5:
+    case STATE_LooseSeek:
         if (!mCtrl->mLowLevel.IsNavigatorInProgress())
         {
             SetNextState(IsInLooseRange() ? 3 : 5);
         }
         else if (CheckForForwardHintNodes())
         {
-            SetNextState(6);
+            SetNextState(STATE_ForwardCover);
         }
         else
         {
             FaceTarget();
         }
         break;
-    case 6:
+    case STATE_ForwardCover:
         FaceTarget(HEIGHT_STAND);
         mCoverHelper.FSMUpdate(dt, false);
         if (mCoverHelper.IsDone())
@@ -394,24 +393,24 @@ int UnitFollowAgent::EventHandler(AI::EventInfo* pInfo)
         return 0;
 
     case AI::EVT_Grenade:
-        if (mCurState != 3 || UnitAgent::EventHandler(pInfo) != 1)
+        if (mCurState != STATE_LoosePassive || UnitAgent::EventHandler(pInfo) != 1)
         {
             return 0;
         }
         mCombatCmd = pInfo->mNextCmd;
-        SetNextState(4);
+        SetNextState(STATE_LooseCombat);
         pInfo->mNextCmd = UnitCmdInfo(CMD_NONE, NULL, PblVector3(0, 0, 0), NULL);
         return 1;
 
     case AI::EVT_Damaged:
-        if (mCurState == 3)
+        if (mCurState == STATE_LoosePassive)
         {
             if (UnitAgent::HandleDamagedEvent(pInfo) != 1)
             {
                 return 0;
             }
             mCombatCmd = pInfo->mNextCmd;
-            SetNextState(4);
+            SetNextState(STATE_LooseCombat);
             pInfo->mNextCmd = UnitCmdInfo(CMD_NONE, NULL, PblVector3(0, 0, 0), NULL);
             return 1;
         }
@@ -440,19 +439,19 @@ int UnitFollowAgent::EventHandler(AI::EventInfo* pInfo)
         {
             AI::VOHelper::Play(AI::VOT_SC_StopFollowResponse, mCtrl->mOwner->GetGameObject(), 0, 0,
                                AIUtil::GetRandomFloat(0.5f, 1.2f) + GameLoop::GetMissionTime());
-            SetNextState(100);
+            SetNextState(STATE_GLOBDONE);
             return 1;
         }
         return -1;
 
     case AI::EVT_Vision_CanSeeEnemy:
     case AI::EVT_Audible_CanHearEnemy:
-        if (mCurState != 3 || UnitAgent::EventHandler(pInfo) != 1)
+        if (mCurState != STATE_LoosePassive || UnitAgent::EventHandler(pInfo) != 1)
         {
             return 0;
         }
         mCombatCmd = pInfo->mNextCmd;
-        SetNextState(4);
+        SetNextState(STATE_LooseCombat);
         pInfo->mNextCmd = UnitCmdInfo(CMD_NONE, NULL, PblVector3(0, 0, 0), NULL);
         return 1;
 

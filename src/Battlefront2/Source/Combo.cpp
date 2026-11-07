@@ -742,7 +742,7 @@ void Combo::State::SetGravity(float fGravity)
 // FUNCTION: SWBF2 0x00471240
 bool Combo::Condition::TestSoldierState(int iState, float fTime) const
 {
-    if (m_uiSoldierStates && !(m_uiSoldierStates & (1 << iState)))
+    if (m_uiSoldierStates && !(m_uiSoldierStates & Bit(iState)))
     {
         return false;
     }

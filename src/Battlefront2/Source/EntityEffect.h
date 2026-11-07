@@ -1,6 +1,7 @@
 #pragma once
 
 #include "PebbleFL/Common/PblHashTable.h"
+#include "PebbleFL/Common/PblRtti.h"
 
 #include <stddef.h>
 
@@ -18,37 +19,17 @@ public:
     virtual ~EntityEffectClass();
     virtual EntityClass* Derive(unsigned int uHash);
     virtual Entity* Build(const EntityDesc& desc);
-    virtual bool IsRtti(unsigned int uRtti) const;
-    virtual unsigned int GetDerivedRtti() const;
-    virtual const char* GetDerivedRttiName() const;
+    // FUNCTION: SWBF2 0x004a99b0
+    // EntityEffectClass::IsRtti
+    // FUNCTION: SWBF2 0x004a99e0
+    // EntityEffectClass::GetDerivedRtti
+    // FUNCTION: SWBF2 0x004a99f0
+    // EntityEffectClass::GetDerivedRttiName
+    PBL_DECLARE_DERIVED_RTTI(EntityEffectClass, EntityClass)
     virtual void SetProperty(unsigned int uProperty, const char* pszValue);
-
-    static PblHash rttiHashEntityEffectClass;
-    static const char rttiNameEntityEffectClass[];
 
     FLEffectClass* mEffectClass;
 };
   
  
 
-// FUNCTION: SWBF2 0x004a99b0
-inline bool EntityEffectClass::IsRtti(unsigned int uRtti) const
-{
-    if (rttiHashEntityEffectClass == uRtti)
-    {
-        return true;
-    }
-    return EntityClass::IsRtti(uRtti);
-}
-
-// FUNCTION: SWBF2 0x004a99e0
-inline unsigned int EntityEffectClass::GetDerivedRtti() const
-{
-    return rttiHashEntityEffectClass;
-}
-
-// FUNCTION: SWBF2 0x004a99f0
-inline const char* EntityEffectClass::GetDerivedRttiName() const
-{
-    return rttiNameEntityEffectClass;
-}

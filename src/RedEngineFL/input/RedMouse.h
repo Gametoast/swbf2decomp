@@ -4,12 +4,14 @@
 #define DIRECTINPUT_VERSION 0x0800
 #endif
 #include <dinput.h>
+#include "PebbleFL/Common/PblBits.h"
 #include <stddef.h>
 
 // VTABLE: SWBF2 0x007832a4
 class RedMouse
 {
 public:
+
 
     RedMouse();
 

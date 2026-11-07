@@ -27,7 +27,7 @@ static pcClearShader* s_pClearShader;
 void ScreenFilterEffect::PlatformInit()
 {
     s_pClearShader = (pcClearShader*)pcRedShader::Create(
-        0x5c6e1222 /* "clear" */, 0x203, 0, 0, 4, RedColor::WHITE, RedColor::BLACK, 32.0f);
+        0x5c6e1222 /* "clear" */, RVF_POSITION_XYZRHW | RVF_TEXCOORDS_1, 0, 0, MATERIAL_FLAG_ALPHAMAP_OPACITY, RedColor::WHITE, RedColor::BLACK, 32.0f);
 }
 
 // FUNCTION: SWBF2 0x00426f00
@@ -71,7 +71,7 @@ void ScreenFilterEffect::PlatformRender(unsigned int) const
     s_pClearShader->m_pTex = RedTexture::Find(data.uiTextureHash);
     RedRenderer::pcRenderPrimitive(pPrimitive, s_pClearShader, gMatrixIdentity,
                                    RedColor(data.filterColor, (unsigned char)(int)(data.filterColor.a * data.fIntensity)),
-                                   0x200, 0, 0, 0);
+                                   PC_RENDERFLAG_IMMEDIATE, 0, 0, 0);
 
     pPrimitive->Release();
 }

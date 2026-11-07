@@ -1,6 +1,7 @@
 #pragma once
 
 #include "PebbleFL/Common/PblHashTable.h"
+#include "PebbleFL/Common/PblRtti.h"
 
 #include <stddef.h>
 
@@ -29,9 +30,13 @@ public:
 
     virtual EntityClass* Derive(unsigned int uHash);
     virtual Entity* Build(const EntityDesc& desc);
-    virtual bool IsRtti(unsigned int uRtti) const;
-    virtual unsigned int GetDerivedRtti() const;
-    virtual const char* GetDerivedRttiName() const;
+    // FUNCTION: SWBF2 0x00524010
+    // FlagItemClass::IsRtti
+    // FUNCTION: SWBF2 0x00524050
+    // FlagItemClass::GetDerivedRtti
+    // FUNCTION: SWBF2 0x00524060
+    // FlagItemClass::GetDerivedRttiName
+    PBL_DECLARE_DERIVED_RTTI(FlagItemClass, EntityItemClass)
     virtual void SetProperty(unsigned int uProperty, const char* pszValue);
 
     GameModel* mCarriedModel;
@@ -44,19 +49,7 @@ public:
     unsigned int mCarriedSoldierBoneHash;
     unsigned int mCarriedDroidekaBoneHash;
 
-    static PblHash rttiHashFlagItemClass;
-    static const char rttiNameFlagItemClass[];
 };
-  
- 
- 
- 
- 
- 
- 
- 
- 
- 
 
 // VTABLE: SWBF2 0x0079ecd8 EntityEx
 // VTABLE: SWBF2 0x0079ec38 CollisionObject
@@ -189,39 +182,6 @@ public:
     static unsigned int GetRtti();
     static const char rttiNameFlagItem[];
 };
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
-
-// FUNCTION: SWBF2 0x00524010
-inline bool FlagItemClass::IsRtti(unsigned int uRtti) const
-{
-    if (rttiHashFlagItemClass == uRtti)
-    {
-        return true;
-    }
-    return EntityItemClass::IsRtti(uRtti);
-}
-
-// FUNCTION: SWBF2 0x00524050
-inline unsigned int FlagItemClass::GetDerivedRtti() const
-{
-    return rttiHashFlagItemClass;
-}
-
-// FUNCTION: SWBF2 0x00524060
-inline const char* FlagItemClass::GetDerivedRttiName() const
-{
-    return rttiNameFlagItemClass;
-}
 
 // FUNCTION: SWBF2 0x00523f30
 inline bool FlagItem::IsRtti(unsigned int uRtti) const

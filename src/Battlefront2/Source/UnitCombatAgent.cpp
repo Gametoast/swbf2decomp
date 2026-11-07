@@ -7,10 +7,9 @@
 
 // GLOBAL: SWBF2 0x01f9935c
 // UnitCombatAgent::rttiHashUnitCombatAgent
-PblHash UnitCombatAgent::rttiHashUnitCombatAgent("UnitCombatAgent");
 // GLOBAL: SWBF2 0x0078b778
 // UnitCombatAgent::rttiNameUnitCombatAgent
-const char UnitCombatAgent::rttiNameUnitCombatAgent[] = "UnitCombatAgent";
+PBL_IMPLEMENT_RTTI(UnitCombatAgent)
 
 
 
@@ -89,7 +88,7 @@ void UnitCombatAgent::UpdateStatePostVision(float dt)
         mCombatHelper.FSMUpdate(dt, false);
         if (mCombatHelper.IsDone())
         {
-            SetNextState(100);
+            SetNextState(STATE_GLOBDONE);
         }
         break;
     }
