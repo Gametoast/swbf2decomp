@@ -40,7 +40,7 @@
 #include "SpaceAssault.h"
 #include "Team.h"
 #include "TriggerRegionManager.h"
-#include "WeaponCannonInstance.h"
+#include "WeaponCannon.h"
 #include "Weapon.h"
 #include "RedEngineFL/Memory/RedMemoryPool.h"
 #include "CombatUtil.h"

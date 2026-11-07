@@ -11,7 +11,7 @@
 #include "LockOnManager.h"
 #include "NetGame.h"
 #include "UnitController.h"
-#include "WeaponCannonInstance.h"
+#include "WeaponCannon.h"
 #include "WeaponShield.h"
 #include "CollisionObject.h"
 #include "GameObject.h"

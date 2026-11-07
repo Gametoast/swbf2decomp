@@ -29,6 +29,8 @@
 #include "FLInputManager.h"
 #include "GameMemory.h"
 #include "GameSound.h"
+#include "Weapon.h"
+#include "WeaponMelee.h"
 #include "GameState.h"
 #include "HeroMessageDisplay.h"
 #include "HUDEventQueue.h"
@@ -106,12 +108,14 @@
 #include <windows.h>
 #include "PauseMenu.h"
 #include "PlayerStats.h"
+#include "ParticleEmitter.h"
+#include "ParticleEmitterInfo.h"
+#include "ParticleEmitterObject.h"
+#include "ParticleTransformer.h"
 
 class VideoEffect { public: static void Init(); };
 class LetterboxEffect { public: static void Init(); };
 
-class WeaponMeleeClass { public: static void PostLoad(); };
-class WeaponMelee { public: static void PostLoad() { WeaponMeleeClass::PostLoad(); } };
 
 class TeamAssistManager { public: static void Create(); static void Destroy(); };
 namespace MissionTimer
@@ -180,20 +184,6 @@ public:
     static MemoryPool sMemoryPool;
 };
 
-class Weapon
-{
-public:
-    static void SetupMemoryPool(unsigned int uCount, unsigned int uSize, unsigned int uGrow) { sMemoryPool.Setup(uCount, uSize, uGrow); }
-    static void UpdateMemoryPoolSize(unsigned int uSize)
-    {
-        if (sMemoryPool.GetSize() < uSize)
-        {
-            sMemoryPool.SetSize(uSize);
-        }
-    }
-    static MemoryPool sMemoryPool;
-};
-
 class StickInfo
 {
 public:
@@ -219,51 +209,10 @@ public:
     static void SetupMemoryPool(unsigned int uCount, unsigned int uSize, unsigned int uGrow) { sMemoryPool.Setup(uCount, uSize, uGrow); }
     static MemoryPool sMemoryPool;
 };
-class ParticleEmitterObject
-{
-public:
-    static void SetupMemoryPool(unsigned int uCount, unsigned int uSize, unsigned int uGrow) { sMemoryPool.Setup(uCount, uSize, uGrow); }
-    static MemoryPool sMemoryPool;
-};
-class ParticleEmitterInfoData
-{
-public:
-    static void SetupMemoryPool(unsigned int uCount, unsigned int uSize, unsigned int uGrow) { sMemoryPool.Setup(uCount, uSize, uGrow); }
-    static MemoryPool sMemoryPool;
-};
-class ParticleEmitter
-{
-public:
-    static void SetupMemoryPool(unsigned int uCount, unsigned int uSize, unsigned int uGrow) { sMemoryPool.Setup(uCount, uSize, uGrow); }
-    static MemoryPool sMemoryPool;
-};
-namespace ParticleTransformer
-{
-class PositionTransformer
-{
-public:
-    static void SetupMemoryPool(unsigned int uCount, unsigned int uSize, unsigned int uGrow) { sMemoryPool.Setup(uCount, uSize, uGrow); }
-    static MemoryPool sMemoryPool;
-};
-class SizeTransformer
-{
-public:
-    static void SetupMemoryPool(unsigned int uCount, unsigned int uSize, unsigned int uGrow) { sMemoryPool.Setup(uCount, uSize, uGrow); }
-    static MemoryPool sMemoryPool;
-};
-class RotationTransformer
-{
-public:
-    static void SetupMemoryPool(unsigned int uCount, unsigned int uSize, unsigned int uGrow) { sMemoryPool.Setup(uCount, uSize, uGrow); }
-    static MemoryPool sMemoryPool;
-};
-class ColorTransformer
-{
-public:
-    static void SetupMemoryPool(unsigned int uCount, unsigned int uSize, unsigned int uGrow) { sMemoryPool.Setup(uCount, uSize, uGrow); }
-    static MemoryPool sMemoryPool;
-};
-}
+
+
+
+
 class EntitySoundStatic
 {
 public:
@@ -704,7 +653,7 @@ void Update(float fDeltaTime);
 }
 namespace PlayerPrefs
 {
-    int __fastcall FindByViewport(int iValue);
+    int FindByViewport(int iValue);
 }
 namespace PopupText
 {
@@ -1746,6 +1695,44 @@ void GameLoop::SetTerrainFilename(char const* pcName)
         strlcpy(mTerrainFileName, pcName, sizeof(mTerrainFileName));
     }
 }
+
+// FUNCTION: SWBF2 0x00533630
+void GameLoop::SetFunctionIdForButtonId(int iButton, int iFunction)
+{
+    RawControllerInputs* pInputs = FLInputManager::s_instance.GetPlayerJoystick(PauseMenu::GetPausingViewport());
+    if (pInputs)
+    {
+        pInputs->mCurBindings[pInputs->GetInputMode()][iButton].mDest = iFunction;
+    }
+}
+
+
+
+
+// FUNCTION: SWBF2 0x00533660
+int GameLoop::GetFunctionIdForButtonId(int iButton)
+{
+    RawControllerInputs* pInputs = FLInputManager::s_instance.GetPlayerJoystick(PauseMenu::GetPausingViewport());
+    if (pInputs)
+    {
+        return pInputs->mCurBindings[pInputs->GetInputMode()][iButton].mDest;
+    }
+    return -1;
+}
+
+
+
+
+// FUNCTION: SWBF2 0x00533690
+int GameLoop::GetFunctionIdForAnalog(int analogStick, int mode)
+{
+    if (RawControllerInputs* pInputs = FLInputManager::s_instance.GetPlayerJoystick(PauseMenu::GetPausingViewport()))
+    {
+        return pInputs->GetFunctionForAnalog(analogStick, mode);
+    }
+    return 0;
+}
+
 
 // FUNCTION: SWBF2 0x005336b0
 void GameLoop::SetJoystickYFlip(int iFlip)

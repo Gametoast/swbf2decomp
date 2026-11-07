@@ -38,7 +38,7 @@
 #include "EntityItem.h"
 #include "PowerupItem.h"
 #include "WeaponDetonator.h"
-#include "WeaponCannonInstance.h"
+#include "WeaponCannon.h"
 #include "Aimer.h"
 #include "CollisionPrimitive.h"
 #include "NetSetup.h"

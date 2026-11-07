@@ -1527,11 +1527,8 @@ extern bool netAutoAssignTeams;
 
 namespace Lua_Callbacks
 {
-static const unsigned int netPlayersSupported[9] =
-{
-3, 6, 9, 12, 19, 25, 38, 76, 153
-}
-;
+// GLOBAL: SWBF2 0x0078a294
+extern const int netPlayersSupported[9] = { 3, 6, 9, 12, 19, 25, 38, 76, 153 };
 }
 
 // GLOBAL: SWBF2 0x007e8edb

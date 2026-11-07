@@ -171,26 +171,12 @@ unsigned int u8tof32_hex[256] = {
     0x3f70f0f1, 0x3f71f1f2, 0x3f72f2f3, 0x3f73f3f4, 0x3f74f4f5, 0x3f75f5f6, 0x3f76f6f7, 0x3f77f7f8,
     0x3f78f8f9, 0x3f79f9fa, 0x3f7afafb, 0x3f7bfbfc, 0x3f7cfcfd, 0x3f7dfdfe, 0x3f7efeff, 0x3f800000,
 };
-static float* const u8tof32_lut = (float*)u8tof32_hex;
+float* u8tof32_lut = (float*)u8tof32_hex;
 
 // GLOBAL: SWBF2 0x01e30394
 CollisionTreeLeaf* sDrawThisLeaf;
 // GLOBAL: SWBF2 0x01eb336c
 CollisionAABB sDrawThisAABB;
-
-// FUNCTION: SWBF2 0x004609e0
-void CollisionAABB::Init(const CollisionAABB& parent, const CompressedAABB& compressed)
-{
-    PblVector3 dim = parent.GetDim();
-    PblVector3 fltmin(u8tof32_lut[compressed.boxmin.x],
-                            u8tof32_lut[compressed.boxmin.y],
-                            u8tof32_lut[compressed.boxmin.z]);
-    PblVector3 fltmax(u8tof32_lut[compressed.boxmax.x],
-                            u8tof32_lut[compressed.boxmax.y],
-                            u8tof32_lut[compressed.boxmax.z]);
-    boxmin = parent.boxmin + dim * fltmin;
-    boxmax = parent.boxmin + dim * fltmax;
-}
 
 // FUNCTION: SWBF2 0x00460b10
 int RayConvexPoly_intersect(const PblVector3& vStart, const PblVector3& vDir, const PblVector3* const pVerts, int iNumVerts,

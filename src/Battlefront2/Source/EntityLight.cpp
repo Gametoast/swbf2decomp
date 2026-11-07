@@ -25,6 +25,15 @@ RedColor ReadColor(const PblConfig::Data& data);
 // GLOBAL: SWBF2 0x01e51de0
 EntityLightFXParser* EntityLightFXParser::s_pInstance;
 
+// SYNTHETIC: SWBF2 0x00402be0
+// `dynamic initializer for 'EntityLight::sMemoryPool''
+// SYNTHETIC: SWBF2 0x00766f70
+// `dynamic atexit destructor for 'EntityLight::sMemoryPool''
+
+// GLOBAL: SWBF2 0x01ebbe38
+// EntityLight::sMemoryPool
+MemoryPool EntityLight::sMemoryPool("EntityLight", sizeof(EntityLight));
+
 // SYNTHETIC: SWBF2 0x00402c00
 // `dynamic initializer for 'EntityLight::rttiHashEntityLight''
 // EntityLight::rttiHashEntityLight
@@ -45,14 +54,6 @@ PblHash EntityLightClass::rttiHashEntityLightClass("EntityLightClass");
 // GLOBAL: SWBF2 0x0078930c
 // EntityLightClass::rttiNameEntityLightClass
 const char EntityLightClass::rttiNameEntityLightClass[] = "EntityLightClass";
-// SYNTHETIC: SWBF2 0x00402be0
-// `dynamic initializer for 'EntityLight::sMemoryPool''
-// SYNTHETIC: SWBF2 0x00766f70
-// `dynamic atexit destructor for 'EntityLight::sMemoryPool''
-
-// GLOBAL: SWBF2 0x01ebbe38
-// EntityLight::sMemoryPool
-MemoryPool EntityLight::sMemoryPool("EntityLight", sizeof(EntityLight));
 // SYNTHETIC: SWBF2 0x00402c20
 // `dynamic initializer for 'EntityLightClass::sLightClassTable''
 

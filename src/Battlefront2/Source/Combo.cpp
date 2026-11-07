@@ -12,7 +12,7 @@
 #include "SoldierAnimatorClass.h"
 #include "SoldierAnimation.h"
 #include "WeaponMelee.h"
-#include "WeaponMeleeInstance.h"
+#include "WeaponMelee.h"
 #include "Zephyr/Source/ZephyrAnim.h"
 #include "Zephyr/Source/ZephyrSkeleton.h"
 #include "Zephyr/Source/ZephyrSkeletonShared.h"

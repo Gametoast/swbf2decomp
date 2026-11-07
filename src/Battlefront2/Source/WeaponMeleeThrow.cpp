@@ -3,7 +3,8 @@
 #include <new>
 
 #include "WeaponMeleeThrow.h"
-#include "WeaponMeleeInstance.h"
+#include "WeaponMelee.h"
+#include "Combo.h"
 #include "Aimer.h"
 #include "Controllable.h"
 #include "EnergyBar.h"

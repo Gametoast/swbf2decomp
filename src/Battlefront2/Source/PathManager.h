@@ -6,6 +6,7 @@
 #include "PebbleFL/Common/PblVector.h"
 #include "RedEngineFL/Memory/RedMemoryPool.h"
 #include "PerformanceTimer.h"
+#include "ConnectivityGraph.h"
 
 class MemoryPool;
 class UnitController;
@@ -90,7 +91,7 @@ class PathRequest
 public:
 
     PathRequest(UnitController* pUnit, const PblVector3& vStart, const PblVector3& vGoal,
-                float fRadius, int eProhibit, unsigned char uPriority,
+                float fRadius, ConnectivityGraph::ProhibitFlag eProhibit, unsigned char uPriority,
                 const ConnectivityArc* pArc, const Obstacle** ppIgnore, int iIgnoreCount);
 
     PblList<PathRequest>::Node mNode;
@@ -98,7 +99,7 @@ public:
     PblVector3 mStart;
     PblVector3 mGoal;
     float mRadius;
-    int mProhibit;
+    ConnectivityGraph::ProhibitFlag mProhibit;
     unsigned char mPriority;
     const Obstacle* mObstacles[2];
     int mObstacleCount;
@@ -115,7 +116,7 @@ void Reset();
 void RemovePathRequest(UnitController* pCtrl);
 void LowerRequestPriority(UnitController* pCtrl);
 bool RequestPath(UnitController* pUnit, const PblVector3& vStart, const PblVector3& vGoal,
-                 float fRadius, int eProhibit, unsigned char uPriority,
+                 float fRadius, ConnectivityGraph::ProhibitFlag eProhibit, unsigned char uPriority,
                  const ConnectivityArc* pArc, const Obstacle** ppIgnore, int iIgnoreCount);
 PathRequest* GetNextPathRequest();
 bool IsDone();

@@ -52,9 +52,9 @@ void SunFlareEffect::Create()
 SunSkyRenderable s_SunSkyRenderable;
 
 // GLOBAL: SWBF2 0x01e2fd54
-static RedTexture* s_sampleTex;
+RedTexture* s_sampleTex;
 // GLOBAL: SWBF2 0x01e2fd50
-static RedTexture* s_intensityTex;
+RedTexture* s_intensityTex;
 // GLOBAL: SWBF2 0x01f9af38
 static pcClearShader* s_pClearShader;
 // GLOBAL: SWBF2 0x01f9af34

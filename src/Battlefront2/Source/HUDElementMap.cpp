@@ -19,7 +19,7 @@
 #include "EntityCarrier.h"
 #include "EntityHover.h"
 #include "EntityWalker.h"
-#include "WeaponCannonInstance.h"
+#include "WeaponCannon.h"
 #include "GameLoop.h"
 #include "GameObject.h"
 #include "HUDEvent.h"
@@ -737,7 +737,7 @@ bool __fastcall IsFriendBuddy(int iLocalIndex, int iPlayerId);
 
 const RedColor Interpolate(const RedColor& a, const RedColor& b, float t);
 
-extern RedColor gHudHighlightColor;
+extern RedColor gVoiceChatTeamColors[3];
 
 
 
@@ -1128,7 +1128,7 @@ void HUD::ElementMap::UpdateTargetIcons(const Controllable* pPlayer)
                     FriendBuddyList::IsFriendBuddy(NetGame::GetLocalIndex(mPlayerIndex),
                                target.actor->GetControllable()->GetPlayerId()))
                 {
-                    color = gHudHighlightColor;
+                    color = gVoiceChatTeamColors[2];
                 }
             }
         }

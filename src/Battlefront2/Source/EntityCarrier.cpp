@@ -15,7 +15,7 @@
 #include "FirstPerson.h"
 #include "Tracker.h"
 #include "NetGame.h"
-#include "WeaponCannonInstance.h"
+#include "WeaponCannon.h"
 #include "CameraManager.h"
 #include "ChaseCamera.h"
 #include "CollisionManager.h"

@@ -23,7 +23,7 @@ bool gAttractMode;
 
 namespace PlayerPrefs
 {
-int __fastcall FindByViewport(int iCamera);
+int FindByViewport(int iCamera);
 }
 
 // GLOBAL: SWBF2 0x007e9ac0

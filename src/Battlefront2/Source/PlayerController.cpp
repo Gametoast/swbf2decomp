@@ -25,7 +25,7 @@
 #include "PauseMenu.h"
 #include "ToolTips.h"
 #include "Weapon.h"
-#include "WeaponCannonInstance.h"
+#include "WeaponCannon.h"
 #include "RedEngineFL/Graphics/RedModel.h"
 #include "Aimer.h"
 #include "CollisionModel.h"

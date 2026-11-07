@@ -30,7 +30,7 @@
 #include "FLEffect.h"
 #include "TargetManager.h"
 #include "VehicleManager.h"
-#include "WeaponCannonInstance.h"
+#include "WeaponCannon.h"
 #include "Zephyr/Source/ZephyrPoseStatic.h"
 
 #include "PlayerController.h"

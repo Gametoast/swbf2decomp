@@ -14,14 +14,6 @@
 
 void __cdecl PblTraceP(const char* Format, ...);
 
-// SYNTHETIC: SWBF2 0x004072e0
-// `dynamic initializer for 'pcRedShader::s_ShaderFactoryByRenderType''
-
-// GLOBAL: SWBF2 0x007f5050
-// pcRedShader::s_ShaderFactoryByRenderType
-PblHashTable<const pcRedShader, pcRedShader::FACTORY_SLOTS>
-    pcRedShader::s_ShaderFactoryByRenderType;
-
 // GLOBAL: SWBF2 0x007f4fe8
 // pcRedShaderDef::s_IDCount
 unsigned int pcRedShaderDef::s_IDCount;
@@ -792,3 +784,11 @@ static int _link_pcTerrainShader() { return ++g_pcTerrainShader; }
 // GLOBAL: SWBF2 0x007f4ffc
 // s_pcTerrainShaderLinked
 static unsigned int s_pcTerrainShaderLinked = _link_pcTerrainShader();
+
+// SYNTHETIC: SWBF2 0x004072e0
+// `dynamic initializer for 'pcRedShader::s_ShaderFactoryByRenderType''
+
+// GLOBAL: SWBF2 0x007f5050
+// pcRedShader::s_ShaderFactoryByRenderType
+PblHashTable<const pcRedShader, pcRedShader::FACTORY_SLOTS>
+    pcRedShader::s_ShaderFactoryByRenderType;

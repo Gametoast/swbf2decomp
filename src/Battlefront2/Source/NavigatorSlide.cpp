@@ -358,7 +358,7 @@ void NavigatorSlide::NextVehicleSlidePos()
 {
     PblVector3 pos = GetMatrix().GetTranslation();
     const float fRadius = GetMyRadius() * 2.0f;
-    const int eProhibit = GetMyProhibit();
+    const ConnectivityGraph::ProhibitFlag eProhibit = GetMyProhibit();
     PathFinder::GetClosestValidPoint(pos, pos, fRadius, eProhibit, mIgnore, mIgnoreCnt);
 
     for (int i = 0; i < 5; ++i)

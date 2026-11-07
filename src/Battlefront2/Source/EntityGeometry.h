@@ -6,6 +6,7 @@
 
 #include "CollisionModel.h"
 #include "CollisionObject.h"
+#include "Chunk.h"
 #include "Entity.h"
 #include "FoleyFX.h"
 #include "GameModel.h"
@@ -21,38 +22,6 @@ class GameObject;
 class RedLodData;
 class RedPose;
 
-class ChunkDescriptor
-{
-public:
-
-    void Init();
-
-    PblMatrix mMatrix;
-    PblVector3 mVelocity;
-    GameModel* mModel;
-    CollisionBodyPrimitive* mPrimitive;
-    unsigned char mMaxTerrainCollisions;
-    unsigned int mTerrainImpactEffect;
-
-    int mPhysicsType;
-    PblVector3 mOmega;
-    PblVector3 mGravity;
-    CollisionModel* mFullCollisionModel;
-    float mCoefficientOfRestitution;
-    float mCoefficientOfFriction;
-    float mSimpleFrictionConstant;
-    float mMinDeathCollisionSpeed;
-    bool mForceZeroYAxisVelocity;
-    float mMaxStaticLifetime;
-    unsigned int mTrailEffect[3];
-    unsigned int mSmokeEffect[3];
-    unsigned int mTrailAttachPoints[3];
-    unsigned int mSmokeAttachPoints[3];
-    bool mNoBuildingCollisions;
-    bool mKeepSoldierCollisions;
-    float mLinearDamping;
-    float mAngularDamping;
-};
  
  
  

@@ -51,7 +51,7 @@
 #include "PassengerSlot.h"
 #include "SnipeHelper.h"
 #include "Team.h"
-#include "WeaponCannonInstance.h"
+#include "WeaponCannon.h"
 #include "PebbleFL/Common/PblMath.h"
 #include "RedEngineFL/Graphics/RedCamera.h"
 #include "RedEngineFL/Graphics/RedModel.h"
@@ -1410,9 +1410,9 @@ float AIUtil::GetCollisionRadius(const GameObject* pObj)
 }
 
 // FUNCTION: SWBF2 0x00441d40
-int AIUtil::GetAIType(const GameObject* pObj)
+ConnectivityGraph::ProhibitFlag AIUtil::GetAIType(const GameObject* pObj)
 {
-    const int eType = pObj->GetGameObjectClass()->mAIType;
+    const ConnectivityGraph::ProhibitFlag eType = pObj->GetGameObjectClass()->mAIType;
     if (eType == ConnectivityGraph::CGT_FLAG_HOVER && pObj->GetCarriedFlagItem())
     {
         return ConnectivityGraph::CGT_FLAG_SOLDIER;

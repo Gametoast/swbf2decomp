@@ -33,7 +33,7 @@
 #include "PathFinder.h"
 #include "TargetManager.h"
 #include "VehicleManager.h"
-#include "WeaponCannonInstance.h"
+#include "WeaponCannon.h"
 #include "PebbleFL/Common/PblRandom.h"
 #include "Zephyr/Source/ZephyrPoseStatic.h"
 #include "AILowLevel.h"
@@ -349,7 +349,7 @@ EntityFlyerClass::EntityFlyerClass(unsigned int uHash)
     mGuidedMissile = false;
 
     mCockpitModelHandle = -1;
-    mAIType = 32;
+    mAIType = ConnectivityGraph::CGT_FLAG_FLYER;
     mBarrierX = mBarrierZ = -1.0f;
     mBarrierOX = mBarrierOZ = 0.0f;
     mHoldForPlayer = true;

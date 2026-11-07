@@ -35,13 +35,6 @@
 // GLOBAL: SWBF2 0x009c893c
 pcShadowQuadRenderable* pcShadowQuadRenderable::s_pInstance;
 
-// SYNTHETIC: SWBF2 0x004094a0
-// `dynamic initializer for 'kuiClearShader''
-
-// GLOBAL: SWBF2 0x009c8944
-// kuiClearShader
-static const unsigned int kuiClearShader = PblHash("Clear");
-
 // SYNTHETIC: SWBF2 0x004094c0
 // `dynamic initializer for 'kuiFilterShader''
 
@@ -49,6 +42,13 @@ static const unsigned int kuiClearShader = PblHash("Clear");
 // kuiFilterShader
 // STRING: SWBF2 0x00784420
 static const unsigned int kuiFilterShader = PblHash("FilterCopy");
+
+// SYNTHETIC: SWBF2 0x004094a0
+// `dynamic initializer for 'kuiClearShader''
+
+// GLOBAL: SWBF2 0x009c8944
+// kuiClearShader
+static const unsigned int kuiClearShader = PblHash("Clear");
 
 // FUNCTION: SWBF2 0x006fbdf0
 pcShadowQuadRenderable::pcShadowQuadRenderable()

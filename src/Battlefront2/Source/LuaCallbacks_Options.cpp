@@ -109,8 +109,7 @@ bool gRandomizePlaylist;
 // GLOBAL: SWBF2 0x01e57948
 bool gIsDedicated;
 
-// GLOBAL: SWBF2 0x0078a294
-static const int netPlayersSupported[9] = { 3, 6, 9, 12, 19, 25, 38, 76, 153 };
+extern const int netPlayersSupported[9];
 
 }
 
@@ -135,44 +134,6 @@ static const int sLuaFunctionToEnum[5][21] = {
 // FUNCTION: SWBF2 0x0052b500
 int RawControllerInputs::GetFunctionForAnalog(int, int) { return 0; }
 
-
-
-// FUNCTION: SWBF2 0x00533630
-void GameLoop::SetFunctionIdForButtonId(int iButton, int iFunction)
-{
-    RawControllerInputs* pInputs = FLInputManager::s_instance.GetPlayerJoystick(PauseMenu::GetPausingViewport());
-    if (pInputs)
-    {
-        pInputs->mCurBindings[pInputs->GetInputMode()][iButton].mDest = iFunction;
-    }
-}
-
-
-
-
-// FUNCTION: SWBF2 0x00533660
-int GameLoop::GetFunctionIdForButtonId(int iButton)
-{
-    RawControllerInputs* pInputs = FLInputManager::s_instance.GetPlayerJoystick(PauseMenu::GetPausingViewport());
-    if (pInputs)
-    {
-        return pInputs->mCurBindings[pInputs->GetInputMode()][iButton].mDest;
-    }
-    return -1;
-}
-
-
-
-
-// FUNCTION: SWBF2 0x00533690
-int GameLoop::GetFunctionIdForAnalog(int analogStick, int mode)
-{
-    if (RawControllerInputs* pInputs = FLInputManager::s_instance.GetPlayerJoystick(PauseMenu::GetPausingViewport()))
-    {
-        return pInputs->GetFunctionForAnalog(analogStick, mode);
-    }
-    return 0;
-}
 
 
 // FUNCTION: SWBF2 0x00597250

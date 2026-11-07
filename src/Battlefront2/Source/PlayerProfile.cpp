@@ -129,16 +129,6 @@ const unsigned short* PlayerProfile::GetDefaultProfileName()
 {
     return mDefaultProfile.mName;
 }
-namespace PlayerPrefs
-{
-
-// SYNTHETIC: SWBF2 0x00405f30
-// PlayerPrefs::`dynamic initializer for 'mAllUserPrefs''
-
-// GLOBAL: SWBF2 0x01ef7fa0
-// mAllUserPrefs
-OnePrefs mAllUserPrefs[1];
-}
 namespace PlayerProfile
 {
 
@@ -154,32 +144,6 @@ int mNumMemoryProfiles;
 
 // GLOBAL: SWBF2 0x009661bc
 bool RedParticleRenderer::s_blurEnable;
-
-// FUNCTION: SWBF2 0x0061c410
-void PlayerPrefs::OnePrefs::Clear()
-{
-    mPlayerId = -1;
-    mViewport = 0;
-    mJoystick = 0;
-    mTeamNum = PlayerPrefs::gDefaultTeamNum;
-    mDifficulty = (eGAME_DIFFICULTY)PlayerPrefs::gDefaultDifficulty;
-    pProfile = 0;
-    hasChallenge = false;
-}
-
-// FUNCTION: SWBF2 0x0061c440
-void PlayerPrefs::InitAll()
-{
-    PlayerProfile::ResetAllProfiles();
-    PlayerPrefs::mAllUserPrefs[0].Clear();
-
-    PlayerPrefs::mAllUserPrefs[0].mViewport = 0;
-    PlayerPrefs::mAllUserPrefs[0].mPlayerId = 0;
-    PlayerPrefs::mAllUserPrefs[0].mJoystick = 0;
-
-    PlayerPrefs::mAllUserPrefs[0].pProfile = PlayerProfile::GetProfile(0);
-    *(PlayerProfile::tProfile**)((char*)&mDefaultProfile + 0x10) = PlayerProfile::GetProfile(1);
-}
 
 // FUNCTION: SWBF2 0x0061c4d0
 double ConvertMouseScaleToRawScale(float fScale, int iMode)

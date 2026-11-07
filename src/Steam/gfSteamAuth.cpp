@@ -576,7 +576,7 @@ bool gf::friends::isFriend(const galaxy::api::GalaxyID& id)
 // std::_Hash<std::_Umap_traits<unsigned __int64,std::basic_string<char,std::char_traits<char>,std::allocator<char> >,std::_Uhash_compare<unsigned __int64,std::hash<unsigned __int64>,std::equal_to<unsigned __int64> >,std::allocator<std::pair<unsigned __int64 const ,std::basic_string<char,std::char_traits<char>,std::allocator<char> > > >,0> >::equal_range
 
 // TEMPLATE: SWBF2 0x0052f800
-// std::_Hash<std::_Umap_traits<unsigned __int64,std::basic_string<char,std::char_traits<char>,std::allocator<char> >,std::_Uhash_compare<unsigned __int64,std::hash<unsigned __int64>,std::equal_to<unsigned __int64> >,std::allocator<std::pair<unsigned __int64 const ,std::basic_string<char,std::char_traits<char>,std::allocator<char> > > >,0> >::find
+// std::_Hash<std::_Umap_traits<unsigned __int64,std::basic_string<char,std::char_traits<char>,std::allocator<char> >,std::_Uhash_compare<unsigned __int64,std::hash<unsigned __int64>,std::equal_to<unsigned __int64> >,std::allocator<std::pair<unsigned __int64 const ,std::basic_string<char,std::char_traits<char>,std::allocator<char> > > >,0> >::lower_bound
 
 // TEMPLATE: SWBF2 0x005300e0
 // std::_Hash<std::_Umap_traits<unsigned __int64,std::basic_string<char,std::char_traits<char>,std::allocator<char> >,std::_Uhash_compare<unsigned __int64,std::hash<unsigned __int64>,std::equal_to<unsigned __int64> >,std::allocator<std::pair<unsigned __int64 const ,std::basic_string<char,std::char_traits<char>,std::allocator<char> > > >,0> >::emplace<std::piecewise_construct_t const &,std::tuple<unsigned __int64 const &>,std::tuple<> >

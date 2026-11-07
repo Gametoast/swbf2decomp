@@ -52,7 +52,7 @@
 #include "EntityPath.h"
 #include "EntityPathFollower.h"
 #include "WeaponGrapplingHook.h"
-#include "WeaponCannonInstance.h"
+#include "WeaponCannon.h"
 
 #include <float.h>
 #include <math.h>

@@ -951,6 +951,10 @@
       <BufferSecurityCheck>false</BufferSecurityCheck>
       <WholeProgramOptimization Condition="'$(Configuration)'=='Release'">true</WholeProgramOptimization>
     </ClCompile>
+    <ClCompile Include="src\Battlefront2\Source\HUDDirections.cpp">
+      <BufferSecurityCheck>false</BufferSecurityCheck>
+      <WholeProgramOptimization Condition="'$(Configuration)'=='Release'">true</WholeProgramOptimization>
+    </ClCompile>
     <ClCompile Include="src\Battlefront2\Source\HUDElement.cpp">
       <BufferSecurityCheck>false</BufferSecurityCheck>
       <WholeProgramOptimization Condition="'$(Configuration)'=='Release'">true</WholeProgramOptimization>
@@ -1681,6 +1685,10 @@
       <BufferSecurityCheck>false</BufferSecurityCheck>
       <WholeProgramOptimization Condition="'$(Configuration)'=='Release'">true</WholeProgramOptimization>
     </ClCompile>
+    <ClCompile Include="src\Battlefront2\Source\TeamDisplay.cpp">
+      <BufferSecurityCheck>false</BufferSecurityCheck>
+      <WholeProgramOptimization Condition="'$(Configuration)'=='Release'">true</WholeProgramOptimization>
+    </ClCompile>
     <ClCompile Include="src\Battlefront2\Source\TeamManager.cpp">
       <BufferSecurityCheck>false</BufferSecurityCheck>
       <WholeProgramOptimization Condition="'$(Configuration)'=='Release'">true</WholeProgramOptimization>
@@ -2111,6 +2119,10 @@
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <OmitDefaultLibName>true</OmitDefaultLibName>
     </ClCompile>
+    <ClCompile Include="src\PebbleFL\Common\PblBuildType.cpp">
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <OmitDefaultLibName>true</OmitDefaultLibName>
+    </ClCompile>
     <ClCompile Include="src\PebbleFL\Common\PblChunk.cpp">
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <OmitDefaultLibName>true</OmitDefaultLibName>
@@ -2187,555 +2199,7 @@
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <OmitDefaultLibName>true</OmitDefaultLibName>
     </ClCompile>
-    <ClCompile Include="src\PebbleFL\Common\pblRef.cpp">
-      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
-      <OmitDefaultLibName>true</OmitDefaultLibName>
-    </ClCompile>
     <ClCompile Include="src\PebbleFL\pc\pcPblMatrix.cpp">
-      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
-      <OmitDefaultLibName>true</OmitDefaultLibName>
-    </ClCompile>
-    <ClCompile Include="src\RedEngineFL\Application\RedPath.cpp" />
-    <ClCompile Include="src\RedEngineFL\Application\RedTerrain.cpp" />
-    <ClCompile Include="src\RedEngineFL\Application\RedWater.cpp" />
-    <ClCompile Include="src\RedEngineFL\Application\Renderable.cpp" />
-    <ClCompile Include="src\RedEngineFL\Application\pc\crtLibrary.cpp" />
-    <ClCompile Include="src\RedEngineFL\Application\pc\pcFLRender.cpp" />
-    <ClCompile Include="src\RedEngineFL\Application\pc\pcRedDebug.cpp" />
-    <ClCompile Include="src\RedEngineFL\Application\pc\pcRedDropShadow.cpp" />
-    <ClCompile Include="src\RedEngineFL\Application\pc\pcRedParticle.cpp" />
-    <ClCompile Include="src\RedEngineFL\Application\pc\pcRedShadowProxy.cpp" />
-    <ClCompile Include="src\RedEngineFL\Application\pc\pcRedTerrain.cpp" />
-    <ClCompile Include="src\RedEngineFL\Application\pc\pcRedWater.cpp" />
-    <ClCompile Include="src\RedEngineFL\Application\pc\pcShadowQuadRenderable.cpp" />
-    <ClCompile Include="src\RedEngineFL\Graphics\PC\pcRedShader.cpp" />
-    <ClCompile Include="src\RedEngineFL\Graphics\PC\Shaders\pcClearShader.cpp" />
-    <ClCompile Include="src\RedEngineFL\Graphics\PC\Shaders\pcDecalShader.cpp" />
-    <ClCompile Include="src\RedEngineFL\Graphics\PC\Shaders\pcFilterCopyShader.cpp" />
-    <ClCompile Include="src\RedEngineFL\Graphics\PC\Shaders\pcFlareShader.cpp" />
-    <ClCompile Include="src\RedEngineFL\Graphics\PC\Shaders\pcHDRShader.cpp" />
-    <ClCompile Include="src\RedEngineFL\Graphics\PC\Shaders\pcInterfaceShader.cpp" />
-    <ClCompile Include="src\RedEngineFL\Graphics\PC\Shaders\pcLightBeamShader.cpp" />
-    <ClCompile Include="src\RedEngineFL\Graphics\PC\Shaders\pcNormalMapAdderShader.cpp" />
-    <ClCompile Include="src\RedEngineFL\Graphics\PC\Shaders\pcNormalShader.cpp" />
-    <ClCompile Include="src\RedEngineFL\Graphics\PC\Shaders\pcOceanShader.cpp" />
-    <ClCompile Include="src\RedEngineFL\Graphics\PC\Shaders\pcParticleShader.cpp" />
-    <ClCompile Include="src\RedEngineFL\Graphics\PC\Shaders\pcPerPixelDiffuseLightingShader.cpp" />
-    <ClCompile Include="src\RedEngineFL\Graphics\PC\Shaders\pcPerVertexDiffuseLightingShader.cpp" />
-    <ClCompile Include="src\RedEngineFL\Graphics\PC\Shaders\pcPreReflectionShader.cpp" />
-    <ClCompile Include="src\RedEngineFL\Graphics\PC\Shaders\pcRainShader.cpp" />
-    <ClCompile Include="src\RedEngineFL\Graphics\PC\Shaders\pcRefractionShader.cpp" />
-    <ClCompile Include="src\RedEngineFL\Graphics\PC\Shaders\pcSampleShader.cpp" />
-    <ClCompile Include="src\RedEngineFL\Graphics\PC\Shaders\pcShadowQuadShader.cpp" />
-    <ClCompile Include="src\RedEngineFL\Graphics\PC\Shaders\pcShieldShader.cpp" />
-    <ClCompile Include="src\RedEngineFL\Graphics\PC\Shaders\pcSkyFogShader.cpp" />
-    <ClCompile Include="src\RedEngineFL\Graphics\PC\Shaders\pcSpecularLightingShader.cpp" />
-    <ClCompile Include="src\RedEngineFL\Graphics\PC\Shaders\pcStencilShadowShader.cpp" />
-    <ClCompile Include="src\RedEngineFL\Graphics\PC\Shaders\pcTerrainShader.cpp" />
-    <ClCompile Include="src\RedEngineFL\Graphics\PC\Shaders\pcTerrainShader2.cpp" />
-    <ClCompile Include="src\RedEngineFL\Graphics\PC\Shaders\pcWaterShader.cpp" />
-    <ClCompile Include="src\RedEngineFL\Graphics\PC\Shaders\pcZPrepassShader.cpp" />
-    <ClCompile Include="src\RedEngineFL\Graphics\PC\StateManager_DX.cpp" />
-    <ClCompile Include="src\RedEngineFL\Graphics\PC\pcRedAutoSettings.cpp" />
-    <ClCompile Include="src\RedEngineFL\Graphics\PC\pcRedDeviceEnumerator.cpp" />
-    <ClCompile Include="src\RedEngineFL\Graphics\PC\pcRedIndexBuffer.cpp" />
-    <ClCompile Include="src\RedEngineFL\Graphics\PC\pcRedPixelShader.cpp" />
-    <ClCompile Include="src\RedEngineFL\Graphics\PC\pcRedPrimitive.cpp" />
-    <ClCompile Include="src\RedEngineFL\Graphics\PC\pcRedRenderer.cpp" />
-    <ClCompile Include="src\RedEngineFL\Graphics\PC\pcRedSegment.cpp" />
-    <ClCompile Include="src\RedEngineFL\Graphics\PC\pcRedStencilShadow.cpp" />
-    <ClCompile Include="src\RedEngineFL\Graphics\PC\pcRedTexture.cpp" />
-    <ClCompile Include="src\RedEngineFL\Graphics\PC\pcRedFootprint.cpp" />
-    <ClCompile Include="src\RedEngineFL\Graphics\PC\pcRedVertexBuffer.cpp" />
-    <ClCompile Include="src\RedEngineFL\Graphics\PC\pcRedVertexCache.cpp" />
-    <ClCompile Include="src\RedEngineFL\Graphics\PC\pcRedVertexFormat.cpp" />
-    <ClCompile Include="src\RedEngineFL\Graphics\PC\pcRedVertexShader.cpp" />
-    <ClCompile Include="src\RedEngineFL\Graphics\RedAmbientLight.cpp" />
-    <ClCompile Include="src\RedEngineFL\Graphics\RedCamera.cpp" />
-    <ClCompile Include="src\RedEngineFL\Graphics\RedColor.cpp" />
-    <ClCompile Include="src\RedEngineFL\Graphics\RedDirectionalLight.cpp" />
-    <ClCompile Include="src\RedEngineFL\Graphics\RedLight.cpp" />
-    <ClCompile Include="src\RedEngineFL\Graphics\RedModel.cpp" />
-    <ClCompile Include="src\RedEngineFL\Graphics\RedOmniLight.cpp" />
-    <ClCompile Include="src\RedEngineFL\Graphics\RedPose.cpp" />
-    <ClCompile Include="src\RedEngineFL\Graphics\RedShadingState.cpp" />
-    <ClCompile Include="src\RedEngineFL\Graphics\RedShadowRegion.cpp" />
-    <ClCompile Include="src\RedEngineFL\Graphics\RedSkeleton.cpp" />
-    <ClCompile Include="src\RedEngineFL\Graphics\RedSpotLight.cpp" />
-    <ClCompile Include="src\RedEngineFL\Interface\Red3DModelAnimator.cpp" />
-    <ClCompile Include="src\RedEngineFL\Interface\Red3DModelElement.cpp" />
-    <ClCompile Include="src\RedEngineFL\Interface\Red3DModelElementLite.cpp" />
-    <ClCompile Include="src\RedEngineFL\Interface\RedBitmapElement.cpp" />
-    <ClCompile Include="src\RedEngineFL\Interface\RedBorderElement.cpp" />
-    <ClCompile Include="src\RedEngineFL\Interface\RedFont.cpp" />
-    <ClCompile Include="src\RedEngineFL\Interface\RedGlyphMemoryManager.cpp" />
-    <ClCompile Include="src\RedEngineFL\Interface\RedGroupElement.cpp" />
-    <ClCompile Include="src\RedEngineFL\Interface\RedHotSpot.cpp" />
-    <ClCompile Include="src\RedEngineFL\Interface\RedIFScreen.cpp" />
-    <ClCompile Include="src\RedEngineFL\Interface\RedInterfaceElement.cpp" />
-    <ClCompile Include="src\RedEngineFL\Interface\RedInterfaceScreen.cpp" />
-    <ClCompile Include="src\RedEngineFL\Interface\RedShadowBlob.cpp" />
-    <ClCompile Include="src\RedEngineFL\Interface\RedTextElement.cpp" />
-    <ClCompile Include="src\RedEngineFL\Interface\RedVectorElement.cpp" />
-    <ClCompile Include="src\RedEngineFL\Interface\pc\pcRedBitmapElement.cpp" />
-    <ClCompile Include="src\RedEngineFL\Interface\pc\pcRedGlyphCacheElement.cpp" />
-    <ClCompile Include="src\RedEngineFL\Interface\pc\pcRedMaskedBitmapElement.cpp" />
-    <ClCompile Include="src\RedEngineFL\Interface\pc\pcRedVectorElement.cpp" />
-    <ClCompile Include="src\RedEngineFL\Memory\RedMemory.cpp" />
-    <ClCompile Include="src\RedEngineFL\Memory\RedMemoryPool.cpp" />
-    <ClCompile Include="src\RedEngineFL\Memory\coreLeafTypes.cpp" />
-    <ClCompile Include="src\RedEngineFL\Portals\Portal.cpp" />
-    <ClCompile Include="src\RedEngineFL\Util\RedAnimation.cpp" />
-    <ClCompile Include="src\RedEngineFL\Util\RedCommandConsole.cpp" />
-    <ClCompile Include="src\RedEngineFL\Util\RedConsole.cpp" />
-    <ClCompile Include="src\RedEngineFL\Util\RedLocalizeDB.cpp" />
-    <ClCompile Include="src\RedEngineFL\Util\RedLodManager.cpp" />
-    <ClCompile Include="src\RedEngineFL\Util\RedMissionLog.cpp" />
-    <ClCompile Include="src\RedEngineFL\Util\RedRegion.cpp" />
-    <ClCompile Include="src\RedEngineFL\Util\RedSceneManager.cpp" />
-    <ClCompile Include="src\RedEngineFL\Util\RedSceneObject.cpp" />
-    <ClCompile Include="src\RedEngineFL\Util\RedScreenShot.cpp" />
-    <ClCompile Include="src\RedEngineFL\Util\RedWarning.cpp" />
-    <ClCompile Include="src\RedEngineFL\Util\ext\Allocator.cpp" />
-    <ClCompile Include="src\RedEngineFL\Util\ext\Globals.cpp" />
-    <ClCompile Include="src\RedEngineFL\Util\ext\ListAllocator.cpp" />
-    <ClCompile Include="src\RedEngineFL\Util\pc\pcRedProfile.cpp" />
-    <ClCompile Include="src\RedEngineFL\geometry\IntersectionOps.cpp" />
-    <ClCompile Include="src\RedEngineFL\geometry\PolyPolyTest2D.cpp" />
-    <ClCompile Include="src\RedEngineFL\geometry\Primitives.cpp" />
-    <ClCompile Include="src\RedEngineFL\input\RedInputEventHandler.cpp" />
-    <ClCompile Include="src\RedEngineFL\input\pc\pcRedInputManager.cpp" />
-    <ClCompile Include="src\RedEngineFL\input\pc\pcRedJoystick.cpp" />
-    <ClCompile Include="src\RedEngineFL\input\pc\pcRedKeyboard.cpp" />
-    <ClCompile Include="src\RedEngineFL\input\pc\pcRedMouse.cpp" />
-    <ClCompile Include="src\RedEngineFL\movie\RedCircularBuffer.cpp" />
-    <ClCompile Include="src\RedEngineFL\movie\RedFileAsync.cpp" />
-    <ClCompile Include="src\RedEngineFL\movie\RedMovie.cpp" />
-    <ClCompile Include="src\RedEngineFL\movie\RedMoviePlayerBase.cpp" />
-    <ClCompile Include="src\RedEngineFL\movie\RedMoviePlayerRenderer.cpp" />
-    <ClCompile Include="src\RedEngineFL\movie\pc\pcRedMoviePlayer.cpp" />
-    <ClCompile Include="src\SoundFL\source\sndallocbitmap.cpp">
-      <InlineFunctionExpansion Condition="'$(Configuration)'=='Release'">AnySuitable</InlineFunctionExpansion>
-      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
-      <OmitDefaultLibName>true</OmitDefaultLibName>
-    </ClCompile>
-    <ClCompile Include="src\SoundFL\source\sndbufferio.cpp">
-      <InlineFunctionExpansion Condition="'$(Configuration)'=='Release'">AnySuitable</InlineFunctionExpansion>
-      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
-      <OmitDefaultLibName>true</OmitDefaultLibName>
-    </ClCompile>
-    <ClCompile Include="src\SoundFL\source\sndbus.cpp">
-      <InlineFunctionExpansion Condition="'$(Configuration)'=='Release'">AnySuitable</InlineFunctionExpansion>
-      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
-      <OmitDefaultLibName>true</OmitDefaultLibName>
-    </ClCompile>
-    <ClCompile Include="src\SoundFL\source\snddsp.cpp">
-      <InlineFunctionExpansion Condition="'$(Configuration)'=='Release'">AnySuitable</InlineFunctionExpansion>
-      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
-      <OmitDefaultLibName>true</OmitDefaultLibName>
-    </ClCompile>
-    <ClCompile Include="src\SoundFL\source\sndenginebase.cpp">
-      <InlineFunctionExpansion Condition="'$(Configuration)'=='Release'">AnySuitable</InlineFunctionExpansion>
-      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
-      <OmitDefaultLibName>true</OmitDefaultLibName>
-    </ClCompile>
-    <ClCompile Include="src\SoundFL\source\sndfile.cpp">
-      <InlineFunctionExpansion Condition="'$(Configuration)'=='Release'">AnySuitable</InlineFunctionExpansion>
-      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
-      <OmitDefaultLibName>true</OmitDefaultLibName>
-    </ClCompile>
-    <ClCompile Include="src\SoundFL\source\sndfileplatformbase.cpp">
-      <InlineFunctionExpansion Condition="'$(Configuration)'=='Release'">AnySuitable</InlineFunctionExpansion>
-      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
-      <OmitDefaultLibName>true</OmitDefaultLibName>
-    </ClCompile>
-    <ClCompile Include="src\SoundFL\source\sndfreelist.cpp">
-      <InlineFunctionExpansion Condition="'$(Configuration)'=='Release'">AnySuitable</InlineFunctionExpansion>
-      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
-      <OmitDefaultLibName>true</OmitDefaultLibName>
-    </ClCompile>
-    <ClCompile Include="src\SoundFL\source\sndglobals.cpp">
-      <InlineFunctionExpansion Condition="'$(Configuration)'=='Release'">AnySuitable</InlineFunctionExpansion>
-      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
-      <OmitDefaultLibName>true</OmitDefaultLibName>
-    </ClCompile>
-    <ClCompile Include="src\SoundFL\source\sndgsm.cpp">
-      <InlineFunctionExpansion Condition="'$(Configuration)'=='Release'">AnySuitable</InlineFunctionExpansion>
-      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
-      <OmitDefaultLibName>true</OmitDefaultLibName>
-    </ClCompile>
-    <ClCompile Include="src\SoundFL\source\sndi3dl2reverb.cpp">
-      <InlineFunctionExpansion Condition="'$(Configuration)'=='Release'">AnySuitable</InlineFunctionExpansion>
-      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
-      <OmitDefaultLibName>true</OmitDefaultLibName>
-    </ClCompile>
-    <ClCompile Include="src\SoundFL\source\sndi3dl2reverbpreset.cpp">
-      <InlineFunctionExpansion Condition="'$(Configuration)'=='Release'">AnySuitable</InlineFunctionExpansion>
-      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
-      <OmitDefaultLibName>true</OmitDefaultLibName>
-    </ClCompile>
-    <ClCompile Include="src\SoundFL\source\sndlistenerbase.cpp">
-      <InlineFunctionExpansion Condition="'$(Configuration)'=='Release'">AnySuitable</InlineFunctionExpansion>
-      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
-      <OmitDefaultLibName>true</OmitDefaultLibName>
-    </ClCompile>
-    <ClCompile Include="src\SoundFL\source\sndobjectlist.cpp">
-      <InlineFunctionExpansion Condition="'$(Configuration)'=='Release'">AnySuitable</InlineFunctionExpansion>
-      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
-      <OmitDefaultLibName>true</OmitDefaultLibName>
-    </ClCompile>
-    <ClCompile Include="src\SoundFL\source\sndobjectweightlist.cpp">
-      <InlineFunctionExpansion Condition="'$(Configuration)'=='Release'">AnySuitable</InlineFunctionExpansion>
-      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
-      <OmitDefaultLibName>true</OmitDefaultLibName>
-    </ClCompile>
-    <ClCompile Include="src\SoundFL\source\sndparametergraph.cpp">
-      <InlineFunctionExpansion Condition="'$(Configuration)'=='Release'">AnySuitable</InlineFunctionExpansion>
-      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
-      <OmitDefaultLibName>true</OmitDefaultLibName>
-    </ClCompile>
-    <ClCompile Include="src\SoundFL\source\sndqueue.cpp">
-      <InlineFunctionExpansion Condition="'$(Configuration)'=='Release'">AnySuitable</InlineFunctionExpansion>
-      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
-      <OmitDefaultLibName>true</OmitDefaultLibName>
-    </ClCompile>
-    <ClCompile Include="src\SoundFL\source\sndqueuelock.cpp">
-      <InlineFunctionExpansion Condition="'$(Configuration)'=='Release'">AnySuitable</InlineFunctionExpansion>
-      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
-      <OmitDefaultLibName>true</OmitDefaultLibName>
-    </ClCompile>
-    <ClCompile Include="src\SoundFL\source\sndsamplebankbase.cpp">
-      <InlineFunctionExpansion Condition="'$(Configuration)'=='Release'">AnySuitable</InlineFunctionExpansion>
-      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
-      <OmitDefaultLibName>true</OmitDefaultLibName>
-    </ClCompile>
-    <ClCompile Include="src\SoundFL\source\sndsampleinfo.cpp">
-      <InlineFunctionExpansion Condition="'$(Configuration)'=='Release'">AnySuitable</InlineFunctionExpansion>
-      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
-      <OmitDefaultLibName>true</OmitDefaultLibName>
-    </ClCompile>
-    <ClCompile Include="src\SoundFL\source\sndsound.cpp">
-      <InlineFunctionExpansion Condition="'$(Configuration)'=='Release'">AnySuitable</InlineFunctionExpansion>
-      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
-      <OmitDefaultLibName>true</OmitDefaultLibName>
-    </ClCompile>
-    <ClCompile Include="src\SoundFL\source\sndsoundlayered.cpp">
-      <InlineFunctionExpansion Condition="'$(Configuration)'=='Release'">AnySuitable</InlineFunctionExpansion>
-      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
-      <OmitDefaultLibName>true</OmitDefaultLibName>
-    </ClCompile>
-    <ClCompile Include="src\SoundFL\source\sndsoundparameterized.cpp">
-      <InlineFunctionExpansion Condition="'$(Configuration)'=='Release'">AnySuitable</InlineFunctionExpansion>
-      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
-      <OmitDefaultLibName>true</OmitDefaultLibName>
-    </ClCompile>
-    <ClCompile Include="src\SoundFL\source\sndsoundproperties.cpp">
-      <InlineFunctionExpansion Condition="'$(Configuration)'=='Release'">AnySuitable</InlineFunctionExpansion>
-      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
-      <OmitDefaultLibName>true</OmitDefaultLibName>
-    </ClCompile>
-    <ClCompile Include="src\SoundFL\source\sndsoundstream.cpp">
-      <InlineFunctionExpansion Condition="'$(Configuration)'=='Release'">AnySuitable</InlineFunctionExpansion>
-      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
-      <OmitDefaultLibName>true</OmitDefaultLibName>
-    </ClCompile>
-    <ClCompile Include="src\SoundFL\source\sndsource.cpp">
-      <InlineFunctionExpansion Condition="'$(Configuration)'=='Release'">AnySuitable</InlineFunctionExpansion>
-      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
-      <OmitDefaultLibName>true</OmitDefaultLibName>
-    </ClCompile>
-    <ClCompile Include="src\SoundFL\source\sndsource2d.cpp">
-      <InlineFunctionExpansion Condition="'$(Configuration)'=='Release'">AnySuitable</InlineFunctionExpansion>
-      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
-      <OmitDefaultLibName>true</OmitDefaultLibName>
-    </ClCompile>
-    <ClCompile Include="src\SoundFL\source\sndsource2d3d.cpp">
-      <InlineFunctionExpansion Condition="'$(Configuration)'=='Release'">AnySuitable</InlineFunctionExpansion>
-      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
-      <OmitDefaultLibName>true</OmitDefaultLibName>
-    </ClCompile>
-    <ClCompile Include="src\SoundFL\source\sndsource3d.cpp">
-      <InlineFunctionExpansion Condition="'$(Configuration)'=='Release'">AnySuitable</InlineFunctionExpansion>
-      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
-      <OmitDefaultLibName>true</OmitDefaultLibName>
-    </ClCompile>
-    <ClCompile Include="src\SoundFL\source\sndsourcebus.cpp">
-      <InlineFunctionExpansion Condition="'$(Configuration)'=='Release'">AnySuitable</InlineFunctionExpansion>
-      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
-      <OmitDefaultLibName>true</OmitDefaultLibName>
-    </ClCompile>
-    <ClCompile Include="src\SoundFL\source\sndsourcei3dl2.cpp">
-      <InlineFunctionExpansion Condition="'$(Configuration)'=='Release'">AnySuitable</InlineFunctionExpansion>
-      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
-      <OmitDefaultLibName>true</OmitDefaultLibName>
-    </ClCompile>
-    <ClCompile Include="src\SoundFL\source\sndsourcetransport.cpp">
-      <InlineFunctionExpansion Condition="'$(Configuration)'=='Release'">AnySuitable</InlineFunctionExpansion>
-      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
-      <OmitDefaultLibName>true</OmitDefaultLibName>
-    </ClCompile>
-    <ClCompile Include="src\SoundFL\source\sndsourcetransportcontrol.cpp">
-      <InlineFunctionExpansion Condition="'$(Configuration)'=='Release'">AnySuitable</InlineFunctionExpansion>
-      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
-      <OmitDefaultLibName>true</OmitDefaultLibName>
-    </ClCompile>
-    <ClCompile Include="src\SoundFL\source\sndsourcevariation.cpp">
-      <InlineFunctionExpansion Condition="'$(Configuration)'=='Release'">AnySuitable</InlineFunctionExpansion>
-      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
-      <OmitDefaultLibName>true</OmitDefaultLibName>
-    </ClCompile>
-    <ClCompile Include="src\SoundFL\source\sndsourcevirtual.cpp">
-      <InlineFunctionExpansion Condition="'$(Configuration)'=='Release'">AnySuitable</InlineFunctionExpansion>
-      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
-      <OmitDefaultLibName>true</OmitDefaultLibName>
-    </ClCompile>
-    <ClCompile Include="src\SoundFL\source\sndspace.cpp">
-      <InlineFunctionExpansion Condition="'$(Configuration)'=='Release'">AnySuitable</InlineFunctionExpansion>
-      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
-      <OmitDefaultLibName>true</OmitDefaultLibName>
-    </ClCompile>
-    <ClCompile Include="src\SoundFL\source\sndstreamagc.cpp">
-      <InlineFunctionExpansion Condition="'$(Configuration)'=='Release'">AnySuitable</InlineFunctionExpansion>
-      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
-      <OmitDefaultLibName>true</OmitDefaultLibName>
-    </ClCompile>
-    <ClCompile Include="src\SoundFL\source\sndstreambase.cpp">
-      <InlineFunctionExpansion Condition="'$(Configuration)'=='Release'">AnySuitable</InlineFunctionExpansion>
-      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
-      <OmitDefaultLibName>true</OmitDefaultLibName>
-    </ClCompile>
-    <ClCompile Include="src\SoundFL\source\sndstreamcapturesourcebase.cpp">
-      <InlineFunctionExpansion Condition="'$(Configuration)'=='Release'">AnySuitable</InlineFunctionExpansion>
-      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
-      <OmitDefaultLibName>true</OmitDefaultLibName>
-    </ClCompile>
-    <ClCompile Include="src\SoundFL\source\sndstreamcodec.cpp">
-      <InlineFunctionExpansion Condition="'$(Configuration)'=='Release'">AnySuitable</InlineFunctionExpansion>
-      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
-      <OmitDefaultLibName>true</OmitDefaultLibName>
-    </ClCompile>
-    <ClCompile Include="src\SoundFL\source\sndstreamconsumer.cpp">
-      <InlineFunctionExpansion Condition="'$(Configuration)'=='Release'">AnySuitable</InlineFunctionExpansion>
-      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
-      <OmitDefaultLibName>true</OmitDefaultLibName>
-    </ClCompile>
-    <ClCompile Include="src\SoundFL\source\sndstreamformat.cpp">
-      <InlineFunctionExpansion Condition="'$(Configuration)'=='Release'">AnySuitable</InlineFunctionExpansion>
-      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
-      <OmitDefaultLibName>true</OmitDefaultLibName>
-    </ClCompile>
-    <ClCompile Include="src\SoundFL\source\sndstreamgsmdecoder.cpp">
-      <InlineFunctionExpansion Condition="'$(Configuration)'=='Release'">AnySuitable</InlineFunctionExpansion>
-      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
-      <OmitDefaultLibName>true</OmitDefaultLibName>
-    </ClCompile>
-    <ClCompile Include="src\SoundFL\source\sndstreamgsmencoder.cpp">
-      <InlineFunctionExpansion Condition="'$(Configuration)'=='Release'">AnySuitable</InlineFunctionExpansion>
-      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
-      <OmitDefaultLibName>true</OmitDefaultLibName>
-    </ClCompile>
-    <ClCompile Include="src\SoundFL\source\gsm-1.0.10\gsm_encode.c">
-      <InlineFunctionExpansion Condition="'$(Configuration)'=='Release'">AnySuitable</InlineFunctionExpansion>
-      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
-      <OmitDefaultLibName>true</OmitDefaultLibName>
-    </ClCompile>
-    <ClCompile Include="src\SoundFL\source\gsm-1.0.10\long_term.c">
-      <InlineFunctionExpansion Condition="'$(Configuration)'=='Release'">AnySuitable</InlineFunctionExpansion>
-      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
-      <OmitDefaultLibName>true</OmitDefaultLibName>
-    </ClCompile>
-    <ClCompile Include="src\SoundFL\source\gsm-1.0.10\short_term.c">
-      <InlineFunctionExpansion Condition="'$(Configuration)'=='Release'">AnySuitable</InlineFunctionExpansion>
-      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
-      <OmitDefaultLibName>true</OmitDefaultLibName>
-    </ClCompile>
-    <ClCompile Include="src\SoundFL\source\gsm-1.0.10\gsm_decode.c">
-      <InlineFunctionExpansion Condition="'$(Configuration)'=='Release'">AnySuitable</InlineFunctionExpansion>
-      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
-      <OmitDefaultLibName>true</OmitDefaultLibName>
-    </ClCompile>
-    <ClCompile Include="src\SoundFL\source\gsm-1.0.10\gsm_option.c">
-      <InlineFunctionExpansion Condition="'$(Configuration)'=='Release'">AnySuitable</InlineFunctionExpansion>
-      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
-      <OmitDefaultLibName>true</OmitDefaultLibName>
-    </ClCompile>
-    <ClCompile Include="src\SoundFL\source\sndstreamhighlowpass.cpp">
-      <InlineFunctionExpansion Condition="'$(Configuration)'=='Release'">AnySuitable</InlineFunctionExpansion>
-      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
-      <OmitDefaultLibName>true</OmitDefaultLibName>
-    </ClCompile>
-    <ClCompile Include="src\SoundFL\source\sndstreamimaadpcmdecoder.cpp">
-      <InlineFunctionExpansion Condition="'$(Configuration)'=='Release'">AnySuitable</InlineFunctionExpansion>
-      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
-      <OmitDefaultLibName>true</OmitDefaultLibName>
-    </ClCompile>
-    <ClCompile Include="src\SoundFL\source\sndstreammixer.cpp">
-      <InlineFunctionExpansion Condition="'$(Configuration)'=='Release'">AnySuitable</InlineFunctionExpansion>
-      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
-      <OmitDefaultLibName>true</OmitDefaultLibName>
-    </ClCompile>
-    <ClCompile Include="src\SoundFL\source\sndstreamnode.cpp">
-      <InlineFunctionExpansion Condition="'$(Configuration)'=='Release'">AnySuitable</InlineFunctionExpansion>
-      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
-      <OmitDefaultLibName>true</OmitDefaultLibName>
-    </ClCompile>
-    <ClCompile Include="src\SoundFL\source\sndstreampacketio.cpp">
-      <InlineFunctionExpansion Condition="'$(Configuration)'=='Release'">AnySuitable</InlineFunctionExpansion>
-      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
-      <OmitDefaultLibName>true</OmitDefaultLibName>
-    </ClCompile>
-    <ClCompile Include="src\SoundFL\source\sndstreamresampler.cpp">
-      <InlineFunctionExpansion Condition="'$(Configuration)'=='Release'">AnySuitable</InlineFunctionExpansion>
-      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
-      <OmitDefaultLibName>true</OmitDefaultLibName>
-    </ClCompile>
-    <ClCompile Include="src\SoundFL\source\sndstreamsource.cpp">
-      <InlineFunctionExpansion Condition="'$(Configuration)'=='Release'">AnySuitable</InlineFunctionExpansion>
-      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
-      <OmitDefaultLibName>true</OmitDefaultLibName>
-    </ClCompile>
-    <ClCompile Include="src\SoundFL\source\sndstreamsourcememory.cpp">
-      <InlineFunctionExpansion Condition="'$(Configuration)'=='Release'">AnySuitable</InlineFunctionExpansion>
-      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
-      <OmitDefaultLibName>true</OmitDefaultLibName>
-    </ClCompile>
-    <ClCompile Include="src\SoundFL\source\sndstreamsourceproducer.cpp">
-      <InlineFunctionExpansion Condition="'$(Configuration)'=='Release'">AnySuitable</InlineFunctionExpansion>
-      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
-      <OmitDefaultLibName>true</OmitDefaultLibName>
-    </ClCompile>
-    <ClCompile Include="src\SoundFL\source\sndstreamsplitter.cpp">
-      <InlineFunctionExpansion Condition="'$(Configuration)'=='Release'">AnySuitable</InlineFunctionExpansion>
-      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
-      <OmitDefaultLibName>true</OmitDefaultLibName>
-    </ClCompile>
-    <ClCompile Include="src\SoundFL\source\sndstreamvad.cpp">
-      <InlineFunctionExpansion Condition="'$(Configuration)'=='Release'">AnySuitable</InlineFunctionExpansion>
-      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
-      <OmitDefaultLibName>true</OmitDefaultLibName>
-    </ClCompile>
-    <ClCompile Include="src\SoundFL\source\sndsubstreamsplitter.cpp">
-      <InlineFunctionExpansion Condition="'$(Configuration)'=='Release'">AnySuitable</InlineFunctionExpansion>
-      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
-      <OmitDefaultLibName>true</OmitDefaultLibName>
-    </ClCompile>
-    <ClCompile Include="src\SoundFL\source\sndthreadupdate.cpp">
-      <InlineFunctionExpansion Condition="'$(Configuration)'=='Release'">AnySuitable</InlineFunctionExpansion>
-      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
-      <OmitDefaultLibName>true</OmitDefaultLibName>
-    </ClCompile>
-    <ClCompile Include="src\SoundFL\source\sndvoicebase.cpp">
-      <InlineFunctionExpansion Condition="'$(Configuration)'=='Release'">AnySuitable</InlineFunctionExpansion>
-      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
-      <OmitDefaultLibName>true</OmitDefaultLibName>
-    </ClCompile>
-    <ClCompile Include="src\SoundFL\source\sndvoicehardware.cpp">
-      <InlineFunctionExpansion Condition="'$(Configuration)'=='Release'">AnySuitable</InlineFunctionExpansion>
-      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
-      <OmitDefaultLibName>true</OmitDefaultLibName>
-    </ClCompile>
-    <ClCompile Include="src\SoundFL\source\sndvoicevirtual.cpp">
-      <InlineFunctionExpansion Condition="'$(Configuration)'=='Release'">AnySuitable</InlineFunctionExpansion>
-      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
-      <OmitDefaultLibName>true</OmitDefaultLibName>
-    </ClCompile>
-    <ClCompile Include="src\SoundFL\source\sndvoicevirtualmanager.cpp">
-      <InlineFunctionExpansion Condition="'$(Configuration)'=='Release'">AnySuitable</InlineFunctionExpansion>
-      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
-      <OmitDefaultLibName>true</OmitDefaultLibName>
-    </ClCompile>
-    <ClCompile Include="src\SoundFL\source\win\snddsbuffer.cpp">
-      <InlineFunctionExpansion Condition="'$(Configuration)'=='Release'">AnySuitable</InlineFunctionExpansion>
-      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
-      <OmitDefaultLibName>true</OmitDefaultLibName>
-    </ClCompile>
-    <ClCompile Include="src\SoundFL\source\win\snddsbufferrenderer.cpp">
-      <InlineFunctionExpansion Condition="'$(Configuration)'=='Release'">AnySuitable</InlineFunctionExpansion>
-      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
-      <OmitDefaultLibName>true</OmitDefaultLibName>
-    </ClCompile>
-    <ClCompile Include="src\SoundFL\source\win\snddsdeviceenumerator.cpp">
-      <InlineFunctionExpansion Condition="'$(Configuration)'=='Release'">AnySuitable</InlineFunctionExpansion>
-      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
-      <OmitDefaultLibName>true</OmitDefaultLibName>
-    </ClCompile>
-    <ClCompile Include="src\SoundFL\source\win\snddsdmo.cpp">
-      <InlineFunctionExpansion Condition="'$(Configuration)'=='Release'">AnySuitable</InlineFunctionExpansion>
-      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
-      <OmitDefaultLibName>true</OmitDefaultLibName>
-    </ClCompile>
-    <ClCompile Include="src\SoundFL\source\win\snddsmediabuffer.cpp">
-      <InlineFunctionExpansion Condition="'$(Configuration)'=='Release'">AnySuitable</InlineFunctionExpansion>
-      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
-      <OmitDefaultLibName>true</OmitDefaultLibName>
-    </ClCompile>
-    <ClCompile Include="src\SoundFL\source\win\sndengine.cpp">
-      <InlineFunctionExpansion Condition="'$(Configuration)'=='Release'">AnySuitable</InlineFunctionExpansion>
-      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
-      <OmitDefaultLibName>true</OmitDefaultLibName>
-    </ClCompile>
-    <ClCompile Include="src\SoundFL\source\win\sndfileplatform.cpp">
-      <InlineFunctionExpansion Condition="'$(Configuration)'=='Release'">AnySuitable</InlineFunctionExpansion>
-      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
-      <OmitDefaultLibName>true</OmitDefaultLibName>
-    </ClCompile>
-    <ClCompile Include="src\SoundFL\source\win\sndlistener.cpp">
-      <InlineFunctionExpansion Condition="'$(Configuration)'=='Release'">AnySuitable</InlineFunctionExpansion>
-      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
-      <OmitDefaultLibName>true</OmitDefaultLibName>
-    </ClCompile>
-    <ClCompile Include="src\SoundFL\source\win\sndsample.cpp">
-      <InlineFunctionExpansion Condition="'$(Configuration)'=='Release'">AnySuitable</InlineFunctionExpansion>
-      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
-      <OmitDefaultLibName>true</OmitDefaultLibName>
-    </ClCompile>
-    <ClCompile Include="src\SoundFL\source\win\sndsamplebank.cpp">
-      <InlineFunctionExpansion Condition="'$(Configuration)'=='Release'">AnySuitable</InlineFunctionExpansion>
-      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
-      <OmitDefaultLibName>true</OmitDefaultLibName>
-    </ClCompile>
-    <ClCompile Include="src\SoundFL\source\win\sndsemaphore.cpp">
-      <InlineFunctionExpansion Condition="'$(Configuration)'=='Release'">AnySuitable</InlineFunctionExpansion>
-      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
-      <OmitDefaultLibName>true</OmitDefaultLibName>
-    </ClCompile>
-    <ClCompile Include="src\SoundFL\source\win\sndsoftoutput.cpp">
-      <InlineFunctionExpansion Condition="'$(Configuration)'=='Release'">AnySuitable</InlineFunctionExpansion>
-      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
-      <OmitDefaultLibName>true</OmitDefaultLibName>
-    </ClCompile>
-    <ClCompile Include="src\SoundFL\source\win\sndstream.cpp">
-      <InlineFunctionExpansion Condition="'$(Configuration)'=='Release'">AnySuitable</InlineFunctionExpansion>
-      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
-      <OmitDefaultLibName>true</OmitDefaultLibName>
-    </ClCompile>
-    <ClCompile Include="src\SoundFL\source\win\sndstreamauxrenderer.cpp">
-      <InlineFunctionExpansion Condition="'$(Configuration)'=='Release'">AnySuitable</InlineFunctionExpansion>
-      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
-      <OmitDefaultLibName>true</OmitDefaultLibName>
-    </ClCompile>
-    <ClCompile Include="src\SoundFL\source\win\sndstreamcapturesource.cpp">
-      <InlineFunctionExpansion Condition="'$(Configuration)'=='Release'">AnySuitable</InlineFunctionExpansion>
-      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
-      <OmitDefaultLibName>true</OmitDefaultLibName>
-    </ClCompile>
-    <ClCompile Include="src\SoundFL\source\win\sndstreamdsdmo.cpp">
-      <InlineFunctionExpansion Condition="'$(Configuration)'=='Release'">AnySuitable</InlineFunctionExpansion>
-      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
-      <OmitDefaultLibName>true</OmitDefaultLibName>
-    </ClCompile>
-    <ClCompile Include="src\SoundFL\source\win\sndstreamrenderer.cpp">
-      <InlineFunctionExpansion Condition="'$(Configuration)'=='Release'">AnySuitable</InlineFunctionExpansion>
-      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
-      <OmitDefaultLibName>true</OmitDefaultLibName>
-    </ClCompile>
-    <ClCompile Include="src\SoundFL\source\win\sndthread.cpp">
-      <InlineFunctionExpansion Condition="'$(Configuration)'=='Release'">AnySuitable</InlineFunctionExpansion>
-      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
-      <OmitDefaultLibName>true</OmitDefaultLibName>
-    </ClCompile>
-    <ClCompile Include="src\SoundFL\source\win\sndvoice.cpp">
-      <InlineFunctionExpansion Condition="'$(Configuration)'=='Release'">AnySuitable</InlineFunctionExpansion>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <OmitDefaultLibName>true</OmitDefaultLibName>
     </ClCompile>
@@ -2743,8 +2207,9 @@
       <BufferSecurityCheck>false</BufferSecurityCheck>
       <WholeProgramOptimization Condition="'$(Configuration)'=='Release'">true</WholeProgramOptimization>
     </ClCompile>
-    <ClCompile Include="src\Zephyr\Source\PblPrintfWrapper.cpp">
-      <InlineFunctionExpansion Condition="'$(Configuration)'=='Release'">AnySuitable</InlineFunctionExpansion>
+    <ClCompile Include="src\PebbleFL\Common\PblPrintfWrapper.cpp">
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <OmitDefaultLibName>true</OmitDefaultLibName>
     </ClCompile>
     <ClCompile Include="src\Zephyr\Source\ZephyrAnim.cpp">
       <InlineFunctionExpansion Condition="'$(Configuration)'=='Release'">AnySuitable</InlineFunctionExpansion>
@@ -2812,7 +2277,6 @@
     <ClCompile Include="src\ZlibFL\zutil.c">
       <InlineFunctionExpansion Condition="'$(Configuration)'=='Release'">AnySuitable</InlineFunctionExpansion>
     </ClCompile>
-    <ClCompile Include="src\RedEngineFL\input\pc\pcRedLogitechLCD.cpp" />
     <ClCompile Include="src\lglcd\lgLcd.cpp">
       <BufferSecurityCheck>false</BufferSecurityCheck>
       <InlineFunctionExpansion Condition="'$(Configuration)'=='Release'">AnySuitable</InlineFunctionExpansion>
@@ -3229,7 +2693,6 @@
     <ClInclude Include="src\Battlefront2\Source\WeaponAreaEffect.h" />
     <ClInclude Include="src\Battlefront2\Source\WeaponBinoculars.h" />
     <ClInclude Include="src\Battlefront2\Source\WeaponCannon.h" />
-    <ClInclude Include="src\Battlefront2\Source\WeaponCannonInstance.h" />
     <ClInclude Include="src\Battlefront2\Source\WeaponCatapult.h" />
     <ClInclude Include="src\Battlefront2\Source\WeaponDestruct.h" />
     <ClInclude Include="src\Battlefront2\Source\WeaponDetonator.h" />
@@ -3241,7 +2704,6 @@
     <ClInclude Include="src\Battlefront2\Source\WeaponLaser.h" />
     <ClInclude Include="src\Battlefront2\Source\WeaponLauncher.h" />
     <ClInclude Include="src\Battlefront2\Source\WeaponMelee.h" />
-    <ClInclude Include="src\Battlefront2\Source\WeaponMeleeInstance.h" />
     <ClInclude Include="src\Battlefront2\Source\WeaponMeleeThrow.h" />
     <ClInclude Include="src\Battlefront2\Source\WeaponRemote.h" />
     <ClInclude Include="src\Battlefront2\Source\WeaponRepair.h" />
@@ -3275,6 +2737,7 @@
     <ClInclude Include="src\LuaFL\src\lzio.h" />
     <ClInclude Include="src\PebbleFL\Common\PblAngle.h" />
     <ClInclude Include="src\PebbleFL\Common\PblBitVector.h" />
+    <ClInclude Include="src\PebbleFL\Common\PblBuildType.h" />
     <ClInclude Include="src\PebbleFL\Common\PblCatmullRom.h" />
     <ClInclude Include="src\PebbleFL\Common\PblChunk.h" />
     <ClInclude Include="src\PebbleFL\Common\PblConfig.h" />
@@ -3302,136 +2765,6 @@
     <ClInclude Include="src\PebbleFL\Common\PblUnicode.h" />
     <ClInclude Include="src\PebbleFL\Common\PblValues.h" />
     <ClInclude Include="src\PebbleFL\Common\PblVector.h" />
-    <ClInclude Include="src\RedEngineFL\Application\RedPath.h" />
-    <ClInclude Include="src\RedEngineFL\Application\RedTerrain.h" />
-    <ClInclude Include="src\RedEngineFL\Application\RedWater.h" />
-    <ClInclude Include="src\RedEngineFL\Application\Renderable.h" />
-    <ClInclude Include="src\RedEngineFL\Application\pc\crtNames.h" />
-    <ClInclude Include="src\RedEngineFL\Application\pc\pcFLRender.h" />
-    <ClInclude Include="src\RedEngineFL\Application\pc\pcRedDebug.h" />
-    <ClInclude Include="src\RedEngineFL\Application\pc\pcRedDropShadow.h" />
-    <ClInclude Include="src\RedEngineFL\Application\pc\pcRedParticle.h" />
-    <ClInclude Include="src\RedEngineFL\Application\pc\pcRedShadowProxy.h" />
-    <ClInclude Include="src\RedEngineFL\Application\pc\pcRedShape.h" />
-    <ClInclude Include="src\RedEngineFL\Application\pc\pcRedTerrain.h" />
-    <ClInclude Include="src\RedEngineFL\Application\pc\pcRenderHelpers.h" />
-    <ClInclude Include="src\RedEngineFL\Application\pc\pcRenderStateHelpers.h" />
-    <ClInclude Include="src\RedEngineFL\Application\pc\pcShadowQuadRenderable.h" />
-    <ClInclude Include="src\RedEngineFL\Graphics\PC\Shaders\pcClearShader.h" />
-    <ClInclude Include="src\RedEngineFL\Graphics\PC\Shaders\pcDecalShader.h" />
-    <ClInclude Include="src\RedEngineFL\Graphics\PC\Shaders\pcFilterCopyShader.h" />
-    <ClInclude Include="src\RedEngineFL\Graphics\PC\Shaders\pcFlareShader.h" />
-    <ClInclude Include="src\RedEngineFL\Graphics\PC\Shaders\pcHDRShader.h" />
-    <ClInclude Include="src\RedEngineFL\Graphics\PC\Shaders\pcInterfaceShader.h" />
-    <ClInclude Include="src\RedEngineFL\Graphics\PC\Shaders\pcLightBeamShader.h" />
-    <ClInclude Include="src\RedEngineFL\Graphics\PC\Shaders\pcNormalMapAdderShader.h" />
-    <ClInclude Include="src\RedEngineFL\Graphics\PC\Shaders\pcNormalShader.h" />
-    <ClInclude Include="src\RedEngineFL\Graphics\PC\Shaders\pcOceanShader.h" />
-    <ClInclude Include="src\RedEngineFL\Graphics\PC\Shaders\pcParticleShader.h" />
-    <ClInclude Include="src\RedEngineFL\Graphics\PC\Shaders\pcPerPixelDiffuseLightingShader.h" />
-    <ClInclude Include="src\RedEngineFL\Graphics\PC\Shaders\pcPerVertexDiffuseLightingShader.h" />
-    <ClInclude Include="src\RedEngineFL\Graphics\PC\Shaders\pcPreReflectionShader.h" />
-    <ClInclude Include="src\RedEngineFL\Graphics\PC\Shaders\pcRainShader.h" />
-    <ClInclude Include="src\RedEngineFL\Graphics\PC\Shaders\pcRefractionShader.h" />
-    <ClInclude Include="src\RedEngineFL\Graphics\PC\Shaders\pcSampleShader.h" />
-    <ClInclude Include="src\RedEngineFL\Graphics\PC\Shaders\pcShadowQuadShader.h" />
-    <ClInclude Include="src\RedEngineFL\Graphics\PC\Shaders\pcShieldShader.h" />
-    <ClInclude Include="src\RedEngineFL\Graphics\PC\Shaders\pcSkyFogShader.h" />
-    <ClInclude Include="src\RedEngineFL\Graphics\PC\Shaders\pcSpecularLightingShader.h" />
-    <ClInclude Include="src\RedEngineFL\Graphics\PC\Shaders\pcStencilShadowShader.h" />
-    <ClInclude Include="src\RedEngineFL\Graphics\PC\Shaders\pcTerrainShader.h" />
-    <ClInclude Include="src\RedEngineFL\Graphics\PC\Shaders\pcTerrainShader2.h" />
-    <ClInclude Include="src\RedEngineFL\Graphics\PC\Shaders\pcWaterShader.h" />
-    <ClInclude Include="src\RedEngineFL\Graphics\PC\Shaders\pcZPrepassShader.h" />
-    <ClInclude Include="src\RedEngineFL\Graphics\PC\StateManager_DX.h" />
-    <ClInclude Include="src\RedEngineFL\Graphics\PC\pcRedAutoSettings.h" />
-    <ClInclude Include="src\RedEngineFL\Graphics\PC\pcRedDeviceEnumerator.h" />
-    <ClInclude Include="src\RedEngineFL\Graphics\PC\pcRedIndexBuffer.h" />
-    <ClInclude Include="src\RedEngineFL\Graphics\PC\pcRedPixelShader.h" />
-    <ClInclude Include="src\RedEngineFL\Graphics\PC\pcRedPrimitive.h" />
-    <ClInclude Include="src\RedEngineFL\Graphics\PC\pcRedRenderer.h" />
-    <ClInclude Include="src\RedEngineFL\Graphics\PC\pcRedSegment.h" />
-    <ClInclude Include="src\RedEngineFL\Graphics\PC\pcRedShader.h" />
-    <ClInclude Include="src\RedEngineFL\Graphics\PC\pcRedStencilShadow.h" />
-    <ClInclude Include="src\RedEngineFL\Graphics\PC\pcRedTexture.h" />
-    <ClInclude Include="src\RedEngineFL\Graphics\PC\pcRedVertexBuffer.h" />
-    <ClInclude Include="src\RedEngineFL\Graphics\PC\pcRedVertexFormat.h" />
-    <ClInclude Include="src\RedEngineFL\Graphics\PC\pcRedVertexShader.h" />
-    <ClInclude Include="src\RedEngineFL\Graphics\RedAmbientLight.h" />
-    <ClInclude Include="src\RedEngineFL\Graphics\RedCamera.h" />
-    <ClInclude Include="src\RedEngineFL\Graphics\RedColor.h" />
-    <ClInclude Include="src\RedEngineFL\Graphics\RedDirectionalLight.h" />
-    <ClInclude Include="src\RedEngineFL\Graphics\RedLight.h" />
-    <ClInclude Include="src\RedEngineFL\Graphics\RedMaterial.h" />
-    <ClInclude Include="src\RedEngineFL\Graphics\RedModel.h" />
-    <ClInclude Include="src\RedEngineFL\Graphics\RedOmniLight.h" />
-    <ClInclude Include="src\RedEngineFL\Graphics\RedPose.h" />
-    <ClInclude Include="src\RedEngineFL\Graphics\RedSegment.h" />
-    <ClInclude Include="src\RedEngineFL\Graphics\RedShadingState.h" />
-    <ClInclude Include="src\RedEngineFL\Graphics\RedShadowRegion.h" />
-    <ClInclude Include="src\RedEngineFL\Graphics\RedSkeleton.h" />
-    <ClInclude Include="src\RedEngineFL\Graphics\RedSpotLight.h" />
-    <ClInclude Include="src\RedEngineFL\Graphics\RedTextureTransform.h" />
-    <ClInclude Include="src\RedEngineFL\Interface\Red3DModelAnimator.h" />
-    <ClInclude Include="src\RedEngineFL\Interface\Red3DModelElement.h" />
-    <ClInclude Include="src\RedEngineFL\Interface\Red3DModelElementLite.h" />
-    <ClInclude Include="src\RedEngineFL\Interface\RedBitmapElement.h" />
-    <ClInclude Include="src\RedEngineFL\Interface\RedBorderElement.h" />
-    <ClInclude Include="src\RedEngineFL\Interface\RedFont.h" />
-    <ClInclude Include="src\RedEngineFL\Interface\RedGlyphCacheElement.h" />
-    <ClInclude Include="src\RedEngineFL\Interface\RedGlyphMemoryManager.h" />
-    <ClInclude Include="src\RedEngineFL\Interface\RedGroupElement.h" />
-    <ClInclude Include="src\RedEngineFL\Interface\RedHotSpot.h" />
-    <ClInclude Include="src\RedEngineFL\Interface\RedIFScreen.h" />
-    <ClInclude Include="src\RedEngineFL\Interface\RedInterfaceElement.h" />
-    <ClInclude Include="src\RedEngineFL\Interface\RedInterfaceScreen.h" />
-    <ClInclude Include="src\RedEngineFL\Interface\RedMaskedBitmapElement.h" />
-    <ClInclude Include="src\RedEngineFL\Interface\RedShadowBlob.h" />
-    <ClInclude Include="src\RedEngineFL\Interface\RedTextElement.h" />
-    <ClInclude Include="src\RedEngineFL\Interface\RedVectorElement.h" />
-    <ClInclude Include="src\RedEngineFL\Memory\RedMemory.h" />
-    <ClInclude Include="src\RedEngineFL\Memory\RedMemoryPool.h" />
-    <ClInclude Include="src\RedEngineFL\Memory\engineAlloc.h" />
-    <ClInclude Include="src\RedEngineFL\Portals\Portal.h" />
-    <ClInclude Include="src\RedEngineFL\Util\RedAnimation.h" />
-    <ClInclude Include="src\RedEngineFL\Util\RedCommandConsole.h" />
-    <ClInclude Include="src\RedEngineFL\Util\RedConsole.h" />
-    <ClInclude Include="src\RedEngineFL\Util\RedLocalizeDB.h" />
-    <ClInclude Include="src\RedEngineFL\Util\RedLodManager.h" />
-    <ClInclude Include="src\RedEngineFL\Util\RedRegion.h" />
-    <ClInclude Include="src\RedEngineFL\Util\RedSceneManager.h" />
-    <ClInclude Include="src\RedEngineFL\Util\RedSceneObject.h" />
-    <ClInclude Include="src\RedEngineFL\Util\RedScreenShot.h" />
-    <ClInclude Include="src\RedEngineFL\Util\RedStack.h" />
-    <ClInclude Include="src\RedEngineFL\Util\RedWarning.h" />
-    <ClInclude Include="src\RedEngineFL\Util\ext\Allocator.h" />
-    <ClInclude Include="src\RedEngineFL\Util\ext\BaseString.h" />
-    <ClInclude Include="src\RedEngineFL\Util\ext\Globals.h" />
-    <ClInclude Include="src\RedEngineFL\Util\ext\IAllocator.h" />
-    <ClInclude Include="src\RedEngineFL\Util\ext\ListAllocator.h" />
-    <ClInclude Include="src\RedEngineFL\Util\ext\SubAllocator.h" />
-    <ClInclude Include="src\RedEngineFL\Util\ext\basearray.h" />
-    <ClInclude Include="src\RedEngineFL\Util\ext\baselist.h" />
-    <ClInclude Include="src\RedEngineFL\Util\ext\basevector.h" />
-    <ClInclude Include="src\RedEngineFL\Util\ext\hashtable.h" />
-    <ClInclude Include="src\RedEngineFL\Util\ext\heap.h" />
-    <ClInclude Include="src\RedEngineFL\Util\ext\types.h" />
-    <ClInclude Include="src\RedEngineFL\geometry\Primitives.h" />
-    <ClInclude Include="src\RedEngineFL\geometry\basics.h" />
-    <ClInclude Include="src\RedEngineFL\geometry\polygons.h" />
-    <ClInclude Include="src\RedEngineFL\geometry\vector.h" />
-    <ClInclude Include="src\RedEngineFL\input\RedInputEventHandler.h" />
-    <ClInclude Include="src\RedEngineFL\input\RedJoystick.h" />
-    <ClInclude Include="src\RedEngineFL\input\RedKeyboard.h" />
-    <ClInclude Include="src\RedEngineFL\input\RedMouse.h" />
-    <ClInclude Include="src\RedEngineFL\input\pc\pcRedInputManager.h" />
-    <ClInclude Include="src\RedEngineFL\movie\RedCircularBuffer.h" />
-    <ClInclude Include="src\RedEngineFL\movie\RedFileAsync.h" />
-    <ClInclude Include="src\RedEngineFL\movie\RedMovie.h" />
-    <ClInclude Include="src\RedEngineFL\movie\RedMoviePlayerBase.h" />
-    <ClInclude Include="src\RedEngineFL\movie\RedMoviePlayerRenderer.h" />
-    <ClInclude Include="src\RedEngineFL\movie\pc\pcRedMoviePlayer.h" />
-    <ClInclude Include="src\RedEngineFL\movie\redpipe.h" />
     <ClInclude Include="src\SoundFL\source\sndallocator.h" />
     <ClInclude Include="src\SoundFL\source\sndallocbitmap.h" />
     <ClInclude Include="src\SoundFL\source\sndbufferio.h" />
@@ -3550,6 +2883,18 @@
     <ClInclude Include="src\ZlibFL\zlib.h" />
     <ClInclude Include="src\ZlibFL\zutil.h" />
     <ClInclude Include="src\lglcd\lgLcd.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="src\RedEngineFL\RedEngineFL.vcxproj">
+      <Project>{C3E30B7D-A395-5FA0-9B64-F5CA244C6B92}</Project>
+      <LinkLibraryDependencies>true</LinkLibraryDependencies>
+      <UseLibraryDependencyInputs>false</UseLibraryDependencyInputs>
+    </ProjectReference>
+    <ProjectReference Include="src\SoundFL\SoundFL.vcxproj">
+      <Project>{6CD3DE5F-38F0-5AC0-84EB-1DA25BBE595B}</Project>
+      <LinkLibraryDependencies>true</LinkLibraryDependencies>
+      <UseLibraryDependencyInputs>false</UseLibraryDependencyInputs>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <PropertyGroup Condition="'$(SWBF2_GAMEDATA)' == ''">

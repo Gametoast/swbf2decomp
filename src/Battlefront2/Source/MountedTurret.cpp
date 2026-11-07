@@ -1,5 +1,6 @@
 #include <d3dx9math.h>
 #include "MountedTurret.h"
+#include "EntityFlyer.h"
 
 #include <float.h>
 #include <math.h>
@@ -24,7 +25,7 @@
 #include "UnitController.h"
 #include "UnitStationaryController.h"
 #include "VehicleManager.h"
-#include "WeaponCannonInstance.h"
+#include "WeaponCannon.h"
 #include "CollisionObject.h"
 #include "EntitySoldier.h"
 #include "PebbleFL/Common/PblHandle.h"
@@ -172,26 +173,6 @@ void RemoveChildren(const GameObject* pObject, RedPose& rPose, int iBone)
 
 extern bool netFrameLock;
 extern bool netIsLocalTurn;
-
-class EntityFlyer
-{
-public:
-    enum State
-    {
-        LANDED = 0,
-        TAKEOFF = 1,
-        FLYING = 2,
-        LANDING = 3,
-        CRASHING = 4,
-        CRASHED = 5
-    };
-
-    char mFlyerBaseStorage[0x564];
-    State mState;
-
-    static PblHash rttiHashEntityFlyer;
-};
- 
 
 // SYNTHETIC: SWBF2 0x00404340
 // `dynamic initializer for 'MountedTurret::rttiHashMountedTurret''

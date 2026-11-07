@@ -2373,9 +2373,3 @@ void SoldierAnimator::SetAlert(bool bAlert)
     }
 }
 
-// FUNCTION: SWBF2 0x00643650
-void SoldierAnimation::SetVelocity(float fVelocityX, float fVelocityZ)
-{
-    m_iVelocityX = (int)Clamp(fVelocityX * 100.0f + 16383.0f + 0.5f, 0.0f, 32767.0f) - 16383;
-    m_iVelocityZ = (int)Clamp(fVelocityZ * 100.0f + 16383.0f + 0.5f, 0.0f, 32767.0f) - 16383;
-}

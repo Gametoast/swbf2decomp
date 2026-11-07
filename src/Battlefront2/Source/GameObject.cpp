@@ -53,7 +53,7 @@ GameObjectClass::GameObjectClass(unsigned int uHash)
     mPilotSkillRepairScale = 0.005f;
     mScanningRange = 0.0f;
     mTransmitRange = 0.0f;
-    mAIType = 1;
+    mAIType = ConnectivityGraph::CGT_FLAG_SOLDIER;
     mSwitchClassRadius = -1.0f;
     mHoldForPlayer = false;
 
@@ -993,31 +993,31 @@ void GameObjectClass::SetProperty(unsigned int uProperty, const char* pszValue)
     case 0xaff22806: /* "AISizeType" */
         if (!_stricmp(pszValue, "SOLDIER"))
         {
-            mAIType = 1;
+            mAIType = ConnectivityGraph::CGT_FLAG_SOLDIER;
         }
         else if (!_stricmp(pszValue, "HOVER"))
         {
-            mAIType = 2;
+            mAIType = ConnectivityGraph::CGT_FLAG_HOVER;
         }
         else if (!_stricmp(pszValue, "SMALL"))
         {
-            mAIType = 4;
+            mAIType = ConnectivityGraph::CGT_FLAG_SMALL;
         }
         else if (!_stricmp(pszValue, "MEDIUM"))
         {
-            mAIType = 8;
+            mAIType = ConnectivityGraph::CGT_FLAG_MEDIUM;
         }
         else if (!_stricmp(pszValue, "HUGE"))
         {
-            mAIType = 16;
+            mAIType = ConnectivityGraph::CGT_FLAG_HUGE;
         }
         else if (!_stricmp(pszValue, "FLYER"))
         {
-            mAIType = 32;
+            mAIType = ConnectivityGraph::CGT_FLAG_FLYER;
         }
         else
         {
-            mAIType = 1;
+            mAIType = ConnectivityGraph::CGT_FLAG_SOLDIER;
         }
         break;
 

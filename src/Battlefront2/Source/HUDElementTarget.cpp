@@ -12,14 +12,7 @@
 #include "TargetManager.h"
 #include "Team.h"
 #include "PebbleFL/Common/PblMath.h"
-
- 
-
-class EntityFlyer
-{
-public:
-    static PblHash rttiHashEntityFlyer;
-};
+#include "EntityFlyer.h"
 
 static const unsigned int kMinScaleHash = 0x4d3600d7 /* "MinScale" */;
 static const unsigned int kMaxScaleHash = 0xb43f812d /* "MaxScale" */;

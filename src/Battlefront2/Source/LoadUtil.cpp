@@ -112,11 +112,7 @@ extern bool sLoadNestedLevels;
 // GLOBAL: SWBF2 0x01e56fa3
 bool gLoading;
 
-// GLOBAL: SWBF2 0x009a1a40
-char RedStack::sMem[40960];
 
-// GLOBAL: SWBF2 0x009aba40
-int RedStack::sMemIdx;
 
 
 // FUNCTION: SWBF2 0x00578ff0

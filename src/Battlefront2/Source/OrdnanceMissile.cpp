@@ -13,7 +13,7 @@
 #include "GameObject.h"
 #include "GameLoop.h"
 #include "UnitController.h"
-#include "WeaponCannonInstance.h"
+#include "WeaponCannon.h"
 #include "PebbleFL/Common/PblMath.h"
 #include "PebbleFL/Common/PblMatrix.h"
 #include "PebbleFL/Common/PblRandom.h"

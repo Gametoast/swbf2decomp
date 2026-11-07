@@ -1,6 +1,7 @@
 #pragma once
 
 #include "CollisionObject.h"
+#include "ConnectivityGraph.h"
 #include "TreeGrid.h"
 #include "PebbleFL/Common/PblList.h"
 #include "PebbleFL/Common/PblVector.h"
@@ -194,7 +195,7 @@ namespace PathFinder
     bool sSamePosXZ(const PblVector3& a, const PblVector3& b);
 
     bool FindClosestObstacleIntersection(const PblVector3& rSrc, const PblVector3& rDest, float fRadius,
-                                         int eProhibit, const Obstacle** ppHit, float* pDistSq,
+                                         ConnectivityGraph::ProhibitFlag eProhibit, const Obstacle** ppHit, float* pDistSq,
                                          bool bParam, const Obstacle** ppIgnore, int iIgnoreCnt);
 
     bool TestTrivialStraightLineHit(const PblVector3& from, const PblVector3& to,
@@ -205,7 +206,7 @@ namespace PathFinder
                                     bool bOnlyDynamic);
 
     void NewPathFind(const PblVector3& vStart, const PblVector3& vGoal, float fRadius,
-                     int eProhibit, const Obstacle** ppIgnore, int iIgnoreCnt);
+                     ConnectivityGraph::ProhibitFlag eProhibit, const Obstacle** ppIgnore, int iIgnoreCnt);
     bool IsCompleted();
     bool GetPausedAtFinish();
     void UpdatePathFind();
@@ -228,7 +229,7 @@ extern PblVector3 sPerpVec;
 extern PblVector3 sSrcPos;
 extern const Obstacle* sIgnore[2];
 extern float sPerpLength;
-extern int sProhibit;
+extern ConnectivityGraph::ProhibitFlag sProhibit;
 extern int sIgnoreCnt;
 extern float sRadiusVehicle;
 

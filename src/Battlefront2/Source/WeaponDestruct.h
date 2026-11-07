@@ -6,7 +6,7 @@
 
 #include "OrbitalStrike.h"
 #include "Weapon.h"
-#include "WeaponCannonInstance.h"
+#include "WeaponCannon.h"
 #include "PebbleFL/Common/PblHashTable.h"
 
 class ExplosionClass;

@@ -21,7 +21,7 @@
 #include "Ordnance.h"
 #include "SpaceAssault.h"
 #include "Team.h"
-#include "WeaponCannonInstance.h"
+#include "WeaponCannon.h"
 
 // GLOBAL: SWBF2 0x007887a0
 // sDifficultyPlayer

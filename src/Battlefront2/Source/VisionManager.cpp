@@ -16,8 +16,9 @@
 #include "MountedTurret.h"
 #include "UnitAttackPatterns.h"
 #include "UnitThreatManager.h"
-#include "WeaponCannonInstance.h"
+#include "WeaponCannon.h"
 #include "WeaponTowCable.h"
+#include "EntityFlyer.h"
 
 #include <math.h>
 
@@ -27,12 +28,6 @@
 // __xmm@00000002000000010000000000000000
 // GLOBAL: SWBF2 0x007b2710
 // __xmm@00000004000000020000000100000001
-
-class EntityFlyer
-{
-public:
-    static PblHash rttiHashEntityFlyer;
-};
 
 // TEMPLATE: SWBF2 0x00671220
 // PblHeap<VisionManager::RayRequest *,int>::FindLowest

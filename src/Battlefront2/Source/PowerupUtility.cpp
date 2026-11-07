@@ -10,7 +10,7 @@
 #include "EnergyBar.h"
 #include "GameObject.h"
 #include "PowerupItem.h"
-#include "WeaponCannonInstance.h"
+#include "WeaponCannon.h"
 #include "WeaponDispenser.h"
 #include "PebbleFL/Common/PblList.h"
 

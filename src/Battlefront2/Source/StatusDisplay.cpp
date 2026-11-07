@@ -43,8 +43,7 @@ namespace FriendBuddyList
 
 extern int gDebugCount;
 
-extern RedColor gVoiceChatTeamColors[2];
-extern RedColor gHudHighlightColor;
+extern RedColor gVoiceChatTeamColors[3];
 
 // GLOBAL: SWBF2 0x01eafb4c
 StatusDisplay* StatusDisplay::sInstance[1];
@@ -511,7 +510,7 @@ void VoiceChatGroup::UpdateLines()
             mLines[i].mText.SetColor(gVoiceChatTeamColors[pLocal->mTeamNumber != pCharacter->mTeamNumber]);
             if (FriendBuddyList::IsFriendBuddy(0, mLines[i].mId))
             {
-                mLines[i].mText.SetColor(gHudHighlightColor);
+                mLines[i].mText.SetColor(gVoiceChatTeamColors[2]);
             }
         }
     }
@@ -688,17 +687,3 @@ DamageArrowGroup::Data DamageArrowGroup::sData[4] =
     { RedInterfaceScreen::CENTER, RedInterfaceScreen::TOP, 0.0f, 0.0f, PblMath::fPi },
 };
 
-extern RedColor gFriendColor;
-extern RedColor gEnemyColor;
-
-
-// SYNTHETIC: SWBF2 0x00406940
-// `dynamic initializer for 'gVoiceChatTeamColors''
-
-// GLOBAL: SWBF2 0x007ec388
-// gVoiceChatTeamColors
-RedColor gVoiceChatTeamColors[2] = { gFriendColor, gEnemyColor };
-
-// GLOBAL: SWBF2 0x007ec390, BGRA bytes CA F9 10 FF.
-
-RedColor gHudHighlightColor = { 0x10, 0xF9, 0xCA, 0xFF };

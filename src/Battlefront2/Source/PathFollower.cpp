@@ -103,58 +103,6 @@ namespace
 extern int WORLD_EXTENTS;
 extern TreeGrid* sObstacles;
 
-namespace PathFinder
-{
-// GLOBAL: SWBF2 0x01eaedb0
-unsigned int _FindBarrierNameHash;
-// GLOBAL: SWBF2 0x01eaedac
-Obstacle* _FindBarrierRet;
-}
-
-namespace PathFinder
-{
-bool FindBarrierCallback(const TreeGridObject* pObject, TreeGridCallbackData*, float&);
-}
-
-// FUNCTION: SWBF2 0x00612510
-bool PathFinder::FindBarrierCallback(const TreeGridObject* pObject, TreeGridCallbackData*, float&)
-{
-    const Obstacle* pObstacle = (const Obstacle*)pObject;
-    if (pObstacle->mNameHash == PathFinder::_FindBarrierNameHash)
-    {
-        PathFinder::_FindBarrierRet = const_cast<Obstacle*>(pObstacle);
-        return false;
-    }
-    return true;
-}
-
-namespace PathFinder
-{
-Obstacle* FindBarrierByName(unsigned int uName);
-}
-
-// FUNCTION: SWBF2 0x00612530
-Obstacle* PathFinder::FindBarrierByName(unsigned int uName)
-{
-    PathFinder::_FindBarrierNameHash = uName;
-    PathFinder::_FindBarrierRet = 0;
-    TreeGridCallbackData data;
-    sObstacles->CallbackOnRect(PblVector3((float)-WORLD_EXTENTS, 0.0f, (float)-WORLD_EXTENTS),
-                               PblVector3((float)WORLD_EXTENTS, 0.0f, (float)WORLD_EXTENTS),
-                               PathFinder::FindBarrierCallback, &data);
-    return PathFinder::_FindBarrierRet;
-}
-
-// TEMPLATE: SWBF2 0x006125b0
-// PblHeap<PathFinder::PathNode *,float>::Push
-template void PblHeap<PathFinder::PathNode*, float>::Push(PathFinder::PathNode*&, float);
-// TEMPLATE: SWBF2 0x00612610
-// PblHeap<PathFinder::PathNode *,float>::ReplaceLowest
-template void PblHeap<PathFinder::PathNode*, float>::ReplaceLowest(PathFinder::PathNode*&, float, int);
-// TEMPLATE: SWBF2 0x00612670
-// PblHeap<PathFinder::PathNode *,float>::Pop
-template void PblHeap<PathFinder::PathNode*, float>::Pop();
-
 // FUNCTION: SWBF2 0x00612710
 PathFollower::PathFollower(UnitController* pCtrl, AIPath* pPath, const Obstacle** ppIgnore,
                            int iIgnoreCnt, bool bDoCallbacksOnPts)

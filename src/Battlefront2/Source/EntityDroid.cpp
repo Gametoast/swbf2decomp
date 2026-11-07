@@ -35,7 +35,7 @@
 #include "TriggerRegionManager.h"
 #include "UnitController.h"
 #include "UnitMobileController.h"
-#include "WeaponCannonInstance.h"
+#include "WeaponCannon.h"
 #include "PebbleFL/Common/PblMath.h"
 #include "PebbleFL/Common/PblQuaternion.h"
 #include "RedEngineFL/Application/pc/pcFLRender.h"

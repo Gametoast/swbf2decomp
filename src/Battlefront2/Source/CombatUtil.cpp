@@ -15,7 +15,7 @@
 #include "OrdnanceShell.h"
 #include "OrdnanceSticky.h"
 #include "WeaponMelee.h"
-#include "WeaponMeleeInstance.h"
+#include "WeaponMelee.h"
 
 #include <math.h>
 
@@ -45,7 +45,7 @@
 #include "WeaponGrenade.h"
 #include "WeaponMeleeThrow.h"
 #include "WeaponRemote.h"
-#include "WeaponCannonInstance.h"
+#include "WeaponCannon.h"
 #include "PebbleFL/Common/PblHandle.h"
 #include "PebbleFL/Common/PblHashTable.h"
 #include "PebbleFL/Common/PblMath.h"

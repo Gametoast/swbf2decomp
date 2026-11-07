@@ -1,6 +1,6 @@
 #include "OrdnanceMeleeThrow.h"
 #include "EntityLight.h"
-#include "WeaponMeleeInstance.h"
+#include "WeaponMelee.h"
 #include "GameObject.h"
 #include "BirdEffect.h"
 #include "LeafEffect.h"

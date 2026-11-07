@@ -49,18 +49,6 @@ const char AI::CTFGoalD::rttiNameCTFGoalD[] = "CTFGoalD";
 // SYNTHETIC: SWBF2 0x00488090
 // AI::CTFGoalD::`scalar deleting destructor'
 
-// FUNCTION: SWBF2 0x00487fb0
-AI::GoalTarget::GoalTarget(const PblVector3& vPos)
-    : mType(GTT_POS), mPos(vPos), mChr(0)
-{
-}
-
-// FUNCTION: SWBF2 0x00487ff0
-AI::GoalTarget::GoalTarget(const GameObject* pObject)
-    : mType(GTT_GAMEOBJECT), mPos(0, 0, 0), mChr(0), mGameObj(pObject)
-{
-}
-
 // FUNCTION: SWBF2 0x004880c0
 AI::CTFGoalD::CTFGoalD(unsigned char uTeam, float fWeight, const GoalTarget& target)
     : AIGoal(AIGOAL_CTFDEFENSE, uTeam, fWeight)

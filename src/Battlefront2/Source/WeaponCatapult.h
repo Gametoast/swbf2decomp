@@ -36,7 +36,7 @@ public:
  
  
 
-#include "WeaponCannonInstance.h"
+#include "WeaponCannon.h"
 
 class EntityBuildingArmed;
 

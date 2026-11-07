@@ -10,7 +10,7 @@
 #include "EntitySoldier.h"
 #include "GameObject.h"
 #include "LightningBoltEffect.h"
-#include "WeaponCannonInstance.h"
+#include "WeaponCannon.h"
 #include "PebbleFL/Common/PblHeap.h"
 #include "PebbleFL/Common/PblMath.h"
 #include "PebbleFL/Common/PblMatrix.h"

@@ -32,7 +32,7 @@ public:
  
  
 
-#include "WeaponCannonInstance.h"
+#include "WeaponCannon.h"
 
 // VTABLE: SWBF2 0x007b1190
 class WeaponLaser : public Weapon

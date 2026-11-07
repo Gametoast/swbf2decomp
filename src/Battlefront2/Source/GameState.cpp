@@ -727,8 +727,7 @@ namespace SaveGameManager
 }
 namespace PblBuildType
 {
-    // GLOBAL: SWBF2 0x009cef72
-    bool gCreateMemoryProfile;
+    extern bool gCreateMemoryProfile;
 }
 
 namespace SaveGameManager

@@ -1,5 +1,6 @@
 #include "HUDGameEvents.h"
 #include "HUDObjectiveList.h"
+#include "EntityFlyer.h"
 
 #include <float.h>
 #include <math.h>
@@ -1065,7 +1066,6 @@ void HUD::GameEvents::Die(const Controllable* const pControllable)
     HideObjectiveDetailsElements(gPlayerEvents[iIndex], gPlayerData[iIndex]);
 }
 
-class EntityFlyer { public: static PblHash rttiHashEntityFlyer; };
 class MountedTurret { public: static PblHash rttiHashMountedTurret; };
 class EntityBuildingArmed { public: static PblHash rttiHashEntityBuildingArmed; };
 class WeaponRepair { public: static PblHash rttiHashWeaponRepair; };

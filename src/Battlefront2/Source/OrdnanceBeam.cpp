@@ -8,19 +8,13 @@
 #include "FLEffect.h"
 #include "GameObject.h"
 #include "NetGame.h"
+#include "Weapon.h"
 #include "RedEngineFL/Application/pc/pcRedParticle.h"
 
 
 extern bool netIsLocalTurn;
 extern bool netIsLateTurn;
 
-class Weapon
-{
-public:
-
-    char mWeaponState[0x70];
-    Aimer* mAimer;
-};
 
 // SYNTHETIC: SWBF2 0x00405a30
 // `dynamic initializer for 'OrdnanceBeam::rttiHashOrdnanceBeam''

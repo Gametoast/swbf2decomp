@@ -17,7 +17,7 @@
 #include "SoldierAnimationBank.h"
 #include "Tracker.h"
 #include "Weapon.h"
-#include "WeaponCannonInstance.h"
+#include "WeaponCannon.h"
 #include "CollisionManager.h"
 #include "RedEngineFL/Graphics/RedColor.h"
 #include "RedEngineFL/Graphics/RedDirectionalLight.h"

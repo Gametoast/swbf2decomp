@@ -54,6 +54,7 @@ public:
     // ParticleEmitterObject::operator delete
     static void operator delete(void* p) { sMemoryPool.Free(p); }
 
+    static void SetupMemoryPool(unsigned int uCount, unsigned int uSize, unsigned int uGrow) { sMemoryPool.Setup(uCount, uSize, uGrow); }
     static MemoryPool sMemoryPool;
 
     void RegisterStep(float fDeltaTime);

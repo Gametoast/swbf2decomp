@@ -112,10 +112,6 @@ bool bTerrainEnable = true;
 // GLOBAL: SWBF2 0x007df331
 bool bForceFullDetail = true;
 
-// SYNTHETIC: SWBF2 0x004081c0
-// `dynamic initializer for 'cvForceFullDetail''
-static RedCommandConsole cvForceFullDetail("terrain.ForceFullDetail", MultiVar(&bForceFullDetail));
-
 // SYNTHETIC: SWBF2 0x004081a0
 // `dynamic initializer for '_TerrainRenderable''
 // SYNTHETIC: SWBF2 0x00769980
@@ -124,6 +120,10 @@ static RedCommandConsole cvForceFullDetail("terrain.ForceFullDetail", MultiVar(&
 // GLOBAL: SWBF2 0x00998240
 // _TerrainRenderable
 TerrainRenderable _TerrainRenderable;
+
+// SYNTHETIC: SWBF2 0x004081c0
+// `dynamic initializer for 'cvForceFullDetail''
+static RedCommandConsole cvForceFullDetail("terrain.ForceFullDetail", MultiVar(&bForceFullDetail));
 
 // FUNCTION: SWBF2 0x006d34f0
 TerrainRenderable::TerrainRenderable()

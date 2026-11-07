@@ -17,6 +17,7 @@
 #include "PebbleFL/Common/PblMatrix.h"
 #include "PebbleFL/Common/PblQuaternion.h"
 #include "RedEngineFL/Graphics/RedCamera.h"
+#include "EntityFlyer.h"
 
 // FUNCTION: SWBF2 0x004832d0
 GameObject* Trackable::GetGameObject() { return 0; }
@@ -45,12 +46,6 @@ namespace FLRenderer
 {
     unsigned int GetCurrentViewport();
 }
-
-class EntityFlyer
-{
-public:
-    static PblHash rttiHashEntityFlyer;
-};
 
 namespace
 {

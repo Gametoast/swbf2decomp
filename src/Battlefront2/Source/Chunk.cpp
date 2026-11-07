@@ -188,7 +188,7 @@ void Chunk::SetData(ChunkDescriptor& desc)
     memcpy(mSmokeEffect, desc.mSmokeEffect, sizeof(mSmokeEffect));
     memcpy(mTrailAttachPoints, desc.mTrailAttachPoints, sizeof(mTrailAttachPoints));
     memcpy(mSmokeAttachPoints, desc.mSmokeAttachPoints, sizeof(mSmokeAttachPoints));
-    mPhysicsType = (ChunkPhysicsType)desc.mPhysicsType;
+    mPhysicsType = desc.mPhysicsType;
     mCoefficientOfRestitution = desc.mCoefficientOfRestitution;
     mCoefficientOfFriction = desc.mCoefficientOfFriction;
     mSimpleFrictionConstant = desc.mSimpleFrictionConstant;

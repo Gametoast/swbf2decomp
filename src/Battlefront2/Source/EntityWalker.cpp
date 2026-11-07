@@ -45,7 +45,7 @@
 #include "UnitMobileController.h"
 #include "VehicleManager.h"
 #include "WaterEffect.h"
-#include "WeaponCannonInstance.h"
+#include "WeaponCannon.h"
 #include "PebbleFL/Common/PblRandom.h"
 #include "RedEngineFL/Application/RedTerrain.h"
 #include "RedEngineFL/Application/RedWater.h"
@@ -360,18 +360,6 @@ EntityType EntityWalker::GetEntityType() const
 
 
 
-// FUNCTION: SWBF2 0x004ff6d0
-WalkerLegPairInfo::WalkerLegPairInfo()
-{
-    for (int i = 0; i < 2; ++i)
-    {
-        mFootIndices[i] = -1;
-        mFootCollisionBody[i] = -1;
-        mLegJoints[i] = -1;
-        mLegMasks[i].SetAll();
-        mLegTopMasks[i].SetAll();
-    }
-}
 
 // FUNCTION: SWBF2 0x005085f0
 EntityWalkerClass::~EntityWalkerClass()

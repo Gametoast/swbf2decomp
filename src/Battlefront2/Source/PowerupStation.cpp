@@ -1,6 +1,7 @@
 #include <string.h>
 #include <d3dx9math.h>
 #include "PowerupStation.h"
+#include "EntityFlyer.h"
 
 #include <math.h>
 #include <stdio.h>
@@ -436,13 +437,6 @@ class EntityWalker
 public:
     static PblHash rttiHashEntityWalker;
 };
-class EntityFlyer
-{
-public:
-    static PblHash rttiHashEntityFlyer;
-};
-
-
 
 // FUNCTION: SWBF2 0x006249a0
 bool PowerupStation::Update(float fDeltaTime)

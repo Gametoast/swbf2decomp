@@ -13,7 +13,7 @@
 #include "PathFinder.h"
 #include "UnitController.h"
 #include "Weapon.h"
-#include "WeaponCannonInstance.h"
+#include "WeaponCannon.h"
 #include "PebbleFL/Common/PblRandom.h"
 
 

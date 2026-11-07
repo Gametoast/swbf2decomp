@@ -21,11 +21,6 @@ bool GodrayEffectObject::IsEffectActive() const
     return true;
 }
 
-// FUNCTION: SWBF2 0x0053e490
-void GodrayEffectObject::UpdatedWorldMatrix()
-{
-    GodrayManager::s_pInstance->UpdateGodrayPosition(m_hGodray, m_mWorldMatrix.GetTranslation());
-}
 
 
 

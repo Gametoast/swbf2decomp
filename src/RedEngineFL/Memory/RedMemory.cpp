@@ -83,9 +83,9 @@ namespace RedMemory
 
 extern "C" void Startup_RedInitHeap(int, int);
 
-void TagAddList(TagList* list, Tag* tag);
-void TagMergeIntoList(TagList* list, Tag* tag);
-void TagRemoveList(TagList* list, Tag* tag);
+static void TagAddList(TagList* list, Tag* tag);
+static void TagMergeIntoList(TagList* list, Tag* tag);
+static void TagRemoveList(TagList* list, Tag* tag);
 
 // FUNCTION: SWBF2 0x006c3540
 void* __cdecl operator new(unsigned int size)
@@ -240,7 +240,7 @@ bool RedFreeToHeapInternal(int heap, void* block, unsigned int flags)
 }
 
 // FUNCTION: SWBF2 0x006c37b0
-void TagAddList(TagList* list, Tag* tag)
+static void TagAddList(TagList* list, Tag* tag)
 {
     if (list->first)
     {
@@ -256,7 +256,7 @@ void TagAddList(TagList* list, Tag* tag)
 }
 
 // FUNCTION: SWBF2 0x006c37f0
-void TagMergeIntoList(TagList* list, Tag* tag)
+static void TagMergeIntoList(TagList* list, Tag* tag)
 {
     Tag* prev = 0;
     Tag* next = list->first;
@@ -315,7 +315,7 @@ void TagMergeIntoList(TagList* list, Tag* tag)
 }
 
 // FUNCTION: SWBF2 0x006c3880
-void TagRemoveList(TagList* list, Tag* tag)
+static void TagRemoveList(TagList* list, Tag* tag)
 {
     if (tag->next_)
     {

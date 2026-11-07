@@ -21,9 +21,6 @@
 
 void __cdecl PblTraceP(const char* Format, ...);
 
-// TEMPLATE: SWBF2 0x006fe970
-// RedTextureTransform::operator()
-
 class PblMatrix;
 extern PblMatrix gMatrixIdentity;
 

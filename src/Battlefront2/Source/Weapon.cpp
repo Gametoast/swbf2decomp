@@ -1,5 +1,6 @@
 #include <d3dx9math.h>
 #include "Weapon.h"
+#include "EntityFlyer.h"
 
 #include <math.h>
 #include <new>
@@ -19,7 +20,7 @@
 #include "ParticleEmitterObject.h"
 #include "SoldierAnimationBank.h"
 #include "Trigger.h"
-#include "WeaponCannonInstance.h"
+#include "WeaponCannon.h"
 #include "RedEngineFL/Memory/RedMemoryPool.h"
 #include "SoundFL/source/sndvoicevirtual.h"
 #include "FLEffect.h"
@@ -120,12 +121,6 @@ namespace
         return pObject->IsRtti(uRtti);
     }
 }
-
-class EntityFlyer
-{
-public:
-    static PblHash rttiHashEntityFlyer;
-};
 
 // FUNCTION: SWBF2 0x00679700
 WeaponClass::WeaponClass(unsigned int uHash)
@@ -1210,6 +1205,15 @@ void WeaponClass::RenderFlash(const PblVector3& vPos, const PblVector3& vDir, fl
     mMuzzleFlashModel->Render(&mFlash, 0, color, 0, 0);
 }
 
+// SYNTHETIC: SWBF2 0x00407000
+// `dynamic initializer for 'Weapon::sMemoryPool''
+// SYNTHETIC: SWBF2 0x007697d0
+// `dynamic atexit destructor for 'Weapon::sMemoryPool''
+
+// GLOBAL: SWBF2 0x01f9a830
+// Weapon::sMemoryPool
+MemoryPool Weapon::sMemoryPool("Weapon", sizeof(Weapon));
+
 // SYNTHETIC: SWBF2 0x00407020
 // `dynamic initializer for 'Weapon::rttiHashWeapon''
 // Weapon::rttiHashWeapon
@@ -1240,15 +1244,6 @@ const char WeaponClass::rttiNameWeaponClass[] = "WeaponClass";
 // GLOBAL: SWBF2 0x01f9a318
 // WeaponClass::sWeaponChangeUnableSound
 GameSound WeaponClass::sWeaponChangeUnableSound;
-
-// SYNTHETIC: SWBF2 0x00407000
-// `dynamic initializer for 'Weapon::sMemoryPool''
-// SYNTHETIC: SWBF2 0x007697d0
-// `dynamic atexit destructor for 'Weapon::sMemoryPool''
-
-// GLOBAL: SWBF2 0x01f9a830
-// Weapon::sMemoryPool
-MemoryPool Weapon::sMemoryPool("Weapon", sizeof(Weapon));
 
 // SYNTHETIC: SWBF2 0x00677650
 // Weapon::operator delete

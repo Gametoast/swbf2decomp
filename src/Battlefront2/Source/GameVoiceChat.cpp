@@ -48,6 +48,15 @@ namespace GameVoiceChat
 }
 
 
+// SYNTHETIC: SWBF2 0x00403ea0
+// GameVoiceChat::`dynamic initializer for 'gTransport''
+// SYNTHETIC: SWBF2 0x00768ae0
+// GameVoiceChat::`dynamic atexit destructor for 'gTransport''
+
+// GLOBAL: SWBF2 0x01ec5fc0
+// GameVoiceChat::gTransport
+GameVoiceChat::Transport GameVoiceChat::gTransport;
+
 // SYNTHETIC: SWBF2 0x00403ec0
 // GameVoiceChat::`dynamic initializer for 'gEncoderStorage''
 
@@ -152,15 +161,6 @@ bool GameVoiceChat::IsSuspended()
 {
     return false;
 }
-
-// SYNTHETIC: SWBF2 0x00403ea0
-// GameVoiceChat::`dynamic initializer for 'gTransport''
-// SYNTHETIC: SWBF2 0x00768ae0
-// GameVoiceChat::`dynamic atexit destructor for 'gTransport''
-
-// GLOBAL: SWBF2 0x01ec5fc0
-// GameVoiceChat::gTransport
-GameVoiceChat::Transport GameVoiceChat::gTransport;
 
 // FUNCTION: SWBF2 0x0053c590
 GameVoiceChat::Transport* GameVoiceChat::GetTransport()

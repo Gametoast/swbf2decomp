@@ -17,7 +17,7 @@
 #include "Ordnance.h"
 #include "Trigger.h"
 #include "UnitController.h"
-#include "WeaponCannonInstance.h"
+#include "WeaponCannon.h"
 #include "PebbleFL/Common/PblRandom.h"
 #include "SoundFL/source/sndvoicevirtualbus.h"
 #include "PebbleFL/Common/PblMath.h"

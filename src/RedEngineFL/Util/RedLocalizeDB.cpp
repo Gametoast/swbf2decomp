@@ -40,16 +40,11 @@ eGAMELANGUAGE gForceLang = eLANG_AUTODETERMINE;
 
 namespace PblBuildType
 {
-// GLOBAL: SWBF2 0x007e2e00
-eGAMELANGUAGE gForceLang1 = eLANG_UNRESTRICTED;
-// GLOBAL: SWBF2 0x007e2e04
-eGAMELANGUAGE gForceLang2 = eLANG_UNRESTRICTED;
-// GLOBAL: SWBF2 0x007e2e08
-eGAMELANGUAGE gForceLang3 = eLANG_UNRESTRICTED;
-// GLOBAL: SWBF2 0x007e2e10
-bool gDemoEnglishOnly = true;
-// GLOBAL: SWBF2 0x009cef71
-bool gDemoBuild;
+extern eGAMELANGUAGE gForceLang1;
+extern eGAMELANGUAGE gForceLang2;
+extern eGAMELANGUAGE gForceLang3;
+extern bool gDemoEnglishOnly;
+extern bool gDemoBuild;
 }
 
 namespace RedLocalizeDB

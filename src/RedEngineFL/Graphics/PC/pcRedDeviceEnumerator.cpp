@@ -59,7 +59,7 @@ IDirect3D9* m_pD3D = 0;
 }
 
 // FUNCTION: SWBF2 0x00716aa0
-unsigned int ColorChannelBits(D3DFORMAT fmt)
+static unsigned int ColorChannelBits(D3DFORMAT fmt)
 {
     switch (fmt)
     {
@@ -93,7 +93,7 @@ unsigned int ColorChannelBits(D3DFORMAT fmt)
 }
 
 // FUNCTION: SWBF2 0x007162f0
-unsigned int AlphaChannelBits(D3DFORMAT fmt)
+static unsigned int AlphaChannelBits(D3DFORMAT fmt)
 {
     switch (fmt)
     {
@@ -127,7 +127,7 @@ unsigned int AlphaChannelBits(D3DFORMAT fmt)
 }
 
 // FUNCTION: SWBF2 0x00716b20
-unsigned int DepthBits(D3DFORMAT fmt)
+static unsigned int DepthBits(D3DFORMAT fmt)
 {
     switch (fmt)
     {
@@ -149,7 +149,7 @@ unsigned int DepthBits(D3DFORMAT fmt)
 }
 
 // FUNCTION: SWBF2 0x00717210
-unsigned int StencilBits(D3DFORMAT fmt)
+static unsigned int StencilBits(D3DFORMAT fmt)
 {
     switch (fmt)
     {

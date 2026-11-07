@@ -16,7 +16,7 @@
 #include "CommandPostManager.h"
 #include "EntityCarrier.h"
 #include "PathManager.h"
-#include "WeaponCannonInstance.h"
+#include "WeaponCannon.h"
 #include "WeaponTowCable.h"
 #include "PebbleFL/Common/PblRandom.h"
 

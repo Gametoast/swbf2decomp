@@ -9,7 +9,7 @@
 #include <string.h>
 
 #include "WeaponMelee.h"
-#include "WeaponMeleeInstance.h"
+#include "WeaponMelee.h"
 #include "WeaponMeleeThrow.h"
 #include "LightsaberTrailEffect.h"
 #include "ParticleSystem.h"

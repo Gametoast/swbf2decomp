@@ -79,6 +79,27 @@ int netLocalIndex[2];
 // netDests
 NetDest netDests[MAX_DESTS];
 
+#pragma pack(push, 4)
+struct JoinSlot
+{
+    float reqTime;
+    NetSocketPeerRecord addr;
+};
+#pragma pack(pop)
+
+static_assert(sizeof(JoinSlot) == 28, "JoinSlot size");
+static_assert(__alignof(JoinSlot) == 4, "JoinSlot alignment");
+static_assert(offsetof(JoinSlot, reqTime) == 0, "JoinSlot request time offset");
+static_assert(offsetof(JoinSlot, addr) == 4, "JoinSlot address offset");
+
+// SYNTHETIC: SWBF2 0x00404430
+// `dynamic initializer for 'joinSlots''
+
+// GLOBAL: SWBF2 0x01ecb9c0
+// joinSlots
+static JoinSlot joinSlots[64];
+static_assert(sizeof(joinSlots) == 1792, "joinSlots array size");
+
 // GLOBAL: SWBF2 0x01fa3d60
 // netTime
 float netTime;
@@ -109,27 +130,6 @@ NetPktGroup inPktGroups[64];
 
 // GLOBAL: SWBF2 0x01ecb9a0
 NetPktGroup inQueue;
-
-#pragma pack(push, 4)
-struct JoinSlot
-{
-    float reqTime;
-    NetSocketPeerRecord addr;
-};
-#pragma pack(pop)
-
-static_assert(sizeof(JoinSlot) == 28, "JoinSlot size");
-static_assert(__alignof(JoinSlot) == 4, "JoinSlot alignment");
-static_assert(offsetof(JoinSlot, reqTime) == 0, "JoinSlot request time offset");
-static_assert(offsetof(JoinSlot, addr) == 4, "JoinSlot address offset");
-
-// SYNTHETIC: SWBF2 0x00404430
-// `dynamic initializer for 'joinSlots''
-
-// GLOBAL: SWBF2 0x01ecb9c0
-// joinSlots
-static JoinSlot joinSlots[64];
-static_assert(sizeof(joinSlots) == 1792, "joinSlots array size");
 
 // GLOBAL: SWBF2 0x01fa3d48
 unsigned __int64 lastTicks;

@@ -5,12 +5,24 @@ VisualStudioVersion = 12.0.40629.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "BattlefrontII", "BattlefrontII.vcxproj", "{F303D4E6-ED54-5075-A41B-A8829D3D67C5}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SoundFL", "src\SoundFL\SoundFL.vcxproj", "{6CD3DE5F-38F0-5AC0-84EB-1DA25BBE595B}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "RedEngineFL", "src\RedEngineFL\RedEngineFL.vcxproj", "{C3E30B7D-A395-5FA0-9B64-F5CA244C6B92}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
 		Release|Win32 = Release|Win32
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{C3E30B7D-A395-5FA0-9B64-F5CA244C6B92}.Debug|Win32.ActiveCfg = Debug|Win32
+		{C3E30B7D-A395-5FA0-9B64-F5CA244C6B92}.Debug|Win32.Build.0 = Debug|Win32
+		{C3E30B7D-A395-5FA0-9B64-F5CA244C6B92}.Release|Win32.ActiveCfg = Release|Win32
+		{C3E30B7D-A395-5FA0-9B64-F5CA244C6B92}.Release|Win32.Build.0 = Release|Win32
+		{6CD3DE5F-38F0-5AC0-84EB-1DA25BBE595B}.Debug|Win32.ActiveCfg = Debug|Win32
+		{6CD3DE5F-38F0-5AC0-84EB-1DA25BBE595B}.Debug|Win32.Build.0 = Debug|Win32
+		{6CD3DE5F-38F0-5AC0-84EB-1DA25BBE595B}.Release|Win32.ActiveCfg = Release|Win32
+		{6CD3DE5F-38F0-5AC0-84EB-1DA25BBE595B}.Release|Win32.Build.0 = Release|Win32
 		{F303D4E6-ED54-5075-A41B-A8829D3D67C5}.Debug|Win32.ActiveCfg = Debug|Win32
 		{F303D4E6-ED54-5075-A41B-A8829D3D67C5}.Debug|Win32.Build.0 = Debug|Win32
 		{F303D4E6-ED54-5075-A41B-A8829D3D67C5}.Release|Win32.ActiveCfg = Release|Win32

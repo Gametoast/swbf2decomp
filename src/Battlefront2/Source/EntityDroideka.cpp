@@ -3,7 +3,7 @@
 #include "PebbleFL/Common/PblVector.h"
 
 #include "EntityDroideka.h"
-#include "WeaponCannonInstance.h"
+#include "WeaponCannon.h"
 #include "Tracker.h"
 #include "FirstPerson.h"
 #include "EnergyBar.h"

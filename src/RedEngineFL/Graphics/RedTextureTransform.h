@@ -34,6 +34,7 @@ public:
         return m_Transform[iRow][iCol];
     }
 
+    // FUNCTION: SWBF2 0x006fe970
     float operator()(int iRow, int iCol) const
     {
         if (!m_bTransform)

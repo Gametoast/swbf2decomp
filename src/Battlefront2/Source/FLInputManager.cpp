@@ -23,7 +23,7 @@
 #include "HUDObjectiveList.h"
 #include "NetGame.h"
 #include "Weapon.h"
-#include "WeaponCannonInstance.h"
+#include "WeaponCannon.h"
 #include "NetState.h"
 #include "EnergyBar.h"
 #include "PebbleFL/Common/PblUnicode.h"

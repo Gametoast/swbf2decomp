@@ -4,6 +4,7 @@
 
 #include <stddef.h>
 
+#include "ConnectivityGraph.h"
 #include "Damageable.h"
 #include "EntityGeometry.h"
 #include "GameSound.h"
@@ -11,28 +12,7 @@
 #include "PebbleFL/Common/PblList.h"
 #include "PebbleFL/Common/PblListSingle.h"
 
-struct DamageEffectClass
-{
 
-    DamageEffectClass(float fPercent = 0.0f, float fPercentStop = 0.0f, unsigned int uNameHash = 0,
-                      unsigned int uHardPoint = 0,
-                      const PblVector3& vAttachOffset = PblVector3(0.0f, 0.0f, 0.0f),
-                      float fScale = 1.0f, float fInheritVelocity = 0.0f)
-        : mPercent(fPercent), mPercentStop(fPercentStop), mNameHash(uNameHash),
-          mHardPoint(uHardPoint), mAttachOffset(vAttachOffset), mScale(fScale),
-          mInheritVelocity(fInheritVelocity)
-    {
-    }
-
-    float mPercent;
-    float mPercentStop;
-    unsigned int mNameHash;
-    unsigned int mHardPoint;
-    PblVector3 mAttachOffset;
-    float mScale;
-    float mInheritVelocity;
-    GameSound mSound;
-};
  
  
 
@@ -123,7 +103,7 @@ public:
     GameSound mSoundHurtFall;
     PblListSingle mSoundDamageRegionList;
 
-    int mAIType;
+    ConnectivityGraph::ProhibitFlag mAIType;
     bool mAINoRepair : 1;
     bool mHeroFlag : 1;
     bool mIsNeutralWhenEmpty : 1;

@@ -363,7 +363,7 @@ void ParticleEmitterObject::Render_(unsigned char ucViewport, float fDist, unsig
         vMax.y += 450.0f;
         vMax.z += 450.0f;
         if (!ParticleSystem::PrepareForRender(mEmitter, GetRenderPos(), ucViewport, fDist, uiFlags, _Sphere.w, vMin,
-                                              vMax, GetLodData()->mMaxDist))
+                                              vMax, GetLodData()->GetMaxDist()))
         {
             return;
         }

@@ -74,7 +74,7 @@ extern bool gAttractMode;
 
 namespace PlayerPrefs
 {
-int __fastcall FindByPlayerId(int iPlayer);
+int FindByPlayerId(int iPlayer);
 }
 
 namespace FriendBuddyList
@@ -99,19 +99,6 @@ static inline int GetTeam(const GameObject* pObject)
 static inline int GetAllyCount(const CommandPost* pPost)
 {
     return pPost->mAllyCount;
-}
-
-// FUNCTION: SWBF2 0x0061c490
-int __fastcall PlayerPrefs::FindByPlayerId(int iPlayer)
-{
-    for (unsigned int i = 0; i < 1; ++i)
-    {
-        if ((&PlayerPrefs::mAllUserPrefs[0].mPlayerId)[i * 11] == iPlayer)
-        {
-            return i;
-        }
-    }
-    return -1;
 }
 
 // FUNCTION: SWBF2 0x0064e000

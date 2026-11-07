@@ -25,7 +25,7 @@
 #include "UnitAgent.h"
 #include "UnitCmdInfo.h"
 #include "UnitController.h"
-#include "WeaponMeleeInstance.h"
+#include "WeaponMelee.h"
 #include "PebbleFL/Common/PblHashTable.h"
 #include "PebbleFL/Common/PblMatrix.h"
 #include "PebbleFL/Common/PblRandom.h"

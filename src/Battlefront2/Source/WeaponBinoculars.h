@@ -25,7 +25,7 @@ public:
 };
   
 
-#include "WeaponCannonInstance.h"
+#include "WeaponCannon.h"
 
 // VTABLE: SWBF2 0x007b0468
 class WeaponBinoculars : public Weapon

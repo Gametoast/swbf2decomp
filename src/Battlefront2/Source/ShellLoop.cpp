@@ -63,38 +63,31 @@ namespace PblBuildType
 }
 namespace PblBuildType
 {
-    // GLOBAL: SWBF2 0x009cef73
-    bool gDemoHasSplitscreen;
+    extern bool gDemoHasSplitscreen;
 }
 namespace PblBuildType
 {
-    // GLOBAL: SWBF2 0x009cef74
-    bool gDemoHost;
+    extern bool gDemoHost;
 }
 namespace PblBuildType
 {
-    // GLOBAL: SWBF2 0x009cef77
-    bool gDemoNoInputRebind;
+    extern bool gDemoNoInputRebind;
 }
 namespace PblBuildType
 {
-    // GLOBAL: SWBF2 0x007e2e0c
-    bool gFinalBuild = true;
+    extern bool gFinalBuild;
 }
 namespace PblBuildType
 {
-    // GLOBAL: SWBF2 0x007e2e0d
-    bool gXBox_DVDDemo = true;
+    extern bool gXBox_DVDDemo;
 }
 namespace PblBuildType
 {
-    // GLOBAL: SWBF2 0x007e2e0e
-    bool gE3Demo = true;
+    extern bool gE3Demo;
 }
 namespace PblBuildType
 {
-    // GLOBAL: SWBF2 0x007e2e0f
-    bool gDemoAutoAssign = true;
+    extern bool gDemoAutoAssign;
 }
 
 

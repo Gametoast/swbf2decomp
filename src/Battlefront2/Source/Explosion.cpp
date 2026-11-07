@@ -351,13 +351,13 @@ void ExplosionClass::SetProperty(unsigned int uProperty, const char* pszValue)
         switch (uType)
         {
         case 0x2648cd55: /* "LEAF" */
-            mChunkDescriptor.mPhysicsType = 3;
+            mChunkDescriptor.mPhysicsType = PHYSICS_LEAF;
             break;
         case 0xd290c23b: /* "STATIC" */
-            mChunkDescriptor.mPhysicsType = 2;
+            mChunkDescriptor.mPhysicsType = PHYSICS_STATIC;
             break;
         default:
-            mChunkDescriptor.mPhysicsType = uType != 0xff79b33c /* "FULL" */;
+            mChunkDescriptor.mPhysicsType = uType != 0xff79b33c /* "FULL" */ ? PHYSICS_SIMPLE_RIGID : PHYSICS_FULL_RIGID;
             break;
         }
         break;

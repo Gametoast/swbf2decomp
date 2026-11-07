@@ -25,7 +25,7 @@ extern bool netShowNames;
 
 extern bool netFrameLock;
 extern int netCurMaxPlayers;
-extern RedColor gHudHighlightColor;
+extern RedColor gVoiceChatTeamColors[3];
 namespace FriendBuddyList
 {
     bool __fastcall IsFriendBuddy(int iLocalIndex, int iPlayerId);
@@ -291,7 +291,7 @@ bool NameDisplayThread::Update(float)
             if (NetGame::IsEnabled() && pCharacter->GetTeamNumber() == pLocalCharacter->GetTeamNumber() &&
                 FriendBuddyList::IsFriendBuddy(iLocalIndex, i))
             {
-                RedColor white(gHudHighlightColor);
+                RedColor white(gVoiceChatTeamColors[2]);
                 text.m_color = white;
             }
         }

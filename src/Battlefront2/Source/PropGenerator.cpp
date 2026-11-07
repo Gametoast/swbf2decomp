@@ -45,7 +45,7 @@ bool mLoaded;
 PropLayer mPropLayers[4];
 
 // SYNTHETIC: SWBF2 0x00406090
-// `dynamic initializer for 'PropGenerator::m_amCamera''
+// PropGenerator::`dynamic initializer for 'm_amCamera''
 
 // GLOBAL: SWBF2 0x01f03250
 // m_amCamera
@@ -801,7 +801,7 @@ const RedLodData* PropGenerator::GetLodData(int iIndex)
             continue;
         }
         const RedLodData* pLodData = mPropLayers[i].mLodData;
-        if (pLodData && (!pBest || pLodData->mMaxDist > pBest->mMaxDist))
+        if (pLodData && (!pBest || pLodData->GetMaxDist() > pBest->GetMaxDist()))
         {
             pBest = pLodData;
         }

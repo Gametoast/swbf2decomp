@@ -227,7 +227,11 @@ public:
     virtual bool IsEffectActive() const;
 private:
     GodrayEffectObject(unsigned int hGodray) : m_hGodray(hGodray) {}
-    virtual void UpdatedWorldMatrix();
+    // FUNCTION: SWBF2 0x0053e490
+    virtual void UpdatedWorldMatrix()
+    {
+        GodrayManager::s_pInstance->UpdateGodrayPosition(m_hGodray, m_mWorldMatrix.GetTranslation());
+    }
 public:
     unsigned int m_hGodray;
 };

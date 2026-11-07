@@ -2,7 +2,7 @@
 
 #include <stddef.h>
 
-class PblVector3;
+#include "PebbleFL/Common/PblVector.h"
 
 namespace Snd
 {

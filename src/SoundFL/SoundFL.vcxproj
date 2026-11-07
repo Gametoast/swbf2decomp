@@ -1,0 +1,246 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003" DefaultTargets="Build" ToolsVersion="12.0">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{6CD3DE5F-38F0-5AC0-84EB-1DA25BBE595B}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <RootNamespace>SoundFL</RootNamespace>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v120_xp</PlatformToolset>
+    <WholeProgramOptimization>false</WholeProgramOptimization>
+    <CharacterSet>NotSet</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <PropertyGroup>
+    <IncludePath>$(VC_IncludePath);$(WindowsSdk_71A_IncludePath);$(DXSDK_DIR)Include</IncludePath>
+    <LibraryPath>$(VC_LibraryPath_x86);$(WindowsSdk_71A_LibraryPath_x86);$(DXSDK_DIR)Lib\x86</LibraryPath>
+    <TargetName>SoundFL</TargetName>
+    <OutDir>..\..\bin\$(Platform)\$(Configuration)\</OutDir>
+    <IntDir>..\..\obj\SoundFL\$(Platform)\$(Configuration)\</IntDir>
+  </PropertyGroup>
+  <ItemDefinitionGroup>
+    <ClCompile>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <Optimization>MaxSpeed</Optimization>
+      <OmitFramePointers>false</OmitFramePointers>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <WarningLevel>Level3</WarningLevel>
+      <ExceptionHandling>Sync</ExceptionHandling>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <AdditionalIncludeDirectories>$(ProjectDir)..;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <SDLCheck>false</SDLCheck>
+      <IntrinsicFunctions>false</IntrinsicFunctions>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <ObjectFileName>$(IntDir)</ObjectFileName>
+      <OmitDefaultLibName>true</OmitDefaultLibName>
+    </ClCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)'=='Debug'">
+    <ClCompile>
+      <Optimization>Disabled</Optimization>
+      <InlineFunctionExpansion>Disabled</InlineFunctionExpansion>
+    </ClCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)'=='Release'">
+    <ClCompile>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
+      <EnableEnhancedInstructionSet>StreamingSIMDExtensions2</EnableEnhancedInstructionSet>
+      <StringPooling>true</StringPooling>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <FloatingPointModel>Precise</FloatingPointModel>
+    </ClCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup>
+    <Lib>
+      <TargetMachine>MachineX86</TargetMachine>
+    </Lib>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="source\sndallocbitmap.cpp">
+      </ClCompile>
+    <ClCompile Include="source\sndbufferio.cpp">
+      </ClCompile>
+    <ClCompile Include="source\sndbus.cpp">
+      </ClCompile>
+    <ClCompile Include="source\snddsp.cpp">
+      </ClCompile>
+    <ClCompile Include="source\sndenginebase.cpp">
+      </ClCompile>
+    <ClCompile Include="source\sndfile.cpp">
+      </ClCompile>
+    <ClCompile Include="source\sndfileplatformbase.cpp">
+      </ClCompile>
+    <ClCompile Include="source\sndfreelist.cpp">
+      </ClCompile>
+    <ClCompile Include="source\sndglobals.cpp">
+      </ClCompile>
+    <ClCompile Include="source\sndgsm.cpp">
+      </ClCompile>
+    <ClCompile Include="source\sndi3dl2reverb.cpp">
+      </ClCompile>
+    <ClCompile Include="source\sndi3dl2reverbpreset.cpp">
+      </ClCompile>
+    <ClCompile Include="source\sndlistenerbase.cpp">
+      </ClCompile>
+    <ClCompile Include="source\sndobjectlist.cpp">
+      </ClCompile>
+    <ClCompile Include="source\sndobjectweightlist.cpp">
+      </ClCompile>
+    <ClCompile Include="source\sndparametergraph.cpp">
+      </ClCompile>
+    <ClCompile Include="source\sndqueue.cpp">
+      </ClCompile>
+    <ClCompile Include="source\sndqueuelock.cpp">
+      </ClCompile>
+    <ClCompile Include="source\sndsamplebankbase.cpp">
+      </ClCompile>
+    <ClCompile Include="source\sndsampleinfo.cpp">
+      </ClCompile>
+    <ClCompile Include="source\sndsound.cpp">
+      </ClCompile>
+    <ClCompile Include="source\sndsoundlayered.cpp">
+      </ClCompile>
+    <ClCompile Include="source\sndsoundparameterized.cpp">
+      </ClCompile>
+    <ClCompile Include="source\sndsoundproperties.cpp">
+      </ClCompile>
+    <ClCompile Include="source\sndsoundstream.cpp">
+      </ClCompile>
+    <ClCompile Include="source\sndsource.cpp">
+      </ClCompile>
+    <ClCompile Include="source\sndsource2d.cpp">
+      </ClCompile>
+    <ClCompile Include="source\sndsource2d3d.cpp">
+      </ClCompile>
+    <ClCompile Include="source\sndsource3d.cpp">
+      </ClCompile>
+    <ClCompile Include="source\sndsourcebus.cpp">
+      </ClCompile>
+    <ClCompile Include="source\sndsourcei3dl2.cpp">
+      </ClCompile>
+    <ClCompile Include="source\sndsourcetransport.cpp">
+      </ClCompile>
+    <ClCompile Include="source\sndsourcetransportcontrol.cpp">
+      </ClCompile>
+    <ClCompile Include="source\sndsourcevariation.cpp">
+      </ClCompile>
+    <ClCompile Include="source\sndsourcevirtual.cpp">
+      </ClCompile>
+    <ClCompile Include="source\sndspace.cpp">
+      </ClCompile>
+    <ClCompile Include="source\sndstreamagc.cpp">
+      </ClCompile>
+    <ClCompile Include="source\sndstreambase.cpp">
+      </ClCompile>
+    <ClCompile Include="source\sndstreamcapturesourcebase.cpp">
+      </ClCompile>
+    <ClCompile Include="source\sndstreamcodec.cpp">
+      </ClCompile>
+    <ClCompile Include="source\sndstreamconsumer.cpp">
+      </ClCompile>
+    <ClCompile Include="source\sndstreamformat.cpp">
+      </ClCompile>
+    <ClCompile Include="source\sndstreamgsmdecoder.cpp">
+      </ClCompile>
+    <ClCompile Include="source\sndstreamgsmencoder.cpp">
+      </ClCompile>
+    <ClCompile Include="source\gsm-1.0.10\gsm_encode.c">
+      </ClCompile>
+    <ClCompile Include="source\gsm-1.0.10\long_term.c">
+      </ClCompile>
+    <ClCompile Include="source\gsm-1.0.10\short_term.c">
+      </ClCompile>
+    <ClCompile Include="source\gsm-1.0.10\gsm_decode.c">
+      </ClCompile>
+    <ClCompile Include="source\gsm-1.0.10\gsm_option.c">
+      </ClCompile>
+    <ClCompile Include="source\sndstreamhighlowpass.cpp">
+      </ClCompile>
+    <ClCompile Include="source\sndstreamimaadpcmdecoder.cpp">
+      </ClCompile>
+    <ClCompile Include="source\sndstreammixer.cpp">
+      </ClCompile>
+    <ClCompile Include="source\sndstreamnode.cpp">
+      </ClCompile>
+    <ClCompile Include="source\sndstreampacketio.cpp">
+      </ClCompile>
+    <ClCompile Include="source\sndstreamresampler.cpp">
+      </ClCompile>
+    <ClCompile Include="source\sndstreamsource.cpp">
+      </ClCompile>
+    <ClCompile Include="source\sndstreamsourcememory.cpp">
+      </ClCompile>
+    <ClCompile Include="source\sndstreamsourceproducer.cpp">
+      </ClCompile>
+    <ClCompile Include="source\sndstreamsplitter.cpp">
+      </ClCompile>
+    <ClCompile Include="source\sndstreamvad.cpp">
+      </ClCompile>
+    <ClCompile Include="source\sndsubstreamsplitter.cpp">
+      </ClCompile>
+    <ClCompile Include="source\sndthreadupdate.cpp">
+      </ClCompile>
+    <ClCompile Include="source\sndvoicebase.cpp">
+      </ClCompile>
+    <ClCompile Include="source\sndvoicehardware.cpp">
+      </ClCompile>
+    <ClCompile Include="source\sndvoicevirtual.cpp">
+      </ClCompile>
+    <ClCompile Include="source\sndvoicevirtualmanager.cpp">
+      </ClCompile>
+    <ClCompile Include="source\win\snddsbuffer.cpp">
+      </ClCompile>
+    <ClCompile Include="source\win\snddsbufferrenderer.cpp">
+      </ClCompile>
+    <ClCompile Include="source\win\snddsdeviceenumerator.cpp">
+      </ClCompile>
+    <ClCompile Include="source\win\snddsdmo.cpp">
+      </ClCompile>
+    <ClCompile Include="source\win\snddsmediabuffer.cpp">
+      </ClCompile>
+    <ClCompile Include="source\win\sndengine.cpp">
+      </ClCompile>
+    <ClCompile Include="source\win\sndfileplatform.cpp">
+      </ClCompile>
+    <ClCompile Include="source\win\sndlistener.cpp">
+      </ClCompile>
+    <ClCompile Include="source\win\sndsample.cpp">
+      </ClCompile>
+    <ClCompile Include="source\win\sndsamplebank.cpp">
+      </ClCompile>
+    <ClCompile Include="source\win\sndsemaphore.cpp">
+      </ClCompile>
+    <ClCompile Include="source\win\sndsoftoutput.cpp">
+      </ClCompile>
+    <ClCompile Include="source\win\sndstream.cpp">
+      </ClCompile>
+    <ClCompile Include="source\win\sndstreamauxrenderer.cpp">
+      </ClCompile>
+    <ClCompile Include="source\win\sndstreamcapturesource.cpp">
+      </ClCompile>
+    <ClCompile Include="source\win\sndstreamdsdmo.cpp">
+      </ClCompile>
+    <ClCompile Include="source\win\sndstreamrenderer.cpp">
+      </ClCompile>
+    <ClCompile Include="source\win\sndthread.cpp">
+      </ClCompile>
+    <ClCompile Include="source\win\sndvoice.cpp">
+      </ClCompile>
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+</Project>

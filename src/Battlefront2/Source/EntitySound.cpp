@@ -37,6 +37,15 @@ PblHash EntitySound::rttiHashEntitySound("EntitySound");
 // EntitySound::rttiNameEntitySound
 const char EntitySound::rttiNameEntitySound[] = "EntitySound";
 
+// SYNTHETIC: SWBF2 0x00402de0
+// `dynamic initializer for 'EntitySound::sEntitySoundList''
+// SYNTHETIC: SWBF2 0x00766fd0
+// `dynamic atexit destructor for 'EntitySound::sEntitySoundList''
+
+// GLOBAL: SWBF2 0x007eb884
+// EntitySound::sEntitySoundList
+PblListSingle EntitySound::sEntitySoundList;
+
 // SYNTHETIC: SWBF2 0x00402df0
 // `dynamic initializer for 'EntitySoundClass::rttiHashEntitySoundClass''
 // EntitySoundClass::rttiHashEntitySoundClass
@@ -57,14 +66,7 @@ const char EntitySoundClass::rttiNameEntitySoundClass[] = "EntitySoundClass";
 // SoundSpaceRegion::sMemoryPool
 MemoryPool SoundSpaceRegion::sMemoryPool("SoundSpaceRegion", sizeof(SoundSpaceRegion));
 
-// SYNTHETIC: SWBF2 0x00402de0
-// `dynamic initializer for 'EntitySound::sEntitySoundList''
-// SYNTHETIC: SWBF2 0x00766fd0
-// `dynamic atexit destructor for 'EntitySound::sEntitySoundList''
 
-// GLOBAL: SWBF2 0x007eb884
-// EntitySound::sEntitySoundList
-PblListSingle EntitySound::sEntitySoundList;
 
 
 

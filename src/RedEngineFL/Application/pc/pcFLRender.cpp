@@ -67,6 +67,30 @@ static RedCommandConsole cvReflectionsEnable("Reflections.Enable", MultiVar(&bRe
 // `dynamic initializer for 'cvReflectionsDraw''
 static RedCommandConsole cvReflectionsDraw("Reflections.Draw", MultiVar(&bReflectionsDraw));
 
+// SYNTHETIC: SWBF2 0x00407950
+// FLRenderer::`dynamic initializer for 'm_curFrameReflections''
+
+// GLOBAL: SWBF2 0x008f70a0
+// FLRenderer::m_curFrameReflections
+FLRenderer::ReflectionT FLRenderer::m_curFrameReflections[255];
+
+// SYNTHETIC: SWBF2 0x00407930
+// FLRenderer::`dynamic initializer for 'mCursorImage''
+// SYNTHETIC: SWBF2 0x00769880
+// FLRenderer::`dynamic atexit destructor for 'mCursorImage''
+
+// GLOBAL: SWBF2 0x008f6ef0
+// FLRenderer::mCursorImage
+RedBitmapElement FLRenderer::mCursorImage;
+
+// SYNTHETIC: SWBF2 0x00407910
+// FLRenderer::`dynamic initializer for 'mCursorGroup''
+// SYNTHETIC: SWBF2 0x00769870
+// FLRenderer::`dynamic atexit destructor for 'mCursorGroup''
+
+// GLOBAL: SWBF2 0x008f7000
+// FLRenderer::mCursorGroup
+RedScreenGroupElement FLRenderer::mCursorGroup;
 // SYNTHETIC: SWBF2 0x004078a0
 // `dynamic initializer for 'cvarNearScenePushInf''
 static RedCommandConsole cvarNearScenePushInf("nearScene.PushInfinite", MultiVar(&NearScenePushInf));
@@ -271,15 +295,6 @@ RedTexture* FLRenderer::m_previousFrameTex;
 _D3DFORMAT FLRenderer::m_formatReflectionTarget_Medium;
 // GLOBAL: SWBF2 0x008f6edc
 _D3DFORMAT FLRenderer::m_formatReflectionDepth_Medium;
-// SYNTHETIC: SWBF2 0x00407930
-// FLRenderer::`dynamic initializer for 'mCursorImage''
-// SYNTHETIC: SWBF2 0x00769880
-// FLRenderer::`dynamic atexit destructor for 'mCursorImage''
-
-// GLOBAL: SWBF2 0x008f6ef0
-// FLRenderer::mCursorImage
-RedBitmapElement FLRenderer::mCursorImage;
-
 // GLOBAL: SWBF2 0x008f6ff0
 RedColor FLRenderer::m_colorFog;
 namespace FLRenderer
@@ -287,21 +302,6 @@ namespace FLRenderer
 // GLOBAL: SWBF2 0x008f6ff4
 RedColor m_colorReflectionFog;
 }
-// SYNTHETIC: SWBF2 0x00407910
-// FLRenderer::`dynamic initializer for 'mCursorGroup''
-// SYNTHETIC: SWBF2 0x00769870
-// FLRenderer::`dynamic atexit destructor for 'mCursorGroup''
-
-// GLOBAL: SWBF2 0x008f7000
-// FLRenderer::mCursorGroup
-RedScreenGroupElement FLRenderer::mCursorGroup;
-// SYNTHETIC: SWBF2 0x00407950
-// FLRenderer::`dynamic initializer for 'm_curFrameReflections''
-
-// GLOBAL: SWBF2 0x008f70a0
-// FLRenderer::m_curFrameReflections
-FLRenderer::ReflectionT FLRenderer::m_curFrameReflections[255];
-
 // FUNCTION: SWBF2 0x006bb240
 FLRenderer::ReflectionT::ReflectionT()
 {

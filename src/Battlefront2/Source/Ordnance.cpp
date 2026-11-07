@@ -14,7 +14,7 @@
 #include "NetGame.h"
 #include "UnitController.h"
 #include "VisionManager.h"
-#include "WeaponCannonInstance.h"
+#include "WeaponCannon.h"
 #include "PebbleFL/Common/PblChunk.h"
 #include "PebbleFL/Common/PblFile.h"
 #include "RedEngineFL/Application/RedWater.h"

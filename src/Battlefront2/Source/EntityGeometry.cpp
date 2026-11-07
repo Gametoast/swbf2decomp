@@ -390,39 +390,6 @@ EntityGeometryClass::EntityGeometryClass(unsigned int uHash)
     mTargetPointOffset.x = 0.0f;
 }
 
-// FUNCTION: SWBF2 0x004b9f50
-void ChunkDescriptor::Init()
-{
-    mMatrix.Reset();
-
-    mVelocity.z = 0.0f;
-    mVelocity.y = 0.0f;
-    mVelocity.x = 0.0f;
-    mModel = 0;
-    mPrimitive = 0;
-    mMaxTerrainCollisions = 0;
-    mTerrainImpactEffect = 0;
-    mPhysicsType = 0;
-    mOmega.z = 0.0f;
-    mOmega.y = 0.0f;
-    mOmega.x = 0.0f;
-    mFullCollisionModel = 0;
-    mCoefficientOfRestitution = 0.0f;
-    mCoefficientOfFriction = 0.0f;
-    mSimpleFrictionConstant = 0.0f;
-    mMinDeathCollisionSpeed = 0.0f;
-    mForceZeroYAxisVelocity = false;
-    memset(mTrailEffect, 0, sizeof(mTrailEffect));
-    memset(mSmokeEffect, 0, sizeof(mSmokeEffect));
-    memset(mTrailAttachPoints, 0, sizeof(mTrailAttachPoints));
-    memset(mSmokeAttachPoints, 0, sizeof(mSmokeAttachPoints));
-    mGravity = PblVector3(0.0f, -9.8f, 0.0f);
-    mNoBuildingCollisions = false;
-    mKeepSoldierCollisions = false;
-    mLinearDamping = 0.0f;
-    mAngularDamping = 0.0f;
-    mMaxStaticLifetime = -1.0f;
-}
 
 // ChunkDescriptor::ChunkDescriptor(const ChunkDescriptor&)
 // SYNTHETIC: SWBF2 0x004bb0b0 SYMBOL
@@ -807,11 +774,11 @@ void EntityGeometryClass::SetProperty(unsigned int uProperty, const char* pszVal
         {
             switch (PblHash(pszValue))
             {
-            case 0xff79b33c: /* "FULL" */ mChunkDescriptors[sCurrentChunk]->mPhysicsType = 0; break;
-            case 0xd290c23b: /* "STATIC" */ mChunkDescriptors[sCurrentChunk]->mPhysicsType = 2; break;
-            case 0x2648cd55: /* "LEAF" */ mChunkDescriptors[sCurrentChunk]->mPhysicsType = 3; break;
-            case 0x493ea232: /* "COCKPIT" */ mChunkDescriptors[sCurrentChunk]->mPhysicsType = 4; break;
-            default: mChunkDescriptors[sCurrentChunk]->mPhysicsType = 1; break;
+            case 0xff79b33c: /* "FULL" */ mChunkDescriptors[sCurrentChunk]->mPhysicsType = PHYSICS_FULL_RIGID; break;
+            case 0xd290c23b: /* "STATIC" */ mChunkDescriptors[sCurrentChunk]->mPhysicsType = PHYSICS_STATIC; break;
+            case 0x2648cd55: /* "LEAF" */ mChunkDescriptors[sCurrentChunk]->mPhysicsType = PHYSICS_LEAF; break;
+            case 0x493ea232: /* "COCKPIT" */ mChunkDescriptors[sCurrentChunk]->mPhysicsType = PHYSICS_COCKPIT; break;
+            default: mChunkDescriptors[sCurrentChunk]->mPhysicsType = PHYSICS_SIMPLE_RIGID; break;
             }
         }
         break;

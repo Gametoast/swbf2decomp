@@ -54,8 +54,17 @@ struct GoalTarget
     {
     }
 
-    GoalTarget(const PblVector3& vPos);
-    GoalTarget(const GameObject* pObject);
+    // FUNCTION: SWBF2 0x00487fb0
+    GoalTarget(const PblVector3& vPos)
+        : mType(GTT_POS), mPos(vPos), mChr(0)
+    {
+    }
+
+    // FUNCTION: SWBF2 0x00487ff0
+    GoalTarget(const GameObject* pObject)
+        : mType(GTT_GAMEOBJECT), mPos(0, 0, 0), mChr(0), mGameObj(pObject)
+    {
+    }
 
     GoalTargetType mType;
     PblVector3 mPos;

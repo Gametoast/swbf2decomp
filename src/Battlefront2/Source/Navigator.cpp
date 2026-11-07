@@ -130,7 +130,7 @@ float Navigator::GetMyRadius() const
 }
 
 // FUNCTION: SWBF2 0x005ab520
-int Navigator::GetMyProhibit() const
+ConnectivityGraph::ProhibitFlag Navigator::GetMyProhibit() const
 {
     return AIUtil::GetAIType(GetGameObject());
 }

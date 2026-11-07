@@ -3,6 +3,7 @@
 #include "PebbleFL/Common/PblHashTable.h"
 
 #include "Fsm.h"
+#include "ConnectivityGraph.h"
 #include "PebbleFL/Common/PblHashTable.h"
 #include "RedEngineFL/Memory/RedMemoryPool.h"
 
@@ -58,7 +59,7 @@ protected:
     GameObject* GetGameObject();
     const GameObject* GetGameObject() const;
     float GetMyRadius() const;
-    int GetMyProhibit() const;
+    ConnectivityGraph::ProhibitFlag GetMyProhibit() const;
     const Obstacle* GetMyBarrier() const;
     bool AttemptWallFollow(float fStep, bool bRight);
     bool LookForPowerUps(float fRadius);
