@@ -3,6 +3,7 @@
 #include "Primitives.h"
 #include "basics.h"
 #include "polygons.h"
+#include "PebbleFL/Common/PblMath.h"
 
 namespace geo
 {

@@ -2107,6 +2107,10 @@
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <OmitDefaultLibName>true</OmitDefaultLibName>
     </ClCompile>
+    <ClCompile Include="src\PebbleFL\Common\PblBuildType.cpp">
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <OmitDefaultLibName>true</OmitDefaultLibName>
+    </ClCompile>
     <ClCompile Include="src\PebbleFL\Common\PblCatmullRom.cpp">
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <OmitDefaultLibName>true</OmitDefaultLibName>
@@ -3276,6 +3280,7 @@
     <ClInclude Include="src\LuaFL\src\lzio.h" />
     <ClInclude Include="src\PebbleFL\Common\PblAngle.h" />
     <ClInclude Include="src\PebbleFL\Common\PblBitVector.h" />
+    <ClInclude Include="src\PebbleFL\Common\PblBuildType.h" />
     <ClInclude Include="src\PebbleFL\Common\PblCatmullRom.h" />
     <ClInclude Include="src\PebbleFL\Common\PblChunk.h" />
     <ClInclude Include="src\PebbleFL\Common\PblConfig.h" />

@@ -4,6 +4,7 @@
 #include "PebbleFL/Common/PblValues.h"
 #include "Battlefront2/Source/NetSetup.h"
 #include "lglcd/lgLcd.h"
+#include "PebbleFL/Common/PblMath.h"
 
 // GLOBAL: SWBF2 0x007873e4
 // IID_IDirectInput8A

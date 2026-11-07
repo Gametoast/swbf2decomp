@@ -8,6 +8,7 @@
 #include "PebbleFL/Common/PblFile.h"
 #include "RedEngineFL/Memory/RedMemory.h"
 #include <new>
+#include "PebbleFL/Common/PblMath.h"
 
 // GLOBAL: SWBF2 0x007e2740
 PblList<RedMoviePlayerBase> RedMoviePlayerBase::sMovieList;

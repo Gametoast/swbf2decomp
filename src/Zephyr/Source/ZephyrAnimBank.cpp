@@ -1,5 +1,6 @@
 #include "ZephyrAnimBank.h"
 #include "ZephyrAnimJoint.h"
+#include "PebbleFL/Common/PblMath.h"
 
 // FUNCTION: SWBF2 0x0072bac0
 bool ZephyrAnimBank::Open(char* pcMem, unsigned int uiMemSize, const char* pcData, const ZephyrAnimFileHeaderD* pkHeader)

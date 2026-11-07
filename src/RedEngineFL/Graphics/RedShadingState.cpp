@@ -1,6 +1,7 @@
 #include "RedShadingState.h"
 
 #include "RedEngineFL/Memory/RedMemoryPool.h"
+#include "PebbleFL/Common/PblMath.h"
 
 class RedModel
 {

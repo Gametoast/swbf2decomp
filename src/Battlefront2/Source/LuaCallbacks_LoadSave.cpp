@@ -60,10 +60,7 @@ unsigned int __cdecl ustrlcpy(unsigned short* pusDest, unsigned short const* pus
                               unsigned int uiSize);
 }
 
-namespace PblBuildType
-{
-extern bool gCreateMemoryProfile;
-}
+#include "PebbleFL/Common/PblBuildType.h"
 extern bool gInTrainingMission;
 
 namespace RedLocalizeDB

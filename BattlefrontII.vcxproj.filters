@@ -1608,6 +1608,9 @@
     <ClCompile Include="src\LuaFL\src\lzio.cpp">
       <Filter>src\LuaFL\src</Filter>
     </ClCompile>
+    <ClCompile Include="src\PebbleFL\Common\PblBuildType.cpp">
+      <Filter>src\PebbleFL\Common</Filter>
+    </ClCompile>
     <ClCompile Include="src\PebbleFL\Common\PblCatmullRom.cpp">
       <Filter>src\PebbleFL\Common</Filter>
     </ClCompile>
@@ -3711,6 +3714,9 @@
       <Filter>src\PebbleFL\Common</Filter>
     </ClInclude>
     <ClInclude Include="src\PebbleFL\Common\PblBitVector.h">
+      <Filter>src\PebbleFL\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="src\PebbleFL\Common\PblBuildType.h">
       <Filter>src\PebbleFL\Common</Filter>
     </ClInclude>
     <ClInclude Include="src\PebbleFL\Common\PblCatmullRom.h">

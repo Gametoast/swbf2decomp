@@ -28,10 +28,7 @@
 #include "EnergyBar.h"
 #include "PebbleFL/Common/PblUnicode.h"
 
-namespace PblBuildType
-{
-extern bool gDemoBuild;
-}
+#include "PebbleFL/Common/PblBuildType.h"
 
 // SYNTHETIC: SWBF2 0x004039d0
 // `dynamic initializer for 'FLInputManager::s_instance''
@@ -341,9 +338,6 @@ bool CanProcessChatMessage(void)
     return pPanel && pPanel->mOpened;
 }
 
-// GLOBAL: SWBF2 0x009cef76
-bool gDemoBindControllers;
-
 namespace ObjectiveManager
 {
 HUD::ObjectiveList* GetObjectiveList();
@@ -379,7 +373,7 @@ bool FLInputManager::Update(float fDeltaTime)
         }
     }
 
-    if (PblBuildType::gDemoBuild && gDemoBindControllers)
+    if (PblBuildType::gDemoBuild && PblBuildType::gDemoNoPressStart)
     {
         for (unsigned char i = 0; i < RedInputManager::GetNumJoystickPorts(); i++)
         {

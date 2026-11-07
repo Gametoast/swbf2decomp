@@ -36,10 +36,7 @@ BOOL CALLBACK EnumObjectsCallback(DIDEVICEOBJECTINSTANCEA const* pObject, void* 
 // GLOBAL: SWBF2 0x01fa9264
 unsigned int mLastDirtyCRC[1];
 
-namespace PblBuildType
-{
-extern bool gCreateMemoryProfile;
-}
+#include "PebbleFL/Common/PblBuildType.h"
 
 extern bool pcWindowed;
 extern int pcWidth;

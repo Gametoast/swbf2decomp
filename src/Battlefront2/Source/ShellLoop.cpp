@@ -53,49 +53,7 @@ unsigned int ShellLoop::sSystemDeltaTime;
 // GLOBAL: SWBF2 0x01eaf058
 unsigned int ShellLoop::clientTimePrev;
 
-namespace PblBuildType
-{
-    extern bool gDemoBuild;
-}
-namespace PblBuildType
-{
-    extern bool gCreateMemoryProfile;
-}
-namespace PblBuildType
-{
-    // GLOBAL: SWBF2 0x009cef73
-    bool gDemoHasSplitscreen;
-}
-namespace PblBuildType
-{
-    // GLOBAL: SWBF2 0x009cef74
-    bool gDemoHost;
-}
-namespace PblBuildType
-{
-    // GLOBAL: SWBF2 0x009cef77
-    bool gDemoNoInputRebind;
-}
-namespace PblBuildType
-{
-    // GLOBAL: SWBF2 0x007e2e0c
-    bool gFinalBuild = true;
-}
-namespace PblBuildType
-{
-    // GLOBAL: SWBF2 0x007e2e0d
-    bool gXBox_DVDDemo = true;
-}
-namespace PblBuildType
-{
-    // GLOBAL: SWBF2 0x007e2e0e
-    bool gE3Demo = true;
-}
-namespace PblBuildType
-{
-    // GLOBAL: SWBF2 0x007e2e0f
-    bool gDemoAutoAssign = true;
-}
+#include "PebbleFL/Common/PblBuildType.h"
 
 
     

@@ -195,25 +195,10 @@ extern int netHeroRuleRespawn;
 extern int netHeroRuleRespawnVal;
 extern bool netHeroUnlocked[3];
 extern bool netHeroFirstUnlocked[3];
-namespace PblBuildType
-{
-    extern bool gDemoBuild;
-}
+#include "PebbleFL/Common/PblBuildType.h"
 extern int netHeroRuleTeam;
 extern int netHeroRuleUnlock;
 extern int netHeroRulePlayer;
-namespace PblBuildType
-{
-    extern bool gDemoHost;
-}
-namespace PblBuildType
-{
-    extern bool gDemoNoInputRebind;
-}
-namespace PblBuildType
-{
-    extern bool gFinalBuild;
-}
 extern bool gMapDisplayAll;
 extern bool sMissionActive;
 

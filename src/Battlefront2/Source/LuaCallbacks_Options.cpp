@@ -42,10 +42,7 @@ extern bool netHeroesEnabled;
 extern int netHeroRuleUnlockVal;
 extern int netHeroRuleRespawn;
 extern int netHeroRuleRespawnVal;
-namespace PblBuildType
-{
-    extern bool gDemoBuild;
-}
+#include "PebbleFL/Common/PblBuildType.h"
 extern int hostVoteThreshold;
 extern int netHostedPlayerLimit;
 extern int netDedicatedPlayerLimit;
@@ -53,10 +50,6 @@ extern int netPlayerLimit;
 extern int gGlobalNumBots;
 extern bool netAutoAim;
 extern bool netShowNames;
-namespace PblBuildType
-{
-    extern bool gDemoAutoAssign;
-}
 extern bool netAutoAssignTeamsOriginalSetting;
 extern int netMinPlayersToAutoLaunchDedicated;
 extern int netThrottle;

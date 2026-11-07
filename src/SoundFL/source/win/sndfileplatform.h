@@ -1,6 +1,7 @@
 #pragma once
 
 #include "SoundFL/source/sndfileplatformbase.h"
+#include "PebbleFL/Common/PblMath.h"
 
 namespace Snd
 {

@@ -725,11 +725,7 @@ namespace SaveGameManager
     // GLOBAL: SWBF2 0x01eaeff7
     bool mForceNoSaveDevice;
 }
-namespace PblBuildType
-{
-    // GLOBAL: SWBF2 0x009cef72
-    bool gCreateMemoryProfile;
-}
+#include "PebbleFL/Common/PblBuildType.h"
 
 namespace SaveGameManager
 {

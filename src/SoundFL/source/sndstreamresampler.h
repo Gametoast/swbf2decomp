@@ -4,6 +4,7 @@
 
 #include "sndstreamnode.h"
 #include "sndstreampacket.h"
+#include "PebbleFL/Common/PblMath.h"
 
 namespace Snd
 {
