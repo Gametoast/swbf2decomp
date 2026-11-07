@@ -4,6 +4,7 @@
 #include "basics.h"
 #include "polygons.h"
 #include "TransformOps.h"
+#include "PebbleFL/Common/PblMath.h"
 
 namespace geo
 {

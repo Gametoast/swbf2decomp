@@ -1,5 +1,6 @@
 #include "RedFileAsync.h"
 #include <windows.h>
+#include "PebbleFL/Common/PblMath.h"
 
 // FUNCTION: SWBF2 0x00726c00
 RedFileAsync::RedFileAsync()

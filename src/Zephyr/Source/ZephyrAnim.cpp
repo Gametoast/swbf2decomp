@@ -1,5 +1,6 @@
 #include "ZephyrAnim.h"
 #include "ZephyrAnimJoint.h"
+#include "PebbleFL/Common/PblMath.h"
 
 // FUNCTION: SWBF2 0x0072f220
 bool ZephyrAnim::Open(const ZephyrAnimD* pkAnimD, const ZephyrAnimJointD* pkJointD, ZephyrAnimJoint* pkJoints, char* pcData)

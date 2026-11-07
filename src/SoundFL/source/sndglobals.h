@@ -1,6 +1,7 @@
 #pragma once
 
 #include <stddef.h>
+#include "PebbleFL/Common/PblMath.h"
 
 #include "PebbleFL/Common/PblVector.h"
 

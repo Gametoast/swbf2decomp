@@ -1,5 +1,7 @@
 #pragma once
 
+#include "PebbleFL/Common/PblMath.h"
+
 namespace Snd
 {
 namespace DSP

@@ -2,6 +2,7 @@
 #include "RedModel.h"
 
 #include "RedEngineFL/Memory/RedMemoryPool.h"
+#include "PebbleFL/Common/PblMath.h"
 
 
 // SYNTHETIC: SWBF2 0x00408c20
