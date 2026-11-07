@@ -119,6 +119,15 @@ PblMatrix NormalMatrix(const PblVector3& vDir, const PblVector3& vNormal, const 
 
 
 
+// SYNTHETIC: SWBF2 0x00402d40
+// `dynamic initializer for 'EntitySoldier::sMemoryPool''
+// SYNTHETIC: SWBF2 0x00766fb0
+// `dynamic atexit destructor for 'EntitySoldier::sMemoryPool''
+
+// GLOBAL: SWBF2 0x01ebc100
+// EntitySoldier::sMemoryPool
+MemoryPool EntitySoldier::sMemoryPool("EntitySoldier", sizeof(EntitySoldier));
+
 // SYNTHETIC: SWBF2 0x00402d60
 // `dynamic initializer for 'EntitySoldier::rttiHashEntitySoldier''
 // EntitySoldier::rttiHashEntitySoldier
@@ -130,15 +139,6 @@ PblHash EntitySoldier::rttiHashEntitySoldier("EntitySoldier");
 // EntitySoldier::rttiNameEntitySoldier
 const char EntitySoldier::rttiNameEntitySoldier[] = "EntitySoldier";
 
-// SYNTHETIC: SWBF2 0x00402d40
-// `dynamic initializer for 'EntitySoldier::sMemoryPool''
-// SYNTHETIC: SWBF2 0x00766fb0
-// `dynamic atexit destructor for 'EntitySoldier::sMemoryPool''
-
-// GLOBAL: SWBF2 0x01ebc100
-// EntitySoldier::sMemoryPool
-MemoryPool EntitySoldier::sMemoryPool("EntitySoldier", sizeof(EntitySoldier));
-
 // SYNTHETIC: SWBF2 0x00402d70
 // `dynamic initializer for 'EntitySoldierClass::rttiHashEntitySoldierClass''
 // EntitySoldierClass::rttiHashEntitySoldierClass
@@ -149,6 +149,12 @@ PblHash EntitySoldierClass::rttiHashEntitySoldierClass("EntitySoldierClass");
 // GLOBAL: SWBF2 0x007895c8
 // EntitySoldierClass::rttiNameEntitySoldierClass
 const char EntitySoldierClass::rttiNameEntitySoldierClass[] = "EntitySoldierClass";
+
+extern bool gShowSoldierPolyCount;
+
+// SYNTHETIC: SWBF2 0x00402d80
+// `dynamic initializer for 'g_SoldierPolyCount''
+RedCommandConsole g_SoldierPolyCount("SoldierPolyCount", MultiVar(&gShowSoldierPolyCount));
 
 // SYNTHETIC: SWBF2 0x00402db0
 // `dynamic initializer for 'AcklayData::sMemoryPool''
@@ -172,11 +178,6 @@ static int sCurDropItem;
 
 // GLOBAL: SWBF2 0x01e51dd5
 static bool gMidgetTime;
-
-ZephyrSkeletonShared* SoldierAnimatorLowResClass::GetDefaultSkeleton()
-{
-    return s_pHead ? s_pHead->m_pZephyrSkeletonShared : 0;
-}
 
 // SYNTHETIC: SWBF2 0x0043cf20
 // Aimer::`scalar deleting destructor'
@@ -1124,8 +1125,6 @@ static PblVector3 sEyePointRelativeWeaponOffset[3] = {
 
 // GLOBAL: SWBF2 0x01faa468
 bool gPlayerSoldierCollisionOccurred;
-
-extern bool gShowSoldierPolyCount;
 
 
 
@@ -10396,7 +10395,3 @@ void EntitySoldier::ApplyChoke(const PblVector3& vDir, float, SoldierAnimationBa
 
 // GLOBAL: SWBF2 0x01e51dd7
 bool gShowSoldierPolyCount;
-
-// SYNTHETIC: SWBF2 0x00402d80
-// `dynamic initializer for 'g_SoldierPolyCount''
-RedCommandConsole g_SoldierPolyCount("SoldierPolyCount", MultiVar(&gShowSoldierPolyCount));

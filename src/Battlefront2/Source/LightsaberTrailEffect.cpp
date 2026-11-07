@@ -84,23 +84,8 @@ LightsaberTrail::LightsaberTrail(const LightsaberTrailClass* pClass)
 
 
 
-// FUNCTION: SWBF2 0x00573da0
-bool LightsaberTrail::IsEffectActive() const
-{
-    return m_bEffectActive;
-}
 
-// FUNCTION: SWBF2 0x00573db0
-void LightsaberTrail::ActivateEffect()
-{
-    m_bEffectActive = true;
-}
 
-// FUNCTION: SWBF2 0x00573dc0
-void LightsaberTrail::DeactivateEffect()
-{
-    m_bEffectActive = false;
-}
 
 // FUNCTION: SWBF2 0x00573dd0
 void LightsaberTrail::AddToRenderList()

@@ -154,9 +154,8 @@ bool Overlap3D::Op(const ExtrudedPoly3D& rPoly, const Vector3<float>& rPoint)
     }
     BasePoly2D poly(rPoly);
 
-    Vector2<float> pt;
-    pt.x = dot(rPoint, rPoly.xaxis_);
-    pt.y = dot(rPoint, rPoly.yaxis_);
+    Vector2<float> pt(dot(rPoint, rPoly.xaxis_),
+                      dot(rPoint, rPoly.yaxis_));
     return PolyPoly2D::PointInPolyCN(pt, poly);
 }
 

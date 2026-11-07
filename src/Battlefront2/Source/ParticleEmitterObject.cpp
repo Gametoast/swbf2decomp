@@ -108,13 +108,6 @@ void ParticleEmitterObject::StopNow()
     }
 }
 
-// FUNCTION: SWBF2 0x006371c0
-void ParticleEmitterObject::PermaRemoveParticleEffect()
-{
-    RedSceneObject::RemoveFromScene();
-    mbAddedToScene = false;
-}
-
 // FUNCTION: SWBF2 0x0060c400
 bool ParticleEmitterObject::IsEffectActive() const
 {

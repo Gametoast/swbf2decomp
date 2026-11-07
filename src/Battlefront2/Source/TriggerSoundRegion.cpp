@@ -19,15 +19,6 @@ void TriggerSoundRegion::Group::DestroyAll()
     }
 }
 
-// SYNTHETIC: SWBF2 0x00406be0
-// `dynamic initializer for 'TriggerSoundRegion::sList''
-// SYNTHETIC: SWBF2 0x007696a0
-// `dynamic atexit destructor for 'TriggerSoundRegion::sList''
-
-// GLOBAL: SWBF2 0x007ebe78
-// TriggerSoundRegion::sList
-PblListSingle TriggerSoundRegion::sList;
-
 // FUNCTION: SWBF2 0x0065d6d0
 unsigned int TriggerSoundRegion::Properties::GetID() const
 {
@@ -59,6 +50,15 @@ const TriggerSoundRegion::Properties* TriggerSoundRegion::Properties::FindByID(u
 // TriggerSoundRegion::Group::sMemoryPool
 MemoryPool TriggerSoundRegion::Group::sMemoryPool("TriggerSoundRegion::Group", sizeof(TriggerSoundRegion::Group));
 
+// SYNTHETIC: SWBF2 0x00406b80
+// `dynamic initializer for 'TriggerSoundRegion::Group::sList''
+// SYNTHETIC: SWBF2 0x00769660
+// `dynamic atexit destructor for 'TriggerSoundRegion::Group::sList''
+
+// GLOBAL: SWBF2 0x007ebe98
+// TriggerSoundRegion::Group::sList
+PblListSingle TriggerSoundRegion::Group::sList;
+
 // SYNTHETIC: SWBF2 0x00406b90
 // `dynamic initializer for 'TriggerSoundRegion::Properties::sMemoryPool''
 // SYNTHETIC: SWBF2 0x00769670
@@ -68,6 +68,14 @@ MemoryPool TriggerSoundRegion::Group::sMemoryPool("TriggerSoundRegion::Group", s
 // TriggerSoundRegion::Properties::sMemoryPool
 MemoryPool TriggerSoundRegion::Properties::sMemoryPool("TriggerSoundRegion::Properties", sizeof(TriggerSoundRegion::Properties));
 
+// SYNTHETIC: SWBF2 0x00406bb0
+// `dynamic initializer for 'TriggerSoundRegion::Properties::sList''
+// SYNTHETIC: SWBF2 0x00769680
+// `dynamic atexit destructor for 'TriggerSoundRegion::Properties::sList''
+
+// GLOBAL: SWBF2 0x007ebe7c
+// TriggerSoundRegion::Properties::sList
+PblListSingle TriggerSoundRegion::Properties::sList;
 // SYNTHETIC: SWBF2 0x00406bc0
 // `dynamic initializer for 'TriggerSoundRegion::sMemoryPool''
 // SYNTHETIC: SWBF2 0x00769690
@@ -76,6 +84,15 @@ MemoryPool TriggerSoundRegion::Properties::sMemoryPool("TriggerSoundRegion::Prop
 // GLOBAL: SWBF2 0x01f9a158
 // TriggerSoundRegion::sMemoryPool
 MemoryPool TriggerSoundRegion::sMemoryPool("TriggerSoundRegion", sizeof(TriggerSoundRegion));
+
+// SYNTHETIC: SWBF2 0x00406be0
+// `dynamic initializer for 'TriggerSoundRegion::sList''
+// SYNTHETIC: SWBF2 0x007696a0
+// `dynamic atexit destructor for 'TriggerSoundRegion::sList''
+
+// GLOBAL: SWBF2 0x007ebe78
+// TriggerSoundRegion::sList
+PblListSingle TriggerSoundRegion::sList;
 
 // FUNCTION: SWBF2 0x0065d400
 TriggerSoundRegion::Group::Group()
@@ -348,20 +365,3 @@ void TriggerSoundRegion::DestroyAll()
     Group::DestroyAll();
 }
 
-// SYNTHETIC: SWBF2 0x00406b80
-// `dynamic initializer for 'TriggerSoundRegion::Group::sList''
-// SYNTHETIC: SWBF2 0x00769660
-// `dynamic atexit destructor for 'TriggerSoundRegion::Group::sList''
-
-// GLOBAL: SWBF2 0x007ebe98
-// TriggerSoundRegion::Group::sList
-PblListSingle TriggerSoundRegion::Group::sList;
-
-// SYNTHETIC: SWBF2 0x00406bb0
-// `dynamic initializer for 'TriggerSoundRegion::Properties::sList''
-// SYNTHETIC: SWBF2 0x00769680
-// `dynamic atexit destructor for 'TriggerSoundRegion::Properties::sList''
-
-// GLOBAL: SWBF2 0x007ebe7c
-// TriggerSoundRegion::Properties::sList
-PblListSingle TriggerSoundRegion::Properties::sList;

@@ -223,7 +223,7 @@ bool EndDisplay::Update(float fDeltaTime)
         GameSoundEngine::StopAll();
         GameSoundEngine::Update(0.0001f);
         Snd::Stream::EnableStreaming(false);
-        GameMovie::StartInGameMoviePlay(mMovieFileName, mMovieIdName);
+        StartInGameMoviePlay(mMovieFileName, mMovieIdName);
         mMoviePlayed = true;
     }
 
@@ -243,27 +243,6 @@ extern unsigned __int64 g_InGameMovieStartTime;
 char ingame_movie_idname[256];
 // GLOBAL: SWBF2 0x01e56288
 char g_InGameMovieFilename[256];
-
-// FUNCTION: SWBF2 0x00534bd0
-void GameMovie::StartInGameMoviePlay(const char* pcFile, const char* pcName)
-{
-    if (g_InGameMoviePlayerState)
-    {
-        return;
-    }
-
-    g_InGameMoviePlayerUpdateEnable = true;
-    g_InGameMoviePlayerState = 1;
-    const unsigned int uiView = CameraManager::sInstance->m_hView[0];
-    g_InGameMoviePlayerFrame = 0;
-    FLRenderer::SetSceneEnable(uiView, false);
-    FLRenderer::SetInterfaceEnable(uiView, false);
-    strcpy(g_InGameMovieFilename, "Movies\\");
-    strcat(g_InGameMovieFilename, pcFile);
-    strcpy(ingame_movie_idname, pcName);
-    unsigned __int64 perfCount = PblTime::GetTickCount();
-    g_InGameMovieStartTime = perfCount;
-}
 
 // FUNCTION: SWBF2 0x004912e0
 bool EndDisplay::HasBeenDisplayed()

@@ -1,5 +1,6 @@
 #include <d3dx9math.h>
 #include "LuaCallbacks_IFace.h"
+#include "StatsManager.h"
 #include "LuaHelper.h"
 
 #include <string.h>
@@ -3825,7 +3826,7 @@ int ScriptCB_PlayInGameMovie(lua_State* L)
     case eLANG_UK: pcFile = "ingame.mvs"; break;
     default: pcFile = "ingame.mvs"; break;
     }
-    GameMovie::StartInGameMoviePlay(pcFile, luaL_checklstring(LuaHelper::mState, 2, 0));
+    StartInGameMoviePlay(pcFile, luaL_checklstring(LuaHelper::mState, 2, 0));
     return 0;
 }
 

@@ -6,6 +6,16 @@
 
 namespace Snd
 {
+
+struct GainMatrix
+{
+    float frontLeft;
+    float frontRight;
+    float rearLeft;
+    float rearRight;
+    float reverb;
+};
+
 namespace Globals
 {
 

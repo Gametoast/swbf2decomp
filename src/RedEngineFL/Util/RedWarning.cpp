@@ -9,17 +9,9 @@
 
 #include "RedWarning.h"
 #include "RedConsole.h"
+#include "RedMissionLog.h"
 
 #include "PebbleFL/Common/PblFile.h"
-
-// GLOBAL: SWBF2 0x007df210
-bool gBreakOnWarning = true;
-
-// FUNCTION: SWBF2 0x006cccb0
-bool GetBreakOnWarning()
-{
-    return gBreakOnWarning;
-}
 
 // GLOBAL: SWBF2 0x007e15cc
 static char* kapcSEVERITYSHORT[6] = { "*", "?", "#", "$", "%", "!" };
@@ -332,7 +324,7 @@ void RedWarning::LogMessage(char const* pcFormat, ...)
         }
 
         RED_ERROR_SEVERITY eBreakAt = RED_SEVERITY_ERROR;
-        if (GetBreakOnWarning())
+        if (RedMissionLog::GetWriteWarnings())
         {
             eBreakAt = RED_SEVERITY_WARNING;
         }

@@ -245,7 +245,7 @@ void VehicleManager::Update()
             continue;
         }
 
-        if (!pObject->GetEntity()->IsRtti(EntityBuilding::rttiHashEntityBuilding))
+        if (!pObject->GetEntity()->IsRtti(EntityBuilding::GetRtti()))
         {
             const Obstacle* pBarrier = AIUtil::GetGameObjectBarrier(pObject);
             if (!PathFinder::IsPointValid(pObject->GetMatrix().GetTranslation(), 2.0f, 1, 0,

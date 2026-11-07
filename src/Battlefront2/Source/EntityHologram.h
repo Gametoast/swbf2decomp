@@ -44,7 +44,7 @@ public:
     static void Reset();
     static PblHashTable<EntityHologramClass, 32> sHologramClassTable;
 
-    RedModel* m_pHoloModel;
+    const RedModel* m_pHoloModel;
     RedColor m_color;
     float m_fVisibleDistance;
     float m_fHeight;
@@ -142,7 +142,7 @@ public:
     RedColor m_color;
     LightBeam* m_pLightBeam;
     RedOmniLight* m_apOmniLight[1];
-    RedModel* m_pHoloModel;
+    const RedModel* m_pHoloModel;
     float m_fRotateTimer;
     float m_fPopTimer;
     float m_fAspect;

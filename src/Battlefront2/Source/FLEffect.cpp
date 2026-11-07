@@ -54,12 +54,6 @@ extern PblMatrix gMatrixIdentity;
 // GLOBAL: SWBF2 0x01e51e26
 bool FLEffect::s_bInitRender;
 
-// SYNTHETIC: SWBF2 0x004038f0
-// `dynamic initializer for 'FLEffect::s_EffectFactories''
-
-// GLOBAL: SWBF2 0x01ebd020
-PblHashTable<FLEffect, 32> FLEffect::s_EffectFactories;
-
 // SYNTHETIC: SWBF2 0x004038d0
 // `dynamic initializer for 'FLEffect::_Thread''
 // SYNTHETIC: SWBF2 0x00768740
@@ -68,6 +62,12 @@ PblHashTable<FLEffect, 32> FLEffect::s_EffectFactories;
 // GLOBAL: SWBF2 0x01ebd124
 // FLEffect::_Thread
 FLEffect::FLEffectThread FLEffect::_Thread;
+
+// SYNTHETIC: SWBF2 0x004038f0
+// `dynamic initializer for 'FLEffect::s_EffectFactories''
+
+// GLOBAL: SWBF2 0x01ebd020
+PblHashTable<FLEffect, 32> FLEffect::s_EffectFactories;
 
 // SYNTHETIC: SWBF2 0x00403910
 // `dynamic initializer for 'FLEffect::s_EffectClasses''

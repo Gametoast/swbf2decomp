@@ -153,6 +153,26 @@ public:
 
     virtual ~EntityGeometry();
     virtual void SetProperty(unsigned int uProperty, const char* pszValue);
+    // FUNCTION: SWBF2 0x00444100
+    virtual const PblVector3& GetPosition() const { return mMatrix.GetTranslation(); }
+
+    // FUNCTION: SWBF2 0x004920e0
+    virtual void SetPosition(const PblVector3& vPos)
+    {
+        PblMatrix& rMatrix = mMatrix;
+        rMatrix[3] = vPos;
+        rMatrix.m[3][3] = 1.0f;
+
+        PblVector3 vCenter;
+        D3DXVec3TransformCoord((D3DXVECTOR3*)&vCenter,
+                               (const D3DXVECTOR3*)&mModel->_mModel->_BoundingSphere.GetCenter(),
+                               (const D3DXMATRIX*)&rMatrix);
+        SetCollisionCenter(vCenter);
+        RecalculateAABB();
+        SetRenderPos(GetCollisionCenter());
+    }
+
+    virtual float GetSmallestCollisionDim() const;
     // FUNCTION: SWBF2 0x00444120
     virtual Entity* GetEntity() { return this; }
     // [thunk]:EntityGeometry::GetEntity`adjustor{12}'
@@ -181,7 +201,29 @@ public:
         mModel = const_cast<GameModel*>(pModel);
         _pLodData = &mModel->_mLodData;
     }
-    virtual void SetupPose(RedPose& pose) const;
+    // FUNCTION: SWBF2 0x00444180
+    virtual const RedPose* GetPose() const { return 0; }
+
+    // FUNCTION: SWBF2 0x00444190
+    virtual void SetupPose(RedPose& pose) const
+    {
+        mModel->GetRedModel(0)->SetupPose(pose);
+    }
+    // FUNCTION: SWBF2 0x004921c0
+    virtual void SetMatrix(const PblMatrix& matrix)
+    {
+        mMatrix = matrix;
+
+        PblVector3 vCenter;
+        D3DXVec3TransformCoord((D3DXVECTOR3*)&vCenter,
+                               (const D3DXVECTOR3*)&mModel->_mModel->_BoundingSphere.GetCenter(),
+                               (const D3DXMATRIX*)&mMatrix);
+        SetCollisionCenter(vCenter);
+        RecalculateAABB();
+        SetRenderPos(GetCollisionCenter());
+    }
+    // FUNCTION: SWBF2 0x00475da0
+    virtual const PblMatrix& GetMatrix() const { return mMatrix; }
     virtual const PblVector3& GetVelocity() const;
 
     // FUNCTION: SWBF2 0x00475dc0
@@ -190,17 +232,7 @@ public:
     virtual PblVector3 GetTargetPoint(const PblVector3& vPos, const PblVector3& vDir, int iBodyId) const;
     virtual PblVector3 GetTargetPointMissVector() const;
 
-    // FUNCTION: SWBF2 0x00444100
-    virtual const PblVector3& GetPosition() const { return mMatrix.GetTranslation(); }
-
-    virtual void SetPosition(const PblVector3& vPos);
-
-    virtual void SetMatrix(const PblMatrix& matrix);
-    virtual float GetSmallestCollisionDim() const;
-    // FUNCTION: SWBF2 0x00475da0
-    virtual const PblMatrix& GetMatrix() const { return mMatrix; }
-    // FUNCTION: SWBF2 0x00444180
-    virtual const RedPose* GetPose() const { return 0; }
+    void CreateChunkCluster(float fScale);
 
     void BuildEffects();
 
@@ -208,8 +240,6 @@ public:
                      unsigned int& uFlags, unsigned int uShadowTexture);
 
     void SetupLightingState(unsigned int& uFlags);
-
-    void CreateChunkCluster(float fScale);
 
     PblMatrix mMatrix;
     GameModel* mModel;

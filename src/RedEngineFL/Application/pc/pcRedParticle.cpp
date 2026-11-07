@@ -46,6 +46,8 @@ struct ParticleVertexT
 RedParticleRenderer* RedParticleRenderer::currentCache;
 // GLOBAL: SWBF2 0x009661b8
 int RedParticleRenderer::s_cacheIndex;
+// GLOBAL: SWBF2 0x009661bc
+bool RedParticleRenderer::s_blurEnable;
 
 // SYNTHETIC: SWBF2 0x00408180
 // `dynamic initializer for 'kuiParticleShader''

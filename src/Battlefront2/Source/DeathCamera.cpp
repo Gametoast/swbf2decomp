@@ -155,15 +155,3 @@ void DeathCamera::SetupIconVisibility(int iView)
 {
     mManager->m_uiVisibleIconMask[iView] = 0;
 }
-
-
-// FUNCTION: SWBF2 0x0043cd40
-PblMatrix DirectionMatrix(const PblVector3& vDir, const PblVector3& vUp, const PblVector3& vPos)
-{
-    PblVector3 vFront = Normalize(vDir);
-
-    PblVector3 vCross = CrossProduct(vUp, vDir);
-    PblVector3 vRight = Normalize(vCross);
-
-    return PblMatrix(vRight, CrossProduct(vFront, vRight), vFront, vPos);
-}

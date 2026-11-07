@@ -119,7 +119,7 @@
     <ClCompile Include="Graphics\PC\pcRedSegment.cpp" />
     <ClCompile Include="Graphics\PC\pcRedStencilShadow.cpp" />
     <ClCompile Include="Graphics\PC\pcRedTexture.cpp" />
-    <ClCompile Include="Graphics\PC\pcRedFootprint.cpp" />
+    <ClCompile Include="Application\pc\pcRedFootprint.cpp" />
     <ClCompile Include="Graphics\PC\pcRedVertexBuffer.cpp" />
     <ClCompile Include="Graphics\PC\pcRedVertexCache.cpp" />
     <ClCompile Include="Graphics\PC\pcRedVertexFormat.cpp" />
@@ -281,6 +281,7 @@
     <ClInclude Include="Memory\RedMemory.h" />
     <ClInclude Include="Memory\RedMemoryPool.h" />
     <ClInclude Include="Memory\engineAlloc.h" />
+    <ClInclude Include="Portals\BaseDisplayable.h" />
     <ClInclude Include="Portals\Portal.h" />
     <ClInclude Include="Util\RedAnimation.h" />
     <ClInclude Include="Util\RedCommandConsole.h" />

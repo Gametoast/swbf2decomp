@@ -142,9 +142,6 @@ bool mSafeMode;
 // GLOBAL: SWBF2 0x01fa9268
 int mNumMemoryProfiles;
 
-// GLOBAL: SWBF2 0x009661bc
-bool RedParticleRenderer::s_blurEnable;
-
 // FUNCTION: SWBF2 0x0061c4d0
 double ConvertMouseScaleToRawScale(float fScale, int iMode)
 {

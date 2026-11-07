@@ -151,8 +151,22 @@ public:
     void CallbackOnFatRay(const PblVector3& rFrom, const PblVector3& rTo, float fRadius,
                           TreeGridCallback pCallback, TreeGridCallbackData* pData);
 
+    // FUNCTION: SWBF2 0x0065adb0
     bool ProcessCell(int iCell, TreeGridCallback pCallback, TreeGridCallbackData* pData,
-                     float& fDist);
+                     float& fDist)
+    {
+        for (TreeGridStack* pStack = mGrid[iCell]; pStack; pStack = pStack->mNext)
+        {
+            for (int i = 0; i < pStack->mStackSize; ++i)
+            {
+                if (!pCallback(pStack->mObject[i], pData, fDist))
+                {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
     bool ProcessCellRect(int iCell, TreeGridCallback pCallback, TreeGridCallbackData* pData,
                          float& fDist, const PblVector3& rMin, const PblVector3& rMax);
     bool ProcessCellRay(int iCell, TreeGridCallback pCallback, TreeGridCallbackData* pData,

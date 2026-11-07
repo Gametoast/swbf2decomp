@@ -260,8 +260,7 @@ bool WeaponShield::Update(float fDeltaTime)
     if (!bBlocked && mOwner->GetGameObject()->IsRtti(EntityDroideka::rttiHashEntityDroideka))
     {
         const EntityDroideka* pDroideka = reinterpret_cast<const EntityDroideka*>(mOwner->GetGameObject());
-        bBlocked = pDroideka->mState == EntityDroideka::Rolling || pDroideka->mState == EntityDroideka::IdleToRoll ||
-                   pDroideka->mState == EntityDroideka::RollToIdle;
+        bBlocked = pDroideka->IsRollingOrTransition();
     }
     if (bBlocked)
     {

@@ -14,6 +14,7 @@
 #include "LuaCallbacks_Options.h"
 #include "NetSetup.h"
 #include "NetGame.h"
+#include "NetDrag.h"
 #include "ShellLoop.h"
 #include "PebbleFL/Common/PblHashTable.h"
 #include "PebbleFL/Common/PblUnicode.h"

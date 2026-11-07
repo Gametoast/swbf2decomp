@@ -8,6 +8,7 @@
 #include <string.h>
 
 #include "LoadUtil.h"
+#include "SkyManager.h"
 
 #include "BoundaryManager.h"
 #include "CollisionBody.h"
@@ -99,10 +100,6 @@ namespace HUD
     }
 }
 namespace PropGenerator
-{
-    void Read(PblFileChunk& chunk);
-}
-namespace SkyManager
 {
     void Read(PblFileChunk& chunk);
 }

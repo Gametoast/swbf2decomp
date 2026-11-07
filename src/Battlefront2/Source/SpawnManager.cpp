@@ -1,4 +1,5 @@
 #include "SpawnManager.h"
+#include "FriendBuddyList.h"
 
 #include <float.h>
 
@@ -77,10 +78,6 @@ namespace PlayerPrefs
 int FindByPlayerId(int iPlayer);
 }
 
-namespace FriendBuddyList
-{
-bool __fastcall IsFriendBuddy(int iLocalIndex, int iPlayerId);
-}
 
 namespace PblUnicode
 {
@@ -218,19 +215,6 @@ void SpawnManager::SetupSoldierMemoryPool()
         EntitySoldier::sMemoryPool.Setup(GetTotalCharacterCount(), EntitySoldier::sMemoryPool.mSize,
                                          EntitySoldier::sMemoryPool.mGrow);
     }
-}
-
-// FUNCTION: SWBF2 0x005b41d0
-int Team::FindSide(Side eSide)
-{
-    for (int i = 0; i < Team::kMaxTeams; i++)
-    {
-        if (sTeams[i]->GetSide() == eSide)
-        {
-            return i;
-        }
-    }
-    return -1;
 }
 
 // FUNCTION: SWBF2 0x0064e510
@@ -443,12 +427,6 @@ CommandPost* SpawnManager::GetRandomSpawnPoint(int iTeam)
         return 0;
     }
     return posts[PblRandom::GetSim().GetInt() % iCount];
-}
-
-// FUNCTION: SWBF2 0x005b4210
-void Team::OverrideMaxReinforcements(int iTeam, int iMax)
-{
-    sTeamMaxReinforcementsOverride[iTeam] = iMax;
 }
 
 // FUNCTION: SWBF2 0x0064e120

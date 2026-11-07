@@ -7,6 +7,7 @@
 #include <string.h>
 #include "GameLoop.h"
 #include "LuaCallbacks_IFace.h"
+#include "StatsManager.h"
 #include "PebbleFL/Common/PblUnicode.h"
 
 namespace StatsManager

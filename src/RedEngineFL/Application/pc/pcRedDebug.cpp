@@ -25,28 +25,6 @@ void RemoveInterfaceElement(RedScreenGroupElement* pElement);
 void __cdecl PblTraceP(const char* Format, ...);
 
 
-struct RedDebug::Radius
-{
-    Radius();
-
-    PblVector3 _vPos;
-    RedColor _color;
-    float _fRadius;
-    float _fHeight;
-};
- 
-
-struct RedDebug::SolidOBB
-{
-    SolidOBB();
-
-    PblBox _vBox;
-    PblMatrix _mBox;
-    RedColor _color;
-};
- 
- 
-
 // FUNCTION: SWBF2 0x006f0780
 RedDebug::Radius::Radius()
 {

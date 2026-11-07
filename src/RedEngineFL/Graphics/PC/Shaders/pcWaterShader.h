@@ -90,7 +90,23 @@ public:
     RedTextureTransform m_specularMaskTransform2;
     float m_specularMaskBlend;
 
-    static void SetFresnelMinMax(float fMin, float fMax);
+    // FUNCTION: SWBF2 0x00720500
+    static void SetFresnelMinMax(float fMin, float fMax)
+    {
+        if (fMax < 0.0f)
+        {
+            fMax = 0.0f;
+        }
+        else if (fMax > 1.0f)
+        {
+            fMax = 1.0f;
+        }
+        float fClampedMin = fMin < 0.0f ? 0.0f : (fMin > 1.0f ? 1.0f : fMin);
+        s_fresnelMinMax.r = 0.0f;
+        s_fresnelMinMax.g = 0.0f;
+        s_fresnelMinMax.b = fClampedMin;
+        s_fresnelMinMax.a = fMax;
+    }
     static void SetReflectionColor(RedColor color);
     static void SetRefractionColor(RedColor color);
     static void SetSpecularEnable(bool bEnable);

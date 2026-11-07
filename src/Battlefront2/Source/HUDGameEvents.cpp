@@ -1,4 +1,5 @@
 #include "HUDGameEvents.h"
+#include "PopupText.h"
 #include "HUDObjectiveList.h"
 #include "EntityFlyer.h"
 
@@ -848,10 +849,6 @@ namespace ObjectiveManager
 {
     unsigned int GetCurrentPopupText();
 }
-namespace PopupText
-{
-    int GetNumHints();
-}
 
 // FUNCTION: SWBF2 0x00562b90
 void HUD::GameEvents::SetObjectiveTimer(const Timer* const pTimer)
@@ -1194,7 +1191,7 @@ void HUD::GameEvents::UpdateLockOn(unsigned int uIndex, const GameObject* const 
          (pObject->IsRtti(EntityBuildingArmed::rttiHashEntityBuildingArmed) && pObject->GetControllable() &&
           pObject->GetControllable()->IsRemoteVehicle())))
     {
-        pTarget = pLockOn->mLockedObj;
+        pTarget = pLockOn->GetLockedTarget();
     }
 
     if (pTarget != data.lockedTarget)

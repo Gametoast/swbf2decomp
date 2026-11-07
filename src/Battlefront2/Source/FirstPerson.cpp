@@ -198,12 +198,6 @@ WEAPONCLASS _GetWeaponClassFromWeapon(const Weapon* pWeapon)
     return TOOL;
 }
 
-// FUNCTION: SWBF2 0x0051ecb0
-PblMatrix CameraManager::GetChaseCameraTransform(int iCam)
-{
-    return mChaseCamera[iCam]->GetMatrix();
-}
-
 // FUNCTION: SWBF2 0x0051eda0
 void FirstPersonRenderable::SetInitialPlayerId(int iPlayerId)
 {
@@ -480,7 +474,7 @@ void FirstPersonRenderable::Activate(int value)
     }
 
     bReadyToRender = false;
-    PblMatrix mCamera = CameraManager::sInstance->mChaseCamera[mCameraId]->GetMatrix();
+    PblMatrix mCamera = CameraManager::sInstance->GetChaseCameraTransform(mCameraId);
     mCockpitRotation = PblQuaternion(mCamera);
     mCockpitTrans = PblVector3(-66.6f, 66.6f, -66.6f);
     Renderable::Activate(value);
@@ -738,7 +732,7 @@ void FirstPersonRenderable::UpdateCockpit(const RedModel* pModel, Controllable* 
         return;
     }
 
-    PblMatrix mCamera = CameraManager::sInstance->mChaseCamera[mCameraId]->GetMatrix();
+    PblMatrix mCamera = CameraManager::sInstance->GetChaseCameraTransform(mCameraId);
     if (!bReadyToRender)
     {
         pOwner->GetTrackable()->SetupCameraTrackMatrix(mCamera, 0.0f);

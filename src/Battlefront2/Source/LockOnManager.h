@@ -266,6 +266,12 @@ public:
     static GameSound sTargetLockSound;
 };
 
+// FUNCTION: SWBF2 0x00483510
+inline GameObject* LockOnManager::GetLockedTarget() const
+{
+    return mLockedObj;
+}
+
  
  
  

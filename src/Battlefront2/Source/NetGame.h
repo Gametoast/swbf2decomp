@@ -306,7 +306,10 @@ protected:
 
 public:
 
-    static bool IsLateTurn();
+    // FUNCTION: SWBF2 0x0043cf50
+    static bool IsLateTurn() { return netIsLateTurn; }
+    // FUNCTION: SWBF2 0x0043cf60
+    static bool IsLocalTurn() { return netIsLocalTurn; }
     static void LeaveTurn();
     static void EnterTurn();
     static unsigned int GetKey(int index);

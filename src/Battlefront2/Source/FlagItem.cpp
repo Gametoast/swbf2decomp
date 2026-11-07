@@ -66,27 +66,6 @@ CollisionObject* FlagCollision(FlagItem* pItem)
 
 }
 
-// FUNCTION: SWBF2 0x00523fd0
-GameObject* FlagItem::GetCarrier()
-{
-    FlagItem* pItem = this;
-    Character* pCarrier = reinterpret_cast<EntityItem*>(pItem)->mOwner;
-    if (!pCarrier)
-    {
-        return 0;
-    }
-    if (pCarrier->mVehicle)
-    {
-        return ((Trackable*)pCarrier->mVehicle)->GetGameObject();
-    }
-    if (pCarrier->mUnit)
-    {
-        return ((Trackable*)pCarrier->mUnit)->GetGameObject();
-    }
-    ResetFlag();
-    return 0;
-}
-
 // FUNCTION: SWBF2 0x005246d0
 bool FlagItem::Drop()
 {
@@ -664,8 +643,7 @@ bool FlagItem::PickUp(GameObject* pObject)
         bool bDroidekaBusy = false;
         if (pObject->IsRtti(EntityDroideka::rttiHashEntityDroideka))
         {
-            const int iState = reinterpret_cast<EntityDroideka*>(pObject)->mState;
-            bDroidekaBusy = (iState == 12 || iState == 11 || iState == 13);
+            bDroidekaBusy = reinterpret_cast<EntityDroideka*>(pObject)->IsRollingOrTransition();
         }
         if (!bDroidekaBusy)
         {
@@ -782,45 +760,34 @@ bool FlagItem::Update(float fDeltaTime)
     }
 
     FlagItem* pItem = this;
-    if (mOwner)
+    GameObject* pCarrier = pItem->GetCarrier();
+    if (pCarrier)
     {
-        Controllable* pControllable = mOwner->mVehicle ? mOwner->mVehicle : mOwner->mUnit;
-        if (pControllable)
+        if (!pCarrier->IsAlive())
         {
-            GameObject* pCarrier = ((Trackable*)pControllable)->GetGameObject();
-            if (pCarrier)
+            pItem->Drop();
+        }
+        if (!NetGame::IsEnabled() || !netEnabledNext || !netClientActive)
+        {
+            if (sFlagGameplayType == FLAG_GAMEPLAY_1FLAG)
             {
-                if (!pCarrier->IsAlive())
+                mCarriedTimer -= fDeltaTime;
+                if (mCarriedTimer < 0.0f)
                 {
-                    pItem->Drop();
-                }
-                if (!NetGame::IsEnabled() || !netEnabledNext || !netClientActive)
-                {
-                    if (sFlagGameplayType == FLAG_GAMEPLAY_1FLAG)
-                    {
-                        mCarriedTimer -= fDeltaTime;
-                        if (mCarriedTimer < 0.0f)
-                        {
-                            mCarriedTimer = FLT_MAX;
-                            pItem->BroadcastMessage(0x8dbebf7f /* "game.flag.carriedtoolong" */);
-                            pItem->ResetFlag();
-                        }
-                    }
-                }
-                if (!GameLoop::mbHistoricalRules && IsASpaceMap() && pItem->IsInLandingZone())
-                {
+                    mCarriedTimer = FLT_MAX;
+                    pItem->BroadcastMessage(0x8dbebf7f /* "game.flag.carriedtoolong" */);
                     pItem->ResetFlag();
-                    if (sFlagGameplayType == FLAG_GAMEPLAY_1FLAG ||
-                        sFlagGameplayType == FLAG_GAMEPLAY_2FLAG)
-                    {
-                        pItem->BroadcastMessage(0x7e6537bc /* "game.flag.reset" */);
-                    }
                 }
             }
         }
-        else
+        if (!GameLoop::mbHistoricalRules && IsASpaceMap() && pItem->IsInLandingZone())
         {
             pItem->ResetFlag();
+            if (sFlagGameplayType == FLAG_GAMEPLAY_1FLAG ||
+                sFlagGameplayType == FLAG_GAMEPLAY_2FLAG)
+            {
+                pItem->BroadcastMessage(0x7e6537bc /* "game.flag.reset" */);
+            }
         }
     }
 

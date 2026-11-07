@@ -93,9 +93,12 @@ public:
     {
         m_bEffectActive = false;
     }
-    virtual bool IsEffectActive() const;
-    virtual void ActivateEffect();
-    virtual void DeactivateEffect();
+    // FUNCTION: SWBF2 0x00573da0
+    virtual bool IsEffectActive() const {return m_bEffectActive;}
+    // FUNCTION: SWBF2 0x00573db0
+    virtual void ActivateEffect() {m_bEffectActive = true;}
+    // FUNCTION: SWBF2 0x00573dc0
+    virtual void DeactivateEffect() {m_bEffectActive = false;}
 protected:
     virtual void UpdatedWorldMatrix();
     virtual void AddToRenderList();

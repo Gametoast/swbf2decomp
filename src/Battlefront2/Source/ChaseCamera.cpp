@@ -35,11 +35,7 @@ float GetWidescreenFOVAdjustment(float fFOV);
 namespace AIUtil
 {
 
-// FUNCTION: SWBF2 0x0043ef40
-bool IsDebugOutputVisible()
-{
-    return false;
-}
+bool IsDebugOutputVisible();
 }
 
 // GLOBAL: SWBF2 0x01e5605f

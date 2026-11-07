@@ -1,6 +1,7 @@
 #pragma once
 
 #include "PebbleFL/Common/PblHashTable.h"
+#include "PebbleFL/Common/PblRtti.h"
 
 #include <stddef.h>
 
@@ -93,6 +94,14 @@ public:
 class EntityBuilding : public GameObject
 {
 public:
+    // FUNCTION: SWBF2 0x00475de0
+    // EntityBuilding::IsRtti
+    // FUNCTION: SWBF2 0x00492330
+    // EntityBuilding::GetDerivedRtti
+    // FUNCTION: SWBF2 0x00492340
+    // EntityBuilding::GetDerivedRttiName
+    PBL_DECLARE_DERIVED_RTTI(EntityBuilding, GameObject)
+
     enum STATE
     {
         STATE_ALIVE = 0,
@@ -103,9 +112,6 @@ public:
 
     EntityBuilding(EntityBuildingClass* pClass, const EntityDesc& desc);
 
-    virtual bool IsRtti(unsigned int uRtti) const;
-    virtual unsigned int GetDerivedRtti() const;
-    virtual const char* GetDerivedRttiName() const;
     virtual ~EntityBuilding();
     virtual void ClientKill();
     // FUNCTION: SWBF2 0x00475e90
@@ -115,8 +121,26 @@ public:
     }
     virtual float GetMaxSpeed() const;
     virtual float GetMaxStrafe() const;
-    virtual const Controllable* GetControllable() const;
-    virtual Controllable* GetControllable();
+    // FUNCTION: SWBF2 0x00475e40
+    virtual const Controllable* GetControllable() const
+    {
+        const PblList<Controllable>& list = GetControllableList();
+        if (list.GetCount() == 1)
+        {
+            return list.GetFirst()->_pObject;
+        }
+        return 0;
+    }
+    // FUNCTION: SWBF2 0x00475e60
+    virtual Controllable* GetControllable()
+    {
+        const PblList<Controllable>& list = GetControllableList();
+        if (list.GetCount() == 1)
+        {
+            return list.GetFirst()->_pObject;
+        }
+        return 0;
+    }
     virtual GameObjectType GetGameObjectType();
     // FUNCTION: SWBF2 0x00492350
     virtual EntityType GetEntityType() const
@@ -157,8 +181,6 @@ public:
 
     void Update(float fDeltaTime);
 
-    static PblHash rttiHashEntityBuilding;
-    static const char rttiNameEntityBuilding[];
 
     EntityBuildingClass* mClass;
     STATE mState;
@@ -201,24 +223,3 @@ inline const char* EntityBuildingClass::GetDerivedRttiName() const
     return rttiNameEntityBuildingClass;
 }
 
-// FUNCTION: SWBF2 0x00475de0
-inline bool EntityBuilding::IsRtti(unsigned int uRtti) const
-{
-    if (rttiHashEntityBuilding == uRtti)
-    {
-        return true;
-    }
-    return GameObject::IsRtti(uRtti);
-}
-
-// FUNCTION: SWBF2 0x00492330
-inline unsigned int EntityBuilding::GetDerivedRtti() const
-{
-    return rttiHashEntityBuilding;
-}
-
-// FUNCTION: SWBF2 0x00492340
-inline const char* EntityBuilding::GetDerivedRttiName() const
-{
-    return rttiNameEntityBuilding;
-}

@@ -151,6 +151,15 @@ bool AIUtil::IsUberMode()
     return sUberMode;
 }
 
+namespace AIUtil
+{
+// FUNCTION: SWBF2 0x0043ef40
+bool IsDebugOutputVisible()
+{
+    return false;
+}
+}
+
 // FUNCTION: SWBF2 0x0043ef50
 float AIUtil::GetRandomFloat(float fMin, float fMax)
 {
@@ -253,7 +262,7 @@ namespace AIUtil
 {
 
 // FUNCTION: SWBF2 0x00441780
-void __fastcall AddSpied(Character* aSpy, Character* aSpotter)
+void AddSpied(Character* aSpy, Character* aSpotter)
 {
     sSpied[Character::GetIndex(aSpy)] |= 1 << Character::GetIndex(aSpotter);
 }
@@ -1106,7 +1115,7 @@ AIUtil::EntityType AIUtil::GetEntityType(const Entity* pEntity)
     {
         return ENTITY_BUILDING_ARMED;
     }
-    if (pEntity->IsRtti(EntityBuilding::rttiHashEntityBuilding))
+    if (pEntity->IsRtti(EntityBuilding::GetRtti()))
     {
         return ENTITY_BUILDING;
     }

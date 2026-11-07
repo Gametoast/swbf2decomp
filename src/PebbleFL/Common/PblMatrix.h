@@ -111,4 +111,27 @@ public:
 
 #include "PebbleFL/pc/pcPblMatrix.h"
 
+// FUNCTION: SWBF2 0x0043cd40
+inline PblMatrix DirectionMatrix(const PblVector3& vDir, const PblVector3& vUp, const PblVector3& vPos)
+{
+    PblVector3 vFront = Normalize(vDir);
+
+    PblVector3 vCross = CrossProduct(vUp, vDir);
+    PblVector3 vRight = Normalize(vCross);
+
+    return PblMatrix(vRight, CrossProduct(vFront, vRight), vFront, vPos);
+}
+
+// FUNCTION: SWBF2 0x0047a570
+inline PblMatrix NormalMatrix(const PblVector3& vDir, const PblVector3& vNormal, const PblVector3& vPos)
+{
+    PblVector3 vUp;
+    D3DXVec3Normalize(reinterpret_cast<D3DXVECTOR3*>(&vUp), reinterpret_cast<const D3DXVECTOR3*>(&vNormal));
+    PblVector3 vRight;
+    D3DXVec3Normalize(reinterpret_cast<D3DXVECTOR3*>(&vRight), reinterpret_cast<const D3DXVECTOR3*>(&CrossProduct(vUp, vDir)));
+
+    PblMatrix mResult(vRight, vUp, CrossProduct(vRight, vUp), vPos);
+    return mResult;
+}
+
 extern PblMatrix gMatrixIdentity;

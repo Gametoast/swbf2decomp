@@ -1,4 +1,5 @@
 #include "PebbleFL/Common/PblMath.h"
+#include "FriendBuddyList.h"
 #include <d3dx9math.h>
 #include "NameDisplay.h"
 #include "CameraManager.h"
@@ -26,10 +27,6 @@ extern bool netShowNames;
 extern bool netFrameLock;
 extern int netCurMaxPlayers;
 extern RedColor gVoiceChatTeamColors[3];
-namespace FriendBuddyList
-{
-    bool __fastcall IsFriendBuddy(int iLocalIndex, int iPlayerId);
-}
 namespace AIDebug
 {
     bool GetTestSpawnMode();

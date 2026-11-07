@@ -36,17 +36,6 @@ unsigned int sSoftCollisionMask;
 // GLOBAL: SWBF2 0x01e2fdd8
 unsigned int sOrdnanceCollisionMask;
 
-// SYNTHETIC: SWBF2 0x004022d0
-// `dynamic initializer for 'AsteroidClass::rttiHashAsteroidClass''
-// AsteroidClass::rttiHashAsteroidClass
-
-// GLOBAL: SWBF2 0x01eb024c
-// AsteroidClass::rttiHashAsteroidClass
-PblHash AsteroidClass::rttiHashAsteroidClass("AsteroidClass");
-// GLOBAL: SWBF2 0x00788840
-// AsteroidClass::rttiNameAsteroidClass
-const char AsteroidClass::rttiNameAsteroidClass[] = "AsteroidClass";
-
 // FUNCTION: SWBF2 0x004453d0
 AsteroidClass::AsteroidClass(unsigned int uHash)
     : GameObjectClass(uHash)
@@ -288,6 +277,17 @@ MemoryPool Asteroid::sMemoryPool("Asteroid", sizeof(Asteroid));
 // Asteroid::rttiHashAsteroid
 PblHash Asteroid::rttiHashAsteroid("Asteroid");
 const char Asteroid::rttiNameAsteroid[] = "Asteroid";
+
+// SYNTHETIC: SWBF2 0x004022d0
+// `dynamic initializer for 'AsteroidClass::rttiHashAsteroidClass''
+// AsteroidClass::rttiHashAsteroidClass
+
+// GLOBAL: SWBF2 0x01eb024c
+// AsteroidClass::rttiHashAsteroidClass
+PblHash AsteroidClass::rttiHashAsteroidClass("AsteroidClass");
+// GLOBAL: SWBF2 0x00788840
+// AsteroidClass::rttiNameAsteroidClass
+const char AsteroidClass::rttiNameAsteroidClass[] = "AsteroidClass";
 
 // FUNCTION: SWBF2 0x00445ba0
 Entity* AsteroidClass::Build(const EntityDesc& desc)

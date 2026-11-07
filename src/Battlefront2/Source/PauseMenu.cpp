@@ -1,4 +1,5 @@
 #include "RedEngineFL/Util/RedCommandConsole.h"
+#include "PopupText.h"
 
 #include <stdio.h>
 #include <string.h>
@@ -43,10 +44,6 @@ public:
 
 
 
-namespace PopupText
-{
-void DisablePopup();
-}
 
 extern bool gAttractMode;
 extern bool sPauseMenuSoundEnabled;
@@ -558,13 +555,11 @@ bool PauseMenu::AllStatsDone()
 
 namespace PopupText
 {
-enum PopupType { DISABLED = 0, HINT = 1, OBJECTIVE = 2, SELECTION = 3, MAX_POPUP_TYPES = 4 };
 extern PopupType gType;
 extern bool gMapEnabled[1];
 extern bool gSpawnDisplayEnabled[1];
 extern int gNumHints;
 extern Trigger gButtonTrigger;
-bool IsEnabled();
 }
 
 

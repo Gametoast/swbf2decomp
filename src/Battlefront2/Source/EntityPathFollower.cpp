@@ -212,18 +212,6 @@ EntityPathFollower::~EntityPathFollower()
     }
 }
 
-// FUNCTION: SWBF2 0x004d2700
-unsigned int EntityPathFollower::GetAllegiance()
-{
-    return 0;
-}
-
-// FUNCTION: SWBF2 0x00477670
-bool EntityPathFollower::CanJoinSquadron() const
-{
-    return !InSquadron();
-}
-
 // FUNCTION: SWBF2 0x004d2970
 void EntityPathFollower::Reset(const EntityPathFollowerClass* const pClass)
 {

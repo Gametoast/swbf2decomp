@@ -71,12 +71,6 @@ float Controllable::GetSoundRadius() const
     return 0.0f;
 }
 
-// FUNCTION: SWBF2 0x00483510
-GameObject* LockOnManager::GetLockedTarget() const
-{
-    return mLockedObj;
-}
-
 // FUNCTION: SWBF2 0x00483580
 unsigned int LockOnManager::GetTargetLockedChangedTurn() const
 {

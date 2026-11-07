@@ -34,7 +34,7 @@ public:
     static CLASS* Find(unsigned int uHash);
     static void Reset();
 
-    static CLASS* FindNetIndex(int iNetIndex);
+    static CLASS* FindNetIndex(unsigned int iNetIndex);
     unsigned int GetId() const;
     unsigned int GetNetIndex() const { return mNetIndex; }
 
@@ -105,6 +105,26 @@ inline CLASS* Factory<TYPE, CLASS, DESC>::Find(unsigned int uHash)
         if (it->mId == uHash)
         {
             return (CLASS*)(&*it);
+        }
+    }
+    return 0;
+}
+
+// TEMPLATE: SWBF2 0x005d36b0
+// Factory<Entity,EntityClass,EntityDesc>::FindNetIndex
+// TEMPLATE: SWBF2 0x005d3740
+// Factory<Ordnance,OrdnanceClass,OrdnanceDesc>::FindNetIndex
+// TEMPLATE: SWBF2 0x005d37a0
+// Factory<Weapon,WeaponClass,WeaponDesc>::FindNetIndex
+template <class TYPE, class CLASS, class DESC>
+CLASS* Factory<TYPE, CLASS, DESC>::FindNetIndex(unsigned int index)
+{
+    typedef Factory<TYPE, CLASS, DESC> FactoryType;
+    for (typename PblList<FactoryType>::Itor it(sList.GetFirst()); it; ++it)
+    {
+        if (it->mNetIndex == index)
+        {
+            return static_cast<CLASS*>(&*it);
         }
     }
     return 0;

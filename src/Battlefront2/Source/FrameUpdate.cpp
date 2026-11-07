@@ -1,4 +1,5 @@
 #include "RedEngineFL/Graphics/RedColor.h"
+#include "FrameUpdate.h"
 #include "RedEngineFL/Graphics/RedMaterial.h"
 
 #include "NetGame.h"
@@ -22,9 +23,6 @@ unsigned __int64 _prevTickCountReal;
 
 namespace FrameUpdate
 {
-
-void Create();
-void Update();
 
 // GLOBAL: SWBF2 0x01e55f80
 unsigned __int64 tickFramePeriod;

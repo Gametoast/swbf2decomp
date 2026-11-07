@@ -115,16 +115,6 @@ const char EntityHologramClass::rttiNameEntityHologramClass[] = "EntityHologramC
 // SYNTHETIC: SWBF2 0x0042cf30
 // PblHandled::`scalar deleting destructor'
 
-// FUNCTION: SWBF2 0x0042cf60
-void FLEffectObject::StopAndFinish()
-{
-    m_uiAttachFlags |= KILL_ON_NEXT_UPDATE;
-    if (!IsThreadActive())
-    {
-        ActivateThread(0, PER_FRAME);
-    }
-}
-
 // FUNCTION: SWBF2 0x0042cf80
 void FLEffectObject::UpdatedWorldMatrix()
 {
@@ -525,7 +515,7 @@ void EntityHologram::SetColor(const RedColor& color)
 // FUNCTION: SWBF2 0x004bf780
 void EntityHologram::SetModel(const RedModel* pModel)
 {
-    m_pHoloModel = const_cast<RedModel*>(pModel);
+    m_pHoloModel = pModel;
 }
 
 // FUNCTION: SWBF2 0x004bf790
@@ -971,7 +961,7 @@ void EntityHologramClass::SetProperty(unsigned int uProperty, const char* pszVal
         m_fRotateRate *= PblMath::fTwoPi;
         break;
     case 0xB64210D2u: /* "HoloImageGeometry" */
-        m_pHoloModel = RedModel::_HashTable.Find(PblHash(pszValue));
+        m_pHoloModel = RedModel::Find(PblHash(pszValue));
         break;
     case 0xB761134Eu: /* "HoloHeight" */
         sscanf(pszValue, "%f", &m_fHeight);

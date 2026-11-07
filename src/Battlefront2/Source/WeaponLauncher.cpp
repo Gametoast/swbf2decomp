@@ -126,23 +126,8 @@ WeaponLauncher::WeaponLauncher(const WeaponLauncherClass* pClass, const WeaponDe
 
 
 
-// FUNCTION: SWBF2 0x006872f0
-bool WeaponLauncher::IsLocked() const
-{
-    return mLocked;
-}
 
-// FUNCTION: SWBF2 0x00687300
-const GameObject* WeaponLauncher::GetLocked() const
-{
-    return const_cast<WeaponLauncher*>(this)->mCurTarget;
-}
 
-// FUNCTION: SWBF2 0x00687330
-int WeaponLauncher::GetLockedTargetBodyId() const
-{
-    return mCurTargetBodyID;
-}
 
 // FUNCTION: SWBF2 0x006874b0
 void WeaponLauncher::SetupTarget(const GameObject** ppTarget, int* pBodyId) const

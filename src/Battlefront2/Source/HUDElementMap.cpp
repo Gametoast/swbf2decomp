@@ -6,6 +6,7 @@
 #include <math.h>
 
 #include "HUDElementMap.h"
+#include "FriendBuddyList.h"
 #include "RedEngineFL/Interface/RedHotSpot.h"
 #include "BonusManager.h"
 #include "CameraManager.h"
@@ -754,10 +755,6 @@ HUD::ElementMap* HUD::ElementMap::FindByIndex(int iIndex)
 // GLOBAL: SWBF2 0x01e56c38
 static bool updating;
 
-namespace FriendBuddyList
-{
-bool __fastcall IsFriendBuddy(int iLocalIndex, int iPlayerId);
-}
 
 const RedColor Interpolate(const RedColor& a, const RedColor& b, float t);
 
@@ -1180,7 +1177,7 @@ void HUD::ElementMap::UpdateTargetIcons(const Controllable* pPlayer)
                 goto hideTarget;
             }
 
-            const bool bBuilding = ((GameObject*)target.actor)->IsRtti(EntityBuilding::rttiHashEntityBuilding);
+            const bool bBuilding = ((GameObject*)target.actor)->IsRtti(EntityBuilding::GetRtti());
             if (((GameObject*)target.actor)->IsAlive())
             {
                 bitmap.SetColorOnly(Interpolate(color, mTargetFireColor, fScale));

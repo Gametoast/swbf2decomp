@@ -1,4 +1,5 @@
 #include "Thread.h"
+#include "FrameUpdate.h"
 #include "NetGame.h"
 
 extern ThreadGroup sHostFrameThreadList;
@@ -10,10 +11,6 @@ extern ThreadGroup* sFrameThreadList;
 extern ThreadGroup* sTurnThreadList;
 extern bool gThreadIsEven;
 
-namespace FrameUpdate
-{
-void Update();
-}
 
 // FUNCTION: SWBF2 0x00657400
 ThreadGroup::ThreadGroup(int iPriority)

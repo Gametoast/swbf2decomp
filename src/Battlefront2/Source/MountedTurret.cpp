@@ -174,16 +174,14 @@ void RemoveChildren(const GameObject* pObject, RedPose& rPose, int iBone)
 extern bool netFrameLock;
 extern bool netIsLocalTurn;
 
-// SYNTHETIC: SWBF2 0x00404340
-// `dynamic initializer for 'MountedTurret::rttiHashMountedTurret''
-// MountedTurret::rttiHashMountedTurret
+// SYNTHETIC: SWBF2 0x00404310
+// `dynamic initializer for 'MountedTurret::sMemoryPool''
+// SYNTHETIC: SWBF2 0x00768d20
+// `dynamic atexit destructor for 'MountedTurret::sMemoryPool''
 
-// GLOBAL: SWBF2 0x01ecb150
-// MountedTurret::rttiHashMountedTurret
-PblHash MountedTurret::rttiHashMountedTurret("MountedTurret");
-// GLOBAL: SWBF2 0x0078a57c
-// MountedTurret::rttiNameMountedTurret
-const char MountedTurret::rttiNameMountedTurret[] = "MountedTurret";
+// GLOBAL: SWBF2 0x01ecb158
+// MountedTurret::sMemoryPool
+MemoryPool MountedTurret::sMemoryPool("MountedTurret", sizeof(MountedTurret));
 
 // SYNTHETIC: SWBF2 0x00404330
 // `dynamic initializer for 'MountedTurretClass::rttiHashMountedTurretClass''
@@ -196,14 +194,16 @@ PblHash MountedTurretClass::rttiHashMountedTurretClass("MountedTurretClass");
 // MountedTurretClass::rttiNameMountedTurretClass
 const char MountedTurretClass::rttiNameMountedTurretClass[] = "MountedTurretClass";
 
-// SYNTHETIC: SWBF2 0x00404310
-// `dynamic initializer for 'MountedTurret::sMemoryPool''
-// SYNTHETIC: SWBF2 0x00768d20
-// `dynamic atexit destructor for 'MountedTurret::sMemoryPool''
+// SYNTHETIC: SWBF2 0x00404340
+// `dynamic initializer for 'MountedTurret::rttiHashMountedTurret''
+// MountedTurret::rttiHashMountedTurret
 
-// GLOBAL: SWBF2 0x01ecb158
-// MountedTurret::sMemoryPool
-MemoryPool MountedTurret::sMemoryPool("MountedTurret", sizeof(MountedTurret));
+// GLOBAL: SWBF2 0x01ecb150
+// MountedTurret::rttiHashMountedTurret
+PblHash MountedTurret::rttiHashMountedTurret("MountedTurret");
+// GLOBAL: SWBF2 0x0078a57c
+// MountedTurret::rttiNameMountedTurret
+const char MountedTurret::rttiNameMountedTurret[] = "MountedTurret";
 
 
 

@@ -172,12 +172,6 @@ void* Lua_Red_realloc(void* pBlock, unsigned int uiOldSize, unsigned int uiNewSi
     return pNew;
 }
 
-// FUNCTION: SWBF2 0x005a18b0
-void __cdecl LuaScript_CallWARNINGF(char const* pcMessage)
-{
-    (void)pcMessage;
-}
-
 // FUNCTION: SWBF2 0x005a16e0
 void LuaMemory::Reset()
 {

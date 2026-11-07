@@ -1,4 +1,5 @@
 #include "StatusDisplay.h"
+#include "FriendBuddyList.h"
 #include "PebbleFL/Common/PblMath.h"
 
 #include <math.h>
@@ -35,10 +36,6 @@ namespace GameVoiceChat
 {
 class Transport;
 Transport* GetTransport();
-}
-namespace FriendBuddyList
-{
-    bool __fastcall IsFriendBuddy(int ignored, int iPlayer);
 }
 
 extern int gDebugCount;

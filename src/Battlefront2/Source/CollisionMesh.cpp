@@ -242,14 +242,6 @@ float BoxDistSq(const PblVector3& vPoint, const CollisionAABB& aabb)
     return DotProduct(Vector, Vector);
 }
 
-// FUNCTION: SWBF2 0x004615e0
-CollisionAABB* CopyCollisionAABB(CollisionAABB* pThis, const CollisionAABB& src)
-{
-    pThis->boxmin = src.boxmin;
-    pThis->boxmax = src.boxmax;
-    return pThis;
-}
-
 // FUNCTION: SWBF2 0x00461610
 bool CollisionMesh::_RayTestAABB(const PblVector3& vStart, const PblVector3& vDir, float fLength, const CollisionAABB& aabb,
                 PblVector3& vCoord) const

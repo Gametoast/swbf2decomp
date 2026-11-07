@@ -136,23 +136,6 @@ void TreeGrid::Update(TreeGridObject* pObj, const PblVector3& rPos, float fSize,
     Add(pObj, vPos, fSize, f2dSize);
 }
 
-// FUNCTION: SWBF2 0x0065adb0
-bool TreeGrid::ProcessCell(int iCell, TreeGridCallback pCallback, TreeGridCallbackData* pData,
-                           float& fDist)
-{
-    for (TreeGridStack* pStack = mGrid[iCell]; pStack; pStack = pStack->mNext)
-    {
-        for (int i = 0; i < pStack->mStackSize; ++i)
-        {
-            if (!pCallback(pStack->mObject[i], pData, fDist))
-            {
-                return false;
-            }
-        }
-    }
-    return true;
-}
-
 // FUNCTION: SWBF2 0x0065b1b0
 bool TreeGrid::ProcessCellRect(int iCell, TreeGridCallback pCallback, TreeGridCallbackData* pData,
                                float& fDist, const PblVector3& rMin, const PblVector3& rMax)

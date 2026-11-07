@@ -1482,84 +1482,6 @@
     <ClCompile Include="src\Battlefront2\Source\pcNetSocket.cpp">
       <Filter>src\Battlefront2\Source</Filter>
     </ClCompile>
-    <ClCompile Include="src\LuaFL\src\lapi.cpp">
-      <Filter>src\LuaFL\src</Filter>
-    </ClCompile>
-    <ClCompile Include="src\LuaFL\src\lcode.cpp">
-      <Filter>src\LuaFL\src</Filter>
-    </ClCompile>
-    <ClCompile Include="src\LuaFL\src\ldebug.cpp">
-      <Filter>src\LuaFL\src</Filter>
-    </ClCompile>
-    <ClCompile Include="src\LuaFL\src\ldo.cpp">
-      <Filter>src\LuaFL\src</Filter>
-    </ClCompile>
-    <ClCompile Include="src\LuaFL\src\ldump.cpp">
-      <Filter>src\LuaFL\src</Filter>
-    </ClCompile>
-    <ClCompile Include="src\LuaFL\src\lfunc.cpp">
-      <Filter>src\LuaFL\src</Filter>
-    </ClCompile>
-    <ClCompile Include="src\LuaFL\src\lgc.cpp">
-      <Filter>src\LuaFL\src</Filter>
-    </ClCompile>
-    <ClCompile Include="src\LuaFL\src\lib\lauxlib.cpp">
-      <Filter>src\LuaFL\src\lib</Filter>
-    </ClCompile>
-    <ClCompile Include="src\LuaFL\src\lib\lbaselib.cpp">
-      <Filter>src\LuaFL\src\lib</Filter>
-    </ClCompile>
-    <ClCompile Include="src\LuaFL\src\lib\ldblib.cpp">
-      <Filter>src\LuaFL\src\lib</Filter>
-    </ClCompile>
-    <ClCompile Include="src\LuaFL\src\lib\liolib.cpp">
-      <Filter>src\LuaFL\src\lib</Filter>
-    </ClCompile>
-    <ClCompile Include="src\LuaFL\src\lib\lmathlib.cpp">
-      <Filter>src\LuaFL\src\lib</Filter>
-    </ClCompile>
-    <ClCompile Include="src\LuaFL\src\lib\lstrlib.cpp">
-      <Filter>src\LuaFL\src\lib</Filter>
-    </ClCompile>
-    <ClCompile Include="src\LuaFL\src\lib\ltablib.cpp">
-      <Filter>src\LuaFL\src\lib</Filter>
-    </ClCompile>
-    <ClCompile Include="src\LuaFL\src\llex.cpp">
-      <Filter>src\LuaFL\src</Filter>
-    </ClCompile>
-    <ClCompile Include="src\LuaFL\src\lmem.cpp">
-      <Filter>src\LuaFL\src</Filter>
-    </ClCompile>
-    <ClCompile Include="src\LuaFL\src\lobject.cpp">
-      <Filter>src\LuaFL\src</Filter>
-    </ClCompile>
-    <ClCompile Include="src\LuaFL\src\lopcodes.cpp">
-      <Filter>src\LuaFL\src</Filter>
-    </ClCompile>
-    <ClCompile Include="src\LuaFL\src\lparser.cpp">
-      <Filter>src\LuaFL\src</Filter>
-    </ClCompile>
-    <ClCompile Include="src\LuaFL\src\lstate.cpp">
-      <Filter>src\LuaFL\src</Filter>
-    </ClCompile>
-    <ClCompile Include="src\LuaFL\src\lstring.cpp">
-      <Filter>src\LuaFL\src</Filter>
-    </ClCompile>
-    <ClCompile Include="src\LuaFL\src\ltable.cpp">
-      <Filter>src\LuaFL\src</Filter>
-    </ClCompile>
-    <ClCompile Include="src\LuaFL\src\ltm.cpp">
-      <Filter>src\LuaFL\src</Filter>
-    </ClCompile>
-    <ClCompile Include="src\LuaFL\src\lundump.cpp">
-      <Filter>src\LuaFL\src</Filter>
-    </ClCompile>
-    <ClCompile Include="src\LuaFL\src\lvm.cpp">
-      <Filter>src\LuaFL\src</Filter>
-    </ClCompile>
-    <ClCompile Include="src\LuaFL\src\lzio.cpp">
-      <Filter>src\LuaFL\src</Filter>
-    </ClCompile>
     <ClCompile Include="src\PebbleFL\Common\PblCatmullRom.cpp">
       <Filter>src\PebbleFL\Common</Filter>
     </ClCompile>
@@ -1637,33 +1559,6 @@
     </ClCompile>
     <ClCompile Include="src\PebbleFL\Common\PblPrintfWrapper.cpp">
       <Filter>src\PebbleFL\Common</Filter>
-    </ClCompile>
-    <ClCompile Include="src\ZlibFL\adler32.c">
-      <Filter>src\ZlibFL</Filter>
-    </ClCompile>
-    <ClCompile Include="src\ZlibFL\compress.c">
-      <Filter>src\ZlibFL</Filter>
-    </ClCompile>
-    <ClCompile Include="src\ZlibFL\crc32.c">
-      <Filter>src\ZlibFL</Filter>
-    </ClCompile>
-    <ClCompile Include="src\ZlibFL\deflate.c">
-      <Filter>src\ZlibFL</Filter>
-    </ClCompile>
-    <ClCompile Include="src\ZlibFL\inffast.c">
-      <Filter>src\ZlibFL</Filter>
-    </ClCompile>
-    <ClCompile Include="src\ZlibFL\inflate.c">
-      <Filter>src\ZlibFL</Filter>
-    </ClCompile>
-    <ClCompile Include="src\ZlibFL\inftrees.c">
-      <Filter>src\ZlibFL</Filter>
-    </ClCompile>
-    <ClCompile Include="src\ZlibFL\trees.c">
-      <Filter>src\ZlibFL</Filter>
-    </ClCompile>
-    <ClCompile Include="src\ZlibFL\zutil.c">
-      <Filter>src\ZlibFL</Filter>
     </ClCompile>
     <ClCompile Include="src\lglcd\lgLcd.cpp">
       <Filter>src\lglcd</Filter>
@@ -1821,6 +1716,9 @@
       <Filter>src\Battlefront2\Source</Filter>
     </ClInclude>
     <ClInclude Include="src\Battlefront2\Source\CollisionObject.h">
+      <Filter>src\Battlefront2\Source</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Battlefront2\Source\CollisionObjectType.h">
       <Filter>src\Battlefront2\Source</Filter>
     </ClInclude>
     <ClInclude Include="src\Battlefront2\Source\CollisionPrimitive.h">
@@ -2112,6 +2010,12 @@
       <Filter>src\Battlefront2\Source</Filter>
     </ClInclude>
     <ClInclude Include="src\Battlefront2\Source\FoleyFX.h">
+      <Filter>src\Battlefront2\Source</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Battlefront2\Source\FoleyFXCollidee.h">
+      <Filter>src\Battlefront2\Source</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Battlefront2\Source\FoleyFXCollider.h">
       <Filter>src\Battlefront2\Source</Filter>
     </ClInclude>
     <ClInclude Include="src\Battlefront2\Source\FoleyFXOrdnance.h">
@@ -2601,6 +2505,9 @@
       <Filter>src\Battlefront2\Source</Filter>
     </ClInclude>
     <ClInclude Include="src\Battlefront2\Source\PropGenerator.h">
+      <Filter>src\Battlefront2\Source</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Battlefront2\Source\PropLayer.h">
       <Filter>src\Battlefront2\Source</Filter>
     </ClInclude>
     <ClInclude Include="src\Battlefront2\Source\PropModel.h">

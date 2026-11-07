@@ -467,11 +467,11 @@ void GrassPatchRenderable::AddParticle(const GrassPatchClass::GrassParticle& par
 
         PblVector3 vSide(u.y * vDir.z - u.z * vDir.y, u.z * vDir.x - u.x * vDir.z, u.x * vDir.y - u.y * vDir.x);
         vSide.y = u.y + vSide.y;
-        D3DXVec3Normalize(reinterpret_cast<D3DXVECTOR3*>(&vSide), reinterpret_cast<const D3DXVECTOR3*>(&vSide));
+        vSide = Normalize(vSide);
 
         PblVector3 vCross(vSide.y * vDir.z - vSide.z * vDir.y, vSide.z * vDir.x - vSide.x * vDir.z,
                           vSide.x * vDir.y - vSide.y * vDir.x);
-        D3DXVec3Normalize(reinterpret_cast<D3DXVECTOR3*>(&vCross), reinterpret_cast<const D3DXVECTOR3*>(&vCross));
+        vCross = Normalize(vCross);
 
         float fSize = particle.mSize * fScale;
         vRight = PblVector3(vSide.x * fSize, vSide.y * fSize, vSide.z * fSize);

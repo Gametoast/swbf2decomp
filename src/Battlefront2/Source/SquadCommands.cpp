@@ -4,6 +4,7 @@
 #include "Controllable.h"
 #include "GameLoop.h"
 #include "GameObject.h"
+#include "ReserveManager.h"
 #include "PebbleFL/Common/PblRandom.h"
 #include "AIUtil.h"
 #include "EventInfo.h"
@@ -41,7 +42,6 @@ namespace ReserveManager
 {
 int GetOpenReservableSlots(const GameObject* pObj, int iTeam, ReserveType eType);
 int GetPlayerOccupiedSlots(const GameObject* pObj);
-const GameObject* __fastcall GetFirstReserver(const GameObject* pObj);
 }
 namespace TeamManager
 {
@@ -138,7 +138,7 @@ void SquadCommands::VehicleGetIn(GameObject* pObject, Character* pCharacter)
     {
         if (pObject->GetReservableSlots(RT_BOARD) - ReserveManager::GetPlayerOccupiedSlots(pObject) > 0)
         {
-            const GameObject* pReserver = ReserveManager::GetFirstReserver(pObject);
+            const GameObject* pReserver = ReserveManager::GetFirstReserver(pObject, RT_BOARD);
             GameObject* pPlayer = AIUtil::FindFirstPlayerInVehicle(pObject);
             AI::VOHelper::Play(AI::VOT_SC_GetInResponseRepeat, pReserver, pPlayer, pObject,
                                AIUtil::GetRandomFloat(0.2f, 0.6f) + GameLoop::GetMissionTime());

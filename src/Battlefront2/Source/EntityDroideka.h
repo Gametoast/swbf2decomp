@@ -495,7 +495,11 @@ public:
     void TurnOffEffects();
     FoleyFX* GetFoleyFX() const;
 
-    bool IsRollingOrTransition() const;
+    // FUNCTION: SWBF2 0x00524070
+    bool IsRollingOrTransition() const
+    {
+        return mState == Rolling || mState == IdleToRoll || mState == RollToIdle;
+    }
 
     bool Smooth(float fDeltaTime) const;
 

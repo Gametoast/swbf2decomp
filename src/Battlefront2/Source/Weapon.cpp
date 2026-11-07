@@ -2312,18 +2312,18 @@ void Weapon::Render(const PblMatrix& mat, const RedPose* pPose, const RedColor& 
         }
         if (mChargeUpEmitter)
         {
-            mChargeUpEmitter().AttachEffectToMatrix(&mFirePointMatrix, false);
+            mChargeUpEmitter->AttachEffectToMatrix(&mFirePointMatrix, false);
 
             RedColorValue chargeColor;
             chargeColor.r = chargeColor.g = chargeColor.b = chargeColor.a = mStateTimer / mStateLimit;
-            mChargeUpEmitter().SetEmitterColor(chargeColor);
+            mChargeUpEmitter->SetEmitterColor(chargeColor);
             ((ParticleEmitterObject*)mChargeUpEmitter)->Update(0.0f);
             ((ParticleEmitterObject*)mChargeUpEmitter)->Render(1, 1.0f, 0);
         }
     }
     else if (mChargeUpEmitter)
     {
-        mChargeUpEmitter().StopNow();
+        mChargeUpEmitter->StopNow();
     }
 }
 

@@ -86,6 +86,12 @@
       <EnableCOMDATFolding>false</EnableCOMDATFolding>
     </Link>
   </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(SWBF2OriginalLgLcdLib)' != ''">
+    <Link>
+      <AdditionalDependencies>$(SWBF2OriginalLgLcdLib);%(AdditionalDependencies)</AdditionalDependencies>
+      <ImageHasSafeExceptionHandlers>false</ImageHasSafeExceptionHandlers>
+    </Link>
+  </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="src\Battlefront2\Platform\Pc\pcBirdEffect.cpp">
       <BufferSecurityCheck>false</BufferSecurityCheck>
@@ -235,6 +241,18 @@
       <BufferSecurityCheck>false</BufferSecurityCheck>
       <WholeProgramOptimization Condition="'$(Configuration)'=='Release'">true</WholeProgramOptimization>
     </ClCompile>
+    <ClCompile Include="src\Battlefront2\Source\ActiveRegion.cpp">
+      <BufferSecurityCheck>false</BufferSecurityCheck>
+      <WholeProgramOptimization Condition="'$(Configuration)'=='Release'">true</WholeProgramOptimization>
+    </ClCompile>
+    <ClCompile Include="src\Battlefront2\Source\Adrenaline.cpp">
+      <BufferSecurityCheck>false</BufferSecurityCheck>
+      <WholeProgramOptimization Condition="'$(Configuration)'=='Release'">true</WholeProgramOptimization>
+    </ClCompile>
+    <ClCompile Include="src\Battlefront2\Source\Agent.cpp">
+      <BufferSecurityCheck>false</BufferSecurityCheck>
+      <WholeProgramOptimization Condition="'$(Configuration)'=='Release'">true</WholeProgramOptimization>
+    </ClCompile>
     <ClCompile Include="src\Battlefront2\Source\AIDebug.cpp">
       <BufferSecurityCheck>false</BufferSecurityCheck>
       <WholeProgramOptimization Condition="'$(Configuration)'=='Release'">true</WholeProgramOptimization>
@@ -259,23 +277,11 @@
       <BufferSecurityCheck>false</BufferSecurityCheck>
       <WholeProgramOptimization Condition="'$(Configuration)'=='Release'">true</WholeProgramOptimization>
     </ClCompile>
-    <ClCompile Include="src\Battlefront2\Source\AIVisRegion.cpp">
-      <BufferSecurityCheck>false</BufferSecurityCheck>
-      <WholeProgramOptimization Condition="'$(Configuration)'=='Release'">true</WholeProgramOptimization>
-    </ClCompile>
-    <ClCompile Include="src\Battlefront2\Source\ActiveRegion.cpp">
-      <BufferSecurityCheck>false</BufferSecurityCheck>
-      <WholeProgramOptimization Condition="'$(Configuration)'=='Release'">true</WholeProgramOptimization>
-    </ClCompile>
-    <ClCompile Include="src\Battlefront2\Source\Adrenaline.cpp">
-      <BufferSecurityCheck>false</BufferSecurityCheck>
-      <WholeProgramOptimization Condition="'$(Configuration)'=='Release'">true</WholeProgramOptimization>
-    </ClCompile>
-    <ClCompile Include="src\Battlefront2\Source\Agent.cpp">
-      <BufferSecurityCheck>false</BufferSecurityCheck>
-      <WholeProgramOptimization Condition="'$(Configuration)'=='Release'">true</WholeProgramOptimization>
-    </ClCompile>
     <ClCompile Include="src\Battlefront2\Source\Aimer.cpp">
+      <BufferSecurityCheck>false</BufferSecurityCheck>
+      <WholeProgramOptimization Condition="'$(Configuration)'=='Release'">true</WholeProgramOptimization>
+    </ClCompile>
+    <ClCompile Include="src\Battlefront2\Source\AIVisRegion.cpp">
       <BufferSecurityCheck>false</BufferSecurityCheck>
       <WholeProgramOptimization Condition="'$(Configuration)'=='Release'">true</WholeProgramOptimization>
     </ClCompile>
@@ -328,14 +334,6 @@
       <WholeProgramOptimization Condition="'$(Configuration)'=='Release'">true</WholeProgramOptimization>
     </ClCompile>
     <ClCompile Include="src\Battlefront2\Source\BoundaryManager.cpp">
-      <BufferSecurityCheck>false</BufferSecurityCheck>
-      <WholeProgramOptimization Condition="'$(Configuration)'=='Release'">true</WholeProgramOptimization>
-    </ClCompile>
-    <ClCompile Include="src\Battlefront2\Source\CTFGoal.cpp">
-      <BufferSecurityCheck>false</BufferSecurityCheck>
-      <WholeProgramOptimization Condition="'$(Configuration)'=='Release'">true</WholeProgramOptimization>
-    </ClCompile>
-    <ClCompile Include="src\Battlefront2\Source\CTFGoalD.cpp">
       <BufferSecurityCheck>false</BufferSecurityCheck>
       <WholeProgramOptimization Condition="'$(Configuration)'=='Release'">true</WholeProgramOptimization>
     </ClCompile>
@@ -480,6 +478,14 @@
       <WholeProgramOptimization Condition="'$(Configuration)'=='Release'">true</WholeProgramOptimization>
     </ClCompile>
     <ClCompile Include="src\Battlefront2\Source\Controller.cpp">
+      <BufferSecurityCheck>false</BufferSecurityCheck>
+      <WholeProgramOptimization Condition="'$(Configuration)'=='Release'">true</WholeProgramOptimization>
+    </ClCompile>
+    <ClCompile Include="src\Battlefront2\Source\CTFGoal.cpp">
+      <BufferSecurityCheck>false</BufferSecurityCheck>
+      <WholeProgramOptimization Condition="'$(Configuration)'=='Release'">true</WholeProgramOptimization>
+    </ClCompile>
+    <ClCompile Include="src\Battlefront2\Source\CTFGoalD.cpp">
       <BufferSecurityCheck>false</BufferSecurityCheck>
       <WholeProgramOptimization Condition="'$(Configuration)'=='Release'">true</WholeProgramOptimization>
     </ClCompile>
@@ -743,22 +749,6 @@
       <BufferSecurityCheck>false</BufferSecurityCheck>
       <WholeProgramOptimization Condition="'$(Configuration)'=='Release'">true</WholeProgramOptimization>
     </ClCompile>
-    <ClCompile Include="src\Battlefront2\Source\FLEffect.cpp">
-      <BufferSecurityCheck>false</BufferSecurityCheck>
-      <WholeProgramOptimization Condition="'$(Configuration)'=='Release'">true</WholeProgramOptimization>
-    </ClCompile>
-    <ClCompile Include="src\Battlefront2\Source\FLGuiManager.cpp">
-      <BufferSecurityCheck>false</BufferSecurityCheck>
-      <WholeProgramOptimization Condition="'$(Configuration)'=='Release'">true</WholeProgramOptimization>
-    </ClCompile>
-    <ClCompile Include="src\Battlefront2\Source\FLInputManager.cpp">
-      <BufferSecurityCheck>false</BufferSecurityCheck>
-      <WholeProgramOptimization Condition="'$(Configuration)'=='Release'">true</WholeProgramOptimization>
-    </ClCompile>
-    <ClCompile Include="src\Battlefront2\Source\FLJoystick.cpp">
-      <BufferSecurityCheck>false</BufferSecurityCheck>
-      <WholeProgramOptimization Condition="'$(Configuration)'=='Release'">true</WholeProgramOptimization>
-    </ClCompile>
     <ClCompile Include="src\Battlefront2\Source\FirstPerson.cpp">
       <BufferSecurityCheck>false</BufferSecurityCheck>
       <WholeProgramOptimization Condition="'$(Configuration)'=='Release'">true</WholeProgramOptimization>
@@ -772,6 +762,22 @@
       <WholeProgramOptimization Condition="'$(Configuration)'=='Release'">true</WholeProgramOptimization>
     </ClCompile>
     <ClCompile Include="src\Battlefront2\Source\FlashyTextElement.cpp">
+      <BufferSecurityCheck>false</BufferSecurityCheck>
+      <WholeProgramOptimization Condition="'$(Configuration)'=='Release'">true</WholeProgramOptimization>
+    </ClCompile>
+    <ClCompile Include="src\Battlefront2\Source\FLEffect.cpp">
+      <BufferSecurityCheck>false</BufferSecurityCheck>
+      <WholeProgramOptimization Condition="'$(Configuration)'=='Release'">true</WholeProgramOptimization>
+    </ClCompile>
+    <ClCompile Include="src\Battlefront2\Source\FLGuiManager.cpp">
+      <BufferSecurityCheck>false</BufferSecurityCheck>
+      <WholeProgramOptimization Condition="'$(Configuration)'=='Release'">true</WholeProgramOptimization>
+    </ClCompile>
+    <ClCompile Include="src\Battlefront2\Source\FLInputManager.cpp">
+      <BufferSecurityCheck>false</BufferSecurityCheck>
+      <WholeProgramOptimization Condition="'$(Configuration)'=='Release'">true</WholeProgramOptimization>
+    </ClCompile>
+    <ClCompile Include="src\Battlefront2\Source\FLJoystick.cpp">
       <BufferSecurityCheck>false</BufferSecurityCheck>
       <WholeProgramOptimization Condition="'$(Configuration)'=='Release'">true</WholeProgramOptimization>
     </ClCompile>
@@ -954,6 +960,10 @@
       <BufferSecurityCheck>false</BufferSecurityCheck>
       <WholeProgramOptimization Condition="'$(Configuration)'=='Release'">true</WholeProgramOptimization>
     </ClCompile>
+    <ClCompile Include="src\Battlefront2\Source\HintManager.cpp">
+      <BufferSecurityCheck>false</BufferSecurityCheck>
+      <WholeProgramOptimization Condition="'$(Configuration)'=='Release'">true</WholeProgramOptimization>
+    </ClCompile>
     <ClCompile Include="src\Battlefront2\Source\HUDDirections.cpp">
       <BufferSecurityCheck>false</BufferSecurityCheck>
       <WholeProgramOptimization Condition="'$(Configuration)'=='Release'">true</WholeProgramOptimization>
@@ -1079,10 +1089,6 @@
       <WholeProgramOptimization Condition="'$(Configuration)'=='Release'">true</WholeProgramOptimization>
     </ClCompile>
     <ClCompile Include="src\Battlefront2\Source\HeroMessageDisplay.cpp">
-      <BufferSecurityCheck>false</BufferSecurityCheck>
-      <WholeProgramOptimization Condition="'$(Configuration)'=='Release'">true</WholeProgramOptimization>
-    </ClCompile>
-    <ClCompile Include="src\Battlefront2\Source\HintManager.cpp">
       <BufferSecurityCheck>false</BufferSecurityCheck>
       <WholeProgramOptimization Condition="'$(Configuration)'=='Release'">true</WholeProgramOptimization>
     </ClCompile>
@@ -1752,10 +1758,6 @@
       <BufferSecurityCheck>false</BufferSecurityCheck>
       <WholeProgramOptimization Condition="'$(Configuration)'=='Release'">true</WholeProgramOptimization>
     </ClCompile>
-    <ClCompile Include="src\Battlefront2\Source\UnitCTFOffenseAgent.cpp">
-      <BufferSecurityCheck>false</BufferSecurityCheck>
-      <WholeProgramOptimization Condition="'$(Configuration)'=='Release'">true</WholeProgramOptimization>
-    </ClCompile>
     <ClCompile Include="src\Battlefront2\Source\UnitCaptureCPAgent.cpp">
       <BufferSecurityCheck>false</BufferSecurityCheck>
       <WholeProgramOptimization Condition="'$(Configuration)'=='Release'">true</WholeProgramOptimization>
@@ -1769,6 +1771,10 @@
       <WholeProgramOptimization Condition="'$(Configuration)'=='Release'">true</WholeProgramOptimization>
     </ClCompile>
     <ClCompile Include="src\Battlefront2\Source\UnitController.cpp">
+      <BufferSecurityCheck>false</BufferSecurityCheck>
+      <WholeProgramOptimization Condition="'$(Configuration)'=='Release'">true</WholeProgramOptimization>
+    </ClCompile>
+    <ClCompile Include="src\Battlefront2\Source\UnitCTFOffenseAgent.cpp">
       <BufferSecurityCheck>false</BufferSecurityCheck>
       <WholeProgramOptimization Condition="'$(Configuration)'=='Release'">true</WholeProgramOptimization>
     </ClCompile>
@@ -1836,10 +1842,6 @@
       <BufferSecurityCheck>false</BufferSecurityCheck>
       <WholeProgramOptimization Condition="'$(Configuration)'=='Release'">true</WholeProgramOptimization>
     </ClCompile>
-    <ClCompile Include="src\Battlefront2\Source\VOHelper.cpp">
-      <BufferSecurityCheck>false</BufferSecurityCheck>
-      <WholeProgramOptimization Condition="'$(Configuration)'=='Release'">true</WholeProgramOptimization>
-    </ClCompile>
     <ClCompile Include="src\Battlefront2\Source\VehicleCoverHelper.cpp">
       <BufferSecurityCheck>false</BufferSecurityCheck>
       <WholeProgramOptimization Condition="'$(Configuration)'=='Release'">true</WholeProgramOptimization>
@@ -1861,6 +1863,10 @@
       <WholeProgramOptimization Condition="'$(Configuration)'=='Release'">true</WholeProgramOptimization>
     </ClCompile>
     <ClCompile Include="src\Battlefront2\Source\VisionManager.cpp">
+      <BufferSecurityCheck>false</BufferSecurityCheck>
+      <WholeProgramOptimization Condition="'$(Configuration)'=='Release'">true</WholeProgramOptimization>
+    </ClCompile>
+    <ClCompile Include="src\Battlefront2\Source\VOHelper.cpp">
       <BufferSecurityCheck>false</BufferSecurityCheck>
       <WholeProgramOptimization Condition="'$(Configuration)'=='Release'">true</WholeProgramOptimization>
     </ClCompile>
@@ -1988,136 +1994,6 @@
       <BufferSecurityCheck>false</BufferSecurityCheck>
       <WholeProgramOptimization Condition="'$(Configuration)'=='Release'">true</WholeProgramOptimization>
     </ClCompile>
-    <ClCompile Include="src\LuaFL\src\lapi.cpp">
-      <AdditionalIncludeDirectories>src;src\LuaFL\include;src\LuaFL\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
-      <OmitDefaultLibName>true</OmitDefaultLibName>
-    </ClCompile>
-    <ClCompile Include="src\LuaFL\src\lcode.cpp">
-      <AdditionalIncludeDirectories>src;src\LuaFL\include;src\LuaFL\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
-      <OmitDefaultLibName>true</OmitDefaultLibName>
-    </ClCompile>
-    <ClCompile Include="src\LuaFL\src\ldebug.cpp">
-      <AdditionalIncludeDirectories>src;src\LuaFL\include;src\LuaFL\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
-      <OmitDefaultLibName>true</OmitDefaultLibName>
-    </ClCompile>
-    <ClCompile Include="src\LuaFL\src\ldo.cpp">
-      <AdditionalIncludeDirectories>src;src\LuaFL\include;src\LuaFL\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
-      <OmitDefaultLibName>true</OmitDefaultLibName>
-    </ClCompile>
-    <ClCompile Include="src\LuaFL\src\ldump.cpp">
-      <AdditionalIncludeDirectories>src;src\LuaFL\include;src\LuaFL\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
-      <OmitDefaultLibName>true</OmitDefaultLibName>
-    </ClCompile>
-    <ClCompile Include="src\LuaFL\src\lfunc.cpp">
-      <AdditionalIncludeDirectories>src;src\LuaFL\include;src\LuaFL\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
-      <OmitDefaultLibName>true</OmitDefaultLibName>
-    </ClCompile>
-    <ClCompile Include="src\LuaFL\src\lgc.cpp">
-      <AdditionalIncludeDirectories>src;src\LuaFL\include;src\LuaFL\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
-      <OmitDefaultLibName>true</OmitDefaultLibName>
-    </ClCompile>
-    <ClCompile Include="src\LuaFL\src\lib\lauxlib.cpp">
-      <AdditionalIncludeDirectories>src;src\LuaFL\include;src\LuaFL\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
-      <OmitDefaultLibName>true</OmitDefaultLibName>
-    </ClCompile>
-    <ClCompile Include="src\LuaFL\src\lib\lbaselib.cpp">
-      <AdditionalIncludeDirectories>src;src\LuaFL\include;src\LuaFL\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
-      <OmitDefaultLibName>true</OmitDefaultLibName>
-    </ClCompile>
-    <ClCompile Include="src\LuaFL\src\lib\ldblib.cpp">
-      <AdditionalIncludeDirectories>src;src\LuaFL\include;src\LuaFL\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
-      <OmitDefaultLibName>true</OmitDefaultLibName>
-    </ClCompile>
-    <ClCompile Include="src\LuaFL\src\lib\liolib.cpp">
-      <AdditionalIncludeDirectories>src;src\LuaFL\include;src\LuaFL\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
-      <OmitDefaultLibName>true</OmitDefaultLibName>
-    </ClCompile>
-    <ClCompile Include="src\LuaFL\src\lib\lmathlib.cpp">
-      <AdditionalIncludeDirectories>src;src\LuaFL\include;src\LuaFL\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
-      <OmitDefaultLibName>true</OmitDefaultLibName>
-    </ClCompile>
-    <ClCompile Include="src\LuaFL\src\lib\lstrlib.cpp">
-      <AdditionalIncludeDirectories>src;src\LuaFL\include;src\LuaFL\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
-      <OmitDefaultLibName>true</OmitDefaultLibName>
-    </ClCompile>
-    <ClCompile Include="src\LuaFL\src\lib\ltablib.cpp">
-      <AdditionalIncludeDirectories>src;src\LuaFL\include;src\LuaFL\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
-      <OmitDefaultLibName>true</OmitDefaultLibName>
-    </ClCompile>
-    <ClCompile Include="src\LuaFL\src\llex.cpp">
-      <AdditionalIncludeDirectories>src;src\LuaFL\include;src\LuaFL\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
-      <OmitDefaultLibName>true</OmitDefaultLibName>
-    </ClCompile>
-    <ClCompile Include="src\LuaFL\src\lmem.cpp">
-      <AdditionalIncludeDirectories>src;src\LuaFL\include;src\LuaFL\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
-      <OmitDefaultLibName>true</OmitDefaultLibName>
-    </ClCompile>
-    <ClCompile Include="src\LuaFL\src\lobject.cpp">
-      <AdditionalIncludeDirectories>src;src\LuaFL\include;src\LuaFL\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
-      <OmitDefaultLibName>true</OmitDefaultLibName>
-    </ClCompile>
-    <ClCompile Include="src\LuaFL\src\lopcodes.cpp">
-      <AdditionalIncludeDirectories>src;src\LuaFL\include;src\LuaFL\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
-      <OmitDefaultLibName>true</OmitDefaultLibName>
-    </ClCompile>
-    <ClCompile Include="src\LuaFL\src\lparser.cpp">
-      <AdditionalIncludeDirectories>src;src\LuaFL\include;src\LuaFL\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
-      <OmitDefaultLibName>true</OmitDefaultLibName>
-    </ClCompile>
-    <ClCompile Include="src\LuaFL\src\lstate.cpp">
-      <AdditionalIncludeDirectories>src;src\LuaFL\include;src\LuaFL\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
-      <OmitDefaultLibName>true</OmitDefaultLibName>
-    </ClCompile>
-    <ClCompile Include="src\LuaFL\src\lstring.cpp">
-      <AdditionalIncludeDirectories>src;src\LuaFL\include;src\LuaFL\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
-      <OmitDefaultLibName>true</OmitDefaultLibName>
-    </ClCompile>
-    <ClCompile Include="src\LuaFL\src\ltable.cpp">
-      <AdditionalIncludeDirectories>src;src\LuaFL\include;src\LuaFL\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
-      <OmitDefaultLibName>true</OmitDefaultLibName>
-    </ClCompile>
-    <ClCompile Include="src\LuaFL\src\ltm.cpp">
-      <AdditionalIncludeDirectories>src;src\LuaFL\include;src\LuaFL\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
-      <OmitDefaultLibName>true</OmitDefaultLibName>
-    </ClCompile>
-    <ClCompile Include="src\LuaFL\src\lundump.cpp">
-      <AdditionalIncludeDirectories>src;src\LuaFL\include;src\LuaFL\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
-      <OmitDefaultLibName>true</OmitDefaultLibName>
-    </ClCompile>
-    <ClCompile Include="src\LuaFL\src\lvm.cpp">
-      <AdditionalIncludeDirectories>src;src\LuaFL\include;src\LuaFL\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
-      <OmitDefaultLibName>true</OmitDefaultLibName>
-    </ClCompile>
-    <ClCompile Include="src\LuaFL\src\lzio.cpp">
-      <AdditionalIncludeDirectories>src;src\LuaFL\include;src\LuaFL\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
-      <OmitDefaultLibName>true</OmitDefaultLibName>
-    </ClCompile>
     <ClCompile Include="src\PebbleFL\Common\PblCatmullRom.cpp">
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <OmitDefaultLibName>true</OmitDefaultLibName>
@@ -2218,34 +2094,8 @@
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <OmitDefaultLibName>true</OmitDefaultLibName>
     </ClCompile>
-    <ClCompile Include="src\ZlibFL\adler32.c">
-      <InlineFunctionExpansion Condition="'$(Configuration)'=='Release'">AnySuitable</InlineFunctionExpansion>
-    </ClCompile>
-    <ClCompile Include="src\ZlibFL\compress.c">
-      <InlineFunctionExpansion Condition="'$(Configuration)'=='Release'">AnySuitable</InlineFunctionExpansion>
-    </ClCompile>
-    <ClCompile Include="src\ZlibFL\crc32.c">
-      <InlineFunctionExpansion Condition="'$(Configuration)'=='Release'">AnySuitable</InlineFunctionExpansion>
-    </ClCompile>
-    <ClCompile Include="src\ZlibFL\deflate.c">
-      <InlineFunctionExpansion Condition="'$(Configuration)'=='Release'">AnySuitable</InlineFunctionExpansion>
-    </ClCompile>
-    <ClCompile Include="src\ZlibFL\inffast.c">
-      <InlineFunctionExpansion Condition="'$(Configuration)'=='Release'">AnySuitable</InlineFunctionExpansion>
-    </ClCompile>
-    <ClCompile Include="src\ZlibFL\inflate.c">
-      <InlineFunctionExpansion Condition="'$(Configuration)'=='Release'">AnySuitable</InlineFunctionExpansion>
-    </ClCompile>
-    <ClCompile Include="src\ZlibFL\inftrees.c">
-      <InlineFunctionExpansion Condition="'$(Configuration)'=='Release'">AnySuitable</InlineFunctionExpansion>
-    </ClCompile>
-    <ClCompile Include="src\ZlibFL\trees.c">
-      <InlineFunctionExpansion Condition="'$(Configuration)'=='Release'">AnySuitable</InlineFunctionExpansion>
-    </ClCompile>
-    <ClCompile Include="src\ZlibFL\zutil.c">
-      <InlineFunctionExpansion Condition="'$(Configuration)'=='Release'">AnySuitable</InlineFunctionExpansion>
-    </ClCompile>
     <ClCompile Include="src\lglcd\lgLcd.cpp">
+      <ExcludedFromBuild Condition="'$(SWBF2OriginalLgLcdLib)' != ''">true</ExcludedFromBuild>
       <BufferSecurityCheck>false</BufferSecurityCheck>
       <InlineFunctionExpansion Condition="'$(Configuration)'=='Release'">AnySuitable</InlineFunctionExpansion>
     </ClCompile>
@@ -2305,6 +2155,7 @@
     <ClInclude Include="src\Battlefront2\Source\CollisionMesh.h" />
     <ClInclude Include="src\Battlefront2\Source\CollisionModel.h" />
     <ClInclude Include="src\Battlefront2\Source\CollisionObject.h" />
+    <ClInclude Include="src\Battlefront2\Source\CollisionObjectType.h" />
     <ClInclude Include="src\Battlefront2\Source\CollisionPrimitive.h" />
     <ClInclude Include="src\Battlefront2\Source\CollisionUtil.h" />
     <ClInclude Include="src\Battlefront2\Source\ColorControl.h" />
@@ -2402,6 +2253,8 @@
     <ClInclude Include="src\Battlefront2\Source\FlashyTextElement.h" />
     <ClInclude Include="src\Battlefront2\Source\FlyRegion.h" />
     <ClInclude Include="src\Battlefront2\Source\FoleyFX.h" />
+    <ClInclude Include="src\Battlefront2\Source\FoleyFXCollidee.h" />
+    <ClInclude Include="src\Battlefront2\Source\FoleyFXCollider.h" />
     <ClInclude Include="src\Battlefront2\Source\FoleyFXOrdnance.h" />
     <ClInclude Include="src\Battlefront2\Source\FoleyFXRegion.h" />
     <ClInclude Include="src\Battlefront2\Source\FoleyFXSoldier.h" />
@@ -2565,6 +2418,7 @@
     <ClInclude Include="src\Battlefront2\Source\ProceduralAnimation.h" />
     <ClInclude Include="src\Battlefront2\Source\PropCluster.h" />
     <ClInclude Include="src\Battlefront2\Source\PropGenerator.h" />
+    <ClInclude Include="src\Battlefront2\Source\PropLayer.h" />
     <ClInclude Include="src\Battlefront2\Source\PropModel.h" />
     <ClInclude Include="src\Battlefront2\Source\PropModelMesh.h" />
     <ClInclude Include="src\Battlefront2\Source\QOSDisplay.h" />
@@ -2857,8 +2711,22 @@
       <LinkLibraryDependencies>true</LinkLibraryDependencies>
       <UseLibraryDependencyInputs>false</UseLibraryDependencyInputs>
     </ProjectReference>
+    <ProjectReference Include="src\LuaFL\LuaFL.vcxproj">
+      <Project>{DD72C068-B8B9-5F2D-9E36-3960F2129E79}</Project>
+      <LinkLibraryDependencies>true</LinkLibraryDependencies>
+      <UseLibraryDependencyInputs>false</UseLibraryDependencyInputs>
+    </ProjectReference>
+    <ProjectReference Include="src\ZlibFL\ZLibFL.vcxproj">
+      <Project>{F23372A9-3077-54F3-998E-5DA6B2228447}</Project>
+      <LinkLibraryDependencies>true</LinkLibraryDependencies>
+      <UseLibraryDependencyInputs>false</UseLibraryDependencyInputs>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <Target Name="ValidateOriginalLgLcd" BeforeTargets="PrepareForBuild" Condition="'$(SWBF2OriginalLgLcdLib)' != ''">
+    <Error Condition="'$(Configuration)|$(Platform)' != 'Release|Win32'" Text="The original LCD archive requires Release|Win32." />
+    <Error Condition="!Exists('$(SWBF2OriginalLgLcdLib)')" Text="SWBF2OriginalLgLcdLib must point to the verified original x86 lgLcd.lib." />
+  </Target>
   <PropertyGroup Condition="'$(SWBF2_GAMEDATA)' == ''">
     <_SteamSWBF2>$([MSBuild]::GetRegistryValueFromView('HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\Steam App 6060', 'InstallLocation', null, RegistryView.Registry64, RegistryView.Registry32))</_SteamSWBF2>
     <SWBF2_GAMEDATA Condition="'$(_SteamSWBF2)' != ''">$(_SteamSWBF2)\GameData</SWBF2_GAMEDATA>

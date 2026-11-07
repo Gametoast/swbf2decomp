@@ -39,8 +39,13 @@ static void HandleQueryPackets();
 // GLOBAL: SWBF2 0x01e64f30
 char netLoginOverrideName[256];
 
+// GLOBAL: SWBF2 0x01fa88d0
+char const* netLoginErrorMessage;
+
+// GLOBAL: SWBF2 0x01e64f04
+int netLoginErrorLevel;
+
 extern int netDirectPort;
-extern int netLoginErrorLevel;
 extern int updatePercent;
 extern int netNoCableCount;
 extern int netConnectState;
@@ -49,7 +54,6 @@ extern int netLobbyState;
 extern int netLanRegisterState;
 extern char const* gameErrorMsg;
 extern int gameErrorLvl;
-extern char const* netLoginErrorMessage;
 extern float netNextLanQueryTime;
 extern int netLanQueryCount;
 extern unsigned int netLanQuerySequence;

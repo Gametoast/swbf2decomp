@@ -65,19 +65,6 @@ extern Event<CommandPost, unsigned __int64> mFinishCapture;
 extern int gSpawnInvicibility;
 
 
-// FUNCTION: SWBF2 0x0047a570
-PblMatrix NormalMatrix(const PblVector3& vDir, const PblVector3& vNormal, const PblVector3& vPos)
-{
-    PblVector3 vUp;
-    D3DXVec3Normalize(reinterpret_cast<D3DXVECTOR3*>(&vUp), reinterpret_cast<const D3DXVECTOR3*>(&vNormal));
-    PblVector3 vRight;
-    D3DXVec3Normalize(reinterpret_cast<D3DXVECTOR3*>(&vRight), reinterpret_cast<const D3DXVECTOR3*>(&CrossProduct(vUp, vDir)));
-
-    PblMatrix mResult(vRight, vUp, CrossProduct(vRight, vUp), vPos);
-    return mResult;
-}
-
-
 // FUNCTION: SWBF2 0x0047e3e0
 CommandPostClass::CommandPostClass(unsigned int  )
 {
@@ -183,7 +170,7 @@ void CommandPostClass::SetProperty(unsigned int uProperty, const char* pszValue,
         if (sscanf(pszValue, "%s %s", acGeometry, acTeam) == 2)
         {
             int iSide = Team::TranslateTeamName(acTeam);
-            m_pHoloModel[iSide] = const_cast<RedModel*>(RedModel::Find(PblHash(acGeometry)));
+            m_pHoloModel[iSide] = RedModel::Find(PblHash(acGeometry));
         }
         break;
     }

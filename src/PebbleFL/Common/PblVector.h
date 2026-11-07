@@ -234,6 +234,9 @@ public:
     PblVector3 _vMax;
 };
 
+// SYNTHETIC: SWBF2 0x004615e0
+// PblBox::PblBox(class PblBox const &)
+
  
  
  

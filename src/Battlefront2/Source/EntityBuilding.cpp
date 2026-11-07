@@ -415,28 +415,6 @@ float EntityBuilding::GetMaxStrafe() const
     return 0.0f;
 }
 
-// FUNCTION: SWBF2 0x00475e60
-Controllable* EntityBuilding::GetControllable()
-{
-    const PblList<Controllable>& list = GetControllableList();
-    if (list.GetCount() == 1)
-    {
-        return list.GetFirst()->_pObject;
-    }
-    return 0;
-}
-
-// FUNCTION: SWBF2 0x00475e40
-const Controllable* EntityBuilding::GetControllable() const
-{
-    const PblList<Controllable>& list = GetControllableList();
-    if (list.GetCount() == 1)
-    {
-        return list.GetFirst()->_pObject;
-    }
-    return 0;
-}
-
 // FUNCTION: SWBF2 0x00475e80
 GameObjectType EntityBuilding::GetGameObjectType()
 {

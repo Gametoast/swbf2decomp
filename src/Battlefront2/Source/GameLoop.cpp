@@ -1,4 +1,5 @@
 #include "AmmoCounter.h"
+#include "PopupText.h"
 #include "PerformanceTimer.h"
 
 #include <math.h>
@@ -6,6 +7,7 @@
 #include <string.h>
 
 #include "GameLoop.h"
+#include "SkyManager.h"
 #include "BootDisplay.h"
 #include "RedEngineFL/Application/RedTerrain.h"
 #include "RedEngineFL/Application/pc/pcRedShadowProxy.h"
@@ -159,16 +161,8 @@ namespace TeamManager
 {
     void Init();
 }
-namespace SkyManager
-{
-    void Activate();
-}
 
 void InitMouseCursor();
-namespace PopupText
-{
-    void Init();
-}
 extern float netSecondsPerTurn;
 extern int netCurMaxPlayers;
 extern HWND hGlobalWnd;
@@ -558,10 +552,6 @@ void Update(float fDeltaTime);
 namespace PlayerPrefs
 {
     int FindByViewport(int iValue);
-}
-namespace PopupText
-{
-    bool IsEnabled(); void Update(float fDeltaTime);
 }
 namespace HUD
 {
@@ -1702,12 +1692,7 @@ void GameLoop::SetNextMission(char const* pcName)
 
 extern bool netAutoAssignTeams;
 
-// SYNTHETIC: SWBF2 0x00404740
-// `dynamic initializer for 'netAutoAssignTeamsOriginalSetting''
-
-// GLOBAL: SWBF2 0x01ed86a7
-// netAutoAssignTeamsOriginalSetting
-bool netAutoAssignTeamsOriginalSetting = netAutoAssignTeams;
+extern bool netAutoAssignTeamsOriginalSetting;
 
 
 

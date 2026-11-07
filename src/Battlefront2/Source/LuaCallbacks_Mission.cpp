@@ -1,4 +1,5 @@
 #include "PebbleFL/Common/PblMath.h"
+#include "PopupText.h"
 #include "AmmoCounter.h"
 #include <d3dx9math.h>
 #include "LuaCallbacks_Mission.h"
@@ -86,10 +87,7 @@
 #include "PebbleFL/Common/PblRandom.h"
 #include "PebbleFL/Common/PblHermite.h"
 #include <math.h>
-namespace PopupText
-{
-    void __fastcall ShowPopup(int iType, unsigned int uTextId);
-}
+
 
 
     
@@ -100,10 +98,6 @@ namespace ParticleSystem
     void SetMaxDistanceBias(float fBias);
 }
 
-namespace PopupText
-{
-    void AddHint(unsigned int uHint);
-}
 
 // FUNCTION: SWBF2 0x0058d8d0
 void* GetRegion(lua_State* L, int iIndex)
@@ -3458,7 +3452,7 @@ int ShowObjectiveTextPopup(lua_State* L)
     unsigned int uText = PblHash(luaL_checklstring(LuaHelper::mState, 1, 0));
     if (PlayerProfile::GetProfile(0)->mGameOptions.mbObjectiveDetails)
     {
-        PopupText::ShowPopup(2, uText);
+        PopupText::ShowPopup(PopupText::OBJECTIVE, uText);
     }
     return 0;
 }
@@ -3466,7 +3460,7 @@ int ShowObjectiveTextPopup(lua_State* L)
 // FUNCTION: SWBF2 0x0058d7e0
 int ShowSelectionTextPopup(lua_State* L)
 {
-    PopupText::ShowPopup(3, PblHash(luaL_checklstring(LuaHelper::mState, 1, 0)));
+    PopupText::ShowPopup(PopupText::SELECTION, PblHash(luaL_checklstring(LuaHelper::mState, 1, 0)));
     return 0;
 }
 

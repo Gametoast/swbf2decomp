@@ -224,7 +224,7 @@ void UnitDestroyAgent::UpdateStatePostVision(float dt)
         if (rMyHealth.mCurHealth > rMyHealth.mMaxHealth * 0.5f &&
             mTarget.mType == AI::GTT_GAMEOBJECT && !bMelee && GetLowLevel().IsNavigatorInProgress())
         {
-            if (mTarget.mGameObj->IsRtti(EntityBuilding::rttiHashEntityBuilding))
+            if (mTarget.mGameObj->IsRtti(EntityBuilding::GetRtti()))
             {
                 if (mTarget.GetGameObject() == GetThreatManager(mCtrl)->GetVisibleObject())
                 {

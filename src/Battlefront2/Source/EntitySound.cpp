@@ -131,7 +131,8 @@ void EntitySound::DestroyAll()
 {
     while (sEntitySoundList.mHead.mNext != &sEntitySoundList.mHead)
     {
-        delete (EntitySound*)((char*)sEntitySoundList.mHead.mNext - offsetof(EntitySound, mNode));
+        delete (EntitySound*)sEntitySoundList.mHead.mNext->GetObjectA(
+            &sEntitySoundList, offsetof(EntitySound, mNode));
     }
 }
 

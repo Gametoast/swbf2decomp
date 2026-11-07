@@ -4,6 +4,7 @@
 
 #include "NetComm.h"
 #include "NetGame.h"
+#include "NetDrag.h"
 #include "GameLoop.h"
 #include "pcNetSocket.h"
 #include "PebbleFL/Common/PblTimeBase.h"
@@ -18,14 +19,6 @@ extern int netCurMaxHosts, netCurMaxPlayers;
 extern int gDebugCount;
 bool __fastcall IsAdminPacketAuthorized(const unsigned char* pPacket);
 
-class NetDrag
-{
-public:
-    static void Send(NetPacket* pPacket, int iDest);
-    static void FreePackets();
-    static void Update();
-    static NetPacket* ReceiveLocal();
-};
 
 struct NetDest
 {

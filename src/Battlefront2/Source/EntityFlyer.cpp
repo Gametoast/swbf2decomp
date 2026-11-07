@@ -381,16 +381,16 @@ EntityFlyerClass::EntityFlyerClass(unsigned int uHash)
     mVORadius = 500.0f;
 }
 
-// SYNTHETIC: SWBF2 0x00402ae0
-// `dynamic initializer for 'EntityFlyerClass::rttiHashEntityFlyerClass''
-// EntityFlyerClass::rttiHashEntityFlyerClass
+// SYNTHETIC: SWBF2 0x00402ab0
+// `dynamic initializer for 'EntityFlyer::sMemoryPool''
+// SYNTHETIC: SWBF2 0x00766f50
+// `dynamic atexit destructor for 'EntityFlyer::sMemoryPool''
 
-// GLOBAL: SWBF2 0x01ebbcb8
-// EntityFlyerClass::rttiHashEntityFlyerClass
-PblHash EntityFlyerClass::rttiHashEntityFlyerClass("EntityFlyerClass");
-// GLOBAL: SWBF2 0x007891ec
-// EntityFlyerClass::rttiNameEntityFlyerClass
-const char EntityFlyerClass::rttiNameEntityFlyerClass[] = "EntityFlyerClass";
+// GLOBAL: SWBF2 0x01ebbc68
+// EntityFlyer::sMemoryPool
+MemoryPool EntityFlyer::sMemoryPool("EntityFlyer", sizeof(EntityFlyer));
+
+
 
 // SYNTHETIC: SWBF2 0x00402ad0
 // `dynamic initializer for 'EntityFlyer::rttiHashEntityFlyer''
@@ -402,16 +402,16 @@ PblHash EntityFlyer::rttiHashEntityFlyer("EntityFlyer");
 
 
 
-// SYNTHETIC: SWBF2 0x00402ab0
-// `dynamic initializer for 'EntityFlyer::sMemoryPool''
-// SYNTHETIC: SWBF2 0x00766f50
-// `dynamic atexit destructor for 'EntityFlyer::sMemoryPool''
+// SYNTHETIC: SWBF2 0x00402ae0
+// `dynamic initializer for 'EntityFlyerClass::rttiHashEntityFlyerClass''
+// EntityFlyerClass::rttiHashEntityFlyerClass
 
-// GLOBAL: SWBF2 0x01ebbc68
-// EntityFlyer::sMemoryPool
-MemoryPool EntityFlyer::sMemoryPool("EntityFlyer", sizeof(EntityFlyer));
-
-
+// GLOBAL: SWBF2 0x01ebbcb8
+// EntityFlyerClass::rttiHashEntityFlyerClass
+PblHash EntityFlyerClass::rttiHashEntityFlyerClass("EntityFlyerClass");
+// GLOBAL: SWBF2 0x007891ec
+// EntityFlyerClass::rttiNameEntityFlyerClass
+const char EntityFlyerClass::rttiNameEntityFlyerClass[] = "EntityFlyerClass";
 
 // FUNCTION: SWBF2 0x004ab7c0
 const ControllableClass* EntityFlyer::GetControllableClass() const
@@ -429,16 +429,6 @@ ControllableClass* EntityFlyer::GetControllableClass()
 int EntityFlyer::GetWeaponCount() const
 {
     return mClass->mWeaponCount;
-}
-
-// FUNCTION: SWBF2 0x004a9db0
-inline Trackable* CameraManager::GetChaseCameraTarget(int iCam)
-{
-    if (mCurGameCamera[iCam] == mDeathCamera[iCam])
-    {
-        return mDeathCamera[iCam]->mOwner;
-    }
-    return mChaseCamera[iCam]->mOwner;
 }
 
 // FUNCTION: SWBF2 0x004ab840
@@ -662,6 +652,11 @@ EntityFlyerClass::EntityFlyerClass(EntityFlyerClass* pSrc, unsigned int uHash)
     mGuidedMissileBoostExplosionSpeedThreshold = pSrc->mGuidedMissileBoostExplosionSpeedThreshold;
     mSoundTrick = pSrc->mSoundTrick;
     mSoundFlip = pSrc->mSoundFlip;
+}
+
+// FUNCTION: SWBF2 0x004b79c0
+EntityFlyerClass::~EntityFlyerClass()
+{
 }
 
 // FUNCTION: SWBF2 0x004b7a60
@@ -2528,15 +2523,15 @@ bool EntityFlyer::TurnOnContrailEffect(int iIndex)
         return false;
     }
 
-    ((ParticleEmitterObject*)mContrailEffect[iIndex])->ScaleSet(mClass->mContrailEffectMinScale[iIndex]);
+    mContrailEffect[iIndex]->ScaleSet(mClass->mContrailEffectMinScale[iIndex]);
     PblMatrix mOffset = gMatrixIdentity;
     mOffset.SetTranslation(mClass->mContrailEffectAttachOffset[iIndex]);
     if (!mClass->mContrailEffectHardPoint[iIndex])
     {
-        ((ParticleEmitterObject*)mContrailEffect[iIndex])->AttachEffectToObject(this, mOffset, true);
+        mContrailEffect[iIndex]->AttachEffectToObject(this, mOffset, true);
         return false;
     }
-    ((ParticleEmitterObject*)mContrailEffect[iIndex])->AttachEffectToObject(this, mClass->mContrailEffectHardPoint[iIndex], mOffset, true);
+    mContrailEffect[iIndex]->AttachEffectToObject(this, mClass->mContrailEffectHardPoint[iIndex], mOffset, true);
     return true;
 }
 
@@ -3127,9 +3122,9 @@ bool EntityFlyer::PostCollisionUpdate(float fDeltaTime)
         }
     }
 
-    if (mPilot && mPilot->GetGameObject()->IsRtti(EntitySoldier::rttiHashEntitySoldier))
+    if (mPilot && mPilot->GetEntity()->IsRtti(EntitySoldier::rttiHashEntitySoldier))
     {
-        EntitySoldier* pSoldier = (EntitySoldier*)mPilot->GetGameObject();
+        EntitySoldier* pSoldier = static_cast<EntitySoldier*>(mPilot->GetEntity());
         PblMatrix localSoldierMat = pSoldier->GetMatrix() * GetMatrix().GetInverseFast();
         PblMatrix vehSmoothMat = GetSmoothedMatrix();
         PblMatrix smoothedSoldierMat = localSoldierMat * vehSmoothMat;

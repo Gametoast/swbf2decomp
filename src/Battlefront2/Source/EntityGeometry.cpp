@@ -56,14 +56,6 @@ const char EntityGeometry::rttiNameEntityGeometry[] = "EntityGeometry";
 
 
 
-// FUNCTION: SWBF2 0x00444190
-void EntityGeometry::SetupPose(RedPose& pose) const
-{
-    mModel->GetRedModel(0)->SetupPose(pose);
-}
-
-
-
 // SYNTHETIC: SWBF2 0x004bd7fe
 // ??_EEntityGeometry@@WM@AEPAXI@Z
 // SYNTHETIC: SWBF2 0x004bd806
@@ -657,7 +649,7 @@ void EntityGeometryClass::SetProperty(unsigned int uProperty, const char* pszVal
         acName[127] = 0;
         if (!mChunkDescriptors[sCurrentChunk]->mPrimitive || CollisionBodyPrimitive::Find(PblHash(acName)))
         {
-            PblBox box = mChunkDescriptors[sCurrentChunk]->mModel->_mModel->_TotalBoundingBox;
+            PblBox box = mChunkDescriptors[sCurrentChunk]->mModel->GetTotalBoundingBox();
             PblVector3 vCenter = (box._vMin + box._vMax) * 0.5f;
 
             CollisionPrimitive primitive;
@@ -1070,36 +1062,6 @@ bool EntityGeometryClass::AddTargetableCollision(const char* pszValue)
         mCollisionModel.SetCollisionMask(COLL_TARGETABLE, CollisionMask(sTargetableCollisionMask));
     }
     return true;
-}
-
-// FUNCTION: SWBF2 0x004920e0
-void EntityGeometry::SetPosition(const PblVector3& vPos)
-{
-    PblMatrix& rMatrix = mMatrix;
-    rMatrix[3] = vPos;
-    rMatrix.m[3][3] = 1.0f;
-
-    PblVector3 vCenter;
-    D3DXVec3TransformCoord((D3DXVECTOR3*)&vCenter,
-                           (const D3DXVECTOR3*)&mModel->_mModel->_BoundingSphere.GetCenter(),
-                           (const D3DXMATRIX*)&rMatrix);
-    SetCollisionCenter(vCenter);
-    RecalculateAABB();
-    SetRenderPos(GetCollisionCenter());
-}
-
-// FUNCTION: SWBF2 0x004921c0
-void EntityGeometry::SetMatrix(const PblMatrix& matrix)
-{
-    mMatrix = matrix;
-
-    PblVector3 vCenter;
-    D3DXVec3TransformCoord((D3DXVECTOR3*)&vCenter,
-                           (const D3DXVECTOR3*)&mModel->_mModel->_BoundingSphere.GetCenter(),
-                           (const D3DXMATRIX*)&mMatrix);
-    SetCollisionCenter(vCenter);
-    RecalculateAABB();
-    SetRenderPos(GetCollisionCenter());
 }
 
 // FUNCTION: SWBF2 0x004ba890

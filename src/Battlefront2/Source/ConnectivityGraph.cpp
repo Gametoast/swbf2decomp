@@ -28,28 +28,6 @@ static char sDiscardedRecordLabel[16];
 // GLOBAL: SWBF2 0x01e3089c
 ConnectivityGraph* ConnectivityGraphManager::mGraph;
 
-// FUNCTION: SWBF2 0x004804c0
-ConnectivityNode::ConnectivityNode()
-{
-    memset(mBranchingTable, 0, sizeof(mBranchingTable));
-}
-
-// FUNCTION: SWBF2 0x004804e0
-ConnectivityNode::~ConnectivityNode()
-{
-    for (int i = 0; i < 5; ++i)
-    {
-        for (int j = 0; j < 4; ++j)
-        {
-            if (mBranchingTable[i][j])
-            {
-                delete[] mBranchingTable[i][j];
-                return;
-            }
-        }
-    }
-}
-
 // FUNCTION: SWBF2 0x00480520
 PblVector3 ConnectivityNode::GetRandomPointInside(float fBuffer) const
 {

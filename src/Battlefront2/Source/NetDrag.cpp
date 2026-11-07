@@ -1,6 +1,7 @@
 #include <winsock2.h>
 #include "NetComm.h"
 #include "NetGame.h"
+#include "NetDrag.h"
 #include "NetPacket.h"
 #include "pcNetSocket.h"
 #include "PebbleFL/Common/PblJournal.h"
@@ -42,18 +43,6 @@ extern int netOutBytes;
 void AddToBandwidth(NetPacket* pPacket, int iDest);
 void Deliver(NetPacket* pPacket, int iDest);
 
-class NetDrag
-{
-public:
-    static void Create(bool bMission);
-    static void Reset();
-    static void BeginShell();
-    static void Update();
-    static void EndShell();
-    static void Send(NetPacket* pPacket, int iDest);
-    static void FreePackets();
-    static NetPacket* ReceiveLocal();
-};
 
 void CreateAll();
 

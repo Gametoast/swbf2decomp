@@ -139,8 +139,6 @@ int Play(VOType eType, const GameObject* pSpeaker, const GameObject* pTarget,
 extern int netHeroKillerID[4];
 extern bool netHeroUnlocked[3];
 
-static char sEventParam;
-
 extern bool netHeroesEnabled;
 extern int netHeroLastPlayerID[3];
 extern bool gDoTakeoverSpawns;
@@ -1036,7 +1034,7 @@ void Character::Spawn(const PblMatrix& mMatrix)
         }
     }
 
-    EventManager::CharacterEvent::mSpawn.Trigger(*this, sEventParam);
+    EventManager::CharacterEvent::mSpawn.Trigger(*this, EventManager::noContext);
 
     if (mPlayerId >= 0 && NetGame::IsEnabled() && !(netEnabledNext && netClientActive))
     {

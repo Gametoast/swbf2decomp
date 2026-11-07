@@ -35,13 +35,15 @@ static const float g_MovieStopDelayTime = 2.0f;
 // GLOBAL: SWBF2 0x01e56278
 unsigned __int64 g_InGameMovieStartTime;
 
-extern bool g_InGameMoviePlayerUpdateEnable;
-
 // GLOBAL: SWBF2 0x01e56274
 RedMovie* GameMovie::sRedMovie;
 
 // GLOBAL: SWBF2 0x01e56136
 bool GameMovie::sMemoryReserved;
+
+// GLOBAL: SWBF2 0x01e56137
+
+bool g_InGameMoviePlayerUpdateEnable;
 
 // GLOBAL: SWBF2 0x007e67c8
 int GameMovie::sDefaultHeap = -1;
@@ -422,6 +424,27 @@ void GameMovie::Update(float fDeltaTime)
     {
         sRedMovie->Update(fDeltaTime);
     }
+}
+
+// FUNCTION: SWBF2 0x00534bd0
+void StartInGameMoviePlay(const char* pcFile, const char* pcName)
+{
+    if (g_InGameMoviePlayerState)
+    {
+        return;
+    }
+
+    g_InGameMoviePlayerUpdateEnable = true;
+    g_InGameMoviePlayerState = 1;
+    const unsigned int uiView = CameraManager::sInstance->m_hView[0];
+    g_InGameMoviePlayerFrame = 0;
+    FLRenderer::SetSceneEnable(uiView, false);
+    FLRenderer::SetInterfaceEnable(uiView, false);
+    strcpy(g_InGameMovieFilename, "Movies\\");
+    strcat(g_InGameMovieFilename, pcFile);
+    strcpy(ingame_movie_idname, pcName);
+    unsigned __int64 perfCount = PblTime::GetTickCount();
+    g_InGameMovieStartTime = perfCount;
 }
 
 // FUNCTION: SWBF2 0x00534ca0

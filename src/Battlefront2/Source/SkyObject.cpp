@@ -19,16 +19,6 @@ int SkyObjectManager::mNumObjectClasses;
 // GLOBAL: SWBF2 0x01eaf06c
 SkyObjectManager::SkyObjectClass* SkyObjectManager::mObjectClasses[10];
 
-namespace SkyManager
-{
-void Activate();
-}
-
-// FUNCTION: SWBF2 0x00638d30
-void SkyManager::Activate()
-{
-}
-
 // FUNCTION: SWBF2 0x00638d40
 void SkyObjectManager::Clear()
 {
@@ -103,7 +93,7 @@ SkyObjectManager::SkyObjectClass::SkyObjectClass(PblConfig& config)
             mDistance = data.GetFloatArg(0);
             break;
         case 0x2A6D8591u: /* "Geometry" */
-            mModel = RedModel::_HashTable.Find(PblHash(data.GetStringArg(0)));
+            mModel = RedModel::Find(PblHash(data.GetStringArg(0)));
             break;
         case 0x2FA0BA9Du: /* "Acceleration" */
             mAcceleration.x = data.GetFloatArg(0);

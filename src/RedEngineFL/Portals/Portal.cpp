@@ -477,18 +477,6 @@ unsigned int util::IAllocator::GetMemHash()
     return 0;
 }
 
-// FUNCTION: SWBF2 0x006e09b0
-geo::Poly3D& pvs::Portal::GetPoly()
-{
-    return poly_;
-}
-
-// FUNCTION: SWBF2 0x006e09c0
-const geo::Poly3D& pvs::Portal::GetPoly() const
-{
-    return poly_;
-}
-
 // FUNCTION: SWBF2 0x006e09d0
 pvs::IPortal* pvs::Manager::GetPortal(int iIndex)
 {
@@ -764,27 +752,6 @@ void util::IAllocator::SetMaxMem(int)
 {
 }
 
-// FUNCTION: SWBF2 0x006e15d0
-void pvs::Portal::SetRight(pvs::ISector* pRight)
-{
-    right_ = (pvs::Sector*)pRight;
-}
-
-template <class T>
-void pvs::BaseDisplayable<T>::SetSector(pvs::Sector* pSector)
-{
-    if (!this->PortalActive())
-    {
-        sector_ = pSector;
-        return;
-    }
-    if (pSector)
-    {
-        this->SetPortalActive(true);
-    }
-    sector_ = pSector;
-}
-
 // TEMPLATE: SWBF2 0x006e15e0
 // pvs::BaseDisplayable<pvs::IDisplayable>::SetSector
 template void pvs::BaseDisplayable<pvs::IDisplayable>::SetSector(pvs::Sector*);
@@ -935,11 +902,6 @@ void pvs::Sector::UnregisterStatic(pvs::IDisplayable& rDisp)
 {
     statics_.FindRemoveLazy(&rDisp);
     rDisp.SetSector(0);
-}
-
-template <class T>
-void pvs::BaseDisplayable<T>::Update(pvs::Manager&)
-{
 }
 
 // TEMPLATE: SWBF2 0x006e1bc0

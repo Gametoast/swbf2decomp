@@ -52,7 +52,7 @@ public:
         void Spawn(int i);
 
         SkyObjectType mType;
-        RedModel* mModel;
+        const RedModel* mModel;
         float mVelocityX;
         float mVelocityVarianceX;
         float mVelocityY;

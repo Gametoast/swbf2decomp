@@ -1,4 +1,5 @@
 #include <string.h>
+#include "PopupText.h"
 #include "FLJoystick.h"
 #include "FLInputManager.h"
 #include "GameSoundEngine.h"
@@ -14,14 +15,6 @@
 #include "PebbleFL/Common/PblUnicode.h"
 #include "SoundFL/source/sndbus.h"
 
-namespace PopupText
-{
-    extern void DisablePopup();
-}
-namespace PopupText
-{
-    void __fastcall ShowPopup(int iType, unsigned int uTextId);
-}
 namespace HUD
 {
 namespace GameEvents
@@ -47,7 +40,6 @@ bool GUIInputs::IsRightPressed() const
 namespace PopupText
 {
 
-enum PopupType { DISABLED = 0, HINT = 1, OBJECTIVE = 2, SELECTION = 3, MAX_POPUP_TYPES = 4 };
 
 // GLOBAL: SWBF2 0x01eaedfb
 bool gMapEnabled[1];
@@ -79,16 +71,10 @@ bool gPreventJump;
 // GLOBAL: SWBF2 0x01ef7fcc
 Trigger gButtonTrigger;
 
-void Init();
-bool IsEnabled();
-bool GetPreventJump();
-void SetPreventJump(bool bPrevent);
-void Update(float fDeltaTime);
-void ShowPopup(PopupType eType, unsigned int uTextId);
 }
 
 // FUNCTION: SWBF2 0x00620af0
-void __fastcall PopupText::ShowPopup(int iType, unsigned int uTextId)
+void PopupText::ShowPopup(PopupText::PopupType iType, unsigned int uTextId)
 {
     using namespace PopupText;
     if (GameLoop::mNumCameras != 1 || (iType == HINT && gHints[gCurHint] == 0))
@@ -258,11 +244,6 @@ void PopupText::DisablePopup()
     PopupText::gButtonTrigger.Clear();
 }
 
-void PopupText::ShowPopup(PopupType eType, unsigned int uTextId)
-{
-    PopupText::ShowPopup((int)eType, uTextId);
-}
-
 // FUNCTION: SWBF2 0x006210d0
 void PopupText::SetPreventJump(bool bPrevent)
 {
@@ -335,7 +316,7 @@ void Update(float fDeltaTime)
             {
                 gCurHint = gNumHints - 1;
             }
-            ShowPopup((int)HINT, 0);
+            ShowPopup(HINT, 0);
         }
         else if (pGui->IsRightPressed() && !gDirectionPressedLastUpdate)
         {
@@ -343,7 +324,7 @@ void Update(float fDeltaTime)
             {
                 gCurHint = 0;
             }
-            ShowPopup((int)HINT, 0);
+            ShowPopup(HINT, 0);
         }
         gDirectionPressedLastUpdate = pGui->IsRightPressed() || pGui->IsLeftPressed();
         break;
@@ -376,10 +357,6 @@ bool PopupText::GetPreventJump()
     return gPreventJump;
 }
 
-namespace PopupText
-{
-    int GetNumHints();
-}
 
 // FUNCTION: SWBF2 0x00620ee0
 int PopupText::GetNumHints()

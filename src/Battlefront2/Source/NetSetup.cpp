@@ -27,6 +27,7 @@
 #include "MissionPlayList.h"
 #include "NetComm.h"
 #include "NetGame.h"
+#include "NetDrag.h"
 #include "NetPacket.h"
 #include "Character.h"
 #include "GameVoiceChat.h"
@@ -1739,8 +1740,6 @@ bool CNetHostGame::IsFailed()
 
 extern int netPlayerLimit;
 extern int netLobbyState;
-extern char const* netLoginErrorMessage;
-extern int netLoginErrorLevel;
 extern int netNoCableCount;
 extern char const* gameErrorMsg;
 extern int gameErrorLvl;
@@ -4039,8 +4038,7 @@ void ReadLaunch(NetPktGroup& group, bool& bAcked)
     for (i = 0; i < 2; ++i)
     {
         group.ReadBits(value, 32);
-        int maxReinforcements = value;
-        Team::sTeamMaxReinforcementsOverride[i] = maxReinforcements;
+        Team::OverrideMaxReinforcements(i, value);
     }
     NetGame::ReadSpectator(group);
 }
@@ -6296,12 +6294,6 @@ unsigned __int64 netCreatedLobbyId;
 
 // GLOBAL: SWBF2 0x01e65048
 int netLanRegisterState;
-
-// GLOBAL: SWBF2 0x01fa88d0
-char const* netLoginErrorMessage;
-
-// GLOBAL: SWBF2 0x01e64f04
-int netLoginErrorLevel;
 
 // GLOBAL: SWBF2 0x01e64f2c
 int netNoCableCount;

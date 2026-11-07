@@ -11,6 +11,10 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "RedEngineFL", "src\RedEngin
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ZephyrFL", "src\Zephyr\ZephyrFL.vcxproj", "{4F910B28-63C7-4E59-BA94-035643220A73}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "LuaFL", "src\LuaFL\LuaFL.vcxproj", "{DD72C068-B8B9-5F2D-9E36-3960F2129E79}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ZLibFL", "src\ZlibFL\ZLibFL.vcxproj", "{F23372A9-3077-54F3-998E-5DA6B2228447}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -29,6 +33,14 @@ Global
 		{6CD3DE5F-38F0-5AC0-84EB-1DA25BBE595B}.Debug|Win32.Build.0 = Debug|Win32
 		{6CD3DE5F-38F0-5AC0-84EB-1DA25BBE595B}.Release|Win32.ActiveCfg = Release|Win32
 		{6CD3DE5F-38F0-5AC0-84EB-1DA25BBE595B}.Release|Win32.Build.0 = Release|Win32
+		{DD72C068-B8B9-5F2D-9E36-3960F2129E79}.Debug|Win32.ActiveCfg = Debug|Win32
+		{DD72C068-B8B9-5F2D-9E36-3960F2129E79}.Debug|Win32.Build.0 = Debug|Win32
+		{DD72C068-B8B9-5F2D-9E36-3960F2129E79}.Release|Win32.ActiveCfg = Release|Win32
+		{DD72C068-B8B9-5F2D-9E36-3960F2129E79}.Release|Win32.Build.0 = Release|Win32
+		{F23372A9-3077-54F3-998E-5DA6B2228447}.Debug|Win32.ActiveCfg = Debug|Win32
+		{F23372A9-3077-54F3-998E-5DA6B2228447}.Debug|Win32.Build.0 = Debug|Win32
+		{F23372A9-3077-54F3-998E-5DA6B2228447}.Release|Win32.ActiveCfg = Release|Win32
+		{F23372A9-3077-54F3-998E-5DA6B2228447}.Release|Win32.Build.0 = Release|Win32
 		{F303D4E6-ED54-5075-A41B-A8829D3D67C5}.Debug|Win32.ActiveCfg = Debug|Win32
 		{F303D4E6-ED54-5075-A41B-A8829D3D67C5}.Debug|Win32.Build.0 = Debug|Win32
 		{F303D4E6-ED54-5075-A41B-A8829D3D67C5}.Release|Win32.ActiveCfg = Release|Win32

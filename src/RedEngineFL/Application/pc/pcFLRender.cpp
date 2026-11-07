@@ -1283,9 +1283,7 @@ int NEAR_SCENE_IMMEDIATE_MODE;
 
 static const RedViewport sFullScreenViewport = { 0.0f, 0.0f, 1.0f, 1.0f };
 
-// GLOBAL: SWBF2 0x01e56137
-
-bool g_InGameMoviePlayerUpdateEnable;
+extern bool g_InGameMoviePlayerUpdateEnable;
 
 // FUNCTION: SWBF2 0x006bd080
 void FLRenderer::Render()

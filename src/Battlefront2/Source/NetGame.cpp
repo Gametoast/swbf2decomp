@@ -1,4 +1,5 @@
 #include "AmmoCounter.h"
+#include "FrameUpdate.h"
 #define _CRT_SECURE_NO_WARNINGS
 
 #include "GameVoiceChat.h"
@@ -18,6 +19,7 @@
 #include "RedEngineFL/Graphics/RedColor.h"
 
 #include "NetGame.h"
+#include "NetDrag.h"
 #include "PebbleFL/Common/PblAngle.h"
 #include "CameraManager.h"
 #include "pcNetSocket.h"
@@ -253,12 +255,175 @@ float netSecondsPerTurn;
 // GLOBAL: SWBF2 0x01e62f44
 int netGameCount;
 
+extern bool netAutoAssignTeams;
+
+// SYNTHETIC: SWBF2 0x00404740
+// `dynamic initializer for 'netAutoAssignTeamsOriginalSetting''
+
+// GLOBAL: SWBF2 0x01ed86a7
+// netAutoAssignTeamsOriginalSetting
+bool netAutoAssignTeamsOriginalSetting = netAutoAssignTeams;
+
+class NetTurn
+{
+public:
+    ProcessedInputs moves[64];
+};
+ 
+
+// SYNTHETIC: SWBF2 0x005b4df0
+// NetTurn::NetTurn
+
+// SYNTHETIC: SWBF2 0x005b4e20
+// NetTurn::~NetTurn
+
+struct SpawnInfo
+{
+    int changeCount;
+    unsigned int changedTurn;
+    bool cancel;
+    bool spectate;
+    bool autoassign;
+    CommandPost* post;
+    PblHandle<GameObject> postHandle;
+    int team;
+    int classIdx;
+};
+ 
+
+// SYNTHETIC: SWBF2 0x005b6470
+// SpawnInfo::SpawnInfo
+
+// SYNTHETIC: SWBF2 0x005b6490
+// SpawnInfo::~SpawnInfo
+
+struct RelChunkClusterData
+{
+    PblMatrix mMatrix;
+    PblVector3 mVelocity;
+    PblVector3 mOmega;
+};
+ 
+
+// SYNTHETIC: SWBF2 0x005c0b60
+// RelChunkClusterData::RelChunkClusterData
+
+// SYNTHETIC: SWBF2 0x00404750
+// `dynamic initializer for 'remoteClientTurns''
+// SYNTHETIC: SWBF2 0x00768d90
+// `dynamic atexit destructor for 'remoteClientTurns''
+
+// GLOBAL: SWBF2 0x01ed6960
+// remoteClientTurns
+NetTurn remoteClientTurns;
+// SYNTHETIC: SWBF2 0x00404780
+// `dynamic initializer for 'localClientTurns''
+// SYNTHETIC: SWBF2 0x00768db0
+// `dynamic atexit destructor for 'localClientTurns''
+
+// GLOBAL: SWBF2 0x01ee4b40
+// localClientTurns
+ProcessedInputs localClientTurns[32][2];
+// SYNTHETIC: SWBF2 0x004047b0
+// `dynamic initializer for 'hostTurns''
+// SYNTHETIC: SWBF2 0x00768de0
+// `dynamic atexit destructor for 'hostTurns''
+
+// GLOBAL: SWBF2 0x01ed89d0
+// hostTurns
+NetTurn hostTurns[32];
+// SYNTHETIC: SWBF2 0x004047e0
+// `dynamic initializer for 'lateState''
+
+// GLOBAL: SWBF2 0x01ee5280
+// lateState
+NetPktGroup lateState[8];
+
+// SYNTHETIC: SWBF2 0x00404800
+// `dynamic initializer for 'noInputs''
+// SYNTHETIC: SWBF2 0x00768e00
+// `dynamic atexit destructor for 'noInputs''
+
+// GLOBAL: SWBF2 0x01ee7a88
+// noInputs
+ProcessedInputs noInputs;
+
+class NetNdObj
+{
+public:
+    GameObject* obj;
+    GameObject* orig;
+    unsigned int uniqId;
+    unsigned int index;
+};
+class NetNdObjMap
+{
+public:
+    NetNdObjMap();
+    void Clear();
+    void Add(NetNdObj* object, unsigned int hash);
+
+    NetNdObj* FindId(unsigned int uniqId)
+    {
+        return objMap.Find(uniqId);
+    }
+
+    NetNdObj* FindIndex(unsigned int index)
+    {
+        return array[index];
+    }
+
+    NetNdObj* FindLocal(GameObject* object);
+
+    PblHashTable<NetNdObj, 256> objMap;
+    unsigned int count;
+    NetNdObj* array[256];
+};
+ 
+ 
+
+// FUNCTION: SWBF2 0x005b4520
+NetNdObjMap::NetNdObjMap()
+{
+    count = 0;
+}
+
+// FUNCTION: SWBF2 0x005b4570
+void NetNdObjMap::Clear()
+{
+    while (count > 0u)
+    {
+        delete array[--count];
+    }
+    objMap.Clear();
+}
+
+// SYNTHETIC: SWBF2 0x00404820
+// `dynamic initializer for 'clientNdObjMap''
+
+// GLOBAL: SWBF2 0x01ed5d58
+// clientNdObjMap
+NetNdObjMap clientNdObjMap;
+
 // SYNTHETIC: SWBF2 0x00404830
 // `dynamic initializer for 'netPlayers''
 
 // GLOBAL: SWBF2 0x01ecdaa0
 // netPlayers
 NetPlayer netPlayers[64];
+// SYNTHETIC: SWBF2 0x00404850
+// `dynamic initializer for 'netCenter''
+
+// GLOBAL: SWBF2 0x01ee7450
+// netCenter
+PblMatrix netCenter;
+// SYNTHETIC: SWBF2 0x00404860
+// `dynamic initializer for 'netLocalPos''
+
+// GLOBAL: SWBF2 0x01ee7b90
+// netLocalPos
+PblVector3 netLocalPos[2];
+
 // GLOBAL: SWBF2 0x01fa8858
 NetHost netHosts[3];
 
@@ -340,22 +505,6 @@ bool netIsOneWorld = true;
 // GLOBAL: SWBF2 0x01e62eaa
 bool netIsDedicated;
 
-// SYNTHETIC: SWBF2 0x00405550
-// `dynamic initializer for 'netGameChatMsgClient''
-
-// GLOBAL: SWBF2 0x01ee7614
-// netGameChatMsgClient
-PblList<NG_ChatMsg> netGameChatMsgClient;
-// SYNTHETIC: SWBF2 0x00405560
-// `dynamic initializer for 'netGameChatMsgServer''
-
-// GLOBAL: SWBF2 0x01ecb25c
-// netGameChatMsgServer
-PblList<NG_ChatMsg> netGameChatMsgServer;
-
-// TEMPLATE: SWBF2 0x005d3a60
-// PblList<NG_ChatMsg>::PblList<NG_ChatMsg>
-
 // GLOBAL: SWBF2 0x01e64efd
 bool isJournalOpened;
 
@@ -367,6 +516,39 @@ bool isJournalOpened;
 // GLOBAL: SWBF2 0x01ee7490
 // NetObj::sMemoryPool
 MemoryPool NetObj::sMemoryPool("NetObj", 0xC);
+
+class NetObjState
+{
+public:
+    ~NetObjState() {}
+
+    static void* operator new(size_t uSize) { return sMemoryPool.Allocate(uSize); }
+    // FUNCTION: SWBF2 0x005b46a0
+    static void operator delete(void* pBlock) { sMemoryPool.Free(pBlock); }
+
+    PblHandle<GameObject> handle;
+    unsigned int usedTurn;
+    unsigned char classIdx;
+    unsigned char playerId;
+    unsigned char initialPlayerId;
+    unsigned char character;
+    unsigned char team;
+    unsigned char perceivedTeam;
+    PblQuaternion rotation;
+    PblVector3 position;
+
+    static MemoryPool sMemoryPool;
+};
+ 
+
+// SYNTHETIC: SWBF2 0x004048b0
+// `dynamic initializer for 'NetObjState::sMemoryPool''
+// SYNTHETIC: SWBF2 0x00768e20
+// `dynamic atexit destructor for 'NetObjState::sMemoryPool''
+
+// GLOBAL: SWBF2 0x01ee4af0
+// NetObjState::sMemoryPool
+MemoryPool NetObjState::sMemoryPool("NetObjState", 0x30);
 
 // SYNTHETIC: SWBF2 0x004048e0
 // `dynamic initializer for 'clientSoldierPool''
@@ -821,154 +1003,6 @@ MemoryPool hostRemoteTerminalPool("HostRemoteTerminal", 0);
 // GLOBAL: SWBF2 0x01e64a30
 ProcessedInputs* hostJoysticks[64];
 
-// SYNTHETIC: SWBF2 0x00404860
-// `dynamic initializer for 'netLocalPos''
-
-// GLOBAL: SWBF2 0x01ee7b90
-// netLocalPos
-PblVector3 netLocalPos[2];
-
-class NetTurn
-{
-public:
-    ProcessedInputs moves[64];
-};
- 
-
-// SYNTHETIC: SWBF2 0x005b4df0
-// NetTurn::NetTurn
-
-// SYNTHETIC: SWBF2 0x005b4e20
-// NetTurn::~NetTurn
-
-struct SpawnInfo
-{
-    int changeCount;
-    unsigned int changedTurn;
-    bool cancel;
-    bool spectate;
-    bool autoassign;
-    CommandPost* post;
-    PblHandle<GameObject> postHandle;
-    int team;
-    int classIdx;
-};
- 
-
-// SYNTHETIC: SWBF2 0x005b6470
-// SpawnInfo::SpawnInfo
-
-// SYNTHETIC: SWBF2 0x005b6490
-// SpawnInfo::~SpawnInfo
-
-struct RelChunkClusterData
-{
-    PblMatrix mMatrix;
-    PblVector3 mVelocity;
-    PblVector3 mOmega;
-};
- 
-
-// SYNTHETIC: SWBF2 0x005c0b60
-// RelChunkClusterData::RelChunkClusterData
-
-// SYNTHETIC: SWBF2 0x00404750
-// `dynamic initializer for 'remoteClientTurns''
-// SYNTHETIC: SWBF2 0x00768d90
-// `dynamic atexit destructor for 'remoteClientTurns''
-
-// GLOBAL: SWBF2 0x01ed6960
-// remoteClientTurns
-NetTurn remoteClientTurns;
-// SYNTHETIC: SWBF2 0x00404780
-// `dynamic initializer for 'localClientTurns''
-// SYNTHETIC: SWBF2 0x00768db0
-// `dynamic atexit destructor for 'localClientTurns''
-
-// GLOBAL: SWBF2 0x01ee4b40
-// localClientTurns
-ProcessedInputs localClientTurns[32][2];
-// SYNTHETIC: SWBF2 0x004047b0
-// `dynamic initializer for 'hostTurns''
-// SYNTHETIC: SWBF2 0x00768de0
-// `dynamic atexit destructor for 'hostTurns''
-
-// GLOBAL: SWBF2 0x01ed89d0
-// hostTurns
-NetTurn hostTurns[32];
-// SYNTHETIC: SWBF2 0x00404800
-// `dynamic initializer for 'noInputs''
-// SYNTHETIC: SWBF2 0x00768e00
-// `dynamic atexit destructor for 'noInputs''
-
-// GLOBAL: SWBF2 0x01ee7a88
-// noInputs
-ProcessedInputs noInputs;
-
-// SYNTHETIC: SWBF2 0x004047e0
-// `dynamic initializer for 'lateState''
-
-// GLOBAL: SWBF2 0x01ee5280
-// lateState
-NetPktGroup lateState[8];
-
-class NetNdObj
-{
-public:
-    GameObject* obj;
-    GameObject* orig;
-    unsigned int uniqId;
-    unsigned int index;
-};
-class NetNdObjMap
-{
-public:
-    NetNdObjMap();
-    void Clear();
-    void Add(NetNdObj* object, unsigned int hash);
-
-    NetNdObj* FindId(unsigned int uniqId)
-    {
-        return objMap.Find(uniqId);
-    }
-
-    NetNdObj* FindIndex(unsigned int index)
-    {
-        return array[index];
-    }
-
-    NetNdObj* FindLocal(GameObject* object);
-
-    PblHashTable<NetNdObj, 256> objMap;
-    unsigned int count;
-    NetNdObj* array[256];
-};
- 
- 
-
-// FUNCTION: SWBF2 0x005b4520
-NetNdObjMap::NetNdObjMap()
-{
-    count = 0;
-}
-
-// FUNCTION: SWBF2 0x005b4570
-void NetNdObjMap::Clear()
-{
-    while (count > 0u)
-    {
-        delete array[--count];
-    }
-    objMap.Clear();
-}
-
-// SYNTHETIC: SWBF2 0x00404820
-// `dynamic initializer for 'clientNdObjMap''
-
-// GLOBAL: SWBF2 0x01ed5d58
-// clientNdObjMap
-NetNdObjMap clientNdObjMap;
-
 // GLOBAL: SWBF2 0x01e62f52
 bool listNearObjects;
 
@@ -986,12 +1020,6 @@ static int RequestNearObjects(RedConsole*, unsigned int, char const*)
 // nearObjects
 RedCommandConsole nearObjects("net.nearobjects", RequestNearObjects);
 
-// SYNTHETIC: SWBF2 0x00404850
-// `dynamic initializer for 'netCenter''
-
-// GLOBAL: SWBF2 0x01ee7450
-// netCenter
-PblMatrix netCenter;
 // SYNTHETIC: SWBF2 0x00405260
 // `dynamic initializer for 'spawnInfo''
 // SYNTHETIC: SWBF2 0x00769150
@@ -1025,20 +1053,6 @@ RelChunkClusterData relChunkClusterData[8][10];
 // GLOBAL: SWBF2 0x01ed8934
 // farToNearCenter
 PblVector3 farToNearCenter;
-// SYNTHETIC: SWBF2 0x00405500
-// `dynamic initializer for 'gCameraFrontPos''
-
-// GLOBAL: SWBF2 0x01ed5d40
-// gCameraFrontPos
-PblVector3 gCameraFrontPos(0.0f, 0.0f, 0.0f);
-
-// SYNTHETIC: SWBF2 0x00405540
-// `dynamic initializer for 'trackDesc''
-
-// GLOBAL: SWBF2 0x01ee5190
-// trackDesc
-EntityDesc trackDesc;
-
 // SYNTHETIC: SWBF2 0x004052e0
 // `dynamic initializer for 'aloReinforcements''
 
@@ -1063,6 +1077,82 @@ AloHeroData aloHeroData1(1);
 // GLOBAL: SWBF2 0x01ee7370
 // aloHeroData2
 AloHeroData aloHeroData2(2);
+// FUNCTION: SWBF2 0x005c5cc0
+AloMapDisplayMarkers::AloMapDisplayMarkers()
+{
+    sig = ALO_MAPDISPLAY_MARKERS;
+    deltaSends = false;
+    Reset();
+}
+
+// FUNCTION: SWBF2 0x005c6140
+void AloMapDisplayMarkers::Read(NetPktGroup& group)
+{
+    for (int i = 0; i < TargetManager::MAX_MARKERS; ++i)
+    {
+        TargetManager::Marker* tmpMarker = &TargetManager::gMarkers[i];
+        bool bRemoveIt = tmpMarker->actor || tmpMarker->region;
+        if (bRemoveIt)
+        {
+            TargetManager::RemoveMarker(tmpMarker->actor, tmpMarker->region,
+                                        tmpMarker->teamMask);
+        }
+    }
+    bool more = false;
+    group.Read(more);
+    while (more)
+    {
+        GameObject* obj = 0;
+        RedRegion* region = 0;
+        unsigned int teamMask = 0;
+        float fScale = 1.0f;
+        unsigned int uTexture = 0;
+        unsigned int uColorHash = 0;
+        float pulseStartScale = 1.0f;
+        bool showHudTarget = false;
+        bool flashAlpha;
+        bool pulseSize;
+        bool bHasObject = false;
+        group.Read(bHasObject);
+        if (bHasObject)
+        {
+            obj = ReadObjectPtr(group);
+        }
+        bool bHasRegion = false;
+        group.Read(bHasRegion);
+        if (bHasRegion)
+        {
+            unsigned int regionId;
+            group.ReadBits(regionId, 32);
+            region = RedRegion::Find(regionId);
+        }
+        group.ReadBits(teamMask, 3);
+        group.ReadFixed(fScale, 0.0f, 16.0f, 8);
+        group.ReadBits(uTexture, 32);
+        group.ReadBits(uColorHash, 32);
+        group.Read(flashAlpha);
+        group.Read(pulseSize);
+        group.ReadFixed(pulseStartScale, 0.0f, 16.0f, 8);
+        group.Read(showHudTarget);
+        if (obj || region)
+        {
+            TargetManager::AddMarker(obj, region, uTexture, fScale, teamMask,
+                                     uColorHash, showHudTarget, flashAlpha,
+                                     pulseSize, pulseStartScale);
+        }
+        group.Read(more);
+    }
+}
+
+// SYNTHETIC: SWBF2 0x004053e0
+// `dynamic initializer for 'aloMapDisplayMarkers''
+// SYNTHETIC: SWBF2 0x00769170
+// `dynamic atexit destructor for 'aloMapDisplayMarkers''
+
+// GLOBAL: SWBF2 0x01ed8198
+// aloMapDisplayMarkers
+AloMapDisplayMarkers aloMapDisplayMarkers;
+
 // SYNTHETIC: SWBF2 0x00405400
 // `dynamic initializer for 'aloMiniStats''
 
@@ -1093,6 +1183,20 @@ AloNextGameInfo aloNextGameInfo;
 // GLOBAL: SWBF2 0x01ee5400
 // aloMissionTimer
 AloMissionTimer aloMissionTimer;
+
+// SYNTHETIC: SWBF2 0x00405500
+// `dynamic initializer for 'gCameraFrontPos''
+
+// GLOBAL: SWBF2 0x01ed5d40
+// gCameraFrontPos
+PblVector3 gCameraFrontPos(0.0f, 0.0f, 0.0f);
+
+// SYNTHETIC: SWBF2 0x00405540
+// `dynamic initializer for 'trackDesc''
+
+// GLOBAL: SWBF2 0x01ee5190
+// trackDesc
+EntityDesc trackDesc;
 
 // FUNCTION: SWBF2 0x005c52f0
 void AloReinforcements::Reset()
@@ -1388,20 +1492,7 @@ float clientDisconnectStartTime;
 // GLOBAL: SWBF2 0x01fa88cc
 unsigned int reliableNetEventHead;
 
-namespace FrameUpdate
-{
-void Create();
-}
 
-class NetDrag
-{
-public:
-    static void Create(bool bMission);
-    static void Reset();
-
-    static void BeginShell();
-    static void EndShell();
-};
 
 class NetAdmin
 {
@@ -1568,39 +1659,6 @@ bool ReceivedNextGameInfo();
 
 extern int netMinPlayersToAutoLaunchDedicated;
 extern int netTraceDst;
-
-class NetObjState
-{
-public:
-    ~NetObjState() {}
-
-    static void* operator new(size_t uSize) { return sMemoryPool.Allocate(uSize); }
-    // FUNCTION: SWBF2 0x005b46a0
-    static void operator delete(void* pBlock) { sMemoryPool.Free(pBlock); }
-
-    PblHandle<GameObject> handle;
-    unsigned int usedTurn;
-    unsigned char classIdx;
-    unsigned char playerId;
-    unsigned char initialPlayerId;
-    unsigned char character;
-    unsigned char team;
-    unsigned char perceivedTeam;
-    PblQuaternion rotation;
-    PblVector3 position;
-
-    static MemoryPool sMemoryPool;
-};
- 
-
-// SYNTHETIC: SWBF2 0x004048b0
-// `dynamic initializer for 'NetObjState::sMemoryPool''
-// SYNTHETIC: SWBF2 0x00768e20
-// `dynamic atexit destructor for 'NetObjState::sMemoryPool''
-
-// GLOBAL: SWBF2 0x01ee4af0
-// NetObjState::sMemoryPool
-MemoryPool NetObjState::sMemoryPool("NetObjState", 0x30);
 
 // VTABLE: SWBF2 0x007ab8c0
 class NetCollisionObject : public CollisionObject
@@ -2287,7 +2345,7 @@ void NetGame::Create(bool bMission)
             {
                 if (aValue[j] != 0)
                 {
-                    Team::sTeamMaxReinforcementsOverride[j] = aValue[j];
+                    Team::OverrideMaxReinforcements(j, aValue[j]);
                 }
             }
         }
@@ -4554,6 +4612,22 @@ void InitBootPlayer()
     bootInfo.changedTurn = 0;
 }
 
+// SYNTHETIC: SWBF2 0x00405550
+// `dynamic initializer for 'netGameChatMsgClient''
+
+// GLOBAL: SWBF2 0x01ee7614
+// netGameChatMsgClient
+PblList<NG_ChatMsg> netGameChatMsgClient;
+// SYNTHETIC: SWBF2 0x00405560
+// `dynamic initializer for 'netGameChatMsgServer''
+
+// GLOBAL: SWBF2 0x01ecb25c
+// netGameChatMsgServer
+PblList<NG_ChatMsg> netGameChatMsgServer;
+
+// TEMPLATE: SWBF2 0x005d3a60
+// PblList<NG_ChatMsg>::PblList<NG_ChatMsg>
+
 // FUNCTION: SWBF2 0x005d1340
 void FreeChatMessageQue(PblList<NG_ChatMsg>* pList)
 {
@@ -4654,14 +4728,6 @@ void NetGame::SetPlayerGSID(int iPlayer, unsigned __int64 uId)
     netPlayers[iPlayer].mGSPlayerID = uId;
 }
 
-bool ReadNetIsLocalTurn();
-
-// FUNCTION: SWBF2 0x0043cf50
-bool NetGame::IsLateTurn()
-{
-    return netIsLateTurn;
-}
-
 bool IsSkippedND(const GameObject* pObject);
 bool IsLateObject(const GameObject* pObject);
 void SpeedGame();
@@ -4734,7 +4800,7 @@ bool NetGame::IsSkipped(const GameObject* pObject, float& fDeltaTime)
 
     if (IsClient())
     {
-        if (!ReadNetIsLocalTurn())
+        if (!IsLocalTurn())
         {
             if (IsNeverDies(pObject->GetEntityType()))
             {
@@ -5721,21 +5787,13 @@ void SpawnDisplay::AcceptSideSelect()
         }
         if (GameLoop::AreMetagameRulesOn())
         {
-            int iSide = GameLoop::GetMetagameSide(mJoystickIndex);
-            int iTeam = -1;
-            for (int i = 0; i < 8; ++i)
+            int side = GameLoop::GetMetagameSide(mJoystickIndex);
+            int team = Team::FindSide((Team::Side)side);
+            if (team < 0)
             {
-                if (Team::sTeams[i]->GetSide() == iSide)
-                {
-                    iTeam = i;
-                    break;
-                }
+                team = Team::GetAutoAssignTeamNumber();
             }
-            if (iTeam < 0)
-            {
-                iTeam = Team::GetAutoAssignTeamNumber();
-            }
-            SpawnDisplay::Instance(mJoystickIndex)->SelectTeam(iTeam);
+            SpawnDisplay::Instance(mJoystickIndex)->SelectTeam(team);
         }
         else if (NetGame::IsEnabled())
         {
@@ -7417,26 +7475,6 @@ void ReadMiniMove(NetPktGroup& group, ProcessedInputs* inputs)
     group.ReadFixed(inputs->mFloatInputs[3], -1.0f, 1.0f, 3);
 }
 
-// TEMPLATE: SWBF2 0x005d36b0
-// Factory<Entity,EntityClass,EntityDesc>::FindNetIndex
-// TEMPLATE: SWBF2 0x005d3740
-// Factory<Ordnance,OrdnanceClass,OrdnanceDesc>::FindNetIndex
-// TEMPLATE: SWBF2 0x005d37a0
-// Factory<Weapon,WeaponClass,WeaponDesc>::FindNetIndex
-template <class TYPE, class CLASS, class DESC>
-CLASS* Factory<TYPE, CLASS, DESC>::FindNetIndex(int index)
-{
-    typedef Factory<TYPE, CLASS, DESC> FactoryType;
-    for (typename PblList<FactoryType>::Itor it(sList.GetFirst()); it; ++it)
-    {
-        if (it->mNetIndex == index)
-        {
-            return static_cast<CLASS*>(&*it);
-        }
-    }
-    return 0;
-}
-
 // FUNCTION: SWBF2 0x005cfbb0
 void NetGame::SelectSpawn(int player, int team, int classIndex, CommandPost* post)
 {
@@ -8133,65 +8171,6 @@ void AloMissionTimer::Read(NetPktGroup& group)
             delete timer;
         }
         MissionTimer::Set(0, MissionTimer::SHOW_NEUTRAL, 0);
-    }
-}
-
-// FUNCTION: SWBF2 0x005c6140
-void AloMapDisplayMarkers::Read(NetPktGroup& group)
-{
-    for (int i = 0; i < TargetManager::MAX_MARKERS; ++i)
-    {
-        TargetManager::Marker* tmpMarker = &TargetManager::gMarkers[i];
-        bool bRemoveIt = tmpMarker->actor || tmpMarker->region;
-        if (bRemoveIt)
-        {
-            TargetManager::RemoveMarker(tmpMarker->actor, tmpMarker->region,
-                                        tmpMarker->teamMask);
-        }
-    }
-    bool more = false;
-    group.Read(more);
-    while (more)
-    {
-        GameObject* obj = 0;
-        RedRegion* region = 0;
-        unsigned int teamMask = 0;
-        float fScale = 1.0f;
-        unsigned int uTexture = 0;
-        unsigned int uColorHash = 0;
-        float pulseStartScale = 1.0f;
-        bool showHudTarget = false;
-        bool flashAlpha;
-        bool pulseSize;
-        bool bHasObject = false;
-        group.Read(bHasObject);
-        if (bHasObject)
-        {
-            obj = ReadObjectPtr(group);
-        }
-        bool bHasRegion = false;
-        group.Read(bHasRegion);
-        if (bHasRegion)
-        {
-            unsigned int regionId;
-            group.ReadBits(regionId, 32);
-            region = RedRegion::Find(regionId);
-        }
-        group.ReadBits(teamMask, 3);
-        group.ReadFixed(fScale, 0.0f, 16.0f, 8);
-        group.ReadBits(uTexture, 32);
-        group.ReadBits(uColorHash, 32);
-        group.Read(flashAlpha);
-        group.Read(pulseSize);
-        group.ReadFixed(pulseStartScale, 0.0f, 16.0f, 8);
-        group.Read(showHudTarget);
-        if (obj || region)
-        {
-            TargetManager::AddMarker(obj, region, uTexture, fScale, teamMask,
-                                     uColorHash, showHudTarget, flashAlpha,
-                                     pulseSize, pulseStartScale);
-        }
-        group.Read(more);
     }
 }
 
@@ -12580,9 +12559,6 @@ void DeleteJournalFile(const char* fileName) {}
 // FUNCTION: SWBF2 0x005c4750
 void SyncJournalChanges() {}
 
-// FUNCTION: SWBF2 0x0043cf60
-bool ReadNetIsLocalTurn() { return netIsLocalTurn; }
-
 // FUNCTION: SWBF2 0x005b4470
 bool IsSkippedND(const GameObject* pObject)
 {
@@ -16904,23 +16880,6 @@ PblTimeBase frameLockTimeBase;
 // `dynamic initializer for 'MAX_DOUBLETAP_INTERVAL_TICKS''
 
 
-
-// FUNCTION: SWBF2 0x005c5cc0
-AloMapDisplayMarkers::AloMapDisplayMarkers()
-{
-    sig = ALO_MAPDISPLAY_MARKERS;
-    deltaSends = false;
-    Reset();
-}
-
-// SYNTHETIC: SWBF2 0x004053e0
-// `dynamic initializer for 'aloMapDisplayMarkers''
-// SYNTHETIC: SWBF2 0x00769170
-// `dynamic atexit destructor for 'aloMapDisplayMarkers''
-
-// GLOBAL: SWBF2 0x01ed8198
-// aloMapDisplayMarkers
-AloMapDisplayMarkers aloMapDisplayMarkers;
 
 // SYNTHETIC: SWBF2 0x00405580
 // `dynamic initializer for 'frameLockStamp''

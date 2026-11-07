@@ -512,23 +512,8 @@ LeafPatch::~LeafPatch()
 // SYNTHETIC: SWBF2 0x0056d400
 // LeafPatch::`scalar deleting destructor'
 
-// FUNCTION: SWBF2 0x0056cef0
-void LeafPatch::DeactivateLeaf()
-{
-    --mNumFallingLeaves;
-}
 
-// FUNCTION: SWBF2 0x0056cf00
-const PblVector3& LeafPatch::GetPosition() const
-{
-    return mMatrix.GetTranslation();
-}
 
-// FUNCTION: SWBF2 0x0056cf10
-const PblMatrix& LeafPatch::GetMatrix() const
-{
-    return mMatrix;
-}
 
 // FUNCTION: SWBF2 0x0056d4a0
 void LeafPatch::SetProperty(unsigned int uProperty, const char* pszValue)

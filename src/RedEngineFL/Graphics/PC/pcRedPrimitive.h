@@ -66,6 +66,22 @@ struct CompressedNormal
 };
 #pragma pack(pop)
 
+struct CompressedPosXY
+{
+    short x;
+    short y;
+    static void SetBoundingBox(const PblBox& box)
+    {
+        s_vMin = box.GetMin();
+        s_vScale = (box.GetMax() - box.GetMin()) / 65535.0f;
+        s_vScaleInv = PblVector3(1.0f / s_vScale.x, 1.0f / s_vScale.y, 1.0f / s_vScale.z);
+    }
+
+    static PblVector3 s_vMin;
+    static PblVector3 s_vScale;
+    static PblVector3 s_vScaleInv;
+};
+
 class pcRedIndexBuffer;
 class pcRedVertexBuffer;
 class pcRedVertexFormat;

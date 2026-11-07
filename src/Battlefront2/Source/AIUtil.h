@@ -190,7 +190,7 @@ bool __cdecl CanPotentiallySee(const Controllable* pMe, const GameObject* pObjec
 }
 namespace AIUtil
 {
-void __fastcall AddSpied(Character* pWatcher, Character* pTarget);
+void AddSpied(Character* pWatcher, Character* pTarget);
 }
 namespace AIUtil
 {

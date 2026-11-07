@@ -115,26 +115,6 @@ void RedMovie::Close()
     RedMoviePlayer::Close();
 }
 
-// FUNCTION: SWBF2 0x006f5240
-int RedMovie::Subtitle::CompareSearch(const void* pKey, const void* pElement)
-{
-    const float fTime = *(const float*)pKey;
-    const Subtitle* pSubtitle = (const Subtitle*)pElement;
-
-    if (fTime >= pSubtitle->mEnableTime && fTime <= pSubtitle->mDisableTime)
-    {
-        return 0;
-    }
-    return (int)((fTime - pSubtitle->mEnableTime) * 100.0f);
-}
-
-// FUNCTION: SWBF2 0x006f5280
-int RedMovie::Subtitle::CompareSort(const void* pElement1, const void* pElement2)
-{
-    return (int)(((const Subtitle*)pElement1)->mEnableTime -
-                 ((const Subtitle*)pElement2)->mEnableTime);
-}
-
 // FUNCTION: SWBF2 0x006f4fb0
 RedMovie::Properties::~Properties()
 {

@@ -47,8 +47,7 @@ public:
     // SYNTHETIC: SWBF2 0x004b6f10
     // EntityFlyerClass::`scalar deleting destructor'
 
-    // FUNCTION: SWBF2 0x004b79c0
-    virtual ~EntityFlyerClass() {}
+    virtual ~EntityFlyerClass();
 
     EntityFlyerClass(EntityFlyerClass* pSrc, unsigned int uHash);
 

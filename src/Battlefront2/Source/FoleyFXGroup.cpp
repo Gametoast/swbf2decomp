@@ -111,7 +111,7 @@ void FoleyFXGroup::DestroyAll()
     while (smList.mHead.mNext != &smList.mHead)
     {
         FoleyFXGroup* pGroup =
-            (FoleyFXGroup*)((char*)smList.mHead.mNext - offsetof(FoleyFXGroup, mNode));
+            (FoleyFXGroup*)smList.mHead.mNext->GetObjectA(&smList, offsetof(FoleyFXGroup, mNode));
         delete pGroup;
     }
     smWater = 0;

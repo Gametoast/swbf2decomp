@@ -334,12 +334,6 @@ bool s_bDetailTextureTransformPrev;
 class PblMatrix;
 extern PblMatrix gMatrixIdentity;
 
-// FUNCTION: SWBF2 0x006fe950
-void RedShadingState::operator delete(void* pBlock)
-{
-    sMemoryPool.Free(pBlock);
-}
-
 
 
 // SYNTHETIC: SWBF2 0x006fe9b0

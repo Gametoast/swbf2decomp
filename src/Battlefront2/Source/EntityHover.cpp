@@ -2661,9 +2661,9 @@ bool EntityHover::PostCollisionUpdate(float fDeltaTime)
         }
     }
 
-    if (mPilot && mPilot->GetGameObject()->IsRtti(EntitySoldier::rttiHashEntitySoldier))
+    if (mPilot && mPilot->GetEntity()->IsRtti(EntitySoldier::rttiHashEntitySoldier))
     {
-        GameObject* pSoldier = mPilot->GetGameObject();
+        GameObject* pSoldier = static_cast<GameObject*>(mPilot->GetEntity());
         PblMatrix mLocal;
         mLocal = pSoldier->GetMatrix() * GetMatrix().GetInverseFast();
         PblMatrix mSmoothed = GetSmoothedMatrix();

@@ -184,12 +184,6 @@ float EntityDroideka::GetStateLimit()
     return (float)mZephyrPoseDyn.GetNumFrames();
 }
 
-// FUNCTION: SWBF2 0x00524070
-bool EntityDroideka::IsRollingOrTransition() const
-{
-    return mState == Rolling || mState == IdleToRoll || mState == RollToIdle;
-}
-
 // FUNCTION: SWBF2 0x004a6430
 float EntityDroideka::GetTurnState()
 {

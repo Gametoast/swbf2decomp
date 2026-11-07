@@ -1,3 +1,4 @@
+#include "SkyManager.h"
 #include "SkyDome.h"
 
 #include "SkyObject.h"
@@ -11,8 +12,6 @@
 
 namespace SkyManager
 {
-    void Init();
-    void Read(PblFileChunk& chunk);
     RedColor ReadColor(const PblConfig::Data& data);
     void ReadSkyInfo_(PblConfig& config, PblConfig::Data& data);
 
@@ -213,6 +212,11 @@ namespace SkyManager
 void Reset()
 {
     SkyDome::Destroy();
+}
+
+// FUNCTION: SWBF2 0x00638d30
+void Activate()
+{
 }
 
 }

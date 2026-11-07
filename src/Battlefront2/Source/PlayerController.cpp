@@ -1,4 +1,5 @@
 #include "PebbleFL/Common/PblMath.h"
+#include "PopupText.h"
 #include <d3dx9math.h>
 #include "PlayerController.h"
 #include "AIUtil.h"
@@ -47,15 +48,6 @@
  
 
 
-namespace PopupText
-{
-
-    enum PopupType { DISABLED = 0, HINT = 1, OBJECTIVE = 2, SELECTION = 3, MAX_POPUP_TYPES = 4 };
-    bool IsEnabled();
-    void ShowPopup(PopupType eType, unsigned int uID);
-    void SetPreventJump(bool bPrevent);
-    bool GetPreventJump();
-}
 
 void ClearFireTriggerBlock();
 bool IsFireTriggerBlocked();

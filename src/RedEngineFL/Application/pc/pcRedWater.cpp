@@ -1414,24 +1414,6 @@ inline void pcWaterShader::SetSpecularEnable(bool bEnable)
     s_specularEnable = bEnable;
 }
 
-// FUNCTION: SWBF2 0x00720500
-void pcWaterShader::SetFresnelMinMax(float fMin, float fMax)
-{
-    if (fMax < 0.0f)
-    {
-        fMax = 0.0f;
-    }
-    else if (fMax > 1.0f)
-    {
-        fMax = 1.0f;
-    }
-    float fClampedMin = fMin < 0.0f ? 0.0f : (fMin > 1.0f ? 1.0f : fMin);
-    s_fresnelMinMax.r = 0.0f;
-    s_fresnelMinMax.g = 0.0f;
-    s_fresnelMinMax.b = fClampedMin;
-    s_fresnelMinMax.a = fMax;
-}
-
 // FUNCTION: SWBF2 0x0071f520
 void RedWater::PlatformPostReadInit()
 {

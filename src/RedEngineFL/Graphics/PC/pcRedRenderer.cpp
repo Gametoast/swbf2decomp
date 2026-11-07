@@ -6132,117 +6132,13 @@ void RedRenderer::pcSetTexture(unsigned int uiStage, const RedTexture* pTexture)
     }
 }
 
-#define COUNT_PERFRAME_VALUE(NAME)                                                              \
+#define COUNT_PERFRAME_VALUE(COUNTER, NAME)                                                              \
     {                                                                                            \
         static util::VariableSet<util::SingletonAllocator<util::DefaultStaticAllocator> >&       \
-            s_perFrame = util::Globals::GetInstance().GetSet("perFrame");                        \
-        static int& s_count = s_perFrame.GetInt(NAME);                                           \
-        ++s_count;                                                                               \
+            vset = util::Globals::GetInstance().GetSet("perFrame");                        \
+        static int& COUNTER = vset.GetInt(NAME);                                           \
+        ++COUNTER;                                                                               \
     }
-
-// FUNCTION: SWBF2 0x006adb60
-void dx::StateManager_DX::FlushState()
-{
-    FlushStateEx_();
-
-    for (NVStateID* pState = m_DirtyStates.Begin(); pState != m_DirtyStates.End(); ++pState)
-    {
-        switch (pState->m_Type)
-        {
-        case 0:
-            m_pD3DDev->SetMaterial(&m_CurrentState.m_D3DMaterial);
-            m_ChipState.m_D3DMaterial = m_CurrentState.m_D3DMaterial;
-            break;
-        case 7:
-            m_pD3DDev->SetFVF(m_CurrentState.m_FVF);
-            m_ChipState.m_FVF = m_CurrentState.m_FVF;
-            break;
-        case 5:
-            if (m_bForce || m_ChipState.m_VertexShader != m_CurrentState.m_VertexShader)
-            {
-                COUNT_PERFRAME_VALUE("numSetVShader");
-                m_pD3DDev->SetVertexShader(m_CurrentState.m_VertexShader);
-                m_ChipState.m_VertexShader = m_CurrentState.m_VertexShader;
-            }
-            break;
-        case 6:
-            m_pD3DDev->SetVertexDeclaration(m_CurrentState.m_VertexShaderDecl);
-            m_ChipState.m_VertexShaderDecl = m_CurrentState.m_VertexShaderDecl;
-            break;
-        case 8:
-            if (m_bForce || m_ChipState.m_PixelShader != m_CurrentState.m_PixelShader)
-            {
-                COUNT_PERFRAME_VALUE("numSetPShader");
-                m_pD3DDev->SetPixelShader(m_CurrentState.m_PixelShader);
-                m_ChipState.m_PixelShader = m_CurrentState.m_PixelShader;
-            }
-            break;
-        case 9:
-        {
-            m_pD3DDev->SetTransform((D3DTRANSFORMSTATETYPE)pState->m_dwValue0,
-                                    &m_CurrentState.m_Matrices[pState->m_dwValue0]);
-            const D3DMATRIX matrix = m_CurrentState.m_Matrices[pState->m_dwValue0];
-            memcpy(&m_ChipState.m_Matrices[pState->m_dwValue0], &matrix, sizeof(D3DMATRIX));
-            break;
-        }
-        case 10:
-            if (!m_bForce)
-            {
-                if (m_ChipState.m_VertexShaderConstants[pState->m_dwValue0] == m_CurrentState.m_VertexShaderConstants[pState->m_dwValue0])
-                {
-                    break;
-                }
-            }
-            m_pD3DDev->SetVertexShaderConstantF(pState->m_dwValue0, m_CurrentState.m_VertexShaderConstants[pState->m_dwValue0], 1);
-            m_ChipState.m_VertexShaderConstants[pState->m_dwValue0] = m_CurrentState.m_VertexShaderConstants[pState->m_dwValue0];
-            break;
-        case 11:
-            if (!m_bForce)
-            {
-                if (m_ChipState.m_PixelShaderConstants[pState->m_dwValue0] == m_CurrentState.m_PixelShaderConstants[pState->m_dwValue0])
-                {
-                    break;
-                }
-            }
-            m_pD3DDev->SetPixelShaderConstantF(pState->m_dwValue0, m_CurrentState.m_PixelShaderConstants[pState->m_dwValue0], 1);
-            m_ChipState.m_PixelShaderConstants[pState->m_dwValue0] = m_CurrentState.m_PixelShaderConstants[pState->m_dwValue0];
-            break;
-        case 12:
-            if (m_bForce
-                || m_ChipState.m_StreamData[pState->m_dwStage].m_pStreamData
-                       != m_CurrentState.m_StreamData[pState->m_dwStage].m_pStreamData
-                || m_ChipState.m_StreamData[pState->m_dwStage].m_Stride
-                       != m_CurrentState.m_StreamData[pState->m_dwStage].m_Stride)
-            {
-                COUNT_PERFRAME_VALUE("numSetStream");
-                m_pD3DDev->SetStreamSource(pState->m_dwStage,
-                                           m_CurrentState.m_StreamData[pState->m_dwStage].m_pStreamData,
-                                           m_CurrentState.m_StreamData[pState->m_dwStage].m_Offset,
-                                           m_CurrentState.m_StreamData[pState->m_dwStage].m_Stride);
-                m_ChipState.m_StreamData[pState->m_dwStage] = m_CurrentState.m_StreamData[pState->m_dwStage];
-            }
-            break;
-        case 13:
-            if (m_bForce
-                || m_ChipState.m_IndexData.m_pIndexData != m_CurrentState.m_IndexData.m_pIndexData
-                || m_ChipState.m_IndexData.m_BaseVertexIndex != m_CurrentState.m_IndexData.m_BaseVertexIndex)
-            {
-                COUNT_PERFRAME_VALUE("numSetIndices");
-                m_pD3DDev->SetIndices((IDirect3DIndexBuffer9*)m_CurrentState.m_IndexData.m_pIndexData);
-                m_ChipState.m_IndexData = m_CurrentState.m_IndexData;
-            }
-            break;
-        default:
-            break;
-        }
-    }
-
-    m_DirtyStates.SetSize(0);
-    renderStates_.SetSize(0);
-    textureStageStates_.SetSize(0);
-    samplerStates_.SetSize(0);
-    textureStates_.SetSize(0);
-}
 
 // FUNCTION: SWBF2 0x006ae270
 void dx::StateManager_DX::FlushStateEx_()
@@ -6275,7 +6171,7 @@ void dx::StateManager_DX::FlushStateEx_()
         }
         for (int i = 0; i < textureStates_.GetSize(); ++i)
         {
-            COUNT_PERFRAME_VALUE("numSetTex");
+            COUNT_PERFRAME_VALUE(numSetTex, "numSetTex");
             const NVStateID& rId = textureStates_[i];
             m_pD3DDev->SetTexture(rId.m_dwStage, m_CurrentState.m_Textures[rId.m_dwStage]);
             m_ChipState.m_Textures[rId.m_dwStage] = m_CurrentState.m_Textures[rId.m_dwStage];
@@ -6324,12 +6220,116 @@ void dx::StateManager_DX::FlushStateEx_()
             const NVStateID& rId = textureStates_[i];
             if (m_ChipState.m_Textures[rId.m_dwStage] != m_CurrentState.m_Textures[rId.m_dwStage])
             {
-                COUNT_PERFRAME_VALUE("numSetTex");
+                COUNT_PERFRAME_VALUE(numSetTex, "numSetTex");
                 m_pD3DDev->SetTexture(rId.m_dwStage, m_CurrentState.m_Textures[rId.m_dwStage]);
                 m_ChipState.m_Textures[rId.m_dwStage] = m_CurrentState.m_Textures[rId.m_dwStage];
             }
         }
     }
+}
+
+// FUNCTION: SWBF2 0x006adb60
+void dx::StateManager_DX::FlushState()
+{
+    FlushStateEx_();
+
+    for (NVStateID* pState = m_DirtyStates.Begin(); pState != m_DirtyStates.End(); ++pState)
+    {
+        switch (pState->m_Type)
+        {
+        case 0:
+            m_pD3DDev->SetMaterial(&m_CurrentState.m_D3DMaterial);
+            m_ChipState.m_D3DMaterial = m_CurrentState.m_D3DMaterial;
+            break;
+        case 7:
+            m_pD3DDev->SetFVF(m_CurrentState.m_FVF);
+            m_ChipState.m_FVF = m_CurrentState.m_FVF;
+            break;
+        case 5:
+            if (m_bForce || m_ChipState.m_VertexShader != m_CurrentState.m_VertexShader)
+            {
+                COUNT_PERFRAME_VALUE(numcalls, "numSetVShader");
+                m_pD3DDev->SetVertexShader(m_CurrentState.m_VertexShader);
+                m_ChipState.m_VertexShader = m_CurrentState.m_VertexShader;
+            }
+            break;
+        case 6:
+            m_pD3DDev->SetVertexDeclaration(m_CurrentState.m_VertexShaderDecl);
+            m_ChipState.m_VertexShaderDecl = m_CurrentState.m_VertexShaderDecl;
+            break;
+        case 8:
+            if (m_bForce || m_ChipState.m_PixelShader != m_CurrentState.m_PixelShader)
+            {
+                COUNT_PERFRAME_VALUE(numcalls, "numSetPShader");
+                m_pD3DDev->SetPixelShader(m_CurrentState.m_PixelShader);
+                m_ChipState.m_PixelShader = m_CurrentState.m_PixelShader;
+            }
+            break;
+        case 9:
+        {
+            m_pD3DDev->SetTransform((D3DTRANSFORMSTATETYPE)pState->m_dwValue0,
+                                    &m_CurrentState.m_Matrices[pState->m_dwValue0]);
+            const D3DMATRIX matrix = m_CurrentState.m_Matrices[pState->m_dwValue0];
+            memcpy(&m_ChipState.m_Matrices[pState->m_dwValue0], &matrix, sizeof(D3DMATRIX));
+            break;
+        }
+        case 10:
+            if (!m_bForce)
+            {
+                if (m_ChipState.m_VertexShaderConstants[pState->m_dwValue0] == m_CurrentState.m_VertexShaderConstants[pState->m_dwValue0])
+                {
+                    break;
+                }
+            }
+            m_pD3DDev->SetVertexShaderConstantF(pState->m_dwValue0, m_CurrentState.m_VertexShaderConstants[pState->m_dwValue0], 1);
+            m_ChipState.m_VertexShaderConstants[pState->m_dwValue0] = m_CurrentState.m_VertexShaderConstants[pState->m_dwValue0];
+            break;
+        case 11:
+            if (!m_bForce)
+            {
+                if (m_ChipState.m_PixelShaderConstants[pState->m_dwValue0] == m_CurrentState.m_PixelShaderConstants[pState->m_dwValue0])
+                {
+                    break;
+                }
+            }
+            m_pD3DDev->SetPixelShaderConstantF(pState->m_dwValue0, m_CurrentState.m_PixelShaderConstants[pState->m_dwValue0], 1);
+            m_ChipState.m_PixelShaderConstants[pState->m_dwValue0] = m_CurrentState.m_PixelShaderConstants[pState->m_dwValue0];
+            break;
+        case 12:
+            if (m_bForce
+                || m_ChipState.m_StreamData[pState->m_dwStage].m_pStreamData
+                       != m_CurrentState.m_StreamData[pState->m_dwStage].m_pStreamData
+                || m_ChipState.m_StreamData[pState->m_dwStage].m_Stride
+                       != m_CurrentState.m_StreamData[pState->m_dwStage].m_Stride)
+            {
+                COUNT_PERFRAME_VALUE(numSetStream, "numSetStream");
+                m_pD3DDev->SetStreamSource(pState->m_dwStage,
+                                           m_CurrentState.m_StreamData[pState->m_dwStage].m_pStreamData,
+                                           m_CurrentState.m_StreamData[pState->m_dwStage].m_Offset,
+                                           m_CurrentState.m_StreamData[pState->m_dwStage].m_Stride);
+                m_ChipState.m_StreamData[pState->m_dwStage] = m_CurrentState.m_StreamData[pState->m_dwStage];
+            }
+            break;
+        case 13:
+            if (m_bForce
+                || m_ChipState.m_IndexData.m_pIndexData != m_CurrentState.m_IndexData.m_pIndexData
+                || m_ChipState.m_IndexData.m_BaseVertexIndex != m_CurrentState.m_IndexData.m_BaseVertexIndex)
+            {
+                COUNT_PERFRAME_VALUE(numSetIndices, "numSetIndices");
+                m_pD3DDev->SetIndices((IDirect3DIndexBuffer9*)m_CurrentState.m_IndexData.m_pIndexData);
+                m_ChipState.m_IndexData = m_CurrentState.m_IndexData;
+            }
+            break;
+        default:
+            break;
+        }
+    }
+
+    m_DirtyStates.SetSize(0);
+    renderStates_.SetSize(0);
+    textureStageStates_.SetSize(0);
+    samplerStates_.SetSize(0);
+    textureStates_.SetSize(0);
 }
 
 // GLOBAL: SWBF2 0x007fb07b

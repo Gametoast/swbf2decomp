@@ -46,6 +46,7 @@
 #include "RedEngineFL/Graphics/PC/pcRedRenderer.h"
 #include "RedEngineFL/Application/pc/pcRedTerrain.h"
 #include "NetGame.h"
+#include "NetSetup.h"
 #include "PebbleFL/Common/PblMath.h"
 
 void __cdecl printf_wrapper(const char*, ...);
@@ -68,22 +69,22 @@ namespace PblUnicode
 unsigned int __cdecl ConvertUnicodeSkippingWide(char* pDest, const unsigned short* pSrc, unsigned int uiCount);
 
 // FUNCTION: SWBF2 0x005805e0
-int __fastcall GetScreenTransitionType(const char* pcName, void*)
+static ScreenTransition::TransitionType GetScreenTransitionType(const char* pcName)
 {
     if (pcName)
     {
         switch ((unsigned int)PblHash(pcName))
         {
-        case 0x6bfbd198u: /* "BLUR" */ return 1;
-        case 0xf16d8413u: /* "FADE" */ return 2;
-        case 0x02ba7498u: /* "SWIPE_LR" */ return 3;
-        case 0xec70b044u: /* "SWIPE_RL" */ return 4;
-        case 0x027fdd70u: /* "SWIPE_TB" */ return 5;
-        case 0xf497cc4cu: /* "SWIPE_BT" */ return 6;
-        case 0xca020c79u: /* "SWIPE_RAND" */ return 7;
+        case 0x6bfbd198u: /* "BLUR" */ return ScreenTransition::BLUR;
+        case 0xf16d8413u: /* "FADE" */ return ScreenTransition::FADE;
+        case 0x02ba7498u: /* "SWIPE_LR" */ return ScreenTransition::SWIPE_LR;
+        case 0xec70b044u: /* "SWIPE_RL" */ return ScreenTransition::SWIPE_RL;
+        case 0x027fdd70u: /* "SWIPE_TB" */ return ScreenTransition::SWIPE_TB;
+        case 0xf497cc4cu: /* "SWIPE_BT" */ return ScreenTransition::SWIPE_BT;
+        case 0xca020c79u: /* "SWIPE_RAND" */ return ScreenTransition::SWIPE_RAND;
         }
     }
-    return 2;
+    return ScreenTransition::FADE;
 }
 extern bool gDemoMode;
 extern bool gAttractMode;
@@ -93,25 +94,6 @@ extern bool gAttractMode;
 
 extern bool gDrawFlyerShadows;
 extern HWND hGlobalWnd;
-
-class NetSetup
-{
-public:
-    static char* GetGameVersion();
-    static char const* GetAutoNetScript();
-    static bool IsAutoNetLan();
-    static char const* GetAutoNetName();
-    static int GetAutoNetPlayerCount();
-    static void SetupAutoNetMissions();
-
-    static void RequestQuit(unsigned int uiReason);
-};
-
-class NetSetupP
-{
-public:
-    static void UpdateScreen();
-};
 
 // GLOBAL: SWBF2 0x007e69e0
 // sCallbacks
@@ -168,11 +150,11 @@ int BeginScreenTransition(lua_State*)
         const float fInTime = LuaHelper::GetFloat(2);
         const float fHoldTime = LuaHelper::GetFloat(3);
         const float fOutTime = LuaHelper::GetFloat(4);
-        const int iInType = GetScreenTransitionType(LuaHelper::GetString(5), 0);
-        const int iOutType = GetScreenTransitionType(LuaHelper::GetString(6), 0);
+        const ScreenTransition::TransitionType eInType = GetScreenTransitionType(LuaHelper::GetString(5));
+        const ScreenTransition::TransitionType eOutType = GetScreenTransitionType(LuaHelper::GetString(6));
         ScreenTransition::sInstance->BeginTransition(
             uScreen, fInTime, fHoldTime, fOutTime,
-            (ScreenTransition::TransitionType)iInType, (ScreenTransition::TransitionType)iOutType, 0, 0);
+            eInType, eOutType, 0, 0);
     }
     return 0;
 }
@@ -1658,8 +1640,8 @@ int ScriptCB_MetagameSetBonus(lua_State*)
 int ScriptCB_MetagameSetSide(lua_State*)
 {
     const char* pcSide = LuaHelper::GetString(2);
-    __int64 iIndex = (__int64)luaL_checknumber(LuaHelper::mState, 1);
-    GameLoop::SetMetagameSide((int)iIndex, Team::TranslateTeamName(pcSide));
+    const int iIndex = LuaHelper::GetInt(1);
+    GameLoop::SetMetagameSide(iIndex, Team::TranslateTeamName(pcSide));
     return 0;
 }
 

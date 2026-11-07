@@ -365,8 +365,7 @@ bool SkyDome::Update(float fDeltaTime)
                 rData.effect->AttachEffectToVector(&rData.pos, true);
 
                 ParticleEmitterObject* pEmitter = rData.effect;
-                pEmitter->Deactivate();
-                pEmitter->mbAddedToScene = false;
+                pEmitter->PermaRemoveParticleEffect();
             }
         }
     }

@@ -4,6 +4,7 @@
 
 #include <windows.h>
 #include "PerformanceTimer.h"
+#include "FrameUpdate.h"
 #include "CommandPost.h"
 
 #include <process.h>
@@ -53,6 +54,7 @@
 #include "ReticuleDisplay.h"
 #include "RumbleRegion.h"
 #include "SkyObject.h"
+#include "SkyManager.h"
 #include "SoldierAnimatorLowRes.h"
 #include "PauseMenu.h"
 #include "SoldierAnimatorClass.h"
@@ -247,10 +249,6 @@ namespace PropGenerator
     void Init();
 }
 
-namespace SkyManager
-{
-    void Init();
-}
 
 namespace FLRenderer
 {
@@ -323,10 +321,6 @@ bool EntitySoldier::sEnableAnnouncementVO = true;
 // GLOBAL: SWBF2 0x007e651d
 bool EntitySoldier::sEnableMusic = true;
 
-namespace FrameUpdate
-{
-    void Update();
-}
 
 namespace PblProfile
 {
@@ -363,10 +357,6 @@ namespace ReserveManager
 {
     void Reset();
 }
-namespace SkyManager
-{
-    void Reset();
-}
 
 namespace SaveGameManager
 {
@@ -388,14 +378,29 @@ unsigned int mNextStateHash;
 // GLOBAL: SWBF2 0x01e563b8
 // mCurrentStateHash
 unsigned int mCurrentStateHash;
-// SYNTHETIC: SWBF2 0x00403e60
-// `dynamic initializer for '_MissionState''
-// SYNTHETIC: SWBF2 0x00768aa0
-// `dynamic atexit destructor for '_MissionState''
 
-// GLOBAL: SWBF2 0x007eb97c
-// _MissionState
-GameState::MissionState _MissionState;
+namespace GameState
+{
+// SYNTHETIC: SWBF2 0x00403e20
+// GameState::`dynamic initializer for '_TimeBase''
+
+// GLOBAL: SWBF2 0x01ec5f40
+// _TimeBase
+PblTimeBase _TimeBase;
+// SYNTHETIC: SWBF2 0x00403e30
+// GameState::`dynamic initializer for '_SystemTimeBase''
+
+// GLOBAL: SWBF2 0x01ec5f90
+// _SystemTimeBase
+PblTimeBase _SystemTimeBase;
+// SYNTHETIC: SWBF2 0x00403e40
+// GameState::`dynamic initializer for '_TotalTimeBase''
+
+// GLOBAL: SWBF2 0x01ec5f58
+// _TotalTimeBase
+PblTimeBase _TotalTimeBase;
+}
+
 // SYNTHETIC: SWBF2 0x00403e50
 // `dynamic initializer for '_ShellState''
 // SYNTHETIC: SWBF2 0x00768a90
@@ -404,6 +409,14 @@ GameState::MissionState _MissionState;
 // GLOBAL: SWBF2 0x007eb998
 // _ShellState
 GameState::ShellState _ShellState;
+// SYNTHETIC: SWBF2 0x00403e60
+// `dynamic initializer for '_MissionState''
+// SYNTHETIC: SWBF2 0x00768aa0
+// `dynamic atexit destructor for '_MissionState''
+
+// GLOBAL: SWBF2 0x007eb97c
+// _MissionState
+GameState::MissionState _MissionState;
 
 // GLOBAL: SWBF2 0x01f9c2c0
 // _pCurrentState
@@ -422,29 +435,6 @@ bool sKioskMode;
 
 // GLOBAL: SWBF2 0x1e5639e
 bool sbDidOneTimeInit;
-
-
-namespace GameState
-{
-// SYNTHETIC: SWBF2 0x00403e20
-// GameState::`dynamic initializer for '_TimeBase''
-
-// GLOBAL: SWBF2 0x01ec5f40
-// _TimeBase
-PblTimeBase _TimeBase;
-// SYNTHETIC: SWBF2 0x00403e40
-// GameState::`dynamic initializer for '_TotalTimeBase''
-
-// GLOBAL: SWBF2 0x01ec5f58
-// _TotalTimeBase
-PblTimeBase _TotalTimeBase;
-// SYNTHETIC: SWBF2 0x00403e30
-// GameState::`dynamic initializer for '_SystemTimeBase''
-
-// GLOBAL: SWBF2 0x01ec5f90
-// _SystemTimeBase
-PblTimeBase _SystemTimeBase;
-}
 
 // GLOBAL: SWBF2 0x1ec5f70
 PblTimeBase::Stamp SystemTimeStamp;

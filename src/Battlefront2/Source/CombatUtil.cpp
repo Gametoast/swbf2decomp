@@ -687,7 +687,7 @@ bool CombatUtil::sCauseDamage(Controllable* pMe, const Weapon* pWpn, const Weapo
     }
     if (!bSlowFlyer && !pTarget->GetEntity()->IsRtti(EntityHover::rttiHashEntityHover) &&
         !pTarget->GetEntity()->IsRtti(EntityWalker::rttiHashEntityWalker) &&
-        !(pTarget->mIsTargetable && pTarget->GetEntity()->IsRtti(EntityBuilding::rttiHashEntityBuilding)))
+        !(pTarget->mIsTargetable && pTarget->GetEntity()->IsRtti(EntityBuilding::GetRtti())))
     {
         return false;
     }

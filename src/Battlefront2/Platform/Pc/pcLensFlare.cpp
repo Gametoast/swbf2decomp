@@ -36,28 +36,6 @@ static pcFlareShader* s_pFlareShader;
 // GLOBAL: SWBF2 0x01f9ae4c
 static pcFlareShader* s_pFillShader;
 
-struct CompressedPosXY
-{
-    short x;
-    short y;
-    static void SetBoundingBox(const PblBox& box)
-    {
-        s_vMin = box.GetMin();
-        s_vScale = (box.GetMax() - box.GetMin()) / 65535.0f;
-        s_vScaleInv = PblVector3(1.0f / s_vScale.x, 1.0f / s_vScale.y, 1.0f / s_vScale.z);
-    }
-
-    static PblVector3 s_vMin;
-    static PblVector3 s_vScale;
-    static PblVector3 s_vScaleInv;
-};
-// GLOBAL: SWBF2 0x007f587c
-PblVector3 CompressedPosXY::s_vMin;
-// GLOBAL: SWBF2 0x007de288
-PblVector3 CompressedPosXY::s_vScale = { 1.0f / 65535.0f, 1.0f / 65535.0f, 1.0f / 65535.0f };
-// GLOBAL: SWBF2 0x007de294
-PblVector3 CompressedPosXY::s_vScaleInv = { 65535.0f, 65535.0f, 65535.0f };
-
 // GLOBAL: SWBF2 0x007eb728
 // s_boundingBox
 static PblBox s_boundingBox(-2200.0f, -2200.0f, -2200.0f, 2200.0f, 2200.0f, 2200.0f);

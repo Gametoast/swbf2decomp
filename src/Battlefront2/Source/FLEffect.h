@@ -120,7 +120,15 @@ public:
     virtual bool IsEffectActive() const = 0;
     virtual void ActivateEffect();
     virtual void DeactivateEffect();
-    virtual void StopAndFinish();
+    // FUNCTION: SWBF2 0x0042cf60
+    virtual void StopAndFinish()
+    {
+        m_uiAttachFlags |= KILL_ON_NEXT_UPDATE;
+        if (!IsThreadActive())
+        {
+            ActivateThread(0, PER_FRAME);
+        }
+    }
 protected:
     virtual bool Update(float fDeltaTime);
     virtual void UpdatedWorldMatrix();

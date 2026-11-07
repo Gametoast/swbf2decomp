@@ -269,16 +269,15 @@ EntityWalkerClass::EntityWalkerClass(unsigned int uHash)
 }
 
 
-// SYNTHETIC: SWBF2 0x00402ef0
-// `dynamic initializer for 'EntityWalkerClass::rttiHashEntityWalkerClass''
-// EntityWalkerClass::rttiHashEntityWalkerClass
+// SYNTHETIC: SWBF2 0x00402ec0
+// `dynamic initializer for 'EntityWalker::sMemoryPool''
+// SYNTHETIC: SWBF2 0x00767010
+// `dynamic atexit destructor for 'EntityWalker::sMemoryPool''
 
-// GLOBAL: SWBF2 0x01ebc25c
-// EntityWalkerClass::rttiHashEntityWalkerClass
-PblHash EntityWalkerClass::rttiHashEntityWalkerClass("EntityWalkerClass");
-// GLOBAL: SWBF2 0x007896cc
-// EntityWalkerClass::rttiNameEntityWalkerClass
-const char EntityWalkerClass::rttiNameEntityWalkerClass[] = "EntityWalkerClass";
+// GLOBAL: SWBF2 0x01ebc260
+// EntityWalker::sMemoryPool
+// STRING: SWBF2 0x0079d7d4
+MemoryPool EntityWalker::sMemoryPool("EntityWalker", sizeof(EntityWalker));
 
 // SYNTHETIC: SWBF2 0x00402ee0
 // `dynamic initializer for 'EntityWalker::rttiHashEntityWalker''
@@ -291,15 +290,16 @@ PblHash EntityWalker::rttiHashEntityWalker("EntityWalker");
 // EntityWalker::rttiNameEntityWalker
 const char EntityWalker::rttiNameEntityWalker[] = "EntityWalker";
 
-// SYNTHETIC: SWBF2 0x00402ec0
-// `dynamic initializer for 'EntityWalker::sMemoryPool''
-// SYNTHETIC: SWBF2 0x00767010
-// `dynamic atexit destructor for 'EntityWalker::sMemoryPool''
+// SYNTHETIC: SWBF2 0x00402ef0
+// `dynamic initializer for 'EntityWalkerClass::rttiHashEntityWalkerClass''
+// EntityWalkerClass::rttiHashEntityWalkerClass
 
-// GLOBAL: SWBF2 0x01ebc260
-// EntityWalker::sMemoryPool
-// STRING: SWBF2 0x0079d7d4
-MemoryPool EntityWalker::sMemoryPool("EntityWalker", sizeof(EntityWalker));
+// GLOBAL: SWBF2 0x01ebc25c
+// EntityWalkerClass::rttiHashEntityWalkerClass
+PblHash EntityWalkerClass::rttiHashEntityWalkerClass("EntityWalkerClass");
+// GLOBAL: SWBF2 0x007896cc
+// EntityWalkerClass::rttiNameEntityWalkerClass
+const char EntityWalkerClass::rttiNameEntityWalkerClass[] = "EntityWalkerClass";
 
 // FUNCTION: SWBF2 0x0047fb50
 const Controllable* EntityWalker::GetControllable() const
@@ -4283,9 +4283,9 @@ bool EntityWalker::PostCollisionUpdate(float fDeltaTime)
         }
     }
 
-    if (mPilot && mPilot->GetGameObject()->IsRtti(EntitySoldier::rttiHashEntitySoldier))
+    if (mPilot && mPilot->GetEntity()->IsRtti(EntitySoldier::rttiHashEntitySoldier))
     {
-        GameObject* pSoldier = mPilot->GetGameObject();
+        GameObject* pSoldier = static_cast<GameObject*>(mPilot->GetEntity());
         PblMatrix mSeat = pSoldier->GetMatrix() * GetMatrix().GetInverseFast();
         PblMatrix mLocal = mSeat;
         PblMatrix mSmoothed = GetSmoothedMatrix();

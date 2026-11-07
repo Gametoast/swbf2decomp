@@ -182,4 +182,3 @@ public:
 extern DrawAllBeamBetween* sDrawAllBeamBetween;
 extern DrawAllParticleAt* sDrawAllParticleAt;
 
-int __fastcall GetScreenTransitionType(const char* pcName, void*);

@@ -142,22 +142,6 @@ namespace RedInputManager
 bool isReadingJournal;
 IDirectInput8A* m_pDI;
 unsigned int m_numJoysticks;
-// SYNTHETIC: SWBF2 0x004085d0
-// RedInputManager::`dynamic initializer for 'm_keyboards''
-// SYNTHETIC: SWBF2 0x007699d0
-// RedInputManager::`dynamic atexit destructor for 'm_keyboards''
-
-// GLOBAL: SWBF2 0x0099cd18
-// m_keyboards
-RedKeyboard m_keyboards[1];
-// SYNTHETIC: SWBF2 0x00408630
-// RedInputManager::`dynamic initializer for 'm_mouses''
-// SYNTHETIC: SWBF2 0x00769a10
-// RedInputManager::`dynamic atexit destructor for 'm_mouses''
-
-// GLOBAL: SWBF2 0x0099d138
-// m_mouses
-RedMouse m_mouses[1];
 // SYNTHETIC: SWBF2 0x004085a0
 // RedInputManager::`dynamic initializer for 'm_joysticks''
 // SYNTHETIC: SWBF2 0x007699b0
@@ -166,6 +150,22 @@ RedMouse m_mouses[1];
 // GLOBAL: SWBF2 0x0099d188
 // m_joysticks
 RedJoystick m_joysticks[10];
+// SYNTHETIC: SWBF2 0x00408630
+// RedInputManager::`dynamic initializer for 'm_mouses''
+// SYNTHETIC: SWBF2 0x00769a10
+// RedInputManager::`dynamic atexit destructor for 'm_mouses''
+
+// GLOBAL: SWBF2 0x0099d138
+// m_mouses
+RedMouse m_mouses[1];
+// SYNTHETIC: SWBF2 0x004085d0
+// RedInputManager::`dynamic initializer for 'm_keyboards''
+// SYNTHETIC: SWBF2 0x007699d0
+// RedInputManager::`dynamic atexit destructor for 'm_keyboards''
+
+// GLOBAL: SWBF2 0x0099cd18
+// m_keyboards
+RedKeyboard m_keyboards[1];
 
 // FUNCTION: SWBF2 0x006dbec0
 RedMouse* GetMouse(unsigned char ucPort)

@@ -201,8 +201,8 @@
     <ClCompile Include="Graphics\PC\pcRedTexture.cpp">
       <Filter>Graphics\PC</Filter>
     </ClCompile>
-    <ClCompile Include="Graphics\PC\pcRedFootprint.cpp">
-      <Filter>Graphics\PC</Filter>
+    <ClCompile Include="Application\pc\pcRedFootprint.cpp">
+      <Filter>Application\pc</Filter>
     </ClCompile>
     <ClCompile Include="Graphics\PC\pcRedVertexBuffer.cpp">
       <Filter>Graphics\PC</Filter>
@@ -682,6 +682,9 @@
     </ClInclude>
     <ClInclude Include="Memory\engineAlloc.h">
       <Filter>Memory</Filter>
+    </ClInclude>
+    <ClInclude Include="Portals\BaseDisplayable.h">
+      <Filter>Portals</Filter>
     </ClInclude>
     <ClInclude Include="Portals\Portal.h">
       <Filter>Portals</Filter>
