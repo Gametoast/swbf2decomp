@@ -2,6 +2,7 @@
 #include "PebbleFL/Common/PblConfig.h"
 #include "PebbleFL/Common/PblHashTable.h"
 #include "Battlefront2Lod.h"
+#include "MemoryPoolCounts.h"
 
 // SYNTHETIC: SWBF2 0x00406370
 // `dynamic initializer for 'ShieldEffect::sMemoryPool''
@@ -30,7 +31,7 @@ ShieldEffectManager::ShieldEffectManager()
 // FUNCTION: SWBF2 0x00636730
 void ShieldEffectManager::Init()
 {
-    ShieldEffect::sMemoryPool.Setup(64, ShieldEffect::sMemoryPool.GetSize(),
+    ShieldEffect::sMemoryPool.Setup(PoolCount::kShieldEffect, ShieldEffect::sMemoryPool.GetSize(),
                                     ShieldEffect::sMemoryPool.GetGrow());
 }
 

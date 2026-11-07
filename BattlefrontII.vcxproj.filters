@@ -3074,6 +3074,9 @@
     <ClInclude Include="src\Battlefront2\Source\MedalsMgr.h">
       <Filter>src\Battlefront2\Source</Filter>
     </ClInclude>
+    <ClInclude Include="src\Battlefront2\Source\MemoryPoolCounts.h">
+      <Filter>src\Battlefront2\Source</Filter>
+    </ClInclude>
     <ClInclude Include="src\Battlefront2\Source\MessageDisplay.h">
       <Filter>src\Battlefront2\Source</Filter>
     </ClInclude>

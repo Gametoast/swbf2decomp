@@ -7,6 +7,7 @@
 #include "SoundFL/source/sndobjectlist.h"
 #include "GameSound.h"
 #include "Team.h"
+#include "MemoryPoolCounts.h"
 
 class PblVector3;
 class PblFileChunk;
@@ -46,7 +47,7 @@ public:
         {
             if (!sMemoryPool.mCount)
             {
-                sMemoryPool.Setup(32, sMemoryPool.GetSize(), sMemoryPool.GetGrow());
+                sMemoryPool.Setup(PoolCount::kTriggerSoundProperties, sMemoryPool.GetSize(), sMemoryPool.GetGrow());
             }
             return sMemoryPool.Allocate(sizeof(Properties));
         }
@@ -84,7 +85,7 @@ public:
         {
             if (!sMemoryPool.mCount)
             {
-                sMemoryPool.Setup(32, sMemoryPool.GetSize(), sMemoryPool.GetGrow());
+                sMemoryPool.Setup(PoolCount::kTriggerSoundGroup, sMemoryPool.GetSize(), sMemoryPool.GetGrow());
             }
             return sMemoryPool.Allocate(sizeof(Group));
         }
@@ -132,7 +133,7 @@ public:
     {
         if (!sMemoryPool.mCount)
         {
-            sMemoryPool.Setup(32, sMemoryPool.GetSize(), sMemoryPool.GetGrow());
+            sMemoryPool.Setup(PoolCount::kTriggerSoundRegion, sMemoryPool.GetSize(), sMemoryPool.GetGrow());
         }
         return sMemoryPool.Allocate(sizeof(TriggerSoundRegion));
     }

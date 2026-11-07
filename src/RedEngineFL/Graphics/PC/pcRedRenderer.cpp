@@ -38,6 +38,12 @@
 #include "pcRedPixelShader.h"
 #include "pcRedVertexShader.h"
 
+// how many shading states, shading pose entries and omni lights the renderer's pools reserve when they are
+// created (a full pool takes another block from its heap)
+static const unsigned int kShadingStatePoolCount = 16;
+static const unsigned int kShadingPoseEntryPoolCount = 256;
+static const unsigned int kOmniLightPoolCount = 128;
+
 // GLOBAL: SWBF2 0x00772760
 // __xmm@000000003f8000003f8000003f800000
 // GLOBAL: SWBF2 0x007727a0
@@ -2559,11 +2565,11 @@ void RedRenderer::Init()
 
     dx::StateManager_DX::CreateInstance(m_pd3dDevice);
 
-    RedShadingState::sMemoryPool.Setup(0x10, RedShadingState::sMemoryPool.mSize,
+    RedShadingState::sMemoryPool.Setup(kShadingStatePoolCount, RedShadingState::sMemoryPool.mSize,
                                        RedShadingState::sMemoryPool.mGrow);
-    RedShadingPose::Entry::sMemoryPool.Setup(0x100, RedShadingPose::Entry::sMemoryPool.mSize,
+    RedShadingPose::Entry::sMemoryPool.Setup(kShadingPoseEntryPoolCount, RedShadingPose::Entry::sMemoryPool.mSize,
                                              RedShadingPose::Entry::sMemoryPool.mGrow);
-    RedOmniLight::sMemoryPool.Setup(0x80, RedOmniLight::sMemoryPool.mSize,
+    RedOmniLight::sMemoryPool.Setup(kOmniLightPoolCount, RedOmniLight::sMemoryPool.mSize,
                                     RedOmniLight::sMemoryPool.mGrow);
 
     const DWORD dwStyle = m_d3dpp.Windowed ? 0x00C40000 : 0x90000000;

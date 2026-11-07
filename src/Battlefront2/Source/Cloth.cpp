@@ -73,6 +73,7 @@
 #include "ProceduralAnimation.h"
 #include "ShellLoop.h"
 #include "RedEngineFL/Interface/RedShadowBlob.h"
+#include "MemoryPoolCounts.h"
 
 // GLOBAL: SWBF2 0x0078db38
 static PblVector3 WIND_DIRECTION(1.0f, 0.0f, 0.0f);
@@ -102,9 +103,9 @@ PblHashTable<ClothData, 64> ClothData::s_clothDataHashTable;
 // FUNCTION: SWBF2 0x00459010
 void ClothData::Init()
 {
-    EntityCloth::sMemoryPool.Setup(0x10, EntityCloth::sMemoryPool.mSize,
+    EntityCloth::sMemoryPool.Setup(PoolCount::kEntityCloth, EntityCloth::sMemoryPool.mSize,
                                    EntityCloth::sMemoryPool.mGrow);
-    ClothData::sMemoryPool.Setup(0x20, ClothData::sMemoryPool.mSize,
+    ClothData::sMemoryPool.Setup(PoolCount::kClothData, ClothData::sMemoryPool.mSize,
                                  ClothData::sMemoryPool.mGrow);
 
     s_clothDataHashTable.Clear();

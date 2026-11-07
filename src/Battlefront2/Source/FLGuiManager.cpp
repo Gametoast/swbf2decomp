@@ -14,6 +14,7 @@
 #include "RedEngineFL/Interface/RedIFScreen.h"
 #include "RedEngineFL/Interface/RedInterfaceScreen.h"
 #include "RedEngineFL/Memory/RedMemory.h"
+#include "MemoryPoolCounts.h"
 
 namespace FLRenderer
 {
@@ -145,7 +146,7 @@ GuiManager::~GuiManager()
 // FUNCTION: SWBF2 0x00528050
 void GuiManager::InitAll()
 {
-    Event::sMemoryPool.Setup(0x40, Event::sMemoryPool.mSize,
+    Event::sMemoryPool.Setup(PoolCount::kGuiEvent, Event::sMemoryPool.mSize,
                              Event::sMemoryPool.mGrow);
 
     GuiManager* pGui = mInstances;

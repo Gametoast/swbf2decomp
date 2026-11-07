@@ -8,6 +8,7 @@
 #include "RedEngineFL/Graphics/RedPose.h"
 #include "RedEngineFL/Graphics/RedColor.h"
 #include "RedEngineFL/Application/pc/pcRedDebug.h"
+#include "MemoryPoolCounts.h"
 
 extern bool netFrameLock;
 extern bool netIsLocalTurn;
@@ -134,7 +135,7 @@ void TentacleSimulator::EnforceCylinderCollision(const PblMatrix& matrix, float 
 // FUNCTION: SWBF2 0x00655750
 void TentacleSimulator::Init()
 {
-    sMemoryPool.Setup(0x22, sMemoryPool.mSize, sMemoryPool.mGrow);
+    sMemoryPool.Setup(PoolCount::kTentacleSimulator, sMemoryPool.mSize, sMemoryPool.mGrow);
 }
 
 // FUNCTION: SWBF2 0x00655770

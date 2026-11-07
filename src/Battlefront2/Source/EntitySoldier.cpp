@@ -96,6 +96,7 @@
 
 #include "EventManager_Object.h"
 #include "StatusDisplay.h"
+#include "MemoryPoolCounts.h"
 
 // GLOBAL: SWBF2 0x007b2950
 // __xmm@7fffffff7fffffff7fffffff7fffffff
@@ -430,7 +431,7 @@ bool EntitySoldier::InNonFirstPersonState()
 // FUNCTION: SWBF2 0x004de620
 void AcklayData::Init()
 {
-    sMemoryPool.Setup(0, sMemoryPool.mSize, sMemoryPool.mGrow);
+    sMemoryPool.Setup(PoolCount::kAcklayData, sMemoryPool.mSize, sMemoryPool.mGrow);
 }
 
 // FUNCTION: SWBF2 0x004de640
