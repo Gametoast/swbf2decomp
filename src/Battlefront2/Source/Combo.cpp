@@ -22,6 +22,7 @@
 #include "PebbleFL/Common/PblMatrix.h"
 #include <float.h>
 #include <d3dx9math.h>
+#include "MemoryPoolCounts.h"
 
 // FUNCTION: SWBF2 0x00475640
 const Combo* Combo::ResolveForWeapon(const WeaponMelee* pWeapon,
@@ -2570,16 +2571,16 @@ void Combo::Init()
 {
     s_ComboTable.Clear();
 
-    sMemoryPool.Setup(0x20, sMemoryPool.mSize, sMemoryPool.mGrow);
-    State::sMemoryPool.Setup(0x64, State::sMemoryPool.mSize, State::sMemoryPool.mGrow);
-    Transition::sMemoryPool.Setup(0x55, Transition::sMemoryPool.mSize,
+    sMemoryPool.Setup(PoolCount::kCombo, sMemoryPool.mSize, sMemoryPool.mGrow);
+    State::sMemoryPool.Setup(PoolCount::kComboState, State::sMemoryPool.mSize, State::sMemoryPool.mGrow);
+    Transition::sMemoryPool.Setup(PoolCount::kComboTransition, Transition::sMemoryPool.mSize,
                                   Transition::sMemoryPool.mGrow);
-    Condition::sMemoryPool.Setup(0x46, Condition::sMemoryPool.mSize,
+    Condition::sMemoryPool.Setup(PoolCount::kComboCondition, Condition::sMemoryPool.mSize,
                                  Condition::sMemoryPool.mGrow);
-    Attack::sMemoryPool.Setup(0x78, Attack::sMemoryPool.mSize, Attack::sMemoryPool.mGrow);
-    DamageSample::sMemoryPool.Setup(0x4b0, DamageSample::sMemoryPool.mSize,
+    Attack::sMemoryPool.Setup(PoolCount::kComboAttack, Attack::sMemoryPool.mSize, Attack::sMemoryPool.mGrow);
+    DamageSample::sMemoryPool.Setup(PoolCount::kComboDamageSample, DamageSample::sMemoryPool.mSize,
                                     DamageSample::sMemoryPool.mGrow);
-    Deflect::sMemoryPool.Setup(8, Deflect::sMemoryPool.mSize, Deflect::sMemoryPool.mGrow);
+    Deflect::sMemoryPool.Setup(PoolCount::kComboDeflect, Deflect::sMemoryPool.mSize, Deflect::sMemoryPool.mGrow);
 }
 
 // FUNCTION: SWBF2 0x00475c50

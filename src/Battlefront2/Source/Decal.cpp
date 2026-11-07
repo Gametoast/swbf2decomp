@@ -7,6 +7,7 @@
 #include "RedEngineFL/Graphics/PC/pcRedAutoSettings.h"
 #include "RedEngineFL/Graphics/PC/pcRedRenderer.h"
 #include "RedEngineFL/Graphics/PC/pcRedShader.h"
+#include "MemoryPoolCounts.h"
 
 // FUNCTION: SWBF2 0x0048aaf0
 FLEffectObject* DecalClass::BuildEffect()
@@ -62,7 +63,7 @@ DecalManager::DecalManager()
 void DecalManager::Init()
 {
     m_numDecals = 0;
-    Decal::sMemoryPool.Create(0, Decal::sMemoryPool.GetSize(), Decal::sMemoryPool.GetGrow());
+    Decal::sMemoryPool.Create(PoolCount::kDecal, Decal::sMemoryPool.GetSize(), Decal::sMemoryPool.GetGrow());
 }
 
 // FUNCTION: SWBF2 0x0048ac50

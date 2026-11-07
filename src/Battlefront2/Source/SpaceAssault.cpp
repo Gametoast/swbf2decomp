@@ -18,6 +18,7 @@
 #include "PebbleFL/Common/PblHashTable.h"
 #include "RedEngineFL/Graphics/RedColor.h"
 #include "RedEngineFL/Interface/RedGroupElement.h"
+#include "MemoryPoolCounts.h"
 
  
 
@@ -423,7 +424,7 @@ void SpaceAssault::Enable(bool bEnable)
 
     if (!mpViewportData && bEnable)
     {
-        ViewportData::SetupMemoryPool(1, ViewportData::sMemoryPool.GetSize(),
+        ViewportData::SetupMemoryPool(PoolCount::kViewportData, ViewportData::sMemoryPool.GetSize(),
                                       ViewportData::sMemoryPool.GetGrow());
         mpViewportData = new ViewportData[1];
     }

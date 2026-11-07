@@ -157,6 +157,7 @@
 #include "PowerupItem.h"
 #include "StickInfo.h"
 #include "TeamAssist.h"
+#include "MemoryPoolCounts.h"
 
 namespace MissionTimer
 {
@@ -703,19 +704,19 @@ int GameLoop::Init()
     AIDebug::Create();
     NetGame::LeaveClient();
 
-    EntitySoldier::SetupMemoryPool(600, EntitySoldier::sMemoryPool.GetSize(), EntitySoldier::sMemoryPool.GetGrow());
-    EntityDroid::SetupMemoryPool(16, EntityDroid::sMemoryPool.GetSize(), EntityDroid::sMemoryPool.GetGrow());
-    MountedTurret::SetupMemoryPool(50, MountedTurret::sMemoryPool.GetSize(), MountedTurret::sMemoryPool.GetGrow());
-    PassengerSlot::SetupMemoryPool(0, PassengerSlot::sMemoryPool.GetSize(), PassengerSlot::sMemoryPool.GetGrow());
-    PowerupItem::SetupMemoryPool(25, PowerupItem::sMemoryPool.GetSize(), PowerupItem::sMemoryPool.GetGrow());
-    EntityMine::SetupMemoryPool(40, EntityMine::sMemoryPool.GetSize(), EntityMine::sMemoryPool.GetGrow());
-    EntityPortableTurret::SetupMemoryPool(6, EntityPortableTurret::sMemoryPool.GetSize(), EntityPortableTurret::sMemoryPool.GetGrow());
-    CommandFlyer::SetupMemoryPool(0, CommandFlyer::sMemoryPool.GetSize(), CommandFlyer::sMemoryPool.GetGrow());
-    Aimer::SetupMemoryPool(100, Aimer::sMemoryPool.GetSize(), Aimer::sMemoryPool.GetGrow());
-    TreeGridStack::SetupMemoryPool(550, TreeGridStack::sMemoryPool.GetSize(), TreeGridStack::sMemoryPool.GetGrow());
-    Weapon::SetupMemoryPool(2400, Weapon::sMemoryPool.GetSize(), Weapon::sMemoryPool.GetGrow());
-    AmmoCounter::SetupMemoryPool(2400, AmmoCounter::sMemoryPool.GetSize(), AmmoCounter::sMemoryPool.GetGrow());
-    EnergyBar::SetupMemoryPool(2400, EnergyBar::sMemoryPool.GetSize(), EnergyBar::sMemoryPool.GetGrow());
+    EntitySoldier::SetupMemoryPool(PoolCount::kEntitySoldier, EntitySoldier::sMemoryPool.GetSize(), EntitySoldier::sMemoryPool.GetGrow());
+    EntityDroid::SetupMemoryPool(PoolCount::kEntityDroid, EntityDroid::sMemoryPool.GetSize(), EntityDroid::sMemoryPool.GetGrow());
+    MountedTurret::SetupMemoryPool(PoolCount::kMountedTurret, MountedTurret::sMemoryPool.GetSize(), MountedTurret::sMemoryPool.GetGrow());
+    PassengerSlot::SetupMemoryPool(PoolCount::kPassengerSlot, PassengerSlot::sMemoryPool.GetSize(), PassengerSlot::sMemoryPool.GetGrow());
+    PowerupItem::SetupMemoryPool(PoolCount::kPowerupItem, PowerupItem::sMemoryPool.GetSize(), PowerupItem::sMemoryPool.GetGrow());
+    EntityMine::SetupMemoryPool(PoolCount::kEntityMine, EntityMine::sMemoryPool.GetSize(), EntityMine::sMemoryPool.GetGrow());
+    EntityPortableTurret::SetupMemoryPool(PoolCount::kEntityPortableTurret, EntityPortableTurret::sMemoryPool.GetSize(), EntityPortableTurret::sMemoryPool.GetGrow());
+    CommandFlyer::SetupMemoryPool(PoolCount::kCommandFlyer, CommandFlyer::sMemoryPool.GetSize(), CommandFlyer::sMemoryPool.GetGrow());
+    Aimer::SetupMemoryPool(PoolCount::kAimer, Aimer::sMemoryPool.GetSize(), Aimer::sMemoryPool.GetGrow());
+    TreeGridStack::SetupMemoryPool(PoolCount::kTreeGridStack, TreeGridStack::sMemoryPool.GetSize(), TreeGridStack::sMemoryPool.GetGrow());
+    Weapon::SetupMemoryPool(PoolCount::kWeapon, Weapon::sMemoryPool.GetSize(), Weapon::sMemoryPool.GetGrow());
+    AmmoCounter::SetupMemoryPool(PoolCount::kAmmoCounter, AmmoCounter::sMemoryPool.GetSize(), AmmoCounter::sMemoryPool.GetGrow());
+    EnergyBar::SetupMemoryPool(PoolCount::kEnergyBar, EnergyBar::sMemoryPool.GetSize(), EnergyBar::sMemoryPool.GetGrow());
 
     // the Weapon pool serves every weapon class: its item size is the largest of them (WeaponCatapult is
     // not listed; it is smaller than WeaponMelee)
@@ -738,8 +739,8 @@ int GameLoop::Init()
     Weapon::UpdateMemoryPoolSize(sizeof(WeaponShield));
     Weapon::UpdateMemoryPoolSize(sizeof(WeaponTowCable));
 
-    StickInfo::SetupMemoryPool(60, StickInfo::sMemoryPool.GetSize(), StickInfo::sMemoryPool.GetGrow());
-    Ordnance::SetupMemoryPool(120, Ordnance::sMemoryPool.GetSize(), Ordnance::sMemoryPool.GetGrow());
+    StickInfo::SetupMemoryPool(PoolCount::kStickInfo, StickInfo::sMemoryPool.GetSize(), StickInfo::sMemoryPool.GetGrow());
+    Ordnance::SetupMemoryPool(PoolCount::kOrdnance, Ordnance::sMemoryPool.GetSize(), Ordnance::sMemoryPool.GetGrow());
 
     // likewise for the ordnance classes (OrdnanceBeam is not listed; OrdnanceTowCable has a pool of its own)
     Ordnance::UpdateMemoryPoolSize(sizeof(OrdnanceBeacon));
@@ -754,21 +755,21 @@ int GameLoop::Init()
     Ordnance::UpdateMemoryPoolSize(sizeof(OrdnanceShell));
     Ordnance::UpdateMemoryPoolSize(sizeof(OrdnanceSticky));
 
-    LightFlash::SetupMemoryPool(16, LightFlash::sMemoryPool.GetSize(), LightFlash::sMemoryPool.GetGrow());
-    EntityLight::SetupMemoryPool(100, EntityLight::sMemoryPool.GetSize(), EntityLight::sMemoryPool.GetGrow());
-    LightningBoltEffectObject::SetupMemoryPool(16, LightningBoltEffectObject::sMemoryPool.GetSize(), LightningBoltEffectObject::sMemoryPool.GetGrow());
-    ParticleEmitterObject::SetupMemoryPool(192, ParticleEmitterObject::sMemoryPool.GetSize(), ParticleEmitterObject::sMemoryPool.GetGrow());
-    ParticleEmitterInfoData::SetupMemoryPool(1024, ParticleEmitterInfoData::sMemoryPool.GetSize(), ParticleEmitterInfoData::sMemoryPool.GetGrow());
-    ParticleEmitter::SetupMemoryPool(1024, ParticleEmitter::sMemoryPool.GetSize(), ParticleEmitter::sMemoryPool.GetGrow());
-    ParticleTransformer::PositionTransformer::SetupMemoryPool(1024, ParticleTransformer::PositionTransformer::sMemoryPool.GetSize(), ParticleTransformer::PositionTransformer::sMemoryPool.GetGrow());
-    ParticleTransformer::SizeTransformer::SetupMemoryPool(1024, ParticleTransformer::SizeTransformer::sMemoryPool.GetSize(), ParticleTransformer::SizeTransformer::sMemoryPool.GetGrow());
-    ParticleTransformer::RotationTransformer::SetupMemoryPool(0, ParticleTransformer::RotationTransformer::sMemoryPool.GetSize(), ParticleTransformer::RotationTransformer::sMemoryPool.GetGrow());
-    ParticleTransformer::ColorTransformer::SetupMemoryPool(1536, ParticleTransformer::ColorTransformer::sMemoryPool.GetSize(), ParticleTransformer::ColorTransformer::sMemoryPool.GetGrow());
-    EntitySoundStatic::SetupMemoryPool(112, EntitySoundStatic::sMemoryPool.GetSize(), EntitySoundStatic::sMemoryPool.GetGrow());
-    EntitySoundStream::SetupMemoryPool(30, EntitySoundStream::sMemoryPool.GetSize(), EntitySoundStream::sMemoryPool.GetGrow());
-    SoundSpaceRegion::SetupMemoryPool(30, SoundSpaceRegion::sMemoryPool.GetSize(), SoundSpaceRegion::sMemoryPool.GetGrow());
-    PlayerController::SetupMemoryPool(64, PlayerController::sMemoryPool.GetSize(), PlayerController::sMemoryPool.GetGrow());
-    TeamAssist::SetupMemoryPool(64, TeamAssist::sMemoryPool.GetSize(), TeamAssist::sMemoryPool.GetGrow());
+    LightFlash::SetupMemoryPool(PoolCount::kLightFlash, LightFlash::sMemoryPool.GetSize(), LightFlash::sMemoryPool.GetGrow());
+    EntityLight::SetupMemoryPool(PoolCount::kEntityLight, EntityLight::sMemoryPool.GetSize(), EntityLight::sMemoryPool.GetGrow());
+    LightningBoltEffectObject::SetupMemoryPool(PoolCount::kLightningBoltEffectObject, LightningBoltEffectObject::sMemoryPool.GetSize(), LightningBoltEffectObject::sMemoryPool.GetGrow());
+    ParticleEmitterObject::SetupMemoryPool(PoolCount::kParticleEmitterObject, ParticleEmitterObject::sMemoryPool.GetSize(), ParticleEmitterObject::sMemoryPool.GetGrow());
+    ParticleEmitterInfoData::SetupMemoryPool(PoolCount::kParticleEmitterInfoData, ParticleEmitterInfoData::sMemoryPool.GetSize(), ParticleEmitterInfoData::sMemoryPool.GetGrow());
+    ParticleEmitter::SetupMemoryPool(PoolCount::kParticleEmitter, ParticleEmitter::sMemoryPool.GetSize(), ParticleEmitter::sMemoryPool.GetGrow());
+    ParticleTransformer::PositionTransformer::SetupMemoryPool(PoolCount::kPositionTransformer, ParticleTransformer::PositionTransformer::sMemoryPool.GetSize(), ParticleTransformer::PositionTransformer::sMemoryPool.GetGrow());
+    ParticleTransformer::SizeTransformer::SetupMemoryPool(PoolCount::kSizeTransformer, ParticleTransformer::SizeTransformer::sMemoryPool.GetSize(), ParticleTransformer::SizeTransformer::sMemoryPool.GetGrow());
+    ParticleTransformer::RotationTransformer::SetupMemoryPool(PoolCount::kRotationTransformer, ParticleTransformer::RotationTransformer::sMemoryPool.GetSize(), ParticleTransformer::RotationTransformer::sMemoryPool.GetGrow());
+    ParticleTransformer::ColorTransformer::SetupMemoryPool(PoolCount::kColorTransformer, ParticleTransformer::ColorTransformer::sMemoryPool.GetSize(), ParticleTransformer::ColorTransformer::sMemoryPool.GetGrow());
+    EntitySoundStatic::SetupMemoryPool(PoolCount::kEntitySoundStatic, EntitySoundStatic::sMemoryPool.GetSize(), EntitySoundStatic::sMemoryPool.GetGrow());
+    EntitySoundStream::SetupMemoryPool(PoolCount::kEntitySoundStream, EntitySoundStream::sMemoryPool.GetSize(), EntitySoundStream::sMemoryPool.GetGrow());
+    SoundSpaceRegion::SetupMemoryPool(PoolCount::kSoundSpaceRegion, SoundSpaceRegion::sMemoryPool.GetSize(), SoundSpaceRegion::sMemoryPool.GetGrow());
+    PlayerController::SetupMemoryPool(PoolCount::kPlayerController, PlayerController::sMemoryPool.GetSize(), PlayerController::sMemoryPool.GetGrow());
+    TeamAssist::SetupMemoryPool(PoolCount::kTeamAssist, TeamAssist::sMemoryPool.GetSize(), TeamAssist::sMemoryPool.GetGrow());
 
     EntityEx::InitFind();
     TeamManager::Init();

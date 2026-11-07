@@ -38,6 +38,7 @@
 #include "WorldShadowMapEffect.h"
 
 #include "GameObject.h"
+#include "MemoryPoolCounts.h"
 
 PblMatrix DirectionMatrix(const PblVector3& vDir, const PblVector3& vUp, const PblVector3& vPos);
 
@@ -303,7 +304,7 @@ void FLEffect::Unregister(unsigned int uiClassName)
 // FUNCTION: SWBF2 0x00527110
 void FLEffectObject::Init()
 {
-    s_OffsetMatrixPool.Setup(0x40, sizeof(PblMatrix), 0);
+    s_OffsetMatrixPool.Setup(PoolCount::kFLEffectOffsetMatrix, sizeof(PblMatrix), 0);
 }
 
 // SYNTHETIC: SWBF2 0x00433dd0

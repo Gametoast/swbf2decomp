@@ -3,6 +3,7 @@
 #include "LuaHelper.h"
 #include "LuaFL/include/lauxlib.h"
 #include "NetGame.h"
+#include "MemoryPoolCounts.h"
 
 #include "EventManager_LuaCallback.h"
 
@@ -152,7 +153,7 @@ void TimerEvent::Init()
     mElapsed.Init();
     RegisterUnregisterLuaCallback(mElapsed, DummyLuaCallback);
     RegisterRegisterLuaCallback<Timer, char, TimerMatches>(mElapsed, DummyLuaCallback);
-    Timer::sMemoryPool.Setup(64, Timer::sMemoryPool.GetSize(), Timer::sMemoryPool.GetGrow());
+    Timer::sMemoryPool.Setup(PoolCount::kTimer, Timer::sMemoryPool.GetSize(), Timer::sMemoryPool.GetGrow());
 }
 
 // TEMPLATE: SWBF2 0x0051c370

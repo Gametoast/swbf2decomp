@@ -67,6 +67,7 @@
 #include "TreeGrid.h"
 #include "PebbleFL/Common/PblHeap.h"
 #include "TeamManager.h"
+#include "MemoryPoolCounts.h"
 
 
 extern PblVector3 gVectorZero;
@@ -315,18 +316,18 @@ void AIUtil::Init()
     sUberMode = false;
     gSnipeSuitabilityDist = 70.0f;
 
-    UnitController::sMemoryPool.Setup(600, sizeof(UnitController), UnitController::sMemoryPool.GetGrow());
+    UnitController::sMemoryPool.Setup(PoolCount::kUnitController, sizeof(UnitController), UnitController::sMemoryPool.GetGrow());
     // the agent, navigator and goal pools serve every subclass: each item is the size of the largest one
     // (UnitDefendAgent is as large as UnitCTFOffenseAgent; DestroyGoal and FollowGoal as large as DefendGoal)
-    UnitAgent::sMemoryPool.Setup(600, sizeof(UnitCTFOffenseAgent), UnitAgent::sMemoryPool.GetGrow());
-    Navigator::sMemoryPool.Setup(600, sizeof(NavigatorFollowTarget), Navigator::sMemoryPool.GetGrow());
-    PathFollower::sMemoryPool.Setup(600, PathFollower::sMemoryPool.GetSize(),
+    UnitAgent::sMemoryPool.Setup(PoolCount::kUnitAgent, sizeof(UnitCTFOffenseAgent), UnitAgent::sMemoryPool.GetGrow());
+    Navigator::sMemoryPool.Setup(PoolCount::kNavigator, sizeof(NavigatorFollowTarget), Navigator::sMemoryPool.GetGrow());
+    PathFollower::sMemoryPool.Setup(PoolCount::kPathFollower, PathFollower::sMemoryPool.GetSize(),
                                     PathFollower::sMemoryPool.GetGrow());
-    ConnectivityGraphFollower::sMemoryPool.Setup(600, ConnectivityGraphFollower::sMemoryPool.GetSize(),
+    ConnectivityGraphFollower::sMemoryPool.Setup(PoolCount::kConnectivityGraphFollower, ConnectivityGraphFollower::sMemoryPool.GetSize(),
                                                  ConnectivityGraphFollower::sMemoryPool.GetGrow());
-    BaseHint::sMemoryPool.Setup(350, sizeof(BaseHint), BaseHint::sMemoryPool.GetGrow());
-    AI::AIGoal::sMemoryPool.Setup(20, sizeof(AI::DefendGoal), AI::AIGoal::sMemoryPool.GetGrow());
-    VisionManager::RayRequest::sMemoryPool.Setup(201, VisionManager::RayRequest::sMemoryPool.GetSize(),
+    BaseHint::sMemoryPool.Setup(PoolCount::kBaseHint, sizeof(BaseHint), BaseHint::sMemoryPool.GetGrow());
+    AI::AIGoal::sMemoryPool.Setup(PoolCount::kAIGoal, sizeof(AI::DefendGoal), AI::AIGoal::sMemoryPool.GetGrow());
+    VisionManager::RayRequest::sMemoryPool.Setup(PoolCount::kRayRequest, VisionManager::RayRequest::sMemoryPool.GetSize(),
                                                  VisionManager::RayRequest::sMemoryPool.GetGrow());
 
     AI::AIGoalManager::Create();

@@ -9,6 +9,7 @@
 #include "SoundFL/source/sndbus.h"
 #include "SoundFL/source/sndenginebase.h"
 #include "RedEngineFL/Memory/RedMemoryPool.h"
+#include "MemoryPoolCounts.h"
 
 // SYNTHETIC: SWBF2 0x00404350
 // `dynamic initializer for 'Music::sMemoryPool''
@@ -518,7 +519,7 @@ void Music::Load(PblFileChunk& chunk)
         }
         if (!Music::sMemoryPool.GetCount())
         {
-            Music::sMemoryPool.Setup(0x20, Music::sMemoryPool.GetSize(), Music::sMemoryPool.GetGrow());
+            Music::sMemoryPool.Setup(PoolCount::kMusic, Music::sMemoryPool.GetSize(), Music::sMemoryPool.GetGrow());
         }
         Music* pMusic = new Music;
         child = chunk.ReadNextChild();

@@ -18,6 +18,7 @@
 #include "PathManager.h"
 #include "PebbleFL/Common/PblHeap.h"
 #include "PebbleFL/Common/PblMatrix.h"
+#include "MemoryPoolCounts.h"
 
 
 extern int WORLD_EXTENTS;
@@ -416,8 +417,8 @@ void PathFinder::AddCost()
 // FUNCTION: SWBF2 0x00610a50
 void PathFinder::Initialize()
 {
-    PathNode::SetupMemoryPool(1024, PathNode::sMemoryPool.GetSize(), PathNode::sMemoryPool.GetGrow());
-    Obstacle::SetupMemoryPool(512, Obstacle::sMemoryPool.GetSize(), Obstacle::sMemoryPool.GetGrow());
+    PathNode::SetupMemoryPool(PoolCount::kPathNode, PathNode::sMemoryPool.GetSize(), PathNode::sMemoryPool.GetGrow());
+    Obstacle::SetupMemoryPool(PoolCount::kObstacle, Obstacle::sMemoryPool.GetSize(), Obstacle::sMemoryPool.GetGrow());
 
     sOpenList = new PblHeap<PathNode*, float>(512, HEAP_MAX_VALUE, 0);
     sSearchedPos = new ListPool<PblVector3, int>(100);

@@ -8,6 +8,7 @@
 #include "NetGame.h"
 #include "StringDB.h"
 #include <new>
+#include "MemoryPoolCounts.h"
 
 // GLOBAL: SWBF2 0x007b2990
 // __xmm@ffffffffffffffffffffffffffffffff
@@ -269,7 +270,7 @@ void Init()
     LuaHelper::Register("DeactivateRegion", Deactivate, 0);
     LuaHelper::Register("GetRegionName", Name, 0);
     LuaHelper::Register("IsCharacterInRegion", IsInside, 0);
-    ActiveRegion::sMemoryPool.Setup(64, ActiveRegion::sMemoryPool.GetSize(), ActiveRegion::sMemoryPool.GetGrow());
+    ActiveRegion::sMemoryPool.Setup(PoolCount::kActiveRegion, ActiveRegion::sMemoryPool.GetSize(), ActiveRegion::sMemoryPool.GetGrow());
 }
 
 }

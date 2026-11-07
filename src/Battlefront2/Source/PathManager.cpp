@@ -9,6 +9,7 @@
 #include "EventInfo.h"
 #include "PathFinder.h"
 #include "UnitController.h"
+#include "MemoryPoolCounts.h"
 
 
 
@@ -265,10 +266,10 @@ PathRequest::PathRequest(UnitController* pUnit, const PblVector3& vStart, const 
 // FUNCTION: SWBF2 0x006147d0
 void Initialize()
 {
-    PathRequest::sMemoryPool.Create(0x2ee, PathRequest::sMemoryPool.GetSize(),
+    PathRequest::sMemoryPool.Create(PoolCount::kPathRequest, PathRequest::sMemoryPool.GetSize(),
                                     PathRequest::sMemoryPool.GetGrow());
-    AIPath::sMemoryPool.Create(0x4b0, AIPath::sMemoryPool.GetSize(), AIPath::sMemoryPool.GetGrow());
-    AIPathNode::sMemoryPool.Create(0x2580, AIPathNode::sMemoryPool.GetSize(),
+    AIPath::sMemoryPool.Create(PoolCount::kAIPath, AIPath::sMemoryPool.GetSize(), AIPath::sMemoryPool.GetGrow());
+    AIPathNode::sMemoryPool.Create(PoolCount::kAIPathNode, AIPathNode::sMemoryPool.GetSize(),
                                    AIPathNode::sMemoryPool.GetGrow());
     sRequests = new PblList<PathRequest>();
     sCurRequest = 0;

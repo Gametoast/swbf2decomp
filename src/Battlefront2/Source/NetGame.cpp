@@ -141,6 +141,7 @@
 #include <limits.h>
 #include "EntityPropAnimated.h"
 #include "EntityWater.h"
+#include "MemoryPoolCounts.h"
 
 inline void NetEventVector::Set(const PblVector3& value)
 {
@@ -2188,7 +2189,7 @@ void NetGame::Create(bool bMission)
     PblJournal::Record(netVoiceMode, PJT_FULL);
 
     FrameUpdate::Create();
-    NetObj::sMemoryPool.Create(0x80, NetObj::sMemoryPool.GetSize(),
+    NetObj::sMemoryPool.Create(PoolCount::kNetObj, NetObj::sMemoryPool.GetSize(),
                                NetObj::sMemoryPool.GetGrow());
     NetObjStateMap::topFree = 0;
     EntityDoor::ResetDoorList();
@@ -2855,7 +2856,7 @@ void NetGame::CreateLast()
         return;
     }
 
-    NetObjState::sMemoryPool.Create(0x2080, NetObjState::sMemoryPool.GetSize(),
+    NetObjState::sMemoryPool.Create(PoolCount::kNetObjState, NetObjState::sMemoryPool.GetSize(),
                                     NetObjState::sMemoryPool.GetGrow());
 
     unsigned int uSoldiers = hostSoldierPool.GetCount();
