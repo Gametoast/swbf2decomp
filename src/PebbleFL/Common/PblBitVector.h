@@ -1,6 +1,7 @@
 #pragma once
 
 #include <string.h>
+#include "PebbleFL/Common/PblBits.h"
 
 template <int N>
 class PblBitVector
@@ -43,14 +44,16 @@ public:
             m_auiData[i] = 0xffffffff;
         }
     }
+    // a bit's mask within its word
+    static int WordBit(unsigned int uBit) { return 1 << (NUM_UINTS == 1 ? uBit : (uBit & 31)); }
     void ClearBit(unsigned int uBit)
     {
-        m_auiData[NUM_UINTS == 1 ? 0 : (uBit >> 5)] &= ~(1 << (NUM_UINTS == 1 ? uBit : (uBit & 31)));
+        m_auiData[NUM_UINTS == 1 ? 0 : (uBit >> 5)] &= ~WordBit(uBit);
     }
 
     void SetBit(unsigned int uBit)
     {
-        m_auiData[NUM_UINTS == 1 ? 0 : (uBit >> 5)] |= 1 << (NUM_UINTS == 1 ? uBit : (uBit & 31));
+        m_auiData[NUM_UINTS == 1 ? 0 : (uBit >> 5)] |= WordBit(uBit);
     }
     void InvertAll()
     {
@@ -60,7 +63,7 @@ public:
         }
         if (N % 32)
         {
-            m_auiData[N / 32] ^= (1u << (N % 32)) - 1;
+            m_auiData[N / 32] ^= LowBitsMaskU(N % 32);
         }
     }
     void And(const PblBitVector& rOther)
@@ -83,7 +86,7 @@ public:
     }
     bool IsBitSet(unsigned int uBit) const
     {
-        return (m_auiData[NUM_UINTS == 1 ? 0 : (uBit >> 5)] & (1 << (NUM_UINTS == 1 ? uBit : (uBit & 31)))) != 0;
+        return (m_auiData[NUM_UINTS == 1 ? 0 : (uBit >> 5)] & WordBit(uBit)) != 0;
     }
 
     unsigned int m_auiData[NUM_UINTS];

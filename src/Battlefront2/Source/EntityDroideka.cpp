@@ -60,6 +60,10 @@
 #include "PebbleFL/Common/PblHandle.h"
 #include "PebbleFL/Common/PblMatrix.h"
 
+// mFootState: a foot on the ground, and its hydraulic sound playing
+static inline unsigned int FootBit(unsigned int uiFoot) { return 1 << uiFoot; }
+static inline unsigned int HydraulicBit(unsigned int uiFoot) { return 1 << (uiFoot + 8); }
+
 // GLOBAL: SWBF2 0x007b2630
 // __xmm@00000000000000003f80000000000000
 
@@ -2250,7 +2254,7 @@ float EntityDroideka::GetSoundRadius() const
     unsigned int uNumFeet = mClass->mNumFeet;
     for (unsigned int i = 0; i < uNumFeet; ++i)
     {
-        if (mFootState & (1 << i))
+        if (mFootState & FootBit(i))
         {
             float fMute = mClass->mFootstepSounds[i].GetMuteDistance();
             if (fMute > fFeetRadius)
@@ -2520,7 +2524,7 @@ void EntityDroideka::DoFootImpactEffects()
     {
         float fFoot = fHeight[i];
         bool bLanded = fFoot < 0.48f && mLastFootHeight[i] > 0.48f;
-        unsigned int uHydraulicBit = 1 << (i + 8);
+        unsigned int uHydraulicBit = HydraulicBit(i);
         if (fFoot > mLastFootHeight[i])
         {
             if (fFoot > mClass->mHydraulicSoundHeight && !(mFootState & uHydraulicBit))
@@ -2541,11 +2545,11 @@ void EntityDroideka::DoFootImpactEffects()
                 ((FoleyFXWalker*)pFoley)->mFootstep[i].Play(&mMatrix.GetTranslation(), 0, false, true);
             }
             mClass->mFootstepSounds[i].Play(&mMatrix.GetTranslation(), 0, false, true);
-            mFootState |= 1 << i;
+            mFootState |= FootBit(i);
         }
         else
         {
-            mFootState &= ~(1 << i);
+            mFootState &= ~FootBit(i);
         }
     }
 }
@@ -3503,7 +3507,7 @@ bool EntityDroideka::Update(float fDeltaTime)
             for (CommandPostItor itor = CommandPostManager::Instance()->GetItor(); itor; ++itor)
             {
                 CommandPost* pPost = *itor;
-                if (!(pPost->GetHoldPlayerMask() & (1 << mCharacter->mPlayerId)))
+                if (!(pPost->GetHoldPlayerMask() & CommandPost::LowPlayerBit(mCharacter->mPlayerId)))
                 {
                     continue;
                 }

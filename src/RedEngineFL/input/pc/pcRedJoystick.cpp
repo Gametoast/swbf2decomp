@@ -184,7 +184,7 @@ void RedJoystick::Update(float fDeltaTime)
     {
         if (pc_state.rgbButtons[i] & 0x80)
         {
-            m_uiDownButtons |= 1 << i;
+            m_uiDownButtons |= RedJoystick::LowButtonBit(i);
         }
     }
 
@@ -193,14 +193,14 @@ void RedJoystick::Update(float fDeltaTime)
         int iBit = 32 + i * 4;
         switch (pc_state.rgdwPOV[i])
         {
-        case 0:     m_uiDownButtons |= (unsigned __int64)1 << iBit; break;
-        case 4500:  m_uiDownButtons |= ((unsigned __int64)1 << iBit) | ((unsigned __int64)1 << (iBit + 1)); break;
-        case 9000:  m_uiDownButtons |= (unsigned __int64)1 << (iBit + 1); break;
-        case 13500: m_uiDownButtons |= ((unsigned __int64)1 << (iBit + 1)) | ((unsigned __int64)1 << (iBit + 2)); break;
-        case 18000: m_uiDownButtons |= (unsigned __int64)1 << (iBit + 2); break;
-        case 22500: m_uiDownButtons |= ((unsigned __int64)1 << (iBit + 2)) | ((unsigned __int64)1 << (iBit + 3)); break;
-        case 27000: m_uiDownButtons |= (unsigned __int64)1 << (iBit + 3); break;
-        case 31500: m_uiDownButtons |= ((unsigned __int64)1 << iBit) | ((unsigned __int64)1 << (iBit + 3)); break;
+        case 0:     m_uiDownButtons |= RedJoystick::ButtonBit(iBit); break;
+        case 4500:  m_uiDownButtons |= RedJoystick::ButtonBit(iBit) | RedJoystick::ButtonBit(iBit + 1); break;
+        case 9000:  m_uiDownButtons |= RedJoystick::ButtonBit(iBit + 1); break;
+        case 13500: m_uiDownButtons |= RedJoystick::ButtonBit(iBit + 1) | RedJoystick::ButtonBit(iBit + 2); break;
+        case 18000: m_uiDownButtons |= RedJoystick::ButtonBit(iBit + 2); break;
+        case 22500: m_uiDownButtons |= RedJoystick::ButtonBit(iBit + 2) | RedJoystick::ButtonBit(iBit + 3); break;
+        case 27000: m_uiDownButtons |= RedJoystick::ButtonBit(iBit + 3); break;
+        case 31500: m_uiDownButtons |= RedJoystick::ButtonBit(iBit) | RedJoystick::ButtonBit(iBit + 3); break;
         }
     }
 

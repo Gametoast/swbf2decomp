@@ -1248,8 +1248,8 @@ void EntityHoverClass::SetProperty(unsigned int uProperty, const char* pszValue)
             int iMaskId = mCollisionModel.GetMaskId(0x29173102 /* "CollisionMesh" */);
             if (iMaskId >= 0)
             {
-                sSoftCollisionMask |= 1 << iMaskId;
-                sOrdnanceCollisionMask |= 1 << iMaskId;
+                sSoftCollisionMask |= CollisionMask::BodyBit(iMaskId);
+                sOrdnanceCollisionMask |= CollisionMask::BodyBit(iMaskId);
             }
             PblBox box = pMesh->GetWorldspaceAABB(gMatrixIdentity);
             mBarrierX = box._vMax.x - box._vMin.x;
@@ -1290,11 +1290,11 @@ void EntityHoverClass::SetProperty(unsigned int uProperty, const char* pszValue)
             CollisionMask ordnanceMask = mCollisionModel.GetCollisionMask(COLL_ORDNANCE);
             for (int i = 0; i < 32; ++i)
             {
-                if (sSoftCollisionMask & (1u << i))
+                if (sSoftCollisionMask & CollisionMask::BodyBit(i))
                 {
                     softMask.SetId(i);
                 }
-                if (sOrdnanceCollisionMask & (1u << i))
+                if (sOrdnanceCollisionMask & CollisionMask::BodyBit(i))
                 {
                     ordnanceMask.SetId(i);
                 }
@@ -1309,7 +1309,7 @@ void EntityHoverClass::SetProperty(unsigned int uProperty, const char* pszValue)
         int iMaskId = mCollisionModel.GetMaskId(PblHash(pszValue));
         if (iMaskId >= 0)
         {
-            sSoftCollisionMask |= 1 << iMaskId;
+            sSoftCollisionMask |= CollisionMask::BodyBit(iMaskId);
             mCollisionModel.SetCollisionMask(COLL_SOFT, CollisionMask(sSoftCollisionMask));
         }
         break;
@@ -1319,7 +1319,7 @@ void EntityHoverClass::SetProperty(unsigned int uProperty, const char* pszValue)
         int iMaskId = mCollisionModel.GetMaskId(PblHash(pszValue));
         if (iMaskId >= 0)
         {
-            sOrdnanceCollisionMask |= 1 << iMaskId;
+            sOrdnanceCollisionMask |= CollisionMask::BodyBit(iMaskId);
             mCollisionModel.SetCollisionMask(COLL_ORDNANCE, CollisionMask(sOrdnanceCollisionMask));
         }
         break;

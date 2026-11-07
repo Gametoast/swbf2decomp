@@ -550,7 +550,7 @@ void RenderFarObjects()
             {
                 continue;
             }
-            if (p->_pLodData->mLowRezFlags & 2)
+            if (p->_pLodData->mLowRezFlags & RedLodData::CROSSFADE_LOWREZ)
             {
                 if (!(fFadeStart > fDist))
                 {

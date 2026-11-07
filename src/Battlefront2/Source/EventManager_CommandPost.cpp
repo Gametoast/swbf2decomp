@@ -161,7 +161,7 @@ bool LuaPushItem<unsigned __int64>(unsigned __int64& mask)
     int iCount = 0;
     for (int i = 0; i < 64; ++i)
     {
-        if (mask & ((unsigned __int64)1 << i))
+        if (mask & CommandPost::PlayerBit(i))
         {
             lua_pushnumber(LuaHelper::mState, (lua_Number)++iCount);
             lua_pushnumber(LuaHelper::mState, (lua_Number)i);

@@ -118,7 +118,7 @@ unsigned short FAR *work;
     curr = root;
     drop = 0;
     low = (unsigned)(-1);
-    used = 1U << root;
+    used = ZPOW2U(root);
     mask = used - 1;
 
     if (type == LENS && used >= ENOUGH - MAXD)
@@ -140,14 +140,14 @@ unsigned short FAR *work;
             this.val = 0;
         }
 
-        incr = 1U << (len - drop);
-        fill = 1U << curr;
+        incr = ZPOW2U(len - drop);
+        fill = ZPOW2U(curr);
         do {
             fill -= incr;
             next[(huff >> drop) + fill] = this;
         } while (fill != 0);
 
-        incr = 1U << (len - 1);
+        incr = ZPOW2U(len - 1);
         while (huff & incr)
             incr >>= 1;
         if (incr != 0) {
@@ -168,10 +168,10 @@ unsigned short FAR *work;
             if (drop == 0)
                 drop = root;
 
-            next += 1U << curr;
+            next += ZPOW2U(curr);
 
             curr = len - drop;
-            left = (int)(1 << curr);
+            left = (int)ZPOW2(curr);
             while (curr + drop < max) {
                 left -= count[curr + drop];
                 if (left <= 0) break;
@@ -179,7 +179,7 @@ unsigned short FAR *work;
                 left <<= 1;
             }
 
-            used += 1U << curr;
+            used += ZPOW2U(curr);
             if (type == LENS && used >= ENOUGH - MAXD)
                 return 1;
 
@@ -204,7 +204,7 @@ unsigned short FAR *work;
 
         next[huff >> drop] = this;
 
-        incr = 1U << (len - 1);
+        incr = ZPOW2U(len - 1);
         while (huff & incr)
             incr >>= 1;
         if (incr != 0) {

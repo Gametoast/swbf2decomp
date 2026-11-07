@@ -23,12 +23,12 @@ typedef struct GCState {
   global_State *g;
 } GCState;
 
-#define setbit(x,b)	((x) |= (1<<(b)))
-#define resetbit(x,b)	((x) &= cast(lu_byte, ~(1<<(b))))
-#define testbit(x,b)	((x) & (1<<(b)))
+#define setbit(x,b)	((x) |= LUA_BIT(b))
+#define resetbit(x,b)	((x) &= cast(lu_byte, ~LUA_BIT(b)))
+#define testbit(x,b)	((x) & LUA_BIT(b))
 
 #define unmark(x)	resetbit((x)->gch.marked, 0)
-#define ismarked(x)	((x)->gch.marked & ((1<<4)|1))
+#define ismarked(x)	((x)->gch.marked & (LUA_BIT(4)|1))
 
 #define stringmark(s)	setbit((s)->tsv.marked, 0)
 
@@ -37,8 +37,8 @@ typedef struct GCState {
 
 #define KEYWEAKBIT    1
 #define VALUEWEAKBIT  2
-#define KEYWEAK         (1<<KEYWEAKBIT)
-#define VALUEWEAK       (1<<VALUEWEAKBIT)
+#define KEYWEAK         LUA_BIT(KEYWEAKBIT)
+#define VALUEWEAK       LUA_BIT(VALUEWEAKBIT)
 
 #define markobject(st,o) { checkconsistency(o); \
   if (iscollectable(o) && !ismarked(gcvalue(o))) reallymarkobject(st,gcvalue(o)); }

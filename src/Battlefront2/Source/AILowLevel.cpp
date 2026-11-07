@@ -659,8 +659,8 @@ void AILowLevel::SetTarget(const GameObject* pTarget)
             int iMyTeam = GetTeam(pOwner->mOwner->GetGameObject());
             int iAffiliation = Team::sTeams[iMyTeam]->GetAffiliation(iTargetTeam);
             const WeaponClass* pClass = pWpn->mClass;
-            if (!(pClass->mTargetSides & (1 << (iAffiliation + 1)))
-                || !(pClass->mAITargetTypes & (1 << GetHealthType(pTarget))))
+            if (!(pClass->mTargetSides & TargetInfo::SideBit(iAffiliation))
+                || !(pClass->mAITargetTypes & TargetInfo::TypeBit(GetHealthType(pTarget))))
             {
                 pTarget = 0;
             }

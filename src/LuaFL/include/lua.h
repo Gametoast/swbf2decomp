@@ -200,10 +200,15 @@ LUA_API int lua_pushupvalues (lua_State *L);
 #define LUA_HOOKCOUNT	3
 #define LUA_HOOKTAILRET 4
 
-#define LUA_MASKCALL	(1 << LUA_HOOKCALL)
-#define LUA_MASKRET	(1 << LUA_HOOKRET)
-#define LUA_MASKLINE	(1 << LUA_HOOKLINE)
-#define LUA_MASKCOUNT	(1 << LUA_HOOKCOUNT)
+/* shifts with a name */
+#define LUA_BIT(n)      (1 << (n))
+#define LUA_UBIT(n)     (1u << (n))
+#define LUA_LOWBITS(n)  ((1 << (n)) - 1)
+
+#define LUA_MASKCALL	LUA_BIT(LUA_HOOKCALL)
+#define LUA_MASKRET	LUA_BIT(LUA_HOOKRET)
+#define LUA_MASKLINE	LUA_BIT(LUA_HOOKLINE)
+#define LUA_MASKCOUNT	LUA_BIT(LUA_HOOKCOUNT)
 
 typedef struct lua_Debug lua_Debug;
 

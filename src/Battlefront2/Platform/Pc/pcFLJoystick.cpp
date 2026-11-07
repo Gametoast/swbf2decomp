@@ -676,7 +676,7 @@ void RawControllerInputs::ReadLatest(float fDeltaTime)
         const unsigned __int64 uiButtons = _redJoystick[iPort]->m_uiDownButtons;
         for (unsigned int i = 0; i < 48; i++)
         {
-            if (uiButtons & ((unsigned __int64)1 << i))
+            if (uiButtons & RedJoystick::ButtonBit(i))
             {
                 bAnyInput = true;
                 mRawInputFloat[iPort][i] = 1.0f;
@@ -717,7 +717,7 @@ void RawControllerInputs::ReadLatest(float fDeltaTime)
         const unsigned int uiMouseButtons = _redMouse->m_uiDownButtons;
         for (int i = 0; i < 8; i++)
         {
-            if (uiMouseButtons & (1 << i))
+            if (uiMouseButtons & RedMouse::ButtonBit(i))
             {
                 mRawInputFloat[0][66 + i] = 1.0f;
                 bAnyInput = true;

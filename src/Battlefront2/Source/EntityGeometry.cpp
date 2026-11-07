@@ -984,7 +984,7 @@ bool EntityGeometryClass::AddBuildingCollision(const char* pszValue)
         {
             return false;
         }
-        sStaticCollisionMask |= 1 << iMaskId;
+        sStaticCollisionMask |= CollisionMask::BodyBit(iMaskId);
         mCollisionModel.SetCollisionMask(COLL_STATIC, CollisionMask(sStaticCollisionMask));
     }
     else
@@ -1006,7 +1006,7 @@ bool EntityGeometryClass::AddVehicleCollision(const char* pszValue)
         {
             return false;
         }
-        sRigidCollisionMask |= 1 << iMaskId;
+        sRigidCollisionMask |= CollisionMask::BodyBit(iMaskId);
         mCollisionModel.SetCollisionMask(COLL_RIGID, CollisionMask(sRigidCollisionMask));
     }
     else
@@ -1028,7 +1028,7 @@ bool EntityGeometryClass::AddTerrainCollision(const char* pszValue)
         {
             return false;
         }
-        sTerrainCollisionMask |= 1 << iMaskId;
+        sTerrainCollisionMask |= CollisionMask::BodyBit(iMaskId);
         mCollisionModel.SetCollisionMask(COLL_TERRAIN, CollisionMask(sTerrainCollisionMask));
     }
     else
@@ -1050,7 +1050,7 @@ bool EntityGeometryClass::AddOrdnanceCollision(const char* pszValue)
         {
             return false;
         }
-        sOrdnanceCollisionMask |= 1 << iMaskId;
+        sOrdnanceCollisionMask |= CollisionMask::BodyBit(iMaskId);
         mCollisionModel.SetCollisionMask(COLL_ORDNANCE, CollisionMask(sOrdnanceCollisionMask));
     }
     else
@@ -1072,7 +1072,7 @@ bool EntityGeometryClass::AddSoldierCollision(const char* pszValue)
         {
             return false;
         }
-        sSoftCollisionMask |= 1 << iMaskId;
+        sSoftCollisionMask |= CollisionMask::BodyBit(iMaskId);
         mCollisionModel.SetCollisionMask(COLL_SOFT, CollisionMask(sSoftCollisionMask));
     }
     else
@@ -1094,7 +1094,7 @@ bool EntityGeometryClass::AddTargetableCollision(const char* pszValue)
         {
             return false;
         }
-        sTargetableCollisionMask |= 1 << iMaskId;
+        sTargetableCollisionMask |= CollisionMask::BodyBit(iMaskId);
         mCollisionModel.SetCollisionMask(COLL_TARGETABLE, CollisionMask(sTargetableCollisionMask));
     }
     else

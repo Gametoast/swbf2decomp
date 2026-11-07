@@ -13,6 +13,9 @@ class GameObjectClass;
 class Team
 {
 public:
+    // a team's bit in a team mask
+    static unsigned int Bit(int iTeam) { return 1u << iTeam; }
+
 
     enum Side
     {

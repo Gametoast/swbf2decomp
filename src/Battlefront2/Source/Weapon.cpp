@@ -191,9 +191,9 @@ WeaponClass::WeaponClass(unsigned int uHash)
     mLockOnRange = 0.0f;
     mLockOnAngle = 0.0f;
     mLockOffAngle = 0.0f;
-    mTargetSides = 1;
-    mTargetTypes = -97;
-    mAITargetTypes = -97;
+    mTargetSides = TargetInfo::SIDE_ENEMY;
+    mTargetTypes = ~(TargetInfo::TYPE_BUILDING_DEAD | TargetInfo::TYPE_BUILDING_UNBUILT);
+    mAITargetTypes = ~(TargetInfo::TYPE_BUILDING_DEAD | TargetInfo::TYPE_BUILDING_UNBUILT);
     mRoundsPerShot = 1.0f;
     mHeatPerShot = 0.0f;
     mHeatRecoverRate = 0.0f;
@@ -446,11 +446,11 @@ void WeaponClass::SetProperty(unsigned int uProperty, const char* pszValue)
     case 0xFAE6054D: /* "TargetPerson" */
         if (atoi(pszValue))
         {
-            mTargetTypes |= 0x01;
+            mTargetTypes |= TargetInfo::TYPE_PERSON;
         }
         else
         {
-            mTargetTypes &= ~0x01;
+            mTargetTypes &= ~TargetInfo::TYPE_PERSON;
         }
         break;
     case 0xFAF37909: /* "AIBubbleCircle" */
@@ -515,11 +515,11 @@ void WeaponClass::SetProperty(unsigned int uProperty, const char* pszValue)
     case 0xE10D2224: /* "TargetEnemy" */
         if (atoi(pszValue))
         {
-            mTargetSides |= 0x01;
+            mTargetSides |= TargetInfo::SIDE_ENEMY;
         }
         else
         {
-            mTargetSides &= ~0x01;
+            mTargetSides &= ~TargetInfo::SIDE_ENEMY;
         }
         break;
     case 0xD211149D: /* "RollSound" */
@@ -528,11 +528,11 @@ void WeaponClass::SetProperty(unsigned int uProperty, const char* pszValue)
     case 0xD6EE0E46: /* "AITargetAnimal" */
         if (atoi(pszValue))
         {
-            mAITargetTypes |= 0x02;
+            mAITargetTypes |= TargetInfo::TYPE_ANIMAL;
         }
         else
         {
-            mAITargetTypes &= ~0x02;
+            mAITargetTypes &= ~TargetInfo::TYPE_ANIMAL;
         }
         break;
     case 0xD8468816: /* "ChargedSound" */
@@ -541,11 +541,11 @@ void WeaponClass::SetProperty(unsigned int uProperty, const char* pszValue)
     case 0xE4AEFAB9: /* "TargetBuildingUnbuilt" */
         if (atoi(pszValue))
         {
-            mTargetTypes |= 0x40;
+            mTargetTypes |= TargetInfo::TYPE_BUILDING_UNBUILT;
         }
         else
         {
-            mTargetTypes &= ~0x40;
+            mTargetTypes &= ~TargetInfo::TYPE_BUILDING_UNBUILT;
         }
         break;
     case 0xE60CD1C3: /* "AIBubbleSizeMultiplier" */
@@ -620,21 +620,21 @@ void WeaponClass::SetProperty(unsigned int uProperty, const char* pszValue)
     case 0xCA7F5887: /* "TargetFriendly" */
         if (atoi(pszValue))
         {
-            mTargetSides |= 0x04;
+            mTargetSides |= TargetInfo::SIDE_FRIENDLY;
         }
         else
         {
-            mTargetSides &= ~0x04;
+            mTargetSides &= ~TargetInfo::SIDE_FRIENDLY;
         }
         break;
     case 0xC4409FF0: /* "TargetBuilding" */
         if (atoi(pszValue))
         {
-            mTargetTypes |= 0x10;
+            mTargetTypes |= TargetInfo::TYPE_BUILDING;
         }
         else
         {
-            mTargetTypes &= ~0x10;
+            mTargetTypes &= ~TargetInfo::TYPE_BUILDING;
         }
         break;
     case 0xB7C581AD: /* "RecoilDelayHeavy" */
@@ -769,11 +769,11 @@ void WeaponClass::SetProperty(unsigned int uProperty, const char* pszValue)
     case 0x8F2A8613: /* "TargetMine" */
         if (atoi(pszValue))
         {
-            mTargetTypes |= 0x80;
+            mTargetTypes |= TargetInfo::TYPE_MINE;
         }
         else
         {
-            mTargetTypes &= ~0x80;
+            mTargetTypes &= ~TargetInfo::TYPE_MINE;
         }
         break;
     case 0x903574D1: /* "RecoilLengthLight" */
@@ -788,11 +788,11 @@ void WeaponClass::SetProperty(unsigned int uProperty, const char* pszValue)
     case 0x9BAD5828: /* "AITargetDroid" */
         if (atoi(pszValue))
         {
-            mAITargetTypes |= 0x04;
+            mAITargetTypes |= TargetInfo::TYPE_DROID;
         }
         else
         {
-            mAITargetTypes &= ~0x04;
+            mAITargetTypes &= ~TargetInfo::TYPE_DROID;
         }
         break;
     case 0x9FC1A1AD: /* "ReloadTime" */
@@ -813,11 +813,11 @@ void WeaponClass::SetProperty(unsigned int uProperty, const char* pszValue)
     case 0x6B7F9189: /* "AITargetMine" */
         if (atoi(pszValue))
         {
-            mAITargetTypes |= 0x80;
+            mAITargetTypes |= TargetInfo::TYPE_MINE;
         }
         else
         {
-            mAITargetTypes &= ~0x80;
+            mAITargetTypes &= ~TargetInfo::TYPE_MINE;
         }
         break;
     case 0x6667A8E0: /* "MedalsTypeToUnlock" */
@@ -836,21 +836,21 @@ void WeaponClass::SetProperty(unsigned int uProperty, const char* pszValue)
     case 0x64667773: /* "AITargetBuildingUnbuilt" */
         if (atoi(pszValue))
         {
-            mAITargetTypes |= 0x40;
+            mAITargetTypes |= TargetInfo::TYPE_BUILDING_UNBUILT;
         }
         else
         {
-            mAITargetTypes &= ~0x40;
+            mAITargetTypes &= ~TargetInfo::TYPE_BUILDING_UNBUILT;
         }
         break;
     case 0x60329904: /* "AITargetBuildingDead" */
         if (atoi(pszValue))
         {
-            mAITargetTypes |= 0x20;
+            mAITargetTypes |= TargetInfo::TYPE_BUILDING_DEAD;
         }
         else
         {
-            mAITargetTypes &= ~0x20;
+            mAITargetTypes &= ~TargetInfo::TYPE_BUILDING_DEAD;
         }
         break;
     case 0x60DDBF8E: /* "ChargeRateHeavy" */
@@ -877,21 +877,21 @@ void WeaponClass::SetProperty(unsigned int uProperty, const char* pszValue)
     case 0x72B4743E: /* "AITargetVehicle" */
         if (atoi(pszValue))
         {
-            mAITargetTypes |= 0x08;
+            mAITargetTypes |= TargetInfo::TYPE_VEHICLE;
         }
         else
         {
-            mAITargetTypes &= ~0x08;
+            mAITargetTypes &= ~TargetInfo::TYPE_VEHICLE;
         }
         break;
     case 0x75C58748: /* "TargetAnimal" */
         if (atoi(pszValue))
         {
-            mTargetTypes |= 0x02;
+            mTargetTypes |= TargetInfo::TYPE_ANIMAL;
         }
         else
         {
-            mTargetTypes &= ~0x02;
+            mTargetTypes &= ~TargetInfo::TYPE_ANIMAL;
         }
         break;
     case 0x5FAB7F1D: /* "AutoTurnScreenDist" */
@@ -940,11 +940,11 @@ void WeaponClass::SetProperty(unsigned int uProperty, const char* pszValue)
     case 0x48E05B6F: /* "AITargetPerson" */
         if (atoi(pszValue))
         {
-            mAITargetTypes |= 0x01;
+            mAITargetTypes |= TargetInfo::TYPE_PERSON;
         }
         else
         {
-            mAITargetTypes &= ~0x01;
+            mAITargetTypes &= ~TargetInfo::TYPE_PERSON;
         }
         break;
     case 0x4B92A06A: /* "RecoilLengthHeavy" */
@@ -978,21 +978,21 @@ void WeaponClass::SetProperty(unsigned int uProperty, const char* pszValue)
     case 0x5F0AE167: /* "TargetNeutral" */
         if (atoi(pszValue))
         {
-            mTargetSides |= 0x02;
+            mTargetSides |= TargetInfo::SIDE_NEUTRAL;
         }
         else
         {
-            mTargetSides &= ~0x02;
+            mTargetSides &= ~TargetInfo::SIDE_NEUTRAL;
         }
         break;
     case 0x3F76AE9E: /* "TargetBuildingDead" */
         if (atoi(pszValue))
         {
-            mTargetTypes |= 0x20;
+            mTargetTypes |= TargetInfo::TYPE_BUILDING_DEAD;
         }
         else
         {
-            mTargetTypes &= ~0x20;
+            mTargetTypes &= ~TargetInfo::TYPE_BUILDING_DEAD;
         }
         break;
     case 0x2A96E8B4: /* "ZoomMax" */
@@ -1012,11 +1012,11 @@ void WeaponClass::SetProperty(unsigned int uProperty, const char* pszValue)
     case 0x281B9338: /* "TargetVehicle" */
         if (atoi(pszValue))
         {
-            mTargetTypes |= 0x08;
+            mTargetTypes |= TargetInfo::TYPE_VEHICLE;
         }
         else
         {
-            mTargetTypes &= ~0x08;
+            mTargetTypes &= ~TargetInfo::TYPE_VEHICLE;
         }
         break;
     case 0x20E1E379: /* "FireEmptySound" */
@@ -1052,11 +1052,11 @@ void WeaponClass::SetProperty(unsigned int uProperty, const char* pszValue)
     case 0x19007F1A: /* "TargetDroid" */
         if (atoi(pszValue))
         {
-            mTargetTypes |= 0x04;
+            mTargetTypes |= TargetInfo::TYPE_DROID;
         }
         else
         {
-            mTargetTypes &= ~0x04;
+            mTargetTypes &= ~TargetInfo::TYPE_DROID;
         }
         break;
     case 0x17668629: /* "EnergyDrain" */
@@ -1100,11 +1100,11 @@ void WeaponClass::SetProperty(unsigned int uProperty, const char* pszValue)
     case 0x08F174A6: /* "AITargetBuilding" */
         if (atoi(pszValue))
         {
-            mAITargetTypes |= 0x10;
+            mAITargetTypes |= TargetInfo::TYPE_BUILDING;
         }
         else
         {
-            mAITargetTypes &= ~0x10;
+            mAITargetTypes &= ~TargetInfo::TYPE_BUILDING;
         }
         break;
     case 0x01A333E4: /* "DisplayRefire" */

@@ -423,6 +423,20 @@ public:
         flags_rightFootInWater = 64,
         flags_fallTimer = 128
     };
+    enum SoundState
+    {
+        soundState_leftDown = 1,
+        soundState_rightDown = 2,
+        soundState_leftStomp = 4,
+        soundState_rightStomp = 8,
+        soundState_bigBlast = 16,
+        soundState_land = 32,
+        soundState_jump = 64,
+        soundState_roll = 128,
+        soundState_resetMask = ~(soundState_land | soundState_jump | soundState_roll),
+        soundState_acklay1 = 256,    // the acklay's six feet: a bit each, up to soundState_acklay6
+        soundState_acklay6 = 8192
+    };
     enum
     {
         INPUTLOCK_MOVEMENT = 1,

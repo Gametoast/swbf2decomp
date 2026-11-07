@@ -1,6 +1,7 @@
 #pragma once
 
 #include "basearray.h"
+#include "PebbleFL/Common/PblBits.h"
 #include "types.h"
 
 namespace util
@@ -155,7 +156,7 @@ public:
         }
         else if (bForce && iSize < this->_size / 2 - 1)
         {
-            if (!this->Reserve_(1 << Int_::ilog(iSize), bForce))
+            if (!this->Reserve_(PowerOf2(Int_::ilog(iSize)), bForce))
             {
                 return false;
             }
@@ -163,7 +164,7 @@ public:
         else if (iSize > this->_size)
         {
             const int iMinGranule = 4;
-            int iGranule = Max_(1 << (Int_::ilog(iSize) - 2), iMinGranule);
+            int iGranule = Max_(PowerOf2(Int_::ilog(iSize) - 2), iMinGranule);
 
             int iRounded = iSize;
             if (iSize % iGranule != 0)

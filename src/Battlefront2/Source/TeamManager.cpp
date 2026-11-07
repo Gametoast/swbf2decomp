@@ -1,6 +1,7 @@
 #include "PebbleFL/Common/PblMath.h"
 #include "TeamManager.h"
 #include "GameObject.h"
+#include "Controllable.h"
 #include "NetGame.h"
 #include "Team.h"
 #include "AIUtil.h"
@@ -101,7 +102,7 @@ int sGetObjectsInRange(const PblVector3& vPos, float fRange, GameObject** const 
     for (int iTeam = 0; iTeam < 8; ++iTeam)
     {
         const int iAffil = pTeam ? pTeam->GetAffiliation(iTeam) : 0;
-        if (!(iAffilMask & (1 << (iAffil + 1))))
+        if (!(iAffilMask & TargetInfo::SideBit(iAffil)))
         {
             continue;
         }
@@ -117,7 +118,7 @@ int sGetObjectsInRange(const PblVector3& vPos, float fRange, GameObject** const 
                 continue;
             }
             const int iObjAffil = pTeam ? pTeam->GetAffiliation(pObject->mPerceivedTeam) : 0;
-            if (iObjAffil > iAffil && !(iAffilMask & (1 << (iObjAffil + 1))))
+            if (iObjAffil > iAffil && !(iAffilMask & TargetInfo::SideBit(iObjAffil)))
             {
                 continue;
             }

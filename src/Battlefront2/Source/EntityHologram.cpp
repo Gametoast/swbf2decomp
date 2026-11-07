@@ -1,4 +1,5 @@
 #include <d3dx9math.h>
+#include "PebbleFL/Common/PblBits.h"
 #include <math.h>
 #include <stdio.h>
 #include <string.h>
@@ -240,7 +241,7 @@ EntityHologram::EntityHologram(EntityHologramClass* pClass, const EntityDesc& de
             m_apOmniLight[0]->SetColor(ToColorValue(RedColor::BLACK));
             for (unsigned int i = 1; i < CameraManager::Instance()->GetNumCameras(); ++i)
             {
-                m_apOmniLight[0]->m_uiHideInView |= 1 << i;
+                m_apOmniLight[0]->m_uiHideInView |= ViewBit(i);
                 m_apOmniLight[i] = new RedOmniLight(m_WorldMatrix.GetTranslation(),
                                                     pClass->m_fLightRadius,
                                                     ToColorValue(RedColor::BLACK));
@@ -248,7 +249,7 @@ EntityHologram::EntityHologram(EntityHologramClass* pClass, const EntityDesc& de
                 {
                     if (j != i)
                     {
-                        m_apOmniLight[i]->m_uiHideInView |= 1 << j;
+                        m_apOmniLight[i]->m_uiHideInView |= ViewBit(j);
                     }
                 }
             }
@@ -418,7 +419,7 @@ bool EntityHologram::Update(float fDeltaTime)
         unsigned int uView = pCameraManager->m_hView[0];
         if (uView < 1)
         {
-            unsigned char ucBit = (unsigned char)(1 << uView);
+            unsigned char ucBit = (unsigned char)ViewBit(uView);
             if (!(pCameraManager->m_uiVisibleIconMask[0] & 1))
             {
                 m_uiHideInView |= ucBit;
@@ -639,7 +640,7 @@ void EntityHologram::Render(unsigned char ucViewport, float fDist, unsigned int 
 {
     const EntityHologramClass* pClass = (const EntityHologramClass*)mEntityClass;
     unsigned int uiViewport = FLRenderer::GetCurrentViewport();
-    if (m_uiHideInView & (1 << uiViewport))
+    if (m_uiHideInView & ViewBit(uiViewport))
     {
         return;
     }

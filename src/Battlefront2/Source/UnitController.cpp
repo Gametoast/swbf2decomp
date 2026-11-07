@@ -789,7 +789,7 @@ void UnitController::UseBuffs()
         }
         if (pClass->mOrdnanceClass &&
             pClass->mOrdnanceClass->IsRtti(OrdnanceEmitterClass::rttiHashOrdnanceEmitterClass) &&
-            (pClass->mTargetSides & 4) && (pClass->mAITargetTypes & 1))
+            (pClass->mTargetSides & TargetInfo::SIDE_FRIENDLY) && (pClass->mAITargetTypes & TargetInfo::TYPE_PERSON))
         {
             GameObject* apUnits[3];
             Controllable* pOwner = mOwner;
@@ -843,7 +843,7 @@ void UnitController::UseAutoTurrets()
         {
             EntityClass* pDispense = ((const WeaponDispenserClass*)pClass)->mDispenseClass;
             if (pDispense && pDispense->IsRtti(EntityBuildingArmedClass::GetRtti()) &&
-                (pClass->mAITargetTypes & 1))
+                (pClass->mAITargetTypes & TargetInfo::TYPE_PERSON))
             {
                 AILowLevel* pLowLevel = &mLowLevel;
                 pLowLevel->SetNextWeapon(i);

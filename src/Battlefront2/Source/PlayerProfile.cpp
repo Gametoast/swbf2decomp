@@ -31,6 +31,9 @@
 #include "NetMatch.h"
 #include "RedEngineFL/input/RedJoystick.h"
 
+// an unlockable's bit in mUnlockableState
+static inline unsigned int UnlockableBit(int iIndex) { return 1u << iIndex; }
+
 BOOL CALLBACK EnumObjectsCallback(DIDEVICEOBJECTINSTANCEA const* pObject, void* pvRef);
 
 // GLOBAL: SWBF2 0x01fa9264
@@ -66,13 +69,13 @@ PlayerProfile::tProfile mDefaultProfile;
 // FUNCTION: SWBF2 0x0061c870
 bool PlayerProfile::tProfile::GetUnlockableState(int iIndex)
 {
-    return (mGameOptions.mUnlockableState & (1u << iIndex)) != 0;
+    return (mGameOptions.mUnlockableState & UnlockableBit(iIndex)) != 0;
 }
 
 // FUNCTION: SWBF2 0x0061c890
 void PlayerProfile::tProfile::SetUnlockableState(int iIndex, bool)
 {
-    unsigned int bit = 1u << iIndex;
+    unsigned int bit = UnlockableBit(iIndex);
     if ((mGameOptions.mUnlockableState & bit) <= 0)
     {
         mGameOptions.mUnlockableState |= bit;

@@ -55,13 +55,13 @@ typedef struct CallInfo {
   } u;
 } CallInfo;
 
-#define CI_C		(1<<0)
+#define CI_C		LUA_BIT(0)
 
-#define CI_HASFRAME	(1<<1)
+#define CI_HASFRAME	LUA_BIT(1)
 
-#define CI_CALLING	(1<<2)
-#define CI_SAVEDPC	(1<<3)
-#define CI_YIELD	(1<<4)
+#define CI_CALLING	LUA_BIT(2)
+#define CI_SAVEDPC	LUA_BIT(3)
+#define CI_YIELD	LUA_BIT(4)
 
 #define ci_func(ci)	(clvalue((ci)->base - 1))
 

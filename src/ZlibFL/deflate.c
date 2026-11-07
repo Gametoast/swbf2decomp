@@ -173,11 +173,11 @@ int ZEXPORT deflateInit2_(strm, level, method, windowBits, memLevel, strategy,
 
     s->wrap = wrap;
     s->w_bits = windowBits;
-    s->w_size = 1 << s->w_bits;
+    s->w_size = ZPOW2(s->w_bits);
     s->w_mask = s->w_size - 1;
 
     s->hash_bits = memLevel + 7;
-    s->hash_size = 1 << s->hash_bits;
+    s->hash_size = ZPOW2(s->hash_bits);
     s->hash_mask = s->hash_size - 1;
     s->hash_shift =  ((s->hash_bits+MIN_MATCH-1)/MIN_MATCH);
 
@@ -185,7 +185,7 @@ int ZEXPORT deflateInit2_(strm, level, method, windowBits, memLevel, strategy,
     s->prev   = (Posf *)  ZALLOC(strm, s->w_size, sizeof(Pos));
     s->head   = (Posf *)  ZALLOC(strm, s->hash_size, sizeof(Pos));
 
-    s->lit_bufsize = 1 << (memLevel + 6);
+    s->lit_bufsize = ZPOW2(memLevel + 6);
 
     overlay = (ushf *) ZALLOC(strm, s->lit_bufsize, sizeof(ush)+2);
     s->pending_buf = (uchf *) overlay;
@@ -291,7 +291,7 @@ int ZEXPORT deflatePrime (strm, bits, value)
 {
     if (strm == Z_NULL || strm->state == Z_NULL) return Z_STREAM_ERROR;
     strm->state->bi_valid = bits;
-    strm->state->bi_buf = (ush)(value & ((1 << bits) - 1));
+    strm->state->bi_buf = (ush)(value & ZLOWBITS(bits));
     return Z_OK;
 }
 

@@ -155,7 +155,7 @@ void WeaponLauncher::SetupTarget(const GameObject** ppTarget, int* pBodyId) cons
             *ppTarget = pTarget;
             if (pTarget)
             {
-                if (!(mClass->mTargetTypes & (1 << pTarget->mHealthType)))
+                if (!(mClass->mTargetTypes & TargetInfo::TypeBit(pTarget->mHealthType)))
                 {
                     *ppTarget = 0;
                 }

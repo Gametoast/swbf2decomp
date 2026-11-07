@@ -26,7 +26,7 @@ int GetNextAvailableLod(const RedLodData* pLodData, int iLod)
     int i;
     for (i = iLod + 1; i < 4; i++)
     {
-        if (pLodData->_LodBitmask & (1 << i))
+        if (pLodData->_LodBitmask & RedLodData::LodBit(i))
         {
             break;
         }
@@ -165,7 +165,7 @@ void Render(unsigned int uiFlags)
                     }
 
                     bool bCompare = bShowMissingLOD ||
-                                    ((pLodData->mLowRezFlags & 1) && iNextLod != 4);
+                                    ((pLodData->mLowRezFlags & RedLodData::HAS_LOWREZ) && iNextLod != 4);
 
                     if (fDensity < 0.001f)
                     {
@@ -200,7 +200,7 @@ void Render(unsigned int uiFlags)
 
                 if (iLod == 4)
                 {
-                    if (!(pLodData->mLowRezFlags & 1))
+                    if (!(pLodData->mLowRezFlags & RedLodData::HAS_LOWREZ))
                     {
                         continue;
                     }

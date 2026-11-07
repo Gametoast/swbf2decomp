@@ -151,19 +151,19 @@ bool EntityPath::NodeProperties::ReadPropertyScope(PblConfig& config, PblConfig:
     {
     case 0x97D3961Fu: /* "BranchPaths" */
         props.mNumBranchPaths = data.GetUint32Arg(0);
-        props.mBranchSet |= 1;
+        props.mBranchSet |= EntityPath::NodeProperties::branchSet_NumBranchPaths;
         return true;
     case 0x5742BBFCu: /* "BranchProbability" */
         props.mBranchProbability = data.GetFloatArg(0);
         return true;
     case 0x72824274u: /* "MaxAngle" */
         props.mCosMaxAngle = PblMath::Cos(data.GetFloatArg(0) * 0.017453292f);
-        props.mBranchSet |= 2;
+        props.mBranchSet |= EntityPath::NodeProperties::branchSet_MaxAngle;
         return true;
     case 0xFADC0CD2u: /* "Range" */
     {
         float fRange = data.GetFloatArg(0);
-        props.mBranchSet |= 4;
+        props.mBranchSet |= EntityPath::NodeProperties::branchSet_BranchInfo;
         props.mBranchInfoType = 1;
         props.mBranchInfo.range = fRange * fRange;
         return true;
@@ -173,7 +173,7 @@ bool EntityPath::NodeProperties::ReadPropertyScope(PblConfig& config, PblConfig:
         const BranchRegion* pRegion = BranchRegion::FindByID(PblHash(data.GetStringArg(0)));
         if (pRegion)
         {
-            props.mBranchSet |= 4;
+            props.mBranchSet |= EntityPath::NodeProperties::branchSet_BranchInfo;
             props.mBranchInfo.branchRegion = (BranchRegion*)pRegion;
             props.mBranchInfoType = 2;
         }

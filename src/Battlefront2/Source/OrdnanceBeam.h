@@ -54,7 +54,7 @@ public:
 class BeamLodData : public RedLodData
 {
 public:
-    BeamLodData() { mLowRezFlags = 5; }
+    BeamLodData() { mLowRezFlags = RedLodData::HAS_LOWREZ | RedLodData::HAS_TRANSPARENT; }
 };
  
 

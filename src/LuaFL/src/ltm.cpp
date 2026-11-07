@@ -40,7 +40,7 @@ const TObject *luaT_gettm (Table *events, TMS event, TString *ename) {
   const TObject *tm = luaH_getstr(events, ename);
   lua_assert(event <= TM_EQ);
   if (ttisnil(tm)) {
-    events->flags |= cast(lu_byte, 1u<<event);
+    events->flags |= cast(lu_byte, LUA_UBIT(event));
     return NULL;
   }
   else return tm;

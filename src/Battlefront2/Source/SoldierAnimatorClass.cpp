@@ -25,6 +25,9 @@
 #include "Zephyr/Source/ZephyrSkeleton.h"
 #include "Zephyr/Source/ZephyrSkeletonShared.h"
 
+// a joint's bit in a joint mask
+static inline unsigned int JointBit(int iJoint) { return 1 << iJoint; }
+
 
 
 static const float ANIM_FRAME_SPEED = 1.0f / 30.0f;
@@ -462,7 +465,7 @@ void SoldierAnimatorClass::SetupBodyMasks(const ZephyrSkeletonShared* pSkel, Pbl
         for (int i = 0; i < (int)(sizeof(s_auiLowerBodyJoints_b70e2184) / sizeof(unsigned int)); ++i)
         {
             int iJoint = (int)kJoints.Find(s_auiLowerBodyJoints_b70e2184[i]) - 1;
-            unsigned int uiBit = 1 << iJoint;
+            unsigned int uiBit = JointBit(iJoint);
             upperBodyMask.m_auiData[0] &= ~uiBit;
             lowerBodyMask.m_auiData[0] |= uiBit;
         }
@@ -472,7 +475,7 @@ void SoldierAnimatorClass::SetupBodyMasks(const ZephyrSkeletonShared* pSkel, Pbl
         for (int i = 0; i < (int)(sizeof(s_auiLowerBodyJoints) / sizeof(unsigned int)); ++i)
         {
             int iJoint = (int)kJoints.Find(s_auiLowerBodyJoints[i]) - 1;
-            unsigned int uiBit = 1 << iJoint;
+            unsigned int uiBit = JointBit(iJoint);
             upperBodyMask.m_auiData[0] &= ~uiBit;
             lowerBodyMask.m_auiData[0] |= uiBit;
         }

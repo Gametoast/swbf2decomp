@@ -1,4 +1,5 @@
 #include "PebbleFL/Common/PblMath.h"
+#include "PebbleFL/Common/PblBits.h"
 #include <d3dx9math.h>
 #include <float.h>
 #include <math.h>
@@ -19,6 +20,9 @@
 #include "RedEngineFL/Memory/RedMemory.h"
 
 #include "ZlibFL/zlib.h"
+
+// a dynamic arc group's bit in mDynamicArcState
+static inline unsigned int DynamicGroupBit(int iGroup) { return 1 << iGroup; }
 
 
 // GLOBAL: SWBF2 0x01f9c264
@@ -458,7 +462,7 @@ bool ConnectivityGraph::ReadPatch(PblFileChunk& chunk)
     mDynamicArcList = new unsigned int[mDynamicArcListCnt];
     chunk._pFile->ReadData(mDynamicArcList, mDynamicArcListCnt * 4);
 
-    const int iNumPatches = 1 << mDynamicGroupCnt;
+    const int iNumPatches = PowerOf2(mDynamicGroupCnt);
     mPatchList = new ConnectivityGraphPatch*[iNumPatches];
     char* pData = new char[chunk.GetSize() + (iNumPatches * 4 - mDynamicArcListCnt) * 4
                            - mDynamicGroupCnt - 2];
@@ -592,7 +596,7 @@ unsigned int ConnectivityGraph::_GetDynamicArcBits(unsigned int* puNames, int iN
         const int iGroup = _GetGroupFromName(puNames[i]);
         if (iGroup >= 0)
         {
-            uBits |= 1 << iGroup;
+            uBits |= DynamicGroupBit(iGroup);
         }
     }
     return uBits;
@@ -605,7 +609,7 @@ void ConnectivityGraph::ToggleDynamicArcs(unsigned int* puNames, int iNumNames,
     unsigned int uBits = _GetDynamicArcBits(puNames, iNumNames);
     for (int i = iNumGroups - 1; i >= 0; --i)
     {
-        uBits |= 1 << (puGroups[i] - 1);
+        uBits |= DynamicGroupBit(puGroups[i] - 1);
     }
     _SetDynamicArcState(mDynamicArcState ^ uBits);
 }
@@ -617,7 +621,7 @@ void ConnectivityGraph::BlockDynamicArcs(unsigned int* puNames, int iNumNames,
     unsigned int uBits = _GetDynamicArcBits(puNames, iNumNames);
     for (int i = iNumGroups - 1; i >= 0; --i)
     {
-        uBits |= 1 << (puGroups[i] - 1);
+        uBits |= DynamicGroupBit(puGroups[i] - 1);
     }
     _SetDynamicArcState(mDynamicArcState | uBits);
 }
@@ -629,7 +633,7 @@ void ConnectivityGraph::UnblockDynamicArcs(unsigned int* puNames, int iNumNames,
     unsigned int uBits = _GetDynamicArcBits(puNames, iNumNames);
     for (int i = iNumGroups - 1; i >= 0; --i)
     {
-        uBits |= 1 << (puGroups[i] - 1);
+        uBits |= DynamicGroupBit(puGroups[i] - 1);
     }
     _SetDynamicArcState(mDynamicArcState & ~uBits);
 }
@@ -784,7 +788,7 @@ const ConnectivityNode* ConnectivityGraph::GetRandomAccessibleNode(const UnitCon
 // FUNCTION: SWBF2 0x00481d40
 void ConnectivityGraph::_SetDynamicArcState(unsigned int uState)
 {
-    uState &= (1 << mDynamicGroupCnt) - 1;
+    uState &= LowBitsMask(mDynamicGroupCnt);
     if (mDynamicArcState == uState)
     {
         return;

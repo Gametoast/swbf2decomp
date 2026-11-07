@@ -10,6 +10,11 @@
 class RedJoystick
 {
 public:
+    // a button's bit in m_uiDownButtons (32 and up are the POV hats)
+    static unsigned __int64 ButtonBit(int iButton) { return (unsigned __int64)1 << iButton; }
+    // the same, as the game sets the plain buttons: a 32-bit shift, so button 31 also sets all the POV bits
+    static int LowButtonBit(int iButton) { return 1 << iButton; }
+
 
     RedJoystick();
 

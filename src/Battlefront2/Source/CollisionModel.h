@@ -13,6 +13,9 @@ class Restrictor;
 class CollisionMask
 {
 public:
+    // a collision body's bit (within its word, for bodies from 32 up)
+    static int BodyBit(int id) { return 1 << id; }
+
 
 
 
@@ -39,11 +42,11 @@ public:
     {
         if (id > 31)
         {
-            mMask[1] |= 1u << (id - 32);
+            mMask[1] |= BodyBit(id - 32);
         }
         else
         {
-            mMask[0] |= 1u << id;
+            mMask[0] |= BodyBit(id);
         }
     }
 
@@ -52,11 +55,11 @@ public:
     {
         if (id > 31)
         {
-            mMask[1] &= ~(1u << (id - 32));
+            mMask[1] &= ~BodyBit(id - 32);
         }
         else
         {
-            mMask[0] &= ~(1u << id);
+            mMask[0] &= ~BodyBit(id);
         }
     }
 
@@ -65,9 +68,9 @@ public:
     {
         if (id > 31)
         {
-            return (mMask[1] & (1u << (id - 32))) != 0;
+            return (mMask[1] & BodyBit(id - 32)) != 0;
         }
-        return (mMask[0] & (1u << id)) != 0;
+        return (mMask[0] & BodyBit(id)) != 0;
     }
 
     bool IsEmpty() const { return mMask[0] == 0 && mMask[1] == 0; }

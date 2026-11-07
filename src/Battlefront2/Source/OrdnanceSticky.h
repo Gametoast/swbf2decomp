@@ -26,6 +26,7 @@ public:
     GameSound mSoundCollisionOther;
     bool mStartTimerOnContact;
     bool mAlignVertical;
+    static const unsigned int kStickTerrain = 0x80000000;   // beside TargetInfo's types, one bit per HealthType
     int mStickTypes;
 
     static PblHash rttiHashOrdnanceStickyClass;

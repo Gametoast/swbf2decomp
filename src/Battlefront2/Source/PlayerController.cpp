@@ -39,6 +39,9 @@
 #include <float.h>
 #include <math.h>
 
+// a joystick's bit in PlayerController::sEnabled
+static inline int JoystickBit(int iJoystick) { return 1 << iJoystick; }
+
  
  
 
@@ -235,7 +238,7 @@ void PlayerController::Update(float dt)
                 ToolTipsDisplay::sInstance->SetControllerDefault(pRawInputs->IsDefaultBindings(iInputMode));
             }
         }
-        if (((1 << iJoystick) & PlayerController::sEnabled) == 0)
+        if ((JoystickBit(iJoystick) & PlayerController::sEnabled) == 0)
         {
             mOwner->ClearControllable();
             return;
@@ -592,8 +595,8 @@ void PlayerController::Update(float dt)
                     if (!CollisionManager::RayTest(vStart, vPoint, apIgnore, 2, 0x90))
                     {
                         bKeep = true;
-                        bLocked = ((1 << (pMe->GetAffiliationToMe(pTarget) + 1)) & iTargetSides) != 0 &&
-                                  ((1 << pTarget->GetHealthType()) & iTargetTypes) != 0 &&
+                        bLocked = (TargetInfo::SideBit(pMe->GetAffiliationToMe(pTarget)) & iTargetSides) != 0 &&
+                                  (TargetInfo::TypeBit(pTarget->GetHealthType()) & iTargetTypes) != 0 &&
                                   fRadius + fLockOnRange >= Length(vCenter - vStart);
                         if (bHoldLock)
                         {
@@ -646,8 +649,8 @@ void PlayerController::Update(float dt)
                         continue;
                     }
 
-                    bool bLockable = ((1 << (pMe->GetAffiliationToMe(pObject) + 1)) & iTargetSides) != 0 &&
-                                     ((1 << pObject->GetHealthType()) & iTargetTypes) != 0;
+                    bool bLockable = (TargetInfo::SideBit(pMe->GetAffiliationToMe(pObject)) & iTargetSides) != 0 &&
+                                     (TargetInfo::TypeBit(pObject->GetHealthType()) & iTargetTypes) != 0;
                     if (bLocked && !bLockable)
                     {
                         continue;

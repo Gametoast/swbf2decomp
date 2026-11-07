@@ -1,4 +1,5 @@
 #include "PebbleFL/Common/PblMath.h"
+#include "Team.h"
 #include <d3dx9math.h>
 #include "LockOnManager.h"
 #include "CameraManager.h"
@@ -193,7 +194,7 @@ void LockOnManager::Update(float fDeltaTime)
         }
     }
 
-    const unsigned int uTeamMask = 1 << (mPlayerCharacter ? mPlayerCharacter->mTeamNumber : 0);
+    const unsigned int uTeamMask = Team::Bit(mPlayerCharacter ? mPlayerCharacter->mTeamNumber : 0);
     RedCamera* pCamera = CameraManager::Instance()->GetCamera(mPlayerIndex);
     const bool bMyFrame = (unsigned int)RedRenderer::GetFrameNumber() % CameraManager::Instance()->GetNumCameras() ==
                      (unsigned int)mPlayerIndex;
@@ -683,7 +684,7 @@ bool LockOnManager::IsTargetObjectTypeAllowed(GameObject* gameObject, GameObject
         healthType = gameObject->mHealthType;
     }
 
-    bool typeAllowed = ((1 << healthType) & targetsAllowedFilter) != 0;
+    bool typeAllowed = (::TargetInfo::TypeBit(healthType) & targetsAllowedFilter) != 0;
 
     if (noLockon && displayIconsOnEverything && !NetGame::IsEnabled() && me->GetAffiliationToMe(gameObject) < 0)
     {

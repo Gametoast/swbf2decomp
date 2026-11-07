@@ -59,7 +59,7 @@ public:
         InputQueue() : m_uiCount(0), m_uiStart(0), m_uiButtonDown(0) {}
 
         int GetCount() const { return m_uiCount; }
-        bool IsButtonDown(unsigned char uiButton) const { return (m_uiButtonDown & (1 << uiButton)) != 0; }
+        bool IsButtonDown(unsigned char uiButton) const { return (m_uiButtonDown & ComboButtonBit(uiButton)) != 0; }
         const Event& GetEvent(int iEvent) const { return m_aEventQueue[(m_uiStart + (unsigned char)(m_uiCount - iEvent - 1)) & INPUT_QUEUE_MASK]; }
         const Event& operator[](int iEvent) const { return m_aEventQueue[(m_uiStart + (unsigned char)iEvent) & INPUT_QUEUE_MASK]; }
         void Update(unsigned char uiButtons, float fTime);
@@ -94,8 +94,7 @@ public:
         }
 
     private:
-        static const int INPUT_QUEUE_LENGTH_LOG2 = 3;
-        static const int INPUT_QUEUE_LENGTH = 1 << INPUT_QUEUE_LENGTH_LOG2;
+        static const int INPUT_QUEUE_LENGTH = 8;
         static const unsigned char INPUT_QUEUE_MASK = INPUT_QUEUE_LENGTH - 1;
         Event m_aEventQueue[INPUT_QUEUE_LENGTH];
         unsigned char m_uiCount;

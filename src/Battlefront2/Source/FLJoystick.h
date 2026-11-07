@@ -64,6 +64,9 @@ enum ePROCESSEDINPUT_TYPE
 class ProcessedInputs
 {
 public:
+    // an input's bit in mBoolInputs
+    static int BoolInputBit(int eType) { return 1 << eType; }
+
     ProcessedInputs();
 
     // FUNCTION: SWBF2 0x00529ad0

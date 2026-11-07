@@ -14,7 +14,7 @@ OrdnanceLodData::OrdnanceLodData()
     _LodCost[1] = -1;
     _LodCost[2] = 10;
     _LodCost[3] = 0;
-    mLowRezFlags = 1;
+    mLowRezFlags = RedLodData::HAS_LOWREZ;
 }
 
 // FUNCTION: SWBF2 0x00448870
@@ -39,7 +39,7 @@ SoldierLodData::SoldierLodData(const RedModel* pModel, const RedModel* pLowResMo
     {
         _LodCost[2] = 2000;
         _LodCost[3] = 2000;
-        mLowRezFlags = 1;
+        mLowRezFlags = RedLodData::HAS_LOWREZ;
         _LodBitmask = 5;
     }
     else
@@ -82,7 +82,7 @@ ModelLodData::ModelLodData(int, const RedModel* pLod0, const RedModel* pLod1, co
         _LodBitmask |= 1;
         if (pLod0->HasTransparentSegment())
         {
-            mLowRezFlags |= 4;
+            mLowRezFlags |= RedLodData::HAS_TRANSPARENT;
         }
     }
     if (pLod1)
@@ -91,7 +91,7 @@ ModelLodData::ModelLodData(int, const RedModel* pLod0, const RedModel* pLod1, co
         _LodBitmask |= 2;
         if (pLod1->HasTransparentSegment())
         {
-            mLowRezFlags |= 4;
+            mLowRezFlags |= RedLodData::HAS_TRANSPARENT;
         }
     }
     if (pLod2)
@@ -100,17 +100,17 @@ ModelLodData::ModelLodData(int, const RedModel* pLod0, const RedModel* pLod1, co
         _LodBitmask |= 4;
         if (pLod2->HasTransparentSegment())
         {
-            mLowRezFlags |= 4;
+            mLowRezFlags |= RedLodData::HAS_TRANSPARENT;
         }
     }
     if (pLod3)
     {
         _LodCost[3] = pLod3->_uiNumStripVtx;
         _LodBitmask |= 8;
-        mLowRezFlags |= 3;
+        mLowRezFlags |= RedLodData::HAS_LOWREZ | RedLodData::CROSSFADE_LOWREZ;
         if (pLod3->HasTransparentSegment())
         {
-            mLowRezFlags |= 4;
+            mLowRezFlags |= RedLodData::HAS_TRANSPARENT;
         }
     }
 }
@@ -150,7 +150,7 @@ LargeEffectLodData::LargeEffectLodData()
     _LodCost[1] = 1;
     _LodCost[2] = 1;
     _LodCost[3] = 0;
-    mLowRezFlags = 1;
+    mLowRezFlags = RedLodData::HAS_LOWREZ;
     mMaxDist = 500.0f;
 }
 

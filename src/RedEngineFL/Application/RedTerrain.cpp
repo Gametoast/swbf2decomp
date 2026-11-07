@@ -16,6 +16,9 @@
 
 #include <float.h>
 
+// a patch quadrant's bit in a hole mask
+static inline int QuadrantBit(int iQuadrant) { return 1 << iQuadrant; }
+
 bool PointInSphere(const PblVector3& vPoint, const PblVector3& vCenter, float fRadius);
 
 // FUNCTION: SWBF2 0x006c21e0
@@ -346,7 +349,7 @@ bool RedTerrain::PointInHole(const PblVector3& vPos)
     }
     const int iQuadrant = ((iX >> (_iHeightPatchPointsPerDimensionLog2 - 1)) & 1) |
                           ((iZ >> (_iHeightPatchPointsPerDimensionLog2 - 2)) & 2);
-    if (!(uiHoles & (1 << iQuadrant)))
+    if (!(uiHoles & QuadrantBit(iQuadrant)))
     {
         return false;
     }

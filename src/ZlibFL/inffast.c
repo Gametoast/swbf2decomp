@@ -56,8 +56,8 @@ unsigned start;
     bits = state->bits;
     lcode = state->lencode;
     dcode = state->distcode;
-    lmask = (1U << state->lenbits) - 1;
-    dmask = (1U << state->distbits) - 1;
+    lmask = ZLOWBITSU(state->lenbits);
+    dmask = ZLOWBITSU(state->distbits);
 
     do {
         if (bits < 15) {
@@ -86,7 +86,7 @@ unsigned start;
                     hold += (unsigned long)(PUP(in)) << bits;
                     bits += 8;
                 }
-                len += (unsigned)hold & ((1U << op) - 1);
+                len += (unsigned)hold & ZLOWBITSU(op);
                 hold >>= op;
                 bits -= op;
             }
@@ -114,7 +114,7 @@ unsigned start;
                         bits += 8;
                     }
                 }
-                dist += (unsigned)hold & ((1U << op) - 1);
+                dist += (unsigned)hold & ZLOWBITSU(op);
                 hold >>= op;
                 bits -= op;
                 Tracevv((stderr, "inflate:         distance %u\n", dist));
@@ -194,7 +194,7 @@ unsigned start;
                 }
             }
             else if ((op & 64) == 0) {
-                this = dcode[this.val + (hold & ((1U << op) - 1))];
+                this = dcode[this.val + (hold & ZLOWBITSU(op))];
                 goto dodist;
             }
             else {
@@ -204,7 +204,7 @@ unsigned start;
             }
         }
         else if ((op & 64) == 0) {
-            this = lcode[this.val + (hold & ((1U << op) - 1))];
+            this = lcode[this.val + (hold & ZLOWBITSU(op))];
             goto dolen;
         }
         else if (op & 32) {
@@ -222,7 +222,7 @@ unsigned start;
     len = bits >> 3;
     in -= len;
     bits -= len << 3;
-    hold &= (1U << bits) - 1;
+    hold &= ZLOWBITSU(bits);
 
     strm->next_in = in + OFF;
     strm->next_out = out + OFF;

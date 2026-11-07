@@ -539,7 +539,7 @@ void BonusManager::PlayTeamBonusVO(unsigned int uBonus, int iTeam)
         default: strlcat(acName, "all", sizeof(acName)); break;
         }
 
-        NetGame::CreateEvent_PlayVoiceOver(PblHash(acName), 1 << i);
+        NetGame::CreateEvent_PlayVoiceOver(PblHash(acName), Team::Bit(i));
 
         if (i == iTeam)
         {

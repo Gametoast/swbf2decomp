@@ -186,7 +186,7 @@ public:
         _LodCost[3] = 0;
         _LodBitmask = 1;
         _LodClass = 3;
-        mLowRezFlags = 3;
+        mLowRezFlags = RedLodData::HAS_LOWREZ | RedLodData::CROSSFADE_LOWREZ;
         mMaxDist = 500.0f;
     }
 };

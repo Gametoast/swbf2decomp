@@ -173,8 +173,8 @@ void AsteroidClass::SetProperty(unsigned int uProperty, const char* pszValue)
             int iMaskId = mCollisionModel.GetMaskId(0x29173102 /* "CollisionMesh" */);
             if (iMaskId >= 0)
             {
-                sSoftCollisionMask |= 1 << iMaskId;
-                sOrdnanceCollisionMask |= 1 << iMaskId;
+                sSoftCollisionMask |= CollisionMask::BodyBit(iMaskId);
+                sOrdnanceCollisionMask |= CollisionMask::BodyBit(iMaskId);
             }
         }
         if (iNumBodies == 0 && mModel)
@@ -240,7 +240,7 @@ void AsteroidClass::SetProperty(unsigned int uProperty, const char* pszValue)
         int iMaskId = mCollisionModel.GetMaskId(PblHash(pszValue));
         if (iMaskId >= 0)
         {
-            sSoftCollisionMask |= 1 << iMaskId;
+            sSoftCollisionMask |= CollisionMask::BodyBit(iMaskId);
             mCollisionModel.SetCollisionMask(COLL_SOFT, CollisionMask(sSoftCollisionMask));
         }
         break;
@@ -250,7 +250,7 @@ void AsteroidClass::SetProperty(unsigned int uProperty, const char* pszValue)
         int iMaskId = mCollisionModel.GetMaskId(PblHash(pszValue));
         if (iMaskId >= 0)
         {
-            sOrdnanceCollisionMask |= 1 << iMaskId;
+            sOrdnanceCollisionMask |= CollisionMask::BodyBit(iMaskId);
             mCollisionModel.SetCollisionMask(COLL_ORDNANCE, CollisionMask(sOrdnanceCollisionMask));
         }
         break;

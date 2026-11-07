@@ -9,6 +9,13 @@
 #include "GameSound.h"
 #include "SoldierAnimationBank.h"
 
+// a lightsaber blade's bit (m_uiLightsaberOnMask, m_uiLightsaberOffMask, m_uiTrailOnMask)
+inline unsigned int BladeBit(unsigned int uiBlade) { return 1u << uiBlade; }
+// a soldier state's bit in a combo's mask of soldier states
+inline int SoldierStateBit(int iState) { return 1 << iState; }
+// a combo button's bit (the input queue, m_uiInputLock)
+inline int ComboButtonBit(unsigned int uiButton) { return 1 << uiButton; }
+
 class PblConfig;
 class PblMatrix;
 class WeaponMelee;
@@ -678,11 +685,11 @@ public:
             {
                 if (bOff)
                 {
-                    m_uiLightsaberOffMask |= 1 << uiBlade;
+                    m_uiLightsaberOffMask |= BladeBit(uiBlade);
                 }
                 else
                 {
-                    m_uiLightsaberOffMask &= ~(1 << uiBlade);
+                    m_uiLightsaberOffMask &= ~BladeBit(uiBlade);
                 }
             }
         }

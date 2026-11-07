@@ -64,6 +64,11 @@
 #include "PebbleFL/Common/PblQuaternion.h"
 #include "RedEngineFL/Application/pc/pcFLRender.h"
 
+// mFootState: a foot on the ground, and its two hydraulic sounds playing
+static inline unsigned int FootBit(unsigned int uiFoot) { return 1 << uiFoot; }
+static inline unsigned int HydraulicBit(unsigned int uiFoot) { return 1 << (uiFoot + 8); }
+static inline unsigned int HydraulicLowerBit(unsigned int uiFoot) { return 1 << (uiFoot + 16); }
+
 // FUNCTION: SWBF2 0x00501a80
 float EntityWalker::GetAimTurnRate() const
 {
@@ -731,7 +736,7 @@ void EntityWalkerClass::SetProperty(unsigned int uProperty, const char* pszValue
         int iMaskId = mCollisionModel.GetMaskId(PblHash(pszValue));
         if (iMaskId >= 0)
         {
-            mIgnorableCollisions |= 1 << iMaskId;
+            mIgnorableCollisions |= CollisionMask::BodyBit(iMaskId);
         }
     }
 
@@ -1259,7 +1264,7 @@ void EntityWalkerClass::SetProperty(unsigned int uProperty, const char* pszValue
         int iMaskId = mCollisionModel.GetMaskId(PblHash(szBody));
         if (iMaskId >= 0)
         {
-            sTowCableCollisionMask |= 1 << iMaskId;
+            sTowCableCollisionMask |= CollisionMask::BodyBit(iMaskId);
             mCollisionModel.SetCollisionMask(COLL_TOWCABLE, CollisionMask(sTowCableCollisionMask));
             for (int i = 0; i < 12; ++i)
             {
@@ -2546,7 +2551,7 @@ bool EntityWalker::CollisionCallback(const CollisionResult* pResult, CollisionOb
     {
         return true;
     }
-    if ((1 << pResult->mColliderId) & mClass->mIgnorableCollisions)
+    if (CollisionMask::BodyBit(pResult->mColliderId) & mClass->mIgnorableCollisions)
     {
         return true;
     }
@@ -4426,18 +4431,18 @@ float EntityWalker::GetSoundRadius() const
     float fMute = 0.0f;
     for (unsigned int i = 0; i < mClass->mNumFeet; ++i)
     {
-        if (mFootState & (1 << i))
+        if (mFootState & FootBit(i))
         {
             if (FoleyFX* pFoley = GetFoleyFX())
             {
                 fMute = ((FoleyFXWalker*)pFoley)->mFootstep[i].GetMuteDistance();
             }
         }
-        if (mFootState & (1 << (i + 8)))
+        if (mFootState & HydraulicBit(i))
         {
             fMute = mClass->mHydraulicSound.GetMuteDistance();
         }
-        if (mFootState & (1 << (i + 16)))
+        if (mFootState & HydraulicLowerBit(i))
         {
             fMute = mClass->mHydraulicLowerSound.GetMuteDistance();
         }

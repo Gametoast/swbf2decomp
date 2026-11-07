@@ -635,8 +635,8 @@ bool CombatUtil::sCauseDamage(Controllable* pMe, const Weapon* pWpn, const Weapo
     {
         return false;
     }
-    if (!(pClass->mAITargetTypes & (1 << GetHealthType(pTarget))) &&
-        !(pTarget->GetEntity()->IsRtti(EntityDroideka::rttiHashEntityDroideka) && (pClass->mAITargetTypes & 8)))
+    if (!(pClass->mAITargetTypes & TargetInfo::TypeBit(GetHealthType(pTarget))) &&
+        !(pTarget->GetEntity()->IsRtti(EntityDroideka::rttiHashEntityDroideka) && (pClass->mAITargetTypes & TargetInfo::TYPE_VEHICLE)))
     {
         if (!pMe->GetEntity()->IsRtti(EntitySoldier::rttiHashEntitySoldier))
         {

@@ -5,6 +5,15 @@
 class RedLodData
 {
 public:
+    // a level of detail's bit in _LodBitmask
+    static int LodBit(int iLod) { return 1 << iLod; }
+
+    enum LowResFlags
+    {
+        HAS_LOWREZ = 1,
+        CROSSFADE_LOWREZ = 2,
+        HAS_TRANSPARENT = 4
+    };
 
     RedLodData()
     {
@@ -14,13 +23,13 @@ public:
     }
 
     int GetCost(int iLod) const { return _LodCost[iLod]; }
-    bool HasLod(int iLod) const { return (_LodBitmask & (1 << iLod)) != 0; }
+    bool HasLod(int iLod) const { return (_LodBitmask & LodBit(iLod)) != 0; }
 
     int GetLodClass() const { return _LodClass; }
     void SetMaxDist(float fMaxDist) { mMaxDist = fMaxDist; }
-    int HasLowRes() const { return mLowRezFlags & 1; }
-    int CrossFadeLowRes() const { return mLowRezFlags & 2; }
-    int HasTransparentSegment() const { return mLowRezFlags & 4; }
+    int HasLowRes() const { return mLowRezFlags & HAS_LOWREZ; }
+    int CrossFadeLowRes() const { return mLowRezFlags & CROSSFADE_LOWREZ; }
+    int HasTransparentSegment() const { return mLowRezFlags & HAS_TRANSPARENT; }
 
     int _LodCost[4];
     int _LodBitmask;

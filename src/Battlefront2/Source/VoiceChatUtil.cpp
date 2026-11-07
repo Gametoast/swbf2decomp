@@ -1,4 +1,5 @@
 #include "VoiceChatUtil.h"
+#include "PebbleFL/Common/PblBits.h"
 
 // FUNCTION: SWBF2 0x006751e0
 unsigned int VoiceChat::GetMSBIndex(unsigned int uiValue)
@@ -16,7 +17,7 @@ unsigned char* VoiceChat::GetBitmapElementAndMask(unsigned char* const bitmap, u
                                                   unsigned char& mask)
 {
     const unsigned int element = bit >> 3;
-    mask = (unsigned char)(1 << (bit - element * 8));
+    mask = (unsigned char)ByteBit(bit - element * 8);
     return bitmap + element;
 }
 

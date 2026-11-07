@@ -22,6 +22,10 @@
 #include "NetGame.h"
 #include "TeamManager.h"
 
+// bits of a hint's stance and sidestep masks
+static inline int StanceBit(int iStance) { return 1 << iStance; }
+static inline int SidestepBit(int iStep) { return 1 << iStep; }
+
 // SYNTHETIC: SWBF2 0x00403f20
 // `dynamic initializer for 'BaseHint::sMemoryPool''
 // SYNTHETIC: SWBF2 0x00768b10
@@ -160,7 +164,7 @@ ControllableHeight BaseHint::GetRandomStance(char cStanceMask) const
     int iStance;
     do
         iStance = AIUtil::GetRandomInt(0, 2);
-    while (!((1 << iStance) & cStanceMask));
+    while (!(StanceBit(iStance) & cStanceMask));
     return (ControllableHeight)iStance;
 }
 
@@ -192,7 +196,7 @@ BaseHint::Sidestep BaseHint::GetRandomSidestep() const
     int iStep;
     do
         iStep = AIUtil::GetRandomInt(0, 1);
-    while (!((1 << iStep) & mSidestep));
+    while (!(SidestepBit(iStep) & mSidestep));
     return (Sidestep)iStep;
 }
 

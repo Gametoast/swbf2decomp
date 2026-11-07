@@ -1,5 +1,7 @@
 #pragma once
 
+#include "PebbleFL/Common/PblBits.h"
+
 namespace util
 {
 
@@ -37,7 +39,7 @@ inline int Int_::ilog(int iValue)
             iBits++;
         }
 
-        if ((1 << (iBits - 1)) > iValue)
+        if (PowerOf2(iBits - 1) > iValue)
         {
             iBits++;
         }

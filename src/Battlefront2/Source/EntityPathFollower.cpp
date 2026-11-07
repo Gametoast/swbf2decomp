@@ -27,6 +27,9 @@
 #include "CollisionModel.h"
 #include "PebbleFL/Common/PblQuaternion.h"
 
+// a spline point's bit in mSetPoints
+static inline int PointBit(unsigned int uiPoint) { return 1 << uiPoint; }
+
 // FUNCTION: SWBF2 0x004d7900
 EntityPathFollowerClass::EntityPathFollowerClass()
 {
@@ -819,16 +822,16 @@ bool EntityPathFollower::Branch(BranchParams& params, const PblVector3* const pP
             if (pProps)
             {
 
-                if ((pProps->mBranchSet & 1) > 0)
+                if ((pProps->mBranchSet & EntityPath::NodeProperties::branchSet_NumBranchPaths) > 0)
                 {
                     params.mBranchPaths = pProps->mNumBranchPaths;
                 }
-                if ((pProps->mBranchSet & 4) > 0)
+                if ((pProps->mBranchSet & EntityPath::NodeProperties::branchSet_BranchInfo) > 0)
                 {
                     pRegion = pProps->GetBranchRegion();
                     params.mSquareRange = pProps->GetRange();
                 }
-                if ((pProps->mBranchSet & 2) > 0)
+                if ((pProps->mBranchSet & EntityPath::NodeProperties::branchSet_MaxAngle) > 0)
                 {
                     params.mCosMaxAngle = pProps->mCosMaxAngle;
                 }
@@ -945,7 +948,7 @@ void EntityPathFollower::EndOfSegment(BranchParams& params, const PblVector3* co
 void EntityPathFollower::SetPoint(const PblVector3& vPoint, unsigned char uIndex)
 {
     mPathSpline.GetControlPoints()[uIndex] = vPoint;
-    mSetPoints |= 1 << uIndex;
+    mSetPoints |= PointBit(uIndex);
 }
 
 // FUNCTION: SWBF2 0x004d6650
@@ -957,7 +960,7 @@ const PblVector3& EntityPathFollower::GetPoint(unsigned char uIndex) const
 // FUNCTION: SWBF2 0x004d6670
 bool EntityPathFollower::GetPointIsSet(unsigned char uIndex) const
 {
-    return (mSetPoints & (1 << uIndex)) > 0;
+    return (mSetPoints & PointBit(uIndex)) > 0;
 }
 
 // FUNCTION: SWBF2 0x004d66b0
@@ -1564,7 +1567,7 @@ bool EntityPathFollower::SavePoints(const PblVector3* const pPosition, BranchPar
         else
         {
             vPoint = GetPoint(1);
-            uKeep &= ~(1 << 2);
+            uKeep &= ~PointBit(2);
         }
         SetPoint(vPoint, 2);
     }
@@ -1594,7 +1597,7 @@ bool EntityPathFollower::SavePoints(const PblVector3* const pPosition, BranchPar
     else
     {
         vPoint = GetPoint(2);
-        uKeep &= ~(1 << 3);
+        uKeep &= ~PointBit(3);
     }
     SetPoint(vPoint, 3);
     mSetPoints &= uKeep;

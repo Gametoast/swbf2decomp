@@ -1,4 +1,5 @@
 #include <d3dx9math.h>
+#include "PebbleFL/Common/PblBits.h"
 #include <math.h>
 #include <stdio.h>
 #include <string.h>
@@ -92,7 +93,7 @@ void ManagedLightBeam::Unhide()
 // FUNCTION: SWBF2 0x004cc8c0
 bool ManagedLightBeam::IsHiddenInView(unsigned int uiView)
 {
-    return (_uiHideInView & (1u << uiView)) != 0;
+    return (_uiHideInView & ViewBit(uiView)) != 0;
 }
 
 

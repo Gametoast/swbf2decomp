@@ -10,6 +10,9 @@
 class RedMouse
 {
 public:
+    // a button's bit in m_uiDownButtons
+    static int ButtonBit(int iButton) { return 1 << iButton; }
+
 
     RedMouse();
 

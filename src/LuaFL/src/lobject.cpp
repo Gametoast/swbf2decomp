@@ -25,7 +25,7 @@ const TObject luaO_nilobject = {LUA_TNIL, {NULL}};
 // FUNCTION: SWBF2 0x006a2600
 int luaO_int2fb (unsigned int x) {
   int m = 0;
-  while (x >= (1<<3)) {
+  while (x >= twoto(3)) {
     x = (x+1) >> 1;
     m++;
   }

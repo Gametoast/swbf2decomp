@@ -636,8 +636,8 @@ void EntityRemoteTerminalClass::SetProperty(unsigned int uProperty, const char* 
             int iMaskId = mCollisionModel.GetMaskId(0x29173102 /* "CollisionMesh" */);
             if (iMaskId >= 0)
             {
-                sSoftCollisionMask |= 1 << iMaskId;
-                sOrdnanceCollisionMask |= 1 << iMaskId;
+                sSoftCollisionMask |= CollisionMask::BodyBit(iMaskId);
+                sOrdnanceCollisionMask |= CollisionMask::BodyBit(iMaskId);
             }
         }
         if (iNumBodies == 0 && mModel)

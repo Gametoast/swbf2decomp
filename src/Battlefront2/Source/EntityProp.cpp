@@ -599,7 +599,7 @@ void EntityPropClass::SetProperty(unsigned int uProperty, const char* pszValue)
             int iMaskId = mCollisionModel.GetMaskId(uName);
             if (iMaskId >= 0)
             {
-                sSoftCollisionMask |= 1 << iMaskId;
+                sSoftCollisionMask |= CollisionMask::BodyBit(iMaskId);
                 mCollisionModel.SetCollisionMask(COLL_SOFT, CollisionMask(sSoftCollisionMask));
             }
         }
@@ -648,7 +648,7 @@ void EntityPropClass::SetProperty(unsigned int uProperty, const char* pszValue)
         int iMaskId = mCollisionModel.GetMaskId(PblHash(pszValue));
         if (iMaskId >= 0)
         {
-            sStaticCollisionMask |= 1 << iMaskId;
+            sStaticCollisionMask |= CollisionMask::BodyBit(iMaskId);
             mCollisionModel.SetCollisionMask(COLL_STATIC, CollisionMask(sStaticCollisionMask));
         }
         break;
@@ -677,7 +677,7 @@ void EntityPropClass::SetProperty(unsigned int uProperty, const char* pszValue)
         int iMaskId = mCollisionModel.GetMaskId(PblHash(pszValue));
         if (iMaskId >= 0)
         {
-            sTerrainCollisionMask |= 1 << iMaskId;
+            sTerrainCollisionMask |= CollisionMask::BodyBit(iMaskId);
             mCollisionModel.SetCollisionMask(COLL_TERRAIN, CollisionMask(sTerrainCollisionMask));
         }
         break;
@@ -692,7 +692,7 @@ void EntityPropClass::SetProperty(unsigned int uProperty, const char* pszValue)
         int iMaskId = mCollisionModel.GetMaskId(PblHash(pszValue));
         if (iMaskId >= 0)
         {
-            sRigidCollisionMask |= 1 << iMaskId;
+            sRigidCollisionMask |= CollisionMask::BodyBit(iMaskId);
             mCollisionModel.SetCollisionMask(COLL_RIGID, CollisionMask(sRigidCollisionMask));
             CollisionMask softMask = mCollisionModel.GetCollisionMask(COLL_SOFT);
             CollisionMask ordnanceMask = mCollisionModel.GetCollisionMask(COLL_ORDNANCE);
@@ -717,7 +717,7 @@ void EntityPropClass::SetProperty(unsigned int uProperty, const char* pszValue)
         int iMaskId = mCollisionModel.GetMaskId(PblHash(pszValue));
         if (iMaskId >= 0)
         {
-            sTargetableCollisionMask |= 1 << iMaskId;
+            sTargetableCollisionMask |= CollisionMask::BodyBit(iMaskId);
             mCollisionModel.SetCollisionMask(COLL_TARGETABLE, CollisionMask(sTargetableCollisionMask));
         }
         break;
@@ -740,7 +740,7 @@ void EntityPropClass::SetProperty(unsigned int uProperty, const char* pszValue)
             int iMaskId = mCollisionModel.GetMaskId(uName);
             if (iMaskId >= 0)
             {
-                sRigidCollisionMask |= 1 << iMaskId;
+                sRigidCollisionMask |= CollisionMask::BodyBit(iMaskId);
                 mCollisionModel.SetCollisionMask(COLL_RIGID, CollisionMask(sRigidCollisionMask));
             }
         }
@@ -774,7 +774,7 @@ void EntityPropClass::SetProperty(unsigned int uProperty, const char* pszValue)
             int iMaskId = mCollisionModel.GetMaskId(uName);
             if (iMaskId >= 0)
             {
-                sOrdnanceCollisionMask |= 1 << iMaskId;
+                sOrdnanceCollisionMask |= CollisionMask::BodyBit(iMaskId);
                 mCollisionModel.SetCollisionMask(COLL_ORDNANCE, CollisionMask(sOrdnanceCollisionMask));
             }
         }

@@ -1,4 +1,5 @@
 #include "TeamAssist.h"
+#include "Team.h"
 #include "TargetManager.h"
 #include "Character.h"
 #include "Controllable.h"
@@ -132,7 +133,7 @@ TeamAssist::TeamAssist(TeamAssist* pNext, int type, Character* pRequestor, float
     if (pControllable)
     {
         mRequestor = ((Trackable*)pControllable)->GetGameObject();
-        mTeamMask = 1 << pRequestor->mTeamNumber;
+        mTeamMask = Team::Bit(pRequestor->mTeamNumber);
         TargetManager::AddMarker(mRequestor, 0, sMarkerTexture[type], 5.0f, mTeamMask, sColorHash, false, true, true, 0.0f);
         AI::VOHelper::Play((AI::VOType)(AI::VOT_TA_First + type), mRequestor, 0,
                            mRequestor->GetPosition(), 0.0f);

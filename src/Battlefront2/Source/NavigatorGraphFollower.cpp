@@ -142,11 +142,11 @@ void NavigatorGraphFollower::EnterState()
             if (uArcFlags)
             {
                 unsigned int uFlags = 0;
-                if (uArcFlags & 2)
+                if (uArcFlags & AF_Jump)
                 {
                     uFlags = AIPathNode::AIPN_JUMP;
                 }
-                if (uArcFlags & 4)
+                if (uArcFlags & AF_JetJump)
                 {
                     uFlags |= AIPathNode::AIPN_JETJUMP;
                 }
@@ -237,11 +237,11 @@ void NavigatorGraphFollower::ReceivePathResult(AIPath* pPath)
     if (uArcFlags)
     {
         unsigned int uFlags = 0;
-        if (uArcFlags & 2)
+        if (uArcFlags & AF_Jump)
         {
             uFlags = AIPathNode::AIPN_JUMP;
         }
-        if (uArcFlags & 4)
+        if (uArcFlags & AF_JetJump)
         {
             uFlags |= AIPathNode::AIPN_JETJUMP;
         }

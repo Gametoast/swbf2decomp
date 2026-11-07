@@ -1,4 +1,5 @@
 #include "pcRedTerrain.h"
+#include "PebbleFL/Common/PblBits.h"
 
 #include "RedEngineFL/Graphics/PC/pcRedRenderer.h"
 #include "RedEngineFL/Graphics/PC/pcRedPrimitive.h"
@@ -846,7 +847,7 @@ void TerrainRenderable::Read(PblFileChunk& chunk)
                        RedTerrain::_fTerrainCenterZ;
             float fHeightMin = (float)patch.iHeightMin;
             PblBox box(fX, fHeightMin * RedTerrain::_fHeightScale, fZ, fX + fSize,
-                       (65535.0f / (float)(1 << iHeightShift) + fHeightMin) * RedTerrain::_fHeightScale, fZ + fSize);
+                       (65535.0f / (float)PowerOf2(iHeightShift) + fHeightMin) * RedTerrain::_fHeightScale, fZ + fSize);
 
             for (unsigned int uiPass = 0; uiPass < uiNumPasses; ++uiPass)
             {

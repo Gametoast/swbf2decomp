@@ -170,7 +170,7 @@ local void tr_static_init()
     length = 0;
     for (code = 0; code < LENGTH_CODES-1; code++) {
         base_length[code] = length;
-        for (n = 0; n < (1<<extra_lbits[code]); n++) {
+        for (n = 0; n < ZPOW2(extra_lbits[code]); n++) {
             _length_code[length++] = (uch)code;
         }
     }
@@ -181,7 +181,7 @@ local void tr_static_init()
     dist = 0;
     for (code = 0 ; code < 16; code++) {
         base_dist[code] = dist;
-        for (n = 0; n < (1<<extra_dbits[code]); n++) {
+        for (n = 0; n < ZPOW2(extra_dbits[code]); n++) {
             _dist_code[dist++] = (uch)code;
         }
     }
@@ -189,7 +189,7 @@ local void tr_static_init()
     dist >>= 7;
     for ( ; code < D_CODES; code++) {
         base_dist[code] = dist << 7;
-        for (n = 0; n < (1<<(extra_dbits[code]-7)); n++) {
+        for (n = 0; n < ZPOW2(extra_dbits[code]-7); n++) {
             _dist_code[256 + dist++] = (uch)code;
         }
     }
@@ -439,7 +439,7 @@ local void gen_codes (tree, max_code, bl_count)
         next_code[bits] = code = (code + bl_count[bits-1]) << 1;
     }
 
-    Assert (code + bl_count[MAX_BITS]-1 == (1<<MAX_BITS)-1,
+    Assert (code + bl_count[MAX_BITS]-1 == ZLOWBITS(MAX_BITS),
             "inconsistent bit counts");
     Tracev((stderr,"\ngen_codes: max_code %d ", max_code));
 

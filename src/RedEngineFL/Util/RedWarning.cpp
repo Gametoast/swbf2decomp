@@ -12,6 +12,9 @@
 
 #include "PebbleFL/Common/PblFile.h"
 
+// a log destination's bit in a destination mask
+static inline unsigned int DestinationBit(int iDestination) { return 1u << iDestination; }
+
 // GLOBAL: SWBF2 0x007df210
 bool gBreakOnWarning = true;
 
@@ -420,7 +423,7 @@ void RedWarning::SetSeverityToDestination(unsigned int uiDestinationMask, RED_ER
 
     for (int i = 0; i < RED_LOG_NUM_DESTINATIONS; ++i)
     {
-        if (uiDestinationMask & (1u << i))
+        if (uiDestinationMask & DestinationBit(i))
         {
             SetSeverityToDestination((RED_LOG_DESTINATION_INDEX)i, eSeverity);
         }

@@ -69,6 +69,9 @@
 #include "TeamManager.h"
 #include "MemoryPoolCounts.h"
 
+// a character's bit in sSpied
+static inline int CharacterBit(int iIndex) { return 1 << iIndex; }
+
 
 extern PblVector3 gVectorZero;
 
@@ -259,7 +262,7 @@ namespace AIUtil
 // FUNCTION: SWBF2 0x00441780
 void __fastcall AddSpied(Character* aSpy, Character* aSpotter)
 {
-    sSpied[Character::GetIndex(aSpy)] |= 1 << Character::GetIndex(aSpotter);
+    sSpied[Character::GetIndex(aSpy)] |= CharacterBit(Character::GetIndex(aSpotter));
 }
 }
 
@@ -269,7 +272,7 @@ namespace AIUtil
 // FUNCTION: SWBF2 0x00441800
 bool __fastcall IsSpied(Character* aSpy, Character* aSpotter)
 {
-    return (sSpied[Character::GetIndex(aSpy)] & (1 << Character::GetIndex(aSpotter))) != 0;
+    return (sSpied[Character::GetIndex(aSpy)] & CharacterBit(Character::GetIndex(aSpotter))) != 0;
 }
 }
 

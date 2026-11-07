@@ -37,7 +37,7 @@ ProcessedInputs::ProcessedInputs()
 // FUNCTION: SWBF2 0x0052b880
 bool ProcessedInputs::GetDigital(ePROCESSEDINPUT_TYPE eType) const
 {
-    return (bits.mBoolInputs & (1 << eType)) != 0;
+    return (bits.mBoolInputs & ProcessedInputs::BoolInputBit(eType)) != 0;
 }
 
 // FUNCTION: SWBF2 0x0052b8b0
@@ -282,7 +282,7 @@ void ProcessedInputs::Set(ePROCESSEDINPUT_TYPE eType, bool& bLocked, float fLast
     case ePROCESSEDINPUT_Map:
         if (fValue >= 0.125f && fLastValue < 0.125f)
         {
-            bits.mBoolInputs |= 1 << eType;
+            bits.mBoolInputs |= ProcessedInputs::BoolInputBit(eType);
         }
         break;
 
@@ -301,14 +301,14 @@ void ProcessedInputs::Set(ePROCESSEDINPUT_TYPE eType, bool& bLocked, float fLast
     case ePROCESSEDINPUT_TakeScreenshot:
         if (fValue >= 0.125f)
         {
-            bits.mBoolInputs |= 1 << eType;
+            bits.mBoolInputs |= ProcessedInputs::BoolInputBit(eType);
         }
         break;
 
     default:
         if (fValue >= 0.125f)
         {
-            bits.mBoolInputs |= 1 << eType;
+            bits.mBoolInputs |= ProcessedInputs::BoolInputBit(eType);
         }
         break;
     }

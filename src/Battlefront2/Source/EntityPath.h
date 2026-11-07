@@ -45,6 +45,14 @@ public:
     class NodeProperties
     {
     public:
+        // which of a node's branch properties were given
+        enum BranchSet
+        {
+            branchSet_NumBranchPaths = 1,
+            branchSet_MaxAngle = 2,
+            branchSet_BranchInfo = 4
+        };
+
         union BranchInfo
         {
             float range;

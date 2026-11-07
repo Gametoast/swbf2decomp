@@ -118,6 +118,11 @@ class RedRegion;
 class CommandPost : public Thread
 {
 public:
+    // a player's bit in mHoldPlayerMask and mSkippedPlayerMask
+    static unsigned __int64 PlayerBit(int iPlayerId) { return (unsigned __int64)1 << iPlayerId; }
+    // the same, as the game tests it from a soldier or a display: a 32-bit shift, which sign-extends at player 31 and wraps from 32
+    static int LowPlayerBit(int iPlayerId) { return 1 << iPlayerId; }
+
 
     class VoiceOver
     {

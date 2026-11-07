@@ -8,6 +8,9 @@
 #include "NetGame.h"
 #include "SoundFL/source/sndfreelist.h"
 
+// a sound parameter's bit in mParams
+static inline int ParamBit(unsigned int uiParam) { return 1 << uiParam; }
+
 extern bool netIsLocalTurn;
 
 // GLOBAL: SWBF2 0x0078bc00
@@ -76,7 +79,7 @@ VehicleEngine::VehicleEngine(VehicleEngineClass* pClass)
         int iHeap = GameSoundEngine::GetHeap();
         for (unsigned int i = 0; i < 12; ++i)
         {
-            mParams |= pProps->QueryParameter(sParamIDs[i]) ? (1 << i) : 0;
+            mParams |= pProps->QueryParameter(sParamIDs[i]) ? ParamBit(i) : 0;
         }
         GameSoundEngine::SetHeap(GameMemory::RunTimeHeap);
         mEngine.SetProperties(pProps);

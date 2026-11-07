@@ -1619,7 +1619,7 @@ void GameLoop::Update(float fDeltaTime, float fSystemDeltaTime)
                         const int iMembers = pTeam->mMemberCount;
                         const int iSide = pTeam->mSide;
                         fprintf(pFile, "\t%c=%s\t%du@%d%c\t%3dr\t%2dp",
-                                (iWinningTeams & (1 << iTeam)) ? 'W' : 'L',
+                                (iWinningTeams & Team::Bit(iTeam)) ? 'W' : 'L',
                                 sSideNamePrefixes[iSide],
                                 iMembers,
                                 AIDifficulty::GetIntSkill((const UnitController*)bPlayerTeam, false),

@@ -2491,7 +2491,7 @@ void HUD::GameEvents::DisplayCenterMessage(unsigned int uTextHash, unsigned int 
     for (unsigned int i = 0; i < uNumLocal; ++i)
     {
         Character* pCharacter = NetGame::GetLocalPlayer(i);
-        if (!pCharacter || !(uTeamMask & (1u << pCharacter->mTeamNumber)))
+        if (!pCharacter || !(uTeamMask & Team::Bit(pCharacter->mTeamNumber)))
         {
             continue;
         }

@@ -1,4 +1,5 @@
 #include <new>
+#include "PebbleFL/Common/PblBits.h"
 #include <d3dx9math.h>
 #include <string.h>
 #include "PebbleFL/Common/PblVector.h"
@@ -975,7 +976,7 @@ void PAAnimationGroup::WriteObject(NetPktGroup& group)
         PAAnimation* pAnim = PAAnimation::Find(sPAAnims[i].mAnimHash);
         int iBits = 1;
         const int iDeciseconds = (int)(pAnim->mTotalTime * 10.0f);
-        while ((1 << (iBits - 1)) < iDeciseconds && iBits < 32)
+        while (PowerOf2(iBits - 1) < iDeciseconds && iBits < 32)
         {
             ++iBits;
         }
@@ -1005,7 +1006,7 @@ void PAAnimationGroup::ReadObject(NetPktGroup& group)
         PAAnimation* pAnim = PAAnimation::Find(sPAAnims[i].mAnimHash);
         int iBits = 1;
         const int iDeciseconds = (int)(pAnim->mTotalTime * 10.0f);
-        while ((1 << (iBits - 1)) < iDeciseconds && iBits < 32)
+        while (PowerOf2(iBits - 1) < iDeciseconds && iBits < 32)
         {
             ++iBits;
         }

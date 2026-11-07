@@ -79,7 +79,7 @@ static float GetOptimalBuildingKillingRange(const Controllable* pMe)
     for (int i = 0; i < pMe->GetWeaponCount(); ++i)
     {
         const WeaponClass* pClass = GetWeaponClass(pMe->GetWeaponPtr(i));
-        if ((pClass->mAITargetTypes & 0x10) && !(fRange > pClass->mOptimalRange))
+        if ((pClass->mAITargetTypes & TargetInfo::TYPE_BUILDING) && !(fRange > pClass->mOptimalRange))
         {
             fRange = pClass->mOptimalRange;
         }

@@ -1,4 +1,5 @@
 #include "pcRedRenderer.h"
+#include "PebbleFL/Common/PblBits.h"
 
 #include "RedEngineFL/Memory/engineAlloc.h"
 #include "RedEngineFL/Application/pc/pcRenderHelpers.h"
@@ -2630,7 +2631,7 @@ void RedRenderer::Init()
     int iShift = 31;
     for (;;)
     {
-        uiPow2Width = 1u << iShift;
+        uiPow2Width = PowerOf2U(iShift);
         if (uiPow2Width <= m_d3dpp.BackBufferWidth &&
             uiPow2Width <= caps.MaxTextureWidth)
         {
@@ -2643,7 +2644,7 @@ void RedRenderer::Init()
     iShift = 31;
     for (;;)
     {
-        uiPow2Height = 1u << iShift;
+        uiPow2Height = PowerOf2U(iShift);
         if (uiPow2Height <= m_d3dpp.BackBufferHeight &&
             uiPow2Height <= caps.MaxTextureHeight)
         {
