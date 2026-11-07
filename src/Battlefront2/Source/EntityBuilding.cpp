@@ -62,12 +62,6 @@ EntityBuildingClass::EntityBuildingClass(unsigned int uHash)
 
 
 
-// FUNCTION: SWBF2 0x00475ed0
-const PblBox& EntityBuilding::GetBBox() const
-{
-    return GetModel()->_mModel->_TotalBoundingBox;
-}
-
 // SYNTHETIC: SWBF2 0x00402890
 // `dynamic initializer for 'EntityBuildingClass::rttiHashEntityBuildingClass''
 // EntityBuildingClass::rttiHashEntityBuildingClass
@@ -409,12 +403,6 @@ EntityBuilding::~EntityBuilding()
 
 
 
-// FUNCTION: SWBF2 0x00475e90
-bool EntityBuilding::IsUnbuilt() const
-{
-    return mState == STATE_UNBUILT;
-}
-
 // FUNCTION: SWBF2 0x00475e20
 float EntityBuilding::GetMaxSpeed() const
 {
@@ -453,18 +441,6 @@ const Controllable* EntityBuilding::GetControllable() const
 GameObjectType EntityBuilding::GetGameObjectType()
 {
     return GO_BUILDING;
-}
-
-// FUNCTION: SWBF2 0x00492350
-EntityType EntityBuilding::GetEntityType() const
-{
-    return ENT_BUILDING;
-}
-
-// FUNCTION: SWBF2 0x00475ea0
-const PblMatrix* EntityBuilding::GetRenderMatrix() const
-{
-    return &mMatrix;
 }
 
 // FUNCTION: SWBF2 0x00475eb0

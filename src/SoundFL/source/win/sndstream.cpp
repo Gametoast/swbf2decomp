@@ -18,14 +18,19 @@ Stream::Stream()
 
     for (unsigned int i = 0; i < 8; ++i)
     {
-        mPackets[i].mBuffer = mStreamBuf[i];
+        mPackets[i].SetBuffer(mStreamBuf[i]);
         for (unsigned int j = 0; j < 3; ++j)
         {
-            mADPCMPackets[j][i].mBuffer = mADPCMPacketBuf[j][i];
+            mADPCMPackets[j][i].SetBuffer(mADPCMPacketBuf[j][i]);
         }
     }
 
     StreamBase::mUpdateI3DL2Source = 0;
+}
+
+// FUNCTION: SWBF2 0x00734830
+Stream::~Stream()
+{
 }
 
 // FUNCTION: SWBF2 0x00734b40
@@ -374,7 +379,7 @@ void Stream::Open(File& rFile)
         {
             rPacket.Unlock();
         }
-        rPacket.mBuffer = 0;
+        rPacket.SetBuffer(0);
     }
     mSplitter.Setup(uiNumSubstreams, pInfo->mSubstreamInterleave, mSplitterPackets,
                     mSplitterReadPos, mSplitterLockPos, uiNumSplitterPackets);

@@ -304,17 +304,6 @@ EntityCarrierClass::~EntityCarrierClass()
 {
 }
 
-// SYNTHETIC: SWBF2 0x004780b0
-// CommandFlyerClass::`scalar deleting destructor'
-
-// FUNCTION: SWBF2 0x00478160
-CommandFlyerClass::~CommandFlyerClass()
-{
-}
-
-// SYNTHETIC: SWBF2 0x004785f1
-// ??_ECommandFlyerClass@@WBAKA@AEPAXI@Z
-
 // FUNCTION: SWBF2 0x00497610
 EntityCarrierClass::EntityCarrierClass(EntityCarrierClass* pSrc, unsigned int uHash)
     : EntityFlyerClass(pSrc, uHash)

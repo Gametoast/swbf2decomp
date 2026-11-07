@@ -25,7 +25,7 @@ public:
     // pcSpecularLightingShader::Bind
     // FUNCTION: SWBF2 0x007129b0
     // pcSpecularLightingShader::GetShaderDef
-    DECLARE_PC_RED_SHADER_METHODS()
+    DECLARE_PC_RED_SHADER_METHODS(pcSpecularLightingShader)
 
     virtual RenderPhaseT GetRenderPhase(const RenderItem*, unsigned int) const;
 
@@ -52,30 +52,6 @@ private:
     void PerVertexLighting(const RenderItem* pItem, unsigned int uiPass) const;
     void PerPixelLighting(const RenderItem* pItem, unsigned int uiPass) const;
 public:
-
-    // GLOBAL: SWBF2 0x009ca970
-    static unsigned int s_uiID;
-
-    // GLOBAL: SWBF2 0x009ca974
-    static GetStateFuncT GetStateFuncArray[MAX_PIPELINES];
-
-    // GLOBAL: SWBF2 0x009ca980
-    static BeginFuncT BeginFuncArray[MAX_PIPELINES];
-
-    // GLOBAL: SWBF2 0x009ca98c
-    static EndFuncT EndFuncArray[MAX_PIPELINES];
-
-    // GLOBAL: SWBF2 0x009ca998
-    static RenderFuncT RenderFuncArray[MAX_PIPELINES];
-
-    // GLOBAL: SWBF2 0x009caa0c
-    static unsigned int s_uiRenderTypeHash;
-
-    // GLOBAL: SWBF2 0x009ca9dc
-    static pcRedShaderDef s_shaderDef;
-
-    // GLOBAL: SWBF2 0x009ca9a8
-    static pcSpecularLightingShader s_Factory;
 
 private:
 

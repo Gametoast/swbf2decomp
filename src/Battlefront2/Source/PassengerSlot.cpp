@@ -185,12 +185,6 @@ PassengerSlot::~PassengerSlot()
 
 
 
-// FUNCTION: SWBF2 0x0060f490
-unsigned int PassengerSlot::GetDerivedRtti() const { return rttiHashPassengerSlot; }
-
-// FUNCTION: SWBF2 0x0060f4a0
-const char* PassengerSlot::GetDerivedRttiName() const { return rttiNamePassengerSlot; }
-
 // SYNTHETIC: SWBF2 0x0060fef8
 // ?GetEntity@PassengerSlot@@WM@AEPAVEntity@@XZ
 // FUNCTION: SWBF2 0x0060f4b0

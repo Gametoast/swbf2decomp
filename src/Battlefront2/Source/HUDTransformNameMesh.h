@@ -102,3 +102,15 @@ inline HUD::TransformNameMesh::Factory::Factory()
 {
     mName = "TransformNameMesh";
 }
+
+// FUNCTION: SWBF2 0x00564af0
+inline HUD::Item* HUD::TransformNameMesh::Factory::CreateItem(const char* const pName, ItemCallback pCallback,
+                                                              void* const pUserData)
+{
+    HUD::Item* pItem = new TransformNameMesh(pName, pCallback, pUserData);
+    if (pItem)
+    {
+        return pItem->SetFactory(this);
+    }
+    return 0;
+}

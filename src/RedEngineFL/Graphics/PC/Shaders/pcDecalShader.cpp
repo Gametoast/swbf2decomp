@@ -11,10 +11,20 @@
 
 void __cdecl PblTraceP(const char* Format, ...);
 
+// GLOBAL: SWBF2 0x009ca634
+// pcDecalShader::s_uiID
 unsigned int pcDecalShader::s_uiID;
+// GLOBAL: SWBF2 0x009ca638
+// pcDecalShader::GetStateFuncArray
 pcRedShader::GetStateFuncT pcDecalShader::GetStateFuncArray[MAX_PIPELINES];
+// GLOBAL: SWBF2 0x009ca644
+// pcDecalShader::BeginFuncArray
 pcRedShader::BeginFuncT pcDecalShader::BeginFuncArray[MAX_PIPELINES];
+// GLOBAL: SWBF2 0x009ca650
+// pcDecalShader::EndFuncArray
 pcRedShader::EndFuncT pcDecalShader::EndFuncArray[MAX_PIPELINES];
+// GLOBAL: SWBF2 0x009ca65c
+// pcDecalShader::RenderFuncArray
 pcRedShader::RenderFuncT pcDecalShader::RenderFuncArray[MAX_PIPELINES];
 
 // FUNCTION: SWBF2 0x0070efa0

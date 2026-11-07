@@ -171,6 +171,8 @@ public:
     void GetTopPlane(Plane& rPlane) const;
 
     void GetBaseEdges(Ray<Vector3<float> >* pEdges) const;
+    void GetNearPlane(Plane& rPlane) const;
+    void GetFarPlane(Plane& rPlane) const;
 
     Vector3<float> center_;
     Vector3<float> up_;
@@ -202,5 +204,82 @@ public:
     Ray() {}
     Ray(const T& rOrig, const T& rDir) : Line<T>(rOrig, rDir) {}
 };
+
+// FUNCTION: SWBF2 0x00723810
+inline void Frustum::GetPlanes_(Plane* pPlanes) const
+{
+    GetNearPlane(pPlanes[0]);
+    GetFarPlane(pPlanes[1]);
+    GetLeftPlane(pPlanes[2]);
+    GetRightPlane(pPlanes[3]);
+    GetBottomPlane(pPlanes[4]);
+    GetTopPlane(pPlanes[5]);
+}
+
+// FUNCTION: SWBF2 0x00722eb0
+inline void Frustum::GetBaseEdges(Ray<Vector3<float> >* pEdges) const
+{
+    Vector3<float> right = normalize(cross(up_, fwd_));
+    pEdges[0].dir_ = fwd_ * far_ + up_ * height_ + right * width_;
+    pEdges[1].dir_ = fwd_ * far_ - up_ * height_ + right * width_;
+    pEdges[2].dir_ = fwd_ * far_ - up_ * height_ - right * width_;
+    pEdges[3].dir_ = fwd_ * far_ + up_ * height_ - right * width_;
+    pEdges[0].orig_ = center_;
+    pEdges[1].orig_ = center_;
+    pEdges[2].orig_ = center_;
+    pEdges[3].orig_ = center_;
+}
+
+inline void Frustum::GetNearPlane(Plane& rPlane) const
+{
+    rPlane.dir_ = fwd_;
+    rPlane.dist_ = (dot(rPlane.dir_, center_) + near_) * -1.0f;
+}
+
+inline void Frustum::GetFarPlane(Plane& rPlane) const
+{
+    rPlane.dir_ = fwd_ * -1.0f;
+    rPlane.dist_ = (dot(rPlane.dir_, center_) - far_) * -1.0f;
+}
+
+// FUNCTION: SWBF2 0x007235c0
+inline void Frustum::GetLeftPlane(Plane& rPlane) const
+{
+    Vector3<float> side = normalize(cross(up_, fwd_)) * width_;
+    Vector3<float> edge = normalize(fwd_ * far_ - side);
+    rPlane.dir_ = normalize(cross(up_, edge));
+    const float fDot = dot(rPlane.dir_, center_);
+    rPlane.dist_ = fDot * -1.0f;
+}
+
+// FUNCTION: SWBF2 0x00723900
+inline void Frustum::GetRightPlane(Plane& rPlane) const
+{
+    Vector3<float> side = normalize(cross(up_, fwd_));
+    Vector3<float> edge = normalize(fwd_ * far_ + side * width_);
+    rPlane.dir_ = normalize(cross(edge, up_));
+    const float fDot = dot(rPlane.dir_, center_);
+    rPlane.dist_ = fDot * -1.0f;
+}
+
+// FUNCTION: SWBF2 0x00723240
+inline void Frustum::GetBottomPlane(Plane& rPlane) const
+{
+    Vector3<float> side = normalize(cross(up_, fwd_));
+    Vector3<float> edge = normalize(fwd_ * far_ - up_ * height_);
+    rPlane.dir_ = normalize(cross(edge, side));
+    const float fDot = dot(rPlane.dir_, center_);
+    rPlane.dist_ = fDot * -1.0f;
+}
+
+// FUNCTION: SWBF2 0x00723b50
+inline void Frustum::GetTopPlane(Plane& rPlane) const
+{
+    Vector3<float> side = normalize(cross(up_, fwd_));
+    Vector3<float> edge = normalize(fwd_ * far_ + up_ * height_);
+    rPlane.dir_ = normalize(cross(side, edge));
+    const float fDot = dot(rPlane.dir_, center_);
+    rPlane.dist_ = fDot * -1.0f;
+}
 
 }

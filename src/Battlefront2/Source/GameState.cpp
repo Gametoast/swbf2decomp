@@ -695,54 +695,9 @@ void GameState::_SetState(State* pState)
     }
 }
 
-namespace SaveGameManager
-{
-    // GLOBAL: SWBF2 0x01eaf000
-    unsigned int mReqSaveFile2Data;
-}
-
-namespace SaveGameManager
-{
-    extern void (*mOnDone)();
-}
-namespace SaveGameManager
-{
-    // GLOBAL: SWBF2 0x01eaf008
-    unsigned int mReqSaveFile2Size;
-}
-namespace SaveGameManager
-{
-    // GLOBAL: SWBF2 0x01eaf010
-    unsigned int mReqSaveFile1Data;
-}
-namespace SaveGameManager
-{
-    // GLOBAL: SWBF2 0x01eaf014
-    unsigned int mReqSaveFile1Size;
-}
-namespace SaveGameManager
-{
-    // GLOBAL: SWBF2 0x01eaeff7
-    bool mForceNoSaveDevice;
-}
 namespace PblBuildType
 {
     extern bool gCreateMemoryProfile;
-}
-
-namespace SaveGameManager
-{
-
-// FUNCTION: SWBF2 0x00632ee0
-void Init(bool bForceNoSaveDevice)
-{
-    SaveGameManager::mOnDone = 0;
-    SaveGameManager::mReqSaveFile2Data = 0;
-    SaveGameManager::mReqSaveFile1Data = 0;
-    SaveGameManager::mReqSaveFile2Size = 0;
-    SaveGameManager::mReqSaveFile1Size = 0;
-    SaveGameManager::mForceNoSaveDevice = bForceNoSaveDevice;
-}
 }
 
 // FUNCTION: SWBF2 0x005396b0

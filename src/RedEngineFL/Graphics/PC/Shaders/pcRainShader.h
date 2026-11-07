@@ -33,7 +33,7 @@ public:
     // pcRainShader::Bind
     // FUNCTION: SWBF2 0x00704f80
     // pcRainShader::GetShaderDef
-    DECLARE_PC_RED_SHADER_METHODS()
+    DECLARE_PC_RED_SHADER_METHODS(pcRainShader)
 
     virtual RenderPhaseT GetRenderPhase(const RenderItem*, unsigned int) const;
 
@@ -58,27 +58,6 @@ public:
     unsigned int m_uiMaterialFlags;
     float m_fLineWidth;
     float m_fMaxPixelWidth;
-
-    // GLOBAL: SWBF2 0x009c99f4
-    static unsigned int s_uiID;
-
-    // GLOBAL: SWBF2 0x009c99f8
-    static GetStateFuncT GetStateFuncArray[MAX_PIPELINES];
-
-    // GLOBAL: SWBF2 0x009c9a04
-    static BeginFuncT BeginFuncArray[MAX_PIPELINES];
-
-    // GLOBAL: SWBF2 0x009c9a10
-    static EndFuncT EndFuncArray[MAX_PIPELINES];
-
-    // GLOBAL: SWBF2 0x009c9a1c
-    static RenderFuncT RenderFuncArray[MAX_PIPELINES];
-
-    static pcRainShader s_Factory;
-
-    static unsigned int s_uiRenderTypeHash;
-
-    static pcRedShaderDef s_shaderDef;
 
 private:
 

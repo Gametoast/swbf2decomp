@@ -40,10 +40,20 @@ static const float kfMaxSpecularPower = 100.0f;
 // GLOBAL: SWBF2 0x00785620
 static const unsigned int MAX_LIGHTS_PER_STATE[10] = { 0, 3, 2, 1, 1, 0, 1, 1, 0, 1 };
 
+// GLOBAL: SWBF2 0x009ca970
+// pcSpecularLightingShader::s_uiID
 unsigned int pcSpecularLightingShader::s_uiID;
+// GLOBAL: SWBF2 0x009ca974
+// pcSpecularLightingShader::GetStateFuncArray
 pcRedShader::GetStateFuncT pcSpecularLightingShader::GetStateFuncArray[MAX_PIPELINES];
+// GLOBAL: SWBF2 0x009ca980
+// pcSpecularLightingShader::BeginFuncArray
 pcRedShader::BeginFuncT pcSpecularLightingShader::BeginFuncArray[MAX_PIPELINES];
+// GLOBAL: SWBF2 0x009ca98c
+// pcSpecularLightingShader::EndFuncArray
 pcRedShader::EndFuncT pcSpecularLightingShader::EndFuncArray[MAX_PIPELINES];
+// GLOBAL: SWBF2 0x009ca998
+// pcSpecularLightingShader::RenderFuncArray
 pcRedShader::RenderFuncT pcSpecularLightingShader::RenderFuncArray[MAX_PIPELINES];
 
 // FUNCTION: SWBF2 0x007125a0

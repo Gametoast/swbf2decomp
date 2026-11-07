@@ -88,7 +88,7 @@ const char NavigatorFollowTarget::rttiNameNavigatorFollowTarget[] = "NavigatorFo
 // FUNCTION: SWBF2 0x005ac590
 NavigatorFollowTarget* NavigatorFollowTargetPtr(Navigator* pNavigator)
 {
-    if (pNavigator && pNavigator->IsRtti(NavigatorFollowTarget::rttiHashNavigatorFollowTarget))
+    if (pNavigator && pNavigator->IsRtti(NavigatorFollowTarget::GetRtti()))
     {
         return (NavigatorFollowTarget*)pNavigator;
     }

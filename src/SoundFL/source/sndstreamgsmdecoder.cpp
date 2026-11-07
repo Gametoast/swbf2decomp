@@ -63,7 +63,7 @@ void StreamGSMDecoder::Update()
             {
                 return;
             }
-            mInputPacketSize = mInputPacket->mBufferUsed;
+            mInputPacketSize = mInputPacket->GetUsed();
             mInputPacketOffset = 0;
         }
 
@@ -74,8 +74,8 @@ void StreamGSMDecoder::Update()
                 break;
             }
 
-            short* const pSamples = (short*)pOutput->mBuffer;
-            unsigned char* const pInput = (unsigned char*)mInputPacket->mBuffer;
+            short* const pSamples = (short*)pOutput->GetBuffer();
+            unsigned char* const pInput = (unsigned char*)mInputPacket->GetBuffer();
             bool bDiscontinuity = false;
             bool bLast = false;
             bool bEnd = false;
@@ -115,7 +115,7 @@ void StreamGSMDecoder::Update()
                 mOutputPacketOffset += 160;
             }
 
-            if (mInputPacketOffset == mInputPacket->mBufferUsed &&
+            if (mInputPacketOffset == mInputPacket->GetUsed() &&
                 (!mDecimate || mFrameOffset == 160))
             {
                 bLast = mInputPacket->GetLast();

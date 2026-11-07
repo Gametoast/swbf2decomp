@@ -1,6 +1,7 @@
 #pragma once
 
 #include <stddef.h>
+#include <string.h>
 #include "RedEngineFL/Graphics/PC/pcRedShader.h"
 
 class RedTexture;
@@ -41,7 +42,7 @@ public:
     // pcFilterCopyShader::Bind
     // FUNCTION: SWBF2 0x0070fd80
     // pcFilterCopyShader::GetShaderDef
-    DECLARE_PC_RED_SHADER_METHODS()
+    DECLARE_PC_RED_SHADER_METHODS(pcFilterCopyShader)
 
     virtual RenderPhaseT GetRenderPhase(const RenderItem*, unsigned int) const;
 
@@ -53,9 +54,20 @@ private:
 
 
 public:
-    virtual void SetTextures(RedTexture* pSrc, RedTexture* pDest);
+    // FUNCTION: SWBF2 0x007102e0
+    virtual void SetTextures(RedTexture* pSrc, RedTexture* pDest)
+    {
+        m_srcTex = pSrc;
+        m_destTex = pDest;
+    }
+
+    // FUNCTION: SWBF2 0x007102b0
     virtual void SetSamples(unsigned int uiNumSamples,
-                            FilterCopyShaderSample* const pSamples);
+                            FilterCopyShaderSample* const pSamples)
+    {
+        memcpy(m_samples, pSamples, uiNumSamples * sizeof(FilterCopyShaderSample));
+        m_numSamples = uiNumSamples;
+    }
 
     unsigned int GetState_Fixed(const RenderItem*) const;
     unsigned int GetState_Prog1(const RenderItem*) const;
@@ -73,27 +85,6 @@ public:
     unsigned int m_numSamples;
 
     mutable unsigned int m_curSample;
-
-    // GLOBAL: SWBF2 0x009ca6d8
-    static unsigned int s_uiID;
-
-    // GLOBAL: SWBF2 0x009ca6dc
-    static GetStateFuncT GetStateFuncArray[MAX_PIPELINES];
-
-    // GLOBAL: SWBF2 0x009ca6e8
-    static BeginFuncT BeginFuncArray[MAX_PIPELINES];
-
-    // GLOBAL: SWBF2 0x009ca6f4
-    static EndFuncT EndFuncArray[MAX_PIPELINES];
-
-    // GLOBAL: SWBF2 0x009ca700
-    static RenderFuncT RenderFuncArray[MAX_PIPELINES];
-
-    static unsigned int s_uiRenderTypeHash;
-
-    static pcRedShaderDef s_shaderDef;
-
-    static pcFilterCopyShader s_Factory;
 
 private:
 

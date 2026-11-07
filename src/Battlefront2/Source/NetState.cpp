@@ -3536,6 +3536,16 @@ bool EntityDroideka::Smooth(float fDeltaTime) const
     return netIsLastLocalTurn;
 }
 
+// FUNCTION: SWBF2 0x005eedf0
+const PblMatrix& EntityDroid::GetSmoothedMatrix() const
+{
+    if (NetGame::IsEnabled() && mNetUniqueId != -1 && NetGame::IsClient())
+    {
+        return NetPredict::GetSmoothInfo(mNetUniqueId).GetRenderMatrix();
+    }
+    return mMatrix;
+}
+
 // FUNCTION: SWBF2 0x005eee40
 bool EntityDroid::Smooth(float fDeltaTime) const
 {
@@ -3625,14 +3635,6 @@ bool EntityFlyer::Smooth(float fDeltaTime) const
     info.mOmega = mOmega;
     info.SetMat(mMatrix, 10.0f, 100.0f);
     return netIsLastLocalTurn;
-}
-
-void PerformSafeRemove(CollisionObject* pObject);
-
-// FUNCTION: SWBF2 0x00460920
-bool CollisionManager::DeactivateItem(CollisionObject* pObject)
-{
-    return sInstance->I_DeactivateItem(pObject);
 }
 
 // FUNCTION: SWBF2 0x005e94d0

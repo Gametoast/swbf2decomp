@@ -667,7 +667,7 @@ bool CombatUtil::sCauseDamage(Controllable* pMe, const Weapon* pWpn, const Weapo
     if (pMe->GetEntity()->IsRtti(EntityHover::rttiHashEntityHover) ||
         pMe->GetEntity()->IsRtti(EntityWalker::rttiHashEntityWalker) ||
         pMe->GetEntity()->IsRtti(EntityBuildingArmed::rttiHashEntityBuildingArmed) ||
-        pMe->GetEntity()->IsRtti(MountedTurret::rttiHashMountedTurret))
+        pMe->GetEntity()->IsRtti(MountedTurret::GetRtti()))
     {
         if (fDamagePerSecond > 0.0f && GetDamageable(pTarget)->mCurHealth < 1.0e16f)
         {

@@ -20,10 +20,20 @@
 
 void __cdecl PblTraceP(const char* Format, ...);
 
+// GLOBAL: SWBF2 0x009c8514
+// pcTerrainShader::s_uiID
 unsigned int pcTerrainShader::s_uiID;
+// GLOBAL: SWBF2 0x009c8518
+// pcTerrainShader::GetStateFuncArray
 pcRedShader::GetStateFuncT pcTerrainShader::GetStateFuncArray[MAX_PIPELINES];
+// GLOBAL: SWBF2 0x009c8524
+// pcTerrainShader::BeginFuncArray
 pcRedShader::BeginFuncT pcTerrainShader::BeginFuncArray[MAX_PIPELINES];
+// GLOBAL: SWBF2 0x009c8530
+// pcTerrainShader::EndFuncArray
 pcRedShader::EndFuncT pcTerrainShader::EndFuncArray[MAX_PIPELINES];
+// GLOBAL: SWBF2 0x009c853c
+// pcTerrainShader::RenderFuncArray
 pcRedShader::RenderFuncT pcTerrainShader::RenderFuncArray[MAX_PIPELINES];
 pcRedVertexFormat* pcTerrainShader::s_pVertexInputFormat;
 pcRedVertexFormat* pcTerrainShader::s_pPosVertexInputFormat;
@@ -65,6 +75,8 @@ pcTerrainShader pcTerrainShader::s_Factory;
 // `dynamic initializer for 'pcTerrainShader::s_shaderDef''
 // SYNTHETIC: SWBF2 0x00769bf0
 // `dynamic atexit destructor for 'pcTerrainShader::s_shaderDef''
+// GLOBAL: SWBF2 0x009c85d4
+// pcTerrainShader::s_shaderDef
 pcRedShaderDef pcTerrainShader::s_shaderDef("terrain_shader.xml");
 
 // SYNTHETIC: SWBF2 0x00409440

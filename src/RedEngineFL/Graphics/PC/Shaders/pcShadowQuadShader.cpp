@@ -15,10 +15,20 @@ extern PblMatrix gMatrixIdentity;
 // GLOBAL: SWBF2 0x007e1e80
 unsigned int pcShadowQuadShader::s_uiStencilMask = 0xff;
 
+// GLOBAL: SWBF2 0x009c9d80
+// pcShadowQuadShader::s_uiID
 unsigned int pcShadowQuadShader::s_uiID;
+// GLOBAL: SWBF2 0x009c9d84
+// pcShadowQuadShader::GetStateFuncArray
 pcRedShader::GetStateFuncT pcShadowQuadShader::GetStateFuncArray[MAX_PIPELINES];
+// GLOBAL: SWBF2 0x009c9d90
+// pcShadowQuadShader::BeginFuncArray
 pcRedShader::BeginFuncT pcShadowQuadShader::BeginFuncArray[MAX_PIPELINES];
+// GLOBAL: SWBF2 0x009c9d9c
+// pcShadowQuadShader::EndFuncArray
 pcRedShader::EndFuncT pcShadowQuadShader::EndFuncArray[MAX_PIPELINES];
+// GLOBAL: SWBF2 0x009c9da8
+// pcShadowQuadShader::RenderFuncArray
 pcRedShader::RenderFuncT pcShadowQuadShader::RenderFuncArray[MAX_PIPELINES];
 
 // SYNTHETIC: SWBF2 0x00409f20

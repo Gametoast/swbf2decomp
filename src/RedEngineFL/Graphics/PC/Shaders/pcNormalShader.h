@@ -27,7 +27,7 @@ public:
     // pcNormalShader::Bind
     // FUNCTION: SWBF2 0x006ff7c0
     // pcNormalShader::GetShaderDef
-    DECLARE_PC_RED_SHADER_METHODS()
+    DECLARE_PC_RED_SHADER_METHODS(pcNormalShader)
 
     virtual RenderPhaseT GetRenderPhase(const RenderItem*, unsigned int) const;
     virtual RedShadingState* CreateShadingState() const;
@@ -67,30 +67,6 @@ public:
 
     RedMaterial m_material;
     bool m_lightingInSeparatePass;
-
-    // GLOBAL: SWBF2 0x009c926c
-    static unsigned int s_uiID;
-
-    // GLOBAL: SWBF2 0x009c9270
-    static GetStateFuncT GetStateFuncArray[MAX_PIPELINES];
-
-    // GLOBAL: SWBF2 0x009c927c
-    static BeginFuncT BeginFuncArray[MAX_PIPELINES];
-
-    // GLOBAL: SWBF2 0x009c9288
-    static EndFuncT EndFuncArray[MAX_PIPELINES];
-
-    // GLOBAL: SWBF2 0x009c9294
-    static RenderFuncT RenderFuncArray[MAX_PIPELINES];
-
-    // GLOBAL: SWBF2 0x009c938c
-    static unsigned int s_uiRenderTypeHash;
-
-    // GLOBAL: SWBF2 0x009c934c
-    static pcRedShaderDef s_shaderDef;
-
-    // GLOBAL: SWBF2 0x009c92a8
-    static pcNormalShader s_Factory;
 
 private:
 

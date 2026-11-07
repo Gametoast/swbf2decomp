@@ -20,10 +20,20 @@ void __cdecl PblTraceP(const char* Format, ...);
 class PblMatrix;
 extern PblMatrix gMatrixIdentity;
 
+// GLOBAL: SWBF2 0x009c98c4
+// pcSkyFogShader::s_uiID
 unsigned int pcSkyFogShader::s_uiID;
+// GLOBAL: SWBF2 0x009c98c8
+// pcSkyFogShader::GetStateFuncArray
 pcRedShader::GetStateFuncT pcSkyFogShader::GetStateFuncArray[MAX_PIPELINES];
+// GLOBAL: SWBF2 0x009c98d4
+// pcSkyFogShader::BeginFuncArray
 pcRedShader::BeginFuncT pcSkyFogShader::BeginFuncArray[MAX_PIPELINES];
+// GLOBAL: SWBF2 0x009c98e0
+// pcSkyFogShader::EndFuncArray
 pcRedShader::EndFuncT pcSkyFogShader::EndFuncArray[MAX_PIPELINES];
+// GLOBAL: SWBF2 0x009c98ec
+// pcSkyFogShader::RenderFuncArray
 pcRedShader::RenderFuncT pcSkyFogShader::RenderFuncArray[MAX_PIPELINES];
 
 // SYNTHETIC: SWBF2 0x00409aa0

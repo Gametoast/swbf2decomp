@@ -1087,6 +1087,16 @@ bool tProfile::IsDirty(bool bNoCache)
 }
 }
 
+namespace PlayerProfile
+{
+
+// FUNCTION: SWBF2 0x0061d8f0
+void SetSafeMode()
+{
+    mSafeMode = true;
+}
+}
+
 // GLOBAL: SWBF2 0x00788140
 
 static const float sDeadZoneScaleByLevel[11] =

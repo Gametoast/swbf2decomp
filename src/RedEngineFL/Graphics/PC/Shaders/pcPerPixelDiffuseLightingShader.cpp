@@ -42,10 +42,20 @@ static const unsigned int MAX_LIGHTS_PER_STATE[24] =
     3, 2, 1, 3, 2, 1, 3, 2, 1, 3, 2, 1, 3, 2, 1, 3, 2, 1, 3, 2, 1, 3, 2, 1,
 };
 
+// GLOBAL: SWBF2 0x009ca8d4
+// pcPerPixelDiffuseLightingShader::s_uiID
 unsigned int pcPerPixelDiffuseLightingShader::s_uiID;
+// GLOBAL: SWBF2 0x009ca8d8
+// pcPerPixelDiffuseLightingShader::GetStateFuncArray
 pcRedShader::GetStateFuncT pcPerPixelDiffuseLightingShader::GetStateFuncArray[MAX_PIPELINES];
+// GLOBAL: SWBF2 0x009ca8e4
+// pcPerPixelDiffuseLightingShader::BeginFuncArray
 pcRedShader::BeginFuncT pcPerPixelDiffuseLightingShader::BeginFuncArray[MAX_PIPELINES];
+// GLOBAL: SWBF2 0x009ca8f0
+// pcPerPixelDiffuseLightingShader::EndFuncArray
 pcRedShader::EndFuncT pcPerPixelDiffuseLightingShader::EndFuncArray[MAX_PIPELINES];
+// GLOBAL: SWBF2 0x009ca8fc
+// pcPerPixelDiffuseLightingShader::RenderFuncArray
 pcRedShader::RenderFuncT pcPerPixelDiffuseLightingShader::RenderFuncArray[MAX_PIPELINES];
 
 // FUNCTION: SWBF2 0x00711560
@@ -566,18 +576,24 @@ void pcPerPixelDiffuseLightingShader::_Read(PblFileChunk& chunk) const
 
 // SYNTHETIC: SWBF2 0x0040a5f0
 // `dynamic initializer for 'pcPerPixelDiffuseLightingShader::s_uiRenderTypeHash''
+// GLOBAL: SWBF2 0x009ca938
+// pcPerPixelDiffuseLightingShader::s_uiRenderTypeHash
 unsigned int pcPerPixelDiffuseLightingShader::s_uiRenderTypeHash = PblHash("perpixeldiffuselighting");
 
 // SYNTHETIC: SWBF2 0x0040a5b0
 // `dynamic initializer for 'pcPerPixelDiffuseLightingShader::s_Factory''
 // SYNTHETIC: SWBF2 0x00769ff0
 // `dynamic atexit destructor for 'pcPerPixelDiffuseLightingShader::s_Factory''
+// GLOBAL: SWBF2 0x009ca940
+// pcPerPixelDiffuseLightingShader::s_Factory
 pcPerPixelDiffuseLightingShader pcPerPixelDiffuseLightingShader::s_Factory;
 
 // SYNTHETIC: SWBF2 0x0040a5d0
 // `dynamic initializer for 'pcPerPixelDiffuseLightingShader::s_shaderDef''
 // SYNTHETIC: SWBF2 0x0076a010
 // `dynamic atexit destructor for 'pcPerPixelDiffuseLightingShader::s_shaderDef''
+// GLOBAL: SWBF2 0x009ca90c
+// pcPerPixelDiffuseLightingShader::s_shaderDef
 pcRedShaderDef pcPerPixelDiffuseLightingShader::s_shaderDef("perpixeldiffuselighting_shader.xml");
 
 // SYNTHETIC: SWBF2 0x0040a630

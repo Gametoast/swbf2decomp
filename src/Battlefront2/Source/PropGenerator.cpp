@@ -197,9 +197,12 @@ bool PropGenerator::PropGeneratorThread::Update(float fDeltaTime)
 // SYNTHETIC: SWBF2 0x00629fe0
 // PropGenerator::PropGeneratorThread::`scalar deleting destructor'
 
+namespace
+{
 // GLOBAL: SWBF2 0x007e9039
 // flushClusterObjs_
 bool flushClusterObjs_ = true;
+}
 
 // FUNCTION: SWBF2 0x0062a180
 void PropGenerator::SortClusters()
@@ -500,6 +503,12 @@ namespace TreeLine
 void CreateTreeLine(PblFileChunk& chunk);
 }
 void CreateTreeLineOnPath(unsigned int uPathName, PblFileChunk& chunk);
+
+// FUNCTION: SWBF2 0x0062b100
+void PropGenerator::FlushClusterObjects()
+{
+    flushClusterObjs_ = true;
+}
 
 // FUNCTION: SWBF2 0x0062b110
 void PropGenerator::FlushClusterObjects_()

@@ -65,3 +65,15 @@ inline HUD::Sound::Factory::Factory()
 {
     mName = "Sound";
 }
+
+// FUNCTION: SWBF2 0x00564c50
+inline HUD::Item* HUD::Sound::Factory::CreateItem(const char* const pName, ItemCallback pCallback,
+                                                  void* const pUserData)
+{
+    HUD::Item* pItem = new Sound(pName, pCallback, pUserData);
+    if (pItem)
+    {
+        return pItem->SetFactory(this);
+    }
+    return 0;
+}

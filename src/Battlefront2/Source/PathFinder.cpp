@@ -120,8 +120,8 @@ float sRadiusVehicle;
 int gPathResultFailureCount = 1;
 
 // FUNCTION: SWBF2 0x0060ff20
-Obstacle::Obstacle(const PblMatrix& rMatrix, const PblVector4& rSize, int eProhibit,
-                   unsigned int uName)
+Obstacle::Obstacle(const PblMatrix& rMatrix, const PblVector4& rSize,
+                   ConnectivityGraph::ProhibitFlag eProhibit, unsigned int uName)
     : TreeGridObject(-1)
 {
     mNameHash = uName;
@@ -440,8 +440,8 @@ void PathFinder::Reset()
 }
 
 // FUNCTION: SWBF2 0x00610c70
-void PathFinder::AddObstacle(const PblMatrix& rMatrix, const PblVector4& rSize, int eProhibit,
-                             unsigned int uName)
+void PathFinder::AddObstacle(const PblMatrix& rMatrix, const PblVector4& rSize,
+                             ConnectivityGraph::ProhibitFlag eProhibit, unsigned int uName)
 {
     Obstacle* pObstacle = new Obstacle(rMatrix, rSize, eProhibit, uName);
     const PblVector3& rPos = rMatrix.GetTranslation();
@@ -483,7 +483,8 @@ void PathFinder::CreateGameObjectBarrier(Obstacle*& rpObstacle, GameObject* pObj
     mat.m[3][0] += offset.x;
     mat.m[3][1] += offset.y;
     mat.m[3][2] += offset.z;
-    rpObstacle = new Obstacle(mat, size, ~32, uName);
+    rpObstacle = new Obstacle(mat, size,
+                              (ConnectivityGraph::ProhibitFlag)~ConnectivityGraph::CGT_FLAG_FLYER, uName);
     sObstacles->Add(rpObstacle, rpObstacle->GetBoundingCircleCenter(),
                     rpObstacle->GetBoundingCircleRadius() * 2.0f);
 }
@@ -1112,9 +1113,4 @@ template void PblHeap<PathFinder::PathNode*, float>::ReplaceLowest(PathFinder::P
 // PblHeap<PathFinder::PathNode *,float>::Pop
 template void PblHeap<PathFinder::PathNode*, float>::Pop();
 
-// FUNCTION: SWBF2 0x00438690
-bool AIDebug::PauseAfterPathFind()
-{
-    return false;
-}
 #include <new>

@@ -7,6 +7,7 @@
 #include "CollisionModel.h"
 #include "GameObject.h"
 #include "GameSound.h"
+#include "GameModel.h"
 #include "PebbleFL/Common/PblList.h"
 #include "PebbleFL/Common/PblVector.h"
 
@@ -107,19 +108,35 @@ public:
     virtual const char* GetDerivedRttiName() const;
     virtual ~EntityBuilding();
     virtual void ClientKill();
-    virtual bool IsUnbuilt() const;
+    // FUNCTION: SWBF2 0x00475e90
+    virtual bool IsUnbuilt() const
+    {
+        return mState == STATE_UNBUILT;
+    }
     virtual float GetMaxSpeed() const;
     virtual float GetMaxStrafe() const;
     virtual const Controllable* GetControllable() const;
     virtual Controllable* GetControllable();
     virtual GameObjectType GetGameObjectType();
-    virtual EntityType GetEntityType() const;
-    virtual const PblMatrix* GetRenderMatrix() const;
+    // FUNCTION: SWBF2 0x00492350
+    virtual EntityType GetEntityType() const
+    {
+        return ENT_BUILDING;
+    }
+    // FUNCTION: SWBF2 0x00475ea0
+    virtual const PblMatrix* GetRenderMatrix() const
+    {
+        return &mMatrix;
+    }
     virtual const RedPose* GetRenderPose() const;
 
     virtual void Render(unsigned char uFlags, float fDist, unsigned int uMask);
     virtual const PblMatrix& GetBBoxMatrix() const;
-    virtual const PblBox& GetBBox() const;
+    // FUNCTION: SWBF2 0x00475ed0
+    virtual const PblBox& GetBBox() const
+    {
+        return GetModel()->_mModel->_TotalBoundingBox;
+    }
 
     virtual void SetPosition(const PblVector3& vPos);
 

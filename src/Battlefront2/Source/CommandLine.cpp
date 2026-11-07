@@ -23,18 +23,6 @@
 #include "RedEngineFL/Util/RedLocalizeDB.h"
 #include "PebbleFL/Common/PblMath.h"
 
-extern bool mSafeMode;
-
-namespace PlayerProfile
-{
-
-// FUNCTION: SWBF2 0x0061d8f0
-void SetSafeMode()
-{
-    mSafeMode = true;
-}
-}
-
 // GLOBAL: SWBF2 0x01e3073c
 // gGamespyAutoName
 char gGamespyAutoName[32];

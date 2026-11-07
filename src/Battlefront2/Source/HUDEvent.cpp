@@ -194,6 +194,12 @@ HUD::Event::Event(const EventClass* const pClass, const RedTexture* const pTextu
     mData.texture = const_cast<RedTexture*>(pTexture);
 }
 
+// FUNCTION: SWBF2 0x0055dbf0
+HUD::EventClass* HUD::EventHandler::GetRegisteredClass() const
+{
+    return mClass;
+}
+
 // FUNCTION: SWBF2 0x0055dc00
 const char* HUD::EventHandler::GetRegisteredClassName(bool bEmptyIfMissing) const
 {
@@ -274,6 +280,13 @@ void HUD::EventClass::RegisterEventHandler(EventHandler& handler)
     }
     mHandlerList.AddLast(&handler.mNode);
     handler.mClass = this;
+}
+
+// FUNCTION: SWBF2 0x0055ddb0
+void HUD::EventClass::UnregisterEventHandler(HUD::EventHandler& handler)
+{
+    handler.mNode.Remove();
+    handler.mClass = 0;
 }
 
 // FUNCTION: SWBF2 0x0055de00

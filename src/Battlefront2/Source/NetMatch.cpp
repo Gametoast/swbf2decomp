@@ -6,6 +6,7 @@
 #include "pcNetSocket.h"
 #include "NetComm.h"
 #include "NetGame.h"
+#include "GameSpyFL/nonport.h"
 #include "NetPacket.h"
 #include "PebbleFL/Common/PblJournal.h"
 #include "PebbleFL/Common/PblUnicode.h"
@@ -67,7 +68,6 @@ extern char netLocalIPText[18];
 extern NetAddr myAddr;
 
 void* GetGalaxyMatchmaking();
-hostent* getlocalhost();
 bool PumpGalaxyMatchmaking();
 void StartRegisterLanGame();
 void UpdateRegisterLanGame();

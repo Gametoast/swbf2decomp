@@ -24,10 +24,20 @@
 
 void __cdecl PblTraceP(const char* Format, ...);
 
+// GLOBAL: SWBF2 0x009c8974
+// pcTerrainShader2::s_uiID
 unsigned int pcTerrainShader2::s_uiID;
+// GLOBAL: SWBF2 0x009c8978
+// pcTerrainShader2::GetStateFuncArray
 pcRedShader::GetStateFuncT pcTerrainShader2::GetStateFuncArray[MAX_PIPELINES];
+// GLOBAL: SWBF2 0x009c8984
+// pcTerrainShader2::BeginFuncArray
 pcRedShader::BeginFuncT pcTerrainShader2::BeginFuncArray[MAX_PIPELINES];
+// GLOBAL: SWBF2 0x009c8990
+// pcTerrainShader2::EndFuncArray
 pcRedShader::EndFuncT pcTerrainShader2::EndFuncArray[MAX_PIPELINES];
+// GLOBAL: SWBF2 0x009c899c
+// pcTerrainShader2::RenderFuncArray
 pcRedShader::RenderFuncT pcTerrainShader2::RenderFuncArray[MAX_PIPELINES];
 
 // SYNTHETIC: SWBF2 0x004095a0

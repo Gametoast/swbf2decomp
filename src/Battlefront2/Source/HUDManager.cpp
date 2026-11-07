@@ -8,9 +8,11 @@
 #include "RedEngineFL/Interface/RedInterfaceScreen.h"
 #include "RedEngineFL/Memory/RedMemory.h"
 #include "CameraManager.h"
+#include "FLInputManager.h"
 #include "GameMemory.h"
 #include "HUDBorderedBox.h"
 #include "HUDEditor.h"
+#include "HUDElement.h"
 #include "HUDElementBarBitmap.h"
 #include "HUDElementBarSegmented.h"
 #include "HUDElementBitmap.h"
@@ -48,66 +50,6 @@ void AdjustScreenGroupAspect(RedScreenGroupElement* pGroup)
 }
 
 #pragma warning(disable : 4316)
-
-// FUNCTION: SWBF2 0x00564990
-HUD::Item* HUD::TransformNumberColor::Factory::CreateItem(const char* const pName, ItemCallback pCallback,
-                                                          void* const pUserData)
-{
-    HUD::Item* pItem = new TransformNumberColor(pName, pCallback, pUserData);
-    if (pItem)
-    {
-        return pItem->SetFactory(this);
-    }
-    return 0;
-}
-
-// FUNCTION: SWBF2 0x00564a40
-HUD::Item* HUD::TransformNumberColorBlend::Factory::CreateItem(const char* const pName, ItemCallback pCallback,
-                                                               void* const pUserData)
-{
-    HUD::Item* pItem = new TransformNumberColorBlend(pName, pCallback, pUserData);
-    if (pItem)
-    {
-        return pItem->SetFactory(this);
-    }
-    return 0;
-}
-
-// FUNCTION: SWBF2 0x00564af0
-HUD::Item* HUD::TransformNameMesh::Factory::CreateItem(const char* const pName, ItemCallback pCallback,
-                                                       void* const pUserData)
-{
-    HUD::Item* pItem = new TransformNameMesh(pName, pCallback, pUserData);
-    if (pItem)
-    {
-        return pItem->SetFactory(this);
-    }
-    return 0;
-}
-
-// FUNCTION: SWBF2 0x00564ba0
-HUD::Item* HUD::TransformNumberVector3::Factory::CreateItem(const char* const pName, ItemCallback pCallback,
-                                                            void* const pUserData)
-{
-    HUD::Item* pItem = new TransformNumberVector3(pName, pCallback, pUserData);
-    if (pItem)
-    {
-        return pItem->SetFactory(this);
-    }
-    return 0;
-}
-
-// FUNCTION: SWBF2 0x00564c50
-HUD::Item* HUD::Sound::Factory::CreateItem(const char* const pName, ItemCallback pCallback,
-                                           void* const pUserData)
-{
-    HUD::Item* pItem = new Sound(pName, pCallback, pUserData);
-    if (pItem)
-    {
-        return pItem->SetFactory(this);
-    }
-    return 0;
-}
 
 // FUNCTION: SWBF2 0x00564cf0
 HUD::Item* HUD::Manager::ConfigFile::Factory::CreateItem(const char* const pName, ItemCallback pCallback,
@@ -376,6 +318,28 @@ void HUD::Manager::Close()
     RedSetCurrentHeap(iOldHeap);
 }
 
+namespace HUD
+{
+namespace Manager
+{
+
+// FUNCTION: SWBF2 0x005658e0
+void Update(float fDeltaTime)
+{
+    float fScale = 1.0f;
+    if (gEditor)
+    {
+        gEditor->Update(FLInputManager::Instance()->GetPlayerJoystick(0), fDeltaTime);
+        if (gEditor->mEnabled)
+        {
+            fScale = 0.0001f;
+        }
+    }
+    HUD::Element::UpdateAll(fScale * fDeltaTime);
+}
+}
+}
+
 // FUNCTION: SWBF2 0x00565c10
 bool HUD::Manager::Write()
 {
@@ -408,20 +372,6 @@ bool HUD::Manager::Write()
         file.Close();
     }
     return true;
-}
-
-// FUNCTION: SWBF2 0x00564930
-unsigned int HUD::TranslateString(const char* const* ppStrings, unsigned int uCount,
-                             const char* const pString)
-{
-    for (unsigned int i = 0; i < uCount; ++i)
-    {
-        if (!_strnicmp(ppStrings[i], pString, strlen(ppStrings[i])))
-        {
-            return i;
-        }
-    }
-    return (unsigned int)-1;
 }
 
 // FUNCTION: SWBF2 0x00565950
@@ -494,7 +444,6 @@ void HUD::Manager::Load(PblFileChunk& chunk)
 #include "Cloth.h"
 #include "CollisionMesh.h"
 #include "GameModel.h"
-#include "HUDElement.h"
 #include "Music.h"
 #include "PebbleFL/Common/PblChunk.h"
 #include "PebbleFL/Common/PblConfig.h"

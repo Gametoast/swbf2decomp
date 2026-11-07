@@ -85,14 +85,27 @@ public:
     virtual const char* GetDerivedRttiName() const;
     virtual void Init();
     virtual const PblVector3& GetVelocity() const;
-    virtual void SetVelocity(const PblVector3& vVelocity);
+    // FUNCTION: SWBF2 0x00444700
+    virtual void SetVelocity(const PblVector3& vVelocity)
+    {
+        mVelocity = vVelocity;
+    }
     virtual void ClientKill();
-    virtual float GetMaxSpeed() const;
+    // FUNCTION: SWBF2 0x004446b0
+    virtual float GetMaxSpeed() const
+    {
+        return mVelocity.y * mMatrix.m[2][1] + mVelocity.x * mMatrix.m[2][0] +
+               mVelocity.z * mMatrix.m[2][2];
+    }
     virtual float GetMaxStrafe() const;
     virtual void ActivatePhysics();
     virtual void DeactivatePhysics();
     virtual GameObjectType GetGameObjectType();
-    virtual EntityType GetEntityType() const;
+    // FUNCTION: SWBF2 0x00444730
+    virtual EntityType GetEntityType() const
+    {
+        return ENT_ASTEROID;
+    }
     virtual bool AddToTeamManager() const;
 
     virtual void WriteCreate(NetPktGroup& group);

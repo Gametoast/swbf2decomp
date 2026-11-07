@@ -33,7 +33,7 @@ public:
     // pcPreReflectionShader::Bind
     // FUNCTION: SWBF2 0x0070b240
     // pcPreReflectionShader::GetShaderDef
-    DECLARE_PC_RED_SHADER_METHODS()
+    DECLARE_PC_RED_SHADER_METHODS(pcPreReflectionShader)
 
     virtual RenderPhaseT GetRenderPhase(const RenderItem*, unsigned int) const;
 
@@ -56,27 +56,6 @@ public:
     unsigned int m_uiMaterialFlags;
     char m_reflectionID;
     pcRedVertexFormat* m_pVertexFormat;
-
-    // GLOBAL: SWBF2 0x009ca0dc
-    static unsigned int s_uiID;
-
-    // GLOBAL: SWBF2 0x009ca0e0
-    static GetStateFuncT GetStateFuncArray[MAX_PIPELINES];
-
-    // GLOBAL: SWBF2 0x009ca0ec
-    static BeginFuncT BeginFuncArray[MAX_PIPELINES];
-
-    // GLOBAL: SWBF2 0x009ca0f8
-    static EndFuncT EndFuncArray[MAX_PIPELINES];
-
-    // GLOBAL: SWBF2 0x009ca104
-    static RenderFuncT RenderFuncArray[MAX_PIPELINES];
-
-    static pcRedShaderDef s_shaderDef;
-
-    static pcPreReflectionShader s_Factory;
-
-    static unsigned int s_uiRenderTypeHash;
 
 private:
 

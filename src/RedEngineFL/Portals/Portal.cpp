@@ -817,13 +817,13 @@ void pvs::Sector::SetTravMark(bool bMark)
 // FUNCTION: SWBF2 0x006e1720
 bool pvs::Sector::TestWindingOrder()
 {
-    if (bound_.points_._numElements < 2)
+    if (bound_.points_.GetSize() < 2)
     {
         return false;
     }
 
-    const geo::Vector2<float>& rP0 = bound_.points_._elements[0];
-    const geo::Vector2<float>& rP1 = bound_.points_._elements[1];
+    const geo::Vector2<float>& rP0 = bound_.points_[0];
+    const geo::Vector2<float>& rP1 = bound_.points_[1];
     geo::Vector3<float> p0(rP0.x, rP0.y, 0.0f);
     geo::Vector3<float> p1(rP1.x, rP1.y, 0.0f);
     geo::Vector3<float> edgeDir = geo::normalize(p1 - p0);

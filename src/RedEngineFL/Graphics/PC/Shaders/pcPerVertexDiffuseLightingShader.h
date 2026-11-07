@@ -25,7 +25,7 @@ public:
     // pcPerVertexDiffuseLightingShader::Bind
     // FUNCTION: SWBF2 0x00710900
     // pcPerVertexDiffuseLightingShader::GetShaderDef
-    DECLARE_PC_RED_SHADER_METHODS()
+    DECLARE_PC_RED_SHADER_METHODS(pcPerVertexDiffuseLightingShader)
 
     virtual RenderPhaseT GetRenderPhase(const RenderItem*, unsigned int) const;
 
@@ -49,30 +49,6 @@ public:
     void Render_Prog1(const RenderItem*, unsigned int) const;
 
     mutable void* m_pLightingStatePrev;
-
-    // GLOBAL: SWBF2 0x009ca840
-    static unsigned int s_uiID;
-
-    // GLOBAL: SWBF2 0x009ca844
-    static GetStateFuncT GetStateFuncArray[MAX_PIPELINES];
-
-    // GLOBAL: SWBF2 0x009ca850
-    static BeginFuncT BeginFuncArray[MAX_PIPELINES];
-
-    // GLOBAL: SWBF2 0x009ca85c
-    static EndFuncT EndFuncArray[MAX_PIPELINES];
-
-    // GLOBAL: SWBF2 0x009ca868
-    static RenderFuncT RenderFuncArray[MAX_PIPELINES];
-
-    // GLOBAL: SWBF2 0x009ca87c
-    static unsigned int s_uiRenderTypeHash;
-
-    // GLOBAL: SWBF2 0x009ca8a8
-    static pcRedShaderDef s_shaderDef;
-
-    // GLOBAL: SWBF2 0x009ca888
-    static pcPerVertexDiffuseLightingShader s_Factory;
 
 private:
 

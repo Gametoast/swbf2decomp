@@ -11,10 +11,6 @@
 #include "SoundFL/source/sndthreadupdate.h"
 #include "Battlefront2/Platform/Pc/pcSpawnDisplay.h"
 
-// GLOBAL: SWBF2 0x01e56bc8
-
-int sVoiceChatHeap;
-
 namespace GameVoiceChat
 {
     // GLOBAL: SWBF2 0x007e68f2
@@ -91,18 +87,6 @@ namespace VoiceChat
     void* Alloc(unsigned int uiSize); void Free(void* pBlock);
 }
 
-// FUNCTION: SWBF2 0x0053e390
-void* VoiceChat::Alloc(unsigned int uiSize)
-{
-    return RedAllocFromHeap(sVoiceChatHeap, uiSize, 0);
-}
-
-// FUNCTION: SWBF2 0x0053e3b0
-void VoiceChat::Free(void* pBlock)
-{
-    RedFreeToHeap(sVoiceChatHeap, pBlock, 0);
-}
-
 extern int netVoiceMode;
 
 namespace GameVoiceChat
@@ -111,7 +95,7 @@ namespace GameVoiceChat
 // FUNCTION: SWBF2 0x0053c040
 bool Open(float fSeconds, bool bSoundWorking)
 {
-    sVoiceChatHeap = GameMemory::ApplicationHeap;
+    gHeap = GameMemory::ApplicationHeap;
     int iOldHeap = RedSetCurrentHeap(GameMemory::ApplicationHeap);
 
     if (GameVoiceChat::gTransport.Open(0x32, 1))
@@ -213,7 +197,7 @@ void GameVoiceChat::Reset()
 void GameVoiceChat::Close()
 {
     unsigned int uiNodes = (unsigned int)GameVoiceChat::GetNumNodes();
-    int iOldHeap = RedSetCurrentHeap(sVoiceChatHeap);
+    int iOldHeap = RedSetCurrentHeap(gHeap);
 
     for (unsigned int i = 0; i < uiNodes; ++i)
     {

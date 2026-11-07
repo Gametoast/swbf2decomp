@@ -692,7 +692,7 @@ bool LockOnManager::IsTargetObjectTypeAllowed(GameObject* gameObject, GameObject
             gameObject->IsRtti(EntityWalker::rttiHashEntityWalker) ||
             gameObject->IsRtti(EntityFlyer::rttiHashEntityFlyer) ||
             gameObject->IsRtti(EntityHover::rttiHashEntityHover) ||
-            gameObject->GetEntity()->IsRtti(MountedTurret::rttiHashMountedTurret))
+            gameObject->GetEntity()->IsRtti(MountedTurret::GetRtti()))
         {
             return true;
         }

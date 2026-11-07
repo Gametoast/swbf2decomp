@@ -241,11 +241,11 @@ bool GameVoiceChat::Decoder::Open(unsigned int playbackDevice, float fPacketMs, 
 
     for (unsigned int i = 0; i < uiSlots; ++i)
     {
-        *(unsigned int*)&mProducerPackets[i].mBuffer = 1;
+        mProducerPackets[i].SetBuffer((void*)1);
         mProducers[i].SetPackets(uiPacket, &mProducerPackets[i], 1);
-        *(unsigned int*)&mProducerPackets[i].mBuffer = 0;
+        mProducerPackets[i].SetBuffer(0);
 
-        mDecoderPackets[i].mBuffer = mDecoderBuffer + i * uiAligned2;
+        mDecoderPackets[i].SetBuffer(mDecoderBuffer + i * uiAligned2);
         mDecoders[i].SetPackets(uiSamples2, &mDecoderPackets[i], 1);
 
         mMixerBufferOffsets[i] = 0;
@@ -253,7 +253,7 @@ bool GameVoiceChat::Decoder::Open(unsigned int playbackDevice, float fPacketMs, 
 
     for (unsigned int i = 0; i < 2; ++i)
     {
-        mMixerPackets[i].mBuffer = (char*)mMixerOutBuffer + i * uiAligned2;
+        mMixerPackets[i].SetBuffer((char*)mMixerOutBuffer + i * uiAligned2);
     }
 
     SetProducers(mProducers, uiSlots);
@@ -366,7 +366,7 @@ bool Decoder::ReceivePacket(unsigned int uiInput, const VoiceChat::AudioPacket* 
             Snd::StreamPacket* pOutput = ((Snd::StreamSourceNProducer*)this)->GetReadPacket(uiInput);
             if (pOutput)
             {
-                pOutput->mBuffer = pPacket->mData;
+                pOutput->SetBuffer(pPacket->mData);
                 ((Snd::StreamSourceNProducer*)this)->PacketComplete(pOutput, pPacket->mSize,
                                 160 * (pPacket->mSize / 33u), false,
                                 pPacket->mDiscontinuity, 0, uiInput);

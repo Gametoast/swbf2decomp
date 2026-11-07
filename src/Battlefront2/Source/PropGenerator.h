@@ -76,6 +76,7 @@ namespace PropGenerator
     float GetRand();
     void Update();
 
+    void FlushClusterObjects();
     void FlushClusterObjects_();
     void SortClusters();
     void ResetClusterRenderedFlags();

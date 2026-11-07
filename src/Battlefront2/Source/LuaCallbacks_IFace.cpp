@@ -192,12 +192,6 @@ extern char netGameName[64];
 // GLOBAL: SWBF2 0x01fa88e0
 unsigned __int64 netLocalGSID;
 
-// FUNCTION: SWBF2 0x00414990
-int __fastcall RawControllerInputs::IndexToRedKey(int iIndex)
-{
-    return RedKeyTo_BindID[iIndex];
-}
-
 // FUNCTION: SWBF2 0x00585a10
 static void fnErrorBoxOk(bool)
 {

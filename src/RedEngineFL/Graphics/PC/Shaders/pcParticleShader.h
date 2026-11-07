@@ -34,7 +34,7 @@ public:
     // pcParticleShader::Bind
     // FUNCTION: SWBF2 0x007034d0
     // pcParticleShader::GetShaderDef
-    DECLARE_PC_RED_SHADER_METHODS()
+    DECLARE_PC_RED_SHADER_METHODS(pcParticleShader)
 
     virtual RenderPhaseT GetRenderPhase(const RenderItem*, unsigned int) const;
 
@@ -72,29 +72,6 @@ public:
     bool m_blurEnable;
     RedTexture* m_blurBuffer;
     bool m_shadowEnable;
-
-    // GLOBAL: SWBF2 0x009c96b4
-    static unsigned int s_uiID;
-
-    // GLOBAL: SWBF2 0x009c96b8
-    static GetStateFuncT GetStateFuncArray[MAX_PIPELINES];
-
-    // GLOBAL: SWBF2 0x009c96c4
-    static BeginFuncT BeginFuncArray[MAX_PIPELINES];
-
-    // GLOBAL: SWBF2 0x009c96d0
-    static EndFuncT EndFuncArray[MAX_PIPELINES];
-
-    // GLOBAL: SWBF2 0x009c96dc
-    static RenderFuncT RenderFuncArray[MAX_PIPELINES];
-
-    // GLOBAL: SWBF2 0x009c96ec
-    static unsigned int s_uiRenderTypeHash;
-
-    // GLOBAL: SWBF2 0x009c9780
-    static pcRedShaderDef s_shaderDef;
-
-    static pcParticleShader s_Factory;
 
 private:
 

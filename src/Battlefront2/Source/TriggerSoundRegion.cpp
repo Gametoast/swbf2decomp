@@ -9,6 +9,7 @@
 #include "SoundFL/source/sndsoundstream.h"
 #include "SoundFL/source/win/sndstream.h"
 
+// FUNCTION: SWBF2 0x0065d620
 void TriggerSoundRegion::Group::DestroyAll()
 {
     while (!sList.IsEmpty())

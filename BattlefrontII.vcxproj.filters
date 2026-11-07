@@ -3095,6 +3095,9 @@
     <ClInclude Include="src\PebbleFL\Common\PblRegion.h">
       <Filter>src\PebbleFL\Common</Filter>
     </ClInclude>
+    <ClInclude Include="src\PebbleFL\Common\PblRtti.h">
+      <Filter>src\PebbleFL\Common</Filter>
+    </ClInclude>
     <ClInclude Include="src\PebbleFL\Common\PblTime.h">
       <Filter>src\PebbleFL\Common</Filter>
     </ClInclude>

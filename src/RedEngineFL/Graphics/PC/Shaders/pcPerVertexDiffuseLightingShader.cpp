@@ -15,10 +15,20 @@
 
 void __cdecl PblTraceP(const char* Format, ...);
 
+// GLOBAL: SWBF2 0x009ca840
+// pcPerVertexDiffuseLightingShader::s_uiID
 unsigned int pcPerVertexDiffuseLightingShader::s_uiID;
+// GLOBAL: SWBF2 0x009ca844
+// pcPerVertexDiffuseLightingShader::GetStateFuncArray
 pcRedShader::GetStateFuncT pcPerVertexDiffuseLightingShader::GetStateFuncArray[MAX_PIPELINES];
+// GLOBAL: SWBF2 0x009ca850
+// pcPerVertexDiffuseLightingShader::BeginFuncArray
 pcRedShader::BeginFuncT pcPerVertexDiffuseLightingShader::BeginFuncArray[MAX_PIPELINES];
+// GLOBAL: SWBF2 0x009ca85c
+// pcPerVertexDiffuseLightingShader::EndFuncArray
 pcRedShader::EndFuncT pcPerVertexDiffuseLightingShader::EndFuncArray[MAX_PIPELINES];
+// GLOBAL: SWBF2 0x009ca868
+// pcPerVertexDiffuseLightingShader::RenderFuncArray
 pcRedShader::RenderFuncT pcPerVertexDiffuseLightingShader::RenderFuncArray[MAX_PIPELINES];
 
 // FUNCTION: SWBF2 0x00710560
@@ -391,18 +401,24 @@ void pcPerVertexDiffuseLightingShader::_Read(PblFileChunk& chunk) const
 
 // SYNTHETIC: SWBF2 0x0040a550
 // `dynamic initializer for 'pcPerVertexDiffuseLightingShader::s_uiRenderTypeHash''
+// GLOBAL: SWBF2 0x009ca87c
+// pcPerVertexDiffuseLightingShader::s_uiRenderTypeHash
 unsigned int pcPerVertexDiffuseLightingShader::s_uiRenderTypeHash = PblHash("pervertexdiffuselighting");
 
 // SYNTHETIC: SWBF2 0x0040a510
 // `dynamic initializer for 'pcPerVertexDiffuseLightingShader::s_Factory''
 // SYNTHETIC: SWBF2 0x00769fc0
 // `dynamic atexit destructor for 'pcPerVertexDiffuseLightingShader::s_Factory''
+// GLOBAL: SWBF2 0x009ca888
+// pcPerVertexDiffuseLightingShader::s_Factory
 pcPerVertexDiffuseLightingShader pcPerVertexDiffuseLightingShader::s_Factory;
 
 // SYNTHETIC: SWBF2 0x0040a530
 // `dynamic initializer for 'pcPerVertexDiffuseLightingShader::s_shaderDef''
 // SYNTHETIC: SWBF2 0x00769fe0
 // `dynamic atexit destructor for 'pcPerVertexDiffuseLightingShader::s_shaderDef''
+// GLOBAL: SWBF2 0x009ca8a8
+// pcPerVertexDiffuseLightingShader::s_shaderDef
 pcRedShaderDef pcPerVertexDiffuseLightingShader::s_shaderDef("pervertexdiffuselighting_shader.xml");
 
 // SYNTHETIC: SWBF2 0x0040a590

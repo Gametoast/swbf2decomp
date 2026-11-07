@@ -33,7 +33,7 @@ public:
     // pcShadowQuadShader::Bind
     // FUNCTION: SWBF2 0x00708290
     // pcShadowQuadShader::GetShaderDef
-    DECLARE_PC_RED_SHADER_METHODS()
+    DECLARE_PC_RED_SHADER_METHODS(pcShadowQuadShader)
 
     virtual RenderPhaseT GetRenderPhase(const RenderItem*, unsigned int) const;
     virtual RedShadingState* CreateShadingState() const;
@@ -57,27 +57,6 @@ public:
     void Render_Prog1(const RenderItem*, unsigned int) const;
 
     pcRedVertexFormat* m_pVertexInputFormat;
-
-    // GLOBAL: SWBF2 0x009c9d80
-    static unsigned int s_uiID;
-
-    // GLOBAL: SWBF2 0x009c9d84
-    static GetStateFuncT GetStateFuncArray[MAX_PIPELINES];
-
-    // GLOBAL: SWBF2 0x009c9d90
-    static BeginFuncT BeginFuncArray[MAX_PIPELINES];
-
-    // GLOBAL: SWBF2 0x009c9d9c
-    static EndFuncT EndFuncArray[MAX_PIPELINES];
-
-    // GLOBAL: SWBF2 0x009c9da8
-    static RenderFuncT RenderFuncArray[MAX_PIPELINES];
-
-    static unsigned int s_uiRenderTypeHash;
-
-    static pcRedShaderDef s_shaderDef;
-
-    static pcShadowQuadShader s_Factory;
 
 private:
 

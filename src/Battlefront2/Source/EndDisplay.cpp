@@ -10,6 +10,7 @@
 #include "ScreenTransition.h"
 #include "Team.h"
 #include "VoiceOverManager.h"
+#include "PebbleFL/Common/PblUnicode.h"
 #include "PebbleFL/Common/PblTime.h"
 #include "RedEngineFL/Graphics/RedColor.h"
 #include "SoundFL/source/sndbus.h"
@@ -324,4 +325,11 @@ void EndDisplay::SetVictoryMusic(unsigned int uTeam, const char* pName)
 void EndDisplay::SetDefeatMusic(unsigned int uTeam, const char* pName)
 {
     mVictoryDefeat[uTeam][1].SetID(pName);
+}
+
+// FUNCTION: SWBF2 0x00491440
+void EndDisplay::SetEndMovie(const char* pcFirst, const char* pcSecond)
+{
+    strlcpy(mMovieFileName, pcFirst, sizeof(mMovieFileName));
+    strlcpy(mMovieIdName, pcSecond, sizeof(mMovieIdName));
 }

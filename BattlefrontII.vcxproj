@@ -835,6 +835,9 @@
       <BufferSecurityCheck>false</BufferSecurityCheck>
       <WholeProgramOptimization Condition="'$(Configuration)'=='Release'">true</WholeProgramOptimization>
     </ClCompile>
+    <ClCompile Include="src\GameSpyFL\nonport.c">
+      <BufferSecurityCheck>false</BufferSecurityCheck>
+    </ClCompile>
     <ClCompile Include="src\GameSpyFL\md5c.c">
       <BufferSecurityCheck>false</BufferSecurityCheck>
       <WholeProgramOptimization Condition="'$(Configuration)'=='Release'">true</WholeProgramOptimization>
@@ -2726,6 +2729,7 @@
     <ClInclude Include="src\PebbleFL\Common\PblRandom.h" />
     <ClInclude Include="src\PebbleFL\Common\PblRef.h" />
     <ClInclude Include="src\PebbleFL\Common\PblRegion.h" />
+    <ClInclude Include="src\PebbleFL\Common\PblRtti.h" />
     <ClInclude Include="src\PebbleFL\Common\PblTime.h" />
     <ClInclude Include="src\PebbleFL\Common\PblTimeBase.h" />
     <ClInclude Include="src\PebbleFL\Common\PblUnicode.h" />
@@ -2835,6 +2839,7 @@
     <ClInclude Include="src\ZlibFL\zlib.h" />
     <ClInclude Include="src\ZlibFL\zutil.h" />
     <ClInclude Include="src\lglcd\lgLcd.h" />
+    <ClInclude Include="src\GameSpyFL\nonport.h" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="src\RedEngineFL\RedEngineFL.vcxproj">

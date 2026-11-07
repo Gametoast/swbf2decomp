@@ -325,20 +325,6 @@ float EntityRemoteTerminal::GetMaxStrafe() const
 
 
 
-// FUNCTION: SWBF2 0x0046db50
-GameObject* EntityRemoteTerminal::GetRemoteGameObject()
-{
-    if (!mRemoteGameObject)
-    {
-        EntityEx* pEntity = EntityEx::mIdMap.Find(mRemoteGameObjectHash);
-        if (pEntity)
-        {
-            mRemoteGameObject = pEntity->GetGameObject();
-        }
-    }
-    return mRemoteGameObject;
-}
-
 // FUNCTION: SWBF2 0x004dce00
 void EntityRemoteTerminal::Init()
 {

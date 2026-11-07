@@ -1,6 +1,7 @@
 #pragma once
 
 #include "PebbleFL/Common/PblHashTable.h"
+#include "PebbleFL/Common/PblRtti.h"
 
 #include "Fsm.h"
 #include "ConnectivityGraph.h"
@@ -25,20 +26,23 @@ public:
         STATE_START = 1
     };
 
+    // FUNCTION: SWBF2 0x005ab2d0
+    // Navigator::IsRtti
+    // FUNCTION: SWBF2 0x005ab2f0
+    // Navigator::GetDerivedRtti
+    // FUNCTION: SWBF2 0x005ab300
+    // Navigator::GetDerivedRttiName
+    PBL_DECLARE_ROOT_RTTI(Navigator)
+
     static void* operator new(unsigned int uiSize);
     // SYNTHETIC: SWBF2 0x0043ab10
     // Navigator::operator delete
     static void operator delete(void* pBlock) { sMemoryPool.Free(pBlock); }
     static MemoryPool sMemoryPool;
 
-    static PblHash rttiHashNavigator;
-    static const char rttiNameNavigator[];
 
     virtual ~Navigator();
 
-    virtual bool IsRtti(unsigned int uRtti) const;
-    virtual unsigned int GetDerivedRtti() const;
-    virtual const char* GetDerivedRttiName() const;
     virtual void ReceivePathResult(AIPath* pPath);
     virtual const PblVector3& GetGlobalDest() const;
     virtual const PblVector3& GetLocalDest() const;
@@ -74,23 +78,5 @@ protected:
 };
 
  
-
-// FUNCTION: SWBF2 0x005ab2d0
-inline bool Navigator::IsRtti(unsigned int uRtti) const
-{
-    return rttiHashNavigator == uRtti;
-}
-
-// FUNCTION: SWBF2 0x005ab2f0
-inline unsigned int Navigator::GetDerivedRtti() const
-{
-    return rttiHashNavigator;
-}
-
-// FUNCTION: SWBF2 0x005ab300
-inline const char* Navigator::GetDerivedRttiName() const
-{
-    return rttiNameNavigator;
-}
 
 

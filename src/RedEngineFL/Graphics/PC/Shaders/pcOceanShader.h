@@ -35,7 +35,7 @@ public:
     // pcOceanShader::Bind
     // FUNCTION: SWBF2 0x0070c2d0
     // pcOceanShader::GetShaderDef
-    DECLARE_PC_RED_SHADER_METHODS()
+    DECLARE_PC_RED_SHADER_METHODS(pcOceanShader)
 
     virtual RenderPhaseT GetRenderPhase(const RenderItem*, unsigned int) const;
     virtual unsigned int GetZPrepassState() const;
@@ -66,27 +66,6 @@ public:
     RedTextureTransform m_foamMapTransform;
     RedColorValue m_transmissiveColor;
     RedColorValue m_reflectionColor;
-
-    // GLOBAL: SWBF2 0x009ca258
-    static unsigned int s_uiID;
-
-    // GLOBAL: SWBF2 0x009ca25c
-    static GetStateFuncT GetStateFuncArray[MAX_PIPELINES];
-
-    // GLOBAL: SWBF2 0x009ca268
-    static BeginFuncT BeginFuncArray[MAX_PIPELINES];
-
-    // GLOBAL: SWBF2 0x009ca274
-    static EndFuncT EndFuncArray[MAX_PIPELINES];
-
-    // GLOBAL: SWBF2 0x009ca280
-    static RenderFuncT RenderFuncArray[MAX_PIPELINES];
-
-    static pcOceanShader s_Factory;
-
-    static unsigned int s_uiRenderTypeHash;
-
-    static pcRedShaderDef s_shaderDef;
 
 private:
     pcOceanShader();

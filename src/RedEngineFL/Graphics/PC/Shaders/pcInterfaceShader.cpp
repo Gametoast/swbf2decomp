@@ -15,10 +15,20 @@
 
 void __cdecl PblTraceP(const char* Format, ...);
 
+// GLOBAL: SWBF2 0x009c94f4
+// pcInterfaceShader::s_uiID
 unsigned int pcInterfaceShader::s_uiID;
+// GLOBAL: SWBF2 0x009c94f8
+// pcInterfaceShader::GetStateFuncArray
 pcRedShader::GetStateFuncT pcInterfaceShader::GetStateFuncArray[MAX_PIPELINES];
+// GLOBAL: SWBF2 0x009c9504
+// pcInterfaceShader::BeginFuncArray
 pcRedShader::BeginFuncT pcInterfaceShader::BeginFuncArray[MAX_PIPELINES];
+// GLOBAL: SWBF2 0x009c9510
+// pcInterfaceShader::EndFuncArray
 pcRedShader::EndFuncT pcInterfaceShader::EndFuncArray[MAX_PIPELINES];
+// GLOBAL: SWBF2 0x009c951c
+// pcInterfaceShader::RenderFuncArray
 pcRedShader::RenderFuncT pcInterfaceShader::RenderFuncArray[MAX_PIPELINES];
 pcRedVertexFormat* pcInterfaceShader::s_pBitmapTexVertexFormat;
 pcRedVertexFormat* pcInterfaceShader::s_pBitmapPosVertexFormat;
@@ -393,18 +403,24 @@ void pcInterfaceShader::_StaticInit() const
 
 // SYNTHETIC: SWBF2 0x004098b0
 // `dynamic initializer for 'pcInterfaceShader::s_uiRenderTypeHash''
+// GLOBAL: SWBF2 0x009c9568
+// pcInterfaceShader::s_uiRenderTypeHash
 unsigned int pcInterfaceShader::s_uiRenderTypeHash = PblHash("Interface");
 
 // SYNTHETIC: SWBF2 0x00409870
 // `dynamic initializer for 'pcInterfaceShader::s_Factory''
 // SYNTHETIC: SWBF2 0x00769c60
 // `dynamic atexit destructor for 'pcInterfaceShader::s_Factory''
+// GLOBAL: SWBF2 0x009c9574
+// pcInterfaceShader::s_Factory
 pcInterfaceShader pcInterfaceShader::s_Factory;
 
 // SYNTHETIC: SWBF2 0x00409890
 // `dynamic initializer for 'pcInterfaceShader::s_shaderDef''
 // SYNTHETIC: SWBF2 0x00769c80
 // `dynamic atexit destructor for 'pcInterfaceShader::s_shaderDef''
+// GLOBAL: SWBF2 0x009c953c
+// pcInterfaceShader::s_shaderDef
 // STRING: SWBF2 0x00784744
 pcRedShaderDef pcInterfaceShader::s_shaderDef("interface_shader.xml");
 

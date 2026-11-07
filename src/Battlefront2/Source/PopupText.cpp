@@ -272,6 +272,15 @@ void PopupText::SetPreventJump(bool bPrevent)
 namespace PopupText
 {
 
+// FUNCTION: SWBF2 0x00620ec0
+void AddHint(unsigned int uHint)
+{
+    if (PopupText::gNumHints < 64)
+    {
+        PopupText::gHints[PopupText::gNumHints++] = uHint;
+    }
+}
+
 // FUNCTION: SWBF2 0x00620f00
 void Update(float fDeltaTime)
 {

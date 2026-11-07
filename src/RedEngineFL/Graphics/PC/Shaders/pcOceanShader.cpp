@@ -17,10 +17,20 @@ void __cdecl PblTraceP(const char* Format, ...);
 
 static const float kInv255 = 1.0f / 255.0f;
 
+// GLOBAL: SWBF2 0x009ca258
+// pcOceanShader::s_uiID
 unsigned int pcOceanShader::s_uiID;
+// GLOBAL: SWBF2 0x009ca25c
+// pcOceanShader::GetStateFuncArray
 pcRedShader::GetStateFuncT pcOceanShader::GetStateFuncArray[MAX_PIPELINES];
+// GLOBAL: SWBF2 0x009ca268
+// pcOceanShader::BeginFuncArray
 pcRedShader::BeginFuncT pcOceanShader::BeginFuncArray[MAX_PIPELINES];
+// GLOBAL: SWBF2 0x009ca274
+// pcOceanShader::EndFuncArray
 pcRedShader::EndFuncT pcOceanShader::EndFuncArray[MAX_PIPELINES];
+// GLOBAL: SWBF2 0x009ca280
+// pcOceanShader::RenderFuncArray
 pcRedShader::RenderFuncT pcOceanShader::RenderFuncArray[MAX_PIPELINES];
 
 // SYNTHETIC: SWBF2 0x0040a210

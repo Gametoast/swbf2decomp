@@ -3781,7 +3781,7 @@ bool EntitySoldier::RenderTrackable(unsigned int uView) const
         }
     }
     const Controllable* pControllable = GetControllable();
-    if (pControllable && pControllable->GetEntity()->IsRtti(PassengerSlot::rttiHashPassengerSlot))
+    if (pControllable && pControllable->GetEntity()->IsRtti(PassengerSlot::GetRtti()))
     {
         return false;
     }
@@ -9621,8 +9621,8 @@ bool EntitySoldier::CyclePosition(bool bForward)
     for (;;)
     {
         if (it && (it->mPilotType == PILOT_VEHICLE || it->mPilotType == PILOT_VEHICLESELF) &&
-            !(pVehicle && pVehicle->GetEntity()->IsRtti(PassengerSlot::rttiHashPassengerSlot) &&
-              it->GetEntity()->IsRtti(PassengerSlot::rttiHashPassengerSlot)))
+            !(pVehicle && pVehicle->GetEntity()->IsRtti(PassengerSlot::GetRtti()) &&
+              it->GetEntity()->IsRtti(PassengerSlot::GetRtti())))
         {
             if (!it->GetPilot())
             {

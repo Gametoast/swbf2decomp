@@ -596,13 +596,6 @@ void Asteroid::SetMatrix(const PblMatrix& matrix)
     RecalculateAABB();
 }
 
-// FUNCTION: SWBF2 0x004446b0
-float Asteroid::GetMaxSpeed() const
-{
-    return mVelocity.y * mMatrix.m[2][1] + mVelocity.x * mMatrix.m[2][0] +
-           mVelocity.z * mMatrix.m[2][2];
-}
-
 // FUNCTION: SWBF2 0x004446e0
 float Asteroid::GetMaxStrafe() const
 {
@@ -615,22 +608,10 @@ bool Asteroid::AddToTeamManager() const
     return false;
 }
 
-// FUNCTION: SWBF2 0x00444700
-void Asteroid::SetVelocity(const PblVector3& vVelocity)
-{
-    mVelocity = vVelocity;
-}
-
 // FUNCTION: SWBF2 0x00444720
 GameObjectType Asteroid::GetGameObjectType()
 {
     return GO_UNKNOWN;
-}
-
-// FUNCTION: SWBF2 0x00444730
-EntityType Asteroid::GetEntityType() const
-{
-    return ENT_ASTEROID;
 }
 
 // FUNCTION: SWBF2 0x00444740

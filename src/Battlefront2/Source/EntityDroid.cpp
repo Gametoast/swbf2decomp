@@ -1616,16 +1616,6 @@ Entity* EntityDroidClass::Build(const EntityDesc& desc)
 // SYNTHETIC: SWBF2 0x0049e2c1
 // ??_EEntityDroid@@WCAA@AEPAXI@Z
 
-// FUNCTION: SWBF2 0x005eedf0
-const PblMatrix& EntityDroid::GetSmoothedMatrix() const
-{
-    if (NetGame::IsEnabled() && mNetUniqueId != -1 && NetGame::IsClient())
-    {
-        return NetPredict::GetSmoothInfo(mNetUniqueId).GetRenderMatrix();
-    }
-    return mMatrix;
-}
-
 // FUNCTION: SWBF2 0x0049ca60
 bool EntityDroid::ShouldShowReticule() const
 {

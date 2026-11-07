@@ -77,14 +77,28 @@
 // GLOBAL: SWBF2 0x0078db38
 static PblVector3 WIND_DIRECTION(1.0f, 0.0f, 0.0f);
 
-// SYNTHETIC: SWBF2 0x004023e0
-// `dynamic initializer for 'EntityCloth::sMemoryPool''
-// SYNTHETIC: SWBF2 0x00766df0
-// `dynamic atexit destructor for 'EntityCloth::sMemoryPool''
+// SYNTHETIC: SWBF2 0x004023a0
+// `dynamic initializer for 'EntityCloth::rttiHashEntityCloth''
+// EntityCloth::rttiHashEntityCloth
 
-// GLOBAL: SWBF2 0x01eb1080
-// EntityCloth::sMemoryPool
-MemoryPool EntityCloth::sMemoryPool("EntityCloth", sizeof(EntityCloth));
+// GLOBAL: SWBF2 0x01eb0fcc
+// EntityCloth::rttiHashEntityCloth
+PblHash EntityCloth::rttiHashEntityCloth("EntityCloth");
+// GLOBAL: SWBF2 0x00788a70
+// EntityCloth::rttiNameEntityCloth
+const char EntityCloth::rttiNameEntityCloth[] = "EntityCloth";
+
+// SYNTHETIC: SWBF2 0x004023b0
+// `dynamic initializer for 'EntityClothClass::rttiHashEntityClothClass''
+// EntityClothClass::rttiHashEntityClothClass
+
+// GLOBAL: SWBF2 0x01eb062c
+// EntityClothClass::rttiHashEntityClothClass
+PblHash EntityClothClass::rttiHashEntityClothClass("EntityClothClass");
+// GLOBAL: SWBF2 0x00788a48
+// EntityClothClass::rttiNameEntityClothClass
+const char EntityClothClass::rttiNameEntityClothClass[] = "EntityClothClass";
+
 // SYNTHETIC: SWBF2 0x004023c0
 // `dynamic initializer for 'ClothData::sMemoryPool''
 // SYNTHETIC: SWBF2 0x00766de0
@@ -93,6 +107,14 @@ MemoryPool EntityCloth::sMemoryPool("EntityCloth", sizeof(EntityCloth));
 // GLOBAL: SWBF2 0x01eb10d0
 // ClothData::sMemoryPool
 MemoryPool ClothData::sMemoryPool("ClothData", sizeof(ClothData));
+// SYNTHETIC: SWBF2 0x004023e0
+// `dynamic initializer for 'EntityCloth::sMemoryPool''
+// SYNTHETIC: SWBF2 0x00766df0
+// `dynamic atexit destructor for 'EntityCloth::sMemoryPool''
+
+// GLOBAL: SWBF2 0x01eb1080
+// EntityCloth::sMemoryPool
+MemoryPool EntityCloth::sMemoryPool("EntityCloth", sizeof(EntityCloth));
 // SYNTHETIC: SWBF2 0x00402400
 // `dynamic initializer for 'ClothData::s_clothDataHashTable''
 
@@ -330,28 +352,6 @@ template void util::HashTable_<ClothBank*, unsigned int, ClothBE::ClothDataT::El
 
 // TEMPLATE: SWBF2 0x0045c720
 // util::BaseArray<unsigned int,util::TypedArrayAllocator<unsigned int,util::TNewArrayAlloc<ClothBank *> > >::Reserve_
-
-// SYNTHETIC: SWBF2 0x004023a0
-// `dynamic initializer for 'EntityCloth::rttiHashEntityCloth''
-// EntityCloth::rttiHashEntityCloth
-
-// GLOBAL: SWBF2 0x01eb0fcc
-// EntityCloth::rttiHashEntityCloth
-PblHash EntityCloth::rttiHashEntityCloth("EntityCloth");
-// GLOBAL: SWBF2 0x00788a70
-// EntityCloth::rttiNameEntityCloth
-const char EntityCloth::rttiNameEntityCloth[] = "EntityCloth";
-
-// SYNTHETIC: SWBF2 0x004023b0
-// `dynamic initializer for 'EntityClothClass::rttiHashEntityClothClass''
-// EntityClothClass::rttiHashEntityClothClass
-
-// GLOBAL: SWBF2 0x01eb062c
-// EntityClothClass::rttiHashEntityClothClass
-PblHash EntityClothClass::rttiHashEntityClothClass("EntityClothClass");
-// GLOBAL: SWBF2 0x00788a48
-// EntityClothClass::rttiNameEntityClothClass
-const char EntityClothClass::rttiNameEntityClothClass[] = "EntityClothClass";
 
 
 

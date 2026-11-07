@@ -699,6 +699,13 @@ bool HUD::ElementMap::ReadData(PblConfig& config, PblConfig::Data& data)
     return ElementGroupPlayer::ReadData(config, data);
 }
 
+// FUNCTION: SWBF2 0x00555830
+void HUD::ElementMap::SetNorth(float fNorth, bool bFlipNorth)
+{
+    HUD::ElementMap::sNorth = fNorth;
+    HUD::ElementMap::sFlipNorth = bFlipNorth;
+}
+
 // FUNCTION: SWBF2 0x00555840
 HUD::ElementMap* HUD::ElementMap::FindByPlayerIndex(int iPlayerIndex)
 {
@@ -706,6 +713,23 @@ HUD::ElementMap* HUD::ElementMap::FindByPlayerIndex(int iPlayerIndex)
     {
         ElementMap* pMap = (ElementMap*)itor.GetNode()->GetObjectA(&sMapList, offsetof(ElementMap, mMapNode));
         if (iPlayerIndex == pMap->mPlayerIndex)
+        {
+            return pMap;
+        }
+    }
+    return 0;
+}
+
+// FUNCTION: SWBF2 0x00555870
+HUD::ElementMap* HUD::ElementMap::FindByIndex(int iIndex)
+{
+    int i = 0;
+    for (PblListSingle::Node* pNode = HUD::ElementMap::sMapList.mHead.mNext;
+         pNode != &HUD::ElementMap::sMapList.mHead; pNode = pNode->mNext, ++i)
+    {
+        HUD::ElementMap* pMap = (HUD::ElementMap*)pNode->GetObjectA(&HUD::ElementMap::sMapList,
+                                                                     offsetof(HUD::ElementMap, mMapNode));
+        if (i == iIndex)
         {
             return pMap;
         }

@@ -34,7 +34,7 @@ public:
     // pcShieldShader::Bind
     // FUNCTION: SWBF2 0x006cd4f0
     // pcShieldShader::GetShaderDef
-    DECLARE_PC_RED_SHADER_METHODS()
+    DECLARE_PC_RED_SHADER_METHODS(pcShieldShader)
 
     virtual RenderPhaseT GetRenderPhase(const RenderItem*, unsigned int) const;
     virtual RedShadingState* CreateShadingState() const;
@@ -85,32 +85,11 @@ public:
     float m_fViewAngleFactor;
     float m_fVertexMinDistSqr;
 
-    // GLOBAL: SWBF2 0x00964f80
-    static unsigned int s_uiID;
-
-    // GLOBAL: SWBF2 0x00964f84
-    static GetStateFuncT GetStateFuncArray[MAX_PIPELINES];
-
-    // GLOBAL: SWBF2 0x00964f90
-    static BeginFuncT BeginFuncArray[MAX_PIPELINES];
-
-    // GLOBAL: SWBF2 0x00964f9c
-    static EndFuncT EndFuncArray[MAX_PIPELINES];
-
-    // GLOBAL: SWBF2 0x00964fa8
-    static RenderFuncT RenderFuncArray[MAX_PIPELINES];
-
     // GLOBAL: SWBF2 0x00964fb4
     static float s_fFadeStart;
 
     // GLOBAL: SWBF2 0x00964fb8
     static float s_fFadeEnd;
-
-    // GLOBAL: SWBF2 0x00965010
-    static unsigned int s_uiRenderTypeHash;
-
-    // GLOBAL: SWBF2 0x0096501c
-    static pcRedShaderDef s_shaderDef;
 
     // GLOBAL: SWBF2 0x0096504c
     static PblVector3 s_vLightDir;
@@ -120,8 +99,6 @@ public:
 
     // GLOBAL: SWBF2 0x00965064
     static PblVector3 s_vLightY;
-
-    static pcShieldShader s_Factory;
 
 private:
 

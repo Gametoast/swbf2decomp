@@ -34,7 +34,7 @@ public:
     // pcTerrainShader2::Bind
     // FUNCTION: SWBF2 0x006fd150
     // pcTerrainShader2::GetShaderDef
-    DECLARE_PC_RED_SHADER_METHODS()
+    DECLARE_PC_RED_SHADER_METHODS(pcTerrainShader2)
 
     virtual RenderPhaseT GetRenderPhase(const RenderItem*, unsigned int) const;
     virtual RedShadingState* CreateShadingState() const;
@@ -78,23 +78,6 @@ public:
     unsigned char m_uiLayerIndex[4];
     unsigned char m_uiOptions;
     bool m_lightingInSeparatePass;
-
-    // GLOBAL: SWBF2 0x009c8974
-    static unsigned int s_uiID;
-    // GLOBAL: SWBF2 0x009c8978
-    static GetStateFuncT GetStateFuncArray[MAX_PIPELINES];
-    // GLOBAL: SWBF2 0x009c8984
-    static BeginFuncT BeginFuncArray[MAX_PIPELINES];
-    // GLOBAL: SWBF2 0x009c8990
-    static EndFuncT EndFuncArray[MAX_PIPELINES];
-    // GLOBAL: SWBF2 0x009c899c
-    static RenderFuncT RenderFuncArray[MAX_PIPELINES];
-
-    static unsigned int s_uiRenderTypeHash;
-
-    static pcRedShaderDef s_shaderDef;
-
-    static pcTerrainShader2 s_Factory;
 
 private:
 

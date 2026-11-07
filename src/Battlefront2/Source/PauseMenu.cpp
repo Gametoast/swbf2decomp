@@ -34,32 +34,6 @@
 #include "PlayerController.h"
 
 
-// GLOBAL: SWBF2 0x01e5600b
-bool GameLoop::sFreeMode;
-
-
-
-
-
-
-// FUNCTION: SWBF2 0x00533600
-void GameLoop::SetFreeMode(bool bFreeCamera)
-{
-    if (sFreeMode == bFreeCamera)
-    {
-        return;
-    }
-    sFreeMode = bFreeCamera;
-    if (bFreeCamera)
-    {
-        CameraManager::Instance()->FreeLook(0);
-    }
-    else
-    {
-        CameraManager::Instance()->ChaseMode(0);
-    }
-}
-
 class StatusDisplay
 {
 public:

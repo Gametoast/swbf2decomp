@@ -72,7 +72,7 @@ const char NavigatorSlide::rttiNameNavigatorSlide[] = "NavigatorSlide";
 // FUNCTION: SWBF2 0x005ade70
 NavigatorSlide* NavigatorSlidePtr(Navigator* pNavigator)
 {
-    if (pNavigator && pNavigator->IsRtti(NavigatorSlide::rttiHashNavigatorSlide))
+    if (pNavigator && pNavigator->IsRtti(NavigatorSlide::GetRtti()))
     {
         return (NavigatorSlide*)pNavigator;
     }

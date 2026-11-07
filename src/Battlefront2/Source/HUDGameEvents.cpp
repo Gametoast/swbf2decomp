@@ -17,6 +17,7 @@
 #include "FLJoystick.h"
 #include "GameLoop.h"
 #include "GameObject.h"
+#include "MountedTurret.h"
 #include "MissionTimer.h"
 #include "NetGame.h"
 #include "ScopeDisplay.h"
@@ -1098,7 +1099,6 @@ void HUD::GameEvents::Die(const Controllable* const pControllable)
     HideObjectiveDetailsElements(gPlayerEvents[iIndex], gPlayerData[iIndex]);
 }
 
-class MountedTurret { public: static PblHash rttiHashMountedTurret; };
 class EntityBuildingArmed { public: static PblHash rttiHashEntityBuildingArmed; };
 class WeaponRepair { public: static PblHash rttiHashWeaponRepair; };
 
@@ -2488,7 +2488,7 @@ void HUD::GameEvents::UpdateMissleLock(const GameObject* const pObject, const Co
                                        PlayerEvents& events, PlayerData& data)
 {
     const bool bLocked = (pObject->IsRtti(EntityFlyer::rttiHashEntityFlyer) ||
-                          pObject->IsRtti(MountedTurret::rttiHashMountedTurret)) &&
+                          pObject->IsRtti(MountedTurret::GetRtti())) &&
                          pControllable->GetEnemyLockedOnMeState() > 0.0f;
     if (bLocked != data.missileLocked)
     {

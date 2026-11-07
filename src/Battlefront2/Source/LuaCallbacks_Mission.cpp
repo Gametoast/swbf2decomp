@@ -69,6 +69,7 @@
 #include "BirdEffect.h"
 #include "GameObject.h"
 #include "MissionTimer.h"
+#include "VehicleManager.h"
 #include "Timer.h"
 #include "HUDGameEvents.h"
 #include "HUDElementMap.h"
@@ -93,7 +94,6 @@ namespace PopupText
 
     
 
-extern float sNotifyRadius;
 extern int WORLD_EXTENTS;
 namespace ParticleSystem
 {
@@ -102,32 +102,7 @@ namespace ParticleSystem
 
 namespace PopupText
 {
-    extern int gNumHints; extern unsigned int gHints[64];
-}
-
-
-
-namespace PopupText
-{
-
-// FUNCTION: SWBF2 0x00620ec0
-static void AddHint(unsigned int uHint)
-{
-    if (PopupText::gNumHints < 64)
-    {
-        PopupText::gHints[PopupText::gNumHints++] = uHint;
-    }
-}
-}
-
-namespace VehicleManager
-{
-
-// FUNCTION: SWBF2 0x0066e380
-static void SetNotifyRadius(float fRadius)
-{
-    sNotifyRadius = fRadius;
-}
+    void AddHint(unsigned int uHint);
 }
 
 // FUNCTION: SWBF2 0x0058d8d0
@@ -138,52 +113,6 @@ void* GetRegion(lua_State* L, int iIndex)
         return (void*)lua_topointer(LuaHelper::mState, iIndex);
     }
     return PblRegion::Find(PblHash(luaL_checklstring(LuaHelper::mState, iIndex, 0)));
-}
-
-// FUNCTION: SWBF2 0x00491440
-void EndDisplay::SetEndMovie(const char* pcFirst, const char* pcSecond)
-{
-    strlcpy(mMovieFileName, pcFirst, sizeof(mMovieFileName));
-    strlcpy(mMovieIdName, pcSecond, sizeof(mMovieIdName));
-}
-
-// FUNCTION: SWBF2 0x00555830
-void HUD::ElementMap::SetNorth(float fNorth, bool bFlipNorth)
-{
-    HUD::ElementMap::sNorth = fNorth;
-    HUD::ElementMap::sFlipNorth = bFlipNorth;
-}
-
-// FUNCTION: SWBF2 0x00555870
-HUD::ElementMap* HUD::ElementMap::FindByIndex(int iIndex)
-{
-    int i = 0;
-    for (PblListSingle::Node* pNode = HUD::ElementMap::sMapList.mHead.mNext;
-         pNode != &HUD::ElementMap::sMapList.mHead; pNode = pNode->mNext, ++i)
-    {
-        HUD::ElementMap* pMap = (HUD::ElementMap*)pNode->GetObjectA(&HUD::ElementMap::sMapList,
-                                                                     offsetof(HUD::ElementMap, mMapNode));
-        if (i == iIndex)
-        {
-            return pMap;
-        }
-    }
-    return 0;
-}
-
-// FUNCTION: SWBF2 0x0045f5e0
-void CollisionManager::SetMaxCollisionDistance(float fDistance)
-{
-    if (CollisionManager::sInstance)
-    {
-        CollisionManager::sInstance->mMaxCollisionDistanceSq = fDistance * fDistance;
-    }
-}
-
-// FUNCTION: SWBF2 0x00657b90
-const char* Timer::GetName()
-{
-    return StringDB::Find(mId);
 }
 
 unsigned int Hash16(unsigned short const* pusString);

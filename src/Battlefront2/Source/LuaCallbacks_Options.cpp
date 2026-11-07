@@ -131,9 +131,6 @@ static const int sLuaFunctionToEnum[5][21] = {
     { -1, -1, -1, 3, 0, 1, 13, -1, 8, 5, 7, 9, 10, 11, 12, -1, 6, -1, -1, -1, -1 }
 };
 
-// FUNCTION: SWBF2 0x0052b500
-int RawControllerInputs::GetFunctionForAnalog(int, int) { return 0; }
-
 
 
 // FUNCTION: SWBF2 0x00597250

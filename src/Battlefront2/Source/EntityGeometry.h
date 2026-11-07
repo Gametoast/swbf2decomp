@@ -8,6 +8,7 @@
 #include "CollisionObject.h"
 #include "Chunk.h"
 #include "Entity.h"
+#include "PebbleFL/Common/PblRtti.h"
 #include "FoleyFX.h"
 #include "GameModel.h"
 #include "PebbleFL/Common/PblMatrix.h"
@@ -139,12 +140,17 @@ public:
 class EntityGeometry : public EntityEx, public CollisionObject, public RedSceneObject
 {
 public:
+    // FUNCTION: SWBF2 0x004440d0
+    // EntityGeometry::IsRtti
+    // FUNCTION: SWBF2 0x004ba080
+    // EntityGeometry::GetDerivedRtti
+    // FUNCTION: SWBF2 0x004ba090
+    // EntityGeometry::GetDerivedRttiName
+    PBL_DECLARE_DERIVED_RTTI(EntityGeometry, EntityEx)
+
     EntityGeometry(EntityGeometryClass* pClass, const EntityDesc& desc, CollisionObjectType eType,
                    const RedLodData* pLodData);
 
-    virtual bool IsRtti(unsigned int uRtti) const;
-    virtual unsigned int GetDerivedRtti() const;
-    virtual const char* GetDerivedRttiName() const;
     virtual ~EntityGeometry();
     virtual void SetProperty(unsigned int uProperty, const char* pszValue);
     // FUNCTION: SWBF2 0x00444120
@@ -210,26 +216,13 @@ public:
     float mSmallestCollisionDim;
     AttachedEffects* m_pAttachedEffects;
 
-    static PblHash rttiHashEntityGeometry;
 
-    static unsigned int GetRtti() { return rttiHashEntityGeometry; }
-    static const char rttiNameEntityGeometry[];
 };
  
  
  
  
  
-
-// FUNCTION: SWBF2 0x004440d0
-inline bool EntityGeometry::IsRtti(unsigned int uRtti) const
-{
-    if (rttiHashEntityGeometry == uRtti)
-    {
-        return true;
-    }
-    return EntityEx::IsRtti(uRtti);
-}
 
 // FUNCTION: SWBF2 0x004441b0
 inline bool EntityGeometryClass::IsRtti(unsigned int uRtti) const
@@ -239,18 +232,6 @@ inline bool EntityGeometryClass::IsRtti(unsigned int uRtti) const
         return true;
     }
     return EntityClass::IsRtti(uRtti);
-}
-
-// FUNCTION: SWBF2 0x004ba080
-inline unsigned int EntityGeometry::GetDerivedRtti() const
-{
-    return rttiHashEntityGeometry;
-}
-
-// FUNCTION: SWBF2 0x004ba090
-inline const char* EntityGeometry::GetDerivedRttiName() const
-{
-    return rttiNameEntityGeometry;
 }
 
 // FUNCTION: SWBF2 0x004ba0d0

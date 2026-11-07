@@ -38,10 +38,20 @@ static float s_FadeNearDistance = 4.0f;
 
 static float s_FadeFarDistance = 14.0f;
 
+// GLOBAL: SWBF2 0x009c96b4
+// pcParticleShader::s_uiID
 unsigned int pcParticleShader::s_uiID;
+// GLOBAL: SWBF2 0x009c96b8
+// pcParticleShader::GetStateFuncArray
 pcRedShader::GetStateFuncT pcParticleShader::GetStateFuncArray[MAX_PIPELINES];
+// GLOBAL: SWBF2 0x009c96c4
+// pcParticleShader::BeginFuncArray
 pcRedShader::BeginFuncT pcParticleShader::BeginFuncArray[MAX_PIPELINES];
+// GLOBAL: SWBF2 0x009c96d0
+// pcParticleShader::EndFuncArray
 pcRedShader::EndFuncT pcParticleShader::EndFuncArray[MAX_PIPELINES];
+// GLOBAL: SWBF2 0x009c96dc
+// pcParticleShader::RenderFuncArray
 pcRedShader::RenderFuncT pcParticleShader::RenderFuncArray[MAX_PIPELINES];
 
 // FUNCTION: SWBF2 0x00702d30

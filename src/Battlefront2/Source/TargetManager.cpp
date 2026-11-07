@@ -19,20 +19,6 @@ ClassMarker _gClassMarker[MAX_CLASS_MARKERS];
 // GLOBAL: SWBF2 0x01eafb9c
 Marker* _gMarkers;
 
-// SYNTHETIC: SWBF2 0x00406600
-// TargetManager::`dynamic initializer for 'gMarkers''
-
-// GLOBAL: SWBF2 0x01f6de9c
-// gMarkers
-Marker* gMarkers = _gMarkers;
-
-// SYNTHETIC: SWBF2 0x00406520
-// TargetManager::`dynamic initializer for '_gPost''
-
-// GLOBAL: SWBF2 0x01f76410
-// _gPost
-Post _gPost[MAX_POSTS];
-
 // SYNTHETIC: SWBF2 0x00652170
 // TargetManager::Target::Target
 // SYNTHETIC: SWBF2 0x006521e0
@@ -46,6 +32,38 @@ Post _gPost[MAX_POSTS];
 // GLOBAL: SWBF2 0x01f76710
 // _gTarget
 Target _gTarget[MAX_TARGETS];
+
+// SYNTHETIC: SWBF2 0x00406520
+// TargetManager::`dynamic initializer for '_gPost''
+
+// GLOBAL: SWBF2 0x01f76410
+// _gPost
+Post _gPost[MAX_POSTS];
+
+// SYNTHETIC: SWBF2 0x004065a0
+// TargetManager::`dynamic initializer for '_gHostMarkers''
+// SYNTHETIC: SWBF2 0x00769520
+// TargetManager::`dynamic atexit destructor for '_gHostMarkers''
+
+// GLOBAL: SWBF2 0x01f75f10
+// _gHostMarkers
+Marker _gHostMarkers[MAX_MARKERS];
+
+// SYNTHETIC: SWBF2 0x004065d0
+// TargetManager::`dynamic initializer for '_gClientMarkers''
+// SYNTHETIC: SWBF2 0x00769540
+// TargetManager::`dynamic atexit destructor for '_gClientMarkers''
+
+// GLOBAL: SWBF2 0x01f7c980
+// _gClientMarkers
+Marker _gClientMarkers[MAX_MARKERS];
+
+// SYNTHETIC: SWBF2 0x00406600
+// TargetManager::`dynamic initializer for 'gMarkers''
+
+// GLOBAL: SWBF2 0x01f6de9c
+// gMarkers
+Marker* gMarkers = _gMarkers;
 
 // SYNTHETIC: SWBF2 0x00406610
 // TargetManager::`dynamic initializer for 'gColorTable''
@@ -546,29 +564,6 @@ void CheckObjectClassMarker(GameObject* const actor)
         }
     }
 }
-
-}
-
-namespace TargetManager
-{
-
-// SYNTHETIC: SWBF2 0x004065a0
-// TargetManager::`dynamic initializer for '_gHostMarkers''
-// SYNTHETIC: SWBF2 0x00769520
-// TargetManager::`dynamic atexit destructor for '_gHostMarkers''
-
-// GLOBAL: SWBF2 0x01f75f10
-// _gHostMarkers
-Marker _gHostMarkers[MAX_MARKERS];
-
-// SYNTHETIC: SWBF2 0x004065d0
-// TargetManager::`dynamic initializer for '_gClientMarkers''
-// SYNTHETIC: SWBF2 0x00769540
-// TargetManager::`dynamic atexit destructor for '_gClientMarkers''
-
-// GLOBAL: SWBF2 0x01f7c980
-// _gClientMarkers
-Marker _gClientMarkers[MAX_MARKERS];
 
 }
 

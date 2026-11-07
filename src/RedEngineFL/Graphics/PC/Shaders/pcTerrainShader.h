@@ -34,7 +34,7 @@ public:
     // pcTerrainShader::Bind
     // FUNCTION: SWBF2 0x006fad10
     // pcTerrainShader::GetShaderDef
-    DECLARE_PC_RED_SHADER_METHODS()
+    DECLARE_PC_RED_SHADER_METHODS(pcTerrainShader)
 
     virtual RenderPhaseT GetRenderPhase(const RenderItem*, unsigned int) const;
     virtual RedShadingState* CreateShadingState() const;
@@ -78,17 +78,6 @@ public:
     unsigned char m_uiLayerIndex[4];
     unsigned char m_uiOptions;
     bool m_lightingInSeparatePass;
-
-    // GLOBAL: SWBF2 0x009c8514
-    static unsigned int s_uiID;
-    // GLOBAL: SWBF2 0x009c8518
-    static GetStateFuncT GetStateFuncArray[MAX_PIPELINES];
-    // GLOBAL: SWBF2 0x009c8524
-    static BeginFuncT BeginFuncArray[MAX_PIPELINES];
-    // GLOBAL: SWBF2 0x009c8530
-    static EndFuncT EndFuncArray[MAX_PIPELINES];
-    // GLOBAL: SWBF2 0x009c853c
-    static RenderFuncT RenderFuncArray[MAX_PIPELINES];
     // GLOBAL: SWBF2 0x009c8548
     static pcRedVertexFormat* s_pVertexInputFormat;
     // GLOBAL: SWBF2 0x009c854c
@@ -127,12 +116,8 @@ public:
     static unsigned int s_uiOptions;
     // GLOBAL: SWBF2 0x009c85cc
     static float s_fLightningValue;
-    // GLOBAL: SWBF2 0x009c85d4
-    static pcRedShaderDef s_shaderDef;
     // GLOBAL: SWBF2 0x009c8600
     static PblVector4 s_BumpSpecularTextureTransform[2];
-
-    static pcTerrainShader s_Factory;
     // GLOBAL: SWBF2 0x009c8644
     static PblVector4 s_BumpLuminosityTextureTransform[2];
     // GLOBAL: SWBF2 0x009c8664
@@ -144,8 +129,6 @@ public:
     static PblVector4 s_FarDetailTextureTransform;
     // GLOBAL: SWBF2 0x009c8890
     static PblMatrix s_mProjectionRestore;
-
-    static unsigned int s_uiRenderTypeHash;
     // GLOBAL: SWBF2 0x009c88d4
     static PblVector4 s_DetailTextureTransform[2];
 

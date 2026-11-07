@@ -35,7 +35,8 @@ class Obstacle : public TreeGridObject
 {
 public:
 
-    Obstacle(const PblMatrix& rMatrix, const PblVector4& rSize, int eProhibit, unsigned int uName);
+    Obstacle(const PblMatrix& rMatrix, const PblVector4& rSize,
+             ConnectivityGraph::ProhibitFlag eProhibit, unsigned int uName);
 
     static void* operator new(unsigned int uSize) { return sMemoryPool.Allocate(uSize); }
     static void operator delete(void* p) { sMemoryPool.Free(p); }
@@ -169,8 +170,8 @@ namespace PathFinder
     int GetCost();
     void AddCost();
 
-    void AddObstacle(const PblMatrix& rMatrix, const PblVector4& rSize, int eProhibit,
-                     unsigned int uName);
+    void AddObstacle(const PblMatrix& rMatrix, const PblVector4& rSize,
+                     ConnectivityGraph::ProhibitFlag eProhibit, unsigned int uName);
     void CreateGameObjectBarrier(Obstacle*& rpObstacle, GameObject* pObject, float fSizeX,
                                  float fSizeZ, float fOffsetX, float fOffsetZ, unsigned int uName);
     void DeleteGameObjectBarrier(Obstacle*& rpObstacle);

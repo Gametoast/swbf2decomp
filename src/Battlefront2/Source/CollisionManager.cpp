@@ -274,6 +274,12 @@ bool CollisionManager::I_DeactivateItem(CollisionObject* pObject)
     return true;
 }
 
+// FUNCTION: SWBF2 0x00460920
+bool CollisionManager::DeactivateItem(CollisionObject* pObject)
+{
+    return sInstance->I_DeactivateItem(pObject);
+}
+
 // FUNCTION: SWBF2 0x004606c0
 bool CollisionManager::I_RemoveBody(CollisionObject* pObject)
 {
@@ -1568,6 +1574,15 @@ bool CollisionManager::OrdnanceUpdate::Update(float fDeltaTime)
         }
     }
     return true;
+}
+
+// FUNCTION: SWBF2 0x0045f5e0
+void CollisionManager::SetMaxCollisionDistance(float fDistance)
+{
+    if (CollisionManager::sInstance)
+    {
+        CollisionManager::sInstance->mMaxCollisionDistanceSq = fDistance * fDistance;
+    }
 }
 
 // FUNCTION: SWBF2 0x0045dc10

@@ -55,9 +55,9 @@ void StreamCaptureSourceBase::Flush()
     {
         StreamPacket* const pPacket = mPackets + uiIndex;
 
-        if (!pPacket->IsLocked() && pPacket->mBufferUsed != 0)
+        if (!pPacket->IsLocked() && pPacket->GetUsed() != 0)
         {
-            pPacket->mBufferUsed = 0;
+            pPacket->SetUsed(0);
         }
     }
 
@@ -74,7 +74,7 @@ StreamPacket* StreamCaptureSourceBase::GetPacket(unsigned int  )
 
     const unsigned char ucIndex = mLockPacketIndex;
     StreamPacket* const pPacket = mPackets + ucIndex;
-    if (pPacket->mBufferUsed == 0 || pPacket->IsLocked())
+    if (pPacket->GetUsed() == 0 || pPacket->IsLocked())
     {
         return 0;
     }
@@ -85,8 +85,8 @@ StreamPacket* StreamCaptureSourceBase::GetPacket(unsigned int  )
         mLockPacketIndex = 0;
     }
 
-    ++pPacket->mRefCount;
-    if (pPacket->mFlags & 1)
+    pPacket->Lock();
+    if (pPacket->GetLast())
     {
         SourceTransport::Stop();
     }
@@ -111,8 +111,8 @@ bool StreamCaptureSourceBase::Open(unsigned char  ,
         do
         {
 
-            mPackets[uiIndex].mBufferUsed = 0;
-            mPackets[uiIndex].mPos = 0;
+            mPackets[uiIndex].SetUsed(0);
+            mPackets[uiIndex].SetPosition(0);
             ++uiIndex;
         }
         while (uiIndex < mNumPackets);
@@ -166,7 +166,7 @@ SourceTransport::PlayState StreamCaptureSourceBase::Update(bool bHaveDevice)
             {
                 SetPlayState(SourceTransport::playState_pausing);
 
-                if (pPacket->mRefCount != 0 || pPacket->mBufferUsed != 0)
+                if (pPacket->IsLocked() || pPacket->GetUsed() != 0)
                 {
                     SetPlayState(
                         SourceTransport::playState_paused);

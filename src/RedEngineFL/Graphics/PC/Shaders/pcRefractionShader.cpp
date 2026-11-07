@@ -58,10 +58,20 @@ static inline unsigned long FloatBits_(float f)
     return *(const unsigned long*)&f;
 }
 
+// GLOBAL: SWBF2 0x009ca374
+// pcRefractionShader::s_uiID
 unsigned int pcRefractionShader::s_uiID;
+// GLOBAL: SWBF2 0x009ca378
+// pcRefractionShader::GetStateFuncArray
 pcRedShader::GetStateFuncT pcRefractionShader::GetStateFuncArray[MAX_PIPELINES];
+// GLOBAL: SWBF2 0x009ca384
+// pcRefractionShader::BeginFuncArray
 pcRedShader::BeginFuncT pcRefractionShader::BeginFuncArray[MAX_PIPELINES];
+// GLOBAL: SWBF2 0x009ca390
+// pcRefractionShader::EndFuncArray
 pcRedShader::EndFuncT pcRefractionShader::EndFuncArray[MAX_PIPELINES];
+// GLOBAL: SWBF2 0x009ca39c
+// pcRefractionShader::RenderFuncArray
 pcRedShader::RenderFuncT pcRefractionShader::RenderFuncArray[MAX_PIPELINES];
 
 // FUNCTION: SWBF2 0x0070cae0

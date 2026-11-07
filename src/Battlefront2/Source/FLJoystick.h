@@ -158,8 +158,18 @@ class GUIInputs
 {
 public:
 
-    GUIInputs();
-    ~GUIInputs();
+    // FUNCTION: SWBF2 0x00529ae0
+    GUIInputs()
+    {
+        memset(mGUIInputs, 0, sizeof(mGUIInputs));
+        memset(mLastGUIInputs, 0, sizeof(mLastGUIInputs));
+        memset(mProcessedGUIInputs, 0, sizeof(mProcessedGUIInputs));
+    }
+
+    // FUNCTION: SWBF2 0x00529b20
+    ~GUIInputs()
+    {
+    }
     void Process();
 
     void Clear();

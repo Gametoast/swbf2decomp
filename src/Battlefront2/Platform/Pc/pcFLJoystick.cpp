@@ -68,6 +68,12 @@ BindDestination RawControllerInputs::sDefaultBindings[5][76] =
 #endif
 #include <dinput.h>
 
+// FUNCTION: SWBF2 0x00414990
+int __fastcall RawControllerInputs::IndexToRedKey(int iIndex)
+{
+    return RedKeyTo_BindID[iIndex];
+}
+
 // FUNCTION: SWBF2 0x004149a0
 unsigned short __cdecl RawInputToActionKey(unsigned short usRawInput)
 {

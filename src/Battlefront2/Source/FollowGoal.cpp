@@ -77,9 +77,18 @@ void AI::FollowGoal::Assign(Character* pChr)
         return;
     }
 
-    const GameObject* pObject = mTarget.GetGameObject();
+    const GameObject* pObject = 0;
+    if (mTarget.mType == GTT_GAMEOBJECT)
+    {
+        pObject = mTarget.mGameObj;
+    }
+    else if (mTarget.mType == GTT_CHARACTER)
+    {
+        pObject = mTarget.mChr->GetControllable() ? mTarget.mChr->GetControllable()->GetGameObject() : 0;
+    }
     if (pObject)
     {
-        pCtrl->ForceCommand(UnitFollowInfo(PblHandle<GameObject>(const_cast<GameObject*>(pObject)), PblHandle<GameObject>(), true));
+        CmdInfo cmd = UnitFollowInfo(const_cast<GameObject*>(pObject), NULL, true);
+        pCtrl->ForceCommand(cmd);
     }
 }

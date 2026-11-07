@@ -23,10 +23,20 @@
 
 void __cdecl PblTraceP(const char* Format, ...);
 
+// GLOBAL: SWBF2 0x009c9c8c
+// pcStencilShadowShader::s_uiID
 unsigned int pcStencilShadowShader::s_uiID;
+// GLOBAL: SWBF2 0x009c9c90
+// pcStencilShadowShader::GetStateFuncArray
 pcRedShader::GetStateFuncT pcStencilShadowShader::GetStateFuncArray[MAX_PIPELINES];
+// GLOBAL: SWBF2 0x009c9c9c
+// pcStencilShadowShader::BeginFuncArray
 pcRedShader::BeginFuncT pcStencilShadowShader::BeginFuncArray[MAX_PIPELINES];
+// GLOBAL: SWBF2 0x009c9ca8
+// pcStencilShadowShader::EndFuncArray
 pcRedShader::EndFuncT pcStencilShadowShader::EndFuncArray[MAX_PIPELINES];
+// GLOBAL: SWBF2 0x009c9cb4
+// pcStencilShadowShader::RenderFuncArray
 pcRedShader::RenderFuncT pcStencilShadowShader::RenderFuncArray[MAX_PIPELINES];
 pcRedVertexFormat* pcStencilShadowShader::s_pSkinnedInputFormat[4];
 unsigned int pcStencilShadowShader::s_uiStencilMask = 0xff;
@@ -587,18 +597,24 @@ void pcStencilShadowShader::_StaticInit() const
 
 // SYNTHETIC: SWBF2 0x00409ea0
 // `dynamic initializer for 'pcStencilShadowShader::s_uiRenderTypeHash''
+// GLOBAL: SWBF2 0x009c9d14
+// pcStencilShadowShader::s_uiRenderTypeHash
 unsigned int pcStencilShadowShader::s_uiRenderTypeHash = PblHash("StencilShadow");
 
 // SYNTHETIC: SWBF2 0x00409e60
 // `dynamic initializer for 'pcStencilShadowShader::s_Factory''
 // SYNTHETIC: SWBF2 0x00769e10
 // `dynamic atexit destructor for 'pcStencilShadowShader::s_Factory''
+// GLOBAL: SWBF2 0x009c9d18
+// pcStencilShadowShader::s_Factory
 pcStencilShadowShader pcStencilShadowShader::s_Factory;
 
 // SYNTHETIC: SWBF2 0x00409e80
 // `dynamic initializer for 'pcStencilShadowShader::s_shaderDef''
 // SYNTHETIC: SWBF2 0x00769e30
 // `dynamic atexit destructor for 'pcStencilShadowShader::s_shaderDef''
+// GLOBAL: SWBF2 0x009c9ce0
+// pcStencilShadowShader::s_shaderDef
 pcRedShaderDef pcStencilShadowShader::s_shaderDef("stencilshadow_shader.xml");
 
 // SYNTHETIC: SWBF2 0x00409ee0

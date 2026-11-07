@@ -1,6 +1,7 @@
 #pragma once
 
 #include "PebbleFL/Common/PblHashTable.h"
+#include "PebbleFL/Common/PblRtti.h"
 
 class PblFileChunk;
 
@@ -89,9 +90,13 @@ public:
     virtual ~Weapon();
     virtual bool Update(float fDeltaTime);
 
-    virtual bool IsRtti(unsigned int uRtti) const;
-    virtual unsigned int GetDerivedRtti() const;
-    virtual const char* GetDerivedRttiName() const;
+    // FUNCTION: SWBF2 0x00677610
+    // Weapon::IsRtti
+    // FUNCTION: SWBF2 0x00677630
+    // Weapon::GetDerivedRtti
+    // FUNCTION: SWBF2 0x00677640
+    // Weapon::GetDerivedRttiName
+    PBL_DECLARE_ROOT_RTTI(Weapon)
     virtual void Init();
     virtual float GetOrdnanceVelocity() const;
     virtual float GetOrdnanceGravity() const;
@@ -208,8 +213,6 @@ public:
     void ClearFiredFlag() { mFiredFlag = 0; }
     WeaponState GetState() const { return mState; }
 
-    static PblHash rttiHashWeapon;
-    static const char rttiNameWeapon[];
 
     static void operator delete(void* p);
 
@@ -269,24 +272,6 @@ public:
     int mTargetBodyID;
 };
 
-// FUNCTION: SWBF2 0x00677610
-inline bool Weapon::IsRtti(unsigned int uRtti) const
-{
-    return rttiHashWeapon == uRtti;
-}
-
-// FUNCTION: SWBF2 0x00677630
-inline unsigned int Weapon::GetDerivedRtti() const
-{
-    return rttiHashWeapon;
-}
-
-// FUNCTION: SWBF2 0x00677640
-inline const char* Weapon::GetDerivedRttiName() const
-{
-    return rttiNameWeapon;
-}
-
 // VTABLE: SWBF2 0x007b0170
 class WeaponClass : public Factory<Weapon, WeaponClass, WeaponDesc>
 {
@@ -326,10 +311,14 @@ public:
     virtual ~WeaponClass();
     virtual WeaponClass* Derive(unsigned int uHash);
 
-    virtual bool IsRtti(unsigned int uRtti) const;
+    // FUNCTION: SWBF2 0x006777d0
+    // WeaponClass::IsRtti
+    // FUNCTION: SWBF2 0x006777f0
+    // WeaponClass::GetDerivedRtti
+    // FUNCTION: SWBF2 0x00677800
+    // WeaponClass::GetDerivedRttiName
+    PBL_DECLARE_ROOT_RTTI(WeaponClass)
     virtual Weapon* Build(const WeaponDesc& desc);
-    virtual unsigned int GetDerivedRtti() const;
-    virtual const char* GetDerivedRttiName() const;
     virtual void SetProperty(unsigned int uProperty, const char* pszValue);
     virtual void PostReadInit();
     virtual bool PostLoadInit();
@@ -347,8 +336,6 @@ public:
 
     float GetBarrageDelay() const;
 
-    static PblHash rttiHashWeaponClass;
-    static const char rttiNameWeaponClass[];
 
     static GameSound sWeaponChangeUnableSound;
 
@@ -542,20 +529,3 @@ inline bool WeaponClass::PostLoadInit()
  
  
 
-// FUNCTION: SWBF2 0x006777d0
-inline bool WeaponClass::IsRtti(unsigned int uRtti) const
-{
-    return rttiHashWeaponClass == uRtti;
-}
-
-// FUNCTION: SWBF2 0x006777f0
-inline unsigned int WeaponClass::GetDerivedRtti() const
-{
-    return rttiHashWeaponClass;
-}
-
-// FUNCTION: SWBF2 0x00677800
-inline const char* WeaponClass::GetDerivedRttiName() const
-{
-    return rttiNameWeaponClass;
-}

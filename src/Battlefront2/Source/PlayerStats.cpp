@@ -5,6 +5,7 @@
 #include "FlagItem.h"
 #include "GameLoop.h"
 #include "GameObject.h"
+#include "MountedTurret.h"
 #include "MedalsMgr.h"
 #include "NetComm.h"
 #include "NetGame.h"
@@ -220,7 +221,6 @@ int PlayerStats::GetNemesisVal(int, int iTeamStat) const
     return iBest;
 }
 
-class MountedTurret { public: static PblHash rttiHashMountedTurret; };
 
 // GLOBAL: SWBF2 0x007e9038
 bool PlayerStats::mStatsActive = true;
@@ -838,7 +838,7 @@ void PlayerStats::AddTimePlayedInsideVehicle(const Entity* pVehicle, float fTime
     }
 
     const EntityClass* pClass = pVehicle->GetEntityClass();
-    if (pVehicle->IsRtti(MountedTurret::rttiHashMountedTurret))
+    if (pVehicle->IsRtti(MountedTurret::GetRtti()))
     {
         pClass = pVehicle->GetGameObject()->GetEntityClass();
     }

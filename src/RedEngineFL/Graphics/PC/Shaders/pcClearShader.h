@@ -43,7 +43,7 @@ public:
     // pcClearShader::Bind
     // FUNCTION: SWBF2 0x00706b10
     // pcClearShader::GetShaderDef
-    DECLARE_PC_RED_SHADER_METHODS()
+    DECLARE_PC_RED_SHADER_METHODS(pcClearShader)
 
     virtual RenderPhaseT GetRenderPhase(const RenderItem*, unsigned int) const;
 
@@ -68,29 +68,6 @@ public:
     RedTexture* m_pAlphaMaskTex;
     unsigned int m_uiMaterialFlags;
     BlendModeT m_blendMode;
-
-    // GLOBAL: SWBF2 0x009c9bec
-    static unsigned int s_uiID;
-
-    // GLOBAL: SWBF2 0x009c9bf0
-    static GetStateFuncT GetStateFuncArray[MAX_PIPELINES];
-
-    // GLOBAL: SWBF2 0x009c9bfc
-    static BeginFuncT BeginFuncArray[MAX_PIPELINES];
-
-    // GLOBAL: SWBF2 0x009c9c08
-    static EndFuncT EndFuncArray[MAX_PIPELINES];
-
-    // GLOBAL: SWBF2 0x009c9c14
-    static RenderFuncT RenderFuncArray[MAX_PIPELINES];
-
-    // GLOBAL: SWBF2 0x009c9c88
-    static unsigned int s_uiRenderTypeHash;
-
-    // GLOBAL: SWBF2 0x009c9c5c
-    static pcRedShaderDef s_shaderDef;
-
-    static pcClearShader s_Factory;
 
 private:
 

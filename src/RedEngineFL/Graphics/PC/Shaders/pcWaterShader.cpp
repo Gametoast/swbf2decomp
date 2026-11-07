@@ -24,10 +24,20 @@ void __cdecl PblTraceP(const char* Format, ...);
 class PblMatrix;
 extern PblMatrix gMatrixIdentity;
 
+// GLOBAL: SWBF2 0x009c9e28
+// pcWaterShader::s_uiID
 unsigned int pcWaterShader::s_uiID;
+// GLOBAL: SWBF2 0x009c9e2c
+// pcWaterShader::GetStateFuncArray
 pcRedShader::GetStateFuncT pcWaterShader::GetStateFuncArray[MAX_PIPELINES];
+// GLOBAL: SWBF2 0x009c9e38
+// pcWaterShader::BeginFuncArray
 pcRedShader::BeginFuncT pcWaterShader::BeginFuncArray[MAX_PIPELINES];
+// GLOBAL: SWBF2 0x009c9e44
+// pcWaterShader::EndFuncArray
 pcRedShader::EndFuncT pcWaterShader::EndFuncArray[MAX_PIPELINES];
+// GLOBAL: SWBF2 0x009c9e50
+// pcWaterShader::RenderFuncArray
 pcRedShader::RenderFuncT pcWaterShader::RenderFuncArray[MAX_PIPELINES];
 
 // SYNTHETIC: SWBF2 0x00409fc0

@@ -33,7 +33,7 @@ public:
     // pcLightBeamShader::Bind
     // FUNCTION: SWBF2 0x007048d0
     // pcLightBeamShader::GetShaderDef
-    DECLARE_PC_RED_SHADER_METHODS()
+    DECLARE_PC_RED_SHADER_METHODS(pcLightBeamShader)
 
     virtual RenderPhaseT GetRenderPhase(const RenderItem*, unsigned int) const;
 
@@ -57,29 +57,6 @@ public:
 
     pcRedVertexFormat* m_pVertexFormat;
     unsigned int m_uiMaterialFlags;
-
-    // GLOBAL: SWBF2 0x009c995c
-    static unsigned int s_uiID;
-
-    // GLOBAL: SWBF2 0x009c9960
-    static GetStateFuncT GetStateFuncArray[MAX_PIPELINES];
-
-    // GLOBAL: SWBF2 0x009c996c
-    static BeginFuncT BeginFuncArray[MAX_PIPELINES];
-
-    // GLOBAL: SWBF2 0x009c9978
-    static EndFuncT EndFuncArray[MAX_PIPELINES];
-
-    // GLOBAL: SWBF2 0x009c9984
-    static RenderFuncT RenderFuncArray[MAX_PIPELINES];
-
-    // GLOBAL: SWBF2 0x009c9994
-    static unsigned int s_uiRenderTypeHash;
-
-    // GLOBAL: SWBF2 0x009c999c
-    static pcRedShaderDef s_shaderDef;
-
-    static pcLightBeamShader s_Factory;
 
 private:
 

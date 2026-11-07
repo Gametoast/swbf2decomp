@@ -653,7 +653,7 @@ int CombatHelper::EventHandler(AI::EventInfo* pInfo)
         return mOwner->RunForVehicle(pInfo->mGameObject) ? AI::EVT_NotHandled : AI::EVT_Ignored;
 
     case AI::EVT_Grenade:
-        if (GetMe()->GetEntity()->IsRtti(MountedTurret::rttiHashMountedTurret))
+        if (GetMe()->GetEntity()->IsRtti(MountedTurret::GetRtti()))
         {
             return AI::EVT_Ignored;
         }

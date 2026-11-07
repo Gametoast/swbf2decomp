@@ -67,11 +67,6 @@ FLInputManager::FLInputManager()
     mActiveControllers[0] = true;
 }
 
-// FUNCTION: SWBF2 0x00529b30
-FLInputManager::~FLInputManager()
-{
-}
-
 // FUNCTION: SWBF2 0x0052a190
 RawControllerInputs* FLInputManager::GetPlayerJoystick(int iPlayer)
 {
@@ -252,19 +247,6 @@ void FLInputManager::Init(void)
         pPanel->DrawLCDText("Battlefront II", 0x32, 0x14);
         pPanel->PresentLCD();
     }
-}
-
-// FUNCTION: SWBF2 0x00529ae0
-GUIInputs::GUIInputs()
-{
-    memset(mGUIInputs, 0, sizeof(mGUIInputs));
-    memset(mLastGUIInputs, 0, sizeof(mLastGUIInputs));
-    memset(mProcessedGUIInputs, 0, sizeof(mProcessedGUIInputs));
-}
-
-// FUNCTION: SWBF2 0x00529b20
-GUIInputs::~GUIInputs()
-{
 }
 
 // FUNCTION: SWBF2 0x0052a150

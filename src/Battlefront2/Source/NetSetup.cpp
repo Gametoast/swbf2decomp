@@ -1831,15 +1831,6 @@ void ReadJoinReject(NetPktGroup& group, JoinRejectReason& eReason)
     JRR_to_Errorbox(eReason);
 }
 
-// FUNCTION: SWBF2 0x005d4ab0
-hostent* getlocalhost()
-{
-    char name[256];
-    memset(name, 0, sizeof(name));
-    gethostname(name, sizeof(name));
-    return gethostbyname(name);
-}
-
 extern unsigned int netDirectSocket;
 
 // FUNCTION: SWBF2 0x005e7630

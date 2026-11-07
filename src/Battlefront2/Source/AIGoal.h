@@ -5,6 +5,7 @@
 #include <stddef.h>
 
 #include "PebbleFL/Common/PblHashTable.h"
+#include "PebbleFL/Common/PblRtti.h"
 #include "PebbleFL/Common/PblHandle.h"
 #include "PebbleFL/Common/PblList.h"
 #include "PebbleFL/Common/PblVector.h"
@@ -73,22 +74,7 @@ struct GoalTarget
 
     bool GetLocation(PblVector3& vPos);
 
-    // FUNCTION: SWBF2 0x00439c90
-    const GameObject* GetGameObject()
-    {
-        if (mType == GTT_GAMEOBJECT)
-        {
-            return mGameObj;
-        }
-        if (mType == GTT_CHARACTER)
-        {
-            if (mChr->GetControllable())
-            {
-                return mChr->GetControllable()->GetGameObject();
-            }
-        }
-        return 0;
-    }
+    const GameObject* GetGameObject();
 };
 
 // VTABLE: SWBF2 0x00796b6c
@@ -98,9 +84,13 @@ public:
 
     AIGoal(AIGoalType eType, unsigned char uTeam, float fWeight);
 
-    virtual bool IsRtti(unsigned int uRtti) const;
-    virtual unsigned int GetDerivedRtti() const;
-    virtual const char* GetDerivedRttiName() const;
+    // FUNCTION: SWBF2 0x00439ab0
+    // AI::AIGoal::IsRtti
+    // FUNCTION: SWBF2 0x00439ad0
+    // AI::AIGoal::GetDerivedRtti
+    // FUNCTION: SWBF2 0x00439ae0
+    // AI::AIGoal::GetDerivedRttiName
+    PBL_DECLARE_ROOT_RTTI(AIGoal)
     virtual ~AIGoal();
     virtual void AddUnit(Character* pChr);
     virtual void Update();
@@ -120,8 +110,6 @@ public:
 
     unsigned char GetTeam() { return mTeam; }
 
-    static PblHash rttiHashAIGoal;
-    static const char rttiNameAIGoal[];
     static MemoryPool sMemoryPool;
 
     PblList<Character> mUnitList;
@@ -138,20 +126,3 @@ public:
  
  
 
-// FUNCTION: SWBF2 0x00439ab0
-inline bool AI::AIGoal::IsRtti(unsigned int uRtti) const
-{
-    return rttiHashAIGoal == uRtti;
-}
-
-// FUNCTION: SWBF2 0x00439ad0
-inline unsigned int AI::AIGoal::GetDerivedRtti() const
-{
-    return rttiHashAIGoal;
-}
-
-// FUNCTION: SWBF2 0x00439ae0
-inline const char* AI::AIGoal::GetDerivedRttiName() const
-{
-    return rttiNameAIGoal;
-}

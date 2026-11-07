@@ -32,7 +32,6 @@
 #include "NetComm.h"
 #include "NetGame.h"
 #include "PauseMenu.h"
-#include "PassengerSlot.h"
 #include "PlayerProfile.h"
 #include "PlayerStats.h"
 #include "PebbleFL/Common/PblMath.h"
@@ -80,68 +79,6 @@ int sHostCharacterCount;
 extern int netCurMaxPlayers;
 extern NetPlayer netPlayers[64];
 
-namespace AIDebug
-{
-namespace TestSpawn
-{
-// GLOBAL: SWBF2 0x01e2fd6c
-Character* aic[4];
-}
-}
-
-namespace AIDebug
-{
-namespace TestSpawn
-{
-
-// FUNCTION: SWBF2 0x00438750
-PblMatrix GetTestSpawnMatrix(Character* pCharacter)
-{
-    if (pCharacter->mPlayerId < 0 &&
-        AIDebug::TestSpawn::aic[0] != pCharacter &&
-        AIDebug::TestSpawn::aic[1] != pCharacter &&
-        AIDebug::TestSpawn::aic[2] != pCharacter &&
-        AIDebug::TestSpawn::aic[3] != pCharacter)
-    {
-        PblMatrix mSpawn(gMatrixIdentity);
-        mSpawn.SetTranslation(PblVector3((float)(pCharacter - Character::sCharacters) * 3.0f, 100.0f, 0.0f));
-        return mSpawn;
-    }
-
-    const float kHalfHeight = 25.0f;
-    const PblVector3 kCylinderCenter(-74.0f, 12.0f, 20.0f);
-
-    const float fAngle = PblRandom::_Global.GetFloat() * 6.2831855f;
-    float fCos, fSin;
-    PblMath::SinCos(&fSin, &fCos, fAngle);
-    const float fRadius = PblRandom::_Global.GetFloat() * 32.0f;
-    const PblVector3 vStart = fRadius * PblVector3(fSin, 0.0f, fCos) + kCylinderCenter + PblVector3(0.0f, kHalfHeight, 0.0f);
-    const PblVector3 vDown = -PblVector3(0.0f, 1.0f, 0.0f);
-    CollisionObject* pHitObject = 0;
-    const float fHit = CollisionManager::RayHit(vStart, vDown, kHalfHeight * 2.0f,
-                                                 pHitObject, 0, 0, 0, 0, false);
-    const PblVector3 vPosition = vStart - PblVector3(0.0f, fHit * kHalfHeight * 2.0f, 0.0f);
-
-    PblMatrix result;
-    result.SetXAxis(-fCos, 0.0f, fSin, 0.0f);
-    result.SetYAxis(0.0f, 1.0f, 0.0f, 0.0f);
-    result.SetZAxis(-fSin, 0.0f, -fCos, 0.0f);
-    result.SetTranslation(vPosition);
-    return result;
-}
-}
-}
-
-namespace AIDebug
-{
-
-// FUNCTION: SWBF2 0x00438a10
-PblMatrix GetTestSpawnMatrix(Character* pCharacter)
-{
-    return AIDebug::TestSpawn::GetTestSpawnMatrix(pCharacter);
-}
-}
-
 // FUNCTION: SWBF2 0x00452310
 float Character::TimeSinceLastVehicleOrRemoteChange()
 {
@@ -174,44 +111,6 @@ void Character::LeaveClient()
         sCharacterCount = sHostCharacterCount;
         sCharacters = sHostCharacters;
     }
-}
-
-// FUNCTION: SWBF2 0x00477fd0
-bool CommandFlyer::IsLanded()
-{
-    return mState == LANDED;
-}
-
-// FUNCTION: SWBF2 0x00477f10
-Controllable* CommandFlyer::GetPassengerSlot(int)
-{
-    if (EntityFlyer::mClass->mPassengerSlotClass)
-    {
-        Controllable* pLast = 0;
-        for (int i = 0; i < EntityFlyer::mClass->mNumPassengerSlots; ++i)
-        {
-            PassengerSlot* pCraft = mPassengerSlots[i];
-            if (!pCraft)
-            {
-                continue;
-            }
-            Controllable* pThis = (Controllable*)this;
-            Controllable* pCurrent = (pThis->mPilotType == PILOT_SELF ||
-                                     (pThis->mPilotType == PILOT_VEHICLESELF && pThis->mPilot == pThis))
-                                        ? 0 : pThis->mPilot;
-            if (pCurrent == (Controllable*)pCraft || pCraft->mPlayerId >= 0)
-            {
-                continue;
-            }
-            pLast = (Controllable*)pCraft;
-            if (!((Trackable*)pCraft)->GetControllable())
-            {
-                return (Controllable*)pCraft;
-            }
-        }
-        return pLast;
-    }
-    return 0;
 }
 
 

@@ -36,7 +36,7 @@ public:
     // pcWaterShader::Bind
     // FUNCTION: SWBF2 0x007096b0
     // pcWaterShader::GetShaderDef
-    DECLARE_PC_RED_SHADER_METHODS()
+    DECLARE_PC_RED_SHADER_METHODS(pcWaterShader)
 
     virtual RenderPhaseT GetRenderPhase(const RenderItem*, unsigned int) const;
 
@@ -89,27 +89,6 @@ public:
     RedTextureTransform m_specularMaskTransform1;
     RedTextureTransform m_specularMaskTransform2;
     float m_specularMaskBlend;
-
-    // GLOBAL: SWBF2 0x009c9e28
-    static unsigned int s_uiID;
-
-    // GLOBAL: SWBF2 0x009c9e2c
-    static GetStateFuncT GetStateFuncArray[MAX_PIPELINES];
-
-    // GLOBAL: SWBF2 0x009c9e38
-    static BeginFuncT BeginFuncArray[MAX_PIPELINES];
-
-    // GLOBAL: SWBF2 0x009c9e44
-    static EndFuncT EndFuncArray[MAX_PIPELINES];
-
-    // GLOBAL: SWBF2 0x009c9e50
-    static RenderFuncT RenderFuncArray[MAX_PIPELINES];
-
-    static pcRedShaderDef s_shaderDef;
-
-    static pcWaterShader s_Factory;
-
-    static unsigned int s_uiRenderTypeHash;
 
     static void SetFresnelMinMax(float fMin, float fMax);
     static void SetReflectionColor(RedColor color);

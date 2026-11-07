@@ -464,7 +464,7 @@ static void sCalculateTurnControls(const Controllable* pMe, float fScale, const 
 
     if (pMe->GetEntity()->IsRtti(EntityFlyer::rttiHashEntityFlyer)
         || pMe->GetEntity()->IsRtti(EntityHover::rttiHashEntityHover)
-        || (pMe->GetEntity()->IsRtti(MountedTurret::rttiHashMountedTurret) && fTurnRate > 0.5f))
+        || (pMe->GetEntity()->IsRtti(MountedTurret::GetRtti()) && fTurnRate > 0.5f))
     {
         vToDest.y = 0.0f;
         const PblVector3 vLocal = UnrotateVector(pMe->GetMatrix(), vToDest);
@@ -521,7 +521,7 @@ static void sCalculateTurnControls(const Controllable* pMe, float fScale, const 
 
     if (pMe->GetEntity()->IsRtti(EntityFlyer::rttiHashEntityFlyer)
         || pMe->GetEntity()->IsRtti(EntityHover::rttiHashEntityHover)
-        || (pMe->GetEntity()->IsRtti(MountedTurret::rttiHashMountedTurret) && fPitchRate > 0.5f))
+        || (pMe->GetEntity()->IsRtti(MountedTurret::GetRtti()) && fPitchRate > 0.5f))
     {
         const PblVector3 vLocal = UnrotateVector(mEye, vToDest2);
         PblVector3 vDir;
@@ -1098,7 +1098,7 @@ AIUtil::EntityType AIUtil::GetEntityType(const Entity* pEntity)
     {
         return ENTITY_HOVER;
     }
-    if (pEntity->IsRtti(MountedTurret::rttiHashMountedTurret))
+    if (pEntity->IsRtti(MountedTurret::GetRtti()))
     {
         return ENTITY_TURRET;
     }
@@ -1114,7 +1114,7 @@ AIUtil::EntityType AIUtil::GetEntityType(const Entity* pEntity)
     {
         return ENTITY_ITEM;
     }
-    if (pEntity->IsRtti(PassengerSlot::rttiHashPassengerSlot))
+    if (pEntity->IsRtti(PassengerSlot::GetRtti()))
     {
         return ENTITY_TURRET;
     }

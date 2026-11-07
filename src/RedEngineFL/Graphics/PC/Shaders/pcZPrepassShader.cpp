@@ -17,10 +17,20 @@ void __cdecl PblTraceP(const char* Format, ...);
 class PblMatrix;
 extern PblMatrix gMatrixIdentity;
 
+// GLOBAL: SWBF2 0x009c95a8
+// pcZPrepassShader::s_uiID
 unsigned int pcZPrepassShader::s_uiID;
+// GLOBAL: SWBF2 0x009c95ac
+// pcZPrepassShader::GetStateFuncArray
 pcRedShader::GetStateFuncT pcZPrepassShader::GetStateFuncArray[MAX_PIPELINES];
+// GLOBAL: SWBF2 0x009c95b8
+// pcZPrepassShader::BeginFuncArray
 pcRedShader::BeginFuncT pcZPrepassShader::BeginFuncArray[MAX_PIPELINES];
+// GLOBAL: SWBF2 0x009c95c4
+// pcZPrepassShader::EndFuncArray
 pcRedShader::EndFuncT pcZPrepassShader::EndFuncArray[MAX_PIPELINES];
+// GLOBAL: SWBF2 0x009c95d0
+// pcZPrepassShader::RenderFuncArray
 pcRedShader::RenderFuncT pcZPrepassShader::RenderFuncArray[MAX_PIPELINES];
 
 // FUNCTION: SWBF2 0x00702390
@@ -301,18 +311,24 @@ void pcZPrepassShader::_Read(PblFileChunk& chunk) const
 
 // SYNTHETIC: SWBF2 0x00409950
 // `dynamic initializer for 'pcZPrepassShader::s_uiRenderTypeHash''
+// GLOBAL: SWBF2 0x009c95e8
+// pcZPrepassShader::s_uiRenderTypeHash
 unsigned int pcZPrepassShader::s_uiRenderTypeHash = PblHash("zprepass");
 
 // SYNTHETIC: SWBF2 0x00409910
 // `dynamic initializer for 'pcZPrepassShader::s_Factory''
 // SYNTHETIC: SWBF2 0x00769c90
 // `dynamic atexit destructor for 'pcZPrepassShader::s_Factory''
+// GLOBAL: SWBF2 0x009c9618
+// pcZPrepassShader::s_Factory
 pcZPrepassShader pcZPrepassShader::s_Factory;
 
 // SYNTHETIC: SWBF2 0x00409930
 // `dynamic initializer for 'pcZPrepassShader::s_shaderDef''
 // SYNTHETIC: SWBF2 0x00769cb0
 // `dynamic atexit destructor for 'pcZPrepassShader::s_shaderDef''
+// GLOBAL: SWBF2 0x009c95ec
+// pcZPrepassShader::s_shaderDef
 pcRedShaderDef pcZPrepassShader::s_shaderDef("zprepass_shader.xml");
 
 // SYNTHETIC: SWBF2 0x00409990

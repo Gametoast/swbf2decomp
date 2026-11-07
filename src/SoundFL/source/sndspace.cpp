@@ -9,14 +9,14 @@
 namespace Snd
 {
 
-// SYNTHETIC: SWBF2 0x0040b640
-// `dynamic initializer for 'Snd::Space::smDefaultSpace''
-// SYNTHETIC: SWBF2 0x0076a1b0
-// `dynamic atexit destructor for 'Snd::Space::smDefaultSpace''
+// SYNTHETIC: SWBF2 0x0040b6b0
+// `dynamic initializer for 'Snd::Space::smFreeList''
+// SYNTHETIC: SWBF2 0x0076a1d0
+// `dynamic atexit destructor for 'Snd::Space::smFreeList''
 
-// GLOBAL: SWBF2 0x009d83c8
-// Space::smDefaultSpace
-Space Space::smDefaultSpace;
+// GLOBAL: SWBF2 0x007e3400
+// Space::smFreeList
+FreeList Space::smFreeList(sizeof(Space), 1, true, 8);
 
 // SYNTHETIC: SWBF2 0x0040b6d0
 // `dynamic initializer for 'Snd::Space::smSpaceList''
@@ -27,6 +27,15 @@ Space Space::smDefaultSpace;
 // Space::smSpaceList
 PblListSingle Space::smSpaceList;
 
+// SYNTHETIC: SWBF2 0x0040b640
+// `dynamic initializer for 'Snd::Space::smDefaultSpace''
+// SYNTHETIC: SWBF2 0x0076a1b0
+// `dynamic atexit destructor for 'Snd::Space::smDefaultSpace''
+
+// GLOBAL: SWBF2 0x009d83c8
+// Space::smDefaultSpace
+Space Space::smDefaultSpace;
+
 // SYNTHETIC: SWBF2 0x0040b690
 // `dynamic initializer for 'Snd::Space::Connected::smFreeList''
 // SYNTHETIC: SWBF2 0x0076a1c0
@@ -35,15 +44,6 @@ PblListSingle Space::smSpaceList;
 // GLOBAL: SWBF2 0x007e341c
 // Space::Connected::smFreeList
 FreeList Space::Connected::smFreeList(8, 1, true, 8);
-
-// SYNTHETIC: SWBF2 0x0040b6b0
-// `dynamic initializer for 'Snd::Space::smFreeList''
-// SYNTHETIC: SWBF2 0x0076a1d0
-// `dynamic atexit destructor for 'Snd::Space::smFreeList''
-
-// GLOBAL: SWBF2 0x007e3400
-// Space::smFreeList
-FreeList Space::smFreeList(sizeof(Space), 1, true, 8);
 
 // FUNCTION: SWBF2 0x00733a70
 bool Space::Open()

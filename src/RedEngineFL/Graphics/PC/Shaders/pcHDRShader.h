@@ -42,7 +42,7 @@ public:
     // pcHDRShader::Bind
     // FUNCTION: SWBF2 0x00713c20
     // pcHDRShader::GetShaderDef
-    DECLARE_PC_RED_SHADER_METHODS()
+    DECLARE_PC_RED_SHADER_METHODS(pcHDRShader)
 
     virtual RenderPhaseT GetRenderPhase(const RenderItem*, unsigned int) const;
 
@@ -86,29 +86,6 @@ public:
     float m_bloomOffset;
     float m_bloomWeight;
     HDR_MODE m_state;
-
-    // GLOBAL: SWBF2 0x009caa10
-    static unsigned int s_uiID;
-
-    // GLOBAL: SWBF2 0x009caa14
-    static GetStateFuncT GetStateFuncArray[MAX_PIPELINES];
-
-    // GLOBAL: SWBF2 0x009caa20
-    static BeginFuncT BeginFuncArray[MAX_PIPELINES];
-
-    // GLOBAL: SWBF2 0x009caa2c
-    static EndFuncT EndFuncArray[MAX_PIPELINES];
-
-    // GLOBAL: SWBF2 0x009caa38
-    static RenderFuncT RenderFuncArray[MAX_PIPELINES];
-
-    // GLOBAL: SWBF2 0x009caa7c
-    static unsigned int s_uiRenderTypeHash;
-
-    // GLOBAL: SWBF2 0x009caa48
-    static pcRedShaderDef s_shaderDef;
-
-    static pcHDRShader s_Factory;
 
 private:
 

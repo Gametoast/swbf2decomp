@@ -16,10 +16,20 @@ extern PblMatrix gMatrixIdentity;
 
 static const float kInv255 = 1.0f / 255.0f;
 
+// GLOBAL: SWBF2 0x009c9a98
+// pcSampleShader::s_uiID
 unsigned int pcSampleShader::s_uiID;
+// GLOBAL: SWBF2 0x009c9a9c
+// pcSampleShader::GetStateFuncArray
 pcRedShader::GetStateFuncT pcSampleShader::GetStateFuncArray[MAX_PIPELINES];
+// GLOBAL: SWBF2 0x009c9aa8
+// pcSampleShader::BeginFuncArray
 pcRedShader::BeginFuncT pcSampleShader::BeginFuncArray[MAX_PIPELINES];
+// GLOBAL: SWBF2 0x009c9ab4
+// pcSampleShader::EndFuncArray
 pcRedShader::EndFuncT pcSampleShader::EndFuncArray[MAX_PIPELINES];
+// GLOBAL: SWBF2 0x009c9ac0
+// pcSampleShader::RenderFuncArray
 pcRedShader::RenderFuncT pcSampleShader::RenderFuncArray[MAX_PIPELINES];
 
 // SYNTHETIC: SWBF2 0x00409ca0

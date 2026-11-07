@@ -53,12 +53,7 @@ static bool sResetFollowRotation;
 
 namespace AIDebug
 {
-
-// FUNCTION: SWBF2 0x00438670
-bool AllowUpdateFreeCamSpeeds()
-{
-    return true;
-}
+    bool AllowUpdateFreeCamSpeeds();
 }
 
 // FUNCTION: SWBF2 0x0052d650

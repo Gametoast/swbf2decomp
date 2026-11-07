@@ -76,6 +76,12 @@ bool SaveFsm::IsDone() const
     return iState == 1 || iState == 100 || iState == 2 || iState == 3 || iState == 4;
 }
 
+// FUNCTION: SWBF2 0x00631760
+void SaveFsm::StartInitialMemcardCheck()
+{
+    SetNextState(STATE_InitialMemcardCheck);
+}
+
 // FUNCTION: SWBF2 0x00631770
 void SaveFsm::StartPreOp(bool bAllowFormat, unsigned int uiCheckFreeBytes,
                           unsigned int uiCheckFreeFiles, unsigned short const* pusFailOpStr,

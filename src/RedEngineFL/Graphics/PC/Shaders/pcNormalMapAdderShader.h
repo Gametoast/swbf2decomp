@@ -39,7 +39,7 @@ public:
     // pcNormalMapAdderShader::Bind
     // FUNCTION: SWBF2 0x0070b7f0
     // pcNormalMapAdderShader::GetShaderDef
-    DECLARE_PC_RED_SHADER_METHODS()
+    DECLARE_PC_RED_SHADER_METHODS(pcNormalMapAdderShader)
 
     virtual RenderPhaseT GetRenderPhase(const RenderItem*, unsigned int) const;
 
@@ -64,27 +64,6 @@ public:
     RedTextureTransform m_textureTransform2;
     float m_blend;
     int m_iShaderState;
-
-    // GLOBAL: SWBF2 0x009ca178
-    static unsigned int s_uiID;
-
-    // GLOBAL: SWBF2 0x009ca17c
-    static GetStateFuncT GetStateFuncArray[MAX_PIPELINES];
-
-    // GLOBAL: SWBF2 0x009ca188
-    static BeginFuncT BeginFuncArray[MAX_PIPELINES];
-
-    // GLOBAL: SWBF2 0x009ca194
-    static EndFuncT EndFuncArray[MAX_PIPELINES];
-
-    // GLOBAL: SWBF2 0x009ca1a0
-    static RenderFuncT RenderFuncArray[MAX_PIPELINES];
-
-    static unsigned int s_uiRenderTypeHash;
-
-    static pcRedShaderDef s_shaderDef;
-
-    static pcNormalMapAdderShader s_Factory;
 
 private:
 

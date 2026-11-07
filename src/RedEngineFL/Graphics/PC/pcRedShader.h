@@ -299,12 +299,20 @@ public:
  
  
 
-#define DECLARE_PC_RED_SHADER_METHODS() \
+#define DECLARE_PC_RED_SHADER_METHODS(ShaderClass) \
 public: \
 virtual unsigned int GetID(unsigned int uiPass) const { return s_shaderDef.m_states[uiPass].uiID; } \
 virtual unsigned int GetRenderTypeHash() const { return s_uiRenderTypeHash; } \
 virtual void Bind() { _BindPipeline(GetStateFuncArray, BeginFuncArray, EndFuncArray, RenderFuncArray); } \
 private: \
+static pcRedShaderDef s_shaderDef; \
+static unsigned int s_uiID; \
+static ShaderClass s_Factory; \
+static unsigned int s_uiRenderTypeHash; \
+static GetStateFuncT GetStateFuncArray[MAX_PIPELINES]; \
+static BeginFuncT BeginFuncArray[MAX_PIPELINES]; \
+static EndFuncT EndFuncArray[MAX_PIPELINES]; \
+static RenderFuncT RenderFuncArray[MAX_PIPELINES]; \
 virtual pcRedShader* _Create(unsigned int uiFlags, const unsigned int* pParams, \
                             unsigned int uiNumParams, unsigned int uiMaterialFlags, \
                             const RedColor& color0, const RedColor& color1, \

@@ -196,31 +196,6 @@ BaseHint::Sidestep BaseHint::GetRandomSidestep() const
     return (Sidestep)iStep;
 }
 
-// FUNCTION: SWBF2 0x0062f460
-bool ReserveObject::IsReserved(int iTeam, float fDelay) const
-{
-    const float fNow = GameLoop::GetMissionTime();
-    float fWait = 2.0f;
-    if (fDelay >= 0.0f)
-    {
-        fWait = fDelay;
-    }
-    return GetReserveTime(iTeam) + fWait > fNow;
-}
-
-// FUNCTION: SWBF2 0x0062f4b0
-float ReserveObject::GetReserveTime(int  ) const
-{
-    return mReserveTime;
-}
-
-// FUNCTION: SWBF2 0x0062f4f0
-void ReserveObject::Reserve(const GameObject* pObj)
-{
-    mReserver = pObj;
-    mReserveTime = GameLoop::GetMissionTime();
-}
-
 // FUNCTION: SWBF2 0x00543730
 SnipeHint::SnipeHint(const HintDesc& desc)
     : BaseHint(desc, HINT_SNIPE)

@@ -62,3 +62,15 @@ inline HUD::TransformNumberColorBlend::Factory::Factory()
 {
     mName = "TransformNumberColorBlend";
 }
+
+// FUNCTION: SWBF2 0x00564a40
+inline HUD::Item* HUD::TransformNumberColorBlend::Factory::CreateItem(const char* const pName, ItemCallback pCallback,
+                                                                      void* const pUserData)
+{
+    HUD::Item* pItem = new TransformNumberColorBlend(pName, pCallback, pUserData);
+    if (pItem)
+    {
+        return pItem->SetFactory(this);
+    }
+    return 0;
+}

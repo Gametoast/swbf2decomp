@@ -16,7 +16,10 @@ public:
     // SYNTHETIC: SWBF2 0x00529bd0
     // FLInputManager::`scalar deleting destructor'
 
-    virtual ~FLInputManager();
+    // FUNCTION: SWBF2 0x00529b30
+    virtual ~FLInputManager()
+    {
+    }
 
     RawControllerInputs* GetPlayerJoystick(int iPlayer);
 

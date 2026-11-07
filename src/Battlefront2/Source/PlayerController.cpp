@@ -202,7 +202,7 @@ void PlayerController::Update(float dt)
                     mOwner->GetGameObject()->GetMaxStrafe() < 0.0001f;
     bool bIsDroideka = mOwner->GetEntity()->IsRtti(EntityDroideka::rttiHashEntityDroideka);
     bool bIsJedi = mOwner->GetWeaponPtr(0) && mOwner->GetWeaponPtr(0)->IsMelee();
-    bool bIsTurret = mOwner->GetEntity()->IsRtti(MountedTurret::rttiHashMountedTurret) ||
+    bool bIsTurret = mOwner->GetEntity()->IsRtti(MountedTurret::GetRtti()) ||
                      mOwner->GetEntity()->IsRtti(EntityBuildingArmed::rttiHashEntityBuildingArmed);
 
     int iInputMode;

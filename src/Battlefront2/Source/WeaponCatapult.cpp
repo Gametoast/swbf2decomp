@@ -140,7 +140,7 @@ void WeaponCatapult::EnterFire()
 {
     mNextArmAngle = mLastArmAngle;
     Entity* pEntity = mOwner->GetEntity();
-    if (pEntity && pEntity->IsRtti(MountedTurret::rttiHashMountedTurret))
+    if (pEntity && pEntity->IsRtti(MountedTurret::GetRtti()))
     {
         mNextArmAngle = ((MountedTurret*)pEntity)->mPitch + 1.5707964f;
     }

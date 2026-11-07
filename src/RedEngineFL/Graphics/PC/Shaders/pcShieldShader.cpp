@@ -20,10 +20,20 @@ extern unsigned int kuiLinearRamp;
 static const float kInv255 = 1.0f / 255.0f;
 static const float kfSpecularSizeInv = 0.3f;
 
+// GLOBAL: SWBF2 0x00964f80
+// pcShieldShader::s_uiID
 unsigned int pcShieldShader::s_uiID;
+// GLOBAL: SWBF2 0x00964f84
+// pcShieldShader::GetStateFuncArray
 pcRedShader::GetStateFuncT pcShieldShader::GetStateFuncArray[MAX_PIPELINES];
+// GLOBAL: SWBF2 0x00964f90
+// pcShieldShader::BeginFuncArray
 pcRedShader::BeginFuncT pcShieldShader::BeginFuncArray[MAX_PIPELINES];
+// GLOBAL: SWBF2 0x00964f9c
+// pcShieldShader::EndFuncArray
 pcRedShader::EndFuncT pcShieldShader::EndFuncArray[MAX_PIPELINES];
+// GLOBAL: SWBF2 0x00964fa8
+// pcShieldShader::RenderFuncArray
 pcRedShader::RenderFuncT pcShieldShader::RenderFuncArray[MAX_PIPELINES];
 float pcShieldShader::s_fFadeStart;
 float pcShieldShader::s_fFadeEnd;
@@ -32,6 +42,8 @@ float pcShieldShader::s_fFadeEnd;
 // `dynamic initializer for 'pcShieldShader::s_shaderDef''
 // SYNTHETIC: SWBF2 0x00769910
 // `dynamic atexit destructor for 'pcShieldShader::s_shaderDef''
+// GLOBAL: SWBF2 0x0096501c
+// pcShieldShader::s_shaderDef
 pcRedShaderDef pcShieldShader::s_shaderDef("shield_shader.xml");
 
 PblVector3 pcShieldShader::s_vLightDir;
@@ -495,6 +507,8 @@ void pcShieldShader::_Read(PblFileChunk& chunk) const
 
 // SYNTHETIC: SWBF2 0x00407f40
 // `dynamic initializer for 'pcShieldShader::s_uiRenderTypeHash''
+// GLOBAL: SWBF2 0x00965010
+// pcShieldShader::s_uiRenderTypeHash
 unsigned int pcShieldShader::s_uiRenderTypeHash = PblHash("Shield");
 
 // SYNTHETIC: SWBF2 0x00407f00

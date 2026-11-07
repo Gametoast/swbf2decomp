@@ -886,7 +886,7 @@ void ProcessBarrierInfo(PblFileChunk& chunk)
 {
     PblMatrix mMatrix = gMatrixIdentity;
     PblVector4 vSize(0.0f);
-    int iFlag = 0;
+    unsigned int iFlag = 0;
     char acName[128];
 
     while (!chunk.IsDone())
@@ -932,7 +932,7 @@ void ProcessBarrierInfo(PblFileChunk& chunk)
         }
     }
 
-    PathFinder::AddObstacle(mMatrix, vSize, iFlag, PblHash(acName));
+    PathFinder::AddObstacle(mMatrix, vSize, (ConnectivityGraph::ProhibitFlag)iFlag, PblHash(acName));
 }
 }
 

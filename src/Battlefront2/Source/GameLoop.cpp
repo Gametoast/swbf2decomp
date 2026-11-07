@@ -34,8 +34,6 @@
 #include "GameState.h"
 #include "HeroMessageDisplay.h"
 #include "HUDEventQueue.h"
-#include "HUDEditor.h"
-#include "HUDElement.h"
 #include "HUDManager.h"
 #include "LockOnManager.h"
 #include "MissionPlayList.h"
@@ -277,6 +275,9 @@ unsigned int GameLoop::mMissionScriptHash;
 // GLOBAL: SWBF2 0x01e5605e
 // GameLoop::sPauseMode
 bool GameLoop::sPauseMode;
+
+// GLOBAL: SWBF2 0x01e5600b
+bool GameLoop::sFreeMode;
 
 // GLOBAL: SWBF2 0x01e56132
 bool GameLoop::gInvincible;
@@ -1599,6 +1600,24 @@ void GameLoop::SetTerrainFilename(char const* pcName)
     }
 }
 
+// FUNCTION: SWBF2 0x00533600
+void GameLoop::SetFreeMode(bool bFreeCamera)
+{
+    if (sFreeMode == bFreeCamera)
+    {
+        return;
+    }
+    sFreeMode = bFreeCamera;
+    if (bFreeCamera)
+    {
+        CameraManager::Instance()->FreeLook(0);
+    }
+    else
+    {
+        CameraManager::Instance()->ChaseMode(0);
+    }
+}
+
 // FUNCTION: SWBF2 0x00533630
 void GameLoop::SetFunctionIdForButtonId(int iButton, int iFunction)
 {
@@ -1749,28 +1768,6 @@ bool GameLoop::GetCanSwitchSides()
     return !netAutoAssignTeams;
 }
 
-
-namespace HUD
-{
-namespace Manager
-{
-
-// FUNCTION: SWBF2 0x005658e0
-void Update(float fDeltaTime)
-{
-    float fScale = 1.0f;
-    if (gEditor)
-    {
-        gEditor->Update(FLInputManager::Instance()->GetPlayerJoystick(0), fDeltaTime);
-        if (gEditor->mEnabled)
-        {
-            fScale = 0.0001f;
-        }
-    }
-    HUD::Element::UpdateAll(fScale * fDeltaTime);
-}
-}
-}
 
 extern bool netIsDedicated;
 

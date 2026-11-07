@@ -432,11 +432,6 @@ Stream* EngineBase::GetStream(unsigned int uiIndex)
     return &smStreams[uiIndex];
 }
 
-// FUNCTION: SWBF2 0x00734830
-Stream::~Stream()
-{
-}
-
 }
 
 namespace Snd

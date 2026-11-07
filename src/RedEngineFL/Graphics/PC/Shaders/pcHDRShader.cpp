@@ -14,15 +14,27 @@ void __cdecl PblTraceP(const char* Format, ...);
 // GLOBAL: SWBF2 0x009caabc
 RedTexture* s_pTextureWhite;
 
+// GLOBAL: SWBF2 0x009caa10
+// pcHDRShader::s_uiID
 unsigned int pcHDRShader::s_uiID;
+// GLOBAL: SWBF2 0x009caa14
+// pcHDRShader::GetStateFuncArray
 pcRedShader::GetStateFuncT pcHDRShader::GetStateFuncArray[MAX_PIPELINES];
+// GLOBAL: SWBF2 0x009caa20
+// pcHDRShader::BeginFuncArray
 pcRedShader::BeginFuncT pcHDRShader::BeginFuncArray[MAX_PIPELINES];
+// GLOBAL: SWBF2 0x009caa2c
+// pcHDRShader::EndFuncArray
 pcRedShader::EndFuncT pcHDRShader::EndFuncArray[MAX_PIPELINES];
+// GLOBAL: SWBF2 0x009caa38
+// pcHDRShader::RenderFuncArray
 pcRedShader::RenderFuncT pcHDRShader::RenderFuncArray[MAX_PIPELINES];
 // SYNTHETIC: SWBF2 0x0040a820
 // `dynamic initializer for 'pcHDRShader::s_shaderDef''
 // SYNTHETIC: SWBF2 0x0076a070
 // `dynamic atexit destructor for 'pcHDRShader::s_shaderDef''
+// GLOBAL: SWBF2 0x009caa48
+// pcHDRShader::s_shaderDef
 pcRedShaderDef pcHDRShader::s_shaderDef("hdr_shader.xml");
 
 // FUNCTION: SWBF2 0x007138b0
@@ -295,6 +307,8 @@ void pcHDRShader::_StaticInit() const
 
 // SYNTHETIC: SWBF2 0x0040a840
 // `dynamic initializer for 'pcHDRShader::s_uiRenderTypeHash''
+// GLOBAL: SWBF2 0x009caa7c
+// pcHDRShader::s_uiRenderTypeHash
 unsigned int pcHDRShader::s_uiRenderTypeHash = PblHash("hdr");
 
 // SYNTHETIC: SWBF2 0x0040a800

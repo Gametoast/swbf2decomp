@@ -96,12 +96,6 @@ namespace AIDebug
 bool SkipCameraForLODs();
 }
 
-// FUNCTION: SWBF2 0x004386a0
-bool AIDebug::SkipCameraForLODs()
-{
-    return false;
-}
-
 // FUNCTION: SWBF2 0x00663d00
 void UnitController::ResetFriendlyList()
 {

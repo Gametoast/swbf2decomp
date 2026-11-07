@@ -101,7 +101,7 @@ void StreamGSMEncoder::Update()
             {
                 return;
             }
-            mInputPacketSize = mInputPacket->mBufferUsed / 2;
+            mInputPacketSize = mInputPacket->GetUsed() / 2;
             mInputPacketOffset = 0;
         }
 
@@ -115,8 +115,8 @@ void StreamGSMEncoder::Update()
             bool bFlag1 = false;
             bool bFlag0 = false;
             bool bLast = false;
-            short* const pInput = (short*)mInputPacket->mBuffer;
-            unsigned char* const pOut = (unsigned char*)pOutput->mBuffer;
+            short* const pInput = (short*)mInputPacket->GetBuffer();
+            unsigned char* const pOut = (unsigned char*)pOutput->GetBuffer();
             unsigned int uiSamples = mInputPacketSize - mInputPacketOffset;
 
             if (mDecimate)

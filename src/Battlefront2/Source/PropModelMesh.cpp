@@ -39,19 +39,6 @@ namespace FLRenderer
 float GetNearSceneFadeEnd();
 }
 
-extern bool flushClusterObjs_;
-
-namespace PropGenerator
-{
-    void FlushClusterObjects();
-}
-
-// FUNCTION: SWBF2 0x0062b100
-void PropGenerator::FlushClusterObjects()
-{
-    flushClusterObjs_ = true;
-}
-
 namespace PropGenerator
 {
     void GetTerrainYAndNormal(float x, float z, float& y, PblVector3& vNormal);

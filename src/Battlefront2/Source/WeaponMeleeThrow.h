@@ -5,6 +5,7 @@
 #include <stddef.h>
 
 #include "Weapon.h"
+#include "PebbleFL/Common/PblRtti.h"
 #include "WeaponCannon.h"
 #include "PebbleFL/Common/PblHashTable.h"
 
@@ -45,9 +46,13 @@ class WeaponMeleeThrow : public Weapon
 public:
     WeaponMeleeThrow(const WeaponMeleeThrowClass* pClass, const WeaponDesc& desc);
     virtual ~WeaponMeleeThrow();
-    virtual bool IsRtti(unsigned int uRtti) const;
-    virtual unsigned int GetDerivedRtti() const;
-    virtual const char* GetDerivedRttiName() const;
+    // FUNCTION: SWBF2 0x0068f520
+    // WeaponMeleeThrow::IsRtti
+    // FUNCTION: SWBF2 0x0068f550
+    // WeaponMeleeThrow::GetDerivedRtti
+    // FUNCTION: SWBF2 0x0068f560
+    // WeaponMeleeThrow::GetDerivedRttiName
+    PBL_DECLARE_DERIVED_RTTI(WeaponMeleeThrow, Weapon)
     virtual bool IsMeleeThrow() const;
     virtual void SetOrdnance(Ordnance* pOrdnance);
     virtual Ordnance* CreateOrdnance(OrdnanceDesc& desc);
@@ -82,34 +87,10 @@ public:
     unsigned int z_uiReserved0 : 29;
     PblMatrix m_mThrow0Local;
 
-    static PblHash rttiHashWeaponMeleeThrow;
-    static const char rttiNameWeaponMeleeThrow[];
 };
   
  
  
-
-// FUNCTION: SWBF2 0x0068f520
-inline bool WeaponMeleeThrow::IsRtti(unsigned int uRtti) const
-{
-    if (rttiHashWeaponMeleeThrow == uRtti)
-    {
-        return true;
-    }
-    return Weapon::IsRtti(uRtti);
-}
-
-// FUNCTION: SWBF2 0x0068f550
-inline unsigned int WeaponMeleeThrow::GetDerivedRtti() const
-{
-    return rttiHashWeaponMeleeThrow;
-}
-
-// FUNCTION: SWBF2 0x0068f560
-inline const char* WeaponMeleeThrow::GetDerivedRttiName() const
-{
-    return rttiNameWeaponMeleeThrow;
-}
 
 // FUNCTION: SWBF2 0x0068f5c0
 inline bool WeaponMeleeThrowClass::IsRtti(unsigned int uRtti) const

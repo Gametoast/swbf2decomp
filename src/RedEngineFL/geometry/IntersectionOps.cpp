@@ -139,20 +139,6 @@ void BasePoly3D::GetEdges(Ray<Vector3<float> >* pEdges) const
     }
 }
 
-// FUNCTION: SWBF2 0x00722eb0
-void Frustum::GetBaseEdges(Ray<Vector3<float> >* pEdges) const
-{
-    Vector3<float> right = normalize(cross(up_, fwd_));
-    pEdges[0].dir_ = fwd_ * far_ + up_ * height_ + right * width_;
-    pEdges[1].dir_ = fwd_ * far_ - up_ * height_ + right * width_;
-    pEdges[2].dir_ = fwd_ * far_ - up_ * height_ - right * width_;
-    pEdges[3].dir_ = fwd_ * far_ + up_ * height_ - right * width_;
-    pEdges[0].orig_ = center_;
-    pEdges[1].orig_ = center_;
-    pEdges[2].orig_ = center_;
-    pEdges[3].orig_ = center_;
-}
-
 // FUNCTION: SWBF2 0x007248a0
 bool Overlap3D::Op(const ExtrudedPoly3D& rPoly, const Vector3<float>& rPoint)
 {
@@ -162,7 +148,7 @@ bool Overlap3D::Op(const ExtrudedPoly3D& rPoly, const Vector3<float>& rPoint)
         return false;
     }
 
-    if (rPoly.points_._numElements < 1)
+    if (rPoly.points_.GetSize() < 1)
     {
         return false;
     }
@@ -199,7 +185,7 @@ bool Overlap3D::Op(const ExtrudedPoly3D& rPoly, const Sphere& rSphere)
         return false;
     }
 
-    if (rPoly.points_._numElements < 1)
+    if (rPoly.points_.GetSize() < 1)
     {
         return false;
     }
@@ -228,14 +214,6 @@ bool Overlap3D::Op(const ExtrudedPoly3D& rPoly, const Sphere& rSphere)
     return false;
 }
 
-// FUNCTION: SWBF2 0x00722e20
-float Box::Volume()
-{
-    Vector3<float> size = max_ - min_;
-    float fArea = Max_(size.x, 0.0f) * Max_(size.y, 0.0f);
-    return fArea * Max_(size.z, 0.0f);
-}
-
 // FUNCTION: SWBF2 0x00723f20
 bool Intersect3D::Op(const Box& rA, const Box& rB, Box& rOut)
 {
@@ -248,60 +226,6 @@ bool Intersect3D::Op(const Box& rA, const Box& rB, Box& rOut)
 float SepDistance::Op(const Sphere& rA, const Sphere& rB)
 {
     return length(rA.center_ - rB.center_) - rA.radius_ - rB.radius_;
-}
-
-// FUNCTION: SWBF2 0x007235c0
-void Frustum::GetLeftPlane(Plane& rPlane) const
-{
-    Vector3<float> side = normalize(cross(up_, fwd_)) * width_;
-    Vector3<float> edge = normalize(fwd_ * far_ - side);
-    rPlane.dir_ = normalize(cross(up_, edge));
-    const float fDot = dot(rPlane.dir_, center_);
-    rPlane.dist_ = fDot * -1.0f;
-}
-
-// FUNCTION: SWBF2 0x00723900
-void Frustum::GetRightPlane(Plane& rPlane) const
-{
-    Vector3<float> side = normalize(cross(up_, fwd_));
-    Vector3<float> edge = normalize(fwd_ * far_ + side * width_);
-    rPlane.dir_ = normalize(cross(edge, up_));
-    const float fDot = dot(rPlane.dir_, center_);
-    rPlane.dist_ = fDot * -1.0f;
-}
-
-// FUNCTION: SWBF2 0x00723240
-void Frustum::GetBottomPlane(Plane& rPlane) const
-{
-    Vector3<float> side = normalize(cross(up_, fwd_));
-    Vector3<float> edge = normalize(fwd_ * far_ - up_ * height_);
-    rPlane.dir_ = normalize(cross(edge, side));
-    const float fDot = dot(rPlane.dir_, center_);
-    rPlane.dist_ = fDot * -1.0f;
-}
-
-// FUNCTION: SWBF2 0x00723b50
-void Frustum::GetTopPlane(Plane& rPlane) const
-{
-    Vector3<float> side = normalize(cross(up_, fwd_));
-    Vector3<float> edge = normalize(fwd_ * far_ + up_ * height_);
-    rPlane.dir_ = normalize(cross(side, edge));
-    const float fDot = dot(rPlane.dir_, center_);
-    rPlane.dist_ = fDot * -1.0f;
-}
-
-// FUNCTION: SWBF2 0x00723810
-void Frustum::GetPlanes_(Plane* pPlanes) const
-{
-    pPlanes[0].dir_ = fwd_;
-    pPlanes[0].dist_ = (dot(pPlanes[0].dir_, center_) + near_) * -1.0f;
-    Plane& rBack = pPlanes[1];
-    rBack.dir_ = fwd_ * -1.0f;
-    rBack.dist_ = (dot(rBack.dir_, center_) - far_) * -1.0f;
-    GetLeftPlane(pPlanes[2]);
-    GetRightPlane(pPlanes[3]);
-    GetBottomPlane(pPlanes[4]);
-    GetTopPlane(pPlanes[5]);
 }
 
 }

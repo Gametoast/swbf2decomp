@@ -509,19 +509,6 @@ void HUD::Item::GetFilteredEventName(const char* const pName, char* const pBuffe
     strncpy(pBuffer, pName, uSize - 1);
 }
 
-// FUNCTION: SWBF2 0x0055dbf0
-HUD::EventClass* HUD::EventHandler::GetRegisteredClass() const
-{
-    return mClass;
-}
-
-// FUNCTION: SWBF2 0x0055ddb0
-void HUD::EventClass::UnregisterEventHandler(HUD::EventHandler& handler)
-{
-    handler.mNode.Remove();
-    handler.mClass = 0;
-}
-
 // FUNCTION: SWBF2 0x005647f0
 void HUD::Item::SetEvent(const char* pName, EventHandler& handler)
 {
@@ -728,4 +715,18 @@ void HUD::FreeName(char** ppName)
         }
         *ppName = 0;
     }
+}
+
+// FUNCTION: SWBF2 0x00564930
+unsigned int HUD::TranslateString(const char* const* ppStrings, unsigned int uCount,
+                             const char* const pString)
+{
+    for (unsigned int i = 0; i < uCount; ++i)
+    {
+        if (!_strnicmp(ppStrings[i], pString, strlen(ppStrings[i])))
+        {
+            return i;
+        }
+    }
+    return (unsigned int)-1;
 }

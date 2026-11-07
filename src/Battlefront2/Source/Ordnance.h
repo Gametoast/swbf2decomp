@@ -1,6 +1,7 @@
 #pragma once
 
 #include "PebbleFL/Common/PblHashTable.h"
+#include "PebbleFL/Common/PblRtti.h"
 
 #include <stddef.h>
 
@@ -65,9 +66,13 @@ public:
 
     static void Read(PblFileChunk& chunk);
 
-    virtual bool IsRtti(unsigned int uRtti) const;
-    virtual unsigned int GetDerivedRtti() const;
-    virtual const char* GetDerivedRttiName() const;
+    // FUNCTION: SWBF2 0x005f72a0
+    // OrdnanceClass::IsRtti
+    // FUNCTION: SWBF2 0x005f72c0
+    // OrdnanceClass::GetDerivedRtti
+    // FUNCTION: SWBF2 0x005f72d0
+    // OrdnanceClass::GetDerivedRttiName
+    PBL_DECLARE_ROOT_RTTI(OrdnanceClass)
     virtual void SetProperty(unsigned int uProperty, const char* pszValue);
     // FUNCTION: SWBF2 0x005f72e0
     virtual float GetVelocity() const
@@ -108,8 +113,6 @@ public:
     GameSound mSoundCollisionWater;
     GameSound mSoundCollisionShield;
 
-    static PblHash rttiHashOrdnanceClass;
-    static const char rttiNameOrdnanceClass[];
 };
  
  
@@ -142,9 +145,13 @@ public:
 
     virtual bool Update(float fDeltaTime) = 0;
 
-    virtual bool IsRtti(unsigned int uRtti) const;
-    virtual unsigned int GetDerivedRtti() const;
-    virtual const char* GetDerivedRttiName() const;
+    // FUNCTION: SWBF2 0x005f71a0
+    // Ordnance::IsRtti
+    // FUNCTION: SWBF2 0x005f71c0
+    // Ordnance::GetDerivedRtti
+    // FUNCTION: SWBF2 0x005f71d0
+    // Ordnance::GetDerivedRttiName
+    PBL_DECLARE_ROOT_RTTI(Ordnance)
     virtual const PblVector3& GetPosition() const;
     virtual const PblVector3& GetOldPosition() const;
     virtual const PblVector3& GetVelocity() const;
@@ -192,8 +199,6 @@ public:
     GameSoundControllable mSoundOrdnance;
     int mInterpIndex;
 
-    static PblHash rttiHashOrdnance;
-    static const char rttiNameOrdnance[];
     static MemoryPool sMemoryPool;
 };
  
@@ -212,42 +217,6 @@ public:
 inline GameObject* Ordnance::GetOwner() const
 {
     return (GameObject*)mOwner;
-}
-
-// FUNCTION: SWBF2 0x005f71a0
-inline bool Ordnance::IsRtti(unsigned int uRtti) const
-{
-    return rttiHashOrdnance == uRtti;
-}
-
-// FUNCTION: SWBF2 0x005f71c0
-inline unsigned int Ordnance::GetDerivedRtti() const
-{
-    return rttiHashOrdnance;
-}
-
-// FUNCTION: SWBF2 0x005f71d0
-inline const char* Ordnance::GetDerivedRttiName() const
-{
-    return rttiNameOrdnance;
-}
-
-// FUNCTION: SWBF2 0x005f72a0
-inline bool OrdnanceClass::IsRtti(unsigned int uRtti) const
-{
-    return rttiHashOrdnanceClass == uRtti;
-}
-
-// FUNCTION: SWBF2 0x005f72c0
-inline unsigned int OrdnanceClass::GetDerivedRtti() const
-{
-    return rttiHashOrdnanceClass;
-}
-
-// FUNCTION: SWBF2 0x005f72d0
-inline const char* OrdnanceClass::GetDerivedRttiName() const
-{
-    return rttiNameOrdnanceClass;
 }
 
 

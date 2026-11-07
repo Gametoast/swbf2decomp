@@ -27,7 +27,7 @@ public:
     // pcZPrepassShader::Bind
     // FUNCTION: SWBF2 0x007027a0
     // pcZPrepassShader::GetShaderDef
-    DECLARE_PC_RED_SHADER_METHODS()
+    DECLARE_PC_RED_SHADER_METHODS(pcZPrepassShader)
 
     virtual RenderPhaseT GetRenderPhase(const RenderItem*, unsigned int) const;
 
@@ -53,30 +53,6 @@ public:
     RedMaterial m_material;
     unsigned int m_uiState;
     pcRedVertexFormat* m_pVertexInputFormat;
-
-    // GLOBAL: SWBF2 0x009c95a8
-    static unsigned int s_uiID;
-
-    // GLOBAL: SWBF2 0x009c95ac
-    static GetStateFuncT GetStateFuncArray[MAX_PIPELINES];
-
-    // GLOBAL: SWBF2 0x009c95b8
-    static BeginFuncT BeginFuncArray[MAX_PIPELINES];
-
-    // GLOBAL: SWBF2 0x009c95c4
-    static EndFuncT EndFuncArray[MAX_PIPELINES];
-
-    // GLOBAL: SWBF2 0x009c95d0
-    static RenderFuncT RenderFuncArray[MAX_PIPELINES];
-
-    // GLOBAL: SWBF2 0x009c95e8
-    static unsigned int s_uiRenderTypeHash;
-
-    // GLOBAL: SWBF2 0x009c95ec
-    static pcRedShaderDef s_shaderDef;
-
-    // GLOBAL: SWBF2 0x009c9618
-    static pcZPrepassShader s_Factory;
 
 private:
 

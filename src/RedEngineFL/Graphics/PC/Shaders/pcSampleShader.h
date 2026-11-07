@@ -35,7 +35,7 @@ public:
     // pcSampleShader::Bind
     // FUNCTION: SWBF2 0x00705890
     // pcSampleShader::GetShaderDef
-    DECLARE_PC_RED_SHADER_METHODS()
+    DECLARE_PC_RED_SHADER_METHODS(pcSampleShader)
 
     virtual RenderPhaseT GetRenderPhase(const RenderItem*, unsigned int) const;
 
@@ -82,27 +82,6 @@ public:
     RedColorValue m_scale;
     unsigned int m_uiMaterialFlags;
     pcRedVertexFormat* m_pVertexFormat;
-
-    // GLOBAL: SWBF2 0x009c9a98
-    static unsigned int s_uiID;
-
-    // GLOBAL: SWBF2 0x009c9a9c
-    static GetStateFuncT GetStateFuncArray[MAX_PIPELINES];
-
-    // GLOBAL: SWBF2 0x009c9aa8
-    static BeginFuncT BeginFuncArray[MAX_PIPELINES];
-
-    // GLOBAL: SWBF2 0x009c9ab4
-    static EndFuncT EndFuncArray[MAX_PIPELINES];
-
-    // GLOBAL: SWBF2 0x009c9ac0
-    static RenderFuncT RenderFuncArray[MAX_PIPELINES];
-
-    static unsigned int s_uiRenderTypeHash;
-
-    static pcRedShaderDef s_shaderDef;
-
-    static pcSampleShader s_Factory;
 
 private:
 

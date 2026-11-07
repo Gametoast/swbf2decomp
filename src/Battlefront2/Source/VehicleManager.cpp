@@ -324,6 +324,12 @@ void VehicleManager::Update()
     }
 }
 
+// FUNCTION: SWBF2 0x0066e380
+void VehicleManager::SetNotifyRadius(float fRadius)
+{
+    sNotifyRadius = fRadius;
+}
+
 // FUNCTION: SWBF2 0x0066e390
 int VehicleManager::RequestVehiclesInRange(const PblVector3& vPos, float fRadius, GameObject** ppOut, int iMax)
 {

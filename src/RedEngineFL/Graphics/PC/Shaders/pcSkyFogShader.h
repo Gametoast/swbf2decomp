@@ -34,7 +34,7 @@ public:
     // pcSkyFogShader::Bind
     // FUNCTION: SWBF2 0x007040c0
     // pcSkyFogShader::GetShaderDef
-    DECLARE_PC_RED_SHADER_METHODS()
+    DECLARE_PC_RED_SHADER_METHODS(pcSkyFogShader)
 
     virtual RenderPhaseT GetRenderPhase(const RenderItem*, unsigned int) const;
     virtual RedShadingState* CreateShadingState() const;
@@ -64,27 +64,6 @@ public:
 
     RedTexture* m_pSkyTexture;
     pcRedVertexFormat* m_pVertexInputFormat;
-
-    // GLOBAL: SWBF2 0x009c98c4
-    static unsigned int s_uiID;
-
-    // GLOBAL: SWBF2 0x009c98c8
-    static GetStateFuncT GetStateFuncArray[MAX_PIPELINES];
-
-    // GLOBAL: SWBF2 0x009c98d4
-    static BeginFuncT BeginFuncArray[MAX_PIPELINES];
-
-    // GLOBAL: SWBF2 0x009c98e0
-    static EndFuncT EndFuncArray[MAX_PIPELINES];
-
-    // GLOBAL: SWBF2 0x009c98ec
-    static RenderFuncT RenderFuncArray[MAX_PIPELINES];
-
-    static unsigned int s_uiRenderTypeHash;
-
-    static pcRedShaderDef s_shaderDef;
-
-    static pcSkyFogShader s_Factory;
 
 private:
 

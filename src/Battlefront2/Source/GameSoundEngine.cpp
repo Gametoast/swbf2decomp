@@ -289,7 +289,6 @@ void Create()
 
 }
 
-extern int sVoiceChatHeap;
 namespace GameVoiceChat
 {
 extern bool gPlayerChange;

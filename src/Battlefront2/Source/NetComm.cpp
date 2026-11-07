@@ -511,14 +511,6 @@ unsigned __int64* __fastcall CopyEnteredLobbyId(unsigned __int64* pID)
     return pID;
 }
 
-// FUNCTION: SWBF2 0x00618560
-void NetSocket::SetAddr(NetSocketPeerRecord& peer, int ip, int port)
-{
-    peer.mSocketAddress.sin_family = AF_INET;
-    peer.mSocketAddress.sin_addr.s_addr = ip;
-    peer.mSocketAddress.sin_port = htons(port);
-}
-
 // FUNCTION: SWBF2 0x005b2300
 void* GetGalaxyMatchmakingForNetComm()
 {
