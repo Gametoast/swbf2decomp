@@ -32,7 +32,6 @@
 #include "ControllerManager.h"
 #include "EntityDoor.h"
 #include "EntityDroideka.h"
-#include "Steam/galaxy_api.h"
 #include "FLJoystick.h"
 #include "NetComm.h"
 #include "NetPacket.h"
@@ -4039,22 +4038,6 @@ void NetGame::ClearAllCDKeyInfo()
     }
 }
 
-// FUNCTION: SWBF2 0x005c3950
-int NetGame::GetSpectator(int iPlayer)
-{
-    if (iPlayer < 0)
-    {
-        return -1;
-    }
-    return netPlayers[iPlayer].mSpectateID;
-}
-
-// FUNCTION: SWBF2 0x005c3970
-bool NetGame::IsSpectator(int iPlayer)
-{
-    return GetSpectator(iPlayer) != -1;
-}
-
 // FUNCTION: SWBF2 0x005c3ea0
 bool NetGame::IsPreGame()
 {
@@ -4601,15 +4584,6 @@ void NetGame::Update()
 		PblValues::Record('*', PVT_FULL);
 	}
     
-}
-
-// FUNCTION: SWBF2 0x005d0c40
-void InitBootPlayer()
-{
-    clientBootPlayer = -1;
-    hostBootPlayer = -1;
-    hostForceBootPlayer = -1;
-    bootInfo.changedTurn = 0;
 }
 
 // SYNTHETIC: SWBF2 0x00405550
@@ -5716,22 +5690,6 @@ void NetGame::HostChangePregame()
     {
         netPreGameStartTime = (float)-netPreGameTimeMax - 1.0f;
     }
-}
-
-// FUNCTION: SWBF2 0x005d0cf0
-int NetGame::GetBootPlayer()
-{
-    if (clientBootPlayer >= 0 && clientTurnNumber > clientBootTurn)
-    {
-        clientBootPlayer = -1;
-    }
-    return clientBootPlayer;
-}
-
-// FUNCTION: SWBF2 0x005d0dc0
-void NetGame::SetBootVoted(int iJoystick, bool bVoted)
-{
-    clientBootVoted[iJoystick] = bVoted;
 }
 
 // FUNCTION: SWBF2 0x005cbc00
@@ -7279,6 +7237,45 @@ void NetGame::SetSpectator(int player, int spectator)
     }
 }
 
+// FUNCTION: SWBF2 0x005c3950
+int NetGame::GetSpectator(int iPlayer)
+{
+    if (iPlayer < 0)
+    {
+        return -1;
+    }
+    return netPlayers[iPlayer].mSpectateID;
+}
+
+// FUNCTION: SWBF2 0x005c3970
+bool NetGame::IsSpectator(int iPlayer)
+{
+    return GetSpectator(iPlayer) != -1;
+}
+
+// FUNCTION: SWBF2 0x005c39a0
+void NetGame::WriteSpectator(NetPktGroup& group)
+{
+    for (int iPlayer = 0; iPlayer < 64; ++iPlayer)
+    {
+        int spectator = GetSpectator(iPlayer) + 1;
+        group.WriteBits(spectator, 6);
+    }
+}
+
+// FUNCTION: SWBF2 0x005c39f0
+void NetGame::ReadSpectator(NetPktGroup& group)
+{
+    for (int iPlayer = 0; iPlayer < 64; ++iPlayer)
+    {
+        unsigned int uEncoded = 0;
+        group.ReadBits(uEncoded, 6);
+        int iSpectator = (int)uEncoded - 1;
+        SetSpectator(iPlayer, iSpectator);
+        NetGame::ChangeSpectateTrack(iPlayer, iSpectator);
+    }
+}
+
 // FUNCTION: SWBF2 0x005c44b0
 void NetGame::SetStartTeam(int player, int team)
 {
@@ -7727,37 +7724,252 @@ unsigned int hostBootTurn;
 // GLOBAL: SWBF2 0x01e64b86
 unsigned char hostBootReason;
 
+extern int hostVoteThreshold;
+
+// FUNCTION: SWBF2 0x005d0c40
+void InitBootPlayer()
+{
+    clientBootPlayer = -1;
+    hostBootPlayer = -1;
+    hostForceBootPlayer = -1;
+    bootInfo.changedTurn = 0;
+}
+
+// FUNCTION: SWBF2 0x005d0c70
+void NetGame::NominateBootPlayer(int iPlayer, int iReason, int iJoystick)
+{
+    bootInfo.changedTurn = clientTurnNumber;
+    bootInfo.dst = iPlayer;
+    bootInfo.reason = iReason;
+    bootInfo.joystick = iJoystick;
+    bootInfo.bootRequest = BR_NOMINATE;
+    NetGame::SetBootVoted(iJoystick, true);
+}
+
+// FUNCTION: SWBF2 0x005d0cc0
+void NetGame::ConfirmBootPlayer(int player)
+{
+    bootInfo.changedTurn = clientTurnNumber;
+    bootInfo.bootRequest = BR_AFFIRM;
+    bootInfo.joystick = player;
+    SetBootVoted(player, true);
+}
+
+// FUNCTION: SWBF2 0x005d0cf0
+int NetGame::GetBootPlayer()
+{
+    if (clientBootPlayer >= 0 && clientTurnNumber > clientBootTurn)
+    {
+        clientBootPlayer = -1;
+    }
+    return clientBootPlayer;
+}
+
+// FUNCTION: SWBF2 0x005d0d20
+float NetGame::GetBootTime()
+{
+    return NetComm::GetTime() +
+        ((float)clientBootTurn - (float)clientTurnNumber) * netSecondsPerTurn;
+}
+
+// FUNCTION: SWBF2 0x005d0da0
+int NetGame::GetBootVotes()
+{
+    return clientBootVotes;
+}
+
+// FUNCTION: SWBF2 0x005d0db0
+bool NetGame::IsBootVoted(int player)
+{
+    return clientBootVoted[player];
+}
+
+// FUNCTION: SWBF2 0x005d0dc0
+void NetGame::SetBootVoted(int iJoystick, bool bVoted)
+{
+    clientBootVoted[iJoystick] = bVoted;
+}
+
+// FUNCTION: SWBF2 0x005d0de0
+int NetGame::GetBootReason()
+{
+    return clientBootReason;
+}
+
+// FUNCTION: SWBF2 0x005d0df0
+void NetGame::ForceBootPlayer(int player)
+{
+    if (NetGame::IsHost())
+    {
+        hostForceBootPlayer = player;
+    }
+}
+
+// FUNCTION: SWBF2 0x005d0e10
+void UpdateBootPlayer(int& player)
+{
+    if (NetGame::IsPlaying(player, false))
+    {
+        if (netPlayers[player].mBooted)
+        {
+            if (NetComm::GetTime() > netPlayers[player].mBootTime)
+            {
+                NetGameP::SetNotPlaying(player);
+                netPlayers[player].mBootTime = -1.0f;
+                netPlayers[player].mBooted = false;
+                player = -1;
+            }
+        }
+        else
+        {
+            int guest = NetGame::GetGuestOf(player);
+            if (guest < 0)
+            {
+                guest = player;
+            }
+            player = guest;
+            netPlayers[guest].mBooted = true;
+            netPlayers[guest].mBootTime = NetComm::GetTime() + 2.0f;
+            NetGame::CreateEvent_Message(NetGame::MSG_BOOTED, Character::GetPtr(guest),
+                                         0, 0, 0, 0, 0);
+        }
+    }
+}
+
+// FUNCTION: SWBF2 0x005d0f10
+bool NetGame::GetBootCount(int& bootCount, int& playerCount, int& needCount)
+{
+    bool ret = false;
+    playerCount = 0;
+    bootCount = 0;
+    const int bootPlayerTeam = GetStartTeam(GetBootPlayer());
+    for (int i = 0; i < netCurMaxPlayers; ++i)
+    {
+        if (!IsPlaying(i, false))
+        {
+            continue;
+        }
+        if (GetStartTeam(i) != bootPlayerTeam)
+        {
+            continue;
+        }
+        ++playerCount;
+        if (hostBootAgreeMask & ((unsigned __int64)1 << i))
+        {
+            ++bootCount;
+        }
+    }
+    needCount = (int)((float)playerCount * (float)hostVoteThreshold / 100.0f + 0.5f);
+    if (needCount <= 0)
+    {
+        needCount = 1;
+    }
+    if (bootCount >= needCount)
+    {
+        ret = true;
+    }
+    return ret;
+}
+
+// FUNCTION: SWBF2 0x005d1020
+void UpdateBootVote()
+{
+    if (hostBootPlayer >= 0)
+    {
+        int playerCount = 0;
+        int bootCount = 0;
+        const int bootPlayerTeam = NetGame::GetStartTeam(hostBootPlayer);
+        for (int i = 0; i < netCurMaxPlayers; ++i)
+        {
+            if (!NetGame::IsPlaying(i, false))
+            {
+                continue;
+            }
+            if (NetGame::GetStartTeam(i) != bootPlayerTeam)
+            {
+                continue;
+            }
+            ++playerCount;
+            if (hostBootAgreeMask & ((unsigned __int64)1 << i))
+            {
+                ++bootCount;
+            }
+        }
+        int needCount = (int)((float)playerCount * (float)hostVoteThreshold /
+                             100.0f + 0.5f);
+        if (needCount <= 0)
+        {
+            needCount = 1;
+        }
+        if (bootCount >= needCount)
+        {
+            UpdateBootPlayer(hostBootPlayer);
+        }
+        else if ((unsigned int)hostTurnNumber >= hostBootTurn)
+        {
+            NetGame::CreateEvent_Message(NetGame::MSG_NOTBOOT,
+                                         Character::GetPtr(hostBootPlayer),
+                                         0, 0, 0, 0, 0);
+            hostBootPlayer = -1;
+        }
+    }
+    if (hostForceBootPlayer >= 0)
+    {
+        UpdateBootPlayer(hostForceBootPlayer);
+    }
+}
+
+// FUNCTION: SWBF2 0x005d1180
+void WriteBootRequest(NetPktGroup& group)
+{
+    bool bPending = bootInfo.changedTurn > (unsigned int)clientAckedTurnNumber;
+    group.Write(bPending);
+    if (bPending)
+    {
+        bool bNomination = bootInfo.bootRequest == BR_NOMINATE;
+        group.Write(bNomination);
+        group.WriteBits(bootInfo.joystick, BOOT_JOYSTICK_BITS);
+        if (bNomination)
+        {
+            group.WriteBits(bootInfo.dst, 6);
+            group.WriteBits(bootInfo.reason, BOOT_REASON_BITS);
+        }
+    }
+}
+
 // FUNCTION: SWBF2 0x005d1240
 void ReadBootRequest(NetPktGroup& group, int player)
 {
-    bool hasInfo;
-    group.Read(hasInfo);
-    if (!hasInfo)
+    bool hasData;
+    group.Read(hasData);
+    if (hasData)
     {
-        return;
-    }
-    bool selectsHost;
-    group.Read(selectsHost);
-    unsigned int guestSlot;
-    group.ReadBits(guestSlot, BOOT_JOYSTICK_BITS);
-    int guest = NetGame::GetGuestIndex(player, guestSlot);
-    if (selectsHost)
-    {
-        unsigned int host;
-        group.ReadBits(host, 6);
-        if (hostBootPlayer < 0)
+        bool selectsHost;
+        group.Read(selectsHost);
+        unsigned int guestSlot;
+        group.ReadBits(guestSlot, BOOT_JOYSTICK_BITS);
+        int guest = NetGame::GetGuestIndex(player, guestSlot);
+        if (selectsHost)
         {
-            hostBootPlayer = host;
-            hostBootAgreeMask = (unsigned __int64)1 << guest;
-            hostBootTurn = hostTurnNumber + 60 * netTurnsPerSecond;
+            unsigned int host;
+            group.ReadBits(host, 6);
+            if (hostBootPlayer >= 0)
+            {
+            }
+            else
+            {
+                hostBootPlayer = host;
+                hostBootAgreeMask = (unsigned __int64)1 << guest;
+                hostBootTurn = hostTurnNumber + 60 * netTurnsPerSecond;
+            }
+            unsigned int spectator = 0;
+            group.ReadBits(spectator, BOOT_REASON_BITS);
+            hostBootReason = spectator;
         }
-        unsigned int spectator = 0;
-        group.ReadBits(spectator, BOOT_REASON_BITS);
-        hostBootReason = spectator;
-    }
-    else
-    {
-        hostBootAgreeMask |= (unsigned __int64)1 << guest;
+        else
+        {
+            hostBootAgreeMask |= (unsigned __int64)1 << guest;
+        }
     }
 }
 
@@ -8335,7 +8547,7 @@ static const unsigned int CAPTURE_RATIO_MAX = (1U << CAPTURE_RATIO_BITS) - 1U;
 
 // GLOBAL: SWBF2 0x01ecb9bc
 // CAPTURE_RATIO_SCALE
-static const float CAPTURE_RATIO_SCALE = 1.0f / CAPTURE_RATIO_MAX;
+static const float CAPTURE_RATIO_SCALE = 1.0f / (float)CAPTURE_RATIO_MAX;
 
 // FUNCTION: SWBF2 0x005cb970
 void ReadCaptureDisplay(NetPktGroup& group, int player)
@@ -8788,13 +9000,12 @@ void HandleEvent_ChangeTeam(ReliableNetEvent& event)
 {
     CommandPost* post = event.u.changeteam.mCommandPost;
     Team* team = event.u.changeteam.mTeam;
-    GameObject* object = post->GetGameObject();
-    if (!object)
+    if (!post->GetGameObject())
     {
         return;
     }
 
-    object->SetTeam(team->GetNumber());
+    post->GetGameObject()->SetTeam(team->GetNumber());
     post->GetGameObject()->SetPerceivedTeam(team->GetNumber());
     if (event.u.changeteam.mAlive)
     {
@@ -11633,33 +11844,6 @@ void NetGame::RequestSuicide(int index)
     suicideInfo[index].killMeNow = true;
 }
 
-// FUNCTION: SWBF2 0x005d0da0
-int NetGame::GetBootVotes()
-{
-    return clientBootVotes;
-}
-
-// FUNCTION: SWBF2 0x005d0db0
-bool NetGame::IsBootVoted(int player)
-{
-    return clientBootVoted[player];
-}
-
-// FUNCTION: SWBF2 0x005d0de0
-int NetGame::GetBootReason()
-{
-    return clientBootReason;
-}
-
-// FUNCTION: SWBF2 0x005d0df0
-void NetGame::ForceBootPlayer(int player)
-{
-    if (NetGame::IsHost())
-    {
-        hostForceBootPlayer = player;
-    }
-}
-
 // FUNCTION: SWBF2 0x005d25d0
 void DisableFrameLock()
 {
@@ -11700,48 +11884,6 @@ int debugBootVoteCounter;
 // GLOBAL: SWBF2 0x007ec4f4
 int debugBootVoteIndex = -1;
 
-// FUNCTION: SWBF2 0x005d0cc0
-void NetGame::ConfirmBootPlayer(int player)
-{
-    bootInfo.changedTurn = clientTurnNumber;
-    bootInfo.bootRequest = BR_AFFIRM;
-    bootInfo.joystick = player;
-    SetBootVoted(player, true);
-}
-
-// FUNCTION: SWBF2 0x005d0d20
-float NetGame::GetBootTime()
-{
-    return NetComm::GetTime() +
-        ((float)clientBootTurn - (float)clientTurnNumber) * netSecondsPerTurn;
-}
-
-extern int hostVoteThreshold;
-
-// FUNCTION: SWBF2 0x005d0f10
-bool NetGame::GetBootCount(int& votes, int& players, int& required)
-{
-    votes = 0;
-    players = 0;
-    const int team = GetStartTeam(GetBootPlayer());
-    for (int i = 0; i < netCurMaxPlayers; ++i)
-    {
-        if (IsPlaying(i, false) && GetStartTeam(i) == team)
-        {
-            ++players;
-            if (hostBootAgreeMask & ((unsigned __int64)1 << i))
-            {
-                ++votes;
-            }
-        }
-    }
-    required = (int)((float)players * (float)hostVoteThreshold / 100.0f + 0.5f);
-    if (required <= 0)
-    {
-        required = 1;
-    }
-    return votes >= required;
-}
 
 // FUNCTION: SWBF2 0x005d1db0
 bool NetGame::AutoBootLagger()
@@ -11919,20 +12061,6 @@ void EnableFrameLock()
     WakeMeNextFrame();
 }
 
-// FUNCTION: SWBF2 0x005b4300
-RedTerrain::Hole::Hole(RedTerrain::Hole* pSource) : TreeGridObject(-1)
-{
-    SetObjectData(0, COLL_HOLE);
-    SetCollisionCenter(pSource->GetCollisionCenter());
-    SetCollisionRadius(pSource->GetCollisionRadius());
-    iNumPlanes = pSource->iNumPlanes;
-    aPlanes = new PblVector4[iNumPlanes];
-    for (int i = 0; i < iNumPlanes; ++i)
-    {
-        aPlanes[i] = pSource->aPlanes[i];
-    }
-}
-
 // FUNCTION: SWBF2 0x005b45f0
 void NetNdObjMap::Add(NetNdObj* object, unsigned int hash)
 {
@@ -12056,17 +12184,12 @@ int NetGame::GetObjectsInRange(const PblVector3& position, float radius, GameObj
 }
 
 // FUNCTION: SWBF2 0x005c9a70
-void AddHoleToClient(const int* source)
+void AddHoleToClient(RedTerrain::Hole* hole)
 {
-    int* copy = (int*)::operator new(60);
-    if (copy)
-    {
-        new (copy) RedTerrain::Hole((RedTerrain::Hole*)source);
-    }
+    RedTerrain::Hole* clientHole = new RedTerrain::Hole(hole);
     CollisionManager::EnterClient();
-    const float radius = ((const TreeGridObject*)copy)->GetCollisionRadius();
-    const PblVector3& position = ((const TreeGridObject*)copy)->GetCollisionCenter();
-    CollisionManager::GetTreeGrid()->Add((TreeGridObject*)copy, position, radius * 2.0f);
+    CollisionManager::GetTreeGrid()->Add(clientHole, clientHole->GetCollisionCenter(),
+        clientHole->GetCollisionRadius() * 2.0f);
     CollisionManager::LeaveClient();
 }
 
@@ -12340,7 +12463,7 @@ void CreateClientCollision(bool bNetCollision)
         NetGame::LeaveClient();
         if (!NetGame::IsOneWorld())
         {
-            RedTerrain::ProcessHoles((void (__cdecl*)(void*))AddHoleToClient);
+            RedTerrain::ProcessHoles(AddHoleToClient);
         }
     }
 }
@@ -12481,29 +12604,6 @@ void WriteEvent_UpdateObjective(NetPktGroup& group, ReliableNetEvent& event)
 {
     group.WriteBits(event.u.updateObjective.mHashID, 32);
     group.WriteBits(event.u.updateObjective.state, 8);
-}
-
-// FUNCTION: SWBF2 0x005c39a0
-void NetGame::WriteSpectator(NetPktGroup& group)
-{
-    for (int iPlayer = 0; iPlayer < 64; ++iPlayer)
-    {
-        int spectator = GetSpectator(iPlayer) + 1;
-        group.WriteBits(spectator, 6);
-    }
-}
-
-// FUNCTION: SWBF2 0x005c39f0
-void NetGame::ReadSpectator(NetPktGroup& group)
-{
-    for (int iPlayer = 0; iPlayer < 64; ++iPlayer)
-    {
-        unsigned int uEncoded = 0;
-        group.ReadBits(uEncoded, 6);
-        int iSpectator = (int)uEncoded - 1;
-        SetSpectator(iPlayer, iSpectator);
-        NetGame::ChangeSpectateTrack(iPlayer, iSpectator);
-    }
 }
 
 // FUNCTION: SWBF2 0x005ba0d0
@@ -13691,35 +13791,6 @@ void SpeedGame()
 {
 }
 
-// FUNCTION: SWBF2 0x005d0c70
-void NetGame::NominateBootPlayer(int iPlayer, int iReason, int iJoystick)
-{
-    bootInfo.changedTurn = clientTurnNumber;
-    bootInfo.dst = iPlayer;
-    bootInfo.reason = iReason;
-    bootInfo.joystick = iJoystick;
-    bootInfo.bootRequest = BR_NOMINATE;
-    NetGame::SetBootVoted(iJoystick, true);
-}
-
-// FUNCTION: SWBF2 0x005d1180
-void WriteBootRequest(NetPktGroup& group)
-{
-    bool bPending = bootInfo.changedTurn > (unsigned int)clientAckedTurnNumber;
-    group.Write(bPending);
-    if (bPending)
-    {
-        bool bNomination = bootInfo.bootRequest == BR_NOMINATE;
-        group.Write(bNomination);
-        group.WriteBits(bootInfo.joystick, BOOT_JOYSTICK_BITS);
-        if (bNomination)
-        {
-            group.WriteBits(bootInfo.dst, 6);
-            group.WriteBits(bootInfo.reason, BOOT_REASON_BITS);
-        }
-    }
-}
-
 void WriteTeam(NetPktGroup& group, Team* pTeam);
 
 // FUNCTION: SWBF2 0x005c1f30
@@ -14102,81 +14173,6 @@ void WriteMove(NetPktGroup& group, ProcessedInputs* previous, ProcessedInputs* c
     WriteFixed<MouseAxisConvert>(mouseAxisConvert, group, current->mFloatInputs[3]);
     group.WriteBits(current->bits.mBoolInputs, 30);
     group.WriteBits(current->bits.mMouseMode, 2);
-}
-
-// FUNCTION: SWBF2 0x005d0e10
-void UpdateBootPlayer(int& player)
-{
-    if (NetGame::IsPlaying(player, false))
-    {
-        if (netPlayers[player].mBooted)
-        {
-            if (NetComm::GetTime() > netPlayers[player].mBootTime)
-            {
-                NetGameP::SetNotPlaying(player);
-                netPlayers[player].mBootTime = -1.0f;
-                netPlayers[player].mBooted = false;
-                player = -1;
-            }
-        }
-        else
-        {
-            int guest = NetGame::GetGuestOf(player);
-            if (guest < 0)
-            {
-                guest = player;
-            }
-            player = guest;
-            netPlayers[guest].mBooted = true;
-            netPlayers[guest].mBootTime = NetComm::GetTime() + 2.0f;
-            NetGame::CreateEvent_Message(NetGame::MSG_BOOTED, Character::GetPtr(guest),
-                                         0, 0, 0, 0, 0);
-        }
-    }
-}
-
-// FUNCTION: SWBF2 0x005d1020
-void UpdateBootVote()
-{
-    if (hostBootPlayer >= 0)
-    {
-        int votes = 0;
-        int players = 0;
-        const int team = NetGame::GetStartTeam(hostBootPlayer);
-        for (int i = 0; i < netCurMaxPlayers; ++i)
-        {
-            if (NetGame::IsPlaying(i, false) &&
-                NetGame::GetStartTeam(i) == team)
-            {
-                ++players;
-                if (hostBootAgreeMask & ((unsigned __int64)1 << i))
-                {
-                    ++votes;
-                }
-            }
-        }
-        int required = (int)((float)players * (float)hostVoteThreshold /
-                             100.0f + 0.5f);
-        if (required <= 0)
-        {
-            required = 1;
-        }
-        if (votes >= required)
-        {
-            UpdateBootPlayer(hostBootPlayer);
-        }
-        else if ((unsigned int)hostTurnNumber >= hostBootTurn)
-        {
-            NetGame::CreateEvent_Message(NetGame::MSG_NOTBOOT,
-                                         Character::GetPtr(hostBootPlayer),
-                                         0, 0, 0, 0, 0);
-            hostBootPlayer = -1;
-        }
-    }
-    if (hostForceBootPlayer >= 0)
-    {
-        UpdateBootPlayer(hostForceBootPlayer);
-    }
 }
 
 // FUNCTION: SWBF2 0x005d3590
@@ -16819,17 +16815,6 @@ void NetGame::EnablePlayback() {}
 // GLOBAL: SWBF2 0x007e8238
 int netHeroRulePlayer = 1;
 
-// FUNCTION: SWBF2 0x005d45f0
-void ProcessGalaxyData()
-{
-    if (!galaxy::api::GalaxyFactory::GetInstance())
-    {
-        return;
-    }
-    galaxy::api::IGalaxy* pGalaxy = galaxy::api::GalaxyFactory::GetInstance();
-    pGalaxy->ProcessData();
-}
-
 // GLOBAL: SWBF2 0x01e65030
 bool netLoginPending;
 
@@ -16895,6 +16880,9 @@ PblTimeBase::Stamp frameLockStamp;
 // `dynamic initializer for 'recentGuestObjects''
 // SYNTHETIC: SWBF2 0x00769190
 // `dynamic atexit destructor for 'recentGuestObjects''
+
+// SYNTHETIC: SWBF2 0x005d3460
+// RecentGuestObjectRecord::~RecentGuestObjectRecord
 
 // GLOBAL: SWBF2 0x01ed7898
 // recentGuestObjects

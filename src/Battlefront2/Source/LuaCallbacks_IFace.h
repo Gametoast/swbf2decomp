@@ -22,7 +22,7 @@ bool ReadStatsGetResults(unsigned int iPlayer, LeaderBoardPlayerStatsT* pStats);
 }
 namespace StatsManager
 {
-bool FindServicePlayerID();
+bool FindServicePlayerID(const char* pGamerTag, int iSelectedIdx, unsigned __int64& playerID);
 }
 namespace StatsManager
 {
@@ -30,7 +30,7 @@ int GetLeaderBoardId();
 }
 namespace StatsManager
 {
-bool ResetPlayer();
+bool ResetPlayer(unsigned __int64& id);
 }
 namespace Lua_Callbacks
 {

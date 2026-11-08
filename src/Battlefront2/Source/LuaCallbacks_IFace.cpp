@@ -46,7 +46,7 @@
 #include "RedEngineFL/Interface/RedTextElement.h"
 #include "RedEngineFL/Util/RedCommandConsole.h"
 #include "RedEngineFL/Util/RedConsole.h"
-#include "RedEngineFL/Graphics/RedAmbientLight.h"
+#include "RedEngineFL/Graphics/RedLight.h"
 #include "RedEngineFL/Graphics/RedDirectionalLight.h"
 #include "SoundFL/source/sndqueue.h"
 #include "Entity.h"
@@ -4021,9 +4021,9 @@ int ScriptCB_GetLeaderBoardPlayerData(lua_State* L)
 int ScriptCB_DownloadLeaderBoardData(lua_State* L)
 {
     const char* pcName = luaL_optlstring(LuaHelper::mState, 1, 0, 0);
-    luaL_checknumber(LuaHelper::mState, 2);
+    const int iSelectedIdx = (int)luaL_checknumber(LuaHelper::mState, 2) - 1;
     unsigned __int64 uId;
-    if (Lua_Callbacks::GetServicePlayerID(pcName, &uId) || StatsManager::FindServicePlayerID())
+    if (Lua_Callbacks::GetServicePlayerID(pcName, &uId) || StatsManager::FindServicePlayerID(pcName, iSelectedIdx, uId))
     {
         StatsManager::Stop();
         return 0;
@@ -4036,7 +4036,7 @@ int ScriptCB_DownloadLeaderBoardData(lua_State* L)
 int ScriptCB_ResetLeaderBoardPlayerData(lua_State* L)
 {
     unsigned __int64 uId;
-    if (Lua_Callbacks::GetServicePlayerID(luaL_optlstring(LuaHelper::mState, 1, 0, 0), &uId) && StatsManager::ResetPlayer())
+    if (Lua_Callbacks::GetServicePlayerID(luaL_optlstring(LuaHelper::mState, 1, 0, 0), &uId) && StatsManager::ResetPlayer(uId))
     {
         return 0;
     }

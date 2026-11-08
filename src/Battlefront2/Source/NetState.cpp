@@ -387,85 +387,6 @@ void ReadAngle(NetPktGroup& group, float& value)
     ReadFixed(angleConvert, group, value);
 }
 
-// FUNCTION: SWBF2 0x005ed430
-void WalkerLegPair::Write(NetPktGroup& group)
-{
-    group.WriteBits(mFootContact[0], 1);
-    group.WriteBits(mFootContact[1], 1);
-    group.WriteBits(mIdleBlendFoot, 2);
-    WriteUnitScalar(group, mLastIdleBlend);
-}
-
-// FUNCTION: SWBF2 0x005ed480
-void WalkerLegPair::Read(NetPktGroup& group)
-{
-    unsigned int value;
-    group.ReadBits(value, 1);
-    mFootContact[0] = value != 0;
-    group.ReadBits(value, 1);
-    mFootContact[1] = value != 0;
-    group.ReadBits(value, 2);
-    mIdleBlendFoot = (WalkerLegPair::eFoot)value;
-    ReadUnitScalar(group, mLastIdleBlend);
-}
-
-// FUNCTION: SWBF2 0x005ed4e0
-void WalkerBlend::Write(NetPktGroup& group)
-{
-    group.WriteFixed(mTime, 0.0f, 10.0f, 24);
-    group.WriteBits(mCount, 2);
-    for (int i = 0; i < mCount; ++i)
-    {
-        WriteUnitScalar(group, mUnits[i]->mWeight);
-    }
-}
-
-// FUNCTION: SWBF2 0x005ed640
-void WalkerBlend::Skip(NetPktGroup& group)
-{
-    float time;
-    group.ReadFixed(time, 0.0f, 10.0f, 24);
-    unsigned int count;
-    group.ReadBits(count, 2);
-    mCount = count;
-    for (int i = 0; i < mCount; ++i)
-    {
-        ReadUnitScalar(group, mUnits[i]->mWeight);
-    }
-}
-
-// FUNCTION: SWBF2 0x005ed550
-void WalkerBlend::Read(NetPktGroup& group)
-{
-    float time;
-    group.ReadFixed(time, 0.0f, 10.0f, 24);
-    unsigned int count;
-    group.ReadBits(count, 2);
-    mCount = count;
-    for (int i = 0; i < mCount; ++i)
-    {
-        ReadUnitScalar(group, mUnits[i]->mWeight);
-    }
-    Update(m_bReversed ? mTimeTotal - time : time);
-    for (int i = 0; i < mCount; ++i)
-    {
-        ZephyrPoseDyn<64>& pose = mUnits[i]->mPose;
-        ZephyrTransform transform;
-        pose.GetJointTransform(transform, 0);
-        pose.m_kRootTrans = transform.kTrans;
-    }
-}
-
-// FUNCTION: SWBF2 0x005ed3f0
-void EntityWalker::Move(const PblMatrix& matrix)
-{
-    GameObject& object = *(GameObject*)this;
-    object.SetMatrix(matrix);
-    RedSceneObject* scene = &object;
-    scene->Deactivate();
-    scene->Activate();
-}
-
 // FUNCTION: SWBF2 0x005eedb0
 void EntityDroid::Move(const PblMatrix& matrix)
 {
@@ -563,171 +484,6 @@ void CommandBuilding::WriteObject(NetPktGroup& group, NetObjState*)
     }
     group.WriteBits(mIsShielded, 1);
     group.WriteBits(mState, 2);
-}
-
-// FUNCTION: SWBF2 0x005f04e0
-void PowerupStation::WriteObject(NetPktGroup& group, NetObjState*)
-{
-    group.WriteBits(mState, 2);
-    group.WriteFixed(mCurHealth, 0.0f, mMaxHealth, 11);
-    group.WriteBits(mIsAlive, 1);
-    if (mState == STATE_ALIVE)
-    {
-        group.WriteFixed(mPowerupTimer, -0.1f, mClass->mPowerupDelay, 8);
-    }
-}
-
-// FUNCTION: SWBF2 0x005f0570
-void PowerupStation::ReadObject(NetPktGroup& group, NetObjState*)
-{
-    unsigned int value;
-    group.ReadBits(value, 2);
-    const int state = value;
-    float health;
-    group.ReadFixed(health, 0.0f, mMaxHealth, 11);
-    SetCurHealth(health, true, 0);
-    group.ReadBits(value, 1);
-    mIsAlive = value;
-    if (state != mState)
-    {
-        if (state == STATE_ALIVE)
-        {
-            static_cast<Damageable*>(this)->Respawn();
-        }
-        else if (state == STATE_DEAD)
-        {
-            static_cast<Damageable*>(this)->Kill();
-        }
-    }
-    if (mState == STATE_ALIVE)
-    {
-        group.ReadFixed(mPowerupTimer, -0.1f, mClass->mPowerupDelay, 8);
-    }
-}
-
-// FUNCTION: SWBF2 0x005f0820
-void FlagItem::WriteCreate(NetPktGroup& group)
-{
-    group.WriteBits(mDroppedModel ? mDroppedModel->_uiNameHash : 0, 32);
-    group.WriteBits(mCarriedModel ? mCarriedModel->_uiNameHash : 0, 32);
-    group.Write(mAllowTeamPickup != 0);
-    group.Write(mAllowAIPickup != 0);
-    group.WriteBits(mHomeRegionId, 32);
-}
-
-// FUNCTION: SWBF2 0x005f08a0
-void FlagItem::ReadCreate(NetPktGroup& group)
-{
-    unsigned int value;
-    group.ReadBits(value, 32);
-    mDroppedModel = value ? const_cast<GameModel*>(GameModel::Find(value)) : 0;
-    group.ReadBits(value, 32);
-    mCarriedModel = value ? const_cast<GameModel*>(GameModel::Find(value)) : 0;
-    group.Read(mAllowTeamPickup);
-    group.Read(mAllowAIPickup);
-    group.ReadBits(mHomeRegionId, 32);
-    mHomeRegion = RedRegion::Find(mHomeRegionId);
-}
-
-// FUNCTION: SWBF2 0x005f0970
-void FlagItem::WriteObject(NetPktGroup& group, NetObjState*)
-{
-    WriteMatrix(group, GetMatrix());
-    group.Write(mStationary != 0);
-    if (!mStationary)
-    {
-        WriteVelocity(group, mVelocity, 5120.0f, -1);
-    }
-    if (mLifeTimer < FLT_MAX)
-    {
-        group.WriteBits(1, 1);
-        group.WriteFixed(mLifeTimer, -1.0f, mClass->mLifeSpan, 8);
-    }
-    else
-    {
-        group.WriteBits(0, 1);
-    }
-    WriteCharacter(group, mOwner);
-    group.Write(mMoved != 0);
-}
-
-// FUNCTION: SWBF2 0x005f0a40
-void FlagItem::ReadObject(NetPktGroup& group, NetObjState*)
-{
-    PblMatrix matrix;
-    ReadMatrix(group, matrix);
-    SetMatrix(matrix);
-    memcpy(&mLastPosition, &GetPosition(), sizeof(PblVector3));
-    unsigned int value;
-    group.Read(mStationary);
-    if (mStationary)
-    {
-        mVelocity = gVectorZero;
-        CollisionManager::DeactivateItem(this);
-    }
-    else
-    {
-        ReadVelocity(group, mVelocity, 5120.0f, -1);
-    }
-    group.ReadBits(value, 1);
-    if (value)
-    {
-        group.ReadFixed(mLifeTimer, -1.0f, mClass->mLifeSpan, 8);
-    }
-    else if (mLifeTimer != FLT_MAX)
-    {
-        ResetFlag();
-    }
-    Character* carrier = ReadCharacter(group);
-    if (carrier != mOwner)
-    {
-        if (!carrier || mOwner)
-        {
-            ClearCarrierFlagItem();
-        }
-        mOwner = carrier;
-        if (carrier)
-        {
-            carrier->mCarriedFlagPtr = this;
-            if (mCarriedModel)
-            {
-                SetModel(mCarriedModel);
-            }
-            else
-            {
-                Deactivate();
-            }
-            if (IsInCollisionList())
-            {
-                RemoveFromCollisionManager();
-            }
-            if (m_pLight)
-            {
-                m_pLight->TurnOff();
-            }
-        }
-        else
-        {
-            if (!IsInCollisionList())
-            {
-                RemoveFromCollisionManager();
-                AddItemToCollisionManager();
-            }
-            if (mCarriedModel)
-            {
-                SetModel(mDroppedModel);
-            }
-            else
-            {
-                Activate();
-            }
-            if (m_pLight)
-            {
-                m_pLight->TurnOn();
-            }
-        }
-    }
-    group.Read(mMoved);
 }
 
 // FUNCTION: SWBF2 0x005f14b0
@@ -1236,6 +992,85 @@ void EntityWalker::ReadObject(NetPktGroup& group, NetObjState*)
         mTurret[i]->Read(group);
     }
     SetNetLOD(0);
+}
+
+// FUNCTION: SWBF2 0x005ed3f0
+void EntityWalker::Move(const PblMatrix& matrix)
+{
+    GameObject& object = *(GameObject*)this;
+    object.SetMatrix(matrix);
+    RedSceneObject* scene = &object;
+    scene->Deactivate();
+    scene->Activate();
+}
+
+// FUNCTION: SWBF2 0x005ed430
+void WalkerLegPair::Write(NetPktGroup& group)
+{
+    group.WriteBits(mFootContact[0], 1);
+    group.WriteBits(mFootContact[1], 1);
+    group.WriteBits(mIdleBlendFoot, 2);
+    WriteUnitScalar(group, mLastIdleBlend);
+}
+
+// FUNCTION: SWBF2 0x005ed480
+void WalkerLegPair::Read(NetPktGroup& group)
+{
+    unsigned int value;
+    group.ReadBits(value, 1);
+    mFootContact[0] = value != 0;
+    group.ReadBits(value, 1);
+    mFootContact[1] = value != 0;
+    group.ReadBits(value, 2);
+    mIdleBlendFoot = (WalkerLegPair::eFoot)value;
+    ReadUnitScalar(group, mLastIdleBlend);
+}
+
+// FUNCTION: SWBF2 0x005ed4e0
+void WalkerBlend::Write(NetPktGroup& group)
+{
+    group.WriteFixed(mTime, 0.0f, 10.0f, 24);
+    group.WriteBits(mCount, 2);
+    for (int i = 0; i < mCount; ++i)
+    {
+        WriteUnitScalar(group, mUnits[i]->mWeight);
+    }
+}
+
+// FUNCTION: SWBF2 0x005ed550
+void WalkerBlend::Read(NetPktGroup& group)
+{
+    float time;
+    group.ReadFixed(time, 0.0f, 10.0f, 24);
+    unsigned int count;
+    group.ReadBits(count, 2);
+    mCount = count;
+    for (int i = 0; i < mCount; ++i)
+    {
+        ReadUnitScalar(group, mUnits[i]->mWeight);
+    }
+    Update(m_bReversed ? mTimeTotal - time : time);
+    for (int i = 0; i < mCount; ++i)
+    {
+        ZephyrPoseDyn<64>& pose = mUnits[i]->mPose;
+        ZephyrTransform transform;
+        pose.GetJointTransform(transform, 0);
+        pose.m_kRootTrans = transform.kTrans;
+    }
+}
+
+// FUNCTION: SWBF2 0x005ed640
+void WalkerBlend::Skip(NetPktGroup& group)
+{
+    float time;
+    group.ReadFixed(time, 0.0f, 10.0f, 24);
+    unsigned int count;
+    group.ReadBits(count, 2);
+    mCount = count;
+    for (int i = 0; i < mCount; ++i)
+    {
+        ReadUnitScalar(group, mUnits[i]->mWeight);
+    }
 }
 
 // FUNCTION: SWBF2 0x005ee870
@@ -2315,31 +2150,6 @@ Character* ReadCharacter(NetPktGroup& group)
     return Character::GetPtr((int)index);
 }
 
-// FUNCTION: SWBF2 0x005f0220
-void PowerupItem::WriteObject(NetPktGroup& group, NetObjState*)
-{
-    WriteMatrix(group, GetMatrix());
-    WriteVelocity(group, mVelocity, 5120.0f, -1);
-    group.WriteFixed(mLifeTimer, -1.0f, mClass->mLifeSpan, 8);
-    group.Write(mStationary);
-}
-
-// FUNCTION: SWBF2 0x005f02a0
-void PowerupItem::ReadObject(NetPktGroup& group, NetObjState*)
-{
-    PblMatrix matrix;
-    ReadMatrix(group, matrix);
-    SetMatrix(matrix);
-    const PblVector3& position = GetPosition();
-    memcpy(&mLastPosition, &position, sizeof(position));
-    RedSceneObject* pScene = this;
-    pScene->Deactivate();
-    pScene->Activate();
-    ReadVelocity(group, mVelocity, 5120.0f, -1);
-    group.ReadFixed(mLifeTimer, -1.0f, mClass->mLifeSpan, 8);
-    group.Read(mStationary);
-}
-
 // FUNCTION: SWBF2 0x005eb1c0
 void EntitySoldier::ResetObject()
 {
@@ -2411,49 +2221,6 @@ void EntityBuilding::ReadObject(NetPktGroup& group, NetObjState*)
         Damageable::HealthChangeCallback(false, 0.0f);
     }
     mState = (STATE)state;
-}
-
-// FUNCTION: SWBF2 0x005f07b0
-void EntityTrap::WriteObject(NetPktGroup& group, NetObjState* pState)
-{
-    EntityBuilding::WriteObject(group, pState);
-    group.Write(mTriggered);
-}
-
-// FUNCTION: SWBF2 0x005f07e0
-void EntityTrap::ReadObject(NetPktGroup& group, NetObjState* pState)
-{
-    EntityBuilding::ReadObject(group, pState);
-    group.Read(mTriggered);
-}
-
-// FUNCTION: SWBF2 0x005f0650
-GameObject* EntityTrap::AddToClient()
-{
-    if (NetGame::IsOneWorld())
-    {
-        if (!NetGame::IsHost())
-        {
-            DeactivateThread();
-            Thread::EnterClient();
-            ActivateThread(0, PER_LOCAL_TURN);
-            Thread::LeaveClient();
-        }
-        return this;
-    }
-    Deactivate();
-    TargetManager::RemoveTarget(this);
-    NetGame::EnterClient();
-    EntityDesc desc;
-    desc.mMatrix = GetMatrix();
-    desc.mNameId = 0;
-    desc.mPlayerId = -1;
-    GameObject* pClient = (GameObject*)GetEntityClass()->Build(desc);
-    PAAnimationGroup::ClientGeometryCreated(this, pClient);
-    pClient->Init();
-    pClient->BuildEffects();
-    NetGame::LeaveClient();
-    return pClient->GetGameObject();
 }
 
 // FUNCTION: SWBF2 0x005f11a0
@@ -2582,6 +2349,269 @@ void EntityMine::ReadObject(NetPktGroup& group, NetObjState*)
         }
     }
     mNetDead = false;
+}
+
+// FUNCTION: SWBF2 0x005f0220
+void PowerupItem::WriteObject(NetPktGroup& group, NetObjState*)
+{
+    WriteMatrix(group, GetMatrix());
+    WriteVelocity(group, mVelocity, 5120.0f, -1);
+    group.WriteFixed(mLifeTimer, -1.0f, mClass->mLifeSpan, 8);
+    group.Write(mStationary);
+}
+
+// FUNCTION: SWBF2 0x005f02a0
+void PowerupItem::ReadObject(NetPktGroup& group, NetObjState*)
+{
+    PblMatrix matrix;
+    ReadMatrix(group, matrix);
+    SetMatrix(matrix);
+    const PblVector3& position = GetPosition();
+    memcpy(&mLastPosition, &position, sizeof(position));
+    RedSceneObject* pScene = this;
+    pScene->Deactivate();
+    pScene->Activate();
+    ReadVelocity(group, mVelocity, 5120.0f, -1);
+    group.ReadFixed(mLifeTimer, -1.0f, mClass->mLifeSpan, 8);
+    group.Read(mStationary);
+}
+
+// FUNCTION: SWBF2 0x005f0370
+GameObject* PowerupStation::AddToClient()
+{
+    if (NetGame::IsOneWorld())
+    {
+        if (!NetGame::IsHost())
+        {
+            DeactivateThread();
+            Thread::EnterClient();
+            ActivateThread(0, PER_LOCAL_TURN);
+            Thread::LeaveClient();
+        }
+        return this;
+    }
+    Deactivate();
+    TargetManager::RemoveTarget(this);
+    NetGame::EnterClient();
+    EntityDesc desc;
+    desc.mMatrix = GetMatrix();
+    desc.mNameId = 0;
+    desc.mPlayerId = -1;
+    EntityGeometry* client = (EntityGeometry*)GetEntityClass()->Build(desc);
+    PAAnimationGroup::ClientGeometryCreated(this, client);
+    ((PowerupStation*)client)->mEffectRegion = mEffectRegion;
+    client->Init();
+    client->BuildEffects();
+    NetGame::LeaveClient();
+    return client->GetGameObject();
+}
+
+// FUNCTION: SWBF2 0x005f04e0
+void PowerupStation::WriteObject(NetPktGroup& group, NetObjState*)
+{
+    group.WriteBits(mState, 2);
+    group.WriteFixed(mCurHealth, 0.0f, mMaxHealth, 11);
+    group.WriteBits(mIsAlive, 1);
+    if (mState == STATE_ALIVE)
+    {
+        group.WriteFixed(mPowerupTimer, -0.1f, mClass->mPowerupDelay, 8);
+    }
+}
+
+// FUNCTION: SWBF2 0x005f0570
+void PowerupStation::ReadObject(NetPktGroup& group, NetObjState*)
+{
+    unsigned int value;
+    group.ReadBits(value, 2);
+    const int state = value;
+    float health;
+    group.ReadFixed(health, 0.0f, mMaxHealth, 11);
+    SetCurHealth(health, true, 0);
+    group.ReadBits(value, 1);
+    mIsAlive = value;
+    if (state != mState)
+    {
+        if (state == STATE_ALIVE)
+        {
+            static_cast<Damageable*>(this)->Respawn();
+        }
+        else if (state == STATE_DEAD)
+        {
+            static_cast<Damageable*>(this)->Kill();
+        }
+    }
+    if (mState == STATE_ALIVE)
+    {
+        group.ReadFixed(mPowerupTimer, -0.1f, mClass->mPowerupDelay, 8);
+    }
+}
+
+// FUNCTION: SWBF2 0x005f0650
+GameObject* EntityTrap::AddToClient()
+{
+    if (NetGame::IsOneWorld())
+    {
+        if (!NetGame::IsHost())
+        {
+            DeactivateThread();
+            Thread::EnterClient();
+            ActivateThread(0, PER_LOCAL_TURN);
+            Thread::LeaveClient();
+        }
+        return this;
+    }
+    Deactivate();
+    TargetManager::RemoveTarget(this);
+    NetGame::EnterClient();
+    EntityDesc desc;
+    desc.mMatrix = GetMatrix();
+    desc.mNameId = 0;
+    desc.mPlayerId = -1;
+    GameObject* pClient = (GameObject*)GetEntityClass()->Build(desc);
+    PAAnimationGroup::ClientGeometryCreated(this, pClient);
+    pClient->Init();
+    pClient->BuildEffects();
+    NetGame::LeaveClient();
+    return pClient->GetGameObject();
+}
+
+// FUNCTION: SWBF2 0x005f07b0
+void EntityTrap::WriteObject(NetPktGroup& group, NetObjState* pState)
+{
+    EntityBuilding::WriteObject(group, pState);
+    group.Write(mTriggered);
+}
+
+// FUNCTION: SWBF2 0x005f07e0
+void EntityTrap::ReadObject(NetPktGroup& group, NetObjState* pState)
+{
+    EntityBuilding::ReadObject(group, pState);
+    group.Read(mTriggered);
+}
+
+// FUNCTION: SWBF2 0x005f0820
+void FlagItem::WriteCreate(NetPktGroup& group)
+{
+    group.WriteBits(mDroppedModel ? mDroppedModel->_uiNameHash : 0, 32);
+    group.WriteBits(mCarriedModel ? mCarriedModel->_uiNameHash : 0, 32);
+    group.Write(mAllowTeamPickup != 0);
+    group.Write(mAllowAIPickup != 0);
+    group.WriteBits(mHomeRegionId, 32);
+}
+
+// FUNCTION: SWBF2 0x005f08a0
+void FlagItem::ReadCreate(NetPktGroup& group)
+{
+    unsigned int value;
+    group.ReadBits(value, 32);
+    mDroppedModel = value ? const_cast<GameModel*>(GameModel::Find(value)) : 0;
+    group.ReadBits(value, 32);
+    mCarriedModel = value ? const_cast<GameModel*>(GameModel::Find(value)) : 0;
+    group.Read(mAllowTeamPickup);
+    group.Read(mAllowAIPickup);
+    group.ReadBits(mHomeRegionId, 32);
+    mHomeRegion = RedRegion::Find(mHomeRegionId);
+}
+
+// FUNCTION: SWBF2 0x005f0970
+void FlagItem::WriteObject(NetPktGroup& group, NetObjState*)
+{
+    WriteMatrix(group, GetMatrix());
+    group.Write(mStationary != 0);
+    if (!mStationary)
+    {
+        WriteVelocity(group, mVelocity, 5120.0f, -1);
+    }
+    if (mLifeTimer < FLT_MAX)
+    {
+        group.WriteBits(1, 1);
+        group.WriteFixed(mLifeTimer, -1.0f, mClass->mLifeSpan, 8);
+    }
+    else
+    {
+        group.WriteBits(0, 1);
+    }
+    WriteCharacter(group, mOwner);
+    group.Write(mMoved != 0);
+}
+
+// FUNCTION: SWBF2 0x005f0a40
+void FlagItem::ReadObject(NetPktGroup& group, NetObjState*)
+{
+    PblMatrix matrix;
+    ReadMatrix(group, matrix);
+    SetMatrix(matrix);
+    memcpy(&mLastPosition, &GetPosition(), sizeof(PblVector3));
+    unsigned int value;
+    group.Read(mStationary);
+    if (mStationary)
+    {
+        mVelocity = gVectorZero;
+        CollisionManager::DeactivateItem(this);
+    }
+    else
+    {
+        ReadVelocity(group, mVelocity, 5120.0f, -1);
+    }
+    group.ReadBits(value, 1);
+    if (value)
+    {
+        group.ReadFixed(mLifeTimer, -1.0f, mClass->mLifeSpan, 8);
+    }
+    else if (mLifeTimer != FLT_MAX)
+    {
+        ResetFlag();
+    }
+    Character* carrier = ReadCharacter(group);
+    if (carrier != mOwner)
+    {
+        if (!carrier || mOwner)
+        {
+            ClearCarrierFlagItem();
+        }
+        mOwner = carrier;
+        if (carrier)
+        {
+            carrier->mCarriedFlagPtr = this;
+            if (mCarriedModel)
+            {
+                SetModel(mCarriedModel);
+            }
+            else
+            {
+                Deactivate();
+            }
+            if (IsInCollisionList())
+            {
+                RemoveFromCollisionManager();
+            }
+            if (m_pLight)
+            {
+                m_pLight->TurnOff();
+            }
+        }
+        else
+        {
+            if (!IsInCollisionList())
+            {
+                RemoveFromCollisionManager();
+                AddItemToCollisionManager();
+            }
+            if (mCarriedModel)
+            {
+                SetModel(mDroppedModel);
+            }
+            else
+            {
+                Activate();
+            }
+            if (m_pLight)
+            {
+                m_pLight->TurnOn();
+            }
+        }
+    }
+    group.Read(mMoved);
 }
 
 class CannonStrengthConvert : public ConvertValues
@@ -3381,9 +3411,13 @@ const PblMatrix& EntitySoldier::GetSmoothedMatrix() const
 }
 
 // FUNCTION: SWBF2 0x005eb420
-bool EntitySoldier::Smooth(float fDeltaTime) const
+bool EntitySoldier::Smooth(float aDt) const
 {
-    if (!NetGame::IsEnabled() || (NetGame::IsHost() && NetGame::IsOneWorld()))
+    if (!NetGame::IsEnabled())
+    {
+        return true;
+    }
+    if (NetGame::IsHost() && NetGame::IsOneWorld())
     {
         return true;
     }
@@ -3391,15 +3425,23 @@ bool EntitySoldier::Smooth(float fDeltaTime) const
     {
         return false;
     }
-    if (fDeltaTime == EPSILON)
+    if (aDt == EPSILON)
     {
         return true;
     }
 
-    SmoothInfo& info = NetPredict::GetSmoothInfo(mNetUniqueId);
-
-    const bool threadActive = const_cast<EntitySoldier*>(this)->IsThreadActive();
-    info.SetMat(mMatrix, threadActive ? 10.0f : 0.0f, threadActive ? 200.0f : 0.0f);
+    SmoothInfo& smooth = NetPredict::GetSmoothInfo(mNetUniqueId);
+    float nearDist, farDist;
+    if (!const_cast<EntitySoldier*>(this)->IsThreadActive())
+    {
+        nearDist = farDist = 0.0f;
+    }
+    else
+    {
+        nearDist = 10.0f;
+        farDist = 200.0f;
+    }
+    smooth.SetMat(mMatrix, nearDist, farDist);
     return netIsLastLocalTurn;
 }
 
@@ -5764,36 +5806,6 @@ void EntityBuildingArmedDynamic::ReadObject(NetPktGroup& group, NetObjState* sta
     Deactivate();
     Activate();
     EntityBuildingArmed::ReadObject(group, state);
-}
-
-// FUNCTION: SWBF2 0x005f0370
-GameObject* PowerupStation::AddToClient()
-{
-    if (NetGame::IsOneWorld())
-    {
-        if (!NetGame::IsHost())
-        {
-            DeactivateThread();
-            Thread::EnterClient();
-            ActivateThread(0, PER_LOCAL_TURN);
-            Thread::LeaveClient();
-        }
-        return this;
-    }
-    Deactivate();
-    TargetManager::RemoveTarget(this);
-    NetGame::EnterClient();
-    EntityDesc desc;
-    desc.mMatrix = GetMatrix();
-    desc.mNameId = 0;
-    desc.mPlayerId = -1;
-    EntityGeometry* client = (EntityGeometry*)GetEntityClass()->Build(desc);
-    PAAnimationGroup::ClientGeometryCreated(this, client);
-    ((PowerupStation*)client)->mEffectRegion = mEffectRegion;
-    client->Init();
-    client->BuildEffects();
-    NetGame::LeaveClient();
-    return client->GetGameObject();
 }
 
 // FUNCTION: SWBF2 0x005f1860

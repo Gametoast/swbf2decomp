@@ -198,6 +198,48 @@ int ScriptCB_IsSplitscreen(lua_State* L)
     return 1;
 }
 
+// FUNCTION: SWBF2 0x00596c40
+int ScriptCB_WasSplitscreen(lua_State*)
+{
+    int NumCameras = ShellLoop::mLastGameNumCameras;
+    if (NumCameras < 2)
+    {
+        LuaHelper::PushNil();
+    }
+    else
+    {
+        LuaHelper::PushInt(NumCameras);
+    }
+    return 1;
+}
+
+// FUNCTION: SWBF2 0x00596c80
+int ScriptCB_SetPlayerSide(lua_State*)
+{
+    int NumArgs = LuaHelper::GetTop();
+    if (NumArgs >= 1 && NumArgs <= 2 && lua_isnumber(LuaHelper::mState, 1))
+    {
+        int TheirTeam = LuaHelper::GetInt(1);
+        if (TheirTeam >= 1 && TheirTeam <= 2)
+        {
+            unsigned int Viewport = 0;
+            if (NumArgs == 2)
+            {
+                if (!LuaHelper::IsNumber(NumArgs))
+                {
+                    return 0;
+                }
+                Viewport = LuaHelper::GetInt(NumArgs);
+            }
+            if (Viewport < sizeof(PlayerPrefs::mAllUserPrefs) / sizeof(PlayerPrefs::mAllUserPrefs[0]))
+            {
+                PlayerPrefs::mAllUserPrefs[Viewport].mTeamNum = TheirTeam;
+            }
+        }
+    }
+    return 0;
+}
+
 // FUNCTION: SWBF2 0x00596d10
 int ScriptCB_SetDifficulty(lua_State* L)
 {
@@ -240,6 +282,20 @@ int ScriptCB_GetDifficulty(lua_State* L)
     return 1;
 }
 
+// FUNCTION: SWBF2 0x00596e30
+int ScriptCB_GetCTFCaptureLimit(lua_State*)
+{
+    lua_pushnumber(LuaHelper::mState, (float)gCTFScore[gCurRules]);
+    return 1;
+}
+
+// FUNCTION: SWBF2 0x00596e60
+int ScriptCB_GetHuntMaxTimeLimit(lua_State*)
+{
+    lua_pushnumber(LuaHelper::mState, (float)(60 * gHuntMaxTimeLimit[gCurRules]));
+    return 1;
+}
+
 // FUNCTION: SWBF2 0x00596ea0
 int ScriptCB_GetHuntScoreLimit(lua_State* L)
 {
@@ -254,6 +310,20 @@ int ScriptCB_ShowHuntScoreLimit(lua_State* L)
 {
     gHuntShowScoreLimit = (int)luaL_checknumber(LuaHelper::mState, 1);
     return 0;
+}
+
+// FUNCTION: SWBF2 0x00596f00
+int ScriptCB_GetCTFMaxTimeLimit(lua_State*)
+{
+    lua_pushnumber(LuaHelper::mState, (float)(60 * gCTFMaxTimeLimit[gCurRules]));
+    return 1;
+}
+
+// FUNCTION: SWBF2 0x00596f40
+int ScriptCB_GetAssaultScoreLimit(lua_State*)
+{
+    lua_pushnumber(LuaHelper::mState, (float)gSpaceAssaultScoreLimit[gCurRules]);
+    return 1;
 }
 
 // FUNCTION: SWBF2 0x00596f70
@@ -287,6 +357,40 @@ int ScriptCB_GetCONNumBots(lua_State* L)
     }
     LuaHelper::PushInt(v);
     return 1;
+}
+
+// FUNCTION: SWBF2 0x00597050
+int ScriptCB_GetCTFNumBots(lua_State*)
+{
+    int v = netNumBots;
+    if ((unsigned int)gCurRules <= eGAMERULES_METAGAME)
+    {
+        v = gCTFNumBots[gCurRules];
+    }
+    LuaHelper::PushInt(v);
+    return 1;
+}
+
+// FUNCTION: SWBF2 0x00597090
+int ScriptCB_GetASSNumBots(lua_State*)
+{
+    int v = netNumBots;
+    if ((unsigned int)gCurRules <= eGAMERULES_METAGAME)
+    {
+        v = gASSNumBots[gCurRules];
+    }
+    LuaHelper::PushInt(v);
+    return 1;
+}
+
+// FUNCTION: SWBF2 0x005970d0
+static int ScriptCB_SetNumBots(lua_State*)
+{
+    if (lua_isnumber(LuaHelper::mState, 1))
+    {
+        netNumBots = (int)luaL_checknumber(LuaHelper::mState, 1);
+    }
+    return 0;
 }
 
 // FUNCTION: SWBF2 0x00597780
@@ -1191,83 +1295,6 @@ int ScriptCB_SetNetHeroDefaults(lua_State* L)
     return 0;
 }
 
-// FUNCTION: SWBF2 0x00596c40
-int ScriptCB_WasSplitscreen(lua_State*)
-{
-    int NumCameras = ShellLoop::mLastGameNumCameras;
-    if (NumCameras < 2)
-    {
-        LuaHelper::PushNil();
-    }
-    else
-    {
-        LuaHelper::PushInt(NumCameras);
-    }
-    return 1;
-}
-
-// FUNCTION: SWBF2 0x00596e30
-int ScriptCB_GetCTFCaptureLimit(lua_State*)
-{
-    lua_pushnumber(LuaHelper::mState, (float)gCTFScore[gCurRules]);
-    return 1;
-}
-
-// FUNCTION: SWBF2 0x00596e60
-int ScriptCB_GetHuntMaxTimeLimit(lua_State*)
-{
-    lua_pushnumber(LuaHelper::mState, (float)(60 * gHuntMaxTimeLimit[gCurRules]));
-    return 1;
-}
-
-// FUNCTION: SWBF2 0x00596f00
-int ScriptCB_GetCTFMaxTimeLimit(lua_State*)
-{
-    lua_pushnumber(LuaHelper::mState, (float)(60 * gCTFMaxTimeLimit[gCurRules]));
-    return 1;
-}
-
-// FUNCTION: SWBF2 0x00596f40
-int ScriptCB_GetAssaultScoreLimit(lua_State*)
-{
-    lua_pushnumber(LuaHelper::mState, (float)gSpaceAssaultScoreLimit[gCurRules]);
-    return 1;
-}
-
-// FUNCTION: SWBF2 0x00597050
-int ScriptCB_GetCTFNumBots(lua_State*)
-{
-    int v = netNumBots;
-    if ((unsigned int)gCurRules <= eGAMERULES_METAGAME)
-    {
-        v = gCTFNumBots[gCurRules];
-    }
-    LuaHelper::PushInt(v);
-    return 1;
-}
-
-// FUNCTION: SWBF2 0x00597090
-int ScriptCB_GetASSNumBots(lua_State*)
-{
-    int v = netNumBots;
-    if ((unsigned int)gCurRules <= eGAMERULES_METAGAME)
-    {
-        v = gASSNumBots[gCurRules];
-    }
-    LuaHelper::PushInt(v);
-    return 1;
-}
-
-// FUNCTION: SWBF2 0x005970d0
-static int ScriptCB_SetNumBots(lua_State*)
-{
-    if (lua_isnumber(LuaHelper::mState, 1))
-    {
-        netNumBots = (int)luaL_checknumber(LuaHelper::mState, 1);
-    }
-    return 0;
-}
-
 // FUNCTION: SWBF2 0x005977c0
 int ScriptCB_SetAIDifficulty(lua_State*)
 {
@@ -1410,33 +1437,6 @@ int ScriptCB_SetFunctionIdForButtonId(lua_State*)
         {
             pProfile->NoteBindingChange();
             pProfile->UpdateProfCRC();
-        }
-    }
-    return 0;
-}
-
-// FUNCTION: SWBF2 0x00596c80
-int ScriptCB_SetPlayerSide(lua_State*)
-{
-    int NumArgs = LuaHelper::GetTop();
-    if (NumArgs >= 1 && NumArgs <= 2 && lua_isnumber(LuaHelper::mState, 1))
-    {
-        int TheirTeam = LuaHelper::GetInt(1);
-        if (TheirTeam >= 1 && TheirTeam <= 2)
-        {
-            unsigned int Viewport = 0;
-            if (NumArgs == 2)
-            {
-                if (!LuaHelper::IsNumber(NumArgs))
-                {
-                    return 0;
-                }
-                Viewport = LuaHelper::GetInt(NumArgs);
-            }
-            if (Viewport < sizeof(PlayerPrefs::mAllUserPrefs) / sizeof(PlayerPrefs::mAllUserPrefs[0]))
-            {
-                PlayerPrefs::mAllUserPrefs[Viewport].mTeamNum = TheirTeam;
-            }
         }
     }
     return 0;

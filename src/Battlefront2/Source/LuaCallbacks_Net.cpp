@@ -3789,22 +3789,6 @@ char gLoginName[256];
 // TEMPLATE: SWBF2 0x0052fbd0
 // std::_Wrap_alloc<std::allocator<char> >::allocate
 
-// FUNCTION: SWBF2 0x0052e430
-void sub_52E430() {}
-
-
-// FUNCTION: SWBF2 0x00530170
-int __cdecl FillWordRange(unsigned int first, unsigned int last, const int* value)
-{
-    int result = 0;
-    for (int* dest = (int*)first; dest < (int*)last; ++dest)
-    {
-        result = *value;
-        *dest = result;
-    }
-    return result;
-}
-
 // GLOBAL: SWBF2 0x01e64a24
 
 int netRequestedCameraCount = 0;

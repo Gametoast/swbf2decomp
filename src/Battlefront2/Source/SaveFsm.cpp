@@ -8,8 +8,6 @@
 #include "LuaHelper.h"
 #include "PebbleFL/Common/PblHashTable.h"
 
-extern void* GetNextSaveFile(void* pDevice);
-extern void sub_631640();
 extern unsigned int CalcCRC(void const* pData, unsigned int uiSize, unsigned int uiSeed);
 namespace RedLocalizeDB
 {
@@ -53,6 +51,17 @@ unsigned int Hash16(unsigned short const* pusString)
         uHash *= 0x01000193u;
     }
     return uHash;
+}
+
+// FUNCTION: SWBF2 0x00631630
+static SaveFile* GetNextSaveFile(SaveDevice& device)
+{
+    return device.GetNextFile();
+}
+
+// FUNCTION: SWBF2 0x00631640
+static void JournalSaveFile(SaveFile*& saveFile)
+{
 }
 
 // FUNCTION: SWBF2 0x00631650
@@ -135,7 +144,7 @@ bool SaveFsm::InputAccept(int iAnswer)
 // FUNCTION: SWBF2 0x00631810
 SaveFile* SaveFsm::GetNextFile()
 {
-    return (SaveFile*)GetNextSaveFile(&mSaveDevice);
+    return GetNextSaveFile(mSaveDevice);
 }
 
 void SaveFsm::MarkMemoryCard()
@@ -387,7 +396,7 @@ void SaveFsm::Enter_Save_CheckExist()
         return;
     }
     mCurSaveFile = mSaveDevice.FindFileInList(mLoadFilename[mLoadQueueCnt - 1], iType);
-    sub_631640();
+    JournalSaveFile(mCurSaveFile);
     if (mCurSaveFile)
     {
         SetNextState(0x11);
@@ -408,6 +417,25 @@ void SaveFsm::Enter_Save_Overwrite()
     mBtnDefault = 2;
     mLoadSavePopupAnswer = -1;
     ShowLoadSavePopup(true);
+}
+
+// FUNCTION: SWBF2 0x00632440
+void SaveFsm::Update_Save_Overwrite()
+{
+    if (mLoadSavePopupAnswer == -1)
+    {
+        return;
+    }
+    ShowLoadSavePopup(false);
+    if (mLoadSavePopupAnswer == 1)
+    {
+        SetNextState(0x11);
+    }
+    else
+    {
+        SetNextState(4);
+        mLoadQueueCnt = 0;
+    }
 }
 
 // FUNCTION: SWBF2 0x00632480
@@ -431,6 +459,31 @@ void SaveFsm::Enter_Save_Create()
     }
 }
 
+// FUNCTION: SWBF2 0x00632500
+void SaveFsm::Update_Save_Create()
+{
+    int iResult = mSaveDevice.CycleCreateFile(mLoadFilename[mLoadQueueCnt - 1], mLoadType[mLoadQueueCnt - 1]);
+    if (iResult == 1)
+    {
+        return;
+    }
+    if (iResult)
+    {
+        if (iResult == -6)
+        {
+            SetNextState(22);
+        }
+        else
+        {
+            SetNextState(21);
+        }
+    }
+    else
+    {
+        SetNextState(0x11);
+    }
+}
+
 // FUNCTION: SWBF2 0x00632530
 void SaveFsm::Enter_Save_Open()
 {
@@ -438,7 +491,7 @@ void SaveFsm::Enter_Save_Open()
     mBtns = 0;
     ShowLoadSavePopup(true);
     mCurSaveFile = mSaveDevice.FindFileInList(mLoadFilename[mLoadQueueCnt - 1], mLoadType[mLoadQueueCnt - 1]);
-    sub_631640();
+    JournalSaveFile(mCurSaveFile);
     if (mCurSaveFile)
     {
         int iResult = mSaveDevice.StartOpenFile(*mCurSaveFile, false);
@@ -448,6 +501,25 @@ void SaveFsm::Enter_Save_Open()
         }
     }
     SetNextState(21);
+}
+
+// FUNCTION: SWBF2 0x006325c0
+void SaveFsm::Update_Save_Open()
+{
+    int iResult = mSaveDevice.CycleOpenFile(*mCurSaveFile, false);
+    if (iResult == 1)
+    {
+        return;
+    }
+    if (iResult)
+    {
+        mSaveErrorAfterClose = true;
+        SetNextState(0x14);
+    }
+    else
+    {
+        SetNextState(0x12);
+    }
 }
 
 // FUNCTION: SWBF2 0x006325f0
@@ -468,6 +540,25 @@ void SaveFsm::Enter_Save_WriteChecksum()
     }
 }
 
+// FUNCTION: SWBF2 0x00632660
+void SaveFsm::Update_Save_WriteChecksum()
+{
+    int iResult = mSaveDevice.CycleWriteFile(*mCurSaveFile, &mChecksum, CRC_SIZE);
+    if (iResult == 1)
+    {
+        return;
+    }
+    if (iResult)
+    {
+        mSaveErrorAfterClose = true;
+        SetNextState(0x14);
+    }
+    else
+    {
+        SetNextState(0x13);
+    }
+}
+
 // FUNCTION: SWBF2 0x00632690
 void SaveFsm::Enter_Save_WriteData()
 {
@@ -475,6 +566,23 @@ void SaveFsm::Enter_Save_WriteData()
     int iResult = mSaveDevice.StartWriteFile(*mCurSaveFile, mLoadDest[iIdx], mLoadSize[iIdx]);
     if (iResult == 1 || iResult == 0)
     {
+        return;
+    }
+    mSaveErrorAfterClose = true;
+    SetNextState(0x14);
+}
+
+// FUNCTION: SWBF2 0x006326d0
+void SaveFsm::Update_Save_WriteData()
+{
+    int iResult = mSaveDevice.CycleWriteFile(*mCurSaveFile, mLoadDest[mLoadQueueCnt - 1], mLoadSize[mLoadQueueCnt - 1]);
+    if (iResult == 1)
+    {
+        return;
+    }
+    if (iResult == 0)
+    {
+        SetNextState(0x14);
         return;
     }
     mSaveErrorAfterClose = true;
@@ -491,6 +599,32 @@ void SaveFsm::Enter_Save_Close()
     }
 }
 
+// FUNCTION: SWBF2 0x00632720
+void SaveFsm::Update_Save_Close()
+{
+    int iResult = mSaveDevice.CycleCloseFile(*mCurSaveFile, false);
+    if (iResult == 1)
+    {
+        return;
+    }
+    if (iResult)
+    {
+        SetNextState(21);
+    }
+    else if (mSaveErrorAfterClose == true)
+    {
+        SetNextState(21);
+    }
+    else
+    {
+        ShowLoadSavePopup(false);
+        PblUnicode::ustrncnv(mLoadFilename[mLoadQueueCnt - 1], "", 66);
+        mLoadDest[mLoadQueueCnt - 1] = 0;
+        --mLoadQueueCnt;
+        SetNextState(0x1F);
+    }
+}
+
 // FUNCTION: SWBF2 0x00632790
 void SaveFsm::Enter_Save_Error()
 {
@@ -500,6 +634,25 @@ void SaveFsm::Enter_Save_Error()
     mBtnDefault = 2;
     mLoadSavePopupAnswer = -1;
     ShowLoadSavePopup(true);
+}
+
+// FUNCTION: SWBF2 0x006327e0
+void SaveFsm::Update_Save_Error()
+{
+    if (mLoadSavePopupAnswer == -1)
+    {
+        return;
+    }
+    ShowLoadSavePopup(false);
+    if (mLoadSavePopupAnswer == 1)
+    {
+        SetNextState(0xE);
+    }
+    else
+    {
+        SetNextState(4);
+        mLoadQueueCnt = 0;
+    }
 }
 
 // FUNCTION: SWBF2 0x00632820
@@ -513,6 +666,25 @@ void SaveFsm::Enter_Save_TooManyFiles()
     ShowLoadSavePopup(true);
 }
 
+// FUNCTION: SWBF2 0x00632870
+void SaveFsm::Update_Save_TooManyFiles()
+{
+    if (mLoadSavePopupAnswer == -1)
+    {
+        return;
+    }
+    ShowLoadSavePopup(false);
+    if (mLoadSavePopupAnswer == 1)
+    {
+        SetNextState(4);
+    }
+    else
+    {
+        SetNextState(4);
+        mLoadQueueCnt = 0;
+    }
+}
+
 // FUNCTION: SWBF2 0x006328b0
 void SaveFsm::Enter_Load_Start()
 {
@@ -521,7 +693,7 @@ void SaveFsm::Enter_Load_Start()
     mBtns = 0;
     ShowLoadSavePopup(true);
     mCurSaveFile = mSaveDevice.FindFileInList(mLoadFilename[mLoadQueueCnt - 1], mLoadType[mLoadQueueCnt - 1]);
-    sub_631640();
+    JournalSaveFile(mCurSaveFile);
     if (mCurSaveFile)
     {
         SetNextState(24);
@@ -603,7 +775,7 @@ void SaveFsm::Enter_Delete()
     mBtns = 0;
     ShowLoadSavePopup(true);
     mCurSaveFile = mSaveDevice.FindFileInList(mLoadFilename[mLoadQueueCnt - 1], mLoadType[mLoadQueueCnt - 1]);
-    sub_631640();
+    JournalSaveFile(mCurSaveFile);
     if (mCurSaveFile)
     {
         int iResult = mSaveDevice.StartDeleteFile(mLoadFilename[mLoadQueueCnt - 1], mLoadType[mLoadQueueCnt - 1], 0);
@@ -751,23 +923,23 @@ void SaveFsm::Update_InitialMemcardCheck_CheckProfile()
     }
 
     mSaveDevice.ResetFileIterator();
-    void* pSlot = GetNextSaveFile(&mSaveDevice);
+    SaveFile* pSlot = GetNextSaveFile(mSaveDevice);
     bool bFlag1 = false, bFlag2 = false, bFlag3 = false;
     while (pSlot)
     {
-        if (((SaveFile*)pSlot)->GetType() == 1)
+        if (pSlot->GetType() == 1)
         {
             bFlag1 = true;
         }
-        if (((SaveFile*)pSlot)->GetType() == 2)
+        if (pSlot->GetType() == 2)
         {
             bFlag2 = true;
         }
-        if (((SaveFile*)pSlot)->GetType() == 3)
+        if (pSlot->GetType() == 3)
         {
             bFlag3 = true;
         }
-        pSlot = GetNextSaveFile(&mSaveDevice);
+        pSlot = GetNextSaveFile(mSaveDevice);
     }
 
     if (bFlag1 && bFlag2 && bFlag3)
@@ -927,169 +1099,6 @@ void SaveFsm::Update_PreOp_Format()
     else
     {
         SetNextState(8);
-    }
-}
-
-// FUNCTION: SWBF2 0x00632440
-void SaveFsm::Update_Save_Overwrite()
-{
-    if (mLoadSavePopupAnswer == -1)
-    {
-        return;
-    }
-    ShowLoadSavePopup(false);
-    if (mLoadSavePopupAnswer == 1)
-    {
-        SetNextState(0x11);
-    }
-    else
-    {
-        SetNextState(4);
-        mLoadQueueCnt = 0;
-    }
-}
-
-// FUNCTION: SWBF2 0x00632500
-void SaveFsm::Update_Save_Create()
-{
-    int iResult = mSaveDevice.CycleCreateFile(mLoadFilename[mLoadQueueCnt - 1], mLoadType[mLoadQueueCnt - 1]);
-    if (iResult == 1)
-    {
-        return;
-    }
-    if (iResult)
-    {
-        if (iResult == -6)
-        {
-            SetNextState(22);
-        }
-        else
-        {
-            SetNextState(21);
-        }
-    }
-    else
-    {
-        SetNextState(0x11);
-    }
-}
-
-// FUNCTION: SWBF2 0x006325c0
-void SaveFsm::Update_Save_Open()
-{
-    int iResult = mSaveDevice.CycleOpenFile(*mCurSaveFile, false);
-    if (iResult == 1)
-    {
-        return;
-    }
-    if (iResult)
-    {
-        mSaveErrorAfterClose = true;
-        SetNextState(0x14);
-    }
-    else
-    {
-        SetNextState(0x12);
-    }
-}
-
-// FUNCTION: SWBF2 0x00632660
-void SaveFsm::Update_Save_WriteChecksum()
-{
-    int iResult = mSaveDevice.CycleWriteFile(*mCurSaveFile, &mChecksum, CRC_SIZE);
-    if (iResult == 1)
-    {
-        return;
-    }
-    if (iResult)
-    {
-        mSaveErrorAfterClose = true;
-        SetNextState(0x14);
-    }
-    else
-    {
-        SetNextState(0x13);
-    }
-}
-
-// FUNCTION: SWBF2 0x006326d0
-void SaveFsm::Update_Save_WriteData()
-{
-    int iResult = mSaveDevice.CycleWriteFile(*mCurSaveFile, mLoadDest[mLoadQueueCnt - 1], mLoadSize[mLoadQueueCnt - 1]);
-    if (iResult == 1)
-    {
-        return;
-    }
-    if (iResult == 0)
-    {
-        SetNextState(0x14);
-        return;
-    }
-    mSaveErrorAfterClose = true;
-    SetNextState(0x14);
-}
-
-// FUNCTION: SWBF2 0x00632720
-void SaveFsm::Update_Save_Close()
-{
-    int iResult = mSaveDevice.CycleCloseFile(*mCurSaveFile, false);
-    if (iResult == 1)
-    {
-        return;
-    }
-    if (iResult)
-    {
-        SetNextState(21);
-    }
-    else if (mSaveErrorAfterClose == true)
-    {
-        SetNextState(21);
-    }
-    else
-    {
-        ShowLoadSavePopup(false);
-        PblUnicode::ustrncnv(mLoadFilename[mLoadQueueCnt - 1], "", 66);
-        mLoadDest[mLoadQueueCnt - 1] = 0;
-        --mLoadQueueCnt;
-        SetNextState(0x1F);
-    }
-}
-
-// FUNCTION: SWBF2 0x006327e0
-void SaveFsm::Update_Save_Error()
-{
-    if (mLoadSavePopupAnswer == -1)
-    {
-        return;
-    }
-    ShowLoadSavePopup(false);
-    if (mLoadSavePopupAnswer == 1)
-    {
-        SetNextState(0xE);
-    }
-    else
-    {
-        SetNextState(4);
-        mLoadQueueCnt = 0;
-    }
-}
-
-// FUNCTION: SWBF2 0x00632870
-void SaveFsm::Update_Save_TooManyFiles()
-{
-    if (mLoadSavePopupAnswer == -1)
-    {
-        return;
-    }
-    ShowLoadSavePopup(false);
-    if (mLoadSavePopupAnswer == 1)
-    {
-        SetNextState(4);
-    }
-    else
-    {
-        SetNextState(4);
-        mLoadQueueCnt = 0;
     }
 }
 
@@ -1268,13 +1277,3 @@ bool SaveFsm::GetSuccess() const
     return mCurState == 3;
 }
 
-// FUNCTION: SWBF2 0x00631630
-void* GetNextSaveFile(void* pDevice)
-{
-    return ((SaveDevice*)pDevice)->GetNextFile();
-}
-
-// FUNCTION: SWBF2 0x00631640
-void sub_631640()
-{
-}

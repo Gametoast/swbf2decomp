@@ -21,206 +21,6 @@
 #include "PebbleFL/Common/PblMath.h"
 #include <float.h>
 
-// FUNCTION: SWBF2 0x0061f490
-const EntityClass* PlayerStats::GetFavoriteSoldierClass(int) const
-{
-    float bestTime = 0.0f;
-    int bestClass = 0, bestTeam = 0;
-    for (int team = 0; team < MAX_STAT_TEAMS; ++team)
-    {
-        for (int slot = 0; slot < MAX_STAT_CLASSES; ++slot)
-        {
-            if (mTimePlayedPerClassList[team][slot] && mTimePlayedPerClass[team][slot]._val > bestTime)
-            {
-                bestTime = mTimePlayedPerClass[team][slot]._val;
-                bestClass = slot;
-                bestTeam = team;
-            }
-        }
-    }
-    return mTimePlayedPerClassList[bestTeam][bestClass];
-}
-
-// FUNCTION: SWBF2 0x0061f540
-float PlayerStats::GetFavoriteSoldierTime(int) const
-{
-    float bestTime = 0.0f;
-    for (int team = 0; team < MAX_STAT_TEAMS; ++team)
-    {
-        for (int slot = 0; slot < MAX_STAT_CLASSES; ++slot)
-        {
-            if (mTimePlayedPerClassList[team][slot] && mTimePlayedPerClass[team][slot]._val > bestTime)
-            {
-                bestTime = mTimePlayedPerClass[team][slot]._val;
-            }
-        }
-    }
-    return bestTime;
-}
-
-// FUNCTION: SWBF2 0x0061f5c0
-const WeaponClass* PlayerStats::GetFavoriteWeaponClass(int) const
-{
-    float bestTime = 0.0f;
-    int bestWeapon = 0, bestTeam = 0;
-    for (int team = 0; team < MAX_STAT_TEAMS; ++team)
-    {
-        for (int slot = 0; slot < MAX_STAT_WEAPONS; ++slot)
-        {
-            if (mTimePlayedPerWeaponList[team][slot] && mTimePlayedPerWeapon[team][slot]._val > bestTime)
-            {
-                bestTime = mTimePlayedPerWeapon[team][slot]._val;
-                bestWeapon = slot;
-                bestTeam = team;
-            }
-        }
-    }
-    return mTimePlayedPerWeaponList[bestTeam][bestWeapon];
-}
-
-// FUNCTION: SWBF2 0x0061f6f0
-float PlayerStats::GetFavoriteWeaponTime(int) const
-{
-    float bestTime = 0.0f;
-    for (int team = 0; team < MAX_STAT_TEAMS; ++team)
-    {
-        for (int slot = 0; slot < MAX_STAT_WEAPONS; ++slot)
-        {
-            if (mTimePlayedPerWeaponList[team][slot] && mTimePlayedPerWeapon[team][slot]._val > bestTime)
-            {
-                bestTime = mTimePlayedPerWeapon[team][slot]._val;
-            }
-        }
-    }
-    return bestTime;
-}
-
-// FUNCTION: SWBF2 0x0061f7d0
-const EntityClass* PlayerStats::GetFavoriteVehicleClass(int) const
-{
-    float bestTime = 0.0f;
-    int bestVehicle = 0, bestTeam = 0;
-    for (int team = 0; team < MAX_STAT_TEAMS; ++team)
-    {
-        for (int slot = 0; slot < MAX_STAT_VEHICLES; ++slot)
-        {
-            if (mTimeInsideVehicleList[team][slot] && mTimeInsideVehicle[team][slot]._val > bestTime)
-            {
-                bestTime = mTimeInsideVehicle[team][slot]._val;
-                bestVehicle = slot;
-                bestTeam = team;
-            }
-        }
-    }
-    return mTimeInsideVehicleList[bestTeam][bestVehicle];
-}
-
-// FUNCTION: SWBF2 0x0061f880
-float PlayerStats::GetFavoriteVehicleTime(int) const
-{
-    float bestTime = 0.0f;
-    for (int team = 0; team < MAX_STAT_TEAMS; ++team)
-    {
-        for (int slot = 0; slot < MAX_STAT_VEHICLES; ++slot)
-        {
-            if (mTimeInsideVehicleList[team][slot] && mTimeInsideVehicle[team][slot]._val > bestTime)
-            {
-                bestTime = mTimeInsideVehicle[team][slot]._val;
-            }
-        }
-    }
-    return bestTime;
-}
-
-// FUNCTION: SWBF2 0x0061fc20
-int PlayerStats::GetExperiencePoints(int, int) const
-{
-    return 0;
-}
-
-// FUNCTION: SWBF2 0x0061fad0
-Character* PlayerStats::GetBait(int, int iTeamStat) const
-{
-    int iBest = 0, iBestIndex = 0;
-    const int iOwnTeam = Character::GetPtr(mStatId)->mTeamNumber;
-    for (int iTeam = 0; iTeam < MAX_STAT_TEAMS; ++iTeam)
-    {
-        for (int i = 0; i < Character::sCharacterLimit; ++i)
-        {
-            int iValue = mKillsByPlayer[iTeam][iTeamStat][i]._val;
-            if (iValue > iBest || (iValue == iBest && iTeam != iOwnTeam))
-            {
-                iBest = iValue;
-                iBestIndex = i;
-            }
-        }
-    }
-    return Character::GetPtr(iBestIndex);
-}
-
-// FUNCTION: SWBF2 0x0061fb90
-int PlayerStats::GetBaitVal(int, int iTeamStat) const
-{
-    const int iOwnTeam = Character::GetPtr(mStatId)->mTeamNumber;
-    int iBest = 0;
-    for (int iTeam = 0; iTeam < MAX_STAT_TEAMS; ++iTeam)
-    {
-        for (int i = 0; i < Character::sCharacterLimit; ++i)
-        {
-            int iValue = mKillsByPlayer[iTeam][iTeamStat][i]._val;
-            if (iValue > iBest || (iValue == iBest && iTeam != iOwnTeam))
-            {
-                iBest = iValue;
-            }
-        }
-    }
-    return iBest;
-}
-
-// FUNCTION: SWBF2 0x0061f900
-Character* PlayerStats::GetNemesis(int, int iTeamStat) const
-{
-    int iBest = 0, iBestIndex = 0;
-    const int iStatId = mStatId;
-    const int iCharacterLimit = Character::sCharacterLimit;
-    const int iOwnTeam = Character::GetPtr(iStatId)->mTeamNumber;
-    for (int iTeam = 0; iTeam < MAX_STAT_TEAMS; ++iTeam)
-    {
-        for (int i = 0; i < iCharacterLimit; ++i)
-        {
-            PlayerStats& candidate = Character::GetPlayerStats(Character::GetPtr(i));
-            int iValue = candidate.mKillsByPlayer[iTeam][iTeamStat][iStatId]._val;
-            if (iValue > iBest || (iValue == iBest && iTeam != iOwnTeam))
-            {
-                iBest = iValue;
-                iBestIndex = i;
-            }
-        }
-    }
-    return Character::GetPtr(iBestIndex);
-}
-
-// FUNCTION: SWBF2 0x0061fa00
-int PlayerStats::GetNemesisVal(int, int iTeamStat) const
-{
-    int iBest = 0;
-    const int iStatId = mStatId;
-    const int iOwnTeam = Character::GetPtr(iStatId)->mTeamNumber;
-    for (int iTeam = 0; iTeam < MAX_STAT_TEAMS; ++iTeam)
-    {
-        for (int i = 0; i < Character::sCharacterLimit; ++i)
-        {
-            PlayerStats& candidate = Character::GetPlayerStats(Character::GetPtr(i));
-            int iValue = candidate.mKillsByPlayer[iTeam][iTeamStat][iStatId]._val;
-            if (iValue > iBest || (iValue == iBest && iTeam != iOwnTeam))
-            {
-                iBest = iValue;
-            }
-        }
-    }
-    return iBest;
-}
-
 
 // GLOBAL: SWBF2 0x007e9038
 bool PlayerStats::mStatsActive = true;
@@ -1237,6 +1037,206 @@ bool PlayerStats::IsClassSelectable(int iClassIndex, UnselectableReason* pReason
         }
     }
     return true;
+}
+
+// FUNCTION: SWBF2 0x0061f490
+const EntityClass* PlayerStats::GetFavoriteSoldierClass(int) const
+{
+    float bestTime = 0.0f;
+    int bestClass = 0, bestTeam = 0;
+    for (int team = 0; team < MAX_STAT_TEAMS; ++team)
+    {
+        for (int slot = 0; slot < MAX_STAT_CLASSES; ++slot)
+        {
+            if (mTimePlayedPerClassList[team][slot] && mTimePlayedPerClass[team][slot]._val > bestTime)
+            {
+                bestTime = mTimePlayedPerClass[team][slot]._val;
+                bestClass = slot;
+                bestTeam = team;
+            }
+        }
+    }
+    return mTimePlayedPerClassList[bestTeam][bestClass];
+}
+
+// FUNCTION: SWBF2 0x0061f540
+float PlayerStats::GetFavoriteSoldierTime(int) const
+{
+    float bestTime = 0.0f;
+    for (int team = 0; team < MAX_STAT_TEAMS; ++team)
+    {
+        for (int slot = 0; slot < MAX_STAT_CLASSES; ++slot)
+        {
+            if (mTimePlayedPerClassList[team][slot] && mTimePlayedPerClass[team][slot]._val > bestTime)
+            {
+                bestTime = mTimePlayedPerClass[team][slot]._val;
+            }
+        }
+    }
+    return bestTime;
+}
+
+// FUNCTION: SWBF2 0x0061f5c0
+const WeaponClass* PlayerStats::GetFavoriteWeaponClass(int) const
+{
+    float bestTime = 0.0f;
+    int bestWeapon = 0, bestTeam = 0;
+    for (int team = 0; team < MAX_STAT_TEAMS; ++team)
+    {
+        for (int slot = 0; slot < MAX_STAT_WEAPONS; ++slot)
+        {
+            if (mTimePlayedPerWeaponList[team][slot] && mTimePlayedPerWeapon[team][slot]._val > bestTime)
+            {
+                bestTime = mTimePlayedPerWeapon[team][slot]._val;
+                bestWeapon = slot;
+                bestTeam = team;
+            }
+        }
+    }
+    return mTimePlayedPerWeaponList[bestTeam][bestWeapon];
+}
+
+// FUNCTION: SWBF2 0x0061f6f0
+float PlayerStats::GetFavoriteWeaponTime(int) const
+{
+    float bestTime = 0.0f;
+    for (int team = 0; team < MAX_STAT_TEAMS; ++team)
+    {
+        for (int slot = 0; slot < MAX_STAT_WEAPONS; ++slot)
+        {
+            if (mTimePlayedPerWeaponList[team][slot] && mTimePlayedPerWeapon[team][slot]._val > bestTime)
+            {
+                bestTime = mTimePlayedPerWeapon[team][slot]._val;
+            }
+        }
+    }
+    return bestTime;
+}
+
+// FUNCTION: SWBF2 0x0061f7d0
+const EntityClass* PlayerStats::GetFavoriteVehicleClass(int) const
+{
+    float bestTime = 0.0f;
+    int bestVehicle = 0, bestTeam = 0;
+    for (int team = 0; team < MAX_STAT_TEAMS; ++team)
+    {
+        for (int slot = 0; slot < MAX_STAT_VEHICLES; ++slot)
+        {
+            if (mTimeInsideVehicleList[team][slot] && mTimeInsideVehicle[team][slot]._val > bestTime)
+            {
+                bestTime = mTimeInsideVehicle[team][slot]._val;
+                bestVehicle = slot;
+                bestTeam = team;
+            }
+        }
+    }
+    return mTimeInsideVehicleList[bestTeam][bestVehicle];
+}
+
+// FUNCTION: SWBF2 0x0061f880
+float PlayerStats::GetFavoriteVehicleTime(int) const
+{
+    float bestTime = 0.0f;
+    for (int team = 0; team < MAX_STAT_TEAMS; ++team)
+    {
+        for (int slot = 0; slot < MAX_STAT_VEHICLES; ++slot)
+        {
+            if (mTimeInsideVehicleList[team][slot] && mTimeInsideVehicle[team][slot]._val > bestTime)
+            {
+                bestTime = mTimeInsideVehicle[team][slot]._val;
+            }
+        }
+    }
+    return bestTime;
+}
+
+// FUNCTION: SWBF2 0x0061f900
+Character* PlayerStats::GetNemesis(int, int iTeamStat) const
+{
+    int iBest = 0, iBestIndex = 0;
+    const int iStatId = mStatId;
+    const int iCharacterLimit = Character::sCharacterLimit;
+    const int iOwnTeam = Character::GetPtr(iStatId)->mTeamNumber;
+    for (int iTeam = 0; iTeam < MAX_STAT_TEAMS; ++iTeam)
+    {
+        for (int i = 0; i < iCharacterLimit; ++i)
+        {
+            PlayerStats& candidate = Character::GetPlayerStats(Character::GetPtr(i));
+            int iValue = candidate.mKillsByPlayer[iTeam][iTeamStat][iStatId]._val;
+            if (iValue > iBest || (iValue == iBest && iTeam != iOwnTeam))
+            {
+                iBest = iValue;
+                iBestIndex = i;
+            }
+        }
+    }
+    return Character::GetPtr(iBestIndex);
+}
+
+// FUNCTION: SWBF2 0x0061fa00
+int PlayerStats::GetNemesisVal(int, int iTeamStat) const
+{
+    int iBest = 0;
+    const int iStatId = mStatId;
+    const int iOwnTeam = Character::GetPtr(iStatId)->mTeamNumber;
+    for (int iTeam = 0; iTeam < MAX_STAT_TEAMS; ++iTeam)
+    {
+        for (int i = 0; i < Character::sCharacterLimit; ++i)
+        {
+            PlayerStats& candidate = Character::GetPlayerStats(Character::GetPtr(i));
+            int iValue = candidate.mKillsByPlayer[iTeam][iTeamStat][iStatId]._val;
+            if (iValue > iBest || (iValue == iBest && iTeam != iOwnTeam))
+            {
+                iBest = iValue;
+            }
+        }
+    }
+    return iBest;
+}
+
+// FUNCTION: SWBF2 0x0061fad0
+Character* PlayerStats::GetBait(int, int iTeamStat) const
+{
+    int iBest = 0, iBestIndex = 0;
+    const int iOwnTeam = Character::GetPtr(mStatId)->mTeamNumber;
+    for (int iTeam = 0; iTeam < MAX_STAT_TEAMS; ++iTeam)
+    {
+        for (int i = 0; i < Character::sCharacterLimit; ++i)
+        {
+            int iValue = mKillsByPlayer[iTeam][iTeamStat][i]._val;
+            if (iValue > iBest || (iValue == iBest && iTeam != iOwnTeam))
+            {
+                iBest = iValue;
+                iBestIndex = i;
+            }
+        }
+    }
+    return Character::GetPtr(iBestIndex);
+}
+
+// FUNCTION: SWBF2 0x0061fb90
+int PlayerStats::GetBaitVal(int, int iTeamStat) const
+{
+    const int iOwnTeam = Character::GetPtr(mStatId)->mTeamNumber;
+    int iBest = 0;
+    for (int iTeam = 0; iTeam < MAX_STAT_TEAMS; ++iTeam)
+    {
+        for (int i = 0; i < Character::sCharacterLimit; ++i)
+        {
+            int iValue = mKillsByPlayer[iTeam][iTeamStat][i]._val;
+            if (iValue > iBest || (iValue == iBest && iTeam != iOwnTeam))
+            {
+                iBest = iValue;
+            }
+        }
+    }
+    return iBest;
+}
+
+// FUNCTION: SWBF2 0x0061fc20
+int PlayerStats::GetExperiencePoints(int, int) const
+{
+    return 0;
 }
 
 namespace PopupText
