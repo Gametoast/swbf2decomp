@@ -1,3 +1,5 @@
+#pragma init_seg(lib)
+
 #include <windows.h>
 #include <mmsystem.h>
 

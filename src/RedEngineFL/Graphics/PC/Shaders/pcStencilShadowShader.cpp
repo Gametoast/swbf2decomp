@@ -12,6 +12,8 @@
 #include "RedEngineFL/Graphics/RedOmniLight.h"
 #include "RedEngineFL/Graphics/RedSpotLight.h"
 
+#pragma init_seg(lib)
+
 // GLOBAL: SWBF2 0x00784e30
 // __xmm@3dcccccd3f4ccccd3e4ccccd3f4ccccd
 // GLOBAL: SWBF2 0x00784e40

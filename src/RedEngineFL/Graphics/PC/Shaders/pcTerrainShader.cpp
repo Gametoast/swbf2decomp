@@ -17,6 +17,8 @@
 #include "RedEngineFL/Graphics/PC/pcRedVertexFormat.h"
 #include "RedEngineFL/Graphics/RedCamera.h"
 
+#pragma init_seg(lib)
+
 
 void __cdecl PblTraceP(const char* Format, ...);
 

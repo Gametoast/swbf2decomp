@@ -16,20 +16,9 @@
 #include "RedEngineFL/Graphics/RedOmniLight.h"
 #include "RedEngineFL/Graphics/RedSpotLight.h"
 
+#pragma init_seg(lib)
+
 void __cdecl PblTraceP(const char* Format, ...);
-
-// SYNTHETIC: SWBF2 0x0040a7c0
-// `dynamic initializer for 's_uiSpecularCubeMapHash''
-
-// GLOBAL: SWBF2 0x009ca9c8
-// s_uiSpecularCubeMapHash
-static unsigned int s_uiSpecularCubeMapHash = PblHash("specularcubemap");
-// SYNTHETIC: SWBF2 0x0040a7e0
-// `dynamic initializer for 's_uiSpecularSpotMapHash''
-
-// GLOBAL: SWBF2 0x009ca9d8
-// s_uiSpecularSpotMapHash
-static unsigned int s_uiSpecularSpotMapHash = PblHash("specularspot");
 
 static const float kInv255 = 1.0f / 255.0f;
 static const float kfSpecularSizeInv = 0.3f;
@@ -55,6 +44,68 @@ pcRedShader::EndFuncT pcSpecularLightingShader::EndFuncArray[MAX_PIPELINES];
 // GLOBAL: SWBF2 0x009ca998
 // pcSpecularLightingShader::RenderFuncArray
 pcRedShader::RenderFuncT pcSpecularLightingShader::RenderFuncArray[MAX_PIPELINES];
+
+// SYNTHETIC: SWBF2 0x0040a6f0
+// `dynamic initializer for 'pcSpecularLightingShader::s_uiRenderTypeHash''
+
+// GLOBAL: SWBF2 0x009caa0c
+// pcSpecularLightingShader::s_uiRenderTypeHash
+unsigned int pcSpecularLightingShader::s_uiRenderTypeHash = PblHash("specularlighting");
+
+// SYNTHETIC: SWBF2 0x0040a6b0
+// `dynamic initializer for 'pcSpecularLightingShader::s_Factory''
+// SYNTHETIC: SWBF2 0x0076a020
+// `dynamic atexit destructor for 'pcSpecularLightingShader::s_Factory''
+
+// GLOBAL: SWBF2 0x009ca9a8
+// pcSpecularLightingShader::s_Factory
+pcSpecularLightingShader pcSpecularLightingShader::s_Factory;
+
+// SYNTHETIC: SWBF2 0x0040a6d0
+// `dynamic initializer for 'pcSpecularLightingShader::s_shaderDef''
+// SYNTHETIC: SWBF2 0x0076a040
+// `dynamic atexit destructor for 'pcSpecularLightingShader::s_shaderDef''
+
+// GLOBAL: SWBF2 0x009ca9dc
+// pcSpecularLightingShader::s_shaderDef
+pcRedShaderDef pcSpecularLightingShader::s_shaderDef("specularlighting_shader.xml");
+
+// SYNTHETIC: SWBF2 0x0040a780
+// `dynamic initializer for 's_uiLightVolumeMapHash''
+
+// GLOBAL: SWBF2 0x009caa08
+// s_uiLightVolumeMapHash
+static unsigned int s_uiLightVolumeMapHash = PblHash("attenuation_volume");
+
+// SYNTHETIC: SWBF2 0x0040a7a0
+// `dynamic initializer for 's_uiNormalizationCubeMapHash''
+
+// GLOBAL: SWBF2 0x009ca9cc
+// s_uiNormalizationCubeMapHash
+static unsigned int s_uiNormalizationCubeMapHash = PblHash("cube_normalizationmap");
+
+// SYNTHETIC: SWBF2 0x0040a7e0
+// `dynamic initializer for 's_uiSpecularSpotMapHash''
+
+// GLOBAL: SWBF2 0x009ca9d8
+// s_uiSpecularSpotMapHash
+static unsigned int s_uiSpecularSpotMapHash = PblHash("specularspot");
+
+// SYNTHETIC: SWBF2 0x0040a7c0
+// `dynamic initializer for 's_uiSpecularCubeMapHash''
+
+// GLOBAL: SWBF2 0x009ca9c8
+// s_uiSpecularCubeMapHash
+static unsigned int s_uiSpecularCubeMapHash = PblHash("specularcubemap");
+
+static const float kfSpecPowerDefault = 32.0f;
+
+// SYNTHETIC: SWBF2 0x0040a750
+// `dynamic initializer for 'kfSpecSizeInvDefault''
+
+// GLOBAL: SWBF2 0x009ca9c4
+// kfSpecSizeInvDefault
+static float kfSpecSizeInvDefault = sqrtf(kfSpecPowerDefault) * kfSpecularSizeInv;
 
 // FUNCTION: SWBF2 0x007125a0
 pcSpecularLightingShader::pcSpecularLightingShader()
@@ -608,53 +659,5 @@ void pcSpecularLightingShader::Render_Prog1(const RenderItem* pItem, unsigned in
     }
 }
 
-// SYNTHETIC: SWBF2 0x0040a6f0
-// `dynamic initializer for 'pcSpecularLightingShader::s_uiRenderTypeHash''
-
-// GLOBAL: SWBF2 0x009caa0c
-// pcSpecularLightingShader::s_uiRenderTypeHash
-unsigned int pcSpecularLightingShader::s_uiRenderTypeHash = PblHash("specularlighting");
-
-// SYNTHETIC: SWBF2 0x0040a6b0
-// `dynamic initializer for 'pcSpecularLightingShader::s_Factory''
-// SYNTHETIC: SWBF2 0x0076a020
-// `dynamic atexit destructor for 'pcSpecularLightingShader::s_Factory''
-
-// GLOBAL: SWBF2 0x009ca9a8
-// pcSpecularLightingShader::s_Factory
-pcSpecularLightingShader pcSpecularLightingShader::s_Factory;
-
-// SYNTHETIC: SWBF2 0x0040a6d0
-// `dynamic initializer for 'pcSpecularLightingShader::s_shaderDef''
-// SYNTHETIC: SWBF2 0x0076a040
-// `dynamic atexit destructor for 'pcSpecularLightingShader::s_shaderDef''
-
-// GLOBAL: SWBF2 0x009ca9dc
-// pcSpecularLightingShader::s_shaderDef
-pcRedShaderDef pcSpecularLightingShader::s_shaderDef("specularlighting_shader.xml");
-
 // GLOBAL: SWBF2 0x009ca96c
 unsigned int g_pcSpecularLightingShader;
-
-// SYNTHETIC: SWBF2 0x0040a780
-// `dynamic initializer for 's_uiLightVolumeMapHash''
-
-// GLOBAL: SWBF2 0x009caa08
-// s_uiLightVolumeMapHash
-static unsigned int s_uiLightVolumeMapHash = PblHash("attenuation_volume");
-
-// SYNTHETIC: SWBF2 0x0040a7a0
-// `dynamic initializer for 's_uiNormalizationCubeMapHash''
-
-// GLOBAL: SWBF2 0x009ca9cc
-// s_uiNormalizationCubeMapHash
-static unsigned int s_uiNormalizationCubeMapHash = PblHash("cube_normalizationmap");
-
-static const float kfSpecPowerDefault = 32.0f;
-
-// SYNTHETIC: SWBF2 0x0040a750
-// `dynamic initializer for 'kfSpecSizeInvDefault''
-
-// GLOBAL: SWBF2 0x009ca9c4
-// kfSpecSizeInvDefault
-static float kfSpecSizeInvDefault = sqrtf(kfSpecPowerDefault) * kfSpecularSizeInv;

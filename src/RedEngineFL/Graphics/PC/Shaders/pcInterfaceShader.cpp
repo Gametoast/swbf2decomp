@@ -13,6 +13,8 @@
 #include "RedEngineFL/Graphics/RedMaterial.h"
 #include "PebbleFL/Common/PblMatrix.h"
 
+#pragma init_seg(lib)
+
 void __cdecl PblTraceP(const char* Format, ...);
 
 // GLOBAL: SWBF2 0x009c94f4

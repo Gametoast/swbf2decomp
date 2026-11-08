@@ -13,6 +13,8 @@
 
 #include "PebbleFL/Common/PblChunk.h"
 
+#pragma init_seg(lib)
+
 void __cdecl PblTraceP(const char* Format, ...);
 
 // GLOBAL: SWBF2 0x009ca840

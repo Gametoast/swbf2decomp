@@ -3,6 +3,8 @@
 #include "PblQuaternion.h"
 #include "PblVector.h"
 
+#pragma init_seg(lib)
+
 // GLOBAL: SWBF2 0x00785af0
 // __xmm@3b490fdb3b490fdb3b490fdb3b490fdb
 

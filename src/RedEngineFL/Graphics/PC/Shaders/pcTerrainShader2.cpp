@@ -15,6 +15,8 @@
 #include "RedEngineFL/Graphics/PC/pcRedTexture.h"
 #include "RedEngineFL/Graphics/PC/pcRedVertexFormat.h"
 
+#pragma init_seg(lib)
+
 // GLOBAL: SWBF2 0x00784560
 // __xmm@3f68f5c33f68f5c33f68f5c33f68f5c3
 // GLOBAL: SWBF2 0x00784570

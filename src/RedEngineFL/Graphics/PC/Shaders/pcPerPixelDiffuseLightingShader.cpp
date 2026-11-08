@@ -15,7 +15,45 @@
 #include "RedEngineFL/Graphics/RedOmniLight.h"
 #include "RedEngineFL/Graphics/RedSpotLight.h"
 
+#pragma init_seg(lib)
+
 void __cdecl PblTraceP(const char* Format, ...);
+
+// SYNTHETIC: SWBF2 0x0040a5f0
+// `dynamic initializer for 'pcPerPixelDiffuseLightingShader::s_uiRenderTypeHash''
+// GLOBAL: SWBF2 0x009ca938
+// pcPerPixelDiffuseLightingShader::s_uiRenderTypeHash
+unsigned int pcPerPixelDiffuseLightingShader::s_uiRenderTypeHash = PblHash("perpixeldiffuselighting");
+
+// SYNTHETIC: SWBF2 0x0040a5b0
+// `dynamic initializer for 'pcPerPixelDiffuseLightingShader::s_Factory''
+// SYNTHETIC: SWBF2 0x00769ff0
+// `dynamic atexit destructor for 'pcPerPixelDiffuseLightingShader::s_Factory''
+// GLOBAL: SWBF2 0x009ca940
+// pcPerPixelDiffuseLightingShader::s_Factory
+pcPerPixelDiffuseLightingShader pcPerPixelDiffuseLightingShader::s_Factory;
+
+// SYNTHETIC: SWBF2 0x0040a5d0
+// `dynamic initializer for 'pcPerPixelDiffuseLightingShader::s_shaderDef''
+// SYNTHETIC: SWBF2 0x0076a010
+// `dynamic atexit destructor for 'pcPerPixelDiffuseLightingShader::s_shaderDef''
+// GLOBAL: SWBF2 0x009ca90c
+// pcPerPixelDiffuseLightingShader::s_shaderDef
+pcRedShaderDef pcPerPixelDiffuseLightingShader::s_shaderDef("perpixeldiffuselighting_shader.xml");
+
+// SYNTHETIC: SWBF2 0x0040a670
+// `dynamic initializer for 's_uiLightVolumeMapHash''
+
+// GLOBAL: SWBF2 0x009ca968
+// s_uiLightVolumeMapHash
+static unsigned int s_uiLightVolumeMapHash = PblHash("attenuation_volume");
+
+// SYNTHETIC: SWBF2 0x0040a690
+// `dynamic initializer for 's_uiNormalizationCubeMapHash''
+
+// GLOBAL: SWBF2 0x009ca93c
+// s_uiNormalizationCubeMapHash
+static unsigned int s_uiNormalizationCubeMapHash = PblHash("cube_normalizationmap");
 
 // SYNTHETIC: SWBF2 0x0040a650
 // `dynamic initializer for 's_uiDefaultSpotLightMapHash''
@@ -23,18 +61,6 @@ void __cdecl PblTraceP(const char* Format, ...);
 // GLOBAL: SWBF2 0x009ca964
 // s_uiDefaultSpotLightMapHash
 static unsigned int s_uiDefaultSpotLightMapHash = PblHash("default_spotlight");
-// SYNTHETIC: SWBF2 0x0040a670
-// `dynamic initializer for 's_uiLightVolumeMapHash''
-
-// GLOBAL: SWBF2 0x009ca968
-// s_uiLightVolumeMapHash
-static unsigned int s_uiLightVolumeMapHash = PblHash("attenuation_volume");
-// SYNTHETIC: SWBF2 0x0040a690
-// `dynamic initializer for 's_uiNormalizationCubeMapHash''
-
-// GLOBAL: SWBF2 0x009ca93c
-// s_uiNormalizationCubeMapHash
-static unsigned int s_uiNormalizationCubeMapHash = PblHash("cube_normalizationmap");
 
 // GLOBAL: SWBF2 0x007854d8
 static const unsigned int MAX_LIGHTS_PER_STATE[24] =
@@ -573,28 +599,6 @@ void pcPerPixelDiffuseLightingShader::_Read(PblFileChunk& chunk) const
         }
     }
 }
-
-// SYNTHETIC: SWBF2 0x0040a5f0
-// `dynamic initializer for 'pcPerPixelDiffuseLightingShader::s_uiRenderTypeHash''
-// GLOBAL: SWBF2 0x009ca938
-// pcPerPixelDiffuseLightingShader::s_uiRenderTypeHash
-unsigned int pcPerPixelDiffuseLightingShader::s_uiRenderTypeHash = PblHash("perpixeldiffuselighting");
-
-// SYNTHETIC: SWBF2 0x0040a5b0
-// `dynamic initializer for 'pcPerPixelDiffuseLightingShader::s_Factory''
-// SYNTHETIC: SWBF2 0x00769ff0
-// `dynamic atexit destructor for 'pcPerPixelDiffuseLightingShader::s_Factory''
-// GLOBAL: SWBF2 0x009ca940
-// pcPerPixelDiffuseLightingShader::s_Factory
-pcPerPixelDiffuseLightingShader pcPerPixelDiffuseLightingShader::s_Factory;
-
-// SYNTHETIC: SWBF2 0x0040a5d0
-// `dynamic initializer for 'pcPerPixelDiffuseLightingShader::s_shaderDef''
-// SYNTHETIC: SWBF2 0x0076a010
-// `dynamic atexit destructor for 'pcPerPixelDiffuseLightingShader::s_shaderDef''
-// GLOBAL: SWBF2 0x009ca90c
-// pcPerPixelDiffuseLightingShader::s_shaderDef
-pcRedShaderDef pcPerPixelDiffuseLightingShader::s_shaderDef("perpixeldiffuselighting_shader.xml");
 
 // SYNTHETIC: SWBF2 0x0040a630
 // PblMath::`dynamic initializer for 'fOneOverTwoPi''

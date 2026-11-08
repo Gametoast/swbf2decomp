@@ -8,6 +8,8 @@
 #include "RedEngineFL/Graphics/PC/pcRedPrimitive.h"
 #include "RedEngineFL/Graphics/PC/pcRedRenderer.h"
 
+#pragma init_seg(lib)
+
 void __cdecl PblTraceP(const char* Format, ...);
 
 // GLOBAL: SWBF2 0x009c9bec
@@ -25,14 +27,6 @@ pcRedShader::EndFuncT pcClearShader::EndFuncArray[MAX_PIPELINES];
 // GLOBAL: SWBF2 0x009c9c14
 // pcClearShader::RenderFuncArray
 pcRedShader::RenderFuncT pcClearShader::RenderFuncArray[MAX_PIPELINES];
-// SYNTHETIC: SWBF2 0x00409de0
-// `dynamic initializer for 'pcClearShader::s_shaderDef''
-// SYNTHETIC: SWBF2 0x00769e00
-// `dynamic atexit destructor for 'pcClearShader::s_shaderDef''
-
-// GLOBAL: SWBF2 0x009c9c5c
-// pcClearShader::s_shaderDef
-pcRedShaderDef pcClearShader::s_shaderDef;
 
 // FUNCTION: SWBF2 0x00706840
 pcClearShader::pcClearShader()
@@ -305,6 +299,15 @@ unsigned int pcClearShader::s_uiRenderTypeHash = PblHash("clear");
 // GLOBAL: SWBF2 0x009c9c24
 // pcClearShader::s_Factory
 pcClearShader pcClearShader::s_Factory;
+
+// SYNTHETIC: SWBF2 0x00409de0
+// `dynamic initializer for 'pcClearShader::s_shaderDef''
+// SYNTHETIC: SWBF2 0x00769e00
+// `dynamic atexit destructor for 'pcClearShader::s_shaderDef''
+
+// GLOBAL: SWBF2 0x009c9c5c
+// pcClearShader::s_shaderDef
+pcRedShaderDef pcClearShader::s_shaderDef;
 
 // SYNTHETIC: SWBF2 0x00409e20
 // PblMath::`dynamic initializer for 'fOneOverHalfPi''

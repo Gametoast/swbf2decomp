@@ -9,6 +9,8 @@
 #include "RedEngineFL/Graphics/PC/pcRedRenderer.h"
 #include "RedEngineFL/Graphics/RedMaterial.h"
 
+#pragma init_seg(lib)
+
 void __cdecl PblTraceP(const char* Format, ...);
 
 // GLOBAL: SWBF2 0x009caabc
@@ -29,13 +31,6 @@ pcRedShader::EndFuncT pcHDRShader::EndFuncArray[MAX_PIPELINES];
 // GLOBAL: SWBF2 0x009caa38
 // pcHDRShader::RenderFuncArray
 pcRedShader::RenderFuncT pcHDRShader::RenderFuncArray[MAX_PIPELINES];
-// SYNTHETIC: SWBF2 0x0040a820
-// `dynamic initializer for 'pcHDRShader::s_shaderDef''
-// SYNTHETIC: SWBF2 0x0076a070
-// `dynamic atexit destructor for 'pcHDRShader::s_shaderDef''
-// GLOBAL: SWBF2 0x009caa48
-// pcHDRShader::s_shaderDef
-pcRedShaderDef pcHDRShader::s_shaderDef("hdr_shader.xml");
 
 // FUNCTION: SWBF2 0x007138b0
 pcHDRShader::pcHDRShader()
@@ -319,6 +314,14 @@ unsigned int pcHDRShader::s_uiRenderTypeHash = PblHash("hdr");
 // GLOBAL: SWBF2 0x009caa80
 // pcHDRShader::s_Factory
 pcHDRShader pcHDRShader::s_Factory;
+
+// SYNTHETIC: SWBF2 0x0040a820
+// `dynamic initializer for 'pcHDRShader::s_shaderDef''
+// SYNTHETIC: SWBF2 0x0076a070
+// `dynamic atexit destructor for 'pcHDRShader::s_shaderDef''
+// GLOBAL: SWBF2 0x009caa48
+// pcHDRShader::s_shaderDef
+pcRedShaderDef pcHDRShader::s_shaderDef("hdr_shader.xml");
 
 // GLOBAL: SWBF2 0x009caa44
 unsigned int g_pcHDRShader;

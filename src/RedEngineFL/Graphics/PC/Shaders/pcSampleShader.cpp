@@ -9,6 +9,8 @@
 #include "PebbleFL/Common/PblMatrix.h"
 #include <string.h>
 
+#pragma init_seg(lib)
+
 void __cdecl PblTraceP(const char* Format, ...);
 
 class PblMatrix;
@@ -31,15 +33,6 @@ pcRedShader::EndFuncT pcSampleShader::EndFuncArray[MAX_PIPELINES];
 // GLOBAL: SWBF2 0x009c9ac0
 // pcSampleShader::RenderFuncArray
 pcRedShader::RenderFuncT pcSampleShader::RenderFuncArray[MAX_PIPELINES];
-
-// SYNTHETIC: SWBF2 0x00409ca0
-// `dynamic initializer for 'pcSampleShader::s_shaderDef''
-// SYNTHETIC: SWBF2 0x00769da0
-// `dynamic atexit destructor for 'pcSampleShader::s_shaderDef''
-
-// GLOBAL: SWBF2 0x009c9b24
-// pcSampleShader::s_shaderDef
-pcRedShaderDef pcSampleShader::s_shaderDef("sample_shader.xml");
 
 // FUNCTION: SWBF2 0x00705510
 pcSampleShader::pcSampleShader()
@@ -322,6 +315,15 @@ unsigned int pcSampleShader::s_uiRenderTypeHash = PblHash("sample");
 // GLOBAL: SWBF2 0x009c9ad0
 // pcSampleShader::s_Factory
 pcSampleShader pcSampleShader::s_Factory;
+
+// SYNTHETIC: SWBF2 0x00409ca0
+// `dynamic initializer for 'pcSampleShader::s_shaderDef''
+// SYNTHETIC: SWBF2 0x00769da0
+// `dynamic atexit destructor for 'pcSampleShader::s_shaderDef''
+
+// GLOBAL: SWBF2 0x009c9b24
+// pcSampleShader::s_shaderDef
+pcRedShaderDef pcSampleShader::s_shaderDef("sample_shader.xml");
 
 // GLOBAL: SWBF2 0x009c9acc
 unsigned int g_pcSampleShader;

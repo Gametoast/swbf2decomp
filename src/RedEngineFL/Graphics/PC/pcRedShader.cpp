@@ -12,6 +12,8 @@
 #include "pcRedPixelShader.h"
 #include "pcRedVertexShader.h"
 
+#pragma init_seg(lib)
+
 void __cdecl PblTraceP(const char* Format, ...);
 
 // GLOBAL: SWBF2 0x007f4fe8

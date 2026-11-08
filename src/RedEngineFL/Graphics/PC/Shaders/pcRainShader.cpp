@@ -8,6 +8,8 @@
 #include "RedEngineFL/Graphics/PC/pcRedPrimitive.h"
 #include "RedEngineFL/Graphics/PC/pcRedRenderer.h"
 
+#pragma init_seg(lib)
+
 void __cdecl PblTraceP(const char* Format, ...);
 
 // GLOBAL: SWBF2 0x009c99f4
@@ -25,15 +27,6 @@ pcRedShader::EndFuncT pcRainShader::EndFuncArray[MAX_PIPELINES];
 // GLOBAL: SWBF2 0x009c9a1c
 // pcRainShader::RenderFuncArray
 pcRedShader::RenderFuncT pcRainShader::RenderFuncArray[MAX_PIPELINES];
-
-// SYNTHETIC: SWBF2 0x00409c00
-// `dynamic initializer for 'pcRainShader::s_shaderDef''
-// SYNTHETIC: SWBF2 0x00769d70
-// `dynamic atexit destructor for 'pcRainShader::s_shaderDef''
-
-// GLOBAL: SWBF2 0x009c9a68
-// pcRainShader::s_shaderDef
-pcRedShaderDef pcRainShader::s_shaderDef("rain_shader.xml");
 
 // FUNCTION: SWBF2 0x00704c60
 pcRainShader::pcRainShader()
@@ -325,6 +318,15 @@ unsigned int pcRainShader::s_uiRenderTypeHash = PblHash("Rain");
 // GLOBAL: SWBF2 0x009c9a30
 // pcRainShader::s_Factory
 pcRainShader pcRainShader::s_Factory;
+
+// SYNTHETIC: SWBF2 0x00409c00
+// `dynamic initializer for 'pcRainShader::s_shaderDef''
+// SYNTHETIC: SWBF2 0x00769d70
+// `dynamic atexit destructor for 'pcRainShader::s_shaderDef''
+
+// GLOBAL: SWBF2 0x009c9a68
+// pcRainShader::s_shaderDef
+pcRedShaderDef pcRainShader::s_shaderDef("rain_shader.xml");
 
 // GLOBAL: SWBF2 0x009c9a2c
 unsigned int g_pcRainShader;

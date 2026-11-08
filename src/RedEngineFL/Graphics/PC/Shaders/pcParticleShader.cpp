@@ -12,6 +12,8 @@
 #include "RedEngineFL/Graphics/RedCamera.h"
 #include "PebbleFL/Common/PblVector.h"
 
+#pragma init_seg(lib)
+
 // GLOBAL: SWBF2 0x007848f0
 // __xmm@0000000000000000000000003f000000
 // GLOBAL: SWBF2 0x00784900
@@ -23,6 +25,31 @@
 
 void __cdecl PblTraceP(const char* Format, ...);
 
+
+// SYNTHETIC: SWBF2 0x004099f0
+// `dynamic initializer for 'pcParticleShader::s_uiRenderTypeHash''
+
+// GLOBAL: SWBF2 0x009c96ec
+// pcParticleShader::s_uiRenderTypeHash
+unsigned int pcParticleShader::s_uiRenderTypeHash = PblHash("Particle");
+
+// SYNTHETIC: SWBF2 0x004099b0
+// `dynamic initializer for 'pcParticleShader::s_Factory''
+// SYNTHETIC: SWBF2 0x00769cc0
+// `dynamic atexit destructor for 'pcParticleShader::s_Factory''
+
+// GLOBAL: SWBF2 0x009c96f0
+// pcParticleShader::s_Factory
+pcParticleShader pcParticleShader::s_Factory;
+
+// SYNTHETIC: SWBF2 0x004099d0
+// `dynamic initializer for 'pcParticleShader::s_shaderDef''
+// SYNTHETIC: SWBF2 0x00769ce0
+// `dynamic atexit destructor for 'pcParticleShader::s_shaderDef''
+
+// GLOBAL: SWBF2 0x009c9780
+// pcParticleShader::s_shaderDef
+pcRedShaderDef pcParticleShader::s_shaderDef("particle_shader.xml");
 
 // SYNTHETIC: SWBF2 0x00409a70
 // `dynamic initializer for 's_blurTexMatrix''
@@ -461,31 +488,6 @@ void pcParticleShader::_Read(PblFileChunk& chunk) const
 void pcParticleShader::_StaticInit() const
 {
 }
-
-// SYNTHETIC: SWBF2 0x004099f0
-// `dynamic initializer for 'pcParticleShader::s_uiRenderTypeHash''
-
-// GLOBAL: SWBF2 0x009c96ec
-// pcParticleShader::s_uiRenderTypeHash
-unsigned int pcParticleShader::s_uiRenderTypeHash = PblHash("Particle");
-
-// SYNTHETIC: SWBF2 0x004099b0
-// `dynamic initializer for 'pcParticleShader::s_Factory''
-// SYNTHETIC: SWBF2 0x00769cc0
-// `dynamic atexit destructor for 'pcParticleShader::s_Factory''
-
-// GLOBAL: SWBF2 0x009c96f0
-// pcParticleShader::s_Factory
-pcParticleShader pcParticleShader::s_Factory;
-
-// SYNTHETIC: SWBF2 0x004099d0
-// `dynamic initializer for 'pcParticleShader::s_shaderDef''
-// SYNTHETIC: SWBF2 0x00769ce0
-// `dynamic atexit destructor for 'pcParticleShader::s_shaderDef''
-
-// GLOBAL: SWBF2 0x009c9780
-// pcParticleShader::s_shaderDef
-pcRedShaderDef pcParticleShader::s_shaderDef("particle_shader.xml");
 
 // SYNTHETIC: SWBF2 0x00409a50
 // `dynamic initializer for 'kuiLinearRamp''

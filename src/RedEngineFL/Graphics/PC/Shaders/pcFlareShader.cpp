@@ -7,6 +7,8 @@
 #include "RedEngineFL/Graphics/PC/pcRedPrimitive.h"
 #include "RedEngineFL/Graphics/PC/pcRedRenderer.h"
 
+#pragma init_seg(lib)
+
 void __cdecl PblTraceP(const char* Format, ...);
 
 // GLOBAL: SWBF2 0x009c9b50
@@ -24,15 +26,6 @@ pcRedShader::EndFuncT pcFlareShader::EndFuncArray[MAX_PIPELINES];
 // GLOBAL: SWBF2 0x009c9b78
 // pcFlareShader::RenderFuncArray
 pcRedShader::RenderFuncT pcFlareShader::RenderFuncArray[MAX_PIPELINES];
-
-// SYNTHETIC: SWBF2 0x00409d40
-// `dynamic initializer for 'pcFlareShader::s_shaderDef''
-// SYNTHETIC: SWBF2 0x00769dd0
-// `dynamic atexit destructor for 'pcFlareShader::s_shaderDef''
-
-// GLOBAL: SWBF2 0x009c9bc0
-// pcFlareShader::s_shaderDef
-pcRedShaderDef pcFlareShader::s_shaderDef("flare_shader.xml");
 
 // FUNCTION: SWBF2 0x00705ec0
 pcFlareShader::pcFlareShader()
@@ -352,6 +345,15 @@ unsigned int pcFlareShader::s_uiRenderTypeHash = PblHash("flare");
 // GLOBAL: SWBF2 0x009c9b90
 // pcFlareShader::s_Factory
 pcFlareShader pcFlareShader::s_Factory;
+
+// SYNTHETIC: SWBF2 0x00409d40
+// `dynamic initializer for 'pcFlareShader::s_shaderDef''
+// SYNTHETIC: SWBF2 0x00769dd0
+// `dynamic atexit destructor for 'pcFlareShader::s_shaderDef''
+
+// GLOBAL: SWBF2 0x009c9bc0
+// pcFlareShader::s_shaderDef
+pcRedShaderDef pcFlareShader::s_shaderDef("flare_shader.xml");
 
 // GLOBAL: SWBF2 0x009c9b84
 unsigned int g_pcFlareShader;

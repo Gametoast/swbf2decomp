@@ -1,3 +1,5 @@
+#pragma init_seg(lib)
+
 #include <d3dx9math.h>
 #include "RedEngineFL/Util/RedCommandConsole.h"
 #include "RedEngineFL/Graphics/PC/Shaders/pcStencilShadowShader.h"

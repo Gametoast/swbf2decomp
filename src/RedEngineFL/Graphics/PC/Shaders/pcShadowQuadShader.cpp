@@ -7,6 +7,8 @@
 #include "RedEngineFL/Graphics/PC/pcRedPrimitive.h"
 #include "RedEngineFL/Graphics/PC/pcRedRenderer.h"
 
+#pragma init_seg(lib)
+
 void __cdecl PblTraceP(const char* Format, ...);
 
 class PblMatrix;
@@ -30,15 +32,6 @@ pcRedShader::EndFuncT pcShadowQuadShader::EndFuncArray[MAX_PIPELINES];
 // GLOBAL: SWBF2 0x009c9da8
 // pcShadowQuadShader::RenderFuncArray
 pcRedShader::RenderFuncT pcShadowQuadShader::RenderFuncArray[MAX_PIPELINES];
-
-// SYNTHETIC: SWBF2 0x00409f20
-// `dynamic initializer for 'pcShadowQuadShader::s_shaderDef''
-// SYNTHETIC: SWBF2 0x00769e60
-// `dynamic atexit destructor for 'pcShadowQuadShader::s_shaderDef''
-
-// GLOBAL: SWBF2 0x009c9de8
-// pcShadowQuadShader::s_shaderDef
-pcRedShaderDef pcShadowQuadShader::s_shaderDef("shadowquad_shader.xml");
 
 // FUNCTION: SWBF2 0x00707f20
 pcShadowQuadShader::pcShadowQuadShader()
@@ -279,6 +272,15 @@ unsigned int pcShadowQuadShader::s_uiRenderTypeHash = PblHash("ShadowQuad");
 // GLOBAL: SWBF2 0x009c9dbc
 // pcShadowQuadShader::s_Factory
 pcShadowQuadShader pcShadowQuadShader::s_Factory;
+
+// SYNTHETIC: SWBF2 0x00409f20
+// `dynamic initializer for 'pcShadowQuadShader::s_shaderDef''
+// SYNTHETIC: SWBF2 0x00769e60
+// `dynamic atexit destructor for 'pcShadowQuadShader::s_shaderDef''
+
+// GLOBAL: SWBF2 0x009c9de8
+// pcShadowQuadShader::s_shaderDef
+pcRedShaderDef pcShadowQuadShader::s_shaderDef("shadowquad_shader.xml");
 
 // GLOBAL: SWBF2 0x009c9db8
 unsigned int g_pcShadowQuadShader;

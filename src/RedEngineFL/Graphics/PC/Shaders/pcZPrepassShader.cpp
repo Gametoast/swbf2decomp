@@ -12,6 +12,8 @@
 #include "RedEngineFL/Graphics/PC/pcRedTexture.h"
 #include "PebbleFL/Common/PblMatrix.h"
 
+#pragma init_seg(lib)
+
 void __cdecl PblTraceP(const char* Format, ...);
 
 class PblMatrix;

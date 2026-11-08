@@ -7,6 +7,8 @@
 #include "RedEngineFL/Graphics/PC/pcRedRenderer.h"
 #include "RedEngineFL/Graphics/PC/pcRedVertexFormat.h"
 
+#pragma init_seg(lib)
+
 void __cdecl PblTraceP(const char* Format, ...);
 
 // GLOBAL: SWBF2 0x009ca0dc
@@ -24,15 +26,6 @@ pcRedShader::EndFuncT pcPreReflectionShader::EndFuncArray[MAX_PIPELINES];
 // GLOBAL: SWBF2 0x009ca104
 // pcPreReflectionShader::RenderFuncArray
 pcRedShader::RenderFuncT pcPreReflectionShader::RenderFuncArray[MAX_PIPELINES];
-
-// SYNTHETIC: SWBF2 0x0040a0b0
-// `dynamic initializer for 'pcPreReflectionShader::s_shaderDef''
-// SYNTHETIC: SWBF2 0x00769ec0
-// `dynamic atexit destructor for 'pcPreReflectionShader::s_shaderDef''
-
-// GLOBAL: SWBF2 0x009ca11c
-// pcPreReflectionShader::s_shaderDef
-pcRedShaderDef pcPreReflectionShader::s_shaderDef("prereflection_shader.xml");
 
 // FUNCTION: SWBF2 0x0070afc0
 pcPreReflectionShader::pcPreReflectionShader()
@@ -236,6 +229,15 @@ unsigned int pcPreReflectionShader::s_uiRenderTypeHash = PblHash("PreReflection"
 // GLOBAL: SWBF2 0x009ca148
 // pcPreReflectionShader::s_Factory
 pcPreReflectionShader pcPreReflectionShader::s_Factory;
+
+// SYNTHETIC: SWBF2 0x0040a0b0
+// `dynamic initializer for 'pcPreReflectionShader::s_shaderDef''
+// SYNTHETIC: SWBF2 0x00769ec0
+// `dynamic atexit destructor for 'pcPreReflectionShader::s_shaderDef''
+
+// GLOBAL: SWBF2 0x009ca11c
+// pcPreReflectionShader::s_shaderDef
+pcRedShaderDef pcPreReflectionShader::s_shaderDef("prereflection_shader.xml");
 
 // GLOBAL: SWBF2 0x009ca110
 unsigned int g_pcPreReflectionShader;

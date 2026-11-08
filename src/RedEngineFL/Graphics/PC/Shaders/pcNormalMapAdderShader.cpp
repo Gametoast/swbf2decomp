@@ -8,6 +8,8 @@
 #include "RedEngineFL/Graphics/PC/pcRedPrimitive.h"
 #include "RedEngineFL/Graphics/PC/pcRedRenderer.h"
 
+#pragma init_seg(lib)
+
 void __cdecl PblTraceP(const char* Format, ...);
 
 // GLOBAL: SWBF2 0x009ca178
@@ -25,6 +27,28 @@ pcRedShader::EndFuncT pcNormalMapAdderShader::EndFuncArray[MAX_PIPELINES];
 // GLOBAL: SWBF2 0x009ca1a0
 // pcNormalMapAdderShader::RenderFuncArray
 pcRedShader::RenderFuncT pcNormalMapAdderShader::RenderFuncArray[MAX_PIPELINES];
+
+// SYNTHETIC: SWBF2 0x0040a170
+// `dynamic initializer for 'pcNormalMapAdderShader::s_uiRenderTypeHash''
+
+// GLOBAL: SWBF2 0x009ca254
+// pcNormalMapAdderShader::s_uiRenderTypeHash
+unsigned int pcNormalMapAdderShader::s_uiRenderTypeHash = PblHash("NormalMapAdder");
+
+// SYNTHETIC: SWBF2 0x0040a190
+// PblMath::`dynamic initializer for 'fOneOverHalfPi''
+
+// SYNTHETIC: SWBF2 0x0040a1b0
+// PblMath::`dynamic initializer for 'fOneOverTwoPi''
+
+// SYNTHETIC: SWBF2 0x0040a130
+// `dynamic initializer for 'pcNormalMapAdderShader::s_Factory''
+// SYNTHETIC: SWBF2 0x00769ed0
+// `dynamic atexit destructor for 'pcNormalMapAdderShader::s_Factory''
+
+// GLOBAL: SWBF2 0x009ca1e8
+// pcNormalMapAdderShader::s_Factory
+pcNormalMapAdderShader pcNormalMapAdderShader::s_Factory;
 
 // SYNTHETIC: SWBF2 0x0040a150
 // `dynamic initializer for 'pcNormalMapAdderShader::s_shaderDef''
@@ -275,28 +299,6 @@ void pcNormalMapAdderShader::_Read(PblFileChunk& chunk) const
 void pcNormalMapAdderShader::_StaticInit() const
 {
 }
-
-// SYNTHETIC: SWBF2 0x0040a170
-// `dynamic initializer for 'pcNormalMapAdderShader::s_uiRenderTypeHash''
-
-// GLOBAL: SWBF2 0x009ca254
-// pcNormalMapAdderShader::s_uiRenderTypeHash
-unsigned int pcNormalMapAdderShader::s_uiRenderTypeHash = PblHash("NormalMapAdder");
-
-// SYNTHETIC: SWBF2 0x0040a190
-// PblMath::`dynamic initializer for 'fOneOverHalfPi''
-
-// SYNTHETIC: SWBF2 0x0040a1b0
-// PblMath::`dynamic initializer for 'fOneOverTwoPi''
-
-// SYNTHETIC: SWBF2 0x0040a130
-// `dynamic initializer for 'pcNormalMapAdderShader::s_Factory''
-// SYNTHETIC: SWBF2 0x00769ed0
-// `dynamic atexit destructor for 'pcNormalMapAdderShader::s_Factory''
-
-// GLOBAL: SWBF2 0x009ca1e8
-// pcNormalMapAdderShader::s_Factory
-pcNormalMapAdderShader pcNormalMapAdderShader::s_Factory;
 
 // GLOBAL: SWBF2 0x009ca1ac
 unsigned int g_pcNormalMapAdderShader;

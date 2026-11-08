@@ -4,9 +4,6 @@
 #include "PebbleFL/Common/PblMatrix.h"
 #include "PebbleFL/Common/PblVector.h"
 
-#pragma warning(disable : 4073)
-#pragma init_seg(lib)
-
 
 // SYNTHETIC: SWBF2 0x0040ae50
 // `dynamic initializer for 'gMatrixIdentity''

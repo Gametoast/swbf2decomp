@@ -12,6 +12,8 @@
 
 #include "PebbleFL/Common/PblMatrix.h"
 
+#pragma init_seg(lib)
+
 // GLOBAL: SWBF2 0x007849d0
 // __xmm@3f800000bf8000000000000000000000
 
@@ -35,15 +37,6 @@ pcRedShader::EndFuncT pcSkyFogShader::EndFuncArray[MAX_PIPELINES];
 // GLOBAL: SWBF2 0x009c98ec
 // pcSkyFogShader::RenderFuncArray
 pcRedShader::RenderFuncT pcSkyFogShader::RenderFuncArray[MAX_PIPELINES];
-
-// SYNTHETIC: SWBF2 0x00409aa0
-// `dynamic initializer for 'pcSkyFogShader::s_shaderDef''
-// SYNTHETIC: SWBF2 0x00769d10
-// `dynamic atexit destructor for 'pcSkyFogShader::s_shaderDef''
-
-// GLOBAL: SWBF2 0x009c9904
-// pcSkyFogShader::s_shaderDef
-pcRedShaderDef pcSkyFogShader::s_shaderDef("skyfog_shader.xml");
 
 // FUNCTION: SWBF2 0x00703cb0
 pcSkyFogShader::pcSkyFogShader()
@@ -300,6 +293,15 @@ unsigned int pcSkyFogShader::s_uiRenderTypeHash = PblHash("SkyFog");
 // GLOBAL: SWBF2 0x009c9938
 // pcSkyFogShader::s_Factory
 pcSkyFogShader pcSkyFogShader::s_Factory;
+
+// SYNTHETIC: SWBF2 0x00409aa0
+// `dynamic initializer for 'pcSkyFogShader::s_shaderDef''
+// SYNTHETIC: SWBF2 0x00769d10
+// `dynamic atexit destructor for 'pcSkyFogShader::s_shaderDef''
+
+// GLOBAL: SWBF2 0x009c9904
+// pcSkyFogShader::s_shaderDef
+pcRedShaderDef pcSkyFogShader::s_shaderDef("skyfog_shader.xml");
 
 // GLOBAL: SWBF2 0x009c98fc
 unsigned int g_pcSkyFogShader;

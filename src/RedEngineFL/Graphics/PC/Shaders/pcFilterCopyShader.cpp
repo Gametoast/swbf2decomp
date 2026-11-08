@@ -10,6 +10,8 @@
 #include <string.h>
 #include "PebbleFL/Common/PblMatrix.h"
 
+#pragma init_seg(lib)
+
 void __cdecl PblTraceP(const char* Format, ...);
 
 class PblMatrix;
@@ -33,15 +35,6 @@ pcRedShader::EndFuncT pcFilterCopyShader::EndFuncArray[MAX_PIPELINES];
 // GLOBAL: SWBF2 0x009ca700
 // pcFilterCopyShader::RenderFuncArray
 pcRedShader::RenderFuncT pcFilterCopyShader::RenderFuncArray[MAX_PIPELINES];
-
-// SYNTHETIC: SWBF2 0x0040a490
-// `dynamic initializer for 'pcFilterCopyShader::s_shaderDef''
-// SYNTHETIC: SWBF2 0x00769fb0
-// `dynamic atexit destructor for 'pcFilterCopyShader::s_shaderDef''
-
-// GLOBAL: SWBF2 0x009ca720
-// pcFilterCopyShader::s_shaderDef
-pcRedShaderDef pcFilterCopyShader::s_shaderDef("filtercopy_shader.xml");
 
 // FUNCTION: SWBF2 0x0070f810
 pcFilterCopyShader::pcFilterCopyShader()
@@ -454,6 +447,15 @@ unsigned int pcFilterCopyShader::s_uiRenderTypeHash = PblHash("FilterCopy");
 // GLOBAL: SWBF2 0x009ca750
 // pcFilterCopyShader::s_Factory
 pcFilterCopyShader pcFilterCopyShader::s_Factory;
+
+// SYNTHETIC: SWBF2 0x0040a490
+// `dynamic initializer for 'pcFilterCopyShader::s_shaderDef''
+// SYNTHETIC: SWBF2 0x00769fb0
+// `dynamic atexit destructor for 'pcFilterCopyShader::s_shaderDef''
+
+// GLOBAL: SWBF2 0x009ca720
+// pcFilterCopyShader::s_shaderDef
+pcRedShaderDef pcFilterCopyShader::s_shaderDef("filtercopy_shader.xml");
 
 // GLOBAL: SWBF2 0x009ca710
 unsigned int g_pcFilterCopyShader;
