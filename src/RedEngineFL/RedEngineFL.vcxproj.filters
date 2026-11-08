@@ -761,6 +761,9 @@
     <ClInclude Include="geometry\Primitives.h">
       <Filter>geometry</Filter>
     </ClInclude>
+    <ClInclude Include="geometry\TransformOps.h">
+      <Filter>geometry</Filter>
+    </ClInclude>
     <ClInclude Include="geometry\basics.h">
       <Filter>geometry</Filter>
     </ClInclude>

@@ -5,6 +5,7 @@
 #include "RedEngineFL/Util/ext/SubAllocator.h"
 #include "RedEngineFL/Util/ext/types.h"
 #include "RedEngineFL/geometry/basics.h"
+#include "RedEngineFL/geometry/TransformOps.h"
 #include "PebbleFL/Common/PblVector.h"
 
 #include <math.h>

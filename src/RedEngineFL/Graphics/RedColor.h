@@ -87,6 +87,7 @@ public:
 
     // FUNCTION: SWBF2 0x0048ebf0
     RedColorValue() {}
+    explicit RedColorValue(float fValue) : r(fValue), g(fValue), b(fValue), a(fValue) {}
     RedColorValue(float fR, float fG, float fB, float fA) : r(fR), g(fG), b(fB), a(fA) {}
     RedColorValue(const RedColorValue& c) : r(c.r), g(c.g), b(c.b), a(c.a) {}
     RedColorValue(const RedColorValue& color, float aA)

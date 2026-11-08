@@ -1038,7 +1038,6 @@ void pcNormalShader::Render_Prog1(const RenderItem* pItem, unsigned int) const
     const bool bSeparate = m_lightingInSeparatePass && !(pItem->flags & 0x10000000);
     RedRenderer::pcSetCullMode((uiMatFlags & 0x10000) ? PCREDCULL_NONE : PCREDCULL_BACK);
 
-    RedColorValue psConst;
     if (bBlend)
     {
         const bool bZWrite = !bTransparent && !(pItem->flags & 0x20);
@@ -1055,9 +1054,10 @@ void pcNormalShader::Render_Prog1(const RenderItem* pItem, unsigned int) const
             RedRenderer::pcSetRenderState(D3DRS_DESTBLEND, D3DBLEND_INVSRCALPHA);
             RedRenderer::pcSetFogForBlendMode(RedRenderer::FOGFORBLEND_NORMAL);
         }
-        psConst.b = bTransparent ? 1.0f : 0.0f;
-        psConst.a = bFlag10 ? 1.0f : 0.0f;
-        RedRenderer::pcGetDevice()->SetPixelShaderConstantF(0, &psConst.r, 1);
+        RedColorValue pixelShaderConstant;
+        pixelShaderConstant.b = bTransparent ? 1.0f : 0.0f;
+        pixelShaderConstant.a = bFlag10 ? 1.0f : 0.0f;
+        RedRenderer::pcGetDevice()->SetPixelShaderConstantF(0, &pixelShaderConstant.r, 1);
     }
     else if (bSeparate)
     {
@@ -1066,15 +1066,17 @@ void pcNormalShader::Render_Prog1(const RenderItem* pItem, unsigned int) const
         RedRenderer::pcSetRenderState(D3DRS_SRCBLEND, D3DBLEND_DESTCOLOR);
         RedRenderer::pcSetRenderState(D3DRS_DESTBLEND, D3DBLEND_ZERO);
         RedRenderer::pcSetFogForBlendMode(RedRenderer::FOGFORBLEND_NORMAL);
-        psConst.b = bTransparent ? 1.0f : 0.0f;
-        psConst.a = bFlag10 ? 1.0f : 0.0f;
-        RedRenderer::pcGetDevice()->SetPixelShaderConstantF(0, &psConst.r, 1);
+        RedColorValue pixelShaderConstant;
+        pixelShaderConstant.b = bTransparent ? 1.0f : 0.0f;
+        pixelShaderConstant.a = bFlag10 ? 1.0f : 0.0f;
+        RedRenderer::pcGetDevice()->SetPixelShaderConstantF(0, &pixelShaderConstant.r, 1);
     }
     else
     {
-        psConst.b = 0.0f;
-        psConst.a = bFlag10 ? 1.0f : 0.0f;
-        RedRenderer::pcGetDevice()->SetPixelShaderConstantF(0, &psConst.r, 1);
+        RedColorValue pixelShaderConstant;
+        pixelShaderConstant.b = 0.0f;
+        pixelShaderConstant.a = bFlag10 ? 1.0f : 0.0f;
+        RedRenderer::pcGetDevice()->SetPixelShaderConstantF(0, &pixelShaderConstant.r, 1);
         RedRenderer::pcSetRenderState(D3DRS_ALPHABLENDENABLE, FALSE);
         RedRenderer::pcSetRenderState(D3DRS_ZWRITEENABLE, (pItem->flags & 0x20) ? FALSE : TRUE);
         RedRenderer::pcSetFogForBlendMode(RedRenderer::FOGFORBLEND_NORMAL);
@@ -1155,9 +1157,9 @@ void pcNormalShader::Render_Prog1(const RenderItem* pItem, unsigned int) const
         RedRenderer::pcSetSamplerState(2, D3DSAMP_ADDRESSV, pItem->pLightingState->pProjectedLight->GetProjectionTextureWrapMode());
         RedRenderer::pcSetSamplerState(2, D3DSAMP_ADDRESSW, pItem->pLightingState->pProjectedLight->GetProjectionTextureWrapMode());
         RedRenderer::pcSetTexture(2, RedTexture::Find(pItem->pLightingState->pProjectedLight->m_uiProjTexHash));
-        psConst = pItem->pLightingState->pProjectedLight->m_color;
-        psConst.a = (float)(int)pItem->pLightingState->pProjectedLight->IsShadowCaster();
-        RedRenderer::pcGetDevice()->SetPixelShaderConstantF(1, &psConst.r, 1);
+        RedColorValue light(pItem->pLightingState->pProjectedLight->GetColor());
+        light.a = (float)(int)pItem->pLightingState->pProjectedLight->IsShadowCaster();
+        RedRenderer::pcGetDevice()->SetPixelShaderConstantF(1, &light.r, 1);
     }
     else
     {

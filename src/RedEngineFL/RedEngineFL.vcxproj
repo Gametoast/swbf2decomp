@@ -307,6 +307,7 @@
     <ClInclude Include="Util\ext\heap.h" />
     <ClInclude Include="Util\ext\types.h" />
     <ClInclude Include="geometry\Primitives.h" />
+    <ClInclude Include="geometry\TransformOps.h" />
     <ClInclude Include="geometry\basics.h" />
     <ClInclude Include="geometry\polygons.h" />
     <ClInclude Include="geometry\vector.h" />

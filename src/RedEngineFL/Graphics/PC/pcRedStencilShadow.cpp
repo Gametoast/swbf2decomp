@@ -845,7 +845,8 @@ void ShadowData::Read(PblFileChunk& chunk)
     unsigned char* puiSkinData = 0;
     unsigned int uiSkinNumBones = 0;
     PblVector3* pSkinnedVertices = 0;
-    PblBox box(FLT_MAX, FLT_MAX, FLT_MAX, -FLT_MAX, -FLT_MAX, -FLT_MAX);
+    PblBox box;
+    box.SetEmpty();
 
     PblTraceP("Model has shadow data\n");
     while (!chunk.IsDone())

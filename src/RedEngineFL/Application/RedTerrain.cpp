@@ -167,14 +167,6 @@ float RedTerrain::GetHeight(int iX, int iZ)
     return (float)RedTerrain::GetHeightUnscaled(iX, iZ) * _fHeightScale;
 }
 
-// FUNCTION: SWBF2 0x006c15f0
-RedTerrain::Hole::Hole() : TreeGridObject(-1)
-{
-    SetObjectData(0, COLL_HOLE);
-    iNumPlanes = 0;
-    aPlanes = 0;
-}
-
 // FUNCTION: SWBF2 0x006c1690
 float RedTerrain::GetHoleHeight(float fX, float fZ)
 {
@@ -228,7 +220,7 @@ float RedTerrain::GetInterpolatedLight(float fX, float fZ)
 {
     const float fHalf = _fMetersPerPoint * 0.5f;
     const int iZ = (int)((fZ - fHalf + _fTerrainCenterZ) * _fPointsPerMeter + 0.5f);
-    const float fFracZ = (fZ - ((float)iZ * _fMetersPerPoint - _fTerrainCenterZ)) * _fPointsPerMeter;
+    const float fFracZ = (fZ - _CalcWorldPosZ(iZ)) * _fPointsPerMeter;
 
     const float fL00 = GetLight(fX - fHalf, fZ - fHalf);
     const float fL10 = GetLight(fX + fHalf, fZ - fHalf);
@@ -236,7 +228,7 @@ float RedTerrain::GetInterpolatedLight(float fX, float fZ)
     const float fL11 = GetLight(fX + fHalf, fZ + fHalf);
 
     const int iX = (int)((fX - fHalf + _fTerrainCenterX) * _fPointsPerMeter + 0.5f);
-    const float fFracX = (fX - ((float)iX * _fMetersPerPoint - _fTerrainCenterX)) * _fPointsPerMeter;
+    const float fFracX = (fX - _CalcWorldPosX(iX)) * _fPointsPerMeter;
     const float fA = (fL01 - fL00) * fFracZ + fL00;
     const float fB = (fL11 - fL10) * fFracZ + fL10;
     return (fB - fA) * fFracX + fA;
@@ -248,24 +240,8 @@ float RedTerrain::GetInterpolatedLight(float fX, float fZ)
 const PblVector3 RedTerrain::GetInterpolatedNormal(float fX, float fZ)
 {
     const float fMax = (float)(_iPointsPerDimension - 1) * _fMetersPerPoint;
-    float fPosX = fX + _fTerrainCenterX;
-    if (fPosX < 0.0f)
-    {
-        fPosX = 0.0f;
-    }
-    else if (fPosX > fMax)
-    {
-        fPosX = fMax;
-    }
-    float fPosZ = fZ + _fTerrainCenterZ;
-    if (fPosZ < 0.0f)
-    {
-        fPosZ = 0.0f;
-    }
-    else if (fPosZ > fMax)
-    {
-        fPosZ = fMax;
-    }
+    const float fPosX = Clamp(fX + _fTerrainCenterX, 0.0f, fMax);
+    const float fPosZ = Clamp(fZ + _fTerrainCenterZ, 0.0f, fMax);
 
     const float fGridX = fPosX * _fPointsPerMeter;
     const float fGridZ = fPosZ * _fPointsPerMeter;
@@ -368,7 +344,7 @@ bool RedTerrain::PointInHole(const PblVector3& vPos)
                 PointInVolume(vPos, pHole->aPlanes, pHole->iNumPlanes))
             {
                 bLastInHole = true;
-                return true;
+                break;
             }
         }
     }
@@ -389,7 +365,7 @@ bool PointInVolume(const PblVector3& vPoint, const PblVector4* aPlanes, int iNum
 }
 
 // FUNCTION: SWBF2 0x006c22a0
-void RedTerrain::ProcessHoles(void (__cdecl *callback)(void*))
+void RedTerrain::ProcessHoles(void (__cdecl *callbackfn)(Hole*))
 {
     if (!_bTreeHoles)
     {
@@ -398,7 +374,7 @@ void RedTerrain::ProcessHoles(void (__cdecl *callback)(void*))
     for (PblList<Hole>::Itor it = _HoleList.Begin(); it; ++it)
     {
         Hole* pHole = it;
-        callback(pHole);
+        callbackfn(pHole);
     }
 }
 
@@ -462,22 +438,21 @@ void RedTerrain::Read(PblFileChunk& chunk)
     while (!chunk.IsDone())
     {
         PblFileChunk child = chunk.ReadNextChild();
-        PblFile* pFile = child._pFile;
         switch (child._iId)
         {
         case CHUNK_ID('I', 'N', 'F', 'O'):
         {
             _bEnable = true;
-            _fMetersPerPoint = pFile->ReadFloat();
-            _fHeightScale = pFile->ReadFloat();
-            _fHeightMin = pFile->ReadFloat();
-            _fHeightMax = pFile->ReadFloat();
-            _iPointsPerDimension = pFile->Read16();
-            _iPatchPointsPerDimension = pFile->Read16();
-            _iHeightPatchPointsPerDimension = pFile->Read16();
-            _iNumLayers = pFile->Read16();
-            _iNumDecalTextures = pFile->Read16();
-            _iNumDecalTiles = pFile->Read16();
+            _fMetersPerPoint = child.ReadFloat();
+            _fHeightScale = child.ReadFloat();
+            _fHeightMin = child.ReadFloat();
+            _fHeightMax = child.ReadFloat();
+            _iPointsPerDimension = child.Read16();
+            _iPatchPointsPerDimension = child.Read16();
+            _iHeightPatchPointsPerDimension = child.Read16();
+            _iNumLayers = child.Read16();
+            _iNumDecalTextures = child.Read16();
+            _iNumDecalTiles = child.Read16();
 
             _iPatchesPerDimension = _iPointsPerDimension / _iPatchPointsPerDimension;
             _iHeightPatchesPerDimension = _iPointsPerDimension / _iHeightPatchPointsPerDimension;
@@ -513,18 +488,18 @@ void RedTerrain::Read(PblFileChunk& chunk)
 
             const int iOldHeap = RedSetCurrentHeap(iHeap);
             pHeightExpand = new HeightExpand[_iNumHeightPatches];
-            mTerrainBytesUsed += _iNumHeightPatches * sizeof(HeightExpand);
+            AdjustTerrainMemoryUsage(_iNumHeightPatches * sizeof(HeightExpand));
             pHeightMinMax = new HeightMinMax[_iNumHeightPatches];
-            mTerrainBytesUsed += _iNumHeightPatches * sizeof(HeightMinMax);
+            AdjustTerrainMemoryUsage(_iNumHeightPatches * sizeof(HeightMinMax));
             pHeight = new unsigned char[_iPointsPerDimension * _iPointsPerDimension];
-            mTerrainBytesUsed += _iPointsPerDimension * _iPointsPerDimension;
+            AdjustTerrainMemoryUsage(_iPointsPerDimension * _iPointsPerDimension);
             unsigned int* puiScorch =
                 new unsigned int[_iPointsPerDimension * _iPointsPerDimension / 4u];
-            mTerrainBytesUsed += _iPointsPerDimension * _iPointsPerDimension * sizeof(unsigned int) / 4;
+            AdjustTerrainMemoryUsage(_iPointsPerDimension * _iPointsPerDimension * sizeof(unsigned int) / 4);
             if (_iNumDecalTiles)
             {
                 pDecalTile = new DecalTile[_iNumDecalTiles];
-                mTerrainBytesUsed += _iNumDecalTiles * sizeof(DecalTile);
+                AdjustTerrainMemoryUsage(_iNumDecalTiles * sizeof(DecalTile));
             }
             else
             {
@@ -543,98 +518,6 @@ void RedTerrain::Read(PblFileChunk& chunk)
             }
             break;
         }
-
-        case CHUNK_ID('H', 'E', 'X', 'P'):
-            for (int i = 0; i < _iNumHeightPatches; ++i)
-            {
-                pHeightExpand[i].uiShift = pFile->Read8();
-                pHeightExpand[i].uiFlags = pFile->Read8();
-                pHeightExpand[i].iOffset = pFile->Read16();
-                pHeightMinMax[i].iMin = pFile->Read16();
-                pHeightMinMax[i].iMax = pFile->Read16();
-            }
-            break;
-
-        case CHUNK_ID('H', 'G', 'T', '8'):
-        {
-            unsigned char* p = pHeight;
-            unsigned char* const pEnd = pHeight + _iNumPoints;
-            while (p < pEnd)
-            {
-                const unsigned char uiCount = pFile->Read8();
-                int iRun;
-                if (uiCount & 0x80)
-                {
-                    const unsigned char uiValue = pFile->Read8();
-                    iRun = uiCount - 127;
-                    memset(p, uiValue, iRun);
-                }
-                else
-                {
-                    iRun = uiCount + 1;
-                    pFile->ReadData(p, iRun);
-                }
-                p += iRun;
-            }
-            break;
-        }
-
-        case CHUNK_ID('L', 'U', 'M', 'I'):
-        {
-            const int iSize = child._iSize;
-            const int iOldHeap = RedSetCurrentHeap(iHeap);
-            unsigned char* pLum = new unsigned char[iSize];
-            mTerrainBytesUsed += iSize;
-            RedSetCurrentHeap(iOldHeap);
-            _puiLuminosity = pLum;
-            pFile->ReadData(pLum, iSize);
-            break;
-        }
-
-        case CHUNK_ID('F', 'O', 'L', 'G'):
-        {
-            const int iSize = pFile->Read32();
-            const int iOldHeap = RedSetCurrentHeap(iHeap);
-            _Foliage = new unsigned char[iSize];
-            RedSetCurrentHeap(iOldHeap);
-            mTerrainBytesUsed += iSize;
-            pFile->ReadData(_Foliage, iSize);
-            break;
-        }
-
-        case CHUNK_ID('D', 'C', 'A', 'L'):
-            for (int i = 0; i < _iNumDecalTiles; ++i)
-            {
-                DecalTile& tile = pDecalTile[i];
-                tile.uiGridX = pFile->Read8();
-                tile.uiGridZ = pFile->Read8();
-                tile.uiTextureIndex = pFile->Read8();
-                pFile->Read8();
-                pFile->Read8();
-                pFile->Read8();
-                pFile->Read8();
-                pFile->Read8();
-                tile.uiLLv = pFile->Read16();
-                tile.uiLLu = pFile->Read16();
-                tile.uiLRv = pFile->Read16();
-                tile.uiLRu = pFile->Read16();
-                tile.uiULv = pFile->Read16();
-                tile.uiULu = pFile->Read16();
-                tile.uiURv = pFile->Read16();
-                tile.uiURu = pFile->Read16();
-            }
-            break;
-
-        case CHUNK_ID('S', 'C', 'A', 'L'):
-            for (int i = 0; i < _iNumLayers; ++i)
-            {
-                _fLayerMetersPerTexture[i] = pFile->ReadFloat();
-            }
-            break;
-
-        case CHUNK_ID('W', 'A', 'T', 'R'):
-            RedWater::Read(child);
-            break;
 
         case CHUNK_ID('L', 'T', 'E', 'X'):
             for (int i = 0; i < _iNumLayers; ++i)
@@ -657,14 +540,90 @@ void RedTerrain::Read(PblFileChunk& chunk)
             _uiDetailTextureHash = PblHash(acName);
             break;
 
-        case CHUNK_ID('P', 'C', 'H', 'S'):
-            _ReadPatchInfo(child);
+        case CHUNK_ID('S', 'C', 'A', 'L'):
+            for (int i = 0; i < _iNumLayers; ++i)
+            {
+                _fLayerMetersPerTexture[i] = child.ReadFloat();
+            }
             break;
 
         case CHUNK_ID('A', 'X', 'I', 'S'):
             for (int i = 0; i < _iNumLayers; ++i)
             {
-                _uiLayerTextureOrientation[i] = pFile->Read8();
+                _uiLayerTextureOrientation[i] = child.Read8();
+            }
+            break;
+
+        case CHUNK_ID('H', 'E', 'X', 'P'):
+            for (int i = 0; i < _iNumHeightPatches; ++i)
+            {
+                pHeightExpand[i].uiShift = child.Read8();
+                pHeightExpand[i].uiFlags = child.Read8();
+                pHeightExpand[i].iOffset = child.Read16();
+                pHeightMinMax[i].iMin = child.Read16();
+                pHeightMinMax[i].iMax = child.Read16();
+            }
+            break;
+
+        case CHUNK_ID('H', 'G', 'T', '8'):
+        {
+            unsigned char* p = pHeight;
+            unsigned char* const pEnd = pHeight + _iNumPoints;
+            while (p < pEnd)
+            {
+                const unsigned char uiCount = child.Read8();
+                int iRun;
+                if (uiCount & 0x80)
+                {
+                    const unsigned char uiValue = child.Read8();
+                    iRun = uiCount - 127;
+                    memset(p, uiValue, iRun);
+                }
+                else
+                {
+                    iRun = uiCount + 1;
+                    child.ReadData(p, iRun);
+                }
+                p += iRun;
+            }
+            break;
+        }
+
+        case CHUNK_ID('F', 'O', 'L', 'G'):
+        {
+            const int iSize = child.Read32();
+            const int iOldHeap = RedSetCurrentHeap(iHeap);
+            _Foliage = new unsigned char[iSize];
+            RedSetCurrentHeap(iOldHeap);
+            AdjustTerrainMemoryUsage(iSize);
+            child.ReadData(_Foliage, iSize);
+            break;
+        }
+
+        case CHUNK_ID('W', 'A', 'T', 'R'):
+            RedWater::Read(child);
+            break;
+
+        case CHUNK_ID('D', 'C', 'A', 'L'):
+            for (int i = 0; i < _iNumDecalTiles; ++i)
+            {
+                DecalTile& tile = pDecalTile[i];
+                tile.uiGridX = child.Read8();
+                tile.uiGridZ = child.Read8();
+                tile.uiTextureIndex = child.Read8();
+                child.Read8();
+                child.Read8();
+                child.Read8();
+                child.Read8();
+                child.Read8();
+                tile.uiLLv = child.Read16();
+                tile.uiLLu = child.Read16();
+                tile.uiLRv = child.Read16();
+                tile.uiLRu = child.Read16();
+                tile.uiULv = child.Read16();
+                tile.uiULu = child.Read16();
+                tile.uiURv = child.Read16();
+                tile.uiURu = child.Read16();
             }
             break;
 
@@ -672,45 +631,51 @@ void RedTerrain::Read(PblFileChunk& chunk)
             while (!child.IsDone())
             {
                 PblFileChunk cut = child.ReadNextChild();
-                if (cut._iId == CHUNK_ID('I', 'N', 'F', 'O'))
+                switch (cut._iId)
                 {
-                    _bTreeHoles = cut._pFile->Read32() > 10;
-                }
-                else if (cut._iId == CHUNK_ID('C', 'U', 'T', 'R'))
+                case CHUNK_ID('I', 'N', 'F', 'O'):
+                    _bTreeHoles = cut.Read32() > 10;
+                    break;
+
+                case CHUNK_ID('C', 'U', 'T', 'R'):
                 {
                     int iOldHeap = RedSetCurrentHeap(iHeap);
                     Hole* pHole = new Hole;
-                    mTerrainBytesUsed += sizeof(Hole);
+                    AdjustTerrainMemoryUsage(sizeof(Hole));
                     RedSetCurrentHeap(iOldHeap);
 
                     while (!cut.IsDone())
                     {
                         PblFileChunk part = cut.ReadNextChild();
-                                                if (part._iId == CHUNK_ID('I', 'N', 'F', 'O'))
+                        switch (part._iId)
                         {
-                            pHole->iNumPlanes = part._pFile->Read32();
-                            const float fRadius = part._pFile->ReadFloat();
+                        case CHUNK_ID('I', 'N', 'F', 'O'):
+                        {
+                            pHole->iNumPlanes = part.Read32();
+                            const float fRadius = part.ReadFloat();
                             PblVector3 vCenter;
-                            vCenter.x = part._pFile->ReadFloat();
-                            vCenter.y = part._pFile->ReadFloat();
-                            vCenter.z = part._pFile->ReadFloat();
+                            vCenter.SetX(part.ReadFloat());
+                            vCenter.SetY(part.ReadFloat());
+                            vCenter.SetZ(part.ReadFloat());
                             pHole->SetCollisionCenter(vCenter);
                             pHole->SetCollisionRadius(fRadius);
 
                             iOldHeap = RedSetCurrentHeap(iHeap);
                             pHole->aPlanes = new PblVector4[pHole->iNumPlanes];
-                            mTerrainBytesUsed += pHole->iNumPlanes * sizeof(PblVector4);
+                            AdjustTerrainMemoryUsage(pHole->iNumPlanes * sizeof(PblVector4));
                             RedSetCurrentHeap(iOldHeap);
+                            break;
                         }
-                        else if (part._iId == CHUNK_ID('P', 'L', 'N', 'S'))
-                        {
+
+                        case CHUNK_ID('P', 'L', 'N', 'S'):
                             for (int i = 0; i < pHole->iNumPlanes; ++i)
                             {
-                                pHole->aPlanes[i].x = part._pFile->ReadFloat();
-                                pHole->aPlanes[i].y = part._pFile->ReadFloat();
-                                pHole->aPlanes[i].z = part._pFile->ReadFloat();
-                                pHole->aPlanes[i].w = part._pFile->ReadFloat();
+                                pHole->aPlanes[i].SetX(part.ReadFloat());
+                                pHole->aPlanes[i].SetY(part.ReadFloat());
+                                pHole->aPlanes[i].SetZ(part.ReadFloat());
+                                pHole->aPlanes[i].SetW(part.ReadFloat());
                             }
+                            break;
                         }
                     }
 
@@ -720,9 +685,27 @@ void RedTerrain::Read(PblFileChunk& chunk)
                         CollisionManager::GetTreeGrid()->Add(
                             pHole, pHole->GetCollisionCenter(), pHole->GetCollisionRadius() * 2.0f);
                     }
+                    break;
+                }
                 }
             }
             break;
+        case CHUNK_ID('L', 'U', 'M', 'I'):
+        {
+            const int iSize = child._iSize;
+            const int iOldHeap = RedSetCurrentHeap(iHeap);
+            unsigned char* pLum = new unsigned char[iSize];
+            AdjustTerrainMemoryUsage(iSize);
+            RedSetCurrentHeap(iOldHeap);
+            _puiLuminosity = pLum;
+            child.ReadData(pLum, iSize);
+            break;
+        }
+
+        case CHUNK_ID('P', 'C', 'H', 'S'):
+            _ReadPatchInfo(child);
+            break;
+
         }
     }
 }

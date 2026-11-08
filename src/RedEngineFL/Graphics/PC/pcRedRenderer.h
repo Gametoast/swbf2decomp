@@ -856,6 +856,7 @@ struct RenderOptionsT
 #include "RedEngineFL/Util/ext/heap.h"
 
 #include "RedEngineFL/Graphics/RedColor.h"
+#include "RedEngineFL/Graphics/RedLight.h"
 #include "RedEngineFL/Graphics/RedMaterial.h"
 #include "PebbleFL/Common/PblVector.h"
 

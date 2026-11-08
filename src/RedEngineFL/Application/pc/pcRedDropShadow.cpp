@@ -7,7 +7,7 @@
 #include "PebbleFL/Common/PblRef.h"
 #include "RedEngineFL/Application/pc/pcRenderHelpers.h"
 #include "RedEngineFL/Application/pc/pcRenderStateHelpers.h"
-#include "RedEngineFL/Graphics/RedAmbientLight.h"
+#include "RedEngineFL/Graphics/RedLight.h"
 #include "RedEngineFL/Graphics/RedCamera.h"
 #include "RedEngineFL/Graphics/RedDirectionalLight.h"
 #include "RedEngineFL/Graphics/PC/pcRedPrimitive.h"

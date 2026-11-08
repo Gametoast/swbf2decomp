@@ -362,35 +362,6 @@ static const PblMatrix& _GetSkinMatrix(unsigned int uiNumBones, const unsigned c
 
 void __cdecl PblTraceP(const char* Format, ...);
 
-// FUNCTION: SWBF2 0x00717b40
-RedShadingState* RedSegment::CreateShadingState() const
-{
-    return 0;
-}
-
-// FUNCTION: SWBF2 0x00717b70
-void RedSegment::Free()
-{
-}
-
-// FUNCTION: SWBF2 0x00717cc0
-bool RedSegment::IsLit() const
-{
-    return true;
-}
-
-// FUNCTION: SWBF2 0x00717cf0
-bool RedSegment::IsTransparent() const
-{
-    return false;
-}
-
-// FUNCTION: SWBF2 0x00717d40
-bool RedSegment::IsVertexLit() const
-{
-    return false;
-}
-
 static inline const PblBox& _GetModelBox(const RedModel* pModel)
 {
     return pModel->_BoundingBox;
@@ -669,7 +640,3 @@ RedSegment* __cdecl RedSegment::Read(PblFileChunk& chunk, const RedModel* pModel
     return pSegment;
 }
 
-// FUNCTION: SWBF2 0x00718950
-void RedSegment::SetData(const RedShaderData&)
-{
-}

@@ -220,12 +220,21 @@ void Init()
     {
         m_pDI->EnumDevices(DI8DEVCLASS_GAMECTRL, pcEnumJoystickDevice, 0,
                            DIEDFL_ATTACHEDONLY);
+
+        bool done = true;
+        PblJournal::Record(done, PJT_FULL);
     }
     else
     {
-        bool bMoreJoysticks = false;
-        while (bMoreJoysticks)
+        while (true)
         {
+            bool done;
+            PblJournal::Record(done, PJT_FULL);
+            if (done)
+            {
+                break;
+            }
+
             if (m_joysticks[m_numJoysticks].pcCreateDevice(0))
             {
                 ++m_numJoysticks;

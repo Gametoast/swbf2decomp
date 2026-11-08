@@ -47,12 +47,6 @@ PblMatrix s_bumpMat;
 // s_refractionTexMat
 PblMatrix s_refractionTexMat;
 
-static PblMatrix _IdentityMatrix(
-    PblVector4{ 1.0f, 0.0f, 0.0f, 0.0f },
-    PblVector4{ 0.0f, 1.0f, 0.0f, 0.0f },
-    PblVector4{ 0.0f, 0.0f, 1.0f, 0.0f },
-    PblVector4{ 0.0f, 0.0f, 0.0f, 1.0f });
-
 static inline unsigned long FloatBits_(float f)
 {
     return *(const unsigned long*)&f;

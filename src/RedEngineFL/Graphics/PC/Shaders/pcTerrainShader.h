@@ -44,6 +44,53 @@ public:
                                           unsigned short uiMax,
                                           const RenderItem* pItem);
 
+    void EnableDetail(bool bEnable)
+    {
+        if (bEnable)
+        {
+            m_uiOptions |= 1;
+        }
+        else
+        {
+            m_uiOptions &= ~1;
+        }
+    }
+
+    void EnableFarRendering(bool bEnable, bool bFarDetail)
+    {
+        if (bEnable)
+        {
+            m_uiOptions |= 8;
+        }
+        else
+        {
+            m_uiOptions &= ~8;
+        }
+
+        if (bFarDetail)
+        {
+            m_uiOptions |= 1;
+        }
+        else
+        {
+            m_uiOptions &= ~1;
+        }
+    }
+
+    void EnablePrePixelLightingPass(bool bEnable)
+    {
+        if (bEnable)
+        {
+            m_uiOptions |= 4;
+        }
+        else
+        {
+            m_uiOptions &= ~4;
+        }
+    }
+
+    void SetMultiLayer(int iLayer) { m_uiOptions = (m_uiOptions & ~0x30) | ((iLayer & 3) << 4); }
+
     unsigned int GetState_Fixed(const RenderItem* pItem) const;
     unsigned int GetState_Prog1(const RenderItem* pItem) const;
     void Begin_Fixed(unsigned int uiState, unsigned int uiPass) const;
@@ -75,9 +122,12 @@ public:
 
     static void _SetLightningValue(float fValue) { s_fLightningValue = fValue; }
 
+private:
     unsigned char m_uiLayerIndex[4];
     unsigned char m_uiOptions;
     bool m_lightingInSeparatePass;
+
+public:
     // GLOBAL: SWBF2 0x009c8548
     static pcRedVertexFormat* s_pVertexInputFormat;
     // GLOBAL: SWBF2 0x009c854c

@@ -5,8 +5,6 @@
 #include "vector.h"
 #include "basics.h"
 
-class PblMatrix;
-
 namespace geo
 {
 
@@ -93,20 +91,6 @@ class SepDistance
 {
 public:
     static float Op(const Sphere& rA, const Sphere& rB);
-};
-
-class ProjClip
-{
-public:
-    static void Op(const BasePoly3D& rIn, BasePoly3D& rOut);
-};
-
-class Transform
-{
-public:
-    static void Op(const BasePoly3D& rIn, BasePoly3D& rOut, const PblMatrix& rTrans);
-
-    static void Op(const BasePoly3D& rIn, BasePoly2D& rOut, const Vector3<float>& rX, const Vector3<float>& rY);
 };
 
 struct Circle

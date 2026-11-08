@@ -109,7 +109,7 @@ struct NormalXYZ
 struct PosXYZ
 {
     void SetPos(float fX, float fY, float fZ) { x = fX; y = fY; z = fZ; }
-    void SetPos(const PblVector3& v) { x = v.x; y = v.y; z = v.z; }
+    void SetPos(const PblVector3& v) { SetPos(v.x, v.y, v.z); }
     void GetPos(PblVector3& v) const;
 
     float x, y, z;

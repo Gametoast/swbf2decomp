@@ -198,22 +198,49 @@ public:
     virtual unsigned int GetID(unsigned int) const = 0;
     virtual unsigned int GetRenderTypeHash() const = 0;
 
-    virtual RedShadingState* CreateShadingState() const;
+    // FUNCTION: SWBF2 0x006ac820
+    virtual RedShadingState* CreateShadingState() const
+    {
+        return 0;
+    }
 
-    virtual void SetData(const RedShaderData&);
+    // FUNCTION: SWBF2 0x006ad130
+    virtual void SetData(const RedShaderData&)
+    {
+    }
 
     virtual void Bind() = 0;
 
-    virtual unsigned int GetZPrepassState() const;
+    // FUNCTION: SWBF2 0x006ac860
+    virtual unsigned int GetZPrepassState() const
+    {
+        return 0xffffffffu;
+    }
 
-    virtual void RenderZPrepass(const RenderItem*) const;
+    // FUNCTION: SWBF2 0x006ad010
+    virtual void RenderZPrepass(const RenderItem*) const
+    {
+    }
 
-    virtual bool SortAsZWritingTransparent() const;
-    virtual bool IsTransparent() const;
+    // FUNCTION: SWBF2 0x006ad140
+    virtual bool SortAsZWritingTransparent() const
+    {
+        return false;
+    }
+    // FUNCTION: SWBF2 0x006ac9f0
+    virtual bool IsTransparent() const
+    {
+        return false;
+    }
 
+    // FUNCTION: SWBF2 0x006ac830
     virtual unsigned short GetShaderChain(pcRedShader** const ppOut,
-                                          unsigned short usCount,
-                                          const RenderItem*);
+                                          unsigned short,
+                                          const RenderItem*)
+    {
+        *ppOut = this;
+        return 1;
+    }
 
     virtual int GetDiffuseMapHash(int, int);
 

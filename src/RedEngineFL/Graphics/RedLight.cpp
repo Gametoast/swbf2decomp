@@ -7,7 +7,7 @@
 #include "RedLight.h"
 #include "PebbleFL/Common/PblConfig.h"
 #include "PebbleFL/Common/PblQuaternion.h"
-#include "RedAmbientLight.h"
+#include "RedLight.h"
 #include "RedCamera.h"
 #include "RedDirectionalLight.h"
 #include "RedOmniLight.h"

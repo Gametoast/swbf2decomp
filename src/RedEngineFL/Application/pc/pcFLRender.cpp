@@ -1241,12 +1241,7 @@ char FLRenderer::RegisterReflection(Renderable* pRenderable, const PblPlane& pla
     m_curFrameReflections[uiIndex].renderable = pRenderable;
     m_curFrameReflections[uiIndex].reflectionPlane = plane;
     m_curFrameReflections[uiIndex].reflectionID = (char)(uiIndex + 1);
-    m_curFrameReflections[uiIndex].bbox._vMin.x = FLT_MAX;
-    m_curFrameReflections[uiIndex].bbox._vMin.y = FLT_MAX;
-    m_curFrameReflections[uiIndex].bbox._vMin.z = FLT_MAX;
-    m_curFrameReflections[uiIndex].bbox._vMax.x = -FLT_MAX;
-    m_curFrameReflections[uiIndex].bbox._vMax.y = -FLT_MAX;
-    m_curFrameReflections[uiIndex].bbox._vMax.z = -FLT_MAX;
+    m_curFrameReflections[uiIndex].bbox.SetEmpty();
     m_curFrameReflections[uiIndex].renderFlags = uiRenderFlags;
     m_numCurFrameReflections = uiIndex + 1;
     return m_curFrameReflections[m_numCurFrameReflections - 1].reflectionID;

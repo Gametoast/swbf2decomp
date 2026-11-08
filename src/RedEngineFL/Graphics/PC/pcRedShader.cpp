@@ -113,31 +113,10 @@ pcRedShader* __cdecl pcRedShader::Create(unsigned int uiNameHash,
     return 0;
 }
 
-// FUNCTION: SWBF2 0x006ac820
-RedShadingState* pcRedShader::CreateShadingState() const
-{
-    return 0;
-}
-
-// FUNCTION: SWBF2 0x006ac830
-unsigned short pcRedShader::GetShaderChain(pcRedShader** const ppOut,
-                                           unsigned short,
-                                           const RenderItem*)
-{
-    *ppOut = this;
-    return 1;
-}
-
 // FUNCTION: SWBF2 0x006ac850
 int pcRedShader::GetDiffuseMapHash(int, int)
 {
     return *(const int*)m_material;
-}
-
-// FUNCTION: SWBF2 0x006ac860
-unsigned int pcRedShader::GetZPrepassState() const
-{
-    return 0xffffffffu;
 }
 
 // FUNCTION: SWBF2 0x006ac870
@@ -187,12 +166,6 @@ void pcRedShaderDef::InitFixedFunction(unsigned int uiVertexFormatSupport,
             m_states[i].pass[p].pPixelShader = 0;
         }
     }
-}
-
-// FUNCTION: SWBF2 0x006ac9f0
-bool pcRedShader::IsTransparent() const
-{
-    return false;
 }
 
 // FUNCTION: SWBF2 0x006aca00
@@ -391,11 +364,6 @@ void pcRedShaderDef::ReadState(PblFileChunk& chunk)
     }
 }
 
-// FUNCTION: SWBF2 0x006ad010
-void pcRedShader::RenderZPrepass(const RenderItem*) const
-{
-}
-
 // FUNCTION: SWBF2 0x006ad020
 void pcRedShaderDef::Reset()
 {
@@ -428,17 +396,6 @@ void pcRedShaderDef::Reset()
     m_supportedPipeline = PIPELINE_FIXED;
     m_uiNumShadersToBind = 0;
     m_apShadersToBind = 0;
-}
-
-// FUNCTION: SWBF2 0x006ad130
-void pcRedShader::SetData(const RedShaderData&)
-{
-}
-
-// FUNCTION: SWBF2 0x006ad140
-bool pcRedShader::SortAsZWritingTransparent() const
-{
-    return false;
 }
 
 // FUNCTION: SWBF2 0x006ad150

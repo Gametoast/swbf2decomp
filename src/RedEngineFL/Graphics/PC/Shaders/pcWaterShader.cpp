@@ -12,7 +12,7 @@
 #include "RedEngineFL/Graphics/RedCamera.h"
 #include "RedEngineFL/Application/pc/pcFLRender.h"
 #include "RedEngineFL/Graphics/RedColor.h"
-#include "RedEngineFL/Graphics/RedAmbientLight.h"
+#include "RedEngineFL/Graphics/RedLight.h"
 #include "PebbleFL/Common/PblMath.h"
 #include <math.h>
 
@@ -70,11 +70,11 @@ static unsigned int kuiCubeNormalizationMap = PblHash("cube_normalizationmap");
 static unsigned int kuiLinearRamp = PblHash("linear_ramp");
 
 // SYNTHETIC: SWBF2 0x0040a080
-// `dynamic initializer for '_IdentityMatrix''
+// `dynamic initializer for 's_bumpMat''
 
 // GLOBAL: SWBF2 0x009ca050
-// _IdentityMatrix
-static D3DXMATRIXA16 _IdentityMatrix;
+// s_bumpMat
+static PblMatrix s_bumpMat;
 
 // GLOBAL: SWBF2 0x009ca098
 static D3DMATERIAL9 s_d3dMat;
@@ -405,8 +405,8 @@ void pcWaterShader::Render_Prog2(const RenderItem* pItem, unsigned int uiPass) c
             pcRedVertexShaderConstantRegister* pRegs = RedRenderer::pcLockVertexShaderConstants(40, 4);
             const PblVector3 vLightDirection = -s_vSpecularDirection;
             pRegs[40].SetFloats(vLightDirection.x, vLightDirection.y, vLightDirection.z, 0.5f);
-            pRegs[41].SetFloats(_IdentityMatrix._11, _IdentityMatrix._21, 0.0f, 1.0f);
-            pRegs[42].SetFloats(_IdentityMatrix._12, _IdentityMatrix._22, 0.0f, 1.0f);
+            pRegs[41].SetFloats(s_bumpMat._11, s_bumpMat._21, 0.0f, 1.0f);
+            pRegs[42].SetFloats(s_bumpMat._12, s_bumpMat._22, 0.0f, 1.0f);
             pRegs[43].SetFloats(0.0f, 0.5f, -0.5f, 0.0f);
             RedRenderer::pcUnlockVertexShaderConstants(pRegs);
 
@@ -780,7 +780,7 @@ void pcWaterShader::Begin_Prog2(unsigned int uiState, unsigned int uiPass) const
             const float fAngle = (float)atan2((double)vForward.z, (double)vForward.x) - PblMath::fHalfPi;
             mFacing.RotateZ(fAngle);
             mScaled.Scale(0.03f, 0.03f, 0.03f);
-            _IdentityMatrix = D3DXMATRIXA16(&(mScaled * mFacing).m[0][0]);
+            s_bumpMat = mScaled * mFacing;
         }
         return;
     }
@@ -883,7 +883,7 @@ void pcWaterShader::Begin_Prog1(unsigned int uiState, unsigned int uiPass) const
                                D3DXMatrixScaling(&mStep, 0.03f, 0.03f, 0.03f));
             PblMatrix mResult;
             D3DXMatrixMultiply((D3DXMATRIX*)&mResult, (D3DXMATRIX*)&mScaled, (D3DXMATRIX*)&mFacing);
-            _IdentityMatrix = reinterpret_cast<const D3DXMATRIX&>(mResult);
+            s_bumpMat = mResult;
 
             RedRenderer::pcSetTextureStageState(1, D3DTSS_TEXTURETRANSFORMFLAGS, D3DTTFF_DISABLE);
             RedRenderer::pcSetTextureStageState(2, D3DTSS_TEXTURETRANSFORMFLAGS, D3DTTFF_PROJECTED);
@@ -895,13 +895,13 @@ void pcWaterShader::Begin_Prog1(unsigned int uiState, unsigned int uiPass) const
 
             RedRenderer::pcSetSamplerState(2, D3DSAMP_ADDRESSU, D3DTADDRESS_WRAP);
             RedRenderer::pcSetSamplerState(2, D3DSAMP_ADDRESSU, D3DTADDRESS_WRAP);
-            float fBump = _IdentityMatrix._11;
+            float fBump = s_bumpMat._11;
             RedRenderer::pcSetTextureStageState(3, D3DTSS_BUMPENVMAT00, *(DWORD*)&fBump);
-            fBump = _IdentityMatrix._21;
+            fBump = s_bumpMat._21;
             RedRenderer::pcSetTextureStageState(3, D3DTSS_BUMPENVMAT10, *(DWORD*)&fBump);
-            fBump = _IdentityMatrix._12;
+            fBump = s_bumpMat._12;
             RedRenderer::pcSetTextureStageState(3, D3DTSS_BUMPENVMAT01, *(DWORD*)&fBump);
-            fBump = _IdentityMatrix._22;
+            fBump = s_bumpMat._22;
             RedRenderer::pcSetTextureStageState(3, D3DTSS_BUMPENVMAT11, *(DWORD*)&fBump);
         }
         else
@@ -965,13 +965,9 @@ static PblMatrix WaterTextureMatrix(const RedTextureTransform& t)
 // FUNCTION: SWBF2 0x007097c0
 void pcWaterShader::Render_Fixed(const RenderItem* pItem, unsigned int uiPass) const
 {
-    const RedColor refraction((unsigned char)(int)(s_refractionColor.r * 255.0f),
-                              (unsigned char)(int)(s_refractionColor.g * 255.0f),
-                              (unsigned char)(int)(s_refractionColor.b * 255.0f),
-                              (unsigned char)(int)(s_refractionColor.a * 255.0f));
-    const RedColor color = pItem->tweakColor * refraction;
+    const RedColor colorDiffuse = pItem->tweakColor * static_cast<RedColor>(s_refractionColor);
 
-    const RedColorValue diffuse(color);
+    const RedColorValue diffuse(colorDiffuse);
     s_d3dMat.Diffuse.r = diffuse.r;
     s_d3dMat.Diffuse.g = diffuse.g;
     s_d3dMat.Diffuse.b = diffuse.b;
@@ -981,46 +977,40 @@ void pcWaterShader::Render_Fixed(const RenderItem* pItem, unsigned int uiPass) c
 
     if (uiPass == 0)
     {
-        const D3DXMATRIXA16 m(m_diffuseMapTransform2(0, 0), m_diffuseMapTransform2(0, 1), 0.0f, 0.0f,
-                              m_diffuseMapTransform2(1, 0), m_diffuseMapTransform2(1, 1), 0.0f, 0.0f,
-                              m_diffuseMapTransform2(2, 0), m_diffuseMapTransform2(2, 1), 0.0f, 0.0f,
-                              0.0f, 0.0f, 0.0f, 1.0f);
+        PblMatrix diffuseTexMat2(
+            PblVector4(m_diffuseMapTransform2(0, 0), m_diffuseMapTransform2(0, 1), 0.0f, 0.0f),
+            PblVector4(m_diffuseMapTransform2(1, 0), m_diffuseMapTransform2(1, 1), 0.0f, 0.0f),
+            PblVector4(m_diffuseMapTransform2(2, 0), m_diffuseMapTransform2(2, 1), 0.0f, 0.0f),
+            PblVector4(0.0f, 0.0f, 0.0f, 1.0f));
         RedRenderer::pcSetTexture(0, m_diffuseMap2);
-        RedRenderer::pcFFSetTextureTransform(0, reinterpret_cast<const PblMatrix&>(m));
+        RedRenderer::pcFFSetTextureTransform(0, diffuseTexMat2);
         const RedColorValue blendValue(m_diffuseMapBlend, m_diffuseMapBlend, m_diffuseMapBlend, m_diffuseMapBlend);
-        const RedColor blend((unsigned char)(int)(blendValue.r * 255.0f),
-                             (unsigned char)(int)(blendValue.g * 255.0f),
-                             (unsigned char)(int)(blendValue.b * 255.0f),
-                             (unsigned char)(int)(blendValue.a * 255.0f));
-        RedRenderer::pcSetRenderState(D3DRS_TEXTUREFACTOR, blend.GetARGB());
+        RedRenderer::pcSetRenderState(D3DRS_TEXTUREFACTOR, static_cast<RedColor>(blendValue));
     }
 
     if (uiPass == 1)
     {
-        const PblVector4 vTranslation(0.0f, 0.0f, 0.0f, 1.0f);
-        const PblMatrix m1(PblVector4(m_specularMaskTransform1(0, 0), m_specularMaskTransform1(0, 1), 0.0f, 0.0f),
-                           PblVector4(m_specularMaskTransform1(1, 0), m_specularMaskTransform1(1, 1), 0.0f, 0.0f),
-                           PblVector4(m_specularMaskTransform1(2, 0), m_specularMaskTransform1(2, 1), 0.0f, 0.0f),
-                           vTranslation);
-        const PblMatrix m2(PblVector4(m_specularMaskTransform2(0, 0), m_specularMaskTransform2(0, 1), 0.0f, 0.0f),
-                           PblVector4(m_specularMaskTransform2(1, 0), m_specularMaskTransform2(1, 1), 0.0f, 0.0f),
-                           PblVector4(m_specularMaskTransform2(2, 0), m_specularMaskTransform2(2, 1), 0.0f, 0.0f),
-                           vTranslation);
+        PblMatrix specularTexMat1(
+            PblVector4(m_specularMaskTransform1(0, 0), m_specularMaskTransform1(0, 1), 0.0f, 0.0f),
+            PblVector4(m_specularMaskTransform1(1, 0), m_specularMaskTransform1(1, 1), 0.0f, 0.0f),
+            PblVector4(m_specularMaskTransform1(2, 0), m_specularMaskTransform1(2, 1), 0.0f, 0.0f),
+            PblVector4(0.0f, 0.0f, 0.0f, 1.0f));
+        PblMatrix specularTexMat2(
+            PblVector4(m_specularMaskTransform2(0, 0), m_specularMaskTransform2(0, 1), 0.0f, 0.0f),
+            PblVector4(m_specularMaskTransform2(1, 0), m_specularMaskTransform2(1, 1), 0.0f, 0.0f),
+            PblVector4(m_specularMaskTransform2(2, 0), m_specularMaskTransform2(2, 1), 0.0f, 0.0f),
+            PblVector4(0.0f, 0.0f, 0.0f, 1.0f));
         RedRenderer::pcSetTexture(0, m_specularMask1);
         RedRenderer::pcSetTexture(1, m_specularMask2);
-        RedRenderer::pcFFSetTextureTransform(0, m1);
-        RedRenderer::pcFFSetTextureTransform(1, m2);
-        RedRenderer::pcSetRenderState(D3DRS_TEXTUREFACTOR,
-            (unsigned int)(unsigned char)(int)(m_specularMaskBlend * 255.0f) << 24);
+        RedRenderer::pcFFSetTextureTransform(0, specularTexMat1);
+        RedRenderer::pcFFSetTextureTransform(1, specularTexMat2);
+        const RedColorValue blendValue(0.0f, 0.0f, 0.0f, m_specularMaskBlend);
+        RedRenderer::pcSetRenderState(D3DRS_TEXTUREFACTOR, static_cast<RedColor>(blendValue));
     }
     else
     {
-        const RedColorValue& ambient = RedLight::GetGlobalAmbientLight()->m_color;
-        const RedColor ambientColor((unsigned char)(int)(ambient.r * 255.0f),
-                                    (unsigned char)(int)(ambient.g * 255.0f),
-                                    (unsigned char)(int)(ambient.b * 255.0f),
-                                    (unsigned char)(int)(ambient.a * 255.0f));
-        RedRenderer::pcSetRenderState(D3DRS_AMBIENT, ambientColor.GetARGB());
+        const RedColorValue& ambient = RedLight::GetGlobalAmbientLight()->GetColor();
+        RedRenderer::pcSetRenderState(D3DRS_AMBIENT, static_cast<RedColor>(ambient));
         RedRenderer::pcGetDevice()->LightEnable(0, TRUE);
         RedRenderer::pcSetRenderState(D3DRS_LIGHTING, TRUE);
         RedRenderer::pcSetRenderState(D3DRS_COLORVERTEX, FALSE);

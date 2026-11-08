@@ -80,19 +80,6 @@ RedModel::~RedModel()
 // SYNTHETIC: SWBF2 0x006c3eb0
 // RedModel::`scalar deleting destructor'
 
-// FUNCTION: SWBF2 0x006c3e40
-RedSkeleton::~RedSkeleton()
-{
-    if (m_uiNameHash)
-    {
-        _HashTable.Remove(m_uiNameHash);
-    }
-    delete[] m_amDefaultPose;
-    delete[] m_amDefaultPoseInv;
-    delete[] m_aConnections;
-    delete[] m_auiNameHash;
-}
-
 // FUNCTION: SWBF2 0x006c3ee0
 RedShadingState* RedModel::CreateDefaultShadingState(unsigned int uiRenderTypeHash) const
 {

@@ -102,14 +102,62 @@ public:
 
     virtual ~BaseDisplayable() {}
 
-    virtual void OnTraverse(pvs::ITraverser &);
-    virtual void SetActive(int);
-    virtual bool IsActive(int) const;
-    virtual void SetProcessed(int);
-    virtual bool IsProcessed(int) const;
-    virtual bool PortalClip() const;
-    virtual void SetPortalClip(bool);
-    virtual bool PortalActive() const;
+    // TEMPLATE: SWBF2 0x00446c30
+    // pvs::BaseDisplayable<pvs::IDisplayable>::OnTraverse
+    virtual void OnTraverse(pvs::ITraverser&)
+    {
+    }
+    // TEMPLATE: SWBF2 0x00446c40
+    // pvs::BaseDisplayable<pvs::IDisplayable>::SetActive
+    virtual void SetActive(int iFrame)
+    {
+        aframe_ = iFrame;
+    }
+    // TEMPLATE: SWBF2 0x00446c50
+    // pvs::BaseDisplayable<pvs::IDisplayable>::IsActive
+    virtual bool IsActive(int iFrame) const
+    {
+        return aframe_ >= iFrame;
+    }
+    // TEMPLATE: SWBF2 0x00446c70
+    // pvs::BaseDisplayable<pvs::IDisplayable>::SetProcessed
+    virtual void SetProcessed(int iFrame)
+    {
+        pframe_ = iFrame;
+    }
+    // TEMPLATE: SWBF2 0x00446c80
+    // pvs::BaseDisplayable<pvs::IDisplayable>::IsProcessed
+    virtual bool IsProcessed(int iFrame) const
+    {
+        return pframe_ == iFrame;
+    }
+    // TEMPLATE: SWBF2 0x00446cd0
+    // pvs::BaseDisplayable<pvs::IDisplayable>::PortalClip
+    virtual bool PortalClip() const
+    {
+        return (flags_ >> 2) & 1;
+    }
+    // TEMPLATE: SWBF2 0x00446ce0
+    // pvs::BaseDisplayable<pvs::IDisplayable>::SetPortalClip
+    virtual void SetPortalClip(bool bClip)
+    {
+        if (bClip)
+        {
+            flags_ |= 4;
+        }
+        else
+        {
+            flags_ &= ~4u;
+        }
+    }
+    // TEMPLATE: SWBF2 0x00446ca0
+    // pvs::BaseDisplayable<pvs::IDisplayable>::PortalActive
+    virtual bool PortalActive() const
+    {
+        return (flags_ >> 1) & 1;
+    }
+    // TEMPLATE: SWBF2 0x00446cb0
+    // pvs::BaseDisplayable<pvs::IDisplayable>::SetPortalActive
     virtual void SetPortalActive(bool bActive)
     {
         if (bActive)
@@ -121,9 +169,31 @@ public:
             flags_ &= ~2u;
         }
     }
-    virtual bool Dynamic() const;
-    virtual void SetDynamic(bool);
-    virtual pvs::Sector * GetSector();
+    // TEMPLATE: SWBF2 0x00446d00
+    // pvs::BaseDisplayable<pvs::IDisplayable>::Dynamic
+    virtual bool Dynamic() const
+    {
+        return (flags_ >> 3) & 1;
+    }
+    // TEMPLATE: SWBF2 0x00446d10
+    // pvs::BaseDisplayable<pvs::IDisplayable>::SetDynamic
+    virtual void SetDynamic(bool bDynamic)
+    {
+        if (bDynamic)
+        {
+            flags_ |= 8;
+        }
+        else
+        {
+            flags_ &= ~8u;
+        }
+    }
+    // TEMPLATE: SWBF2 0x00446d30
+    // pvs::BaseDisplayable<pvs::IDisplayable>::GetSector
+    virtual pvs::Sector* GetSector()
+    {
+        return sector_;
+    }
     virtual void SetSector(pvs::Sector *pSector)
     {
         if (!this->PortalActive())
