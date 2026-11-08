@@ -28,6 +28,17 @@ int __cdecl DecodeBase64(unsigned char* pOutput, unsigned int uiOutputCapacity, 
 // GLOBAL: SWBF2 0x01e65044
 unsigned int gListedLobbyCount;
 
+// FUNCTION: SWBF2 0x005d45f0
+void ProcessGalaxyData()
+{
+    if (!galaxy::api::GalaxyFactory::GetInstance())
+    {
+        return;
+    }
+    galaxy::api::IGalaxy* pGalaxy = galaxy::api::GalaxyFactory::GetInstance();
+    pGalaxy->ProcessData();
+}
+
 // FUNCTION: SWBF2 0x005d4610
 void* GetGalaxyUser()
 {

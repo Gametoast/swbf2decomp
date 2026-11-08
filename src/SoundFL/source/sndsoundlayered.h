@@ -162,7 +162,15 @@ public:
     static void operator delete(void* p) { smFreeList.Free(p); }
 
     ~Properties();
-    static void __cdecl DestroyAll();
+    // FUNCTION: SWBF2 0x00734010
+    static void __cdecl DestroyAll()
+    {
+        while (!smPropertyList.IsEmpty())
+        {
+            delete (Properties*)smPropertyList.GetFirst()->GetObjectA(
+                &smPropertyList, offsetof(Properties, mNode));
+        }
+    }
 
     void Read(PblFileChunk& chunk);
 

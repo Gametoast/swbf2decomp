@@ -99,6 +99,18 @@ public:
 
 protected:
 
+    void SetReturnCurrentPlayStateMode(bool bReturnCurrent)
+    {
+        if (bReturnCurrent)
+        {
+            mFlags |= flags_returnCurrentPlayState;
+        }
+        else
+        {
+            mFlags &= ~flags_returnCurrentPlayState;
+        }
+    }
+
     void SetDesiredPlayState(PlayState ePlayState);
 
     void SetPlayState(PlayState ePlayState);

@@ -33,12 +33,7 @@ StreamPacket* StreamLowHighPass::GetPacket(unsigned int uiOutput)
     StreamPacketIO* const pIO = &mInputPacket;
     if (pIO->GetPacket() == 0)
     {
-
-        StreamNodeSource* const pNode = StreamNodeSink::mConnection.mInputNode;
-        pIO->SetPacket(
-            pNode != 0
-                ? pNode->GetPacket(StreamNodeSink::mConnection.mInputNodeOutputIndex)
-                : 0);
+        pIO->SetPacket(ConnectionGetPacket());
     }
 
     StreamPacket* const pInput = pIO->GetPacket();

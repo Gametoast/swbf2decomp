@@ -132,18 +132,12 @@ SourceTransport::PlayState StreamCaptureSourceBase::Update(bool bHaveDevice)
         StreamPacket* const pPacket = mPackets + mReadPacketIndex;
 
         const SourceTransport::PlayState eDesired =
-            QueryDesiredPlayState();
-
-        SourceTransport::mFlags = (unsigned short)
-            (SourceTransport::mFlags
-             & ~(unsigned int)SourceTransport::flags_updateTransport);
+            GetDesiredPlayState();
 
         const SourceTransport::PlayState eCurrent =
             GetCurrentPlayState();
 
-        SourceTransport::mFlags = (unsigned short)
-            (SourceTransport::mFlags
-             & ~(unsigned int)SourceTransport::flags_returnCurrentPlayState);
+        SetReturnCurrentPlayStateMode(false);
 
         if (eDesired == SourceTransport::playState_invalid)
         {
@@ -192,11 +186,7 @@ SourceTransport::PlayState StreamCaptureSourceBase::Update(bool bHaveDevice)
 
     {
         SourceTransport::PlayState eState =
-            QueryDesiredPlayState();
-
-        SourceTransport::mFlags = (unsigned short)
-            (SourceTransport::mFlags
-             & ~(unsigned int)SourceTransport::flags_updateTransport);
+            GetDesiredPlayState();
 
         if (eState == SourceTransport::playState_invalid)
         {
@@ -207,9 +197,7 @@ SourceTransport::PlayState StreamCaptureSourceBase::Update(bool bHaveDevice)
         SetPlayState(SourceTransport::playState_stopped);
         Flush();
 
-        SourceTransport::mFlags = (unsigned short)
-            (SourceTransport::mFlags
-             | (unsigned int)SourceTransport::flags_returnCurrentPlayState);
+        SetReturnCurrentPlayStateMode(true);
     }
 
     return SourceTransport::playState_invalid;

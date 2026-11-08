@@ -57,6 +57,9 @@ public:
 
     // TEMPLATE: SWBF2 0x0042cd20
     // PblHandle<GameObject>::~PblHandle<GameObject>
+
+    // TEMPLATE: SWBF2 0x0042e960
+    // PblHandle<GameObject const >::~PblHandle<GameObject const >
     ~PblHandle() {}
 
     // TEMPLATE: SWBF2 0x005d3700
@@ -116,6 +119,11 @@ public:
     {
         mObject = pObject;
         mSavedHandleId = pObject ? pObject->GetHandleId() : 0;
+    }
+
+    bool IsDeadHandle() const
+    {
+        return mObject && mObject->GetHandleId() != mSavedHandleId;
     }
 
 private:

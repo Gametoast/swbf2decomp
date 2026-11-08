@@ -417,15 +417,6 @@ void EngineBase::Close()
     smOpened = false;
 }
 
-// FUNCTION: SWBF2 0x00734010
-void __cdecl SoundLayered::Properties::DestroyAll()
-{
-    while (!smPropertyList.IsEmpty())
-    {
-        delete (Properties*)((char*)smPropertyList.mHead.mNext - offsetof(Properties, mNode));
-    }
-}
-
 // FUNCTION: SWBF2 0x00734130
 Stream* EngineBase::GetStream(unsigned int uiIndex)
 {

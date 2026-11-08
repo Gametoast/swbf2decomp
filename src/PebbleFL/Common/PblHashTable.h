@@ -76,6 +76,7 @@ public:
         }
 
         operator TYPE*() const { return (TYPE*)_table->_uiTable[SLOTS + _pos]; }
+        TYPE* operator->() const { return (TYPE*)_table->_uiTable[SLOTS + _pos]; }
         TYPE& operator*() const { return *(TYPE*)_table->_uiTable[SLOTS + _pos]; }
 
         unsigned int GetKey() const { return _table->_uiTable[_pos]; }

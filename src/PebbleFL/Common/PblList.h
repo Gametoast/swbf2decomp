@@ -168,6 +168,8 @@ public:
         // PblList<FlagItem>::Itor::operator*
         // TEMPLATE: SWBF2 0x005d3720
         // PblList<Controllable>::Itor::operator*
+        // TEMPLATE: SWBF2 0x00446da0
+        // PblList<Factory<Entity,EntityClass,EntityDesc> >::Itor::operator*
         TYPE& operator*() const { return *_pNode->_pObject; }
         // TEMPLATE: SWBF2 0x0049e1d0
         // PblList<Factory<Weapon,WeaponClass,WeaponDesc> >::Itor::operator->
@@ -175,6 +177,8 @@ public:
         // PblList<Factory<Ordnance,OrdnanceClass,OrdnanceDesc> >::Itor::operator->
         // TEMPLATE: SWBF2 0x00437dd0
         // PblList<Controllable>::Itor::operator->
+        // TEMPLATE: SWBF2 0x00446d90
+        // PblList<Factory<Entity,EntityClass,EntityDesc> >::Itor::operator->
         TYPE* operator->() const { return _pNode->_pObject; }
 
         // TEMPLATE: SWBF2 0x005d3bd0
@@ -205,6 +209,8 @@ public:
 
     int GetCount() const { return _iCount; }
 
+    // TEMPLATE: SWBF2 0x0053bff0
+    // PblList<Factory<Ordnance,OrdnanceClass,OrdnanceDesc> >::GetFirst
     // TEMPLATE: SWBF2 0x0049e1b0
     // PblList<Factory<Weapon,WeaponClass,WeaponDesc> >::GetFirst
     // TEMPLATE: SWBF2 0x00487fa0
@@ -267,9 +273,9 @@ public:
     // PblList<FlashyTextElement>::Clear
     void Clear()
     {
-        while (_iCount > 0)
+        while (GetCount() > 0)
         {
-            Remove(_head._pNext);
+            Remove(GetFirst());
         }
     }
 
