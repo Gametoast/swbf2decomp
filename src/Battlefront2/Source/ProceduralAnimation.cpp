@@ -15,15 +15,15 @@
 #include "PebbleFL/Common/PblFile.h"
 
 // FUNCTION: SWBF2 0x00628c00
-bool* PAAnimationGroup::EnterClient()
+void PAAnimationGroup::EnterClient()
 {
-    return mActive = &mClientActive;
+    mActive = &mClientActive;
 }
 
 // FUNCTION: SWBF2 0x00628c10
-bool* PAAnimationGroup::LeaveClient()
+void PAAnimationGroup::LeaveClient()
 {
-    return mActive = &mHostActive;
+    mActive = &mHostActive;
 }
 
 // FUNCTION: SWBF2 0x00628530
@@ -60,118 +60,6 @@ void PAAnimationGroup::ClientGeometryCreated(CollisionObject* pHost, CollisionOb
 extern PblVector3 gVectorZero;
 extern bool netIsLocalTurn;
 extern bool netFrameLock;
-
-// FUNCTION: SWBF2 0x00628eb0
-void PAManagerInterpolator::Destroy()
-{
-    if (!netFrameLock)
-    {
-        DeactivateThread();
-    }
-}
-
-// FUNCTION: SWBF2 0x00628ed0
-bool PAManagerInterpolator::Update(float)
-{
-    mIsFrameUpdate = true;
-    if (mNextTotalTurnTime > 0.0f)
-    {
-        float fRemaining = mTotalTurnTime - mTotalFrameTime - mNextTotalTurnTime;
-        mTotalTurnTime = mNextTotalTurnTime;
-        mNextTotalTurnTime = 0.0f;
-        mTotalFrameTime = 0.0f;
-        PAManager::sInstance->Update(fRemaining);
-    }
-    float fTurnRatio = NetGame::GetTurnRatio();
-    PAManager::sInstance->Update(mTotalTurnTime * fTurnRatio - mTotalFrameTime);
-    mIsFrameUpdate = false;
-    mTotalFrameTime = mTotalTurnTime * fTurnRatio;
-    return true;
-}
-
-// FUNCTION: SWBF2 0x00629160
-void PAManager::CreateClient()
-{
-    pamanagerInterpolator.Create();
-    if (NetGame::IsOneWorld())
-    {
-        sInstance->DeactivateThread();
-        sInstance->ActivateThread(-99, PER_TURN);
-    }
-    else
-    {
-        sClientInstance = new PAManager;
-    }
-}
-
-// FUNCTION: SWBF2 0x00629200
-void PAManager::DestroyClient()
-{
-    if (NetGame::IsOneWorld())
-    {
-        pamanagerInterpolator.Destroy();
-    }
-    delete sClientInstance;
-    sClientInstance = NULL;
-}
-
-// FUNCTION: SWBF2 0x006292e0
-void PAManager::EnterClient()
-{
-    if (NetGame::IsOneWorld())
-    {
-        return;
-    }
-    sInstance = sClientInstance;
-    for (PblHashTable<PAAnimationGroup, 32>::Itor it = PAAnimationGroup::_HashTable.Begin();
-         it != PAAnimationGroup::_HashTable.End(); ++it)
-    {
-        (*it).EnterClient();
-    }
-    for (int i = 0; i < 255; ++i)
-    {
-        sPAAnims[i].mTimer = &sPAAnims[i].mClientTimer;
-        sPAAnims[i].mGeometry = &sPAAnims[i].mClientGeometry;
-    }
-    for (int i = 0; i < PAAnimationGroup::mNumHierarchies; ++i)
-    {
-        PAHierarchy& hierarchy = *PAAnimationGroup::mHierarchies[i];
-        hierarchy.mRoot.mGeometry = &hierarchy.mRoot.mClientGeometry;
-        for (int j = 0; j < hierarchy.mNumObjs; ++j)
-        {
-            hierarchy.mObjs[j].mGeometry = &hierarchy.mObjs[j].mClientGeometry;
-        }
-    }
-}
-
-// FUNCTION: SWBF2 0x006293d0
-void PAManager::LeaveClient()
-{
-    if (NetGame::IsOneWorld())
-    {
-        return;
-    }
-    sInstance = sHostInstance;
-    for (PblHashTable<PAAnimationGroup, 32>::Itor it = PAAnimationGroup::_HashTable.Begin();
-         it != PAAnimationGroup::_HashTable.End(); ++it)
-    {
-        (*it).LeaveClient();
-    }
-    for (int i = 0; i < 255; ++i)
-    {
-        sPAAnims[i].mTimer = &sPAAnims[i].mHostTimer;
-        sPAAnims[i].mGeometry = &sPAAnims[i].mHostGeometry;
-    }
-    for (int i = 0; i < PAAnimationGroup::mNumHierarchies; ++i)
-    {
-        PAHierarchy& hierarchy = *PAAnimationGroup::mHierarchies[i];
-        hierarchy.mRoot.mGeometry = &hierarchy.mRoot.mHostGeometry;
-        for (int j = 0; j < hierarchy.mNumObjs; ++j)
-        {
-            hierarchy.mObjs[j].mGeometry = &hierarchy.mObjs[j].mHostGeometry;
-        }
-    }
-}
 void ReadMatrix(NetPktGroup& group, PblMatrix& matrix);
 void WriteMatrix(NetPktGroup& group, const PblMatrix& matrix);
 
@@ -1056,6 +944,34 @@ void PAManagerInterpolator::Create()
     }
 }
 
+// FUNCTION: SWBF2 0x00628eb0
+void PAManagerInterpolator::Destroy()
+{
+    if (!netFrameLock)
+    {
+        DeactivateThread();
+    }
+}
+
+// FUNCTION: SWBF2 0x00628ed0
+bool PAManagerInterpolator::Update(float)
+{
+    mIsFrameUpdate = true;
+    if (mNextTotalTurnTime > 0.0f)
+    {
+        float fRemaining = mTotalTurnTime - mTotalFrameTime - mNextTotalTurnTime;
+        mTotalTurnTime = mNextTotalTurnTime;
+        mNextTotalTurnTime = 0.0f;
+        mTotalFrameTime = 0.0f;
+        PAManager::sInstance->Update(fRemaining);
+    }
+    float fTurnRatio = NetGame::GetTurnRatio();
+    PAManager::sInstance->Update(mTotalTurnTime * fTurnRatio - mTotalFrameTime);
+    mIsFrameUpdate = false;
+    mTotalFrameTime = mTotalTurnTime * fTurnRatio;
+    return true;
+}
+
 // FUNCTION: SWBF2 0x00628f60
 PAManager::PAManager()
 {
@@ -1103,6 +1019,32 @@ void PAManager::Destroy()
     PAAnimationGroup::mNumHierarchies = 0;
 }
 
+// FUNCTION: SWBF2 0x00629160
+void PAManager::CreateClient()
+{
+    pamanagerInterpolator.Create();
+    if (NetGame::IsOneWorld())
+    {
+        sInstance->DeactivateThread();
+        sInstance->ActivateThread(-99, PER_TURN);
+    }
+    else
+    {
+        sClientInstance = new PAManager;
+    }
+}
+
+// FUNCTION: SWBF2 0x00629200
+void PAManager::DestroyClient()
+{
+    if (NetGame::IsOneWorld())
+    {
+        pamanagerInterpolator.Destroy();
+    }
+    delete sClientInstance;
+    sClientInstance = NULL;
+}
+
 // FUNCTION: SWBF2 0x00629230
 bool PAManager::Update(float fDeltaTime)
 {
@@ -1117,4 +1059,62 @@ bool PAManager::Update(float fDeltaTime)
         (*i).UpdateAnimations(fDeltaTime);
     }
     return true;
+}
+
+// FUNCTION: SWBF2 0x006292e0
+void PAManager::EnterClient()
+{
+    if (NetGame::IsOneWorld())
+    {
+        return;
+    }
+    sInstance = sClientInstance;
+    for (PblHashTable<PAAnimationGroup, 32>::Itor it = PAAnimationGroup::_HashTable.Begin();
+         it != PAAnimationGroup::_HashTable.End(); ++it)
+    {
+        (*it).EnterClient();
+    }
+    for (int i = 0; i < 255; ++i)
+    {
+        sPAAnims[i].mTimer = &sPAAnims[i].mClientTimer;
+        sPAAnims[i].mGeometry = &sPAAnims[i].mClientGeometry;
+    }
+    for (int i = 0; i < PAAnimationGroup::mNumHierarchies; ++i)
+    {
+        PAHierarchy& hierarchy = *PAAnimationGroup::mHierarchies[i];
+        hierarchy.mRoot.mGeometry = &hierarchy.mRoot.mClientGeometry;
+        for (int j = 0; j < hierarchy.mNumObjs; ++j)
+        {
+            hierarchy.mObjs[j].mGeometry = &hierarchy.mObjs[j].mClientGeometry;
+        }
+    }
+}
+
+// FUNCTION: SWBF2 0x006293d0
+void PAManager::LeaveClient()
+{
+    if (NetGame::IsOneWorld())
+    {
+        return;
+    }
+    sInstance = sHostInstance;
+    for (PblHashTable<PAAnimationGroup, 32>::Itor it = PAAnimationGroup::_HashTable.Begin();
+         it != PAAnimationGroup::_HashTable.End(); ++it)
+    {
+        (*it).LeaveClient();
+    }
+    for (int i = 0; i < 255; ++i)
+    {
+        sPAAnims[i].mTimer = &sPAAnims[i].mHostTimer;
+        sPAAnims[i].mGeometry = &sPAAnims[i].mHostGeometry;
+    }
+    for (int i = 0; i < PAAnimationGroup::mNumHierarchies; ++i)
+    {
+        PAHierarchy& hierarchy = *PAAnimationGroup::mHierarchies[i];
+        hierarchy.mRoot.mGeometry = &hierarchy.mRoot.mHostGeometry;
+        for (int j = 0; j < hierarchy.mNumObjs; ++j)
+        {
+            hierarchy.mObjs[j].mGeometry = &hierarchy.mObjs[j].mHostGeometry;
+        }
+    }
 }

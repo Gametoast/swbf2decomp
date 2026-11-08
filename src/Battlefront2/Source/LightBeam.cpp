@@ -169,26 +169,6 @@ FLEffectClass* LightBeamEffect::BuildClass(PblConfig& config) const
     return pBeam;
 }
 
-// FUNCTION: SWBF2 0x0056fb10
-LightBeam::LightBeam(const LightBeam& that)
-    : _Flare(that._Flare)
-    , _vHeadPosition(that._vHeadPosition)
-    , _vDirection(that._vDirection)
-    , _color(that._color)
-    , _fLength(that._fLength)
-    , _fHeadSizeX(that._fHeadSizeX)
-    , _fHeadSizeZ(that._fHeadSizeZ)
-    , _fTailSizeX(that._fTailSizeX)
-    , _fTailSizeZ(that._fTailSizeZ)
-    , _fFadeLength(that._fFadeLength)
-    , _fFadeAmount(that._fFadeAmount)
-    , _fSquaredDrawDistance(that._fSquaredDrawDistance)
-    , _fFlareIntensity(that._fFlareIntensity)
-    , _fBeamIntensity(that._fBeamIntensity)
-    , _fFlareCosAngle(0.5f)
-{
-}
-
 inline ManagedLightBeam::ManagedLightBeam(const LightBeam& beam)
     : RedSceneObject(&largeEffectLodData)
     , LightBeam(beam)

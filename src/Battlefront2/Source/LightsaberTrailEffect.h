@@ -106,7 +106,18 @@ protected:
 
 public:
 
+    void Render(unsigned int uiFlags) const
+    {
+        if (m_uiNumSamples)
+        {
+            LightsaberTrailEffect* pEffect = LightsaberTrailEffect::s_pInstance;
+            s_uiSamplePrev = 0;
+            s_uiSample = 0;
+            pEffect->RenderLightsaberTrail(this, uiFlags);
+        }
+    }
     bool IsTrailOn() const { return m_bTrailWasOn; }
+    void SetTrailOn(bool bTrailOn) { m_bTrailOn = bTrailOn; }
     unsigned int GetNumSamples() const { return m_uiNumSamples; }
     float GetTime(unsigned int iSample) const { return m_afTime[(m_uiSampleNext - m_uiNumSamples + iSample) & 7]; }
     const PblVector3& GetPos(unsigned int iSample) const { return m_avPos[(m_uiSampleNext - m_uiNumSamples + iSample) & 7]; }

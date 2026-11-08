@@ -42,6 +42,25 @@ void SunFlareEffect::Create()
     }
 }
 
+// VTABLE: SWBF2 0x007969e4
+class SunSkyRenderable : public Renderable
+{
+public:
+    SunSkyRenderable()
+        : Renderable(1)
+    {
+    }
+
+    virtual ~SunSkyRenderable()
+    {
+    }
+
+    // SYNTHETIC: SWBF2 0x0042d220
+    // SunSkyRenderable::`scalar deleting destructor'
+
+    virtual void Render(int value);
+};
+
 // SYNTHETIC: SWBF2 0x00402120
 // `dynamic initializer for 's_SunSkyRenderable''
 // SYNTHETIC: SWBF2 0x00766d00
@@ -533,11 +552,6 @@ float SunFlare::GetDistance()
         fDistance = 2000.0f;
     }
     return fDistance;
-}
-
-// FUNCTION: SWBF2 0x0042e960
-void sub_42E960()
-{
 }
 
 // FUNCTION: SWBF2 0x0042e740

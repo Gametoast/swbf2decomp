@@ -72,15 +72,6 @@ FLEffectClass* LensFlareEffect::BuildClass(PblConfig& config) const
     return pFlare;
 }
 
-// FUNCTION: SWBF2 0x0056f4a0
-LensFlare::LensFlare(const LensFlare& that)
-    : _fSize(that._fSize)
-    , _color(that._color)
-    , _fSquaredDrawDistance(that._fSquaredDrawDistance)
-    , _uiHideInView(0)
-{
-}
-
 // FUNCTION: SWBF2 0x0056f8c0
 void LensFlareEffect::LensFlareList::Cleanup()
 {

@@ -709,114 +709,64 @@ PropObject* PropModelMesh::CreateObject(float x, float z, float rotation)
 // FUNCTION: SWBF2 0x0062d330
 void PropModelMesh::SetupMatrix(PblMatrix& matrix, float rotation)
 {
-    const PblVector3 vTrans = matrix.GetTranslation();
-    const PblVector3 vOrigin = vTrans;
-    const float x = vOrigin.x;
-    const float z = vOrigin.z;
     PblVector3 vNormal(0.0f, 1.0f, 0.0f);
+    PblVector3 vOrigin = matrix.GetTranslation();
     float y;
 
     if (mType == PMM_MESH)
     {
-        PropGenerator::GetTerrainYAndNormal(x, z, y, vNormal);
+        PropGenerator::GetTerrainYAndNormal(vOrigin.x, vOrigin.z, y, vNormal);
+        vOrigin.SetY(y);
     }
     else
     {
-        float y0 = 0.0f;
-        float y1 = 0.0f;
-        float y2 = 0.0f;
-        const PblVector3 v0(x, 0.0f, z + 4.0f);
-        PropGenerator::GetTerrainY(v0.x, v0.z, y0);
-        const PblVector3 v1(x - 3.0f, 0.0f, z - 3.0f);
-        PropGenerator::GetTerrainY(v1.x, v1.z, y1);
-        const PblVector3 v2(x + 3.0f, 0.0f, z - 3.0f);
-        PropGenerator::GetTerrainY(v2.x, v2.z, y2);
+        float leftHeight = 0.0f;
+        float rightHeight = 0.0f;
+        float topHeight = 0.0f;
 
-        y = (y1 + y0 + y2) / 3.0f;
+        PropGenerator::GetTerrainY(vOrigin.x, vOrigin.z + 4.0f, topHeight);
+        PropGenerator::GetTerrainY(vOrigin.x - 3.0f, vOrigin.z - 3.0f, leftHeight);
+        PropGenerator::GetTerrainY(vOrigin.x + 3.0f, vOrigin.z - 3.0f, rightHeight);
 
-        const float ax = x - x;
-        const float ay = y0 - (y2 + y1) * 0.5f;
-        const float az = v0.z - v1.z;
-        const float bx = v2.x - v1.x;
-        const float by = y2 - y1;
-        const float bz = v1.z - v1.z;
-        const PblVector3 vCross(bz * ay - by * az, az * bx - bz * ax, by * ax - ay * bx);
-        PblVector3 vUnit;
-        D3DXVec3Normalize((D3DXVECTOR3*)&vUnit, (const D3DXVECTOR3*)&vCross);
-        vNormal = vUnit;
+        vOrigin.y = (leftHeight + topHeight + rightHeight) / 3.0f;
+        const PblVector3 up = PblVector3(vOrigin.x, topHeight, vOrigin.z + 4.0f) -
+                              PblVector3(vOrigin.x, (rightHeight + leftHeight) * 0.5f, vOrigin.z - 3.0f);
+        const PblVector3 right = PblVector3(vOrigin.x + 3.0f, rightHeight, vOrigin.z - 3.0f) -
+                                 PblVector3(vOrigin.x - 3.0f, leftHeight, vOrigin.z - 3.0f);
+        vNormal = Normalize(CrossProduct(up, right));
     }
 
-    matrix.SetTranslation(PblVector3(x, y, z));
+    matrix.SetTranslation(vOrigin);
 
     const float fStiffness = mStiffness;
     if (fStiffness > 0.0f)
     {
-        const float fFlex = 1.0f - fStiffness;
-        vNormal = PblVector3(fFlex * vNormal.x + fStiffness * 0.0f, vNormal.y * fFlex + fStiffness,
-                             vNormal.z * fFlex + fStiffness * 0.0f);
+        vNormal = vNormal * (1.0f - fStiffness) + PblVector3(0.0f, 1.0f, 0.0f) * fStiffness;
     }
 
     const float fScale = mScale;
     if (mType == PMM_MESH)
     {
-        const PblVector3 vPos(x - mYOffset * vNormal.x, y - vNormal.y * mYOffset,
-                              z - vNormal.z * mYOffset);
+        const PblVector3 vPos = vOrigin - vNormal * mYOffset;
         PblVector3 vDir;
         vDir.x = PblMath::Sin(rotation);
         vDir.y = 0.0f;
         vDir.z = -PblMath::Cos(rotation);
 
-        PblMatrix scale;
-        scale.m[0][0] = fScale;
-        scale.m[0][1] = 0.0f;
-        scale.m[0][2] = 0.0f;
-        scale.m[0][3] = 0.0f;
-        scale.m[1][0] = 0.0f;
-        scale.m[1][1] = fScale;
-        scale.m[1][2] = 0.0f;
-        scale.m[1][3] = 0.0f;
-        scale.m[2][0] = 0.0f;
-        scale.m[2][1] = 0.0f;
-        scale.m[2][2] = fScale;
-        scale.m[2][3] = 0.0f;
-        scale.m[3][0] = 0.0f;
-        scale.m[3][1] = 0.0f;
-        scale.m[3][2] = 0.0f;
-        scale.m[3][3] = 1.0f;
-
-        const PblMatrix frame = NormalMatrix(vDir, vNormal, vPos);
-        PblMatrix result;
-        result = scale * frame;
-        matrix = result;
-        return;
+        const PblMatrix scale(PblVector4(fScale, 0.0f, 0.0f, 0.0f),
+                              PblVector4(0.0f, fScale, 0.0f, 0.0f),
+                              PblVector4(0.0f, 0.0f, fScale, 0.0f),
+                              PblVector4(0.0f, 0.0f, 0.0f, 1.0f));
+        matrix = scale * NormalMatrix(vDir, vNormal, vPos);
     }
-
-    matrix = gMatrixIdentity;
-    matrix[1] = vNormal;
-    matrix.m[1][3] = 0.0f;
-
-    PblVector3 vOut;
-    const float bx = -matrix.m[2][0];
-    const float by = -matrix.m[2][1];
-    const float bz = -matrix.m[2][2];
-    PblVector3 vIn(matrix.m[1][2] * by - matrix.m[1][1] * bz,
-                   matrix.m[1][0] * bz - matrix.m[1][2] * bx,
-                   matrix.m[1][1] * bx - matrix.m[1][0] * by);
-    D3DXVec3Normalize((D3DXVECTOR3*)&vOut, (const D3DXVECTOR3*)&vIn);
-    matrix[0] = vOut;
-    matrix.m[0][3] = 0.0f;
-
-    vIn = PblVector3(matrix.m[0][1] * matrix.m[1][2] - matrix.m[0][2] * matrix.m[1][1],
-                     matrix.m[0][2] * matrix.m[1][0] - matrix.m[0][0] * matrix.m[1][2],
-                     matrix.m[0][0] * matrix.m[1][1] - matrix.m[0][1] * matrix.m[1][0]);
-    D3DXVec3Normalize((D3DXVECTOR3*)&vOut, (const D3DXVECTOR3*)&vIn);
-    matrix[2] = vOut;
-    matrix.m[2][3] = 0.0f;
-
-    matrix.m[3][0] = x - mYOffset * vNormal.x;
-    matrix.m[3][1] = y - vNormal.y * mYOffset;
-    matrix.m[3][2] = z - mYOffset * vNormal.z;
-    matrix.m[3][3] = 1.0f;
+    else
+    {
+        matrix = gMatrixIdentity;
+        matrix.SetYAxis(vNormal);
+        matrix.SetXAxis(Normalize(CrossProduct(-matrix.GetZAxis(), matrix.GetYAxis())));
+        matrix.SetZAxis(Normalize(CrossProduct(matrix.GetXAxis(), matrix.GetYAxis())));
+        matrix.SetTranslation(vOrigin - vNormal * mYOffset);
+    }
 }
 
 // FUNCTION: SWBF2 0x0062d900

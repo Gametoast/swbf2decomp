@@ -120,10 +120,6 @@ bool OrbitalStrike::Update(float fDeltaTime)
     return true;
 }
 
-// TEMPLATE: SWBF2 0x005f7140
-// Factory<Ordnance,OrdnanceClass,OrdnanceDesc>::Find
-template OrdnanceClass* Factory<Ordnance, OrdnanceClass, OrdnanceDesc>::Find(unsigned int);
-
 // FUNCTION: SWBF2 0x005f7010
 bool OrbitalStrikeClass::SetProperty(unsigned int uProperty, const char* pszValue)
 {

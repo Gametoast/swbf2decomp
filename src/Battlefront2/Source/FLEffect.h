@@ -46,7 +46,7 @@ public:
 
     bool IsEnabled() const { return m_bEnabled; }
 
-    static void InitAll(bool bMission);
+    static void InitAll(bool bAllowRender);
 
     static void CleanupAll();
 

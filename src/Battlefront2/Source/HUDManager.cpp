@@ -448,7 +448,7 @@ void HUD::Manager::Load(PblFileChunk& chunk)
 #include "PebbleFL/Common/PblChunk.h"
 #include "PebbleFL/Common/PblConfig.h"
 #include "PebbleFL/Common/PblHashTable.h"
-#include "RedEngineFL/Graphics/RedAmbientLight.h"
+#include "RedEngineFL/Graphics/RedLight.h"
 #include "RedEngineFL/Graphics/RedColor.h"
 #include "RedEngineFL/Graphics/RedDirectionalLight.h"
 #include "RedEngineFL/Graphics/RedLight.h"

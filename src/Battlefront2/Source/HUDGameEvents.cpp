@@ -1792,11 +1792,7 @@ void HUD::GameEvents::UpdateWeaponEvents(const RedCamera* const pCamera, const C
 void HUD::GameEvents::UpdateHealth(const Character* const pCharacter, const GameObject* const pObject,
                                    PlayerEvents& events, PlayerData& data)
 {
-    float fHealth = pObject->mCurHealth;
-    if (0.0f > fHealth)
-    {
-        fHealth = 0.0f;
-    }
+    const float fHealth = Max(0.0f, pObject->mCurHealth);
 
     const bool bHero = pObject->GetGameObjectClass()->GetHeroFlag();
     if (data.isHero != bHero)
@@ -1813,8 +1809,16 @@ void HUD::GameEvents::UpdateHealth(const Character* const pCharacter, const Game
         {
             if (pCharacter->mPlayerId < 1)
             {
-                HUD::Event pulse(gPlayerEvents[iPlayer].healthRegenPulseRate, fHealth > data.health ? 0.5f : FLT_MAX);
-                pulse.Send();
+                if (fHealth > data.health)
+                {
+                    HUD::Event healthRegenPulse(gPlayerEvents[iPlayer].healthRegenPulseRate, 0.5f);
+                    healthRegenPulse.Send();
+                }
+                else
+                {
+                    HUD::Event healthRegenPulse(gPlayerEvents[iPlayer].healthRegenPulseRate, FLT_MAX);
+                    healthRegenPulse.Send();
+                }
             }
         }
     }

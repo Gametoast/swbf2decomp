@@ -48,20 +48,7 @@ public:
 };
  
 
-// VTABLE: SWBF2 0x007969e4
-class SunSkyRenderable : public Renderable
-{
-public:
-    SunSkyRenderable()
-        : Renderable(1)
-    {
-    }
 
-    // SYNTHETIC: SWBF2 0x0042d220
-    // SunSkyRenderable::`scalar deleting destructor'
-
-    virtual void Render(int value);
-};
  
 
  

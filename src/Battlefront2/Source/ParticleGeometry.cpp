@@ -204,15 +204,7 @@ void ParticleGeometry::Render(Particle& particle, bool bLast) const
 
     const PblBox& box = ParticleSystem::GetBoundingBox();
     const PblVector3& vPos = particle.mPosition;
-    if (!(vPos.x >= box._vMin.x && vPos.x <= box._vMax.x))
-    {
-        return;
-    }
-    if (!(vPos.y >= box._vMin.y && vPos.y <= box._vMax.y))
-    {
-        return;
-    }
-    if (!(vPos.z >= box._vMin.z && vPos.z <= box._vMax.z))
+    if (!box.ContainsPoint(vPos))
     {
         return;
     }
