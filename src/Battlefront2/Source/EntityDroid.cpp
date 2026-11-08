@@ -638,10 +638,6 @@ void EntityDroid::FreezeMovement()
     }
 }
 
-// TEMPLATE: SWBF2 0x0049e180
-// Factory<Weapon,WeaponClass,WeaponDesc>::Find
-template WeaponClass* Factory<Weapon, WeaponClass, WeaponDesc>::Find(unsigned int);
-
 
 
 // FUNCTION: SWBF2 0x00499640
@@ -1662,23 +1658,6 @@ void EntityDroid::SetupCameraZoomFactor(float& rZoom)
     {
         rZoom = 1.0f;
     }
-}
-
-// FUNCTION: SWBF2 0x0049ccb0
-CameraTrackSetting::CameraTrackSetting(const CameraTrackSetting& other)
-    : mCameraEyePointOffset(other.mCameraEyePointOffset),
-      mCameraTrackCenter(other.mCameraTrackCenter),
-      mCameraTrackOffset(other.mCameraTrackOffset),
-      mCameraSafePoint(other.mCameraSafePoint),
-      mCameraMoveTensionL(other.mCameraMoveTensionL),
-      mCameraMoveTensionR(other.mCameraMoveTensionR),
-      mCameraMoveTensionU(other.mCameraMoveTensionU),
-      mCameraMoveTensionD(other.mCameraMoveTensionD),
-      mCameraMoveTensionF(other.mCameraMoveTensionF),
-      mCameraMoveTensionB(other.mCameraMoveTensionB),
-      mCameraAimTension(other.mCameraAimTension),
-      mCameraTiltValue(other.mCameraTiltValue)
-{
 }
 
 // FUNCTION: SWBF2 0x00499e10

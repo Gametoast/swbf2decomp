@@ -70,26 +70,6 @@ namespace
         return pCtrl->mOpenRadius > 10.0f ? FT_FLYINGV : FT_DOUBLEFILE;
     }
 
-    template <typename TYPE>
-    inline TYPE* ResolveHandle(PblHandle<TYPE>& handle)
-    {
-        return (TYPE*)handle;
-    }
-
-    GameObject* ResolveHandleAt(void* pHandleAddr)
-    {
-        return pHandleAddr ? ResolveHandle(*reinterpret_cast<PblHandle<GameObject>*>(pHandleAddr)) : 0;
-    }
-
-    PblHandle<GameObject> BuildHandle(GameObject* pObject)
-    {
-        PblHandle<GameObject> h;
-        h.mObject = pObject;
-        h.mSavedHandleId = pObject ? pObject->GetHandleId() : 0;
-        return h;
-    }
-
-
     inline Controllable* SeatOf(const GameObject* pTarget)
     {
         return pTarget->mControllableList.GetFirst()->_pObject;
@@ -180,20 +160,20 @@ void UnitFollowAgent::EnterState()
             return;
         }
 
-        unsigned int uTries = 0;
+        unsigned int loopcount = 0;
         bool bValid;
-        PblVector3 vDest;
+        PblVector3 seekPos;
         do
         {
-            vDest = mTarget->GetPosition() - (mTarget->GetMatrix().GetZAxis() * 20.0f) * 0.5f +
-                    (PblRandom::GetGlobalVector3() * 20.0f) * 0.2f;
-            ++uTries;
-            bValid = PathFinder::IsPointValid(vDest, 0, mCtrl->mOwner->GetGameObject());
-        } while (!bValid && uTries < 20);
+            seekPos = mTarget->GetPosition() - mTarget->GetMatrix().GetZAxis() * 20.0f / 2.0f +
+                    PblRandom::GetGlobalVector3() * 20.0f / 5.0f;
+            ++loopcount;
+            bValid = PathFinder::IsPointValid(seekPos, 0, mCtrl->mOwner->GetGameObject());
+        } while (!bValid && loopcount < 20);
 
-        if (uTries < 20)
+        if (loopcount < 20)
         {
-            mCtrl->mLowLevel.SetNavigator_Goto(vDest, 0, false, false);
+            GetLowLevel().SetNavigator_Goto(seekPos, 0, false, false);
             return;
         }
         SetNextState(100);
@@ -222,25 +202,19 @@ void UnitFollowAgent::ExitState()
 // FUNCTION: SWBF2 0x006683e0
 bool UnitFollowAgent::CheckForForwardHintNodes()
 {
-    Controllable* pMe = mCtrl->mOwner;
-    const GameObject* pTarget = ResolveHandle(mTarget);
-    if (ReserveManager::GetReserveOrder(pTarget, pMe->GetGameObject(), RT_FORMATION) > 2)
+    int resOrder = ReserveManager::GetReserveOrder(mTarget, mCtrl->mOwner->GetGameObject(), RT_FORMATION);
+    if (resOrder > 2)
     {
         return false;
     }
-    return mCoverHelper.CheckForHintAndInit(COVERTYPE_ForwardCover, ResolveHandle(mTarget));
+    return mCoverHelper.CheckForHintAndInit(COVERTYPE_ForwardCover, mTarget);
 }
 
 // FUNCTION: SWBF2 0x00668480
 bool UnitFollowAgent::IsInLooseRange()
 {
-    Controllable* pMe = mCtrl->mOwner;
-    const GameObject* pTarget = ResolveHandle(mTarget);
-    const PblMatrix& mine = pMe->GetMatrix();
-    const PblVector3& theirs = ((const CollisionObject&)(*pTarget)).GetPosition();
-    float dx = theirs.x - mine.m[3][0];
-    float dz = theirs.z - mine.m[3][2];
-    return (dx * dx + dz * dz) < 400.0f;
+    float distToTargetSq = SquaredLengthXZ(mTarget->GetPosition() - GetMe()->GetMatrix().GetTranslation());
+    return distToTargetSq < 400.0f;
 }
 
 // FUNCTION: SWBF2 0x00668500

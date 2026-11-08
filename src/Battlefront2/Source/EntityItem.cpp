@@ -282,14 +282,11 @@ EntityItem::EntityItem(EntityItemClass* pClass, const EntityDesc& desc)
             }
             PblMatrix matrix = gMatrixIdentity;
             matrix.SetTranslation(mMatrix.GetTranslation());
-            if (m_pLight->_fBeamLength > 0.0f)
+            if (m_pLight->IsCone())
             {
-                matrix[0] = gVectorUnitX;
-                matrix.m[0][3] = 0.0f;
-                matrix[1] = -gVectorUnitZ;
-                matrix.m[1][3] = 0.0f;
-                matrix[2] = gVectorUnitY;
-                matrix.m[2][3] = 0.0f;
+                matrix.SetXAxis(gVectorUnitX);
+                matrix.SetYAxis(-gVectorUnitZ);
+                matrix.SetZAxis(gVectorUnitY);
             }
             m_pLight->SetMatrix(matrix);
             m_pLight->TurnOn();

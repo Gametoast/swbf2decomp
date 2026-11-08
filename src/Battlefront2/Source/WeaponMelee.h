@@ -109,20 +109,7 @@ public:
         unsigned char z_uiReserved;
     };
 
-    class TrailData
-    {
-    public:
-        TrailData();
-        ~TrailData();
-        void Init(unsigned int uiEdge, const PblVector3& vOffsetPos, const PblVector3& vOffsetDir,
-                  float fLength, float fWidth, const RedColor& colorTrail, const RedColor& colorHead);
-
-        TrailData* pNext;
-        unsigned char m_uiEdge;
-        unsigned char m_uiFrameLastUpdated;
-        LightsaberTrailClass m_TrailClass;
-        LightsaberTrail* m_pTrail;
-    };
+    class TrailData;
 
     WeaponMelee(const WeaponMeleeClass* pClass, const WeaponDesc& desc);
     virtual ~WeaponMelee();
@@ -180,6 +167,7 @@ public:
 
     void TurnOn(float fDuration);
     void TurnOff(float fDuration);
+    void TurnOnTrail(bool bOn) { m_uiTrailOnMask = bOn ? 0xf : 0; }
 
     float GetLightSaberLengthFactor() const;
     bool IsOn() const { return m_bLightsaberOn || m_fTurnOnTimer < m_fTurnOnDuration; }

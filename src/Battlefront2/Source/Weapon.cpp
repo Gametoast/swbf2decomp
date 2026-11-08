@@ -46,29 +46,6 @@ bool Weapon::FireDone() const
     return true;
 }
 
-// FUNCTION: SWBF2 0x0067bce0
-float WeaponClass::GetHeatPerSalvo() const
-{
-    return mHeatPerShot;
-}
-
-// FUNCTION: SWBF2 0x0067bcf0
-float WeaponClass::GetShotsPerSalvo() const
-{
-    return 1.0f;
-}
-
-// FUNCTION: SWBF2 0x0067bc00
-Weapon* WeaponClass::Build(const WeaponDesc& desc)
-{
-    PostLoadInit();
-    if (Weapon::sMemoryPool.IsFull())
-    {
-        return 0;
-    }
-    return new Weapon(this, desc);
-}
-
 // SYNTHETIC: SWBF2 0x00679b40
 // WeaponClass::`scalar deleting destructor'
 // SYNTHETIC: SWBF2 0x0067c120
@@ -76,12 +53,6 @@ Weapon* WeaponClass::Build(const WeaponDesc& desc)
 
 // FUNCTION: SWBF2 0x0067a1b0
 WeaponClass::~WeaponClass() {}
-
-// FUNCTION: SWBF2 0x0067bb90
-WeaponClass* WeaponClass::Derive(unsigned int uHash)
-{
-    return new WeaponClass(this, uHash);
-}
 
 
 extern bool netIsLateTurn;
@@ -1137,6 +1108,23 @@ void WeaponClass::PostReadInit()
     }
 }
 
+// FUNCTION: SWBF2 0x0067bb90
+WeaponClass* WeaponClass::Derive(unsigned int uHash)
+{
+    return new WeaponClass(this, uHash);
+}
+
+// FUNCTION: SWBF2 0x0067bc00
+Weapon* WeaponClass::Build(const WeaponDesc& desc)
+{
+    PostLoadInit();
+    if (Weapon::sMemoryPool.IsFull())
+    {
+        return 0;
+    }
+    return new Weapon(this, desc);
+}
+
 // FUNCTION: SWBF2 0x0067bc80
 void WeaponClass::CreateMuzzleFlash(const PblMatrix& mFire) const
 {
@@ -1152,6 +1140,18 @@ void WeaponClass::CreateMuzzleFlash(const PblMatrix& mFire) const
     {
         pEffect->AttachEffectToMatrix(&mFire, false);
     }
+}
+
+// FUNCTION: SWBF2 0x0067bce0
+float WeaponClass::GetHeatPerSalvo() const
+{
+    return mHeatPerShot;
+}
+
+// FUNCTION: SWBF2 0x0067bcf0
+float WeaponClass::GetShotsPerSalvo() const
+{
+    return 1.0f;
 }
 
 // FUNCTION: SWBF2 0x0067bd00

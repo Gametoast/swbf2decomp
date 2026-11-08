@@ -59,8 +59,7 @@ WeaponMeleeThrow::WeaponMeleeThrow(const WeaponMeleeThrowClass* pClass, const We
         }
     }
 
-    const WeaponMeleeClass* pPrimaryClass =
-        (const WeaponMeleeClass*)m_pPrimaryWeapon->mClass;
+    const WeaponMeleeClass* pPrimaryClass = _GetPrimaryClass();
 
     const unsigned char uiThrowAnim = static_cast<unsigned char>(pPrimaryClass->m_pCombo->m_uiThrowAnimIndex);
     SoldierAnimatorClass::Instance()->GetAnimationBoneMatrix(

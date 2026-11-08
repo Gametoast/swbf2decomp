@@ -101,7 +101,7 @@ void WeaponMelee::Render(const PblMatrix& matrix, const RedPose* pPose,
         {
             bThrown = true;
         }
-        const bool bReturned = m_pMeleeThrow->m_bReturnedThisFrame != 0;
+        const bool bReturned = m_pMeleeThrow->ReturnedThisFrame();
         if (bReturned)
         {
             bThrown = true;
@@ -387,6 +387,34 @@ void WeaponMelee::TurnOff(float fDuration)
     }
 }
 
+class WeaponMelee::TrailData
+{
+public:
+    TrailData();
+    ~TrailData();
+    void Init(unsigned int uiEdge, const PblVector3& vOffsetPos, const PblVector3& vOffsetDir,
+              float fLength, float fWidth, const RedColor& colorTrail, const RedColor& colorHead);
+    unsigned int GetEdge() const { return m_uiEdge; }
+    bool IsTrailRendering() const { return m_pTrail->m_uiNumSamples > 0; }
+    bool HasUpdatedThisFrame() const
+    {
+        return m_uiFrameLastUpdated == (unsigned char)RedRenderer::GetFrameNumber();
+    }
+
+    void Update(const PblMatrix& mMatrix, bool bTrailOn)
+    {
+        m_pTrail->SetTrailOn(bTrailOn);
+        m_pTrail->AttachEffectToMatrix(&mMatrix, false);
+    }
+    void Render(unsigned int uiFlags) const { m_pTrail->Render(uiFlags); }
+
+    TrailData* pNext;
+    unsigned char m_uiEdge;
+    unsigned char m_uiFrameLastUpdated;
+    LightsaberTrailClass m_TrailClass;
+    LightsaberTrail* m_pTrail;
+};
+
 // FUNCTION: SWBF2 0x00689d20
 float WeaponMelee::GetLightSaberLengthFactor() const
 {
@@ -471,14 +499,14 @@ void WeaponMelee::RenderLightsaberTrail(unsigned int uiEdge, const PblMatrix& mM
     WeaponMelee::TrailData** ppData = &m_pTrailData;
     while (pData)
     {
-        if (pData->m_pTrail->m_uiNumSamples <= 0)
+        if (!pData->IsTrailRendering())
         {
             *ppData = pData->pNext;
             WeaponMelee::_FreeTrailData(pData);
         }
         else
         {
-            if (pData->m_uiEdge == uiEdge)
+            if (pData->GetEdge() == uiEdge)
             {
                 pSelected = pData;
             }
@@ -491,10 +519,9 @@ void WeaponMelee::RenderLightsaberTrail(unsigned int uiEdge, const PblMatrix& mM
     const WeaponMeleeClass::DamageEdge& edge = pClass->m_aDamageEdge[uiEdge];
     if (pSelected)
     {
-        if (pSelected->m_uiFrameLastUpdated != (unsigned char)RedRenderer::GetFrameNumber())
+        if (!pSelected->HasUpdatedThisFrame())
         {
-            pSelected->m_pTrail->m_bTrailOn = bTrailOn;
-            pSelected->m_pTrail->AttachEffectToMatrix(&mMatrix, false);
+            pSelected->Update(mMatrix, bTrailOn);
         }
     }
     else
@@ -513,16 +540,9 @@ void WeaponMelee::RenderLightsaberTrail(unsigned int uiEdge, const PblMatrix& mM
                         edge.fLength, edge.fWidth, edge.colorTrail, colorHead);
         pSelected->pNext = m_pTrailData;
         m_pTrailData = pSelected;
-        pSelected->m_pTrail->m_bTrailOn = bTrailOn;
-        pSelected->m_pTrail->AttachEffectToMatrix(&mMatrix, false);
+        pSelected->Update(mMatrix, bTrailOn);
     }
-    if (pSelected->m_pTrail->m_uiNumSamples)
-    {
-        LightsaberTrailEffect* pEffect = LightsaberTrailEffect::s_pInstance;
-        LightsaberTrail::s_uiSamplePrev = 0;
-        LightsaberTrail::s_uiSample = 0;
-        pEffect->RenderLightsaberTrail(pSelected->m_pTrail, uiFlags);
-    }
+    pSelected->Render(uiFlags);
 }
 
 // FUNCTION: SWBF2 0x0068a550
@@ -535,33 +555,31 @@ bool WeaponMelee::Deflect(const Ordnance* pOrdnance, const PblVector3& pos, cons
         return false;
     }
 
-    PblVector3 vVelocity = mOwner->GetGameObject()->GetVelocity();
-    vVelocity.y = 0.0f;
-    if (vVelocity.x * vVelocity.x + vVelocity.y * vVelocity.y + vVelocity.z * vVelocity.z > 0.09f)
+    PblVector3 vFacingDir = mOwner->GetGameObject()->GetVelocity();
+    vFacingDir.y = 0.0f;
+    float fVelocityXZSqr = SquaredLength(vFacingDir);
+    if (fVelocityXZSqr > 0.09f)
     {
-        PblVector3 vNormal;
-        D3DXVec3Normalize(reinterpret_cast<D3DXVECTOR3*>(&vNormal), reinterpret_cast<const D3DXVECTOR3*>(&vVelocity));
-        vVelocity = vNormal;
-        const PblMatrix& mOwnerMatrix = mOwner->GetMatrix();
-        if (DotProduct(vVelocity, mOwnerMatrix.GetZAxis()) <= 0.0f)
+        vFacingDir = Normalize(vFacingDir);
+        if (DotProduct(vFacingDir, mOwner->GetMatrix().GetZAxis()) <= 0.0f)
         {
-            vVelocity = PblVector3(-vVelocity.x, -vVelocity.y, -vVelocity.z);
+            vFacingDir = -vFacingDir;
         }
     }
     else
     {
-        vVelocity = mOwner->GetMatrix().GetZAxis();
+        vFacingDir = mOwner->GetMatrix().GetZAxis();
     }
 
     unsigned char uiAnim;
 
-    if (!pDeflect->TestDeflect(mOwner->GetMatrix(), vVelocity, dir, pos, m_uiAnimIndex, uiAnim))
+    if (!pDeflect->TestDeflect(mOwner->GetMatrix(), vFacingDir, dir, pos, m_uiAnimIndex, uiAnim))
     {
         m_uiAnimIndex = state.m_uiAnimIndex;
         return false;
     }
 
-    const float fEnergyCost = pDeflect->m_uiEnergyCost * 0.1f;
+    const float fEnergyCost = pDeflect->GetEnergyCost();
     EnergyBar* pEnergyBar = mOwner->GetEnergyBar();
     if (pEnergyBar && !pEnergyBar->SpendEnergy(fEnergyCost))
     {
@@ -579,21 +597,19 @@ bool WeaponMelee::Deflect(const Ordnance* pOrdnance, const PblVector3& pos, cons
         const PblVector3 vRight = Normalize(CrossProduct(mOwner->GetMatrix().GetYAxis(), vFront));
         PblMatrix mDeflect(vRight, CrossProduct(vFront, vRight), vFront, mOwner->GetMatrix().GetTranslation());
 
-        for (unsigned int i = 0; i < pDeflect->m_uiNumDeflectAnimations; ++i)
+        for (unsigned int i = 0; i < pDeflect->GetNumDeflectAnimations(); ++i)
         {
             if (pDeflect->m_aDeflectAnim[i].uiAnimIndex != uiAnim)
             {
                 continue;
             }
 
-            PblMatrix mBlock = pClass->m_amDeflectMatrix[i] * mDeflect;
-            const float dx = pos.x - mBlock.m[3][0];
-            const float dy = pos.y - mBlock.m[3][1];
-            const float dz = pos.z - mBlock.m[3][2];
-            const unsigned char uiWeapon = pDeflect->m_aDeflectAnim[i].uiWeapon;
-            PblVector3 vLocal(mBlock.m[0][1] * dy + dx * mBlock.m[0][0] + mBlock.m[0][2] * dz,
-                              mBlock.m[1][0] * dx + mBlock.m[1][1] * dy + mBlock.m[1][2] * dz,
-                              mBlock.m[2][0] * dx + mBlock.m[2][1] * dy + mBlock.m[2][2] * dz);
+            PblMatrix mHP = pClass->m_amDeflectMatrix[i] * mDeflect;
+            PblVector3 vCollisionPointLocal = pos - mHP.GetTranslation();
+            vCollisionPointLocal = PblVector3(DotProduct(vCollisionPointLocal, mHP.GetXAxis()),
+                                              DotProduct(vCollisionPointLocal, mHP.GetYAxis()),
+                                              DotProduct(vCollisionPointLocal, mHP.GetZAxis()));
+            const unsigned char uiWeapon = pDeflect->GetDeflectWeapon(i);
             int iEdge = -1;
             float fBestDistSq = FLT_MAX;
             for (unsigned int e = 0; e < pClass->m_uiNumDamageEdges; ++e)
@@ -603,43 +619,32 @@ bool WeaponMelee::Deflect(const Ordnance* pOrdnance, const PblVector3& pos, cons
                 {
                     continue;
                 }
-                const float fHalf = edge.fLength * 0.5f;
-                const float cx = edge.vOffsetPos.x + edge.vOffsetDir.x * fHalf - vLocal.x;
-                const float cy = edge.vOffsetPos.y + edge.vOffsetDir.y * fHalf - vLocal.y;
-                const float cz = edge.vOffsetPos.z + edge.vOffsetDir.z * fHalf - vLocal.z;
-                const float fDistSq = cy * cy + cx * cx + cz * cz;
-                if (fDistSq < fBestDistSq)
+                PblVector3 vMidPointLocal = edge.vOffsetPos + edge.vOffsetDir * (edge.fLength * 0.5f);
+                float fDistSqrToMidPoint = SquaredLength(vMidPointLocal - vCollisionPointLocal);
+                if (fDistSqrToMidPoint < fBestDistSq)
                 {
                     iEdge = e;
-                    fBestDistSq = fDistSq;
+                    fBestDistSq = fDistSqrToMidPoint;
                 }
             }
             if (iEdge == -1)
             {
-                vHitPos = mBlock.GetTranslation();
+                vHitPos = mHP.GetTranslation();
             }
             else
             {
-                const WeaponMeleeClass::DamageEdge& edge = pClass->m_aDamageEdge[iEdge];
-                float t = ((edge.vOffsetDir.y * (vLocal.y - edge.vOffsetPos.y) +
-                            edge.vOffsetDir.x * (vLocal.x - edge.vOffsetPos.x) +
-                            edge.vOffsetDir.z * (vLocal.z - edge.vOffsetPos.z)) /
-                               edge.fLength +
-                           1.0f) *
-                          0.5f;
-                if (t > 1.0f)
+                const WeaponMeleeClass::DamageEdge& e = pClass->m_aDamageEdge[iEdge];
+                float fNearestPos = DotProduct(vCollisionPointLocal - e.vOffsetPos, e.vOffsetDir) / e.fLength;
+                float fAttachToPos = (fNearestPos + 1.0f) * 0.5f;
+                if (fAttachToPos > 1.0f)
                 {
-                    t = 1.0f;
+                    fAttachToPos = 1.0f;
                 }
-                else if (t < 0.0f)
+                else if (fAttachToPos < 0.0f)
                 {
-                    t = 0.0f;
+                    fAttachToPos = 0.0f;
                 }
-                const float fAlong = t * edge.fLength;
-                PblVector3 vEdgePoint(edge.vOffsetDir.x * fAlong + edge.vOffsetPos.x,
-                                      edge.vOffsetPos.y + edge.vOffsetDir.y * fAlong,
-                                      edge.vOffsetPos.z + edge.vOffsetDir.z * fAlong);
-                vHitPos = mBlock.ApplyTransform(vEdgePoint);
+                vHitPos = mHP.ApplyTransform(e.vOffsetPos + e.vOffsetDir * (fAttachToPos * e.fLength));
             }
             break;
         }
@@ -1276,6 +1281,37 @@ void WeaponMelee::EnterState(ComboState eState)
     }
 }
 
+// FUNCTION: SWBF2 0x0068bef0
+void WeaponMelee::ExitState()
+{
+    switch (GetMeleeState())
+    {
+    case MELEE_IDLE:
+        ExitIdle();
+        break;
+    case MELEE_ATTACK:
+        ExitFire();
+        if (m_pCombo->m_aState[m_eComboState].m_pDeflect)
+        {
+            ExitDeflect();
+        }
+        break;
+    case MELEE_RECOVER:
+        ExitRecover();
+        break;
+    case MELEE_DEFLECT:
+        ExitDeflect();
+        break;
+    default:
+        ExitIdle();
+        break;
+    }
+    for (DamageData* pData = m_pDamageData; pData; pData = pData->pNext)
+    {
+        pData->fTime -= m_fComboStateTimer;
+    }
+}
+
 // FUNCTION: SWBF2 0x0068bfa0
 bool WeaponMelee::UpdateState(float fDeltaTime)
 {
@@ -1332,37 +1368,6 @@ bool WeaponMelee::UpdateState(float fDeltaTime)
     return bResult;
 }
 
-// FUNCTION: SWBF2 0x0068bef0
-void WeaponMelee::ExitState()
-{
-    switch (GetMeleeState())
-    {
-    case MELEE_IDLE:
-        ExitIdle();
-        break;
-    case MELEE_ATTACK:
-        ExitFire();
-        if (m_pCombo->m_aState[m_eComboState].m_pDeflect)
-        {
-            ExitDeflect();
-        }
-        break;
-    case MELEE_RECOVER:
-        ExitRecover();
-        break;
-    case MELEE_DEFLECT:
-        ExitDeflect();
-        break;
-    default:
-        ExitIdle();
-        break;
-    }
-    for (DamageData* pData = m_pDamageData; pData; pData = pData->pNext)
-    {
-        pData->fTime -= m_fComboStateTimer;
-    }
-}
-
 // FUNCTION: SWBF2 0x0068c140
 void WeaponMelee::EnterIdle()
 {
@@ -1385,6 +1390,25 @@ bool WeaponMelee::UpdateIdle(float fDeltaTime)
         Thread::DeactivateThread();
     }
     return true;
+}
+
+// FUNCTION: SWBF2 0x0068c190
+void WeaponMelee::EnterFire()
+{
+    m_uiTrailOnMask = 0;
+    mStateTimer = 0.0f;
+    const Combo::State& state = m_pCombo->m_aState[m_eComboState];
+    SignalFire();
+    float fDuration = ((const WeaponMeleeClass*)mClass)->m_fTurnOnDuration;
+    if (state.m_uiNumAttacks)
+    {
+        float fStart = state.m_aAttack[0].m_uiDamageTimeStart * 0.01f;
+        if (fStart < fDuration)
+        {
+            fDuration = fStart;
+        }
+    }
+    TurnOn(fDuration);
 }
 
 // FUNCTION: SWBF2 0x0068c210
@@ -1658,25 +1682,6 @@ bool WeaponMelee::UpdateFire(float fDeltaTime)
                                                                       &pObject->GetVelocity(), false, true);
     }
     return true;
-}
-
-// FUNCTION: SWBF2 0x0068c190
-void WeaponMelee::EnterFire()
-{
-    m_uiTrailOnMask = 0;
-    mStateTimer = 0.0f;
-    const Combo::State& state = m_pCombo->m_aState[m_eComboState];
-    SignalFire();
-    float fDuration = ((const WeaponMeleeClass*)mClass)->m_fTurnOnDuration;
-    if (state.m_uiNumAttacks)
-    {
-        float fStart = state.m_aAttack[0].m_uiDamageTimeStart * 0.01f;
-        if (fStart < fDuration)
-        {
-            fDuration = fStart;
-        }
-    }
-    TurnOn(fDuration);
 }
 
 // FUNCTION: SWBF2 0x0068d180
@@ -2725,10 +2730,10 @@ bool WeaponMelee::Update(float fDeltaTime)
 
     if (m_pMeleeThrow)
     {
-        const bool bReturned = m_pMeleeThrow->m_bReturnedThisFrame != 0;
+        const bool bReturned = m_pMeleeThrow->ReturnedThisFrame();
         if (bReturned)
         {
-            m_pMeleeThrow->m_bReturnedThisFrame = 0;
+            m_pMeleeThrow->AcknowledgeReturn();
             if ((m_iSoldierState == SoldierState::STAND || m_iSoldierState == SoldierState::CROUCH) &&
                 m_pCombo && m_pCombo->m_pCatchState)
             {
@@ -2809,19 +2814,19 @@ bool WeaponMelee::Update(float fDeltaTime)
                 for (unsigned int i = 0; i < pState->m_uiNumTransitions; ++i)
                 {
                     const Combo::Transition& transition = pState->m_aTransition[i];
-                    const float fCost = transition.m_uiEnergyCost * 0.1f;
+                    const float fCost = transition.GetEnergyCost();
                     const EnergyBar* pEnergy = mOwner->GetEnergyBar();
                     if (!pEnergy || !pEnergy->m_bOverheat || fCost <= 0.0f)
                     {
-                        if (!transition.m_uiNumConditions && fMatchTime > fDuration)
+                        if (!transition.GetNumConditions() && fMatchTime > fDuration)
                         {
                             pTransition = &transition;
                             pCondition = 0;
                             fMatchTime = fDuration;
                         }
-                        for (unsigned int j = 0; j < transition.m_uiNumConditions; ++j)
+                        for (unsigned int j = 0; j < transition.GetNumConditions(); ++j)
                         {
-                            const Combo::Condition* pTest = &transition.m_aCondition[j];
+                            const Combo::Condition* pTest = transition.GetCondition(j);
                             float fTime;
                             if (TestCondition(pTest, fDuration, m_fComboStateTimer, fTime) &&
                                 fMatchTime > fTime)
@@ -2869,13 +2874,13 @@ bool WeaponMelee::Update(float fDeltaTime)
                 for (unsigned int i = 0; i < pStatePrev->m_uiNumTransitions; ++i)
                 {
                     const Combo::Transition& transition = pStatePrev->m_aTransition[i];
-                    const float fCost = transition.m_uiEnergyCost * 0.1f;
+                    const float fCost = transition.GetEnergyCost();
                     const EnergyBar* pEnergy = mOwner->GetEnergyBar();
                     if (!pEnergy || !pEnergy->m_bOverheat || fCost <= 0.0f)
                     {
-                        for (unsigned int j = 0; j < transition.m_uiNumConditions; ++j)
+                        for (unsigned int j = 0; j < transition.GetNumConditions(); ++j)
                         {
-                            const Combo::Condition* pTest = &transition.m_aCondition[j];
+                            const Combo::Condition* pTest = transition.GetCondition(j);
                             float fTime;
                             if (TestCondition(pTest, m_fComboStateDurationPrev, fPrevTimer, fTime))
                             {
@@ -2901,13 +2906,13 @@ bool WeaponMelee::Update(float fDeltaTime)
                 for (unsigned int i = 0; i < pState->m_uiNumTransitions; ++i)
                 {
                     const Combo::Transition& transition = pState->m_aTransition[i];
-                    const float fCost = transition.m_uiEnergyCost * 0.1f;
+                    const float fCost = transition.GetEnergyCost();
                     const EnergyBar* pEnergy = mOwner->GetEnergyBar();
                     if (!pEnergy || !pEnergy->m_bOverheat || fCost <= 0.0f)
                     {
-                        for (unsigned int j = 0; j < transition.m_uiNumConditions; ++j)
+                        for (unsigned int j = 0; j < transition.GetNumConditions(); ++j)
                         {
-                            const Combo::Condition* pTest = &transition.m_aCondition[j];
+                            const Combo::Condition* pTest = transition.GetCondition(j);
                             float fTime;
                             if ((pTest->IsBreak() || bNoDuration) &&
                                 !(m_fComboStateTimer < pTest->m_uiBreakTime * Combo::Condition::TIME_SCALE) &&
@@ -2941,7 +2946,7 @@ bool WeaponMelee::Update(float fDeltaTime)
         if (pTransition)
         {
             eNextState = (ComboState)pTransition->m_uiTargetState;
-            const float fCost = pTransition->m_uiEnergyCost * 0.1f;
+            const float fCost = pTransition->GetEnergyCost();
             EnergyBar* pEnergy = mOwner->GetEnergyBar();
             if (pEnergy)
             {

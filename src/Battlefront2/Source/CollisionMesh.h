@@ -234,6 +234,8 @@ public:
         pVerts = &mVertices[iFirst];
     }
 
+    // TEMPLATE: SWBF2 0x004620a0
+    // PolyListContainer<100>::AddPolygon
     void AddPolygon(unsigned char uNumVerts, const PblVector3* pVerts)
     {
         if (mPolyCount == N)

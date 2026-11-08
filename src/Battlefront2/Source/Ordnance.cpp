@@ -24,11 +24,6 @@
 namespace
 {
 
-    inline unsigned int GameObjectHandleId(const GameObject* pObject)
-    {
-        return pObject->GetHandleId();
-    }
-
     inline Controllable* GetControllable(GameObject* pObject)
     {
         typedef Controllable*(__thiscall * GetControllableFn)(GameObject*);
@@ -174,8 +169,7 @@ Ordnance::Ordnance(OrdnanceClass* pClass, const OrdnanceDesc& desc)
 
     mPosition = desc.mPosition;
     GameObject* pOwner = desc.mOwner;
-    mOwner.mObject = pOwner;
-    mOwner.mSavedHandleId = pOwner ? GameObjectHandleId(pOwner) : 0;
+    mOwner = pOwner;
     mDamageOwner = desc.mDamageOwner;
     mLifeTime = (mClass->mNextCharge->mLifeSpan - mClass->mLifeSpan) * mRatio + mClass->mLifeSpan;
     mLifeElapsed = 0.0f;

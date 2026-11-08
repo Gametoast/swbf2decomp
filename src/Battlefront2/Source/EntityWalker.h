@@ -310,7 +310,16 @@ protected:
 
 public:
 
-    void RotateY(const PblAngle& rAngle);
+    // FUNCTION: SWBF2 0x004ff510
+    void RotateY(const PblAngle& aAngle)
+    {
+        const PblAngle angle = aAngle.Double();
+        const float c = angle.mCos;
+        const float s = angle.mSin;
+        PblMatrix rot(PblVector3(c, 0.0f, -s), PblVector3(0.0f, 1.0f, 0.0f),
+                      PblVector3(s, 0.0f, c), PblVector3(0.0f, 0.0f, 0.0f));
+        mMatrix = rot * mMatrix;
+    }
     void DoFootImpactEffects();
     int GetFirstPersonIndex();
     int GetJoystickIndex();

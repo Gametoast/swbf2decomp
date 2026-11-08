@@ -81,14 +81,9 @@ public:
     {
         if (mStackPtr)
         {
-            PblSphere& rSphere = mStackPtr->mSphere[mStackIdx];
-            rSphere.x = rCenter.x;
-            rSphere.y = rCenter.y;
-            rSphere.z = rCenter.z;
+            mStackPtr->mSphere[mStackIdx].SetCenter(rCenter);
         }
-        mCollisionSphere.x = rCenter.x;
-        mCollisionSphere.y = rCenter.y;
-        mCollisionSphere.z = rCenter.z;
+        mCollisionSphere.SetCenter(rCenter);
     }
     // FUNCTION: SWBF2 0x00454da0
     void SetCollisionRadius(float fRadius)

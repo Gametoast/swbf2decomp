@@ -772,6 +772,3 @@ void Asteroid::DeactivatePhysics()
     DeactivateThread();
 }
 
-// TEMPLATE: SWBF2 0x00446d40
-// Factory<Ordnance,ExplosionClass,OrdnanceDesc>::Find
-template ExplosionClass* Factory<Ordnance, ExplosionClass, OrdnanceDesc>::Find(unsigned int);

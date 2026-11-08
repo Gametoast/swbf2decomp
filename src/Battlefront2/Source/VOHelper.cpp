@@ -103,13 +103,8 @@ void GetModifiers(const GameObject* pTarget, const PblVector3& vPos, VOModifier&
     const PblVector3& vTarget = mTarget.GetTranslation();
 
     const float fHeight = vPos.y - vTarget.y;
-    const float fX = vTarget.x - vPos.x;
-    const float fZ = vTarget.z - vPos.z;
-    float fDist = sqrtf(fZ * fZ + fX * fX);
-    if (!(fDist > 0.1f))
-    {
-        fDist = 0.1f;
-    }
+    float fDist = LengthXZ(vTarget - vPos);
+    fDist = Max(fDist, 0.1f);
     const float fSlope = fHeight / fDist;
     if (fHeight > 3.0f && fSlope > 0.25f)
     {
@@ -174,19 +169,19 @@ VOModifier GetModifiers(const GameObject* pTarget, const GameObject* pOther)
 
     switch (AIUtil::GetEntityType(pOther->GetEntity()))
     {
-    case AIUtil::ENTITY_WALKER:
-        modifiers.mTargetType = VO_TT_IsWalker;
-        break;
     case AIUtil::ENTITY_FLYER:
         modifiers.mTargetType = VO_TT_IsFlyer;
-        break;
-    case AIUtil::ENTITY_HOVER:
-        modifiers.mTargetType = VO_TT_IsHover;
         break;
     case AIUtil::ENTITY_TURRET:
     case AIUtil::ENTITY_BUILDING_ARMED:
     case AIUtil::ENTITY_REMOTE_TERMINAL:
         modifiers.mTargetType = VO_TT_IsTurret;
+        break;
+    case AIUtil::ENTITY_WALKER:
+        modifiers.mTargetType = VO_TT_IsWalker;
+        break;
+    case AIUtil::ENTITY_HOVER:
+        modifiers.mTargetType = VO_TT_IsHover;
         break;
     default:
         if (AIUtil::IsSniperGuy(pOther))
@@ -206,6 +201,20 @@ VOModifier GetModifiers(const GameObject* pTarget, const GameObject* pOther)
 
     switch (AIUtil::GetEntityType(pTarget->GetEntity()))
     {
+    case AIUtil::ENTITY_TURRET:
+    case AIUtil::ENTITY_BUILDING_ARMED:
+    case AIUtil::ENTITY_REMOTE_TERMINAL:
+        modifiers.mMeInfo = VO_ME_InTurret;
+        break;
+    case AIUtil::ENTITY_FLYER:
+        modifiers.mTargetType = VO_ME_InFlyer;
+        break;
+    case AIUtil::ENTITY_WALKER:
+        modifiers.mTargetType = VO_ME_InWalker;
+        break;
+    case AIUtil::ENTITY_HOVER:
+        modifiers.mTargetType = VO_ME_InHover;
+        break;
     case AIUtil::ENTITY_SOLDIER:
     {
         EntitySoldier* pSoldier = (EntitySoldier*)(const_cast<Entity*>(pTarget->GetEntity()));
@@ -219,27 +228,13 @@ VOModifier GetModifiers(const GameObject* pTarget, const GameObject* pOther)
         }
         break;
     }
-    case AIUtil::ENTITY_WALKER:
-        modifiers.mTargetType = VO_ME_InWalker;
-        break;
-    case AIUtil::ENTITY_FLYER:
-        modifiers.mTargetType = VO_ME_InFlyer;
-        break;
-    case AIUtil::ENTITY_HOVER:
-        modifiers.mTargetType = VO_ME_InHover;
-        break;
-    case AIUtil::ENTITY_TURRET:
-    case AIUtil::ENTITY_BUILDING_ARMED:
-    case AIUtil::ENTITY_REMOTE_TERMINAL:
-        modifiers.mMeInfo = VO_ME_InTurret;
-        break;
     default:
         break;
     }
 
     if (pTarget->GetControllable() && pTarget->GetControllable()->mCharacter)
     {
-        switch (pTarget->GetControllable()->mCharacter->mAdrenaline.GetCurrentLevel())
+        switch (pTarget->GetControllable()->GetCharacter()->mAdrenaline.GetCurrentLevel())
         {
         case ADRENALINE_LOW:
             modifiers.mAdrenaline = VO_ADR_Low;
@@ -552,7 +547,8 @@ int Play(VOType eType, const GameObject* pSpeaker, const GameObject* pTarget,
     }
     if (pTarget)
     {
-        _Play(eType, pSpeaker, pTarget, GetModifiers(pTarget, pOther));
+        VOModifier modifiers = GetModifiers(pTarget, pOther);
+        _Play(eType, pSpeaker, pTarget, modifiers);
     }
     return -1;
 }

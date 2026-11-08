@@ -1035,8 +1035,8 @@ void EntitySoldier::RecalculateAABB()
     }
     else
     {
-        float fOffset = sCollisionOffset[mStanceIndex] + 0.1f;
-        SetCollisionCenter(mMatrix.GetYAxis() * fOffset + mMatrix.GetTranslation());
+        float fY = sCollisionOffset[mStanceIndex] + 0.1f;
+        SetCollisionCenter(fY * mMatrix.GetYAxis() + mMatrix.GetTranslation());
         SetCollisionRadius(sCollisionRadius2[mStanceIndex]);
         float fRadius = sCollisionRadius[mStanceIndex];
         float fHalfHeight = sCollisionHeight[mStanceIndex] * 0.5f + 0.1f;
@@ -3062,8 +3062,8 @@ GameObject* EntitySoldier::TryBoard(bool bArg, bool& rIsVehicle)
             const PblVector3 vMax = box._vMax + PblVector3(GetCollisionRadius() + 0.5f, GetCollisionRadius() + 0.5f,
                                                            GetCollisionRadius() + 0.5f);
             const PblVector3 vLocal = apObjects[i]->GetMatrix().GetInverseFast().ApplyTransform(GetCollisionCenter());
-            if (!(vLocal.x >= vMin.x && vMax.x >= vLocal.x && vLocal.y >= vMin.y && vMax.y >= vLocal.y &&
-                  vLocal.z >= vMin.z && vMax.z >= vLocal.z))
+            const PblBox bbox(vMin, vMax);
+            if (!bbox.ContainsPoint(vLocal))
             {
                 continue;
             }
@@ -5419,106 +5419,6 @@ const float UnitCircleNormalize(float fAngle)
         fAngle += PblMath::fTwoPi;
     }
     return fAngle;
-}
-
-// FUNCTION: SWBF2 0x004e0090
-void EntitySoldier::TriggerBuffHealthEffect()
-{
-    if (mBuffHealthTimer > 0.0f && GetInvisibilityFactor() == 0.0f &&
-        (IsThreadActive() || GetObjectData(0) == COLL_ATTACHED))
-    {
-        if (mClass->mBuffHealthEffect && mBuffHealthEffectHandle == 0)
-        {
-            if (FLEffectClass* pEffectClass = FLEffect::Get(mClass->mBuffHealthEffect))
-            {
-                if (FLEffectObject* pEffect = pEffectClass->BuildEffect())
-                {
-                    pEffect->AttachEffectToObject(this, true);
-                    mBuffHealthEffectHandle = pEffect;
-                }
-            }
-        }
-    }
-    else if (mBuffHealthEffectHandle)
-    {
-        mBuffHealthEffectHandle->StopAndFinish();
-        mBuffHealthEffectHandle = NULL;
-    }
-}
-
-// FUNCTION: SWBF2 0x004e01d0
-void EntitySoldier::TriggerBuffOffenseEffect()
-{
-    if (mBuffOffenseTimer > 0.0f && GetInvisibilityFactor() == 0.0f &&
-        (IsThreadActive() || GetObjectData(0) == COLL_ATTACHED))
-    {
-        if (mClass->mBuffOffenseEffect && mBuffOffenseEffectHandle == 0)
-        {
-            if (FLEffectClass* pEffectClass = FLEffect::Get(mClass->mBuffOffenseEffect))
-            {
-                if (FLEffectObject* pEffect = pEffectClass->BuildEffect())
-                {
-                    pEffect->AttachEffectToObject(this, true);
-                    mBuffOffenseEffectHandle = pEffect;
-                }
-            }
-        }
-    }
-    else if (mBuffOffenseEffectHandle)
-    {
-        mBuffOffenseEffectHandle->StopAndFinish();
-        mBuffOffenseEffectHandle = NULL;
-    }
-}
-
-// FUNCTION: SWBF2 0x004e0310
-void EntitySoldier::TriggerBuffDefenseEffect()
-{
-    if (mBuffDefenseTimer > 0.0f && GetInvisibilityFactor() == 0.0f &&
-        (IsThreadActive() || GetObjectData(0) == COLL_ATTACHED))
-    {
-        if (mClass->mBuffDefenseEffect && mBuffDefenseEffectHandle == 0)
-        {
-            if (FLEffectClass* pEffectClass = FLEffect::Get(mClass->mBuffDefenseEffect))
-            {
-                if (FLEffectObject* pEffect = pEffectClass->BuildEffect())
-                {
-                    pEffect->AttachEffectToObject(this, true);
-                    mBuffDefenseEffectHandle = pEffect;
-                }
-            }
-        }
-    }
-    else if (mBuffDefenseEffectHandle)
-    {
-        mBuffDefenseEffectHandle->StopAndFinish();
-        mBuffDefenseEffectHandle = NULL;
-    }
-}
-
-// FUNCTION: SWBF2 0x004e0450
-void EntitySoldier::TriggerDebuffEffect()
-{
-    if (mDebuffDamageTimer > 0.0f && GetInvisibilityFactor() == 0.0f &&
-        (IsThreadActive() || GetObjectData(0) == COLL_ATTACHED))
-    {
-        if (mClass->mDebuffEffect && mDebuffEffectHandle == 0)
-        {
-            if (FLEffectClass* pEffectClass = FLEffect::Get(mClass->mDebuffEffect))
-            {
-                if (FLEffectObject* pEffect = pEffectClass->BuildEffect())
-                {
-                    pEffect->AttachEffectToObject(this, true);
-                    mDebuffEffectHandle = pEffect;
-                }
-            }
-        }
-    }
-    else if (mDebuffEffectHandle)
-    {
-        mDebuffEffectHandle->StopAndFinish();
-        mDebuffEffectHandle = NULL;
-    }
 }
 
 // FUNCTION: SWBF2 0x004e0670
@@ -8596,6 +8496,106 @@ void EntitySoldier::TriggerEnergyGainEffect()
                 mEnergyGainEffectHandle = pEffect;
             }
         }
+    }
+}
+
+// FUNCTION: SWBF2 0x004e0090
+void EntitySoldier::TriggerBuffHealthEffect()
+{
+    if (mBuffHealthTimer > 0.0f && GetInvisibilityFactor() == 0.0f &&
+        (IsThreadActive() || GetObjectData(0) == COLL_ATTACHED))
+    {
+        if (mClass->mBuffHealthEffect && mBuffHealthEffectHandle == 0)
+        {
+            if (FLEffectClass* pEffectClass = FLEffect::Get(mClass->mBuffHealthEffect))
+            {
+                if (FLEffectObject* pEffect = pEffectClass->BuildEffect())
+                {
+                    pEffect->AttachEffectToObject(this, true);
+                    mBuffHealthEffectHandle = pEffect;
+                }
+            }
+        }
+    }
+    else if (mBuffHealthEffectHandle)
+    {
+        mBuffHealthEffectHandle->StopAndFinish();
+        mBuffHealthEffectHandle = NULL;
+    }
+}
+
+// FUNCTION: SWBF2 0x004e01d0
+void EntitySoldier::TriggerBuffOffenseEffect()
+{
+    if (mBuffOffenseTimer > 0.0f && GetInvisibilityFactor() == 0.0f &&
+        (IsThreadActive() || GetObjectData(0) == COLL_ATTACHED))
+    {
+        if (mClass->mBuffOffenseEffect && mBuffOffenseEffectHandle == 0)
+        {
+            if (FLEffectClass* pEffectClass = FLEffect::Get(mClass->mBuffOffenseEffect))
+            {
+                if (FLEffectObject* pEffect = pEffectClass->BuildEffect())
+                {
+                    pEffect->AttachEffectToObject(this, true);
+                    mBuffOffenseEffectHandle = pEffect;
+                }
+            }
+        }
+    }
+    else if (mBuffOffenseEffectHandle)
+    {
+        mBuffOffenseEffectHandle->StopAndFinish();
+        mBuffOffenseEffectHandle = NULL;
+    }
+}
+
+// FUNCTION: SWBF2 0x004e0310
+void EntitySoldier::TriggerBuffDefenseEffect()
+{
+    if (mBuffDefenseTimer > 0.0f && GetInvisibilityFactor() == 0.0f &&
+        (IsThreadActive() || GetObjectData(0) == COLL_ATTACHED))
+    {
+        if (mClass->mBuffDefenseEffect && mBuffDefenseEffectHandle == 0)
+        {
+            if (FLEffectClass* pEffectClass = FLEffect::Get(mClass->mBuffDefenseEffect))
+            {
+                if (FLEffectObject* pEffect = pEffectClass->BuildEffect())
+                {
+                    pEffect->AttachEffectToObject(this, true);
+                    mBuffDefenseEffectHandle = pEffect;
+                }
+            }
+        }
+    }
+    else if (mBuffDefenseEffectHandle)
+    {
+        mBuffDefenseEffectHandle->StopAndFinish();
+        mBuffDefenseEffectHandle = NULL;
+    }
+}
+
+// FUNCTION: SWBF2 0x004e0450
+void EntitySoldier::TriggerDebuffEffect()
+{
+    if (mDebuffDamageTimer > 0.0f && GetInvisibilityFactor() == 0.0f &&
+        (IsThreadActive() || GetObjectData(0) == COLL_ATTACHED))
+    {
+        if (mClass->mDebuffEffect && mDebuffEffectHandle == 0)
+        {
+            if (FLEffectClass* pEffectClass = FLEffect::Get(mClass->mDebuffEffect))
+            {
+                if (FLEffectObject* pEffect = pEffectClass->BuildEffect())
+                {
+                    pEffect->AttachEffectToObject(this, true);
+                    mDebuffEffectHandle = pEffect;
+                }
+            }
+        }
+    }
+    else if (mDebuffEffectHandle)
+    {
+        mDebuffEffectHandle->StopAndFinish();
+        mDebuffEffectHandle = NULL;
     }
 }
 

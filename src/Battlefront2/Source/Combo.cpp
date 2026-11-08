@@ -654,11 +654,15 @@ const float Combo::State::VELOCITYY_SCALE_INV = 10.0f;
 const float Combo::State::VELOCITYDELTA_SCALE_INV = 10.0f;
 
 const float Combo::Transition::ENERGY_SCALE_INV = 10.0f;
+// GLOBAL: SWBF2 0x0078e07c
+const float Combo::Transition::ENERGY_SCALE = 1.0f / Combo::Transition::ENERGY_SCALE_INV;
 const float Combo::Attack::WIDTH_SCALE_INV = 100.0f;
 const float Combo::Attack::PUSH_SCALE_INV = 10.0f;
 const float Combo::Attack::TIME_SCALE_INV = 100.0f;
 const float Combo::Attack::LENGTH_SCALE_INV = 100.0f;
 const float Combo::Deflect::ENERGY_SCALE_INV = 10.0f;
+// GLOBAL: SWBF2 0x0078e094
+const float Combo::Deflect::ENERGY_SCALE = 1.0f / Combo::Deflect::ENERGY_SCALE_INV;
 
 static const float ANIM_FRAME_SPEED = 1.0f / 30.0f;
 

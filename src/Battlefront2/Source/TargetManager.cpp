@@ -382,7 +382,7 @@ void RemovePost(CommandPost* const post)
     {
         return;
     }
-    GameObject* pObject = post->mObject;
+    GameObject* pObject = post->GetGameObject();
     if (!pObject)
     {
         return;
@@ -479,7 +479,7 @@ void AddMarker(GameObject* const actor, const RedRegion* const region, unsigned 
         {
             Marker& marker = _gMarkers[uIndex];
             marker.actor = actor;
-            marker.region = const_cast<RedRegion*>(region);
+            marker.region = region;
             marker.teamMask = teamMask;
             marker.scale = scale;
             marker.textureHash = textureHash;

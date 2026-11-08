@@ -319,35 +319,6 @@ Controllable* EntityWalker::GetControllable()
 
 
 
-// FUNCTION: SWBF2 0x004ff510
-void EntityWalker::RotateY(const PblAngle& rAngle)
-{
-    const float fCos = rAngle.mCos * rAngle.mCos - rAngle.mSin * rAngle.mSin;
-    const float fSin = rAngle.mCos * 2.0f * rAngle.mSin;
-
-    PblMatrix kRot;
-    kRot.m[0][0] = fCos;
-    kRot.m[0][1] = 0.0f;
-    kRot.m[0][3] = 0.0f;
-    kRot.m[1][0] = 0.0f;
-    kRot.m[1][1] = 1.0f;
-    kRot.m[1][2] = 0.0f;
-    kRot.m[1][3] = 0.0f;
-    kRot.m[0][2] = -fSin;
-    kRot.m[2][0] = fSin;
-    kRot.m[2][1] = 0.0f;
-    kRot.m[2][2] = fCos;
-    kRot.m[2][3] = 0.0f;
-    kRot.m[3][0] = 0.0f;
-    kRot.m[3][1] = 0.0f;
-    kRot.m[3][2] = 0.0f;
-    kRot.m[3][3] = 1.0f;
-
-    PblMatrix kOut;
-    kOut = kRot * mMatrix;
-    mMatrix = kOut;
-}
-
 // FUNCTION: SWBF2 0x004ff5f0
 EntityType EntityWalker::GetEntityType() const
 {

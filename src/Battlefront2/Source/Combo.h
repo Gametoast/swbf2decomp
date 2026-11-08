@@ -348,6 +348,7 @@ public:
 
         unsigned int GetNumConditions() const { return m_uiNumConditions; }
         const Condition* GetCondition(unsigned int iCondition) const { return &m_aCondition[iCondition]; }
+        float GetEnergyCost() const { return m_uiEnergyCost * ENERGY_SCALE; }
 
         Condition* AddCondition();
 
@@ -376,13 +377,14 @@ public:
 
         void _ReadConfig(PblConfig& config, const char* pszComboName, const char* pszStateName);
 
+        static const float ENERGY_SCALE_INV;
+        static const float ENERGY_SCALE;
+
     public:
 
         static MemoryPool sMemoryPool;
 
         static void* operator new(unsigned int uiSize) { return sMemoryPool.Allocate(uiSize); }
-
-        static const float ENERGY_SCALE_INV;
 
         unsigned int m_uiTargetState;
         Condition* m_aCondition;
@@ -943,8 +945,10 @@ public:
             unsigned char uiWeapon : 2;
         };
 
+        float GetEnergyCost() const { return m_uiEnergyCost * ENERGY_SCALE; }
         unsigned int GetNumDeflectAnimations() const { return m_uiNumDeflectAnimations; }
         unsigned char GetDeflectAnimIndex(unsigned int i) const { return m_aDeflectAnim[i].uiAnimIndex; }
+        unsigned char GetDeflectWeapon(unsigned int i) const { return m_aDeflectAnim[i].uiWeapon; }
 
         unsigned int AddDeflectAnimation(unsigned char uiAnimIndex, unsigned char uiDirections,
                                          unsigned char uiWeapon);
@@ -975,12 +979,13 @@ public:
 
         void _ReadConfig(PblConfig& config, const Combo& combo, const char* pszStateName);
 
+        static const float ENERGY_SCALE_INV;
+        static const float ENERGY_SCALE;
+
     public:
         static MemoryPool sMemoryPool;
 
         static void* operator new(unsigned int uiSize) { return sMemoryPool.Allocate(uiSize); }
-
-        static const float ENERGY_SCALE_INV;
 
         union
         {

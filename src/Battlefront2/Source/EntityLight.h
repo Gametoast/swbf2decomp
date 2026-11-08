@@ -64,6 +64,7 @@ public:
     void SetHaloRadius(float fRadius);
 
     void SetFlareIntensity(float fIntensity);
+    bool IsCone() const { return _fBeamLength > 0.0f; }
     void TurnOn();
     void TurnOff();
 

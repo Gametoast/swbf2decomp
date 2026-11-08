@@ -75,8 +75,7 @@ bool CoverHelper::CheckForHintAndInit(CoverType eType, const GameObject* pTarget
     }
 
     mCoverType = eType;
-    mCoverTarget.mObject = pTarget;
-    mCoverTarget.mSavedHandleId = pTarget ? pTarget->GetHandleId() : 0;
+    mCoverTarget = pTarget;
     mHint = const_cast<CoverHint*>(FindHint());
     if (!mHint)
     {

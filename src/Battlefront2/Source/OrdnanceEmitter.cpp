@@ -361,13 +361,6 @@ OrdnanceClass* OrdnanceEmitterClass::Derive(unsigned int uHash)
 }
 
 
-static inline const PblVector3 RotateZ(const PblVector3& v, float fAngle)
-{
-    float fSin, fCos;
-    PblMath::SinCos(&fSin, &fCos, fAngle);
-    return PblVector3(fCos * v.x + fSin * v.y, fCos * v.y - fSin * v.x, v.z);
-}
-
 static const int kEmitterTargetFilter = COLL_SOFT | COLL_RIGID | COLL_ATTACHED | COLL_SHIELD;
 static const int kEmitterRayFilter = COLL_ASTEROID | COLL_RIGID | COLL_STATIC | COLL_TERRAIN;
 

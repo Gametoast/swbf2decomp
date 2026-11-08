@@ -47,16 +47,6 @@ static const float kfFadeDrawDistanceFactor = 1.0f / (1.0f - kfFadeDrawDistanceS
 
 
 
-// FUNCTION: SWBF2 0x004bd990
-LensFlare::LensFlare()
-    : _fSize(1.0f)
-    , _color(RedColor::WHITE)
-    , _fSquaredDrawDistance(0.0f)
-    , _uiHideInView(0)
-{
-    _fRandomRotOffset = PblRandom::_Global.GetFloat() * PblMath::fTwoPi;
-}
-
 // FUNCTION: SWBF2 0x004bdc00
 LightBeam::LightBeam()
     : _vHeadPosition(0.0f, 0.0f, 0.0f)

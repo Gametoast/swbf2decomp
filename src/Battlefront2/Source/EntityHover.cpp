@@ -2987,18 +2987,6 @@ bool EntityHover::CollisionCallback(const CollisionResult* pResult, CollisionObj
     return bResult;
 }
 
-// FUNCTION: SWBF2 0x004c7670
-ControllableDestination::ControllableDestination(const ControllableDestination& other)
-    : mHasDest(other.mHasDest),
-      mPos(other.mPos),
-      mOriginalPos(other.mOriginalPos),
-      mDirection(other.mDirection),
-      mSafeHeightEnforce(other.mSafeHeightEnforce),
-      mTaperFactor(other.mTaperFactor),
-      mMaxSpeed(other.mMaxSpeed)
-{
-}
-
 // FUNCTION: SWBF2 0x004c6ef0
 bool EntityHover::UpdateIndirect(float fDeltaTime)
 {

@@ -954,10 +954,6 @@ void LoadUtil::ProcessBarrier(PblFileChunk& chunk)
     }
 }
 
-// TEMPLATE: SWBF2 0x00446c00
-// Factory<Entity,EntityClass,EntityDesc>::Find
-template EntityClass* Factory<Entity, EntityClass, EntityDesc>::Find(unsigned int);
-
 // TEMPLATE: SWBF2 0x00578f10
 // util::HashTable_<pvs::ISector *,char const *,util::Vector<pvs::ISector *,util::BaseArray<pvs::ISector *,util::TypedArrayAllocator<pvs::ISector *,util::TNewArrayAlloc<pvs::ISector *> > > >,util::Vector<char const *,util::BaseArray<char const *,util::TypedArrayAllocator<char const *,util::TNewArrayAlloc<pvs::ISector *> > > >,util::Vector<unsigned int,util::BaseArray<unsigned int,util::TypedArrayAllocator<unsigned int,util::TNewArrayAlloc<pvs::ISector *> > > > >::~HashTable_<pvs::ISector *,char const *,util::Vector<pvs::ISector *,util::BaseArray<pvs::ISector *,util::TypedArrayAllocator<pvs::ISector *,util::TNewArrayAlloc<pvs::ISector *> > > >,util::Vector<char const *,util::BaseArray<char const *,util::TypedArrayAllocator<char const *,util::TNewArrayAlloc<pvs::ISector *> > > >,util::Vector<unsigned int,util::BaseArray<unsigned int,util::TypedArrayAllocator<unsigned int,util::TNewArrayAlloc<pvs::ISector *> > > > >
 template util::HashTable_<pvs::ISector*, char const*, util::HashTable<pvs::ISector*, char const*, util::TNewArrayAlloc<pvs::ISector*> >::ElemVecT, util::HashTable<pvs::ISector*, char const*, util::TNewArrayAlloc<pvs::ISector*> >::KeyVecT, util::HashTable<pvs::ISector*, char const*, util::TNewArrayAlloc<pvs::ISector*> >::HashVecT>::~HashTable_();

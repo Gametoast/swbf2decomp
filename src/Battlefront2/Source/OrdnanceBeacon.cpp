@@ -12,24 +12,6 @@
 
 extern bool netIsLocalTurn;
 
-namespace
-{
-
-    inline GameObject* ResolveHandle(PblHandle<GameObject>& handle)
-    {
-        GameObject* pObject = handle.mObject;
-        if (pObject &&
-            pObject->GetHandleId() !=
-                handle.mSavedHandleId)
-        {
-            handle.mObject = 0;
-            handle.mSavedHandleId = 0;
-            pObject = 0;
-        }
-        return pObject;
-    }
-}
-
 // SYNTHETIC: SWBF2 0x00405a10
 // `dynamic initializer for 'OrdnanceBeacon::rttiHashOrdnanceBeacon''
 // OrdnanceBeacon::rttiHashOrdnanceBeacon
@@ -87,31 +69,27 @@ OrdnanceBeacon::~OrdnanceBeacon()
 }
 
 // FUNCTION: SWBF2 0x005f8de0
-bool OrdnanceBeacon::Update(float fDeltaTime)
+bool OrdnanceBeacon::Update(float aDt)
 {
-    while (mSalvoCount > 0 && fDeltaTime > mLifeTime)
+    while (mSalvoCount > 0 && aDt > mLifeTime)
     {
-        PblMatrix aim;
-        aim.SetRotateX(-((OrdnanceBeaconClass*)mClass)->mAimElevation);
-        aim.RotateY(((OrdnanceBeaconClass*)mClass)->mAimAzimuth);
+        PblMatrix matrix;
+        matrix.SetRotateX(-((OrdnanceBeaconClass*)mClass)->mAimElevation);
+        matrix.RotateY(((OrdnanceBeaconClass*)mClass)->mAimAzimuth);
 
         OrdnanceDesc desc;
         desc.mPosition = mPosition;
-        const float fDist = ((OrdnanceBeaconClass*)mClass)->mAimDistance;
-        desc.mPosition += aim[2] * fDist;
+        desc.mPosition += ((OrdnanceBeaconClass*)mClass)->mAimDistance * matrix[2];
+        desc.mPosition += (PblRandom::GetSim().GetFloat() - PblRandom::GetSim().GetFloat()) *
+                          ((OrdnanceBeaconClass*)mClass)->mScatterDistance * matrix[0];
+        desc.mPosition += (PblRandom::GetSim().GetFloat() - PblRandom::GetSim().GetFloat()) *
+                          ((OrdnanceBeaconClass*)mClass)->mScatterDistance * matrix[1];
 
-        const float fRight = (PblRandom::GetSim().GetFloat() - PblRandom::GetSim().GetFloat()) *
-                             ((OrdnanceBeaconClass*)mClass)->mScatterDistance;
-        desc.mPosition += aim[0] * fRight;
-        const float fUp = (PblRandom::GetSim().GetFloat() - PblRandom::GetSim().GetFloat()) *
-                          ((OrdnanceBeaconClass*)mClass)->mScatterDistance;
-        desc.mPosition += aim[1] * fUp;
-
-        desc.mDirection = PblVector3(-aim.m[2][0], -aim.m[2][1], -aim.m[2][2]);
+        desc.mDirection = -matrix[2];
         desc.mStrength = 1.0f;
-        desc.mOwner = ResolveHandle(mOwner);
+        desc.mOwner = mOwner;
         desc.mDamageOwner = mDamageOwner;
-        desc.mTarget = mStickInfo ? ResolveHandle(mStickInfo->mCollHandle) : 0;
+        desc.mTarget = mStickInfo ? static_cast<GameObject*>(mStickInfo->mCollHandle) : 0;
         desc.mBodyID = mStickInfo ? mStickInfo->mCollBodyID : -1;
 
         if (NetGame::IsEnabled() && (netEnabledNext && netClientActive))
@@ -133,7 +111,7 @@ bool OrdnanceBeacon::Update(float fDeltaTime)
         --mSalvoCount;
         mLifeTime += ((OrdnanceBeaconClass*)mClass)->mSalvoDelay;
     }
-    return OrdnanceSticky::Update(fDeltaTime);
+    return OrdnanceSticky::Update(aDt);
 }
 
 

@@ -965,7 +965,7 @@ void GameState::PreStateInit(bool bMission)
     FLRenderer::Init(AIUtil::IsUberMode());
     CameraManager::Create(GameLoop::GetNumCameras());
 
-    FLEffect::InitAll(bMission);
+    FLEffect::InitAll(true);
     NetGame::LeaveClient();
     CommandPostManager::Create();
 
@@ -1482,12 +1482,6 @@ void GameState::PostStateCleanup(bool bMission)
 // TEMPLATE: SWBF2 0x0053c000
 // PblJournal::Record<unsigned int>
 template void PblJournal::Record<unsigned int>(unsigned int& value, PblJournalType type);
-
-// FUNCTION: SWBF2 0x0053bff0
-unsigned int __fastcall GetFactorySecondWord(const unsigned int* pThis)
-{
-    return pThis[1];
-}
 
 // SYNTHETIC: SWBF2 0x00403e70
 // `dynamic initializer for 'GameState::MissionState::_PlayState''

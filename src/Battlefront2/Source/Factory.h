@@ -97,6 +97,14 @@ Factory<TYPE, CLASS, DESC>::Factory(CLASS* pParent, unsigned int uHash)
     sList.AddLast(&mNode, this);
 }
 
+// TEMPLATE: SWBF2 0x00446c00
+// Factory<Entity,EntityClass,EntityDesc>::Find
+// TEMPLATE: SWBF2 0x00446d40
+// Factory<Ordnance,ExplosionClass,OrdnanceDesc>::Find
+// TEMPLATE: SWBF2 0x0049e180
+// Factory<Weapon,WeaponClass,WeaponDesc>::Find
+// TEMPLATE: SWBF2 0x005f7140
+// Factory<Ordnance,OrdnanceClass,OrdnanceDesc>::Find
 template <class TYPE, class CLASS, class DESC>
 inline CLASS* Factory<TYPE, CLASS, DESC>::Find(unsigned int uHash)
 {

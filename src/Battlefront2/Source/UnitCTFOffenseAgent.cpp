@@ -57,8 +57,7 @@ UnitCTFOffenseAgent::UnitCTFOffenseAgent(UnitController* pCtrl, const FlagItem* 
 {
     mCurState = 1;
     mNextState = 1;
-    mFlag.mObject = reinterpret_cast<const GameObject*>(pFlag);
-    mFlag.mSavedHandleId = pFlag ? pFlag->GetHandleId() : 0;
+    mFlag = pFlag;
     mCapturePos = vPos;
 
     mDefendCarrierOffset = AIUtil::GetRandomFloat(1.0f, 6.0f);

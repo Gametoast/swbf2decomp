@@ -28,10 +28,6 @@ namespace AIUtil
                       float* pLastEventTime);
 }
 
-class PblMatrix;
-extern PblMatrix gMatrixIdentity;
-#define _IdentityMatrix (gMatrixIdentity)
-
 namespace
 {
 
@@ -216,7 +212,7 @@ void OrdnanceGrenade::Render(unsigned char ucViewport, float fDist, unsigned int
             netInterpolator.GetVec(mInterpIndex, vPos);
         }
 
-        PblMatrix mat = _IdentityMatrix;
+        PblMatrix mat = gMatrixIdentity;
         mat.SetTranslation(vPos);
         ((OrdnanceGrenadeClass*)mClass)->mModel->Render(&mat, 0, RedColor::WHITE, uiFlags, 0);
         return;

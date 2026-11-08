@@ -490,10 +490,6 @@ bool CollisionPrimitive::CollideBox(const PblVector3& vVelocity, const PblVector
     }
 }
 
-// TEMPLATE: SWBF2 0x004620a0
-// PolyListContainer<100>::AddPolygon
-template void PolyListContainer<100>::AddPolygon(unsigned char, const PblVector3*);
-
 // FUNCTION: SWBF2 0x00467090
 bool CollisionPrimitive::InitMeshCollision(const PblMatrix& matrix, const CollisionMesh* pMesh,
                                            const PblMatrix& meshMatrix, CollisionObject* pObject,

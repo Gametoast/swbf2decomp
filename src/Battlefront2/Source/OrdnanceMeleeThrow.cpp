@@ -177,7 +177,7 @@ const PblVector3& OrdnanceMeleeThrow::GetVelocity() const
 // FUNCTION: SWBF2 0x006034e0
 void OrdnanceMeleeThrow::Render(unsigned char, float, unsigned int uiFlags)
 {
-    if (m_pOwner.mObject && m_pOwner.mObject->GetHandleId() != m_pOwner.mSavedHandleId)
+    if (m_pOwner.IsDeadHandle())
     {
         return;
     }
@@ -222,11 +222,11 @@ OrdnanceMeleeThrow::OrdnanceMeleeThrow(OrdnanceMeleeThrowClass* pClass, const Or
 
     m_pWeapon = (WeaponMeleeThrow*)desc.mFireWeapon;
     m_pWeapon->m_pPrimaryWeapon->TurnOn(0.01f);
-    m_pWeapon->m_pPrimaryWeapon->m_uiTrailOnMask = 0xf;
+    m_pWeapon->m_pPrimaryWeapon->TurnOnTrail(true);
     m_pWeapon->NotifyThrow();
     m_bLastFrameIndicator = false;
 
-    m_mMatrix = m_pWeapon->m_mThrow0Local * m_pOwner->GetMatrix();
+    m_mMatrix = m_pWeapon->GetFireMatrixLocal() * m_pOwner->GetMatrix();
 
     const WeaponMeleeClass* pWeaponClass = (const WeaponMeleeClass*)m_pWeapon->m_pPrimaryWeapon->mClass;
     PblVector3 vEdgeDir = gVectorUnitZ;
@@ -292,10 +292,9 @@ OrdnanceMeleeThrow::OrdnanceMeleeThrow(OrdnanceMeleeThrowClass* pClass, const Or
             }
             PblMatrix matrix = gMatrixIdentity;
             matrix.SetTranslation(mPosition);
-            if (m_pLight->_fBeamLength > 0.0f)
+            if (m_pLight->IsCone())
             {
-                matrix[1] = vDir;
-                matrix.m[1][3] = 0.0f;
+                matrix.SetYAxis(vDir);
                 PblVector3 vFront = -gVectorUnitY + vDir * vDir.y;
                 float fLength2 = SquaredLength(vFront);
                 if (fLength2 <= 0.0001f)
@@ -304,10 +303,8 @@ OrdnanceMeleeThrow::OrdnanceMeleeThrow(OrdnanceMeleeThrowClass* pClass, const Or
                     fLength2 = SquaredLength(vFront);
                 }
                 vFront *= 1.0f / sqrtf(fLength2);
-                matrix[0] = CrossProduct(vDir, vFront);
-                matrix.m[0][3] = 0.0f;
-                matrix[2] = vFront;
-                matrix.m[2][3] = 0.0f;
+                matrix.SetXAxis(CrossProduct(vDir, vFront));
+                matrix.SetZAxis(vFront);
             }
             m_pLight->SetMatrix(matrix);
             m_pLight->TurnOn();
@@ -336,7 +333,7 @@ bool OrdnanceMeleeThrow::Update(float fDeltaTime)
     }
 
     OrdnanceMeleeThrowClass* pClass = (OrdnanceMeleeThrowClass*)mClass;
-    if (m_pOwner.mObject && m_pOwner.mObject->GetHandleId() != m_pOwner.mSavedHandleId)
+    if (m_pOwner.IsDeadHandle())
     {
         return false;
     }
@@ -352,7 +349,7 @@ bool OrdnanceMeleeThrow::Update(float fDeltaTime)
         if (-mLifeTime >= fReturnDuration)
         {
             m_pWeapon->NotifyReturned();
-            m_pWeapon->m_pPrimaryWeapon->m_uiTrailOnMask = 0;
+            m_pWeapon->m_pPrimaryWeapon->TurnOnTrail(false);
             m_bLastFrameIndicator = true;
             return true;
         }

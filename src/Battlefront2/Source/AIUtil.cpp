@@ -252,32 +252,6 @@ float AIUtil::gSnipeSuitabilityDist = 70.0f;
 // GLOBAL: SWBF2 0x01f9af80
 static unsigned __int64 sSpied[600];
 
-// FUNCTION: SWBF2 0x004417d0
-void AIUtil::ResetSpied(Character* pWatcher)
-{
-    sSpied[Character::GetIndex(pWatcher)] = 0;
-}
-
-namespace AIUtil
-{
-
-// FUNCTION: SWBF2 0x00441780
-void AddSpied(Character* aSpy, Character* aSpotter)
-{
-    sSpied[Character::GetIndex(aSpy)] |= 1 << Character::GetIndex(aSpotter);
-}
-}
-
-namespace AIUtil
-{
-
-// FUNCTION: SWBF2 0x00441800
-bool IsSpied(Character* aSpy, Character* aSpotter)
-{
-    return (sSpied[Character::GetIndex(aSpy)] & (1 << Character::GetIndex(aSpotter))) != 0;
-}
-}
-
 namespace AIUtil
 {
 
@@ -291,33 +265,6 @@ bool __fastcall ShouldStayInVehicle(const Controllable* pMe)
     }
     return true;
 }
-}
-
-// FUNCTION: SWBF2 0x00441690
-bool AIUtil::IsNearNonAllyCommandPost(const GameObject* pObject, const CommandPost** ppPost)
-{
-    float fNearest = 3.402823466e38f;
-    *ppPost = 0;
-    PblVector3 vObject;
-    vObject = pObject->GetMatrix().GetTranslation();
-    for (int i = 0; i < CommandPostManager::Instance()->GetCount(); ++i)
-    {
-        CommandPost* pPost = CommandPostManager::Instance()->FindPostFromIndex(i);
-        const GameObject* pPostObject = pPost->GetGameObject();
-        if (!pObject->IsMyFriend(pPostObject))
-        {
-            const PblVector3 vDelta = GetCommandPostPos(pPost) - vObject;
-            const float dz = vDelta.z;
-            const float dx = vDelta.x;
-            const float fDistanceSq = dx * dx + dz * dz;
-            if (fDistanceSq < fNearest && fDistanceSq < 5625.0f)
-            {
-                fNearest = fDistanceSq;
-                *ppPost = pPost;
-            }
-        }
-    }
-    return *ppPost != 0;
 }
 
 namespace AIDifficulty
@@ -1316,6 +1263,75 @@ bool AIUtil::IsNearPost(const Controllable* pMe, const CommandPost* pPost, const
     return fRadius * fRadius > fDistSq;
 }
 
+// FUNCTION: SWBF2 0x00441620
+void AIUtil::DeployCargo(GameObject* pObject, const CommandPost*  )
+{
+    const PblList<Controllable>& list = pObject->GetControllableList();
+    PblList<Controllable>::Itor it = list.Begin();
+    ++it;
+    for (; (Controllable*)it; ++it)
+    {
+        Controller* pCtrl = ((Controllable*)it)->mCtrl;
+        if (pCtrl && !pCtrl->IsRtti(PlayerController::rttiHashPlayerController))
+        {
+            pCtrl->mOwner->GetPilot()->ExitVehicle(true, true);
+        }
+    }
+}
+
+// FUNCTION: SWBF2 0x00441690
+bool AIUtil::IsNearNonAllyCommandPost(const GameObject* pObject, const CommandPost** ppPost)
+{
+    float fNearest = 3.402823466e38f;
+    *ppPost = 0;
+    PblVector3 vObject;
+    vObject = pObject->GetMatrix().GetTranslation();
+    for (int i = 0; i < CommandPostManager::Instance()->GetCount(); ++i)
+    {
+        CommandPost* pPost = CommandPostManager::Instance()->FindPostFromIndex(i);
+        const GameObject* pPostObject = pPost->GetGameObject();
+        if (!pObject->IsMyFriend(pPostObject))
+        {
+            const PblVector3 vDelta = GetCommandPostPos(pPost) - vObject;
+            const float dz = vDelta.z;
+            const float dx = vDelta.x;
+            const float fDistanceSq = dx * dx + dz * dz;
+            if (fDistanceSq < fNearest && fDistanceSq < 5625.0f)
+            {
+                fNearest = fDistanceSq;
+                *ppPost = pPost;
+            }
+        }
+    }
+    return *ppPost != 0;
+}
+
+namespace AIUtil
+{
+
+// FUNCTION: SWBF2 0x00441780
+void AddSpied(Character* aSpy, Character* aSpotter)
+{
+    sSpied[Character::GetIndex(aSpy)] |= 1 << Character::GetIndex(aSpotter);
+}
+}
+
+// FUNCTION: SWBF2 0x004417d0
+void AIUtil::ResetSpied(Character* pWatcher)
+{
+    sSpied[Character::GetIndex(pWatcher)] = 0;
+}
+
+namespace AIUtil
+{
+
+// FUNCTION: SWBF2 0x00441800
+bool IsSpied(Character* aSpy, Character* aSpotter)
+{
+    return (sSpied[Character::GetIndex(aSpy)] & (1 << Character::GetIndex(aSpotter))) != 0;
+}
+}
+
 namespace AIUtil
 {
 
@@ -1364,20 +1380,65 @@ bool __cdecl CanPotentiallySee(const Controllable* pMe, const GameObject* pObjec
 }
 }
 
-// FUNCTION: SWBF2 0x00441620
-void AIUtil::DeployCargo(GameObject* pObject, const CommandPost*  )
+// FUNCTION: SWBF2 0x004419c0
+PblVector3 AIUtil::GetMyVisionPos(const Controllable* pMe)
 {
-    const PblList<Controllable>& list = pObject->GetControllableList();
-    PblList<Controllable>::Itor it = list.Begin();
-    ++it;
-    for (; (Controllable*)it; ++it)
+    return pMe->GetEyePoint();
+}
+
+// FUNCTION: SWBF2 0x004419e0
+PblVector3 AIUtil::GetHisVisionTargetPos(const Controllable* pMe, const GameObject* pObj)
+{
+    const PblVector3 vMyPos = GetMyVisionPos(pMe);
+    if (pObj->GetControllable())
     {
-        Controller* pCtrl = ((Controllable*)it)->mCtrl;
-        if (pCtrl && !pCtrl->IsRtti(PlayerController::rttiHashPlayerController))
-        {
-            pCtrl->mOwner->GetPilot()->ExitVehicle(true, true);
-        }
+        PblVector3 vHisEye;
+        vHisEye = pObj->GetControllable()->GetEyePoint();
+        PblVector3 vDir;
+        vDir = pMe->mEyeDir;
+        const PblVector3 vTarget = pObj->GetTargetPoint(vMyPos, vDir, -1);
+        const PblVector3 vSum(vHisEye.x + vTarget.x, vHisEye.y + vTarget.y, vHisEye.z + vTarget.z);
+        return PblVector3(vSum.x * 0.5f, vSum.y * 0.5f, vSum.z * 0.5f);
     }
+    return pObj->GetTargetPoint(vMyPos, pMe->mEyeDir, -1);
+}
+
+// FUNCTION: SWBF2 0x00441ac0
+bool AIUtil::CanSeePosition(Controllable* pMe, const PblVector3& vPos, const GameObject* pObj)
+{
+    const PblVector3 vFrom = GetMyVisionPos(pMe);
+    const GameObject* ignore[2];
+    ignore[0] = pMe->GetGameObject();
+    ignore[1] = pObj;
+    return !CollisionManager::RayTest(vFrom, vPos, ignore, 2, 0x9e);
+}
+
+// FUNCTION: SWBF2 0x00441b10
+bool AIUtil::CanSeePosition(const PblVector3& vFrom, Controllable* pMe, const PblVector3& vTo,
+                            const GameObject* pIgnore)
+{
+    const GameObject* ignore[3];
+    ignore[0] = pMe->GetGameObject();
+    ignore[1] = pIgnore;
+    int iIgnoreCount;
+    if (pIgnore->GetCollisionType() == COLL_ATTACHED && pIgnore->GetControllable() &&
+        pIgnore->GetControllable()->mCharacter && pIgnore->GetControllable()->mCharacter->mVehicle)
+    {
+        ignore[2] = const_cast<GameObject*>(pIgnore)->GetControllable()->mCharacter->mVehicle->GetGameObject();
+        iIgnoreCount = 3;
+    }
+    else
+    {
+        iIgnoreCount = 2;
+    }
+    return !CollisionManager::RayTest(vFrom, vTo, ignore, iIgnoreCount, 0x9e);
+}
+
+// FUNCTION: SWBF2 0x00441bd0
+bool AIUtil::CanSee(Controllable* pMe, const GameObject* pObj, PblVector3* pPos)
+{
+    *pPos = GetHisVisionTargetPos(pMe, pObj);
+    return CanSeePosition(pMe, *pPos, pObj);
 }
 
 // FUNCTION: SWBF2 0x00441c10
@@ -1782,67 +1843,6 @@ bool AIUtil::IsSnipeHintNearby(const GameObject* pObj, const SnipeHelper& helper
         }
     }
     return false;
-}
-
-// FUNCTION: SWBF2 0x004419c0
-PblVector3 AIUtil::GetMyVisionPos(const Controllable* pMe)
-{
-    return pMe->GetEyePoint();
-}
-
-// FUNCTION: SWBF2 0x004419e0
-PblVector3 AIUtil::GetHisVisionTargetPos(const Controllable* pMe, const GameObject* pObj)
-{
-    const PblVector3 vMyPos = GetMyVisionPos(pMe);
-    if (pObj->GetControllable())
-    {
-        PblVector3 vHisEye;
-        vHisEye = pObj->GetControllable()->GetEyePoint();
-        PblVector3 vDir;
-        vDir = pMe->mEyeDir;
-        const PblVector3 vTarget = pObj->GetTargetPoint(vMyPos, vDir, -1);
-        const PblVector3 vSum(vHisEye.x + vTarget.x, vHisEye.y + vTarget.y, vHisEye.z + vTarget.z);
-        return PblVector3(vSum.x * 0.5f, vSum.y * 0.5f, vSum.z * 0.5f);
-    }
-    return pObj->GetTargetPoint(vMyPos, pMe->mEyeDir, -1);
-}
-
-// FUNCTION: SWBF2 0x00441ac0
-bool AIUtil::CanSeePosition(Controllable* pMe, const PblVector3& vPos, const GameObject* pObj)
-{
-    const PblVector3 vFrom = GetMyVisionPos(pMe);
-    const GameObject* ignore[2];
-    ignore[0] = pMe->GetGameObject();
-    ignore[1] = pObj;
-    return !CollisionManager::RayTest(vFrom, vPos, ignore, 2, 0x9e);
-}
-
-// FUNCTION: SWBF2 0x00441b10
-bool AIUtil::CanSeePosition(const PblVector3& vFrom, Controllable* pMe, const PblVector3& vTo,
-                            const GameObject* pIgnore)
-{
-    const GameObject* ignore[3];
-    ignore[0] = pMe->GetGameObject();
-    ignore[1] = pIgnore;
-    int iIgnoreCount;
-    if (pIgnore->GetCollisionType() == COLL_ATTACHED && pIgnore->GetControllable() &&
-        pIgnore->GetControllable()->mCharacter && pIgnore->GetControllable()->mCharacter->mVehicle)
-    {
-        ignore[2] = const_cast<GameObject*>(pIgnore)->GetControllable()->mCharacter->mVehicle->GetGameObject();
-        iIgnoreCount = 3;
-    }
-    else
-    {
-        iIgnoreCount = 2;
-    }
-    return !CollisionManager::RayTest(vFrom, vTo, ignore, iIgnoreCount, 0x9e);
-}
-
-// FUNCTION: SWBF2 0x00441bd0
-bool AIUtil::CanSee(Controllable* pMe, const GameObject* pObj, PblVector3* pPos)
-{
-    *pPos = GetHisVisionTargetPos(pMe, pObj);
-    return CanSeePosition(pMe, *pPos, pObj);
 }
 
 // FUNCTION: SWBF2 0x00442b80

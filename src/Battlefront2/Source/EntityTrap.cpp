@@ -26,12 +26,6 @@
 #include "Zephyr/Source/ZephyrPoseStatic.h"
 
 
-static PblMatrix _IdentityMatrix(
-    PblVector4{ 1.0f, 0.0f, 0.0f, 0.0f },
-    PblVector4{ 0.0f, 1.0f, 0.0f, 0.0f },
-    PblVector4{ 0.0f, 0.0f, 1.0f, 0.0f },
-    PblVector4{ 0.0f, 0.0f, 0.0f, 1.0f });
-
 // FUNCTION: SWBF2 0x004fe100
 EntityTrapClass::EntityTrapClass(unsigned int uHash)
     : EntityBuildingClass(uHash)

@@ -39,10 +39,6 @@ namespace
         return (Damageable*)pObject;
     }
 
-    inline unsigned int GameObjectHandleId(const GameObject* pObject)
-    {
-        return pObject->GetHandleId();
-    }
 }
 
 // SYNTHETIC: SWBF2 0x00405b80
@@ -287,8 +283,7 @@ bool OrdnanceSticky::Update(float fDeltaTime)
         return OrdnanceShell::Update(fDeltaTime);
     }
 
-    if (mStickInfo->mCollHandle.mObject &&
-        GameObjectHandleId(mStickInfo->mCollHandle.mObject) != mStickInfo->mCollHandle.mSavedHandleId)
+    if (mStickInfo->mCollHandle.IsDeadHandle())
     {
         delete mStickInfo;
         mStickInfo = 0;

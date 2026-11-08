@@ -7,7 +7,7 @@
 #include "Weapon.h"
 #include "PebbleFL/Common/PblRtti.h"
 #include "WeaponCannon.h"
-#include "PebbleFL/Common/PblHashTable.h"
+#include "WeaponMelee.h"
 
 // VTABLE: SWBF2 0x007b16ac
 class WeaponMeleeThrowClass : public WeaponClass
@@ -59,6 +59,9 @@ public:
     void NotifyThrow();
     void NotifyReturned();
     bool IsCurrentlyThrown() const { return m_bThrow; }
+    void AcknowledgeReturn() { m_bReturnedThisFrame = 0; }
+    bool ReturnedThisFrame() { return m_bReturnedThisFrame != 0; }
+    const PblMatrix& GetFireMatrixLocal() const { return m_mThrow0Local; }
     virtual bool IsBusy() const;
     virtual bool Update(float fDeltaTime);
     virtual void Write(NetPktGroup& group);
@@ -77,6 +80,10 @@ protected:
     virtual bool FireDone() const;
     virtual bool CheckEmpty() const;
     virtual bool ReloadDone() const;
+    const WeaponMeleeClass* _GetPrimaryClass() const
+    {
+        return (const WeaponMeleeClass*)m_pPrimaryWeapon->mClass;
+    }
 
 public:
 

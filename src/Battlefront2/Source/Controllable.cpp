@@ -60,11 +60,6 @@ namespace AIUtil
 GameObject* GetAlivePtr(PblHandle<GameObject> const& hObj, bool bIncludeBuildings);
 }
 
-static inline unsigned int GameObjectHandleId(const GameObject* pObject)
-{
-    return pObject->GetHandleId();
-}
-
 // FUNCTION: SWBF2 0x004833b0
 float Controllable::GetSoundRadius() const
 {
@@ -361,8 +356,7 @@ void Controllable::SetIndirectControl(bool bIndirect)
 // FUNCTION: SWBF2 0x00483f50
 void Controllable::SetCurrentCollision(GameObject* pObject)
 {
-    mCollisionObj.mObject = pObject;
-    mCollisionObj.mSavedHandleId = pObject ? GameObjectHandleId(pObject) : 0;
+    mCollisionObj = pObject;
 }
 
 // FUNCTION: SWBF2 0x00483f80
