@@ -18,11 +18,11 @@ void EndFrame()
 
 }
 
+// GLOBAL: SWBF2 0x009cefc0
+// mPausedFlag
 namespace PblProfile
 {
-
-// GLOBAL: SWBF2 0x009cefc0
-bool mPausedFlag;
+static bool mPausedFlag;
 }
 
 namespace PblProfile

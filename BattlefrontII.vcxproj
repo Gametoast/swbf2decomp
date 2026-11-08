@@ -844,10 +844,6 @@
     <ClCompile Include="src\GameSpyFL\nonport.c">
       <BufferSecurityCheck>false</BufferSecurityCheck>
     </ClCompile>
-    <ClCompile Include="src\GameSpyFL\md5c.c">
-      <BufferSecurityCheck>false</BufferSecurityCheck>
-      <WholeProgramOptimization Condition="'$(Configuration)'=='Release'">true</WholeProgramOptimization>
-    </ClCompile>
     <ClCompile Include="src\Battlefront2\Source\gamespyStatsManager.cpp">
       <BufferSecurityCheck>false</BufferSecurityCheck>
       <WholeProgramOptimization Condition="'$(Configuration)'=='Release'">true</WholeProgramOptimization>
@@ -1205,6 +1201,10 @@
       <WholeProgramOptimization Condition="'$(Configuration)'=='Release'">true</WholeProgramOptimization>
     </ClCompile>
     <ClCompile Include="src\Battlefront2\Source\MapCamera.cpp">
+      <BufferSecurityCheck>false</BufferSecurityCheck>
+      <WholeProgramOptimization Condition="'$(Configuration)'=='Release'">true</WholeProgramOptimization>
+    </ClCompile>
+    <ClCompile Include="src\GameSpyFL\md5c.c">
       <BufferSecurityCheck>false</BufferSecurityCheck>
       <WholeProgramOptimization Condition="'$(Configuration)'=='Release'">true</WholeProgramOptimization>
     </ClCompile>
@@ -1839,6 +1839,10 @@
       <WholeProgramOptimization Condition="'$(Configuration)'=='Release'">true</WholeProgramOptimization>
     </ClCompile>
     <ClCompile Include="src\Battlefront2\Source\UnitWaitSecondaryAgent.cpp">
+      <BufferSecurityCheck>false</BufferSecurityCheck>
+      <WholeProgramOptimization Condition="'$(Configuration)'=='Release'">true</WholeProgramOptimization>
+    </ClCompile>
+    <ClCompile Include="src\Battlefront2\Source\unzip.cpp">
       <BufferSecurityCheck>false</BufferSecurityCheck>
       <WholeProgramOptimization Condition="'$(Configuration)'=='Release'">true</WholeProgramOptimization>
     </ClCompile>

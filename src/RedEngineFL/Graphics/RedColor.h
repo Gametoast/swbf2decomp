@@ -33,8 +33,8 @@ public:
     // FUNCTION: SWBF2 0x0041bbe0
     unsigned int GetARGB() const
     {
-        return ((unsigned int)a << 24) | ((unsigned int)r << 16) |
-               ((unsigned int)g << 8) | (unsigned int)b;
+        unsigned int argb = (static_cast<unsigned int>(a) << 8) | r;
+        return (((argb << 8) | g) << 8) | b;
     }
 
     operator unsigned int() const { return GetARGB(); }

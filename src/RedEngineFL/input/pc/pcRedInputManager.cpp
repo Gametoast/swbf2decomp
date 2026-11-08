@@ -1,6 +1,7 @@
 #include "pcRedInputManager.h"
 
 #include "PebbleFL/Common/PblJournal.h"
+#include "PebbleFL/Common/PblMath.h"
 #include "PebbleFL/Common/PblValues.h"
 #include "Battlefront2/Source/NetSetup.h"
 #include "lglcd/lgLcd.h"

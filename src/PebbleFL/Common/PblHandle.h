@@ -83,6 +83,8 @@ public:
     // PblHandle<GameObject>::operator->
     // TEMPLATE: SWBF2 0x0043a120
     // PblHandle<GameObject const >::operator->
+    // TEMPLATE: SWBF2 0x00428e40
+    // PblHandle<ParticleEmitterObject>::operator->
     TYPE* operator->() const { return GetObjectA(); }
 
     // TEMPLATE: SWBF2 0x0043a150
@@ -127,8 +129,6 @@ public:
     }
 
 private:
-    // TEMPLATE: SWBF2 0x00428e40
-    // PblHandle<ParticleEmitterObject>::GetObjectA
     TYPE* GetObjectA() const
     {
         if (mObject)

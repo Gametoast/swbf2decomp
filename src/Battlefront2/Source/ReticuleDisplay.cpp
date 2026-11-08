@@ -48,7 +48,8 @@ bool ReticuleInterpolator::Update(float)
 {
     if (mCount >= 2)
     {
-        NetGame::GetTurnRatio();
+        const float fRatio = NetGame::GetTurnRatio();
+        const PblVector3 vPos = Interpolate(mPos[mCount & 1], mPos[(mCount - 1) & 1], fRatio);
     }
     return true;
 }

@@ -65,16 +65,10 @@ template bool util::Vector<char const*, util::BaseArray<char const*,
 // util::HashTable_<int *,char const *,util::Vector<int *,util::BaseArray<int *,util::TypedArrayAllocator<int *,util::SingletonAllocator<util::DefaultStaticAllocator> > > >,util::Vector<char const *,util::BaseArray<char const *,util::TypedArrayAllocator<char const *,util::SingletonAllocator<util::DefaultStaticAllocator> > > >,util::Vector<unsigned int,util::BaseArray<unsigned int,util::TypedArrayAllocator<unsigned int,util::SingletonAllocator<util::DefaultStaticAllocator> > > > >::FindIndex_
 template unsigned int util::HashTable_<int*, char const*, util::HashTable<int*, char const*, util::SingletonAllocator<util::DefaultStaticAllocator> >::ElemVecT, util::HashTable<int*, char const*, util::SingletonAllocator<util::DefaultStaticAllocator> >::KeyVecT, util::HashTable<int*, char const*, util::SingletonAllocator<util::DefaultStaticAllocator> >::HashVecT>::FindIndex_(unsigned int) const;
 
-// TEMPLATE: SWBF2 0x006ad580
-// util::BaseArray<unsigned int,util::TypedArrayAllocator<unsigned int,util::SingletonAllocator<util::DefaultStaticAllocator> > >::~BaseArray<unsigned int,util::TypedArrayAllocator<unsigned int,util::SingletonAllocator<util::DefaultStaticAllocator> > >
 template util::BaseArray<unsigned int,
     util::TypedArrayAllocator<unsigned int, util::SingletonAllocator<util::DefaultStaticAllocator> > >::~BaseArray();
-// TEMPLATE: SWBF2 0x006ad5d0
-// util::BaseArray<int *,util::TypedArrayAllocator<int *,util::SingletonAllocator<util::DefaultStaticAllocator> > >::~BaseArray<int *,util::TypedArrayAllocator<int *,util::SingletonAllocator<util::DefaultStaticAllocator> > >
 template util::BaseArray<int*,
     util::TypedArrayAllocator<int*, util::SingletonAllocator<util::DefaultStaticAllocator> > >::~BaseArray();
-// TEMPLATE: SWBF2 0x006ad620
-// util::BaseArray<char const *,util::TypedArrayAllocator<char const *,util::SingletonAllocator<util::DefaultStaticAllocator> > >::~BaseArray<char const *,util::TypedArrayAllocator<char const *,util::SingletonAllocator<util::DefaultStaticAllocator> > >
 template util::BaseArray<char const*,
     util::TypedArrayAllocator<char const*, util::SingletonAllocator<util::DefaultStaticAllocator> > >::~BaseArray();
 

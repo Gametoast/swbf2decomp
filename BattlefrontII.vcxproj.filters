@@ -1365,6 +1365,9 @@
     <ClCompile Include="src\Battlefront2\Source\UnitWaitSecondaryAgent.cpp">
       <Filter>src\Battlefront2\Source</Filter>
     </ClCompile>
+    <ClCompile Include="src\Battlefront2\Source\unzip.cpp">
+      <Filter>src\Battlefront2\Source</Filter>
+    </ClCompile>
     <ClCompile Include="src\Battlefront2\Source\VOHelper.cpp">
       <Filter>src\Battlefront2\Source</Filter>
     </ClCompile>

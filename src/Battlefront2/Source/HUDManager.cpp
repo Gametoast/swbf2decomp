@@ -464,12 +464,6 @@ void HUD::Manager::Load(PblFileChunk& chunk)
 #include "Zephyr/Source/ZephyrSkinReader.h"
 #include "Zephyr/Source/ZephyrSkinShared.h"
 
-// FUNCTION: SWBF2 0x00565d20
-void __fastcall DestroyPblFileForHUD(PblFile* pFile)
-{
-    pFile->~PblFile();
-}
-
 // FUNCTION: SWBF2 0x00565d30
 unsigned int HUD::Objective::GetTextHashID() const
 {

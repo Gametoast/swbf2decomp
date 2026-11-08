@@ -14286,7 +14286,7 @@ void AddSendBefore(GameObject* pObject, int iBefore)
 // FUNCTION: SWBF2 0x005bdc70
 bool IsUnmanned(const GameObject* pObject)
 {
-    for (PblList<Controllable>::Itor it(pObject->GetControllableList()); it; ++it)
+    for (PblList<Controllable>::Itor it(&pObject->GetControllableList()); it; ++it)
     {
         if (it->IsSelfPilotable() ||
             ((it->IsPilotable() || it->IsRemoteVehicle()) && it->GetPilot()))

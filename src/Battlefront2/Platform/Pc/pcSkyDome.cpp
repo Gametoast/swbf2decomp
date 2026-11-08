@@ -134,6 +134,11 @@ void SkyFogRenderable::Render(unsigned int) const
 
 
 
+int SkyDome::Build()
+{
+    return 1;
+}
+
 // FUNCTION: SWBF2 0x00428970
 void SkyDome::Render(unsigned int value) const
 {

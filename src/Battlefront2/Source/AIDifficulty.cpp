@@ -587,7 +587,7 @@ int GetAutoBalanceMode()
     {
         return 3;
     }
-    if (SpaceAssault::mInstance && SpaceAssault::mInstance->mbEnabled)
+    if (SpaceAssault::Instance() && SpaceAssault::Instance()->IsEnabled())
     {
         return 1;
     }

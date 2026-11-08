@@ -24,12 +24,6 @@
 #include "UnitStationaryController.h"
 #include "CollisionManager.h"
 
-namespace gf
-{
-bool isInitialized(); bool checkError();
-}
-void ProcessGalaxyData();
-
 
 PblMatrix DirectionMatrix(const PblVector3& vDir, const PblVector3& vUp, const PblVector3& vPos);
 
@@ -708,15 +702,4 @@ const GameObject* WeaponDispenser::GetItem(int iIndex) const
         return 0;
     }
     return (*mItemArray)[iIndex];
-}
-
-// FUNCTION: SWBF2 0x005d5a40
-bool PumpGalaxyMatchmaking()
-{
-    if (!gf::isInitialized())
-    {
-        return false;
-    }
-    ProcessGalaxyData();
-    return !gf::checkError();
 }

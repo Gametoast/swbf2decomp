@@ -217,6 +217,10 @@ void Reset()
 // FUNCTION: SWBF2 0x00638d30
 void Activate()
 {
+    if (SkyDome::sInstance)
+    {
+        SkyDome::sInstance->Build();
+    }
 }
 
 }

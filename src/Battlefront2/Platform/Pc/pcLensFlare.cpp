@@ -651,7 +651,7 @@ void LensFlareEffect::LensFlareList::Render<FlareVertex, 642>() const
         RedRenderer::pcGetDevice()->GetBackBuffer(0, 0, D3DBACKBUFFER_TYPE_MONO, &pBackBuffer);
         IDirect3DSurface9* pSampleSurface;
         ((IDirect3DTexture9*)s_sampleTex->m_pTexture)->GetSurfaceLevel(0, &pSampleSurface);
-        RedRenderer::pcGetDevice()->ColorFill(pSampleSurface, 0, 0);
+        RedRenderer::pcGetDevice()->ColorFill(pSampleSurface, 0, RedColor(0, 0, 0, 0));
         for (int i = 0; i < iNumFlares; i++)
         {
             RedRenderer::pcGetDevice()->StretchRect(pBackBuffer, &sourceRects[i], pSampleSurface,
@@ -886,7 +886,7 @@ void LensFlareEffect::LensFlareList::Render<FlareCompressedVertex, 37506>() cons
         RedRenderer::pcGetDevice()->GetBackBuffer(0, 0, D3DBACKBUFFER_TYPE_MONO, &pBackBuffer);
         IDirect3DSurface9* pSampleSurface;
         ((IDirect3DTexture9*)s_sampleTex->m_pTexture)->GetSurfaceLevel(0, &pSampleSurface);
-        RedRenderer::pcGetDevice()->ColorFill(pSampleSurface, 0, 0);
+        RedRenderer::pcGetDevice()->ColorFill(pSampleSurface, 0, RedColor(0, 0, 0, 0));
         for (int i = 0; i < iNumFlares; i++)
         {
             RedRenderer::pcGetDevice()->StretchRect(pBackBuffer, &sourceRects[i], pSampleSurface,

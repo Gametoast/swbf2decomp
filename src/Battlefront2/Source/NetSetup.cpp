@@ -1800,7 +1800,6 @@ bool CNetHostGame::IsFailed()
 
 extern int netPlayerLimit;
 extern int netLobbyState;
-extern int netNoCableCount;
 extern char const* gameErrorMsg;
 extern int gameErrorLvl;
 
@@ -6293,9 +6292,6 @@ unsigned __int64 netCreatedLobbyId;
 
 // GLOBAL: SWBF2 0x01e65048
 int netLanRegisterState;
-
-// GLOBAL: SWBF2 0x01e64f2c
-int netNoCableCount;
 
 // GLOBAL: SWBF2 0x01e65040
 int netLobbyState;

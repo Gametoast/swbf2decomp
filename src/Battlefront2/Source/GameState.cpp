@@ -571,7 +571,7 @@ void GameState::UpdateTime()
         {
             _TimeBase.AdvanceTicks(iDeltaTicks);
         }
-        _SystemTimeBase.AdvanceTicks(iDeltaTicks);
+        GetSystemTimeBase()->AdvanceTicks(iDeltaTicks);
 
         oldPerfCount = perfCount;
     }
@@ -587,7 +587,7 @@ void GameState::UpdateTime()
         {
             _TimeBase.AdvanceTime(fDeltaTime);
         }
-        _SystemTimeBase.AdvanceTime(fDeltaTime);
+        GetSystemTimeBase()->AdvanceTime(fDeltaTime);
     }
 
     if (!sIgnoreNextTime)
@@ -1201,7 +1201,7 @@ void GameState::ShellState::Enter()
     }
 
     AppTimeStamp.Mark(&_TimeBase);
-    SystemTimeStamp.Mark(&_SystemTimeBase);
+    SystemTimeStamp.Mark(GetSystemTimeBase());
 }
 
 // FUNCTION: SWBF2 0x0053ba70
@@ -1247,7 +1247,7 @@ void GameState::MissionState::Enter()
     }
 
     AppTimeStamp.Mark(&_TimeBase);
-    SystemTimeStamp.Mark(&_SystemTimeBase);
+    SystemTimeStamp.Mark(GetSystemTimeBase());
 
     RedProfile::DisplayCountersByGroup();
     CameraManager::sInstance->EnableScene(true);
@@ -1303,7 +1303,7 @@ void GameState::MissionState::Exit()
 void GameState::JournalStartTimes()
 {
     _TimeBase.PblJournal_Record();
-    _SystemTimeBase.PblJournal_Record();
+    GetSystemTimeBase()->PblJournal_Record();
 }
 
 // TEMPLATE: SWBF2 0x0053be20

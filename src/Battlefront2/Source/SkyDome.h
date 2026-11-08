@@ -75,6 +75,8 @@ public:
     // SYNTHETIC: SWBF2 0x00638719
     // ??_ESkyDome@@WBM@AEPAXI@Z
 
+    int Build();
+
     virtual void Render(unsigned int value) const;
 
     virtual bool Update(float fDeltaTime);

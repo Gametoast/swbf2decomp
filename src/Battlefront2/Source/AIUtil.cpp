@@ -2059,7 +2059,7 @@ float GetThreatSwitchTime(const UnitController* pCtrl)
 void AIUtil::TellAIToExit(GameObject* pObject)
 {
     const PblList<Controllable>& list = pObject->GetControllableList();
-    for (PblList<Controllable>::Itor it = list.Begin(); (Controllable*)it; ++it)
+    for (PblList<Controllable>::Itor it(&list); (Controllable*)it; ++it)
     {
         UnitController* pUnit = UnitControllerPtr((Controllable*)it);
         if (!pUnit)

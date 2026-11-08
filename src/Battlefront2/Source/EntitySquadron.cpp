@@ -235,6 +235,7 @@ void EntitySquadron::RemoveFromSquadron()
         class EntityDistance
         {
         public:
+            // FUNCTION: SWBF2 0x004fc6d0
             void* operator new(size_t, void* pMemory) { return pMemory; }
             void operator delete(void*, void*) {}
 
