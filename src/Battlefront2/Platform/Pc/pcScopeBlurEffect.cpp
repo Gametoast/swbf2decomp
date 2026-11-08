@@ -72,7 +72,7 @@ void ScopeBlurEffect::PlatformCleanup()
 }
 
 // FUNCTION: SWBF2 0x00426910
-void ScopeBlurEffect::Render(int value)
+void ScopeBlurEffect::Render(unsigned int value) const
 {
     unsigned int uiViewport = FLRenderer::GetCurrentViewport();
     if ((unsigned int)value & 0x200000)

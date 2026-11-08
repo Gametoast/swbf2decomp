@@ -106,13 +106,13 @@ class EntityLightFXParser : public FLEffect
 public:
 
     EntityLightFXParser()
-        : FLEffect(0xB71E2FBEu /* "EntityLight" */, 3)
+        : FLEffect(0xB71E2FBEu /* "EntityLight" */, RENDERABLE_POSTWORLD)
     {
     }
 
     // SYNTHETIC: SWBF2 0x004ccb30
     // EntityLightFXParser::`scalar deleting destructor'
-    virtual void Render(int value);
+    virtual void Render(unsigned int value) const;
     virtual void Init();
     virtual void Cleanup();
     virtual void ReadConfig(PblConfig& config);

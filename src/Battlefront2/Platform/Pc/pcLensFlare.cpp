@@ -256,7 +256,7 @@ void LensFlareEffect::PlatformCleanup()
 }
 
 // FUNCTION: SWBF2 0x0041c170
-void LensFlareEffect::Render(int value)
+void LensFlareEffect::Render(unsigned int value) const
 {
     if (value & 0x200000)
     {

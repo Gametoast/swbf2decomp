@@ -30,13 +30,13 @@ public:
     };
 
     LensFlareEffect()
-        : FLEffect(0xAEC1B09Fu /* "LensFlare" */, 6)
+        : FLEffect(0xAEC1B09Fu /* "LensFlare" */, RENDERABLE_POSTTRANSPARENT)
     {
     }
 
     // SYNTHETIC: SWBF2 0x0056f430
     // LensFlareEffect::`scalar deleting destructor'
-    virtual void Render(int value);
+    virtual void Render(unsigned int value) const;
     virtual void Init();
     virtual void Cleanup();
     virtual FLEffectClass* BuildClass(PblConfig& config) const;

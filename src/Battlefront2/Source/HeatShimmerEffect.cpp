@@ -34,7 +34,7 @@ void HeatShimmerEffect::Create()
 
 // FUNCTION: SWBF2 0x00542600
 HeatShimmerEffect::HeatShimmerEffect()
-    : FLEffect(0xEAAAAE76u /* "HeatShimmer" */, 5)
+    : FLEffect(0xEAAAAE76u /* "HeatShimmer" */, RENDERABLE_PRETRANSPARENT)
 {
     Enable(false);
     SetRenderPriority(0x2710);
@@ -67,7 +67,7 @@ HeatShimmerEffect::~HeatShimmerEffect()
 }
 
 // FUNCTION: SWBF2 0x00542890
-void HeatShimmerEffect::Render(int value)
+void HeatShimmerEffect::Render(unsigned int value) const
 {
     if (!((unsigned int)value & 0x200000))
     {

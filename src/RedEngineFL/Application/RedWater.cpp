@@ -41,13 +41,13 @@ void RedWater::UpdateEventCache()
 class WaterRenderable : public Renderable
 {
 public:
-    WaterRenderable() : Renderable(5) {}
+    WaterRenderable() : Renderable(RENDERABLE_PRETRANSPARENT) {}
     virtual ~WaterRenderable() {}
 
     // SYNTHETIC: SWBF2 0x006ce0e0
     // WaterRenderable::`scalar deleting destructor'
 
-    virtual void Render(int value);
+    virtual void Render(unsigned int value) const;
     virtual bool IsReflected();
     virtual bool HasReflection();
 };
@@ -56,13 +56,13 @@ public:
 class UnderWaterRenderable : public Renderable
 {
 public:
-    UnderWaterRenderable() : Renderable(9) {}
+    UnderWaterRenderable() : Renderable(RENDERABLE_SCREENEFFECT) {}
     virtual ~UnderWaterRenderable() {}
 
     // SYNTHETIC: SWBF2 0x006ce0b0
     // UnderWaterRenderable::`scalar deleting destructor'
 
-    virtual void Render(int value);
+    virtual void Render(unsigned int value) const;
     virtual bool IsReflected();
 };
 
@@ -1041,13 +1041,13 @@ void RedWater::Render(unsigned int uiView)
 }
 
 // FUNCTION: SWBF2 0x006d04a0
-void UnderWaterRenderable::Render(int value)
+void UnderWaterRenderable::Render(unsigned int value) const
 {
     RedWater::RenderUnderWaterView(value);
 }
 
 // FUNCTION: SWBF2 0x006d04c0
-void WaterRenderable::Render(int value)
+void WaterRenderable::Render(unsigned int value) const
 {
     RedWater::Render(value);
 }

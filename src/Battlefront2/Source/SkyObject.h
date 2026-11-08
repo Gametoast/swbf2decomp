@@ -45,7 +45,7 @@ public:
 
         SkyObjectClass(PblConfig& config);
 
-        virtual void Render(int value);
+        virtual void Render(unsigned int value) const;
 
         virtual bool Update(float fDeltaTime);
 

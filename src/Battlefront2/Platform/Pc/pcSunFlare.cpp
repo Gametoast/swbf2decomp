@@ -47,7 +47,7 @@ class SunSkyRenderable : public Renderable
 {
 public:
     SunSkyRenderable()
-        : Renderable(1)
+        : Renderable(RENDERABLE_SKY_POSTWORLD)
     {
     }
 
@@ -58,7 +58,7 @@ public:
     // SYNTHETIC: SWBF2 0x0042d220
     // SunSkyRenderable::`scalar deleting destructor'
 
-    virtual void Render(int value);
+    virtual void Render(unsigned int value) const;
 };
 
 // SYNTHETIC: SWBF2 0x00402120
@@ -222,7 +222,7 @@ void SunFlareEffect::Destroy()
 }
 
 // FUNCTION: SWBF2 0x0042d200
-void SunSkyRenderable::Render(int value)
+void SunSkyRenderable::Render(unsigned int value) const
 {
     if (SunFlareEffect::s_pInstance)
     {
@@ -369,7 +369,7 @@ void SunFlareEffect::Cleanup()
 }
 
 // FUNCTION: SWBF2 0x0042def0
-void SunFlareEffect::Render(int value)
+void SunFlareEffect::Render(unsigned int value) const
 {
     if (value & 0x200000)
     {

@@ -13,7 +13,7 @@ class LightsaberTrailEffect : public FLEffect
 public:
 
     LightsaberTrailEffect()
-        : FLEffect(0xFBAB1AF0u /* "LightsaberTrail" */, 3)
+        : FLEffect(0xFBAB1AF0u /* "LightsaberTrail" */, RENDERABLE_POSTWORLD)
     {
         m_pShader = 0;
     }
@@ -22,7 +22,7 @@ public:
 
     // SYNTHETIC: SWBF2 0x00573d30
     // LightsaberTrailEffect::`scalar deleting destructor'
-    virtual void Render(int value);
+    virtual void Render(unsigned int value) const;
     virtual void Init();
     virtual void Cleanup();
     virtual void ReadConfig(PblConfig& config);

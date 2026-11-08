@@ -29,7 +29,7 @@ void LightsaberTrailEffect::Init()
 
 
 // FUNCTION: SWBF2 0x00573d20
-void LightsaberTrailEffect::Render(int)
+void LightsaberTrailEffect::Render(unsigned int) const
 {
 }
 

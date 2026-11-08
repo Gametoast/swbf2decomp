@@ -29,7 +29,7 @@ void HDREffect::Destroy()
 
 // FUNCTION: SWBF2 0x00542270
 HDREffect::HDREffect()
-    : FLEffect(0xFEB6DBE1u /* "HDR" */, 9)
+    : FLEffect(0xFEB6DBE1u /* "HDR" */, RENDERABLE_SCREENEFFECT)
 {
     Enable(false);
     m_downSizeFactor = 0.25f;

@@ -88,7 +88,7 @@ void BlurEffect::PlatformReadConfigData(PblConfig::Data& data)
 }
 
 // FUNCTION: SWBF2 0x0040f8d0
-void BlurEffect::Render(int value)
+void BlurEffect::Render(unsigned int value) const
 {
     if ((unsigned int)value & 0x200000)
     {

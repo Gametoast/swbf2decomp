@@ -23,7 +23,7 @@ void ShieldEffectManager::Create()
 
 // FUNCTION: SWBF2 0x00636610
 ShieldEffectManager::ShieldEffectManager()
-    : FLEffect(0x337519B0u /* "shield" */, 3)
+    : FLEffect(0x337519B0u /* "shield" */, RENDERABLE_POSTWORLD)
 {
 }
 
@@ -45,7 +45,7 @@ void ShieldEffectManager::Destroy()
 }
 
 // FUNCTION: SWBF2 0x00636530
-void ShieldEffectManager::Render(int)
+void ShieldEffectManager::Render(unsigned int) const
 {
 }
 

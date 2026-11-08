@@ -17,7 +17,7 @@ void ScopeBlurEffect::Create()
 
 // FUNCTION: SWBF2 0x00633340
 ScopeBlurEffect::ScopeBlurEffect()
-    : FLEffect(0xF35CF5C6u /* "ScopeBlur" */, 9)
+    : FLEffect(0xF35CF5C6u /* "ScopeBlur" */, RENDERABLE_SCREENEFFECT)
 {
     Enable(true);
     m_alpha[0] = 0;

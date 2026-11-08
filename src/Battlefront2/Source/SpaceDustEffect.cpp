@@ -99,7 +99,7 @@ void SpaceDustEffect::Destroy()
 
 // FUNCTION: SWBF2 0x0064d0d0
 SpaceDustEffect::SpaceDustEffect()
-    : FLEffect(0x3757A565u /* "SpaceDust" */, 3)
+    : FLEffect(0x3757A565u /* "SpaceDust" */, RENDERABLE_POSTWORLD)
 {
     Enable(false);
 }
@@ -350,7 +350,7 @@ void SpaceDustEffect::Update(float fDeltaTime)
 }
 
 // FUNCTION: SWBF2 0x0064dc60
-void SpaceDustEffect::Render(int value)
+void SpaceDustEffect::Render(unsigned int value) const
 {
     if (value & 0x20000)
     {

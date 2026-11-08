@@ -73,7 +73,7 @@
 #include "WaterEffect.h"
 #include "RedEngineFL/Application/RedTerrain.h"
 #include "RedEngineFL/Application/RedWater.h"
-#include "RedEngineFL/Application/pc/pcRedDropShadow.h"
+#include "RedEngineFL/Application/RedDropShadow.h"
 #include "RedEngineFL/Graphics/PC/pcRedRenderer.h"
 #include "RedEngineFL/Graphics/PC/pcRedStencilShadow.h"
 #include "RedEngineFL/Graphics/RedCamera.h"

@@ -162,7 +162,7 @@ void ColorControl::Update(float fDeltaTime)
 }
 
 // FUNCTION: SWBF2 0x00410850
-void ColorControl::Render(int value)
+void ColorControl::Render(unsigned int value) const
 {
 }
 

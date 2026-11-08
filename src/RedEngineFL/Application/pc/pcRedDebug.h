@@ -31,7 +31,7 @@ public:
         // SYNTHETIC: SWBF2 0x006f08f0
         // RedDebug::RedDebugRenderable::`scalar deleting destructor'
 
-        virtual void Render(int value);
+        virtual void Render(unsigned int value) const;
 
         // FUNCTION: SWBF2 0x006f2510
         void Init();

@@ -14,7 +14,7 @@ void BlurEffect::Create()
 
 // FUNCTION: SWBF2 0x0044c380
 BlurEffect::BlurEffect()
-    : FLEffect(0x6BFBD198u /* "BLUR" */, 7)
+    : FLEffect(0x6BFBD198u /* "BLUR" */, RENDERABLE_PREFIRSTPERSON)
 {
     Enable(false);
     m_pFilterShader = 0;

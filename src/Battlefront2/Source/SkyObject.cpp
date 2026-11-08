@@ -47,7 +47,7 @@ void ReadVarianceData(PblConfig::Data& data, float& fMean, float& fVariance)
 
 // FUNCTION: SWBF2 0x00638e10
 SkyObjectManager::SkyObjectClass::SkyObjectClass(PblConfig& config)
-    : Renderable(0)
+    : Renderable(RENDERABLE_SKY)
 {
     mNumObjects = 1;
     mVelocityX = 0.0f;
@@ -160,7 +160,7 @@ bool SkyObjectManager::SkyObjectClass::Update(float fDeltaTime)
 }
 
 // FUNCTION: SWBF2 0x00639220
-void SkyObjectManager::SkyObjectClass::Render(int uiFlags)
+void SkyObjectManager::SkyObjectClass::Render(unsigned int uiFlags) const
 {
     uiFlags |= 0x200;
     RedRenderer::pcFlush(0);

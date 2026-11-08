@@ -23,7 +23,7 @@ void LightBeamEffect::Init()
 }
 
 // FUNCTION: SWBF2 0x0056fa90
-void LightBeamEffect::Render(int)
+void LightBeamEffect::Render(unsigned int) const
 {
 }
 

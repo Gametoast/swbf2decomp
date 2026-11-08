@@ -66,7 +66,7 @@ FogCloudEffect* FogCloudEffect::s_pInstance;
 WindEffect* WindEffect::s_pInstance;
 
 // FUNCTION: SWBF2 0x00692cb0
-void WindEffect::Render(int)
+void WindEffect::Render(unsigned int) const
 {
 }
 
@@ -88,7 +88,7 @@ void WindEffect::Destroy()
 
 // FUNCTION: SWBF2 0x00692d50
 WindEffect::WindEffect()
-    : FLEffect(0x1414F107u /* "Wind" */, 3)
+    : FLEffect(0x1414F107u /* "Wind" */, RENDERABLE_POSTWORLD)
 {
     Enable(false);
     const PblVector3 vZero(0, 0, 0);
@@ -194,7 +194,7 @@ void FogCloudEffect::Destroy()
 
 // FUNCTION: SWBF2 0x006932d0
 FogCloudEffect::FogCloudEffect()
-    : FLEffect(0xC211031Cu /* "FogCloud" */, 3)
+    : FLEffect(0xC211031Cu /* "FogCloud" */, RENDERABLE_POSTWORLD)
 {
     Enable(false);
     VELOCITY = PblVector3(0, 0, 0);
@@ -300,7 +300,7 @@ void PrecipitationEffect::Create()
 
 // FUNCTION: SWBF2 0x00693720
 PrecipitationEffect::PrecipitationEffect()
-    : FLEffect(0x3F5E4CD0u /* "Precipitation" */, 3)
+    : FLEffect(0x3F5E4CD0u /* "Precipitation" */, RENDERABLE_POSTWORLD)
     , RedRegionFactory("rainshadow")
 {
     Enable(false);

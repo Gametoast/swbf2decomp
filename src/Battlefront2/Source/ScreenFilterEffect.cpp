@@ -21,7 +21,7 @@ void ScreenFilterEffect::Create()
 
 // FUNCTION: SWBF2 0x00633ef0
 ScreenFilterEffect::ScreenFilterEffect()
-    : FLEffect(0xE32EAA23u, 9)
+    : FLEffect(0xE32EAA23u, RENDERABLE_SCREENEFFECT)
 {
     Enable(true);
 }
@@ -50,7 +50,7 @@ ScreenFilterEffect::~ScreenFilterEffect()
 }
 
 // FUNCTION: SWBF2 0x00634240
-void ScreenFilterEffect::Render(int value)
+void ScreenFilterEffect::Render(unsigned int value) const
 {
     if (!((unsigned int)value & 0x200000) && m_data[FLRenderer::GetCurrentViewport()].uiState)
     {

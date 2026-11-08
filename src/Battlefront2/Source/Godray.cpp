@@ -45,7 +45,7 @@ void GodrayManager::Destroy()
 
 // FUNCTION: SWBF2 0x0053e590
 GodrayManager::GodrayManager()
-    : FLEffect(0xBA5B0537u /* "Godray" */, 3)
+    : FLEffect(0xBA5B0537u /* "Godray" */, RENDERABLE_POSTWORLD)
 {
     Enable(false);
     m_pFirstFreeGodray = 0;
@@ -398,7 +398,7 @@ void GodrayManager::Update(float fDeltaTime)
 }
 
 // FUNCTION: SWBF2 0x0053f0b0
-void GodrayManager::Render(int value)
+void GodrayManager::Render(unsigned int value) const
 {
     if (!m_uiNumVisibleGodrays)
     {

@@ -17,7 +17,7 @@
 #include "GameModel.h"
 #include "PebbleFL/Common/PblHashTable.h"
 #include "ProceduralAnimation.h"
-#include "RedEngineFL/Application/pc/pcRedDropShadow.h"
+#include "RedEngineFL/Application/RedDropShadow.h"
 #include "RedEngineFL/Graphics/PC/pcRedRenderer.h"
 #include "RedEngineFL/Graphics/PC/pcRedStencilShadow.h"
 #include "RedEngineFL/Graphics/RedCamera.h"

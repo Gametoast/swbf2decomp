@@ -20,7 +20,7 @@ void ShadowEffect::Create()
 
 // FUNCTION: SWBF2 0x00635ae0
 ShadowEffect::ShadowEffect()
-    : FLEffect(0x3A43C561u /* "shadow" */, 3)
+    : FLEffect(0x3A43C561u /* "shadow" */, RENDERABLE_POSTWORLD)
 {
     Enable(true);
     m_blurEnable = false;
@@ -95,7 +95,7 @@ void ShadowEffect::ReadConfig(PblConfig& config)
 }
 
 // FUNCTION: SWBF2 0x00635d20
-void ShadowEffect::Render(int)
+void ShadowEffect::Render(unsigned int) const
 {
     RedRenderer::SetShadowIntensity(m_shadowIntensity);
     pcShadowQuadRenderable::Instance()->EnableBlur(m_blurEnable);

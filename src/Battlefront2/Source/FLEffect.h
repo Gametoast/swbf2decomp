@@ -21,7 +21,7 @@ class FLEffect : public Renderable
 {
 public:
 
-    FLEffect(unsigned int uiName, int ePhase)
+    FLEffect(unsigned int uiName, RENDERABLE_PHASE ePhase)
         : Renderable(ePhase)
         , m_bEnabled(true)
     {

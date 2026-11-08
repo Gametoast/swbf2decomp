@@ -101,7 +101,7 @@ void WaterEffect::Update(float fDeltaTime)
 
 
 // FUNCTION: SWBF2 0x00677070
-void WaterEffect::Render(int)
+void WaterEffect::Render(unsigned int) const
 {
 }
 

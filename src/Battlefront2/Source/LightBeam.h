@@ -16,13 +16,13 @@ class LightBeamEffect : public FLEffect
 public:
 
     LightBeamEffect()
-        : FLEffect(0xE8651328u /* "LightBeam" */, 3)
+        : FLEffect(0xE8651328u /* "LightBeam" */, RENDERABLE_POSTWORLD)
     {
         m_pShader = 0;
     }
 
     virtual ~LightBeamEffect();
-    virtual void Render(int value);
+    virtual void Render(unsigned int value) const;
     virtual void Init();
     virtual void Cleanup();
     virtual void ReadConfig(PblConfig& config);

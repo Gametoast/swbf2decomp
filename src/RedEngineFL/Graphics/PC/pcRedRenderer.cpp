@@ -2836,11 +2836,6 @@ void RedRenderer::InitStatic()
     }
 }
 
-// FUNCTION: SWBF2 0x006b2740
-void RedRenderer::OpenDynamic()
-{
-}
-
 // FUNCTION: SWBF2 0x006b2970
 void RedRenderer::Read(PblFileChunk& chunk)
 {
@@ -4828,30 +4823,32 @@ void TransparentHeap<ITEM, KEY>::Push(ITEM& rItem, KEY idSort)
 // TransparentHeap<RenderItem *,unsigned int>::Push
 template void TransparentHeap<RenderItem*, unsigned int>::Push(RenderItem*&, unsigned int);
 
-// FUNCTION: SWBF2 0x006b33c0
-void RedRenderer::SetAmbientFilter(bool bEnable)
-{
-}
+// FUNCTION: SWBF2 0x006b3ca0
+void RedRenderer::SetSky(bool bEnable) {}
 
-// FUNCTION: SWBF2 0x006b33d0
-void RedRenderer::SetAmbientIntensity(int iIntensity)
-{
-}
+// FUNCTION: SWBF2 0x006b33c0
+void RedRenderer::SetAmbientFilter(bool bEnable) {}
 
 // FUNCTION: SWBF2 0x006b33e0
-void RedRenderer::SetAmbientThreshold(int iThreshold)
-{
-}
+void RedRenderer::SetAmbientThreshold(int _iThreshold) {}
+
+// FUNCTION: SWBF2 0x006b33d0
+void RedRenderer::SetAmbientIntensity(int _iIntensity) {}
+
+// FUNCTION: SWBF2 0x006b3cb0
+void RedRenderer::SetSoftnessEnable(bool bEnable) {}
+
+// FUNCTION: SWBF2 0x006b3cc0
+void RedRenderer::SetSoftnessValue(int value) {}
 
 // FUNCTION: SWBF2 0x006b3460
-void RedRenderer::SetColorFilter(bool bEnable)
-{
-}
+void RedRenderer::SetColorFilter(bool bEnable) {}
 
 // FUNCTION: SWBF2 0x006b3500
-void RedRenderer::SetFilterColor(RedColor color, int iAmount)
-{
-}
+void RedRenderer::SetFilterColor(RedColor color, int index) {}
+
+// FUNCTION: SWBF2 0x006b2740
+void RedRenderer::OpenDynamic() {}
 
 // FUNCTION: SWBF2 0x006b3510
 void RedRenderer::SetFogColor(const RedColor& color)
@@ -4892,21 +4889,6 @@ void RedRenderer::SetScreenOffset(float fX, float fY)
 void RedRenderer::SetShadowIntensity(float fIntensity)
 {
     RedRenderer::m_shadowIntensity = fIntensity;
-}
-
-// FUNCTION: SWBF2 0x006b3ca0
-void RedRenderer::SetSky(bool)
-{
-}
-
-// FUNCTION: SWBF2 0x006b3cb0
-void RedRenderer::SetSoftnessEnable(bool bEnable)
-{
-}
-
-// FUNCTION: SWBF2 0x006b3cc0
-void RedRenderer::SetSoftnessValue(int iValue)
-{
 }
 
 // FUNCTION: SWBF2 0x006b3ce0

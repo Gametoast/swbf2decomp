@@ -47,6 +47,7 @@ public:
     static void Read(PblFileChunk& chunk);
     static void Activate();
     static void Deactivate();
+    static const unsigned char* GetFoliage() { return _Foliage; }
     static void Render(unsigned int uiFlags);
 
     static void AdjustTerrainMemoryUsage(int Delta) { mTerrainBytesUsed += Delta; }
@@ -134,12 +135,14 @@ public:
     static bool RenderDetail;
     static HeightExpand* _pHeightExpand;
     static HeightMinMax* _pHeightMinMax;
-    static unsigned char* _Foliage;
     static bool mTerrainColorDarkeningFlag;
     static bool _bEnable;
     static int mTerrainBytesUsed;
     static float _fMetersPerPoint;
     static int _iNumPatches;
+
+protected:
+    static unsigned char* _Foliage;
 
 private:
 

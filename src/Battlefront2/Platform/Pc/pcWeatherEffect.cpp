@@ -121,7 +121,7 @@ void FogCloudEffect::PlatformCleanup()
 }
 
 // FUNCTION: SWBF2 0x00433f90
-void FogCloudEffect::Render(int value)
+void FogCloudEffect::Render(unsigned int value) const
 {
     if ((unsigned int)value & 0x200000)
     {
@@ -384,7 +384,7 @@ inline PblVector3 CameraManager::GetCameraVelocity(int iCam) const
 }
 
 // FUNCTION: SWBF2 0x004356b0
-void PrecipitationEffect::Render(int value)
+void PrecipitationEffect::Render(unsigned int value) const
 {
     if ((unsigned int)value & 0x200000)
     {

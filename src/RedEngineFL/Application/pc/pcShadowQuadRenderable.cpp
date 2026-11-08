@@ -52,7 +52,7 @@ static const unsigned int kuiClearShader = PblHash("Clear");
 
 // FUNCTION: SWBF2 0x006fbdf0
 pcShadowQuadRenderable::pcShadowQuadRenderable()
-    : Renderable(4)
+    : Renderable(RENDERABLE_POSTSHADOW)
 {
     m_pPrimitive = 0;
     m_pShadowShader = 0;
@@ -190,7 +190,7 @@ void pcShadowQuadRenderable::Init()
  
 
 // FUNCTION: SWBF2 0x006fc2e0
-void pcShadowQuadRenderable::Render(int value)
+void pcShadowQuadRenderable::Render(unsigned int value) const
 {
     if (!RedStencilShadow::GetShadowEnable())
     {

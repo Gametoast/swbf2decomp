@@ -74,7 +74,7 @@
 
 #include "PebbleFL/Common/PblRandom.h"
 #include "RedEngineFL/Application/Renderable.h"
-#include "RedEngineFL/Application/pc/pcRedDropShadow.h"
+#include "RedEngineFL/Application/RedDropShadow.h"
 #include "RedEngineFL/Application/pc/pcRedParticle.h"
 #include "RedEngineFL/Graphics/PC/pcRedAutoSettings.h"
 #include "RedEngineFL/Graphics/PC/pcRedRenderer.h"

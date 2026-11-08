@@ -35,7 +35,7 @@ void WorldShadowMapEffect::Destroy()
 
 
 // FUNCTION: SWBF2 0x00695070
-void WorldShadowMapEffect::Render(int)
+void WorldShadowMapEffect::Render(unsigned int) const
 {
 }
 

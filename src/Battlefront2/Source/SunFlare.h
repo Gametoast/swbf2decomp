@@ -26,13 +26,13 @@ public:
     };
 
     SunFlareEffect()
-        : FLEffect(0xBDF357B3u /* "SunFlare" */, 6)
+        : FLEffect(0xBDF357B3u /* "SunFlare" */, RENDERABLE_POSTTRANSPARENT)
     {
     }
 
     // SYNTHETIC: SWBF2 0x0042d0d0
     // SunFlareEffect::`scalar deleting destructor'
-    virtual void Render(int value);
+    virtual void Render(unsigned int value) const;
     virtual void Init();
     virtual void Cleanup();
     virtual FLEffectClass* BuildClass(PblConfig& config) const;

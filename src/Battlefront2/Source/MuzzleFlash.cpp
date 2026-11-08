@@ -6,6 +6,36 @@
 #include "RedEngineFL/Graphics/RedCamera.h"
 #include "RedEngineFL/Graphics/PC/pcRedRenderer.h"
 
+// VTABLE: SWBF2 0x007aa74c
+class MuzzleFlashRenderer : public Renderable
+{
+public:
+
+    struct MuzzleFlashData
+    {
+        Aimer* m_pAimer;
+        PblVector3 mDir;
+        float mRadius;
+        float mWidth;
+        float mLength;
+        RedColor mColor;
+    };
+
+    MuzzleFlashRenderer();
+    virtual ~MuzzleFlashRenderer();
+
+    virtual void Render(unsigned int value) const;
+
+    void RenderFlash(MuzzleFlashData const& data, RedColor const& color) const;
+
+    void RenderStreak(MuzzleFlashData const& data, RedColor const& color) const;
+
+    MuzzleFlashData mMuzzleFlashData[2][30];
+    mutable int mCurrentBuffer;
+    mutable int mNumMuzzleFlashes;
+    mutable int mOldNumMuzzleFlashes;
+};
+
 // GLOBAL: SWBF2 0x01e579f0
 MuzzleFlashRenderer* sMuzzleFlashRenderer;
 
@@ -62,7 +92,7 @@ void MuzzleFlashRenderer::RenderStreak(MuzzleFlashData const& data, RedColor con
 }
 
 // FUNCTION: SWBF2 0x005aa190
-void MuzzleFlashRenderer::Render(int)
+void MuzzleFlashRenderer::Render(unsigned int) const
 {
     if (mNumMuzzleFlashes == 0 && mOldNumMuzzleFlashes == 0)
     {

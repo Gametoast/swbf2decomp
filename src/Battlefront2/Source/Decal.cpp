@@ -53,7 +53,7 @@ void DecalManager::Destroy()
 
 // FUNCTION: SWBF2 0x0048ab90
 DecalManager::DecalManager()
-    : FLEffect(0xDE15F6AEu /* "Decal" */, 5)
+    : FLEffect(0xDE15F6AEu /* "Decal" */, RENDERABLE_PRETRANSPARENT)
 {
     Enable(true);
 }
@@ -147,7 +147,7 @@ void DecalManager::Update(float fDeltaTime)
 }
 
 // FUNCTION: SWBF2 0x0048af30
-void DecalManager::Render(int value)
+void DecalManager::Render(unsigned int value) const
 {
     const RedCamera* pCamera = RedRenderer::GetCamera();
     float fNear, fFar, fWidth, fHeight;

@@ -45,8 +45,6 @@
 #include "StatIconDisplay.h"
 #include "Tracker.h"
 #include "VehicleSpawn.h"
-#include "Battlefront2/Platform/Pc/pcGrassPatch.h"
-#include "Battlefront2/Platform/Pc/pcLeafPatch.h"
 #include "RedEngineFL/Application/pc/pcRedShadowProxy.h"
 #include "RedEngineFL/Application/RedTerrain.h"
 #include "RedEngineFL/Graphics/PC/pcRedShader.h"

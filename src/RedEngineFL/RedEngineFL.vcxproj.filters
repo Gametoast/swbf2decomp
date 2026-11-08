@@ -434,8 +434,8 @@
     <ClInclude Include="Application\pc\pcRedDebug.h">
       <Filter>Application\pc</Filter>
     </ClInclude>
-    <ClInclude Include="Application\pc\pcRedDropShadow.h">
-      <Filter>Application\pc</Filter>
+    <ClInclude Include="Application\RedDropShadow.h">
+      <Filter>Application</Filter>
     </ClInclude>
     <ClInclude Include="Application\pc\pcRedParticle.h">
       <Filter>Application\pc</Filter>
@@ -444,9 +444,6 @@
       <Filter>Application\pc</Filter>
     </ClInclude>
     <ClInclude Include="Application\pc\pcRedShape.h">
-      <Filter>Application\pc</Filter>
-    </ClInclude>
-    <ClInclude Include="Application\pc\pcRedTerrain.h">
       <Filter>Application\pc</Filter>
     </ClInclude>
     <ClInclude Include="Application\pc\pcRenderHelpers.h">

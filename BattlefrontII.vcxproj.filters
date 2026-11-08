@@ -1565,23 +1565,14 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\Battlefront2\Platform\Pc\pcDustEffect.h">
-      <Filter>src\Battlefront2\Platform\Pc</Filter>
-    </ClInclude>
     <ClInclude Include="src\Battlefront2\Platform\Pc\pcDynamicSprite.h">
       <Filter>src\Battlefront2\Platform\Pc</Filter>
     </ClInclude>
     <ClInclude Include="src\Battlefront2\Platform\Pc\pcFLJoystick.h">
       <Filter>src\Battlefront2\Platform\Pc</Filter>
     </ClInclude>
-    <ClInclude Include="src\Battlefront2\Platform\Pc\pcGrassPatch.h">
-      <Filter>src\Battlefront2\Platform\Pc</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Battlefront2\Platform\Pc\pcLeafPatch.h">
-      <Filter>src\Battlefront2\Platform\Pc</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Battlefront2\Platform\Pc\pcLetterboxEffect.h">
-      <Filter>src\Battlefront2\Platform\Pc</Filter>
+    <ClInclude Include="src\Battlefront2\Source\LetterboxEffect.h">
+      <Filter>src\Battlefront2\Source</Filter>
     </ClInclude>
     <ClInclude Include="src\Battlefront2\Platform\Pc\pcLightBeam.h">
       <Filter>src\Battlefront2\Platform\Pc</Filter>
@@ -1598,8 +1589,8 @@
     <ClInclude Include="src\Battlefront2\Platform\Pc\pcSunFlare.h">
       <Filter>src\Battlefront2\Platform\Pc</Filter>
     </ClInclude>
-    <ClInclude Include="src\Battlefront2\Platform\Pc\pcVideoEffect.h">
-      <Filter>src\Battlefront2\Platform\Pc</Filter>
+    <ClInclude Include="src\Battlefront2\Source\VideoEffect.h">
+      <Filter>src\Battlefront2\Source</Filter>
     </ClInclude>
     <ClInclude Include="src\Battlefront2\Source\AIDifficulty.h">
       <Filter>src\Battlefront2\Source</Filter>

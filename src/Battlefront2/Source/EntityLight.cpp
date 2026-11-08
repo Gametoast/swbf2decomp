@@ -481,7 +481,7 @@ FLEffectClass* EntityLightFXParser::BuildClass(PblConfig& config) const
 }
 
 // FUNCTION: SWBF2 0x004ccb20
-void EntityLightFXParser::Render(int)
+void EntityLightFXParser::Render(unsigned int) const
 {
 }
 

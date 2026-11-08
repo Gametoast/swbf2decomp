@@ -49,7 +49,7 @@
 #include "PebbleFL/Common/PblRandom.h"
 #include "RedEngineFL/Application/RedTerrain.h"
 #include "RedEngineFL/Application/RedWater.h"
-#include "RedEngineFL/Application/pc/pcRedDropShadow.h"
+#include "RedEngineFL/Application/RedDropShadow.h"
 #include "RedEngineFL/Graphics/RedDirectionalLight.h"
 #include "RedEngineFL/Graphics/RedLight.h"
 

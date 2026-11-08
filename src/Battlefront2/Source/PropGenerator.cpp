@@ -556,7 +556,7 @@ static unsigned char GetLayers(int x, int z)
         return 0;
     }
 
-    const unsigned char* pFoliage = RedTerrain::_Foliage;
+    const unsigned char* pFoliage = RedTerrain::GetFoliage();
     if (!pFoliage)
     {
         return 0;
@@ -621,7 +621,7 @@ void PropGenerator::Read(PblFileChunk& chunk)
         }
     }
 
-    if (RedTerrain::_Foliage)
+    if (RedTerrain::GetFoliage())
     {
         mLayerMapWidth = RedTerrain::_iPointsPerDimension / 2;
         mLayerCellWidth = RedTerrain::_fMetersPerPoint * 2.0f;

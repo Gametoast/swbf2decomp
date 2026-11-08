@@ -32,7 +32,7 @@ void SkyDome::Create()
 
 // FUNCTION: SWBF2 0x00637270
 SkyDome::SkyDome()
-    : Renderable(0)
+    : Renderable(RENDERABLE_SKY)
 {
     mForceHiDetail = false;
     Renderable::Activate(-9999);

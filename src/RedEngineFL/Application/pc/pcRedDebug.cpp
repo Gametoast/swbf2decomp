@@ -151,7 +151,7 @@ RedColor RedDebug::_aColor[3000];
 
 // FUNCTION: SWBF2 0x006f0790
 RedDebug::RedDebugRenderable::RedDebugRenderable()
-    : Renderable(7)
+    : Renderable(RENDERABLE_PREFIRSTPERSON)
 {
 }
 
@@ -163,7 +163,7 @@ RedDebug::Text3D::Text3D()
 
 // FUNCTION: SWBF2 0x006f07b0
 RedShape::RedShape()
-    : Renderable(6), _Matrix(gMatrixIdentity), _pMatrix(&_Matrix),
+    : Renderable(RENDERABLE_POSTTRANSPARENT), _Matrix(gMatrixIdentity), _pMatrix(&_Matrix),
       _vMin(-1.0f, -1.0f, -1.0f), _vMax(1.0f, 1.0f, 1.0f)
 {
     SetColor(RedColor::WHITE);
@@ -483,7 +483,7 @@ void RedDebug::_DrawSolidOBB(const SolidOBB& obb)
 }
 
 // FUNCTION: SWBF2 0x006f2710
-void RedDebug::RedDebugRenderable::Render(int)
+void RedDebug::RedDebugRenderable::Render(unsigned int) const
 {
     if (_n3DLines >= 2)
     {
@@ -561,12 +561,12 @@ void RedDebug::RedDebugRenderable::Render(int)
 }
 
 // FUNCTION: SWBF2 0x006f2bb0
-void RedSphereShape::Render(int)
+void RedSphereShape::Render(unsigned int) const
 {
 }
 
 // FUNCTION: SWBF2 0x006f2bc0
-void RedTetrahedronShape::Render(int)
+void RedTetrahedronShape::Render(unsigned int) const
 {
 }
 

@@ -31,7 +31,7 @@ void ParticleEmitterEffect::Create()
 
 
 // FUNCTION: SWBF2 0x00618610
-void ParticleEmitterEffect::Render(int)
+void ParticleEmitterEffect::Render(unsigned int) const
 {
 }
 

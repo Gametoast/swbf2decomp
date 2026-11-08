@@ -198,11 +198,10 @@
     <ClInclude Include="Application\pc\crtNames.h" />
     <ClInclude Include="Application\pc\pcFLRender.h" />
     <ClInclude Include="Application\pc\pcRedDebug.h" />
-    <ClInclude Include="Application\pc\pcRedDropShadow.h" />
+    <ClInclude Include="Application\RedDropShadow.h" />
     <ClInclude Include="Application\pc\pcRedParticle.h" />
     <ClInclude Include="Application\pc\pcRedShadowProxy.h" />
     <ClInclude Include="Application\pc\pcRedShape.h" />
-    <ClInclude Include="Application\pc\pcRedTerrain.h" />
     <ClInclude Include="Application\pc\pcRenderHelpers.h" />
     <ClInclude Include="Application\pc\pcRenderStateHelpers.h" />
     <ClInclude Include="Application\pc\pcShadowQuadRenderable.h" />

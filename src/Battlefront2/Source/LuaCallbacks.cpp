@@ -44,7 +44,6 @@
 #include "SoldierAnimatorLowRes.h"
 #include "SoldierAnimationData.h"
 #include "RedEngineFL/Graphics/PC/pcRedRenderer.h"
-#include "RedEngineFL/Application/pc/pcRedTerrain.h"
 #include "NetGame.h"
 #include "NetSetup.h"
 #include "PebbleFL/Common/PblMath.h"
@@ -91,6 +90,74 @@ extern bool gAttractMode;
 
 
     
+
+// VTABLE: SWBF2 0x007a4958
+class DrawAllBeamBetween : public Renderable
+{
+public:
+    DrawAllBeamBetween() : Renderable(RENDERABLE_POSTTRANSPARENT), mCount(0)
+    {
+        Activate(-1);
+    }
+    struct Desc
+    {
+        PblVector3 mPos1;
+        PblVector3 mPos2;
+        unsigned int mTexture;
+        float mWidth;
+        RedColor mColor;
+        float mShift;
+        float mRepetitions;
+    };
+
+    // SYNTHETIC: SWBF2 0x0057fff0
+    // DrawAllBeamBetween::`scalar deleting destructor'
+
+    virtual void Render(unsigned int value) const;
+
+    bool Add(const PblVector3& vPos1, const PblVector3& vPos2, const char* pcTexture, float fWidth,
+             RedColor color, float fShift, float fRepetitions);
+
+    Desc mArray[64];
+    mutable unsigned int mCount;
+};
+
+
+
+
+// VTABLE: SWBF2 0x007a4978
+class DrawAllParticleAt : public Renderable
+{
+public:
+    DrawAllParticleAt() : Renderable(RENDERABLE_POSTTRANSPARENT), mCount(0)
+    {
+        Activate(0);
+    }
+    struct Desc
+    {
+        PblVector3 mPos;
+        unsigned int mTexture;
+        float mWidth;
+        RedColor mColor;
+        float mRotation;
+    };
+
+    // SYNTHETIC: SWBF2 0x00580350
+    // DrawAllParticleAt::`scalar deleting destructor'
+
+    virtual void Render(unsigned int value) const;
+
+    bool Add(const PblVector3& vPos, const char* pcTexture, float fWidth, RedColor color, float fRotation);
+
+    Desc mArray[128];
+    mutable unsigned int mCount;
+};
+
+
+
+
+extern DrawAllBeamBetween* sDrawAllBeamBetween;
+extern DrawAllParticleAt* sDrawAllParticleAt;
 
 extern bool gDrawFlyerShadows;
 extern HWND hGlobalWnd;
@@ -1669,7 +1736,7 @@ inline RedParticleRenderer::TexCoords WholeTexture()
 }
 
 // FUNCTION: SWBF2 0x0057fbb0
-void DrawAllBeamBetween::Render(int)
+void DrawAllBeamBetween::Render(unsigned int) const
 {
     for (unsigned int i = 0; i < mCount; ++i)
     {
@@ -1796,7 +1863,7 @@ int DrawBeamBetween(lua_State*)
 }
 
 // FUNCTION: SWBF2 0x005801b0
-void DrawAllParticleAt::Render(int)
+void DrawAllParticleAt::Render(unsigned int) const
 {
     RedParticleRenderer::TexCoords tcWhole;
     tcWhole.u0 = 0;

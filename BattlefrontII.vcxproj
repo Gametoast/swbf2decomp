@@ -2104,18 +2104,15 @@
     <ResourceCompile Include="BattlefrontII.rc" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\Battlefront2\Platform\Pc\pcDustEffect.h" />
     <ClInclude Include="src\Battlefront2\Platform\Pc\pcDynamicSprite.h" />
     <ClInclude Include="src\Battlefront2\Platform\Pc\pcFLJoystick.h" />
-    <ClInclude Include="src\Battlefront2\Platform\Pc\pcGrassPatch.h" />
-    <ClInclude Include="src\Battlefront2\Platform\Pc\pcLeafPatch.h" />
-    <ClInclude Include="src\Battlefront2\Platform\Pc\pcLetterboxEffect.h" />
+    <ClInclude Include="src\Battlefront2\Source\LetterboxEffect.h" />
     <ClInclude Include="src\Battlefront2\Platform\Pc\pcLightBeam.h" />
     <ClInclude Include="src\Battlefront2\Platform\Pc\pcSaveDevice.h" />
     <ClInclude Include="src\Battlefront2\Platform\Pc\pcSaveFile.h" />
     <ClInclude Include="src\Battlefront2\Platform\Pc\pcSpawnDisplay.h" />
     <ClInclude Include="src\Battlefront2\Platform\Pc\pcSunFlare.h" />
-    <ClInclude Include="src\Battlefront2\Platform\Pc\pcVideoEffect.h" />
+    <ClInclude Include="src\Battlefront2\Source\VideoEffect.h" />
     <ClInclude Include="src\Battlefront2\Source\AIDifficulty.h" />
     <ClInclude Include="src\Battlefront2\Source\AIGoal.h" />
     <ClInclude Include="src\Battlefront2\Source\AIGoalManager.h" />

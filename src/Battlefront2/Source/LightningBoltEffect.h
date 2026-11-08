@@ -57,12 +57,12 @@ class LightningBoltEffect : public FLEffect
 public:
 
     LightningBoltEffect()
-        : FLEffect(0x1F678786u /* "LightningBolt" */, 6)
+        : FLEffect(0x1F678786u /* "LightningBolt" */, RENDERABLE_POSTTRANSPARENT)
     {
     }
 
     virtual ~LightningBoltEffect();
-    virtual void Render(int value);
+    virtual void Render(unsigned int value) const;
     virtual FLEffectClass* BuildClass(PblConfig& config) const;
 
     static void Create();

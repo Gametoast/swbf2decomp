@@ -602,8 +602,8 @@ static float GetSin(float fAngle)
 // FUNCTION: SWBF2 0x006d3050
 void RedParticleRenderer::Init()
 {
-    FLRenderer::AddRenderable(&RedParticleRenderer::_Instance, 3, 0x12c);
-    FLRenderer::AddRenderable(&RedParticleRenderer::_FarInstance, 1, 0x12c);
+    FLRenderer::AddRenderable(&RedParticleRenderer::_Instance, RENDERABLE_POSTWORLD, 0x12c);
+    FLRenderer::AddRenderable(&RedParticleRenderer::_FarInstance, RENDERABLE_SKY_POSTWORLD, 0x12c);
 
     currentCache = 0;
     s_cacheIndex = 0;
@@ -621,7 +621,7 @@ bool RedParticleRenderer::IsFull()
 }
 
 // FUNCTION: SWBF2 0x006d30b0
-void RedParticleRenderer::Renderable::Render(int value)
+void RedParticleRenderer::Renderable::Render(unsigned int value) const
 {
     RenderAll();
 }

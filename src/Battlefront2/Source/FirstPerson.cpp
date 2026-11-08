@@ -34,6 +34,8 @@
 
 extern bool netFrameLock;
 
+class FirstPersonRenderable;
+
 namespace FirstPerson
 {
 
@@ -197,6 +199,69 @@ WEAPONCLASS _GetWeaponClassFromWeapon(const Weapon* pWeapon)
     }
     return TOOL;
 }
+
+// VTABLE: SWBF2 0x0079eb80
+class FirstPersonRenderable : public Renderable
+{
+public:
+
+    void SetAnimAndTransition(SOLDIERANIMATION aAnim, SOLDIERANIMATION aTrans, float aTime);
+    FirstPersonRenderable(unsigned int uCameraId, const ZephyrSkeletonShared* pShared);
+    virtual ~FirstPersonRenderable();
+
+    virtual void Activate(int value);
+    virtual void Deactivate();
+
+    virtual void Render(unsigned int value) const;
+
+    void SetInitialPlayerId(int iPlayerId);
+    void UpdateAimer(const PblMatrix& mMatrix);
+    void SetAnimation(const ZephyrAnim* pAnim, bool bLoop);
+    void SetSoldierState(int iState);
+
+    void ClearFiringState();
+    void UpdateSoldier(const RedModel* pModel, Controllable* pOwner, Aimer* pAimer);
+    void UpdateCockpit(const RedModel* pModel, Controllable* pOwner, Aimer* pAimer);
+    void UpdateDroideka(const RedModel* pModel, Controllable* pOwner, Aimer* pAimer);
+    void UpdateSoldierAimer(const PblMatrix& mMatrix);
+    void UpdateDroidekaAimer(const PblMatrix& mMatrix);
+    void UpdateCockpitAimer(const PblMatrix& mMatrix);
+    void RenderSoldier(unsigned int uFlags) const;
+
+    void RenderCockpit(unsigned int uFlags) const;
+    void RenderDroideka(unsigned int uFlags) const;
+
+protected:
+    bool IsOwnerAiming() const;
+
+public:
+    ZephyrSkeleton<32> mZephyrSkeleton;
+    ZephyrPoseStatic<32> mZephyrPoseStatic;
+    ZephyrPoseDyn<32> mZephyrPoseDynamic;
+    float mBlendFactor;
+    PblMatrix mModelMatrix;
+    PblMatrix mWeaponMatrix;
+    float mAnimPlaySpeed;
+    unsigned int mEntitySoldierState;
+    Aimer* mAimer;
+    const RedModel* mObjectModel;
+    Weapon* mCurrentWeapon;
+    WEAPONCLASS mWeaponClass;
+    SOLDIERANIMATION mSoldierState;
+    eViewObjectType mObjectType;
+    Controllable* mOwner;
+    bool mUpdatedSoldierAimer;
+    float fTransitionTimer;
+    float fTransitionTimerMax;
+    SOLDIERANIMATION mTransitionAnim;
+    bool mBlendHandsDown;
+    float mShadowVal;
+    PblQuaternion mCockpitRotation;
+    PblVector3 mCockpitTrans;
+    unsigned int mCameraId;
+    bool bReadyToRender;
+    bool bStreamingModel;
+};
 
 // FUNCTION: SWBF2 0x0051eda0
 void FirstPersonRenderable::SetInitialPlayerId(int iPlayerId)
@@ -429,7 +494,7 @@ void FirstPersonRenderable::UpdateCockpitAimer(const PblMatrix& mMatrix)
 
 // FUNCTION: SWBF2 0x0051f750
 FirstPersonRenderable::FirstPersonRenderable(unsigned int uCameraId, const ZephyrSkeletonShared* pShared)
-    : Renderable(8)
+    : Renderable(RENDERABLE_FIRSTPERSON)
 {
     mObjectType = TYPE_NONE;
     mObjectModel = 0;
@@ -976,7 +1041,7 @@ void FirstPersonRenderable::RenderSoldier(unsigned int uFlags) const
 }
 
 // FUNCTION: SWBF2 0x00520de0
-void FirstPersonRenderable::Render(int value)
+void FirstPersonRenderable::Render(unsigned int value) const
 {
     const unsigned int uFlags = (unsigned int)value;
     if (!FirstPerson::IsActive(mCameraId) || CameraManager::sInstance->IsFreeLook(mCameraId))

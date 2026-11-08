@@ -45,7 +45,7 @@ bool LightningEffect::IsReflected()
 }
 
 // FUNCTION: SWBF2 0x00572840
-void LightningEffect::Render(int)
+void LightningEffect::Render(unsigned int) const
 {
 }
 
@@ -70,7 +70,7 @@ void LightningEffect::Destroy()
 
 // FUNCTION: SWBF2 0x005728e0
 LightningEffect::LightningEffect()
-    : FLEffect(0xE812F405u /* "Lightning" */, 3)
+    : FLEffect(0xE812F405u /* "Lightning" */, RENDERABLE_POSTWORLD)
 {
     Enable(false);
     m_colorLightning = RedColorValue(0.937254965f, 0.972549081f, 1.0f, 1.0f);

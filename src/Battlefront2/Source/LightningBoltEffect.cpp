@@ -84,7 +84,7 @@ FLEffectClass* LightningBoltEffect::BuildClass(PblConfig& config) const
 }
 
 // FUNCTION: SWBF2 0x00570ff0
-void LightningBoltEffect::Render(int)
+void LightningBoltEffect::Render(unsigned int) const
 {
 }
 

@@ -152,7 +152,7 @@ void DustEffectClass::CreateClient()
 }
 
 // FUNCTION: SWBF2 0x0048f120
-void DustEffectClass::Render(int value)
+void DustEffectClass::Render(unsigned int value) const
 {
 }
 

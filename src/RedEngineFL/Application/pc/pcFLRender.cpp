@@ -130,7 +130,7 @@ PblList<ReflectionRegion> ReflectionRegion::s_List;
 PblList<ReflectionRegion> ReflectionRegion::s_VisibleList;
 
 // GLOBAL: SWBF2 0x007dea48
-FLRenderer::RenderableList FLRenderer::_RenderableLists[10];
+FLRenderer::RenderableList FLRenderer::_RenderableLists[NUM_RENDERABLE_PHASES];
 
 // GLOBAL: SWBF2 0x007deb38
 
@@ -1335,7 +1335,7 @@ void FLRenderer::Render()
                 RedLight::UpdateAllVisibility(0, mView);
                 RenderReflections();
                 RenderFarScene(mView);
-                _RenderableLists[2].Render();
+                _RenderableLists[RENDERABLE_PREWORLD].Render();
                 RedRenderer::pcClear(D3DCLEAR_ZBUFFER | D3DCLEAR_STENCIL, RedColor::BLACK, 1.0f,
                                      pcStencilShadowShader::s_stencilRef);
                 RedRenderer::BeginScene();
@@ -1362,19 +1362,19 @@ void FLRenderer::Render()
                     RedRenderer::pcFlush(1);
                 }
                 RedSceneManager::Render(0, 0);
-                _RenderableLists[3].Render();
+                _RenderableLists[RENDERABLE_POSTWORLD].Render();
                 RedRenderer::pcEnableScreenSpaceShadow(false);
                 RedRenderer::pcSetImmediateMode(0);
                 RedRenderer::pcFlush(7);
-                _RenderableLists[4].Render();
+                _RenderableLists[RENDERABLE_POSTSHADOW].Render();
                 RedRenderer::pcFlush(8);
-                _RenderableLists[5].Render();
+                _RenderableLists[RENDERABLE_PRETRANSPARENT].Render();
                 pcUpdateRefractionBuffer();
                 RedRenderer::FlushOcclusionQueries();
                 RedRenderer::pcFlush(0x10);
                 RedRenderer::pcFlush(0x20);
-                _RenderableLists[6].Render();
-                _RenderableLists[7].Render();
+                _RenderableLists[RENDERABLE_POSTTRANSPARENT].Render();
+                _RenderableLists[RENDERABLE_PREFIRSTPERSON].Render();
                 RedRenderer::Flush();
                 RedRenderer::pcClear(D3DCLEAR_ZBUFFER | D3DCLEAR_STENCIL, RedColor::BLACK, 1.0f,
                                      pcStencilShadowShader::s_stencilRef);
@@ -1395,7 +1395,7 @@ void FLRenderer::Render()
                         RedShadowMap::_bShadowMapEnable = false;
                     }
                 }
-                _RenderableLists[8].Render();
+                _RenderableLists[RENDERABLE_FIRSTPERSON].Render();
                 RedRenderer::Flush();
                 if (bShadowMap)
                 {
@@ -1409,7 +1409,7 @@ void FLRenderer::Render()
                 m_pViewCamera[mView]->SetNearFarPlane(GetNearPlane(), GetNearSceneFadeEnd());
                 RedRenderer::pcSetNearSceneStart(GetNearSceneFadeStart());
                 RedRenderer::pcSetNearSceneEnd(GetNearSceneFadeEnd());
-                _RenderableLists[9].Render();
+                _RenderableLists[RENDERABLE_SCREENEFFECT].Render();
                 RedRenderer::Flush();
                 RedRenderer::pcSetNearScene(false);
                 CaptureFrame(mView);
@@ -1499,7 +1499,7 @@ void FLRenderer::RenderableList::Render() const
 // FUNCTION: SWBF2 0x006bd940
 void FLRenderer::RenderFarScene(unsigned int uiView)
 {
-    if (!_RenderableLists[0]._iCount)
+    if (!_RenderableLists[RENDERABLE_SKY]._iCount)
     {
         return;
     }
@@ -1560,14 +1560,14 @@ void FLRenderer::RenderFarScene(unsigned int uiView)
     RedRenderer::SetCamera(m_pViewCamera[uiView]);
     RedRenderer::pcSetImmediateMode(FAR_SCENE_IMMEDIATE_MODE);
     RedRenderer::BeginScene();
-    _RenderableLists[0].Render();
+    _RenderableLists[RENDERABLE_SKY].Render();
     RedRenderer::Flush();
     if (m_bFarSceneEnable[0] && sFarSceneRangeEnabled[uiView])
     {
         RedSceneManager::Render(0x60000, 0);
     }
     RedRenderer::Flush();
-    _RenderableLists[1].Render();
+    _RenderableLists[RENDERABLE_SKY_POSTWORLD].Render();
     RedRenderer::EndScene();
     RedRenderer::pcSetImmediateMode(0);
 
@@ -1793,7 +1793,7 @@ void FLRenderer::RenderReflections()
             reflectCamera.SetMatrix(mCamera);
         }
 
-        _RenderableLists[2].RenderReflections(0);
+        _RenderableLists[RENDERABLE_PREWORLD].RenderReflections(0);
         RedRenderer::pcFlush(0);
 
         bool bStencilShadows = RedStencilShadow::GetShadowEnable();
@@ -1832,7 +1832,7 @@ void FLRenderer::RenderReflections()
 
         RedRenderer::pcSetImmediateMode(REFLECTION_SCENE_IMMEDIATE_MODE);
         RedRenderer::BeginScene();
-        _RenderableLists[0].RenderReflections(r.renderFlags);
+        _RenderableLists[RENDERABLE_SKY].RenderReflections(r.renderFlags);
         if (!(r.renderFlags & 0x400000))
         {
             RedRenderer::pcSetNearScene(true);
@@ -1845,7 +1845,7 @@ void FLRenderer::RenderReflections()
                 RedTerrain::Render(0x200000);
                 RedSceneManager::Render(0x200000, pSceneCamera);
             }
-            _RenderableLists[3].RenderReflections(0);
+            _RenderableLists[RENDERABLE_POSTWORLD].RenderReflections(0);
         }
         RedRenderer::EndScene();
         RedRenderer::pcSetNearScene(false);
@@ -2047,9 +2047,9 @@ Renderable* m_potentialReflections[50];
 }
 
 // FUNCTION: SWBF2 0x006bb840
-void FLRenderer::AddRenderable(Renderable* renderable, int index, int value)
+void FLRenderer::AddRenderable(Renderable* renderable, RENDERABLE_PHASE phase, int value)
 {
-    FLRenderer::RenderableList* bucket = &FLRenderer::_RenderableLists[index];
+    FLRenderer::RenderableList* bucket = &FLRenderer::_RenderableLists[phase];
     PblOrderedList<Renderable, int>* list = renderable->_RenderableNode._pList;
     if (list == bucket)
     {
@@ -2073,7 +2073,7 @@ void FLRenderer::AddRenderable(Renderable* renderable, int index, int value)
 }
 
 // FUNCTION: SWBF2 0x006bce60
-bool FLRenderer::IsRenderableActive(const Renderable* renderable, int index)
+bool FLRenderer::IsRenderableActive(const Renderable* renderable, RENDERABLE_PHASE index)
 {
     if (index < 10)
     {
