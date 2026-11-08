@@ -70,10 +70,7 @@ CollisionObject* FlagCollision(FlagItem* pItem)
 bool FlagItem::Drop()
 {
     FlagItem* pItem = this;
-    if (!NetGame::IsEnabled() || !netEnabledNext || !netClientActive)
-    {
-        EventManager::FlagEvent::mDrop.mRoot.Trigger(*pItem, *reinterpret_cast<EntityItem*>(pItem)->mOwner);
-    }
+    EventManager::FlagEvent::mDrop.Trigger(*pItem, *reinterpret_cast<EntityItem*>(pItem)->mOwner);
 
     AI::EventInfo event(AI::EVT_CTF_FlagDrop, reinterpret_cast<GameObject*>(pItem));
     ControllerManager::BroadcastEvent(&event, 1000);
@@ -133,10 +130,7 @@ void FlagItem::ResetFlag()
     SetMatrix(mStart);
     pItem->mLastPosition = pItem->mStartPosition;
 
-    if (!NetGame::IsEnabled() || !netEnabledNext || !netClientActive)
-    {
-        EventManager::FlagEvent::mReset.mRoot.Trigger(*pItem, EventManager::noContext);
-    }
+    EventManager::FlagEvent::mReset.Trigger(*pItem, EventManager::noContext);
     AI::EventInfo event(AI::EVT_CTF_FlagKill, reinterpret_cast<GameObject*>(pItem));
     ControllerManager::BroadcastEvent(&event, 1000);
 

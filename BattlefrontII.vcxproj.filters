@@ -1952,6 +1952,9 @@
     <ClInclude Include="src\Battlefront2\Source\EventManager_Flag.h">
       <Filter>src\Battlefront2\Source</Filter>
     </ClInclude>
+    <ClInclude Include="src\Battlefront2\Source\EventManager_LuaCallback.h">
+      <Filter>src\Battlefront2\Source</Filter>
+    </ClInclude>
     <ClInclude Include="src\Battlefront2\Source\EventManager_LuaUser.h">
       <Filter>src\Battlefront2\Source</Filter>
     </ClInclude>

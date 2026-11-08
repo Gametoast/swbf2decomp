@@ -77,29 +77,18 @@ public:
         PREDICATE mPredicate;
     };
 
-    // TEMPLATE: SWBF2 0x0050e0c0
-    // EventManager::Event<Character,DamageOwner>::Unregister
+private:
+    const char* mName;
+    Callback mRoot;
 
-    // TEMPLATE: SWBF2 0x00511350
-    // EventManager::Event<CommandPost,unsigned __int64>::Unregister
+public:
+    Event(const char* pcName) : mName(pcName) {}
 
-    // TEMPLATE: SWBF2 0x005142f0
-    // EventManager::Event<EventManager::LuaObject,EventManager::LuaObject>::Unregister
+    void Init() {}
+    void Cleanup() { mRoot.Clear(); }
 
-    // TEMPLATE: SWBF2 0x0051c610
-    // EventManager::Event<Timer,char>::Unregister
+    const char* GetName() { return mName; }
 
-    void Unregister(Callback& callback)
-    {
-        Node* pParent = callback.mParent;
-        callback.DetachFromParent();
-        while (pParent && pParent->mParent && !pParent->mChild)
-        {
-            Node* pNode = pParent;
-            pParent = pParent->mParent;
-            pNode->DetachFromParent();
-        }
-    }
     template <class PREDICATE>
     Filter<PREDICATE>* GetFilter(PREDICATE& predicate, Callback* pParent = 0)
     {
@@ -123,10 +112,34 @@ public:
         return pFilter;
     }
 
-    Event(char* pcName) : mName(pcName) {}
+    void Register(Callback& aCallback, Callback* aParent)
+    {
+        aCallback.AttachToParent(aParent ? aParent : &mRoot);
+    }
 
-    void Init() {}
-    void Cleanup() { mRoot.Clear(); }
+    // TEMPLATE: SWBF2 0x0050e0c0
+    // EventManager::Event<Character,DamageOwner>::Unregister
+
+    // TEMPLATE: SWBF2 0x00511350
+    // EventManager::Event<CommandPost,unsigned __int64>::Unregister
+
+    // TEMPLATE: SWBF2 0x005142f0
+    // EventManager::Event<EventManager::LuaObject,EventManager::LuaObject>::Unregister
+
+    // TEMPLATE: SWBF2 0x0051c610
+    // EventManager::Event<Timer,char>::Unregister
+
+    void Unregister(Callback& callback)
+    {
+        Node* pParent = callback.mParent;
+        callback.DetachFromParent();
+        while (pParent && pParent->mParent && !pParent->mChild)
+        {
+            Node* pNode = pParent;
+            pParent = pParent->mParent;
+            pNode->DetachFromParent();
+        }
+    }
 
     // TEMPLATE: SWBF2 0x0042cd60
     // EventManager::Event<Character,char>::Trigger
@@ -143,9 +156,6 @@ public:
             mRoot.Trigger(item, param);
         }
     }
-
-    char* mName;
-    Callback mRoot;
 };
 
 void Init();

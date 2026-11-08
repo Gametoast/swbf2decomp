@@ -2236,6 +2236,7 @@
     <ClInclude Include="src\Battlefront2\Source\EventManager_Character.h" />
     <ClInclude Include="src\Battlefront2\Source\EventManager_CommandPost.h" />
     <ClInclude Include="src\Battlefront2\Source\EventManager_Flag.h" />
+    <ClInclude Include="src\Battlefront2\Source\EventManager_LuaCallback.h" />
     <ClInclude Include="src\Battlefront2\Source\EventManager_LuaUser.h" />
     <ClInclude Include="src\Battlefront2\Source\EventManager_Object.h" />
     <ClInclude Include="src\Battlefront2\Source\EventManager_Region.h" />

@@ -1,29 +1,13 @@
 #pragma once
 
 #include "Battlefront2/Source/EventManager.h"
+#include "EventManager_LuaCallback.h"
 #include "PebbleFL/Common/PblHandle.h"
 #include "Timer.h"
 #include "LuaHelper.h"
 
 namespace EventManager
 {
-
-// VTABLE: SWBF2 0x0079e250
-// class LuaCallback<CommandPost, struct DamageOwner>
-template <class ITEM, class PARAM>
-class LuaCallback : public Event<ITEM, PARAM>::Callback
-{
-public:
-
-    LuaCallback(int iRef);
-    virtual ~LuaCallback();
-    virtual bool operator()(ITEM& item, PARAM& param);
-
-    int mFunction;
-};
-
-template <class ITEM>
-bool LuaPushItem(ITEM& item);
 
 template <>
 bool LuaPushItem<char>(char& item);
@@ -58,14 +42,3 @@ void Cleanup();
 
 }
 
-namespace EventManager
-{
-template <class ITEM, class PARAM>
-inline LuaCallback<ITEM, PARAM>::~LuaCallback()
-{
-    if (mFunction != -1)
-    {
-        lua_unref(LuaHelper::mState, mFunction);
-    }
-}
-}
