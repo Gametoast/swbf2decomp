@@ -29,7 +29,7 @@ public:
     void Initialize(const ZephyrSkeletonShared* pSkeleton);
     int GetFramesSinceUsed() const;
     void SetNewOwner(unsigned int uiOwnerId, const EntitySoldier* pOwner, const ZephyrSkeletonShared* pSkeleton,
-                     const PblBitVector<32>& upperBodyMask, const PblBitVector<32>& lowerBodyMask,
+                     const PblBitVector<kSoldierJoints>& upperBodyMask, const PblBitVector<kSoldierJoints>& lowerBodyMask,
                      float fSkeletonScale);
     bool RestartJumpAnimation(float fForward, float fSide, bool bForce);
     void SetAction(SoldierState::SoldierState eState, const PblMatrix& legMatrix, unsigned int uiAnimationHash);
@@ -109,8 +109,8 @@ public:
     PblList<SoldierAnimator>::Node mLRUNode;
     const EntitySoldier* mOwner;
     unsigned int mOwnerId;
-    PblBitVector<32> mUpperBodyAnimMask;
-    PblBitVector<32> mLowerBodyAnimMask;
+    PblBitVector<kSoldierJoints> mUpperBodyAnimMask;
+    PblBitVector<kSoldierJoints> mLowerBodyAnimMask;
     float mSkeletonScale;
     PblVector3 mAimDir;
     SoldierState::SoldierState mSoldierAction;
@@ -133,10 +133,10 @@ public:
     int mLastFrameUsed;
     unsigned int mNetTurn;
     float mExtraDt;
-    ZephyrSkeleton<32> mZephyrSkeleton;
-    ZephyrPoseStatic<32> mZephyrPoseStatic;
-    ZephyrPoseDyn<32> mZephyrPoseDynUpper;
-    ZephyrPoseDyn<32> mZephyrPoseDynLower;
+    ZephyrSkeleton<kSoldierJoints> mZephyrSkeleton;
+    ZephyrPoseStatic<kSoldierJoints> mZephyrPoseStatic;
+    ZephyrPoseDyn<kSoldierJoints> mZephyrPoseDynUpper;
+    ZephyrPoseDyn<kSoldierJoints> mZephyrPoseDynLower;
     const SoldierAnimation* m_pAnimLower;
     const SoldierAnimation* m_pAnimUpper;
     float mAnimationTimerLower;

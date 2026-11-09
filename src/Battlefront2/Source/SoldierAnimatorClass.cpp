@@ -367,17 +367,17 @@ bool SoldierAnimatorClass::_GetAnimationBoneMatrix(const ZephyrSkeletonShared* p
         return false;
     }
 
-    ZephyrSkeleton<32> kSkeleton;
-    ZephyrPoseStatic<32> kPoseStatic;
-    ZephyrPoseDyn<32> kPoseUpper;
-    ZephyrPoseDyn<32> kPoseLower;
+    ZephyrSkeleton<kSoldierJoints> kSkeleton;
+    ZephyrPoseStatic<kSoldierJoints> kPoseStatic;
+    ZephyrPoseDyn<kSoldierJoints> kPoseUpper;
+    ZephyrPoseDyn<kSoldierJoints> kPoseLower;
     kSkeleton.Open(*pSkel, kPoseStatic);
     kPoseStatic.Open(kSkeleton);
     kPoseUpper.Open(kSkeleton);
     kPoseLower.Open(kSkeleton);
 
-    PblBitVector<32> upperBodyMask;
-    PblBitVector<32> lowerBodyMask;
+    PblBitVector<kSoldierJoints> upperBodyMask;
+    PblBitVector<kSoldierJoints> lowerBodyMask;
     SetupBodyMasks(pSkel, upperBodyMask, lowerBodyMask);
     upperBodyMask.SetBit(iJoint);
     lowerBodyMask.ClearBit(iJoint);
@@ -449,8 +449,8 @@ void SoldierAnimatorClass::SetupJointTransformAnimationFlag(ZephyrSkeletonShared
 }
 
 // FUNCTION: SWBF2 0x006441e0
-void SoldierAnimatorClass::SetupBodyMasks(const ZephyrSkeletonShared* pSkel, PblBitVector<32>& upperBodyMask,
-                                          PblBitVector<32>& lowerBodyMask)
+void SoldierAnimatorClass::SetupBodyMasks(const ZephyrSkeletonShared* pSkel, PblBitVector<kSoldierJoints>& upperBodyMask,
+                                          PblBitVector<kSoldierJoints>& lowerBodyMask)
 {
     const PblHashTable<unsigned int, 64>& kJoints = pSkel->m_kHashCRC2Joint;
     int iForearmJoint = (int)kJoints.Find(0xb70e2184 /* "bone_r_forarm3" */) - 1;
@@ -603,8 +603,8 @@ bool SoldierAnimatorClass::_AddBank(const RedAnimation* pBank)
 
 // FUNCTION: SWBF2 0x006445e0
 const PblMatrix* SoldierAnimatorClass::_GetBoneMatrix(unsigned int uiJointCrc, const SoldierAnimation* pAnim,
-                                                      ZephyrSkeleton<32>& skeleton, ZephyrPoseDyn<32>& poseDyn,
-                                                      ZephyrPoseStatic<32>& poseStatic) const
+                                                      ZephyrSkeleton<kSoldierJoints>& skeleton, ZephyrPoseDyn<kSoldierJoints>& poseDyn,
+                                                      ZephyrPoseStatic<kSoldierJoints>& poseStatic) const
 {
     RedStack stack;
     RedPose* pPose = (RedPose*)stack.Alloc(sizeof(RedPose));
@@ -666,7 +666,7 @@ static bool _IsWeaponMeleeAnimationIndex(int i)
 }
 
 // FUNCTION: SWBF2 0x00644770
-static void SetupVelocity(SoldierAnimation* pAnim, ZephyrPoseDyn<32>& tempPose)
+static void SetupVelocity(SoldierAnimation* pAnim, ZephyrPoseDyn<kSoldierJoints>& tempPose)
 {
     if (!pAnim)
     {
@@ -694,7 +694,7 @@ static void SetupVelocity(SoldierAnimation* pAnim, ZephyrPoseDyn<32>& tempPose)
 }
 
 // FUNCTION: SWBF2 0x00644900
-static void SetupVelocity(SoldierAnimation* pAnim, int iAnim, ZephyrPoseDyn<32>& tempPose)
+static void SetupVelocity(SoldierAnimation* pAnim, int iAnim, ZephyrPoseDyn<kSoldierJoints>& tempPose)
 {
     if (iAnim >= SoldierAnimatorClass::WEAPON_ANIMATIONS_END ||
         !pAnim || !pAnim->HasLowerBody())
@@ -927,7 +927,7 @@ public:
         }
     }
     void Pop() { m_Stack.Pop(); }
-    void SetFindData(CachedBankStack& cache, ZephyrPoseDyn<32>& tempPose)
+    void SetFindData(CachedBankStack& cache, ZephyrPoseDyn<kSoldierJoints>& tempPose)
     {
         m_pCache = &cache;
         m_pTempPose = &tempPose;
@@ -970,7 +970,7 @@ public:
     SoldierAnimationData* m_pAnimData;
     SoldierAnimation::SCOPE m_eDefaultScope;
     CachedBankStack* m_pCache;
-    ZephyrPoseDyn<32>* m_pTempPose;
+    ZephyrPoseDyn<kSoldierJoints>* m_pTempPose;
 };
  
  
@@ -1580,9 +1580,9 @@ void SoldierAnimatorClass::_PostLoad()
     SoldierAnimationData::InitLoadTimeDataPostLoad();
     SoldierAnimationData::InitAnimationData(true);
 
-    ZephyrSkeleton<32> tempZephyrSkeleton;
-    ZephyrPoseDyn<32> tempZephyrPoseDyn;
-    ZephyrPoseStatic<32> tempZephyrPoseStatic;
+    ZephyrSkeleton<kSoldierJoints> tempZephyrSkeleton;
+    ZephyrPoseDyn<kSoldierJoints> tempZephyrPoseDyn;
+    ZephyrPoseStatic<kSoldierJoints> tempZephyrPoseStatic;
     tempZephyrSkeleton.Open(*mZephyrSkeletonShared, tempZephyrPoseStatic);
     tempZephyrPoseStatic.Open(tempZephyrSkeleton);
     tempZephyrPoseDyn.Open(tempZephyrSkeleton);

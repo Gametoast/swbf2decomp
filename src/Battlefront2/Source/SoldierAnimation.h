@@ -43,7 +43,7 @@ public:
 
     static void* operator new(unsigned int uiSize);
 
-    void SetupDynamicPose(ZephyrPoseDyn<32>& pose, float fTime) const;
+    void SetupDynamicPose(ZephyrPoseDyn<kSoldierJoints>& pose, float fTime) const;
 
     // FUNCTION: SWBF2 0x00643650
     void SetVelocity(float fVelocityX, float fVelocityZ)

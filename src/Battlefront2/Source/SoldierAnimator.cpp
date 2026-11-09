@@ -124,8 +124,8 @@ void SoldierAnimator::Initialize(const ZephyrSkeletonShared* pSkeleton)
 
 // FUNCTION: SWBF2 0x0063ea30
 void SoldierAnimator::SetNewOwner(unsigned int uiOwnerId, const EntitySoldier* pOwner,
-                                  const ZephyrSkeletonShared* pSkeleton, const PblBitVector<32>& upperBodyMask,
-                                  const PblBitVector<32>& lowerBodyMask, float fSkeletonScale)
+                                  const ZephyrSkeletonShared* pSkeleton, const PblBitVector<kSoldierJoints>& upperBodyMask,
+                                  const PblBitVector<kSoldierJoints>& lowerBodyMask, float fSkeletonScale)
 {
     mOwnerId = uiOwnerId;
     m_bRestartJumpForJedi = false;
@@ -822,7 +822,7 @@ void SoldierAnimator::SetupPose(RedPose& pose)
             }
             if (mSoldierAction != SoldierState::CHOKE && pOverlayAnim)
             {
-                ZephyrPoseDyn<32> overlayPose;
+                ZephyrPoseDyn<kSoldierJoints> overlayPose;
                 overlayPose.Open(mZephyrSkeleton);
                 overlayPose.SetAnimation(pOverlayAnim, 30.0f);
                 mZephyrPoseStatic.Blend(overlayPose, mUpperBodyAnimMask, fOverlayBlend);
@@ -1210,7 +1210,7 @@ void SoldierAnimator::ApplyProceduralAnimationAndBuildWorldMatrices(float fDelta
 
     float fAimYaw = mAimYAngle - mLegAngle;
     float fAimPitch = mAimXAngle;
-    PblBitVector<32> kDirty;
+    PblBitVector<kSoldierJoints> kDirty;
     kDirty.SetAll();
     PblMatrix worldRotation;
     PblMatrix* mat;
@@ -1700,7 +1700,7 @@ void SoldierAnimator::UpdateMovementAnimation(float fDeltaTime, const ZephyrAnim
         if (pAnim && (!bWeaponLower || !bAnimControlledMove) && eMove <= SoldierAnimType::IDLE_LOOK_AROUND &&
             mPosture != SoldierAnimType::PRONE)
         {
-            ZephyrPoseDyn<32> overlayPose;
+            ZephyrPoseDyn<kSoldierJoints> overlayPose;
             overlayPose.Open(mZephyrSkeleton);
             overlayPose.SetAnimation(pAnim, 30.0f);
             mZephyrPoseStatic.Blend(overlayPose, mLowerBodyAnimMask, fBlend);
@@ -1719,7 +1719,7 @@ void SoldierAnimator::UpdateMovementAnimation(float fDeltaTime, const ZephyrAnim
 
     if (pAnim && mPosture != SoldierAnimType::PRONE)
     {
-        ZephyrPoseDyn<32> overlayPose;
+        ZephyrPoseDyn<kSoldierJoints> overlayPose;
         overlayPose.Open(mZephyrSkeleton);
         overlayPose.SetAnimation(pAnim, 30.0f);
         mZephyrPoseStatic.Blend(overlayPose, mUpperBodyAnimMask, fBlend);

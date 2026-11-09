@@ -39,7 +39,7 @@ bool SoldierAnimation::IsLooping() const
 }
 
 // FUNCTION: SWBF2 0x0063c2e0
-void SoldierAnimation::SetupDynamicPose(ZephyrPoseDyn<32>& pose, float fTime) const
+void SoldierAnimation::SetupDynamicPose(ZephyrPoseDyn<kSoldierJoints>& pose, float fTime) const
 {
     if (m_pZephyrAnim != pose.m_kAnim.m_pkAnim)
     {

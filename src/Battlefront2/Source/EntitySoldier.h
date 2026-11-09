@@ -203,8 +203,8 @@ public:
     float m_fCollisionTorsoScale;
     ZephyrSkeletonShared* mSpecialSkeleton;
 
-    PblBitVector<32> mUpperBodyAnimMask;
-    PblBitVector<32> mLowerBodyAnimMask;
+    PblBitVector<kSoldierJoints> mUpperBodyAnimMask;
+    PblBitVector<kSoldierJoints> mLowerBodyAnimMask;
     ZephyrSkeletonShared* mSpecialSkeletonLowRes;
     AnimatedAddon* mAddon;
     float mFootstepStride;

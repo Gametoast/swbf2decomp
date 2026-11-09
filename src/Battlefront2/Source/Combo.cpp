@@ -296,17 +296,17 @@ bool Combo::Attack::_ResolveDamageData(const Combo* pCombo, const State* pState,
         return false;
     }
 
-    ZephyrSkeleton<32> kSkel;
-    ZephyrPoseStatic<32> kPose;
-    ZephyrPoseDyn<32> kUpperPose;
-    ZephyrPoseDyn<32> kLowerPose;
+    ZephyrSkeleton<kSoldierJoints> kSkel;
+    ZephyrPoseStatic<kSoldierJoints> kPose;
+    ZephyrPoseDyn<kSoldierJoints> kUpperPose;
+    ZephyrPoseDyn<kSoldierJoints> kLowerPose;
     kSkel.Open(*pCombo->m_pSkeleton, kPose);
     kPose.Open(kSkel);
     kUpperPose.Open(kSkel);
     kLowerPose.Open(kSkel);
 
-    PblBitVector<32> kUpperMask;
-    PblBitVector<32> kLowerMask;
+    PblBitVector<kSoldierJoints> kUpperMask;
+    PblBitVector<kSoldierJoints> kLowerMask;
     SoldierAnimatorClass::SetupBodyMasks(pCombo->m_pSkeleton, kUpperMask, kLowerMask);
     bool bLowerAnim = true;
     kUpperMask.SetBit(iJoint);

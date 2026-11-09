@@ -1,5 +1,8 @@
 #pragma once
 
+// the most joints a soldier's skeleton has (the high-res animator, its class's masks)
+enum { kSoldierJoints = 32 };
+
 class SoldierAnimationBank
 {
 public:

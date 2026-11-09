@@ -29,16 +29,16 @@ class SoldierAnimatorClass
 public:
 
     static void SetupJointTransformAnimationFlag(ZephyrSkeletonShared* pSkel);
-    static void SetupBodyMasks(const ZephyrSkeletonShared* pSkel, PblBitVector<32>& upperBodyMask,
-                               PblBitVector<32>& lowerBodyMask);
+    static void SetupBodyMasks(const ZephyrSkeletonShared* pSkel, PblBitVector<kSoldierJoints>& upperBodyMask,
+                               PblBitVector<kSoldierJoints>& lowerBodyMask);
 
     static SoldierAnimatorClass* Instance() { return sInstance; }
     ZephyrSkeletonShared* GetDefaultSkeleton() { return mZephyrSkeletonShared; }
 
     const PblMatrix& GetJetPackMatrix() const { return mJetPackMatrix; }
 
-    const PblBitVector<32>& GetDefaultUpperBodyAnimMask() const { return mDefaultUpperBodyAnimMask; }
-    const PblBitVector<32>& GetDefaultLowerBodyAnimMask() const { return mDefaultLowerBodyAnimMask; }
+    const PblBitVector<kSoldierJoints>& GetDefaultUpperBodyAnimMask() const { return mDefaultUpperBodyAnimMask; }
+    const PblBitVector<kSoldierJoints>& GetDefaultLowerBodyAnimMask() const { return mDefaultLowerBodyAnimMask; }
 
     const SoldierAnimation* GetLowerBodyActionAnimation(SoldierAnimType::ActionAnimation eAnim,
                                                         SoldierAnimationBank::MAP eMap) const;
@@ -153,8 +153,8 @@ public:
     static const ZephyrSkeletonShared* _GetAnimationMapSkeleton(SoldierAnimationBank::MAP eMap);
 
     const PblMatrix* _GetBoneMatrix(unsigned int uiJointCrc, const SoldierAnimation* pAnim,
-                                    ZephyrSkeleton<32>& skeleton, ZephyrPoseDyn<32>& poseDyn,
-                                    ZephyrPoseStatic<32>& poseStatic) const;
+                                    ZephyrSkeleton<kSoldierJoints>& skeleton, ZephyrPoseDyn<kSoldierJoints>& poseDyn,
+                                    ZephyrPoseStatic<kSoldierJoints>& poseStatic) const;
 
 public:
 
@@ -163,8 +163,8 @@ public:
     SoldierAnimator* mSoldierAnimators;
     PblList<SoldierAnimator> mLRU_List;
     ZephyrSkeletonShared* mZephyrSkeletonShared;
-    PblBitVector<32> mDefaultUpperBodyAnimMask;
-    PblBitVector<32> mDefaultLowerBodyAnimMask;
+    PblBitVector<kSoldierJoints> mDefaultUpperBodyAnimMask;
+    PblBitVector<kSoldierJoints> mDefaultLowerBodyAnimMask;
 
     AnimationMap mMap[SoldierAnimationBank::MAX_MAPS];
     SoldierOrdnanceCollisionTable m_aOrdCollTable[SoldierAnimationBank::MAX_MAPS];
