@@ -17,15 +17,18 @@
 #include "PebbleFL/Common/PblRandom.h"
 #include "PebbleFL/Common/PblVector.h"
 #include "AIGoal.h"
+#include "DefendGoal.h"
 #include "AIGoalManager.h"
 #include "AIVisRegion.h"
 #include "FlyRegion.h"
 #include "HintManager.h"
 #include "Navigator.h"
+#include "NavigatorFollowTarget.h"
 #include "PathFinder.h"
 #include "PathFollower.h"
 #include "PathManager.h"
 #include "UnitAgent.h"
+#include "UnitCTFOffenseAgent.h"
 #include "CombatUtil.h"
 #include "ConnectivityGraphFollower.h"
 #include "VehicleManager.h"
@@ -313,14 +316,16 @@ void AIUtil::Init()
     gSnipeSuitabilityDist = 70.0f;
 
     UnitController::sMemoryPool.Setup(600, sizeof(UnitController), UnitController::sMemoryPool.GetGrow());
-    UnitAgent::sMemoryPool.Setup(600, 0x358, UnitAgent::sMemoryPool.GetGrow());
-    Navigator::sMemoryPool.Setup(600, 0x1e8, Navigator::sMemoryPool.GetGrow());
+    // the agent, navigator and goal pools serve every subclass: each item is the size of the largest one
+    // (UnitDefendAgent is as large as UnitCTFOffenseAgent; DestroyGoal and FollowGoal as large as DefendGoal)
+    UnitAgent::sMemoryPool.Setup(600, sizeof(UnitCTFOffenseAgent), UnitAgent::sMemoryPool.GetGrow());
+    Navigator::sMemoryPool.Setup(600, sizeof(NavigatorFollowTarget), Navigator::sMemoryPool.GetGrow());
     PathFollower::sMemoryPool.Setup(600, PathFollower::sMemoryPool.GetSize(),
                                     PathFollower::sMemoryPool.GetGrow());
     ConnectivityGraphFollower::sMemoryPool.Setup(600, ConnectivityGraphFollower::sMemoryPool.GetSize(),
                                                  ConnectivityGraphFollower::sMemoryPool.GetGrow());
     BaseHint::sMemoryPool.Setup(350, sizeof(BaseHint), BaseHint::sMemoryPool.GetGrow());
-    AI::AIGoal::sMemoryPool.Setup(20, 0x3c, AI::AIGoal::sMemoryPool.GetGrow());
+    AI::AIGoal::sMemoryPool.Setup(20, sizeof(AI::DefendGoal), AI::AIGoal::sMemoryPool.GetGrow());
     VisionManager::RayRequest::sMemoryPool.Setup(201, VisionManager::RayRequest::sMemoryPool.GetSize(),
                                                  VisionManager::RayRequest::sMemoryPool.GetGrow());
 
