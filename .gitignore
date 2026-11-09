@@ -9,3 +9,4 @@ ipch/
 *.user
 reports/
 BattlefrontII_Steam.exe
+/config/BF2_modtools_NoDVD.exe

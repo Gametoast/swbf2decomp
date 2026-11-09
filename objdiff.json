@@ -1,0 +1,15 @@
+{
+  "min_version": "3.8.3",
+  "build_target": false,
+  "build_base": false,
+  "units": [
+    {
+      "name": "PebbleFL/Common/PblCatmullRom",
+      "target_path": "obj/Win32/ModTools/PblCatmullRom.obj",
+      "base_path": "obj/Win32/Release/PblCatmullRom.modtools.obj",
+      "metadata": {
+        "source_path": "src/PebbleFL/Common/PblCatmullRom.cpp"
+      }
+    }
+  ]
+}
