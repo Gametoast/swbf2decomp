@@ -209,13 +209,13 @@ static RedTexture* s_pWhiteTexture;
 
 static inline PblVector4 Splat(float f)
 {
-    PblVector4 v = { f, f, f, f };
+    PblVector4 v(f, f, f, f);
     return v;
 }
 
 static inline const PblVector4 operator*(const PblVector4& a, const PblVector4& b)
 {
-    PblVector4 v = { a.x * b.x, a.y * b.y, a.z * b.z, a.w * b.w };
+    PblVector4 v(a.x * b.x, a.y * b.y, a.z * b.z, a.w * b.w);
     return v;
 }
 

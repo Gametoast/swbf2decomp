@@ -26,13 +26,11 @@ namespace
 
     inline Controllable* GetControllable(GameObject* pObject)
     {
-        typedef Controllable*(__thiscall * GetControllableFn)(GameObject*);
         return pObject->GetControllable();
     }
 
     void SignalFire(Weapon* pWeapon)
     {
-        typedef void(__thiscall * SignalFireFn)(Weapon*);
         pWeapon->SignalFire();
     }
 }

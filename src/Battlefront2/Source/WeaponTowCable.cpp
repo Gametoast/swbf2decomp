@@ -11,13 +11,11 @@ namespace
 
     inline const PblMatrix& GetCollisionMatrix(GameObject* pObject)
     {
-        typedef const PblMatrix& (__thiscall * Fn)(void*);
         return ((CollisionObject*)pObject)->GetMatrix();
     }
 
     inline const PblVector3& GetVelocity(GameObject* pObject)
     {
-        typedef const PblVector3& (__thiscall * Fn)(GameObject*);
         return pObject->GetVelocity();
     }
 

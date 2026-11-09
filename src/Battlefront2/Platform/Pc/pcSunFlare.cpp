@@ -745,7 +745,7 @@ bool CreateTextures(RedTexture* pTexture, const PblVector3& vPosition, float fSi
     pClearV[2].pos.Set(x1, y0, 0.0f, 1.0f);
     pClearV[3].pos.Set(x1, y1, 0.0f, 1.0f);
     pClear->EndVertexData();
-    RedColor transparent = { 0, 0, 0, 0 };
+    RedColor transparent(0, 0, 0, 0);
     RedRenderer::pcRenderPrimitive(pClear, s_pClearShader,
                                    gMatrixIdentity, transparent, 0x200, 0, 0, 0);
     pClear->Release();

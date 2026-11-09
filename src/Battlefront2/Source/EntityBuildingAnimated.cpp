@@ -185,7 +185,6 @@ EntityClass* EntityBuildingAnimatedClass::Derive(unsigned int uHash)
 // FUNCTION: SWBF2 0x00494f20
 Entity* EntityBuildingAnimatedClass::Build(const EntityDesc& desc)
 {
-    typedef void (__thiscall* ActivatePhysicsFn)(void*);
 
     EntityBuildingAnimated* pBuilding = new EntityBuildingAnimated(this, desc);
     if (pBuilding)

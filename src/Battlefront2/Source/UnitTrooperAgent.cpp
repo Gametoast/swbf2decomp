@@ -122,7 +122,7 @@ void UnitTrooperAgent::EnterState()
     {
     case STATE_START:
     {
-        auto pOwner = mCtrl->mOwner;
+        Controllable* pOwner = mCtrl->mOwner;
         if (AIUtil::IsNearPost(pOwner, mPost, gVectorZero))
         {
             SetNextState(STATE_Patrol);
@@ -334,7 +334,7 @@ void UnitTrooperAgent::UpdateStatePostVision(float dt)
             SetNextState(100);
             break;
         }
-        auto pOwner = mCtrl->mOwner;
+        Controllable* pOwner = mCtrl->mOwner;
         if (AIUtil::IsNearPost(pOwner, mPost, mCPOffset) || GetLowLevel().IsAtDest())
         {
             SetNextState(STATE_Patrol);
@@ -365,7 +365,7 @@ void UnitTrooperAgent::UpdateStatePostVision(float dt)
             }
         }
 
-        auto pMover = mCtrl->mOwner;
+        Controllable* pMover = mCtrl->mOwner;
         if (AIUtil::HasCPMoved(mPost, pMover, mCPPos, mCPTime, mSrcPos))
         {
             SetNextState(STATE_Goto);

@@ -666,8 +666,8 @@ void TerrainRenderable::_InitPixelLighting(bool bEnable)
     if (m_bBumpTextureAvailable && m_bEnableBumpMapping)
     {
         float fScale = m_fBumpLuminosityScale * RedTerrain::_fPointsPerMeter;
-        PblVector4 vScale1 = { 0.0f, 0.0f, fScale, 0.0f };
-        PblVector4 vScale0 = { fScale, 0.0f, 0.0f, 0.0f };
+        PblVector4 vScale1(0.0f, 0.0f, fScale, 0.0f);
+        PblVector4 vScale0(fScale, 0.0f, 0.0f, 0.0f);
         pcTerrainShader2::_InitBumpLuminosityPixelLighting(0x785887DA /* "attenuation_volume" */, m_uiBumpLuminosityTextureHash,
                                                            vScale0, vScale1, m_fStaticBumpFactor);
     }

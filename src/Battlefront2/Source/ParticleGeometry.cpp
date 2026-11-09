@@ -217,7 +217,7 @@ void ParticleGeometry::Render(Particle& particle, bool bLast) const
         const float fLength = mSparkLength * fSizeMultiplier;
         const PblVector3 vStreak(particle.mVelocity.x * fLength, particle.mVelocity.y * fLength,
                                  particle.mVelocity.z * fLength);
-        RedParticleRenderer::TexCoords texCoords = { 0, 0, 255, 255 };
+        RedParticleRenderer::TexCoords texCoords(0, 0, 255, 255);
         if (iFrame >= 0)
         {
             const int iFrameSizeLog = (int)mFrameSizeLog;
@@ -358,7 +358,7 @@ void ParticleGeometry::Render(Particle& particle, bool bLast) const
         redColor.g = (unsigned char)(int)(color.g * 255.0f);
         redColor.r = (unsigned char)(int)(color.r * 255.0f);
         redColor.a = (unsigned char)(int)(color.a * 255.0f);
-        const RedParticleRenderer::TexCoords texCoords = { 0, 0, 255, 255 };
+        const RedParticleRenderer::TexCoords texCoords(0, 0, 255, 255);
         RedParticleRenderer::SubmitParticle(eInfo, vPos, redColor, ParticleSystem::GetSizeMultiplier() * particle.mSize[0], 0.0f, texCoords,
                                             vRight, vUp);
     }
@@ -369,7 +369,7 @@ void ParticleGeometry::Render(Particle& particle, bool bLast) const
         redColor.g = (unsigned char)(int)(color.g * 255.0f);
         redColor.r = (unsigned char)(int)(color.r * 255.0f);
         redColor.a = (unsigned char)(int)(color.a * 255.0f);
-        const RedParticleRenderer::TexCoords texCoords = { 0, 0, 255, 255 };
+        const RedParticleRenderer::TexCoords texCoords(0, 0, 255, 255);
         RedParticleRenderer::SubmitParticle(eInfo, vPos, redColor, ParticleSystem::GetSizeMultiplier() * particle.mSize[0],
                                             particle.mRotation[0], texCoords, gVectorUnitX, gVectorUnitY);
     }

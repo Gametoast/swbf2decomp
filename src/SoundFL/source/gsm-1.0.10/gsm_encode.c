@@ -66,11 +66,11 @@ int value;
     };
     if (!value)
     {
-        _wassert(
+        _assert(
 // STRING: SWBF2 0x7871b0
-L"a != 0", 
+"a != 0",
 // STRING: SWBF2 0x786e98
-L"source\\gsm-1.0.10\\gsm_encode.c", 0x66c);
+"source\\gsm-1.0.10\\gsm_encode.c", 0x66c);
     }
     if (value < 0)
     {
@@ -121,9 +121,9 @@ short* output;
 {
     int i = 13;
 // STRING: SWBF2 0x787130
-// L"0 <= Mc && Mc <= 3"
+// "0 <= Mc && Mc <= 3"
     if (!(0 <= grid && grid <= 3))
-        _wassert(L"0 <= Mc && Mc <= 3", GSM_ENCODE_C, 0x517);
+        _assert("0 <= Mc && Mc <= 3", GSM_ENCODE_C, 0x517);
     switch (grid)
     {
     case 3: *output++ = 0;
@@ -190,10 +190,10 @@ short* mantissa;
         mant -= 8;
     }
 // STRING: SWBF2 0x786f98
-// L"exp >= -4 && exp <= 6"
+// "exp >= -4 && exp <= 6"
     GSM_ASSERT(exp >= -4 && exp <= 6, GSM_ENCODE_C, 0x47e);
 // STRING: SWBF2 0x786fc4
-// L"mant >= 0 && mant <= 7"
+// "mant >= 0 && mant <= 7"
     GSM_ASSERT(mant >= 0 && mant <= 7, GSM_ENCODE_C, 0x47f);
     *exponent = exp;
     *mantissa = mant;
@@ -217,7 +217,7 @@ word* r;
         temp = *r;
         temp = GSM_ABS(temp);
 // STRING: SWBF2 0x786f68
-// L"temp >= 0"
+// "temp >= 0"
         GSM_ASSERT(temp >= 0, GSM_ENCODE_C, 0x337);
         if (temp < 22118)
         {
@@ -226,7 +226,7 @@ word* r;
         else if (temp < 31130)
         {
 // STRING: SWBF2 0x786f7c
-// L"temp >= 11059"
+// "temp >= 11059"
             GSM_ASSERT(temp >= 11059, GSM_ENCODE_C, 0x33c);
             temp -= 11059;
         }
@@ -237,7 +237,7 @@ word* r;
         }
         *r = *r < 0 ? -temp : temp;
 // STRING: SWBF2 0x786f48
-// L"*r != MIN_WORD"
+// "*r != MIN_WORD"
         GSM_ASSERT(*r != MIN_WORD, GSM_ENCODE_C, 0x345);
     }
 }
@@ -261,19 +261,19 @@ short* output;
     short temp, temp1, temp2, temp3;
     longword ltmp;
     if (!(mantissa >= 0 && mantissa <= 7))
-        _wassert(L"mant >= 0 && mant <= 7", GSM_ENCODE_C, 0x4f1);
+        _assert("mant >= 0 && mant <= 7", GSM_ENCODE_C, 0x4f1);
     temp1 = gsm_FAC[mantissa];
     temp2 = gsm_sub(6, exponent);
     temp3 = gsm_asl(1, gsm_sub(temp2, 1));
     for (i = 13; i--;)
     {
 // STRING: SWBF2 0x7870d0
-// L"*xMc <= 7 && *xMc >= 0"
+// "*xMc <= 7 && *xMc >= 0"
         if (!(*coded <= 7 && *coded >= 0))
-            _wassert(L"*xMc <= 7 && *xMc >= 0", GSM_ENCODE_C, 0x4f9);
+            _assert("*xMc <= 7 && *xMc >= 0", GSM_ENCODE_C, 0x4f9);
         temp = (short)((*coded++ << 1) - 7);
 // STRING: SWBF2 0x787100
-// L"temp <= 7 && temp >= -7"
+// "temp <= 7 && temp >= -7"
         GSM_ASSERT(temp <= 7 && temp >= -7, GSM_ENCODE_C, 0x4fd);
         temp <<= 12;
         temp = (short)GSM_MULT_R(temp1, temp);
@@ -308,21 +308,21 @@ short* xmaxc;
         itest |= temp <= 0;
         temp = (short)SASR(temp, 1);
 // STRING: SWBF2 0x786ff4
-// L"exp <= 5"
+// "exp <= 5"
         GSM_ASSERT(exp <= 5, GSM_ENCODE_C, 0x4aa);
         if (itest == 0) ++exp;
     }
 // STRING: SWBF2 0x787008
-// L"exp <= 6 && exp >= 0"
+// "exp <= 6 && exp >= 0"
     GSM_ASSERT(exp <= 6 && exp >= 0, GSM_ENCODE_C, 0x4ae);
     temp = (short)(exp + 5);
 // STRING: SWBF2 0x787034
-// L"temp <= 11 && temp >= 0"
+// "temp <= 11 && temp >= 0"
     GSM_ASSERT(temp <= 11 && temp >= 0, GSM_ENCODE_C, 0x4b1);
     encodedMaximum = gsm_add((short)SASR(maximum, temp), (short)(exp << 3));
     APCM_quantization_xmaxc_to_exp_mant(encodedMaximum, &exp, &mant);
 // STRING: SWBF2 0x787064
-// L"exp <= 4096 && exp >= -4096"
+// "exp <= 4096 && exp >= -4096"
     GSM_ASSERT(exp <= 4096 && exp >= -4096, GSM_ENCODE_C, 0x4c8);
     GSM_ASSERT(mant >= 0 && mant <= 7, GSM_ENCODE_C, 0x4c9);
     temp1 = (short)(6 - exp);
@@ -330,7 +330,7 @@ short* xmaxc;
     for (i = 0; i <= 12; ++i)
     {
 // STRING: SWBF2 0x78709c
-// L"temp1 >= 0 && temp1 < 16"
+// "temp1 >= 0 && temp1 < 16"
         GSM_ASSERT(temp1 >= 0 && temp1 < 16, GSM_ENCODE_C, 0x4d0);
         temp = (short)(input[i] << temp1);
         temp = (short)GSM_MULT(temp, temp2);
@@ -374,15 +374,15 @@ short* output;
         SO = (word)(SASR(*input, 3) << 2);
         ++input;
 // STRING: SWBF2 0x787158
-// L"SO >= -0x4000"
+// "SO >= -0x4000"
         GSM_ASSERT(SO >= -0x4000, GSM_ENCODE_C, 0x5b1);
 // STRING: SWBF2 0x787174
-// L"SO <= 0x3FFC"
+// "SO <= 0x3FFC"
         GSM_ASSERT(SO <= 0x3FFC, GSM_ENCODE_C, 0x5b2);
         s1 = SO - z1;
         z1 = SO;
 // STRING: SWBF2 0x787190
-// L"s1 != MIN_WORD"
+// "s1 != MIN_WORD"
         GSM_ASSERT(s1 != MIN_WORD, GSM_ENCODE_C, 0x5c2);
         L_s2 = s1;
         L_s2 <<= 15;
@@ -503,7 +503,7 @@ word denum;
     int k = 15;
 
 // STRING: SWBF2 0x7871c0
-// L"num >= 0 && denum >= num"
+// "num >= 0 && denum >= num"
     GSM_ASSERT(num >= 0 && denum >= num, GSM_ENCODE_C, 0x6bf);
     if (num == 0)
     {
@@ -546,7 +546,7 @@ void __cdecl Autocorrelation(short* s, int* L_ACF)
     else
     {
 // STRING: SWBF2 0x786ed8
-// L"smax > 0"
+// "smax > 0"
         GSM_ASSERT(smax > 0, GSM_ENCODE_C, 0x265);
         scalauto = (word)(4 - gsm_norm((longword)smax << 16));
     }
@@ -610,7 +610,7 @@ void __cdecl Autocorrelation(short* s, int* L_ACF)
     if (scalauto > 0)
     {
 // STRING: SWBF2 0x786eec
-// L"scalauto <= 4"
+// "scalauto <= 4"
         GSM_ASSERT(scalauto <= 4, GSM_ENCODE_C, 0x2ba);
         for (k = 160; k--; *s++ <<= scalauto);
     }
@@ -636,7 +636,7 @@ void __cdecl Reflection_coefficients(const int* L_ACF, short* r)
     temp = (word)gsm_norm(L_ACF[0]);
 
 // STRING: SWBF2 0x786f08
-// L"temp >= 0 && temp < 32"
+// "temp >= 0 && temp < 32"
     GSM_ASSERT(temp >= 0 && temp < 32, GSM_ENCODE_C, 0x2f4);
 
     for (i = 0; i <= 8; i++)
@@ -669,7 +669,7 @@ void __cdecl Reflection_coefficients(const int* L_ACF, short* r)
         *r = gsm_div(temp, P[0]);
 
 // STRING: SWBF2 0x786f38
-// L"*r >= 0"
+// "*r >= 0"
         GSM_ASSERT(*r >= 0, GSM_ENCODE_C, 0x30c);
         if (P[1] > 0)
         {

@@ -40,7 +40,6 @@ namespace
 
 inline Controllable* GetControllable(GameObject* pObject)
 {
-    typedef Controllable*(__thiscall * GetControllableFn)(GameObject*);
     return pObject->GetControllable();
 }
 

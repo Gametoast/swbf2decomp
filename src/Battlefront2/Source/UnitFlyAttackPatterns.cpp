@@ -25,8 +25,6 @@ namespace
 
     const PblVector3& GetTargetVelocity(const GameObject* pTarget)
     {
-        typedef const Entity*(__thiscall * EntityFn)(const GameObject*);
-        typedef const PblVector3&(__thiscall * VelocityFn)(const Entity*);
         const Entity* pEntity = pTarget->GetEntity();
         return ((const EntityGeometry*)pEntity)->GetVelocity();
     }

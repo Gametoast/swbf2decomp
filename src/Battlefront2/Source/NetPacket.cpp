@@ -90,11 +90,11 @@ NetPacket* NetPacket::Alloc(bool bSmall)
         pPacket = freePackets.PopFront();
         if (!pPacket)
         {
-            for (int i = 0; i < _countof(netBigPackets); ++i)
+            for (int i = 0; i < ARRAYSIZE(netBigPackets); ++i)
             {
                 freeBigPackets.PushBack(&netBigPackets[i]);
             }
-            for (int i = 0; i < _countof(netSmallPackets); ++i)
+            for (int i = 0; i < ARRAYSIZE(netSmallPackets); ++i)
             {
                 freeSmallPackets.PushBack(&netSmallPackets[i]);
             }

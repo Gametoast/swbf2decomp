@@ -270,8 +270,8 @@ bool SpaceAssault::Update(float fDeltaTime)
             }
             float fCurShield = GetCurShield(system.pGameObject);
 
-            const RedColor empty = { 255, 0, 0, 0 };
-            const RedColor full = { 0, 200, 150, 255 };
+            const RedColor empty(255, 0, 0, 0);
+            const RedColor full(0, 200, 150, 255);
             RedColor color = Interpolate(empty, full, fCurShield / fMaxShield);
 
             float* pLastShield = (iTeam == mTeamATT) ? &mLastShieldATT : &mLastShieldDEF;

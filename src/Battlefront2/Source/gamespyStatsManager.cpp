@@ -1,5 +1,5 @@
 #include <string.h>
-#include <unordered_set>
+#include <set>
 #include <vector>
 #include <new>
 #include "GameMemory.h"
@@ -170,7 +170,7 @@ void StatsManager::BeginMatch()
 
 // GLOBAL: SWBF2 0x01ec0c20
 // sStatsLeaderboard
-std::unordered_set<unsigned __int64> sStatsLeaderboard;
+std::set<unsigned __int64> sStatsLeaderboard;
 
 namespace StatsManager
 {

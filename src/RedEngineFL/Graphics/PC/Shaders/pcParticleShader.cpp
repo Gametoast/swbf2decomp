@@ -126,10 +126,10 @@ void pcParticleShader::Begin_Prog1(unsigned int, unsigned int) const
         // scaleTexMatrix
 
         static PblMatrix scaleTexMatrix(
-            PblVector4{ 0.5f, 0.0f, 0.0f, 0.0f },
-            PblVector4{ 0.0f, 0.5f, 0.0f, 0.0f },
-            PblVector4{ 0.0f, 0.0f, 0.5f, 0.0f },
-            PblVector4{ 0.5f, 0.5f, 0.0f, 1.0f });
+            PblVector4(0.5f, 0.0f, 0.0f, 0.0f),
+            PblVector4(0.0f, 0.5f, 0.0f, 0.0f),
+            PblVector4(0.0f, 0.0f, 0.5f, 0.0f),
+            PblVector4(0.5f, 0.5f, 0.0f, 1.0f));
 
         const RedCamera* pCamera = RedRenderer::GetCamera();
         PblMatrix mViewProj = pCamera->GetMatrixInverse() * RedRenderer::GetProjectionMatrix();
@@ -168,10 +168,10 @@ void pcParticleShader::Begin_Fixed(unsigned int uiState, unsigned int) const
     if (uiState == 1)
     {
         // GLOBAL: SWBF2 0x009c97b0
-        static PblMatrix scaleTexMatrix(PblVector4{ 0.5f, 0.0f, 0.0f, 0.0f },
-                                     PblVector4{ 0.0f, -0.5f, 0.0f, 0.0f },
-                                     PblVector4{ 0.0f, 0.0f, 0.0f, 0.0f },
-                                     PblVector4{ 0.5f, 0.5f, 1.0f, 1.0f });
+        static PblMatrix scaleTexMatrix(PblVector4(0.5f, 0.0f, 0.0f, 0.0f),
+                                     PblVector4(0.0f, -0.5f, 0.0f, 0.0f),
+                                     PblVector4(0.0f, 0.0f, 0.0f, 0.0f),
+                                     PblVector4(0.5f, 0.5f, 1.0f, 1.0f));
         // GLOBAL: SWBF2 0x009c9800
         static PblMatrix mProjection;
         // GLOBAL: SWBF2 0x009c9840

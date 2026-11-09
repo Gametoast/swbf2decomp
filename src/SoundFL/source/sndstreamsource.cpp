@@ -100,8 +100,6 @@ void StreamSource::Close()
 // FUNCTION: SWBF2 0x00749c10
 void StreamSource::Flush()
 {
-    typedef StreamPacket* (__thiscall* GetPacketFn)(StreamSource* pThis,
-                                                    unsigned int uiOutput);
 
     mLock.Wait();
     while ((mFlags & flags_Reading) != 0)

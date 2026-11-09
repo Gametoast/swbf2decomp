@@ -1360,17 +1360,17 @@ void PlayerStats::Read(NetPktGroup& group)
     }
 
     group.ReadBits(uValue, 32);
-    auto pWeaponClass = Factory<Weapon, WeaponClass, WeaponDesc>::Find(uValue);
+    WeaponClass* pWeaponClass = Factory<Weapon, WeaponClass, WeaponDesc>::Find(uValue);
     group.ReadBits(uValue, 16);
     mTimePlayedPerWeaponList[0][0] = pWeaponClass;
     mTimePlayedPerWeapon[0][0].Set((float)uValue);
     group.ReadBits(uValue, 32);
-    auto pVehicleClass = Factory<Entity, EntityClass, EntityDesc>::Find(uValue);
+    EntityClass* pVehicleClass = Factory<Entity, EntityClass, EntityDesc>::Find(uValue);
     group.ReadBits(uValue, 16);
     mTimeInsideVehicleList[0][0] = pVehicleClass;
     mTimeInsideVehicle[0][0].Set((float)uValue);
     group.ReadBits(uValue, 32);
-    auto pSoldierClass = Factory<Entity, EntityClass, EntityDesc>::Find(uValue);
+    EntityClass* pSoldierClass = Factory<Entity, EntityClass, EntityDesc>::Find(uValue);
     group.ReadBits(uValue, 16);
     mTimePlayedPerClassList[0][0] = pSoldierClass;
     mTimePlayedPerClass[0][0].Set((float)uValue);

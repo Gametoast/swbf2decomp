@@ -26,8 +26,6 @@ StreamVAD::~StreamVAD()
 // FUNCTION: SWBF2 0x007421a0
 StreamPacket* StreamVAD::GetPacket(unsigned int uiOutput)
 {
-    typedef StreamPacket* (__thiscall* GetPacketFn)(StreamNodeSource* pThis,
-                                                    unsigned int uiOutput);
     (void)uiOutput;
 
     if (GetCurrentPlayState() != playState_playing)

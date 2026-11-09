@@ -131,7 +131,7 @@ void UnitDeathmatchAgent::EnterState()
         {
             break;
         }
-        auto pOwnerCtrl = mCtrl->mOwner->mCtrl;
+        Controller* pOwnerCtrl = mCtrl->mOwner->mCtrl;
         if (!CombatUtil::EngageInCombat(UnitControllerPtr(pOwnerCtrl),
                                         pEnemy->GetControllable()->GetGameObject(), true))
         {

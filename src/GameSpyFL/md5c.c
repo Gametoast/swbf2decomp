@@ -30,13 +30,13 @@ void __cdecl MD5Init(MD5_CTX* pState)
 void __cdecl MD5Update(MD5_CTX* pState, const unsigned char* pData, unsigned int uLength)
 {
     unsigned int uIndex = (pState->count[0] >> 3) & 63;
+    unsigned int uPart = 64 - uIndex;
+    unsigned int i;
     if ((pState->count[0] += (uLength << 3)) < (uLength << 3))
     {
         ++pState->count[1];
     }
     pState->count[1] += uLength >> 29;
-    unsigned int uPart = 64 - uIndex;
-    unsigned int i;
     if (uLength >= uPart)
     {
         MD5CopyBytes(pState->buffer + uIndex, pData, uPart);
@@ -58,8 +58,8 @@ void __cdecl MD5Update(MD5_CTX* pState, const unsigned char* pData, unsigned int
 void __cdecl MD5Final(unsigned char* pDigest, MD5_CTX* pState)
 {
     unsigned char aucBits[8];
-    MD5EncodeWords(aucBits, pState->count, 8);
     unsigned int uIndex = (pState->count[0] >> 3) & 63;
+    MD5EncodeWords(aucBits, pState->count, 8);
     MD5Update(pState, md5Padding, (uIndex < 56 ? 56 : 120) - uIndex);
     MD5Update(pState, aucBits, 8);
     MD5EncodeWords(pDigest, pState->state, 16);
@@ -125,7 +125,8 @@ void __cdecl MD5Transform(unsigned int* pState, const unsigned char* pBlock)
 // FUNCTION: SWBF2 0x005a2f40
 void __cdecl MD5EncodeWords(unsigned char* pDest, const unsigned int* pSource, unsigned int uLength)
 {
-    for (unsigned int i = 0, j = 0; j < uLength; ++i, j += 4)
+    unsigned int i, j;
+    for (i = 0, j = 0; j < uLength; ++i, j += 4)
     {
         pDest[j] = (unsigned char)(pSource[i] & 0xff);
         pDest[j + 1] = (unsigned char)((pSource[i] >> 8) & 0xff);
@@ -137,7 +138,8 @@ void __cdecl MD5EncodeWords(unsigned char* pDest, const unsigned int* pSource, u
 // FUNCTION: SWBF2 0x005a2f90
 void __cdecl MD5DecodeWords(unsigned int* pWords, const unsigned char* pBlock, unsigned int uLength)
 {
-    for (unsigned int i = 0, j = 0; j < uLength; ++i, j += 4)
+    unsigned int i, j;
+    for (i = 0, j = 0; j < uLength; ++i, j += 4)
     {
         pWords[i] = (unsigned int)pBlock[j] |
                     ((unsigned int)pBlock[j + 1] << 8) |
@@ -161,7 +163,8 @@ void __cdecl MD5ClearBytes(void* pDest, int iValue, unsigned int uLength)
 // FUNCTION: SWBF2 0x005a3010
 void __cdecl MD5Print(const unsigned char* pDigest, char* pcHex)
 {
-    for (unsigned int i = 0; i < 16; ++i)
+    unsigned int i;
+    for (i = 0; i < 16; ++i)
     {
         sprintf(pcHex, "%02x", pDigest[i]);
         pcHex += 2;

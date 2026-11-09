@@ -464,12 +464,12 @@ static void pcSetRingBoundingBox(pcRedPrimitive* pPrim, const PblVector3& vWorld
 {
     pPrim->m_bbox._vMin = vWorldMin;
     pPrim->m_bbox._vMax = vWorldMax;
-    PblVector3 vBoxMin = {vWorldMin.x, vWorldMin.y, vWorldMin.z};
-    PblVector3 vExtent = {vWorldMax.x - vWorldMin.x, vWorldMax.y - vWorldMin.y,
-                               vWorldMax.z - vWorldMin.z};
+    PblVector3 vBoxMin(vWorldMin.x, vWorldMin.y, vWorldMin.z);
+    PblVector3 vExtent(vWorldMax.x - vWorldMin.x, vWorldMax.y - vWorldMin.y,
+                               vWorldMax.z - vWorldMin.z);
     PblVector3 vScale = vExtent * (1.0f / 65535.0f);
-    PblVector3 vScaleInv = {1.0f / vScale.x, 1.0f / vScale.y,
-                                 1.0f / vScale.z};
+    PblVector3 vScaleInv(1.0f / vScale.x, 1.0f / vScale.y,
+                                 1.0f / vScale.z);
     CompressedPos::s_vMin = vBoxMin;
     CompressedPos::s_vScale = vScale;
     CompressedPos::s_vScaleInv = vScaleInv;

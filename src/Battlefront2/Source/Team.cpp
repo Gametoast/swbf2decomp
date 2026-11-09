@@ -49,7 +49,7 @@ int Team::sTeamMaxReinforcementsOverride[2] = { -1, -1 };
 unsigned int Team::sWinningTeams;
 
 // GLOBAL: SWBF2 0x007ebc98
-RedColor gFriendColor = { 0x01, 0x56, 0xd5, 0xff };
+RedColor gFriendColor(0x01, 0x56, 0xd5, 0xff);
 // SYNTHETIC: SWBF2 0x00406890
 // `dynamic initializer for 'gEnemyColor''
 
@@ -399,7 +399,7 @@ void Team::InitialUpdate()
         }
         else if (mAffiliation[i] > 0)
         {
-            RedColor friendColor = { 0x01, 0x56, 0xd5, 0xff };
+            RedColor friendColor(0x01, 0x56, 0xd5, 0xff);
             mColor[i] = friendColor;
         }
         else if (mAffiliation[i] < 0)
@@ -484,7 +484,6 @@ void Team::InitialUpdate()
         break;
     }
 
-    typedef void(__thiscall * CharacterInitialUpdateFn)(Character*);
     for (int i = 0; i < mMemberCount; ++i)
     {
         Character* pMember = mMemberArray[i];

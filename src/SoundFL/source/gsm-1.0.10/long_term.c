@@ -31,7 +31,7 @@ void __cdecl Calculation_of_the_LTP_parameters(const short* d, const short* dp, 
     else
     {
 // STRING: SWBF2 0x787250
-// L"dmax > 0"
+// "dmax > 0"
         GSM_ASSERT(dmax > 0, LONG_TERM_C, 0xb8);
         temp = (word)gsm_norm((longword)dmax << 16);
     }
@@ -46,7 +46,7 @@ void __cdecl Calculation_of_the_LTP_parameters(const short* d, const short* dp, 
     }
 
 // STRING: SWBF2 0x787264
-// L"scal >= 0"
+// "scal >= 0"
     GSM_ASSERT(scal >= 0, LONG_TERM_C, 0xbf);
 
     for (k = 0; k <= 39; k++)
@@ -96,12 +96,12 @@ void __cdecl Calculation_of_the_LTP_parameters(const short* d, const short* dp, 
     L_max <<= 1;
 
 // STRING: SWBF2 0x787278
-// L"scal <= 100 && scal >= -100"
+// "scal <= 100 && scal >= -100"
     GSM_ASSERT(scal <= 100 && scal >= -100, LONG_TERM_C, 0xf4);
     L_max = L_max >> (6 - scal);
 
 // STRING: SWBF2 0x7872b0
-// L"Nc <= 120 && Nc >= 40"
+// "Nc <= 120 && Nc >= 40"
     GSM_ASSERT(Nc <= 120 && Nc >= 40, LONG_TERM_C, 0xf7);
 
     L_power = 0;
@@ -178,44 +178,44 @@ short* predicted;
 short* lag;
 short* gain;
 {
-    const wchar_t* file = 
+    const char* file =
 // STRING: SWBF2 0x787214
-L"source\\gsm-1.0.10\\long_term.c";
+"source\\gsm-1.0.10\\long_term.c";
     if (!input)
     {
-        _wassert(
+        _assert(
 // STRING: SWBF2 0x7872dc
-L"d", file, 0x370);
+"d", file, 0x370);
     }
     if (!history)
     {
-        _wassert(
+        _assert(
 // STRING: SWBF2 0x7872e0
-L"dp", file, 0x370);
+"dp", file, 0x370);
     }
     if (!residual)
     {
-        _wassert(
+        _assert(
 // STRING: SWBF2 0x7872e8
-L"e", file, 0x370);
+"e", file, 0x370);
     }
     if (!predicted)
     {
-        _wassert(
+        _assert(
 // STRING: SWBF2 0x7872ec
-L"dpp", file, 0x371);
+"dpp", file, 0x371);
     }
     if (!lag)
     {
-        _wassert(
+        _assert(
 // STRING: SWBF2 0x7872f4
-L"Nc", file, 0x371);
+"Nc", file, 0x371);
     }
     if (!gain)
     {
-        _wassert(
+        _assert(
 // STRING: SWBF2 0x7872fc
-L"bc", file, 0x371);
+"bc", file, 0x371);
     }
     Calculation_of_the_LTP_parameters(input, history, gain, lag);
     Long_term_analysis_filtering(*gain, *lag, history, input, predicted, residual);
@@ -235,14 +235,14 @@ short* history;
     effectiveLag = lag < 40 || lag > 120 ? state->nrp : lag;
     state->nrp = effectiveLag;
     if (!(effectiveLag >= 40 && effectiveLag <= 120))
-        _wassert(
+        _assert(
 // STRING: SWBF2 0x787304
-L"Nr >= 40 && Nr <= 120", LONG_TERM_C, 0x3a0);
+"Nr >= 40 && Nr <= 120", LONG_TERM_C, 0x3a0);
     factor = gsm_QLB[gain];
     if (factor == MIN_WORD)
-        _wassert(
+        _assert(
 // STRING: SWBF2 0x787330
-L"brp != MIN_WORD", LONG_TERM_C, 0x3a9);
+"brp != MIN_WORD", LONG_TERM_C, 0x3a9);
     for (k = 0; k <= 39; ++k)
     {
         predicted = (word)GSM_MULT_R(factor, history[k - effectiveLag]);

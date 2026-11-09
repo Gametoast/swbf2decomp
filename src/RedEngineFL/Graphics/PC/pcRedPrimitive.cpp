@@ -23,9 +23,9 @@ PblVector3 CompressedPos::s_vScaleInv(65535.0f, 65535.0f, 65535.0f);
 // GLOBAL: SWBF2 0x007f587c
 PblVector3 CompressedPosXY::s_vMin;
 // GLOBAL: SWBF2 0x007de288
-PblVector3 CompressedPosXY::s_vScale = { 1.0f / 65535.0f, 1.0f / 65535.0f, 1.0f / 65535.0f };
+PblVector3 CompressedPosXY::s_vScale(1.0f / 65535.0f, 1.0f / 65535.0f, 1.0f / 65535.0f);
 // GLOBAL: SWBF2 0x007de294
-PblVector3 CompressedPosXY::s_vScaleInv = { 65535.0f, 65535.0f, 65535.0f };
+PblVector3 CompressedPosXY::s_vScaleInv(65535.0f, 65535.0f, 65535.0f);
 
 // FUNCTION: SWBF2 0x006ad3e0
 pcRedPrimitive::pcRedPrimitive(D3DPRIMITIVETYPE primType,

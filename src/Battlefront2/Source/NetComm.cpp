@@ -80,10 +80,10 @@ struct JoinSlot
 };
 #pragma pack(pop)
 
-static_assert(sizeof(JoinSlot) == 28, "JoinSlot size");
-static_assert(__alignof(JoinSlot) == 4, "JoinSlot alignment");
-static_assert(offsetof(JoinSlot, reqTime) == 0, "JoinSlot request time offset");
-static_assert(offsetof(JoinSlot, addr) == 4, "JoinSlot address offset");
+typedef char JoinSlotHasExpectedSize[(sizeof(JoinSlot) == 28) ? 1 : -1];
+typedef char JoinSlotHasExpectedAlignment[(__alignof(JoinSlot) == 4) ? 1 : -1];
+typedef char JoinSlotHasExpectedRequestTimeOffset[(offsetof(JoinSlot, reqTime) == 0) ? 1 : -1];
+typedef char JoinSlotHasExpectedAddressOffset[(offsetof(JoinSlot, addr) == 4) ? 1 : -1];
 
 // SYNTHETIC: SWBF2 0x00404430
 // `dynamic initializer for 'joinSlots''
@@ -91,7 +91,7 @@ static_assert(offsetof(JoinSlot, addr) == 4, "JoinSlot address offset");
 // GLOBAL: SWBF2 0x01ecb9c0
 // joinSlots
 static JoinSlot joinSlots[64];
-static_assert(sizeof(joinSlots) == 1792, "joinSlots array size");
+typedef char JoinSlotsHasExpectedSize[(sizeof(joinSlots) == 1792) ? 1 : -1];
 
 // GLOBAL: SWBF2 0x01fa3d60
 // netTime
@@ -167,7 +167,7 @@ void NetComm::Init()
     netLocalIndex[0] = -1;
     netLocalIndex[1] = -1;
 
-    for (int i = 0; i < _countof(netDests); i++)
+    for (int i = 0; i < ARRAYSIZE(netDests); i++)
     {
         netDests[i].Init();
     }
@@ -197,7 +197,7 @@ void NetComm::Create(bool bMission)
     netOutBytes = 0;
 
     const float fTime = GetTime();
-    for (int i = 0; i < _countof(netDests); i++)
+    for (int i = 0; i < ARRAYSIZE(netDests); i++)
     {
         NetDest& dest = netDests[i];
         if (!bMission)
@@ -214,7 +214,7 @@ void NetComm::Create(bool bMission)
     }
 
     inQueue.Reset();
-    for (unsigned int i = 0; i < _countof(inPktGroups); i++)
+    for (unsigned int i = 0; i < ARRAYSIZE(inPktGroups); i++)
     {
         inPktGroups[i].Reset();
     }
@@ -268,7 +268,7 @@ void NetComm::Reset()
 void NetComm::BeginShell()
 {
     const float fTime = GetTime();
-    for (int i = 0; i < _countof(netDests); ++i)
+    for (int i = 0; i < ARRAYSIZE(netDests); ++i)
     {
         netDests[i].lastRecv = fTime;
     }
@@ -529,7 +529,7 @@ void ClearGroup(NetPktGroup& group, int iDest)
 void NetComm::Disconnect(int iDest)
 {
     ClearGroup(inQueue, iDest);
-    for (int i = 0; i < _countof(inPktGroups); ++i)
+    for (int i = 0; i < ARRAYSIZE(inPktGroups); ++i)
     {
         ClearGroup(inPktGroups[i], iDest);
     }
@@ -568,11 +568,11 @@ void NetCommP::FreePackets()
     else
     {
         inQueue.Free();
-        for (int i = 0; i < _countof(netDests); ++i)
+        for (int i = 0; i < ARRAYSIZE(netDests); ++i)
         {
             netDests[i].outQueue.Free();
         }
-        for (int i = 0; i < _countof(inPktGroups); ++i)
+        for (int i = 0; i < ARRAYSIZE(inPktGroups); ++i)
         {
             inPktGroups[i].Free();
         }
@@ -626,7 +626,7 @@ void CleanGroups(int iDest, int iSequence)
     {
         iOld += 0x10000;
     }
-    for (int i = 0; i < _countof(inPktGroups); ++i)
+    for (int i = 0; i < ARRAYSIZE(inPktGroups); ++i)
     {
         NetPktGroup& group = inPktGroups[i];
         if (!group.pktCount)
@@ -661,7 +661,7 @@ bool RecvGroup(NetPktGroup& complete, NetPacket* pPacket)
     }
 
     NetPktGroup* pPartial = 0;
-    for (int i = 0; i < _countof(inPktGroups); ++i)
+    for (int i = 0; i < ARRAYSIZE(inPktGroups); ++i)
     {
         NetPktGroup& group = inPktGroups[i];
         if (!group.pktCount)
@@ -679,7 +679,7 @@ bool RecvGroup(NetPktGroup& complete, NetPacket* pPacket)
     }
     if (!pPartial)
     {
-        for (int i = 0; i < _countof(inPktGroups); ++i)
+        for (int i = 0; i < ARRAYSIZE(inPktGroups); ++i)
         {
             if (!inPktGroups[i].pktCount)
             {
@@ -854,7 +854,7 @@ int __fastcall FindSource(const void* pSource, unsigned int uType)
     }
 
     const unsigned __int64 sourceId = address.mGalaxyId.ToUint64();
-    for (; iDest < _countof(netDests); ++iDest)
+    for (; iDest < ARRAYSIZE(netDests); ++iDest)
     {
         if (NetComm::IsLAN())
         {
@@ -1229,7 +1229,7 @@ void __fastcall NetCommP::Connect(int iDest, const void* pAddress)
 int __fastcall NetCommP::FindJoinSource(const int* pAddress)
 {
     const float fNow = NetComm::GetTime();
-    for (int i = 0; i < _countof(joinSlots); ++i)
+    for (int i = 0; i < ARRAYSIZE(joinSlots); ++i)
     {
         if (IsSame(pAddress, &joinSlots[i].addr))
         {
@@ -1237,7 +1237,7 @@ int __fastcall NetCommP::FindJoinSource(const int* pAddress)
             return i + 69;
         }
     }
-    for (int i = 0; i < _countof(joinSlots); ++i)
+    for (int i = 0; i < ARRAYSIZE(joinSlots); ++i)
     {
         const float fLast = joinSlots[i].reqTime;
         if (fNow - fLast > 1.0f || fLast == 0.0f)

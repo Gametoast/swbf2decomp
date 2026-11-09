@@ -48,13 +48,13 @@ PblList<RedLight> RedLight::s_VisibleSpotLightList;
 PblList<RedLight> RedLight::s_VisibleDirectionalLightList;
 
 // GLOBAL: SWBF2 0x007df0a4
-PblVector4 RedShadowMap::_vShadowMapTransformU = { 1.0f, 0.0f, 0.0f, 0.0f };
+PblVector4 RedShadowMap::_vShadowMapTransformU(1.0f, 0.0f, 0.0f, 0.0f);
 
 // GLOBAL: SWBF2 0x007df0b4
-PblVector4 RedShadowMap::_vShadowMapTransformV = { 0.0f, 0.0f, 1.0f, 0.0f };
+PblVector4 RedShadowMap::_vShadowMapTransformV(0.0f, 0.0f, 1.0f, 0.0f);
 
 // GLOBAL: SWBF2 0x007df0c4
-PblVector4 RedShadowMap::_vShadowMapTransformW = { 0.0f, 0.0f, 0.0f, 1.0f };
+PblVector4 RedShadowMap::_vShadowMapTransformW(0.0f, 0.0f, 0.0f, 1.0f);
 
 static const float LIGHT_MAX_PREFERED_CAMERA_DISTANCE = 60.0f;
 

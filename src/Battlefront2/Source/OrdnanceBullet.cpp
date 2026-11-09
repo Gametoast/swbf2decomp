@@ -58,7 +58,7 @@ PblHash OrdnanceBulletClass::rttiHashOrdnanceBulletClass("OrdnanceBulletClass");
 // OrdnanceBulletClass::rttiNameOrdnanceBulletClass
 const char OrdnanceBulletClass::rttiNameOrdnanceBulletClass[] = "OrdnanceBulletClass";
 
-static const RedColor kColorZero = { 0, 0, 0, 0 };
+static const RedColor kColorZero(0, 0, 0, 0);
 
 // FUNCTION: SWBF2 0x005fbb60
 OrdnanceBulletClass::OrdnanceBulletClass(unsigned int uHash)

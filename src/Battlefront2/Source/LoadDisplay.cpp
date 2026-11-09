@@ -114,15 +114,15 @@ static const float LOADING_TIPS_POSITION_X = 0.35f;
 static const float LOADING_TIPS_POSITION_Y = 0.18f;
 
 // GLOBAL: SWBF2 0x0079193c
-static const RedColor DEFAULT_LED_COLOR = { 0xc8, 0xc8, 0xc8, 0xff };
+static const RedColor DEFAULT_LED_COLOR(0xc8, 0xc8, 0xc8, 0xff);
 
 // GLOBAL: SWBF2 0x007ebb38
-static RedColor MISSION_NAME_COLOR = { 0xc8, 0xc8, 0xc8, 0xff };
+static RedColor MISSION_NAME_COLOR(0xc8, 0xc8, 0xc8, 0xff);
 // GLOBAL: SWBF2 0x007ebb1c
-static RedColor MODE_NAME_COLOR = { 0xc8, 0xc8, 0xc8, 0xff };
+static RedColor MODE_NAME_COLOR(0xc8, 0xc8, 0xc8, 0xff);
 
 // GLOBAL: SWBF2 0x007ebb18
-static RedColor DEFAULT_LEVELTIPS_TEXT_COLOR = { 0xc8, 0xc8, 0xff, 0xff };
+static RedColor DEFAULT_LEVELTIPS_TEXT_COLOR(0xc8, 0xc8, 0xff, 0xff);
 
 // SYNTHETIC: SWBF2 0x00404120
 // `dynamic initializer for 'DEFAULT_LED_TEXTURE_HASH''
@@ -275,7 +275,7 @@ void LoadDisplay::BuildCampaignLayout()
 {
     const float fWidth = (float)RedInterfaceScreen::GetScreenWidth();
     const float fHeight = (float)RedInterfaceScreen::GetScreenHeight();
-    const RedColor color = { 0xc8, 0xc8, 0xc8, 0xff };
+    const RedColor color(0xc8, 0xc8, 0xc8, 0xff);
 
     SetTextElementDefaults(m_textCampaignTitle);
     m_textCampaignTitle.SetTextAlign(RedTextElement::TEXT_HALIGN_CENTER,

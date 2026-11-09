@@ -78,7 +78,7 @@ void RedWarning::DialogBoxMessage(char const* pcFormat, ...)
     va_list args;
 
     va_start(args, pcFormat);
-    vsnprintf(acMessage, sizeof(acMessage), pcFormat, args);
+    _vsnprintf(acMessage, sizeof(acMessage) - 1, pcFormat, args);
     va_end(args);
 
     apcDialogText[0] = kapcSEVERITYLONG[g_eSeverity];
@@ -302,7 +302,7 @@ void RedWarning::LogMessage(char const* pcFormat, ...)
 
     va_start(args, pcFormat);
     char* pcText = acFormatted;
-    vsnprintf(acMessage, sizeof(acMessage), pcFormat, args);
+    _vsnprintf(acMessage, sizeof(acMessage) - 1, pcFormat, args);
     va_end(args);
 
     bool bBreak = false;

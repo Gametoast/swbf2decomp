@@ -24,7 +24,7 @@ pcRedShader* OrdnanceGrapplingHook::sShader;
 
 
 // GLOBAL: SWBF2 0x007eb740
-static RedColor kCableColor = { 0xcc, 0xcc, 0xcc, 0xff };
+static RedColor kCableColor(0xcc, 0xcc, 0xcc, 0xff);
 
 
 

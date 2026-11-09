@@ -398,8 +398,9 @@ void ControllerManager::DoPeriodicUpdate(float fDeltaTime)
 // FUNCTION: SWBF2 0x00486370
 void ControllerManager::Update(float fDeltaTime)
 {
-    for (PblList<PlayerController>::Itor it(*sPlayerCtrls); PlayerController* pCtrl = it; )
+    for (PblList<PlayerController>::Itor it(*sPlayerCtrls); it; )
     {
+        PlayerController* pCtrl = it;
         ++it;
         pCtrl->Update(fDeltaTime);
     }
@@ -433,8 +434,9 @@ void ControllerManager::Update(float fDeltaTime)
         sAICtrls->Add(pNode, pCtrl, pCtrl->mNextUpdateTime);
     }
 
-    for (PblOrderedList<UnitController, float>::Itor it(*sAICtrls); UnitController* pCtrl = it; )
+    for (PblOrderedList<UnitController, float>::Itor it(*sAICtrls); it; )
     {
+        UnitController* pCtrl = it;
         ++it;
         pCtrl->UpdateLowLevel(fDeltaTime);
     }

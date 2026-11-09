@@ -435,7 +435,7 @@ void Music::StopAll()
         if (pMusic->mStream)
         {
             Snd::SourceTransport* pTransport = pMusic->mStream;
-            pMusic->mStream->Snd::SourceBus::Stop(pTransport);
+            pMusic->mStream->SourceBus::Stop(pTransport);
             pTransport->Stop();
         }
 

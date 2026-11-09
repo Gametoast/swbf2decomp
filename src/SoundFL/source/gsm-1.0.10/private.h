@@ -28,9 +28,9 @@ typedef unsigned long ulongword;
 #define GSM_MAGIC 0xD
 
 #define GSM_ASSERT(e, file, line) \
-    (void)((!!(e)) || (_wassert(_CRT_WIDE(#e), file, line), 0))
-#define GSM_ENCODE_C L"source\\gsm-1.0.10\\gsm_encode.c"
-#define LONG_TERM_C L"source\\gsm-1.0.10\\long_term.c"
+    (void)((!!(e)) || (_assert(#e, file, line), 0))
+#define GSM_ENCODE_C "source\\gsm-1.0.10\\gsm_encode.c"
+#define LONG_TERM_C "source\\gsm-1.0.10\\long_term.c"
 
 
 struct gsm_state

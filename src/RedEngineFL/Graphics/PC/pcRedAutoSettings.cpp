@@ -4,7 +4,6 @@
 #include <mmsystem.h>
 
 #include <ctype.h>
-#include <intrin.h>
 #include <stdio.h>
 #include <string.h>
 
@@ -544,8 +543,6 @@ unsigned long GetCpuSpeed()
     unsigned int uiStart = 0;
     unsigned int uiEnd = 0;
 
-    int aCpuInfo[4];
-
     DWORD dwT0 = timeGetTime();
     DWORD dwT1;
 
@@ -555,14 +552,30 @@ unsigned long GetCpuSpeed()
     }
     while ((int)(dwT1 - dwT0) <= 1);
 
-    __cpuid(aCpuInfo, 0);
-    uiStart = (unsigned int)__rdtsc();
+    __asm
+    {
+        xor eax, eax
+        xor ebx, ebx
+        xor ecx, ecx
+        xor edx, edx
+        cpuid
+        rdtsc
+        mov uiStart, eax
+    }
 
     while ((int)(timeGetTime() - dwT1) <= 1000)
         ;
 
-    __cpuid(aCpuInfo, 0);
-    uiEnd = (unsigned int)__rdtsc();
+    __asm
+    {
+        xor eax, eax
+        xor ebx, ebx
+        xor ecx, ecx
+        xor edx, edx
+        cpuid
+        rdtsc
+        mov uiEnd, eax
+    }
 
     return (uiEnd - uiStart) / 1000000;
 }

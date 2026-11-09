@@ -69,7 +69,7 @@ void GameModel::PrintDebugInfo(const RedModel* pModel, const PblVector3& vPos)
     if (fDist > 0.0f && fDist < 100.0f)
     {
         int iNumVtx = pModel->_uiNumStripVtx;
-        RedColor color = { 0xff, 0xff, 0xff, 0xff };
+        RedColor color(0xff, 0xff, 0xff, 0xff);
         if (iNumVtx > 100)
         {
             if (iNumVtx > 1000)

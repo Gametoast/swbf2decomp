@@ -1340,7 +1340,7 @@ void pcTerrainShader::_StaticInit() const
     s_pFarDetailTexture = 0;
     memset(s_TextureTransform, 0, sizeof(s_TextureTransform));
     s_fDetailFadeDistance = 32.0f;
-    const PblVector4 vZero = { 0.0f, 0.0f, 0.0f, 0.0f };
+    const PblVector4 vZero(0.0f, 0.0f, 0.0f, 0.0f);
     s_DetailTextureTransform[0] = vZero;
     s_fStaticBumpFactor = 0.5f;
     s_DetailTextureTransform[1] = vZero;

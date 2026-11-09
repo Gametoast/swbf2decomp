@@ -113,7 +113,7 @@ void FishParticleManager::PlatformCleanup()
 }
 
 // GLOBAL: SWBF2 0x0078c5f4
-const RedColor kFishColor = { 0xcc, 0xcc, 0xcc, 0xff };
+const RedColor kFishColor(0xcc, 0xcc, 0xcc, 0xff);
 
 struct FishVertex
 {

@@ -7,7 +7,6 @@
 #include <ctype.h>
 #include <windows.h>
 #include <string>
-#include <unordered_map>
 
 #include "PebbleFL/Common/PblHashTable.h"
 #include "PebbleFL/Common/PblUnicode.h"

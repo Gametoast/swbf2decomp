@@ -1,0 +1,75 @@
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <VC71Lib Condition="'$(VC71Lib)' == ''">$(VC71Root)\Lib</VC71Lib>
+    <IncludePath>$(VC71Root)\Include;$(DXSDK_DIR)\Include;$(WindowsSdkDir_71A)include;$(VCInstallDir)include</IncludePath>
+    <LibraryPath>$(VC71Lib);$(WindowsSdkDir_71A)lib;$(DXSDK_DIR)\Lib\x86</LibraryPath>
+    <ExecutablePath>$(VC71Root)\Bin;$(ExecutablePath)</ExecutablePath>
+    <CLToolPath>$(VC71Root)\Bin</CLToolPath>
+    <LinkToolPath>$(VC71Root)\Bin</LinkToolPath>
+    <LIBToolPath>$(VC71Root)\Bin</LIBToolPath>
+    <LIBToolExe>link.exe</LIBToolExe>
+    <RCToolPath>$(VC71Root)\Bin</RCToolPath>
+    <VC71TaskSource>$(MSBuildThisFileDirectory)VC71Tasks.cs</VC71TaskSource>
+    <VC71TaskAssembly>$(MSBuildProjectDirectory)\$(IntDir)VC71Tasks.dll</VC71TaskAssembly>
+  </PropertyGroup>
+  <ItemDefinitionGroup>
+    <ClCompile>
+      <PreprocessorDefinitions>_WIN32_WINNT=0x0501;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <OmitFramePointers>false</OmitFramePointers>
+      <DebugInformationFormat>OldStyle</DebugInformationFormat>
+      <ExceptionHandling>Sync</ExceptionHandling>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <WarningLevel>Level3</WarningLevel>
+      <FloatingPointModel />
+      <EnablePREfast />
+      <ErrorReporting />
+      <TreatWChar_tAsBuiltInType />
+      <ForceConformanceInForLoopScope />
+      <BufferSecurityCheck />
+    </ClCompile>
+    <ResourceCompile>
+      <SuppressStartupBanner />
+    </ResourceCompile>
+    <Lib>
+      <LinkErrorReporting />
+    </Lib>
+    <Link>
+      <LinkErrorReporting />
+      <RandomizedBaseAddress />
+      <DataExecutionPrevention />
+      <ImageHasSafeExceptionHandlers>false</ImageHasSafeExceptionHandlers>
+      <MinimumRequiredVersion>4.00</MinimumRequiredVersion>
+      <TerminalServerAware>false</TerminalServerAware>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)' == 'Release'">
+    <ClCompile>
+      <Optimization>MaxSpeed</Optimization>
+      <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
+      <StringPooling>true</StringPooling>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+    </ClCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)' == 'Debug'">
+    <ClCompile>
+      <Optimization>Disabled</Optimization>
+      <InlineFunctionExpansion>Disabled</InlineFunctionExpansion>
+    </ClCompile>
+  </ItemDefinitionGroup>
+  <UsingTask TaskName="CL" AssemblyFile="$(VC71TaskAssembly)" />
+  <UsingTask TaskName="Link" AssemblyFile="$(VC71TaskAssembly)" />
+  <UsingTask TaskName="LIB" AssemblyFile="$(VC71TaskAssembly)" />
+  <Target Name="ValidateVC71">
+    <Error Condition="'$(VC71Root)' == '' Or !Exists('$(CLToolPath)\cl.exe')"
+           Text="Set VC71Root to the Visual C++ 7.1 installation containing Bin and Include." />
+    <Error Condition="!Exists('$(VC71Lib)\libcmt.lib')" Text="Set VC71Lib to the Visual C++ 7.1 runtime library directory." />
+    <Error Condition="!Exists('$(DXSDK_DIR)\Include\d3dx9.h')" Text="Set DXSDK_DIR to the June 2010 DirectX SDK installation." />
+  </Target>
+  <Target Name="PrepareVC71Tasks" BeforeTargets="PrepareForBuild" DependsOnTargets="ValidateVC71"
+          Inputs="$(VC71TaskSource)" Outputs="$(VC71TaskAssembly)">
+    <MakeDir Directories="$(IntDir)" />
+    <Csc Sources="$(VC71TaskSource)" OutputAssembly="$(VC71TaskAssembly)" TargetType="Library"
+         References="$(VCTargetsPath)\Microsoft.Build.CppTasks.Common.dll;$(MSBuildToolsPath)\Microsoft.Build.Framework.dll;$(MSBuildToolsPath)\Microsoft.Build.Utilities.v12.0.dll" />
+  </Target>
+</Project>

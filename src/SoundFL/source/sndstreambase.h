@@ -201,8 +201,13 @@ inline StreamBase::Info* StreamBase::FindInfoByIndex(unsigned int uiIndex) const
 // FUNCTION: SWBF2 0x0059b4e0
 inline StreamBase::Segment* StreamBase::FindSegment(unsigned int uiSegmentID) const
 {
-    for (InfoItor itor(mInfoList); const Info* pInfo = itor.GetInfo(); ++itor)
+    for (InfoItor itor(mInfoList); ; ++itor)
     {
+        const Info* pInfo = itor.GetInfo();
+        if (!pInfo)
+        {
+            break;
+        }
         unsigned int uiKey = uiSegmentID;
         Segment* pSegment = (Segment*)bsearch(&uiKey, pInfo->mSegments, pInfo->mNumSegments,
                                               sizeof(Segment), Segment::CompareSearch);

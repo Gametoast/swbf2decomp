@@ -41,7 +41,7 @@ EndDisplay* EndDisplay::sInstance;
 bool EndDisplay::sCanRender = true;
 
 // GLOBAL: SWBF2 0x007eb7e4
-static RedColor sColor[2] = { { 0xc0, 0x40, 0x40, 0xff }, { 0x01, 0x56, 0xd5, 0xff } };
+static RedColor sColor[2] = { RedColor(0xc0, 0x40, 0x40, 0xff), RedColor(0x01, 0x56, 0xd5, 0xff) };
 // GLOBAL: SWBF2 0x00788f00
 static float sTexcoords[4][2] = { { 0.0f, 0.5f }, { 1.0f, 1.0f }, { 0.0f, 0.0f }, { 1.0f, 0.5f } };
 
@@ -162,7 +162,7 @@ void EndDisplay::Hide()
     {
         for (unsigned int i = 0; i < CameraManager::sInstance->m_iNumCam; ++i)
         {
-            RedColor clear = { 0, 0, 0, 0 };
+            RedColor clear(0, 0, 0, 0);
             FLRenderer::SetTransitionOverlayColor(i, clear);
         }
     }
@@ -186,7 +186,7 @@ void EndDisplay::HideCallback(void* pData)
     pThis->mHideIt = true;
     for (unsigned int i = 0; i < CameraManager::sInstance->m_iNumCam; ++i)
     {
-        RedColor black = { 0, 0, 0, 0xff };
+        RedColor black(0, 0, 0, 0xff);
         FLRenderer::SetTransitionOverlayColor(i, black);
     }
 }

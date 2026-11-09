@@ -1050,33 +1050,36 @@ void GameState::State::Exit()
 {
 }
 
+typedef GameState::MissionState::State MissionSubState;
+typedef GameState::MissionState::PlayState::State PlaySubState;
+
 // FUNCTION: SWBF2 0x005395a0
-void GameState::MissionState::State::Enter()
+void MissionSubState::Enter()
 {
 }
 
 // FUNCTION: SWBF2 0x005395b0
-void GameState::MissionState::State::Update(float, float)
+void MissionSubState::Update(float, float)
 {
 }
 
 // FUNCTION: SWBF2 0x005395c0
-void GameState::MissionState::State::Exit()
+void MissionSubState::Exit()
 {
 }
 
 // FUNCTION: SWBF2 0x005395d0
-void GameState::MissionState::PlayState::State::Enter()
+void PlaySubState::Enter()
 {
 }
 
 // FUNCTION: SWBF2 0x005395e0
-void GameState::MissionState::PlayState::State::Update(float, float)
+void PlaySubState::Update(float, float)
 {
 }
 
 // FUNCTION: SWBF2 0x005395f0
-void GameState::MissionState::PlayState::State::Exit()
+void PlaySubState::Exit()
 {
 }
 

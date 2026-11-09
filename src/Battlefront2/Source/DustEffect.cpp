@@ -583,7 +583,7 @@ Entity* CloudClusterClass::Build(const EntityDesc& desc)
 void CloudClusterClass::RenderDustEffects(const PblVector3& vPos, unsigned int uSeed, unsigned int uiFlags)
 {
     PblMatrix matrix = gMatrixIdentity;
-    PblRandom random = { uSeed ^ 0xc71c2830 };
+    PblRandom random(uSeed ^ 0xc71c2830);
     // SYNTHETIC: SWBF2 0x00766ed0
     // `CloudClusterClass::RenderDustEffects'::`2'::`dynamic atexit destructor for 'positionHeap''
 

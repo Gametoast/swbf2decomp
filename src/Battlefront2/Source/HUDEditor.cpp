@@ -88,7 +88,7 @@ HUD::Editor::Editor()
 
     mBackdrop.Init();
 
-    const RedColor cBackdrop = { 0x00, 0x44, 0x00, 0x80 };
+    const RedColor cBackdrop(0x00, 0x44, 0x00, 0x80);
     mBackdrop.m_color = cBackdrop;
 
     mBackdrop.Enable(true);
@@ -671,7 +671,7 @@ void HUD::Editor::Update(RawControllerInputs* const pInputs, float fDelta)
             mScreenElement.AddElement(&mSafeZone);
             mSafeZone.Clear();
 
-            const RedColor cSafeZone = { 0x00, 0xff, 0x00, 0xbf };
+            const RedColor cSafeZone(0x00, 0xff, 0x00, 0xbf);
             mSafeZone.m_color = cSafeZone;
 
             float fLeft, fTop, fRight, fBottom;

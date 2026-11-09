@@ -224,7 +224,7 @@ void FogCloudEffect::Render(unsigned int value) const
     void* pVertices = pVertexBuffer->Lock(usNumVertices, uiStartVertex);
     unsigned short* pIndices = pIndexBuffer->Lock(usNumIndices, uiStartIndex);
 
-    PblRandom random = { 0xC71C2831u };
+    PblRandom random(0xC71C2831u);
     unsigned short usVertex = 0;
     unsigned short usIndex = 0;
     for (unsigned int uiParticle = 0; uiParticle < PARTICLES_PER_BOX; ++uiParticle)

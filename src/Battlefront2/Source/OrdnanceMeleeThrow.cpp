@@ -622,7 +622,7 @@ void OrdnanceMeleeThrow::ApplyDamage(float fDeltaTime)
     }
 }
 
-static const RedColor kColorZero = { 0, 0, 0, 0 };
+static const RedColor kColorZero(0, 0, 0, 0);
 
 // FUNCTION: SWBF2 0x006042d0
 OrdnanceMeleeThrowClass::OrdnanceMeleeThrowClass(unsigned int uHash)

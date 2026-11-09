@@ -47,7 +47,6 @@ struct GoalTarget
 {
     // SYNTHETIC: SWBF2 0x00488290
     // AI::GoalTarget::operator=
-    GoalTarget& operator=(const GoalTarget& other) = default;
     GoalTarget()
     {
     }

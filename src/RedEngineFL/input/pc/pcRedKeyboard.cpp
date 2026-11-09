@@ -5,6 +5,10 @@
 #include "PebbleFL/Common/PblJournal.h"
 #include "PebbleFL/Common/PblValues.h"
 
+#ifndef MAPVK_VSC_TO_VK
+#define MAPVK_VSC_TO_VK 1
+#endif
+
 // GLOBAL: SWBF2 0x00772cd0
 // __xmm@2a3826375e3625352434233340322131
 // GLOBAL: SWBF2 0x00772ce0

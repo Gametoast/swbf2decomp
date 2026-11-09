@@ -169,7 +169,7 @@ void QOSDisplay::InitClient()
 
     QosIcon.Enable(false);
     QosIcon.m_eStyle = RedBitmapElement::BITMAP_STYLE_NORMAL;
-    RedColor white = { 0xff, 0xff, 0xff, 0xff };
+    RedColor white(0xff, 0xff, 0xff, 0xff);
     QosIcon.m_color = white;
     QosIcon.SetPosition(-110.0f, -100.0f);
     QosIcon.SetRect(64.0f, 64.0f, RedBitmapElement::BITMAP_HALIGN_LEFT,

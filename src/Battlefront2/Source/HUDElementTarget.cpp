@@ -157,16 +157,16 @@ void HUD::ElementTarget::Target::Update(float fDeltaTime, HUD::ElementBitmap& bi
         }
         if (pLockOn && bShow && info.mOnScreen)
         {
-            bitmap.HUD::Element::Enable(false);
+            bitmap.Element::Enable(false);
             for (unsigned int i = 0; i < 4; ++i)
             {
                 pLockOn[i] = *this;
-                pLockOn[i].HUD::Element::Enable(true);
+                pLockOn[i].Element::Enable(true);
             }
         }
         else
         {
-            bitmap.HUD::Element::Enable(bShow);
+            bitmap.Element::Enable(bShow);
         }
     }
     if (!bShow)
@@ -493,14 +493,14 @@ HUD::ElementTarget::ElementTarget(const char* const pName, Factory::ItemCallback
     unsigned int i;
     for (i = 0; i < targetCommonState_MAX; ++i)
     {
-        mTargetCommonAll[i].HUD::Item::SetName(sTargetCommonStateStrings[i]);
-        mTargetCommonAll[i].HUD::Element::Enable(false);
+        mTargetCommonAll[i].Item::SetName(sTargetCommonStateStrings[i]);
+        mTargetCommonAll[i].Element::Enable(false);
         mTargetCommonAll[i].SetFactory(pBitmapFactory);
     }
     for (i = 0; i < targetPlayerState_MAX; ++i)
     {
-        mTargetPlayerAll[i].HUD::Item::SetName(sTargetPlayerStateStrings[i]);
-        mTargetPlayerAll[i].HUD::Element::Enable(false);
+        mTargetPlayerAll[i].Item::SetName(sTargetPlayerStateStrings[i]);
+        mTargetPlayerAll[i].Element::Enable(false);
         mTargetPlayerAll[i].SetFactory(pBitmapFactory);
     }
 
@@ -510,7 +510,7 @@ HUD::ElementTarget::ElementTarget(const char* const pName, Factory::ItemCallback
         mTargetCommon[i].mDynamicAlloc = false;
         mTargetCommon[i].SetFactory(pBitmapFactory);
         mTargetCommon[i].mWriteEnabled = false;
-        mTargetCommon[i].HUD::Element::Enable(false);
+        mTargetCommon[i].Element::Enable(false);
         mTargetCommonState[i] = targetCommonState_OnScreen;
     }
     for (i = 0; i < LockOnManager::kMaxTargets; ++i)
@@ -519,7 +519,7 @@ HUD::ElementTarget::ElementTarget(const char* const pName, Factory::ItemCallback
         mTargetPlayer[i].mDynamicAlloc = false;
         mTargetPlayer[i].SetFactory(pBitmapFactory);
         mTargetPlayer[i].mWriteEnabled = false;
-        mTargetPlayer[i].HUD::Element::Enable(false);
+        mTargetPlayer[i].Element::Enable(false);
         mTargetPlayerState[i] = targetPlayerState_AttackerOnScreen;
     }
     for (i = 0; i < 4; ++i)
@@ -528,7 +528,7 @@ HUD::ElementTarget::ElementTarget(const char* const pName, Factory::ItemCallback
         mTargetLockOn[i].mDynamicAlloc = false;
         mTargetLockOn[i].SetFactory(pBitmapFactory);
         mTargetLockOn[i].mWriteEnabled = false;
-        mTargetLockOn[i].HUD::Element::Enable(false);
+        mTargetLockOn[i].Element::Enable(false);
     }
 
     mEventResetTargetCommon.Init(EventRefreshTargetCommon, this);
@@ -586,7 +586,7 @@ void HUD::ElementTarget::Update(const float fDeltaTime)
                 }
                 else
                 {
-                    mTargetPlayer[i].HUD::Element::Enable(false);
+                    mTargetPlayer[i].Element::Enable(false);
                 }
             }
             mTargetPlayerState[i] = eState;
@@ -596,7 +596,7 @@ void HUD::ElementTarget::Update(const float fDeltaTime)
         {
             for (i = 0; i < 4; ++i)
             {
-                mTargetLockOn[i].HUD::Element::Enable(false);
+                mTargetLockOn[i].Element::Enable(false);
             }
         }
 
@@ -679,7 +679,7 @@ void HUD::ElementTarget::Read(PblConfig& config, Factory::ItemCallback pCallback
     {
         float fLeft, fTop, fRight, fBottom;
         mTargetPlayerAll[i].GetRect(fLeft, fTop, fRight, fBottom);
-        mTargetPlayerAll[i].HUD::ElementBitmapBase::SetRect(fRight - fLeft, fBottom - fTop,
+        mTargetPlayerAll[i].ElementBitmapBase::SetRect(fRight - fLeft, fBottom - fTop,
                                                             RedBitmapElement::BITMAP_HALIGN_RIGHT,
                                                             RedBitmapElement::BITMAP_VALIGN_BOTTOM);
     }

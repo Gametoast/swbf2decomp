@@ -159,8 +159,6 @@ void DSBufferRenderer::UpdateBufferParameters(IDirectSoundBuffer* const pBuffer,
 void DSBufferRenderer::QueuePackets()
 {
 
-    typedef StreamPacket* (__thiscall* GetPacketFn)(StreamNodeSource* pThis,
-                                                    unsigned int uiOutput);
 
     while (!mPacketQueue.IsFull())
     {

@@ -538,7 +538,7 @@ void PlayerProfile::tPCOpt::ApplyPostLoadSettings()
 
     if (RedRenderer::pcGetDeviceCaps().DevCaps2 & D3DDEVCAPS2_CAN_STRETCHRECT_FROM_TEXTURES)
     {
-        const auto& options = RedRenderer::pcGetRenderOptions();
+        const RenderOptionsT& options = RedRenderer::pcGetRenderOptions();
         RedParticleRenderer::s_blurEnable = true;
         if (!options.distortion)
         {

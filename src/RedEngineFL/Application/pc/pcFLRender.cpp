@@ -137,8 +137,8 @@ FLRenderer::RenderableList FLRenderer::_RenderableLists[NUM_RENDERABLE_PHASES];
 // GLOBAL: SWBF2 0x007deb38
 
 FLRenderer::TransitionT sViewTransitions[2] = {
-    { { 0, 0, 0, 0 }, { 0 }, 0.0f, { 0, 0, 0, 0 }, 0.0f, 0.0f, 1.0f, 1.0f },
-    { { 0, 0, 0, 0 }, { 0 }, 0.0f, { 0, 0, 0, 0 }, 0.0f, 0.0f, 1.0f, 1.0f },
+    { RedColor(0, 0, 0, 0), { 0 }, 0.0f, RedColor(0, 0, 0, 0), 0.0f, 0.0f, 1.0f, 1.0f },
+    { RedColor(0, 0, 0, 0), { 0 }, 0.0f, RedColor(0, 0, 0, 0), 0.0f, 0.0f, 1.0f, 1.0f },
 };
 
 // GLOBAL: SWBF2 0x008f6d99

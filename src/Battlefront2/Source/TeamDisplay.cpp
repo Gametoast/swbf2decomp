@@ -13,5 +13,5 @@ RedColor gVoiceChatTeamColors[3] =
 {
     gFriendColor,
     gEnemyColor,
-    { 0x10, 0xF9, 0xCA, 0xFF }
+    RedColor(0x10, 0xF9, 0xCA, 0xFF)
 };

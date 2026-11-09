@@ -300,10 +300,10 @@ void pcRefractionShader::Begin_Prog1(unsigned int uiState, unsigned int) const
         // rescaleMat
 
         static PblMatrix rescaleMat(
-            PblVector4{ 0.5f, 0.0f, 0.0f, 0.0f },
-            PblVector4{ 0.0f, 0.5f, 0.0f, 0.0f },
-            PblVector4{ 0.0f, 0.0f, 0.5f, 0.0f },
-            PblVector4{ 0.5f, 0.5f, 0.5f, 1.0f });
+            PblVector4(0.5f, 0.0f, 0.0f, 0.0f),
+            PblVector4(0.0f, 0.5f, 0.0f, 0.0f),
+            PblVector4(0.0f, 0.0f, 0.5f, 0.0f),
+            PblVector4(0.5f, 0.5f, 0.5f, 1.0f));
 
         const RedCamera* pCamera = RedRenderer::GetCamera();
         PblMatrix mViewProj = pCamera->GetMatrixInverse() * RedRenderer::GetProjectionMatrix();
@@ -489,10 +489,10 @@ void pcRefractionShader::RenderZPrepass(const RenderItem* pItem) const
 
 static void FFSetTextureTransform_(unsigned int uiStage, const RedTextureTransform& transform)
 {
-    const PblMatrix mTransform(PblVector4{ transform(0, 0), transform(0, 1), 0.0f, 0.0f },
-                               PblVector4{ transform(1, 0), transform(1, 1), 0.0f, 0.0f },
-                               PblVector4{ transform(2, 0), transform(2, 1), 0.0f, 0.0f },
-                               PblVector4{ 0.0f, 0.0f, 0.0f, 1.0f });
+    const PblMatrix mTransform(PblVector4(transform(0, 0), transform(0, 1), 0.0f, 0.0f),
+                               PblVector4(transform(1, 0), transform(1, 1), 0.0f, 0.0f),
+                               PblVector4(transform(2, 0), transform(2, 1), 0.0f, 0.0f),
+                               PblVector4(0.0f, 0.0f, 0.0f, 1.0f));
     RedRenderer::pcFFSetTextureTransform(uiStage, mTransform);
 }
 

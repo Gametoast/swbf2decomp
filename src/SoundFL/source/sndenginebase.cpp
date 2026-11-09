@@ -135,8 +135,13 @@ Stream* EngineBase::GetOpenStream(unsigned int uiHashID)
         {
             continue;
         }
-        for (StreamBase::InfoItor it = pStream->GetInfoItor(); const StreamBase::Info* pInfo = it.GetInfo(); ++it)
+        for (StreamBase::InfoItor it = pStream->GetInfoItor(); ; ++it)
         {
+            const StreamBase::Info* pInfo = it.GetInfo();
+            if (!pInfo)
+            {
+                break;
+            }
             if (pInfo->mHashID == uiHashID)
             {
                 pResult = &smStreams[i];

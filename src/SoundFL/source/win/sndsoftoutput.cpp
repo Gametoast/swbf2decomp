@@ -384,8 +384,6 @@ void Snd::SoftOutput::Discontinuity(unsigned int uiInput)
 // FUNCTION: SWBF2 0x00746e30
 StreamPacket* SoftOutput::PostOutputMixFlusher::GetPacket(unsigned int  )
 {
-    typedef StreamPacket* (__thiscall* GetPacketFn)(StreamNodeSource* pThis,
-                                                    unsigned int uiOutput);
 
     StreamNodeSource* const pSource = StreamNodeSink::mConnection.mInputNode;
     if (pSource != 0)

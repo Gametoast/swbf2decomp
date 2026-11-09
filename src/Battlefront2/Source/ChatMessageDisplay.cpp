@@ -63,7 +63,7 @@ void ChatMessageDisplay::Init()
     mBitmapBackground.Enable(false);
     mBitmapBackground.m_eStyle = RedBitmapElement::BITMAP_STYLE_NORMAL;
     mBitmapBackground.SetPosition(-3.0f, -13.0f);
-    RedColor white = { 0xff, 0xff, 0xff, 0xff };
+    RedColor white(0xff, 0xff, 0xff, 0xff);
     mBitmapBackground.SetColor(white);
     mBitmapBackground.SetRect(fScreenWidth + 6.0f, (float)ucFontHeight + 6.0f,
                               RedBitmapElement::BitmapHAlignT(0),

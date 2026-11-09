@@ -453,8 +453,8 @@ void RedDebug::_DrawSolidOBB(const SolidOBB& obb)
     const PblBox bounds(vMin, vMax);
     pPrimitive->m_bbox = bounds;
     CompressedPos::s_vMin = vMin;
-    CompressedPos::s_vScale = PblVector3{ 0.015625238f, 0.015625238f, 0.015625238f };
-    CompressedPos::s_vScaleInv = PblVector3{ 63.999023f, 63.999023f, 63.999023f };
+    CompressedPos::s_vScale = PblVector3(0.015625238f, 0.015625238f, 0.015625238f);
+    CompressedPos::s_vScaleInv = PblVector3(63.999023f, 63.999023f, 63.999023f);
     DebugVertex* pVertex = (DebugVertex*)pPrimitive->BeginVertexData();
     if (pVertex)
     {

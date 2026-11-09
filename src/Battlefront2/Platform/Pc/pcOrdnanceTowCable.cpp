@@ -28,7 +28,7 @@ void OrdnanceTowCable::PlatformInit()
 }
 
 // GLOBAL: SWBF2 0x007eb744
-static RedColor kCableColor = { 0, 0, 0, 255 };
+static RedColor kCableColor(0, 0, 0, 255);
 
 
 

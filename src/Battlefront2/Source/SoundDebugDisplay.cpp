@@ -125,11 +125,11 @@ SoundDebugDisplay::SoundDebugDisplay()
 
     mBitmapElement.Init();
     mBitmapElement.SetRect(0.0f, 0.0f, (float)RedInterfaceScreen::GetScreenWidth(), 0.0f);
-    const RedColor backColor = { 0x00, 0x44, 0x00, 0x40 };
+    const RedColor backColor(0x00, 0x44, 0x00, 0x40);
     mBitmapElement.SetColor(backColor);
     mGroupElement.AddElement(&mBitmapElement);
 
-    const RedColor textColor = { 0xff, 0xff, 0xff, 0xff };
+    const RedColor textColor(0xff, 0xff, 0xff, 0xff);
     float fY = 0.0f;
     for (int i = 0; i < NUM_TEXT_ELEMENTS; ++i)
     {
@@ -312,7 +312,7 @@ void SoundDebugDisplay::DisplayVirtualVoices(Snd::VoiceVirtualManager* pManager)
             (Snd::VoiceVirtual*)((char*)pNode - offsetof(Snd::VoiceVirtual, mNode));
 
         float fGain;
-        pVoice->Snd::Source3D::CalculateGain(fGain);
+        pVoice->Source3D::CalculateGain(fGain);
 
         if ((mMode == mode_Sounds && pVoice->mCustomFlags != 0) ||
             (mMode != mode_Sounds &&

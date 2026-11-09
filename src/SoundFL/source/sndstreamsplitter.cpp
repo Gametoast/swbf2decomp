@@ -72,8 +72,6 @@ namespace Snd
 // FUNCTION: SWBF2 0x0074cfe0
 StreamPacket* StreamSplitter::GetPacket(unsigned int uiOutput)
 {
-    typedef StreamPacket* (__thiscall* GetPacketFn)(StreamNodeSource* pThis,
-                                                    unsigned int uiOutput);
 
     StreamPacket* pResult = 0;
 

@@ -72,7 +72,7 @@ Marker* gMarkers = _gMarkers;
 // gColorTable
 Color gColorTable[MAX_COLORS] =
 {
-    { 0x00000000, { 0, 0, 0, 0 } },
+    { 0x00000000, RedColor(0, 0, 0, 0) },
     { 0xde020766 /* "white" */, RedColor::WHITE },
     { 0x7ea5f49e /* "LTGREY" */, RedColor::LTGREY },
     { 0xe41b46af /* "MDGREY" */, RedColor::MDGREY },

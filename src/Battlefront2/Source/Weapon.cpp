@@ -531,7 +531,7 @@ void WeaponClass::SetProperty(unsigned int uProperty, const char* pszValue)
         break;
     case 0xCFCCCBCE: /* "MuzzleFlash" */
     {
-        RedColor flashColor = { 0xFF, 0xFF, 0x32, 0xFF };
+        RedColor flashColor(0xFF, 0xFF, 0x32, 0xFF);
         RedColor lightColor;
         switch ((unsigned int)PblHash(pszValue))
         {
@@ -540,7 +540,7 @@ void WeaponClass::SetProperty(unsigned int uProperty, const char* pszValue)
             mFlashRadius = 0.6f;
             mFlashWidth = 0.15f;
             mFlashLength = 0.1f;
-            RedColor c = { 0x3F, 0x3F, 0x0D, 0xFF };
+            RedColor c(0x3F, 0x3F, 0x0D, 0xFF);
             lightColor = c;
             break;
         }
@@ -549,7 +549,7 @@ void WeaponClass::SetProperty(unsigned int uProperty, const char* pszValue)
             mFlashRadius = 1.8f;
             mFlashWidth = 0.45f;
             mFlashLength = 0.3f;
-            RedColor c = { 0xBF, 0xBF, 0x25, 0xFF };
+            RedColor c(0xBF, 0xBF, 0x25, 0xFF);
             lightColor = c;
             break;
         }
@@ -558,7 +558,7 @@ void WeaponClass::SetProperty(unsigned int uProperty, const char* pszValue)
             mFlashRadius = 1.0f;
             mFlashWidth = 0.25f;
             mFlashLength = 0.15f;
-            RedColor c = { 0x7F, 0x7F, 0x19, 0xFF };
+            RedColor c(0x7F, 0x7F, 0x19, 0xFF);
             lightColor = c;
             break;
         }

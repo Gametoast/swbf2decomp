@@ -26,7 +26,6 @@ namespace
 {
     inline EntityClass* GetEntityClass(GameObject* pObject)
     {
-        typedef EntityClass* (__thiscall *Fn)(GameObject*);
         return pObject->GetEntityClass();
     }
 }

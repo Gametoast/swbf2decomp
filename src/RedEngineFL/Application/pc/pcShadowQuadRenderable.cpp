@@ -229,14 +229,14 @@ void pcShadowQuadRenderable::Render(unsigned int value) const
     RedRenderer::pcGetViewportExtents(left, top, right, bottom);
 
     PblMatrix scaleOffset(
-        PblVector4{ viewport.fWidth * 0.5f, 0.0f, 0.0f, 0.0f },
-        PblVector4{ 0.0f, viewport.fHeight * 0.5f, 0.0f, 0.0f },
-        PblVector4{ 0.0f, 0.0f, 0.5f, 0.0f },
-        PblVector4{ viewport.fWidth * 0.5f + viewport.fOffsetX +
+        PblVector4(viewport.fWidth * 0.5f, 0.0f, 0.0f, 0.0f),
+        PblVector4(0.0f, viewport.fHeight * 0.5f, 0.0f, 0.0f),
+        PblVector4(0.0f, 0.0f, 0.5f, 0.0f),
+        PblVector4(viewport.fWidth * 0.5f + viewport.fOffsetX +
                          0.5f / (float)target->m_uiWidth,
                      viewport.fHeight * 0.5f + viewport.fOffsetY +
                          0.5f / (float)target->m_uiHeight,
-                     0.0f, 1.0f });
+                     0.0f, 1.0f));
 
     const RedCamera* camera = RedRenderer::GetCamera();
     PblMatrix shadowMatrix = camera->_MatrixInverse * RedRenderer::GetProjectionMatrix() * scaleOffset;

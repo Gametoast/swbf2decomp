@@ -20,7 +20,7 @@ struct __declspec(align(8)) ZephyrAnimFileHeaderD
     unsigned char u8DebugLevel;
     unsigned char u8Padding;
 };
-static_assert(sizeof(ZephyrAnimFileHeaderD) == 24, "ZephyrAnimFileHeaderD is the file's 24-byte header");
+typedef char ZephyrAnimFileHeaderDHasExpectedSize[(sizeof(ZephyrAnimFileHeaderD) == 24) ? 1 : -1];
  
 
 struct ZephyrAnimD

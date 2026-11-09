@@ -47,7 +47,7 @@ __declspec(dllexport) T* Allocate()
 }
 
 template <typename T, typename A1>
-__declspec(dllexport) T* Allocate(A1&& a1)
+__declspec(dllexport) T* Allocate(const A1& a1)
 {
     return new (RedAllocFromHeap(GameMemory::GamespyHeap, sizeof(T), 0)) T(a1);
 }

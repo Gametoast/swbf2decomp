@@ -120,7 +120,7 @@ void GameVoiceChat::Decoder::Flush()
 
     mMixer.Flush();
 
-    mAuxRenderer.Snd::DSBufferRenderer::Flush();
+    mAuxRenderer.DSBufferRenderer::Flush();
 }
 
 // FUNCTION: SWBF2 0x0053cf20
@@ -134,7 +134,7 @@ void GameVoiceChat::Decoder::Stop()
     }
 
     mMixer.Stop();
-    mAuxRenderer.Snd::SourceTransport::Stop();
+    mAuxRenderer.SourceTransport::Stop();
 
     mPlaying = false;
 }
@@ -158,7 +158,7 @@ void GameVoiceChat::Decoder::Close()
 
     mAuxRenderer.Close();
 
-    mMixer.Snd::StreamSourceProducer::SetPackets(0, 0, 0);
+    mMixer.StreamSourceProducer::SetPackets(0, 0, 0);
     mMixer.SetMixBuffer(0);
     mMixer.StreamNodeSinkNInput::SetConnectionArray(0, 0);
     mMixer.SetPacketArray(0, 0);
@@ -258,7 +258,7 @@ bool GameVoiceChat::Decoder::Open(unsigned int playbackDevice, float fPacketMs, 
 
     SetProducers(mProducers, uiSlots);
 
-    mMixer.Snd::StreamSourceProducer::SetPackets(uiSamples2, mMixerPackets, 2);
+    mMixer.StreamSourceProducer::SetPackets(uiSamples2, mMixerPackets, 2);
     mMixer.SetMixBuffer(mMixerAccBuffer);
     mMixer.StreamNodeSinkNInput::SetConnectionArray(mMixerConnections, uiSlots);
     mMixer.SetPacketArray(mMixerPacketIO, mMixerBufferOffsets);
@@ -303,7 +303,7 @@ void GameVoiceChat::Decoder::Play()
     }
 
     mMixer.Play(true);
-    mAuxRenderer.Snd::StreamNode::Play(true);
+    mAuxRenderer.StreamNode::Play(true);
 
     mPlaying = true;
 }
@@ -332,7 +332,7 @@ bool GameVoiceChat::Decoder::Update()
     }
 
     mMixer.Update();
-    return mAuxRenderer.Snd::StreamNode::IsStarving();
+    return mAuxRenderer.StreamNode::IsStarving();
 }
 
 // FUNCTION: SWBF2 0x0053d220

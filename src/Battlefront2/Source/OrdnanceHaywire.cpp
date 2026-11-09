@@ -33,7 +33,7 @@ bool OrdnanceHaywire::Update(float fDeltaTime)
 {
     if (!OrdnanceSticky::Update(fDeltaTime))
     {
-        auto* pStick = mStickInfo;
+        StickInfo* pStick = mStickInfo;
         if (pStick && pStick->mCollHandle.mObject)
         {
             GameObject* pObject = pStick->mCollHandle.mObject;

@@ -72,7 +72,7 @@ void _RenderLightSabre(const PblVector3& vPosition, const PblVector3& vDirection
     RedParticleRenderer::SubmitBounds(vPosition - vExtent, vExtent + vPosition);
     RedParticleRenderer::SubmitTexture(uiTexture, BLEND_ADDITIVE, uiFlags);
 
-    RedParticleRenderer::TexCoords texCoords = {0, 0, 255, 255};
+    RedParticleRenderer::TexCoords texCoords(0, 0, 255, 255);
     RedParticleRenderer::SubmitParticle(PIT_LASER_START, fLength * vDirection + vPosition, RedColor::WHITE,
                                         fWidth * 0.8f, 0.0f, texCoords, gVectorUnitX, gVectorUnitY);
     RedParticleRenderer::SubmitParticle(PIT_LASER_END, vPosition - fLength * 0.04f * vDirection, RedColor::WHITE,

@@ -50,27 +50,19 @@ namespace FLRenderer
 namespace
 {
 
-    inline void* const* VTable(const void* pThis)
-    {
-        return *reinterpret_cast<void* const* const*>(pThis);
-    }
-
     inline bool GameObject_IsRtti(const GameObject* pObject, unsigned int uRtti)
     {
-        typedef bool(__thiscall * Fn)(const GameObject*, unsigned int);
-        return reinterpret_cast<Fn>(VTable(pObject)[0])(pObject, uRtti);
+        return pObject->IsRtti(uRtti);
     }
 
     inline GameObject* GameObject_GetGameObject(GameObject* pObject)
     {
-        typedef GameObject*(__thiscall * Fn)(GameObject*);
-        return reinterpret_cast<Fn>(VTable(pObject)[9])(pObject);
+        return pObject->GetGameObject();
     }
 
     inline const PblMatrix& GameObject_GetSmoothedMatrix(GameObject* pObject)
     {
-        typedef const PblMatrix&(__thiscall * Fn)(GameObject*);
-        return reinterpret_cast<Fn>(VTable(pObject)[68])(pObject);
+        return pObject->GetSmoothedMatrix();
     }
 
 

@@ -60,7 +60,7 @@ void BirdParticleManager::PlatformCleanup()
 }
 
 // GLOBAL: SWBF2 0x0078c2e4
-const RedColor kBirdColor = { 0xcc, 0xcc, 0xcc, 0xff };
+const RedColor kBirdColor(0xcc, 0xcc, 0xcc, 0xff);
 
 struct BirdVertex
 {

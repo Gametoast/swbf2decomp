@@ -45,7 +45,7 @@ SpectatorDisplay::SpectatorDisplay()
     {
         fHeight = 0.15f;
     }
-    const RedColor white = { 0xff, 0xff, 0xff, 0xff };
+    const RedColor white(0xff, 0xff, 0xff, 0xff);
 
     sCanRender = false;
     sDisable = false;

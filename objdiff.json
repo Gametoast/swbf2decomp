@@ -4,11 +4,1035 @@
   "build_base": false,
   "units": [
     {
+      "name": "Battlefront2/Source/AIGoalManager",
+      "target_path": "obj/Win32/ModTools/AIGoalManager.obj",
+      "base_path": "obj/Win32/Release/AIGoalManager.obj",
+      "metadata": {
+        "source_path": "src/Battlefront2/Source/AIGoalManager.cpp"
+      }
+    },
+    {
+      "name": "Battlefront2/Source/AILowLevel",
+      "target_path": "obj/Win32/ModTools/AILowLevel.obj",
+      "base_path": "obj/Win32/Release/AILowLevel.obj",
+      "metadata": {
+        "source_path": "src/Battlefront2/Source/AILowLevel.cpp"
+      }
+    },
+    {
+      "name": "Battlefront2/Source/AIUtil",
+      "target_path": "obj/Win32/ModTools/AIUtil.obj",
+      "base_path": "obj/Win32/Release/AIUtil.obj",
+      "metadata": {
+        "source_path": "src/Battlefront2/Source/AIUtil.cpp"
+      }
+    },
+    {
+      "name": "Battlefront2/Source/Agent",
+      "target_path": "obj/Win32/ModTools/Agent.obj",
+      "base_path": "obj/Win32/Release/Agent.obj",
+      "metadata": {
+        "source_path": "src/Battlefront2/Source/Agent.cpp"
+      }
+    },
+    {
+      "name": "Battlefront2/Source/Aimer",
+      "target_path": "obj/Win32/ModTools/Aimer.obj",
+      "base_path": "obj/Win32/Release/Aimer.obj",
+      "metadata": {
+        "source_path": "src/Battlefront2/Source/Aimer.cpp"
+      }
+    },
+    {
+      "name": "Battlefront2/Source/AttackHelper",
+      "target_path": "obj/Win32/ModTools/AttackHelper.obj",
+      "base_path": "obj/Win32/Release/AttackHelper.obj",
+      "metadata": {
+        "source_path": "src/Battlefront2/Source/AttackHelper.cpp"
+      }
+    },
+    {
+      "name": "Battlefront2/Source/BonusManager",
+      "target_path": "obj/Win32/ModTools/BonusManager.obj",
+      "base_path": "obj/Win32/Release/BonusManager.obj",
+      "metadata": {
+        "source_path": "src/Battlefront2/Source/BonusManager.cpp"
+      }
+    },
+    {
+      "name": "Battlefront2/Source/CameraManager",
+      "target_path": "obj/Win32/ModTools/CameraManager.obj",
+      "base_path": "obj/Win32/Release/CameraManager.obj",
+      "metadata": {
+        "source_path": "src/Battlefront2/Source/CameraManager.cpp"
+      }
+    },
+    {
+      "name": "Battlefront2/Source/CaptureDisplay",
+      "target_path": "obj/Win32/ModTools/CaptureDisplay.obj",
+      "base_path": "obj/Win32/Release/CaptureDisplay.obj",
+      "metadata": {
+        "source_path": "src/Battlefront2/Source/CaptureDisplay.cpp"
+      }
+    },
+    {
+      "name": "Battlefront2/Source/Character",
+      "target_path": "obj/Win32/ModTools/Character.obj",
+      "base_path": "obj/Win32/Release/Character.obj",
+      "metadata": {
+        "source_path": "src/Battlefront2/Source/Character.cpp"
+      }
+    },
+    {
+      "name": "Battlefront2/Source/ChaseCamera",
+      "target_path": "obj/Win32/ModTools/ChaseCamera.obj",
+      "base_path": "obj/Win32/Release/ChaseCamera.obj",
+      "metadata": {
+        "source_path": "src/Battlefront2/Source/ChaseCamera.cpp"
+      }
+    },
+    {
+      "name": "Battlefront2/Source/Chunk",
+      "target_path": "obj/Win32/ModTools/Chunk.obj",
+      "base_path": "obj/Win32/Release/Chunk.obj",
+      "metadata": {
+        "source_path": "src/Battlefront2/Source/Chunk.cpp"
+      }
+    },
+    {
+      "name": "Battlefront2/Source/CmdInfo",
+      "target_path": "obj/Win32/ModTools/CmdInfo.obj",
+      "base_path": "obj/Win32/Release/CmdInfo.obj",
+      "metadata": {
+        "source_path": "src/Battlefront2/Source/CmdInfo.cpp"
+      }
+    },
+    {
+      "name": "Battlefront2/Source/CollisionModel",
+      "target_path": "obj/Win32/ModTools/CollisionModel.obj",
+      "base_path": "obj/Win32/Release/CollisionModel.obj",
+      "metadata": {
+        "source_path": "src/Battlefront2/Source/CollisionModel.cpp"
+      }
+    },
+    {
+      "name": "Battlefront2/Source/CollisionObject",
+      "target_path": "obj/Win32/ModTools/CollisionObject.obj",
+      "base_path": "obj/Win32/Release/CollisionObject.obj",
+      "metadata": {
+        "source_path": "src/Battlefront2/Source/CollisionObject.cpp"
+      }
+    },
+    {
+      "name": "Battlefront2/Source/CollisionPrimitive",
+      "target_path": "obj/Win32/ModTools/CollisionPrimitive.obj",
+      "base_path": "obj/Win32/Release/CollisionPrimitive.obj",
+      "metadata": {
+        "source_path": "src/Battlefront2/Source/CollisionPrimitive.cpp"
+      }
+    },
+    {
+      "name": "Battlefront2/Source/CollisionUtil",
+      "target_path": "obj/Win32/ModTools/CollisionUtil.obj",
+      "base_path": "obj/Win32/Release/CollisionUtil.obj",
+      "metadata": {
+        "source_path": "src/Battlefront2/Source/CollisionUtil.cpp"
+      }
+    },
+    {
+      "name": "Battlefront2/Source/Combo",
+      "target_path": "obj/Win32/ModTools/Combo.obj",
+      "base_path": "obj/Win32/Release/Combo.obj",
+      "metadata": {
+        "source_path": "src/Battlefront2/Source/Combo.cpp"
+      }
+    },
+    {
+      "name": "Battlefront2/Source/CommandFsm",
+      "target_path": "obj/Win32/ModTools/CommandFsm.obj",
+      "base_path": "obj/Win32/Release/CommandFsm.obj",
+      "metadata": {
+        "source_path": "src/Battlefront2/Source/CommandFsm.cpp"
+      }
+    },
+    {
+      "name": "Battlefront2/Source/CommandHover",
+      "target_path": "obj/Win32/ModTools/CommandHover.obj",
+      "base_path": "obj/Win32/Release/CommandHover.obj",
+      "metadata": {
+        "source_path": "src/Battlefront2/Source/CommandHover.cpp"
+      }
+    },
+    {
+      "name": "Battlefront2/Source/CommandPostManager",
+      "target_path": "obj/Win32/ModTools/CommandPostManager.obj",
+      "base_path": "obj/Win32/Release/CommandPostManager.obj",
+      "metadata": {
+        "source_path": "src/Battlefront2/Source/CommandPostManager.cpp"
+      }
+    },
+    {
+      "name": "Battlefront2/Source/ConnectivityGraph",
+      "target_path": "obj/Win32/ModTools/ConnectivityGraph.obj",
+      "base_path": "obj/Win32/Release/ConnectivityGraph.obj",
+      "metadata": {
+        "source_path": "src/Battlefront2/Source/ConnectivityGraph.cpp"
+      }
+    },
+    {
+      "name": "Battlefront2/Source/ConnectivityGraphFollower",
+      "target_path": "obj/Win32/ModTools/ConnectivityGraphFollower.obj",
+      "base_path": "obj/Win32/Release/ConnectivityGraphFollower.obj",
+      "metadata": {
+        "source_path": "src/Battlefront2/Source/ConnectivityGraphFollower.cpp"
+      }
+    },
+    {
+      "name": "Battlefront2/Source/Controllable",
+      "target_path": "obj/Win32/ModTools/Controllable.obj",
+      "base_path": "obj/Win32/Release/Controllable.obj",
+      "metadata": {
+        "source_path": "src/Battlefront2/Source/Controllable.cpp"
+      }
+    },
+    {
+      "name": "Battlefront2/Source/Damageable",
+      "target_path": "obj/Win32/ModTools/Damageable.obj",
+      "base_path": "obj/Win32/Release/Damageable.obj",
+      "metadata": {
+        "source_path": "src/Battlefront2/Source/Damageable.cpp"
+      }
+    },
+    {
+      "name": "Battlefront2/Source/DeathCamera",
+      "target_path": "obj/Win32/ModTools/DeathCamera.obj",
+      "base_path": "obj/Win32/Release/DeathCamera.obj",
+      "metadata": {
+        "source_path": "src/Battlefront2/Source/DeathCamera.cpp"
+      }
+    },
+    {
+      "name": "Battlefront2/Source/EnergyBar",
+      "target_path": "obj/Win32/ModTools/EnergyBar.obj",
+      "base_path": "obj/Win32/Release/EnergyBar.obj",
+      "metadata": {
+        "source_path": "src/Battlefront2/Source/EnergyBar.cpp"
+      }
+    },
+    {
+      "name": "Battlefront2/Source/EntityBuildingAnimated",
+      "target_path": "obj/Win32/ModTools/EntityBuildingAnimated.obj",
+      "base_path": "obj/Win32/Release/EntityBuildingAnimated.obj",
+      "metadata": {
+        "source_path": "src/Battlefront2/Source/EntityBuildingAnimated.cpp"
+      }
+    },
+    {
+      "name": "Battlefront2/Source/EntityBuildingAnimatedArmed",
+      "target_path": "obj/Win32/ModTools/EntityBuildingAnimatedArmed.obj",
+      "base_path": "obj/Win32/Release/EntityBuildingAnimatedArmed.obj",
+      "metadata": {
+        "source_path": "src/Battlefront2/Source/EntityBuildingAnimatedArmed.cpp"
+      }
+    },
+    {
+      "name": "Battlefront2/Source/EntityBuildingArmed",
+      "target_path": "obj/Win32/ModTools/EntityBuildingArmed.obj",
+      "base_path": "obj/Win32/Release/EntityBuildingArmed.obj",
+      "metadata": {
+        "source_path": "src/Battlefront2/Source/EntityBuildingArmed.cpp"
+      }
+    },
+    {
+      "name": "Battlefront2/Source/EntityCarrier",
+      "target_path": "obj/Win32/ModTools/EntityCarrier.obj",
+      "base_path": "obj/Win32/Release/EntityCarrier.obj",
+      "metadata": {
+        "source_path": "src/Battlefront2/Source/EntityCarrier.cpp"
+      }
+    },
+    {
+      "name": "Battlefront2/Source/EntityDroideka",
+      "target_path": "obj/Win32/ModTools/EntityDroideka.obj",
+      "base_path": "obj/Win32/Release/EntityDroideka.obj",
+      "metadata": {
+        "source_path": "src/Battlefront2/Source/EntityDroideka.cpp"
+      }
+    },
+    {
+      "name": "Battlefront2/Source/EntityFlyer",
+      "target_path": "obj/Win32/ModTools/EntityFlyer.obj",
+      "base_path": "obj/Win32/Release/EntityFlyer.obj",
+      "metadata": {
+        "source_path": "src/Battlefront2/Source/EntityFlyer.cpp"
+      }
+    },
+    {
+      "name": "Battlefront2/Source/EntityFormation",
+      "target_path": "obj/Win32/ModTools/EntityFormation.obj",
+      "base_path": "obj/Win32/Release/EntityFormation.obj",
+      "metadata": {
+        "source_path": "src/Battlefront2/Source/EntityFormation.cpp"
+      }
+    },
+    {
+      "name": "Battlefront2/Source/EntityGeometry",
+      "target_path": "obj/Win32/ModTools/EntityGeometry.obj",
+      "base_path": "obj/Win32/Release/EntityGeometry.obj",
+      "metadata": {
+        "source_path": "src/Battlefront2/Source/EntityGeometry.cpp"
+      }
+    },
+    {
+      "name": "Battlefront2/Source/EntityHologram",
+      "target_path": "obj/Win32/ModTools/EntityHologram.obj",
+      "base_path": "obj/Win32/Release/EntityHologram.obj",
+      "metadata": {
+        "source_path": "src/Battlefront2/Source/EntityHologram.cpp"
+      }
+    },
+    {
+      "name": "Battlefront2/Source/EntityHover",
+      "target_path": "obj/Win32/ModTools/EntityHover.obj",
+      "base_path": "obj/Win32/Release/EntityHover.obj",
+      "metadata": {
+        "source_path": "src/Battlefront2/Source/EntityHover.cpp"
+      }
+    },
+    {
+      "name": "Battlefront2/Source/EntityItem",
+      "target_path": "obj/Win32/ModTools/EntityItem.obj",
+      "base_path": "obj/Win32/Release/EntityItem.obj",
+      "metadata": {
+        "source_path": "src/Battlefront2/Source/EntityItem.cpp"
+      }
+    },
+    {
+      "name": "Battlefront2/Source/EntityPath",
+      "target_path": "obj/Win32/ModTools/EntityPath.obj",
+      "base_path": "obj/Win32/Release/EntityPath.obj",
+      "metadata": {
+        "source_path": "src/Battlefront2/Source/EntityPath.cpp"
+      }
+    },
+    {
+      "name": "Battlefront2/Source/EntityPathFollower",
+      "target_path": "obj/Win32/ModTools/EntityPathFollower.obj",
+      "base_path": "obj/Win32/Release/EntityPathFollower.obj",
+      "metadata": {
+        "source_path": "src/Battlefront2/Source/EntityPathFollower.cpp"
+      }
+    },
+    {
+      "name": "Battlefront2/Source/EntityRemoteTerminal",
+      "target_path": "obj/Win32/ModTools/EntityRemoteTerminal.obj",
+      "base_path": "obj/Win32/Release/EntityRemoteTerminal.obj",
+      "metadata": {
+        "source_path": "src/Battlefront2/Source/EntityRemoteTerminal.cpp"
+      }
+    },
+    {
+      "name": "Battlefront2/Source/EntitySoldier",
+      "target_path": "obj/Win32/ModTools/EntitySoldier.obj",
+      "base_path": "obj/Win32/Release/EntitySoldier.obj",
+      "metadata": {
+        "source_path": "src/Battlefront2/Source/EntitySoldier.cpp"
+      }
+    },
+    {
+      "name": "Battlefront2/Source/EntitySquadron",
+      "target_path": "obj/Win32/ModTools/EntitySquadron.obj",
+      "base_path": "obj/Win32/Release/EntitySquadron.obj",
+      "metadata": {
+        "source_path": "src/Battlefront2/Source/EntitySquadron.cpp"
+      }
+    },
+    {
+      "name": "Battlefront2/Source/EntityTrap",
+      "target_path": "obj/Win32/ModTools/EntityTrap.obj",
+      "base_path": "obj/Win32/Release/EntityTrap.obj",
+      "metadata": {
+        "source_path": "src/Battlefront2/Source/EntityTrap.cpp"
+      }
+    },
+    {
+      "name": "Battlefront2/Source/EntityWalker",
+      "target_path": "obj/Win32/ModTools/EntityWalker.obj",
+      "base_path": "obj/Win32/Release/EntityWalker.obj",
+      "metadata": {
+        "source_path": "src/Battlefront2/Source/EntityWalker.cpp"
+      }
+    },
+    {
+      "name": "Battlefront2/Source/FLInputManager",
+      "target_path": "obj/Win32/ModTools/FLInputManager.obj",
+      "base_path": "obj/Win32/Release/FLInputManager.obj",
+      "metadata": {
+        "source_path": "src/Battlefront2/Source/FLInputManager.cpp"
+      }
+    },
+    {
+      "name": "Battlefront2/Source/FlagItem",
+      "target_path": "obj/Win32/ModTools/FlagItem.obj",
+      "base_path": "obj/Win32/Release/FlagItem.obj",
+      "metadata": {
+        "source_path": "src/Battlefront2/Source/FlagItem.cpp"
+      }
+    },
+    {
+      "name": "Battlefront2/Source/FoleyFXCollidee",
+      "target_path": "obj/Win32/ModTools/FoleyFXCollidee.obj",
+      "base_path": "obj/Win32/Release/FoleyFXCollidee.obj",
+      "metadata": {
+        "source_path": "src/Battlefront2/Source/FoleyFXCollidee.cpp"
+      }
+    },
+    {
+      "name": "Battlefront2/Source/FoleyFXCollider",
+      "target_path": "obj/Win32/ModTools/FoleyFXCollider.obj",
+      "base_path": "obj/Win32/Release/FoleyFXCollider.obj",
+      "metadata": {
+        "source_path": "src/Battlefront2/Source/FoleyFXCollider.cpp"
+      }
+    },
+    {
+      "name": "Battlefront2/Source/Fsm",
+      "target_path": "obj/Win32/ModTools/Fsm.obj",
+      "base_path": "obj/Win32/Release/Fsm.obj",
+      "metadata": {
+        "source_path": "src/Battlefront2/Source/Fsm.cpp"
+      }
+    },
+    {
+      "name": "Battlefront2/Source/GameMusic",
+      "target_path": "obj/Win32/ModTools/GameMusic.obj",
+      "base_path": "obj/Win32/Release/GameMusic.obj",
+      "metadata": {
+        "source_path": "src/Battlefront2/Source/GameMusic.cpp"
+      }
+    },
+    {
+      "name": "Battlefront2/Source/GameObject",
+      "target_path": "obj/Win32/ModTools/GameObject.obj",
+      "base_path": "obj/Win32/Release/GameObject.obj",
+      "metadata": {
+        "source_path": "src/Battlefront2/Source/GameObject.cpp"
+      }
+    },
+    {
+      "name": "Battlefront2/Source/GameSound",
+      "target_path": "obj/Win32/ModTools/GameSound.obj",
+      "base_path": "obj/Win32/Release/GameSound.obj",
+      "metadata": {
+        "source_path": "src/Battlefront2/Source/GameSound.cpp"
+      }
+    },
+    {
+      "name": "Battlefront2/Source/HeroMessageDisplay",
+      "target_path": "obj/Win32/ModTools/HeroMessageDisplay.obj",
+      "base_path": "obj/Win32/Release/HeroMessageDisplay.obj",
+      "metadata": {
+        "source_path": "src/Battlefront2/Source/HeroMessageDisplay.cpp"
+      }
+    },
+    {
+      "name": "Battlefront2/Source/IFaceSoldierAnimator",
+      "target_path": "obj/Win32/ModTools/IFaceSoldierAnimator.obj",
+      "base_path": "obj/Win32/Release/IFaceSoldierAnimator.obj",
+      "metadata": {
+        "source_path": "src/Battlefront2/Source/IFaceSoldierAnimator.cpp"
+      }
+    },
+    {
+      "name": "Battlefront2/Source/LeafPatch",
+      "target_path": "obj/Win32/ModTools/LeafPatch.obj",
+      "base_path": "obj/Win32/Release/LeafPatch.obj",
+      "metadata": {
+        "source_path": "src/Battlefront2/Source/LeafPatch.cpp"
+      }
+    },
+    {
+      "name": "Battlefront2/Source/LoadDisplay",
+      "target_path": "obj/Win32/ModTools/LoadDisplay.obj",
+      "base_path": "obj/Win32/Release/LoadDisplay.obj",
+      "metadata": {
+        "source_path": "src/Battlefront2/Source/LoadDisplay.cpp"
+      }
+    },
+    {
+      "name": "Battlefront2/Source/LockOnManager",
+      "target_path": "obj/Win32/ModTools/LockOnManager.obj",
+      "base_path": "obj/Win32/Release/LockOnManager.obj",
+      "metadata": {
+        "source_path": "src/Battlefront2/Source/LockOnManager.cpp"
+      }
+    },
+    {
+      "name": "Battlefront2/Source/MapCamera",
+      "target_path": "obj/Win32/ModTools/MapCamera.obj",
+      "base_path": "obj/Win32/Release/MapCamera.obj",
+      "metadata": {
+        "source_path": "src/Battlefront2/Source/MapCamera.cpp"
+      }
+    },
+    {
+      "name": "Battlefront2/Source/MountedTurret",
+      "target_path": "obj/Win32/ModTools/MountedTurret.obj",
+      "base_path": "obj/Win32/Release/MountedTurret.obj",
+      "metadata": {
+        "source_path": "src/Battlefront2/Source/MountedTurret.cpp"
+      }
+    },
+    {
+      "name": "Battlefront2/Source/Navigator",
+      "target_path": "obj/Win32/ModTools/Navigator.obj",
+      "base_path": "obj/Win32/Release/Navigator.obj",
+      "metadata": {
+        "source_path": "src/Battlefront2/Source/Navigator.cpp"
+      }
+    },
+    {
+      "name": "Battlefront2/Source/NavigatorFollowTarget",
+      "target_path": "obj/Win32/ModTools/NavigatorFollowTarget.obj",
+      "base_path": "obj/Win32/Release/NavigatorFollowTarget.obj",
+      "metadata": {
+        "source_path": "src/Battlefront2/Source/NavigatorFollowTarget.cpp"
+      }
+    },
+    {
+      "name": "Battlefront2/Source/NavigatorGraphFollower",
+      "target_path": "obj/Win32/ModTools/NavigatorGraphFollower.obj",
+      "base_path": "obj/Win32/Release/NavigatorGraphFollower.obj",
+      "metadata": {
+        "source_path": "src/Battlefront2/Source/NavigatorGraphFollower.cpp"
+      }
+    },
+    {
+      "name": "Battlefront2/Source/NavigatorPathFollower",
+      "target_path": "obj/Win32/ModTools/NavigatorPathFollower.obj",
+      "base_path": "obj/Win32/Release/NavigatorPathFollower.obj",
+      "metadata": {
+        "source_path": "src/Battlefront2/Source/NavigatorPathFollower.cpp"
+      }
+    },
+    {
+      "name": "Battlefront2/Source/NavigatorSlide",
+      "target_path": "obj/Win32/ModTools/NavigatorSlide.obj",
+      "base_path": "obj/Win32/Release/NavigatorSlide.obj",
+      "metadata": {
+        "source_path": "src/Battlefront2/Source/NavigatorSlide.cpp"
+      }
+    },
+    {
+      "name": "Battlefront2/Source/NetComm",
+      "target_path": "obj/Win32/ModTools/NetComm.obj",
+      "base_path": "obj/Win32/Release/NetComm.obj",
+      "metadata": {
+        "source_path": "src/Battlefront2/Source/NetComm.cpp"
+      }
+    },
+    {
+      "name": "Battlefront2/Source/NetDrag",
+      "target_path": "obj/Win32/ModTools/NetDrag.obj",
+      "base_path": "obj/Win32/Release/NetDrag.obj",
+      "metadata": {
+        "source_path": "src/Battlefront2/Source/NetDrag.cpp"
+      }
+    },
+    {
+      "name": "Battlefront2/Source/NetGame",
+      "target_path": "obj/Win32/ModTools/NetGame.obj",
+      "base_path": "obj/Win32/Release/NetGame.obj",
+      "metadata": {
+        "source_path": "src/Battlefront2/Source/NetGame.cpp"
+      }
+    },
+    {
+      "name": "Battlefront2/Source/NetMatch",
+      "target_path": "obj/Win32/ModTools/NetMatch.obj",
+      "base_path": "obj/Win32/Release/NetMatch.obj",
+      "metadata": {
+        "source_path": "src/Battlefront2/Source/NetMatch.cpp"
+      }
+    },
+    {
+      "name": "Battlefront2/Source/NetPacket",
+      "target_path": "obj/Win32/ModTools/NetPacket.obj",
+      "base_path": "obj/Win32/Release/NetPacket.obj",
+      "metadata": {
+        "source_path": "src/Battlefront2/Source/NetPacket.cpp"
+      }
+    },
+    {
+      "name": "Battlefront2/Source/NetQOS",
+      "target_path": "obj/Win32/ModTools/NetQOS.obj",
+      "base_path": "obj/Win32/Release/NetQOS.obj",
+      "metadata": {
+        "source_path": "src/Battlefront2/Source/NetQOS.cpp"
+      }
+    },
+    {
+      "name": "Battlefront2/Source/NetSetup",
+      "target_path": "obj/Win32/ModTools/NetSetup.obj",
+      "base_path": "obj/Win32/Release/NetSetup.obj",
+      "metadata": {
+        "source_path": "src/Battlefront2/Source/NetSetup.cpp"
+      }
+    },
+    {
+      "name": "Battlefront2/Source/ParticleEmitter",
+      "target_path": "obj/Win32/ModTools/ParticleEmitter.obj",
+      "base_path": "obj/Win32/Release/ParticleEmitter.obj",
+      "metadata": {
+        "source_path": "src/Battlefront2/Source/ParticleEmitter.cpp"
+      }
+    },
+    {
+      "name": "Battlefront2/Source/ParticleGeometry",
+      "target_path": "obj/Win32/ModTools/ParticleGeometry.obj",
+      "base_path": "obj/Win32/Release/ParticleGeometry.obj",
+      "metadata": {
+        "source_path": "src/Battlefront2/Source/ParticleGeometry.cpp"
+      }
+    },
+    {
+      "name": "Battlefront2/Source/ParticleTransformer",
+      "target_path": "obj/Win32/ModTools/ParticleTransformer.obj",
+      "base_path": "obj/Win32/Release/ParticleTransformer.obj",
+      "metadata": {
+        "source_path": "src/Battlefront2/Source/ParticleTransformer.cpp"
+      }
+    },
+    {
+      "name": "Battlefront2/Source/PlayerStats",
+      "target_path": "obj/Win32/ModTools/PlayerStats.obj",
+      "base_path": "obj/Win32/Release/PlayerStats.obj",
+      "metadata": {
+        "source_path": "src/Battlefront2/Source/PlayerStats.cpp"
+      }
+    },
+    {
+      "name": "Battlefront2/Source/PropCluster",
+      "target_path": "obj/Win32/ModTools/PropCluster.obj",
+      "base_path": "obj/Win32/Release/PropCluster.obj",
+      "metadata": {
+        "source_path": "src/Battlefront2/Source/PropCluster.cpp"
+      }
+    },
+    {
+      "name": "Battlefront2/Source/SoldierAnimatorClass",
+      "target_path": "obj/Win32/ModTools/SoldierAnimatorClass.obj",
+      "base_path": "obj/Win32/Release/SoldierAnimatorClass.obj",
+      "metadata": {
+        "source_path": "src/Battlefront2/Source/SoldierAnimatorClass.cpp"
+      }
+    },
+    {
+      "name": "Battlefront2/Source/SoldierAnimatorLowRes",
+      "target_path": "obj/Win32/ModTools/SoldierAnimatorLowRes.obj",
+      "base_path": "obj/Win32/Release/SoldierAnimatorLowRes.obj",
+      "metadata": {
+        "source_path": "src/Battlefront2/Source/SoldierAnimatorLowRes.cpp"
+      }
+    },
+    {
+      "name": "Battlefront2/Source/SoundDebugDisplay",
+      "target_path": "obj/Win32/ModTools/SoundDebugDisplay.obj",
+      "base_path": "obj/Win32/Release/SoundDebugDisplay.obj",
+      "metadata": {
+        "source_path": "src/Battlefront2/Source/SoundDebugDisplay.cpp"
+      }
+    },
+    {
+      "name": "Battlefront2/Source/SpaceAssault",
+      "target_path": "obj/Win32/ModTools/SpaceAssault.obj",
+      "base_path": "obj/Win32/Release/SpaceAssault.obj",
+      "metadata": {
+        "source_path": "src/Battlefront2/Source/SpaceAssault.cpp"
+      }
+    },
+    {
+      "name": "Battlefront2/Source/SpawnManager",
+      "target_path": "obj/Win32/ModTools/SpawnManager.obj",
+      "base_path": "obj/Win32/Release/SpawnManager.obj",
+      "metadata": {
+        "source_path": "src/Battlefront2/Source/SpawnManager.cpp"
+      }
+    },
+    {
+      "name": "Battlefront2/Source/TargetManager",
+      "target_path": "obj/Win32/ModTools/TargetManager.obj",
+      "base_path": "obj/Win32/Release/TargetManager.obj",
+      "metadata": {
+        "source_path": "src/Battlefront2/Source/TargetManager.cpp"
+      }
+    },
+    {
+      "name": "Battlefront2/Source/Team",
+      "target_path": "obj/Win32/ModTools/Team.obj",
+      "base_path": "obj/Win32/Release/Team.obj",
+      "metadata": {
+        "source_path": "src/Battlefront2/Source/Team.cpp"
+      }
+    },
+    {
+      "name": "Battlefront2/Source/TeamManager",
+      "target_path": "obj/Win32/ModTools/TeamManager.obj",
+      "base_path": "obj/Win32/Release/TeamManager.obj",
+      "metadata": {
+        "source_path": "src/Battlefront2/Source/TeamManager.cpp"
+      }
+    },
+    {
+      "name": "Battlefront2/Source/TentacleSimulator",
+      "target_path": "obj/Win32/ModTools/TentacleSimulator.obj",
+      "base_path": "obj/Win32/Release/TentacleSimulator.obj",
+      "metadata": {
+        "source_path": "src/Battlefront2/Source/TentacleSimulator.cpp"
+      }
+    },
+    {
+      "name": "Battlefront2/Source/Timer",
+      "target_path": "obj/Win32/ModTools/Timer.obj",
+      "base_path": "obj/Win32/Release/Timer.obj",
+      "metadata": {
+        "source_path": "src/Battlefront2/Source/Timer.cpp"
+      }
+    },
+    {
+      "name": "Battlefront2/Source/Trackable",
+      "target_path": "obj/Win32/ModTools/Trackable.obj",
+      "base_path": "obj/Win32/Release/Trackable.obj",
+      "metadata": {
+        "source_path": "src/Battlefront2/Source/Trackable.cpp"
+      }
+    },
+    {
+      "name": "Battlefront2/Source/Tracker",
+      "target_path": "obj/Win32/ModTools/Tracker.obj",
+      "base_path": "obj/Win32/Release/Tracker.obj",
+      "metadata": {
+        "source_path": "src/Battlefront2/Source/Tracker.cpp"
+      }
+    },
+    {
+      "name": "Battlefront2/Source/TreeGridCache",
+      "target_path": "obj/Win32/ModTools/TreeGridCache.obj",
+      "base_path": "obj/Win32/Release/TreeGridCache.obj",
+      "metadata": {
+        "source_path": "src/Battlefront2/Source/TreeGridCache.cpp"
+      }
+    },
+    {
+      "name": "Battlefront2/Source/TriggerRegionManager",
+      "target_path": "obj/Win32/ModTools/TriggerRegionManager.obj",
+      "base_path": "obj/Win32/Release/TriggerRegionManager.obj",
+      "metadata": {
+        "source_path": "src/Battlefront2/Source/TriggerRegionManager.cpp"
+      }
+    },
+    {
+      "name": "Battlefront2/Source/UnitAgent",
+      "target_path": "obj/Win32/ModTools/UnitAgent.obj",
+      "base_path": "obj/Win32/Release/UnitAgent.obj",
+      "metadata": {
+        "source_path": "src/Battlefront2/Source/UnitAgent.cpp"
+      }
+    },
+    {
+      "name": "Battlefront2/Source/UnitBoardAgent",
+      "target_path": "obj/Win32/ModTools/UnitBoardAgent.obj",
+      "base_path": "obj/Win32/Release/UnitBoardAgent.obj",
+      "metadata": {
+        "source_path": "src/Battlefront2/Source/UnitBoardAgent.cpp"
+      }
+    },
+    {
+      "name": "Battlefront2/Source/UnitCombatAgent",
+      "target_path": "obj/Win32/ModTools/UnitCombatAgent.obj",
+      "base_path": "obj/Win32/Release/UnitCombatAgent.obj",
+      "metadata": {
+        "source_path": "src/Battlefront2/Source/UnitCombatAgent.cpp"
+      }
+    },
+    {
+      "name": "Battlefront2/Source/UnitController",
+      "target_path": "obj/Win32/ModTools/UnitController.obj",
+      "base_path": "obj/Win32/Release/UnitController.obj",
+      "metadata": {
+        "source_path": "src/Battlefront2/Source/UnitController.cpp"
+      }
+    },
+    {
+      "name": "Battlefront2/Source/UnitFlyAgent",
+      "target_path": "obj/Win32/ModTools/UnitFlyAgent.obj",
+      "base_path": "obj/Win32/Release/UnitFlyAgent.obj",
+      "metadata": {
+        "source_path": "src/Battlefront2/Source/UnitFlyAgent.cpp"
+      }
+    },
+    {
+      "name": "Battlefront2/Source/UnitRandomAgent",
+      "target_path": "obj/Win32/ModTools/UnitRandomAgent.obj",
+      "base_path": "obj/Win32/Release/UnitRandomAgent.obj",
+      "metadata": {
+        "source_path": "src/Battlefront2/Source/UnitRandomAgent.cpp"
+      }
+    },
+    {
+      "name": "Battlefront2/Source/UnitUnBoardAgent",
+      "target_path": "obj/Win32/ModTools/UnitUnBoardAgent.obj",
+      "base_path": "obj/Win32/Release/UnitUnBoardAgent.obj",
+      "metadata": {
+        "source_path": "src/Battlefront2/Source/UnitUnBoardAgent.cpp"
+      }
+    },
+    {
+      "name": "Battlefront2/Source/UnitWaitSecondaryAgent",
+      "target_path": "obj/Win32/ModTools/UnitWaitSecondaryAgent.obj",
+      "base_path": "obj/Win32/Release/UnitWaitSecondaryAgent.obj",
+      "metadata": {
+        "source_path": "src/Battlefront2/Source/UnitWaitSecondaryAgent.cpp"
+      }
+    },
+    {
+      "name": "Battlefront2/Source/VoiceOverManager",
+      "target_path": "obj/Win32/ModTools/VoiceOverManager.obj",
+      "base_path": "obj/Win32/Release/VoiceOverManager.obj",
+      "metadata": {
+        "source_path": "src/Battlefront2/Source/VoiceOverManager.cpp"
+      }
+    },
+    {
+      "name": "Battlefront2/Source/Weapon",
+      "target_path": "obj/Win32/ModTools/Weapon.obj",
+      "base_path": "obj/Win32/Release/Weapon.obj",
+      "metadata": {
+        "source_path": "src/Battlefront2/Source/Weapon.cpp"
+      }
+    },
+    {
+      "name": "Battlefront2/Source/WeaponAreaEffect",
+      "target_path": "obj/Win32/ModTools/WeaponAreaEffect.obj",
+      "base_path": "obj/Win32/Release/WeaponAreaEffect.obj",
+      "metadata": {
+        "source_path": "src/Battlefront2/Source/WeaponAreaEffect.cpp"
+      }
+    },
+    {
+      "name": "Battlefront2/Source/WeaponCannon",
+      "target_path": "obj/Win32/ModTools/WeaponCannon.obj",
+      "base_path": "obj/Win32/Release/WeaponCannon.obj",
+      "metadata": {
+        "source_path": "src/Battlefront2/Source/WeaponCannon.cpp"
+      }
+    },
+    {
+      "name": "Battlefront2/Source/WeaponCatapult",
+      "target_path": "obj/Win32/ModTools/WeaponCatapult.obj",
+      "base_path": "obj/Win32/Release/WeaponCatapult.obj",
+      "metadata": {
+        "source_path": "src/Battlefront2/Source/WeaponCatapult.cpp"
+      }
+    },
+    {
+      "name": "Battlefront2/Source/WeaponDestruct",
+      "target_path": "obj/Win32/ModTools/WeaponDestruct.obj",
+      "base_path": "obj/Win32/Release/WeaponDestruct.obj",
+      "metadata": {
+        "source_path": "src/Battlefront2/Source/WeaponDestruct.cpp"
+      }
+    },
+    {
+      "name": "Battlefront2/Source/WeaponDisguise",
+      "target_path": "obj/Win32/ModTools/WeaponDisguise.obj",
+      "base_path": "obj/Win32/Release/WeaponDisguise.obj",
+      "metadata": {
+        "source_path": "src/Battlefront2/Source/WeaponDisguise.cpp"
+      }
+    },
+    {
+      "name": "Battlefront2/Source/WeaponDispenser",
+      "target_path": "obj/Win32/ModTools/WeaponDispenser.obj",
+      "base_path": "obj/Win32/Release/WeaponDispenser.obj",
+      "metadata": {
+        "source_path": "src/Battlefront2/Source/WeaponDispenser.cpp"
+      }
+    },
+    {
+      "name": "Battlefront2/Source/WeaponGrapplingHook",
+      "target_path": "obj/Win32/ModTools/WeaponGrapplingHook.obj",
+      "base_path": "obj/Win32/Release/WeaponGrapplingHook.obj",
+      "metadata": {
+        "source_path": "src/Battlefront2/Source/WeaponGrapplingHook.cpp"
+      }
+    },
+    {
+      "name": "Battlefront2/Source/WeaponGrenade",
+      "target_path": "obj/Win32/ModTools/WeaponGrenade.obj",
+      "base_path": "obj/Win32/Release/WeaponGrenade.obj",
+      "metadata": {
+        "source_path": "src/Battlefront2/Source/WeaponGrenade.cpp"
+      }
+    },
+    {
+      "name": "Battlefront2/Source/WeaponInvisibility",
+      "target_path": "obj/Win32/ModTools/WeaponInvisibility.obj",
+      "base_path": "obj/Win32/Release/WeaponInvisibility.obj",
+      "metadata": {
+        "source_path": "src/Battlefront2/Source/WeaponInvisibility.cpp"
+      }
+    },
+    {
+      "name": "Battlefront2/Source/WeaponLauncher",
+      "target_path": "obj/Win32/ModTools/WeaponLauncher.obj",
+      "base_path": "obj/Win32/Release/WeaponLauncher.obj",
+      "metadata": {
+        "source_path": "src/Battlefront2/Source/WeaponLauncher.cpp"
+      }
+    },
+    {
+      "name": "Battlefront2/Source/WeaponMelee",
+      "target_path": "obj/Win32/ModTools/WeaponMelee.obj",
+      "base_path": "obj/Win32/Release/WeaponMelee.obj",
+      "metadata": {
+        "source_path": "src/Battlefront2/Source/WeaponMelee.cpp"
+      }
+    },
+    {
+      "name": "Battlefront2/Source/WeaponMeleeThrow",
+      "target_path": "obj/Win32/ModTools/WeaponMeleeThrow.obj",
+      "base_path": "obj/Win32/Release/WeaponMeleeThrow.obj",
+      "metadata": {
+        "source_path": "src/Battlefront2/Source/WeaponMeleeThrow.cpp"
+      }
+    },
+    {
+      "name": "Battlefront2/Source/WeaponRemote",
+      "target_path": "obj/Win32/ModTools/WeaponRemote.obj",
+      "base_path": "obj/Win32/Release/WeaponRemote.obj",
+      "metadata": {
+        "source_path": "src/Battlefront2/Source/WeaponRemote.cpp"
+      }
+    },
+    {
+      "name": "Battlefront2/Source/WeaponRepair",
+      "target_path": "obj/Win32/ModTools/WeaponRepair.obj",
+      "base_path": "obj/Win32/Release/WeaponRepair.obj",
+      "metadata": {
+        "source_path": "src/Battlefront2/Source/WeaponRepair.cpp"
+      }
+    },
+    {
+      "name": "Battlefront2/Source/WeaponShield",
+      "target_path": "obj/Win32/ModTools/WeaponShield.obj",
+      "base_path": "obj/Win32/Release/WeaponShield.obj",
+      "metadata": {
+        "source_path": "src/Battlefront2/Source/WeaponShield.cpp"
+      }
+    },
+    {
       "name": "PebbleFL/Common/PblCatmullRom",
       "target_path": "obj/Win32/ModTools/PblCatmullRom.obj",
-      "base_path": "obj/Win32/Release/PblCatmullRom.modtools.obj",
+      "base_path": "obj/Win32/Release/PblCatmullRom.obj",
       "metadata": {
         "source_path": "src/PebbleFL/Common/PblCatmullRom.cpp"
+      }
+    },
+    {
+      "name": "PebbleFL/Common/PblUnicode",
+      "target_path": "obj/Win32/ModTools/PblUnicode.obj",
+      "base_path": "obj/Win32/Release/PblUnicode.obj",
+      "metadata": {
+        "source_path": "src/PebbleFL/Common/PblUnicode.cpp"
+      }
+    },
+    {
+      "name": "RedEngineFL/Graphics/PC/pcRedShader",
+      "target_path": "obj/Win32/ModTools/pcRedShader.obj",
+      "base_path": "obj/RedEngineFL/Win32/Release/pcRedShader.obj",
+      "metadata": {
+        "source_path": "src/RedEngineFL/Graphics/PC/pcRedShader.cpp"
+      }
+    },
+    {
+      "name": "RedEngineFL/Graphics/RedCamera",
+      "target_path": "obj/Win32/ModTools/RedCamera.obj",
+      "base_path": "obj/RedEngineFL/Win32/Release/RedCamera.obj",
+      "metadata": {
+        "source_path": "src/RedEngineFL/Graphics/RedCamera.cpp"
+      }
+    },
+    {
+      "name": "RedEngineFL/Graphics/RedModel",
+      "target_path": "obj/Win32/ModTools/RedModel.obj",
+      "base_path": "obj/RedEngineFL/Win32/Release/RedModel.obj",
+      "metadata": {
+        "source_path": "src/RedEngineFL/Graphics/RedModel.cpp"
+      }
+    },
+    {
+      "name": "RedEngineFL/Graphics/RedPose",
+      "target_path": "obj/Win32/ModTools/RedPose.obj",
+      "base_path": "obj/RedEngineFL/Win32/Release/RedPose.obj",
+      "metadata": {
+        "source_path": "src/RedEngineFL/Graphics/RedPose.cpp"
+      }
+    },
+    {
+      "name": "RedEngineFL/Graphics/RedSkeleton",
+      "target_path": "obj/Win32/ModTools/RedSkeleton.obj",
+      "base_path": "obj/RedEngineFL/Win32/Release/RedSkeleton.obj",
+      "metadata": {
+        "source_path": "src/RedEngineFL/Graphics/RedSkeleton.cpp"
+      }
+    },
+    {
+      "name": "RedEngineFL/Interface/RedInterfaceElement",
+      "target_path": "obj/Win32/ModTools/RedInterfaceElement.obj",
+      "base_path": "obj/RedEngineFL/Win32/Release/RedInterfaceElement.obj",
+      "metadata": {
+        "source_path": "src/RedEngineFL/Interface/RedInterfaceElement.cpp"
+      }
+    },
+    {
+      "name": "RedEngineFL/Interface/RedInterfaceScreen",
+      "target_path": "obj/Win32/ModTools/RedInterfaceScreen.obj",
+      "base_path": "obj/RedEngineFL/Win32/Release/RedInterfaceScreen.obj",
+      "metadata": {
+        "source_path": "src/RedEngineFL/Interface/RedInterfaceScreen.cpp"
+      }
+    },
+    {
+      "name": "RedEngineFL/Interface/RedTextElement",
+      "target_path": "obj/Win32/ModTools/RedTextElement.obj",
+      "base_path": "obj/RedEngineFL/Win32/Release/RedTextElement.obj",
+      "metadata": {
+        "source_path": "src/RedEngineFL/Interface/RedTextElement.cpp"
+      }
+    },
+    {
+      "name": "RedEngineFL/Util/RedCommandConsole",
+      "target_path": "obj/Win32/ModTools/RedCommandConsole.obj",
+      "base_path": "obj/RedEngineFL/Win32/Release/RedCommandConsole.obj",
+      "metadata": {
+        "source_path": "src/RedEngineFL/Util/RedCommandConsole.cpp"
+      }
+    },
+    {
+      "name": "Zephyr/Source/ZephyrAnimBank",
+      "target_path": "obj/Win32/ModTools/ZephyrAnimBank.obj",
+      "base_path": "obj/ZephyrFL/Win32/Release/ZephyrAnimBank.obj",
+      "metadata": {
+        "source_path": "src/Zephyr/Source/ZephyrAnimBank.cpp"
+      }
+    },
+    {
+      "name": "Zephyr/Source/ZephyrSkeletonShared",
+      "target_path": "obj/Win32/ModTools/ZephyrSkeletonShared.obj",
+      "base_path": "obj/ZephyrFL/Win32/Release/ZephyrSkeletonShared.obj",
+      "metadata": {
+        "source_path": "src/Zephyr/Source/ZephyrSkeletonShared.cpp"
       }
     }
   ]

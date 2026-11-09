@@ -223,9 +223,9 @@ HUD::ElementMap::ElementMap(const char* const pName, Factory::ItemCallback pCall
     for (i = 0; i < mode_MAX; ++i)
     {
         _snprintf(buffer, sizeof(buffer), "PostSelected%s", sModeStrings[i]);
-        mPostSelectAll[i].HUD::Item::SetName(buffer);
+        mPostSelectAll[i].Item::SetName(buffer);
         _snprintf(buffer, sizeof(buffer), "Marker%s", sModeStrings[i]);
-        mMarkerAll[i].HUD::Item::SetName(buffer);
+        mMarkerAll[i].Item::SetName(buffer);
         mPostSelectAll[i].mWriteEnabled = false;
         mMarkerAll[i].mWriteEnabled = false;
     }
@@ -252,7 +252,7 @@ HUD::ElementMap::ElementMap(const char* const pName, Factory::ItemCallback pCall
     {
         _snprintf(buffer, sizeof(buffer), "Backdrop%s", sModeStrings[i]);
         HUD::ElementBitmapMasked* pBackdrop = &mBackdrop[i];
-        pBackdrop->HUD::Item::SetName(buffer);
+        pBackdrop->Item::SetName(buffer);
         if (pBackdrop)
         {
             pBackdrop->SetFactory(Factory::FindByHashID(kBitmapMaskedFactoryHash));
@@ -262,13 +262,13 @@ HUD::ElementMap::ElementMap(const char* const pName, Factory::ItemCallback pCall
         pBackdrop->mAlpha = 0.5f;
         pBackdrop->SetZOrder(0xff);
         pBackdrop->RedInterfaceElement::SetPosition(0.0f, 0.0f, 0.0f);
-        pBackdrop->HUD::ElementBitmapBase::SetRect(
+        pBackdrop->ElementBitmapBase::SetRect(
             sViewportHeight / sViewportWidth * gBackdropDefaults[i].diameter,
             gBackdropDefaults[i].diameter, RedBitmapElement::BITMAP_HALIGN_CENTER,
             RedBitmapElement::BITMAP_VALIGN_CENTER);
         pBackdrop->mDynamicAlloc = false;
         ElementGroupBase::AddElement(pBackdrop);
-        pBackdrop->HUD::Element::Enable(mMode == i);
+        pBackdrop->Element::Enable(mMode == i);
         pBackdrop->mWriteEnabled = false;
     }
 
@@ -276,14 +276,14 @@ HUD::ElementMap::ElementMap(const char* const pName, Factory::ItemCallback pCall
     {
         _snprintf(buffer, sizeof(buffer), "PlayerFOV%s", sModeStrings[i]);
         HUD::ElementModel3D* pFOV = &mPlayerFOV[i];
-        pFOV->HUD::Item::SetName(buffer);
+        pFOV->Item::SetName(buffer);
         pFOV->SetZOrder(123);
         if (pFOV)
         {
             pFOV->SetFactory(Factory::FindByHashID(kModel3DFactoryHash));
         }
         ElementGroupBase::AddElement(pFOV);
-        pFOV->HUD::Element::Enable(mMode == i && mMode != mode_Spawn);
+        pFOV->Element::Enable(mMode == i && mMode != mode_Spawn);
         pFOV->mDynamicAlloc = false;
         pFOV->mWriteEnabled = false;
     }
@@ -292,14 +292,14 @@ HUD::ElementMap::ElementMap(const char* const pName, Factory::ItemCallback pCall
     {
         _snprintf(buffer, sizeof(buffer), "PlayerDirection%s", sModeStrings[i]);
         HUD::ElementModel3D* pDirection = &mDirection[i];
-        pDirection->HUD::Item::SetName(buffer);
+        pDirection->Item::SetName(buffer);
         pDirection->SetZOrder(124);
         if (pDirection)
         {
             pDirection->SetFactory(Factory::FindByHashID(kModel3DFactoryHash));
         }
         ElementGroupBase::AddElement(pDirection);
-        pDirection->HUD::Element::Enable(mMode == i && mMode != mode_Spawn);
+        pDirection->Element::Enable(mMode == i && mMode != mode_Spawn);
         pDirection->mDynamicAlloc = false;
         pDirection->mWriteEnabled = false;
     }
@@ -310,14 +310,14 @@ HUD::ElementMap::ElementMap(const char* const pName, Factory::ItemCallback pCall
     {
         _snprintf(buffer, sizeof(buffer), "Target%s", sModeStrings[i]);
         BitmapGroup* pTarget = &mTargetAll[i];
-        pTarget->HUD::Item::SetName(buffer);
+        pTarget->Item::SetName(buffer);
         if (pTarget)
         {
             pTarget->SetFactory(Factory::FindByHashID(kBitmapFactoryHash));
         }
         pTarget->SetColor(RedColor::BLACK);
         pTarget->SetStyle(RedBitmapElement::BITMAP_STYLE_SHADOW);
-        pTarget->HUD::ElementBitmapBase::SetRect(
+        pTarget->ElementBitmapBase::SetRect(
             sSymbolScale[uScaleIndex] / sViewportWidth, sSymbolScale[uScaleIndex] / sViewportHeight,
             RedBitmapElement::BITMAP_HALIGN_CENTER, RedBitmapElement::BITMAP_VALIGN_CENTER);
         pTarget->SetZOrder(126);
@@ -333,13 +333,13 @@ HUD::ElementMap::ElementMap(const char* const pName, Factory::ItemCallback pCall
     {
         _snprintf(buffer, sizeof(buffer), "Post%s", sModeStrings[i]);
         BitmapGroup* pPost = &mPostAll[i];
-        pPost->HUD::Item::SetName(buffer);
+        pPost->Item::SetName(buffer);
         if (pPost)
         {
             pPost->SetFactory(Factory::FindByHashID(kBitmapFactoryHash));
         }
         pPost->SetStyle(RedBitmapElement::BITMAP_STYLE_SHADOW);
-        pPost->HUD::ElementBitmapBase::SetRect(
+        pPost->ElementBitmapBase::SetRect(
             sSymbolScale[uScaleIndex] / sViewportWidth, sSymbolScale[uScaleIndex] / sViewportHeight,
             RedBitmapElement::BITMAP_HALIGN_CENTER, RedBitmapElement::BITMAP_VALIGN_CENTER);
         pPost->SetZOrder(128);
@@ -366,7 +366,7 @@ HUD::ElementMap::ElementMap(const char* const pName, Factory::ItemCallback pCall
     {
         _snprintf(buffer, sizeof(buffer), "PostText%s", sModeStrings[i]);
         HUD::ElementText* pPostText = &mPostTextAll[i];
-        pPostText->HUD::Item::SetName(buffer);
+        pPostText->Item::SetName(buffer);
         if (pPostText)
         {
             pPostText->SetFactory(Factory::FindByHashID(kTextFactoryHash));
@@ -388,14 +388,14 @@ HUD::ElementMap::ElementMap(const char* const pName, Factory::ItemCallback pCall
     {
         _snprintf(buffer, sizeof(buffer), "PostSelect%s", sModeStrings[i]);
         BitmapGroup* pPostSelect = &mPostSelectAll[i];
-        pPostSelect->HUD::Item::SetName(buffer);
+        pPostSelect->Item::SetName(buffer);
         if (pPostSelect)
         {
             pPostSelect->SetFactory(Factory::FindByHashID(kBitmapFactoryHash));
         }
-        pPostSelect->HUD::ElementBitmap::SetTexture("hud_icon_flash");
+        pPostSelect->ElementBitmap::SetTexture("hud_icon_flash");
         pPostSelect->SetStyle(RedBitmapElement::BITMAP_STYLE_SHADOW);
-        pPostSelect->HUD::ElementBitmapBase::SetRect(
+        pPostSelect->ElementBitmapBase::SetRect(
             sSymbolScale[uScaleIndex] / sViewportWidth, sSymbolScale[uScaleIndex] / sViewportHeight,
             RedBitmapElement::BITMAP_HALIGN_CENTER, RedBitmapElement::BITMAP_VALIGN_CENTER);
         pPostSelect->SetZOrder(128);
@@ -410,13 +410,13 @@ HUD::ElementMap::ElementMap(const char* const pName, Factory::ItemCallback pCall
     {
         _snprintf(buffer, sizeof(buffer), "Marker%s", sModeStrings[i]);
         BitmapGroup* pMarker = &mMarkerAll[i];
-        pMarker->HUD::Item::SetName(buffer);
+        pMarker->Item::SetName(buffer);
         if (pMarker)
         {
             pMarker->SetFactory(Factory::FindByHashID(kBitmapFactoryHash));
         }
         pMarker->SetStyle(RedBitmapElement::BITMAP_STYLE_SHADOW);
-        pMarker->HUD::ElementBitmapBase::SetRect(
+        pMarker->ElementBitmapBase::SetRect(
             sSymbolScale[uScaleIndex] / sViewportWidth, sSymbolScale[uScaleIndex] / sViewportHeight,
             RedBitmapElement::BITMAP_HALIGN_CENTER, RedBitmapElement::BITMAP_VALIGN_CENTER);
         pMarker->SetZOrder(127);
@@ -431,19 +431,19 @@ HUD::ElementMap::ElementMap(const char* const pName, Factory::ItemCallback pCall
     {
         _snprintf(buffer, sizeof(buffer), "North%s", sModeStrings[i]);
         HUD::ElementBitmap* pNorth = &mNorthIcon[i];
-        pNorth->HUD::Item::SetName(buffer);
+        pNorth->Item::SetName(buffer);
         if (pNorth)
         {
             pNorth->SetFactory(Factory::FindByHashID(kBitmapFactoryHash));
         }
         pNorth->SetStyle(RedBitmapElement::BITMAP_STYLE_SHADOW);
-        pNorth->HUD::ElementBitmapBase::SetRect(
+        pNorth->ElementBitmapBase::SetRect(
             sSymbolScale[uScaleIndex] / sViewportWidth, sSymbolScale[uScaleIndex] / sViewportHeight,
             RedBitmapElement::BITMAP_HALIGN_CENTER, RedBitmapElement::BITMAP_VALIGN_BOTTOM);
         pNorth->SetZOrder(127);
         pNorth->mDynamicAlloc = false;
         pNorth->mWriteEnabled = false;
-        pNorth->HUD::ElementBitmap::SetTexture("hud_map_northpointer");
+        pNorth->ElementBitmap::SetTexture("hud_map_northpointer");
         ElementGroupBase::AddElement(pNorth);
     }
 
@@ -970,7 +970,7 @@ void HUD::ElementMap::UpdateBackdropTexCoords()
 // FUNCTION: SWBF2 0x00552cd0
 void HUD::ElementMap::UpdateNorthIcon(float)
 {
-    const PblVector3& vScale = mNorthIcon[mMode].HUD::Element::mMatrix.GetScale();
+    const PblVector3& vScale = mNorthIcon[mMode].Element::mMatrix.GetScale();
     float fLeft, fTop, fRight, fBottom;
     mBackdrop[mMode].GetRect(fLeft, fTop, fRight, fBottom);
     mNorthIcon[mMode].SetMatrixPosRotScale(0.0f, (fBottom - fTop) * -0.5f, 0.0f, vScale.x, vScale.y);
@@ -1033,7 +1033,7 @@ void HUD::ElementMap::UpdatePlayerIcon()
         fX = fScreenX;
     }
 
-    const PblVector3& vViewScale = mPlayerFOV[mMode].HUD::Element::mMatrix.GetScale();
+    const PblVector3& vViewScale = mPlayerFOV[mMode].Element::mMatrix.GetScale();
     const D3DXMATRIXA16 mFlat(1.0f, 0.0f, 0.0f, 0.0f,
                               0.0f, 0.0f, -1.0f, 0.0f,
                               0.0f, 1.0f, 0.0f, 0.0f,
@@ -1050,7 +1050,7 @@ void HUD::ElementMap::UpdatePlayerIcon()
     const bool bShowDirection = (float)fabs((double)(fMoveAngle - fViewAngle)) >= 0.2617994f;
     if (bShowDirection)
     {
-        const PblVector3& vMoveScale = mDirection[mMode].HUD::Element::mMatrix.GetScale();
+        const PblVector3& vMoveScale = mDirection[mMode].Element::mMatrix.GetScale();
         matrix = mFlat;
         matrix.RotateZ(fMoveAngle - PblMath::fPi);
         matrix.Scale(vMoveScale.x, vMoveScale.y, vMoveScale.z);
@@ -1060,7 +1060,7 @@ void HUD::ElementMap::UpdatePlayerIcon()
         matrix.m[3][3] = 1.0f;
     }
     mDirection[mMode].RedInterfaceElement::SetMatrix(matrix);
-    mDirection[mMode].HUD::Element::Enable(bShowDirection);
+    mDirection[mMode].Element::Enable(bShowDirection);
 }
 
 // FUNCTION: SWBF2 0x005531a0
@@ -1681,10 +1681,10 @@ void HUD::ElementMap::SetMode(Mode eMode)
 // FUNCTION: SWBF2 0x00554cf0
 void HUD::ElementMap::EnableModeElements(bool bEnable)
 {
-    mBackdrop[mMode].HUD::Element::Enable(bEnable);
-    mPlayerFOV[mMode].HUD::Element::Enable(bEnable && mMode != mode_Spawn);
-    mDirection[mMode].HUD::Element::Enable(bEnable && mMode != mode_Spawn);
-    mNorthIcon[mMode].HUD::Element::Enable(bEnable);
+    mBackdrop[mMode].Element::Enable(bEnable);
+    mPlayerFOV[mMode].Element::Enable(bEnable && mMode != mode_Spawn);
+    mDirection[mMode].Element::Enable(bEnable && mMode != mode_Spawn);
+    mNorthIcon[mMode].Element::Enable(bEnable);
     if (bEnable)
     {
         mTargetAll[mMode].CopyToBitmaps(mTarget, 450, 0, false);

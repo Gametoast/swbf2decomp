@@ -1,9 +1,8 @@
 #include <stdio.h>
 #include <string.h>
-#include <chrono>
 #include <string>
-#include <thread>
-#include <unordered_map>
+#include <map>
+#include <windows.h>
 
 #include "gfGalaxy.h"
 #include "gfSteamAuth.h"
@@ -38,7 +37,7 @@ std::string gEncryptedAppTicket;
 
 // GLOBAL: SWBF2 0x01ec0bf0
 // gFriendConnectionStrings
-std::unordered_map<unsigned __int64, std::string> gFriendConnectionStrings;
+std::map<unsigned __int64, std::string> gFriendConnectionStrings;
 
 // TEMPLATE: SWBF2 0x0052f9a0
 // std::list<std::pair<unsigned __int64 const ,std::basic_string<char,std::char_traits<char>,std::allocator<char> > >,std::allocator<std::pair<unsigned __int64 const ,std::basic_string<char,std::char_traits<char>,std::allocator<char> > > > >::~list<std::pair<unsigned __int64 const ,std::basic_string<char,std::char_traits<char>,std::allocator<char> > >,std::allocator<std::pair<unsigned __int64 const ,std::basic_string<char,std::char_traits<char>,std::allocator<char> > > > >
@@ -324,7 +323,7 @@ int gf::SteamAuthProvider::GetEncryptedAppTicket(char* pTicket, int iSize)
         {
             break;
         }
-        std::this_thread::sleep_for(std::chrono::milliseconds(10));
+        Sleep(10);
     }
 
     if (!gEncryptedAppTicket.size() || (unsigned int)iSize < gEncryptedAppTicket.size())

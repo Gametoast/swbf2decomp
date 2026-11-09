@@ -3604,7 +3604,7 @@ void WriteJoin(NetPktGroup& group, unsigned int guestCount)
     unsigned int count = 0;
     unsigned int viewport;
     unsigned int guest;
-    for (viewport = 0; viewport < _countof(playerIndexes); ++viewport)
+    for (viewport = 0; viewport < ARRAYSIZE(playerIndexes); ++viewport)
     {
         bool active = input->mActiveControllers[viewport];
         if (active)
@@ -3612,7 +3612,7 @@ void WriteJoin(NetPktGroup& group, unsigned int guestCount)
             playerIndexes[count++] = viewport;
         }
     }
-    for (viewport = count; viewport < _countof(playerIndexes); ++viewport)
+    for (viewport = count; viewport < ARRAYSIZE(playerIndexes); ++viewport)
     {
         playerIndexes[viewport] = -1;
     }
@@ -3626,8 +3626,8 @@ void WriteJoin(NetPktGroup& group, unsigned int guestCount)
     {
         joystick = playerIndexes[count];
         char converted[66];
-        PblUnicode::ustrncnv(converted, PlayerProfile::GetProfile((unsigned int)joystick)->GetName(), _countof(converted));
-        WriteString(group, converted, _countof(converted));
+        PblUnicode::ustrncnv(converted, PlayerProfile::GetProfile((unsigned int)joystick)->GetName(), ARRAYSIZE(converted));
+        WriteString(group, converted, ARRAYSIZE(converted));
         ++count;
     }
     group.WriteBits(intraSessionPlayerId[0], 32);
@@ -5709,7 +5709,7 @@ bool CNetFindGame::Update()
                 }
                 void* networking = GetGalaxyNetworkingInterface();
                 int ping = ((galaxy::api::INetworking*)networking)->GetPingWith(itor->mAddr.mGalaxyId);
-                float pingTime = fmaxf(0.0f, (float)ping * 0.001f);
+                float pingTime = Max(0.0f, (float)ping * 0.001f);
                 itor->mFindData.mPingTime = pingTime;
             }
         }

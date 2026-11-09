@@ -640,7 +640,7 @@ void LensFlareEffect::LensFlareList::Render<FlareVertex, 642>() const
             D3DPT_TRIANGLELIST, iNumClearVertices / 3, 3, iNumClearVertices, uiClearStart,
             pClearBuffer, 0, 0);
 
-        RedColor clearColor = { 0, 0, 0, 0 };
+        RedColor clearColor(0, 0, 0, 0);
         RedRenderer::pcRenderPrimitive(pClearPrimitive, s_pClearShader, gMatrixIdentity,
                                        clearColor, 0x200, 0, 0, 0);
         RedColor fillColor(RedColor::BLACK, 255);
@@ -875,7 +875,7 @@ void LensFlareEffect::LensFlareList::Render<FlareCompressedVertex, 37506>() cons
             D3DPT_TRIANGLELIST, iNumClearVertices / 3, 3, iNumClearVertices, uiClearStart,
             pClearBuffer, 0, 0);
 
-        RedColor clearColor = { 0, 0, 0, 0 };
+        RedColor clearColor(0, 0, 0, 0);
         RedRenderer::pcRenderPrimitive(pClearPrimitive, s_pClearShader, gMatrixIdentity,
                                        clearColor, 0x200, 0, 0, 0);
         RedColor fillColor(RedColor::BLACK, 255);

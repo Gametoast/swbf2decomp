@@ -8,7 +8,8 @@ const short* second;
 short* output;
 {
     long ltmp;
-    for (int i = 1; i <= 8; ++i, ++first, ++second, ++output)
+    int i;
+    for (i = 1; i <= 8; ++i, ++first, ++second, ++output)
     {
         *output = (short)GSM_ADD(SASR(*first, 2), SASR(*second, 2));
         *output = (short)GSM_ADD(*output, SASR(*first, 1));
@@ -23,7 +24,8 @@ const short* second;
 short* output;
 {
     long ltmp;
-    for (int i = 1; i <= 8; ++i, ++first, ++second, ++output)
+    int i;
+    for (i = 1; i <= 8; ++i, ++first, ++second, ++output)
     {
         *output = (short)GSM_ADD(SASR(*first, 1), SASR(*second, 1));
     }
@@ -37,7 +39,8 @@ const short* second;
 short* output;
 {
     long ltmp;
-    for (int i = 1; i <= 8; ++i, ++first, ++second, ++output)
+    int i;
+    for (i = 1; i <= 8; ++i, ++first, ++second, ++output)
     {
         *output = (short)GSM_ADD(SASR(*first, 2), SASR(*second, 2));
         *output = (short)GSM_ADD(*output, SASR(*second, 1));
@@ -51,7 +54,8 @@ short* ratios;
 {
     short temp;
     long ltmp;
-    for (int i = 1; i <= 8; ++i, ++ratios)
+    int i;
+    for (i = 1; i <= 8; ++i, ++ratios)
     {
         if (*ratios < 0)
         {

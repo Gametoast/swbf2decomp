@@ -334,7 +334,7 @@ ClothDataT clothData_;
 
 // TEMPLATE: SWBF2 0x00458cb0
 // util::HashTable<ClothBank *,unsigned int,util::TNewArrayAlloc<ClothBank *> >::~HashTable<ClothBank *,unsigned int,util::TNewArrayAlloc<ClothBank *> >
-template ClothBE::ClothDataT::~HashTable();
+template util::HashTable<ClothBank*, unsigned int, util::TNewArrayAlloc<ClothBank*> >::~HashTable();
 
 // SYNTHETIC: SWBF2 0x0045c1f0
 // util::HashTable<ClothBank *,unsigned int,util::TNewArrayAlloc<ClothBank *> >::HashTable<ClothBank *,unsigned int,util::TNewArrayAlloc<ClothBank *> >

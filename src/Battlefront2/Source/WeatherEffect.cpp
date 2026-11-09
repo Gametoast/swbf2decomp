@@ -568,7 +568,7 @@ void PrecipitationEffect::Update(float fDeltaTime)
     const float fDensity = mNumGroundEffectsPerSec / (mGroundEffectSpread * mGroundEffectSpread * 0.65f);
     const unsigned int uNumCameras = CameraManager::sInstance->GetNumCameras();
 
-    PblBox aBoxes[_countof(mGroundEffectTimer)];
+    PblBox aBoxes[ARRAYSIZE(mGroundEffectTimer)];
     unsigned int uCam;
     for (uCam = 0; uCam < uNumCameras; ++uCam)
     {
@@ -657,7 +657,7 @@ void PrecipitationEffect::Update(float fDeltaTime)
             pEffect->AttachEffectToVector(&vPos, false);
         }
     }
-    for (; uCam < _countof(mGroundEffectTimer); ++uCam)
+    for (; uCam < ARRAYSIZE(mGroundEffectTimer); ++uCam)
     {
         mGroundEffectTimer[uCam] = 0.0f;
     }
