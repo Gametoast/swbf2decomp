@@ -644,9 +644,9 @@ void ExplosionClass::CreateExplosion(const PblVector3& aPos, const DamageOwner& 
     }
 
     float maxRadius = mDamageRadius[1] > mPushRadius[1] ? mDamageRadius[1] : mPushRadius[1];
-    GameObject* array[20];
+    GameObject* array[kMaxTargets];
     int count = CollisionManager::GetObjectsInRange(
-        aPos, maxRadius, array, 20, 0,
+        aPos, maxRadius, array, kMaxTargets, 0,
         COLL_ITEM | COLL_SOFT | COLL_RIGID | COLL_STATIC | COLL_ATTACHED | COLL_SHIELD);
 
     DamageDesc damage = mDamage;

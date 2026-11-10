@@ -3,6 +3,7 @@
 #include <stddef.h>
 
 #include "Thread.h"
+#include "GameLimits.h"
 #include "PebbleFL/Common/PblBitVector.h"
 #include "PebbleFL/Common/PblHashTable.h"
 #include "RedEngineFL/Memory/RedMemoryPool.h"
@@ -24,7 +25,7 @@ public:
 
     virtual bool Update(float fDeltaTime);
 
-    PblBitVector<600> GetPlayersInRegion();
+    PblBitVector<GameLimits::kMaxCharacters> GetPlayersInRegion();
 
     static void* operator new(unsigned int uSize) { return sMemoryPool.Allocate(uSize); }
 
@@ -33,7 +34,7 @@ public:
     static void operator delete(void* pBlock) { sMemoryPool.Free(pBlock); }
 
     RedRegion& mRegion;
-    PblBitVector<600> mPlayers;
+    PblBitVector<GameLimits::kMaxCharacters> mPlayers;
 
     static MemoryPool sMemoryPool;
 };

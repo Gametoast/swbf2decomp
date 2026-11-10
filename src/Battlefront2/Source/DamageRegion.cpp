@@ -6,6 +6,7 @@
 #include "GameLoop.h"
 #include "GameObject.h"
 #include "TriggerRegionManager.h"
+#include "CollisionManager.h"
 
 static inline Damageable* GetDamageable(GameObject* pObject)
 {
@@ -48,8 +49,8 @@ DamageRegion::DamageRegion(RedRegionDesc& desc, const Damage& damage)
 // FUNCTION: SWBF2 0x00489f80
 void DamageRegion::Update(float fDeltaTime) const
 {
-    GameObject* apObjects[64];
-    int iCount = TriggerRegionManager::GetObjectsInRegion(this, apObjects, 64);
+    GameObject* apObjects[CollisionManager::kMaxQueryObjects];
+    int iCount = TriggerRegionManager::GetObjectsInRegion(this, apObjects, CollisionManager::kMaxQueryObjects);
     if (!iCount)
     {
         return;

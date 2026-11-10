@@ -98,7 +98,9 @@ public:
 private:
     unsigned int m_uiTexture;
     pcRedShader* m_pShader;
-    _DropShadow mShadowsList[32];
+    // the most drop shadows drawn in a frame
+    static const int kMaxShadows = 32;
+    _DropShadow mShadowsList[kMaxShadows];
     mutable int mShadowCount;
     float mShadowOffset;
     float mPosOffset;
@@ -155,9 +157,9 @@ void DropShadowRenderable::AddShadow(unsigned int uiTexture, const PblVector3& v
         return;
     }
 
-    if (++mShadowCount > 32)
+    if (++mShadowCount > kMaxShadows)
     {
-        mShadowCount = 32;
+        mShadowCount = kMaxShadows;
     }
     _DropShadow& shadow = mShadowsList[mShadowCount - 1];
 

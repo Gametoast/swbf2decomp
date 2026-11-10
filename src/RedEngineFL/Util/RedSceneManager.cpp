@@ -124,8 +124,11 @@ float g_fCameraCosHalfFOVY;
 // GLOBAL: SWBF2 0x009a08b0
 // sRedSceneCamera
 static RedSceneCamera sRedSceneCamera;
+// the most objects the far pass draws (the buffer, and sMaxNumFarObjects' default and cap)
+static const int kMaxFarObjects = 256;
+
 // GLOBAL: SWBF2 0x007df954
-static int sMaxNumFarObjects = 256;
+static int sMaxNumFarObjects = kMaxFarObjects;
 
 // GLOBAL: SWBF2 0x009a092c
 static bool sDrawFullyVisibleBoxes;
@@ -494,9 +497,9 @@ void RenderFarObjects()
     }
 
     float fMinScreenSize = RedLodManager::GetMinScreenSize();
-    RedSceneObject* objects[256];
+    RedSceneObject* objects[kMaxFarObjects];
     int iCount = 0;
-    int iMax = Min(sMaxNumFarObjects, 256);
+    int iMax = Min(sMaxNumFarObjects, kMaxFarObjects);
     int iClass2Budget = 10;
     sMaxNumFarObjects = iMax;
     float fMinRatio = fMinScreenSize * fMinScreenSize / 798720.0f;

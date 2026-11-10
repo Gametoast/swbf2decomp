@@ -3,6 +3,7 @@
 #include <stddef.h>
 
 #include "Thread.h"
+#include "GameLimits.h"
 
 class CommandPost;
 class EntityDefenseGridTurret;
@@ -62,7 +63,7 @@ private:
 
 public:
     unsigned int mTeamBonuses[2];
-    unsigned int mIndividualBonuses[600];
+    unsigned int mIndividualBonuses[GameLimits::kMaxCharacters];
     int mNumCPs;
     bool mbIsBonusAutoturretsInitialized;
     CommandPostData* mpCommandPostData;

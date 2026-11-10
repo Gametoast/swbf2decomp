@@ -35,6 +35,7 @@
 #include "VehicleManager.h"
 #include "CameraManager.h"
 #include "Character.h"
+#include "GameLimits.h"
 #include "CommandPost.h"
 #include "CommandPostManager.h"
 #include "EntityBuilding.h"
@@ -256,7 +257,7 @@ bool AIUtil::gSkipPlayer;
 float AIUtil::gSnipeSuitabilityDist = 70.0f;
 
 // GLOBAL: SWBF2 0x01f9af80
-static unsigned __int64 sSpied[600];
+static unsigned __int64 sSpied[GameLimits::kMaxCharacters];
 
 namespace AIUtil
 {
@@ -344,7 +345,7 @@ void AIUtil::Init()
     AIVisRegionManager::Init();
     CombatUtil::Init();
 
-    for (int i = 0; i < 600; i++)
+    for (int i = 0; i < GameLimits::kMaxCharacters; i++)
     {
         sSpied[i] = 0;
     }

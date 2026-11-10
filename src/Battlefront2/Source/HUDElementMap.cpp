@@ -323,10 +323,10 @@ HUD::ElementMap::ElementMap(const char* const pName, Factory::ItemCallback pCall
         pTarget->SetZOrder(126);
         pTarget->mDynamicAlloc = false;
         ElementGroupBase::AddElement(pTarget);
-        pTarget->Init(this, i, mTarget, 450);
+        pTarget->Init(this, i, mTarget, TargetManager::MAX_TARGETS);
         pTarget->mWriteEnabled = false;
     }
-    mTargetAll[mMode].CopyToBitmaps(mTarget, 450, this, true);
+    mTargetAll[mMode].CopyToBitmaps(mTarget, TargetManager::MAX_TARGETS, this, true);
     mTargetFireColor = RedColor::WHITE;
 
     for (i = 0; i < mode_MAX; ++i)
@@ -496,7 +496,7 @@ void HUD::ElementMap::Read(PblConfig& config, Factory::ItemCallback pCallback, v
                 {
                     PblConfig scope(config.ReadNextScope(), true);
                     mTargetAll[i].Read(scope, 0, 0);
-                    mTargetAll[mMode].CopyToBitmaps(mTarget, 450, 0, true);
+                    mTargetAll[mMode].CopyToBitmaps(mTarget, TargetManager::MAX_TARGETS, 0, true);
                     break;
                 }
                 if (data.GetId() == mPostAll[i].GetNameHash())
@@ -1687,7 +1687,7 @@ void HUD::ElementMap::EnableModeElements(bool bEnable)
     mNorthIcon[mMode].HUD::Element::Enable(bEnable);
     if (bEnable)
     {
-        mTargetAll[mMode].CopyToBitmaps(mTarget, 450, 0, false);
+        mTargetAll[mMode].CopyToBitmaps(mTarget, TargetManager::MAX_TARGETS, 0, false);
         mPostAll[mMode].CopyToBitmaps(mPost, 16, 0, false);
         mPostSelectAll[mMode].CopyToBitmaps(mPostSelect, 16, 0, false);
         mMarkerAll[mMode].CopyToBitmaps(mMarker, 32, 0, false);

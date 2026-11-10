@@ -200,13 +200,13 @@ ActiveRegion::~ActiveRegion()
 // FUNCTION: SWBF2 0x00437660
 bool ActiveRegion::Update(float fDeltaTime)
 {
-    PblBitVector<600> oldPlayers(mPlayers);
+    PblBitVector<GameLimits::kMaxCharacters> oldPlayers(mPlayers);
     mPlayers = GetPlayersInRegion();
 
-    PblBitVector<600> notOld(~oldPlayers);
-    PblBitVector<600> entered(mPlayers);
+    PblBitVector<GameLimits::kMaxCharacters> notOld(~oldPlayers);
+    PblBitVector<GameLimits::kMaxCharacters> entered(mPlayers);
     entered.And(notOld);
-    PblBitVector<600> left;
+    PblBitVector<GameLimits::kMaxCharacters> left;
     left = ~mPlayers;
     left.And(oldPlayers);
 
@@ -227,13 +227,13 @@ bool ActiveRegion::Update(float fDeltaTime)
 }
 
 // FUNCTION: SWBF2 0x00437960
-PblBitVector<600> ActiveRegion::GetPlayersInRegion()
+PblBitVector<GameLimits::kMaxCharacters> ActiveRegion::GetPlayersInRegion()
 {
-    PblBitVector<600> players;
+    PblBitVector<GameLimits::kMaxCharacters> players;
     players.ClearAll();
 
-    GameObject* pObjects[64];
-    int iCount = CollisionManager::GetObjectsInRegion(mRegion, pObjects, 64, 0, 10);
+    GameObject* pObjects[CollisionManager::kMaxQueryObjects];
+    int iCount = CollisionManager::GetObjectsInRegion(mRegion, pObjects, CollisionManager::kMaxQueryObjects, 0, 10);
     for (int i = 0; i < iCount; ++i)
     {
         const bool bAlive = pObjects[i]->mIsAlive;

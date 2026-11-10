@@ -34,7 +34,7 @@ void Event<Team, float>::Callback::Trigger(Team& item, float& param);
 Team* Team::sHostTeams[Team::kMaxTeams];
 
 // GLOBAL: SWBF2 0x01eafca4
-Team* Team::sClientTeams[8];
+Team* Team::sClientTeams[kMaxTeams];
 
 // GLOBAL: SWBF2 0x007e9aa0
 Team** Team::sTeams = Team::sHostTeams;
@@ -73,11 +73,11 @@ RedColor gNeutralColor = RedColor::YELLOW;
 void Team::CreateAll()
 {
     sTeams[0] = new Team(0, 0, 0);
-    sTeams[1] = new Team(1, 300, 12);
-    sTeams[2] = new Team(2, 300, 12);
+    sTeams[1] = new Team(1, kMemberLimit, kClassLimit);
+    sTeams[2] = new Team(2, kMemberLimit, kClassLimit);
     for (int i = 3; i < Team::kMaxTeams; ++i)
     {
-        sTeams[i] = new Team(i, 300, 12);
+        sTeams[i] = new Team(i, kMemberLimit, kClassLimit);
         sTeams[i]->mMaxReinforcements = 0x7FFFFFFF;
         sTeams[i]->SetCurReinforcements(0x7FFFFFFF);
     }
@@ -766,8 +766,8 @@ int Team::PickRandomClassIndex(Character* pCharacter) const
         return -1;
     }
 
-    int aiUnits[12];
-    int aiOrder[12];
+    int aiUnits[kClassLimit];
+    int aiOrder[kClassLimit];
     memset(aiUnits, 0, sizeof(aiUnits));
 
     bool bReserve = false;

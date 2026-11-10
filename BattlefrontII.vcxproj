@@ -2350,6 +2350,7 @@
     <ClInclude Include="src\Battlefront2\Source\LuaScript.h" />
     <ClInclude Include="src\Battlefront2\Source\MapCamera.h" />
     <ClInclude Include="src\Battlefront2\Source\MedalsMgr.h" />
+    <ClInclude Include="src\Battlefront2\Source\GameLimits.h" />
     <ClInclude Include="src\Battlefront2\Source\MemoryPoolCounts.h" />
     <ClInclude Include="src\Battlefront2\Source\MessageDisplay.h" />
     <ClInclude Include="src\Battlefront2\Source\MineHelper.h" />

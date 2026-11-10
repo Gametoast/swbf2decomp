@@ -355,8 +355,9 @@ bool EntityMine::Update(float fDeltaTime)
                                      ((EntityMineClass*)mClass)->mSuppressRadius
                                  ? ((EntityMineClass*)mClass)->mTriggerRadius
                                  : ((EntityMineClass*)mClass)->mSuppressRadius;
-        GameObject* apObjects[64];
-        const int iCount = CollisionManager::GetObjectsInRange(vPos, fRange, apObjects, 64, this, 42);
+        GameObject* apObjects[CollisionManager::kMaxQueryObjects];
+        const int iCount = CollisionManager::GetObjectsInRange(vPos, fRange, apObjects,
+                                                               CollisionManager::kMaxQueryObjects, this, 42);
         for (int i = 0; i < iCount; ++i)
         {
             if (IsMyEnemy(apObjects[i]) && apObjects[i]->IsAlive())

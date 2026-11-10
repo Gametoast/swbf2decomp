@@ -64,7 +64,7 @@ unsigned int kuiParticleShader = PblHash("particle");
 
 // GLOBAL: SWBF2 0x009661e0
 // RedParticleRenderer::s_caches
-RedParticleRenderer RedParticleRenderer::s_caches[15];
+RedParticleRenderer RedParticleRenderer::s_caches[RedParticleRenderer::kNumCaches];
 
 // SYNTHETIC: SWBF2 0x004080f0
 // `dynamic initializer for 'RedParticleRenderer::_Instance''
@@ -136,14 +136,13 @@ static float GetSin(float fAngle);
 static int numIndicesAdded(ParticleInfoType eType);
 static int numVertsAdded(ParticleInfoType eType);
 
-static const int MAX_PARTICLES = 200;
 
 // FUNCTION: SWBF2 0x006d0c60
 bool RedParticleRenderer::AddParticle(ParticleInfoType eType, const PblVector3& vPos, const RedColor& color,
                                       float fSize, float fRotation, TexCoords texCoords,
                                       const PblVector3& vRight, const PblVector3& vUp)
 {
-    if (m_particleIndex >= MAX_PARTICLES)
+    if (m_particleIndex >= kMaxParticles)
     {
         return false;
     }
@@ -615,7 +614,7 @@ bool RedParticleRenderer::IsFull()
     RedParticleRenderer* pCache = RedParticleRenderer::currentCache;
     if (pCache)
     {
-        return pCache->m_particleIndex >= 200;
+        return pCache->m_particleIndex >= RedParticleRenderer::kMaxParticles;
     }
     return false;
 }
@@ -709,7 +708,7 @@ void RedParticleRenderer::SetCurrentCache(unsigned int uTexture, RedBlendMode eB
             return;
         }
     }
-    if (s_cacheIndex >= 15)
+    if (s_cacheIndex >= RedParticleRenderer::kNumCaches)
     {
         currentCache = 0;
         return;

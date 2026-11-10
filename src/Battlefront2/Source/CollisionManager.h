@@ -31,6 +31,9 @@ public:
         CollisionManager* mOwner;
     };
 
+    // the result buffer an object query's caller gives it (GetObjectsInRange / InRegion here, trigger regions and
+    // command post capture regions too)
+    static const int kMaxQueryObjects = 64;
     static bool Create(const PblVector3& vMin, const PblVector3& vMax);
     static bool CreateClient();
     static bool Destroy();

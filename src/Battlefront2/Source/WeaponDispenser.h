@@ -6,6 +6,7 @@
 #include <stddef.h>
 
 #include "Weapon.h"
+#include "GameLimits.h"
 #include "WeaponCannon.h"
 #include "PebbleFL/Common/PblHandle.h"
 #include "PebbleFL/Common/PblHashTable.h"
@@ -48,8 +49,8 @@ public:
     bool mHideOnEmpty;
     PblVector3 mFirePointExtraOffset;
     PblHandle<GameObject>* mTrackItemPool;
-    PblHandle<GameObject>* mTrackItemArray[600];
-    int mTrackItemCount[600];
+    PblHandle<GameObject>* mTrackItemArray[GameLimits::kMaxCharacters];
+    int mTrackItemCount[GameLimits::kMaxCharacters];
     PblVector3 m_avFireOffset[3];
 };
 

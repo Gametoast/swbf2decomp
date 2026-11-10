@@ -86,14 +86,17 @@ int sCurBarrel;
 // FUNCTION: SWBF2 0x0043e4c0
 AimerClass::AimerClass()
 {
+    const float DEG2RAD = 0.017453292f;
+
     memset(mBarrelInfo, 0, sizeof(mBarrelInfo));
 
     mNumBarrels = 0;
-    mPitchMin = -0.7853982f;
-    mPitchMax = 0.7853982f;
+    // default limits around the rest direction: 45 degrees up or down, 30 degrees to either side
+    mPitchMin = -45.0f * DEG2RAD;
+    mPitchMax = +45.0f * DEG2RAD;
     mPitchRate = 1.0f;
-    mYawMin = -0.5235988f;
-    mYawMax = 0.5235988f;
+    mYawMin = -30.0f * DEG2RAD;
+    mYawMax = +30.0f * DEG2RAD;
     mYawRate = 2.0f;
     mShiftYaw = false;
     mRestDir.x = 0.0f;

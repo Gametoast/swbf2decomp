@@ -1263,11 +1263,11 @@ bool CommandPost::Update(float fDeltaTime)
 
     Character* pLongestHolder = 0;
     float fLongestHoldTime = 0.0f;
-    GameObject* apObjects[64];
+    GameObject* apObjects[CollisionManager::kMaxQueryObjects];
     int iCount;
     if (!NetGame::IsEnabled() || !NetGame::IsClient() || NetGame::IsNearLocalPlayer(GetMatrix().GetTranslation()))
     {
-        iCount = GetObjectsInCaptureRegion(apObjects, 64);
+        iCount = GetObjectsInCaptureRegion(apObjects, CollisionManager::kMaxQueryObjects);
         for (int i = 0; i < iCount; ++i)
         {
             if (!apObjects[i]->IsAlive() || !apObjects[i]->GetControllable())
@@ -1493,7 +1493,7 @@ bool CommandPost::Update(float fDeltaTime)
 
         float fRate = 0.0f;
         float fWeight = 1.0f;
-        for (int iTeam = 1; iTeam < 8; ++iTeam)
+        for (int iTeam = 1; iTeam < Team::kMaxTeams; ++iTeam)
         {
             if (iTeam == GetGameObject()->mTeam)
             {

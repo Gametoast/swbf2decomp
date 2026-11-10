@@ -3383,9 +3383,10 @@ bool EntityDroideka::Update(float fDeltaTime)
             }
             if (!mCanChangeClass)
             {
-                GameObject* aObjects[64];
+                GameObject* aObjects[CollisionManager::kMaxQueryObjects];
                 int iCount =
-                    CollisionManager::GetObjectsInRange(GetCollisionCenter(), 30.0f, aObjects, 64, this, 0x10);
+                    CollisionManager::GetObjectsInRange(GetCollisionCenter(), 30.0f, aObjects,
+                                                        CollisionManager::kMaxQueryObjects, this, 0x10);
                 for (int i = 0; i < iCount; ++i)
                 {
                     const PblVector3& vMe = GetPosition();

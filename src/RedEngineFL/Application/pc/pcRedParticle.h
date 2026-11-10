@@ -92,7 +92,11 @@ public:
 
     static int s_cacheIndex;
 
-    static RedParticleRenderer s_caches[15];
+    // the particle caches (one per texture and blend mode drawn in a frame) and the particles each holds
+    static const int kNumCaches = 15;
+    static const int kMaxParticles = 200;
+
+    static RedParticleRenderer s_caches[kNumCaches];
 
 protected:
 
@@ -103,7 +107,7 @@ protected:
                      const PblVector3& vRight, const PblVector3& vUp);
     void AddParticleToBuffers(void* pVertices, unsigned short* pIndices);
 
-    RedParticleInfoType m_particleCache[200];
+    RedParticleInfoType m_particleCache[kMaxParticles];
     int m_particleIndex;
     unsigned int m_texHash;
     RedBlendMode m_blendMode;

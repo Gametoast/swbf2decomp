@@ -166,8 +166,11 @@ public:
     static Team** sTeams;
 
     static const int kMaxTeams = 8;
+    // the member and class limits CreateAll gives every team
+    static const int kMemberLimit = 300;
+    static const int kClassLimit = 12;
     static Team* sHostTeams[kMaxTeams];
-    static Team* sClientTeams[8];
+    static Team* sClientTeams[kMaxTeams];
     static int sTeamMaxReinforcementsOverride[2];
 
     // FUNCTION: SWBF2 0x00490b30

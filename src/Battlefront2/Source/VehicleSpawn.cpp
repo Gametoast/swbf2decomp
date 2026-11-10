@@ -165,7 +165,7 @@ void VehicleSpawn::SetProperty(unsigned int uProperty, const char* pszValue)
         return;
     }
 
-    for (int iTeam = 0; iTeam < 8; ++iTeam)
+    for (int iTeam = 0; iTeam < Team::kMaxTeams; ++iTeam)
     {
         Team* pTeam = Team::GetPtr(iTeam);
         int iSide = pTeam->GetSide();

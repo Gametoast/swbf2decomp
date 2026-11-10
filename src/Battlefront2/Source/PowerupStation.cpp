@@ -450,8 +450,8 @@ bool PowerupStation::Update(float fDeltaTime)
     {
         mPowerupTimer -= mClass->mPowerupDelay;
 
-        GameObject* apObjects[64];
-        int iNumObjects = GetObjectsInRegion(mEffectRegion, apObjects, 64);
+        GameObject* apObjects[CollisionManager::kMaxQueryObjects];
+        int iNumObjects = GetObjectsInRegion(mEffectRegion, apObjects, CollisionManager::kMaxQueryObjects);
         bool bApplied = false;
         for (int i = 0; i < iNumObjects; i++)
         {

@@ -1834,7 +1834,7 @@ int SetProperty(lua_State* L)
 int ClearAIGoals(lua_State* L)
 {
     int iTeam = LuaHelper::GetInt(1);
-    if (iTeam >= 0 && iTeam < 8)
+    if (iTeam >= 0 && iTeam < Team::kMaxTeams)
     {
         AI::AIGoalManager::Instance()->ClearAllGoals(iTeam);
     }

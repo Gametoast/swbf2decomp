@@ -33,23 +33,27 @@ static const float ANIM_FRAME_SPEED = 1.0f / 30.0f;
 // GLOBAL: SWBF2 0x01eafb1c
 SoldierAnimatorClass* SoldierAnimatorClass::sInstance;
 
+// the bones that tell the two special skeletons apart: General Grievous (four arms) and the Acklay
+static const unsigned int uiGreviousBone = 0x93e93819 /* "bone_abdomen" */;
+static const unsigned int uiAcklayBone = 0x7a89c91f /* "bone_r_finger3" */;
+
 // GLOBAL: SWBF2 0x007ae72c
-static const unsigned int s_auiAnimatedJoints[] = { 0x16e27226 /* "bone_root" */, 0x2b960099 /* "hp_weapons" */, 0 };
+static const unsigned int sTransformedList[] = { 0x16e27226 /* "bone_root" */, 0x2b960099 /* "hp_weapons" */, 0 };
 
 // GLOBAL: SWBF2 0x007ae740
-static const unsigned int s_auiAnimatedJoints_93e93819[] = { 0x16e27226 /* "bone_root" */, 0x8afdf5e4 /* "bone_head" */, 0x98b5d322 /* "bone_lb_wrist" */, 0xa1296ed1 /* "bone_lf_wrist" */,
+static const unsigned int sGreviousTransformedList[] = { 0x16e27226 /* "bone_root" */, 0x8afdf5e4 /* "bone_head" */, 0x98b5d322 /* "bone_lb_wrist" */, 0xa1296ed1 /* "bone_lf_wrist" */,
                                                              0x3ce47edc /* "bone_rb_wrist" */, 0x0578c32f /* "bone_rf_wrist" */, 0 };
 
 // GLOBAL: SWBF2 0x007ae75c
-static const unsigned int s_auiAnimatedJoints_7a89c91f[] = { 0x16e27226 /* "bone_root" */, 0 };
+static const unsigned int sAcklayTransformedList[] = { 0x16e27226 /* "bone_root" */, 0 };
 
 // GLOBAL: SWBF2 0x007ae790
-static const unsigned int s_auiLowerBodyJoints_b70e2184[] = {
+static const unsigned int auiAcklayLowerBodyBoneHash[] = {
     0x5e892db0 /* "bone_l_upperarm2" */, 0x1acfaf53 /* "bone_l_forarm4" */, 0xcdce0a7a /* "bone_l_finger2" */, 0x5a483007 /* "bone_l_upperarm3" */, 0x0488ff56 /* "bone_l_forarm3" */, 0xc90f17cd /* "bone_l_finger3" */, 0x3344aa92 /* "bone_r_upperarm2" */, 0xb3cf3c33 /* "bone_r_forarm2" */,
     0x7e48d4a8 /* "bone_r_finger2" */, 0x3785b725 /* "bone_r_upperarm3" */, 0xb70e2184 /* "bone_r_forarm3" */, 0x7a89c91f /* "bone_r_finger3" */, 0x93e93819 /* "bone_abdomen" */, 0x16e27226 /* "bone_root" */, 0xe6e47876 /* "bone_pelvis" */,
 };
 // GLOBAL: SWBF2 0x007ae7d0
-static const unsigned int s_auiLowerBodyJoints[] = {
+static const unsigned int auiNormalLowerBodyBoneHash[] = {
     0x16e27226 /* "bone_root" */, 0xe6e47876 /* "bone_pelvis" */, 0xc496176d /* "bone_l_thigh" */, 0x87019234 /* "bone_l_calf" */, 0x1af77461 /* "bone_l_foot" */,
     0x2a8eade7 /* "bone_l_toe" */, 0xf6eff696 /* "bone_r_thigh" */, 0xb2f01cd3 /* "bone_r_calf" */, 0x2f06fa86 /* "bone_r_foot" */, 0x5a5be874 /* "bone_r_toe" */,
 };
@@ -98,7 +102,7 @@ SoldierAnimatorClass::~SoldierAnimatorClass()
 {
     if (mSoldierAnimators)
     {
-        for (int i = 0; i < 50; ++i)
+        for (int i = 0; i < kNumSoldierAnimators; ++i)
         {
             PblList<SoldierAnimator>::Node& node = mSoldierAnimators[i].GetLRUNode();
             if (node.IsInList())
@@ -417,32 +421,32 @@ void SoldierAnimatorClass::SetupJointTransformAnimationFlag(ZephyrSkeletonShared
         pSkel->SetJointTransformAnimationFlag(idx, false);
     }
 
-    idx = pSkel->GetJointIdxByCrc(0x7a89c91f /* "bone_r_finger3" */);
+    idx = pSkel->GetJointIdxByCrc(uiAcklayBone);
     if (idx < 0)
     {
-        idx = pSkel->GetJointIdxByCrc(0x93e93819 /* "bone_abdomen" */);
+        idx = pSkel->GetJointIdxByCrc(uiGreviousBone);
         if (idx < 0)
         {
-            for (int t = 0; s_auiAnimatedJoints[t]; ++t)
+            for (int t = 0; sTransformedList[t]; ++t)
             {
-                idx = pSkel->GetJointIdxByCrc(s_auiAnimatedJoints[t]);
+                idx = pSkel->GetJointIdxByCrc(sTransformedList[t]);
                 pSkel->SetJointTransformAnimationFlag(idx, true);
             }
         }
         else
         {
-            for (int t = 0; s_auiAnimatedJoints_93e93819[t]; ++t)
+            for (int t = 0; sGreviousTransformedList[t]; ++t)
             {
-                idx = pSkel->GetJointIdxByCrc(s_auiAnimatedJoints_93e93819[t]);
+                idx = pSkel->GetJointIdxByCrc(sGreviousTransformedList[t]);
                 pSkel->SetJointTransformAnimationFlag(idx, true);
             }
         }
     }
     else
     {
-        for (int t = 0; s_auiAnimatedJoints_7a89c91f[t]; ++t)
+        for (int t = 0; sAcklayTransformedList[t]; ++t)
         {
-            idx = pSkel->GetJointIdxByCrc(s_auiAnimatedJoints_7a89c91f[t]);
+            idx = pSkel->GetJointIdxByCrc(sAcklayTransformedList[t]);
             pSkel->SetJointTransformAnimationFlag(idx, true);
         }
     }
@@ -460,18 +464,18 @@ void SoldierAnimatorClass::SetupBodyMasks(const ZephyrSkeletonShared* pSkel, Pbl
 
     if (iForearmJoint >= 0)
     {
-        for (int i = 0; i < (int)(sizeof(s_auiLowerBodyJoints_b70e2184) / sizeof(unsigned int)); ++i)
+        for (int i = 0; i < (int)(sizeof(auiAcklayLowerBodyBoneHash) / sizeof(unsigned int)); ++i)
         {
-            int iJoint = (int)kJoints.Find(s_auiLowerBodyJoints_b70e2184[i]) - 1;
+            int iJoint = (int)kJoints.Find(auiAcklayLowerBodyBoneHash[i]) - 1;
             upperBodyMask.ClearBit(iJoint);
             lowerBodyMask.SetBit(iJoint);
         }
     }
     else
     {
-        for (int i = 0; i < (int)(sizeof(s_auiLowerBodyJoints) / sizeof(unsigned int)); ++i)
+        for (int i = 0; i < (int)(sizeof(auiNormalLowerBodyBoneHash) / sizeof(unsigned int)); ++i)
         {
-            int iJoint = (int)kJoints.Find(s_auiLowerBodyJoints[i]) - 1;
+            int iJoint = (int)kJoints.Find(auiNormalLowerBodyBoneHash[i]) - 1;
             upperBodyMask.ClearBit(iJoint);
             lowerBodyMask.SetBit(iJoint);
         }
@@ -2387,10 +2391,10 @@ void SoldierAnimatorClass::_PostLoad()
 
     SoldierAnimationData::DiscardLoadTimeData();
 
-    mSoldierAnimators = new SoldierAnimator[50];
+    mSoldierAnimators = new SoldierAnimator[kNumSoldierAnimators];
     if (mSoldierAnimators)
     {
-        for (int i = 0; i < 50; ++i)
+        for (int i = 0; i < kNumSoldierAnimators; ++i)
         {
             mSoldierAnimators[i].Initialize(mZephyrSkeletonShared);
             mLRU_List.Add(&mSoldierAnimators[i].GetLRUNode(), &mSoldierAnimators[i]);

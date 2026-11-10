@@ -160,6 +160,8 @@ public:
 
     static SoldierAnimatorClass* sInstance;
 
+    // the high-res animators, shared by the soldiers drawn in full detail
+    static const int kNumSoldierAnimators = 50;
     SoldierAnimator* mSoldierAnimators;
     PblList<SoldierAnimator> mLRU_List;
     ZephyrSkeletonShared* mZephyrSkeletonShared;

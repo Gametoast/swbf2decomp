@@ -10,6 +10,7 @@
 #include <string.h>
 
 #include "Character.h"
+#include "GameLimits.h"
 #include "Entity.h"
 #include "GameLoop.h"
 #include "NetGame.h"
@@ -97,7 +98,7 @@ int ScriptCB_GetRank(lua_State*)
     }
 
     Team* pTeam = Team::sTeams[(int)fTeam];
-    Character* apSorted[600];
+    Character* apSorted[GameLimits::kMaxCharacters];
     for (int i = 0; i < pTeam->mMemberCount; ++i)
     {
         apSorted[i] = pTeam->GetMemberPtr(i);
@@ -401,7 +402,7 @@ int ScriptCB_GetTeamstats(lua_State* L)
     lua_newtable(LuaHelper::mState);
 
     Team* pTeam = Team::sTeams[(int)fSide + 1];
-    Character* apSorted[600];
+    Character* apSorted[GameLimits::kMaxCharacters];
     for (int i = 0; i < pTeam->mMemberCount; ++i)
     {
         apSorted[i] = pTeam->GetMemberPtr(i);

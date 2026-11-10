@@ -16,16 +16,16 @@
 
 // GLOBAL: SWBF2 0x01f7d0e0
 // sTeamList
-static TeamManager::ObjCacheData sTeamList[8][600];
+static TeamManager::ObjCacheData sTeamList[Team::kMaxTeams][600];
 
 // GLOBAL: SWBF2 0x01faa430
-static int sMemberCount[8];
+static int sMemberCount[Team::kMaxTeams];
 
 // GLOBAL: SWBF2 0x007ec554
 int sUnmatchedRemovalCount = 1;
 
 // GLOBAL: SWBF2 0x01faa214
-static bool sDirty[8];
+static bool sDirty[Team::kMaxTeams];
 
 namespace TeamManager
 {
@@ -39,7 +39,7 @@ void TeamManager::Init()
     {
         return;
     }
-    for (int i = 0; i < 8; ++i)
+    for (int i = 0; i < Team::kMaxTeams; ++i)
     {
         sDirty[i] = true;
         sMemberCount[i] = 0;
@@ -53,7 +53,7 @@ void TeamManager::UpdatePositions()
     {
         return;
     }
-    for (int i = 0; i < 8; ++i)
+    for (int i = 0; i < Team::kMaxTeams; ++i)
     {
         sDirty[i] = true;
     }
@@ -99,7 +99,7 @@ int sGetObjectsInRange(const PblVector3& vPos, float fRange, GameObject** const 
     }
 
     int iCount = 0;
-    for (int iTeam = 0; iTeam < 8; ++iTeam)
+    for (int iTeam = 0; iTeam < Team::kMaxTeams; ++iTeam)
     {
         const int iAffil = pTeam ? pTeam->GetAffiliation(iTeam) : 0;
         if (!(iAffilMask & TargetInfo::SideBit(iAffil)))

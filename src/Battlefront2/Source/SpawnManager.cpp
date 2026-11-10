@@ -5,6 +5,7 @@
 
 #include "AIGoalManager.h"
 #include "Character.h"
+#include "GameLimits.h"
 #include "EntitySoldier.h"
 #include "CommandPost.h"
 #include "CommandPostManager.h"
@@ -112,7 +113,7 @@ SpawnManager::SpawnManager()
     memset(mMaxUnitCount, 0, sizeof(mMaxUnitCount));
     memset(mCurrentUnitCount, 0, sizeof(mCurrentUnitCount));
     mAllyUnitCount = 0;
-    for (int iTeam = 0; iTeam < 8; ++iTeam)
+    for (int iTeam = 0; iTeam < Team::kMaxTeams; ++iTeam)
     {
         if (iTeam >= 1 && iTeam <= 2)
         {
@@ -135,7 +136,7 @@ SpawnManager::~SpawnManager()
 // FUNCTION: SWBF2 0x0064e290
 void SpawnManager::SetSpawnDelay(float fCycleDelay, float fSlotDelay, int iTeam)
 {
-    if (iTeam >= 0 && iTeam < 8)
+    if (iTeam >= 0 && iTeam < Team::kMaxTeams)
     {
         mCycleDelay[iTeam] = fCycleDelay;
         mSlotDelay[iTeam] = fSlotDelay;
@@ -200,9 +201,9 @@ int SpawnManager::GetTotalCharacterCount()
     }
     iCount += mMaxUnitCount[0] + mMaxUnitCount[3] + mMaxUnitCount[4] + mMaxUnitCount[5] +
               mMaxUnitCount[6] + mMaxUnitCount[7];
-    if (iCount > 600)
+    if (iCount > GameLimits::kMaxCharacters)
     {
-        iCount = 600;
+        iCount = GameLimits::kMaxCharacters;
     }
     return iCount;
 }
@@ -356,7 +357,7 @@ bool SpawnManager::Update(float fDeltaTime)
         mSlotTimer[i] -= fDeltaTime;
     }
 
-    for (int iTeam = 1; iTeam < 8; ++iTeam)
+    for (int iTeam = 1; iTeam < Team::kMaxTeams; ++iTeam)
     {
         Team::sTeams[iTeam]->Update(fDeltaTime);
     }

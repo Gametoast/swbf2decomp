@@ -143,9 +143,9 @@ void WeaponDispenserClass::PostReadInit()
     memset(mTrackItemCount, 0, sizeof(mTrackItemCount));
     if (mMaxItems > 0)
     {
-        mTrackItemPool = new PblHandle<GameObject>[600 * mMaxItems];
+        mTrackItemPool = new PblHandle<GameObject>[GameLimits::kMaxCharacters * mMaxItems];
         PblHandle<GameObject>* pItem = mTrackItemPool;
-        for (int i = 0; i < 600; ++i)
+        for (int i = 0; i < GameLimits::kMaxCharacters; ++i)
         {
             mTrackItemArray[i] = pItem;
             pItem += mMaxItems;
@@ -602,7 +602,7 @@ Entity* WeaponDispenser::Fire()
         GameObject* pMe = mOwner->GetGameObject();
         GameObject* pOldest = 0;
         PblHandle<GameObject>* pHandle = pClass->mTrackItemPool;
-        for (int i = 0; i < 600 * pClass->mMaxItems; ++i, ++pHandle)
+        for (int i = 0; i < GameLimits::kMaxCharacters * pClass->mMaxItems; ++i, ++pHandle)
         {
             GameObject* pItem = *pHandle;
             if (pItem && pItem->IsAlive() && (*pHandle)->GetAffiliationToMe(pMe) >= 0)

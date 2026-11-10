@@ -44,7 +44,9 @@ struct CollectData : public CollisionObjectCallbackData
     PblVector3 mCenter;
     float mRadius;
     CollisionObject* mMe;
-    CollisionObject* mArray[100];
+    // the most objects one collection holds
+    static const int kMaxObjects = 100;
+    CollisionObject* mArray[kMaxObjects];
     int mLength;
 };
  
@@ -740,7 +742,7 @@ bool CollisionManager::CollectDataCallback(const TreeGridObject* pTreeObject, Tr
     }
 
     pCollect->mArray[pCollect->mLength++] = pObject;
-    if (pCollect->mLength == 100)
+    if (pCollect->mLength == CollectData::kMaxObjects)
     {
         return false;
     }
@@ -1264,8 +1266,8 @@ void CollisionManager::UpdateRestricted(PblList<CollisionObject>& aList, int aTy
     PblMatrix* const storedMatrices = NULL;
 
     MatrixStruct structInfo[MAX_OBJECTS_STORED];
-    int structMap[100];
-    int testFrame[100];
+    int structMap[CollectData::kMaxObjects];
+    int testFrame[CollectData::kMaxObjects];
     PblVector3 camPos[1];
 
     CollectData data;

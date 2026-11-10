@@ -183,7 +183,7 @@ public:
     HUD::ElementBitmapMasked mBackdrop[3];
     HUD::ElementBitmap mNorthIcon[3];
     BitmapGroup mTargetAll[3];
-    RedBitmapElement mTarget[450];
+    RedBitmapElement mTarget[TargetManager::MAX_TARGETS];
     BitmapGroup mPostAll[3];
     RedBitmapElement mPost[kMaxPosts];
     float mPostScale[kMaxPosts];

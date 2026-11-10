@@ -2090,7 +2090,7 @@ void RedRenderer::pcRenderPrimitive(pcRedPrimitive* pPrim, pcRedShader* pShader,
         uiFlags |= RENDERFLAG_NO_LIGHTING;
     }
 
-    if (m_curRenderItemOffset >= 0x128c)
+    if (m_curRenderItemOffset >= RedRenderer::kRenderItemPoolSize)
     {
         return;
     }
@@ -2107,7 +2107,7 @@ void RedRenderer::pcRenderPrimitive(pcRedPrimitive* pPrim, pcRedShader* pShader,
 
     int iSavedMatrixOffset = m_uiCurMatrixPoolOffset;
     if (!(uiFlags & RENDERFLAG_RENDER_CACHED) &&
-        (&mWorld < &m_amMatrixPool[0] || &mWorld >= &m_amMatrixPool[3062]))
+        (&mWorld < &m_amMatrixPool[0] || &mWorld >= &m_amMatrixPool[RedRenderer::kMatrixPoolSize]))
     {
 
         pItem->pmObjWorld = (PblMatrix*)AllocMatrixInCache(mWorld);
@@ -2134,8 +2134,8 @@ void RedRenderer::pcRenderPrimitive(pcRedPrimitive* pPrim, pcRedShader* pShader,
     unsigned int uiEnvState = 0;
     if (uiFlags & RENDERFLAG_NO_LIGHTING)
     {
-        pItem->pLightingState = (uiRVF & RVF_LIGHTING) ? &m_aLightingStatePool[2048]
-                                                : &m_aLightingStatePool[2049];
+        pItem->pLightingState = (uiRVF & RVF_LIGHTING) ? &m_aLightingStatePool[kLightingStateBlack]
+                                                : &m_aLightingStatePool[kLightingStateWhite];
     }
     else
     {
@@ -2346,7 +2346,7 @@ void RedRenderer::pcRenderPrimitive(pcRedPrimitive* pPrim, pcRedShader* pShader,
             pCopy->uiCurrentShader = 0;
             pCopy->uiShaderState = uiZState;
             pCopy->flags |= RENDERFLAG_NO_LIGHTING;
-            pCopy->pLightingState = &m_aLightingStatePool[2049];
+            pCopy->pLightingState = &m_aLightingStatePool[kLightingStateWhite];
 
             unsigned char copyLow =
                 (unsigned char)internalGetTransformAndLightingID(uiRVF, uiEnvState, uiZPassCaps);
@@ -2687,17 +2687,17 @@ void RedRenderer::Init()
     RedRenderer::m_uiCurMatrixPoolOffset = 0;
     RedRenderer::m_uiCurLightingStatePoolOffset = 0;
 
-    memset(&RedRenderer::m_aLightingStatePool[2048], 0, sizeof(RedLightingState));
-    memset(&RedRenderer::m_aLightingStatePool[2049], 0, sizeof(RedLightingState));
-    memset(&RedRenderer::m_aLightingStatePool[2050], 0, sizeof(RedLightingState));
+    memset(&RedRenderer::m_aLightingStatePool[kLightingStateBlack], 0, sizeof(RedLightingState));
+    memset(&RedRenderer::m_aLightingStatePool[kLightingStateWhite], 0, sizeof(RedLightingState));
+    memset(&RedRenderer::m_aLightingStatePool[kLightingStateDefault], 0, sizeof(RedLightingState));
 
-    RedRenderer::m_aLightingStatePool[2048].ambientLight = RedAmbientLight::BLACK;
-    RedRenderer::m_aLightingStatePool[2048].pDirectionalLights[0] = &RedDirectionalLight::BLACK;
+    RedRenderer::m_aLightingStatePool[kLightingStateBlack].ambientLight = RedAmbientLight::BLACK;
+    RedRenderer::m_aLightingStatePool[kLightingStateBlack].pDirectionalLights[0] = &RedDirectionalLight::BLACK;
 
-    RedRenderer::m_aLightingStatePool[2049].ambientLight = RedAmbientLight::WHITE;
-    RedRenderer::m_aLightingStatePool[2049].pDirectionalLights[0] = &RedDirectionalLight::BLACK;
+    RedRenderer::m_aLightingStatePool[kLightingStateWhite].ambientLight = RedAmbientLight::WHITE;
+    RedRenderer::m_aLightingStatePool[kLightingStateWhite].pDirectionalLights[0] = &RedDirectionalLight::BLACK;
 
-    RedRenderer::m_pLightingState = &RedRenderer::m_aLightingStatePool[2048];
+    RedRenderer::m_pLightingState = &RedRenderer::m_aLightingStatePool[kLightingStateBlack];
 
     m_lightingScale = 1.0f;
     m_lightingScaleColor = RedColor::WHITE;
@@ -3534,7 +3534,7 @@ void RedRenderer::internalResetState()
     rNormalized.fWidth = 1.0f;
     pcSetViewport(rNormalized);
 
-    RedRenderer::m_pLightingState = &RedRenderer::m_aLightingStatePool[2048];
+    RedRenderer::m_pLightingState = &RedRenderer::m_aLightingStatePool[kLightingStateBlack];
     RedRenderer::m_curVertexShader = 0;
     RedRenderer::m_curPixelShader = 0;
     RedRenderer::m_curFormat = 0;
@@ -4256,7 +4256,7 @@ PblMatrix* RedRenderer::AllocBoneMatricesInCache(unsigned int uiCount)
 {
     unsigned int uiOffset = (unsigned int)RedRenderer::m_uiCurMatrixPoolOffset;
     PblMatrix* pMatrices = &RedRenderer::m_amMatrixPool[uiOffset];
-    if (uiOffset + uiCount >= 3062)
+    if (uiOffset + uiCount >= RedRenderer::kMatrixPoolSize)
     {
         uiOffset = 0;
     }
@@ -4269,7 +4269,7 @@ RedLightingState* RedRenderer::AllocLightingStateInCache()
 {
     unsigned int uiIndex = RedRenderer::m_uiCurLightingStatePoolOffset;
     RedLightingState* pState = &m_aLightingStatePool[uiIndex];
-    RedRenderer::m_uiCurLightingStatePoolOffset = (uiIndex + 1 < 2048 ? uiIndex : 0) + 1;
+    RedRenderer::m_uiCurLightingStatePoolOffset = (uiIndex + 1 < kLightingStatePoolSize ? uiIndex : 0) + 1;
     memset(pState, 0, sizeof(RedLightingState));
     return pState;
 }
@@ -4278,7 +4278,7 @@ RedLightingState* RedRenderer::AllocLightingStateInCache()
 const PblMatrix* RedRenderer::AllocMatrixInCache(const PblMatrix& mat)
 {
     PblMatrix* pMatrix = &RedRenderer::m_amMatrixPool[RedRenderer::m_uiCurMatrixPoolOffset];
-    if (RedRenderer::m_uiCurMatrixPoolOffset + 1 >= 3062)
+    if (RedRenderer::m_uiCurMatrixPoolOffset + 1 >= RedRenderer::kMatrixPoolSize)
     {
         RedRenderer::m_uiCurMatrixPoolOffset = 0;
     }
@@ -4413,10 +4413,10 @@ void RedRenderer::Cleanup()
     RedRenderer::m_uiPrevShaderState = 0;
     RedRenderer::m_iImmediateMode = 0;
 
-    memset(&RedRenderer::m_aLightingStatePool[2048], 0, sizeof(RedLightingState));
-    memset(&RedRenderer::m_aLightingStatePool[2049], 0, sizeof(RedLightingState));
-    memset(&RedRenderer::m_aLightingStatePool[2050], 0, sizeof(RedLightingState));
-    RedRenderer::m_pLightingState = &RedRenderer::m_aLightingStatePool[2048];
+    memset(&RedRenderer::m_aLightingStatePool[kLightingStateBlack], 0, sizeof(RedLightingState));
+    memset(&RedRenderer::m_aLightingStatePool[kLightingStateWhite], 0, sizeof(RedLightingState));
+    memset(&RedRenderer::m_aLightingStatePool[kLightingStateDefault], 0, sizeof(RedLightingState));
+    RedRenderer::m_pLightingState = &RedRenderer::m_aLightingStatePool[kLightingStateBlack];
 
     dx::StateManager_DX::ClearInstance();
 }
@@ -4473,7 +4473,7 @@ void RedRenderer::EndScene()
 void RedRenderer::Flush()
 {
     pcFlush(RENDERPHASE_ALL);
-    RedRenderer::m_pLightingState = &RedRenderer::m_aLightingStatePool[2048];
+    RedRenderer::m_pLightingState = &RedRenderer::m_aLightingStatePool[kLightingStateBlack];
 }
 
 // GLOBAL: SWBF2 0x007fb07a
@@ -4552,7 +4552,7 @@ TransparentHeap<RenderItem*, unsigned int> RedRenderer::m_posttransparentItems(5
 
 // GLOBAL: SWBF2 0x008bef50
 // RedRenderer::m_amMatrixPool
-PblMatrix RedRenderer::m_amMatrixPool[3062];
+PblMatrix RedRenderer::m_amMatrixPool[RedRenderer::kMatrixPoolSize];
 
 // SYNTHETIC: SWBF2 0x004076e0
 // `dynamic initializer for 'RedRenderer::m_renderItemPool''
@@ -4561,7 +4561,7 @@ PblMatrix RedRenderer::m_amMatrixPool[3062];
 
 // GLOBAL: SWBF2 0x008174f0
 // RedRenderer::m_renderItemPool
-RenderItem RedRenderer::m_renderItemPool[4748];
+RenderItem RedRenderer::m_renderItemPool[RedRenderer::kRenderItemPoolSize];
 
 // SYNTHETIC: SWBF2 0x00407560
 // `dynamic initializer for 'RedRenderer::m_aLightingStatePool''
@@ -4572,7 +4572,7 @@ RenderItem RedRenderer::m_renderItemPool[4748];
 
 // GLOBAL: SWBF2 0x0086ad10
 // RedRenderer::m_aLightingStatePool
-RedLightingState RedRenderer::m_aLightingStatePool[2051];
+RedLightingState RedRenderer::m_aLightingStatePool[kLightingStateCount];
 
 // SYNTHETIC: SWBF2 0x00407630
 // `dynamic initializer for 'RedRenderer::m_mViewUndo''
@@ -4606,7 +4606,7 @@ void RedRenderer::FlushOcclusionQueries()
     pItem->uiCurrentShader = 0;
     pItem->uiShaderState = 0;
     pItem->flags = RENDERFLAG_NO_LIGHTING | RENDERFLAG_NO_Z;
-    pItem->pLightingState = &RedRenderer::m_aLightingStatePool[2049];
+    pItem->pLightingState = &RedRenderer::m_aLightingStatePool[kLightingStateWhite];
     pItem->uiEnvState = 0;
     pItem->pVisibilityQuery = 0;
 
@@ -4681,7 +4681,7 @@ const RedCamera* RedRenderer::GetCamera()
 // FUNCTION: SWBF2 0x006b11c0
 const RedLightingState& RedRenderer::GetDefaultLightingState()
 {
-    return RedRenderer::m_aLightingStatePool[2050];
+    return RedRenderer::m_aLightingStatePool[kLightingStateDefault];
 }
 
 // FUNCTION: SWBF2 0x006b1340
@@ -5630,8 +5630,8 @@ void __cdecl RedRenderer::internalRenderProg1(RenderItem* pItem, unsigned int ui
     else
     {
         const RedLightingState* pDefault =
-            bVertexLit ? &RedRenderer::m_aLightingStatePool[2048]
-                     : &RedRenderer::m_aLightingStatePool[2049];
+            bVertexLit ? &RedRenderer::m_aLightingStatePool[kLightingStateBlack]
+                     : &RedRenderer::m_aLightingStatePool[kLightingStateWhite];
         if (pDefault != RedRenderer::m_pLightingStatePrev)
         {
             RedRenderer::m_pLightingStatePrev = pDefault;
@@ -6225,13 +6225,13 @@ inline void RedRenderer::SortHeap::Push(RenderItem* pItem, unsigned int uiKey)
 // FUNCTION: SWBF2 0x006b34b0
 void RedRenderer::SetDefaultLightingState(const RedLightingState& state)
 {
-    RedRenderer::m_aLightingStatePool[2050] = state;
+    RedRenderer::m_aLightingStatePool[kLightingStateDefault] = state;
 }
 
 // FUNCTION: SWBF2 0x006b3770
 void RedRenderer::SetLightingState(const RedLightingState& state)
 {
-    if (&state >= m_aLightingStatePool && &state < m_aLightingStatePool + 2051)
+    if (&state >= m_aLightingStatePool && &state < m_aLightingStatePool + kLightingStateCount)
     {
         RedRenderer::m_pLightingState = (RedLightingState*)&state;
         return;

@@ -1254,15 +1254,28 @@ public:
     template <class HEAP>
     static void internalRenderFromHeap(HEAP& heap);
 
+    // the lighting state pool: the states handed out each frame (AllocLightingStateInCache), then three fixed ones: black
+    // (black ambient, no lights: the default current state, and vertex-lit geometry), white (white ambient: unlit
+    // geometry drawn full bright, draws without lighting) and the default state (Get/SetDefaultLightingState)
+    static const unsigned int kLightingStatePoolSize = 2048;
+    static const unsigned int kLightingStateBlack = kLightingStatePoolSize;
+    static const unsigned int kLightingStateWhite = kLightingStatePoolSize + 1;
+    static const unsigned int kLightingStateDefault = kLightingStatePoolSize + 2;
+    static const unsigned int kLightingStateCount = kLightingStatePoolSize + 3;
+
+    // the per-frame pools of render items (pcRenderPrimitive) and bone matrices (AllocBoneMatricesInCache)
+    static const unsigned int kRenderItemPoolSize = 4748;
+    static const unsigned int kMatrixPoolSize = 3062;
+
     // GLOBAL: SWBF2 0x0086ad10 -- pdb_globals.tsv `RedLightingState[2051]`.
 
-    static struct RedLightingState m_aLightingStatePool[2051];
+    static struct RedLightingState m_aLightingStatePool[kLightingStateCount];
 
-    static struct RenderItem m_renderItemPool[4748];
+    static struct RenderItem m_renderItemPool[kRenderItemPoolSize];
 
     // GLOBAL: SWBF2 0x008bef50 -- pdb_globals.tsv `PblMatrix[3062]` (22, TU 42;
 
-    static class PblMatrix m_amMatrixPool[3062];
+    static class PblMatrix m_amMatrixPool[kMatrixPoolSize];
 
     // GLOBAL: SWBF2 0x007fbf60 -- pdb_globals.tsv `OcclusionQueryT[1400]`,
 

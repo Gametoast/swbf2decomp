@@ -117,8 +117,8 @@ void TriggerRegionManager::ApplyTempDeathRegion(const RedRegion* pRegion)
     {
         return;
     }
-    GameObject* apObjects[64];
-    int iCount = GetObjectsInRegion(pRegion, apObjects, 64);
+    GameObject* apObjects[CollisionManager::kMaxQueryObjects];
+    int iCount = GetObjectsInRegion(pRegion, apObjects, CollisionManager::kMaxQueryObjects);
     for (int i = 0; i < iCount; ++i)
     {
         TriggerDeath(apObjects[i]);
@@ -141,8 +141,8 @@ bool TriggerRegionManager::Update(float)
             mLandingRegionsExist = true;
         }
 
-        GameObject* apObjects[64];
-        int iCount = GetObjectsInRegion(data.mRegion, apObjects, 64);
+        GameObject* apObjects[CollisionManager::kMaxQueryObjects];
+        int iCount = GetObjectsInRegion(data.mRegion, apObjects, CollisionManager::kMaxQueryObjects);
         for (int j = 0; j < iCount; ++j)
         {
             switch (data.mType)

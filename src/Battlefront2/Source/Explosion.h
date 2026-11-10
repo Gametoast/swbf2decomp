@@ -25,6 +25,9 @@ public:
     virtual Ordnance* Build(const OrdnanceDesc& desc);
     virtual void SetProperty(unsigned int uProperty, const char* pszValue);
 
+    // the most objects one explosion damages or pushes
+    static const int kMaxTargets = 20;
+
     void CreateExplosion(const PblVector3& aPos, const DamageOwner& aOwner, bool aFlying,
                          CollisionObjectType aCollType);
 
